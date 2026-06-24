@@ -324,11 +324,25 @@ def main():
     cache_mercados = {}
     debug_no_resueltos = 0  # log primeros mercados sin resolver para diagnóstico
 
+    ahora = datetime.now(timezone.utc)
+
     for pred in pendientes:
         clave = (pred.get("strategy", ""),
                  pred.get("market_id", ""))
         if clave in ya_resueltas:
             continue
+
+        # Saltar mercados cuyo end_date es más de 2h en el futuro — imposible que resuelvan
+        end_str = pred.get("end_date", "")
+        if end_str:
+            try:
+                end_dt = datetime.fromisoformat(end_str.replace("Z", "+00:00"))
+                if end_dt.tzinfo is None:
+                    end_dt = end_dt.replace(tzinfo=timezone.utc)
+                if (end_dt - ahora).total_seconds() > 7200:
+                    continue
+            except Exception:
+                pass
 
         mid = pred.get("market_id", "")
         if mid not in cache_mercados:
