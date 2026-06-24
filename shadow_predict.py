@@ -951,6 +951,7 @@ def main():
                 "timestamp_utc", "strategy", "market_id", "question", "end_date",
                 "horas_a_vencimiento", "precio_yes_mercado", "prob_yes_modelo",
                 "edge_bruto", "edge_neto", "edge_direccional", "decision", "razon", "subtype",
+                "apuesta",
             ])
         for m in operables:
             py  = m["_precio_yes"]
@@ -985,6 +986,8 @@ def main():
                 if not sp.get("activa", True):
                     continue
                 edge_min = sp.get("edge_minimo") or EDGE_MINIMO
+                # Apuesta Kelly: escala con IC confirmado, mínimo 0.50€ si activa
+                apuesta = sp.get("apuesta_kelly", 0.50) or 0.50
                 contador[nombre]["aplica"] += 1
                 prob_y = pred["prob_yes"]
                 eb = prob_y - py
@@ -1009,6 +1012,7 @@ def main():
                     f"{m['_horas']:.2f}", f"{py:.4f}", f"{prob_y:.4f}",
                     f"{eb:.4f}", f"{en:.4f}", f"{ed:.4f}", dec,
                     pred.get("razon", ""), subtype,
+                    f"{apuesta:.2f}",
                 ])
                 total += 1
     print(f"  Predicciones registradas: {total} (operables: {ops}, dup saltados: {skipped_dup}, extremo filtrado: {skipped_extremo})")

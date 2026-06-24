@@ -18,8 +18,9 @@ while true; do
     $PYTHON "$REPO_DIR/shadow_predict.py"         >> "$LOG" 2>&1 || true
     $PYTHON "$REPO_DIR/shadow_resolve.py"         >> "$LOG" 2>&1 || true
     $PYTHON "$REPO_DIR/shadow_postmortem.py"      >> "$LOG" 2>&1 || true
+    $PYTHON "$REPO_DIR/shadow_resumen.py"         >> "$LOG" 2>&1 || true
 
-    # Git: solo datos shadow (binance está en .gitignore)
+    # Git: datos shadow + resumen de estado
     cd "$REPO_DIR"
     git add data/shadow/ >> "$LOG" 2>&1 || true
     if ! git diff --cached --quiet 2>/dev/null; then

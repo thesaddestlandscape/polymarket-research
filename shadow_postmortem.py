@@ -167,6 +167,14 @@ def calcular_params(resultados: list) -> dict:
             edge_minimo = 0.04
             motivo += " → edge_minimo=0.04"
 
+        # Kelly simplificado: apuesta = 20€ * |ic_efectivo| * 0.5 (half-Kelly)
+        # Mínimo 0.50€ (sin datos / IC negativo), máximo 2.00€ (10% del capital)
+        # Sólo escala hacia arriba con IC positivo confirmado (n >= 5)
+        if activa and n >= 5 and ic_efectivo > 0:
+            apuesta_kelly = round(min(2.00, max(0.50, 20.0 * ic_efectivo * 0.5)), 2)
+        else:
+            apuesta_kelly = 0.50 if activa else 0.0
+
         params["estrategias"][s] = {
             "activa":          activa,
             "edge_minimo":     edge_minimo,
@@ -175,6 +183,7 @@ def calcular_params(resultados: list) -> dict:
             "pnl_total":       round(d["pnl"], 4),
             "causa_principal": causa_principal,
             "motivo":          motivo,
+            "apuesta_kelly":   apuesta_kelly,
         }
 
     return params

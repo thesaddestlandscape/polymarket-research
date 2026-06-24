@@ -166,14 +166,21 @@ def evaluar(pred: dict, mercado: dict) -> dict | None:
     if decision == "BUY_NO":
         precio_entrada = 1 - precio_entrada
 
+    # Apuesta: usa la registrada en la predicción (Kelly dinámico), o la base si no existe
+    try:
+        apuesta = float(pred.get("apuesta") or APUESTA_SIMULADA)
+        if apuesta <= 0:
+            apuesta = APUESTA_SIMULADA
+    except (ValueError, TypeError):
+        apuesta = APUESTA_SIMULADA
+
     if acierto:
-        # Ganamos: cobramos 1/precio_entrada por cada unidad apostada
-        payout = APUESTA_SIMULADA / max(0.01, precio_entrada)
-        pnl_bruto = payout - APUESTA_SIMULADA
-        pnl_neto = pnl_bruto - SLIPPAGE * APUESTA_SIMULADA
+        payout    = apuesta / max(0.01, precio_entrada)
+        pnl_bruto = payout - apuesta
+        pnl_neto  = pnl_bruto - SLIPPAGE * apuesta
     else:
-        pnl_bruto = -APUESTA_SIMULADA
-        pnl_neto = -APUESTA_SIMULADA - SLIPPAGE * APUESTA_SIMULADA
+        pnl_bruto = -apuesta
+        pnl_neto  = -apuesta - SLIPPAGE * apuesta
 
     return {
         "outcome_real": outcome_real,
