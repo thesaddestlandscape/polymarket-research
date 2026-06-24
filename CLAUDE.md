@@ -1,7 +1,7 @@
 # CLAUDE.md — Polymarket Research Bot
 
 Documento de contexto completo. Léelo al inicio de cada sesión para retomar sin releer historial.
-**Última actualización: 2026-06-24 ~13:30 UTC**
+**Última actualización: 2026-06-24 ~16:00 UTC**
 
 ---
 
@@ -31,21 +31,33 @@ for k,d in sorted(by_sub.items(), key=lambda x: x[1]['pnl'], reverse=True):
     print(f"  {k:32s} {d['win']}/{d['n']} ({d['win']/d['n']*100:.0f}%)  PNL={d['pnl']:+.2f}  IC={ic:+.3f}")
 EOF
 
-# 3. Arb scan del día
+# 3. Split BUY_YES vs BUY_NO en #15min (hipótesis H-BUYNO)
+python3 << 'EOF'
+import csv
+rows = list(csv.DictReader(open('data/shadow/results.csv')))
+for side in ['BUY_YES','BUY_NO']:
+    sub = [r for r in rows if r.get('subtype','').endswith('15min') and r.get('decision')==side and r['strategy']=='UPDOWN_GBM']
+    if sub:
+        w=sum(int(r['acierto']) for r in sub); n=len(sub); pnl=sum(float(r['pnl_neto']) for r in sub)
+        print(f"  {side:8s} #15min: {w}/{n} ({w/n*100:.0f}%) PNL={pnl:+.2f}€")
+EOF
+
+# 4. Arb scan del día
 cat data/shadow/arb_scan_$(date +%Y-%m-%d).csv 2>/dev/null | head -5 || echo "Sin oportunidades hoy"
 ```
 
 **Presentar al usuario:**
 - Bankroll actual y PNL desde última sesión
 - Nuevas resoluciones y su impacto por estrategia
-- Estado H3 (BTC#5min momentum): n actual y si patrón persiste
+- Split BUY_YES vs BUY_NO en #15min y si el patrón H-BUYNO persiste o se invirtió
+- Que las nuevas features (drift_15min, drift_60min, delta_ratio_macro) están presentes en predicciones recientes
 - Oportunidades de arb detectadas si las hay
-- Hipótesis que se han confirmado o descartado
 
 **Seguimiento obligatorio — hipótesis bajo vigilancia:**
-- **H3 BTC#5min momentum**: pct WIN=0.054% vs LOSS=0.023% — opuesto a ETH/SOL. Reportar n actual. Activar filtro inverso si n≥20 y IC>+0.10.
-- **ORDER_FLOW_5M**: monitorear si IC>+0.10 con n≥50 → candidato a live.
-- **UP vs DOWN en #15min**: comprobar si BUY_NO tiene peor win rate que BUY_YES.
+- **H-BUYNO #15min**: BUY_NO tiene 100% win rate hoy (n=11) pero es día bajista (-3.12% BTC). ¿Se invierte en días alcistas? Reportar split BUY_YES/BUY_NO actualizado.
+- **H-REGIMEN**: el mercado tuvo 70% de slots NO en #15min hoy. ¿El drift_60min en el GBM mejora la calibración? Comparar p_up pre y post-cambio cuando haya datos.
+- **H3 BTC#5min momentum**: features ahora se guardan. Verificar cuando n≥10 con features.
+- **ORDER_FLOW_5M**: IC=+0.063 (n=124). El bloque #94-124 bajó del pico 71% al 58%. ¿Tendencia o ruido?
 
 ---
 
@@ -95,17 +107,24 @@ capture_markets → capture_wallets → capture_trades
 
 ### 1. WEEKLY_PRICE
 Mercados "Will BTC be between $X-$Y?" — spot vs bracket → BUY_YES/BUY_NO.
-Primera resolución: 24 Jun 16:00 UTC. Sin resoluciones aún.
+Primera resolución: 24 Jun 16:00 UTC. 1 resolución con acierto, PNL=+0.13€ (ETH bracket correcto).
 
 ### 2. PRICE_MOMENTUM
 Tendencia exponencial del precio YES (últimas 6h). 0 señales antes del mediodía.
 
 ### 3. SMART_FLOW_1H
 ≥3 wallets humanas comprando el mismo lado, imbalance≥70%. Excluye mercados Up/Down.
-n=12, IC=-0.171 (datos contaminados pre-fix). Acumulando datos limpios.
+n=13, IC=-0.195. **Candidata a desactivar** — supera umbral de desactivación (-0.30, n=8) pero el postmortem no la ha desactivado aún. Revisar.
 
 ### 4. UPDOWN_GBM ← edge principal confirmado
 Black-Scholes digital para mercados "X Up or Down". Daily/hourly/15min/5min.
+
+**Cambio clave sesión 2026-06-24 tarde**: el modelo ahora incorpora drift de mercado.
+```
+d2 = (log(spot/ref) + mu_h × T_h) / (sigma_h × sqrt(T_h))
+mu_h = drift_60min_por_hora × DRIFT_DAMPING(0.25)
+```
+Con BTC bajando -0.82%/h, `mu_h = -0.00206/h` → reduce p_up ~5-15pp en señales marginales.
 
 **Filtros activos:**
 - Opción A: `if ventana_min==5 and abs(pct_spot_vs_ref)>0.05% → return None`
@@ -114,25 +133,29 @@ Black-Scholes digital para mercados "X Up or Down". Daily/hourly/15min/5min.
   - ETH#5min: `|pct|>0.02%` + `sigma_h > 0.0024` → skip
   - SOL#5min: `|pct|>0.03%` + `sigma_h > 0.0018` → skip
 
-**Features guardadas**: `{pct_spot_vs_ref, sigma_h, T_h}`
+**Features guardadas (actualizadas)**: `{pct_spot_vs_ref, sigma_h, T_h, drift_15min, drift_60min, delta_ratio_macro}`
 
-**Estado actual (13:30 UTC, 24 Jun):**
-| Subtipo | n | Win% | IC | PNL | Kelly |
-|---|---|---|---|---|---|
-| #15min global | 23 | ~70% | +0.220 | **+6.43€** | **2.00€** |
-| ETH#15min | 8 | 62% | +0.075 | +1.53€ | 0.75€ |
-| SOL#15min | 5 | 60% | +0.018 | +1.32€ | 0.50€ |
-| BTC#15min | 11 | 55% | +0.061 | +0.68€ | 0.61€ |
+**Estado actual (16:00 UTC, 24 Jun):**
+| Subtipo | n | Win% | IC | PNL |
+|---|---|---|---|---|
+| #15min global | 33 | 63% | +0.220 | **+9.92€** |
+| BTC#15min | 13 | 54% | +0.022 | +2.51€ |
+| ETH#15min | 10 | 60% | +0.075 | +3.37€ |
+| SOL#15min | 7 | 71% | +0.058 | +3.09€ |
+| #5min global | ~45 | ~33% | ~-0.11 | ~-14.81€ |
+
+**ATENCIÓN**: en sesión 2026-06-24 tarde se descubrió que el 63% de #15min está sesgado por un día bajista (70% slots NO). BUY_NO fue 11/11 hoy. Verificar en días futuros si el patrón es simétrico o hay edge estructural.
 
 ### 5. PRICE_TARGET_GBM
 GBM para "Will BTC reach $70k?". Sin resoluciones (mercados multi-día).
 
-### 6. ORDER_FLOW_5M ← sorpresa positiva del día
+### 6. ORDER_FLOW_5M
 Cumulative delta Binance (taker_buy - taker_sell) últimas 5 velas.
 Señal: `|delta_ratio| > 0.38` Y precio YES en 0.38-0.62.
 
-**Estado actual:** n=84, 47W/37L (56%), IC=+0.058, PNL=**+7.78€**
-Es la segunda estrategia mejor del sistema. Necesita n≥50 con IC≥0.10 para live.
+**Estado actual:** n=124, 70W/54L (56%), IC=+0.063, PNL=**+12.75€**
+Evolución: #1-31 (39%) → #32-62 (58%) → #63-93 (71% pico) → #94-124 (58%).
+BUY_NO domina: 59/92 (64%) vs BUY_YES 11/33 (33%). Misma explicación que #15min: día bajista.
 
 ---
 
@@ -145,9 +168,9 @@ predictions (features JSON) → results (features copiadas)
     → strategy_params.json → siguiente ciclo
 ```
 
-**FEATURE_RULES actuales:**
-- 5min y 15min: `pct_spot_vs_ref` (abs_gt/abs_lt) + `sigma_h` (gt/lt)
-- ORDER_FLOW_5M: `delta_ratio` (abs_lt/abs_gt)
+**FEATURE_RULES actuales (actualizado 2026-06-24):**
+- 5min y 15min: `pct_spot_vs_ref` + `sigma_h` + `drift_60min` + `delta_ratio_macro`
+- ORDER_FLOW_5M: `delta_ratio`
 
 **Kelly dinámico:**
 ```
@@ -158,91 +181,92 @@ sino: apuesta = 0.50€
 
 ---
 
-## Estado actual (2026-06-24 13:30 UTC)
+## Estado actual (2026-06-24 ~16:00 UTC)
 
 ### Capital
 | | |
 |---|---|
-| Bankroll actual | **9.95 €** |
-| PNL acumulado | **-10.05 €** |
-| Loops | fast ciclo ~383, slow ciclo ~35 |
+| Bankroll simulado real | **~16.06€** (varía cada ciclo) |
+| PNL acumulado | **~-3.94€** |
+| Nota | `estado_actual.md` muestra menos porque no contabiliza ORDER_FLOW_5M — bug en shadow_resumen.py |
 
 ### Desglose honesto del PNL
 
 | Fuente | PNL | Estado |
 |---|---|---|
-| ORDER_FLOW_5M | **+7.78€** | ✅ IC positivo, acumulando |
-| UPDOWN_GBM #15min | **+6.43€** | ✅ Edge confirmado |
+| ORDER_FLOW_5M | **+12.75€** | ✅ IC positivo, creciendo |
+| UPDOWN_GBM #15min | **+9.92€** | ✅ Edge confirmado (verificar en días alcistas) |
 | UPDOWN_GBM #60min/otros | +0.91€ | ✅ Positivo |
-| UPDOWN_GBM #5min (pre-filtros) | -14.81€ | Filtros aplicados, ya no sangra |
-| SMART_FLOW_1H (pre-fix slots) | -6.74€ | Bug corregido |
-| UPDOWN_GBM #5min (post-filtros) | ~-4.62€ | Mejorando con filtros causales |
+| UPDOWN_GBM #5min (todos) | ~-14.81€ | Filtros aplicados, mejorando |
+| SMART_FLOW_1H | **-7.66€** | ⚠️ IC=-0.195, candidata a desactivar |
 
 ---
 
 ## ⚡ PRIORIDADES PARA PRÓXIMA SESIÓN
 
-### PRIORIDAD 1 — Explorar dataset Jon-Becker (HACER PRIMERO)
+### PRIORIDAD 1 — Verificar efecto del drift en el modelo
+
+Desde el ciclo 456+ las predicciones UPDOWN_GBM incluyen `drift_15min`, `drift_60min`, `delta_ratio_macro` en features. Comprobar:
+
+```bash
+python3 << 'EOF'
+import csv, json
+rows = list(csv.DictReader(open('data/shadow/predictions_2026-06-24.csv')))
+gbm = [r for r in rows if r['strategy']=='UPDOWN_GBM' and r.get('features','') not in ('','{}')]
+print(f"UPDOWN_GBM con nuevas features: {len(gbm)}")
+if gbm:
+    f = json.loads(gbm[-1]['features'])
+    print(f"Últimas features: {f}")
+    tiene_drift = sum(1 for r in gbm if 'drift_60min' in (r.get('features') or ''))
+    print(f"Con drift_60min: {tiene_drift}")
+EOF
+```
+
+También: ¿el drift está cambiando decisiones BUY_YES → BUY_NO en señales marginales?
+
+### PRIORIDAD 2 — Hipótesis H-BUYNO con más días
+
+¿El 11/11 BUY_NO de hoy es artefacto del día bajista o hay edge estructural?
+Analizar split BUY_YES/BUY_NO en días anteriores (si hay datos) y en los próximos días.
+
+```bash
+python3 << 'EOF'
+import csv
+from collections import defaultdict
+rows = list(csv.DictReader(open('data/shadow/results.csv')))
+by_day_side = defaultdict(lambda: {'n':0,'w':0})
+for r in rows:
+    if r.get('subtype','').endswith('15min') and r['strategy']=='UPDOWN_GBM':
+        dia = r.get('resolution_timestamp','')[:10]
+        side = r.get('decision','')
+        key = (dia, side)
+        by_day_side[key]['n']+=1; by_day_side[key]['w']+=int(r['acierto'])
+for (dia,side),d in sorted(by_day_side.items()):
+    n=d['n']; w=d['w']
+    if n: print(f"  {dia} {side:8s}: {w}/{n} ({w/n*100:.0f}%)")
+EOF
+```
+
+### PRIORIDAD 3 — SMART_FLOW_1H: desactivar o no
+
+IC=-0.195, n=13. El postmortem tiene umbral de desactivación en (-0.30, n=8) — ¿por qué no la desactivó? Revisar strategy_params.json.
+
+### PRIORIDAD 4 — Dataset Jon-Becker
 
 **Repo**: `github.com/Jon-Becker/prediction-market-analysis` (3.6k stars, 497 forks)
 **Dataset**: 36GB comprimido — trades históricos de Polymarket + Kalshi desde 2022+
+Desbloquea backtesting de todo el sistema con miles de slots históricos.
 
-**Por qué es crítico**: resuelve el mayor bloqueador de todo el sistema.
-Con este dataset podemos:
-- Backtestear ORDER_FLOW_5M con miles de slots históricos (tenemos solo 84)
-- Backtestear la hipótesis de ventanas horarias con años de datos reales
-- Construir dataset de entrenamiento para HMM, CNN, GP (requieren n≥5000)
-- Analizar si existe cross-platform arb entre Polymarket y Kalshi históricamente
+### PRIORIDAD 5 — WEEKLY_PRICE análisis completo
 
-**Pasos**:
-1. `git clone https://github.com/Jon-Becker/prediction-market-analysis`
-2. Verificar qué contiene exactamente (¿trades o L2 orderbook?)
-3. Si tiene datos de slots 5/15min → backtestear ORDER_FLOW_5M
-4. Si tiene L2 depth → desbloquea OBI (Orderbook Imbalance)
-
----
-
-### PRIORIDAD 2 — Evaluar candidatos a live
-
-Con ORDER_FLOW_5M en IC=+0.058 (n=84) y #15min en IC=+0.220 (n=23):
-
-**Umbral para live**: IC ≥ 0.10 con n ≥ 50
-
-- `UPDOWN_GBM#15min`: IC=+0.220, n=23. **Faltan ~27 ops.** Con 3-4 ops/hora activa, en 1-2 días más.
-- `ORDER_FLOW_5M`: IC=+0.058, n=84. Necesita subir IC. Vigilar si sigue mejorando.
-
-**Cuando ambos superen el umbral**: decidir recapitalización y estrategia de entrada a live.
-
----
-
-### PRIORIDAD 3 — Análisis de WEEKLY_PRICE (si ya resolvió)
-
-Los mercados WEEKLY_PRICE del 24 Jun resolvieron a las 16:00 UTC.
-Analizar: ¿qué predicciones teníamos? ¿cuántas acertamos? ¿cuál es el IC inicial?
-
-```bash
-python3 -c "
-import csv
-rows = [r for r in csv.DictReader(open('data/shadow/results.csv')) if r['strategy']=='WEEKLY_PRICE']
-print(f'WEEKLY_PRICE: {len(rows)} resoluciones')
-for r in rows: print(f'  {r[\"acierto\"]} | {r[\"pnl_neto\"]} | {r.get(\"question\",\"\")[:50]}')
-"
-```
-
----
-
-### PRIORIDAD 4 — Verificaciones rápidas de hipótesis
-
-**H3 BTC#5min momentum**: comprobar n actual y si pct WIN>LOSS sigue siendo opuesto a ETH/SOL.
-**UP vs DOWN en #15min**: comprobar si BUY_NO tiene peor win rate.
-**Ventanas horarias**: con más datos, re-ejecutar el análisis horario.
+Resolver a las 16:00 UTC hoy. Analizar IC inicial.
 
 ---
 
 ## Arbitraje — `arb_scanner.py`
 
 Detecta BRACKET_ARB: mercados de precio-rango (mutuamente excluyentes) donde suma YES < 0.97.
-Ejemplo real: "ETH price June 28" — 8 brackets, suma=0.926, profit potencial 5.4%.
+Hoy solo detectó OVERROUNDs (suma > 1.0, desfavorables). Sin oportunidades reales.
 **Riesgo**: precio fuera del rango cubierto → todos los brackets pierden.
 Corre cada ~23min en slow loop. Guarda en `data/shadow/arb_scan_YYYY-MM-DD.csv`.
 
@@ -255,11 +279,13 @@ Corre cada ~23min en slow loop. Guarda en `data/shadow/arb_scan_YYYY-MM-DD.csv`.
 [✓] Aprende POR QUÉ pierde — filtros_causales sobre features
 [✓] Aprende POR QUÉ gana  — patrones_ganadores → kelly_boost
 [✓] Escáner de arbitraje   — bracket arb cada ~23min
-[ ] PRÓXIMO: Explorar dataset Jon-Becker → backtesting histórico
-[ ] Verificar UP>DOWN en #15min
+[✓] Drift de mercado en GBM — mu_h = drift_60min × DRIFT_DAMPING (2026-06-24)
+[ ] PRÓXIMO: Verificar efecto drift + hipótesis H-BUYNO con más días
+[ ] Dataset Jon-Becker → backtesting histórico
 [ ] Slippage floor          — antes del primer trade real en live
 [ ] Resolution Sniper / Expiry Fade — tras analizar WEEKLY_PRICE
 [ ] OBI (Orderbook Imbalance) — si el dataset tiene L2 depth
+[ ] HMM para régimen de mercado — tras validar drift simple
 [ ] Cross-Market Arb (Polymarket vs Kalshi) — con el dataset
 [ ] LP Rewards (market making) — cuando estemos en live
 [ ] Live trading           — IC ≥ 0.10, n ≥ 50, recapitalizar
@@ -269,24 +295,21 @@ Corre cada ~23min en slow loop. Guarda en `data/shadow/arb_scan_YYYY-MM-DD.csv`.
 
 ## Investigación pendiente — por orden de impacto
 
+### [PRÓXIMA SESIÓN] Verificar drift + H-BUYNO
+Ver PRIORIDADES 1 y 2 arriba.
+
 ### [PRÓXIMA SESIÓN] Dataset Jon-Becker
-Ver PRIORIDAD 1 arriba. Desbloquea todo lo demás.
+Ver PRIORIDAD 4. Desbloquea todo lo demás.
+
+### [PENDIENTE — media prioridad] Kalman + HMM para régimen de mercado
+El drift simple (implementado hoy) es la versión básica. HMM detectaría regímenes latentes
+(vol baja/normal/crisis) sin etiquetado manual.
+Librería: `hmmlearn`. Emisión: sigma_h, drift_15min, delta_ratio_macro, hora UTC.
+Activar cuando n≥50 en #15min y el drift simple validado.
 
 ### [PENDIENTE — observar con más datos] Ventanas horarias de alta reversión
 09:00-10:30 UTC mostró 25% win rate en primer día (n=4-8, insuficiente).
 NYSE open (13:30-14:30 UTC) y close (20:30-21:30 UTC) sin datos propios aún.
-Implementar skip cuando tengamos n≥15 por franja en 7+ días.
-```python
-# Propuesta: SKIP_HOURS_UTC = [(9,10), (13,14)] en shadow_predict.py
-```
-
-### [PENDIENTE — media prioridad] Kalman + HMM para sigma_h
-Kalman: sigma_h como estado continuo que evoluciona suavemente.
-HMM: regímenes discretos latentes (vol baja/normal/crisis) sin etiquetado manual.
-Librería: `hmmlearn`. Emisión: sigma_h rolling, pct_spot_vs_ref, delta_ratio, hora UTC.
-**Extensión**: samplear N valores de sigma_h → distribución de p_up → entropía = incertidumbre.
-(Inspirado en PredACGAN, Kim & Lee 2023: Sharpe 0.236→1.054 filtrando por incertidumbre.)
-Activar cuando n≥50 en #15min y modelo base validado.
 
 ### [PENDIENTE — media prioridad] Opción B — OU para slots 5min
 Cuando n≥100 post-filtro A. Hipótesis: proceso mean-reverting, no GBM.
@@ -300,29 +323,20 @@ Si ambas coinciden en dirección → boost. Si divergen → skip.
 
 ### [PENDIENTE] Resolution Sniper / Expiry Fade
 Última 1-2h antes de vencimiento: si modelo da p≥0.92 y mercado está en 0.80 → edge real.
-Caso natural: WEEKLY_PRICE en la última hora. Analizar tras resolución de hoy.
 
 ### [PENDIENTE] OBI (Orderbook Imbalance)
 Ratio bid/ask depth como señal. Necesita `best_bid_size` y `best_ask_size`.
 Si dataset Jon-Becker tiene L2 → implementar inmediatamente.
-Fórmula: `OBI = (V_bid - V_ask) / (V_bid + V_ask)` → `P_micro = P_mid + OBI × (spread/2)`
 
 ### [PENDIENTE — baja] SMART_FLOW_1H refinements
-One-hit wonder filter (>30% PNL de un solo trade) + profit factor ≥1.5x.
-Activar cuando SMART_FLOW_1H tenga n≥30 datos limpios y IC real confirmado.
+One-hit wonder filter + profit factor ≥1.5x. Cuando n≥30 datos limpios.
 
 ### [PENDIENTE — baja] CNN sobre precio (Re-Imaging Price Trends)
-Jiang, Kelly, Xiu 2020. Convertir series de precios YES en imágenes → CNN predice dirección.
 Necesita n≥5000. El dataset Jon-Becker puede darnos ese histórico.
 
 ### [PENDIENTE — futuro] Métodos astro-statistics
-GP (celerite2/tinygp) para sigma_h, Matched Filtering (LIGO) para ORDER_FLOW,
-ZTF classification pipelines para filtros causales, Bayesian Blocks para detección régimen.
+GP (celerite2/tinygp), Matched Filtering (LIGO), Bayesian Blocks.
 Activar cuando modelo base validado.
-
-### [REFERENCIA] Agentic Design Patterns (Gulli/Google 2025)
-Patrones útiles: Ch20 Prioritization + Ch21 Exploration/Discovery.
-Leer antes de implementar el meta-learner LLM completo.
 
 ---
 
@@ -343,8 +357,9 @@ Leer antes de implementar el meta-learner LLM completo.
 HORIZONTE_MIN_HORAS = 0.05
 EDGE_MINIMO = 0.02
 SLIPPAGE_ESTIMADO = 0.02
-DELTA_MIN = 0.38   # ORDER_FLOW_5M (subido de 0.20)
+DELTA_MIN = 0.38       # ORDER_FLOW_5M (subido de 0.20)
 LAG_MAX   = 0.12
+DRIFT_DAMPING = 0.25   # fracción del drift observado que entra en el GBM (añadido 2026-06-24)
 ```
 
 ### `shadow_postmortem.py`
@@ -367,14 +382,14 @@ DEPOSITO_TOTAL = 30.0; CAPITAL_OPERATIVO = 20.0; RESERVA = 10.0
 
 ## Ficheros clave (commitados en GitHub)
 ```
-data/shadow/predictions_YYYY-MM-DD.csv  — columna 'features' JSON
+data/shadow/predictions_YYYY-MM-DD.csv  — columna 'features' JSON (ahora incluye drift y delta_macro)
 data/shadow/results.csv                 — columna 'features' copiada
 data/shadow/strategy_params.json        — IC, Kelly, filtros_causales, patrones_ganadores
-data/shadow/estado_actual.md            — actualizado cada 60s
+data/shadow/estado_actual.md            — actualizado cada 60s (OJO: no incluye ORDER_FLOW en bankroll)
 data/shadow/informe_bot.xlsx            — Excel, actualizado cada ~23min
 data/shadow/arb_scan_YYYY-MM-DD.csv    — oportunidades de arbitraje
-data/shadow/hipotesis_YYYY-MM-DD.md    — hipótesis con evidencia
-data/prices/YYYY-MM-DD.csv             — spot cada ~60s
+data/shadow/sesion_YYYY-MM-DD-*.md     — recaps de sesiones anteriores
+data/prices/YYYY-MM-DD.csv             — spot cada ~60s (fuente de drift_Nmin)
 data/wallets/leaderboard_YYYY-MM-DD.csv
 ```
 
@@ -384,6 +399,8 @@ data/wallets/leaderboard_YYYY-MM-DD.csv
 
 **PRICE_MOMENTUM 0 señales por la mañana**: normal, necesita drift ≥1.5% en 6h.
 **SMART_FLOW_1H 0 señales al inicio**: trades se cargan ~15min después del slow loop.
+**estado_actual.md muestra bankroll bajo**: no contabiliza ORDER_FLOW_5M — usar script Python del protocolo de inicio.
+**features vacías en predictions antiguas**: bug preexistente resuelto con `_normalizar_pred()` en resolve y postmortem.
 **Conflictos git con el fast loop**: `git stash && git pull --rebase origin main && git stash pop && git push`.
 **prices CSV en conflicto**: `git checkout --theirs data/prices/YYYY-MM-DD.csv`.
 
