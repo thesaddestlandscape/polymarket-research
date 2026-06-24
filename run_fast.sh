@@ -14,9 +14,10 @@ CICLO=0
 while true; do
     CICLO=$((CICLO + 1))
 
-    $PYTHON "$REPO_DIR/fetch_binance_klines.py" >> "$LOG" 2>&1 || true
-    $PYTHON "$REPO_DIR/shadow_predict.py"        >> "$LOG" 2>&1 || true
-    $PYTHON "$REPO_DIR/shadow_resolve.py"        >> "$LOG" 2>&1 || true
+    $PYTHON "$REPO_DIR/fetch_binance_klines.py"   >> "$LOG" 2>&1 || true
+    $PYTHON "$REPO_DIR/shadow_predict.py"         >> "$LOG" 2>&1 || true
+    $PYTHON "$REPO_DIR/shadow_resolve.py"         >> "$LOG" 2>&1 || true
+    $PYTHON "$REPO_DIR/shadow_postmortem.py"      >> "$LOG" 2>&1 || true
 
     # Git: solo datos shadow (binance está en .gitignore)
     cd "$REPO_DIR"

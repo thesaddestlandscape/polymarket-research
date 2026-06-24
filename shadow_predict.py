@@ -19,6 +19,18 @@ MIN_LIQUIDEZ = 500
 
 DIR_DATA    = Path("data")
 DIR_SHADOW  = DIR_DATA / "shadow"
+
+def _cargar_params_dinamicos() -> dict:
+    """Lee strategy_params.json generado por postmortem. Devuelve {} si no existe."""
+    path = DIR_SHADOW / "strategy_params.json"
+    if not path.exists():
+        return {}
+    try:
+        with open(path, encoding="utf-8") as f:
+            data = json.load(f)
+        return data.get("estrategias", {})
+    except Exception:
+        return {}
 DIR_MARKETS = DIR_DATA / "markets"
 DIR_TRADES  = DIR_DATA / "trades"
 DIR_BINANCE = DIR_DATA / "binance"
@@ -667,13 +679,18 @@ def s_updown_gbm(market, ctx):
         return None
 
     pct = (spot / ref - 1) * 100
-    vent_str = "daily" if tipo == 'daily' else f"{ventana_min}min"
+    if tipo == 'daily':
+        subtype = 'daily'
+    elif tipo == 'hourly':
+        subtype = 'hourly'
+    else:
+        subtype = f'{ventana_min}min'
     razon = (
-        f"updown_gbm {activo} {vent_str} "
+        f"updown_gbm {activo} {subtype} "
         f"ref={ref:.4g} spot={spot:.4g} ({pct:+.2f}%) "
         f"sigma_h={sigma_h:.4f} T={T_h:.2f}h p_up={p_up:.3f}"
     )
-    return {"prob_yes": max(0.05, min(0.95, p_up)), "razon": razon}
+    return {"prob_yes": max(0.05, min(0.95, p_up)), "razon": razon, "subtype": subtype}
 
 
 ESTRATEGIAS = [
@@ -712,6 +729,10 @@ def main():
         print("  Nada que predecir.")
         return
     ctx = construir_contexto()
+    params_din = _cargar_params_dinamicos()
+    if params_din:
+        activas = {k for k, v in params_din.items() if not v.get("activa", True)}
+        print(f"  Params dinámicos cargados: {len(params_din)} estrategias, desactivadas: {activas or 'ninguna'}")
     fecha   = ts[:10]
     archivo = DIR_SHADOW / f"predictions_{fecha}.csv"
     nuevo   = not archivo.exists()
@@ -732,12 +753,16 @@ def main():
             w.writerow([
                 "timestamp_utc", "strategy", "market_id", "question", "end_date",
                 "horas_a_vencimiento", "precio_yes_mercado", "prob_yes_modelo",
-                "edge_bruto", "edge_neto", "edge_direccional", "decision", "razon",
+                "edge_bruto", "edge_neto", "edge_direccional", "decision", "razon", "subtype",
             ])
         for m in operables:
             py  = m["_precio_yes"]
             mid = m.get("market_id", "")
             for nombre, func in ESTRATEGIAS:
+                # Comprobar si la estrategia está desactivada por postmortem
+                sp = params_din.get(nombre, {})
+                if not sp.get("activa", True):
+                    continue
                 if (nombre, mid) in ya_predichos:
                     skipped_dup += 1
                     continue
@@ -748,16 +773,21 @@ def main():
                     continue
                 if pred is None:
                     continue
+                # Edge mínimo: puede ser sobrescrito por postmortem a nivel estrategia o subtipo
+                subtype = pred.get("subtype", "")
+                subtype_key = f"{nombre}#{subtype}" if subtype else ""
+                sp_sub = params_din.get(subtype_key, {}) if subtype_key else {}
+                edge_min = sp_sub.get("edge_minimo") or sp.get("edge_minimo") or EDGE_MINIMO
                 contador[nombre]["aplica"] += 1
                 prob_y = pred["prob_yes"]
                 eb = prob_y - py
                 en = eb - SLIPPAGE_ESTIMADO if eb > 0 else eb + SLIPPAGE_ESTIMADO
-                precio_extremo = (en >= EDGE_MINIMO and py < 0.10) or (-en >= EDGE_MINIMO and py > 0.90)
+                precio_extremo = (en >= edge_min and py < 0.10) or (-en >= edge_min and py > 0.90)
                 if precio_extremo:
                     skipped_extremo += 1
-                if en >= EDGE_MINIMO and not precio_extremo:
+                if en >= edge_min and not precio_extremo:
                     dec = "BUY_YES"
-                elif -en >= EDGE_MINIMO and not precio_extremo:
+                elif -en >= edge_min and not precio_extremo:
                     dec = "BUY_NO"
                 else:
                     dec = "SKIP"
@@ -771,7 +801,7 @@ def main():
                     m.get("question", ""), m.get("end_date", ""),
                     f"{m['_horas']:.2f}", f"{py:.4f}", f"{prob_y:.4f}",
                     f"{eb:.4f}", f"{en:.4f}", f"{ed:.4f}", dec,
-                    pred.get("razon", ""),
+                    pred.get("razon", ""), subtype,
                 ])
                 total += 1
     print(f"  Predicciones registradas: {total} (operables: {ops}, dup saltados: {skipped_dup}, extremo filtrado: {skipped_extremo})")

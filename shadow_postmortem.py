@@ -59,6 +59,9 @@ def cargar_ya_postmortem() -> set:
 
 
 def clasificar_causa(resultado: dict, pred: dict | None) -> str:
+    strategy = resultado.get("strategy", "")
+    subtype  = resultado.get("subtype", "") or (pred.get("subtype", "") if pred else "")
+
     if pred:
         try:
             eb = abs(float(pred.get("edge_bruto", 0)))
@@ -72,11 +75,26 @@ def clasificar_causa(resultado: dict, pred: dict | None) -> str:
                 return "EDGE_INSUFICIENTE"
         except (ValueError, TypeError):
             pass
+
+    # SLOT_OVERCONFIDENCE: modelo GBM da prob extrema en slots cortos
+    # El mercado valora esos slots en ~0.50 → el edge aparente es ilusorio
+    if strategy == "UPDOWN_GBM" and subtype and "min" in subtype:
+        try:
+            mins = int(subtype.replace("min", ""))
+            prob = float(resultado.get("prob_yes_modelo", 0.5) or 0.5)
+            if mins <= 10 and (prob > 0.75 or prob < 0.25):
+                return "SLOT_OVERCONFIDENCE"
+        except (ValueError, TypeError):
+            pass
+
+    # TIMING_CORTO: solo para estrategias que no están diseñadas para slots cortos
+    if strategy != "UPDOWN_GBM" and pred:
         try:
             if float(pred.get("horas_a_vencimiento", 999)) < 24:
                 return "TIMING_CORTO"
         except (ValueError, TypeError):
             pass
+
     return "DIRECTION_ERROR"
 
 
@@ -84,17 +102,23 @@ def calcular_params(resultados: list) -> dict:
     por_estrategia = {}
     for r in resultados:
         s = r["strategy"]
-        if s not in por_estrategia:
-            por_estrategia[s] = {"n": 0, "aciertos": 0, "pnl": 0.0, "causas": {}}
-        por_estrategia[s]["n"] += 1
-        por_estrategia[s]["aciertos"] += int(r.get("acierto", 0))
-        try:
-            por_estrategia[s]["pnl"] += float(r.get("pnl_neto", 0))
-        except (ValueError, TypeError):
-            pass
-        causa = r.get("causa_perdida", "")
-        if causa:
-            por_estrategia[s]["causas"][causa] = por_estrategia[s]["causas"].get(causa, 0) + 1
+        subtype = r.get("subtype", "")
+        # Acumular en clave global y, si hay subtype, también en clave granular
+        claves = [s]
+        if subtype:
+            claves.append(f"{s}#{subtype}")
+        for clave in claves:
+            if clave not in por_estrategia:
+                por_estrategia[clave] = {"n": 0, "aciertos": 0, "pnl": 0.0, "causas": {}}
+            por_estrategia[clave]["n"] += 1
+            por_estrategia[clave]["aciertos"] += int(r.get("acierto", 0))
+            try:
+                por_estrategia[clave]["pnl"] += float(r.get("pnl_neto", 0))
+            except (ValueError, TypeError):
+                pass
+            causa = r.get("causa_perdida", "")
+            if causa:
+                por_estrategia[clave]["causas"][causa] = por_estrategia[clave]["causas"].get(causa, 0) + 1
 
     params = {
         "timestamp_utc": datetime.now(timezone.utc).isoformat(timespec="seconds"),
@@ -343,10 +367,10 @@ def main():
     with open(PARAMS_PATH, "w", encoding="utf-8") as f:
         json.dump(params, f, indent=2, ensure_ascii=False)
 
-    print(f"\n  Ajustes automáticos por estrategia:")
+    print(f"\n  Ajustes automáticos por estrategia/subtipo:")
     for s, p in sorted(params["estrategias"].items()):
         estado = "✓" if p["activa"] else "✗ DESACT"
-        print(f"    [{estado}] {s:30s}  edge≥{p['edge_minimo']:.2f}  {p['motivo']}")
+        print(f"    [{estado}] {s:35s}  n={p['n']:>3}  edge≥{p['edge_minimo']:.2f}  {p['motivo']}")
 
     # Performance completo
     performance = generar_performance(todos_con_causa, pred_index)

@@ -323,6 +323,7 @@ def main():
             "resolution_timestamp": ts,
             "prediction_timestamp": pred.get("timestamp_utc", ""),
             "strategy": pred.get("strategy", ""),
+            "subtype": pred.get("subtype", ""),
             "market_id": mid,
             "question": pred.get("question", ""),
             "end_date": pred.get("end_date", ""),
