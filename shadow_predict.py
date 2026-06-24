@@ -614,17 +614,57 @@ def _precio_en(activo, ref_time, precios_data, tol_min=10):
     return None
 
 
-def _gbm_p_up(spot, ref, sigma_h, T_h):
+def _calcular_drift_h(sym, precios_data, n_min):
     """
-    P(S_T > ref | S_t=spot) via Black-Scholes digital con drift=0.
-    sigma_h: vol por hora. T_h: horas restantes.
+    Drift observado en las últimas n_min, expresado como fracción por hora.
+    Usa precios_intraday (datos cada ~60s) para cubrir ventanas largas.
+    """
+    ahora = datetime.now(timezone.utc)
+    corte = ahora - timedelta(minutes=n_min)
+    subset = [(ts, p[sym]) for ts, p in precios_data if sym in p and ts >= corte]
+    if len(subset) < 5:
+        return None
+    ref_p, now_p = subset[0][1], subset[-1][1]
+    if ref_p <= 0:
+        return None
+    return (now_p / ref_p - 1) / (n_min / 60)  # fracción por hora
+
+
+def _calcular_delta_ratio_macro(sym, klines_raw):
+    """
+    Delta ratio acumulado sobre todas las klines disponibles con taker_buy_vol.
+    Señal macro de presión compradora/vendedora en el exchange.
+    """
+    klines = klines_raw.get(sym, [])
+    if not klines or len(klines[0]) < 7:
+        return None
+    tb = sum(float(k[6]) for k in klines)
+    tv = sum(float(k[5]) for k in klines)
+    ts_vol = tv - tb
+    denom = tb + ts_vol
+    if denom <= 0:
+        return None
+    return (tb - ts_vol) / denom
+
+
+# Fracción del drift observado que se incorpora al GBM.
+# 0.25 = conservador: evita sobrereaccionar a ruido intraday.
+DRIFT_DAMPING = 0.25
+
+
+def _gbm_p_up(spot, ref, sigma_h, T_h, mu_h=0.0):
+    """
+    P(S_T > ref | S_t=spot) via Black-Scholes digital.
+    mu_h: drift estimado por hora (fracción). Default 0 = riesgo neutro.
+    Con drift: d2 = (log(spot/ref) + mu_h * T_h) / (sigma_h * sqrt(T_h))
     """
     if sigma_h <= 0 or T_h <= 0 or ref <= 0 or spot <= 0:
         return None
     sigma_T = sigma_h * math.sqrt(T_h)
     if sigma_T < 1e-9:
         return 1.0 if spot > ref else (0.0 if spot < ref else 0.5)
-    return _norm_cdf(math.log(spot / ref) / sigma_T)
+    d2 = (math.log(spot / ref) + mu_h * T_h) / sigma_T
+    return _norm_cdf(d2)
 
 
 def _parse_updown_tipo(question):
@@ -738,11 +778,21 @@ def s_updown_gbm(market, ctx):
     if not sigma_h or sigma_h <= 0:
         return None
 
-    p_up = _gbm_p_up(spot, ref, sigma_h, T_h)
+    pct = (spot / ref - 1) * 100
+
+    # Drift macro: tendencia de las últimas 1h y 15min desde precios_intraday.
+    # Se incorpora al GBM (amortiguado) para que el modelo sea consciente del régimen.
+    drift_15 = _calcular_drift_h(activo, precios_data, 15)
+    drift_60 = _calcular_drift_h(activo, precios_data, 60)
+    delta_macro = _calcular_delta_ratio_macro(activo, ctx.get("klines_raw", {}))
+
+    # mu_h: drift por hora que entra en la fórmula BS digital.
+    # Usamos drift_60min como señal más estable; amortiguado para no sobrereaccionar.
+    mu_h = (drift_60 or 0.0) * DRIFT_DAMPING
+
+    p_up = _gbm_p_up(spot, ref, sigma_h, T_h, mu_h=mu_h)
     if p_up is None:
         return None
-
-    pct = (spot / ref - 1) * 100
 
     # Filtro mean-reversion 5min (Opción A, 2026-06-24):
     # Empírico n=68: edge>10% (|pct|>0.05%) → 21% win rate.
@@ -761,17 +811,24 @@ def s_updown_gbm(market, ctx):
     razon = (
         f"updown_gbm {activo} {slot_type} "
         f"ref={ref:.4g} spot={spot:.4g} ({pct:+.2f}%) "
-        f"sigma_h={sigma_h:.4f} T={T_h:.2f}h p_up={p_up:.3f}"
+        f"sigma_h={sigma_h:.4f} T={T_h:.2f}h p_up={p_up:.3f} mu_h={mu_h:+.4f}"
     )
+    features = {
+        "pct_spot_vs_ref": round(pct, 4),
+        "sigma_h":         round(sigma_h, 6),
+        "T_h":             round(T_h, 4),
+    }
+    if drift_15 is not None:
+        features["drift_15min"] = round(drift_15 * 100, 4)   # %/hora
+    if drift_60 is not None:
+        features["drift_60min"] = round(drift_60 * 100, 4)   # %/hora
+    if delta_macro is not None:
+        features["delta_ratio_macro"] = round(delta_macro, 4)
     return {
         "prob_yes": max(0.05, min(0.95, p_up)),
         "razon":   razon,
         "subtype": subtype,
-        "features": {
-            "pct_spot_vs_ref": round(pct, 4),
-            "sigma_h":         round(sigma_h, 6),
-            "T_h":             round(T_h, 4),
-        },
+        "features": features,
     }
 
 

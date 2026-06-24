@@ -39,12 +39,23 @@ def cargar_results() -> list:
         return list(csv.DictReader(f))
 
 
+def _normalizar_pred(row: dict) -> dict:
+    """Extrae subtype, apuesta y features del key None cuando el header es antiguo (13 cols)."""
+    extra = row.pop(None, None)
+    if isinstance(extra, list):
+        for i, campo in enumerate(["subtype", "apuesta", "features"]):
+            if i < len(extra) and extra[i] and not row.get(campo):
+                row[campo] = extra[i]
+    return row
+
+
 def cargar_predicciones_index() -> dict:
     index = {}
     for arch in sorted(DIR_SHADOW.glob("predictions_*.csv")):
         with open(arch, encoding="utf-8") as f:
             for row in csv.DictReader(f):
                 if row.get("decision") in ("BUY_YES", "BUY_NO"):
+                    row = _normalizar_pred(row)
                     clave = (row["strategy"], row["market_id"], row["decision"])
                     if clave not in index:
                         index[clave] = row
@@ -368,24 +379,41 @@ def _extraer_features(resultado: dict, pred: dict) -> dict:
 # condicion_buena: "abs_lt" = bueno cuando |feature| < umbral (ej: delta alto es bueno)
 FEATURE_RULES = {
     # 5min: alta sigma → modelo sobreconfiado (evidencia: ETH Δ=46%, BTC Δ=30%)
-    "UPDOWN_GBM#5min":     [("pct_spot_vs_ref", "abs_gt", "abs_lt"),
-                            ("sigma_h",          "gt",     "lt")],
-    "UPDOWN_GBM#BTC#5min": [("pct_spot_vs_ref", "abs_gt", "abs_lt"),
-                            ("sigma_h",          "gt",     "lt")],
-    "UPDOWN_GBM#ETH#5min": [("pct_spot_vs_ref", "abs_gt", "abs_lt"),
-                            ("sigma_h",          "gt",     "lt")],
-    "UPDOWN_GBM#SOL#5min": [("pct_spot_vs_ref", "abs_gt", "abs_lt"),
-                            ("sigma_h",          "gt",     "lt")],
-    "UPDOWN_GBM#15min":    [("pct_spot_vs_ref", "abs_gt", "abs_lt"),
-                            ("sigma_h",          "gt",     "lt")],
-    "UPDOWN_GBM#BTC#15min":[("pct_spot_vs_ref", "abs_gt", "abs_lt"),
-                            ("sigma_h",          "gt",     "lt")],
-    "UPDOWN_GBM#ETH#15min":[("pct_spot_vs_ref", "abs_gt", "abs_lt"),
-                            ("sigma_h",          "gt",     "lt")],
-    "UPDOWN_GBM#SOL#15min":[("pct_spot_vs_ref", "abs_gt", "abs_lt"),
-                            ("sigma_h",          "gt",     "lt")],
+    "UPDOWN_GBM#5min":     [("pct_spot_vs_ref",    "abs_gt", "abs_lt"),
+                            ("sigma_h",             "gt",     "lt"),
+                            ("drift_60min",         "abs_gt", "abs_lt"),
+                            ("delta_ratio_macro",   "abs_lt", "abs_gt")],
+    "UPDOWN_GBM#BTC#5min": [("pct_spot_vs_ref",    "abs_gt", "abs_lt"),
+                            ("sigma_h",             "gt",     "lt"),
+                            ("drift_60min",         "abs_gt", "abs_lt"),
+                            ("delta_ratio_macro",   "abs_lt", "abs_gt")],
+    "UPDOWN_GBM#ETH#5min": [("pct_spot_vs_ref",    "abs_gt", "abs_lt"),
+                            ("sigma_h",             "gt",     "lt"),
+                            ("drift_60min",         "abs_gt", "abs_lt"),
+                            ("delta_ratio_macro",   "abs_lt", "abs_gt")],
+    "UPDOWN_GBM#SOL#5min": [("pct_spot_vs_ref",    "abs_gt", "abs_lt"),
+                            ("sigma_h",             "gt",     "lt"),
+                            ("drift_60min",         "abs_gt", "abs_lt"),
+                            ("delta_ratio_macro",   "abs_lt", "abs_gt")],
+    # 15min: añadimos drift y delta macro para detectar régimen de mercado
+    "UPDOWN_GBM#15min":    [("pct_spot_vs_ref",    "abs_gt", "abs_lt"),
+                            ("sigma_h",             "gt",     "lt"),
+                            ("drift_60min",         "abs_gt", "abs_lt"),
+                            ("delta_ratio_macro",   "abs_lt", "abs_gt")],
+    "UPDOWN_GBM#BTC#15min":[("pct_spot_vs_ref",    "abs_gt", "abs_lt"),
+                            ("sigma_h",             "gt",     "lt"),
+                            ("drift_60min",         "abs_gt", "abs_lt"),
+                            ("delta_ratio_macro",   "abs_lt", "abs_gt")],
+    "UPDOWN_GBM#ETH#15min":[("pct_spot_vs_ref",    "abs_gt", "abs_lt"),
+                            ("sigma_h",             "gt",     "lt"),
+                            ("drift_60min",         "abs_gt", "abs_lt"),
+                            ("delta_ratio_macro",   "abs_lt", "abs_gt")],
+    "UPDOWN_GBM#SOL#15min":[("pct_spot_vs_ref",    "abs_gt", "abs_lt"),
+                            ("sigma_h",             "gt",     "lt"),
+                            ("drift_60min",         "abs_gt", "abs_lt"),
+                            ("delta_ratio_macro",   "abs_lt", "abs_gt")],
     # ORDER_FLOW: delta alto = señal fuerte (WIN avg=0.445 vs LOSS avg=0.384)
-    "ORDER_FLOW_5M":        [("delta_ratio",     "abs_lt", "abs_gt")],
+    "ORDER_FLOW_5M":        [("delta_ratio",        "abs_lt", "abs_gt")],
 }
 
 IC_FILTRO_MIN   = -0.12   # IC para activar filtro (evitar)

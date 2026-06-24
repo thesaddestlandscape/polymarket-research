@@ -59,6 +59,21 @@ RESULTS_PATH = DIR_SHADOW / "results.csv"
 ACCURACY_PATH = DIR_SHADOW / "strategy_accuracy.csv"
 
 
+def _normalizar_pred(row: dict) -> dict:
+    """
+    El header del CSV puede tener solo 13 columnas (formato antiguo).
+    En ese caso subtype, apuesta y features van al key None como lista.
+    Los extraemos para que el resto del código los encuentre con sus nombres.
+    """
+    extra = row.pop(None, None)
+    if isinstance(extra, list):
+        campos = ["subtype", "apuesta", "features"]
+        for i, campo in enumerate(campos):
+            if i < len(extra) and extra[i] and not row.get(campo):
+                row[campo] = extra[i]
+    return row
+
+
 def cargar_predicciones_pendientes() -> list:
     """Carga todas las predicciones que tengan decision != SKIP."""
     archivos = sorted(glob.glob(str(DIR_SHADOW / "predictions_*.csv")))
@@ -68,7 +83,7 @@ def cargar_predicciones_pendientes() -> list:
             reader = csv.DictReader(f)
             for row in reader:
                 if row.get("decision", "SKIP") in ("BUY_YES", "BUY_NO"):
-                    pendientes.append(row)
+                    pendientes.append(_normalizar_pred(row))
     return pendientes
 
 
