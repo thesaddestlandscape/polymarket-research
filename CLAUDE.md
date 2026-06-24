@@ -319,6 +319,33 @@ y queramos reducir el delay de señal de 15min a <30s.
 
 ---
 
+### [PENDIENTE — media prioridad] Kalman Filter para sigma_h y PRICE_MOMENTUM
+
+Aplicar el filtro de Kalman a dos componentes del modelo central:
+
+**1. Kalman adaptativo para sigma_h (UPDOWN_GBM)**
+Problema actual: `_estimar_vol_h` usa una ventana fija (15-60 min). La volatilidad real
+es un estado oculto que cambia en el tiempo — reacciona tarde a spikes y sobreestima
+ruido en mercados quietos.
+Mejora: reemplazar por Kalman adaptativo donde Q se ajusta dinámicamente según vol realizada.
+Beneficio extra: la incertidumbre `P_trace` de la estimación de sigma entraría como feature
+adicional en FEATURE_RULES — bloquear señales cuando la estimación es inestable.
+```python
+# Concepto: Q_dynamic = base_Q * (realized_vol * scale)^2
+# P_trace alto → sigma_uncertainty alta → skip señal
+```
+
+**2. Kalman velocity para PRICE_MOMENTUM**
+Problema actual: drift exponencial del precio YES sobrepondera puntos recientes con ruido.
+Mejora: `kalman_trend_filter` devuelve `level` (precio suavizado) + `velocity`
+(tasa de cambio del trend real, separada del ruido). Señal más limpia y auto-ajustable
+al régimen de volatilidad actual.
+
+**Cuándo activar**: cuando UPDOWN_GBM#15min alcance n≥50 y tengamos la validación del
+modelo base. No tocar el core del modelo hasta tener ese baseline sólido.
+**Referencia**: artículo "Kalman Filter for Quant Trading" — Ruuj (@RuujSs), Jun 2026.
+Implementación Python completa incluida en el artículo.
+
 ### [PENDIENTE — baja prioridad] SMART_FLOW_1H refinements
 
 Cuando SMART_FLOW_1H tenga n≥30 resoluciones limpias (post-fix) y IC real confirmado,
