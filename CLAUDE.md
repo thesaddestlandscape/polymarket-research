@@ -1,7 +1,30 @@
 # CLAUDE.md — Polymarket Research Bot
 
 Documento de contexto completo. Léelo al inicio de cada sesión para retomar sin releer historial.
-**Última actualización: 2026-06-24 ~11:15 UTC**
+**Última actualización: 2026-06-24 ~12:00 UTC**
+
+---
+
+## ⚡ PROTOCOLO DE INICIO DE SESIÓN — ejecutar SIEMPRE al arrancar
+
+**Claude: al leer esto, ejecuta inmediatamente los siguientes pasos antes de responder nada más:**
+
+1. Leer el estado actual: `cat data/shadow/estado_actual.md`
+2. Cargar resultados y generar análisis WIN vs LOSS por subtipo (extraer features de columna `features` o de `razon`)
+3. Comparar con hipótesis anteriores en `data/shadow/hipotesis_*.md` si existen
+4. Presentar al usuario:
+   - Bankroll actual y PNL desde última sesión
+   - Nuevas resoluciones desde la última sesión
+   - 2-4 hipótesis concretas basadas en los datos (con evidencia numérica)
+   - Estado de hipótesis anteriores (¿se han confirmado? ¿hay más datos?)
+
+**Formato del saludo de inicio:**
+```
+📊 Estado: [bankroll]€ | PNL hoy: [X]€ | [n] nuevas resoluciones
+🔬 Hipótesis para esta sesión: [título breve de las más relevantes]
+```
+
+Este protocolo existe porque el análisis de hipótesis es la palanca más importante para mejorar el modelo, y si no se ejecuta automáticamente se olvida.
 
 ---
 
