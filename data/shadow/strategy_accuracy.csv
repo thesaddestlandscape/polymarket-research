@@ -1,2 +1,3 @@
 timestamp_utc,strategy,n_total,n_aciertos,hit_rate,edge_medio,pnl_total,pnl_medio,IC_simple,IC_pearson,sum_edge,sum_prob,sum_outcome,sum_prob2,sum_outcome2,sum_prob_outcome
-2026-06-24T07:16:33+00:00,UPDOWN_GBM,47,26,0.5532,0.185,2.6527,0.0564,0.0532,0.0067,8.6966,23.92,25.0,15.403444,25.0,12.7645
+2026-06-24T07:27:02+00:00,SMART_FLOW_1H,2,0,0.0,0.08,-1.836,-0.918,-0.5,0.0,0.16,1.21,0.0,0.73205,0.0,0.0
+2026-06-24T07:27:02+00:00,UPDOWN_GBM,48,26,0.5417,0.1844,1.7347,0.0361,0.0417,-0.0068,8.8511,24.5895,25.0,15.851674,25.0,12.7645
