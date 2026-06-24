@@ -103,10 +103,17 @@ def calcular_params(resultados: list) -> dict:
     for r in resultados:
         s = r["strategy"]
         subtype = r.get("subtype", "")
-        # Acumular en clave global y, si hay subtype, también en clave granular
+        # Generar todas las claves de agregación relevantes
         claves = [s]
-        if subtype:
-            claves.append(f"{s}#{subtype}")
+        if "#" in subtype:
+            a_part, d_part = subtype.split("#", 1)
+            claves += [
+                f"{s}#{subtype}",   # UPDOWN_GBM#BTC#15min  (más específico)
+                f"{s}#{a_part}",    # UPDOWN_GBM#BTC         (nivel asset)
+                f"{s}#{d_part}",    # UPDOWN_GBM#15min       (nivel duración)
+            ]
+        elif subtype:
+            claves.append(f"{s}#{subtype}")   # WEEKLY_PRICE#BTC
         for clave in claves:
             if clave not in por_estrategia:
                 por_estrategia[clave] = {"n": 0, "aciertos": 0, "pnl": 0.0, "causas": {}}

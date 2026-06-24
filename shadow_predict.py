@@ -268,6 +268,7 @@ def s_price_momentum(market, ctx):
         "prob_yes": prob_yes,
         "razon": (f"price_momentum drift={drift:+.4f} "
                   f"consistency={consistency:.0%} obs={len(obs)} spread={spread:.3f}"),
+        "subtype": identificar_activo(market.get("question", "")) or "",
     }
 
 def s_smart_flow_1h(market, ctx):
@@ -311,7 +312,11 @@ def s_smart_flow_1h(market, ctx):
     else:
         prob_yes = max(0.05, min(0.95, py - base_boost - top_boost))
         razon    = f"smart_flow_1h {dom_count}w->NO imb={imbalance:.0%} top={n_top}"
-    return {"prob_yes": prob_yes, "razon": razon}
+    return {
+        "prob_yes": prob_yes,
+        "razon": razon,
+        "subtype": identificar_activo(market.get("question", "")) or "",
+    }
 
 def s_binance_updown(market, ctx):
     question = market.get("question", "")
@@ -446,6 +451,7 @@ def s_weekly_price(market, ctx):
         return {
             "prob_yes": max(0.05, min(0.95, prob_yes)),
             "razon": f"weekly_between {activo} spot={spot:.0f} [{lo:.0f},{hi:.0f}] in={in_range}",
+            "subtype": activo,
         }
 
     # Formato: above/below X
@@ -465,6 +471,7 @@ def s_weekly_price(market, ctx):
     return {
         "prob_yes": max(0.05, min(0.95, prob_yes)),
         "razon": f"weekly_price {activo} spot={spot:.0f} obj={precio_obj:.0f} ratio={ratio:.3f}",
+        "subtype": activo,
     }
 
 
@@ -680,13 +687,14 @@ def s_updown_gbm(market, ctx):
 
     pct = (spot / ref - 1) * 100
     if tipo == 'daily':
-        subtype = 'daily'
+        slot_type = 'daily'
     elif tipo == 'hourly':
-        subtype = 'hourly'
+        slot_type = '60min'
     else:
-        subtype = f'{ventana_min}min'
+        slot_type = f'{ventana_min}min'
+    subtype = f"{activo}#{slot_type}"
     razon = (
-        f"updown_gbm {activo} {subtype} "
+        f"updown_gbm {activo} {slot_type} "
         f"ref={ref:.4g} spot={spot:.4g} ({pct:+.2f}%) "
         f"sigma_h={sigma_h:.4f} T={T_h:.2f}h p_up={p_up:.3f}"
     )
@@ -759,10 +767,6 @@ def main():
             py  = m["_precio_yes"]
             mid = m.get("market_id", "")
             for nombre, func in ESTRATEGIAS:
-                # Comprobar si la estrategia está desactivada por postmortem
-                sp = params_din.get(nombre, {})
-                if not sp.get("activa", True):
-                    continue
                 if (nombre, mid) in ya_predichos:
                     skipped_dup += 1
                     continue
@@ -773,11 +777,25 @@ def main():
                     continue
                 if pred is None:
                     continue
-                # Edge mínimo: puede ser sobrescrito por postmortem a nivel estrategia o subtipo
+                # Edge mínimo y activa: lookup de más específico a más general
                 subtype = pred.get("subtype", "")
-                subtype_key = f"{nombre}#{subtype}" if subtype else ""
-                sp_sub = params_din.get(subtype_key, {}) if subtype_key else {}
-                edge_min = sp_sub.get("edge_minimo") or sp.get("edge_minimo") or EDGE_MINIMO
+                if "#" in subtype:
+                    a_part, d_part = subtype.split("#", 1)
+                    lookup_keys = [
+                        f"{nombre}#{subtype}",   # UPDOWN_GBM#BTC#15min
+                        f"{nombre}#{a_part}",    # UPDOWN_GBM#BTC
+                        f"{nombre}#{d_part}",    # UPDOWN_GBM#15min
+                        nombre,
+                    ]
+                elif subtype:
+                    lookup_keys = [f"{nombre}#{subtype}", nombre]
+                else:
+                    lookup_keys = [nombre]
+                sp = next((params_din[k] for k in lookup_keys if k in params_din), {})
+                # Si la clave más específica desactiva → saltar
+                if not sp.get("activa", True):
+                    continue
+                edge_min = sp.get("edge_minimo") or EDGE_MINIMO
                 contador[nombre]["aplica"] += 1
                 prob_y = pred["prob_yes"]
                 eb = prob_y - py
