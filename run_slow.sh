@@ -20,6 +20,7 @@ while true; do
     $PYTHON "$REPO_DIR/capture_wallets.py"  >> "$LOG" 2>&1 || true
     $PYTHON "$REPO_DIR/capture_trades.py"   >> "$LOG" 2>&1 || true
     $PYTHON "$REPO_DIR/generate_report.py"  >> "$LOG" 2>&1 || true
+    $PYTHON "$REPO_DIR/arb_scanner.py"      >> "$LOG" 2>&1 || true
 
     # LLM hypothesis generator: solo una vez al día (ciclo 1 de cada día)
     HORA_UTC=$(date -u +%H)
@@ -30,7 +31,7 @@ while true; do
 
     # Git: precios, leaderboard e hipótesis LLM
     cd "$REPO_DIR"
-    git add data/prices/ data/wallets/leaderboard_*.csv data/shadow/hipotesis_*.md >> "$LOG" 2>&1 || true
+    git add data/prices/ data/wallets/leaderboard_*.csv data/shadow/hipotesis_*.md data/shadow/arb_scan_*.csv >> "$LOG" 2>&1 || true
     if ! git diff --cached --quiet 2>/dev/null; then
         git commit -m "data: ciclo slow $CICLO $(date -u +%Y-%m-%dT%H:%MZ)" >> "$LOG" 2>&1 || true
         git pull --rebase origin main >> "$LOG" 2>&1 || true

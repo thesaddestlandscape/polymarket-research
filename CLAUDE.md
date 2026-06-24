@@ -1,33 +1,26 @@
 # CLAUDE.md — Polymarket Research Bot
 
 Documento de contexto completo. Léelo al inicio de cada sesión para retomar sin releer historial.
-**Última actualización: 2026-06-24 ~12:00 UTC**
+**Última actualización: 2026-06-24 ~12:15 UTC**
 
 ---
 
 ## ⚡ PROTOCOLO DE INICIO DE SESIÓN — ejecutar SIEMPRE al arrancar
 
-**Claude: al leer esto, ejecuta inmediatamente los siguientes pasos antes de responder nada más:**
+**Claude: al leer esto, ejecuta inmediatamente antes de responder nada más:**
 
-1. Leer el estado actual: `cat data/shadow/estado_actual.md`
-2. Cargar resultados y generar análisis WIN vs LOSS por subtipo (extraer features de columna `features` o de `razon`)
-3. Comparar con hipótesis anteriores en `data/shadow/hipotesis_*.md` si existen
-4. Presentar al usuario:
+1. `cat data/shadow/estado_actual.md` — bankroll y PNL actual
+2. Análisis WIN vs LOSS por subtipo (extraer features de razon si no hay columna features)
+3. Leer `data/shadow/hipotesis_*.md` — hipótesis anteriores y su estado
+4. Leer `data/shadow/arb_scan_*.csv` del día — oportunidades de arbitraje detectadas
+5. Presentar:
    - Bankroll actual y PNL desde última sesión
-   - Nuevas resoluciones desde la última sesión
-   - 2-4 hipótesis concretas basadas en los datos (con evidencia numérica)
-   - Estado de hipótesis anteriores (¿se han confirmado? ¿hay más datos?)
+   - Nuevas resoluciones y su impacto
+   - Estado de hipótesis bajo vigilancia (especialmente H3 BTC#5min)
+   - Oportunidades de arb detectadas si las hay
 
-**Formato del saludo de inicio:**
-```
-📊 Estado: [bankroll]€ | PNL hoy: [X]€ | [n] nuevas resoluciones
-🔬 Hipótesis para esta sesión: [título breve de las más relevantes]
-```
-
-Este protocolo existe porque el análisis de hipótesis es la palanca más importante para mejorar el modelo, y si no se ejecuta automáticamente se olvida.
-
-**Seguimiento obligatorio en cada sesión — hipótesis bajo vigilancia:**
-- **BTC#5min momentum** (H4, 2026-06-24): pct WIN=0.054% vs LOSS=0.023% — patrón opuesto a ETH/SOL. Reportar n actual, si la diferencia se mantiene o revierte. Activar filtro si n≥20 y patrón consistente (IC>+0.10).
+**Seguimiento obligatorio cada sesión — hipótesis bajo vigilancia:**
+- **H3 BTC#5min momentum** (2026-06-24): pct WIN=0.054% vs LOSS=0.023% — patrón opuesto a ETH/SOL. Reportar n actual y si el patrón persiste. Activar filtro inverso si n≥20 y IC>+0.10.
 
 ---
 
@@ -35,9 +28,9 @@ Este protocolo existe porque el análisis de hipótesis es la palanca más impor
 
 Bot semi-autónomo para operar mercados de predicción cripto en Polymarket.
 
-- **Fase actual**: shadow mode — predice y registra como si apostara, sin dinero real. Acumula resoluciones para medir el IC real de cada estrategia.
-- **Fase 2 (live)**: IC ≥ 0.10 con n ≥ 50 resoluciones en una estrategia → operar con dinero real.
-- **Capital simulado**: 30 € depósito → 20 € operativo + 10 € reserva intocable.
+- **Fase actual**: shadow mode — predice y registra, sin dinero real.
+- **Fase 2 (live)**: IC ≥ 0.10 con n ≥ 50 resoluciones en una estrategia.
+- **Capital simulado**: 30 € depósito → 20 € operativo + 10 € reserva.
 
 ---
 
@@ -51,29 +44,30 @@ screen -S slow  →  bash run_slow.sh    (~23min por ciclo)
 ### Loop FAST — `run_fast.sh`
 
 ```
-fetch_binance_klines.py  →  shadow_predict.py  →  shadow_resolve.py
-    →  shadow_postmortem.py  →  shadow_resumen.py  →  git push
+fetch_binance_klines  →  shadow_predict  →  shadow_resolve
+    →  shadow_postmortem  →  shadow_resumen  →  git push
 ```
 
-1. **`fetch_binance_klines.py`** — klines 1min BTC/ETH/SOL/XRP/DOGE/BNB. **Binance es primario** (da `taker_buy_vol` en columna 7 del JSON, necesario para ORDER_FLOW_5M). Kraken como fallback (6 columnas, sin order flow). Guarda en `data/binance/klines_YYYY-MM-DD.json`.
-2. **`shadow_predict.py`** — genera predicciones en `data/shadow/predictions_YYYY-MM-DD.csv`. Incluye columna `features` (JSON) con datos estructurados por estrategia.
-3. **`shadow_resolve.py`** — detecta mercados vencidos, resuelve, calcula PNL con Kelly dinámico. Copia columna `features` a `results.csv`.
-4. **`shadow_postmortem.py`** — IC Bayesiano + Kelly + aprendizaje causal (filtros + patrones). Escribe `strategy_params.json` y `performance.csv`.
-5. **`shadow_resumen.py`** — genera `data/shadow/estado_actual.md` (visible en GitHub, actualizado cada 60s).
-6. `git add data/shadow/ && git commit && git push` — solo si hay cambios.
+1. **`fetch_binance_klines.py`** — klines 1min. **Binance es primario** (columna 7 = `taker_buy_vol` para ORDER_FLOW_5M). Kraken fallback (6 columnas, sin order flow).
+2. **`shadow_predict.py`** — 6 estrategias → predictions CSV con columna `features` (JSON).
+3. **`shadow_resolve.py`** — resuelve, calcula PNL Kelly, copia columna `features` a results.
+4. **`shadow_postmortem.py`** — IC Bayesiano + Kelly + aprendizaje causal → `strategy_params.json`.
+5. **`shadow_resumen.py`** — genera `data/shadow/estado_actual.md`.
+6. `git push` si hay cambios.
 
 ### Loop SLOW — `run_slow.sh`
 
 ```
-capture_markets.py  →  capture_wallets.py  →  capture_trades.py
-    →  generate_report.py  →  git push
+capture_markets  →  capture_wallets  →  capture_trades
+    →  generate_report  →  arb_scanner  →  git push
 ```
 
-1. **`capture_markets.py`** — ~1800 mercados cripto Polymarket. Escribe `data/prices/YYYY-MM-DD.csv` vía CoinGecko cada ~60s con precios spot.
+1. **`capture_markets.py`** — ~1800-2400 mercados + precios spot intraday en `data/prices/`.
 2. **`capture_wallets.py`** — top 75 wallets del leaderboard.
 3. **`capture_trades.py`** — últimas 4h de trades de top 50 wallets.
-4. **`generate_report.py`** — genera `data/shadow/informe_bot.xlsx` (Excel 7 hojas).
-5. `git add data/prices/ data/wallets/leaderboard_*.csv && git push`.
+4. **`generate_report.py`** — Excel `data/shadow/informe_bot.xlsx` (7 hojas).
+5. **`arb_scanner.py`** — escanea ~2400 mercados buscando bracket arb → `data/shadow/arb_scan_YYYY-MM-DD.csv`.
+6. `git push` con precios, leaderboard, hipótesis, arb_scan.
 
 ---
 
@@ -84,270 +78,189 @@ capture_markets.py  →  capture_wallets.py  →  capture_trades.py
 |---|---|---|
 | `fetch_binance_klines.py` | fast | Klines 1min con taker_buy_vol (Binance) o OHLCV (Kraken) |
 | `shadow_predict.py` | fast | 6 estrategias → predictions CSV con columna features |
-| `shadow_resolve.py` | fast | Resuelve predicciones, calcula PNL Kelly, copia features |
+| `shadow_resolve.py` | fast | Resuelve, PNL Kelly, copia features a results |
 | `shadow_postmortem.py` | fast | IC Bayesiano + aprendizaje causal → strategy_params.json |
 | `shadow_resumen.py` | fast | estado_actual.md actualizado cada 60s |
-| `capture_markets.py` | slow | Mercados Polymarket + precios spot intraday |
+| `capture_markets.py` | slow | ~2400 mercados Polymarket + precios spot intraday |
 | `capture_wallets.py` | slow | Leaderboard top 75 wallets |
 | `capture_trades.py` | slow | Trades recientes de wallets top |
 | `generate_report.py` | slow | Excel unificado (informe_bot.xlsx) |
+| `arb_scanner.py` | slow | Escáner de arbitraje bracket → arb_scan_YYYY-MM-DD.csv |
 
 ### Auxiliares (no en loops)
 | Script | Función |
 |---|---|
 | `shadow_digest.py` | Resumen diario Telegram (GitHub Actions, 20:00 UTC) |
+| `llm_hypothesis.py` | Meta-learner LLM (manual; ver sección LLM) |
 | `backtest.py` | Backtesting offline |
 | `conviction_score.py` | Score multi-estrategia |
-| `insider_detect.py` | Detección wallets con información privilegiada |
-| `price_alerts.py` | Alertas de precio |
-| `capture_prices.py` | Captura spot (no activo en loops) |
+| `insider_detect.py` | Detección wallets con info privilegiada |
 
 ---
 
 ## Las 6 estrategias activas
 
-Registradas en `ESTRATEGIAS = [...]` al final de `shadow_predict.py`.
-
 ### 1. WEEKLY_PRICE
-- **Qué**: mercados "Will BTC be between $X-$Y on [date]?". Compara spot con bracket.
-- **Señal**: spot IN → BUY_YES; OUT → BUY_NO. Prob ajustada por `sqrt(6/max(horas,6))`.
-- **Estado**: activa, sin resoluciones aún (primer vencimiento 24 Jun 16:00 UTC).
+- **Qué**: "Will BTC be between $X-$Y on [date]?". Spot vs bracket → BUY_YES/BUY_NO.
+- **Estado**: activa, primeras resoluciones el 24 Jun 16:00 UTC.
 
 ### 2. PRICE_MOMENTUM
-- **Qué**: tendencia exponencial del precio YES en historial de mercados (últimas 6h).
-- **Filtros**: ≥5 snapshots, liq≥500, spread≤0.08, drift≥1.5%, consistencia≥60%.
-- **Estado**: 0 señales antes de mediodía (mercados quietos). Activo 12:00-22:00 UTC.
+- **Qué**: tendencia exponencial del precio YES (últimas 6h de snapshots).
+- **Estado**: 0 señales antes de mediodía. Activo 12:00-22:00 UTC.
 
 ### 3. SMART_FLOW_1H
-- **Qué**: ≥3 wallets humanas comprando el mismo lado en última 1h, imbalance≥70%.
-- **Filtro crítico**: excluye mercados Up/Down — `_parse_updown_tipo(question)[0] is not None → return None`. Sin este filtro operaba slots con IC=-0.375.
-- **Estado**: n=12, IC=-0.171 (datos contaminados pre-fix). Acumulando datos limpios.
+- **Qué**: ≥3 wallets humanas comprando el mismo lado en 1h, imbalance≥70%.
+- **Filtro crítico**: excluye mercados Up/Down (`_parse_updown_tipo` → `return None`).
+- **Estado**: n=12, IC=-0.171 (contaminado pre-fix). Acumulando datos limpios.
 
 ### 4. UPDOWN_GBM ← estrategia principal con edge real
-- **Qué**: Black-Scholes digital `P(S_T > S_ref | spot, σ, T)` para mercados "X Up or Down".
-- **Tipos**: daily (ref=medianoche UTC), hourly (ref=1h antes cierre), slot 5min, slot 15min.
-- **Vol**: estimada de `data/prices/` CSV (~60s resolution).
-- **Filtros base**: liq≥2000, spread≤0.05, T≥2min.
-- **Filtro 5min (Opción A)**: `if ventana_min==5 and abs(pct_spot_vs_ref)>0.05% → return None`. Mean-reversion empírico.
-- **Filtros causales aprendidos** (en `strategy_params.json`, auto-actualizados):
-  - SOL#5min: `|pct_spot_vs_ref| > 0.03%` → skip (IC_malo=-0.286, n=12)
-  - ETH#5min: `|pct_spot_vs_ref| > 0.02%` → skip (IC_malo=-0.200, n=8)
-- **Descubrimiento directo**: `fetch_slots_directos()` consulta API Polymarket por slug para cobertura ~100% de slots.
-- **Features guardadas**: `{pct_spot_vs_ref, sigma_h, T_h}` en columna `features` del CSV.
-- **Estado**: **#15min es el edge real** — IC=+0.239, n=21, Kelly=2.00€, 75-83% win rate.
+- **Qué**: Black-Scholes digital `P(S_T > S_ref)` para mercados "X Up or Down".
+- **Tipos**: daily, hourly, slot 5min, slot 15min.
+- **Filtro 5min (Opción A)**: `if ventana_min==5 and abs(pct_spot_vs_ref)>0.05% → return None`.
+- **Filtros causales aprendidos** (auto-actualizados por postmortem):
+  - BTC#5min: `sigma_h > 0.0018` → skip
+  - ETH#5min: `|pct|>0.02%` + `sigma_h > 0.0024` → skip
+  - SOL#5min: `|pct|>0.03%` + `sigma_h > 0.0018` → skip
+- **Features guardadas**: `{pct_spot_vs_ref, sigma_h, T_h}` en columna `features`.
+- **Estado**: **#15min es el edge real** — IC=+0.239, n=21+, Kelly=2.00€, 75%+ win rate.
 
 ### 5. PRICE_TARGET_GBM
 - **Qué**: GBM para "Will BTC reach $70k?", "Will ETH be above $X?".
-  - `atexpiry above K`: P(S_T > K); `below K`: P(S_T < K); `reach K`: 2·N(-|log(S/K)|/σ√T)
-- **Filtros**: liq≥2000, spread≤0.08, T entre 1h y 30 días.
-- **Estado**: señales activas, sin resoluciones (mercados multi-día).
+- **Estado**: señales activas, sin resoluciones aún (mercados multi-día).
 
 ### 6. ORDER_FLOW_5M ← nueva (2026-06-24)
-- **Hipótesis**: el flujo de órdenes en Binance precede al reajuste de Polymarket en 30s-3min.
-- **Qué**: cumulative delta (taker_buy_vol - taker_sell_vol) últimas 5 velas. Si `|delta_ratio| > 0.20` Y precio YES en Polymarket entre 0.38-0.62 → señal de dirección.
-- **Delta real**: col 9 Binance (`taker_buy_base_asset_volume`), guardado como col 7 en el JSON.
-- **Delta estimado (Kraken fallback)**: close-location en rango H-L.
-- **Solo**: slots 5min Up/Down, activos BTC/ETH/SOL/XRP/DOGE/BNB.
+- **Qué**: cumulative delta (taker_buy - taker_sell) últimas 5 velas de Binance.
+- **Señal**: `|delta_ratio| > 0.38` Y precio YES en 0.38-0.62 → BUY.
 - **Features guardadas**: `{delta_ratio, total_vol_5m, has_real_flow}`.
-- **Estado**: n=16, IC=-0.089, PNL=-3.80€. Underperforming. El postmortem lo analizará automáticamente conforme acumule datos.
-
-### BINANCE_UPDOWN — RETIRADA
-IC=-0.50. Usaba momentum de klines para predecir dirección. Comentada en `ESTRATEGIAS`.
+- **Estado**: n=16+, IC≈-0.09. El postmortem subirá edge_minimo automáticamente si no mejora.
 
 ---
 
-## Sistema de auto-tuning y aprendizaje causal
-
-### El ciclo completo (cada 60s)
+## Sistema de aprendizaje causal (ciclo completo)
 
 ```
-shadow_predict  →  predictions CSV con columna 'features' (JSON)
-                    {pct_spot_vs_ref, sigma_h, T_h} para UPDOWN_GBM
-                    {delta_ratio, total_vol_5m} para ORDER_FLOW_5M
+shadow_predict  →  predictions CSV (columna 'features' JSON)
        ↓
-shadow_resolve  →  results.csv con 'features' copiado del prediction
+shadow_resolve  →  results.csv (columna 'features' copiada)
        ↓
-shadow_postmortem →  agrupa (strategy×subtype×feature_bucket) vs outcome
-                     IC_bucket < -0.12 con n≥8 → filtros_causales (EVITAR)
-                     IC_bucket > +0.12 con n≥8 → patrones_ganadores (AMPLIFICAR)
-                     Escribe todo en strategy_params.json
+shadow_postmortem  →  agrupa por (strategy×subtype×feature_bucket) vs outcome
+                       IC_bucket < -0.12 con n≥8  →  filtros_causales (EVITAR)
+                       IC_bucket > +0.12 con n≥8  →  patrones_ganadores (AMPLIFICAR + kelly_boost)
+                       Escribe todo en strategy_params.json
        ↓
-siguiente shadow_predict → aplica filtros_causales (skip) + patrones_ganadores (kelly_boost)
+siguiente shadow_predict  →  aplica filtros_causales (skip) + patrones_ganadores (kelly_boost)
 ```
 
-### Lo que aprende automáticamente
-
-| Trigger | Acción automática |
-|---|---|
-| IC_subtipo < -0.10, n≥3 | `edge_minimo` → 0.04 |
-| IC_subtipo < -0.20, n≥5 | `edge_minimo` → 0.06 |
-| IC_subtipo < -0.30, n≥8 | `activa = false` |
-| IC_feature_bucket < -0.12, n≥8 | `filtros_causales` → skip cuando feature en ese rango |
-| IC_feature_bucket > +0.12, n≥8 | `patrones_ganadores` → `apuesta += kelly_boost` |
-| IC_subtipo > 0, n≥5 | `apuesta_kelly = min(2€, max(0.5€, 20€×IC×0.5))` |
-
-### `strategy_params.json` — estructura de una entrada
-
-```json
-{
-  "UPDOWN_GBM#15min": {
-    "activa": true,
-    "edge_minimo": 0.02,
-    "ic_bayes": 0.2391,
-    "n": 21,
-    "apuesta_kelly": 2.00,
-    "filtros_causales": [],
-    "patrones_ganadores": [],
-    "motivo": "IC_bayes=+0.239 n=21 conf=1.00"
-  },
-  "UPDOWN_GBM#SOL#5min": {
-    "filtros_causales": [
-      {"feature": "pct_spot_vs_ref", "condicion": "abs_gt", "umbral": 0.03,
-       "ic_malo": -0.286, "n_malo": 12, "ic_bueno": 0.214, "n_bueno": 5}
-    ],
-    "patrones_ganadores": []
-  }
-}
-```
-
-### FEATURE_RULES — qué features analiza el postmortem por estrategia
+### FEATURE_RULES — qué features analiza el postmortem
 
 ```python
 FEATURE_RULES = {
-    "UPDOWN_GBM#5min":     [("pct_spot_vs_ref", "abs_gt", "abs_lt")],
-    "UPDOWN_GBM#BTC#5min": [("pct_spot_vs_ref", "abs_gt", "abs_lt")],
-    "UPDOWN_GBM#ETH#5min": [("pct_spot_vs_ref", "abs_gt", "abs_lt")],
-    "UPDOWN_GBM#SOL#5min": [("pct_spot_vs_ref", "abs_gt", "abs_lt")],
-    "UPDOWN_GBM#15min":    [("pct_spot_vs_ref", "abs_gt", "abs_lt"),
+    "UPDOWN_GBM#5min":     [("pct_spot_vs_ref", "abs_gt", "abs_lt"),
                             ("sigma_h",          "gt",     "lt")],
-    "UPDOWN_GBM#BTC#15min":[("pct_spot_vs_ref", "abs_gt", "abs_lt")],
-    "UPDOWN_GBM#ETH#15min":[("pct_spot_vs_ref", "abs_gt", "abs_lt")],
-    "UPDOWN_GBM#SOL#15min":[("pct_spot_vs_ref", "abs_gt", "abs_lt")],
+    "UPDOWN_GBM#BTC#5min": [("pct_spot_vs_ref", "abs_gt", "abs_lt"), ("sigma_h", "gt", "lt")],
+    "UPDOWN_GBM#ETH#5min": [("pct_spot_vs_ref", "abs_gt", "abs_lt"), ("sigma_h", "gt", "lt")],
+    "UPDOWN_GBM#SOL#5min": [("pct_spot_vs_ref", "abs_gt", "abs_lt"), ("sigma_h", "gt", "lt")],
+    "UPDOWN_GBM#15min":    [("pct_spot_vs_ref", "abs_gt", "abs_lt"), ("sigma_h", "gt", "lt")],
+    "UPDOWN_GBM#BTC#15min":[("pct_spot_vs_ref", "abs_gt", "abs_lt"), ("sigma_h", "gt", "lt")],
+    "UPDOWN_GBM#ETH#15min":[("pct_spot_vs_ref", "abs_gt", "abs_lt"), ("sigma_h", "gt", "lt")],
+    "UPDOWN_GBM#SOL#15min":[("pct_spot_vs_ref", "abs_gt", "abs_lt"), ("sigma_h", "gt", "lt")],
     "ORDER_FLOW_5M":        [("delta_ratio",     "abs_lt", "abs_gt")],
 }
 ```
 
+### Kelly dinámico
+
+```
+si activa y n >= 5 y IC_efectivo > 0:
+    apuesta_kelly = min(2.00€, max(0.50€, 20€ × IC_ef × 0.5))
+sino:
+    apuesta_kelly = 0.50€
+
++ patrones_ganadores: apuesta += kelly_boost (si feature en rango ganador)
+```
+
 ---
 
-## Estado actual (2026-06-24 ~11:15 UTC)
+## Estado actual (2026-06-24 ~12:15 UTC)
 
 ### Capital simulado
-
 | | |
 |---|---|
-| Depósito total | 30 € |
-| Capital operativo | 20 € |
+| Depósito | 30 € |
+| Operativo | 20 € |
 | Reserva | 10 € |
-| **Bankroll actual** | **1.68 €** |
-| **PNL acumulado** | **-18.32 €** |
+| **Bankroll actual** | **~1.68 €** (ver estado_actual.md para dato en tiempo real) |
 
-### Desglose honesto del PNL
+### Contexto del PNL negativo
+- SMART_FLOW_1H pre-fix en slots: **-6.74 €** (bug corregido)
+- UPDOWN_GBM#5min pre-filtros: **-14.81 €** (filtros aplicados)
+- UPDOWN_GBM#15min: **+9.77 €** (el edge real del sistema)
+- Los filtros causales automáticos (sigma_h, pct) están reduciendo las pérdidas de #5min
 
-| Fuente | PNL | Causa | Estado |
-|---|---|---|---|
-| UPDOWN_GBM #15min | **+9.77 €** | Edge real, modelo correcto | Activo, acumulando |
-| UPDOWN_GBM #60min | +0.28 € | Edge positivo, pocos datos | Activo |
-| SMART_FLOW_1H pre-fix | **-6.74 €** | Bug: operaba slots Up/Down | Corregido |
-| UPDOWN_GBM #5min pre-filtro | **-14.81 €** | GBM asume momentum, mkt revierte | Filtros activos |
-| ORDER_FLOW_5M | -3.80 € | Nuevo, 16 ops, early | Acumulando |
-
-**El edge del sistema es real (+9.77€ en #15min)**. Las pérdidas vienen de dos bugs ya corregidos y una estrategia nueva aún sin datos suficientes.
-
-### Resultados por subtipo
-
-| Subtipo | n | Win% | IC_ef | PNL | Kelly |
-|---|---|---|---|---|---|
-| UPDOWN_GBM#15min (global) | 21 | 71% | +0.239 | **+9.77€** | **2.00€** |
-| UPDOWN_GBM#BTC#15min | 8 | 75% | +0.080 | +3.43€ | 0.80€ |
-| UPDOWN_GBM#ETH#15min | 6 | 83% | +0.075 | +3.37€ | 0.75€ |
-| UPDOWN_GBM#XRP#15min | 2 | 100% | +0.025 | +1.91€ | 0.50€ |
-| UPDOWN_GBM#SOL#15min | 4 | 50% | 0.000 | -0.04€ | 0.50€ |
-| ORDER_FLOW_5M | 16 | 37% | -0.089 | -3.80€ | 0.50€ |
-| UPDOWN_GBM#BTC#5min | 16 | 31% | -0.133 | -6.30€ | 0.50€ |
-| UPDOWN_GBM#SOL#5min | 17 | 35% | -0.112 | -4.84€ | 0.50€ |
-| SMART_FLOW_1H | 12 | 17% | -0.171 | -6.74€ | 0.50€ |
-
-### Señales activas hoy (11:15 UTC)
-- UPDOWN_GBM: 108 | ORDER_FLOW_5M: 91 | WEEKLY_PRICE: 43 | PRICE_TARGET_GBM: 34 | SMART_FLOW_1H: 16
-
-### Loops
-- `screen fast`: corriendo desde 05:01 UTC
-- `screen slow`: corriendo desde 05:01 UTC
+### Estrategia con edge confirmado
+| Subtipo | n | Win% | IC_ef | Kelly |
+|---|---|---|---|---|
+| UPDOWN_GBM#15min global | 21+ | ~73% | +0.239 | **2.00€** |
+| UPDOWN_GBM#BTC#15min | 8 | 75% | +0.080 | 0.80€ |
+| UPDOWN_GBM#ETH#15min | 6 | 83% | +0.075 | 0.75€ |
 
 ---
 
-## Decisiones tomadas y por qué
+## Arbitraje — `arb_scanner.py`
 
-### SMART_FLOW_1H — filtro Up/Down (2026-06-24)
-Sin filtro operaba en slots 5/15min. El wallet flow en slots de tan corto plazo es ruido. IC=-0.375. Fix: `if _parse_updown_tipo(question)[0] is not None: return None`.
+### Qué detecta
 
-### UPDOWN_GBM — filtro Opción A (mean-reversion 5min, 2026-06-24)
-Análisis empírico (n=68): edge>10% (|pct_spot_vs_ref|>0.05%) → 21% win rate. Edge<10% → 83%. El GBM asume continuación del movimiento pero en 5min el mercado revierte. Fix: `if tipo=='slot' and ventana_min==5 and abs(pct)>0.05: return None`.
+**BRACKET_ARB**: eventos con múltiples mercados de precio-rango mutuamente excluyentes donde la suma de YES < 0.97.
 
-### Binance como primario para klines (2026-06-24)
-Kraken no da taker buy/sell separados. Binance (col 9) sí. ORDER_FLOW_5M requiere ese dato. El VPS europeo no tiene restricción 451. Kraken queda como fallback.
+Ejemplo real detectado (2026-06-24 mañana, ya expiró):
+- "Ethereum price on June 28?" — 8 brackets $1,300-$2,200
+- Suma YES = 0.926 → profit neto 5.4% después de 2% fee en el bracket ganador
+- **RIESGO**: si ETH sale de $1,300-$2,200, todos los brackets pierden
 
-### Kelly dinámico (2026-06-24)
-Antes: apuesta fija 0.90€. Ahora: `min(2€, max(0.5€, 20€×IC_ef×0.5))`. #15min con IC=+0.239 apuesta 2.00€ automáticamente.
+**¿Por qué no es arb puro?** No hay brackets para todos los rangos posibles. El profit viene de apostar implícitamente que el precio estará DENTRO del rango total cubierto.
 
-### Aprendizaje causal simétrico (2026-06-24)
-El postmortem ahora aprende TANTO por qué pierde COMO por qué gana, usando las `features` estructuradas guardadas en el momento de la predicción. Activa filtros (skip) para condiciones malas y boosts de Kelly para condiciones ganadoras.
+### Cómo actuar cuando aparece una oportunidad
 
-### Salida Excel en `data/shadow/` (2026-06-24)
-Movido de `data/reports/` (en .gitignore) a `data/shadow/informe_bot.xlsx`.
+1. Comprobar que los brackets son EXHAUSTIVOS para el rango cubierto (sin gaps)
+2. Verificar que el rango es creíble para el plazo (spot actual ±margen razonable)
+3. Calcular liq_min — es el capital máximo que puedes desplegar por leg
+4. En shadow mode: registrar señal pero NO generar predicción automática
+5. En live mode (futuro): apostar `liq_min` en cada bracket simultáneamente
 
-### BINANCE_UPDOWN — retirada
-IC=-0.50. Momentum de klines no predice dirección en crypto a corto plazo.
+### Estado del escáner
+- Corre cada ~23 min en el slow loop
+- Guarda en `data/shadow/arb_scan_YYYY-MM-DD.csv`
+- LIQ_MIN = 200 (bracket mínimo de $200 en liquidez)
+- UMBRAL_ARB = 0.97 (suma YES < esto para trigger)
 
 ---
 
 ## Investigación pendiente
 
-### [PENDIENTE] Opción B — Ornstein-Uhlenbeck para slots 5min
+### [IMPLEMENTADO] Opción A — filtro mean-reversion 5min
+Edge >10% (|pct|>0.05%) → 21% win rate. Filtro manual en `s_updown_gbm`.
 
-**Cuándo activar**: n≥100 resoluciones en 5min POST filtro A, IC estable.
+### [IMPLEMENTADO] sigma_h como filtro en 5min
+ETH: sigma WIN=0.0024 vs LOSS=0.0035 (Δ=46%). BTC similar. En FEATURE_RULES.
+Filtros causales descubiertos automáticamente: BTC sigma>0.0018, ETH sigma>0.0024, SOL sigma>0.0018.
 
-**Hipótesis**: en ventanas 5min el proceso es mean-reverting (OU), no GBM. Si spot > ref → p_up < 0.50. Usar la señal del GBM AL REVÉS cuando la divergencia es grande.
+### [IMPLEMENTADO] ORDER_FLOW_5M umbral 0.38
+WIN_avg delta=0.445 vs LOSS_avg=0.384. Subido de 0.20 a 0.38.
 
-**Implementación propuesta**:
-```python
-# En s_updown_gbm, rama tipo=='slot' y ventana_min==5
-theta = 2.0  # velocidad de reversión — calibrar con MLE sobre histórico
-pct_norm = (spot / ref - 1)
-p_up_mr = 0.5 - pct_norm * theta * T_h
-p_up_mr = max(0.05, min(0.95, p_up_mr))
-```
-Condición: señal inversa con IC > +0.10 sostenido en backtesting n≥100.
+### [PENDIENTE] Opción B — Ornstein-Uhlenbeck para 5min
+Cuando n≥100 en 5min post-filtros. Hipótesis: proceso mean-reverting, no GBM.
+Implementación: `p_up_mr = 0.5 - pct_norm × theta × T_h` (theta a calibrar).
 
----
+### [PENDIENTE] Kelly compuesto — convergencia ORDER_FLOW + UPDOWN_GBM
+Si ambas coinciden en dirección → boost. Si divergen → skip.
 
-### [PENDIENTE] Kelly compuesto — convergencia de señales
+### [PENDIENTE] Expiry Fade
+Fading de precios extremos en la última hora antes del vencimiento.
+Caso natural: WEEKLY_PRICE 16:00 UTC. Analizar hoy si hay sesgo detectable.
 
-Si ORDER_FLOW_5M y UPDOWN_GBM coinciden en dirección en el mismo slot → boost adicional. Si divergen → no apostar o mínimo.
-
-```python
-# Formalización:
-apuesta_final = apuesta_kelly + boost_patron_causal
-if order_flow_alineado:
-    apuesta_final = min(2.00, apuesta_final * 1.25)
-```
-
----
-
-### [PENDIENTE] Patrones ganadores automáticos (esperando datos)
-
-Los `patrones_ganadores` en `strategy_params.json` están vacíos porque ningún bucket "bueno" tiene aún n≥8 con IC>+0.12. Se descubrirán solos cuando haya suficientes datos. Estrategias más cercanas:
-- UPDOWN_GBM#SOL#5min: bucket bueno (|pct|≤0.03) tiene IC=+0.214 pero n=5. Necesita 3 más.
-- UPDOWN_GBM#15min: analiza pct_spot_vs_ref y sigma_h, necesita n=21 en bucket concreto.
-
----
-
-### [PENDIENTE] ORDER_FLOW_5M — evaluar en n≥30
-
-Con 16 ops y IC=-0.089, el postmortem pronto subirá el `edge_minimo` a 0.04. Evaluar si:
-- El problema es la estimación de delta (threshold 0.20 muy bajo, ruido de mercado)
-- El lag Polymarket-Binance varía demasiado según la hora del día
-- Segmentar por `has_real_flow=1` (Binance) vs `0` (Kraken estimado)
+### [PENDIENTE] LLM hypothesis diario
+`llm_hypothesis.py` existe pero requiere ANTHROPIC_API_KEY.
+Alternativa: pedir análisis al inicio de cada sesión aquí en Claude Code (gratis con Pro).
 
 ---
 
@@ -355,51 +268,57 @@ Con 16 ops y IC=-0.089, el postmortem pronto subirá el `edge_minimo` a 0.04. Ev
 
 ### Commitados en GitHub
 ```
-data/shadow/predictions_YYYY-MM-DD.csv   — predicciones (con columna 'features' JSON)
-data/shadow/results.csv                  — resoluciones (con columna 'features' copiada)
-data/shadow/strategy_accuracy.csv        — IC y stats por estrategia
-data/shadow/strategy_params.json         — IC, Kelly, filtros_causales, patrones_ganadores
-data/shadow/performance.csv              — sharpe, drawdown, kelly, profit_factor
-data/shadow/postmortem.csv               — clasificación de pérdidas
-data/shadow/estado_actual.md             — resumen legible, actualizado cada 60s
-data/shadow/informe_bot.xlsx             — Excel 7 hojas, actualizado cada ~23min
-data/prices/YYYY-MM-DD.csv              — spot cada ~60s (BTC/ETH/SOL/XRP/DOGE/BNB)
-data/wallets/leaderboard_YYYY-MM-DD.csv  — top 75 wallets
+data/shadow/predictions_YYYY-MM-DD.csv  — predictions con columna 'features' JSON
+data/shadow/results.csv                 — resoluciones con 'features' copiada
+data/shadow/strategy_accuracy.csv
+data/shadow/strategy_params.json        — IC, Kelly, filtros_causales, patrones_ganadores
+data/shadow/performance.csv
+data/shadow/postmortem.csv
+data/shadow/estado_actual.md            — actualizado cada 60s
+data/shadow/informe_bot.xlsx            — Excel, actualizado cada ~23min
+data/shadow/arb_scan_YYYY-MM-DD.csv    — oportunidades de arbitraje bracket
+data/shadow/hipotesis_YYYY-MM-DD.md    — hipótesis con evidencia
+data/prices/YYYY-MM-DD.csv             — spot cada ~60s
+data/wallets/leaderboard_YYYY-MM-DD.csv
 ```
 
-### Excluidos de GitHub (.gitignore)
+### Excluidos (.gitignore)
 ```
-data/binance/    — klines con taker_buy_vol, re-fetcheables cada 60s
-data/markets/    — 120-131 MB/día
-data/trades/     — 53 MB/día
-data/wallets/positions_*.csv
-data/live/       — operaciones reales (cuando existan)
-data/reports/    — obsoleto
-logs/
+data/binance/   data/markets/   data/trades/
+data/wallets/positions_*.csv   data/live/   logs/
 ```
 
 ---
 
-## Constantes importantes
+## Constantes clave
 
 ### `shadow_predict.py`
 ```python
-HORIZONTE_MIN_HORAS = 0.05   # 3 min (cubre slots 5min)
-EDGE_MINIMO         = 0.02   # base; sube automáticamente si IC < 0
-SLIPPAGE_ESTIMADO   = 0.02
+HORIZONTE_MIN_HORAS = 0.05   # 3 min
+EDGE_MINIMO = 0.02
+SLIPPAGE_ESTIMADO = 0.02
 # ORDER_FLOW_5M:
-DELTA_MIN = 0.20             # desequilibrio mínimo (20% del volumen)
-LAG_MAX   = 0.12             # precio YES máximo alejado de 0.50
+DELTA_MIN = 0.38
+LAG_MAX   = 0.12
 ```
 
 ### `shadow_postmortem.py`
 ```python
-IC_FILTRO_MIN  = -0.12   # IC bucket para activar filtro causal
-IC_PATRON_MIN  = +0.12   # IC bucket para activar patrón ganador
-N_BUCKET_MIN   =  8      # mínimo de obs en cualquier bucket
+IC_FILTRO_MIN  = -0.12   # umbral para filtros_causales
+IC_PATRON_MIN  = +0.12   # umbral para patrones_ganadores
+N_BUCKET_MIN   =  8
 UMBRAL_SUBIR_EDGE = (-0.10, 3)
 UMBRAL_SUBIR_MAS  = (-0.20, 5)
 UMBRAL_DESACTIVAR = (-0.30, 8)
+```
+
+### `arb_scanner.py`
+```python
+UMBRAL_ARB  = 0.97   # suma YES < esto → BRACKET_ARB
+UMBRAL_OVER = 1.02   # suma YES > esto → OVERROUND
+LIQ_MIN     = 200    # liq del bracket más pequeño
+N_MIN       = 3      # mínimo de brackets
+FEE_PAYOUT  = 0.02   # fee 2% sobre el payout ganador
 ```
 
 ### `generate_report.py`
@@ -407,13 +326,21 @@ UMBRAL_DESACTIVAR = (-0.30, 8)
 DEPOSITO_TOTAL    = 30.0
 CAPITAL_OPERATIVO = 20.0
 RESERVA           = 10.0
-BANKROLL_INICIAL_SHADOW = 20.0
 ```
 
-### `shadow_resolve.py`
-```python
-APUESTA_SIMULADA = 0.90   # fallback si la predicción no tiene columna 'apuesta'
-SLIPPAGE         = 0.02
+---
+
+## Roadmap hacia autonomía
+
+```
+[✓] Aprende CUÁNTO pierde  — IC + Kelly por subtipo
+[✓] Aprende POR QUÉ pierde — filtros_causales sobre features
+[✓] Aprende POR QUÉ gana  — patrones_ganadores → kelly_boost
+[✓] Escáner de arbitraje   — bracket arb en ~2400 mercados cada ~23min
+[ ] Kelly compuesto        — combinar ORDER_FLOW + UPDOWN_GBM
+[ ] Opción B (OU model)    — mean-reversion explícito para 5min (n≥100)
+[ ] Expiry Fade            — fading de precios extremos pre-vencimiento
+[ ] Live trading           — IC ≥ 0.10, n ≥ 50, bankroll recapitalizado
 ```
 
 ---
@@ -421,15 +348,12 @@ SLIPPAGE         = 0.02
 ## Comandos para retomar
 
 ```bash
-# Estado general
 screen -ls
 cat data/shadow/estado_actual.md
-
-# Logs en tiempo real
 tail -f logs/fast.log
 tail -f logs/slow.log
 
-# Resultados con subtipo
+# Resultados completos
 python3 << 'EOF'
 import csv, json
 from collections import defaultdict
@@ -437,7 +361,7 @@ rows = list(csv.DictReader(open('data/shadow/results.csv')))
 pnl = sum(float(r['pnl_neto']) for r in rows)
 wins = sum(int(r['acierto']) for r in rows)
 n = len(rows)
-print(f"{n} ops | {wins}W/{n-wins}L ({wins/n*100:.1f}%) | PNL={pnl:+.2f} | Bankroll={20+pnl:.2f}")
+print(f"{n} ops | {wins}W/{n-wins}L ({wins/n*100:.1f}%) | PNL={pnl:+.2f}€ | Bankroll={20+pnl:.2f}€")
 by_sub = defaultdict(lambda: {'n':0,'win':0,'pnl':0.0})
 for r in rows:
     k = r['strategy']+('#'+r['subtype'] if r.get('subtype') else '')
@@ -447,41 +371,25 @@ for k,d in sorted(by_sub.items(), key=lambda x: x[1]['pnl'], reverse=True):
     print(f"  {k:32s} {d['win']}/{d['n']} ({d['win']/d['n']*100:.0f}%)  PNL={d['pnl']:+.2f}  IC={ic:+.3f}")
 EOF
 
-# Filtros y patrones causales activos
+# Arb scan del día
+cat data/shadow/arb_scan_$(date +%Y-%m-%d).csv 2>/dev/null || echo "Sin scan hoy aún"
+
+# Filtros causales activos
 python3 -c "
 import json
 d = json.load(open('data/shadow/strategy_params.json'))
 for k,v in d['estrategias'].items():
     for f in v.get('filtros_causales',[]):
-        print(f'✗ {k}: |{f[\"feature\"]}|>{f[\"umbral\"]}  IC_malo={f[\"ic_malo\"]:+.3f} n={f[\"n_malo\"]}')
+        print(f'✗ {k}: |{f[\"feature\"]}|>{f[\"umbral\"]}  IC_malo={f[\"ic_malo\"]:+.3f}')
     for g in v.get('patrones_ganadores',[]):
-        print(f'✓ {k}: {g[\"condicion\"]} {g[\"feature\"]} {g[\"umbral\"]}  IC={g[\"ic_patron\"]:+.3f} boost=+{g[\"kelly_boost\"]}€')
+        print(f'✓ {k}: {g[\"condicion\"]} {g[\"feature\"]} {g[\"umbral\"]}  boost=+{g[\"kelly_boost\"]}€')
 "
 
-# Kelly actual por subtipo
-python3 -c "
-import json
-d = json.load(open('data/shadow/strategy_params.json'))
-for k,v in sorted(d['estrategias'].items(), key=lambda x: x[1].get('apuesta_kelly',0), reverse=True)[:10]:
-    print(f'{k:35s} IC={v[\"ic_bayes\"]:+.4f} n={v[\"n\"]:>3} kelly={v.get(\"apuesta_kelly\",0):.2f}€ activa={v[\"activa\"]}')
-"
-
-# Reiniciar loops si caen
+# Reiniciar loops
 screen -dmS fast bash /root/polymarket-research/run_fast.sh
 screen -dmS slow bash /root/polymarket-research/run_slow.sh
 
-# ORDER_FLOW_5M señales recientes
-python3 -c "
-import csv
-from datetime import datetime, timezone
-today = datetime.now(timezone.utc).strftime('%Y-%m-%d')
-rows = [r for r in csv.DictReader(open(f'data/shadow/predictions_{today}.csv'))
-        if r['strategy']=='ORDER_FLOW_5M' and r['decision'] in ('BUY_YES','BUY_NO')]
-print(f'ORDER_FLOW_5M hoy: {len(rows)} señales')
-for r in rows[-5:]: print(f'  {r[\"timestamp_utc\"][:16]} {r[\"decision\"]} {r.get(\"razon\",\"\")[:70]}')
-"
-
-# Git (cuando el loop está pusheando constantemente)
+# Git cuando hay conflictos con el fast loop
 git stash && git pull --rebase origin main && git stash pop && git push origin main
 ```
 
@@ -489,46 +397,16 @@ git stash && git pull --rebase origin main && git stash pop && git push origin m
 
 ## Diagnósticos comunes
 
-### PRICE_MOMENTUM da 0 señales antes de mediodía
-Normal. Necesita drift ≥1.5% en precio YES en últimas 6h. Mercados quietos hasta ~12:00 UTC.
+### PRICE_MOMENTUM 0 señales por la mañana
+Normal. Necesita drift ≥1.5% en últimas 6h. Activo 12:00-22:00 UTC.
 
-### SMART_FLOW_1H da 0 señales al inicio
-El slow loop tarda ~15min en cargar trades. Hasta entonces `trades_1h` está vacío.
-
-### Slots 5min "expirados sin resolver" en logs
-Normal. Oráculos UMA tardan minutos a horas. `shadow_resolve.py` salta mercados con `end_date > ahora + 2h`.
+### SMART_FLOW_1H 0 señales al inicio
+Normal. Trades se cargan ~15min después de arrancar el slow loop.
 
 ### Conflictos git con el fast loop
-El fast loop pushea cada 60s. Si se hacen cambios manuales:
-```bash
-git stash && git pull --rebase origin main && git stash pop && git push origin main
-```
-Si hay conflicto en `data/prices/YYYY-MM-DD.csv`: `git checkout --theirs data/prices/YYYY-MM-DD.csv && git add data/prices/ && git rebase --continue`.
+El fast loop pushea cada 60s. Resolución: `git stash && git pull --rebase && git stash pop && git push`.
+Si conflicto en prices CSV: `git checkout --theirs data/prices/YYYY-MM-DD.csv`.
 
-### `estado_actual.md` desactualizado
-Si muestra timestamps viejos, el fast loop puede estar caído. Comprobar con `screen -ls` y `tail -f logs/fast.log`.
-
-### ORDER_FLOW_5M genera muchas señales (90+/día)
-Normal por ahora. Opera en todos los slots 5min de todos los activos. El postmortem irá subiendo `edge_minimo` automáticamente si el IC no mejora.
-
----
-
-## Roadmap hacia autonomía
-
-```
-[✓] Aprende CUÁNTO pierde  — IC por subtipo, Kelly escala automáticamente
-[✓] Aprende POR QUÉ pierde — filtros_causales sobre features (pct_spot_vs_ref, etc.)
-[✓] Aprende POR QUÉ gana  — patrones_ganadores → kelly_boost automático
-[ ] Kelly compuesto        — combinar ORDER_FLOW + UPDOWN_GBM en misma señal
-[ ] Opción B (OU model)    — mean-reversion explícito para 5min (necesita n≥100)
-[ ] Nuevas features        — añadir a FEATURE_RULES cuando surja hipótesis
-[ ] Live trading           — cuando IC ≥ 0.10 con n ≥ 50 en al menos una estrategia
-```
-
-**Lo que necesitará ajuste manual periódico** (no más de una vez a la semana):
-- Añadir features nuevas a `FEATURE_RULES` cuando tengas una hipótesis
-- Revisar que los filtros/patrones aprendidos tienen sentido económico
-- Decidir cuándo pasar a live y con qué capital
-- Diagnosticar si una nueva estrategia tiene edge real o es ruido
-
-**Todo lo demás se gestiona solo**: IC, Kelly, filtros causales, desactivaciones, patrones ganadores.
+### arb_scanner no detecta nada
+Normal la mayor parte del tiempo. Las oportunidades bracket duran horas o días, no minutos.
+El OVERROUND (suma>1.02) se registra siempre como observación aunque no sea accionable.
