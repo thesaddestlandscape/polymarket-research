@@ -363,6 +363,20 @@ al régimen de volatilidad actual.
 
 **Cuándo activar**: cuando UPDOWN_GBM#15min alcance n≥50 y tengamos la validación del
 modelo base. No tocar el core del modelo hasta tener ese baseline sólido.
+
+**Extensión futura — distribución de p_up via sampling (inspirado en PredACGAN)**
+En vez de calcular p_up = _gbm_p_up(spot, ref, sigma_h, T_h) como un único número,
+samplear N valores de sigma_h desde su distribución de incertidumbre (Kalman P_trace
+o GP posterior) y obtener una distribución de p_up. La entropía de esa distribución
+es una métrica de incertidumbre más rica que cualquier umbral fijo.
+Si la distribución de p_up es muy dispersa (alta entropía) → skip señal.
+Si está concentrada en un valor alto (baja entropía) → señal de alta confianza.
+Esto unifica la estimación de sigma_h y la cuantificación de incertidumbre en un solo
+paso, reemplazando nuestros filtros causales actuales con algo más principiado.
+Requiere: Kalman/GP operativo para sigma_h + n≥500 resoluciones para validar.
+Ref: PredACGAN (Kim & Lee, Engineering Applications of AI, 2023) — tabla 1 muestra
+que filtrar por incertidumbre mejora Sharpe de 0.236 a 1.054 en S&P500 (10 años).
+
 **Referencia**: artículo "Kalman Filter for Quant Trading" — Ruuj (@RuujSs), Jun 2026.
 
 **Alternativa más potente: Hidden Markov Models (HMM)**
