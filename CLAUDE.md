@@ -26,6 +26,9 @@ Documento de contexto completo. Léelo al inicio de cada sesión para retomar si
 
 Este protocolo existe porque el análisis de hipótesis es la palanca más importante para mejorar el modelo, y si no se ejecuta automáticamente se olvida.
 
+**Seguimiento obligatorio en cada sesión — hipótesis bajo vigilancia:**
+- **BTC#5min momentum** (H4, 2026-06-24): pct WIN=0.054% vs LOSS=0.023% — patrón opuesto a ETH/SOL. Reportar n actual, si la diferencia se mantiene o revierte. Activar filtro si n≥20 y patrón consistente (IC>+0.10).
+
 ---
 
 ## Objetivo

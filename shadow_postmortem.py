@@ -367,16 +367,25 @@ def _extraer_features(resultado: dict, pred: dict) -> dict:
 # condicion_mala: "abs_gt" = malo cuando |feature| > umbral (ej: pct_spot alto)
 # condicion_buena: "abs_lt" = bueno cuando |feature| < umbral (ej: delta alto es bueno)
 FEATURE_RULES = {
-    "UPDOWN_GBM#5min":     [("pct_spot_vs_ref", "abs_gt", "abs_lt")],
-    "UPDOWN_GBM#BTC#5min": [("pct_spot_vs_ref", "abs_gt", "abs_lt")],
-    "UPDOWN_GBM#ETH#5min": [("pct_spot_vs_ref", "abs_gt", "abs_lt")],
-    "UPDOWN_GBM#SOL#5min": [("pct_spot_vs_ref", "abs_gt", "abs_lt")],
+    # 5min: alta sigma → modelo sobreconfiado (evidencia: ETH Δ=46%, BTC Δ=30%)
+    "UPDOWN_GBM#5min":     [("pct_spot_vs_ref", "abs_gt", "abs_lt"),
+                            ("sigma_h",          "gt",     "lt")],
+    "UPDOWN_GBM#BTC#5min": [("pct_spot_vs_ref", "abs_gt", "abs_lt"),
+                            ("sigma_h",          "gt",     "lt")],
+    "UPDOWN_GBM#ETH#5min": [("pct_spot_vs_ref", "abs_gt", "abs_lt"),
+                            ("sigma_h",          "gt",     "lt")],
+    "UPDOWN_GBM#SOL#5min": [("pct_spot_vs_ref", "abs_gt", "abs_lt"),
+                            ("sigma_h",          "gt",     "lt")],
     "UPDOWN_GBM#15min":    [("pct_spot_vs_ref", "abs_gt", "abs_lt"),
                             ("sigma_h",          "gt",     "lt")],
-    "UPDOWN_GBM#BTC#15min":[("pct_spot_vs_ref", "abs_gt", "abs_lt")],
-    "UPDOWN_GBM#ETH#15min":[("pct_spot_vs_ref", "abs_gt", "abs_lt")],
-    "UPDOWN_GBM#SOL#15min":[("pct_spot_vs_ref", "abs_gt", "abs_lt")],
-    "ORDER_FLOW_5M":        [("delta_ratio",     "abs_lt", "abs_gt")],  # alto delta = bueno
+    "UPDOWN_GBM#BTC#15min":[("pct_spot_vs_ref", "abs_gt", "abs_lt"),
+                            ("sigma_h",          "gt",     "lt")],
+    "UPDOWN_GBM#ETH#15min":[("pct_spot_vs_ref", "abs_gt", "abs_lt"),
+                            ("sigma_h",          "gt",     "lt")],
+    "UPDOWN_GBM#SOL#15min":[("pct_spot_vs_ref", "abs_gt", "abs_lt"),
+                            ("sigma_h",          "gt",     "lt")],
+    # ORDER_FLOW: delta alto = señal fuerte (WIN avg=0.445 vs LOSS avg=0.384)
+    "ORDER_FLOW_5M":        [("delta_ratio",     "abs_lt", "abs_gt")],
 }
 
 IC_FILTRO_MIN   = -0.12   # IC para activar filtro (evitar)

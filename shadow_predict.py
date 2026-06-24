@@ -966,7 +966,7 @@ def s_order_flow_5m(market, ctx):
     delta_ratio = cum_delta / total_vol  # rango [-1, +1]
 
     # Umbral mínimo de desequilibrio: 20% del volumen total
-    DELTA_MIN = 0.20
+    DELTA_MIN = 0.38  # subido de 0.20 — evidencia: WIN_avg=0.445 vs LOSS_avg=0.384
     if abs(delta_ratio) < DELTA_MIN:
         return None
 
