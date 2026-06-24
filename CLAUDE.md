@@ -258,6 +258,17 @@ Si ambas coinciden en dirección → boost. Si divergen → skip.
 Fading de precios extremos en la última hora antes del vencimiento.
 Caso natural: WEEKLY_PRICE 16:00 UTC. Analizar hoy si hay sesgo detectable.
 
+### [PENDIENTE] LP Rewards — market making como capa adicional en live
+
+Polymarket paga recompensas USDC a quienes ponen órdenes límite dentro de la banda δ (half-width) del programa LP, independientemente del resultado del mercado.
+
+**Cuándo activar**: cuando estemos en live con capital real.
+**Cómo**: en mercados donde ya tenemos señal de predicción, poner simultáneamente una orden límite en el lado contrario para cobrar LP rewards. El spread + recompensas reducen el break-even.
+**Riesgo clave**: adverse selection — alguien te llena porque tiene info que tú no tienes.
+**Mitigación**: fill cooldowns + mid-price jump filter + pausar si hay inventario abierto.
+**Requiere**: CLOB API (wallet + firma de transacciones), distinta de la Gamma API actual.
+**Referencia**: github.com/lihanyu81/polymarket_lp_tool (gestión automática de órdenes límite).
+
 ### [PENDIENTE] LLM hypothesis diario
 `llm_hypothesis.py` existe pero requiere ANTHROPIC_API_KEY.
 Alternativa: pedir análisis al inicio de cada sesión aquí en Claude Code (gratis con Pro).
@@ -340,6 +351,7 @@ RESERVA           = 10.0
 [ ] Kelly compuesto        — combinar ORDER_FLOW + UPDOWN_GBM
 [ ] Opción B (OU model)    — mean-reversion explícito para 5min (n≥100)
 [ ] Expiry Fade            — fading de precios extremos pre-vencimiento
+[ ] LP Rewards (market making) — cuando estemos en live, apilar sobre predicción
 [ ] Live trading           — IC ≥ 0.10, n ≥ 50, bankroll recapitalizado
 ```
 
