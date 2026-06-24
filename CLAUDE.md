@@ -319,6 +319,21 @@ y queramos reducir el delay de señal de 15min a <30s.
 
 ---
 
+### [PENDIENTE — baja prioridad] SMART_FLOW_1H refinements
+
+Cuando SMART_FLOW_1H tenga n≥30 resoluciones limpias (post-fix) y IC real confirmado,
+revisar estos dos filtros adicionales de `github.com/MrFadiAi/Polymarket-bot`:
+
+1. **Excluir one-hit wonders**: descartar wallets donde >30% del PNL total viene de
+   una sola operación. Evita copiar a alguien con un golpe de suerte, no edge real.
+   Implementación: en `capture_wallets.py`, calcular concentración de PNL por trade.
+
+2. **Profit factor ≥1.5x**: ratio ganancias_totales / pérdidas_totales. Más robusto
+   que win rate solo porque captura el tamaño de las operaciones.
+
+**Por qué no ahora**: IC actual es -0.171 con datos contaminados pre-fix. No merece
+optimizar el filtrado de wallets hasta validar el IC base con datos limpios.
+
 ### [PENDIENTE] Cross-Market Arb (Polymarket vs Kalshi)
 
 Misma pregunta en dos plataformas con precios distintos → comprar en la más barata,
