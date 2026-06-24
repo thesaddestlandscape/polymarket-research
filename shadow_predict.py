@@ -738,6 +738,14 @@ def s_updown_gbm(market, ctx):
         return None
 
     pct = (spot / ref - 1) * 100
+
+    # Filtro mean-reversion 5min (Opción A, 2026-06-24):
+    # Empírico n=68: edge>10% (|pct|>0.05%) → 21% win rate.
+    # El GBM sobreestima cuando spot diverge del ref; el mercado revierte, no continúa.
+    # Solo apostamos cuando spot≈ref y el edge viene de mala valoración, no de momentum.
+    if tipo == 'slot' and ventana_min == 5 and abs(pct) > 0.05:
+        return None
+
     if tipo == 'daily':
         slot_type = 'daily'
     elif tipo == 'hourly':

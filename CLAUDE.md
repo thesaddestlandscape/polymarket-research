@@ -312,13 +312,57 @@ Generado por `shadow_resumen.py` al final de cada ciclo fast. Permite ver el est
 
 ## Pendiente / Próximos pasos
 
-1. **Acumular más resoluciones UPDOWN_GBM#15min**: está en n=15, IC=+0.20. Meta: n≥50 para considerar operar en real.
-2. **Primera resolución WEEKLY_PRICE**: postmortem a las 16:00 UTC del 24 Jun.
-3. **PRICE_TARGET_GBM**: sin resoluciones aún. Los mercados son multi-día (resuelven en semanas).
-4. **SMART_FLOW_1H post-fix**: ahora solo opera en mercados de predicción normales. IC real desconocido aún (datos anteriores contaminados).
-5. **Umbral IC para live**: IC ≥ 0.10 con n ≥ 50 resoluciones por estrategia antes de operar con dinero real.
+1. **Acumular más resoluciones UPDOWN_GBM#15min**: n=20, IC=+0.20. Meta: n≥50 para considerar operar en real.
+2. **WEEKLY_PRICE**: primera resolución 24 Jun 16:00 UTC. Hacer postmortem.
+3. **PRICE_TARGET_GBM**: sin resoluciones aún. Mercados multi-día (resuelven en semanas).
+4. **SMART_FLOW_1H post-fix**: datos anteriores contaminados por slots. IC real desconocido aún.
+5. **Umbral IC para live**: IC ≥ 0.10 con n ≥ 50 resoluciones por estrategia.
 6. **Gestión de riesgo para live**: Kelly fraction, max apuesta = 5% del capital por trade, max exposure simultánea = 30%.
-7. **SOL/ETH#5min**: si el IC no mejora, el postmortem los desactivará automáticamente (umbral IC < -0.30 con n ≥ 8). SOL está en IC=-0.07 con n=12, cerca.
+
+---
+
+## Investigación pendiente — mejoras de modelo
+
+### [IMPLEMENTADO 2026-06-24] Opción A — Filtro spot_vs_ref en slots 5min
+
+**Problema empírico confirmado (n=68 resoluciones)**:
+- Edge >10% en slots 5min (|spot_vs_ref| > 0.05%) → **21% win rate** — modelo sobreconfiado
+- Edge 2-10% en slots 5min (spot ≈ ref)            → **83% win rate** — edge real
+
+Causa: **mean reversion a corto plazo**. El GBM asume que el movimiento pasado continúa,
+pero en ventanas de 5min el precio revierte hacia el nivel de referencia. Cuando spot se ha
+movido +0.20% desde la referencia, el modelo dice p_up=0.95 pero el mercado (correctamente)
+sigue valorando YES a 0.50.
+
+**Fix en `s_updown_gbm`** (`shadow_predict.py`):
+```python
+if tipo == 'slot' and ventana_min == 5 and abs(pct) > 0.05:
+    return None
+```
+Solo apostamos en 5min cuando spot está muy cerca del precio de referencia,
+donde el edge procede de una pequeña mala valoración del mercado, no del momentum.
+
+---
+
+### [PENDIENTE] Opción B — Modelo mean-reversion explícito para 5min
+
+**Cuándo activar**: cuando tengamos n≥100 resoluciones en slots 5min post-filtro A,
+con IC estable para confirmar que el efecto mean-reversion es real y no ruido.
+
+**Hipótesis**: en ventanas de 5min el proceso subyacente no es GBM (drift libre)
+sino Ornstein-Uhlenbeck (mean-reverting). Si spot > ref → p_up < 0.50, no > 0.50.
+Esencialmente: **usar la señal del GBM al revés** cuando el movimiento es grande.
+
+**Implementación propuesta** (en `s_updown_gbm`, rama `tipo=='slot' y ventana_min==5`):
+```python
+# En lugar de: p_up = _gbm_p_up(spot, ref, sigma_h, T_h)
+theta = 2.0  # velocidad de reversión — calibrar con datos reales
+pct_norm = (spot / ref - 1)
+p_up_mr = 0.5 - pct_norm * theta * T_h   # señal contraria al movimiento
+p_up_mr = max(0.05, min(0.95, p_up_mr))
+```
+El parámetro `theta` debe estimarse por MLE o grid-search sobre el histórico.
+Condición de activación: señal inversa con IC > +0.10 sostenido en backtesting.
 
 ---
 
