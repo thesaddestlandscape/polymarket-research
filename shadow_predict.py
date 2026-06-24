@@ -1,10 +1,11 @@
 """
-shadow_predict.py — v7. Tres estrategias activas:
-  1. PRICE_MOMENTUM — tendencia exponencial del precio YES (mejora de MICROSTRUCTURE_MOMENTUM)
-  2. SMART_FLOW_1H  — flujo de compras recientes (ultimo 1h, wallets distintas, no BOT)
-  3. BINANCE_UPDOWN — mercados Up/Down con senal de klines Binance (reserva futura)
+shadow_predict.py — v8. Cuatro estrategias activas:
+  1. PRICE_MOMENTUM — tendencia exponencial del precio YES en historial de mercados
+  2. SMART_FLOW_1H  — flujo de compras recientes (ultimo 1h, wallets humanas)
+  3. UPDOWN_GBM     — mercados Up/Down via modelo Black-Scholes digital (daily/hourly/slot)
+  4. WEEKLY_PRICE   — mercados de rango de precio semanal (BTC/ETH/SOL entre $X-$Y)
 """
-import csv, glob, json, math, os, sys
+import csv, glob, json, math, os, re, sys
 from datetime import datetime, timezone, timedelta
 from pathlib import Path
 import requests
@@ -182,6 +183,28 @@ def construir_contexto():
     n_mkt     = len(trades)
     n_wallets = sum(len(v) for v in trades.values())
     print(f"  SMART_FLOW_1H: {n_mkt} mercados, {n_wallets} wallet-acciones en ultima 1h")
+
+    # Precios intraday para UPDOWN_GBM
+    precios_data = cargar_precios_intraday()
+    ctx["precios_intraday"] = precios_data
+
+    # Spot más reciente: primero precios_intraday, luego sobreescribir con klines (más fresco)
+    spot_prices = {}
+    for _, prices in precios_data[-5:]:
+        spot_prices.update(prices)
+    try:
+        fecha_hoy = datetime.now(timezone.utc).strftime("%Y-%m-%d")
+        kf = DIR_BINANCE / f"klines_{fecha_hoy}.json"
+        if kf.exists():
+            with open(kf, encoding="utf-8") as f:
+                kd = json.load(f)
+            for sym, data in kd.items():
+                if isinstance(data, list) and data:
+                    spot_prices[sym] = float(data[-1][4])
+    except Exception:
+        pass
+    ctx["spot_prices"] = spot_prices
+    print(f"  UPDOWN_GBM: {len(precios_data)} pts intraday | spot={{{', '.join(f'{k}={v:.4g}' for k, v in list(spot_prices.items())[:4])}}}")
     return ctx
 
 def s_price_momentum(market, ctx):
@@ -433,16 +456,234 @@ def s_weekly_price(market, ctx):
     }
 
 
+# ─────────────────────────────────────────────────────────────────────────────
+# UPDOWN_GBM — Black-Scholes digital para mercados Up/Down
+# ─────────────────────────────────────────────────────────────────────────────
+
+def cargar_precios_intraday():
+    """Carga prices CSV (hoy y ayer) → lista ordenada de (ts_utc, {sym: float})."""
+    SYMS = ["BTC", "ETH", "SOL", "XRP", "DOGE", "BNB"]
+    fecha_hoy  = datetime.now(timezone.utc).strftime("%Y-%m-%d")
+    fecha_ayer = (datetime.now(timezone.utc) - timedelta(days=1)).strftime("%Y-%m-%d")
+    rows = []
+    for fecha in [fecha_ayer, fecha_hoy]:
+        path = DIR_DATA / "prices" / f"{fecha}.csv"
+        if not path.exists():
+            continue
+        try:
+            with open(path, encoding="utf-8") as f:
+                for row in csv.DictReader(f):
+                    try:
+                        ts = datetime.fromisoformat(
+                            row["timestamp_utc"].replace("Z", "+00:00"))
+                        if ts.tzinfo is None:
+                            ts = ts.replace(tzinfo=timezone.utc)
+                    except Exception:
+                        continue
+                    prices = {}
+                    for sym in SYMS:
+                        v = row.get(sym, "")
+                        if v:
+                            try:
+                                prices[sym] = float(v)
+                            except ValueError:
+                                pass
+                    if prices:
+                        rows.append((ts, prices))
+        except Exception as e:
+            print(f"  Error precios_intraday {fecha}: {e}")
+    rows.sort(key=lambda x: x[0])
+    return rows
+
+
+def _estimar_vol_h(sym, precios_data, n_min=120):
+    """Vol por hora a partir de las últimas n_min de precios spot. None si insuficiente."""
+    ahora = datetime.now(timezone.utc)
+    corte = ahora - timedelta(minutes=n_min)
+    subset = [(ts, p[sym]) for ts, p in precios_data if sym in p and ts >= corte]
+    if len(subset) < 5:
+        subset = [(ts, p[sym]) for ts, p in precios_data if sym in p][-60:]
+    if len(subset) < 2:
+        return None
+    prices = [p for _, p in subset]
+    log_r = [math.log(prices[i] / prices[i-1])
+             for i in range(1, len(prices))
+             if prices[i-1] > 0 and prices[i] > 0]
+    if len(log_r) < 2:
+        return None
+    var = sum(r * r for r in log_r) / len(log_r)
+    # Duración media entre puntos (minutos)
+    durs = [(subset[i][0] - subset[i-1][0]).total_seconds() / 60
+            for i in range(1, len(subset))]
+    avg_dur = sum(durs) / len(durs)
+    if avg_dur <= 0:
+        return None
+    return math.sqrt(var / avg_dur * 60)  # vol por hora
+
+
+def _precio_en(activo, ref_time, precios_data, tol_min=10):
+    """Precio más cercano a ref_time (tolerancia ±tol_min minutos). None si no hay."""
+    best_p, best_d = None, None
+    for ts, prices in precios_data:
+        if activo not in prices:
+            continue
+        d = abs((ts - ref_time).total_seconds())
+        if best_d is None or d < best_d:
+            best_d, best_p = d, prices[activo]
+    if best_d is not None and best_d <= tol_min * 60:
+        return best_p
+    return None
+
+
+def _gbm_p_up(spot, ref, sigma_h, T_h):
+    """
+    P(S_T > ref | S_t=spot) via Black-Scholes digital con drift=0.
+    sigma_h: vol por hora. T_h: horas restantes.
+    """
+    if sigma_h <= 0 or T_h <= 0 or ref <= 0 or spot <= 0:
+        return None
+    sigma_T = sigma_h * math.sqrt(T_h)
+    if sigma_T < 1e-9:
+        return 1.0 if spot > ref else (0.0 if spot < ref else 0.5)
+    return _norm_cdf(math.log(spot / ref) / sigma_T)
+
+
+def _parse_updown_tipo(question):
+    """
+    Clasifica el mercado Up/Down y devuelve (tipo, ventana_min).
+    tipo: 'daily' | 'slot' | 'hourly' | None
+    ventana_min: minutos de la ventana (None para daily)
+    """
+    q = question.lower()
+    if "up or down" not in q:
+        return None, None
+
+    # Daily: "Bitcoin Up or Down on June 24?"
+    if re.search(r'up or down on \w+ \d+\??$', q.strip()):
+        return 'daily', None
+
+    # Slot con rango explícito: "1:15am-1:20am et" (5min, 15min, etc.)
+    m = re.search(r'(\d+):(\d+)(am|pm)-(\d+):(\d+)(am|pm)', q)
+    if m:
+        def to_min(h, mn, mer):
+            h = int(h) % 12 + (12 if mer == 'pm' else 0)
+            return h * 60 + int(mn)
+        t1 = to_min(m.group(1), m.group(2), m.group(3))
+        t2 = to_min(m.group(4), m.group(5), m.group(6))
+        diff = (t2 - t1) % (24 * 60)
+        return ('slot', diff) if diff > 0 else (None, None)
+
+    # Hourly: "June 24, 9am et" (sin rango de minutos)
+    if re.search(r',\s*\d+\s*(am|pm)\s+et', q):
+        return 'hourly', 60
+
+    return None, None
+
+
+def s_updown_gbm(market, ctx):
+    """
+    Black-Scholes digital para mercados Up/Down.
+    Calcula P(S_T > S_ref | spot, sigma, T) y compara con price_yes del mercado.
+    Cubre: daily ($42k liq), hourly (1h), slots de 5/15min.
+    """
+    question = market.get("question", "")
+    if "up or down" not in question.lower():
+        return None
+
+    activo = identificar_activo(question)
+    if not activo or activo not in BINANCE_SYMBOLS:
+        return None
+
+    try:
+        liq = float(market.get("liquidity") or 0)
+    except (ValueError, TypeError):
+        liq = 0.0
+    if liq < 2000:
+        return None
+
+    try:
+        spread = float(market.get("spread") or 0)
+    except (ValueError, TypeError):
+        spread = 0.0
+    if spread > 0.05:
+        return None
+
+    tipo, ventana_min = _parse_updown_tipo(question)
+    if tipo is None:
+        return None
+
+    T_h = market.get("_horas")
+    if T_h is None or T_h <= 2 / 60:  # mínimo 2 minutos
+        return None
+
+    precios_data = ctx.get("precios_intraday", [])
+    if not precios_data:
+        return None
+
+    # Spot actual: klines > precios_intraday
+    spot = ctx.get("spot_prices", {}).get(activo)
+    if not spot:
+        recientes = [(ts, p[activo]) for ts, p in precios_data if activo in p]
+        if not recientes:
+            return None
+        spot = recientes[-1][1]
+
+    # end_date
+    try:
+        end_str = market.get("end_date", "").replace("Z", "+00:00")
+        end_dt = datetime.fromisoformat(end_str)
+        if end_dt.tzinfo is None:
+            end_dt = end_dt.replace(tzinfo=timezone.utc)
+    except Exception:
+        return None
+
+    # Tiempo de referencia y ventana de vol según tipo
+    if tipo == 'daily':
+        ref_time = end_dt.replace(hour=0, minute=0, second=0, microsecond=0)
+        vol_win  = min(240, max(60, int(T_h * 20)))
+        tol_min  = 15
+    elif tipo == 'hourly':
+        ref_time = end_dt - timedelta(hours=1)
+        vol_win  = 120
+        tol_min  = 8
+    else:  # slot
+        ref_time = end_dt - timedelta(minutes=ventana_min)
+        vol_win  = min(60, max(15, ventana_min * 4))
+        tol_min  = max(2, ventana_min // 2)
+
+    ref = _precio_en(activo, ref_time, precios_data, tol_min)
+    if ref is None:
+        return None
+
+    sigma_h = _estimar_vol_h(activo, precios_data, n_min=vol_win)
+    if not sigma_h or sigma_h <= 0:
+        return None
+
+    p_up = _gbm_p_up(spot, ref, sigma_h, T_h)
+    if p_up is None:
+        return None
+
+    pct = (spot / ref - 1) * 100
+    vent_str = "daily" if tipo == 'daily' else f"{ventana_min}min"
+    razon = (
+        f"updown_gbm {activo} {vent_str} "
+        f"ref={ref:.4g} spot={spot:.4g} ({pct:+.2f}%) "
+        f"sigma_h={sigma_h:.4f} T={T_h:.2f}h p_up={p_up:.3f}"
+    )
+    return {"prob_yes": max(0.05, min(0.95, p_up)), "razon": razon}
+
+
 ESTRATEGIAS = [
-    ("WEEKLY_PRICE", s_weekly_price),
-    ("PRICE_MOMENTUM",  s_price_momentum),
-    ("SMART_FLOW_1H",   s_smart_flow_1h),
-    # ("BINANCE_UPDOWN",  s_binance_updown),  # desactivado — IC -0.50
+    ("WEEKLY_PRICE",  s_weekly_price),
+    ("PRICE_MOMENTUM", s_price_momentum),
+    ("SMART_FLOW_1H",  s_smart_flow_1h),
+    ("UPDOWN_GBM",     s_updown_gbm),
+    # ("BINANCE_UPDOWN", s_binance_updown),  # retirada — IC -0.50
 ]
 
 def main():
     ts = datetime.now(timezone.utc).isoformat(timespec="seconds")
-    print(f"[{ts}] === Shadow predict v7 ===")
+    print(f"[{ts}] === Shadow predict v8 ===")
     mercados = cargar_mercados_recientes()
     print(f"  Mercados snapshot reciente: {len(mercados)}")
     operables = []
