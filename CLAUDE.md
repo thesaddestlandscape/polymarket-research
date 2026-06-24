@@ -366,6 +366,26 @@ modelo base. No tocar el core del modelo hasta tener ese baseline sólido.
 **Referencia**: artículo "Kalman Filter for Quant Trading" — Ruuj (@RuujSs), Jun 2026.
 Implementación Python completa incluida en el artículo.
 
+### [PENDIENTE — experimento futuro] CNN sobre imágenes de precio (Re-Imaging Price Trends)
+
+Paper: Jiang, Kelly, Xiu — "(Re-)Imag(in)ing Price Trends", Chicago Booth/AQR (2020).
+Idea: convertir series de precios en imágenes y entrenar una CNN para predecir dirección.
+La CNN descubre patrones técnicos conocidos Y nuevos que el análisis lineal no captura.
+Sharpe out-of-sample >1.0, ortogonal a factores de momentum clásicos.
+
+**Aplicación a nuestro sistema:**
+1. PRICE_MOMENTUM: en vez de drift exponencial del precio YES, tomar los últimos N
+   snapshots del precio YES como imagen → CNN predice dirección del mercado.
+2. UPDOWN_GBM: tomar el precio spot BTC/ETH/SOL en ventana pre-vencimiento como imagen
+   → CNN complementa o reemplaza el modelo GBM analítico.
+
+**Por qué no ahora**: necesita 5.000-10.000 ejemplos mínimo para entrenar.
+Tenemos ~120 resoluciones totales. Construir el dataset requiere meses de operación
+O extraer histórico de Polymarket + Binance (proyecto de semanas).
+
+**Cuando activar**: cuando PRICE_MOMENTUM tenga n≥200 resoluciones con historial
+de YES price guardado, O cuando construyamos dataset histórico de slots de Polymarket.
+
 ### [PENDIENTE — baja prioridad] SMART_FLOW_1H refinements
 
 Cuando SMART_FLOW_1H tenga n≥30 resoluciones limpias (post-fix) y IC real confirmado,
