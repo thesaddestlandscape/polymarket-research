@@ -1,2 +1,2 @@
 timestamp_utc,strategy,n_total,n_aciertos,hit_rate,edge_medio,pnl_total,pnl_medio,IC_simple,IC_pearson,sum_edge,sum_prob,sum_outcome,sum_prob2,sum_outcome2,sum_prob_outcome
-2026-06-24T05:39:08+00:00,UPDOWN_GBM,3,0,0.0,0.1318,-2.754,-0.918,-0.5,-0.7358,0.3953,1.8355,1.0,1.195487,1.0,0.4501
+2026-06-24T05:41:37+00:00,UPDOWN_GBM,5,2,0.4,0.1556,-0.9161,-0.1832,-0.1,-0.2181,0.7782,3.2384,3.0,2.239513,3.0,1.853
