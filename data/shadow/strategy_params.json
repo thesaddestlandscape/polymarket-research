@@ -1,5 +1,5 @@
 {
-  "timestamp_utc": "2026-06-24T06:42:57+00:00",
+  "timestamp_utc": "2026-06-24T06:44:11+00:00",
   "estrategias": {
     "UPDOWN_GBM": {
       "activa": true,
@@ -7,8 +7,35 @@
       "ic_bayes": 0.0455,
       "n": 42,
       "pnl_total": 1.8033,
-      "causa_principal": "DIRECTION_ERROR",
+      "causa_principal": "SLOT_OVERCONFIDENCE",
       "motivo": "IC_bayes=+0.045 n=42 conf=1.00"
+    },
+    "UPDOWN_GBM#5min": {
+      "activa": true,
+      "edge_minimo": 0.02,
+      "ic_bayes": -0.0455,
+      "n": 31,
+      "pnl_total": -3.6938,
+      "causa_principal": "SLOT_OVERCONFIDENCE",
+      "motivo": "IC_bayes=-0.045 n=31 conf=1.00"
+    },
+    "UPDOWN_GBM#15min": {
+      "activa": true,
+      "edge_minimo": 0.02,
+      "ic_bayes": 0.1432,
+      "n": 9,
+      "pnl_total": 6.1718,
+      "causa_principal": "DIRECTION_ERROR",
+      "motivo": "IC_bayes=+0.318 n=9 conf=0.45"
+    },
+    "UPDOWN_GBM#hourly": {
+      "activa": true,
+      "edge_minimo": 0.02,
+      "ic_bayes": 0.0,
+      "n": 2,
+      "pnl_total": -0.6747,
+      "causa_principal": "EDGE_INSUFICIENTE",
+      "motivo": "IC_bayes=+0.000 n=2 conf=0.10"
     }
   }
 }
