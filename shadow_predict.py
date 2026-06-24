@@ -187,6 +187,56 @@ def cargar_trades_recientes():
             print(f"  Error leyendo trades {arch}: {e}")
     return por_market
 
+UPDOWN_ASSETS_LOWER = ["btc", "eth", "sol", "xrp", "doge", "bnb"]
+
+def fetch_slots_directos(horizonte_min=5, ventanas_adelante=2):
+    """
+    Consulta Polymarket directamente por los slots activos/próximos de 5min y 15min.
+    Devuelve lista de dicts compatibles con cargar_mercados_recientes().
+    Esto garantiza cobertura de slots aunque el slow loop no haya actualizado el CSV.
+    """
+    ahora = datetime.now(timezone.utc)
+    intervalo_s = horizonte_min * 60
+    ts_base = (int(ahora.timestamp()) // intervalo_s) * intervalo_s
+    prefix = f"updown-{horizonte_min}m"
+    url = "https://gamma-api.polymarket.com/events"
+    mercados = []
+    for delta in range(ventanas_adelante + 1):
+        ts_slot = ts_base + delta * intervalo_s
+        for asset in UPDOWN_ASSETS_LOWER:
+            slug = f"{asset}-{prefix}-{ts_slot}"
+            try:
+                r = requests.get(url, params={"slug": slug}, timeout=5)
+                if r.status_code != 200:
+                    continue
+                events = r.json() if isinstance(r.json(), list) else []
+                for ev in events:
+                    for m in (ev.get("markets") or []):
+                        precios_raw = m.get("outcomePrices")
+                        try:
+                            pr = json.loads(precios_raw) if isinstance(precios_raw, str) else precios_raw
+                            py = float(pr[0]) if pr else None
+                        except Exception:
+                            py = None
+                        if py is None or not (0.01 < py < 0.99):
+                            continue
+                        mercados.append({
+                            "market_id":       m.get("id", ""),
+                            "condition_id":    m.get("conditionId", ""),
+                            "question":        m.get("question", ""),
+                            "slug":            m.get("slug", ""),
+                            "end_date":        (m.get("endDate") or "")[:19],
+                            "liquidity":       m.get("liquidity", ""),
+                            "spread":          m.get("spread", ""),
+                            "price_yes":       py,
+                            "event_tags":      "|".join(t.get("slug","") for t in (ev.get("tags") or [])),
+                            "timestamp_utc":   ahora.isoformat(timespec="seconds"),
+                        })
+            except Exception:
+                pass
+    return mercados
+
+
 def construir_contexto():
     print("Construyendo contexto...")
     ctx = {}
@@ -839,6 +889,18 @@ def main():
     print(f"[{ts}] === Shadow predict v8 ===")
     mercados = cargar_mercados_recientes()
     print(f"  Mercados snapshot reciente: {len(mercados)}")
+
+    # Enriquecer con slots frescos obtenidos directamente de la API
+    # Garantiza cobertura de slots 5min/15min independientemente del slow loop
+    ids_conocidos = {m.get("market_id", "") for m in mercados}
+    frescos_5m  = fetch_slots_directos(horizonte_min=5,  ventanas_adelante=2)
+    frescos_15m = fetch_slots_directos(horizonte_min=15, ventanas_adelante=1)
+    nuevos_frescos = [m for m in frescos_5m + frescos_15m
+                      if m.get("market_id", "") not in ids_conocidos and m.get("market_id", "")]
+    if nuevos_frescos:
+        mercados = mercados + nuevos_frescos
+        print(f"  + {len(nuevos_frescos)} slots frescos (5/15min) de API directa")
+
     operables = []
     for m in mercados:
         h = horas_a_vencimiento(m.get("end_date", ""))
