@@ -21,10 +21,16 @@ while true; do
     $PYTHON "$REPO_DIR/capture_trades.py"   >> "$LOG" 2>&1 || true
     $PYTHON "$REPO_DIR/generate_report.py"  >> "$LOG" 2>&1 || true
 
-    # Git: precios y leaderboard (archivos pequeños rastreados en GitHub)
-    # markets, trades y positions están en .gitignore por ser demasiado grandes
+    # LLM hypothesis generator: solo una vez al día (ciclo 1 de cada día)
+    HORA_UTC=$(date -u +%H)
+    if [ "$HORA_UTC" -ge 20 ] && [ "$HORA_UTC" -le 21 ] && [ -n "$ANTHROPIC_API_KEY" ]; then
+        log "  Ejecutando LLM hypothesis generator..."
+        $PYTHON "$REPO_DIR/llm_hypothesis.py" >> "$LOG" 2>&1 || true
+    fi
+
+    # Git: precios, leaderboard e hipótesis LLM
     cd "$REPO_DIR"
-    git add data/prices/ data/wallets/leaderboard_*.csv >> "$LOG" 2>&1 || true
+    git add data/prices/ data/wallets/leaderboard_*.csv data/shadow/hipotesis_*.md >> "$LOG" 2>&1 || true
     if ! git diff --cached --quiet 2>/dev/null; then
         git commit -m "data: ciclo slow $CICLO $(date -u +%Y-%m-%dT%H:%MZ)" >> "$LOG" 2>&1 || true
         git pull --rebase origin main >> "$LOG" 2>&1 || true
