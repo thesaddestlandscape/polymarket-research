@@ -18,10 +18,36 @@ import csv
 import glob
 import json
 import math
+import re
 from datetime import datetime, timezone
 from pathlib import Path
 
 import requests
+
+
+def _infer_subtype(pred: dict) -> str:
+    """Infiere subtype de la columna razon cuando no está disponible en el CSV."""
+    s = pred.get("subtype", "")
+    if s:
+        return s
+    razon = pred.get("razon", "") or ""
+    # "updown_gbm BTC 15min ..."  →  BTC#15min
+    m = re.search(r'updown_gbm\s+(\w+)\s+(\w+)', razon)
+    if m:
+        return f"{m.group(1)}#{m.group(2)}"
+    # "price_target_gbm BTC atexpiry ..."  →  BTC#atexpiry
+    m = re.search(r'price_target_gbm\s+(\w+)\s+(\w+)', razon)
+    if m:
+        return f"{m.group(1)}#{m.group(2)}"
+    # "weekly_between BTC ..." / "weekly_price BTC ..."  →  BTC
+    m = re.search(r'weekly_(?:between|price)\s+(\w+)', razon)
+    if m:
+        return m.group(1)
+    # "price_momentum ..." / "smart_flow_1h ..."  → asset si aparece
+    m = re.search(r'(?:price_momentum|smart_flow_1h)\s+.*?(BTC|ETH|SOL|XRP|DOGE|BNB)', razon)
+    if m:
+        return m.group(1)
+    return ""
 
 TIMEOUT = 30
 SLIPPAGE = 0.02
@@ -323,7 +349,7 @@ def main():
             "resolution_timestamp": ts,
             "prediction_timestamp": pred.get("timestamp_utc", ""),
             "strategy": pred.get("strategy", ""),
-            "subtype": pred.get("subtype", ""),
+            "subtype": _infer_subtype(pred),
             "market_id": mid,
             "question": pred.get("question", ""),
             "end_date": pred.get("end_date", ""),

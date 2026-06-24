@@ -701,11 +701,136 @@ def s_updown_gbm(market, ctx):
     return {"prob_yes": max(0.05, min(0.95, p_up)), "razon": razon, "subtype": subtype}
 
 
+# ─────────────────────────────────────────────────────────────────────────────
+# PRICE_TARGET_GBM — mercados de precio objetivo via Black-Scholes digital/barrera
+# ─────────────────────────────────────────────────────────────────────────────
+
+def _parse_price_target(question):
+    """
+    Extrae (tipo, direction, K) de preguntas de precio objetivo.
+      tipo:      'atexpiry' | 'reach'
+      direction: 'above' | 'below'  (solo para atexpiry)
+      K:         precio objetivo (float)
+
+    Soporta: "$76,000", "$150k", "$3,000", "$1.5m"
+    """
+    q = question.lower().replace(",", "")
+
+    def parse_k(s):
+        s = s.strip()
+        mul = 1
+        if s.endswith("b"): s = s[:-1]; mul = 1_000_000_000
+        elif s.endswith("m"): s = s[:-1]; mul = 1_000_000
+        elif s.endswith("k"): s = s[:-1]; mul = 1_000
+        try:
+            return float(s) * mul
+        except ValueError:
+            return None
+
+    m = re.search(r'\$([0-9]+(?:\.[0-9]+)?[bBmMkK]?)', q)
+    if not m:
+        return None, None, None
+    K = parse_k(m.group(1))
+    if not K or K <= 0:
+        return None, None, None
+
+    if re.search(r'\b(hit|reach|exceed|get to|touch)\b', q):
+        return 'reach', None, K
+    elif re.search(r'\babove\b|\bover\b', q):
+        return 'atexpiry', 'above', K
+    elif re.search(r'\bbelow\b|\bunder\b', q):
+        return 'atexpiry', 'below', K
+
+    return None, None, None
+
+
+def s_price_target_gbm(market, ctx):
+    """
+    GBM digital/barrera para mercados de precio objetivo sobre activos cripto.
+
+    atexpiry above K: P(S_T > K)   = N( log(S/K) / σ√T )
+    atexpiry below K: P(S_T < K)   = N(-log(S/K) / σ√T )
+    reach    K:       P(toca K)     = 2·N(-|log(S/K)| / σ√T )  [reflexión BM]
+
+    Solo activos con precio spot disponible (BTC/ETH/SOL/XRP/DOGE/BNB).
+    Ventana de tiempo: 1h – 30 días (más allá el modelo GBM pierde fiabilidad).
+    """
+    question = market.get("question", "")
+
+    activo = identificar_activo(question)
+    if not activo or activo not in BINANCE_SYMBOLS:
+        return None
+
+    try:
+        liq = float(market.get("liquidity") or 0)
+    except (ValueError, TypeError):
+        liq = 0.0
+    if liq < 2000:
+        return None
+
+    try:
+        spread = float(market.get("spread") or 0)
+    except (ValueError, TypeError):
+        spread = 0.0
+    if spread > 0.08:
+        return None
+
+    tipo, direction, K = _parse_price_target(question)
+    if tipo is None:
+        return None
+
+    T_h = market.get("_horas")
+    if T_h is None or not (1 <= T_h <= 720):   # 1h … 30 días
+        return None
+
+    precios_data = ctx.get("precios_intraday", [])
+    spot = ctx.get("spot_prices", {}).get(activo)
+    if not spot:
+        recientes = [(ts, p[activo]) for ts, p in precios_data if activo in p]
+        if not recientes:
+            return None
+        spot = recientes[-1][1]
+
+    # K fuera de rango imposible (evita FDV, market cap, etc.)
+    if not (spot / 50 < K < spot * 50):
+        return None
+
+    # Vol: ventana proporcional a T (2h para slots intraday, hasta 12h para multi-día)
+    # El CSV de precios tiene ~12h de historia a resolución 60s
+    vol_win = min(720, max(30, int(T_h * 5)))
+    sigma_h = _estimar_vol_h(activo, precios_data, n_min=vol_win)
+    if not sigma_h or sigma_h <= 0:
+        return None
+
+    sigma_T = sigma_h * math.sqrt(T_h)
+    if sigma_T < 1e-9:
+        return None
+
+    log_ratio = math.log(spot / K)   # > 0 si spot > K, < 0 si spot < K
+
+    if tipo == 'atexpiry':
+        p_yes = _norm_cdf(log_ratio / sigma_T if direction == 'above'
+                          else -log_ratio / sigma_T)
+        subtype = f"{activo}#atexpiry"
+    else:  # reach / barrier
+        p_yes = min(0.99, 2 * _norm_cdf(-abs(log_ratio) / sigma_T))
+        subtype = f"{activo}#reach"
+
+    pct_vs_K = (spot / K - 1) * 100
+    razon = (
+        f"price_target_gbm {activo} {tipo} "
+        f"K={K:.5g} spot={spot:.5g} ({pct_vs_K:+.1f}%vsK) "
+        f"sigma_h={sigma_h:.4f} T={T_h:.1f}h p_yes={p_yes:.3f}"
+    )
+    return {"prob_yes": max(0.05, min(0.95, p_yes)), "razon": razon, "subtype": subtype}
+
+
 ESTRATEGIAS = [
-    ("WEEKLY_PRICE",  s_weekly_price),
-    ("PRICE_MOMENTUM", s_price_momentum),
-    ("SMART_FLOW_1H",  s_smart_flow_1h),
-    ("UPDOWN_GBM",     s_updown_gbm),
+    ("WEEKLY_PRICE",      s_weekly_price),
+    ("PRICE_MOMENTUM",    s_price_momentum),
+    ("SMART_FLOW_1H",     s_smart_flow_1h),
+    ("UPDOWN_GBM",        s_updown_gbm),
+    ("PRICE_TARGET_GBM",  s_price_target_gbm),
     # ("BINANCE_UPDOWN", s_binance_updown),  # retirada — IC -0.50
 ]
 

@@ -88,10 +88,24 @@ def clasificar_causa(resultado: dict, pred: dict | None) -> str:
             pass
 
     # TIMING_CORTO: solo para estrategias que no están diseñadas para slots cortos
-    if strategy != "UPDOWN_GBM" and pred:
+    if strategy not in ("UPDOWN_GBM", "PRICE_TARGET_GBM") and pred:
         try:
             if float(pred.get("horas_a_vencimiento", 999)) < 24:
                 return "TIMING_CORTO"
+        except (ValueError, TypeError):
+            pass
+
+    # DRIFT_ERROR: PRICE_TARGET_GBM asume drift=0; si el mercado hizo un movimiento
+    # direccional sostenido grande (>5%) la hipótesis es incorrecta
+    if strategy == "PRICE_TARGET_GBM":
+        try:
+            prob = float(resultado.get("prob_yes_modelo", 0.5) or 0.5)
+            edge = abs(float(resultado.get("edge_direccional", 0) or 0))
+            # edge alto + fallo = modelo muy seguro pero mercado tenía razón
+            if edge > 0.15 and prob < 0.20:
+                return "DRIFT_ERROR"  # modelo dijo ~0 pero ocurrió: drift alcista
+            if edge > 0.15 and prob > 0.80:
+                return "DRIFT_ERROR"  # modelo dijo ~1 pero no ocurrió: drift bajista
         except (ValueError, TypeError):
             pass
 
