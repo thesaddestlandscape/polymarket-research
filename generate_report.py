@@ -17,7 +17,7 @@ Ficheros de entrada:
   data/shadow/strategy_accuracy.csv
   data/shadow/performance.csv
 
-Salida: data/reports/informe_bot.xlsx
+Salida: data/shadow/informe_bot.xlsx
 """
 import csv
 import glob
@@ -35,16 +35,14 @@ except ImportError:
 
 DIR_SHADOW   = Path("data/shadow")
 DIR_LIVE     = Path("data/live")
-DIR_REPORTS  = Path("data/reports")
 DIR_LIVE.mkdir(parents=True, exist_ok=True)
-DIR_REPORTS.mkdir(parents=True, exist_ok=True)
 
 LIVE_TRADES_CSV    = DIR_LIVE  / "trades.csv"
 LIVE_BANKROLL_CSV  = DIR_LIVE  / "bankroll.csv"
 SHADOW_RESULTS     = DIR_SHADOW / "results.csv"
 SHADOW_ACCURACY    = DIR_SHADOW / "strategy_accuracy.csv"
 SHADOW_PERFORMANCE = DIR_SHADOW / "performance.csv"
-OUTPUT_XLS         = DIR_REPORTS / "informe_bot.xlsx"
+OUTPUT_XLS         = DIR_SHADOW / "informe_bot.xlsx"
 
 LIVE_TRADES_COLS = [
     "timestamp_utc","market_id","question","end_date",
@@ -55,8 +53,11 @@ LIVE_TRADES_COLS = [
 ]
 LIVE_BANKROLL_COLS = ["fecha","tipo","importe_eur","balance_eur","notas"]
 
+DEPOSITO_TOTAL          = 30.0   # depósito real en Polymarket
+CAPITAL_OPERATIVO       = 20.0   # capital que puede usar el bot
+RESERVA                 = 10.0   # colchón intocable
 APUESTA_SHADOW          = 0.90
-BANKROLL_INICIAL_SHADOW = 30.0
+BANKROLL_INICIAL_SHADOW = CAPITAL_OPERATIVO
 
 _F = lambda hex: PatternFill("solid", fgColor=hex)
 FILL = {
@@ -272,6 +273,7 @@ def hoja_dashboard(wb, shadow_res, shadow_acc, live_trades, live_bankroll, shado
     pnl_sh  = sum(float(r.get("pnl_neto", 0)) for r in shadow_res)
     roi_sh  = pnl_sh / (APUESTA_SHADOW * n_sh) if n_sh else 0
     bkr_sh  = BANKROLL_INICIAL_SHADOW + pnl_sh
+    roi_deposito = pnl_sh / DEPOSITO_TOTAL  # ROI sobre el depósito total
 
     racha_sh, tipo_sh = 0, ""
     for r in reversed(shadow_res):
@@ -283,14 +285,39 @@ def hoja_dashboard(wb, shadow_res, shadow_acc, live_trades, live_bankroll, shado
         else:
             break
 
-    f = 5
+    # Bloque capital — encabezado propio
+    ws.merge_cells("A4:B4")
+    c = ws["A4"]
+    c.value     = "CAPITAL"
+    c.fill      = PatternFill("solid", fgColor="37474F")
+    c.font      = Font(bold=True, color="FFFFFF", name="Calibri", size=11)
+    c.alignment = AC
+    ws.row_dimensions[4].height = 24
+
+    for idx, (lbl, val, fv, fn) in enumerate([
+        ("Depósito total",    f"{DEPOSITO_TOTAL:.0f} €",    FILL["gris"],    FONT["bold"]),
+        ("Capital operativo", f"{CAPITAL_OPERATIVO:.0f} €", FILL["azul"],    FONT["bold"]),
+        ("Reserva intocable", f"{RESERVA:.0f} €",           FILL["amarillo"],FONT["bold"]),
+    ]):
+        kpi(ws, 5 + idx, 1, 2, lbl, val, fv, fn)
+
+    ws.merge_cells("A8:B8")
+    c = ws["A8"]
+    c.value     = "SHADOW (simulado)"
+    c.fill      = FILL["subhead"]
+    c.font      = Font(bold=True, color="FFFFFF", name="Calibri", size=11)
+    c.alignment = AC
+    ws.row_dimensions[8].height = 24
+
+    f = 9
     for lbl, val, fv, fn in [
         ("Operaciones resueltas", n_sh,                           FILL["gris"],    FONT["bold"]),
         ("Posiciones abiertas",   len(shadow_abiertas),           FILL["amarillo"],FONT["bold"]),
         ("Aciertos / Fallos",     f"{n_ok_sh} / {n_sh-n_ok_sh}", FILL["verde"] if hit_sh >= 0.5 else FILL["rojo"], FONT["verde"] if hit_sh >= 0.5 else FONT["rojo"]),
         ("Hit Rate",              f"{hit_sh*100:.1f}%",           FILL["verde"] if hit_sh >= 0.5 else FILL["rojo"], FONT["verde"] if hit_sh >= 0.5 else FONT["rojo"]),
-        ("P&L Neto Total",        f"{pnl_sh:+.2f} €",            FILL["verde"] if pnl_sh >= 0 else FILL["rojo"],   FONT["verde"] if pnl_sh >= 0 else FONT["rojo"]),
-        ("ROI sobre apuestas",    f"{roi_sh*100:+.1f}%",          FILL["verde"] if roi_sh >= 0 else FILL["rojo"],   FONT["verde"] if roi_sh >= 0 else FONT["rojo"]),
+        ("P&L Neto",              f"{pnl_sh:+.2f} €",            FILL["verde"] if pnl_sh >= 0 else FILL["rojo"],   FONT["verde"] if pnl_sh >= 0 else FONT["rojo"]),
+        ("ROI s/ capital operativo", f"{roi_sh*100:+.1f}%",      FILL["verde"] if roi_sh >= 0 else FILL["rojo"],   FONT["verde"] if roi_sh >= 0 else FONT["rojo"]),
+        ("ROI s/ depósito total", f"{roi_deposito*100:+.1f}%",   FILL["verde"] if roi_deposito >= 0 else FILL["rojo"], FONT["verde"] if roi_deposito >= 0 else FONT["rojo"]),
         ("Bankroll simulado",     f"{bkr_sh:.2f} €",              FILL["azul"],    FONT["bold"]),
         ("Racha actual",          f"{tipo_sh} × {racha_sh}",      FILL["amarillo"],FONT["bold"]),
     ]:
@@ -312,15 +339,38 @@ def hoja_dashboard(wb, shadow_res, shadow_acc, live_trades, live_bankroll, shado
         else:
             break
 
+    ws.merge_cells("D4:E4")
+    c = ws["D4"]
+    c.value     = "LIVE (dinero real)"
+    c.fill      = PatternFill("solid", fgColor="1B5E20")
+    c.font      = Font(bold=True, color="FFFFFF", name="Calibri", size=11)
+    c.alignment = AC
+
     f = 5
+    for lbl, val, fv, fn in [
+        ("Depósito total",    f"{DEPOSITO_TOTAL:.0f} €",    FILL["gris"],    FONT["bold"]),
+        ("Capital operativo", f"{CAPITAL_OPERATIVO:.0f} €", FILL["azul"],    FONT["bold"]),
+        ("Reserva intocable", f"{RESERVA:.0f} €",           FILL["amarillo"],FONT["bold"]),
+    ]:
+        kpi(ws, f, 4, 5, lbl, val, fv, fn)
+        f += 1
+
+    ws.merge_cells("D8:E8")
+    c = ws["D8"]
+    c.value     = "LIVE — Operaciones"
+    c.fill      = PatternFill("solid", fgColor="1B5E20")
+    c.font      = Font(bold=True, color="FFFFFF", name="Calibri", size=11)
+    c.alignment = AC
+
+    f = 9
     for lbl, val, fv, fn in [
         ("Operaciones cerradas",   lv["n"] if not sin_datos else "— (bot no activo aún)", FILL["gris"], FONT["bold"]),
         ("Posiciones abiertas",    len(lv["abiertas"]) if not sin_datos else "—", FILL["amarillo"], FONT["bold"]),
         ("Aciertos / Fallos",      f"{lv['n_ok']} / {lv['n']-lv['n_ok']}" if not sin_datos else "—", FILL["verde"] if not sin_datos and hit_lv >= 0.5 else (FILL["rojo"] if not sin_datos else FILL["gris"]), FONT["verde"] if not sin_datos and hit_lv >= 0.5 else (FONT["rojo"] if not sin_datos else FONT["gris"])),
         ("Hit Rate",               f"{hit_lv*100:.1f}%" if not sin_datos else "—", FILL["verde"] if not sin_datos and hit_lv >= 0.5 else (FILL["rojo"] if not sin_datos else FILL["gris"]), FONT["verde"] if not sin_datos and hit_lv >= 0.5 else (FONT["rojo"] if not sin_datos else FONT["gris"])),
-        ("P&L Neto Total",         f"{lv['pnl']:+.2f} €" if not sin_datos else "—", FILL["verde"] if not sin_datos and lv["pnl"] >= 0 else (FILL["rojo"] if not sin_datos else FILL["gris"]), FONT["verde"] if not sin_datos and lv["pnl"] >= 0 else (FONT["rojo"] if not sin_datos else FONT["gris"])),
-        ("ROI sobre apuestas",     f"{lv['roi']*100:+.1f}%" if not sin_datos else "—", FILL["verde"] if not sin_datos and lv["roi"] >= 0 else (FILL["rojo"] if not sin_datos else FILL["gris"]), FONT["verde"] if not sin_datos and lv["roi"] >= 0 else (FONT["rojo"] if not sin_datos else FONT["gris"])),
-        ("Bankroll actual (real)", f"{bkr_live:.2f} €" if bkr_live else "— (añadir en bankroll.csv)", FILL["live_ok"] if bkr_live and not sin_datos else FILL["gris"], FONT["verde"] if bkr_live and not sin_datos else FONT["gris"]),
+        ("P&L Neto",               f"{lv['pnl']:+.2f} €" if not sin_datos else "—", FILL["verde"] if not sin_datos and lv["pnl"] >= 0 else (FILL["rojo"] if not sin_datos else FILL["gris"]), FONT["verde"] if not sin_datos and lv["pnl"] >= 0 else (FONT["rojo"] if not sin_datos else FONT["gris"])),
+        ("ROI s/ capital operativo", f"{lv['roi']*100:+.1f}%" if not sin_datos else "—", FILL["verde"] if not sin_datos and lv["roi"] >= 0 else (FILL["rojo"] if not sin_datos else FILL["gris"]), FONT["verde"] if not sin_datos and lv["roi"] >= 0 else (FONT["rojo"] if not sin_datos else FONT["gris"])),
+        ("Bankroll actual (real)", f"{bkr_live:.2f} €" if bkr_live else f"{CAPITAL_OPERATIVO:.0f} € (sin trades aún)", FILL["live_ok"] if bkr_live and not sin_datos else FILL["gris"], FONT["verde"] if bkr_live and not sin_datos else FONT["gris"]),
         ("Racha actual",           f"{tipo_lv} × {racha_lv}" if not sin_datos else "—", FILL["amarillo"], FONT["bold"]),
     ]:
         kpi(ws, f, 4, 5, lbl, val, fv, fn)
@@ -336,7 +386,7 @@ def hoja_dashboard(wb, shadow_res, shadow_acc, live_trades, live_bankroll, shado
 
     serie_sh = pnl_acum_shadow(shadow_res)
     if len(serie_sh) >= 2:
-        fila_g = 14
+        fila_g = 20
         ws.cell(row=fila_g, column=1, value="#")
         ws.cell(row=fila_g, column=2, value="Bankroll Shadow €")
         for i, (fecha, pnl, acum) in enumerate(serie_sh, 1):
@@ -912,7 +962,6 @@ def main():
     hoja_shadow_estrategias(wb, shadow_acc)
     hoja_abiertas(wb, shadow_ab, live_ab)
 
-    DIR_REPORTS.mkdir(parents=True, exist_ok=True)
     wb.save(OUTPUT_XLS)
     print(f"  Guardado: {OUTPUT_XLS}")
     print(f"[{ts}] === Fin ===")

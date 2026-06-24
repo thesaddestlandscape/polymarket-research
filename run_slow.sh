@@ -19,6 +19,7 @@ while true; do
     $PYTHON "$REPO_DIR/capture_markets.py"  >> "$LOG" 2>&1 || true
     $PYTHON "$REPO_DIR/capture_wallets.py"  >> "$LOG" 2>&1 || true
     $PYTHON "$REPO_DIR/capture_trades.py"   >> "$LOG" 2>&1 || true
+    $PYTHON "$REPO_DIR/generate_report.py"  >> "$LOG" 2>&1 || true
 
     # Git: precios y leaderboard (archivos pequeños rastreados en GitHub)
     # markets, trades y positions están en .gitignore por ser demasiado grandes
