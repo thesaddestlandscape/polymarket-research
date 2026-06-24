@@ -269,6 +269,62 @@ Polymarket paga recompensas USDC a quienes ponen órdenes límite dentro de la b
 **Requiere**: CLOB API (wallet + firma de transacciones), distinta de la Gamma API actual.
 **Referencia**: github.com/lihanyu81/polymarket_lp_tool (gestión automática de órdenes límite).
 
+### [PENDIENTE] Resolution Sniper — vincular con Expiry Fade y WEEKLY_PRICE
+
+Cuando un mercado está en los últimos 60-90 minutos antes de resolver y el modelo GBM
+da p≥0.95 pero el precio de mercado está en 0.85-0.90 → edge real de 5-10%.
+
+**Caso natural**: mercados WEEKLY_PRICE en la última hora. Si BTC está en $62,500
+y el bracket es $62k-$64k con 45 min restantes, p_GBM ≈ 0.98, precio ≈ 0.90 → 8% edge.
+Es una versión más agresiva de WEEKLY_PRICE concentrada en el tramo final.
+
+**Implementación propuesta**: añadir a `s_weekly_price` un multiplicador de confianza
+cuando `T_h < 1.5` y `p_modelo > 0.92`. O estrategia separada `RESOLUTION_SNIPER`.
+**Cuando activar**: tras analizar los WEEKLY_PRICE que resuelven hoy 16:00 UTC.
+**Referencia**: github.com/HarrierOnChain/Prediction-Markets-Trading-Bot-Toolkits — strategy #7.
+
+---
+
+### [PENDIENTE] Orderbook Imbalance (OBI) — señal sin datos externos
+
+Ratio bid/ask depth como señal de dirección, 100% interno a Polymarket, sin feeds externos.
+
+**Lógica**: si hay más liquidez en el lado bid que en el ask → presión compradora → bias YES.
+```python
+obi = (best_bid_depth - best_ask_depth) / (best_bid_depth + best_ask_depth)  # [-1, +1]
+```
+**Problema actual**: `capture_markets.py` guarda `best_bid` y `best_ask` como PRECIO,
+no como tamaño/profundidad. Necesitaría añadir `best_bid_size` y `best_ask_size` a la captura.
+**Cuando activar**: cuando modifiquemos `capture_markets.py` para capturar profundidad.
+Añadir `delta_obi` a FEATURE_RULES para UPDOWN_GBM y ORDER_FLOW_5M.
+**Referencia**: strategy #8 — actualiza cada 500ms, sin feeds externos.
+
+---
+
+### [PENDIENTE] On-Chain Whale Signal — upgrade de SMART_FLOW_1H
+
+Leer el blockchain de Polygon directamente para detectar posiciones de whales
+**3-30 segundos antes** de que aparezcan en la API pública (vs nuestros ~15 min de delay).
+
+**Cómo**: suscripción a bloques de Polygon + decodificar ABI calldata de transacciones
+de Polymarket para inferir posiciones en tiempo real.
+**Requiere**: nodo RPC Polygon (Alchemy/Infura) o acceso a eventos WebSocket.
+**Cuando activar**: cuando SMART_FLOW_1H tenga IC > +0.05 con n≥30 datos limpios
+y queramos reducir el delay de señal de 15min a <30s.
+**Referencia**: strategy #10.
+
+---
+
+### [PENDIENTE] Cross-Market Arb (Polymarket vs Kalshi)
+
+Misma pregunta en dos plataformas con precios distintos → comprar en la más barata,
+vender en la más cara, profit garantizado del spread.
+**Requiere**: CLOB API en ambas plataformas + capital real.
+**Cuando activar**: junto con LP rewards, al ir a live.
+**Referencia**: strategy #3 — "lock the spread, not the direction".
+
+---
+
 ### [PENDIENTE] LLM hypothesis diario
 `llm_hypothesis.py` existe pero requiere ANTHROPIC_API_KEY.
 Alternativa: pedir análisis al inicio de cada sesión aquí en Claude Code (gratis con Pro).
@@ -351,7 +407,11 @@ RESERVA           = 10.0
 [ ] Kelly compuesto        — combinar ORDER_FLOW + UPDOWN_GBM
 [ ] Opción B (OU model)    — mean-reversion explícito para 5min (n≥100)
 [ ] Expiry Fade            — fading de precios extremos pre-vencimiento
-[ ] LP Rewards (market making) — cuando estemos en live, apilar sobre predicción
+[ ] Resolution Sniper      — analizar tras WEEKLY_PRICE 16:00 UTC hoy
+[ ] OBI (Orderbook Imbalance) — añadir profundidad bid/ask a capture_markets
+[ ] On-Chain Whale Signal  — upgrade SMART_FLOW_1H con Polygon RPC (cuando IC>+0.05)
+[ ] Cross-Market Arb       — Polymarket vs Kalshi (cuando estemos en live)
+[ ] LP Rewards (market making) — apilar sobre predicción en live
 [ ] Live trading           — IC ≥ 0.10, n ≥ 50, bankroll recapitalizado
 ```
 
