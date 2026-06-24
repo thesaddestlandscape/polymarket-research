@@ -15,6 +15,7 @@ Causas de pérdida:
 """
 import csv
 import json
+import re
 from datetime import datetime, timezone
 from pathlib import Path
 
@@ -322,6 +323,141 @@ def generar_performance(resultados: list, pred_index: dict) -> list:
     return performance
 
 
+def _extraer_features(resultado: dict, pred: dict) -> dict:
+    """
+    Extrae features del momento de la predicción para análisis causal.
+    Lee primero la columna 'features' (JSON estructurado, predicciones nuevas),
+    luego parsea la cadena 'razon' como fallback para datos históricos.
+    """
+    features = {}
+
+    # 1. Columna features (nueva, a partir de 2026-06-24)
+    raw = resultado.get("features") or (pred or {}).get("features", "")
+    if raw and raw != "{}":
+        try:
+            parsed = json.loads(raw) if isinstance(raw, str) else raw
+            features.update({k: float(v) for k, v in parsed.items()
+                             if v not in (None, "")})
+        except (ValueError, TypeError, json.JSONDecodeError):
+            pass
+
+    # 2. Fallback: parsear razon string (datos históricos sin columna features)
+    razon = (pred or {}).get("razon", "") if pred else ""
+    if "pct_spot_vs_ref" not in features:
+        m = re.search(r'\(([+-]\d+\.?\d*)%\)', razon)
+        if m:
+            try: features["pct_spot_vs_ref"] = float(m.group(1))
+            except ValueError: pass
+    if "sigma_h" not in features:
+        m = re.search(r'sigma_h=(\d+\.?\d+)', razon)
+        if m:
+            try: features["sigma_h"] = float(m.group(1))
+            except ValueError: pass
+    if "delta_ratio" not in features:
+        m = re.search(r'delta=([+-]\d+\.?\d+)', razon)
+        if m:
+            try: features["delta_ratio"] = float(m.group(1))
+            except ValueError: pass
+
+    return features
+
+
+# Qué features analizar por estrategia/subtipo y con qué condición
+FEATURE_RULES = {
+    "UPDOWN_GBM#5min":     [("pct_spot_vs_ref", "abs_gt")],
+    "UPDOWN_GBM#BTC#5min": [("pct_spot_vs_ref", "abs_gt")],
+    "UPDOWN_GBM#ETH#5min": [("pct_spot_vs_ref", "abs_gt")],
+    "UPDOWN_GBM#SOL#5min": [("pct_spot_vs_ref", "abs_gt")],
+    "ORDER_FLOW_5M":        [("delta_ratio",     "abs_gt")],
+}
+
+# Umbrales mínimos para generar un filtro aprendido
+IC_BUCKET_MIN  = -0.12   # IC del bucket problemático para activar el filtro
+N_BUCKET_MIN   = 8       # mínimo de observaciones en el bucket
+
+
+def aprender_filtros_causales(resultados: list, pred_index: dict) -> dict:
+    """
+    Analiza la correlación entre features en el momento de la predicción
+    y el outcome real. Descubre automáticamente en qué rangos de features
+    el modelo pierde sistemáticamente y genera filtros para evitarlos.
+
+    Retorna dict de filtros aprendidos por clave de estrategia.
+    """
+    filtros = {}
+
+    for strat_key, feature_specs in FEATURE_RULES.items():
+        # Recopilar (resultado, features) para esta clave
+        datos = []
+        for r in resultados:
+            s   = r.get("strategy", "")
+            sub = r.get("subtype", "")
+            key = s + ("#" + sub if sub else "")
+            if key != strat_key:
+                continue
+            clave_pred = (s, r.get("market_id", ""), r.get("decision", ""))
+            pred = pred_index.get(clave_pred)
+            feats = _extraer_features(r, pred)
+            if feats:
+                datos.append((r, feats))
+
+        if len(datos) < N_BUCKET_MIN:
+            continue
+
+        filtros_strat = []
+
+        for feature, condicion in feature_specs:
+            vals = [(r, f[feature]) for r, f in datos if feature in f]
+            if len(vals) < N_BUCKET_MIN:
+                continue
+
+            # Probar percentiles como posibles umbrales de corte
+            abs_vals = sorted(abs(v) for _, v in vals)
+            percentiles = [0.33, 0.50, 0.66]
+
+            mejor = None
+            mejor_dif_ic = 0.0
+
+            for p in percentiles:
+                idx = int(len(abs_vals) * p)
+                umbral = abs_vals[idx] if idx < len(abs_vals) else None
+                if umbral is None or umbral == 0:
+                    continue
+
+                encima = [(r, v) for r, v in vals if abs(v) > umbral]
+                debajo = [(r, v) for r, v in vals if abs(v) <= umbral]
+
+                if len(encima) < N_BUCKET_MIN or len(debajo) < 3:
+                    continue
+
+                wins_enc = sum(int(r.get("acierto", 0)) for r, _ in encima)
+                wins_deb = sum(int(r.get("acierto", 0)) for r, _ in debajo)
+                ic_enc   = (wins_enc + 1) / (len(encima) + 2) - 0.5
+                ic_deb   = (wins_deb + 1) / (len(debajo) + 2) - 0.5
+                dif_ic   = ic_deb - ic_enc
+
+                if ic_enc < IC_BUCKET_MIN and dif_ic > mejor_dif_ic:
+                    mejor_dif_ic = dif_ic
+                    mejor = {
+                        "feature":    feature,
+                        "condicion":  condicion,
+                        "umbral":     round(umbral, 4),
+                        "ic_malo":    round(ic_enc, 4),
+                        "ic_bueno":   round(ic_deb, 4),
+                        "n_malo":     len(encima),
+                        "n_bueno":    len(debajo),
+                        "descubierto": datetime.now(timezone.utc).isoformat(timespec="seconds"),
+                    }
+
+            if mejor:
+                filtros_strat.append(mejor)
+
+        if filtros_strat:
+            filtros[strat_key] = filtros_strat
+
+    return filtros
+
+
 def guardar_performance(performance: list):
     if not performance:
         return
@@ -394,6 +530,24 @@ def main():
             todos_con_causa.append({**r, "causa_perdida": ""})
 
     params = calcular_params(todos_con_causa)
+
+    # Aprendizaje causal: descubrir filtros de features automáticamente
+    filtros_causales = aprender_filtros_causales(resultados, pred_index)
+    if filtros_causales:
+        print(f"\n  Filtros causales aprendidos:")
+        for strat_key, filtros in filtros_causales.items():
+            for f in filtros:
+                print(f"    {strat_key}: {f['feature']} {f['condicion']} {f['umbral']}"
+                      f"  → IC_malo={f['ic_malo']:+.3f} (n={f['n_malo']})"
+                      f"  IC_bueno={f['ic_bueno']:+.3f} (n={f['n_bueno']})")
+            # Inyectar en params de esa estrategia
+            if strat_key in params["estrategias"]:
+                params["estrategias"][strat_key]["filtros_causales"] = filtros
+            else:
+                params["estrategias"][strat_key] = {"filtros_causales": filtros}
+    else:
+        print(f"\n  Sin filtros causales nuevos (datos insuficientes o sin patrones claros)")
+
     with open(PARAMS_PATH, "w", encoding="utf-8") as f:
         json.dump(params, f, indent=2, ensure_ascii=False)
 

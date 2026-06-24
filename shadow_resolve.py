@@ -388,6 +388,7 @@ def main():
             "acierto": res["acierto"],
             "pnl_bruto": f"{res['pnl_bruto']:.4f}",
             "pnl_neto": f"{res['pnl_neto']:.4f}",
+            "features": pred.get("features", ""),
         })
 
     print(f"  Predicciones pendientes consultadas: {len(consultados_ids)} mercados")

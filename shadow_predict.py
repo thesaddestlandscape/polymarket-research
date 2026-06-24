@@ -763,7 +763,16 @@ def s_updown_gbm(market, ctx):
         f"ref={ref:.4g} spot={spot:.4g} ({pct:+.2f}%) "
         f"sigma_h={sigma_h:.4f} T={T_h:.2f}h p_up={p_up:.3f}"
     )
-    return {"prob_yes": max(0.05, min(0.95, p_up)), "razon": razon, "subtype": subtype}
+    return {
+        "prob_yes": max(0.05, min(0.95, p_up)),
+        "razon":   razon,
+        "subtype": subtype,
+        "features": {
+            "pct_spot_vs_ref": round(pct, 4),
+            "sigma_h":         round(sigma_h, 6),
+            "T_h":             round(T_h, 4),
+        },
+    }
 
 
 # ─────────────────────────────────────────────────────────────────────────────
@@ -983,6 +992,11 @@ def s_order_flow_5m(market, ctx):
         "prob_yes": p_yes,
         "razon":   razon,
         "subtype": f"{activo}#5min",
+        "features": {
+            "delta_ratio":  round(delta_ratio, 4),
+            "total_vol_5m": round(total_vol, 4),
+            "has_real_flow": int(has_real_flow),
+        },
     }
 
 
@@ -1061,7 +1075,7 @@ def main():
                 "timestamp_utc", "strategy", "market_id", "question", "end_date",
                 "horas_a_vencimiento", "precio_yes_mercado", "prob_yes_modelo",
                 "edge_bruto", "edge_neto", "edge_direccional", "decision", "razon", "subtype",
-                "apuesta",
+                "apuesta", "features",
             ])
         for m in operables:
             py  = m["_precio_yes"]
@@ -1098,6 +1112,33 @@ def main():
                 edge_min = sp.get("edge_minimo") or EDGE_MINIMO
                 # Apuesta Kelly: escala con IC confirmado, mínimo 0.50€ si activa
                 apuesta = sp.get("apuesta_kelly", 0.50) or 0.50
+                # Filtros causales aprendidos por el postmortem
+                pred_features = pred.get("features", {}) or {}
+                skip_causal = False
+                for lk in lookup_keys:
+                    filtros_c = params_din.get(lk, {}).get("filtros_causales", [])
+                    for f in filtros_c:
+                        feat_val = pred_features.get(f.get("feature"))
+                        if feat_val is None:
+                            continue
+                        try:
+                            val = float(feat_val)
+                            umbral = float(f.get("umbral", 999))
+                            cond = f.get("condicion", "")
+                            if cond == "abs_gt" and abs(val) > umbral:
+                                skip_causal = True
+                            elif cond == "gt" and val > umbral:
+                                skip_causal = True
+                            elif cond == "lt" and val < umbral:
+                                skip_causal = True
+                        except (TypeError, ValueError):
+                            pass
+                        if skip_causal:
+                            break
+                    if skip_causal:
+                        break
+                if skip_causal:
+                    continue
                 contador[nombre]["aplica"] += 1
                 prob_y = pred["prob_yes"]
                 eb = prob_y - py
@@ -1116,13 +1157,14 @@ def main():
                     ops += 1
                     contador[nombre]["operable"] += 1
                     ya_predichos.add((nombre, mid))
+                features_json = json.dumps(pred.get("features", {}), separators=(",", ":"))
                 w.writerow([
                     ts, nombre, mid,
                     m.get("question", ""), m.get("end_date", ""),
                     f"{m['_horas']:.2f}", f"{py:.4f}", f"{prob_y:.4f}",
                     f"{eb:.4f}", f"{en:.4f}", f"{ed:.4f}", dec,
                     pred.get("razon", ""), subtype,
-                    f"{apuesta:.2f}",
+                    f"{apuesta:.2f}", features_json,
                 ])
                 total += 1
     print(f"  Predicciones registradas: {total} (operables: {ops}, dup saltados: {skipped_dup}, extremo filtrado: {skipped_extremo})")
