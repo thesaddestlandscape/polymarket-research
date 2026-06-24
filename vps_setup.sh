@@ -65,13 +65,13 @@ while true; do
     $PYTHON "$REPO_DIR/shadow_predict.py"        >> "$LOG" 2>&1 || true
     $PYTHON "$REPO_DIR/shadow_resolve.py"        >> "$LOG" 2>&1 || true
 
-    # Push de resultados
+    # Git: solo datos shadow (binance está en .gitignore)
     cd "$REPO_DIR"
-    git add data/shadow/ data/binance/ >> "$LOG" 2>&1 || true
+    git add data/shadow/ >> "$LOG" 2>&1 || true
     if ! git diff --cached --quiet 2>/dev/null; then
-        git commit -m "fast: ciclo $CICLO $(date -u +%Y-%m-%dT%H:%MZ)" >> "$LOG" 2>&1 || true
-        git pull --rebase --autostash >> "$LOG" 2>&1 || true
-        git push >> "$LOG" 2>&1 || true
+        git commit -m "shadow: ciclo $CICLO $(date -u +%Y-%m-%dT%H:%MZ)" >> "$LOG" 2>&1 || true
+        git pull --rebase origin main >> "$LOG" 2>&1 || true
+        git push origin main >> "$LOG" 2>&1 || true
     fi
 
     sleep 60
@@ -105,13 +105,14 @@ while true; do
     $PYTHON "$REPO_DIR/capture_wallets.py"  >> "$LOG" 2>&1 || true
     $PYTHON "$REPO_DIR/capture_trades.py"   >> "$LOG" 2>&1 || true
 
-    # Push de datos capturados
+    # Git: precios y leaderboard (archivos pequeños rastreados en GitHub)
+    # markets, trades y positions están en .gitignore por ser demasiado grandes
     cd "$REPO_DIR"
-    git add data/markets/ data/wallets/ data/trades/ data/prices/ >> "$LOG" 2>&1 || true
+    git add data/prices/ data/wallets/leaderboard_*.csv >> "$LOG" 2>&1 || true
     if ! git diff --cached --quiet 2>/dev/null; then
-        git commit -m "slow: ciclo $CICLO $(date -u +%Y-%m-%dT%H:%MZ)" >> "$LOG" 2>&1 || true
-        git pull --rebase --autostash >> "$LOG" 2>&1 || true
-        git push >> "$LOG" 2>&1 || true
+        git commit -m "data: ciclo slow $CICLO $(date -u +%Y-%m-%dT%H:%MZ)" >> "$LOG" 2>&1 || true
+        git pull --rebase origin main >> "$LOG" 2>&1 || true
+        git push origin main >> "$LOG" 2>&1 || true
         log "  Push OK"
     fi
 
