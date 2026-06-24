@@ -297,7 +297,11 @@ obi = (best_bid_depth - best_ask_depth) / (best_bid_depth + best_ask_depth)  # [
 no como tamaño/profundidad. Necesitaría añadir `best_bid_size` y `best_ask_size` a la captura.
 **Cuando activar**: cuando modifiquemos `capture_markets.py` para capturar profundidad.
 Añadir `delta_obi` a FEATURE_RULES para UPDOWN_GBM y ORDER_FLOW_5M.
-**Referencia**: strategy #8 — actualiza cada 500ms, sin feeds externos.
+**Alternativa sin modificar captura**: usar APIs externas de datos de orderbook:
+  - **Marketlens** — datos históricos tick-level de Polymarket (bid/ask depth histórico)
+  - **Probalytics** — API REST, 200-500M actualizaciones orderbook/día en tiempo real
+  Ambos darían `best_bid_size` y `best_ask_size` sin tocar `capture_markets.py`.
+**Referencia**: strategy #8 HarrierOnChain; Marketlens + Probalytics en Awesome-PM-Tools.
 
 ---
 
