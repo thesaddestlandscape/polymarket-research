@@ -1,0 +1,113 @@
+{
+  "timestamp_utc": "2026-06-23T17:32:18+00:00",
+  "estrategias": {
+    "COPY_WALLETS": {
+      "activa": false,
+      "edge_minimo": 0.02,
+      "ic_bayes": -0.4293,
+      "n": 408,
+      "pnl_total": -305.6004,
+      "causa_principal": "DIRECTION_ERROR",
+      "motivo": "IC_bayes=-0.429 n=408 conf=1.00 → DESACTIVADA"
+    },
+    "CONSENSUS_WEIGHTED": {
+      "activa": false,
+      "edge_minimo": 0.02,
+      "ic_bayes": -0.4121,
+      "n": 362,
+      "pnl_total": -278.4095,
+      "causa_principal": "DIRECTION_ERROR",
+      "motivo": "IC_bayes=-0.412 n=362 conf=1.00 → DESACTIVADA"
+    },
+    "POLYMARKET_SPOT_DIVERGENCE": {
+      "activa": false,
+      "edge_minimo": 0.02,
+      "ic_bayes": -0.3554,
+      "n": 164,
+      "pnl_total": -104.3904,
+      "causa_principal": "DIRECTION_ERROR",
+      "motivo": "IC_bayes=-0.355 n=164 conf=1.00 → DESACTIVADA"
+    },
+    "MEAN_REVERSION": {
+      "activa": false,
+      "edge_minimo": 0.02,
+      "ic_bayes": -0.4619,
+      "n": 103,
+      "pnl_total": -81.6786,
+      "causa_principal": "DIRECTION_ERROR",
+      "motivo": "IC_bayes=-0.462 n=103 conf=1.00 → DESACTIVADA"
+    },
+    "SPOT_MOMENTUM_CORTO": {
+      "activa": false,
+      "edge_minimo": 0.02,
+      "ic_bayes": -0.4143,
+      "n": 33,
+      "pnl_total": -27.3402,
+      "causa_principal": "DIRECTION_ERROR",
+      "motivo": "IC_bayes=-0.414 n=33 conf=1.00 → DESACTIVADA"
+    },
+    "CONSENSUS_TURBO": {
+      "activa": true,
+      "edge_minimo": 0.04,
+      "ic_bayes": -0.045,
+      "n": 3,
+      "pnl_total": -2.754,
+      "causa_principal": "DIRECTION_ERROR",
+      "motivo": "IC_bayes=-0.300 n=3 conf=0.15 → edge_minimo=0.04"
+    },
+    "MICRO_MOMENTUM": {
+      "activa": true,
+      "edge_minimo": 0.02,
+      "ic_bayes": 0.025,
+      "n": 2,
+      "pnl_total": 1.7284,
+      "causa_principal": "",
+      "motivo": "IC_bayes=+0.250 n=2 conf=0.10"
+    },
+    "SMART_FLOW": {
+      "activa": true,
+      "edge_minimo": 0.02,
+      "ic_bayes": 0.1364,
+      "n": 20,
+      "pnl_total": -0.1175,
+      "causa_principal": "DIRECTION_ERROR",
+      "motivo": "IC_bayes=+0.136 n=20 conf=1.00"
+    },
+    "PRE_WINDOW": {
+      "activa": true,
+      "edge_minimo": 0.02,
+      "ic_bayes": -0.04,
+      "n": 8,
+      "pnl_total": -3.3876,
+      "causa_principal": "DIRECTION_ERROR",
+      "motivo": "IC_bayes=-0.100 n=8 conf=0.40"
+    },
+    "BINANCE_UPDOWN": {
+      "activa": true,
+      "edge_minimo": 0.02,
+      "ic_bayes": -0.0773,
+      "n": 192,
+      "pnl_total": -30.4125,
+      "causa_principal": "TIMING_CORTO",
+      "motivo": "IC_bayes=-0.077 n=192 conf=1.00"
+    },
+    "MICROSTRUCTURE_MOMENTUM": {
+      "activa": true,
+      "edge_minimo": 0.02,
+      "ic_bayes": -0.025,
+      "n": 2,
+      "pnl_total": -1.836,
+      "causa_principal": "EDGE_INSUFICIENTE",
+      "motivo": "IC_bayes=-0.250 n=2 conf=0.10"
+    },
+    "WEEKLY_PRICE": {
+      "activa": true,
+      "edge_minimo": 0.06,
+      "ic_bayes": -0.2419,
+      "n": 29,
+      "pnl_total": -15.3916,
+      "causa_principal": "TIMING_CORTO",
+      "motivo": "IC_bayes=-0.242 n=29 conf=1.00 → edge_minimo=0.06"
+    }
+  }
+}
