@@ -376,6 +376,42 @@ discretos latentes (vol baja / vol normal / vol crisis) sin etiquetado manual.
 - Librería: `hmmlearn` (pip install hmmlearn)
 - Ref: "How To Use Markov Chains To Win Every Single Trade" — Roan (@RohOnChain)
 
+### [PENDIENTE — estudio futuro] Métodos de Astro-Statistics aplicables al sistema
+
+Conexión real documentada: astronomía y quant finance comparten el problema central
+de detectar señales débiles en datos extremadamente ruidosos. Cuatro técnicas concretas:
+
+**1. Gaussian Processes para sigma_h (celerite2 / tinygp)**
+Foreman-Mackey et al. desarrollaron GPs para modelar variabilidad estelar en series
+temporales con ruido heterocedástico — estructuralmente idéntico a nuestra estimación
+de sigma_h desde snapshots de 60s. Más preciso que ventana fija, más interpretable
+que Kalman o HMM. Librerías: `tinygp` (2022+), `celerite2`.
+→ Alternativa a Kalman adaptativo para `_estimar_vol_h` en UPDOWN_GBM.
+
+**2. Matched Filtering (técnica LIGO/Virgo, ondas gravitacionales)**
+LIGO detecta señales 1000× menores que el ruido correlacionando el flujo de datos
+con una plantilla de la señal esperada. Aplicado a ORDER_FLOW_5M: en vez del umbral
+fijo delta_ratio>0.38, construir una plantilla del patrón de flujo que precede
+movimientos reales en Polymarket y correlacionar el flujo actual contra ella.
+→ Requiere historial de ORDER_FLOW_5M. Activar cuando n≥200 resoluciones.
+
+**3. Detección de transitorios — ZTF/LSST classification pipelines**
+El Zwicky Transient Facility clasifica millones de alertas/noche (¿señal real o ruido?).
+Möller et al. 2022: gradient boosting + features de la serie temporal. Arquitectura
+directamente aplicable a nuestros filtros causales en shadow_postmortem.
+→ Mejora del sistema de filtros_causales cuando tengamos n≥500 resoluciones.
+
+**4. Bayesian Blocks / PELT para detección de cambios de régimen**
+Algoritmo de Scargle (Bayesian blocks) detecta cuándo una curva de luz cambia de
+comportamiento — no-paramétrico, no requiere especificar el número de regímenes.
+Alternativa a HMM para detección de régimen de volatilidad en BTC/ETH/SOL.
+→ Librería: `astropy.stats.bayesian_blocks`. Más simple que HMM para empezar.
+
+**Cuándo estudiar**: cuando el modelo base esté validado (n≥50 en #15min) y
+tengamos suficiente historial para entrenar cualquiera de estos métodos.
+**Referencias**: astro-statistics, papers ZTF 2022-2024, LIGO technical papers,
+Foreman-Mackey celerite/tinygp series 2017-2024.
+
 ### [REFERENCIA ARQUITECTURAL] Agentic Design Patterns — Antonio Gulli (Google OCTO, 2025)
 
 Libro de 424 páginas sobre patrones de diseño para sistemas agénticos con LLMs.
