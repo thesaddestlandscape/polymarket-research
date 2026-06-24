@@ -1112,33 +1112,40 @@ def main():
                 edge_min = sp.get("edge_minimo") or EDGE_MINIMO
                 # Apuesta Kelly: escala con IC confirmado, mínimo 0.50€ si activa
                 apuesta = sp.get("apuesta_kelly", 0.50) or 0.50
-                # Filtros causales aprendidos por el postmortem
+                # Aprendizaje causal: filtros (evitar) + patrones ganadores (amplificar)
                 pred_features = pred.get("features", {}) or {}
+
+                def _feature_match(feat_val, cond, umbral):
+                    try:
+                        v, u = float(feat_val), float(umbral)
+                        if cond == "abs_gt":  return abs(v) > u
+                        if cond == "abs_lt":  return abs(v) <= u
+                        if cond == "gt":      return v > u
+                        if cond == "lt":      return v <= u
+                    except (TypeError, ValueError):
+                        pass
+                    return False
+
+                # 1. Filtros causales — si matchean, skip
                 skip_causal = False
                 for lk in lookup_keys:
-                    filtros_c = params_din.get(lk, {}).get("filtros_causales", [])
-                    for f in filtros_c:
-                        feat_val = pred_features.get(f.get("feature"))
-                        if feat_val is None:
-                            continue
-                        try:
-                            val = float(feat_val)
-                            umbral = float(f.get("umbral", 999))
-                            cond = f.get("condicion", "")
-                            if cond == "abs_gt" and abs(val) > umbral:
-                                skip_causal = True
-                            elif cond == "gt" and val > umbral:
-                                skip_causal = True
-                            elif cond == "lt" and val < umbral:
-                                skip_causal = True
-                        except (TypeError, ValueError):
-                            pass
-                        if skip_causal:
+                    for f in params_din.get(lk, {}).get("filtros_causales", []):
+                        fv = pred_features.get(f.get("feature"))
+                        if fv is not None and _feature_match(fv, f.get("condicion",""), f.get("umbral",999)):
+                            skip_causal = True
                             break
                     if skip_causal:
                         break
                 if skip_causal:
                     continue
+
+                # 2. Patrones ganadores — si matchean, boost a la apuesta
+                for lk in lookup_keys:
+                    for g in params_din.get(lk, {}).get("patrones_ganadores", []):
+                        fv = pred_features.get(g.get("feature"))
+                        if fv is not None and _feature_match(fv, g.get("condicion",""), g.get("umbral",999)):
+                            boost = float(g.get("kelly_boost", 0))
+                            apuesta = min(2.00, apuesta + boost)
                 contador[nombre]["aplica"] += 1
                 prob_y = pred["prob_yes"]
                 eb = prob_y - py

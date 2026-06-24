@@ -362,32 +362,62 @@ def _extraer_features(resultado: dict, pred: dict) -> dict:
     return features
 
 
-# Qué features analizar por estrategia/subtipo y con qué condición
+# Features a analizar y en qué dirección buscar el patrón
+# (feature, condicion_mala, condicion_buena)
+# condicion_mala: "abs_gt" = malo cuando |feature| > umbral (ej: pct_spot alto)
+# condicion_buena: "abs_lt" = bueno cuando |feature| < umbral (ej: delta alto es bueno)
 FEATURE_RULES = {
-    "UPDOWN_GBM#5min":     [("pct_spot_vs_ref", "abs_gt")],
-    "UPDOWN_GBM#BTC#5min": [("pct_spot_vs_ref", "abs_gt")],
-    "UPDOWN_GBM#ETH#5min": [("pct_spot_vs_ref", "abs_gt")],
-    "UPDOWN_GBM#SOL#5min": [("pct_spot_vs_ref", "abs_gt")],
-    "ORDER_FLOW_5M":        [("delta_ratio",     "abs_gt")],
+    "UPDOWN_GBM#5min":     [("pct_spot_vs_ref", "abs_gt", "abs_lt")],
+    "UPDOWN_GBM#BTC#5min": [("pct_spot_vs_ref", "abs_gt", "abs_lt")],
+    "UPDOWN_GBM#ETH#5min": [("pct_spot_vs_ref", "abs_gt", "abs_lt")],
+    "UPDOWN_GBM#SOL#5min": [("pct_spot_vs_ref", "abs_gt", "abs_lt")],
+    "UPDOWN_GBM#15min":    [("pct_spot_vs_ref", "abs_gt", "abs_lt"),
+                            ("sigma_h",          "gt",     "lt")],
+    "UPDOWN_GBM#BTC#15min":[("pct_spot_vs_ref", "abs_gt", "abs_lt")],
+    "UPDOWN_GBM#ETH#15min":[("pct_spot_vs_ref", "abs_gt", "abs_lt")],
+    "UPDOWN_GBM#SOL#15min":[("pct_spot_vs_ref", "abs_gt", "abs_lt")],
+    "ORDER_FLOW_5M":        [("delta_ratio",     "abs_lt", "abs_gt")],  # alto delta = bueno
 }
 
-# Umbrales mínimos para generar un filtro aprendido
-IC_BUCKET_MIN  = -0.12   # IC del bucket problemático para activar el filtro
-N_BUCKET_MIN   = 8       # mínimo de observaciones en el bucket
+IC_FILTRO_MIN   = -0.12   # IC para activar filtro (evitar)
+IC_PATRON_MIN   = +0.12   # IC para activar patrón ganador (amplificar)
+N_BUCKET_MIN    = 8       # mínimo de observaciones en cualquier bucket
 
 
-def aprender_filtros_causales(resultados: list, pred_index: dict) -> dict:
+def _evaluar_bucket(vals, umbral, condicion_mala):
+    """Separa vals en [malo, bueno] según condicion_mala y umbral."""
+    if condicion_mala == "abs_gt":
+        malo  = [(r, v) for r, v in vals if abs(v) > umbral]
+        bueno = [(r, v) for r, v in vals if abs(v) <= umbral]
+        cond_buena = "abs_lt"
+    elif condicion_mala == "gt":
+        malo  = [(r, v) for r, v in vals if v > umbral]
+        bueno = [(r, v) for r, v in vals if v <= umbral]
+        cond_buena = "lt"
+    elif condicion_mala == "lt":
+        malo  = [(r, v) for r, v in vals if v < umbral]
+        bueno = [(r, v) for r, v in vals if v >= umbral]
+        cond_buena = "gt"
+    else:
+        malo, bueno, cond_buena = [], [], ""
+    return malo, bueno, cond_buena
+
+
+def aprender_patrones_causales(resultados: list, pred_index: dict) -> dict:
     """
-    Analiza la correlación entre features en el momento de la predicción
-    y el outcome real. Descubre automáticamente en qué rangos de features
-    el modelo pierde sistemáticamente y genera filtros para evitarlos.
+    Aprende TANTO por qué el modelo pierde COMO por qué gana.
 
-    Retorna dict de filtros aprendidos por clave de estrategia.
+    Para cada estrategia/subtipo y feature relevante, busca el umbral que
+    mejor separa ganadores de perdedores y genera:
+      - filtros_causales: rangos de features donde siempre pierde → skip
+      - patrones_ganadores: rangos de features donde gana consistentemente → boost kelly
+
+    El aprendizaje es completamente automático y se actualiza cada ciclo.
     """
-    filtros = {}
+    ts_ahora = datetime.now(timezone.utc).isoformat(timespec="seconds")
+    resultado_final = {}
 
     for strat_key, feature_specs in FEATURE_RULES.items():
-        # Recopilar (resultado, features) para esta clave
         datos = []
         for r in resultados:
             s   = r.get("strategy", "")
@@ -396,7 +426,7 @@ def aprender_filtros_causales(resultados: list, pred_index: dict) -> dict:
             if key != strat_key:
                 continue
             clave_pred = (s, r.get("market_id", ""), r.get("decision", ""))
-            pred = pred_index.get(clave_pred)
+            pred  = pred_index.get(clave_pred)
             feats = _extraer_features(r, pred)
             if feats:
                 datos.append((r, feats))
@@ -404,19 +434,25 @@ def aprender_filtros_causales(resultados: list, pred_index: dict) -> dict:
         if len(datos) < N_BUCKET_MIN:
             continue
 
-        filtros_strat = []
+        ic_base = ((sum(int(r.get("acierto", 0)) for r, _ in datos) + 1)
+                   / (len(datos) + 2) - 0.5)
 
-        for feature, condicion in feature_specs:
+        filtros_strat  = []
+        patrones_strat = []
+
+        for feature, cond_mala, cond_buena in feature_specs:
             vals = [(r, f[feature]) for r, f in datos if feature in f]
             if len(vals) < N_BUCKET_MIN:
                 continue
 
             # Probar percentiles como posibles umbrales de corte
             abs_vals = sorted(abs(v) for _, v in vals)
-            percentiles = [0.33, 0.50, 0.66]
+            percentiles = [0.25, 0.33, 0.50, 0.66, 0.75]
 
-            mejor = None
-            mejor_dif_ic = 0.0
+            mejor_filtro  = None
+            mejor_patron  = None
+            mejor_dif_filtro = 0.0
+            mejor_dif_patron = 0.0
 
             for p in percentiles:
                 idx = int(len(abs_vals) * p)
@@ -424,38 +460,58 @@ def aprender_filtros_causales(resultados: list, pred_index: dict) -> dict:
                 if umbral is None or umbral == 0:
                     continue
 
-                encima = [(r, v) for r, v in vals if abs(v) > umbral]
-                debajo = [(r, v) for r, v in vals if abs(v) <= umbral]
-
-                if len(encima) < N_BUCKET_MIN or len(debajo) < 3:
+                malo, bueno, _ = _evaluar_bucket(vals, umbral, cond_mala)
+                if len(malo) < N_BUCKET_MIN or len(bueno) < 3:
                     continue
 
-                wins_enc = sum(int(r.get("acierto", 0)) for r, _ in encima)
-                wins_deb = sum(int(r.get("acierto", 0)) for r, _ in debajo)
-                ic_enc   = (wins_enc + 1) / (len(encima) + 2) - 0.5
-                ic_deb   = (wins_deb + 1) / (len(debajo) + 2) - 0.5
-                dif_ic   = ic_deb - ic_enc
+                wins_malo  = sum(int(r.get("acierto", 0)) for r, _ in malo)
+                wins_bueno = sum(int(r.get("acierto", 0)) for r, _ in bueno)
+                ic_malo    = (wins_malo  + 1) / (len(malo)  + 2) - 0.5
+                ic_bueno   = (wins_bueno + 1) / (len(bueno) + 2) - 0.5
+                dif        = ic_bueno - ic_malo
 
-                if ic_enc < IC_BUCKET_MIN and dif_ic > mejor_dif_ic:
-                    mejor_dif_ic = dif_ic
-                    mejor = {
+                # ── Filtro: el bucket malo es suficientemente malo ──
+                if ic_malo < IC_FILTRO_MIN and dif > mejor_dif_filtro:
+                    mejor_dif_filtro = dif
+                    mejor_filtro = {
                         "feature":    feature,
-                        "condicion":  condicion,
+                        "condicion":  cond_mala,
                         "umbral":     round(umbral, 4),
-                        "ic_malo":    round(ic_enc, 4),
-                        "ic_bueno":   round(ic_deb, 4),
-                        "n_malo":     len(encima),
-                        "n_bueno":    len(debajo),
-                        "descubierto": datetime.now(timezone.utc).isoformat(timespec="seconds"),
+                        "ic_malo":    round(ic_malo,  4),
+                        "ic_bueno":   round(ic_bueno, 4),
+                        "n_malo":     len(malo),
+                        "n_bueno":    len(bueno),
+                        "descubierto": ts_ahora,
                     }
 
-            if mejor:
-                filtros_strat.append(mejor)
+                # ── Patrón ganador: el bucket bueno es suficientemente bueno ──
+                if ic_bueno > IC_PATRON_MIN and len(bueno) >= N_BUCKET_MIN and dif > mejor_dif_patron:
+                    # Kelly boost: cuánto apostar extra cuando esta condición se cumple
+                    kelly_boost = round(min(1.00, max(0.10, 20.0 * ic_bueno * 0.25)), 2)
+                    mejor_dif_patron = dif
+                    mejor_patron = {
+                        "feature":     feature,
+                        "condicion":   cond_buena,
+                        "umbral":      round(umbral, 4),
+                        "ic_patron":   round(ic_bueno, 4),
+                        "ic_base":     round(ic_base,  4),
+                        "n_patron":    len(bueno),
+                        "kelly_boost": kelly_boost,
+                        "descubierto": ts_ahora,
+                    }
 
-        if filtros_strat:
-            filtros[strat_key] = filtros_strat
+            if mejor_filtro:
+                filtros_strat.append(mejor_filtro)
+            if mejor_patron:
+                patrones_strat.append(mejor_patron)
 
-    return filtros
+        if filtros_strat or patrones_strat:
+            resultado_final[strat_key] = {
+                "filtros_causales":  filtros_strat,
+                "patrones_ganadores": patrones_strat,
+            }
+
+    return resultado_final
 
 
 def guardar_performance(performance: list):
@@ -531,22 +587,31 @@ def main():
 
     params = calcular_params(todos_con_causa)
 
-    # Aprendizaje causal: descubrir filtros de features automáticamente
-    filtros_causales = aprender_filtros_causales(resultados, pred_index)
-    if filtros_causales:
-        print(f"\n  Filtros causales aprendidos:")
-        for strat_key, filtros in filtros_causales.items():
-            for f in filtros:
-                print(f"    {strat_key}: {f['feature']} {f['condicion']} {f['umbral']}"
-                      f"  → IC_malo={f['ic_malo']:+.3f} (n={f['n_malo']})"
-                      f"  IC_bueno={f['ic_bueno']:+.3f} (n={f['n_bueno']})")
+    # Aprendizaje causal completo: aprende POR QUÉ pierde Y POR QUÉ gana
+    patrones = aprender_patrones_causales(resultados, pred_index)
+
+    n_filtros  = sum(len(v["filtros_causales"])  for v in patrones.values())
+    n_patrones = sum(len(v["patrones_ganadores"]) for v in patrones.values())
+
+    if patrones:
+        print(f"\n  Aprendizaje causal: {n_filtros} filtros (evitar) + {n_patrones} patrones (amplificar)")
+        for strat_key, p in patrones.items():
+            for f in p["filtros_causales"]:
+                print(f"    ✗ EVITAR  {strat_key}: |{f['feature']}|>{f['umbral']}"
+                      f"  IC={f['ic_malo']:+.3f} (n={f['n_malo']})"
+                      f"  vs bueno={f['ic_bueno']:+.3f}")
+            for g in p["patrones_ganadores"]:
+                print(f"    ✓ AMPLIF  {strat_key}: {g['condicion']} {g['feature']} {g['umbral']}"
+                      f"  IC={g['ic_patron']:+.3f} (n={g['n_patron']})"
+                      f"  kelly_boost=+{g['kelly_boost']:.2f}€")
             # Inyectar en params de esa estrategia
             if strat_key in params["estrategias"]:
-                params["estrategias"][strat_key]["filtros_causales"] = filtros
+                params["estrategias"][strat_key]["filtros_causales"]   = p["filtros_causales"]
+                params["estrategias"][strat_key]["patrones_ganadores"] = p["patrones_ganadores"]
             else:
-                params["estrategias"][strat_key] = {"filtros_causales": filtros}
+                params["estrategias"][strat_key] = p
     else:
-        print(f"\n  Sin filtros causales nuevos (datos insuficientes o sin patrones claros)")
+        print(f"\n  Sin patrones causales nuevos (datos insuficientes o sin señal clara)")
 
     with open(PARAMS_PATH, "w", encoding="utf-8") as f:
         json.dump(params, f, indent=2, ensure_ascii=False)
