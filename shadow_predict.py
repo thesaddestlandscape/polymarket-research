@@ -325,6 +325,8 @@ def s_price_momentum(market, ctx):
 
 def s_smart_flow_1h(market, ctx):
     import json as _json, glob as _glob
+    if _parse_updown_tipo(market.get("question", ""))[0] is not None:
+        return None
     # Lookup por condition_id (market_id siempre vacío en data-api)
     cid    = market.get("condition_id", "")
     trades = ctx.get("trades_1h", {}).get(cid, {})
