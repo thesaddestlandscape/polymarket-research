@@ -73,15 +73,18 @@ def cargar_predicciones_pendientes() -> list:
 
 
 def cargar_ya_resueltas() -> set:
-    """Devuelve set de (timestamp, strategy, market_id) ya resueltos."""
+    """
+    Devuelve set de (strategy, market_id) ya resueltos.
+    Sin timestamp: cada (strategy, market_id) se resuelve UNA sola vez aunque
+    se haya predicho en varios días distintos (evita duplicar el IC).
+    """
     if not RESULTS_PATH.exists():
         return set()
     ya = set()
     with open(RESULTS_PATH, encoding="utf-8") as f:
         reader = csv.DictReader(f)
         for row in reader:
-            ya.add((row.get("prediction_timestamp", ""),
-                    row.get("strategy", ""),
+            ya.add((row.get("strategy", ""),
                     row.get("market_id", "")))
     return ya
 
@@ -322,8 +325,7 @@ def main():
     debug_no_resueltos = 0  # log primeros mercados sin resolver para diagnóstico
 
     for pred in pendientes:
-        clave = (pred.get("timestamp_utc", ""),
-                 pred.get("strategy", ""),
+        clave = (pred.get("strategy", ""),
                  pred.get("market_id", ""))
         if clave in ya_resueltas:
             continue
@@ -344,6 +346,9 @@ def main():
                       f"outcomePrices={str(precios)[:40]}")
                 debug_no_resueltos += 1
             continue
+
+        # Marcar como resuelta en memoria para evitar duplicados dentro del mismo run
+        ya_resueltas.add(clave)
 
         nuevos_resultados.append({
             "resolution_timestamp": ts,

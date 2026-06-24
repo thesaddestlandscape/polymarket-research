@@ -142,6 +142,10 @@ def cargar_historial_mercados():
     return historial
 
 def cargar_trades_recientes():
+    """
+    Carga BUY trades de la última 1h desde el CSV de trades.
+    Indexa por condition_id (market_id siempre vacío en la data-api de Polymarket).
+    """
     corte      = datetime.now(timezone.utc) - timedelta(hours=1)
     fecha_hoy  = datetime.now(timezone.utc).strftime("%Y-%m-%d")
     fecha_ayer = (datetime.now(timezone.utc) - timedelta(days=1)).strftime("%Y-%m-%d")
@@ -163,16 +167,14 @@ def cargar_trades_recientes():
                         continue
                     if dt < corte:
                         continue
-                    side    = (row.get("side") or "").upper()
+                    side = (row.get("side") or "").upper()
                     if side != "BUY":
                         continue
-                    wtype   = (row.get("wallet_type") or "").upper()
-                    if wtype == "BOT":
-                        continue
-                    wallet  = (row.get("wallet") or "").lower()
-                    mid     = (row.get("market_id") or "").strip()
+                    # market_id está siempre vacío en data-api → usar condition_id
+                    cid    = (row.get("condition_id") or "").strip()
+                    wallet = (row.get("wallet") or "").lower()
                     outcome = (row.get("outcome") or "").upper()
-                    if not wallet or not mid:
+                    if not wallet or not cid:
                         continue
                     if outcome == "YES":
                         action = "BUY_YES"
@@ -180,7 +182,7 @@ def cargar_trades_recientes():
                         action = "BUY_NO"
                     else:
                         continue
-                    por_market.setdefault(mid, {}).setdefault(wallet, []).append(action)
+                    por_market.setdefault(cid, {}).setdefault(wallet, []).append(action)
         except Exception as e:
             print(f"  Error leyendo trades {arch}: {e}")
     return por_market
@@ -273,8 +275,9 @@ def s_price_momentum(market, ctx):
 
 def s_smart_flow_1h(market, ctx):
     import json as _json, glob as _glob
-    mid         = market.get("market_id", "")
-    trades      = ctx.get("trades_1h", {}).get(mid, {})
+    # Lookup por condition_id (market_id siempre vacío en data-api)
+    cid    = market.get("condition_id", "")
+    trades = ctx.get("trades_1h", {}).get(cid, {})
     top_wallets = ctx.get("top_wallets", set())
     w_stats     = ctx.get("wallet_stats", {})
     if not trades:
