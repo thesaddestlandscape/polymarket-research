@@ -101,30 +101,42 @@ data/binance/klines_YYYY-MM-DD.json    — 25 velas 1min, cada asset por separad
 
 ---
 
-## Estado actual (actualizado 2026-06-24 ~05:45 UTC)
+## Estado actual (actualizado 2026-06-24 ~06:36 UTC)
 
 ### Git
 - Branch: `main`, sincronizado con origin
 - Historia limpiada el 2026-06-24 (squash de 800+ commits de ciclos individuales)
-- Último commit: `feat: estrategia UPDOWN_GBM`
 
 ### Loops
-- Fast: corriendo, ciclo ~8+, klines OK
-- Slow: ciclo 4 completado, push OK a las 05:33 UTC
+- Fast: corriendo, ciclo ~76+, klines OK
+- Slow: corriendo, ciclo 4+ completado
 
 ### Shadow mode
 - **predictions_2026-06-23.csv**: 124 filas, solo WEEKLY_PRICE
-- **predictions_2026-06-24.csv**: ~135+ filas, WEEKLY_PRICE (90 BUY) + UPDOWN_GBM (13 señales)
-- **results.csv**: NO existe aún (ningún mercado resuelto todavía)
-- **Primera resolución esperada**: 16:00 UTC hoy (mercados WEEKLY_PRICE del 24 Jun)
+- **predictions_2026-06-24.csv**: 63+ señales UPDOWN_GBM activas (39×5min ya resueltas, 17×15min, 5×daily/hourly) + WEEKLY_PRICE
+- **results.csv**: 36 resoluciones UPDOWN_GBM ya acumuladas (06:34 UTC)
+- **Primera resolución WEEKLY_PRICE**: 16:00 UTC hoy
 
-### Señales UPDOWN_GBM activas más importantes
-- SOL Daily BUY_NO: modelo 0.60 vs mercado 0.75, edge=12.7% — la más grande
-- BTC/ETH Daily BUY_NO: modelo ~0.60 vs mercado 0.675, edge ~5%
-- BTC/ETH/SOL/XRP slots 5-15min: varios BUY_YES con edges 3-41%
+### Resultados UPDOWN_GBM — primeras 36 resoluciones (06:34 UTC)
+| Duración | Win rate | PNL | n |
+|----------|----------|-----|---|
+| **5 min** | **44%** | **-3.68** | 25 |
+| **15 min** | **88.9%** | **+6.17** | 9 |
+| 60 min | 50% | -0.68 | 2 |
+- IC_simple global: 0.0556 | IC_pearson: 0.05 | PNL neto: +1.82
+- BTC: 72.7% acierto (mejor activo, BUY_NO dominante)
+- SOL/ETH: 40-45% (peores, sobreconfiados en 5min)
+- Señales high-edge (>30%) → solo 36.4% aciertos → modelo sobreconfiado en slots cortos
 
-### Advertencia sobre daily BUY_NO
-El modelo asume drift=0. Si el mercado "Up or Down on June 24?" usa como referencia la medianoche UTC, nuestro cálculo es correcto. Si usa otro precio de referencia (ej. 4PM ET del día anterior), la señal podría ser espuria. El shadow mode lo revelará tras las primeras resoluciones.
+### Fix aplicado: slots 5min desactivados
+- El GBM con ventana de vol de 20min y T≈2-4min genera probs extremas (0.85-0.95) para SOL/ETH
+- El mercado valora correctamente esos slots en ~0.50 → edge aparente es ilusorio
+- **Cambio en shadow_predict.py**: `if tipo == 'slot' and ventana_min <= 5: return None`
+- Slots de 15min se mantienen (88.9% win rate, 9 resoluciones)
+
+### Señales UPDOWN_GBM pendientes (daily/hourly)
+- SOL/BTC/ETH Daily: resuelven a medianoche UTC
+- Hourly: se van resolviendo cada hora
 
 ---
 
@@ -179,14 +191,31 @@ git status
 
 ---
 
+## Diagnóstico adicional — UPDOWN_GBM slots 5min
+
+### Por qué los 5min fallan (análisis empírico 2026-06-24)
+- Ventana de vol: solo 20min → si hay spike reciente, vol se dispara
+- T muy pequeño (1-4min restantes al generar señal) + spot ligeramente arriba de ref → GBM da p_up≈0.90
+- Mercado dice 0.50 → edge "41%" es ilusión
+- SOL especialmente afectado: más volátil, más señales extremas
+- **Fix**: filtrar `ventana_min ≤ 5` en s_updown_gbm
+
+### Por qué los 15min funcionan bien
+- Ventana de vol: 60min (más estable)
+- T ≈ 5-12min al generar señal → prob más moderada
+- El precio de referencia tiene más historia antes de que el spot cambie
+
+---
+
 ## Pendiente / Próximos pasos
 
 1. **16:00 UTC hoy**: primeras resoluciones de WEEKLY_PRICE (mercados 24 Jun). Hacer postmortem.
-2. **UPDOWN_GBM calibración**: verificar que la referencia de precio es correcta comparando resoluciones reales.
-3. **PRICE_MOMENTUM en horario activo**: revisar señales entre 14:00-20:00 UTC.
-4. **IC mínimo para operar**: IC ≥ 0.10 con n ≥ 50 resoluciones por estrategia.
-5. **Gestión de riesgo**: cuando pasar a real, definir `APUESTA_REAL` y Kelly fraction.
-6. **UPDOWN_GBM mejoras potenciales**:
+2. **UPDOWN_GBM 15min**: acumular más resoluciones (ahora n=9, muy prometedor). Meta: n≥30.
+3. **UPDOWN_GBM daily/hourly**: primera resolución diaria a medianoche. Verificar referencia de precio.
+4. **PRICE_MOMENTUM en horario activo**: revisar señales entre 14:00-20:00 UTC.
+5. **IC mínimo para operar**: IC ≥ 0.10 con n ≥ 50 resoluciones por estrategia.
+6. **Gestión de riesgo**: cuando pasar a real, definir `APUESTA_REAL` y Kelly fraction.
+7. **UPDOWN_GBM mejoras potenciales** (cuando n≥50):
    - Añadir drift estimado de las últimas 24h (pequeño pero no nulo)
-   - Mejorar detección del precio de referencia para slots (timing preciso)
+   - Filtrar señales donde T_h < 3min (muy cerca del vencimiento)
    - Solo operar slots con liq ≥ 5000 (slots pequeños tienen spread implícito alto)

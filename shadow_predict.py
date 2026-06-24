@@ -611,6 +611,9 @@ def s_updown_gbm(market, ctx):
     tipo, ventana_min = _parse_updown_tipo(question)
     if tipo is None:
         return None
+    # Slots de 5min: modelo sobreconfiado (win rate 44%, IC negativo empírico)
+    if tipo == 'slot' and ventana_min <= 5:
+        return None
 
     T_h = market.get("_horas")
     if T_h is None or T_h <= 2 / 60:  # mínimo 2 minutos
