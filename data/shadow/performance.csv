@@ -1,2 +1,2 @@
 strategy,n_total,n_aciertos,n_fallos,hit_rate,ic_bayes,confianza,ic_efectivo,pnl_total,pnl_medio,max_ganancia,max_perdida,avg_win,avg_loss,expectancy,profit_factor,mejor_racha,peor_racha,edge_medio_pred,edge_real,avg_horas_ganadora,avg_horas_perdedora,kelly_optimo,causa_perdida_principal
-UPDOWN_GBM,42,23,19,0.5476,0.0455,1.0,0.0455,1.8033,0.0429,0.9767,-0.918,0.8368,-0.918,0.0429,1.1034,5,4,-0.0025,0.0477,0.2,0.1,0.0513,SLOT_OVERCONFIDENCE
+UPDOWN_GBM,44,23,21,0.5227,0.0217,1.0,0.0217,-0.0327,-0.0007,0.9767,-0.918,0.8368,-0.918,-0.0007,0.9983,5,4,0.0067,-0.0008,0.2,0.2,0.0,DIRECTION_ERROR
