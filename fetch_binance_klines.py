@@ -15,10 +15,15 @@ open_time_ms is Unix milliseconds (consistent with Binance format).
 
 If all sources are unreachable, prints a warning and exits 0.
 """
-import json, sys, time
+import csv, json, sys, time
 from datetime import datetime, timezone
 from pathlib import Path
 import requests
+
+DIR_PRICES = Path("data") / "prices"
+DIR_PRICES.mkdir(parents=True, exist_ok=True)
+
+SPOT_SYMBOLS = ["BTC", "ETH", "SOL", "XRP", "DOGE", "BNB"]
 
 TIMEOUT = 15
 LIMIT   = 25  # number of 1-min candles
@@ -128,6 +133,30 @@ def main():
     with open(out_path, "w", encoding="utf-8") as f:
         json.dump(data, f, separators=(",", ":"))
     print(f"  Saved -> {out_path}")
+
+    # Escribir spot price (close de última vela) en prices CSV cada 60s
+    # Solo si el archivo ya existe (capture_markets lo crea con el header completo)
+    # Kraken/Binance reemplaza la dependencia de CoinGecko free tier para los 6 activos principales
+    prices_path = DIR_PRICES / f"{fecha}.csv"
+    if prices_path.exists():
+        # Leer las columnas del header existente para ser compatible
+        with open(prices_path, "r", newline="", encoding="utf-8") as pf:
+            header = next(csv.reader(pf), [])
+        spot_row = {col: "" for col in header}
+        spot_row["timestamp_utc"] = ts_str
+        for sym in SPOT_SYMBOLS:
+            klines_sym = data.get(sym)
+            if klines_sym and isinstance(klines_sym, list) and sym in header:
+                try:
+                    spot_row[sym] = float(klines_sym[-1][4])
+                except (IndexError, ValueError, TypeError):
+                    pass
+        if any(spot_row.get(sym, "") != "" for sym in SPOT_SYMBOLS):
+            with open(prices_path, "a", newline="", encoding="utf-8") as pf:
+                w = csv.DictWriter(pf, fieldnames=header, extrasaction="ignore")
+                w.writerow(spot_row)
+            print(f"  Spot → prices/{fecha}.csv  BTC={spot_row.get('BTC','?')} ETH={spot_row.get('ETH','?')} SOL={spot_row.get('SOL','?')}")
+
     print(f"[{datetime.now(timezone.utc).isoformat(timespec='seconds')}] Done.")
 
 
