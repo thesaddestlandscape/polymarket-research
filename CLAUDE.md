@@ -443,6 +443,57 @@ RESERVA           = 10.0
 
 ---
 
+## Validación empírica externa — "Five months building a Bitcoin 5-minute trading bot"
+
+Artículo de un builder que operó 318 trades en mercados BTC Up/Down 5min de Polymarket.
+76% win rate, balance plano. Investigación exhaustiva de por qué.
+
+### El teorema que explica nuestros datos
+
+**Win rate debe superar el precio de entrada.** Comprar YES a 0.52 requiere ganar >52% para no perder.
+Esto explica mecánicamente toda nuestra tabla de resultados:
+
+- 5min (BTC/ETH/SOL): win rate 31-45% vs ~49.5% necesario → pérdidas inevitables
+- 15min (BTC/ETH): win rate 75-83% vs ~52% necesario → edge real confirmado
+
+El mercado de 5min de BTC en Polymarket es el más eficiente del mundo en su categoría.
+El mercado de 15min es menos eficiente: el precio sigue en 0.52 (coin flip implícito)
+pero el GBM estima correctamente 0.78 cuando las condiciones son correctas.
+
+### La mecánica de los losses en 5min (confirmada empíricamente)
+
+> "Price spikes away from strike, bot enters on spike, price mean-reverts straight back."
+
+Probaron 12 features distintas como predictores de loss. Todas fueron ruido.
+Los trajectories de winners y losers son IDÉNTICOS hasta los últimos 30 segundos.
+**No hay señal predictiva en el momento de entrada — es matemáticamente indetectable.**
+
+Esto valida:
+- Nuestro filtro Opción A (|pct_spot_vs_ref| > 0.05% → skip): correcto
+- Nuestros filtros de sigma_h: correcto (alta vol = impulsos más agresivos = más reversión)
+- Que ORDER_FLOW_5M luche: el order flow real también se mean-revierte en ese mercado
+
+### Hallazgos adicionales a verificar en nuestros datos
+
+**UP bate a DOWN**: en su muestra UP wins 96%, DOWN wins 90%. Sugerente, no probado.
+Pendiente: comprobar si nuestros datos de #15min muestran el mismo patrón.
+Si se confirma → ser más selectivos / reducir Kelly en señales BUY_NO.
+
+**Slippage floor para live**: antes de ejecutar orden, leer el mejor ask real y cancelar
+si está por debajo del precio mínimo aceptable. En shadow no importa, en live es crítico.
+Implementar antes del primer trade real.
+
+### Conclusión que resume la estrategia correcta
+
+> "The edge, if it exists, lives in a less efficient market, somewhere the price is
+> wrong often enough to be worth the risk, not in the cleanest 5-minute book there is."
+
+Nuestros #15min son ese mercado. Todo lo demás (5min, ORDER_FLOW_5M en 5min) es
+reducción de daños, no generación de edge. El capital y los esfuerzos de optimización
+deben concentrarse en entender y escalar #15min.
+
+---
+
 ## Roadmap hacia autonomía
 
 ```
@@ -453,6 +504,8 @@ RESERVA           = 10.0
 [ ] Kelly compuesto        — combinar ORDER_FLOW + UPDOWN_GBM
 [ ] Opción B (OU model)    — mean-reversion explícito para 5min (n≥100)
 [ ] Expiry Fade            — fading de precios extremos pre-vencimiento
+[ ] Verificar UP>DOWN en #15min — comprobar si nuestros datos confirman el patrón
+[ ] Slippage floor          — implementar antes del primer trade real en live
 [ ] Resolution Sniper      — analizar tras WEEKLY_PRICE 16:00 UTC hoy
 [ ] OBI (Orderbook Imbalance) — añadir profundidad bid/ask a capture_markets
 [ ] On-Chain Whale Signal  — upgrade SMART_FLOW_1H con Polygon RPC (cuando IC>+0.05)
