@@ -364,7 +364,17 @@ al régimen de volatilidad actual.
 **Cuándo activar**: cuando UPDOWN_GBM#15min alcance n≥50 y tengamos la validación del
 modelo base. No tocar el core del modelo hasta tener ese baseline sólido.
 **Referencia**: artículo "Kalman Filter for Quant Trading" — Ruuj (@RuujSs), Jun 2026.
-Implementación Python completa incluida en el artículo.
+
+**Alternativa más potente: Hidden Markov Models (HMM)**
+En vez de estimar sigma_h como estado continuo (Kalman), el HMM identifica regímenes
+discretos latentes (vol baja / vol normal / vol crisis) sin etiquetado manual.
+- Algoritmo Baum-Welch aprende los regímenes directamente de `data/prices/*.csv`
+- En régimen de alta vol → skip señal o ampliar threshold
+- Emission variables naturales: sigma_h rolling, pct_spot_vs_ref, delta_ratio, hora UTC
+  (son literalmente nuestras FEATURE_RULES actuales)
+- Captura automáticamente el efecto de ventanas horarias de sesión (transiciones de régimen)
+- Librería: `hmmlearn` (pip install hmmlearn)
+- Ref: "How To Use Markov Chains To Win Every Single Trade" — Roan (@RohOnChain)
 
 ### [REFERENCIA ARQUITECTURAL] Agentic Design Patterns — Antonio Gulli (Google OCTO, 2025)
 
