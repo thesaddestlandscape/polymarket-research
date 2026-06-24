@@ -319,6 +319,26 @@ y queramos reducir el delay de señal de 15min a <30s.
 
 ---
 
+### [OBSERVAR — necesita n≥15 por franja] Ventanas horarias de alta reversión
+
+Hipótesis: ciertos slots del reloj son consistentemente malos porque coinciden con
+transiciones de sesión (Asia/Europa, Europa/US, NYSE open/close). Precio oscila
+muchas veces en esas ventanas y destruye señales de momentum.
+
+**Ventanas a vigilar** (en UTC, basado en el artículo + primer día de datos):
+- 07:30-08:00 UTC — Asia tarde / pre-Londres (25% win rate en n=4, 24 Jun)
+- 09:00-10:30 UTC — pre-apertura US / handoff Asia-Europa (25% en n=4-8, 24 Jun)
+- 13:30-14:30 UTC — NYSE open (8:45-9:45 ET) — el peor según el artículo, sin datos nuestros aún
+- 20:30-21:30 UTC — NYSE close (3:30-4:30 PM ET) — sin datos nuestros aún
+
+**Estado**: n demasiado pequeño para actuar (n=4-8 por franja, solo 1 día).
+**Cuándo implementar**: cuando tengamos ≥7 días y n≥15 por bloque de 30min con
+el patrón consistente en ≥3 días distintos.
+**Implementación propuesta**: añadir `SKIP_HOURS_UTC = [(9,10), (13,14)]` en
+`shadow_predict.py` y aplicar al inicio de cada estrategia de slots.
+**Referencia**: thread "ventanas de caos en 5/15min" — $24k de ganancia limpia
+bloqueando estos slots. Datos propios: 09:00-10:30 UTC potencialmente problemático.
+
 ### [PENDIENTE — media prioridad] Kalman Filter para sigma_h y PRICE_MOMENTUM
 
 Aplicar el filtro de Kalman a dos componentes del modelo central:
