@@ -366,6 +366,33 @@ modelo base. No tocar el core del modelo hasta tener ese baseline sólido.
 **Referencia**: artículo "Kalman Filter for Quant Trading" — Ruuj (@RuujSs), Jun 2026.
 Implementación Python completa incluida en el artículo.
 
+### [REFERENCIA ARQUITECTURAL] Agentic Design Patterns — Antonio Gulli (Google OCTO, 2025)
+
+Libro de 424 páginas sobre patrones de diseño para sistemas agénticos con LLMs.
+Preprint: amazon.com/Agentic-Design-Patterns-Hands-Intelligent/dp/3032014018
+
+Nuestro sistema ya implementa la mayoría de los patrones del libro (ver tabla en
+CLAUDE.md sección "Sistema de aprendizaje causal"). Los dos patrones que nos faltan
+y que añadirían valor real:
+
+**Chapter 20: Prioritization**
+Nuestro postmortem ejecuta todos los análisis sin distinguir qué ajuste tiene mayor
+impacto esperado. Un patrón formal de priorización: `impacto_esperado × confianza`
+decidiría qué filtro causal aplicar primero cuando hay múltiples candidatos.
+Útil cuando tengamos 10+ filtros compitiendo por activarse.
+
+**Chapter 21: Exploration and Discovery**
+Formaliza cómo explorar el espacio de hipótesis de forma estructurada vs. ad-hoc:
+  - Generación → evaluación → selección → explotación
+  - Separación explícita explorar (hipótesis nueva) vs. explotar (lo que funciona)
+  - Registro de hipótesis descartadas para no repetirlas (nuestro hipotesis_*.md
+    hace esto parcialmente pero sin estructura formal)
+Mejoraría `llm_hypothesis.py` cuando tengamos API key y el meta-learner autónomo.
+
+**Cuando leer**: antes de implementar el meta-learner LLM completo (llm_hypothesis.py).
+Los capítulos 4 (Reflection), 8 (Memory), 9 (Learning), 19 (Evaluation) son los más
+directamente aplicables a nuestra arquitectura actual.
+
 ### [PENDIENTE — experimento futuro] CNN sobre imágenes de precio (Re-Imaging Price Trends)
 
 Paper: Jiang, Kelly, Xiu — "(Re-)Imag(in)ing Price Trends", Chicago Booth/AQR (2020).
