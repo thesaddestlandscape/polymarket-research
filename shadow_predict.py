@@ -252,8 +252,9 @@ def construir_contexto():
     precios_data = cargar_precios_intraday()
     ctx["precios_intraday"] = precios_data
 
-    # Spot más reciente: primero precios_intraday, luego sobreescribir con klines (más fresco)
+    # Spot más reciente + klines raw para ORDER_FLOW_5M
     spot_prices = {}
+    klines_raw  = {}
     for _, prices in precios_data[-5:]:
         spot_prices.update(prices)
     try:
@@ -262,13 +263,17 @@ def construir_contexto():
         if kf.exists():
             with open(kf, encoding="utf-8") as f:
                 kd = json.load(f)
-            for sym, data in kd.items():
-                if isinstance(data, list) and data:
-                    spot_prices[sym] = float(data[-1][4])
+            for sym, klines in kd.items():
+                if isinstance(klines, list) and klines:
+                    spot_prices[sym] = float(klines[-1][4])
+                    klines_raw[sym]  = klines   # todas las velas, con flow si está disponible
     except Exception:
         pass
     ctx["spot_prices"] = spot_prices
+    ctx["klines_raw"]  = klines_raw
+    has_flow = any(len(v[0]) >= 7 for v in klines_raw.values() if v)
     print(f"  UPDOWN_GBM: {len(precios_data)} pts intraday | spot={{{', '.join(f'{k}={v:.4g}' for k, v in list(spot_prices.items())[:4])}}}")
+    print(f"  ORDER_FLOW: klines de {len(klines_raw)} activos | flow_real={'sí' if has_flow else 'no (Kraken fallback)'}")
     return ctx
 
 def s_price_momentum(market, ctx):
@@ -885,12 +890,109 @@ def s_price_target_gbm(market, ctx):
     return {"prob_yes": max(0.05, min(0.95, p_yes)), "razon": razon, "subtype": subtype}
 
 
+# ─────────────────────────────────────────────────────────────────────────────
+# ORDER_FLOW_5M — Cumulative delta en exchanges reales para slots Up/Down 5min
+# ─────────────────────────────────────────────────────────────────────────────
+
+def s_order_flow_5m(market, ctx):
+    """
+    Explota el lag entre el flujo de órdenes en exchanges (Binance) y el
+    reajuste del mercado de predicción de Polymarket.
+
+    Si hay presión compradora neta fuerte en los últimos 5 minutos de klines
+    Y el precio YES en Polymarket sigue en torno a 0.50 (no ha reaccionado),
+    existe una ventana de arbitraje: el exchange ya 'sabe' la dirección,
+    Polymarket todavía no.
+
+    Delta real (Binance): taker_buy_vol - taker_sell_vol por minuto.
+    Delta estimado (Kraken fallback): close-location en el rango H-L.
+    """
+    question = market.get("question", "")
+
+    # Solo slots 5min Up/Down
+    tipo, ventana_min = _parse_updown_tipo(question)
+    if tipo != 'slot' or ventana_min != 5:
+        return None
+
+    activo = identificar_activo(question)
+    if not activo or activo not in BINANCE_SYMBOLS:
+        return None
+
+    klines = ctx.get("klines_raw", {}).get(activo, [])
+    if len(klines) < 5:
+        return None
+
+    last_5 = klines[-5:]
+    cum_delta = 0.0
+    total_vol = 0.0
+    has_real_flow = all(len(k) >= 7 for k in last_5)
+
+    for k in last_5:
+        try:
+            vol = float(k[5])
+        except (ValueError, TypeError, IndexError):
+            return None
+        total_vol += vol
+
+        if len(k) >= 7:
+            # Binance: taker_buy_base_asset_volume en columna 6 (guardada como col 7 original)
+            try:
+                taker_buy = float(k[6])
+            except (ValueError, TypeError):
+                taker_buy = vol / 2
+            cum_delta += 2 * taker_buy - vol
+        else:
+            # Kraken fallback: close location como proxy de presión compradora
+            try:
+                h, l, c = float(k[2]), float(k[3]), float(k[4])
+                bull_frac = (c - l) / (h - l) if h > l else 0.5
+            except (ValueError, TypeError, ZeroDivisionError):
+                bull_frac = 0.5
+            cum_delta += (2 * bull_frac - 1) * vol
+
+    if total_vol <= 0:
+        return None
+
+    # Delta normalizado: fracción del volumen total que fue presión neta
+    delta_ratio = cum_delta / total_vol  # rango [-1, +1]
+
+    # Umbral mínimo de desequilibrio: 20% del volumen total
+    DELTA_MIN = 0.20
+    if abs(delta_ratio) < DELTA_MIN:
+        return None
+
+    # El mercado de Polymarket no debe haber reaccionado ya
+    # Si YES está en 0.40-0.60 → lag explotable; si ya se movió → tarde
+    py = market.get("_precio_yes", 0.5)
+    LAG_MAX = 0.12
+    if abs(py - 0.5) > LAG_MAX:
+        return None
+
+    # Conversión delta → probabilidad
+    # delta=0.20 → prob=0.60 ; delta=0.50 → prob=0.75 ; delta=1.0 → prob=1.0 (capped)
+    p_yes = 0.5 + delta_ratio * 0.5
+    p_yes = max(0.10, min(0.90, p_yes))
+
+    flow_src = "binance_real" if has_real_flow else "kraken_est"
+    razon = (
+        f"order_flow_5m {activo} "
+        f"delta={delta_ratio:+.3f} vol5m={total_vol:.3f} "
+        f"py_mkt={py:.3f} [{flow_src}]"
+    )
+    return {
+        "prob_yes": p_yes,
+        "razon":   razon,
+        "subtype": f"{activo}#5min",
+    }
+
+
 ESTRATEGIAS = [
     ("WEEKLY_PRICE",      s_weekly_price),
     ("PRICE_MOMENTUM",    s_price_momentum),
     ("SMART_FLOW_1H",     s_smart_flow_1h),
     ("UPDOWN_GBM",        s_updown_gbm),
     ("PRICE_TARGET_GBM",  s_price_target_gbm),
+    ("ORDER_FLOW_5M",     s_order_flow_5m),
     # ("BINANCE_UPDOWN", s_binance_updown),  # retirada — IC -0.50
 ]
 

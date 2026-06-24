@@ -84,8 +84,11 @@ def fetch_kraken(asset: str) -> list | None:
         return None
 
 
-def fetch_binance(asset: str) -> list | None:
-    """Fetch last LIMIT 1-min klines from Binance (fallback). May return 451 on CI runners."""
+def fetch_binance(asset: str, with_flow: bool = False) -> list | None:
+    """Fetch last LIMIT 1-min klines from Binance.
+    with_flow=True → devuelve 7 columnas: [time_ms, o, h, l, c, vol, taker_buy_vol]
+    with_flow=False → 6 columnas compatibles con Kraken.
+    """
     symbol = BINANCE_SYMBOLS.get(asset)
     if not symbol:
         return None
@@ -97,6 +100,9 @@ def fetch_binance(asset: str) -> list | None:
         )
         r.raise_for_status()
         raw = r.json()
+        if with_flow:
+            # col 9: taker_buy_base_asset_volume
+            return [[k[0], k[1], k[2], k[3], k[4], k[5], k[9]] for k in raw]
         return [[k[0], k[1], k[2], k[3], k[4], k[5]] for k in raw]
     except Exception as e:
         print(f"  [WARN] Binance error for {asset}: {type(e).__name__}: {e}", file=sys.stderr)
@@ -113,15 +119,18 @@ def main():
     any_success = False
 
     for asset in KRAKEN_PAIRS:
-        klines = fetch_kraken(asset)
-        source = "Kraken"
+        # Binance primero: da taker_buy_vol (columna 7) para order flow
+        klines = fetch_binance(asset, with_flow=True)
+        source = "Binance+flow"
         if klines is None:
-            klines = fetch_binance(asset)
-            source = "Binance"
+            # Kraken fallback: solo OHLCV (6 columnas, sin order flow)
+            klines = fetch_kraken(asset)
+            source = "Kraken"
         if klines is not None:
             data[asset] = klines
             any_success = True
-            print(f"  {asset}: {len(klines)} klines OK [{source}]")
+            has_flow = len(klines[0]) >= 7 if klines else False
+            print(f"  {asset}: {len(klines)} klines OK [{source}{'  ✓flow' if has_flow else ''}]")
         else:
             print(f"  {asset}: SKIP (both sources failed)")
 
