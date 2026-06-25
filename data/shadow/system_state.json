@@ -1,10 +1,10 @@
 {
-  "timestamp_utc": "2026-06-25T13:54:18+00:00",
-  "bankroll_sim": 6.49,
-  "pnl_total": -13.51,
-  "n_ops": 1058,
-  "win_rate": 0.4943,
-  "estrategias_activas": 63,
+  "timestamp_utc": "2026-06-25T13:56:07+00:00",
+  "bankroll_sim": 4.45,
+  "pnl_total": -15.55,
+  "n_ops": 1062,
+  "win_rate": 0.4925,
+  "estrategias_activas": 59,
   "desactivadas": [
     "UPDOWN_GBM#SOL#5min",
     "UPDOWN_GBM#5min",
@@ -14,8 +14,12 @@
     "SMART_FLOW_1H",
     "UPDOWN_GBM#XRP#5min",
     "UPDOWN_GBM#240min",
+    "UPDOWN_OU_5M",
     "UPDOWN_OU_5M#BTC#5min",
-    "UPDOWN_OU_5M#BTC"
+    "UPDOWN_OU_5M#BTC",
+    "UPDOWN_OU_5M#5min",
+    "UPDOWN_OU_5M#ETH#5min",
+    "UPDOWN_OU_5M#ETH"
   ],
   "top3_ic": [
     {
@@ -34,23 +38,23 @@
       "n": 14
     }
   ],
-  "brier_medio": 0.2965,
-  "clv_medio": -0.0035,
+  "brier_medio": 0.2971,
+  "clv_medio": -0.0053,
   "monitor_5min": {
     "ou_5m": {
-      "n": 49,
-      "clv": -0.1907,
-      "clv_ult30": -0.3325
+      "n": 52,
+      "clv": -0.2087,
+      "clv_ult30": -0.333
     },
     "of_buy_yes": {
-      "n": 312,
-      "clv": -0.0294,
+      "n": 313,
+      "clv": -0.0309,
       "umbral_accion": -0.03,
       "n_umbral": 400,
-      "alerta_proxima": "n=312/400, CLV=-0.029/−0.030"
+      "alerta_proxima": "n=313/400, CLV=-0.031/−0.030"
     },
     "of_decay": {
-      "clv_historico": 0.0001,
+      "clv_historico": -0.0007,
       "clv_ult30": -0.1008,
       "decay_ratio": null
     },
