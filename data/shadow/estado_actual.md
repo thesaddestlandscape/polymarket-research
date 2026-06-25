@@ -1,4 +1,4 @@
-# Estado del bot — 2026-06-25 10:10 UTC
+# Estado del bot — 2026-06-25 10:11 UTC
 
 ## Capital
 | | |
@@ -11,19 +11,19 @@
 | | |
 |---|---|
 | Inicio | 20.00 € |
-| Actual | **32.16 €** |
-| P&L acumulado | 🟢 **+12.16 €** |
-| ROI s/ operativo | +60.79% |
-| ROI s/ depósito | +40.53% |
-| P&L hoy (2026-06-25) | 🔴 -1.94 € |
-| Operaciones resueltas | 935 (483 WIN / 452 LOSS) — 51.7% |
+| Actual | **33.14 €** |
+| P&L acumulado | 🟢 **+13.14 €** |
+| ROI s/ operativo | +65.69% |
+| ROI s/ depósito | +43.79% |
+| P&L hoy (2026-06-25) | 🔴 -0.96 € |
+| Operaciones resueltas | 937 (485 WIN / 452 LOSS) — 51.8% |
 | Señales abiertas | 924 |
 
 ## Estrategias (visión global)
 
 | Estrategia | n | Win% | IC_efectivo | PNL | Apuesta | Estado |
 |---|---|---|---|---|---|---|
-| ORDER_FLOW_5M | 695 | 52.2% | +0.022 | +14.64€ | 0.50€ | ✅ activa |
+| ORDER_FLOW_5M | 697 | 52.4% | +0.024 | +15.62€ | 0.50€ | ✅ activa |
 | UPDOWN_GBM | 210 | 50.0% | +0.000 | +3.44€ | 0.50€ | ✅ activa |
 | UPDOWN_OU_5M | 7 | 85.7% | +0.097 | +2.47€ | 0.97€ | ⏳ acumulando |
 | PRICE_TARGET_GBM | 3 | 66.7% | +0.015 | -0.12€ | 0.50€ | ⏳ acumulando |
@@ -34,11 +34,11 @@
 
 | Timestamp | Estrategia | Mercado | Resultado | PNL |
 |---|---|---|---|---|
+| 2026-06-25T10:11 | ORDER_FLOW_5M#BNB#5min | BNB Up or Down - June 25, 6:05AM-6:10AM ET… | ✅ WIN | +0.49€ |
+| 2026-06-25T10:11 | ORDER_FLOW_5M#DOGE#5min | Dogecoin Up or Down - June 25, 6:05AM-6:10AM ET… | ✅ WIN | +0.49€ |
 | 2026-06-25T10:08 | UPDOWN_OU_5M#ETH#5min | Ethereum Up or Down - June 25, 6:00AM-6:05AM ET… | ✅ WIN | +0.48€ |
 | 2026-06-25T10:08 | ORDER_FLOW_5M#ETH#5min | Ethereum Up or Down - June 25, 6:00AM-6:05AM ET… | ❌ LOSS | -0.51€ |
 | 2026-06-25T10:08 | ORDER_FLOW_5M#SOL#5min | Solana Up or Down - June 25, 6:00AM-6:05AM ET… | ❌ LOSS | -0.51€ |
-| 2026-06-25T10:07 | ORDER_FLOW_5M#BTC#5min | Bitcoin Up or Down - June 25, 6:00AM-6:05AM ET… | ❌ LOSS | -0.51€ |
-| 2026-06-25T10:01 | ORDER_FLOW_5M#BTC#5min | Bitcoin Up or Down - June 25, 5:55AM-6:00AM ET… | ❌ LOSS | -0.51€ |
 
 ---
 *Actualizado automáticamente cada ~60s por el fast loop*
