@@ -1,4 +1,4 @@
-# Estado del bot — 2026-06-25 16:59 UTC
+# Estado del bot — 2026-06-25 17:01 UTC
 
 ## Capital
 | | |
@@ -11,13 +11,13 @@
 | | |
 |---|---|
 | Inicio | 20.00 € |
-| Actual | **3.16 €** |
-| P&L acumulado | 🔴 **-16.84 €** |
-| ROI s/ operativo | -84.20% |
-| ROI s/ depósito | -56.13% |
-| P&L hoy (2026-06-25) | 🔴 -30.93 € |
-| Operaciones resueltas | 1103 (541 WIN / 562 LOSS) — 49.0% |
-| Señales abiertas | 990 |
+| Actual | **2.65 €** |
+| P&L acumulado | 🔴 **-17.35 €** |
+| ROI s/ operativo | -86.75% |
+| ROI s/ depósito | -57.83% |
+| P&L hoy (2026-06-25) | 🔴 -31.44 € |
+| Operaciones resueltas | 1104 (541 WIN / 563 LOSS) — 49.0% |
+| Señales abiertas | 989 |
 
 ## Estrategias (visión global)
 
@@ -25,7 +25,7 @@
 |---|---|---|---|---|---|---|
 | ORDER_FLOW_5M | 778 | 51.0% | +0.010 | +5.97€ | 0.50€ | ✅ activa |
 | PRICE_TARGET_GBM | 9 | 66.7% | +0.061 | +1.49€ | 0.61€ | ✅ activa |
-| UPDOWN_GBM | 227 | 48.9% | -0.011 | -0.43€ | 0.50€ | ⚠️ IC negativo |
+| UPDOWN_GBM | 228 | 48.7% | -0.013 | -0.94€ | 0.50€ | ⚠️ IC negativo |
 | WEEKLY_PRICE | 15 | 60.0% | +0.066 | -1.16€ | 0.66€ | ✅ activa |
 | SMART_FLOW_1H | 17 | 17.6% | -0.246 | -8.95€ | 0.00€ | 🚫 desactivada |
 | UPDOWN_OU_5M | 57 | 26.3% | -0.229 | -13.76€ | 0.00€ | 🚫 desactivada |
@@ -34,11 +34,11 @@
 
 | Timestamp | Estrategia | Mercado | Resultado | PNL |
 |---|---|---|---|---|
+| 2026-06-25T17:01 | UPDOWN_GBM#XRP#15min | XRP Up or Down - June 25, 12:45PM-1:00PM ET… | ❌ LOSS | -0.51€ |
 | 2026-06-25T16:43 | ORDER_FLOW_5M#SOL#5min | Solana Up or Down - June 25, 12:35PM-12:40PM ET… | ✅ WIN | +0.48€ |
 | 2026-06-25T16:11 | WEEKLY_PRICE#SOL | Will the price of Solana be between $70 and $80 on… | ✅ WIN | +0.66€ |
 | 2026-06-25T16:07 | UPDOWN_GBM#ETH#60min | Ethereum Up or Down - June 25, 11AM ET… | ✅ WIN | +0.71€ |
 | 2026-06-25T16:07 | PRICE_TARGET_GBM#SOL#atexpiry | Will the price of Solana be above $70 on June 25?… | ✅ WIN | +0.75€ |
-| 2026-06-25T16:03 | WEEKLY_PRICE#SOL | Will the price of Solana be between $60 and $70 on… | ✅ WIN | +1.10€ |
 
 ---
 *Actualizado automáticamente cada ~60s por el fast loop*
