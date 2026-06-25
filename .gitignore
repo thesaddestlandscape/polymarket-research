@@ -13,3 +13,5 @@ data/live/LIVE_MODE_ON
 data/live/*.key
 data/live/.env
 data/reports/
+data/backfill/klines/
+data/shadow/_cache_*.pkl

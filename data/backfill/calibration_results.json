@@ -1,0 +1,34 @@
+{
+  "timestamp": "2026-06-25T16:04:03.179277+00:00",
+  "n_total": 134906,
+  "drift_damping_optimo": 0.0,
+  "drift_damping_ic": 0.1303390422929046,
+  "regime_threshold_optimo": 0.6000000000000001,
+  "regime_threshold_ic": 0.10343325934874836,
+  "order_flow_por_par": {
+    "BTC": {
+      "delta_min": 0.42,
+      "delta_max": 0.44,
+      "ic": 0.10344827586206895,
+      "n": 578
+    },
+    "SOL": {
+      "delta_min": 0.36,
+      "delta_max": 0.39999999999999997,
+      "ic": 0.09247648902821315,
+      "n": 636
+    },
+    "XRP": {
+      "delta_min": 0.44,
+      "delta_max": 0.46,
+      "ic": 0.11228406909788868,
+      "n": 519
+    },
+    "DOGE": {
+      "delta_min": 0.44,
+      "delta_max": 0.46,
+      "ic": 0.09698996655518399,
+      "n": 596
+    }
+  }
+}
