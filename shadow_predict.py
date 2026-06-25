@@ -1074,6 +1074,10 @@ def s_price_target_gbm(market, ctx):
 # ORDER_FLOW_5M — Cumulative delta en exchanges reales para slots Up/Down 5min
 # ─────────────────────────────────────────────────────────────────────────────
 
+# Horas UTC con edge negativo confirmado en ORDER_FLOW_5M (n≥20, IC≤-0.10)
+ORDER_FLOW_BLACKLIST_HOURS = {22}  # 22:xx UTC: IC=-0.115, n=37
+
+
 def s_order_flow_5m(market, ctx):
     """
     Explota el lag entre el flujo de órdenes en exchanges (Binance) y el
@@ -1088,6 +1092,11 @@ def s_order_flow_5m(market, ctx):
     Delta estimado (Kraken fallback): close-location en el rango H-L.
     """
     question = market.get("question", "")
+
+    # Filtro horario: horas con edge sistemáticamente negativo
+    hora_utc = datetime.now(timezone.utc).hour
+    if hora_utc in ORDER_FLOW_BLACKLIST_HOURS:
+        return None
 
     # Solo slots 5min Up/Down
     tipo, ventana_min = _parse_updown_tipo(question)
