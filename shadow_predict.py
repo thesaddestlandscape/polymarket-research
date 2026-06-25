@@ -651,6 +651,11 @@ def _calcular_delta_ratio_macro(sym, klines_raw):
 # 0.25 = conservador: evita sobrereaccionar a ruido intraday.
 DRIFT_DAMPING = 0.25
 
+# Umbral de régimen claro para filtrar señales contra-tendencia en slots #15min.
+# Datos: bajista -0.82%/h → BUY_NO 76%; alcista +0.43%/h → BUY_NO 0/2.
+# 0.7%/h es conservador: solo filtra regímenes muy claros, evita overfitting con n pequeño.
+REGIME_THRESHOLD = 0.7  # %/h
+
 
 def _gbm_p_up(spot, ref, sigma_h, T_h, mu_h=0.0):
     """
@@ -800,6 +805,19 @@ def s_updown_gbm(market, ctx):
     # Solo apostamos cuando spot≈ref y el edge viene de mala valoración, no de momentum.
     if tipo == 'slot' and ventana_min == 5 and abs(pct) > 0.05:
         return None
+
+    # Filtro de régimen H-REGIMEN (2026-06-25): en slots #15min, rechazar señales que
+    # van contra un régimen de mercado claro. Datos: bajista -0.82%/h → BUY_NO 76%;
+    # alcista +0.43%/h → BUY_NO 0/2. Umbral 0.7%/h conservador (evita overfitting, n=27).
+    # Solo actúa cuando el drift es inequívoco y el modelo va en sentido contrario.
+    if tipo == 'slot' and ventana_min == 15 and drift_60 is not None:
+        drift_pct = drift_60 * 100                  # ya en %/h en features
+        py_mkt = market.get("_precio_yes", 0.5)
+        model_bullish = p_up > py_mkt               # True → el modelo apostaria BUY_YES
+        if drift_pct > REGIME_THRESHOLD and not model_bullish:
+            return None  # régimen alcista + modelo BUY_NO → momentum continuará arriba
+        if drift_pct < -REGIME_THRESHOLD and model_bullish:
+            return None  # régimen bajista + modelo BUY_YES → momentum continuará abajo
 
     if tipo == 'daily':
         slot_type = 'daily'

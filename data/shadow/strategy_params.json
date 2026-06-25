@@ -271,13 +271,13 @@
       "apuesta_kelly": 0.5
     },
     "SMART_FLOW_1H": {
-      "activa": true,
+      "activa": false,
       "edge_minimo": 0.06,
       "ic_bayes": -0.1714,
       "n": 12,
       "pnl_total": -6.7416,
       "causa_principal": "TIMING_CORTO",
-      "motivo": "IC_bayes=-0.286 n=12 conf=0.60 → edge_minimo=0.06",
+      "motivo": "IC_bayes=-0.286 n=12 conf=0.60 → edge_minimo=0.06 | DESACTIVADA MANUALMENTE 2026-06-25: IC=-0.175 n=14 21% win rate",
       "apuesta_kelly": 0.5
     },
     "UPDOWN_GBM#XRP#5min": {

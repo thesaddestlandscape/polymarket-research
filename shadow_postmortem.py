@@ -29,7 +29,7 @@ APUESTA_SHADOW = 0.90
 
 UMBRAL_SUBIR_EDGE = (-0.10, 3)
 UMBRAL_SUBIR_MAS  = (-0.20, 5)
-UMBRAL_DESACTIVAR = (-0.30, 8)
+UMBRAL_DESACTIVAR = (-0.20, 8)  # bajado de -0.30: desactiva antes estrategias con IC negativo claro
 
 
 def cargar_results() -> list:
