@@ -1,5 +1,5 @@
 {
-  "timestamp_utc": "2026-06-25T13:37:44+00:00",
+  "timestamp_utc": "2026-06-25T13:39:34+00:00",
   "estrategias": {
     "UPDOWN_GBM": {
       "activa": true,
@@ -29,7 +29,7 @@
           "ic_bueno": 0.2143,
           "n_malo": 12,
           "n_bueno": 5,
-          "descubierto": "2026-06-25T13:37:44+00:00"
+          "descubierto": "2026-06-25T13:39:34+00:00"
         },
         {
           "feature": "sigma_h",
@@ -39,7 +39,7 @@
           "ic_bueno": -0.0714,
           "n_malo": 12,
           "n_bueno": 5,
-          "descubierto": "2026-06-25T13:37:44+00:00"
+          "descubierto": "2026-06-25T13:39:34+00:00"
         }
       ],
       "patrones_ganadores": []
@@ -82,7 +82,7 @@
           "ic_bueno": 0.0,
           "n_malo": 8,
           "n_bueno": 4,
-          "descubierto": "2026-06-25T13:37:44+00:00"
+          "descubierto": "2026-06-25T13:39:34+00:00"
         },
         {
           "feature": "sigma_h",
@@ -92,7 +92,7 @@
           "ic_bueno": 0.1667,
           "n_malo": 8,
           "n_bueno": 4,
-          "descubierto": "2026-06-25T13:37:44+00:00"
+          "descubierto": "2026-06-25T13:39:34+00:00"
         }
       ],
       "patrones_ganadores": []
@@ -125,7 +125,7 @@
           "ic_bueno": 0.125,
           "n_malo": 10,
           "n_bueno": 6,
-          "descubierto": "2026-06-25T13:37:44+00:00"
+          "descubierto": "2026-06-25T13:39:34+00:00"
         }
       ],
       "patrones_ganadores": []
@@ -158,7 +158,7 @@
           "ic_bueno": 0.25,
           "n_malo": 11,
           "n_bueno": 6,
-          "descubierto": "2026-06-25T13:37:44+00:00"
+          "descubierto": "2026-06-25T13:39:34+00:00"
         }
       ],
       "patrones_ganadores": [
@@ -170,7 +170,7 @@
           "ic_base": 0.0385,
           "n_patron": 9,
           "kelly_boost": 0.68,
-          "descubierto": "2026-06-25T13:37:44+00:00"
+          "descubierto": "2026-06-25T13:39:34+00:00"
         }
       ]
     },
@@ -223,7 +223,7 @@
           "ic_base": 0.0833,
           "n_patron": 11,
           "kelly_boost": 0.96,
-          "descubierto": "2026-06-25T13:37:44+00:00"
+          "descubierto": "2026-06-25T13:39:34+00:00"
         },
         {
           "feature": "sigma_h",
@@ -233,7 +233,7 @@
           "ic_base": 0.0833,
           "n_patron": 23,
           "kelly_boost": 0.9,
-          "descubierto": "2026-06-25T13:37:44+00:00"
+          "descubierto": "2026-06-25T13:39:34+00:00"
         }
       ]
     },
@@ -340,11 +340,11 @@
     "ORDER_FLOW_5M": {
       "activa": true,
       "edge_minimo": 0.02,
-      "ic_bayes": 0.0137,
-      "n": 765,
-      "pnl_total": 8.6001,
+      "ic_bayes": 0.013,
+      "n": 766,
+      "pnl_total": 8.0901,
       "causa_principal": "TIMING_CORTO",
-      "motivo": "IC_bayes=+0.014 n=765 conf=1.00",
+      "motivo": "IC_bayes=+0.013 n=766 conf=1.00",
       "apuesta_kelly": 0.5
     },
     "UPDOWN_GBM#ETH#240min": {
@@ -510,31 +510,31 @@
     "ORDER_FLOW_5M#ETH#5min": {
       "activa": true,
       "edge_minimo": 0.02,
-      "ic_bayes": -0.0046,
-      "n": 107,
-      "pnl_total": -1.7551,
+      "ic_bayes": -0.0091,
+      "n": 108,
+      "pnl_total": -2.2651,
       "causa_principal": "TIMING_CORTO",
-      "motivo": "IC_bayes=-0.005 n=107 conf=1.00",
+      "motivo": "IC_bayes=-0.009 n=108 conf=1.00",
       "apuesta_kelly": 0.5
     },
     "ORDER_FLOW_5M#ETH": {
       "activa": true,
       "edge_minimo": 0.02,
-      "ic_bayes": -0.0046,
-      "n": 107,
-      "pnl_total": -1.7551,
+      "ic_bayes": -0.0091,
+      "n": 108,
+      "pnl_total": -2.2651,
       "causa_principal": "TIMING_CORTO",
-      "motivo": "IC_bayes=-0.005 n=107 conf=1.00",
+      "motivo": "IC_bayes=-0.009 n=108 conf=1.00",
       "apuesta_kelly": 0.5
     },
     "ORDER_FLOW_5M#5min": {
       "activa": true,
       "edge_minimo": 0.02,
-      "ic_bayes": 0.004,
-      "n": 629,
-      "pnl_total": -3.9937,
+      "ic_bayes": 0.0032,
+      "n": 630,
+      "pnl_total": -4.5037,
       "causa_principal": "TIMING_CORTO",
-      "motivo": "IC_bayes=+0.004 n=629 conf=1.00",
+      "motivo": "IC_bayes=+0.003 n=630 conf=1.00",
       "apuesta_kelly": 0.5
     },
     "ORDER_FLOW_5M#SOL#5min": {
@@ -700,41 +700,41 @@
     "UPDOWN_OU_5M": {
       "activa": true,
       "edge_minimo": 0.04,
-      "ic_bayes": -0.119,
-      "n": 40,
-      "pnl_total": -5.0941,
+      "ic_bayes": -0.1444,
+      "n": 43,
+      "pnl_total": -6.6241,
       "causa_principal": "TIMING_CORTO",
-      "motivo": "IC_bayes=-0.119 n=40 conf=1.00 → edge_minimo=0.04",
+      "motivo": "IC_bayes=-0.144 n=43 conf=1.00 → edge_minimo=0.04",
       "apuesta_kelly": 0.5
     },
     "UPDOWN_OU_5M#BTC#5min": {
-      "activa": true,
-      "edge_minimo": 0.04,
-      "ic_bayes": -0.08,
-      "n": 8,
-      "pnl_total": -2.0598,
-      "causa_principal": "EDGE_INSUFICIENTE",
-      "motivo": "IC_bayes=-0.200 n=8 conf=0.40 → edge_minimo=0.04",
-      "apuesta_kelly": 0.5
+      "activa": false,
+      "edge_minimo": 0.02,
+      "ic_bayes": -0.1023,
+      "n": 9,
+      "pnl_total": -2.5698,
+      "causa_principal": "TIMING_CORTO",
+      "motivo": "IC_bayes=-0.227 n=9 conf=0.45 → DESACTIVADA",
+      "apuesta_kelly": 0.0
     },
     "UPDOWN_OU_5M#BTC": {
-      "activa": true,
-      "edge_minimo": 0.04,
-      "ic_bayes": -0.08,
-      "n": 8,
-      "pnl_total": -2.0598,
-      "causa_principal": "EDGE_INSUFICIENTE",
-      "motivo": "IC_bayes=-0.200 n=8 conf=0.40 → edge_minimo=0.04",
-      "apuesta_kelly": 0.5
+      "activa": false,
+      "edge_minimo": 0.02,
+      "ic_bayes": -0.1023,
+      "n": 9,
+      "pnl_total": -2.5698,
+      "causa_principal": "TIMING_CORTO",
+      "motivo": "IC_bayes=-0.227 n=9 conf=0.45 → DESACTIVADA",
+      "apuesta_kelly": 0.0
     },
     "UPDOWN_OU_5M#5min": {
       "activa": true,
       "edge_minimo": 0.04,
-      "ic_bayes": -0.119,
-      "n": 40,
-      "pnl_total": -5.0941,
+      "ic_bayes": -0.1444,
+      "n": 43,
+      "pnl_total": -6.6241,
       "causa_principal": "TIMING_CORTO",
-      "motivo": "IC_bayes=-0.119 n=40 conf=1.00 → edge_minimo=0.04",
+      "motivo": "IC_bayes=-0.144 n=43 conf=1.00 → edge_minimo=0.04",
       "apuesta_kelly": 0.5
     },
     "UPDOWN_OU_5M#XRP#5min": {
@@ -780,21 +780,21 @@
     "UPDOWN_OU_5M#ETH#5min": {
       "activa": true,
       "edge_minimo": 0.04,
-      "ic_bayes": -0.0614,
-      "n": 9,
-      "pnl_total": -1.2869,
+      "ic_bayes": -0.0833,
+      "n": 10,
+      "pnl_total": -1.7969,
       "causa_principal": "TIMING_CORTO",
-      "motivo": "IC_bayes=-0.136 n=9 conf=0.45 → edge_minimo=0.04",
+      "motivo": "IC_bayes=-0.167 n=10 conf=0.50 → edge_minimo=0.04",
       "apuesta_kelly": 0.5
     },
     "UPDOWN_OU_5M#ETH": {
       "activa": true,
       "edge_minimo": 0.04,
-      "ic_bayes": -0.0614,
-      "n": 9,
-      "pnl_total": -1.2869,
+      "ic_bayes": -0.0833,
+      "n": 10,
+      "pnl_total": -1.7969,
       "causa_principal": "TIMING_CORTO",
-      "motivo": "IC_bayes=-0.136 n=9 conf=0.45 → edge_minimo=0.04",
+      "motivo": "IC_bayes=-0.167 n=10 conf=0.50 → edge_minimo=0.04",
       "apuesta_kelly": 0.5
     },
     "UPDOWN_OU_5M#DOGE#5min": {
@@ -819,22 +819,22 @@
     },
     "UPDOWN_OU_5M#BNB#5min": {
       "activa": true,
-      "edge_minimo": 0.04,
-      "ic_bayes": -0.0667,
-      "n": 4,
-      "pnl_total": -2.5194,
-      "causa_principal": "EDGE_INSUFICIENTE",
-      "motivo": "IC_bayes=-0.333 n=4 conf=0.20 → edge_minimo=0.04",
+      "edge_minimo": 0.06,
+      "ic_bayes": -0.0893,
+      "n": 5,
+      "pnl_total": -3.0294,
+      "causa_principal": "TIMING_CORTO",
+      "motivo": "IC_bayes=-0.357 n=5 conf=0.25 → edge_minimo=0.06",
       "apuesta_kelly": 0.5
     },
     "UPDOWN_OU_5M#BNB": {
       "activa": true,
-      "edge_minimo": 0.04,
-      "ic_bayes": -0.0667,
-      "n": 4,
-      "pnl_total": -2.5194,
-      "causa_principal": "EDGE_INSUFICIENTE",
-      "motivo": "IC_bayes=-0.333 n=4 conf=0.20 → edge_minimo=0.04",
+      "edge_minimo": 0.06,
+      "ic_bayes": -0.0893,
+      "n": 5,
+      "pnl_total": -3.0294,
+      "causa_principal": "TIMING_CORTO",
+      "motivo": "IC_bayes=-0.357 n=5 conf=0.25 → edge_minimo=0.06",
       "apuesta_kelly": 0.5
     }
   }
