@@ -4,7 +4,7 @@
 - [x] Resolution Sniper — p_modelo≥0.92 con mercado en 0.80, última 1-2h antes de vencimiento
 - [x] OU Process 5min — shadow strategy paralela UPDOWN_OU_5M, θ=30, calibrar con n≥200
 - [x] Ventanas horarias con más edge — ORDER_FLOW blacklist 22 UTC (IC=-0.115 n=37)
-- [ ] Grinold-Kahn: ampliar breadth con mercados no-cripto (política, macro, deportes en Polymarket) — correlación ≈0 con BTC/ETH → BR_efectivo casi se dobla → IR se multiplica por √2
+- [ ] [LARGO PLAZO] Grinold-Kahn: ampliar breadth con mercados no-cripto — cuando modelo crypto esté funcionando perfectamente. Tipos candidatos: tiempo meteorológico, política, macro, deportes. Correlación ≈0 con BTC/ETH → BR_efectivo se dobla → IR ×√2 sin cambiar el modelo.
 - [ ] Grinold-Kahn: alpha decay monitor automático — si IC_rolling_30 < 0.5×IC_histórico → Telegram alert. Ya tenemos datos, falta el trigger.
 - [ ] Grinold-Kahn: stake explícito por IC — #60min (IC=0.105) debería apostar ×1.5 vs #15min (IC=0.070). Actualmente Kelly lo aproxima pero no explícitamente.
 - [ ] Dataset Jon-Becker — descarga selectiva + procesamiento en streaming
