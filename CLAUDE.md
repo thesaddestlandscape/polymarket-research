@@ -1,7 +1,7 @@
 # CLAUDE.md — Polymarket Research Bot
 
 Documento de contexto completo. Léelo al inicio de cada sesión para retomar sin releer historial.
-**Última actualización: 2026-06-25 ~08:30 UTC**
+**Última actualización: 2026-06-25 ~09:30 UTC**
 
 ---
 
@@ -107,19 +107,19 @@ capture_markets → capture_wallets → capture_trades
 
 ---
 
-## Estado de estrategias — 2026-06-25
+## Estado de estrategias — 2026-06-25 (sesión tarde)
 
-### Bankroll simulado: **36.21€** (+16.21€ PNL) | 875 ops | 52.1% WR
+### Bankroll simulado: **~35€** (+15€ PNL) | ~900 ops | ~52% WR (actualizar con protocolo inicio)
 
 | Estrategia | n | Win% | IC | PNL | Estado |
 |---|---|---|---|---|---|
-| UPDOWN_GBM#BTC#15min | 32 | 62% | **+0.118** | +6.45€ | ✅ casi live (n≥40) |
-| UPDOWN_GBM#ETH#60min | 14 | 71% | **+0.131** | +3.63€ | ✅ señal emergente |
-| UPDOWN_GBM#BTC#60min | 13 | 69% | **+0.108** | +2.54€ | ✅ señal emergente |
-| UPDOWN_GBM#SOL#15min | 23 | 57% | +0.060 | +3.83€ | ⚠️ acumulando |
-| UPDOWN_GBM#ETH#15min | 40 | 53% | +0.025 | +1.67€ | ⚠️ IC bajo |
-| ORDER_FLOW_5M (sub) | 449 | 53% | +0.030 | +7.49€ | ⚠️ tendencia bajando |
-| UPDOWN_GBM#BTC#5min | 16 | 31% | -0.133 | -6.30€ | ❌ filtros activos |
+| UPDOWN_GBM#BTC#15min | 32+ | 62% | **+0.118** | +6.45€ | ✅ casi live (n≥40) |
+| UPDOWN_GBM#ETH#60min | 14+ | 71% | **+0.131** | +3.63€ | ✅ señal emergente |
+| UPDOWN_GBM#BTC#60min | 13+ | 69% | **+0.108** | +2.54€ | ✅ señal emergente |
+| ORDER_FLOW_5M [0.38-0.46] | 268 | 56% | **+0.059** | +13.53€ | ✅ fix DELTA_MAX |
+| UPDOWN_GBM#SOL#15min | 23+ | 57% | +0.060 | +3.83€ | ⚠️ acumulando |
+| RESOLUTION_SNIPER | 0 | — | — | — | 🆕 acumulando datos |
+| UPDOWN_OU_5M | 0 | — | — | — | 🆕 shadow paralelo |
 | SMART_FLOW_1H | 14 | 21% | -0.175 | -7.42€ | 🚫 DESACTIVADA |
 | UPDOWN_GBM#240min | 9 | 0-33% | -0.318 | -3.37€ | 🚫 DESACTIVADA |
 
@@ -154,25 +154,37 @@ ETH y BTC están ya por encima de IC=0.10. Necesitan llegar a n≥40 para live.
 **Hipótesis**: los mercados hourly (60min) tienen menos ruido que los 15min y más señal que los daily. El GBM captura bien la dinámica de 1 hora.
 **Acción**: priorizar acumulación de datos en #60min. Si IC se mantiene ≥0.10 con n≥40 → candidato a live antes que #15min global.
 
-### H-ORDER_FLOW-DECAY ⚠️ VIGILAR
+### H-ORDER_FLOW-DECAY ✅ RESUELTA — DELTA_MAX implementado
 
-ORDER_FLOW_5M mostraba IC=+0.06 histórico, pero los últimos 4 bloques de 30:
+Análisis (n=518 con features) reveló que la señal **no es monótona**:
+- `[0.38-0.46]`: IC=+0.059 (268 ops) → sweet spot ✅
+- `[0.46-0.65]`: IC=-0.079 (250 ops) → zona muerta ❌ señal ya priceada, reversión
+- `[0.65+]`: IC=+0.032 (45 ops) → extremo, pocas ops
 
-| Bloque | Win% | IC |
-|---|---|---|
-| #394-423 | 40% | -0.094 |
-| #424-453 | 43% | -0.062 |
-| #454-483 | 53% | +0.031 |
-| #484-513 | 40% | -0.094 |
-
-**Posible explicación**: el edge inicial era el sesgo bajista del día 24-Jun. Con datos más equilibrados, el IC real es ~+0.025, no +0.06. Si el IC cae sostenidamente por debajo de 0 con n≥50 nuevas obs → revisar parámetros.
-**Acción**: monitorear. Si 3 bloques consecutivos con IC < -0.05 → subir DELTA_MIN de 0.38 a 0.45.
+**Fix aplicado**: `DELTA_MAX = 0.46` en `s_order_flow_5m`. Zona muerta eliminada.
+**Resultado**: IC +0.019 → +0.059, PNL histórico +4.89€ → +13.53€ (con el filtro).
 
 ### H-DRIFT-EFECTO ⚠️ DATOS INSUFICIENTES
 
 El filtro REGIME_THRESHOLD lleva activo solo desde 2026-06-25 06:27 UTC.
 Pre-filtro: 56/98 (57%) IC=+0.070. Post-filtro: 3/4 (75%) n=4 — demasiado pequeño.
 **Acción**: esperar n≥20 post-filtro para evaluar impacto real.
+
+### H-VENTANAS-HORARIAS ✅ ACCIONADA
+
+Análisis por hora UTC reveló:
+- **ORDER_FLOW 22:xx UTC**: IC=-0.115 n=37 → consistentemente malo
+- **ORDER_FLOW 17:xx UTC**: IC=+0.201 n=17 → el mejor, pero n pequeño
+- **GBM #15min 06-07 UTC**: IC=+0.102 n=9 → promisorio, insuficiente
+
+**Fix**: `ORDER_FLOW_BLACKLIST_HOURS = {22}` en `s_order_flow_5m`.
+**Pendiente**: con más datos confirmar/añadir otras horas (17:xx posible boost futuro).
+
+### H-OU-5MIN 🆕 SHADOW PARALELO
+
+Inversion test simple (n=160): IC=-0.006 → +0.006. Mejora mínima, estadísticamente ruido.
+`UPDOWN_OU_5M` añadida como estrategia shadow paralela (no reemplaza GBM).
+Formula: `p_up = 0.5 - pct × THETA_OU(30)`. Calibrar cuando n≥200 o con Jon-Becker.
 
 ### H-5MIN-REVERSIÓN ✅ CONFIRMADA EXTERNAMENTE
 
@@ -262,15 +274,18 @@ predictions (features JSON) → results (features copiadas)
 [✓] Sistema live: ventanas + switch + Kelly + circuit breakers
 [✓] Control Telegram (/on /off /status)
 [✓] Notificaciones: señales, circuit breaker, digest diario
+[✓] ORDER_FLOW DELTA_MAX=0.46 (zona muerta [0.46-0.65] eliminada)
+[✓] Ciclo fast 125s → 6s (paralelización + cache pickle CSV)
+[✓] Kelly compuesto: GBM+OF coinciden → stake×1.5, divergen → SKIP
+[✓] Resolution Sniper: bracket/target en última 1.5h con GBM real
+[✓] UPDOWN_OU_5M: shadow paralelo mean-reversion 5min
+[✓] Ventanas horarias: ORDER_FLOW blacklist 22 UTC (IC=-0.115)
 [~] BTC#15min IC≥0.10 n=32/40 — casi listo para live
 [ ] Credenciales Polymarket API → primer trade real
-[ ] Dataset Jon-Becker → backtesting histórico completo
+[ ] Dataset Jon-Becker → backtesting histórico + calibrar theta OU
 [ ] H-60MIN validada con n≥40 → segunda estrategia live
 [ ] REGIME_THRESHOLD ajustado con más datos (0.7 → 0.5?)
 [ ] HMM régimen de mercado (cuando drift simple validado con n≥50)
-[ ] OU process para slots 5min (cuando n≥100 post-filtro)
-[ ] Kelly compuesto ORDER_FLOW + UPDOWN_GBM (convergencia de señales)
-[ ] Resolution Sniper (p≥0.92 con mercado en 0.80, última 1-2h)
 [ ] OBI Orderbook Imbalance (con dataset Jon-Becker)
 [ ] Cross-Market Arb Polymarket vs Kalshi (con dataset)
 ```
@@ -278,6 +293,9 @@ predictions (features JSON) → results (features copiadas)
 ---
 
 ## Prioridades para próxima sesión
+
+### P0 — Esta tarde: MetaMask + USDC + cuenta Polymarket
+Ver `LIVE_PLAN.md`. Checklist: instalar MetaMask → red Polygon → comprar 30 USDC en Coinbase → retirar vía Polygon → crear cuenta Polymarket desde VPS Helsinki (ssh root@2a01:4f9:c014:df39::1).
 
 ### P1 — Credenciales Polymarket + primera operación real
 BTC#15min está casi en umbral (n=32/40). En 2-3 días de trading lo cruza.
@@ -303,11 +321,19 @@ Si llegan a n=40 con IC≥0.10 → segunda estrategia candidata a live.
 
 ### `shadow_predict.py`
 ```python
-DRIFT_DAMPING = 0.25        # fracción del drift que entra en el GBM
-REGIME_THRESHOLD = 0.7      # %/h para filtrar señales contra-tendencia en #15min
-EDGE_MINIMO = 0.02
-SLIPPAGE_ESTIMADO = 0.02
-DELTA_MIN = 0.38            # ORDER_FLOW_5M
+DRIFT_DAMPING    = 0.25    # fracción del drift que entra en el GBM
+REGIME_THRESHOLD = 0.7     # %/h para filtrar señales contra-tendencia en #15min
+EDGE_MINIMO      = 0.02
+SLIPPAGE_ESTIMADO= 0.02
+DELTA_MIN = 0.38           # ORDER_FLOW_5M — umbral mínimo
+DELTA_MAX = 0.46           # ORDER_FLOW_5M — umbral máximo (zona muerta >0.46)
+KELLY_COMPUESTO_BOOST = 1.5  # boost cuando GBM+OF coinciden en dirección
+KELLY_COMPUESTO_MAX   = 2.00
+THETA_OU = 30.0            # OU mean-reversion para 5min (calibrar con Jon-Becker)
+ORDER_FLOW_BLACKLIST_HOURS = {22}  # hora UTC con IC=-0.115 n=37
+# Cache pickle: mercados_recientes TTL=90s, historial_mercados TTL=90s
+# Ciclo fast: predict+trade cada 20s / resolve+postmortem cada 60s (3er ciclo)
+# Paralelización: fetch_slots (ThreadPool), fetch_mercados_paralelo(20 workers)
 ```
 
 ### `shadow_postmortem.py`

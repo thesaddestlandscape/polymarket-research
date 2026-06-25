@@ -2,6 +2,6 @@
 
 - [x] Kelly compuesto (en curso)
 - [x] Resolution Sniper — p_modelo≥0.92 con mercado en 0.80, última 1-2h antes de vencimiento
-- [ ] OU Process 5min — Ornstein-Uhlenbeck vs GBM en slots de 5min (n=151 ops disponibles)
-- [ ] Ventanas horarias con más edge — ¿hay horas UTC con win rate superior?
+- [x] OU Process 5min — shadow strategy paralela UPDOWN_OU_5M, θ=30, calibrar con n≥200
+- [x] Ventanas horarias con más edge — ORDER_FLOW blacklist 22 UTC (IC=-0.115 n=37)
 - [ ] Dataset Jon-Becker — descarga selectiva + procesamiento en streaming
