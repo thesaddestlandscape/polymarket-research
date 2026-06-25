@@ -22,9 +22,9 @@
     "min_stake_eur": 0.25,
     "max_stake_eur": 2.00,
     "circuit_breaker": {
-      "max_perdida_ventana_eur": 1.00,
-      "max_perdida_diaria_eur": 3.00,
-      "parar_switch_si_perdida_diaria": true
+      "freno_ventana_pct": 0.20,
+      "freno_diario_pct": 0.15,
+      "bankroll_minimo_eur": 5.00
     }
   },
 

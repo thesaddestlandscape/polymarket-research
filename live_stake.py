@@ -33,7 +33,6 @@ TRADES_CSV            = DIR_LIVE / "trades.csv"
 SWITCH_PATH           = DIR_LIVE / "LIVE_MODE_ON"
 
 CAPITAL_OPERATIVO_INICIAL = 20.0
-BANKROLL_MINIMO           = 5.0   # por debajo → desactiva switch automáticamente
 
 
 def _cargar_config() -> dict:
@@ -172,88 +171,124 @@ def pnl_live_hoy() -> float:
 
 # ── Circuit breaker ───────────────────────────────────────────────────────────
 
+def bankroll_inicio_dia() -> float:
+    """Bankroll al inicio del día de hoy (antes de cualquier trade de hoy)."""
+    bkr_ahora = bankroll_actual()
+    pnl_hoy   = pnl_live_hoy()
+    return bkr_ahora - pnl_hoy
+
+
+def pnl_live_ventana_actual() -> float:
+    """PNL neto de trades cerrados en la ventana horaria actual."""
+    if not TRADES_CSV.exists():
+        return 0.0
+    config = _cargar_config()
+    v = _ventana_actual(config)
+    if v is None:
+        return 0.0
+    ts_ini = _ts_inicio_ventana_utc(v, config)
+    pnl = 0.0
+    with open(TRADES_CSV, encoding="utf-8") as f:
+        for row in csv.DictReader(f):
+            if row.get("status") != "CLOSED":
+                continue
+            ts_str = row.get("close_timestamp") or row.get("timestamp_utc") or ""
+            try:
+                ts = datetime.fromisoformat(ts_str.replace("Z", "+00:00"))
+                if ts.tzinfo is None:
+                    ts = ts.replace(tzinfo=timezone.utc)
+                if ts >= ts_ini:
+                    pnl += float(row.get("pnl_neto_eur", 0) or 0)
+            except Exception:
+                pass
+    return pnl
+
+
 def verificar_circuit_breaker() -> tuple[bool, str]:
     """
-    Dos niveles de freno:
-      1. Ventana: si el capital DESPLEGADO en esta ventana >= budget_ventana → para
-      2. Bankroll mínimo: si bankroll < BANKROLL_MINIMO → desactiva switch
+    Tres niveles de freno (de mayor a menor prioridad):
+
+      1. Bankroll mínimo absoluto (5€): apaga el switch, avisa al usuario.
+      2. Freno diario (-15%): si el bankroll cayó 15% desde inicio del día → para hoy.
+      3. Freno por ventana (-20%): si en esta ventana se ha perdido 20% del bankroll
+         del inicio de la ventana → para esta ventana.
 
     Devuelve (disparado, motivo).
     """
     config  = _cargar_config()
+    cb      = config.get("riesgo", {}).get("circuit_breaker", {})
     bkr     = bankroll_actual()
+    bkr_min = cb.get("bankroll_minimo_eur", 5.0)
 
-    # Freno 2: bankroll total demasiado bajo → desactiva switch
-    if bkr < BANKROLL_MINIMO:
+    # Freno 1 — bankroll mínimo absoluto
+    if bkr <= bkr_min:
         if SWITCH_PATH.exists():
             SWITCH_PATH.unlink()
-        return True, f"bankroll {bkr:.2f}€ < mínimo {BANKROLL_MINIMO:.2f}€ — switch desactivado"
+        return True, f"🛑 bankroll {bkr:.2f}€ ≤ mínimo {bkr_min:.2f}€ — switch desactivado"
 
-    # Freno 1: presupuesto de ventana agotado
+    # Freno 2 — caída diaria
+    freno_dia_pct = cb.get("freno_diario_pct", 0.15)
+    bkr_ini_dia   = bankroll_inicio_dia()
+    if bkr_ini_dia > 0:
+        caida_dia = (bkr_ini_dia - bkr) / bkr_ini_dia
+        if caida_dia >= freno_dia_pct:
+            return True, (f"🛑 caída diaria {caida_dia*100:.1f}% "
+                          f"({bkr_ini_dia:.2f}€ → {bkr:.2f}€) ≥ freno {freno_dia_pct*100:.0f}%")
+
+    # Freno 3 — caída en ventana actual
+    freno_v_pct = cb.get("freno_ventana_pct", 0.20)
     v = _ventana_actual(config)
     if v:
-        n_restantes     = ventanas_restantes_hoy(config)
-        budget_ventana  = bkr / n_restantes
-        desplegado      = stakes_desplegados_ventana_actual()
+        pnl_v       = pnl_live_ventana_actual()
+        desp        = stakes_desplegados_ventana_actual()
+        bkr_ini_v   = bkr - pnl_v           # bankroll al inicio de esta ventana
+        if bkr_ini_v > 0 and pnl_v < 0:
+            caida_v = abs(pnl_v) / bkr_ini_v
+            if caida_v >= freno_v_pct:
+                return True, (f"🛑 caída en ventana '{v.get('nombre','')}' "
+                               f"{caida_v*100:.1f}% ({pnl_v:.2f}€) ≥ freno {freno_v_pct*100:.0f}%")
 
-        if desplegado >= budget_ventana:
-            return True, (
-                f"ventana '{v.get('nombre','')}' agotada: "
-                f"desplegado={desplegado:.2f}€ / budget={budget_ventana:.2f}€"
-            )
-
-    return False, f"OK (bankroll={bkr:.2f}€)"
+    return False, f"✅ OK  (bkr={bkr:.2f}€  pnl_día={pnl_live_hoy():+.2f}€)"
 
 
 # ── Calcular stake ────────────────────────────────────────────────────────────
 
 def calcular_stake(ic: float, strategy: str = "", subtype: str = "") -> dict:
     """
-    Stake para una señal con IC dado, respetando el presupuesto de ventana.
+    Stake para una señal con IC dado.
+    Opera con el bankroll completo en cada ventana (compounding natural).
 
     Techos en cascada:
       1. Kelly half: IC × bankroll × 0.5
-      2. Máx 10% del bankroll por trade
-      3. Budget restante en esta ventana
-      4. Máximo absoluto del config (2€)
+      2. Máx 10% del bankroll por trade (nunca más de 2€ con bankroll=20€)
+      3. Máximo absoluto del config (2€)
     """
     config     = _cargar_config()
     riesgo     = config.get("riesgo", {})
     bkr        = bankroll_actual()
-    n_rest     = ventanas_restantes_hoy(config)
     half_kelly = riesgo.get("half_kelly", True)
     max_pct    = riesgo.get("max_pct_bankroll_por_trade", 0.10)
     min_stake  = riesgo.get("min_stake_eur", 0.25)
     max_stake  = riesgo.get("max_stake_eur", 2.00)
 
-    budget_ventana  = bkr / n_rest
-    desplegado      = stakes_desplegados_ventana_actual()
-    budget_restante = max(0.0, budget_ventana - desplegado)
-
     techo_kelly  = bkr * abs(ic) * (0.5 if half_kelly else 1.0)
     techo_pct    = bkr * max_pct
-    techo_budget = budget_restante
     techo_config = max_stake
 
-    stake = min(techo_kelly, techo_pct, techo_budget, techo_config)
-    stake = max(stake, min_stake) if budget_restante >= min_stake else 0.0
+    stake = min(techo_kelly, techo_pct, techo_config)
+    stake = max(stake, min_stake) if bkr >= min_stake else 0.0
 
     motivo = (
-        f"bankroll={bkr:.2f}€ / {n_rest}ventanas → "
-        f"budget_ventana={budget_ventana:.2f}€ "
-        f"(desplegado={desplegado:.2f}€, restante={budget_restante:.2f}€) | "
-        f"Kelly={techo_kelly:.2f}€ max10%={techo_pct:.2f}€ → stake={stake:.2f}€"
+        f"bankroll={bkr:.2f}€ | "
+        f"Kelly={techo_kelly:.2f}€  max10%={techo_pct:.2f}€  máx={techo_config:.2f}€ "
+        f"→ stake={stake:.2f}€"
     )
 
     return {
-        "stake_eur":        round(stake, 2),
-        "bankroll":         round(bkr, 2),
-        "budget_ventana":   round(budget_ventana, 2),
-        "budget_restante":  round(budget_restante, 2),
-        "desplegado":       round(desplegado, 2),
-        "n_ventanas_rest":  n_rest,
-        "motivo":           motivo,
-        "viable":           stake >= min_stake,
+        "stake_eur":  round(stake, 2),
+        "bankroll":   round(bkr, 2),
+        "motivo":     motivo,
+        "viable":     stake >= min_stake,
     }
 
 
