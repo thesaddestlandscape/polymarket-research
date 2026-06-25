@@ -57,6 +57,87 @@ def _verificar_integridad() -> list[str]:
     return alertas
 
 
+def _monitor_5min(resultados: list) -> dict:
+    """
+    Monitor específico del mercado de 5 minutos.
+    Tres señales bajo vigilancia:
+      1. OU_5M: CLV y tendencia (¿THETA_OU=30 sigue siendo válido?)
+      2. ORDER_FLOW BUY_YES: CLV rolling — umbral de desactivación en -0.030 con n≥400
+      3. Alpha decay ORDER_FLOW: IC rolling últimas 30 vs histórico
+    """
+    alertas = []
+
+    # 1. UPDOWN_OU_5M
+    ou = [r for r in resultados if r.get("strategy") == "UPDOWN_OU_5M"]
+    ou_clv = [float(r["clv"]) for r in ou if r.get("clv")]
+    ou_state = {
+        "n": len(ou),
+        "clv": round(sum(ou_clv)/len(ou_clv), 4) if ou_clv else None,
+        "clv_ult30": None,
+    }
+    if len(ou) >= 10:
+        ult30 = sorted(ou, key=lambda r: r["resolution_timestamp"])[-30:]
+        clv30 = [float(r["clv"]) for r in ult30 if r.get("clv")]
+        ou_state["clv_ult30"] = round(sum(clv30)/len(clv30), 4) if clv30 else None
+
+    # 2. ORDER_FLOW BUY_YES: umbral de desactivación
+    of_yes = [r for r in resultados
+              if r.get("strategy") == "ORDER_FLOW_5M" and r.get("decision") == "BUY_YES"
+              and r.get("subtype","")]
+    of_yes_clv = [float(r["clv"]) for r in of_yes if r.get("clv")]
+    of_yes_state = {
+        "n": len(of_yes),
+        "clv": round(sum(of_yes_clv)/len(of_yes_clv), 4) if of_yes_clv else None,
+        "umbral_accion": -0.030,
+        "n_umbral": 400,
+    }
+    if of_yes_clv:
+        clv_m = sum(of_yes_clv)/len(of_yes_clv)
+        if len(of_yes) >= 400 and clv_m < -0.030:
+            alertas.append(f"🚨 ORDER_FLOW BUY_YES: CLV={clv_m:+.3f} con n={len(of_yes)} → DESACTIVAR BUY_YES")
+        elif len(of_yes) >= 300:
+            # Alerta temprana cuando se acerca al umbral
+            of_yes_state["alerta_proxima"] = f"n={len(of_yes)}/400, CLV={clv_m:+.3f}/−0.030"
+
+    # 3. Alpha decay ORDER_FLOW global (rolling 30 vs histórico)
+    of_all = [r for r in resultados if r.get("strategy") == "ORDER_FLOW_5M" and r.get("subtype","")]
+    of_clv_all = [float(r["clv"]) for r in of_all if r.get("clv")]
+    of_clv_hist = sum(of_clv_all)/len(of_clv_all) if of_clv_all else 0
+    ult30_of = sorted(of_all, key=lambda r: r["resolution_timestamp"])[-30:]
+    of_clv_30 = [float(r["clv"]) for r in ult30_of if r.get("clv")]
+    of_clv_30m = sum(of_clv_30)/len(of_clv_30) if of_clv_30 else 0
+    decay_ratio = of_clv_30m / of_clv_hist if of_clv_hist > 0.005 else None
+
+    of_state = {
+        "clv_historico": round(of_clv_hist, 4),
+        "clv_ult30":     round(of_clv_30m, 4),
+        "decay_ratio":   round(decay_ratio, 2) if decay_ratio else None,
+    }
+    # Decay real = varias sesiones consecutivas negativas, no un único día malo.
+    # Solo alertar si hay ops de al menos 2 días distintos en las últimas 30
+    dias_distintos = len({r["resolution_timestamp"][:10] for r in ult30_of})
+    if decay_ratio is not None and decay_ratio < 0.5 and dias_distintos >= 2:
+        alertas.append(f"⚠️ ORDER_FLOW alpha decay: CLV histórico={of_clv_hist:+.3f} → últimas30={of_clv_30m:+.3f} (ratio={decay_ratio:.1f}x, {dias_distintos} días)")
+
+    # Enviar alertas por Telegram si las hay
+    if alertas:
+        try:
+            import os, requests
+            tok = os.environ.get("TELEGRAM_TOKEN", "")
+            cid = os.environ.get("TELEGRAM_CHAT_ID", "")
+            if tok and cid:
+                msg = "📊 *Monitor 5min — alerta*\n" + "\n".join(alertas)
+                requests.post(f"https://api.telegram.org/bot{tok}/sendMessage",
+                              json={"chat_id": cid, "text": msg, "parse_mode": "Markdown"},
+                              timeout=10)
+        except Exception:
+            pass
+    for a in alertas:
+        print(f"  [5MIN ALERTA] {a}")
+
+    return {"ou_5m": ou_state, "of_buy_yes": of_yes_state, "of_decay": of_state, "alertas": alertas}
+
+
 def _escribir_state(params: dict, resultados: list):
     """Gap 2: state file machine-generated con snapshot del sistema."""
     estrategias = params.get("estrategias", {})
@@ -70,6 +151,7 @@ def _escribir_state(params: dict, resultados: list):
     n_total      = len(resultados)
     wins         = sum(int(r.get("acierto", 0)) for r in resultados)
     top3         = sorted(activas.items(), key=lambda x: x[1].get("ic_bayes", 0), reverse=True)[:3]
+    monitor_5m   = _monitor_5min(resultados)
     state = {
         "timestamp_utc":   datetime.now(timezone.utc).isoformat(timespec="seconds"),
         "bankroll_sim":    round(20.0 + pnl_total, 2),
@@ -81,6 +163,7 @@ def _escribir_state(params: dict, resultados: list):
         "top3_ic":         [{"k": k, "ic": round(v.get("ic_bayes", 0), 4), "n": v.get("n", 0)} for k, v in top3],
         "brier_medio":     brier_mean,
         "clv_medio":       clv_mean,
+        "monitor_5min":    monitor_5m,
     }
     path = PARAMS_PATH.parent / "system_state.json"
     path.write_text(json.dumps(state, indent=2, ensure_ascii=False), encoding="utf-8")
