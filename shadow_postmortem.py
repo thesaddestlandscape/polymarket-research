@@ -63,6 +63,10 @@ def _escribir_state(params: dict, resultados: list):
     activas      = {k: v for k, v in estrategias.items() if v.get("activa", True)}
     desactivadas = {k: v for k, v in estrategias.items() if not v.get("activa", True)}
     pnl_total    = sum(float(r.get("pnl_neto", 0)) for r in resultados)
+    brier_vals   = [float(r["brier_score"]) for r in resultados if r.get("brier_score")]
+    clv_vals     = [float(r["clv"])         for r in resultados if r.get("clv")]
+    brier_mean   = round(sum(brier_vals)/len(brier_vals), 4) if brier_vals else None
+    clv_mean     = round(sum(clv_vals)/len(clv_vals), 4)     if clv_vals  else None
     n_total      = len(resultados)
     wins         = sum(int(r.get("acierto", 0)) for r in resultados)
     top3         = sorted(activas.items(), key=lambda x: x[1].get("ic_bayes", 0), reverse=True)[:3]
@@ -75,6 +79,8 @@ def _escribir_state(params: dict, resultados: list):
         "estrategias_activas": len(activas),
         "desactivadas":    list(desactivadas.keys()),
         "top3_ic":         [{"k": k, "ic": round(v.get("ic_bayes", 0), 4), "n": v.get("n", 0)} for k, v in top3],
+        "brier_medio":     brier_mean,
+        "clv_medio":       clv_mean,
     }
     path = PARAMS_PATH.parent / "system_state.json"
     path.write_text(json.dumps(state, indent=2, ensure_ascii=False), encoding="utf-8")

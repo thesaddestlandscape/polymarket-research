@@ -352,6 +352,40 @@ def actualizar_strategy_accuracy(nuevos: list, ts: str):
                   f"pnl={fila['pnl_total']:+.2f}  {bar}")
 
 
+def _brier(pred: dict, res: dict) -> str:
+    """Brier score = (prob_modelo - outcome)². Proper scoring rule: se minimiza con la prob real."""
+    try:
+        p = float(pred.get("prob_yes_modelo", 0.5) or 0.5)
+        o = float(res["acierto"])  # 1 si acertó YES, 0 si no
+        # Para BUY_NO: el acierto es cuando outcome=NO (acierto=1 pero outcome_real=NO)
+        # prob_yes_modelo < 0.5 para BUY_NO, outcome_real puede ser YES o NO
+        outcome_yes = 1.0 if res["outcome_real"] == "YES" else 0.0
+        return f"{(p - outcome_yes) ** 2:.4f}"
+    except Exception:
+        return ""
+
+
+def _clv(pred: dict, res: dict) -> str:
+    """
+    Closing Line Value: mide si nuestra predicción tenía edge respecto al mercado.
+    CLV = outcome_real - precio_entrada (para BUY_YES)
+        = precio_entrada - outcome_real  (para BUY_NO)
+    Positivo = compramos barato (el mercado estaba equivocado a nuestro favor).
+    Promedio de CLV > 0 con n suficiente = edge real, no suerte.
+    """
+    try:
+        precio = float(pred.get("precio_yes_mercado", 0.5) or 0.5)
+        outcome_yes = 1.0 if res["outcome_real"] == "YES" else 0.0
+        dec = pred.get("decision", "")
+        if dec == "BUY_YES":
+            return f"{outcome_yes - precio:.4f}"
+        elif dec == "BUY_NO":
+            return f"{precio - outcome_yes:.4f}"
+        return ""
+    except Exception:
+        return ""
+
+
 def main():
     ts = datetime.now(timezone.utc).isoformat(timespec="seconds")
     print(f"[{ts}] === Shadow resolve ===")
@@ -426,6 +460,8 @@ def main():
             "pnl_bruto": f"{res['pnl_bruto']:.4f}",
             "pnl_neto": f"{res['pnl_neto']:.4f}",
             "features": pred.get("features", ""),
+            "brier_score": _brier(pred, res),
+            "clv": _clv(pred, res),
         })
 
     print(f"  Predicciones pendientes consultadas: {len(consultados_ids)} mercados")
