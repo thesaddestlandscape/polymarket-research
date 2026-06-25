@@ -1,9 +1,9 @@
 {
-  "timestamp_utc": "2026-06-25T10:18:09+00:00",
-  "bankroll_sim": 34.04,
-  "pnl_total": 14.04,
-  "n_ops": 942,
-  "win_rate": 0.518,
+  "timestamp_utc": "2026-06-25T10:19:52+00:00",
+  "bankroll_sim": 33.53,
+  "pnl_total": 13.53,
+  "n_ops": 943,
+  "win_rate": 0.5175,
   "estrategias_activas": 69,
   "desactivadas": [
     "SMART_FLOW_1H",
@@ -26,6 +26,6 @@
       "n": 36
     }
   ],
-  "brier_medio": 0.2901,
-  "clv_medio": 0.0205
+  "brier_medio": 0.2904,
+  "clv_medio": 0.0199
 }
