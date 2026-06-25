@@ -722,14 +722,13 @@ def _calcular_delta_ratio_macro(sym, klines_raw):
 
 
 # Fracción del drift observado que se incorpora al GBM.
-# 0.25 = conservador: evita sobrereaccionar a ruido intraday.
-DRIFT_DAMPING = 0.25
+# Backfill 90d (125k predicciones): dd=0.00 IC=+0.130 vs dd=0.25 IC=+0.103.
+# El drift intraday es ruido — amortiguarlo a 0 mejora el IC un 20%.
+DRIFT_DAMPING = 0.00
 
-# Umbral de régimen claro para filtrar señales contra-tendencia en slots #15min.
-# Datos (n=78): BUY_YES Q3 drift=[+0.15,+0.57%/h] → 79% WR ✅
-#               BUY_YES Q4 drift=[+0.57,+2.80%/h] → 33% WR ❌ (reversión)
-# 0.55%/h captura el Q4 problemático; antes era 0.70 y perdía ese rango.
-REGIME_THRESHOLD = 0.55  # %/h  (bajado de 0.70 el 2026-06-25)
+# Backfill 90d (35k señales): filtro elimina señales con IC=+0.17 (drift<-0.7 BUY_YES).
+# El IC sin filtro (+0.1244) >= con filtro (+0.1236). Desactivado.
+REGIME_THRESHOLD = 999.0  # desactivado — no filtra nada
 
 KELLY_COMPUESTO_BOOST = 1.5
 KELLY_COMPUESTO_MAX   = 2.00
