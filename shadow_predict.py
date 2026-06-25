@@ -5,7 +5,7 @@ shadow_predict.py — v8. Cuatro estrategias activas:
   3. UPDOWN_GBM     — mercados Up/Down via modelo Black-Scholes digital (daily/hourly/slot)
   4. WEEKLY_PRICE   — mercados de rango de precio semanal (BTC/ETH/SOL entre $X-$Y)
 """
-import csv, glob, json, math, os, re, sys
+import csv, glob, json, math, os, pickle, re, sys
 from datetime import datetime, timezone, timedelta
 from pathlib import Path
 import requests
@@ -93,13 +93,35 @@ def horas_a_vencimiento(end_date_str):
     except Exception:
         return None
 
+def _cache_path(nombre: str) -> Path:
+    return DIR_DATA / "shadow" / f"_cache_{nombre}.pkl"
+
+
+def _cache_valida(cache_file: Path, fuentes: list = None, ttl_s: int = 90) -> bool:
+    """True si el cache existe y no ha expirado el TTL temporal.
+    No compara mtimes de fuentes — el slow loop actualiza los CSV cada ~23min
+    pero los datos son válidos para el fast loop durante ttl_s segundos."""
+    if not cache_file.exists():
+        return False
+    cache_mtime = cache_file.stat().st_mtime
+    ahora = datetime.now(timezone.utc).timestamp()
+    return (ahora - cache_mtime) <= ttl_s
+
+
 def cargar_mercados_recientes():
     fecha_hoy  = datetime.now(timezone.utc).strftime("%Y-%m-%d")
     fecha_ayer = (datetime.now(timezone.utc) - timedelta(days=1)).strftime("%Y-%m-%d")
     archivos   = [DIR_MARKETS / f"{fecha_hoy}.csv", DIR_MARKETS / f"{fecha_ayer}.csv"]
+    fuentes    = [str(a) for a in archivos if Path(a).exists()]
+
+    cache_file = _cache_path("mercados_recientes")
+    if _cache_valida(cache_file, fuentes):
+        with open(cache_file, "rb") as f:
+            return pickle.load(f)
+
     por_id = {}
     for arch in archivos:
-        if not arch.exists():
+        if not Path(arch).exists():
             continue
         with open(arch, encoding="utf-8") as f:
             for row in csv.DictReader(f):
@@ -109,13 +131,24 @@ def cargar_mercados_recientes():
                 ts = row.get("timestamp_utc", "")
                 if mid not in por_id or ts > por_id[mid]["timestamp_utc"]:
                     por_id[mid] = row
-    return list(por_id.values())
+    resultado = list(por_id.values())
+    with open(cache_file, "wb") as f:
+        pickle.dump(resultado, f)
+    return resultado
+
 
 def cargar_historial_mercados():
     corte    = datetime.now(timezone.utc) - timedelta(hours=6)
+    archivos = sorted(glob.glob(str(DIR_MARKETS / "*.csv")))[-3:]
+    fuentes  = [a for a in archivos if Path(a).exists()]
+
+    cache_file = _cache_path("historial_mercados")
+    if _cache_valida(cache_file, fuentes, ttl_s=90):  # 90s: el historial cambia más rápido
+        with open(cache_file, "rb") as f:
+            return pickle.load(f)
+
     historial = {}
-    archivos  = sorted(glob.glob(str(DIR_MARKETS / "*.csv")))[-3:]
-    for arch in archivos:
+    for arch in fuentes:
         try:
             with open(arch, encoding="utf-8") as f:
                 for row in csv.DictReader(f):
@@ -139,6 +172,8 @@ def cargar_historial_mercados():
             print(f"  Error leyendo {arch}: {e}")
     for mid in historial:
         historial[mid].sort(key=lambda x: x[0])
+    with open(cache_file, "wb") as f:
+        pickle.dump(historial, f)
     return historial
 
 def cargar_trades_recientes():
@@ -189,52 +224,82 @@ def cargar_trades_recientes():
 
 UPDOWN_ASSETS_LOWER = ["btc", "eth", "sol", "xrp", "doge", "bnb"]
 
+def _fetch_slot(slug: str, ahora_iso: str) -> list:
+    """Descarga un slot concreto de Polymarket. Llamado en paralelo."""
+    url = "https://gamma-api.polymarket.com/events"
+    mercados = []
+    try:
+        r = requests.get(url, params={"slug": slug}, timeout=5)
+        if r.status_code != 200:
+            return []
+        events = r.json() if isinstance(r.json(), list) else []
+        for ev in events:
+            for m in (ev.get("markets") or []):
+                precios_raw = m.get("outcomePrices")
+                try:
+                    pr = json.loads(precios_raw) if isinstance(precios_raw, str) else precios_raw
+                    py = float(pr[0]) if pr else None
+                except Exception:
+                    py = None
+                if py is None or not (0.01 < py < 0.99):
+                    continue
+                mercados.append({
+                    "market_id":    m.get("id", ""),
+                    "condition_id": m.get("conditionId", ""),
+                    "question":     m.get("question", ""),
+                    "slug":         m.get("slug", ""),
+                    "end_date":     (m.get("endDate") or "")[:19],
+                    "liquidity":    m.get("liquidity", ""),
+                    "spread":       m.get("spread", ""),
+                    "price_yes":    py,
+                    "event_tags":   "|".join(t.get("slug","") for t in (ev.get("tags") or [])),
+                    "timestamp_utc": ahora_iso,
+                })
+    except Exception:
+        pass
+    return mercados
+
+
 def fetch_slots_directos(horizonte_min=5, ventanas_adelante=2):
     """
-    Consulta Polymarket directamente por los slots activos/próximos de 5min y 15min.
-    Devuelve lista de dicts compatibles con cargar_mercados_recientes().
-    Esto garantiza cobertura de slots aunque el slow loop no haya actualizado el CSV.
+    Consulta Polymarket por slots activos/próximos de 5min y 15min en paralelo.
+    Todas las combinaciones (asset × ventana) se lanzan simultáneamente.
     """
+    from concurrent.futures import ThreadPoolExecutor, as_completed
     ahora = datetime.now(timezone.utc)
+    ahora_iso = ahora.isoformat(timespec="seconds")
     intervalo_s = horizonte_min * 60
     ts_base = (int(ahora.timestamp()) // intervalo_s) * intervalo_s
     prefix = f"updown-{horizonte_min}m"
-    url = "https://gamma-api.polymarket.com/events"
+
+    slugs = [
+        f"{asset}-{prefix}-{ts_base + delta * intervalo_s}"
+        for delta in range(ventanas_adelante + 1)
+        for asset in UPDOWN_ASSETS_LOWER
+    ]
+
     mercados = []
-    for delta in range(ventanas_adelante + 1):
-        ts_slot = ts_base + delta * intervalo_s
-        for asset in UPDOWN_ASSETS_LOWER:
-            slug = f"{asset}-{prefix}-{ts_slot}"
+    with ThreadPoolExecutor(max_workers=len(slugs)) as executor:
+        futuros = {executor.submit(_fetch_slot, slug, ahora_iso): slug for slug in slugs}
+        for futuro in as_completed(futuros):
             try:
-                r = requests.get(url, params={"slug": slug}, timeout=5)
-                if r.status_code != 200:
-                    continue
-                events = r.json() if isinstance(r.json(), list) else []
-                for ev in events:
-                    for m in (ev.get("markets") or []):
-                        precios_raw = m.get("outcomePrices")
-                        try:
-                            pr = json.loads(precios_raw) if isinstance(precios_raw, str) else precios_raw
-                            py = float(pr[0]) if pr else None
-                        except Exception:
-                            py = None
-                        if py is None or not (0.01 < py < 0.99):
-                            continue
-                        mercados.append({
-                            "market_id":       m.get("id", ""),
-                            "condition_id":    m.get("conditionId", ""),
-                            "question":        m.get("question", ""),
-                            "slug":            m.get("slug", ""),
-                            "end_date":        (m.get("endDate") or "")[:19],
-                            "liquidity":       m.get("liquidity", ""),
-                            "spread":          m.get("spread", ""),
-                            "price_yes":       py,
-                            "event_tags":      "|".join(t.get("slug","") for t in (ev.get("tags") or [])),
-                            "timestamp_utc":   ahora.isoformat(timespec="seconds"),
-                        })
+                mercados.extend(futuro.result())
             except Exception:
                 pass
     return mercados
+
+
+def _smart_flow_activa() -> bool:
+    """Comprueba si SMART_FLOW_1H está activa en strategy_params.json."""
+    try:
+        path = DIR_SHADOW / "strategy_params.json"
+        if not path.exists():
+            return True
+        with open(path, encoding="utf-8") as f:
+            params = json.load(f).get("estrategias", {})
+        return params.get("SMART_FLOW_1H", {}).get("activa", True)
+    except Exception:
+        return True
 
 
 def construir_contexto():
@@ -242,7 +307,12 @@ def construir_contexto():
     ctx = {}
     ctx["historial_mercados"] = cargar_historial_mercados()
     print(f"  Historial precios YES cargado para {len(ctx['historial_mercados'])} mercados")
-    trades = cargar_trades_recientes()
+
+    # Trades solo si SMART_FLOW_1H está activa — ahorra 5-6s cuando está desactivada
+    if _smart_flow_activa():
+        trades = cargar_trades_recientes()
+    else:
+        trades = {}
     ctx["trades_1h"] = trades
     n_mkt     = len(trades)
     n_wallets = sum(len(v) for v in trades.values())

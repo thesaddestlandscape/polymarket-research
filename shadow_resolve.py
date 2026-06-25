@@ -117,6 +117,24 @@ def estado_mercado(market_id: str) -> dict | None:
             return data
     except Exception as e:
         print(f"  Error consultando {market_id}: {type(e).__name__}: {e}")
+
+
+def fetch_mercados_paralelo(market_ids: list, workers: int = 20) -> dict:
+    """
+    Descarga el estado de múltiples mercados en paralelo.
+    Devuelve {market_id: estado_dict | None}.
+    """
+    from concurrent.futures import ThreadPoolExecutor, as_completed
+    resultados = {}
+    with ThreadPoolExecutor(max_workers=workers) as executor:
+        futuros = {executor.submit(estado_mercado, mid): mid for mid in market_ids}
+        for futuro in as_completed(futuros):
+            mid = futuros[futuro]
+            try:
+                resultados[mid] = futuro.result()
+            except Exception:
+                resultados[mid] = None
+    return resultados
     return None
 
 
@@ -342,19 +360,15 @@ def main():
     ya_resueltas = cargar_ya_resueltas()
 
     nuevos_resultados = []
-    consultados_ids = set()
-    cache_mercados = {}
-    debug_no_resueltos = 0  # log primeros mercados sin resolver para diagnóstico
-
+    debug_no_resueltos = 0
     ahora = datetime.now(timezone.utc)
 
+    # Filtrar predicciones que vale la pena consultar
+    candidatas = []
     for pred in pendientes:
-        clave = (pred.get("strategy", ""),
-                 pred.get("market_id", ""))
+        clave = (pred.get("strategy", ""), pred.get("market_id", ""))
         if clave in ya_resueltas:
             continue
-
-        # Saltar mercados cuyo end_date es más de 2h en el futuro — imposible que resuelvan
         end_str = pred.get("end_date", "")
         if end_str:
             try:
@@ -365,12 +379,20 @@ def main():
                     continue
             except Exception:
                 pass
+        candidatas.append(pred)
 
+    # Obtener IDs únicos y descargar en paralelo
+    mids_unicos = list({p.get("market_id", "") for p in candidatas if p.get("market_id")})
+    print(f"  Descargando {len(mids_unicos)} mercados en paralelo (workers=20)...")
+    cache_mercados = fetch_mercados_paralelo(mids_unicos, workers=20)
+    consultados_ids = set(mids_unicos)
+
+    for pred in candidatas:
+        clave = (pred.get("strategy", ""), pred.get("market_id", ""))
+        if clave in ya_resueltas:
+            continue
         mid = pred.get("market_id", "")
-        if mid not in cache_mercados:
-            cache_mercados[mid] = estado_mercado(mid)
-            consultados_ids.add(mid)
-        mercado = cache_mercados[mid]
+        mercado = cache_mercados.get(mid)
         res = evaluar(pred, mercado)
         if res is None:
             if mercado and debug_no_resueltos < 3:
