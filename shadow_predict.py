@@ -722,13 +722,22 @@ def _calcular_delta_ratio_macro(sym, klines_raw):
 
 
 # Fracción del drift observado que se incorpora al GBM.
-# Backfill 90d (125k predicciones): dd=0.00 IC=+0.130 vs dd=0.25 IC=+0.103.
-# El drift intraday es ruido — amortiguarlo a 0 mejora el IC un 20%.
-DRIFT_DAMPING = 0.00
+# DRIFT_DAMPING por ventana — backfill 90d × 6 pares (125k predicciones GBM).
+# El momentum de Binance aporta más en ventanas cortas (5/15min) que en largas.
+# dd óptimo por ventana: 5min=0.30, 15min=0.20, 60min=0.05, 240min=0.10.
+DRIFT_DAMPING = {
+    5:   0.30,
+    15:  0.20,
+    60:  0.05,
+    240: 0.10,
+}
+DRIFT_DAMPING_DEFAULT = 0.10  # daily y ventanas no catalogadas
 
-# Backfill 90d (35k señales): filtro elimina señales con IC=+0.17 (drift<-0.7 BUY_YES).
-# El IC sin filtro (+0.1244) >= con filtro (+0.1236). Desactivado.
-REGIME_THRESHOLD = 999.0  # desactivado — no filtra nada
+# Filtro régimen — solo activo en ventanas ≥60min y solo para BUY_NO alcista.
+# Backfill 90d: 60min drift>+0.7 BUY_NO IC=−0.004; 240min IC=−0.050 → mala señal.
+# drift<−0.7 BUY_YES en 60min IC=+0.169 → buena señal, no filtrar.
+# En 5/15min ambas señales son buenas → sin filtro.
+REGIME_BUY_NO_THRESHOLD = 0.7  # %/h, solo para ventanas ≥60min
 
 KELLY_COMPUESTO_BOOST = 1.5
 KELLY_COMPUESTO_MAX   = 2.00
@@ -891,33 +900,27 @@ def s_updown_gbm(market, ctx):
     drift_60 = _calcular_drift_h(activo, precios_data, 60)
     delta_macro = _calcular_delta_ratio_macro(activo, ctx.get("klines_raw", {}))
 
-    # mu_h: drift por hora que entra en la fórmula BS digital.
-    # Usamos drift_60min como señal más estable; amortiguado para no sobrereaccionar.
-    mu_h = (drift_60 or 0.0) * DRIFT_DAMPING
+    # mu_h: drift por hora amortiguado según ventana temporal.
+    # dd óptimo varía: más en corto (momentum 5min) que en largo (ruido 60min+).
+    _dd = DRIFT_DAMPING.get(ventana_min, DRIFT_DAMPING_DEFAULT)
+    mu_h = (drift_60 or 0.0) * _dd
 
     p_up = _gbm_p_up(spot, ref, sigma_h, T_h, mu_h=mu_h)
     if p_up is None:
         return None
 
-    # Filtro mean-reversion 5min (Opción A, 2026-06-24):
-    # Empírico n=68: edge>10% (|pct|>0.05%) → 21% win rate.
-    # El GBM sobreestima cuando spot diverge del ref; el mercado revierte, no continúa.
-    # Solo apostamos cuando spot≈ref y el edge viene de mala valoración, no de momentum.
+    # Filtro mean-reversion 5min: sin datos suficientes para decidir, conservar.
     if tipo == 'slot' and ventana_min == 5 and abs(pct) > 0.05:
         return None
 
-    # Filtro de régimen H-REGIMEN (2026-06-25): en slots #15min, rechazar señales que
-    # van contra un régimen de mercado claro. Datos: bajista -0.82%/h → BUY_NO 76%;
-    # alcista +0.43%/h → BUY_NO 0/2. Umbral 0.7%/h conservador (evita overfitting, n=27).
-    # Solo actúa cuando el drift es inequívoco y el modelo va en sentido contrario.
-    if tipo == 'slot' and ventana_min == 15 and drift_60 is not None:
-        drift_pct = drift_60 * 100                  # ya en %/h en features
+    # Filtro régimen — solo en ventanas ≥60min y solo para BUY_NO alcista fuerte.
+    # Backfill 90d: 60min drift>+0.7 BUY_NO IC=−0.004; 240min IC=−0.050.
+    # No filtrar BUY_YES (drift<−0.7 BUY_YES 60min IC=+0.169 — mean-reversion buena).
+    if tipo in ('slot', 'hourly') and ventana_min and ventana_min >= 60 and drift_60 is not None:
+        drift_pct = drift_60 * 100
         py_mkt = market.get("_precio_yes", 0.5)
-        model_bullish = p_up > py_mkt               # True → el modelo apostaria BUY_YES
-        if drift_pct > REGIME_THRESHOLD and not model_bullish:
-            return None  # régimen alcista + modelo BUY_NO → momentum continuará arriba
-        if drift_pct < -REGIME_THRESHOLD and model_bullish:
-            return None  # régimen bajista + modelo BUY_YES → momentum continuará abajo
+        if drift_pct > REGIME_BUY_NO_THRESHOLD and p_up < py_mkt:
+            return None  # 60min+ alcista + BUY_NO → señal mala históricamente
 
     if tipo == 'daily':
         slot_type = 'daily'
