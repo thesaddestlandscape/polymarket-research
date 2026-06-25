@@ -1,215 +1,186 @@
 # Plan Live Trading — Polymarket Bot
-**Última actualización: 2026-06-25**
+**Última actualización: 2026-06-25 ~12:30 UTC**
 
 ---
 
-## Estado actual
+## Estado del bot (ahora mismo)
 
-El bot está en **shadow mode** — predice y registra resultados sin dinero real.
-Objetivo para activar live: **IC ≥ 0.10 con n ≥ 50** en alguna estrategia confirmada.
+Shadow mode activo. Candidatas a live más cercanas:
 
-| Estrategia | IC actual | n | ¿Lista? |
+| Estrategia | IC | n | Faltan |
 |---|---|---|---|
-| UPDOWN_GBM #BTC#15min | +0.106 | 31 | ⚠️ IC sí, n casi |
-| UPDOWN_GBM #15min global | +0.070 | 98 | ⚠️ n suficiente, IC bajo |
-| ORDER_FLOW_5M | +0.033 | 585 | ❌ IC insuficiente |
+| UPDOWN_GBM #60min (global) | +0.105 | 36 | **4 ops** |
+| UPDOWN_GBM #BTC#15min | +0.083 | 34 | **6 ops** |
+| UPDOWN_GBM #ETH#60min | +0.110 | 15 | 25 ops |
+
+A ritmo actual (~4-6 ops/día en #60min) podría estar lista **mañana o pasado**.
+Cuando cruce el umbral, recibirás un aviso por Telegram.
 
 ---
 
 ## Circuito completo del dinero
 
 ```
-════════════════════════════════════════════════════════
-                   CIRCUITO COMPLETO
-════════════════════════════════════════════════════════
-
-        TU DINERO FIAT
+          ENTRADA
     Coinbase (€ → USDC)
-              │
-              ▼
+            │
+            ▼
    ┌─────────────────────┐
-   │   WALLET TRADING    │  20€ operativos
-   │   (bot tiene clave) │  Polygon / MetaMask
+   │  WALLET TRADING     │  ← dirección A (bot tiene la clave)
+   │  20€ operativos     │     Polygon / MetaMask
    └─────────────────────┘
-              │
-              ▼
-         POLYMARKET
-      (bot opera aquí)
-              │
-         ganancias
-              │
-              ▼
+            │
+       ganancias
+            │
+            ▼
    ┌─────────────────────┐
-   │   WALLET AHORRO     │  Solo tú accedes
-   │   (bot NO accede)   │  Polygon / MetaMask
+   │  WALLET AHORRO      │  ← dirección B (solo tú, bot NO accede)
+   │  (nunca en el bot)  │     Polygon / MetaMask, dirección nueva
    └─────────────────────┘
-              │
-              ▼
-       USDC → BITCOIN
-    (Coinbase o swap directo
-     sin KYC via Uniswap)
-              │
-              ▼
+            │
+            ▼
+     USDC → BITCOIN
+   (Coinbase o swap directo
+    sin KYC via Uniswap)
+            │
+            ▼
    ┌─────────────────────┐
-   │    RESERVA BTC      │  Reserva de valor
-   │    (wallet fría)    │  No tocar salvo necesidad
+   │   RESERVA BTC       │  Reserva de valor, no tocar
    └─────────────────────┘
-              │
-              │  cuando necesitas liquidez
-              ▼
-    Vender BTC en Coinbase
-    al cambio del momento
-              │
-              ▼
-        € a cuenta bancaria
-              │
-              ▼
-    Gastas con tarjeta normal
+            │  cuando necesites liquidez
+            ▼
+    Vender en Coinbase → €
+    a tu cuenta bancaria normal
 
-════════════════════════════════════════════════════════
-  ⚠️  FISCAL: cada venta de BTC → declarar ganancia
-      en IRPF (precio venta - precio compra)
-════════════════════════════════════════════════════════
+════════════════════════════════
+  ⚠️  FISCAL: cada venta de BTC
+  = hecho imponible en IRPF
+════════════════════════════════
 ```
 
 ---
 
-## Checklist de setup — pasos pendientes
+## Checklist esta tarde — paso a paso
 
 ```
-[ ] 1. Instalar MetaMask (metamask.io — verificar URL oficial)
-[ ] 2. Guardar seed phrase (12 palabras) en papel físico, NUNCA digital
-[ ] 3. Añadir red Polygon en MetaMask
-        - RPC: https://polygon-rpc.com
-        - Chain ID: 137
-[ ] 4. Crear DOS wallets en MetaMask
-        - Wallet 1: TRADING  (el bot tendrá la clave privada)
-        - Wallet 2: AHORRO   (solo tú, nunca en el bot)
-[ ] 5. Comprar 30€ de USDC en Coinbase
-[ ] 6. Retirar USDC a Wallet TRADING — red Polygon (NO Ethereum)
-[ ] 7. Conectar al VPS via SSH para crear cuenta Polymarket
-        - Abrir cmd en Windows
-        - Comando: ssh root@2a01:4f9:c014:df39::1
-        - Contraseña: la de Hetzner
-[ ] 8. Crear cuenta Polymarket desde IP finlandesa (VPS Helsinki)
-[ ] 9. Completar KYC en Polymarket
-[ ] 10. Depositar USDC desde Wallet TRADING a Polymarket
-[ ] 11. Añadir credenciales al bot
-        - POLYMARKET_PRIVATE_KEY en data/live/.env (nunca en git)
-[ ] 12. Activar live mode cuando IC esté confirmado
-        - Comando: bash live_switch.sh on
+[ ] 1. Instalar MetaMask
+        → metamask.io (verificar URL oficial)
+        → "Crear nueva cartera"
+        → Guardar seed phrase (12 palabras) en PAPEL FÍSICO
+          NUNCA en digital, nunca en foto, nunca en nube
+
+[ ] 2. Añadir red Polygon en MetaMask
+        → Redes → Añadir red → Añadir manualmente:
+          Nombre:   Polygon
+          RPC:      https://polygon-rpc.com
+          Chain ID: 137
+          Símbolo:  MATIC
+          Explorer: https://polygonscan.com
+
+[ ] 3. Crear DOS cuentas en MetaMask
+        → Cuenta 1: "Trading" (usará el bot)
+        → Cuenta 2: "Ahorro"  (solo tú, dirección diferente)
+        → Copiar la dirección 0x... de "Trading"
+
+[ ] 4. Abrir cmd en Windows y conectar al VPS
+        → Escribir: ssh root@2a01:4f9:c014:df39::1
+        → Contraseña: la de Hetzner
+        → Aparece: root@servidor:~#
+
+[ ] 5. Abrir Firefox con proxy Helsinki para crear cuenta Polymarket
+        → Abrir otra ventana de cmd:
+          ssh -D 1080 -N root@2a01:4f9:c014:df39::1
+        → Firefox → Ajustes → Configuración de red
+          → Configuración manual → SOCKS v5
+          → localhost  puerto: 1080
+        → Ir a polymarket.com → Crear cuenta → Conectar MetaMask
+        → Verificar IP en whatismyip.com (debe ser Finlandia)
+
+[ ] 6. Comprar 30 USDC en Coinbase
+        → Coinbase → Comprar → USDC → 30€
+
+[ ] 7. Retirar USDC a MetaMask wallet "Trading"
+        → Coinbase → Enviar → USDC
+        → RED: Polygon  ← CRÍTICO (no Ethereum)
+        → Dirección: tu 0x... de MetaMask Trading
+        → Cantidad: 30 USDC
+
+[ ] 8. Verificar que llegan los fondos
+        → MetaMask → Red Polygon → ver saldo USDC
+        → O en polygonscan.com buscando tu dirección
+
+[ ] 9. Depositar en Polymarket
+        → polymarket.com → Depositar → conectar MetaMask
+        → 20 USDC al capital operativo
+        → 10 USDC quedan en MetaMask como reserva
 ```
 
 ---
 
-## Infraestructura técnica
+## Acceso SSH — recordatorio
 
-### VPS
-- **Proveedor**: Hetzner Online GmbH
-- **Ubicación**: Helsinki, Finlandia
-- **IP**: 2a01:4f9:c014:df39::1
-- **Relevancia**: IP finlandesa — Polymarket accesible (España bloqueada desde mayo 2026)
-
-### Situación regulatoria en España
-- **DGOJ** (mayo 2026): bloqueó Polymarket via ISPs españoles (Vodafone, Telefónica, Orange)
-- Clasificación: juego de azar sin licencia española
-- **Finlandia**: no bloqueada — el VPS opera sin restricción
-- Acceso a Polymarket: siempre desde el VPS, nunca desde IP española
-
-### Acceso SSH desde Windows
 ```bash
-# En cmd de Windows:
+# Conectar al VPS (ventana 1 — para gestionar el bot)
 ssh root@2a01:4f9:c014:df39::1
 
-# Para navegar por Polymarket desde IP finlandesa (SOCKS proxy):
+# Proxy para navegar con IP finlandesa (ventana 2 — dejar abierta)
 ssh -D 1080 -N root@2a01:4f9:c014:df39::1
-# Luego en Firefox: Preferencias → Red → SOCKS proxy → localhost:1080
+
+# Ver estado del bot
+bash live_switch.sh
+
+# Activar live trading cuando esté listo
+bash live_switch.sh on
 ```
 
 ---
 
-## Sistema de ventanas horarias (live_guard.py)
+## Privacidad — plan mínimo razonable
 
-El bot solo ejecuta trades reales cuando:
-1. El switch manual está activado (`bash live_switch.sh on`)
-2. **Y** la hora de Madrid está dentro de una ventana
+**Principio**: cada propósito, una dirección distinta.
 
-### Ventanas L-V (hora Madrid)
-| Ventana | Horario | UTC equivalente |
+| Dirección | Uso | Vinculada a ti |
 |---|---|---|
-| Apertura europea | 08:30 – 09:30 | 06:30 – 07:30 |
-| Media mañana | 10:30 – 11:30 | 08:30 – 09:30 |
-| Mediodía | 12:30 – 13:30 | 10:30 – 11:30 |
-| Tarde 1 | 16:30 – 17:30 | 14:30 – 15:30 |
-| Tarde 2 | 18:30 – 19:30 | 16:30 – 17:30 |
-| Cierre | 20:30 – 21:30 | 18:30 – 19:30 |
+| Trading (A) | Bot opera aquí, fondeable desde Coinbase | Sí (via Coinbase KYC) |
+| Ahorro (B) | Recibe ganancias, compra BTC | No directamente |
 
-**Fines de semana**: solo switch manual, sin restricción horaria.
+- Nunca mezcles Trading y Ahorro en la misma dirección
+- Cuando haya beneficios reales, usar ruta sin KYC para Ahorro (cajero BTC efectivo o P2P)
+- Para esta fase inicial (30€) Coinbase → Trading es suficiente y legal
 
-### Comandos de control
-```bash
-bash live_switch.sh on      # activar
-bash live_switch.sh off     # parar inmediatamente
-bash live_switch.sh         # ver estado actual
+---
+
+## Control live trading
+
+**Ventanas horarias L-V (hora Madrid):**
+08:30-09:30 | 10:30-11:30 | 12:30-13:30 | 16:30-17:30 | 18:30-19:30 | 20:30-21:30
+
+**Fines de semana:** solo switch manual
+
+**Comandos Telegram** (desde el móvil, directo al bot):
+```
+/on      → activa el bot
+/off     → para el bot
+/status  → estado completo
 ```
 
----
-
-## Lógica de stake (live_stake.py)
-
-| Parámetro | Valor | Razón |
-|---|---|---|
-| Capital operativo | 20€ | De los 30€ depositados |
-| Reserva intocable | 10€ | Colchón de seguridad |
-| Budget diario | 30% del bankroll | ~6€/día con bankroll inicial |
-| Máx por trade | 10% del bankroll | Nunca más de 2€ con 20€ |
-| Sizing | Half-Kelly | IC × bankroll × 0.5 |
-| Mínimo por trade | 0.25€ | Por debajo no compensa fees |
-| Máximo por trade | 2.00€ | Cap absoluto |
-
-### Ejemplos con bankroll=20€
-| IC confirmado | Stake calculado |
-|---|---|
-| 0.08 | 0.80€ |
-| 0.10 | 1.00€ |
-| 0.15 | 1.50€ |
-| 0.22+ | 2.00€ (cap) |
+**Circuit breakers automáticos:**
+- Bankroll < 5€ → se apaga solo
+- Pérdida diaria > 15% → para el día
+- Pérdida en una ventana > 20% → para esa ventana
 
 ---
 
-## Estrategias permitidas en live
-
-Solo operará en estrategias con edge confirmado:
-- `UPDOWN_GBM` subtypes: `BTC#15min`, `ETH#15min`, `SOL#15min`, `BTC#60min`, `ETH#60min`
-- IC histórico mínimo: **0.08**
-- n mínimo: **40 resoluciones**
-
-Configuración en: `data/live/config_live.json`
-
----
-
-## Compra USDC — ruta desde España
+## Lo que falta para el primer trade real
 
 ```
-Coinbase (cuenta existente)
-    │
-    ├─ Comprar: 30€ → USDC
-    │
-    └─ Retirar:
-         Dirección: 0x... (Wallet TRADING de MetaMask)
-         Red: Polygon  ← CRÍTICO, no Ethereum
-         Importe: 30 USDC
+[✅] Bot shadow funcionando y acumulando datos
+[✅] Sistema live completo (ventanas, stake, circuit breakers)
+[✅] Control Telegram (/on /off /status)
+[✅] Notificaciones automáticas
+[ ] MetaMask instalado con 2 wallets         ← esta tarde
+[ ] 30 USDC en wallet Trading vía Polygon    ← esta tarde
+[ ] Cuenta Polymarket creada desde Helsinki  ← esta tarde
+[ ] Credenciales CLOB API en data/live/.env  ← tras crear cuenta
+[ ] Primera estrategia cruzando umbral live  ← muy próximo (#60min)
 ```
-
-**Gas fees**: Polymarket tiene trading gasless (no necesitas MATIC para operar).
-Opcional: comprar 1€ de MATIC para movimientos manuales de fondos.
-
----
-
-## Notas importantes
-
-- La **seed phrase** (12 palabras de MetaMask) es lo más valioso. Papel físico, caja fuerte.
-- La **clave privada** de la wallet TRADING va en `data/live/.env` (en el VPS, nunca en git).
-- El bot tiene acceso **solo** a la wallet de trading, nunca a la de ahorro.
-- Cada venta de BTC (incluido swap a euros) es un **hecho imponible** en IRPF España.
-- El shadow mode continúa en paralelo aunque el live esté activo — comparación permanente.
