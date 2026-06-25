@@ -1175,13 +1175,82 @@ def s_order_flow_5m(market, ctx):
     }
 
 
+def s_resolution_sniper(market, ctx):
+    """
+    Sniper de vencimiento: mercados NO Up/Down en su última 1.5h.
+    Usa GBM real (no heurísticas) para calcular prob cuando la incertidumbre ya es mínima.
+    Solo dispara si edge > 0.08 y |prob - 0.5| > 0.30 (alta certeza).
+    """
+    import re as _re
+    h   = market.get("_horas", 999)
+    if not (0.05 < h < 1.5):
+        return None
+    q   = market.get("question", "")
+    ql  = q.lower()
+    if "up or down" in ql:          # ya cubierto por UPDOWN_GBM
+        return None
+    activo = identificar_activo(q)
+    if not activo:
+        return None
+    spot = _cargar_spot().get(activo)
+    if not spot or spot <= 0:
+        return None
+
+    py_mkt = market.get("_precio_yes", 0.5)
+    precios = ctx.get("precios_intraday", [])
+    sigma_h = _estimar_vol_h(activo, precios, n_min=60) or 0.015
+    T_h     = max(h, 0.05)
+    prob_yes = None
+    detalle  = ""
+
+    # ── Bracket "between X and Y" ──────────────────────────────────────────
+    m = _re.search(r"between[^0-9]*([0-9,]+(?:\.[0-9]+)?)[^0-9]+([0-9,]+(?:\.[0-9]+)?)", ql)
+    if m:
+        lo = float(m.group(1).replace(",", ""))
+        hi = float(m.group(2).replace(",", ""))
+        if lo > hi: lo, hi = hi, lo
+        if lo <= spot <= hi:
+            d_lo = math.log(spot / lo) / (sigma_h * math.sqrt(T_h))
+            d_hi = math.log(hi / spot) / (sigma_h * math.sqrt(T_h))
+            prob_yes = max(0.50, min(0.97, _norm_cdf(d_lo) + _norm_cdf(d_hi) - 1.0))
+        else:
+            dist = min(abs(spot - lo), abs(spot - hi))
+            d    = dist / (spot * sigma_h * math.sqrt(T_h))
+            prob_yes = max(0.03, 1.0 - _norm_cdf(abs(d)))
+        detalle = f"bracket [{lo:.0f},{hi:.0f}] spot={spot:.0f}"
+
+    # ── Precio objetivo "above/below $X" ───────────────────────────────────
+    else:
+        m2 = _re.search(r"\$([0-9,]+(?:\.[0-9]+)?)", q)
+        if not m2:
+            return None
+        target   = float(m2.group(1).replace(",", ""))
+        is_above = any(w in ql for w in ("above", "over", "reach", "exceed", "higher"))
+        p_up = _gbm_p_up(spot, target, sigma_h, T_h)
+        if p_up is None:
+            return None
+        prob_yes = p_up if is_above else (1.0 - p_up)
+        detalle  = f"target={target:.0f} spot={spot:.0f} {'above' if is_above else 'below'}"
+
+    edge = abs(prob_yes - py_mkt)
+    if edge < 0.08 or abs(prob_yes - 0.5) < 0.30:
+        return None
+
+    return {
+        "prob_yes": max(0.05, min(0.95, prob_yes)),
+        "razon":    f"resolution_sniper {activo} {detalle} T={T_h:.2f}h σ={sigma_h:.4f}",
+        "subtype":  f"{activo}#sniper",
+    }
+
+
 ESTRATEGIAS = [
-    ("WEEKLY_PRICE",      s_weekly_price),
-    ("PRICE_MOMENTUM",    s_price_momentum),
-    ("SMART_FLOW_1H",     s_smart_flow_1h),
-    ("UPDOWN_GBM",        s_updown_gbm),
-    ("PRICE_TARGET_GBM",  s_price_target_gbm),
-    ("ORDER_FLOW_5M",     s_order_flow_5m),
+    ("WEEKLY_PRICE",        s_weekly_price),
+    ("PRICE_MOMENTUM",      s_price_momentum),
+    ("SMART_FLOW_1H",       s_smart_flow_1h),
+    ("UPDOWN_GBM",          s_updown_gbm),
+    ("PRICE_TARGET_GBM",    s_price_target_gbm),
+    ("ORDER_FLOW_5M",       s_order_flow_5m),
+    ("RESOLUTION_SNIPER",   s_resolution_sniper),
     # ("BINANCE_UPDOWN", s_binance_updown),  # retirada — IC -0.50
 ]
 
