@@ -578,10 +578,13 @@ def s_weekly_price(market, ctx):
             dist = min(abs(spot - lo), abs(spot - hi))
             pct_dist = dist / spot
             prob_yes = max(0.06, py - 0.20) if pct_dist > 0.20 else max(0.10, py - 0.10)
+        T_h = round(market.get("_horas", 0), 4)
+        pct_d = round(min(abs(spot-lo), abs(spot-hi))/spot*100, 4) if not in_range else 0.0
         return {
             "prob_yes": max(0.05, min(0.95, prob_yes)),
             "razon": f"weekly_between {activo} spot={spot:.0f} [{lo:.0f},{hi:.0f}] in={in_range}",
             "subtype": activo,
+            "features": {"spot": round(spot,2), "in_range": int(in_range), "pct_dist": pct_d, "T_h": T_h},
         }
 
     # Formato: above/below X
@@ -602,6 +605,7 @@ def s_weekly_price(market, ctx):
         "prob_yes": max(0.05, min(0.95, prob_yes)),
         "razon": f"weekly_price {activo} spot={spot:.0f} obj={precio_obj:.0f} ratio={ratio:.3f}",
         "subtype": activo,
+        "features": {"spot": round(spot,2), "ratio": round(ratio,4), "is_above": int(is_above), "T_h": round(market.get("_horas",0),4)},
     }
 
 
@@ -1067,7 +1071,13 @@ def s_price_target_gbm(market, ctx):
         f"K={K:.5g} spot={spot:.5g} ({pct_vs_K:+.1f}%vsK) "
         f"sigma_h={sigma_h:.4f} T={T_h:.1f}h p_yes={p_yes:.3f}"
     )
-    return {"prob_yes": max(0.05, min(0.95, p_yes)), "razon": razon, "subtype": subtype}
+    return {
+        "prob_yes": max(0.05, min(0.95, p_yes)),
+        "razon": razon,
+        "subtype": subtype,
+        "features": {"pct_vs_K": round(pct_vs_K, 4), "sigma_h": round(sigma_h, 6),
+                     "T_h": round(T_h, 4), "log_ratio": round(log_ratio, 6)},
+    }
 
 
 # ─────────────────────────────────────────────────────────────────────────────

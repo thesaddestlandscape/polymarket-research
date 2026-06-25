@@ -417,8 +417,8 @@ def main():
 
     # Obtener IDs únicos y descargar en paralelo
     mids_unicos = list({p.get("market_id", "") for p in candidatas if p.get("market_id")})
-    print(f"  Descargando {len(mids_unicos)} mercados en paralelo (workers=20)...")
-    cache_mercados = fetch_mercados_paralelo(mids_unicos, workers=20)
+    print(f"  Descargando {len(mids_unicos)} mercados en paralelo (workers=8)...")
+    cache_mercados = fetch_mercados_paralelo(mids_unicos, workers=8)
     consultados_ids = set(mids_unicos)
 
     for pred in candidatas:
