@@ -1,4 +1,4 @@
-# Estado del bot — 2026-06-25 09:29 UTC
+# Estado del bot — 2026-06-25 09:31 UTC
 
 ## Capital
 | | |
@@ -11,19 +11,19 @@
 | | |
 |---|---|
 | Inicio | 20.00 € |
-| Actual | **34.86 €** |
-| P&L acumulado | 🟢 **+14.86 €** |
-| ROI s/ operativo | +74.28% |
-| ROI s/ depósito | +49.52% |
-| P&L hoy (2026-06-25) | 🟢 +0.76 € |
-| Operaciones resueltas | 910 (473 WIN / 437 LOSS) — 52.0% |
-| Señales abiertas | 894 |
+| Actual | **33.84 €** |
+| P&L acumulado | 🟢 **+13.84 €** |
+| ROI s/ operativo | +69.18% |
+| ROI s/ depósito | +46.12% |
+| P&L hoy (2026-06-25) | 🔴 -0.26 € |
+| Operaciones resueltas | 912 (473 WIN / 439 LOSS) — 51.9% |
+| Señales abiertas | 895 |
 
 ## Estrategias (visión global)
 
 | Estrategia | n | Win% | IC_efectivo | PNL | Apuesta | Estado |
 |---|---|---|---|---|---|---|
-| ORDER_FLOW_5M | 676 | 53.0% | +0.029 | +19.31€ | 0.50€ | ✅ activa |
+| ORDER_FLOW_5M | 678 | 52.8% | +0.028 | +18.29€ | 0.50€ | ✅ activa |
 | UPDOWN_GBM | 210 | 50.0% | +0.000 | +3.44€ | 0.50€ | ✅ activa |
 | UPDOWN_OU_5M | 1 | 100.0% | +0.008 | +0.50€ | 0.50€ | ⏳ acumulando |
 | PRICE_TARGET_GBM | 3 | 66.7% | +0.015 | -0.12€ | 0.50€ | ⏳ acumulando |
@@ -34,11 +34,11 @@
 
 | Timestamp | Estrategia | Mercado | Resultado | PNL |
 |---|---|---|---|---|
+| 2026-06-25T09:31 | ORDER_FLOW_5M#BTC#5min | Bitcoin Up or Down - June 25, 5:25AM-5:30AM ET… | ❌ LOSS | -0.51€ |
+| 2026-06-25T09:31 | ORDER_FLOW_5M#ETH#5min | Ethereum Up or Down - June 25, 5:25AM-5:30AM ET… | ❌ LOSS | -0.51€ |
 | 2026-06-25T09:26 | UPDOWN_OU_5M#BTC#5min | Bitcoin Up or Down - June 25, 5:20AM-5:25AM ET… | ✅ WIN | +0.50€ |
 | 2026-06-25T09:26 | ORDER_FLOW_5M#BTC#5min | Bitcoin Up or Down - June 25, 5:20AM-5:25AM ET… | ✅ WIN | +0.50€ |
 | 2026-06-25T09:25 | ORDER_FLOW_5M#ETH#5min | Ethereum Up or Down - June 25, 5:20AM-5:25AM ET… | ✅ WIN | +0.50€ |
-| 2026-06-25T09:25 | ORDER_FLOW_5M#SOL#5min | Solana Up or Down - June 25, 5:20AM-5:25AM ET… | ❌ LOSS | -0.51€ |
-| 2026-06-25T09:23 | ORDER_FLOW_5M#XRP#5min | XRP Up or Down - June 25, 5:15AM-5:20AM ET… | ✅ WIN | +0.50€ |
 
 ---
 *Actualizado automáticamente cada ~60s por el fast loop*
