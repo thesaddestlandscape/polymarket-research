@@ -20,6 +20,7 @@ from pathlib import Path
 
 from live_guard import puede_operar_live, estado_live, switch_activo
 from live_stake import calcular_stake, bankroll_actual, verificar_circuit_breaker, pnl_live_hoy, stakes_desplegados_ventana_actual
+from shadow_digest import enviar_telegram
 
 DIR_LIVE    = Path("data/live")
 DIR_SHADOW  = Path("data/shadow")
@@ -164,7 +165,13 @@ def main():
 
     if disparado:
         log(f"  🛑 CIRCUIT BREAKER: {motivo_cb}")
-        # El switch ya lo gestiona verificar_circuit_breaker() si bankroll < mínimo
+        enviar_telegram(
+            f"🛑 *CIRCUIT BREAKER DISPARADO*\n"
+            f"{motivo_cb}\n"
+            f"Bankroll actual: {bankroll_actual():.2f}€\n"
+            f"PNL hoy: {pnl_live_hoy():+.2f}€\n"
+            f"Bot parado. Usa `/live_switch.sh on` para reactivar."
+        )
         return
 
     # 3. Cargar predicciones y parámetros
@@ -224,10 +231,20 @@ def main():
             f"stake={stake:.2f}€")
         log(f"         {stake_info['motivo']}")
 
-        # 3. Ejecutar (STUB hasta tener credenciales)
+        # 3. Notificar señal antes de ejecutar
+        enviar_telegram(
+            f"🎯 *Señal live detectada*\n"
+            f"Estrategia: {strategy}#{subtype}\n"
+            f"Dirección: {dec}\n"
+            f"Precio entrada: {entry_p:.4f}\n"
+            f"Stake: {stake:.2f}€  |  IC: {ic_hist:+.3f}\n"
+            f"Bankroll: {bankroll_actual():.2f}€"
+        )
+
+        # 4. Ejecutar (STUB hasta tener credenciales)
         resultado = _ejecutar_orden_polymarket(mid, dec, stake, entry_p)
 
-        # 4. Registrar
+        # 5. Registrar
         ts_now = datetime.now(timezone.utc).isoformat(timespec="seconds")
         trade = {
             "timestamp_utc":   ts_now,
@@ -262,6 +279,18 @@ def main():
             break
 
     log(f"  Operaciones ejecutadas este ciclo: {ejecutados}")
+
+    # Resumen de ventana si hubo actividad
+    if ejecutados > 0:
+        bkr_final = bankroll_actual()
+        pnl_d     = pnl_live_hoy()
+        enviar_telegram(
+            f"📊 *Ciclo live completado*\n"
+            f"Operaciones este ciclo: {ejecutados}\n"
+            f"PNL hoy: {pnl_d:+.2f}€\n"
+            f"Bankroll actual: {bkr_final:.2f}€"
+        )
+
     log(f"=== Fin live_trade ===")
 
 
