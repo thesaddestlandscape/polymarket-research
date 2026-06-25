@@ -1040,9 +1040,13 @@ def s_order_flow_5m(market, ctx):
     # Delta normalizado: fracción del volumen total que fue presión neta
     delta_ratio = cum_delta / total_vol  # rango [-1, +1]
 
-    # Umbral mínimo de desequilibrio: 20% del volumen total
-    DELTA_MIN = 0.38  # subido de 0.20 — evidencia: WIN_avg=0.445 vs LOSS_avg=0.384
-    if abs(delta_ratio) < DELTA_MIN:
+    # Umbral mínimo y máximo de desequilibrio.
+    # Datos (n=518): zona [0.38-0.46] IC=+0.03→+0.125 ✅
+    #               zona [0.46-0.65] IC=-0.079 ❌ (señal "fuerte" ya priceada → reversión)
+    #               zona [0.65+]     IC=+0.032 ✅ (momentum extremo, pocas ops)
+    DELTA_MIN = 0.38
+    DELTA_MAX = 0.46  # añadido 2026-06-25: elimina zona muerta que destruía -6.75€
+    if abs(delta_ratio) < DELTA_MIN or abs(delta_ratio) > DELTA_MAX:
         return None
 
     # El mercado de Polymarket no debe haber reaccionado ya
