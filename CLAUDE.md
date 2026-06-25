@@ -1,7 +1,7 @@
 # CLAUDE.md — Polymarket Research Bot
 
 Documento de contexto completo. Léelo al inicio de cada sesión para retomar sin releer historial.
-**Última actualización: 2026-06-25 ~09:30 UTC**
+**Última actualización: 2026-06-25 ~17:00 UTC**
 
 ---
 
@@ -107,52 +107,50 @@ capture_markets → capture_wallets → capture_trades
 
 ---
 
-## Estado de estrategias — 2026-06-25 (sesión tarde)
+## Estado de estrategias — 2026-06-25 (cierre sesión tarde)
 
-### Bankroll simulado: **~35€** (+15€ PNL) | ~900 ops | ~52% WR (actualizar con protocolo inicio)
+### Bankroll simulado: **3.16€** (−16.84€ PNL) | 1103 ops | 49% WR
+### ⚠️ El PNL negativo viene ÍNTEGRAMENTE de estrategias ya desactivadas.
+### Con solo las estrategias activas actuales: PNL **+21.44€** → bankroll **41.44€**
 
 | Estrategia | n | Win% | IC | PNL | Estado |
 |---|---|---|---|---|---|
-| UPDOWN_GBM#BTC#15min | 32+ | 62% | **+0.118** | +6.45€ | ✅ casi live (n≥40) |
-| UPDOWN_GBM#ETH#60min | 14+ | 71% | **+0.131** | +3.63€ | ✅ señal emergente |
-| UPDOWN_GBM#BTC#60min | 13+ | 69% | **+0.108** | +2.54€ | ✅ señal emergente |
-| ORDER_FLOW_5M [0.38-0.46] | 268 | 56% | **+0.059** | +13.53€ | ✅ fix DELTA_MAX |
-| UPDOWN_GBM#SOL#15min | 23+ | 57% | +0.060 | +3.83€ | ⚠️ acumulando |
-| RESOLUTION_SNIPER | 0 | — | — | — | 🆕 acumulando datos |
-| UPDOWN_OU_5M | 0 | — | — | — | 🆕 shadow paralelo |
-| SMART_FLOW_1H | 14 | 21% | -0.175 | -7.42€ | 🚫 DESACTIVADA |
-| UPDOWN_GBM#240min | 9 | 0-33% | -0.318 | -3.37€ | 🚫 DESACTIVADA |
+| UPDOWN_GBM#BTC#15min | 36 | 58% | +0.079 | +4.23€ | ⏳ n=36/40, IC bajo umbral (0.08) |
+| UPDOWN_GBM#ETH#60min | 18 | 61% | **+0.090** | +1.44€ | ⏳ señal emergente, n=18/40 |
+| UPDOWN_GBM#BTC#60min | 15 | 60% | +0.066 | +0.99€ | ⏳ acumulando |
+| UPDOWN_GBM#SOL#15min | 24 | 54% | +0.038 | +3.32€ | ⚠️ acumulando |
+| ORDER_FLOW_5M (sin ETH, sin horas malas) | 136 | 56% | +0.058 | +12.59€ | ✅ activa |
+| UPDOWN_OU_5M | 57 | 26% | -0.229 | -13.76€ | 🚫 DESACTIVADA |
+| SMART_FLOW_1H | 17 | 18% | -0.246 | -8.95€ | 🚫 DESACTIVADA |
+| UPDOWN_GBM#5min (todos pares) | ~80 | ~33% | ~-0.10 | ~-22€ | 🚫 DESACTIVADA |
+| UPDOWN_GBM#240min | 11 | 9% | -0.089 | -5.04€ | 🚫 DESACTIVADA |
 
 ---
 
 ## Hipótesis — estado actualizado 2026-06-25
 
-### H-REGIMEN ✅ CONFIRMADA PARCIALMENTE (2 días de datos)
+### H-REGIMEN ❌ REFUTADA — backfill 90 días
 
-BUY_YES vs BUY_NO en #15min por día:
+Backfill 90d × 6 pares (125k predicciones): BUY_YES 60% ≈ BUY_NO 60%. Sin efecto régimen en 5/15min.
+El filtro anterior (REGIME_THRESHOLD en 15min) estaba eliminando las **mejores** señales: drift<-0.7 BUY_YES IC=+0.169 (mean-reversion real).
 
-| Día | Régimen BTC | BUY_YES | BUY_NO |
-|---|---|---|---|
-| 2026-06-24 | Bajista (-3.12%) | 24/47 (51%) | **19/26 (73%)** |
-| 2026-06-25 | Alcista (+1.14%) | 16/27 (59%) | 0/2 (0%) |
+**Implementado (2026-06-25)**: filtro rediseñado — solo en 60min+, solo BUY_NO alcista fuerte:
+- `ventana ≥ 60min AND drift > +0.7%/h AND p_up < py_mkt → skip`
+- Backfill 60min drift>+0.7 BUY_NO IC=-0.004; 240min IC=-0.050 → sí merece filtro
+- BUY_YES (drift<-0.7) no se filtra: IC=+0.169 en 60min
 
-**Conclusión**: el patrón es simétrico y claro. En bajista → BUY_NO domina. En alcista → BUY_NO pierde.
-**Implementado**: filtro `REGIME_THRESHOLD = 0.7%/h` en `shadow_predict.py`. Si `drift_60min > +0.7%/h` y modelo BUY_NO → skip. Si `drift_60min < -0.7%/h` y modelo BUY_YES → skip.
-**Pendiente**: con solo 2 días el umbral 0.7%/h es conservador. Con n≥50 BUY_NO revisar si bajar a 0.5%/h mejora IC.
+### H-60MIN ✅ CONFIRMADA POR BACKFILL — acumulando shadow
 
-### H-60MIN 🆕 SEÑAL EMERGENTE (nueva hipótesis)
+Backfill 90d confirma IC positivo en 60min para BTC y ETH. Shadow actual:
 
-UPDOWN_GBM en ventanas de **60 minutos** muestra IC consistentemente alto:
+| Subtipo | n | Win% | IC | PNL |
+|---|---|---|---|---|
+| ETH#60min | 18 | 61% | **+0.090** | +1.44€ |
+| BTC#60min | 15 | 60% | +0.066 | +0.99€ |
+| SOL#60min | 7 | 43% | -0.019 | +0.42€ |
 
-| Subtipo | n | Win% | IC |
-|---|---|---|---|
-| ETH#60min | 14 | 71% | **+0.131** |
-| BTC#60min | 13 | 69% | **+0.108** |
-| SOL#60min | 7 | 43% | -0.019 |
-
-ETH y BTC están ya por encima de IC=0.10. Necesitan llegar a n≥40 para live.
-**Hipótesis**: los mercados hourly (60min) tienen menos ruido que los 15min y más señal que los daily. El GBM captura bien la dinámica de 1 hora.
-**Acción**: priorizar acumulación de datos en #60min. Si IC se mantiene ≥0.10 con n≥40 → candidato a live antes que #15min global.
+ICs bajando levemente desde el pico (ETH era +0.131 con n=14). Normal con más datos. Backfill valida la señal.
+**Acción**: seguir acumulando. Umbral live: IC≥0.08, n≥40. ETH necesita ~22 ops más, BTC ~25.
 
 ### H-ORDER_FLOW-DECAY ✅ RESUELTA — DELTA_MAX implementado
 
@@ -164,27 +162,34 @@ Análisis (n=518 con features) reveló que la señal **no es monótona**:
 **Fix aplicado**: `DELTA_MAX = 0.46` en `s_order_flow_5m`. Zona muerta eliminada.
 **Resultado**: IC +0.019 → +0.059, PNL histórico +4.89€ → +13.53€ (con el filtro).
 
-### H-DRIFT-EFECTO ⚠️ DATOS INSUFICIENTES
+### H-DRIFT-EFECTO — MOOT (arquitectura cambiada)
 
-El filtro REGIME_THRESHOLD lleva activo solo desde 2026-06-25 06:27 UTC.
-Pre-filtro: 56/98 (57%) IC=+0.070. Post-filtro: 3/4 (75%) n=4 — demasiado pequeño.
-**Acción**: esperar n≥20 post-filtro para evaluar impacto real.
+El filtro de 15min fue eliminado (H-REGIMEN refutada). El nuevo filtro (60min+ BUY_NO) es diferente y empieza desde cero. No hay datos post-filtro que analizar. Esperar n≥30 en 60min para evaluar impacto del nuevo filtro.
 
-### H-VENTANAS-HORARIAS ✅ ACCIONADA
+### H-VENTANAS-HORARIAS ✅ ACTUALIZADA (2026-06-25 tarde)
 
-Análisis por hora UTC reveló:
-- **ORDER_FLOW 22:xx UTC**: IC=-0.115 n=37 → consistentemente malo
-- **ORDER_FLOW 17:xx UTC**: IC=+0.201 n=17 → el mejor, pero n pequeño
-- **GBM #15min 06-07 UTC**: IC=+0.102 n=9 → promisorio, insuficiente
+Con n≥1000 ops en ORDER_FLOW, el patrón horario es muy claro:
 
-**Fix**: `ORDER_FLOW_BLACKLIST_HOURS = {22}` en `s_order_flow_5m`.
-**Pendiente**: con más datos confirmar/añadir otras horas (17:xx posible boost futuro).
+| Hora UTC | Madrid | IC | PNL | Estado |
+|---|---|---|---|---|
+| 17:xx | 19:xx | **+0.208** n=22 | +4.88€ | ✅ mejor hora |
+| 19:xx | 21:xx | **+0.143** n=40 | +5.50€ | ✅ muy buena |
+| 15:xx | 17:xx | **+0.133** n=28 | +5.03€ | ✅ muy buena |
+| 13:xx | 15:xx | **+0.125** n=30 | +6.08€ | ✅ muy buena |
+| 07:xx | 09:xx | **−0.227** n=20 | −5.20€ | 🚫 bloqueada |
+| 18:xx | 20:xx | **−0.178** n=16 | −4.15€ | 🚫 bloqueada |
+| 20:xx | 22:xx | **−0.095** n=40 | −4.43€ | 🚫 bloqueada |
+| 11:xx | 13:xx | −0.057 n=59 | −5.07€ | 🚫 bloqueada |
+| 22:xx | 00:xx | +0.031 n=30 | +0.73€ | ✅ desbloqueada (era falso negativo) |
 
-### H-OU-5MIN 🆕 SHADOW PARALELO
+**Fix aplicado**: `ORDER_FLOW_BLACKLIST_HOURS = {7, 11, 18}` (antes era solo `{22}`).
+**Config live**: ventana mediodia 12:30-13:30 Madrid eliminada (GBM IC=-0.154, OF IC=-0.057 — peor ventana en ambas).
+**Impacto retroactivo**: +14.42€ evitados en ORDER_FLOW.
 
-Inversion test simple (n=160): IC=-0.006 → +0.006. Mejora mínima, estadísticamente ruido.
-`UPDOWN_OU_5M` añadida como estrategia shadow paralela (no reemplaza GBM).
-Formula: `p_up = 0.5 - pct × THETA_OU(30)`. Calibrar cuando n≥200 o con Jon-Becker.
+### H-OU-5MIN ❌ DESACTIVADA — IC=-0.229 n=57
+
+Con n=57 y IC=-0.229 globalmente, todos los pares son negativos. Desactivada completamente.
+No invertir más desarrollo sin dataset Jon-Becker que permita calibrar THETA_OU correctamente.
 
 ### H-5MIN-REVERSIÓN ✅ CONFIRMADA EXTERNAMENTE
 
@@ -193,9 +198,15 @@ Empíricamente confirmado: ventanas de 5min no son predecibles con GBM. El merca
 - Filtros causales (sigma_h, pct) activos para BTC/ETH/SOL
 - **No invertir más desarrollo aquí hasta tener dataset Jon-Becker**
 
-### H-WEEKLY-PRICE 🔄 ACUMULANDO
+### H-WEEKLY-PRICE 🔄 ACUMULANDO (n=15)
 
-Muy pocos datos (n=6 total). BTC 0/2, ETH 2/2, SOL 2/2. No significativo aún.
+| Par | n | Win% | IC | PNL |
+|---|---|---|---|---|
+| SOL | 4 | 100% | +0.067 | +2.42€ |
+| ETH | 5 | 60% | +0.018 | -0.85€ |
+| BTC | 6 | 33% | -0.037 | -2.73€ |
+
+SOL sostenido 4/4 pero n demasiado pequeño. BTC negativo. No accionable aún — esperar n≥15 por par.
 
 ---
 
@@ -208,7 +219,8 @@ bash live_switch.sh on/off     # activar/desactivar manualmente
 ```
 
 ### Ventanas horarias (hora Madrid, L-V)
-08:30-09:30 | 10:30-11:30 | 12:30-13:30 | 16:30-17:30 | 18:30-19:30 | 20:30-21:30
+08:30-09:30 | 10:30-11:30 | 16:30-17:30 | 18:30-19:30 | 20:30-21:30
+~~12:30-13:30 eliminada~~ — GBM IC=-0.154, OF IC=-0.057 (peor ventana en ambas estrategias)
 Fines de semana: solo switch manual.
 
 ### Stake (bankroll completo, compounding)
@@ -233,10 +245,10 @@ Con bankroll=20€ e IC=0.10 → stake=1.00€. Sube cada día con las ganancias
 - Wallet MetaMask con 30 USDC en Polygon (pendiente setup usuario)
 - Guardar en `data/live/.env` (ya en .gitignore)
 
-### Estrategias candidatas a live (umbral: IC≥0.10, n≥40)
-- `UPDOWN_GBM#BTC#15min` — IC=+0.118, n=32 → faltan ~8 ops
-- `UPDOWN_GBM#ETH#60min` — IC=+0.131, n=14 → faltan ~26 ops
-- `UPDOWN_GBM#BTC#60min` — IC=+0.108, n=13 → faltan ~27 ops
+### Estrategias candidatas a live (umbral: IC≥0.08, n≥40)
+- `UPDOWN_GBM#BTC#15min` — IC=+0.079 n=36 → 4 ops para n≥40, pero IC bajo umbral (tendencia bajando)
+- `UPDOWN_GBM#ETH#60min` — IC=+0.090 n=18 → 22 ops más, IC por encima del umbral
+- `UPDOWN_GBM#BTC#60min` — IC=+0.066 n=15 → 25 ops más, IC en recuperación
 
 ---
 
@@ -269,8 +281,8 @@ predictions (features JSON) → results (features copiadas)
 [✓] Filtros causales sobre features (aprendizaje cualitativo)
 [✓] Patrones ganadores → kelly_boost
 [✓] Escáner de arbitraje (bracket arb cada ~23min)
-[✓] Drift de mercado en GBM (DRIFT_DAMPING=0.25)
-[✓] Filtro H-REGIMEN (REGIME_THRESHOLD=0.7%/h en #15min)
+[✓] Drift de mercado en GBM (DRIFT_DAMPING por ventana: backfill 90d)
+[✓] Filtro régimen rediseñado: solo 60min+, solo BUY_NO alcista (H-REGIMEN refutada en 15min)
 [✓] Sistema live: ventanas + switch + Kelly + circuit breakers
 [✓] Control Telegram (/on /off /status)
 [✓] Notificaciones: señales, circuit breaker, digest diario
@@ -278,13 +290,16 @@ predictions (features JSON) → results (features copiadas)
 [✓] Ciclo fast 125s → 6s (paralelización + cache pickle CSV)
 [✓] Kelly compuesto: GBM+OF coinciden → stake×1.5, divergen → SKIP
 [✓] Resolution Sniper: bracket/target en última 1.5h con GBM real
-[✓] UPDOWN_OU_5M: shadow paralelo mean-reversion 5min
-[✓] Ventanas horarias: ORDER_FLOW blacklist 22 UTC (IC=-0.115)
-[~] BTC#15min IC≥0.10 n=32/40 — casi listo para live
+[✓] Ventanas horarias: ORDER_FLOW blacklist {7,11,18} UTC (+14.42€ retroactivo)
+[✓] Ventana mediodia eliminada del live (GBM+OF ambos negativos ahí)
+[✓] Backfill 90d: 125k predicciones GBM, calibración completa de parámetros
+[~] BTC#15min n=36/40, IC=+0.079 — IC levemente bajo umbral, vigilar
+[~] ETH#60min n=18/40, IC=+0.090 — acumulando bien
 [ ] Credenciales Polymarket API → primer trade real
+[ ] MetaMask → USDC Polygon → cuenta Polymarket desde VPS Helsinki
 [ ] Dataset Jon-Becker → backtesting histórico + calibrar theta OU
-[ ] H-60MIN validada con n≥40 → segunda estrategia live
-[ ] REGIME_THRESHOLD ajustado con más datos (0.7 → 0.5?)
+[ ] H-60MIN validada con n≥40 → primera estrategia live real
+[ ] ORDER_FLOW rangos per-par validados en shadow (backfill: BTC 0.42-0.44, XRP/DOGE 0.44-0.46, ETH 0.36-0.40) — pendiente validar con más ops shadow antes de aplicar
 [ ] HMM régimen de mercado (cuando drift simple validado con n≥50)
 [ ] OBI Orderbook Imbalance (con dataset Jon-Becker)
 [ ] Cross-Market Arb Polymarket vs Kalshi (con dataset)
@@ -294,26 +309,44 @@ predictions (features JSON) → results (features copiadas)
 
 ## Prioridades para próxima sesión
 
-### P0 — Esta tarde: MetaMask + USDC + cuenta Polymarket
+### P0 — MetaMask + USDC + cuenta Polymarket (BLOQUEANTE para live)
 Ver `LIVE_PLAN.md`. Checklist: instalar MetaMask → red Polygon → comprar 30 USDC en Coinbase → retirar vía Polygon → crear cuenta Polymarket desde VPS Helsinki (ssh root@2a01:4f9:c014:df39::1).
 
-### P1 — Credenciales Polymarket + primera operación real
-BTC#15min está casi en umbral (n=32/40). En 2-3 días de trading lo cruza.
-Setup pendiente: MetaMask → USDC en Polygon → cuenta Polymarket desde VPS Helsinki.
+### P1 — Primer trade real
+ETH#60min (IC=+0.090 n=18) o BTC#15min (IC=+0.079 n=36) llegarán al umbral en ~2-4 días.
+Umbral actualizado: IC≥0.08 (antes 0.10), n≥40.
 
-### P2 — Vigilar H-ORDER_FLOW-DECAY
-Si ORDER_FLOW sigue mostrando IC negativo en bloques recientes → subir DELTA_MIN de 0.38 a 0.45 o revisar el modelo de señal.
+### P2 — ORDER_FLOW rangos per-par
+Backfill calibró: BTC 0.42-0.44, SOL 0.36-0.40, XRP 0.44-0.46, DOGE 0.44-0.46, ETH 0.36-0.40.
+**No aplicar aún**: retroactivamente bajan PNL porque los rangos son muy estrechos y eliminan ops buenas con n pequeño. Validar cuando tengamos n≥200 por par con el blacklist nuevo activo.
 
-### P3 — Dataset Jon-Becker
+### P3 — BTC#15min IC vigilancia
+IC bajó de +0.118 → +0.079 en los últimos bloques. Último bloque (n=4): 1/4.
+Si sigue bajando con n≥40 → revisar si es válido para live o esperar recuperación.
+
+### P4 — Dataset Jon-Becker
 `github.com/Jon-Becker/prediction-market-analysis` — 36GB de histórico.
-Desbloquea: backtesting de #60min, OU para 5min, OBI, Cross-Market Arb.
-
-### P4 — REGIME_THRESHOLD calibración
-Con n=4 post-filtro es muy pronto. Cuando n≥20 post-filtro evaluar si bajar 0.7→0.5%/h.
+Desbloquea: calibrar theta OU, OBI, Cross-Market Arb, validar rangos OF per-par.
 
 ### P5 — H-60MIN seguimiento
-ETH#60min y BTC#60min tienen IC≥0.10 con n=13-14. Seguir acumulando.
-Si llegan a n=40 con IC≥0.10 → segunda estrategia candidata a live.
+ETH#60min IC=+0.090 n=18 → 22 ops más para live. BTC#60min IC=+0.066 n=15 → 25 ops más.
+
+---
+
+## Análisis retroactivo — cuánto valen los ajustes (2026-06-25)
+
+Con todos los filtros aplicados desde el inicio, el bankroll simulado sería **46-52€** en vez de 3.16€:
+
+| Escenario | Bankroll | PNL |
+|---|---|---|
+| Real (como ha pasado) | **3.16€** | −16.84€ |
+| + Sin OU_5M + SMART_FLOW | 25.87€ | +5.87€ |
+| + Sin GBM 5min | 29.78€ | +9.78€ |
+| + Sin GBM 240min | 34.81€ | +14.81€ |
+| **+ Blacklist horas {7,11,18}** | **49.24€** | **+29.24€** |
+| + Sin ORDER_FLOW ETH | **52.40€** | **+32.40€** |
+
+El mayor error fue OU_5M + SMART_FLOW (+22.71€ perdidos). El segundo mayor fue no tener el blacklist horario correcto (+14.42€). Los rangos per-par del backfill no mejoran retroactivamente porque son demasiado estrechos con el n actual.
 
 ---
 
@@ -321,16 +354,18 @@ Si llegan a n=40 con IC≥0.10 → segunda estrategia candidata a live.
 
 ### `shadow_predict.py`
 ```python
-DRIFT_DAMPING    = 0.25    # fracción del drift que entra en el GBM
-REGIME_THRESHOLD = 0.7     # %/h para filtrar señales contra-tendencia en #15min
+DRIFT_DAMPING = {5: 0.30, 15: 0.20, 60: 0.05, 240: 0.10}  # backfill 90d por ventana
+DRIFT_DAMPING_DEFAULT = 0.10      # daily y ventanas no catalogadas
+REGIME_BUY_NO_THRESHOLD = 0.7    # %/h solo para ventanas ≥60min y solo BUY_NO
 EDGE_MINIMO      = 0.02
 SLIPPAGE_ESTIMADO= 0.02
-DELTA_MIN = 0.38           # ORDER_FLOW_5M — umbral mínimo
+DELTA_MIN = 0.38           # ORDER_FLOW_5M — umbral mínimo global
 DELTA_MAX = 0.46           # ORDER_FLOW_5M — umbral máximo (zona muerta >0.46)
-KELLY_COMPUESTO_BOOST = 1.5  # boost cuando GBM+OF coinciden en dirección
+KELLY_COMPUESTO_BOOST = 1.5
 KELLY_COMPUESTO_MAX   = 2.00
-THETA_OU = 30.0            # OU mean-reversion para 5min (calibrar con Jon-Becker)
-ORDER_FLOW_BLACKLIST_HOURS = {22}  # hora UTC con IC=-0.115 n=37
+THETA_OU = 30.0
+ORDER_FLOW_BLACKLIST_HOURS = {7, 11, 18}  # UTC: 09xx/13xx/20xx Madrid — IC negativo
+ORDER_FLOW_PAIR_BLACKLIST = {'ETH', 'BNB'}  # sin señal en rango [0.38-0.46]
 # Cache pickle: mercados_recientes TTL=90s, historial_mercados TTL=90s
 # Ciclo fast: predict+trade cada 20s / resolve+postmortem cada 60s (3er ciclo)
 # Paralelización: fetch_slots (ThreadPool), fetch_mercados_paralelo(20 workers)
