@@ -1,5 +1,5 @@
 strategy,n_total,n_aciertos,n_fallos,hit_rate,ic_bayes,confianza,ic_efectivo,pnl_total,pnl_medio,max_ganancia,max_perdida,avg_win,avg_loss,expectancy,profit_factor,mejor_racha,peor_racha,edge_medio_pred,edge_real,avg_horas_ganadora,avg_horas_perdedora,kelly_optimo,causa_perdida_principal
-ORDER_FLOW_5M,697,365,332,0.5237,0.0236,1.0,0.0236,15.618,0.0224,0.9002,-0.918,0.5743,-0.5843,0.0224,1.0805,10,8,-0.0611,0.0249,0.9,0.9,0.039,TIMING_CORTO
+ORDER_FLOW_5M,698,366,332,0.5244,0.0243,1.0,0.0243,16.108,0.0231,0.9002,-0.918,0.5741,-0.5843,0.0231,1.083,10,8,-0.0614,0.0256,0.9,0.9,0.0402,TIMING_CORTO
 UPDOWN_GBM,210,105,105,0.5,0.0,1.0,0.0,3.4396,0.0164,2.682,-0.918,0.7847,-0.752,0.0164,1.0436,10,8,0.0177,0.0182,0.9,0.7,0.0209,DIRECTION_ERROR
 UPDOWN_OU_5M,7,6,1,0.8571,0.2778,0.35,0.0972,2.4714,0.3531,0.5209,-0.51,0.4969,-0.51,0.3531,5.8459,5,1,-0.0116,0.3923,0.1,0.1,0.4,EDGE_INSUFICIENTE
 PRICE_TARGET_GBM,3,2,1,0.6667,0.1,0.15,0.015,-0.1237,-0.0412,0.6472,-0.918,0.3972,-0.918,-0.0412,0.8653,1,1,-0.1015,-0.0458,8.9,8.9,0.0,DIRECTION_ERROR
