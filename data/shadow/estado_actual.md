@@ -1,4 +1,4 @@
-# Estado del bot — 2026-06-25 09:10 UTC
+# Estado del bot — 2026-06-25 09:12 UTC
 
 ## Capital
 | | |
@@ -11,19 +11,19 @@
 | | |
 |---|---|
 | Inicio | 20.00 € |
-| Actual | **33.39 €** |
-| P&L acumulado | 🟢 **+13.39 €** |
-| ROI s/ operativo | +66.93% |
-| ROI s/ depósito | +44.62% |
-| P&L hoy (2026-06-25) | 🔴 -0.71 € |
-| Operaciones resueltas | 901 (467 WIN / 434 LOSS) — 51.8% |
-| Señales abiertas | 877 |
+| Actual | **32.88 €** |
+| P&L acumulado | 🟢 **+12.88 €** |
+| ROI s/ operativo | +64.38% |
+| ROI s/ depósito | +42.92% |
+| P&L hoy (2026-06-25) | 🔴 -1.22 € |
+| Operaciones resueltas | 902 (467 WIN / 435 LOSS) — 51.8% |
+| Señales abiertas | 876 |
 
 ## Estrategias (visión global)
 
 | Estrategia | n | Win% | IC_efectivo | PNL | Apuesta | Estado |
 |---|---|---|---|---|---|---|
-| ORDER_FLOW_5M | 668 | 52.8% | +0.028 | +18.34€ | 0.50€ | ✅ activa |
+| ORDER_FLOW_5M | 669 | 52.8% | +0.028 | +17.83€ | 0.50€ | ✅ activa |
 | UPDOWN_GBM | 210 | 50.0% | +0.000 | +3.44€ | 0.50€ | ✅ activa |
 | PRICE_TARGET_GBM | 3 | 66.7% | +0.015 | -0.12€ | 0.50€ | ⏳ acumulando |
 | WEEKLY_PRICE | 6 | 66.7% | +0.037 | -0.85€ | 0.50€ | ⏳ acumulando |
@@ -33,11 +33,11 @@
 
 | Timestamp | Estrategia | Mercado | Resultado | PNL |
 |---|---|---|---|---|
+| 2026-06-25T09:12 | ORDER_FLOW_5M#BTC#5min | Bitcoin Up or Down - June 25, 5:05AM-5:10AM ET… | ❌ LOSS | -0.51€ |
 | 2026-06-25T09:10 | ORDER_FLOW_5M#ETH#5min | Ethereum Up or Down - June 25, 5:05AM-5:10AM ET… | ❌ LOSS | -0.51€ |
 | 2026-06-25T09:07 | ORDER_FLOW_5M#BTC#5min | Bitcoin Up or Down - June 25, 5:00AM-5:05AM ET… | ❌ LOSS | -0.51€ |
 | 2026-06-25T09:06 | ORDER_FLOW_5M#SOL#5min | Solana Up or Down - June 25, 5:00AM-5:05AM ET… | ❌ LOSS | -0.51€ |
 | 2026-06-25T09:04 | ORDER_FLOW_5M#BNB#5min | BNB Up or Down - June 25, 4:55AM-5:00AM ET… | ❌ LOSS | -0.55€ |
-| 2026-06-25T09:01 | ORDER_FLOW_5M#BTC#5min | Bitcoin Up or Down - June 25, 4:55AM-5:00AM ET… | ✅ WIN | +0.50€ |
 
 ---
 *Actualizado automáticamente cada ~60s por el fast loop*
