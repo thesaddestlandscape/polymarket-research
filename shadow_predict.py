@@ -1243,11 +1243,79 @@ def s_resolution_sniper(market, ctx):
     }
 
 
+THETA_OU = 30.0  # calibrar con Jon-Becker cuando n≥200
+
+
+def s_updown_ou_5m(market, ctx):
+    """
+    OU (Ornstein-Uhlenbeck) para slots de 5min — hipótesis mean-reversion.
+    Corre en PARALELO con UPDOWN_GBM para acumular evidencia.
+    No reemplaza GBM hasta que IC_OU > IC_GBM con n≥200.
+    Fórmula: p_up = 0.5 - pct_spot_vs_ref * THETA_OU
+    """
+    question = market.get("question", "")
+    if "up or down" not in question.lower():
+        return None
+    tipo, ventana_min = _parse_updown_tipo(question)
+    if tipo != "slot" or ventana_min != 5:
+        return None
+
+    activo = identificar_activo(question)
+    if not activo:
+        return None
+
+    precios_data = ctx.get("precios_intraday", [])
+    spot = _cargar_spot().get(activo)
+    if not spot or spot <= 0:
+        return None
+
+    try:
+        end_dt = datetime.fromisoformat(
+            market.get("end_date","").replace("Z","+00:00"))
+        if end_dt.tzinfo is None:
+            end_dt = end_dt.replace(tzinfo=timezone.utc)
+    except Exception:
+        return None
+
+    ref_time = end_dt - timedelta(minutes=5)
+    tol_min  = 3
+    ref = _precio_en(activo, ref_time, precios_data, tol_min)
+    if ref is None or ref <= 0:
+        return None
+
+    pct = (spot / ref - 1)
+    if abs(pct) < 0.0001:   # sin señal cuando spot≈ref
+        return None
+
+    p_up = max(0.05, min(0.95, 0.5 - pct * THETA_OU))
+    sigma_h = _estimar_vol_h(activo, precios_data, n_min=20) or 0.02
+    drift_15 = _calcular_drift_h(activo, precios_data, 15)
+    drift_60 = _calcular_drift_h(activo, precios_data, 60)
+    delta_macro = _calcular_delta_ratio_macro(activo, ctx.get("klines_raw", {}))
+
+    features = {
+        "pct_spot_vs_ref": round(pct * 100, 4),
+        "sigma_h":          round(sigma_h, 6),
+        "theta_ou":         THETA_OU,
+    }
+    if drift_15 is not None: features["drift_15min"] = round(drift_15 * 100, 4)
+    if drift_60 is not None: features["drift_60min"] = round(drift_60 * 100, 4)
+    if delta_macro is not None: features["delta_ratio_macro"] = round(delta_macro, 4)
+
+    return {
+        "prob_yes": p_up,
+        "razon":   f"ou_5m {activo} pct={pct*100:+.3f}% θ={THETA_OU} p_up={p_up:.3f}",
+        "subtype": f"{activo}#5min",
+        "features": features,
+    }
+
+
 ESTRATEGIAS = [
     ("WEEKLY_PRICE",        s_weekly_price),
     ("PRICE_MOMENTUM",      s_price_momentum),
     ("SMART_FLOW_1H",       s_smart_flow_1h),
     ("UPDOWN_GBM",          s_updown_gbm),
+    ("UPDOWN_OU_5M",        s_updown_ou_5m),
     ("PRICE_TARGET_GBM",    s_price_target_gbm),
     ("ORDER_FLOW_5M",       s_order_flow_5m),
     ("RESOLUTION_SNIPER",   s_resolution_sniper),
