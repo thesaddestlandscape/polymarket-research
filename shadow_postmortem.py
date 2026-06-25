@@ -715,6 +715,20 @@ def main():
     else:
         print(f"\n  Sin patrones causales nuevos (datos insuficientes o sin señal clara)")
 
+    # Preservar desactivaciones manuales (marcadas con "MANUALMENTE" o "DESACTIVADA 2026-")
+    if PARAMS_PATH.exists():
+        try:
+            old = json.load(open(PARAMS_PATH, encoding="utf-8")).get("estrategias", {})
+            for k, v in old.items():
+                if not v.get("activa", True) and k in params["estrategias"]:
+                    motivo_old = v.get("motivo", "")
+                    if "MANUALMENTE" in motivo_old or ("DESACTIVADA 202" in motivo_old and "DESACTIVADA" in motivo_old):
+                        params["estrategias"][k]["activa"] = False
+                        if "DESACTIVADA" not in params["estrategias"][k]["motivo"]:
+                            params["estrategias"][k]["motivo"] += f" | {motivo_old.split('|')[-1].strip()}"
+        except Exception:
+            pass
+
     with open(PARAMS_PATH, "w", encoding="utf-8") as f:
         json.dump(params, f, indent=2, ensure_ascii=False)
 
