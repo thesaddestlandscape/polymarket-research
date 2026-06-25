@@ -1,4 +1,4 @@
-# Estado del bot — 2026-06-25 11:48 UTC
+# Estado del bot — 2026-06-25 11:49 UTC
 
 ## Capital
 | | |
@@ -11,20 +11,20 @@
 | | |
 |---|---|
 | Inicio | 20.00 € |
-| Actual | **25.23 €** |
-| P&L acumulado | 🟢 **+5.23 €** |
-| ROI s/ operativo | +26.17% |
-| ROI s/ depósito | +17.45% |
-| P&L hoy (2026-06-25) | 🔴 -8.86 € |
-| Operaciones resueltas | 981 (501 WIN / 480 LOSS) — 51.1% |
-| Señales abiertas | 984 |
+| Actual | **23.53 €** |
+| P&L acumulado | 🟢 **+3.53 €** |
+| ROI s/ operativo | +17.66% |
+| ROI s/ depósito | +11.77% |
+| P&L hoy (2026-06-25) | 🔴 -10.56 € |
+| Operaciones resueltas | 984 (501 WIN / 483 LOSS) — 50.9% |
+| Señales abiertas | 982 |
 
 ## Estrategias (visión global)
 
 | Estrategia | n | Win% | IC_efectivo | PNL | Apuesta | Estado |
 |---|---|---|---|---|---|---|
-| ORDER_FLOW_5M | 727 | 51.9% | +0.019 | +12.11€ | 0.50€ | ✅ activa |
-| UPDOWN_OU_5M | 18 | 55.6% | +0.045 | +1.13€ | 0.50€ | ✅ activa |
+| ORDER_FLOW_5M | 729 | 51.7% | +0.017 | +10.92€ | 0.50€ | ✅ activa |
+| UPDOWN_OU_5M | 19 | 52.6% | +0.023 | +0.62€ | 0.50€ | ✅ activa |
 | UPDOWN_GBM | 213 | 49.3% | -0.007 | +0.38€ | 0.50€ | ⚠️ IC negativo |
 | PRICE_TARGET_GBM | 3 | 66.7% | +0.015 | -0.12€ | 0.50€ | ⏳ acumulando |
 | WEEKLY_PRICE | 6 | 66.7% | +0.037 | -0.85€ | 0.50€ | ⏳ acumulando |
@@ -34,11 +34,11 @@
 
 | Timestamp | Estrategia | Mercado | Resultado | PNL |
 |---|---|---|---|---|
+| 2026-06-25T11:49 | UPDOWN_OU_5M#ETH#5min | Ethereum Up or Down - June 25, 7:40AM-7:45AM ET… | ❌ LOSS | -0.51€ |
+| 2026-06-25T11:49 | ORDER_FLOW_5M#BNB#5min | BNB Up or Down - June 25, 7:45AM-7:50AM ET… | ❌ LOSS | -0.68€ |
+| 2026-06-25T11:49 | ORDER_FLOW_5M#ETH#5min | Ethereum Up or Down - June 25, 7:40AM-7:45AM ET… | ❌ LOSS | -0.51€ |
 | 2026-06-25T11:47 | UPDOWN_OU_5M#XRP#5min | XRP Up or Down - June 25, 7:40AM-7:45AM ET… | ✅ WIN | +0.49€ |
 | 2026-06-25T11:47 | ORDER_FLOW_5M#XRP#5min | XRP Up or Down - June 25, 7:40AM-7:45AM ET… | ❌ LOSS | -0.51€ |
-| 2026-06-25T11:46 | UPDOWN_OU_5M#BNB#5min | BNB Up or Down - June 25, 7:40AM-7:45AM ET… | ❌ LOSS | -0.51€ |
-| 2026-06-25T11:46 | UPDOWN_OU_5M#SOL#5min | Solana Up or Down - June 25, 7:40AM-7:45AM ET… | ❌ LOSS | -0.51€ |
-| 2026-06-25T11:46 | ORDER_FLOW_5M#BNB#5min | BNB Up or Down - June 25, 7:40AM-7:45AM ET… | ❌ LOSS | -0.68€ |
 
 ---
 *Actualizado automáticamente cada ~60s por el fast loop*
