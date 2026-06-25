@@ -1,4 +1,4 @@
-# Estado del bot — 2026-06-25 10:29 UTC
+# Estado del bot — 2026-06-25 11:16 UTC
 
 ## Capital
 | | |
@@ -11,19 +11,19 @@
 | | |
 |---|---|
 | Inicio | 20.00 € |
-| Actual | **29.45 €** |
-| P&L acumulado | 🟢 **+9.45 €** |
-| ROI s/ operativo | +47.24% |
-| ROI s/ depósito | +31.50% |
-| P&L hoy (2026-06-25) | 🔴 -4.64 € |
-| Operaciones resueltas | 954 (490 WIN / 464 LOSS) — 51.4% |
-| Señales abiertas | 934 |
+| Actual | **28.38 €** |
+| P&L acumulado | 🟢 **+8.38 €** |
+| ROI s/ operativo | +41.90% |
+| ROI s/ depósito | +27.93% |
+| P&L hoy (2026-06-25) | 🔴 -5.71 € |
+| Operaciones resueltas | 960 (492 WIN / 468 LOSS) — 51.2% |
+| Señales abiertas | 931 |
 
 ## Estrategias (visión global)
 
 | Estrategia | n | Win% | IC_efectivo | PNL | Apuesta | Estado |
 |---|---|---|---|---|---|---|
-| ORDER_FLOW_5M | 709 | 52.0% | +0.020 | +13.50€ | 0.50€ | ✅ activa |
+| ORDER_FLOW_5M | 715 | 51.9% | +0.019 | +12.43€ | 0.50€ | ✅ activa |
 | UPDOWN_GBM | 210 | 50.0% | +0.000 | +3.44€ | 0.50€ | ✅ activa |
 | UPDOWN_OU_5M | 12 | 58.3% | +0.043 | +0.90€ | 0.50€ | ✅ activa |
 | PRICE_TARGET_GBM | 3 | 66.7% | +0.015 | -0.12€ | 0.50€ | ⏳ acumulando |
@@ -34,11 +34,11 @@
 
 | Timestamp | Estrategia | Mercado | Resultado | PNL |
 |---|---|---|---|---|
-| 2026-06-25T10:28 | ORDER_FLOW_5M#ETH#5min | Ethereum Up or Down - June 25, 6:20AM-6:25AM ET… | ❌ LOSS | -0.51€ |
-| 2026-06-25T10:27 | ORDER_FLOW_5M#XRP#5min | XRP Up or Down - June 25, 6:20AM-6:25AM ET… | ❌ LOSS | -0.51€ |
-| 2026-06-25T10:26 | ORDER_FLOW_5M#DOGE#5min | Dogecoin Up or Down - June 25, 6:20AM-6:25AM ET… | ✅ WIN | +0.49€ |
-| 2026-06-25T10:26 | ORDER_FLOW_5M#BTC#5min | Bitcoin Up or Down - June 25, 6:20AM-6:25AM ET… | ❌ LOSS | -0.51€ |
-| 2026-06-25T10:26 | ORDER_FLOW_5M#SOL#5min | Solana Up or Down - June 25, 6:20AM-6:25AM ET… | ❌ LOSS | -0.51€ |
+| 2026-06-25T11:16 | ORDER_FLOW_5M#ETH#5min | Ethereum Up or Down - June 25, 7:10AM-7:15AM ET… | ✅ WIN | +0.48€ |
+| 2026-06-25T10:31 | ORDER_FLOW_5M#XRP#5min | XRP Up or Down - June 25, 6:25AM-6:30AM ET… | ❌ LOSS | -0.51€ |
+| 2026-06-25T10:31 | ORDER_FLOW_5M#DOGE#5min | Dogecoin Up or Down - June 25, 6:25AM-6:30AM ET… | ✅ WIN | +0.49€ |
+| 2026-06-25T10:31 | ORDER_FLOW_5M#BTC#5min | Bitcoin Up or Down - June 25, 6:25AM-6:30AM ET… | ❌ LOSS | -0.51€ |
+| 2026-06-25T10:31 | ORDER_FLOW_5M#ETH#5min | Ethereum Up or Down - June 25, 6:25AM-6:30AM ET… | ❌ LOSS | -0.51€ |
 
 ---
 *Actualizado automáticamente cada ~60s por el fast loop*
