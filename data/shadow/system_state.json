@@ -1,0 +1,29 @@
+{
+  "timestamp_utc": "2026-06-25T09:28:27+00:00",
+  "bankroll_sim": 34.86,
+  "pnl_total": 14.86,
+  "n_ops": 910,
+  "win_rate": 0.5198,
+  "estrategias_activas": 61,
+  "desactivadas": [
+    "SMART_FLOW_1H",
+    "UPDOWN_GBM#240min"
+  ],
+  "top3_ic": [
+    {
+      "k": "UPDOWN_GBM#BTC#15min",
+      "ic": 0.1176,
+      "n": 32
+    },
+    {
+      "k": "UPDOWN_GBM#ETH#60min",
+      "ic": 0.1103,
+      "n": 15
+    },
+    {
+      "k": "UPDOWN_GBM#60min",
+      "ic": 0.1053,
+      "n": 36
+    }
+  ]
+}
