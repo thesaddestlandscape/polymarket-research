@@ -1164,6 +1164,14 @@ def s_order_flow_5m(market, ctx):
     if abs(delta_ratio) < DELTA_MIN or abs(delta_ratio) > DELTA_MAX:
         return None
 
+    # Timing: esperar a que el slot lleve ≥1.5min abierto.
+    # Datos: slot 0-1min → IC=-0.035 (-15.28€). Slot 2-3min → IC=+0.045.
+    # Los klines del primer minuto son del slot ANTERIOR → señal de ruido.
+    h_restantes = market.get("_horas", 0) * 60  # minutos restantes
+    minutos_vividos = 5 - h_restantes  # cuánto lleva abierto el slot de 5min
+    if minutos_vividos < 1.5:
+        return None
+
     # El mercado de Polymarket no debe haber reaccionado ya
     # Si YES está en 0.40-0.60 → lag explotable; si ya se movió → tarde
     py = market.get("_precio_yes", 0.5)
@@ -1306,8 +1314,20 @@ def s_updown_ou_5m(market, ctx):
     if abs(pct) < 0.0001:   # sin señal cuando spot≈ref
         return None
 
-    p_up = max(0.05, min(0.95, 0.5 - pct * THETA_OU))
     sigma_h = _estimar_vol_h(activo, precios_data, n_min=20) or 0.02
+
+    # Filtro de fuerza de señal: solo disparar si |pct| ≥ 0.8 desviaciones típicas.
+    # Datos (n=21): todas las señales actuales tienen 0.24-0.50σ → ruido puro.
+    # Una señal de mean-reversion necesita al menos 0.8σ para ser estadísticamente
+    # distinguible de una fluctuación aleatoria.
+    T_h_slot = max(market.get("_horas", 0.083), 0.05)
+    sigma_T = sigma_h * math.sqrt(T_h_slot)  # desviación típica total del slot
+    signal_strength = abs(pct) / sigma_T if sigma_T > 0 else 0
+    OU_SIGNAL_MIN = 0.5  # σ mínimas. 0.8σ = demasiado estricto (0 señales). Calibrar con Jon-Becker.
+    if signal_strength < OU_SIGNAL_MIN:
+        return None
+
+    p_up = max(0.05, min(0.95, 0.5 - pct * THETA_OU))
     drift_15 = _calcular_drift_h(activo, precios_data, 15)
     drift_60 = _calcular_drift_h(activo, precios_data, 60)
     delta_macro = _calcular_delta_ratio_macro(activo, ctx.get("klines_raw", {}))
