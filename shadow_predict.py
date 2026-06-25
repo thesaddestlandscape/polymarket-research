@@ -726,9 +726,10 @@ def _calcular_delta_ratio_macro(sym, klines_raw):
 DRIFT_DAMPING = 0.25
 
 # Umbral de régimen claro para filtrar señales contra-tendencia en slots #15min.
-# Datos: bajista -0.82%/h → BUY_NO 76%; alcista +0.43%/h → BUY_NO 0/2.
-# 0.7%/h es conservador: solo filtra regímenes muy claros, evita overfitting con n pequeño.
-REGIME_THRESHOLD = 0.7  # %/h
+# Datos (n=78): BUY_YES Q3 drift=[+0.15,+0.57%/h] → 79% WR ✅
+#               BUY_YES Q4 drift=[+0.57,+2.80%/h] → 33% WR ❌ (reversión)
+# 0.55%/h captura el Q4 problemático; antes era 0.70 y perdía ese rango.
+REGIME_THRESHOLD = 0.55  # %/h  (bajado de 0.70 el 2026-06-25)
 
 KELLY_COMPUESTO_BOOST = 1.5
 KELLY_COMPUESTO_MAX   = 2.00
@@ -1087,6 +1088,10 @@ def s_price_target_gbm(market, ctx):
 # Horas UTC con edge negativo confirmado en ORDER_FLOW_5M (n≥20, IC≤-0.10)
 ORDER_FLOW_BLACKLIST_HOURS = {22}  # 22:xx UTC: IC=-0.115, n=37
 
+# Pares con IC negativo dentro del sweet spot [0.38-0.46] (2026-06-25, n≥34):
+# ETH: n=71, IC=-0.007; BNB: n=34, IC=-0.028 — flujo Binance ya priceado en estos pares.
+ORDER_FLOW_PAIR_BLACKLIST = {'ETH', 'BNB'}
+
 
 def s_order_flow_5m(market, ctx):
     """
@@ -1115,6 +1120,8 @@ def s_order_flow_5m(market, ctx):
 
     activo = identificar_activo(question)
     if not activo or activo not in BINANCE_SYMBOLS:
+        return None
+    if activo in ORDER_FLOW_PAIR_BLACKLIST:
         return None
 
     klines = ctx.get("klines_raw", {}).get(activo, [])
