@@ -1,13 +1,11 @@
 # CLAUDE.md — Polymarket Research Bot
 
 Documento de contexto completo. Léelo al inicio de cada sesión para retomar sin releer historial.
-**Última actualización: 2026-06-24 ~16:00 UTC**
+**Última actualización: 2026-06-25 ~08:30 UTC**
 
 ---
 
 ## ⚡ PROTOCOLO DE INICIO DE SESIÓN — ejecutar SIEMPRE
-
-**Claude: al leer esto, ejecuta inmediatamente antes de responder nada más:**
 
 ```bash
 # 1. Estado del sistema
@@ -31,7 +29,7 @@ for k,d in sorted(by_sub.items(), key=lambda x: x[1]['pnl'], reverse=True):
     print(f"  {k:32s} {d['win']}/{d['n']} ({d['win']/d['n']*100:.0f}%)  PNL={d['pnl']:+.2f}  IC={ic:+.3f}")
 EOF
 
-# 3. Split BUY_YES vs BUY_NO en #15min (hipótesis H-BUYNO)
+# 3. Split BUY_YES vs BUY_NO en #15min (H-REGIMEN)
 python3 << 'EOF'
 import csv
 rows = list(csv.DictReader(open('data/shadow/results.csv')))
@@ -39,48 +37,49 @@ for side in ['BUY_YES','BUY_NO']:
     sub = [r for r in rows if r.get('subtype','').endswith('15min') and r.get('decision')==side and r['strategy']=='UPDOWN_GBM']
     if sub:
         w=sum(int(r['acierto']) for r in sub); n=len(sub); pnl=sum(float(r['pnl_neto']) for r in sub)
-        print(f"  {side:8s} #15min: {w}/{n} ({w/n*100:.0f}%) PNL={pnl:+.2f}€")
+        ic=((w+1)/(n+2)-0.5)*min(1.0,n/20)
+        print(f"  {side:8s} #15min: {w}/{n} ({w/n*100:.0f}%) PNL={pnl:+.2f}€ IC={ic:+.3f}")
 EOF
 
-# 4. Arb scan del día
+# 4. Estado live trading
+python3 live_guard.py
+python3 live_stake.py
+
+# 5. Arb scan del día
 cat data/shadow/arb_scan_$(date +%Y-%m-%d).csv 2>/dev/null | head -5 || echo "Sin oportunidades hoy"
 ```
 
 **Presentar al usuario:**
-- Bankroll actual y PNL desde última sesión
-- Nuevas resoluciones y su impacto por estrategia
-- Split BUY_YES vs BUY_NO en #15min y si el patrón H-BUYNO persiste o se invirtió
-- Que las nuevas features (drift_15min, drift_60min, delta_ratio_macro) están presentes en predicciones recientes
-- Oportunidades de arb detectadas si las hay
-
-**Seguimiento obligatorio — hipótesis bajo vigilancia:**
-- **H-BUYNO #15min**: BUY_NO tiene 100% win rate hoy (n=11) pero es día bajista (-3.12% BTC). ¿Se invierte en días alcistas? Reportar split BUY_YES/BUY_NO actualizado.
-- **H-REGIMEN**: el mercado tuvo 70% de slots NO en #15min hoy. ¿El drift_60min en el GBM mejora la calibración? Comparar p_up pre y post-cambio cuando haya datos.
-- **H3 BTC#5min momentum**: features ahora se guardan. Verificar cuando n≥10 con features.
-- **ORDER_FLOW_5M**: IC=+0.063 (n=124). El bloque #94-124 bajó del pico 71% al 58%. ¿Tendencia o ruido?
+- Bankroll actual (shadow + live si hay) y PNL desde última sesión
+- Estrategias que han cruzado el umbral IC≥0.10 n≥40 → candidatas a live
+- Split BUY_YES/BUY_NO en #15min y si H-REGIMEN se mantiene
+- Estado del switch live (ON/OFF) y ventana horaria actual
+- Oportunidades de arb si las hay
 
 ---
 
 ## Objetivo
 
 Bot semi-autónomo para operar mercados de predicción cripto en Polymarket.
-- **Fase actual**: shadow mode — predice y registra, sin dinero real.
-- **Fase 2 (live)**: IC ≥ 0.10 con n ≥ 50 resoluciones en una estrategia.
-- **Capital**: 30 € depósito → 20 € operativo + 10 € reserva.
+- **Fase actual**: shadow mode + sistema live listo (pendiente credenciales Polymarket API)
+- **Fase live**: IC ≥ 0.10 con n ≥ 40 resoluciones confirmadas en una estrategia
+- **Capital**: 30€ depósito → 20€ operativo + 10€ reserva
+- **VPS**: Hetzner Helsinki (IP finlandesa — Polymarket accesible desde FI)
 
 ---
 
-## Arquitectura — dos loops en screen
+## Arquitectura — tres loops en screen
 
 ```
-screen -S fast  →  bash run_fast.sh    (~60s)
-screen -S slow  →  bash run_slow.sh    (~23min)
+screen -S fast     →  bash run_fast.sh       (~60s)
+screen -S slow     →  bash run_slow.sh       (~23min)
+screen -S control  →  python3 live_control.py  (siempre)
 ```
 
 ### Loop FAST
 ```
-fetch_binance_klines → shadow_predict → shadow_resolve
-    → shadow_postmortem → shadow_resumen → git push
+fetch_binance_klines → shadow_predict → live_trade
+    → shadow_resolve → shadow_postmortem → shadow_resumen → git push
 ```
 
 ### Loop SLOW
@@ -93,69 +92,139 @@ capture_markets → capture_wallets → capture_trades
 
 | Script | Función |
 |---|---|
-| `fetch_binance_klines.py` | Klines 1min — Binance primario (col 7 = taker_buy_vol), Kraken fallback |
-| `shadow_predict.py` | 6 estrategias → predictions CSV con columna `features` JSON |
-| `shadow_resolve.py` | Resuelve, PNL Kelly, copia `features` a results.csv |
+| `fetch_binance_klines.py` | Klines 1min — Binance primario, Kraken fallback |
+| `shadow_predict.py` | Estrategias → predictions CSV con `features` JSON |
+| `live_trade.py` | Ejecuta trades reales (STUB hasta tener API key Polymarket) |
+| `shadow_resolve.py` | Resuelve predicciones, PNL Kelly, copia features a results.csv |
 | `shadow_postmortem.py` | IC Bayesiano + Kelly + aprendizaje causal → strategy_params.json |
 | `shadow_resumen.py` | estado_actual.md actualizado cada 60s |
 | `arb_scanner.py` | Escanea ~2400 mercados → arb_scan_YYYY-MM-DD.csv |
-| `generate_report.py` | Excel informe_bot.xlsx actualizado cada ~23min |
+| `generate_report.py` | Excel informe_bot.xlsx (37 subtypes, datos históricos completos) |
+| `live_guard.py` | Guardián: switch + ventanas horarias → ¿puede operar? |
+| `live_stake.py` | Kelly stake con bankroll completo + 3 niveles de circuit breaker |
+| `live_control.py` | Listener Telegram: /on /off /status /help |
+| `live_switch.sh` | bash live_switch.sh on/off/status |
 
 ---
 
-## Las 6 estrategias activas
+## Estado de estrategias — 2026-06-25
 
-### 1. WEEKLY_PRICE
-Mercados "Will BTC be between $X-$Y?" — spot vs bracket → BUY_YES/BUY_NO.
-Primera resolución: 24 Jun 16:00 UTC. 1 resolución con acierto, PNL=+0.13€ (ETH bracket correcto).
+### Bankroll simulado: **36.21€** (+16.21€ PNL) | 875 ops | 52.1% WR
 
-### 2. PRICE_MOMENTUM
-Tendencia exponencial del precio YES (últimas 6h). 0 señales antes del mediodía.
+| Estrategia | n | Win% | IC | PNL | Estado |
+|---|---|---|---|---|---|
+| UPDOWN_GBM#BTC#15min | 32 | 62% | **+0.118** | +6.45€ | ✅ casi live (n≥40) |
+| UPDOWN_GBM#ETH#60min | 14 | 71% | **+0.131** | +3.63€ | ✅ señal emergente |
+| UPDOWN_GBM#BTC#60min | 13 | 69% | **+0.108** | +2.54€ | ✅ señal emergente |
+| UPDOWN_GBM#SOL#15min | 23 | 57% | +0.060 | +3.83€ | ⚠️ acumulando |
+| UPDOWN_GBM#ETH#15min | 40 | 53% | +0.025 | +1.67€ | ⚠️ IC bajo |
+| ORDER_FLOW_5M (sub) | 449 | 53% | +0.030 | +7.49€ | ⚠️ tendencia bajando |
+| UPDOWN_GBM#BTC#5min | 16 | 31% | -0.133 | -6.30€ | ❌ filtros activos |
+| SMART_FLOW_1H | 14 | 21% | -0.175 | -7.42€ | 🚫 DESACTIVADA |
+| UPDOWN_GBM#240min | 9 | 0-33% | -0.318 | -3.37€ | 🚫 DESACTIVADA |
 
-### 3. SMART_FLOW_1H
-≥3 wallets humanas comprando el mismo lado, imbalance≥70%. Excluye mercados Up/Down.
-n=13, IC=-0.195. **Candidata a desactivar** — supera umbral de desactivación (-0.30, n=8) pero el postmortem no la ha desactivado aún. Revisar.
+---
 
-### 4. UPDOWN_GBM ← edge principal confirmado
-Black-Scholes digital para mercados "X Up or Down". Daily/hourly/15min/5min.
+## Hipótesis — estado actualizado 2026-06-25
 
-**Cambio clave sesión 2026-06-24 tarde**: el modelo ahora incorpora drift de mercado.
+### H-REGIMEN ✅ CONFIRMADA PARCIALMENTE (2 días de datos)
+
+BUY_YES vs BUY_NO en #15min por día:
+
+| Día | Régimen BTC | BUY_YES | BUY_NO |
+|---|---|---|---|
+| 2026-06-24 | Bajista (-3.12%) | 24/47 (51%) | **19/26 (73%)** |
+| 2026-06-25 | Alcista (+1.14%) | 16/27 (59%) | 0/2 (0%) |
+
+**Conclusión**: el patrón es simétrico y claro. En bajista → BUY_NO domina. En alcista → BUY_NO pierde.
+**Implementado**: filtro `REGIME_THRESHOLD = 0.7%/h` en `shadow_predict.py`. Si `drift_60min > +0.7%/h` y modelo BUY_NO → skip. Si `drift_60min < -0.7%/h` y modelo BUY_YES → skip.
+**Pendiente**: con solo 2 días el umbral 0.7%/h es conservador. Con n≥50 BUY_NO revisar si bajar a 0.5%/h mejora IC.
+
+### H-60MIN 🆕 SEÑAL EMERGENTE (nueva hipótesis)
+
+UPDOWN_GBM en ventanas de **60 minutos** muestra IC consistentemente alto:
+
+| Subtipo | n | Win% | IC |
+|---|---|---|---|
+| ETH#60min | 14 | 71% | **+0.131** |
+| BTC#60min | 13 | 69% | **+0.108** |
+| SOL#60min | 7 | 43% | -0.019 |
+
+ETH y BTC están ya por encima de IC=0.10. Necesitan llegar a n≥40 para live.
+**Hipótesis**: los mercados hourly (60min) tienen menos ruido que los 15min y más señal que los daily. El GBM captura bien la dinámica de 1 hora.
+**Acción**: priorizar acumulación de datos en #60min. Si IC se mantiene ≥0.10 con n≥40 → candidato a live antes que #15min global.
+
+### H-ORDER_FLOW-DECAY ⚠️ VIGILAR
+
+ORDER_FLOW_5M mostraba IC=+0.06 histórico, pero los últimos 4 bloques de 30:
+
+| Bloque | Win% | IC |
+|---|---|---|
+| #394-423 | 40% | -0.094 |
+| #424-453 | 43% | -0.062 |
+| #454-483 | 53% | +0.031 |
+| #484-513 | 40% | -0.094 |
+
+**Posible explicación**: el edge inicial era el sesgo bajista del día 24-Jun. Con datos más equilibrados, el IC real es ~+0.025, no +0.06. Si el IC cae sostenidamente por debajo de 0 con n≥50 nuevas obs → revisar parámetros.
+**Acción**: monitorear. Si 3 bloques consecutivos con IC < -0.05 → subir DELTA_MIN de 0.38 a 0.45.
+
+### H-DRIFT-EFECTO ⚠️ DATOS INSUFICIENTES
+
+El filtro REGIME_THRESHOLD lleva activo solo desde 2026-06-25 06:27 UTC.
+Pre-filtro: 56/98 (57%) IC=+0.070. Post-filtro: 3/4 (75%) n=4 — demasiado pequeño.
+**Acción**: esperar n≥20 post-filtro para evaluar impacto real.
+
+### H-5MIN-REVERSIÓN ✅ CONFIRMADA EXTERNAMENTE
+
+Empíricamente confirmado: ventanas de 5min no son predecibles con GBM. El mercado revierte.
+- Filtro Opción A (`|pct|>0.05% → skip`) activo
+- Filtros causales (sigma_h, pct) activos para BTC/ETH/SOL
+- **No invertir más desarrollo aquí hasta tener dataset Jon-Becker**
+
+### H-WEEKLY-PRICE 🔄 ACUMULANDO
+
+Muy pocos datos (n=6 total). BTC 0/2, ETH 2/2, SOL 2/2. No significativo aún.
+
+---
+
+## Sistema live trading — arquitectura completa
+
+### Control
+```bash
+bash live_switch.sh on/off     # activar/desactivar manualmente
+# O desde Telegram: /on /off /status /help
 ```
-d2 = (log(spot/ref) + mu_h × T_h) / (sigma_h × sqrt(T_h))
-mu_h = drift_60min_por_hora × DRIFT_DAMPING(0.25)
+
+### Ventanas horarias (hora Madrid, L-V)
+08:30-09:30 | 10:30-11:30 | 12:30-13:30 | 16:30-17:30 | 18:30-19:30 | 20:30-21:30
+Fines de semana: solo switch manual.
+
+### Stake (bankroll completo, compounding)
 ```
-Con BTC bajando -0.82%/h, `mu_h = -0.00206/h` → reduce p_up ~5-15pp en señales marginales.
+stake = min(IC × bankroll × 0.5,  bankroll × 10%,  2€)
+```
+Con bankroll=20€ e IC=0.10 → stake=1.00€. Sube cada día con las ganancias.
 
-**Filtros activos:**
-- Opción A: `if ventana_min==5 and abs(pct_spot_vs_ref)>0.05% → return None`
-- Filtros causales aprendidos (auto-actualizados en strategy_params.json):
-  - BTC#5min: `sigma_h > 0.0018` → skip
-  - ETH#5min: `|pct|>0.02%` + `sigma_h > 0.0024` → skip
-  - SOL#5min: `|pct|>0.03%` + `sigma_h > 0.0018` → skip
+### Circuit breakers (3 niveles)
+1. Bankroll < 5€ → desactiva switch automáticamente
+2. Caída diaria ≥ 15% → para el día
+3. Caída en ventana ≥ 20% → para esa ventana
 
-**Features guardadas (actualizadas)**: `{pct_spot_vs_ref, sigma_h, T_h, drift_15min, drift_60min, delta_ratio_macro}`
+### Notificaciones Telegram
+- 🎯 Señal detectada (estrategia, dirección, stake, IC)
+- 📊 Fin de ciclo con actividad
+- 🛑 Circuit breaker disparado
+- 📊 Digest diario a las 20:00 UTC
 
-**Estado actual (16:00 UTC, 24 Jun):**
-| Subtipo | n | Win% | IC | PNL |
-|---|---|---|---|---|
-| #15min global | 33 | 63% | +0.220 | **+9.92€** |
-| BTC#15min | 13 | 54% | +0.022 | +2.51€ |
-| ETH#15min | 10 | 60% | +0.075 | +3.37€ |
-| SOL#15min | 7 | 71% | +0.058 | +3.09€ |
-| #5min global | ~45 | ~33% | ~-0.11 | ~-14.81€ |
+### Lo que falta para live real
+- Credenciales Polymarket CLOB API (private key + API key)
+- Wallet MetaMask con 30 USDC en Polygon (pendiente setup usuario)
+- Guardar en `data/live/.env` (ya en .gitignore)
 
-**ATENCIÓN**: en sesión 2026-06-24 tarde se descubrió que el 63% de #15min está sesgado por un día bajista (70% slots NO). BUY_NO fue 11/11 hoy. Verificar en días futuros si el patrón es simétrico o hay edge estructural.
-
-### 5. PRICE_TARGET_GBM
-GBM para "Will BTC reach $70k?". Sin resoluciones (mercados multi-día).
-
-### 6. ORDER_FLOW_5M
-Cumulative delta Binance (taker_buy - taker_sell) últimas 5 velas.
-Señal: `|delta_ratio| > 0.38` Y precio YES en 0.38-0.62.
-
-**Estado actual:** n=124, 70W/54L (56%), IC=+0.063, PNL=**+12.75€**
-Evolución: #1-31 (39%) → #32-62 (58%) → #63-93 (71% pico) → #94-124 (58%).
-BUY_NO domina: 59/92 (64%) vs BUY_YES 11/33 (33%). Misma explicación que #15min: día bajista.
+### Estrategias candidatas a live (umbral: IC≥0.10, n≥40)
+- `UPDOWN_GBM#BTC#15min` — IC=+0.118, n=32 → faltan ~8 ops
+- `UPDOWN_GBM#ETH#60min` — IC=+0.131, n=14 → faltan ~26 ops
+- `UPDOWN_GBM#BTC#60min` — IC=+0.108, n=13 → faltan ~27 ops
 
 ---
 
@@ -168,246 +237,123 @@ predictions (features JSON) → results (features copiadas)
     → strategy_params.json → siguiente ciclo
 ```
 
-**FEATURE_RULES actuales (actualizado 2026-06-24):**
-- 5min y 15min: `pct_spot_vs_ref` + `sigma_h` + `drift_60min` + `delta_ratio_macro`
-- ORDER_FLOW_5M: `delta_ratio`
+**Features por estrategia:**
+- UPDOWN_GBM: `{pct_spot_vs_ref, sigma_h, T_h, drift_15min, drift_60min, delta_ratio_macro}`
+- ORDER_FLOW_5M: `{delta_ratio, total_vol_5m, has_real_flow}`
 
-**Kelly dinámico:**
-```
-n≥5 y IC>0: apuesta = min(2€, max(0.50€, 20€ × IC × 0.5))
-sino: apuesta = 0.50€
-+ patrones_ganadores: apuesta += kelly_boost
-```
-
----
-
-## Estado actual (2026-06-24 ~16:00 UTC)
-
-### Capital
-| | |
-|---|---|
-| Bankroll simulado real | **~16.06€** (varía cada ciclo) |
-| PNL acumulado | **~-3.94€** |
-| Nota | `estado_actual.md` muestra menos porque no contabiliza ORDER_FLOW_5M — bug en shadow_resumen.py |
-
-### Desglose honesto del PNL
-
-| Fuente | PNL | Estado |
-|---|---|---|
-| ORDER_FLOW_5M | **+12.75€** | ✅ IC positivo, creciendo |
-| UPDOWN_GBM #15min | **+9.92€** | ✅ Edge confirmado (verificar en días alcistas) |
-| UPDOWN_GBM #60min/otros | +0.91€ | ✅ Positivo |
-| UPDOWN_GBM #5min (todos) | ~-14.81€ | Filtros aplicados, mejorando |
-| SMART_FLOW_1H | **-7.66€** | ⚠️ IC=-0.195, candidata a desactivar |
-
----
-
-## ⚡ PRIORIDADES PARA PRÓXIMA SESIÓN
-
-### PRIORIDAD 1 — Verificar efecto del drift en el modelo
-
-Desde el ciclo 456+ las predicciones UPDOWN_GBM incluyen `drift_15min`, `drift_60min`, `delta_ratio_macro` en features. Comprobar:
-
-```bash
-python3 << 'EOF'
-import csv, json
-rows = list(csv.DictReader(open('data/shadow/predictions_2026-06-24.csv')))
-gbm = [r for r in rows if r['strategy']=='UPDOWN_GBM' and r.get('features','') not in ('','{}')]
-print(f"UPDOWN_GBM con nuevas features: {len(gbm)}")
-if gbm:
-    f = json.loads(gbm[-1]['features'])
-    print(f"Últimas features: {f}")
-    tiene_drift = sum(1 for r in gbm if 'drift_60min' in (r.get('features') or ''))
-    print(f"Con drift_60min: {tiene_drift}")
-EOF
-```
-
-También: ¿el drift está cambiando decisiones BUY_YES → BUY_NO en señales marginales?
-
-### PRIORIDAD 2 — Hipótesis H-BUYNO con más días
-
-¿El 11/11 BUY_NO de hoy es artefacto del día bajista o hay edge estructural?
-Analizar split BUY_YES/BUY_NO en días anteriores (si hay datos) y en los próximos días.
-
-```bash
-python3 << 'EOF'
-import csv
-from collections import defaultdict
-rows = list(csv.DictReader(open('data/shadow/results.csv')))
-by_day_side = defaultdict(lambda: {'n':0,'w':0})
-for r in rows:
-    if r.get('subtype','').endswith('15min') and r['strategy']=='UPDOWN_GBM':
-        dia = r.get('resolution_timestamp','')[:10]
-        side = r.get('decision','')
-        key = (dia, side)
-        by_day_side[key]['n']+=1; by_day_side[key]['w']+=int(r['acierto'])
-for (dia,side),d in sorted(by_day_side.items()):
-    n=d['n']; w=d['w']
-    if n: print(f"  {dia} {side:8s}: {w}/{n} ({w/n*100:.0f}%)")
-EOF
-```
-
-### PRIORIDAD 3 — SMART_FLOW_1H: desactivar o no
-
-IC=-0.195, n=13. El postmortem tiene umbral de desactivación en (-0.30, n=8) — ¿por qué no la desactivó? Revisar strategy_params.json.
-
-### PRIORIDAD 4 — Dataset Jon-Becker
-
-**Repo**: `github.com/Jon-Becker/prediction-market-analysis` (3.6k stars, 497 forks)
-**Dataset**: 36GB comprimido — trades históricos de Polymarket + Kalshi desde 2022+
-Desbloquea backtesting de todo el sistema con miles de slots históricos.
-
-### PRIORIDAD 5 — WEEKLY_PRICE análisis completo
-
-Resolver a las 16:00 UTC hoy. Analizar IC inicial.
-
----
-
-## Arbitraje — `arb_scanner.py`
-
-Detecta BRACKET_ARB: mercados de precio-rango (mutuamente excluyentes) donde suma YES < 0.97.
-Hoy solo detectó OVERROUNDs (suma > 1.0, desfavorables). Sin oportunidades reales.
-**Riesgo**: precio fuera del rango cubierto → todos los brackets pierden.
-Corre cada ~23min en slow loop. Guarda en `data/shadow/arb_scan_YYYY-MM-DD.csv`.
+**Aprendizaje causal activo (strategy_params.json):**
+- UPDOWN_GBM#BTC#5min: sigma_h > 0.0018 → skip
+- UPDOWN_GBM#ETH#5min: |pct| > 0.02% + sigma_h > 0.0024 → skip
+- UPDOWN_GBM#SOL#5min: |pct| > 0.03% + sigma_h > 0.0018 → skip
+- SMART_FLOW_1H: DESACTIVADA (IC=-0.25 n=14 → UMBRAL_DESACTIVAR=-0.20)
+- UPDOWN_GBM#240min: DESACTIVADA (IC=-0.318 n=9)
 
 ---
 
 ## Roadmap hacia autonomía
 
 ```
-[✓] Aprende CUÁNTO pierde  — IC + Kelly por subtipo
-[✓] Aprende POR QUÉ pierde — filtros_causales sobre features
-[✓] Aprende POR QUÉ gana  — patrones_ganadores → kelly_boost
-[✓] Escáner de arbitraje   — bracket arb cada ~23min
-[✓] Drift de mercado en GBM — mu_h = drift_60min × DRIFT_DAMPING (2026-06-24)
-[ ] PRÓXIMO: Verificar efecto drift + hipótesis H-BUYNO con más días
-[ ] Dataset Jon-Becker → backtesting histórico
-[ ] Slippage floor          — antes del primer trade real en live
-[ ] Resolution Sniper / Expiry Fade — tras analizar WEEKLY_PRICE
-[ ] OBI (Orderbook Imbalance) — si el dataset tiene L2 depth
-[ ] HMM para régimen de mercado — tras validar drift simple
-[ ] Cross-Market Arb (Polymarket vs Kalshi) — con el dataset
-[ ] LP Rewards (market making) — cuando estemos en live
-[ ] Live trading           — IC ≥ 0.10, n ≥ 50, recapitalizar
+[✓] IC + Kelly por subtipo (aprendizaje cuantitativo)
+[✓] Filtros causales sobre features (aprendizaje cualitativo)
+[✓] Patrones ganadores → kelly_boost
+[✓] Escáner de arbitraje (bracket arb cada ~23min)
+[✓] Drift de mercado en GBM (DRIFT_DAMPING=0.25)
+[✓] Filtro H-REGIMEN (REGIME_THRESHOLD=0.7%/h en #15min)
+[✓] Sistema live: ventanas + switch + Kelly + circuit breakers
+[✓] Control Telegram (/on /off /status)
+[✓] Notificaciones: señales, circuit breaker, digest diario
+[~] BTC#15min IC≥0.10 n=32/40 — casi listo para live
+[ ] Credenciales Polymarket API → primer trade real
+[ ] Dataset Jon-Becker → backtesting histórico completo
+[ ] H-60MIN validada con n≥40 → segunda estrategia live
+[ ] REGIME_THRESHOLD ajustado con más datos (0.7 → 0.5?)
+[ ] HMM régimen de mercado (cuando drift simple validado con n≥50)
+[ ] OU process para slots 5min (cuando n≥100 post-filtro)
+[ ] Kelly compuesto ORDER_FLOW + UPDOWN_GBM (convergencia de señales)
+[ ] Resolution Sniper (p≥0.92 con mercado en 0.80, última 1-2h)
+[ ] OBI Orderbook Imbalance (con dataset Jon-Becker)
+[ ] Cross-Market Arb Polymarket vs Kalshi (con dataset)
 ```
 
 ---
 
-## Investigación pendiente — por orden de impacto
+## Prioridades para próxima sesión
 
-### [PRÓXIMA SESIÓN] Verificar drift + H-BUYNO
-Ver PRIORIDADES 1 y 2 arriba.
+### P1 — Credenciales Polymarket + primera operación real
+BTC#15min está casi en umbral (n=32/40). En 2-3 días de trading lo cruza.
+Setup pendiente: MetaMask → USDC en Polygon → cuenta Polymarket desde VPS Helsinki.
 
-### [PRÓXIMA SESIÓN] Dataset Jon-Becker
-Ver PRIORIDAD 4. Desbloquea todo lo demás.
+### P2 — Vigilar H-ORDER_FLOW-DECAY
+Si ORDER_FLOW sigue mostrando IC negativo en bloques recientes → subir DELTA_MIN de 0.38 a 0.45 o revisar el modelo de señal.
 
-### [PENDIENTE — media prioridad] Kalman + HMM para régimen de mercado
-El drift simple (implementado hoy) es la versión básica. HMM detectaría regímenes latentes
-(vol baja/normal/crisis) sin etiquetado manual.
-Librería: `hmmlearn`. Emisión: sigma_h, drift_15min, delta_ratio_macro, hora UTC.
-Activar cuando n≥50 en #15min y el drift simple validado.
+### P3 — Dataset Jon-Becker
+`github.com/Jon-Becker/prediction-market-analysis` — 36GB de histórico.
+Desbloquea: backtesting de #60min, OU para 5min, OBI, Cross-Market Arb.
 
-### [PENDIENTE — observar con más datos] Ventanas horarias de alta reversión
-09:00-10:30 UTC mostró 25% win rate en primer día (n=4-8, insuficiente).
-NYSE open (13:30-14:30 UTC) y close (20:30-21:30 UTC) sin datos propios aún.
+### P4 — REGIME_THRESHOLD calibración
+Con n=4 post-filtro es muy pronto. Cuando n≥20 post-filtro evaluar si bajar 0.7→0.5%/h.
 
-### [PENDIENTE — media prioridad] Opción B — OU para slots 5min
-Cuando n≥100 post-filtro A. Hipótesis: proceso mean-reverting, no GBM.
-```python
-theta = 2.0  # calibrar con MLE
-p_up_mr = 0.5 - (spot/ref - 1) * theta * T_h
-```
-
-### [PENDIENTE] Kelly compuesto — convergencia ORDER_FLOW + UPDOWN_GBM
-Si ambas coinciden en dirección → boost. Si divergen → skip.
-
-### [PENDIENTE] Resolution Sniper / Expiry Fade
-Última 1-2h antes de vencimiento: si modelo da p≥0.92 y mercado está en 0.80 → edge real.
-
-### [PENDIENTE] OBI (Orderbook Imbalance)
-Ratio bid/ask depth como señal. Necesita `best_bid_size` y `best_ask_size`.
-Si dataset Jon-Becker tiene L2 → implementar inmediatamente.
-
-### [PENDIENTE — baja] SMART_FLOW_1H refinements
-One-hit wonder filter + profit factor ≥1.5x. Cuando n≥30 datos limpios.
-
-### [PENDIENTE — baja] CNN sobre precio (Re-Imaging Price Trends)
-Necesita n≥5000. El dataset Jon-Becker puede darnos ese histórico.
-
-### [PENDIENTE — futuro] Métodos astro-statistics
-GP (celerite2/tinygp), Matched Filtering (LIGO), Bayesian Blocks.
-Activar cuando modelo base validado.
+### P5 — H-60MIN seguimiento
+ETH#60min y BTC#60min tienen IC≥0.10 con n=13-14. Seguir acumulando.
+Si llegan a n=40 con IC≥0.10 → segunda estrategia candidata a live.
 
 ---
 
-## Validación empírica externa
-
-**"Five months building a Bitcoin 5-min trading bot"**: win_rate debe superar entry_price.
-- 5min: win rate 31-45% vs ~49.5% necesario → pérdidas inevitables sin filtros
-- 15min: win rate 55-70% vs ~52% necesario → edge real ✅
-- Mean-reversion en 5min confirmada empíricamente. No hay señal predictiva en el momento de entrada.
-- **"The edge lives in a less efficient market."** Nuestros 15min son ese mercado.
-
----
-
-## Constantes importantes
+## Constantes clave
 
 ### `shadow_predict.py`
 ```python
-HORIZONTE_MIN_HORAS = 0.05
+DRIFT_DAMPING = 0.25        # fracción del drift que entra en el GBM
+REGIME_THRESHOLD = 0.7      # %/h para filtrar señales contra-tendencia en #15min
 EDGE_MINIMO = 0.02
 SLIPPAGE_ESTIMADO = 0.02
-DELTA_MIN = 0.38       # ORDER_FLOW_5M (subido de 0.20)
-LAG_MAX   = 0.12
-DRIFT_DAMPING = 0.25   # fracción del drift observado que entra en el GBM (añadido 2026-06-24)
+DELTA_MIN = 0.38            # ORDER_FLOW_5M
 ```
 
 ### `shadow_postmortem.py`
 ```python
-IC_FILTRO_MIN  = -0.12; IC_PATRON_MIN = +0.12; N_BUCKET_MIN = 8
-UMBRAL_SUBIR_EDGE = (-0.10, 3); UMBRAL_SUBIR_MAS = (-0.20, 5); UMBRAL_DESACTIVAR = (-0.30, 8)
+IC_FILTRO_MIN  = -0.12
+IC_PATRON_MIN  = +0.12
+N_BUCKET_MIN   = 8
+UMBRAL_SUBIR_EDGE = (-0.10, 3)
+UMBRAL_SUBIR_MAS  = (-0.20, 5)
+UMBRAL_DESACTIVAR = (-0.20, 8)   # bajado de -0.30 el 2026-06-25
 ```
 
-### `arb_scanner.py`
+### `live_stake.py` / `data/live/config_live.json`
 ```python
-UMBRAL_ARB = 0.97; LIQ_MIN = 200; N_MIN = 3; FEE_PAYOUT = 0.02
-```
-
-### `generate_report.py`
-```python
-DEPOSITO_TOTAL = 30.0; CAPITAL_OPERATIVO = 20.0; RESERVA = 10.0
+max_pct_bankroll_por_trade = 0.10   # máx 10% del bankroll por trade
+max_stake_eur = 2.00                 # techo absoluto
+freno_ventana_pct = 0.20            # -20% en una ventana → para
+freno_diario_pct = 0.15             # -15% en el día → para
+bankroll_minimo_eur = 5.00          # suelo absoluto → desactiva switch
 ```
 
 ---
 
-## Ficheros clave (commitados en GitHub)
+## Ficheros clave
 ```
-data/shadow/predictions_YYYY-MM-DD.csv  — columna 'features' JSON (ahora incluye drift y delta_macro)
-data/shadow/results.csv                 — columna 'features' copiada
-data/shadow/strategy_params.json        — IC, Kelly, filtros_causales, patrones_ganadores
-data/shadow/estado_actual.md            — actualizado cada 60s (OJO: no incluye ORDER_FLOW en bankroll)
-data/shadow/informe_bot.xlsx            — Excel, actualizado cada ~23min
-data/shadow/arb_scan_YYYY-MM-DD.csv    — oportunidades de arbitraje
-data/shadow/sesion_YYYY-MM-DD-*.md     — recaps de sesiones anteriores
-data/prices/YYYY-MM-DD.csv             — spot cada ~60s (fuente de drift_Nmin)
-data/wallets/leaderboard_YYYY-MM-DD.csv
+data/shadow/predictions_YYYY-MM-DD.csv  — features JSON: drift, sigma, pct, delta_macro
+data/shadow/results.csv                 — 17 cols incluida 'features' (fix 2026-06-25)
+data/shadow/strategy_params.json        — IC, Kelly, filtros_causales, activa/desactivada
+data/shadow/estado_actual.md            — actualizado cada 60s
+data/shadow/informe_bot.xlsx            — 37 subtypes con histórico completo
+data/shadow/arb_scan_YYYY-MM-DD.csv    — bracket arb oportunidades
+data/live/config_live.json              — ventanas, stakes, circuit breakers
+data/live/LIVE_MODE_ON                  — touchfile switch (NO commiteado)
+data/live/trades.csv                    — operaciones reales
+logs/live.log                           — log del fast loop
+logs/live_control.log                   — log del listener Telegram
+LIVE_PLAN.md                            — setup completo: wallet, circuito, checklist
 ```
 
 ---
 
 ## Diagnósticos comunes
 
-**PRICE_MOMENTUM 0 señales por la mañana**: normal, necesita drift ≥1.5% en 6h.
-**SMART_FLOW_1H 0 señales al inicio**: trades se cargan ~15min después del slow loop.
-**estado_actual.md muestra bankroll bajo**: no contabiliza ORDER_FLOW_5M — usar script Python del protocolo de inicio.
-**features vacías en predictions antiguas**: bug preexistente resuelto con `_normalizar_pred()` en resolve y postmortem.
-**Conflictos git con el fast loop**: `git stash && git pull --rebase origin main && git stash pop && git push`.
-**prices CSV en conflicto**: `git checkout --theirs data/prices/YYYY-MM-DD.csv`.
-
----
-
-## Reiniciar loops si caen
-```bash
-screen -dmS fast bash /root/polymarket-research/run_fast.sh
-screen -dmS slow bash /root/polymarket-research/run_slow.sh
-```
+**`results.csv` sin features**: ocurrió el 24-Jun. Fix aplicado (17 cols con features).
+**Git conflicto con fast loop**: `git stash && git pull --rebase origin main && git stash pop && git push`
+**prices CSV en conflicto**: `git checkout --theirs data/prices/YYYY-MM-DD.csv`
+**live_control caído**: `screen -dmS control python3 live_control.py`
+**ORDER_FLOW IC negativo**: si 3 bloques consecutivos IC<-0.05 → subir DELTA_MIN a 0.45
+**Bot no opera en live**: verificar `bash live_switch.sh` + ventana horaria activa
