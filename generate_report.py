@@ -56,7 +56,7 @@ LIVE_BANKROLL_COLS = ["fecha","tipo","importe_eur","balance_eur","notas"]
 DEPOSITO_TOTAL          = 30.0   # depósito real en Polymarket
 CAPITAL_OPERATIVO       = 20.0   # capital que puede usar el bot
 RESERVA                 = 10.0   # colchón intocable
-APUESTA_SHADOW          = 0.90
+APUESTA_SHADOW          = 0.90   # apuesta legacy (no usada en ROI real)
 BANKROLL_INICIAL_SHADOW = CAPITAL_OPERATIVO
 
 _F = lambda hex: PatternFill("solid", fgColor=hex)
@@ -140,6 +140,93 @@ def cargar_csv(path):
         return []
     with open(path, encoding="utf-8") as f:
         return list(csv.DictReader(f))
+
+
+def cargar_strategy_params():
+    path = DIR_SHADOW / "strategy_params.json"
+    if not path.exists():
+        return {}
+    try:
+        import json
+        with open(path, encoding="utf-8") as f:
+            return json.load(f).get("estrategias", {})
+    except Exception:
+        return {}
+
+
+def _stake_real(r):
+    """Estima el stake real de una operación a partir del pnl_bruto y precio."""
+    try:
+        pnl_b  = float(r.get("pnl_bruto", 0))
+        acierto = int(r.get("acierto", 0))
+        price   = float(r.get("precio_yes_mercado", 0.5))
+        dec     = r.get("decision", "")
+        if acierto == 0:
+            return abs(pnl_b)                        # pérdida: pnl_b = -stake
+        eff = price if dec == "BUY_YES" else max(0.001, 1 - price)
+        if 0 < eff < 1:
+            return pnl_b / (1.0 / eff - 1.0)       # ganancia: pnl_b = stake*(1/p-1)
+    except Exception:
+        pass
+    return APUESTA_SHADOW
+
+
+def stats_por_subtype(resultados, strategy_params):
+    """Calcula stats completas por estrategia+subtype desde results.csv."""
+    from collections import defaultdict
+    by = defaultdict(lambda: {"n": 0, "w": 0, "pnl": 0.0, "staked": 0.0,
+                               "wins": [], "losses": []})
+    for r in resultados:
+        strat   = r.get("strategy", "")
+        subtype = r.get("subtype", "")
+        # Clave más específica disponible: UPDOWN_GBM#BTC#15min
+        if subtype:
+            key = f"{strat}#{subtype}"
+        else:
+            key = strat
+        try:
+            pnl = float(r.get("pnl_neto", 0))
+            acierto = int(r.get("acierto", 0))
+            stake = _stake_real(r)
+        except Exception:
+            continue
+        d = by[key]
+        d["n"] += 1
+        d["w"] += acierto
+        d["pnl"] += pnl
+        d["staked"] += stake
+        if acierto:
+            d["wins"].append(pnl)
+        else:
+            d["losses"].append(pnl)
+
+    rows = []
+    for key, d in sorted(by.items(), key=lambda x: x[1]["pnl"], reverse=True):
+        n = d["n"]; w = d["w"]
+        hit  = w / n if n else 0
+        ic   = ((w + 1) / (n + 2) - 0.5) * min(1.0, n / 20)
+        pnl  = d["pnl"]
+        avg_win  = sum(d["wins"])  / len(d["wins"])  if d["wins"]  else 0
+        avg_loss = sum(d["losses"])/ len(d["losses"]) if d["losses"] else 0
+        exp  = hit * avg_win + (1 - hit) * avg_loss
+        pf   = sum(d["wins"]) / abs(sum(d["losses"])) if d["losses"] else 99.0
+        sp   = strategy_params.get(key, {})
+        rows.append({
+            "key":     key,
+            "n":       n,
+            "w":       w,
+            "hit":     hit,
+            "ic":      ic,
+            "pnl":     pnl,
+            "pnl_op":  pnl / n if n else 0,
+            "exp":     exp,
+            "pf":      pf,
+            "staked":  d["staked"],
+            "activa":  sp.get("activa", True),
+            "kelly":   sp.get("apuesta_kelly", 0.5),
+            "filtros": len(sp.get("filtros_causales", [])),
+        })
+    return rows
 
 
 def cargar_shadow_abiertas():
@@ -271,7 +358,8 @@ def hoja_dashboard(wb, shadow_res, shadow_acc, live_trades, live_bankroll, shado
     n_ok_sh = sum(1 for r in shadow_res if int(r.get("acierto", 0)))
     hit_sh  = n_ok_sh / n_sh if n_sh else 0
     pnl_sh  = sum(float(r.get("pnl_neto", 0)) for r in shadow_res)
-    roi_sh  = pnl_sh / (APUESTA_SHADOW * n_sh) if n_sh else 0
+    total_staked = sum(_stake_real(r) for r in shadow_res)
+    roi_sh  = pnl_sh / total_staked if total_staked > 0 else 0
     bkr_sh  = BANKROLL_INICIAL_SHADOW + pnl_sh
     roi_deposito = pnl_sh / DEPOSITO_TOTAL  # ROI sobre el depósito total
 
@@ -810,60 +898,78 @@ def hoja_shadow_ops(wb, resultados):
 
 
 # ── HOJA 6: Shadow Estrategias ─────────────────────────────────────────────────
-def hoja_shadow_estrategias(wb, accuracy):
+def hoja_shadow_estrategias(wb, resultados, strategy_params):
     ws = wb.create_sheet("Shadow_Estrategias")
     ws.sheet_view.showGridLines = False
     ws.freeze_panes = "A2"
 
-    cols = [("Estrategia",30),("Ops",7),("Aciertos",10),("Hit Rate",11),
-            ("IC Simple",11),("IC Pearson",11),("P&L Total €",14),
-            ("P&L Medio €",14),("Edge Medio",11)]
+    cols = [
+        ("Estrategia / Subtipo", 34), ("n",  6), ("Win%", 8),
+        ("IC Bayes",  9), ("P&L Total €", 13), ("P&L / op €", 11),
+        ("Profit F.", 9), ("Kelly €",  9), ("Estado", 12), ("Filtros", 8),
+    ]
     for c, (txt, w) in enumerate(cols, 1):
         ws.column_dimensions[get_column_letter(c)].width = w
-        cell_set(ws.cell(row=1,column=c,value=txt),
+        cell_set(ws.cell(row=1, column=c, value=txt),
                  fill=FILL["header"], font=FONT["header"], align=AC)
     ws.row_dimensions[1].height = 22
 
-    for i, r in enumerate(sorted(accuracy, key=lambda r: float(r.get("pnl_total",0) or 0), reverse=True), 1):
+    rows = stats_por_subtype(resultados, strategy_params)
+
+    for i, d in enumerate(rows, 1):
         fila = i + 1
-        try: hit   = float(r.get("hit_rate",0))
-        except: hit = 0
-        try: pnl_t = float(r.get("pnl_total",0))
-        except: pnl_t = 0
-        try: pnl_m = float(r.get("pnl_medio",0))
-        except: pnl_m = 0
-        try: ic_s  = float(r.get("IC_simple",0))
-        except: ic_s = 0
-        try: ic_p  = float(r.get("IC_pearson",0))
-        except: ic_p = 0
-        try: em    = float(r.get("edge_medio",0))
-        except: em = 0
+        activa = d["activa"]
+        ic     = d["ic"]
+        hit    = d["hit"]
+        pnl    = d["pnl"]
+        pf     = d["pf"]
 
-        fv_h = FILL["verde"] if hit >= 0.5 else FILL["rojo"]
-        fn_h = FONT["verde"] if hit >= 0.5 else FONT["rojo"]
-        fv_p = FILL["verde"] if pnl_t >= 0 else FILL["rojo"]
-        fn_p = FONT["verde"] if pnl_t >= 0 else FONT["rojo"]
-        fr_b = FILL["gris"]  if i%2==0 else FILL["gris2"]
+        fv_ic  = FILL["verde"]   if ic  >= 0.05 else (FILL["amarillo"] if ic >= 0 else FILL["rojo"])
+        fn_ic  = FONT["verde"]   if ic  >= 0.05 else (FONT["bold"]     if ic >= 0 else FONT["rojo"])
+        fv_hit = FILL["verde"]   if hit >= 0.52  else (FILL["amarillo"] if hit >= 0.5 else FILL["rojo"])
+        fn_hit = FONT["verde"]   if hit >= 0.52  else (FONT["bold"]     if hit >= 0.5 else FONT["rojo"])
+        fv_pnl = FILL["verde"]   if pnl >= 0 else FILL["rojo"]
+        fn_pnl = FONT["verde"]   if pnl >= 0 else FONT["rojo"]
+        fv_pf  = FILL["verde"]   if pf  >= 1.1 else (FILL["amarillo"] if pf >= 1.0 else FILL["rojo"])
+        fv_est = FILL["verde"]   if activa else FILL["rojo"]
+        fn_est = FONT["verde"]   if activa else FONT["rojo"]
+        fr_b   = FILL["gris"]   if i % 2 == 0 else FILL["gris2"]
+        if not activa:
+            fr_b = FILL["rojo"]
 
-        for c, (val, fmt, fv, fn) in enumerate([
-            (r.get("strategy",""), None,         fr_b, FONT["bold"]),
-            (int(r.get("n_total",0)), None,       fr_b, FONT["normal"]),
-            (int(r.get("n_aciertos",0)), None,    fr_b, FONT["normal"]),
-            (hit,   '0.0%',     fv_h, fn_h),
-            (ic_s,  '+0.000',   fv_h, fn_h),
-            (ic_p,  '+0.000',   fv_h, fn_h),
-            (pnl_t, '#,##0.00 "€"', fv_p, fn_p),
-            (pnl_m, '#,##0.00 "€"', fv_p, fn_p),
-            (em,    '+0.000',   fr_b, FONT["normal"]),
-        ], 1):
-            cell_set(ws.cell(row=fila,column=c,value=val),
+        estado_txt = "✅ activa" if activa else "🚫 desact."
+        kelly_txt  = f"{d['kelly']:.2f} €"
+
+        vals_fmts_fills = [
+            (d["key"],          None,               fr_b,   FONT["bold"] if activa else FONT["rojo"]),
+            (d["n"],            None,               fr_b,   FONT["normal"]),
+            (hit,               "0.0%",             fv_hit, fn_hit),
+            (ic,                "+0.000",           fv_ic,  fn_ic),
+            (pnl,               '#,##0.00 "€"',     fv_pnl, fn_pnl),
+            (d["pnl_op"],       '#,##0.00 "€"',     fv_pnl, fn_pnl),
+            (pf if pf < 99 else "∞", "0.00",        fv_pf,  FONT["bold"]),
+            (kelly_txt,         None,               FILL["azul"], FONT["bold"]),
+            (estado_txt,        None,               fv_est, fn_est),
+            (d["filtros"] if d["filtros"] > 0 else "—", None, fr_b, FONT["gris"]),
+        ]
+
+        for c_idx, (val, fmt, fv, fn) in enumerate(vals_fmts_fills, 1):
+            cell_set(ws.cell(row=fila, column=c_idx, value=val),
                      fill=fv, font=fn,
-                     align=AL if c==1 else AC, fmt=fmt)
+                     align=AL if c_idx == 1 else AC, fmt=fmt)
         ws.row_dimensions[fila].height = 18
 
-    if not accuracy:
-        ws["A2"].value = "Sin datos de accuracy todavía (esperando primeras resoluciones)."
+    if not rows:
+        ws["A2"].value = "Sin datos todavía."
         ws["A2"].font  = Font(italic=True, color="607D8B")
+
+    fila_nota = len(rows) + 3
+    ws.merge_cells(f"A{fila_nota}:J{fila_nota}")
+    c = ws.cell(row=fila_nota, column=1,
+                value="IC Bayes = (w+1)/(n+2)-0.5 × conf(n/20) | >+0.05 = edge real | "
+                      "Filtros = reglas causales aprendidas automáticamente por el postmortem")
+    c.font = Font(italic=True, color="455A64", name="Calibri", size=9)
+    c.alignment = AL
 
 
 # ── HOJA 7: Abiertas ──────────────────────────────────────────────────────────
@@ -937,29 +1043,30 @@ def main():
 
     init_live_csvs()
 
-    shadow_res  = cargar_csv(SHADOW_RESULTS)
-    shadow_acc  = cargar_csv(SHADOW_ACCURACY)
-    shadow_perf = cargar_csv(SHADOW_PERFORMANCE)
-    shadow_ab   = cargar_shadow_abiertas()
-    live_trades = cargar_csv(LIVE_TRADES_CSV)
-    live_bkr    = cargar_csv(LIVE_BANKROLL_CSV)
-    live_ab     = [t for t in live_trades if t.get("status","") == "OPEN"]
+    shadow_res    = cargar_csv(SHADOW_RESULTS)
+    shadow_perf   = cargar_csv(SHADOW_PERFORMANCE)
+    strategy_params = cargar_strategy_params()
+    shadow_ab     = cargar_shadow_abiertas()
+    live_trades   = cargar_csv(LIVE_TRADES_CSV)
+    live_bkr      = cargar_csv(LIVE_BANKROLL_CSV)
+    live_ab       = [t for t in live_trades if t.get("status","") == "OPEN"]
 
     print(f"  Shadow resueltas:          {len(shadow_res)}")
     print(f"  Shadow abiertas:           {len(shadow_ab)}")
     print(f"  Performance estrategias:   {len(shadow_perf)}")
+    print(f"  Strategy params cargados:  {len(strategy_params)}")
     print(f"  Live operaciones:          {len(live_trades)}")
     print(f"  Live movimientos bankroll: {len(live_bkr)}")
 
     wb = openpyxl.Workbook()
     wb.remove(wb.active)
 
-    hoja_dashboard(wb, shadow_res, shadow_acc, live_trades, live_bkr, shadow_ab)
+    hoja_dashboard(wb, shadow_res, [], live_trades, live_bkr, shadow_ab)
     hoja_rendimiento(wb, shadow_perf, shadow_res)
     hoja_live_ops(wb, live_trades)
     hoja_live_bankroll(wb, live_bkr, live_trades)
     hoja_shadow_ops(wb, shadow_res)
-    hoja_shadow_estrategias(wb, shadow_acc)
+    hoja_shadow_estrategias(wb, shadow_res, strategy_params)
     hoja_abiertas(wb, shadow_ab, live_ab)
 
     wb.save(OUTPUT_XLS)
