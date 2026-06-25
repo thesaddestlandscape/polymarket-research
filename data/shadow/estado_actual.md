@@ -1,4 +1,4 @@
-# Estado del bot — 2026-06-25 14:05 UTC
+# Estado del bot — 2026-06-25 14:07 UTC
 
 ## Capital
 | | |
@@ -11,12 +11,12 @@
 | | |
 |---|---|
 | Inicio | 20.00 € |
-| Actual | **3.13 €** |
-| P&L acumulado | 🔴 **-16.87 €** |
-| ROI s/ operativo | -84.35% |
-| ROI s/ depósito | -56.24% |
-| P&L hoy (2026-06-25) | 🔴 -30.96 € |
-| Operaciones resueltas | 1078 (530 WIN / 548 LOSS) — 49.2% |
+| Actual | **3.37 €** |
+| P&L acumulado | 🔴 **-16.63 €** |
+| ROI s/ operativo | -83.14% |
+| ROI s/ depósito | -55.42% |
+| P&L hoy (2026-06-25) | 🔴 -30.72 € |
+| Operaciones resueltas | 1079 (531 WIN / 548 LOSS) — 49.2% |
 | Señales abiertas | 989 |
 
 ## Estrategias (visión global)
@@ -26,7 +26,7 @@
 | ORDER_FLOW_5M | 774 | 51.0% | +0.010 | +6.03€ | 0.50€ | ✅ activa |
 | UPDOWN_GBM | 218 | 49.5% | -0.005 | +0.90€ | 0.50€ | ⚠️ IC negativo |
 | PRICE_TARGET_GBM | 6 | 66.7% | +0.037 | -0.48€ | 0.50€ | ⏳ acumulando |
-| WEEKLY_PRICE | 8 | 62.5% | +0.040 | -1.63€ | 0.50€ | ✅ activa |
+| WEEKLY_PRICE | 9 | 66.7% | +0.061 | -1.38€ | 0.61€ | ✅ activa |
 | SMART_FLOW_1H | 15 | 20.0% | -0.199 | -7.93€ | 0.00€ | 🚫 desactivada |
 | UPDOWN_OU_5M | 57 | 26.3% | -0.229 | -13.76€ | 0.00€ | 🚫 desactivada |
 
@@ -34,11 +34,11 @@
 
 | Timestamp | Estrategia | Mercado | Resultado | PNL |
 |---|---|---|---|---|
+| 2026-06-25T14:07 | WEEKLY_PRICE#ETH | Will the price of Ethereum be between $1,700 and $… | ✅ WIN | +0.24€ |
 | 2026-06-25T14:05 | SMART_FLOW_1H#BTC | Will the price of Bitcoin be above $62,000 on June… | ❌ LOSS | -0.51€ |
 | 2026-06-25T14:05 | PRICE_TARGET_GBM#BTC#atexpiry | Will the price of Bitcoin be above $62,000 on June… | ❌ LOSS | -0.92€ |
 | 2026-06-25T14:05 | WEEKLY_PRICE#BTC | Will the price of Bitcoin be between $64,000 and $… | ✅ WIN | +0.14€ |
 | 2026-06-25T14:03 | UPDOWN_OU_5M#DOGE#5min | Dogecoin Up or Down - June 25, 9:55AM-10:00AM ET… | ❌ LOSS | -0.51€ |
-| 2026-06-25T14:03 | PRICE_TARGET_GBM#BTC#atexpiry | Will the price of Bitcoin be above $64,000 on June… | ✅ WIN | +0.17€ |
 
 ---
 *Actualizado automáticamente cada ~60s por el fast loop*
