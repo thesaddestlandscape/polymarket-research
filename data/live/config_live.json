@@ -5,11 +5,11 @@
   "ventanas_lunes_viernes": [
     {"inicio": "08:30", "fin": "09:30", "nombre": "apertura_europea"},
     {"inicio": "10:30", "fin": "11:30", "nombre": "media_manana"},
-    {"inicio": "12:30", "fin": "13:30", "nombre": "mediodia"},
     {"inicio": "16:30", "fin": "17:30", "nombre": "tarde_1"},
     {"inicio": "18:30", "fin": "19:30", "nombre": "tarde_2"},
     {"inicio": "20:30", "fin": "21:30", "nombre": "cierre"}
   ],
+  "_mediodia_eliminada": "12:30-13:30 eliminada: GBM IC=-0.154 PNL=-7.96€, OF IC=-0.033 PNL=-5.43€ — peor ventana en ambas estrategias (n≥30)",
 
   "fines_de_semana": "solo_manual",
 

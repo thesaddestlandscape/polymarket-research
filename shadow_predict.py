@@ -1088,7 +1088,11 @@ def s_price_target_gbm(market, ctx):
 # ─────────────────────────────────────────────────────────────────────────────
 
 # Horas UTC con edge negativo confirmado en ORDER_FLOW_5M (n≥20, IC≤-0.10)
-ORDER_FLOW_BLACKLIST_HOURS = {22}  # 22:xx UTC: IC=-0.115, n=37
+ORDER_FLOW_BLACKLIST_HOURS = {7, 11, 18}
+# 07:xx UTC (09:xx Madrid): IC=-0.227 n=20 PNL=-5.20€ — apertura europea, alta volatilidad espuria
+# 11:xx UTC (13:xx Madrid): IC=-0.057 n=59 PNL=-5.07€ — mediodia, señal OF no funciona
+# 18:xx UTC (20:xx Madrid): IC=-0.178 n=16 PNL=-4.15€ — cierre primera mitad
+# 22:xx UTC era el blacklist original (IC=-0.115); con n=30 actual IC=+0.031 → desbloqueado
 
 # Pares con IC negativo dentro del sweet spot [0.38-0.46] (2026-06-25, n≥34):
 # ETH: n=71, IC=-0.007; BNB: n=34, IC=-0.028 — flujo Binance ya priceado en estos pares.
