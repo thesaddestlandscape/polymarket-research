@@ -39,6 +39,48 @@ def cargar_results() -> list:
         return list(csv.DictReader(f))
 
 
+def _verificar_integridad() -> list[str]:
+    """Grader independiente: valida results.csv antes de que el postmortem lo procese."""
+    alertas = []
+    if not RESULTS_PATH.exists():
+        return ["results.csv no existe"]
+    content = RESULTS_PATH.read_text(encoding="utf-8")
+    if any(m in content for m in ["<<<<<<<", ">>>>>>>", "======="]):
+        alertas.append("CONFLICT MARKERS en results.csv — git rebase incompleto")
+    rows = list(csv.DictReader(content.splitlines()))
+    if rows:
+        if "features" not in rows[0]:
+            alertas.append("Falta columna 'features' en results.csv — fix urgente")
+        bad = sum(1 for r in rows if r.get("pnl_neto") in (None, ""))
+        if bad:
+            alertas.append(f"{bad} filas con pnl_neto inválido")
+    return alertas
+
+
+def _escribir_state(params: dict, resultados: list):
+    """Gap 2: state file machine-generated con snapshot del sistema."""
+    estrategias = params.get("estrategias", {})
+    activas      = {k: v for k, v in estrategias.items() if v.get("activa", True)}
+    desactivadas = {k: v for k, v in estrategias.items() if not v.get("activa", True)}
+    pnl_total    = sum(float(r.get("pnl_neto", 0)) for r in resultados)
+    n_total      = len(resultados)
+    wins         = sum(int(r.get("acierto", 0)) for r in resultados)
+    top3         = sorted(activas.items(), key=lambda x: x[1].get("ic_bayes", 0), reverse=True)[:3]
+    state = {
+        "timestamp_utc":   datetime.now(timezone.utc).isoformat(timespec="seconds"),
+        "bankroll_sim":    round(20.0 + pnl_total, 2),
+        "pnl_total":       round(pnl_total, 2),
+        "n_ops":           n_total,
+        "win_rate":        round(wins / n_total, 4) if n_total else 0,
+        "estrategias_activas": len(activas),
+        "desactivadas":    list(desactivadas.keys()),
+        "top3_ic":         [{"k": k, "ic": round(v.get("ic_bayes", 0), 4), "n": v.get("n", 0)} for k, v in top3],
+    }
+    path = PARAMS_PATH.parent / "system_state.json"
+    path.write_text(json.dumps(state, indent=2, ensure_ascii=False), encoding="utf-8")
+    return state
+
+
 def _normalizar_pred(row: dict) -> dict:
     """Extrae subtype, apuesta y features del key None cuando el header es antiguo (13 cols)."""
     extra = row.pop(None, None)
@@ -567,6 +609,23 @@ def main():
     ts = datetime.now(timezone.utc).isoformat(timespec="seconds")
     print(f"[{ts}] === Postmortem ===")
 
+    # Gap 1: grader independiente
+    alertas = _verificar_integridad()
+    if alertas:
+        for a in alertas:
+            print(f"  [ALERTA INTEGRIDAD] {a}")
+        try:
+            import os, requests
+            tok = os.environ.get("TELEGRAM_TOKEN", "")
+            cid = os.environ.get("TELEGRAM_CHAT_ID", "")
+            if tok and cid:
+                msg = "⚠️ *Alerta integridad pipeline*\n" + "\n".join(f"• {a}" for a in alertas)
+                requests.post(f"https://api.telegram.org/bot{tok}/sendMessage",
+                              json={"chat_id": cid, "text": msg, "parse_mode": "Markdown"},
+                              timeout=10)
+        except Exception:
+            pass
+
     resultados = cargar_results()
     if not resultados:
         print("  Sin resultados aún — nada que analizar.")
@@ -672,6 +731,7 @@ def main():
               f"IC={p['ic_bayes']:+.3f}  PF={pf_str}")
 
     print(f"\n  Params guardados: {PARAMS_PATH}")
+    _escribir_state(params, resultados)  # Gap 2: state file
     print(f"[{ts}] === Fin postmortem ===")
 
 
