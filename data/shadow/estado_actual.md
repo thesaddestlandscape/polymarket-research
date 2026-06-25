@@ -1,4 +1,4 @@
-# Estado del bot — 2026-06-25 18:42 UTC
+# Estado del bot — 2026-06-25 18:44 UTC
 
 ## Capital
 | | |
@@ -11,20 +11,20 @@
 | | |
 |---|---|
 | Inicio | 20.00 € |
-| Actual | **6.92 €** |
-| P&L acumulado | 🔴 **-13.08 €** |
-| ROI s/ operativo | -65.42% |
-| ROI s/ depósito | -43.61% |
-| P&L hoy (2026-06-25) | 🔴 -27.18 € |
-| Operaciones resueltas | 1109 (545 WIN / 564 LOSS) — 49.1% |
-| Señales abiertas | 993 |
+| Actual | **6.41 €** |
+| P&L acumulado | 🔴 **-13.59 €** |
+| ROI s/ operativo | -67.97% |
+| ROI s/ depósito | -45.31% |
+| P&L hoy (2026-06-25) | 🔴 -27.69 € |
+| Operaciones resueltas | 1110 (545 WIN / 565 LOSS) — 49.1% |
+| Señales abiertas | 992 |
 
 ## Estrategias (visión global)
 
 | Estrategia | n | Win% | IC_efectivo | PNL | Apuesta | Estado |
 |---|---|---|---|---|---|---|
 | ORDER_FLOW_5M | 778 | 51.0% | +0.010 | +5.97€ | 0.50€ | ✅ activa |
-| UPDOWN_GBM | 233 | 49.4% | -0.006 | +3.33€ | 0.50€ | ⚠️ IC negativo |
+| UPDOWN_GBM | 234 | 49.1% | -0.008 | +2.82€ | 0.50€ | ⚠️ IC negativo |
 | PRICE_TARGET_GBM | 9 | 66.7% | +0.061 | +1.49€ | 0.61€ | ✅ activa |
 | WEEKLY_PRICE | 15 | 60.0% | +0.066 | -1.16€ | 0.66€ | ✅ activa |
 | SMART_FLOW_1H | 17 | 17.6% | -0.246 | -8.95€ | 0.00€ | 🚫 desactivada |
@@ -34,11 +34,11 @@
 
 | Timestamp | Estrategia | Mercado | Resultado | PNL |
 |---|---|---|---|---|
+| 2026-06-25T18:43 | UPDOWN_GBM#SOL#60min | Solana Up or Down - June 25, 2PM ET… | ❌ LOSS | -0.51€ |
 | 2026-06-25T18:40 | UPDOWN_GBM#XRP#15min | XRP Up or Down - June 25, 2:30PM-2:45PM ET… | ❌ LOSS | -0.51€ |
 | 2026-06-25T18:32 | UPDOWN_GBM#SOL#15min | Solana Up or Down - June 25, 2:15PM-2:30PM ET… | ✅ WIN | +1.71€ |
 | 2026-06-25T18:03 | UPDOWN_GBM#XRP#15min | XRP Up or Down - June 25, 1:45PM-2:00PM ET… | ✅ WIN | +0.54€ |
 | 2026-06-25T17:31 | UPDOWN_GBM#SOL#15min | Solana Up or Down - June 25, 1:15PM-1:30PM ET… | ✅ WIN | +1.39€ |
-| 2026-06-25T17:03 | UPDOWN_GBM#SOL#15min | Solana Up or Down - June 25, 12:45PM-1:00PM ET… | ✅ WIN | +1.13€ |
 
 ---
 *Actualizado automáticamente cada ~60s por el fast loop*
