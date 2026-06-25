@@ -9,5 +9,7 @@ data/trades/
 data/wallets/positions_*.csv
 data/funding/
 data/alerts/
-data/live/
+data/live/LIVE_MODE_ON
+data/live/*.key
+data/live/.env
 data/reports/

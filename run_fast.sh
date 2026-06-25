@@ -16,13 +16,14 @@ while true; do
 
     $PYTHON "$REPO_DIR/fetch_binance_klines.py"   >> "$LOG" 2>&1 || true
     $PYTHON "$REPO_DIR/shadow_predict.py"         >> "$LOG" 2>&1 || true
+    $PYTHON "$REPO_DIR/live_trade.py"             >> "$LOG" 2>&1 || true
     $PYTHON "$REPO_DIR/shadow_resolve.py"         >> "$LOG" 2>&1 || true
     $PYTHON "$REPO_DIR/shadow_postmortem.py"      >> "$LOG" 2>&1 || true
     $PYTHON "$REPO_DIR/shadow_resumen.py"         >> "$LOG" 2>&1 || true
 
     # Git: datos shadow + resumen de estado
     cd "$REPO_DIR"
-    git add data/shadow/ >> "$LOG" 2>&1 || true
+    git add data/shadow/ data/live/ >> "$LOG" 2>&1 || true
     if ! git diff --cached --quiet 2>/dev/null; then
         git commit -m "shadow: ciclo $CICLO $(date -u +%Y-%m-%dT%H:%MZ)" >> "$LOG" 2>&1 || true
         git pull --rebase origin main >> "$LOG" 2>&1 || true

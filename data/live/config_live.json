@@ -1,0 +1,37 @@
+{
+  "zona_horaria": "Europe/Madrid",
+  "utc_offset_verano": 2,
+
+  "ventanas_lunes_viernes": [
+    {"inicio": "08:30", "fin": "09:30", "nombre": "apertura_europea"},
+    {"inicio": "10:30", "fin": "11:30", "nombre": "media_manana"},
+    {"inicio": "12:30", "fin": "13:30", "nombre": "mediodia"},
+    {"inicio": "16:30", "fin": "17:30", "nombre": "tarde_1"},
+    {"inicio": "18:30", "fin": "19:30", "nombre": "tarde_2"},
+    {"inicio": "20:30", "fin": "21:30", "nombre": "cierre"}
+  ],
+
+  "fines_de_semana": "solo_manual",
+
+  "riesgo": {
+    "max_pct_bankroll_por_trade": 0.10,
+    "pct_bankroll_diario": 0.30,
+    "half_kelly": true,
+    "min_ic_para_live": 0.08,
+    "min_n_para_live": 40,
+    "min_stake_eur": 0.25,
+    "max_stake_eur": 2.00
+  },
+
+  "estrategias_permitidas_live": [
+    "UPDOWN_GBM"
+  ],
+
+  "subtypes_permitidos_live": [
+    "BTC#15min",
+    "ETH#15min",
+    "SOL#15min",
+    "BTC#60min",
+    "ETH#60min"
+  ]
+}
