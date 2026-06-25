@@ -1428,8 +1428,9 @@ def main():
                 else:
                     lookup_keys = [nombre]
                 sp = next((params_din[k] for k in lookup_keys if k in params_din), {})
-                # Si la clave más específica desactiva → saltar
-                if not sp.get("activa", True):
+                # Si CUALQUIER clave de la jerarquía está desactivada → saltar
+                # (evita que BTC#240min quede activo cuando #240min está desactivado)
+                if any(not params_din.get(k, {}).get("activa", True) for k in lookup_keys if k in params_din):
                     continue
                 edge_min = sp.get("edge_minimo") or EDGE_MINIMO
                 # Apuesta Kelly: escala con IC confirmado, mínimo 0.50€ si activa
