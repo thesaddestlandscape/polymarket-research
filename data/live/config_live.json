@@ -20,7 +20,12 @@
     "min_ic_para_live": 0.08,
     "min_n_para_live": 40,
     "min_stake_eur": 0.25,
-    "max_stake_eur": 2.00
+    "max_stake_eur": 2.00,
+    "circuit_breaker": {
+      "max_perdida_ventana_eur": 1.00,
+      "max_perdida_diaria_eur": 3.00,
+      "parar_switch_si_perdida_diaria": true
+    }
   },
 
   "estrategias_permitidas_live": [

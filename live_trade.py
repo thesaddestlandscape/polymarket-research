@@ -18,8 +18,8 @@ import os
 from datetime import datetime, timezone, timedelta
 from pathlib import Path
 
-from live_guard import puede_operar_live, estado_live
-from live_stake import calcular_stake, bankroll_actual
+from live_guard import puede_operar_live, estado_live, switch_activo
+from live_stake import calcular_stake, bankroll_actual, verificar_circuit_breaker, pnl_live_hoy, pnl_live_ventana_actual
 
 DIR_LIVE    = Path("data/live")
 DIR_SHADOW  = Path("data/shadow")
@@ -156,7 +156,23 @@ def main():
         log(f"  → Fuera de operación. Motivo: {motivo}")
         return
 
-    # 2. Cargar predicciones y parámetros
+    # 2. Circuit breaker — verificar límites de pérdida antes de operar
+    disparado, motivo_cb = verificar_circuit_breaker()
+    pnl_v = pnl_live_ventana_actual()
+    pnl_d = pnl_live_hoy()
+    log(f"  Circuit breaker: ventana={pnl_v:+.2f}€  día={pnl_d:+.2f}€  → {'🛑 DISPARADO' if disparado else '✅ OK'}")
+
+    if disparado:
+        log(f"  🛑 CIRCUIT BREAKER: {motivo_cb}")
+        config_cb = _cargar_config().get("riesgo", {}).get("circuit_breaker", {})
+        if config_cb.get("parar_switch_si_perdida_diaria") and pnl_d <= -config_cb.get("max_perdida_diaria_eur", 3.0):
+            switch_path = DIR_LIVE / "LIVE_MODE_ON"
+            if switch_path.exists():
+                switch_path.unlink()
+                log(f"  🛑 Switch live desactivado automáticamente por pérdida diaria.")
+        return
+
+    # 3. Cargar predicciones y parámetros
     predicciones = _cargar_predicciones_hoy()
     params       = _cargar_params()
     config       = _cargar_config()

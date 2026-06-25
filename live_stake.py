@@ -68,6 +68,94 @@ def gastado_hoy() -> float:
     return gastado
 
 
+def pnl_live_hoy() -> float:
+    """PNL neto de trades resueltos hoy (solo CLOSED)."""
+    if not TRADES_CSV.exists():
+        return 0.0
+    config = _cargar_config()
+    offset = config.get("utc_offset_verano", 2)
+    hoy_madrid = (datetime.now(timezone.utc) + timedelta(hours=offset)).strftime("%Y-%m-%d")
+    pnl = 0.0
+    with open(TRADES_CSV, encoding="utf-8") as f:
+        for row in csv.DictReader(f):
+            if row.get("status") != "CLOSED":
+                continue
+            fecha = (row.get("close_timestamp") or row.get("timestamp_utc") or "")[:10]
+            if fecha == hoy_madrid:
+                try:
+                    pnl += float(row.get("pnl_neto_eur", 0) or 0)
+                except ValueError:
+                    pass
+    return pnl
+
+
+def pnl_live_ventana_actual() -> float:
+    """PNL neto de trades resueltos en la ventana horaria actual."""
+    if not TRADES_CSV.exists():
+        return 0.0
+    config = _cargar_config()
+    offset = config.get("utc_offset_verano", 2)
+    ahora_madrid = datetime.now(timezone.utc) + timedelta(hours=offset)
+
+    # Detectar ventana actual
+    ventana_inicio = None
+    for v in config.get("ventanas_lunes_viernes", []):
+        try:
+            h_ini = datetime.strptime(v["inicio"], "%H:%M").time()
+            h_fin = datetime.strptime(v["fin"],    "%H:%M").time()
+            if h_ini <= ahora_madrid.time() <= h_fin:
+                ventana_inicio = ahora_madrid.replace(
+                    hour=h_ini.hour, minute=h_ini.minute, second=0, microsecond=0)
+                break
+        except Exception:
+            continue
+
+    if ventana_inicio is None:
+        return 0.0
+
+    ventana_inicio_utc = ventana_inicio - timedelta(hours=offset)
+    pnl = 0.0
+    with open(TRADES_CSV, encoding="utf-8") as f:
+        for row in csv.DictReader(f):
+            if row.get("status") != "CLOSED":
+                continue
+            ts_str = row.get("close_timestamp") or row.get("timestamp_utc") or ""
+            try:
+                ts = datetime.fromisoformat(ts_str.replace("Z", "+00:00"))
+                if ts.tzinfo is None:
+                    ts = ts.replace(tzinfo=timezone.utc)
+                if ts >= ventana_inicio_utc:
+                    pnl += float(row.get("pnl_neto_eur", 0) or 0)
+            except Exception:
+                pass
+    return pnl
+
+
+def verificar_circuit_breaker() -> tuple[bool, str]:
+    """
+    Comprueba si el bot debe parar por pérdidas excesivas.
+    Devuelve (disparado, motivo). Si disparado=True → parar.
+    """
+    config = _cargar_config()
+    cb = config.get("riesgo", {}).get("circuit_breaker", {})
+    if not cb:
+        return False, "sin circuit breaker configurado"
+
+    max_ventana = cb.get("max_perdida_ventana_eur", 1.0)
+    max_diaria  = cb.get("max_perdida_diaria_eur", 3.0)
+
+    pnl_ventana = pnl_live_ventana_actual()
+    pnl_dia     = pnl_live_hoy()
+
+    if pnl_ventana <= -max_ventana:
+        return True, f"pérdida en ventana {pnl_ventana:.2f}€ ≥ límite {max_ventana:.2f}€"
+
+    if pnl_dia <= -max_diaria:
+        return True, f"pérdida diaria {pnl_dia:.2f}€ ≥ límite {max_diaria:.2f}€"
+
+    return False, f"OK (ventana={pnl_ventana:+.2f}€, día={pnl_dia:+.2f}€)"
+
+
 def calcular_stake(ic: float, strategy: str = "", subtype: str = "") -> dict:
     """
     Devuelve el stake recomendado para una señal con el IC dado.
