@@ -726,6 +726,32 @@ DRIFT_DAMPING = 0.25
 # 0.7%/h es conservador: solo filtra regímenes muy claros, evita overfitting con n pequeño.
 REGIME_THRESHOLD = 0.7  # %/h
 
+KELLY_COMPUESTO_BOOST = 1.5
+KELLY_COMPUESTO_MAX   = 2.00
+
+
+def _aplicar_kelly_compuesto(rows: list) -> list:
+    """
+    rows: listas [ts, nombre, mid, q, end, horas, py, prob_y, eb, en, ed,
+                  dec(11), razon(12), subtype(13), apuesta(14), features(15)]
+    Si UPDOWN_GBM y ORDER_FLOW_5M coinciden → boost apuesta 1.5×.
+    Si divergen → ambas SKIP (señal ambigua).
+    """
+    gbm = next((r for r in rows if r[1] == "UPDOWN_GBM"    and r[11] != "SKIP"), None)
+    of  = next((r for r in rows if r[1] == "ORDER_FLOW_5M"  and r[11] != "SKIP"), None)
+    if not gbm or not of:
+        return rows
+    if gbm[11] == of[11]:
+        for r in rows:
+            if r[1] in ("UPDOWN_GBM", "ORDER_FLOW_5M") and r[11] != "SKIP":
+                r[14] = f"{min(float(r[14]) * KELLY_COMPUESTO_BOOST, KELLY_COMPUESTO_MAX):.2f}"
+                r[12] += " [+compuesto]"
+    else:
+        for r in rows:
+            if r[1] in ("UPDOWN_GBM", "ORDER_FLOW_5M"):
+                r[11] = "SKIP"
+    return rows
+
 
 def _gbm_p_up(spot, ref, sigma_h, T_h, mu_h=0.0):
     """
@@ -1227,6 +1253,7 @@ def main():
                 "apuesta", "features",
             ])
         for m in operables:
+            market_rows = []  # buffer para Kelly compuesto
             py  = m["_precio_yes"]
             mid = m.get("market_id", "")
             for nombre, func in ESTRATEGIAS:
@@ -1311,10 +1338,9 @@ def main():
                 ed = en if dec != "BUY_NO" else -en
                 if dec != "SKIP":
                     ops += 1
-                    contador[nombre]["operable"] += 1
                     ya_predichos.add((nombre, mid))
                 features_json = json.dumps(pred.get("features", {}), separators=(",", ":"))
-                w.writerow([
+                market_rows.append([
                     ts, nombre, mid,
                     m.get("question", ""), m.get("end_date", ""),
                     f"{m['_horas']:.2f}", f"{py:.4f}", f"{prob_y:.4f}",
@@ -1322,7 +1348,16 @@ def main():
                     pred.get("razon", ""), subtype,
                     f"{apuesta:.2f}", features_json,
                 ])
+
+            # Kelly compuesto: boost si UPDOWN_GBM y ORDER_FLOW_5M coinciden
+            market_rows = _aplicar_kelly_compuesto(market_rows)
+
+            for row in market_rows:
+                if row[11] != "SKIP":
+                    contador[row[1]]["operable"] += 1
+                w.writerow(row)
                 total += 1
+
     print(f"  Predicciones registradas: {total} (operables: {ops}, dup saltados: {skipped_dup}, extremo filtrado: {skipped_extremo})")
     print("  Desglose por estrategia (aplica / operable):")
     for nombre, c in contador.items():
