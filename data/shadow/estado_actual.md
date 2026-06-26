@@ -1,4 +1,4 @@
-# Estado del bot — 2026-06-26 21:32 UTC
+# Estado del bot — 2026-06-26 21:34 UTC
 
 ## Capital
 | | |
@@ -17,7 +17,7 @@
 | ROI s/ depósito | -83.20% |
 | P&L hoy (2026-06-26) | 🔴 -11.37 € |
 | Operaciones resueltas | 1160 (568 WIN / 592 LOSS) — 49.0% |
-| Señales abiertas | 687 |
+| Señales abiertas | 688 |
 
 ## Estrategias (visión global)
 
