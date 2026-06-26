@@ -1571,6 +1571,13 @@ def main():
                     dec = "BUY_NO"
                 else:
                     dec = "SKIP"
+                # Kelly por dirección: si el postmortem tiene IC separado BUY_YES/BUY_NO,
+                # sustituir la apuesta (que acumuló kelly_boost direction-blind) por el Kelly
+                # específico de esa dirección. Evita overstakear BUY_YES con IC bajo.
+                if dec in ("BUY_YES", "BUY_NO"):
+                    dir_stake = sp.get(f"apuesta_kelly_{dec}")
+                    if dir_stake is not None:
+                        apuesta = max(0.50, min(2.00, float(dir_stake)))
                 ed = en if dec != "BUY_NO" else -en
                 if dec != "SKIP":
                     ops += 1

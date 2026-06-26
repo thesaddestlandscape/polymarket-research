@@ -271,9 +271,10 @@ def calcular_params(resultados: list) -> dict:
             ]
         elif subtype:
             claves.append(f"{s}#{subtype}")   # WEEKLY_PRICE#BTC
+        decision = r.get("decision", "")
         for clave in claves:
             if clave not in por_estrategia:
-                por_estrategia[clave] = {"n": 0, "aciertos": 0, "pnl": 0.0, "causas": {}}
+                por_estrategia[clave] = {"n": 0, "aciertos": 0, "pnl": 0.0, "causas": {}, "por_decision": {}}
             por_estrategia[clave]["n"] += 1
             por_estrategia[clave]["aciertos"] += int(r.get("acierto", 0))
             try:
@@ -283,6 +284,16 @@ def calcular_params(resultados: list) -> dict:
             causa = r.get("causa_perdida", "")
             if causa:
                 por_estrategia[clave]["causas"][causa] = por_estrategia[clave]["causas"].get(causa, 0) + 1
+            if decision in ("BUY_YES", "BUY_NO"):
+                pd = por_estrategia[clave]["por_decision"]
+                if decision not in pd:
+                    pd[decision] = {"n": 0, "aciertos": 0, "pnl": 0.0}
+                pd[decision]["n"] += 1
+                pd[decision]["aciertos"] += int(r.get("acierto", 0))
+                try:
+                    pd[decision]["pnl"] += float(r.get("pnl_neto", 0))
+                except (ValueError, TypeError):
+                    pass
 
     params = {
         "timestamp_utc": datetime.now(timezone.utc).isoformat(timespec="seconds"),
@@ -318,7 +329,7 @@ def calcular_params(resultados: list) -> dict:
         else:
             apuesta_kelly = 0.50 if activa else 0.0
 
-        params["estrategias"][s] = {
+        entry = {
             "activa":          activa,
             "edge_minimo":     edge_minimo,
             "ic_bayes":        ic_efectivo,
@@ -328,6 +339,21 @@ def calcular_params(resultados: list) -> dict:
             "motivo":          motivo,
             "apuesta_kelly":   apuesta_kelly,
         }
+
+        # Kelly por dirección (BUY_YES / BUY_NO separados)
+        for dec_name, dec_d in d.get("por_decision", {}).items():
+            dn = dec_d["n"]
+            d_ic_b = (dec_d["aciertos"] + 1) / (dn + 2) - 0.5
+            d_ic_e = round(d_ic_b * min(1.0, dn / 20), 4)
+            if dn >= 5 and d_ic_e > 0:
+                d_ap = round(min(2.00, max(0.50, 20.0 * d_ic_e * 0.5)), 2)
+            else:
+                d_ap = 0.50
+            entry[f"n_{dec_name}"]               = dn
+            entry[f"ic_{dec_name}"]              = d_ic_e
+            entry[f"apuesta_kelly_{dec_name}"]   = d_ap
+
+        params["estrategias"][s] = entry
 
     return params
 
@@ -549,7 +575,7 @@ FEATURE_RULES = {
 
 IC_FILTRO_MIN   = -0.12   # IC para activar filtro (evitar)
 IC_PATRON_MIN   = +0.12   # IC para activar patrón ganador (amplificar)
-N_BUCKET_MIN    = 8       # mínimo de observaciones en cualquier bucket
+N_BUCKET_MIN    = 15      # mínimo de observaciones en cualquier bucket (subido de 8: n<15 → demasiado ruidoso para kelly_boost)
 
 
 def _evaluar_bucket(vals, umbral, condicion_mala):
