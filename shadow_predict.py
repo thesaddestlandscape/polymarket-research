@@ -781,6 +781,13 @@ DRIFT_DAMPING_DEFAULT = 0.10  # daily y ventanas no catalogadas
 # En 5/15min ambas señales son buenas → sin filtro.
 REGIME_BUY_NO_THRESHOLD = 0.7  # %/h, solo para ventanas ≥60min
 
+# Filtro BUY_YES #15min — solo operar cuando drift_60min ∈ [0, +0.5%)
+# Análisis n=81 ops con features: [0,0.5) → 16/22 (73%) IC=+0.208 PNL=+8.32€
+# Fuera: IC~0 (drift<0 n=33 PNL=-4.97€) o negativo (drift>0.5% n=26 PNL=-2.97€)
+# Consistente por par: BTC 7/8, ETH 6/8, SOL 3/4. Mejora retroactiva: +16.26€.
+DRIFT_60_BUY_YES_15M_LO = 0.0   # %/h — mínimo (drift plano o ligeramente alcista)
+DRIFT_60_BUY_YES_15M_HI = 0.5   # %/h — máximo (drift muy alcista → ya priceado)
+
 KELLY_COMPUESTO_BOOST = 1.5
 KELLY_COMPUESTO_MAX   = 2.00
 
@@ -963,6 +970,15 @@ def s_updown_gbm(market, ctx):
         py_mkt = market.get("_precio_yes", 0.5)
         if drift_pct > REGIME_BUY_NO_THRESHOLD and p_up < py_mkt:
             return None  # 60min+ alcista + BUY_NO → señal mala históricamente
+
+    # Filtro BUY_YES #15min: solo cuando drift_60min ∈ [0, +0.5%)
+    # Lógica: confirma dirección (alcista moderado) sin estar ya priceado (alcista fuerte).
+    # IC fuera del rango ≈ 0 (n=59, PNL=−7.94€ total) vs IC=+0.208 dentro (n=22).
+    if tipo == 'slot' and ventana_min == 15 and drift_60 is not None:
+        drift_60_pct = drift_60 * 100
+        if p_up > market.get("_precio_yes", 0.5) and \
+                not (DRIFT_60_BUY_YES_15M_LO <= drift_60_pct < DRIFT_60_BUY_YES_15M_HI):
+            return None  # BUY_YES #15min fuera del sweet spot drift_60min
 
     if tipo == 'daily':
         slot_type = 'daily'

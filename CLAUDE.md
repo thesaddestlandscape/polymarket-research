@@ -195,6 +195,22 @@ Con n≥1000 ops en ORDER_FLOW, el patrón horario expandido (6 horas bloqueadas
 **Fix 4 (2026-06-26 tarde)**: ventana live 15:00-16:00 Madrid (UTC 13h) añadida — OF IC=+0.112 n=17.
 **Config live**: ventana mediodia 12:30-13:30 Madrid eliminada (GBM IC=-0.154, OF IC=-0.057 — peor ventana en ambas).
 
+### H-DRIFT60-BUY_YES_15MIN ✅ IMPLEMENTADA — 2026-06-26 tarde
+
+Análisis n=81 BUY_YES #15min con features: drift_60min ∈ [0, +0.5%) es el único rango rentable.
+
+| drift_60min | n | Win% | IC | PNL |
+|---|---|---|---|---|
+| **[0, +0.5%)** | **22** | **73%** | **+0.208** | **+8.32€** |
+| < 0% (bajista) | 33 | 48% | +0.000 | −4.97€ |
+| ≥ 0.5% (muy alcista) | 26 | 42% | −0.044 | −2.97€ |
+
+Consistente por par: BTC 7/8 (88%), ETH 6/8 (75%), SOL 3/4 (75%).
+Lógica: drift moderado confirma dirección sin estar ya priceado; drift fuerte → el mercado ya lo sabe.
+**Implementado en `shadow_predict.py`**: `DRIFT_60_BUY_YES_15M_LO=0.0`, `DRIFT_60_BUY_YES_15M_HI=0.5`
+Mejora retroactiva potencial: **+16.26€** (op saltadas: 59, PNL evitado: −7.94€).
+**Validar con n≥40 ops en forward** antes de considerar ajuste de umbral.
+
 ### H-OU-5MIN ❌ DESACTIVADA — IC=-0.229 n=57
 
 Con n=57 y IC=-0.229 globalmente, todos los pares son negativos. Desactivada completamente.
@@ -311,6 +327,7 @@ predictions (features JSON) → results (features copiadas)
 [✓] Dashboard per-bet section completa (renderPerBet JS + HTML)
 [✓] Kelly por dirección: postmortem genera apuesta_kelly_BUY_YES/BUY_NO; predict override tras determinar dec
 [✓] N_BUCKET_MIN 8→15: patrones causales requieren n≥15 para evitar kelly_boost ruidoso
+[✓] Filtro drift_60min en BUY_YES #15min: [0,+0.5%) → IC=+0.208 (n=22); fuera → skip (n=59 ops vacías)
 [~] BUY_NO #15min n=39/40, IC=+0.134 — 1 op para live (bloqueado por credenciales)
 [~] SOL#15min n=30/40, IC=+0.062 — ETA sábado 27 Jun
 [ ] Credenciales Polymarket API → primer trade real
@@ -382,6 +399,8 @@ El mayor error fue OU_5M + SMART_FLOW (+22.71€ perdidos). El segundo mayor fue
 DRIFT_DAMPING = {5: 0.30, 15: 0.20, 60: 0.05, 240: 0.10}  # backfill 90d por ventana
 DRIFT_DAMPING_DEFAULT = 0.10      # daily y ventanas no catalogadas
 REGIME_BUY_NO_THRESHOLD = 0.7    # %/h solo para ventanas ≥60min y solo BUY_NO
+DRIFT_60_BUY_YES_15M_LO = 0.0   # BUY_YES #15min: drift_60min mínimo (%/h)
+DRIFT_60_BUY_YES_15M_HI = 0.5   # BUY_YES #15min: drift_60min máximo (%/h)
 EDGE_MINIMO      = 0.02
 SLIPPAGE_ESTIMADO= 0.02
 DELTA_MIN = 0.38           # ORDER_FLOW_5M — umbral mínimo global
