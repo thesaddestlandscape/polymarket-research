@@ -1130,10 +1130,14 @@ def s_price_target_gbm(market, ctx):
 # ─────────────────────────────────────────────────────────────────────────────
 
 # Horas UTC con edge negativo confirmado en ORDER_FLOW_5M (n≥20, IC≤-0.05)
-ORDER_FLOW_BLACKLIST_HOURS = {2, 7, 9, 10, 11, 20, 22}
-# 02h IC=-0.081 n=29 PNL=-2.77€ | 07h IC=-0.067 n=28 PNL=-2.23€ | 09h IC=-0.067 n=28 PNL=-2.24€
-# 10h IC=-0.190 n=27 PNL=-6.18€ (peor hora) | 11h IC=-0.086 n=56 | 22h IC=-0.115 n=37 PNL=-4.87€
-# 18h IC=-0.178 n=16 PNL=-4.15€ (Madrid 20:xx) | 20h IC=-0.095 n=40 PNL=-4.43€ (Madrid 22:xx)
+ORDER_FLOW_BLACKLIST_HOURS = {2, 7, 9, 10, 11, 22}
+# ICs sobre BTC+SOL únicamente (pares activos tras PAIR_BLACKLIST), n≥10:
+# 02h IC=+0.000 n=14 (IC original full-pairs: -0.081 — mantener por cautela)
+# 07h IC=-0.083 n=10 | 09h IC=-0.054 n=5 (pequeño) | 10h IC=-0.028 n=34
+# 11h IC=+0.038 n=24 (mejoró con excl. pairs — pendiente revalidar con n≥40)
+# 22h IC=+0.086 n=12 (mejoró; mantener bloqueo hasta n≥20)
+# 18h: IC=-0.018 n=5 BTC+SOL — desbloqueado (n insuficiente, monitorear)
+# 20h: ELIMINADO — IC=+0.000 n=18 BTC+SOL; el -0.095 original era de ETH/XRP/DOGE
 
 # Pares con IC negativo en sweet spot [0.38-0.46] (conf=1.00, n≥80):
 # ETH: n=112, IC=-0.026 | XRP: n=119, IC=-0.004 (-6.13€ el 2026-06-25) | DOGE: n=83, IC=-0.006

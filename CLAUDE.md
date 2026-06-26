@@ -182,15 +182,17 @@ Con n≥1000 ops en ORDER_FLOW, el patrón horario expandido (6 horas bloqueadas
 | 10:xx | 12:xx | **−0.190** n=28 | −6.18€ | 🚫 bloqueada (añadida 2026-06-26) |
 | 07:xx | 09:xx | **−0.227** n=20 | −5.20€ | 🚫 bloqueada |
 | 18:xx | 20:xx | **−0.178** n=16 | −4.15€ | 🚫 bloqueada |
-| 20:xx | 22:xx | **−0.095** n=40 | −4.43€ | 🚫 bloqueada (Fix 3 — faltaba en código) |
-| 22:xx | 00:xx | **−0.115** n=37 | −4.87€ | 🚫 bloqueada |
+| 13:xx | 15:xx | **+0.112** n=17 | +3.56€ | ✅ activa — ventana live añadida |
+| 20:xx | 22:xx | +0.000 n=18 | −0.17€ | 〰️ neutral BTC+SOL (el -0.095 era de pares excluidos) |
+| 22:xx | 00:xx | **−0.115** n=37 full / IC=+0.086 n=12 BTC+SOL | — | 🚫 bloqueada (n BTC+SOL insuficiente) |
 | 09:xx | 11:xx | **−0.067** n=18 | −1.81€ | 🚫 bloqueada (añadida 2026-06-26) |
 | 11:xx | 13:xx | −0.057 n=59 | −5.07€ | 🚫 bloqueada |
 | 02:xx | 04:xx | **−0.081** n=20 | −1.96€ | 🚫 bloqueada (añadida 2026-06-26) |
 
 **Fix 1 (2026-06-25)**: `{7, 11, 18}` — mejora retroactiva +14.42€.
 **Fix 2 (2026-06-26 mañana)**: ampliado a `{2, 7, 9, 10, 11, 22}` — mejora retroactiva adicional +16.88€ (total acumulado +31.30€).
-**Fix 3 (2026-06-26 tarde)**: añadida hora 20 UTC (Madrid 22:xx) — IC=-0.095 n=40 PNL=-4.43€ confirmado, nunca estaba en código pese a estar en tabla.
+**Fix 3 (2026-06-26 tarde)**: hora 20 UTC revertida — el IC=-0.095 era de ETH/XRP/DOGE; para BTC+SOL IC=+0.000 n=18. Set queda `{2,7,9,10,11,22}`.
+**Fix 4 (2026-06-26 tarde)**: ventana live 15:00-16:00 Madrid (UTC 13h) añadida — OF IC=+0.112 n=17.
 **Config live**: ventana mediodia 12:30-13:30 Madrid eliminada (GBM IC=-0.154, OF IC=-0.057 — peor ventana en ambas).
 
 ### H-OU-5MIN ❌ DESACTIVADA — IC=-0.229 n=57
@@ -226,8 +228,9 @@ bash live_switch.sh on/off     # activar/desactivar manualmente
 ```
 
 ### Ventanas horarias (hora Madrid, L-V)
-08:30-09:30 | 10:30-11:30 | 16:30-17:30 | 18:30-19:30 | 20:30-21:30
+08:30-09:30 | 10:30-11:30 | **15:00-16:00** | 16:30-17:30 | 18:30-19:30 | 20:30-21:30
 ~~12:30-13:30 eliminada~~ — GBM IC=-0.154, OF IC=-0.057 (peor ventana en ambas estrategias)
+**15:00-16:00 añadida** (UTC 13h): ORDER_FLOW IC=+0.112 n=17 — mejor candidata libre
 Fines de semana: solo switch manual.
 
 ### Stake (bankroll completo, compounding)
@@ -385,10 +388,12 @@ DELTA_MAX = 0.46           # ORDER_FLOW_5M — umbral máximo (zona muerta >0.46
 KELLY_COMPUESTO_BOOST = 1.5
 KELLY_COMPUESTO_MAX   = 2.00
 THETA_OU = 30.0
-ORDER_FLOW_BLACKLIST_HOURS = {2, 7, 9, 10, 11, 20, 22}  # UTC: IC negativo con n≥20
-# 02h IC=-0.081 | 07h IC=-0.067 | 09h IC=-0.067 | 10h IC=-0.190 (-6.18€!) | 11h IC=-0.086
-# 20h IC=-0.095 n=40 PNL=-4.43€ (Madrid 22:xx) | 22h IC=-0.115 n=37
-# Mejora retroactiva acumulada vs {7,11,18}: +16.88€ + ~4.43€ adicional (hora 20)
+ORDER_FLOW_BLACKLIST_HOURS = {2, 7, 9, 10, 11, 22}  # UTC: IC negativo (evaluado sobre BTC+SOL)
+# 07h IC=-0.083 n=10 | 10h IC=-0.028 n=34 | 11h IC=+0.038 n=24 (mejoró, mantener hasta n≥40)
+# 02h IC=+0.000 n=14 | 09h IC=-0.054 n=5 | 22h IC=+0.086 n=12 (mantener hasta n≥20)
+# 20h ELIMINADO: IC=+0.000 n=18 BTC+SOL (el -0.095 era de ETH/XRP/DOGE)
+# 18h: no incluido — IC=-0.018 n=5 BTC+SOL (insuficiente, monitorear)
+# Mejora retroactiva acumulada vs {7,11,18}: +16.88€
 ORDER_FLOW_PAIR_BLACKLIST = {'ETH', 'BNB', 'XRP', 'DOGE'}  # IC negativo conf=1.00
 # ETH: n=112 IC=-0.026 | XRP: n=119 IC=-0.004 | DOGE: n=83 IC=-0.006 | BNB: backfill negativo
 # Cache pickle: mercados_recientes TTL=90s, historial_mercados TTL=90s
