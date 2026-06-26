@@ -1,5 +1,5 @@
 {
-  "timestamp_utc": "2026-06-26T09:10:44+00:00",
+  "timestamp_utc": "2026-06-26T09:12:59+00:00",
   "estrategias": {
     "UPDOWN_GBM": {
       "activa": true,
@@ -29,7 +29,7 @@
           "ic_bueno": 0.2143,
           "n_malo": 12,
           "n_bueno": 5,
-          "descubierto": "2026-06-26T09:10:44+00:00"
+          "descubierto": "2026-06-26T09:12:59+00:00"
         },
         {
           "feature": "sigma_h",
@@ -39,7 +39,7 @@
           "ic_bueno": -0.0714,
           "n_malo": 12,
           "n_bueno": 5,
-          "descubierto": "2026-06-26T09:10:44+00:00"
+          "descubierto": "2026-06-26T09:12:59+00:00"
         }
       ],
       "patrones_ganadores": []
@@ -82,7 +82,7 @@
           "ic_bueno": 0.0,
           "n_malo": 8,
           "n_bueno": 4,
-          "descubierto": "2026-06-26T09:10:44+00:00"
+          "descubierto": "2026-06-26T09:12:59+00:00"
         },
         {
           "feature": "sigma_h",
@@ -92,7 +92,7 @@
           "ic_bueno": 0.1667,
           "n_malo": 8,
           "n_bueno": 4,
-          "descubierto": "2026-06-26T09:10:44+00:00"
+          "descubierto": "2026-06-26T09:12:59+00:00"
         }
       ],
       "patrones_ganadores": []
@@ -125,7 +125,7 @@
           "ic_bueno": 0.125,
           "n_malo": 10,
           "n_bueno": 6,
-          "descubierto": "2026-06-26T09:10:44+00:00"
+          "descubierto": "2026-06-26T09:12:59+00:00"
         }
       ],
       "patrones_ganadores": []
@@ -158,7 +158,7 @@
           "ic_bueno": 0.2692,
           "n_malo": 10,
           "n_bueno": 11,
-          "descubierto": "2026-06-26T09:10:44+00:00"
+          "descubierto": "2026-06-26T09:12:59+00:00"
         }
       ],
       "patrones_ganadores": [
@@ -170,7 +170,7 @@
           "ic_base": 0.1,
           "n_patron": 11,
           "kelly_boost": 1.0,
-          "descubierto": "2026-06-26T09:10:44+00:00"
+          "descubierto": "2026-06-26T09:12:59+00:00"
         }
       ]
     },
@@ -222,7 +222,7 @@
           "ic_bueno": 0.2037,
           "n_malo": 12,
           "n_bueno": 25,
-          "descubierto": "2026-06-26T09:10:44+00:00"
+          "descubierto": "2026-06-26T09:12:59+00:00"
         }
       ],
       "patrones_ganadores": [
@@ -234,7 +234,7 @@
           "ic_base": 0.0897,
           "n_patron": 12,
           "kelly_boost": 1.0,
-          "descubierto": "2026-06-26T09:10:44+00:00"
+          "descubierto": "2026-06-26T09:12:59+00:00"
         },
         {
           "feature": "sigma_h",
@@ -244,7 +244,7 @@
           "ic_base": 0.0897,
           "n_patron": 25,
           "kelly_boost": 1.0,
-          "descubierto": "2026-06-26T09:10:44+00:00"
+          "descubierto": "2026-06-26T09:12:59+00:00"
         },
         {
           "feature": "drift_60min",
@@ -254,7 +254,7 @@
           "ic_base": 0.0897,
           "n_patron": 16,
           "kelly_boost": 0.83,
-          "descubierto": "2026-06-26T09:10:44+00:00"
+          "descubierto": "2026-06-26T09:12:59+00:00"
         }
       ]
     },
