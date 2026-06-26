@@ -5,6 +5,7 @@
   "ventanas_lunes_viernes": [
     {"inicio": "08:30", "fin": "09:30", "nombre": "apertura_europea"},
     {"inicio": "10:30", "fin": "11:30", "nombre": "media_manana"},
+    {"inicio": "15:00", "fin": "16:00", "nombre": "mediotarde"},
     {"inicio": "16:30", "fin": "17:30", "nombre": "tarde_1"},
     {"inicio": "18:30", "fin": "19:30", "nombre": "tarde_2"},
     {"inicio": "20:30", "fin": "21:30", "nombre": "cierre"}
