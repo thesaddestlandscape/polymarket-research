@@ -1,7 +1,7 @@
 # CLAUDE.md — Polymarket Research Bot
 
 Documento de contexto completo. Léelo al inicio de cada sesión para retomar sin releer historial.
-**Última actualización: 2026-06-26 ~11:30 UTC**
+**Última actualización: 2026-06-26 ~19:50 UTC**
 
 ---
 
@@ -107,26 +107,26 @@ capture_markets → capture_wallets → capture_trades
 
 ---
 
-## Estado de estrategias — 2026-06-26 (sesión tarde)
+## Estado de estrategias — 2026-06-26 (sesión noche)
 
-### Bankroll simulado: **−0.23€** (−20.23€ PNL total) | 1128 ops | 49.0% WR
+### Bankroll simulado: **−4.84€** (−24.84€ PNL total) | 1158 ops | 49.0% WR
 ### ⚠️ El PNL negativo viene ÍNTEGRAMENTE de estrategias ya desactivadas.
-### Con solo las estrategias activas actuales: PNL **+21.07€** → bankroll **~41€**
+### Con solo las estrategias activas actuales (excl. desactivadas): PNL estimado positivo.
 
 | Estrategia | n | Win% | IC | PNL | Estado |
 |---|---|---|---|---|---|
 | **BUY_NO #15min (todas pares)** | **39** | **64%** | **+0.134** | **+11.69€** | **🔥 1 op para live — bloqueado por credenciales** |
-| UPDOWN_GBM#SOL#15min | 30 | 57% | +0.062 | +5.19€ | ⏳ n=30/40 — ETA sáb 27 |
-| UPDOWN_GBM#ETH#60min | 18 | 61% | +0.090 | +1.44€ | ⏳ ETA dom 28 |
-| UPDOWN_GBM#BTC#60min | 16 | 62% | +0.089 | +1.11€ | ⏳ ETA lun 29 |
-| UPDOWN_GBM#BTC#15min | 40 | 55% | +0.048 | +0.11€ | ⚠️ n=40 alcanzado, IC=+0.048 < umbral 0.08 |
-| UPDOWN_GBM#ETH#15min | 52 | 52% | +0.019 | +1.38€ | ⚠️ n≥40 pero IC bajo (0.02) |
-| ORDER_FLOW_5M (BTC+SOL solamente) | 269 raw / 136 filtrado | 51%/56% | +0.010/+0.058 | +0.15€/+12.59€ | ✅ activa |
-| BUY_YES #15min (todas pares) | 94 | 50% | +0.000 | −3.24€ | ⚠️ Ruido — stake mínimo 0.50€ (fix hoy) |
+| UPDOWN_GBM#SOL#15min | 32 | 56% | +0.059 | +5.16€ | ⏳ n=32/40 — ETA sáb 27 |
+| **UPDOWN_GBM#BTC#60min** | **17** | **65%** | **+0.112** | **+2.00€** | **⏳ mejor IC activo — ETA lun 29** |
+| UPDOWN_GBM#ETH#60min | 19 | 58% | +0.068 | +0.56€ | ⏳ ETA dom 28 |
+| UPDOWN_GBM#BTC#15min | 43 | 56% | +0.056 | +0.64€ | ⚠️ n=43 alcanzado, IC=+0.056 < umbral 0.08 |
+| UPDOWN_GBM#ETH#15min | 56 | 54% | +0.034 | +2.33€ | ⚠️ n≥40 pero IC bajo |
+| ORDER_FLOW_5M (BTC+SOL filtrado) | 136 ops filtradas | 56% | +0.058 | +12.59€ | ✅ activa |
+| BUY_YES #15min (todas pares) | 103 | 51% | +0.014 | −1.79€ | 🔶 Filtro drift_60min aplicado hoy — monitorear |
 | UPDOWN_OU_5M | 57 | 26% | -0.229 | -13.76€ | 🚫 DESACTIVADA |
-| SMART_FLOW_1H | 17 | 18% | -0.246 | -8.95€ | 🚫 DESACTIVADA |
-| UPDOWN_GBM#5min (todos pares) | ~80 | ~33% | ~-0.10 | ~-22€ | 🚫 DESACTIVADA |
-| UPDOWN_GBM#240min | 11 | 9% | -0.089 | -5.04€ | 🚫 DESACTIVADA |
+| SMART_FLOW_1H | 20 | 20% | -0.273 | -9.86€ | 🚫 DESACTIVADA |
+| UPDOWN_GBM#5min (todos pares) | ~56 | ~33% | ~-0.15 | ~-16€ | 🚫 DESACTIVADA (edge_min=0.04) |
+| UPDOWN_GBM#240min | 12 | 9% | -0.171 | ~-5€ | 🚫 DESACTIVADA |
 
 ---
 
@@ -350,25 +350,36 @@ Ver `LIVE_PLAN.md`. Checklist: instalar MetaMask → red Polygon → comprar 30 
 
 ### P1 — Primer trade real (esta semana)
 **BUY_NO #15min**: n=39, IC=+0.134 → **1 op más y técnicamente lista — SOLO FALTA CREDENCIAL**
-**SOL#15min**: n=30, IC=+0.062 → ETA sábado 27 Jun
-**BTC#15min**: n=40 alcanzado, IC=+0.048 → por debajo del umbral 0.08 — monitorear
-**ETH#60min**: n=18, IC=+0.090 → ETA domingo 28 Jun
-**BTC#60min**: n=16, IC=+0.089 → ETA lunes 29 Jun
+**SOL#15min**: n=32, IC=+0.059 → ETA sábado 27 Jun (8 ops)
+**BTC#60min**: n=17, IC=+0.112 → mejor IC activo — ETA lunes 29 Jun (23 ops)
+**ETH#60min**: n=19, IC=+0.068 → ETA domingo 28 Jun (21 ops)
+**BTC#15min**: n=43, IC=+0.056 → n≥40 alcanzado pero IC<0.08 — monitorear tendencia
 
 ### P2 — ✅ COMPLETADO — Dirección como feature de live (BUY_NO vs BUY_YES)
 Implementado 2026-06-26: postmortem trackea BUY_YES/BUY_NO separado en strategy_params.
 shadow_predict aplica Kelly específico por dirección tras determinar dec.
-BUY_YES #15min: stake 2.00€ → 0.50€ mínimo. BUY_NO #15min: stake real 1.34€ (IC=+0.134 aggregate).
+BUY_YES #15min: stake mínimo 0.50€. BUY_NO #15min: stake 1.34€ (IC=+0.134).
 
-### P3 — ORDER_FLOW rangos per-par
+### P3 — ✅ COMPLETADO — Filtro drift_60min en BUY_YES #15min
+Implementado 2026-06-26 noche: solo operar BUY_YES #15min cuando drift_60min ∈ [0, +0.5%).
+IC fuera: ≈0 (n=59, PNL=-7.94€). IC dentro: +0.208 (n=22, PNL=+8.32€). Mejora: +16.26€ retroactivo.
+**Próxima acción**: monitorear n forward. Con n≥20 ops nuevas revisar si IC se sostiene ≥0.15.
+Con n≥40 revisar si el umbral superior (0.5%) es óptimo o cabe subir a 0.7%.
+
+### P4 — Análisis del aprendizaje causal — sesión 2026-06-26 noche
+Hallazgos de la sesión:
+- El bot desactiva automáticamente bien (OU_5M, SMART_FLOW, GBM#5min fuera)
+- El split BUY_YES/BUY_NO está captado en Kelly por dirección (universal: BUY_NO > BUY_YES en 15min)
+- La excepción 60min (BUY_YES > BUY_NO) ya está en Kelly — sistema correcto
+- drift_15min: señal pequeña (solo 4 ops afectadas), no accionable aún
+- total_vol_5m en OF: patrón no monótono → posible sobreajuste, no implementar
+- **Siguiente análisis**: con n≥50 en BUY_YES #15min post-filtro, revisar si hay features adicionales
+
+### P5 — ORDER_FLOW rangos per-par
 Backfill calibró: BTC 0.42-0.44, SOL 0.36-0.40. No aplicar aún (n<200 con nuevo blacklist activo).
 Validar cuando BTC+SOL tengan n≥200 cada uno con el blacklist {2,7,9,10,11,22} activo.
 
-### P4 — Monitorear BTC#15min IC
-IC=+0.079 con n=36. Con los próximos 4 ops cruzará n=40. Si IC ≥ 0.08 → candidato live inmediato.
-Si IC cae por debajo de 0.06 → pausar y esperar recuperación.
-
-### P5 — Dataset Jon-Becker
+### P6 — Dataset Jon-Becker
 `github.com/Jon-Becker/prediction-market-analysis` — 36GB histórico.
 Desbloquea: calibrar theta OU, OBI, Cross-Market Arb, validar rangos OF per-par.
 
