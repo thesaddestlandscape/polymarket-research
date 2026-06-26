@@ -365,7 +365,7 @@ KELLY_COMPUESTO_BOOST = 1.5
 KELLY_COMPUESTO_MAX   = 2.00
 THETA_OU = 30.0
 ORDER_FLOW_BLACKLIST_HOURS = {7, 11, 18}  # UTC: 09xx/13xx/20xx Madrid — IC negativo
-ORDER_FLOW_PAIR_BLACKLIST = {'ETH', 'BNB'}  # sin señal en rango [0.38-0.46]
+ORDER_FLOW_PAIR_BLACKLIST = {'ETH', 'BNB', 'XRP', 'DOGE'}  # IC negativo conf=1.00 (2026-06-26: +XRP n=119 IC=-0.004, +DOGE n=83 IC=-0.006)
 # Cache pickle: mercados_recientes TTL=90s, historial_mercados TTL=90s
 # Ciclo fast: predict+trade cada 20s / resolve+postmortem cada 60s (3er ciclo)
 # Paralelización: fetch_slots (ThreadPool), fetch_mercados_paralelo(20 workers)

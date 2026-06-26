@@ -15,3 +15,4 @@ data/live/.env
 data/reports/
 data/backfill/klines/
 data/shadow/_cache_*.pkl
+data/shadow/postmortem.csv
