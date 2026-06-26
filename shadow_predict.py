@@ -1129,10 +1129,10 @@ def s_price_target_gbm(market, ctx):
 # ORDER_FLOW_5M — Cumulative delta en exchanges reales para slots Up/Down 5min
 # ─────────────────────────────────────────────────────────────────────────────
 
-# Horas UTC con edge negativo confirmado en ORDER_FLOW_5M (n≥20, IC≤-0.10)
-ORDER_FLOW_BLACKLIST_HOURS = {7, 11, 18}
-# 07:xx UTC (09:xx Madrid): IC=-0.227 n=20 PNL=-5.20€ — apertura europea, alta volatilidad espuria
-# 11:xx UTC (13:xx Madrid): IC=-0.057 n=59 PNL=-5.07€ — mediodia, señal OF no funciona
+# Horas UTC con edge negativo confirmado en ORDER_FLOW_5M (n≥20, IC≤-0.05)
+ORDER_FLOW_BLACKLIST_HOURS = {2, 7, 9, 10, 11, 22}
+# 02h IC=-0.081 n=29 PNL=-2.77€ | 07h IC=-0.067 n=28 PNL=-2.23€ | 09h IC=-0.067 n=28 PNL=-2.24€
+# 10h IC=-0.190 n=27 PNL=-6.18€ (peor hora) | 11h IC=-0.086 n=56 | 22h IC=-0.115 n=37 PNL=-4.87€
 # 18:xx UTC (20:xx Madrid): IC=-0.178 n=16 PNL=-4.15€ — cierre primera mitad
 # 22:xx UTC era el blacklist original (IC=-0.115); con n=30 actual IC=+0.031 → desbloqueado
 

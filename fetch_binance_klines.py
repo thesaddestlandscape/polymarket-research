@@ -151,20 +151,29 @@ def main():
         # Leer las columnas del header existente para ser compatible
         with open(prices_path, "r", newline="", encoding="utf-8") as pf:
             header = next(csv.reader(pf), [])
-        spot_row = {col: "" for col in header}
-        spot_row["timestamp_utc"] = ts_str
+        new_fmt = "asset" in header and "price_usd" in header
+        prices_escritas = {}
         for sym in SPOT_SYMBOLS:
             klines_sym = data.get(sym)
-            if klines_sym and isinstance(klines_sym, list) and sym in header:
+            if klines_sym and isinstance(klines_sym, list):
                 try:
-                    spot_row[sym] = float(klines_sym[-1][4])
+                    prices_escritas[sym] = float(klines_sym[-1][4])
                 except (IndexError, ValueError, TypeError):
                     pass
-        if any(spot_row.get(sym, "") != "" for sym in SPOT_SYMBOLS):
+        if prices_escritas:
             with open(prices_path, "a", newline="", encoding="utf-8") as pf:
-                w = csv.DictWriter(pf, fieldnames=header, extrasaction="ignore")
-                w.writerow(spot_row)
-            print(f"  Spot → prices/{fecha}.csv  BTC={spot_row.get('BTC','?')} ETH={spot_row.get('ETH','?')} SOL={spot_row.get('SOL','?')}")
+                if new_fmt:
+                    w = csv.writer(pf)
+                    for sym, price in prices_escritas.items():
+                        w.writerow([ts_str, sym, price, "", ""])
+                else:
+                    spot_row = {col: "" for col in header}
+                    spot_row["timestamp_utc"] = ts_str
+                    spot_row.update({k: v for k, v in prices_escritas.items() if k in header})
+                    w = csv.DictWriter(pf, fieldnames=header, extrasaction="ignore")
+                    w.writerow(spot_row)
+            btc = prices_escritas.get('BTC','?'); eth = prices_escritas.get('ETH','?'); sol = prices_escritas.get('SOL','?')
+            print(f"  Spot → prices/{fecha}.csv  BTC={btc} ETH={eth} SOL={sol}")
 
     print(f"[{datetime.now(timezone.utc).isoformat(timespec='seconds')}] Done.")
 

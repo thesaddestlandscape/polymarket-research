@@ -311,8 +311,28 @@ def guardar_precios(precios, ts):
     with open(archivo, "a", newline="", encoding="utf-8") as f:
         w = csv.writer(f)
         if nuevo:
-            w.writerow(["timestamp_utc"] + SPOT_SYMBOLS)
-        w.writerow([ts] + [precios.get(s, "") for s in SPOT_SYMBOLS])
+            # Formato nuevo: una fila por asset
+            w.writerow(["timestamp_utc", "asset", "price_usd", "change_1h_pct", "change_24h_pct"])
+            for sym in SPOT_SYMBOLS:
+                v = precios.get(sym)
+                if v is not None:
+                    w.writerow([ts, sym, v, "", ""])
+        else:
+            # Detectar formato del archivo existente
+            try:
+                with open(archivo, "r", newline="", encoding="utf-8") as rf:
+                    header = next(csv.reader(rf), [])
+            except Exception:
+                header = []
+            if "asset" in header:
+                # Formato nuevo: una fila por asset
+                for sym in SPOT_SYMBOLS:
+                    v = precios.get(sym)
+                    if v is not None:
+                        w.writerow([ts, sym, v, "", ""])
+            else:
+                # Formato viejo: una fila con todos los assets
+                w.writerow([ts] + [precios.get(s, "") for s in SPOT_SYMBOLS])
 
 
 def una_captura():
