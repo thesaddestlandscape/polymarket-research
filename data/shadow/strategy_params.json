@@ -1,14 +1,14 @@
 {
-  "timestamp_utc": "2026-06-26T09:59:56+00:00",
+  "timestamp_utc": "2026-06-26T10:02:15+00:00",
   "estrategias": {
     "UPDOWN_GBM": {
       "activa": true,
       "edge_minimo": 0.02,
-      "ic_bayes": -0.0121,
-      "n": 246,
-      "pnl_total": -2.0486,
+      "ic_bayes": -0.01,
+      "n": 247,
+      "pnl_total": -1.5169,
       "causa_principal": "DIRECTION_ERROR",
-      "motivo": "IC_bayes=-0.012 n=246 conf=1.00",
+      "motivo": "IC_bayes=-0.010 n=247 conf=1.00",
       "apuesta_kelly": 0.5
     },
     "UPDOWN_GBM#SOL#5min": {
@@ -29,7 +29,7 @@
           "ic_bueno": 0.2143,
           "n_malo": 12,
           "n_bueno": 5,
-          "descubierto": "2026-06-26T09:59:56+00:00"
+          "descubierto": "2026-06-26T10:02:15+00:00"
         },
         {
           "feature": "sigma_h",
@@ -39,7 +39,7 @@
           "ic_bueno": -0.0714,
           "n_malo": 12,
           "n_bueno": 5,
-          "descubierto": "2026-06-26T09:59:56+00:00"
+          "descubierto": "2026-06-26T10:02:15+00:00"
         }
       ],
       "patrones_ganadores": []
@@ -47,11 +47,11 @@
     "UPDOWN_GBM#SOL": {
       "activa": true,
       "edge_minimo": 0.02,
-      "ic_bayes": -0.0333,
-      "n": 58,
-      "pnl_total": 1.512,
+      "ic_bayes": -0.0246,
+      "n": 59,
+      "pnl_total": 2.0437,
       "causa_principal": "DIRECTION_ERROR",
-      "motivo": "IC_bayes=-0.033 n=58 conf=1.00",
+      "motivo": "IC_bayes=-0.025 n=59 conf=1.00",
       "apuesta_kelly": 0.5
     },
     "UPDOWN_GBM#5min": {
@@ -82,7 +82,7 @@
           "ic_bueno": 0.0,
           "n_malo": 8,
           "n_bueno": 4,
-          "descubierto": "2026-06-26T09:59:56+00:00"
+          "descubierto": "2026-06-26T10:02:15+00:00"
         },
         {
           "feature": "sigma_h",
@@ -92,7 +92,7 @@
           "ic_bueno": 0.1667,
           "n_malo": 8,
           "n_bueno": 4,
-          "descubierto": "2026-06-26T09:59:56+00:00"
+          "descubierto": "2026-06-26T10:02:15+00:00"
         }
       ],
       "patrones_ganadores": []
@@ -125,7 +125,7 @@
           "ic_bueno": 0.125,
           "n_malo": 10,
           "n_bueno": 6,
-          "descubierto": "2026-06-26T09:59:56+00:00"
+          "descubierto": "2026-06-26T10:02:15+00:00"
         }
       ],
       "patrones_ganadores": []
@@ -159,7 +159,7 @@
           "ic_base": 0.0625,
           "n_patron": 8,
           "kelly_boost": 1.0,
-          "descubierto": "2026-06-26T09:59:56+00:00"
+          "descubierto": "2026-06-26T10:02:15+00:00"
         }
       ]
     },
@@ -212,7 +212,7 @@
           "ic_base": 0.061,
           "n_patron": 12,
           "kelly_boost": 1.0,
-          "descubierto": "2026-06-26T09:59:56+00:00"
+          "descubierto": "2026-06-26T10:02:15+00:00"
         },
         {
           "feature": "sigma_h",
@@ -222,7 +222,7 @@
           "ic_base": 0.061,
           "n_patron": 20,
           "kelly_boost": 0.91,
-          "descubierto": "2026-06-26T09:59:56+00:00"
+          "descubierto": "2026-06-26T10:02:15+00:00"
         },
         {
           "feature": "drift_60min",
@@ -232,7 +232,7 @@
           "ic_base": 0.061,
           "n_patron": 14,
           "kelly_boost": 0.62,
-          "descubierto": "2026-06-26T09:59:56+00:00"
+          "descubierto": "2026-06-26T10:02:15+00:00"
         }
       ]
     },
@@ -249,12 +249,12 @@
     "UPDOWN_GBM#60min": {
       "activa": true,
       "edge_minimo": 0.02,
-      "ic_bayes": 0.0682,
-      "n": 42,
-      "pnl_total": 2.4616,
+      "ic_bayes": 0.0778,
+      "n": 43,
+      "pnl_total": 2.9933,
       "causa_principal": "DIRECTION_ERROR",
-      "motivo": "IC_bayes=+0.068 n=42 conf=1.00",
-      "apuesta_kelly": 0.68
+      "motivo": "IC_bayes=+0.078 n=43 conf=1.00",
+      "apuesta_kelly": 0.78
     },
     "UPDOWN_GBM#BTC#60min": {
       "activa": true,
@@ -689,11 +689,11 @@
     "UPDOWN_GBM#SOL#60min": {
       "activa": true,
       "edge_minimo": 0.02,
-      "ic_bayes": -0.04,
-      "n": 8,
-      "pnl_total": -0.0869,
+      "ic_bayes": -0.0205,
+      "n": 9,
+      "pnl_total": 0.4448,
       "causa_principal": "DIRECTION_ERROR",
-      "motivo": "IC_bayes=-0.100 n=8 conf=0.40",
+      "motivo": "IC_bayes=-0.045 n=9 conf=0.45",
       "apuesta_kelly": 0.5
     },
     "UPDOWN_OU_5M": {
