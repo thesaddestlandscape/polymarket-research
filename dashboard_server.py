@@ -445,12 +445,12 @@ footer { text-align: center; padding: 10px; font-size: 10px; color: var(--muted)
 
 <!-- Stats row -->
 <div class="stats-row">
-  <div class="stat-card"><div class="label">Bankroll</div><div class="value neu" id="s-bankroll">—</div></div>
-  <div class="stat-card"><div class="label">PnL Total</div><div class="value" id="s-pnl">—</div></div>
-  <div class="stat-card"><div class="label">PnL Hoy</div><div class="value" id="s-pnl-hoy">—</div></div>
-  <div class="stat-card"><div class="label">PnL 7 días</div><div class="value" id="s-pnl-7d">—</div></div>
-  <div class="stat-card"><div class="label">Win Rate</div><div class="value neu" id="s-wr">—</div></div>
-  <div class="stat-card"><div class="label">Ops (Hoy)</div><div class="value neu" id="s-ops">—</div></div>
+  <div class="stat-card"><div class="label">💰 Capital disponible</div><div class="value neu" id="s-bankroll">—</div></div>
+  <div class="stat-card"><div class="label">📈 Beneficio total</div><div class="value" id="s-pnl">—</div></div>
+  <div class="stat-card"><div class="label">🎯 Beneficio hoy</div><div class="value" id="s-pnl-hoy">—</div></div>
+  <div class="stat-card"><div class="label">📅 Últimos 7 días</div><div class="value" id="s-pnl-7d">—</div></div>
+  <div class="stat-card"><div class="label">✅ Apuestas acertadas</div><div class="value neu" id="s-wr">—</div></div>
+  <div class="stat-card"><div class="label">🎲 Apuestas (hoy)</div><div class="value neu" id="s-ops">—</div></div>
 </div>
 
 <!-- Tabs -->
@@ -464,11 +464,11 @@ footer { text-align: center; padding: 10px; font-size: 10px; color: var(--muted)
 <!-- Row 1: Equity + PnL diario -->
 <div class="grid grid-2" style="grid-template-columns:2fr 1fr">
   <div class="panel">
-    <div class="panel-title">Equity Curve</div>
+    <div class="panel-title">📈 Evolución del capital — cada punto es una apuesta resuelta</div>
     <div class="chart-host" id="equity-chart" style="height:200px"></div>
   </div>
   <div class="panel">
-    <div class="panel-title">PnL Diario</div>
+    <div class="panel-title">📊 Ganancia / Pérdida por día</div>
     <div class="chart-host" id="daily-chart" style="height:200px"></div>
   </div>
 </div>
@@ -476,11 +476,11 @@ footer { text-align: center; padding: 10px; font-size: 10px; color: var(--muted)
 <!-- Row 2: BTC price + Rolling IC -->
 <div class="grid grid-2">
   <div class="panel">
-    <div class="panel-title">BTC / ETH / SOL — Precio (7d)</div>
+    <div class="panel-title">💹 Precio de las criptos — los marcadores ▲▼ son apuestas ganadas/perdidas en BTC</div>
     <div class="chart-host" id="price-chart" style="height:180px"></div>
   </div>
   <div class="panel">
-    <div class="panel-title">Rolling IC (ventana 20 ops)</div>
+    <div class="panel-title">📡 Tendencia de precisión — media de las últimas 20 apuestas por estrategia</div>
     <div id="legend"></div>
     <div class="chart-host" id="rolling-chart" style="height:155px"></div>
   </div>
@@ -489,14 +489,14 @@ footer { text-align: center; padding: 10px; font-size: 10px; color: var(--muted)
 <!-- Row 3: Hora UTC + Ventanas -->
 <div class="grid grid-2">
   <div class="panel">
-    <div class="panel-title">IC por Hora UTC — ORDER_FLOW (🚫 = bloqueada)</div>
+    <div class="panel-title">🕐 Mejor hora para apostar — verde = rentable, 🚫 = hora bloqueada por el bot</div>
     <div class="hour-grid" id="hour-bars"></div>
     <div style="display:flex;justify-content:space-between;margin-top:4px;font-size:9px;color:var(--muted)">
-      <span>00 UTC</span><span>06 UTC</span><span>12 UTC</span><span>18 UTC</span><span>23 UTC</span>
+      <span>medianoche</span><span>06h</span><span>mediodía</span><span>18h</span><span>23h</span>
     </div>
   </div>
   <div class="panel">
-    <div class="panel-title">Ventanas Madrid (todas las estrategias)</div>
+    <div class="panel-title">⏰ Horarios de operación — Madrid (todas las estrategias)</div>
     <div class="ventanas-grid" id="ventanas"></div>
   </div>
 </div>
@@ -504,21 +504,21 @@ footer { text-align: center; padding: 10px; font-size: 10px; color: var(--muted)
 <!-- Row 4: Por estrategia + Por activo -->
 <div class="grid grid-2">
   <div class="panel">
-    <div class="panel-title">IC por Estrategia</div>
+    <div class="panel-title">🧠 Ventaja por estrategia — qué tan por encima del 50% acierta cada una</div>
     <div id="strat-bars"></div>
   </div>
   <div class="panel">
-    <div class="panel-title">IC por Activo</div>
+    <div class="panel-title">🪙 Ventaja por moneda</div>
     <div id="asset-bars"></div>
-    <div class="panel-title" style="margin-top:16px">Detalle por Estrategia</div>
+    <div class="panel-title" style="margin-top:16px">📋 Tabla completa de estrategias</div>
     <table class="mini-table">
-      <thead><tr><th>Estrategia</th><th>n</th><th>WR%</th><th>IC</th><th>PnL</th></tr></thead>
+      <thead><tr><th>Estrategia</th><th>Apuestas</th><th>Aciertos</th><th>Ventaja</th><th>Beneficio</th></tr></thead>
       <tbody id="strat-table"></tbody>
     </table>
   </div>
 </div>
 
-<footer>Auto-refresh 60s · Datos: data/shadow/results.csv · Servidor: dashboard_server.py</footer>
+<footer>Se actualiza automáticamente cada 60 segundos · "Ventaja" = qué tan por encima del 50% acierta el modelo · Verde = ganando, Rojo = perdiendo</footer>
 
 <script>
 // ─── Estado ──────────────────────────────────────────────────────────────────
@@ -619,7 +619,7 @@ function renderAll() {
   document.getElementById("s-pnl-7d").innerHTML   = fmt(stats.pnl_7d);
   document.getElementById("s-wr").textContent     = `${stats.win_rate}%`;
   document.getElementById("s-ops").textContent    = `${stats.n_ops} (${stats.n_hoy})`;
-  document.getElementById("update-badge").textContent = `Última actualización: ${stats.updated} · auto-refresh 60s`;
+  document.getElementById("update-badge").textContent = `Actualizado: ${stats.updated} · refresco automático cada 60s`;
 
   // Equity curve
   const eqData = filterByPeriod(equity_curve, PERIOD);
@@ -645,7 +645,7 @@ function renderAll() {
   if (btc_markers?.length) btcLine.setMarkers(btc_markers.filter(m => m.time >= pCutoff).slice(-200));
   priceChart.timeScale().fitContent();
 
-  // Rolling IC
+  // Rolling IC — nombres legibles en la leyenda
   const legEl = document.getElementById("legend");
   legEl.innerHTML = "";
   let ci = 0;
@@ -658,7 +658,7 @@ function renderAll() {
     const filtered = filterByPeriod(pts, PERIOD);
     if (filtered.length) series.setData(filtered);
     rollingSeries[k] = series;
-    legEl.innerHTML += `<div class="legend-item"><div class="legend-dot" style="background:${color}"></div><span>${k}</span></div>`;
+    legEl.innerHTML += `<div class="legend-item"><div class="legend-dot" style="background:${color}"></div><span>${simpleName(k)}</span></div>`;
   }
   rollingChart.timeScale().fitContent();
 
@@ -670,7 +670,7 @@ function renderAll() {
     const color = h.blacklisted ? "#ef535077"
                 : h.ic > 0 ? `#26a69a${Math.round(40 + pct * 0.6).toString(16)}` : "#ef535077";
     const bl    = h.blacklisted ? " hour-bl" : "";
-    const tip   = `${h.hour}:00 UTC | IC=${h.ic.toFixed(3)} n=${h.n} WR=${h.wr}% PnL=${h.pnl>0?"+":""}${h.pnl}€`;
+    const tip   = `${h.hour}:00h UTC${h.blacklisted?" — BLOQUEADA":""} | Ventaja: ${h.ic>=0?"+":""}${(h.ic*100).toFixed(1)}% | Apuestas: ${h.n} | Aciertos: ${h.wr}% | Beneficio: ${h.pnl>=0?"+":""}${h.pnl}€`;
     return `<div class="hour-bar-wrap${bl}" title="${tip}">
       <div class="hour-bar" style="height:${Math.max(4, pct * 0.9)}px;background:${color}"></div>
       <div class="hour-label">${String(h.hour).padStart(2,"0")}</div>
@@ -683,31 +683,31 @@ function renderAll() {
     const cls = v.ic > 0 ? "pos-card" : v.ic < 0 ? "neg-card" : "";
     const icColor = v.ic > 0 ? "var(--green)" : v.ic < 0 ? "var(--red)" : "var(--text)";
     return `<div class="ventana-card ${cls}">
-      <div class="ventana-time">${v.label} 🕐</div>
-      <div class="ventana-ic" style="color:${icColor}">${v.ic > 0 ? "+" : ""}${v.ic.toFixed(3)}</div>
-      <div class="ventana-sub">WR ${v.wr}% · n=${v.n} · ${v.pnl >= 0 ? "+" : ""}${v.pnl}€</div>
+      <div class="ventana-time">${v.label}</div>
+      <div class="ventana-ic" style="color:${icColor}">${v.ic > 0 ? "+" : ""}${(v.ic*100).toFixed(1)}%</div>
+      <div class="ventana-sub">${v.wr}% aciertos · ${v.n} apuestas · ${v.pnl >= 0 ? "+" : ""}${v.pnl}€</div>
     </div>`;
   }).join("");
 
   // Barras estrategia
-  renderBars("strat-bars", by_strategy, d => d.name, d => d.ic, d => d.activa,
-    d => `IC ${d.ic > 0 ? "+" : ""}${d.ic.toFixed(3)}`, d => `n=${d.n}`);
+  renderBars("strat-bars", by_strategy, d => simpleName(d.name), d => d.ic, d => d.activa,
+    d => `${d.ic >= 0 ? "+" : ""}${(d.ic*100).toFixed(1)}%`, d => `${d.n} ap.`);
 
   // Barras activo
   renderBars("asset-bars", by_asset, d => d.asset, d => d.ic, () => true,
-    d => `IC ${d.ic > 0 ? "+" : ""}${d.ic.toFixed(3)}`, d => `n=${d.n}`);
+    d => `${d.ic >= 0 ? "+" : ""}${(d.ic*100).toFixed(1)}%`, d => `${d.n} ap.`);
 
   // Tabla de estrategias
   const tblBody = document.getElementById("strat-table");
   tblBody.innerHTML = by_strategy.slice(0, 30).map(s => {
     const icColor = s.ic > 0 ? "var(--green)" : s.ic < 0 ? "var(--red)" : "var(--text)";
     const pColor  = s.pnl > 0 ? "var(--green)" : s.pnl < 0 ? "var(--red)" : "var(--text)";
-    const active  = s.activa ? "" : "style='color:var(--muted)'";
-    return `<tr>
-      <td ${active}>${s.activa ? "✅" : "🚫"} ${s.name}</td>
+    const rowStyle = s.activa ? "" : "style='opacity:.5'";
+    return `<tr ${rowStyle}>
+      <td title="${s.name}">${s.activa ? "✅" : "🚫"} ${simpleName(s.name)}</td>
       <td>${s.n}</td>
       <td>${s.wr}%</td>
-      <td style="color:${icColor}">${s.ic > 0 ? "+" : ""}${s.ic.toFixed(3)}</td>
+      <td style="color:${icColor}">${s.ic >= 0 ? "+" : ""}${(s.ic*100).toFixed(1)}%</td>
       <td style="color:${pColor}">${s.pnl >= 0 ? "+" : ""}${s.pnl}€</td>
     </tr>`;
   }).join("");
@@ -726,7 +726,7 @@ function renderBars(elId, data, labelFn, icFn, activaFn, valFn, nFn) {
       <div class="bar-track">
         <div class="bar-fill" style="width:${pct}%;background:${color}${ic < 0 ? "88" : ""}"></div>
       </div>
-      <div class="bar-val" style="color:${color}">${ic >= 0 ? "+" : ""}${ic.toFixed(3)}</div>
+      <div class="bar-val" style="color:${color}">${valFn(d)}</div>
       <div class="bar-n">${nFn(d)}</div>
     </div>`;
   }).join("");
@@ -752,6 +752,29 @@ document.querySelectorAll(".tab").forEach(tab => {
     renderAll();
   });
 });
+
+// ─── Nombres legibles para estrategias ───────────────────────────────────────
+function simpleName(k) {
+  return k
+    .replace("ORDER_FLOW_5M#", "Flujo órdenes · ")
+    .replace("UPDOWN_GBM#", "Tendencia · ")
+    .replace("UPDOWN_OU_5M#", "Reversión · ")
+    .replace("SMART_FLOW_1H#", "Flujo inteligente · ")
+    .replace("WEEKLY_PRICE#", "Precio semanal · ")
+    .replace("PRICE_TARGET_GBM#", "Precio objetivo · ")
+    .replace("RESOLUTION_SNIPER#", "Sniper · ")
+    .replace("ORDER_FLOW_5M", "Flujo de órdenes")
+    .replace("UPDOWN_GBM", "Tendencia GBM")
+    .replace("WEEKLY_PRICE", "Precio semanal")
+    .replace("#5min", " 5min")
+    .replace("#15min", " 15min")
+    .replace("#60min", " 1 hora")
+    .replace("#240min", " 4 horas")
+    .replace("#daily", " diario")
+    .replace("#atexpiry", " al vencer")
+    .replace("#reach", " alcance")
+    .replace("#sniper", " sniper");
+}
 
 // ─── Boot ────────────────────────────────────────────────────────────────────
 initCharts();
