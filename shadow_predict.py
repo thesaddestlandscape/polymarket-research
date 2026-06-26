@@ -625,7 +625,23 @@ def cargar_precios_intraday():
             continue
         try:
             with open(path, encoding="utf-8") as f:
-                for row in csv.DictReader(f):
+                reader = csv.DictReader(f)
+                fieldnames = reader.fieldnames or []
+                new_fmt = "asset" in fieldnames
+                old_in_new = new_fmt and "BTC" not in fieldnames
+                # Si new_fmt: header tiene "asset","price_usd"
+                #   - filas limpias:  asset=BTC/ETH/…, price_usd=precio
+                #   - filas mixtas:   asset=precio_BTC, price_usd=precio_ETH, …
+                #     (escritas por capture_markets con formato viejo en fichero nuevo)
+                OLD_IN_NEW_COLS = {  # col_nueva → símbolo
+                    "asset": "BTC", "price_usd": "ETH",
+                    "change_1h_pct": "SOL", "change_24h_pct": "XRP",
+                }
+                buf: dict = {}
+                buf_ts = None
+                def _emit(ts, d):
+                    if d and ts: rows.append((ts, dict(d)))
+                for row in reader:
                     try:
                         ts = datetime.fromisoformat(
                             row["timestamp_utc"].replace("Z", "+00:00"))
@@ -633,16 +649,42 @@ def cargar_precios_intraday():
                             ts = ts.replace(tzinfo=timezone.utc)
                     except Exception:
                         continue
-                    prices = {}
-                    for sym in SYMS:
-                        v = row.get(sym, "")
-                        if v:
+                    if new_fmt:
+                        asset = row.get("asset", "").strip().upper()
+                        if asset in SYMS:
+                            # fila limpia formato nuevo
                             try:
-                                prices[sym] = float(v)
-                            except ValueError:
-                                pass
-                    if prices:
-                        rows.append((ts, prices))
+                                v = float(row.get("price_usd", ""))
+                            except (ValueError, TypeError):
+                                continue
+                            if ts != buf_ts:
+                                _emit(buf_ts, buf); buf, buf_ts = {}, ts
+                            buf[asset] = v
+                        else:
+                            # fila vieja dentro de fichero nuevo: cada col = un sym
+                            prices = {}
+                            for col, sym in OLD_IN_NEW_COLS.items():
+                                try:
+                                    prices[sym] = float(row.get(col, ""))
+                                except (ValueError, TypeError):
+                                    pass
+                            if prices:
+                                if ts != buf_ts:
+                                    _emit(buf_ts, buf); buf, buf_ts = {}, ts
+                                buf.update(prices)
+                    else:
+                        prices = {}
+                        for sym in SYMS:
+                            v = row.get(sym, "")
+                            if v:
+                                try:
+                                    prices[sym] = float(v)
+                                except ValueError:
+                                    pass
+                        if prices:
+                            rows.append((ts, prices))
+                if new_fmt:
+                    _emit(buf_ts, buf)
         except Exception as e:
             print(f"  Error precios_intraday {fecha}: {e}")
     rows.sort(key=lambda x: x[0])

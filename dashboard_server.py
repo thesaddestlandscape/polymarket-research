@@ -153,13 +153,20 @@ def compute_data():
 
     # ── Equity curve ──────────────────────────────────────────────────────────
     bankroll = BANKROLL_INICIAL
-    equity = [{"time": _ts(rows[0]["resolution_timestamp"]) - 1, "value": bankroll}] if rows else []
+    equity_raw = []
     for r in rows:
         ts = _ts(r.get("resolution_timestamp", ""))
         if not ts:
             continue
         bankroll += _pnl(r)
-        equity.append({"time": ts, "value": round(bankroll, 4)})
+        equity_raw.append({"time": ts, "value": round(bankroll, 4)})
+    # LightweightCharts exige timestamps estrictamente crecientes — deduplicar por segundo
+    seen = {}
+    for p in equity_raw:
+        seen[p["time"]] = p["value"]  # si hay duplicado, gana el último (más actualizado)
+    equity = [{"time": t, "value": v} for t, v in sorted(seen.items())]
+    if equity:
+        equity = [{"time": equity[0]["time"] - 1, "value": BANKROLL_INICIAL}] + equity
 
     # ── PnL diario ────────────────────────────────────────────────────────────
     daily = defaultdict(lambda: {"pnl": 0.0, "n": 0, "wins": 0})
@@ -304,6 +311,44 @@ def compute_data():
             "wr": round(wins / n * 100, 1) if n else 0,
         })
 
+    # ── Rentabilidad por apuesta ──────────────────────────────────────────────
+    all_pnls  = [_pnl(r) for r in rows]
+    wins_pnl  = [p for p in all_pnls if p > 0]
+    loss_pnl  = [p for p in all_pnls if p < 0]
+    BUCKETS = [
+        ("< −1€",        None, -1.0),
+        ("−1€ a −0.5€",  -1.0, -0.5),
+        ("−0.5€ a 0€",   -0.5,  0.0),
+        ("0€ a +0.5€",    0.0,  0.5),
+        ("+0.5€ a +1€",   0.5,  1.0),
+        ("> +1€",          1.0, None),
+    ]
+    dist = []
+    for label_b, lo, hi in BUCKETS:
+        cnt = sum(1 for p in all_pnls
+                  if (lo is None or p >= lo) and (hi is None or p < hi))
+        dist.append({"label": label_b, "n": cnt,
+                     "pct": round(cnt / len(all_pnls) * 100, 1) if all_pnls else 0,
+                     "pos": (hi is None or hi > 0) and (lo is None or lo >= 0)})
+
+    per_bet_strat = sorted([
+        {"name": k,
+         "avg": round(d["pnl"] / d["n"], 4),
+         "n": d["n"],
+         "pnl": round(d["pnl"], 2),
+         "activa": activas.get(k, True)}
+        for k, d in strat.items() if d["n"] >= 10
+    ], key=lambda x: x["avg"], reverse=True)
+
+    per_bet = {
+        "avg_total": round(sum(all_pnls) / len(all_pnls), 4) if all_pnls else 0,
+        "avg_win":   round(sum(wins_pnl) / len(wins_pnl), 4) if wins_pnl else 0,
+        "avg_loss":  round(sum(loss_pnl) / len(loss_pnl), 4) if loss_pnl else 0,
+        "ratio":     round(abs(sum(wins_pnl) / len(wins_pnl)) / abs(sum(loss_pnl) / len(loss_pnl)), 3) if wins_pnl and loss_pnl else 0,
+        "dist":      dist,
+        "by_strategy": per_bet_strat,
+    }
+
     # ── Stats globales ────────────────────────────────────────────────────────
     pnl_total  = sum(_pnl(r) for r in rows)
     wins_total = sum(_win(r) for r in rows)
@@ -351,6 +396,7 @@ def compute_data():
         "prices":        prices,
         "btc_markers":   btc_markers,
         "ventanas_perf": ventanas_perf,
+        "per_bet":       per_bet,
     }
 
 # ─── HTML ────────────────────────────────────────────────────────────────────
@@ -516,6 +562,48 @@ footer { text-align: center; padding: 10px; font-size: 10px; color: var(--muted)
       <tbody id="strat-table"></tbody>
     </table>
   </div>
+</div>
+
+<!-- Row 5: Rentabilidad por apuesta -->
+<div class="grid" style="grid-template-columns:1fr 1fr 1fr;background:var(--border);gap:1px;border-top:1px solid var(--border)">
+
+  <!-- Mini stats -->
+  <div class="panel">
+    <div class="panel-title">💶 ¿Cuánto gana el bot por apuesta? — resumen</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:4px">
+      <div style="background:#ffffff08;border-radius:6px;padding:12px;text-align:center">
+        <div style="font-size:10px;color:var(--muted);margin-bottom:4px">Valor esperado por apuesta</div>
+        <div id="pb-avg" style="font-size:26px;font-weight:700">—</div>
+        <div style="font-size:10px;color:var(--muted)">en promedio, cada apuesta genera este importe neto</div>
+      </div>
+      <div style="background:#ffffff08;border-radius:6px;padding:12px;text-align:center">
+        <div style="font-size:10px;color:var(--muted);margin-bottom:4px">Ratio ganancia / pérdida</div>
+        <div id="pb-ratio" style="font-size:26px;font-weight:700">—</div>
+        <div style="font-size:10px;color:var(--muted)">cuando gana, gana esta proporción vs cuando pierde</div>
+      </div>
+      <div style="background:#26a69a18;border:1px solid #26a69a44;border-radius:6px;padding:12px;text-align:center">
+        <div style="font-size:10px;color:var(--muted);margin-bottom:4px">✅ Media cuando acierta</div>
+        <div id="pb-win" style="font-size:22px;font-weight:700;color:var(--green)">—</div>
+      </div>
+      <div style="background:#ef535018;border:1px solid #ef535044;border-radius:6px;padding:12px;text-align:center">
+        <div style="font-size:10px;color:var(--muted);margin-bottom:4px">❌ Media cuando falla</div>
+        <div id="pb-loss" style="font-size:22px;font-weight:700;color:var(--red)">—</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Distribución -->
+  <div class="panel">
+    <div class="panel-title">📊 Distribución de resultados por apuesta</div>
+    <div id="pb-dist" style="margin-top:8px"></div>
+  </div>
+
+  <!-- Por estrategia -->
+  <div class="panel">
+    <div class="panel-title">🏆 Ganancia neta media por apuesta y estrategia</div>
+    <div id="pb-strat"></div>
+  </div>
+
 </div>
 
 <footer>Se actualiza automáticamente cada 60 segundos · "Ventaja" = qué tan por encima del 50% acierta el modelo · Verde = ganando, Rojo = perdiendo</footer>
@@ -711,6 +799,8 @@ function renderAll() {
       <td style="color:${pColor}">${s.pnl >= 0 ? "+" : ""}${s.pnl}€</td>
     </tr>`;
   }).join("");
+
+  renderPerBet(DATA.per_bet);
 }
 
 function renderBars(elId, data, labelFn, icFn, activaFn, valFn, nFn) {
@@ -728,6 +818,54 @@ function renderBars(elId, data, labelFn, icFn, activaFn, valFn, nFn) {
       </div>
       <div class="bar-val" style="color:${color}">${valFn(d)}</div>
       <div class="bar-n">${nFn(d)}</div>
+    </div>`;
+  }).join("");
+}
+
+function renderPerBet(per_bet) {
+  if (!per_bet) return;
+  const { avg_total, avg_win, avg_loss, ratio, dist, by_strategy } = per_bet;
+
+  // Stats
+  const avgEl = document.getElementById("pb-avg");
+  avgEl.textContent = `${avg_total >= 0 ? "+" : ""}${avg_total.toFixed(4)}€`;
+  avgEl.style.color = avg_total >= 0 ? "var(--green)" : "var(--red)";
+
+  document.getElementById("pb-ratio").textContent = `${ratio.toFixed(2)}x`;
+  document.getElementById("pb-win").textContent   = `+${avg_win.toFixed(3)}€`;
+  document.getElementById("pb-loss").textContent  = `${avg_loss.toFixed(3)}€`;
+
+  // Distribución
+  const distEl = document.getElementById("pb-dist");
+  const maxPct = Math.max(...dist.map(d => d.pct), 1);
+  distEl.innerHTML = dist.map(d => {
+    const color = d.pos ? "var(--green)" : "var(--red)";
+    const opacity = d.pos ? "" : "88";
+    return `<div class="bar-row" style="margin-bottom:7px">
+      <div class="bar-label" style="width:110px;font-size:11px">${d.label}</div>
+      <div class="bar-track">
+        <div class="bar-fill" style="width:${d.pct/maxPct*100}%;background:${color}${opacity}"></div>
+      </div>
+      <div class="bar-val" style="color:${color};width:44px">${d.pct}%</div>
+      <div class="bar-n">${d.n} ap.</div>
+    </div>`;
+  }).join("");
+
+  // Por estrategia (avg €/apuesta)
+  const stratEl = document.getElementById("pb-strat");
+  const maxAvg = Math.max(...by_strategy.map(d => Math.abs(d.avg)), 0.01);
+  stratEl.innerHTML = by_strategy.slice(0, 16).map(d => {
+    const color  = d.avg >= 0 ? "var(--green)" : "var(--red)";
+    const pct    = Math.abs(d.avg) / maxAvg * 100;
+    const label  = simpleName(d.name);
+    const opacity = d.activa ? "" : "88";
+    return `<div class="bar-row">
+      <div class="bar-label ${d.activa ? "" : "inactive"}" title="${d.name}" style="width:150px">${label}</div>
+      <div class="bar-track">
+        <div class="bar-fill" style="width:${pct}%;background:${color}${opacity}"></div>
+      </div>
+      <div class="bar-val" style="color:${color};width:64px">${d.avg >= 0 ? "+" : ""}${d.avg.toFixed(4)}€</div>
+      <div class="bar-n">${d.n} ap.</div>
     </div>`;
   }).join("");
 }
