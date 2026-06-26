@@ -1094,9 +1094,10 @@ ORDER_FLOW_BLACKLIST_HOURS = {7, 11, 18}
 # 18:xx UTC (20:xx Madrid): IC=-0.178 n=16 PNL=-4.15€ — cierre primera mitad
 # 22:xx UTC era el blacklist original (IC=-0.115); con n=30 actual IC=+0.031 → desbloqueado
 
-# Pares con IC negativo dentro del sweet spot [0.38-0.46] (2026-06-25, n≥34):
-# ETH: n=71, IC=-0.007; BNB: n=34, IC=-0.028 — flujo Binance ya priceado en estos pares.
-ORDER_FLOW_PAIR_BLACKLIST = {'ETH', 'BNB'}
+# Pares con IC negativo en sweet spot [0.38-0.46] (conf=1.00, n≥80):
+# ETH: n=112, IC=-0.026 | XRP: n=119, IC=-0.004 (-6.13€ el 2026-06-25) | DOGE: n=83, IC=-0.006
+# BNB: n=63, IC=+0.038 shadow — backfill 90d negativo, mantener bloqueado hasta n≥150
+ORDER_FLOW_PAIR_BLACKLIST = {'ETH', 'BNB', 'XRP', 'DOGE'}
 
 
 def s_order_flow_5m(market, ctx):
