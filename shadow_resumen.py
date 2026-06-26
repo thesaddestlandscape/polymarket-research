@@ -6,10 +6,14 @@ Visible en GitHub en tiempo real. Muestra:
   - P&L del día y acumulado por estrategia con IC, Kelly, apuesta actual
   - Últimas 5 resoluciones
   - Señales abiertas pendientes
+
+También envía un resumen compacto por Telegram cada TELEGRAM_INTERVALO_MIN minutos.
 """
 import csv
 import json
 import glob
+import os
+import requests as _requests
 from datetime import datetime, timezone, timedelta
 from pathlib import Path
 
@@ -17,6 +21,9 @@ DIR_SHADOW   = Path("data/shadow")
 RESULTS_PATH = DIR_SHADOW / "results.csv"
 PARAMS_PATH  = DIR_SHADOW / "strategy_params.json"
 OUTPUT_MD    = DIR_SHADOW / "estado_actual.md"
+LAST_TG_PATH = DIR_SHADOW / "_last_telegram_update.ts"
+
+TELEGRAM_INTERVALO_MIN = 60   # enviar resumen cada N minutos
 
 CAPITAL_OPERATIVO = 20.0
 DEPOSITO_TOTAL    = 30.0
@@ -189,6 +196,185 @@ def main():
     print(f"  [resumen] Bankroll={bankroll:.2f}€ PNL={signo_pnl}{pnl_total:.2f}€ "
           f"({signo_pnl}{roi_op:.1f}% op) | Hoy={signo_hoy}{pnl_hoy:.2f}€ | "
           f"n={n_total} wr={wr_g:.1f}% | abiertas={abiertas}")
+
+    # Telegram periódico
+    _telegram_periodico(ahora, bankroll, pnl_total, pnl_hoy, n_total, n_win,
+                        por_strat, params)
+
+
+def _ic_bayes(win, n):
+    return ((win + 1) / (n + 2) - 0.5) * min(1.0, n / 20)
+
+
+def _esc(s):
+    """Escapa _ y * para Markdown v1 de Telegram."""
+    return s.replace('_', '\\_').replace('*', '\\*')
+
+
+def _stats_directas(resultados):
+    """Calcula stats curadas directamente de results.csv, sin ruido de params."""
+    from collections import defaultdict
+
+    PAIR_BL   = {'Ethereum', 'XRP', 'Dogecoin', 'BNB', 'Binance'}
+    GBM_KEYS  = {
+        'BTC#15min':  ('UPDOWN_GBM', '15min', 'BTC'),
+        'SOL#15min':  ('UPDOWN_GBM', '15min', 'SOL'),
+        'ETH#15min':  ('UPDOWN_GBM', '15min', 'ETH'),
+        'BTC#60min':  ('UPDOWN_GBM', '60min', 'BTC'),
+        'ETH#60min':  ('UPDOWN_GBM', '60min', 'ETH'),
+        'SOL#60min':  ('UPDOWN_GBM', '60min', 'SOL'),
+    }
+
+    gbm = defaultdict(lambda: {'n': 0, 'win': 0, 'pnl': 0.0})
+    of_btc_sol = {'n': 0, 'win': 0, 'pnl': 0.0}
+    buyno_15min = {'n': 0, 'win': 0, 'pnl': 0.0}
+    buyyes_60min = {'n': 0, 'win': 0, 'pnl': 0.0}
+
+    for r in resultados:
+        strat = r.get('strategy', '')
+        sub   = r.get('subtype', '')
+        dec   = r.get('decision', '')
+        q     = r.get('question', '')
+        w     = int(r.get('acierto', 0))
+        pnl   = float(r.get('pnl_neto', 0))
+
+        if strat == 'UPDOWN_GBM':
+            parts = sub.split('#')  # e.g. BTC#15min
+            if len(parts) == 2:
+                pair, window = parts[0], parts[1]
+                key = f'{pair}#{window}'
+                if key in GBM_KEYS:
+                    gbm[key]['n']   += 1
+                    gbm[key]['win'] += w
+                    gbm[key]['pnl'] += pnl
+                    # Split BUY_NO / BUY_YES
+                    if window == '15min' and dec == 'BUY_NO':
+                        buyno_15min['n'] += 1; buyno_15min['win'] += w; buyno_15min['pnl'] += pnl
+                    if window == '60min' and dec == 'BUY_YES':
+                        buyyes_60min['n'] += 1; buyyes_60min['win'] += w; buyyes_60min['pnl'] += pnl
+
+        elif strat == 'ORDER_FLOW_5M':
+            if not any(p in q for p in PAIR_BL):
+                of_btc_sol['n']   += 1
+                of_btc_sol['win'] += w
+                of_btc_sol['pnl'] += pnl
+
+    return gbm, of_btc_sol, buyno_15min, buyyes_60min
+
+
+def _telegram_periodico(ahora, bankroll, pnl_total, pnl_hoy,
+                         n_total, n_win, por_strat, params):
+    tok = os.environ.get("TELEGRAM_TOKEN", "")
+    cid = os.environ.get("TELEGRAM_CHAT_ID", "")
+    if not tok or not cid:
+        return
+
+    # Comprobar si toca enviar
+    ahora_ts = ahora.timestamp()
+    if LAST_TG_PATH.exists():
+        try:
+            ultimo = float(LAST_TG_PATH.read_text().strip())
+            if ahora_ts - ultimo < TELEGRAM_INTERVALO_MIN * 60:
+                return
+        except Exception:
+            pass
+
+    # Estado live
+    try:
+        from live_guard import estado_live
+        est = estado_live()
+        switch_on   = est["switch"]
+        en_ventana  = est["en_ventana"]
+        prox        = est.get("proxima_ventana", "")
+        if en_ventana:
+            live_txt = f"✅ ON | En ventana {est['motivo']}"
+        elif switch_on:
+            live_txt = f"🟡 ON | Fuera ventana (prox: {prox})"
+        else:
+            live_txt = f"❌ OFF | Fuera ventana (prox: {prox})"
+    except Exception:
+        live_txt = "? (error estado)"
+
+    # Stats curadas directamente de results.csv
+    resultados_raw = cargar_csv(RESULTS_PATH)
+    gbm, of_bs, buyno, buyyes = _stats_directas(resultados_raw)
+
+    LIVE_IC = 0.08
+    LIVE_N  = 40
+
+    def fila(label, d, extra=""):
+        n, win, pnl = d['n'], d['win'], d['pnl']
+        if n == 0:
+            return None
+        ic = _ic_bayes(win, n)
+        sp = "+" if pnl >= 0 else ""
+        prog = f"n={n}/{LIVE_N}" if n < LIVE_N else f"n={n}✓"
+        if ic >= LIVE_IC and n >= LIVE_N:
+            ico = "🔥"
+        elif ic >= LIVE_IC * 0.75 and n >= LIVE_N * 0.75:
+            ico = "⏳"
+        elif ic < 0:
+            ico = "⚠️"
+        else:
+            ico = "▸ "
+        return f"{ico} {_esc(label):<18} {prog:<8} IC={ic:+.3f}  {sp}{pnl:.2f}€{extra}"
+
+    wr_g = n_win / n_total * 100 if n_total else 0
+    sp   = "+" if pnl_total >= 0 else ""
+    sh   = "+" if pnl_hoy   >= 0 else ""
+    em   = "🟢" if pnl_total >= 0 else "🔴"
+
+    lineas = [
+        f"📊 *Polymarket Bot* — {ahora.strftime('%H:%M UTC')}",
+        "",
+        f"{em} Bankroll: *{bankroll:.2f}€*  ({sp}{pnl_total:.2f}€ total | hoy: {sh}{pnl_hoy:.2f}€)",
+        f"📈 {n_total} ops  |  {wr_g:.1f}% WR",
+        "",
+        "*GBM — candidatas live:*",
+    ]
+
+    # Dirección split primero (más informativo)
+    f_buyno = fila("BUY\\_NO#15min", buyno)
+    if f_buyno:
+        lineas.append(f_buyno)
+
+    f_buyyes = fila("BUY\\_YES#60min", buyyes)
+    if f_buyyes:
+        lineas.append(f_buyyes)
+
+    # Subtypes por par
+    ORDER_GBM = ['SOL#15min', 'BTC#15min', 'ETH#15min', 'ETH#60min', 'BTC#60min', 'SOL#60min']
+    for key in ORDER_GBM:
+        d = gbm.get(key)
+        if d:
+            f = fila(key, d)
+            if f:
+                lineas.append(f)
+
+    # ORDER_FLOW BTC+SOL
+    lineas.append("")
+    lineas.append("*ORDER FLOW* (BTC+SOL):")
+    n, win, pnl = of_bs['n'], of_bs['win'], of_bs['pnl']
+    if n > 0:
+        ic  = _ic_bayes(win, n)
+        sp2 = "+" if pnl >= 0 else ""
+        lineas.append(f"  n={n}  IC={ic:+.3f}  {sp2}{pnl:.2f}€")
+    else:
+        lineas.append("  (sin datos)")
+
+    lineas += ["", f"🔘 Live: {live_txt}"]
+
+    msg = "\n".join(lineas)
+    try:
+        _requests.post(
+            f"https://api.telegram.org/bot{tok}/sendMessage",
+            json={"chat_id": cid, "text": msg, "parse_mode": "Markdown"},
+            timeout=10,
+        )
+        LAST_TG_PATH.write_text(str(ahora_ts))
+        print(f"  [telegram] Resumen enviado ({ahora.strftime('%H:%M UTC')})")
+    except Exception as e:
+        print(f"  [telegram] Error: {e}")
 
 
 if __name__ == "__main__":

@@ -117,13 +117,50 @@ def procesar_comando(texto: str) -> str:
     elif cmd in ("/status", "status", "estado", "/estado"):
         return estado_completo()
 
+    elif cmd in ("/update", "update", "/resumen", "resumen"):
+        try:
+            from shadow_resumen import (
+                cargar_csv, cargar_params, RESULTS_PATH,
+                CAPITAL_OPERATIVO, LAST_TG_PATH,
+                _ic_bayes, _esc, _telegram_periodico
+            )
+            from collections import defaultdict
+            from datetime import datetime, timezone
+            resultados = cargar_csv(RESULTS_PATH)
+            params     = cargar_params()
+            ahora      = datetime.now(timezone.utc)
+            pnl_total  = sum(float(r.get("pnl_neto", 0)) for r in resultados)
+            bankroll   = CAPITAL_OPERATIVO + pnl_total
+            hoy        = ahora.strftime("%Y-%m-%d")
+            pnl_hoy    = sum(float(r.get("pnl_neto", 0)) for r in resultados
+                             if (r.get("resolution_timestamp","") or "")[:10] == hoy)
+            n_total    = len(resultados)
+            n_win      = sum(int(r.get("acierto", 0)) for r in resultados)
+            por_strat  = defaultdict(lambda: {"n": 0, "win": 0, "pnl": 0.0})
+            for r in resultados:
+                key = r.get("strategy","?")
+                sub = r.get("subtype","")
+                if sub: key = f"{key}#{sub}"
+                por_strat[key]["n"]   += 1
+                por_strat[key]["win"] += int(r.get("acierto", 0))
+                por_strat[key]["pnl"] += float(r.get("pnl_neto", 0))
+            # Forzar envío borrando el timestamp guard
+            if LAST_TG_PATH.exists():
+                LAST_TG_PATH.unlink()
+            _telegram_periodico(ahora, bankroll, pnl_total, pnl_hoy,
+                                n_total, n_win, por_strat, params)
+            return "✅ Resumen enviado."
+        except Exception as e:
+            return f"❌ Error generando resumen: {e}"
+
     elif cmd in ("/help", "help", "ayuda", "/ayuda"):
         return (
             "🤖 *Comandos disponibles*\n\n"
-            "/on     → Activar live trading\n"
-            "/off    → Desactivar live trading\n"
-            "/status → Ver estado actual\n"
-            "/help   → Ver estos comandos"
+            "/on      → Activar live trading\n"
+            "/off     → Desactivar live trading\n"
+            "/status  → Ver estado actual\n"
+            "/update  → Resumen compacto ahora\n"
+            "/help    → Ver estos comandos"
         )
 
     else:
