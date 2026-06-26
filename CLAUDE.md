@@ -328,6 +328,10 @@ predictions (features JSON) → results (features copiadas)
 [✓] Kelly por dirección: postmortem genera apuesta_kelly_BUY_YES/BUY_NO; predict override tras determinar dec
 [✓] N_BUCKET_MIN 8→15: patrones causales requieren n≥15 para evitar kelly_boost ruidoso
 [✓] Filtro drift_60min en BUY_YES #15min: [0,+0.5%) → IC=+0.208 (n=22); fuera → skip (n=59 ops vacías)
+[✓] ORDER_FLOW solo BUY_NO (delta<0): BUY_YES IC=-0.038 eliminado; BUY_NO IC=+0.092 (+4.10€ retroactivo)
+[ ] Bloquear hora 18h UTC en GBM (IC=-0.148 n=11 — esperar n≥15)
+[ ] Cross-asset confirmation: GBM BUY_NO + OF BUY_NO mismo activo → boost ×1.5 (esperar n≥20 OF post-filtro)
+[ ] Kelly por hora: boost ×1.2 en 15h/17h/19h UTC (esperar n≥40 por hora)
 [~] BUY_NO #15min n=39/40, IC=+0.134 — 1 op para live (bloqueado por credenciales)
 [~] SOL#15min n=30/40, IC=+0.062 — ETA sábado 27 Jun
 [ ] Credenciales Polymarket API → primer trade real
@@ -366,20 +370,35 @@ IC fuera: ≈0 (n=59, PNL=-7.94€). IC dentro: +0.208 (n=22, PNL=+8.32€). Mej
 **Próxima acción**: monitorear n forward. Con n≥20 ops nuevas revisar si IC se sostiene ≥0.15.
 Con n≥40 revisar si el umbral superior (0.5%) es óptimo o cabe subir a 0.7%.
 
-### P4 — Análisis del aprendizaje causal — sesión 2026-06-26 noche
-Hallazgos de la sesión:
-- El bot desactiva automáticamente bien (OU_5M, SMART_FLOW, GBM#5min fuera)
-- El split BUY_YES/BUY_NO está captado en Kelly por dirección (universal: BUY_NO > BUY_YES en 15min)
-- La excepción 60min (BUY_YES > BUY_NO) ya está en Kelly — sistema correcto
-- drift_15min: señal pequeña (solo 4 ops afectadas), no accionable aún
-- total_vol_5m en OF: patrón no monótono → posible sobreajuste, no implementar
-- **Siguiente análisis**: con n≥50 en BUY_YES #15min post-filtro, revisar si hay features adicionales
+### P4 — ✅ COMPLETADO — ORDER_FLOW solo BUY_NO (delta negativo)
+Implementado 2026-06-26 noche: `if delta_ratio > 0: return None` en `s_order_flow_5m`.
+Análisis n=271 BTC+SOL: BUY_NO IC=+0.092 PNL=+8.64€ vs BUY_YES IC=−0.038 PNL=−4.10€.
+Razón: presión compradora ya visible → priceada en Polymarket; presión vendedora silenciosa → lag.
+Mejora retroactiva: +4.10€ eliminados + IC sweet spot +0.058→+0.092.
+**Monitorear**: con n≥40 nuevas ops verificar IC≥0.08. Si cae → revisar DELTA_MIN.
 
-### P5 — ORDER_FLOW rangos per-par
-Backfill calibró: BTC 0.42-0.44, SOL 0.36-0.40. No aplicar aún (n<200 con nuevo blacklist activo).
-Validar cuando BTC+SOL tengan n≥200 cada uno con el blacklist {2,7,9,10,11,22} activo.
+### P5 — PENDIENTE — Bloquear hora 18h UTC en GBM
+GBM a las 18h UTC: IC=−0.148, n=11, PNL=−2.83€. Ya bloqueada para ORDER_FLOW.
+**Acción cuando n≥15**: añadir `GBM_BLACKLIST_HOURS = {18}` en shadow_predict.py,
+check en `s_updown_gbm` justo antes de calcular p_up. Posible extensión a `{7, 18}`.
+**No implementar antes de n≥15** — con n=11 e IC=−0.148 aún podría ser ruido.
 
-### P6 — Dataset Jon-Becker
+### P6 — PENDIENTE — Cross-asset confirmation (reemplaza Kelly compuesto muerto)
+El Kelly compuesto actual (mismo market_id) nunca dispara: GBM=15min, OF=5min, solo 5 solapamientos.
+**Nueva lógica**: GBM BUY_NO en ASSET#15min + OF BUY_NO en ASSET#5min en misma ventana → boost ×1.5.
+En `_aplicar_kelly_compuesto`: buscar coincidencia por `subtype.split('#')[0]` (activo) en vez de market_id.
+**Esperar**: n≥20 ops BUY_NO OF post-filtro para calibrar frecuencia de coincidencia temporal.
+
+### P7 — PENDIENTE — Kelly por hora (boost en ventanas de alta rentabilidad)
+Horas top en activas: 15h UTC IC=+0.147 (n=32), 17h IC=+0.107 (n=26), 19h IC=+0.151 (n=41).
+Idea: apuesta ×1.2 en esas horas, ×0.8 en horas neutras (IC ∈ [−0.05,+0.05]).
+**No implementar antes de**: n≥40 por hora confirmado estable en forward.
+
+### P8 — PENDIENTE — ORDER_FLOW rangos per-par
+Backfill calibró: BTC 0.42-0.44, SOL 0.36-0.40. No aplicar aún (n<200 con nuevo filtro BUY_NO activo).
+Validar cuando BTC+SOL tengan n≥200 cada uno con blacklist {2,7,9,10,11,22} + BUY_NO-only.
+
+### P9 — PENDIENTE — Dataset Jon-Becker
 `github.com/Jon-Becker/prediction-market-analysis` — 36GB histórico.
 Desbloquea: calibrar theta OU, OBI, Cross-Market Arb, validar rangos OF per-par.
 
@@ -416,6 +435,7 @@ EDGE_MINIMO      = 0.02
 SLIPPAGE_ESTIMADO= 0.02
 DELTA_MIN = 0.38           # ORDER_FLOW_5M — umbral mínimo global
 DELTA_MAX = 0.46           # ORDER_FLOW_5M — umbral máximo (zona muerta >0.46)
+# Solo delta<0 (BUY_NO): BUY_YES IC=-0.038 eliminado (implementado 2026-06-26 noche)
 KELLY_COMPUESTO_BOOST = 1.5
 KELLY_COMPUESTO_MAX   = 2.00
 THETA_OU = 30.0

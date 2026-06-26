@@ -1239,6 +1239,12 @@ def s_order_flow_5m(market, ctx):
     if abs(delta_ratio) < DELTA_MIN or abs(delta_ratio) > DELTA_MAX:
         return None
 
+    # Solo operar en dirección BUY_NO (delta negativo — presión vendedora).
+    # Análisis n=271 BTC+SOL: BUY_NO IC=+0.092 PNL=+8.64€ vs BUY_YES IC=-0.038 PNL=-4.10€.
+    # Razón: presión compradora ya visible → priceada; presión vendedora silenciosa → lag mayor.
+    if delta_ratio > 0:
+        return None
+
     # Timing: esperar a que el slot lleve ≥1.5min abierto.
     # Datos: slot 0-1min → IC=-0.035 (-15.28€). Slot 2-3min → IC=+0.045.
     # Los klines del primer minuto son del slot ANTERIOR → señal de ruido.
