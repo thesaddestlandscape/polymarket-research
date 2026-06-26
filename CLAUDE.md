@@ -1,7 +1,7 @@
 # CLAUDE.md — Polymarket Research Bot
 
 Documento de contexto completo. Léelo al inicio de cada sesión para retomar sin releer historial.
-**Última actualización: 2026-06-26 ~09:00 UTC**
+**Última actualización: 2026-06-26 ~11:30 UTC**
 
 ---
 
@@ -107,22 +107,22 @@ capture_markets → capture_wallets → capture_trades
 
 ---
 
-## Estado de estrategias — 2026-06-26 (sesión mañana)
+## Estado de estrategias — 2026-06-26 (sesión tarde)
 
-### Bankroll simulado: **5.17€** (−14.83€ PNL total) | 1114 ops | 49.1% WR
+### Bankroll simulado: **−0.23€** (−20.23€ PNL total) | 1128 ops | 49.0% WR
 ### ⚠️ El PNL negativo viene ÍNTEGRAMENTE de estrategias ya desactivadas.
-### Con solo las estrategias activas actuales: PNL **+21.07€** → bankroll **41.07€**
+### Con solo las estrategias activas actuales: PNL **+21.07€** → bankroll **~41€**
 
 | Estrategia | n | Win% | IC | PNL | Estado |
 |---|---|---|---|---|---|
-| UPDOWN_GBM#BTC#15min | 36 | 58% | +0.079 | +4.23€ | ⏳ n=36/40 — llega hoy, IC bordeando umbral |
-| UPDOWN_GBM#SOL#15min | 28 | 57% | +0.100 | +5.85€ | ⏳ n=28/40 — ETA sáb 27 |
+| **BUY_NO #15min (todas pares)** | **39** | **64%** | **+0.134** | **+11.69€** | **🔥 1 op para live — bloqueado por credenciales** |
+| UPDOWN_GBM#SOL#15min | 30 | 57% | +0.062 | +5.19€ | ⏳ n=30/40 — ETA sáb 27 |
 | UPDOWN_GBM#ETH#60min | 18 | 61% | +0.090 | +1.44€ | ⏳ ETA dom 28 |
-| UPDOWN_GBM#BTC#60min | 16 | 60% | +0.089 | +0.99€ | ⏳ ETA lun 29 |
-| UPDOWN_GBM#ETH#15min | 50 | 53% | +0.019 | +1.94€ | ⚠️ n≥40 pero IC bajo (0.02) |
-| ORDER_FLOW_5M (BTC+SOL solamente) | 269 raw / 136 filtrado | 51%/56% | +0.010/+0.058 | +0.15€/+12.59€ | ✅ activa — crudo incluye horas malas históricas |
-| **BUY_NO #15min (todas pares)** | **39** | **64%** | **+0.134** | **+11.69€** | **🔥 1 op para live** |
-| **BUY_YES #60min (todas pares)** | **30** | **60%** | **+0.094** | **+3.95€** | **🔥 10 ops para live** |
+| UPDOWN_GBM#BTC#60min | 16 | 62% | +0.089 | +1.11€ | ⏳ ETA lun 29 |
+| UPDOWN_GBM#BTC#15min | 40 | 55% | +0.048 | +0.11€ | ⚠️ n=40 alcanzado, IC=+0.048 < umbral 0.08 |
+| UPDOWN_GBM#ETH#15min | 52 | 52% | +0.019 | +1.38€ | ⚠️ n≥40 pero IC bajo (0.02) |
+| ORDER_FLOW_5M (BTC+SOL solamente) | 269 raw / 136 filtrado | 51%/56% | +0.010/+0.058 | +0.15€/+12.59€ | ✅ activa |
+| BUY_YES #15min (todas pares) | 94 | 50% | +0.000 | −3.24€ | ⚠️ Ruido — stake mínimo 0.50€ (fix hoy) |
 | UPDOWN_OU_5M | 57 | 26% | -0.229 | -13.76€ | 🚫 DESACTIVADA |
 | SMART_FLOW_1H | 17 | 18% | -0.246 | -8.95€ | 🚫 DESACTIVADA |
 | UPDOWN_GBM#5min (todos pares) | ~80 | ~33% | ~-0.10 | ~-22€ | 🚫 DESACTIVADA |
@@ -309,9 +309,10 @@ predictions (features JSON) → results (features copiadas)
 [✓] fetch_binance_klines.py + capture_markets.py escriben formato correcto
 [✓] Equity curve deduplicada en dashboard (LightweightCharts ascending timestamps)
 [✓] Dashboard per-bet section completa (renderPerBet JS + HTML)
-[~] BUY_NO #15min n=39/40, IC=+0.134 — 1 op para live
-[~] BUY_YES #60min n=30/40, IC=+0.094 — 10 ops para live
-[~] SOL#15min n=28/40, IC=+0.100 — ETA sábado 27 Jun
+[✓] Kelly por dirección: postmortem genera apuesta_kelly_BUY_YES/BUY_NO; predict override tras determinar dec
+[✓] N_BUCKET_MIN 8→15: patrones causales requieren n≥15 para evitar kelly_boost ruidoso
+[~] BUY_NO #15min n=39/40, IC=+0.134 — 1 op para live (bloqueado por credenciales)
+[~] SOL#15min n=30/40, IC=+0.062 — ETA sábado 27 Jun
 [ ] Credenciales Polymarket API → primer trade real
 [ ] MetaMask → USDC Polygon → cuenta Polymarket desde VPS Helsinki
 [ ] Dataset Jon-Becker → backtesting histórico + calibrar theta OU
@@ -331,16 +332,16 @@ Ver `LIVE_PLAN.md`. Checklist: instalar MetaMask → red Polygon → comprar 30 
 **Antes de dinero real**: conectar con Polymarket Paper Trader (ver TOOLS.md) para validar live_trade.py.
 
 ### P1 — Primer trade real (esta semana)
-**BUY_NO #15min**: n=39, IC=+0.134 → **1 op más y entra en live (HOY o mañana)**
-**SOL#15min**: n=28, IC=+0.100 → ETA sábado 27 Jun
-**BTC#15min**: n=36, IC=+0.079 → llega a n=40 HOY pero IC bordeando umbral (0.08)
+**BUY_NO #15min**: n=39, IC=+0.134 → **1 op más y técnicamente lista — SOLO FALTA CREDENCIAL**
+**SOL#15min**: n=30, IC=+0.062 → ETA sábado 27 Jun
+**BTC#15min**: n=40 alcanzado, IC=+0.048 → por debajo del umbral 0.08 — monitorear
 **ETH#60min**: n=18, IC=+0.090 → ETA domingo 28 Jun
 **BTC#60min**: n=16, IC=+0.089 → ETA lunes 29 Jun
-**BUY_YES #60min**: n=30, IC=+0.094 → ~10 ops más
 
-### P2 — Dirección como feature de live (BUY_NO vs BUY_YES)
-BUY_NO #15min: IC=+0.134 | BUY_YES #15min: IC=+0.029 — diferencia ENORME.
-Implementar: lookup_keys en postmortem incluya dirección → strategy_params trackee BUY_NO/BUY_YES separado → kelly mayor para BUY_NO.
+### P2 — ✅ COMPLETADO — Dirección como feature de live (BUY_NO vs BUY_YES)
+Implementado 2026-06-26: postmortem trackea BUY_YES/BUY_NO separado en strategy_params.
+shadow_predict aplica Kelly específico por dirección tras determinar dec.
+BUY_YES #15min: stake 2.00€ → 0.50€ mínimo. BUY_NO #15min: stake real 1.34€ (IC=+0.134 aggregate).
 
 ### P3 — ORDER_FLOW rangos per-par
 Backfill calibró: BTC 0.42-0.44, SOL 0.36-0.40. No aplicar aún (n<200 con nuevo blacklist activo).
@@ -407,10 +408,12 @@ ORDER_FLOW_PAIR_BLACKLIST = {'ETH', 'BNB', 'XRP', 'DOGE'}  # IC negativo conf=1.
 ```python
 IC_FILTRO_MIN  = -0.12
 IC_PATRON_MIN  = +0.12
-N_BUCKET_MIN   = 8
+N_BUCKET_MIN   = 15   # subido de 8 el 2026-06-26: n<15 → kelly_boost demasiado ruidoso
 UMBRAL_SUBIR_EDGE = (-0.10, 3)
 UMBRAL_SUBIR_MAS  = (-0.20, 5)
 UMBRAL_DESACTIVAR = (-0.20, 8)   # bajado de -0.30 el 2026-06-25
+# Kelly por dirección (2026-06-26): calcular_params genera apuesta_kelly_BUY_YES / apuesta_kelly_BUY_NO
+# shadow_predict aplica el específico tras determinar dec → evita overstakear BUY_YES con IC bajo
 ```
 
 ### `live_stake.py` / `data/live/config_live.json`
