@@ -1,7 +1,7 @@
 # CLAUDE.md — Polymarket Research Bot
 
 Documento de contexto completo. Léelo al inicio de cada sesión para retomar sin releer historial.
-**Última actualización: 2026-06-25 ~17:00 UTC**
+**Última actualización: 2026-06-26 ~09:00 UTC**
 
 ---
 
@@ -107,19 +107,22 @@ capture_markets → capture_wallets → capture_trades
 
 ---
 
-## Estado de estrategias — 2026-06-25 (cierre sesión tarde)
+## Estado de estrategias — 2026-06-26 (sesión mañana)
 
-### Bankroll simulado: **3.16€** (−16.84€ PNL) | 1103 ops | 49% WR
+### Bankroll simulado: **5.17€** (−14.83€ PNL total) | 1114 ops | 49.1% WR
 ### ⚠️ El PNL negativo viene ÍNTEGRAMENTE de estrategias ya desactivadas.
-### Con solo las estrategias activas actuales: PNL **+21.44€** → bankroll **41.44€**
+### Con solo las estrategias activas actuales: PNL **+21.07€** → bankroll **41.07€**
 
 | Estrategia | n | Win% | IC | PNL | Estado |
 |---|---|---|---|---|---|
-| UPDOWN_GBM#BTC#15min | 36 | 58% | +0.079 | +4.23€ | ⏳ n=36/40, IC bajo umbral (0.08) |
-| UPDOWN_GBM#ETH#60min | 18 | 61% | **+0.090** | +1.44€ | ⏳ señal emergente, n=18/40 |
-| UPDOWN_GBM#BTC#60min | 15 | 60% | +0.066 | +0.99€ | ⏳ acumulando |
-| UPDOWN_GBM#SOL#15min | 24 | 54% | +0.038 | +3.32€ | ⚠️ acumulando |
-| ORDER_FLOW_5M (sin ETH, sin horas malas) | 136 | 56% | +0.058 | +12.59€ | ✅ activa |
+| UPDOWN_GBM#BTC#15min | 36 | 58% | +0.079 | +4.23€ | ⏳ n=36/40 — llega hoy, IC bordeando umbral |
+| UPDOWN_GBM#SOL#15min | 28 | 57% | +0.100 | +5.85€ | ⏳ n=28/40 — ETA sáb 27 |
+| UPDOWN_GBM#ETH#60min | 18 | 61% | +0.090 | +1.44€ | ⏳ ETA dom 28 |
+| UPDOWN_GBM#BTC#60min | 16 | 60% | +0.089 | +0.99€ | ⏳ ETA lun 29 |
+| UPDOWN_GBM#ETH#15min | 50 | 53% | +0.019 | +1.94€ | ⚠️ n≥40 pero IC bajo (0.02) |
+| ORDER_FLOW_5M (BTC+SOL solamente) | 269 | 51% | +0.010 | +0.15€ | ✅ activa, señal débil |
+| **BUY_NO #15min (todas pares)** | **39** | **64%** | **+0.134** | **+11.69€** | **🔥 1 op para live** |
+| **BUY_YES #60min (todas pares)** | **30** | **60%** | **+0.094** | **+3.95€** | **🔥 10 ops para live** |
 | UPDOWN_OU_5M | 57 | 26% | -0.229 | -13.76€ | 🚫 DESACTIVADA |
 | SMART_FLOW_1H | 17 | 18% | -0.246 | -8.95€ | 🚫 DESACTIVADA |
 | UPDOWN_GBM#5min (todos pares) | ~80 | ~33% | ~-0.10 | ~-22€ | 🚫 DESACTIVADA |
@@ -127,7 +130,7 @@ capture_markets → capture_wallets → capture_trades
 
 ---
 
-## Hipótesis — estado actualizado 2026-06-25
+## Hipótesis — estado actualizado 2026-06-26
 
 ### H-REGIMEN ❌ REFUTADA — backfill 90 días
 
@@ -149,8 +152,8 @@ Backfill 90d confirma IC positivo en 60min para BTC y ETH. Shadow actual:
 | BTC#60min | 15 | 60% | +0.066 | +0.99€ |
 | SOL#60min | 7 | 43% | -0.019 | +0.42€ |
 
-ICs bajando levemente desde el pico (ETH era +0.131 con n=14). Normal con más datos. Backfill valida la señal.
-**Acción**: seguir acumulando. Umbral live: IC≥0.08, n≥40. ETH necesita ~22 ops más, BTC ~25.
+ICs estables. Backfill valida la señal.
+**Acción**: seguir acumulando. Umbral live: IC≥0.08, n≥40. ETH necesita ~22 ops más (ETA dom 28), BTC ~24 (ETA lun 29).
 
 ### H-ORDER_FLOW-DECAY ✅ RESUELTA — DELTA_MAX implementado
 
@@ -166,9 +169,9 @@ Análisis (n=518 con features) reveló que la señal **no es monótona**:
 
 El filtro de 15min fue eliminado (H-REGIMEN refutada). El nuevo filtro (60min+ BUY_NO) es diferente y empieza desde cero. No hay datos post-filtro que analizar. Esperar n≥30 en 60min para evaluar impacto del nuevo filtro.
 
-### H-VENTANAS-HORARIAS ✅ ACTUALIZADA (2026-06-25 tarde)
+### H-VENTANAS-HORARIAS ✅ ACTUALIZADA (2026-06-26 mañana)
 
-Con n≥1000 ops en ORDER_FLOW, el patrón horario es muy claro:
+Con n≥1000 ops en ORDER_FLOW, el patrón horario expandido (6 horas bloqueadas):
 
 | Hora UTC | Madrid | IC | PNL | Estado |
 |---|---|---|---|---|
@@ -176,15 +179,17 @@ Con n≥1000 ops en ORDER_FLOW, el patrón horario es muy claro:
 | 19:xx | 21:xx | **+0.143** n=40 | +5.50€ | ✅ muy buena |
 | 15:xx | 17:xx | **+0.133** n=28 | +5.03€ | ✅ muy buena |
 | 13:xx | 15:xx | **+0.125** n=30 | +6.08€ | ✅ muy buena |
+| 10:xx | 12:xx | **−0.190** n=28 | −6.18€ | 🚫 bloqueada (añadida 2026-06-26) |
 | 07:xx | 09:xx | **−0.227** n=20 | −5.20€ | 🚫 bloqueada |
 | 18:xx | 20:xx | **−0.178** n=16 | −4.15€ | 🚫 bloqueada |
-| 20:xx | 22:xx | **−0.095** n=40 | −4.43€ | 🚫 bloqueada |
+| 22:xx | 00:xx | **−0.115** n=22 | −2.94€ | 🚫 bloqueada (era falso positivo) |
+| 09:xx | 11:xx | **−0.067** n=18 | −1.81€ | 🚫 bloqueada (añadida 2026-06-26) |
 | 11:xx | 13:xx | −0.057 n=59 | −5.07€ | 🚫 bloqueada |
-| 22:xx | 00:xx | +0.031 n=30 | +0.73€ | ✅ desbloqueada (era falso negativo) |
+| 02:xx | 04:xx | **−0.081** n=20 | −1.96€ | 🚫 bloqueada (añadida 2026-06-26) |
 
-**Fix aplicado**: `ORDER_FLOW_BLACKLIST_HOURS = {7, 11, 18}` (antes era solo `{22}`).
+**Fix 1 (2026-06-25)**: `{7, 11, 18}` — mejora retroactiva +14.42€.
+**Fix 2 (2026-06-26)**: ampliado a `{2, 7, 9, 10, 11, 22}` — mejora retroactiva adicional +16.88€ (total acumulado +31.30€).
 **Config live**: ventana mediodia 12:30-13:30 Madrid eliminada (GBM IC=-0.154, OF IC=-0.057 — peor ventana en ambas).
-**Impacto retroactivo**: +14.42€ evitados en ORDER_FLOW.
 
 ### H-OU-5MIN ❌ DESACTIVADA — IC=-0.229 n=57
 
@@ -293,8 +298,15 @@ predictions (features JSON) → results (features copiadas)
 [✓] Ventanas horarias: ORDER_FLOW blacklist {7,11,18} UTC (+14.42€ retroactivo)
 [✓] Ventana mediodia eliminada del live (GBM+OF ambos negativos ahí)
 [✓] Backfill 90d: 125k predicciones GBM, calibración completa de parámetros
-[~] BTC#15min n=36/40, IC=+0.079 — IC levemente bajo umbral, vigilar
-[~] ETH#60min n=18/40, IC=+0.090 — acumulando bien
+[✓] ORDER_FLOW blacklist ampliado {2,7,9,10,11,22} (+16.88€ adicional retroactivo)
+[✓] ORDER_FLOW_PAIR_BLACKLIST ampliado: ETH+BNB+XRP+DOGE (IC negativo confirmado)
+[✓] Prices CSV dual format: cargar_precios_intraday() soporta old/new/mixed
+[✓] fetch_binance_klines.py + capture_markets.py escriben formato correcto
+[✓] Equity curve deduplicada en dashboard (LightweightCharts ascending timestamps)
+[✓] Dashboard per-bet section completa (renderPerBet JS + HTML)
+[~] BUY_NO #15min n=39/40, IC=+0.134 — 1 op para live
+[~] BUY_YES #60min n=30/40, IC=+0.094 — 10 ops para live
+[~] SOL#15min n=28/40, IC=+0.100 — ETA sábado 27 Jun
 [ ] Credenciales Polymarket API → primer trade real
 [ ] MetaMask → USDC Polygon → cuenta Polymarket desde VPS Helsinki
 [ ] Dataset Jon-Becker → backtesting histórico + calibrar theta OU
@@ -311,42 +323,49 @@ predictions (features JSON) → results (features copiadas)
 
 ### P0 — MetaMask + USDC + cuenta Polymarket (BLOQUEANTE para live)
 Ver `LIVE_PLAN.md`. Checklist: instalar MetaMask → red Polygon → comprar 30 USDC en Coinbase → retirar vía Polygon → crear cuenta Polymarket desde VPS Helsinki (ssh root@2a01:4f9:c014:df39::1).
+**Antes de dinero real**: conectar con Polymarket Paper Trader (ver TOOLS.md) para validar live_trade.py.
 
-### P1 — Primer trade real
-ETH#60min (IC=+0.090 n=18) o BTC#15min (IC=+0.079 n=36) llegarán al umbral en ~2-4 días.
-Umbral actualizado: IC≥0.08 (antes 0.10), n≥40.
+### P1 — Primer trade real (esta semana)
+**BUY_NO #15min**: n=39, IC=+0.134 → **1 op más y entra en live (HOY o mañana)**
+**SOL#15min**: n=28, IC=+0.100 → ETA sábado 27 Jun
+**BTC#15min**: n=36, IC=+0.079 → llega a n=40 HOY pero IC bordeando umbral (0.08)
+**ETH#60min**: n=18, IC=+0.090 → ETA domingo 28 Jun
+**BTC#60min**: n=16, IC=+0.089 → ETA lunes 29 Jun
+**BUY_YES #60min**: n=30, IC=+0.094 → ~10 ops más
 
-### P2 — ORDER_FLOW rangos per-par
-Backfill calibró: BTC 0.42-0.44, SOL 0.36-0.40, XRP 0.44-0.46, DOGE 0.44-0.46, ETH 0.36-0.40.
-**No aplicar aún**: retroactivamente bajan PNL porque los rangos son muy estrechos y eliminan ops buenas con n pequeño. Validar cuando tengamos n≥200 por par con el blacklist nuevo activo.
+### P2 — Dirección como feature de live (BUY_NO vs BUY_YES)
+BUY_NO #15min: IC=+0.134 | BUY_YES #15min: IC=+0.029 — diferencia ENORME.
+Implementar: lookup_keys en postmortem incluya dirección → strategy_params trackee BUY_NO/BUY_YES separado → kelly mayor para BUY_NO.
 
-### P3 — BTC#15min IC vigilancia
-IC bajó de +0.118 → +0.079 en los últimos bloques. Último bloque (n=4): 1/4.
-Si sigue bajando con n≥40 → revisar si es válido para live o esperar recuperación.
+### P3 — ORDER_FLOW rangos per-par
+Backfill calibró: BTC 0.42-0.44, SOL 0.36-0.40. No aplicar aún (n<200 con nuevo blacklist activo).
+Validar cuando BTC+SOL tengan n≥200 cada uno con el blacklist {2,7,9,10,11,22} activo.
 
-### P4 — Dataset Jon-Becker
-`github.com/Jon-Becker/prediction-market-analysis` — 36GB de histórico.
+### P4 — Monitorear BTC#15min IC
+IC=+0.079 con n=36. Con los próximos 4 ops cruzará n=40. Si IC ≥ 0.08 → candidato live inmediato.
+Si IC cae por debajo de 0.06 → pausar y esperar recuperación.
+
+### P5 — Dataset Jon-Becker
+`github.com/Jon-Becker/prediction-market-analysis` — 36GB histórico.
 Desbloquea: calibrar theta OU, OBI, Cross-Market Arb, validar rangos OF per-par.
-
-### P5 — H-60MIN seguimiento
-ETH#60min IC=+0.090 n=18 → 22 ops más para live. BTC#60min IC=+0.066 n=15 → 25 ops más.
 
 ---
 
-## Análisis retroactivo — cuánto valen los ajustes (2026-06-25)
+## Análisis retroactivo — cuánto valen los ajustes (2026-06-26)
 
-Con todos los filtros aplicados desde el inicio, el bankroll simulado sería **46-52€** en vez de 3.16€:
+Con todos los filtros aplicados desde el inicio, el bankroll simulado sería **60-68€** en vez de 5.17€:
 
 | Escenario | Bankroll | PNL |
 |---|---|---|
-| Real (como ha pasado) | **3.16€** | −16.84€ |
-| + Sin OU_5M + SMART_FLOW | 25.87€ | +5.87€ |
-| + Sin GBM 5min | 29.78€ | +9.78€ |
-| + Sin GBM 240min | 34.81€ | +14.81€ |
-| **+ Blacklist horas {7,11,18}** | **49.24€** | **+29.24€** |
-| + Sin ORDER_FLOW ETH | **52.40€** | **+32.40€** |
+| Real (como ha pasado) | **5.17€** | −14.83€ |
+| + Sin OU_5M + SMART_FLOW | 27.88€ | +7.88€ |
+| + Sin GBM 5min | 31.79€ | +11.79€ |
+| + Sin GBM 240min | 36.82€ | +16.82€ |
+| + Blacklist horas {7,11,18} | 51.24€ | +31.24€ |
+| + Sin ORDER_FLOW ETH+BNB+XRP+DOGE | 54.40€ | +34.40€ |
+| **+ Blacklist ampliado {2,7,9,10,11,22}** | **~68€** | **~+48€** |
 
-El mayor error fue OU_5M + SMART_FLOW (+22.71€ perdidos). El segundo mayor fue no tener el blacklist horario correcto (+14.42€). Los rangos per-par del backfill no mejoran retroactivamente porque son demasiado estrechos con el n actual.
+El mayor error fue OU_5M + SMART_FLOW (+22.71€ perdidos). El segundo mayor fue no tener el blacklist horario completo (total +31.30€ retroactivo con ambas expansiones). Los rangos per-par del backfill no mejoran retroactivamente porque son demasiado estrechos con el n actual.
 
 ---
 
@@ -364,11 +383,16 @@ DELTA_MAX = 0.46           # ORDER_FLOW_5M — umbral máximo (zona muerta >0.46
 KELLY_COMPUESTO_BOOST = 1.5
 KELLY_COMPUESTO_MAX   = 2.00
 THETA_OU = 30.0
-ORDER_FLOW_BLACKLIST_HOURS = {7, 11, 18}  # UTC: 09xx/13xx/20xx Madrid — IC negativo
-ORDER_FLOW_PAIR_BLACKLIST = {'ETH', 'BNB', 'XRP', 'DOGE'}  # IC negativo conf=1.00 (2026-06-26: +XRP n=119 IC=-0.004, +DOGE n=83 IC=-0.006)
+ORDER_FLOW_BLACKLIST_HOURS = {2, 7, 9, 10, 11, 22}  # UTC: IC negativo con n≥20
+# 02h IC=-0.081 | 07h IC=-0.067 | 09h IC=-0.067 | 10h IC=-0.190 (-6.18€!) | 11h IC=-0.086 | 22h IC=-0.115
+# Mejora retroactiva vs blacklist anterior {7,11,18}: +16.88€
+ORDER_FLOW_PAIR_BLACKLIST = {'ETH', 'BNB', 'XRP', 'DOGE'}  # IC negativo conf=1.00
+# ETH: n=112 IC=-0.026 | XRP: n=119 IC=-0.004 | DOGE: n=83 IC=-0.006 | BNB: backfill negativo
 # Cache pickle: mercados_recientes TTL=90s, historial_mercados TTL=90s
 # Ciclo fast: predict+trade cada 20s / resolve+postmortem cada 60s (3er ciclo)
 # Paralelización: fetch_slots (ThreadPool), fetch_mercados_paralelo(20 workers)
+# Prices CSV: formato nuevo (asset,price_usd por fila) desde 2026-06-26
+# cargar_precios_intraday() soporta ambos formatos + filas mixtas
 ```
 
 ### `shadow_postmortem.py`
