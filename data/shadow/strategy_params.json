@@ -1,5 +1,5 @@
 {
-  "timestamp_utc": "2026-06-26T17:40:31+00:00",
+  "timestamp_utc": "2026-06-26T17:42:31+00:00",
   "estrategias": {
     "UPDOWN_GBM": {
       "activa": true,
@@ -218,7 +218,7 @@
           "ic_base": 0.0556,
           "n_patron": 22,
           "kelly_boost": 0.83,
-          "descubierto": "2026-06-26T17:40:31+00:00"
+          "descubierto": "2026-06-26T17:42:31+00:00"
         },
         {
           "feature": "sigma_h",
@@ -228,7 +228,7 @@
           "ic_base": 0.0556,
           "n_patron": 22,
           "kelly_boost": 0.83,
-          "descubierto": "2026-06-26T17:40:31+00:00"
+          "descubierto": "2026-06-26T17:42:31+00:00"
         }
       ]
     },
