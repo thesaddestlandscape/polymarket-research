@@ -120,7 +120,7 @@ capture_markets → capture_wallets → capture_trades
 | UPDOWN_GBM#ETH#60min | 18 | 61% | +0.090 | +1.44€ | ⏳ ETA dom 28 |
 | UPDOWN_GBM#BTC#60min | 16 | 60% | +0.089 | +0.99€ | ⏳ ETA lun 29 |
 | UPDOWN_GBM#ETH#15min | 50 | 53% | +0.019 | +1.94€ | ⚠️ n≥40 pero IC bajo (0.02) |
-| ORDER_FLOW_5M (BTC+SOL solamente) | 269 | 51% | +0.010 | +0.15€ | ✅ activa, señal débil |
+| ORDER_FLOW_5M (BTC+SOL solamente) | 269 raw / 136 filtrado | 51%/56% | +0.010/+0.058 | +0.15€/+12.59€ | ✅ activa — crudo incluye horas malas históricas |
 | **BUY_NO #15min (todas pares)** | **39** | **64%** | **+0.134** | **+11.69€** | **🔥 1 op para live** |
 | **BUY_YES #60min (todas pares)** | **30** | **60%** | **+0.094** | **+3.95€** | **🔥 10 ops para live** |
 | UPDOWN_OU_5M | 57 | 26% | -0.229 | -13.76€ | 🚫 DESACTIVADA |
@@ -149,7 +149,7 @@ Backfill 90d confirma IC positivo en 60min para BTC y ETH. Shadow actual:
 | Subtipo | n | Win% | IC | PNL |
 |---|---|---|---|---|
 | ETH#60min | 18 | 61% | **+0.090** | +1.44€ |
-| BTC#60min | 15 | 60% | +0.066 | +0.99€ |
+| BTC#60min | 16 | 60% | +0.089 | +0.99€ |
 | SOL#60min | 7 | 43% | -0.019 | +0.42€ |
 
 ICs estables. Backfill valida la señal.
