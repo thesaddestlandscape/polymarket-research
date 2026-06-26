@@ -182,13 +182,15 @@ Con n≥1000 ops en ORDER_FLOW, el patrón horario expandido (6 horas bloqueadas
 | 10:xx | 12:xx | **−0.190** n=28 | −6.18€ | 🚫 bloqueada (añadida 2026-06-26) |
 | 07:xx | 09:xx | **−0.227** n=20 | −5.20€ | 🚫 bloqueada |
 | 18:xx | 20:xx | **−0.178** n=16 | −4.15€ | 🚫 bloqueada |
-| 22:xx | 00:xx | **−0.115** n=22 | −2.94€ | 🚫 bloqueada (era falso positivo) |
+| 20:xx | 22:xx | **−0.095** n=40 | −4.43€ | 🚫 bloqueada (Fix 3 — faltaba en código) |
+| 22:xx | 00:xx | **−0.115** n=37 | −4.87€ | 🚫 bloqueada |
 | 09:xx | 11:xx | **−0.067** n=18 | −1.81€ | 🚫 bloqueada (añadida 2026-06-26) |
 | 11:xx | 13:xx | −0.057 n=59 | −5.07€ | 🚫 bloqueada |
 | 02:xx | 04:xx | **−0.081** n=20 | −1.96€ | 🚫 bloqueada (añadida 2026-06-26) |
 
 **Fix 1 (2026-06-25)**: `{7, 11, 18}` — mejora retroactiva +14.42€.
-**Fix 2 (2026-06-26)**: ampliado a `{2, 7, 9, 10, 11, 22}` — mejora retroactiva adicional +16.88€ (total acumulado +31.30€).
+**Fix 2 (2026-06-26 mañana)**: ampliado a `{2, 7, 9, 10, 11, 22}` — mejora retroactiva adicional +16.88€ (total acumulado +31.30€).
+**Fix 3 (2026-06-26 tarde)**: añadida hora 20 UTC (Madrid 22:xx) — IC=-0.095 n=40 PNL=-4.43€ confirmado, nunca estaba en código pese a estar en tabla.
 **Config live**: ventana mediodia 12:30-13:30 Madrid eliminada (GBM IC=-0.154, OF IC=-0.057 — peor ventana en ambas).
 
 ### H-OU-5MIN ❌ DESACTIVADA — IC=-0.229 n=57
@@ -383,9 +385,10 @@ DELTA_MAX = 0.46           # ORDER_FLOW_5M — umbral máximo (zona muerta >0.46
 KELLY_COMPUESTO_BOOST = 1.5
 KELLY_COMPUESTO_MAX   = 2.00
 THETA_OU = 30.0
-ORDER_FLOW_BLACKLIST_HOURS = {2, 7, 9, 10, 11, 22}  # UTC: IC negativo con n≥20
-# 02h IC=-0.081 | 07h IC=-0.067 | 09h IC=-0.067 | 10h IC=-0.190 (-6.18€!) | 11h IC=-0.086 | 22h IC=-0.115
-# Mejora retroactiva vs blacklist anterior {7,11,18}: +16.88€
+ORDER_FLOW_BLACKLIST_HOURS = {2, 7, 9, 10, 11, 20, 22}  # UTC: IC negativo con n≥20
+# 02h IC=-0.081 | 07h IC=-0.067 | 09h IC=-0.067 | 10h IC=-0.190 (-6.18€!) | 11h IC=-0.086
+# 20h IC=-0.095 n=40 PNL=-4.43€ (Madrid 22:xx) | 22h IC=-0.115 n=37
+# Mejora retroactiva acumulada vs {7,11,18}: +16.88€ + ~4.43€ adicional (hora 20)
 ORDER_FLOW_PAIR_BLACKLIST = {'ETH', 'BNB', 'XRP', 'DOGE'}  # IC negativo conf=1.00
 # ETH: n=112 IC=-0.026 | XRP: n=119 IC=-0.004 | DOGE: n=83 IC=-0.006 | BNB: backfill negativo
 # Cache pickle: mercados_recientes TTL=90s, historial_mercados TTL=90s
