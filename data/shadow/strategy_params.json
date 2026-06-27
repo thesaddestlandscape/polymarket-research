@@ -1,5 +1,5 @@
 {
-  "timestamp_utc": "2026-06-27T04:37:57+00:00",
+  "timestamp_utc": "2026-06-27T04:39:48+00:00",
   "estrategias": {
     "UPDOWN_GBM": {
       "activa": true,
@@ -18,13 +18,13 @@
       "apuesta_kelly_BUY_NO": 0.5
     },
     "UPDOWN_GBM#SOL#5min": {
-      "activa": true,
+      "activa": false,
       "edge_minimo": 0.04,
       "ic_bayes": -0.1118,
       "n": 17,
       "pnl_total": -4.8408,
       "causa_principal": "DIRECTION_ERROR",
-      "motivo": "IC_bayes=-0.132 n=17 conf=0.85 → edge_minimo=0.04",
+      "motivo": "IC_bayes=-0.132 n=17 conf=0.85 → edge_minimo=0.04 | IC_bayes=-0.112 n=17 → DESACTIVADA MANUALMENTE 2026-06-27 (GBM#5min IC<-0.05 consistente)",
       "apuesta_kelly": 0.5,
       "n_BUY_YES": 8,
       "ic_BUY_YES": -0.08,
@@ -50,13 +50,13 @@
       "apuesta_kelly_BUY_NO": 0.77
     },
     "UPDOWN_GBM#5min": {
-      "activa": true,
+      "activa": false,
       "edge_minimo": 0.04,
       "ic_bayes": -0.1552,
       "n": 56,
       "pnl_total": -16.6434,
       "causa_principal": "DIRECTION_ERROR",
-      "motivo": "IC_bayes=-0.155 n=56 conf=1.00 → edge_minimo=0.04",
+      "motivo": "IC_bayes=-0.155 n=56 conf=1.00 → edge_minimo=0.04 | IC_bayes=-0.155 n=56 → DESACTIVADA MANUALMENTE 2026-06-27 (GBM#5min IC<-0.05 consistente)",
       "apuesta_kelly": 0.5,
       "n_BUY_YES": 26,
       "ic_BUY_YES": -0.2143,
@@ -66,13 +66,13 @@
       "apuesta_kelly_BUY_NO": 0.5
     },
     "UPDOWN_GBM#ETH#5min": {
-      "activa": true,
+      "activa": false,
       "edge_minimo": 0.04,
       "ic_bayes": -0.0857,
       "n": 12,
       "pnl_total": -3.6652,
       "causa_principal": "DIRECTION_ERROR",
-      "motivo": "IC_bayes=-0.143 n=12 conf=0.60 → edge_minimo=0.04",
+      "motivo": "IC_bayes=-0.143 n=12 conf=0.60 → edge_minimo=0.04 | IC_bayes=-0.086 n=12 → DESACTIVADA MANUALMENTE 2026-06-27 (GBM#5min IC<-0.05 consistente)",
       "apuesta_kelly": 0.5,
       "n_BUY_YES": 7,
       "ic_BUY_YES": -0.0194,
@@ -98,13 +98,13 @@
       "apuesta_kelly_BUY_NO": 0.5
     },
     "UPDOWN_GBM#BTC#5min": {
-      "activa": true,
+      "activa": false,
       "edge_minimo": 0.04,
       "ic_bayes": -0.1333,
       "n": 16,
       "pnl_total": -6.2951,
       "causa_principal": "DIRECTION_ERROR",
-      "motivo": "IC_bayes=-0.167 n=16 conf=0.80 → edge_minimo=0.04",
+      "motivo": "IC_bayes=-0.167 n=16 conf=0.80 → edge_minimo=0.04 | IC_bayes=-0.133 n=16 → DESACTIVADA MANUALMENTE 2026-06-27 (GBM#5min IC<-0.05 consistente)",
       "apuesta_kelly": 0.5,
       "n_BUY_NO": 10,
       "ic_BUY_NO": -0.0417,
@@ -153,7 +153,7 @@
           "ic_bueno": 0.2273,
           "n_malo": 17,
           "n_bueno": 9,
-          "descubierto": "2026-06-27T04:37:57+00:00"
+          "descubierto": "2026-06-27T04:39:48+00:00"
         }
       ],
       "patrones_ganadores": []
@@ -231,7 +231,7 @@
           "ic_base": 0.0556,
           "n_patron": 22,
           "kelly_boost": 0.83,
-          "descubierto": "2026-06-27T04:37:57+00:00"
+          "descubierto": "2026-06-27T04:39:48+00:00"
         },
         {
           "feature": "sigma_h",
@@ -241,7 +241,7 @@
           "ic_base": 0.0556,
           "n_patron": 22,
           "kelly_boost": 0.83,
-          "descubierto": "2026-06-27T04:37:57+00:00"
+          "descubierto": "2026-06-27T04:39:48+00:00"
         }
       ]
     },
@@ -375,13 +375,13 @@
       "apuesta_kelly_BUY_YES": 0.5
     },
     "UPDOWN_GBM#XRP#5min": {
-      "activa": true,
+      "activa": false,
       "edge_minimo": 0.04,
       "ic_bayes": -0.0614,
       "n": 9,
       "pnl_total": -1.862,
       "causa_principal": "DIRECTION_ERROR",
-      "motivo": "IC_bayes=-0.136 n=9 conf=0.45 → edge_minimo=0.04",
+      "motivo": "IC_bayes=-0.136 n=9 conf=0.45 → edge_minimo=0.04 | IC_bayes=-0.061 n=9 → DESACTIVADA MANUALMENTE 2026-06-27 (GBM#5min IC<-0.05 consistente)",
       "apuesta_kelly": 0.5,
       "n_BUY_YES": 5,
       "ic_BUY_YES": -0.0536,
