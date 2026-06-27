@@ -1,5 +1,5 @@
-# Hipótesis automáticas — 2026-06-27 14:02 UTC
-_Generado por shadow_postmortem.py sobre 1199 resoluciones (PNL=-25.80€)_
+# Hipótesis automáticas — 2026-06-27 14:03 UTC
+_Generado por shadow_postmortem.py sobre 1202 resoluciones (PNL=-26.00€)_
 
 ## Patrones causales activos
 
@@ -31,12 +31,12 @@ _Sin sugerencias automáticas con datos actuales. Ampliar n por estrategia._
 | ✅ ORDER_FLOW_5M#SOL#5min | 145 | +0.017 | +1.22€ | 0 | 0 |
 | ✅ ORDER_FLOW_5M#XRP | 116 | -0.009 | -2.01€ | 0 | 0 |
 | ✅ ORDER_FLOW_5M#XRP#5min | 116 | -0.009 | -2.01€ | 0 | 0 |
-| ✅ PRICE_TARGET_GBM | 19 | -0.023 | -2.48€ | 0 | 0 |
-| ✅ PRICE_TARGET_GBM#BTC | 8 | -0.040 | -1.58€ | 0 | 0 |
-| ✅ PRICE_TARGET_GBM#BTC#atexpiry | 8 | -0.040 | -1.58€ | 0 | 0 |
+| ✅ PRICE_TARGET_GBM | 20 | +0.000 | -2.12€ | 0 | 0 |
+| ✅ PRICE_TARGET_GBM#BTC | 9 | -0.021 | -1.22€ | 0 | 0 |
+| ✅ PRICE_TARGET_GBM#BTC#atexpiry | 9 | -0.021 | -1.22€ | 0 | 0 |
 | ✅ PRICE_TARGET_GBM#ETH | 8 | +0.000 | -1.38€ | 0 | 0 |
 | ✅ PRICE_TARGET_GBM#ETH#atexpiry | 8 | +0.000 | -1.38€ | 0 | 0 |
-| ✅ PRICE_TARGET_GBM#atexpiry | 19 | -0.023 | -2.48€ | 0 | 0 |
+| ✅ PRICE_TARGET_GBM#atexpiry | 20 | +0.000 | -2.12€ | 0 | 0 |
 | 🚫 SMART_FLOW_1H | 21 | -0.283 | -10.37€ | 0 | 0 |
 | ✅ SMART_FLOW_1H#BTC | 7 | -0.058 | -2.20€ | 0 | 0 |
 | ✅ UPDOWN_GBM | 296 | -0.003 | -3.61€ | 0 | 0 |
@@ -76,9 +76,9 @@ _Sin sugerencias automáticas con datos actuales. Ampliar n por estrategia._
 | ✅ UPDOWN_OU_5M#SOL#5min | 10 | -0.042 | -1.06€ | 0 | 0 |
 | ✅ UPDOWN_OU_5M#XRP | 11 | -0.064 | -1.65€ | 0 | 0 |
 | ✅ UPDOWN_OU_5M#XRP#5min | 11 | -0.064 | -1.65€ | 0 | 0 |
-| ✅ WEEKLY_PRICE | 24 | +0.077 | -2.52€ | 0 | 0 |
-| ✅ WEEKLY_PRICE#BTC | 7 | -0.019 | -2.56€ | 0 | 0 |
-| ✅ WEEKLY_PRICE#ETH | 9 | +0.021 | -2.12€ | 0 | 0 |
+| ✅ WEEKLY_PRICE | 26 | +0.071 | -3.08€ | 0 | 0 |
+| ✅ WEEKLY_PRICE#BTC | 8 | -0.040 | -3.48€ | 0 | 0 |
+| ✅ WEEKLY_PRICE#ETH | 10 | +0.042 | -1.76€ | 0 | 0 |
 | ✅ WEEKLY_PRICE#SOL | 8 | +0.080 | +2.16€ | 0 | 0 |
 ## Hipótesis pendientes — tracking automático
 
@@ -105,7 +105,7 @@ _Sin sugerencias automáticas con datos actuales. Ampliar n por estrategia._
 **⏳ H-CROSS-ASSET** — Cross-asset confirmation GBM+OF BUY_NO
   - _Umbral_: n_overlaps≥20 y IC_overlap > IC_base + 0.05
   - _Acción_: Cambiar _aplicar_kelly_compuesto: match por activo, no market_id
-  - _Estado_: n_overlaps=17, boost estimado=+0.017. Necesita 3 más y boost>0.05
+  - _Estado_: n_overlaps=17, boost estimado=+0.016. Necesita 3 más y boost>0.05
 
 **⏳ H-OF-PAR** — ORDER_FLOW per-pair delta_ratio ranges
   - _Umbral_: n≥200 por par con delta_ratio feature en shadow
@@ -131,7 +131,7 @@ _Sin sugerencias automáticas con datos actuales. Ampliar n por estrategia._
 **⏳ H-WEEKLY** — Predicciones semanales de precio por par
   - _Umbral_: n≥15 por par con IC≥+0.05
   - _Acción_: Si confirma IC≥+0.10 n≥15 en SOL → considerar live semanal
-  - _Estado_: ETH: n=9/15 IC=+0.021 PNL=-2.12€ | BTC: n=7/15 IC=-0.019 PNL=-2.56€ | SOL: n=8/15 IC=+0.080 PNL=+2.16€
+  - _Estado_: ETH: n=10/15 IC=+0.042 PNL=-1.76€ | BTC: n=8/15 IC=-0.040 PNL=-3.48€ | SOL: n=8/15 IC=+0.080 PNL=+2.16€
 
 **⏳ H-KALMAN** — Kalman filter para drift adaptativo
   - _Umbral_: n≥200 por subtipo para calibrar parámetros Q/R del KF
