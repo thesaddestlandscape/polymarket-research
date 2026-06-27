@@ -1,5 +1,5 @@
-# Hipótesis automáticas — 2026-06-27 15:12 UTC
-_Generado por shadow_postmortem.py sobre 1204 resoluciones (PNL=-26.78€)_
+# Hipótesis automáticas — 2026-06-27 15:13 UTC
+_Generado por shadow_postmortem.py sobre 1205 resoluciones (PNL=-27.70€)_
 
 ## Patrones causales activos
 
@@ -31,12 +31,12 @@ _Sin sugerencias automáticas con datos actuales. Ampliar n por estrategia._
 | ✅ ORDER_FLOW_5M#SOL#5min | 145 | +0.017 | +1.22€ | 0 | 0 |
 | ✅ ORDER_FLOW_5M#XRP | 116 | -0.009 | -2.01€ | 0 | 0 |
 | ✅ ORDER_FLOW_5M#XRP#5min | 116 | -0.009 | -2.01€ | 0 | 0 |
-| ✅ PRICE_TARGET_GBM | 20 | +0.000 | -2.12€ | 0 | 0 |
+| ✅ PRICE_TARGET_GBM | 21 | -0.022 | -3.04€ | 0 | 0 |
 | ✅ PRICE_TARGET_GBM#BTC | 9 | -0.021 | -1.22€ | 0 | 0 |
 | ✅ PRICE_TARGET_GBM#BTC#atexpiry | 9 | -0.021 | -1.22€ | 0 | 0 |
 | ✅ PRICE_TARGET_GBM#ETH | 8 | +0.000 | -1.38€ | 0 | 0 |
 | ✅ PRICE_TARGET_GBM#ETH#atexpiry | 8 | +0.000 | -1.38€ | 0 | 0 |
-| ✅ PRICE_TARGET_GBM#atexpiry | 20 | +0.000 | -2.12€ | 0 | 0 |
+| ✅ PRICE_TARGET_GBM#atexpiry | 21 | -0.022 | -3.04€ | 0 | 0 |
 | 🚫 SMART_FLOW_1H | 21 | -0.283 | -10.37€ | 0 | 0 |
 | ✅ SMART_FLOW_1H#BTC | 7 | -0.058 | -2.20€ | 0 | 0 |
 | ✅ UPDOWN_GBM | 296 | -0.003 | -3.61€ | 0 | 0 |
@@ -105,7 +105,7 @@ _Sin sugerencias automáticas con datos actuales. Ampliar n por estrategia._
 **⏳ H-CROSS-ASSET** — Cross-asset confirmation GBM+OF BUY_NO
   - _Umbral_: n_overlaps≥20 y IC_overlap > IC_base + 0.05
   - _Acción_: Cambiar _aplicar_kelly_compuesto: match por activo, no market_id
-  - _Estado_: n_overlaps=17, boost estimado=+0.015. Necesita 3 más y boost>0.05
+  - _Estado_: n_overlaps=17, boost estimado=+0.016. Necesita 3 más y boost>0.05
 
 **⏳ H-OF-PAR** — ORDER_FLOW per-pair delta_ratio ranges
   - _Umbral_: n≥200 por par con delta_ratio feature en shadow
@@ -115,7 +115,7 @@ _Sin sugerencias automáticas con datos actuales. Ampliar n por estrategia._
 **⏳ H-KELLY-HORA** — Kelly boost ×1.2 en horas top (15/17/19h UTC)
   - _Umbral_: n≥40 por hora con IC estable ≥+0.10 confirmado en forward
   - _Acción_: Añadir HORA_BOOST = {13: 1.2, 15: 1.2, 17: 1.2, 19: 1.2} en shadow_predict.py
-  - _Estado_: H=13h UTC: IC=-0.070 n=84/40 PNL=-2.13€ | H=15h UTC: IC=+0.025 n=59/40 PNL=+2.45€ | H=17h UTC: IC=+0.204 n=25/40 PNL=+7.08€ | H=19h UTC: IC=-0.029 n=32/40 PNL=-0.97€
+  - _Estado_: H=13h UTC: IC=-0.070 n=84/40 PNL=-2.13€ | H=15h UTC: IC=+0.016 n=60/40 PNL=+1.53€ | H=17h UTC: IC=+0.204 n=25/40 PNL=+7.08€ | H=19h UTC: IC=-0.029 n=32/40 PNL=-0.97€
 
 **⏳ H-60MIN-LIVE** — Estrategias 60min → umbral live (IC≥0.08 n≥40)
   - _Umbral_: IC≥0.08 y n≥40 en cualquier subtipo 60min
