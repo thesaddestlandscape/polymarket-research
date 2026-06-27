@@ -1,4 +1,4 @@
-# Estado del bot — 2026-06-27 05:30 UTC
+# Estado del bot — 2026-06-27 05:32 UTC
 
 ## Capital
 | | |
@@ -39,6 +39,23 @@
 | 2026-06-27T04:45 | UPDOWN_GBM#XRP#15min | XRP Up or Down - June 27, 12:30AM-12:45AM ET… | ❌ LOSS | -0.51€ |
 | 2026-06-26T18:46 | UPDOWN_GBM#ETH#15min | Ethereum Up or Down - June 26, 2:30PM-2:45PM ET… | ✅ WIN | +0.50€ |
 | 2026-06-26T17:48 | UPDOWN_GBM#SOL#15min | Solana Up or Down - June 26, 1:30PM-1:45PM ET… | ❌ LOSS | -0.62€ |
+
+## Calidad de datos
+
+⚠️ **DEGRADED** — última verificación 2026-06-27T05:32 UTC
+
+| Asset | Precio | Age | Alertas |
+|---|---|---|---|
+| ⚠️ BTC | $60,178.59 | 0.4min | gap 362min (00:23) |
+| ⚠️ ETH | $1,577.88 | 0.4min | gap 362min (00:23) |
+| ⚠️ SOL | $71.69 | 0.4min | gap 362min (00:23) |
+| ⚠️ XRP | $1.05 | 0.4min | gap 362min (00:23) |
+
+**Alertas activas:**
+- ⚠ BTC:gap 362min (00:23)
+- ⚠ ETH:gap 362min (00:23)
+- ⚠ SOL:gap 362min (00:23)
+- ⚠ XRP:gap 362min (00:23)
 
 ---
 *Actualizado automáticamente cada ~60s por el fast loop*

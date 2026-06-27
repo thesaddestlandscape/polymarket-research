@@ -1,0 +1,182 @@
+{
+  "timestamp_utc": "2026-06-27T05:32:31+00:00",
+  "estado_global": "DEGRADED",
+  "alertas": [
+    "BTC:gap 362min (00:23)",
+    "ETH:gap 362min (00:23)",
+    "SOL:gap 362min (00:23)",
+    "XRP:gap 362min (00:23)"
+  ],
+  "rechazos_1h": {
+    "rango": 0,
+    "spike": 0,
+    "total": 0,
+    "por_sym": {}
+  },
+  "assets": {
+    "BTC": {
+      "estado": "DEGRADED",
+      "n": 1899,
+      "age_seconds": 23.0,
+      "ultimo_precio": 60178.59,
+      "gaps": [
+        {
+          "inicio": "2026-06-26T00:23:33",
+          "fin": "2026-06-26T06:25:53",
+          "duracion_min": 362.3
+        },
+        {
+          "inicio": "2026-06-26T11:58:27",
+          "fin": "2026-06-26T12:39:48",
+          "duracion_min": 41.4
+        },
+        {
+          "inicio": "2026-06-26T18:03:50",
+          "fin": "2026-06-26T18:13:57",
+          "duracion_min": 10.1
+        },
+        {
+          "inicio": "2026-06-26T21:41:21",
+          "fin": "2026-06-26T21:51:22",
+          "duracion_min": 10.0
+        },
+        {
+          "inicio": "2026-06-26T21:51:22",
+          "fin": "2026-06-26T23:48:05",
+          "duracion_min": 116.7
+        },
+        {
+          "inicio": "2026-06-26T23:48:21",
+          "fin": "2026-06-27T04:31:50",
+          "duracion_min": 283.5
+        }
+      ],
+      "alertas": [
+        "gap 362min (00:23)"
+      ]
+    },
+    "ETH": {
+      "estado": "DEGRADED",
+      "n": 1899,
+      "age_seconds": 23.0,
+      "ultimo_precio": 1577.88,
+      "gaps": [
+        {
+          "inicio": "2026-06-26T00:23:33",
+          "fin": "2026-06-26T06:25:53",
+          "duracion_min": 362.3
+        },
+        {
+          "inicio": "2026-06-26T11:58:27",
+          "fin": "2026-06-26T12:39:48",
+          "duracion_min": 41.4
+        },
+        {
+          "inicio": "2026-06-26T18:03:50",
+          "fin": "2026-06-26T18:13:57",
+          "duracion_min": 10.1
+        },
+        {
+          "inicio": "2026-06-26T21:41:21",
+          "fin": "2026-06-26T21:51:22",
+          "duracion_min": 10.0
+        },
+        {
+          "inicio": "2026-06-26T21:51:22",
+          "fin": "2026-06-26T23:48:05",
+          "duracion_min": 116.7
+        },
+        {
+          "inicio": "2026-06-26T23:48:21",
+          "fin": "2026-06-27T04:31:50",
+          "duracion_min": 283.5
+        }
+      ],
+      "alertas": [
+        "gap 362min (00:23)"
+      ]
+    },
+    "SOL": {
+      "estado": "DEGRADED",
+      "n": 1899,
+      "age_seconds": 23.0,
+      "ultimo_precio": 71.69,
+      "gaps": [
+        {
+          "inicio": "2026-06-26T00:23:33",
+          "fin": "2026-06-26T06:25:53",
+          "duracion_min": 362.3
+        },
+        {
+          "inicio": "2026-06-26T11:58:27",
+          "fin": "2026-06-26T12:39:48",
+          "duracion_min": 41.4
+        },
+        {
+          "inicio": "2026-06-26T18:03:50",
+          "fin": "2026-06-26T18:13:57",
+          "duracion_min": 10.1
+        },
+        {
+          "inicio": "2026-06-26T21:41:21",
+          "fin": "2026-06-26T21:51:22",
+          "duracion_min": 10.0
+        },
+        {
+          "inicio": "2026-06-26T21:51:22",
+          "fin": "2026-06-26T23:48:05",
+          "duracion_min": 116.7
+        },
+        {
+          "inicio": "2026-06-26T23:48:21",
+          "fin": "2026-06-27T04:31:50",
+          "duracion_min": 283.5
+        }
+      ],
+      "alertas": [
+        "gap 362min (00:23)"
+      ]
+    },
+    "XRP": {
+      "estado": "DEGRADED",
+      "n": 1899,
+      "age_seconds": 23.0,
+      "ultimo_precio": 1.0549,
+      "gaps": [
+        {
+          "inicio": "2026-06-26T00:23:33",
+          "fin": "2026-06-26T06:25:53",
+          "duracion_min": 362.3
+        },
+        {
+          "inicio": "2026-06-26T11:58:27",
+          "fin": "2026-06-26T12:39:48",
+          "duracion_min": 41.4
+        },
+        {
+          "inicio": "2026-06-26T18:03:50",
+          "fin": "2026-06-26T18:13:57",
+          "duracion_min": 10.1
+        },
+        {
+          "inicio": "2026-06-26T21:41:21",
+          "fin": "2026-06-26T21:51:22",
+          "duracion_min": 10.0
+        },
+        {
+          "inicio": "2026-06-26T21:51:22",
+          "fin": "2026-06-26T23:48:05",
+          "duracion_min": 116.7
+        },
+        {
+          "inicio": "2026-06-26T23:48:21",
+          "fin": "2026-06-27T04:31:50",
+          "duracion_min": 283.5
+        }
+      ],
+      "alertas": [
+        "gap 362min (00:23)"
+      ]
+    }
+  }
+}
