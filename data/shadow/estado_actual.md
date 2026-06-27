@@ -1,4 +1,4 @@
-# Estado del bot — 2026-06-27 12:03 UTC
+# Estado del bot — 2026-06-27 12:04 UTC
 
 ## Capital
 | | |
@@ -11,13 +11,13 @@
 | | |
 |---|---|
 | Inicio | 20.00 € |
-| Actual | **-4.39 €** |
-| P&L acumulado | 🔴 **-24.39 €** |
-| ROI s/ operativo | -121.94% |
-| ROI s/ depósito | -81.29% |
-| P&L hoy (2026-06-27) | 🟢 +0.57 € |
-| Operaciones resueltas | 1187 (583 WIN / 604 LOSS) — 49.1% |
-| Señales abiertas | 132 |
+| Actual | **-5.72 €** |
+| P&L acumulado | 🔴 **-25.72 €** |
+| ROI s/ operativo | -128.62% |
+| ROI s/ depósito | -85.75% |
+| P&L hoy (2026-06-27) | 🔴 -0.76 € |
+| Operaciones resueltas | 1188 (583 WIN / 605 LOSS) — 49.1% |
+| Señales abiertas | 131 |
 
 ## Estrategias (visión global)
 
@@ -25,7 +25,7 @@
 |---|---|---|---|---|---|---|
 | ORDER_FLOW_5M | 782 | 51.2% | +0.011 | +6.94€ | 0.50€ | ✅ activa |
 | PRICE_TARGET_GBM | 16 | 50.0% | +0.000 | -1.53€ | 0.50€ | ✅ activa |
-| UPDOWN_GBM | 291 | 49.8% | -0.002 | -2.40€ | 0.50€ | ⚠️ IC negativo |
+| UPDOWN_GBM | 292 | 49.7% | -0.003 | -3.74€ | 0.50€ | ⚠️ IC negativo |
 | WEEKLY_PRICE | 21 | 52.4% | +0.022 | -3.78€ | 0.50€ | ✅ activa |
 | SMART_FLOW_1H | 20 | 20.0% | -0.273 | -9.86€ | 0.00€ | 🚫 desactivada |
 | UPDOWN_OU_5M | 57 | 26.3% | -0.229 | -13.76€ | 0.00€ | 🚫 desactivada |
@@ -34,15 +34,15 @@
 
 | Timestamp | Estrategia | Mercado | Resultado | PNL |
 |---|---|---|---|---|
+| 2026-06-27T12:04 | UPDOWN_GBM#BTC#60min | Bitcoin Up or Down - June 27, 7AM ET… | ❌ LOSS | -1.34€ |
 | 2026-06-27T12:00 | UPDOWN_GBM#ETH#15min | Ethereum Up or Down - June 27, 7:45AM-8:00AM ET… | ✅ WIN | +0.04€ |
 | 2026-06-27T12:00 | UPDOWN_GBM#SOL#15min | Solana Up or Down - June 27, 7:45AM-8:00AM ET… | ✅ WIN | +0.48€ |
 | 2026-06-27T11:31 | UPDOWN_GBM#XRP#15min | XRP Up or Down - June 27, 7:15AM-7:30AM ET… | ✅ WIN | +0.45€ |
 | 2026-06-27T11:31 | UPDOWN_GBM#ETH#15min | Ethereum Up or Down - June 27, 7:15AM-7:30AM ET… | ❌ LOSS | -1.18€ |
-| 2026-06-27T11:16 | UPDOWN_GBM#ETH#15min | Ethereum Up or Down - June 27, 7:00AM-7:15AM ET… | ❌ LOSS | -1.18€ |
 
 ## Calidad de datos
 
-⚠️ **DEGRADED** — última verificación 2026-06-27T12:03 UTC
+⚠️ **DEGRADED** — última verificación 2026-06-27T12:04 UTC
 
 | Asset | Precio | Age | Alertas |
 |---|---|---|---|
