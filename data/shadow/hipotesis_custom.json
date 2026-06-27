@@ -1,0 +1,79 @@
+{
+  "_instrucciones": [
+    "Añade hipótesis aquí para que el sistema las evalúe automáticamente cada ciclo.",
+    "Campos obligatorios: id, nombre, descripcion, filtro (al menos uno), umbral_n.",
+    "El sistema calcula IC/PNL sobre el subconjunto filtrado y reporta en hipotesis_auto.md.",
+    "",
+    "FILTROS disponibles (todos opcionales, se combinan con AND):",
+    "  strategy_prefix  — estrategia empieza por (ej: 'UPDOWN_GBM', 'ORDER_FLOW_5M')",
+    "  subtype_contains — subtipo contiene (ej: '60min', 'BTC', 'BUY_NO')",
+    "  decision         — decisión exacta: 'BUY_YES', 'BUY_NO'",
+    "  hora_utc         — hora UTC exacta (0-23), usa timestamp de resolución",
+    "  hora_utc_desde   — hora UTC >= valor",
+    "  hora_utc_hasta   — hora UTC <= valor",
+    "  feature          — nombre de feature en el JSON de features",
+    "  feature_lo       — feature >= valor (null = sin límite inferior)",
+    "  feature_hi       — feature <  valor (null = sin límite superior)",
+    "  par              — activo en subtype ('BTC', 'ETH', 'SOL', 'XRP')",
+    "",
+    "UMBRALES de acción:",
+    "  umbral_n         — mínimo de ops para declarar la hipótesis evaluable",
+    "  umbral_ic_max    — si IC < esto → confirma SEÑAL_NEGATIVA (para filtros)",
+    "  umbral_ic_min    — si IC > esto → confirma SEÑAL_POSITIVA (para boosts)",
+    "",
+    "EJEMPLO de hipótesis:",
+    "  'Operar GBM en BTC a las 17h UTC tiene edge positivo'",
+    "  filtro: strategy_prefix=UPDOWN_GBM, par=BTC, hora_utc=17",
+    "  umbral_n=15, umbral_ic_min=0.08"
+  ],
+
+  "hipotesis": [
+    {
+      "id": "H-CUSTOM-GBM-17H-BTC",
+      "nombre": "GBM BTC a las 17h UTC — ¿edge real?",
+      "descripcion": "La hora 17h UTC aparece como la mejor en historial. ¿Se confirma solo en BTC?",
+      "tipo": "filtro",
+      "umbral": "n≥15 y IC>+0.08",
+      "accion": "Boost ×1.2 en GBM BTC a las 17h si se confirma",
+      "filtro": {
+        "strategy_prefix": "UPDOWN_GBM",
+        "par": "BTC",
+        "hora_utc": 17
+      },
+      "umbral_n": 15,
+      "umbral_ic_min": 0.08
+    },
+    {
+      "id": "H-CUSTOM-OF-MADRUGADA",
+      "nombre": "ORDER_FLOW de madrugada (0h-6h UTC) — ¿neutralizar?",
+      "descripcion": "Las horas 0-6h UTC en ORDER_FLOW tienen menos volumen y posiblemente menos fiabilidad.",
+      "tipo": "filtro",
+      "umbral": "n≥30 y IC<-0.05",
+      "accion": "Bloquear ORDER_FLOW entre 0-6h UTC si IC negativo confirmado",
+      "filtro": {
+        "strategy_prefix": "ORDER_FLOW_5M",
+        "hora_utc_desde": 0,
+        "hora_utc_hasta": 5,
+        "decision": "BUY_NO",
+        "par_excluir": ["ETH", "XRP", "DOGE", "BNB"]
+      },
+      "umbral_n": 30,
+      "umbral_ic_max": -0.05
+    },
+    {
+      "id": "H-CUSTOM-GBM-SIGMA-ALTO",
+      "nombre": "GBM con sigma_h alto (>0.002/h) — ¿destruye edge?",
+      "descripcion": "Cuando la volatilidad horaria es muy alta el GBM puede sobreestimar el edge. Testear.",
+      "tipo": "filtro",
+      "umbral": "n≥30 y IC<-0.05 en sigma alto vs neutro",
+      "accion": "Filtrar señales GBM cuando sigma_h > 0.002 si se confirma IC negativo",
+      "filtro": {
+        "strategy_prefix": "UPDOWN_GBM",
+        "feature": "sigma_h",
+        "feature_lo": 0.002
+      },
+      "umbral_n": 30,
+      "umbral_ic_max": -0.05
+    }
+  ]
+}

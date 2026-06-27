@@ -1,4 +1,4 @@
-# Hipótesis automáticas — 2026-06-27 11:21 UTC
+# Hipótesis automáticas — 2026-06-27 11:22 UTC
 _Generado por shadow_postmortem.py sobre 1183 resoluciones (PNL=-24.17€)_
 
 ## Patrones causales activos
@@ -94,6 +94,21 @@ _Sin sugerencias automáticas con datos actuales. Ampliar n por estrategia._
 ## Hipótesis pendientes — tracking automático
 
 
+### 🟡 Listas para evaluar
+
+**〰️ H-CUSTOM-OF-MADRUGADA** — ORDER_FLOW de madrugada (0h-6h UTC) — ¿neutralizar?
+  - _Umbral_: n≥30 y IC<-0.05
+  - _Acción_: Bloquear ORDER_FLOW entre 0-6h UTC si IC negativo confirmado
+  - _Estado_: n=36 IC=+0.000 PNL=-0.18€ — sin señal clara aún (umbral IC: min=None max=-0.05)
+  - _Datos_: n=36 IC=+0.000 PNL=-0.18€
+
+**〰️ H-CUSTOM-GBM-SIGMA-ALTO** — GBM con sigma_h alto (>0.002/h) — ¿destruye edge?
+  - _Umbral_: n≥30 y IC<-0.05 en sigma alto vs neutro
+  - _Acción_: Filtrar señales GBM cuando sigma_h > 0.002 si se confirma IC negativo
+  - _Estado_: n=188 IC=+0.016 PNL=+3.45€ — sin señal clara aún (umbral IC: min=None max=-0.05)
+  - _Datos_: n=188 IC=+0.016 PNL=+3.45€
+
+
 ### ⏳ Acumulando datos
 
 **⏳ H-GBM-18H** — Bloquear hora 18h UTC en GBM
@@ -149,6 +164,11 @@ _Sin sugerencias automáticas con datos actuales. Ampliar n por estrategia._
   - _Acción_: Sustituir DRIFT_DAMPING por KalmanDrift en fetch_binance_klines.py
   - _Estado_: Máximo n actual en GBM: 287/200. Esperar 3+ subtypes con n≥200.
   - _Bloqueante_: N_INSUFICIENTE
+
+**⏳ H-CUSTOM-GBM-17H-BTC** — GBM BTC a las 17h UTC — ¿edge real?
+  - _Umbral_: 15
+  - _Acción_: Boost ×1.2 en GBM BTC a las 17h si se confirma
+  - _Estado_: 0/15 ops en el filtro definido (IC actual=+0.000 PNL=+0.00€)
 
 
 ### 🔒 Bloqueadas (requieren dataset/API)
