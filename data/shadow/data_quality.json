@@ -1,12 +1,7 @@
 {
-  "timestamp_utc": "2026-06-27T14:28:56+00:00",
-  "estado_global": "DEGRADED",
-  "alertas": [
-    "BTC:gap 69min (09:20)",
-    "ETH:gap 69min (09:20)",
-    "SOL:gap 69min (09:20)",
-    "XRP:gap 69min (09:20)"
-  ],
+  "timestamp_utc": "2026-06-27T14:30:12+00:00",
+  "estado_global": "OK",
+  "alertas": [],
   "rechazos_1h": {
     "rango": 0,
     "spike": 0,
@@ -15,9 +10,9 @@
   },
   "assets": {
     "BTC": {
-      "estado": "DEGRADED",
-      "n": 3220,
-      "age_seconds": 1.7,
+      "estado": "OK",
+      "n": 3224,
+      "age_seconds": 1.4,
       "ultimo_precio": 60515.615,
       "gaps": [
         {
@@ -61,14 +56,12 @@
           "duracion_min": 68.7
         }
       ],
-      "alertas": [
-        "gap 69min (09:20)"
-      ]
+      "alertas": []
     },
     "ETH": {
-      "estado": "DEGRADED",
-      "n": 3220,
-      "age_seconds": 1.7,
+      "estado": "OK",
+      "n": 3224,
+      "age_seconds": 1.4,
       "ultimo_precio": 1591.11,
       "gaps": [
         {
@@ -112,15 +105,13 @@
           "duracion_min": 68.7
         }
       ],
-      "alertas": [
-        "gap 69min (09:20)"
-      ]
+      "alertas": []
     },
     "SOL": {
-      "estado": "DEGRADED",
-      "n": 3220,
-      "age_seconds": 1.7,
-      "ultimo_precio": 72.74,
+      "estado": "OK",
+      "n": 3224,
+      "age_seconds": 1.4,
+      "ultimo_precio": 72.71,
       "gaps": [
         {
           "inicio": "2026-06-26T00:23:33",
@@ -163,15 +154,13 @@
           "duracion_min": 68.7
         }
       ],
-      "alertas": [
-        "gap 69min (09:20)"
-      ]
+      "alertas": []
     },
     "XRP": {
-      "estado": "DEGRADED",
-      "n": 3220,
-      "age_seconds": 1.7,
-      "ultimo_precio": 1.0665,
+      "estado": "OK",
+      "n": 3224,
+      "age_seconds": 1.4,
+      "ultimo_precio": 1.0662,
       "gaps": [
         {
           "inicio": "2026-06-26T00:23:33",
@@ -214,9 +203,7 @@
           "duracion_min": 68.7
         }
       ],
-      "alertas": [
-        "gap 69min (09:20)"
-      ]
+      "alertas": []
     }
   },
   "cross_source": {}
