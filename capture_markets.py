@@ -12,7 +12,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 import requests
 
-from data_quality import validar_precio
+from data_quality import validar_precio, fetch_coinbase_spot, validar_cross_source
 
 TIMEOUT = 30
 N_CAPTURAS_POR_WORKFLOW = 10
@@ -312,22 +312,48 @@ def guardar_precios(precios, ts):
     fecha   = ts[:10]
     archivo = DIR_PRICES / f"{fecha}.csv"
     nuevo   = not archivo.exists()
-    rechazados = []
+
+    # L1: validar rango para cada precio de CoinGecko
+    precios_validos: dict[str, float] = {}
+    rechazados: list[str] = []
+    for sym in SPOT_SYMBOLS:
+        v = precios.get(sym)
+        if v is None:
+            continue
+        ok, motivo = validar_precio(sym, v)
+        if ok:
+            precios_validos[sym] = float(v)
+        else:
+            rechazados.append(f"{sym}({motivo})")
+    if rechazados:
+        print(f"  [DQ L1] CoinGecko rechazados: {', '.join(rechazados)}")
+
+    # L4: cross-source — comparar CoinGecko con Coinbase para assets principales
+    assets_check = [s for s in ["BTC", "ETH", "SOL", "XRP"] if s in precios_validos]
+    if assets_check:
+        try:
+            coinbase = fetch_coinbase_spot(assets_check, timeout=5)
+            cg_subset = {s: precios_validos[s] for s in assets_check}
+            cross = validar_cross_source(
+                {"coingecko": cg_subset, "coinbase": coinbase}, assets_check
+            )
+            for a in cross.get("alertas", []):
+                icon = "🚨" if a["accion"] == "BLOQUEADO" else "⚠️"
+                print(f"  [DQ L4] {icon} CoinGecko {a['sym']} div={a['max_div_pct']:.2f}%")
+            # Si Coinbase está disponible y CoinGecko diverge >2%, usar Coinbase
+            for sym in cross.get("bloqueados", []):
+                if sym in coinbase:
+                    precios_validos[sym] = coinbase[sym]
+                    print(f"  [DQ L4] {sym}: usando Coinbase en lugar de CoinGecko (bloqueado)")
+        except Exception as _e:
+            pass   # cross-source es best-effort; no bloquea el guardado
+
     with open(archivo, "a", newline="", encoding="utf-8") as f:
         w = csv.writer(f)
         if nuevo:
             w.writerow(["timestamp_utc", "asset", "price_usd", "change_1h_pct", "change_24h_pct"])
-        for sym in SPOT_SYMBOLS:
-            v = precios.get(sym)
-            if v is None:
-                continue
-            ok, motivo = validar_precio(sym, v)   # sin last_price: CoinGecko no tiene serie continua
-            if ok:
-                w.writerow([ts, sym, float(v), "", ""])
-            else:
-                rechazados.append(f"{sym}({motivo})")
-    if rechazados:
-        print(f"  [DQ L1] CoinGecko rechazados: {', '.join(rechazados)}")
+        for sym, price in precios_validos.items():
+            w.writerow([ts, sym, price, "", ""])
 
 
 def una_captura():

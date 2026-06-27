@@ -1,20 +1,35 @@
 """
 data_quality.py — Guardián centralizado de calidad de datos.
 
-Cuatro capas de defensa:
-  L1 validar_precio()      — bloquea datos malos al escribir en CSV
-  L2 verificar_series()    — detecta gaps y datos stale en la serie temporal
-  L3 validar_features_gbm()— bloquea predicciones con features imposibles
-  L4 generar_reporte()     — snapshot del estado → data_quality.json
+Cinco capas de defensa:
+  L1 validar_precio()        — bloquea datos malos al escribir en CSV
+  L2 verificar_series()      — detecta gaps y datos stale en la serie temporal
+  L3 validar_features_gbm()  — bloquea predicciones con features imposibles
+  L4 validar_cross_source()  — consenso multi-fuente: Binance/Kraken/Coinbase/CoinGecko
+  L5 generar_reporte()       — snapshot completo → data_quality.json visible en estado_actual.md
+
+Fuentes de datos y rol en el sistema:
+  Binance   — klines 1min + taker flow (PRIMARY: sigma_h, drift, order flow)
+  Kraken    — klines 1min fallback (PRIMARY: cuando Binance no responde)
+  Coinbase  — spot price (SETTLEMENT: Polymarket resuelve BTC/ETH a precio Coinbase)
+  CoinGecko — spot price (SLOW: cada 23min, menor calidad, solo para gap filling)
+  Polymarket — precios YES/NO + liquidez (MARKET: lo que apostamos)
 
 Importado por: fetch_binance_klines, capture_markets, shadow_predict, shadow_resumen.
 Ejecutable standalone para diagnóstico: python3 data_quality.py
 """
 import csv
 import json
+import concurrent.futures
 from datetime import datetime, timezone, timedelta
 from pathlib import Path
 from typing import Optional
+
+try:
+    import requests as _requests
+    _HAS_REQUESTS = True
+except ImportError:
+    _HAS_REQUESTS = False
 
 # ─── Constantes de validación (fuente única de verdad) ───────────────────────
 
@@ -40,9 +55,227 @@ STALE_WARN_MIN   = 5      # último precio >5 min → alerta leve
 
 ASSETS_GBM = ["BTC", "ETH", "SOL", "XRP"]
 
+# Umbral de divergencia entre fuentes: >0.5% en condiciones normales es una anomalía
+# (Medición histórica: Binance vs Coinbase ≈ 0.15% de divergencia normal)
+CROSS_SOURCE_WARN_PCT  = 0.005   # 0.5%  → alerta, revisar
+CROSS_SOURCE_BLOCK_PCT = 0.020   # 2.0%  → precio infiable, no apostar ese activo
+FETCH_TIMEOUT          = 6       # segundos por fuente en cross-source check
+
+# Settlement reference: Polymarket resuelve BTC/ETH al precio Coinbase
+# Si Coinbase y Binance divergen >0.5% → usar Coinbase como spot en las predicciones
+SETTLEMENT_ASSETS = {"BTC", "ETH"}   # los que Polymarket resuelve contra Coinbase
+
 DIR_SHADOW = Path("data/shadow")
 DQ_PATH    = DIR_SHADOW / "data_quality.json"
 DQ_LOG     = DIR_SHADOW / "dq_events.jsonl"   # log de rechazos (append-only)
+
+# ─── L4: Fetchers multi-fuente ───────────────────────────────────────────────
+
+def fetch_coinbase_spot(assets: Optional[list] = None,
+                         timeout: int = FETCH_TIMEOUT) -> dict[str, float]:
+    """
+    Obtiene precios spot de Coinbase Advanced Trade API (pública, sin auth).
+    Coinbase es la fuente de settlement de Polymarket para BTC y ETH.
+    """
+    if not _HAS_REQUESTS:
+        return {}
+    if assets is None:
+        assets = ASSETS_GBM
+
+    def _fetch_one(sym):
+        try:
+            r = _requests.get(
+                f"https://api.coinbase.com/v2/prices/{sym}-USD/spot",
+                timeout=timeout,
+            )
+            r.raise_for_status()
+            price = float(r.json()["data"]["amount"])
+            ok, _ = validar_precio(sym, price)
+            return (sym, price) if ok else (sym, None)
+        except Exception:
+            return (sym, None)
+
+    results = {}
+    with concurrent.futures.ThreadPoolExecutor(max_workers=len(assets)) as ex:
+        for sym, price in ex.map(_fetch_one, assets):
+            if price is not None:
+                results[sym] = price
+    return results
+
+
+def fetch_kraken_spot(assets: Optional[list] = None,
+                       timeout: int = FETCH_TIMEOUT) -> dict[str, float]:
+    """Obtiene precios spot de Kraken (sin auth)."""
+    if not _HAS_REQUESTS:
+        return {}
+    PAIRS = {"BTC":"XBTUSD","ETH":"ETHUSD","SOL":"SOLUSD","XRP":"XRPUSD","DOGE":"DOGEUSD","BNB":"BNBUSD"}
+    if assets is None:
+        assets = ASSETS_GBM
+
+    def _fetch_one(sym):
+        pair = PAIRS.get(sym)
+        if not pair:
+            return (sym, None)
+        try:
+            r = _requests.get(
+                f"https://api.kraken.com/0/public/Ticker?pair={pair}",
+                timeout=timeout,
+            )
+            body = r.json()
+            if body.get("error"):
+                return (sym, None)
+            result = body.get("result", {})
+            key = next((k for k in result if k != "last"), None)
+            if not key:
+                return (sym, None)
+            price = float(result[key]["c"][0])
+            ok, _ = validar_precio(sym, price)
+            return (sym, price) if ok else (sym, None)
+        except Exception:
+            return (sym, None)
+
+    results = {}
+    with concurrent.futures.ThreadPoolExecutor(max_workers=len(assets)) as ex:
+        for sym, price in ex.map(_fetch_one, assets):
+            if price is not None:
+                results[sym] = price
+    return results
+
+
+# ─── L4: Validación cross-source ─────────────────────────────────────────────
+
+def validar_cross_source(
+    sources: dict[str, dict[str, float]],
+    assets: Optional[list] = None,
+) -> dict:
+    """
+    Compara precios entre múltiples fuentes para detectar anomalías.
+
+    Args:
+        sources: {'binance': {BTC: 60000, ETH: 1580, ...},
+                  'coinbase': {BTC: 60120, ETH: 1576, ...},
+                  'kraken':   {...}, ...}
+        assets:  lista de activos a validar
+
+    Returns:
+        dict con:
+          'consenso':  {sym: precio_mediana}   ← usar para predicciones
+          'alertas':   [{sym, fuentes, max_div, accion}]
+          'bloqueados': [sym]                  ← divergencia >2%
+    """
+    if assets is None:
+        assets = ASSETS_GBM
+
+    consenso: dict[str, float] = {}
+    alertas: list[dict] = []
+    bloqueados: list[str] = []
+
+    for sym in assets:
+        precios_por_fuente = {
+            nombre: prices[sym]
+            for nombre, prices in sources.items()
+            if prices.get(sym) is not None
+        }
+        if not precios_por_fuente:
+            continue
+
+        vals = list(precios_por_fuente.values())
+        if len(vals) == 1:
+            consenso[sym] = vals[0]
+            continue
+
+        # Mediana como precio de consenso (robusto a un outlier)
+        sorted_vals = sorted(vals)
+        n = len(sorted_vals)
+        mediana = sorted_vals[n // 2] if n % 2 else (sorted_vals[n//2-1] + sorted_vals[n//2]) / 2
+
+        max_div = (max(vals) - min(vals)) / min(vals)
+        outlier = max(precios_por_fuente, key=lambda k: abs(precios_por_fuente[k] - mediana))
+
+        if max_div >= CROSS_SOURCE_BLOCK_PCT:
+            bloqueados.append(sym)
+            alertas.append({
+                "sym": sym, "max_div_pct": round(max_div * 100, 3),
+                "fuentes": precios_por_fuente, "consenso": mediana,
+                "accion": "BLOQUEADO",
+            })
+            _log_evento(sym, precios_por_fuente.get(outlier, 0),
+                        f"cross_source_block {outlier}={precios_por_fuente.get(outlier):.4f} vs mediana={mediana:.4f} ({max_div*100:.2f}%)")
+        elif max_div >= CROSS_SOURCE_WARN_PCT:
+            alertas.append({
+                "sym": sym, "max_div_pct": round(max_div * 100, 3),
+                "fuentes": precios_por_fuente, "consenso": mediana,
+                "accion": "ALERTA",
+            })
+            _log_evento(sym, precios_por_fuente.get(outlier, 0),
+                        f"cross_source_warn {outlier}={precios_por_fuente.get(outlier):.4f} vs mediana={mediana:.4f} ({max_div*100:.2f}%)")
+
+        consenso[sym] = mediana
+
+    return {
+        "timestamp_utc": datetime.now(timezone.utc).isoformat(timespec="seconds"),
+        "fuentes_activas": list(sources.keys()),
+        "consenso": consenso,
+        "alertas": alertas,
+        "bloqueados": bloqueados,
+    }
+
+
+def obtener_consensus_spot(
+    binance_prices: Optional[dict] = None,
+    assets: Optional[list] = None,
+    timeout: int = FETCH_TIMEOUT,
+) -> dict:
+    """
+    Obtiene precio de consenso multi-fuente. Llamado desde fetch_binance_klines.
+    Prioriza Coinbase para activos de settlement (BTC, ETH).
+
+    Retorna:
+      'precios':   {sym: float}  — precio a usar en predicciones
+      'cross':     resultado de validar_cross_source
+      'fuente_preferida': {sym: 'binance'|'coinbase'|'kraken'|'consenso'}
+    """
+    if assets is None:
+        assets = ASSETS_GBM
+
+    # Fetch Coinbase y Kraken en paralelo (Binance ya fue fetcheado por el caller)
+    with concurrent.futures.ThreadPoolExecutor(max_workers=2) as ex:
+        f_cb = ex.submit(fetch_coinbase_spot, assets, timeout)
+        f_kr = ex.submit(fetch_kraken_spot, assets, timeout)
+        coinbase = f_cb.result()
+        kraken   = f_kr.result()
+
+    sources: dict[str, dict] = {}
+    if binance_prices:
+        sources["binance"] = {k: v for k, v in binance_prices.items() if k in assets}
+    if coinbase:
+        sources["coinbase"] = coinbase
+    if kraken:
+        sources["kraken"] = kraken
+
+    cross = validar_cross_source(sources, assets)
+
+    # Para settlement assets (BTC, ETH): usar Coinbase si está disponible y no bloqueado
+    precios: dict[str, float] = {}
+    fuente_elegida: dict[str, str] = {}
+    for sym in assets:
+        if sym in cross["bloqueados"]:
+            continue   # no usar precio infiable
+        if sym in SETTLEMENT_ASSETS and sym in coinbase:
+            precios[sym] = coinbase[sym]
+            fuente_elegida[sym] = "coinbase"
+        elif cross["consenso"].get(sym):
+            precios[sym] = cross["consenso"][sym]
+            fuente_elegida[sym] = "consenso"
+        elif binance_prices and sym in binance_prices:
+            precios[sym] = binance_prices[sym]
+            fuente_elegida[sym] = "binance"
+
+    return {
+        "precios": precios,
+        "cross": cross,
+        "fuente_elegida": fuente_elegida,
+    }
 
 # ─── L1: Validación en punto de escritura ────────────────────────────────────
 
@@ -238,10 +471,17 @@ def _contar_rechazos(ventana_min: int = 60) -> dict:
 
 
 def generar_reporte(precios_data: list,
-                     assets: Optional[list] = None) -> dict:
+                     assets: Optional[list] = None,
+                     cross_result: Optional[dict] = None) -> dict:
     """
     Genera snapshot completo de calidad de datos.
     Escribe data/shadow/data_quality.json y lo retorna.
+
+    Args:
+        precios_data: output de cargar_precios_intraday()
+        assets:       lista de activos a analizar
+        cross_result: output previo de validar_cross_source() si está disponible
+                      (evita re-fetch de fuentes externas)
     """
     if assets is None:
         assets = ASSETS_GBM
@@ -266,12 +506,28 @@ def generar_reporte(precios_data: list,
             f"rechazos_1h:{rechazos['total']} (rango={rechazos['rango']}, spike={rechazos['spike']})"
         )
 
+    # Integrar resultado cross-source si fue pasado
+    if cross_result:
+        if cross_result.get("bloqueados"):
+            if estado_global != "CRITICAL":
+                estado_global = "CRITICAL"
+            for sym in cross_result["bloqueados"]:
+                alertas_globales.append(f"{sym}:cross_source_BLOQUEADO")
+        for alerta in cross_result.get("alertas", []):
+            if alerta.get("accion") == "ALERTA":
+                alertas_globales.append(
+                    f"{alerta['sym']}:divergencia_{alerta['max_div_pct']:.2f}%"
+                )
+                if estado_global == "OK":
+                    estado_global = "DEGRADED"
+
     reporte = {
         "timestamp_utc": datetime.now(timezone.utc).isoformat(timespec="seconds"),
         "estado_global": estado_global,
         "alertas":       alertas_globales,
         "rechazos_1h":   rechazos,
         "assets":        series,
+        "cross_source":  cross_result or {},
     }
 
     try:
@@ -305,23 +561,45 @@ def simbolo_bloqueado(sym: str) -> bool:
 # ─── Diagnóstico standalone ──────────────────────────────────────────────────
 
 if __name__ == "__main__":
-    print("Cargando datos de precios...")
+    print("Cargando datos de precios locales...")
     try:
         from shadow_predict import cargar_precios_intraday
         data = cargar_precios_intraday()
-        print(f"  {len(data)} registros")
+        print(f"  {len(data)} registros en CSV")
     except Exception as e:
         print(f"  [ERROR] No se pudieron cargar precios: {e}")
         data = []
 
-    reporte = generar_reporte(data)
+    # Fetch Binance en paralelo para cross-source
+    print("Consultando fuentes externas (Binance + Coinbase + Kraken)...")
+    binance_now: dict = {}
+    if _HAS_REQUESTS:
+        def _fetch_bn(sym):
+            try:
+                r = _requests.get(
+                    f"https://api.binance.com/api/v3/ticker/price?symbol={sym}USDT",
+                    timeout=FETCH_TIMEOUT,
+                )
+                return sym, float(r.json()["price"])
+            except Exception:
+                return sym, None
+        with concurrent.futures.ThreadPoolExecutor() as ex:
+            for sym, p in ex.map(_fetch_bn, ASSETS_GBM):
+                if p:
+                    binance_now[sym] = p
+
+    consensus = obtener_consensus_spot(binance_now, ASSETS_GBM)
+    cross = consensus["cross"]
+    reporte = generar_reporte(data, cross_result=cross)
 
     iconos = {"OK": "✅", "DEGRADED": "⚠️", "CRITICAL": "🚨", "DESCONOCIDO": "❓"}
-    print(f"\n{'═'*55}")
+    print(f"\n{'═'*60}")
     print(f" CALIDAD DE DATOS: {iconos.get(reporte['estado_global'], '?')} {reporte['estado_global']}")
     print(f" {reporte['timestamp_utc']}")
-    print(f"{'═'*55}")
+    print(f"{'═'*60}")
 
+    # Series temporales
+    print("\n── Series temporales ──────────────────────────────────────")
     for sym, info in reporte["assets"].items():
         ic = iconos.get(info["estado"], "?")
         age_str = (f"{info['age_seconds']/60:.1f}min"
@@ -333,16 +611,39 @@ if __name__ == "__main__":
         for a in info["alertas"]:
             print(f"       └─ ⚠ {a}")
 
+    # Cross-source
+    print("\n── Cross-source: Binance / Coinbase / Kraken ──────────────")
+    print(f"  Fuentes activas: {cross.get('fuentes_activas', [])}")
+    print(f"  {'Asset':6} {'Consenso':>18}  {'Fuente pred':>14}  {'Div%':>7}")
+    for sym in ASSETS_GBM:
+        px_c = cross.get("consenso", {}).get(sym)
+        fe   = consensus.get("fuente_elegida", {}).get(sym, "—")
+        blk  = " 🚨BLOQUEADO" if sym in cross.get("bloqueados", []) else ""
+        div_str = ""
+        for a in cross.get("alertas", []):
+            if a["sym"] == sym:
+                div_str = f"{a['max_div_pct']:.3f}%"
+        px_str = f"${px_c:>16,.4f}" if px_c else "          N/A"
+        print(f"  {sym:6} {px_str}  {fe:>14}  {div_str:>7}{blk}")
+
+    if cross.get("alertas"):
+        print("\n  Divergencias:")
+        for a in cross["alertas"]:
+            icon = "🚨" if a["accion"] == "BLOQUEADO" else "⚠️"
+            fs = "  ".join([f"{k}=${v:,.2f}" for k, v in a["fuentes"].items()])
+            print(f"    {icon} {a['sym']}: {fs}  div={a['max_div_pct']}%")
+
+    # Rechazos
     r = reporte["rechazos_1h"]
     if r["total"] > 0:
-        print(f"\n  Rechazos última hora: {r['total']}  "
-              f"(rango={r['rango']}  spike={r['spike']})")
+        print(f"\n── Rechazos última hora ──────────────────────────────────")
+        print(f"  Total: {r['total']}  (rango={r['rango']}  spike={r['spike']})")
         if r.get("por_sym"):
             print(f"  Por asset: {r['por_sym']}")
 
     if reporte["alertas"]:
-        print("\n  Alertas activas:")
+        print(f"\n── Alertas activas ({len(reporte['alertas'])}) ──────────────────────────────")
         for a in reporte["alertas"]:
             print(f"    ⚠ {a}")
     else:
-        print("\n  Sin alertas. Pipeline limpio.")
+        print("\n  Sin alertas. Pipeline completamente limpio ✅")

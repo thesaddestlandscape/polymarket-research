@@ -20,7 +20,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 import requests
 
-from data_quality import validar_precio, leer_ultimo_precio
+from data_quality import validar_precio, leer_ultimo_precio, obtener_consensus_spot
 
 DIR_PRICES = Path("data") / "prices"
 DIR_PRICES.mkdir(parents=True, exist_ok=True)
@@ -154,10 +154,11 @@ def main():
         with open(prices_path, "w", newline="", encoding="utf-8") as pf:
             csv.writer(pf).writerow(["timestamp_utc", "asset", "price_usd", "change_1h_pct", "change_24h_pct"])
 
-    # Leer último precio de cada asset (para detección de spikes)
+    # Leer último precio de cada asset (para detección de spikes en L1)
     last_prices = {sym: leer_ultimo_precio(sym, prices_path) for sym in SPOT_SYMBOLS}
 
-    prices_escritas = {}
+    # L1: extraer y validar precios desde klines
+    binance_prices: dict[str, float] = {}
     for sym in SPOT_SYMBOLS:
         klines_sym = data.get(sym)
         if not (klines_sym and isinstance(klines_sym, list)):
@@ -166,20 +167,40 @@ def main():
             price = float(klines_sym[-1][4])
         except (IndexError, ValueError, TypeError):
             continue
-
         ok, motivo = validar_precio(sym, price, last_prices.get(sym))
         if not ok:
             print(f"  [DQ L1] {sym} RECHAZADO ({motivo})")
             continue
+        binance_prices[sym] = price
 
-        prices_escritas[sym] = price
+    # L4: cross-source consensus (Binance vs Coinbase vs Kraken)
+    # Coinbase = settlement reference para BTC/ETH en Polymarket
+    # Se ejecuta en paralelo; el resultado enriquece el reporte de calidad
+    assets_gbm = ["BTC", "ETH", "SOL", "XRP"]
+    binance_gbm = {k: v for k, v in binance_prices.items() if k in assets_gbm}
+    if binance_gbm:
+        try:
+            consensus = obtener_consensus_spot(binance_gbm, assets_gbm, timeout=5)
+            cross = consensus["cross"]
+            if cross.get("alertas"):
+                for a in cross["alertas"]:
+                    icon = "🚨" if a["accion"] == "BLOQUEADO" else "⚠️"
+                    print(f"  [DQ L4] {icon} {a['sym']} divergencia {a['max_div_pct']:.2f}% entre fuentes")
+            # Para BTC/ETH: sobreescribir con precio Coinbase (settlement reference)
+            for sym, px_consenso in consensus["precios"].items():
+                if sym in binance_prices:
+                    binance_prices[sym] = px_consenso  # ya es Coinbase si sym en SETTLEMENT_ASSETS
+        except Exception as _cs_err:
+            print(f"  [DQ L4] Cross-source error (no bloqueante): {_cs_err}")
 
-    if prices_escritas:
+    if binance_prices:
         with open(prices_path, "a", newline="", encoding="utf-8") as pf:
             w = csv.writer(pf)
-            for sym, price in prices_escritas.items():
+            for sym, price in binance_prices.items():
                 w.writerow([ts_str, sym, price, "", ""])
-        btc = prices_escritas.get('BTC','?'); eth = prices_escritas.get('ETH','?'); sol = prices_escritas.get('SOL','?')
+        btc = binance_prices.get('BTC','?')
+        eth = binance_prices.get('ETH','?')
+        sol = binance_prices.get('SOL','?')
         print(f"  Spot → prices/{fecha}.csv  BTC={btc} ETH={eth} SOL={sol}")
 
     print(f"[{datetime.now(timezone.utc).isoformat(timespec='seconds')}] Done.")

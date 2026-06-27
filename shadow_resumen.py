@@ -221,6 +221,30 @@ def main():
             "|---|---|---|---|",
         ] + dq_rows
 
+    # Cross-source si está disponible
+    cross = dq.get("cross_source", {})
+    if cross.get("fuentes_activas"):
+        fuentes = ", ".join(cross["fuentes_activas"])
+        consenso = cross.get("consenso", {})
+        fe = cross.get("fuente_elegida", {}) if "fuente_elegida" in cross else {}
+        cross_rows = []
+        for sym, px in consenso.items():
+            src = fe.get(sym, "consenso")
+            div_str = ""
+            for a in cross.get("alertas", []):
+                if a["sym"] == sym:
+                    div_str = f"⚠️ div {a['max_div_pct']:.2f}%"
+            blk = "🚨 BLOQUEADO" if sym in cross.get("bloqueados", []) else ""
+            cross_rows.append(f"| {sym} | ${px:,.2f} | {src} | {div_str}{blk} |")
+        if cross_rows:
+            lines += [
+                "",
+                f"**Cross-source** ({fuentes}):",
+                "",
+                "| Asset | Consenso | Fuente | Estado |",
+                "|---|---|---|---|",
+            ] + cross_rows
+
     alertas_dq = dq.get("alertas", [])
     if alertas_dq:
         lines.append("")
