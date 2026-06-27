@@ -534,43 +534,53 @@ def _extraer_features(resultado: dict, pred: dict) -> dict:
 # (feature, condicion_mala, condicion_buena)
 # condicion_mala: "abs_gt" = malo cuando |feature| > umbral (ej: pct_spot alto)
 # condicion_buena: "abs_lt" = bueno cuando |feature| < umbral (ej: delta alto es bueno)
+_BASE_GBM = [
+    # ── Features de precio y volatilidad ──────────────────────────────────────
+    # pct alto = precio ya movió mucho desde ref → el modelo sobreestima la señal
+    ("pct_spot_vs_ref",  "abs_gt", "abs_lt"),
+    # sigma alta = alta volatilidad → señales más ruidosas (varía por activo/ventana)
+    ("sigma_h",          "gt",     "lt"),
+    ("sigma_h",          "lt",     "gt"),    # algunas estrategias prefieren alta vol
+    # ── Features de régimen / drift ────────────────────────────────────────────
+    # drift fuerte en cualquier dirección → precio ya priceado en Polymarket
+    ("drift_60min",      "abs_gt", "abs_lt"),
+    ("drift_15min",      "abs_gt", "abs_lt"),
+    # ── Order flow macro ───────────────────────────────────────────────────────
+    ("delta_ratio_macro","abs_lt", "abs_gt"),
+    # ── Temporal — hora UTC (0-23) ─────────────────────────────────────────────
+    # El sistema aprende automáticamente qué horas son buenas/malas por estrategia
+    ("hora_utc",         "lt",     "gt"),    # malo cuando hora < umbral (madrugada/mañana)
+    ("hora_utc",         "gt",     "lt"),    # malo cuando hora > umbral (noche)
+    # ── IBS-15 (Internal Bar Strength, últimas 15 velas 1min) ──────────────────
+    # IBS>0.7: precio cerca del máximo → sobrecompra → refuerza BUY_NO
+    # IBS<0.3: precio cerca del mínimo → sobreventa → refuerza BUY_YES
+    # El postmortem descubrirá automáticamente qué umbral separa ganadores de perdedores
+    ("ibs_15",           "gt",     "lt"),
+    ("ibs_15",           "lt",     "gt"),
+]
+
 FEATURE_RULES = {
-    # 5min: alta sigma → modelo sobreconfiado (evidencia: ETH Δ=46%, BTC Δ=30%)
-    "UPDOWN_GBM#5min":     [("pct_spot_vs_ref",    "abs_gt", "abs_lt"),
-                            ("sigma_h",             "gt",     "lt"),
-                            ("drift_60min",         "abs_gt", "abs_lt"),
-                            ("delta_ratio_macro",   "abs_lt", "abs_gt")],
-    "UPDOWN_GBM#BTC#5min": [("pct_spot_vs_ref",    "abs_gt", "abs_lt"),
-                            ("sigma_h",             "gt",     "lt"),
-                            ("drift_60min",         "abs_gt", "abs_lt"),
-                            ("delta_ratio_macro",   "abs_lt", "abs_gt")],
-    "UPDOWN_GBM#ETH#5min": [("pct_spot_vs_ref",    "abs_gt", "abs_lt"),
-                            ("sigma_h",             "gt",     "lt"),
-                            ("drift_60min",         "abs_gt", "abs_lt"),
-                            ("delta_ratio_macro",   "abs_lt", "abs_gt")],
-    "UPDOWN_GBM#SOL#5min": [("pct_spot_vs_ref",    "abs_gt", "abs_lt"),
-                            ("sigma_h",             "gt",     "lt"),
-                            ("drift_60min",         "abs_gt", "abs_lt"),
-                            ("delta_ratio_macro",   "abs_lt", "abs_gt")],
-    # 15min: añadimos drift y delta macro para detectar régimen de mercado
-    "UPDOWN_GBM#15min":    [("pct_spot_vs_ref",    "abs_gt", "abs_lt"),
-                            ("sigma_h",             "gt",     "lt"),
-                            ("drift_60min",         "abs_gt", "abs_lt"),
-                            ("delta_ratio_macro",   "abs_lt", "abs_gt")],
-    "UPDOWN_GBM#BTC#15min":[("pct_spot_vs_ref",    "abs_gt", "abs_lt"),
-                            ("sigma_h",             "gt",     "lt"),
-                            ("drift_60min",         "abs_gt", "abs_lt"),
-                            ("delta_ratio_macro",   "abs_lt", "abs_gt")],
-    "UPDOWN_GBM#ETH#15min":[("pct_spot_vs_ref",    "abs_gt", "abs_lt"),
-                            ("sigma_h",             "gt",     "lt"),
-                            ("drift_60min",         "abs_gt", "abs_lt"),
-                            ("delta_ratio_macro",   "abs_lt", "abs_gt")],
-    "UPDOWN_GBM#SOL#15min":[("pct_spot_vs_ref",    "abs_gt", "abs_lt"),
-                            ("sigma_h",             "gt",     "lt"),
-                            ("drift_60min",         "abs_gt", "abs_lt"),
-                            ("delta_ratio_macro",   "abs_lt", "abs_gt")],
-    # ORDER_FLOW: delta alto = señal fuerte (WIN avg=0.445 vs LOSS avg=0.384)
-    "ORDER_FLOW_5M":        [("delta_ratio",        "abs_lt", "abs_gt")],
+    # 5min: desactivadas manualmente, pero seguimos aprendiendo por si acaso se reactivan
+    "UPDOWN_GBM#5min":     _BASE_GBM,
+    "UPDOWN_GBM#BTC#5min": _BASE_GBM,
+    "UPDOWN_GBM#ETH#5min": _BASE_GBM,
+    "UPDOWN_GBM#SOL#5min": _BASE_GBM,
+    # 15min: nuestras estrategias más activas
+    "UPDOWN_GBM#15min":    _BASE_GBM,
+    "UPDOWN_GBM#BTC#15min": _BASE_GBM,
+    "UPDOWN_GBM#ETH#15min": _BASE_GBM,
+    "UPDOWN_GBM#SOL#15min": _BASE_GBM,
+    "UPDOWN_GBM#XRP#15min": _BASE_GBM,
+    # 60min: candidatas a live con mejor IC — CRÍTICO tener aprendizaje aquí
+    # En 60min sigma_h baja correlaciona con IC alto (H-60MIN confirmada en shadow)
+    "UPDOWN_GBM#60min":    _BASE_GBM,
+    "UPDOWN_GBM#BTC#60min": _BASE_GBM,
+    "UPDOWN_GBM#ETH#60min": _BASE_GBM,
+    "UPDOWN_GBM#SOL#60min": _BASE_GBM,
+    # ORDER_FLOW: delta_ratio es la señal principal + hora
+    "ORDER_FLOW_5M":       [("delta_ratio",        "abs_lt", "abs_gt"),
+                            ("hora_utc",            "lt",     "gt"),
+                            ("hora_utc",            "gt",     "lt")],
 }
 
 IC_FILTRO_MIN   = -0.12   # IC para activar filtro (evitar)
@@ -706,6 +716,201 @@ def aprender_patrones_causales(resultados: list, pred_index: dict) -> dict:
             }
 
     return resultado_final
+
+
+def _generar_hipotesis_auto(params: dict, patrones: dict, resultados: list) -> None:
+    """
+    Traduce los patrones causales aprendidos a hipótesis accionables en markdown.
+    Escribe data/shadow/hipotesis_auto.md — leída por el LLM nocturno y por el humano.
+
+    Cada patrón descubierto se expresa como:
+      - QUÉ condición predice éxito/fracaso
+      - POR QUÉ (interpretación microestructural)
+      - ACCIÓN sugerida (filtro, boost, nueva estrategia)
+    """
+    ts = datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M UTC")
+    n_total = len(resultados)
+    pnl_total = sum(float(r.get("pnl_neto", 0)) for r in resultados)
+
+    lineas = [
+        f"# Hipótesis automáticas — {ts}",
+        f"_Generado por shadow_postmortem.py sobre {n_total} resoluciones (PNL={pnl_total:+.2f}€)_",
+        "",
+        "## Patrones causales activos",
+        "",
+    ]
+
+    # Interpretaciones microestructurales por feature
+    INTERPRETACIONES = {
+        "sigma_h": {
+            "gt":    "alta volatilidad → el modelo GBM sobreestima la señal; el mercado es más aleatorio",
+            "lt":    "baja volatilidad → señal GBM más fiable; el spread de Polymarket cubre mejor el edge",
+            "abs_gt":"alta volatilidad en cualquier dirección → señal contaminada por ruido",
+        },
+        "drift_60min": {
+            "abs_gt":"drift fuerte en 1h → el movimiento ya está priceado en Polymarket; edge agotado",
+            "abs_lt":"drift moderado → precio aún no ha reaccionado del todo; lag explotable",
+        },
+        "drift_15min": {
+            "abs_gt":"drift fuerte en 15min → momentum reciente ya en el precio Polymarket",
+        },
+        "pct_spot_vs_ref": {
+            "abs_gt":"precio spot lejos de la referencia → señal GBM sobreextiende; riesgo de reversión",
+            "abs_lt":"precio spot cerca de la referencia → señal GBM más calibrada",
+        },
+        "hora_utc": {
+            "lt":    "hora temprana → mercados cripto menos líquidos, spreads más amplios; edge real menor",
+            "gt":    "hora tardía/noche → sesión US cerrada, menos participantes informados; señales más ruidosas",
+        },
+        "ibs_15": {
+            "gt":    "IBS alto (precio cerca del máximo) → sobrecompra de corto plazo; BUY_YES menos fiable",
+            "lt":    "IBS bajo (precio cerca del mínimo) → sobreventa de corto plazo; BUY_NO menos fiable",
+        },
+        "delta_ratio": {
+            "abs_lt":"delta_ratio bajo → order flow débil; señal insuficiente para batir el spread",
+            "abs_gt":"delta_ratio alto → flow informado visible; edge real en el desequilibrio",
+        },
+        "delta_ratio_macro": {
+            "abs_gt":"flow macro dominante → el lado comprador/vendedor ya fijó el precio en Polymarket",
+            "abs_lt":"flow macro débil → el mercado no ha procesado aún la presión; lag explotable",
+        },
+    }
+
+    tiene_patrones = False
+    for strat_key, p in sorted(patrones.items()):
+        filtros   = p.get("filtros_causales", [])
+        ganadores = p.get("patrones_ganadores", [])
+        if not filtros and not ganadores:
+            continue
+        tiene_patrones = True
+        lineas.append(f"### {strat_key}")
+
+        for f in filtros:
+            feat = f["feature"]; cond = f["condicion"]
+            interp = INTERPRETACIONES.get(feat, {}).get(cond, "")
+            accion = f"SKIP cuando `{feat}` {_cond_legible(cond)} {f['umbral']}"
+            lineas += [
+                f"- **FILTRO** `{feat}` {_cond_legible(cond)} `{f['umbral']}` → IC={f['ic_malo']:+.3f} (n={f['n_malo']})",
+                f"  - _Por qué funciona_: {interp}" if interp else "",
+                f"  - _Acción_: {accion}",
+                f"  - _Potencial_: sin este filtro IC_bueno={f['ic_bueno']:+.3f} (n={f['n_bueno']})",
+                "",
+            ]
+
+        for g in ganadores:
+            feat = g["feature"]; cond = g["condicion"]
+            interp = INTERPRETACIONES.get(feat, {}).get(cond, "")
+            accion = f"Kelly boost +{g['kelly_boost']:.2f}€ cuando `{feat}` {_cond_legible(cond)} {g['umbral']}"
+            lineas += [
+                f"- **PATRÓN** `{feat}` {_cond_legible(cond)} `{g['umbral']}` → IC={g['ic_patron']:+.3f} (n={g['n_patron']})",
+                f"  - _Por qué funciona_: {interp}" if interp else "",
+                f"  - _Acción_: {accion} (IC base={g['ic_base']:+.3f})",
+                "",
+            ]
+
+    if not tiene_patrones:
+        lineas.append("_Sin patrones causales con n≥15 aún. El sistema necesita más datos._\n")
+
+    lineas += [
+        "## Estrategias nuevas sugeridas",
+        "_Derivadas de los patrones aprendidos:_",
+        "",
+    ]
+
+    # Generar sugerencias basadas en patrones encontrados
+    sugerencias = _sugerir_estrategias(patrones, params, resultados)
+    if sugerencias:
+        for s in sugerencias:
+            lineas.append(f"- {s}")
+    else:
+        lineas.append("_Sin sugerencias automáticas con datos actuales. Ampliar n por estrategia._")
+
+    lineas += [
+        "",
+        "## Estado de aprendizaje por estrategia",
+        "",
+        "| Estrategia | n | IC | PNL | Filtros | Patrones |",
+        "|---|---|---|---|---|---|",
+    ]
+    for k, v in sorted(params.get("estrategias", {}).items()):
+        if not isinstance(v, dict): continue
+        n = v.get("n", 0)
+        if n < 5: continue
+        ic = v.get("ic_bayes", 0)
+        pnl = v.get("pnl_total", 0)
+        nf = len(v.get("filtros_causales", []))
+        np_ = len(v.get("patrones_ganadores", []))
+        act = "✅" if v.get("activa", True) else "🚫"
+        lineas.append(f"| {act} {k} | {n} | {ic:+.3f} | {pnl:+.2f}€ | {nf} | {np_} |")
+
+    out = "\n".join(l for l in lineas if l is not None)
+    hip_path = DIR_SHADOW / "hipotesis_auto.md"
+    hip_path.write_text(out, encoding="utf-8")
+    print(f"  → hipotesis_auto.md actualizado ({len(patrones)} estrategias con patrones)")
+
+
+def _cond_legible(cond: str) -> str:
+    return {"gt": ">", "lt": "<", "abs_gt": "|x|>", "abs_lt": "|x|≤"}.get(cond, cond)
+
+
+def _sugerir_estrategias(patrones: dict, params: dict, resultados: list) -> list[str]:
+    """
+    A partir de los patrones aprendidos, propone estrategias nuevas o ajustes.
+    Devuelve lista de strings (markdown) con sugerencias accionables.
+    """
+    sugs = []
+    estrats = params.get("estrategias", {})
+
+    # 1. Si BTC#60min o ETH#60min tienen patrón en sigma_h → proponer filtro sigma
+    for activo in ["BTC", "ETH", "SOL"]:
+        key = f"UPDOWN_GBM#{activo}#60min"
+        sp = estrats.get(key, {})
+        pats_key = patrones.get(key, {})
+        for p in pats_key.get("patrones_ganadores", []):
+            if p["feature"] == "sigma_h" and p["ic_patron"] > 0.15:
+                sugs.append(
+                    f"**H-SIGMA-{activo}-60MIN**: `{key}` gana cuando sigma_h {_cond_legible(p['condicion'])} "
+                    f"{p['umbral']} (IC={p['ic_patron']:+.3f} n={p['n_patron']}). "
+                    f"Implementar como filtro pre-predicción en shadow_predict.py."
+                )
+
+    # 2. Si hora_utc aparece como patrón en ORDER_FLOW → refinar blacklist horaria
+    of_pats = patrones.get("ORDER_FLOW_5M", {})
+    for f in of_pats.get("filtros_causales", []):
+        if f["feature"] == "hora_utc":
+            cond = f["condicion"]
+            umb = f["umbral"]
+            hora_int = int(umb)
+            sugs.append(
+                f"**H-HORA-OF**: ORDER_FLOW_5M tiene IC={f['ic_malo']:+.3f} cuando hora_utc {_cond_legible(cond)} {umb}. "
+                f"Añadir hora {hora_int} a ORDER_FLOW_BLACKLIST_HOURS si n≥20."
+            )
+
+    # 3. Si IBS aparece como patrón ganador → proponer IBS-boost en shadow_predict
+    for key, pdata in patrones.items():
+        for g in pdata.get("patrones_ganadores", []):
+            if g["feature"] == "ibs_15" and g["ic_patron"] > 0.15 and g["n_patron"] >= 15:
+                dir_text = "BUY_NO" if g["condicion"] == "gt" else "BUY_YES"
+                sugs.append(
+                    f"**H-IBS-{key}**: IBS {_cond_legible(g['condicion'])} {g['umbral']} "
+                    f"correlaciona con éxito en {key} (IC={g['ic_patron']:+.3f} n={g['n_patron']}). "
+                    f"Confirma señal de reversión media → alinear con {dir_text}."
+                )
+
+    # 4. Si hay estrategia activa con IC creciente y n acercándose a 40 → alertar
+    for key, v in estrats.items():
+        if not isinstance(v, dict): continue
+        if not v.get("activa", True): continue
+        n = v.get("n", 0)
+        ic = v.get("ic_bayes", 0)
+        if 30 <= n < 40 and ic > 0.08:
+            ops_rest = 40 - n
+            sugs.append(
+                f"**LIVE-CANDIDATA**: `{key}` — IC={ic:+.3f} n={n}. "
+                f"Faltan ~{ops_rest} resoluciones para umbral n≥40. ETA: ~{ops_rest * 0.7:.0f}h."
+            )
+
+    return sugs
 
 
 def guardar_performance(performance: list):
@@ -861,6 +1066,13 @@ def main():
 
     print(f"\n  Params guardados: {PARAMS_PATH}")
     _escribir_state(params, resultados)  # Gap 2: state file
+
+    # Generador de hipótesis automáticas — aprende POR QUÉ y propone QUÉ hacer
+    try:
+        _generar_hipotesis_auto(params, patrones, resultados)
+    except Exception as e:
+        print(f"  [WARN] hipotesis_auto.md: {e}")
+
     print(f"[{ts}] === Fin postmortem ===")
 
 

@@ -1195,6 +1195,7 @@ def s_updown_gbm(market, ctx):
         "pct_spot_vs_ref": round(pct, 4),
         "sigma_h":         round(sigma_h, 6),
         "T_h":             round(T_h, 4),
+        "hora_utc":        datetime.now(timezone.utc).hour,
     }
     if drift_15 is not None:
         features["drift_15min"] = round(drift_15 * 100, 4)   # %/hora
@@ -1202,6 +1203,17 @@ def s_updown_gbm(market, ctx):
         features["drift_60min"] = round(drift_60 * 100, 4)   # %/hora
     if delta_macro is not None:
         features["delta_ratio_macro"] = round(delta_macro, 4)
+    # IBS-15: posición del precio dentro del rango high/low de las últimas 15 velas 1min.
+    # IBS>0.7 = precio cerca del máximo (sobrecompra → señal BUY_NO).
+    # IBS<0.3 = precio cerca del mínimo (sobreventa → señal BUY_YES).
+    klines_sym = ctx.get("klines_raw", {}).get(activo, [])
+    if len(klines_sym) >= 15:
+        k15 = klines_sym[-15:]
+        h15 = max(float(k[2]) for k in k15)
+        l15 = min(float(k[3]) for k in k15)
+        c15 = float(k15[-1][4])
+        if (h15 - l15) > 1e-8:
+            features["ibs_15"] = round((c15 - l15) / (h15 - l15), 4)
     return {
         "prob_yes": max(0.05, min(0.95, p_up)),
         "razon":   razon,
@@ -1772,13 +1784,17 @@ def main():
                 if skip_causal:
                     continue
 
-                # 2. Patrones ganadores — si matchean, boost a la apuesta
+                # 2. Patrones ganadores — acumular boost por separado para que
+                # sobreviva al override del Kelly por dirección (bug anterior: el boost
+                # se sumaba a apuesta pero luego dir_stake lo machacaba completamente).
+                causal_boost = 0.0
                 for lk in lookup_keys:
                     for g in params_din.get(lk, {}).get("patrones_ganadores", []):
                         fv = pred_features.get(g.get("feature"))
                         if fv is not None and _feature_match(fv, g.get("condicion",""), g.get("umbral",999)):
-                            boost = float(g.get("kelly_boost", 0))
-                            apuesta = min(2.00, apuesta + boost)
+                            causal_boost += float(g.get("kelly_boost", 0))
+                if causal_boost > 0:
+                    apuesta = min(2.00, apuesta + causal_boost)
                 contador[nombre]["aplica"] += 1
                 prob_y = pred["prob_yes"]
                 eb = prob_y - py
@@ -1792,13 +1808,12 @@ def main():
                     dec = "BUY_NO"
                 else:
                     dec = "SKIP"
-                # Kelly por dirección: si el postmortem tiene IC separado BUY_YES/BUY_NO,
-                # sustituir la apuesta (que acumuló kelly_boost direction-blind) por el Kelly
-                # específico de esa dirección. Evita overstakear BUY_YES con IC bajo.
+                # Kelly por dirección: usar el IC específico como base, luego sumar
+                # el boost causal encima (no reemplazarlo). Evita overstakear BUY_YES.
                 if dec in ("BUY_YES", "BUY_NO"):
                     dir_stake = sp.get(f"apuesta_kelly_{dec}")
                     if dir_stake is not None:
-                        apuesta = max(0.50, min(2.00, float(dir_stake)))
+                        apuesta = max(0.50, min(2.00, float(dir_stake) + causal_boost))
                 ed = en if dec != "BUY_NO" else -en
                 if dec != "SKIP":
                     ops += 1
