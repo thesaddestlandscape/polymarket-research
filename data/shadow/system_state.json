@@ -1,9 +1,9 @@
 {
-  "timestamp_utc": "2026-06-27T15:59:26+00:00",
-  "bankroll_sim": -7.09,
-  "pnl_total": -27.09,
-  "n_ops": 1210,
-  "win_rate": 0.4926,
+  "timestamp_utc": "2026-06-27T16:00:42+00:00",
+  "bankroll_sim": -7.6,
+  "pnl_total": -27.6,
+  "n_ops": 1211,
+  "win_rate": 0.4922,
   "estrategias_activas": 59,
   "desactivadas": [
     "UPDOWN_GBM#SOL#5min",
@@ -40,7 +40,7 @@
     }
   ],
   "brier_medio": 0.2956,
-  "clv_medio": -0.0099,
+  "clv_medio": -0.01,
   "monitor_5min": {
     "ou_5m": {
       "n": 57,

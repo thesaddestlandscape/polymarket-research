@@ -1,5 +1,5 @@
-# Hipótesis automáticas — 2026-06-27 15:59 UTC
-_Generado por shadow_postmortem.py sobre 1210 resoluciones (PNL=-27.09€)_
+# Hipótesis automáticas — 2026-06-27 16:00 UTC
+_Generado por shadow_postmortem.py sobre 1211 resoluciones (PNL=-27.60€)_
 
 ## Patrones causales activos
 
@@ -39,7 +39,7 @@ _Sin sugerencias automáticas con datos actuales. Ampliar n por estrategia._
 | ✅ PRICE_TARGET_GBM#atexpiry | 23 | +0.020 | -2.79€ | 0 | 0 |
 | 🚫 SMART_FLOW_1H | 22 | -0.250 | -10.12€ | 0 | 0 |
 | ✅ SMART_FLOW_1H#BTC | 8 | -0.040 | -1.95€ | 0 | 0 |
-| ✅ UPDOWN_GBM | 297 | -0.002 | -2.58€ | 0 | 0 |
+| ✅ UPDOWN_GBM | 298 | -0.003 | -3.09€ | 0 | 0 |
 | ✅ UPDOWN_GBM#15min | 167 | +0.038 | +6.53€ | 0 | 0 |
 | 🚫 UPDOWN_GBM#240min | 12 | -0.171 | -4.82€ | 0 | 0 |
 | 🚫 UPDOWN_GBM#5min | 56 | -0.155 | -16.64€ | 0 | 0 |
@@ -54,14 +54,14 @@ _Sin sugerencias automáticas con datos actuales. Ampliar n por estrategia._
 | ✅ UPDOWN_GBM#ETH#240min | 5 | -0.018 | -0.44€ | 0 | 0 |
 | 🚫 UPDOWN_GBM#ETH#5min | 12 | -0.086 | -3.67€ | 0 | 0 |
 | ✅ UPDOWN_GBM#ETH#60min | 22 | +0.083 | +1.31€ | 0 | 0 |
-| ✅ UPDOWN_GBM#SOL | 67 | -0.022 | +2.18€ | 0 | 0 |
+| ✅ UPDOWN_GBM#SOL | 68 | -0.029 | +1.67€ | 0 | 0 |
 | ✅ UPDOWN_GBM#SOL#15min | 35 | +0.041 | +4.50€ | 0 | 0 |
 | 🚫 UPDOWN_GBM#SOL#5min | 17 | -0.112 | -4.84€ | 0 | 0 |
 | ✅ UPDOWN_GBM#SOL#60min | 12 | +0.000 | +1.27€ | 0 | 0 |
 | ✅ UPDOWN_GBM#XRP | 22 | -0.042 | -0.49€ | 0 | 0 |
 | ✅ UPDOWN_GBM#XRP#15min | 13 | +0.022 | +1.37€ | 0 | 0 |
 | 🚫 UPDOWN_GBM#XRP#5min | 9 | -0.061 | -1.86€ | 0 | 0 |
-| ✅ UPDOWN_GBM#daily | 6 | +0.075 | +8.52€ | 0 | 0 |
+| ✅ UPDOWN_GBM#daily | 7 | +0.058 | +8.01€ | 0 | 0 |
 | 🚫 UPDOWN_OU_5M | 57 | -0.229 | -13.76€ | 0 | 0 |
 | 🚫 UPDOWN_OU_5M#5min | 57 | -0.229 | -13.76€ | 0 | 0 |
 | 🚫 UPDOWN_OU_5M#BNB | 8 | -0.160 | -4.56€ | 0 | 0 |
@@ -136,7 +136,7 @@ _Sin sugerencias automáticas con datos actuales. Ampliar n por estrategia._
 **⏳ H-KALMAN** — Kalman filter para drift adaptativo
   - _Umbral_: n≥200 por subtipo para calibrar parámetros Q/R del KF
   - _Acción_: Sustituir DRIFT_DAMPING por KalmanDrift en fetch_binance_klines.py
-  - _Estado_: Máximo n actual en GBM: 297/200. Esperar 3+ subtypes con n≥200.
+  - _Estado_: Máximo n actual en GBM: 298/200. Esperar 3+ subtypes con n≥200.
   - _Bloqueante_: N_INSUFICIENTE
 
 
@@ -186,8 +186,8 @@ _Sin sugerencias automáticas con datos actuales. Ampliar n por estrategia._
   - _Hipótesis_: Cuando la volatilidad horaria es muy alta el GBM puede sobreestimar el edge. Testear.
   - _Umbral_: n≥30 y IC<-0.05
   - _Acción_: Filtrar señales GBM cuando sigma_h > 0.002 si se confirma IC negativo
-  - _Estado_: n=198 IC=+0.020 PNL=+3.06€ — sin señal clara aún (umbral IC: min=None max=-0.05)
-  - _Datos_: n=198 IC=+0.020 PNL=+3.06€
+  - _Estado_: n=199 IC=+0.017 PNL=+2.55€ — sin señal clara aún (umbral IC: min=None max=-0.05)
+  - _Datos_: n=199 IC=+0.017 PNL=+2.55€
 
 **⏳ H-CUSTOM-OF-02H-BTCSOL** — ORDER_FLOW H=02h UTC — BTC+SOL solamente (revisar blacklist)
   - _Hipótesis_: La hora 02h está en el blacklist basado en TODOS los pares. Con BTC+SOL solo, el historial muestra 4/5 (80%) IC=+0.054. ¿Se confirma la señal positiva con más datos?
