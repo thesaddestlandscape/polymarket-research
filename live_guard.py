@@ -6,7 +6,10 @@ Responde a la pregunta: ¿puede el bot operar en LIVE ahora mismo?
 Reglas:
   1. El fichero data/live/LIVE_MODE_ON debe existir (switch manual).
   2. Si es L-V: la hora de Madrid debe estar dentro de alguna ventana del config.
-     Si es S-D: solo se opera si el switch está ON (sin restricción horaria).
+     Si es S-D:
+       - fines_de_semana = "ventanas"    → usa ventanas_fin_de_semana
+       - fines_de_semana = "solo_manual" → opera sin restricción horaria
+       - fines_de_semana = "off"         → no opera en finde
   3. Si la estrategia/subtype no está en la lista de permitidos → no opera.
 """
 
@@ -50,9 +53,25 @@ def en_ventana_horaria(config: dict | None = None) -> tuple[bool, str]:
 
     if dia_semana >= 5:  # fin de semana
         modo_fds = config.get("fines_de_semana", "solo_manual")
+        if modo_fds == "off":
+            return False, "fin_de_semana_desactivado"
         if modo_fds == "solo_manual":
             return True, "fin_de_semana_manual"
-        return False, "fin_de_semana_sin_ventanas"
+        # modo "ventanas": usar ventanas_fin_de_semana igual que L-V
+        ventanas_fds = config.get("ventanas_fin_de_semana", [])
+        if not ventanas_fds:
+            return False, "fin_de_semana_sin_ventanas_configuradas"
+        hora_actual = ahora.time()
+        for v in ventanas_fds:
+            try:
+                h_ini = datetime.strptime(v["inicio"], "%H:%M").time()
+                h_fin = datetime.strptime(v["fin"],    "%H:%M").time()
+                if h_ini <= hora_actual <= h_fin:
+                    return True, v.get("nombre", "fds_ventana")
+            except Exception:
+                continue
+        proxima = _proxima_ventana(ventanas_fds, hora_actual, dia_semana)
+        return False, f"fds_fuera_de_ventana (proxima: {proxima})"
 
     ventanas = config.get("ventanas_lunes_viernes", [])
     hora_actual = ahora.time()

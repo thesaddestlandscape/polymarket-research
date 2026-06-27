@@ -10,6 +10,11 @@ from datetime import datetime, timezone, timedelta
 from pathlib import Path
 import requests
 
+from data_quality import (
+    SIGMA_H_MAX, DRIFT_MAX,
+    validar_features_gbm, simbolo_bloqueado, generar_reporte,
+)
+
 TIMEOUT = 30
 HORIZONTE_MIN_HORAS = 0.05    # 3 min: cubre mercados Up/Down 5m
 HORIZONTE_MAX_HORAS = 365 * 24  # 1 anno
@@ -318,9 +323,15 @@ def construir_contexto():
     n_wallets = sum(len(v) for v in trades.values())
     print(f"  SMART_FLOW_1H: {n_mkt} mercados, {n_wallets} wallet-acciones en ultima 1h")
 
-    # Precios intraday para UPDOWN_GBM
+    # Precios intraday para UPDOWN_GBM + generar reporte de calidad
     precios_data = cargar_precios_intraday()
     ctx["precios_intraday"] = precios_data
+    try:
+        dq = generar_reporte(precios_data)
+        if dq["estado_global"] != "OK":
+            print(f"  [DQ] Estado: {dq['estado_global']} — {dq['alertas']}")
+    except Exception as _dq_err:
+        print(f"  [DQ] Error generando reporte: {_dq_err}")
 
     # Spot más reciente + klines raw para ORDER_FLOW_5M
     spot_prices = {}
@@ -652,7 +663,7 @@ def cargar_precios_intraday():
                     if new_fmt:
                         asset = row.get("asset", "").strip().upper()
                         if asset in SYMS:
-                            # fila limpia formato nuevo
+                            # fila limpia formato nuevo — asset conocido
                             try:
                                 v = float(row.get("price_usd", ""))
                             except (ValueError, TypeError):
@@ -661,6 +672,17 @@ def cargar_precios_intraday():
                                 _emit(buf_ts, buf); buf, buf_ts = {}, ts
                             buf[asset] = v
                         else:
+                            # Distinguir fila vieja (asset=número BTC) de fila nueva
+                            # con asset desconocido (LTC, ADA, AVAX…).
+                            # BUG CRÍTICO: tratar LTC/ADA como fila vieja mapeaba
+                            # price_usd→ETH, provocando ETH=41 y sigma_h=36.
+                            try:
+                                float(asset)   # si convierte → es precio numérico → fila vieja
+                                is_old = True
+                            except ValueError:
+                                is_old = False  # texto → asset desconocido → IGNORAR
+                            if not is_old:
+                                continue
                             # fila vieja dentro de fichero nuevo: cada col = un sym
                             prices = {}
                             for col, sym in OLD_IN_NEW_COLS.items():
@@ -688,7 +710,22 @@ def cargar_precios_intraday():
         except Exception as e:
             print(f"  Error precios_intraday {fecha}: {e}")
     rows.sort(key=lambda x: x[0])
-    return rows
+
+    # Deduplicar (ts, sym): si el union-merge de git añadió filas duplicadas,
+    # conservar solo la primera aparición de cada (timestamp, asset).
+    seen: set = set()
+    deduped = []
+    for ts, prices in rows:
+        ts_key = ts.isoformat()
+        clean = {}
+        for sym, price in prices.items():
+            k = (ts_key, sym)
+            if k not in seen:
+                seen.add(k)
+                clean[sym] = price
+        if clean:
+            deduped.append((ts, clean))
+    return deduped
 
 
 def _estimar_vol_h(sym, precios_data, n_min=120):
@@ -902,6 +939,10 @@ def s_updown_gbm(market, ctx):
     if not precios_data:
         return None
 
+    # L2: bloquear si data_quality marca este símbolo como CRITICAL
+    if simbolo_bloqueado(activo):
+        return None
+
     # Spot actual: klines > precios_intraday
     spot = ctx.get("spot_prices", {}).get(activo)
     if not spot:
@@ -949,6 +990,17 @@ def s_updown_gbm(market, ctx):
     drift_60 = _calcular_drift_h(activo, precios_data, 60)
     delta_macro = _calcular_delta_ratio_macro(activo, ctx.get("klines_raw", {}))
 
+    # L3: validar features via data_quality (fuente única de verdad para umbrales)
+    feat_ok, feat_motivo = validar_features_gbm(sigma_h, drift_60, drift_15)
+    if not feat_ok:
+        if "drift" not in feat_motivo:
+            return None   # sigma_h corrupta → descartar predicción completamente
+        # drift imposible → ignorar el drift pero continuar con predicción
+        if drift_60 is not None and abs(drift_60) > DRIFT_MAX:
+            drift_60 = None
+        if drift_15 is not None and abs(drift_15) > DRIFT_MAX:
+            drift_15 = None
+
     # mu_h: drift por hora amortiguado según ventana temporal.
     # dd óptimo varía: más en corto (momentum 5min) que en largo (ruido 60min+).
     _dd = DRIFT_DAMPING.get(ventana_min, DRIFT_DAMPING_DEFAULT)
@@ -974,10 +1026,12 @@ def s_updown_gbm(market, ctx):
     # Filtro BUY_YES #15min: solo cuando drift_60min ∈ [0, +0.5%)
     # Lógica: confirma dirección (alcista moderado) sin estar ya priceado (alcista fuerte).
     # IC fuera del rango ≈ 0 (n=59, PNL=−7.94€ total) vs IC=+0.208 dentro (n=22).
-    if tipo == 'slot' and ventana_min == 15 and drift_60 is not None:
+    # Si drift_60 es None (sin histórico 60min), bloquear BUY_YES — sin datos no apostar.
+    if tipo == 'slot' and ventana_min == 15 and p_up > market.get("_precio_yes", 0.5):
+        if drift_60 is None:
+            return None  # BUY_YES #15min sin histórico 60min → no apostar
         drift_60_pct = drift_60 * 100
-        if p_up > market.get("_precio_yes", 0.5) and \
-                not (DRIFT_60_BUY_YES_15M_LO <= drift_60_pct < DRIFT_60_BUY_YES_15M_HI):
+        if not (DRIFT_60_BUY_YES_15M_LO <= drift_60_pct < DRIFT_60_BUY_YES_15M_HI):
             return None  # BUY_YES #15min fuera del sweet spot drift_60min
 
     if tipo == 'daily':
@@ -1109,7 +1163,7 @@ def s_price_target_gbm(market, ctx):
     # El CSV de precios tiene ~12h de historia a resolución 60s
     vol_win = min(720, max(30, int(T_h * 5)))
     sigma_h = _estimar_vol_h(activo, precios_data, n_min=vol_win)
-    if not sigma_h or sigma_h <= 0:
+    if not sigma_h or sigma_h <= 0 or sigma_h > SIGMA_H_MAX:
         return None
 
     sigma_T = sigma_h * math.sqrt(T_h)

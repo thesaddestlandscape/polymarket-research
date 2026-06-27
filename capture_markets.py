@@ -12,6 +12,8 @@ from datetime import datetime, timezone
 from pathlib import Path
 import requests
 
+from data_quality import validar_precio
+
 TIMEOUT = 30
 N_CAPTURAS_POR_WORKFLOW = 10
 SLEEP_ENTRE_CAPTURAS_SEG = 60
@@ -45,6 +47,8 @@ COINGECKO_IDS = {
     "DOT": "polkadot", "MATIC": "matic-network", "LTC": "litecoin",
 }
 SPOT_SYMBOLS = list(COINGECKO_IDS.keys())
+
+# PRICE_RANGES importado de data_quality (fuente única de verdad)
 
 DIR_MARKETS = Path("data/markets")
 DIR_PRICES  = Path("data/prices")
@@ -308,31 +312,22 @@ def guardar_precios(precios, ts):
     fecha   = ts[:10]
     archivo = DIR_PRICES / f"{fecha}.csv"
     nuevo   = not archivo.exists()
+    rechazados = []
     with open(archivo, "a", newline="", encoding="utf-8") as f:
         w = csv.writer(f)
         if nuevo:
-            # Formato nuevo: una fila por asset
             w.writerow(["timestamp_utc", "asset", "price_usd", "change_1h_pct", "change_24h_pct"])
-            for sym in SPOT_SYMBOLS:
-                v = precios.get(sym)
-                if v is not None:
-                    w.writerow([ts, sym, v, "", ""])
-        else:
-            # Detectar formato del archivo existente
-            try:
-                with open(archivo, "r", newline="", encoding="utf-8") as rf:
-                    header = next(csv.reader(rf), [])
-            except Exception:
-                header = []
-            if "asset" in header:
-                # Formato nuevo: una fila por asset
-                for sym in SPOT_SYMBOLS:
-                    v = precios.get(sym)
-                    if v is not None:
-                        w.writerow([ts, sym, v, "", ""])
+        for sym in SPOT_SYMBOLS:
+            v = precios.get(sym)
+            if v is None:
+                continue
+            ok, motivo = validar_precio(sym, v)   # sin last_price: CoinGecko no tiene serie continua
+            if ok:
+                w.writerow([ts, sym, float(v), "", ""])
             else:
-                # Formato viejo: una fila con todos los assets
-                w.writerow([ts] + [precios.get(s, "") for s in SPOT_SYMBOLS])
+                rechazados.append(f"{sym}({motivo})")
+    if rechazados:
+        print(f"  [DQ L1] CoinGecko rechazados: {', '.join(rechazados)}")
 
 
 def una_captura():

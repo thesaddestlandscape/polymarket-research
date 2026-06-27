@@ -17,6 +17,8 @@ import requests as _requests
 from datetime import datetime, timezone, timedelta
 from pathlib import Path
 
+from data_quality import leer_estado_calidad
+
 DIR_SHADOW   = Path("data/shadow")
 RESULTS_PATH = DIR_SHADOW / "results.csv"
 PARAMS_PATH  = DIR_SHADOW / "strategy_params.json"
@@ -185,6 +187,46 @@ def main():
         pnl_r  = float(r.get("pnl_neto", 0))
         signo_r = "+" if pnl_r >= 0 else ""
         lines.append(f"| {ts_r} | {label} | {q}… | {emoji} | {signo_r}{pnl_r:.2f}€ |")
+
+    # ─── Sección calidad de datos ──────────────────────────────────────────
+    dq = leer_estado_calidad()
+    dq_ts   = dq.get("timestamp_utc", "")[:16]
+    dq_glob = dq.get("estado_global", "DESCONOCIDO")
+    dq_icon = {"OK": "✅", "DEGRADED": "⚠️", "CRITICAL": "🚨"}.get(dq_glob, "❓")
+    rechazos = dq.get("rechazos_1h", {})
+
+    dq_rows = []
+    for sym, info in dq.get("assets", {}).items():
+        ic_sym = {"OK": "✅", "DEGRADED": "⚠️", "CRITICAL": "🚨"}.get(info.get("estado"), "❓")
+        age_s  = info.get("age_seconds")
+        age_str = f"{age_s/60:.1f}min" if age_s is not None else "N/A"
+        px     = info.get("ultimo_precio")
+        px_str = f"${px:,.2f}" if px else "N/A"
+        alertas = " ".join(info.get("alertas", []))
+        dq_rows.append(f"| {ic_sym} {sym} | {px_str} | {age_str} | {alertas} |")
+
+    lines += [
+        "",
+        "## Calidad de datos",
+        "",
+        f"{dq_icon} **{dq_glob}** — última verificación {dq_ts} UTC"
+        + (f" | rechazos 1h: {rechazos.get('total',0)}"
+           f" (rango={rechazos.get('rango',0)}, spike={rechazos.get('spike',0)})"
+           if rechazos.get("total", 0) > 0 else ""),
+    ]
+    if dq_rows:
+        lines += [
+            "",
+            "| Asset | Precio | Age | Alertas |",
+            "|---|---|---|---|",
+        ] + dq_rows
+
+    alertas_dq = dq.get("alertas", [])
+    if alertas_dq:
+        lines.append("")
+        lines.append("**Alertas activas:**")
+        for a in alertas_dq[:5]:
+            lines.append(f"- ⚠ {a}")
 
     lines += [
         "",

@@ -20,6 +20,8 @@ from datetime import datetime, timezone
 from pathlib import Path
 import requests
 
+from data_quality import validar_precio, leer_ultimo_precio
+
 DIR_PRICES = Path("data") / "prices"
 DIR_PRICES.mkdir(parents=True, exist_ok=True)
 
@@ -147,33 +149,38 @@ def main():
     # Solo si el archivo ya existe (capture_markets lo crea con el header completo)
     # Kraken/Binance reemplaza la dependencia de CoinGecko free tier para los 6 activos principales
     prices_path = DIR_PRICES / f"{fecha}.csv"
-    if prices_path.exists():
-        # Leer las columnas del header existente para ser compatible
-        with open(prices_path, "r", newline="", encoding="utf-8") as pf:
-            header = next(csv.reader(pf), [])
-        new_fmt = "asset" in header and "price_usd" in header
-        prices_escritas = {}
-        for sym in SPOT_SYMBOLS:
-            klines_sym = data.get(sym)
-            if klines_sym and isinstance(klines_sym, list):
-                try:
-                    prices_escritas[sym] = float(klines_sym[-1][4])
-                except (IndexError, ValueError, TypeError):
-                    pass
-        if prices_escritas:
-            with open(prices_path, "a", newline="", encoding="utf-8") as pf:
-                if new_fmt:
-                    w = csv.writer(pf)
-                    for sym, price in prices_escritas.items():
-                        w.writerow([ts_str, sym, price, "", ""])
-                else:
-                    spot_row = {col: "" for col in header}
-                    spot_row["timestamp_utc"] = ts_str
-                    spot_row.update({k: v for k, v in prices_escritas.items() if k in header})
-                    w = csv.DictWriter(pf, fieldnames=header, extrasaction="ignore")
-                    w.writerow(spot_row)
-            btc = prices_escritas.get('BTC','?'); eth = prices_escritas.get('ETH','?'); sol = prices_escritas.get('SOL','?')
-            print(f"  Spot → prices/{fecha}.csv  BTC={btc} ETH={eth} SOL={sol}")
+    if not prices_path.exists():
+        # Crear el archivo con header si no existe (no depender de capture_markets)
+        with open(prices_path, "w", newline="", encoding="utf-8") as pf:
+            csv.writer(pf).writerow(["timestamp_utc", "asset", "price_usd", "change_1h_pct", "change_24h_pct"])
+
+    # Leer último precio de cada asset (para detección de spikes)
+    last_prices = {sym: leer_ultimo_precio(sym, prices_path) for sym in SPOT_SYMBOLS}
+
+    prices_escritas = {}
+    for sym in SPOT_SYMBOLS:
+        klines_sym = data.get(sym)
+        if not (klines_sym and isinstance(klines_sym, list)):
+            continue
+        try:
+            price = float(klines_sym[-1][4])
+        except (IndexError, ValueError, TypeError):
+            continue
+
+        ok, motivo = validar_precio(sym, price, last_prices.get(sym))
+        if not ok:
+            print(f"  [DQ L1] {sym} RECHAZADO ({motivo})")
+            continue
+
+        prices_escritas[sym] = price
+
+    if prices_escritas:
+        with open(prices_path, "a", newline="", encoding="utf-8") as pf:
+            w = csv.writer(pf)
+            for sym, price in prices_escritas.items():
+                w.writerow([ts_str, sym, price, "", ""])
+        btc = prices_escritas.get('BTC','?'); eth = prices_escritas.get('ETH','?'); sol = prices_escritas.get('SOL','?')
+        print(f"  Spot → prices/{fecha}.csv  BTC={btc} ETH={eth} SOL={sol}")
 
     print(f"[{datetime.now(timezone.utc).isoformat(timespec='seconds')}] Done.")
 
