@@ -32,7 +32,7 @@
       "id": "H-CUSTOM-GBM-17H-BTC",
       "nombre": "GBM BTC a las 17h UTC — ¿edge real?",
       "descripcion": "La hora 17h UTC aparece como la mejor en historial. ¿Se confirma solo en BTC?",
-      "tipo": "filtro",
+      "tipo": "boost",
       "umbral": "n≥15 y IC>+0.08",
       "accion": "Boost ×1.2 en GBM BTC a las 17h si se confirma",
       "filtro": {
@@ -45,11 +45,11 @@
     },
     {
       "id": "H-CUSTOM-OF-MADRUGADA",
-      "nombre": "ORDER_FLOW de madrugada (0h-6h UTC) — ¿neutralizar?",
-      "descripcion": "Las horas 0-6h UTC en ORDER_FLOW tienen menos volumen y posiblemente menos fiabilidad.",
+      "nombre": "ORDER_FLOW de madrugada (0h-6h UTC) BTC+SOL — ¿neutralizar?",
+      "descripcion": "Las horas 0-6h UTC en ORDER_FLOW. El blacklist fue calculado con todos los pares incluyendo los negativos (ETH/XRP/DOGE). ¿Con BTC+SOL sigue siendo negativo?",
       "tipo": "filtro",
       "umbral": "n≥30 y IC<-0.05",
-      "accion": "Bloquear ORDER_FLOW entre 0-6h UTC si IC negativo confirmado",
+      "accion": "Mantener bloqueo si IC<-0.05; desbloquear si IC>0 con n≥30",
       "filtro": {
         "strategy_prefix": "ORDER_FLOW_5M",
         "hora_utc_desde": 0,
@@ -65,7 +65,7 @@
       "nombre": "GBM con sigma_h alto (>0.002/h) — ¿destruye edge?",
       "descripcion": "Cuando la volatilidad horaria es muy alta el GBM puede sobreestimar el edge. Testear.",
       "tipo": "filtro",
-      "umbral": "n≥30 y IC<-0.05 en sigma alto vs neutro",
+      "umbral": "n≥30 y IC<-0.05",
       "accion": "Filtrar señales GBM cuando sigma_h > 0.002 si se confirma IC negativo",
       "filtro": {
         "strategy_prefix": "UPDOWN_GBM",
@@ -74,6 +74,127 @@
       },
       "umbral_n": 30,
       "umbral_ic_max": -0.05
+    },
+    {
+      "id": "H-CUSTOM-OF-02H-BTCSOL",
+      "nombre": "ORDER_FLOW H=02h UTC — BTC+SOL solamente (revisar blacklist)",
+      "descripcion": "La hora 02h está en el blacklist basado en TODOS los pares. Con BTC+SOL solo, el historial muestra 4/5 (80%) IC=+0.054. ¿Se confirma la señal positiva con más datos?",
+      "tipo": "filtro",
+      "umbral": "n≥15 para evaluar desbloqueo; desbloquear si IC≥+0.05 con n≥20",
+      "accion": "Si IC>0.05 con n≥20 → proponer eliminar 02h del blacklist ORDER_FLOW",
+      "filtro": {
+        "strategy_prefix": "ORDER_FLOW_5M",
+        "hora_utc": 2,
+        "decision": "BUY_NO",
+        "par_excluir": ["ETH", "XRP", "DOGE", "BNB"]
+      },
+      "umbral_n": 15,
+      "umbral_ic_min": 0.05
+    },
+    {
+      "id": "H-CUSTOM-OF-07H-BTCSOL",
+      "nombre": "ORDER_FLOW H=07h UTC — BTC+SOL solamente (revisar blacklist)",
+      "descripcion": "La hora 07h está en el blacklist. Con BTC+SOL solo, el historial muestra 7/12 (58%) IC=+0.043. El blacklist puede estar basado en pares negativos que ya están excluidos.",
+      "tipo": "filtro",
+      "umbral": "n≥20 para evaluar desbloqueo; desbloquear si IC≥+0.05 con n≥20",
+      "accion": "Si IC>0.05 con n≥20 → proponer eliminar 07h del blacklist ORDER_FLOW",
+      "filtro": {
+        "strategy_prefix": "ORDER_FLOW_5M",
+        "hora_utc": 7,
+        "decision": "BUY_NO",
+        "par_excluir": ["ETH", "XRP", "DOGE", "BNB"]
+      },
+      "umbral_n": 20,
+      "umbral_ic_min": 0.05
+    },
+    {
+      "id": "H-CUSTOM-GBM-60MIN-BUYYES",
+      "nombre": "GBM 60min BUY_YES — ¿edge superior al BUY_NO?",
+      "descripcion": "Análisis actual muestra BUY_YES 60min: 22/36 (61%) IC=+0.105 vs BUY_NO 60min: 8/14 (57%) IC=+0.044. En 60min parece que BUY_YES es la dirección dominante, al contrario que en 15min.",
+      "tipo": "boost",
+      "umbral": "n≥30 y IC>+0.08",
+      "accion": "Si BUY_YES 60min confirma IC≥0.10 n≥40 → prioridad live por encima de BUY_NO",
+      "filtro": {
+        "strategy_prefix": "UPDOWN_GBM",
+        "subtype_contains": "60min",
+        "decision": "BUY_YES"
+      },
+      "umbral_n": 30,
+      "umbral_ic_min": 0.08
+    },
+    {
+      "id": "H-CUSTOM-GBM-60MIN-BUYNO",
+      "nombre": "GBM 60min BUY_NO — tracking por separado",
+      "descripcion": "En 15min BUY_NO tiene IC=+0.119. ¿Se repite en 60min? Datos actuales: 8/14 (57%) IC=+0.044 — positivo pero débil. Puede ser que 60min requiera dirección alcista (BUY_YES) y no bajista.",
+      "tipo": "filtro",
+      "umbral": "n≥30 para confirmar dirección",
+      "accion": "Si IC<0.05 con n≥30 → en 60min priorizar solo BUY_YES; si IC>0.08 → igualar al BUY_YES",
+      "filtro": {
+        "strategy_prefix": "UPDOWN_GBM",
+        "subtype_contains": "60min",
+        "decision": "BUY_NO"
+      },
+      "umbral_n": 30,
+      "umbral_ic_min": 0.05
+    },
+    {
+      "id": "H-CUSTOM-GBM-18H",
+      "nombre": "GBM a las 18h UTC — ¿blacklist necesario?",
+      "descripcion": "IC=-0.148 con n=11 en GBM a las 18h UTC. P5 del roadmap: bloquear cuando n≥15. Esta hipótesis hace el tracking automático.",
+      "tipo": "filtro",
+      "umbral": "n≥15 y IC<-0.08",
+      "accion": "Auto-añadir 18h a GBM_BLACKLIST cuando IC<-0.08 con n≥15 (P5 roadmap)",
+      "filtro": {
+        "strategy_prefix": "UPDOWN_GBM",
+        "hora_utc": 18
+      },
+      "umbral_n": 15,
+      "umbral_ic_max": -0.08
+    },
+    {
+      "id": "H-CUSTOM-BUYYES-15MIN-POSTFILTRO",
+      "nombre": "BUY_YES #15min con filtro drift_60min activo — ¿funciona en forward?",
+      "descripcion": "El filtro drift_60min ∈ [0,+0.5%) se implementó el 2026-06-26. Datos forward desde 2026-06-27: 8/18 (44%) IC=-0.045. Aún n pequeño. Monitorear si el IC sube a +0.10 con n≥40.",
+      "tipo": "boost",
+      "umbral": "n≥40 y IC>+0.10 para confirmar el filtro funciona en forward",
+      "accion": "Si IC<0 con n≥30 → revisar umbral drift_60min (0.5% puede ser demasiado estrecho)",
+      "filtro": {
+        "strategy_prefix": "UPDOWN_GBM",
+        "subtype_contains": "15min",
+        "decision": "BUY_YES"
+      },
+      "umbral_n": 40,
+      "umbral_ic_min": 0.10
+    },
+    {
+      "id": "H-CUSTOM-GBM-SIGMA-BAJO",
+      "nombre": "GBM con sigma_h muy bajo (<0.0008/h) — ¿mercado dormido = más predecible?",
+      "descripcion": "Hipótesis opuesta a sigma_alto: cuando el mercado está muy quieto, ¿el GBM captura mejor la señal porque hay menos ruido? sigma_h<0.0008 equivale a volatilidad diaria <0.8%.",
+      "tipo": "boost",
+      "umbral": "n≥30 y IC>+0.10",
+      "accion": "Si IC>0.10 con n≥30 → boost ×1.2 en señales GBM con sigma_h<0.0008",
+      "filtro": {
+        "strategy_prefix": "UPDOWN_GBM",
+        "feature": "sigma_h",
+        "feature_hi": 0.0008
+      },
+      "umbral_n": 30,
+      "umbral_ic_min": 0.10
+    },
+    {
+      "id": "H-CUSTOM-BTC15-TENDENCIA",
+      "nombre": "BTC#15min — ¿el edge está decayendo?",
+      "descripcion": "Análisis split: primeras 20 ops IC=+0.136 (65%); últimas 20 ops IC=-0.091 (40%). El edge era real pero puede estar desapareciendo. n=43 actual con IC=+0.056 ya bajo umbral. Tracking continuo.",
+      "tipo": "filtro",
+      "umbral": "n≥50 — si IC<0.04 con n≥50 considerar desactivar BTC#15min",
+      "accion": "Si IC<0.02 con n≥50 → desactivar BTC#15min (el edge ha muerto); si sube a >0.08 → candidato live",
+      "filtro": {
+        "strategy_prefix": "UPDOWN_GBM",
+        "par": "BTC",
+        "subtype_contains": "15min"
+      },
+      "umbral_n": 50,
+      "umbral_ic_max": 0.02
     }
   ]
 }

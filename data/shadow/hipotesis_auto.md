@@ -1,4 +1,4 @@
-# Hipótesis automáticas — 2026-06-27 11:32 UTC
+# Hipótesis automáticas — 2026-06-27 11:34 UTC
 _Generado por shadow_postmortem.py sobre 1185 resoluciones (PNL=-24.91€)_
 
 ## Patrones causales activos
@@ -186,16 +186,72 @@ _Sin sugerencias automáticas con datos actuales. Ampliar n por estrategia._
   - _Acción_: Boost ×1.2 en GBM BTC a las 17h si se confirma
   - _Estado_: 0/15 ops en el filtro definido (IC actual=+0.000 PNL=+0.00€)
 
-**〰️ H-CUSTOM-OF-MADRUGADA** — ORDER_FLOW de madrugada (0h-6h UTC) — ¿neutralizar?
-  - _Hipótesis_: Las horas 0-6h UTC en ORDER_FLOW tienen menos volumen y posiblemente menos fiabilidad.
+**〰️ H-CUSTOM-OF-MADRUGADA** — ORDER_FLOW de madrugada (0h-6h UTC) BTC+SOL — ¿neutralizar?
+  - _Hipótesis_: Las horas 0-6h UTC en ORDER_FLOW. El blacklist fue calculado con todos los pares incluyendo los negativos (ETH/XRP/DOGE). ¿Con BTC+SOL sigue siendo negativo?
   - _Umbral_: n≥30 y IC<-0.05
-  - _Acción_: Bloquear ORDER_FLOW entre 0-6h UTC si IC negativo confirmado
+  - _Acción_: Mantener bloqueo si IC<-0.05; desbloquear si IC>0 con n≥30
   - _Estado_: n=36 IC=+0.000 PNL=-0.18€ — sin señal clara aún (umbral IC: min=None max=-0.05)
   - _Datos_: n=36 IC=+0.000 PNL=-0.18€
 
 **〰️ H-CUSTOM-GBM-SIGMA-ALTO** — GBM con sigma_h alto (>0.002/h) — ¿destruye edge?
   - _Hipótesis_: Cuando la volatilidad horaria es muy alta el GBM puede sobreestimar el edge. Testear.
-  - _Umbral_: n≥30 y IC<-0.05 en sigma alto vs neutro
+  - _Umbral_: n≥30 y IC<-0.05
   - _Acción_: Filtrar señales GBM cuando sigma_h > 0.002 si se confirma IC negativo
   - _Estado_: n=190 IC=+0.016 PNL=+2.72€ — sin señal clara aún (umbral IC: min=None max=-0.05)
   - _Datos_: n=190 IC=+0.016 PNL=+2.72€
+
+**⏳ H-CUSTOM-OF-02H-BTCSOL** — ORDER_FLOW H=02h UTC — BTC+SOL solamente (revisar blacklist)
+  - _Hipótesis_: La hora 02h está en el blacklist basado en TODOS los pares. Con BTC+SOL solo, el historial muestra 4/5 (80%) IC=+0.054. ¿Se confirma la señal positiva con más datos?
+  - _Umbral_: 15
+  - _Acción_: Si IC>0.05 con n≥20 → proponer eliminar 02h del blacklist ORDER_FLOW
+  - _Estado_: 5/15 ops en el filtro definido (IC actual=+0.054 PNL=+1.49€)
+  - _Datos_: n=5 IC=+0.054 PNL=+1.49€
+
+**⏳ H-CUSTOM-OF-07H-BTCSOL** — ORDER_FLOW H=07h UTC — BTC+SOL solamente (revisar blacklist)
+  - _Hipótesis_: La hora 07h está en el blacklist. Con BTC+SOL solo, el historial muestra 7/12 (58%) IC=+0.043. El blacklist puede estar basado en pares negativos que ya están excluidos.
+  - _Umbral_: 20
+  - _Acción_: Si IC>0.05 con n≥20 → proponer eliminar 07h del blacklist ORDER_FLOW
+  - _Estado_: 12/20 ops en el filtro definido (IC actual=+0.043 PNL=+0.95€)
+  - _Datos_: n=12 IC=+0.043 PNL=+0.95€
+
+**🟡 H-CUSTOM-GBM-60MIN-BUYYES** — GBM 60min BUY_YES — ¿edge superior al BUY_NO?
+  - _Hipótesis_: Análisis actual muestra BUY_YES 60min: 22/36 (61%) IC=+0.105 vs BUY_NO 60min: 8/14 (57%) IC=+0.044. En 60min parece que BUY_YES es la dirección dominante, al contrario que en 15min.
+  - _Umbral_: n≥30 y IC>+0.08
+  - _Acción_: Si BUY_YES 60min confirma IC≥0.10 n≥40 → prioridad live por encima de BUY_NO
+  - _Estado_: SEÑAL POSITIVA confirmada: IC=+0.105 > 0.08 con n=36 PNL=+6.11€
+  - _Datos_: n=36 IC=+0.105 PNL=+6.11€
+
+**⏳ H-CUSTOM-GBM-60MIN-BUYNO** — GBM 60min BUY_NO — tracking por separado
+  - _Hipótesis_: En 15min BUY_NO tiene IC=+0.119. ¿Se repite en 60min? Datos actuales: 8/14 (57%) IC=+0.044 — positivo pero débil. Puede ser que 60min requiera dirección alcista (BUY_YES) y no bajista.
+  - _Umbral_: 30
+  - _Acción_: Si IC<0.05 con n≥30 → en 60min priorizar solo BUY_YES; si IC>0.08 → igualar al BUY_YES
+  - _Estado_: 14/30 ops en el filtro definido (IC actual=+0.044 PNL=-0.41€)
+  - _Datos_: n=14 IC=+0.044 PNL=-0.41€
+
+**⏳ H-CUSTOM-GBM-18H** — GBM a las 18h UTC — ¿blacklist necesario?
+  - _Hipótesis_: IC=-0.148 con n=11 en GBM a las 18h UTC. P5 del roadmap: bloquear cuando n≥15. Esta hipótesis hace el tracking automático.
+  - _Umbral_: 15
+  - _Acción_: Auto-añadir 18h a GBM_BLACKLIST cuando IC<-0.08 con n≥15 (P5 roadmap)
+  - _Estado_: 13/15 ops en el filtro definido (IC actual=-0.108 PNL=-1.93€)
+  - _Datos_: n=13 IC=-0.108 PNL=-1.93€
+
+**〰️ H-CUSTOM-BUYYES-15MIN-POSTFILTRO** — BUY_YES #15min con filtro drift_60min activo — ¿funciona en forward?
+  - _Hipótesis_: El filtro drift_60min ∈ [0,+0.5%) se implementó el 2026-06-26. Datos forward desde 2026-06-27: 8/18 (44%) IC=-0.045. Aún n pequeño. Monitorear si el IC sube a +0.10 con n≥40.
+  - _Umbral_: n≥40 y IC>+0.10 para confirmar el filtro funciona en forward
+  - _Acción_: Si IC<0 con n≥30 → revisar umbral drift_60min (0.5% puede ser demasiado estrecho)
+  - _Estado_: n=123 IC=+0.004 PNL=-4.33€ — sin señal clara aún (umbral IC: min=0.1 max=None)
+  - _Datos_: n=123 IC=+0.004 PNL=-4.33€
+
+**⏳ H-CUSTOM-GBM-SIGMA-BAJO** — GBM con sigma_h muy bajo (<0.0008/h) — ¿mercado dormido = más predecible?
+  - _Hipótesis_: Hipótesis opuesta a sigma_alto: cuando el mercado está muy quieto, ¿el GBM captura mejor la señal porque hay menos ruido? sigma_h<0.0008 equivale a volatilidad diaria <0.8%.
+  - _Umbral_: 30
+  - _Acción_: Si IC>0.10 con n≥30 → boost ×1.2 en señales GBM con sigma_h<0.0008
+  - _Estado_: 2/30 ops en el filtro definido (IC actual=+0.000 PNL=+0.01€)
+  - _Datos_: n=2 IC=+0.000 PNL=+0.01€
+
+**⏳ H-CUSTOM-BTC15-TENDENCIA** — BTC#15min — ¿el edge está decayendo?
+  - _Hipótesis_: Análisis split: primeras 20 ops IC=+0.136 (65%); últimas 20 ops IC=-0.091 (40%). El edge era real pero puede estar desapareciendo. n=43 actual con IC=+0.056 ya bajo umbral. Tracking continuo.
+  - _Umbral_: 50
+  - _Acción_: Si IC<0.02 con n≥50 → desactivar BTC#15min (el edge ha muerto); si sube a >0.08 → candidato live
+  - _Estado_: 49/50 ops en el filtro definido (IC actual=+0.029 PNL=-0.44€)
+  - _Datos_: n=49 IC=+0.029 PNL=-0.44€
