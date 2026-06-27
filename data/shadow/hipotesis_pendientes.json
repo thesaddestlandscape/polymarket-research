@@ -6,7 +6,7 @@
     "accion": "Añadir 18 a GBM_BLACKLIST_HOURS en shadow_predict.py",
     "bloqueante": null,
     "fuente": "builtin",
-    "actualizado": "2026-06-27T11:24+00:00",
+    "actualizado": "2026-06-27T11:25+00:00",
     "n": 13,
     "wins": 4,
     "ic": -0.1083,
@@ -21,7 +21,7 @@
     "accion": "Añadir ibs_15 como boost/filtro en FEATURE_RULES de shadow_postmortem.py",
     "bloqueante": null,
     "fuente": "builtin",
-    "actualizado": "2026-06-27T11:24+00:00",
+    "actualizado": "2026-06-27T11:25+00:00",
     "n": 1,
     "wins": 0,
     "ic": -0.0083,
@@ -36,7 +36,7 @@
     "accion": "El sistema lo aplica automáticamente vía FEATURE_RULES. Verificar en strategy_params.json.",
     "bloqueante": null,
     "fuente": "builtin",
-    "actualizado": "2026-06-27T11:24+00:00",
+    "actualizado": "2026-06-27T11:25+00:00",
     "n": 1,
     "status": "ACUMULANDO",
     "rec": "Solo 1 ops GBM con hora_utc en features. Esperar n≥20 para patrones."
@@ -48,7 +48,7 @@
     "accion": "Cambiar _aplicar_kelly_compuesto: match por activo, no market_id",
     "bloqueante": null,
     "fuente": "builtin",
-    "actualizado": "2026-06-27T11:24+00:00",
+    "actualizado": "2026-06-27T11:25+00:00",
     "n_overlaps": 17,
     "ic_overlap": 0.0745,
     "ic_base": 0.0542,
@@ -63,7 +63,7 @@
     "accion": "Añadir DELTA_MIN/MAX por par dict en shadow_predict.py",
     "bloqueante": null,
     "fuente": "builtin",
-    "actualizado": "2026-06-27T11:24+00:00",
+    "actualizado": "2026-06-27T11:25+00:00",
     "by_pair": {
       "BTC": {
         "n": 73,
@@ -140,7 +140,7 @@
     "accion": "Añadir HORA_BOOST = {13: 1.2, 15: 1.2, 17: 1.2, 19: 1.2} en shadow_predict.py",
     "bloqueante": null,
     "fuente": "builtin",
-    "actualizado": "2026-06-27T11:24+00:00",
+    "actualizado": "2026-06-27T11:25+00:00",
     "by_hour": {
       "13": {
         "n": 82,
@@ -185,7 +185,7 @@
     "accion": "Activar live cuando haya credenciales Polymarket API",
     "bloqueante": null,
     "fuente": "builtin",
-    "actualizado": "2026-06-27T11:24+00:00",
+    "actualizado": "2026-06-27T11:25+00:00",
     "by_subtype": {
       "ETH#60min": {
         "n": 20,
@@ -226,7 +226,7 @@
     "accion": "Activar live cuando haya credenciales Polymarket API",
     "bloqueante": null,
     "fuente": "builtin",
-    "actualizado": "2026-06-27T11:24+00:00",
+    "actualizado": "2026-06-27T11:25+00:00",
     "n": 34,
     "wins": 18,
     "ic": 0.0278,
@@ -241,7 +241,7 @@
     "accion": "Si confirma IC≥+0.10 n≥15 en SOL → considerar live semanal",
     "bloqueante": null,
     "fuente": "builtin",
-    "actualizado": "2026-06-27T11:24+00:00",
+    "actualizado": "2026-06-27T11:25+00:00",
     "by_pair": {
       "ETH": {
         "n": 8,
@@ -279,7 +279,7 @@
     "accion": "Implementar s_obi en shadow_predict.py usando L2 orderbook",
     "bloqueante": "JON_BECKER_DATASET",
     "fuente": "builtin",
-    "actualizado": "2026-06-27T11:24+00:00",
+    "actualizado": "2026-06-27T11:25+00:00",
     "status": "BLOQUEADA_DATASET",
     "rec": "Descargar github.com/Jon-Becker/prediction-market-analysis (36GB). Analizar spread bid/ask e imbalance por mercado en 60min previos a resolución."
   },
@@ -290,7 +290,7 @@
     "accion": "Ajustar THETA_OU por par en strategy_params.json (BTC/ETH/SOL independientes)",
     "bloqueante": "JON_BECKER_DATASET",
     "fuente": "builtin",
-    "actualizado": "2026-06-27T11:24+00:00",
+    "actualizado": "2026-06-27T11:25+00:00",
     "status": "BLOQUEADA_DATASET",
     "rec": "Descargar github.com/Jon-Becker/prediction-market-analysis (36GB). Fit OU sobre series históricas por par y estimar theta por MLE."
   },
@@ -301,7 +301,7 @@
     "accion": "Implementar hmmlearn sobre features GBM; condicionar estrategia al régimen detectado",
     "bloqueante": "JON_BECKER_DATASET",
     "fuente": "builtin",
-    "actualizado": "2026-06-27T11:24+00:00",
+    "actualizado": "2026-06-27T11:25+00:00",
     "status": "BLOQUEADA_DATASET",
     "rec": "Descargar github.com/Jon-Becker/prediction-market-analysis (36GB). Entrenar HMM 3-estado sobre (drift_60min, sigma_h) histórico. Validar en forward."
   },
@@ -312,7 +312,7 @@
     "accion": "Sustituir DRIFT_DAMPING por KalmanDrift en fetch_binance_klines.py",
     "bloqueante": "N_INSUFICIENTE",
     "fuente": "builtin",
-    "actualizado": "2026-06-27T11:24+00:00",
+    "actualizado": "2026-06-27T11:25+00:00",
     "status": "ACUMULANDO",
     "max_n": 287,
     "rec": "Máximo n actual en GBM: 287/200. Esperar 3+ subtypes con n≥200."
@@ -324,7 +324,7 @@
     "accion": "Extender arb_scanner.py con endpoints Kalshi; comparar mismo evento cross-plataforma",
     "bloqueante": "API_KALSHI",
     "fuente": "builtin",
-    "actualizado": "2026-06-27T11:24+00:00",
+    "actualizado": "2026-06-27T11:25+00:00",
     "status": "BLOQUEADA_API",
     "rec": "Requiere acceso API Kalshi + credenciales Polymarket live"
   },
@@ -335,7 +335,7 @@
     "accion": "Boost ×1.2 en GBM BTC a las 17h si se confirma",
     "descripcion": "La hora 17h UTC aparece como la mejor en historial. ¿Se confirma solo en BTC?",
     "fuente": "custom",
-    "actualizado": "2026-06-27T11:24+00:00",
+    "actualizado": "2026-06-27T11:25+00:00",
     "n": 0,
     "wins": 0,
     "ic": 0.0,
@@ -350,7 +350,7 @@
     "accion": "Bloquear ORDER_FLOW entre 0-6h UTC si IC negativo confirmado",
     "descripcion": "Las horas 0-6h UTC en ORDER_FLOW tienen menos volumen y posiblemente menos fiabilidad.",
     "fuente": "custom",
-    "actualizado": "2026-06-27T11:24+00:00",
+    "actualizado": "2026-06-27T11:25+00:00",
     "n": 36,
     "wins": 18,
     "ic": 0.0,
@@ -365,7 +365,7 @@
     "accion": "Filtrar señales GBM cuando sigma_h > 0.002 si se confirma IC negativo",
     "descripcion": "Cuando la volatilidad horaria es muy alta el GBM puede sobreestimar el edge. Testear.",
     "fuente": "custom",
-    "actualizado": "2026-06-27T11:24+00:00",
+    "actualizado": "2026-06-27T11:25+00:00",
     "n": 188,
     "wins": 97,
     "ic": 0.0158,
