@@ -5,7 +5,7 @@ shadow_predict.py — v8. Cuatro estrategias activas:
   3. UPDOWN_GBM     — mercados Up/Down via modelo Black-Scholes digital (daily/hourly/slot)
   4. WEEKLY_PRICE   — mercados de rango de precio semanal (BTC/ETH/SOL entre $X-$Y)
 """
-import csv, glob, json, math, os, pickle, re, sys
+import csv, glob, io, json, math, os, pickle, re, sys
 from datetime import datetime, timezone, timedelta
 from pathlib import Path
 import requests
@@ -14,6 +14,20 @@ from data_quality import (
     SIGMA_H_MAX, DRIFT_MAX,
     validar_features_gbm, simbolo_bloqueado, generar_reporte,
 )
+
+_HAS_PANDAS: bool | None = None   # None = not yet checked; True/False after first use
+_pd = None                         # populated lazily on first cache miss
+
+def _check_pandas():
+    global _HAS_PANDAS, _pd
+    if _HAS_PANDAS is None:
+        try:
+            import pandas as _pd_mod  # noqa: PLC0415
+            _pd = _pd_mod
+            _HAS_PANDAS = True
+        except ImportError:
+            _HAS_PANDAS = False
+    return _HAS_PANDAS
 
 TIMEOUT = 30
 HORIZONTE_MIN_HORAS = 0.05    # 3 min: cubre mercados Up/Down 5m
@@ -114,69 +128,200 @@ def _cache_valida(cache_file: Path, fuentes: list = None, ttl_s: int = 90) -> bo
 
 
 def cargar_mercados_recientes():
+    """
+    Devuelve la snapshot más reciente de cada mercado activo.
+    Lee solo la cola de today's CSV (los archivos de mercado crecen hasta 700MB/día).
+    Se cubre con ayer solo si hoy tiene < 200 filas (arranque a medianoche).
+    TTL cache 90s: necesitamos datos frescos para price_yes actual.
+    """
     fecha_hoy  = datetime.now(timezone.utc).strftime("%Y-%m-%d")
     fecha_ayer = (datetime.now(timezone.utc) - timedelta(days=1)).strftime("%Y-%m-%d")
-    archivos   = [DIR_MARKETS / f"{fecha_hoy}.csv", DIR_MARKETS / f"{fecha_ayer}.csv"]
-    fuentes    = [str(a) for a in archivos if Path(a).exists()]
 
     cache_file = _cache_path("mercados_recientes")
-    if _cache_valida(cache_file, fuentes):
+    if _cache_valida(cache_file, ttl_s=90):
         with open(cache_file, "rb") as f:
             return pickle.load(f)
 
-    por_id = {}
-    for arch in archivos:
-        if not Path(arch).exists():
+    # Leer solo los últimos ~100MB de hoy (contiene las últimas 100-110 capturas ≈ 4h de datos)
+    # Suficiente para obtener el snapshot más reciente de todos los mercados activos.
+    BYTES_COLA = 100 * 1024 * 1024
+    archivos_a_leer = [DIR_MARKETS / f"{fecha_hoy}.csv"]
+
+    por_id: dict = {}
+
+    for arch in archivos_a_leer:
+        if not arch.exists():
             continue
-        with open(arch, encoding="utf-8") as f:
-            for row in csv.DictReader(f):
-                mid = row.get("market_id")
+        fsize = arch.stat().st_size
+        skip  = max(0, fsize - BYTES_COLA)
+        try:
+            with open(arch, "rb") as fb:
+                header = fb.readline().decode("utf-8", errors="replace").strip()
+                fieldnames = [h.strip() for h in header.split(",")]
+                if skip > 0:
+                    fb.seek(skip)
+                    fb.readline()
+                content = fb.read()
+        except Exception as e:
+            print(f"  Error leyendo {arch.name}: {e}")
+            continue
+
+        if _check_pandas():
+            try:
+                df = _pd.read_csv(
+                    io.BytesIO(content), names=fieldnames,
+                    on_bad_lines="skip", dtype=str, engine="c",
+                )
+                df = df[df["market_id"].notna() & (df["market_id"] != "")]
+                # Último snapshot por market_id (el CSV está en orden cronológico)
+                df = df.groupby("market_id", as_index=False).last()
+                resultado = df.to_dict("records")
+                # Si el archivo empieza hoy y tiene poca data, añadir de ayer
+                if len(resultado) < 200:
+                    archivos_a_leer.append(DIR_MARKETS / f"{fecha_ayer}.csv")
+                else:
+                    for row in resultado:
+                        mid = row.get("market_id", "")
+                        if mid and (mid not in por_id or row.get("timestamp_utc","") > por_id[mid].get("timestamp_utc","")):
+                            por_id[mid] = row
+                    continue  # pandas path done
+            except Exception:
+                pass  # fallback below
+
+        # Fallback: csv.DictReader
+        try:
+            for row in csv.DictReader(io.StringIO(content.decode("utf-8", errors="replace")), fieldnames=fieldnames):
+                mid = row.get("market_id", "")
                 if not mid:
                     continue
                 ts = row.get("timestamp_utc", "")
-                if mid not in por_id or ts > por_id[mid]["timestamp_utc"]:
+                if mid not in por_id or ts > por_id[mid].get("timestamp_utc", ""):
                     por_id[mid] = row
+        except Exception as e:
+            print(f"  Error parseando {arch.name}: {e}")
+
     resultado = list(por_id.values())
+    # Si muy pocos resultados (arranque en frío), también leer ayer
+    if len(resultado) < 200:
+        arch_ayer = DIR_MARKETS / f"{fecha_ayer}.csv"
+        if arch_ayer.exists():
+            fsize = arch_ayer.stat().st_size
+            skip  = max(0, fsize - BYTES_COLA)
+            try:
+                with open(arch_ayer, "rb") as fb:
+                    header = fb.readline().decode("utf-8", errors="replace").strip()
+                    fieldnames = [h.strip() for h in header.split(",")]
+                    if skip > 0:
+                        fb.seek(skip); fb.readline()
+                    content = fb.read()
+                for row in csv.DictReader(io.StringIO(content.decode("utf-8", errors="replace")), fieldnames=fieldnames):
+                    mid = row.get("market_id", "")
+                    if not mid:
+                        continue
+                    ts = row.get("timestamp_utc", "")
+                    if mid not in por_id or ts > por_id[mid].get("timestamp_utc", ""):
+                        por_id[mid] = row
+            except Exception:
+                pass
+            resultado = list(por_id.values())
+
     with open(cache_file, "wb") as f:
         pickle.dump(resultado, f)
     return resultado
 
 
+def _leer_historial_archivo(arch: Path, corte: datetime, bytes_cola: int) -> dict:
+    """
+    Lee solo los últimos `bytes_cola` de un CSV de mercados y filtra a ts >= corte.
+    Usa pandas si disponible (2× más rápido); fallback a csv.DictReader.
+    """
+    resultado: dict = {}
+    fsize = arch.stat().st_size
+    skip  = max(0, fsize - bytes_cola)
+    try:
+        with open(arch, "rb") as fb:
+            header = fb.readline().decode("utf-8", errors="replace").strip()
+            if skip > 0:
+                fb.seek(skip)
+                fb.readline()  # descartar línea parcial
+            content = fb.read()
+    except Exception as e:
+        print(f"  Error leyendo {arch.name}: {e}")
+        return resultado
+
+    if _check_pandas():
+        try:
+            df = _pd.read_csv(
+                io.BytesIO(content),
+                names=header.split(","),
+                usecols=["timestamp_utc", "market_id", "price_yes"],
+                on_bad_lines="skip",
+                dtype=str,
+                engine="c",
+            )
+            df["ts"] = _pd.to_datetime(df["timestamp_utc"], utc=True, errors="coerce")
+            df = df[df["ts"] >= _pd.Timestamp(corte)]
+            df["py"] = _pd.to_numeric(df["price_yes"], errors="coerce")
+            df = df.dropna(subset=["ts", "market_id", "py"])
+            ts_list = df["ts"].dt.to_pydatetime()  # tz-aware Python datetime objects
+            for mid, ts, py in zip(df["market_id"].values, ts_list, df["py"].values):
+                resultado.setdefault(mid, []).append((ts, float(py)))
+            return resultado
+        except Exception:
+            pass  # fallback to csv below
+
+    # Fallback: csv.DictReader
+    fieldnames = [h.strip() for h in header.split(",")]
+    try:
+        for row in csv.DictReader(io.StringIO(content.decode("utf-8", errors="replace")), fieldnames=fieldnames):
+            try:
+                ts = datetime.fromisoformat(row["timestamp_utc"].replace("Z", "+00:00"))
+            except Exception:
+                continue
+            if ts < corte:
+                continue
+            mid = row.get("market_id", "")
+            py  = row.get("price_yes", "")
+            if not mid or not py:
+                continue
+            try:
+                resultado.setdefault(mid, []).append((ts, float(py)))
+            except ValueError:
+                pass
+    except Exception as e:
+        print(f"  Error parseando {arch.name}: {e}")
+    return resultado
+
+
 def cargar_historial_mercados():
-    corte    = datetime.now(timezone.utc) - timedelta(hours=6)
-    archivos = sorted(glob.glob(str(DIR_MARKETS / "*.csv")))[-3:]
-    fuentes  = [a for a in archivos if Path(a).exists()]
+    ahora = datetime.now(timezone.utc)
+    corte = ahora - timedelta(hours=6)
 
     cache_file = _cache_path("historial_mercados")
-    if _cache_valida(cache_file, fuentes, ttl_s=90):  # 90s: el historial cambia más rápido
+    if _cache_valida(cache_file, ttl_s=300):  # 5min TTL: el historial solo cambia con slow loop
         with open(cache_file, "rb") as f:
             return pickle.load(f)
 
-    historial = {}
-    for arch in fuentes:
-        try:
-            with open(arch, encoding="utf-8") as f:
-                for row in csv.DictReader(f):
-                    try:
-                        ts = datetime.fromisoformat(
-                            row["timestamp_utc"].replace("Z", "+00:00"))
-                    except Exception:
-                        continue
-                    if ts < corte:
-                        continue
-                    mid = row.get("market_id", "")
-                    py  = row.get("price_yes", "")
-                    if not mid or not py:
-                        continue
-                    try:
-                        py_f = float(py)
-                    except ValueError:
-                        continue
-                    historial.setdefault(mid, []).append((ts, py_f))
-        except Exception as e:
-            print(f"  Error leyendo {arch}: {e}")
+    # Solo hoy + ayer. No incluir ayer si hoy ya tiene ≥6.5h de datos.
+    # Cada archivo solo se lee por la cola: ~180MB = ~6h de capturas de mercados.
+    BYTES_COLA = 180 * 1024 * 1024
+    h_hoy = ahora.hour + ahora.minute / 60
+    candidatos = [ahora.strftime("%Y-%m-%d")]
+    if h_hoy < 6.5:  # antes de 06:30 UTC: hoy tiene < 6.5h de datos → incluir ayer
+        candidatos.append((ahora - timedelta(days=1)).strftime("%Y-%m-%d"))
+    archivos = [DIR_MARKETS / f"{d}.csv" for d in candidatos if (DIR_MARKETS / f"{d}.csv").exists()]
+
+    from concurrent.futures import ThreadPoolExecutor
+    historial: dict = {}
+    with ThreadPoolExecutor(max_workers=len(archivos) or 1) as ex:
+        futuros = [ex.submit(_leer_historial_archivo, arch, corte, BYTES_COLA) for arch in archivos]
+        for fut in futuros:
+            for mid, pts in fut.result().items():
+                historial.setdefault(mid, []).extend(pts)
+
     for mid in historial:
         historial[mid].sort(key=lambda x: x[0])
+
     with open(cache_file, "wb") as f:
         pickle.dump(historial, f)
     return historial

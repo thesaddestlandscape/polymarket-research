@@ -59,15 +59,17 @@ ASSETS_GBM = ["BTC", "ETH", "SOL", "XRP"]
 # (Medición histórica: Binance vs Coinbase ≈ 0.15% de divergencia normal)
 CROSS_SOURCE_WARN_PCT  = 0.005   # 0.5%  → alerta, revisar
 CROSS_SOURCE_BLOCK_PCT = 0.020   # 2.0%  → precio infiable, no apostar ese activo
-FETCH_TIMEOUT          = 6       # segundos por fuente en cross-source check
+FETCH_TIMEOUT          = 5       # segundos por fuente en cross-source check
+CROSS_SOURCE_TTL_S     = 300     # refrescar fuentes externas solo cada 5 minutos
 
 # Settlement reference: Polymarket resuelve BTC/ETH al precio Coinbase
 # Si Coinbase y Binance divergen >0.5% → usar Coinbase como spot en las predicciones
 SETTLEMENT_ASSETS = {"BTC", "ETH"}   # los que Polymarket resuelve contra Coinbase
 
-DIR_SHADOW = Path("data/shadow")
-DQ_PATH    = DIR_SHADOW / "data_quality.json"
-DQ_LOG     = DIR_SHADOW / "dq_events.jsonl"   # log de rechazos (append-only)
+DIR_SHADOW     = Path("data/shadow")
+DQ_PATH        = DIR_SHADOW / "data_quality.json"
+DQ_LOG         = DIR_SHADOW / "dq_events.jsonl"   # log de rechazos (append-only)
+CROSS_CACHE    = DIR_SHADOW / "cross_source_cache.json"
 
 # ─── L4: Fetchers multi-fuente ───────────────────────────────────────────────
 
@@ -221,24 +223,78 @@ def validar_cross_source(
     }
 
 
+def _cross_cache_fresco() -> bool:
+    """True si el cache de cross-source fue guardado hace < CROSS_SOURCE_TTL_S."""
+    if not CROSS_CACHE.exists():
+        return False
+    try:
+        import time as _time
+        age = _time.time() - CROSS_CACHE.stat().st_mtime
+        return age < CROSS_SOURCE_TTL_S
+    except Exception:
+        return False
+
+
+def _cargar_cross_cache() -> Optional[dict]:
+    """Lee el cache de cross-source guardado. None si no existe o es inválido."""
+    if not CROSS_CACHE.exists():
+        return None
+    try:
+        with open(CROSS_CACHE, encoding="utf-8") as f:
+            return json.load(f)
+    except Exception:
+        return None
+
+
+def _guardar_cross_cache(result: dict) -> None:
+    """Guarda el resultado de obtener_consensus_spot en cache."""
+    try:
+        DIR_SHADOW.mkdir(parents=True, exist_ok=True)
+        with open(CROSS_CACHE, "w", encoding="utf-8") as f:
+            json.dump(result, f, separators=(",", ":"))
+    except Exception:
+        pass
+
+
 def obtener_consensus_spot(
     binance_prices: Optional[dict] = None,
     assets: Optional[list] = None,
     timeout: int = FETCH_TIMEOUT,
 ) -> dict:
     """
-    Obtiene precio de consenso multi-fuente. Llamado desde fetch_binance_klines.
+    Obtiene precio de consenso multi-fuente con cache de 5 minutos.
     Prioriza Coinbase para activos de settlement (BTC, ETH).
+    Solo hace peticiones externas (Coinbase/Kraken) cuando el cache está stale.
 
     Retorna:
       'precios':   {sym: float}  — precio a usar en predicciones
       'cross':     resultado de validar_cross_source
       'fuente_preferida': {sym: 'binance'|'coinbase'|'kraken'|'consenso'}
+      'cached':    bool — True si se usó resultado del cache (sin peticiones externas)
     """
     if assets is None:
         assets = ASSETS_GBM
 
-    # Fetch Coinbase y Kraken en paralelo (Binance ya fue fetcheado por el caller)
+    # Cache hit: devolver precios Coinbase cacheados + precios Binance actuales
+    if _cross_cache_fresco():
+        cached = _cargar_cross_cache()
+        if cached:
+            cross = cached.get("cross", {})
+            coinbase_cached = cached.get("coinbase", {})
+            precios: dict[str, float] = {}
+            fuente_elegida: dict[str, str] = {}
+            for sym in assets:
+                if sym in cross.get("bloqueados", []):
+                    continue
+                if sym in SETTLEMENT_ASSETS and sym in coinbase_cached:
+                    precios[sym] = coinbase_cached[sym]
+                    fuente_elegida[sym] = "coinbase_cached"
+                elif binance_prices and sym in binance_prices:
+                    precios[sym] = binance_prices[sym]
+                    fuente_elegida[sym] = "binance"
+            return {"precios": precios, "cross": cross, "fuente_elegida": fuente_elegida, "cached": True}
+
+    # Cache miss: fetch Coinbase y Kraken en paralelo
     with concurrent.futures.ThreadPoolExecutor(max_workers=2) as ex:
         f_cb = ex.submit(fetch_coinbase_spot, assets, timeout)
         f_kr = ex.submit(fetch_kraken_spot, assets, timeout)
@@ -255,12 +311,11 @@ def obtener_consensus_spot(
 
     cross = validar_cross_source(sources, assets)
 
-    # Para settlement assets (BTC, ETH): usar Coinbase si está disponible y no bloqueado
-    precios: dict[str, float] = {}
-    fuente_elegida: dict[str, str] = {}
+    precios = {}
+    fuente_elegida = {}
     for sym in assets:
         if sym in cross["bloqueados"]:
-            continue   # no usar precio infiable
+            continue
         if sym in SETTLEMENT_ASSETS and sym in coinbase:
             precios[sym] = coinbase[sym]
             fuente_elegida[sym] = "coinbase"
@@ -271,11 +326,9 @@ def obtener_consensus_spot(
             precios[sym] = binance_prices[sym]
             fuente_elegida[sym] = "binance"
 
-    return {
-        "precios": precios,
-        "cross": cross,
-        "fuente_elegida": fuente_elegida,
-    }
+    result = {"precios": precios, "cross": cross, "fuente_elegida": fuente_elegida, "coinbase": coinbase, "cached": False}
+    _guardar_cross_cache(result)
+    return result
 
 # ─── L1: Validación en punto de escritura ────────────────────────────────────
 

@@ -16,11 +16,12 @@ open_time_ms is Unix milliseconds (consistent with Binance format).
 If all sources are unreachable, prints a warning and exits 0.
 """
 import csv, json, sys, time
+from concurrent.futures import ThreadPoolExecutor
 from datetime import datetime, timezone
 from pathlib import Path
 import requests
 
-from data_quality import validar_precio, leer_ultimo_precio, obtener_consensus_spot
+from data_quality import validar_precio, leer_ultimo_precio, obtener_consensus_spot, _cross_cache_fresco
 
 DIR_PRICES = Path("data") / "prices"
 DIR_PRICES.mkdir(parents=True, exist_ok=True)
@@ -120,21 +121,23 @@ def main():
     data = {"timestamp_utc": ts_str}
     any_success = False
 
-    for asset in KRAKEN_PAIRS:
-        # Binance primero: da taker_buy_vol (columna 7) para order flow
+    def _fetch_asset(asset):
         klines = fetch_binance(asset, with_flow=True)
         source = "Binance+flow"
         if klines is None:
-            # Kraken fallback: solo OHLCV (6 columnas, sin order flow)
             klines = fetch_kraken(asset)
             source = "Kraken"
-        if klines is not None:
-            data[asset] = klines
-            any_success = True
-            has_flow = len(klines[0]) >= 7 if klines else False
-            print(f"  {asset}: {len(klines)} klines OK [{source}{'  ✓flow' if has_flow else ''}]")
-        else:
-            print(f"  {asset}: SKIP (both sources failed)")
+        return asset, klines, source
+
+    with ThreadPoolExecutor(max_workers=len(KRAKEN_PAIRS)) as ex:
+        for asset, klines, source in ex.map(_fetch_asset, list(KRAKEN_PAIRS)):
+            if klines is not None:
+                data[asset] = klines
+                any_success = True
+                has_flow = len(klines[0]) >= 7 if klines else False
+                print(f"  {asset}: {len(klines)} klines OK [{source}{'  ✓flow' if has_flow else ''}]")
+            else:
+                print(f"  {asset}: SKIP (both sources failed)")
 
     if not any_success:
         print("[WARN] No klines fetched — all sources unreachable. Exiting 0.")
@@ -174,22 +177,22 @@ def main():
         binance_prices[sym] = price
 
     # L4: cross-source consensus (Binance vs Coinbase vs Kraken)
-    # Coinbase = settlement reference para BTC/ETH en Polymarket
-    # Se ejecuta en paralelo; el resultado enriquece el reporte de calidad
-    assets_gbm = ["BTC", "ETH", "SOL", "XRP"]
+    # TTL 5min: solo hace peticiones externas cuando el cache está stale.
+    # Coinbase = settlement reference para BTC/ETH en Polymarket.
+    assets_gbm  = ["BTC", "ETH", "SOL", "XRP"]
     binance_gbm = {k: v for k, v in binance_prices.items() if k in assets_gbm}
     if binance_gbm:
         try:
-            consensus = obtener_consensus_spot(binance_gbm, assets_gbm, timeout=5)
-            cross = consensus["cross"]
-            if cross.get("alertas"):
+            consensus = obtener_consensus_spot(binance_gbm, assets_gbm, timeout=4)
+            cross     = consensus.get("cross", {})
+            cached    = consensus.get("cached", False)
+            if not cached and cross.get("alertas"):
                 for a in cross["alertas"]:
                     icon = "🚨" if a["accion"] == "BLOQUEADO" else "⚠️"
-                    print(f"  [DQ L4] {icon} {a['sym']} divergencia {a['max_div_pct']:.2f}% entre fuentes")
-            # Para BTC/ETH: sobreescribir con precio Coinbase (settlement reference)
-            for sym, px_consenso in consensus["precios"].items():
+                    print(f"  [DQ L4] {icon} {a['sym']} div={a['max_div_pct']:.2f}% ({'cache' if cached else 'fresco'})")
+            for sym, px_consenso in consensus.get("precios", {}).items():
                 if sym in binance_prices:
-                    binance_prices[sym] = px_consenso  # ya es Coinbase si sym en SETTLEMENT_ASSETS
+                    binance_prices[sym] = px_consenso
         except Exception as _cs_err:
             print(f"  [DQ L4] Cross-source error (no bloqueante): {_cs_err}")
 
