@@ -449,9 +449,15 @@ def verificar_series(precios_data: list,
             alertas.append(f"precio viejo ({age_s/60:.1f}min)")
             estado = "DEGRADED"
 
-        # Gap histórico en la última ventana
-        if gaps:
-            worst = max(gaps, key=lambda g: g["duracion_min"])
+        # Solo alertar sobre gaps recientes (fin dentro de las últimas 4h)
+        # Gaps históricos de días anteriores se guardan en JSON pero no generan alertas
+        RECENT_GAP_H = 4
+        recent_gaps = [
+            g for g in gaps
+            if (ahora - datetime.fromisoformat(g["fin"]).replace(tzinfo=timezone.utc)).total_seconds() < RECENT_GAP_H * 3600
+        ]
+        if recent_gaps:
+            worst = max(recent_gaps, key=lambda g: g["duracion_min"])
             alertas.append(f"gap {worst['duracion_min']:.0f}min ({worst['inicio'][11:16]})")
             if worst["duracion_min"] > MAX_GAP_MIN * 3:
                 if estado != "CRITICAL":

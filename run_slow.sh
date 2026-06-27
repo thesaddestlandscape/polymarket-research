@@ -33,9 +33,9 @@ while true; do
     cd "$REPO_DIR"
     git add data/prices/ data/wallets/leaderboard_*.csv data/shadow/hipotesis_*.md data/shadow/arb_scan_*.csv >> "$LOG" 2>&1 || true
     if ! git diff --cached --quiet 2>/dev/null; then
-        git commit -m "data: ciclo slow $CICLO $(date -u +%Y-%m-%dT%H:%MZ)" >> "$LOG" 2>&1 || true
-        git pull --rebase origin main >> "$LOG" 2>&1 || true
-        git push origin main >> "$LOG" 2>&1 || true
+        timeout 30s git commit -m "data: ciclo slow $CICLO $(date -u +%Y-%m-%dT%H:%MZ)" >> "$LOG" 2>&1 || true
+        timeout 60s git pull --rebase origin main >> "$LOG" 2>&1 || true
+        timeout 60s git push origin main >> "$LOG" 2>&1 || true
         log "  Push OK"
     fi
 
