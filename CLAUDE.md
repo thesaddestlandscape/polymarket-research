@@ -1,7 +1,27 @@
 # CLAUDE.md — Polymarket Research Bot
 
 Documento de contexto completo. Léelo al inicio de cada sesión para retomar sin releer historial.
-**Última actualización: 2026-06-27 ~04:45 UTC**
+**Última actualización: 2026-06-27 ~08:00 UTC**
+
+---
+
+## 🛠️ Skills disponibles (usar con `/nombre`)
+
+| Skill | Descripción |
+|---|---|
+| `/inicio` | Protocolo completo de inicio: bankroll, IC, H-REGIMEN, live status, arb |
+| `/ic` | Análisis IC detallado por subtipo + horas ORDER_FLOW + progreso hacia live |
+| `/hipotesis` | Estado actualizado de todas las hipótesis activas con datos reales |
+| `/dev` | Instrucciones para trabajar en el worktree de desarrollo sin tocar producción |
+
+## 🌿 Worktrees
+
+```bash
+/root/polymarket-research      # main — BOT EN PRODUCCIÓN, loops corriendo
+/root/polymarket-research-dev  # dev  — experimentos, cambios de estrategia
+git worktree list              # ver estado
+git merge dev --no-ff          # (desde main) promover experimento validado
+```
 
 ---
 
