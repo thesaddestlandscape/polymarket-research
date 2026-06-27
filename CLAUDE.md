@@ -125,26 +125,29 @@ capture_markets → capture_wallets → capture_trades
 | `live_stake.py` | Kelly stake con bankroll completo + 3 niveles de circuit breaker |
 | `live_control.py` | Listener Telegram: /on /off /status /help |
 | `live_switch.sh` | bash live_switch.sh on/off/status |
+| **`hypothesis_tracker.py`** | **14 hipótesis builtin + custom JSON → hipotesis_auto.md, auto-apply a strategy_params.json** |
+| **`dashboard_server.py`** | **Dashboard web http://37.27.249.72:8888 — polling 1s, LightweightCharts local, dual-stack** |
+| `data/shadow/hipotesis_custom.json` | JSON editable: añadir hipótesis sin tocar código; 11 hipótesis custom activas |
 
 ---
 
-## Estado de estrategias — 2026-06-27 (sesión madrugada)
+## Estado de estrategias — 2026-06-27 (sesión mañana ~12:00 UTC)
 
-### Bankroll simulado: **−4.96€** (−24.96€ PNL total) | 1160 ops | 49.0% WR
+### Bankroll simulado: **~−4.91€** (~1185 ops) | 49.0% WR
 ### ⚠️ El PNL negativo viene ÍNTEGRAMENTE de estrategias ya desactivadas.
 ### Con solo las estrategias activas actuales (excl. desactivadas): PNL estimado positivo.
 
 | Estrategia | n | Win% | IC | PNL | Estado |
 |---|---|---|---|---|---|
-| **BUY_NO #15min (todas pares)** | **40** | **62%** | **+0.119** | **+11.07€** | **🔥 LISTA PARA LIVE — IC≥0.10 n≥40 — bloqueado por credenciales** |
-| UPDOWN_GBM#SOL#15min | 36 | 56% | +0.053 | +5.00€ | ⏳ n=36/40 — ETA hoy sáb 27 (4 ops) |
+| **BUY_NO #15min (todas pares)** | **40+** | **62%** | **+0.119** | **+11.07€** | **🔥 LISTA PARA LIVE — IC≥0.10 n≥40 — bloqueado por credenciales** |
+| **GBM 60min BUY_YES** | **36** | **61%** | **+0.105** | **+6.11€** | **⏳ Sorpresa sesión: BUY_YES domina en 60min (contrario a 15min)** |
 | **UPDOWN_GBM#BTC#60min** | **17** | **65%** | **+0.112** | **+2.00€** | **⏳ mejor IC activo — ETA lun 29** |
 | UPDOWN_GBM#ETH#60min | 19 | 57% | +0.068 | +0.56€ | ⏳ ETA dom 28-lun 29 |
-| UPDOWN_GBM#BTC#15min | 43 | 56% | +0.056 | +0.64€ | ⚠️ n=43 alcanzado, IC=+0.056 < umbral 0.08 |
-| UPDOWN_GBM#ETH#15min | 58 | 55% | +0.050 | +3.33€ | ⚠️ n≥40 pero IC bajo |
-| ORDER_FLOW_5M BUY_NO (BTC+SOL) | 425 BUY_NO total | 56% | +0.057 | +33.54€ | ✅ activa (BUY_YES filtrado) |
-| BUY_YES #15min (todas pares) | 104 | 52% | +0.019 | −1.29€ | 🔶 Filtro drift_60min activo — mejorando |
-| **BTC#15min con drift_15min≥0.3** | **13** | **77%** | **+0.152** | **+5.68€** | **🔥 Filtro activo desde 2026-06-27 — mejora retroactiva +6.81€** |
+| **BTC#15min (drift≥0.3 filtrado)** | **13** | **77%** | **+0.152** | **+5.68€** | **🔥 Filtro activo 2026-06-27 — sin filtro IC=+0.029 → con filtro IC=+0.152** |
+| UPDOWN_GBM#BTC#15min global | 49 | 53% | +0.029 | −0.44€ | ⚠️ IC bajo sin filtro drift; con filtro es la mejor señal activa |
+| UPDOWN_GBM#ETH#15min | 58+ | 55% | +0.050 | +3.33€ | ⚠️ n≥40 pero IC bajo |
+| ORDER_FLOW_5M BUY_NO (BTC+SOL) | 425+ BUY_NO total | 56% | +0.057 | +33.54€ | ✅ activa (BUY_YES filtrado) |
+| BUY_YES #15min (todas pares) | 104+ | 52% | +0.019 | −1.29€ | 🔶 Filtro drift_60min activo — n=18 forward IC=-0.045 (pronto para juzgar) |
 | **UPDOWN_GBM#5min (todos pares)** | **56** | **33%** | **-0.155** | **~-16€** | **🚫 DESACTIVADA MANUALMENTE 2026-06-27** |
 | **UPDOWN_GBM#BTC#5min** | 16 | 31% | -0.133 | -6.30€ | 🚫 DESACTIVADA MANUALMENTE 2026-06-27 |
 | **UPDOWN_GBM#ETH#5min** | 12 | 33% | -0.086 | -3.67€ | 🚫 DESACTIVADA MANUALMENTE 2026-06-27 |
@@ -155,7 +158,7 @@ capture_markets → capture_wallets → capture_trades
 
 ---
 
-## Hipótesis — estado actualizado 2026-06-26
+## Hipótesis — estado actualizado 2026-06-27 (sesión mañana)
 
 ### H-REGIMEN ❌ REFUTADA — backfill 90 días
 
@@ -248,15 +251,42 @@ Empíricamente confirmado: ventanas de 5min no son predecibles con GBM. El merca
 - Filtros causales (sigma_h, pct) activos para BTC/ETH/SOL
 - **No invertir más desarrollo aquí hasta tener dataset Jon-Becker**
 
-### H-WEEKLY-PRICE 🔄 ACUMULANDO (n=15)
+### H-WEEKLY-PRICE 🔄 ACUMULANDO (n=21)
 
 | Par | n | Win% | IC | PNL |
 |---|---|---|---|---|
-| SOL | 4 | 100% | +0.067 | +2.42€ |
-| ETH | 5 | 60% | +0.018 | -0.85€ |
-| BTC | 6 | 33% | -0.037 | -2.73€ |
+| SOL | 4+ | 100% | +0.067 | +2.42€ |
+| ETH | 5+ | 60% | +0.018 | -0.85€ |
+| BTC | 6+ | 33% | -0.037 | -2.73€ |
 
 SOL sostenido 4/4 pero n demasiado pequeño. BTC negativo. No accionable aún — esperar n≥15 por par.
+
+### H-DRIFT15-MOMENTUM ✅ IMPLEMENTADA — 2026-06-27 mañana
+
+Análisis n=127 GBM#15min con drift_15min feature:
+
+| drift_15min | n | Win% | IC | Zona |
+|---|---|---|---|---|
+| < −1 | 29 | 55% | +0.048 | ✅ reversión fuerte |
+| −1…−0.3 | 26 | 38% | **−0.107** | ❌ peor zona |
+| −0.3…+0.3 | 24 | 50% | −0.043 | ❌ consolidación |
+| **+0.3…+1** | **28** | **61%** | **+0.100** | **✅ mejor zona** |
+| > +1 | 20 | 60% | +0.091 | ✅ momentum fuerte |
+
+**Para BTC específicamente**: drift≥0.3 → IC=+0.152 n=13 (77%); drift<0.3 → IC=−0.100 n=23 (39%).
+**Implementado en `shadow_predict.py`**: BTC#15min skip cuando `drift_15 * 100 < 0.3`.
+Mejora retroactiva: **+6.81€** (BTC#15min pasa de IC=+0.029 → IC=+0.143 con filtro).
+**Revisable con n≥60** ops en BTC#15min con la feature registrada.
+
+### H-BTC-ETH-MOMENTUM-REVERSION 🔬 NUEVA — 2026-06-27
+
+BTC y ETH muestran comportamientos opuestos en drift_15min:
+- **BTC**: funciona con **momentum** (drift>+0.3 IC=+0.152) — sigue el impulso
+- **ETH**: funciona con **reversión** (drift<−1 IC=+0.087 n=14) — revierte el exceso
+
+Hipótesis: la liquidez y capitalización de cada activo determina su régimen. BTC (más institucional) tiene momentum más claro; ETH (más especulativo) revierte más.
+**Acción**: cuando ETH#15min drift<−1 tenga n≥20 y IC sostenido → implementar boost ×1.1 para ETH en esa zona.
+**Tracking automático**: H-CUSTOM-ETH15-REVERSION en hipotesis_custom.json.
 
 ---
 
@@ -300,6 +330,42 @@ Con bankroll=20€ e IC=0.10 → stake=1.00€. Sube cada día con las ganancias
 - `UPDOWN_GBM#BTC#15min` — IC=+0.079 n=36 → 4 ops para n≥40, pero IC bajo umbral (tendencia bajando)
 - `UPDOWN_GBM#ETH#60min` — IC=+0.090 n=18 → 22 ops más, IC por encima del umbral
 - `UPDOWN_GBM#BTC#60min` — IC=+0.066 n=15 → 25 ops más, IC en recuperación
+
+---
+
+## Sistema de hipótesis automático — hypothesis_tracker.py
+
+Evaluación autónoma de hipótesis cada ciclo de postmortem (~23min).
+
+```
+shadow_postmortem → hypothesis_tracker.run() → hipotesis_auto.md
+                                              → hipotesis_pendientes.json
+                                              → _auto_apply() → strategy_params.json["meta"]
+                                              → shadow_predict lee meta_params cada ciclo
+```
+
+### Hipótesis builtin (14, en hypothesis_tracker.py):
+H-REGIMEN, H-60MIN, H-ORDER_FLOW-DECAY, H-DRIFT-EFECTO, H-VENTANAS-HORARIAS,
+H-DRIFT60-BUY_YES_15MIN, H-OU-5MIN, H-5MIN-REVERSIÓN, H-WEEKLY-PRICE,
+H-GBM-18H, H-CROSS-ASSET, H-KELLY-HORA, H-BLACKLIST-02H, H-BLACKLIST-07H.
+
+### Hipótesis custom (11, en data/shadow/hipotesis_custom.json):
+H-CUSTOM-GBM-17H-BTC, H-CUSTOM-OF-MADRUGADA, H-CUSTOM-GBM-SIGMA-ALTO,
+H-CUSTOM-OF-02H-BTCSOL, H-CUSTOM-OF-07H-BTCSOL,
+H-CUSTOM-GBM-60MIN-BUYYES, H-CUSTOM-GBM-60MIN-BUYNO,
+H-CUSTOM-GBM-18H (auto-P5), H-CUSTOM-BUYYES-15MIN-POSTFILTRO,
+H-CUSTOM-GBM-SIGMA-BAJO, H-CUSTOM-BTC15-TENDENCIA,
+H-CUSTOM-DRIFT15-ZONA-MUERTA, H-CUSTOM-DRIFT15-MOMENTUM, H-CUSTOM-ETH15-REVERSION.
+
+### Auto-apply implementado:
+- H-GBM-18H → `meta.gbm_blacklist_hours_auto` (shadow_predict lo lee y aplica el skip)
+- H-KELLY-HORA → `meta.hora_boost_factor` (shadow_predict aplica ×factor en stake)
+- Para añadir nuevas hipótesis: editar `data/shadow/hipotesis_custom.json` (sin tocar código)
+
+### Dashboard web:
+- URL: `http://37.27.249.72:8888` (IPv4 directa)
+- Polling cada 1s, LightweightCharts servido localmente en `/lc.js`
+- ThreadedHTTPServer + cache 1s para no bloquear conexiones concurrentes
 
 ---
 
@@ -381,72 +447,70 @@ Ver `LIVE_PLAN.md`. Checklist: instalar MetaMask → red Polygon → comprar 30 
 **Antes de dinero real**: conectar con Polymarket Paper Trader (ver TOOLS.md) para validar live_trade.py.
 
 ### P1 — Primer trade real (esta semana)
-**BUY_NO #15min**: n=40, IC=+0.119 → **CUMPLE UMBRAL IC≥0.10 n≥40 — SOLO FALTA CREDENCIAL**
-**SOL#15min**: n=36, IC=+0.053 → ETA hoy sáb 27 Jun (4 ops)
-**BTC#60min**: n=17, IC=+0.112 → mejor IC activo — ETA lunes 29 Jun (23 ops)
-**ETH#60min**: n=19, IC=+0.068 → ETA domingo 28 Jun-lunes 29 (19-21 ops)
-**BTC#15min**: n=43, IC=+0.056 → n≥40 alcanzado pero IC<0.08 — monitorear
+**BUY_NO #15min**: n=40+, IC=+0.119 → **CUMPLE UMBRAL IC≥0.10 n≥40 — SOLO FALTA CREDENCIAL**
+**BTC#15min filtrado** (drift≥0.3): IC=+0.152 n=13+ → pendiente acumular n≥40 en zona buena
+**BTC#60min**: n=17+, IC=+0.112 → ETA lunes 29 Jun (~23 ops)
+**ETH#60min**: n=19+, IC=+0.068 → ETA domingo 28 Jun-lunes 29 (~19-21 ops)
 
 ### P2 — ✅ COMPLETADO — Dirección como feature de live (BUY_NO vs BUY_YES)
 Implementado 2026-06-26: postmortem trackea BUY_YES/BUY_NO separado en strategy_params.
-shadow_predict aplica Kelly específico por dirección tras determinar dec.
-BUY_YES #15min: stake mínimo 0.50€. BUY_NO #15min: stake 1.34€ (IC=+0.134).
 
 ### P3 — ✅ COMPLETADO — Filtro drift_60min en BUY_YES #15min
-Implementado 2026-06-26 noche: solo operar BUY_YES #15min cuando drift_60min ∈ [0, +0.5%).
-IC fuera: ≈0 (n=59, PNL=-7.94€). IC dentro: +0.208 (n=22, PNL=+8.32€). Mejora: +16.26€ retroactivo.
-**Próxima acción**: monitorear n forward. Con n≥20 ops nuevas revisar si IC se sostiene ≥0.15.
-Con n≥40 revisar si el umbral superior (0.5%) es óptimo o cabe subir a 0.7%.
+Implementado 2026-06-26 noche. **Forward n=18: IC=-0.045** — aún pronto. Revisar con n≥40.
 
 ### P4 — ✅ COMPLETADO — ORDER_FLOW solo BUY_NO (delta negativo)
-Implementado 2026-06-26 noche: `if delta_ratio > 0: return None` en `s_order_flow_5m`.
-Análisis n=271 BTC+SOL: BUY_NO IC=+0.092 PNL=+8.64€ vs BUY_YES IC=−0.038 PNL=−4.10€.
-Razón: presión compradora ya visible → priceada en Polymarket; presión vendedora silenciosa → lag.
-Mejora retroactiva: +4.10€ eliminados + IC sweet spot +0.058→+0.092.
-**Monitorear**: con n≥40 nuevas ops verificar IC≥0.08. Si cae → revisar DELTA_MIN.
+Implementado 2026-06-26 noche. Mejora: +4.10€ eliminados + IC +0.058→+0.092.
 
-### P5 — PENDIENTE — Bloquear hora 18h UTC en GBM
-GBM a las 18h UTC: IC=−0.148, n=11, PNL=−2.83€. Ya bloqueada para ORDER_FLOW.
-**Acción cuando n≥15**: añadir `GBM_BLACKLIST_HOURS = {18}` en shadow_predict.py,
-check en `s_updown_gbm` justo antes de calcular p_up. Posible extensión a `{7, 18}`.
-**No implementar antes de n≥15** — con n=11 e IC=−0.148 aún podría ser ruido.
+### P5 — ✅ TRACKING AUTOMÁTICO — Bloquear hora 18h UTC en GBM
+H-CUSTOM-GBM-18H en hipotesis_custom.json → auto-aplica cuando n≥15 e IC<−0.08.
+**No implementar manualmente** — el hypothesis_tracker lo hará solo.
 
 ### P6 — PENDIENTE — Cross-asset confirmation (reemplaza Kelly compuesto muerto)
-El Kelly compuesto actual (mismo market_id) nunca dispara: GBM=15min, OF=5min, solo 5 solapamientos.
-**Nueva lógica**: GBM BUY_NO en ASSET#15min + OF BUY_NO en ASSET#5min en misma ventana → boost ×1.5.
-En `_aplicar_kelly_compuesto`: buscar coincidencia por `subtype.split('#')[0]` (activo) en vez de market_id.
-**Esperar**: n≥20 ops BUY_NO OF post-filtro para calibrar frecuencia de coincidencia temporal.
+GBM BUY_NO en ASSET#15min + OF BUY_NO en ASSET#5min en misma ventana → boost ×1.5.
+En `_aplicar_kelly_compuesto`: buscar por `subtype.split('#')[0]` (activo) en vez de market_id.
+**Esperar**: n≥20 ops BUY_NO OF post-filtro para calibrar frecuencia temporal.
 
 ### P7 — PENDIENTE — Kelly por hora (boost en ventanas de alta rentabilidad)
-Horas top en activas: 15h UTC IC=+0.147 (n=32), 17h IC=+0.107 (n=26), 19h IC=+0.151 (n=41).
-Idea: apuesta ×1.2 en esas horas, ×0.8 en horas neutras (IC ∈ [−0.05,+0.05]).
-**No implementar antes de**: n≥40 por hora confirmado estable en forward.
+Forward data muestra H=13h y H=19h negativos (contrario al histórico). Solo H=17h sólido (IC=+0.204 n=25).
+**No implementar aún** — hypothesis_tracker H-KELLY-HORA lo monitorea. Esperar n≥40 por hora en forward.
 
 ### P8 — PENDIENTE — ORDER_FLOW rangos per-par
-Backfill calibró: BTC 0.42-0.44, SOL 0.36-0.40. No aplicar aún (n<200 con nuevo filtro BUY_NO activo).
-Validar cuando BTC+SOL tengan n≥200 cada uno con blacklist {2,7,9,10,11,22} + BUY_NO-only.
+Backfill calibró: BTC 0.42-0.44, SOL 0.36-0.40. No aplicar (n<200 con filtros actuales).
 
-### P9 — PENDIENTE — Dataset Jon-Becker
-`github.com/Jon-Becker/prediction-market-analysis` — 36GB histórico.
-Desbloquea: calibrar theta OU, OBI, Cross-Market Arb, validar rangos OF per-par.
+### P9 — ✅ COMPLETADO (análisis online) — Dataset Jon-Becker
+Repo analizado online. Dataset 36GB en S3 pendiente de descargar para backtesting masivo.
+Hipótesis a validar con el dataset: H-DRIFT15 umbral exacto, DRIFT_DAMPING, H-WEEKLY-PRICE, DELTA_MAX.
+
+### P10 — NUEVO — ETH#15min mean-reversion (drift<−1)
+ETH#15min con drift_15min<−1: 9/14 (64%) IC=+0.087. BTC en la misma zona: IC=+0.048.
+**Acción cuando n≥20**: si IC ETH se sostiene ≥0.08 → implementar boost ×1.1.
+Tracking: H-CUSTOM-ETH15-REVERSION en hipotesis_custom.json.
+
+### P11 — NUEVO — Revisar blacklist OF horas 02h y 07h (BTC+SOL)
+H=02h BTC+SOL: 4/5 (80%) IC=+0.054. H=07h BTC+SOL: 7/12 (58%) IC=+0.043.
+El blacklist fue calculado incluyendo ETH/XRP/DOGE que ya están excluidos.
+**Acción cuando n≥20**: si IC≥+0.05 con BTC+SOL → eliminar esas horas del ORDER_FLOW_BLACKLIST_HOURS.
+Tracking: H-CUSTOM-OF-02H-BTCSOL y H-CUSTOM-OF-07H-BTCSOL en hipotesis_custom.json.
 
 ---
 
-## Análisis retroactivo — cuánto valen los ajustes (2026-06-26)
+## Análisis retroactivo — cuánto valen los ajustes (actualizado 2026-06-27)
 
-Con todos los filtros aplicados desde el inicio, el bankroll simulado sería **60-68€** en vez de 5.17€:
+Con todos los filtros aplicados desde el inicio, el bankroll simulado sería **~75€** en vez de ~5€:
 
 | Escenario | Bankroll | PNL |
 |---|---|---|
-| Real (como ha pasado) | **5.17€** | −14.83€ |
+| Real (como ha pasado) | **~5€** | ~−15€ |
 | + Sin OU_5M + SMART_FLOW | 27.88€ | +7.88€ |
 | + Sin GBM 5min | 31.79€ | +11.79€ |
 | + Sin GBM 240min | 36.82€ | +16.82€ |
 | + Blacklist horas {7,11,18} | 51.24€ | +31.24€ |
 | + Sin ORDER_FLOW ETH+BNB+XRP+DOGE | 54.40€ | +34.40€ |
-| **+ Blacklist ampliado {2,7,9,10,11,22}** | **~68€** | **~+48€** |
+| + Blacklist ampliado {2,7,9,10,11,22} | ~68€ | ~+48€ |
+| **+ BTC#15min drift≥0.3 (2026-06-27)** | **~75€** | **~+55€** |
 
-El mayor error fue OU_5M + SMART_FLOW (+22.71€ perdidos). El segundo mayor fue no tener el blacklist horario completo (total +31.30€ retroactivo con ambas expansiones). Los rangos per-par del backfill no mejoran retroactivamente porque son demasiado estrechos con el n actual.
+El mayor error fue OU_5M + SMART_FLOW (+22.71€ perdidos). El segundo mayor fue no tener el blacklist horario completo (total +31.30€ retroactivo). BTC#15min drift filter añade +6.81€ adicional retroactivo.
+**Próximos candidatos con más n**: drift_60min BUY_YES forward validation, ETH#15min reversion.
 
 ---
 
