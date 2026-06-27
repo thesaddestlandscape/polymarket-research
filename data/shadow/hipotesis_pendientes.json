@@ -5,7 +5,7 @@
     "umbral": 15,
     "accion": "Añadir 18 a GBM_BLACKLIST_HOURS en shadow_predict.py",
     "bloqueante": null,
-    "actualizado": "2026-06-27T11:17+00:00",
+    "actualizado": "2026-06-27T11:18+00:00",
     "n": 13,
     "wins": 4,
     "ic": -0.1083,
@@ -19,7 +19,7 @@
     "umbral": 40,
     "accion": "Añadir ibs_15 como boost/filtro en FEATURE_RULES de shadow_postmortem.py",
     "bloqueante": null,
-    "actualizado": "2026-06-27T11:17+00:00",
+    "actualizado": "2026-06-27T11:18+00:00",
     "n": 1,
     "wins": 0,
     "ic": -0.0083,
@@ -33,7 +33,7 @@
     "umbral": 20,
     "accion": "El sistema lo aplica automáticamente vía FEATURE_RULES. Verificar en strategy_params.json.",
     "bloqueante": null,
-    "actualizado": "2026-06-27T11:17+00:00",
+    "actualizado": "2026-06-27T11:18+00:00",
     "n": 1,
     "status": "ACUMULANDO",
     "rec": "Solo 1 ops GBM con hora_utc en features. Esperar n≥20 para patrones."
@@ -44,7 +44,7 @@
     "umbral": "n_overlaps≥20 y IC_overlap > IC_base + 0.05",
     "accion": "Cambiar _aplicar_kelly_compuesto: match por activo, no market_id",
     "bloqueante": null,
-    "actualizado": "2026-06-27T11:17+00:00",
+    "actualizado": "2026-06-27T11:18+00:00",
     "n_overlaps": 17,
     "ic_overlap": 0.0745,
     "ic_base": 0.0542,
@@ -58,7 +58,7 @@
     "umbral": "n≥200 por par con delta_ratio feature en shadow",
     "accion": "Añadir DELTA_MIN/MAX por par dict en shadow_predict.py",
     "bloqueante": null,
-    "actualizado": "2026-06-27T11:17+00:00",
+    "actualizado": "2026-06-27T11:18+00:00",
     "by_pair": {
       "BTC": {
         "n": 73,
@@ -134,7 +134,7 @@
     "umbral": "n≥40 por hora con IC estable ≥+0.10 confirmado en forward",
     "accion": "Añadir HORA_BOOST = {13: 1.2, 15: 1.2, 17: 1.2, 19: 1.2} en shadow_predict.py",
     "bloqueante": null,
-    "actualizado": "2026-06-27T11:17+00:00",
+    "actualizado": "2026-06-27T11:18+00:00",
     "by_hour": {
       "13": {
         "n": 82,
@@ -178,7 +178,7 @@
     "umbral": "IC≥0.08 y n≥40 en cualquier subtipo 60min",
     "accion": "Activar live cuando haya credenciales Polymarket API",
     "bloqueante": null,
-    "actualizado": "2026-06-27T11:17+00:00",
+    "actualizado": "2026-06-27T11:18+00:00",
     "by_subtype": {
       "ETH#60min": {
         "n": 20,
@@ -218,7 +218,7 @@
     "umbral": "IC≥0.08 y n≥40",
     "accion": "Activar live cuando haya credenciales Polymarket API",
     "bloqueante": null,
-    "actualizado": "2026-06-27T11:17+00:00",
+    "actualizado": "2026-06-27T11:18+00:00",
     "n": 34,
     "wins": 18,
     "ic": 0.0278,
@@ -232,7 +232,7 @@
     "umbral": "n≥15 por par con IC≥+0.05",
     "accion": "Si confirma IC≥+0.10 n≥15 en SOL → considerar live semanal",
     "bloqueante": null,
-    "actualizado": "2026-06-27T11:17+00:00",
+    "actualizado": "2026-06-27T11:18+00:00",
     "by_pair": {
       "ETH": {
         "n": 8,
@@ -269,7 +269,7 @@
     "umbral": "Dataset Jon-Becker + API CLOB con orderbook histórico",
     "accion": "Implementar s_obi en shadow_predict.py usando L2 orderbook",
     "bloqueante": "JON_BECKER_DATASET",
-    "actualizado": "2026-06-27T11:17+00:00",
+    "actualizado": "2026-06-27T11:18+00:00",
     "status": "BLOQUEADA_DATASET",
     "rec": "Descargar github.com/Jon-Becker/prediction-market-analysis (36GB). Analizar spread bid/ask e imbalance por mercado en 60min previos a resolución."
   },
@@ -279,7 +279,7 @@
     "umbral": "Dataset Jon-Becker con series de precios históricos suficientes",
     "accion": "Ajustar THETA_OU por par en strategy_params.json (BTC/ETH/SOL independientes)",
     "bloqueante": "JON_BECKER_DATASET",
-    "actualizado": "2026-06-27T11:17+00:00",
+    "actualizado": "2026-06-27T11:18+00:00",
     "status": "BLOQUEADA_DATASET",
     "rec": "Descargar github.com/Jon-Becker/prediction-market-analysis (36GB). Fit OU sobre series históricas por par y estimar theta por MLE."
   },
@@ -289,7 +289,7 @@
     "umbral": "n≥200 ops GBM forward con hora_utc/ibs_15, o dataset Jon-Becker",
     "accion": "Implementar hmmlearn sobre features GBM; condicionar estrategia al régimen detectado",
     "bloqueante": "JON_BECKER_DATASET",
-    "actualizado": "2026-06-27T11:17+00:00",
+    "actualizado": "2026-06-27T11:18+00:00",
     "status": "BLOQUEADA_DATASET",
     "rec": "Descargar github.com/Jon-Becker/prediction-market-analysis (36GB). Entrenar HMM 3-estado sobre (drift_60min, sigma_h) histórico. Validar en forward."
   },
@@ -299,7 +299,7 @@
     "umbral": "n≥200 por subtipo para calibrar parámetros Q/R del KF",
     "accion": "Sustituir DRIFT_DAMPING por KalmanDrift en fetch_binance_klines.py",
     "bloqueante": "N_INSUFICIENTE",
-    "actualizado": "2026-06-27T11:17+00:00",
+    "actualizado": "2026-06-27T11:18+00:00",
     "status": "ACUMULANDO",
     "max_n": 287,
     "rec": "Máximo n actual en GBM: 287/200. Esperar 3+ subtypes con n≥200."
@@ -310,7 +310,7 @@
     "umbral": "API Kalshi activa + credenciales Polymarket live",
     "accion": "Extender arb_scanner.py con endpoints Kalshi; comparar mismo evento cross-plataforma",
     "bloqueante": "API_KALSHI",
-    "actualizado": "2026-06-27T11:17+00:00",
+    "actualizado": "2026-06-27T11:18+00:00",
     "status": "BLOQUEADA_API",
     "rec": "Requiere acceso API Kalshi + credenciales Polymarket live"
   }
