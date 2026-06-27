@@ -1,5 +1,5 @@
-# Hipótesis automáticas — 2026-06-27 16:00 UTC
-_Generado por shadow_postmortem.py sobre 1211 resoluciones (PNL=-27.60€)_
+# Hipótesis automáticas — 2026-06-27 16:01 UTC
+_Generado por shadow_postmortem.py sobre 1213 resoluciones (PNL=-24.90€)_
 
 ## Patrones causales activos
 
@@ -39,12 +39,12 @@ _Sin sugerencias automáticas con datos actuales. Ampliar n por estrategia._
 | ✅ PRICE_TARGET_GBM#atexpiry | 23 | +0.020 | -2.79€ | 0 | 0 |
 | 🚫 SMART_FLOW_1H | 22 | -0.250 | -10.12€ | 0 | 0 |
 | ✅ SMART_FLOW_1H#BTC | 8 | -0.040 | -1.95€ | 0 | 0 |
-| ✅ UPDOWN_GBM | 298 | -0.003 | -3.09€ | 0 | 0 |
+| ✅ UPDOWN_GBM | 299 | -0.002 | -1.47€ | 0 | 0 |
 | ✅ UPDOWN_GBM#15min | 167 | +0.038 | +6.53€ | 0 | 0 |
 | 🚫 UPDOWN_GBM#240min | 12 | -0.171 | -4.82€ | 0 | 0 |
 | 🚫 UPDOWN_GBM#5min | 56 | -0.155 | -16.64€ | 0 | 0 |
 | ✅ UPDOWN_GBM#60min | 54 | +0.089 | +5.68€ | 0 | 0 |
-| ✅ UPDOWN_GBM#BTC | 92 | +0.000 | -3.12€ | 0 | 0 |
+| ✅ UPDOWN_GBM#BTC | 93 | +0.005 | -1.50€ | 0 | 0 |
 | ✅ UPDOWN_GBM#BTC#15min | 49 | +0.029 | -0.44€ | 0 | 1 |
 | ✅ UPDOWN_GBM#BTC#240min | 5 | -0.089 | -2.96€ | 0 | 0 |
 | 🚫 UPDOWN_GBM#BTC#5min | 16 | -0.133 | -6.30€ | 0 | 0 |
@@ -61,7 +61,7 @@ _Sin sugerencias automáticas con datos actuales. Ampliar n por estrategia._
 | ✅ UPDOWN_GBM#XRP | 22 | -0.042 | -0.49€ | 0 | 0 |
 | ✅ UPDOWN_GBM#XRP#15min | 13 | +0.022 | +1.37€ | 0 | 0 |
 | 🚫 UPDOWN_GBM#XRP#5min | 9 | -0.061 | -1.86€ | 0 | 0 |
-| ✅ UPDOWN_GBM#daily | 7 | +0.058 | +8.01€ | 0 | 0 |
+| ✅ UPDOWN_GBM#daily | 8 | +0.080 | +9.63€ | 0 | 0 |
 | 🚫 UPDOWN_OU_5M | 57 | -0.229 | -13.76€ | 0 | 0 |
 | 🚫 UPDOWN_OU_5M#5min | 57 | -0.229 | -13.76€ | 0 | 0 |
 | 🚫 UPDOWN_OU_5M#BNB | 8 | -0.160 | -4.56€ | 0 | 0 |
@@ -76,9 +76,9 @@ _Sin sugerencias automáticas con datos actuales. Ampliar n por estrategia._
 | ✅ UPDOWN_OU_5M#SOL#5min | 10 | -0.042 | -1.06€ | 0 | 0 |
 | ✅ UPDOWN_OU_5M#XRP | 11 | -0.064 | -1.65€ | 0 | 0 |
 | ✅ UPDOWN_OU_5M#XRP#5min | 11 | -0.064 | -1.65€ | 0 | 0 |
-| ✅ WEEKLY_PRICE | 29 | +0.048 | -4.78€ | 0 | 0 |
+| ✅ WEEKLY_PRICE | 30 | +0.062 | -3.70€ | 0 | 0 |
 | ✅ WEEKLY_PRICE#BTC | 10 | -0.042 | -4.26€ | 0 | 0 |
-| ✅ WEEKLY_PRICE#ETH | 10 | +0.042 | -1.76€ | 0 | 0 |
+| ✅ WEEKLY_PRICE#ETH | 11 | +0.064 | -0.68€ | 0 | 0 |
 | ✅ WEEKLY_PRICE#SOL | 9 | +0.061 | +1.24€ | 0 | 0 |
 ## Hipótesis pendientes — tracking automático
 
@@ -131,12 +131,12 @@ _Sin sugerencias automáticas con datos actuales. Ampliar n por estrategia._
 **⏳ H-WEEKLY** — Predicciones semanales de precio por par
   - _Umbral_: n≥15 por par con IC≥+0.05
   - _Acción_: Si confirma IC≥+0.10 n≥15 en SOL → considerar live semanal
-  - _Estado_: ETH: n=10/15 IC=+0.042 PNL=-1.76€ | BTC: n=10/15 IC=-0.042 PNL=-4.26€ | SOL: n=9/15 IC=+0.061 PNL=+1.24€
+  - _Estado_: ETH: n=11/15 IC=+0.064 PNL=-0.68€ | BTC: n=10/15 IC=-0.042 PNL=-4.26€ | SOL: n=9/15 IC=+0.061 PNL=+1.24€
 
 **⏳ H-KALMAN** — Kalman filter para drift adaptativo
   - _Umbral_: n≥200 por subtipo para calibrar parámetros Q/R del KF
   - _Acción_: Sustituir DRIFT_DAMPING por KalmanDrift en fetch_binance_klines.py
-  - _Estado_: Máximo n actual en GBM: 298/200. Esperar 3+ subtypes con n≥200.
+  - _Estado_: Máximo n actual en GBM: 299/200. Esperar 3+ subtypes con n≥200.
   - _Bloqueante_: N_INSUFICIENTE
 
 
@@ -186,8 +186,8 @@ _Sin sugerencias automáticas con datos actuales. Ampliar n por estrategia._
   - _Hipótesis_: Cuando la volatilidad horaria es muy alta el GBM puede sobreestimar el edge. Testear.
   - _Umbral_: n≥30 y IC<-0.05
   - _Acción_: Filtrar señales GBM cuando sigma_h > 0.002 si se confirma IC negativo
-  - _Estado_: n=199 IC=+0.017 PNL=+2.55€ — sin señal clara aún (umbral IC: min=None max=-0.05)
-  - _Datos_: n=199 IC=+0.017 PNL=+2.55€
+  - _Estado_: n=200 IC=+0.020 PNL=+4.17€ — sin señal clara aún (umbral IC: min=None max=-0.05)
+  - _Datos_: n=200 IC=+0.020 PNL=+4.17€
 
 **⏳ H-CUSTOM-OF-02H-BTCSOL** — ORDER_FLOW H=02h UTC — BTC+SOL solamente (revisar blacklist)
   - _Hipótesis_: La hora 02h está en el blacklist basado en TODOS los pares. Con BTC+SOL solo, el historial muestra 4/5 (80%) IC=+0.054. ¿Se confirma la señal positiva con más datos?
