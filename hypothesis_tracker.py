@@ -32,6 +32,7 @@ REPO             = Path(__file__).parent
 RESULTS_CSV      = REPO / "data/shadow/results.csv"
 STRATEGY_PARAMS  = REPO / "data/shadow/strategy_params.json"
 HIPOTESIS_JSON   = REPO / "data/shadow/hipotesis_pendientes.json"
+HIPOTESIS_CUSTOM = REPO / "data/shadow/hipotesis_custom.json"
 JON_BECKER_DIR   = REPO / "data/jon_becker"
 
 # ── Utilidades ────────────────────────────────────────────────────────────────
@@ -409,6 +410,97 @@ def _eval_weekly_price(rows):
             "rec": " | ".join(v["rec"] for v in results.values()) or "Sin datos WEEKLY_PRICE"}
 
 
+# ── Evaluador genérico para hipótesis custom (JSON sin código) ───────────────
+
+def _aplicar_filtro(row, filtro):
+    """Devuelve True si el row cumple todos los filtros del dict."""
+    if not filtro:
+        return True
+
+    strat = row.get("strategy", "")
+    sub   = row.get("subtype", "")
+    dec   = row.get("decision", "")
+
+    if "strategy_prefix" in filtro and not strat.startswith(filtro["strategy_prefix"]):
+        return False
+    if "subtype_contains" in filtro and filtro["subtype_contains"] not in sub:
+        return False
+    if "decision" in filtro and dec != filtro["decision"]:
+        return False
+    if "par" in filtro and filtro["par"] not in sub:
+        return False
+    if "par_excluir" in filtro and any(p in sub for p in filtro["par_excluir"]):
+        return False
+
+    # Hora UTC desde timestamp de resolución
+    ts = row.get("resolution_timestamp", "")
+    hora = None
+    try:
+        hora = int(ts[11:13]) if len(ts) >= 13 else None
+    except Exception:
+        pass
+    # También intenta desde feature hora_utc
+    if hora is None:
+        hora = _feat(row, "hora_utc")
+
+    if "hora_utc" in filtro:
+        if hora != filtro["hora_utc"]:
+            return False
+    if "hora_utc_desde" in filtro and (hora is None or hora < filtro["hora_utc_desde"]):
+        return False
+    if "hora_utc_hasta" in filtro and (hora is None or hora > filtro["hora_utc_hasta"]):
+        return False
+
+    # Feature numérica
+    if "feature" in filtro:
+        val = _feat(row, filtro["feature"])
+        if val is None:
+            return False
+        if "feature_lo" in filtro and filtro["feature_lo"] is not None and val < filtro["feature_lo"]:
+            return False
+        if "feature_hi" in filtro and filtro["feature_hi"] is not None and val >= filtro["feature_hi"]:
+            return False
+
+    return True
+
+
+def _eval_custom(h_def, rows):
+    """Evalúa una hipótesis custom definida en JSON."""
+    filtro = h_def.get("filtro", {})
+    subset = [r for r in rows if _aplicar_filtro(r, filtro)]
+    s = _stats(subset)
+
+    umbral_n      = h_def.get("umbral_n", 20)
+    ic_min        = h_def.get("umbral_ic_min")   # positivo → confirma boost
+    ic_max        = h_def.get("umbral_ic_max")   # negativo → confirma filtro
+
+    if s["n"] < umbral_n:
+        return {**s, "status": "ACUMULANDO", "umbral": umbral_n,
+                "rec": f"{s['n']}/{umbral_n} ops en el filtro definido (IC actual={s['ic']:+.3f} PNL={s['pnl']:+.2f}€)"}
+
+    if ic_max is not None and s["ic"] < ic_max:
+        return {**s, "status": "LISTA_IMPLEMENTAR",
+                "rec": f"SEÑAL NEGATIVA confirmada: IC={s['ic']:+.3f} < {ic_max} con n={s['n']} PNL={s['pnl']:+.2f}€"}
+
+    if ic_min is not None and s["ic"] > ic_min:
+        return {**s, "status": "LISTA_EVALUAR",
+                "rec": f"SEÑAL POSITIVA confirmada: IC={s['ic']:+.3f} > {ic_min} con n={s['n']} PNL={s['pnl']:+.2f}€"}
+
+    return {**s, "status": "SEÑAL_DEBIL",
+            "rec": f"n={s['n']} IC={s['ic']:+.3f} PNL={s['pnl']:+.2f}€ — sin señal clara aún (umbral IC: min={ic_min} max={ic_max})"}
+
+
+def _cargar_hipotesis_custom():
+    """Lee hipotesis_custom.json y devuelve lista de definiciones."""
+    if not HIPOTESIS_CUSTOM.exists():
+        return []
+    try:
+        data = json.loads(HIPOTESIS_CUSTOM.read_text(encoding="utf-8"))
+        return data.get("hipotesis", [])
+    except Exception:
+        return []
+
+
 # ── Evaluadores hipótesis bloqueadas ─────────────────────────────────────────
 
 def _eval_blocked_jon_becker(desc):
@@ -649,13 +741,14 @@ def _auto_apply(resultados):
 
 
 def run(rows=None):
-    """Evalúa todas las hipótesis. Devuelve dict id→resultado y escribe JSON."""
+    """Evalúa todas las hipótesis (builtin + custom). Devuelve dict id→resultado y escribe JSON."""
     if rows is None:
         rows = _load_results()
 
     now = datetime.now(timezone.utc).isoformat(timespec="minutes")
     resultados = {}
 
+    # Hipótesis builtin
     for h in HIPOTESIS:
         try:
             result = h["eval_fn"](rows)
@@ -663,11 +756,32 @@ def run(rows=None):
             result = {"status": "ERROR", "rec": str(e)}
 
         resultados[h["id"]] = {
-            "nombre":    h["nombre"],
-            "tipo":      h["tipo"],
-            "umbral":    h["umbral"],
-            "accion":    h["accion"],
+            "nombre":     h["nombre"],
+            "tipo":       h["tipo"],
+            "umbral":     h["umbral"],
+            "accion":     h["accion"],
             "bloqueante": h.get("bloqueante"),
+            "fuente":     "builtin",
+            "actualizado": now,
+            **result,
+        }
+
+    # Hipótesis custom (del JSON editable)
+    custom_defs = _cargar_hipotesis_custom()
+    for h_def in custom_defs:
+        hid = h_def.get("id", f"H-CUSTOM-{len(resultados)}")
+        try:
+            result = _eval_custom(h_def, rows)
+        except Exception as e:
+            result = {"status": "ERROR", "rec": str(e)}
+
+        resultados[hid] = {
+            "nombre":     h_def.get("nombre", hid),
+            "tipo":       h_def.get("tipo", "custom"),
+            "umbral":     h_def.get("umbral", ""),
+            "accion":     h_def.get("accion", ""),
+            "descripcion": h_def.get("descripcion", ""),
+            "fuente":     "custom",
             "actualizado": now,
             **result,
         }
@@ -694,7 +808,13 @@ def generate_markdown_section(resultados=None):
         else:
             return ""
 
-    # Agrupar por urgencia
+    builtin_ids  = {h["id"] for h in HIPOTESIS}
+    custom_items = [(hid, d) for hid, d in resultados.items()
+                    if d.get("fuente") == "custom" or hid not in builtin_ids]
+    builtin_only = {hid: d for hid, d in resultados.items()
+                    if hid in builtin_ids}
+
+    # Agrupar builtin por urgencia
     grupos = {
         "🔴 Listas para implementar YA": [],
         "🟢 Listas para live":           [],
@@ -703,7 +823,7 @@ def generate_markdown_section(resultados=None):
         "🔒 Bloqueadas (requieren dataset/API)": [],
     }
 
-    for hid, d in resultados.items():
+    for hid, d in builtin_only.items():
         s = d.get("status", "")
         if s == "LISTA_IMPLEMENTAR":
             grupos["🔴 Listas para implementar YA"].append((hid, d))
@@ -719,29 +839,40 @@ def generate_markdown_section(resultados=None):
 
     lines = ["\n## Hipótesis pendientes — tracking automático\n"]
 
+    def _render_item(hid, d):
+        icon = STATUS_ICON.get(d.get("status", ""), "❓")
+        lines.append(f"**{icon} {hid}** — {d['nombre']}")
+        if d.get("descripcion") and d.get("fuente") == "custom":
+            lines.append(f"  - _Hipótesis_: {d['descripcion']}")
+        lines.append(f"  - _Umbral_: {d.get('umbral', '')}")
+        if d.get("accion"):
+            lines.append(f"  - _Acción_: {d['accion']}")
+        rec = d.get("rec", "")
+        if rec:
+            lines.append(f"  - _Estado_: {rec}")
+        n   = d.get("n") or d.get("n_overlaps") or d.get("n_total")
+        ic  = d.get("ic")
+        pnl = d.get("pnl")
+        if n is not None and ic is not None:
+            extra = f" PNL={pnl:+.2f}€" if pnl is not None else ""
+            lines.append(f"  - _Datos_: n={n} IC={ic:+.3f}{extra}")
+        bl = d.get("bloqueante")
+        if bl:
+            lines.append(f"  - _Bloqueante_: {bl}")
+        lines.append("")
+
     for grupo, items in grupos.items():
         if not items:
             continue
         lines.append(f"\n### {grupo}\n")
         for hid, d in items:
-            icon = STATUS_ICON.get(d.get("status", ""), "❓")
-            lines.append(f"**{icon} {hid}** — {d['nombre']}")
-            lines.append(f"  - _Umbral_: {d.get('umbral', '')}")
-            if d.get("accion"):
-                lines.append(f"  - _Acción_: {d['accion']}")
-            rec = d.get("rec", "")
-            if rec:
-                lines.append(f"  - _Estado_: {rec}")
-            n   = d.get("n") or d.get("n_overlaps") or d.get("n_total")
-            ic  = d.get("ic")
-            pnl = d.get("pnl")
-            if n is not None and ic is not None:
-                extra = f" PNL={pnl:+.2f}€" if pnl is not None else ""
-                lines.append(f"  - _Datos_: n={n} IC={ic:+.3f}{extra}")
-            bl = d.get("bloqueante")
-            if bl:
-                lines.append(f"  - _Bloqueante_: {bl}")
-            lines.append("")
+            _render_item(hid, d)
+
+    # Sección separada para hipótesis custom
+    if custom_items:
+        lines.append("\n### 🧪 Hipótesis custom (editables en hipotesis_custom.json)\n")
+        for hid, d in custom_items:
+            _render_item(hid, d)
 
     return "\n".join(lines)
 

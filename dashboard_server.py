@@ -5,12 +5,14 @@ Lanzar:  screen -dmS dash python3 dashboard_server.py
 Acceso:  http://<VPS_IP>:8888
          o SSH tunnel: ssh -L 8888:localhost:8888 root@<VPS_IP> → http://localhost:8888
 """
-import csv, json, sys, time, threading
+import csv, json, sys, time, threading, socket
 from http.server import HTTPServer, BaseHTTPRequestHandler
 from socketserver import ThreadingMixIn
 from pathlib import Path
 from datetime import datetime, timezone, timedelta
 from collections import defaultdict
+
+STATIC_DIR = Path(__file__).parent / "static"
 
 REPO             = Path(__file__).parent
 RESULTS_CSV      = REPO / "data/shadow/results.csv"
@@ -428,7 +430,7 @@ HTML = r"""<!DOCTYPE html>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Polymarket Bot Dashboard</title>
-<script src="https://unpkg.com/lightweight-charts@4.2.0/dist/lightweight-charts.standalone.production.js"></script>
+<script src="/lc.js"></script>
 <style>
 :root {
   --bg:       #131722;
@@ -962,6 +964,8 @@ setInterval(fetchData, 1_000);
 
 # ─── Servidor HTTP ────────────────────────────────────────────────────────────
 
+_LC_JS = (STATIC_DIR / "lc.js").read_bytes() if (STATIC_DIR / "lc.js").exists() else b""
+
 class Handler(BaseHTTPRequestHandler):
     def do_GET(self):
         if self.path == "/api/data":
@@ -979,6 +983,13 @@ class Handler(BaseHTTPRequestHandler):
             self.send_header("Content-Length", len(body))
             self.end_headers()
             self.wfile.write(body)
+        elif self.path == "/lc.js":
+            self.send_response(200)
+            self.send_header("Content-Type", "application/javascript")
+            self.send_header("Content-Length", len(_LC_JS))
+            self.send_header("Cache-Control", "public, max-age=86400")
+            self.end_headers()
+            self.wfile.write(_LC_JS)
         else:
             self.send_response(404)
             self.end_headers()
@@ -989,11 +1000,13 @@ class Handler(BaseHTTPRequestHandler):
 
 class ThreadedHTTPServer(ThreadingMixIn, HTTPServer):
     daemon_threads = True
+    address_family  = socket.AF_INET6   # AF_INET6 soporta dual-stack IPv4+IPv6
 
 if __name__ == "__main__":
-    srv = ThreadedHTTPServer(("0.0.0.0", PORT), Handler)
-    print(f"Dashboard → http://0.0.0.0:{PORT}", flush=True)
-    print(f"SSH tunnel: ssh -L {PORT}:localhost:{PORT} root@<VPS_IP>", flush=True)
+    srv = ThreadedHTTPServer(("::", PORT), Handler)
+    print(f"Dashboard → http://0.0.0.0:{PORT}  (IPv4+IPv6)", flush=True)
+    print(f"Acceso directo: http://<VPS_IP>:{PORT}", flush=True)
+    print(f"SSH tunnel:     ssh -L {PORT}:localhost:{PORT} root@<VPS_IP>", flush=True)
     try:
         srv.serve_forever()
     except KeyboardInterrupt:
