@@ -1,5 +1,5 @@
-# Hipótesis automáticas — 2026-06-27 11:30 UTC
-_Generado por shadow_postmortem.py sobre 1183 resoluciones (PNL=-24.17€)_
+# Hipótesis automáticas — 2026-06-27 11:31 UTC
+_Generado por shadow_postmortem.py sobre 1185 resoluciones (PNL=-24.91€)_
 
 ## Patrones causales activos
 
@@ -9,9 +9,9 @@ _Generado por shadow_postmortem.py sobre 1183 resoluciones (PNL=-24.17€)_
   - _Acción_: Kelly boost +0.66€ cuando `pct_spot_vs_ref` |x|≤ 0.0502 (IC base=+0.029)
 
 ### UPDOWN_GBM#ETH#15min
-- **PATRÓN** `sigma_h` < `0.0116` → IC=+0.132 (n=17)
+- **PATRÓN** `sigma_h` < `0.0107` → IC=+0.132 (n=17)
   - _Por qué funciona_: baja volatilidad → señal GBM más fiable; el spread de Polymarket cubre mejor el edge
-  - _Acción_: Kelly boost +0.66€ cuando `sigma_h` < 0.0116 (IC base=+0.044)
+  - _Acción_: Kelly boost +0.66€ cuando `sigma_h` < 0.0107 (IC base=+0.036)
 
 ### UPDOWN_GBM#SOL#15min
 - **FILTRO** `drift_60min` |x|> `0.2212` → IC=-0.132 (n=17)
@@ -50,8 +50,8 @@ _Sin sugerencias automáticas con datos actuales. Ampliar n por estrategia._
 | ✅ PRICE_TARGET_GBM#atexpiry | 16 | +0.000 | -1.53€ | 0 | 0 |
 | 🚫 SMART_FLOW_1H | 20 | -0.273 | -9.86€ | 0 | 0 |
 | ✅ SMART_FLOW_1H#BTC | 6 | -0.037 | -1.69€ | 0 | 0 |
-| ✅ UPDOWN_GBM | 287 | -0.005 | -2.19€ | 0 | 0 |
-| ✅ UPDOWN_GBM#15min | 162 | +0.037 | +7.93€ | 0 | 0 |
+| ✅ UPDOWN_GBM | 289 | -0.005 | -2.92€ | 0 | 0 |
+| ✅ UPDOWN_GBM#15min | 164 | +0.036 | +7.19€ | 0 | 0 |
 | 🚫 UPDOWN_GBM#240min | 12 | -0.171 | -4.82€ | 0 | 0 |
 | 🚫 UPDOWN_GBM#5min | 56 | -0.155 | -16.64€ | 0 | 0 |
 | ✅ UPDOWN_GBM#60min | 50 | +0.096 | +5.70€ | 0 | 0 |
@@ -60,8 +60,8 @@ _Sin sugerencias automáticas con datos actuales. Ampliar n por estrategia._
 | ✅ UPDOWN_GBM#BTC#240min | 5 | -0.089 | -2.96€ | 0 | 0 |
 | 🚫 UPDOWN_GBM#BTC#5min | 16 | -0.133 | -6.30€ | 0 | 0 |
 | ✅ UPDOWN_GBM#BTC#60min | 18 | +0.135 | +3.18€ | 0 | 0 |
-| ✅ UPDOWN_GBM#ETH | 105 | +0.023 | +1.11€ | 0 | 0 |
-| ✅ UPDOWN_GBM#ETH#15min | 66 | +0.044 | +2.62€ | 0 | 1 |
+| ✅ UPDOWN_GBM#ETH | 106 | +0.018 | -0.07€ | 0 | 0 |
+| ✅ UPDOWN_GBM#ETH#15min | 67 | +0.036 | +1.43€ | 0 | 1 |
 | ✅ UPDOWN_GBM#ETH#240min | 5 | -0.018 | -0.44€ | 0 | 0 |
 | 🚫 UPDOWN_GBM#ETH#5min | 12 | -0.086 | -3.67€ | 0 | 0 |
 | ✅ UPDOWN_GBM#ETH#60min | 20 | +0.091 | +1.25€ | 0 | 0 |
@@ -69,8 +69,8 @@ _Sin sugerencias automáticas con datos actuales. Ampliar n por estrategia._
 | ✅ UPDOWN_GBM#SOL#15min | 34 | +0.028 | +4.02€ | 1 | 0 |
 | 🚫 UPDOWN_GBM#SOL#5min | 17 | -0.112 | -4.84€ | 0 | 0 |
 | ✅ UPDOWN_GBM#SOL#60min | 12 | +0.000 | +1.27€ | 0 | 0 |
-| ✅ UPDOWN_GBM#XRP | 21 | -0.065 | -0.94€ | 0 | 0 |
-| ✅ UPDOWN_GBM#XRP#15min | 12 | +0.000 | +0.92€ | 0 | 0 |
+| ✅ UPDOWN_GBM#XRP | 22 | -0.042 | -0.49€ | 0 | 0 |
+| ✅ UPDOWN_GBM#XRP#15min | 13 | +0.022 | +1.37€ | 0 | 0 |
 | 🚫 UPDOWN_GBM#XRP#5min | 9 | -0.061 | -1.86€ | 0 | 0 |
 | ✅ UPDOWN_GBM#daily | 5 | +0.054 | +7.49€ | 0 | 0 |
 | 🚫 UPDOWN_OU_5M | 57 | -0.229 | -13.76€ | 0 | 0 |
@@ -105,18 +105,18 @@ _Sin sugerencias automáticas con datos actuales. Ampliar n por estrategia._
 **⏳ H-IBS-15** — IBS-15 como señal de mean-reversion
   - _Umbral_: 40
   - _Acción_: Añadir ibs_15 como boost/filtro en FEATURE_RULES de shadow_postmortem.py
-  - _Estado_: Solo 1 ops con ibs_15 (feature añadida 2026-06-27). Esperar n≥40.
-  - _Datos_: n=1 IC=-0.008 PNL=-1.18€
+  - _Estado_: Solo 3 ops con ibs_15 (feature añadida 2026-06-27). Esperar n≥40.
+  - _Datos_: n=3 IC=-0.015 PNL=-1.91€
 
 **⏳ H-HORA-GBM** — hora_utc causal automático en GBM (forward)
   - _Umbral_: 20
   - _Acción_: El sistema lo aplica automáticamente vía FEATURE_RULES. Verificar en strategy_params.json.
-  - _Estado_: Solo 1 ops GBM con hora_utc en features. Esperar n≥20 para patrones.
+  - _Estado_: Solo 3 ops GBM con hora_utc en features. Esperar n≥20 para patrones.
 
 **⏳ H-CROSS-ASSET** — Cross-asset confirmation GBM+OF BUY_NO
   - _Umbral_: n_overlaps≥20 y IC_overlap > IC_base + 0.05
   - _Acción_: Cambiar _aplicar_kelly_compuesto: match por activo, no market_id
-  - _Estado_: n_overlaps=17, boost estimado=+0.020. Necesita 3 más y boost>0.05
+  - _Estado_: n_overlaps=17, boost estimado=+0.019. Necesita 3 más y boost>0.05
 
 **⏳ H-OF-PAR** — ORDER_FLOW per-pair delta_ratio ranges
   - _Umbral_: n≥200 por par con delta_ratio feature en shadow
@@ -147,7 +147,7 @@ _Sin sugerencias automáticas con datos actuales. Ampliar n por estrategia._
 **⏳ H-KALMAN** — Kalman filter para drift adaptativo
   - _Umbral_: n≥200 por subtipo para calibrar parámetros Q/R del KF
   - _Acción_: Sustituir DRIFT_DAMPING por KalmanDrift en fetch_binance_klines.py
-  - _Estado_: Máximo n actual en GBM: 287/200. Esperar 3+ subtypes con n≥200.
+  - _Estado_: Máximo n actual en GBM: 289/200. Esperar 3+ subtypes con n≥200.
   - _Bloqueante_: N_INSUFICIENTE
 
 
@@ -197,5 +197,5 @@ _Sin sugerencias automáticas con datos actuales. Ampliar n por estrategia._
   - _Hipótesis_: Cuando la volatilidad horaria es muy alta el GBM puede sobreestimar el edge. Testear.
   - _Umbral_: n≥30 y IC<-0.05 en sigma alto vs neutro
   - _Acción_: Filtrar señales GBM cuando sigma_h > 0.002 si se confirma IC negativo
-  - _Estado_: n=188 IC=+0.016 PNL=+3.45€ — sin señal clara aún (umbral IC: min=None max=-0.05)
-  - _Datos_: n=188 IC=+0.016 PNL=+3.45€
+  - _Estado_: n=190 IC=+0.016 PNL=+2.72€ — sin señal clara aún (umbral IC: min=None max=-0.05)
+  - _Datos_: n=190 IC=+0.016 PNL=+2.72€
