@@ -1,5 +1,5 @@
 {
-  "timestamp_utc": "2026-06-27T08:20:32+00:00",
+  "timestamp_utc": "2026-06-27T08:21:47+00:00",
   "estrategias": {
     "UPDOWN_GBM": {
       "activa": true,
@@ -153,7 +153,7 @@
           "ic_bueno": 0.2273,
           "n_malo": 17,
           "n_bueno": 9,
-          "descubierto": "2026-06-27T08:20:32+00:00"
+          "descubierto": "2026-06-27T08:21:47+00:00"
         }
       ],
       "patrones_ganadores": []
@@ -231,7 +231,7 @@
           "ic_base": 0.04,
           "n_patron": 25,
           "kelly_boost": 0.65,
-          "descubierto": "2026-06-27T08:20:32+00:00"
+          "descubierto": "2026-06-27T08:21:47+00:00"
         }
       ]
     },
