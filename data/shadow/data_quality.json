@@ -1,5 +1,5 @@
 {
-  "timestamp_utc": "2026-06-27T06:49:06+00:00",
+  "timestamp_utc": "2026-06-27T06:50:18+00:00",
   "estado_global": "DEGRADED",
   "alertas": [
     "BTC:gap 362min (00:23)",
@@ -16,9 +16,9 @@
   "assets": {
     "BTC": {
       "estado": "DEGRADED",
-      "n": 2139,
-      "age_seconds": 3.0,
-      "ultimo_precio": 60315.655,
+      "n": 2143,
+      "age_seconds": 1.6,
+      "ultimo_precio": 60355.445,
       "gaps": [
         {
           "inicio": "2026-06-26T00:23:33",
@@ -57,9 +57,9 @@
     },
     "ETH": {
       "estado": "DEGRADED",
-      "n": 2139,
-      "age_seconds": 3.0,
-      "ultimo_precio": 1580.615,
+      "n": 2143,
+      "age_seconds": 1.6,
+      "ultimo_precio": 1581.365,
       "gaps": [
         {
           "inicio": "2026-06-26T00:23:33",
@@ -98,9 +98,9 @@
     },
     "SOL": {
       "estado": "DEGRADED",
-      "n": 2139,
-      "age_seconds": 3.0,
-      "ultimo_precio": 72.28,
+      "n": 2143,
+      "age_seconds": 1.6,
+      "ultimo_precio": 72.27,
       "gaps": [
         {
           "inicio": "2026-06-26T00:23:33",
@@ -139,9 +139,9 @@
     },
     "XRP": {
       "estado": "DEGRADED",
-      "n": 2139,
-      "age_seconds": 3.0,
-      "ultimo_precio": 1.0606,
+      "n": 2143,
+      "age_seconds": 1.6,
+      "ultimo_precio": 1.0601,
       "gaps": [
         {
           "inicio": "2026-06-26T00:23:33",
