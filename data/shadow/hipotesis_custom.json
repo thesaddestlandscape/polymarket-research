@@ -26,7 +26,6 @@
     "  filtro: strategy_prefix=UPDOWN_GBM, par=BTC, hora_utc=17",
     "  umbral_n=15, umbral_ic_min=0.08"
   ],
-
   "hipotesis": [
     {
       "id": "H-CUSTOM-GBM-17H-BTC",
@@ -55,7 +54,12 @@
         "hora_utc_desde": 0,
         "hora_utc_hasta": 5,
         "decision": "BUY_NO",
-        "par_excluir": ["ETH", "XRP", "DOGE", "BNB"]
+        "par_excluir": [
+          "ETH",
+          "XRP",
+          "DOGE",
+          "BNB"
+        ]
       },
       "umbral_n": 30,
       "umbral_ic_max": -0.05
@@ -86,7 +90,12 @@
         "strategy_prefix": "ORDER_FLOW_5M",
         "hora_utc": 2,
         "decision": "BUY_NO",
-        "par_excluir": ["ETH", "XRP", "DOGE", "BNB"]
+        "par_excluir": [
+          "ETH",
+          "XRP",
+          "DOGE",
+          "BNB"
+        ]
       },
       "umbral_n": 15,
       "umbral_ic_min": 0.05
@@ -102,7 +111,12 @@
         "strategy_prefix": "ORDER_FLOW_5M",
         "hora_utc": 7,
         "decision": "BUY_NO",
-        "par_excluir": ["ETH", "XRP", "DOGE", "BNB"]
+        "par_excluir": [
+          "ETH",
+          "XRP",
+          "DOGE",
+          "BNB"
+        ]
       },
       "umbral_n": 20,
       "umbral_ic_min": 0.05
@@ -164,7 +178,7 @@
         "decision": "BUY_YES"
       },
       "umbral_n": 40,
-      "umbral_ic_min": 0.10
+      "umbral_ic_min": 0.1
     },
     {
       "id": "H-CUSTOM-GBM-SIGMA-BAJO",
@@ -179,7 +193,7 @@
         "feature_hi": 0.0008
       },
       "umbral_n": 30,
-      "umbral_ic_min": 0.10
+      "umbral_ic_min": 0.1
     },
     {
       "id": "H-CUSTOM-BTC15-TENDENCIA",
@@ -243,7 +257,7 @@
         "feature_lo": 0.15
       },
       "umbral_n": 30,
-      "umbral_ic_min": 0.10,
+      "umbral_ic_min": 0.1,
       "_nota": "Proxy: pct_spot_vs_ref alto → mercado tiene precio favorable → py_mkt bajo. Revisar si el filtro es correcto cuando tengamos n suficiente."
     },
     {
@@ -262,6 +276,22 @@
       },
       "umbral_n": 20,
       "umbral_ic_min": 0.08
+    },
+    {
+      "id": "H-CUSTOM-POLY-DRIFT-CONFIRM",
+      "nombre": "poly_drift_5obs: ¿el precio YES interno de Polymarket confirma nuestra señal?",
+      "descripcion": "Feature nueva 2026-06-27: drift del precio YES en Polymarket en últimas 5 obs (~5min). Si poly_drift<0 y decidimos BUY_NO (o poly_drift>0 y BUY_YES) → confluencia. Si diverge → reducción de stake. Hipótesis: confluencia Binance+Polymarket mejora IC; divergencia empeora.",
+      "tipo": "boost",
+      "umbral": "n≥40 en confluencia vs divergencia para validar el boost ×1.1",
+      "accion": "Si IC_confluencia>IC_divergencia con n≥40 → mantener el boost. Si no → retirar.",
+      "filtro": {
+        "strategy_prefix": "UPDOWN_GBM",
+        "feature": "poly_drift_5obs",
+        "feature_lo": 0.5
+      },
+      "umbral_n": 40,
+      "umbral_ic_min": 0.08,
+      "_nota": "Solo ops con |poly_drift|>0.5% para filtrar mercados estáticos"
     }
   ]
 }

@@ -1242,6 +1242,16 @@ def s_updown_gbm(market, ctx):
         c15 = float(k15[-1][4])
         if (h15 - l15) > 1e-8:
             features["ibs_15"] = round((c15 - l15) / (h15 - l15), 4)
+    # poly_drift_5obs: drift del precio YES DENTRO de Polymarket en últimas 5 obs (~5min).
+    # Negativo → el mercado interno está vendiendo YES (demanda NO). Positivo → demanda YES.
+    # Si poly_drift y nuestra predicción coinciden → señal reforzada (cross-confirmation).
+    mid_market = market.get("id")
+    hist_mkt = ctx.get("historial_mercados", {}).get(mid_market, [])
+    if len(hist_mkt) >= 5:
+        prices_hist = [p for _, p in hist_mkt[-5:]]
+        if prices_hist[0] > 1e-6:
+            poly_drift = (prices_hist[-1] - prices_hist[0]) / prices_hist[0] * 100
+            features["poly_drift_5obs"] = round(poly_drift, 4)
     return {
         "prob_yes": max(0.05, min(0.95, p_up)),
         "razon":   razon,
@@ -1857,6 +1867,23 @@ def main():
                     factor = hora_boost_map.get(str(datetime.now(timezone.utc).hour), 1.0)
                     if factor and factor != 1.0:
                         apuesta = min(2.00, apuesta * float(factor))
+                # Longshot bias (Jon-Becker, 2026-06-27): mercados con py_mkt<0.20 tienen
+                # win_rate<precio_implícito para compradores de YES (EV negativo en longshots).
+                # BUY_NO en estos mercados tiene edge estructural adicional → boost ×1.1.
+                if dec == "BUY_NO" and py < 0.20:
+                    apuesta = min(2.00, apuesta * 1.1)
+                # YES/NO flow interno Polymarket (poly_drift_5obs, 2026-06-27):
+                # Si el precio YES en Polymarket lleva bajando (poly_drift<0) y predecimos
+                # BUY_NO → señal interna confirma la nuestra → boost ×1.1.
+                # Si el precio lleva subiendo y predecimos BUY_YES → boost ×1.1.
+                # Si hay divergencia → reducir apuesta ×0.85 (mercado interno dice otra cosa).
+                pred_features_now = json.loads(features_json) if features_json != "{}" else {}
+                poly_d = pred.get("features", {}).get("poly_drift_5obs") if isinstance(pred.get("features"), dict) else None
+                if poly_d is not None and abs(poly_d) > 0.5:  # solo si hay movimiento real (>0.5%)
+                    if (dec == "BUY_NO" and poly_d < 0) or (dec == "BUY_YES" and poly_d > 0):
+                        apuesta = min(2.00, apuesta * 1.1)   # confluencia: poly + nuestro signal
+                    elif (dec == "BUY_NO" and poly_d > 1.5) or (dec == "BUY_YES" and poly_d < -1.5):
+                        apuesta = max(0.50, apuesta * 0.85)  # divergencia fuerte → cautela
                 ed = en if dec != "BUY_NO" else -en
                 if dec != "SKIP":
                     ops += 1
