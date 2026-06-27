@@ -1197,6 +1197,16 @@ def s_updown_gbm(market, ctx):
         if not (DRIFT_60_BUY_YES_15M_LO <= drift_60_pct < DRIFT_60_BUY_YES_15M_HI):
             return None  # BUY_YES #15min fuera del sweet spot drift_60min
 
+    # Filtro BTC#15min — solo operar cuando drift_15min ≥ +0.3%/h (momentum claro)
+    # Análisis n=36 BTC#15min con feature: drift≥0.3 → IC=+0.152 n=13 (77%);
+    # drift<0.3 → IC=−0.100 n=23 (39%). La señal GBM necesita dirección clara.
+    # Zona muerta [-0.3,+0.3]: mercado consolidando → GBM incapaz de predecir.
+    # Zona -1…-0.3: señal negativa activa (mercado bajando suavemente) → también mala.
+    # Implementado 2026-06-27 con n=36, revisable con n≥60.
+    if tipo == 'slot' and ventana_min == 15 and activo == 'BTC' and drift_15 is not None:
+        if drift_15 * 100 < 0.3:
+            return None  # BTC#15min sin momentum positivo claro → no apostar
+
     if tipo == 'daily':
         slot_type = 'daily'
     elif tipo == 'hourly':

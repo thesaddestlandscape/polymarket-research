@@ -1,7 +1,7 @@
 # CLAUDE.md — Polymarket Research Bot
 
 Documento de contexto completo. Léelo al inicio de cada sesión para retomar sin releer historial.
-**Última actualización: 2026-06-27 ~08:00 UTC**
+**Última actualización: 2026-06-27 ~11:45 UTC**
 
 ---
 
@@ -144,6 +144,7 @@ capture_markets → capture_wallets → capture_trades
 | UPDOWN_GBM#ETH#15min | 58 | 55% | +0.050 | +3.33€ | ⚠️ n≥40 pero IC bajo |
 | ORDER_FLOW_5M BUY_NO (BTC+SOL) | 425 BUY_NO total | 56% | +0.057 | +33.54€ | ✅ activa (BUY_YES filtrado) |
 | BUY_YES #15min (todas pares) | 104 | 52% | +0.019 | −1.29€ | 🔶 Filtro drift_60min activo — mejorando |
+| **BTC#15min con drift_15min≥0.3** | **13** | **77%** | **+0.152** | **+5.68€** | **🔥 Filtro activo desde 2026-06-27 — mejora retroactiva +6.81€** |
 | **UPDOWN_GBM#5min (todos pares)** | **56** | **33%** | **-0.155** | **~-16€** | **🚫 DESACTIVADA MANUALMENTE 2026-06-27** |
 | **UPDOWN_GBM#BTC#5min** | 16 | 31% | -0.133 | -6.30€ | 🚫 DESACTIVADA MANUALMENTE 2026-06-27 |
 | **UPDOWN_GBM#ETH#5min** | 12 | 33% | -0.086 | -3.67€ | 🚫 DESACTIVADA MANUALMENTE 2026-06-27 |
@@ -355,6 +356,7 @@ predictions (features JSON) → results (features copiadas)
 [✓] ORDER_FLOW solo BUY_NO (delta<0): BUY_YES IC=-0.038 eliminado; BUY_NO IC=+0.092 (+4.10€ retroactivo)
 [✓] GBM#5min desactivados MANUALMENTE 2026-06-27: BTC/ETH/SOL/XRP/#5min aggregate (IC -0.08 a -0.13, edge_min=0.04 insuficiente para bloquear señales de edge alto)
 [✓] data_quality.py 2026-06-27: 4 capas L1-L4, bug LTC→ETH fix, .gitattributes union merge, ventanas fds
+[✓] BTC#15min filtro drift_15min≥0.3 (2026-06-27): zona muerta [-1,+0.3] IC=-0.100 eliminada; pasarían IC=+0.152. Mejora retroactiva +6.81€
 [ ] Bloquear hora 18h UTC en GBM (IC=-0.148 n=11 — esperar n≥15)
 [ ] Cross-asset confirmation: GBM BUY_NO + OF BUY_NO mismo activo → boost ×1.5 (esperar n≥20 OF post-filtro)
 [ ] Kelly por hora: boost ×1.2 en 15h/17h/19h UTC (esperar n≥40 por hora)
@@ -457,6 +459,8 @@ DRIFT_DAMPING_DEFAULT = 0.10      # daily y ventanas no catalogadas
 REGIME_BUY_NO_THRESHOLD = 0.7    # %/h solo para ventanas ≥60min y solo BUY_NO
 DRIFT_60_BUY_YES_15M_LO = 0.0   # BUY_YES #15min: drift_60min mínimo (%/h)
 DRIFT_60_BUY_YES_15M_HI = 0.5   # BUY_YES #15min: drift_60min máximo (%/h)
+# BTC#15min: solo operar cuando drift_15min ≥ +0.3%/h (2026-06-27)
+# drift<0.3 → IC=-0.100 n=23 (zona muerta); drift≥0.3 → IC=+0.152 n=13
 EDGE_MINIMO      = 0.02
 SLIPPAGE_ESTIMADO= 0.02
 DELTA_MIN = 0.38           # ORDER_FLOW_5M — umbral mínimo global
