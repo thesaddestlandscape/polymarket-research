@@ -1073,6 +1073,19 @@ def main():
     except Exception as e:
         print(f"  [WARN] hipotesis_auto.md: {e}")
 
+    try:
+        import hypothesis_tracker as ht
+        h_resultados = ht.run(resultados)
+        h_md = ht.generate_markdown_section(h_resultados)
+        hip_path = DIR_SHADOW / "hipotesis_auto.md"
+        hip_path.write_text(hip_path.read_text(encoding="utf-8") + h_md, encoding="utf-8")
+        listas = [hid for hid, d in h_resultados.items()
+                  if d.get("status") in ("LISTA_IMPLEMENTAR", "LISTA_LIVE", "LISTA_EVALUAR")]
+        print(f"  → hypothesis_tracker: {len(h_resultados)} hipótesis | "
+              f"{len(listas)} listas para evaluar: {listas}")
+    except Exception as e:
+        print(f"  [WARN] hypothesis_tracker: {e}")
+
     print(f"[{ts}] === Fin postmortem ===")
 
 

@@ -50,6 +50,16 @@ def _cargar_params_dinamicos() -> dict:
         return data.get("estrategias", {})
     except Exception:
         return {}
+
+def _cargar_meta_params() -> dict:
+    """Lee la sección 'meta' de strategy_params.json — parámetros auto-aplicados por hypothesis_tracker."""
+    path = DIR_SHADOW / "strategy_params.json"
+    if not path.exists():
+        return {}
+    try:
+        return json.load(open(path, encoding="utf-8")).get("meta", {})
+    except Exception:
+        return {}
 DIR_MARKETS = DIR_DATA / "markets"
 DIR_TRADES  = DIR_DATA / "trades"
 DIR_BINANCE = DIR_DATA / "binance"
@@ -1088,6 +1098,14 @@ def s_updown_gbm(market, ctx):
     if simbolo_bloqueado(activo):
         return None
 
+    # Meta auto-params: blacklist de horas aplicada automáticamente por hypothesis_tracker
+    meta = ctx.get("meta_params", {})
+    gbm_auto_blacklist = set(meta.get("gbm_blacklist_hours_auto", []))
+    if gbm_auto_blacklist:
+        hora_actual = datetime.now(timezone.utc).hour
+        if hora_actual in gbm_auto_blacklist:
+            return None
+
     # Spot actual: klines > precios_intraday
     spot = ctx.get("spot_prices", {}).get(activo)
     if not spot:
@@ -1694,9 +1712,18 @@ def main():
         return
     ctx = construir_contexto()
     params_din = _cargar_params_dinamicos()
+    meta_params = _cargar_meta_params()
+    ctx["meta_params"] = meta_params
     if params_din:
         activas = {k for k, v in params_din.items() if not v.get("activa", True)}
         print(f"  Params dinámicos cargados: {len(params_din)} estrategias, desactivadas: {activas or 'ninguna'}")
+    if meta_params:
+        auto_hours = meta_params.get("gbm_blacklist_hours_auto", [])
+        hora_boost = meta_params.get("hora_boost_factor", {})
+        if auto_hours:
+            print(f"  Meta auto-params: GBM_BLACKLIST_HOURS_AUTO={set(auto_hours)}")
+        if hora_boost:
+            print(f"  Meta auto-params: HORA_BOOST={hora_boost}")
     fecha   = ts[:10]
     archivo = DIR_SHADOW / f"predictions_{fecha}.csv"
     nuevo   = not archivo.exists()
@@ -1814,6 +1841,12 @@ def main():
                     dir_stake = sp.get(f"apuesta_kelly_{dec}")
                     if dir_stake is not None:
                         apuesta = max(0.50, min(2.00, float(dir_stake) + causal_boost))
+                # Meta auto-params: boost horario (hypothesis_tracker H-KELLY-HORA)
+                hora_boost_map = meta_params.get("hora_boost_factor", {})
+                if hora_boost_map and dec in ("BUY_YES", "BUY_NO"):
+                    factor = hora_boost_map.get(str(datetime.now(timezone.utc).hour), 1.0)
+                    if factor and factor != 1.0:
+                        apuesta = min(2.00, apuesta * float(factor))
                 ed = en if dec != "BUY_NO" else -en
                 if dec != "SKIP":
                     ops += 1
