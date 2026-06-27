@@ -1,4 +1,4 @@
-# Estado del bot — 2026-06-27 14:52 UTC
+# Estado del bot — 2026-06-27 14:53 UTC
 
 ## Capital
 | | |
@@ -42,7 +42,7 @@
 
 ## Calidad de datos
 
-✅ **OK** — última verificación 2026-06-27T14:51 UTC
+✅ **OK** — última verificación 2026-06-27T14:53 UTC
 
 | Asset | Precio | Age | Alertas |
 |---|---|---|---|
