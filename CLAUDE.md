@@ -1,7 +1,7 @@
 # CLAUDE.md — Polymarket Research Bot
 
 Documento de contexto completo. Léelo al inicio de cada sesión para retomar sin releer historial.
-**Última actualización: 2026-06-26 ~19:50 UTC**
+**Última actualización: 2026-06-27 ~04:45 UTC**
 
 ---
 
@@ -100,6 +100,7 @@ capture_markets → capture_wallets → capture_trades
 | `shadow_resumen.py` | estado_actual.md actualizado cada 60s |
 | `arb_scanner.py` | Escanea ~2400 mercados → arb_scan_YYYY-MM-DD.csv |
 | `generate_report.py` | Excel informe_bot.xlsx (37 subtypes, datos históricos completos) |
+| **`data_quality.py`** | **Guardián calidad de datos — 4 capas L1-L4 → data_quality.json** |
 | `live_guard.py` | Guardián: switch + ventanas horarias → ¿puede operar? |
 | `live_stake.py` | Kelly stake con bankroll completo + 3 niveles de circuit breaker |
 | `live_control.py` | Listener Telegram: /on /off /status /help |
@@ -107,25 +108,28 @@ capture_markets → capture_wallets → capture_trades
 
 ---
 
-## Estado de estrategias — 2026-06-26 (sesión noche)
+## Estado de estrategias — 2026-06-27 (sesión madrugada)
 
-### Bankroll simulado: **−4.84€** (−24.84€ PNL total) | 1158 ops | 49.0% WR
+### Bankroll simulado: **−4.96€** (−24.96€ PNL total) | 1160 ops | 49.0% WR
 ### ⚠️ El PNL negativo viene ÍNTEGRAMENTE de estrategias ya desactivadas.
 ### Con solo las estrategias activas actuales (excl. desactivadas): PNL estimado positivo.
 
 | Estrategia | n | Win% | IC | PNL | Estado |
 |---|---|---|---|---|---|
-| **BUY_NO #15min (todas pares)** | **39** | **64%** | **+0.134** | **+11.69€** | **🔥 1 op para live — bloqueado por credenciales** |
-| UPDOWN_GBM#SOL#15min | 32 | 56% | +0.059 | +5.16€ | ⏳ n=32/40 — ETA sáb 27 |
+| **BUY_NO #15min (todas pares)** | **40** | **62%** | **+0.119** | **+11.07€** | **🔥 LISTA PARA LIVE — IC≥0.10 n≥40 — bloqueado por credenciales** |
+| UPDOWN_GBM#SOL#15min | 36 | 56% | +0.053 | +5.00€ | ⏳ n=36/40 — ETA hoy sáb 27 (4 ops) |
 | **UPDOWN_GBM#BTC#60min** | **17** | **65%** | **+0.112** | **+2.00€** | **⏳ mejor IC activo — ETA lun 29** |
-| UPDOWN_GBM#ETH#60min | 19 | 58% | +0.068 | +0.56€ | ⏳ ETA dom 28 |
+| UPDOWN_GBM#ETH#60min | 19 | 57% | +0.068 | +0.56€ | ⏳ ETA dom 28-lun 29 |
 | UPDOWN_GBM#BTC#15min | 43 | 56% | +0.056 | +0.64€ | ⚠️ n=43 alcanzado, IC=+0.056 < umbral 0.08 |
-| UPDOWN_GBM#ETH#15min | 56 | 54% | +0.034 | +2.33€ | ⚠️ n≥40 pero IC bajo |
-| ORDER_FLOW_5M (BTC+SOL filtrado) | 136 ops filtradas | 56% | +0.058 | +12.59€ | ✅ activa |
-| BUY_YES #15min (todas pares) | 103 | 51% | +0.014 | −1.79€ | 🔶 Filtro drift_60min aplicado hoy — monitorear |
+| UPDOWN_GBM#ETH#15min | 58 | 55% | +0.050 | +3.33€ | ⚠️ n≥40 pero IC bajo |
+| ORDER_FLOW_5M BUY_NO (BTC+SOL) | 425 BUY_NO total | 56% | +0.057 | +33.54€ | ✅ activa (BUY_YES filtrado) |
+| BUY_YES #15min (todas pares) | 104 | 52% | +0.019 | −1.29€ | 🔶 Filtro drift_60min activo — mejorando |
+| **UPDOWN_GBM#5min (todos pares)** | **56** | **33%** | **-0.155** | **~-16€** | **🚫 DESACTIVADA MANUALMENTE 2026-06-27** |
+| **UPDOWN_GBM#BTC#5min** | 16 | 31% | -0.133 | -6.30€ | 🚫 DESACTIVADA MANUALMENTE 2026-06-27 |
+| **UPDOWN_GBM#ETH#5min** | 12 | 33% | -0.086 | -3.67€ | 🚫 DESACTIVADA MANUALMENTE 2026-06-27 |
+| **UPDOWN_GBM#SOL#5min** | 17 | 35% | -0.112 | -4.84€ | 🚫 DESACTIVADA MANUALMENTE 2026-06-27 |
 | UPDOWN_OU_5M | 57 | 26% | -0.229 | -13.76€ | 🚫 DESACTIVADA |
 | SMART_FLOW_1H | 20 | 20% | -0.273 | -9.86€ | 🚫 DESACTIVADA |
-| UPDOWN_GBM#5min (todos pares) | ~56 | ~33% | ~-0.15 | ~-16€ | 🚫 DESACTIVADA (edge_min=0.04) |
 | UPDOWN_GBM#240min | 12 | 9% | -0.171 | ~-5€ | 🚫 DESACTIVADA |
 
 ---
@@ -329,6 +333,8 @@ predictions (features JSON) → results (features copiadas)
 [✓] N_BUCKET_MIN 8→15: patrones causales requieren n≥15 para evitar kelly_boost ruidoso
 [✓] Filtro drift_60min en BUY_YES #15min: [0,+0.5%) → IC=+0.208 (n=22); fuera → skip (n=59 ops vacías)
 [✓] ORDER_FLOW solo BUY_NO (delta<0): BUY_YES IC=-0.038 eliminado; BUY_NO IC=+0.092 (+4.10€ retroactivo)
+[✓] GBM#5min desactivados MANUALMENTE 2026-06-27: BTC/ETH/SOL/XRP/#5min aggregate (IC -0.08 a -0.13, edge_min=0.04 insuficiente para bloquear señales de edge alto)
+[✓] data_quality.py 2026-06-27: 4 capas L1-L4, bug LTC→ETH fix, .gitattributes union merge, ventanas fds
 [ ] Bloquear hora 18h UTC en GBM (IC=-0.148 n=11 — esperar n≥15)
 [ ] Cross-asset confirmation: GBM BUY_NO + OF BUY_NO mismo activo → boost ×1.5 (esperar n≥20 OF post-filtro)
 [ ] Kelly por hora: boost ×1.2 en 15h/17h/19h UTC (esperar n≥40 por hora)
@@ -353,11 +359,11 @@ Ver `LIVE_PLAN.md`. Checklist: instalar MetaMask → red Polygon → comprar 30 
 **Antes de dinero real**: conectar con Polymarket Paper Trader (ver TOOLS.md) para validar live_trade.py.
 
 ### P1 — Primer trade real (esta semana)
-**BUY_NO #15min**: n=39, IC=+0.134 → **1 op más y técnicamente lista — SOLO FALTA CREDENCIAL**
-**SOL#15min**: n=32, IC=+0.059 → ETA sábado 27 Jun (8 ops)
+**BUY_NO #15min**: n=40, IC=+0.119 → **CUMPLE UMBRAL IC≥0.10 n≥40 — SOLO FALTA CREDENCIAL**
+**SOL#15min**: n=36, IC=+0.053 → ETA hoy sáb 27 Jun (4 ops)
 **BTC#60min**: n=17, IC=+0.112 → mejor IC activo — ETA lunes 29 Jun (23 ops)
-**ETH#60min**: n=19, IC=+0.068 → ETA domingo 28 Jun (21 ops)
-**BTC#15min**: n=43, IC=+0.056 → n≥40 alcanzado pero IC<0.08 — monitorear tendencia
+**ETH#60min**: n=19, IC=+0.068 → ETA domingo 28 Jun-lunes 29 (19-21 ops)
+**BTC#15min**: n=43, IC=+0.056 → n≥40 alcanzado pero IC<0.08 — monitorear
 
 ### P2 — ✅ COMPLETADO — Dirección como feature de live (BUY_NO vs BUY_YES)
 Implementado 2026-06-26: postmortem trackea BUY_YES/BUY_NO separado en strategy_params.
