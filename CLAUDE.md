@@ -423,7 +423,9 @@ predictions (features JSON) → results (features copiadas)
 [✓] GBM#5min desactivados MANUALMENTE 2026-06-27: BTC/ETH/SOL/XRP/#5min aggregate (IC -0.08 a -0.13, edge_min=0.04 insuficiente para bloquear señales de edge alto)
 [✓] data_quality.py 2026-06-27: 4 capas L1-L4, bug LTC→ETH fix, .gitattributes union merge, ventanas fds
 [✓] BTC#15min filtro drift_15min≥0.3 (2026-06-27): zona muerta [-1,+0.3] IC=-0.100 eliminada; pasarían IC=+0.152. Mejora retroactiva +6.81€
-[ ] Bloquear hora 18h UTC en GBM (IC=-0.148 n=11 — esperar n≥15)
+[✓] Longshot bias activo (2026-06-27): BUY_NO con py_mkt<0.20 → boost ×1.1. Edge estructural documentado Jon-Becker.
+[✓] poly_drift_5obs feature (2026-06-27): drift precio YES dentro Polymarket últimas 5obs. Confluencia → ×1.1; divergencia fuerte → ×0.85. P6 cross-confirmation reimplementado.
+[ ] Bloquear hora 18h UTC en GBM (IC=-0.148 n=11 — esperar n≥15 → hypothesis_tracker lo auto-aplica)
 [ ] Cross-asset confirmation: GBM BUY_NO + OF BUY_NO mismo activo → boost ×1.5 (esperar n≥20 OF post-filtro)
 [ ] Kelly por hora: boost ×1.2 en 15h/17h/19h UTC (esperar n≥40 por hora)
 [~] BUY_NO #15min n=39/40, IC=+0.134 — 1 op para live (bloqueado por credenciales)
@@ -496,6 +498,11 @@ Repo analizado online 2026-06-27. Dataset 36GB en S3 pendiente de descargar.
 ETH#15min con drift_15min<−1: 9/14 (64%) IC=+0.087. BTC en la misma zona: IC=+0.048.
 **Acción cuando n≥20**: si IC ETH se sostiene ≥0.08 → implementar boost ×1.1.
 Tracking: H-CUSTOM-ETH15-REVERSION en hipotesis_custom.json.
+
+### P12 — PENDIENTE (siguiente ronda) — Smart money wallets + Trade size
+Dataset Jon-Becker tiene `maker` (address blockchain) por cada trade. Wallets con mayor excess return histórico = smart money. "¿Actividad reciente de wallet top en este mercado?" = feature de alta potencia.
+`win_rate_by_trade_size.py`: trades grandes tienen excess win rate positivo. Trackear tamaño de trades recientes via CLOB API como feature.
+**No implementar hasta**: descargar dataset Jon-Becker (36GB) y extraer top wallets cripto.
 
 ### P11 — NUEVO — Revisar blacklist OF horas 02h y 07h (BTC+SOL)
 H=02h BTC+SOL: 4/5 (80%) IC=+0.054. H=07h BTC+SOL: 7/12 (58%) IC=+0.043.
