@@ -1,5 +1,5 @@
-# Hipótesis automáticas — 2026-06-27 13:59 UTC
-_Generado por shadow_postmortem.py sobre 1192 resoluciones (PNL=-25.59€)_
+# Hipótesis automáticas — 2026-06-27 14:01 UTC
+_Generado por shadow_postmortem.py sobre 1195 resoluciones (PNL=-25.34€)_
 
 ## Patrones causales activos
 
@@ -31,12 +31,12 @@ _Sin sugerencias automáticas con datos actuales. Ampliar n por estrategia._
 | ✅ ORDER_FLOW_5M#SOL#5min | 145 | +0.017 | +1.22€ | 0 | 0 |
 | ✅ ORDER_FLOW_5M#XRP | 116 | -0.009 | -2.01€ | 0 | 0 |
 | ✅ ORDER_FLOW_5M#XRP#5min | 116 | -0.009 | -2.01€ | 0 | 0 |
-| ✅ PRICE_TARGET_GBM | 16 | +0.000 | -1.53€ | 0 | 0 |
+| ✅ PRICE_TARGET_GBM | 18 | +0.000 | -1.56€ | 0 | 0 |
 | ✅ PRICE_TARGET_GBM#BTC | 7 | -0.019 | -0.66€ | 0 | 0 |
 | ✅ PRICE_TARGET_GBM#BTC#atexpiry | 7 | -0.019 | -0.66€ | 0 | 0 |
-| ✅ PRICE_TARGET_GBM#ETH | 6 | +0.000 | -1.35€ | 0 | 0 |
-| ✅ PRICE_TARGET_GBM#ETH#atexpiry | 6 | +0.000 | -1.35€ | 0 | 0 |
-| ✅ PRICE_TARGET_GBM#atexpiry | 16 | +0.000 | -1.53€ | 0 | 0 |
+| ✅ PRICE_TARGET_GBM#ETH | 8 | +0.000 | -1.38€ | 0 | 0 |
+| ✅ PRICE_TARGET_GBM#ETH#atexpiry | 8 | +0.000 | -1.38€ | 0 | 0 |
+| ✅ PRICE_TARGET_GBM#atexpiry | 18 | +0.000 | -1.56€ | 0 | 0 |
 | 🚫 SMART_FLOW_1H | 20 | -0.273 | -9.86€ | 0 | 0 |
 | ✅ SMART_FLOW_1H#BTC | 6 | -0.037 | -1.69€ | 0 | 0 |
 | ✅ UPDOWN_GBM | 296 | -0.003 | -3.61€ | 0 | 0 |
@@ -76,9 +76,9 @@ _Sin sugerencias automáticas con datos actuales. Ampliar n por estrategia._
 | ✅ UPDOWN_OU_5M#SOL#5min | 10 | -0.042 | -1.06€ | 0 | 0 |
 | ✅ UPDOWN_OU_5M#XRP | 11 | -0.064 | -1.65€ | 0 | 0 |
 | ✅ UPDOWN_OU_5M#XRP#5min | 11 | -0.064 | -1.65€ | 0 | 0 |
-| ✅ WEEKLY_PRICE | 21 | +0.022 | -3.78€ | 0 | 0 |
+| ✅ WEEKLY_PRICE | 22 | +0.042 | -3.49€ | 0 | 0 |
 | ✅ WEEKLY_PRICE#BTC | 6 | -0.037 | -2.73€ | 0 | 0 |
-| ✅ WEEKLY_PRICE#ETH | 8 | +0.000 | -2.41€ | 0 | 0 |
+| ✅ WEEKLY_PRICE#ETH | 9 | +0.021 | -2.12€ | 0 | 0 |
 | ✅ WEEKLY_PRICE#SOL | 7 | +0.058 | +1.36€ | 0 | 0 |
 ## Hipótesis pendientes — tracking automático
 
@@ -131,7 +131,7 @@ _Sin sugerencias automáticas con datos actuales. Ampliar n por estrategia._
 **⏳ H-WEEKLY** — Predicciones semanales de precio por par
   - _Umbral_: n≥15 por par con IC≥+0.05
   - _Acción_: Si confirma IC≥+0.10 n≥15 en SOL → considerar live semanal
-  - _Estado_: ETH: n=8/15 IC=+0.000 PNL=-2.41€ | BTC: n=6/15 IC=-0.037 PNL=-2.73€ | SOL: n=7/15 IC=+0.058 PNL=+1.36€
+  - _Estado_: ETH: n=9/15 IC=+0.021 PNL=-2.12€ | BTC: n=6/15 IC=-0.037 PNL=-2.73€ | SOL: n=7/15 IC=+0.058 PNL=+1.36€
 
 **⏳ H-KALMAN** — Kalman filter para drift adaptativo
   - _Umbral_: n≥200 por subtipo para calibrar parámetros Q/R del KF
