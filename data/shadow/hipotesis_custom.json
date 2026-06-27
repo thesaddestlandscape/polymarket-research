@@ -230,6 +230,23 @@
       "umbral_ic_min": 0.08
     },
     {
+      "id": "H-CUSTOM-LONGSHOT-BIAS",
+      "nombre": "Longshot bias — ¿mejor IC cuando py_mkt < 0.20 o > 0.80?",
+      "descripcion": "Jon-Becker repo documenta formalmente: contratos a 1-20 cents tienen win_rate < precio implícito (compradores pierden sistemáticamente en longshots). En nuestro sistema: cuando py_mkt<0.20 el GBM predice BUY_NO con edge estructural adicional al del modelo. ¿Se confirma en nuestros datos? Buscar en feature pct_spot_vs_ref si los mercados extremos tienen mejor IC en BUY_NO.",
+      "tipo": "boost",
+      "umbral": "n≥30 y IC>+0.10",
+      "accion": "Si IC>0.10 con n≥30 en mercados extremos → boost ×1.2 en BUY_NO cuando py_mkt<0.20",
+      "filtro": {
+        "strategy_prefix": "UPDOWN_GBM",
+        "decision": "BUY_NO",
+        "feature": "pct_spot_vs_ref",
+        "feature_lo": 0.15
+      },
+      "umbral_n": 30,
+      "umbral_ic_min": 0.10,
+      "_nota": "Proxy: pct_spot_vs_ref alto → mercado tiene precio favorable → py_mkt bajo. Revisar si el filtro es correcto cuando tengamos n suficiente."
+    },
+    {
       "id": "H-CUSTOM-ETH15-REVERSION",
       "nombre": "ETH#15min con drift_15min < -1 — ¿mean reversion?",
       "descripcion": "ETH y BTC tienen patrones opuestos: BTC funciona con momentum (drift>0.3). ETH funciona con reversión (drift<-1): 9/14 (64%) IC=+0.087. La hipótesis es que ETH tiene más mean-reversion que BTC en 15min.",

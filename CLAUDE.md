@@ -478,8 +478,19 @@ Forward data muestra H=13h y H=19h negativos (contrario al histórico). Solo H=1
 Backfill calibró: BTC 0.42-0.44, SOL 0.36-0.40. No aplicar (n<200 con filtros actuales).
 
 ### P9 — ✅ COMPLETADO (análisis online) — Dataset Jon-Becker
-Repo analizado online. Dataset 36GB en S3 pendiente de descargar para backtesting masivo.
-Hipótesis a validar con el dataset: H-DRIFT15 umbral exacto, DRIFT_DAMPING, H-WEEKLY-PRICE, DELTA_MAX.
+Repo analizado online 2026-06-27. Dataset 36GB en S3 pendiente de descargar.
+
+**Hallazgos del análisis online (sin descargar el dataset):**
+- H-ORDER_FLOW (BUY_NO>BUY_YES): **VALIDADO EXTERNAMENTE** — `statistical_tests.py` Test 2+5 en Kalshi confirma el principio (presión compradora visible ya priceada).
+- H-WEEKLY-PRICE: uso más directo del dataset — query SQL sobre parquets de Polymarket con n>>21.
+- H-VENTANAS-HORARIAS: `returns_by_hour.py` de Kalshi portable a Polymarket cripto.
+- **Feature nueva: Longshot bias** — mercados <20 cents tienen win_rate < precio implícito → BUY_NO structural edge. H-CUSTOM-LONGSHOT-BIAS añadida al tracker.
+- **Feature nueva: YES/NO flow interno de Polymarket** — complementario al Binance delta_ratio. Candidato para P6 cross-asset.
+- **Feature futura: smart money wallets** — requiere dataset descargado. Maker addresses con track record positivo.
+- **Barrera principal**: dataset no tiene precios spot (BTC/ETH/SOL). H-DRIFT15, H-60MIN, H-BTC-ETH-MOMENTUM necesitan join externo con Binance klines.
+
+**Para descargar el dataset cuando sea necesario:**
+`https://s3.jbecker.dev/data.tar.zst` (36GB comprimido, ~64GB libre en VPS). Extracción selectiva: un parquet a la vez → procesar → borrar. Ver `project_jon_becker.md` en memory.
 
 ### P10 — NUEVO — ETH#15min mean-reversion (drift<−1)
 ETH#15min con drift_15min<−1: 9/14 (64%) IC=+0.087. BTC en la misma zona: IC=+0.048.
