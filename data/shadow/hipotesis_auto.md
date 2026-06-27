@@ -1,4 +1,4 @@
-# Hipótesis automáticas — 2026-06-27 11:06 UTC
+# Hipótesis automáticas — 2026-06-27 11:07 UTC
 _Generado por shadow_postmortem.py sobre 1182 resoluciones (PNL=-22.99€)_
 
 ## Patrones causales activos
@@ -91,3 +91,87 @@ _Sin sugerencias automáticas con datos actuales. Ampliar n por estrategia._
 | ✅ WEEKLY_PRICE#BTC | 6 | -0.037 | -2.73€ | 0 | 0 |
 | ✅ WEEKLY_PRICE#ETH | 8 | +0.000 | -2.41€ | 0 | 0 |
 | ✅ WEEKLY_PRICE#SOL | 7 | +0.058 | +1.36€ | 0 | 0 |
+## Hipótesis pendientes — tracking automático
+
+
+### ⏳ Acumulando datos
+
+**⏳ H-GBM-18H** — Bloquear hora 18h UTC en GBM
+  - _Umbral_: 15
+  - _Acción_: Añadir 18 a GBM_BLACKLIST_HOURS en shadow_predict.py
+  - _Estado_: Falta 2 ops más en GBM@18h (IC actual=-0.108)
+  - _Datos_: n=13 IC=-0.108 PNL=-1.93€
+
+**⏳ H-IBS-15** — IBS-15 como señal de mean-reversion
+  - _Umbral_: 40
+  - _Acción_: Añadir ibs_15 como boost/filtro en FEATURE_RULES de shadow_postmortem.py
+  - _Estado_: Solo 0 ops con ibs_15 (feature añadida 2026-06-27). Esperar n≥40.
+
+**⏳ H-HORA-GBM** — hora_utc causal automático en GBM (forward)
+  - _Umbral_: 20
+  - _Acción_: El sistema lo aplica automáticamente vía FEATURE_RULES. Verificar en strategy_params.json.
+  - _Estado_: Solo 0 ops GBM con hora_utc en features. Esperar n≥20 para patrones.
+
+**⏳ H-CROSS-ASSET** — Cross-asset confirmation GBM+OF BUY_NO
+  - _Umbral_: n_overlaps≥20 y IC_overlap > IC_base + 0.05
+  - _Acción_: Cambiar _aplicar_kelly_compuesto: match por activo, no market_id
+  - _Estado_: n_overlaps=17, boost estimado=+0.020. Necesita 3 más y boost>0.05
+
+**⏳ H-OF-PAR** — ORDER_FLOW per-pair delta_ratio ranges
+  - _Umbral_: n≥200 por par con delta_ratio feature en shadow
+  - _Acción_: Añadir DELTA_MIN/MAX por par dict en shadow_predict.py
+  - _Estado_: BTC: 72 ops con delta_ratio | SOL: 84 ops con delta_ratio
+
+**⏳ H-KELLY-HORA** — Kelly boost ×1.2 en horas top (15/17/19h UTC)
+  - _Umbral_: n≥40 por hora con IC estable ≥+0.10 confirmado en forward
+  - _Acción_: Añadir HORA_BOOST = {13: 1.2, 15: 1.2, 17: 1.2, 19: 1.2} en shadow_predict.py
+  - _Estado_: H=13h UTC: IC=-0.083 n=82/40 PNL=-4.35€ | H=15h UTC: IC=+0.025 n=57/40 PNL=+3.23€ | H=17h UTC: IC=+0.204 n=25/40 PNL=+7.08€ | H=19h UTC: IC=-0.029 n=32/40 PNL=-0.97€
+
+**⏳ H-60MIN-LIVE** — Estrategias 60min → umbral live (IC≥0.08 n≥40)
+  - _Umbral_: IC≥0.08 y n≥40 en cualquier subtipo 60min
+  - _Acción_: Activar live cuando haya credenciales Polymarket API
+  - _Estado_: ETH#60min: n=20/40 IC=+0.091 PNL=+1.25€ | BTC#60min: n=18/40 IC=+0.135 PNL=+3.18€ | SOL#60min: n=12/40 IC=+0.000 PNL=+1.27€
+
+**⏳ H-SOL-15MIN** — SOL#15min → umbral live (IC≥0.08 n≥40)
+  - _Umbral_: IC≥0.08 y n≥40
+  - _Acción_: Activar live cuando haya credenciales Polymarket API
+  - _Estado_: SOL#15min: n=34/40 IC=+0.028 PNL=+4.02€ (ETA: 6 ops)
+  - _Datos_: n=34 IC=+0.028 PNL=+4.02€
+
+**⏳ H-WEEKLY** — Predicciones semanales de precio por par
+  - _Umbral_: n≥15 por par con IC≥+0.05
+  - _Acción_: Si confirma IC≥+0.10 n≥15 en SOL → considerar live semanal
+  - _Estado_: ETH: n=8/15 IC=+0.000 PNL=-2.41€ | BTC: n=6/15 IC=-0.037 PNL=-2.73€ | SOL: n=7/15 IC=+0.058 PNL=+1.36€
+
+**⏳ H-KALMAN** — Kalman filter para drift adaptativo
+  - _Umbral_: n≥200 por subtipo para calibrar parámetros Q/R del KF
+  - _Acción_: Sustituir DRIFT_DAMPING por KalmanDrift en fetch_binance_klines.py
+  - _Estado_: Máximo n actual en GBM: 286/200. Esperar 3+ subtypes con n≥200.
+  - _Bloqueante_: N_INSUFICIENTE
+
+
+### 🔒 Bloqueadas (requieren dataset/API)
+
+**🔒 H-OBI** — Orderbook Imbalance como señal
+  - _Umbral_: Dataset Jon-Becker + API CLOB con orderbook histórico
+  - _Acción_: Implementar s_obi en shadow_predict.py usando L2 orderbook
+  - _Estado_: Descargar github.com/Jon-Becker/prediction-market-analysis (36GB). Analizar spread bid/ask e imbalance por mercado en 60min previos a resolución.
+  - _Bloqueante_: JON_BECKER_DATASET
+
+**🔒 H-OU-THETA** — Calibrar theta OU con datos históricos
+  - _Umbral_: Dataset Jon-Becker con series de precios históricos suficientes
+  - _Acción_: Ajustar THETA_OU por par en strategy_params.json (BTC/ETH/SOL independientes)
+  - _Estado_: Descargar github.com/Jon-Becker/prediction-market-analysis (36GB). Fit OU sobre series históricas por par y estimar theta por MLE.
+  - _Bloqueante_: JON_BECKER_DATASET
+
+**🔒 H-HMM-REGIME** — HMM para régimen de mercado
+  - _Umbral_: n≥200 ops GBM forward con hora_utc/ibs_15, o dataset Jon-Becker
+  - _Acción_: Implementar hmmlearn sobre features GBM; condicionar estrategia al régimen detectado
+  - _Estado_: Descargar github.com/Jon-Becker/prediction-market-analysis (36GB). Entrenar HMM 3-estado sobre (drift_60min, sigma_h) histórico. Validar en forward.
+  - _Bloqueante_: JON_BECKER_DATASET
+
+**🔒 H-CROSS-ARB** — Arbitraje Polymarket vs Kalshi
+  - _Umbral_: API Kalshi activa + credenciales Polymarket live
+  - _Acción_: Extender arb_scanner.py con endpoints Kalshi; comparar mismo evento cross-plataforma
+  - _Estado_: Requiere acceso API Kalshi + credenciales Polymarket live
+  - _Bloqueante_: API_KALSHI
