@@ -2,3 +2,4 @@
 {"ts": "2026-06-27T05:32:37+00:00", "sym": "ETH", "value": 1580.0, "reason": "spike 1200→1580 (31.7%)"}
 {"ts": "2026-06-27T05:32:37+00:00", "sym": "ETH", "value": 41.4, "reason": "rango [41.4] esperado [200, 30000]"}
 {"ts": "2026-06-27T17:02:28+00:00", "sym": "ETH", "value": 1595.255, "reason": "cross_source_warn coinbase=1595.2550 vs mediana=1599.5075 (0.53%)"}
+{"ts": "2026-06-27T17:04:36+00:00", "sym": "SOL", "value": 72.3, "reason": "cross_source_warn coingecko=72.3000 vs mediana=72.1050 (0.54%)"}
