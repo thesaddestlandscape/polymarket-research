@@ -5,8 +5,9 @@ Lanzar:  screen -dmS dash python3 dashboard_server.py
 Acceso:  http://<VPS_IP>:8888
          o SSH tunnel: ssh -L 8888:localhost:8888 root@<VPS_IP> → http://localhost:8888
 """
-import csv, json, sys
+import csv, json, sys, time, threading
 from http.server import HTTPServer, BaseHTTPRequestHandler
+from socketserver import ThreadingMixIn
 from pathlib import Path
 from datetime import datetime, timezone, timedelta
 from collections import defaultdict
@@ -19,6 +20,12 @@ BANKROLL_INICIAL = 20.0
 PORT = int(sys.argv[1]) if len(sys.argv) > 1 else 8888
 
 BLACKLIST_HOURS = {7, 11, 18}  # UTC
+
+# ─── Cache ───────────────────────────────────────────────────────────────────
+_cache_lock = threading.Lock()
+_cache_data  = None
+_cache_ts    = 0.0
+CACHE_TTL    = 1.0   # segundos — recalcula máximo 1×/s
 
 # ─── Utilidades ──────────────────────────────────────────────────────────────
 
@@ -385,7 +392,7 @@ def compute_data():
             "win_rate":  round(wins_total / n_total * 100, 1) if n_total else 0,
             "n_ops":     n_total,
             "n_hoy":     len(rows_hoy),
-            "updated":   now.strftime("%H:%M UTC"),
+            "updated":   now.strftime("%H:%M:%S UTC"),
         },
         "equity_curve":  equity,
         "daily_pnl":     daily_pnl,
@@ -398,6 +405,20 @@ def compute_data():
         "ventanas_perf": ventanas_perf,
         "per_bet":       per_bet,
     }
+
+def get_data():
+    global _cache_data, _cache_ts
+    with _cache_lock:
+        if time.monotonic() - _cache_ts < CACHE_TTL and _cache_data is not None:
+            return _cache_data
+        try:
+            _cache_data = compute_data()
+        except Exception as e:
+            if _cache_data is not None:
+                return _cache_data   # sirve el último bueno si falla
+            raise
+        _cache_ts = time.monotonic()
+        return _cache_data
 
 # ─── HTML ────────────────────────────────────────────────────────────────────
 
@@ -915,9 +936,26 @@ function simpleName(k) {
 }
 
 // ─── Boot ────────────────────────────────────────────────────────────────────
+let _lastUpdated = "";
+const _origFetchData = fetchData;
+async function fetchData() {
+  try {
+    const r = await fetch("/api/data");
+    const d = await r.json();
+    const newTs = d?.stats?.updated || "";
+    if (newTs !== _lastUpdated) {
+      DATA = d;
+      _lastUpdated = newTs;
+      renderAll();
+    }
+    document.getElementById("update-badge").textContent = newTs ? `🟢 ${newTs}` : "";
+  } catch(e) {
+    document.getElementById("update-badge").textContent = "⚠️ sin conexión";
+  }
+}
 initCharts();
 fetchData();
-setInterval(fetchData, 60_000);
+setInterval(fetchData, 1_000);
 </script>
 </body>
 </html>"""
@@ -927,7 +965,7 @@ setInterval(fetchData, 60_000);
 class Handler(BaseHTTPRequestHandler):
     def do_GET(self):
         if self.path == "/api/data":
-            body = json.dumps(compute_data()).encode()
+            body = json.dumps(get_data()).encode()
             self.send_response(200)
             self.send_header("Content-Type", "application/json")
             self.send_header("Content-Length", len(body))
@@ -949,8 +987,11 @@ class Handler(BaseHTTPRequestHandler):
         ts = datetime.now(timezone.utc).strftime("%H:%M:%S")
         print(f"[{ts}] {fmt % args}", flush=True)
 
+class ThreadedHTTPServer(ThreadingMixIn, HTTPServer):
+    daemon_threads = True
+
 if __name__ == "__main__":
-    srv = HTTPServer(("0.0.0.0", PORT), Handler)
+    srv = ThreadedHTTPServer(("0.0.0.0", PORT), Handler)
     print(f"Dashboard → http://0.0.0.0:{PORT}", flush=True)
     print(f"SSH tunnel: ssh -L {PORT}:localhost:{PORT} root@<VPS_IP>", flush=True)
     try:
