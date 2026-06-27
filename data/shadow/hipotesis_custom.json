@@ -195,6 +195,56 @@
       },
       "umbral_n": 50,
       "umbral_ic_max": 0.02
+    },
+    {
+      "id": "H-CUSTOM-DRIFT15-ZONA-MUERTA",
+      "nombre": "GBM#15min drift_15min ∈ [-0.3,+0.3] — zona muerta de señal",
+      "descripcion": "Análisis n=127 GBM#15min: cuando drift_15min está entre -0.3 y +0.3 (mercado sin dirección clara) el IC es negativo (-0.043). Cuando drift>0.3 IC=+0.100 (n=28). Cuando drift<-1 IC=+0.048 (reversión). La señal requiere mercado con dirección clara.",
+      "tipo": "filtro",
+      "umbral": "n≥50 en zona muerta y IC<-0.03",
+      "accion": "Filtrar señales GBM#15min cuando drift_15min ∈ [-0.3, +0.3] — validar con n≥50 antes de implementar",
+      "filtro": {
+        "strategy_prefix": "UPDOWN_GBM",
+        "subtype_contains": "15min",
+        "feature": "drift_15min",
+        "feature_lo": -0.3,
+        "feature_hi": 0.3
+      },
+      "umbral_n": 50,
+      "umbral_ic_max": -0.03
+    },
+    {
+      "id": "H-CUSTOM-DRIFT15-MOMENTUM",
+      "nombre": "GBM#15min drift_15min > 0.3 — zona de momentum (señal fuerte)",
+      "descripcion": "Cuando drift_15min > 0.3%/h el GBM captura bien la dirección: IC=+0.100 n=28 en todos GBM#15min; IC=+0.152 n=13 solo BTC. El mercado tiene dirección clara y el GBM la sigue. Hipótesis: este rango es donde la señal es real.",
+      "tipo": "boost",
+      "umbral": "n≥40 y IC>+0.08",
+      "accion": "Si se confirma IC>0.10 con n≥40 → boost ×1.2 en GBM#15min cuando drift_15min>0.3",
+      "filtro": {
+        "strategy_prefix": "UPDOWN_GBM",
+        "subtype_contains": "15min",
+        "feature": "drift_15min",
+        "feature_lo": 0.3
+      },
+      "umbral_n": 40,
+      "umbral_ic_min": 0.08
+    },
+    {
+      "id": "H-CUSTOM-ETH15-REVERSION",
+      "nombre": "ETH#15min con drift_15min < -1 — ¿mean reversion?",
+      "descripcion": "ETH y BTC tienen patrones opuestos: BTC funciona con momentum (drift>0.3). ETH funciona con reversión (drift<-1): 9/14 (64%) IC=+0.087. La hipótesis es que ETH tiene más mean-reversion que BTC en 15min.",
+      "tipo": "boost",
+      "umbral": "n≥20 y IC>+0.08",
+      "accion": "Si ETH drift<-1 confirma IC>0.08 con n≥20 → boost ×1.1 en ETH#15min cuando drift_15min<-1",
+      "filtro": {
+        "strategy_prefix": "UPDOWN_GBM",
+        "par": "ETH",
+        "subtype_contains": "15min",
+        "feature": "drift_15min",
+        "feature_hi": -1.0
+      },
+      "umbral_n": 20,
+      "umbral_ic_min": 0.08
     }
   ]
 }

@@ -1,4 +1,4 @@
-# Hipótesis automáticas — 2026-06-27 11:37 UTC
+# Hipótesis automáticas — 2026-06-27 11:39 UTC
 _Generado por shadow_postmortem.py sobre 1185 resoluciones (PNL=-24.91€)_
 
 ## Patrones causales activos
@@ -255,3 +255,24 @@ _Sin sugerencias automáticas con datos actuales. Ampliar n por estrategia._
   - _Acción_: Si IC<0.02 con n≥50 → desactivar BTC#15min (el edge ha muerto); si sube a >0.08 → candidato live
   - _Estado_: 49/50 ops en el filtro definido (IC actual=+0.029 PNL=-0.44€)
   - _Datos_: n=49 IC=+0.029 PNL=-0.44€
+
+**⏳ H-CUSTOM-DRIFT15-ZONA-MUERTA** — GBM#15min drift_15min ∈ [-0.3,+0.3] — zona muerta de señal
+  - _Hipótesis_: Análisis n=127 GBM#15min: cuando drift_15min está entre -0.3 y +0.3 (mercado sin dirección clara) el IC es negativo (-0.043). Cuando drift>0.3 IC=+0.100 (n=28). Cuando drift<-1 IC=+0.048 (reversión). La señal requiere mercado con dirección clara.
+  - _Umbral_: 50
+  - _Acción_: Filtrar señales GBM#15min cuando drift_15min ∈ [-0.3, +0.3] — validar con n≥50 antes de implementar
+  - _Estado_: 24/50 ops en el filtro definido (IC actual=+0.000 PNL=-2.08€)
+  - _Datos_: n=24 IC=+0.000 PNL=-2.08€
+
+**🟡 H-CUSTOM-DRIFT15-MOMENTUM** — GBM#15min drift_15min > 0.3 — zona de momentum (señal fuerte)
+  - _Hipótesis_: Cuando drift_15min > 0.3%/h el GBM captura bien la dirección: IC=+0.100 n=28 en todos GBM#15min; IC=+0.152 n=13 solo BTC. El mercado tiene dirección clara y el GBM la sigue. Hipótesis: este rango es donde la señal es real.
+  - _Umbral_: n≥40 y IC>+0.08
+  - _Acción_: Si se confirma IC>0.10 con n≥40 → boost ×1.2 en GBM#15min cuando drift_15min>0.3
+  - _Estado_: SEÑAL POSITIVA confirmada: IC=+0.100 > 0.08 con n=48 PNL=+6.37€
+  - _Datos_: n=48 IC=+0.100 PNL=+6.37€
+
+**⏳ H-CUSTOM-ETH15-REVERSION** — ETH#15min con drift_15min < -1 — ¿mean reversion?
+  - _Hipótesis_: ETH y BTC tienen patrones opuestos: BTC funciona con momentum (drift>0.3). ETH funciona con reversión (drift<-1): 9/14 (64%) IC=+0.087. La hipótesis es que ETH tiene más mean-reversion que BTC en 15min.
+  - _Umbral_: 20
+  - _Acción_: Si ETH drift<-1 confirma IC>0.08 con n≥20 → boost ×1.1 en ETH#15min cuando drift_15min<-1
+  - _Estado_: 14/20 ops en el filtro definido (IC actual=+0.087 PNL=+2.23€)
+  - _Datos_: n=14 IC=+0.087 PNL=+2.23€
