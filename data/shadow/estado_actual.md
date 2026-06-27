@@ -1,4 +1,4 @@
-# Estado del bot — 2026-06-27 10:29 UTC
+# Estado del bot — 2026-06-27 10:30 UTC
 
 ## Capital
 | | |
@@ -17,7 +17,7 @@
 | ROI s/ depósito | -76.67% |
 | P&L hoy (2026-06-27) | 🟢 +1.96 € |
 | Operaciones resueltas | 1180 (579 WIN / 601 LOSS) — 49.1% |
-| Señales abiertas | 126 |
+| Señales abiertas | 128 |
 
 ## Estrategias (visión global)
 
@@ -42,20 +42,20 @@
 
 ## Calidad de datos
 
-⚠️ **DEGRADED** — última verificación 2026-06-27T10:29 UTC
+⚠️ **DEGRADED** — última verificación 2026-06-27T10:30 UTC
 
 | Asset | Precio | Age | Alertas |
 |---|---|---|---|
-| ⚠️ BTC | $60,366.71 | 0.1min | gap 362min (00:23) |
-| ⚠️ ETH | $1,581.30 | 0.1min | gap 362min (00:23) |
-| ⚠️ SOL | $71.95 | 0.1min | gap 362min (00:23) |
-| ⚠️ XRP | $1.06 | 0.1min | gap 362min (00:23) |
+| ⚠️ BTC | $60,366.71 | 0.0min | gap 69min (09:20) |
+| ⚠️ ETH | $1,581.30 | 0.0min | gap 69min (09:20) |
+| ⚠️ SOL | $71.94 | 0.0min | gap 69min (09:20) |
+| ⚠️ XRP | $1.06 | 0.0min | gap 69min (09:20) |
 
 **Alertas activas:**
-- ⚠ BTC:gap 362min (00:23)
-- ⚠ ETH:gap 362min (00:23)
-- ⚠ SOL:gap 362min (00:23)
-- ⚠ XRP:gap 362min (00:23)
+- ⚠ BTC:gap 69min (09:20)
+- ⚠ ETH:gap 69min (09:20)
+- ⚠ SOL:gap 69min (09:20)
+- ⚠ XRP:gap 69min (09:20)
 
 ---
 *Actualizado automáticamente cada ~60s por el fast loop*

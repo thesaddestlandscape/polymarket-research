@@ -1,11 +1,11 @@
 {
-  "timestamp_utc": "2026-06-27T09:20:21+00:00",
+  "timestamp_utc": "2026-06-27T10:30:41+00:00",
   "estado_global": "DEGRADED",
   "alertas": [
-    "BTC:gap 362min (00:23)",
-    "ETH:gap 362min (00:23)",
-    "SOL:gap 362min (00:23)",
-    "XRP:gap 362min (00:23)"
+    "BTC:gap 69min (09:20)",
+    "ETH:gap 69min (09:20)",
+    "SOL:gap 69min (09:20)",
+    "XRP:gap 69min (09:20)"
   ],
   "rechazos_1h": {
     "rango": 0,
@@ -16,9 +16,9 @@
   "assets": {
     "BTC": {
       "estado": "DEGRADED",
-      "n": 2390,
-      "age_seconds": 2.3,
-      "ultimo_precio": 60423.005,
+      "n": 2466,
+      "age_seconds": 1.5,
+      "ultimo_precio": 60366.715,
       "gaps": [
         {
           "inicio": "2026-06-26T00:23:33",
@@ -51,20 +51,25 @@
           "duracion_min": 283.5
         },
         {
-          "inicio": "2026-06-27T08:21:27",
+          "inicio": "2026-06-27T08:26:38",
           "fin": "2026-06-27T09:20:02",
-          "duracion_min": 58.6
+          "duracion_min": 53.4
+        },
+        {
+          "inicio": "2026-06-27T09:20:19",
+          "fin": "2026-06-27T10:29:03",
+          "duracion_min": 68.7
         }
       ],
       "alertas": [
-        "gap 362min (00:23)"
+        "gap 69min (09:20)"
       ]
     },
     "ETH": {
       "estado": "DEGRADED",
-      "n": 2390,
-      "age_seconds": 2.3,
-      "ultimo_precio": 1583.015,
+      "n": 2466,
+      "age_seconds": 1.5,
+      "ultimo_precio": 1581.295,
       "gaps": [
         {
           "inicio": "2026-06-26T00:23:33",
@@ -97,20 +102,25 @@
           "duracion_min": 283.5
         },
         {
-          "inicio": "2026-06-27T08:21:27",
+          "inicio": "2026-06-27T08:26:38",
           "fin": "2026-06-27T09:20:02",
-          "duracion_min": 58.6
+          "duracion_min": 53.4
+        },
+        {
+          "inicio": "2026-06-27T09:20:19",
+          "fin": "2026-06-27T10:29:03",
+          "duracion_min": 68.7
         }
       ],
       "alertas": [
-        "gap 362min (00:23)"
+        "gap 69min (09:20)"
       ]
     },
     "SOL": {
       "estado": "DEGRADED",
-      "n": 2390,
-      "age_seconds": 2.3,
-      "ultimo_precio": 71.66,
+      "n": 2466,
+      "age_seconds": 1.5,
+      "ultimo_precio": 71.94,
       "gaps": [
         {
           "inicio": "2026-06-26T00:23:33",
@@ -143,20 +153,25 @@
           "duracion_min": 283.5
         },
         {
-          "inicio": "2026-06-27T08:21:27",
+          "inicio": "2026-06-27T08:26:38",
           "fin": "2026-06-27T09:20:02",
-          "duracion_min": 58.6
+          "duracion_min": 53.4
+        },
+        {
+          "inicio": "2026-06-27T09:20:19",
+          "fin": "2026-06-27T10:29:03",
+          "duracion_min": 68.7
         }
       ],
       "alertas": [
-        "gap 362min (00:23)"
+        "gap 69min (09:20)"
       ]
     },
     "XRP": {
       "estado": "DEGRADED",
-      "n": 2390,
-      "age_seconds": 2.3,
-      "ultimo_precio": 1.05462,
+      "n": 2466,
+      "age_seconds": 1.5,
+      "ultimo_precio": 1.058,
       "gaps": [
         {
           "inicio": "2026-06-26T00:23:33",
@@ -189,13 +204,18 @@
           "duracion_min": 283.5
         },
         {
-          "inicio": "2026-06-27T08:21:27",
+          "inicio": "2026-06-27T08:26:38",
           "fin": "2026-06-27T09:20:02",
-          "duracion_min": 58.6
+          "duracion_min": 53.4
+        },
+        {
+          "inicio": "2026-06-27T09:20:19",
+          "fin": "2026-06-27T10:29:03",
+          "duracion_min": 68.7
         }
       ],
       "alertas": [
-        "gap 362min (00:23)"
+        "gap 69min (09:20)"
       ]
     }
   },
