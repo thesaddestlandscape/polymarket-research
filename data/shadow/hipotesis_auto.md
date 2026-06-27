@@ -1,4 +1,4 @@
-# Hipótesis automáticas — 2026-06-27 11:58 UTC
+# Hipótesis automáticas — 2026-06-27 11:59 UTC
 _Generado por shadow_postmortem.py sobre 1185 resoluciones (PNL=-24.91€)_
 
 ## Patrones causales activos
@@ -283,3 +283,9 @@ _Sin sugerencias automáticas con datos actuales. Ampliar n por estrategia._
   - _Acción_: Si ETH drift<-1 confirma IC>0.08 con n≥20 → boost ×1.1 en ETH#15min cuando drift_15min<-1
   - _Estado_: 14/20 ops en el filtro definido (IC actual=+0.087 PNL=+2.23€)
   - _Datos_: n=14 IC=+0.087 PNL=+2.23€
+
+**⏳ H-CUSTOM-POLY-DRIFT-CONFIRM** — poly_drift_5obs: ¿el precio YES interno de Polymarket confirma nuestra señal?
+  - _Hipótesis_: Feature nueva 2026-06-27: drift del precio YES en Polymarket en últimas 5 obs (~5min). Si poly_drift<0 y decidimos BUY_NO (o poly_drift>0 y BUY_YES) → confluencia. Si diverge → reducción de stake. Hipótesis: confluencia Binance+Polymarket mejora IC; divergencia empeora.
+  - _Umbral_: 40
+  - _Acción_: Si IC_confluencia>IC_divergencia con n≥40 → mantener el boost. Si no → retirar.
+  - _Estado_: 0/40 ops en el filtro definido (IC actual=+0.000 PNL=+0.00€)
