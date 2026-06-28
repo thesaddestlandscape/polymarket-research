@@ -1,5 +1,5 @@
-# Hipótesis automáticas — 2026-06-28 15:03 UTC
-_Generado por shadow_postmortem.py sobre 1224 resoluciones (PNL=-26.37€)_
+# Hipótesis automáticas — 2026-06-28 15:04 UTC
+_Generado por shadow_postmortem.py sobre 1226 resoluciones (PNL=-28.20€)_
 
 ## Patrones causales activos
 
@@ -76,11 +76,19 @@ _Sin sugerencias automáticas con datos actuales. Ampliar n por estrategia._
 | ✅ UPDOWN_OU_5M#SOL#5min | 10 | -0.042 | -1.06€ | 0 | 0 |
 | ✅ UPDOWN_OU_5M#XRP | 11 | -0.064 | -1.65€ | 0 | 0 |
 | ✅ UPDOWN_OU_5M#XRP#5min | 11 | -0.064 | -1.65€ | 0 | 0 |
-| ✅ WEEKLY_PRICE | 36 | +0.079 | -4.57€ | 0 | 0 |
+| ✅ WEEKLY_PRICE | 38 | +0.050 | -6.40€ | 0 | 0 |
 | ✅ WEEKLY_PRICE#BTC | 12 | -0.043 | -5.01€ | 0 | 0 |
-| ✅ WEEKLY_PRICE#ETH | 13 | +0.108 | -0.18€ | 0 | 0 |
+| ✅ WEEKLY_PRICE#ETH | 15 | +0.066 | -2.02€ | 0 | 0 |
 | ✅ WEEKLY_PRICE#SOL | 11 | +0.064 | +0.62€ | 0 | 0 |
 ## Hipótesis pendientes — tracking automático
+
+
+### 🟡 Listas para evaluar
+
+**🟡 H-WEEKLY** — Predicciones semanales de precio por par
+  - _Umbral_: n≥15 por par con IC≥+0.05
+  - _Acción_: Si confirma IC≥+0.10 n≥15 en SOL → considerar live semanal
+  - _Estado_: ETH: n=15/15 IC=+0.066 PNL=-2.02€ | BTC: n=12/15 IC=-0.043 PNL=-5.01€ | SOL: n=11/15 IC=+0.064 PNL=+0.62€
 
 
 ### ⏳ Acumulando datos
@@ -105,7 +113,7 @@ _Sin sugerencias automáticas con datos actuales. Ampliar n por estrategia._
 **⏳ H-CROSS-ASSET** — Cross-asset confirmation GBM+OF BUY_NO
   - _Umbral_: n_overlaps≥20 y IC_overlap > IC_base + 0.05
   - _Acción_: Cambiar _aplicar_kelly_compuesto: match por activo, no market_id
-  - _Estado_: n_overlaps=17, boost estimado=+0.015. Necesita 3 más y boost>0.05
+  - _Estado_: n_overlaps=17, boost estimado=+0.016. Necesita 3 más y boost>0.05
 
 **⏳ H-OF-PAR** — ORDER_FLOW per-pair delta_ratio ranges
   - _Umbral_: n≥200 por par con delta_ratio feature en shadow
@@ -115,7 +123,7 @@ _Sin sugerencias automáticas con datos actuales. Ampliar n por estrategia._
 **⏳ H-KELLY-HORA** — Kelly boost ×1.2 en horas top (15/17/19h UTC)
   - _Umbral_: n≥40 por hora con IC estable ≥+0.10 confirmado en forward
   - _Acción_: Añadir HORA_BOOST = {13: 1.2, 15: 1.2, 17: 1.2, 19: 1.2} en shadow_predict.py
-  - _Estado_: H=13h UTC: IC=-0.070 n=84/40 PNL=-2.13€ | H=15h UTC: IC=+0.037 n=65/40 PNL=+2.14€ | H=17h UTC: IC=+0.204 n=25/40 PNL=+7.08€ | H=19h UTC: IC=-0.029 n=32/40 PNL=-0.97€
+  - _Estado_: H=13h UTC: IC=-0.070 n=84/40 PNL=-2.13€ | H=15h UTC: IC=+0.022 n=67/40 PNL=+0.30€ | H=17h UTC: IC=+0.204 n=25/40 PNL=+7.08€ | H=19h UTC: IC=-0.029 n=32/40 PNL=-0.97€
 
 **⏳ H-60MIN-LIVE** — Estrategias 60min → umbral live (IC≥0.08 n≥40)
   - _Umbral_: IC≥0.08 y n≥40 en cualquier subtipo 60min
@@ -127,11 +135,6 @@ _Sin sugerencias automáticas con datos actuales. Ampliar n por estrategia._
   - _Acción_: Activar live cuando haya credenciales Polymarket API
   - _Estado_: SOL#15min: n=35/40 IC=+0.041 PNL=+4.50€ (ETA: 5 ops)
   - _Datos_: n=35 IC=+0.041 PNL=+4.50€
-
-**⏳ H-WEEKLY** — Predicciones semanales de precio por par
-  - _Umbral_: n≥15 por par con IC≥+0.05
-  - _Acción_: Si confirma IC≥+0.10 n≥15 en SOL → considerar live semanal
-  - _Estado_: ETH: n=13/15 IC=+0.108 PNL=-0.18€ | BTC: n=12/15 IC=-0.043 PNL=-5.01€ | SOL: n=11/15 IC=+0.064 PNL=+0.62€
 
 **⏳ H-KALMAN** — Kalman filter para drift adaptativo
   - _Umbral_: n≥200 por subtipo para calibrar parámetros Q/R del KF
