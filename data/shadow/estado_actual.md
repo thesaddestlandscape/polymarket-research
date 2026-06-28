@@ -1,4 +1,4 @@
-# Estado del bot — 2026-06-28 16:02 UTC
+# Estado del bot — 2026-06-28 16:03 UTC
 
 ## Capital
 | | |
@@ -11,12 +11,12 @@
 | | |
 |---|---|
 | Inicio | 20.00 € |
-| Actual | **-9.12 €** |
-| P&L acumulado | 🔴 **-29.12 €** |
-| ROI s/ operativo | -145.61% |
-| ROI s/ depósito | -97.08% |
-| P&L hoy (2026-06-28) | 🔴 -3.53 € |
-| Operaciones resueltas | 1227 (604 WIN / 623 LOSS) — 49.2% |
+| Actual | **-10.96 €** |
+| P&L acumulado | 🔴 **-30.96 €** |
+| ROI s/ operativo | -154.79% |
+| ROI s/ depósito | -103.20% |
+| P&L hoy (2026-06-28) | 🔴 -5.37 € |
+| Operaciones resueltas | 1229 (604 WIN / 625 LOSS) — 49.1% |
 | Señales abiertas | 44 |
 
 ## Estrategias (visión global)
@@ -25,8 +25,8 @@
 |---|---|---|---|---|---|---|
 | ORDER_FLOW_5M | 782 | 51.2% | +0.011 | +6.94€ | 0.50€ | ✅ activa |
 | UPDOWN_GBM | 299 | 49.8% | -0.002 | -1.47€ | 0.50€ | ⚠️ IC negativo |
-| PRICE_TARGET_GBM | 29 | 48.3% | -0.016 | -4.30€ | 0.50€ | ⚠️ IC negativo |
-| WEEKLY_PRICE | 38 | 55.3% | +0.050 | -6.40€ | 0.50€ | ✅ activa |
+| PRICE_TARGET_GBM | 30 | 46.7% | -0.031 | -5.22€ | 0.50€ | ⚠️ IC negativo |
+| WEEKLY_PRICE | 39 | 53.8% | +0.037 | -7.32€ | 0.50€ | ✅ activa |
 | SMART_FLOW_1H | 22 | 22.7% | -0.250 | -10.12€ | 0.00€ | 🚫 desactivada |
 | UPDOWN_OU_5M | 57 | 26.3% | -0.229 | -13.76€ | 0.00€ | 🚫 desactivada |
 
@@ -34,21 +34,21 @@
 
 | Timestamp | Estrategia | Mercado | Resultado | PNL |
 |---|---|---|---|---|
+| 2026-06-28T16:03 | PRICE_TARGET_GBM#BTC#atexpiry | Will the price of Bitcoin be above $60,000 on June… | ❌ LOSS | -0.92€ |
+| 2026-06-28T16:03 | WEEKLY_PRICE#BTC | Will the price of Bitcoin be between $58,000 and $… | ❌ LOSS | -0.92€ |
 | 2026-06-28T15:44 | PRICE_TARGET_GBM#ETH#atexpiry | Will the price of Ethereum be above $1,600 on June… | ❌ LOSS | -0.92€ |
 | 2026-06-28T15:04 | WEEKLY_PRICE#ETH | Will the price of Ethereum be between $1,600 and $… | ❌ LOSS | -0.92€ |
 | 2026-06-28T15:04 | WEEKLY_PRICE#ETH | Will the price of Ethereum be between $1,500 and $… | ❌ LOSS | -0.92€ |
-| 2026-06-28T14:04 | PRICE_TARGET_GBM#BTC#atexpiry | Will the price of Bitcoin be above $64,000 on June… | ✅ WIN | +0.40€ |
-| 2026-06-28T14:04 | WEEKLY_PRICE#SOL | Will the price of Solana be between $90 and $100 o… | ✅ WIN | +0.30€ |
 
 ## Calidad de datos
 
-✅ **OK** — última verificación 2026-06-28T16:01 UTC
+✅ **OK** — última verificación 2026-06-28T16:03 UTC
 
 | Asset | Precio | Age | Alertas |
 |---|---|---|---|
 | ✅ BTC | $59,818.24 | 0.1min |  |
 | ✅ ETH | $1,578.27 | 0.1min |  |
-| ✅ SOL | $72.02 | 0.1min |  |
+| ✅ SOL | $72.04 | 0.1min |  |
 | ✅ XRP | $1.05 | 0.1min |  |
 
 ---
