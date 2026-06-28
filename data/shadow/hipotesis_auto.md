@@ -1,5 +1,5 @@
-# Hipótesis automáticas — 2026-06-28 15:43 UTC
-_Generado por shadow_postmortem.py sobre 1226 resoluciones (PNL=-28.20€)_
+# Hipótesis automáticas — 2026-06-28 15:44 UTC
+_Generado por shadow_postmortem.py sobre 1227 resoluciones (PNL=-29.12€)_
 
 ## Patrones causales activos
 
@@ -31,12 +31,12 @@ _Sin sugerencias automáticas con datos actuales. Ampliar n por estrategia._
 | ✅ ORDER_FLOW_5M#SOL#5min | 145 | +0.017 | +1.22€ | 0 | 0 |
 | ✅ ORDER_FLOW_5M#XRP | 116 | -0.009 | -2.01€ | 0 | 0 |
 | ✅ ORDER_FLOW_5M#XRP#5min | 116 | -0.009 | -2.01€ | 0 | 0 |
-| ✅ PRICE_TARGET_GBM | 28 | +0.000 | -3.39€ | 0 | 0 |
+| ✅ PRICE_TARGET_GBM | 29 | -0.016 | -4.30€ | 0 | 0 |
 | ✅ PRICE_TARGET_GBM#BTC | 13 | -0.022 | -1.76€ | 0 | 0 |
 | ✅ PRICE_TARGET_GBM#BTC#atexpiry | 13 | -0.022 | -1.76€ | 0 | 0 |
-| ✅ PRICE_TARGET_GBM#ETH | 11 | +0.021 | -1.18€ | 0 | 0 |
-| ✅ PRICE_TARGET_GBM#ETH#atexpiry | 11 | +0.021 | -1.18€ | 0 | 0 |
-| ✅ PRICE_TARGET_GBM#atexpiry | 28 | +0.000 | -3.39€ | 0 | 0 |
+| ✅ PRICE_TARGET_GBM#ETH | 12 | +0.000 | -2.10€ | 0 | 0 |
+| ✅ PRICE_TARGET_GBM#ETH#atexpiry | 12 | +0.000 | -2.10€ | 0 | 0 |
+| ✅ PRICE_TARGET_GBM#atexpiry | 29 | -0.016 | -4.30€ | 0 | 0 |
 | 🚫 SMART_FLOW_1H | 22 | -0.250 | -10.12€ | 0 | 0 |
 | ✅ SMART_FLOW_1H#BTC | 8 | -0.040 | -1.95€ | 0 | 0 |
 | ✅ UPDOWN_GBM | 299 | -0.002 | -1.47€ | 0 | 0 |
@@ -123,7 +123,7 @@ _Sin sugerencias automáticas con datos actuales. Ampliar n por estrategia._
 **⏳ H-KELLY-HORA** — Kelly boost ×1.2 en horas top (15/17/19h UTC)
   - _Umbral_: n≥40 por hora con IC estable ≥+0.10 confirmado en forward
   - _Acción_: Añadir HORA_BOOST = {13: 1.2, 15: 1.2, 17: 1.2, 19: 1.2} en shadow_predict.py
-  - _Estado_: H=13h UTC: IC=-0.070 n=84/40 PNL=-2.13€ | H=15h UTC: IC=+0.022 n=67/40 PNL=+0.30€ | H=17h UTC: IC=+0.204 n=25/40 PNL=+7.08€ | H=19h UTC: IC=-0.029 n=32/40 PNL=-0.97€
+  - _Estado_: H=13h UTC: IC=-0.070 n=84/40 PNL=-2.13€ | H=15h UTC: IC=+0.014 n=68/40 PNL=-0.61€ | H=17h UTC: IC=+0.204 n=25/40 PNL=+7.08€ | H=19h UTC: IC=-0.029 n=32/40 PNL=-0.97€
 
 **⏳ H-60MIN-LIVE** — Estrategias 60min → umbral live (IC≥0.08 n≥40)
   - _Umbral_: IC≥0.08 y n≥40 en cualquier subtipo 60min
