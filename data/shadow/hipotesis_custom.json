@@ -278,6 +278,34 @@
       "umbral_ic_min": 0.08
     },
     {
+      "id": "H-CUSTOM-GBM-09H",
+      "nombre": "GBM a las 09h UTC — bloqueada 2026-06-29",
+      "descripcion": "IC=-0.158 n=19 PNL=-11.62€. Bloqueada manualmente el 2026-06-29 añadiendo hora 9 a meta.gbm_blacklist_hours_auto. Esta hipótesis monitorea que el IC siga siendo negativo para justificar el bloqueo.",
+      "tipo": "filtro",
+      "umbral": "n≥25 para confirmar el bloqueo es necesario",
+      "accion": "Si IC sube a >-0.05 con n≥30 → evaluar desbloquear. Si se mantiene <-0.10 → confirmar bloqueo permanente.",
+      "filtro": {
+        "strategy_prefix": "UPDOWN_GBM",
+        "hora_utc": 9
+      },
+      "umbral_n": 25,
+      "umbral_ic_max": -0.10
+    },
+    {
+      "id": "H-CUSTOM-GBM-10H",
+      "nombre": "GBM a las 10h UTC — ¿blacklist necesario?",
+      "descripcion": "IC=-0.175 n=14 PNL=-7.70€. Muy cercano al umbral n≥15 para bloquear. Si IC<-0.08 con n≥15, considerar añadir al blacklist (igual que se hizo con 09h).",
+      "tipo": "filtro",
+      "umbral": "n≥15 y IC<-0.08",
+      "accion": "Si IC<-0.08 con n≥15 → añadir 10h a meta.gbm_blacklist_hours_auto en strategy_params.json",
+      "filtro": {
+        "strategy_prefix": "UPDOWN_GBM",
+        "hora_utc": 10
+      },
+      "umbral_n": 15,
+      "umbral_ic_max": -0.08
+    },
+    {
       "id": "H-CUSTOM-POLY-DRIFT-CONFIRM",
       "nombre": "poly_drift_5obs: ¿el precio YES interno de Polymarket confirma nuestra señal?",
       "descripcion": "Feature nueva 2026-06-27: drift del precio YES en Polymarket en últimas 5 obs (~5min). Si poly_drift<0 y decidimos BUY_NO (o poly_drift>0 y BUY_YES) → confluencia. Si diverge → reducción de stake. Hipótesis: confluencia Binance+Polymarket mejora IC; divergencia empeora.",
