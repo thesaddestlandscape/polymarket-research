@@ -1,5 +1,5 @@
-# Hipótesis automáticas — 2026-06-29 16:05 UTC
-_Generado por shadow_postmortem.py sobre 1284 resoluciones (PNL=-40.46€)_
+# Hipótesis automáticas — 2026-06-29 16:07 UTC
+_Generado por shadow_postmortem.py sobre 1286 resoluciones (PNL=-41.88€)_
 
 ## Patrones causales activos
 
@@ -89,19 +89,11 @@ _Sin sugerencias automáticas con datos actuales. Ampliar n por estrategia._
 | ✅ UPDOWN_OU_5M#SOL#5min | 10 | -0.042 | -1.06€ | 0 | 0 |
 | ✅ UPDOWN_OU_5M#XRP | 11 | -0.064 | -1.65€ | 0 | 0 |
 | ✅ UPDOWN_OU_5M#XRP#5min | 11 | -0.064 | -1.65€ | 0 | 0 |
-| ✅ WEEKLY_PRICE | 55 | +0.026 | -12.00€ | 0 | 0 |
-| ✅ WEEKLY_PRICE#BTC | 17 | -0.022 | -6.09€ | 0 | 0 |
+| ✅ WEEKLY_PRICE | 57 | +0.009 | -13.43€ | 0 | 0 |
+| ✅ WEEKLY_PRICE#BTC | 18 | -0.045 | -6.60€ | 0 | 0 |
 | ✅ WEEKLY_PRICE#ETH | 21 | +0.022 | -5.16€ | 0 | 0 |
-| ✅ WEEKLY_PRICE#SOL | 17 | +0.067 | -0.75€ | 0 | 0 |
+| ✅ WEEKLY_PRICE#SOL | 18 | +0.045 | -1.67€ | 0 | 0 |
 ## Hipótesis pendientes — tracking automático
-
-
-### 🟡 Listas para evaluar
-
-**🟡 H-WEEKLY** — Predicciones semanales de precio por par
-  - _Umbral_: n≥15 por par con IC≥+0.05
-  - _Acción_: Si confirma IC≥+0.10 n≥15 en SOL → considerar live semanal
-  - _Estado_: ETH: n=21/15 IC=+0.022 PNL=-5.16€ | BTC: n=17/15 IC=-0.022 PNL=-6.09€ | SOL: n=17/15 IC=+0.067 PNL=-0.75€
 
 
 ### ⏳ Acumulando datos
@@ -148,6 +140,11 @@ _Sin sugerencias automáticas con datos actuales. Ampliar n por estrategia._
   - _Acción_: Activar live cuando haya credenciales Polymarket API
   - _Estado_: SOL#15min: n=36/40 IC=+0.026 PNL=+3.99€ (ETA: 4 ops)
   - _Datos_: n=36 IC=+0.026 PNL=+3.99€
+
+**⏳ H-WEEKLY** — Predicciones semanales de precio por par
+  - _Umbral_: n≥15 por par con IC≥+0.05
+  - _Acción_: Si confirma IC≥+0.10 n≥15 en SOL → considerar live semanal
+  - _Estado_: ETH: n=21/15 IC=+0.022 PNL=-5.16€ | BTC: n=18/15 IC=-0.045 PNL=-6.60€ | SOL: n=18/15 IC=+0.045 PNL=-1.67€
 
 **⏳ H-KALMAN** — Kalman filter para drift adaptativo
   - _Umbral_: n≥200 por subtipo para calibrar parámetros Q/R del KF
