@@ -7,7 +7,7 @@ Flujo por ciclo:
   3. Filtrar señales que pasan el umbral IC mínimo y son de estrategias permitidas
   4. Evitar duplicados: no operar en el mismo mercado dos veces
   5. Calcular stake con live_stake.py
-  6. [STUB] Ejecutar orden en Polymarket via CLOB API  ← pendiente de credenciales
+  6. Ejecutar orden real en Polymarket via CLOB API (py-clob-client)
   7. Registrar en data/live/trades.csv
   8. Log completo en logs/live.log
 """
@@ -15,6 +15,7 @@ Flujo por ciclo:
 import csv
 import json
 import os
+import requests
 from datetime import datetime, timezone, timedelta
 from pathlib import Path
 
@@ -91,8 +92,8 @@ def _cargar_predicciones_hoy() -> list:
     return rows
 
 
-def _ic_para_subtype(strategy: str, subtype: str, params: dict) -> float:
-    """IC Bayesiano efectivo del subtype desde strategy_params.json."""
+def _ic_para_subtype(strategy: str, subtype: str, params: dict, decision: str = "") -> float:
+    """IC Bayesiano efectivo del subtype. Usa ic_BUY_NO/ic_BUY_YES si están disponibles."""
     claves = []
     if "#" in subtype:
         a, d = subtype.split("#", 1)
@@ -103,34 +104,96 @@ def _ic_para_subtype(strategy: str, subtype: str, params: dict) -> float:
         claves = [strategy]
     for k in claves:
         if k in params:
-            return float(params[k].get("ic_bayes", 0))
+            p = params[k]
+            # Preferir IC direccional si existe y tiene n suficiente
+            if decision == "BUY_NO" and p.get("ic_BUY_NO") is not None:
+                ic_dir = float(p["ic_BUY_NO"])
+                if p.get("n_BUY_NO", 0) >= 5:
+                    return ic_dir
+            elif decision == "BUY_YES" and p.get("ic_BUY_YES") is not None:
+                ic_dir = float(p["ic_BUY_YES"])
+                if p.get("n_BUY_YES", 0) >= 5:
+                    return ic_dir
+            return float(p.get("ic_bayes", 0))
     return 0.0
+
+
+def _get_clob_client():
+    """Crea cliente CLOB autenticado desde .env."""
+    from dotenv import load_dotenv
+    from py_clob_client.client import ClobClient
+    from py_clob_client.clob_types import ApiCreds
+    from py_clob_client.constants import POLYGON
+    load_dotenv(DIR_LIVE / ".env")
+    key = os.getenv("POLY_PRIVATE_KEY")
+    creds = ApiCreds(
+        api_key=os.getenv("POLY_API_KEY"),
+        api_secret=os.getenv("POLY_API_SECRET"),
+        api_passphrase=os.getenv("POLY_API_PASSPHRASE"),
+    )
+    return ClobClient("https://clob.polymarket.com", key=key, chain_id=POLYGON, creds=creds)
+
+
+def _get_token_ids(market_id: str) -> tuple[str, str]:
+    """Devuelve (yes_token_id, no_token_id) desde Gamma API."""
+    resp = requests.get(
+        f"https://gamma-api.polymarket.com/markets/{market_id}",
+        timeout=10
+    )
+    resp.raise_for_status()
+    data = resp.json()
+    raw = data.get("clobTokenIds", [])
+    tokens = json.loads(raw) if isinstance(raw, str) else raw
+    if len(tokens) < 2:
+        raise ValueError(f"clobTokenIds incompleto para market {market_id}: {tokens}")
+    return tokens[0], tokens[1]
 
 
 def _ejecutar_orden_polymarket(market_id: str, direction: str,
                                stake_eur: float, entry_price: float) -> dict:
-    """
-    STUB: aquí irá la integración con la CLOB API de Polymarket.
+    """Ejecuta orden real en Polymarket via CLOB API."""
+    from py_clob_client.clob_types import MarketOrderArgs
+    try:
+        yes_token, no_token = _get_token_ids(market_id)
+        if direction == "BUY_YES":
+            token_id = yes_token
+            precio   = entry_price
+        else:  # BUY_NO
+            token_id = no_token
+            precio   = round(1.0 - entry_price, 6)
 
-    Necesita:
-      - Clave privada de la wallet (POLYMARKET_PRIVATE_KEY en .env)
-      - py-clob-client o llamadas directas a https://clob.polymarket.com
-      - USDC en Polygon en la wallet
+        client = _get_clob_client()
+        order_args = MarketOrderArgs(
+            token_id=token_id,
+            amount=stake_eur,
+            side="BUY",
+            price=precio,
+        )
+        signed_order = client.create_market_order(order_args)
+        resp = client.post_order(signed_order)
 
-    Cuando esté listo, sustituir este stub por la llamada real.
-    Devuelve dict con: ok, order_id, entry_price_real, fee_eur, error
-    """
-    log(f"  [STUB] Orden NO ejecutada — credenciales pendientes")
-    log(f"         market_id={market_id} direction={direction} "
-        f"stake={stake_eur:.2f}€ precio={entry_price:.4f}")
-    return {
-        "ok":           False,
-        "stub":         True,
-        "order_id":     None,
-        "entry_price":  entry_price,
-        "fee_eur":      0.0,
-        "error":        "CREDENCIALES_PENDIENTES",
-    }
+        order_id = resp.get("orderID") or resp.get("id") or str(resp)
+        filled_price = float(resp.get("price", precio))
+        fee = float(resp.get("feeRateBps", 0)) / 10000 * stake_eur
+
+        log(f"  ✅ Orden ejecutada: {direction} market={market_id} "
+            f"stake={stake_eur:.2f}€ precio={filled_price:.4f} order_id={order_id}")
+        return {
+            "ok":          True,
+            "order_id":    order_id,
+            "entry_price": filled_price,
+            "fee_eur":     fee,
+            "error":       "",
+        }
+    except Exception as e:
+        log(f"  ❌ Error ejecutando orden: {e}")
+        return {
+            "ok":          False,
+            "order_id":    None,
+            "entry_price": entry_price,
+            "fee_eur":     0.0,
+            "error":       str(e),
+        }
 
 
 def _registrar_trade(row: dict):
@@ -204,7 +267,7 @@ def main():
             continue
 
         # IC mínimo confirmado en histórico
-        ic_hist = _ic_para_subtype(strategy, subtype, params)
+        ic_hist = _ic_para_subtype(strategy, subtype, params, decision=dec)
         n_hist  = params.get(f"{strategy}#{subtype}", params.get(strategy, {})).get("n", 0)
         if ic_hist < min_ic or n_hist < min_n:
             continue

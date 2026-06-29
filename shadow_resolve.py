@@ -512,6 +512,71 @@ def main():
         print(f"    {s:30s}  n={d['n']:>4}  acierto={tasa:5.1f}%  "
               f"pnl_neto={d['pnl']:+.2f}€")
 
+    # Cerrar trades live que hayan resuelto
+    _cerrar_trades_live(nuevos_resultados, ts)
+
+
+def _cerrar_trades_live(nuevos_resultados: list, ts: str):
+    """Actualiza data/live/trades.csv: cierra trades OPEN cuyo mercado ya resolvió."""
+    LIVE_CSV = Path("data/live/trades.csv")
+    if not LIVE_CSV.exists():
+        return
+
+    # Índice de outcomes por market_id
+    outcomes = {}
+    for r in nuevos_resultados:
+        outcomes[str(r["market_id"])] = {
+            "outcome_real": r["outcome_real"],
+            "acierto":      int(r["acierto"]),
+        }
+
+    trades = list(csv.DictReader(open(LIVE_CSV, encoding="utf-8")))
+    modificado = False
+
+    for t in trades:
+        if t.get("status") != "OPEN":
+            continue
+        mid = str(t.get("market_id", ""))
+        if mid not in outcomes:
+            continue
+
+        outcome = outcomes[mid]["outcome_real"]
+        acierto = outcomes[mid]["acierto"]
+        direction = t.get("direction", "")
+        acierto_dir = (direction == "BUY_YES" and outcome == "YES") or \
+                      (direction == "BUY_NO"  and outcome == "NO")
+
+        try:
+            stake      = float(t.get("stake_eur") or 0)
+            entry_p    = float(t.get("entry_price") or 0.5)
+            fee        = float(t.get("fee_eur") or 0)
+        except ValueError:
+            continue
+
+        if acierto_dir and entry_p > 0:
+            pnl_bruto = stake * (1.0 / entry_p - 1.0)
+        else:
+            pnl_bruto = -stake
+        pnl_neto = pnl_bruto - fee
+
+        t["status"]          = "CLOSED"
+        t["close_timestamp"] = ts
+        t["exit_price"]      = "1.0" if acierto_dir else "0.0"
+        t["outcome_real"]    = outcome
+        t["pnl_bruto_eur"]   = f"{pnl_bruto:.4f}"
+        t["pnl_neto_eur"]    = f"{pnl_neto:.4f}"
+        modificado = True
+        signo = "✅" if acierto_dir else "❌"
+        print(f"  {signo} Trade live cerrado: {t['strategy']}#{t['subtype']} "
+              f"{direction} market={mid} PNL={pnl_neto:+.4f}€")
+
+    if modificado:
+        cols = list(trades[0].keys())
+        with open(LIVE_CSV, "w", newline="", encoding="utf-8") as f:
+            w = csv.DictWriter(f, fieldnames=cols)
+            w.writeheader()
+            w.writerows(trades)
+
     actualizar_strategy_accuracy(nuevos_resultados, ts)
 
     print(f"[{ts}] === Fin shadow resolve ===")

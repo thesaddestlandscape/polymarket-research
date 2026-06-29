@@ -18,6 +18,9 @@ REPO             = Path(__file__).parent
 RESULTS_CSV      = REPO / "data/shadow/results.csv"
 STRATEGY_PARAMS  = REPO / "data/shadow/strategy_params.json"
 PRICES_DIR       = REPO / "data/prices"
+LIVE_TRADES_CSV  = REPO / "data/live/trades.csv"
+LIVE_SWITCH_PATH = REPO / "data/live/LIVE_MODE_ON"
+LIVE_BANKROLL_INICIAL = 25.44  # depósito real 2026-06-29
 BANKROLL_INICIAL = 20.0
 PORT = int(sys.argv[1]) if len(sys.argv) > 1 else 8888
 
@@ -151,6 +154,40 @@ def load_activas():
         return {k: v.get("activa", True) for k, v in sp.get("estrategias", {}).items()}
     except Exception:
         return {}
+
+def load_live_trades():
+    if not LIVE_TRADES_CSV.exists():
+        return []
+    try:
+        return list(csv.DictReader(open(LIVE_TRADES_CSV, encoding="utf-8")))
+    except Exception:
+        return []
+
+def compute_live_data():
+    trades = load_live_trades()
+    switch_on = LIVE_SWITCH_PATH.exists()
+    pnl_total = sum(float(t.get("pnl_neto_eur") or 0) for t in trades if t.get("status") == "CLOSED")
+    pnl_hoy = 0.0
+    hoy = datetime.now(timezone.utc).strftime("%Y-%m-%d")
+    for t in trades:
+        if (t.get("timestamp_utc") or "")[:10] == hoy and t.get("status") == "CLOSED":
+            pnl_hoy += float(t.get("pnl_neto_eur") or 0)
+    open_trades = [t for t in trades if t.get("status") == "OPEN"]
+    closed = [t for t in trades if t.get("status") == "CLOSED"]
+    wins = sum(1 for t in closed if float(t.get("pnl_neto_eur") or 0) > 0)
+    recent = sorted(trades, key=lambda t: t.get("timestamp_utc",""), reverse=True)[:10]
+    return {
+        "switch": switch_on,
+        "bankroll": round(LIVE_BANKROLL_INICIAL + pnl_total, 2),
+        "bankroll_inicial": LIVE_BANKROLL_INICIAL,
+        "pnl_total": round(pnl_total, 2),
+        "pnl_hoy": round(pnl_hoy, 2),
+        "n_total": len(trades),
+        "n_open": len(open_trades),
+        "n_closed": len(closed),
+        "win_rate": round(wins / len(closed) * 100, 1) if closed else 0,
+        "recent_trades": recent,
+    }
 
 # ─── Procesamiento ───────────────────────────────────────────────────────────
 
@@ -406,6 +443,7 @@ def compute_data():
         "btc_markers":   btc_markers,
         "ventanas_perf": ventanas_perf,
         "per_bet":       per_bet,
+        "live":          compute_live_data(),
     }
 
 def get_data():
@@ -511,6 +549,44 @@ footer { text-align: center; padding: 10px; font-size: 10px; color: var(--muted)
   <h1>🤖 Polymarket Bot — Dashboard</h1>
   <span id="update-badge">Cargando…</span>
 </header>
+
+<!-- LIVE TRADING — preámbulo -->
+<div id="live-section" style="background:#0d1f1a;border:1px solid #26a69a55;border-radius:8px;margin:8px 8px 0;padding:12px 16px">
+  <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px">
+    <div id="live-switch-badge" style="font-size:12px;font-weight:700;padding:3px 10px;border-radius:20px">…</div>
+    <span style="font-size:13px;font-weight:600;color:#e0e0e0">LIVE TRADING — Polymarket</span>
+    <span style="font-size:11px;color:var(--muted);margin-left:4px">inicio: 25.44 USDC · 2026-06-29</span>
+  </div>
+  <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-bottom:10px">
+    <div style="background:#ffffff08;border-radius:6px;padding:8px;text-align:center">
+      <div style="font-size:9px;color:var(--muted)">💰 Bankroll live</div>
+      <div id="live-bankroll" style="font-size:20px;font-weight:700">—</div>
+    </div>
+    <div style="background:#ffffff08;border-radius:6px;padding:8px;text-align:center">
+      <div style="font-size:9px;color:var(--muted)">📈 PNL total</div>
+      <div id="live-pnl" style="font-size:20px;font-weight:700">—</div>
+    </div>
+    <div style="background:#ffffff08;border-radius:6px;padding:8px;text-align:center">
+      <div style="font-size:9px;color:var(--muted)">🎯 PNL hoy</div>
+      <div id="live-pnl-hoy" style="font-size:20px;font-weight:700">—</div>
+    </div>
+    <div style="background:#ffffff08;border-radius:6px;padding:8px;text-align:center">
+      <div style="font-size:9px;color:var(--muted)">✅ Win rate</div>
+      <div id="live-wr" style="font-size:20px;font-weight:700">—</div>
+    </div>
+    <div style="background:#ffffff08;border-radius:6px;padding:8px;text-align:center">
+      <div style="font-size:9px;color:var(--muted)">🎲 Trades</div>
+      <div id="live-trades-count" style="font-size:20px;font-weight:700">—</div>
+    </div>
+  </div>
+  <table class="mini-table" id="live-trades-table">
+    <thead><tr>
+      <th>Hora</th><th>Estrategia</th><th>Mercado</th><th>Dir.</th>
+      <th>Stake</th><th>Precio</th><th>Estado</th><th>PNL</th>
+    </tr></thead>
+    <tbody id="live-trades-body"><tr><td colspan="8" style="color:var(--muted);text-align:center">Sin trades aún</td></tr></tbody>
+  </table>
+</div>
 
 <!-- Stats row -->
 <div class="stats-row">
@@ -713,11 +789,65 @@ function filterDailyByPeriod(arr, period) {
   return arr.filter(pt => pt.time >= cutoff);
 }
 
+// ─── Render Live ─────────────────────────────────────────────────────────────
+function renderLive(live) {
+  if (!live) return;
+  const fmtPnl = v => {
+    const cls = v > 0 ? "pos" : v < 0 ? "neg" : "neu";
+    return `<span class="${cls}">${v > 0 ? "+" : ""}${v.toFixed(2)}€</span>`;
+  };
+  // Switch badge
+  const badge = document.getElementById("live-switch-badge");
+  if (live.switch) {
+    badge.textContent = "🟢 LIVE ON";
+    badge.style.background = "#26a69a33";
+    badge.style.color = "#26a69a";
+    badge.style.border = "1px solid #26a69a66";
+  } else {
+    badge.textContent = "⚫ LIVE OFF";
+    badge.style.background = "#ffffff11";
+    badge.style.color = "#888";
+    badge.style.border = "1px solid #ffffff22";
+  }
+  document.getElementById("live-bankroll").textContent = `${live.bankroll.toFixed(2)}$`;
+  document.getElementById("live-pnl").innerHTML = fmtPnl(live.pnl_total);
+  document.getElementById("live-pnl-hoy").innerHTML = fmtPnl(live.pnl_hoy);
+  document.getElementById("live-wr").textContent = live.n_closed ? `${live.win_rate}%` : "—";
+  document.getElementById("live-trades-count").textContent =
+    `${live.n_total} (${live.n_open} abiertas)`;
+  // Tabla trades
+  const tbody = document.getElementById("live-trades-body");
+  if (!live.recent_trades || live.recent_trades.length === 0) {
+    tbody.innerHTML = '<tr><td colspan="8" style="color:var(--muted);text-align:center">Sin trades aún</td></tr>';
+    return;
+  }
+  tbody.innerHTML = live.recent_trades.map(t => {
+    const pnl = t.pnl_neto_eur ? parseFloat(t.pnl_neto_eur) : null;
+    const pnlHtml = pnl !== null && t.status === "CLOSED"
+      ? `<span class="${pnl>0?"pos":"neg"}">${pnl>0?"+":""}${pnl.toFixed(2)}€</span>`
+      : "—";
+    const hora = (t.timestamp_utc || "").slice(11, 16);
+    const q = (t.question || "").slice(0, 45);
+    const statusColor = t.status === "OPEN" ? "#f5a623" : t.status === "CLOSED" ? "#26a69a" : "#888";
+    return `<tr>
+      <td>${hora}</td>
+      <td>${t.strategy}#${t.subtype}</td>
+      <td title="${t.question}">${q}…</td>
+      <td><b>${t.direction}</b></td>
+      <td>${parseFloat(t.stake_eur||0).toFixed(2)}€</td>
+      <td>${parseFloat(t.entry_price||0).toFixed(3)}</td>
+      <td style="color:${statusColor}">${t.status}</td>
+      <td>${pnlHtml}</td>
+    </tr>`;
+  }).join("");
+}
+
 // ─── Render ───────────────────────────────────────────────────────────────────
 function renderAll() {
   if (!DATA) return;
   const { stats, equity_curve, daily_pnl, by_hour, by_strategy,
-          by_asset, rolling_ic, prices, btc_markers, ventanas_perf } = DATA;
+          by_asset, rolling_ic, prices, btc_markers, ventanas_perf, live } = DATA;
+  renderLive(live);
 
   // Stats
   const fmt = (v, prefix="") => {

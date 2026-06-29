@@ -32,7 +32,7 @@ CONFIG_PATH           = DIR_LIVE / "config_live.json"
 TRADES_CSV            = DIR_LIVE / "trades.csv"
 SWITCH_PATH           = DIR_LIVE / "LIVE_MODE_ON"
 
-CAPITAL_OPERATIVO_INICIAL = 20.0
+CAPITAL_OPERATIVO_INICIAL = 25.44  # depósito real 2026-06-29
 
 
 def _cargar_config() -> dict:
