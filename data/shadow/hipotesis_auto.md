@@ -1,5 +1,5 @@
-# Hipótesis automáticas — 2026-06-29 16:28 UTC
-_Generado por shadow_postmortem.py sobre 1287 resoluciones (PNL=-42.39€)_
+# Hipótesis automáticas — 2026-06-29 16:30 UTC
+_Generado por shadow_postmortem.py sobre 1288 resoluciones (PNL=-41.96€)_
 
 ## Patrones causales activos
 
@@ -47,8 +47,8 @@ _Sin sugerencias automáticas con datos actuales. Ampliar n por estrategia._
 | ✅ PRICE_TARGET_GBM#atexpiry | 48 | -0.080 | -10.87€ | 0 | 0 |
 | 🚫 SMART_FLOW_1H | 23 | -0.260 | -10.63€ | 0 | 0 |
 | ✅ SMART_FLOW_1H#BTC | 9 | -0.061 | -2.46€ | 0 | 0 |
-| ✅ UPDOWN_GBM | 318 | -0.003 | -0.96€ | 0 | 0 |
-| ✅ UPDOWN_GBM#15min | 180 | +0.038 | +6.18€ | 0 | 0 |
+| ✅ UPDOWN_GBM | 319 | -0.002 | -0.53€ | 0 | 0 |
+| ✅ UPDOWN_GBM#15min | 181 | +0.041 | +6.61€ | 0 | 0 |
 | 🚫 UPDOWN_GBM#240min | 12 | -0.171 | -4.82€ | 0 | 0 |
 | 🚫 UPDOWN_GBM#5min | 56 | -0.155 | -16.64€ | 0 | 0 |
 | ✅ UPDOWN_GBM#60min | 57 | +0.093 | +8.07€ | 0 | 0 |
@@ -57,8 +57,8 @@ _Sin sugerencias automáticas con datos actuales. Ampliar n por estrategia._
 | ✅ UPDOWN_GBM#BTC#240min | 5 | -0.089 | -2.96€ | 0 | 0 |
 | 🚫 UPDOWN_GBM#BTC#5min | 16 | -0.133 | -6.30€ | 0 | 0 |
 | ✅ UPDOWN_GBM#BTC#60min | 20 | +0.136 | +3.10€ | 0 | 0 |
-| ✅ UPDOWN_GBM#ETH | 121 | +0.037 | +3.50€ | 0 | 0 |
-| ✅ UPDOWN_GBM#ETH#15min | 76 | +0.051 | +1.53€ | 0 | 0 |
+| ✅ UPDOWN_GBM#ETH | 122 | +0.040 | +3.93€ | 0 | 0 |
+| ✅ UPDOWN_GBM#ETH#15min | 77 | +0.057 | +1.96€ | 0 | 0 |
 | ✅ UPDOWN_GBM#ETH#240min | 5 | -0.018 | -0.44€ | 0 | 0 |
 | 🚫 UPDOWN_GBM#ETH#5min | 12 | -0.086 | -3.67€ | 0 | 0 |
 | ✅ UPDOWN_GBM#ETH#60min | 24 | +0.115 | +4.22€ | 0 | 0 |
@@ -102,13 +102,13 @@ _Sin sugerencias automáticas con datos actuales. Ampliar n por estrategia._
 **⏳ H-IBS-15** — IBS-15 como señal de mean-reversion
   - _Umbral_: n≥40 ops con ibs_15 en features y spread_IC>0.15 entre buckets
   - _Acción_: Añadir ibs_15 como boost/filtro en FEATURE_RULES de shadow_postmortem.py
-  - _Estado_: 29/40 ops con ibs_15. oversold(IBS<0.3): IC=-0.021 n=9 | neutral: IC=+0.000 n=6 | overbought(IBS>0.7): IC=+0.000 n=12
-  - _Datos_: n=29 IC=-0.016 PNL=-2.09€
+  - _Estado_: 30/40 ops con ibs_15. oversold(IBS<0.3): IC=+0.000 n=10 | neutral: IC=+0.000 n=6 | overbought(IBS>0.7): IC=+0.000 n=12
+  - _Datos_: n=30 IC=+0.000 PNL=-1.65€
 
 **⏳ H-HORA-GBM** — hora_utc causal automático en GBM (forward)
   - _Umbral_: n≥20 forward con hora_utc + alguna hora con n≥15 IC<-0.10 o >+0.10
   - _Acción_: El sistema lo aplica automáticamente vía FEATURE_RULES. Verificar en strategy_params.json.
-  - _Estado_: 29 ops, 5 horas distintas. Sin hora con n≥15 y IC extremo aún.
+  - _Estado_: 30 ops, 6 horas distintas. Sin hora con n≥15 y IC extremo aún.
 
 **⏳ H-CROSS-ASSET** — Cross-asset confirmation GBM+OF BUY_NO
   - _Umbral_: n_overlaps≥20 y IC_overlap > IC_base + 0.05
@@ -144,7 +144,7 @@ _Sin sugerencias automáticas con datos actuales. Ampliar n por estrategia._
 **⏳ H-KALMAN** — Kalman filter para drift adaptativo
   - _Umbral_: n≥200 por subtipo para calibrar parámetros Q/R del KF
   - _Acción_: Sustituir DRIFT_DAMPING por KalmanDrift en fetch_binance_klines.py
-  - _Estado_: Máximo n actual en GBM: 318/200. Esperar 3+ subtypes con n≥200.
+  - _Estado_: Máximo n actual en GBM: 319/200. Esperar 3+ subtypes con n≥200.
   - _Bloqueante_: N_INSUFICIENTE
 
 
@@ -194,8 +194,8 @@ _Sin sugerencias automáticas con datos actuales. Ampliar n por estrategia._
   - _Hipótesis_: Cuando la volatilidad horaria es muy alta el GBM puede sobreestimar el edge. Testear.
   - _Umbral_: n≥30 y IC<-0.05
   - _Acción_: Filtrar señales GBM cuando sigma_h > 0.002 si se confirma IC negativo
-  - _Estado_: n=219 IC=+0.016 PNL=+4.68€ — sin señal clara aún (umbral IC: min=None max=-0.05)
-  - _Datos_: n=219 IC=+0.016 PNL=+4.68€
+  - _Estado_: n=220 IC=+0.018 PNL=+5.11€ — sin señal clara aún (umbral IC: min=None max=-0.05)
+  - _Datos_: n=220 IC=+0.018 PNL=+5.11€
 
 **⏳ H-CUSTOM-OF-02H-BTCSOL** — ORDER_FLOW H=02h UTC — BTC+SOL solamente (revisar blacklist)
   - _Hipótesis_: La hora 02h está en el blacklist basado en TODOS los pares. Con BTC+SOL solo, el historial muestra 4/5 (80%) IC=+0.054. ¿Se confirma la señal positiva con más datos?
