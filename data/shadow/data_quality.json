@@ -1,5 +1,5 @@
 {
-  "timestamp_utc": "2026-06-29T21:07:16+00:00",
+  "timestamp_utc": "2026-06-29T21:09:11+00:00",
   "estado_global": "OK",
   "alertas": [],
   "rechazos_1h": {
@@ -11,33 +11,33 @@
   "assets": {
     "BTC": {
       "estado": "OK",
-      "n": 8010,
-      "age_seconds": 1.8,
+      "n": 8015,
+      "age_seconds": 1.7,
       "ultimo_precio": 60219.045,
       "gaps": [],
       "alertas": []
     },
     "ETH": {
       "estado": "OK",
-      "n": 8010,
-      "age_seconds": 1.8,
+      "n": 8015,
+      "age_seconds": 1.7,
       "ultimo_precio": 1614.52,
       "gaps": [],
       "alertas": []
     },
     "SOL": {
       "estado": "OK",
-      "n": 8010,
-      "age_seconds": 1.8,
+      "n": 8015,
+      "age_seconds": 1.7,
       "ultimo_precio": 75.37,
       "gaps": [],
       "alertas": []
     },
     "XRP": {
       "estado": "OK",
-      "n": 8010,
-      "age_seconds": 1.8,
-      "ultimo_precio": 1.0615,
+      "n": 8015,
+      "age_seconds": 1.7,
+      "ultimo_precio": 1.0619,
       "gaps": [],
       "alertas": []
     }
