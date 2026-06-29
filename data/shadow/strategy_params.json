@@ -1,17 +1,17 @@
 {
-  "timestamp_utc": "2026-06-29T20:14:31+00:00",
+  "timestamp_utc": "2026-06-29T20:16:28+00:00",
   "estrategias": {
     "UPDOWN_GBM": {
       "activa": true,
       "edge_minimo": 0.02,
-      "ic_bayes": 0.0174,
-      "n": 342,
-      "pnl_total": 9.0559,
+      "ic_bayes": 0.0188,
+      "n": 343,
+      "pnl_total": 10.9283,
       "causa_principal": "DIRECTION_ERROR",
-      "motivo": "IC_bayes=+0.017 n=342 conf=1.00",
+      "motivo": "IC_bayes=+0.019 n=343 conf=1.00",
       "apuesta_kelly": 0.5,
-      "n_BUY_YES": 234,
-      "ic_BUY_YES": 0.0042,
+      "n_BUY_YES": 235,
+      "ic_BUY_YES": 0.0063,
       "apuesta_kelly_BUY_YES": 0.5,
       "n_BUY_NO": 108,
       "ic_BUY_NO": 0.0455,
@@ -116,17 +116,17 @@
     "UPDOWN_GBM#BTC": {
       "activa": true,
       "edge_minimo": 0.02,
-      "ic_bayes": 0.0185,
-      "n": 106,
-      "pnl_total": -0.2184,
+      "ic_bayes": 0.0229,
+      "n": 107,
+      "pnl_total": 1.654,
       "causa_principal": "DIRECTION_ERROR",
-      "motivo": "IC_bayes=+0.019 n=106 conf=1.00",
+      "motivo": "IC_bayes=+0.023 n=107 conf=1.00",
       "apuesta_kelly": 0.5,
       "n_BUY_NO": 30,
       "ic_BUY_NO": 0.0,
       "apuesta_kelly_BUY_NO": 0.5,
-      "n_BUY_YES": 76,
-      "ic_BUY_YES": 0.0256,
+      "n_BUY_YES": 77,
+      "ic_BUY_YES": 0.0316,
       "apuesta_kelly_BUY_YES": 0.5
     },
     "UPDOWN_GBM#SOL#15min": {
@@ -148,14 +148,14 @@
     "UPDOWN_GBM#15min": {
       "activa": true,
       "edge_minimo": 0.02,
-      "ic_bayes": 0.0622,
-      "n": 199,
-      "pnl_total": 13.0101,
+      "ic_bayes": 0.0644,
+      "n": 200,
+      "pnl_total": 14.8825,
       "causa_principal": "DIRECTION_ERROR",
-      "motivo": "IC_bayes=+0.062 n=199 conf=1.00",
-      "apuesta_kelly": 0.62,
-      "n_BUY_YES": 148,
-      "ic_BUY_YES": 0.04,
+      "motivo": "IC_bayes=+0.064 n=200 conf=1.00",
+      "apuesta_kelly": 0.64,
+      "n_BUY_YES": 149,
+      "ic_BUY_YES": 0.043,
       "apuesta_kelly_BUY_YES": 0.5,
       "n_BUY_NO": 51,
       "ic_BUY_NO": 0.1226,
@@ -196,14 +196,14 @@
     "UPDOWN_GBM#BTC#15min": {
       "activa": true,
       "edge_minimo": 0.02,
-      "ic_bayes": 0.05,
-      "n": 58,
-      "pnl_total": -0.0374,
+      "ic_bayes": 0.0574,
+      "n": 59,
+      "pnl_total": 1.835,
       "causa_principal": "DIRECTION_ERROR",
-      "motivo": "IC_bayes=+0.050 n=58 conf=1.00",
-      "apuesta_kelly": 0.5,
-      "n_BUY_YES": 47,
-      "ic_BUY_YES": 0.0306,
+      "motivo": "IC_bayes=+0.057 n=59 conf=1.00",
+      "apuesta_kelly": 0.57,
+      "n_BUY_YES": 48,
+      "ic_BUY_YES": 0.04,
       "apuesta_kelly_BUY_YES": 0.5,
       "n_BUY_NO": 11,
       "ic_BUY_NO": 0.0635,
@@ -213,22 +213,22 @@
         {
           "feature": "pct_spot_vs_ref",
           "condicion": "abs_lt",
-          "umbral": 0.1022,
-          "ic_patron": 0.1364,
-          "ic_base": 0.05,
+          "umbral": 0.0921,
+          "ic_patron": 0.1818,
+          "ic_base": 0.0574,
           "n_patron": 20,
-          "kelly_boost": 0.68,
-          "descubierto": "2026-06-29T20:14:31+00:00"
+          "kelly_boost": 0.91,
+          "descubierto": "2026-06-29T20:16:28+00:00"
         },
         {
           "feature": "sigma_h",
           "condicion": "lt",
-          "umbral": 0.0121,
-          "ic_patron": 0.125,
-          "ic_base": 0.05,
-          "n_patron": 30,
-          "kelly_boost": 0.62,
-          "descubierto": "2026-06-29T20:14:31+00:00"
+          "umbral": 0.0125,
+          "ic_patron": 0.1341,
+          "ic_base": 0.0574,
+          "n_patron": 39,
+          "kelly_boost": 0.67,
+          "descubierto": "2026-06-29T20:16:28+00:00"
         }
       ]
     },
@@ -331,7 +331,7 @@
           "ic_base": 0.0795,
           "n_patron": 57,
           "kelly_boost": 0.64,
-          "descubierto": "2026-06-29T20:14:31+00:00"
+          "descubierto": "2026-06-29T20:16:28+00:00"
         },
         {
           "feature": "drift_60min",
@@ -341,7 +341,7 @@
           "ic_base": 0.0795,
           "n_patron": 38,
           "kelly_boost": 0.62,
-          "descubierto": "2026-06-29T20:14:31+00:00"
+          "descubierto": "2026-06-29T20:16:28+00:00"
         },
         {
           "feature": "drift_15min",
@@ -351,7 +351,7 @@
           "ic_base": 0.0795,
           "n_patron": 25,
           "kelly_boost": 0.65,
-          "descubierto": "2026-06-29T20:14:31+00:00"
+          "descubierto": "2026-06-29T20:16:28+00:00"
         }
       ]
     },
