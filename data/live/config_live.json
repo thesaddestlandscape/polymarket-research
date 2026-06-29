@@ -8,7 +8,8 @@
     {"inicio": "15:00", "fin": "16:00", "nombre": "mediotarde"},
     {"inicio": "16:30", "fin": "17:30", "nombre": "tarde_1"},
     {"inicio": "18:30", "fin": "19:30", "nombre": "tarde_2"},
-    {"inicio": "20:30", "fin": "21:30", "nombre": "cierre"}
+    {"inicio": "20:30", "fin": "21:30", "nombre": "cierre"},
+    {"inicio": "22:00", "fin": "22:30", "nombre": "test_live_1"}
   ],
   "_mediodia_eliminada": "12:30-13:30 eliminada: GBM IC=-0.154 PNL=-7.96€, OF IC=-0.033 PNL=-5.43€ — peor ventana en ambas estrategias (n≥30)",
 
