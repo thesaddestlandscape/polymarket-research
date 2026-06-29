@@ -1,12 +1,12 @@
-# Hipótesis automáticas — 2026-06-29 15:29 UTC
-_Generado por shadow_postmortem.py sobre 1270 resoluciones (PNL=-36.90€)_
+# Hipótesis automáticas — 2026-06-29 15:31 UTC
+_Generado por shadow_postmortem.py sobre 1271 resoluciones (PNL=-36.65€)_
 
 ## Patrones causales activos
 
 ### UPDOWN_GBM#BTC#15min
 - **PATRÓN** `pct_spot_vs_ref` |x|≤ `0.0502` → IC=+0.132 (n=17)
   - _Por qué funciona_: precio spot cerca de la referencia → señal GBM más calibrada
-  - _Acción_: Kelly boost +0.66€ cuando `pct_spot_vs_ref` |x|≤ 0.0502 (IC base=+0.038)
+  - _Acción_: Kelly boost +0.66€ cuando `pct_spot_vs_ref` |x|≤ 0.0502 (IC base=+0.047)
 
 ## Estrategias nuevas sugeridas
 _Derivadas de los patrones aprendidos:_
@@ -41,13 +41,13 @@ _Sin sugerencias automáticas con datos actuales. Ampliar n por estrategia._
 | ✅ PRICE_TARGET_GBM#atexpiry | 46 | -0.062 | -9.03€ | 0 | 0 |
 | 🚫 SMART_FLOW_1H | 23 | -0.260 | -10.63€ | 0 | 0 |
 | ✅ SMART_FLOW_1H#BTC | 9 | -0.061 | -2.46€ | 0 | 0 |
-| ✅ UPDOWN_GBM | 308 | +0.000 | -0.29€ | 0 | 0 |
-| ✅ UPDOWN_GBM#15min | 173 | +0.043 | +7.35€ | 0 | 0 |
+| ✅ UPDOWN_GBM | 309 | +0.002 | -0.05€ | 0 | 0 |
+| ✅ UPDOWN_GBM#15min | 174 | +0.045 | +7.59€ | 0 | 0 |
 | 🚫 UPDOWN_GBM#240min | 12 | -0.171 | -4.82€ | 0 | 0 |
 | 🚫 UPDOWN_GBM#5min | 56 | -0.155 | -16.64€ | 0 | 0 |
 | ✅ UPDOWN_GBM#60min | 56 | +0.086 | +6.54€ | 0 | 0 |
-| ✅ UPDOWN_GBM#BTC | 94 | +0.010 | -0.92€ | 0 | 0 |
-| ✅ UPDOWN_GBM#BTC#15min | 50 | +0.038 | +0.15€ | 0 | 1 |
+| ✅ UPDOWN_GBM#BTC | 95 | +0.015 | -0.68€ | 0 | 0 |
+| ✅ UPDOWN_GBM#BTC#15min | 51 | +0.047 | +0.39€ | 0 | 1 |
 | ✅ UPDOWN_GBM#BTC#240min | 5 | -0.089 | -2.96€ | 0 | 0 |
 | 🚫 UPDOWN_GBM#BTC#5min | 16 | -0.133 | -6.30€ | 0 | 0 |
 | ✅ UPDOWN_GBM#BTC#60min | 20 | +0.136 | +3.10€ | 0 | 0 |
@@ -104,13 +104,13 @@ _Sin sugerencias automáticas con datos actuales. Ampliar n por estrategia._
 **⏳ H-IBS-15** — IBS-15 como señal de mean-reversion
   - _Umbral_: n≥40 ops con ibs_15 en features y spread_IC>0.15 entre buckets
   - _Acción_: Añadir ibs_15 como boost/filtro en FEATURE_RULES de shadow_postmortem.py
-  - _Estado_: 19/40 ops con ibs_15. oversold(IBS<0.3): IC=-0.058 n=7 | neutral: IC=+0.033 n=4 | overbought(IBS>0.7): IC=+0.037 n=6
-  - _Datos_: n=19 IC=+0.023 PNL=-1.42€
+  - _Estado_: 20/40 ops con ibs_15. oversold(IBS<0.3): IC=-0.058 n=7 | neutral: IC=+0.033 n=4 | overbought(IBS>0.7): IC=+0.058 n=7
+  - _Datos_: n=20 IC=+0.045 PNL=-1.18€
 
 **⏳ H-HORA-GBM** — hora_utc causal automático en GBM (forward)
-  - _Umbral_: 20
+  - _Umbral_: n≥20 forward con hora_utc + alguna hora con n≥15 IC<-0.10 o >+0.10
   - _Acción_: El sistema lo aplica automáticamente vía FEATURE_RULES. Verificar en strategy_params.json.
-  - _Estado_: Solo 19 ops GBM con hora_utc en features. Esperar n≥20 para patrones.
+  - _Estado_: 20 ops, 5 horas distintas. Sin hora con n≥15 y IC extremo aún.
 
 **⏳ H-CROSS-ASSET** — Cross-asset confirmation GBM+OF BUY_NO
   - _Umbral_: n_overlaps≥20 y IC_overlap > IC_base + 0.05
@@ -125,7 +125,7 @@ _Sin sugerencias automáticas con datos actuales. Ampliar n por estrategia._
 **⏳ H-KELLY-HORA** — Kelly boost ×1.2 en horas top (15/17/19h UTC)
   - _Umbral_: n≥40 por hora con IC estable ≥+0.10 confirmado en forward
   - _Acción_: Añadir HORA_BOOST = {13: 1.2, 15: 1.2, 17: 1.2, 19: 1.2} en shadow_predict.py
-  - _Estado_: H=13h UTC: IC=-0.051 n=87/40 PNL=+0.29€ | H=15h UTC: IC=-0.011 n=86/40 PNL=-5.05€ | H=17h UTC: IC=+0.204 n=25/40 PNL=+7.08€ | H=19h UTC: IC=-0.029 n=32/40 PNL=-0.97€
+  - _Estado_: H=13h UTC: IC=-0.051 n=87/40 PNL=+0.29€ | H=15h UTC: IC=-0.006 n=87/40 PNL=-4.80€ | H=17h UTC: IC=+0.204 n=25/40 PNL=+7.08€ | H=19h UTC: IC=-0.029 n=32/40 PNL=-0.97€
 
 **⏳ H-60MIN-LIVE** — Estrategias 60min → umbral live (IC≥0.08 n≥40)
   - _Umbral_: IC≥0.08 y n≥40 en cualquier subtipo 60min
@@ -141,7 +141,7 @@ _Sin sugerencias automáticas con datos actuales. Ampliar n por estrategia._
 **⏳ H-KALMAN** — Kalman filter para drift adaptativo
   - _Umbral_: n≥200 por subtipo para calibrar parámetros Q/R del KF
   - _Acción_: Sustituir DRIFT_DAMPING por KalmanDrift en fetch_binance_klines.py
-  - _Estado_: Máximo n actual en GBM: 308/200. Esperar 3+ subtypes con n≥200.
+  - _Estado_: Máximo n actual en GBM: 309/200. Esperar 3+ subtypes con n≥200.
   - _Bloqueante_: N_INSUFICIENTE
 
 
@@ -191,8 +191,8 @@ _Sin sugerencias automáticas con datos actuales. Ampliar n por estrategia._
   - _Hipótesis_: Cuando la volatilidad horaria es muy alta el GBM puede sobreestimar el edge. Testear.
   - _Umbral_: n≥30 y IC<-0.05
   - _Acción_: Filtrar señales GBM cuando sigma_h > 0.002 si se confirma IC negativo
-  - _Estado_: n=209 IC=+0.021 PNL=+5.35€ — sin señal clara aún (umbral IC: min=None max=-0.05)
-  - _Datos_: n=209 IC=+0.021 PNL=+5.35€
+  - _Estado_: n=210 IC=+0.024 PNL=+5.59€ — sin señal clara aún (umbral IC: min=None max=-0.05)
+  - _Datos_: n=210 IC=+0.024 PNL=+5.59€
 
 **⏳ H-CUSTOM-OF-02H-BTCSOL** — ORDER_FLOW H=02h UTC — BTC+SOL solamente (revisar blacklist)
   - _Hipótesis_: La hora 02h está en el blacklist basado en TODOS los pares. Con BTC+SOL solo, el historial muestra 4/5 (80%) IC=+0.054. ¿Se confirma la señal positiva con más datos?
@@ -233,8 +233,8 @@ _Sin sugerencias automáticas con datos actuales. Ampliar n por estrategia._
   - _Hipótesis_: El filtro drift_60min ∈ [0,+0.5%) se implementó el 2026-06-26. Datos forward desde 2026-06-27: 8/18 (44%) IC=-0.045. Aún n pequeño. Monitorear si el IC sube a +0.10 con n≥40.
   - _Umbral_: n≥40 y IC>+0.10 para confirmar el filtro funciona en forward
   - _Acción_: Si IC<0 con n≥30 → revisar umbral drift_60min (0.5% puede ser demasiado estrecho)
-  - _Estado_: n=127 IC=+0.012 PNL=-4.49€ — sin señal clara aún (umbral IC: min=0.1 max=None)
-  - _Datos_: n=127 IC=+0.012 PNL=-4.49€
+  - _Estado_: n=128 IC=+0.015 PNL=-4.25€ — sin señal clara aún (umbral IC: min=0.1 max=None)
+  - _Datos_: n=128 IC=+0.015 PNL=-4.25€
 
 **⏳ H-CUSTOM-GBM-SIGMA-BAJO** — GBM con sigma_h muy bajo (<0.0008/h) — ¿mercado dormido = más predecible?
   - _Hipótesis_: Hipótesis opuesta a sigma_alto: cuando el mercado está muy quieto, ¿el GBM captura mejor la señal porque hay menos ruido? sigma_h<0.0008 equivale a volatilidad diaria <0.8%.
@@ -247,8 +247,8 @@ _Sin sugerencias automáticas con datos actuales. Ampliar n por estrategia._
   - _Hipótesis_: Análisis split: primeras 20 ops IC=+0.136 (65%); últimas 20 ops IC=-0.091 (40%). El edge era real pero puede estar desapareciendo. n=43 actual con IC=+0.056 ya bajo umbral. Tracking continuo.
   - _Umbral_: n≥50 — si IC<0.04 con n≥50 considerar desactivar BTC#15min
   - _Acción_: Si IC<0.02 con n≥50 → desactivar BTC#15min (el edge ha muerto); si sube a >0.08 → candidato live
-  - _Estado_: n=50 IC=+0.038 PNL=+0.15€ — sin señal clara aún (umbral IC: min=None max=0.02)
-  - _Datos_: n=50 IC=+0.038 PNL=+0.15€
+  - _Estado_: n=51 IC=+0.047 PNL=+0.39€ — sin señal clara aún (umbral IC: min=None max=0.02)
+  - _Datos_: n=51 IC=+0.047 PNL=+0.39€
 
 **⏳ H-CUSTOM-DRIFT15-ZONA-MUERTA** — GBM#15min drift_15min ∈ [-0.3,+0.3] — zona muerta de señal
   - _Hipótesis_: Análisis n=127 GBM#15min: cuando drift_15min está entre -0.3 y +0.3 (mercado sin dirección clara) el IC es negativo (-0.043). Cuando drift>0.3 IC=+0.100 (n=28). Cuando drift<-1 IC=+0.048 (reversión). La señal requiere mercado con dirección clara.
@@ -261,8 +261,8 @@ _Sin sugerencias automáticas con datos actuales. Ampliar n por estrategia._
   - _Hipótesis_: Cuando drift_15min > 0.3%/h el GBM captura bien la dirección: IC=+0.100 n=28 en todos GBM#15min; IC=+0.152 n=13 solo BTC. El mercado tiene dirección clara y el GBM la sigue. Hipótesis: este rango es donde la señal es real.
   - _Umbral_: n≥40 y IC>+0.08
   - _Acción_: Si se confirma IC>0.10 con n≥40 → boost ×1.2 en GBM#15min cuando drift_15min>0.3
-  - _Estado_: SEÑAL POSITIVA confirmada: IC=+0.132 > 0.08 con n=55 PNL=+7.76€
-  - _Datos_: n=55 IC=+0.132 PNL=+7.76€
+  - _Estado_: SEÑAL POSITIVA confirmada: IC=+0.138 > 0.08 con n=56 PNL=+8.00€
+  - _Datos_: n=56 IC=+0.138 PNL=+8.00€
 
 **⏳ H-CUSTOM-LONGSHOT-BIAS** — Longshot bias — ¿mejor IC cuando py_mkt < 0.20 o > 0.80?
   - _Hipótesis_: Jon-Becker repo documenta formalmente: contratos a 1-20 cents tienen win_rate < precio implícito (compradores pierden sistemáticamente en longshots). En nuestro sistema: cuando py_mkt<0.20 el GBM predice BUY_NO con edge estructural adicional al del modelo. ¿Se confirma en nuestros datos? Buscar en feature pct_spot_vs_ref si los mercados extremos tienen mejor IC en BUY_NO.
