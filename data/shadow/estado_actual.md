@@ -1,4 +1,4 @@
-# Estado del bot — 2026-06-29 16:59 UTC
+# Estado del bot — 2026-06-29 17:01 UTC
 
 ## Capital
 | | |
@@ -11,20 +11,20 @@
 | | |
 |---|---|
 | Inicio | 20.00 € |
-| Actual | **-21.46 €** |
-| P&L acumulado | 🔴 **-41.46 €** |
-| ROI s/ operativo | -207.31% |
-| ROI s/ depósito | -138.21% |
-| P&L hoy (2026-06-29) | 🔴 -5.98 € |
-| Operaciones resueltas | 1289 (631 WIN / 658 LOSS) — 49.0% |
-| Señales abiertas | 46 |
+| Actual | **-20.52 €** |
+| P&L acumulado | 🔴 **-40.52 €** |
+| ROI s/ operativo | -202.61% |
+| ROI s/ depósito | -135.07% |
+| P&L hoy (2026-06-29) | 🔴 -5.04 € |
+| Operaciones resueltas | 1291 (633 WIN / 658 LOSS) — 49.0% |
+| Señales abiertas | 44 |
 
 ## Estrategias (visión global)
 
 | Estrategia | n | Win% | IC_efectivo | PNL | Apuesta | Estado |
 |---|---|---|---|---|---|---|
 | ORDER_FLOW_5M | 782 | 51.2% | +0.011 | +6.94€ | 0.50€ | ✅ activa |
-| UPDOWN_GBM | 320 | 50.0% | +0.000 | -0.03€ | 0.50€ | ✅ activa |
+| UPDOWN_GBM | 322 | 50.3% | +0.003 | +0.92€ | 0.50€ | ✅ activa |
 | PRICE_TARGET_GBM | 50 | 44.0% | -0.058 | -10.55€ | 0.50€ | ⚠️ IC negativo |
 | SMART_FLOW_1H | 23 | 21.7% | -0.260 | -10.63€ | 0.00€ | 🚫 desactivada |
 | WEEKLY_PRICE | 57 | 50.9% | +0.008 | -13.43€ | 0.50€ | ✅ activa |
@@ -34,21 +34,21 @@
 
 | Timestamp | Estrategia | Mercado | Resultado | PNL |
 |---|---|---|---|---|
+| 2026-06-29T17:00 | UPDOWN_GBM#ETH#15min | Ethereum Up or Down - June 29, 12:45PM-1:00PM ET… | ✅ WIN | +0.46€ |
+| 2026-06-29T17:00 | UPDOWN_GBM#BTC#15min | Bitcoin Up or Down - June 29, 12:45PM-1:00PM ET… | ✅ WIN | +0.48€ |
 | 2026-06-29T16:41 | UPDOWN_GBM#ETH#15min | Ethereum Up or Down - June 29, 12:30PM-12:45PM ET… | ✅ WIN | +0.50€ |
 | 2026-06-29T16:30 | UPDOWN_GBM#ETH#15min | Ethereum Up or Down - June 29, 12:15PM-12:30PM ET… | ✅ WIN | +0.43€ |
 | 2026-06-29T16:14 | UPDOWN_GBM#ETH#15min | Ethereum Up or Down - June 29, 12:00PM-12:15PM ET… | ❌ LOSS | -0.51€ |
-| 2026-06-29T16:07 | WEEKLY_PRICE#BTC | Will the price of Bitcoin be between $58,000 and $… | ❌ LOSS | -0.51€ |
-| 2026-06-29T16:07 | WEEKLY_PRICE#SOL | Will the price of Solana be between $60 and $70 on… | ❌ LOSS | -0.92€ |
 
 ## Calidad de datos
 
-✅ **OK** — última verificación 2026-06-29T16:58 UTC
+✅ **OK** — última verificación 2026-06-29T17:00 UTC
 
 | Asset | Precio | Age | Alertas |
 |---|---|---|---|
 | ✅ BTC | $59,778.42 | 0.0min |  |
 | ✅ ETH | $1,582.97 | 0.0min |  |
-| ✅ SOL | $73.97 | 0.0min |  |
+| ✅ SOL | $74.09 | 0.0min |  |
 | ✅ XRP | $1.05 | 0.0min |  |
 
 ---
