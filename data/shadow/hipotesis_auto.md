@@ -1,5 +1,5 @@
-# Hipótesis automáticas — 2026-06-29 14:54 UTC
-_Generado por shadow_postmortem.py sobre 1262 resoluciones (PNL=-34.03€)_
+# Hipótesis automáticas — 2026-06-29 14:56 UTC
+_Generado por shadow_postmortem.py sobre 1263 resoluciones (PNL=-34.54€)_
 
 ## Patrones causales activos
 
@@ -31,14 +31,14 @@ _Sin sugerencias automáticas con datos actuales. Ampliar n por estrategia._
 | ✅ ORDER_FLOW_5M#SOL#5min | 145 | +0.017 | +1.22€ | 0 | 0 |
 | ✅ ORDER_FLOW_5M#XRP | 116 | -0.009 | -2.01€ | 0 | 0 |
 | ✅ ORDER_FLOW_5M#XRP#5min | 116 | -0.009 | -2.01€ | 0 | 0 |
-| ✅ PRICE_TARGET_GBM | 45 | -0.011 | -6.78€ | 0 | 0 |
-| ✅ PRICE_TARGET_GBM#BTC | 23 | -0.060 | -4.14€ | 0 | 0 |
-| ✅ PRICE_TARGET_GBM#BTC#atexpiry | 22 | -0.083 | -4.30€ | 0 | 0 |
+| ✅ PRICE_TARGET_GBM | 46 | -0.021 | -7.29€ | 0 | 0 |
+| ✅ PRICE_TARGET_GBM#BTC | 24 | -0.077 | -4.65€ | 0 | 0 |
+| ✅ PRICE_TARGET_GBM#BTC#atexpiry | 23 | -0.100 | -4.81€ | 0 | 0 |
 | ✅ PRICE_TARGET_GBM#ETH | 17 | +0.067 | -1.28€ | 0 | 0 |
 | ✅ PRICE_TARGET_GBM#ETH#atexpiry | 16 | +0.044 | -1.43€ | 0 | 0 |
 | ✅ PRICE_TARGET_GBM#SOL | 5 | -0.018 | -1.36€ | 0 | 0 |
 | ✅ PRICE_TARGET_GBM#SOL#atexpiry | 5 | -0.018 | -1.36€ | 0 | 0 |
-| ✅ PRICE_TARGET_GBM#atexpiry | 43 | -0.033 | -7.09€ | 0 | 0 |
+| ✅ PRICE_TARGET_GBM#atexpiry | 44 | -0.043 | -7.60€ | 0 | 0 |
 | 🚫 SMART_FLOW_1H | 23 | -0.260 | -10.63€ | 0 | 0 |
 | ✅ SMART_FLOW_1H#BTC | 9 | -0.061 | -2.46€ | 0 | 0 |
 | ✅ UPDOWN_GBM | 304 | +0.000 | -0.28€ | 0 | 0 |
@@ -115,7 +115,7 @@ _Sin sugerencias automáticas con datos actuales. Ampliar n por estrategia._
 **⏳ H-CROSS-ASSET** — Cross-asset confirmation GBM+OF BUY_NO
   - _Umbral_: n_overlaps≥20 y IC_overlap > IC_base + 0.05
   - _Acción_: Cambiar _aplicar_kelly_compuesto: match por activo, no market_id
-  - _Estado_: n_overlaps=17, boost estimado=+0.011. Necesita 3 más y boost>0.05
+  - _Estado_: n_overlaps=17, boost estimado=+0.012. Necesita 3 más y boost>0.05
 
 **⏳ H-OF-PAR** — ORDER_FLOW per-pair delta_ratio ranges
   - _Umbral_: n≥200 por par con delta_ratio feature en shadow
