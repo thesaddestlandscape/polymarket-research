@@ -1,7 +1,7 @@
 # CLAUDE.md — Polymarket Research Bot
 
 Documento de contexto completo. Léelo al inicio de cada sesión para retomar sin releer historial.
-**Última actualización: 2026-06-27 ~11:45 UTC**
+**Última actualización: 2026-06-27 ~16:00 UTC**
 
 ---
 
@@ -9,10 +9,23 @@ Documento de contexto completo. Léelo al inicio de cada sesión para retomar si
 
 | Skill | Descripción |
 |---|---|
-| `/inicio` | Protocolo completo de inicio: bankroll, IC, H-REGIMEN, live status, arb |
-| `/ic` | Análisis IC detallado por subtipo + horas ORDER_FLOW + progreso hacia live |
-| `/hipotesis` | Estado actualizado de todas las hipótesis activas con datos reales |
+| `/inicio` | Protocolo completo de inicio: bankroll, IC, alertas de anomalías, live status, arb |
+| `/ic` | Análisis IC detallado por subtipo con tendencia ult20, horas ORDER_FLOW, progreso hacia live |
+| `/hipotesis` | Estado de todas las hipótesis activas: veredicto + próxima acción por cada una |
+| `/decision` | **Capa de decisión del aprendizaje continuo** — genera plan de acción priorizado con cambios exactos |
+| `/analizar <estrategia>` | Análisis profundo de features por bucket para una estrategia específica — sugiere umbrales óptimos |
+| `/calibrar` | Revisión de parámetros (blacklist horas, DELTA_MIN/MAX, drift thresholds) contra datos acumulados |
 | `/dev` | Instrucciones para trabajar en el worktree de desarrollo sin tocar producción |
+
+### Flujo recomendado por sesión
+```
+/inicio          → estado general + alertas
+/decision        → qué cambiar ahora (si hay alertas)
+/analizar X      → cuando una estrategia merece análisis profundo (n≥30)
+/calibrar        → cada 50+ ops nuevas para revisar parámetros
+/ic              → cuando se quiere ver el IC completo con tendencias
+/hipotesis       → cuando se quiere revisar el estado de hipótesis específicas
+```
 
 ## 🌿 Worktrees
 
