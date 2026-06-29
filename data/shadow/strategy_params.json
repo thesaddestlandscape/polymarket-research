@@ -1,17 +1,17 @@
 {
-  "timestamp_utc": "2026-06-29T16:04:01+00:00",
+  "timestamp_utc": "2026-06-29T16:05:55+00:00",
   "estrategias": {
     "UPDOWN_GBM": {
       "activa": true,
       "edge_minimo": 0.02,
-      "ic_bayes": 0.0016,
-      "n": 315,
-      "pnl_total": 0.5741,
+      "ic_bayes": -0.0016,
+      "n": 317,
+      "pnl_total": -0.4459,
       "causa_principal": "DIRECTION_ERROR",
-      "motivo": "IC_bayes=+0.002 n=315 conf=1.00",
+      "motivo": "IC_bayes=-0.002 n=317 conf=1.00",
       "apuesta_kelly": 0.5,
-      "n_BUY_YES": 210,
-      "ic_BUY_YES": -0.0142,
+      "n_BUY_YES": 212,
+      "ic_BUY_YES": -0.0187,
       "apuesta_kelly_BUY_YES": 0.5,
       "n_BUY_NO": 105,
       "ic_BUY_NO": 0.0327,
@@ -84,15 +84,15 @@
     "UPDOWN_GBM#ETH": {
       "activa": true,
       "edge_minimo": 0.02,
-      "ic_bayes": 0.0455,
-      "n": 119,
-      "pnl_total": 4.5227,
+      "ic_bayes": 0.041,
+      "n": 120,
+      "pnl_total": 4.0127,
       "causa_principal": "DIRECTION_ERROR",
-      "motivo": "IC_bayes=+0.045 n=119 conf=1.00",
+      "motivo": "IC_bayes=+0.041 n=120 conf=1.00",
       "apuesta_kelly": 0.5,
-      "n_BUY_YES": 83,
-      "ic_BUY_YES": 0.0529,
-      "apuesta_kelly_BUY_YES": 0.53,
+      "n_BUY_YES": 84,
+      "ic_BUY_YES": 0.0465,
+      "apuesta_kelly_BUY_YES": 0.5,
       "n_BUY_NO": 36,
       "ic_BUY_NO": 0.0263,
       "apuesta_kelly_BUY_NO": 0.5
@@ -116,17 +116,17 @@
     "UPDOWN_GBM#BTC": {
       "activa": true,
       "edge_minimo": 0.02,
-      "ic_bayes": 0.0051,
-      "n": 97,
-      "pnl_total": -2.0327,
+      "ic_bayes": 0.0,
+      "n": 98,
+      "pnl_total": -2.5427,
       "causa_principal": "DIRECTION_ERROR",
-      "motivo": "IC_bayes=+0.005 n=97 conf=1.00",
+      "motivo": "IC_bayes=+0.000 n=98 conf=1.00",
       "apuesta_kelly": 0.5,
       "n_BUY_NO": 30,
       "ic_BUY_NO": 0.0,
       "apuesta_kelly_BUY_NO": 0.5,
-      "n_BUY_YES": 67,
-      "ic_BUY_YES": 0.0072,
+      "n_BUY_YES": 68,
+      "ic_BUY_YES": 0.0,
       "apuesta_kelly_BUY_YES": 0.5
     },
     "UPDOWN_GBM#SOL#15min": {
@@ -153,7 +153,7 @@
           "ic_bueno": 0.25,
           "n_malo": 18,
           "n_bueno": 10,
-          "descubierto": "2026-06-29T16:04:01+00:00"
+          "descubierto": "2026-06-29T16:05:55+00:00"
         }
       ],
       "patrones_ganadores": []
@@ -231,7 +231,7 @@
           "ic_base": 0.0273,
           "n_patron": 18,
           "kelly_boost": 0.75,
-          "descubierto": "2026-06-29T16:04:01+00:00"
+          "descubierto": "2026-06-29T16:05:55+00:00"
         }
       ]
     },
@@ -334,7 +334,7 @@
           "ic_base": 0.0584,
           "n_patron": 33,
           "kelly_boost": 0.64,
-          "descubierto": "2026-06-29T16:04:01+00:00"
+          "descubierto": "2026-06-29T16:05:55+00:00"
         }
       ]
     },
@@ -556,33 +556,33 @@
     "UPDOWN_GBM#BTC#daily": {
       "activa": true,
       "edge_minimo": 0.02,
-      "ic_bayes": 0.045,
-      "n": 3,
-      "pnl_total": 5.0866,
-      "causa_principal": "",
-      "motivo": "IC_bayes=+0.300 n=3 conf=0.15",
+      "ic_bayes": 0.0333,
+      "n": 4,
+      "pnl_total": 4.5766,
+      "causa_principal": "EDGE_INSUFICIENTE",
+      "motivo": "IC_bayes=+0.167 n=4 conf=0.20",
       "apuesta_kelly": 0.5,
       "n_BUY_NO": 2,
       "ic_BUY_NO": 0.025,
       "apuesta_kelly_BUY_NO": 0.5,
-      "n_BUY_YES": 1,
-      "ic_BUY_YES": 0.0083,
+      "n_BUY_YES": 2,
+      "ic_BUY_YES": 0.0,
       "apuesta_kelly_BUY_YES": 0.5
     },
     "UPDOWN_GBM#daily": {
       "activa": true,
       "edge_minimo": 0.02,
-      "ic_bayes": 0.0614,
-      "n": 9,
-      "pnl_total": 9.1183,
+      "ic_bayes": 0.0212,
+      "n": 11,
+      "pnl_total": 8.0983,
       "causa_principal": "DIRECTION_ERROR",
-      "motivo": "IC_bayes=+0.136 n=9 conf=0.45",
-      "apuesta_kelly": 0.61,
+      "motivo": "IC_bayes=+0.038 n=11 conf=0.55",
+      "apuesta_kelly": 0.5,
       "n_BUY_NO": 5,
       "ic_BUY_NO": 0.0536,
       "apuesta_kelly_BUY_NO": 0.54,
-      "n_BUY_YES": 4,
-      "ic_BUY_YES": 0.0,
+      "n_BUY_YES": 6,
+      "ic_BUY_YES": -0.0375,
       "apuesta_kelly_BUY_YES": 0.5
     },
     "PRICE_TARGET_GBM#BTC#atexpiry": {
@@ -777,17 +777,17 @@
     "UPDOWN_GBM#ETH#daily": {
       "activa": true,
       "edge_minimo": 0.02,
-      "ic_bayes": 0.015,
-      "n": 3,
-      "pnl_total": 2.3697,
+      "ic_bayes": 0.0,
+      "n": 4,
+      "pnl_total": 1.8597,
       "causa_principal": "DIRECTION_ERROR",
-      "motivo": "IC_bayes=+0.100 n=3 conf=0.15",
+      "motivo": "IC_bayes=+0.000 n=4 conf=0.20",
       "apuesta_kelly": 0.5,
       "n_BUY_NO": 1,
       "ic_BUY_NO": 0.0083,
       "apuesta_kelly_BUY_NO": 0.5,
-      "n_BUY_YES": 2,
-      "ic_BUY_YES": 0.0,
+      "n_BUY_YES": 3,
+      "ic_BUY_YES": -0.015,
       "apuesta_kelly_BUY_YES": 0.5
     },
     "ORDER_FLOW_5M#BNB#5min": {
