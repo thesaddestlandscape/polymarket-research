@@ -1,5 +1,5 @@
-# Hipótesis automáticas — 2026-06-29 15:11 UTC
-_Generado por shadow_postmortem.py sobre 1267 resoluciones (PNL=-35.98€)_
+# Hipótesis automáticas — 2026-06-29 15:13 UTC
+_Generado por shadow_postmortem.py sobre 1268 resoluciones (PNL=-36.90€)_
 
 ## Patrones causales activos
 
@@ -31,14 +31,14 @@ _Sin sugerencias automáticas con datos actuales. Ampliar n por estrategia._
 | ✅ ORDER_FLOW_5M#SOL#5min | 145 | +0.017 | +1.22€ | 0 | 0 |
 | ✅ ORDER_FLOW_5M#XRP | 116 | -0.009 | -2.01€ | 0 | 0 |
 | ✅ ORDER_FLOW_5M#XRP#5min | 116 | -0.009 | -2.01€ | 0 | 0 |
-| ✅ PRICE_TARGET_GBM | 47 | -0.031 | -7.80€ | 0 | 0 |
+| ✅ PRICE_TARGET_GBM | 48 | -0.040 | -8.72€ | 0 | 0 |
 | ✅ PRICE_TARGET_GBM#BTC | 24 | -0.077 | -4.65€ | 0 | 0 |
 | ✅ PRICE_TARGET_GBM#BTC#atexpiry | 23 | -0.100 | -4.81€ | 0 | 0 |
-| ✅ PRICE_TARGET_GBM#ETH | 18 | +0.045 | -1.79€ | 0 | 0 |
-| ✅ PRICE_TARGET_GBM#ETH#atexpiry | 17 | +0.022 | -1.94€ | 0 | 0 |
+| ✅ PRICE_TARGET_GBM#ETH | 19 | +0.023 | -2.71€ | 0 | 0 |
+| ✅ PRICE_TARGET_GBM#ETH#atexpiry | 18 | +0.000 | -2.86€ | 0 | 0 |
 | ✅ PRICE_TARGET_GBM#SOL | 5 | -0.018 | -1.36€ | 0 | 0 |
 | ✅ PRICE_TARGET_GBM#SOL#atexpiry | 5 | -0.018 | -1.36€ | 0 | 0 |
-| ✅ PRICE_TARGET_GBM#atexpiry | 45 | -0.053 | -8.11€ | 0 | 0 |
+| ✅ PRICE_TARGET_GBM#atexpiry | 46 | -0.062 | -9.03€ | 0 | 0 |
 | 🚫 SMART_FLOW_1H | 23 | -0.260 | -10.63€ | 0 | 0 |
 | ✅ SMART_FLOW_1H#BTC | 9 | -0.061 | -2.46€ | 0 | 0 |
 | ✅ UPDOWN_GBM | 306 | +0.000 | -0.29€ | 0 | 0 |
@@ -125,7 +125,7 @@ _Sin sugerencias automáticas con datos actuales. Ampliar n por estrategia._
 **⏳ H-KELLY-HORA** — Kelly boost ×1.2 en horas top (15/17/19h UTC)
   - _Umbral_: n≥40 por hora con IC estable ≥+0.10 confirmado en forward
   - _Acción_: Añadir HORA_BOOST = {13: 1.2, 15: 1.2, 17: 1.2, 19: 1.2} en shadow_predict.py
-  - _Estado_: H=13h UTC: IC=-0.051 n=87/40 PNL=+0.29€ | H=15h UTC: IC=-0.006 n=83/40 PNL=-4.13€ | H=17h UTC: IC=+0.204 n=25/40 PNL=+7.08€ | H=19h UTC: IC=-0.029 n=32/40 PNL=-0.97€
+  - _Estado_: H=13h UTC: IC=-0.051 n=87/40 PNL=+0.29€ | H=15h UTC: IC=-0.012 n=84/40 PNL=-5.05€ | H=17h UTC: IC=+0.204 n=25/40 PNL=+7.08€ | H=19h UTC: IC=-0.029 n=32/40 PNL=-0.97€
 
 **⏳ H-60MIN-LIVE** — Estrategias 60min → umbral live (IC≥0.08 n≥40)
   - _Umbral_: IC≥0.08 y n≥40 en cualquier subtipo 60min
