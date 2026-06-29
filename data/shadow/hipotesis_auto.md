@@ -1,5 +1,5 @@
-# Hipótesis automáticas — 2026-06-29 16:02 UTC
-_Generado por shadow_postmortem.py sobre 1280 resoluciones (PNL=-38.78€)_
+# Hipótesis automáticas — 2026-06-29 16:04 UTC
+_Generado por shadow_postmortem.py sobre 1282 resoluciones (PNL=-39.44€)_
 
 ## Patrones causales activos
 
@@ -89,9 +89,9 @@ _Sin sugerencias automáticas con datos actuales. Ampliar n por estrategia._
 | ✅ UPDOWN_OU_5M#SOL#5min | 10 | -0.042 | -1.06€ | 0 | 0 |
 | ✅ UPDOWN_OU_5M#XRP | 11 | -0.064 | -1.65€ | 0 | 0 |
 | ✅ UPDOWN_OU_5M#XRP#5min | 11 | -0.064 | -1.65€ | 0 | 0 |
-| ✅ WEEKLY_PRICE | 53 | +0.027 | -11.35€ | 0 | 0 |
-| ✅ WEEKLY_PRICE#BTC | 16 | -0.044 | -6.36€ | 0 | 0 |
-| ✅ WEEKLY_PRICE#ETH | 20 | +0.045 | -4.24€ | 0 | 0 |
+| ✅ WEEKLY_PRICE | 55 | +0.026 | -12.00€ | 0 | 0 |
+| ✅ WEEKLY_PRICE#BTC | 17 | -0.022 | -6.09€ | 0 | 0 |
+| ✅ WEEKLY_PRICE#ETH | 21 | +0.022 | -5.16€ | 0 | 0 |
 | ✅ WEEKLY_PRICE#SOL | 17 | +0.067 | -0.75€ | 0 | 0 |
 ## Hipótesis pendientes — tracking automático
 
@@ -101,7 +101,7 @@ _Sin sugerencias automáticas con datos actuales. Ampliar n por estrategia._
 **🟡 H-WEEKLY** — Predicciones semanales de precio por par
   - _Umbral_: n≥15 por par con IC≥+0.05
   - _Acción_: Si confirma IC≥+0.10 n≥15 en SOL → considerar live semanal
-  - _Estado_: ETH: n=20/15 IC=+0.045 PNL=-4.24€ | BTC: n=16/15 IC=-0.044 PNL=-6.36€ | SOL: n=17/15 IC=+0.067 PNL=-0.75€
+  - _Estado_: ETH: n=21/15 IC=+0.022 PNL=-5.16€ | BTC: n=17/15 IC=-0.022 PNL=-6.09€ | SOL: n=17/15 IC=+0.067 PNL=-0.75€
 
 
 ### ⏳ Acumulando datos
