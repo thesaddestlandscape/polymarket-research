@@ -1877,7 +1877,6 @@ def main():
                 # BUY_NO → señal interna confirma la nuestra → boost ×1.1.
                 # Si el precio lleva subiendo y predecimos BUY_YES → boost ×1.1.
                 # Si hay divergencia → reducir apuesta ×0.85 (mercado interno dice otra cosa).
-                pred_features_now = json.loads(features_json) if features_json != "{}" else {}
                 poly_d = pred.get("features", {}).get("poly_drift_5obs") if isinstance(pred.get("features"), dict) else None
                 if poly_d is not None and abs(poly_d) > 0.5:  # solo si hay movimiento real (>0.5%)
                     if (dec == "BUY_NO" and poly_d < 0) or (dec == "BUY_YES" and poly_d > 0):

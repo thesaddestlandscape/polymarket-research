@@ -19,6 +19,7 @@ import glob
 import json
 import math
 import re
+import time
 from datetime import datetime, timezone
 from pathlib import Path
 
@@ -105,29 +106,44 @@ def cargar_ya_resueltas() -> set:
 
 
 def estado_mercado(market_id: str) -> dict | None:
-    """Consulta el estado actual del mercado en Polymarket."""
+    """Consulta el estado actual del mercado en Polymarket. Reintenta en 429."""
     url = "https://gamma-api.polymarket.com/markets"
-    try:
-        r = requests.get(url, params={"id": market_id}, timeout=TIMEOUT)
-        r.raise_for_status()
-        data = r.json()
-        if isinstance(data, list) and data:
-            return data[0]
-        if isinstance(data, dict):
-            return data
-    except Exception as e:
-        print(f"  Error consultando {market_id}: {type(e).__name__}: {e}")
+    for intento in range(3):
+        try:
+            r = requests.get(url, params={"id": market_id}, timeout=TIMEOUT)
+            if r.status_code == 429:
+                time.sleep(2 ** intento)  # backoff: 1s, 2s, 4s
+                continue
+            r.raise_for_status()
+            data = r.json()
+            if isinstance(data, list) and data:
+                return data[0]
+            if isinstance(data, dict):
+                return data
+            return None
+        except Exception as e:
+            if intento == 2:
+                print(f"  Error consultando {market_id}: {type(e).__name__}: {e}")
+    return None
 
 
-def fetch_mercados_paralelo(market_ids: list, workers: int = 20) -> dict:
+def fetch_mercados_paralelo(market_ids: list, workers: int = 3) -> dict:
     """
-    Descarga el estado de múltiples mercados en paralelo.
-    Devuelve {market_id: estado_dict | None}.
+    Descarga el estado de múltiples mercados en paralelo con throttle.
+    Máximo 3 workers simultáneos para no saturar la API de Polymarket.
     """
+    import threading
     from concurrent.futures import ThreadPoolExecutor, as_completed
+    _sem = threading.Semaphore(workers)
+
+    def _fetch_con_sem(mid):
+        with _sem:
+            time.sleep(0.1)  # 100ms entre requests → ~30 req/s máximo
+            return estado_mercado(mid)
+
     resultados = {}
     with ThreadPoolExecutor(max_workers=workers) as executor:
-        futuros = {executor.submit(estado_mercado, mid): mid for mid in market_ids}
+        futuros = {executor.submit(_fetch_con_sem, mid): mid for mid in market_ids}
         for futuro in as_completed(futuros):
             mid = futuros[futuro]
             try:
@@ -400,6 +416,8 @@ def main():
     # Filtrar predicciones que vale la pena consultar
     candidatas = []
     for pred in pendientes:
+        if pred.get("decision", "") == "SKIP":
+            continue  # SKIP no necesitan resolución
         clave = (pred.get("strategy", ""), pred.get("market_id", ""))
         if clave in ya_resueltas:
             continue
@@ -415,10 +433,10 @@ def main():
                 pass
         candidatas.append(pred)
 
-    # Obtener IDs únicos y descargar en paralelo
+    # Obtener IDs únicos y descargar en paralelo (throttled)
     mids_unicos = list({p.get("market_id", "") for p in candidatas if p.get("market_id")})
-    print(f"  Descargando {len(mids_unicos)} mercados en paralelo (workers=8)...")
-    cache_mercados = fetch_mercados_paralelo(mids_unicos, workers=8)
+    print(f"  Descargando {len(mids_unicos)} mercados en paralelo (workers=3, throttled)...")
+    cache_mercados = fetch_mercados_paralelo(mids_unicos, workers=3)
     consultados_ids = set(mids_unicos)
 
     for pred in candidatas:
