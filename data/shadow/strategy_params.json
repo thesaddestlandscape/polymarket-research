@@ -1207,5 +1207,10 @@
       "ic_BUY_NO": 0.0083,
       "apuesta_kelly_BUY_NO": 0.5
     }
+  },
+  "meta": {
+    "gbm_blacklist_hours_auto": [
+      9
+    ]
   }
 }

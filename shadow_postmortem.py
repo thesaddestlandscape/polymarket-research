@@ -1029,10 +1029,11 @@ def main():
     else:
         print(f"\n  Sin patrones causales nuevos (datos insuficientes o sin señal clara)")
 
-    # Preservar desactivaciones manuales (marcadas con "MANUALMENTE" o "DESACTIVADA 2026-")
+    # Preservar desactivaciones manuales y sección meta (ambas sobreviven al ciclo de reescritura)
     if PARAMS_PATH.exists():
         try:
-            old = json.load(open(PARAMS_PATH, encoding="utf-8")).get("estrategias", {})
+            old_data = json.load(open(PARAMS_PATH, encoding="utf-8"))
+            old = old_data.get("estrategias", {})
             for k, v in old.items():
                 if not v.get("activa", True) and k in params["estrategias"]:
                     motivo_old = v.get("motivo", "")
@@ -1040,6 +1041,17 @@ def main():
                         params["estrategias"][k]["activa"] = False
                         if "DESACTIVADA" not in params["estrategias"][k]["motivo"]:
                             params["estrategias"][k]["motivo"] += f" | {motivo_old.split('|')[-1].strip()}"
+            # Preservar meta (hypothesis_tracker y cambios manuales lo usan)
+            if "meta" in old_data and old_data["meta"]:
+                existing_meta = old_data["meta"]
+                new_meta = params.get("meta", {})
+                # Merge: hypothesis_tracker puede añadir a gbm_blacklist_hours_auto; preservar entradas manuales
+                if "gbm_blacklist_hours_auto" in existing_meta:
+                    merged_bl = set(existing_meta.get("gbm_blacklist_hours_auto", []))
+                    merged_bl.update(new_meta.get("gbm_blacklist_hours_auto", []))
+                    existing_meta["gbm_blacklist_hours_auto"] = sorted(merged_bl)
+                existing_meta.update({k: v for k, v in new_meta.items() if k != "gbm_blacklist_hours_auto"})
+                params["meta"] = existing_meta
         except Exception:
             pass
 
