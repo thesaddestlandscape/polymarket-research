@@ -1,5 +1,5 @@
-# Hipótesis automáticas — 2026-06-29 20:29 UTC
-_Generado por shadow_postmortem.py sobre 1312 resoluciones (PNL=-30.51€)_
+# Hipótesis automáticas — 2026-06-29 20:31 UTC
+_Generado por shadow_postmortem.py sobre 1313 resoluciones (PNL=-31.02€)_
 
 ## Patrones causales activos
 
@@ -58,8 +58,8 @@ _Sin sugerencias automáticas con datos actuales. Ampliar n por estrategia._
 | ✅ PRICE_TARGET_GBM#atexpiry | 48 | -0.080 | -10.87€ | 0 | 0 |
 | 🚫 SMART_FLOW_1H | 23 | -0.260 | -10.63€ | 0 | 0 |
 | ✅ SMART_FLOW_1H#BTC | 9 | -0.061 | -2.46€ | 0 | 0 |
-| ✅ UPDOWN_GBM | 343 | +0.019 | +10.93€ | 0 | 0 |
-| ✅ UPDOWN_GBM#15min | 200 | +0.064 | +14.88€ | 0 | 0 |
+| ✅ UPDOWN_GBM | 344 | +0.017 | +10.42€ | 0 | 0 |
+| ✅ UPDOWN_GBM#15min | 201 | +0.062 | +14.37€ | 0 | 0 |
 | 🚫 UPDOWN_GBM#240min | 12 | -0.171 | -4.82€ | 0 | 0 |
 | 🚫 UPDOWN_GBM#5min | 56 | -0.155 | -16.64€ | 0 | 0 |
 | ✅ UPDOWN_GBM#60min | 62 | +0.109 | +11.25€ | 0 | 0 |
@@ -73,8 +73,8 @@ _Sin sugerencias automáticas con datos actuales. Ampliar n por estrategia._
 | ✅ UPDOWN_GBM#ETH#240min | 5 | -0.018 | -0.44€ | 0 | 0 |
 | 🚫 UPDOWN_GBM#ETH#5min | 12 | -0.086 | -3.67€ | 0 | 0 |
 | ✅ UPDOWN_GBM#ETH#60min | 25 | +0.130 | +5.43€ | 0 | 0 |
-| ✅ UPDOWN_GBM#SOL | 73 | -0.033 | +1.19€ | 0 | 0 |
-| ✅ UPDOWN_GBM#SOL#15min | 37 | +0.038 | +4.47€ | 0 | 0 |
+| ✅ UPDOWN_GBM#SOL | 74 | -0.040 | +0.68€ | 0 | 0 |
+| ✅ UPDOWN_GBM#SOL#15min | 38 | +0.025 | +3.96€ | 0 | 0 |
 | 🚫 UPDOWN_GBM#SOL#5min | 17 | -0.112 | -4.84€ | 0 | 0 |
 | ✅ UPDOWN_GBM#SOL#60min | 14 | +0.000 | +1.32€ | 0 | 0 |
 | ✅ UPDOWN_GBM#XRP | 26 | -0.036 | -0.47€ | 0 | 0 |
@@ -113,11 +113,11 @@ _Sin sugerencias automáticas con datos actuales. Ampliar n por estrategia._
 
 ### 🟡 Listas para evaluar
 
-**〰️ H-IBS-15** — IBS-15 como señal de mean-reversion
+**🟡 H-IBS-15** — IBS-15 como señal de mean-reversion
   - _Umbral_: n≥40 ops con ibs_15 en features y spread_IC>0.15 entre buckets
   - _Acción_: Añadir ibs_15 como boost/filtro en FEATURE_RULES de shadow_postmortem.py
-  - _Estado_: Spread bajo (0.134) — sin ventaja clara. oversold(IBS<0.3): IC=+0.044 n=14 | neutral: IC=+0.178 n=16 | overbought(IBS>0.7): IC=+0.083 n=22
-  - _Datos_: n=54 IC=+0.125 PNL=+9.80€
+  - _Estado_: Spread=0.156: neutral→boost, oversold→filtro | oversold(IBS<0.3): IC=+0.022 n=15 | neutral: IC=+0.178 n=16 | overbought(IBS>0.7): IC=+0.083 n=22
+  - _Datos_: n=55 IC=+0.114 PNL=+9.29€
 
 
 ### ⏳ Acumulando datos
@@ -125,7 +125,7 @@ _Sin sugerencias automáticas con datos actuales. Ampliar n por estrategia._
 **⏳ H-HORA-GBM** — hora_utc causal automático en GBM (forward)
   - _Umbral_: n≥20 forward con hora_utc + alguna hora con n≥15 IC<-0.10 o >+0.10
   - _Acción_: El sistema lo aplica automáticamente vía FEATURE_RULES. Verificar en strategy_params.json.
-  - _Estado_: 54 ops, 9 horas distintas. Sin hora con n≥15 y IC extremo aún.
+  - _Estado_: 55 ops, 10 horas distintas. Sin hora con n≥15 y IC extremo aún.
 
 **⏳ H-CROSS-ASSET** — Cross-asset confirmation GBM+OF BUY_NO
   - _Umbral_: n_overlaps≥20 y IC_overlap > IC_base + 0.05
@@ -150,8 +150,8 @@ _Sin sugerencias automáticas con datos actuales. Ampliar n por estrategia._
 **⏳ H-SOL-15MIN** — SOL#15min → umbral live (IC≥0.08 n≥40)
   - _Umbral_: IC≥0.08 y n≥40
   - _Acción_: Activar live cuando haya credenciales Polymarket API
-  - _Estado_: SOL#15min: n=37/40 IC=+0.038 PNL=+4.47€ (ETA: 3 ops)
-  - _Datos_: n=37 IC=+0.038 PNL=+4.47€
+  - _Estado_: SOL#15min: n=38/40 IC=+0.025 PNL=+3.96€ (ETA: 2 ops)
+  - _Datos_: n=38 IC=+0.025 PNL=+3.96€
 
 **⏳ H-WEEKLY** — Predicciones semanales de precio por par
   - _Umbral_: n≥15 por par con IC≥+0.05
@@ -161,7 +161,7 @@ _Sin sugerencias automáticas con datos actuales. Ampliar n por estrategia._
 **⏳ H-KALMAN** — Kalman filter para drift adaptativo
   - _Umbral_: n≥200 por subtipo para calibrar parámetros Q/R del KF
   - _Acción_: Sustituir DRIFT_DAMPING por KalmanDrift en fetch_binance_klines.py
-  - _Estado_: Máximo n actual en GBM: 343/200. Esperar 3+ subtypes con n≥200.
+  - _Estado_: Máximo n actual en GBM: 344/200. Esperar 3+ subtypes con n≥200.
   - _Bloqueante_: N_INSUFICIENTE
 
 
@@ -212,8 +212,8 @@ _Sin sugerencias automáticas con datos actuales. Ampliar n por estrategia._
   - _Hipótesis_: Cuando la volatilidad horaria es muy alta el GBM puede sobreestimar el edge. Testear.
   - _Umbral_: n≥30 y IC<-0.05
   - _Acción_: Filtrar señales GBM cuando sigma_h > 0.002 si se confirma IC negativo
-  - _Estado_: n=244 IC=+0.045 PNL=+16.57€ — sin señal clara aún (umbral IC: min=None max=-0.05)
-  - _Datos_: n=244 IC=+0.045 PNL=+16.57€
+  - _Estado_: n=245 IC=+0.043 PNL=+16.06€ — sin señal clara aún (umbral IC: min=None max=-0.05)
+  - _Datos_: n=245 IC=+0.043 PNL=+16.06€
 
 **⏳ H-CUSTOM-OF-02H-BTCSOL** — ORDER_FLOW H=02h UTC — BTC+SOL solamente (revisar blacklist)
   - _Hipótesis_: La hora 02h está en el blacklist basado en TODOS los pares. Con BTC+SOL solo, el historial muestra 4/5 (80%) IC=+0.054. ¿Se confirma la señal positiva con más datos?
@@ -254,8 +254,8 @@ _Sin sugerencias automáticas con datos actuales. Ampliar n por estrategia._
   - _Hipótesis_: El filtro drift_60min ∈ [0,+0.5%) se implementó el 2026-06-26. Datos forward desde 2026-06-27: 8/18 (44%) IC=-0.045. Aún n pequeño. Monitorear si el IC sube a +0.10 con n≥40.
   - _Umbral_: n≥40 y IC>+0.10 para confirmar el filtro funciona en forward
   - _Acción_: Si IC<0 con n≥30 → revisar umbral drift_60min (0.5% puede ser demasiado estrecho)
-  - _Estado_: n=149 IC=+0.043 PNL=+1.71€ — sin señal clara aún (umbral IC: min=0.1 max=None)
-  - _Datos_: n=149 IC=+0.043 PNL=+1.71€
+  - _Estado_: n=150 IC=+0.040 PNL=+1.20€ — sin señal clara aún (umbral IC: min=0.1 max=None)
+  - _Datos_: n=150 IC=+0.040 PNL=+1.20€
 
 **⏳ H-CUSTOM-GBM-SIGMA-BAJO** — GBM con sigma_h muy bajo (<0.0008/h) — ¿mercado dormido = más predecible?
   - _Hipótesis_: Hipótesis opuesta a sigma_alto: cuando el mercado está muy quieto, ¿el GBM captura mejor la señal porque hay menos ruido? sigma_h<0.0008 equivale a volatilidad diaria <0.8%.
