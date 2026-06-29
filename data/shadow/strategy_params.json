@@ -1,5 +1,5 @@
 {
-  "timestamp_utc": "2026-06-29T19:32:16+00:00",
+  "timestamp_utc": "2026-06-29T19:34:09+00:00",
   "estrategias": {
     "UPDOWN_GBM": {
       "activa": true,
@@ -218,7 +218,7 @@
           "ic_base": 0.0517,
           "n_patron": 19,
           "kelly_boost": 0.83,
-          "descubierto": "2026-06-29T19:32:16+00:00"
+          "descubierto": "2026-06-29T19:34:09+00:00"
         }
       ]
     },
@@ -321,7 +321,7 @@
           "ic_base": 0.0814,
           "n_patron": 28,
           "kelly_boost": 0.83,
-          "descubierto": "2026-06-29T19:32:16+00:00"
+          "descubierto": "2026-06-29T19:34:09+00:00"
         },
         {
           "feature": "drift_60min",
@@ -331,7 +331,7 @@
           "ic_base": 0.0814,
           "n_patron": 49,
           "kelly_boost": 0.64,
-          "descubierto": "2026-06-29T19:32:16+00:00"
+          "descubierto": "2026-06-29T19:34:09+00:00"
         }
       ]
     },
