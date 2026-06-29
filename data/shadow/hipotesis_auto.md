@@ -1,4 +1,4 @@
-# Hipótesis automáticas — 2026-06-29 14:14 UTC
+# Hipótesis automáticas — 2026-06-29 14:15 UTC
 _Generado por shadow_postmortem.py sobre 1260 resoluciones (PNL=-32.80€)_
 
 ## Patrones causales activos
@@ -277,6 +277,20 @@ _Sin sugerencias automáticas con datos actuales. Ampliar n por estrategia._
   - _Acción_: Si ETH drift<-1 confirma IC>0.08 con n≥20 → boost ×1.1 en ETH#15min cuando drift_15min<-1
   - _Estado_: 14/20 ops en el filtro definido (IC actual=+0.087 PNL=+2.23€)
   - _Datos_: n=14 IC=+0.087 PNL=+2.23€
+
+**⏳ H-CUSTOM-GBM-09H** — GBM a las 09h UTC — bloqueada 2026-06-29
+  - _Hipótesis_: IC=-0.158 n=19 PNL=-11.62€. Bloqueada manualmente el 2026-06-29 añadiendo hora 9 a meta.gbm_blacklist_hours_auto. Esta hipótesis monitorea que el IC siga siendo negativo para justificar el bloqueo.
+  - _Umbral_: 25
+  - _Acción_: Si IC sube a >-0.05 con n≥30 → evaluar desbloquear. Si se mantiene <-0.10 → confirmar bloqueo permanente.
+  - _Estado_: 15/25 ops en el filtro definido (IC actual=-0.110 PNL=-8.44€)
+  - _Datos_: n=15 IC=-0.110 PNL=-8.44€
+
+**🔴 H-CUSTOM-GBM-10H** — GBM a las 10h UTC — ¿blacklist necesario?
+  - _Hipótesis_: IC=-0.175 n=14 PNL=-7.70€. Muy cercano al umbral n≥15 para bloquear. Si IC<-0.08 con n≥15, considerar añadir al blacklist (igual que se hizo con 09h).
+  - _Umbral_: n≥15 y IC<-0.08
+  - _Acción_: Si IC<-0.08 con n≥15 → añadir 10h a meta.gbm_blacklist_hours_auto en strategy_params.json
+  - _Estado_: SEÑAL NEGATIVA confirmada: IC=-0.158 < -0.08 con n=19 PNL=-8.08€
+  - _Datos_: n=19 IC=-0.158 PNL=-8.08€
 
 **⏳ H-CUSTOM-POLY-DRIFT-CONFIRM** — poly_drift_5obs: ¿el precio YES interno de Polymarket confirma nuestra señal?
   - _Hipótesis_: Feature nueva 2026-06-27: drift del precio YES en Polymarket en últimas 5 obs (~5min). Si poly_drift<0 y decidimos BUY_NO (o poly_drift>0 y BUY_YES) → confluencia. Si diverge → reducción de stake. Hipótesis: confluencia Binance+Polymarket mejora IC; divergencia empeora.
