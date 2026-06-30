@@ -1,4 +1,4 @@
-# Estado del bot — 2026-06-30 19:31 UTC
+# Estado del bot — 2026-06-30 19:33 UTC
 
 ## Capital
 | | |
@@ -11,13 +11,13 @@
 | | |
 |---|---|
 | Inicio | 25.44 € |
-| Actual | **-35.06 €** |
-| P&L acumulado | 🔴 **-60.50 €** |
-| ROI s/ operativo | -237.80% |
-| ROI s/ depósito | -201.66% |
-| P&L hoy (2026-06-30) | 🔴 -16.00 € |
-| Operaciones resueltas | 1464 (701 WIN / 763 LOSS) — 47.9% |
-| Señales abiertas | 104 |
+| Actual | **-35.07 €** |
+| P&L acumulado | 🔴 **-60.51 €** |
+| ROI s/ operativo | -237.84% |
+| ROI s/ depósito | -201.69% |
+| P&L hoy (2026-06-30) | 🔴 -16.01 € |
+| Operaciones resueltas | 1466 (702 WIN / 764 LOSS) — 47.9% |
+| Señales abiertas | 102 |
 
 ## Estrategias (visión global)
 
@@ -26,7 +26,7 @@
 | ORDER_FLOW_5M | 790 | 50.9% | +0.009 | +4.86€ | 0.50€ | ✅ activa |
 | PRICE_TARGET_GBM | 59 | 42.4% | -0.074 | -10.88€ | 0.50€ | ⚠️ IC negativo |
 | SMART_FLOW_1H | 24 | 20.8% | -0.269 | -11.14€ | 0.00€ | 🚫 desactivada |
-| UPDOWN_GBM | 469 | 47.5% | -0.024 | -13.35€ | 0.50€ | ⚠️ IC negativo |
+| UPDOWN_GBM | 471 | 47.6% | -0.024 | -13.36€ | 0.50€ | ⚠️ IC negativo |
 | UPDOWN_OU_5M | 57 | 26.3% | -0.229 | -13.76€ | 0.00€ | 🚫 desactivada |
 | WEEKLY_PRICE | 65 | 47.7% | -0.022 | -16.22€ | 0.50€ | ⚠️ IC negativo |
 
@@ -34,22 +34,22 @@
 
 | Timestamp | Estrategia | Mercado | Resultado | PNL |
 |---|---|---|---|---|
+| 2026-06-30T19:32 | UPDOWN_GBM#BTC#15min | Bitcoin Up or Down - June 30, 3:15PM-3:30PM ET… | ✅ WIN | +0.50€ |
+| 2026-06-30T19:32 | UPDOWN_GBM#ETH#15min | Ethereum Up or Down - June 30, 3:15PM-3:30PM ET… | ❌ LOSS | -0.51€ |
 | 2026-06-30T19:16 | UPDOWN_GBM#ETH#15min | Ethereum Up or Down - June 30, 3:00PM-3:15PM ET… | ❌ LOSS | -0.51€ |
 | 2026-06-30T19:16 | UPDOWN_GBM#BTC#15min | Bitcoin Up or Down - June 30, 3:00PM-3:15PM ET… | ❌ LOSS | -0.51€ |
 | 2026-06-30T18:57 | UPDOWN_GBM#ETH#60min | Ethereum Up or Down - June 30, 2PM ET… | ✅ WIN | +0.48€ |
-| 2026-06-30T18:16 | UPDOWN_GBM#ETH#15min | Ethereum Up or Down - June 30, 2:00PM-2:15PM ET… | ✅ WIN | +0.48€ |
-| 2026-06-30T18:10 | ORDER_FLOW_5M#BTC#5min | Bitcoin Up or Down - June 30, 2:05PM-2:10PM ET… | ❌ LOSS | -0.51€ |
 
 ## Calidad de datos
 
-✅ **OK** — última verificación 2026-06-30T19:30 UTC
+✅ **OK** — última verificación 2026-06-30T19:32 UTC
 
 | Asset | Precio | Age | Alertas |
 |---|---|---|---|
-| ✅ BTC | $58,516.07 | 0.1min |  |
-| ✅ ETH | $1,573.96 | 0.1min |  |
-| ✅ SOL | $73.58 | 0.1min |  |
-| ✅ XRP | $1.04 | 0.1min |  |
+| ✅ BTC | $58,516.07 | 0.0min |  |
+| ✅ ETH | $1,573.96 | 0.0min |  |
+| ✅ SOL | $73.75 | 0.0min |  |
+| ✅ XRP | $1.04 | 0.0min |  |
 
 ---
 *Actualizado automáticamente cada ~60s por el fast loop*
