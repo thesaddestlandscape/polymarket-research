@@ -4,6 +4,7 @@
 ## Reglas de comportamiento
 - **Fail Loud**: "completado"/"verificado" es INCORRECTO si algo se asumió sin confirmar explícitamente. Surfacear incertidumbre siempre.
 - **Checkpoint**: en tareas ≥3 pasos, resumir tras cada paso qué está verificado y qué queda antes de continuar.
+- **Antes de escribir código nuevo** (decisión ladder): ¿ya existe en el codebase? → ¿lo hace la stdlib/requests/csv/json? → ¿una línea? → solo entonces: mínimo viable. Excepción: código de seguridad live (circuit breakers, filtros end_date, Kelly) — no minimizar.
 
 ---
 
