@@ -1,5 +1,5 @@
-# Hipótesis automáticas — 2026-06-30 16:02 UTC
-_Generado por shadow_postmortem.py sobre 1450 resoluciones (PNL=-59.95€)_
+# Hipótesis automáticas — 2026-06-30 16:04 UTC
+_Generado por shadow_postmortem.py sobre 1451 resoluciones (PNL=-58.82€)_
 
 ## Patrones causales activos
 
@@ -104,7 +104,7 @@ _Derivadas de los patrones aprendidos:_
 | ✅ PRICE_TARGET_GBM#atexpiry | 57 | -0.093 | -11.19€ | 0 | 0 |
 | 🚫 SMART_FLOW_1H | 24 | -0.269 | -11.14€ | 0 | 0 |
 | ✅ SMART_FLOW_1H#BTC | 10 | -0.083 | -2.97€ | 0 | 0 |
-| ✅ UPDOWN_GBM | 457 | -0.025 | -13.82€ | 0 | 0 |
+| ✅ UPDOWN_GBM | 458 | -0.024 | -12.69€ | 0 | 0 |
 | ✅ UPDOWN_GBM#15min | 274 | +0.018 | +4.02€ | 0 | 0 |
 | 🚫 UPDOWN_GBM#240min | 12 | -0.171 | -4.82€ | 0 | 0 |
 | 🚫 UPDOWN_GBM#5min | 56 | -0.155 | -16.64€ | 0 | 0 |
@@ -121,14 +121,14 @@ _Derivadas de los patrones aprendidos:_
 | 🚫 UPDOWN_GBM#ETH#5min | 12 | -0.086 | -3.67€ | 0 | 0 |
 | ✅ UPDOWN_GBM#ETH#60min | 40 | +0.024 | +0.40€ | 0 | 0 |
 | ✅ UPDOWN_GBM#ETH#daily | 5 | +0.018 | +3.85€ | 0 | 0 |
-| ✅ UPDOWN_GBM#SOL | 85 | -0.086 | -5.27€ | 0 | 0 |
+| ✅ UPDOWN_GBM#SOL | 86 | -0.080 | -4.14€ | 0 | 0 |
 | ✅ UPDOWN_GBM#SOL#15min | 42 | +0.000 | +1.59€ | 1 | 0 |
 | 🚫 UPDOWN_GBM#SOL#5min | 17 | -0.112 | -4.84€ | 0 | 0 |
 | ✅ UPDOWN_GBM#SOL#60min | 21 | -0.152 | -2.25€ | 3 | 0 |
 | ✅ UPDOWN_GBM#XRP | 30 | -0.094 | -2.51€ | 0 | 0 |
 | ✅ UPDOWN_GBM#XRP#15min | 21 | -0.065 | -0.65€ | 2 | 0 |
 | 🚫 UPDOWN_GBM#XRP#5min | 9 | -0.061 | -1.86€ | 0 | 0 |
-| ✅ UPDOWN_GBM#daily | 13 | +0.065 | +11.12€ | 0 | 0 |
+| ✅ UPDOWN_GBM#daily | 14 | +0.087 | +12.25€ | 0 | 0 |
 | 🚫 UPDOWN_OU_5M | 57 | -0.229 | -13.76€ | 0 | 0 |
 | 🚫 UPDOWN_OU_5M#5min | 57 | -0.229 | -13.76€ | 0 | 0 |
 | 🚫 UPDOWN_OU_5M#BNB | 8 | -0.160 | -4.56€ | 0 | 0 |
@@ -164,8 +164,8 @@ _Derivadas de los patrones aprendidos:_
 **〰️ H-IBS-15** — IBS-15 como señal de mean-reversion
   - _Umbral_: n≥40 ops con ibs_15 en features y spread_IC>0.15 entre buckets
   - _Acción_: Añadir ibs_15 como boost/filtro en FEATURE_RULES de shadow_postmortem.py
-  - _Estado_: Spread bajo (0.035) — sin ventaja clara. oversold(IBS<0.3): IC=-0.038 n=50 | neutral: IC=-0.071 n=54 | overbought(IBS>0.7): IC=-0.074 n=59
-  - _Datos_: n=168 IC=-0.065 PNL=-14.95€
+  - _Estado_: Spread bajo (0.033) — sin ventaja clara. oversold(IBS<0.3): IC=-0.038 n=50 | neutral: IC=-0.071 n=54 | overbought(IBS>0.7): IC=-0.065 n=60
+  - _Datos_: n=169 IC=-0.061 PNL=-13.82€
 
 **⚠️ H-SOL-15MIN** — SOL#15min → umbral live (IC≥0.08 n≥40)
   - _Umbral_: IC≥0.08 y n≥40
@@ -179,12 +179,12 @@ _Derivadas de los patrones aprendidos:_
 **⏳ H-HORA-GBM** — hora_utc causal automático en GBM (forward)
   - _Umbral_: n≥20 forward con hora_utc + alguna hora con n≥15 IC<-0.10 o >+0.10
   - _Acción_: El sistema lo aplica automáticamente vía FEATURE_RULES. Verificar en strategy_params.json.
-  - _Estado_: 168 ops, 23 horas distintas. Sin hora con n≥15 y IC extremo aún.
+  - _Estado_: 169 ops, 23 horas distintas. Sin hora con n≥15 y IC extremo aún.
 
 **⏳ H-CROSS-ASSET** — Cross-asset confirmation GBM+OF BUY_NO
   - _Umbral_: n_overlaps≥20 y IC_overlap > IC_base + 0.05
   - _Acción_: Cambiar _aplicar_kelly_compuesto: match por activo, no market_id
-  - _Estado_: n_overlaps=17, boost estimado=+0.018. Necesita 3 más y boost>0.05
+  - _Estado_: n_overlaps=17, boost estimado=+0.017. Necesita 3 más y boost>0.05
 
 **⏳ H-OF-PAR** — ORDER_FLOW per-pair delta_ratio ranges
   - _Umbral_: n≥200 por par con delta_ratio feature en shadow
@@ -209,7 +209,7 @@ _Derivadas de los patrones aprendidos:_
 **⏳ H-KALMAN** — Kalman filter para drift adaptativo
   - _Umbral_: n≥200 por subtipo para calibrar parámetros Q/R del KF
   - _Acción_: Sustituir DRIFT_DAMPING por KalmanDrift en fetch_binance_klines.py
-  - _Estado_: Máximo n actual en GBM: 457/200. Esperar 3+ subtypes con n≥200.
+  - _Estado_: Máximo n actual en GBM: 458/200. Esperar 3+ subtypes con n≥200.
   - _Bloqueante_: N_INSUFICIENTE
 
 
@@ -288,8 +288,8 @@ _Derivadas de los patrones aprendidos:_
   - _Hipótesis_: Cuando la volatilidad horaria es muy alta el GBM puede sobreestimar el edge. Testear.
   - _Umbral_: n≥30 y IC<-0.05
   - _Acción_: Filtrar señales GBM cuando sigma_h > 0.002 si se confirma IC negativo
-  - _Estado_: n=358 IC=-0.019 PNL=-8.18€ — sin señal clara aún (umbral IC: min=None max=-0.05)
-  - _Datos_: n=358 IC=-0.019 PNL=-8.18€
+  - _Estado_: n=359 IC=-0.018 PNL=-7.06€ — sin señal clara aún (umbral IC: min=None max=-0.05)
+  - _Datos_: n=359 IC=-0.018 PNL=-7.06€
 
 **⏳ H-CUSTOM-OF-02H-BTCSOL** — ORDER_FLOW H=02h UTC — BTC+SOL solamente (revisar blacklist)
   - _Hipótesis_: La hora 02h está en el blacklist basado en TODOS los pares. Con BTC+SOL solo, el historial muestra 4/5 (80%) IC=+0.054. ¿Se confirma la señal positiva con más datos?
