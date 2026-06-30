@@ -1,5 +1,5 @@
-# Hipótesis automáticas — 2026-06-30 02:54 UTC
-_Generado por shadow_postmortem.py sobre 1352 resoluciones (PNL=-48.06€)_
+# Hipótesis automáticas — 2026-06-30 02:56 UTC
+_Generado por shadow_postmortem.py sobre 1353 resoluciones (PNL=-48.57€)_
 
 ## Patrones causales activos
 
@@ -47,11 +47,11 @@ _Sin sugerencias automáticas con datos actuales. Ampliar n por estrategia._
 | ✅ PRICE_TARGET_GBM#atexpiry | 48 | -0.080 | -10.87€ | 0 | 0 |
 | 🚫 SMART_FLOW_1H | 23 | -0.260 | -10.63€ | 0 | 0 |
 | ✅ SMART_FLOW_1H#BTC | 9 | -0.061 | -2.46€ | 0 | 0 |
-| ✅ UPDOWN_GBM | 380 | -0.008 | -7.10€ | 0 | 0 |
+| ✅ UPDOWN_GBM | 381 | -0.009 | -7.61€ | 0 | 0 |
 | ✅ UPDOWN_GBM#15min | 225 | +0.029 | +3.33€ | 0 | 0 |
 | 🚫 UPDOWN_GBM#240min | 12 | -0.171 | -4.82€ | 0 | 0 |
 | 🚫 UPDOWN_GBM#5min | 56 | -0.155 | -16.64€ | 0 | 0 |
-| ✅ UPDOWN_GBM#60min | 74 | +0.053 | +4.78€ | 0 | 0 |
+| ✅ UPDOWN_GBM#60min | 75 | +0.045 | +4.27€ | 0 | 0 |
 | ✅ UPDOWN_GBM#BTC | 121 | +0.004 | -5.55€ | 0 | 0 |
 | ✅ UPDOWN_GBM#BTC#15min | 67 | +0.036 | -2.13€ | 0 | 1 |
 | ✅ UPDOWN_GBM#BTC#240min | 5 | -0.089 | -2.96€ | 0 | 0 |
@@ -62,10 +62,10 @@ _Sin sugerencias automáticas con datos actuales. Ampliar n por estrategia._
 | ✅ UPDOWN_GBM#ETH#240min | 5 | -0.018 | -0.44€ | 0 | 0 |
 | 🚫 UPDOWN_GBM#ETH#5min | 12 | -0.086 | -3.67€ | 0 | 0 |
 | ✅ UPDOWN_GBM#ETH#60min | 29 | +0.081 | +3.23€ | 0 | 0 |
-| ✅ UPDOWN_GBM#SOL | 77 | -0.057 | -0.85€ | 0 | 0 |
+| ✅ UPDOWN_GBM#SOL | 78 | -0.062 | -1.36€ | 0 | 0 |
 | ✅ UPDOWN_GBM#SOL#15min | 39 | +0.012 | +3.45€ | 1 | 0 |
 | 🚫 UPDOWN_GBM#SOL#5min | 17 | -0.112 | -4.84€ | 0 | 0 |
-| ✅ UPDOWN_GBM#SOL#60min | 16 | -0.044 | +0.30€ | 0 | 0 |
+| ✅ UPDOWN_GBM#SOL#60min | 17 | -0.067 | -0.21€ | 0 | 0 |
 | ✅ UPDOWN_GBM#XRP | 28 | -0.067 | -1.49€ | 0 | 0 |
 | ✅ UPDOWN_GBM#XRP#15min | 19 | -0.023 | +0.37€ | 0 | 0 |
 | 🚫 UPDOWN_GBM#XRP#5min | 9 | -0.061 | -1.86€ | 0 | 0 |
@@ -105,8 +105,8 @@ _Sin sugerencias automáticas con datos actuales. Ampliar n por estrategia._
 **〰️ H-IBS-15** — IBS-15 como señal de mean-reversion
   - _Umbral_: n≥40 ops con ibs_15 en features y spread_IC>0.15 entre buckets
   - _Acción_: Añadir ibs_15 como boost/filtro en FEATURE_RULES de shadow_postmortem.py
-  - _Estado_: Spread bajo (0.033) — sin ventaja clara. oversold(IBS<0.3): IC=-0.033 n=28 | neutral: IC=+0.000 n=24 | overbought(IBS>0.7): IC=-0.026 n=36
-  - _Datos_: n=91 IC=-0.027 PNL=-8.22€
+  - _Estado_: Spread bajo (0.048) — sin ventaja clara. oversold(IBS<0.3): IC=-0.048 n=29 | neutral: IC=+0.000 n=24 | overbought(IBS>0.7): IC=-0.026 n=36
+  - _Datos_: n=92 IC=-0.032 PNL=-8.73€
 
 
 ### ⏳ Acumulando datos
@@ -114,7 +114,7 @@ _Sin sugerencias automáticas con datos actuales. Ampliar n por estrategia._
 **⏳ H-HORA-GBM** — hora_utc causal automático en GBM (forward)
   - _Umbral_: n≥20 forward con hora_utc + alguna hora con n≥15 IC<-0.10 o >+0.10
   - _Acción_: El sistema lo aplica automáticamente vía FEATURE_RULES. Verificar en strategy_params.json.
-  - _Estado_: 91 ops, 16 horas distintas. Sin hora con n≥15 y IC extremo aún.
+  - _Estado_: 92 ops, 16 horas distintas. Sin hora con n≥15 y IC extremo aún.
 
 **⏳ H-CROSS-ASSET** — Cross-asset confirmation GBM+OF BUY_NO
   - _Umbral_: n_overlaps≥20 y IC_overlap > IC_base + 0.05
@@ -134,7 +134,7 @@ _Sin sugerencias automáticas con datos actuales. Ampliar n por estrategia._
 **⏳ H-60MIN-LIVE** — Estrategias 60min → umbral live (IC≥0.08 n≥40)
   - _Umbral_: IC≥0.08 y n≥40 en cualquier subtipo 60min
   - _Acción_: Activar live cuando haya credenciales Polymarket API
-  - _Estado_: ETH#60min: n=29/40 IC=+0.081 PNL=+3.23€ | BTC#60min: n=29/40 IC=+0.081 PNL=+1.25€ | SOL#60min: n=16/40 IC=-0.044 PNL=+0.30€
+  - _Estado_: ETH#60min: n=29/40 IC=+0.081 PNL=+3.23€ | BTC#60min: n=29/40 IC=+0.081 PNL=+1.25€ | SOL#60min: n=17/40 IC=-0.067 PNL=-0.21€
 
 **⏳ H-SOL-15MIN** — SOL#15min → umbral live (IC≥0.08 n≥40)
   - _Umbral_: IC≥0.08 y n≥40
@@ -150,7 +150,7 @@ _Sin sugerencias automáticas con datos actuales. Ampliar n por estrategia._
 **⏳ H-KALMAN** — Kalman filter para drift adaptativo
   - _Umbral_: n≥200 por subtipo para calibrar parámetros Q/R del KF
   - _Acción_: Sustituir DRIFT_DAMPING por KalmanDrift en fetch_binance_klines.py
-  - _Estado_: Máximo n actual en GBM: 380/200. Esperar 3+ subtypes con n≥200.
+  - _Estado_: Máximo n actual en GBM: 381/200. Esperar 3+ subtypes con n≥200.
   - _Bloqueante_: N_INSUFICIENTE
 
 
@@ -201,8 +201,8 @@ _Sin sugerencias automáticas con datos actuales. Ampliar n por estrategia._
   - _Hipótesis_: Cuando la volatilidad horaria es muy alta el GBM puede sobreestimar el edge. Testear.
   - _Umbral_: n≥30 y IC<-0.05
   - _Acción_: Filtrar señales GBM cuando sigma_h > 0.002 si se confirma IC negativo
-  - _Estado_: n=281 IC=+0.005 PNL=-1.46€ — sin señal clara aún (umbral IC: min=None max=-0.05)
-  - _Datos_: n=281 IC=+0.005 PNL=-1.46€
+  - _Estado_: n=282 IC=+0.004 PNL=-1.97€ — sin señal clara aún (umbral IC: min=None max=-0.05)
+  - _Datos_: n=282 IC=+0.004 PNL=-1.97€
 
 **⏳ H-CUSTOM-OF-02H-BTCSOL** — ORDER_FLOW H=02h UTC — BTC+SOL solamente (revisar blacklist)
   - _Hipótesis_: La hora 02h está en el blacklist basado en TODOS los pares. Con BTC+SOL solo, el historial muestra 4/5 (80%) IC=+0.054. ¿Se confirma la señal positiva con más datos?
@@ -229,8 +229,8 @@ _Sin sugerencias automáticas con datos actuales. Ampliar n por estrategia._
   - _Hipótesis_: En 15min BUY_NO tiene IC=+0.119. ¿Se repite en 60min? Datos actuales: 8/14 (57%) IC=+0.044 — positivo pero débil. Puede ser que 60min requiera dirección alcista (BUY_YES) y no bajista.
   - _Umbral_: 30
   - _Acción_: Si IC<0.05 con n≥30 → en 60min priorizar solo BUY_YES; si IC>0.08 → igualar al BUY_YES
-  - _Estado_: 15/30 ops en el filtro definido (IC actual=+0.066 PNL=+0.96€)
-  - _Datos_: n=15 IC=+0.066 PNL=+0.96€
+  - _Estado_: 16/30 ops en el filtro definido (IC actual=+0.044 PNL=+0.45€)
+  - _Datos_: n=16 IC=+0.044 PNL=+0.45€
 
 **🔴 H-CUSTOM-GBM-18H** — GBM a las 18h UTC — ¿blacklist necesario?
   - _Hipótesis_: IC=-0.148 con n=11 en GBM a las 18h UTC. P5 del roadmap: bloquear cuando n≥15. Esta hipótesis hace el tracking automático.
