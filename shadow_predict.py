@@ -2014,6 +2014,12 @@ def main():
                     dec = "BUY_NO"
                 else:
                     dec = "SKIP"
+                # PRICE_TARGET#atexpiry BUY_YES: IC=-0.267 (n=16) — el modelo GBM
+                # sobreestima P(precio_above_K) consistentemente; BUY_NO es la única
+                # dirección con IC positivo (+0.059). Filtro estructural por dirección.
+                if (nombre == "PRICE_TARGET_GBM" and "atexpiry" in subtype
+                        and dec == "BUY_YES"):
+                    dec = "SKIP"
                 # Kelly por dirección: usar el IC específico como base, luego sumar
                 # el boost causal encima (no reemplazarlo). Evita overstakear BUY_YES.
                 if dec in ("BUY_YES", "BUY_NO"):
