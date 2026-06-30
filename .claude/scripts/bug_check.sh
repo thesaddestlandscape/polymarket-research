@@ -56,6 +56,24 @@ fi
 UBL=$(grep -n 'json.loads(features_json)' shadow_predict.py 2>/dev/null | head -3 || true)
 [[ -n "$UBL" ]] && ISSUES+=("UNBOUND_RISK:json.loads antes de asignación:$UBL")
 
+# 7. shadow_resolve.py — throttle y filtro SKIP
+if [ -f "shadow_resolve.py" ]; then
+  HAS_SLEEP=$(grep -c 'time\.sleep' shadow_resolve.py 2>/dev/null || echo 0)
+  HAS_SKIP=$(grep -c 'SKIP' shadow_resolve.py 2>/dev/null || echo 0)
+  WORKERS=$(grep -oP 'workers\s*[:=]\s*\K\d+' shadow_resolve.py 2>/dev/null | head -1 || echo 0)
+  [[ $HAS_SLEEP -eq 0 ]] && ISSUES+=("RESOLVE_NO_THROTTLE:shadow_resolve.py sin time.sleep — riesgo 429")
+  [[ $HAS_SKIP -eq 0 ]] && ISSUES+=("RESOLVE_NO_SKIP:shadow_resolve.py no filtra decision==SKIP")
+  [[ -n "$WORKERS" && $WORKERS -gt 5 ]] && ISSUES+=("RESOLVE_WORKERS_HIGH:workers=$WORKERS>5 — riesgo 429")
+fi
+
+# 8. shadow_postmortem.py — checkpoint usa prediction_timestamp
+if [ -f "shadow_postmortem.py" ]; then
+  HAS_CKPT=$(grep -c 'cargar_ya_postmortem\|ya_procesadas' shadow_postmortem.py 2>/dev/null || echo 0)
+  HAS_TS=$(grep -c 'prediction_timestamp' shadow_postmortem.py 2>/dev/null || echo 0)
+  [[ $HAS_CKPT -eq 0 ]] && ISSUES+=("POSTMORTEM_NO_CHECKPOINT:sin función de deduplicación — riesgo duplicados")
+  [[ $HAS_CKPT -gt 0 && $HAS_TS -eq 0 ]] && ISSUES+=("POSTMORTEM_CHECKPOINT_SIN_TS:checkpoint no usa prediction_timestamp — duplicados posibles")
+fi
+
 # Output estructurado
 NISSUES=${#ISSUES[@]}
 if [[ $NISSUES -eq 0 ]]; then
