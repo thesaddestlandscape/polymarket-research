@@ -515,6 +515,67 @@ def main():
     _cerrar_trades_live(nuevos_resultados, ts)
 
 
+def _notificar_cierre_live(trade: dict, pnl_neto: float, acierto_dir: bool):
+    """Envía notificación Telegram cuando un trade live se resuelve."""
+    import os
+    tok = os.environ.get("TELEGRAM_TOKEN", "")
+    cid = os.environ.get("TELEGRAM_CHAT_ID", "")
+    if not tok or not cid:
+        return
+
+    # Calcular bankroll actualizado y P&L del día leyendo trades.csv completo
+    try:
+        from live_stake import bankroll_actual, pnl_live_hoy, CAPITAL_OPERATIVO_INICIAL
+        bkr   = bankroll_actual()
+        pnl_d = pnl_live_hoy()
+        bkr_ini = CAPITAL_OPERATIVO_INICIAL
+        pnl_total = bkr - bkr_ini
+    except Exception:
+        bkr = pnl_d = pnl_total = 0.0
+
+    signo   = "✅ WIN" if acierto_dir else "❌ LOSS"
+    pnl_str = f"{pnl_neto:+.2f}€"
+    q       = trade.get("question", "")[:55]
+    entry_p = float(trade.get("entry_price") or 0)
+    dir_    = trade.get("direction", "")
+    sub     = trade.get("subtype", "")
+
+    # Racha: contar wins/losses en trades.csv para el día
+    try:
+        trades_hoy = []
+        LIVE_CSV = Path("data/live/trades.csv")
+        hoy = datetime.now(timezone.utc).strftime("%Y-%m-%d")
+        for row in csv.DictReader(open(LIVE_CSV, encoding="utf-8")):
+            if row.get("status") == "CLOSED" and row.get("close_timestamp", "").startswith(hoy):
+                trades_hoy.append(row)
+        n_hoy  = len(trades_hoy)
+        w_hoy  = sum(1 for r in trades_hoy if float(r.get("pnl_neto_eur", 0) or 0) > 0)
+        racha  = f"{w_hoy}W/{n_hoy-w_hoy}L hoy"
+    except Exception:
+        racha = ""
+
+    bkr_color = "📈" if bkr >= bkr_ini else "📉"
+    msg = (
+        f"{'🏆' if acierto_dir else '💸'} *TRADE LIVE — {signo}*\n"
+        f"\n"
+        f"Mercado: _{q}_\n"
+        f"Dir: {dir_}  |  Entrada: {entry_p:.3f}  |  Sub: {sub}\n"
+        f"P&L trade: *{pnl_str}*\n"
+        f"\n"
+        f"{bkr_color} Bankroll real: *{bkr:.2f}€*  ({pnl_total:+.2f}€ total)\n"
+        f"Hoy: {pnl_d:+.2f}€  |  {racha}"
+    )
+    try:
+        requests.post(
+            f"https://api.telegram.org/bot{tok}/sendMessage",
+            json={"chat_id": cid, "text": msg, "parse_mode": "Markdown"},
+            timeout=10,
+        )
+        print(f"  [telegram] Resultado live enviado.")
+    except Exception as e:
+        print(f"  [telegram] Error notificando cierre live: {e}")
+
+
 def _cerrar_trades_live(nuevos_resultados: list, ts: str):
     """Actualiza data/live/trades.csv: cierra trades OPEN cuyo mercado ya resolvió."""
     LIVE_CSV = Path("data/live/trades.csv")
@@ -531,6 +592,7 @@ def _cerrar_trades_live(nuevos_resultados: list, ts: str):
 
     trades = list(csv.DictReader(open(LIVE_CSV, encoding="utf-8")))
     modificado = False
+    cierres = []
 
     for t in trades:
         if t.get("status") != "OPEN":
@@ -565,6 +627,7 @@ def _cerrar_trades_live(nuevos_resultados: list, ts: str):
         t["pnl_bruto_eur"]   = f"{pnl_bruto:.4f}"
         t["pnl_neto_eur"]    = f"{pnl_neto:.4f}"
         modificado = True
+        cierres.append((t, pnl_neto, acierto_dir))
         signo = "✅" if acierto_dir else "❌"
         print(f"  {signo} Trade live cerrado: {t['strategy']}#{t['subtype']} "
               f"{direction} market={mid} PNL={pnl_neto:+.4f}€")
@@ -575,6 +638,9 @@ def _cerrar_trades_live(nuevos_resultados: list, ts: str):
             w = csv.DictWriter(f, fieldnames=cols)
             w.writeheader()
             w.writerows(trades)
+        # Notificar cada cierre por Telegram
+        for t, pnl_neto, acierto_dir in cierres:
+            _notificar_cierre_live(t, pnl_neto, acierto_dir)
 
     actualizar_strategy_accuracy(nuevos_resultados, ts)
 

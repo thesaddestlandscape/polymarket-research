@@ -345,35 +345,62 @@ def _telegram_periodico(ahora, bankroll, pnl_total, pnl_hoy,
         except Exception:
             pass
 
-    # Estado live
+    # ── Estado live (switch + ventana) ───────────────────────────────────────
     try:
         from live_guard import estado_live
-        est = estado_live()
-        switch_on   = est["switch"]
-        en_ventana  = est["en_ventana"]
-        prox        = est.get("proxima_ventana", "")
+        est       = estado_live()
+        switch_on = est["switch"]
+        en_ventana = est["en_ventana"]
+        prox      = est.get("proxima_ventana", "")
         if en_ventana:
-            live_txt = f"✅ ON | En ventana {est['motivo']}"
+            live_estado = f"✅ ON — en ventana"
         elif switch_on:
-            live_txt = f"🟡 ON | Fuera ventana (prox: {prox})"
+            live_estado = f"🟡 ON — próx. ventana: {prox}"
         else:
-            live_txt = f"❌ OFF | Fuera ventana (prox: {prox})"
+            live_estado = f"❌ OFF — próx. ventana: {prox}"
     except Exception:
-        live_txt = "? (error estado)"
+        live_estado = "? (error)"
 
-    # Stats curadas directamente de results.csv
+    # ── Stats live reales (dinero real de trades.csv) ────────────────────────
+    try:
+        from live_stake import bankroll_actual, pnl_live_hoy, CAPITAL_OPERATIVO_INICIAL
+        bkr_real   = bankroll_actual()
+        pnl_d_real = pnl_live_hoy()
+        pnl_t_real = bkr_real - CAPITAL_OPERATIVO_INICIAL
+        trades_csv = Path("data/live/trades.csv")
+        trades_all = list(csv.reader(open(trades_csv))) if trades_csv.exists() else []
+        hoy = ahora.strftime("%Y-%m-%d")
+        n_live_hoy = sum(
+            1 for row in csv.DictReader(open(trades_csv)) if row.get("status") == "CLOSED"
+            and row.get("close_timestamp", "").startswith(hoy)
+        ) if trades_csv.exists() and trades_csv.stat().st_size > 100 else 0
+        n_live_total = sum(
+            1 for row in csv.DictReader(open(trades_csv)) if row.get("status") == "CLOSED"
+        ) if trades_csv.exists() and trades_csv.stat().st_size > 100 else 0
+        w_live_total = sum(
+            1 for row in csv.DictReader(open(trades_csv))
+            if row.get("status") == "CLOSED" and float(row.get("pnl_neto_eur", 0) or 0) > 0
+        ) if trades_csv.exists() and trades_csv.stat().st_size > 100 else 0
+        tiene_live = n_live_total > 0
+    except Exception:
+        bkr_real = CAPITAL_OPERATIVO_INICIAL = 25.44
+        pnl_d_real = pnl_t_real = 0.0
+        n_live_hoy = n_live_total = w_live_total = 0
+        tiene_live = False
+
+    # ── Stats shadow curadas de results.csv ──────────────────────────────────
     resultados_raw = cargar_csv(RESULTS_PATH)
     gbm, of_bs, buyno, buyyes = _stats_directas(resultados_raw)
 
     LIVE_IC = 0.08
     LIVE_N  = 40
 
-    def fila(label, d, extra=""):
+    def fila(label, d):
         n, win, pnl = d['n'], d['win'], d['pnl']
         if n == 0:
             return None
-        ic = _ic_bayes(win, n)
-        sp = "+" if pnl >= 0 else ""
+        ic  = _ic_bayes(win, n)
+        sp  = "+" if pnl >= 0 else ""
         prog = f"n={n}/{LIVE_N}" if n < LIVE_N else f"n={n}✓"
         if ic >= LIVE_IC and n >= LIVE_N:
             ico = "🔥"
@@ -383,62 +410,86 @@ def _telegram_periodico(ahora, bankroll, pnl_total, pnl_hoy,
             ico = "⚠️"
         else:
             ico = "▸ "
-        return f"{ico} {_esc(label):<18} {prog:<8} IC={ic:+.3f}  {sp}{pnl:.2f}€{extra}"
+        return f"{ico} {_esc(label):<18} {prog:<8} IC={ic:+.3f}  {sp}{pnl:.2f}€"
 
-    wr_g = n_win / n_total * 100 if n_total else 0
-    sp   = "+" if pnl_total >= 0 else ""
-    sh   = "+" if pnl_hoy   >= 0 else ""
-    em   = "🟢" if pnl_total >= 0 else "🔴"
-
-    lineas = [
-        f"📊 *Polymarket Bot* — {ahora.strftime('%H:%M UTC')}",
-        "",
-        f"{em} Bankroll: *{bankroll:.2f}€*  ({sp}{pnl_total:.2f}€ total | hoy: {sh}{pnl_hoy:.2f}€)",
-        f"📈 {n_total} ops  |  {wr_g:.1f}% WR",
-        "",
-        "*GBM — candidatas live:*",
-    ]
-
-    # Dirección split primero (más informativo)
-    f_buyno = fila("BUY\\_NO#15min", buyno)
-    if f_buyno:
-        lineas.append(f_buyno)
-
-    f_buyyes = fila("BUY\\_YES#60min", buyyes)
-    if f_buyyes:
-        lineas.append(f_buyyes)
-
-    # Subtypes por par
-    ORDER_GBM = ['SOL#15min', 'BTC#15min', 'ETH#15min', 'ETH#60min', 'BTC#60min', 'SOL#60min']
-    for key in ORDER_GBM:
-        d = gbm.get(key)
-        if d:
-            f = fila(key, d)
-            if f:
-                lineas.append(f)
-
-    # ORDER_FLOW BTC+SOL
-    lineas.append("")
-    lineas.append("*ORDER FLOW* (BTC+SOL):")
-    n, win, pnl = of_bs['n'], of_bs['win'], of_bs['pnl']
-    if n > 0:
-        ic  = _ic_bayes(win, n)
-        sp2 = "+" if pnl >= 0 else ""
-        lineas.append(f"  n={n}  IC={ic:+.3f}  {sp2}{pnl:.2f}€")
-    else:
-        lineas.append("  (sin datos)")
-
-    lineas += ["", f"🔘 Live: {live_txt}"]
-
-    msg = "\n".join(lineas)
-    try:
+    def _post(msg):
         _requests.post(
             f"https://api.telegram.org/bot{tok}/sendMessage",
             json={"chat_id": cid, "text": msg, "parse_mode": "Markdown"},
             timeout=10,
         )
+
+    # ════════════════════════════════════════════════════════════════════════
+    # MENSAJE 1 — LIVE (dinero real)
+    # ════════════════════════════════════════════════════════════════════════
+    bkr_em = "📈" if pnl_t_real >= 0 else "📉"
+    if tiene_live:
+        wr_live = w_live_total / n_live_total * 100 if n_live_total else 0
+        live_perf = (
+            f"Trades totales: {n_live_total}  |  WR {wr_live:.0f}%\n"
+            f"Hoy: {n_live_hoy} trades cerrados  |  PNL hoy: {pnl_d_real:+.2f}€"
+        )
+    else:
+        live_perf = "Sin trades cerrados aún — esperando primera ventana"
+
+    msg_live = (
+        f"💰 *BOT LIVE — dinero real* — {ahora.strftime('%H:%M UTC')}\n"
+        f"\n"
+        f"{bkr_em} Bankroll: *{bkr_real:.2f}€*  ({pnl_t_real:+.2f}€ vs inicio)\n"
+        f"{live_perf}\n"
+        f"\n"
+        f"Estado: {live_estado}"
+    )
+
+    # ════════════════════════════════════════════════════════════════════════
+    # MENSAJE 2 — SHADOW (simulación, no es dinero real)
+    # ════════════════════════════════════════════════════════════════════════
+    wr_g  = n_win / n_total * 100 if n_total else 0
+    sp_t  = "+" if pnl_total >= 0 else ""
+    sp_h  = "+" if pnl_hoy   >= 0 else ""
+
+    lineas_shadow = [
+        f"🧪 *SHADOW (simulación)* — {ahora.strftime('%H:%M UTC')}",
+        f"_(No es dinero real — incluye BUY\\_YES y estrategias en prueba)_",
+        "",
+        f"Bankroll sim: {bankroll:.2f}€  ({sp_t}{pnl_total:.2f}€ total | hoy: {sp_h}{pnl_hoy:.2f}€)",
+        f"{n_total} ops  |  {wr_g:.1f}% WR global",
+        "",
+        "*Estrategia live activa* (BUY\\_NO #15min):",
+    ]
+
+    f_buyno = fila("BUY\\_NO#15min", buyno)
+    if f_buyno:
+        lineas_shadow.append(f_buyno)
+    else:
+        lineas_shadow.append("  (sin datos aún)")
+
+    lineas_shadow += ["", "*Otras GBM en observación:*"]
+    ORDER_GBM = ['BTC#15min', 'ETH#15min', 'SOL#15min', 'ETH#60min', 'BTC#60min', 'SOL#60min']
+    for key in ORDER_GBM:
+        d = gbm.get(key)
+        if d:
+            f = fila(key, d)
+            if f:
+                lineas_shadow.append(f)
+
+    n_of, win_of, pnl_of = of_bs['n'], of_bs['win'], of_bs['pnl']
+    if n_of > 0:
+        ic_of = _ic_bayes(win_of, n_of)
+        sp_of = "+" if pnl_of >= 0 else ""
+        lineas_shadow += [
+            "",
+            f"*ORDER FLOW* (BTC+SOL): n={n_of}  IC={ic_of:+.3f}  {sp_of}{pnl_of:.2f}€",
+        ]
+
+    msg_shadow = "\n".join(lineas_shadow)
+
+    # Enviar ambos mensajes
+    try:
+        _post(msg_live)
+        _post(msg_shadow)
         LAST_TG_PATH.write_text(str(ahora_ts))
-        print(f"  [telegram] Resumen enviado ({ahora.strftime('%H:%M UTC')})")
+        print(f"  [telegram] Mensajes live+shadow enviados ({ahora.strftime('%H:%M UTC')})")
     except Exception as e:
         print(f"  [telegram] Error: {e}")
 
