@@ -1,4 +1,4 @@
-# Hipótesis automáticas — 2026-06-30 11:55 UTC
+# Hipótesis automáticas — 2026-06-30 11:57 UTC
 _Generado por shadow_postmortem.py sobre 1408 resoluciones (PNL=-60.48€)_
 
 ## Patrones causales activos
@@ -182,6 +182,27 @@ _Sin sugerencias automáticas con datos actuales. Ampliar n por estrategia._
 
 
 ### 🧪 Hipótesis custom (editables en hipotesis_custom.json)
+
+**🟡 H-24H-GBM-BUYYES-MADRUGADA** — GBM BUY_YES en madrugada europea (05-07h UTC) — señal alcista
+  - _Hipótesis_: Patrón detectado 2026-06-30: GBM BUY_YES funciona en horas 05-07h UTC (7-9h Madrid). IC=+0.087 n=14 a las 06h, +0.063 n=11 a las 05h, +0.067 n=17 a las 07h. Hipótesis: apertura europea genera momentum alcista que el GBM captura. La dirección dominante cambia de BUY_NO (madrugada americana 13h) a BUY_YES (apertura europea). Objetivo: cubrir franja horaria 05-07h UTC en el camino hacia operación 24h.
+  - _Umbral_: n≥40 en franja 05-07h y IC>+0.08
+  - _Acción_: Si IC>+0.08 con n≥40 → añadir GBM BUY_YES a subtypes_permitidos_live para horas 05-07h UTC
+  - _Estado_: SEÑAL POSITIVA confirmada: IC=+0.114 > 0.08 con n=42 PNL=+8.75€
+  - _Datos_: n=42 IC=+0.114 PNL=+8.75€
+
+**⏳ H-24H-GBM-BUYYES-TARDE** — GBM BUY_YES en tarde europea (15-19h UTC) — señal alcista sostenida
+  - _Hipótesis_: Patrón detectado 2026-06-30: GBM BUY_YES funciona consistentemente en 15-19h UTC (17-21h Madrid). IC=+0.136 n=7 a las 17h, +0.097 n=7 a las 19h, +0.080 n=8 a las 15h. Franja de sesión americana donde el mercado tiende a subir. Complementa BUY_NO de las 13-14h. Objetivo: cubrir tarde completa 15-19h UTC.
+  - _Umbral_: 40
+  - _Acción_: Si IC>+0.08 con n≥40 → habilitar GBM BUY_YES en live para horas 15-19h UTC (además del BUY_NO actual)
+  - _Estado_: 34/40 ops en el filtro definido (IC actual=+0.222 PNL=+8.51€)
+  - _Datos_: n=34 IC=+0.222 PNL=+8.51€
+
+**⏳ H-24H-OF-18H** — ORDER_FLOW BUY_NO a las 18h UTC — GBM bloqueado pero OF funciona
+  - _Hipótesis_: GBM está en blacklist a las 18h UTC (IC muy negativo). Pero ORDER_FLOW BUY_NO BTC+SOL a las 18h: IC=+0.106 n=11. El blacklist de GBM no debería afectar a OF. Hipótesis: son señales independientes — OF captura flujo real de órdenes mientras GBM falla con el modelo de precios en esa hora. Objetivo: activar OF BUY_NO específicamente a las 18h sin tocar blacklist GBM.
+  - _Umbral_: 25
+  - _Acción_: Si IC>+0.08 con n≥25 → eliminar 18h del blacklist ORDER_FLOW (no del GBM) para recuperar esa hora
+  - _Estado_: 16/25 ops en el filtro definido (IC actual=+0.089 PNL=+1.92€)
+  - _Datos_: n=16 IC=+0.089 PNL=+1.92€
 
 **⏳ H-WEEKLY-BUYNO** — WEEKLY_PRICE BUY_NO — dirección dominante con IC muy alto
   - _Hipótesis_: Split por dirección en WEEKLY_PRICE: BUY_NO n=38 WR=66% IC=+0.316 vs BUY_YES n=19 WR=21% IC=-0.579. El mercado semanal de precios tiende a NO cumplir el target → BUY_NO tiene edge estructural fuerte. PNL negativo por apuestas pequeñas y slippage, no por dirección. Candidata live si se confirma con n≥50.

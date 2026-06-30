@@ -28,6 +28,55 @@
   ],
   "hipotesis": [
     {
+      "id": "H-24H-GBM-BUYYES-MADRUGADA",
+      "nombre": "GBM BUY_YES en madrugada europea (05-07h UTC) — señal alcista",
+      "descripcion": "Patrón detectado 2026-06-30: GBM BUY_YES funciona en horas 05-07h UTC (7-9h Madrid). IC=+0.087 n=14 a las 06h, +0.063 n=11 a las 05h, +0.067 n=17 a las 07h. Hipótesis: apertura europea genera momentum alcista que el GBM captura. La dirección dominante cambia de BUY_NO (madrugada americana 13h) a BUY_YES (apertura europea). Objetivo: cubrir franja horaria 05-07h UTC en el camino hacia operación 24h.",
+      "tipo": "boost",
+      "umbral": "n≥40 en franja 05-07h y IC>+0.08",
+      "accion": "Si IC>+0.08 con n≥40 → añadir GBM BUY_YES a subtypes_permitidos_live para horas 05-07h UTC",
+      "filtro": {
+        "strategy_prefix": "UPDOWN_GBM",
+        "subtype_contains": "15min",
+        "decision": "BUY_YES",
+        "hora_utc_desde": 5,
+        "hora_utc_hasta": 7
+      },
+      "umbral_n": 40,
+      "umbral_ic_min": 0.08
+    },
+    {
+      "id": "H-24H-GBM-BUYYES-TARDE",
+      "nombre": "GBM BUY_YES en tarde europea (15-19h UTC) — señal alcista sostenida",
+      "descripcion": "Patrón detectado 2026-06-30: GBM BUY_YES funciona consistentemente en 15-19h UTC (17-21h Madrid). IC=+0.136 n=7 a las 17h, +0.097 n=7 a las 19h, +0.080 n=8 a las 15h. Franja de sesión americana donde el mercado tiende a subir. Complementa BUY_NO de las 13-14h. Objetivo: cubrir tarde completa 15-19h UTC.",
+      "tipo": "boost",
+      "umbral": "n≥40 en franja 15-19h y IC>+0.08",
+      "accion": "Si IC>+0.08 con n≥40 → habilitar GBM BUY_YES en live para horas 15-19h UTC (además del BUY_NO actual)",
+      "filtro": {
+        "strategy_prefix": "UPDOWN_GBM",
+        "subtype_contains": "15min",
+        "decision": "BUY_YES",
+        "hora_utc_desde": 15,
+        "hora_utc_hasta": 19
+      },
+      "umbral_n": 40,
+      "umbral_ic_min": 0.08
+    },
+    {
+      "id": "H-24H-OF-18H",
+      "nombre": "ORDER_FLOW BUY_NO a las 18h UTC — GBM bloqueado pero OF funciona",
+      "descripcion": "GBM está en blacklist a las 18h UTC (IC muy negativo). Pero ORDER_FLOW BUY_NO BTC+SOL a las 18h: IC=+0.106 n=11. El blacklist de GBM no debería afectar a OF. Hipótesis: son señales independientes — OF captura flujo real de órdenes mientras GBM falla con el modelo de precios en esa hora. Objetivo: activar OF BUY_NO específicamente a las 18h sin tocar blacklist GBM.",
+      "tipo": "boost",
+      "umbral": "n≥25 y IC>+0.08",
+      "accion": "Si IC>+0.08 con n≥25 → eliminar 18h del blacklist ORDER_FLOW (no del GBM) para recuperar esa hora",
+      "filtro": {
+        "strategy_prefix": "ORDER_FLOW_5M",
+        "decision": "BUY_NO",
+        "hora_utc": 18
+      },
+      "umbral_n": 25,
+      "umbral_ic_min": 0.08
+    },
+    {
       "id": "H-WEEKLY-BUYNO",
       "nombre": "WEEKLY_PRICE BUY_NO — dirección dominante con IC muy alto",
       "descripcion": "Split por dirección en WEEKLY_PRICE: BUY_NO n=38 WR=66% IC=+0.316 vs BUY_YES n=19 WR=21% IC=-0.579. El mercado semanal de precios tiende a NO cumplir el target → BUY_NO tiene edge estructural fuerte. PNL negativo por apuestas pequeñas y slippage, no por dirección. Candidata live si se confirma con n≥50.",
