@@ -28,6 +28,20 @@
   ],
   "hipotesis": [
     {
+      "id": "H-WEEKLY-BUYNO",
+      "nombre": "WEEKLY_PRICE BUY_NO — dirección dominante con IC muy alto",
+      "descripcion": "Split por dirección en WEEKLY_PRICE: BUY_NO n=38 WR=66% IC=+0.316 vs BUY_YES n=19 WR=21% IC=-0.579. El mercado semanal de precios tiende a NO cumplir el target → BUY_NO tiene edge estructural fuerte. PNL negativo por apuestas pequeñas y slippage, no por dirección. Candidata live si se confirma con n≥50.",
+      "tipo": "boost",
+      "umbral": "n≥50 y IC>+0.10",
+      "accion": "Si IC>+0.10 con n≥50 → activar WEEKLY_PRICE BUY_NO en live (filtrar BUY_YES). Si IC cae <+0.05 con n≥50 → el edge se ha erosionado.",
+      "filtro": {
+        "strategy_prefix": "WEEKLY_PRICE",
+        "decision": "BUY_NO"
+      },
+      "umbral_n": 50,
+      "umbral_ic_min": 0.10
+    },
+    {
       "id": "H-CUSTOM-GBM-17H-BTC",
       "nombre": "GBM BTC a las 17h UTC — ¿edge real?",
       "descripcion": "La hora 17h UTC aparece como la mejor en historial. ¿Se confirma solo en BTC?",
