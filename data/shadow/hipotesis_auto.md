@@ -1,5 +1,5 @@
-# Hipótesis automáticas — 2026-06-30 00:03 UTC
-_Generado por shadow_postmortem.py sobre 1333 resoluciones (PNL=-44.49€)_
+# Hipótesis automáticas — 2026-06-30 00:05 UTC
+_Generado por shadow_postmortem.py sobre 1334 resoluciones (PNL=-43.06€)_
 
 ## Patrones causales activos
 
@@ -51,21 +51,21 @@ _Sin sugerencias automáticas con datos actuales. Ampliar n por estrategia._
 | ✅ PRICE_TARGET_GBM#atexpiry | 48 | -0.080 | -10.87€ | 0 | 0 |
 | 🚫 SMART_FLOW_1H | 23 | -0.260 | -10.63€ | 0 | 0 |
 | ✅ SMART_FLOW_1H#BTC | 9 | -0.061 | -2.46€ | 0 | 0 |
-| ✅ UPDOWN_GBM | 363 | +0.001 | -3.55€ | 0 | 0 |
+| ✅ UPDOWN_GBM | 364 | +0.003 | -2.12€ | 0 | 0 |
 | ✅ UPDOWN_GBM#15min | 214 | +0.042 | +4.92€ | 0 | 0 |
 | 🚫 UPDOWN_GBM#240min | 12 | -0.171 | -4.82€ | 0 | 0 |
 | 🚫 UPDOWN_GBM#5min | 56 | -0.155 | -16.64€ | 0 | 0 |
-| ✅ UPDOWN_GBM#60min | 68 | +0.071 | +6.73€ | 0 | 0 |
+| ✅ UPDOWN_GBM#60min | 69 | +0.077 | +8.17€ | 0 | 0 |
 | ✅ UPDOWN_GBM#BTC | 116 | +0.009 | -3.75€ | 0 | 0 |
 | ✅ UPDOWN_GBM#BTC#15min | 64 | +0.045 | -0.93€ | 0 | 2 |
 | ✅ UPDOWN_GBM#BTC#240min | 5 | -0.089 | -2.96€ | 0 | 0 |
 | 🚫 UPDOWN_GBM#BTC#5min | 16 | -0.133 | -6.30€ | 0 | 0 |
 | ✅ UPDOWN_GBM#BTC#60min | 27 | +0.086 | +1.86€ | 0 | 0 |
-| ✅ UPDOWN_GBM#ETH | 140 | +0.035 | +2.03€ | 0 | 0 |
+| ✅ UPDOWN_GBM#ETH | 141 | +0.038 | +3.47€ | 0 | 0 |
 | ✅ UPDOWN_GBM#ETH#15min | 93 | +0.047 | +0.22€ | 0 | 0 |
 | ✅ UPDOWN_GBM#ETH#240min | 5 | -0.018 | -0.44€ | 0 | 0 |
 | 🚫 UPDOWN_GBM#ETH#5min | 12 | -0.086 | -3.67€ | 0 | 0 |
-| ✅ UPDOWN_GBM#ETH#60min | 26 | +0.107 | +4.06€ | 0 | 0 |
+| ✅ UPDOWN_GBM#ETH#60min | 27 | +0.121 | +5.49€ | 0 | 0 |
 | ✅ UPDOWN_GBM#SOL | 76 | -0.051 | -0.34€ | 0 | 0 |
 | ✅ UPDOWN_GBM#SOL#15min | 39 | +0.012 | +3.45€ | 1 | 0 |
 | 🚫 UPDOWN_GBM#SOL#5min | 17 | -0.112 | -4.84€ | 0 | 0 |
@@ -109,8 +109,8 @@ _Sin sugerencias automáticas con datos actuales. Ampliar n por estrategia._
 **〰️ H-IBS-15** — IBS-15 como señal de mean-reversion
   - _Umbral_: n≥40 ops con ibs_15 en features y spread_IC>0.15 entre buckets
   - _Acción_: Añadir ibs_15 como boost/filtro en FEATURE_RULES de shadow_postmortem.py
-  - _Estado_: Spread bajo (0.042) — sin ventaja clara. oversold(IBS<0.3): IC=+0.000 n=20 | neutral: IC=+0.042 n=22 | overbought(IBS>0.7): IC=+0.000 n=30
-  - _Datos_: n=74 IC=+0.013 PNL=-4.68€
+  - _Estado_: Spread bajo (0.042) — sin ventaja clara. oversold(IBS<0.3): IC=+0.022 n=21 | neutral: IC=+0.042 n=22 | overbought(IBS>0.7): IC=+0.000 n=30
+  - _Datos_: n=75 IC=+0.019 PNL=-3.25€
 
 
 ### ⏳ Acumulando datos
@@ -118,7 +118,7 @@ _Sin sugerencias automáticas con datos actuales. Ampliar n por estrategia._
 **⏳ H-HORA-GBM** — hora_utc causal automático en GBM (forward)
   - _Umbral_: n≥20 forward con hora_utc + alguna hora con n≥15 IC<-0.10 o >+0.10
   - _Acción_: El sistema lo aplica automáticamente vía FEATURE_RULES. Verificar en strategy_params.json.
-  - _Estado_: 74 ops, 13 horas distintas. Sin hora con n≥15 y IC extremo aún.
+  - _Estado_: 75 ops, 13 horas distintas. Sin hora con n≥15 y IC extremo aún.
 
 **⏳ H-CROSS-ASSET** — Cross-asset confirmation GBM+OF BUY_NO
   - _Umbral_: n_overlaps≥20 y IC_overlap > IC_base + 0.05
@@ -138,7 +138,7 @@ _Sin sugerencias automáticas con datos actuales. Ampliar n por estrategia._
 **⏳ H-60MIN-LIVE** — Estrategias 60min → umbral live (IC≥0.08 n≥40)
   - _Umbral_: IC≥0.08 y n≥40 en cualquier subtipo 60min
   - _Acción_: Activar live cuando haya credenciales Polymarket API
-  - _Estado_: ETH#60min: n=26/40 IC=+0.107 PNL=+4.06€ | BTC#60min: n=27/40 IC=+0.086 PNL=+1.86€ | SOL#60min: n=15/40 IC=-0.022 PNL=+0.81€
+  - _Estado_: ETH#60min: n=27/40 IC=+0.121 PNL=+5.49€ | BTC#60min: n=27/40 IC=+0.086 PNL=+1.86€ | SOL#60min: n=15/40 IC=-0.022 PNL=+0.81€
 
 **⏳ H-SOL-15MIN** — SOL#15min → umbral live (IC≥0.08 n≥40)
   - _Umbral_: IC≥0.08 y n≥40
@@ -154,7 +154,7 @@ _Sin sugerencias automáticas con datos actuales. Ampliar n por estrategia._
 **⏳ H-KALMAN** — Kalman filter para drift adaptativo
   - _Umbral_: n≥200 por subtipo para calibrar parámetros Q/R del KF
   - _Acción_: Sustituir DRIFT_DAMPING por KalmanDrift en fetch_binance_klines.py
-  - _Estado_: Máximo n actual en GBM: 363/200. Esperar 3+ subtypes con n≥200.
+  - _Estado_: Máximo n actual en GBM: 364/200. Esperar 3+ subtypes con n≥200.
   - _Bloqueante_: N_INSUFICIENTE
 
 
@@ -205,8 +205,8 @@ _Sin sugerencias automáticas con datos actuales. Ampliar n por estrategia._
   - _Hipótesis_: Cuando la volatilidad horaria es muy alta el GBM puede sobreestimar el edge. Testear.
   - _Umbral_: n≥30 y IC<-0.05
   - _Acción_: Filtrar señales GBM cuando sigma_h > 0.002 si se confirma IC negativo
-  - _Estado_: n=264 IC=+0.019 PNL=+2.08€ — sin señal clara aún (umbral IC: min=None max=-0.05)
-  - _Datos_: n=264 IC=+0.019 PNL=+2.08€
+  - _Estado_: n=265 IC=+0.021 PNL=+3.52€ — sin señal clara aún (umbral IC: min=None max=-0.05)
+  - _Datos_: n=265 IC=+0.021 PNL=+3.52€
 
 **⏳ H-CUSTOM-OF-02H-BTCSOL** — ORDER_FLOW H=02h UTC — BTC+SOL solamente (revisar blacklist)
   - _Hipótesis_: La hora 02h está en el blacklist basado en TODOS los pares. Con BTC+SOL solo, el historial muestra 4/5 (80%) IC=+0.054. ¿Se confirma la señal positiva con más datos?
@@ -226,8 +226,8 @@ _Sin sugerencias automáticas con datos actuales. Ampliar n por estrategia._
   - _Hipótesis_: Análisis actual muestra BUY_YES 60min: 22/36 (61%) IC=+0.105 vs BUY_NO 60min: 8/14 (57%) IC=+0.044. En 60min parece que BUY_YES es la dirección dominante, al contrario que en 15min.
   - _Umbral_: n≥30 y IC>+0.08
   - _Acción_: Si BUY_YES 60min confirma IC≥0.10 n≥40 → prioridad live por encima de BUY_NO
-  - _Estado_: n=53 IC=+0.064 PNL=+5.77€ — sin señal clara aún (umbral IC: min=0.08 max=None)
-  - _Datos_: n=53 IC=+0.064 PNL=+5.77€
+  - _Estado_: n=54 IC=+0.071 PNL=+7.20€ — sin señal clara aún (umbral IC: min=0.08 max=None)
+  - _Datos_: n=54 IC=+0.071 PNL=+7.20€
 
 **⏳ H-CUSTOM-GBM-60MIN-BUYNO** — GBM 60min BUY_NO — tracking por separado
   - _Hipótesis_: En 15min BUY_NO tiene IC=+0.119. ¿Se repite en 60min? Datos actuales: 8/14 (57%) IC=+0.044 — positivo pero débil. Puede ser que 60min requiera dirección alcista (BUY_YES) y no bajista.
