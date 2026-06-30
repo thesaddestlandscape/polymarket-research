@@ -41,6 +41,11 @@ LIQ_MIN = 200   # liq mínima del bracket más pequeño; limita el tamaño máxi
 # Mínimo de brackets para que el análisis tenga sentido
 N_MIN   = 3
 
+# Skip si algún bracket tiene YES > este umbral (mercado casi resuelto, no es arb real)
+NEAR_RESOLVED_THRESHOLD = 0.90
+# Gap mínimo para ser ACCIONABLE (5 cents) vs solo DETECTABLE (3 cents con UMBRAL_ARB)
+UMBRAL_ACCIONABLE = 0.95
+
 BRACKET_PATTERNS = [
     re.compile(r'between\s+\$[\d,]+\s+and\s+\$[\d,]+', re.I),
     re.compile(r'between\s+[\d,]+\s+and\s+[\d,]+', re.I),
@@ -103,6 +108,11 @@ def analizar_oportunidades(por_id: dict) -> list:
         if len(mercados) < N_MIN:
             continue
 
+        # Skip eventos donde algún bracket ya está casi resuelto (YES > 90%)
+        # Esos precios no representan arb real, solo el mercado convergiendo a 1
+        if any(m["yes"] > NEAR_RESOLVED_THRESHOLD for m in mercados):
+            continue
+
         suma_yes  = sum(m["yes"] for m in mercados)
         liq_min   = min(m["liquidity"] for m in mercados)
         liq_total = sum(m["liquidity"] for m in mercados)
@@ -120,6 +130,9 @@ def analizar_oportunidades(por_id: dict) -> list:
         else:
             continue
 
+        # Accionable: gap ≥ 5% (suma < 0.95) — por debajo los fees se comen el margen
+        accionable = (tipo == "BRACKET_ARB" and suma_yes < UMBRAL_ACCIONABLE)
+
         # Rango cubierto por los brackets (para estimar el riesgo de cola)
         preguntas = [m["question"] for m in mercados]
         precios_nums = []
@@ -131,11 +144,13 @@ def analizar_oportunidades(por_id: dict) -> list:
 
         oportunidades.append({
             "tipo":        tipo,
+            "accionable":  accionable,
             "event_id":    eid,
             "event":       mercados[0]["event"][:60],
             "end_date":    mercados[0]["end_date"],
             "n_brackets":  len(mercados),
             "suma_yes":    round(suma_yes, 4),
+            "gap_pct":     round((1.0 - suma_yes) * 100, 2),
             "profit_pct":  round(profit_pct, 2),
             "liq_min":     round(liq_min, 0),
             "liq_total":   round(liq_total, 0),
@@ -152,8 +167,8 @@ def guardar_csv(oportunidades: list, fecha: str):
     """Guarda las oportunidades en CSV para seguimiento."""
     path = DIR_SHADOW / f"arb_scan_{fecha}.csv"
     columnas = [
-        "timestamp_utc", "tipo", "event", "end_date",
-        "n_brackets", "suma_yes", "profit_pct",
+        "timestamp_utc", "tipo", "accionable", "event", "end_date",
+        "n_brackets", "suma_yes", "gap_pct", "profit_pct",
         "liq_min", "liq_total", "rango_min", "rango_max",
     ]
     ts = datetime.now(timezone.utc).isoformat(timespec="seconds")
@@ -180,21 +195,28 @@ def main():
     print(f"  Mercados en snapshot: {len(por_id)}")
     oportunidades = analizar_oportunidades(por_id)
 
-    arb  = [o for o in oportunidades if o["tipo"] == "BRACKET_ARB"]
-    over = [o for o in oportunidades if o["tipo"] == "OVERROUND"]
+    arb        = [o for o in oportunidades if o["tipo"] == "BRACKET_ARB"]
+    accionable = [o for o in arb if o["accionable"]]
+    detectable = [o for o in arb if not o["accionable"]]
+    over       = [o for o in oportunidades if o["tipo"] == "OVERROUND"]
 
-    print(f"  BRACKET_ARB (suma<0.97, liq>500): {len(arb)}")
-    print(f"  OVERROUND   (suma>1.02):           {len(over)}")
+    print(f"  BRACKET_ARB detectable (gap>3%, suma<0.97): {len(arb)}")
+    print(f"    → ACCIONABLE (gap≥5%, suma<0.95):         {len(accionable)}")
+    print(f"    → solo detectable (gap 3-5%):             {len(detectable)}")
+    print(f"  OVERROUND (suma>1.02):                      {len(over)}")
 
-    for op in arb:
-        print(f"\n  ✅ ARB | {op['event']} ({op['n_brackets']} brackets)")
-        print(f"     suma={op['suma_yes']:.3f}  profit_neto={op['profit_pct']:+.1f}%"
+    for op in accionable:
+        print(f"\n  🎯 ACCIONABLE | {op['event']} ({op['n_brackets']} brackets)")
+        print(f"     suma={op['suma_yes']:.3f}  gap={op['gap_pct']:+.1f}%  profit_neto={op['profit_pct']:+.1f}%"
               f"  liq_min={op['liq_min']:.0f}  vence={op['end_date']}")
         if op["rango_min"] and op["rango_max"]:
-            print(f"     Rango cubierto: ${op['rango_min']:,} – ${op['rango_max']:,}"
-                  f"  (riesgo: precio fuera de este rango)")
+            print(f"     Rango cubierto: ${op['rango_min']:,} – ${op['rango_max']:,}")
         for m in op["mercados"][:5]:
             print(f"     YES={m['yes']:.3f} liq={m['liquidity']:.0f} | {m['question'][:65]}")
+
+    for op in detectable:
+        print(f"\n  👀 detectable | {op['event']} ({op['n_brackets']} brackets)"
+              f"  suma={op['suma_yes']:.3f}  gap={op['gap_pct']:+.1f}%  liq_min={op['liq_min']:.0f}")
 
     if oportunidades:
         path = guardar_csv(oportunidades, fecha)
