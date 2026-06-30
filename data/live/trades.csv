@@ -1,1 +1,2 @@
 timestamp_utc,market_id,question,end_date,strategy,subtype,direction,stake_eur,entry_price,ic_modelo,edge_neto,conviction_score,kelly_recomendado,status,close_timestamp,exit_price,outcome_real,fee_eur,pnl_bruto_eur,pnl_neto_eur,notas
+2026-06-30T14:39:26+00:00,2730730,"Ethereum Up or Down - June 30, 10:45AM-11:00AM ET",2026-06-30T15:00:00,UPDOWN_GBM,ETH#15min,BUY_NO,0.0,0.485,0.2999,-0.1651,0.1562,1.99,STUB,,,,0.0,,,"PolyApiException[status_code=400, error_message={'error': 'invalid order version, please use the latest clob-client'}]"
