@@ -1,5 +1,5 @@
-# Hipótesis automáticas — 2026-06-30 20:56 UTC
-_Generado por shadow_postmortem.py sobre 1477 resoluciones (PNL=-58.33€)_
+# Hipótesis automáticas — 2026-06-30 20:58 UTC
+_Generado por shadow_postmortem.py sobre 1478 resoluciones (PNL=-58.84€)_
 
 ## Patrones causales activos
 
@@ -37,6 +37,15 @@ _Generado por shadow_postmortem.py sobre 1477 resoluciones (PNL=-58.33€)_
 - **PATRÓN** `ibs_15` < `0.1521` → IC=+0.182 (n=20)
   - _Por qué funciona_: IBS bajo (precio cerca del mínimo) → sobreventa de corto plazo; BUY_NO menos fiable
   - _Acción_: Kelly boost +0.91€ cuando `ibs_15` < 0.1521 (IC base=+0.031)
+
+### UPDOWN_GBM#ETH#60min
+- **PATRÓN** `pct_spot_vs_ref` |x|≤ `0.0853` → IC=+0.147 (n=15)
+  - _Por qué funciona_: precio spot cerca de la referencia → señal GBM más calibrada
+  - _Acción_: Kelly boost +0.74€ cuando `pct_spot_vs_ref` |x|≤ 0.0853 (IC base=+0.033)
+
+- **PATRÓN** `sigma_h` > `0.0097` → IC=+0.125 (n=22)
+  - _Por qué funciona_: alta volatilidad → el modelo GBM sobreestima la señal; el mercado es más aleatorio
+  - _Acción_: Kelly boost +0.62€ cuando `sigma_h` > 0.0097 (IC base=+0.033)
 
 ### UPDOWN_GBM#SOL#15min
 - **FILTRO** `drift_60min` |x|> `0.2311` → IC=-0.184 (n=17)
@@ -104,22 +113,22 @@ _Derivadas de los patrones aprendidos:_
 | ✅ PRICE_TARGET_GBM#atexpiry | 57 | -0.093 | -11.19€ | 0 | 0 |
 | 🚫 SMART_FLOW_1H | 24 | -0.269 | -11.14€ | 0 | 0 |
 | ✅ SMART_FLOW_1H#BTC | 10 | -0.083 | -2.97€ | 0 | 0 |
-| ✅ UPDOWN_GBM | 482 | -0.021 | -11.18€ | 0 | 0 |
+| ✅ UPDOWN_GBM | 483 | -0.022 | -11.69€ | 0 | 0 |
 | ✅ UPDOWN_GBM#15min | 296 | +0.017 | +4.52€ | 0 | 0 |
 | 🚫 UPDOWN_GBM#240min | 12 | -0.171 | -4.82€ | 0 | 0 |
 | 🚫 UPDOWN_GBM#5min | 56 | -0.155 | -16.64€ | 0 | 0 |
-| ✅ UPDOWN_GBM#60min | 102 | -0.029 | -4.64€ | 0 | 0 |
+| ✅ UPDOWN_GBM#60min | 103 | -0.033 | -5.15€ | 0 | 0 |
 | ✅ UPDOWN_GBM#BTC | 150 | -0.020 | -10.93€ | 0 | 0 |
 | ✅ UPDOWN_GBM#BTC#15min | 85 | +0.029 | -3.47€ | 0 | 1 |
 | ✅ UPDOWN_GBM#BTC#240min | 5 | -0.089 | -2.96€ | 0 | 0 |
 | 🚫 UPDOWN_GBM#BTC#5min | 16 | -0.133 | -6.30€ | 0 | 0 |
 | ✅ UPDOWN_GBM#BTC#60min | 39 | -0.037 | -3.81€ | 4 | 0 |
 | ✅ UPDOWN_GBM#BTC#daily | 5 | +0.054 | +5.61€ | 0 | 0 |
-| ✅ UPDOWN_GBM#ETH | 207 | +0.021 | +8.42€ | 0 | 0 |
+| ✅ UPDOWN_GBM#ETH | 208 | +0.019 | +7.91€ | 0 | 0 |
 | ✅ UPDOWN_GBM#ETH#15min | 143 | +0.031 | +7.25€ | 0 | 2 |
 | ✅ UPDOWN_GBM#ETH#240min | 5 | -0.018 | -0.44€ | 0 | 0 |
 | 🚫 UPDOWN_GBM#ETH#5min | 12 | -0.086 | -3.67€ | 0 | 0 |
-| ✅ UPDOWN_GBM#ETH#60min | 42 | +0.045 | +1.42€ | 0 | 0 |
+| ✅ UPDOWN_GBM#ETH#60min | 43 | +0.033 | +0.91€ | 0 | 2 |
 | ✅ UPDOWN_GBM#ETH#daily | 5 | +0.018 | +3.85€ | 0 | 0 |
 | ✅ UPDOWN_GBM#SOL | 87 | -0.084 | -4.65€ | 0 | 0 |
 | ✅ UPDOWN_GBM#SOL#15min | 43 | -0.011 | +1.08€ | 1 | 0 |
@@ -164,13 +173,13 @@ _Derivadas de los patrones aprendidos:_
 **〰️ H-IBS-15** — IBS-15 como señal de mean-reversion
   - _Umbral_: n≥40 ops con ibs_15 en features y spread_IC>0.15 entre buckets
   - _Acción_: Añadir ibs_15 como boost/filtro en FEATURE_RULES de shadow_postmortem.py
-  - _Estado_: Spread bajo (0.038) — sin ventaja clara. oversold(IBS<0.3): IC=-0.036 n=54 | neutral: IC=-0.071 n=61 | overbought(IBS>0.7): IC=-0.033 n=73
-  - _Datos_: n=193 IC=-0.049 PNL=-12.30€
+  - _Estado_: Spread bajo (0.045) — sin ventaja clara. oversold(IBS<0.3): IC=-0.036 n=54 | neutral: IC=-0.078 n=62 | overbought(IBS>0.7): IC=-0.033 n=73
+  - _Datos_: n=194 IC=-0.051 PNL=-12.81€
 
 **🟡 H-HORA-GBM** — hora_utc causal automático en GBM (forward)
   - _Umbral_: n≥20 forward con hora_utc + alguna hora con n≥15 IC<-0.10 o >+0.10
   - _Acción_: El sistema lo aplica automáticamente vía FEATURE_RULES. Verificar en strategy_params.json.
-  - _Estado_: H=19h: IC=+0.196 n=21 PNL=+7.54€ → BOOST
+  - _Estado_: H=19h: IC=+0.167 n=22 PNL=+7.03€ → BOOST
 
 **⚠️ H-SOL-15MIN** — SOL#15min → umbral live (IC≥0.08 n≥40)
   - _Umbral_: IC≥0.08 y n≥40
@@ -205,7 +214,7 @@ _Derivadas de los patrones aprendidos:_
 **⏳ H-60MIN-LIVE** — Estrategias 60min → umbral live (IC≥0.08 n≥40)
   - _Umbral_: IC≥0.08 y n≥40 en cualquier subtipo 60min
   - _Acción_: Activar live cuando haya credenciales Polymarket API
-  - _Estado_: ETH#60min: n=42/40 IC=+0.045 PNL=+1.42€ | BTC#60min: n=39/40 IC=-0.037 PNL=-3.81€ | SOL#60min: n=21/40 IC=-0.152 PNL=-2.25€
+  - _Estado_: ETH#60min: n=43/40 IC=+0.033 PNL=+0.91€ | BTC#60min: n=39/40 IC=-0.037 PNL=-3.81€ | SOL#60min: n=21/40 IC=-0.152 PNL=-2.25€
 
 **⏳ H-WEEKLY** — Predicciones semanales de precio por par
   - _Umbral_: n≥15 por par con IC≥+0.05
@@ -288,8 +297,8 @@ _Derivadas de los patrones aprendidos:_
   - _Hipótesis_: Cuando la volatilidad horaria es muy alta el GBM puede sobreestimar el edge. Testear.
   - _Umbral_: n≥30 y IC<-0.05
   - _Acción_: Filtrar señales GBM cuando sigma_h > 0.002 si se confirma IC negativo
-  - _Estado_: n=383 IC=-0.014 PNL=-5.54€ — sin señal clara aún (umbral IC: min=None max=-0.05)
-  - _Datos_: n=383 IC=-0.014 PNL=-5.54€
+  - _Estado_: n=384 IC=-0.015 PNL=-6.05€ — sin señal clara aún (umbral IC: min=None max=-0.05)
+  - _Datos_: n=384 IC=-0.015 PNL=-6.05€
 
 **⏳ H-CUSTOM-OF-02H-BTCSOL** — ORDER_FLOW H=02h UTC — BTC+SOL solamente (revisar blacklist)
   - _Hipótesis_: La hora 02h está en el blacklist basado en TODOS los pares. Con BTC+SOL solo, el historial muestra 4/5 (80%) IC=+0.054. ¿Se confirma la señal positiva con más datos?
@@ -309,8 +318,8 @@ _Derivadas de los patrones aprendidos:_
   - _Hipótesis_: Análisis actual muestra BUY_YES 60min: 22/36 (61%) IC=+0.105 vs BUY_NO 60min: 8/14 (57%) IC=+0.044. En 60min parece que BUY_YES es la dirección dominante, al contrario que en 15min.
   - _Umbral_: n≥30 y IC>+0.08
   - _Acción_: Si BUY_YES 60min confirma IC≥0.10 n≥40 → prioridad live por encima de BUY_NO
-  - _Estado_: n=85 IC=-0.040 PNL=-4.58€ — sin señal clara aún (umbral IC: min=0.08 max=None)
-  - _Datos_: n=85 IC=-0.040 PNL=-4.58€
+  - _Estado_: n=86 IC=-0.045 PNL=-5.09€ — sin señal clara aún (umbral IC: min=0.08 max=None)
+  - _Datos_: n=86 IC=-0.045 PNL=-5.09€
 
 **⏳ H-CUSTOM-GBM-60MIN-BUYNO** — GBM 60min BUY_NO — tracking por separado
   - _Hipótesis_: En 15min BUY_NO tiene IC=+0.119. ¿Se repite en 60min? Datos actuales: 8/14 (57%) IC=+0.044 — positivo pero débil. Puede ser que 60min requiera dirección alcista (BUY_YES) y no bajista.
