@@ -1,4 +1,4 @@
-# Hipótesis automáticas — 2026-06-30 08:25 UTC
+# Hipótesis automáticas — 2026-06-30 08:27 UTC
 _Generado por shadow_postmortem.py sobre 1387 resoluciones (PNL=-53.31€)_
 
 ## Patrones causales activos
@@ -306,6 +306,18 @@ _Sin sugerencias automáticas con datos actuales. Ampliar n por estrategia._
   - _Acción_: Si IC<-0.08 con n≥15 → añadir 10h a meta.gbm_blacklist_hours_auto en strategy_params.json
   - _Estado_: SEÑAL NEGATIVA confirmada: IC=-0.158 < -0.08 con n=19 PNL=-8.08€
   - _Datos_: n=19 IC=-0.158 PNL=-8.08€
+
+**⏳ H-FUNDING-HIGH-BUYNO** — Funding rate alto (>0.03%/8h) → BUY_NO tiene más edge
+  - _Hipótesis_: Cuando funding perps Binance > 0.03%/8h, los longs están sobrecargados y pagan por mantener. El mercado es structuralmente vulnerable a corrección. Hipótesis: BUY_NO GBM tiene IC superior en este régimen vs funding neutral.
+  - _Umbral_: 40
+  - _Acción_: Si IC_funding_alto > IC_baseline + 0.05 con n≥40 → boost ×1.1 en BUY_NO cuando funding_rate_8h > 0.03
+  - _Estado_: 0/40 ops en el filtro definido (IC actual=+0.000 PNL=+0.00€)
+
+**⏳ H-FUNDING-NEGATIVE-BUYYES** — Funding rate negativo (<-0.01%/8h) → BUY_YES tiene más edge (short squeeze)
+  - _Hipótesis_: Cuando funding < -0.01%/8h, los shorts están pagando por mantener la posición. Históricamente precede squeezes en cripto. Hipótesis: BUY_YES GBM tiene IC superior en régimen de funding negativo.
+  - _Umbral_: 30
+  - _Acción_: Si se confirma → boost ×1.1 en BUY_YES cuando funding_rate_8h < -0.01
+  - _Estado_: 0/30 ops en el filtro definido (IC actual=+0.000 PNL=+0.00€)
 
 **⏳ H-LATE-WINDOW-5MIN** — Late-window BTC 5min — arbitraje timing vs Polymarket
   - _Hipótesis_: Inspirado en VyvanseWithMarijuana (36.5% ROI, $42k vol). A T+160-270s dentro de una ventana BTC 5min, si BTC ya se movió >0.3%, Polymarket no ha actualizado precio → edge estructural. Estrategia LATE_WINDOW_5MIN en shadow hasta n≥30.
