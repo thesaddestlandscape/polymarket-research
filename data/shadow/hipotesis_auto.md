@@ -1,5 +1,5 @@
-# Hipótesis automáticas — 2026-06-30 01:14 UTC
-_Generado por shadow_postmortem.py sobre 1342 resoluciones (PNL=-43.86€)_
+# Hipótesis automáticas — 2026-06-30 01:16 UTC
+_Generado por shadow_postmortem.py sobre 1343 resoluciones (PNL=-44.39€)_
 
 ## Patrones causales activos
 
@@ -27,8 +27,8 @@ _Sin sugerencias automáticas con datos actuales. Ampliar n por estrategia._
 
 | Estrategia | n | IC | PNL | Filtros | Patrones |
 |---|---|---|---|---|---|
-| ✅ ORDER_FLOW_5M | 784 | +0.013 | +7.94€ | 0 | 0 |
-| ✅ ORDER_FLOW_5M#5min | 648 | +0.003 | -4.65€ | 0 | 0 |
+| ✅ ORDER_FLOW_5M | 785 | +0.012 | +7.41€ | 0 | 0 |
+| ✅ ORDER_FLOW_5M#5min | 649 | +0.002 | -5.18€ | 0 | 0 |
 | ✅ ORDER_FLOW_5M#BNB | 63 | +0.038 | +1.36€ | 0 | 0 |
 | ✅ ORDER_FLOW_5M#BNB#5min | 63 | +0.038 | +1.36€ | 0 | 0 |
 | ✅ ORDER_FLOW_5M#BTC | 129 | +0.011 | +0.40€ | 0 | 0 |
@@ -37,8 +37,8 @@ _Sin sugerencias automáticas con datos actuales. Ampliar n por estrategia._
 | ✅ ORDER_FLOW_5M#DOGE#5min | 82 | -0.012 | -1.81€ | 0 | 0 |
 | ✅ ORDER_FLOW_5M#ETH | 112 | -0.026 | -4.31€ | 0 | 0 |
 | ✅ ORDER_FLOW_5M#ETH#5min | 112 | -0.026 | -4.31€ | 0 | 0 |
-| ✅ ORDER_FLOW_5M#SOL | 146 | +0.020 | +1.72€ | 0 | 0 |
-| ✅ ORDER_FLOW_5M#SOL#5min | 146 | +0.020 | +1.72€ | 0 | 0 |
+| ✅ ORDER_FLOW_5M#SOL | 147 | +0.017 | +1.19€ | 0 | 0 |
+| ✅ ORDER_FLOW_5M#SOL#5min | 147 | +0.017 | +1.19€ | 0 | 0 |
 | ✅ ORDER_FLOW_5M#XRP | 116 | -0.009 | -2.01€ | 0 | 0 |
 | ✅ ORDER_FLOW_5M#XRP#5min | 116 | -0.009 | -2.01€ | 0 | 0 |
 | ✅ PRICE_TARGET_GBM | 50 | -0.058 | -10.55€ | 0 | 0 |
@@ -123,12 +123,12 @@ _Sin sugerencias automáticas con datos actuales. Ampliar n por estrategia._
 **⏳ H-CROSS-ASSET** — Cross-asset confirmation GBM+OF BUY_NO
   - _Umbral_: n_overlaps≥20 y IC_overlap > IC_base + 0.05
   - _Acción_: Cambiar _aplicar_kelly_compuesto: match por activo, no market_id
-  - _Estado_: n_overlaps=17, boost estimado=+0.012. Necesita 3 más y boost>0.05
+  - _Estado_: n_overlaps=17, boost estimado=+0.013. Necesita 3 más y boost>0.05
 
 **⏳ H-OF-PAR** — ORDER_FLOW per-pair delta_ratio ranges
   - _Umbral_: n≥200 por par con delta_ratio feature en shadow
   - _Acción_: Añadir DELTA_MIN/MAX por par dict en shadow_predict.py
-  - _Estado_: BTC: 73 ops con delta_ratio | SOL: 85 ops con delta_ratio
+  - _Estado_: BTC: 73 ops con delta_ratio | SOL: 86 ops con delta_ratio
 
 **⏳ H-KELLY-HORA** — Kelly boost ×1.2 en horas top (15/17/19h UTC)
   - _Umbral_: n≥40 por hora con IC estable ≥+0.10 confirmado en forward
@@ -198,8 +198,8 @@ _Sin sugerencias automáticas con datos actuales. Ampliar n por estrategia._
   - _Hipótesis_: Las horas 0-6h UTC en ORDER_FLOW. El blacklist fue calculado con todos los pares incluyendo los negativos (ETH/XRP/DOGE). ¿Con BTC+SOL sigue siendo negativo?
   - _Umbral_: n≥30 y IC<-0.05
   - _Acción_: Mantener bloqueo si IC<-0.05; desbloquear si IC>0 con n≥30
-  - _Estado_: n=37 IC=+0.013 PNL=+0.32€ — sin señal clara aún (umbral IC: min=None max=-0.05)
-  - _Datos_: n=37 IC=+0.013 PNL=+0.32€
+  - _Estado_: n=38 IC=+0.000 PNL=-0.21€ — sin señal clara aún (umbral IC: min=None max=-0.05)
+  - _Datos_: n=38 IC=+0.000 PNL=-0.21€
 
 **〰️ H-CUSTOM-GBM-SIGMA-ALTO** — GBM con sigma_h alto (>0.002/h) — ¿destruye edge?
   - _Hipótesis_: Cuando la volatilidad horaria es muy alta el GBM puede sobreestimar el edge. Testear.
