@@ -1317,8 +1317,9 @@ def s_updown_gbm(market, ctx):
     # logit_edge (Shaw & Dalen 2025 — BS-P): edge en espacio logit.
     # logit(p_modelo) - logit(p_mercado) es más estable que la diferencia en probabilidad
     # cerca de los extremos (p→0 o p→1) y captura el edge multiplicativo real.
+    py_mkt_le    = market.get("_precio_yes", 0.5)
     p_up_clipped = max(0.02, min(0.98, p_up))
-    py_clipped   = max(0.02, min(0.98, py))
+    py_clipped   = max(0.02, min(0.98, py_mkt_le))
     logit_edge   = math.log(p_up_clipped / (1 - p_up_clipped)) - math.log(py_clipped / (1 - py_clipped))
     features["logit_edge"] = round(logit_edge, 4)
     # sigma_b (belief volatility): volatilidad del logit(price_yes) en Polymarket.
@@ -2013,6 +2014,12 @@ def main():
                 elif -en >= edge_min and not precio_extremo:
                     dec = "BUY_NO"
                 else:
+                    dec = "SKIP"
+                # PRICE_TARGET#atexpiry BUY_YES: IC=-0.267 (n=16) — el modelo GBM
+                # sobreestima P(precio_above_K) consistentemente; BUY_NO es la única
+                # dirección con IC positivo (+0.059). Filtro estructural por dirección.
+                if (nombre == "PRICE_TARGET_GBM" and "atexpiry" in subtype
+                        and dec == "BUY_YES"):
                     dec = "SKIP"
                 # Kelly por dirección: usar el IC específico como base, luego sumar
                 # el boost causal encima (no reemplazarlo). Evita overstakear BUY_YES.
