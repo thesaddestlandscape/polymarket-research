@@ -1,5 +1,5 @@
-# Hipótesis automáticas — 2026-06-30 16:20 UTC
-_Generado por shadow_postmortem.py sobre 1451 resoluciones (PNL=-58.82€)_
+# Hipótesis automáticas — 2026-06-30 16:22 UTC
+_Generado por shadow_postmortem.py sobre 1452 resoluciones (PNL=-59.33€)_
 
 ## Patrones causales activos
 
@@ -80,12 +80,12 @@ _Derivadas de los patrones aprendidos:_
 
 | Estrategia | n | IC | PNL | Filtros | Patrones |
 |---|---|---|---|---|---|
-| ✅ ORDER_FLOW_5M | 788 | +0.010 | +5.88€ | 0 | 0 |
-| ✅ ORDER_FLOW_5M#5min | 652 | +0.000 | -6.71€ | 0 | 0 |
+| ✅ ORDER_FLOW_5M | 789 | +0.009 | +5.37€ | 0 | 0 |
+| ✅ ORDER_FLOW_5M#5min | 653 | -0.001 | -7.22€ | 0 | 0 |
 | ✅ ORDER_FLOW_5M#BNB | 63 | +0.038 | +1.36€ | 0 | 0 |
 | ✅ ORDER_FLOW_5M#BNB#5min | 63 | +0.038 | +1.36€ | 0 | 0 |
-| ✅ ORDER_FLOW_5M#BTC | 130 | +0.008 | -0.11€ | 0 | 0 |
-| ✅ ORDER_FLOW_5M#BTC#5min | 130 | +0.008 | -0.11€ | 0 | 0 |
+| ✅ ORDER_FLOW_5M#BTC | 131 | +0.004 | -0.62€ | 0 | 0 |
+| ✅ ORDER_FLOW_5M#BTC#5min | 131 | +0.004 | -0.62€ | 0 | 0 |
 | ✅ ORDER_FLOW_5M#DOGE | 82 | -0.012 | -1.81€ | 0 | 0 |
 | ✅ ORDER_FLOW_5M#DOGE#5min | 82 | -0.012 | -1.81€ | 0 | 0 |
 | ✅ ORDER_FLOW_5M#ETH | 112 | -0.026 | -4.31€ | 0 | 0 |
@@ -184,12 +184,12 @@ _Derivadas de los patrones aprendidos:_
 **⏳ H-CROSS-ASSET** — Cross-asset confirmation GBM+OF BUY_NO
   - _Umbral_: n_overlaps≥20 y IC_overlap > IC_base + 0.05
   - _Acción_: Cambiar _aplicar_kelly_compuesto: match por activo, no market_id
-  - _Estado_: n_overlaps=17, boost estimado=+0.017. Necesita 3 más y boost>0.05
+  - _Estado_: n_overlaps=17, boost estimado=+0.018. Necesita 3 más y boost>0.05
 
 **⏳ H-OF-PAR** — ORDER_FLOW per-pair delta_ratio ranges
   - _Umbral_: n≥200 por par con delta_ratio feature en shadow
   - _Acción_: Añadir DELTA_MIN/MAX por par dict en shadow_predict.py
-  - _Estado_: BTC: 74 ops con delta_ratio | SOL: 88 ops con delta_ratio
+  - _Estado_: BTC: 75 ops con delta_ratio | SOL: 88 ops con delta_ratio
 
 **⏳ H-KELLY-HORA** — Kelly boost ×1.2 en horas top (15/17/19h UTC)
   - _Umbral_: n≥40 por hora con IC estable ≥+0.10 confirmado en forward
