@@ -1602,6 +1602,83 @@ def s_resolution_sniper(market, ctx):
 
 THETA_OU = 30.0  # calibrar con Jon-Becker cuando n≥200
 
+LATE_WINDOW_DRIFT_MIN = 0.003   # 0.3 %/h mínimo en ventana para señal late-window
+LATE_WINDOW_ENTRY_LO  = 160     # segundos desde inicio ventana: entrada mínima
+LATE_WINDOW_ENTRY_HI  = 270     # segundos desde inicio ventana: entrada máxima
+
+
+def s_late_window_5min(market: dict, ctx: dict):
+    """
+    Late-window arbitraje BTC 5min — inspirado en VyvanseWithMarijuana (36.5% ROI).
+
+    Lógica: a T+160-270s dentro de una ventana de 5min, si BTC ya se ha movido
+    > 0.3% desde el inicio de la ventana, Polymarket a menudo no ha actualizado
+    precio aún → edge estructural en la dirección del movimiento.
+
+    Sólo BTC (el par con mayor correlación y menor latencia en Polymarket).
+    En shadow mode hasta n≥30 con IC>+0.05.
+    """
+    question = market.get("question", "")
+    if "up or down" not in question.lower():
+        return None
+    tipo, ventana_min = _parse_updown_tipo(question)
+    if tipo != "slot" or ventana_min != 5:
+        return None
+    activo = identificar_activo(question)
+    if activo != "BTC":
+        return None
+
+    # Determinar posición temporal dentro de la ventana
+    try:
+        end_dt = datetime.fromisoformat(
+            market.get("end_date", "").replace("Z", "+00:00"))
+        if end_dt.tzinfo is None:
+            end_dt = end_dt.replace(tzinfo=timezone.utc)
+    except Exception:
+        return None
+
+    now_utc = datetime.now(timezone.utc)
+    window_start = end_dt - timedelta(minutes=5)
+    elapsed_s = (now_utc - window_start).total_seconds()
+
+    if not (LATE_WINDOW_ENTRY_LO <= elapsed_s <= LATE_WINDOW_ENTRY_HI):
+        return None  # fuera de la zona de entrada late-window
+
+    # Drift BTC desde inicio de ventana usando klines intraday
+    precios_data = ctx.get("precios_intraday", [])
+    spot = _cargar_spot().get("BTC")
+    if not spot or spot <= 0:
+        return None
+
+    ref = _precio_en("BTC", window_start, precios_data, tol_min=3)
+    if ref is None or ref <= 0:
+        return None
+
+    drift_ventana = (spot / ref - 1)  # fracción, ej: +0.004 = +0.4%
+
+    if abs(drift_ventana) < LATE_WINDOW_DRIFT_MIN:
+        return None  # movimiento insuficiente
+
+    # La señal sigue la dirección del drift (momentum intra-ventana)
+    # BUY_YES si BTC subió, BUY_NO si BTC bajó
+    p_up = 0.70 if drift_ventana > 0 else 0.30
+
+    drift_15 = _calcular_drift_h("BTC", precios_data, 15)
+    drift_60 = _calcular_drift_h("BTC", precios_data, 60)
+
+    return {
+        "prob_yes": p_up,
+        "razon":    (f"late_window_5min BTC drift_ventana={drift_ventana*100:+.3f}% "
+                     f"elapsed={elapsed_s:.0f}s p_up={p_up:.2f}"),
+        "subtype":  "BTC#5min",
+        "features": {
+            "drift_ventana_pct":  round(drift_ventana * 100, 4),
+            "elapsed_s":          round(elapsed_s, 1),
+            "drift_15min":        round(drift_15 * 100, 4) if drift_15 is not None else None,
+            "drift_60min":        round(drift_60 * 100, 4) if drift_60 is not None else None,
+        },
+    }
+
 
 def s_updown_ou_5m(market, ctx):
     """
@@ -1688,6 +1765,7 @@ ESTRATEGIAS = [
     ("PRICE_TARGET_GBM",    s_price_target_gbm),
     ("ORDER_FLOW_5M",       s_order_flow_5m),
     ("RESOLUTION_SNIPER",   s_resolution_sniper),
+    ("LATE_WINDOW_5MIN",    s_late_window_5min),
     # ("BINANCE_UPDOWN", s_binance_updown),  # retirada — IC -0.50
 ]
 

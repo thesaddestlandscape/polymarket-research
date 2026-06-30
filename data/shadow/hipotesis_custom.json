@@ -306,6 +306,20 @@
       "umbral_ic_max": -0.08
     },
     {
+      "id": "H-LATE-WINDOW-5MIN",
+      "nombre": "Late-window BTC 5min — arbitraje timing vs Polymarket",
+      "descripcion": "Inspirado en VyvanseWithMarijuana (36.5% ROI, $42k vol). A T+160-270s dentro de una ventana BTC 5min, si BTC ya se movió >0.3%, Polymarket no ha actualizado precio → edge estructural. Estrategia LATE_WINDOW_5MIN en shadow hasta n≥30.",
+      "tipo": "nueva_estrategia",
+      "umbral": "n≥30 y IC>+0.05",
+      "accion": "Si IC≥0.08 con n≥30 → proponer pasar a live con stake mínimo (0.50€). Si IC<0 con n≥30 → el lag de Polymarket en BTC es insuficiente.",
+      "filtro": {
+        "strategy_prefix": "LATE_WINDOW_5MIN",
+        "par": "BTC"
+      },
+      "umbral_n": 30,
+      "umbral_ic_min": 0.08
+    },
+    {
       "id": "H-CUSTOM-POLY-DRIFT-CONFIRM",
       "nombre": "poly_drift_5obs: ¿el precio YES interno de Polymarket confirma nuestra señal?",
       "descripcion": "Feature nueva 2026-06-27: drift del precio YES en Polymarket en últimas 5 obs (~5min). Si poly_drift<0 y decidimos BUY_NO (o poly_drift>0 y BUY_YES) → confluencia. Si diverge → reducción de stake. Hipótesis: confluencia Binance+Polymarket mejora IC; divergencia empeora.",
