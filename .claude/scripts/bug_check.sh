@@ -74,6 +74,12 @@ if [ -f "shadow_postmortem.py" ]; then
   [[ $HAS_CKPT -gt 0 && $HAS_TS -eq 0 ]] && ISSUES+=("POSTMORTEM_CHECKPOINT_SIN_TS:checkpoint no usa prediction_timestamp — duplicados posibles")
 fi
 
+# 9. live_trade.py — filtro end_date (evita "invalid order version" en mercados cerrados)
+if [ -f "live_trade.py" ]; then
+  HAS_ENDDATE=$(grep -c 'end_date.*now\|end_dt.*<=.*now\|end_dt <= datetime' live_trade.py 2>/dev/null || echo 0)
+  [[ $HAS_ENDDATE -eq 0 ]] && ISSUES+=("LIVE_NO_ENDDATE_FILTER:live_trade.py no filtra mercados expirados — PolyApiException 400")
+fi
+
 # Output estructurado
 NISSUES=${#ISSUES[@]}
 if [[ $NISSUES -eq 0 ]]; then
