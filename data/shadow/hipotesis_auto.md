@@ -1,4 +1,4 @@
-# Hipótesis automáticas — 2026-06-30 08:12 UTC
+# Hipótesis automáticas — 2026-06-30 08:14 UTC
 _Generado por shadow_postmortem.py sobre 1387 resoluciones (PNL=-53.31€)_
 
 ## Patrones causales activos
@@ -306,6 +306,12 @@ _Sin sugerencias automáticas con datos actuales. Ampliar n por estrategia._
   - _Acción_: Si IC<-0.08 con n≥15 → añadir 10h a meta.gbm_blacklist_hours_auto en strategy_params.json
   - _Estado_: SEÑAL NEGATIVA confirmada: IC=-0.158 < -0.08 con n=19 PNL=-8.08€
   - _Datos_: n=19 IC=-0.158 PNL=-8.08€
+
+**⏳ H-LATE-WINDOW-5MIN** — Late-window BTC 5min — arbitraje timing vs Polymarket
+  - _Hipótesis_: Inspirado en VyvanseWithMarijuana (36.5% ROI, $42k vol). A T+160-270s dentro de una ventana BTC 5min, si BTC ya se movió >0.3%, Polymarket no ha actualizado precio → edge estructural. Estrategia LATE_WINDOW_5MIN en shadow hasta n≥30.
+  - _Umbral_: 30
+  - _Acción_: Si IC≥0.08 con n≥30 → proponer pasar a live con stake mínimo (0.50€). Si IC<0 con n≥30 → el lag de Polymarket en BTC es insuficiente.
+  - _Estado_: 0/30 ops en el filtro definido (IC actual=+0.000 PNL=+0.00€)
 
 **⏳ H-CUSTOM-POLY-DRIFT-CONFIRM** — poly_drift_5obs: ¿el precio YES interno de Polymarket confirma nuestra señal?
   - _Hipótesis_: Feature nueva 2026-06-27: drift del precio YES en Polymarket en últimas 5 obs (~5min). Si poly_drift<0 y decidimos BUY_NO (o poly_drift>0 y BUY_YES) → confluencia. Si diverge → reducción de stake. Hipótesis: confluencia Binance+Polymarket mejora IC; divergencia empeora.
