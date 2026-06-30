@@ -1,5 +1,5 @@
-# Hipótesis automáticas — 2026-06-30 18:09 UTC
-_Generado por shadow_postmortem.py sobre 1459 resoluciones (PNL=-59.93€)_
+# Hipótesis automáticas — 2026-06-30 18:11 UTC
+_Generado por shadow_postmortem.py sobre 1460 resoluciones (PNL=-60.44€)_
 
 ## Patrones causales activos
 
@@ -76,12 +76,12 @@ _Derivadas de los patrones aprendidos:_
 
 | Estrategia | n | IC | PNL | Filtros | Patrones |
 |---|---|---|---|---|---|
-| ✅ ORDER_FLOW_5M | 789 | +0.009 | +5.37€ | 0 | 0 |
-| ✅ ORDER_FLOW_5M#5min | 653 | -0.001 | -7.22€ | 0 | 0 |
+| ✅ ORDER_FLOW_5M | 790 | +0.009 | +4.86€ | 0 | 0 |
+| ✅ ORDER_FLOW_5M#5min | 654 | -0.002 | -7.73€ | 0 | 0 |
 | ✅ ORDER_FLOW_5M#BNB | 63 | +0.038 | +1.36€ | 0 | 0 |
 | ✅ ORDER_FLOW_5M#BNB#5min | 63 | +0.038 | +1.36€ | 0 | 0 |
-| ✅ ORDER_FLOW_5M#BTC | 131 | +0.004 | -0.62€ | 0 | 0 |
-| ✅ ORDER_FLOW_5M#BTC#5min | 131 | +0.004 | -0.62€ | 0 | 0 |
+| ✅ ORDER_FLOW_5M#BTC | 132 | +0.000 | -1.13€ | 0 | 0 |
+| ✅ ORDER_FLOW_5M#BTC#5min | 132 | +0.000 | -1.13€ | 0 | 0 |
 | ✅ ORDER_FLOW_5M#DOGE | 82 | -0.012 | -1.81€ | 0 | 0 |
 | ✅ ORDER_FLOW_5M#DOGE#5min | 82 | -0.012 | -1.81€ | 0 | 0 |
 | ✅ ORDER_FLOW_5M#ETH | 112 | -0.026 | -4.31€ | 0 | 0 |
@@ -180,12 +180,12 @@ _Derivadas de los patrones aprendidos:_
 **⏳ H-CROSS-ASSET** — Cross-asset confirmation GBM+OF BUY_NO
   - _Umbral_: n_overlaps≥20 y IC_overlap > IC_base + 0.05
   - _Acción_: Cambiar _aplicar_kelly_compuesto: match por activo, no market_id
-  - _Estado_: n_overlaps=17, boost estimado=+0.018. Necesita 3 más y boost>0.05
+  - _Estado_: n_overlaps=17, boost estimado=+0.019. Necesita 3 más y boost>0.05
 
 **⏳ H-OF-PAR** — ORDER_FLOW per-pair delta_ratio ranges
   - _Umbral_: n≥200 por par con delta_ratio feature en shadow
   - _Acción_: Añadir DELTA_MIN/MAX por par dict en shadow_predict.py
-  - _Estado_: BTC: 75 ops con delta_ratio | SOL: 88 ops con delta_ratio
+  - _Estado_: BTC: 76 ops con delta_ratio | SOL: 88 ops con delta_ratio
 
 **⏳ H-KELLY-HORA** — Kelly boost ×1.2 en horas top (15/17/19h UTC)
   - _Umbral_: n≥40 por hora con IC estable ≥+0.10 confirmado en forward
@@ -256,8 +256,8 @@ _Derivadas de los patrones aprendidos:_
   - _Hipótesis_: GBM está en blacklist a las 18h UTC (IC muy negativo). Pero ORDER_FLOW BUY_NO BTC+SOL a las 18h: IC=+0.106 n=11. El blacklist de GBM no debería afectar a OF. Hipótesis: son señales independientes — OF captura flujo real de órdenes mientras GBM falla con el modelo de precios en esa hora. Objetivo: activar OF BUY_NO específicamente a las 18h sin tocar blacklist GBM.
   - _Umbral_: 25
   - _Acción_: Si IC>+0.08 con n≥25 → eliminar 18h del blacklist ORDER_FLOW (no del GBM) para recuperar esa hora
-  - _Estado_: 16/25 ops en el filtro definido (IC actual=+0.089 PNL=+1.92€)
-  - _Datos_: n=16 IC=+0.089 PNL=+1.92€
+  - _Estado_: 17/25 ops en el filtro definido (IC actual=+0.067 PNL=+1.41€)
+  - _Datos_: n=17 IC=+0.067 PNL=+1.41€
 
 **⏳ H-WEEKLY-BUYNO** — WEEKLY_PRICE BUY_NO — dirección dominante con IC muy alto
   - _Hipótesis_: Split por dirección en WEEKLY_PRICE: BUY_NO n=38 WR=66% IC=+0.316 vs BUY_YES n=19 WR=21% IC=-0.579. El mercado semanal de precios tiende a NO cumplir el target → BUY_NO tiene edge estructural fuerte. PNL negativo por apuestas pequeñas y slippage, no por dirección. Candidata live si se confirma con n≥50.

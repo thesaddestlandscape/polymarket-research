@@ -1,4 +1,4 @@
-# Estado del bot — 2026-06-30 18:09 UTC
+# Estado del bot — 2026-06-30 18:11 UTC
 
 ## Capital
 | | |
@@ -11,19 +11,19 @@
 | | |
 |---|---|
 | Inicio | 25.44 € |
-| Actual | **-34.49 €** |
-| P&L acumulado | 🔴 **-59.93 €** |
-| ROI s/ operativo | -235.56% |
-| ROI s/ depósito | -199.76% |
-| P&L hoy (2026-06-30) | 🔴 -15.44 € |
-| Operaciones resueltas | 1459 (699 WIN / 760 LOSS) — 47.9% |
-| Señales abiertas | 102 |
+| Actual | **-35.00 €** |
+| P&L acumulado | 🔴 **-60.44 €** |
+| ROI s/ operativo | -237.57% |
+| ROI s/ depósito | -201.46% |
+| P&L hoy (2026-06-30) | 🔴 -15.95 € |
+| Operaciones resueltas | 1460 (699 WIN / 761 LOSS) — 47.9% |
+| Señales abiertas | 101 |
 
 ## Estrategias (visión global)
 
 | Estrategia | n | Win% | IC_efectivo | PNL | Apuesta | Estado |
 |---|---|---|---|---|---|---|
-| ORDER_FLOW_5M | 789 | 51.0% | +0.009 | +5.37€ | 0.50€ | ✅ activa |
+| ORDER_FLOW_5M | 790 | 50.9% | +0.009 | +4.86€ | 0.50€ | ✅ activa |
 | PRICE_TARGET_GBM | 59 | 42.4% | -0.074 | -10.88€ | 0.50€ | ⚠️ IC negativo |
 | SMART_FLOW_1H | 24 | 20.8% | -0.269 | -11.14€ | 0.00€ | 🚫 desactivada |
 | UPDOWN_GBM | 465 | 47.5% | -0.025 | -13.29€ | 0.50€ | ⚠️ IC negativo |
@@ -34,15 +34,15 @@
 
 | Timestamp | Estrategia | Mercado | Resultado | PNL |
 |---|---|---|---|---|
+| 2026-06-30T18:10 | ORDER_FLOW_5M#BTC#5min | Bitcoin Up or Down - June 30, 2:05PM-2:10PM ET… | ❌ LOSS | -0.51€ |
 | 2026-06-30T17:47 | UPDOWN_GBM#ETH#15min | Ethereum Up or Down - June 30, 1:30PM-1:45PM ET… | ❌ LOSS | -0.51€ |
 | 2026-06-30T17:31 | UPDOWN_GBM#ETH#15min | Ethereum Up or Down - June 30, 1:15PM-1:30PM ET… | ✅ WIN | +1.16€ |
 | 2026-06-30T17:17 | UPDOWN_GBM#ETH#15min | Ethereum Up or Down - June 30, 1:00PM-1:15PM ET… | ❌ LOSS | -0.51€ |
 | 2026-06-30T17:15 | UPDOWN_GBM#BTC#15min | Bitcoin Up or Down - June 30, 1:00PM-1:15PM ET… | ❌ LOSS | -1.14€ |
-| 2026-06-30T17:00 | UPDOWN_GBM#ETH#15min | Ethereum Up or Down - June 30, 12:45PM-1:00PM ET… | ✅ WIN | +0.46€ |
 
 ## Calidad de datos
 
-✅ **OK** — última verificación 2026-06-30T18:08 UTC
+✅ **OK** — última verificación 2026-06-30T18:10 UTC
 
 | Asset | Precio | Age | Alertas |
 |---|---|---|---|
