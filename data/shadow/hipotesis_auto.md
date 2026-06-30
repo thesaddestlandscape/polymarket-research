@@ -1,5 +1,5 @@
-# Hipótesis automáticas — 2026-06-30 15:04 UTC
-_Generado por shadow_postmortem.py sobre 1441 resoluciones (PNL=-61.19€)_
+# Hipótesis automáticas — 2026-06-30 15:06 UTC
+_Generado por shadow_postmortem.py sobre 1442 resoluciones (PNL=-61.70€)_
 
 ## Patrones causales activos
 
@@ -114,9 +114,9 @@ _Derivadas de los patrones aprendidos:_
 | ✅ UPDOWN_OU_5M#SOL#5min | 10 | -0.042 | -1.06€ | 0 | 0 |
 | ✅ UPDOWN_OU_5M#XRP | 11 | -0.064 | -1.65€ | 0 | 0 |
 | ✅ UPDOWN_OU_5M#XRP#5min | 11 | -0.064 | -1.65€ | 0 | 0 |
-| ✅ WEEKLY_PRICE | 62 | +0.000 | -14.69€ | 0 | 0 |
+| ✅ WEEKLY_PRICE | 63 | -0.008 | -15.20€ | 0 | 0 |
 | ✅ WEEKLY_PRICE#BTC | 20 | -0.045 | -6.98€ | 0 | 0 |
-| ✅ WEEKLY_PRICE#ETH | 23 | +0.020 | -5.54€ | 0 | 0 |
+| ✅ WEEKLY_PRICE#ETH | 24 | +0.000 | -6.05€ | 0 | 0 |
 | ✅ WEEKLY_PRICE#SOL | 19 | +0.023 | -2.18€ | 0 | 0 |
 ## Hipótesis pendientes — tracking automático
 
@@ -155,7 +155,7 @@ _Derivadas de los patrones aprendidos:_
 **⏳ H-CROSS-ASSET** — Cross-asset confirmation GBM+OF BUY_NO
   - _Umbral_: n_overlaps≥20 y IC_overlap > IC_base + 0.05
   - _Acción_: Cambiar _aplicar_kelly_compuesto: match por activo, no market_id
-  - _Estado_: n_overlaps=17, boost estimado=+0.015. Necesita 3 más y boost>0.05
+  - _Estado_: n_overlaps=17, boost estimado=+0.016. Necesita 3 más y boost>0.05
 
 **⏳ H-OF-PAR** — ORDER_FLOW per-pair delta_ratio ranges
   - _Umbral_: n≥200 por par con delta_ratio feature en shadow
@@ -165,7 +165,7 @@ _Derivadas de los patrones aprendidos:_
 **⏳ H-KELLY-HORA** — Kelly boost ×1.2 en horas top (15/17/19h UTC)
   - _Umbral_: n≥40 por hora con IC estable ≥+0.10 confirmado en forward
   - _Acción_: Añadir HORA_BOOST = {13: 1.2, 15: 1.2, 17: 1.2, 19: 1.2} en shadow_predict.py
-  - _Estado_: H=13h UTC: IC=-0.058 n=93/40 PNL=-3.58€ | H=15h UTC: IC=-0.010 n=94/40 PNL=-4.50€ | H=17h UTC: IC=+0.271 n=33/40 PNL=+13.52€ | H=19h UTC: IC=+0.048 n=40/40 PNL=+2.97€
+  - _Estado_: H=13h UTC: IC=-0.058 n=93/40 PNL=-3.58€ | H=15h UTC: IC=-0.015 n=95/40 PNL=-5.01€ | H=17h UTC: IC=+0.271 n=33/40 PNL=+13.52€ | H=19h UTC: IC=+0.048 n=40/40 PNL=+2.97€
 
 **⏳ H-60MIN-LIVE** — Estrategias 60min → umbral live (IC≥0.08 n≥40)
   - _Umbral_: IC≥0.08 y n≥40 en cualquier subtipo 60min
@@ -175,7 +175,7 @@ _Derivadas de los patrones aprendidos:_
 **⏳ H-WEEKLY** — Predicciones semanales de precio por par
   - _Umbral_: n≥15 por par con IC≥+0.05
   - _Acción_: Si confirma IC≥+0.10 n≥15 en SOL → considerar live semanal
-  - _Estado_: ETH: n=23/15 IC=+0.020 PNL=-5.54€ | BTC: n=20/15 IC=-0.045 PNL=-6.98€ | SOL: n=19/15 IC=+0.023 PNL=-2.18€
+  - _Estado_: ETH: n=24/15 IC=+0.000 PNL=-6.05€ | BTC: n=20/15 IC=-0.045 PNL=-6.98€ | SOL: n=19/15 IC=+0.023 PNL=-2.18€
 
 **⏳ H-KALMAN** — Kalman filter para drift adaptativo
   - _Umbral_: n≥200 por subtipo para calibrar parámetros Q/R del KF
@@ -238,8 +238,8 @@ _Derivadas de los patrones aprendidos:_
   - _Hipótesis_: Split por dirección en WEEKLY_PRICE: BUY_NO n=38 WR=66% IC=+0.316 vs BUY_YES n=19 WR=21% IC=-0.579. El mercado semanal de precios tiende a NO cumplir el target → BUY_NO tiene edge estructural fuerte. PNL negativo por apuestas pequeñas y slippage, no por dirección. Candidata live si se confirma con n≥50.
   - _Umbral_: 50
   - _Acción_: Si IC>+0.10 con n≥50 → activar WEEKLY_PRICE BUY_NO en live (filtrar BUY_YES). Si IC cae <+0.05 con n≥50 → el edge se ha erosionado.
-  - _Estado_: 40/50 ops en el filtro definido (IC actual=+0.167 PNL=-2.12€)
-  - _Datos_: n=40 IC=+0.167 PNL=-2.12€
+  - _Estado_: 41/50 ops en el filtro definido (IC actual=+0.151 PNL=-2.63€)
+  - _Datos_: n=41 IC=+0.151 PNL=-2.63€
 
 **⏳ H-CUSTOM-GBM-17H-BTC** — GBM BTC a las 17h UTC — ¿edge real?
   - _Hipótesis_: La hora 17h UTC aparece como la mejor en historial. ¿Se confirma solo en BTC?
