@@ -322,6 +322,18 @@ def main():
         if mid in ya_operados:
             continue
 
+        # Mercado ya cerrado → no operar (evita "invalid order version" de la API)
+        try:
+            end_str = pred.get("end_date", "")
+            if end_str:
+                end_dt = datetime.fromisoformat(end_str.replace("Z", "+00:00"))
+                if end_dt.tzinfo is None:
+                    end_dt = end_dt.replace(tzinfo=timezone.utc)
+                if end_dt <= datetime.now(timezone.utc):
+                    continue
+        except Exception:
+            pass
+
         # IC mínimo confirmado en histórico
         ic_hist = _ic_para_subtype(strategy, subtype, params, decision=dec)
         n_hist  = params.get(f"{strategy}#{subtype}", params.get(strategy, {})).get("n", 0)
@@ -339,7 +351,7 @@ def main():
         # Stake (con penalización de inventario direccional)
         stake_info = calcular_stake(ic_hist, strategy, subtype, direction=dec)
         if not stake_info["viable"]:
-            log(f"  SKIP {strategy}#{subtype}: budget insuficiente ({stake_info['budget_restante']:.2f}€ restante)")
+            log(f"  SKIP {strategy}#{subtype}: stake no viable — {stake_info['motivo']}")
             continue
 
         stake    = stake_info["stake_eur"]

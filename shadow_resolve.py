@@ -151,7 +151,6 @@ def fetch_mercados_paralelo(market_ids: list, workers: int = 3) -> dict:
             except Exception:
                 resultados[mid] = None
     return resultados
-    return None
 
 
 def parse_outcome_prices(raw):
