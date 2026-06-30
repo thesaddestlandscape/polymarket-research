@@ -1,5 +1,5 @@
-# Hipótesis automáticas — 2026-06-30 14:50 UTC
-_Generado por shadow_postmortem.py sobre 1433 resoluciones (PNL=-63.72€)_
+# Hipótesis automáticas — 2026-06-30 14:52 UTC
+_Generado por shadow_postmortem.py sobre 1434 resoluciones (PNL=-62.82€)_
 
 ## Patrones causales activos
 
@@ -72,14 +72,14 @@ _Derivadas de los patrones aprendidos:_
 | ✅ ORDER_FLOW_5M#SOL#5min | 149 | +0.010 | +0.17€ | 0 | 0 |
 | ✅ ORDER_FLOW_5M#XRP | 116 | -0.009 | -2.01€ | 0 | 0 |
 | ✅ ORDER_FLOW_5M#XRP#5min | 116 | -0.009 | -2.01€ | 0 | 0 |
-| ✅ PRICE_TARGET_GBM | 55 | -0.097 | -13.10€ | 0 | 0 |
-| ✅ PRICE_TARGET_GBM#BTC | 28 | -0.133 | -7.10€ | 0 | 0 |
-| ✅ PRICE_TARGET_GBM#BTC#atexpiry | 27 | -0.155 | -7.26€ | 0 | 0 |
+| ✅ PRICE_TARGET_GBM | 56 | -0.086 | -12.20€ | 0 | 0 |
+| ✅ PRICE_TARGET_GBM#BTC | 29 | -0.113 | -6.20€ | 0 | 0 |
+| ✅ PRICE_TARGET_GBM#BTC#atexpiry | 28 | -0.133 | -6.36€ | 0 | 0 |
 | ✅ PRICE_TARGET_GBM#ETH | 21 | -0.022 | -3.73€ | 0 | 0 |
 | ✅ PRICE_TARGET_GBM#ETH#atexpiry | 20 | -0.045 | -3.88€ | 0 | 0 |
 | ✅ PRICE_TARGET_GBM#SOL | 6 | -0.037 | -2.28€ | 0 | 0 |
 | ✅ PRICE_TARGET_GBM#SOL#atexpiry | 6 | -0.037 | -2.28€ | 0 | 0 |
-| ✅ PRICE_TARGET_GBM#atexpiry | 53 | -0.118 | -13.42€ | 0 | 0 |
+| ✅ PRICE_TARGET_GBM#atexpiry | 54 | -0.107 | -12.52€ | 0 | 0 |
 | 🚫 SMART_FLOW_1H | 24 | -0.269 | -11.14€ | 0 | 0 |
 | ✅ SMART_FLOW_1H#BTC | 10 | -0.083 | -2.97€ | 0 | 0 |
 | ✅ UPDOWN_GBM | 450 | -0.026 | -18.43€ | 0 | 0 |
@@ -160,7 +160,7 @@ _Derivadas de los patrones aprendidos:_
 **⏳ H-CROSS-ASSET** — Cross-asset confirmation GBM+OF BUY_NO
   - _Umbral_: n_overlaps≥20 y IC_overlap > IC_base + 0.05
   - _Acción_: Cambiar _aplicar_kelly_compuesto: match por activo, no market_id
-  - _Estado_: n_overlaps=17, boost estimado=+0.017. Necesita 3 más y boost>0.05
+  - _Estado_: n_overlaps=17, boost estimado=+0.016. Necesita 3 más y boost>0.05
 
 **⏳ H-OF-PAR** — ORDER_FLOW per-pair delta_ratio ranges
   - _Umbral_: n≥200 por par con delta_ratio feature en shadow

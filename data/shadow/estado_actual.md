@@ -1,4 +1,4 @@
-# Estado del bot — 2026-06-30 14:50 UTC
+# Estado del bot — 2026-06-30 14:52 UTC
 
 ## Capital
 | | |
@@ -11,12 +11,12 @@
 | | |
 |---|---|
 | Inicio | 20.00 € |
-| Actual | **-43.72 €** |
-| P&L acumulado | 🔴 **-63.72 €** |
-| ROI s/ operativo | -318.61% |
-| ROI s/ depósito | -212.41% |
-| P&L hoy (2026-06-30) | 🔴 -19.23 € |
-| Operaciones resueltas | 1433 (688 WIN / 745 LOSS) — 48.0% |
+| Actual | **-42.82 €** |
+| P&L acumulado | 🔴 **-62.82 €** |
+| ROI s/ operativo | -314.12% |
+| ROI s/ depósito | -209.41% |
+| P&L hoy (2026-06-30) | 🔴 -18.33 € |
+| Operaciones resueltas | 1434 (689 WIN / 745 LOSS) — 48.0% |
 | Señales abiertas | 95 |
 
 ## Estrategias (visión global)
@@ -25,7 +25,7 @@
 |---|---|---|---|---|---|---|
 | ORDER_FLOW_5M | 788 | 51.0% | +0.010 | +5.88€ | 0.50€ | ✅ activa |
 | SMART_FLOW_1H | 24 | 20.8% | -0.269 | -11.14€ | 0.00€ | 🚫 desactivada |
-| PRICE_TARGET_GBM | 55 | 40.0% | -0.096 | -13.10€ | 0.50€ | ⚠️ IC negativo |
+| PRICE_TARGET_GBM | 56 | 41.1% | -0.086 | -12.20€ | 0.50€ | ⚠️ IC negativo |
 | WEEKLY_PRICE | 59 | 52.5% | +0.025 | -13.16€ | 0.50€ | ✅ activa |
 | UPDOWN_OU_5M | 57 | 26.3% | -0.229 | -13.76€ | 0.00€ | 🚫 desactivada |
 | UPDOWN_GBM | 450 | 47.3% | -0.027 | -18.43€ | 0.50€ | ⚠️ IC negativo |
@@ -34,21 +34,21 @@
 
 | Timestamp | Estrategia | Mercado | Resultado | PNL |
 |---|---|---|---|---|
+| 2026-06-30T14:51 | PRICE_TARGET_GBM#BTC#atexpiry | Will the price of Bitcoin be above $60,000 on June… | ✅ WIN | +0.90€ |
 | 2026-06-30T14:16 | UPDOWN_GBM#BTC#15min | Bitcoin Up or Down - June 30, 10:00AM-10:15AM ET… | ✅ WIN | +0.44€ |
 | 2026-06-30T14:16 | UPDOWN_GBM#ETH#15min | Ethereum Up or Down - June 30, 10:00AM-10:15AM ET… | ✅ WIN | +0.48€ |
 | 2026-06-30T14:10 | PRICE_TARGET_GBM#ETH#atexpiry | Will the price of Ethereum be above $1,500 on June… | ❌ LOSS | -0.51€ |
 | 2026-06-30T14:00 | PRICE_TARGET_GBM#BTC#atexpiry | Will the price of Bitcoin be above $56,000 on June… | ❌ LOSS | -0.51€ |
-| 2026-06-30T14:00 | PRICE_TARGET_GBM#BTC#atexpiry | Will the price of Bitcoin be above $62,000 on June… | ❌ LOSS | -0.51€ |
 
 ## Calidad de datos
 
-✅ **OK** — última verificación 2026-06-30T14:49 UTC | rechazos 1h: 2 (rango=0, spike=0)
+✅ **OK** — última verificación 2026-06-30T14:51 UTC | rechazos 1h: 2 (rango=0, spike=0)
 
 | Asset | Precio | Age | Alertas |
 |---|---|---|---|
 | ✅ BTC | $58,601.36 | 0.0min |  |
 | ✅ ETH | $1,564.90 | 0.0min |  |
-| ✅ SOL | $73.14 | 0.0min |  |
+| ✅ SOL | $73.02 | 0.0min |  |
 | ✅ XRP | $1.04 | 0.0min |  |
 
 **Alertas activas:**
