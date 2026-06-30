@@ -1,5 +1,5 @@
-# Hipótesis automáticas — 2026-06-30 20:29 UTC
-_Generado por shadow_postmortem.py sobre 1474 resoluciones (PNL=-55.87€)_
+# Hipótesis automáticas — 2026-06-30 20:31 UTC
+_Generado por shadow_postmortem.py sobre 1475 resoluciones (PNL=-56.38€)_
 
 ## Patrones causales activos
 
@@ -39,9 +39,9 @@ _Generado por shadow_postmortem.py sobre 1474 resoluciones (PNL=-55.87€)_
   - _Acción_: Kelly boost +0.91€ cuando `ibs_15` < 0.1558 (IC base=+0.035)
 
 ### UPDOWN_GBM#SOL#15min
-- **FILTRO** `drift_60min` |x|> `0.2945` → IC=-0.167 (n=16)
+- **FILTRO** `drift_60min` |x|> `0.2311` → IC=-0.184 (n=17)
   - _Por qué funciona_: drift fuerte en 1h → el movimiento ya está priceado en Polymarket; edge agotado
-  - _Acción_: SKIP cuando `drift_60min` |x|> 0.2945
+  - _Acción_: SKIP cuando `drift_60min` |x|> 0.2311
   - _Potencial_: sin este filtro IC_bueno=+0.100 (n=18)
 
 ### UPDOWN_GBM#SOL#60min
@@ -104,8 +104,8 @@ _Derivadas de los patrones aprendidos:_
 | ✅ PRICE_TARGET_GBM#atexpiry | 57 | -0.093 | -11.19€ | 0 | 0 |
 | 🚫 SMART_FLOW_1H | 24 | -0.269 | -11.14€ | 0 | 0 |
 | ✅ SMART_FLOW_1H#BTC | 10 | -0.083 | -2.97€ | 0 | 0 |
-| ✅ UPDOWN_GBM | 479 | -0.018 | -8.72€ | 0 | 0 |
-| ✅ UPDOWN_GBM#15min | 293 | +0.022 | +6.98€ | 0 | 0 |
+| ✅ UPDOWN_GBM | 480 | -0.019 | -9.23€ | 0 | 0 |
+| ✅ UPDOWN_GBM#15min | 294 | +0.020 | +6.47€ | 0 | 0 |
 | 🚫 UPDOWN_GBM#240min | 12 | -0.171 | -4.82€ | 0 | 0 |
 | 🚫 UPDOWN_GBM#5min | 56 | -0.155 | -16.64€ | 0 | 0 |
 | ✅ UPDOWN_GBM#60min | 102 | -0.029 | -4.64€ | 0 | 0 |
@@ -121,8 +121,8 @@ _Derivadas de los patrones aprendidos:_
 | 🚫 UPDOWN_GBM#ETH#5min | 12 | -0.086 | -3.67€ | 0 | 0 |
 | ✅ UPDOWN_GBM#ETH#60min | 42 | +0.045 | +1.42€ | 0 | 0 |
 | ✅ UPDOWN_GBM#ETH#daily | 5 | +0.018 | +3.85€ | 0 | 0 |
-| ✅ UPDOWN_GBM#SOL | 86 | -0.080 | -4.14€ | 0 | 0 |
-| ✅ UPDOWN_GBM#SOL#15min | 42 | +0.000 | +1.59€ | 1 | 0 |
+| ✅ UPDOWN_GBM#SOL | 87 | -0.084 | -4.65€ | 0 | 0 |
+| ✅ UPDOWN_GBM#SOL#15min | 43 | -0.011 | +1.08€ | 1 | 0 |
 | 🚫 UPDOWN_GBM#SOL#5min | 17 | -0.112 | -4.84€ | 0 | 0 |
 | ✅ UPDOWN_GBM#SOL#60min | 21 | -0.152 | -2.25€ | 3 | 0 |
 | ✅ UPDOWN_GBM#XRP | 30 | -0.094 | -2.51€ | 0 | 0 |
@@ -164,8 +164,8 @@ _Derivadas de los patrones aprendidos:_
 **〰️ H-IBS-15** — IBS-15 como señal de mean-reversion
   - _Umbral_: n≥40 ops con ibs_15 en features y spread_IC>0.15 entre buckets
   - _Acción_: Añadir ibs_15 como boost/filtro en FEATURE_RULES de shadow_postmortem.py
-  - _Estado_: Spread bajo (0.030) — sin ventaja clara. oversold(IBS<0.3): IC=-0.027 n=53 | neutral: IC=-0.057 n=59 | overbought(IBS>0.7): IC=-0.033 n=73
-  - _Datos_: n=190 IC=-0.042 PNL=-9.85€
+  - _Estado_: Spread bajo (0.037) — sin ventaja clara. oversold(IBS<0.3): IC=-0.027 n=53 | neutral: IC=-0.065 n=60 | overbought(IBS>0.7): IC=-0.033 n=73
+  - _Datos_: n=191 IC=-0.044 PNL=-10.36€
 
 **🟡 H-HORA-GBM** — hora_utc causal automático en GBM (forward)
   - _Umbral_: n≥20 forward con hora_utc + alguna hora con n≥15 IC<-0.10 o >+0.10
@@ -175,8 +175,8 @@ _Derivadas de los patrones aprendidos:_
 **⚠️ H-SOL-15MIN** — SOL#15min → umbral live (IC≥0.08 n≥40)
   - _Umbral_: IC≥0.08 y n≥40
   - _Acción_: Activar live cuando haya credenciales Polymarket API
-  - _Estado_: SOL#15min: n≥40 pero IC=+0.000 < 0.08 — monitorear
-  - _Datos_: n=42 IC=+0.000 PNL=+1.59€
+  - _Estado_: SOL#15min: n≥40 pero IC=-0.011 < 0.08 — monitorear
+  - _Datos_: n=43 IC=-0.011 PNL=+1.08€
 
 **🟡 H-KALMAN** — Kalman filter para drift adaptativo
   - _Umbral_: n≥200 por subtipo para calibrar parámetros Q/R del KF
@@ -288,8 +288,8 @@ _Derivadas de los patrones aprendidos:_
   - _Hipótesis_: Cuando la volatilidad horaria es muy alta el GBM puede sobreestimar el edge. Testear.
   - _Umbral_: n≥30 y IC<-0.05
   - _Acción_: Filtrar señales GBM cuando sigma_h > 0.002 si se confirma IC negativo
-  - _Estado_: n=380 IC=-0.011 PNL=-3.08€ — sin señal clara aún (umbral IC: min=None max=-0.05)
-  - _Datos_: n=380 IC=-0.011 PNL=-3.08€
+  - _Estado_: n=381 IC=-0.012 PNL=-3.59€ — sin señal clara aún (umbral IC: min=None max=-0.05)
+  - _Datos_: n=381 IC=-0.012 PNL=-3.59€
 
 **⏳ H-CUSTOM-OF-02H-BTCSOL** — ORDER_FLOW H=02h UTC — BTC+SOL solamente (revisar blacklist)
   - _Hipótesis_: La hora 02h está en el blacklist basado en TODOS los pares. Con BTC+SOL solo, el historial muestra 4/5 (80%) IC=+0.054. ¿Se confirma la señal positiva con más datos?
@@ -330,8 +330,8 @@ _Derivadas de los patrones aprendidos:_
   - _Hipótesis_: El filtro drift_60min ∈ [0,+0.5%) se implementó el 2026-06-26. Datos forward desde 2026-06-27: 8/18 (44%) IC=-0.045. Aún n pequeño. Monitorear si el IC sube a +0.10 con n≥40.
   - _Umbral_: n≥40 y IC>+0.10 para confirmar el filtro funciona en forward
   - _Acción_: Si IC<0 con n≥30 → revisar umbral drift_60min (0.5% puede ser demasiado estrecho)
-  - _Estado_: n=227 IC=-0.011 PNL=-14.97€ — sin señal clara aún (umbral IC: min=0.1 max=None)
-  - _Datos_: n=227 IC=-0.011 PNL=-14.97€
+  - _Estado_: n=228 IC=-0.013 PNL=-15.48€ — sin señal clara aún (umbral IC: min=0.1 max=None)
+  - _Datos_: n=228 IC=-0.013 PNL=-15.48€
 
 **⏳ H-CUSTOM-GBM-SIGMA-BAJO** — GBM con sigma_h muy bajo (<0.0008/h) — ¿mercado dormido = más predecible?
   - _Hipótesis_: Hipótesis opuesta a sigma_alto: cuando el mercado está muy quieto, ¿el GBM captura mejor la señal porque hay menos ruido? sigma_h<0.0008 equivale a volatilidad diaria <0.8%.
@@ -351,8 +351,8 @@ _Derivadas de los patrones aprendidos:_
   - _Hipótesis_: Análisis n=127 GBM#15min: cuando drift_15min está entre -0.3 y +0.3 (mercado sin dirección clara) el IC es negativo (-0.043). Cuando drift>0.3 IC=+0.100 (n=28). Cuando drift<-1 IC=+0.048 (reversión). La señal requiere mercado con dirección clara.
   - _Umbral_: 50
   - _Acción_: Filtrar señales GBM#15min cuando drift_15min ∈ [-0.3, +0.3] — validar con n≥50 antes de implementar
-  - _Estado_: 46/50 ops en el filtro definido (IC actual=-0.062 PNL=-2.98€)
-  - _Datos_: n=46 IC=-0.062 PNL=-2.98€
+  - _Estado_: 47/50 ops en el filtro definido (IC actual=-0.071 PNL=-3.49€)
+  - _Datos_: n=47 IC=-0.071 PNL=-3.49€
 
 **〰️ H-CUSTOM-DRIFT15-MOMENTUM** — GBM#15min drift_15min > 0.3 — zona de momentum (señal fuerte)
   - _Hipótesis_: Cuando drift_15min > 0.3%/h el GBM captura bien la dirección: IC=+0.100 n=28 en todos GBM#15min; IC=+0.152 n=13 solo BTC. El mercado tiene dirección clara y el GBM la sigue. Hipótesis: este rango es donde la señal es real.
