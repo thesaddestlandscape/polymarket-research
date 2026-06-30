@@ -306,6 +306,38 @@
       "umbral_ic_max": -0.08
     },
     {
+      "id": "H-FUNDING-HIGH-BUYNO",
+      "nombre": "Funding rate alto (>0.03%/8h) → BUY_NO tiene más edge",
+      "descripcion": "Cuando funding perps Binance > 0.03%/8h, los longs están sobrecargados y pagan por mantener. El mercado es structuralmente vulnerable a corrección. Hipótesis: BUY_NO GBM tiene IC superior en este régimen vs funding neutral.",
+      "tipo": "boost",
+      "umbral": "n≥40 y IC>+0.05 diferencial vs baseline",
+      "accion": "Si IC_funding_alto > IC_baseline + 0.05 con n≥40 → boost ×1.1 en BUY_NO cuando funding_rate_8h > 0.03",
+      "filtro": {
+        "strategy_prefix": "UPDOWN_GBM",
+        "decision": "BUY_NO",
+        "feature": "funding_rate_8h",
+        "feature_lo": 0.03
+      },
+      "umbral_n": 40,
+      "umbral_ic_min": 0.08
+    },
+    {
+      "id": "H-FUNDING-NEGATIVE-BUYYES",
+      "nombre": "Funding rate negativo (<-0.01%/8h) → BUY_YES tiene más edge (short squeeze)",
+      "descripcion": "Cuando funding < -0.01%/8h, los shorts están pagando por mantener la posición. Históricamente precede squeezes en cripto. Hipótesis: BUY_YES GBM tiene IC superior en régimen de funding negativo.",
+      "tipo": "boost",
+      "umbral": "n≥30 y IC>+0.05",
+      "accion": "Si se confirma → boost ×1.1 en BUY_YES cuando funding_rate_8h < -0.01",
+      "filtro": {
+        "strategy_prefix": "UPDOWN_GBM",
+        "decision": "BUY_YES",
+        "feature": "funding_rate_8h",
+        "feature_hi": -0.01
+      },
+      "umbral_n": 30,
+      "umbral_ic_min": 0.08
+    },
+    {
       "id": "H-LATE-WINDOW-5MIN",
       "nombre": "Late-window BTC 5min — arbitraje timing vs Polymarket",
       "descripcion": "Inspirado en VyvanseWithMarijuana (36.5% ROI, $42k vol). A T+160-270s dentro de una ventana BTC 5min, si BTC ya se movió >0.3%, Polymarket no ha actualizado precio → edge estructural. Estrategia LATE_WINDOW_5MIN en shadow hasta n≥30.",

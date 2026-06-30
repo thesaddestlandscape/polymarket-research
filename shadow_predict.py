@@ -39,6 +39,54 @@ MIN_LIQUIDEZ = 500
 DIR_DATA    = Path("data")
 DIR_SHADOW  = DIR_DATA / "shadow"
 
+_FUNDING_CACHE: dict = {}          # {activo: rate} — en memoria, TTL gestionado por mtime
+_FUNDING_CACHE_FILE = DIR_DATA / "funding_rates_cache.json"
+_FUNDING_SYMBOLS = {"BTC": "BTCUSDT", "ETH": "ETHUSDT", "SOL": "SOLUSDT", "XRP": "XRPUSDT"}
+FUNDING_TTL_S = 1800               # 30 min — las rates cambian cada 8h
+
+
+def _fetch_funding_rates() -> dict:
+    """
+    Funding rates actuales de perps Binance para BTC/ETH/SOL/XRP.
+    Devuelve {activo: last_funding_rate_8h} como decimal (ej: 0.0001 = 0.01%/8h).
+    Usa caché en disco con TTL=30min para no penalizar el fast loop.
+    """
+    global _FUNDING_CACHE
+    # Comprobar caché en disco
+    if _FUNDING_CACHE_FILE.exists():
+        age_s = (datetime.now(timezone.utc).timestamp()
+                 - _FUNDING_CACHE_FILE.stat().st_mtime)
+        if age_s < FUNDING_TTL_S:
+            if not _FUNDING_CACHE:
+                try:
+                    _FUNDING_CACHE = json.loads(_FUNDING_CACHE_FILE.read_text())
+                except Exception:
+                    pass
+            if _FUNDING_CACHE:
+                return _FUNDING_CACHE
+
+    rates = {}
+    for activo, sym in _FUNDING_SYMBOLS.items():
+        try:
+            resp = requests.get(
+                "https://fapi.binance.com/fapi/v1/premiumIndex",
+                params={"symbol": sym},
+                timeout=5,
+            )
+            if resp.status_code == 200:
+                rates[activo] = float(resp.json().get("lastFundingRate", 0))
+        except Exception:
+            pass
+
+    if rates:
+        _FUNDING_CACHE = rates
+        try:
+            _FUNDING_CACHE_FILE.write_text(json.dumps(rates))
+        except Exception:
+            pass
+    return rates
+
+
 def _cargar_params_dinamicos() -> dict:
     """Lee strategy_params.json generado por postmortem. Devuelve {} si no existe."""
     path = DIR_SHADOW / "strategy_params.json"
@@ -510,6 +558,16 @@ def construir_contexto():
     has_flow = any(len(v[0]) >= 7 for v in klines_raw.values() if v)
     print(f"  UPDOWN_GBM: {len(precios_data)} pts intraday | spot={{{', '.join(f'{k}={v:.4g}' for k, v in list(spot_prices.items())[:4])}}}")
     print(f"  ORDER_FLOW: klines de {len(klines_raw)} activos | flow_real={'sí' if has_flow else 'no (Kraken fallback)'}")
+
+    # Funding rates perps Binance — feature de régimen (crowded longs/shorts)
+    funding = _fetch_funding_rates()
+    ctx["funding_rates"] = funding
+    if funding:
+        fr_str = "  ".join(f"{k}={v*100:+.4f}%" for k, v in funding.items())
+        print(f"  Funding rates (8h): {fr_str}")
+    else:
+        print("  Funding rates: sin datos (API inaccesible)")
+
     return ctx
 
 def s_price_momentum(market, ctx):
@@ -1252,6 +1310,13 @@ def s_updown_gbm(market, ctx):
         if prices_hist[0] > 1e-6:
             poly_drift = (prices_hist[-1] - prices_hist[0]) / prices_hist[0] * 100
             features["poly_drift_5obs"] = round(poly_drift, 4)
+    # funding_rate_8h: última tasa de financiación del perp Binance (decimal/8h).
+    # Alto positivo (>0.03%/8h) → longs sobrecargados → más probable corrección → BUY_NO.
+    # Muy negativo (<-0.01%/8h) → shorts sobrecargados → más probable squeeze → BUY_YES.
+    # Se guarda como feature para tracking; la hipótesis evalúa si correlaciona con IC.
+    fr = ctx.get("funding_rates", {}).get(activo)
+    if fr is not None:
+        features["funding_rate_8h"] = round(fr * 100, 5)  # en % para legibilidad
     return {
         "prob_yes": max(0.05, min(0.95, p_up)),
         "razon":   razon,
