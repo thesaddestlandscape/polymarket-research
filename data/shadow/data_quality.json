@@ -1,5 +1,5 @@
 {
-  "timestamp_utc": "2026-06-30T22:02:42+00:00",
+  "timestamp_utc": "2026-06-30T23:54:39+00:00",
   "estado_global": "DEGRADED",
   "alertas": [
     "BTC:gap 218min (18:24)",
@@ -16,14 +16,19 @@
   "assets": {
     "BTC": {
       "estado": "DEGRADED",
-      "n": 6602,
-      "age_seconds": 2.1,
+      "n": 6614,
+      "age_seconds": 2.4,
       "ultimo_precio": 58382.005,
       "gaps": [
         {
           "inicio": "2026-06-30T18:24:52",
           "fin": "2026-06-30T22:02:40",
           "duracion_min": 217.8
+        },
+        {
+          "inicio": "2026-06-30T22:13:26",
+          "fin": "2026-06-30T23:54:18",
+          "duracion_min": 100.9
         }
       ],
       "alertas": [
@@ -32,14 +37,19 @@
     },
     "ETH": {
       "estado": "DEGRADED",
-      "n": 6602,
-      "age_seconds": 2.1,
+      "n": 6614,
+      "age_seconds": 2.4,
       "ultimo_precio": 1571.045,
       "gaps": [
         {
           "inicio": "2026-06-30T18:24:52",
           "fin": "2026-06-30T22:02:40",
           "duracion_min": 217.8
+        },
+        {
+          "inicio": "2026-06-30T22:13:26",
+          "fin": "2026-06-30T23:54:18",
+          "duracion_min": 100.9
         }
       ],
       "alertas": [
@@ -48,14 +58,19 @@
     },
     "SOL": {
       "estado": "DEGRADED",
-      "n": 6602,
-      "age_seconds": 2.1,
-      "ultimo_precio": 73.51,
+      "n": 6614,
+      "age_seconds": 2.4,
+      "ultimo_precio": 73.49,
       "gaps": [
         {
           "inicio": "2026-06-30T18:24:52",
           "fin": "2026-06-30T22:02:40",
           "duracion_min": 217.8
+        },
+        {
+          "inicio": "2026-06-30T22:13:26",
+          "fin": "2026-06-30T23:54:18",
+          "duracion_min": 100.9
         }
       ],
       "alertas": [
@@ -64,14 +79,19 @@
     },
     "XRP": {
       "estado": "DEGRADED",
-      "n": 6602,
-      "age_seconds": 2.1,
-      "ultimo_precio": 1.04098,
+      "n": 6614,
+      "age_seconds": 2.4,
+      "ultimo_precio": 1.03862,
       "gaps": [
         {
           "inicio": "2026-06-30T18:24:52",
           "fin": "2026-06-30T22:02:40",
           "duracion_min": 217.8
+        },
+        {
+          "inicio": "2026-06-30T22:13:26",
+          "fin": "2026-06-30T23:54:18",
+          "duracion_min": 100.9
         }
       ],
       "alertas": [
