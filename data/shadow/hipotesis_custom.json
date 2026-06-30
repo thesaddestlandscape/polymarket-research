@@ -352,6 +352,25 @@
       "umbral_ic_min": 0.08
     },
     {
+      "id": "H-DVOL-SPIKE-BUYNO",
+      "nombre": "DVOL spike (sigma_h alto) → BUY_NO tiene más edge (panic regime)",
+      "descripcion": "Inspirado en 'The Volatility Edge' (Concretum Research, 2025): en equities, VIX spikes identifican regímenes de pánico donde los moves están sobreamplificados por feedback loops (deleveraging, hedgers, etc). En cripto el análogo es DVOL (Deribit BTC IV). Sin acceso a DVOL, usamos sigma_h como proxy (vol realizada 1h). Hipótesis: cuando sigma_h > 0.004/h (≈ vol diaria >9.6%), los mercados de predicción exageran la bajada en 15min → BUY_NO tiene IC superior porque el pánico se revierte intraday. Activar cuando n≥200 en BUY_NO #15min para tener potencia suficiente para subdividir por régimen.",
+      "tipo": "boost",
+      "umbral": "n≥200 BUY_NO #15min total, luego n≥40 en subconjunto sigma_h>0.004 y IC>+0.10",
+      "accion": "Si IC_sigma_alto > IC_baseline + 0.08 con n≥40 → boost ×1.2 en BUY_NO cuando sigma_h>0.004. Pendiente integrar DVOL real (Deribit API) cuando n≥500.",
+      "filtro": {
+        "strategy_prefix": "UPDOWN_GBM",
+        "decision": "BUY_NO",
+        "subtype_contains": "15min",
+        "feature": "sigma_h",
+        "feature_lo": 0.004
+      },
+      "umbral_n": 40,
+      "umbral_ic_min": 0.10,
+      "_contexto": "Ver artículo 'The Volatility Edge' (Concretum Research, 5º Quantpedia Awards 2026). La idea de fondo: 'elevador hacia abajo' por feedback loops (deleveraging, hedgers) → speculators con capital pueden explotar sobre-correcciones. En Polymarket: BUY_NO en 15min durante sigma alto = explotar el pánico de corto plazo.",
+      "_pendiente": "Reemplazar sigma_h por DVOL real (Deribit /public/get_index_price_names → BTC_DVOL) cuando tengamos infraestructura. DVOL>70 ≈ percentil 80 histórico."
+    },
+    {
       "id": "H-CUSTOM-POLY-DRIFT-CONFIRM",
       "nombre": "poly_drift_5obs: ¿el precio YES interno de Polymarket confirma nuestra señal?",
       "descripcion": "Feature nueva 2026-06-27: drift del precio YES en Polymarket en últimas 5 obs (~5min). Si poly_drift<0 y decidimos BUY_NO (o poly_drift>0 y BUY_YES) → confluencia. Si diverge → reducción de stake. Hipótesis: confluencia Binance+Polymarket mejora IC; divergencia empeora.",
