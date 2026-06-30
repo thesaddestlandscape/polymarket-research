@@ -196,6 +196,62 @@ def _ejecutar_orden_polymarket(market_id: str, direction: str,
         }
 
 
+def _evaluar_pre_trade(pred: dict, decision: str) -> tuple[bool, str]:
+    """
+    Evaluador independiente pre-trade (generator/evaluator split — Loop Engineering).
+    Actúa como skeptic: asume que la señal está mal hasta que se demuestre lo contrario.
+    Rechaza si ≥2 señales independientes contradicen la predicción.
+    Las señales individuales son ruidosas; se necesita consenso para rechazar.
+    """
+    flags = []
+
+    try:
+        feats = json.loads(pred.get("features", "{}") or "{}")
+    except Exception:
+        feats = {}
+
+    # 1. Predicción vieja (>5 min) — el mercado pudo moverse desde que se generó
+    try:
+        pred_ts = datetime.fromisoformat(
+            pred.get("timestamp_utc", "").replace("Z", "+00:00"))
+        if pred_ts.tzinfo is None:
+            pred_ts = pred_ts.replace(tzinfo=timezone.utc)
+        age_min = (datetime.now(timezone.utc) - pred_ts).total_seconds() / 60
+        if age_min > 5:
+            flags.append(f"pred_vieja={age_min:.0f}min>5")
+    except Exception:
+        pass
+
+    # 2. Edge en el momento de ejecutar demasiado pequeño (más estricto que el modelo)
+    try:
+        edge = float(pred.get("edge_neto", 0))
+    except (ValueError, TypeError):
+        edge = 0.0
+    if abs(edge) < 0.025:
+        flags.append(f"edge={edge:.4f}<0.025")
+
+    # 3. Funding rate de perps contradice la dirección
+    fr = feats.get("funding_rate_8h")  # % por 8h
+    if fr is not None:
+        if decision == "BUY_YES" and fr > 0.05:
+            flags.append(f"funding={fr:+.3f}%/8h longs_sobrecargados vs BUY_YES")
+        elif decision == "BUY_NO" and fr < -0.02:
+            flags.append(f"funding={fr:+.3f}%/8h shorts_sobrecargados vs BUY_NO")
+
+    # 4. Drift interno de Polymarket (poly_drift_5obs) contradice fuertemente
+    poly_d = feats.get("poly_drift_5obs")
+    if poly_d is not None and abs(poly_d) > 1.5:
+        if decision == "BUY_YES" and poly_d < -1.5:
+            flags.append(f"poly_drift={poly_d:+.2f}% vende_YES vs BUY_YES")
+        elif decision == "BUY_NO" and poly_d > 1.5:
+            flags.append(f"poly_drift={poly_d:+.2f}% compra_YES vs BUY_NO")
+
+    if len(flags) >= 2:
+        return False, f"{len(flags)} señales contrarias: " + " | ".join(flags)
+    flag_str = f"({flags[0]})" if flags else "sin flags"
+    return True, f"PASS {flag_str}"
+
+
 def _registrar_trade(row: dict):
     nuevo = not TRADES_CSV.exists()
     with open(TRADES_CSV, "a", newline="", encoding="utf-8") as f:
@@ -293,6 +349,18 @@ def main():
             f"precio={entry_p:.4f} IC_hist={ic_hist:+.3f} n={n_hist} "
             f"stake={stake:.2f}€")
         log(f"         {stake_info['motivo']}")
+
+        # Evaluador pre-trade independiente (generator/evaluator split)
+        eval_ok, eval_motivo = _evaluar_pre_trade(pred, dec)
+        log(f"  Evaluador: {eval_motivo}")
+        if not eval_ok:
+            log(f"  ⛔ EVALUADOR RECHAZA — no se ejecuta")
+            enviar_telegram(
+                f"⛔ *Señal rechazada por evaluador*\n"
+                f"{strategy}#{subtype} {dec}\n"
+                f"{eval_motivo}"
+            )
+            continue
 
         # 3. Notificar señal antes de ejecutar
         enviar_telegram(
