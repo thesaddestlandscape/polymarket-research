@@ -1,19 +1,19 @@
-# Estado del bot — 2026-06-30 15:56 UTC
+# Estado del bot — 2026-06-30 15:58 UTC
 
 ## Capital
 | | |
 |---|---|
 | Depósito total | **30 €** |
-| Capital operativo | **20 €** |
-| Reserva intocable | **10 €** |
+| Capital operativo | **25 €** |
+| Reserva intocable | **5 €** |
 
 ## Bankroll simulado
 | | |
 |---|---|
-| Inicio | 20.00 € |
-| Actual | **-38.93 €** |
+| Inicio | 25.44 € |
+| Actual | **-33.49 €** |
 | P&L acumulado | 🔴 **-58.93 €** |
-| ROI s/ operativo | -294.66% |
+| ROI s/ operativo | -231.65% |
 | ROI s/ depósito | -196.44% |
 | P&L hoy (2026-06-30) | 🔴 -14.44 € |
 | Operaciones resueltas | 1448 (695 WIN / 753 LOSS) — 48.0% |
@@ -42,13 +42,13 @@
 
 ## Calidad de datos
 
-✅ **OK** — última verificación 2026-06-30T15:55 UTC | rechazos 1h: 3 (rango=0, spike=0)
+✅ **OK** — última verificación 2026-06-30T15:57 UTC | rechazos 1h: 3 (rango=0, spike=0)
 
 | Asset | Precio | Age | Alertas |
 |---|---|---|---|
-| ✅ BTC | $58,494.14 | 0.0min |  |
-| ✅ ETH | $1,569.69 | 0.0min |  |
-| ✅ SOL | $73.55 | 0.0min |  |
+| ✅ BTC | $58,415.58 | 0.0min |  |
+| ✅ ETH | $1,565.62 | 0.0min |  |
+| ✅ SOL | $73.41 | 0.0min |  |
 | ✅ XRP | $1.04 | 0.0min |  |
 
 **Alertas activas:**
