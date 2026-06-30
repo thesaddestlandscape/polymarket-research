@@ -1,4 +1,4 @@
-# Estado del bot — 2026-06-30 03:47 UTC
+# Estado del bot — 2026-06-30 03:48 UTC
 
 ## Capital
 | | |
@@ -11,20 +11,20 @@
 | | |
 |---|---|
 | Inicio | 20.00 € |
-| Actual | **-29.90 €** |
-| P&L acumulado | 🔴 **-49.90 €** |
-| ROI s/ operativo | -249.52% |
-| ROI s/ depósito | -166.34% |
-| P&L hoy (2026-06-30) | 🔴 -5.41 € |
-| Operaciones resueltas | 1361 (663 WIN / 698 LOSS) — 48.7% |
-| Señales abiertas | 80 |
+| Actual | **-30.85 €** |
+| P&L acumulado | 🔴 **-50.85 €** |
+| ROI s/ operativo | -254.26% |
+| ROI s/ depósito | -169.51% |
+| P&L hoy (2026-06-30) | 🔴 -6.36 € |
+| Operaciones resueltas | 1362 (663 WIN / 699 LOSS) — 48.7% |
+| Señales abiertas | 79 |
 
 ## Estrategias (visión global)
 
 | Estrategia | n | Win% | IC_efectivo | PNL | Apuesta | Estado |
 |---|---|---|---|---|---|---|
 | ORDER_FLOW_5M | 785 | 51.2% | +0.012 | +7.41€ | 0.50€ | ✅ activa |
-| UPDOWN_GBM | 389 | 48.8% | -0.012 | -8.94€ | 0.50€ | ⚠️ IC negativo |
+| UPDOWN_GBM | 390 | 48.7% | -0.013 | -9.88€ | 0.50€ | ⚠️ IC negativo |
 | PRICE_TARGET_GBM | 50 | 44.0% | -0.058 | -10.55€ | 0.50€ | ⚠️ IC negativo |
 | SMART_FLOW_1H | 23 | 21.7% | -0.260 | -10.63€ | 0.00€ | 🚫 desactivada |
 | WEEKLY_PRICE | 57 | 50.9% | +0.008 | -13.43€ | 0.50€ | ✅ activa |
@@ -34,21 +34,21 @@
 
 | Timestamp | Estrategia | Mercado | Resultado | PNL |
 |---|---|---|---|---|
+| 2026-06-30T03:48 | UPDOWN_GBM#BTC#60min | Bitcoin Up or Down - June 29, 11PM ET… | ❌ LOSS | -0.95€ |
 | 2026-06-30T03:46 | UPDOWN_GBM#BTC#15min | Bitcoin Up or Down - June 29, 11:30PM-11:45PM ET… | ✅ WIN | +0.64€ |
 | 2026-06-30T03:46 | UPDOWN_GBM#ETH#15min | Ethereum Up or Down - June 29, 11:30PM-11:45PM ET… | ❌ LOSS | -0.51€ |
 | 2026-06-30T03:31 | UPDOWN_GBM#ETH#15min | Ethereum Up or Down - June 29, 11:15PM-11:30PM ET… | ❌ LOSS | -0.51€ |
 | 2026-06-30T03:16 | UPDOWN_GBM#ETH#15min | Ethereum Up or Down - June 29, 11:00PM-11:15PM ET… | ✅ WIN | +0.50€ |
-| 2026-06-30T03:16 | UPDOWN_GBM#BTC#15min | Bitcoin Up or Down - June 29, 11:00PM-11:15PM ET… | ❌ LOSS | -0.51€ |
 
 ## Calidad de datos
 
-✅ **OK** — última verificación 2026-06-30T03:46 UTC
+✅ **OK** — última verificación 2026-06-30T03:48 UTC
 
 | Asset | Precio | Age | Alertas |
 |---|---|---|---|
 | ✅ BTC | $59,630.57 | 0.0min |  |
 | ✅ ETH | $1,587.06 | 0.0min |  |
-| ✅ SOL | $74.38 | 0.0min |  |
+| ✅ SOL | $74.36 | 0.0min |  |
 | ✅ XRP | $1.05 | 0.0min |  |
 
 ---
