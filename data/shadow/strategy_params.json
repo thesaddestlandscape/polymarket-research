@@ -1224,6 +1224,7 @@
   "meta": {
     "gbm_blacklist_hours_auto": [
       9,
+      10,
       18
     ],
     "gbm_blacklist_hours_auto_motivo": "H-GBM-18H auto-aplicada: IC=-0.154 n=15"
