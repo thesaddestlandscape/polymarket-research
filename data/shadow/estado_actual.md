@@ -1,4 +1,4 @@
-# Estado del bot — 2026-06-30 13:59 UTC
+# Estado del bot — 2026-06-30 14:01 UTC
 
 ## Capital
 | | |
@@ -11,12 +11,12 @@
 | | |
 |---|---|
 | Inicio | 20.00 € |
-| Actual | **-41.85 €** |
-| P&L acumulado | 🔴 **-61.85 €** |
-| ROI s/ operativo | -309.26% |
-| ROI s/ depósito | -206.17% |
-| P&L hoy (2026-06-30) | 🔴 -17.36 € |
-| Operaciones resueltas | 1423 (684 WIN / 739 LOSS) — 48.1% |
+| Actual | **-44.14 €** |
+| P&L acumulado | 🔴 **-64.14 €** |
+| ROI s/ operativo | -320.68% |
+| ROI s/ depósito | -213.78% |
+| P&L hoy (2026-06-30) | 🔴 -19.64 € |
+| Operaciones resueltas | 1430 (686 WIN / 744 LOSS) — 48.0% |
 | Señales abiertas | 95 |
 
 ## Estrategias (visión global)
@@ -24,9 +24,9 @@
 | Estrategia | n | Win% | IC_efectivo | PNL | Apuesta | Estado |
 |---|---|---|---|---|---|---|
 | ORDER_FLOW_5M | 788 | 51.0% | +0.010 | +5.88€ | 0.50€ | ✅ activa |
-| PRICE_TARGET_GBM | 50 | 44.0% | -0.058 | -10.55€ | 0.50€ | ⚠️ IC negativo |
-| SMART_FLOW_1H | 23 | 21.7% | -0.260 | -10.63€ | 0.00€ | 🚫 desactivada |
-| WEEKLY_PRICE | 57 | 50.9% | +0.008 | -13.43€ | 0.50€ | ✅ activa |
+| SMART_FLOW_1H | 24 | 20.8% | -0.269 | -11.14€ | 0.00€ | 🚫 desactivada |
+| PRICE_TARGET_GBM | 54 | 40.7% | -0.089 | -12.59€ | 0.50€ | ⚠️ IC negativo |
+| WEEKLY_PRICE | 59 | 52.5% | +0.025 | -13.16€ | 0.50€ | ✅ activa |
 | UPDOWN_OU_5M | 57 | 26.3% | -0.229 | -13.76€ | 0.00€ | 🚫 desactivada |
 | UPDOWN_GBM | 448 | 47.1% | -0.029 | -19.35€ | 0.50€ | ⚠️ IC negativo |
 
@@ -34,21 +34,21 @@
 
 | Timestamp | Estrategia | Mercado | Resultado | PNL |
 |---|---|---|---|---|
-| 2026-06-30T13:58 | UPDOWN_GBM#ETH#60min | Ethereum Up or Down - June 30, 9AM ET… | ✅ WIN | +0.45€ |
-| 2026-06-30T13:45 | UPDOWN_GBM#ETH#15min | Ethereum Up or Down - June 30, 9:30AM-9:45AM ET… | ❌ LOSS | -0.51€ |
-| 2026-06-30T13:31 | UPDOWN_GBM#ETH#15min | Ethereum Up or Down - June 30, 9:15AM-9:30AM ET… | ❌ LOSS | -1.81€ |
-| 2026-06-30T13:16 | UPDOWN_GBM#ETH#15min | Ethereum Up or Down - June 30, 9:00AM-9:15AM ET… | ❌ LOSS | -2.04€ |
-| 2026-06-30T13:14 | UPDOWN_GBM#BNB#15min | BNB Up or Down - June 30, 9:00AM-9:15AM ET… | ❌ LOSS | -0.51€ |
+| 2026-06-30T14:00 | PRICE_TARGET_GBM#BTC#atexpiry | Will the price of Bitcoin be above $56,000 on June… | ❌ LOSS | -0.51€ |
+| 2026-06-30T14:00 | PRICE_TARGET_GBM#BTC#atexpiry | Will the price of Bitcoin be above $62,000 on June… | ❌ LOSS | -0.51€ |
+| 2026-06-30T14:00 | SMART_FLOW_1H#BTC | Will the price of Bitcoin be above $62,000 on June… | ❌ LOSS | -0.51€ |
+| 2026-06-30T14:00 | PRICE_TARGET_GBM#BTC#atexpiry | Will the price of Bitcoin be above $64,000 on June… | ❌ LOSS | -0.51€ |
+| 2026-06-30T14:00 | WEEKLY_PRICE#BTC | Will the price of Bitcoin be between $62,000 and $… | ✅ WIN | +0.13€ |
 
 ## Calidad de datos
 
-✅ **OK** — última verificación 2026-06-30T13:58 UTC
+✅ **OK** — última verificación 2026-06-30T14:00 UTC
 
 | Asset | Precio | Age | Alertas |
 |---|---|---|---|
-| ✅ BTC | $58,590.12 | 0.0min |  |
-| ✅ ETH | $1,561.27 | 0.0min |  |
-| ✅ SOL | $72.85 | 0.0min |  |
+| ✅ BTC | $58,629.69 | 0.0min |  |
+| ✅ ETH | $1,564.38 | 0.0min |  |
+| ✅ SOL | $72.88 | 0.0min |  |
 | ✅ XRP | $1.03 | 0.0min |  |
 
 ---
