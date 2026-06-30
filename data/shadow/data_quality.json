@@ -1,7 +1,12 @@
 {
-  "timestamp_utc": "2026-06-30T18:24:53+00:00",
-  "estado_global": "OK",
-  "alertas": [],
+  "timestamp_utc": "2026-06-30T22:02:42+00:00",
+  "estado_global": "DEGRADED",
+  "alertas": [
+    "BTC:gap 218min (18:24)",
+    "ETH:gap 218min (18:24)",
+    "SOL:gap 218min (18:24)",
+    "XRP:gap 218min (18:24)"
+  ],
   "rechazos_1h": {
     "rango": 0,
     "spike": 0,
@@ -10,36 +15,68 @@
   },
   "assets": {
     "BTC": {
-      "estado": "OK",
-      "n": 6601,
-      "age_seconds": 1.5,
+      "estado": "DEGRADED",
+      "n": 6602,
+      "age_seconds": 2.1,
       "ultimo_precio": 58382.005,
-      "gaps": [],
-      "alertas": []
+      "gaps": [
+        {
+          "inicio": "2026-06-30T18:24:52",
+          "fin": "2026-06-30T22:02:40",
+          "duracion_min": 217.8
+        }
+      ],
+      "alertas": [
+        "gap 218min (18:24)"
+      ]
     },
     "ETH": {
-      "estado": "OK",
-      "n": 6601,
-      "age_seconds": 1.5,
+      "estado": "DEGRADED",
+      "n": 6602,
+      "age_seconds": 2.1,
       "ultimo_precio": 1571.045,
-      "gaps": [],
-      "alertas": []
+      "gaps": [
+        {
+          "inicio": "2026-06-30T18:24:52",
+          "fin": "2026-06-30T22:02:40",
+          "duracion_min": 217.8
+        }
+      ],
+      "alertas": [
+        "gap 218min (18:24)"
+      ]
     },
     "SOL": {
-      "estado": "OK",
-      "n": 6601,
-      "age_seconds": 1.5,
-      "ultimo_precio": 73.26,
-      "gaps": [],
-      "alertas": []
+      "estado": "DEGRADED",
+      "n": 6602,
+      "age_seconds": 2.1,
+      "ultimo_precio": 73.51,
+      "gaps": [
+        {
+          "inicio": "2026-06-30T18:24:52",
+          "fin": "2026-06-30T22:02:40",
+          "duracion_min": 217.8
+        }
+      ],
+      "alertas": [
+        "gap 218min (18:24)"
+      ]
     },
     "XRP": {
-      "estado": "OK",
-      "n": 6601,
-      "age_seconds": 1.5,
-      "ultimo_precio": 1.04176,
-      "gaps": [],
-      "alertas": []
+      "estado": "DEGRADED",
+      "n": 6602,
+      "age_seconds": 2.1,
+      "ultimo_precio": 1.04098,
+      "gaps": [
+        {
+          "inicio": "2026-06-30T18:24:52",
+          "fin": "2026-06-30T22:02:40",
+          "duracion_min": 217.8
+        }
+      ],
+      "alertas": [
+        "gap 218min (18:24)"
+      ]
     }
   },
   "cross_source": {}
