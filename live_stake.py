@@ -251,9 +251,54 @@ def verificar_circuit_breaker() -> tuple[bool, str]:
     return False, f"✅ OK  (bkr={bkr:.2f}€  pnl_día={pnl_live_hoy():+.2f}€)"
 
 
+# ── Inventario direccional (Shaw & Dalen 2025 — AS en logit space) ───────────
+
+def inventario_direccional_hoy() -> dict:
+    """
+    Cuenta las posiciones abiertas de hoy por dirección (BUY_YES / BUY_NO).
+    Devuelve {'BUY_YES': n, 'BUY_NO': n, 'q_net': n}.
+    q_net > 0 → sesgo largo (más YES); q_net < 0 → sesgo corto (más NO).
+    """
+    if not TRADES_CSV.exists():
+        return {"BUY_YES": 0, "BUY_NO": 0, "q_net": 0}
+    config = _cargar_config()
+    hoy    = _hoy_madrid(config)
+    n_yes  = 0
+    n_no   = 0
+    with open(TRADES_CSV, encoding="utf-8") as f:
+        for row in csv.DictReader(f):
+            if row.get("status") not in ("OPEN", "STUB"):
+                continue
+            if (row.get("timestamp_utc") or "")[:10] != hoy:
+                continue
+            if row.get("direction") == "BUY_YES":
+                n_yes += 1
+            elif row.get("direction") == "BUY_NO":
+                n_no += 1
+    return {"BUY_YES": n_yes, "BUY_NO": n_no, "q_net": n_yes - n_no}
+
+
+def _inventory_penalty(direction: str, inv: dict) -> float:
+    """
+    Factor de penalización de stake según inventario acumulado (principio AS).
+    Si apostamos en la misma dirección que el inventario neto, reducimos el stake.
+    Primera apuesta en esa dirección: sin penalización.
+    Cada apuesta adicional en la misma dirección: -20%, mínimo 50%.
+    """
+    q_net = inv.get("q_net", 0)
+    if direction == "BUY_YES" and q_net > 0:
+        exceso = q_net          # posiciones YES de más
+    elif direction == "BUY_NO" and q_net < 0:
+        exceso = abs(q_net)     # posiciones NO de más
+    else:
+        return 1.0              # dirección contraria o neutral — sin penalización
+    return max(0.50, 1.0 - exceso * 0.20)
+
+
 # ── Calcular stake ────────────────────────────────────────────────────────────
 
-def calcular_stake(ic: float, strategy: str = "", subtype: str = "") -> dict:
+def calcular_stake(ic: float, strategy: str = "", subtype: str = "",
+                   direction: str = "") -> dict:
     """
     Stake para una señal con IC dado.
     Opera con el bankroll completo en cada ventana (compounding natural).
@@ -278,10 +323,22 @@ def calcular_stake(ic: float, strategy: str = "", subtype: str = "") -> dict:
     stake = min(techo_kelly, techo_pct, techo_config)
     stake = max(stake, min_stake) if bkr >= min_stake else 0.0
 
+    # Penalización por inventario (Avellaneda-Stoikov en logit space):
+    # si ya tenemos posiciones abiertas en la misma dirección, reducir stake.
+    inv_factor = 1.0
+    inv_str    = ""
+    if direction:
+        inv = inventario_direccional_hoy()
+        inv_factor = _inventory_penalty(direction, inv)
+        if inv_factor < 1.0:
+            stake = max(min_stake, stake * inv_factor)
+            inv_str = (f" | inv_penalty×{inv_factor:.2f} "
+                       f"(q_net={inv['q_net']:+d} YES={inv['BUY_YES']} NO={inv['BUY_NO']})")
+
     motivo = (
         f"bankroll={bkr:.2f}€ | "
-        f"Kelly={techo_kelly:.2f}€  max10%={techo_pct:.2f}€  máx={techo_config:.2f}€ "
-        f"→ stake={stake:.2f}€"
+        f"Kelly={techo_kelly:.2f}€  max10%={techo_pct:.2f}€  máx={techo_config:.2f}€"
+        f"{inv_str} → stake={stake:.2f}€"
     )
 
     return {

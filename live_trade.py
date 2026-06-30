@@ -336,8 +336,8 @@ def main():
         except ValueError:
             continue
 
-        # Stake
-        stake_info = calcular_stake(ic_hist, strategy, subtype)
+        # Stake (con penalización de inventario direccional)
+        stake_info = calcular_stake(ic_hist, strategy, subtype, direction=dec)
         if not stake_info["viable"]:
             log(f"  SKIP {strategy}#{subtype}: budget insuficiente ({stake_info['budget_restante']:.2f}€ restante)")
             continue

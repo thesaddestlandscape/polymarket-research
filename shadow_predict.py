@@ -1311,12 +1311,28 @@ def s_updown_gbm(market, ctx):
             poly_drift = (prices_hist[-1] - prices_hist[0]) / prices_hist[0] * 100
             features["poly_drift_5obs"] = round(poly_drift, 4)
     # funding_rate_8h: última tasa de financiación del perp Binance (decimal/8h).
-    # Alto positivo (>0.03%/8h) → longs sobrecargados → más probable corrección → BUY_NO.
-    # Muy negativo (<-0.01%/8h) → shorts sobrecargados → más probable squeeze → BUY_YES.
-    # Se guarda como feature para tracking; la hipótesis evalúa si correlaciona con IC.
     fr = ctx.get("funding_rates", {}).get(activo)
     if fr is not None:
-        features["funding_rate_8h"] = round(fr * 100, 5)  # en % para legibilidad
+        features["funding_rate_8h"] = round(fr * 100, 5)
+    # logit_edge (Shaw & Dalen 2025 — BS-P): edge en espacio logit.
+    # logit(p_modelo) - logit(p_mercado) es más estable que la diferencia en probabilidad
+    # cerca de los extremos (p→0 o p→1) y captura el edge multiplicativo real.
+    p_up_clipped = max(0.02, min(0.98, p_up))
+    py_clipped   = max(0.02, min(0.98, py))
+    logit_edge   = math.log(p_up_clipped / (1 - p_up_clipped)) - math.log(py_clipped / (1 - py_clipped))
+    features["logit_edge"] = round(logit_edge, 4)
+    # sigma_b (belief volatility): volatilidad del logit(price_yes) en Polymarket.
+    # Mide cuánto oscila la creencia del mercado — alta sigma_b = señal poco fiable.
+    # Shaw & Dalen 2025: σ_b es el factor de riesgo análogo a implied vol en opciones.
+    if len(hist_mkt) >= 4:
+        logit_prices = []
+        for _, p_hist in hist_mkt[-10:]:
+            if 0.01 < p_hist < 0.99:
+                logit_prices.append(math.log(p_hist / (1 - p_hist)))
+        if len(logit_prices) >= 3:
+            diffs = [abs(logit_prices[i] - logit_prices[i-1]) for i in range(1, len(logit_prices))]
+            sigma_b = (sum(d**2 for d in diffs) / len(diffs)) ** 0.5
+            features["sigma_b"] = round(sigma_b, 4)
     return {
         "prob_yes": max(0.05, min(0.95, p_up)),
         "razon":   razon,
