@@ -1977,6 +1977,12 @@ def main():
     precios_ventanas_hoy = {k: sum(v) / len(v) for k, v in _precios_ventanas_acc.items()}
     _moon_phase_hoy = _moon_phase(datetime.now(timezone.utc))
     _mercury_retro_hoy = _mercurio_retrogrado(datetime.now(timezone.utc))
+    try:
+        _smart_money_consenso = json.loads(
+            (DIR_SHADOW / "smart_money_consensus.json").read_text(encoding="utf-8")
+        )
+    except Exception:
+        _smart_money_consenso = {}
 
     ctx = construir_contexto()
     ctx["precios_ventanas_hoy"] = precios_ventanas_hoy
@@ -2059,6 +2065,11 @@ def main():
                 # no afecta ninguna decisión, solo se acumula para análisis futuro
                 pred_features["moon_phase"] = _moon_phase_hoy
                 pred_features["mercury_retrogrado"] = 1 if _mercury_retro_hoy else 0
+                _activo_pred = subtype.split("#", 1)[0].upper() if subtype else ""
+                _consenso_activo = _smart_money_consenso.get(_activo_pred)
+                if _consenso_activo:
+                    pred_features["smart_money_consensus"] = _consenso_activo.get("smart_money_consensus")
+                    pred_features["smart_money_n_wallets"] = _consenso_activo.get("n_wallets_smart")
                 pred["features"] = pred_features
 
                 def _feature_match(feat_val, cond, umbral):
