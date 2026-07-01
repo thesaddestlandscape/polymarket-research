@@ -1,8 +1,13 @@
 name: Capture Markets
-
+# schedule desactivado 2026-07-01: corría shadow_resolve.py cada 10min desde
+# GitHub Actions en paralelo con el fast loop del VPS, que ejecuta el mismo
+# script cada ~20-60s. Dos procesos no coordinados resolviendo predicciones
+# y cerrando trades LIVE en trades.csv a la vez es un riesgo real de doble
+# resolución / condición de carrera, agravado por el merge "-X union" en
+# conflictos de git (puede duplicar filas en CSVs). capture_markets.py ya
+# lo cubre run_slow.sh en el VPS. Se deja workflow_dispatch por si hace
+# falta correrlo manual.
 on:
-  schedule:
-    - cron: '*/10 * * * *'
   workflow_dispatch:
 
 permissions:

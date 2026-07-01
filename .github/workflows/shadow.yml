@@ -1,11 +1,15 @@
 name: Shadow Paper Trader
+# schedule/workflow_run desactivados 2026-07-01: duplicaba shadow_predict.py
+# + shadow_resolve.py del fast loop del VPS (que corre cada ~20-60s con
+# datos Binance directos desde IP finlandesa), compitiendo por el mismo
+# git push a data/shadow/ en main. Desde que el live está activo el VPS
+# pushea mucho más seguido → 68% de fallos en los últimos 3 días (git
+# push rejected). Además Binance bloquea (451) las IPs de los runners de
+# GitHub Actions, así que cuando SÍ tenía éxito escribía con datos
+# degradados (Kraken fallback) en el mismo results.csv que usa el
+# postmortem para IC — contaminaba la señal de aprendizaje. Se deja
+# workflow_dispatch por si hace falta correrlo manual algún día.
 on:
-  workflow_run:
-    workflows: ["Capture Wallets"]
-    types: [completed]
-    branches: [main]
-  schedule:
-    - cron: '*/15 * * * *'
   workflow_dispatch:
 
 permissions:

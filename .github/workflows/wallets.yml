@@ -1,8 +1,9 @@
 name: Capture Wallets
-
+# schedule desactivado 2026-07-01: capture_wallets.py/capture_trades.py ya
+# los ejecuta run_slow.sh en el VPS cada ~15min. Duplicado que competía por
+# el mismo git push a data/ en main. Se deja workflow_dispatch por si hace
+# falta correrlo manual.
 on:
-  schedule:
-    - cron: '0 */2 * * *'
   workflow_dispatch:
 
 permissions:
