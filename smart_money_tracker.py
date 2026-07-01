@@ -33,7 +33,6 @@ cambia ninguna decisión todavía. Corre por su propio cron (no toca fast/slow).
 import csv
 import json
 import random
-import re
 import time
 from collections import defaultdict
 from datetime import datetime, timedelta, timezone
@@ -54,9 +53,11 @@ HEADERS = {
 TIMEOUT = 20
 SLEEP_ENTRE_LLAMADAS = 0.2
 
-ACTIVOS = ("btc", "eth", "sol", "xrp")
-DURACIONES = ("5m", "15m", "60m")
-SLUG_RE = re.compile(rf"({'|'.join(ACTIVOS)})-updown-({'|'.join(DURACIONES)})-")
+ACTIVOS = ("BTC", "ETH", "SOL", "XRP")
+# Duración real por tag de evento (más fiable que el slug: 5min/15min/4h usan
+# slug "activo-updown-Xm-..." pero 60min ("hourly") usa un slug sin duración
+# fija, ej. "bitcoin-up-or-down-july-2-2026-7am-et" — solo el tag lo distingue.
+TAG_A_DURACION = {"5M": "5m", "15M": "15m", "1H": "60m", "4H": "240m"}
 
 VENTANA_MERCADOS_HORAS = 30      # cuántas horas hacia atrás muestrear mercados
 MAX_MERCADOS_MUESTRA = 150       # tope de mercados a consultar por ciclo
@@ -98,9 +99,15 @@ def mercados_recientes() -> dict:
         try:
             with open(archivo, encoding="utf-8") as f:
                 for row in csv.DictReader(f):
-                    slug = row.get("slug", "")
-                    m = SLUG_RE.search(slug)
-                    if not m:
+                    tags = (row.get("event_tags") or "").split("|")
+                    duracion = next((TAG_A_DURACION[t] for t in tags if t in TAG_A_DURACION), None)
+                    if duracion is None:
+                        continue
+                    if "Up or Down" not in (row.get("question") or ""):
+                        continue
+                    activo = next((a for a in ACTIVOS if a in [t.upper() for t in tags]
+                                   or a.lower() in (row.get("question") or "").lower()), None)
+                    if not activo:
                         continue
                     ts = row.get("timestamp_utc", "")
                     try:
@@ -114,9 +121,9 @@ def mercados_recientes() -> dict:
                         continue
                     vistos[cid] = {
                         "question": row.get("question", ""),
-                        "slug": slug,
-                        "activo": m.group(1).upper(),
-                        "duracion": m.group(2),
+                        "slug": row.get("slug", ""),
+                        "activo": activo,
+                        "duracion": duracion,
                     }
         except Exception as e:
             print(f"  [warn] leyendo {archivo}: {e}")
