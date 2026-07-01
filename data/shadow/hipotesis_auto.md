@@ -1,4 +1,4 @@
-# Hipótesis automáticas — 2026-07-01 17:55 UTC
+# Hipótesis automáticas — 2026-07-01 17:57 UTC
 _Generado por shadow_postmortem.py sobre 1591 resoluciones (PNL=-60.20€)_
 
 ## Patrones causales activos
@@ -300,6 +300,16 @@ _Derivadas de los patrones aprendidos:_
   - _Acción_: Si confirma IC≥+0.10 n≥15 en SOL → considerar live semanal
   - _Estado_: ETH: n=27/15 IC=-0.017 PNL=-6.94€ | BTC: n=24/15 IC=-0.077 PNL=-8.41€ | SOL: n=24/15 IC=+0.000 PNL=-2.84€
 
+**⏳ H-STREAK-COOLDOWN** — Cooldown tras 2 derrotas consecutivas (mismo subtype)
+  - _Umbral_: n≥40 tras 2 losses y gap(IC_tras_win - IC_tras_2loss)≥0.05
+  - _Acción_: Reducir stake (no desactivar) 1-2h tras 2 derrotas consecutivas en el mismo subtype
+  - _Estado_: tras_win IC=-0.007 n=724 | tras_1loss IC=-0.025 n=750 | tras_2loss IC=-0.042 n=380/40 | gap=+0.035 (umbral 0.05)
+
+**⏳ H-BTC-LEADS-ETH** — ETH/SOL GBM contrario al drift_15min de BTC del mismo ciclo
+  - _Umbral_: n≥40 en contrario_BTC y gap≥0.08 — y descartar confound con drift propio antes de actuar
+  - _Acción_: Si se confirma y no es confound → boost en ETH/SOL cuando decisión contraria a drift_15min BTC
+  - _Estado_: alineado_BTC IC=-0.029 n=68 | contrario_BTC IC=+0.036 n=26/40 | gap=+0.064 (umbral 0.08) — SIN CONFIRMAR independencia de filtros propios de ETH
+
 
 ### 🔒 Bloqueadas (requieren dataset/API)
 
@@ -549,3 +559,31 @@ _Derivadas de los patrones aprendidos:_
   - _Acción_: Si IC en confluencia (decisión coincide con signo de smart_money_consensus) supera en >=0.05 al IC en divergencia, con n≥40 en cada lado → boost ×1.1-1.2 cuando coincide, considerar reducir stake cuando diverge fuerte.
   - _Estado_: 2/40 ops en el filtro definido (IC actual=+0.000 PNL=-0.08€)
   - _Datos_: n=2 IC=+0.000 PNL=-0.08€
+
+**〰️ H-CUSTOM-OF-EDGE-ALTO** — ORDER_FLOW_5M: edge_neto alto (>0.20) rinde mejor que edge cerca del suelo
+  - _Hipótesis_: Analizado 2026-07-01 sobre 794 resoluciones de ORDER_FLOW_5M: edge_neto en [0.025,0.198) -> IC=-0.009 (n=397, PNL=-10.49€) vs edge_neto en [0.198,0.385] -> IC=+0.029 (n=397, PNL=+16.43€). Comprobado que NO es un efecto general: en UPDOWN_GBM el patrón se invierte (edge bajo IC=-0.002 vs edge alto IC=-0.033), así que este filtro debe quedar scoped solo a ORDER_FLOW_5M, no aplicarse a otras estrategias.
+  - _Umbral_: n≥80 en cada mitad (bajo/alto) para confirmar con más margen que el análisis inicial
+  - _Acción_: Si se confirma con n≥80 y el gap se mantiene ≥0.03 → subir EDGE_MINIMO solo para ORDER_FLOW_5M a ~0.20 (o escalar Kelly con la magnitud del edge)
+  - _Estado_: n=151 IC=-0.003 PNL=-3.11€ — sin señal clara aún (umbral IC: min=0.02 max=None)
+  - _Datos_: n=151 IC=-0.003 PNL=-3.11€
+
+**⏳ H-CUSTOM-PRICETARGET-BUYYES-MALO** — PRICE_TARGET_GBM BUY_YES estructuralmente roto (BUY_NO no)
+  - _Hipótesis_: Analizado 2026-07-01: BTC#atexpiry BUY_YES 2/16 (12%) IC=-0.267 PNL=-8.83€; ETH#atexpiry BUY_YES 2/8 (25%) IC=-0.080 PNL=-3.70€. Mientras BUY_NO en ambos activos está en break-even (IC≈0 a +0.02). Prácticamente toda la sangría de la estrategia completa (-13€ de -13.08€ totales) es BUY_YES. Podría rescatar una estrategia que hoy está en la lista de revisar-desactivación.
+  - _Umbral_: 30
+  - _Acción_: Si se confirma con n≥30 → filtro causal decision==BUY_YES → skip en PRICE_TARGET_GBM, dejar solo BUY_NO activo
+  - _Estado_: 28/30 ops en el filtro definido (IC actual=-0.267 PNL=-11.51€)
+  - _Datos_: n=28 IC=-0.267 PNL=-11.51€
+
+**⏳ H-CUSTOM-WEEKLY-INRANGE-BUYYES** — WEEKLY_PRICE BUY_YES con in_range=1 — ¿estructuralmente sobrevalorado?
+  - _Hipótesis_: Analizado 2026-07-01, n=10 (evidencia mínima): BUY_YES cuando in_range=1 fue 0/3 (todo pérdida). Mecanismo propuesto: acertar un rango de precio estrecho al vencimiento es intrínsecamente poco probable, el mercado puede estar sobrevalorando el 'sí'. Ver H-CUSTOM-WEEKLY-PCTDIST-BUYNO para el lado complementario (BUY_NO con pct_dist alto).
+  - _Umbral_: 25
+  - _Acción_: Si se confirma con n≥25 → filtro causal in_range==1 + BUY_YES → skip en WEEKLY_PRICE
+  - _Estado_: 3/25 ops en el filtro definido (IC actual=-0.045 PNL=-1.53€)
+  - _Datos_: n=3 IC=-0.045 PNL=-1.53€
+
+**⏳ H-CUSTOM-WEEKLY-PCTDIST-BUYNO** — WEEKLY_PRICE BUY_NO con pct_dist alto — cuanto más lejos del rango, más seguro
+  - _Hipótesis_: Analizado 2026-07-01, n=10 (evidencia mínima): BUY_NO con pct_dist>=2.09% fue 4/4 victorias (rango 2.09%-23.4%); BUY_NO con pct_dist<8% (pero fuera del corte anterior) tuvo derrotas. Patrón: cuanto más lejos está el spot del rango objetivo al momento de la predicción, más fiable el BUY_NO. Complementa H-CUSTOM-WEEKLY-INRANGE-BUYYES.
+  - _Umbral_: 25
+  - _Acción_: Si se confirma con n≥25 → boost ×1.2 en WEEKLY_PRICE BUY_NO cuando pct_dist≥2
+  - _Estado_: 6/25 ops en el filtro definido (IC actual=+0.037 PNL=+0.07€)
+  - _Datos_: n=6 IC=+0.037 PNL=+0.07€

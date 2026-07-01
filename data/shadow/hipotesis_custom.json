@@ -545,6 +545,69 @@
       "umbral_n": 40,
       "umbral_ic_min": 0.08,
       "_nota": "feature_lo=0.15 es un primer corte arbitrario (consenso Up neto >15%) sin cruzar con la dirección real de nuestra decisión todavía — el motor de hipótesis no soporta comparar dos features entre sí (decisión vs signo del consenso), así que esto solo mide 'consenso alto' en aislado, no 'confluencia real'. Revisar manualmente cruzando decisión vs signo cuando haya n suficiente. smart_money_consensus se empieza a capturar el 2026-07-01, cero histórico, y depende de que existan wallets clasificadas 'smart' (ninguna en el primer ciclo de prueba, n máximo visto fue 8)."
+    },
+    {
+      "id": "H-CUSTOM-OF-EDGE-ALTO",
+      "nombre": "ORDER_FLOW_5M: edge_neto alto (>0.20) rinde mejor que edge cerca del suelo",
+      "descripcion": "Analizado 2026-07-01 sobre 794 resoluciones de ORDER_FLOW_5M: edge_neto en [0.025,0.198) -> IC=-0.009 (n=397, PNL=-10.49€) vs edge_neto en [0.198,0.385] -> IC=+0.029 (n=397, PNL=+16.43€). Comprobado que NO es un efecto general: en UPDOWN_GBM el patrón se invierte (edge bajo IC=-0.002 vs edge alto IC=-0.033), así que este filtro debe quedar scoped solo a ORDER_FLOW_5M, no aplicarse a otras estrategias.",
+      "tipo": "filtro",
+      "umbral": "n≥80 en cada mitad (bajo/alto) para confirmar con más margen que el análisis inicial",
+      "accion": "Si se confirma con n≥80 y el gap se mantiene ≥0.03 → subir EDGE_MINIMO solo para ORDER_FLOW_5M a ~0.20 (o escalar Kelly con la magnitud del edge)",
+      "filtro": {
+        "strategy_prefix": "ORDER_FLOW_5M",
+        "feature": "edge_neto",
+        "feature_lo": 0.20
+      },
+      "umbral_n": 80,
+      "umbral_ic_min": 0.02,
+      "_nota": "edge_neto es columna de primer nivel en results.csv, no vive en el JSON de features — requiere el fallback añadido en _feat() (hypothesis_tracker.py, 2026-07-01) para que 'feature' pueda leerlo."
+    },
+    {
+      "id": "H-CUSTOM-PRICETARGET-BUYYES-MALO",
+      "nombre": "PRICE_TARGET_GBM BUY_YES estructuralmente roto (BUY_NO no)",
+      "descripcion": "Analizado 2026-07-01: BTC#atexpiry BUY_YES 2/16 (12%) IC=-0.267 PNL=-8.83€; ETH#atexpiry BUY_YES 2/8 (25%) IC=-0.080 PNL=-3.70€. Mientras BUY_NO en ambos activos está en break-even (IC≈0 a +0.02). Prácticamente toda la sangría de la estrategia completa (-13€ de -13.08€ totales) es BUY_YES. Podría rescatar una estrategia que hoy está en la lista de revisar-desactivación.",
+      "tipo": "filtro",
+      "umbral": "n≥30 en BUY_YES y IC<-0.15 para confirmar bloqueo",
+      "accion": "Si se confirma con n≥30 → filtro causal decision==BUY_YES → skip en PRICE_TARGET_GBM, dejar solo BUY_NO activo",
+      "filtro": {
+        "strategy_prefix": "PRICE_TARGET_GBM",
+        "decision": "BUY_YES"
+      },
+      "umbral_n": 30,
+      "umbral_ic_max": -0.15
+    },
+    {
+      "id": "H-CUSTOM-WEEKLY-INRANGE-BUYYES",
+      "nombre": "WEEKLY_PRICE BUY_YES con in_range=1 — ¿estructuralmente sobrevalorado?",
+      "descripcion": "Analizado 2026-07-01, n=10 (evidencia mínima): BUY_YES cuando in_range=1 fue 0/3 (todo pérdida). Mecanismo propuesto: acertar un rango de precio estrecho al vencimiento es intrínsecamente poco probable, el mercado puede estar sobrevalorando el 'sí'. Ver H-CUSTOM-WEEKLY-PCTDIST-BUYNO para el lado complementario (BUY_NO con pct_dist alto).",
+      "tipo": "filtro",
+      "umbral": "n≥25 y IC<-0.10 para confirmar (evidencia inicial es de solo 3 ops)",
+      "accion": "Si se confirma con n≥25 → filtro causal in_range==1 + BUY_YES → skip en WEEKLY_PRICE",
+      "filtro": {
+        "strategy_prefix": "WEEKLY_PRICE",
+        "decision": "BUY_YES",
+        "feature": "in_range",
+        "feature_lo": 1
+      },
+      "umbral_n": 25,
+      "umbral_ic_max": -0.10,
+      "_nota": "in_range y pct_dist son features nuevas (feature_json), muy poco histórico previo al 2026-07-01."
+    },
+    {
+      "id": "H-CUSTOM-WEEKLY-PCTDIST-BUYNO",
+      "nombre": "WEEKLY_PRICE BUY_NO con pct_dist alto — cuanto más lejos del rango, más seguro",
+      "descripcion": "Analizado 2026-07-01, n=10 (evidencia mínima): BUY_NO con pct_dist>=2.09% fue 4/4 victorias (rango 2.09%-23.4%); BUY_NO con pct_dist<8% (pero fuera del corte anterior) tuvo derrotas. Patrón: cuanto más lejos está el spot del rango objetivo al momento de la predicción, más fiable el BUY_NO. Complementa H-CUSTOM-WEEKLY-INRANGE-BUYYES.",
+      "tipo": "boost",
+      "umbral": "n≥25 y IC>+0.10 para confirmar",
+      "accion": "Si se confirma con n≥25 → boost ×1.2 en WEEKLY_PRICE BUY_NO cuando pct_dist≥2",
+      "filtro": {
+        "strategy_prefix": "WEEKLY_PRICE",
+        "decision": "BUY_NO",
+        "feature": "pct_dist",
+        "feature_lo": 2.0
+      },
+      "umbral_n": 25,
+      "umbral_ic_min": 0.10
     }
   ]
 }
