@@ -1,5 +1,5 @@
-# Hipótesis automáticas — 2026-07-01 11:30 UTC
-_Generado por shadow_postmortem.py sobre 1533 resoluciones (PNL=-61.78€)_
+# Hipótesis automáticas — 2026-07-01 11:32 UTC
+_Generado por shadow_postmortem.py sobre 1535 resoluciones (PNL=-61.20€)_
 
 ## Patrones causales activos
 
@@ -17,11 +17,11 @@ _Generado por shadow_postmortem.py sobre 1533 resoluciones (PNL=-61.78€)_
 - **FILTRO** `hora_utc` < `10.0` → IC=-0.147 (n=15)
   - _Por qué funciona_: hora temprana → mercados cripto menos líquidos, spreads más amplios; edge real menor
   - _Acción_: SKIP cuando `hora_utc` < 10.0
-  - _Potencial_: sin este filtro IC_bueno=+0.100 (n=33)
+  - _Potencial_: sin este filtro IC_bueno=+0.083 (n=34)
 
-- **PATRÓN** `drift_60min` |x|≤ `0.0607` → IC=+0.125 (n=22)
+- **PATRÓN** `drift_60min` |x|≤ `0.057` → IC=+0.125 (n=22)
   - _Por qué funciona_: drift moderado → precio aún no ha reaccionado del todo; lag explotable
-  - _Acción_: Kelly boost +0.62€ cuando `drift_60min` |x|≤ 0.0607 (IC base=+0.025)
+  - _Acción_: Kelly boost +0.62€ cuando `drift_60min` |x|≤ 0.057 (IC base=+0.020)
 
 ### UPDOWN_GBM#BTC#60min
 - **FILTRO** `sigma_h` < `0.0117` → IC=-0.130 (n=25)
@@ -45,9 +45,9 @@ _Generado por shadow_postmortem.py sobre 1533 resoluciones (PNL=-61.78€)_
   - _Potencial_: sin este filtro IC_bueno=+0.000 (n=6)
 
 ### UPDOWN_GBM#ETH#15min
-- **PATRÓN** `ibs_15` < `0.1521` → IC=+0.224 (n=27)
+- **PATRÓN** `ibs_15` < `0.1531` → IC=+0.233 (n=28)
   - _Por qué funciona_: IBS bajo (precio cerca del mínimo) → sobreventa de corto plazo; BUY_NO menos fiable
-  - _Acción_: Kelly boost +1.00€ cuando `ibs_15` < 0.1521 (IC base=+0.023)
+  - _Acción_: Kelly boost +1.00€ cuando `ibs_15` < 0.1531 (IC base=+0.026)
 
 ### UPDOWN_GBM#ETH#60min
 - **FILTRO** `sigma_h` < `0.0074` → IC=-0.147 (n=15)
@@ -119,7 +119,7 @@ _Generado por shadow_postmortem.py sobre 1533 resoluciones (PNL=-61.78€)_
 ## Estrategias nuevas sugeridas
 _Derivadas de los patrones aprendidos:_
 
-- **H-IBS-UPDOWN_GBM#ETH#15min**: IBS < 0.1521 correlaciona con éxito en UPDOWN_GBM#ETH#15min (IC=+0.224 n=27). Confirma señal de reversión media → alinear con BUY_YES.
+- **H-IBS-UPDOWN_GBM#ETH#15min**: IBS < 0.1531 correlaciona con éxito en UPDOWN_GBM#ETH#15min (IC=+0.233 n=28). Confirma señal de reversión media → alinear con BUY_YES.
 
 ## Estado de aprendizaje por estrategia
 
@@ -150,19 +150,19 @@ _Derivadas de los patrones aprendidos:_
 | ✅ PRICE_TARGET_GBM#reach | 5 | +0.018 | -0.58€ | 0 | 0 |
 | 🚫 SMART_FLOW_1H | 26 | -0.286 | -12.57€ | 0 | 0 |
 | ✅ SMART_FLOW_1H#BTC | 11 | -0.106 | -3.89€ | 0 | 0 |
-| ✅ UPDOWN_GBM | 531 | -0.024 | -13.41€ | 0 | 0 |
-| ✅ UPDOWN_GBM#15min | 341 | +0.013 | +5.03€ | 0 | 0 |
+| ✅ UPDOWN_GBM | 533 | -0.023 | -12.84€ | 0 | 0 |
+| ✅ UPDOWN_GBM#15min | 343 | +0.013 | +5.61€ | 0 | 0 |
 | 🚫 UPDOWN_GBM#240min | 12 | -0.171 | -4.82€ | 0 | 0 |
 | 🚫 UPDOWN_GBM#5min | 56 | -0.155 | -16.64€ | 0 | 0 |
 | ✅ UPDOWN_GBM#60min | 106 | -0.046 | -7.39€ | 0 | 0 |
-| ✅ UPDOWN_GBM#BTC | 162 | -0.018 | -11.79€ | 0 | 0 |
-| ✅ UPDOWN_GBM#BTC#15min | 97 | +0.025 | -4.34€ | 1 | 1 |
+| ✅ UPDOWN_GBM#BTC | 163 | -0.021 | -12.94€ | 0 | 0 |
+| ✅ UPDOWN_GBM#BTC#15min | 98 | +0.020 | -5.48€ | 1 | 1 |
 | ✅ UPDOWN_GBM#BTC#240min | 5 | -0.089 | -2.96€ | 0 | 0 |
 | 🚫 UPDOWN_GBM#BTC#5min | 16 | -0.133 | -6.30€ | 0 | 0 |
 | ✅ UPDOWN_GBM#BTC#60min | 39 | -0.037 | -3.81€ | 4 | 0 |
 | ✅ UPDOWN_GBM#BTC#daily | 5 | +0.054 | +5.61€ | 0 | 0 |
-| ✅ UPDOWN_GBM#ETH | 240 | +0.008 | +7.16€ | 0 | 0 |
-| ✅ UPDOWN_GBM#ETH#15min | 172 | +0.023 | +8.75€ | 0 | 1 |
+| ✅ UPDOWN_GBM#ETH | 241 | +0.010 | +8.88€ | 0 | 0 |
+| ✅ UPDOWN_GBM#ETH#15min | 173 | +0.026 | +10.47€ | 0 | 1 |
 | ✅ UPDOWN_GBM#ETH#240min | 5 | -0.018 | -0.44€ | 0 | 0 |
 | 🚫 UPDOWN_GBM#ETH#5min | 12 | -0.086 | -3.67€ | 0 | 0 |
 | ✅ UPDOWN_GBM#ETH#60min | 46 | +0.000 | -1.33€ | 3 | 1 |
@@ -210,8 +210,8 @@ _Derivadas de los patrones aprendidos:_
 **〰️ H-IBS-15** — IBS-15 como señal de mean-reversion
   - _Umbral_: n≥40 ops con ibs_15 en features y spread_IC>0.15 entre buckets
   - _Acción_: Añadir ibs_15 como boost/filtro en FEATURE_RULES de shadow_postmortem.py
-  - _Estado_: Spread bajo (0.124) — sin ventaja clara. oversold(IBS<0.3): IC=+0.014 n=70 | neutral: IC=-0.110 n=75 | overbought(IBS>0.7): IC=-0.043 n=92
-  - _Datos_: n=242 IC=-0.049 PNL=-14.54€
+  - _Estado_: Spread bajo (0.129) — sin ventaja clara. oversold(IBS<0.3): IC=+0.014 n=70 | neutral: IC=-0.115 n=76 | overbought(IBS>0.7): IC=-0.037 n=93
+  - _Datos_: n=244 IC=-0.049 PNL=-13.97€
 
 **🟡 H-HORA-GBM** — hora_utc causal automático en GBM (forward)
   - _Umbral_: n≥20 forward con hora_utc + alguna hora con n≥15 IC<-0.10 o >+0.10
@@ -236,7 +236,7 @@ _Derivadas de los patrones aprendidos:_
 **⏳ H-CROSS-ASSET** — Cross-asset confirmation GBM+OF BUY_NO
   - _Umbral_: n_overlaps≥20 y IC_overlap > IC_base + 0.05
   - _Acción_: Cambiar _aplicar_kelly_compuesto: match por activo, no market_id
-  - _Estado_: n_overlaps=17, boost estimado=+0.017. Necesita 3 más y boost>0.05
+  - _Estado_: n_overlaps=17, boost estimado=+0.016. Necesita 3 más y boost>0.05
 
 **⏳ H-OF-PAR** — ORDER_FLOW per-pair delta_ratio ranges
   - _Umbral_: n≥200 por par con delta_ratio feature en shadow
@@ -334,8 +334,8 @@ _Derivadas de los patrones aprendidos:_
   - _Hipótesis_: Cuando la volatilidad horaria es muy alta el GBM puede sobreestimar el edge. Testear.
   - _Umbral_: n≥30 y IC<-0.05
   - _Acción_: Filtrar señales GBM cuando sigma_h > 0.002 si se confirma IC negativo
-  - _Estado_: n=432 IC=-0.018 PNL=-7.78€ — sin señal clara aún (umbral IC: min=None max=-0.05)
-  - _Datos_: n=432 IC=-0.018 PNL=-7.78€
+  - _Estado_: n=434 IC=-0.018 PNL=-7.20€ — sin señal clara aún (umbral IC: min=None max=-0.05)
+  - _Datos_: n=434 IC=-0.018 PNL=-7.20€
 
 **⏳ H-CUSTOM-OF-02H-BTCSOL** — ORDER_FLOW H=02h UTC — BTC+SOL solamente (revisar blacklist)
   - _Hipótesis_: La hora 02h está en el blacklist basado en TODOS los pares. Con BTC+SOL solo, el historial muestra 4/5 (80%) IC=+0.054. ¿Se confirma la señal positiva con más datos?
@@ -376,8 +376,8 @@ _Derivadas de los patrones aprendidos:_
   - _Hipótesis_: El filtro drift_60min ∈ [0,+0.5%) se implementó el 2026-06-26. Datos forward desde 2026-06-27: 8/18 (44%) IC=-0.045. Aún n pequeño. Monitorear si el IC sube a +0.10 con n≥40.
   - _Umbral_: n≥40 y IC>+0.10 para confirmar el filtro funciona en forward
   - _Acción_: Si IC<0 con n≥30 → revisar umbral drift_60min (0.5% puede ser demasiado estrecho)
-  - _Estado_: n=265 IC=-0.021 PNL=-19.12€ — sin señal clara aún (umbral IC: min=0.1 max=None)
-  - _Datos_: n=265 IC=-0.021 PNL=-19.12€
+  - _Estado_: n=266 IC=-0.022 PNL=-20.27€ — sin señal clara aún (umbral IC: min=0.1 max=None)
+  - _Datos_: n=266 IC=-0.022 PNL=-20.27€
 
 **⏳ H-CUSTOM-GBM-SIGMA-BAJO** — GBM con sigma_h muy bajo (<0.0008/h) — ¿mercado dormido = más predecible?
   - _Hipótesis_: Hipótesis opuesta a sigma_alto: cuando el mercado está muy quieto, ¿el GBM captura mejor la señal porque hay menos ruido? sigma_h<0.0008 equivale a volatilidad diaria <0.8%.
@@ -390,8 +390,8 @@ _Derivadas de los patrones aprendidos:_
   - _Hipótesis_: Análisis split: primeras 20 ops IC=+0.136 (65%); últimas 20 ops IC=-0.091 (40%). El edge era real pero puede estar desapareciendo. n=43 actual con IC=+0.056 ya bajo umbral. Tracking continuo.
   - _Umbral_: n≥50 — si IC<0.04 con n≥50 considerar desactivar BTC#15min
   - _Acción_: Si IC<0.02 con n≥50 → desactivar BTC#15min (el edge ha muerto); si sube a >0.08 → candidato live
-  - _Estado_: n=97 IC=+0.025 PNL=-4.34€ — sin señal clara aún (umbral IC: min=None max=0.02)
-  - _Datos_: n=97 IC=+0.025 PNL=-4.34€
+  - _Estado_: n=98 IC=+0.020 PNL=-5.48€ — sin señal clara aún (umbral IC: min=None max=0.02)
+  - _Datos_: n=98 IC=+0.020 PNL=-5.48€
 
 **〰️ H-CUSTOM-DRIFT15-ZONA-MUERTA** — GBM#15min drift_15min ∈ [-0.3,+0.3] — zona muerta de señal
   - _Hipótesis_: Análisis n=127 GBM#15min: cuando drift_15min está entre -0.3 y +0.3 (mercado sin dirección clara) el IC es negativo (-0.043). Cuando drift>0.3 IC=+0.100 (n=28). Cuando drift<-1 IC=+0.048 (reversión). La señal requiere mercado con dirección clara.
@@ -404,8 +404,8 @@ _Derivadas de los patrones aprendidos:_
   - _Hipótesis_: Cuando drift_15min > 0.3%/h el GBM captura bien la dirección: IC=+0.100 n=28 en todos GBM#15min; IC=+0.152 n=13 solo BTC. El mercado tiene dirección clara y el GBM la sigue. Hipótesis: este rango es donde la señal es real.
   - _Umbral_: n≥40 y IC>+0.08
   - _Acción_: Si se confirma IC>0.10 con n≥40 → boost ×1.2 en GBM#15min cuando drift_15min>0.3
-  - _Estado_: n=151 IC=+0.016 PNL=-6.75€ — sin señal clara aún (umbral IC: min=0.08 max=None)
-  - _Datos_: n=151 IC=+0.016 PNL=-6.75€
+  - _Estado_: n=153 IC=+0.016 PNL=-6.18€ — sin señal clara aún (umbral IC: min=0.08 max=None)
+  - _Datos_: n=153 IC=+0.016 PNL=-6.18€
 
 **⏳ H-CUSTOM-LONGSHOT-BIAS** — Longshot bias — ¿mejor IC cuando py_mkt < 0.20 o > 0.80?
   - _Hipótesis_: Jon-Becker repo documenta formalmente: contratos a 1-20 cents tienen win_rate < precio implícito (compradores pierden sistemáticamente en longshots). En nuestro sistema: cuando py_mkt<0.20 el GBM predice BUY_NO con edge estructural adicional al del modelo. ¿Se confirma en nuestros datos? Buscar en feature pct_spot_vs_ref si los mercados extremos tienen mejor IC en BUY_NO.
@@ -457,8 +457,8 @@ _Derivadas de los patrones aprendidos:_
   - _Hipótesis_: Inspirado en 'The Volatility Edge' (Concretum Research, 2025): en equities, VIX spikes identifican regímenes de pánico donde los moves están sobreamplificados por feedback loops (deleveraging, hedgers, etc). En cripto el análogo es DVOL (Deribit BTC IV). Sin acceso a DVOL, usamos sigma_h como proxy (vol realizada 1h). Hipótesis: cuando sigma_h > 0.004/h (≈ vol diaria >9.6%), los mercados de predicción exageran la bajada en 15min → BUY_NO tiene IC superior porque el pánico se revierte intraday. Activar cuando n≥200 en BUY_NO #15min para tener potencia suficiente para subdividir por régimen.
   - _Umbral_: n≥200 BUY_NO #15min total, luego n≥40 en subconjunto sigma_h>0.004 y IC>+0.10
   - _Acción_: Si IC_sigma_alto > IC_baseline + 0.08 con n≥40 → boost ×1.2 en BUY_NO cuando sigma_h>0.004. Pendiente integrar DVOL real (Deribit API) cuando n≥500.
-  - _Estado_: n=63 IC=+0.069 PNL=+13.04€ — sin señal clara aún (umbral IC: min=0.1 max=None)
-  - _Datos_: n=63 IC=+0.069 PNL=+13.04€
+  - _Estado_: n=64 IC=+0.076 PNL=+14.75€ — sin señal clara aún (umbral IC: min=0.1 max=None)
+  - _Datos_: n=64 IC=+0.076 PNL=+14.75€
 
 **⏳ H-CUSTOM-POLY-DRIFT-CONFIRM** — poly_drift_5obs: ¿el precio YES interno de Polymarket confirma nuestra señal?
   - _Hipótesis_: Feature nueva 2026-06-27: drift del precio YES en Polymarket en últimas 5 obs (~5min). Si poly_drift<0 y decidimos BUY_NO (o poly_drift>0 y BUY_YES) → confluencia. Si diverge → reducción de stake. Hipótesis: confluencia Binance+Polymarket mejora IC; divergencia empeora.
