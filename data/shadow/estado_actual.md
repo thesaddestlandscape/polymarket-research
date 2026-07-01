@@ -1,4 +1,4 @@
-# Estado del bot — 2026-07-01 08:14 UTC
+# Estado del bot — 2026-07-01 08:16 UTC
 
 ## Capital
 | | |
@@ -11,20 +11,20 @@
 | | |
 |---|---|
 | Inicio | 25.44 € |
-| Actual | **-29.81 €** |
-| P&L acumulado | 🔴 **-55.25 €** |
-| ROI s/ operativo | -217.17% |
-| ROI s/ depósito | -184.16% |
-| P&L hoy (2026-07-01) | 🟢 +6.22 € |
-| Operaciones resueltas | 1527 (734 WIN / 793 LOSS) — 48.1% |
-| Señales abiertas | 95 |
+| Actual | **-31.74 €** |
+| P&L acumulado | 🔴 **-57.18 €** |
+| ROI s/ operativo | -224.75% |
+| ROI s/ depósito | -190.59% |
+| P&L hoy (2026-07-01) | 🟢 +4.30 € |
+| Operaciones resueltas | 1529 (734 WIN / 795 LOSS) — 48.0% |
+| Señales abiertas | 93 |
 
 ## Estrategias (visión global)
 
 | Estrategia | n | Win% | IC_efectivo | PNL | Apuesta | Estado |
 |---|---|---|---|---|---|---|
 | ORDER_FLOW_5M | 792 | 51.0% | +0.010 | +5.97€ | 0.50€ | ✅ activa |
-| UPDOWN_GBM | 525 | 48.2% | -0.018 | -6.89€ | 0.50€ | ⚠️ IC negativo |
+| UPDOWN_GBM | 527 | 48.0% | -0.020 | -8.81€ | 0.50€ | ⚠️ IC negativo |
 | PRICE_TARGET_GBM | 62 | 41.9% | -0.078 | -11.78€ | 0.50€ | ⚠️ IC negativo |
 | SMART_FLOW_1H | 26 | 19.2% | -0.286 | -12.57€ | 0.00€ | 🚫 desactivada |
 | UPDOWN_OU_5M | 57 | 26.3% | -0.229 | -13.76€ | 0.00€ | 🚫 desactivada |
@@ -34,21 +34,21 @@
 
 | Timestamp | Estrategia | Mercado | Resultado | PNL |
 |---|---|---|---|---|
+| 2026-07-01T08:15 | UPDOWN_GBM#ETH#15min | Ethereum Up or Down - July 1, 4:00AM-4:15AM ET… | ❌ LOSS | -0.51€ |
+| 2026-07-01T08:15 | UPDOWN_GBM#BTC#15min | Bitcoin Up or Down - July 1, 4:00AM-4:15AM ET… | ❌ LOSS | -1.42€ |
 | 2026-07-01T08:01 | UPDOWN_GBM#ETH#15min | Ethereum Up or Down - July 1, 3:45AM-4:00AM ET… | ✅ WIN | +0.49€ |
 | 2026-07-01T07:16 | UPDOWN_GBM#ETH#15min | Ethereum Up or Down - July 1, 3:00AM-3:15AM ET… | ✅ WIN | +2.56€ |
 | 2026-07-01T07:02 | UPDOWN_GBM#ETH#15min | Ethereum Up or Down - July 1, 2:45AM-3:00AM ET… | ✅ WIN | +2.08€ |
-| 2026-07-01T06:42 | UPDOWN_GBM#ETH#15min | Ethereum Up or Down - July 1, 2:30AM-2:45AM ET… | ✅ WIN | +2.08€ |
-| 2026-07-01T06:26 | UPDOWN_GBM#ETH#15min | Ethereum Up or Down - July 1, 2:15AM-2:30AM ET… | ✅ WIN | +2.02€ |
 
 ## Calidad de datos
 
-✅ **OK** — última verificación 2026-07-01T08:13 UTC
+✅ **OK** — última verificación 2026-07-01T08:15 UTC
 
 | Asset | Precio | Age | Alertas |
 |---|---|---|---|
 | ✅ BTC | $58,644.96 | 0.0min |  |
 | ✅ ETH | $1,574.21 | 0.0min |  |
-| ✅ SOL | $74.93 | 0.0min |  |
+| ✅ SOL | $74.87 | 0.0min |  |
 | ✅ XRP | $1.04 | 0.0min |  |
 
 ---
