@@ -139,6 +139,36 @@ def _norm_ppf(p, lo=-8.0, hi=8.0, it=60):
             hi = mid
     return (lo + hi) / 2
 
+# Features observacionales de calendario astronómico (2026-07-01) — inspirado en
+# Fornero, "La doctrina de la astrología financiera" (43 Jornadas SADAF, 2023):
+# el paper es escéptico de la astrología en sí, pero documenta 2 efectos empíricos
+# replicados en revistas peer-review, con mecanismo NO místico (sesgo de humor /
+# creencia supersticiosa de inversores retail, más fuerte en mercados dominados
+# por minoristas — igual que Polymarket): fase lunar (Dichev & Janes 2003 y otros,
+# ~5-10%/año) y Mercurio retrógrado (Qi/Wang/Zhang 2022, Kou & Ma 2022, -3% a -31%
+# anualizado). Solo observacional, no cambia ninguna decisión — necesitamos meses
+# de calendario (no solo más operaciones) para tener suficientes ciclos lunares y
+# ventanas de retrogradación distintas. Ver H-CUSTOM-MOON-PHASE y
+# H-CUSTOM-MERCURY-RETROGRADO en hipotesis_custom.json.
+_MOON_SYNODIC_DIAS = 29.530588853
+_MOON_REF_NUEVA = datetime(2000, 1, 6, 18, 14, tzinfo=timezone.utc)
+
+def _moon_phase(dt):
+    """0.0=luna nueva, 0.5=luna llena, ciclo continuo 0-1."""
+    dias = (dt - _MOON_REF_NUEVA).total_seconds() / 86400.0
+    return round((dias % _MOON_SYNODIC_DIAS) / _MOON_SYNODIC_DIAS, 4)
+
+# Ventanas de Mercurio retrógrado (fechas públicas, actualizar cada año — ver
+# almanac.com o astro-seek.com). 2026 confirmadas:
+MERCURIO_RETROGRADO_VENTANAS = [
+    (datetime(2026, 2, 26, tzinfo=timezone.utc), datetime(2026, 3, 20, tzinfo=timezone.utc)),
+    (datetime(2026, 6, 29, tzinfo=timezone.utc), datetime(2026, 7, 23, tzinfo=timezone.utc)),
+    (datetime(2026, 10, 24, tzinfo=timezone.utc), datetime(2026, 11, 13, tzinfo=timezone.utc)),
+]
+
+def _mercurio_retrogrado(dt):
+    return any(lo <= dt <= hi for lo, hi in MERCURIO_RETROGRADO_VENTANAS)
+
 ACTIVOS_REF = {
     "BTC":  ("bitcoin",  "btc"),
     "ETH":  ("ethereum", "eth"),
@@ -1945,6 +1975,8 @@ def main():
         _clave = _ventana_m if _tipo_m == 'slot' else (60 if _tipo_m == 'hourly' else 'daily')
         _precios_ventanas_acc.setdefault((_activo_m, _clave), []).append(_m["_precio_yes"])
     precios_ventanas_hoy = {k: sum(v) / len(v) for k, v in _precios_ventanas_acc.items()}
+    _moon_phase_hoy = _moon_phase(datetime.now(timezone.utc))
+    _mercury_retro_hoy = _mercurio_retrogrado(datetime.now(timezone.utc))
 
     ctx = construir_contexto()
     ctx["precios_ventanas_hoy"] = precios_ventanas_hoy
@@ -2023,6 +2055,11 @@ def main():
                 apuesta = sp.get("apuesta_kelly", 0.50) or 0.50
                 # Aprendizaje causal: filtros (evitar) + patrones ganadores (amplificar)
                 pred_features = pred.get("features", {}) or {}
+                # Calendario astronómico observacional (moon_phase, mercury_retrogrado) —
+                # no afecta ninguna decisión, solo se acumula para análisis futuro
+                pred_features["moon_phase"] = _moon_phase_hoy
+                pred_features["mercury_retrogrado"] = 1 if _mercury_retro_hoy else 0
+                pred["features"] = pred_features
 
                 def _feature_match(feat_val, cond, umbral):
                     try:
