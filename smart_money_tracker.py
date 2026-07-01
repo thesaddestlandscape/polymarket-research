@@ -33,6 +33,7 @@ cambia ninguna decisión todavía. Corre por su propio cron (no toca fast/slow).
 import csv
 import json
 import random
+import re
 import time
 from collections import defaultdict
 from datetime import datetime, timedelta, timezone
@@ -58,6 +59,12 @@ ACTIVOS = ("BTC", "ETH", "SOL", "XRP")
 # slug "activo-updown-Xm-..." pero 60min ("hourly") usa un slug sin duración
 # fija, ej. "bitcoin-up-or-down-july-2-2026-7am-et" — solo el tag lo distingue.
 TAG_A_DURACION = {"5M": "5m", "15M": "15m", "1H": "60m", "4H": "240m"}
+# WEEKLY_PRICE (mercados de rango/umbral de precio, tag "Weekly", pregunta
+# "Will the price of X be above/below/between $A and $B on <fecha>?") usan
+# el nombre completo del activo en vez del ticker — ni en tags ni en la
+# pregunta aparece "BTC"/"ETH" literal.
+NOMBRE_A_TICKER = {"bitcoin": "BTC", "ethereum": "ETH", "solana": "SOL", "xrp": "XRP"}
+_RE_WEEKLY_TITLE = re.compile(r"the price of .* be (above|below|less than|greater than|between)", re.I)
 
 VENTANA_MERCADOS_HORAS = 30      # cuántas horas hacia atrás muestrear mercados
 MAX_MERCADOS_MUESTRA = 150       # tope de mercados a consultar por ciclo
@@ -100,14 +107,24 @@ def mercados_recientes() -> dict:
             with open(archivo, encoding="utf-8") as f:
                 for row in csv.DictReader(f):
                     tags = (row.get("event_tags") or "").split("|")
+                    question = row.get("question") or ""
                     duracion = next((TAG_A_DURACION[t] for t in tags if t in TAG_A_DURACION), None)
-                    if duracion is None:
-                        continue
-                    if "Up or Down" not in (row.get("question") or ""):
-                        continue
-                    activo = next((a for a in ACTIVOS if a in [t.upper() for t in tags]
-                                   or a.lower() in (row.get("question") or "").lower()), None)
-                    if not activo:
+                    activo = None
+                    if duracion is not None:
+                        if "Up or Down" not in question:
+                            continue
+                        activo = next((a for a in ACTIVOS if a in [t.upper() for t in tags]
+                                       or a.lower() in question.lower()), None)
+                    elif "Up or Down" not in question and (
+                        "weekly" in [t.lower() for t in tags] or "week" in question.lower()
+                    ):
+                        # WEEKLY_PRICE: mismo universo que shadow_predict.py::s_weekly_price
+                        # (pregunta "the price of <nombre completo> be above/below/between..."),
+                        # nombre completo del activo, no ticker.
+                        duracion = "weekly"
+                        activo = next((tk for nombre, tk in NOMBRE_A_TICKER.items()
+                                       if nombre in question.lower()), None)
+                    if duracion is None or not activo:
                         continue
                     ts = row.get("timestamp_utc", "")
                     try:
@@ -120,7 +137,7 @@ def mercados_recientes() -> dict:
                     if not cid or cid in vistos:
                         continue
                     vistos[cid] = {
-                        "question": row.get("question", ""),
+                        "question": question,
                         "slug": row.get("slug", ""),
                         "activo": activo,
                         "duracion": duracion,
@@ -136,23 +153,38 @@ def trades_de_mercado(condition_id: str) -> list:
     return data or []
 
 
-def posiciones_updown(wallet: str) -> dict:
-    """PNL/win-rate real de una wallet, filtrado a posiciones 'Up or Down'."""
-    data = _get(f"{DATA_API}/positions", {"user": wallet, "limit": 500}) or []
-    time.sleep(SLEEP_ENTRE_LLAMADAS)
-    pos_updown = [p for p in data if "Up or Down" in (p.get("title") or "")]
-    n = len(pos_updown)
+def _resumen_posiciones(data: list, filtro_titulo) -> dict:
+    pos = [p for p in data if filtro_titulo(p.get("title") or "")]
+    n = len(pos)
     if n == 0:
         return {"n": 0}
-    wins = sum(1 for p in pos_updown if (p.get("cashPnl") or 0) > 0)
-    pnl_total = sum(float(p.get("cashPnl") or 0) for p in pos_updown)
-    tam_medio = sum(float(p.get("initialValue") or 0) for p in pos_updown) / n
+    wins = sum(1 for p in pos if (p.get("cashPnl") or 0) > 0)
+    pnl_total = sum(float(p.get("cashPnl") or 0) for p in pos)
+    tam_medio = sum(float(p.get("initialValue") or 0) for p in pos) / n
     return {
         "n": n,
         "win_rate": round(wins / n, 4),
         "pnl_total": round(pnl_total, 2),
         "tamano_medio_usd": round(tam_medio, 2),
     }
+
+
+def posiciones_updown(wallet: str) -> dict:
+    """PNL/win-rate real de una wallet, filtrado a posiciones 'Up or Down'."""
+    data = _get(f"{DATA_API}/positions", {"user": wallet, "limit": 500}) or []
+    time.sleep(SLEEP_ENTRE_LLAMADAS)
+    return _resumen_posiciones(data, lambda t: "Up or Down" in t)
+
+
+def posiciones_weekly(wallet: str) -> dict:
+    """PNL/win-rate real de una wallet, filtrado a posiciones WEEKLY_PRICE
+    (rango/umbral de precio, título tipo 'the price of X be above/below/
+    between...'). Track record separado del de Up-or-Down: son apuestas de
+    naturaleza distinta (umbral de precio vs. dirección), mezclarlas
+    diluiría ambas señales."""
+    data = _get(f"{DATA_API}/positions", {"user": wallet, "limit": 500}) or []
+    time.sleep(SLEEP_ENTRE_LLAMADAS)
+    return _resumen_posiciones(data, lambda t: bool(_RE_WEEKLY_TITLE.search(t)))
 
 
 def main():
@@ -163,7 +195,11 @@ def main():
     random.shuffle(condition_ids)
     condition_ids = condition_ids[:MAX_MERCADOS_MUESTRA]
 
-    actividad_wallet = defaultdict(lambda: {"n": 0, "activos": defaultdict(lambda: {"up": 0, "down": 0})})
+    actividad_wallet = defaultdict(lambda: {
+        "n": 0,
+        "activos": defaultdict(lambda: {"up": 0, "down": 0}),
+        "duraciones": defaultdict(int),
+    })
     for cid in condition_ids:
         info = mercados[cid]
         for t in trades_de_mercado(cid):
@@ -171,10 +207,20 @@ def main():
             if not w:
                 continue
             actividad_wallet[w]["n"] += 1
-            lado = "up" if (t.get("outcome") or "").lower() == "up" else "down"
+            actividad_wallet[w]["duraciones"][info["duracion"]] += 1
+            # /trades usa "up"/"down" o "yes"/"no" según el mercado (mismo
+            # patrón ya visto en capture_trades.py) — antes solo reconocía
+            # "up" literal, así que un mercado con "yes"/"no" clasificaba
+            # todo como "down", sesgando el consenso hacia negativo.
+            lado = "up" if (t.get("outcome") or "").strip().lower() in ("up", "yes") else "down"
             actividad_wallet[w]["activos"][info["activo"]][lado] += 1
 
     print(f"  Wallets distintas vistas: {len(actividad_wallet)}")
+    duraciones_totales = defaultdict(int)
+    for d in actividad_wallet.values():
+        for dur, n in d["duraciones"].items():
+            duraciones_totales[dur] += n
+    print(f"  Trades por duración en la muestra: {dict(duraciones_totales)}")
     candidatos = {w: d for w, d in actividad_wallet.items() if d["n"] >= MIN_TRADES_PARA_CANDIDATO}
     print(f"  Candidatas con >= {MIN_TRADES_PARA_CANDIDATO} trades en la muestra: {len(candidatos)}")
     if len(candidatos) > MAX_CANDIDATOS_POR_CICLO:
@@ -185,6 +231,7 @@ def main():
     wallets_db = _cargar_json(WALLETS_PATH, {})
     ahora = datetime.now(timezone.utc)
     consultadas = 0
+    consultadas_weekly = 0
     for w, act in candidatos.items():
         prev = wallets_db.get(w, {})
         ultima = prev.get("ultima_actualizacion")
@@ -196,9 +243,17 @@ def main():
                 fresca = False
         if fresca:
             stats = {k: prev[k] for k in ("n", "win_rate", "pnl_total", "tamano_medio_usd") if k in prev}
+            weekly_stats = prev.get("weekly")
         else:
             stats = posiciones_updown(w)
             consultadas += 1
+            # Track record WEEKLY_PRICE aparte — solo se pide si la wallet
+            # tuvo actividad reciente en mercados semanales (evita duplicar
+            # llamadas a /positions para wallets que solo operan Up-or-Down).
+            weekly_stats = None
+            if act["duraciones"].get("weekly", 0) > 0:
+                weekly_stats = posiciones_weekly(w)
+                consultadas_weekly += 1
         clasificacion = "smart" if (
             stats.get("n", 0) >= MIN_N_SMART
             and stats.get("win_rate", 0) >= MIN_WINRATE_SMART
@@ -209,10 +264,14 @@ def main():
             "clasificacion": clasificacion,
             "trades_muestra_reciente": act["n"],
             "activos_muestra_reciente": {k: v for k, v in act["activos"].items()},
+            "duraciones_muestra_reciente": dict(act["duraciones"]),
             "primera_vez_visto": prev.get("primera_vez_visto", ahora.isoformat(timespec="seconds")),
             "ultima_actualizacion": ahora.isoformat(timespec="seconds") if not fresca else ultima,
         }
-    print(f"  Posiciones consultadas de verdad (resto cacheado <{REFRESH_POSICIONES_HORAS}h): {consultadas}")
+        if weekly_stats is not None:
+            wallets_db[w]["weekly"] = weekly_stats
+    print(f"  Posiciones consultadas de verdad (resto cacheado <{REFRESH_POSICIONES_HORAS}h): "
+          f"{consultadas} (+{consultadas_weekly} weekly)")
     WALLETS_PATH.write_text(json.dumps(wallets_db, indent=2, ensure_ascii=False), encoding="utf-8")
 
     # Consenso direccional de las wallets "smart" en la muestra reciente, por activo
