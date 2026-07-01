@@ -13,10 +13,8 @@
   "ventanas_lunes_viernes": [
     {"inicio": "08:30", "fin": "09:30", "nombre": "apertura_europea"},
     {"inicio": "10:30", "fin": "11:30", "nombre": "media_manana"},
-    {"inicio": "15:00", "fin": "16:00", "nombre": "mediotarde"},
-    {"inicio": "16:30", "fin": "17:30", "nombre": "tarde_1"},
-    {"inicio": "18:30", "fin": "19:30", "nombre": "tarde_2"},
-    {"inicio": "20:30", "fin": "21:30", "nombre": "cierre"}
+    {"inicio": "15:00", "fin": "21:30", "nombre": "tarde_completa", "_nota": "2026-07-02: fusiona mediotarde+tarde_1+tarde_2+cierre sin huecos (13:00-19:30 UTC). Seguro respecto a horas malas: 18h UTC ya bloqueada por GBM_BLACKLIST_HOURS_AUTO, 20h UTC queda fuera del rango (termina en 19:30 UTC)."},
+    {"inicio": "01:00", "fin": "02:00", "nombre": "prueba_23h_utc", "_nota": "2026-07-02: prueba de 23h UTC (=01:00-02:00 Madrid verano), IC=+0.130 agregado (n=52), GBM solo IC=+0.178 (n=16). OJO: un viernes 23h UTC cae en sábado 01:00 Madrid → se evalúa con reglas de fin de semana, no de lunes-viernes; revisar si hace falta añadir esta franja también a ventanas_fin_de_semana."}
   ],
   "_mediodia_eliminada": "12:30-13:30 eliminada: GBM IC=-0.154 PNL=-7.96€, OF IC=-0.033 PNL=-5.43€ — peor ventana en ambas estrategias (n≥30)",
 

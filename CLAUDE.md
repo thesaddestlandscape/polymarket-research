@@ -71,7 +71,7 @@ cron */5       → watchdog_fast.sh (9 checks, restart screens, alerta disco)
 ```bash
 bash live_switch.sh on/off/status   # o Telegram: /on /off /status
 ```
-**Ventanas (hora Madrid, L-V)**: 08:30-09:30 | 10:30-11:30 | 15:00-16:00 | 16:30-17:30 | 18:30-19:30 | 20:30-21:30
+**Ventanas (hora Madrid, L-V)**: 08:30-09:30 | 10:30-11:30 | 15:00-21:30 (fusionada 2026-07-02, sin huecos) | 01:00-02:00 (prueba, ≈23h UTC)
 **Stake**: `min(IC × bankroll × 0.5, bankroll × 10%, 2€)` — compounding automático
 **Circuit breakers**: bkr<5€→OFF | caída diaria≥15%→para día | caída ventana≥20%→para ventana
 **Credenciales**: `data/live/.env` (POLY_PRIVATE_KEY + API_KEY + SECRET + PASS) ✅
