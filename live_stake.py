@@ -76,7 +76,10 @@ def _ventanas_hoy(config: dict) -> list:
     dia   = ahora.weekday()  # 0=lunes…6=domingo
     if dia < 5:
         return config.get("ventanas_lunes_viernes", [])
-    return []  # fin de semana: sin ventanas automáticas
+    modo_fds = config.get("fines_de_semana", "off")
+    if modo_fds == "ventanas":
+        return config.get("ventanas_fin_de_semana", [])
+    return []
 
 
 def _ventana_actual(config: dict) -> dict | None:
