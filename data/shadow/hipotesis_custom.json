@@ -448,6 +448,22 @@
       "umbral_n": 40,
       "umbral_ic_min": 0.08,
       "_nota": "Solo ops con |poly_drift|>0.5% para filtrar mercados estáticos"
+    },
+    {
+      "id": "H-CUSTOM-OF-VOLUMEN-ALTO",
+      "nombre": "ORDER_FLOW_5M con total_vol_5m alto — ¿volumen extremo mejora el IC?",
+      "descripcion": "Inspirado en un artículo sobre 'volume trading strategy' (mean-reversion en SPY): la idea es que un mismo movimiento de precio con volumen inusualmente alto refleja pánico/liquidación forzada y tiene más probabilidad de revertir que el mismo movimiento con volumen normal. No es transplantable tal cual (esa estrategia opera en barras diarias de SPY, nosotros en ventanas de 15-60min de cripto), pero el feature total_vol_5m ya se captura en cada predicción de ORDER_FLOW_5M (shadow_predict.py) y nunca se ha usado como filtro independiente — solo sirve de denominador para calcular delta_ratio. Hipótesis: dentro de las señales que ya pasan el filtro de delta_ratio, un total_vol_5m alto (volumen real, no solo desequilibrio) mejora el IC. Distribución real en predictions_*.csv (n=843): mediana=1696, p75=108522 (muy asimétrica) — se usa p75 como umbral de 'volumen alto'.",
+      "tipo": "boost",
+      "umbral": "n≥40 y IC>+0.08",
+      "accion": "Si IC_volumen_alto > IC_baseline + 0.05 con n≥40 → boost ×1.1 en ORDER_FLOW_5M cuando total_vol_5m>100000",
+      "filtro": {
+        "strategy_prefix": "ORDER_FLOW_5M",
+        "feature": "total_vol_5m",
+        "feature_lo": 100000
+      },
+      "umbral_n": 40,
+      "umbral_ic_min": 0.08,
+      "_nota": "Umbral 100000 ≈ percentil 75 de total_vol_5m observado a día 2026-07-01. Revisar si el percentil se mueve mucho con más datos."
     }
   ]
 }

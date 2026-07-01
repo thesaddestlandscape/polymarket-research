@@ -1,4 +1,4 @@
-# Hipótesis automáticas — 2026-07-01 08:08 UTC
+# Hipótesis automáticas — 2026-07-01 08:10 UTC
 _Generado por shadow_postmortem.py sobre 1527 resoluciones (PNL=-55.25€)_
 
 ## Patrones causales activos
@@ -460,3 +460,10 @@ _Derivadas de los patrones aprendidos:_
   - _Umbral_: 40
   - _Acción_: Si IC_confluencia>IC_divergencia con n≥40 → mantener el boost. Si no → retirar.
   - _Estado_: 0/40 ops en el filtro definido (IC actual=+0.000 PNL=+0.00€)
+
+**〰️ H-CUSTOM-OF-VOLUMEN-ALTO** — ORDER_FLOW_5M con total_vol_5m alto — ¿volumen extremo mejora el IC?
+  - _Hipótesis_: Inspirado en un artículo sobre 'volume trading strategy' (mean-reversion en SPY): la idea es que un mismo movimiento de precio con volumen inusualmente alto refleja pánico/liquidación forzada y tiene más probabilidad de revertir que el mismo movimiento con volumen normal. No es transplantable tal cual (esa estrategia opera en barras diarias de SPY, nosotros en ventanas de 15-60min de cripto), pero el feature total_vol_5m ya se captura en cada predicción de ORDER_FLOW_5M (shadow_predict.py) y nunca se ha usado como filtro independiente — solo sirve de denominador para calcular delta_ratio. Hipótesis: dentro de las señales que ya pasan el filtro de delta_ratio, un total_vol_5m alto (volumen real, no solo desequilibrio) mejora el IC. Distribución real en predictions_*.csv (n=843): mediana=1696, p75=108522 (muy asimétrica) — se usa p75 como umbral de 'volumen alto'.
+  - _Umbral_: n≥40 y IC>+0.08
+  - _Acción_: Si IC_volumen_alto > IC_baseline + 0.05 con n≥40 → boost ×1.1 en ORDER_FLOW_5M cuando total_vol_5m>100000
+  - _Estado_: n=173 IC=-0.014 PNL=-4.16€ — sin señal clara aún (umbral IC: min=0.08 max=None)
+  - _Datos_: n=173 IC=-0.014 PNL=-4.16€
