@@ -1,25 +1,29 @@
 """
-live_stake.py — Calculadora de stake con capital distribuido por ventana.
+live_stake.py — Calculadora de stake y circuit breakers de riesgo.
 
-Lógica de capital:
-  - Bankroll total = 20€ inicial + PNL acumulado de trades cerrados
-  - Cada día se divide el bankroll entre las ventanas del día
-  - Las ganancias/pérdidas resueltas se redistribuyen en tiempo real:
-      capital_disponible = bankroll_actual
-      ventanas_restantes = ventanas que quedan hoy (incluida la actual)
-      budget_esta_ventana = capital_disponible / ventanas_restantes
+Diseño real (verificado 2026-07-01 — el docstring anterior describía un
+mecanismo de "presupuesto por ventana" que nunca se implementó así):
 
-  Ejemplo con bankroll=20€ y 6 ventanas:
-    Ventana 1: 20/6 = 3.33€ — gana 1€ → bankroll=21€
-    Ventana 2: 21/5 = 4.20€ — pierde 2€ → bankroll=19€
-    Ventana 3: 19/4 = 4.75€
-    ...
+  calcular_stake(ic): techos en cascada por trade, no por ventana:
+    1. Kelly half: IC × bankroll × 0.5
+    2. Máx 10% del bankroll por trade
+    3. Máximo absoluto del config (2€)
+    4. Penalización de inventario direccional (Avellaneda-Stoikov, ver
+       inventario_direccional_hoy/_inventory_penalty)
 
-  Si en una ventana el bot GASTA todo su presupuesto → freno hasta la siguiente.
-  No espera a que los trades se resuelvan — el freno es por capital DESPLEGADO.
+  verificar_circuit_breaker(): 3 frenos basados en PNL realizado, no en
+  capital desplegado:
+    1. Bankroll mínimo absoluto → apaga el switch
+    2. Freno diario: caída ≥15% del bankroll desde el inicio del día
+       (Madrid) → para el día
+    3. Freno por ventana: caída ≥20% del bankroll desde el inicio de la
+       ventana actual → para la ventana
 
-Freno adicional (diario):
-  Si el bankroll cae por debajo del umbral mínimo → desactiva el switch.
+  stakes_desplegados_ventana_actual() se calcula y se loguea (CLI de
+  diagnóstico, motivo del freno 3) pero NO actúa como techo duro de
+  exposición simultánea — el límite de trades concurrentes en una ventana
+  viene solo de "máx 3 trades/ciclo" en live_trade.py + dedup por
+  market_id, no de un presupuesto por ventana.
 """
 
 import csv

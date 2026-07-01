@@ -565,17 +565,22 @@ def main():
         if mid in ya_operados:
             continue
 
-        # Mercado ya cerrado → no operar (evita "invalid order version" de la API)
+        # Mercado ya cerrado → no operar (evita "invalid order version" de la API).
+        # Fail-closed: end_date vacío o sin parsear NO debe dejar pasar el
+        # trade sin validar — código de seguridad live, no se minimiza (ver
+        # CLAUDE.md). No observado en producción (0/117 predicciones de hoy
+        # con end_date vacío) pero es el comportamiento correcto si pasa.
+        end_str = pred.get("end_date", "")
         try:
-            end_str = pred.get("end_date", "")
-            if end_str:
-                end_dt = datetime.fromisoformat(end_str.replace("Z", "+00:00"))
-                if end_dt.tzinfo is None:
-                    end_dt = end_dt.replace(tzinfo=timezone.utc)
-                if end_dt <= datetime.now(timezone.utc):
-                    continue
+            if not end_str:
+                continue
+            end_dt = datetime.fromisoformat(end_str.replace("Z", "+00:00"))
+            if end_dt.tzinfo is None:
+                end_dt = end_dt.replace(tzinfo=timezone.utc)
+            if end_dt <= datetime.now(timezone.utc):
+                continue
         except Exception:
-            pass
+            continue
 
         # IC mínimo confirmado en histórico (n_hist siempre corresponde a la
         # muestra real detrás de ic_hist, direccional o agregada), umbral global.
