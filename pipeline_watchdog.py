@@ -44,6 +44,8 @@ MAX_POSTMORTEM_MB  = 50    # MB máx postmortem.csv
 MAX_FAST_LOG_MB    = 200   # MB máx fast.log antes de rotar
 DISK_WARN_PCT      = 85    # % usado → warning
 SYNTAX_CHECK_EVERY = 5     # ciclos entre chequeos de sintaxis de todos los scripts
+
+SWITCH_ALERTA_COOLDOWN = 1800  # segundos entre alertas de switch apagado (30 min)
 RESOLVE_LAG_SECS   = 7200  # 2h sin nuevas resoluciones → warning
 
 PIPELINE_SCRIPTS = [
@@ -349,6 +351,38 @@ def commit_fix(descripcion: str) -> bool:
 
 
 # ──────────────────────────────────────────────────────────────────────────────
+# CHECK 10: Switch OFF durante ventana horaria → alerta Telegram
+# ──────────────────────────────────────────────────────────────────────────────
+_switch_alerta_ts: float = 0.0  # timestamp del último alerta enviado
+
+
+def check_switch_ventana() -> None:
+    """Alerta por Telegram si el switch live se apaga dentro de una ventana programada."""
+    global _switch_alerta_ts
+    try:
+        from live_guard import en_ventana_horaria, switch_activo
+        from shadow_digest import enviar_telegram
+
+        en_v, motivo = en_ventana_horaria()
+        switch_on = switch_activo()
+
+        if en_v and not switch_on:
+            if time.time() - _switch_alerta_ts > SWITCH_ALERTA_COOLDOWN:
+                _switch_alerta_ts = time.time()
+                log(f"⚠ Switch OFF durante ventana ({motivo}) — alerta Telegram enviada")
+                enviar_telegram(
+                    "⚠️ *Switch apagado durante ventana horaria*\n"
+                    f"Ventana activa: `{motivo}`\n"
+                    "El bot NO está operando. Activa con:\n"
+                    "`bash live_switch.sh on`  o  /on por Telegram"
+                )
+        elif switch_on:
+            _switch_alerta_ts = 0.0  # reset cuando vuelve ON
+    except Exception as e:
+        log(f"  [check-switch] Error: {e}")
+
+
+# ──────────────────────────────────────────────────────────────────────────────
 # BUCLE PRINCIPAL
 # ──────────────────────────────────────────────────────────────────────────────
 def main():
@@ -461,6 +495,9 @@ def main():
                     log(f"✅ Sintaxis OK ({len(PIPELINE_SCRIPTS)} scripts — ciclo {ciclo})")
 
                 check_results_growing()
+
+            # ── 10. Switch OFF durante ventana horaria ────────────────────
+            check_switch_ventana()
 
         except Exception as e:
             log(f"Error interno watchdog: {e}")
