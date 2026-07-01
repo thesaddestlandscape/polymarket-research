@@ -1,13 +1,13 @@
 {
-  "ETH": {
-    "smart_money_consensus": -0.5,
-    "n_trades_smart": 8,
-    "n_wallets_smart": 1
-  },
   "SOL": {
-    "smart_money_consensus": -1.0,
-    "n_trades_smart": 1,
+    "smart_money_consensus": -0.8,
+    "n_trades_smart": 10,
     "n_wallets_smart": 1
   },
-  "_actualizado": "2026-07-01T16:01:15+00:00"
+  "ETH": {
+    "smart_money_consensus": 0.0,
+    "n_trades_smart": 4,
+    "n_wallets_smart": 1
+  },
+  "_actualizado": "2026-07-01T16:21:15+00:00"
 }
