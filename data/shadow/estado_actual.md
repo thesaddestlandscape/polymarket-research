@@ -1,4 +1,4 @@
-# Estado del bot — 2026-07-01 19:45 UTC
+# Estado del bot — 2026-07-01 19:46 UTC
 
 ## Capital
 | | |
@@ -11,13 +11,13 @@
 | | |
 |---|---|
 | Inicio | 25.44 € |
-| Actual | **-61.21 €** |
-| P&L acumulado | 🔴 **-86.65 €** |
-| ROI s/ operativo | -340.61% |
-| ROI s/ depósito | -288.84% |
-| P&L hoy (2026-07-01) | 🔴 -28.57 € |
-| Operaciones resueltas | 2455 (1184 WIN / 1271 LOSS) — 48.2% |
-| Señales abiertas | 58 |
+| Actual | **-62.74 €** |
+| P&L acumulado | 🔴 **-88.18 €** |
+| ROI s/ operativo | -346.63% |
+| ROI s/ depósito | -293.94% |
+| P&L hoy (2026-07-01) | 🔴 -30.10 € |
+| Operaciones resueltas | 2456 (1184 WIN / 1272 LOSS) — 48.2% |
+| Señales abiertas | 57 |
 
 ## Estrategias (visión global)
 
@@ -28,27 +28,27 @@
 | SMART_FLOW_1H | 29 | 20.7% | -0.274 | -13.82€ | 0.00€ | 🚫 desactivada |
 | WEEKLY_PRICE | 70 | 45.7% | -0.042 | -17.23€ | 0.50€ | ⚠️ IC negativo |
 | UPDOWN_OU_5M | 84 | 28.6% | -0.209 | -18.89€ | 0.00€ | 🚫 desactivada |
-| UPDOWN_GBM | 708 | 46.2% | -0.038 | -36.04€ | 0.50€ | ⚠️ IC negativo |
+| UPDOWN_GBM | 709 | 46.1% | -0.039 | -37.57€ | 0.50€ | ⚠️ IC negativo |
 
 ## Últimas 5 resoluciones
 
 | Timestamp | Estrategia | Mercado | Resultado | PNL |
 |---|---|---|---|---|
+| 2026-07-01T19:46 | UPDOWN_GBM#SOL#15min | Solana Up or Down - July 1, 3:30PM-3:45PM ET… | ❌ LOSS | -1.53€ |
 | 2026-07-01T19:29 | ORDER_FLOW_5M#SOL#5min | Solana Up or Down - July 1, 3:20PM-3:25PM ET… | ✅ WIN | +0.57€ |
 | 2026-07-01T19:16 | ORDER_FLOW_5M#SOL#5min | Solana Up or Down - July 1, 3:10PM-3:15PM ET… | ✅ WIN | +0.54€ |
 | 2026-07-01T18:31 | UPDOWN_GBM#BTC#15min | Bitcoin Up or Down - July 1, 12:30PM-12:45PM ET… | ✅ WIN | +0.78€ |
 | 2026-07-01T18:31 | UPDOWN_GBM#XRP#15min | XRP Up or Down - July 1, 8:45AM-9:00AM ET… | ❌ LOSS | -0.51€ |
-| 2026-07-01T18:31 | UPDOWN_GBM#SOL#15min | Solana Up or Down - July 1, 4:30AM-4:45AM ET… | ❌ LOSS | -1.36€ |
 
 ## Calidad de datos
 
-✅ **OK** — última verificación 2026-07-01T19:45 UTC
+✅ **OK** — última verificación 2026-07-01T19:46 UTC
 
 | Asset | Precio | Age | Alertas |
 |---|---|---|---|
 | ✅ BTC | $60,087.33 | 0.0min |  |
 | ✅ ETH | $1,615.62 | 0.0min |  |
-| ✅ SOL | $77.25 | 0.0min |  |
+| ✅ SOL | $77.16 | 0.0min |  |
 | ✅ XRP | $1.06 | 0.0min |  |
 
 **Cross-source** (binance, coinbase, kraken):
