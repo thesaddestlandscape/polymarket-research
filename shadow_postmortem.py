@@ -783,10 +783,21 @@ def aprender_patrones_causales(resultados: list, pred_index: dict) -> dict:
     resultado_final = {}
 
     for strat_key, feature_specs in FEATURE_RULES.items():
-        datos = []
+        # Separado por dirección (BUY_YES/BUY_NO) desde el principio — antes
+        # se mezclaban ambas direcciones en el mismo bucket, así que un
+        # patrón "ganador" podía en realidad ser casi todo BUY_NO (ej.
+        # ibs_15<0.148 en UPDOWN_GBM#ETH#15min: 80% win_rate en BUY_NO n=20
+        # vs 55.6% en BUY_YES n=9, verificado 2026-07-01) y el kelly_boost se
+        # aplicaba igual a un futuro BUY_YES con esa feature, cuya edge real
+        # es marginal. Un patrón/filtro descubierto en una dirección NO se
+        # aplica nunca a la otra.
+        datos_por_dir: dict[str, list] = {"BUY_YES": [], "BUY_NO": []}
         for r in resultados:
             s   = r.get("strategy", "")
             sub = r.get("subtype", "")
+            dec = r.get("decision", "")
+            if dec not in datos_por_dir:
+                continue
             # Claves posibles a las que esta fila puede contribuir: exacta,
             # asset, duración y agregado total — igual jerarquía que
             # calcular_params()/lookup_keys en shadow_predict.py. Antes solo
@@ -803,85 +814,88 @@ def aprender_patrones_causales(resultados: list, pred_index: dict) -> dict:
                 posibles.add(f"{s}#{sub}")
             if strat_key not in posibles:
                 continue
-            clave_pred = (s, r.get("market_id", ""), r.get("decision", ""))
+            clave_pred = (s, r.get("market_id", ""), dec)
             pred  = pred_index.get(clave_pred)
             feats = _extraer_features(r, pred)
             if feats:
-                datos.append((r, feats))
-
-        if len(datos) < N_BUCKET_MIN:
-            continue
-
-        ic_base = ((sum(int(r.get("acierto", 0)) for r, _ in datos) + 1)
-                   / (len(datos) + 2) - 0.5)
+                datos_por_dir[dec].append((r, feats))
 
         filtros_strat  = []
         patrones_strat = []
 
-        for feature, cond_mala, cond_buena in feature_specs:
-            vals = [(r, f[feature]) for r, f in datos if feature in f]
-            if len(vals) < N_BUCKET_MIN:
+        for direccion, datos in datos_por_dir.items():
+            if len(datos) < N_BUCKET_MIN:
                 continue
 
-            # Probar percentiles como posibles umbrales de corte
-            abs_vals = sorted(abs(v) for _, v in vals)
-            percentiles = [0.25, 0.33, 0.50, 0.66, 0.75]
+            ic_base = ((sum(int(r.get("acierto", 0)) for r, _ in datos) + 1)
+                       / (len(datos) + 2) - 0.5)
 
-            mejor_filtro  = None
-            mejor_patron  = None
-            mejor_dif_filtro = 0.0
-            mejor_dif_patron = 0.0
-
-            for p in percentiles:
-                idx = int(len(abs_vals) * p)
-                umbral = abs_vals[idx] if idx < len(abs_vals) else None
-                if umbral is None or umbral == 0:
+            for feature, cond_mala, cond_buena in feature_specs:
+                vals = [(r, f[feature]) for r, f in datos if feature in f]
+                if len(vals) < N_BUCKET_MIN:
                     continue
 
-                malo, bueno, _ = _evaluar_bucket(vals, umbral, cond_mala)
-                if len(malo) < N_BUCKET_MIN or len(bueno) < 3:
-                    continue
+                # Probar percentiles como posibles umbrales de corte
+                abs_vals = sorted(abs(v) for _, v in vals)
+                percentiles = [0.25, 0.33, 0.50, 0.66, 0.75]
 
-                wins_malo  = sum(int(r.get("acierto", 0)) for r, _ in malo)
-                wins_bueno = sum(int(r.get("acierto", 0)) for r, _ in bueno)
-                ic_malo    = (wins_malo  + 1) / (len(malo)  + 2) - 0.5
-                ic_bueno   = (wins_bueno + 1) / (len(bueno) + 2) - 0.5
-                dif        = ic_bueno - ic_malo
+                mejor_filtro  = None
+                mejor_patron  = None
+                mejor_dif_filtro = 0.0
+                mejor_dif_patron = 0.0
 
-                # ── Filtro: el bucket malo es suficientemente malo ──
-                if ic_malo < IC_FILTRO_MIN and dif > mejor_dif_filtro:
-                    mejor_dif_filtro = dif
-                    mejor_filtro = {
-                        "feature":    feature,
-                        "condicion":  cond_mala,
-                        "umbral":     round(umbral, 4),
-                        "ic_malo":    round(ic_malo,  4),
-                        "ic_bueno":   round(ic_bueno, 4),
-                        "n_malo":     len(malo),
-                        "n_bueno":    len(bueno),
-                        "descubierto": ts_ahora,
-                    }
+                for p in percentiles:
+                    idx = int(len(abs_vals) * p)
+                    umbral = abs_vals[idx] if idx < len(abs_vals) else None
+                    if umbral is None or umbral == 0:
+                        continue
 
-                # ── Patrón ganador: el bucket bueno es suficientemente bueno ──
-                if ic_bueno > IC_PATRON_MIN and len(bueno) >= N_BUCKET_MIN and dif > mejor_dif_patron:
-                    # Kelly boost: cuánto apostar extra cuando esta condición se cumple
-                    kelly_boost = round(min(1.00, max(0.10, 20.0 * ic_bueno * 0.25)), 2)
-                    mejor_dif_patron = dif
-                    mejor_patron = {
-                        "feature":     feature,
-                        "condicion":   cond_buena,
-                        "umbral":      round(umbral, 4),
-                        "ic_patron":   round(ic_bueno, 4),
-                        "ic_base":     round(ic_base,  4),
-                        "n_patron":    len(bueno),
-                        "kelly_boost": kelly_boost,
-                        "descubierto": ts_ahora,
-                    }
+                    malo, bueno, _ = _evaluar_bucket(vals, umbral, cond_mala)
+                    if len(malo) < N_BUCKET_MIN or len(bueno) < 3:
+                        continue
 
-            if mejor_filtro:
-                filtros_strat.append(mejor_filtro)
-            if mejor_patron:
-                patrones_strat.append(mejor_patron)
+                    wins_malo  = sum(int(r.get("acierto", 0)) for r, _ in malo)
+                    wins_bueno = sum(int(r.get("acierto", 0)) for r, _ in bueno)
+                    ic_malo    = (wins_malo  + 1) / (len(malo)  + 2) - 0.5
+                    ic_bueno   = (wins_bueno + 1) / (len(bueno) + 2) - 0.5
+                    dif        = ic_bueno - ic_malo
+
+                    # ── Filtro: el bucket malo es suficientemente malo ──
+                    if ic_malo < IC_FILTRO_MIN and dif > mejor_dif_filtro:
+                        mejor_dif_filtro = dif
+                        mejor_filtro = {
+                            "feature":    feature,
+                            "condicion":  cond_mala,
+                            "umbral":     round(umbral, 4),
+                            "ic_malo":    round(ic_malo,  4),
+                            "ic_bueno":   round(ic_bueno, 4),
+                            "n_malo":     len(malo),
+                            "n_bueno":    len(bueno),
+                            "direccion":  direccion,
+                            "descubierto": ts_ahora,
+                        }
+
+                    # ── Patrón ganador: el bucket bueno es suficientemente bueno ──
+                    if ic_bueno > IC_PATRON_MIN and len(bueno) >= N_BUCKET_MIN and dif > mejor_dif_patron:
+                        # Kelly boost: cuánto apostar extra cuando esta condición se cumple
+                        kelly_boost = round(min(1.00, max(0.10, 20.0 * ic_bueno * 0.25)), 2)
+                        mejor_dif_patron = dif
+                        mejor_patron = {
+                            "feature":     feature,
+                            "condicion":   cond_buena,
+                            "umbral":      round(umbral, 4),
+                            "ic_patron":   round(ic_bueno, 4),
+                            "ic_base":     round(ic_base,  4),
+                            "n_patron":    len(bueno),
+                            "kelly_boost": kelly_boost,
+                            "direccion":   direccion,
+                            "descubierto": ts_ahora,
+                        }
+
+                if mejor_filtro:
+                    filtros_strat.append(mejor_filtro)
+                if mejor_patron:
+                    patrones_strat.append(mejor_patron)
 
         if filtros_strat or patrones_strat:
             resultado_final[strat_key] = {

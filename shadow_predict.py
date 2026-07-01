@@ -11,8 +11,8 @@ from pathlib import Path
 import requests
 
 from data_quality import (
-    SIGMA_H_MAX, DRIFT_MAX,
-    validar_features_gbm, simbolo_bloqueado, generar_reporte,
+    SIGMA_H_MAX, DRIFT_MAX, ASSETS_GBM,
+    validar_features_gbm, simbolo_bloqueado, generar_reporte, obtener_consensus_spot,
 )
 
 _HAS_PANDAS: bool | None = None   # None = not yet checked; True/False after first use
@@ -572,7 +572,16 @@ def construir_contexto():
     precios_data = cargar_precios_intraday()
     ctx["precios_intraday"] = precios_data
     try:
-        dq = generar_reporte(precios_data)
+        # L4: reusa el cache de cross-source (refrescado por fetch_binance_klines.py
+        # cada ciclo, TTL 5min) para que simbolo_bloqueado() sepa de divergencias
+        # Binance/Coinbase/Kraken. Antes generar_reporte() se llamaba sin
+        # cross_result → el bloqueo L4 nunca llegaba al gate real (dead code).
+        try:
+            cross_result = obtener_consensus_spot(assets=ASSETS_GBM).get("cross", {})
+        except Exception as _cross_err:
+            print(f"  [DQ] Cross-source no disponible: {_cross_err}")
+            cross_result = None
+        dq = generar_reporte(precios_data, cross_result=cross_result)
         if dq["estado_global"] != "OK":
             print(f"  [DQ] Estado: {dq['estado_global']} — {dq['alertas']}")
     except Exception as _dq_err:
@@ -1470,6 +1479,8 @@ def s_price_target_gbm(market, ctx):
     activo = identificar_activo(question)
     if not activo or activo not in BINANCE_SYMBOLS:
         return None
+    if simbolo_bloqueado(activo):
+        return None
 
     try:
         liq = float(market.get("liquidity") or 0)
@@ -1590,6 +1601,8 @@ def s_order_flow_5m(market, ctx):
     if not activo or activo not in BINANCE_SYMBOLS:
         return None
     if activo in ORDER_FLOW_PAIR_BLACKLIST:
+        return None
+    if simbolo_bloqueado(activo):
         return None
 
     klines = ctx.get("klines_raw", {}).get(activo, [])
@@ -2073,49 +2086,39 @@ def main():
                 pred["features"] = pred_features
 
                 def _feature_match(feat_val, cond, umbral):
+                    # Estricto en los 4 casos: coincide con el límite "malo" tal
+                    # como lo define _evaluar_bucket() en shadow_postmortem.py
+                    # (malo siempre estricto, bueno siempre inclusive). Antes
+                    # "abs_lt"/"lt" usaban <= y colaban el valor umbral —que
+                    # _evaluar_bucket había clasificado como "bueno"— dentro de
+                    # filtros_causales, descartando operaciones rentables reales
+                    # (ej. hora_utc=11 en BTC#15min, confirmado en producción).
                     try:
                         v, u = float(feat_val), float(umbral)
                         if cond == "abs_gt":  return abs(v) > u
-                        if cond == "abs_lt":  return abs(v) <= u
+                        if cond == "abs_lt":  return abs(v) < u
                         if cond == "gt":      return v > u
-                        if cond == "lt":      return v <= u
+                        if cond == "lt":      return v < u
                     except (TypeError, ValueError):
                         pass
                     return False
 
-                # 1. Filtros causales — si matchean, skip
-                skip_causal = False
-                for lk in lookup_keys:
-                    for f in params_din.get(lk, {}).get("filtros_causales", []):
-                        fv = pred_features.get(f.get("feature"))
-                        if fv is not None and _feature_match(fv, f.get("condicion",""), f.get("umbral",999)):
-                            skip_causal = True
-                            break
-                    if skip_causal:
-                        break
-                if skip_causal:
-                    continue
-
-                # 2. Patrones ganadores — acumular boost por separado para que
-                # sobreviva al override del Kelly por dirección (bug anterior: el boost
-                # se sumaba a apuesta pero luego dir_stake lo machacaba completamente).
-                causal_boost = 0.0
-                for lk in lookup_keys:
-                    for g in params_din.get(lk, {}).get("patrones_ganadores", []):
-                        fv = pred_features.get(g.get("feature"))
-                        if fv is not None and _feature_match(fv, g.get("condicion",""), g.get("umbral",999)):
-                            causal_boost += float(g.get("kelly_boost", 0))
-                if causal_boost > 0:
-                    apuesta = min(2.00, apuesta + causal_boost)
                 contador[nombre]["aplica"] += 1
-                prob_y = pred["prob_yes"]
+                prob_y_raw = pred["prob_yes"]
+                prob_y = prob_y_raw
                 # Recalibración Platt (a,b) aprendida por postmortem sobre el histórico
                 # agregado de la estrategia — solo se activa cuando el holdout OOS confirma
                 # mejora significativa (walk-forward 2026-07-01: prob_yes_modelo crudo
                 # estaba sobreconfiado, ver calibracion_prob en strategy_params.json).
+                # Se persiste prob_y_raw (no el calibrado) en la columna
+                # prob_yes_modelo: postmortem reentrena (a,b) leyendo esa misma
+                # columna asumiendo que es la probabilidad cruda del modelo —
+                # si se guardara ya calibrada, cada reentreno calibraría sobre
+                # su propia calibración anterior en vez de sobre la señal
+                # original (deriva compuesta, detectado 2026-07-01).
                 calib = params_din.get(nombre, {}).get("calibracion_prob")
                 if calib:
-                    prob_y = _norm_cdf(calib["a"] + calib["b"] * _norm_ppf(prob_y))
+                    prob_y = _norm_cdf(calib["a"] + calib["b"] * _norm_ppf(prob_y_raw))
                 eb = prob_y - py
                 en = eb - SLIPPAGE_ESTIMADO if eb > 0 else eb + SLIPPAGE_ESTIMADO
                 precio_extremo = (en >= edge_min and py < 0.10) or (-en >= edge_min and py > 0.90)
@@ -2133,6 +2136,53 @@ def main():
                 if (nombre == "PRICE_TARGET_GBM" and "atexpiry" in subtype
                         and dec == "BUY_YES"):
                     dec = "SKIP"
+
+                # 1. Filtros causales — direccionales (BUY_YES/BUY_NO), se
+                # evalúan aquí (ya se conoce `dec`) para exigir que el filtro
+                # coincida con la dirección real. Antes se evaluaban sin
+                # conocer la dirección, mezclando el aprendizaje de BUY_YES y
+                # BUY_NO en el mismo bucket causal.
+                if dec in ("BUY_YES", "BUY_NO"):
+                    skip_causal = False
+                    for lk in lookup_keys:
+                        for f in params_din.get(lk, {}).get("filtros_causales", []):
+                            if f.get("direccion") not in (None, dec):
+                                continue
+                            fv = pred_features.get(f.get("feature"))
+                            if fv is not None and _feature_match(fv, f.get("condicion",""), f.get("umbral",999)):
+                                skip_causal = True
+                                break
+                        if skip_causal:
+                            break
+                    if skip_causal:
+                        dec = "SKIP"
+
+                # 2. Patrones ganadores — direccionales, y se toma el de mayor
+                # ic_patron entre los que matchean (no se suman): sumar boosts
+                # de features/niveles de jerarquía solapados (ej. mismo
+                # subconjunto de filas contado dos veces bajo
+                # "UPDOWN_GBM#SOL#15min" y el agregado "UPDOWN_GBM#15min")
+                # inflaba el stake muy por encima de lo que la evidencia real
+                # sostiene (confirmado 2026-07-01, dos patrones con n_patron
+                # e ic_patron idénticos sumándose como si fueran señales
+                # independientes). Guardado en variable aparte para que
+                # sobreviva al override del Kelly por dirección de abajo.
+                causal_boost = 0.0
+                if dec in ("BUY_YES", "BUY_NO"):
+                    mejor_ic_patron = None
+                    for lk in lookup_keys:
+                        for g in params_din.get(lk, {}).get("patrones_ganadores", []):
+                            if g.get("direccion") not in (None, dec):
+                                continue
+                            fv = pred_features.get(g.get("feature"))
+                            if fv is not None and _feature_match(fv, g.get("condicion",""), g.get("umbral",999)):
+                                ic_g = float(g.get("ic_patron", 0))
+                                if mejor_ic_patron is None or ic_g > mejor_ic_patron:
+                                    mejor_ic_patron = ic_g
+                                    causal_boost = float(g.get("kelly_boost", 0))
+                    if causal_boost > 0:
+                        apuesta = min(2.00, apuesta + causal_boost)
+
                 # Kelly por dirección: usar el IC específico como base, luego sumar
                 # el boost causal encima (no reemplazarlo). Evita overstakear BUY_YES.
                 if dec in ("BUY_YES", "BUY_NO"):
@@ -2184,7 +2234,7 @@ def main():
                 market_rows.append([
                     ts, nombre, mid,
                     m.get("question", ""), m.get("end_date", ""),
-                    f"{m['_horas']:.2f}", f"{py:.4f}", f"{prob_y:.4f}",
+                    f"{m['_horas']:.2f}", f"{py:.4f}", f"{prob_y_raw:.4f}",
                     f"{eb:.4f}", f"{en:.4f}", f"{ed:.4f}", dec,
                     pred.get("razon", ""), subtype,
                     f"{apuesta:.2f}", features_json,
