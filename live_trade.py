@@ -542,7 +542,8 @@ def main():
     riesgo       = config.get("riesgo", {})
     min_ic       = riesgo.get("min_ic_para_live", 0.08)
     min_n        = riesgo.get("min_n_para_live", 40)
-    min_n_overrides = riesgo.get("min_n_overrides", {})
+    min_n_overrides   = riesgo.get("min_n_overrides", {})
+    min_ic_asimetrico = riesgo.get("min_ic_asimetrico", {})
     estrategias_ok = config.get("estrategias_permitidas_live", [])
     subtypes_ok    = config.get("subtypes_permitidos_live", [])
     ya_operados  = _ya_operados_hoy()
@@ -584,13 +585,18 @@ def main():
 
         # IC mínimo confirmado en histórico (n_hist siempre corresponde a la
         # muestra real detrás de ic_hist, direccional o agregada), umbral global.
+        # Barra asimétrica: strategy#decision con evidencia estructural de que
+        # esa dirección rinde peor (ver H-CUSTOM-GBM-BUYYES-GLOBAL-MALO,
+        # confirmada 2026-07-01, n=507 IC=-0.076) exige un min_ic más alto que
+        # el global, en vez del mismo umbral para las dos direcciones.
+        min_ic_efectivo = min_ic_asimetrico.get(f"{strategy}#{dec}", min_ic)
         try:
             feats_pred = json.loads(pred.get("features", "{}") or "{}")
         except Exception:
             feats_pred = {}
         ic_hist, n_hist = _ic_n_para_subtype(strategy, subtype, params, decision=dec,
-                                              min_n=min_n, min_ic=min_ic, features=feats_pred)
-        pasa = not (ic_hist < min_ic or n_hist < min_n)
+                                              min_n=min_n, min_ic=min_ic_efectivo, features=feats_pred)
+        pasa = not (ic_hist < min_ic_efectivo or n_hist < min_n)
 
         # Override puntual por strategy#subtype#decision (config_live.json):
         # solo mira el n/ic direccional de ESA clave exacta, nunca una clave
@@ -607,7 +613,7 @@ def main():
             campo_n  = f"n_{dec}"
             ic_exacto = p_exact.get(campo_ic)
             n_exacto  = p_exact.get(campo_n, 0)
-            if ic_exacto is not None and n_exacto >= min_n_override and float(ic_exacto) >= min_ic:
+            if ic_exacto is not None and n_exacto >= min_n_override and float(ic_exacto) >= min_ic_efectivo:
                 ic_hist, n_hist = float(ic_exacto), n_exacto
                 pasa = True
                 if n_hist >= min_n:
