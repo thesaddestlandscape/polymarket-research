@@ -1,5 +1,5 @@
-# Hipótesis automáticas — 2026-07-01 01:14 UTC
-_Generado por shadow_postmortem.py sobre 1495 resoluciones (PNL=-60.26€)_
+# Hipótesis automáticas — 2026-07-01 01:16 UTC
+_Generado por shadow_postmortem.py sobre 1496 resoluciones (PNL=-59.76€)_
 
 ## Patrones causales activos
 
@@ -103,12 +103,12 @@ _Derivadas de los patrones aprendidos:_
 
 | Estrategia | n | IC | PNL | Filtros | Patrones |
 |---|---|---|---|---|---|
-| ✅ ORDER_FLOW_5M | 791 | +0.009 | +5.47€ | 0 | 0 |
-| ✅ ORDER_FLOW_5M#5min | 655 | -0.001 | -7.12€ | 0 | 0 |
+| ✅ ORDER_FLOW_5M | 792 | +0.010 | +5.97€ | 0 | 0 |
+| ✅ ORDER_FLOW_5M#5min | 656 | +0.000 | -6.62€ | 0 | 0 |
 | ✅ ORDER_FLOW_5M#BNB | 63 | +0.038 | +1.36€ | 0 | 0 |
 | ✅ ORDER_FLOW_5M#BNB#5min | 63 | +0.038 | +1.36€ | 0 | 0 |
-| ✅ ORDER_FLOW_5M#BTC | 133 | +0.004 | -0.52€ | 0 | 0 |
-| ✅ ORDER_FLOW_5M#BTC#5min | 133 | +0.004 | -0.52€ | 0 | 0 |
+| ✅ ORDER_FLOW_5M#BTC | 134 | +0.007 | -0.02€ | 0 | 0 |
+| ✅ ORDER_FLOW_5M#BTC#5min | 134 | +0.007 | -0.02€ | 0 | 0 |
 | ✅ ORDER_FLOW_5M#DOGE | 82 | -0.012 | -1.81€ | 0 | 0 |
 | ✅ ORDER_FLOW_5M#DOGE#5min | 82 | -0.012 | -1.81€ | 0 | 0 |
 | ✅ ORDER_FLOW_5M#ETH | 112 | -0.026 | -4.31€ | 0 | 0 |
@@ -213,12 +213,12 @@ _Derivadas de los patrones aprendidos:_
 **⏳ H-CROSS-ASSET** — Cross-asset confirmation GBM+OF BUY_NO
   - _Umbral_: n_overlaps≥20 y IC_overlap > IC_base + 0.05
   - _Acción_: Cambiar _aplicar_kelly_compuesto: match por activo, no market_id
-  - _Estado_: n_overlaps=17, boost estimado=+0.019. Necesita 3 más y boost>0.05
+  - _Estado_: n_overlaps=17, boost estimado=+0.018. Necesita 3 más y boost>0.05
 
 **⏳ H-OF-PAR** — ORDER_FLOW per-pair delta_ratio ranges
   - _Umbral_: n≥200 por par con delta_ratio feature en shadow
   - _Acción_: Añadir DELTA_MIN/MAX por par dict en shadow_predict.py
-  - _Estado_: BTC: 77 ops con delta_ratio | SOL: 88 ops con delta_ratio
+  - _Estado_: BTC: 78 ops con delta_ratio | SOL: 88 ops con delta_ratio
 
 **⏳ H-KELLY-HORA** — Kelly boost ×1.2 en horas top (15/17/19h UTC)
   - _Umbral_: n≥40 por hora con IC estable ≥+0.10 confirmado en forward
@@ -304,8 +304,8 @@ _Derivadas de los patrones aprendidos:_
   - _Hipótesis_: Las horas 0-6h UTC en ORDER_FLOW. El blacklist fue calculado con todos los pares incluyendo los negativos (ETH/XRP/DOGE). ¿Con BTC+SOL sigue siendo negativo?
   - _Umbral_: n≥30 y IC<-0.05
   - _Acción_: Mantener bloqueo si IC<-0.05; desbloquear si IC>0 con n≥30
-  - _Estado_: n=39 IC=+0.012 PNL=+0.41€ — sin señal clara aún (umbral IC: min=None max=-0.05)
-  - _Datos_: n=39 IC=+0.012 PNL=+0.41€
+  - _Estado_: n=40 IC=+0.024 PNL=+0.91€ — sin señal clara aún (umbral IC: min=None max=-0.05)
+  - _Datos_: n=40 IC=+0.024 PNL=+0.91€
 
 **〰️ H-CUSTOM-GBM-SIGMA-ALTO** — GBM con sigma_h alto (>0.002/h) — ¿destruye edge?
   - _Hipótesis_: Cuando la volatilidad horaria es muy alta el GBM puede sobreestimar el edge. Testear.
