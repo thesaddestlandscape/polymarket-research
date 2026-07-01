@@ -21,7 +21,7 @@ conexiones que se generan"):
   en cada sync.
 
 No toca nada del pipeline fast/slow — corre por su cron propio
-(ver crontab, 1x/día), separado del trading en vivo.
+(ver crontab, cada 15min), separado del trading en vivo.
 """
 import csv
 import json

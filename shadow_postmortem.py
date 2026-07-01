@@ -132,8 +132,8 @@ def _monitor_5min(resultados: list) -> dict:
                 requests.post(f"https://api.telegram.org/bot{tok}/sendMessage",
                               json={"chat_id": cid, "text": msg, "parse_mode": "Markdown"},
                               timeout=10)
-        except Exception:
-            pass
+        except Exception as e:
+            print(f"  [aviso 5min] no se pudo notificar Telegram: {e}")
     for a in alertas:
         print(f"  [5MIN ALERTA] {a}")
 
@@ -1131,8 +1131,8 @@ def main():
                 requests.post(f"https://api.telegram.org/bot{tok}/sendMessage",
                               json={"chat_id": cid, "text": msg, "parse_mode": "Markdown"},
                               timeout=10)
-        except Exception:
-            pass
+        except Exception as e:
+            print(f"  [aviso integridad] no se pudo notificar Telegram: {e}")
 
     resultados = cargar_results()
     if not resultados:

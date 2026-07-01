@@ -34,7 +34,7 @@ git merge dev --no-ff          # promover desde main
 Bot semi-autónomo para mercados cripto Polymarket.
 - **Fase actual**: live activo — primer trade real hoy 30-Jun
 - **Capital**: 25.44€ operativo live (30€ depósito, 10€ reserva)
-- **Umbral live**: IC≥0.10, n≥40 resoluciones confirmadas
+- **Umbral live**: IC≥0.08, n≥40 resoluciones confirmadas (valor real en `data/live/config_live.json::riesgo.min_ic_para_live`)
 - **VPS**: Hetzner Helsinki (IP finlandesa — Polymarket accesible desde FI)
 - **Estrategia live activa**: BUY_NO #15min (IC=+0.133, n=58) ✅
 

@@ -24,7 +24,14 @@ LIVE_BANKROLL_INICIAL = 25.44  # depósito real 2026-06-29
 BANKROLL_INICIAL = 20.0
 PORT = int(sys.argv[1]) if len(sys.argv) > 1 else 8888
 
-BLACKLIST_HOURS = {7, 11, 18}  # UTC
+try:
+    # Fuente de verdad real: shadow_predict.py::ORDER_FLOW_BLACKLIST_HOURS.
+    # Antes hardcodeado aquí como {7, 11, 18}, desactualizado frente al valor
+    # real {2, 7, 9, 10, 11, 22} — el gráfico "mejor hora" marcaba mal las
+    # horas bloqueadas. Import directo en vez de duplicar la constante.
+    from shadow_predict import ORDER_FLOW_BLACKLIST_HOURS as BLACKLIST_HOURS
+except Exception:
+    BLACKLIST_HOURS = {2, 7, 9, 10, 11, 22}  # UTC — fallback si el import falla
 
 # ─── Cache ───────────────────────────────────────────────────────────────────
 _cache_lock = threading.Lock()
@@ -1023,17 +1030,6 @@ function renderPerBet(per_bet) {
   }).join("");
 }
 
-// ─── Fetch & refresh ─────────────────────────────────────────────────────────
-async function fetchData() {
-  try {
-    const r = await fetch("/api/data");
-    DATA = await r.json();
-    renderAll();
-  } catch(e) {
-    document.getElementById("update-badge").textContent = "⚠️ Error cargando datos";
-  }
-}
-
 // ─── Tabs ────────────────────────────────────────────────────────────────────
 document.querySelectorAll(".tab").forEach(tab => {
   tab.addEventListener("click", () => {
@@ -1069,7 +1065,6 @@ function simpleName(k) {
 
 // ─── Boot ────────────────────────────────────────────────────────────────────
 let _lastUpdated = "";
-const _origFetchData = fetchData;
 async function fetchData() {
   try {
     const r = await fetch("/api/data");

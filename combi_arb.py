@@ -17,10 +17,7 @@ NO ejecuta trades. Requiere ANTHROPIC_API_KEY para LLM path.
 Output: data/shadow/combi_arb_YYYY-MM-DD.csv
 """
 import csv
-import json
-import os
 import re
-import sys
 import time
 from collections import defaultdict
 from datetime import datetime, timezone

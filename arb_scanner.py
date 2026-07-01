@@ -20,7 +20,6 @@ y loguea las oportunidades encontradas.
 """
 import csv
 import glob
-import json
 import re
 from collections import defaultdict
 from datetime import datetime, timezone
