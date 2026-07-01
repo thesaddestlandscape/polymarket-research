@@ -42,8 +42,11 @@ MAX_LLM_PARES = 60     # máx pares a enviar al LLM por run (costo API)
 
 # Regex para extraer umbrales monetarios del título.
 # El sufijo [BMK] requiere lookahead negativo para no capturar "B" de "by", etc.
+# re.I para aceptar "$150k"/"$1b" en minúscula (_parse_umbral ya hace .upper()
+# antes de mirar _SUFIJO, verificado 2026-07-01 — sin el flag, "150k"/"1b" se
+# interpretaban como umbral sin multiplicador, ej. $150 en vez de $150,000).
 _RE_UMBRAL = re.compile(
-    r'\$([\d,]+(?:\.\d+)?)\s*([BMK](?=[^a-zA-Z]|$))?'
+    r'\$([\d,]+(?:\.\d+)?)\s*([BMK](?=[^a-zA-Z]|$))?', re.I
 )
 # Sufijos a multiplicadores (mayúsculas; la "b" de "by" no pasa el lookahead)
 _SUFIJO = {"B": 1e9, "M": 1e6, "K": 1e3, "": 1.0}
@@ -197,6 +200,10 @@ def detectar_cadenas(mercados: list[dict]) -> list[dict]:
             b = ms[i + 1]
             pa = float(a["price_yes"])
             pb = float(b["price_yes"])
+            # Coste real de comprar YES en "a" es el ask, no el mid (ver mismo
+            # fix aplicado 2026-07-01 en arb_scanner.py — ask medio ~0.025 por
+            # encima del mid, suficiente para tragarse el margen de arb).
+            ask_a = float(a.get("best_ask") or 0) or pa
 
             # Corrección: monotonicidad exige pa ≥ pb (a es "más fácil" de cumplir)
             if pa >= pb:
@@ -204,7 +211,13 @@ def detectar_cadenas(mercados: list[dict]) -> list[dict]:
 
             # VIOLACIÓN: pa < pb → a debería tener mayor P pero no la tiene
             # Arb: comprar YES en "a" (barato) + NO en "b" (pagar (1-pb))
-            coste = pa + (1.0 - pb)
+            # NOTA: el coste de la pata NO en "b" sigue siendo (1-price_yes_b),
+            # una aproximación al mid — Polymarket no expone un ask propio del
+            # token NO en nuestro esquema de datos (solo best_bid/best_ask del
+            # YES), así que profit_bruto/profit_neto pueden seguir estando
+            # ligeramente sobreestimados por esa pata. SOLO OBSERVACIÓN, no se
+            # ejecuta ningún trade desde aquí.
+            coste = ask_a + (1.0 - pb)
             profit_bruto = 1.0 - coste
             profit_neto  = profit_bruto - POLY_FEE
 
@@ -384,12 +397,17 @@ def _r1_temporal(mercados: list[dict]) -> list[dict]:
                 continue
             pa = float(a["price_yes"])
             pb = float(b["price_yes"])
+            # Coste real de comprar YES en "b" es el ask, no el mid (mismo fix
+            # que arb_scanner.py). La pata NO en "a" sigue siendo aproximada
+            # con (1-price_yes_a) — no hay ask propio del token NO en el
+            # esquema de datos actual. SOLO OBSERVACIÓN, sin ejecución.
+            ask_b = float(b.get("best_ask") or 0) or pb
             # Debe cumplirse: P(antes) ≤ P(después)
             if pa <= pb:
                 continue  # sin violación
             # VIOLACIÓN: P(antes) > P(después) — imposible lógicamente
             # Arb: comprar YES en B (más barato que debería) + NO en A
-            coste        = pb + (1.0 - pa)
+            coste        = ask_b + (1.0 - pa)
             profit_bruto = 1.0 - coste
             desc = f"BUY_YES_B({pb:.3f}) + BUY_NO_A({1-pa:.3f}) — deadline B más tardío"
             razon = (f"'{b['question'][:50]}' (deadline {b['_deadline']}) "
@@ -437,6 +455,11 @@ def _r2_exclusividad(mercados: list[dict]) -> list[dict]:
                     continue
                 # VIOLACIÓN: suma > 1 → comprar NO en ambos
                 # Pagar (1-pa) + (1-pb), cobrar ≥1 cuando uno resuelve NO
+                # NOTA: ambas patas son NO — no hay ask propio del token NO en
+                # el esquema de datos actual (solo best_bid/best_ask del YES),
+                # así que (1-price_yes) es una aproximación al mid en las DOS
+                # patas, no solo una. profit_bruto/profit_neto aquí son los
+                # menos fiables de las 3 reglas. SOLO OBSERVACIÓN.
                 coste        = (1.0 - pa) + (1.0 - pb)
                 profit_bruto = suma - 1.0    # exceso garantizado
                 desc = (f"BUY_NO_A({1-pa:.3f}) + BUY_NO_B({1-pb:.3f}) "
@@ -478,6 +501,10 @@ def _r3_launch_fdv(mercados: list[dict]) -> list[dict]:
         pa = float(fdv["price_yes"])  # P(FDV > X)
         for launch in launch_ms:
             pb = float(launch["price_yes"])  # P(lanza)
+            # Coste real de comprar YES(lanza) es el ask, no el mid (mismo fix
+            # que arb_scanner.py). La pata NO(FDV) sigue aproximada con
+            # (1-price_yes) — sin ask propio del token NO en el esquema actual.
+            ask_pb = float(launch.get("best_ask") or 0) or pb
             # Misma entidad?
             e1 = fdv["_entidad"].lower()
             e2 = launch["_entidad"].lower()
@@ -497,7 +524,7 @@ def _r3_launch_fdv(mercados: list[dict]) -> list[dict]:
             # toda violación real, así que nunca se marcaba accionable (bug
             # confirmado 2026-07-01: coste usaba las patas cambiadas respecto
             # a la posición descrita más abajo en `desc`).
-            coste        = (1.0 - pa) + pb
+            coste        = (1.0 - pa) + ask_pb
             profit_bruto = 1.0 - coste
             desc = (f"BUY_NO_FDV({1-pa:.3f}) + BUY_YES_LAUNCH({pb:.3f}) "
                     f"— FDV implica lanzamiento")

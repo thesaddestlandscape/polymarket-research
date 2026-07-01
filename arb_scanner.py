@@ -88,8 +88,16 @@ def analizar_oportunidades(por_id: dict) -> list:
             continue
         try:
             yes = float(r.get("price_yes") or 0)
+            # Coste real de comprar el bracket es el ASK, no el precio medio
+            # (price_yes) — con 2026-07-01 verificado que el ask medio está
+            # ~0.025 por encima del mid, y con N_MIN=3-9 patas el spread
+            # acumulado puede superar el gap de 3-5% que dispara el arb,
+            # convirtiendo una oportunidad "detectada" en pérdida garantizada
+            # si se ejecutara al precio real. Fallback a price_yes solo si
+            # best_ask no viene informado (no observado en la práctica).
+            ask = float(r.get("best_ask") or 0) or yes
             liq = float(r.get("liquidity") or 0)
-            if yes <= 0:
+            if yes <= 0 or ask <= 0:
                 continue
         except (ValueError, TypeError):
             continue
@@ -98,6 +106,7 @@ def analizar_oportunidades(por_id: dict) -> list:
             "mid":        mid,
             "question":   r.get("question", ""),
             "yes":        yes,
+            "ask":        ask,
             "liquidity":  liq,
             "end_date":   r.get("end_date", "")[:10],
             "event":      r.get("event_title", ""),
@@ -113,25 +122,27 @@ def analizar_oportunidades(por_id: dict) -> list:
         if any(m["yes"] > NEAR_RESOLVED_THRESHOLD for m in mercados):
             continue
 
-        suma_yes  = sum(m["yes"] for m in mercados)
+        # Coste real de ejecutar el bracket completo = suma de ASKs, no de mids.
+        suma_yes  = sum(m["yes"] for m in mercados)   # referencia/display
+        suma_ask  = sum(m["ask"] for m in mercados)   # coste ejecutable real
         liq_min   = min(m["liquidity"] for m in mercados)
         liq_total = sum(m["liquidity"] for m in mercados)
 
         # Payout neto si gana un bracket: 1 × (1 - FEE_PAYOUT)
         payout_neto = 1.0 - FEE_PAYOUT
-        # Profit real = payout_neto - suma_invertida
-        profit_neto = payout_neto - suma_yes
+        # Profit real = payout_neto - suma_invertida (al precio que realmente se paga)
+        profit_neto = payout_neto - suma_ask
         profit_pct  = profit_neto * 100
 
-        if suma_yes < UMBRAL_ARB and liq_min >= LIQ_MIN:
+        if suma_ask < UMBRAL_ARB and liq_min >= LIQ_MIN:
             tipo = "BRACKET_ARB"
         elif suma_yes > UMBRAL_OVER:
             tipo = "OVERROUND"
         else:
             continue
 
-        # Accionable: gap ≥ 5% (suma < 0.95) — por debajo los fees se comen el margen
-        accionable = (tipo == "BRACKET_ARB" and suma_yes < UMBRAL_ACCIONABLE)
+        # Accionable: gap ≥ 5% (suma < 0.95) sobre el coste ejecutable real
+        accionable = (tipo == "BRACKET_ARB" and suma_ask < UMBRAL_ACCIONABLE)
 
         # Rango cubierto por los brackets (para estimar el riesgo de cola)
         preguntas = [m["question"] for m in mercados]
@@ -150,7 +161,8 @@ def analizar_oportunidades(por_id: dict) -> list:
             "end_date":    mercados[0]["end_date"],
             "n_brackets":  len(mercados),
             "suma_yes":    round(suma_yes, 4),
-            "gap_pct":     round((1.0 - suma_yes) * 100, 2),
+            "suma_ask":    round(suma_ask, 4),
+            "gap_pct":     round((1.0 - suma_ask) * 100, 2),
             "profit_pct":  round(profit_pct, 2),
             "liq_min":     round(liq_min, 0),
             "liq_total":   round(liq_total, 0),
