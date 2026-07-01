@@ -15,6 +15,8 @@ Causas de pérdida:
 """
 import csv
 import json
+import math
+import random
 import re
 from datetime import datetime, timezone
 from pathlib import Path
@@ -255,11 +257,159 @@ def clasificar_causa(resultado: dict, pred: dict | None) -> str:
     return "DIRECTION_ERROR"
 
 
+# ── Recalibración Platt de prob_yes_modelo ──────────────────────────────
+# Motivado por análisis walk-forward 2026-07-01: prob_yes_modelo (GBM y
+# ORDER_FLOW_5M) resultó sistemáticamente sobreconfiado — el log-loss
+# out-of-sample con p'=Phi(a+b*Phi^-1(p)) fue mejor que con el crudo en
+# ambas estrategias. Solo se activa por estrategia cuando el holdout
+# cronológico reciente confirma mejora significativa (CI bootstrap>0);
+# si no, se sigue reintentando cada ciclo según crece el histórico.
+CALIB_MIN_N = 200
+CALIB_A_GRID = [i / 20 for i in range(-20, 21)]       # -1.00 .. 1.00 paso 0.05 (fit final)
+CALIB_B_GRID = [i / 20 for i in range(0, 41)]         #  0.00 .. 2.00 paso 0.05 (fit final)
+CALIB_A_GRID_FOLD = [i / 10 for i in range(-10, 11)]  # -1.0 .. 1.0 paso 0.1 (por fold walk-forward, más rápido)
+CALIB_B_GRID_FOLD = [i / 10 for i in range(0, 21)]    #  0.0 .. 2.0 paso 0.1
+CALIB_Z_ALPHA, CALIB_Z_BETA = 1.96, 0.84              # potencia 80%, alpha 0.05
+
+def _norm_cdf(x):
+    if x < -8.0: return 0.0
+    if x > 8.0: return 1.0
+    sign = 1.0 if x >= 0 else -1.0
+    x = abs(x)
+    t = 1.0 / (1.0 + 0.2316419 * x)
+    d = 0.3989422804014327 * math.exp(-0.5 * x * x)
+    p = d * t * (0.3193815302
+        + t * (-0.3565637813
+        + t * (1.7814779372
+        + t * (-1.8212559978
+        + t * 1.3302744929))))
+    return 1.0 - p if sign > 0 else p
+
+def _norm_ppf(p, lo=-8.0, hi=8.0, it=60):
+    if p <= 1e-9: return -8.0
+    if p >= 1 - 1e-9: return 8.0
+    for _ in range(it):
+        mid = (lo + hi) / 2
+        if _norm_cdf(mid) < p: lo = mid
+        else: hi = mid
+    return (lo + hi) / 2
+
+def _negloglik(a, b, zs, ys):
+    if not zs:
+        return 0.0
+    s = 0.0
+    for z, y in zip(zs, ys):
+        p = min(max(_norm_cdf(a + b * z), 1e-6), 1 - 1e-6)
+        s += -(y * math.log(p) + (1 - y) * math.log(1 - p))
+    return s / len(zs)
+
+def _fit_ab(zs, ys, a_grid=CALIB_A_GRID, b_grid=CALIB_B_GRID):
+    best = None
+    for a in a_grid:
+        for b in b_grid:
+            nl = _negloglik(a, b, zs, ys)
+            if best is None or nl < best[2]:
+                best = (a, b, nl)
+    return best[0], best[1]
+
+def _fit_calibracion_prob(triples):
+    """
+    triples: [(prediction_timestamp, prob_yes_modelo_str, outcome_real_str), ...]
+    para una estrategia agregada (clave sin '#'). Ajusta p'=Phi(a+b*Phi^-1(p)).
+
+    Validación: walk-forward de ventana expansiva (igual metodología usada para
+    decidir el N significativo en sesión 2026-07-01) — se reentrena (a,b) cada
+    `step` observaciones nuevas y se evalúa out-of-sample en el siguiente bloque.
+    Solo se activa si:
+      1. El CI bootstrap 95% de la mejora media de log-loss excluye 0.
+      2. n_oos acumulado ≥ N requerido por análisis de potencia (80%, α=0.05)
+         dado el efecto observado.
+      3. (a,b) estables en los últimos folds (no siguen saltando → no es ruido).
+    Si no se cumplen las 3, devuelve None y se reintenta el ciclo siguiente
+    según crece el histórico (igual que otros filtros_causales/patrones).
+    """
+    datos = []
+    for ts, p_raw, out_raw in triples:
+        try:
+            p = float(p_raw)
+        except (TypeError, ValueError):
+            continue
+        if p <= 0.001 or p >= 0.999:
+            continue
+        y = 1 if out_raw in ("1", "YES", "True", "true") else 0
+        datos.append((ts or "", p, y))
+    n_total = len(datos)
+    if n_total < CALIB_MIN_N:
+        return None
+    datos.sort(key=lambda t: t[0])
+    zs_all = [_norm_ppf(p) for _, p, _ in datos]
+    ys_all = [y for _, _, y in datos]
+
+    min_train = max(100, n_total // 3)
+    step = max(15, n_total // 25)
+    if min_train >= n_total:
+        return None
+
+    diffs, folds_ab = [], []
+    i = min_train
+    while i < n_total:
+        j = min(i + step, n_total)
+        a, b = _fit_ab(zs_all[:i], ys_all[:i], CALIB_A_GRID_FOLD, CALIB_B_GRID_FOLD)
+        folds_ab.append((a, b))
+        for z, y in zip(zs_all[i:j], ys_all[i:j]):
+            p_raw_ = min(max(_norm_cdf(z), 1e-6), 1 - 1e-6)
+            p_cal_ = min(max(_norm_cdf(a + b * z), 1e-6), 1 - 1e-6)
+            raw_l = -(y * math.log(p_raw_) + (1 - y) * math.log(1 - p_raw_))
+            cal_l = -(y * math.log(p_cal_) + (1 - y) * math.log(1 - p_cal_))
+            diffs.append(raw_l - cal_l)
+        i = j
+
+    n_oos = len(diffs)
+    if n_oos < 100 or len(folds_ab) < 4:
+        return None
+
+    mu = sum(diffs) / n_oos
+    var = sum((d - mu) ** 2 for d in diffs) / (n_oos - 1)
+    sigma = math.sqrt(var)
+    if mu <= 0:
+        return None
+
+    rng = random.Random(42)
+    boots = sorted(
+        sum(diffs[rng.randrange(n_oos)] for _ in range(n_oos)) / n_oos
+        for _ in range(1500)
+    )
+    ci_lo = boots[int(0.025 * len(boots))]
+    if ci_lo <= 0:
+        return None  # condición 1: no significativo out-of-sample todavía
+
+    n_requerido = ((CALIB_Z_ALPHA + CALIB_Z_BETA) * sigma / mu) ** 2
+    if n_oos < n_requerido:
+        return None  # condición 2: potencia insuficiente para el efecto observado
+
+    # condición 3: estabilidad — los últimos 3 folds no deben saltar más de 0.3 en b
+    b_recientes = [b for _, b in folds_ab[-3:]]
+    if len(b_recientes) >= 2 and (max(b_recientes) - min(b_recientes)) > 0.3:
+        return None
+
+    a_final, b_final = _fit_ab(zs_all, ys_all)
+    return {
+        "a": a_final, "b": b_final, "n": n_total,
+        "n_oos_validado": n_oos, "n_requerido": round(n_requerido, 1),
+        "mejora_media_oos": round(mu, 4),
+        "actualizado": datetime.now(timezone.utc).isoformat(timespec="seconds"),
+    }
+
+
 def calcular_params(resultados: list) -> dict:
     por_estrategia = {}
+    calib_pairs = {}
     for r in resultados:
         s = r["strategy"]
         subtype = r.get("subtype", "")
+        calib_pairs.setdefault(s, []).append(
+            (r.get("prediction_timestamp", ""), r.get("prob_yes_modelo"), r.get("outcome_real"))
+        )
         # Generar todas las claves de agregación relevantes
         claves = [s]
         if "#" in subtype:
@@ -352,6 +502,13 @@ def calcular_params(resultados: list) -> dict:
             entry[f"n_{dec_name}"]               = dn
             entry[f"ic_{dec_name}"]              = d_ic_e
             entry[f"apuesta_kelly_{dec_name}"]   = d_ap
+
+        # Recalibración Platt: solo a nivel agregado de estrategia (sin '#'),
+        # que es el único nivel validado con walk-forward (ver docstring arriba)
+        if "#" not in s:
+            calib = _fit_calibracion_prob(calib_pairs.get(s, []))
+            if calib:
+                entry["calibracion_prob"] = calib
 
         params["estrategias"][s] = entry
 

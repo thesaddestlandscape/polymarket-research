@@ -127,6 +127,18 @@ def _norm_cdf(x):
         + t * 1.3302744929))))
     return 1.0 - p if sign > 0 else p
 
+def _norm_ppf(p, lo=-8.0, hi=8.0, it=60):
+    """Inversa de _norm_cdf por bisección — usada por la recalibración Platt (calibracion_prob)."""
+    if p <= 1e-9: return -8.0
+    if p >= 1 - 1e-9: return 8.0
+    for _ in range(it):
+        mid = (lo + hi) / 2
+        if _norm_cdf(mid) < p:
+            lo = mid
+        else:
+            hi = mid
+    return (lo + hi) / 2
+
 ACTIVOS_REF = {
     "BTC":  ("bitcoin",  "btc"),
     "ETH":  ("ethereum", "eth"),
@@ -2049,6 +2061,13 @@ def main():
                     apuesta = min(2.00, apuesta + causal_boost)
                 contador[nombre]["aplica"] += 1
                 prob_y = pred["prob_yes"]
+                # Recalibración Platt (a,b) aprendida por postmortem sobre el histórico
+                # agregado de la estrategia — solo se activa cuando el holdout OOS confirma
+                # mejora significativa (walk-forward 2026-07-01: prob_yes_modelo crudo
+                # estaba sobreconfiado, ver calibracion_prob en strategy_params.json).
+                calib = params_din.get(nombre, {}).get("calibracion_prob")
+                if calib:
+                    prob_y = _norm_cdf(calib["a"] + calib["b"] * _norm_ppf(prob_y))
                 eb = prob_y - py
                 en = eb - SLIPPAGE_ESTIMADO if eb > 0 else eb + SLIPPAGE_ESTIMADO
                 precio_extremo = (en >= edge_min and py < 0.10) or (-en >= edge_min and py > 0.90)

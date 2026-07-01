@@ -15,5 +15,6 @@ data/live/.env
 data/reports/
 data/backfill/klines/
 data/shadow/_cache_*.pkl
+data/funding_rates_cache.json
 data/shadow/postmortem.csv
 data/shadow/combi_arb_llm_*.csv
