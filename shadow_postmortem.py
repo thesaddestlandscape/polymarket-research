@@ -787,8 +787,21 @@ def aprender_patrones_causales(resultados: list, pred_index: dict) -> dict:
         for r in resultados:
             s   = r.get("strategy", "")
             sub = r.get("subtype", "")
-            key = s + ("#" + sub if sub else "")
-            if key != strat_key:
+            # Claves posibles a las que esta fila puede contribuir: exacta,
+            # asset, duración y agregado total — igual jerarquía que
+            # calcular_params()/lookup_keys en shadow_predict.py. Antes solo
+            # se comparaba la clave exacta (s+"#"+sub), así que las entradas
+            # agregadas de FEATURE_RULES (ej. "ORDER_FLOW_5M", "UPDOWN_GBM#15min")
+            # casi nunca recibían datos reales (2026-07-01: "ORDER_FLOW_5M"
+            # llevaba desde el 24-jun estancado en 136 filas con subtype vacío
+            # por un bug ya corregido, en vez de las 792 operaciones reales).
+            posibles = {s}
+            if "#" in sub:
+                a_part, d_part = sub.split("#", 1)
+                posibles |= {f"{s}#{sub}", f"{s}#{a_part}", f"{s}#{d_part}"}
+            elif sub:
+                posibles.add(f"{s}#{sub}")
+            if strat_key not in posibles:
                 continue
             clave_pred = (s, r.get("market_id", ""), r.get("decision", ""))
             pred  = pred_index.get(clave_pred)

@@ -92,14 +92,44 @@ def _cargar_predicciones_hoy() -> list:
     return rows
 
 
+def _feature_match(feat_val, cond, umbral):
+    """Idéntico a shadow_predict.py::_feature_match — mismo criterio para
+    evaluar condiciones de patrones_ganadores/filtros_causales."""
+    try:
+        v, u = float(feat_val), float(umbral)
+        if cond == "abs_gt": return abs(v) > u
+        if cond == "abs_lt": return abs(v) <= u
+        if cond == "gt":     return v > u
+        if cond == "lt":     return v <= u
+    except (TypeError, ValueError):
+        pass
+    return False
+
+
 def _ic_n_para_subtype(strategy: str, subtype: str, params: dict,
-                       decision: str = "", min_n: int = 40) -> tuple[float, int]:
+                       decision: str = "", min_n: int = 40, min_ic: float = 0.08,
+                       features: dict | None = None) -> tuple[float, int]:
     """IC Bayesiano efectivo del subtype + n de la muestra que lo respalda.
     Usa ic_BUY_NO/ic_BUY_YES (direccional) solo si su propio n_BUY_NO/n_BUY_YES
     ya cumple min_n; si no, cae al ic_bayes/n agregados. Así el n devuelto
     siempre corresponde a la muestra real detrás del IC usado (antes se
     comparaba min_n contra el n agregado aunque se usara un IC direccional
-    de muestra mucho menor)."""
+    de muestra mucho menor).
+
+    2026-07-01: si el resultado normal (direccional o agregado) NO alcanza
+    min_n Y min_ic a la vez — exactamente los mismos umbrales que ya
+    aplicaba el caller después de llamar a esta función — se comprueba si
+    esta predicción concreta cumple la condición de un patrón causal ya
+    confirmado (patrones_ganadores con su propio n_patron>=min_n e
+    ic_patron>=min_ic). Si es así, se devuelve el IC/n de ese patrón.
+
+    Es puramente aditivo respecto al caso ACEPTADO: cualquier combinación
+    que antes pasaba el filtro (ic>=min_ic y n>=min_n) sigue devolviendo
+    exactamente el mismo (ic, n) y se acepta igual — se comprueba esa
+    condición antes de mirar ningún patrón. Solo cambia el resultado en
+    combinaciones que HOY se rechazan (ej. ORDER_FLOW_5M: n direccional de
+    sobra pero IC diluido por debajo de 0.08 en el agregado, mientras que su
+    patrón delta_ratio confirmado si tiene ic_patron>=0.08)."""
     claves = []
     if "#" in subtype:
         a, d = subtype.split("#", 1)
@@ -108,19 +138,51 @@ def _ic_n_para_subtype(strategy: str, subtype: str, params: dict,
         claves = [f"{strategy}#{subtype}", strategy]
     else:
         claves = [strategy]
+
+    ic_normal, n_normal, clave_usada = None, None, None
     for k in claves:
         if k in params:
             p = params[k]
             if decision == "BUY_NO" and p.get("ic_BUY_NO") is not None:
                 n_dir = p.get("n_BUY_NO", 0)
                 if n_dir >= min_n:
-                    return float(p["ic_BUY_NO"]), n_dir
+                    ic_normal, n_normal, clave_usada = float(p["ic_BUY_NO"]), n_dir, k
+                    break
             elif decision == "BUY_YES" and p.get("ic_BUY_YES") is not None:
                 n_dir = p.get("n_BUY_YES", 0)
                 if n_dir >= min_n:
-                    return float(p["ic_BUY_YES"]), n_dir
-            return float(p.get("ic_bayes", 0)), p.get("n", 0)
-    return 0.0, 0
+                    ic_normal, n_normal, clave_usada = float(p["ic_BUY_YES"]), n_dir, k
+                    break
+            ic_normal, n_normal, clave_usada = float(p.get("ic_bayes", 0)), p.get("n", 0), k
+            break
+
+    if clave_usada is None:
+        return 0.0, 0
+    if n_normal >= min_n and ic_normal >= min_ic:
+        return ic_normal, n_normal
+
+    # No alcanza min_n+min_ic por la vía normal — probar patrón causal confirmado
+    if features:
+        mejor_patron = None
+        for k in claves:
+            for patron in params.get(k, {}).get("patrones_ganadores", []):
+                n_patron = patron.get("n_patron", 0)
+                if n_patron < min_n:
+                    continue
+                ic_patron = float(patron.get("ic_patron", 0))
+                if ic_patron < min_ic:
+                    continue
+                fv = features.get(patron.get("feature"))
+                if fv is None:
+                    continue
+                if not _feature_match(fv, patron.get("condicion", ""), patron.get("umbral", 999)):
+                    continue
+                if mejor_patron is None or ic_patron > mejor_patron[0]:
+                    mejor_patron = (ic_patron, n_patron)
+        if mejor_patron:
+            return mejor_patron
+
+    return ic_normal, n_normal
 
 
 def _get_clob_client():
@@ -434,7 +496,12 @@ def main():
         # cuando el n direccional está muy cerca del umbral global.
         override_key = f"{strategy}#{subtype}#{dec}"
         min_n_efectivo = min_n_overrides.get(override_key, min_n)
-        ic_hist, n_hist = _ic_n_para_subtype(strategy, subtype, params, decision=dec, min_n=min_n_efectivo)
+        try:
+            feats_pred = json.loads(pred.get("features", "{}") or "{}")
+        except Exception:
+            feats_pred = {}
+        ic_hist, n_hist = _ic_n_para_subtype(strategy, subtype, params, decision=dec,
+                                              min_n=min_n_efectivo, min_ic=min_ic, features=feats_pred)
         if override_key in min_n_overrides and n_hist >= min_n:
             _avisar_override_superado(override_key, n_hist, min_n)
         if ic_hist < min_ic or n_hist < min_n_efectivo:
