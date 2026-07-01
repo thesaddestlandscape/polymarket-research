@@ -1,8 +1,9 @@
 """
 fetch_binance_klines.py — Fetches 1-min OHLCV klines for crypto assets.
 
-Primary source: Kraken public REST API (no geo-restrictions, no auth needed).
-Fallback source: Binance public API (may return HTTP 451 from US-based CI runners).
+Primary source: Binance public API.
+Fallback source: Kraken public REST API (usado cuando Binance falla, p.ej.
+HTTP 451 desde runners de CI en datacenters bloqueados por Binance).
 
 Saves to data/binance/klines_YYYY-MM-DD.json as:
 {
@@ -21,7 +22,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 import requests
 
-from data_quality import validar_precio, leer_ultimo_precio, obtener_consensus_spot, _cross_cache_fresco
+from data_quality import validar_precio, obtener_consensus_spot, DQ_LOG
 
 DIR_PRICES = Path("data") / "prices"
 DIR_PRICES.mkdir(parents=True, exist_ok=True)
@@ -112,14 +113,33 @@ def fetch_binance(asset: str, with_flow: bool = False) -> list | None:
         return None
 
 
+def _log_evento_fuente(sym: str, fuente_prev: str, fuente_nueva: str, salto_pct: float) -> None:
+    """Deja constancia en dq_events.jsonl (mismo log que L1) de un cambio de
+    fuente de precio para un activo, con el salto de precio asociado — antes
+    no había ninguna forma de auditar retroactivamente cuándo pasaba esto."""
+    try:
+        DQ_LOG.parent.mkdir(parents=True, exist_ok=True)
+        evento = {
+            "ts": datetime.now(timezone.utc).isoformat(timespec="seconds"),
+            "sym": sym.upper(),
+            "value": round(salto_pct, 4),
+            "reason": f"cambio_fuente {fuente_prev}->{fuente_nueva}",
+        }
+        with open(DQ_LOG, "a", encoding="utf-8") as f:
+            f.write(json.dumps(evento, ensure_ascii=False) + "\n")
+    except Exception:
+        pass
+
+
 def main():
     now_utc = datetime.now(timezone.utc)
     ts_str  = now_utc.isoformat(timespec="seconds")
     fecha   = now_utc.strftime("%Y-%m-%d")
-    print(f"[{ts_str}] Fetching 1-min klines (Kraken primary, Binance fallback)...")
+    print(f"[{ts_str}] Fetching 1-min klines (Binance primary, Kraken fallback)...")
 
     data = {"timestamp_utc": ts_str}
     any_success = False
+    fuente_por_symbol: dict[str, str] = {}
 
     def _fetch_asset(asset):
         klines = fetch_binance(asset, with_flow=True)
@@ -134,6 +154,7 @@ def main():
             if klines is not None:
                 data[asset] = klines
                 any_success = True
+                fuente_por_symbol[asset] = "kraken" if source == "Kraken" else "binance"
                 has_flow = len(klines[0]) >= 7 if klines else False
                 print(f"  {asset}: {len(klines)} klines OK [{source}{'  ✓flow' if has_flow else ''}]")
             else:
@@ -152,13 +173,38 @@ def main():
     # Solo si el archivo ya existe (capture_markets lo crea con el header completo)
     # Kraken/Binance reemplaza la dependencia de CoinGecko free tier para los 6 activos principales
     prices_path = DIR_PRICES / f"{fecha}.csv"
+    tiene_col_source = False
     if not prices_path.exists():
-        # Crear el archivo con header si no existe (no depender de capture_markets)
+        # Crear el archivo con header si no existe (no depender de capture_markets).
+        # Incluye "source" (binance/kraken/consenso) desde el primer momento —
+        # antes no había forma de saber retroactivamente qué fila venía de qué
+        # exchange, y el fallback Binance↔Kraken alterna varias veces al día
+        # (desfase típico 0.1-1% entre exchanges, suficiente para invertir el
+        # signo de un drift_15min/60min si cae justo en el cambio de fuente).
         with open(prices_path, "w", newline="", encoding="utf-8") as pf:
-            csv.writer(pf).writerow(["timestamp_utc", "asset", "price_usd", "change_1h_pct", "change_24h_pct"])
+            csv.writer(pf).writerow(["timestamp_utc", "asset", "price_usd", "change_1h_pct", "change_24h_pct", "source"])
+        tiene_col_source = True
+    else:
+        with open(prices_path, encoding="utf-8") as pf:
+            tiene_col_source = "source" in (pf.readline().strip().split(","))
 
-    # Leer último precio de cada asset (para detección de spikes en L1)
-    last_prices = {sym: leer_ultimo_precio(sym, prices_path) for sym in SPOT_SYMBOLS}
+    # Leer último precio Y fuente de cada asset en una sola pasada (para
+    # detección de spikes en L1 y de cambios de fuente en la misma línea).
+    last_prices: dict[str, float | None] = {}
+    last_sources: dict[str, str | None] = {}
+    try:
+        with open(prices_path, encoding="utf-8") as pf:
+            for row in csv.DictReader(pf):
+                sym = (row.get("asset") or "").strip().upper()
+                if sym not in SPOT_SYMBOLS:
+                    continue
+                try:
+                    last_prices[sym] = float(row["price_usd"])
+                except (KeyError, ValueError, TypeError):
+                    continue
+                last_sources[sym] = row.get("source") or None
+    except Exception:
+        pass
 
     # L1: extraer y validar precios desde klines
     binance_prices: dict[str, float] = {}
@@ -193,6 +239,7 @@ def main():
             for sym, px_consenso in consensus.get("precios", {}).items():
                 if sym in binance_prices:
                     binance_prices[sym] = px_consenso
+                    fuente_por_symbol[sym] = "consenso"
         except Exception as _cs_err:
             print(f"  [DQ L4] Cross-source error (no bloqueante): {_cs_err}")
 
@@ -200,7 +247,22 @@ def main():
         with open(prices_path, "a", newline="", encoding="utf-8") as pf:
             w = csv.writer(pf)
             for sym, price in binance_prices.items():
-                w.writerow([ts_str, sym, price, "", ""])
+                fuente = fuente_por_symbol.get(sym, "")
+                # Cambio de fuente respecto a la fila anterior de este activo
+                # (ej. Binance→Kraken por un fallo puntual): el desfase típico
+                # entre exchanges (0.1-1%) puede leerse como movimiento real.
+                # Solo se deja constancia en dq_events.jsonl (no bloqueante) —
+                # antes no había ninguna forma de saber que esto pasaba.
+                fuente_prev = last_sources.get(sym)
+                if fuente and fuente_prev and fuente_prev not in (fuente, "consenso") and fuente != "consenso":
+                    prev_p = last_prices.get(sym)
+                    salto = abs(price / prev_p - 1) * 100 if prev_p else 0.0
+                    print(f"  [DQ] {sym} cambio de fuente {fuente_prev}→{fuente} (salto {salto:.3f}%)")
+                    _log_evento_fuente(sym, fuente_prev, fuente, salto)
+                fila = [ts_str, sym, price, "", ""]
+                if tiene_col_source:
+                    fila.append(fuente)
+                w.writerow(fila)
         btc = binance_prices.get('BTC','?')
         eth = binance_prices.get('ETH','?')
         sol = binance_prices.get('SOL','?')

@@ -207,7 +207,12 @@ def evaluar(pred: dict, mercado: dict, ahora: datetime | None = None) -> dict | 
         or not mercado.get("active", True)
     )
     if not is_closed:
-        end_str = pred.get("end_date", "")
+        # Prioriza el endDate fresco del mercado (recién descargado en esta
+        # misma función) sobre el cacheado en la predicción — si la predicción
+        # se hizo sin endDate (mercado aún sin ese campo poblado en su
+        # momento), el cacheado queda vacío para siempre y la resolución por
+        # precio nunca se acepta (trade live queda OPEN indefinidamente).
+        end_str = mercado.get("endDate") or pred.get("end_date", "")
         end_pasado = False
         if end_str:
             try:
@@ -229,6 +234,12 @@ def evaluar(pred: dict, mercado: dict, ahora: datetime | None = None) -> dict | 
         precio_entrada = float(pred.get("precio_yes_mercado", 0.5))
     except (ValueError, TypeError):
         precio_entrada = 0.5
+    # Piso Y techo: precio_yes_mercado es una probabilidad, [0,1]. Un valor
+    # corrupto por encima de 1 (dato upstream dañado) haría que un WIN real
+    # se contabilizara como pérdida más abajo (payout = apuesta/precio_entrada
+    # sale por debajo de la apuesta) — mismo patrón que ya se corrigió para
+    # el caso "hacia 0", pero por el lado no cubierto.
+    precio_entrada = min(0.99, max(0.01, precio_entrada))
     if decision == "BUY_NO":
         precio_entrada = 1 - precio_entrada
 
@@ -627,7 +638,10 @@ def _cerrar_trades_live(nuevos_resultados: list, ts: str):
 
         try:
             stake      = float(t.get("stake_eur") or 0)
-            entry_p    = max(0.01, float(t.get("entry_price") or 0.5))
+            # Techo además de piso: mismo motivo que en evaluar() — un
+            # entry_price corrupto >1 convertiría un WIN real en pérdida
+            # via pnl_bruto = stake*(1/entry_p - 1) negativo.
+            entry_p    = min(0.99, max(0.01, float(t.get("entry_price") or 0.5)))
             fee        = float(t.get("fee_eur") or 0)
         except ValueError:
             continue

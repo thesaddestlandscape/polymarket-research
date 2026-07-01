@@ -490,7 +490,14 @@ def _r3_launch_fdv(mercados: list[dict]) -> list[dict]:
             if pb >= pa:
                 continue  # sin violación
             # VIOLACIÓN: P(FDV > X) > P(lanza) — imposible
-            coste        = pa + (1.0 - pb)
+            # Posición correcta: BUY_NO_FDV + BUY_YES_LAUNCH (coste=(1-pa)+pb).
+            # La combinación contraria (BUY_YES_FDV + BUY_NO_LAUNCH, pa+(1-pb))
+            # tiene un estado real donde ambas patas pierden (FDV<=X y lanza) —
+            # no es un hedge válido, y su profit_bruto=pb-pa sale negativo en
+            # toda violación real, así que nunca se marcaba accionable (bug
+            # confirmado 2026-07-01: coste usaba las patas cambiadas respecto
+            # a la posición descrita más abajo en `desc`).
+            coste        = (1.0 - pa) + pb
             profit_bruto = 1.0 - coste
             desc = (f"BUY_NO_FDV({1-pa:.3f}) + BUY_YES_LAUNCH({pb:.3f}) "
                     f"— FDV implica lanzamiento")
