@@ -1,5 +1,5 @@
-# Hipótesis automáticas — 2026-07-01 15:58 UTC
-_Generado por shadow_postmortem.py sobre 1560 resoluciones (PNL=-59.18€)_
+# Hipótesis automáticas — 2026-07-01 16:01 UTC
+_Generado por shadow_postmortem.py sobre 1576 resoluciones (PNL=-60.22€)_
 
 ## Patrones causales activos
 
@@ -156,18 +156,18 @@ _Derivadas de los patrones aprendidos:_
 | ✅ ORDER_FLOW_5M#SOL#5min | 150 | +0.013 | +0.65€ | 0 | 0 |
 | ✅ ORDER_FLOW_5M#XRP | 116 | -0.009 | -2.01€ | 0 | 0 |
 | ✅ ORDER_FLOW_5M#XRP#5min | 116 | -0.009 | -2.01€ | 0 | 0 |
-| ✅ PRICE_TARGET_GBM | 62 | -0.078 | -11.78€ | 0 | 0 |
-| ✅ PRICE_TARGET_GBM#BTC | 33 | -0.129 | -7.61€ | 0 | 0 |
-| ✅ PRICE_TARGET_GBM#BTC#atexpiry | 29 | -0.145 | -6.87€ | 0 | 0 |
-| ✅ PRICE_TARGET_GBM#ETH | 22 | +0.000 | -2.65€ | 0 | 0 |
-| ✅ PRICE_TARGET_GBM#ETH#atexpiry | 21 | -0.022 | -2.80€ | 0 | 0 |
-| ✅ PRICE_TARGET_GBM#SOL | 7 | -0.019 | -1.52€ | 0 | 0 |
-| ✅ PRICE_TARGET_GBM#SOL#atexpiry | 7 | -0.019 | -1.52€ | 0 | 0 |
-| ✅ PRICE_TARGET_GBM#atexpiry | 57 | -0.093 | -11.19€ | 0 | 0 |
+| ✅ PRICE_TARGET_GBM | 72 | -0.108 | -13.76€ | 0 | 0 |
+| ✅ PRICE_TARGET_GBM#BTC | 37 | -0.167 | -9.65€ | 0 | 0 |
+| ✅ PRICE_TARGET_GBM#BTC#atexpiry | 33 | -0.186 | -8.91€ | 0 | 0 |
+| ✅ PRICE_TARGET_GBM#ETH | 26 | -0.036 | -3.36€ | 0 | 0 |
+| ✅ PRICE_TARGET_GBM#ETH#atexpiry | 25 | -0.056 | -3.51€ | 0 | 0 |
+| ✅ PRICE_TARGET_GBM#SOL | 9 | -0.021 | -0.75€ | 0 | 0 |
+| ✅ PRICE_TARGET_GBM#SOL#atexpiry | 9 | -0.021 | -0.75€ | 0 | 0 |
+| ✅ PRICE_TARGET_GBM#atexpiry | 67 | -0.123 | -13.18€ | 0 | 0 |
 | ✅ PRICE_TARGET_GBM#reach | 5 | +0.018 | -0.58€ | 0 | 0 |
 | 🚫 SMART_FLOW_1H | 26 | -0.286 | -12.57€ | 0 | 0 |
 | ✅ SMART_FLOW_1H#BTC | 11 | -0.106 | -3.89€ | 0 | 0 |
-| ✅ UPDOWN_GBM | 557 | -0.021 | -11.30€ | 0 | 0 |
+| ✅ UPDOWN_GBM | 558 | -0.020 | -10.94€ | 0 | 0 |
 | ✅ UPDOWN_GBM#15min | 367 | +0.015 | +7.15€ | 1 | 3 |
 | 🚫 UPDOWN_GBM#240min | 12 | -0.171 | -4.82€ | 0 | 0 |
 | 🚫 UPDOWN_GBM#5min | 56 | -0.155 | -16.64€ | 4 | 0 |
@@ -180,12 +180,12 @@ _Derivadas de los patrones aprendidos:_
 | 🚫 UPDOWN_GBM#BTC#5min | 16 | -0.133 | -6.30€ | 0 | 0 |
 | ✅ UPDOWN_GBM#BTC#60min | 39 | -0.037 | -3.81€ | 4 | 0 |
 | ✅ UPDOWN_GBM#BTC#daily | 5 | +0.054 | +5.61€ | 0 | 0 |
-| ✅ UPDOWN_GBM#ETH | 252 | +0.012 | +8.75€ | 0 | 0 |
+| ✅ UPDOWN_GBM#ETH | 253 | +0.014 | +9.11€ | 0 | 0 |
 | ✅ UPDOWN_GBM#ETH#15min | 184 | +0.027 | +10.33€ | 2 | 4 |
 | ✅ UPDOWN_GBM#ETH#240min | 5 | -0.018 | -0.44€ | 0 | 0 |
 | 🚫 UPDOWN_GBM#ETH#5min | 12 | -0.086 | -3.67€ | 0 | 0 |
 | ✅ UPDOWN_GBM#ETH#60min | 46 | +0.000 | -1.33€ | 3 | 0 |
-| ✅ UPDOWN_GBM#ETH#daily | 5 | +0.018 | +3.85€ | 0 | 0 |
+| ✅ UPDOWN_GBM#ETH#daily | 6 | +0.037 | +4.21€ | 0 | 0 |
 | ✅ UPDOWN_GBM#SOL | 91 | -0.070 | -1.98€ | 0 | 0 |
 | ✅ UPDOWN_GBM#SOL#15min | 47 | +0.010 | +3.75€ | 0 | 0 |
 | 🚫 UPDOWN_GBM#SOL#5min | 17 | -0.112 | -4.84€ | 0 | 0 |
@@ -193,7 +193,7 @@ _Derivadas de los patrones aprendidos:_
 | ✅ UPDOWN_GBM#XRP | 32 | -0.088 | -2.49€ | 0 | 0 |
 | ✅ UPDOWN_GBM#XRP#15min | 23 | -0.060 | -0.63€ | 0 | 0 |
 | 🚫 UPDOWN_GBM#XRP#5min | 9 | -0.061 | -1.86€ | 0 | 0 |
-| ✅ UPDOWN_GBM#daily | 14 | +0.087 | +12.25€ | 0 | 0 |
+| ✅ UPDOWN_GBM#daily | 15 | +0.110 | +12.61€ | 0 | 0 |
 | 🚫 UPDOWN_OU_5M | 57 | -0.229 | -13.76€ | 0 | 0 |
 | 🚫 UPDOWN_OU_5M#5min | 57 | -0.229 | -13.76€ | 0 | 0 |
 | 🚫 UPDOWN_OU_5M#BNB | 8 | -0.160 | -4.56€ | 0 | 0 |
@@ -208,10 +208,10 @@ _Derivadas de los patrones aprendidos:_
 | ✅ UPDOWN_OU_5M#SOL#5min | 10 | -0.042 | -1.06€ | 0 | 0 |
 | ✅ UPDOWN_OU_5M#XRP | 11 | -0.064 | -1.65€ | 0 | 0 |
 | ✅ UPDOWN_OU_5M#XRP#5min | 11 | -0.064 | -1.65€ | 0 | 0 |
-| ✅ WEEKLY_PRICE | 65 | -0.022 | -16.22€ | 0 | 0 |
-| ✅ WEEKLY_PRICE#BTC | 21 | -0.065 | -7.49€ | 0 | 0 |
-| ✅ WEEKLY_PRICE#ETH | 24 | +0.000 | -6.05€ | 0 | 0 |
-| ✅ WEEKLY_PRICE#SOL | 20 | +0.000 | -2.69€ | 0 | 0 |
+| ✅ WEEKLY_PRICE | 70 | +0.000 | -15.64€ | 0 | 0 |
+| ✅ WEEKLY_PRICE#BTC | 22 | -0.042 | -7.39€ | 0 | 0 |
+| ✅ WEEKLY_PRICE#ETH | 25 | +0.018 | -5.92€ | 0 | 0 |
+| ✅ WEEKLY_PRICE#SOL | 23 | +0.020 | -2.33€ | 0 | 0 |
 ## Hipótesis pendientes — tracking automático
 
 
@@ -229,8 +229,8 @@ _Derivadas de los patrones aprendidos:_
 **〰️ H-IBS-15** — IBS-15 como señal de mean-reversion
   - _Umbral_: n≥40 ops con ibs_15 en features y spread_IC>0.15 entre buckets
   - _Acción_: Añadir ibs_15 como boost/filtro en FEATURE_RULES de shadow_postmortem.py
-  - _Estado_: Spread bajo (0.091) — sin ventaja clara. oversold(IBS<0.3): IC=-0.006 n=75 | neutral: IC=-0.098 n=80 | overbought(IBS>0.7): IC=-0.023 n=105
-  - _Datos_: n=268 IC=-0.041 PNL=-12.43€
+  - _Estado_: Spread bajo (0.091) — sin ventaja clara. oversold(IBS<0.3): IC=-0.006 n=75 | neutral: IC=-0.098 n=80 | overbought(IBS>0.7): IC=-0.018 n=106
+  - _Datos_: n=269 IC=-0.039 PNL=-12.07€
 
 **🟡 H-HORA-GBM** — hora_utc causal automático en GBM (forward)
   - _Umbral_: n≥20 forward con hora_utc + alguna hora con n≥15 IC<-0.10 o >+0.10
@@ -255,7 +255,7 @@ _Derivadas de los patrones aprendidos:_
 **⏳ H-CROSS-ASSET** — Cross-asset confirmation GBM+OF BUY_NO
   - _Umbral_: n_overlaps≥20 y IC_overlap > IC_base + 0.05
   - _Acción_: Cambiar _aplicar_kelly_compuesto: match por activo, no market_id
-  - _Estado_: n_overlaps=17, boost estimado=+0.018. Necesita 3 más y boost>0.05
+  - _Estado_: n_overlaps=17, boost estimado=+0.019. Necesita 3 más y boost>0.05
 
 **⏳ H-OF-PAR** — ORDER_FLOW per-pair delta_ratio ranges
   - _Umbral_: n≥200 por par con delta_ratio feature en shadow
@@ -275,7 +275,7 @@ _Derivadas de los patrones aprendidos:_
 **⏳ H-WEEKLY** — Predicciones semanales de precio por par
   - _Umbral_: n≥15 por par con IC≥+0.05
   - _Acción_: Si confirma IC≥+0.10 n≥15 en SOL → considerar live semanal
-  - _Estado_: ETH: n=24/15 IC=+0.000 PNL=-6.05€ | BTC: n=21/15 IC=-0.065 PNL=-7.49€ | SOL: n=20/15 IC=+0.000 PNL=-2.69€
+  - _Estado_: ETH: n=25/15 IC=+0.018 PNL=-5.92€ | BTC: n=22/15 IC=-0.042 PNL=-7.39€ | SOL: n=23/15 IC=+0.020 PNL=-2.33€
 
 
 ### 🔒 Bloqueadas (requieren dataset/API)
@@ -332,8 +332,8 @@ _Derivadas de los patrones aprendidos:_
   - _Hipótesis_: Split por dirección en WEEKLY_PRICE: BUY_NO n=38 WR=66% IC=+0.316 vs BUY_YES n=19 WR=21% IC=-0.579. El mercado semanal de precios tiende a NO cumplir el target → BUY_NO tiene edge estructural fuerte. PNL negativo por apuestas pequeñas y slippage, no por dirección. Candidata live si se confirma con n≥50.
   - _Umbral_: 50
   - _Acción_: Si IC>+0.10 con n≥50 → activar WEEKLY_PRICE BUY_NO en live (filtrar BUY_YES). Si IC cae <+0.05 con n≥50 → el edge se ha erosionado.
-  - _Estado_: 43/50 ops en el filtro definido (IC actual=+0.122 PNL=-3.65€)
-  - _Datos_: n=43 IC=+0.122 PNL=-3.65€
+  - _Estado_: 47/50 ops en el filtro definido (IC actual=+0.153 PNL=-2.56€)
+  - _Datos_: n=47 IC=+0.153 PNL=-2.56€
 
 **⏳ H-CUSTOM-GBM-17H-BTC** — GBM BTC a las 17h UTC — ¿edge real?
   - _Hipótesis_: La hora 17h UTC aparece como la mejor en historial. ¿Se confirma solo en BTC?
@@ -353,8 +353,8 @@ _Derivadas de los patrones aprendidos:_
   - _Hipótesis_: Cuando la volatilidad horaria es muy alta el GBM puede sobreestimar el edge. Testear.
   - _Umbral_: n≥30 y IC<-0.05
   - _Acción_: Filtrar señales GBM cuando sigma_h > 0.002 si se confirma IC negativo
-  - _Estado_: n=458 IC=-0.015 PNL=-5.66€ — sin señal clara aún (umbral IC: min=None max=-0.05)
-  - _Datos_: n=458 IC=-0.015 PNL=-5.66€
+  - _Estado_: n=459 IC=-0.014 PNL=-5.30€ — sin señal clara aún (umbral IC: min=None max=-0.05)
+  - _Datos_: n=459 IC=-0.014 PNL=-5.30€
 
 **⏳ H-CUSTOM-OF-02H-BTCSOL** — ORDER_FLOW H=02h UTC — BTC+SOL solamente (revisar blacklist)
   - _Hipótesis_: La hora 02h está en el blacklist basado en TODOS los pares. Con BTC+SOL solo, el historial muestra 4/5 (80%) IC=+0.054. ¿Se confirma la señal positiva con más datos?
