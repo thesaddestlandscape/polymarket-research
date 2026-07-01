@@ -161,6 +161,40 @@ def _get_token_ids(market_id: str) -> tuple[str, str]:
     return tokens[0], tokens[1]
 
 
+def _consultar_profundidad_libro(client, token_id: str, precio_entrada: float,
+                                 stake_eur: float) -> dict:
+    """
+    Observación pura (no cambia ninguna decisión): consulta el order book
+    real de Polymarket para el token que vamos a comprar y mide cuánta
+    profundidad hay en el lado ask cerca del precio de entrada. Se loguea
+    junto a cada orden para poder cruzar después si los kills de FOK
+    ("sin liquidez a ese precio") correlacionan con libros finos.
+    """
+    try:
+        book = client.get_order_book(token_id)
+        asks = (book.get("asks") if isinstance(book, dict) else getattr(book, "asks", None)) or []
+        techo = precio_entrada * 1.05  # banda razonable sobre el precio objetivo
+        profundidad_eur = 0.0
+        mejor_ask = None
+        for lvl in asks:
+            p = float(lvl.get("price") if isinstance(lvl, dict) else lvl.price)
+            s = float(lvl.get("size") if isinstance(lvl, dict) else lvl.size)
+            if mejor_ask is None or p < mejor_ask:
+                mejor_ask = p
+            if p <= techo:
+                profundidad_eur += p * s
+        ratio = (profundidad_eur / stake_eur) if stake_eur > 0 else None
+        return {
+            "ok": True,
+            "mejor_ask": mejor_ask,
+            "profundidad_eur": round(profundidad_eur, 2),
+            "n_niveles": len(asks),
+            "ratio_vs_stake": round(ratio, 1) if ratio is not None else None,
+        }
+    except Exception as e:
+        return {"ok": False, "error": str(e)}
+
+
 def _ejecutar_orden_polymarket(market_id: str, direction: str,
                                stake_eur: float, entry_price: float) -> dict:
     """Ejecuta orden real en Polymarket via CLOB API."""
@@ -175,6 +209,17 @@ def _ejecutar_orden_polymarket(market_id: str, direction: str,
             precio   = round(1.0 - entry_price, 6)
 
         client = _get_clob_client()
+
+        # Observación de profundidad del libro — no afecta a la ejecución,
+        # solo se loguea para poder correlacionar con kills de FOK más tarde.
+        depth = _consultar_profundidad_libro(client, token_id, precio, stake_eur)
+        if depth.get("ok"):
+            log(f"  📊 Libro {market_id}/{direction}: mejor_ask={depth['mejor_ask']} "
+                f"profundidad≈{depth['profundidad_eur']:.2f}€ "
+                f"({depth['n_niveles']} niveles, ratio={depth['ratio_vs_stake']}x stake)")
+        else:
+            log(f"  📊 Libro {market_id}/{direction}: error consultando profundidad — {depth.get('error')}")
+
         order_args = MarketOrderArgsV2(
             token_id=token_id,
             amount=stake_eur,
