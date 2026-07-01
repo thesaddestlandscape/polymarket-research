@@ -594,6 +594,10 @@ def _evaluar_bucket(vals, umbral, condicion_mala):
         malo  = [(r, v) for r, v in vals if abs(v) > umbral]
         bueno = [(r, v) for r, v in vals if abs(v) <= umbral]
         cond_buena = "abs_lt"
+    elif condicion_mala == "abs_lt":
+        malo  = [(r, v) for r, v in vals if abs(v) < umbral]
+        bueno = [(r, v) for r, v in vals if abs(v) >= umbral]
+        cond_buena = "abs_gt"
     elif condicion_mala == "gt":
         malo  = [(r, v) for r, v in vals if v > umbral]
         bueno = [(r, v) for r, v in vals if v <= umbral]

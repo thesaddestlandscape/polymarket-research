@@ -166,12 +166,18 @@ def parse_outcome_prices(raw):
     return None
 
 
-def evaluar(pred: dict, mercado: dict) -> dict | None:
+def evaluar(pred: dict, mercado: dict, ahora: datetime | None = None) -> dict | None:
     """
     Señal primaria: outcomePrices — si alguno llega a 1.0 el mercado está
     resuelto, independientemente de los flags closed/archived/resolved.
     Esto evita falsos negativos cuando la API actualiza los precios antes
     de cambiar el campo closed (comportamiento habitual en Polymarket).
+
+    Salvaguarda: en ventanas cortas (15-60min) el precio puede tocar ~0.99
+    por pura volatilidad intraciclo y revertir antes del cierre real. Para
+    aceptar la resolución por precio exigimos ADEMÁS que el mercado ya haya
+    pasado su end_date o que la API confirme closed/resolved — si no,
+    reintentamos en el siguiente ciclo en vez de cerrar en falso.
     """
     if not mercado:
         return None
@@ -191,16 +197,28 @@ def evaluar(pred: dict, mercado: dict) -> dict | None:
     elif abs(pn_final - 1.0) < 0.01:
         outcome_real = "NO"
     else:
-        # Precios no liquidados — comprobar flags de estado
-        is_closed = (
-            mercado.get("closed")
-            or mercado.get("archived")
-            or mercado.get("resolved")
-            or not mercado.get("active", True)
-        )
-        if not is_closed:
-            return None  # mercado genuinamente abierto
-        return None  # cerrado pero oracle pendiente — reintentar
+        return None  # precios no liquidados — reintentar en el siguiente ciclo
+
+    # Confirmar que el mercado realmente cerró antes de aceptar el precio como definitivo
+    is_closed = (
+        mercado.get("closed")
+        or mercado.get("archived")
+        or mercado.get("resolved")
+        or not mercado.get("active", True)
+    )
+    if not is_closed:
+        end_str = pred.get("end_date", "")
+        end_pasado = False
+        if end_str:
+            try:
+                end_dt = datetime.fromisoformat(end_str.replace("Z", "+00:00"))
+                if end_dt.tzinfo is None:
+                    end_dt = end_dt.replace(tzinfo=timezone.utc)
+                end_pasado = (ahora or datetime.now(timezone.utc)) >= end_dt
+            except Exception:
+                pass
+        if not end_pasado:
+            return None  # precio cerca de certeza pero ventana aún no ha cerrado — reintentar
 
     decision = pred.get("decision", "")
     acierto = (decision == "BUY_YES" and outcome_real == "YES") or \
@@ -444,7 +462,7 @@ def main():
             continue
         mid = pred.get("market_id", "")
         mercado = cache_mercados.get(mid)
-        res = evaluar(pred, mercado)
+        res = evaluar(pred, mercado, ahora=ahora)
         if res is None:
             if mercado and debug_no_resueltos < 3:
                 precios = mercado.get("outcomePrices", "?")
@@ -609,7 +627,7 @@ def _cerrar_trades_live(nuevos_resultados: list, ts: str):
 
         try:
             stake      = float(t.get("stake_eur") or 0)
-            entry_p    = float(t.get("entry_price") or 0.5)
+            entry_p    = max(0.01, float(t.get("entry_price") or 0.5))
             fee        = float(t.get("fee_eur") or 0)
         except ValueError:
             continue

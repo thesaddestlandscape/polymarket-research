@@ -1610,6 +1610,7 @@ def s_order_flow_5m(market, ctx):
             "delta_ratio":  round(delta_ratio, 4),
             "total_vol_5m": round(total_vol, 4),
             "has_real_flow": int(has_real_flow),
+            "hora_utc": hora_utc,
         },
     }
 

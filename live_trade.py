@@ -92,8 +92,14 @@ def _cargar_predicciones_hoy() -> list:
     return rows
 
 
-def _ic_para_subtype(strategy: str, subtype: str, params: dict, decision: str = "") -> float:
-    """IC Bayesiano efectivo del subtype. Usa ic_BUY_NO/ic_BUY_YES si están disponibles."""
+def _ic_n_para_subtype(strategy: str, subtype: str, params: dict,
+                       decision: str = "", min_n: int = 40) -> tuple[float, int]:
+    """IC Bayesiano efectivo del subtype + n de la muestra que lo respalda.
+    Usa ic_BUY_NO/ic_BUY_YES (direccional) solo si su propio n_BUY_NO/n_BUY_YES
+    ya cumple min_n; si no, cae al ic_bayes/n agregados. Así el n devuelto
+    siempre corresponde a la muestra real detrás del IC usado (antes se
+    comparaba min_n contra el n agregado aunque se usara un IC direccional
+    de muestra mucho menor)."""
     claves = []
     if "#" in subtype:
         a, d = subtype.split("#", 1)
@@ -105,17 +111,16 @@ def _ic_para_subtype(strategy: str, subtype: str, params: dict, decision: str = 
     for k in claves:
         if k in params:
             p = params[k]
-            # Preferir IC direccional si existe y tiene n suficiente
             if decision == "BUY_NO" and p.get("ic_BUY_NO") is not None:
-                ic_dir = float(p["ic_BUY_NO"])
-                if p.get("n_BUY_NO", 0) >= 5:
-                    return ic_dir
+                n_dir = p.get("n_BUY_NO", 0)
+                if n_dir >= min_n:
+                    return float(p["ic_BUY_NO"]), n_dir
             elif decision == "BUY_YES" and p.get("ic_BUY_YES") is not None:
-                ic_dir = float(p["ic_BUY_YES"])
-                if p.get("n_BUY_YES", 0) >= 5:
-                    return ic_dir
-            return float(p.get("ic_bayes", 0))
-    return 0.0
+                n_dir = p.get("n_BUY_YES", 0)
+                if n_dir >= min_n:
+                    return float(p["ic_BUY_YES"]), n_dir
+            return float(p.get("ic_bayes", 0)), p.get("n", 0)
+    return 0.0, 0
 
 
 def _get_clob_client():
@@ -280,6 +285,30 @@ def _registrar_trade(row: dict):
         w.writerow({col: row.get(col, "") for col in TRADES_COLS})
 
 
+OVERRIDES_NOTIF_PATH = DIR_LIVE / "overrides_notificados.json"
+
+
+def _avisar_override_superado(key: str, n_real: int, min_n_global: int):
+    """Telegram una sola vez cuando el n direccional real de una key con
+    min_n_overrides alcanza el umbral global — a partir de ahí el override
+    ya no hace falta y se puede quitar de config_live.json."""
+    try:
+        notificados = json.loads(OVERRIDES_NOTIF_PATH.read_text()) if OVERRIDES_NOTIF_PATH.exists() else {}
+    except Exception:
+        notificados = {}
+    if notificados.get(key):
+        return
+    enviar_telegram(
+        f"✅ *Override de min_n ya no hace falta*\n"
+        f"{key}\n"
+        f"n real = {n_real} ≥ min_n_para_live ({min_n_global})\n"
+        f"Puedes quitar la entrada de `min_n_overrides` en config_live.json."
+    )
+    log(f"  ℹ️  Override {key} superó min_n global ({n_real}≥{min_n_global}) — avisado por Telegram")
+    notificados[key] = {"n_real": n_real, "ts": datetime.now(timezone.utc).isoformat(timespec="seconds")}
+    OVERRIDES_NOTIF_PATH.write_text(json.dumps(notificados, indent=2))
+
+
 def main():
     ts = datetime.now(timezone.utc).isoformat(timespec="seconds")
     log(f"=== live_trade ciclo {ts} ===")
@@ -319,6 +348,7 @@ def main():
     riesgo       = config.get("riesgo", {})
     min_ic       = riesgo.get("min_ic_para_live", 0.08)
     min_n        = riesgo.get("min_n_para_live", 40)
+    min_n_overrides = riesgo.get("min_n_overrides", {})
     estrategias_ok = config.get("estrategias_permitidas_live", [])
     subtypes_ok    = config.get("subtypes_permitidos_live", [])
     ya_operados  = _ya_operados_hoy()
@@ -353,10 +383,16 @@ def main():
         except Exception:
             pass
 
-        # IC mínimo confirmado en histórico
-        ic_hist = _ic_para_subtype(strategy, subtype, params, decision=dec)
-        n_hist  = params.get(f"{strategy}#{subtype}", params.get(strategy, {})).get("n", 0)
-        if ic_hist < min_ic or n_hist < min_n:
+        # IC mínimo confirmado en histórico (n_hist siempre corresponde a la
+        # muestra real detrás de ic_hist, direccional o agregada). min_n_efectivo
+        # permite un override puntual por strategy#subtype#decision (config_live.json)
+        # cuando el n direccional está muy cerca del umbral global.
+        override_key = f"{strategy}#{subtype}#{dec}"
+        min_n_efectivo = min_n_overrides.get(override_key, min_n)
+        ic_hist, n_hist = _ic_n_para_subtype(strategy, subtype, params, decision=dec, min_n=min_n_efectivo)
+        if override_key in min_n_overrides and n_hist >= min_n:
+            _avisar_override_superado(override_key, n_hist, min_n)
+        if ic_hist < min_ic or n_hist < min_n_efectivo:
             continue
 
         # IC del modelo para esta señal concreta
