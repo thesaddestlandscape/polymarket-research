@@ -45,8 +45,19 @@ def _ic(wins, n):
 
 def _feat(row, key):
     try:
-        return json.loads(row.get("features", "{}") or "{}").get(key)
+        val = json.loads(row.get("features", "{}") or "{}").get(key)
     except Exception:
+        val = None
+    if val is not None:
+        return val
+    # Fallback: columnas de primer nivel de results.csv (ej. edge_neto, brier_score)
+    # que no viven dentro del JSON de features pero son numéricas y útiles como filtro.
+    raw = row.get(key)
+    if raw in (None, ""):
+        return None
+    try:
+        return float(raw)
+    except (TypeError, ValueError):
         return None
 
 
@@ -320,6 +331,109 @@ def _eval_kelly_hora(rows):
     return {"by_hour": by_hour,
             "status": "LISTA_EVALUAR" if all_ready else "ACUMULANDO",
             "rec": " | ".join(v["rec"] for v in by_hour.values())}
+
+
+def _eval_streak_cooldown(rows):
+    """
+    ¿El IC se degrada tras rachas de pérdidas en el mismo subtype? (regime persistence)
+    Detectado 2026-07-01: tras 1 win IC=-0.007 (n=724) -> tras 1 loss IC=-0.025 (n=750)
+    -> tras 2 losses seguidas IC=-0.042 (n=380). Degradación progresiva y consistente.
+    No es expresable con el motor de filtros genérico (necesita el resultado de la
+    operación ANTERIOR en el mismo subtype, no solo features de la fila actual).
+    """
+    by_sub = defaultdict(list)
+    for r in rows:
+        ts = r.get("prediction_timestamp", "")
+        if not ts:
+            continue
+        key = r.get("strategy", "") + "#" + r.get("subtype", "")
+        by_sub[key].append(r)
+    for k in by_sub:
+        by_sub[k].sort(key=lambda r: r.get("prediction_timestamp", ""))
+
+    after_win, after_1loss, after_2loss = [], [], []
+    for k, lst in by_sub.items():
+        if len(lst) < 10:
+            continue
+        for i in range(1, len(lst)):
+            prev, cur = lst[i - 1], lst[i]
+            (after_1loss if _win(prev) == 0 else after_win).append(cur)
+            if i >= 2 and _win(prev) == 0 and _win(lst[i - 2]) == 0:
+                after_2loss.append(cur)
+
+    s_win   = _stats(after_win)
+    s_loss1 = _stats(after_1loss)
+    s_loss2 = _stats(after_2loss)
+    gap = round(s_win["ic"] - s_loss2["ic"], 4)
+
+    ready = s_loss2["n"] >= 40 and gap >= 0.05
+    status = "LISTA_EVALUAR" if ready else "ACUMULANDO"
+    rec = (f"tras_win IC={s_win['ic']:+.3f} n={s_win['n']} | "
+           f"tras_1loss IC={s_loss1['ic']:+.3f} n={s_loss1['n']} | "
+           f"tras_2loss IC={s_loss2['ic']:+.3f} n={s_loss2['n']}/40 | gap={gap:+.3f} (umbral 0.05)")
+
+    return {"after_win": s_win, "after_1loss": s_loss1, "after_2loss": s_loss2,
+            "gap": gap, "status": status, "rec": rec}
+
+
+def _eval_btc_leads_eth(rows):
+    """
+    ETH/SOL#GBM: ¿decisión contraria al drift_15min de BTC del mismo ciclo predice mejor?
+    Detectado 2026-07-01: alineado con BTC IC=-0.056 (n=61) vs contrario a BTC IC=+0.091
+    (n=20) en ETH. Posible mecanismo: BTC lidera, ETH sobrerreacciona y revierte.
+    CAVEAT sin verificar: podría ser un proxy indirecto de filtros ya existentes sobre
+    el propio drift de ETH (correlación cripto-beta) — no confirmado como señal
+    independiente. No expresable con el motor de filtros genérico (compara features de
+    DOS filas de activos distintos en el mismo ciclo, no solo la fila propia).
+    """
+    def parse_ts(r):
+        try:
+            return datetime.fromisoformat(r["prediction_timestamp"].replace("Z", "+00:00"))
+        except Exception:
+            return None
+
+    btc = []
+    for r in rows:
+        if r.get("strategy") != "UPDOWN_GBM" or "BTC" not in r.get("subtype", ""):
+            continue
+        d15 = _feat(r, "drift_15min")
+        pt = parse_ts(r)
+        if d15 is None or pt is None:
+            continue
+        btc.append((pt, d15))
+    btc.sort(key=lambda x: x[0])
+
+    aligned, contrary = [], []
+    for r in rows:
+        strat, sub = r.get("strategy", ""), r.get("subtype", "")
+        if strat != "UPDOWN_GBM" or not (sub.startswith("ETH") or sub.startswith("SOL")):
+            continue
+        pt = parse_ts(r)
+        if pt is None:
+            continue
+        best_dt, best_drift = None, None
+        for bts, bdrift in btc:
+            dt = abs((pt - bts).total_seconds())
+            if best_dt is None or dt < best_dt:
+                best_dt, best_drift = dt, bdrift
+        if best_dt is None or best_dt > 120 or abs(best_drift) < 0.1:
+            continue
+        btc_up = best_drift > 0
+        dec_yes = r.get("decision") == "BUY_YES"
+        (aligned if btc_up == dec_yes else contrary).append(r)
+
+    s_aligned = _stats(aligned)
+    s_contrary = _stats(contrary)
+    gap = round(s_contrary["ic"] - s_aligned["ic"], 4)
+
+    ready = s_contrary["n"] >= 40 and gap >= 0.08
+    status = "LISTA_EVALUAR" if ready else "ACUMULANDO"
+    rec = (f"alineado_BTC IC={s_aligned['ic']:+.3f} n={s_aligned['n']} | "
+           f"contrario_BTC IC={s_contrary['ic']:+.3f} n={s_contrary['n']}/40 | "
+           f"gap={gap:+.3f} (umbral 0.08) — SIN CONFIRMAR independencia de filtros propios de ETH")
+
+    return {"aligned_btc": s_aligned, "contrary_btc": s_contrary,
+            "gap": gap, "status": status, "rec": rec}
 
 
 def _eval_60min_live(rows):
@@ -617,6 +731,28 @@ HIPOTESIS = [
         "umbral":      "n≥15 por par con IC≥+0.05",
         "accion":      "Si confirma IC≥+0.10 n≥15 en SOL → considerar live semanal",
         "eval_fn":     _eval_weekly_price,
+    },
+    {
+        "id":          "H-STREAK-COOLDOWN",
+        "nombre":      "Cooldown tras 2 derrotas consecutivas (mismo subtype)",
+        "descripcion": "2026-07-01: tras win IC=-0.007 (n=724) -> tras 1 loss IC=-0.025 (n=750) "
+                        "-> tras 2 losses seguidas IC=-0.042 (n=380). Degradación progresiva y "
+                        "consistente, sugiere persistencia de régimen (no ruido puro).",
+        "tipo":        "risk_management",
+        "umbral":      "n≥40 tras 2 losses y gap(IC_tras_win - IC_tras_2loss)≥0.05",
+        "accion":      "Reducir stake (no desactivar) 1-2h tras 2 derrotas consecutivas en el mismo subtype",
+        "eval_fn":     _eval_streak_cooldown,
+    },
+    {
+        "id":          "H-BTC-LEADS-ETH",
+        "nombre":      "ETH/SOL GBM contrario al drift_15min de BTC del mismo ciclo",
+        "descripcion": "2026-07-01: ETH alineado con BTC IC=-0.056 (n=61) vs contrario a BTC "
+                        "IC=+0.091 (n=20). SIN CONFIRMAR: podría ser proxy indirecto de filtros "
+                        "ya existentes sobre el propio drift de ETH (correlación cripto-beta).",
+        "tipo":        "boost",
+        "umbral":      "n≥40 en contrario_BTC y gap≥0.08 — y descartar confound con drift propio antes de actuar",
+        "accion":      "Si se confirma y no es confound → boost en ETH/SOL cuando decisión contraria a drift_15min BTC",
+        "eval_fn":     _eval_btc_leads_eth,
     },
     # ── Bloqueadas por dataset/API ────────────────────────────────────────────
     {
