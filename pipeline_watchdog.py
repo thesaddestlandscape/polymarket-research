@@ -7,7 +7,10 @@ Checks de sintaxis periódicos: cada 5 ciclos (~10 min).
 Checks en cada ciclo:
   1. klines_HOY.json actualizado en los últimos 5 min (proxy del fast loop vivo;
      predictions_HOY.csv no sirve porque el dedup diario lo deja sin filas
-     nuevas en ciclos enteros aunque el loop esté sano)
+     nuevas en ciclos enteros aunque el loop esté sano) + logs/live.log
+     actualizado (klines se escribe aunque live_trade.py esté roto — corre
+     antes e independiente en run_fast.sh — así que hace falta un check
+     propio para no quedar ciego a fallos en el camino del dinero real)
   2. Screens fast/slow/control corriendo → restart si caídas
   3. Errores en fast.log → patrón conocido → fix automático
   4. postmortem.csv > 50MB → regenerar
@@ -37,6 +40,7 @@ from pathlib import Path
 
 REPO       = Path(__file__).parent
 LOG_FAST   = REPO / "logs" / "fast.log"
+LOG_LIVE   = REPO / "logs" / "live.log"
 LOG_WATCH  = REPO / "logs" / "watchdog.log"
 DIR_SHADOW = REPO / "data" / "shadow"
 DIR_BINANCE = REPO / "data" / "binance"
@@ -403,12 +407,28 @@ def main():
             #      ciclos enteros sin filas nuevas aunque el loop esté sano) ──────
             hoy_klines = klines_json_hoy()
             age = segundos_desde_update(hoy_klines)
+            klines_mal = age is None or age > MAX_PRED_SILENCE
             if age is None:
                 log(f"⚠ klines JSON hoy no existe: {hoy_klines.name}")
+            elif klines_mal:
+                log(f"⚠ fast loop sin actualizar klines {age:.0f}s (umbral={MAX_PRED_SILENCE}s)")
+
+            # ── 1b. live_trade.py silencio — klines se actualiza aunque
+            #       live_trade.py esté roto (corre antes e independientemente
+            #       en run_fast.sh, con || true), así que un crash sostenido
+            #       en el camino del dinero real podía pasar invisible al
+            #       check de arriba y nunca disparar el escaneo de tracebacks
+            #       de abajo. logs/live.log lo escribe solo live_trade.py.
+            age_live = segundos_desde_update(LOG_LIVE)
+            live_mal = age_live is None or age_live > MAX_PRED_SILENCE
+            if age_live is None:
+                log(f"⚠ logs/live.log no existe")
+            elif live_mal:
+                log(f"⚠ live_trade.py sin actualizar {age_live:.0f}s (umbral={MAX_PRED_SILENCE}s)")
+
+            if klines_mal or live_mal:
                 consecutivos_silencio += 1
-            elif age > MAX_PRED_SILENCE:
-                consecutivos_silencio += 1
-                log(f"⚠ fast loop sin actualizar klines {age:.0f}s (umbral={MAX_PRED_SILENCE}s) — ciclo silencio #{consecutivos_silencio}")
+                log(f"  ciclo silencio #{consecutivos_silencio}")
             else:
                 if consecutivos_silencio > 0:
                     log(f"✅ fast loop activo de nuevo (silencio={consecutivos_silencio} ciclos)")
