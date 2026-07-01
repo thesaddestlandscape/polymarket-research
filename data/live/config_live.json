@@ -37,6 +37,10 @@
     "min_n_para_live": 40,
     "_min_n_overrides_nota": "Overrides puntuales y temporales de min_n por strategy#subtype#direction, decisión manual del usuario cuando el n direccional está muy cerca de 40. Quitar la entrada cuando n_BUY_NO/n_BUY_YES real supere min_n_para_live.",
     "min_n_overrides": {},
+    "_min_ic_asimetrico_nota": "Barra más alta de IC para strategy#decision específicos, en vez del min_ic_para_live global. Añadido 2026-07-01 tras H-CUSTOM-GBM-BUYYES-GLOBAL-MALO: BUY_NO gana a BUY_YES en las 4 estrategias activas sin excepción (GBM confirmado n=507 IC=-0.076). No auto-desactiva BUY_YES de golpe — exige evidencia direccional más fuerte (doble del umbral normal) antes de confiar en una señal BUY_YES de GBM en vivo. A día de hoy no cambia ningún subtype ya elegible (todos los ic_BUY_YES direccionales de los subtypes permitidos en vivo ya están en negativo, muy por debajo incluso del umbral normal) — es una salvaguarda hacia adelante.",
+    "min_ic_asimetrico": {
+      "UPDOWN_GBM#BUY_YES": 0.16
+    },
     "min_stake_eur": 0.25,
     "max_stake_eur": 2.00,
     "circuit_breaker": {
