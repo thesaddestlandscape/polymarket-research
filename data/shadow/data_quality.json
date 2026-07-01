@@ -10,9 +10,12 @@
   "rechazos_1h": {
     "rango": 0,
     "spike": 0,
-    "total": 1,
+    "total": 5,
     "por_sym": {
-      "SOL": 1
+      "SOL": 2,
+      "BTC": 1,
+      "ETH": 1,
+      "XRP": 1
     }
   },
   "assets": {
