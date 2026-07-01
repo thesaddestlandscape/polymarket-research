@@ -1,5 +1,5 @@
-# Hipótesis automáticas — 2026-07-01 12:30 UTC
-_Generado por shadow_postmortem.py sobre 1540 resoluciones (PNL=-58.04€)_
+# Hipótesis automáticas — 2026-07-01 12:32 UTC
+_Generado por shadow_postmortem.py sobre 1542 resoluciones (PNL=-60.59€)_
 
 ## Patrones causales activos
 
@@ -41,9 +41,9 @@ _Generado por shadow_postmortem.py sobre 1540 resoluciones (PNL=-58.04€)_
   - _Potencial_: sin este filtro IC_bueno=+0.000 (n=6)
 
 ### UPDOWN_GBM#ETH#15min
-- **PATRÓN** `ibs_15` < `0.1521` → IC=+0.233 (n=28)
+- **PATRÓN** `ibs_15` < `0.1479` → IC=+0.233 (n=28)
   - _Por qué funciona_: IBS bajo (precio cerca del mínimo) → sobreventa de corto plazo; BUY_NO menos fiable
-  - _Acción_: Kelly boost +1.00€ cuando `ibs_15` < 0.1521 (IC base=+0.025)
+  - _Acción_: Kelly boost +1.00€ cuando `ibs_15` < 0.1479 (IC base=+0.022)
 
 ### UPDOWN_GBM#ETH#60min
 - **FILTRO** `sigma_h` < `0.0074` → IC=-0.147 (n=15)
@@ -108,7 +108,7 @@ _Generado por shadow_postmortem.py sobre 1540 resoluciones (PNL=-58.04€)_
 ## Estrategias nuevas sugeridas
 _Derivadas de los patrones aprendidos:_
 
-- **H-IBS-UPDOWN_GBM#ETH#15min**: IBS < 0.1521 correlaciona con éxito en UPDOWN_GBM#ETH#15min (IC=+0.233 n=28). Confirma señal de reversión media → alinear con BUY_YES.
+- **H-IBS-UPDOWN_GBM#ETH#15min**: IBS < 0.1479 correlaciona con éxito en UPDOWN_GBM#ETH#15min (IC=+0.233 n=28). Confirma señal de reversión media → alinear con BUY_YES.
 
 ## Estado de aprendizaje por estrategia
 
@@ -139,19 +139,21 @@ _Derivadas de los patrones aprendidos:_
 | ✅ PRICE_TARGET_GBM#reach | 5 | +0.018 | -0.58€ | 0 | 0 |
 | 🚫 SMART_FLOW_1H | 26 | -0.286 | -12.57€ | 0 | 0 |
 | ✅ SMART_FLOW_1H#BTC | 11 | -0.106 | -3.89€ | 0 | 0 |
-| ✅ UPDOWN_GBM | 538 | -0.022 | -9.68€ | 0 | 0 |
-| ✅ UPDOWN_GBM#15min | 348 | +0.014 | +8.77€ | 0 | 0 |
+| ✅ UPDOWN_GBM | 540 | -0.024 | -12.23€ | 0 | 0 |
+| ✅ UPDOWN_GBM#15min | 350 | +0.011 | +6.22€ | 0 | 0 |
 | 🚫 UPDOWN_GBM#240min | 12 | -0.171 | -4.82€ | 0 | 0 |
 | 🚫 UPDOWN_GBM#5min | 56 | -0.155 | -16.64€ | 0 | 0 |
 | ✅ UPDOWN_GBM#60min | 106 | -0.046 | -7.39€ | 0 | 0 |
+| ✅ UPDOWN_GBM#BNB | 5 | -0.054 | -1.24€ | 0 | 0 |
+| ✅ UPDOWN_GBM#BNB#15min | 5 | -0.054 | -1.24€ | 0 | 0 |
 | ✅ UPDOWN_GBM#BTC | 164 | -0.024 | -14.08€ | 0 | 0 |
 | ✅ UPDOWN_GBM#BTC#15min | 99 | +0.015 | -6.62€ | 1 | 0 |
 | ✅ UPDOWN_GBM#BTC#240min | 5 | -0.089 | -2.96€ | 0 | 0 |
 | 🚫 UPDOWN_GBM#BTC#5min | 16 | -0.133 | -6.30€ | 0 | 0 |
 | ✅ UPDOWN_GBM#BTC#60min | 39 | -0.037 | -3.81€ | 4 | 0 |
 | ✅ UPDOWN_GBM#BTC#daily | 5 | +0.054 | +5.61€ | 0 | 0 |
-| ✅ UPDOWN_GBM#ETH | 243 | +0.010 | +10.37€ | 0 | 0 |
-| ✅ UPDOWN_GBM#ETH#15min | 175 | +0.025 | +11.96€ | 0 | 1 |
+| ✅ UPDOWN_GBM#ETH | 244 | +0.008 | +8.33€ | 0 | 0 |
+| ✅ UPDOWN_GBM#ETH#15min | 176 | +0.022 | +9.92€ | 0 | 1 |
 | ✅ UPDOWN_GBM#ETH#240min | 5 | -0.018 | -0.44€ | 0 | 0 |
 | 🚫 UPDOWN_GBM#ETH#5min | 12 | -0.086 | -3.67€ | 0 | 0 |
 | ✅ UPDOWN_GBM#ETH#60min | 46 | +0.000 | -1.33€ | 3 | 1 |
@@ -199,8 +201,8 @@ _Derivadas de los patrones aprendidos:_
 **〰️ H-IBS-15** — IBS-15 como señal de mean-reversion
   - _Umbral_: n≥40 ops con ibs_15 en features y spread_IC>0.15 entre buckets
   - _Acción_: Añadir ibs_15 como boost/filtro en FEATURE_RULES de shadow_postmortem.py
-  - _Estado_: Spread bajo (0.126) — sin ventaja clara. oversold(IBS<0.3): IC=+0.014 n=70 | neutral: IC=-0.113 n=78 | overbought(IBS>0.7): IC=-0.042 n=94
-  - _Datos_: n=249 IC=-0.046 PNL=-10.80€
+  - _Estado_: Spread bajo (0.113) — sin ventaja clara. oversold(IBS<0.3): IC=+0.000 n=72 | neutral: IC=-0.113 n=78 | overbought(IBS>0.7): IC=-0.042 n=94
+  - _Datos_: n=251 IC=-0.049 PNL=-13.35€
 
 **🟡 H-HORA-GBM** — hora_utc causal automático en GBM (forward)
   - _Umbral_: n≥20 forward con hora_utc + alguna hora con n≥15 IC<-0.10 o >+0.10
@@ -225,7 +227,7 @@ _Derivadas de los patrones aprendidos:_
 **⏳ H-CROSS-ASSET** — Cross-asset confirmation GBM+OF BUY_NO
   - _Umbral_: n_overlaps≥20 y IC_overlap > IC_base + 0.05
   - _Acción_: Cambiar _aplicar_kelly_compuesto: match por activo, no market_id
-  - _Estado_: n_overlaps=17, boost estimado=+0.014. Necesita 3 más y boost>0.05
+  - _Estado_: n_overlaps=17, boost estimado=+0.016. Necesita 3 más y boost>0.05
 
 **⏳ H-OF-PAR** — ORDER_FLOW per-pair delta_ratio ranges
   - _Umbral_: n≥200 por par con delta_ratio feature en shadow
@@ -323,8 +325,8 @@ _Derivadas de los patrones aprendidos:_
   - _Hipótesis_: Cuando la volatilidad horaria es muy alta el GBM puede sobreestimar el edge. Testear.
   - _Umbral_: n≥30 y IC<-0.05
   - _Acción_: Filtrar señales GBM cuando sigma_h > 0.002 si se confirma IC negativo
-  - _Estado_: n=439 IC=-0.017 PNL=-4.04€ — sin señal clara aún (umbral IC: min=None max=-0.05)
-  - _Datos_: n=439 IC=-0.017 PNL=-4.04€
+  - _Estado_: n=441 IC=-0.019 PNL=-6.59€ — sin señal clara aún (umbral IC: min=None max=-0.05)
+  - _Datos_: n=441 IC=-0.019 PNL=-6.59€
 
 **⏳ H-CUSTOM-OF-02H-BTCSOL** — ORDER_FLOW H=02h UTC — BTC+SOL solamente (revisar blacklist)
   - _Hipótesis_: La hora 02h está en el blacklist basado en TODOS los pares. Con BTC+SOL solo, el historial muestra 4/5 (80%) IC=+0.054. ¿Se confirma la señal positiva con más datos?
@@ -446,8 +448,8 @@ _Derivadas de los patrones aprendidos:_
   - _Hipótesis_: Inspirado en 'The Volatility Edge' (Concretum Research, 2025): en equities, VIX spikes identifican regímenes de pánico donde los moves están sobreamplificados por feedback loops (deleveraging, hedgers, etc). En cripto el análogo es DVOL (Deribit BTC IV). Sin acceso a DVOL, usamos sigma_h como proxy (vol realizada 1h). Hipótesis: cuando sigma_h > 0.004/h (≈ vol diaria >9.6%), los mercados de predicción exageran la bajada en 15min → BUY_NO tiene IC superior porque el pánico se revierte intraday. Activar cuando n≥200 en BUY_NO #15min para tener potencia suficiente para subdividir por régimen.
   - _Umbral_: n≥200 BUY_NO #15min total, luego n≥40 en subconjunto sigma_h>0.004 y IC>+0.10
   - _Acción_: Si IC_sigma_alto > IC_baseline + 0.08 con n≥40 → boost ×1.2 en BUY_NO cuando sigma_h>0.004. Pendiente integrar DVOL real (Deribit API) cuando n≥500.
-  - _Estado_: n=67 IC=+0.094 PNL=+19.57€ — sin señal clara aún (umbral IC: min=0.1 max=None)
-  - _Datos_: n=67 IC=+0.094 PNL=+19.57€
+  - _Estado_: n=69 IC=+0.077 PNL=+17.02€ — sin señal clara aún (umbral IC: min=0.1 max=None)
+  - _Datos_: n=69 IC=+0.077 PNL=+17.02€
 
 **⏳ H-CUSTOM-POLY-DRIFT-CONFIRM** — poly_drift_5obs: ¿el precio YES interno de Polymarket confirma nuestra señal?
   - _Hipótesis_: Feature nueva 2026-06-27: drift del precio YES en Polymarket en últimas 5 obs (~5min). Si poly_drift<0 y decidimos BUY_NO (o poly_drift>0 y BUY_YES) → confluencia. Si diverge → reducción de stake. Hipótesis: confluencia Binance+Polymarket mejora IC; divergencia empeora.
@@ -479,12 +481,12 @@ _Derivadas de los patrones aprendidos:_
   - _Hipótesis_: Inspirado en el paper de Fornero (2023, 43 Jornadas SADAF) sobre astrología financiera: 5 estudios peer-review (Dichev & Janes 2003, Yuan et al. 2006, Keef & Khaled 2011, Floros & Tan 2013, Liu & Tseng 2009) en 25-62 mercados bursátiles encuentran rendimientos 5-10%/año más bajos cerca de luna llena que de luna nueva. El propio paper es escéptico de la astrología como tal, pero el mecanismo que documenta no es místico: sesgo de humor de inversores minoristas (más fuerte en acciones con dominancia retail, casi nulo en institucional). Polymarket es un mercado muy retail/cripto — hipótesis: si el mecanismo transfiere, debería verse peor IC cerca de luna llena (moon_phase≈0.5) que en el resto del ciclo.
   - _Umbral_: 200
   - _Acción_: Si IC cerca de luna llena < IC resto del ciclo con margen ≥0.05 y ≥3 ciclos lunares cubiertos → considerar boost/filtro por moon_phase. No implementar con menos de 3 ciclos aunque n sea alto — el efecto es de calendario lento, no de volumen.
-  - _Estado_: 3/200 ops en el filtro definido (IC actual=+0.045 PNL=+4.82€)
-  - _Datos_: n=3 IC=+0.045 PNL=+4.82€
+  - _Estado_: 5/200 ops en el filtro definido (IC actual=+0.018 PNL=+2.27€)
+  - _Datos_: n=5 IC=+0.018 PNL=+2.27€
 
 **⏳ H-CUSTOM-MERCURY-RETROGRADO** — Mercurio retrógrado: ¿rendimiento peor durante la ventana?
   - _Hipótesis_: Mismo origen que H-CUSTOM-MOON-LLENA (paper de Fornero, 43 Jornadas SADAF 2023). Qi, Wang & Zhang (2022, 48 mercados, 1973-2019): rendimientos 3.33%/año más bajos durante Mercurio retrógrado. Kou & Ma (2022) en China (99.8% cuentas retail): hasta -31% anualizado. Ambos estudios confirman que el mecanismo es la creencia/superstición de inversores retail (mayor efecto cuanto más retail y más supersticioso el mercado), no un efecto astral literal — Polymarket encaja en ese perfil. Ventanas 2026 (fuente pública, actualizar cada año): 26-feb a 20-mar, 29-jun a 23-jul, 24-oct a 13-nov.
   - _Umbral_: 100
   - _Acción_: Si IC en mercury_retrogrado=1 < IC en mercury_retrogrado=0 con margen ≥0.05 y ≥2 ventanas distintas cubiertas → considerar boost/filtro. No implementar tras una sola ventana (jun-jul 2026) por more que n sea alto — sería solo un evento, no un patrón.
-  - _Estado_: 3/100 ops en el filtro definido (IC actual=+0.045 PNL=+4.82€)
-  - _Datos_: n=3 IC=+0.045 PNL=+4.82€
+  - _Estado_: 5/100 ops en el filtro definido (IC actual=+0.018 PNL=+2.27€)
+  - _Datos_: n=5 IC=+0.018 PNL=+2.27€
