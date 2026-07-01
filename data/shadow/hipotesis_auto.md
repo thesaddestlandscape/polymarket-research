@@ -1,5 +1,5 @@
-# Hipótesis automáticas — 2026-07-01 02:46 UTC
-_Generado por shadow_postmortem.py sobre 1510 resoluciones (PNL=-61.92€)_
+# Hipótesis automáticas — 2026-07-01 02:48 UTC
+_Generado por shadow_postmortem.py sobre 1511 resoluciones (PNL=-62.84€)_
 
 ## Patrones causales activos
 
@@ -119,8 +119,8 @@ _Derivadas de los patrones aprendidos:_
 | ✅ PRICE_TARGET_GBM#SOL#atexpiry | 7 | -0.019 | -1.52€ | 0 | 0 |
 | ✅ PRICE_TARGET_GBM#atexpiry | 57 | -0.093 | -11.19€ | 0 | 0 |
 | ✅ PRICE_TARGET_GBM#reach | 5 | +0.018 | -0.58€ | 0 | 0 |
-| 🚫 SMART_FLOW_1H | 25 | -0.278 | -11.65€ | 0 | 0 |
-| ✅ SMART_FLOW_1H#BTC | 10 | -0.083 | -2.97€ | 0 | 0 |
+| 🚫 SMART_FLOW_1H | 26 | -0.286 | -12.57€ | 0 | 0 |
+| ✅ SMART_FLOW_1H#BTC | 11 | -0.106 | -3.89€ | 0 | 0 |
 | ✅ UPDOWN_GBM | 509 | -0.021 | -14.48€ | 0 | 0 |
 | ✅ UPDOWN_GBM#15min | 319 | +0.020 | +3.97€ | 0 | 0 |
 | 🚫 UPDOWN_GBM#240min | 12 | -0.171 | -4.82€ | 0 | 0 |
