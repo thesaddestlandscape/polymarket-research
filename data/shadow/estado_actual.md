@@ -1,4 +1,4 @@
-# Estado del bot — 2026-07-01 18:42 UTC
+# Estado del bot — 2026-07-01 18:44 UTC
 
 ## Capital
 | | |
@@ -11,24 +11,24 @@
 | | |
 |---|---|
 | Inicio | 25.44 € |
-| Actual | **-65.71 €** |
-| P&L acumulado | 🔴 **-91.15 €** |
-| ROI s/ operativo | -358.31% |
-| ROI s/ depósito | -303.84% |
+| Actual | **-62.32 €** |
+| P&L acumulado | 🔴 **-87.76 €** |
+| ROI s/ operativo | -344.97% |
+| ROI s/ depósito | -292.54% |
 | P&L hoy (2026-07-01) | 🔴 -29.68 € |
-| Operaciones resueltas | 2470 (1189 WIN / 1281 LOSS) — 48.1% |
+| Operaciones resueltas | 2453 (1182 WIN / 1271 LOSS) — 48.2% |
 | Señales abiertas | 52 |
 
 ## Estrategias (visión global)
 
 | Estrategia | n | Win% | IC_efectivo | PNL | Apuesta | Estado |
 |---|---|---|---|---|---|---|
-| ORDER_FLOW_5M | 1497 | 51.3% | +0.013 | +11.16€ | 0.50€ | ✅ activa |
-| PRICE_TARGET_GBM | 73 | 39.7% | -0.100 | -13.08€ | 0.50€ | ⚠️ IC negativo |
+| ORDER_FLOW_5M | 1495 | 51.2% | +0.012 | +10.18€ | 0.50€ | ✅ activa |
+| PRICE_TARGET_GBM | 67 | 40.3% | -0.094 | -11.97€ | 0.50€ | ⚠️ IC negativo |
 | SMART_FLOW_1H | 29 | 20.7% | -0.274 | -13.82€ | 0.00€ | 🚫 desactivada |
-| WEEKLY_PRICE | 75 | 46.7% | -0.032 | -18.19€ | 0.50€ | ⚠️ IC negativo |
+| WEEKLY_PRICE | 70 | 45.7% | -0.042 | -17.23€ | 0.50€ | ⚠️ IC negativo |
 | UPDOWN_OU_5M | 84 | 28.6% | -0.209 | -18.89€ | 0.00€ | 🚫 desactivada |
-| UPDOWN_GBM | 712 | 45.9% | -0.041 | -38.34€ | 0.50€ | ⚠️ IC negativo |
+| UPDOWN_GBM | 708 | 46.2% | -0.038 | -36.04€ | 0.50€ | ⚠️ IC negativo |
 
 ## Últimas 5 resoluciones
 
@@ -42,7 +42,7 @@
 
 ## Calidad de datos
 
-✅ **OK** — última verificación 2026-07-01T18:42 UTC
+✅ **OK** — última verificación 2026-07-01T18:44 UTC
 
 | Asset | Precio | Age | Alertas |
 |---|---|---|---|
