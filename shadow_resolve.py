@@ -106,14 +106,27 @@ def cargar_ya_resueltas() -> set:
 
 
 def estado_mercado(market_id: str) -> dict | None:
-    """Consulta el estado actual del mercado en Polymarket. Reintenta en 429."""
-    url = "https://gamma-api.polymarket.com/markets"
+    """
+    Consulta el estado actual del mercado en Polymarket. Reintenta en 429.
+
+    Usa el endpoint por path (/markets/{id}), NO por query param (?id=X):
+    verificado 2026-07-01 que ?id=X aplica un filtro implícito closed=false
+    y por tanto NUNCA devuelve un mercado ya cerrado — exactamente el caso
+    que evaluar() necesita para confirmar la resolución final. Esto dejaba
+    predicciones sin resolver indefinidamente en cuanto el mercado cerraba
+    de verdad (875 pares strategy/market_id >6h pasado su end_date sin
+    resolver en el momento de detectarlo), con riesgo directo de dejar
+    trades live en status=OPEN para siempre.
+    """
+    url = f"https://gamma-api.polymarket.com/markets/{market_id}"
     for intento in range(3):
         try:
-            r = requests.get(url, params={"id": market_id}, timeout=TIMEOUT)
+            r = requests.get(url, timeout=TIMEOUT)
             if r.status_code == 429:
                 time.sleep(2 ** intento)  # backoff: 1s, 2s, 4s
                 continue
+            if r.status_code == 404:
+                return None
             r.raise_for_status()
             data = r.json()
             if isinstance(data, list) and data:
