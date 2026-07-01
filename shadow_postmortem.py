@@ -1218,6 +1218,7 @@ def main():
         print(f"\n  Sin patrones causales nuevos (datos insuficientes o sin señal clara)")
 
     # Preservar desactivaciones manuales y sección meta (ambas sobreviven al ciclo de reescritura)
+    old = {}
     if PARAMS_PATH.exists():
         try:
             old_data = json.load(open(PARAMS_PATH, encoding="utf-8"))
@@ -1242,6 +1243,28 @@ def main():
                 params["meta"] = existing_meta
         except Exception:
             pass
+
+    # Aviso Telegram una sola vez cuando la recalibración Platt de una estrategia
+    # pasa de no-validada a validada (walk-forward + potencia estadística OK) —
+    # 2026-07-01: UPDOWN_GBM confirmado significativo pero bloqueado por potencia
+    # (n_oos=378/447 en ese momento), se esperaba activación en 1-2 días.
+    for strat_key, p in params["estrategias"].items():
+        if "#" in strat_key:
+            continue
+        nueva_calib = p.get("calibracion_prob")
+        vieja_calib = old.get(strat_key, {}).get("calibracion_prob")
+        if nueva_calib and not vieja_calib:
+            try:
+                from shadow_digest import enviar_telegram
+                enviar_telegram(
+                    f"📐 *Recalibración Platt activada: {strat_key}*\n"
+                    f"a={nueva_calib['a']:+.2f} b={nueva_calib['b']:.2f} "
+                    f"n_oos={nueva_calib['n_oos_validado']} "
+                    f"mejora_oos={nueva_calib['mejora_media_oos']:+.4f}\n"
+                    f"prob_yes_modelo se corrige automáticamente en las próximas decisiones."
+                )
+            except Exception as e:
+                print(f"  [aviso calibración] no se pudo notificar: {e}")
 
     with open(PARAMS_PATH, "w", encoding="utf-8") as f:
         json.dump(params, f, indent=2, ensure_ascii=False)
