@@ -2,10 +2,14 @@
 """
 dashboard_server.py — Dashboard visual del bot Polymarket
 Lanzar:  screen -dmS dash python3 dashboard_server.py
-Acceso:  http://<VPS_IP>:8888
+Acceso:  http://<VPS_IP>:8888  (pide usuario/contraseña — ver data/live/.env)
          o SSH tunnel: ssh -L 8888:localhost:8888 root@<VPS_IP> → http://localhost:8888
+
+Auth: HTTP Basic, credenciales en data/live/.env (DASHBOARD_USER/DASHBOARD_PASS,
+gitignored). Añadido 2026-07-01 — antes exponía bankroll/trades/IC en la IP
+pública del VPS sin ningún control de acceso.
 """
-import csv, json, sys, time, threading, socket
+import base64, csv, hmac, json, sys, time, threading, socket
 from http.server import HTTPServer, BaseHTTPRequestHandler
 from socketserver import ThreadingMixIn
 from pathlib import Path
@@ -13,6 +17,15 @@ from datetime import datetime, timezone, timedelta
 from collections import defaultdict
 
 STATIC_DIR = Path(__file__).parent / "static"
+
+try:
+    from dotenv import load_dotenv
+    load_dotenv(Path(__file__).parent / "data" / "live" / ".env")
+except Exception:
+    pass
+import os
+DASHBOARD_USER = os.environ.get("DASHBOARD_USER", "")
+DASHBOARD_PASS = os.environ.get("DASHBOARD_PASS", "")
 
 REPO             = Path(__file__).parent
 RESULTS_CSV      = REPO / "data/shadow/results.csv"
@@ -1092,7 +1105,31 @@ setInterval(fetchData, 1_000);
 _LC_JS = (STATIC_DIR / "lc.js").read_bytes() if (STATIC_DIR / "lc.js").exists() else b""
 
 class Handler(BaseHTTPRequestHandler):
+    def _autenticado(self) -> bool:
+        if not DASHBOARD_USER or not DASHBOARD_PASS:
+            return True  # sin credenciales configuradas → no bloquear (fallback)
+        header = self.headers.get("Authorization", "")
+        if not header.startswith("Basic "):
+            return False
+        try:
+            decoded = base64.b64decode(header[6:]).decode("utf-8")
+            user, _, pw = decoded.partition(":")
+        except Exception:
+            return False
+        # Comparación en tiempo constante para evitar timing attacks
+        return hmac.compare_digest(user, DASHBOARD_USER) and hmac.compare_digest(pw, DASHBOARD_PASS)
+
+    def _pedir_auth(self):
+        self.send_response(401)
+        self.send_header("WWW-Authenticate", 'Basic realm="Polymarket Dashboard"')
+        self.send_header("Content-Type", "text/plain")
+        self.end_headers()
+        self.wfile.write(b"Autenticacion requerida")
+
     def do_GET(self):
+        if not self._autenticado():
+            self._pedir_auth()
+            return
         if self.path == "/api/data":
             body = json.dumps(get_data()).encode()
             self.send_response(200)
