@@ -1,7 +1,17 @@
-# Hipótesis automáticas — 2026-07-01 06:56 UTC
+# Hipótesis automáticas — 2026-07-01 06:58 UTC
 _Generado por shadow_postmortem.py sobre 1524 resoluciones (PNL=-60.38€)_
 
 ## Patrones causales activos
+
+### ORDER_FLOW_5M
+- **FILTRO** `delta_ratio` |x|≤ `0.389` → IC=-0.139 (n=34)
+  - _Por qué funciona_: delta_ratio bajo → order flow débil; señal insuficiente para batir el spread
+  - _Acción_: SKIP cuando `delta_ratio` |x|≤ 0.389
+  - _Potencial_: sin este filtro IC_bueno=+0.125 (n=102)
+
+- **PATRÓN** `delta_ratio` |x|> `0.389` → IC=+0.125 (n=102)
+  - _Por qué funciona_: delta_ratio alto → flow informado visible; edge real en el desequilibrio
+  - _Acción_: Kelly boost +0.62€ cuando `delta_ratio` |x|> 0.389 (IC base=+0.058)
 
 ### UPDOWN_GBM#BTC#15min
 - **PATRÓN** `drift_60min` |x|≤ `0.0607` → IC=+0.152 (n=21)
@@ -40,16 +50,30 @@ _Generado por shadow_postmortem.py sobre 1524 resoluciones (PNL=-60.38€)_
   - _Acción_: SKIP cuando `sigma_h` < 0.0074
   - _Potencial_: sin este filtro IC_bueno=+0.076 (n=31)
 
+- **FILTRO** `delta_ratio_macro` |x|≤ `0.1382` → IC=-0.125 (n=22)
+  - _Por qué funciona_: flow macro débil → el mercado no ha procesado aún la presión; lag explotable
+  - _Acción_: SKIP cuando `delta_ratio_macro` |x|≤ 0.1382
+  - _Potencial_: sin este filtro IC_bueno=+0.125 (n=22)
+
 - **FILTRO** `hora_utc` < `15.0` → IC=-0.132 (n=17)
   - _Por qué funciona_: hora temprana → mercados cripto menos líquidos, spreads más amplios; edge real menor
   - _Acción_: SKIP cuando `hora_utc` < 15.0
   - _Potencial_: sin este filtro IC_bueno=+0.045 (n=9)
+
+- **PATRÓN** `delta_ratio_macro` |x|> `0.1382` → IC=+0.125 (n=22)
+  - _Por qué funciona_: flow macro dominante → el lado comprador/vendedor ya fijó el precio en Polymarket
+  - _Acción_: Kelly boost +0.62€ cuando `delta_ratio_macro` |x|> 0.1382 (IC base=+0.000)
 
 ### UPDOWN_GBM#SOL#15min
 - **FILTRO** `drift_60min` |x|> `0.2277` → IC=-0.200 (n=18)
   - _Por qué funciona_: drift fuerte en 1h → el movimiento ya está priceado en Polymarket; edge agotado
   - _Acción_: SKIP cuando `drift_60min` |x|> 0.2277
   - _Potencial_: sin este filtro IC_bueno=+0.136 (n=20)
+
+- **FILTRO** `delta_ratio_macro` |x|≤ `0.1328` → IC=-0.167 (n=19)
+  - _Por qué funciona_: flow macro débil → el mercado no ha procesado aún la presión; lag explotable
+  - _Acción_: SKIP cuando `delta_ratio_macro` |x|≤ 0.1328
+  - _Potencial_: sin este filtro IC_bueno=+0.091 (n=20)
 
 - **PATRÓN** `drift_60min` |x|≤ `0.2277` → IC=+0.136 (n=20)
   - _Por qué funciona_: drift moderado → precio aún no ha reaccionado del todo; lag explotable
@@ -71,6 +95,11 @@ _Generado por shadow_postmortem.py sobre 1524 resoluciones (PNL=-60.38€)_
   - _Acción_: SKIP cuando `drift_15min` |x|> 0.61
   - _Potencial_: sin este filtro IC_bueno=+0.125 (n=6)
 
+- **FILTRO** `delta_ratio_macro` |x|≤ `0.1696` → IC=-0.147 (n=15)
+  - _Por qué funciona_: flow macro débil → el mercado no ha procesado aún la presión; lag explotable
+  - _Acción_: SKIP cuando `delta_ratio_macro` |x|≤ 0.1696
+  - _Potencial_: sin este filtro IC_bueno=-0.125 (n=6)
+
 ### UPDOWN_GBM#XRP#15min
 - **FILTRO** `pct_spot_vs_ref` |x|> `0.0748` → IC=-0.147 (n=15)
   - _Por qué funciona_: precio spot lejos de la referencia → señal GBM sobreextiende; riesgo de reversión
@@ -91,7 +120,7 @@ _Derivadas de los patrones aprendidos:_
 
 | Estrategia | n | IC | PNL | Filtros | Patrones |
 |---|---|---|---|---|---|
-| ✅ ORDER_FLOW_5M | 792 | +0.010 | +5.97€ | 0 | 0 |
+| ✅ ORDER_FLOW_5M | 792 | +0.010 | +5.97€ | 1 | 1 |
 | ✅ ORDER_FLOW_5M#5min | 656 | +0.000 | -6.62€ | 0 | 0 |
 | ✅ ORDER_FLOW_5M#BNB | 63 | +0.038 | +1.36€ | 0 | 0 |
 | ✅ ORDER_FLOW_5M#BNB#5min | 63 | +0.038 | +1.36€ | 0 | 0 |
@@ -131,12 +160,12 @@ _Derivadas de los patrones aprendidos:_
 | ✅ UPDOWN_GBM#ETH#15min | 164 | +0.030 | +8.73€ | 0 | 1 |
 | ✅ UPDOWN_GBM#ETH#240min | 5 | -0.018 | -0.44€ | 0 | 0 |
 | 🚫 UPDOWN_GBM#ETH#5min | 12 | -0.086 | -3.67€ | 0 | 0 |
-| ✅ UPDOWN_GBM#ETH#60min | 46 | +0.000 | -1.33€ | 2 | 0 |
+| ✅ UPDOWN_GBM#ETH#60min | 46 | +0.000 | -1.33€ | 3 | 1 |
 | ✅ UPDOWN_GBM#ETH#daily | 5 | +0.018 | +3.85€ | 0 | 0 |
 | ✅ UPDOWN_GBM#SOL | 90 | -0.076 | -4.26€ | 0 | 0 |
-| ✅ UPDOWN_GBM#SOL#15min | 46 | +0.000 | +1.46€ | 1 | 1 |
+| ✅ UPDOWN_GBM#SOL#15min | 46 | +0.000 | +1.46€ | 2 | 1 |
 | 🚫 UPDOWN_GBM#SOL#5min | 17 | -0.112 | -4.84€ | 0 | 0 |
-| ✅ UPDOWN_GBM#SOL#60min | 21 | -0.152 | -2.25€ | 3 | 0 |
+| ✅ UPDOWN_GBM#SOL#60min | 21 | -0.152 | -2.25€ | 4 | 0 |
 | ✅ UPDOWN_GBM#XRP | 30 | -0.094 | -2.51€ | 0 | 0 |
 | ✅ UPDOWN_GBM#XRP#15min | 21 | -0.065 | -0.65€ | 2 | 0 |
 | 🚫 UPDOWN_GBM#XRP#5min | 9 | -0.061 | -1.86€ | 0 | 0 |
