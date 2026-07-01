@@ -5,7 +5,9 @@ Intervalo: 120s (2 minutos).
 Checks de sintaxis periódicos: cada 5 ciclos (~10 min).
 
 Checks en cada ciclo:
-  1. predictions_HOY.csv actualizado en los últimos 5 min
+  1. klines_HOY.json actualizado en los últimos 5 min (proxy del fast loop vivo;
+     predictions_HOY.csv no sirve porque el dedup diario lo deja sin filas
+     nuevas en ciclos enteros aunque el loop esté sano)
   2. Screens fast/slow/control corriendo → restart si caídas
   3. Errores en fast.log → patrón conocido → fix automático
   4. postmortem.csv > 50MB → regenerar
@@ -37,6 +39,7 @@ REPO       = Path(__file__).parent
 LOG_FAST   = REPO / "logs" / "fast.log"
 LOG_WATCH  = REPO / "logs" / "watchdog.log"
 DIR_SHADOW = REPO / "data" / "shadow"
+DIR_BINANCE = REPO / "data" / "binance"
 
 CHECK_INTERVAL     = 120   # segundos entre ciclos
 MAX_PRED_SILENCE   = 300   # sin actualizar predictions → alerta
@@ -76,8 +79,8 @@ def log(msg: str):
             f.write(line + "\n")
 
 
-def pred_csv_hoy() -> Path:
-    return DIR_SHADOW / f"predictions_{datetime.now(timezone.utc).strftime('%Y-%m-%d')}.csv"
+def klines_json_hoy() -> Path:
+    return DIR_BINANCE / f"klines_{datetime.now(timezone.utc).strftime('%Y-%m-%d')}.json"
 
 
 def segundos_desde_update(path: Path) -> float | None:
@@ -395,18 +398,20 @@ def main():
     while True:
         ciclo += 1
         try:
-            # ── 1. Predictions CSV silencio ───────────────────────────────────
-            hoy_csv = pred_csv_hoy()
-            age = segundos_desde_update(hoy_csv)
+            # ── 1. Fast loop silencio (klines, se escribe cada ciclo pase lo que pase;
+            #      predictions.csv NO sirve de proxy porque el dedup diario deja
+            #      ciclos enteros sin filas nuevas aunque el loop esté sano) ──────
+            hoy_klines = klines_json_hoy()
+            age = segundos_desde_update(hoy_klines)
             if age is None:
-                log(f"⚠ predictions CSV hoy no existe: {hoy_csv.name}")
+                log(f"⚠ klines JSON hoy no existe: {hoy_klines.name}")
                 consecutivos_silencio += 1
             elif age > MAX_PRED_SILENCE:
                 consecutivos_silencio += 1
-                log(f"⚠ predictions sin actualizar {age:.0f}s (umbral={MAX_PRED_SILENCE}s) — ciclo silencio #{consecutivos_silencio}")
+                log(f"⚠ fast loop sin actualizar klines {age:.0f}s (umbral={MAX_PRED_SILENCE}s) — ciclo silencio #{consecutivos_silencio}")
             else:
                 if consecutivos_silencio > 0:
-                    log(f"✅ predictions activa de nuevo (silencio={consecutivos_silencio} ciclos)")
+                    log(f"✅ fast loop activo de nuevo (silencio={consecutivos_silencio} ciclos)")
                 consecutivos_silencio = 0
 
             # ── 2. Screens health ─────────────────────────────────────────────
