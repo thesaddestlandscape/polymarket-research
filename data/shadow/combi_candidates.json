@@ -1,8 +1,8 @@
 {
-  "generated_at": "2026-07-01T07:19:10.836123+00:00",
+  "generated_at": "2026-07-01T07:30:21.578503+00:00",
   "markets_file": "2026-07-01.csv",
-  "total_filtered": 1314,
-  "total_pairs": 1365,
+  "total_filtered": 1328,
+  "total_pairs": 1362,
   "candidates": [
     {
       "market_id_a": "701553",
@@ -12,27 +12,7 @@
       "market_id_b": "701554",
       "question_b": "Will Ethereum dip to $800 by December 31, 2026?",
       "price_yes_b": 0.145,
-      "liq_b": 97544.0
-    },
-    {
-      "market_id_a": "701549",
-      "question_a": "Will Ethereum reach $3,500 by December 31, 2026?",
-      "price_yes_a": 0.1,
-      "liq_a": 46262.0,
-      "market_id_b": "701553",
-      "question_b": "Will Ethereum dip to $1,000 by December 31, 2026?",
-      "price_yes_b": 0.225,
-      "liq_b": 118485.0
-    },
-    {
-      "market_id_a": "701547",
-      "question_a": "Will Ethereum reach $4,500 by December 31, 2026?",
-      "price_yes_a": 0.06,
-      "liq_a": 45255.0,
-      "market_id_b": "701553",
-      "question_b": "Will Ethereum dip to $1,000 by December 31, 2026?",
-      "price_yes_b": 0.225,
-      "liq_b": 118485.0
+      "liq_b": 97295.0
     },
     {
       "market_id_a": "701553",
@@ -42,7 +22,27 @@
       "market_id_b": "701544",
       "question_b": "Will Ethereum reach $6,000 by December 31, 2026?",
       "price_yes_b": 0.05,
-      "liq_b": 44343.0
+      "liq_b": 46773.0
+    },
+    {
+      "market_id_a": "701549",
+      "question_a": "Will Ethereum reach $3,500 by December 31, 2026?",
+      "price_yes_a": 0.1,
+      "liq_a": 46260.0,
+      "market_id_b": "701553",
+      "question_b": "Will Ethereum dip to $1,000 by December 31, 2026?",
+      "price_yes_b": 0.225,
+      "liq_b": 118485.0
+    },
+    {
+      "market_id_a": "701547",
+      "question_a": "Will Ethereum reach $4,500 by December 31, 2026?",
+      "price_yes_a": 0.06,
+      "liq_a": 43684.0,
+      "market_id_b": "701553",
+      "question_b": "Will Ethereum dip to $1,000 by December 31, 2026?",
+      "price_yes_b": 0.225,
+      "liq_b": 118485.0
     },
     {
       "market_id_a": "701553",
@@ -52,7 +52,7 @@
       "market_id_b": "701548",
       "question_b": "Will Ethereum reach $4,000 by December 31, 2026?",
       "price_yes_b": 0.075,
-      "liq_b": 40462.0
+      "liq_b": 41036.0
     },
     {
       "market_id_a": "701553",
@@ -62,7 +62,7 @@
       "market_id_b": "701552",
       "question_b": "Will Ethereum dip to $1,500 by December 31, 2026?",
       "price_yes_b": 0.9115,
-      "liq_b": 39935.0
+      "liq_b": 40169.0
     },
     {
       "market_id_a": "701545",
@@ -82,7 +82,7 @@
       "market_id_b": "701546",
       "question_b": "Will Ethereum reach $5,000 by December 31, 2026?",
       "price_yes_b": 0.055,
-      "liq_b": 34291.0
+      "liq_b": 36319.0
     },
     {
       "market_id_a": "701553",
@@ -95,34 +95,24 @@
       "liq_b": 28905.0
     },
     {
-      "market_id_a": "701549",
-      "question_a": "Will Ethereum reach $3,500 by December 31, 2026?",
-      "price_yes_a": 0.1,
-      "liq_a": 46262.0,
-      "market_id_b": "701554",
-      "question_b": "Will Ethereum dip to $800 by December 31, 2026?",
-      "price_yes_b": 0.145,
-      "liq_b": 97544.0
-    },
-    {
-      "market_id_a": "701547",
-      "question_a": "Will Ethereum reach $4,500 by December 31, 2026?",
-      "price_yes_a": 0.06,
-      "liq_a": 45255.0,
-      "market_id_b": "701554",
-      "question_b": "Will Ethereum dip to $800 by December 31, 2026?",
-      "price_yes_b": 0.145,
-      "liq_b": 97544.0
-    },
-    {
       "market_id_a": "701544",
       "question_a": "Will Ethereum reach $6,000 by December 31, 2026?",
       "price_yes_a": 0.05,
-      "liq_a": 44343.0,
+      "liq_a": 46773.0,
       "market_id_b": "701554",
       "question_b": "Will Ethereum dip to $800 by December 31, 2026?",
       "price_yes_b": 0.145,
-      "liq_b": 97544.0
+      "liq_b": 97295.0
+    },
+    {
+      "market_id_a": "701549",
+      "question_a": "Will Ethereum reach $3,500 by December 31, 2026?",
+      "price_yes_a": 0.1,
+      "liq_a": 46260.0,
+      "market_id_b": "701554",
+      "question_b": "Will Ethereum dip to $800 by December 31, 2026?",
+      "price_yes_b": 0.145,
+      "liq_b": 97295.0
     },
     {
       "market_id_a": "701553",
@@ -145,24 +135,34 @@
       "liq_b": 22714.0
     },
     {
-      "market_id_a": "701548",
-      "question_a": "Will Ethereum reach $4,000 by December 31, 2026?",
-      "price_yes_a": 0.075,
-      "liq_a": 40462.0,
+      "market_id_a": "701547",
+      "question_a": "Will Ethereum reach $4,500 by December 31, 2026?",
+      "price_yes_a": 0.06,
+      "liq_a": 43684.0,
       "market_id_b": "701554",
       "question_b": "Will Ethereum dip to $800 by December 31, 2026?",
       "price_yes_b": 0.145,
-      "liq_b": 97544.0
+      "liq_b": 97295.0
+    },
+    {
+      "market_id_a": "701548",
+      "question_a": "Will Ethereum reach $4,000 by December 31, 2026?",
+      "price_yes_a": 0.075,
+      "liq_a": 41036.0,
+      "market_id_b": "701554",
+      "question_b": "Will Ethereum dip to $800 by December 31, 2026?",
+      "price_yes_b": 0.145,
+      "liq_b": 97295.0
     },
     {
       "market_id_a": "701552",
       "question_a": "Will Ethereum dip to $1,500 by December 31, 2026?",
       "price_yes_a": 0.9115,
-      "liq_a": 39935.0,
+      "liq_a": 40169.0,
       "market_id_b": "701554",
       "question_b": "Will Ethereum dip to $800 by December 31, 2026?",
       "price_yes_b": 0.145,
-      "liq_b": 97544.0
+      "liq_b": 97295.0
     },
     {
       "market_id_a": "701553",
@@ -182,7 +182,17 @@
       "market_id_b": "701554",
       "question_b": "Will Ethereum dip to $800 by December 31, 2026?",
       "price_yes_b": 0.145,
-      "liq_b": 97544.0
+      "liq_b": 97295.0
+    },
+    {
+      "market_id_a": "701546",
+      "question_a": "Will Ethereum reach $5,000 by December 31, 2026?",
+      "price_yes_a": 0.055,
+      "liq_a": 36319.0,
+      "market_id_b": "701554",
+      "question_b": "Will Ethereum dip to $800 by December 31, 2026?",
+      "price_yes_b": 0.145,
+      "liq_b": 97295.0
     },
     {
       "market_id_a": "701553",
@@ -195,16 +205,6 @@
       "liq_b": 14593.0
     },
     {
-      "market_id_a": "701546",
-      "question_a": "Will Ethereum reach $5,000 by December 31, 2026?",
-      "price_yes_a": 0.055,
-      "liq_a": 34291.0,
-      "market_id_b": "701554",
-      "question_b": "Will Ethereum dip to $800 by December 31, 2026?",
-      "price_yes_b": 0.145,
-      "liq_b": 97544.0
-    },
-    {
       "market_id_a": "701553",
       "question_a": "Will Ethereum dip to $1,000 by December 31, 2026?",
       "price_yes_a": 0.225,
@@ -212,7 +212,7 @@
       "market_id_b": "2467358",
       "question_b": "Will Ethereum reach $2,500 by December 31, 2026?",
       "price_yes_b": 0.18,
-      "liq_b": 11628.0
+      "liq_b": 11632.0
     },
     {
       "market_id_a": "701553",
@@ -222,13 +222,13 @@
       "market_id_b": "2467359",
       "question_b": "Will Ethereum reach $2,250 by December 31, 2026?",
       "price_yes_b": 0.365,
-      "liq_b": 8120.0
+      "liq_b": 8125.0
     },
     {
       "market_id_a": "701554",
       "question_a": "Will Ethereum dip to $800 by December 31, 2026?",
       "price_yes_a": 0.145,
-      "liq_a": 97544.0,
+      "liq_a": 97295.0,
       "market_id_b": "2467357",
       "question_b": "Will Ethereum reach $2,750 by December 31, 2026?",
       "price_yes_b": 0.16,
@@ -238,11 +238,11 @@
       "market_id_a": "716823",
       "question_a": "Extended FDV above $500M one day after launch?",
       "price_yes_a": 0.3,
-      "liq_a": 65447.0,
+      "liq_a": 65489.0,
       "market_id_b": "904737",
       "question_b": "Extended FDV above $300M one day after launch?",
       "price_yes_b": 0.465,
-      "liq_b": 58092.0
+      "liq_b": 58113.0
     },
     {
       "market_id_a": "701553",
@@ -261,14 +261,14 @@
       "liq_a": 118485.0,
       "market_id_b": "2467362",
       "question_b": "Will Ethereum dip to $1,250 by December 31, 2026?",
-      "price_yes_b": 0.58,
-      "liq_b": 4321.0
+      "price_yes_b": 0.585,
+      "liq_b": 4329.0
     },
     {
       "market_id_a": "701554",
       "question_a": "Will Ethereum dip to $800 by December 31, 2026?",
       "price_yes_a": 0.145,
-      "liq_a": 97544.0,
+      "liq_a": 97295.0,
       "market_id_b": "2468461",
       "question_b": "Will Ethereum dip to $500 by December 31, 2026?",
       "price_yes_b": 0.059,
@@ -278,7 +278,7 @@
       "market_id_a": "701554",
       "question_a": "Will Ethereum dip to $800 by December 31, 2026?",
       "price_yes_a": 0.145,
-      "liq_a": 97544.0,
+      "liq_a": 97295.0,
       "market_id_b": "2467356",
       "question_b": "Will Ethereum reach $3,000 by December 31, 2026?",
       "price_yes_b": 0.115,
@@ -288,7 +288,7 @@
       "market_id_a": "701554",
       "question_a": "Will Ethereum dip to $800 by December 31, 2026?",
       "price_yes_a": 0.145,
-      "liq_a": 97544.0,
+      "liq_a": 97295.0,
       "market_id_b": "2468459",
       "question_b": "Will Ethereum dip to $700 by December 31, 2026?",
       "price_yes_b": 0.105,
@@ -298,7 +298,7 @@
       "market_id_a": "701554",
       "question_a": "Will Ethereum dip to $800 by December 31, 2026?",
       "price_yes_a": 0.145,
-      "liq_a": 97544.0,
+      "liq_a": 97295.0,
       "market_id_b": "2468460",
       "question_b": "Will Ethereum dip to $600 by December 31, 2026?",
       "price_yes_b": 0.07,
@@ -308,27 +308,27 @@
       "market_id_a": "701554",
       "question_a": "Will Ethereum dip to $800 by December 31, 2026?",
       "price_yes_a": 0.145,
-      "liq_a": 97544.0,
+      "liq_a": 97295.0,
       "market_id_b": "2467358",
       "question_b": "Will Ethereum reach $2,500 by December 31, 2026?",
       "price_yes_b": 0.18,
-      "liq_b": 11628.0
+      "liq_b": 11632.0
     },
     {
       "market_id_a": "701554",
       "question_a": "Will Ethereum dip to $800 by December 31, 2026?",
       "price_yes_a": 0.145,
-      "liq_a": 97544.0,
+      "liq_a": 97295.0,
       "market_id_b": "2467359",
       "question_b": "Will Ethereum reach $2,250 by December 31, 2026?",
       "price_yes_b": 0.365,
-      "liq_b": 8120.0
+      "liq_b": 8125.0
     },
     {
       "market_id_a": "701554",
       "question_a": "Will Ethereum dip to $800 by December 31, 2026?",
       "price_yes_a": 0.145,
-      "liq_a": 97544.0,
+      "liq_a": 97295.0,
       "market_id_b": "2467360",
       "question_b": "Will Ethereum reach $2,000 by December 31, 2026?",
       "price_yes_b": 0.57,
@@ -338,51 +338,51 @@
       "market_id_a": "701554",
       "question_a": "Will Ethereum dip to $800 by December 31, 2026?",
       "price_yes_a": 0.145,
-      "liq_a": 97544.0,
+      "liq_a": 97295.0,
       "market_id_b": "2467362",
       "question_b": "Will Ethereum dip to $1,250 by December 31, 2026?",
-      "price_yes_b": 0.58,
-      "liq_b": 4321.0
-    },
-    {
-      "market_id_a": "701547",
-      "question_a": "Will Ethereum reach $4,500 by December 31, 2026?",
-      "price_yes_a": 0.06,
-      "liq_a": 45255.0,
-      "market_id_b": "701549",
-      "question_b": "Will Ethereum reach $3,500 by December 31, 2026?",
-      "price_yes_b": 0.1,
-      "liq_b": 46262.0
+      "price_yes_b": 0.585,
+      "liq_b": 4329.0
     },
     {
       "market_id_a": "701549",
       "question_a": "Will Ethereum reach $3,500 by December 31, 2026?",
       "price_yes_a": 0.1,
-      "liq_a": 46262.0,
+      "liq_a": 46260.0,
       "market_id_b": "701544",
       "question_b": "Will Ethereum reach $6,000 by December 31, 2026?",
       "price_yes_b": 0.05,
-      "liq_b": 44343.0
-    },
-    {
-      "market_id_a": "716826",
-      "question_a": "Extended FDV above $800M one day after launch?",
-      "price_yes_a": 0.13,
-      "liq_a": 24666.0,
-      "market_id_b": "716823",
-      "question_b": "Extended FDV above $500M one day after launch?",
-      "price_yes_b": 0.3,
-      "liq_b": 65447.0
+      "liq_b": 46773.0
     },
     {
       "market_id_a": "701547",
       "question_a": "Will Ethereum reach $4,500 by December 31, 2026?",
       "price_yes_a": 0.06,
-      "liq_a": 45255.0,
+      "liq_a": 43684.0,
       "market_id_b": "701544",
       "question_b": "Will Ethereum reach $6,000 by December 31, 2026?",
       "price_yes_b": 0.05,
-      "liq_b": 44343.0
+      "liq_b": 46773.0
+    },
+    {
+      "market_id_a": "716826",
+      "question_a": "Extended FDV above $800M one day after launch?",
+      "price_yes_a": 0.13,
+      "liq_a": 24673.0,
+      "market_id_b": "716823",
+      "question_b": "Extended FDV above $500M one day after launch?",
+      "price_yes_b": 0.3,
+      "liq_b": 65489.0
+    },
+    {
+      "market_id_a": "701547",
+      "question_a": "Will Ethereum reach $4,500 by December 31, 2026?",
+      "price_yes_a": 0.06,
+      "liq_a": 43684.0,
+      "market_id_b": "701549",
+      "question_b": "Will Ethereum reach $3,500 by December 31, 2026?",
+      "price_yes_b": 0.1,
+      "liq_b": 46260.0
     },
     {
       "market_id_a": "716829",
@@ -392,87 +392,97 @@
       "market_id_b": "716823",
       "question_b": "Extended FDV above $500M one day after launch?",
       "price_yes_b": 0.3,
-      "liq_b": 65447.0
+      "liq_b": 65489.0
+    },
+    {
+      "market_id_a": "701544",
+      "question_a": "Will Ethereum reach $6,000 by December 31, 2026?",
+      "price_yes_a": 0.05,
+      "liq_a": 46773.0,
+      "market_id_b": "701548",
+      "question_b": "Will Ethereum reach $4,000 by December 31, 2026?",
+      "price_yes_b": 0.075,
+      "liq_b": 41036.0
+    },
+    {
+      "market_id_a": "701549",
+      "question_a": "Will Ethereum reach $3,500 by December 31, 2026?",
+      "price_yes_a": 0.1,
+      "liq_a": 46260.0,
+      "market_id_b": "701548",
+      "question_b": "Will Ethereum reach $4,000 by December 31, 2026?",
+      "price_yes_b": 0.075,
+      "liq_b": 41036.0
     },
     {
       "market_id_a": "716823",
       "question_a": "Extended FDV above $500M one day after launch?",
       "price_yes_a": 0.3,
-      "liq_a": 65447.0,
+      "liq_a": 65489.0,
       "market_id_b": "716827",
       "question_b": "Extended FDV above $1B one day after launch?",
       "price_yes_b": 0.11,
-      "liq_b": 21476.0
-    },
-    {
-      "market_id_a": "701549",
-      "question_a": "Will Ethereum reach $3,500 by December 31, 2026?",
-      "price_yes_a": 0.1,
-      "liq_a": 46262.0,
-      "market_id_b": "701548",
-      "question_b": "Will Ethereum reach $4,000 by December 31, 2026?",
-      "price_yes_b": 0.075,
-      "liq_b": 40462.0
-    },
-    {
-      "market_id_a": "701549",
-      "question_a": "Will Ethereum reach $3,500 by December 31, 2026?",
-      "price_yes_a": 0.1,
-      "liq_a": 46262.0,
-      "market_id_b": "701552",
-      "question_b": "Will Ethereum dip to $1,500 by December 31, 2026?",
-      "price_yes_b": 0.9115,
-      "liq_b": 39935.0
-    },
-    {
-      "market_id_a": "701547",
-      "question_a": "Will Ethereum reach $4,500 by December 31, 2026?",
-      "price_yes_a": 0.06,
-      "liq_a": 45255.0,
-      "market_id_b": "701548",
-      "question_b": "Will Ethereum reach $4,000 by December 31, 2026?",
-      "price_yes_b": 0.075,
-      "liq_b": 40462.0
-    },
-    {
-      "market_id_a": "701547",
-      "question_a": "Will Ethereum reach $4,500 by December 31, 2026?",
-      "price_yes_a": 0.06,
-      "liq_a": 45255.0,
-      "market_id_b": "701552",
-      "question_b": "Will Ethereum dip to $1,500 by December 31, 2026?",
-      "price_yes_b": 0.9115,
-      "liq_b": 39935.0
+      "liq_b": 21519.0
     },
     {
       "market_id_a": "701544",
       "question_a": "Will Ethereum reach $6,000 by December 31, 2026?",
       "price_yes_a": 0.05,
-      "liq_a": 44343.0,
-      "market_id_b": "701548",
-      "question_b": "Will Ethereum reach $4,000 by December 31, 2026?",
-      "price_yes_b": 0.075,
-      "liq_b": 40462.0
-    },
-    {
-      "market_id_a": "701544",
-      "question_a": "Will Ethereum reach $6,000 by December 31, 2026?",
-      "price_yes_a": 0.05,
-      "liq_a": 44343.0,
+      "liq_a": 46773.0,
       "market_id_b": "701552",
       "question_b": "Will Ethereum dip to $1,500 by December 31, 2026?",
       "price_yes_b": 0.9115,
-      "liq_b": 39935.0
+      "liq_b": 40169.0
+    },
+    {
+      "market_id_a": "701549",
+      "question_a": "Will Ethereum reach $3,500 by December 31, 2026?",
+      "price_yes_a": 0.1,
+      "liq_a": 46260.0,
+      "market_id_b": "701552",
+      "question_b": "Will Ethereum dip to $1,500 by December 31, 2026?",
+      "price_yes_b": 0.9115,
+      "liq_b": 40169.0
+    },
+    {
+      "market_id_a": "701547",
+      "question_a": "Will Ethereum reach $4,500 by December 31, 2026?",
+      "price_yes_a": 0.06,
+      "liq_a": 43684.0,
+      "market_id_b": "701548",
+      "question_b": "Will Ethereum reach $4,000 by December 31, 2026?",
+      "price_yes_b": 0.075,
+      "liq_b": 41036.0
     },
     {
       "market_id_a": "716823",
       "question_a": "Extended FDV above $500M one day after launch?",
       "price_yes_a": 0.3,
-      "liq_a": 65447.0,
+      "liq_a": 65489.0,
       "market_id_b": "1383905",
       "question_b": "Extended FDV above $150M one day after launch?",
       "price_yes_b": 0.755,
-      "liq_b": 18387.0
+      "liq_b": 18417.0
+    },
+    {
+      "market_id_a": "701547",
+      "question_a": "Will Ethereum reach $4,500 by December 31, 2026?",
+      "price_yes_a": 0.06,
+      "liq_a": 43684.0,
+      "market_id_b": "701552",
+      "question_b": "Will Ethereum dip to $1,500 by December 31, 2026?",
+      "price_yes_b": 0.9115,
+      "liq_b": 40169.0
+    },
+    {
+      "market_id_a": "701545",
+      "question_a": "Will Ethereum reach $5,500 by December 31, 2026?",
+      "price_yes_a": 0.048,
+      "liq_a": 36953.0,
+      "market_id_b": "701544",
+      "question_b": "Will Ethereum reach $6,000 by December 31, 2026?",
+      "price_yes_b": 0.05,
+      "liq_b": 46773.0
     },
     {
       "market_id_a": "701545",
@@ -482,17 +492,47 @@
       "market_id_b": "701549",
       "question_b": "Will Ethereum reach $3,500 by December 31, 2026?",
       "price_yes_b": 0.1,
-      "liq_b": 46262.0
+      "liq_b": 46260.0
+    },
+    {
+      "market_id_a": "701544",
+      "question_a": "Will Ethereum reach $6,000 by December 31, 2026?",
+      "price_yes_a": 0.05,
+      "liq_a": 46773.0,
+      "market_id_b": "701546",
+      "question_b": "Will Ethereum reach $5,000 by December 31, 2026?",
+      "price_yes_b": 0.055,
+      "liq_b": 36319.0
     },
     {
       "market_id_a": "716826",
       "question_a": "Extended FDV above $800M one day after launch?",
       "price_yes_a": 0.13,
-      "liq_a": 24666.0,
+      "liq_a": 24673.0,
       "market_id_b": "904737",
       "question_b": "Extended FDV above $300M one day after launch?",
       "price_yes_b": 0.465,
-      "liq_b": 58092.0
+      "liq_b": 58113.0
+    },
+    {
+      "market_id_a": "701549",
+      "question_a": "Will Ethereum reach $3,500 by December 31, 2026?",
+      "price_yes_a": 0.1,
+      "liq_a": 46260.0,
+      "market_id_b": "701546",
+      "question_b": "Will Ethereum reach $5,000 by December 31, 2026?",
+      "price_yes_b": 0.055,
+      "liq_b": 36319.0
+    },
+    {
+      "market_id_a": "701548",
+      "question_a": "Will Ethereum reach $4,000 by December 31, 2026?",
+      "price_yes_a": 0.075,
+      "liq_a": 41036.0,
+      "market_id_b": "701552",
+      "question_b": "Will Ethereum dip to $1,500 by December 31, 2026?",
+      "price_yes_b": 0.9115,
+      "liq_b": 40169.0
     },
     {
       "market_id_a": "701545",
@@ -502,17 +542,7 @@
       "market_id_b": "701547",
       "question_b": "Will Ethereum reach $4,500 by December 31, 2026?",
       "price_yes_b": 0.06,
-      "liq_b": 45255.0
-    },
-    {
-      "market_id_a": "701545",
-      "question_a": "Will Ethereum reach $5,500 by December 31, 2026?",
-      "price_yes_a": 0.048,
-      "liq_a": 36953.0,
-      "market_id_b": "701544",
-      "question_b": "Will Ethereum reach $6,000 by December 31, 2026?",
-      "price_yes_b": 0.05,
-      "liq_b": 44343.0
+      "liq_b": 43684.0
     },
     {
       "market_id_a": "716829",
@@ -522,57 +552,27 @@
       "market_id_b": "904737",
       "question_b": "Extended FDV above $300M one day after launch?",
       "price_yes_b": 0.465,
-      "liq_b": 58092.0
-    },
-    {
-      "market_id_a": "701549",
-      "question_a": "Will Ethereum reach $3,500 by December 31, 2026?",
-      "price_yes_a": 0.1,
-      "liq_a": 46262.0,
-      "market_id_b": "701546",
-      "question_b": "Will Ethereum reach $5,000 by December 31, 2026?",
-      "price_yes_b": 0.055,
-      "liq_b": 34291.0
-    },
-    {
-      "market_id_a": "701548",
-      "question_a": "Will Ethereum reach $4,000 by December 31, 2026?",
-      "price_yes_a": 0.075,
-      "liq_a": 40462.0,
-      "market_id_b": "701552",
-      "question_b": "Will Ethereum dip to $1,500 by December 31, 2026?",
-      "price_yes_b": 0.9115,
-      "liq_b": 39935.0
-    },
-    {
-      "market_id_a": "716827",
-      "question_a": "Extended FDV above $1B one day after launch?",
-      "price_yes_a": 0.11,
-      "liq_a": 21476.0,
-      "market_id_b": "904737",
-      "question_b": "Extended FDV above $300M one day after launch?",
-      "price_yes_b": 0.465,
-      "liq_b": 58092.0
+      "liq_b": 58113.0
     },
     {
       "market_id_a": "701547",
       "question_a": "Will Ethereum reach $4,500 by December 31, 2026?",
       "price_yes_a": 0.06,
-      "liq_a": 45255.0,
+      "liq_a": 43684.0,
       "market_id_b": "701546",
       "question_b": "Will Ethereum reach $5,000 by December 31, 2026?",
       "price_yes_b": 0.055,
-      "liq_b": 34291.0
+      "liq_b": 36319.0
     },
     {
-      "market_id_a": "701544",
-      "question_a": "Will Ethereum reach $6,000 by December 31, 2026?",
-      "price_yes_a": 0.05,
-      "liq_a": 44343.0,
-      "market_id_b": "701546",
-      "question_b": "Will Ethereum reach $5,000 by December 31, 2026?",
-      "price_yes_b": 0.055,
-      "liq_b": 34291.0
+      "market_id_a": "716827",
+      "question_a": "Extended FDV above $1B one day after launch?",
+      "price_yes_a": 0.11,
+      "liq_a": 21519.0,
+      "market_id_b": "904737",
+      "question_b": "Extended FDV above $300M one day after launch?",
+      "price_yes_b": 0.465,
+      "liq_b": 58113.0
     },
     {
       "market_id_a": "701545",
@@ -582,7 +582,17 @@
       "market_id_b": "701548",
       "question_b": "Will Ethereum reach $4,000 by December 31, 2026?",
       "price_yes_b": 0.075,
-      "liq_b": 40462.0
+      "liq_b": 41036.0
+    },
+    {
+      "market_id_a": "701546",
+      "question_a": "Will Ethereum reach $5,000 by December 31, 2026?",
+      "price_yes_a": 0.055,
+      "liq_a": 36319.0,
+      "market_id_b": "701548",
+      "question_b": "Will Ethereum reach $4,000 by December 31, 2026?",
+      "price_yes_b": 0.075,
+      "liq_b": 41036.0
     },
     {
       "market_id_a": "701545",
@@ -592,17 +602,7 @@
       "market_id_b": "701552",
       "question_b": "Will Ethereum dip to $1,500 by December 31, 2026?",
       "price_yes_b": 0.9115,
-      "liq_b": 39935.0
-    },
-    {
-      "market_id_a": "904737",
-      "question_a": "Extended FDV above $300M one day after launch?",
-      "price_yes_a": 0.465,
-      "liq_a": 58092.0,
-      "market_id_b": "1383905",
-      "question_b": "Extended FDV above $150M one day after launch?",
-      "price_yes_b": 0.755,
-      "liq_b": 18387.0
+      "liq_b": 40169.0
     }
   ]
 }
