@@ -119,11 +119,10 @@ def _ic_para_subtype(strategy: str, subtype: str, params: dict, decision: str = 
 
 
 def _get_clob_client():
-    """Crea cliente CLOB autenticado desde .env."""
+    """Crea cliente CLOB V2 autenticado desde .env."""
     from dotenv import load_dotenv
-    from py_clob_client.client import ClobClient
-    from py_clob_client.clob_types import ApiCreds
-    from py_clob_client.constants import POLYGON
+    from py_clob_client_v2 import ClobClient, ApiCreds
+    from py_clob_client_v2.constants import POLYGON
     load_dotenv(DIR_LIVE / ".env")
     key = os.getenv("POLY_PRIVATE_KEY")
     creds = ApiCreds(
@@ -131,7 +130,15 @@ def _get_clob_client():
         api_secret=os.getenv("POLY_API_SECRET"),
         api_passphrase=os.getenv("POLY_API_PASSPHRASE"),
     )
-    return ClobClient("https://clob.polymarket.com", key=key, chain_id=POLYGON, creds=creds)
+    deposit_wallet = os.getenv("POLY_DEPOSIT_WALLET")
+    return ClobClient(
+        "https://clob.polymarket.com",
+        key=key,
+        chain_id=POLYGON,
+        creds=creds,
+        signature_type=3,       # POLY_1271 — deposit wallet flow
+        funder=deposit_wallet,
+    )
 
 
 def _get_token_ids(market_id: str) -> tuple[str, str]:
@@ -152,8 +159,8 @@ def _get_token_ids(market_id: str) -> tuple[str, str]:
 def _ejecutar_orden_polymarket(market_id: str, direction: str,
                                stake_eur: float, entry_price: float) -> dict:
     """Ejecuta orden real en Polymarket via CLOB API."""
-    from py_clob_client.clob_types import MarketOrderArgs
     try:
+        from py_clob_client_v2 import MarketOrderArgsV2, OrderType
         yes_token, no_token = _get_token_ids(market_id)
         if direction == "BUY_YES":
             token_id = yes_token
@@ -163,14 +170,14 @@ def _ejecutar_orden_polymarket(market_id: str, direction: str,
             precio   = round(1.0 - entry_price, 6)
 
         client = _get_clob_client()
-        order_args = MarketOrderArgs(
+        order_args = MarketOrderArgsV2(
             token_id=token_id,
             amount=stake_eur,
             side="BUY",
             price=precio,
         )
         signed_order = client.create_market_order(order_args)
-        resp = client.post_order(signed_order)
+        resp = client.post_order(signed_order, OrderType.FOK)
 
         order_id = resp.get("orderID") or resp.get("id") or str(resp)
         filled_price = float(resp.get("price", precio))
@@ -186,13 +193,25 @@ def _ejecutar_orden_polymarket(market_id: str, direction: str,
             "error":       "",
         }
     except Exception as e:
+        err_str = str(e)
+        if "couldn't be fully filled" in err_str or "FOK" in err_str:
+            log(f"  ⚠️  FOK kill (sin liquidez a ese precio) — no fill: {e}")
+            return {
+                "ok":       False,
+                "no_fill":  True,
+                "order_id": None,
+                "entry_price": entry_price,
+                "fee_eur":  0.0,
+                "error":    err_str,
+            }
         log(f"  ❌ Error ejecutando orden: {e}")
         return {
             "ok":          False,
+            "no_fill":     False,
             "order_id":    None,
             "entry_price": entry_price,
             "fee_eur":     0.0,
-            "error":       str(e),
+            "error":       err_str,
         }
 
 
@@ -384,8 +403,12 @@ def main():
             f"Bankroll: {bankroll_actual():.2f}€"
         )
 
-        # 4. Ejecutar (STUB hasta tener credenciales)
+        # 4. Ejecutar
         resultado = _ejecutar_orden_polymarket(mid, dec, stake, entry_p)
+
+        # FOK kill = sin liquidez, no registrar ni contar
+        if resultado.get("no_fill"):
+            continue
 
         # 5. Registrar
         ts_now = datetime.now(timezone.utc).isoformat(timespec="seconds")
@@ -403,7 +426,7 @@ def main():
             "edge_neto":       round(edge, 4),
             "conviction_score": round(ic_hist, 4),
             "kelly_recomendado": stake,
-            "status":          "OPEN" if resultado["ok"] else "STUB",
+            "status":          "OPEN" if resultado["ok"] else "ERROR",
             "close_timestamp": "",
             "exit_price":      "",
             "outcome_real":    "",

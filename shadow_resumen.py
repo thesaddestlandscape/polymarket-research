@@ -27,9 +27,9 @@ LAST_TG_PATH = DIR_SHADOW / "_last_telegram_update.ts"
 
 TELEGRAM_INTERVALO_MIN = 60   # enviar resumen cada N minutos
 
-CAPITAL_OPERATIVO = 20.0
+CAPITAL_OPERATIVO = 25.44   # depósito real operativo (actualizado 2026-06-30)
 DEPOSITO_TOTAL    = 30.0
-RESERVA           = 10.0
+RESERVA           = 4.56
 
 
 def cargar_csv(path):
