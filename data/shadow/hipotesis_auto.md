@@ -1,17 +1,53 @@
-# Hipótesis automáticas — 2026-07-01 13:21 UTC
+# Hipótesis automáticas — 2026-07-01 13:23 UTC
 _Generado por shadow_postmortem.py sobre 1549 resoluciones (PNL=-63.24€)_
 
 ## Patrones causales activos
 
-### ORDER_FLOW_5M
-- **FILTRO** `delta_ratio` |x|≤ `0.389` → IC=-0.139 (n=34)
-  - _Por qué funciona_: delta_ratio bajo → order flow débil; señal insuficiente para batir el spread
-  - _Acción_: SKIP cuando `delta_ratio` |x|≤ 0.389
-  - _Potencial_: sin este filtro IC_bueno=+0.125 (n=102)
+### UPDOWN_GBM#5min
+- **FILTRO** `pct_spot_vs_ref` |x|> `0.03` → IC=-0.214 (n=26)
+  - _Por qué funciona_: precio spot lejos de la referencia → señal GBM sobreextiende; riesgo de reversión
+  - _Acción_: SKIP cuando `pct_spot_vs_ref` |x|> 0.03
+  - _Potencial_: sin este filtro IC_bueno=-0.094 (n=30)
 
-- **PATRÓN** `delta_ratio` |x|> `0.389` → IC=+0.125 (n=102)
-  - _Por qué funciona_: delta_ratio alto → flow informado visible; edge real en el desequilibrio
-  - _Acción_: Kelly boost +0.62€ cuando `delta_ratio` |x|> 0.389 (IC base=+0.058)
+- **FILTRO** `sigma_h` > `0.002` → IC=-0.198 (n=41)
+  - _Por qué funciona_: alta volatilidad → el modelo GBM sobreestima la señal; el mercado es más aleatorio
+  - _Acción_: SKIP cuando `sigma_h` > 0.002
+  - _Potencial_: sin este filtro IC_bueno=-0.029 (n=15)
+
+- **FILTRO** `sigma_h` < `0.0045` → IC=-0.151 (n=41)
+  - _Por qué funciona_: baja volatilidad → señal GBM más fiable; el spread de Polymarket cubre mejor el edge
+  - _Acción_: SKIP cuando `sigma_h` < 0.0045
+  - _Potencial_: sin este filtro IC_bueno=-0.147 (n=15)
+
+### UPDOWN_GBM#60min
+- **FILTRO** `sigma_h` > `0.015` → IC=-0.143 (n=26)
+  - _Por qué funciona_: alta volatilidad → el modelo GBM sobreestima la señal; el mercado es más aleatorio
+  - _Acción_: SKIP cuando `sigma_h` > 0.015
+  - _Potencial_: sin este filtro IC_bueno=-0.012 (n=80)
+
+- **FILTRO** `sigma_h` < `0.0061` → IC=-0.130 (n=25)
+  - _Por qué funciona_: baja volatilidad → señal GBM más fiable; el spread de Polymarket cubre mejor el edge
+  - _Acción_: SKIP cuando `sigma_h` < 0.0061
+  - _Potencial_: sin este filtro IC_bueno=-0.018 (n=81)
+
+- **FILTRO** `hora_utc` < `11.0` → IC=-0.293 (n=27)
+  - _Por qué funciona_: hora temprana → mercados cripto menos líquidos, spreads más amplios; edge real menor
+  - _Acción_: SKIP cuando `hora_utc` < 11.0
+  - _Potencial_: sin este filtro IC_bueno=-0.048 (n=29)
+
+- **FILTRO** `ibs_15` > `0.209` → IC=-0.198 (n=41)
+  - _Por qué funciona_: IBS alto (precio cerca del máximo) → sobrecompra de corto plazo; BUY_YES menos fiable
+  - _Acción_: SKIP cuando `ibs_15` > 0.209
+  - _Potencial_: sin este filtro IC_bueno=-0.088 (n=15)
+
+- **FILTRO** `ibs_15` < `0.6457` → IC=-0.237 (n=36)
+  - _Por qué funciona_: IBS bajo (precio cerca del mínimo) → sobreventa de corto plazo; BUY_NO menos fiable
+  - _Acción_: SKIP cuando `ibs_15` < 0.6457
+  - _Potencial_: sin este filtro IC_bueno=-0.045 (n=20)
+
+- **PATRÓN** `pct_spot_vs_ref` |x|≤ `0.0541` → IC=+0.155 (n=27)
+  - _Por qué funciona_: precio spot cerca de la referencia → señal GBM más calibrada
+  - _Acción_: Kelly boost +0.78€ cuando `pct_spot_vs_ref` |x|≤ 0.0541 (IC base=-0.046)
 
 ### UPDOWN_GBM#BTC#15min
 - **FILTRO** `hora_utc` < `10.0` → IC=-0.147 (n=15)
@@ -125,7 +161,7 @@ _Derivadas de los patrones aprendidos:_
 
 | Estrategia | n | IC | PNL | Filtros | Patrones |
 |---|---|---|---|---|---|
-| ✅ ORDER_FLOW_5M | 792 | +0.010 | +5.97€ | 1 | 1 |
+| ✅ ORDER_FLOW_5M | 792 | +0.010 | +5.97€ | 0 | 0 |
 | ✅ ORDER_FLOW_5M#5min | 656 | +0.000 | -6.62€ | 0 | 0 |
 | ✅ ORDER_FLOW_5M#BNB | 63 | +0.038 | +1.36€ | 0 | 0 |
 | ✅ ORDER_FLOW_5M#BNB#5min | 63 | +0.038 | +1.36€ | 0 | 0 |
@@ -153,8 +189,8 @@ _Derivadas de los patrones aprendidos:_
 | ✅ UPDOWN_GBM | 547 | -0.026 | -14.88€ | 0 | 0 |
 | ✅ UPDOWN_GBM#15min | 357 | +0.007 | +3.57€ | 0 | 0 |
 | 🚫 UPDOWN_GBM#240min | 12 | -0.171 | -4.82€ | 0 | 0 |
-| 🚫 UPDOWN_GBM#5min | 56 | -0.155 | -16.64€ | 0 | 0 |
-| ✅ UPDOWN_GBM#60min | 106 | -0.046 | -7.39€ | 0 | 0 |
+| 🚫 UPDOWN_GBM#5min | 56 | -0.155 | -16.64€ | 3 | 0 |
+| ✅ UPDOWN_GBM#60min | 106 | -0.046 | -7.39€ | 5 | 1 |
 | ✅ UPDOWN_GBM#BNB | 8 | -0.080 | -1.72€ | 0 | 0 |
 | ✅ UPDOWN_GBM#BNB#15min | 8 | -0.080 | -1.72€ | 0 | 0 |
 | ✅ UPDOWN_GBM#BTC | 164 | -0.024 | -14.08€ | 0 | 0 |
