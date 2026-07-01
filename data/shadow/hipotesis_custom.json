@@ -529,6 +529,22 @@
       "umbral_n": 100,
       "umbral_ic_max": -0.03,
       "_nota": "mercury_retrogrado se empezó a capturar el 2026-07-01 (justo dentro de la ventana jun-jul 2026), feature nueva, cero histórico previo. Ventanas hardcodeadas en shadow_predict.py::MERCURIO_RETROGRADO_VENTANAS — revisar/actualizar cada año."
+    },
+    {
+      "id": "H-CUSTOM-SMART-MONEY-CONSENSUS",
+      "nombre": "Consenso de wallets 'smart money' — ¿confirma nuestra dirección?",
+      "descripcion": "Javi propuso estudiar bots/wallets que operan bien en nuestros mismos mercados. En vez de creer artículos (ya verificamos 2 veces esta semana que las narrativas no aguantan el cruce con datos reales), smart_money_tracker.py mide el track record REAL de wallets activas en BTC/ETH/SOL/XRP Up-or-Down 5/15/60min vía data-api.polymarket.com/positions, filtrado a posiciones 'Up or Down'. Clasifica como 'smart' las wallets con n>=10 posiciones, win_rate>=0.55 y pnl_total>0. smart_money_consensus es el sesgo direccional reciente (Up-Down)/(Up+Down) de esas wallets 'smart' por activo. Hipótesis: si nuestra decisión (BUY_YES/BUY_NO) coincide con el consenso smart money, mejor IC que cuando diverge.",
+      "tipo": "boost",
+      "umbral": "n≥40 y IC>+0.08 — además necesita que existan wallets 'smart' acumuladas (0 al empezar, se van descubriendo cada ciclo)",
+      "accion": "Si IC en confluencia (decisión coincide con signo de smart_money_consensus) supera en >=0.05 al IC en divergencia, con n≥40 en cada lado → boost ×1.1-1.2 cuando coincide, considerar reducir stake cuando diverge fuerte.",
+      "filtro": {
+        "strategy_prefix": "UPDOWN_GBM",
+        "feature": "smart_money_consensus",
+        "feature_lo": 0.15
+      },
+      "umbral_n": 40,
+      "umbral_ic_min": 0.08,
+      "_nota": "feature_lo=0.15 es un primer corte arbitrario (consenso Up neto >15%) sin cruzar con la dirección real de nuestra decisión todavía — el motor de hipótesis no soporta comparar dos features entre sí (decisión vs signo del consenso), así que esto solo mide 'consenso alto' en aislado, no 'confluencia real'. Revisar manualmente cruzando decisión vs signo cuando haya n suficiente. smart_money_consensus se empieza a capturar el 2026-07-01, cero histórico, y depende de que existan wallets clasificadas 'smart' (ninguna en el primer ciclo de prueba, n máximo visto fue 8)."
     }
   ]
 }

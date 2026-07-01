@@ -1,4 +1,4 @@
-# Hipótesis automáticas — 2026-07-01 12:40 UTC
+# Hipótesis automáticas — 2026-07-01 12:42 UTC
 _Generado por shadow_postmortem.py sobre 1542 resoluciones (PNL=-60.59€)_
 
 ## Patrones causales activos
@@ -490,3 +490,9 @@ _Derivadas de los patrones aprendidos:_
   - _Acción_: Si IC en mercury_retrogrado=1 < IC en mercury_retrogrado=0 con margen ≥0.05 y ≥2 ventanas distintas cubiertas → considerar boost/filtro. No implementar tras una sola ventana (jun-jul 2026) por more que n sea alto — sería solo un evento, no un patrón.
   - _Estado_: 5/100 ops en el filtro definido (IC actual=+0.018 PNL=+2.27€)
   - _Datos_: n=5 IC=+0.018 PNL=+2.27€
+
+**⏳ H-CUSTOM-SMART-MONEY-CONSENSUS** — Consenso de wallets 'smart money' — ¿confirma nuestra dirección?
+  - _Hipótesis_: Javi propuso estudiar bots/wallets que operan bien en nuestros mismos mercados. En vez de creer artículos (ya verificamos 2 veces esta semana que las narrativas no aguantan el cruce con datos reales), smart_money_tracker.py mide el track record REAL de wallets activas en BTC/ETH/SOL/XRP Up-or-Down 5/15/60min vía data-api.polymarket.com/positions, filtrado a posiciones 'Up or Down'. Clasifica como 'smart' las wallets con n>=10 posiciones, win_rate>=0.55 y pnl_total>0. smart_money_consensus es el sesgo direccional reciente (Up-Down)/(Up+Down) de esas wallets 'smart' por activo. Hipótesis: si nuestra decisión (BUY_YES/BUY_NO) coincide con el consenso smart money, mejor IC que cuando diverge.
+  - _Umbral_: 40
+  - _Acción_: Si IC en confluencia (decisión coincide con signo de smart_money_consensus) supera en >=0.05 al IC en divergencia, con n≥40 en cada lado → boost ×1.1-1.2 cuando coincide, considerar reducir stake cuando diverge fuerte.
+  - _Estado_: 0/40 ops en el filtro definido (IC actual=+0.000 PNL=+0.00€)
