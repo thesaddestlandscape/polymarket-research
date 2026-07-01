@@ -2099,7 +2099,7 @@ def main():
                 # → BUY_YES contra la caída. A diferencia de BTC (momentum, filtro arriba),
                 # ETH reacciona por reversión. Boost ×1.1.
                 drift_15_val = pred_features.get("drift_15min")
-                if (subtype == "ETH#15min" and drift_15_val is not None
+                if (dec == "BUY_YES" and subtype == "ETH#15min" and drift_15_val is not None
                         and float(drift_15_val) < -1.0):
                     apuesta = min(2.00, apuesta * 1.1)
                 # H-24H-GBM-BUYYES-MADRUGADA/TARDE (confirmadas 2026-07-01: IC=+0.096 n=45
