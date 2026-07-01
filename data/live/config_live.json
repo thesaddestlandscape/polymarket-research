@@ -36,6 +36,10 @@
     "half_kelly": true,
     "min_ic_para_live": 0.08,
     "min_n_para_live": 40,
+    "_min_n_overrides_nota": "Overrides puntuales y temporales de min_n por strategy#subtype#direction, decisión manual del usuario cuando el n direccional está muy cerca de 40. Quitar la entrada cuando n_BUY_NO/n_BUY_YES real supere min_n_para_live.",
+    "min_n_overrides": {
+      "UPDOWN_GBM#ETH#15min#BUY_NO": 30
+    },
     "min_stake_eur": 0.25,
     "max_stake_eur": 2.00,
     "circuit_breaker": {
