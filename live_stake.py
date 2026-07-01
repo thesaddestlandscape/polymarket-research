@@ -42,11 +42,6 @@ def _cargar_config() -> dict:
         return json.load(f)
 
 
-def _hoy_madrid(config: dict) -> str:
-    offset = config.get("utc_offset_verano", 2)
-    return (datetime.now(timezone.utc) + timedelta(hours=offset)).strftime("%Y-%m-%d")
-
-
 def _ahora_madrid(config: dict) -> datetime:
     offset = config.get("utc_offset_verano", 2)
     return datetime.now(timezone.utc) + timedelta(hours=offset)
@@ -122,6 +117,26 @@ def _ts_inicio_ventana_utc(v: dict, config: dict) -> datetime:
     return inicio_madrid - timedelta(hours=offset)
 
 
+def _ts_inicio_dia_utc(config: dict) -> datetime:
+    """Timestamp UTC de las 00:00 de hoy en Madrid (para filtrar 'trades de hoy')."""
+    offset  = config.get("utc_offset_verano", 2)
+    ahora_m = _ahora_madrid(config)
+    inicio_madrid = ahora_m.replace(hour=0, minute=0, second=0, microsecond=0)
+    return inicio_madrid - timedelta(hours=offset)
+
+
+def _parse_ts(ts_str: str) -> datetime | None:
+    if not ts_str:
+        return None
+    try:
+        ts = datetime.fromisoformat(ts_str.replace("Z", "+00:00"))
+        if ts.tzinfo is None:
+            ts = ts.replace(tzinfo=timezone.utc)
+        return ts
+    except Exception:
+        return None
+
+
 def stakes_desplegados_ventana_actual() -> float:
     """
     Suma de stakes colocados en la ventana horaria actual (trades OPEN o STUB).
@@ -140,31 +155,35 @@ def stakes_desplegados_ventana_actual() -> float:
         for row in csv.DictReader(f):
             if row.get("status") not in ("OPEN", "STUB"):
                 continue
-            ts_str = row.get("timestamp_utc") or ""
-            try:
-                ts = datetime.fromisoformat(ts_str.replace("Z", "+00:00"))
-                if ts.tzinfo is None:
-                    ts = ts.replace(tzinfo=timezone.utc)
-                if ts >= ts_ini:
+            ts = _parse_ts(row.get("timestamp_utc") or "")
+            if ts is not None and ts >= ts_ini:
+                try:
                     total += float(row.get("stake_eur", 0) or 0)
-            except Exception:
-                pass
+                except ValueError:
+                    pass
     return total
 
 
 def pnl_live_hoy() -> float:
-    """PNL neto de trades cerrados hoy."""
+    """
+    PNL neto de trades cerrados hoy (día Madrid). Compara datetimes reales
+    contra las 00:00 Madrid de hoy en UTC, no substrings de fecha — comparar
+    fecha UTC de close_timestamp contra "hoy" en Madrid excluía para siempre
+    los trades que cierran entre 22:00-23:59 UTC (00:00-01:59 Madrid del día
+    siguiente, dentro de la ventana de prueba 01:00-02:00 Madrid), corrompiendo
+    el freno diario del circuit breaker.
+    """
     if not TRADES_CSV.exists():
         return 0.0
     config    = _cargar_config()
-    hoy       = _hoy_madrid(config)
+    ts_ini    = _ts_inicio_dia_utc(config)
     pnl       = 0.0
     with open(TRADES_CSV, encoding="utf-8") as f:
         for row in csv.DictReader(f):
             if row.get("status") != "CLOSED":
                 continue
-            fecha = (row.get("close_timestamp") or row.get("timestamp_utc") or "")[:10]
-            if fecha == hoy:
+            ts = _parse_ts(row.get("close_timestamp") or row.get("timestamp_utc") or "")
+            if ts is not None and ts >= ts_ini:
                 try:
                     pnl += float(row.get("pnl_neto_eur", 0) or 0)
                 except ValueError:
@@ -195,15 +214,12 @@ def pnl_live_ventana_actual() -> float:
         for row in csv.DictReader(f):
             if row.get("status") != "CLOSED":
                 continue
-            ts_str = row.get("close_timestamp") or row.get("timestamp_utc") or ""
-            try:
-                ts = datetime.fromisoformat(ts_str.replace("Z", "+00:00"))
-                if ts.tzinfo is None:
-                    ts = ts.replace(tzinfo=timezone.utc)
-                if ts >= ts_ini:
+            ts = _parse_ts(row.get("close_timestamp") or row.get("timestamp_utc") or "")
+            if ts is not None and ts >= ts_ini:
+                try:
                     pnl += float(row.get("pnl_neto_eur", 0) or 0)
-            except Exception:
-                pass
+                except ValueError:
+                    pass
     return pnl
 
 
@@ -265,14 +281,15 @@ def inventario_direccional_hoy() -> dict:
     if not TRADES_CSV.exists():
         return {"BUY_YES": 0, "BUY_NO": 0, "q_net": 0}
     config = _cargar_config()
-    hoy    = _hoy_madrid(config)
+    ts_ini = _ts_inicio_dia_utc(config)
     n_yes  = 0
     n_no   = 0
     with open(TRADES_CSV, encoding="utf-8") as f:
         for row in csv.DictReader(f):
             if row.get("status") not in ("OPEN", "STUB"):
                 continue
-            if (row.get("timestamp_utc") or "")[:10] != hoy:
+            ts = _parse_ts(row.get("timestamp_utc") or "")
+            if ts is None or ts < ts_ini:
                 continue
             if row.get("direction") == "BUY_YES":
                 n_yes += 1
