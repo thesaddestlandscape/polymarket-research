@@ -466,11 +466,11 @@
       "_nota": "Umbral 100000 ≈ percentil 75 de total_vol_5m observado a día 2026-07-01. Revisar si el percentil se mueve mucho con más datos."
     },
     {
-      "id": "H-CUSTOM-CROSS-WINDOW-SPREAD",
-      "nombre": "GBM 15min/60min: spread de precio_yes contra la ventana relacionada del mismo activo",
-      "descripcion": "Inspirado en un artículo sobre bots de Polymarket: mercados de distinta duración del mismo activo (ej. BTC#15min vs BTC#60min) no repriciician a la misma velocidad — uno puede quedarse rezagado tras un movimiento. Si el spread entre ambos se sale de lo normal, puede indicar que uno de los dos aún no ha incorporado la información que el otro ya tiene. No es transplantable tal cual (el artículo lo usa para arbitraje comprando ambos lados a la vez, algo que no hacemos — ver idea_bidirectional_accumulation aparcada), pero el feature cross_window_spread (precio_yes propio menos precio_yes de la ventana relacionada, sin normalizar aún por z-score) ya se captura para GBM#15min (contra 60min) y GBM#60min (contra 15min) desde el 2026-07-01, sin cambiar ninguna decisión. Hipótesis: un spread grande (en cualquier signo) correlaciona con mejor o peor IC de la decisión ya tomada.",
+      "id": "H-CUSTOM-CROSS-WINDOW-SPREAD-POS",
+      "nombre": "GBM 15min/60min: spread positivo alto de precio_yes contra la ventana relacionada",
+      "descripcion": "Inspirado en un artículo sobre bots de Polymarket: mercados de distinta duración del mismo activo (ej. BTC#15min vs BTC#60min) no repriciician a la misma velocidad — uno puede quedarse rezagado tras un movimiento. Si el spread entre ambos se sale de lo normal, puede indicar que uno de los dos aún no ha incorporado la información que el otro ya tiene. No es transplantable tal cual (el artículo lo usa para arbitraje comprando ambos lados a la vez, algo que no hacemos — ver idea_bidirectional_accumulation aparcada), pero el feature cross_window_spread (precio_yes propio menos precio_yes de la ventana relacionada, sin normalizar aún por z-score) ya se captura para GBM#15min (contra 60min) y GBM#60min (contra 15min) desde el 2026-07-01, sin cambiar ninguna decisión. Esta hipótesis cubre el lado positivo (mercado propio más caro que el relacionado); ver H-CUSTOM-CROSS-WINDOW-SPREAD-NEG para el lado negativo.",
       "tipo": "boost",
-      "umbral": "n≥40 y |spread| alto correlaciona con IC>+0.08 o <-0.08",
+      "umbral": "n≥40 y IC>+0.08",
       "accion": "Si se confirma con n≥40 → considerar boost/filtro por cross_window_spread, y evaluar si merece la pena normalizar a z-score con más histórico",
       "filtro": {
         "strategy_prefix": "UPDOWN_GBM",
@@ -480,7 +480,24 @@
       },
       "umbral_n": 40,
       "umbral_ic_min": 0.08,
-      "_nota": "feature_lo=0.05 es un primer corte arbitrario (spread absoluto, sin normalizar). Revisar la distribución real cuando haya n suficiente y ajustar umbral si hace falta — de momento el sistema solo acumula datos, no actúa."
+      "_nota": "feature_lo=0.05 es un primer corte arbitrario, sin normalizar por z-score. Revisar la distribución real cuando haya n suficiente y ajustar umbral si hace falta — de momento el sistema solo acumula datos, no actúa."
+    },
+    {
+      "id": "H-CUSTOM-CROSS-WINDOW-SPREAD-NEG",
+      "nombre": "GBM 15min/60min: spread negativo alto de precio_yes contra la ventana relacionada",
+      "descripcion": "Lado negativo de H-CUSTOM-CROSS-WINDOW-SPREAD-POS (mercado propio más barato que el relacionado). Mismo feature cross_window_spread, mismo origen (artículo sobre bots de Polymarket), umbral simétrico.",
+      "tipo": "boost",
+      "umbral": "n≥40 y IC>+0.08",
+      "accion": "Si se confirma con n≥40 → considerar boost/filtro por cross_window_spread",
+      "filtro": {
+        "strategy_prefix": "UPDOWN_GBM",
+        "subtype_contains": "15min",
+        "feature": "cross_window_spread",
+        "feature_hi": -0.05
+      },
+      "umbral_n": 40,
+      "umbral_ic_min": 0.08,
+      "_nota": "feature_hi=-0.05 es un primer corte arbitrario, sin normalizar por z-score."
     }
   ]
 }

@@ -1286,6 +1286,22 @@ def s_updown_gbm(market, ctx):
         f"ref={ref:.4g} spot={spot:.4g} ({pct:+.2f}%) "
         f"sigma_h={sigma_h:.4f} T={T_h:.2f}h p_up={p_up:.3f} mu_h={mu_h:+.4f}"
     )
+
+    # H-CUSTOM-CROSS-WINDOW-SPREAD: diferencia de precio_yes contra la ventana
+    # relacionada del mismo activo (15min vs 60min). Solo observación — no
+    # afecta a p_up ni a la decisión, solo se registra como feature.
+    precios_ventanas = ctx.get("precios_ventanas_hoy", {})
+    _py_propio = market.get("_precio_yes", 0.5)
+    cross_window_spread = None
+    if ventana_min == 15:
+        _rel = precios_ventanas.get((activo, 60))
+        if _rel is not None:
+            cross_window_spread = round(_py_propio - _rel, 4)
+    elif tipo == 'hourly':
+        _rel = precios_ventanas.get((activo, 15))
+        if _rel is not None:
+            cross_window_spread = round(_py_propio - _rel, 4)
+
     features = {
         "pct_spot_vs_ref": round(pct, 4),
         "sigma_h":         round(sigma_h, 6),
@@ -1298,6 +1314,8 @@ def s_updown_gbm(market, ctx):
         features["drift_60min"] = round(drift_60 * 100, 4)   # %/hora
     if delta_macro is not None:
         features["delta_ratio_macro"] = round(delta_macro, 4)
+    if cross_window_spread is not None:
+        features["cross_window_spread"] = cross_window_spread
     # IBS-15: posición del precio dentro del rango high/low de las últimas 15 velas 1min.
     # IBS>0.7 = precio cerca del máximo (sobrecompra → señal BUY_NO).
     # IBS<0.3 = precio cerca del mínimo (sobreventa → señal BUY_YES).
@@ -1900,7 +1918,24 @@ def main():
     if not operables:
         print("  Nada que predecir.")
         return
+
+    # Lookup precio_yes por (activo, ventana) — feature de spread entre
+    # ventanas relacionadas del mismo activo (H-CUSTOM-CROSS-WINDOW-SPREAD).
+    # Solo observación: no cambia ninguna decisión de predicción existente.
+    _precios_ventanas_acc = {}
+    for _m in operables:
+        _tipo_m, _ventana_m = _parse_updown_tipo(_m.get("question", ""))
+        if _tipo_m is None:
+            continue
+        _activo_m = identificar_activo(_m.get("question", ""))
+        if not _activo_m:
+            continue
+        _clave = _ventana_m if _tipo_m == 'slot' else (60 if _tipo_m == 'hourly' else 'daily')
+        _precios_ventanas_acc.setdefault((_activo_m, _clave), []).append(_m["_precio_yes"])
+    precios_ventanas_hoy = {k: sum(v) / len(v) for k, v in _precios_ventanas_acc.items()}
+
     ctx = construir_contexto()
+    ctx["precios_ventanas_hoy"] = precios_ventanas_hoy
     params_din = _cargar_params_dinamicos()
     meta_params = _cargar_meta_params()
     ctx["meta_params"] = meta_params
