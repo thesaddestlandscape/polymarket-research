@@ -1265,6 +1265,15 @@ def s_updown_gbm(market, ctx):
         if drift_15 * 100 < 0.3:
             return None  # BTC#15min sin momentum positivo claro → no apostar
 
+    # Filtro GBM#15min — zona muerta drift_15min∈[-0.3,+0.3]%/h (todos los pares)
+    # H-CUSTOM-DRIFT15-ZONA-MUERTA confirmada 2026-07-01: IC=-0.037 n=52 en la zona
+    # muerta (mercado sin dirección clara, GBM no puede predecir), vs IC=+0.100 n=28
+    # con drift>0.3 (momentum) y edge de reversión aparte con drift<-1 (boost Kelly).
+    # Para BTC ya queda cubierto por el filtro de momentum de arriba (más estricto).
+    if tipo == 'slot' and ventana_min == 15 and drift_15 is not None:
+        if abs(drift_15 * 100) < 0.3:
+            return None  # GBM#15min en zona muerta → sin dirección clara, no apostar
+
     if tipo == 'daily':
         slot_type = 'daily'
     elif tipo == 'hourly':
@@ -2050,6 +2059,21 @@ def main():
                         apuesta = min(2.00, apuesta * 1.1)   # confluencia: poly + nuestro signal
                     elif (dec == "BUY_NO" and poly_d > 1.5) or (dec == "BUY_YES" and poly_d < -1.5):
                         apuesta = max(0.50, apuesta * 0.85)  # divergencia fuerte → cautela
+                # H-CUSTOM-ETH15-REVERSION (confirmada 2026-07-01, IC=+0.155 n=27):
+                # ETH#15min con drift_15min<-1%/h (caída fuerte reciente) tiene mean-reversion
+                # → BUY_YES contra la caída. A diferencia de BTC (momentum, filtro arriba),
+                # ETH reacciona por reversión. Boost ×1.1.
+                drift_15_val = pred_features.get("drift_15min")
+                if (subtype == "ETH#15min" and drift_15_val is not None
+                        and float(drift_15_val) < -1.0):
+                    apuesta = min(2.00, apuesta * 1.1)
+                # H-24H-GBM-BUYYES-MADRUGADA/TARDE (confirmadas 2026-07-01: IC=+0.096 n=45
+                # en 05-07h UTC, IC=+0.154 n=50 en 15-19h UTC): GBM BUY_YES#15min tiene edge
+                # forward extra en estas franjas horarias, independiente del filtro
+                # drift_60min ya aplicado arriba. Boost ×1.1.
+                if (dec == "BUY_YES" and subtype.endswith("15min")
+                        and datetime.now(timezone.utc).hour in (5, 6, 7, 15, 16, 17, 18, 19)):
+                    apuesta = min(2.00, apuesta * 1.1)
                 ed = en if dec != "BUY_NO" else -en
                 if dec != "SKIP":
                     ops += 1
