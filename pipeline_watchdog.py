@@ -58,6 +58,7 @@ PIPELINE_SCRIPTS = [
 # Comandos para reiniciar screens críticas si caen
 SCREEN_RESTART = {
     "fast":    f"cd {REPO} && bash run_fast.sh >> logs/fast.log 2>&1",
+    "slow":    f"cd {REPO} && bash run_slow.sh >> logs/slow.log 2>&1",
     "control": f"cd {REPO} && .venv/bin/python live_control.py >> logs/live_control.log 2>&1",
 }
 

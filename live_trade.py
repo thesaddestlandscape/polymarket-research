@@ -16,7 +16,7 @@ import csv
 import json
 import os
 import requests
-from datetime import datetime, timezone, timedelta
+from datetime import datetime, timezone
 from pathlib import Path
 
 from live_guard import puede_operar_live, estado_live, switch_activo
@@ -29,6 +29,27 @@ TRADES_CSV  = DIR_LIVE  / "trades.csv"
 PARAMS_PATH = DIR_SHADOW / "strategy_params.json"
 LOG_PATH    = Path("logs/live.log")
 LOG_PATH.parent.mkdir(parents=True, exist_ok=True)
+ORDEN_EN_CURSO_PATH = DIR_LIVE / "orden_en_curso.json"
+
+
+def _marcar_orden_en_curso(market_id: str, direction: str):
+    """Marca que hay una orden real en vuelo hacia el CLOB. watchdog_fast.sh
+    la comprueba antes de matar la screen 'fast' para no interrumpir un
+    envío ya hecho al exchange justo antes de registrarlo en trades.csv."""
+    try:
+        ORDEN_EN_CURSO_PATH.write_text(json.dumps({
+            "market_id": market_id, "direction": direction,
+            "ts": datetime.now(timezone.utc).isoformat(timespec="seconds"),
+        }), encoding="utf-8")
+    except Exception:
+        pass
+
+
+def _limpiar_orden_en_curso():
+    try:
+        ORDEN_EN_CURSO_PATH.unlink(missing_ok=True)
+    except Exception:
+        pass
 
 TRADES_COLS = [
     "timestamp_utc", "market_id", "question", "end_date",
@@ -64,17 +85,20 @@ def _cargar_config() -> dict:
 
 
 def _ya_operados_hoy() -> set:
-    """Set de market_id que ya tienen trade OPEN o CLOSED hoy."""
+    """Set de todos los market_id que ya tienen trade OPEN o CLOSED (cada
+    market_id es una ventana concreta e irrepetible, nunca reaparece en un
+    día distinto, así que no hace falta ni conviene acotar por fecha).
+    Antes se filtraba comparando una fecha Madrid (UTC+offset) contra
+    timestamp_utc crudo (UTC) — durante 23:00-24:00 UTC (=01:00-02:00 Madrid,
+    justo la ventana de prueba activa) la fecha Madrid ya era "mañana" y
+    ningún trade de esa ventana entraba en `vistos`, permitiendo re-operar
+    el mismo mercado varias veces con dinero real."""
     if not TRADES_CSV.exists():
         return set()
-    config = _cargar_config()
-    offset = config.get("utc_offset_verano", 2)
-    hoy    = (datetime.now(timezone.utc) + timedelta(hours=offset)).strftime("%Y-%m-%d")
     vistos = set()
     with open(TRADES_CSV, encoding="utf-8") as f:
         for row in csv.DictReader(f):
-            if (row.get("timestamp_utc") or "")[:10] == hoy:
-                vistos.add(row.get("market_id", ""))
+            vistos.add(row.get("market_id", ""))
     return vistos
 
 
@@ -94,13 +118,15 @@ def _cargar_predicciones_hoy() -> list:
 
 def _feature_match(feat_val, cond, umbral):
     """Idéntico a shadow_predict.py::_feature_match — mismo criterio para
-    evaluar condiciones de patrones_ganadores/filtros_causales."""
+    evaluar condiciones de patrones_ganadores/filtros_causales. Estricto en
+    los 4 casos (ver comentario en shadow_predict.py: coincide con el límite
+    "malo" de _evaluar_bucket, antes abs_lt/lt colaban el umbral de más)."""
     try:
         v, u = float(feat_val), float(umbral)
         if cond == "abs_gt": return abs(v) > u
-        if cond == "abs_lt": return abs(v) <= u
+        if cond == "abs_lt": return abs(v) < u
         if cond == "gt":     return v > u
-        if cond == "lt":     return v <= u
+        if cond == "lt":     return v < u
     except (TypeError, ValueError):
         pass
     return False
@@ -166,6 +192,8 @@ def _ic_n_para_subtype(strategy: str, subtype: str, params: dict,
         mejor_patron = None
         for k in claves:
             for patron in params.get(k, {}).get("patrones_ganadores", []):
+                if patron.get("direccion") not in (None, decision):
+                    continue
                 n_patron = patron.get("n_patron", 0)
                 if n_patron < min_n:
                     continue
@@ -209,7 +237,14 @@ def _get_clob_client():
 
 
 def _get_token_ids(market_id: str) -> tuple[str, str]:
-    """Devuelve (yes_token_id, no_token_id) desde Gamma API."""
+    """Devuelve (yes_token_id, no_token_id) desde Gamma API.
+
+    Valida el orden real contra `outcomes` en vez de asumir ciegamente
+    clobTokenIds[0]=YES/UP — si algún mercado trajera el orden invertido,
+    asumirlo a ciegas compraría el token contrario con dinero real sin
+    ningún aviso. Si `outcomes` no trae las etiquetas esperadas, falla
+    fuerte (se captura arriba en _ejecutar_orden_polymarket) en vez de
+    arriesgar una dirección adivinada."""
     resp = requests.get(
         f"https://gamma-api.polymarket.com/markets/{market_id}",
         timeout=10
@@ -220,7 +255,24 @@ def _get_token_ids(market_id: str) -> tuple[str, str]:
     tokens = json.loads(raw) if isinstance(raw, str) else raw
     if len(tokens) < 2:
         raise ValueError(f"clobTokenIds incompleto para market {market_id}: {tokens}")
-    return tokens[0], tokens[1]
+
+    raw_outcomes = data.get("outcomes", [])
+    outcomes = json.loads(raw_outcomes) if isinstance(raw_outcomes, str) else raw_outcomes
+    if len(outcomes) < 2:
+        raise ValueError(f"outcomes incompleto para market {market_id}: {outcomes}")
+
+    AFIRMATIVOS = {"yes", "up"}
+    NEGATIVOS   = {"no", "down"}
+    o0 = str(outcomes[0]).strip().lower()
+    o1 = str(outcomes[1]).strip().lower()
+    if o0 in AFIRMATIVOS and o1 in NEGATIVOS:
+        return tokens[0], tokens[1]
+    if o0 in NEGATIVOS and o1 in AFIRMATIVOS:
+        return tokens[1], tokens[0]
+    raise ValueError(
+        f"outcomes inesperados para market {market_id}: {outcomes} — "
+        f"no se puede mapear YES/NO con seguridad"
+    )
 
 
 def _consultar_profundidad_libro(client, token_id: str, precio_entrada: float,
@@ -282,14 +334,49 @@ def _ejecutar_orden_polymarket(market_id: str, direction: str,
         else:
             log(f"  📊 Libro {market_id}/{direction}: error consultando profundidad — {depth.get('error')}")
 
-        order_args = MarketOrderArgsV2(
-            token_id=token_id,
-            amount=stake_eur,
-            side="BUY",
-            price=precio,
-        )
-        signed_order = client.create_market_order(order_args)
-        resp = client.post_order(signed_order, OrderType.FOK)
+        _marcar_orden_en_curso(market_id, direction)
+        try:
+            # py_clob_client_v2 calcula makerAmount/takerAmount dividiendo
+            # amount/price en float puro y redondeando después — para ciertas
+            # combinaciones concretas el resultado conserva más decimales de
+            # los que el tick del mercado permite y el CLOB rechaza la orden
+            # con "invalid amounts" (confirmado en real 2026-07-01, stake=0€
+            # perdido = ningún dinero en riesgo, solo la señal). Es un bug de
+            # precisión de coma flotante en la librería (order_builder/
+            # builder.py::get_market_order_amounts, no en nuestro código), no
+            # reproducible de forma determinista sin acceso al validador del
+            # CLOB. Mitigación: un reintento con el stake desplazado 1
+            # céntimo cambia el resultado de la división y en la práctica
+            # evita la misma colisión — ningún intento previo llega a
+            # ejecutarse de verdad (el rechazo es previo al match), así que
+            # reintentar no puede duplicar la operación.
+            intentos_stake = [stake_eur, round(stake_eur - 0.01, 2), round(stake_eur + 0.01, 2)]
+            resp = None
+            for intento, amt in enumerate(intentos_stake):
+                if amt <= 0:
+                    continue
+                order_args = MarketOrderArgsV2(
+                    token_id=token_id,
+                    amount=amt,
+                    side="BUY",
+                    price=precio,
+                )
+                try:
+                    signed_order = client.create_market_order(order_args)
+                    resp = client.post_order(signed_order, OrderType.FOK)
+                    stake_eur = amt
+                    if intento > 0:
+                        log(f"  ⚠️  Orden aceptada en reintento {intento} con stake={amt:.2f}€ "
+                            f"(precisión decimal, ver comentario en código)")
+                    break
+                except Exception as e_intento:
+                    if "invalid amounts" not in str(e_intento) or intento == len(intentos_stake) - 1:
+                        raise
+                    log(f"  ⚠️  'invalid amounts' con stake={amt:.2f}€, reintentando con otro monto...")
+            if resp is None:
+                raise RuntimeError("no se pudo construir una orden con amounts válidos")
+        finally:
+            _limpiar_orden_en_curso()
 
         order_id = resp.get("orderID") or resp.get("id") or str(resp)
         filled_price = float(resp.get("price", precio))
@@ -491,20 +578,36 @@ def main():
             pass
 
         # IC mínimo confirmado en histórico (n_hist siempre corresponde a la
-        # muestra real detrás de ic_hist, direccional o agregada). min_n_efectivo
-        # permite un override puntual por strategy#subtype#decision (config_live.json)
-        # cuando el n direccional está muy cerca del umbral global.
-        override_key = f"{strategy}#{subtype}#{dec}"
-        min_n_efectivo = min_n_overrides.get(override_key, min_n)
+        # muestra real detrás de ic_hist, direccional o agregada), umbral global.
         try:
             feats_pred = json.loads(pred.get("features", "{}") or "{}")
         except Exception:
             feats_pred = {}
         ic_hist, n_hist = _ic_n_para_subtype(strategy, subtype, params, decision=dec,
-                                              min_n=min_n_efectivo, min_ic=min_ic, features=feats_pred)
-        if override_key in min_n_overrides and n_hist >= min_n:
-            _avisar_override_superado(override_key, n_hist, min_n)
-        if ic_hist < min_ic or n_hist < min_n_efectivo:
+                                              min_n=min_n, min_ic=min_ic, features=feats_pred)
+        pasa = not (ic_hist < min_ic or n_hist < min_n)
+
+        # Override puntual por strategy#subtype#decision (config_live.json):
+        # solo mira el n/ic direccional de ESA clave exacta, nunca una clave
+        # más amplia de la jerarquía de fallback — antes el min_n rebajado se
+        # colaba dentro de _ic_n_para_subtype y podía validar la señal contra
+        # el ic_bayes/n agregado de toda la estrategia (una muestra mucho más
+        # amplia y potencialmente más débil que la que motivó el override).
+        override_key = f"{strategy}#{subtype}#{dec}"
+        if not pasa and override_key in min_n_overrides:
+            min_n_override = min_n_overrides[override_key]
+            exact_key = f"{strategy}#{subtype}" if subtype else strategy
+            p_exact = params.get(exact_key, {})
+            campo_ic = f"ic_{dec}"
+            campo_n  = f"n_{dec}"
+            ic_exacto = p_exact.get(campo_ic)
+            n_exacto  = p_exact.get(campo_n, 0)
+            if ic_exacto is not None and n_exacto >= min_n_override and float(ic_exacto) >= min_ic:
+                ic_hist, n_hist = float(ic_exacto), n_exacto
+                pasa = True
+                if n_hist >= min_n:
+                    _avisar_override_superado(override_key, n_hist, min_n)
+        if not pasa:
             continue
 
         # IC del modelo para esta señal concreta

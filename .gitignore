@@ -12,6 +12,8 @@ data/alerts/
 data/live/LIVE_MODE_ON
 data/live/*.key
 data/live/.env
+data/live/orden_en_curso.json
+data/live/overrides_notificados.json
 data/reports/
 data/backfill/klines/
 data/shadow/_cache_*.pkl
