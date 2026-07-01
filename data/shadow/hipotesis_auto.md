@@ -1,4 +1,4 @@
-# Hipótesis automáticas — 2026-07-01 08:57 UTC
+# Hipótesis automáticas — 2026-07-01 08:59 UTC
 _Generado por shadow_postmortem.py sobre 1531 resoluciones (PNL=-59.65€)_
 
 ## Patrones causales activos
@@ -473,8 +473,14 @@ _Derivadas de los patrones aprendidos:_
   - _Estado_: n=173 IC=-0.014 PNL=-4.16€ — sin señal clara aún (umbral IC: min=0.08 max=None)
   - _Datos_: n=173 IC=-0.014 PNL=-4.16€
 
-**⏳ H-CUSTOM-CROSS-WINDOW-SPREAD** — GBM 15min/60min: spread de precio_yes contra la ventana relacionada del mismo activo
-  - _Hipótesis_: Inspirado en un artículo sobre bots de Polymarket: mercados de distinta duración del mismo activo (ej. BTC#15min vs BTC#60min) no repriciician a la misma velocidad — uno puede quedarse rezagado tras un movimiento. Si el spread entre ambos se sale de lo normal, puede indicar que uno de los dos aún no ha incorporado la información que el otro ya tiene. No es transplantable tal cual (el artículo lo usa para arbitraje comprando ambos lados a la vez, algo que no hacemos — ver idea_bidirectional_accumulation aparcada), pero el feature cross_window_spread (precio_yes propio menos precio_yes de la ventana relacionada, sin normalizar aún por z-score) ya se captura para GBM#15min (contra 60min) y GBM#60min (contra 15min) desde el 2026-07-01, sin cambiar ninguna decisión. Hipótesis: un spread grande (en cualquier signo) correlaciona con mejor o peor IC de la decisión ya tomada.
+**⏳ H-CUSTOM-CROSS-WINDOW-SPREAD-POS** — GBM 15min/60min: spread positivo alto de precio_yes contra la ventana relacionada
+  - _Hipótesis_: Inspirado en un artículo sobre bots de Polymarket: mercados de distinta duración del mismo activo (ej. BTC#15min vs BTC#60min) no repriciician a la misma velocidad — uno puede quedarse rezagado tras un movimiento. Si el spread entre ambos se sale de lo normal, puede indicar que uno de los dos aún no ha incorporado la información que el otro ya tiene. No es transplantable tal cual (el artículo lo usa para arbitraje comprando ambos lados a la vez, algo que no hacemos — ver idea_bidirectional_accumulation aparcada), pero el feature cross_window_spread (precio_yes propio menos precio_yes de la ventana relacionada, sin normalizar aún por z-score) ya se captura para GBM#15min (contra 60min) y GBM#60min (contra 15min) desde el 2026-07-01, sin cambiar ninguna decisión. Esta hipótesis cubre el lado positivo (mercado propio más caro que el relacionado); ver H-CUSTOM-CROSS-WINDOW-SPREAD-NEG para el lado negativo.
   - _Umbral_: 40
   - _Acción_: Si se confirma con n≥40 → considerar boost/filtro por cross_window_spread, y evaluar si merece la pena normalizar a z-score con más histórico
+  - _Estado_: 0/40 ops en el filtro definido (IC actual=+0.000 PNL=+0.00€)
+
+**⏳ H-CUSTOM-CROSS-WINDOW-SPREAD-NEG** — GBM 15min/60min: spread negativo alto de precio_yes contra la ventana relacionada
+  - _Hipótesis_: Lado negativo de H-CUSTOM-CROSS-WINDOW-SPREAD-POS (mercado propio más barato que el relacionado). Mismo feature cross_window_spread, mismo origen (artículo sobre bots de Polymarket), umbral simétrico.
+  - _Umbral_: 40
+  - _Acción_: Si se confirma con n≥40 → considerar boost/filtro por cross_window_spread
   - _Estado_: 0/40 ops en el filtro definido (IC actual=+0.000 PNL=+0.00€)
