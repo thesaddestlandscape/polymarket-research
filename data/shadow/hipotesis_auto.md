@@ -1,65 +1,88 @@
-# Hipótesis automáticas — 2026-07-01 15:19 UTC
+# Hipótesis automáticas — 2026-07-01 15:21 UTC
 _Generado por shadow_postmortem.py sobre 1555 resoluciones (PNL=-59.61€)_
 
 ## Patrones causales activos
 
-### UPDOWN_GBM#5min
-- **FILTRO** `pct_spot_vs_ref` |x|> `0.03` → IC=-0.214 (n=26)
-  - _Por qué funciona_: precio spot lejos de la referencia → señal GBM sobreextiende; riesgo de reversión
-  - _Acción_: SKIP cuando `pct_spot_vs_ref` |x|> 0.03
-  - _Potencial_: sin este filtro IC_bueno=-0.094 (n=30)
+### UPDOWN_GBM#15min
+- **FILTRO** `hora_utc` < `11.0` → IC=-0.129 (n=68)
+  - _Por qué funciona_: hora temprana → mercados cripto menos líquidos, spreads más amplios; edge real menor
+  - _Acción_: SKIP cuando `hora_utc` < 11.0
+  - _Potencial_: sin este filtro IC_bueno=+0.040 (n=85)
 
-- **FILTRO** `sigma_h` > `0.002` → IC=-0.198 (n=41)
-  - _Por qué funciona_: alta volatilidad → el modelo GBM sobreestima la señal; el mercado es más aleatorio
-  - _Acción_: SKIP cuando `sigma_h` > 0.002
-  - _Potencial_: sin este filtro IC_bueno=-0.029 (n=15)
+- **FILTRO** `hora_utc` > `19.0` → IC=-0.180 (n=23)
+  - _Por qué funciona_: hora tardía/noche → sesión US cerrada, menos participantes informados; señales más ruidosas
+  - _Acción_: SKIP cuando `hora_utc` > 19.0
+  - _Potencial_: sin este filtro IC_bueno=-0.008 (n=130)
 
-- **FILTRO** `sigma_h` < `0.0045` → IC=-0.151 (n=41)
+- **PATRÓN** `sigma_h` < `0.0179` → IC=+0.167 (n=67)
   - _Por qué funciona_: baja volatilidad → señal GBM más fiable; el spread de Polymarket cubre mejor el edge
-  - _Acción_: SKIP cuando `sigma_h` < 0.0045
-  - _Potencial_: sin este filtro IC_bueno=-0.147 (n=15)
+  - _Acción_: Kelly boost +0.83€ cuando `sigma_h` < 0.0179 (IC base=+0.104)
+
+- **PATRÓN** `hora_utc` < `11.0` → IC=+0.214 (n=19)
+  - _Por qué funciona_: hora temprana → mercados cripto menos líquidos, spreads más amplios; edge real menor
+  - _Acción_: Kelly boost +1.00€ cuando `hora_utc` < 11.0 (IC base=+0.104)
+
+- **PATRÓN** `ibs_15` < `0.0952` → IC=+0.278 (n=25)
+  - _Por qué funciona_: IBS bajo (precio cerca del mínimo) → sobreventa de corto plazo; BUY_NO menos fiable
+  - _Acción_: Kelly boost +1.00€ cuando `ibs_15` < 0.0952 (IC base=+0.104)
+
+### UPDOWN_GBM#5min
+- **FILTRO** `pct_spot_vs_ref` |x|> `0.02` → IC=-0.250 (n=18)
+  - _Por qué funciona_: precio spot lejos de la referencia → señal GBM sobreextiende; riesgo de reversión
+  - _Acción_: SKIP cuando `pct_spot_vs_ref` |x|> 0.02
+  - _Potencial_: sin este filtro IC_bueno=-0.100 (n=8)
+
+- **FILTRO** `sigma_h` > `0.0026` → IC=-0.289 (n=17)
+  - _Por qué funciona_: alta volatilidad → el modelo GBM sobreestima la señal; el mercado es más aleatorio
+  - _Acción_: SKIP cuando `sigma_h` > 0.0026
+  - _Potencial_: sin este filtro IC_bueno=-0.045 (n=9)
+
+- **FILTRO** `sigma_h` < `0.0051` → IC=-0.214 (n=19)
+  - _Por qué funciona_: baja volatilidad → señal GBM más fiable; el spread de Polymarket cubre mejor el edge
+  - _Acción_: SKIP cuando `sigma_h` < 0.0051
+  - _Potencial_: sin este filtro IC_bueno=-0.167 (n=7)
+
+- **FILTRO** `sigma_h` > `0.0018` → IC=-0.196 (n=21)
+  - _Por qué funciona_: alta volatilidad → el modelo GBM sobreestima la señal; el mercado es más aleatorio
+  - _Acción_: SKIP cuando `sigma_h` > 0.0018
+  - _Potencial_: sin este filtro IC_bueno=+0.136 (n=9)
 
 ### UPDOWN_GBM#60min
-- **FILTRO** `sigma_h` > `0.015` → IC=-0.143 (n=26)
-  - _Por qué funciona_: alta volatilidad → el modelo GBM sobreestima la señal; el mercado es más aleatorio
-  - _Acción_: SKIP cuando `sigma_h` > 0.015
-  - _Potencial_: sin este filtro IC_bueno=-0.012 (n=80)
-
-- **FILTRO** `sigma_h` < `0.0061` → IC=-0.130 (n=25)
+- **FILTRO** `sigma_h` < `0.0061` → IC=-0.167 (n=22)
   - _Por qué funciona_: baja volatilidad → señal GBM más fiable; el spread de Polymarket cubre mejor el edge
   - _Acción_: SKIP cuando `sigma_h` < 0.0061
-  - _Potencial_: sin este filtro IC_bueno=-0.018 (n=81)
+  - _Potencial_: sin este filtro IC_bueno=-0.015 (n=66)
 
-- **FILTRO** `hora_utc` < `11.0` → IC=-0.293 (n=27)
+- **FILTRO** `hora_utc` < `11.0` → IC=-0.278 (n=25)
   - _Por qué funciona_: hora temprana → mercados cripto menos líquidos, spreads más amplios; edge real menor
   - _Acción_: SKIP cuando `hora_utc` < 11.0
-  - _Potencial_: sin este filtro IC_bueno=-0.048 (n=29)
+  - _Potencial_: sin este filtro IC_bueno=-0.052 (n=27)
 
-- **FILTRO** `ibs_15` > `0.209` → IC=-0.198 (n=41)
+- **FILTRO** `ibs_15` > `0.209` → IC=-0.200 (n=38)
   - _Por qué funciona_: IBS alto (precio cerca del máximo) → sobrecompra de corto plazo; BUY_YES menos fiable
   - _Acción_: SKIP cuando `ibs_15` > 0.209
-  - _Potencial_: sin este filtro IC_bueno=-0.088 (n=15)
+  - _Potencial_: sin este filtro IC_bueno=-0.062 (n=14)
 
-- **FILTRO** `ibs_15` < `0.6457` → IC=-0.237 (n=36)
+- **FILTRO** `ibs_15` < `0.5186` → IC=-0.214 (n=26)
   - _Por qué funciona_: IBS bajo (precio cerca del mínimo) → sobreventa de corto plazo; BUY_NO menos fiable
-  - _Acción_: SKIP cuando `ibs_15` < 0.6457
-  - _Potencial_: sin este filtro IC_bueno=-0.045 (n=20)
-
-- **PATRÓN** `pct_spot_vs_ref` |x|≤ `0.0541` → IC=+0.155 (n=27)
-  - _Por qué funciona_: precio spot cerca de la referencia → señal GBM más calibrada
-  - _Acción_: Kelly boost +0.78€ cuando `pct_spot_vs_ref` |x|≤ 0.0541 (IC base=-0.046)
+  - _Acción_: SKIP cuando `ibs_15` < 0.5186
+  - _Potencial_: sin este filtro IC_bueno=-0.107 (n=26)
 
 ### UPDOWN_GBM#BTC#15min
-- **FILTRO** `hora_utc` < `11.0` → IC=-0.132 (n=17)
+- **FILTRO** `hora_utc` < `11.0` → IC=-0.167 (n=16)
   - _Por qué funciona_: hora temprana → mercados cripto menos líquidos, spreads más amplios; edge real menor
   - _Acción_: SKIP cuando `hora_utc` < 11.0
-  - _Potencial_: sin este filtro IC_bueno=+0.105 (n=36)
+  - _Potencial_: sin este filtro IC_bueno=+0.111 (n=34)
+
+- **PATRÓN** `hora_utc` > `15.0` → IC=+0.121 (n=27)
+  - _Por qué funciona_: hora tardía/noche → sesión US cerrada, menos participantes informados; señales más ruidosas
+  - _Acción_: Kelly boost +0.60€ cuando `hora_utc` > 15.0 (IC base=+0.011)
 
 ### UPDOWN_GBM#BTC#60min
-- **FILTRO** `sigma_h` < `0.0117` → IC=-0.130 (n=25)
+- **FILTRO** `sigma_h` < `0.012` → IC=-0.143 (n=26)
   - _Por qué funciona_: baja volatilidad → señal GBM más fiable; el spread de Polymarket cubre mejor el edge
-  - _Acción_: SKIP cuando `sigma_h` < 0.0117
-  - _Potencial_: sin este filtro IC_bueno=+0.125 (n=14)
+  - _Acción_: SKIP cuando `sigma_h` < 0.012
+  - _Potencial_: sin este filtro IC_bueno=+0.227 (n=9)
 
 - **FILTRO** `hora_utc` < `19.0` → IC=-0.206 (n=15)
   - _Por qué funciona_: hora temprana → mercados cripto menos líquidos, spreads más amplios; edge real menor
@@ -77,89 +100,52 @@ _Generado por shadow_postmortem.py sobre 1555 resoluciones (PNL=-59.61€)_
   - _Potencial_: sin este filtro IC_bueno=+0.000 (n=6)
 
 ### UPDOWN_GBM#ETH#15min
-- **PATRÓN** `sigma_h` > `0.0134` → IC=+0.125 (n=46)
-  - _Por qué funciona_: alta volatilidad → el modelo GBM sobreestima la señal; el mercado es más aleatorio
-  - _Acción_: Kelly boost +0.62€ cuando `sigma_h` > 0.0134 (IC base=+0.027)
+- **FILTRO** `delta_ratio_macro` |x|≤ `0.0813` → IC=-0.136 (n=42)
+  - _Por qué funciona_: flow macro débil → el mercado no ha procesado aún la presión; lag explotable
+  - _Acción_: SKIP cuando `delta_ratio_macro` |x|≤ 0.0813
+  - _Potencial_: sin este filtro IC_bueno=+0.062 (n=87)
 
-- **PATRÓN** `ibs_15` < `0.1479` → IC=+0.219 (n=30)
+- **FILTRO** `ibs_15` < `0.3681` → IC=-0.133 (n=28)
   - _Por qué funciona_: IBS bajo (precio cerca del mínimo) → sobreventa de corto plazo; BUY_NO menos fiable
-  - _Acción_: Kelly boost +1.00€ cuando `ibs_15` < 0.1479 (IC base=+0.027)
+  - _Acción_: SKIP cuando `ibs_15` < 0.3681
+  - _Potencial_: sin este filtro IC_bueno=+0.008 (n=59)
+
+- **PATRÓN** `sigma_h` > `0.0132` → IC=+0.139 (n=34)
+  - _Por qué funciona_: alta volatilidad → el modelo GBM sobreestima la señal; el mercado es más aleatorio
+  - _Acción_: Kelly boost +0.69€ cuando `sigma_h` > 0.0132 (IC base=-0.007)
+
+- **PATRÓN** `sigma_h` < `0.0089` → IC=+0.192 (n=24)
+  - _Por qué funciona_: baja volatilidad → señal GBM más fiable; el spread de Polymarket cubre mejor el edge
+  - _Acción_: Kelly boost +0.96€ cuando `sigma_h` < 0.0089 (IC base=+0.125)
+
+- **PATRÓN** `drift_60min` |x|≤ `0.7816` → IC=+0.125 (n=22)
+  - _Por qué funciona_: drift moderado → precio aún no ha reaccionado del todo; lag explotable
+  - _Acción_: Kelly boost +0.62€ cuando `drift_60min` |x|≤ 0.7816 (IC base=+0.125)
+
+- **PATRÓN** `drift_15min` |x|≤ `0.8974` → IC=+0.125 (n=22)
+
+  - _Acción_: Kelly boost +0.62€ cuando `drift_15min` |x|≤ 0.8974 (IC base=+0.125)
 
 ### UPDOWN_GBM#ETH#60min
-- **FILTRO** `sigma_h` < `0.0074` → IC=-0.147 (n=15)
-  - _Por qué funciona_: baja volatilidad → señal GBM más fiable; el spread de Polymarket cubre mejor el edge
-  - _Acción_: SKIP cuando `sigma_h` < 0.0074
-  - _Potencial_: sin este filtro IC_bueno=+0.076 (n=31)
-
-- **FILTRO** `delta_ratio_macro` |x|≤ `0.1382` → IC=-0.125 (n=22)
+- **FILTRO** `delta_ratio_macro` |x|≤ `0.133` → IC=-0.150 (n=18)
   - _Por qué funciona_: flow macro débil → el mercado no ha procesado aún la presión; lag explotable
-  - _Acción_: SKIP cuando `delta_ratio_macro` |x|≤ 0.1382
-  - _Potencial_: sin este filtro IC_bueno=+0.125 (n=22)
+  - _Acción_: SKIP cuando `delta_ratio_macro` |x|≤ 0.133
+  - _Potencial_: sin este filtro IC_bueno=+0.119 (n=19)
 
-- **FILTRO** `hora_utc` < `15.0` → IC=-0.132 (n=17)
+- **FILTRO** `hora_utc` < `15.0` → IC=-0.147 (n=15)
   - _Por qué funciona_: hora temprana → mercados cripto menos líquidos, spreads más amplios; edge real menor
   - _Acción_: SKIP cuando `hora_utc` < 15.0
   - _Potencial_: sin este filtro IC_bueno=+0.045 (n=9)
 
-- **PATRÓN** `delta_ratio_macro` |x|> `0.1382` → IC=+0.125 (n=22)
-  - _Por qué funciona_: flow macro dominante → el lado comprador/vendedor ya fijó el precio en Polymarket
-  - _Acción_: Kelly boost +0.62€ cuando `delta_ratio_macro` |x|> 0.1382 (IC base=+0.000)
-
-### UPDOWN_GBM#SOL#15min
-- **FILTRO** `drift_60min` |x|> `0.2244` → IC=-0.167 (n=19)
-  - _Por qué funciona_: drift fuerte en 1h → el movimiento ya está priceado en Polymarket; edge agotado
-  - _Acción_: SKIP cuando `drift_60min` |x|> 0.2244
-  - _Potencial_: sin este filtro IC_bueno=+0.136 (n=20)
-
-- **FILTRO** `delta_ratio_macro` |x|≤ `0.1383` → IC=-0.182 (n=20)
-  - _Por qué funciona_: flow macro débil → el mercado no ha procesado aún la presión; lag explotable
-  - _Acción_: SKIP cuando `delta_ratio_macro` |x|≤ 0.1383
-  - _Potencial_: sin este filtro IC_bueno=+0.136 (n=20)
-
-- **PATRÓN** `drift_60min` |x|≤ `0.2244` → IC=+0.136 (n=20)
-  - _Por qué funciona_: drift moderado → precio aún no ha reaccionado del todo; lag explotable
-  - _Acción_: Kelly boost +0.68€ cuando `drift_60min` |x|≤ 0.2244 (IC base=+0.010)
-
-- **PATRÓN** `delta_ratio_macro` |x|> `0.1383` → IC=+0.136 (n=20)
-  - _Por qué funciona_: flow macro dominante → el lado comprador/vendedor ya fijó el precio en Polymarket
-  - _Acción_: Kelly boost +0.68€ cuando `delta_ratio_macro` |x|> 0.1383 (IC base=+0.010)
-
-### UPDOWN_GBM#SOL#60min
-- **FILTRO** `pct_spot_vs_ref` |x|> `0.0069` → IC=-0.265 (n=15)
-  - _Por qué funciona_: precio spot lejos de la referencia → señal GBM sobreextiende; riesgo de reversión
-  - _Acción_: SKIP cuando `pct_spot_vs_ref` |x|> 0.0069
-  - _Potencial_: sin este filtro IC_bueno=+0.125 (n=6)
-
-- **FILTRO** `sigma_h` > `0.0136` → IC=-0.265 (n=15)
-  - _Por qué funciona_: alta volatilidad → el modelo GBM sobreestima la señal; el mercado es más aleatorio
-  - _Acción_: SKIP cuando `sigma_h` > 0.0136
-  - _Potencial_: sin este filtro IC_bueno=+0.125 (n=6)
-
-- **FILTRO** `drift_15min` |x|> `0.61` → IC=-0.265 (n=15)
-  - _Por qué funciona_: drift fuerte en 15min → momentum reciente ya en el precio Polymarket
-  - _Acción_: SKIP cuando `drift_15min` |x|> 0.61
-  - _Potencial_: sin este filtro IC_bueno=+0.125 (n=6)
-
-- **FILTRO** `delta_ratio_macro` |x|≤ `0.1696` → IC=-0.147 (n=15)
-  - _Por qué funciona_: flow macro débil → el mercado no ha procesado aún la presión; lag explotable
-  - _Acción_: SKIP cuando `delta_ratio_macro` |x|≤ 0.1696
-  - _Potencial_: sin este filtro IC_bueno=-0.125 (n=6)
-
-### UPDOWN_GBM#XRP#15min
-- **FILTRO** `pct_spot_vs_ref` |x|> `0.0748` → IC=-0.147 (n=15)
-  - _Por qué funciona_: precio spot lejos de la referencia → señal GBM sobreextiende; riesgo de reversión
-  - _Acción_: SKIP cuando `pct_spot_vs_ref` |x|> 0.0748
-  - _Potencial_: sin este filtro IC_bueno=+0.100 (n=8)
-
-- **FILTRO** `sigma_h` > `0.0125` → IC=-0.147 (n=15)
-  - _Por qué funciona_: alta volatilidad → el modelo GBM sobreestima la señal; el mercado es más aleatorio
-  - _Acción_: SKIP cuando `sigma_h` > 0.0125
-  - _Potencial_: sin este filtro IC_bueno=+0.100 (n=8)
+- **FILTRO** `ibs_15` > `0.2558` → IC=-0.132 (n=17)
+  - _Por qué funciona_: IBS alto (precio cerca del máximo) → sobrecompra de corto plazo; BUY_YES menos fiable
+  - _Acción_: SKIP cuando `ibs_15` > 0.2558
+  - _Potencial_: sin este filtro IC_bueno=+0.056 (n=7)
 
 ## Estrategias nuevas sugeridas
 _Derivadas de los patrones aprendidos:_
 
-- **H-IBS-UPDOWN_GBM#ETH#15min**: IBS < 0.1479 correlaciona con éxito en UPDOWN_GBM#ETH#15min (IC=+0.219 n=30). Confirma señal de reversión media → alinear con BUY_YES.
+- **H-IBS-UPDOWN_GBM#15min**: IBS < 0.0952 correlaciona con éxito en UPDOWN_GBM#15min (IC=+0.278 n=25). Confirma señal de reversión media → alinear con BUY_YES.
 
 ## Estado de aprendizaje por estrategia
 
@@ -191,30 +177,30 @@ _Derivadas de los patrones aprendidos:_
 | 🚫 SMART_FLOW_1H | 26 | -0.286 | -12.57€ | 0 | 0 |
 | ✅ SMART_FLOW_1H#BTC | 11 | -0.106 | -3.89€ | 0 | 0 |
 | ✅ UPDOWN_GBM | 553 | -0.021 | -11.25€ | 0 | 0 |
-| ✅ UPDOWN_GBM#15min | 363 | +0.015 | +7.20€ | 0 | 0 |
+| ✅ UPDOWN_GBM#15min | 363 | +0.015 | +7.20€ | 2 | 3 |
 | 🚫 UPDOWN_GBM#240min | 12 | -0.171 | -4.82€ | 0 | 0 |
-| 🚫 UPDOWN_GBM#5min | 56 | -0.155 | -16.64€ | 3 | 0 |
-| ✅ UPDOWN_GBM#60min | 106 | -0.046 | -7.39€ | 5 | 1 |
+| 🚫 UPDOWN_GBM#5min | 56 | -0.155 | -16.64€ | 4 | 0 |
+| ✅ UPDOWN_GBM#60min | 106 | -0.046 | -7.39€ | 4 | 0 |
 | ✅ UPDOWN_GBM#BNB | 8 | -0.080 | -1.72€ | 0 | 0 |
 | ✅ UPDOWN_GBM#BNB#15min | 8 | -0.080 | -1.72€ | 0 | 0 |
 | ✅ UPDOWN_GBM#BTC | 167 | -0.015 | -12.59€ | 0 | 0 |
-| ✅ UPDOWN_GBM#BTC#15min | 102 | +0.029 | -5.13€ | 1 | 0 |
+| ✅ UPDOWN_GBM#BTC#15min | 102 | +0.029 | -5.13€ | 1 | 1 |
 | ✅ UPDOWN_GBM#BTC#240min | 5 | -0.089 | -2.96€ | 0 | 0 |
 | 🚫 UPDOWN_GBM#BTC#5min | 16 | -0.133 | -6.30€ | 0 | 0 |
 | ✅ UPDOWN_GBM#BTC#60min | 39 | -0.037 | -3.81€ | 4 | 0 |
 | ✅ UPDOWN_GBM#BTC#daily | 5 | +0.054 | +5.61€ | 0 | 0 |
 | ✅ UPDOWN_GBM#ETH | 250 | +0.012 | +8.80€ | 0 | 0 |
-| ✅ UPDOWN_GBM#ETH#15min | 182 | +0.027 | +10.39€ | 0 | 2 |
+| ✅ UPDOWN_GBM#ETH#15min | 182 | +0.027 | +10.39€ | 2 | 4 |
 | ✅ UPDOWN_GBM#ETH#240min | 5 | -0.018 | -0.44€ | 0 | 0 |
 | 🚫 UPDOWN_GBM#ETH#5min | 12 | -0.086 | -3.67€ | 0 | 0 |
-| ✅ UPDOWN_GBM#ETH#60min | 46 | +0.000 | -1.33€ | 3 | 1 |
+| ✅ UPDOWN_GBM#ETH#60min | 46 | +0.000 | -1.33€ | 3 | 0 |
 | ✅ UPDOWN_GBM#ETH#daily | 5 | +0.018 | +3.85€ | 0 | 0 |
 | ✅ UPDOWN_GBM#SOL | 91 | -0.070 | -1.98€ | 0 | 0 |
-| ✅ UPDOWN_GBM#SOL#15min | 47 | +0.010 | +3.75€ | 2 | 2 |
+| ✅ UPDOWN_GBM#SOL#15min | 47 | +0.010 | +3.75€ | 0 | 0 |
 | 🚫 UPDOWN_GBM#SOL#5min | 17 | -0.112 | -4.84€ | 0 | 0 |
-| ✅ UPDOWN_GBM#SOL#60min | 21 | -0.152 | -2.25€ | 4 | 0 |
+| ✅ UPDOWN_GBM#SOL#60min | 21 | -0.152 | -2.25€ | 0 | 0 |
 | ✅ UPDOWN_GBM#XRP | 32 | -0.088 | -2.49€ | 0 | 0 |
-| ✅ UPDOWN_GBM#XRP#15min | 23 | -0.060 | -0.63€ | 2 | 0 |
+| ✅ UPDOWN_GBM#XRP#15min | 23 | -0.060 | -0.63€ | 0 | 0 |
 | 🚫 UPDOWN_GBM#XRP#5min | 9 | -0.061 | -1.86€ | 0 | 0 |
 | ✅ UPDOWN_GBM#daily | 14 | +0.087 | +12.25€ | 0 | 0 |
 | 🚫 UPDOWN_OU_5M | 57 | -0.229 | -13.76€ | 0 | 0 |
