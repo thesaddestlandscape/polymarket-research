@@ -31,7 +31,7 @@ while true; do
         git add data/shadow/ data/live/ >> "$LOG" 2>&1 || true
         if ! git diff --cached --quiet 2>/dev/null; then
             timeout 30s git commit -m "shadow: ciclo $CICLO $(date -u +%Y-%m-%dT%H:%MZ)" >> "$LOG" 2>&1 || true
-            timeout 60s git pull --rebase -X ours origin main >> "$LOG" 2>&1 || true
+            timeout 60s git pull --rebase --autostash -X ours origin main >> "$LOG" 2>&1 || true
             timeout 60s git push origin main >> "$LOG" 2>&1 || true
         fi
     fi
