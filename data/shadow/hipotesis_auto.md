@@ -1,5 +1,5 @@
-# Hipótesis automáticas — 2026-07-01 15:50 UTC
-_Generado por shadow_postmortem.py sobre 1559 resoluciones (PNL=-59.66€)_
+# Hipótesis automáticas — 2026-07-01 15:52 UTC
+_Generado por shadow_postmortem.py sobre 1560 resoluciones (PNL=-59.18€)_
 
 ## Patrones causales activos
 
@@ -142,8 +142,8 @@ _Derivadas de los patrones aprendidos:_
 
 | Estrategia | n | IC | PNL | Filtros | Patrones |
 |---|---|---|---|---|---|
-| ✅ ORDER_FLOW_5M | 792 | +0.010 | +5.97€ | 0 | 0 |
-| ✅ ORDER_FLOW_5M#5min | 656 | +0.000 | -6.62€ | 0 | 0 |
+| ✅ ORDER_FLOW_5M | 793 | +0.011 | +6.45€ | 0 | 0 |
+| ✅ ORDER_FLOW_5M#5min | 657 | +0.001 | -6.14€ | 0 | 0 |
 | ✅ ORDER_FLOW_5M#BNB | 63 | +0.038 | +1.36€ | 0 | 0 |
 | ✅ ORDER_FLOW_5M#BNB#5min | 63 | +0.038 | +1.36€ | 0 | 0 |
 | ✅ ORDER_FLOW_5M#BTC | 134 | +0.007 | -0.02€ | 0 | 0 |
@@ -152,8 +152,8 @@ _Derivadas de los patrones aprendidos:_
 | ✅ ORDER_FLOW_5M#DOGE#5min | 82 | -0.012 | -1.81€ | 0 | 0 |
 | ✅ ORDER_FLOW_5M#ETH | 112 | -0.026 | -4.31€ | 0 | 0 |
 | ✅ ORDER_FLOW_5M#ETH#5min | 112 | -0.026 | -4.31€ | 0 | 0 |
-| ✅ ORDER_FLOW_5M#SOL | 149 | +0.010 | +0.17€ | 0 | 0 |
-| ✅ ORDER_FLOW_5M#SOL#5min | 149 | +0.010 | +0.17€ | 0 | 0 |
+| ✅ ORDER_FLOW_5M#SOL | 150 | +0.013 | +0.65€ | 0 | 0 |
+| ✅ ORDER_FLOW_5M#SOL#5min | 150 | +0.013 | +0.65€ | 0 | 0 |
 | ✅ ORDER_FLOW_5M#XRP | 116 | -0.009 | -2.01€ | 0 | 0 |
 | ✅ ORDER_FLOW_5M#XRP#5min | 116 | -0.009 | -2.01€ | 0 | 0 |
 | ✅ PRICE_TARGET_GBM | 62 | -0.078 | -11.78€ | 0 | 0 |
@@ -255,17 +255,17 @@ _Derivadas de los patrones aprendidos:_
 **⏳ H-CROSS-ASSET** — Cross-asset confirmation GBM+OF BUY_NO
   - _Umbral_: n_overlaps≥20 y IC_overlap > IC_base + 0.05
   - _Acción_: Cambiar _aplicar_kelly_compuesto: match por activo, no market_id
-  - _Estado_: n_overlaps=17, boost estimado=+0.019. Necesita 3 más y boost>0.05
+  - _Estado_: n_overlaps=17, boost estimado=+0.018. Necesita 3 más y boost>0.05
 
 **⏳ H-OF-PAR** — ORDER_FLOW per-pair delta_ratio ranges
   - _Umbral_: n≥200 por par con delta_ratio feature en shadow
   - _Acción_: Añadir DELTA_MIN/MAX por par dict en shadow_predict.py
-  - _Estado_: BTC: 78 ops con delta_ratio | SOL: 88 ops con delta_ratio
+  - _Estado_: BTC: 78 ops con delta_ratio | SOL: 89 ops con delta_ratio
 
 **⏳ H-KELLY-HORA** — Kelly boost ×1.2 en horas top (15/17/19h UTC)
   - _Umbral_: n≥40 por hora con IC estable ≥+0.10 confirmado en forward
   - _Acción_: Añadir HORA_BOOST = {13: 1.2, 15: 1.2, 17: 1.2, 19: 1.2} en shadow_predict.py
-  - _Estado_: H=13h UTC: IC=-0.058 n=102/40 PNL=-6.72€ | H=15h UTC: IC=-0.009 n=108/40 PNL=-1.15€ | H=17h UTC: IC=+0.225 n=38/40 PNL=+12.97€ | H=19h UTC: IC=+0.042 n=46/40 PNL=+3.69€
+  - _Estado_: H=13h UTC: IC=-0.058 n=102/40 PNL=-6.72€ | H=15h UTC: IC=-0.004 n=109/40 PNL=-0.67€ | H=17h UTC: IC=+0.225 n=38/40 PNL=+12.97€ | H=19h UTC: IC=+0.042 n=46/40 PNL=+3.69€
 
 **⏳ H-60MIN-LIVE** — Estrategias 60min → umbral live (IC≥0.08 n≥40)
   - _Umbral_: IC≥0.08 y n≥40 en cualquier subtipo 60min
@@ -509,15 +509,15 @@ _Derivadas de los patrones aprendidos:_
   - _Hipótesis_: Inspirado en el paper de Fornero (2023, 43 Jornadas SADAF) sobre astrología financiera: 5 estudios peer-review (Dichev & Janes 2003, Yuan et al. 2006, Keef & Khaled 2011, Floros & Tan 2013, Liu & Tseng 2009) en 25-62 mercados bursátiles encuentran rendimientos 5-10%/año más bajos cerca de luna llena que de luna nueva. El propio paper es escéptico de la astrología como tal, pero el mecanismo que documenta no es místico: sesgo de humor de inversores minoristas (más fuerte en acciones con dominancia retail, casi nulo en institucional). Polymarket es un mercado muy retail/cripto — hipótesis: si el mecanismo transfiere, debería verse peor IC cerca de luna llena (moon_phase≈0.5) que en el resto del ciclo.
   - _Umbral_: 200
   - _Acción_: Si IC cerca de luna llena < IC resto del ciclo con margen ≥0.05 y ≥3 ciclos lunares cubiertos → considerar boost/filtro por moon_phase. No implementar con menos de 3 ciclos aunque n sea alto — el efecto es de calendario lento, no de volumen.
-  - _Estado_: 22/200 ops en el filtro definido (IC actual=+0.083 PNL=+3.20€)
-  - _Datos_: n=22 IC=+0.083 PNL=+3.20€
+  - _Estado_: 23/200 ops en el filtro definido (IC actual=+0.100 PNL=+3.68€)
+  - _Datos_: n=23 IC=+0.100 PNL=+3.68€
 
 **⏳ H-CUSTOM-MERCURY-RETROGRADO** — Mercurio retrógrado: ¿rendimiento peor durante la ventana?
   - _Hipótesis_: Mismo origen que H-CUSTOM-MOON-LLENA (paper de Fornero, 43 Jornadas SADAF 2023). Qi, Wang & Zhang (2022, 48 mercados, 1973-2019): rendimientos 3.33%/año más bajos durante Mercurio retrógrado. Kou & Ma (2022) en China (99.8% cuentas retail): hasta -31% anualizado. Ambos estudios confirman que el mecanismo es la creencia/superstición de inversores retail (mayor efecto cuanto más retail y más supersticioso el mercado), no un efecto astral literal — Polymarket encaja en ese perfil. Ventanas 2026 (fuente pública, actualizar cada año): 26-feb a 20-mar, 29-jun a 23-jul, 24-oct a 13-nov.
   - _Umbral_: 100
   - _Acción_: Si IC en mercury_retrogrado=1 < IC en mercury_retrogrado=0 con margen ≥0.05 y ≥2 ventanas distintas cubiertas → considerar boost/filtro. No implementar tras una sola ventana (jun-jul 2026) por more que n sea alto — sería solo un evento, no un patrón.
-  - _Estado_: 22/100 ops en el filtro definido (IC actual=+0.083 PNL=+3.20€)
-  - _Datos_: n=22 IC=+0.083 PNL=+3.20€
+  - _Estado_: 23/100 ops en el filtro definido (IC actual=+0.100 PNL=+3.68€)
+  - _Datos_: n=23 IC=+0.100 PNL=+3.68€
 
 **⏳ H-CUSTOM-SMART-MONEY-CONSENSUS** — Consenso de wallets 'smart money' — ¿confirma nuestra dirección?
   - _Hipótesis_: Javi propuso estudiar bots/wallets que operan bien en nuestros mismos mercados. En vez de creer artículos (ya verificamos 2 veces esta semana que las narrativas no aguantan el cruce con datos reales), smart_money_tracker.py mide el track record REAL de wallets activas en BTC/ETH/SOL/XRP Up-or-Down 5/15/60min vía data-api.polymarket.com/positions, filtrado a posiciones 'Up or Down'. Clasifica como 'smart' las wallets con n>=10 posiciones, win_rate>=0.55 y pnl_total>0. smart_money_consensus es el sesgo direccional reciente (Up-Down)/(Up+Down) de esas wallets 'smart' por activo. Hipótesis: si nuestra decisión (BUY_YES/BUY_NO) coincide con el consenso smart money, mejor IC que cuando diverge.
