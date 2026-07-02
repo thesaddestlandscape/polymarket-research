@@ -1,4 +1,4 @@
-# Hipótesis automáticas — 2026-07-02 07:56 UTC
+# Hipótesis automáticas — 2026-07-02 07:57 UTC
 _Generado por shadow_postmortem.py sobre 2574 resoluciones (PNL=-79.19€)_
 
 ## Patrones causales activos
@@ -704,3 +704,9 @@ _Derivadas de los patrones aprendidos:_
   - _Acción_: Si confirma con n>=50 → candidato live acotado a horas 16-23 UTC (la ventana 15:00-21:30 Madrid ya cubre 14-19:30 UTC, encaja); si ademas H-KELLY-HORA confirma → boost conjunto
   - _Estado_: n=87 IC=-0.006 PNL=-7.11€ — sin señal clara aún (umbral IC: min=0.1 max=None)
   - _Datos_: n=87 IC=-0.006 PNL=-7.11€
+
+**⏳ H-CUSTOM-ETH15-BUYNO-PRECIO-ALTO** — ETH#15min BUY_NO con precio_yes>0.55 pierde (NO longshot contra favorito)
+  - _Hipótesis_: Detectado 2026-07-02: ult.60 shadow ETH15 BUY_NO — py_mkt~0.5 wr=0.67 PNL=+29.3 (n=49); py_mkt 0.6-0.8 wr 0.33-0 PNL=-5.75 (n=9). Filtro skip aplicado en shadow_predict.py (PY_MKT_MAX_BUY_NO_ETH15=0.55) el mismo dia. Esta hipotesis trackea la zona filtrada: si las ops que HABRIAN caido aqui siguen apareciendo en otras estrategias o el IC forward de la zona se vuelve positivo, revisar el filtro. CAVEAT: n=9, muestra chica — el filtro se aplico por asimetria de riesgo (afecta a dinero live), no por significancia.
+  - _Umbral_: 20
+  - _Acción_: Si IC forward de la zona >0 con n>=20 → retirar filtro; si confirma negativo → considerar extender a BTC/SOL 15min
+  - _Estado_: 0/20 ops en el filtro definido (IC actual=+0.000 PNL=+0.00€)
