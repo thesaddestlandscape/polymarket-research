@@ -1,4 +1,4 @@
-# Estado del bot — 2026-07-02 08:14 UTC
+# Estado del bot — 2026-07-02 08:16 UTC
 
 ## Capital
 | | |
@@ -11,20 +11,20 @@
 | | |
 |---|---|
 | Inicio | 25.44 € |
-| Actual | **-53.20 €** |
-| P&L acumulado | 🔴 **-78.64 €** |
-| ROI s/ operativo | -309.12% |
-| ROI s/ depósito | -262.13% |
-| P&L hoy (2026-07-02) | 🟢 +0.61 € |
-| Operaciones resueltas | 2579 (1252 WIN / 1327 LOSS) — 48.5% |
-| Señales abiertas | 86 |
+| Actual | **-53.71 €** |
+| P&L acumulado | 🔴 **-79.15 €** |
+| ROI s/ operativo | -311.12% |
+| ROI s/ depósito | -263.83% |
+| P&L hoy (2026-07-02) | 🟢 +0.10 € |
+| Operaciones resueltas | 2580 (1252 WIN / 1328 LOSS) — 48.5% |
+| Señales abiertas | 85 |
 
 ## Estrategias (visión global)
 
 | Estrategia | n | Win% | IC_efectivo | PNL | Apuesta | Estado |
 |---|---|---|---|---|---|---|
 | ORDER_FLOW_5M | 1508 | 51.4% | +0.014 | +13.03€ | 0.50€ | ✅ activa |
-| GBM_LATE_15M | 21 | 81.0% | +0.283 | +6.77€ | 2.00€ | ✅ activa |
+| GBM_LATE_15M | 22 | 77.3% | +0.250 | +6.26€ | 2.00€ | ✅ activa |
 | PRICE_TARGET_GBM | 67 | 40.3% | -0.094 | -11.97€ | 0.50€ | ⚠️ IC negativo |
 | SMART_FLOW_1H | 29 | 20.7% | -0.274 | -13.82€ | 0.00€ | 🚫 desactivada |
 | WEEKLY_PRICE | 70 | 45.7% | -0.042 | -17.23€ | 0.50€ | ⚠️ IC negativo |
@@ -35,21 +35,21 @@
 
 | Timestamp | Estrategia | Mercado | Resultado | PNL |
 |---|---|---|---|---|
+| 2026-07-02T08:16 | GBM_LATE_15M#BTC#15min | Bitcoin Up or Down - July 2, 4:00AM-4:15AM ET… | ❌ LOSS | -0.51€ |
 | 2026-07-02T08:05 | GBM_LATE_15M#ETH#15min | Ethereum Up or Down - July 2, 3:45AM-4:00AM ET… | ✅ WIN | +0.50€ |
 | 2026-07-02T08:05 | GBM_LATE_15M#XRP#15min | XRP Up or Down - July 2, 3:45AM-4:00AM ET… | ✅ WIN | +0.50€ |
 | 2026-07-02T08:04 | GBM_LATE_15M#BTC#15min | Bitcoin Up or Down - July 2, 3:45AM-4:00AM ET… | ❌ LOSS | -0.51€ |
 | 2026-07-02T08:04 | UPDOWN_GBM#SOL#60min | Solana Up or Down - July 2, 3AM ET… | ❌ LOSS | -0.51€ |
-| 2026-07-02T08:02 | GBM_LATE_15M#SOL#15min | Solana Up or Down - July 2, 3:45AM-4:00AM ET… | ✅ WIN | +0.57€ |
 
 ## Calidad de datos
 
-⚠️ **DEGRADED** — última verificación 2026-07-02T08:14 UTC | rechazos 1h: 98 (rango=0, spike=0)
+⚠️ **DEGRADED** — última verificación 2026-07-02T08:16 UTC | rechazos 1h: 98 (rango=0, spike=0)
 
 | Asset | Precio | Age | Alertas |
 |---|---|---|---|
 | ✅ BTC | $60,243.57 | 0.0min |  |
 | ✅ ETH | $1,617.60 | 0.0min |  |
-| ✅ SOL | $78.07 | 0.0min |  |
+| ✅ SOL | $78.23 | 0.0min |  |
 | ✅ XRP | $1.06 | 0.0min |  |
 
 **Cross-source** (binance, coinbase, kraken):
