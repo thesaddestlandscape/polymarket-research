@@ -523,8 +523,23 @@ def main():
             "clv": _clv(pred, res),
         })
 
+        # Simulación maker (observacional, best-effort — jamás afecta a la
+        # resolución real ni al cierre de trades live; ver maker_sim.py)
+        try:
+            import maker_sim
+            maker_sim.simular(pred, mercado, res, ts)
+        except Exception:
+            pass
+
     print(f"  Predicciones pendientes consultadas: {len(consultados_ids)} mercados")
     print(f"  Resoluciones nuevas: {len(nuevos_resultados)}")
+    try:
+        import maker_sim
+        _rs = maker_sim.resumen()
+        if _rs:
+            print(f"  {_rs}")
+    except Exception:
+        pass
 
     if not nuevos_resultados:
         print(f"[{ts}] === Fin shadow resolve (nada nuevo) ===")

@@ -64,6 +64,8 @@ cron */5       → watchdog_fast.sh (9 checks, restart screens, alerta disco)
 | `hypothesis_tracker.py` | 14 hipótesis builtin + custom JSON → auto-apply strategy_params |
 | `pipeline_watchdog.py` | 9 checks, restart screens, rotación logs, alerta disco |
 | `dashboard_server.py` | http://37.27.249.72:8888 (polling 1s, LightweightCharts) |
+| `nested_arb_scanner.py` | Arb de contención ventanas anidadas (cron 1min) → nested_arb_YYYY-MM-DD.csv |
+| `maker_sim.py` | Sim entrada maker vs taker (invocado por shadow_resolve) → maker_sim.csv |
 
 ---
 
@@ -128,6 +130,8 @@ predictions (features JSON) → postmortem:
 | P10 | ETH#15min reversion drift<-1 → boost ×1.1 | n≥20, IC≥0.08 sostenido |
 | P11 | Revisar OF blacklist 02h/07h (BTC+SOL solo) | n≥20 por hora |
 | P12 | Smart money wallets + trade size feature | Descargar Jon-Becker (`s3.jbecker.dev/data.tar.zst` 36GB) |
+| P13 | Arb de contención ventanas anidadas → live | `nested_arb_scanner.py` (cron 1min) acumulando; revisar distribución coste/depth tras ~1 semana |
+| P14 | Conversión entrada taker→maker en live | `maker_sim.py` (via shadow_resolve) midiendo fill-rate+EV; decidir con n≥100 señales simuladas |
 
 ---
 
