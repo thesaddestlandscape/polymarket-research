@@ -75,6 +75,42 @@ REFRESH_POSICIONES_HORAS = 6     # no re-pedir /positions si se evaluó hace men
 MIN_N_SMART = 10
 MIN_WINRATE_SMART = 0.55
 
+# Clasificación "smart" v2 (2026-07-02): el criterio original basado en
+# /positions resultó estar INVERTIDO para wallets de alta frecuencia — el
+# endpoint solo retiene posiciones sin redimir, y como las ganadoras se
+# redimen (cash) y las perdedoras valen 0 (no hay nada que redimir), lo que
+# queda listado es el residuo perdedor. Verificado 2026-07-02: la wallet
+# "wowitsamazing" figuraba aquí con pnl=-478k/wr=0.002 y en el leaderboard
+# oficial (que capturamos a diario en data/wallets/) es +$10k/mes. El
+# leaderboard es ahora la fuente autoritativa de "smart"; win_rate/pnl de
+# /positions se conservan solo como dato informativo, no como criterio.
+DIR_WALLETS = Path("data/wallets")
+MIN_PNL_LEADERBOARD_SMART = 1000.0  # USD/mes en leaderboard oficial
+
+
+def _leaderboard_pnl() -> dict:
+    """{address_lower: pnl_mes} del leaderboard oficial más reciente en disco."""
+    # Cada fichero diario acumula capturas horarias del top-~75 → pocas
+    # addresses únicas por día. Se fusionan los últimos 3 días para ampliar
+    # cobertura (una wallet que estuvo en el top el lunes sigue verificada
+    # el miércoles a efectos de clasificación).
+    archivos = sorted(DIR_WALLETS.glob("leaderboard_*.csv"))[-3:]
+    out: dict[str, float] = {}
+    for archivo in archivos:
+        try:
+            with open(archivo, encoding="utf-8") as f:
+                for row in csv.DictReader(f):
+                    a = (row.get("address") or "").lower()
+                    try:
+                        p = float(row.get("pnl") or "")
+                    except ValueError:
+                        continue
+                    if a and (a not in out or p > out[a]):
+                        out[a] = p
+        except Exception as e:
+            print(f"  [warn] leyendo {archivo.name}: {e}")
+    return out
+
 
 def _cargar_json(path, default):
     if not path.exists():
@@ -230,6 +266,8 @@ def main():
 
     wallets_db = _cargar_json(WALLETS_PATH, {})
     ahora = datetime.now(timezone.utc)
+    lb_pnl = _leaderboard_pnl()
+    print(f"  Leaderboard oficial cargado: {len(lb_pnl)} wallets con PNL verificado")
     consultadas = 0
     consultadas_weekly = 0
     for w, act in candidatos.items():
@@ -254,14 +292,23 @@ def main():
             if act["duraciones"].get("weekly", 0) > 0:
                 weekly_stats = posiciones_weekly(w)
                 consultadas_weekly += 1
-        clasificacion = "smart" if (
-            stats.get("n", 0) >= MIN_N_SMART
-            and stats.get("win_rate", 0) >= MIN_WINRATE_SMART
-            and stats.get("pnl_total", 0) > 0
-        ) else "normal"
+        # v2: "smart" solo si el leaderboard oficial lo verifica (ver nota en
+        # MIN_PNL_LEADERBOARD_SMART — el criterio viejo por /positions estaba
+        # invertido para wallets que redimen rápido).
+        pnl_lb = lb_pnl.get(w.lower())
+        if pnl_lb is not None and pnl_lb >= MIN_PNL_LEADERBOARD_SMART:
+            clasificacion = "smart"
+        elif (stats.get("n", 0) >= MIN_N_SMART
+              and stats.get("win_rate", 0) >= MIN_WINRATE_SMART
+              and stats.get("pnl_total", 0) > 0):
+            # criterio viejo: se degrada a candidato (no entra en el consenso)
+            clasificacion = "candidato_posiciones"
+        else:
+            clasificacion = "normal"
         wallets_db[w] = {
             **stats,
             "clasificacion": clasificacion,
+            **({"pnl_leaderboard_mes": round(pnl_lb, 2)} if pnl_lb is not None else {}),
             "trades_muestra_reciente": act["n"],
             "activos_muestra_reciente": {k: v for k, v in act["activos"].items()},
             "duraciones_muestra_reciente": dict(act["duraciones"]),

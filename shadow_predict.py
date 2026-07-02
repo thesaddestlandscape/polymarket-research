@@ -1954,8 +1954,18 @@ def main():
     operables = []
     for m in mercados:
         h = horas_a_vencimiento(m.get("end_date", ""))
-        if h is None or not (HORIZONTE_MIN_HORAS <= h <= HORIZONTE_MAX_HORAS):
+        if h is None or h > HORIZONTE_MAX_HORAS:
             continue
+        if h < HORIZONTE_MIN_HORAS:
+            # Zona late-window: mercados Up-or-Down a 30s-3min de expirar.
+            # El suelo general de 3min dejaba a LATE_WINDOW_5MIN sin un solo
+            # mercado elegible (su zona de entrada 160-270s de una ventana de
+            # 5min deja 30-140s restantes) — 0 predicciones desde su creación,
+            # detectado 2026-07-02. Estos mercados pasan marcados y SOLO los
+            # evalúa LATE_WINDOW_5MIN (ver check _solo_late en el bucle).
+            if h < 0.008 or "up or down" not in (m.get("question") or "").lower():
+                continue
+            m["_solo_late"] = True
         try:
             py = float(m.get("price_yes", ""))
         except (ValueError, TypeError):
@@ -2040,6 +2050,8 @@ def main():
             py  = m["_precio_yes"]
             mid = m.get("market_id", "")
             for nombre, func in ESTRATEGIAS:
+                if m.get("_solo_late") and nombre != "LATE_WINDOW_5MIN":
+                    continue
                 if (nombre, mid) in ya_predichos:
                     skipped_dup += 1
                     continue
