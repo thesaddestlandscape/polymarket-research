@@ -802,14 +802,28 @@ def _cargar_spot():
             rows = list(csv.DictReader(f))
         if not rows:
             return {}
-        last = rows[-1]
-        for k, v in last.items():
-            if k == "timestamp_utc":
-                continue
-            try:
-                SPOT_PRECIOS[k] = float(v)
-            except (ValueError, TypeError):
-                pass
+        if "asset" in rows[0]:
+            # Formato largo (una fila por activo: timestamp,asset,price_usd,...).
+            # El parser anterior asumía el formato ancho legacy y devolvía
+            # {'price_usd': <último precio>} — .get(activo) era None SIEMPRE,
+            # matando en silencio toda estrategia dependiente de spot
+            # (WEEKLY_PRICE, RESOLUTION_SNIPER, LATE_WINDOW_5MIN, OU).
+            # Detectado 2026-07-02.
+            for r in rows:  # la última aparición de cada activo gana
+                try:
+                    SPOT_PRECIOS[(r.get("asset") or "").upper()] = float(r["price_usd"])
+                except (KeyError, ValueError, TypeError):
+                    continue
+            SPOT_PRECIOS.pop("", None)
+        else:
+            # Formato ancho legacy: última fila, una columna por activo
+            for k, v in rows[-1].items():
+                if k == "timestamp_utc":
+                    continue
+                try:
+                    SPOT_PRECIOS[k] = float(v)
+                except (ValueError, TypeError):
+                    pass
     except Exception:
         pass
     return SPOT_PRECIOS
@@ -1845,6 +1859,102 @@ def s_late_window_5min(market: dict, ctx: dict):
     }
 
 
+GBM_LATE_15M_REST_MIN_LO = 3.0    # min restantes mínimos (suelo operables = 3min)
+GBM_LATE_15M_REST_MIN_HI = 12.0   # min restantes máximos (salta los 3 primeros min)
+GBM_LATE_15M_PARES = {"BTC", "ETH", "SOL", "XRP"}
+
+
+def s_gbm_late_15min(market, ctx):
+    """
+    GBM de entrada tardía en ventanas 15min — estrategia propia (2026-07-02).
+
+    Evidencia doble: (a) nuestras entradas tardías accidentales en GBM#15min
+    (T_h<0.2) dan IC=+0.279 n=61 vs IC=-0.024 la entrada temprana; (b) el
+    estudio de ballenas verificadas contra el leaderboard oficial muestra que
+    los 3 mayores ganadores de estos mercados compran el lado que ya va
+    ganando a mitad/final de ventana (zhangfan151 compra a 0.88 en la 2ª
+    mitad, +$8.7k/mes). Mecanismo: con poco tiempo restante la varianza
+    residual cae y el movimiento ya hecho domina el outcome, pero el precio
+    de Polymarket se queda rezagado cerca de 50/50.
+
+    Estrategia SEPARADA de UPDOWN_GBM a propósito: (1) el dedup por
+    (strategy, market_id) impediría una segunda pasada bajo el mismo nombre;
+    (2) acumula su propio IC desde cero; (3) no está en
+    estrategias_permitidas_live → imposible que toque dinero real hasta
+    decisión explícita.
+    """
+    question = market.get("question", "")
+    if "up or down" not in question.lower():
+        return None
+    tipo, ventana_min = _parse_updown_tipo(question)
+    if tipo != "slot" or ventana_min != 15:
+        return None
+    activo = identificar_activo(question)
+    if activo not in GBM_LATE_15M_PARES:
+        return None
+
+    try:
+        end_dt = datetime.fromisoformat(
+            market.get("end_date", "").replace("Z", "+00:00"))
+        if end_dt.tzinfo is None:
+            end_dt = end_dt.replace(tzinfo=timezone.utc)
+    except Exception:
+        return None
+
+    now_utc = datetime.now(timezone.utc)
+    restante_min = (end_dt - now_utc).total_seconds() / 60.0
+    if not (GBM_LATE_15M_REST_MIN_LO <= restante_min <= GBM_LATE_15M_REST_MIN_HI):
+        return None
+
+    precios_data = ctx.get("precios_intraday", [])
+    spot = _cargar_spot().get(activo)
+    if not spot or spot <= 0:
+        return None
+
+    window_start = end_dt - timedelta(minutes=15)
+    ref = _precio_en(activo, window_start, precios_data, tol_min=3)
+    if ref is None or ref <= 0:
+        return None
+
+    sigma_h = _estimar_vol_h(activo, precios_data, n_min=20) or 0.02
+    T_rem_h = restante_min / 60.0
+    # P(cierre > apertura de ventana) con lo ya movido como ventaja:
+    # d = ln(spot/ref) / (sigma * sqrt(T_restante))
+    import math
+    denom = sigma_h * math.sqrt(max(T_rem_h, 1e-6))
+    if denom <= 0:
+        return None
+    d = math.log(spot / ref) / denom
+    p_up = _norm_cdf(d)
+
+    drift_ventana = spot / ref - 1
+    py = market.get("_precio_yes")
+    if py is None:
+        return None
+
+    edge = p_up - py
+    # Mismo listón que el resto: EDGE_MINIMO lo aplica main() sobre edge_neto;
+    # aquí solo se exige señal direccional mínima para no emitir ruido 50/50.
+    if abs(edge) < 0.03:
+        return None
+
+    return {
+        "prob_yes": round(p_up, 4),
+        "razon":    (f"gbm_late_15min {activo} drift_vent={drift_ventana*100:+.3f}% "
+                     f"rest={restante_min:.1f}min d={d:+.2f} p_up={p_up:.2f} py={py:.2f}"),
+        "subtype":  f"{activo}#15min",
+        "features": {
+            "drift_ventana_pct": round(drift_ventana * 100, 4),
+            "restante_min":      round(restante_min, 2),
+            "T_h":               round(T_rem_h, 4),
+            "sigma_h":           round(sigma_h, 5),
+            "d_gbm":             round(d, 3),
+            "py_entrada":        round(py, 3),
+            "hora_utc":          now_utc.hour,
+        },
+    }
+
+
 def s_updown_ou_5m(market, ctx):
     """
     OU (Ornstein-Uhlenbeck) para slots de 5min — hipótesis mean-reversion.
@@ -1931,6 +2041,7 @@ ESTRATEGIAS = [
     ("ORDER_FLOW_5M",       s_order_flow_5m),
     ("RESOLUTION_SNIPER",   s_resolution_sniper),
     ("LATE_WINDOW_5MIN",    s_late_window_5min),
+    ("GBM_LATE_15M",        s_gbm_late_15min),
     # ("BINANCE_UPDOWN", s_binance_updown),  # retirada — IC -0.50
 ]
 
