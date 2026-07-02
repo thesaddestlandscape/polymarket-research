@@ -261,10 +261,10 @@
     {
       "id": "H-CUSTOM-BTC15-TENDENCIA",
       "nombre": "BTC#15min — ¿el edge está decayendo?",
-      "descripcion": "Análisis split: primeras 20 ops IC=+0.136 (65%); últimas 20 ops IC=-0.091 (40%). El edge era real pero puede estar desapareciendo. n=43 actual con IC=+0.056 ya bajo umbral. Tracking continuo.",
+      "descripcion": "Análisis split: primeras 20 ops IC=+0.136 (65%); últimas 20 ops IC=-0.091 (40%). El edge era real pero puede estar desapareciendo. n=43 actual con IC=+0.056 ya bajo umbral. Tracking continuo. ACTUALIZADO 2026-07-02: el agregado IC=-0.022 n=159 mezcla historia pre-filtros. Supervivientes a filtros causales actuales: IC=+0.008 n=131 (break-even). Tercio reciente (30jun-2jul): IC=+0.057. NO desactivar por el agregado — ver H-CUSTOM-BTC15-TARDE para el bolsillo rentable (hora>=16).",
       "tipo": "filtro",
       "umbral": "n≥50 — si IC<0.04 con n≥50 considerar desactivar BTC#15min",
-      "accion": "Si IC<0.02 con n≥50 → desactivar BTC#15min (el edge ha muerto); si sube a >0.08 → candidato live",
+      "accion": "NO desactivar por el agregado (confundido por historia pre-filtros). Evaluar sobre supervivientes post-filtro: si IC post-filtro <0 con n>=60 forward → desactivar; si H-CUSTOM-BTC15-TARDE confirma → acotar a tarde en vez de matar.",
       "filtro": {
         "strategy_prefix": "UPDOWN_GBM",
         "par": "BTC",
@@ -686,6 +686,22 @@
         "decision": "BUY_NO"
       },
       "umbral_n": 20,
+      "umbral_ic_min": 0.1
+    },
+    {
+      "id": "H-CUSTOM-BTC15-TARDE",
+      "nombre": "BTC#15min en tarde UTC (hora>=16) — el bolsillo rentable dentro de un subtipo mediocre",
+      "descripcion": "Detectado 2026-07-02 al analizar si BTC#15min es rescatable en vez de desactivarla: sobre los supervivientes a los filtros causales actuales, hora_utc>=16 da IC=+0.385 n=26 PNL=+4.16€, mientras el agregado del subtipo es IC=-0.044 n=159. Convergen 3 señales independientes: el patron ganador del postmortem (BUY_YES hora>17 IC=+0.125 n=22), H-KELLY-HORA (17h IC=+0.221 n=41 global) y este split. Ademas el tercio temporal reciente (30-jun a 2-jul, ya con filtros activos) esta en IC=+0.057 — el 'declive' de H-CUSTOM-BTC15-TENDENCIA mezclaba historia pre-filtros. CAVEAT: n=26 y encontrado explorando varios splits (riesgo de comparaciones multiples) — la convergencia con las otras 2 señales mitiga pero no elimina; exigir confirmacion forward.",
+      "tipo": "boost",
+      "umbral": "n>=50 y IC>+0.10 en forward",
+      "accion": "Si confirma con n>=50 → candidato live acotado a horas 16-23 UTC (la ventana 15:00-21:30 Madrid ya cubre 14-19:30 UTC, encaja); si ademas H-KELLY-HORA confirma → boost conjunto",
+      "filtro": {
+        "strategy_prefix": "UPDOWN_GBM",
+        "par": "BTC",
+        "subtype_contains": "15min",
+        "hora_utc_desde": 16
+      },
+      "umbral_n": 50,
       "umbral_ic_min": 0.1
     }
   ]
