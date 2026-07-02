@@ -1,4 +1,4 @@
-# Estado del bot — 2026-07-02 16:17 UTC
+# Estado del bot — 2026-07-02 16:18 UTC
 
 ## Capital
 | | |
@@ -11,19 +11,19 @@
 | | |
 |---|---|
 | Inicio | 25.44 € |
-| Actual | **-29.54 €** |
-| P&L acumulado | 🔴 **-54.98 €** |
-| ROI s/ operativo | -216.12% |
-| ROI s/ depósito | -183.27% |
-| P&L hoy (2026-07-02) | 🟢 +24.27 € |
-| Operaciones resueltas | 2743 (1344 WIN / 1399 LOSS) — 49.0% |
-| Señales abiertas | 103 |
+| Actual | **-28.53 €** |
+| P&L acumulado | 🔴 **-53.97 €** |
+| ROI s/ operativo | -212.14% |
+| ROI s/ depósito | -179.90% |
+| P&L hoy (2026-07-02) | 🟢 +25.28 € |
+| Operaciones resueltas | 2745 (1345 WIN / 1400 LOSS) — 49.0% |
+| Señales abiertas | 105 |
 
 ## Estrategias (visión global)
 
 | Estrategia | n | Win% | IC_efectivo | PNL | Apuesta | Estado |
 |---|---|---|---|---|---|---|
-| GBM_LATE_15M | 133 | 63.2% | +0.130 | +34.79€ | 1.30€ | ✅ activa |
+| GBM_LATE_15M | 135 | 63.0% | +0.128 | +35.80€ | 1.28€ | ✅ activa |
 | ORDER_FLOW_5M | 1511 | 51.4% | +0.014 | +12.34€ | 0.50€ | ✅ activa |
 | RESOLUTION_SNIPER | 6 | 100.0% | +0.112 | +2.85€ | 1.12€ | ⏳ acumulando |
 | LATE_WINDOW_5MIN | 4 | 50.0% | +0.000 | -0.08€ | 0.50€ | ⏳ acumulando |
@@ -37,22 +37,22 @@
 
 | Timestamp | Estrategia | Mercado | Resultado | PNL |
 |---|---|---|---|---|
+| 2026-07-02T16:18 | GBM_LATE_15M#SOL#15min | Solana Up or Down - July 2, 12:00PM-12:15PM ET… | ✅ WIN | +1.52€ |
+| 2026-07-02T16:18 | GBM_LATE_15M#BTC#15min | Bitcoin Up or Down - July 2, 12:00PM-12:15PM ET… | ❌ LOSS | -0.51€ |
 | 2026-07-02T16:16 | GBM_LATE_15M#ETH#15min | Ethereum Up or Down - July 2, 12:00PM-12:15PM ET… | ❌ LOSS | -0.51€ |
 | 2026-07-02T16:16 | UPDOWN_GBM#ETH#15min | Ethereum Up or Down - July 2, 12:00PM-12:15PM ET… | ❌ LOSS | -2.04€ |
 | 2026-07-02T16:07 | RESOLUTION_SNIPER#ETH#sniper | Will the price of Ethereum be between $1,600 and $… | ✅ WIN | +0.72€ |
-| 2026-07-02T16:07 | RESOLUTION_SNIPER#ETH#sniper | Will the price of Ethereum be above $1,700 on July… | ✅ WIN | +0.84€ |
-| 2026-07-02T16:07 | WEEKLY_PRICE#ETH | Will the price of Ethereum be between $1,600 and $… | ✅ WIN | +0.14€ |
 
 ## Calidad de datos
 
-✅ **OK** — última verificación 2026-07-02T16:16 UTC
+✅ **OK** — última verificación 2026-07-02T16:18 UTC
 
 | Asset | Precio | Age | Alertas |
 |---|---|---|---|
-| ✅ BTC | $61,448.00 | 0.0min |  |
-| ✅ ETH | $1,693.21 | 0.0min |  |
-| ✅ SOL | $80.84 | 0.0min |  |
-| ✅ XRP | $1.09 | 0.0min |  |
+| ✅ BTC | $61,448.00 | 0.1min |  |
+| ✅ ETH | $1,693.21 | 0.1min |  |
+| ✅ SOL | $80.76 | 0.1min |  |
+| ✅ XRP | $1.09 | 0.1min |  |
 
 **Cross-source** (binance, coinbase, kraken):
 
