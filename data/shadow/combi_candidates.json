@@ -1,48 +1,48 @@
 {
-  "generated_at": "2026-07-02T23:34:57.495330+00:00",
+  "generated_at": "2026-07-02T23:47:49.898050+00:00",
   "markets_file": "2026-07-02.csv",
-  "total_filtered": 2765,
-  "total_pairs": 1615,
+  "total_filtered": 2778,
+  "total_pairs": 1610,
   "candidates": [
     {
       "market_id_a": "701496",
       "question_a": "Will Bitcoin reach $100,000 by December 31, 2026?",
-      "price_yes_a": 0.105,
-      "liq_a": 131014.0,
+      "price_yes_a": 0.1,
+      "liq_a": 131368.0,
       "market_id_b": "701503",
       "question_b": "Will Bitcoin dip to $35,000 by December 31, 2026?",
       "price_yes_b": 0.135,
-      "liq_b": 166102.0
+      "liq_b": 166111.0
     },
     {
       "market_id_a": "701503",
       "question_a": "Will Bitcoin dip to $35,000 by December 31, 2026?",
       "price_yes_a": 0.135,
-      "liq_a": 166102.0,
+      "liq_a": 166111.0,
       "market_id_b": "1339769",
       "question_b": "Will Bitcoin dip to $30,000 by December 31, 2026?",
       "price_yes_b": 0.105,
-      "liq_b": 126953.0
+      "liq_b": 127003.0
     },
     {
       "market_id_a": "701502",
       "question_a": "Will Bitcoin dip to $45,000 by December 31, 2026?",
       "price_yes_a": 0.395,
-      "liq_a": 109840.0,
+      "liq_a": 110900.0,
       "market_id_b": "701503",
       "question_b": "Will Bitcoin dip to $35,000 by December 31, 2026?",
       "price_yes_b": 0.135,
-      "liq_b": 166102.0
+      "liq_b": 166111.0
     },
     {
       "market_id_a": "701496",
       "question_a": "Will Bitcoin reach $100,000 by December 31, 2026?",
-      "price_yes_a": 0.105,
-      "liq_a": 131014.0,
+      "price_yes_a": 0.1,
+      "liq_a": 131368.0,
       "market_id_b": "1339769",
       "question_b": "Will Bitcoin dip to $30,000 by December 31, 2026?",
       "price_yes_b": 0.105,
-      "liq_b": 126953.0
+      "liq_b": 127003.0
     },
     {
       "market_id_a": "701494",
@@ -52,87 +52,87 @@
       "market_id_b": "701503",
       "question_b": "Will Bitcoin dip to $35,000 by December 31, 2026?",
       "price_yes_b": 0.135,
-      "liq_b": 166102.0
+      "liq_b": 166111.0
     },
     {
       "market_id_a": "701504",
       "question_a": "Will Bitcoin dip to $25,000 by December 31, 2026?",
       "price_yes_a": 0.055,
-      "liq_a": 90385.0,
+      "liq_a": 90761.0,
       "market_id_b": "701503",
       "question_b": "Will Bitcoin dip to $35,000 by December 31, 2026?",
       "price_yes_b": 0.135,
-      "liq_b": 166102.0
+      "liq_b": 166111.0
     },
     {
       "market_id_a": "701503",
       "question_a": "Will Bitcoin dip to $35,000 by December 31, 2026?",
       "price_yes_a": 0.135,
-      "liq_a": 166102.0,
+      "liq_a": 166111.0,
       "market_id_b": "1345531",
       "question_b": "Will Bitcoin reach $90,000 by December 31, 2026?",
       "price_yes_b": 0.175,
-      "liq_b": 89946.0
+      "liq_b": 89721.0
     },
     {
       "market_id_a": "701495",
       "question_a": "Will Bitcoin reach $110,000 by December 31, 2026?",
       "price_yes_a": 0.07,
-      "liq_a": 85761.0,
+      "liq_a": 85921.0,
       "market_id_b": "701503",
       "question_b": "Will Bitcoin dip to $35,000 by December 31, 2026?",
       "price_yes_b": 0.135,
-      "liq_b": 166102.0
+      "liq_b": 166111.0
     },
     {
       "market_id_a": "701503",
       "question_a": "Will Bitcoin dip to $35,000 by December 31, 2026?",
       "price_yes_a": 0.135,
-      "liq_a": 166102.0,
+      "liq_a": 166111.0,
       "market_id_b": "1339767",
       "question_b": "Will Bitcoin dip to $50,000 by December 31, 2026?",
       "price_yes_b": 0.535,
-      "liq_b": 82520.0
+      "liq_b": 82665.0
     },
     {
       "market_id_a": "701503",
       "question_a": "Will Bitcoin dip to $35,000 by December 31, 2026?",
       "price_yes_a": 0.135,
-      "liq_a": 166102.0,
+      "liq_a": 166111.0,
       "market_id_b": "1339768",
       "question_b": "Will Bitcoin dip to $40,000 by December 31, 2026?",
       "price_yes_b": 0.245,
-      "liq_b": 79826.0
-    },
-    {
-      "market_id_a": "701503",
-      "question_a": "Will Bitcoin dip to $35,000 by December 31, 2026?",
-      "price_yes_a": 0.135,
-      "liq_a": 166102.0,
-      "market_id_b": "1343219",
-      "question_b": "Will Bitcoin dip to $20,000 by December 31, 2026?",
-      "price_yes_b": 0.045,
-      "liq_b": 75002.0
+      "liq_b": 78726.0
     },
     {
       "market_id_a": "701496",
       "question_a": "Will Bitcoin reach $100,000 by December 31, 2026?",
-      "price_yes_a": 0.105,
-      "liq_a": 131014.0,
+      "price_yes_a": 0.1,
+      "liq_a": 131368.0,
       "market_id_b": "701502",
       "question_b": "Will Bitcoin dip to $45,000 by December 31, 2026?",
       "price_yes_b": 0.395,
-      "liq_b": 109840.0
+      "liq_b": 110900.0
+    },
+    {
+      "market_id_a": "701503",
+      "question_a": "Will Bitcoin dip to $35,000 by December 31, 2026?",
+      "price_yes_a": 0.135,
+      "liq_a": 166111.0,
+      "market_id_b": "1343219",
+      "question_b": "Will Bitcoin dip to $20,000 by December 31, 2026?",
+      "price_yes_b": 0.045,
+      "liq_b": 74939.0
     },
     {
       "market_id_a": "701502",
       "question_a": "Will Bitcoin dip to $45,000 by December 31, 2026?",
       "price_yes_a": 0.395,
-      "liq_a": 109840.0,
+      "liq_a": 110900.0,
       "market_id_b": "1339769",
       "question_b": "Will Bitcoin dip to $30,000 by December 31, 2026?",
       "price_yes_b": 0.105,
-      "liq_b": 126953.0
+      "liq_b": 127003.0
     },
     {
       "market_id_a": "701501",
@@ -142,17 +142,17 @@
       "market_id_b": "701503",
       "question_b": "Will Bitcoin dip to $35,000 by December 31, 2026?",
       "price_yes_b": 0.135,
-      "liq_b": 166102.0
+      "liq_b": 166111.0
     },
     {
       "market_id_a": "701503",
       "question_a": "Will Bitcoin dip to $35,000 by December 31, 2026?",
       "price_yes_a": 0.135,
-      "liq_a": 166102.0,
+      "liq_a": 166111.0,
       "market_id_b": "2467207",
       "question_b": "Will Bitcoin reach $85,000 by December 31, 2026?",
       "price_yes_b": 0.22,
-      "liq_b": 65637.0
+      "liq_b": 65714.0
     },
     {
       "market_id_a": "701494",
@@ -161,28 +161,28 @@
       "liq_a": 91848.0,
       "market_id_b": "701496",
       "question_b": "Will Bitcoin reach $100,000 by December 31, 2026?",
-      "price_yes_b": 0.105,
-      "liq_b": 131014.0
+      "price_yes_b": 0.1,
+      "liq_b": 131368.0
     },
     {
       "market_id_a": "701496",
       "question_a": "Will Bitcoin reach $100,000 by December 31, 2026?",
-      "price_yes_a": 0.105,
-      "liq_a": 131014.0,
+      "price_yes_a": 0.1,
+      "liq_a": 131368.0,
       "market_id_b": "701504",
       "question_b": "Will Bitcoin dip to $25,000 by December 31, 2026?",
       "price_yes_b": 0.055,
-      "liq_b": 90385.0
+      "liq_b": 90761.0
     },
     {
       "market_id_a": "701496",
       "question_a": "Will Bitcoin reach $100,000 by December 31, 2026?",
-      "price_yes_a": 0.105,
-      "liq_a": 131014.0,
+      "price_yes_a": 0.1,
+      "liq_a": 131368.0,
       "market_id_b": "1345531",
       "question_b": "Will Bitcoin reach $90,000 by December 31, 2026?",
       "price_yes_b": 0.175,
-      "liq_b": 89946.0
+      "liq_b": 89721.0
     },
     {
       "market_id_a": "701494",
@@ -192,7 +192,7 @@
       "market_id_b": "1339769",
       "question_b": "Will Bitcoin dip to $30,000 by December 31, 2026?",
       "price_yes_b": 0.105,
-      "liq_b": 126953.0
+      "liq_b": 127003.0
     },
     {
       "market_id_a": "701553",
@@ -202,127 +202,107 @@
       "market_id_b": "701554",
       "question_b": "Will Ethereum dip to $800 by December 31, 2026?",
       "price_yes_b": 0.125,
-      "liq_b": 96502.0
+      "liq_b": 96896.0
     },
     {
       "market_id_a": "701504",
       "question_a": "Will Bitcoin dip to $25,000 by December 31, 2026?",
       "price_yes_a": 0.055,
-      "liq_a": 90385.0,
+      "liq_a": 90761.0,
       "market_id_b": "1339769",
       "question_b": "Will Bitcoin dip to $30,000 by December 31, 2026?",
       "price_yes_b": 0.105,
-      "liq_b": 126953.0
+      "liq_b": 127003.0
+    },
+    {
+      "market_id_a": "701496",
+      "question_a": "Will Bitcoin reach $100,000 by December 31, 2026?",
+      "price_yes_a": 0.1,
+      "liq_a": 131368.0,
+      "market_id_b": "701495",
+      "question_b": "Will Bitcoin reach $110,000 by December 31, 2026?",
+      "price_yes_b": 0.07,
+      "liq_b": 85921.0
     },
     {
       "market_id_a": "1339769",
       "question_a": "Will Bitcoin dip to $30,000 by December 31, 2026?",
       "price_yes_a": 0.105,
-      "liq_a": 126953.0,
+      "liq_a": 127003.0,
       "market_id_b": "1345531",
       "question_b": "Will Bitcoin reach $90,000 by December 31, 2026?",
       "price_yes_b": 0.175,
-      "liq_b": 89946.0
+      "liq_b": 89721.0
     },
     {
       "market_id_a": "701496",
       "question_a": "Will Bitcoin reach $100,000 by December 31, 2026?",
-      "price_yes_a": 0.105,
-      "liq_a": 131014.0,
-      "market_id_b": "701495",
-      "question_b": "Will Bitcoin reach $110,000 by December 31, 2026?",
-      "price_yes_b": 0.07,
-      "liq_b": 85761.0
+      "price_yes_a": 0.1,
+      "liq_a": 131368.0,
+      "market_id_b": "1339767",
+      "question_b": "Will Bitcoin dip to $50,000 by December 31, 2026?",
+      "price_yes_b": 0.535,
+      "liq_b": 82665.0
     },
     {
       "market_id_a": "701493",
       "question_a": "Will Bitcoin reach $130,000 by December 31, 2026?",
       "price_yes_a": 0.045,
-      "liq_a": 47574.0,
+      "liq_a": 47576.0,
       "market_id_b": "701503",
       "question_b": "Will Bitcoin dip to $35,000 by December 31, 2026?",
       "price_yes_b": 0.135,
-      "liq_b": 166102.0
-    },
-    {
-      "market_id_a": "701496",
-      "question_a": "Will Bitcoin reach $100,000 by December 31, 2026?",
-      "price_yes_a": 0.105,
-      "liq_a": 131014.0,
-      "market_id_b": "1339767",
-      "question_b": "Will Bitcoin dip to $50,000 by December 31, 2026?",
-      "price_yes_b": 0.535,
-      "liq_b": 82520.0
+      "liq_b": 166111.0
     },
     {
       "market_id_a": "701495",
       "question_a": "Will Bitcoin reach $110,000 by December 31, 2026?",
       "price_yes_a": 0.07,
-      "liq_a": 85761.0,
+      "liq_a": 85921.0,
       "market_id_b": "1339769",
       "question_b": "Will Bitcoin dip to $30,000 by December 31, 2026?",
       "price_yes_b": 0.105,
-      "liq_b": 126953.0
+      "liq_b": 127003.0
     },
     {
       "market_id_a": "701496",
       "question_a": "Will Bitcoin reach $100,000 by December 31, 2026?",
-      "price_yes_a": 0.105,
-      "liq_a": 131014.0,
+      "price_yes_a": 0.1,
+      "liq_a": 131368.0,
       "market_id_b": "1339768",
       "question_b": "Will Bitcoin dip to $40,000 by December 31, 2026?",
       "price_yes_b": 0.245,
-      "liq_b": 79826.0
+      "liq_b": 78726.0
     },
     {
       "market_id_a": "1339767",
       "question_a": "Will Bitcoin dip to $50,000 by December 31, 2026?",
       "price_yes_a": 0.535,
-      "liq_a": 82520.0,
+      "liq_a": 82665.0,
       "market_id_b": "1339769",
       "question_b": "Will Bitcoin dip to $30,000 by December 31, 2026?",
       "price_yes_b": 0.105,
-      "liq_b": 126953.0
+      "liq_b": 127003.0
+    },
+    {
+      "market_id_a": "701496",
+      "question_a": "Will Bitcoin reach $100,000 by December 31, 2026?",
+      "price_yes_a": 0.1,
+      "liq_a": 131368.0,
+      "market_id_b": "1343219",
+      "question_b": "Will Bitcoin dip to $20,000 by December 31, 2026?",
+      "price_yes_b": 0.045,
+      "liq_b": 74939.0
     },
     {
       "market_id_a": "1339768",
       "question_a": "Will Bitcoin dip to $40,000 by December 31, 2026?",
       "price_yes_a": 0.245,
-      "liq_a": 79826.0,
+      "liq_a": 78726.0,
       "market_id_b": "1339769",
       "question_b": "Will Bitcoin dip to $30,000 by December 31, 2026?",
       "price_yes_b": 0.105,
-      "liq_b": 126953.0
-    },
-    {
-      "market_id_a": "701496",
-      "question_a": "Will Bitcoin reach $100,000 by December 31, 2026?",
-      "price_yes_a": 0.105,
-      "liq_a": 131014.0,
-      "market_id_b": "1343219",
-      "question_b": "Will Bitcoin dip to $20,000 by December 31, 2026?",
-      "price_yes_b": 0.045,
-      "liq_b": 75002.0
-    },
-    {
-      "market_id_a": "1339769",
-      "question_a": "Will Bitcoin dip to $30,000 by December 31, 2026?",
-      "price_yes_a": 0.105,
-      "liq_a": 126953.0,
-      "market_id_b": "1343219",
-      "question_b": "Will Bitcoin dip to $20,000 by December 31, 2026?",
-      "price_yes_b": 0.045,
-      "liq_b": 75002.0
-    },
-    {
-      "market_id_a": "701503",
-      "question_a": "Will Bitcoin dip to $35,000 by December 31, 2026?",
-      "price_yes_a": 0.135,
-      "liq_a": 166102.0,
-      "market_id_b": "2467206",
-      "question_b": "Will Bitcoin reach $95,000 by December 31, 2026?",
-      "price_yes_b": 0.11,
-      "liq_b": 35608.0
+      "liq_b": 127003.0
     },
     {
       "market_id_a": "701494",
@@ -332,33 +312,53 @@
       "market_id_b": "701502",
       "question_b": "Will Bitcoin dip to $45,000 by December 31, 2026?",
       "price_yes_b": 0.395,
-      "liq_b": 109840.0
+      "liq_b": 110900.0
+    },
+    {
+      "market_id_a": "1339769",
+      "question_a": "Will Bitcoin dip to $30,000 by December 31, 2026?",
+      "price_yes_a": 0.105,
+      "liq_a": 127003.0,
+      "market_id_b": "1343219",
+      "question_b": "Will Bitcoin dip to $20,000 by December 31, 2026?",
+      "price_yes_b": 0.045,
+      "liq_b": 74939.0
+    },
+    {
+      "market_id_a": "701503",
+      "question_a": "Will Bitcoin dip to $35,000 by December 31, 2026?",
+      "price_yes_a": 0.135,
+      "liq_a": 166111.0,
+      "market_id_b": "2467206",
+      "question_b": "Will Bitcoin reach $95,000 by December 31, 2026?",
+      "price_yes_b": 0.11,
+      "liq_b": 35608.0
     },
     {
       "market_id_a": "701502",
       "question_a": "Will Bitcoin dip to $45,000 by December 31, 2026?",
       "price_yes_a": 0.395,
-      "liq_a": 109840.0,
+      "liq_a": 110900.0,
       "market_id_b": "701504",
       "question_b": "Will Bitcoin dip to $25,000 by December 31, 2026?",
       "price_yes_b": 0.055,
-      "liq_b": 90385.0
+      "liq_b": 90761.0
     },
     {
       "market_id_a": "701502",
       "question_a": "Will Bitcoin dip to $45,000 by December 31, 2026?",
       "price_yes_a": 0.395,
-      "liq_a": 109840.0,
+      "liq_a": 110900.0,
       "market_id_b": "1345531",
       "question_b": "Will Bitcoin reach $90,000 by December 31, 2026?",
       "price_yes_b": 0.175,
-      "liq_b": 89946.0
+      "liq_b": 89721.0
     },
     {
       "market_id_a": "701496",
       "question_a": "Will Bitcoin reach $100,000 by December 31, 2026?",
-      "price_yes_a": 0.105,
-      "liq_a": 131014.0,
+      "price_yes_a": 0.1,
+      "liq_a": 131368.0,
       "market_id_b": "701501",
       "question_b": "Will Bitcoin dip to $55,000 by December 31, 2026?",
       "price_yes_b": 0.75,
@@ -368,21 +368,31 @@
       "market_id_a": "701503",
       "question_a": "Will Bitcoin dip to $35,000 by December 31, 2026?",
       "price_yes_a": 0.135,
-      "liq_a": 166102.0,
+      "liq_a": 166111.0,
       "market_id_b": "2730613",
       "question_b": "Will Bitcoin reach $65,000 by December 31, 2026?",
       "price_yes_b": 0.865,
-      "liq_b": 32483.0
+      "liq_b": 32117.0
     },
     {
       "market_id_a": "701496",
       "question_a": "Will Bitcoin reach $100,000 by December 31, 2026?",
-      "price_yes_a": 0.105,
-      "liq_a": 131014.0,
+      "price_yes_a": 0.1,
+      "liq_a": 131368.0,
       "market_id_b": "2467207",
       "question_b": "Will Bitcoin reach $85,000 by December 31, 2026?",
       "price_yes_b": 0.22,
-      "liq_b": 65637.0
+      "liq_b": 65714.0
+    },
+    {
+      "market_id_a": "701502",
+      "question_a": "Will Bitcoin dip to $45,000 by December 31, 2026?",
+      "price_yes_a": 0.395,
+      "liq_a": 110900.0,
+      "market_id_b": "701495",
+      "question_b": "Will Bitcoin reach $110,000 by December 31, 2026?",
+      "price_yes_b": 0.07,
+      "liq_b": 85921.0
     },
     {
       "market_id_a": "701501",
@@ -392,43 +402,43 @@
       "market_id_b": "1339769",
       "question_b": "Will Bitcoin dip to $30,000 by December 31, 2026?",
       "price_yes_b": 0.105,
-      "liq_b": 126953.0
+      "liq_b": 127003.0
     },
     {
       "market_id_a": "701503",
       "question_a": "Will Bitcoin dip to $35,000 by December 31, 2026?",
       "price_yes_a": 0.135,
-      "liq_a": 166102.0,
+      "liq_a": 166111.0,
       "market_id_b": "2467209",
       "question_b": "Will Bitcoin reach $75,000 by December 31, 2026?",
       "price_yes_b": 0.455,
       "liq_b": 29539.0
     },
     {
-      "market_id_a": "701502",
-      "question_a": "Will Bitcoin dip to $45,000 by December 31, 2026?",
-      "price_yes_a": 0.395,
-      "liq_a": 109840.0,
-      "market_id_b": "701495",
-      "question_b": "Will Bitcoin reach $110,000 by December 31, 2026?",
-      "price_yes_b": 0.07,
-      "liq_b": 85761.0
-    },
-    {
       "market_id_a": "701503",
       "question_a": "Will Bitcoin dip to $35,000 by December 31, 2026?",
       "price_yes_a": 0.135,
-      "liq_a": 166102.0,
+      "liq_a": 166111.0,
       "market_id_b": "2467210",
       "question_b": "Will Bitcoin reach $70,000 by December 31, 2026?",
       "price_yes_b": 0.625,
-      "liq_b": 29210.0
+      "liq_b": 29341.0
+    },
+    {
+      "market_id_a": "701502",
+      "question_a": "Will Bitcoin dip to $45,000 by December 31, 2026?",
+      "price_yes_a": 0.395,
+      "liq_a": 110900.0,
+      "market_id_b": "1339767",
+      "question_b": "Will Bitcoin dip to $50,000 by December 31, 2026?",
+      "price_yes_b": 0.535,
+      "liq_b": 82665.0
     },
     {
       "market_id_a": "701503",
       "question_a": "Will Bitcoin dip to $35,000 by December 31, 2026?",
       "price_yes_a": 0.135,
-      "liq_a": 166102.0,
+      "liq_a": 166111.0,
       "market_id_b": "2467208",
       "question_b": "Will Bitcoin reach $80,000 by December 31, 2026?",
       "price_yes_b": 0.315,
@@ -438,41 +448,31 @@
       "market_id_a": "1339769",
       "question_a": "Will Bitcoin dip to $30,000 by December 31, 2026?",
       "price_yes_a": 0.105,
-      "liq_a": 126953.0,
+      "liq_a": 127003.0,
       "market_id_b": "2467207",
       "question_b": "Will Bitcoin reach $85,000 by December 31, 2026?",
       "price_yes_b": 0.22,
-      "liq_b": 65637.0
+      "liq_b": 65714.0
     },
     {
       "market_id_a": "701502",
       "question_a": "Will Bitcoin dip to $45,000 by December 31, 2026?",
       "price_yes_a": 0.395,
-      "liq_a": 109840.0,
-      "market_id_b": "1339767",
-      "question_b": "Will Bitcoin dip to $50,000 by December 31, 2026?",
-      "price_yes_b": 0.535,
-      "liq_b": 82520.0
-    },
-    {
-      "market_id_a": "701502",
-      "question_a": "Will Bitcoin dip to $45,000 by December 31, 2026?",
-      "price_yes_a": 0.395,
-      "liq_a": 109840.0,
+      "liq_a": 110900.0,
       "market_id_b": "1339768",
       "question_b": "Will Bitcoin dip to $40,000 by December 31, 2026?",
       "price_yes_b": 0.245,
-      "liq_b": 79826.0
+      "liq_b": 78726.0
     },
     {
       "market_id_a": "701502",
       "question_a": "Will Bitcoin dip to $45,000 by December 31, 2026?",
       "price_yes_a": 0.395,
-      "liq_a": 109840.0,
+      "liq_a": 110900.0,
       "market_id_b": "1343219",
       "question_b": "Will Bitcoin dip to $20,000 by December 31, 2026?",
       "price_yes_b": 0.045,
-      "liq_b": 75002.0
+      "liq_b": 74939.0
     },
     {
       "market_id_a": "701494",
@@ -482,7 +482,7 @@
       "market_id_b": "701504",
       "question_b": "Will Bitcoin dip to $25,000 by December 31, 2026?",
       "price_yes_b": 0.055,
-      "liq_b": 90385.0
+      "liq_b": 90761.0
     },
     {
       "market_id_a": "701494",
@@ -492,39 +492,39 @@
       "market_id_b": "1345531",
       "question_b": "Will Bitcoin reach $90,000 by December 31, 2026?",
       "price_yes_b": 0.175,
-      "liq_b": 89946.0
+      "liq_b": 89721.0
     },
     {
       "market_id_a": "701504",
       "question_a": "Will Bitcoin dip to $25,000 by December 31, 2026?",
       "price_yes_a": 0.055,
-      "liq_a": 90385.0,
+      "liq_a": 90761.0,
       "market_id_b": "1345531",
       "question_b": "Will Bitcoin reach $90,000 by December 31, 2026?",
       "price_yes_b": 0.175,
-      "liq_b": 89946.0
-    },
-    {
-      "market_id_a": "701496",
-      "question_a": "Will Bitcoin reach $100,000 by December 31, 2026?",
-      "price_yes_a": 0.105,
-      "liq_a": 131014.0,
-      "market_id_b": "701493",
-      "question_b": "Will Bitcoin reach $130,000 by December 31, 2026?",
-      "price_yes_b": 0.045,
-      "liq_b": 47574.0
+      "liq_b": 89721.0
     },
     {
       "market_id_a": "701502",
       "question_a": "Will Bitcoin dip to $45,000 by December 31, 2026?",
       "price_yes_a": 0.395,
-      "liq_a": 109840.0,
+      "liq_a": 110900.0,
       "market_id_b": "701501",
       "question_b": "Will Bitcoin dip to $55,000 by December 31, 2026?",
       "price_yes_b": 0.75,
       "liq_b": 68744.0
     },
     {
+      "market_id_a": "701496",
+      "question_a": "Will Bitcoin reach $100,000 by December 31, 2026?",
+      "price_yes_a": 0.1,
+      "liq_a": 131368.0,
+      "market_id_b": "701493",
+      "question_b": "Will Bitcoin reach $130,000 by December 31, 2026?",
+      "price_yes_b": 0.045,
+      "liq_b": 47576.0
+    },
+    {
       "market_id_a": "701494",
       "question_a": "Will Bitcoin reach $120,000 by December 31, 2026?",
       "price_yes_a": 0.055,
@@ -532,47 +532,47 @@
       "market_id_b": "701495",
       "question_b": "Will Bitcoin reach $110,000 by December 31, 2026?",
       "price_yes_b": 0.07,
-      "liq_b": 85761.0
+      "liq_b": 85921.0
     },
     {
       "market_id_a": "701504",
       "question_a": "Will Bitcoin dip to $25,000 by December 31, 2026?",
       "price_yes_a": 0.055,
-      "liq_a": 90385.0,
+      "liq_a": 90761.0,
       "market_id_b": "701495",
       "question_b": "Will Bitcoin reach $110,000 by December 31, 2026?",
       "price_yes_b": 0.07,
-      "liq_b": 85761.0
-    },
-    {
-      "market_id_a": "701495",
-      "question_a": "Will Bitcoin reach $110,000 by December 31, 2026?",
-      "price_yes_a": 0.07,
-      "liq_a": 85761.0,
-      "market_id_b": "1345531",
-      "question_b": "Will Bitcoin reach $90,000 by December 31, 2026?",
-      "price_yes_b": 0.175,
-      "liq_b": 89946.0
+      "liq_b": 85921.0
     },
     {
       "market_id_a": "701502",
       "question_a": "Will Bitcoin dip to $45,000 by December 31, 2026?",
       "price_yes_a": 0.395,
-      "liq_a": 109840.0,
+      "liq_a": 110900.0,
       "market_id_b": "2467207",
       "question_b": "Will Bitcoin reach $85,000 by December 31, 2026?",
       "price_yes_b": 0.22,
-      "liq_b": 65637.0
+      "liq_b": 65714.0
+    },
+    {
+      "market_id_a": "701495",
+      "question_a": "Will Bitcoin reach $110,000 by December 31, 2026?",
+      "price_yes_a": 0.07,
+      "liq_a": 85921.0,
+      "market_id_b": "1345531",
+      "question_b": "Will Bitcoin reach $90,000 by December 31, 2026?",
+      "price_yes_b": 0.175,
+      "liq_b": 89721.0
     },
     {
       "market_id_a": "701493",
       "question_a": "Will Bitcoin reach $130,000 by December 31, 2026?",
       "price_yes_a": 0.045,
-      "liq_a": 47574.0,
+      "liq_a": 47576.0,
       "market_id_b": "1339769",
       "question_b": "Will Bitcoin dip to $30,000 by December 31, 2026?",
       "price_yes_b": 0.105,
-      "liq_b": 126953.0
+      "liq_b": 127003.0
     },
     {
       "market_id_a": "701494",
@@ -582,27 +582,27 @@
       "market_id_b": "1339767",
       "question_b": "Will Bitcoin dip to $50,000 by December 31, 2026?",
       "price_yes_b": 0.535,
-      "liq_b": 82520.0
+      "liq_b": 82665.0
     },
     {
       "market_id_a": "701504",
       "question_a": "Will Bitcoin dip to $25,000 by December 31, 2026?",
       "price_yes_a": 0.055,
-      "liq_a": 90385.0,
+      "liq_a": 90761.0,
       "market_id_b": "1339767",
       "question_b": "Will Bitcoin dip to $50,000 by December 31, 2026?",
       "price_yes_b": 0.535,
-      "liq_b": 82520.0
+      "liq_b": 82665.0
     },
     {
       "market_id_a": "1339767",
       "question_a": "Will Bitcoin dip to $50,000 by December 31, 2026?",
       "price_yes_a": 0.535,
-      "liq_a": 82520.0,
+      "liq_a": 82665.0,
       "market_id_b": "1345531",
       "question_b": "Will Bitcoin reach $90,000 by December 31, 2026?",
       "price_yes_b": 0.175,
-      "liq_b": 89946.0
+      "liq_b": 89721.0
     }
   ]
 }
