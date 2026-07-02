@@ -1,4 +1,4 @@
-# Estado del bot — 2026-07-02 07:45 UTC
+# Estado del bot — 2026-07-02 07:46 UTC
 
 ## Capital
 | | |
@@ -11,20 +11,20 @@
 | | |
 |---|---|
 | Inicio | 25.44 € |
-| Actual | **-52.29 €** |
-| P&L acumulado | 🔴 **-77.73 €** |
-| ROI s/ operativo | -305.54% |
-| ROI s/ depósito | -259.10% |
-| P&L hoy (2026-07-02) | 🟢 +1.52 € |
-| Operaciones resueltas | 2569 (1247 WIN / 1322 LOSS) — 48.5% |
-| Señales abiertas | 87 |
+| Actual | **-51.79 €** |
+| P&L acumulado | 🔴 **-77.23 €** |
+| ROI s/ operativo | -303.58% |
+| ROI s/ depósito | -257.44% |
+| P&L hoy (2026-07-02) | 🟢 +2.01 € |
+| Operaciones resueltas | 2570 (1248 WIN / 1322 LOSS) — 48.6% |
+| Señales abiertas | 86 |
 
 ## Estrategias (visión global)
 
 | Estrategia | n | Win% | IC_efectivo | PNL | Apuesta | Estado |
 |---|---|---|---|---|---|---|
 | ORDER_FLOW_5M | 1508 | 51.4% | +0.014 | +13.03€ | 0.50€ | ✅ activa |
-| GBM_LATE_15M | 15 | 80.0% | +0.199 | +4.62€ | 1.99€ | ✅ activa |
+| GBM_LATE_15M | 16 | 81.2% | +0.222 | +5.12€ | 2.00€ | ✅ activa |
 | PRICE_TARGET_GBM | 67 | 40.3% | -0.094 | -11.97€ | 0.50€ | ⚠️ IC negativo |
 | SMART_FLOW_1H | 29 | 20.7% | -0.274 | -13.82€ | 0.00€ | 🚫 desactivada |
 | WEEKLY_PRICE | 70 | 45.7% | -0.042 | -17.23€ | 0.50€ | ⚠️ IC negativo |
@@ -35,22 +35,22 @@
 
 | Timestamp | Estrategia | Mercado | Resultado | PNL |
 |---|---|---|---|---|
+| 2026-07-02T07:46 | GBM_LATE_15M#XRP#15min | XRP Up or Down - July 2, 3:30AM-3:45AM ET… | ✅ WIN | +0.50€ |
 | 2026-07-02T07:34 | GBM_LATE_15M#BTC#15min | Bitcoin Up or Down - July 2, 3:15AM-3:30AM ET… | ✅ WIN | +0.52€ |
 | 2026-07-02T07:33 | GBM_LATE_15M#SOL#15min | Solana Up or Down - July 2, 3:15AM-3:30AM ET… | ✅ WIN | +0.52€ |
 | 2026-07-02T07:31 | GBM_LATE_15M#ETH#15min | Ethereum Up or Down - July 2, 3:15AM-3:30AM ET… | ✅ WIN | +0.53€ |
 | 2026-07-02T07:31 | UPDOWN_GBM#ETH#15min | Ethereum Up or Down - July 2, 3:15AM-3:30AM ET… | ✅ WIN | +2.13€ |
-| 2026-07-02T07:22 | UPDOWN_GBM#ETH#15min | Ethereum Up or Down - July 2, 3:00AM-3:15AM ET… | ✅ WIN | +2.36€ |
 
 ## Calidad de datos
 
-⚠️ **DEGRADED** — última verificación 2026-07-02T07:45 UTC | rechazos 1h: 102 (rango=0, spike=0)
+⚠️ **DEGRADED** — última verificación 2026-07-02T07:46 UTC | rechazos 1h: 100 (rango=0, spike=0)
 
 | Asset | Precio | Age | Alertas |
 |---|---|---|---|
-| ✅ BTC | $60,052.43 | 0.1min |  |
-| ✅ ETH | $1,614.67 | 0.1min |  |
-| ✅ SOL | $78.01 | 0.1min |  |
-| ✅ XRP | $1.06 | 0.1min |  |
+| ✅ BTC | $60,052.43 | 0.0min |  |
+| ✅ ETH | $1,614.67 | 0.0min |  |
+| ✅ SOL | $77.96 | 0.0min |  |
+| ✅ XRP | $1.06 | 0.0min |  |
 
 **Cross-source** (binance, coinbase, kraken):
 
@@ -62,7 +62,7 @@
 | XRP | $1.06 | consenso |  |
 
 **Alertas activas:**
-- ⚠ rechazos_1h:102 (rango=0, spike=0)
+- ⚠ rechazos_1h:100 (rango=0, spike=0)
 
 ---
 *Actualizado automáticamente cada ~60s por el fast loop*
