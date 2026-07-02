@@ -28,6 +28,12 @@
 git merge dev --no-ff          # promover desde main
 ```
 
+## ⚠️ Sistema hermano INDEPENDIENTE: weather bot
+`/root/polymarket-weather` (repo `polymarket-weather`, PRIVADO) — mercados de
+temperatura, shadow puro, cron propio cada 3h. **NO mezclar**: datos, código,
+params y métricas separados; este CLAUDE.md no aplica allí (tiene el suyo).
+Solo comparten metodología (IC, shadow-first, umbral live).
+
 ---
 
 ## Objetivo
