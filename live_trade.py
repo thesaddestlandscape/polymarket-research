@@ -350,7 +350,11 @@ def _ejecutar_orden_polymarket(market_id: str, direction: str,
             # evita la misma colisión — ningún intento previo llega a
             # ejecutarse de verdad (el rechazo es previo al match), así que
             # reintentar no puede duplicar la operación.
-            intentos_stake = [stake_eur, round(stake_eur - 0.01, 2), round(stake_eur + 0.01, 2)]
+            _max_stake = _cargar_config().get("riesgo", {}).get("max_stake_eur", 2.00)
+            intentos_stake = [stake_eur, round(stake_eur - 0.01, 2)]
+            _mas = round(stake_eur + 0.01, 2)
+            if _mas <= _max_stake:
+                intentos_stake.append(_mas)
             resp = None
             for intento, amt in enumerate(intentos_stake):
                 if amt <= 0:

@@ -358,7 +358,8 @@ def _telegram_periodico(ahora, bankroll, pnl_total, pnl_hoy,
             live_estado = f"🟡 ON — próx. ventana: {prox}"
         else:
             live_estado = f"❌ OFF — próx. ventana: {prox}"
-    except Exception:
+    except Exception as e:
+        print(f"[shadow_resumen] excepción en estado_live(): {type(e).__name__}: {e}")
         live_estado = "? (error)"
 
     # ── Stats live reales (dinero real de trades.csv) ────────────────────────
@@ -382,7 +383,8 @@ def _telegram_periodico(ahora, bankroll, pnl_total, pnl_hoy,
             if row.get("status") == "CLOSED" and float(row.get("pnl_neto_eur", 0) or 0) > 0
         ) if trades_csv.exists() and trades_csv.stat().st_size > 100 else 0
         tiene_live = n_live_total > 0
-    except Exception:
+    except Exception as e:
+        print(f"[shadow_resumen] excepción en stats live reales (bankroll/pnl mostrados serán placeholder): {type(e).__name__}: {e}")
         bkr_real = CAPITAL_OPERATIVO_INICIAL = 25.44
         pnl_d_real = pnl_t_real = 0.0
         n_live_hoy = n_live_total = w_live_total = 0

@@ -328,6 +328,8 @@ def guardar_precios(precios, ts):
     if rechazados:
         print(f"  [DQ L1] CoinGecko rechazados: {', '.join(rechazados)}")
 
+    fuentes: dict[str, str] = {sym: "coingecko" for sym in precios_validos}
+
     # L4: cross-source — comparar CoinGecko con Coinbase para assets principales
     assets_check = [s for s in ["BTC", "ETH", "SOL", "XRP"] if s in precios_validos]
     if assets_check:
@@ -344,16 +346,30 @@ def guardar_precios(precios, ts):
             for sym in cross.get("bloqueados", []):
                 if sym in coinbase:
                     precios_validos[sym] = coinbase[sym]
+                    fuentes[sym] = "coinbase"
                     print(f"  [DQ L4] {sym}: usando Coinbase en lugar de CoinGecko (bloqueado)")
         except Exception as _e:
             pass   # cross-source es best-effort; no bloquea el guardado
 
+    # El fichero puede haber sido creado ya por fetch_binance_klines.py con
+    # columna "source" (o no) — igualar el esquema real del fichero en vez de
+    # asumirlo, para no mezclar filas de 5 y 6 campos en el mismo CSV (eso
+    # deja algunas filas con source=None para siempre, indistinguibles del
+    # exchange real que las originó).
+    tiene_col_source = True
+    if not nuevo:
+        with open(archivo, encoding="utf-8") as pf:
+            tiene_col_source = "source" in (pf.readline().strip().split(","))
+
     with open(archivo, "a", newline="", encoding="utf-8") as f:
         w = csv.writer(f)
         if nuevo:
-            w.writerow(["timestamp_utc", "asset", "price_usd", "change_1h_pct", "change_24h_pct"])
+            w.writerow(["timestamp_utc", "asset", "price_usd", "change_1h_pct", "change_24h_pct", "source"])
         for sym, price in precios_validos.items():
-            w.writerow([ts, sym, price, "", ""])
+            fila = [ts, sym, price, "", ""]
+            if tiene_col_source:
+                fila.append(fuentes.get(sym, "coingecko"))
+            w.writerow(fila)
 
 
 def una_captura():

@@ -26,6 +26,9 @@ except Exception:
 import os
 DASHBOARD_USER = os.environ.get("DASHBOARD_USER", "")
 DASHBOARD_PASS = os.environ.get("DASHBOARD_PASS", "")
+if not DASHBOARD_USER or not DASHBOARD_PASS:
+    print("[dashboard] ⚠️  DASHBOARD_USER/DASHBOARD_PASS no configurados en data/live/.env "
+          "— el dashboard queda SIN AUTENTICACIÓN en la IP pública.")
 
 REPO             = Path(__file__).parent
 RESULTS_CSV      = REPO / "data/shadow/results.csv"
