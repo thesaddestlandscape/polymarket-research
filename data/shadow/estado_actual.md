@@ -1,4 +1,4 @@
-# Estado del bot — 2026-07-02 05:48 UTC
+# Estado del bot — 2026-07-02 05:49 UTC
 
 ## Capital
 | | |
@@ -42,7 +42,7 @@
 
 ## Calidad de datos
 
-⚠️ **DEGRADED** — última verificación 2026-07-02T05:48 UTC | rechazos 1h: 22 (rango=0, spike=0)
+⚠️ **DEGRADED** — última verificación 2026-07-02T05:49 UTC | rechazos 1h: 24 (rango=0, spike=0)
 
 | Asset | Precio | Age | Alertas |
 |---|---|---|---|
@@ -61,7 +61,7 @@
 | XRP | $1.06 | consenso |  |
 
 **Alertas activas:**
-- ⚠ rechazos_1h:22 (rango=0, spike=0)
+- ⚠ rechazos_1h:24 (rango=0, spike=0)
 
 ---
 *Actualizado automáticamente cada ~60s por el fast loop*
