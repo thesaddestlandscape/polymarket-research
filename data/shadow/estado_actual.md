@@ -1,4 +1,4 @@
-# Estado del bot — 2026-07-02 07:32 UTC
+# Estado del bot — 2026-07-02 07:33 UTC
 
 ## Capital
 | | |
@@ -11,20 +11,20 @@
 | | |
 |---|---|
 | Inicio | 25.44 € |
-| Actual | **-53.33 €** |
-| P&L acumulado | 🔴 **-78.77 €** |
-| ROI s/ operativo | -309.63% |
-| ROI s/ depósito | -262.57% |
-| P&L hoy (2026-07-02) | 🟢 +0.48 € |
-| Operaciones resueltas | 2567 (1245 WIN / 1322 LOSS) — 48.5% |
-| Señales abiertas | 87 |
+| Actual | **-52.81 €** |
+| P&L acumulado | 🔴 **-78.25 €** |
+| ROI s/ operativo | -307.58% |
+| ROI s/ depósito | -260.83% |
+| P&L hoy (2026-07-02) | 🟢 +1.00 € |
+| Operaciones resueltas | 2568 (1246 WIN / 1322 LOSS) — 48.5% |
+| Señales abiertas | 88 |
 
 ## Estrategias (visión global)
 
 | Estrategia | n | Win% | IC_efectivo | PNL | Apuesta | Estado |
 |---|---|---|---|---|---|---|
 | ORDER_FLOW_5M | 1508 | 51.4% | +0.014 | +13.03€ | 0.50€ | ✅ activa |
-| GBM_LATE_15M | 13 | 76.9% | +0.152 | +3.58€ | 1.52€ | ✅ activa |
+| GBM_LATE_15M | 14 | 78.6% | +0.175 | +4.10€ | 1.75€ | ✅ activa |
 | PRICE_TARGET_GBM | 67 | 40.3% | -0.094 | -11.97€ | 0.50€ | ⚠️ IC negativo |
 | SMART_FLOW_1H | 29 | 20.7% | -0.274 | -13.82€ | 0.00€ | 🚫 desactivada |
 | WEEKLY_PRICE | 70 | 45.7% | -0.042 | -17.23€ | 0.50€ | ⚠️ IC negativo |
@@ -35,21 +35,21 @@
 
 | Timestamp | Estrategia | Mercado | Resultado | PNL |
 |---|---|---|---|---|
+| 2026-07-02T07:33 | GBM_LATE_15M#SOL#15min | Solana Up or Down - July 2, 3:15AM-3:30AM ET… | ✅ WIN | +0.52€ |
 | 2026-07-02T07:31 | GBM_LATE_15M#ETH#15min | Ethereum Up or Down - July 2, 3:15AM-3:30AM ET… | ✅ WIN | +0.53€ |
 | 2026-07-02T07:31 | UPDOWN_GBM#ETH#15min | Ethereum Up or Down - July 2, 3:15AM-3:30AM ET… | ✅ WIN | +2.13€ |
 | 2026-07-02T07:22 | UPDOWN_GBM#ETH#15min | Ethereum Up or Down - July 2, 3:00AM-3:15AM ET… | ✅ WIN | +2.36€ |
 | 2026-07-02T07:22 | GBM_LATE_15M#ETH#15min | Ethereum Up or Down - July 2, 3:00AM-3:15AM ET… | ✅ WIN | +0.59€ |
-| 2026-07-02T07:20 | GBM_LATE_15M#BTC#15min | Bitcoin Up or Down - July 2, 3:00AM-3:15AM ET… | ✅ WIN | +0.52€ |
 
 ## Calidad de datos
 
-⚠️ **DEGRADED** — última verificación 2026-07-02T07:31 UTC | rechazos 1h: 100 (rango=0, spike=0)
+⚠️ **DEGRADED** — última verificación 2026-07-02T07:33 UTC | rechazos 1h: 100 (rango=0, spike=0)
 
 | Asset | Precio | Age | Alertas |
 |---|---|---|---|
 | ✅ BTC | $60,081.17 | 0.0min |  |
 | ✅ ETH | $1,613.73 | 0.0min |  |
-| ✅ SOL | $77.76 | 0.0min |  |
+| ✅ SOL | $77.70 | 0.0min |  |
 | ✅ XRP | $1.06 | 0.0min |  |
 
 **Cross-source** (binance, coinbase, kraken):
