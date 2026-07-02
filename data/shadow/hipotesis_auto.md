@@ -1,4 +1,4 @@
-# Hipótesis automáticas — 2026-07-02 05:49 UTC
+# Hipótesis automáticas — 2026-07-02 05:51 UTC
 _Generado por shadow_postmortem.py sobre 2536 resoluciones (PNL=-89.92€)_
 
 ## Patrones causales activos
@@ -327,6 +327,11 @@ _Derivadas de los patrones aprendidos:_
 
 
 ### ⏳ Acumulando datos
+
+**⏳ H-WINDOW-MOMENTUM** — Momentum de outcome entre ventanas 15min contiguas
+  - _Umbral_: n≥60 alineadas y gap IC≥0.08 vs contrarias — y descartar que sea proxy de drift_15min/60min
+  - _Acción_: Si confirma e independiente de drift → capturar prev_window_outcome como feature en shadow_predict y boost ×1.1-1.2 en señales alineadas
+  - _Estado_: alineada_con_outcome_prev IC=+0.044 n=16/60 | contraria IC=+0.058 n=7 | gap=-0.014 (umbral 0.08) — verificar independencia de drift_15min/60min antes de actuar
 
 **⏳ H-CROSS-ASSET** — Cross-asset confirmation GBM+OF BUY_NO
   - _Umbral_: n_overlaps≥20 y IC_overlap > IC_base + 0.05
