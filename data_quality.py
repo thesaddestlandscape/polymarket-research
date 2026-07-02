@@ -499,7 +499,7 @@ def validar_features_gbm(sigma_h: Optional[float],
 
 def _contar_rechazos(ventana_min: int = 60) -> dict:
     """Cuenta eventos de rechazo en dq_events.jsonl en los últimos ventana_min minutos."""
-    conteo: dict = {"rango": 0, "spike": 0, "total": 0, "por_sym": {}}
+    conteo: dict = {"rango": 0, "spike": 0, "total": 0, "cambio_fuente": 0, "por_sym": {}}
     if not DQ_LOG.exists():
         return conteo
     cutoff = datetime.now(timezone.utc) - timedelta(minutes=ventana_min)
@@ -514,8 +514,15 @@ def _contar_rechazos(ventana_min: int = 60) -> dict:
                     ts = datetime.fromisoformat(ev["ts"])
                     if ts < cutoff:
                         continue
-                    conteo["total"] += 1
                     r = ev.get("reason", "")
+                    # "cambio_fuente" es informativo (alternancia esperada
+                    # coingecko/binance en DOGE-BNB por el doble writer del
+                    # prices CSV), no un rechazo de validación — contarlo en
+                    # total degradaba el estado global sin dato malo real.
+                    if "cambio_fuente" in r:
+                        conteo["cambio_fuente"] += 1
+                        continue
+                    conteo["total"] += 1
                     if "rango" in r:
                         conteo["rango"] += 1
                     if "spike" in r:
