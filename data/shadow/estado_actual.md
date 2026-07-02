@@ -1,4 +1,4 @@
-# Estado del bot — 2026-07-02 16:06 UTC
+# Estado del bot — 2026-07-02 16:07 UTC
 
 ## Capital
 | | |
@@ -11,13 +11,13 @@
 | | |
 |---|---|
 | Inicio | 25.44 € |
-| Actual | **-28.18 €** |
-| P&L acumulado | 🔴 **-53.62 €** |
-| ROI s/ operativo | -210.77% |
-| ROI s/ depósito | -178.73% |
-| P&L hoy (2026-07-02) | 🟢 +25.63 € |
-| Operaciones resueltas | 2737 (1341 WIN / 1396 LOSS) — 49.0% |
-| Señales abiertas | 106 |
+| Actual | **-26.99 €** |
+| P&L acumulado | 🔴 **-52.43 €** |
+| ROI s/ operativo | -206.10% |
+| ROI s/ depósito | -174.77% |
+| P&L hoy (2026-07-02) | 🟢 +26.82 € |
+| Operaciones resueltas | 2741 (1344 WIN / 1397 LOSS) — 49.0% |
+| Señales abiertas | 103 |
 
 ## Estrategias (visión global)
 
@@ -25,11 +25,11 @@
 |---|---|---|---|---|---|---|
 | GBM_LATE_15M | 132 | 63.6% | +0.134 | +35.30€ | 1.34€ | ✅ activa |
 | ORDER_FLOW_5M | 1511 | 51.4% | +0.014 | +12.34€ | 0.50€ | ✅ activa |
-| RESOLUTION_SNIPER | 4 | 100.0% | +0.067 | +1.29€ | 0.50€ | ⏳ acumulando |
+| RESOLUTION_SNIPER | 6 | 100.0% | +0.112 | +2.85€ | 1.12€ | ⏳ acumulando |
 | LATE_WINDOW_5MIN | 4 | 50.0% | +0.000 | -0.08€ | 0.50€ | ⏳ acumulando |
-| PRICE_TARGET_GBM | 75 | 40.0% | -0.097 | -8.70€ | 0.50€ | ⚠️ IC negativo |
+| PRICE_TARGET_GBM | 76 | 39.5% | -0.103 | -9.21€ | 0.50€ | ⚠️ IC negativo |
 | SMART_FLOW_1H | 29 | 20.7% | -0.274 | -13.82€ | 0.00€ | 🚫 desactivada |
-| WEEKLY_PRICE | 74 | 47.3% | -0.026 | -17.07€ | 0.50€ | ⚠️ IC negativo |
+| WEEKLY_PRICE | 75 | 48.0% | -0.019 | -16.93€ | 0.50€ | ⚠️ IC negativo |
 | UPDOWN_OU_5M | 84 | 28.6% | -0.209 | -18.89€ | 0.00€ | 🚫 desactivada |
 | UPDOWN_GBM | 824 | 46.1% | -0.039 | -44.00€ | 0.50€ | ⚠️ IC negativo |
 
@@ -37,22 +37,22 @@
 
 | Timestamp | Estrategia | Mercado | Resultado | PNL |
 |---|---|---|---|---|
+| 2026-07-02T16:07 | RESOLUTION_SNIPER#ETH#sniper | Will the price of Ethereum be between $1,600 and $… | ✅ WIN | +0.72€ |
+| 2026-07-02T16:07 | RESOLUTION_SNIPER#ETH#sniper | Will the price of Ethereum be above $1,700 on July… | ✅ WIN | +0.84€ |
+| 2026-07-02T16:07 | WEEKLY_PRICE#ETH | Will the price of Ethereum be between $1,600 and $… | ✅ WIN | +0.14€ |
+| 2026-07-02T16:07 | PRICE_TARGET_GBM#ETH#atexpiry | Will the price of Ethereum be above $1,700 on July… | ❌ LOSS | -0.51€ |
 | 2026-07-02T16:05 | RESOLUTION_SNIPER#ETH#sniper | Will the price of Ethereum be between $1,700 and $… | ✅ WIN | +0.87€ |
-| 2026-07-02T16:04 | GBM_LATE_15M#SOL#15min | Solana Up or Down - July 2, 11:45AM-12:00PM ET… | ✅ WIN | +1.24€ |
-| 2026-07-02T16:04 | GBM_LATE_15M#BTC#15min | Bitcoin Up or Down - July 2, 11:45AM-12:00PM ET… | ✅ WIN | +0.46€ |
-| 2026-07-02T16:03 | WEEKLY_PRICE#SOL | Will the price of Solana be between $80 and $90 on… | ❌ LOSS | -0.56€ |
-| 2026-07-02T16:02 | GBM_LATE_15M#XRP#15min | XRP Up or Down - July 2, 11:45AM-12:00PM ET… | ❌ LOSS | -2.04€ |
 
 ## Calidad de datos
 
-✅ **OK** — última verificación 2026-07-02T16:05 UTC
+✅ **OK** — última verificación 2026-07-02T16:07 UTC
 
 | Asset | Precio | Age | Alertas |
 |---|---|---|---|
-| ✅ BTC | $61,535.62 | 0.0min |  |
-| ✅ ETH | $1,694.49 | 0.0min |  |
-| ✅ SOL | $81.03 | 0.0min |  |
-| ✅ XRP | $1.09 | 0.0min |  |
+| ✅ BTC | $61,535.62 | 0.1min |  |
+| ✅ ETH | $1,694.49 | 0.1min |  |
+| ✅ SOL | $80.98 | 0.1min |  |
+| ✅ XRP | $1.10 | 0.1min |  |
 
 **Cross-source** (binance, coinbase, kraken):
 
