@@ -1,4 +1,4 @@
-# Estado del bot — 2026-07-02 12:14 UTC
+# Estado del bot — 2026-07-02 12:15 UTC
 
 ## Capital
 | | |
@@ -44,26 +44,26 @@
 
 ## Calidad de datos
 
-✅ **OK** — última verificación 2026-07-02T12:14 UTC | rechazos 1h: 2 (rango=0, spike=0)
+✅ **OK** — última verificación 2026-07-02T12:15 UTC | rechazos 1h: 1 (rango=0, spike=0)
 
 | Asset | Precio | Age | Alertas |
 |---|---|---|---|
-| ✅ BTC | $61,245.89 | 0.0min |  |
-| ✅ ETH | $1,647.99 | 0.0min |  |
-| ✅ SOL | $82.27 | 0.0min |  |
-| ✅ XRP | $1.09 | 0.0min |  |
+| ✅ BTC | $61,292.61 | 0.1min |  |
+| ✅ ETH | $1,653.74 | 0.1min |  |
+| ✅ SOL | $82.36 | 0.1min |  |
+| ✅ XRP | $1.09 | 0.1min |  |
 
 **Cross-source** (binance, coinbase, kraken):
 
 | Asset | Consenso | Fuente | Estado |
 |---|---|---|---|
-| BTC | $61,250.10 | consenso |  |
-| ETH | $1,648.28 | consenso |  |
-| SOL | $82.28 | consenso |  |
-| XRP | $1.08 | consenso |  |
+| BTC | $61,292.61 | consenso |  |
+| ETH | $1,653.74 | consenso |  |
+| SOL | $82.22 | consenso |  |
+| XRP | $1.09 | consenso |  |
 
 **Alertas activas:**
-- ⚠ rechazos_1h:2 (rango=0, spike=0)
+- ⚠ rechazos_1h:1 (rango=0, spike=0)
 
 ---
 *Actualizado automáticamente cada ~60s por el fast loop*
