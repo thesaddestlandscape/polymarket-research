@@ -1,4 +1,4 @@
-# Estado del bot — 2026-07-02 06:02 UTC
+# Estado del bot — 2026-07-02 06:03 UTC
 
 ## Capital
 | | |
@@ -11,13 +11,13 @@
 | | |
 |---|---|
 | Inicio | 25.44 € |
-| Actual | **-64.99 €** |
-| P&L acumulado | 🔴 **-90.43 €** |
-| ROI s/ operativo | -355.47% |
-| ROI s/ depósito | -301.44% |
-| P&L hoy (2026-07-02) | 🔴 -11.19 € |
-| Operaciones resueltas | 2537 (1225 WIN / 1312 LOSS) — 48.3% |
-| Señales abiertas | 46 |
+| Actual | **-61.33 €** |
+| P&L acumulado | 🔴 **-86.77 €** |
+| ROI s/ operativo | -341.09% |
+| ROI s/ depósito | -289.24% |
+| P&L hoy (2026-07-02) | 🔴 -7.53 € |
+| Operaciones resueltas | 2541 (1228 WIN / 1313 LOSS) — 48.3% |
+| Señales abiertas | 42 |
 
 ## Estrategias (visión global)
 
@@ -28,27 +28,27 @@
 | SMART_FLOW_1H | 29 | 20.7% | -0.274 | -13.82€ | 0.00€ | 🚫 desactivada |
 | WEEKLY_PRICE | 70 | 45.7% | -0.042 | -17.23€ | 0.50€ | ⚠️ IC negativo |
 | UPDOWN_OU_5M | 84 | 28.6% | -0.209 | -18.89€ | 0.00€ | 🚫 desactivada |
-| UPDOWN_GBM | 779 | 46.3% | -0.036 | -41.56€ | 0.50€ | ⚠️ IC negativo |
+| UPDOWN_GBM | 783 | 46.5% | -0.035 | -37.90€ | 0.50€ | ⚠️ IC negativo |
 
 ## Últimas 5 resoluciones
 
 | Timestamp | Estrategia | Mercado | Resultado | PNL |
 |---|---|---|---|---|
+| 2026-07-02T06:03 | UPDOWN_GBM#XRP#15min | XRP Up or Down - July 2, 1:45AM-2:00AM ET… | ✅ WIN | +2.13€ |
+| 2026-07-02T06:03 | UPDOWN_GBM#BTC#15min | Bitcoin Up or Down - July 2, 1:45AM-2:00AM ET… | ✅ WIN | +1.50€ |
+| 2026-07-02T06:03 | UPDOWN_GBM#SOL#15min | Solana Up or Down - July 2, 1:45AM-2:00AM ET… | ❌ LOSS | -0.51€ |
+| 2026-07-02T06:03 | UPDOWN_GBM#SOL#60min | Solana Up or Down - July 2, 1AM ET… | ✅ WIN | +0.54€ |
 | 2026-07-02T05:57 | ORDER_FLOW_5M#BTC#5min | Bitcoin Up or Down - July 2, 1:50AM-1:55AM ET… | ❌ LOSS | -0.51€ |
-| 2026-07-02T05:48 | ORDER_FLOW_5M#SOL#5min | Solana Up or Down - July 2, 1:40AM-1:45AM ET… | ✅ WIN | +0.64€ |
-| 2026-07-02T05:32 | ORDER_FLOW_5M#SOL#5min | Solana Up or Down - July 2, 1:25AM-1:30AM ET… | ✅ WIN | +0.59€ |
-| 2026-07-02T05:20 | UPDOWN_GBM#ETH#15min | Ethereum Up or Down - July 2, 1:00AM-1:15AM ET… | ❌ LOSS | -2.04€ |
-| 2026-07-02T05:05 | ORDER_FLOW_5M#SOL#5min | Solana Up or Down - July 2, 12:55AM-1:00AM ET… | ✅ WIN | +0.59€ |
 
 ## Calidad de datos
 
-⚠️ **DEGRADED** — última verificación 2026-07-02T06:01 UTC | rechazos 1h: 38 (rango=0, spike=0)
+⚠️ **DEGRADED** — última verificación 2026-07-02T06:03 UTC | rechazos 1h: 40 (rango=0, spike=0)
 
 | Asset | Precio | Age | Alertas |
 |---|---|---|---|
 | ✅ BTC | $60,439.23 | 0.0min |  |
 | ✅ ETH | $1,624.98 | 0.0min |  |
-| ✅ SOL | $78.12 | 0.0min |  |
+| ✅ SOL | $78.18 | 0.0min |  |
 | ✅ XRP | $1.06 | 0.0min |  |
 
 **Cross-source** (binance, coinbase, kraken):
@@ -61,7 +61,7 @@
 | XRP | $1.06 | consenso |  |
 
 **Alertas activas:**
-- ⚠ rechazos_1h:38 (rango=0, spike=0)
+- ⚠ rechazos_1h:40 (rango=0, spike=0)
 
 ---
 *Actualizado automáticamente cada ~60s por el fast loop*
