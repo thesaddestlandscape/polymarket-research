@@ -436,6 +436,76 @@ def _eval_btc_leads_eth(rows):
             "gap": gap, "status": status, "rec": rec}
 
 
+def _eval_window_momentum(rows):
+    """
+    ¿El outcome (Up/Down) de la ventana 15min ANTERIOR del mismo par predice la siguiente?
+    Detectado 2026-07-02 sobre 551 transiciones GBM#15min: tras DOWN → P(UP)=41.6% (n=308)
+    vs tras UP → P(UP)=47.7% (n=243). Persistencia de outcome entre ventanas contiguas.
+    Forma accionable: nuestras ops alineadas con el outcome anterior (BUY_NO tras DOWN,
+    BUY_YES tras UP) vs contrarias. CAVEAT: puede ser proxy de drift_15min/60min que el
+    GBM ya usa como feature — antes de actuar, verificar que añade señal por encima de
+    esas features. No expresable con el motor de filtros genérico (necesita el outcome
+    de la ventana anterior del mismo par, no solo features de la fila actual).
+    """
+    def parse_ts(s):
+        try:
+            return datetime.fromisoformat((s or "").replace("Z", "+00:00"))
+        except Exception:
+            return None
+
+    def outcome(r):
+        w = _win(r)
+        if w is None:
+            return None
+        if r.get("decision") == "BUY_NO":
+            return "DOWN" if w == 1 else "UP"
+        if r.get("decision") == "BUY_YES":
+            return "UP" if w == 1 else "DOWN"
+        return None
+
+    by_sub = defaultdict(list)
+    for r in rows:
+        sub = r.get("subtype", "")
+        if r.get("strategy") != "UPDOWN_GBM" or not sub.endswith("#15min"):
+            continue
+        pt = parse_ts(r.get("prediction_timestamp"))
+        if pt is None or outcome(r) is None:
+            continue
+        by_sub[sub].append((pt, r))
+
+    aligned, contrary = [], []
+    for sub, lst in by_sub.items():
+        lst.sort(key=lambda x: x[0])
+        for i in range(1, len(lst)):
+            pt_prev, prev = lst[i - 1]
+            pt_cur, cur = lst[i]
+            # Solo ventanas realmente contiguas: la anterior debe haber terminado
+            # hace poco (≤25min entre predicciones), no horas antes.
+            if (pt_cur - pt_prev).total_seconds() > 25 * 60:
+                continue
+            rt_prev = parse_ts(prev.get("resolution_timestamp"))
+            # El outcome anterior tiene que ser CONOCIBLE al predecir la actual
+            # (resuelto antes) — si no, sería lookahead.
+            if rt_prev is None or rt_prev > pt_cur:
+                continue
+            prev_down = outcome(prev) == "DOWN"
+            cur_no = cur.get("decision") == "BUY_NO"
+            (aligned if prev_down == cur_no else contrary).append(cur)
+
+    s_al = _stats(aligned)
+    s_co = _stats(contrary)
+    gap = round(s_al["ic"] - s_co["ic"], 4)
+
+    ready = s_al["n"] >= 60 and gap >= 0.08
+    status = "LISTA_EVALUAR" if ready else "ACUMULANDO"
+    rec = (f"alineada_con_outcome_prev IC={s_al['ic']:+.3f} n={s_al['n']}/60 | "
+           f"contraria IC={s_co['ic']:+.3f} n={s_co['n']} | gap={gap:+.3f} (umbral 0.08) "
+           f"— verificar independencia de drift_15min/60min antes de actuar")
+
+    return {"aligned_prev_outcome": s_al, "contrary_prev_outcome": s_co,
+            "gap": gap, "status": status, "rec": rec}
+
+
 def _eval_60min_live(rows):
     """BTC/ETH/SOL 60min → live cuando IC≥0.08 n≥40."""
     by_sub = defaultdict(list)
@@ -677,6 +747,15 @@ HIPOTESIS = [
         "umbral":      "n≥20 forward con hora_utc + alguna hora con n≥15 IC<-0.10 o >+0.10",
         "accion":      "El sistema lo aplica automáticamente vía FEATURE_RULES. Verificar en strategy_params.json.",
         "eval_fn":     _eval_hora_gbm,
+    },
+    {
+        "id":          "H-WINDOW-MOMENTUM",
+        "nombre":      "Momentum de outcome entre ventanas 15min contiguas",
+        "descripcion": "Tras DOWN, la siguiente ventana 15min del mismo par vuelve a ser DOWN el 58.4% (n=308 transiciones); tras UP, P(UP)=47.7% (n=243). Detectado 2026-07-02. Forma accionable: ops alineadas con el outcome anterior vs contrarias.",
+        "tipo":        "boost",
+        "umbral":      "n≥60 alineadas y gap IC≥0.08 vs contrarias — y descartar que sea proxy de drift_15min/60min",
+        "accion":      "Si confirma e independiente de drift → capturar prev_window_outcome como feature en shadow_predict y boost ×1.1-1.2 en señales alineadas",
+        "eval_fn":     _eval_window_momentum,
     },
     {
         "id":          "H-CROSS-ASSET",
