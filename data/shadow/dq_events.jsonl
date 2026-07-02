@@ -87,3 +87,7 @@
 {"ts": "2026-07-01T22:21:40+00:00", "sym": "BTC", "value": 60774.0, "reason": "cross_source_warn coingecko=60774.0000 vs mediana=60973.1450 (0.66%)"}
 {"ts": "2026-07-01T22:21:40+00:00", "sym": "ETH", "value": 1638.0, "reason": "cross_source_warn coinbase=1638.0000 vs mediana=1633.0350 (0.61%)"}
 {"ts": "2026-07-01T22:21:40+00:00", "sym": "SOL", "value": 78.28, "reason": "cross_source_warn coingecko=78.2800 vs mediana=78.4875 (0.53%)"}
+{"ts": "2026-07-02T03:28:15+00:00", "sym": "BTC", "value": 60314.0, "reason": "cross_source_warn coingecko=60314.0000 vs mediana=60479.8825 (0.55%)"}
+{"ts": "2026-07-02T03:28:15+00:00", "sym": "ETH", "value": 1619.79, "reason": "cross_source_warn coingecko=1619.7900 vs mediana=1625.9425 (0.76%)"}
+{"ts": "2026-07-02T03:28:15+00:00", "sym": "SOL", "value": 77.91, "reason": "cross_source_warn coingecko=77.9100 vs mediana=78.2175 (0.79%)"}
+{"ts": "2026-07-02T03:28:15+00:00", "sym": "XRP", "value": 1.056, "reason": "cross_source_warn coingecko=1.0560 vs mediana=1.0591 (0.58%)"}
