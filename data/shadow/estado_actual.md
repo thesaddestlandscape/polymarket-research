@@ -1,4 +1,4 @@
-# Estado del bot — 2026-07-02 00:36 UTC
+# Estado del bot — 2026-07-02 00:37 UTC
 
 ## Capital
 | | |
@@ -17,7 +17,7 @@
 | ROI s/ depósito | -228.04% |
 | P&L hoy (2026-07-02) | 🟢 +10.83 € |
 | Operaciones resueltas | 2494 (1209 WIN / 1285 LOSS) — 48.5% |
-| Señales abiertas | 45 |
+| Señales abiertas | 46 |
 
 ## Estrategias (visión global)
 
@@ -42,22 +42,22 @@
 
 ## Calidad de datos
 
-✅ **OK** — última verificación 2026-07-02T00:36 UTC
+✅ **OK** — última verificación 2026-07-02T00:37 UTC
 
 | Asset | Precio | Age | Alertas |
 |---|---|---|---|
-| ✅ BTC | $59,661.54 | 0.0min |  |
-| ✅ ETH | $1,600.04 | 0.0min |  |
-| ✅ SOL | $77.07 | 0.0min |  |
+| ✅ BTC | $59,665.86 | 0.0min |  |
+| ✅ ETH | $1,602.84 | 0.0min |  |
+| ✅ SOL | $77.09 | 0.0min |  |
 | ✅ XRP | $1.05 | 0.0min |  |
 
 **Cross-source** (binance, coinbase, kraken):
 
 | Asset | Consenso | Fuente | Estado |
 |---|---|---|---|
-| BTC | $59,665.10 | consenso |  |
-| ETH | $1,600.08 | consenso |  |
-| SOL | $77.05 | consenso |  |
+| BTC | $59,673.70 | consenso |  |
+| ETH | $1,602.84 | consenso |  |
+| SOL | $77.00 | consenso |  |
 | XRP | $1.05 | consenso |  |
 
 ---
