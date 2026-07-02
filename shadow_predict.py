@@ -1103,6 +1103,11 @@ REGIME_BUY_NO_THRESHOLD = 0.7  # %/h, solo para ventanas ≥60min
 DRIFT_60_BUY_YES_15M_LO = 0.0   # %/h — mínimo (drift plano o ligeramente alcista)
 DRIFT_60_BUY_YES_15M_HI = 0.5   # %/h — máximo (drift muy alcista → ya priceado)
 
+# Filtro ETH#15min BUY_NO — skip si el mercado ya da >55% al YES (NO longshot).
+# Análisis 2026-07-02 últ.60 shadow: py_mkt~0.5 → wr 0.67 PNL=+29.3€ (n=49);
+# py_mkt 0.6-0.8 → wr 0.33→0 PNL=-5.75€ (n=9). Comprar NO contra favorito no paga.
+PY_MKT_MAX_BUY_NO_ETH15 = 0.55
+
 KELLY_COMPUESTO_BOOST = 1.5
 KELLY_COMPUESTO_MAX   = 2.00
 
@@ -1319,6 +1324,12 @@ def s_updown_gbm(market, ctx):
         drift_60_pct = drift_60 * 100
         if not (DRIFT_60_BUY_YES_15M_LO <= drift_60_pct < DRIFT_60_BUY_YES_15M_HI):
             return None  # BUY_YES #15min fuera del sweet spot drift_60min
+
+    # Filtro ETH#15min BUY_NO — no comprar NO cuando el mercado da >55% al YES.
+    if (tipo == 'slot' and ventana_min == 15 and activo == 'ETH'
+            and p_up < market.get("_precio_yes", 0.5)
+            and market.get("_precio_yes", 0.5) > PY_MKT_MAX_BUY_NO_ETH15):
+        return None
 
     # Filtro BTC#15min — solo operar cuando drift_15min ≥ +0.3%/h (momentum claro)
     # Análisis n=36 BTC#15min con feature: drift≥0.3 → IC=+0.152 n=13 (77%);
