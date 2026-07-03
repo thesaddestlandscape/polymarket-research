@@ -117,7 +117,12 @@ def _posiciones_abiertas_misma_direccion(direction: str) -> int:
     n = 0
     with open(TRADES_CSV, encoding="utf-8") as f:
         for row in csv.DictReader(f):
-            if row.get("status") == "OPEN" and row.get("direction") == direction:
+            # OPEN y STUB cuentan como posición viva — mismo criterio que
+            # live_stake.py (stakes_desplegados_ventana_actual e
+            # inventario_direccional_hoy); solo OPEN dejaba colarse trades
+            # STUB por el techo.
+            if (row.get("status") in ("OPEN", "STUB")
+                    and row.get("direction") == direction):
                 n += 1
     return n
 
@@ -842,25 +847,24 @@ def main():
         eval_ok, eval_motivo = _evaluar_pre_trade(pred, dec)
         log(f"  Evaluador: {eval_motivo}")
         if not eval_ok:
+            # Solo log, no Telegram: la señal rechazada no se registra, así
+            # que se re-evalúa (y se re-rechazaría) cada ciclo ~20s mientras
+            # la predicción siga viva — un Telegram aquí es un mensaje por
+            # ciclo. Misma clase de spam que la notificación pre-ejecución
+            # eliminada 2026-07-03.
             log(f"  ⛔ EVALUADOR RECHAZA — no se ejecuta")
-            enviar_telegram(
-                f"⛔ *Señal rechazada por evaluador*\n"
-                f"{strategy}#{subtype} {dec}\n"
-                f"{eval_motivo}"
-            )
             continue
 
-        # 3. Notificar señal antes de ejecutar
-        enviar_telegram(
-            f"🎯 *Señal live detectada*\n"
-            f"Estrategia: {strategy}#{subtype}\n"
-            f"Dirección: {dec}\n"
-            f"Precio entrada: {entry_p:.4f}\n"
-            f"Stake: {stake:.2f}€  |  IC: {ic_hist:+.3f}\n"
-            f"Bankroll: {bankroll_actual():.2f}€"
-        )
-
-        # 4. Ejecutar — edge_dir = edge_neto con el signo resuelto hacia
+        # 3+4. Ejecutar y notificar DESPUÉS con el resultado real.
+        # Antes el Telegram "señal detectada" salía antes de ejecutar: una
+        # señal con no_fill (FOK kill, o edge evaporado en re-quote) no se
+        # registra y se reintenta cada ciclo (~20s) mientras la predicción
+        # siga viva → un mensaje por ciclo (ocurrió 2026-07-02 19:25, 3
+        # mensajes en 90s; el re-quote lo habría amplificado). Los reintentos
+        # silenciosos quedan en live.log; Telegram solo recibe fills y
+        # errores reales, una vez, porque ambos se registran en trades.csv y
+        # el mercado entra en ya_operados.
+        # edge_dir = edge_neto con el signo resuelto hacia
         # nuestra dirección (shadow_predict: en>=min → BUY_YES, -en>=min →
         # BUY_NO), para que _decidir_requote pueda recortar por deterioro.
         edge_dir = edge if dec == "BUY_YES" else -edge
@@ -902,6 +906,23 @@ def main():
         _registrar_trade(trade)
         ya_operados.add(mid)
         ejecutados += 1
+
+        if resultado["ok"]:
+            enviar_telegram(
+                f"🎯 *Orden live ejecutada*\n"
+                f"Estrategia: {strategy}#{subtype}\n"
+                f"Dirección: {dec}\n"
+                f"Precio fill: {resultado['entry_price']:.4f} "
+                f"(slip {resultado.get('slip_real', 0):+.4f})\n"
+                f"Stake: {stake:.2f}€  |  IC: {ic_hist:+.3f}\n"
+                f"Bankroll: {bankroll_actual():.2f}€"
+            )
+        else:
+            enviar_telegram(
+                f"❌ *Orden live ERROR*\n"
+                f"{strategy}#{subtype} {dec}\n"
+                f"{resultado.get('error', '')[:200]}"
+            )
 
         # No más de 3 operaciones por ciclo (espacio entre señales)
         if ejecutados >= 3:
