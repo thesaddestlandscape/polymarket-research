@@ -43,7 +43,8 @@
       "_GBM_LATE_BUY_NO_nota": "2026-07-03: en GBM_LATE la dirección fuerte es BUY_YES (SOL 0.144, XRP 0.211); BUY_NO direccional está bajo el umbral (SOL 0.079 n=36, XRP 0.071 n=33) pero el ic_bayes AGREGADO (inflado por BUY_YES) sí pasaría 0.08 vía fallback. Barra doble para que BUY_NO solo opere con evidencia direccional fuerte propia.",
       "GBM_LATE_15M#BUY_NO": 0.16
     },
-    "min_stake_eur": 0.25,
+    "_min_stake_nota": "2026-07-03: el CLOB rechaza órdenes marketable BUY < $1 ('invalid amount for a marketable BUY order, min size: 1') — 2 señales perdidas hoy con stake 0.94€/0.98€ (Kelly con bankroll 16.33€). El suelo se sube a 1.05 (buffer 0.05 para que el reintento stake±0.01 de live_trade nunca baje de $1). Efecto: señales con Kelly < 1.05€ se ejecutan a 1.05€ (leve sobre-apuesta vs half-Kelly, sigue < full-Kelly y < max10%).",
+    "min_stake_eur": 1.05,
     "max_stake_eur": 2.00,
     "_min_profundidad_nota": "2026-07-03: veto por profundidad de libro — XRP/SOL#15min ejecutaron contra libros con profundidad 0.00€ (ratio 0.0x stake) y slippage real +0.04/+0.085 que se comió el edge (-3.19€). La profundidad ya se consultaba y logueaba pero no vetaba. Si ratio_vs_stake < este valor (o la consulta del libro falla), la orden se aborta. Fail-closed.",
     "min_profundidad_ratio_libro": 5.0,
