@@ -104,7 +104,7 @@
   },
   "_min_stake_nota": "2026-07-03: el CLOB rechaza órdenes marketable BUY < $1 ('invalid amount for a marketable BUY order, min size: 1') — 2 señales perdidas hoy con stake 0.94€/0.98€ (Kelly con bankroll 16.33€). El suelo se sube a 1.05 (buffer 0.05 para que el reintento stake±0.01 de live_trade nunca baje de $1). Efecto: señales con Kelly < 1.05€ se ejecutan a 1.05€ (leve sobre-apuesta vs half-Kelly, sigue < full-Kelly y < max10%).",
   "min_stake_eur": 1.05,
-  "max_stake_eur": 2.0,
+  "max_stake_eur": 1.05,
   "_min_profundidad_nota": "2026-07-03: veto por profundidad de libro — XRP/SOL#15min ejecutaron contra libros con profundidad 0.00€ (ratio 0.0x stake) y slippage real +0.04/+0.085 que se comió el edge (-3.19€). La profundidad ya se consultaba y logueaba pero no vetaba. Si ratio_vs_stake < este valor (o la consulta del libro falla), la orden se aborta. Fail-closed.",
   "min_profundidad_ratio_libro": 5.0,
   "_max_posiciones_nota": "2026-07-03: techo de correlación — los pares cripto se mueven al unísono intradía; N posiciones misma dirección abiertas a la vez = 1 apuesta con stake ×N (cluster shadow 02-Jul 01h UTC: -24.4€ en 17 BUY_NO simultáneos).",
@@ -125,7 +125,8 @@
     "fecha": "2026-07-03",
     "pct": 0.65
    }
-  }
+  },
+  "_stake_nota": "2026-07-03 17:30: usuario fija stake=min=1.05€ (max=min) tras evidencia de selección adversa taker (fills 19% hit vs 83% las vetadas por profundidad). Se mantiene hasta validar entrada maker — NO autoexpira. Revertir a 2.00 solo con decisión explícita."
  },
  "_pares_nota": "2026-07-03: sustituye a estrategias_permitidas_live + subtypes_permitidos_live. El producto cartesiano de las dos listas dejaba pasar combinaciones nunca aprobadas: UPDOWN_GBM#SOL#15min (02-Jul, -2.00€) y UPDOWN_GBM#BTC#15min (03-Jul, -2.00€, hora 06 UTC cuando BTC#15min solo se rescató para hora>=16). Formato: STRATEGY#SUBTYPE#DIRECTION, comparación exacta. Los BUY_NO de GBM_LATE y el BUY_YES de UPDOWN_GBM siguen además gateados por min_ic_asimetrico=0.16. Fail-closed: lista vacía o ausente = no se opera nada.",
  "_pares_eth_buyyes_nota": "2026-07-03 sesión 5: UPDOWN_GBM#ETH#15min#BUY_YES retirado — shadow 3d: n=104 hit=0.41 pnl=-6.03€ clv=-0.074, ic_BUY_YES(ETH)=-0.051. La barra asimétrica 0.16 ya lo bloqueaba; se quita de la whitelist para que ninguna ruta lo cuele (belt-and-braces).",
