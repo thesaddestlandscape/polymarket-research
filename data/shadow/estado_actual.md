@@ -1,4 +1,4 @@
-# Estado del bot — 2026-07-03 16:39 UTC
+# Estado del bot — 2026-07-03 16:41 UTC
 
 ## Capital
 | | |
@@ -17,7 +17,7 @@
 | ROI s/ depósito | -127.32% |
 | P&L hoy (2026-07-03) | 🟢 +10.93 € |
 | Operaciones resueltas | 3146 (1542 WIN / 1604 LOSS) — 49.0% |
-| Señales abiertas | 155 |
+| Señales abiertas | 158 |
 
 ## Estrategias (visión global)
 
@@ -46,7 +46,7 @@
 
 ## Calidad de datos
 
-⚠️ **DEGRADED** — última verificación 2026-07-03T16:39 UTC | rechazos 1h: 6 (rango=0, spike=0)
+⚠️ **DEGRADED** — última verificación 2026-07-03T16:40 UTC | rechazos 1h: 6 (rango=0, spike=0)
 
 | Asset | Precio | Age | Alertas |
 |---|---|---|---|
