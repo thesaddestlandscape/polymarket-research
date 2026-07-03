@@ -1,9 +1,9 @@
 {
-  "timestamp_utc": "2026-07-03T02:04:44+00:00",
-  "bankroll_sim": -26.31,
-  "pnl_total": -46.31,
-  "n_ops": 2903,
-  "win_rate": 0.4909,
+  "timestamp_utc": "2026-07-03T02:06:04+00:00",
+  "bankroll_sim": -28.35,
+  "pnl_total": -48.35,
+  "n_ops": 2904,
+  "win_rate": 0.4907,
   "estrategias_activas": 89,
   "desactivadas": [
     "UPDOWN_GBM#SOL#5min",
@@ -23,13 +23,13 @@
   "top3_ic": [
     {
       "k": "GBM_LATE_15M#XRP#15min",
-      "ic": 0.1935,
-      "n": 60
+      "ic": 0.1825,
+      "n": 61
     },
     {
       "k": "GBM_LATE_15M#XRP",
-      "ic": 0.1935,
-      "n": 60
+      "ic": 0.1825,
+      "n": 61
     },
     {
       "k": "RESOLUTION_SNIPER",
@@ -38,7 +38,7 @@
     }
   ],
   "brier_medio": 0.2849,
-  "clv_medio": -0.0029,
+  "clv_medio": -0.0031,
   "monitor_5min": {
     "ou_5m": {
       "n": 84,
