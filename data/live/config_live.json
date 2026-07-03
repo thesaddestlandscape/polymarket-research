@@ -117,7 +117,10 @@
       "freno_diario_pct_override": {
         "fecha": "2026-07-03",
         "pct": 0.606
-      }
+      },
+      "_racha_nota": "2026-07-03: freno 4 — N pérdidas CLOSED consecutivas (día Madrid) → para el día. Una racha es firma de fallo sistemático, no varianza (03-Jul: 4 pérdidas en 5min, -6.54€, los frenos en € no la cortaron). racha_vigente_desde: las 5 pérdidas previas a la reapertura de hoy no cuentan (el usuario ya decidió operar hoy); borrar la clave cuando pase el día — desde mañana es inerte.",
+      "max_perdidas_consecutivas": 4,
+      "racha_vigente_desde": "2026-07-03T09:15:00+00:00"
     }
   },
   "_pares_nota": "2026-07-03: sustituye a estrategias_permitidas_live + subtypes_permitidos_live. El producto cartesiano de las dos listas dejaba pasar combinaciones nunca aprobadas: UPDOWN_GBM#SOL#15min (02-Jul, -2.00€) y UPDOWN_GBM#BTC#15min (03-Jul, -2.00€, hora 06 UTC cuando BTC#15min solo se rescató para hora>=16). Formato: STRATEGY#SUBTYPE#DIRECTION, comparación exacta. Los BUY_NO de GBM_LATE y el BUY_YES de UPDOWN_GBM siguen además gateados por min_ic_asimetrico=0.16. Fail-closed: lista vacía o ausente = no se opera nada.",
