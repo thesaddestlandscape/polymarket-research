@@ -106,16 +106,19 @@ def _proxima_ventana(ventanas: list, hora_actual, dia_semana: int) -> str:
     return f"{prox} {ventanas[0]['inicio']}" if ventanas else "indefinida"
 
 
-def estrategia_permitida(strategy: str, subtype: str, config: dict | None = None) -> bool:
+def estrategia_permitida(strategy: str, subtype: str, config: dict | None = None,
+                         direction: str | None = None) -> bool:
+    """Whitelist por tupla exacta (2026-07-03, sustituye al producto cartesiano
+    estrategias × subtypes que coló UPDOWN_GBM#SOL/BTC#15min a live). Sin
+    direction: permitida si alguna dirección de ese strategy#subtype lo está.
+    Fail-closed: lista vacía o ausente → False."""
     if config is None:
         config = _cargar_config()
-    estrategias_ok = config.get("estrategias_permitidas_live", [])
-    subtypes_ok    = config.get("subtypes_permitidos_live", [])
-    if strategy not in estrategias_ok:
-        return False
-    if subtypes_ok and subtype not in subtypes_ok:
-        return False
-    return True
+    pares_ok = config.get("pares_permitidos_live", [])
+    if direction:
+        return f"{strategy}#{subtype}#{direction}" in pares_ok
+    prefijo = f"{strategy}#{subtype}#"
+    return any(p.startswith(prefijo) for p in pares_ok)
 
 
 def puede_operar_live(strategy: str = "", subtype: str = "") -> tuple[bool, str]:

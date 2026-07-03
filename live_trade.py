@@ -498,6 +498,30 @@ def _ejecutar_orden_polymarket(market_id: str, direction: str,
         else:
             log(f"  📊 Libro {market_id}/{direction}: error consultando profundidad — {depth.get('error')}")
 
+        # Veto por profundidad: 2026-07-03 XRP/SOL#15min ejecutaron contra
+        # libros con profundidad 0.00€ (ratio=0.0x, ask oscilando 0.52↔0.75
+        # en segundos) y el slippage real (+0.04/+0.085) se comió el edge:
+        # -3.19€. El re-quote solo mira el mejor ask de UN snapshot — en un
+        # libro vacío ese snapshot es ruido. Fail-closed: si la consulta del
+        # libro falla tampoco se ejecuta (sin libro no hay re-quote fiable).
+        # Código de seguridad live — no minimizar.
+        min_ratio = _cargar_config().get("riesgo", {}).get("min_profundidad_ratio_libro", 5.0)
+        if not depth.get("ok"):
+            log(f"  ⛔ Sin datos de libro — no se ejecuta (fail-closed)")
+            return {
+                "ok": False, "no_fill": True, "libro_sin_datos": True,
+                "order_id": None, "entry_price": entry_price,
+                "fee_eur": 0.0, "error": f"profundidad no consultable: {depth.get('error')}",
+            }
+        ratio = depth.get("ratio_vs_stake")
+        if ratio is None or ratio < min_ratio:
+            log(f"  ⛔ Libro sin profundidad: ratio={ratio}x < {min_ratio}x stake — no se ejecuta")
+            return {
+                "ok": False, "no_fill": True, "libro_vacio": True,
+                "order_id": None, "entry_price": entry_price,
+                "fee_eur": 0.0, "error": f"profundidad insuficiente: ratio={ratio}x < {min_ratio}x",
+            }
+
         # Re-cotización con el libro actual (solo si el caller pasó edge_dir)
         if edge_dir is not None:
             mejor_ask = depth.get("mejor_ask") if depth.get("ok") else None
@@ -733,8 +757,15 @@ def main():
     min_n        = riesgo.get("min_n_para_live", 40)
     min_n_overrides   = riesgo.get("min_n_overrides", {})
     min_ic_asimetrico = riesgo.get("min_ic_asimetrico", {})
-    estrategias_ok = config.get("estrategias_permitidas_live", [])
-    subtypes_ok    = config.get("subtypes_permitidos_live", [])
+    # Whitelist por tupla exacta STRATEGY#SUBTYPE#DIRECTION. Antes eran dos
+    # listas independientes (estrategias × subtypes) y el producto cartesiano
+    # dejaba pasar combinaciones nunca aprobadas: UPDOWN_GBM#SOL#15min
+    # (02-Jul, -2.00€ real) y UPDOWN_GBM#BTC#15min (03-Jul, -2.00€ real).
+    # Fail-closed: lista vacía o ausente → no se opera nada. Código de
+    # seguridad live — no minimizar.
+    pares_ok = set(config.get("pares_permitidos_live", []))
+    if not pares_ok:
+        log("  ⚠️ pares_permitidos_live vacío o ausente en config — no se opera (fail-closed)")
     ya_operados  = _ya_operados_hoy()
     bkr          = bankroll_actual()
 
@@ -747,10 +778,8 @@ def main():
         mid      = pred.get("market_id", "")
         dec      = pred.get("decision", "")
 
-        # Filtros de elegibilidad
-        if strategy not in estrategias_ok:
-            continue
-        if subtypes_ok and subtype not in subtypes_ok:
+        # Filtros de elegibilidad — tupla exacta aprobada para live
+        if f"{strategy}#{subtype}#{dec}" not in pares_ok:
             continue
         if mid in ya_operados:
             continue

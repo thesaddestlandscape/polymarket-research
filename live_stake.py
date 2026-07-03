@@ -195,7 +195,50 @@ def pnl_live_hoy() -> float:
     return pnl
 
 
+def stakes_abiertos_total() -> float:
+    """
+    Suma de stakes de TODAS las posiciones abiertas (OPEN o STUB), sin filtro
+    de fecha: cualquier stake abierto puede perderse hoy, así que cuenta como
+    riesgo vivo del día. bankroll_actual() solo resta PnL de trades CLOSED,
+    por lo que este dinero no está reflejado ahí. Código de seguridad live.
+    """
+    if not TRADES_CSV.exists():
+        return 0.0
+    total = 0.0
+    with open(TRADES_CSV, encoding="utf-8") as f:
+        for row in csv.DictReader(f):
+            if row.get("status") not in ("OPEN", "STUB"):
+                continue
+            try:
+                total += float(row.get("stake_eur", 0) or 0)
+            except ValueError:
+                pass
+    return total
+
+
 # ── Circuit breaker ───────────────────────────────────────────────────────────
+
+def freno_diario_pct_hoy(config: dict | None = None) -> float:
+    """
+    Porcentaje del freno diario aplicable HOY. Permite un override puntual con
+    fecha (riesgo.circuit_breaker.freno_diario_pct_override = {fecha, pct})
+    que solo aplica si fecha == hoy (Madrid) — al día siguiente vuelve solo al
+    valor normal, sin depender de que nadie se acuerde de revertir el config.
+    Añadido 2026-07-03: decisión del usuario de seguir operando tras el freno
+    de -28.6%, con suelo duro en bankroll_minimo_eur.
+    """
+    if config is None:
+        config = _cargar_config()
+    cb  = config.get("riesgo", {}).get("circuit_breaker", {})
+    pct = cb.get("freno_diario_pct", 0.15)
+    ov  = cb.get("freno_diario_pct_override") or {}
+    try:
+        if ov.get("fecha") == _ahora_madrid(config).date().isoformat():
+            return float(ov["pct"])
+    except (KeyError, TypeError, ValueError):
+        pass
+    return pct
+
 
 def bankroll_inicio_dia() -> float:
     """Bankroll al inicio del día de hoy (antes de cualquier trade de hoy)."""
@@ -249,8 +292,8 @@ def verificar_circuit_breaker() -> tuple[bool, str]:
             SWITCH_PATH.unlink()
         return True, f"🛑 bankroll {bkr:.2f}€ ≤ mínimo {bkr_min:.2f}€ — switch desactivado"
 
-    # Freno 2 — caída diaria
-    freno_dia_pct = cb.get("freno_diario_pct", 0.15)
+    # Freno 2 — caída diaria (pct puede venir de un override con fecha)
+    freno_dia_pct = freno_diario_pct_hoy(config)
     bkr_ini_dia   = bankroll_inicio_dia()
     if bkr_ini_dia > 0:
         caida_dia = (bkr_ini_dia - bkr) / bkr_ini_dia
@@ -363,20 +406,32 @@ def calcular_stake(ic: float, strategy: str = "", subtype: str = "",
     # (verificar_circuit_breaker) solo mira PnL realizado, así que con stakes
     # de ~8% del bankroll un solo trade puede cruzar el límite diario de largo
     # (2026-07-02: -12.9% realizado antes del último trade y el día cerró en
-    # -20%). Techo extra: si este stake se perdiera entero, la caída del día
-    # no puede superar freno_diario_pct. Si el margen restante no da ni para
+    # -20%). Techo extra: si este stake Y todos los abiertos se perdieran
+    # enteros, la caída del día no puede superar freno_diario_pct. Los stakes
+    # abiertos sin resolver se restan del margen — no contarlos fue lo que el
+    # 2026-07-03 dejó desplegar 6.54€ (28.6% del bankroll) con freno del 15%:
+    # a las 06:38 había 3.19€ abiertos, pnl realizado 0.00€, y entraron
+    # 3.35€ más. Suelo adicional: en el peor caso el bankroll no puede quedar
+    # por debajo de bankroll_minimo_eur. Si el margen restante no da ni para
     # min_stake, la señal deja de ser viable (equivale a disparar el freno un
     # trade antes). Código de seguridad live — no minimizar.
     freno_str = ""
-    freno_dia_pct = riesgo.get("circuit_breaker", {}).get("freno_diario_pct", 0.15)
+    freno_dia_pct = freno_diario_pct_hoy(config)
+    bkr_min       = riesgo.get("circuit_breaker", {}).get("bankroll_minimo_eur", 5.0)
     bkr_ini_dia   = bankroll_inicio_dia()
+    abiertos      = stakes_abiertos_total()
     if bkr_ini_dia > 0:
-        margen_dia = bkr_ini_dia * freno_dia_pct + pnl_live_hoy()
+        margen_freno = bkr_ini_dia * freno_dia_pct + pnl_live_hoy() - abiertos
+        margen_suelo = bkr - bkr_min - abiertos
+        margen_dia   = min(margen_freno, margen_suelo)
         if stake > margen_dia:
             stake = max(0.0, margen_dia)
+            if stake < min_stake:
+                stake = 0.0
             freno_str = (f" | techo_freno_diario={margen_dia:.2f}€ "
                          f"(freno={freno_dia_pct*100:.0f}% de {bkr_ini_dia:.2f}€, "
-                         f"pnl_hoy={pnl_live_hoy():+.2f}€)")
+                         f"pnl_hoy={pnl_live_hoy():+.2f}€, abiertos={abiertos:.2f}€, "
+                         f"suelo_bkr={bkr_min:.2f}€)")
 
     motivo = (
         f"bankroll={bkr:.2f}€ | "
