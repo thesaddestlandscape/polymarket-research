@@ -1,135 +1,139 @@
 {
-  "zona_horaria": "Europe/Madrid",
-  "utc_offset_verano": 2,
-  "_ventanas_originales": [
-    {
-      "inicio": "08:30",
-      "fin": "09:30",
-      "nombre": "apertura_europea"
-    },
-    {
-      "inicio": "10:30",
-      "fin": "11:30",
-      "nombre": "media_manana"
-    },
-    {
-      "inicio": "15:00",
-      "fin": "16:00",
-      "nombre": "mediotarde"
-    },
-    {
-      "inicio": "16:30",
-      "fin": "17:30",
-      "nombre": "tarde_1"
-    },
-    {
-      "inicio": "18:30",
-      "fin": "19:30",
-      "nombre": "tarde_2"
-    },
-    {
-      "inicio": "20:30",
-      "fin": "21:30",
-      "nombre": "cierre"
-    }
-  ],
-  "ventanas_lunes_viernes": [
-    {
-      "inicio": "08:30",
-      "fin": "09:30",
-      "nombre": "apertura_europea"
-    },
-    {
-      "inicio": "10:30",
-      "fin": "11:30",
-      "nombre": "media_manana"
-    },
-    {
-      "inicio": "15:00",
-      "fin": "21:30",
-      "nombre": "tarde_completa",
-      "_nota": "2026-07-01: fusiona mediotarde+tarde_1+tarde_2+cierre sin huecos (13:00-19:30 UTC). Seguro respecto a horas malas: 18h UTC ya bloqueada por GBM_BLACKLIST_HOURS_AUTO, 20h UTC queda fuera del rango (termina en 19:30 UTC)."
-    },
-    {
-      "inicio": "01:00",
-      "fin": "02:00",
-      "nombre": "prueba_23h_utc",
-      "_nota": "2026-07-01: prueba de 23h UTC (=01:00-02:00 Madrid verano), IC=+0.130 agregado (n=52), GBM solo IC=+0.178 (n=16). OJO: un viernes 23h UTC cae en sábado 01:00 Madrid → se evalúa con reglas de fin de semana, no de lunes-viernes; revisar si hace falta añadir esta franja también a ventanas_fin_de_semana."
-    }
-  ],
-  "_mediodia_eliminada": "12:30-13:30 eliminada: GBM IC=-0.154 PNL=-7.96€, OF IC=-0.033 PNL=-5.43€ — peor ventana en ambas estrategias (n≥30)",
-  "fines_de_semana": "ventanas",
-  "_fds_nota": "Ventanas conservadoras: solo horas validadas en backfill 90d con IC positivo. Las horas 7-11h UTC (apertura EUR) se excluyen igualmente aunque en finde no haya apertura — sin evidencia forward aún para relajarlas. Revisar tras 2-3 fines de semana con shadow.",
-  "ventanas_fin_de_semana": [
-    {
-      "inicio": "15:00",
-      "fin": "16:00",
-      "nombre": "fds_tarde1"
-    },
-    {
-      "inicio": "17:00",
-      "fin": "18:00",
-      "nombre": "fds_tarde2"
-    },
-    {
-      "inicio": "19:00",
-      "fin": "20:00",
-      "nombre": "fds_tarde3"
-    },
-    {
-      "inicio": "21:00",
-      "fin": "22:00",
-      "nombre": "fds_tarde4"
-    },
-    {
-      "inicio": "01:00",
-      "fin": "02:00",
-      "nombre": "fds_prueba_23h_utc",
-      "_nota": "2026-07-01: replica de prueba_23h_utc — un viernes 23h UTC cae en sábado de madrugada Madrid, sin esto esa franja quedaba sin cubrir ningún día."
-    }
-  ],
-  "riesgo": {
-    "max_pct_bankroll_por_trade": 0.1,
-    "pct_bankroll_diario": 0.3,
-    "half_kelly": true,
-    "min_ic_para_live": 0.08,
-    "min_n_para_live": 40,
-    "_min_n_overrides_nota": "Overrides puntuales y temporales de min_n por strategy#subtype#direction, decisión manual del usuario cuando el n direccional está muy cerca de 40. Quitar la entrada cuando n_BUY_NO/n_BUY_YES real supere min_n_para_live.",
-    "min_n_overrides": {},
-    "_min_ic_asimetrico_nota": "Barra más alta de IC para strategy#decision específicos, en vez del min_ic_para_live global. Añadido 2026-07-01 tras H-CUSTOM-GBM-BUYYES-GLOBAL-MALO: BUY_NO gana a BUY_YES en las 4 estrategias activas sin excepción (GBM confirmado n=507 IC=-0.076). No auto-desactiva BUY_YES de golpe — exige evidencia direccional más fuerte (doble del umbral normal) antes de confiar en una señal BUY_YES de GBM en vivo. A día de hoy no cambia ningún subtype ya elegible (todos los ic_BUY_YES direccionales de los subtypes permitidos en vivo ya están en negativo, muy por debajo incluso del umbral normal) — es una salvaguarda hacia adelante.",
-    "min_ic_asimetrico": {
-      "UPDOWN_GBM#BUY_YES": 0.16,
-      "_GBM_LATE_BUY_NO_nota": "2026-07-03: en GBM_LATE la dirección fuerte es BUY_YES (SOL 0.144, XRP 0.211); BUY_NO direccional está bajo el umbral (SOL 0.079 n=36, XRP 0.071 n=33) pero el ic_bayes AGREGADO (inflado por BUY_YES) sí pasaría 0.08 vía fallback. Barra doble para que BUY_NO solo opere con evidencia direccional fuerte propia.",
-      "GBM_LATE_15M#BUY_NO": 0.16
-    },
-    "_min_stake_nota": "2026-07-03: el CLOB rechaza órdenes marketable BUY < $1 ('invalid amount for a marketable BUY order, min size: 1') — 2 señales perdidas hoy con stake 0.94€/0.98€ (Kelly con bankroll 16.33€). El suelo se sube a 1.05 (buffer 0.05 para que el reintento stake±0.01 de live_trade nunca baje de $1). Efecto: señales con Kelly < 1.05€ se ejecutan a 1.05€ (leve sobre-apuesta vs half-Kelly, sigue < full-Kelly y < max10%).",
-    "min_stake_eur": 1.05,
-    "max_stake_eur": 2.0,
-    "_min_profundidad_nota": "2026-07-03: veto por profundidad de libro — XRP/SOL#15min ejecutaron contra libros con profundidad 0.00€ (ratio 0.0x stake) y slippage real +0.04/+0.085 que se comió el edge (-3.19€). La profundidad ya se consultaba y logueaba pero no vetaba. Si ratio_vs_stake < este valor (o la consulta del libro falla), la orden se aborta. Fail-closed.",
-    "min_profundidad_ratio_libro": 5.0,
-    "_max_posiciones_nota": "2026-07-03: techo de correlación — los pares cripto se mueven al unísono intradía; N posiciones misma dirección abiertas a la vez = 1 apuesta con stake ×N (cluster shadow 02-Jul 01h UTC: -24.4€ en 17 BUY_NO simultáneos).",
-    "max_posiciones_abiertas_misma_direccion": 2,
-    "circuit_breaker": {
-      "freno_ventana_pct": 0.2,
-      "freno_diario_pct": 0.15,
-      "_override_nota": "2026-07-03 (2ª vez, tarde): usuario reabre live hoy con suelo 9€ — pct 0.606 sobre inicio de día 22.86€ dispara el freno justo en 9.01€. Autoexpira mañana (fecha==hoy). El suelo duro permanente sigue en bankroll_minimo_eur=8.",
-      "bankroll_minimo_eur": 8.0,
-      "freno_diario_pct_override": {
-        "fecha": "2026-07-03",
-        "pct": 0.606
-      },
-      "_racha_nota": "2026-07-03: freno 4 — N pérdidas CLOSED consecutivas (día Madrid) → para el día. Una racha es firma de fallo sistemático, no varianza (03-Jul: 4 pérdidas en 5min, -6.54€, los frenos en € no la cortaron). racha_vigente_desde: las 5 pérdidas previas a la reapertura de hoy no cuentan (el usuario ya decidió operar hoy); borrar la clave cuando pase el día — desde mañana es inerte.",
-      "max_perdidas_consecutivas": 4,
-      "racha_vigente_desde": "2026-07-03T09:15:00+00:00"
-    }
+ "zona_horaria": "Europe/Madrid",
+ "utc_offset_verano": 2,
+ "_ventanas_originales": [
+  {
+   "inicio": "08:30",
+   "fin": "09:30",
+   "nombre": "apertura_europea"
   },
-  "_pares_nota": "2026-07-03: sustituye a estrategias_permitidas_live + subtypes_permitidos_live. El producto cartesiano de las dos listas dejaba pasar combinaciones nunca aprobadas: UPDOWN_GBM#SOL#15min (02-Jul, -2.00€) y UPDOWN_GBM#BTC#15min (03-Jul, -2.00€, hora 06 UTC cuando BTC#15min solo se rescató para hora>=16). Formato: STRATEGY#SUBTYPE#DIRECTION, comparación exacta. Los BUY_NO de GBM_LATE y el BUY_YES de UPDOWN_GBM siguen además gateados por min_ic_asimetrico=0.16. Fail-closed: lista vacía o ausente = no se opera nada.",
-  "_pares_eth_buyyes_nota": "2026-07-03 sesión 5: UPDOWN_GBM#ETH#15min#BUY_YES retirado — shadow 3d: n=104 hit=0.41 pnl=-6.03€ clv=-0.074, ic_BUY_YES(ETH)=-0.051. La barra asimétrica 0.16 ya lo bloqueaba; se quita de la whitelist para que ninguna ruta lo cuele (belt-and-braces).",
-  "pares_permitidos_live": [
-    "UPDOWN_GBM#ETH#15min#BUY_NO",
-    "GBM_LATE_15M#SOL#15min#BUY_YES",
-    "GBM_LATE_15M#XRP#15min#BUY_YES",
-    "GBM_LATE_15M#SOL#15min#BUY_NO",
-    "GBM_LATE_15M#XRP#15min#BUY_NO"
-  ]
+  {
+   "inicio": "10:30",
+   "fin": "11:30",
+   "nombre": "media_manana"
+  },
+  {
+   "inicio": "15:00",
+   "fin": "16:00",
+   "nombre": "mediotarde"
+  },
+  {
+   "inicio": "16:30",
+   "fin": "17:30",
+   "nombre": "tarde_1"
+  },
+  {
+   "inicio": "18:30",
+   "fin": "19:30",
+   "nombre": "tarde_2"
+  },
+  {
+   "inicio": "20:30",
+   "fin": "21:30",
+   "nombre": "cierre"
+  }
+ ],
+ "ventanas_lunes_viernes": [
+  {
+   "inicio": "08:30",
+   "fin": "09:30",
+   "nombre": "apertura_europea"
+  },
+  {
+   "inicio": "10:30",
+   "fin": "11:30",
+   "nombre": "media_manana"
+  },
+  {
+   "inicio": "15:00",
+   "fin": "21:30",
+   "nombre": "tarde_completa",
+   "_nota": "2026-07-01: fusiona mediotarde+tarde_1+tarde_2+cierre sin huecos (13:00-19:30 UTC). Seguro respecto a horas malas: 18h UTC ya bloqueada por GBM_BLACKLIST_HOURS_AUTO, 20h UTC queda fuera del rango (termina en 19:30 UTC)."
+  },
+  {
+   "inicio": "01:00",
+   "fin": "02:00",
+   "nombre": "prueba_23h_utc",
+   "_nota": "2026-07-01: prueba de 23h UTC (=01:00-02:00 Madrid verano), IC=+0.130 agregado (n=52), GBM solo IC=+0.178 (n=16). OJO: un viernes 23h UTC cae en sábado 01:00 Madrid → se evalúa con reglas de fin de semana, no de lunes-viernes; revisar si hace falta añadir esta franja también a ventanas_fin_de_semana."
+  }
+ ],
+ "_mediodia_eliminada": "12:30-13:30 eliminada: GBM IC=-0.154 PNL=-7.96€, OF IC=-0.033 PNL=-5.43€ — peor ventana en ambas estrategias (n≥30)",
+ "fines_de_semana": "ventanas",
+ "_fds_nota": "Ventanas conservadoras: solo horas validadas en backfill 90d con IC positivo. Las horas 7-11h UTC (apertura EUR) se excluyen igualmente aunque en finde no haya apertura — sin evidencia forward aún para relajarlas. Revisar tras 2-3 fines de semana con shadow.",
+ "ventanas_fin_de_semana": [
+  {
+   "inicio": "15:00",
+   "fin": "16:00",
+   "nombre": "fds_tarde1"
+  },
+  {
+   "inicio": "17:00",
+   "fin": "18:00",
+   "nombre": "fds_tarde2"
+  },
+  {
+   "inicio": "19:00",
+   "fin": "20:00",
+   "nombre": "fds_tarde3"
+  },
+  {
+   "inicio": "21:00",
+   "fin": "22:00",
+   "nombre": "fds_tarde4"
+  },
+  {
+   "inicio": "01:00",
+   "fin": "02:00",
+   "nombre": "fds_prueba_23h_utc",
+   "_nota": "2026-07-01: replica de prueba_23h_utc — un viernes 23h UTC cae en sábado de madrugada Madrid, sin esto esa franja quedaba sin cubrir ningún día."
+  }
+ ],
+ "riesgo": {
+  "max_pct_bankroll_por_trade": 0.1,
+  "pct_bankroll_diario": 0.3,
+  "half_kelly": true,
+  "min_ic_para_live": 0.08,
+  "min_n_para_live": 40,
+  "_min_n_overrides_nota": "Overrides puntuales y temporales de min_n por strategy#subtype#direction, decisión manual del usuario cuando el n direccional está muy cerca de 40. Quitar la entrada cuando n_BUY_NO/n_BUY_YES real supere min_n_para_live.",
+  "min_n_overrides": {},
+  "_min_ic_asimetrico_nota": "Barra más alta de IC para strategy#decision específicos, en vez del min_ic_para_live global. Añadido 2026-07-01 tras H-CUSTOM-GBM-BUYYES-GLOBAL-MALO: BUY_NO gana a BUY_YES en las 4 estrategias activas sin excepción (GBM confirmado n=507 IC=-0.076). No auto-desactiva BUY_YES de golpe — exige evidencia direccional más fuerte (doble del umbral normal) antes de confiar en una señal BUY_YES de GBM en vivo. A día de hoy no cambia ningún subtype ya elegible (todos los ic_BUY_YES direccionales de los subtypes permitidos en vivo ya están en negativo, muy por debajo incluso del umbral normal) — es una salvaguarda hacia adelante.",
+  "min_ic_asimetrico": {
+   "UPDOWN_GBM#BUY_YES": 0.16,
+   "_GBM_LATE_BUY_NO_nota": "2026-07-03: en GBM_LATE la dirección fuerte es BUY_YES (SOL 0.144, XRP 0.211); BUY_NO direccional está bajo el umbral (SOL 0.079 n=36, XRP 0.071 n=33) pero el ic_bayes AGREGADO (inflado por BUY_YES) sí pasaría 0.08 vía fallback. Barra doble para que BUY_NO solo opere con evidencia direccional fuerte propia.",
+   "GBM_LATE_15M#BUY_NO": 0.16
+  },
+  "_min_stake_nota": "2026-07-03: el CLOB rechaza órdenes marketable BUY < $1 ('invalid amount for a marketable BUY order, min size: 1') — 2 señales perdidas hoy con stake 0.94€/0.98€ (Kelly con bankroll 16.33€). El suelo se sube a 1.05 (buffer 0.05 para que el reintento stake±0.01 de live_trade nunca baje de $1). Efecto: señales con Kelly < 1.05€ se ejecutan a 1.05€ (leve sobre-apuesta vs half-Kelly, sigue < full-Kelly y < max10%).",
+  "min_stake_eur": 1.05,
+  "max_stake_eur": 2.0,
+  "_min_profundidad_nota": "2026-07-03: veto por profundidad de libro — XRP/SOL#15min ejecutaron contra libros con profundidad 0.00€ (ratio 0.0x stake) y slippage real +0.04/+0.085 que se comió el edge (-3.19€). La profundidad ya se consultaba y logueaba pero no vetaba. Si ratio_vs_stake < este valor (o la consulta del libro falla), la orden se aborta. Fail-closed.",
+  "min_profundidad_ratio_libro": 5.0,
+  "_max_posiciones_nota": "2026-07-03: techo de correlación — los pares cripto se mueven al unísono intradía; N posiciones misma dirección abiertas a la vez = 1 apuesta con stake ×N (cluster shadow 02-Jul 01h UTC: -24.4€ en 17 BUY_NO simultáneos).",
+  "max_posiciones_abiertas_misma_direccion": 2,
+  "circuit_breaker": {
+   "freno_ventana_pct": 0.2,
+   "freno_diario_pct": 0.15,
+   "_override_nota": "2026-07-03 (3ª vez, 17:15): usuario reabre la ventana tras el latch de las 17:07 y fija el corte en bankroll=8€: freno diario 0.65 sobre inicio de día 22.86€ dispara justo en 8.00€, y freno de ventana también 0.65 hoy (no muerde antes que el suelo). Ambos autoexpiran mañana (fecha==hoy). Suelo duro permanente bankroll_minimo_eur=8 + suelo prospectivo en calcular_stake.",
+   "bankroll_minimo_eur": 8.0,
+   "freno_diario_pct_override": {
+    "fecha": "2026-07-03",
+    "pct": 0.65
+   },
+   "_racha_nota": "2026-07-03: freno 4 — N pérdidas CLOSED consecutivas (día Madrid) → para el día. Una racha es firma de fallo sistemático, no varianza (03-Jul: 4 pérdidas en 5min, -6.54€, los frenos en € no la cortaron). racha_vigente_desde: las 5 pérdidas previas a la reapertura de hoy no cuentan (el usuario ya decidió operar hoy); borrar la clave cuando pase el día — desde mañana es inerte.",
+   "max_perdidas_consecutivas": 4,
+   "racha_vigente_desde": "2026-07-03T09:15:00+00:00",
+   "freno_ventana_pct_override": {
+    "fecha": "2026-07-03",
+    "pct": 0.65
+   }
+  }
+ },
+ "_pares_nota": "2026-07-03: sustituye a estrategias_permitidas_live + subtypes_permitidos_live. El producto cartesiano de las dos listas dejaba pasar combinaciones nunca aprobadas: UPDOWN_GBM#SOL#15min (02-Jul, -2.00€) y UPDOWN_GBM#BTC#15min (03-Jul, -2.00€, hora 06 UTC cuando BTC#15min solo se rescató para hora>=16). Formato: STRATEGY#SUBTYPE#DIRECTION, comparación exacta. Los BUY_NO de GBM_LATE y el BUY_YES de UPDOWN_GBM siguen además gateados por min_ic_asimetrico=0.16. Fail-closed: lista vacía o ausente = no se opera nada.",
+ "_pares_eth_buyyes_nota": "2026-07-03 sesión 5: UPDOWN_GBM#ETH#15min#BUY_YES retirado — shadow 3d: n=104 hit=0.41 pnl=-6.03€ clv=-0.074, ic_BUY_YES(ETH)=-0.051. La barra asimétrica 0.16 ya lo bloqueaba; se quita de la whitelist para que ninguna ruta lo cuele (belt-and-braces).",
+ "pares_permitidos_live": [
+  "UPDOWN_GBM#ETH#15min#BUY_NO",
+  "GBM_LATE_15M#SOL#15min#BUY_YES",
+  "GBM_LATE_15M#XRP#15min#BUY_YES",
+  "GBM_LATE_15M#SOL#15min#BUY_NO",
+  "GBM_LATE_15M#XRP#15min#BUY_NO"
+ ]
 }
