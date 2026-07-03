@@ -216,6 +216,45 @@ def stakes_abiertos_total() -> float:
     return total
 
 
+def racha_perdidas_consecutivas() -> int:
+    """
+    Nº de pérdidas CLOSED consecutivas al final de la secuencia de hoy (día
+    Madrid), ordenadas por close_timestamp. Una racha así es la firma de un
+    modo de fallo sistemático (modelo desfasado, régimen hostil), no de
+    varianza — 2026-07-03: 4 pérdidas en 5 minutos (-6.54€) y los frenos en €
+    no la cortaron a tiempo. Si circuit_breaker.racha_vigente_desde existe,
+    solo cuentan cierres posteriores (para no re-castigar una racha anterior
+    a una reapertura manual del usuario). Código de seguridad live.
+    """
+    if not TRADES_CSV.exists():
+        return 0
+    config = _cargar_config()
+    ts_ini = _ts_inicio_dia_utc(config)
+    desde  = _parse_ts(config.get("riesgo", {}).get("circuit_breaker", {})
+                       .get("racha_vigente_desde") or "")
+    if desde is not None and desde > ts_ini:
+        ts_ini = desde
+    cierres = []
+    with open(TRADES_CSV, encoding="utf-8") as f:
+        for row in csv.DictReader(f):
+            if row.get("status") != "CLOSED":
+                continue
+            ts = _parse_ts(row.get("close_timestamp") or "")
+            if ts is None or ts < ts_ini:
+                continue
+            try:
+                cierres.append((ts, float(row.get("pnl_neto_eur", 0) or 0)))
+            except ValueError:
+                pass
+    racha = 0
+    for _, pnl in sorted(cierres, reverse=True):
+        if pnl < 0:
+            racha += 1
+        else:
+            break
+    return racha
+
+
 # ── Circuit breaker ───────────────────────────────────────────────────────────
 
 def freno_diario_pct_hoy(config: dict | None = None) -> float:
@@ -300,6 +339,14 @@ def verificar_circuit_breaker() -> tuple[bool, str]:
         if caida_dia >= freno_dia_pct:
             return True, (f"🛑 caída diaria {caida_dia*100:.1f}% "
                           f"({bkr_ini_dia:.2f}€ → {bkr:.2f}€) ≥ freno {freno_dia_pct*100:.0f}%")
+
+    # Freno 4 — racha de pérdidas consecutivas (para el día, como el freno 2)
+    max_racha = cb.get("max_perdidas_consecutivas", 4)
+    if max_racha:
+        racha = racha_perdidas_consecutivas()
+        if racha >= max_racha:
+            return True, (f"🛑 {racha} pérdidas live consecutivas ≥ {max_racha} "
+                          f"— racha sistemática, para el día")
 
     # Freno 3 — caída en ventana actual
     freno_v_pct = cb.get("freno_ventana_pct", 0.20)
