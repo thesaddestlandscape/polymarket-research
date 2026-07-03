@@ -16,7 +16,7 @@ import csv
 import json
 import os
 import requests
-from datetime import datetime, timezone
+from datetime import datetime, timezone, timedelta
 from pathlib import Path
 
 from live_guard import puede_operar_live, estado_live, switch_activo
@@ -25,6 +25,39 @@ from shadow_digest import enviar_telegram
 
 DIR_LIVE    = Path("data/live")
 DIR_SHADOW  = Path("data/shadow")
+
+CLV_VETO_MIN_N = 20   # resoluciones con clv en ventana para poder vetar
+CLV_VETO_DIAS  = 7    # ventana móvil del CLV medio por tupla
+_CLV_CACHE: dict | None = None  # tupla → [clv,...]; una lectura por ciclo
+
+
+def _clv_tupla(strategy: str, subtype: str, decision: str) -> tuple[float, int]:
+    """
+    CLV medio y n de la tupla STRATEGY#SUBTYPE#DECISION en los últimos
+    CLV_VETO_DIAS días de results.csv. (0.0, 0) si no hay datos o error —
+    el veto solo actúa con n suficiente, nunca por ausencia de datos.
+    """
+    global _CLV_CACHE
+    if _CLV_CACHE is None:
+        _CLV_CACHE = {}
+        try:
+            corte = (datetime.now(timezone.utc) - timedelta(days=CLV_VETO_DIAS)).isoformat()
+            with open(DIR_SHADOW / "results.csv", encoding="utf-8") as f:
+                for row in csv.DictReader(f):
+                    if (row.get("resolution_timestamp") or "") < corte:
+                        continue
+                    try:
+                        clv = float(row.get("clv"))
+                    except (TypeError, ValueError):
+                        continue
+                    k = f"{row.get('strategy')}#{row.get('subtype')}#{row.get('decision')}"
+                    _CLV_CACHE.setdefault(k, []).append(clv)
+        except Exception:
+            pass
+    vals = _CLV_CACHE.get(f"{strategy}#{subtype}#{decision}", [])
+    if not vals:
+        return 0.0, 0
+    return sum(vals) / len(vals), len(vals)
 TRADES_CSV  = DIR_LIVE  / "trades.csv"
 PARAMS_PATH = DIR_SHADOW / "strategy_params.json"
 LOG_PATH    = Path("logs/live.log")
@@ -863,6 +896,16 @@ def main():
                 if n_hist >= min_n:
                     _avisar_override_superado(override_key, n_hist, min_n)
         if not pasa:
+            continue
+
+        # Veto CLV (2026-07-03): tupla con CLV medio < 0 sostenido pierde
+        # contra la línea de cierre sistemáticamente — el IC/PnL tarda más
+        # en reflejarlo (binario, n~40) que el CLV (continuo, n~20). Guardia
+        # adicional sobre el IC, no sustituto; sin datos CLV no veta.
+        clv_medio, n_clv = _clv_tupla(strategy, subtype, dec)
+        if n_clv >= CLV_VETO_MIN_N and clv_medio < 0:
+            log(f"  ⛔ Veto CLV: {strategy}#{subtype}#{dec} clv_medio={clv_medio:+.4f}"
+                f" (n={n_clv}, ventana {CLV_VETO_DIAS}d) < 0 — no se ejecuta")
             continue
 
         # IC del modelo para esta señal concreta

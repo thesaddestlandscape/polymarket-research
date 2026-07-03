@@ -42,8 +42,8 @@ Bot semi-autónomo para mercados cripto Polymarket.
 - **Capital**: 25.44€ operativo live (30€ depósito, 10€ reserva)
 - **Umbral live**: IC≥0.08, n≥40 resoluciones confirmadas (valor real en `data/live/config_live.json::riesgo.min_ic_para_live`)
 - **VPS**: Hetzner Helsinki (IP finlandesa — Polymarket accesible desde FI)
-- **Estrategias live activas**: UPDOWN_GBM (ETH#15min BUY_NO) + GBM_LATE_15M (SOL/XRP BUY_YES, promovida 2026-07-03: IC=0.144/0.211 n=43/43, CLV+0.107). BUY_NO de GBM_LATE con barra asimétrica 0.16 (evidencia direccional insuficiente). ORDER_FLOW_5M no está en whitelist live.
-- **Protecciones live añadidas 2026-07-03**: re-quote contra libro al ejecutar (aborta si edge<0.02 con el ask actual) | techo 2 posiciones abiertas misma dirección (correlación multi-par) | freno diario prospectivo (pérdida+stake+**stakes abiertos**≤15%, fix tras -6.54€ el 03-Jul) | veto patrón causal si IC propio del subtype <0 | slippage real → `notas` (`slip_real=`) para calibrar SLIPPAGE_ESTIMADO con n≥30 | **veto profundidad libro** (ratio<5x stake o consulta fallida → aborta; XRP/SOL entraron contra libros vacíos con slip +0.04/+0.085) | **whitelist por tupla** `pares_permitidos_live` STRATEGY#SUBTYPE#DIRECTION (el producto cartesiano coló UPDOWN_GBM#SOL/BTC#15min) | suelo prospectivo bankroll_minimo (8€ desde 03-Jul) | override freno diario con fecha (`freno_diario_pct_override`, solo aplica el día indicado) | **suelo stake 1.05€** (CLOB rechaza marketable BUY <$1 "min size: 1"; 2 señales perdidas 03-Jul con Kelly 0.94/0.98€ tras caer el bankroll) + guardia fail-closed en live_trade si llega <$1
+- **Estrategias live activas**: UPDOWN_GBM (ETH#15min BUY_NO) + GBM_LATE_15M (SOL/XRP BUY_YES, promovida 2026-07-03: IC=0.144/0.211 n=43/43, CLV+0.107). BUY_NO de GBM_LATE con barra asimétrica 0.16 (evidencia direccional insuficiente). ORDER_FLOW_5M no está en whitelist live. GBM_LATE_60M (03-Jul): clon shadow-puro de la entrada tardía para mercados 60min (últimos 5-20 min), fuera de whitelist.
+- **Protecciones live añadidas 2026-07-03**: re-quote contra libro al ejecutar (aborta si edge<0.02 con el ask actual) | techo 2 posiciones abiertas misma dirección (correlación multi-par) | freno diario prospectivo (pérdida+stake+**stakes abiertos**≤15%, fix tras -6.54€ el 03-Jul) | veto patrón causal si IC propio del subtype <0 | **latch freno ventana** (disparo → `freno_ventana_latch.json`, no reabre hasta la siguiente ventana; antes se rearmaba solo al recuperar PnL) | **veto CLV** (tupla con clv_medio<0 y n≥20 en ventana 7d → no ejecuta; guardia sobre el IC, no sustituto) | slippage real → `notas` (`slip_real=`) para calibrar SLIPPAGE_ESTIMADO con n≥30 | **veto profundidad libro** (ratio<5x stake o consulta fallida → aborta; XRP/SOL entraron contra libros vacíos con slip +0.04/+0.085) | **whitelist por tupla** `pares_permitidos_live` STRATEGY#SUBTYPE#DIRECTION (el producto cartesiano coló UPDOWN_GBM#SOL/BTC#15min) | suelo prospectivo bankroll_minimo (8€ desde 03-Jul) | override freno diario con fecha (`freno_diario_pct_override`, solo aplica el día indicado) | **suelo stake 1.05€** (CLOB rechaza marketable BUY <$1 "min size: 1"; 2 señales perdidas 03-Jul con Kelly 0.94/0.98€ tras caer el bankroll) + guardia fail-closed en live_trade si llega <$1
 
 ---
 
@@ -151,7 +151,7 @@ REGIME_BUY_NO_THRESHOLD = 0.7    # %/h — solo ≥60min, solo BUY_NO
 DRIFT_60_BUY_YES_15M_LO = 0.0   # BUY_YES #15min: drift_60min mínimo
 DRIFT_60_BUY_YES_15M_HI = 0.5   # BUY_YES #15min: drift_60min máximo
 # BTC#15min: skip si drift_15min*100 < 0.3
-EDGE_MINIMO = 0.02 | SLIPPAGE_ESTIMADO = 0.02
+EDGE_MINIMO = 0.02 | SLIPPAGE_ESTIMADO = 0.02 (dinámico desde 03-Jul: mediana slip_real live si n≥30, clamp [0.005, 0.02])
 DELTA_MIN = 0.38 | DELTA_MAX = 0.46  # OF solo BUY_NO (delta<0)
 KELLY_COMPUESTO_BOOST = 1.5 | KELLY_COMPUESTO_MAX = 2.00
 ORDER_FLOW_BLACKLIST_HOURS = {2,7,9,10,11,22}  # UTC — evaluado sobre BTC+SOL

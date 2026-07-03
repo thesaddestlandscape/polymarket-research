@@ -33,11 +33,38 @@ TIMEOUT = 30
 HORIZONTE_MIN_HORAS = 0.05    # 3 min: cubre mercados Up/Down 5m
 HORIZONTE_MAX_HORAS = 365 * 24  # 1 anno
 EDGE_MINIMO = 0.02
-SLIPPAGE_ESTIMADO = 0.02
+SLIPPAGE_ESTIMADO = 0.02          # fallback; ver _slippage_estimado_dinamico()
+SLIPPAGE_MIN_N = 30               # fills live con slip_real necesarios para recalibrar
+SLIPPAGE_FLOOR = 0.005            # nunca asumir slippage mejor que esto
+SLIPPAGE_VENTANA = 60             # últimos N fills (el régimen post-requote domina)
 MIN_LIQUIDEZ = 500
 
 DIR_DATA    = Path("data")
 DIR_SHADOW  = DIR_DATA / "shadow"
+
+
+def _slippage_estimado_dinamico() -> float:
+    """
+    Recalibra SLIPPAGE_ESTIMADO con el slippage real de los fills live
+    (live_trade guarda `slip_real=±X` en notas desde 2026-07-03). Gate n≥30;
+    mediana sobre los últimos SLIPPAGE_VENTANA fills (robusta a los outliers
+    pre-veto-profundidad +0.085/+0.04) con clamp [SLIPPAGE_FLOOR, 0.02].
+    Cualquier problema → fallback a la constante 0.02 (fail-safe).
+    """
+    try:
+        slips = []
+        with open(DIR_DATA / "live" / "trades.csv", encoding="utf-8") as f:
+            for row in csv.DictReader(f):
+                m = re.search(r"slip_real=([+-]?[\d.]+)", row.get("notas", "") or "")
+                if m:
+                    slips.append(float(m.group(1)))
+        slips = slips[-SLIPPAGE_VENTANA:]
+        if len(slips) < SLIPPAGE_MIN_N:
+            return SLIPPAGE_ESTIMADO
+        mediana = sorted(slips)[len(slips) // 2]
+        return round(min(max(mediana, SLIPPAGE_FLOOR), SLIPPAGE_ESTIMADO), 4)
+    except Exception:
+        return SLIPPAGE_ESTIMADO
 
 _FUNDING_CACHE: dict = {}          # {activo: rate} — en memoria, TTL gestionado por mtime
 _FUNDING_CACHE_FILE = DIR_DATA / "funding_rates_cache.json"
@@ -1872,6 +1899,8 @@ def s_late_window_5min(market: dict, ctx: dict):
 
 GBM_LATE_15M_REST_MIN_LO = 3.0    # min restantes mínimos (suelo operables = 3min)
 GBM_LATE_15M_REST_MIN_HI = 12.0   # min restantes máximos (salta los 3 primeros min)
+GBM_LATE_60M_REST_MIN_LO = 5.0    # 60min: suelo más alto — libros finos al final
+GBM_LATE_60M_REST_MIN_HI = 20.0   # 60min: último tercio de la ventana (T_h<0.33)
 GBM_LATE_15M_PARES = {"BTC", "ETH", "SOL", "XRP"}
 
 
@@ -1894,11 +1923,33 @@ def s_gbm_late_15min(market, ctx):
     estrategias_permitidas_live → imposible que toque dinero real hasta
     decisión explícita.
     """
+    return _s_gbm_late(market, ctx, ventana_min=15,
+                       rest_lo=GBM_LATE_15M_REST_MIN_LO,
+                       rest_hi=GBM_LATE_15M_REST_MIN_HI)
+
+
+def s_gbm_late_60min(market, ctx):
+    """
+    GBM de entrada tardía en ventanas 60min (2026-07-03) — clona la mecánica
+    de GBM_LATE_15M donde ya está validada (CLV +0.107, calibración
+    infraconfiada en colas): entra solo en el último tercio (5-20 min
+    restantes), cuando el movimiento hecho domina el outcome y el precio se
+    rezaga. H-60MIN acumula IC≈+0.059 (BTC/ETH n=32) con entrada temprana —
+    hipótesis: la tardía lo mejora igual que en 15min. Shadow puro: no está
+    en pares_permitidos_live (whitelist fail-closed por tupla).
+    """
+    return _s_gbm_late(market, ctx, ventana_min=60,
+                       rest_lo=GBM_LATE_60M_REST_MIN_LO,
+                       rest_hi=GBM_LATE_60M_REST_MIN_HI)
+
+
+def _s_gbm_late(market, ctx, ventana_min, rest_lo, rest_hi):
     question = market.get("question", "")
     if "up or down" not in question.lower():
         return None
-    tipo, ventana_min = _parse_updown_tipo(question)
-    if tipo != "slot" or ventana_min != 15:
+    tipo, vent = _parse_updown_tipo(question)
+    # 15min llega como slot con rango explícito; 60min como hourly (o slot de 60)
+    if vent != ventana_min or tipo not in ("slot", "hourly"):
         return None
     activo = identificar_activo(question)
     if activo not in GBM_LATE_15M_PARES:
@@ -1914,7 +1965,7 @@ def s_gbm_late_15min(market, ctx):
 
     now_utc = datetime.now(timezone.utc)
     restante_min = (end_dt - now_utc).total_seconds() / 60.0
-    if not (GBM_LATE_15M_REST_MIN_LO <= restante_min <= GBM_LATE_15M_REST_MIN_HI):
+    if not (rest_lo <= restante_min <= rest_hi):
         return None
 
     precios_data = ctx.get("precios_intraday", [])
@@ -1922,7 +1973,7 @@ def s_gbm_late_15min(market, ctx):
     if not spot or spot <= 0:
         return None
 
-    window_start = end_dt - timedelta(minutes=15)
+    window_start = end_dt - timedelta(minutes=ventana_min)
     ref = _precio_en(activo, window_start, precios_data, tol_min=3)
     if ref is None or ref <= 0:
         return None
@@ -1951,9 +2002,9 @@ def s_gbm_late_15min(market, ctx):
 
     return {
         "prob_yes": round(p_up, 4),
-        "razon":    (f"gbm_late_15min {activo} drift_vent={drift_ventana*100:+.3f}% "
+        "razon":    (f"gbm_late_{ventana_min}min {activo} drift_vent={drift_ventana*100:+.3f}% "
                      f"rest={restante_min:.1f}min d={d:+.2f} p_up={p_up:.2f} py={py:.2f}"),
-        "subtype":  f"{activo}#15min",
+        "subtype":  f"{activo}#{ventana_min}min",
         "features": {
             "drift_ventana_pct": round(drift_ventana * 100, 4),
             "restante_min":      round(restante_min, 2),
@@ -2053,12 +2104,18 @@ ESTRATEGIAS = [
     ("RESOLUTION_SNIPER",   s_resolution_sniper),
     ("LATE_WINDOW_5MIN",    s_late_window_5min),
     ("GBM_LATE_15M",        s_gbm_late_15min),
+    ("GBM_LATE_60M",        s_gbm_late_60min),
     # ("BINANCE_UPDOWN", s_binance_updown),  # retirada — IC -0.50
 ]
 
 def main():
+    global SLIPPAGE_ESTIMADO
     ts = datetime.now(timezone.utc).isoformat(timespec="seconds")
     print(f"[{ts}] === Shadow predict v8 ===")
+    slip_din = _slippage_estimado_dinamico()
+    if slip_din != SLIPPAGE_ESTIMADO:
+        print(f"  SLIPPAGE_ESTIMADO recalibrado con slip_real live: 0.02 → {slip_din}")
+        SLIPPAGE_ESTIMADO = slip_din
     mercados = cargar_mercados_recientes()
     print(f"  Mercados snapshot reciente: {len(mercados)}")
 
