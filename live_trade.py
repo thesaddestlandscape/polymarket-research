@@ -102,6 +102,26 @@ def _ya_operados_hoy() -> set:
     return vistos
 
 
+def _posiciones_abiertas_misma_direccion(direction: str) -> int:
+    """Nº de trades con status OPEN ahora mismo en la misma dirección.
+
+    Límite de correlación (2026-07-03): BTC/ETH/SOL/XRP se mueven casi al
+    unísono intradía, así que N posiciones misma-dirección abiertas a la vez
+    son en la práctica UNA apuesta con stake ×N, no N apuestas — el cluster
+    shadow de 2026-07-02 01h UTC perdió -24.4€ en 17 BUY_NO simultáneos
+    multi-par cuando todo subió a la vez. La penalización de inventario de
+    live_stake reduce el stake pero no acota el nº de posiciones; este techo
+    duro sí. Código de seguridad live — no minimizar."""
+    if not TRADES_CSV.exists():
+        return 0
+    n = 0
+    with open(TRADES_CSV, encoding="utf-8") as f:
+        for row in csv.DictReader(f):
+            if row.get("status") == "OPEN" and row.get("direction") == direction:
+                n += 1
+    return n
+
+
 def _cargar_predicciones_hoy() -> list:
     """Carga las predicciones de hoy con decision BUY_YES o BUY_NO."""
     hoy  = datetime.now(timezone.utc).strftime("%Y-%m-%d")
@@ -398,9 +418,60 @@ def _consultar_profundidad_libro(client, token_id: str, precio_entrada: float,
         return {"ok": False, "error": str(e)}
 
 
+REQUOTE_EDGE_MIN  = 0.02   # mismo listón que EDGE_MINIMO de shadow_predict
+REQUOTE_PRECIO_MAX = 0.95  # nunca pagar más de esto por el token, pase lo que pase
+
+
+def _decidir_requote(edge_dir: float, precio_plan: float,
+                     mejor_ask: float | None) -> tuple[float, float, bool, str]:
+    """Re-cotización en el momento de ejecutar (fix 2026-07-03).
+
+    Antes la orden FOK salía al precio de la PREDICCIÓN (minutos de
+    antigüedad): si el mercado había mejorado, el FOK moría ("couldn't be
+    fully filled", 3 kills seguidos 2026-07-02 19:25) y perdíamos la entrada
+    buena; si había empeorado, nos llenaban igual — selección adversa pura:
+    solo ejecutábamos cuando el libro venía en contra.
+
+    Con el mejor ask actual del libro:
+      - deterioro = mejor_ask - precio_plan (>0 → pagamos más que al señalar)
+      - el edge restante se recorta por el deterioro; la mejora NO infla el
+        edge estimado (conservador)
+      - si el edge restante < REQUOTE_EDGE_MIN → no operar (la señal caducó)
+      - si sigue vivo → ejecutar al precio REAL del libro (el FOK casa)
+
+    Devuelve (precio_final, edge_restante, operar, motivo).
+    Sin libro (mejor_ask None) se mantiene el comportamiento anterior:
+    precio de la predicción, edge tal cual. Código de seguridad live — no
+    minimizar."""
+    if mejor_ask is None:
+        return precio_plan, edge_dir, True, "sin libro — precio de predicción"
+    if mejor_ask > REQUOTE_PRECIO_MAX:
+        return mejor_ask, 0.0, False, (
+            f"mejor_ask={mejor_ask:.4f} > tope {REQUOTE_PRECIO_MAX}")
+    deterioro = round(mejor_ask - precio_plan, 4)
+    edge_ahora = round(edge_dir - max(0.0, deterioro), 4)
+    if edge_ahora < REQUOTE_EDGE_MIN:
+        return mejor_ask, edge_ahora, False, (
+            f"edge evaporado: {edge_dir:+.4f} → {edge_ahora:+.4f} "
+            f"(ask {precio_plan:.4f}→{mejor_ask:.4f}) < {REQUOTE_EDGE_MIN}")
+    if deterioro > 0:
+        motivo = f"deterioro {deterioro:+.4f} pero edge vivo ({edge_ahora:+.4f})"
+    elif deterioro < 0:
+        motivo = f"precio mejoró {deterioro:+.4f} — antes el FOK moría aquí"
+    else:
+        motivo = "precio sin cambios"
+    return mejor_ask, edge_ahora, True, motivo
+
+
 def _ejecutar_orden_polymarket(market_id: str, direction: str,
-                               stake_eur: float, entry_price: float) -> dict:
-    """Ejecuta orden real en Polymarket via CLOB API."""
+                               stake_eur: float, entry_price: float,
+                               edge_dir: float | None = None) -> dict:
+    """Ejecuta orden real en Polymarket via CLOB API.
+
+    edge_dir: edge neto A FAVOR de nuestra dirección (edge_neto de la
+    predicción con el signo ya resuelto: +edge para BUY_YES, -edge para
+    BUY_NO). Si se pasa, se re-cotiza contra el libro actual antes de
+    ejecutar (ver _decidir_requote)."""
     try:
         from py_clob_client_v2 import MarketOrderArgsV2, OrderType
         yes_token, no_token = _get_token_ids(market_id)
@@ -410,11 +481,10 @@ def _ejecutar_orden_polymarket(market_id: str, direction: str,
         else:  # BUY_NO
             token_id = no_token
             precio   = round(1.0 - entry_price, 6)
+        precio_plan = precio   # precio del token en el momento de la señal
 
         client = _get_clob_client()
 
-        # Observación de profundidad del libro — no afecta a la ejecución,
-        # solo se loguea para poder correlacionar con kills de FOK más tarde.
         depth = _consultar_profundidad_libro(client, token_id, precio, stake_eur)
         if depth.get("ok"):
             log(f"  📊 Libro {market_id}/{direction}: mejor_ask={depth['mejor_ask']} "
@@ -422,6 +492,20 @@ def _ejecutar_orden_polymarket(market_id: str, direction: str,
                 f"({depth['n_niveles']} niveles, ratio={depth['ratio_vs_stake']}x stake)")
         else:
             log(f"  📊 Libro {market_id}/{direction}: error consultando profundidad — {depth.get('error')}")
+
+        # Re-cotización con el libro actual (solo si el caller pasó edge_dir)
+        if edge_dir is not None:
+            mejor_ask = depth.get("mejor_ask") if depth.get("ok") else None
+            mejor_ask = float(mejor_ask) if mejor_ask is not None else None
+            precio, edge_vivo, operar, motivo_rq = _decidir_requote(
+                edge_dir, precio_plan, mejor_ask)
+            log(f"  🔁 Re-quote: {motivo_rq}")
+            if not operar:
+                return {
+                    "ok": False, "no_fill": True, "edge_evaporado": True,
+                    "order_id": None, "entry_price": entry_price,
+                    "fee_eur": 0.0, "error": f"requote: {motivo_rq}",
+                }
 
         _marcar_orden_en_curso(market_id, direction)
         try:
@@ -475,13 +559,20 @@ def _ejecutar_orden_polymarket(market_id: str, direction: str,
         filled_price = float(resp.get("price", precio))
         fee = float(resp.get("feeRateBps", 0)) / 10000 * stake_eur
 
+        # Slippage real señal→fill (en el token comprado). Se acumula en
+        # `notas` para calibrar SLIPPAGE_ESTIMADO (hoy constante 0.02) con
+        # datos reales cuando haya n≥30 fills.
+        slip_real = round(filled_price - precio_plan, 4)
+
         log(f"  ✅ Orden ejecutada: {direction} market={market_id} "
-            f"stake={stake_eur:.2f}€ precio={filled_price:.4f} order_id={order_id}")
+            f"stake={stake_eur:.2f}€ precio={filled_price:.4f} "
+            f"slip={slip_real:+.4f} order_id={order_id}")
         return {
             "ok":          True,
             "order_id":    order_id,
             "entry_price": filled_price,
             "fee_eur":     fee,
+            "slip_real":   slip_real,
             "error":       "",
         }
     except Exception as e:
@@ -723,6 +814,17 @@ def main():
             continue
 
         # Stake (con penalización de inventario direccional)
+        # Techo de correlación direccional: los pares cripto se mueven casi
+        # al unísono — más de N posiciones abiertas en la misma dirección es
+        # una sola apuesta con stake multiplicado (ver
+        # _posiciones_abiertas_misma_direccion).
+        max_misma_dir = riesgo.get("max_posiciones_abiertas_misma_direccion", 2)
+        abiertas_dir = _posiciones_abiertas_misma_direccion(dec)
+        if abiertas_dir >= max_misma_dir:
+            log(f"  SKIP {strategy}#{subtype} {dec}: ya hay {abiertas_dir} "
+                f"posiciones abiertas {dec} (techo correlación = {max_misma_dir})")
+            continue
+
         stake_info = calcular_stake(ic_hist, strategy, subtype, direction=dec)
         if not stake_info["viable"]:
             log(f"  SKIP {strategy}#{subtype}: stake no viable — {stake_info['motivo']}")
@@ -758,10 +860,15 @@ def main():
             f"Bankroll: {bankroll_actual():.2f}€"
         )
 
-        # 4. Ejecutar
-        resultado = _ejecutar_orden_polymarket(mid, dec, stake, entry_p)
+        # 4. Ejecutar — edge_dir = edge_neto con el signo resuelto hacia
+        # nuestra dirección (shadow_predict: en>=min → BUY_YES, -en>=min →
+        # BUY_NO), para que _decidir_requote pueda recortar por deterioro.
+        edge_dir = edge if dec == "BUY_YES" else -edge
+        resultado = _ejecutar_orden_polymarket(mid, dec, stake, entry_p,
+                                               edge_dir=edge_dir)
 
-        # FOK kill = sin liquidez, no registrar ni contar
+        # FOK kill o edge evaporado en re-quote = no registrar ni contar;
+        # la señal puede reintentarse en ciclos siguientes si sigue viva.
         if resultado.get("no_fill"):
             continue
 
@@ -788,7 +895,9 @@ def main():
             "fee_eur":         resultado.get("fee_eur", 0),
             "pnl_bruto_eur":   "",
             "pnl_neto_eur":    "",
-            "notas":           resultado.get("error", ""),
+            "notas":           (f"slip_real={resultado['slip_real']:+.4f}"
+                                if resultado.get("ok") and "slip_real" in resultado
+                                else resultado.get("error", "")),
         }
         _registrar_trade(trade)
         ya_operados.add(mid)

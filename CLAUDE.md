@@ -42,7 +42,8 @@ Bot semi-autónomo para mercados cripto Polymarket.
 - **Capital**: 25.44€ operativo live (30€ depósito, 10€ reserva)
 - **Umbral live**: IC≥0.08, n≥40 resoluciones confirmadas (valor real en `data/live/config_live.json::riesgo.min_ic_para_live`)
 - **VPS**: Hetzner Helsinki (IP finlandesa — Polymarket accesible desde FI)
-- **Estrategia live activa**: UPDOWN_GBM#ETH#15min BUY_NO (IC=+0.132, n=55) ✅ — `config_live.json::estrategias_permitidas_live` solo permite `UPDOWN_GBM`, ORDER_FLOW_5M no está en la whitelist live pese a mencionarse antes aquí
+- **Estrategias live activas**: UPDOWN_GBM (ETH#15min BUY_NO) + GBM_LATE_15M (SOL/XRP BUY_YES, promovida 2026-07-03: IC=0.144/0.211 n=43/43, CLV+0.107). BUY_NO de GBM_LATE con barra asimétrica 0.16 (evidencia direccional insuficiente). ORDER_FLOW_5M no está en whitelist live.
+- **Protecciones live añadidas 2026-07-03**: re-quote contra libro al ejecutar (aborta si edge<0.02 con el ask actual) | techo 2 posiciones abiertas misma dirección (correlación multi-par) | freno diario prospectivo (pérdida+stake≤15%) | veto patrón causal si IC propio del subtype <0 | slippage real → `notas` (`slip_real=`) para calibrar SLIPPAGE_ESTIMADO con n≥30
 
 ---
 
@@ -137,7 +138,7 @@ predictions (features JSON) → postmortem:
 | P11 | Revisar OF blacklist 02h/07h (BTC+SOL solo) | n≥20 por hora |
 | P12 | Smart money wallets + trade size feature | Descargar Jon-Becker (`s3.jbecker.dev/data.tar.zst` 36GB) |
 | P13 | Arb de contención ventanas anidadas → live | `nested_arb_scanner.py` (cron 1min) acumulando; revisar distribución coste/depth tras ~1 semana |
-| P14 | Conversión entrada taker→maker en live | `maker_sim.py` (via shadow_resolve) midiendo fill-rate+EV; decidir con n≥100 señales simuladas |
+| ~~P14~~ | **RESUELTO 2026-07-03: quedarse taker.** maker_sim n=375: fill 53.6%, EV taker +0.147€/señal vs maker -0.21€/señal (selección adversa). maker_sim sigue acumulando por si cambia con más liquidez | — |
 
 ---
 
