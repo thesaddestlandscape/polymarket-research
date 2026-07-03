@@ -1,4 +1,4 @@
-# Estado del bot — 2026-07-03 16:17 UTC
+# Estado del bot — 2026-07-03 16:19 UTC
 
 ## Capital
 | | |
@@ -11,19 +11,19 @@
 | | |
 |---|---|
 | Inicio | 25.44 € |
-| Actual | **-13.36 €** |
-| P&L acumulado | 🔴 **-38.80 €** |
-| ROI s/ operativo | -152.53% |
-| ROI s/ depósito | -129.35% |
-| P&L hoy (2026-07-03) | 🟢 +10.32 € |
-| Operaciones resueltas | 3139 (1539 WIN / 1600 LOSS) — 49.0% |
-| Señales abiertas | 152 |
+| Actual | **-12.91 €** |
+| P&L acumulado | 🔴 **-38.35 €** |
+| ROI s/ operativo | -150.76% |
+| ROI s/ depósito | -127.85% |
+| P&L hoy (2026-07-03) | 🟢 +10.77 € |
+| Operaciones resueltas | 3141 (1540 WIN / 1601 LOSS) — 49.0% |
+| Señales abiertas | 153 |
 
 ## Estrategias (visión global)
 
 | Estrategia | n | Win% | IC_efectivo | PNL | Apuesta | Estado |
 |---|---|---|---|---|---|---|
-| GBM_LATE_15M | 451 | 54.8% | +0.047 | +53.47€ | 0.50€ | ✅ activa |
+| GBM_LATE_15M | 453 | 54.7% | +0.047 | +53.92€ | 0.50€ | ✅ activa |
 | ORDER_FLOW_5M | 1526 | 51.3% | +0.013 | +11.71€ | 0.50€ | ✅ activa |
 | RESOLUTION_SNIPER | 6 | 100.0% | +0.112 | +2.85€ | 1.12€ | ⏳ acumulando |
 | GBM_LATE_60M | 1 | 0.0% | -0.008 | -0.51€ | 0.50€ | ⏳ acumulando |
@@ -38,21 +38,21 @@
 
 | Timestamp | Estrategia | Mercado | Resultado | PNL |
 |---|---|---|---|---|
+| 2026-07-03T16:19 | GBM_LATE_15M#BTC#15min | Bitcoin Up or Down - July 3, 12:00PM-12:15PM ET… | ❌ LOSS | -0.51€ |
+| 2026-07-03T16:19 | GBM_LATE_15M#SOL#15min | Solana Up or Down - July 3, 12:00PM-12:15PM ET… | ✅ WIN | +0.96€ |
 | 2026-07-03T16:17 | GBM_LATE_15M#ETH#15min | Ethereum Up or Down - July 3, 12:00PM-12:15PM ET… | ✅ WIN | +0.52€ |
 | 2026-07-03T16:17 | UPDOWN_GBM#ETH#15min | Ethereum Up or Down - July 3, 12:00PM-12:15PM ET… | ✅ WIN | +2.05€ |
 | 2026-07-03T16:16 | GBM_LATE_15M#XRP#15min | XRP Up or Down - July 3, 12:00PM-12:15PM ET… | ✅ WIN | +0.50€ |
-| 2026-07-03T16:08 | WEEKLY_PRICE#SOL | Will the price of Solana be between $80 and $90 on… | ❌ LOSS | -0.51€ |
-| 2026-07-03T16:08 | WEEKLY_PRICE#SOL | Will the price of Solana be between $70 and $80 on… | ❌ LOSS | -0.51€ |
 
 ## Calidad de datos
 
-✅ **OK** — última verificación 2026-07-03T16:17 UTC | rechazos 1h: 3 (rango=0, spike=0)
+✅ **OK** — última verificación 2026-07-03T16:19 UTC | rechazos 1h: 4 (rango=0, spike=0)
 
 | Asset | Precio | Age | Alertas |
 |---|---|---|---|
 | ✅ BTC | $61,877.47 | 0.0min |  |
 | ✅ ETH | $1,727.53 | 0.0min |  |
-| ✅ SOL | $81.28 | 0.0min |  |
+| ✅ SOL | $81.35 | 0.0min |  |
 | ✅ XRP | $1.12 | 0.0min |  |
 
 **Cross-source** (binance, coinbase, kraken):
@@ -65,7 +65,7 @@
 | XRP | $1.11 | consenso |  |
 
 **Alertas activas:**
-- ⚠ rechazos_1h:3 (rango=0, spike=0)
+- ⚠ rechazos_1h:4 (rango=0, spike=0)
 
 ---
 *Actualizado automáticamente cada ~60s por el fast loop*
