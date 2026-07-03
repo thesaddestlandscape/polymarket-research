@@ -425,6 +425,7 @@ def _consultar_profundidad_libro(client, token_id: str, precio_entrada: float,
 
 REQUOTE_EDGE_MIN  = 0.02   # mismo listón que EDGE_MINIMO de shadow_predict
 REQUOTE_PRECIO_MAX = 0.95  # nunca pagar más de esto por el token, pase lo que pase
+MIN_ORDEN_CLOB_USD = 1.00  # el CLOB rechaza marketable BUY < $1 ("min size: 1")
 
 
 def _decidir_requote(edge_dir: float, precio_plan: float,
@@ -557,6 +558,19 @@ def _ejecutar_orden_polymarket(market_id: str, direction: str,
             _mas = round(stake_eur + 0.01, 2)
             if _mas <= _max_stake:
                 intentos_stake.append(_mas)
+            # El CLOB exige ≥$1 en órdenes marketable BUY ("min size: 1") —
+            # 2026-07-03: 2 señales rechazadas con stake 0.94/0.98€. El suelo
+            # min_stake_eur=1.05 del config debería impedir llegar aquí con
+            # menos; este filtro es la red fail-closed si alguna ruta lo salta.
+            intentos_stake = [a for a in intentos_stake if a >= MIN_ORDEN_CLOB_USD]
+            if not intentos_stake:
+                log(f"  ⛔ Stake {stake_eur:.2f}€ < mínimo CLOB ${MIN_ORDEN_CLOB_USD:.2f} — no se ejecuta")
+                return {
+                    "ok": False, "no_fill": True, "stake_bajo_minimo": True,
+                    "order_id": None, "entry_price": entry_price,
+                    "fee_eur": 0.0,
+                    "error": f"stake {stake_eur:.2f} < mínimo CLOB {MIN_ORDEN_CLOB_USD}",
+                }
             resp = None
             for intento, amt in enumerate(intentos_stake):
                 if amt <= 0:

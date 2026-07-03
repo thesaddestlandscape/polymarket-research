@@ -43,7 +43,7 @@ Bot semi-autónomo para mercados cripto Polymarket.
 - **Umbral live**: IC≥0.08, n≥40 resoluciones confirmadas (valor real en `data/live/config_live.json::riesgo.min_ic_para_live`)
 - **VPS**: Hetzner Helsinki (IP finlandesa — Polymarket accesible desde FI)
 - **Estrategias live activas**: UPDOWN_GBM (ETH#15min BUY_NO) + GBM_LATE_15M (SOL/XRP BUY_YES, promovida 2026-07-03: IC=0.144/0.211 n=43/43, CLV+0.107). BUY_NO de GBM_LATE con barra asimétrica 0.16 (evidencia direccional insuficiente). ORDER_FLOW_5M no está en whitelist live.
-- **Protecciones live añadidas 2026-07-03**: re-quote contra libro al ejecutar (aborta si edge<0.02 con el ask actual) | techo 2 posiciones abiertas misma dirección (correlación multi-par) | freno diario prospectivo (pérdida+stake+**stakes abiertos**≤15%, fix tras -6.54€ el 03-Jul) | veto patrón causal si IC propio del subtype <0 | slippage real → `notas` (`slip_real=`) para calibrar SLIPPAGE_ESTIMADO con n≥30 | **veto profundidad libro** (ratio<5x stake o consulta fallida → aborta; XRP/SOL entraron contra libros vacíos con slip +0.04/+0.085) | **whitelist por tupla** `pares_permitidos_live` STRATEGY#SUBTYPE#DIRECTION (el producto cartesiano coló UPDOWN_GBM#SOL/BTC#15min) | suelo prospectivo bankroll_minimo (8€ desde 03-Jul) | override freno diario con fecha (`freno_diario_pct_override`, solo aplica el día indicado)
+- **Protecciones live añadidas 2026-07-03**: re-quote contra libro al ejecutar (aborta si edge<0.02 con el ask actual) | techo 2 posiciones abiertas misma dirección (correlación multi-par) | freno diario prospectivo (pérdida+stake+**stakes abiertos**≤15%, fix tras -6.54€ el 03-Jul) | veto patrón causal si IC propio del subtype <0 | slippage real → `notas` (`slip_real=`) para calibrar SLIPPAGE_ESTIMADO con n≥30 | **veto profundidad libro** (ratio<5x stake o consulta fallida → aborta; XRP/SOL entraron contra libros vacíos con slip +0.04/+0.085) | **whitelist por tupla** `pares_permitidos_live` STRATEGY#SUBTYPE#DIRECTION (el producto cartesiano coló UPDOWN_GBM#SOL/BTC#15min) | suelo prospectivo bankroll_minimo (8€ desde 03-Jul) | override freno diario con fecha (`freno_diario_pct_override`, solo aplica el día indicado) | **suelo stake 1.05€** (CLOB rechaza marketable BUY <$1 "min size: 1"; 2 señales perdidas 03-Jul con Kelly 0.94/0.98€ tras caer el bankroll) + guardia fail-closed en live_trade si llega <$1
 
 ---
 
@@ -169,8 +169,8 @@ UMBRAL_DESACTIVAR=(-0.20, 8)  # IC<-0.20 en n≥8 ciclos → desactivar
 
 ### live_stake.py / data/live/config_live.json
 ```python
-max_pct_bankroll=0.10 | max_stake_eur=2.00
-freno_ventana=0.20 | freno_diario=0.15 | bankroll_min=5.00
+max_pct_bankroll=0.10 | min_stake_eur=1.05 (CLOB exige ≥$1 en marketable BUY) | max_stake_eur=2.00
+freno_ventana=0.20 | freno_diario=0.15 | bankroll_min=8.00
 ```
 
 ---
