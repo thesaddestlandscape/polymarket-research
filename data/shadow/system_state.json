@@ -1,9 +1,9 @@
 {
-  "timestamp_utc": "2026-07-03T20:30:26+00:00",
-  "bankroll_sim": -12.52,
-  "pnl_total": -32.52,
-  "n_ops": 3206,
-  "win_rate": 0.4916,
+  "timestamp_utc": "2026-07-03T20:31:48+00:00",
+  "bankroll_sim": -10.08,
+  "pnl_total": -30.08,
+  "n_ops": 3208,
+  "win_rate": 0.4919,
   "estrategias_activas": 94,
   "desactivadas": [
     "UPDOWN_GBM#SOL#5min",
@@ -36,12 +36,12 @@
     },
     {
       "k": "GBM_LATE_15M#XRP#15min",
-      "ic": 0.1068,
-      "n": 115
+      "ic": 0.1102,
+      "n": 116
     }
   ],
-  "brier_medio": 0.2812,
-  "clv_medio": 0.001,
+  "brier_medio": 0.2811,
+  "clv_medio": 0.0014,
   "monitor_5min": {
     "ou_5m": {
       "n": 84,
