@@ -45,12 +45,16 @@
     },
     "min_stake_eur": 0.25,
     "max_stake_eur": 2.00,
+    "_min_profundidad_nota": "2026-07-03: veto por profundidad de libro — XRP/SOL#15min ejecutaron contra libros con profundidad 0.00€ (ratio 0.0x stake) y slippage real +0.04/+0.085 que se comió el edge (-3.19€). La profundidad ya se consultaba y logueaba pero no vetaba. Si ratio_vs_stake < este valor (o la consulta del libro falla), la orden se aborta. Fail-closed.",
+    "min_profundidad_ratio_libro": 5.0,
     "_max_posiciones_nota": "2026-07-03: techo de correlación — los pares cripto se mueven al unísono intradía; N posiciones misma dirección abiertas a la vez = 1 apuesta con stake ×N (cluster shadow 02-Jul 01h UTC: -24.4€ en 17 BUY_NO simultáneos).",
     "max_posiciones_abiertas_misma_direccion": 2,
     "circuit_breaker": {
       "freno_ventana_pct": 0.20,
       "freno_diario_pct": 0.15,
-      "bankroll_minimo_eur": 5.00
+      "_override_nota": "2026-07-03: decisión del usuario — seguir operando hoy pese al freno diario ya disparado (-6.54€, -28.6%), con suelo duro en 8€ de bankroll (bankroll_minimo_eur). El override solo aplica si 'fecha' == hoy (Madrid); mañana vuelve solo al 15%. Borrar la entrada cuando pase la fecha.",
+      "freno_diario_pct_override": {"fecha": "2026-07-03", "pct": 0.65},
+      "bankroll_minimo_eur": 8.00
     }
   },
 
