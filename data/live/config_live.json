@@ -43,6 +43,8 @@
     },
     "min_stake_eur": 0.25,
     "max_stake_eur": 2.00,
+    "_max_posiciones_nota": "2026-07-03: techo de correlación — los pares cripto se mueven al unísono intradía; N posiciones misma dirección abiertas a la vez = 1 apuesta con stake ×N (cluster shadow 02-Jul 01h UTC: -24.4€ en 17 BUY_NO simultáneos).",
+    "max_posiciones_abiertas_misma_direccion": 2,
     "circuit_breaker": {
       "freno_ventana_pct": 0.20,
       "freno_diario_pct": 0.15,
@@ -50,14 +52,17 @@
     }
   },
 
+  "_estrategias_nota": "2026-07-03: GBM_LATE_15M promovida — SOL BUY_YES IC=0.144 n=43 y XRP BUY_YES IC=0.211 n=43 cumplen umbral (IC>=0.08, n>=40 direccional); CLV +0.107 (mejor de todas las estrategias, n=321). El gate direccional por strategy#subtype ya bloquea el resto (ETH negativo, BUY_NO insuficiente). XRP#15min se añade a subtypes por GBM_LATE; UPDOWN_GBM#XRP seguiría necesitando su propio IC>=0.08 n>=40 para operar.",
   "estrategias_permitidas_live": [
-    "UPDOWN_GBM"
+    "UPDOWN_GBM",
+    "GBM_LATE_15M"
   ],
 
   "subtypes_permitidos_live": [
     "BTC#15min",
     "ETH#15min",
     "SOL#15min",
+    "XRP#15min",
     "BTC#60min",
     "ETH#60min"
   ]
