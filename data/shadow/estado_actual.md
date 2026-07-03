@@ -1,4 +1,4 @@
-# Estado del bot — 2026-07-03 08:00 UTC
+# Estado del bot — 2026-07-03 08:02 UTC
 
 ## Capital
 | | |
@@ -11,19 +11,19 @@
 | | |
 |---|---|
 | Inicio | 25.44 € |
-| Actual | **-12.54 €** |
-| P&L acumulado | 🔴 **-37.98 €** |
-| ROI s/ operativo | -149.31% |
-| ROI s/ depósito | -126.62% |
-| P&L hoy (2026-07-03) | 🟢 +11.14 € |
-| Operaciones resueltas | 2997 (1472 WIN / 1525 LOSS) — 49.1% |
-| Señales abiertas | 152 |
+| Actual | **-14.58 €** |
+| P&L acumulado | 🔴 **-40.02 €** |
+| ROI s/ operativo | -157.33% |
+| ROI s/ depósito | -133.42% |
+| P&L hoy (2026-07-03) | 🟢 +9.10 € |
+| Operaciones resueltas | 2998 (1472 WIN / 1526 LOSS) — 49.1% |
+| Señales abiertas | 151 |
 
 ## Estrategias (visión global)
 
 | Estrategia | n | Win% | IC_efectivo | PNL | Apuesta | Estado |
 |---|---|---|---|---|---|---|
-| GBM_LATE_15M | 346 | 56.1% | +0.060 | +53.97€ | 0.60€ | ✅ activa |
+| GBM_LATE_15M | 347 | 55.9% | +0.059 | +51.93€ | 0.59€ | ✅ activa |
 | ORDER_FLOW_5M | 1523 | 51.3% | +0.013 | +11.27€ | 0.50€ | ✅ activa |
 | RESOLUTION_SNIPER | 6 | 100.0% | +0.112 | +2.85€ | 1.12€ | ⏳ acumulando |
 | LATE_WINDOW_5MIN | 4 | 50.0% | +0.000 | -0.08€ | 0.50€ | ⏳ acumulando |
@@ -37,22 +37,22 @@
 
 | Timestamp | Estrategia | Mercado | Resultado | PNL |
 |---|---|---|---|---|
+| 2026-07-03T08:01 | GBM_LATE_15M#XRP#15min | XRP Up or Down - July 3, 3:45AM-4:00AM ET… | ❌ LOSS | -2.04€ |
 | 2026-07-03T08:00 | UPDOWN_GBM#SOL#60min | Solana Up or Down - July 3, 3AM ET… | ❌ LOSS | -0.51€ |
 | 2026-07-03T07:51 | GBM_LATE_15M#BTC#15min | Bitcoin Up or Down - July 3, 3:30AM-3:45AM ET… | ✅ WIN | +0.57€ |
 | 2026-07-03T07:48 | GBM_LATE_15M#ETH#15min | Ethereum Up or Down - July 3, 3:30AM-3:45AM ET… | ✅ WIN | +0.73€ |
 | 2026-07-03T07:48 | GBM_LATE_15M#SOL#15min | Solana Up or Down - July 3, 3:30AM-3:45AM ET… | ✅ WIN | +2.18€ |
-| 2026-07-03T07:47 | GBM_LATE_15M#XRP#15min | XRP Up or Down - July 3, 3:30AM-3:45AM ET… | ❌ LOSS | -0.85€ |
 
 ## Calidad de datos
 
-✅ **OK** — última verificación 2026-07-03T08:00 UTC
+✅ **OK** — última verificación 2026-07-03T08:01 UTC
 
 | Asset | Precio | Age | Alertas |
 |---|---|---|---|
-| ✅ BTC | $61,686.12 | 0.0min |  |
-| ✅ ETH | $1,717.22 | 0.0min |  |
-| ✅ SOL | $81.23 | 0.0min |  |
-| ✅ XRP | $1.10 | 0.0min |  |
+| ✅ BTC | $61,686.12 | 0.1min |  |
+| ✅ ETH | $1,717.22 | 0.1min |  |
+| ✅ SOL | $81.26 | 0.1min |  |
+| ✅ XRP | $1.10 | 0.1min |  |
 
 **Cross-source** (binance, coinbase, kraken):
 
