@@ -13,6 +13,7 @@ data/live/LIVE_MODE_ON
 data/live/*.key
 data/live/.env
 data/live/orden_en_curso.json
+data/live/freno_ventana_latch.json
 data/live/overrides_notificados.json
 data/reports/
 data/backfill/klines/

@@ -35,6 +35,7 @@ DIR_LIVE              = Path("data/live")
 CONFIG_PATH           = DIR_LIVE / "config_live.json"
 TRADES_CSV            = DIR_LIVE / "trades.csv"
 SWITCH_PATH           = DIR_LIVE / "LIVE_MODE_ON"
+LATCH_VENTANA_PATH    = DIR_LIVE / "freno_ventana_latch.json"
 
 CAPITAL_OPERATIVO_INICIAL = 25.44  # depósito real 2026-06-29
 
@@ -349,19 +350,49 @@ def verificar_circuit_breaker() -> tuple[bool, str]:
                           f"— racha sistemática, para el día")
 
     # Freno 3 — caída en ventana actual
+    # Con latch: una vez disparado, la ventana queda cerrada el resto del día
+    # aunque el PnL recupere (2026-07-03: disparó a las 14:35, un WIN lo
+    # rearmó a los 50s y siguió operando en la misma ventana).
     freno_v_pct = cb.get("freno_ventana_pct", 0.20)
     v = _ventana_actual(config)
     if v:
+        nombre_v = v.get("nombre") or f"{v.get('inicio','')}-{v.get('fin','')}"
+        latch = _leer_latch_ventana()
+        if (latch.get("fecha") == _ahora_madrid(config).date().isoformat()
+                and latch.get("ventana") == nombre_v):
+            return True, (f"🛑 ventana '{nombre_v}' cerrada por freno a las "
+                          f"{latch.get('ts','?')} — no reabre hasta la siguiente ventana")
         pnl_v       = pnl_live_ventana_actual()
         desp        = stakes_desplegados_ventana_actual()
         bkr_ini_v   = bkr - pnl_v           # bankroll al inicio de esta ventana
         if bkr_ini_v > 0 and pnl_v < 0:
             caida_v = abs(pnl_v) / bkr_ini_v
             if caida_v >= freno_v_pct:
-                return True, (f"🛑 caída en ventana '{v.get('nombre','')}' "
+                _escribir_latch_ventana(nombre_v, config)
+                return True, (f"🛑 caída en ventana '{nombre_v}' "
                                f"{caida_v*100:.1f}% ({pnl_v:.2f}€) ≥ freno {freno_v_pct*100:.0f}%")
 
     return False, f"✅ OK  (bkr={bkr:.2f}€  pnl_día={pnl_live_hoy():+.2f}€)"
+
+
+def _leer_latch_ventana() -> dict:
+    if not LATCH_VENTANA_PATH.exists():
+        return {}
+    try:
+        return json.loads(LATCH_VENTANA_PATH.read_text(encoding="utf-8"))
+    except Exception:
+        return {}
+
+
+def _escribir_latch_ventana(nombre_ventana: str, config: dict) -> None:
+    try:
+        LATCH_VENTANA_PATH.write_text(json.dumps({
+            "fecha": _ahora_madrid(config).date().isoformat(),
+            "ventana": nombre_ventana,
+            "ts": _ahora_madrid(config).strftime("%H:%M"),
+        }), encoding="utf-8")
+    except Exception:
+        pass  # el freno ya devuelve True este ciclo; el latch es best-effort
 
 
 # ── Inventario direccional (Shaw & Dalen 2025 — AS en logit space) ───────────
