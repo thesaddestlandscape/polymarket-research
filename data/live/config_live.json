@@ -58,18 +58,13 @@
     }
   },
 
-  "_estrategias_nota": "2026-07-03: GBM_LATE_15M promovida — SOL BUY_YES IC=0.144 n=43 y XRP BUY_YES IC=0.211 n=43 cumplen umbral (IC>=0.08, n>=40 direccional); CLV +0.107 (mejor de todas las estrategias, n=321). El gate direccional por strategy#subtype ya bloquea el resto (ETH negativo, BUY_NO insuficiente). XRP#15min se añade a subtypes por GBM_LATE; UPDOWN_GBM#XRP seguiría necesitando su propio IC>=0.08 n>=40 para operar.",
-  "estrategias_permitidas_live": [
-    "UPDOWN_GBM",
-    "GBM_LATE_15M"
-  ],
-
-  "subtypes_permitidos_live": [
-    "BTC#15min",
-    "ETH#15min",
-    "SOL#15min",
-    "XRP#15min",
-    "BTC#60min",
-    "ETH#60min"
+  "_pares_nota": "2026-07-03: sustituye a estrategias_permitidas_live + subtypes_permitidos_live. El producto cartesiano de las dos listas dejaba pasar combinaciones nunca aprobadas: UPDOWN_GBM#SOL#15min (02-Jul, -2.00€) y UPDOWN_GBM#BTC#15min (03-Jul, -2.00€, hora 06 UTC cuando BTC#15min solo se rescató para hora>=16). Formato: STRATEGY#SUBTYPE#DIRECTION, comparación exacta. Los BUY_NO de GBM_LATE y el BUY_YES de UPDOWN_GBM siguen además gateados por min_ic_asimetrico=0.16. Fail-closed: lista vacía o ausente = no se opera nada.",
+  "pares_permitidos_live": [
+    "UPDOWN_GBM#ETH#15min#BUY_NO",
+    "UPDOWN_GBM#ETH#15min#BUY_YES",
+    "GBM_LATE_15M#SOL#15min#BUY_YES",
+    "GBM_LATE_15M#XRP#15min#BUY_YES",
+    "GBM_LATE_15M#SOL#15min#BUY_NO",
+    "GBM_LATE_15M#XRP#15min#BUY_NO"
   ]
 }
