@@ -174,7 +174,10 @@ freno_ventana=0.20 | freno_diario=0.15 | bankroll_min=8.00
 # ⚠️ SELECCIÓN ADVERSA TAKER (03-Jul): fills live 19% hit vs 83% señales vetadas por profundidad
 # (mismas tuplas/día; shadow pierde los MISMOS mercados a precio plan → no es slippage, es fill-ability).
 # data/live/libro_snapshots.csv registra libro de cada señal en fase de ejecución (motivo:
-# ejecutada/veto_profundidad/veto_sin_datos/abort_requote/fok_kill) → análisis maker condicional con n≥30.
+# ejecutada/veto_profundidad/veto_sin_datos/abort_requote/fok_kill/no_viable_stake — este último
+# captura señales bloqueadas por el suelo/freno, para que el dataset acumule con el live congelado).
+# `python3 analisis_fills.py` = criterio de reapertura: hit shadow por motivo, decide con n≥30.
+# Live CONGELADO de facto desde 03-Jul ~15:40Z: bankroll 8.50€, suelo 8€ + min_stake 1.05 → stake=0 siempre.
 ```
 
 ---
