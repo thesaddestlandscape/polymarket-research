@@ -722,6 +722,22 @@
    },
    "umbral_n": 20,
    "umbral_ic_max": -0.05
+  },
+  {
+   "id": "H-PRECIO-YES-BARATO",
+   "nombre": "BUY_YES con precio de mercado 0.30-0.40 — mercado infravalora YES",
+   "descripcion": "Detectado 2026-07-03 en benchmark de calibración del mercado (7d, estrategias GBM): en el bucket precio_yes_mercado [0.3-0.4) la frecuencia real de YES fue 0.45 vs 0.35 implícito (+0.10, n=38). Posible sesgo favorito-longshot suave en binarios de 15min (complemento del LONGSHOT ya activo para BUY_NO con py<0.20). Si se confirma, BUY_YES comprado en esa banda lleva viento de cola estructural del propio mercado, independiente del modelo.",
+   "tipo": "boost",
+   "umbral": "n≥40 y IC>+0.08",
+   "accion": "Si IC>+0.08 con n≥40 → kelly_boost ×1.1 para BUY_YES con precio_yes_mercado en [0.30,0.40), simétrico al longshot BUY_NO existente",
+   "filtro": {
+    "decision": "BUY_YES",
+    "feature": "precio_yes_mercado",
+    "feature_lo": 0.3,
+    "feature_hi": 0.4
+   },
+   "umbral_n": 40,
+   "umbral_ic_min": 0.08
   }
  ]
 }
