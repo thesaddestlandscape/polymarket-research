@@ -931,3 +931,14 @@ timestamp_utc,activo,nesting,combo,coste,profit_min_pct,gap_opens_pct,depth_usd,
 2026-07-03T07:53:02+00:00,ETH,15min60m,YESout+NOin,1.16,-16.0,0.1167,4.75,417,0.97,0.19,1715.875,1713.875,eth-updown-15m-1783064700,ethereum-up-or-down-july-3-2026-3am-et
 2026-07-03T07:53:02+00:00,SOL,15min60m,YESout+NOin,1.304,-30.4,0.3457,28.48,417,0.994,0.31,81.27,80.99,sol-updown-15m-1783064700,solana-up-or-down-july-3-2026-3am-et
 2026-07-03T07:53:03+00:00,XRP,15min60m,YESout+NOin,1.41,-41.0,0.1453,26.1,416,0.96,0.45,1.1026,1.101,xrp-updown-15m-1783064700,xrp-up-or-down-july-3-2026-3am-et
+2026-07-03T07:54:01+00:00,BTC,15min60m,YESout+NOin,1.56,-56.0,0.1641,8.7,358,0.98,0.58,61724.775,61623.645,btc-updown-15m-1783064700,bitcoin-up-or-down-july-3-2026-3am-et
+2026-07-03T07:54:02+00:00,ETH,15min60m,YESout+NOin,1.08,-8.0,0.1167,1.5,357,0.98,0.1,1715.875,1713.875,eth-updown-15m-1783064700,ethereum-up-or-down-july-3-2026-3am-et
+2026-07-03T07:54:02+00:00,SOL,15min60m,YESout+NOin,1.294,-29.4,0.3457,4.5,357,0.994,0.3,81.27,80.99,sol-updown-15m-1783064700,solana-up-or-down-july-3-2026-3am-et
+2026-07-03T07:54:02+00:00,XRP,15min60m,YESout+NOin,1.52,-52.0,0.1453,5.7,357,0.95,0.57,1.1026,1.101,xrp-updown-15m-1783064700,xrp-up-or-down-july-3-2026-3am-et
+2026-07-03T07:55:01+00:00,BTC,15min60m,YESout+NOin,1.73,-73.0,0.1641,87.41,298,0.98,0.75,61724.775,61623.645,btc-updown-15m-1783064700,bitcoin-up-or-down-july-3-2026-3am-et
+2026-07-03T07:55:02+00:00,SOL,15min60m,YESout+NOin,1.436,-43.6,0.3457,4.4,297,0.996,0.44,81.27,80.99,sol-updown-15m-1783064700,solana-up-or-down-july-3-2026-3am-et
+2026-07-03T07:55:02+00:00,XRP,15min60m,YESout+NOin,1.63,-63.0,0.1453,28.79,297,0.94,0.69,1.1026,1.101,xrp-updown-15m-1783064700,xrp-up-or-down-july-3-2026-3am-et
+2026-07-03T07:55:03+00:00,BTC,5min15m,YESout+NOin,0.79,21.0,0.0175,49.41,296,0.26,0.53,61735.555,61724.775,btc-updown-5m-1783065300,btc-updown-15m-1783064700
+2026-07-03T07:55:03+00:00,ETH,5min15m,YESout+NOin,1.41,-41.0,0.1343,26.36,296,0.88,0.53,1718.18,1715.875,eth-updown-5m-1783065300,eth-updown-15m-1783064700
+2026-07-03T07:55:03+00:00,SOL,5min15m,YESout+NOin,1.09,-9.0,0.0492,30.17,296,0.56,0.53,81.31,81.27,sol-updown-5m-1783065300,sol-updown-15m-1783064700
+2026-07-03T07:55:04+00:00,XRP,5min15m,YESout+NOin,0.85,15.0,0.0,8.55,295,0.28,0.57,1.1026,1.1026,xrp-updown-5m-1783065300,xrp-updown-15m-1783064700
