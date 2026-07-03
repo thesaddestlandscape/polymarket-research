@@ -490,6 +490,38 @@ def _registrar_snapshot_libro(motivo: str, market_id: str, direction: str,
         pass
 
 
+def _snapshot_senal_bloqueada(market_id: str, direction: str, precio_yes,
+                              stake_ref: float, contexto: dict) -> None:
+    """Snapshot del libro para señales que NO llegan a ejecución porque el
+    stake no es viable (suelo bankroll_minimo / freno diario). Sin esto el
+    dataset del análisis maker (libro_snapshots.csv) deja de acumular justo
+    cuando el live está congelado (2026-07-03: suelo 8€ mordiendo toda señal)
+    — que es cuando hace falta para decidir la reapertura. Una fila por
+    market#direction: el proceso es nuevo cada ciclo (~20s) y sin dedupe
+    serían ~45 filas y consultas CLOB por señal de 15min. stake_ref es
+    nominal (min_stake_eur) para que ratio_vs_stake sea comparable con los
+    snapshots de ejecución. Solo lee el libro — nunca ordena, nunca lanza."""
+    try:
+        if SNAPSHOT_LIBRO_CSV.exists():
+            with open(SNAPSHOT_LIBRO_CSV, newline="", encoding="utf-8") as f:
+                for row in csv.DictReader(f):
+                    if (str(row.get("market_id")) == str(market_id)
+                            and row.get("direction") == direction
+                            and row.get("motivo") == "no_viable_stake"):
+                        return
+        yes_token, no_token = _get_token_ids(market_id)
+        if direction == "BUY_YES":
+            token_id, precio = yes_token, float(precio_yes)
+        else:
+            token_id, precio = no_token, round(1.0 - float(precio_yes), 6)
+        client = _get_clob_client()
+        depth = _consultar_profundidad_libro(client, token_id, precio, stake_ref)
+        _registrar_snapshot_libro("no_viable_stake", market_id, direction,
+                                  precio, stake_ref, depth, contexto)
+    except Exception:
+        pass
+
+
 REQUOTE_EDGE_MIN  = 0.02   # mismo listón que EDGE_MINIMO de shadow_predict
 REQUOTE_PRECIO_MAX = 0.95  # nunca pagar más de esto por el token, pase lo que pase
 MIN_ORDEN_CLOB_USD = 1.00  # el CLOB rechaza marketable BUY < $1 ("min size: 1")
@@ -978,6 +1010,9 @@ def main():
         stake_info = calcular_stake(ic_hist, strategy, subtype, direction=dec)
         if not stake_info["viable"]:
             log(f"  SKIP {strategy}#{subtype}: stake no viable — {stake_info['motivo']}")
+            _snapshot_senal_bloqueada(mid, dec, precio,
+                                      riesgo.get("min_stake_eur", 1.05),
+                                      {"strategy": strategy, "subtype": subtype})
             continue
 
         stake    = stake_info["stake_eur"]
