@@ -426,6 +426,7 @@ def _consultar_profundidad_libro(client, token_id: str, precio_entrada: float,
 REQUOTE_EDGE_MIN  = 0.02   # mismo listón que EDGE_MINIMO de shadow_predict
 REQUOTE_PRECIO_MAX = 0.95  # nunca pagar más de esto por el token, pase lo que pase
 MIN_ORDEN_CLOB_USD = 1.00  # el CLOB rechaza marketable BUY < $1 ("min size: 1")
+REQUOTE_DIVERGENCIA_MAX = 0.10  # |ask - plan| máx; más allá el modelo está desfasado
 
 
 def _decidir_requote(edge_dir: float, precio_plan: float,
@@ -455,6 +456,17 @@ def _decidir_requote(edge_dir: float, precio_plan: float,
         return mejor_ask, 0.0, False, (
             f"mejor_ask={mejor_ask:.4f} > tope {REQUOTE_PRECIO_MAX}")
     deterioro = round(mejor_ask - precio_plan, 4)
+    # Divergencia extrema plan↔libro = el mercado sabe algo que el snapshot
+    # del modelo no vio (spot movido tras la señal). Un ask MUY por debajo
+    # del plan no es regalo: 2026-07-03 08:49 XRP#15min BUY_YES señal a
+    # 0.475 (modelo 0.62), libro a 0.12, fill 0.04 → resolvió NO, -1.63€.
+    # El mercado a 11min del cierre tenía razón. El lado deterioro>0 ya lo
+    # corta el chequeo de edge; este guard corta el lado "mejora" que antes
+    # se celebraba. Código de seguridad live — no minimizar.
+    if abs(deterioro) > REQUOTE_DIVERGENCIA_MAX:
+        return mejor_ask, 0.0, False, (
+            f"divergencia plan↔libro {deterioro:+.4f} > {REQUOTE_DIVERGENCIA_MAX} "
+            f"(plan {precio_plan:.4f}, ask {mejor_ask:.4f}) — modelo desfasado, no operar")
     edge_ahora = round(edge_dir - max(0.0, deterioro), 4)
     if edge_ahora < REQUOTE_EDGE_MIN:
         return mejor_ask, edge_ahora, False, (
