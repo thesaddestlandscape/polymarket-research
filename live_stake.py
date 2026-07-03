@@ -280,6 +280,27 @@ def freno_diario_pct_hoy(config: dict | None = None) -> float:
     return pct
 
 
+def freno_ventana_pct_hoy(config: dict | None = None) -> float:
+    """
+    Como freno_diario_pct_hoy pero para el freno de ventana: override puntual
+    con fecha (riesgo.circuit_breaker.freno_ventana_pct_override = {fecha, pct})
+    que solo aplica hoy (Madrid) y autoexpira. Añadido 2026-07-03 tarde:
+    decisión del usuario de reabrir la ventana tras el latch de las 17:07 y
+    dejar como único corte el suelo de 8€ (freno diario 0.65 + bankroll_minimo).
+    """
+    if config is None:
+        config = _cargar_config()
+    cb  = config.get("riesgo", {}).get("circuit_breaker", {})
+    pct = cb.get("freno_ventana_pct", 0.20)
+    ov  = cb.get("freno_ventana_pct_override") or {}
+    try:
+        if ov.get("fecha") == _ahora_madrid(config).date().isoformat():
+            return float(ov["pct"])
+    except (KeyError, TypeError, ValueError):
+        pass
+    return pct
+
+
 def bankroll_inicio_dia() -> float:
     """Bankroll al inicio del día de hoy (antes de cualquier trade de hoy)."""
     bkr_ahora = bankroll_actual()
@@ -353,7 +374,7 @@ def verificar_circuit_breaker() -> tuple[bool, str]:
     # Con latch: una vez disparado, la ventana queda cerrada el resto del día
     # aunque el PnL recupere (2026-07-03: disparó a las 14:35, un WIN lo
     # rearmó a los 50s y siguió operando en la misma ventana).
-    freno_v_pct = cb.get("freno_ventana_pct", 0.20)
+    freno_v_pct = freno_ventana_pct_hoy(config)
     v = _ventana_actual(config)
     if v:
         nombre_v = v.get("nombre") or f"{v.get('inicio','')}-{v.get('fin','')}"
