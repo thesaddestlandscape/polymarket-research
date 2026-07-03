@@ -187,8 +187,23 @@ def _ic_n_para_subtype(strategy: str, subtype: str, params: dict,
     if n_normal >= min_n and ic_normal >= min_ic:
         return ic_normal, n_normal
 
-    # No alcanza min_n+min_ic por la vía normal — probar patrón causal confirmado
+    # No alcanza min_n+min_ic por la vía normal — probar patrón causal confirmado.
+    # Veto previo: si el subtype EXACTO ya tiene evidencia direccional propia
+    # NEGATIVA (o agregada negativa si no hay direccional), ningún patrón de una
+    # clave más genérica puede rehabilitarlo para live — un patrón de
+    # UPDOWN_GBM#15min (aprendido sobre todo en ETH/XRP) validó en vivo un
+    # SOL#15min BUY_NO cuyo ic_BUY_NO propio era -0.025 (trade real perdido
+    # 2026-07-02 19:26 UTC, -2.00€). El patrón sigue valiendo para subtypes
+    # sin historial propio o con historial propio ≥0 pero insuficiente.
+    # Código de seguridad live — no minimizar.
     if features:
+        p_exacto = params.get(claves[0], {})
+        ic_propio = p_exacto.get(f"ic_{decision}") if decision else None
+        if ic_propio is None:
+            ic_propio = p_exacto.get("ic_bayes")
+        if ic_propio is not None and float(ic_propio) < 0:
+            return ic_normal, n_normal
+
         mejor_patron = None
         for k in claves:
             for patron in params.get(k, {}).get("patrones_ganadores", []):
@@ -213,11 +228,85 @@ def _ic_n_para_subtype(strategy: str, subtype: str, params: dict,
     return ic_normal, n_normal
 
 
+_clob_redondeo_parcheado = False
+
+
+def _parchear_redondeo_clob():
+    """Sustituye los helpers de redondeo de py_clob_client_v2 por versiones
+    exactas basadas en Decimal. Los originales operan en float puro
+    (floor(x * 10**n) / 10**n), y para ciertas combinaciones stake/precio el
+    residuo binario deja maker/taker amounts con más decimales de los que el
+    CLOB admite → rechazo "invalid amounts" (2 señales reales perdidas:
+    2026-06-30 y 2026-07-02 19:22 UTC). Esta es la causa raíz; el reintento
+    con stake±0.01€ de _ejecutar_orden_polymarket se mantiene como red de
+    seguridad. Se parchean tanto helpers como builder (importa por nombre).
+
+    Causa raíz principal encontrada 2026-07-03: los mercados cripto up/down
+    usan tick 0.001 (precios de 3 decimales, ej. 0.485), y para ese tick la
+    librería redondea el taker amount a 5 decimales (RoundConfig(amount=5)),
+    pero el CLOB solo admite 4 en market orders ("taker amount a max of 4
+    decimals") → la orden falla exactamente cuando el 5º decimal del cociente
+    maker/precio no es cero, de ahí la intermitencia. Se sustituye también
+    get_market_order_amounts por una versión que respeta los límites reales
+    del CLOB para market orders: maker (USDC) ≤2 decimales, taker (shares) ≤4.
+    Código de seguridad live — no minimizar."""
+    global _clob_redondeo_parcheado
+    if _clob_redondeo_parcheado:
+        return
+    from decimal import Decimal, ROUND_FLOOR, ROUND_CEILING, ROUND_HALF_UP
+    from py_clob_client_v2.order_builder import builder as _b, helpers as _h
+    from py_clob_client_v2.order_utils import Side as _Side
+
+    def _q(sig_digits: int) -> Decimal:
+        return Decimal(1).scaleb(-sig_digits)
+
+    def round_down(x: float, sig_digits: int) -> float:
+        return float(Decimal(str(x)).quantize(_q(sig_digits), rounding=ROUND_FLOOR))
+
+    def round_up(x: float, sig_digits: int) -> float:
+        return float(Decimal(str(x)).quantize(_q(sig_digits), rounding=ROUND_CEILING))
+
+    def round_normal(x: float, sig_digits: int) -> float:
+        return float(Decimal(str(x)).quantize(_q(sig_digits), rounding=ROUND_HALF_UP))
+
+    def to_token_decimals(x: float) -> int:
+        return int((Decimal(str(x)) * 10**6).quantize(Decimal(1), rounding=ROUND_HALF_UP))
+
+    for mod in (_h, _b):
+        mod.round_down = round_down
+        mod.round_up = round_up
+        mod.round_normal = round_normal
+        mod.to_token_decimals = to_token_decimals
+
+    MAX_DEC_TAKER_MARKET = 4  # límite del CLOB para market orders, no depende del tick
+
+    def get_market_order_amounts(self, side, amount, price, round_config):
+        if isinstance(side, _Side):
+            side = _b.BUY if side == _Side.BUY else _b.SELL
+        raw_price = round_down(price, round_config.price)
+        max_dec = min(round_config.amount, MAX_DEC_TAKER_MARKET)
+        if side == _b.BUY:
+            # maker = USDC gastado (≤2 dec), taker = shares recibidas (≤4 dec).
+            # Shares hacia abajo: nunca pedir más de lo que el dinero compra.
+            raw_maker = round_down(amount, round_config.size)
+            raw_taker = round_down(raw_maker / raw_price, max_dec)
+            return _Side.BUY, to_token_decimals(raw_maker), to_token_decimals(raw_taker)
+        elif side == _b.SELL:
+            raw_maker = round_down(amount, round_config.size)
+            raw_taker = round_down(raw_maker * raw_price, max_dec)
+            return _Side.SELL, to_token_decimals(raw_maker), to_token_decimals(raw_taker)
+        raise ValueError(f"order_args.side must be '{_b.BUY}' or '{_b.SELL}'")
+
+    _b.OrderBuilder.get_market_order_amounts = get_market_order_amounts
+    _clob_redondeo_parcheado = True
+
+
 def _get_clob_client():
     """Crea cliente CLOB V2 autenticado desde .env."""
     from dotenv import load_dotenv
     from py_clob_client_v2 import ClobClient, ApiCreds
     from py_clob_client_v2.constants import POLYGON
+    _parchear_redondeo_clob()
     load_dotenv(DIR_LIVE / ".env")
     key = os.getenv("POLY_PRIVATE_KEY")
     creds = ApiCreds(

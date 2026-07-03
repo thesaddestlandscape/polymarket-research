@@ -359,10 +359,29 @@ def calcular_stake(ic: float, strategy: str = "", subtype: str = "",
             inv_str = (f" | inv_penalty×{inv_factor:.2f} "
                        f"(q_net={inv['q_net']:+d} YES={inv['BUY_YES']} NO={inv['BUY_NO']})")
 
+    # Freno diario prospectivo: el freno 2 del circuit breaker
+    # (verificar_circuit_breaker) solo mira PnL realizado, así que con stakes
+    # de ~8% del bankroll un solo trade puede cruzar el límite diario de largo
+    # (2026-07-02: -12.9% realizado antes del último trade y el día cerró en
+    # -20%). Techo extra: si este stake se perdiera entero, la caída del día
+    # no puede superar freno_diario_pct. Si el margen restante no da ni para
+    # min_stake, la señal deja de ser viable (equivale a disparar el freno un
+    # trade antes). Código de seguridad live — no minimizar.
+    freno_str = ""
+    freno_dia_pct = riesgo.get("circuit_breaker", {}).get("freno_diario_pct", 0.15)
+    bkr_ini_dia   = bankroll_inicio_dia()
+    if bkr_ini_dia > 0:
+        margen_dia = bkr_ini_dia * freno_dia_pct + pnl_live_hoy()
+        if stake > margen_dia:
+            stake = max(0.0, margen_dia)
+            freno_str = (f" | techo_freno_diario={margen_dia:.2f}€ "
+                         f"(freno={freno_dia_pct*100:.0f}% de {bkr_ini_dia:.2f}€, "
+                         f"pnl_hoy={pnl_live_hoy():+.2f}€)")
+
     motivo = (
         f"bankroll={bkr:.2f}€ | "
         f"Kelly={techo_kelly:.2f}€  max10%={techo_pct:.2f}€  máx={techo_config:.2f}€"
-        f"{inv_str} → stake={stake:.2f}€"
+        f"{inv_str}{freno_str} → stake={stake:.2f}€"
     )
 
     return {
