@@ -112,17 +112,16 @@
   "circuit_breaker": {
    "freno_ventana_pct": 0.2,
    "freno_diario_pct": 0.15,
-   "_override_nota": "2026-07-03 (3ª vez, 17:15): usuario reabre la ventana tras el latch de las 17:07 y fija el corte en bankroll=8€: freno diario 0.65 sobre inicio de día 22.86€ dispara justo en 8.00€, y freno de ventana también 0.65 hoy (no muerde antes que el suelo). Ambos autoexpiran mañana (fecha==hoy). Suelo duro permanente bankroll_minimo_eur=8 + suelo prospectivo en calcular_stake.",
-   "bankroll_minimo_eur": 8.0,
+   "_override_nota": "2026-07-04 (decisión usuario 03-Jul ~16:00Z): reabrir mañana con corte en bankroll=3€. Suelo permanente bankroll_minimo_eur 8→3 (el suelo prospectivo de calcular_stake corta exacto en 3.00€: último trade viable con bkr≥4.05, peor caso 4.05-1.05=3.00). Frenos diario y ventana 0.65 SOLO el 04-Jul (autoexpiran; con inicio de día 8.50€ el 65%=5.53€ no muerde antes que el suelo, que permite perder 5.50€). Desde el 05-Jul vuelven los defaults 15%/20% — con bankroll ~8.50€ el diario corta tras ~1 pérdida (1.28€); revisar entonces. HOY 03-Jul sigue congelado: el override diario de hoy (0.65 sobre 22.87€, pnl -14.37€) deja margen 0.49€ < min_stake.",
+   "bankroll_minimo_eur": 3.0,
    "freno_diario_pct_override": {
-    "fecha": "2026-07-03",
+    "fecha": "2026-07-04",
     "pct": 0.65
    },
-   "_racha_nota": "2026-07-03: freno 4 — N pérdidas CLOSED consecutivas (día Madrid) → para el día. Una racha es firma de fallo sistemático, no varianza (03-Jul: 4 pérdidas en 5min, -6.54€, los frenos en € no la cortaron). racha_vigente_desde: las 5 pérdidas previas a la reapertura de hoy no cuentan (el usuario ya decidió operar hoy); borrar la clave cuando pase el día — desde mañana es inerte.",
+   "_racha_nota": "2026-07-03: freno 4 — N pérdidas CLOSED consecutivas (día Madrid) → para el día. Una racha es firma de fallo sistemático, no varianza (03-Jul: 4 pérdidas en 5min, -6.54€, los frenos en € no la cortaron). Sigue activo el 04-Jul: 4 pérdidas seguidas (-4.20€ con stake 1.05) paran el DÍA aunque el bankroll (~4.30€) no haya tocado el suelo de 3€ — protección contra fallo sistemático, decisión distinta al suelo. racha_vigente_desde eliminada 03-Jul al pasar el día (era solo para excluir las pérdidas previas a la reapertura de ese día).",
    "max_perdidas_consecutivas": 4,
-   "racha_vigente_desde": "2026-07-03T09:15:00+00:00",
    "freno_ventana_pct_override": {
-    "fecha": "2026-07-03",
+    "fecha": "2026-07-04",
     "pct": 0.65
    }
   },
