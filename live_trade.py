@@ -456,6 +456,40 @@ def _consultar_profundidad_libro(client, token_id: str, precio_entrada: float,
         return {"ok": False, "error": str(e)}
 
 
+SNAPSHOT_LIBRO_CSV = DIR_LIVE / "libro_snapshots.csv"
+
+
+def _registrar_snapshot_libro(motivo: str, market_id: str, direction: str,
+                              precio_plan, stake_eur, depth: dict | None,
+                              contexto: dict | None = None) -> None:
+    """
+    Dataset para el análisis maker (2026-07-03): estado del libro de CADA
+    señal que llega a fase de ejecución, se ejecute o se aborte. Hallazgo que
+    lo motiva: los fills taker aciertan 19% y las señales vetadas por
+    profundidad 83% (mismo día, mismas tuplas) — la fill-ability es un
+    anti-predictor y no quedaba registrada para las no ejecutadas. Cruzar
+    con results.csv por market_id. Nunca lanza.
+    """
+    try:
+        ctx = contexto or {}
+        d = depth or {}
+        nuevo = not SNAPSHOT_LIBRO_CSV.exists()
+        with open(SNAPSHOT_LIBRO_CSV, "a", newline="", encoding="utf-8") as f:
+            w = csv.writer(f)
+            if nuevo:
+                w.writerow(["timestamp_utc", "market_id", "strategy", "subtype",
+                            "direction", "motivo", "precio_plan", "stake_eur",
+                            "mejor_ask", "profundidad_eur", "n_niveles",
+                            "ratio_vs_stake"])
+            w.writerow([datetime.now(timezone.utc).isoformat(timespec="seconds"),
+                        market_id, ctx.get("strategy", ""), ctx.get("subtype", ""),
+                        direction, motivo, precio_plan, stake_eur,
+                        d.get("mejor_ask", ""), d.get("profundidad_eur", ""),
+                        d.get("n_niveles", ""), d.get("ratio_vs_stake", "")])
+    except Exception:
+        pass
+
+
 REQUOTE_EDGE_MIN  = 0.02   # mismo listón que EDGE_MINIMO de shadow_predict
 REQUOTE_PRECIO_MAX = 0.95  # nunca pagar más de esto por el token, pase lo que pase
 MIN_ORDEN_CLOB_USD = 1.00  # el CLOB rechaza marketable BUY < $1 ("min size: 1")
@@ -516,13 +550,16 @@ def _decidir_requote(edge_dir: float, precio_plan: float,
 
 def _ejecutar_orden_polymarket(market_id: str, direction: str,
                                stake_eur: float, entry_price: float,
-                               edge_dir: float | None = None) -> dict:
+                               edge_dir: float | None = None,
+                               contexto: dict | None = None) -> dict:
     """Ejecuta orden real en Polymarket via CLOB API.
 
     edge_dir: edge neto A FAVOR de nuestra dirección (edge_neto de la
     predicción con el signo ya resuelto: +edge para BUY_YES, -edge para
     BUY_NO). Si se pasa, se re-cotiza contra el libro actual antes de
     ejecutar (ver _decidir_requote)."""
+    depth: dict = {}
+    precio_plan = entry_price
     try:
         from py_clob_client_v2 import MarketOrderArgsV2, OrderType
         yes_token, no_token = _get_token_ids(market_id)
@@ -554,6 +591,8 @@ def _ejecutar_orden_polymarket(market_id: str, direction: str,
         min_ratio = _cargar_config().get("riesgo", {}).get("min_profundidad_ratio_libro", 5.0)
         if not depth.get("ok"):
             log(f"  ⛔ Sin datos de libro — no se ejecuta (fail-closed)")
+            _registrar_snapshot_libro("veto_sin_datos", market_id, direction,
+                                      precio_plan, stake_eur, depth, contexto)
             return {
                 "ok": False, "no_fill": True, "libro_sin_datos": True,
                 "order_id": None, "entry_price": entry_price,
@@ -562,6 +601,8 @@ def _ejecutar_orden_polymarket(market_id: str, direction: str,
         ratio = depth.get("ratio_vs_stake")
         if ratio is None or ratio < min_ratio:
             log(f"  ⛔ Libro sin profundidad: ratio={ratio}x < {min_ratio}x stake — no se ejecuta")
+            _registrar_snapshot_libro("veto_profundidad", market_id, direction,
+                                      precio_plan, stake_eur, depth, contexto)
             return {
                 "ok": False, "no_fill": True, "libro_vacio": True,
                 "order_id": None, "entry_price": entry_price,
@@ -576,6 +617,8 @@ def _ejecutar_orden_polymarket(market_id: str, direction: str,
                 edge_dir, precio_plan, mejor_ask)
             log(f"  🔁 Re-quote: {motivo_rq}")
             if not operar:
+                _registrar_snapshot_libro("abort_requote", market_id, direction,
+                                          precio_plan, stake_eur, depth, contexto)
                 return {
                     "ok": False, "no_fill": True, "edge_evaporado": True,
                     "order_id": None, "entry_price": entry_price,
@@ -655,6 +698,8 @@ def _ejecutar_orden_polymarket(market_id: str, direction: str,
         log(f"  ✅ Orden ejecutada: {direction} market={market_id} "
             f"stake={stake_eur:.2f}€ precio={filled_price:.4f} "
             f"slip={slip_real:+.4f} order_id={order_id}")
+        _registrar_snapshot_libro("ejecutada", market_id, direction,
+                                  precio_plan, stake_eur, depth, contexto)
         return {
             "ok":          True,
             "order_id":    order_id,
@@ -667,6 +712,8 @@ def _ejecutar_orden_polymarket(market_id: str, direction: str,
         err_str = str(e)
         if "couldn't be fully filled" in err_str or "FOK" in err_str:
             log(f"  ⚠️  FOK kill (sin liquidez a ese precio) — no fill: {e}")
+            _registrar_snapshot_libro("fok_kill", market_id, direction,
+                                      precio_plan, stake_eur, depth, contexto)
             return {
                 "ok":       False,
                 "no_fill":  True,
@@ -967,7 +1014,9 @@ def main():
         # BUY_NO), para que _decidir_requote pueda recortar por deterioro.
         edge_dir = edge if dec == "BUY_YES" else -edge
         resultado = _ejecutar_orden_polymarket(mid, dec, stake, entry_p,
-                                               edge_dir=edge_dir)
+                                               edge_dir=edge_dir,
+                                               contexto={"strategy": strategy,
+                                                         "subtype": subtype})
 
         # FOK kill o edge evaporado en re-quote = no registrar ni contar;
         # la señal puede reintentarse en ciclos siguientes si sigue viva.

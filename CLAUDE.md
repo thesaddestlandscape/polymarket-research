@@ -169,8 +169,12 @@ UMBRAL_DESACTIVAR=(-0.20, 8)  # IC<-0.20 en n≥8 ciclos → desactivar
 
 ### live_stake.py / data/live/config_live.json
 ```python
-max_pct_bankroll=0.10 | min_stake_eur=1.05 (CLOB exige ≥$1 en marketable BUY) | max_stake_eur=2.00
+max_pct_bankroll=0.10 | min_stake_eur=1.05 (CLOB exige ≥$1 en marketable BUY) | max_stake_eur=1.05 (03-Jul: stake=min hasta validar maker; antes 2.00)
 freno_ventana=0.20 | freno_diario=0.15 | bankroll_min=8.00
+# ⚠️ SELECCIÓN ADVERSA TAKER (03-Jul): fills live 19% hit vs 83% señales vetadas por profundidad
+# (mismas tuplas/día; shadow pierde los MISMOS mercados a precio plan → no es slippage, es fill-ability).
+# data/live/libro_snapshots.csv registra libro de cada señal en fase de ejecución (motivo:
+# ejecutada/veto_profundidad/veto_sin_datos/abort_requote/fok_kill) → análisis maker condicional con n≥30.
 ```
 
 ---
