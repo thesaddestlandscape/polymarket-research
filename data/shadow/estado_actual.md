@@ -1,4 +1,4 @@
-# Estado del bot — 2026-07-04 14:24 UTC
+# Estado del bot — 2026-07-04 14:25 UTC
 
 ## Capital
 | | |
@@ -46,7 +46,7 @@
 
 ## Calidad de datos
 
-⚠️ **DEGRADED** — última verificación 2026-07-04T14:23 UTC | rechazos 1h: 7 (rango=0, spike=0)
+⚠️ **DEGRADED** — última verificación 2026-07-04T14:25 UTC | rechazos 1h: 7 (rango=0, spike=0)
 
 | Asset | Precio | Age | Alertas |
 |---|---|---|---|
