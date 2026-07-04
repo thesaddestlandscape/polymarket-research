@@ -1,4 +1,4 @@
-# Estado del bot — 2026-07-04 11:50 UTC
+# Estado del bot — 2026-07-04 11:52 UTC
 
 ## Capital
 | | |
@@ -11,19 +11,19 @@
 | | |
 |---|---|
 | Inicio | 25.44 € |
-| Actual | **87.67 €** |
-| P&L acumulado | 🟢 **+62.23 €** |
-| ROI s/ operativo | +244.63% |
-| ROI s/ depósito | +207.45% |
-| P&L hoy (2026-07-04) | 🟢 +81.31 € |
-| Operaciones resueltas | 3463 (1741 WIN / 1722 LOSS) — 50.3% |
-| Señales abiertas | 146 |
+| Actual | **88.46 €** |
+| P&L acumulado | 🟢 **+63.02 €** |
+| ROI s/ operativo | +247.73% |
+| ROI s/ depósito | +210.07% |
+| P&L hoy (2026-07-04) | 🟢 +82.10 € |
+| Operaciones resueltas | 3464 (1742 WIN / 1722 LOSS) — 50.3% |
+| Señales abiertas | 145 |
 
 ## Estrategias (visión global)
 
 | Estrategia | n | Win% | IC_efectivo | PNL | Apuesta | Estado |
 |---|---|---|---|---|---|---|
-| GBM_LATE_15M | 717 | 59.1% | +0.091 | +163.71€ | 0.91€ | ✅ activa |
+| GBM_LATE_15M | 718 | 59.2% | +0.092 | +164.49€ | 0.92€ | ✅ activa |
 | ORDER_FLOW_5M | 1533 | 51.2% | +0.012 | +10.14€ | 0.50€ | ✅ activa |
 | RESOLUTION_SNIPER | 6 | 100.0% | +0.112 | +2.85€ | 1.12€ | ⏳ acumulando |
 | LATE_WINDOW_5MIN | 9 | 66.7% | +0.061 | +1.52€ | 0.61€ | ✅ activa |
@@ -38,21 +38,21 @@
 
 | Timestamp | Estrategia | Mercado | Resultado | PNL |
 |---|---|---|---|---|
+| 2026-07-04T11:51 | GBM_LATE_15M#BTC#15min | Bitcoin Up or Down - July 4, 7:30AM-7:45AM ET… | ✅ WIN | +0.79€ |
 | 2026-07-04T11:46 | GBM_LATE_15M#SOL#15min | Solana Up or Down - July 4, 7:30AM-7:45AM ET… | ✅ WIN | +1.52€ |
 | 2026-07-04T11:46 | GBM_LATE_15M#ETH#15min | Ethereum Up or Down - July 4, 7:30AM-7:45AM ET… | ✅ WIN | +0.53€ |
 | 2026-07-04T11:45 | GBM_LATE_15M#XRP#15min | XRP Up or Down - July 4, 7:30AM-7:45AM ET… | ✅ WIN | +1.72€ |
 | 2026-07-04T11:35 | GBM_LATE_15M#SOL#15min | Solana Up or Down - July 4, 7:15AM-7:30AM ET… | ✅ WIN | +1.37€ |
-| 2026-07-04T11:35 | GBM_LATE_15M#ETH#15min | Ethereum Up or Down - July 4, 7:15AM-7:30AM ET… | ✅ WIN | +0.50€ |
 
 ## Calidad de datos
 
-✅ **OK** — última verificación 2026-07-04T11:50 UTC
+✅ **OK** — última verificación 2026-07-04T11:51 UTC
 
 | Asset | Precio | Age | Alertas |
 |---|---|---|---|
-| ✅ BTC | $62,432.00 | 0.0min |  |
-| ✅ ETH | $1,756.39 | 0.0min |  |
-| ✅ SOL | $81.78 | 0.0min |  |
+| ✅ BTC | $62,437.76 | 0.0min |  |
+| ✅ ETH | $1,756.51 | 0.0min |  |
+| ✅ SOL | $81.80 | 0.0min |  |
 | ✅ XRP | $1.14 | 0.0min |  |
 
 **Cross-source** (binance, coinbase, kraken):
