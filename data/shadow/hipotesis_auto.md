@@ -1,5 +1,5 @@
-# Hipótesis automáticas — 2026-07-04 16:03 UTC
-_Generado por shadow_postmortem.py sobre 3552 resoluciones (PNL=+72.00€)_
+# Hipótesis automáticas — 2026-07-04 16:05 UTC
+_Generado por shadow_postmortem.py sobre 3553 resoluciones (PNL=+74.62€)_
 
 ## Patrones causales activos
 
@@ -245,14 +245,14 @@ _Derivadas de los patrones aprendidos:_
 | ✅ ORDER_FLOW_5M#SOL#5min | 302 | +0.040 | +9.67€ | 0 | 0 |
 | ✅ ORDER_FLOW_5M#XRP | 184 | +0.000 | -1.63€ | 0 | 0 |
 | ✅ ORDER_FLOW_5M#XRP#5min | 184 | +0.000 | -1.63€ | 0 | 0 |
-| ✅ PRICE_TARGET_GBM | 91 | -0.124 | -3.31€ | 0 | 0 |
+| ✅ PRICE_TARGET_GBM | 92 | -0.117 | -0.70€ | 0 | 0 |
 | 🚫 PRICE_TARGET_GBM#BTC | 45 | -0.202 | -12.08€ | 0 | 0 |
 | 🚫 PRICE_TARGET_GBM#BTC#atexpiry | 41 | -0.221 | -11.34€ | 0 | 0 |
 | ✅ PRICE_TARGET_GBM#ETH | 32 | -0.059 | +2.40€ | 0 | 0 |
 | ✅ PRICE_TARGET_GBM#ETH#atexpiry | 31 | -0.076 | +2.25€ | 0 | 0 |
-| ✅ PRICE_TARGET_GBM#SOL | 14 | +0.000 | +6.37€ | 0 | 0 |
-| ✅ PRICE_TARGET_GBM#SOL#atexpiry | 14 | +0.000 | +6.37€ | 0 | 0 |
-| ✅ PRICE_TARGET_GBM#atexpiry | 86 | -0.136 | -2.73€ | 0 | 0 |
+| ✅ PRICE_TARGET_GBM#SOL | 15 | +0.022 | +8.98€ | 0 | 0 |
+| ✅ PRICE_TARGET_GBM#SOL#atexpiry | 15 | +0.022 | +8.98€ | 0 | 0 |
+| ✅ PRICE_TARGET_GBM#atexpiry | 87 | -0.129 | -0.11€ | 0 | 0 |
 | ✅ PRICE_TARGET_GBM#reach | 5 | +0.018 | -0.58€ | 0 | 0 |
 | ✅ RESOLUTION_SNIPER | 6 | +0.113 | +2.85€ | 0 | 0 |
 | ✅ RESOLUTION_SNIPER#sniper | 6 | +0.113 | +2.85€ | 0 | 0 |
@@ -344,7 +344,7 @@ _Derivadas de los patrones aprendidos:_
 **🟡 H-STREAK-COOLDOWN** — Cooldown tras 2 derrotas consecutivas (mismo subtype)
   - _Umbral_: n≥40 tras 2 losses y gap(IC_tras_win - IC_tras_2loss)≥0.05
   - _Acción_: Reducir stake (no desactivar) 1-2h tras 2 derrotas consecutivas en el mismo subtype
-  - _Estado_: tras_win IC=+0.022 n=1746 | tras_1loss IC=-0.017 n=1698 | tras_2loss IC=-0.037 n=856/40 | gap=+0.059 (umbral 0.05)
+  - _Estado_: tras_win IC=+0.022 n=1747 | tras_1loss IC=-0.017 n=1698 | tras_2loss IC=-0.037 n=856/40 | gap=+0.059 (umbral 0.05)
 
 **🟡 H-KALMAN** — Kalman filter para drift adaptativo
   - _Umbral_: n≥200 por subtipo para calibrar parámetros Q/R del KF
@@ -647,8 +647,8 @@ _Derivadas de los patrones aprendidos:_
   - _Hipótesis_: Analizado 2026-07-01: BTC#atexpiry BUY_YES 2/16 (12%) IC=-0.267 PNL=-8.83€; ETH#atexpiry BUY_YES 2/8 (25%) IC=-0.080 PNL=-3.70€. Mientras BUY_NO en ambos activos está en break-even (IC≈0 a +0.02). Prácticamente toda la sangría de la estrategia completa (-13€ de -13.08€ totales) es BUY_YES. Podría rescatar una estrategia que hoy está en la lista de revisar-desactivación.
   - _Umbral_: n≥30 en BUY_YES y IC<-0.15 para confirmar bloqueo
   - _Acción_: Si se confirma con n≥30 → filtro causal decision==BUY_YES → skip en PRICE_TARGET_GBM, dejar solo BUY_NO activo
-  - _Estado_: n=38 IC=-0.150 PNL=+4.61€ — sin señal clara aún (umbral IC: min=None max=-0.15)
-  - _Datos_: n=38 IC=-0.150 PNL=+4.61€
+  - _Estado_: n=39 IC=-0.134 PNL=+7.22€ — sin señal clara aún (umbral IC: min=None max=-0.15)
+  - _Datos_: n=39 IC=-0.134 PNL=+7.22€
 
 **⏳ H-CUSTOM-WEEKLY-INRANGE-BUYYES** — WEEKLY_PRICE BUY_YES con in_range=1 — ¿estructuralmente sobrevalorado?
   - _Hipótesis_: Analizado 2026-07-01, n=10 (evidencia mínima): BUY_YES cuando in_range=1 fue 0/3 (todo pérdida). Mecanismo propuesto: acertar un rango de precio estrecho al vencimiento es intrínsecamente poco probable, el mercado puede estar sobrevalorando el 'sí'. Ver H-CUSTOM-WEEKLY-PCTDIST-BUYNO para el lado complementario (BUY_NO con pct_dist alto).
