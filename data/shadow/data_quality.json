@@ -1,16 +1,14 @@
 {
-  "timestamp_utc": "2026-07-04T15:14:26+00:00",
+  "timestamp_utc": "2026-07-04T15:15:52+00:00",
   "estado_global": "DEGRADED",
   "alertas": [
-    "rechazos_1h:7 (rango=0, spike=0)",
-    "ETH:divergencia_1.35%",
-    "SOL:divergencia_0.51%"
+    "rechazos_1h:7 (rango=0, spike=0)"
   ],
   "rechazos_1h": {
     "rango": 0,
     "spike": 0,
     "total": 7,
-    "cambio_fuente": 100,
+    "cambio_fuente": 102,
     "por_sym": {
       "XRP": 4,
       "ETH": 2,
@@ -20,74 +18,51 @@
   "assets": {
     "BTC": {
       "estado": "OK",
-      "n": 7067,
-      "age_seconds": 0.7,
-      "ultimo_precio": 62757.0,
+      "n": 7071,
+      "age_seconds": 3.5,
+      "ultimo_precio": 62768.365,
       "gaps": [],
       "alertas": []
     },
     "ETH": {
       "estado": "OK",
-      "n": 7067,
-      "age_seconds": 0.7,
-      "ultimo_precio": 1785.04,
+      "n": 7071,
+      "age_seconds": 3.5,
+      "ultimo_precio": 1783.655,
       "gaps": [],
       "alertas": []
     },
     "SOL": {
       "estado": "OK",
-      "n": 7067,
-      "age_seconds": 0.7,
-      "ultimo_precio": 81.92,
+      "n": 7071,
+      "age_seconds": 3.5,
+      "ultimo_precio": 82.0,
       "gaps": [],
       "alertas": []
     },
     "XRP": {
       "estado": "OK",
-      "n": 7067,
-      "age_seconds": 0.7,
-      "ultimo_precio": 1.17,
+      "n": 7071,
+      "age_seconds": 3.5,
+      "ultimo_precio": 1.1694,
       "gaps": [],
       "alertas": []
     }
   },
   "cross_source": {
-    "timestamp_utc": "2026-07-04T15:09:31+00:00",
+    "timestamp_utc": "2026-07-04T15:15:03+00:00",
     "fuentes_activas": [
       "binance",
       "coinbase",
       "kraken"
     ],
     "consenso": {
-      "BTC": 62805.0,
-      "ETH": 1785.88,
-      "SOL": 82.09,
-      "XRP": 1.17781
+      "BTC": 62768.365,
+      "ETH": 1784.01,
+      "SOL": 81.985,
+      "XRP": 1.17005
     },
-    "alertas": [
-      {
-        "sym": "ETH",
-        "max_div_pct": 1.35,
-        "fuentes": {
-          "binance": 1798.67,
-          "coinbase": 1774.72,
-          "kraken": 1785.88
-        },
-        "consenso": 1785.88,
-        "accion": "ALERTA"
-      },
-      {
-        "sym": "SOL",
-        "max_div_pct": 0.513,
-        "fuentes": {
-          "binance": 82.23,
-          "coinbase": 81.81,
-          "kraken": 82.09
-        },
-        "consenso": 82.09,
-        "accion": "ALERTA"
-      }
-    ],
+    "alertas": [],
     "bloqueados": []
   }
 }
