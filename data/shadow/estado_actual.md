@@ -1,4 +1,4 @@
-# Estado del bot — 2026-07-04 18:45 UTC
+# Estado del bot — 2026-07-04 18:47 UTC
 
 ## Capital
 | | |
@@ -11,19 +11,19 @@
 | | |
 |---|---|
 | Inicio | 25.44 € |
-| Actual | **113.14 €** |
-| P&L acumulado | 🟢 **+87.70 €** |
-| ROI s/ operativo | +344.72% |
-| ROI s/ depósito | +292.32% |
-| P&L hoy (2026-07-04) | 🟢 +106.78 € |
-| Operaciones resueltas | 3593 (1811 WIN / 1782 LOSS) — 50.4% |
-| Señales abiertas | 156 |
+| Actual | **113.60 €** |
+| P&L acumulado | 🟢 **+88.16 €** |
+| ROI s/ operativo | +346.53% |
+| ROI s/ depósito | +293.85% |
+| P&L hoy (2026-07-04) | 🟢 +107.24 € |
+| Operaciones resueltas | 3594 (1812 WIN / 1782 LOSS) — 50.4% |
+| Señales abiertas | 155 |
 
 ## Estrategias (visión global)
 
 | Estrategia | n | Win% | IC_efectivo | PNL | Apuesta | Estado |
 |---|---|---|---|---|---|---|
-| GBM_LATE_15M | 815 | 59.1% | +0.091 | +189.34€ | 0.91€ | ✅ activa |
+| GBM_LATE_15M | 816 | 59.2% | +0.092 | +189.80€ | 0.92€ | ✅ activa |
 | ORDER_FLOW_5M | 1536 | 51.1% | +0.011 | +8.49€ | 0.50€ | ✅ activa |
 | RESOLUTION_SNIPER | 6 | 100.0% | +0.112 | +2.85€ | 1.12€ | ⏳ acumulando |
 | LATE_WINDOW_5MIN | 9 | 66.7% | +0.061 | +1.52€ | 0.61€ | ✅ activa |
@@ -38,31 +38,31 @@
 
 | Timestamp | Estrategia | Mercado | Resultado | PNL |
 |---|---|---|---|---|
+| 2026-07-04T18:47 | GBM_LATE_15M#BTC#15min | Bitcoin Up or Down - July 4, 2:30PM-2:45PM ET… | ✅ WIN | +0.46€ |
 | 2026-07-04T18:30 | GBM_LATE_15M#SOL#15min | Solana Up or Down - July 4, 2:15PM-2:30PM ET… | ✅ WIN | +0.92€ |
 | 2026-07-04T18:30 | GBM_LATE_15M#BTC#15min | Bitcoin Up or Down - July 4, 2:15PM-2:30PM ET… | ❌ LOSS | -1.24€ |
 | 2026-07-04T18:30 | GBM_LATE_15M#ETH#15min | Ethereum Up or Down - July 4, 2:15PM-2:30PM ET… | ❌ LOSS | -1.03€ |
 | 2026-07-04T18:20 | GBM_LATE_15M#BTC#15min | Bitcoin Up or Down - July 4, 2:00PM-2:15PM ET… | ❌ LOSS | -0.51€ |
-| 2026-07-04T18:19 | GBM_LATE_15M#SOL#15min | Solana Up or Down - July 4, 2:00PM-2:15PM ET… | ❌ LOSS | -1.31€ |
 
 ## Calidad de datos
 
-✅ **OK** — última verificación 2026-07-04T18:45 UTC | rechazos 1h: 2 (rango=0, spike=0)
+✅ **OK** — última verificación 2026-07-04T18:47 UTC | rechazos 1h: 2 (rango=0, spike=0)
 
 | Asset | Precio | Age | Alertas |
 |---|---|---|---|
-| ✅ BTC | $63,056.00 | 0.0min |  |
-| ✅ ETH | $1,792.31 | 0.0min |  |
-| ✅ SOL | $82.20 | 0.0min |  |
-| ✅ XRP | $1.18 | 0.0min |  |
+| ✅ BTC | $63,081.46 | 0.1min |  |
+| ✅ ETH | $1,793.59 | 0.1min |  |
+| ✅ SOL | $82.20 | 0.1min |  |
+| ✅ XRP | $1.18 | 0.1min |  |
 
 **Cross-source** (binance, coinbase, kraken):
 
 | Asset | Consenso | Fuente | Estado |
 |---|---|---|---|
-| BTC | $63,056.00 | consenso |  |
-| ETH | $1,792.31 | consenso |  |
-| SOL | $82.13 | consenso |  |
-| XRP | $1.18 | consenso |  |
+| BTC | $63,090.00 | consenso |  |
+| ETH | $1,793.70 | consenso |  |
+| SOL | $82.14 | consenso |  |
+| XRP | $1.17 | consenso |  |
 
 **Alertas activas:**
 - ⚠ rechazos_1h:2 (rango=0, spike=0)
