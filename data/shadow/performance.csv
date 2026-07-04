@@ -1,5 +1,5 @@
 strategy,n_total,n_aciertos,n_fallos,hit_rate,ic_bayes,confianza,ic_efectivo,pnl_total,pnl_medio,max_ganancia,max_perdida,avg_win,avg_loss,expectancy,profit_factor,mejor_racha,peor_racha,edge_medio_pred,edge_real,avg_horas_ganadora,avg_horas_perdedora,kelly_optimo,causa_perdida_principal
-GBM_LATE_15M,753,448,305,0.595,0.0947,1.0,0.0947,182.33,0.2421,4.3453,-2.04,1.0212,-0.9022,0.2421,1.6626,11,9,0.0031,0.269,0.2,0.2,0.2371,TIMING_CORTO
+GBM_LATE_15M,755,449,306,0.5947,0.0945,1.0,0.0945,183.2998,0.2428,4.3453,-2.04,1.0222,-0.9009,0.2428,1.6649,11,9,0.0029,0.2698,0.2,0.2,0.2375,TIMING_CORTO
 ORDER_FLOW_5M,1535,785,750,0.5114,0.0114,1.0,0.0114,8.9991,0.0059,0.9002,-0.918,0.5329,-0.5458,0.0059,1.022,10,9,-0.048,0.0065,0.8,0.8,0.011,TIMING_CORTO
 RESOLUTION_SNIPER,6,6,0,1.0,0.375,0.3,0.1125,2.8533,0.4755,0.8655,0.1269,0.4755,0.0,0.4755,99.0,6,0,-0.0746,0.5284,0.2,0.0,0.0,
 LATE_WINDOW_5MIN,9,6,3,0.6667,0.1364,0.45,0.0614,1.5186,0.1687,0.7887,-0.51,0.5081,-0.51,0.1687,1.9925,4,2,-0.0439,0.1875,0.0,0.0,0.3321,TIMING_CORTO
