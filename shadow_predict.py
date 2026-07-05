@@ -2170,6 +2170,162 @@ def s_struct_no_15m(market, ctx):
     }
 
 
+# ── STREAK — momentum (5min) / reversión (15min) en la SECUENCIA de resoluciones ──
+# Hallazgo 2026-07-05: nadie miraba la secuencia de ventanas (todas las estrategias
+# las tratan como independientes). El signo se INVIERTE por escala:
+#   5min  → MOMENTUM:  tras ≥3 resoluciones iguales, continúa (n=189 58% EV+0.15).
+#   15min → REVERSIÓN: tras ≥4 resoluciones iguales, revierte (n=68 71% EV+0.28;
+#           en el slice de entrada temprana py~0.50: 80% EV+0.53).
+# Mecanismo: en 5min el flujo persiste (momentum); en 15min el retail persigue la
+# racha, sobre-extiende y revierte. Entrada AL ABRIR la ventana (py∈[0.47,0.53]): el
+# timing es crítico (si el precio ya derivó, el edge muere). BTC excluido (flojo en
+# ambas). Shadow puro: no en pares_permitidos_live → jamás opera en vivo.
+_STREAK_SEQ = None
+
+def _cargar_outcomes_recientes():
+    """Lee results.csv → {(activo, ventana_min): [(end_dt, outcome), ...] ordenado}.
+    Un outcome por ventana (mayoría). Cache por proceso (predict corre fresco c/ciclo)."""
+    global _STREAK_SEQ
+    if _STREAK_SEQ is not None:
+        return _STREAK_SEQ
+    acc = {}
+    try:
+        with open(DIR_SHADOW / "results.csv", encoding="utf-8") as f:
+            for r in csv.DictReader(f):
+                sub = r.get("subtype") or ""
+                if "#" not in sub:
+                    continue
+                activo, resto = sub.split("#", 1)
+                if activo not in ("BTC", "ETH", "SOL", "XRP"):
+                    continue
+                vent = 5 if resto == "5min" else (15 if resto == "15min" else None)
+                if vent is None:
+                    continue
+                out = r.get("outcome_real")
+                if out not in ("YES", "NO"):
+                    continue
+                try:
+                    edt = datetime.fromisoformat((r.get("end_date") or "").replace("Z", "+00:00"))
+                    if edt.tzinfo is None:
+                        edt = edt.replace(tzinfo=timezone.utc)
+                except Exception:
+                    continue
+                acc.setdefault((activo, vent), {}).setdefault(edt, []).append(out)
+    except FileNotFoundError:
+        _STREAK_SEQ = {}
+        return _STREAK_SEQ
+    seqs = {}
+    for key, d in acc.items():
+        seqs[key] = [(edt, ("YES" if o.count("YES") >= o.count("NO") else "NO"))
+                     for edt, o in ((e, d[e]) for e in sorted(d))]
+    _STREAK_SEQ = seqs
+    return _STREAK_SEQ
+
+def _racha_actual(activo, ventana_min, current_end_dt):
+    """Racha de resoluciones consecutivas de ventanas ANTERIORES a la actual.
+    Exige que la última resuelta sea adyacente (una ventana antes) para no usar
+    rachas obsoletas. Devuelve (longitud, direccion) o (0, None)."""
+    seq = _cargar_outcomes_recientes().get((activo, ventana_min))
+    if not seq:
+        return 0, None
+    gap = ventana_min * 60
+    tol = max(30, gap * 0.05)
+    prev = [(edt, o) for edt, o in seq if edt < current_end_dt]
+    if not prev:
+        return 0, None
+    prev.sort()
+    if abs((current_end_dt - prev[-1][0]).total_seconds() - gap) > tol:
+        return 0, None  # última resuelta no es adyacente → racha obsoleta
+    k = 1
+    d = prev[-1][1]
+    for i in range(len(prev) - 1, 0, -1):
+        if abs((prev[i][0] - prev[i - 1][0]).total_seconds() - gap) > tol:
+            break
+        if prev[i - 1][1] == d:
+            k += 1
+        else:
+            break
+    return k, d
+
+STREAK_MOM_5M_PARES = {"SOL", "ETH", "XRP"}    # BTC excluido (flojo, EV≈0)
+STREAK_FADE_15M_PARES = {"ETH", "SOL", "XRP"}  # BTC excluido (flojo, EV≈0)
+STREAK_PY_LO = 0.47   # entrada temprana / coinflip: fuera de esta banda el edge muere
+STREAK_PY_HI = 0.53
+
+def _streak_end_dt(market):
+    try:
+        edt = datetime.fromisoformat(market.get("end_date", "").replace("Z", "+00:00"))
+        return edt.replace(tzinfo=timezone.utc) if edt.tzinfo is None else edt
+    except Exception:
+        return None
+
+def s_streak_mom_5m(market, ctx):
+    q = market.get("question", "")
+    if "up or down" not in q.lower():
+        return None
+    tipo, vent = _parse_updown_tipo(q)
+    if tipo != "slot" or vent != 5:
+        return None
+    activo = identificar_activo(q)
+    if activo not in STREAK_MOM_5M_PARES:
+        return None
+    py = market.get("_precio_yes")
+    if py is None or not (STREAK_PY_LO <= py <= STREAK_PY_HI):
+        return None
+    edt = _streak_end_dt(market)
+    if edt is None:
+        return None
+    k, d = _racha_actual(activo, 5, edt)
+    if k < 3 or d is None:
+        return None
+    # momentum: SEGUIR la racha. prob_yes = P(continuación)≈0.58 empírico
+    prob_yes = 0.58 if d == "YES" else 0.42
+    return {
+        "prob_yes": prob_yes,
+        "razon":    f"streak_mom_5m {activo} racha={k}x{d} py={py:.3f} (momentum)",
+        "subtype":  f"{activo}#5min",
+        "features": {
+            "streak_len":    k,
+            "streak_dir_up": 1 if d == "YES" else 0,
+            "py_entrada":    round(py, 3),
+            "hora_utc":      datetime.now(timezone.utc).hour,
+        },
+    }
+
+def s_streak_fade_15m(market, ctx):
+    q = market.get("question", "")
+    if "up or down" not in q.lower():
+        return None
+    tipo, vent = _parse_updown_tipo(q)
+    if tipo != "slot" or vent != 15:
+        return None
+    activo = identificar_activo(q)
+    if activo not in STREAK_FADE_15M_PARES:
+        return None
+    py = market.get("_precio_yes")
+    if py is None or not (STREAK_PY_LO <= py <= STREAK_PY_HI):
+        return None
+    edt = _streak_end_dt(market)
+    if edt is None:
+        return None
+    k, d = _racha_actual(activo, 15, edt)
+    if k < 4 or d is None:
+        return None
+    # reversión: FADEAR la racha. racha UP → esperamos DOWN → prob_yes bajo, y viceversa
+    prob_yes = 0.30 if d == "YES" else 0.70
+    return {
+        "prob_yes": prob_yes,
+        "razon":    f"streak_fade_15m {activo} racha={k}x{d} py={py:.3f} (reversión)",
+        "subtype":  f"{activo}#15min",
+        "features": {
+            "streak_len":    k,
+            "streak_dir_up": 1 if d == "YES" else 0,
+            "py_entrada":    round(py, 3),
+            "hora_utc":      datetime.now(timezone.utc).hour,
+        },
+    }
+
+
 ESTRATEGIAS = [
     ("WEEKLY_PRICE",        s_weekly_price),
     ("PRICE_MOMENTUM",      s_price_momentum),
@@ -2183,6 +2339,8 @@ ESTRATEGIAS = [
     ("GBM_LATE_15M",        s_gbm_late_15min),
     ("GBM_LATE_60M",        s_gbm_late_60min),
     ("STRUCT_NO_15M",       s_struct_no_15m),
+    ("STREAK_MOM_5M",       s_streak_mom_5m),
+    ("STREAK_FADE_15M",     s_streak_fade_15m),
     # ("BINANCE_UPDOWN", s_binance_updown),  # retirada — IC -0.50
 ]
 
