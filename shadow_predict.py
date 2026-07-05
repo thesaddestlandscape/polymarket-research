@@ -1916,6 +1916,12 @@ GBM_LATE_15M_REST_MIN_HI = 12.0   # min restantes máximos (salta los 3 primeros
 GBM_LATE_60M_REST_MIN_LO = 5.0    # 60min: suelo más alto — libros finos al final
 GBM_LATE_60M_REST_MIN_HI = 20.0   # 60min: último tercio de la ventana (T_h<0.33)
 GBM_LATE_15M_PARES = {"BTC", "ETH", "SOL", "XRP"}
+# Photo finish (2026-07-05): entrar con el precio pegado al strike es moneda
+# al aire cobrada como favorito. |drift_ventana|<0.02% → IC=-0.145 n=181
+# (win 35%), estable en ambas mitades temporales (-0.163/-0.127) y monótono
+# con la distancia; buffer [0.02,0.05) ya es positivo en los 4 pares.
+# Tracking forward: H-CUSTOM-LATE15-PHOTO-FINISH.
+GBM_LATE_DRIFT_VENT_MIN_PCT = 0.02  # % — distancia mínima |spot vs ref ventana|
 
 
 def s_gbm_late_15min(market, ctx):
@@ -2004,6 +2010,9 @@ def _s_gbm_late(market, ctx, ventana_min, rest_lo, rest_hi):
     p_up = _norm_cdf(d)
 
     drift_ventana = spot / ref - 1
+    # Photo finish: sin distancia real al strike no hay señal, solo ruido 50/50
+    if abs(drift_ventana * 100) < GBM_LATE_DRIFT_VENT_MIN_PCT:
+        return None
     py = market.get("_precio_yes")
     if py is None:
         return None

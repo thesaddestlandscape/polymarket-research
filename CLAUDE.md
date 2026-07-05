@@ -152,6 +152,7 @@ DRIFT_60_BUY_YES_15M_LO = 0.0   # BUY_YES #15min: drift_60min mínimo
 DRIFT_60_BUY_YES_15M_HI = 0.25  # BUY_YES #15min: drift_60min máximo (05-Jul, antes 0.5)
 # BTC#15min: skip si drift_15min*100 < 0.3
 EDGE_MINIMO = 0.02 | SLIPPAGE_ESTIMADO = 0.02 (dinámico desde 03-Jul: mediana slip_real live si n≥30, clamp [0.005, 0.02])
+GBM_LATE_DRIFT_VENT_MIN_PCT = 0.02  # photo finish (05-Jul): GBM_LATE skip si |drift_ventana|<0.02%
 DELTA_MIN = 0.38 | DELTA_MAX = 0.46  # OF solo BUY_NO (delta<0)
 KELLY_COMPUESTO_BOOST = 1.5 | KELLY_COMPUESTO_MAX = 2.00
 ORDER_FLOW_BLACKLIST_HOURS = {2,7,9,10,11,22}  # UTC — evaluado sobre BTC+SOL
