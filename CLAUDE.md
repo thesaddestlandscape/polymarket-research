@@ -52,6 +52,7 @@ Bot semi-autónomo para mercados cripto Polymarket.
 screen fast    → run_fast.sh   (~20s): klines→predict→live_trade→resolve→postmortem→resumen→push
 screen slow    → run_slow.sh  (~23min): markets→wallets→trades→report→arb→push
 screen control → live_control.py (Telegram: /on /off /status /help)
+screen pfinish → photo_finish_logger.py (captura photo finish c/frontera 5min)
 cron */5       → watchdog_fast.sh (9 checks, restart screens, alerta disco)
 ```
 
@@ -73,6 +74,7 @@ cron */5       → watchdog_fast.sh (9 checks, restart screens, alerta disco)
 | `dashboard_server.py` | http://37.27.249.72:8888 (polling 1s, LightweightCharts) |
 | `nested_arb_scanner.py` | Arb de contención ventanas anidadas (cron 1min) → nested_arb_YYYY-MM-DD.csv |
 | `maker_sim.py` | Sim entrada maker vs taker (invocado por shadow_resolve) → maker_sim.csv |
+| `photo_finish_logger.py` | Screen `pfinish`: libro del lado rezagado a T-10s en photo finishes (|dist|<0.15%) + outcome oficial → photo_finish_YYYY-MM-DD.csv (H-CUSTOM-PHOTO-FINISH-SNIPER, solo captura) |
 
 ---
 

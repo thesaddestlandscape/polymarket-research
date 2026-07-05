@@ -68,6 +68,7 @@ SCREEN_RESTART = {
     "slow":    f"cd {REPO} && bash run_slow.sh >> logs/slow.log 2>&1",
     "control": f"cd {REPO} && .venv/bin/python live_control.py >> logs/live_control.log 2>&1",
     "dash":    f"cd {REPO} && python3 dashboard_server.py >> logs/dashboard.log 2>&1",
+    "pfinish": f"cd {REPO} && .venv/bin/python photo_finish_logger.py >> logs/photo_finish.log 2>&1",
 }
 
 # Cuando stdout está redirigido (screen >> watchdog.log), print() ya escribe al fichero
@@ -128,7 +129,7 @@ def check_screens() -> dict[str, bool]:
         r = subprocess.run(["screen", "-ls"], capture_output=True, text=True, timeout=5)
         output = r.stdout + r.stderr
         return {name: (f".{name}\t" in output or f".{name} " in output)
-                for name in ["fast", "slow", "control", "dash"]}
+                for name in ["fast", "slow", "control", "dash", "pfinish"]}
     except Exception:
         return {}
 
