@@ -836,11 +836,24 @@ def _cargar_spot():
             # matando en silencio toda estrategia dependiente de spot
             # (WEEKLY_PRICE, RESOLUTION_SNIPER, LATE_WINDOW_5MIN, OU).
             # Detectado 2026-07-02.
+            # Prioridad por fuente: coingecko solo como fallback. capture_prices
+            # intercala filas coingecko (~cada 72s) con las de consenso (~27s);
+            # sin este filtro ~20% de las lecturas usaban el precio coingecko
+            # (diff hasta 0.13% vs consenso y potencialmente rancio por 429).
+            # Detectado 2026-07-05.
+            fallback = {}
             for r in rows:  # la última aparición de cada activo gana
                 try:
-                    SPOT_PRECIOS[(r.get("asset") or "").upper()] = float(r["price_usd"])
+                    activo = (r.get("asset") or "").upper()
+                    precio = float(r["price_usd"])
                 except (KeyError, ValueError, TypeError):
                     continue
+                if (r.get("source") or "") == "coingecko":
+                    fallback[activo] = precio
+                else:
+                    SPOT_PRECIOS[activo] = precio
+            for k, v in fallback.items():
+                SPOT_PRECIOS.setdefault(k, v)
             SPOT_PRECIOS.pop("", None)
         else:
             # Formato ancho legacy: última fila, una columna por activo
