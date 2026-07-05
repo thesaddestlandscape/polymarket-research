@@ -1,4 +1,4 @@
-# Hipótesis automáticas — 2026-07-05 07:57 UTC
+# Hipótesis automáticas — 2026-07-05 07:58 UTC
 _Generado por shadow_postmortem.py sobre 3796 resoluciones (PNL=+137.61€)_
 
 ## Patrones causales activos
@@ -735,3 +735,9 @@ _Derivadas de los patrones aprendidos:_
   - _Acción_: Si aparecen ops nuevas en la zona → el filtro está roto, revisar shadow_predict. Si el buffer [0.02,0.05) se vuelve negativo con n≥60 forward → subir el corte a 0.05.
   - _Estado_: 182/200 ops en el filtro definido (IC actual=-0.147 PNL=-10.58€)
   - _Datos_: n=182 IC=-0.147 PNL=-10.58€
+
+**⏳ H-CUSTOM-PHOTO-FINISH-SNIPER** — Photo finish sniper — comprar el lado rezagado a 1-3c en los últimos segundos (estilo egig)
+  - _Hipótesis_: 2026-07-05: wallet 'egig' verificada on-chain (leaderboard oficial +$41k all-time; flujo 23h: -$729 compras / +$2,140 redeems). Forense de 497 trades: compra a 1-3c (mediana 2c) el lado rezagado a mediana 2s del cierre, exclusivamente en photo finishes (dist spot-strike mediana 0.027%). Mecanismo: el mercado cobra los finales de foto como decididos cuando son ~moneda al aire — es el espejo del filtro photo finish que aplicamos a GBM_LATE el mismo día. Win rate implícito ~6% con breakeven 2% (~3x por ticket). photo_finish_logger.py (screen pfinish) acumula dataset en data/shadow/photo_finish_YYYY-MM-DD.csv: libro del lado rezagado a T-10s + outcome oficial vía outcomePrices. CAVEATS a medir: profundidad real del ask a 1-3c (egig compite por asks rancios), frecuencia del setup, y que nuestro T-10s no es su T-2s.
+  - _Umbral_: 200
+  - _Acción_: Si EV>2x sostenido con n≥200 → proponer watcher de ejecución dedicado (decisión de Javi: toca dinero real y requiere loop sub-5s). Si win rate ≈ ask (mercado calibrado también aquí) → archivar.
+  - _Estado_: 0/200 ops en el filtro definido (IC actual=+0.000 PNL=+0.00€)
