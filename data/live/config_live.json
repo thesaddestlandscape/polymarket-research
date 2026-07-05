@@ -111,9 +111,10 @@
   "max_posiciones_abiertas_misma_direccion": 2,
   "circuit_breaker": {
    "freno_ventana_pct": 0.2,
-   "freno_diario_pct": 0.15,
+   "_reapertura_2026-07-06_nota": "Decisión usuario 05-Jul: reabrir live desde el lunes 06-Jul (at job toca LIVE_MODE_ON a las 06:00 UTC) e intentar recuperar con el bankroll restante, parando solo al quedarse sin dinero. freno_diario 0.15→0.30 (con stakes 1.05€ sobre ~8.50€ el 15% cortaba el día tras 1 pérdida — con 30% caben ~2). bankroll_minimo 3→1: el breaker 1 apaga el switch y avisa por Telegram al cruzar 1€; por debajo de ~2€ ni se puede absorber una pérdida sin quedar bajo el mínimo CLOB ($1/orden). Racha 4 y freno ventana 0.20 se mantienen (fallo sistemático ≠ varianza).",
+   "freno_diario_pct": 0.3,
    "_override_nota": "2026-07-04 (decisión usuario 03-Jul ~16:00Z): reabrir mañana con corte en bankroll=3€. Suelo permanente bankroll_minimo_eur 8→3 (el suelo prospectivo de calcular_stake corta exacto en 3.00€: último trade viable con bkr≥4.05, peor caso 4.05-1.05=3.00). Frenos diario y ventana 0.65 SOLO el 04-Jul (autoexpiran; con inicio de día 8.50€ el 65%=5.53€ no muerde antes que el suelo, que permite perder 5.50€). Desde el 05-Jul vuelven los defaults 15%/20% — con bankroll ~8.50€ el diario corta tras ~1 pérdida (1.28€); revisar entonces. HOY 03-Jul sigue congelado: el override diario de hoy (0.65 sobre 22.87€, pnl -14.37€) deja margen 0.49€ < min_stake.",
-   "bankroll_minimo_eur": 3.0,
+   "bankroll_minimo_eur": 1.0,
    "freno_diario_pct_override": {
     "fecha": "2026-07-04",
     "pct": 0.65
