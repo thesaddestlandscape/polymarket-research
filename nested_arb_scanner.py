@@ -55,6 +55,20 @@ MARGEN_FIN_S = 25       # no evaluar en los últimos ~25s (sin tiempo de ejecuta
 COSTE_LOG_MAX = 9.9     # registrar TODA medición en fase activa (~140 filas/día);
                         # la distribución completa del coste también es dato
 
+# --- Sim de ejecución (2026-07-05): valida si el arb sobrevive a fills FOK
+# reales y si la garantía de contención aguanta contra el outcome OFICIAL
+# (el riesgo es que o_inner/o_outer vengan de nuestros precios con tolerancia
+# ±3min y discrepen del strike real con gaps pequeños). Criterio de paso a
+# live: n>=30 cerradas con garantia_ok~100% y pnl medio ≈ profit_min.
+SIM_CSV = DIR_SHADOW / "nested_arb_sim.csv"
+SIM_MIN_DEPTH_USD = 10.0   # mismo listón que el análisis del 05-Jul
+SIM_CAP_COSTE_USD = 10.0   # coste máximo por oportunidad simulada
+SIM_CAMPOS = ["ts_entrada", "activo", "nesting", "combo", "coste", "n_shares",
+              "coste_total_usd", "ask_leg1", "ask_leg2", "gap_opens_pct",
+              "depth_usd", "min_orden_ok", "end_utc", "inner_slug",
+              "outer_slug", "status", "ts_cierre", "gano_leg1", "gano_leg2",
+              "payout_por_share", "pnl_usd", "garantia_ok"]
+
 
 def _log(msg):
     print(f"[{datetime.now(timezone.utc).isoformat(timespec='seconds')}] {msg}")
@@ -196,6 +210,114 @@ def evaluar_par(act, inner_slug, outer_slug, end_utc, inner_ini, outer_ini, prec
                  f"gap={gap_opens_pct:+.2f}%, depth=${depth_usd}, quedan {int(restante_s)}s)")
 
 
+def _sim_cargar() -> list:
+    if not SIM_CSV.exists():
+        return []
+    with open(SIM_CSV, newline="", encoding="utf-8") as f:
+        return list(csv.DictReader(f))
+
+
+def _sim_guardar(rows: list):
+    with open(SIM_CSV, "w", newline="", encoding="utf-8") as f:
+        w = csv.DictWriter(f, fieldnames=SIM_CAMPOS)
+        w.writeheader()
+        w.writerows(rows)
+
+
+def _outcome_yes(m: dict | None) -> bool | None:
+    """True/False si el mercado resolvió YES/NO oficialmente, None si aún no."""
+    try:
+        op = json.loads((m or {}).get("outcomePrices") or "[]")
+        if len(op) == 2:
+            a, b = float(op[0]), float(op[1])
+            if a > 0.99 and b < 0.01:
+                return True
+            if b > 0.99 and a < 0.01:
+                return False
+    except Exception:
+        pass
+    return None
+
+
+def _sim_resolver(rows: list) -> bool:
+    """Cierra sim trades cuya ventana terminó, contra el outcome oficial."""
+    ahora = datetime.now(timezone.utc)
+    cambiado = False
+    for r in rows:
+        if r["status"] != "OPEN":
+            continue
+        try:
+            end = datetime.fromisoformat(r["end_utc"])
+        except Exception:
+            continue
+        if ahora < end + timedelta(minutes=2):
+            continue
+        lados = r["combo"].split("+")          # ["YESout","NOin"] etc.
+        ganes = []
+        for slug, lado in ((r["outer_slug"], lados[0]),
+                           (r["inner_slug"], lados[1])):
+            yes_won = _outcome_yes(_gamma_market(slug))
+            if yes_won is None:
+                ganes = None
+                break
+            ganes.append(1 if yes_won == lado.startswith("YES") else 0)
+            time.sleep(0.15)
+        if ganes is None:
+            continue  # aún sin resolver oficialmente — reintenta el próximo run
+        payout = sum(ganes)
+        n, coste = float(r["n_shares"]), float(r["coste"])
+        r.update({"gano_leg1": ganes[0], "gano_leg2": ganes[1],
+                  "payout_por_share": payout,
+                  "pnl_usd": round(n * (payout - coste), 4),
+                  "garantia_ok": 1 if payout >= 1 else 0,
+                  "status": "CLOSED",
+                  "ts_cierre": ahora.isoformat(timespec="seconds")})
+        cambiado = True
+        _log(f"  sim CLOSED {r['activo']} {r['combo']} payout={payout} "
+             f"pnl={r['pnl_usd']}$ garantia={'OK' if payout >= 1 else '❌ ROTA'}")
+    return cambiado
+
+
+def _sim_entrar(filas: list, ends: dict, rows: list) -> bool:
+    """Registra entradas simuladas para oportunidades coste<1 con depth."""
+    abiertos = {(r["inner_slug"], r["outer_slug"], r["combo"]) for r in rows}
+    cambiado = False
+    for f in filas:
+        if f["coste"] >= 1.0 or f["depth_usd"] < SIM_MIN_DEPTH_USD:
+            continue
+        key = (f["inner_slug"], f["outer_slug"], f["combo"])
+        if key in abiertos:
+            continue
+        # FOK conservador contra el top del libro recién leído: capacidad en
+        # shares acotada por depth_usd/max(ask) (cota inferior del tamaño de
+        # ambos niveles), y por el cap de coste total.
+        max_ask = max(f["ask_leg1"], f["ask_leg2"])
+        n = round(min(SIM_CAP_COSTE_USD / f["coste"], f["depth_usd"] / max_ask), 2)
+        if n <= 0:
+            continue
+        rows.append({
+            "ts_entrada": f["timestamp_utc"], "activo": f["activo"],
+            "nesting": f["nesting"], "combo": f["combo"], "coste": f["coste"],
+            "n_shares": n, "coste_total_usd": round(n * f["coste"], 4),
+            "ask_leg1": f["ask_leg1"], "ask_leg2": f["ask_leg2"],
+            "gap_opens_pct": f["gap_opens_pct"], "depth_usd": f["depth_usd"],
+            # CLOB exige >=$1 por orden marketable — con asks de céntimos la
+            # pata barata puede no llegar; se registra para no sobreestimar
+            "min_orden_ok": 1 if (n * f["ask_leg1"] >= 1.0
+                                  and n * f["ask_leg2"] >= 1.0) else 0,
+            "end_utc": ends[f["inner_slug"]].isoformat(timespec="seconds"),
+            "inner_slug": f["inner_slug"], "outer_slug": f["outer_slug"],
+            "status": "OPEN", "ts_cierre": "", "gano_leg1": "",
+            "gano_leg2": "", "payout_por_share": "", "pnl_usd": "",
+            "garantia_ok": "",
+        })
+        abiertos.add(key)
+        cambiado = True
+        _log(f"  sim OPEN {f['activo']} {f['combo']} coste={f['coste']} "
+             f"n={n} (min garantizado +{f['profit_min_pct']}%)")
+    return cambiado
+
+
 def main():
     ahora = datetime.now(timezone.utc)
     tareas = []
@@ -219,7 +341,12 @@ def main():
             tareas.append((act, f"{corto}-updown-5m-{ep5}", f"{corto}-updown-15m-{ep15q}",
                            fin_q, ini_slot5, fin_q - timedelta(minutes=15)))
 
+    sim_rows = _sim_cargar()
+    sim_dirty = _sim_resolver(sim_rows)
+
     if not tareas:
+        if sim_dirty:
+            _sim_guardar(sim_rows)
         return  # fuera de fase activa — salida silenciosa
 
     precios = _precios_minuto()
@@ -241,6 +368,12 @@ def main():
             w.writerows(filas)
         n_arb = sum(1 for r in filas if r["coste"] < 1.0)
         _log(f"nested_arb: {len(filas)} mediciones, {n_arb} con coste<1")
+
+    ends = {t[1]: t[3] for t in tareas}
+    if _sim_entrar(filas, ends, sim_rows):
+        sim_dirty = True
+    if sim_dirty:
+        _sim_guardar(sim_rows)
 
 
 if __name__ == "__main__":

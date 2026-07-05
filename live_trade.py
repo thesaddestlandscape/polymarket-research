@@ -491,7 +491,8 @@ def _registrar_snapshot_libro(motivo: str, market_id: str, direction: str,
 
 
 def _snapshot_senal_bloqueada(market_id: str, direction: str, precio_yes,
-                              stake_ref: float, contexto: dict) -> None:
+                              stake_ref: float, contexto: dict,
+                              motivo: str = "no_viable_stake") -> None:
     """Snapshot del libro para señales que NO llegan a ejecución porque el
     stake no es viable (suelo bankroll_minimo / freno diario). Sin esto el
     dataset del análisis maker (libro_snapshots.csv) deja de acumular justo
@@ -507,7 +508,8 @@ def _snapshot_senal_bloqueada(market_id: str, direction: str, precio_yes,
                 for row in csv.DictReader(f):
                     if (str(row.get("market_id")) == str(market_id)
                             and row.get("direction") == direction
-                            and row.get("motivo") == "no_viable_stake"):
+                            and row.get("motivo") in ("no_viable_stake",
+                                                      "fuera_ventana")):
                         return
         yes_token, no_token = _get_token_ids(market_id)
         if direction == "BUY_YES":
@@ -516,8 +518,67 @@ def _snapshot_senal_bloqueada(market_id: str, direction: str, precio_yes,
             token_id, precio = no_token, round(1.0 - float(precio_yes), 6)
         client = _get_clob_client()
         depth = _consultar_profundidad_libro(client, token_id, precio, stake_ref)
-        _registrar_snapshot_libro("no_viable_stake", market_id, direction,
+        _registrar_snapshot_libro(motivo, market_id, direction,
                                   precio, stake_ref, depth, contexto)
+    except Exception:
+        pass
+
+
+def _snapshots_fuera_ventana() -> None:
+    """Acumula libro_snapshots también con el live cerrado (switch OFF, fuera
+    de ventana, fin de semana). Motivo: el dataset de fill-ability — criterio
+    de reapertura, n>=30 en analisis_fills.py — solo crecía dentro de ventanas
+    L-V, y el live se congeló un viernes por la tarde (03-Jul): 1 fila en 2
+    días. Aplica los mismos filtros de elegibilidad que el flujo live (tupla
+    whitelisted + mercado abierto + barra IC/n) para que las filas sean
+    comparables con las de ejecución. Solo lee el libro — nunca ordena, nunca
+    lanza."""
+    try:
+        config   = _cargar_config()
+        pares_ok = set(config.get("pares_permitidos_live", []))
+        if not pares_ok:
+            return
+        params  = _cargar_params()
+        riesgo  = config.get("riesgo", {})
+        min_ic  = riesgo.get("min_ic_para_live", 0.08)
+        min_n   = riesgo.get("min_n_para_live", 40)
+        min_ic_asim = riesgo.get("min_ic_asimetrico", {})
+        stake_ref   = riesgo.get("min_stake_eur", 1.05)
+        ahora = datetime.now(timezone.utc)
+        for pred in _cargar_predicciones_hoy():
+            strategy = pred.get("strategy", "")
+            subtype  = pred.get("subtype", "")
+            mid      = pred.get("market_id", "")
+            dec      = pred.get("decision", "")
+            if f"{strategy}#{subtype}#{dec}" not in pares_ok:
+                continue
+            end_str = pred.get("end_date", "")
+            try:
+                if not end_str:
+                    continue
+                end_dt = datetime.fromisoformat(end_str.replace("Z", "+00:00"))
+                if end_dt.tzinfo is None:
+                    end_dt = end_dt.replace(tzinfo=timezone.utc)
+                if end_dt <= ahora:
+                    continue
+            except Exception:
+                continue
+            min_ic_efectivo = min_ic_asim.get(f"{strategy}#{dec}", min_ic)
+            try:
+                feats = json.loads(pred.get("features", "{}") or "{}")
+            except Exception:
+                feats = {}
+            ic_h, n_h = _ic_n_para_subtype(strategy, subtype, params,
+                                           decision=dec, min_n=min_n,
+                                           min_ic=min_ic_efectivo,
+                                           features=feats)
+            if ic_h < min_ic_efectivo or n_h < min_n:
+                continue
+            _snapshot_senal_bloqueada(mid, dec,
+                                      pred.get("precio_yes_mercado", 0.5),
+                                      stake_ref,
+                                      {"strategy": strategy, "subtype": subtype},
+                                      motivo="fuera_ventana")
     except Exception:
         pass
 
@@ -867,6 +928,7 @@ def main():
 
     if not puede:
         log(f"  → Fuera de operación. Motivo: {motivo}")
+        _snapshots_fuera_ventana()
         return
 
     # 2. Circuit breaker — verificar límites de pérdida antes de operar
