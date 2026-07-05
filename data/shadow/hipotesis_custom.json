@@ -738,6 +738,22 @@
    },
    "umbral_n": 40,
    "umbral_ic_min": 0.08
+  },
+  {
+   "id": "H-CUSTOM-LATE15-PHOTO-FINISH",
+   "nombre": "GBM_LATE_15M photo finish — entrar pegado al strike es moneda al aire cobrada como favorito",
+   "descripcion": "Detectado 2026-07-05 validando contra nuestros datos la única idea aprovechable de un artículo-anuncio de copy-bot: GBM_LATE_15M con |drift_ventana_pct|<0.02 tenía IC=-0.145 n=181 (win 35%, -9.70€), estable en ambas mitades temporales (-0.163/-0.127), monótono con la distancia (0.02-0.05: IC=+0.061; ≥0.05: IC=+0.14..0.19) y consistente en crudo y normalizado por sigma (|d_gbm|<0.1 IC=-0.081 n=244). BTC (IC=-0.163 n=90) y ETH (-0.130 n=79) concentraban el daño; SOL/XRP apenas entran en esa zona. Mecanismo: sin distancia real al strike el resultado es ~50/50 pero py_entrada ya cobra favorito. Filtro GBM_LATE_DRIFT_VENT_MIN_PCT=0.02 aplicado en shadow_predict el 2026-07-05. Esta hipótesis trackea la zona filtrada: si vuelven a aparecer ops aquí, el filtro se ha roto.",
+   "tipo": "filtro",
+   "umbral": "vigilancia: 0 ops nuevas esperadas tras el filtro (2026-07-05)",
+   "accion": "Si aparecen ops nuevas en la zona → el filtro está roto, revisar shadow_predict. Si el buffer [0.02,0.05) se vuelve negativo con n≥60 forward → subir el corte a 0.05.",
+   "filtro": {
+    "strategy_prefix": "GBM_LATE_15M",
+    "feature": "drift_ventana_pct",
+    "feature_lo": -0.02,
+    "feature_hi": 0.02
+   },
+   "umbral_n": 200,
+   "umbral_ic_max": -0.05
   }
  ]
 }
