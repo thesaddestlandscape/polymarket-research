@@ -1123,12 +1123,13 @@ DRIFT_DAMPING_DEFAULT = 0.10  # daily y ventanas no catalogadas
 # En 5/15min ambas señales son buenas → sin filtro.
 REGIME_BUY_NO_THRESHOLD = 0.7  # %/h, solo para ventanas ≥60min
 
-# Filtro BUY_YES #15min — solo operar cuando drift_60min ∈ [0, +0.5%)
-# Análisis n=81 ops con features: [0,0.5) → 16/22 (73%) IC=+0.208 PNL=+8.32€
-# Fuera: IC~0 (drift<0 n=33 PNL=-4.97€) o negativo (drift>0.5% n=26 PNL=-2.97€)
-# Consistente por par: BTC 7/8, ETH 6/8, SOL 3/4. Mejora retroactiva: +16.26€.
+# Filtro BUY_YES #15min — solo operar cuando drift_60min ∈ [0, +0.25%)
+# Análisis original n=81 (2026-06-26): [0,0.5) IC=+0.208. NO se sostuvo en forward:
+# 27-Jun→05-Jul [0,0.25) IC=-0.018 n=195 | [0.25,0.5) IC=-0.071 n=82 (peor tramo).
+# 2026-07-05: HI 0.5→0.25 — recorta la zona peor; el resto sigue en tracking
+# (H-CUSTOM-BUYYES-15MIN-POSTFILTRO). Ninguna zona drift es positiva forward.
 DRIFT_60_BUY_YES_15M_LO = 0.0   # %/h — mínimo (drift plano o ligeramente alcista)
-DRIFT_60_BUY_YES_15M_HI = 0.5   # %/h — máximo (drift muy alcista → ya priceado)
+DRIFT_60_BUY_YES_15M_HI = 0.25  # %/h — máximo (2026-07-05, antes 0.5: IC=-0.071 en [0.25,0.5))
 
 # Filtro ETH#15min BUY_NO — skip si el mercado ya da >55% al YES (NO longshot).
 # Análisis 2026-07-02 últ.60 shadow: py_mkt~0.5 → wr 0.67 PNL=+29.3€ (n=49);

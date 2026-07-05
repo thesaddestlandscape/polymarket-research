@@ -231,10 +231,10 @@
   {
    "id": "H-CUSTOM-BUYYES-15MIN-POSTFILTRO",
    "nombre": "BUY_YES #15min con filtro drift_60min activo — ¿funciona en forward?",
-   "descripcion": "El filtro drift_60min ∈ [0,+0.5%) se implementó el 2026-06-26. Datos forward desde 2026-06-27: 8/18 (44%) IC=-0.045. Aún n pequeño. Monitorear si el IC sube a +0.10 con n≥40.",
+   "descripcion": "El filtro drift_60min ∈ [0,+0.5%) se implementó el 2026-06-26. Datos forward desde 2026-06-27: 8/18 (44%) IC=-0.045. Aún n pequeño. Monitorear si el IC sube a +0.10 con n≥40. ACTUALIZADO 2026-07-05: el filtro NO funciona en forward (27jun-05jul): [0,0.25) IC=-0.018 n=195, [0.25,0.5) IC=-0.071 n=82. Se estrecha DRIFT_60_BUY_YES_15M_HI de 0.5 a 0.25 (quita el tramo peor). Ninguna zona drift es positiva — si el IC forward de [0,0.25) no mejora con n≥250, considerar cerrar BUY_YES #15min por completo (coherente con H-CUSTOM-GBM-BUYYES-GLOBAL-MALO).",
    "tipo": "boost",
    "umbral": "n≥40 y IC>+0.10 para confirmar el filtro funciona en forward",
-   "accion": "Si IC<0 con n≥30 → revisar umbral drift_60min (0.5% puede ser demasiado estrecho)",
+   "accion": "Filtro estrechado a [0,0.25) el 2026-07-05. Si IC forward sigue <0 con n≥250 en la zona restante → proponer cierre total de BUY_YES #15min en shadow_predict.",
    "filtro": {
     "strategy_prefix": "UPDOWN_GBM",
     "subtype_contains": "15min",

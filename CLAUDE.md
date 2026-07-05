@@ -149,7 +149,7 @@ predictions (features JSON) → postmortem:
 DRIFT_DAMPING = {5:0.30, 15:0.20, 60:0.05, 240:0.10}  # backfill 90d
 REGIME_BUY_NO_THRESHOLD = 0.7    # %/h — solo ≥60min, solo BUY_NO
 DRIFT_60_BUY_YES_15M_LO = 0.0   # BUY_YES #15min: drift_60min mínimo
-DRIFT_60_BUY_YES_15M_HI = 0.5   # BUY_YES #15min: drift_60min máximo
+DRIFT_60_BUY_YES_15M_HI = 0.25  # BUY_YES #15min: drift_60min máximo (05-Jul, antes 0.5)
 # BTC#15min: skip si drift_15min*100 < 0.3
 EDGE_MINIMO = 0.02 | SLIPPAGE_ESTIMADO = 0.02 (dinámico desde 03-Jul: mediana slip_real live si n≥30, clamp [0.005, 0.02])
 DELTA_MIN = 0.38 | DELTA_MAX = 0.46  # OF solo BUY_NO (delta<0)
