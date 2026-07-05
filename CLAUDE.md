@@ -38,12 +38,12 @@ Solo comparten metodología (IC, shadow-first, umbral live).
 
 ## Objetivo
 Bot semi-autónomo para mercados cripto Polymarket.
-- **Fase actual**: live activo — primer trade real hoy 30-Jun
+- **Fase actual**: live REABRE lunes 06-Jul 06:00 UTC (at job) tras congelación 03-05 Jul — objetivo recuperar 8.50€, para solo sin dinero (suelo 1€)
 - **Capital**: 25.44€ operativo live (30€ depósito, 10€ reserva)
 - **Umbral live**: IC≥0.08, n≥40 resoluciones confirmadas (valor real en `data/live/config_live.json::riesgo.min_ic_para_live`)
 - **VPS**: Hetzner Helsinki (IP finlandesa — Polymarket accesible desde FI)
 - **Estrategias live activas**: UPDOWN_GBM (ETH#15min BUY_NO) + GBM_LATE_15M (SOL/XRP BUY_YES, promovida 2026-07-03: IC=0.144/0.211 n=43/43, CLV+0.107). BUY_NO de GBM_LATE con barra asimétrica 0.16 (evidencia direccional insuficiente). ORDER_FLOW_5M no está en whitelist live. GBM_LATE_60M (03-Jul): clon shadow-puro de la entrada tardía para mercados 60min (últimos 5-20 min), fuera de whitelist.
-- **Protecciones live añadidas 2026-07-03**: re-quote contra libro al ejecutar (aborta si edge<0.02 con el ask actual) | techo 2 posiciones abiertas misma dirección (correlación multi-par) | freno diario prospectivo (pérdida+stake+**stakes abiertos**≤15%, fix tras -6.54€ el 03-Jul) | veto patrón causal si IC propio del subtype <0 | **latch freno ventana** (disparo → `freno_ventana_latch.json`, no reabre hasta la siguiente ventana; antes se rearmaba solo al recuperar PnL) | **veto CLV** (tupla con clv_medio<0 y n≥20 en ventana 7d → no ejecuta; guardia sobre el IC, no sustituto) | slippage real → `notas` (`slip_real=`) para calibrar SLIPPAGE_ESTIMADO con n≥30 | **veto profundidad libro** (ratio<5x stake o consulta fallida → aborta; XRP/SOL entraron contra libros vacíos con slip +0.04/+0.085) | **whitelist por tupla** `pares_permitidos_live` STRATEGY#SUBTYPE#DIRECTION (el producto cartesiano coló UPDOWN_GBM#SOL/BTC#15min) | suelo prospectivo bankroll_minimo (8€ desde 03-Jul) | override freno diario con fecha (`freno_diario_pct_override`, solo aplica el día indicado) | **suelo stake 1.05€** (CLOB rechaza marketable BUY <$1 "min size: 1"; 2 señales perdidas 03-Jul con Kelly 0.94/0.98€ tras caer el bankroll) + guardia fail-closed en live_trade si llega <$1
+- **Protecciones live añadidas 2026-07-03**: re-quote contra libro al ejecutar (aborta si edge<0.02 con el ask actual) | techo 2 posiciones abiertas misma dirección (correlación multi-par) | freno diario prospectivo (pérdida+stake+**stakes abiertos**≤15%, fix tras -6.54€ el 03-Jul) | veto patrón causal si IC propio del subtype <0 | **latch freno ventana** (disparo → `freno_ventana_latch.json`, no reabre hasta la siguiente ventana; antes se rearmaba solo al recuperar PnL) | **veto CLV** (tupla con clv_medio<0 y n≥20 en ventana 7d → no ejecuta; guardia sobre el IC, no sustituto) | slippage real → `notas` (`slip_real=`) para calibrar SLIPPAGE_ESTIMADO con n≥30 | **veto profundidad libro** (ratio<5x stake o consulta fallida → aborta; XRP/SOL entraron contra libros vacíos con slip +0.04/+0.085) | **whitelist por tupla** `pares_permitidos_live` STRATEGY#SUBTYPE#DIRECTION (el producto cartesiano coló UPDOWN_GBM#SOL/BTC#15min) | suelo prospectivo bankroll_minimo (8→3€ el 04-Jul, 1€ desde 06-Jul) | override freno diario con fecha (`freno_diario_pct_override`, solo aplica el día indicado) | **suelo stake 1.05€** (CLOB rechaza marketable BUY <$1 "min size: 1"; 2 señales perdidas 03-Jul con Kelly 0.94/0.98€ tras caer el bankroll) + guardia fail-closed en live_trade si llega <$1
 
 ---
 
@@ -72,7 +72,7 @@ cron */5       → watchdog_fast.sh (9 checks, restart screens, alerta disco)
 | `hypothesis_tracker.py` | 14 hipótesis builtin + custom JSON → auto-apply strategy_params |
 | `pipeline_watchdog.py` | 9 checks, restart screens, rotación logs, alerta disco |
 | `dashboard_server.py` | http://37.27.249.72:8888 (polling 1s, LightweightCharts) |
-| `nested_arb_scanner.py` | Arb de contención ventanas anidadas (cron 1min) → nested_arb_YYYY-MM-DD.csv |
+| `nested_arb_scanner.py` | Arb de contención ventanas anidadas (cron 1min) → nested_arb_YYYY-MM-DD.csv + **sim ejecución FOK** (05-Jul) → nested_arb_sim.csv (entrada a asks reales, cierre con outcome oficial, `garantia_ok`; paso a live: n≥30 con garantía ~100%) |
 | `maker_sim.py` | Sim entrada maker vs taker (invocado por shadow_resolve) → maker_sim.csv |
 | `photo_finish_logger.py` | Screen `pfinish`: libro del lado rezagado a T-10s en photo finishes (|dist|<0.15%) + outcome oficial → photo_finish_YYYY-MM-DD.csv (H-CUSTOM-PHOTO-FINISH-SNIPER, solo captura) |
 
@@ -139,7 +139,7 @@ predictions (features JSON) → postmortem:
 | P10 | ETH#15min reversion drift<-1 → boost ×1.1 | n≥20, IC≥0.08 sostenido |
 | P11 | Revisar OF blacklist 02h/07h (BTC+SOL solo) | n≥20 por hora |
 | P12 | Smart money wallets + trade size feature | Descargar Jon-Becker (`s3.jbecker.dev/data.tar.zst` 36GB) |
-| P13 | Arb de contención ventanas anidadas → live | `nested_arb_scanner.py` (cron 1min) acumulando; revisar distribución coste/depth tras ~1 semana |
+| P13 | Arb de contención ventanas anidadas → live | **Análisis 05-Jul: 157 opps/4d con profit>1% y depth≥$10, mediana +14%.** Sim ejecución activa (nested_arb_sim.csv); a live con n≥30 cerradas y garantia_ok~100% |
 | ~~P14~~ | **RESUELTO 2026-07-03: quedarse taker.** maker_sim n=375: fill 53.6%, EV taker +0.147€/señal vs maker -0.21€/señal (selección adversa). maker_sim sigue acumulando por si cambia con más liquidez | — |
 
 ---
@@ -173,14 +173,20 @@ UMBRAL_DESACTIVAR=(-0.20, 8)  # IC<-0.20 en n≥8 ciclos → desactivar
 ### live_stake.py / data/live/config_live.json
 ```python
 max_pct_bankroll=0.10 | min_stake_eur=1.05 (CLOB exige ≥$1 en marketable BUY) | max_stake_eur=1.05 (03-Jul: stake=min hasta validar maker; antes 2.00)
-freno_ventana=0.20 | freno_diario=0.15 | bankroll_min=8.00
+freno_ventana=0.20 | freno_diario=0.30 (05-Jul, antes 0.15) | bankroll_min=1.00 (05-Jul) | racha=4
 # ⚠️ SELECCIÓN ADVERSA TAKER (03-Jul): fills live 19% hit vs 83% señales vetadas por profundidad
 # (mismas tuplas/día; shadow pierde los MISMOS mercados a precio plan → no es slippage, es fill-ability).
 # data/live/libro_snapshots.csv registra libro de cada señal en fase de ejecución (motivo:
 # ejecutada/veto_profundidad/veto_sin_datos/abort_requote/fok_kill/no_viable_stake — este último
 # captura señales bloqueadas por el suelo/freno, para que el dataset acumule con el live congelado).
 # `python3 analisis_fills.py` = criterio de reapertura: hit shadow por motivo, decide con n≥30.
-# Live CONGELADO de facto desde 03-Jul ~15:40Z: bankroll 8.50€, suelo 8€ + min_stake 1.05 → stake=0 siempre.
+# 05-Jul: libro_snapshots acumula 24/7 (motivo fuera_ventana, mismos filtros IC/whitelist, desde
+# live_trade._snapshots_fuera_ventana) — antes solo dentro de ventana y el dataset no crecía.
+# maker_sim segmentado por tupla (n=1270): EV maker NEGATIVO en las 10 tuplas → maker descartado
+# también condicional; la reapertura va por filtro fill-ability, no por maker.
+# REAPERTURA 06-Jul (decisión usuario 05-Jul): at job toca LIVE_MODE_ON lunes 06:00 UTC.
+# Objetivo: recuperar con los 8.50€; solo para al quedarse sin dinero (breaker a 1€ apaga y avisa).
+# Congelado 03→05-Jul: el suelo era 8€→3€ (04-Jul) y el switch quedó OFF.
 ```
 
 ---
