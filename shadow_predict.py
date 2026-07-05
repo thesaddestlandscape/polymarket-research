@@ -2116,6 +2116,60 @@ def s_updown_ou_5m(market, ctx):
     }
 
 
+# ── STRUCT_NO_15M — factor estructural "sobreprecio del YES" (model-free) ──────
+# Hallazgo 2026-07-05: en los cripto Up/Down 15min, el NO gana sistemáticamente
+# por encima de su precio implícito CUANDO es el favorito leve (precio_yes<0.50).
+# No es simétrico (respaldar el YES-favorito da EV negativo) → es el sesgo
+# conductual "el retail compra Up" aislado del GBM. Backtest mercados únicos
+# BTC+ETH+SOL BUY_NO py∈[0.47,0.50): n=459 P(NO)=55.6% EV_neto(fee 2%)=+0.066.
+# Modelo: P(YES)=0.43 (P(NO)≈0.57) en la zona coinflip. Calibrado a la sub-banda
+# de disparo real py∈[0.47,0.50), donde el empírico es P(NO)=0.556 (n=459). Con el
+# gate de main() (slippage 0.02 + edge_min 0.02) este prob_yes hace que dispare
+# BUY_NO exactamente en [0.47,0.50) —el tramo de mayor EV— sin riesgo de misfire a
+# BUY_YES (imposible en la banda). El prob_yes solo fija el umbral de decisión: el
+# PnL/IC se miden con resultados reales en shadow_resolve, no con este valor.
+# Shadow puro: NO está en pares_permitidos_live → jamás opera en vivo. XRP excluido
+# (P(NO)=0.51, sin edge), BNB/DOGE fuera (n minúsculo).
+STRUCT_NO_15M_PARES = {"BTC", "ETH", "SOL"}
+STRUCT_NO_PY_LO = 0.44   # banda coinflip observada (fires ~[0.47,0.50), resto SKIP)
+STRUCT_NO_PY_HI = 0.50
+STRUCT_NO_PROB_YES = 0.43  # P(YES) justo ≈ 1 - P(NO)(0.556) en la sub-banda de disparo
+
+def s_struct_no_15m(market, ctx):
+    question = market.get("question", "")
+    if "up or down" not in question.lower():
+        return None
+    tipo, vent = _parse_updown_tipo(question)
+    if tipo != "slot" or vent != 15:
+        return None
+    activo = identificar_activo(question)
+    if activo not in STRUCT_NO_15M_PARES:
+        return None
+    py = market.get("_precio_yes")
+    if py is None or not (STRUCT_NO_PY_LO <= py < STRUCT_NO_PY_HI):
+        return None
+
+    restante_min = None
+    try:
+        end_dt = datetime.fromisoformat(market.get("end_date", "").replace("Z", "+00:00"))
+        if end_dt.tzinfo is None:
+            end_dt = end_dt.replace(tzinfo=timezone.utc)
+        restante_min = round((end_dt - datetime.now(timezone.utc)).total_seconds() / 60.0, 2)
+    except Exception:
+        pass
+
+    return {
+        "prob_yes": STRUCT_NO_PROB_YES,
+        "razon":    f"struct_no_15m {activo} py={py:.3f} (favorito-NO leve, model-free)",
+        "subtype":  f"{activo}#15min",
+        "features": {
+            "py_entrada":   round(py, 3),
+            "restante_min": restante_min,
+            "hora_utc":     datetime.now(timezone.utc).hour,
+        },
+    }
+
+
 ESTRATEGIAS = [
     ("WEEKLY_PRICE",        s_weekly_price),
     ("PRICE_MOMENTUM",      s_price_momentum),
@@ -2128,6 +2182,7 @@ ESTRATEGIAS = [
     ("LATE_WINDOW_5MIN",    s_late_window_5min),
     ("GBM_LATE_15M",        s_gbm_late_15min),
     ("GBM_LATE_60M",        s_gbm_late_60min),
+    ("STRUCT_NO_15M",       s_struct_no_15m),
     # ("BINANCE_UPDOWN", s_binance_updown),  # retirada — IC -0.50
 ]
 
