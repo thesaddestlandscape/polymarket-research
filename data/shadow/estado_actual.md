@@ -1,4 +1,4 @@
-# Estado del bot — 2026-07-06 17:00 UTC
+# Estado del bot — 2026-07-06 17:01 UTC
 
 ## Capital
 | | |
@@ -11,13 +11,13 @@
 | | |
 |---|---|
 | Inicio | 25.44 € |
-| Actual | **319.36 €** |
-| P&L acumulado | 🟢 **+293.92 €** |
-| ROI s/ operativo | +1155.35% |
-| ROI s/ depósito | +979.74% |
-| P&L hoy (2026-07-06) | 🟢 +98.93 € |
-| Operaciones resueltas | 4389 (2270 WIN / 2119 LOSS) — 51.7% |
-| Señales abiertas | 177 |
+| Actual | **319.65 €** |
+| P&L acumulado | 🟢 **+294.21 €** |
+| ROI s/ operativo | +1156.49% |
+| ROI s/ depósito | +980.71% |
+| P&L hoy (2026-07-06) | 🟢 +99.22 € |
+| Operaciones resueltas | 4390 (2271 WIN / 2119 LOSS) — 51.7% |
+| Señales abiertas | 176 |
 
 ## Estrategias (visión global)
 
@@ -30,7 +30,7 @@
 | RESOLUTION_SNIPER | 6 | 100.0% | +0.112 | +2.85€ | 1.12€ | ⏳ acumulando |
 | STREAK_FADE_15M | 17 | 41.2% | -0.067 | -1.92€ | 0.50€ | ⚠️ IC negativo |
 | STRUCT_NO_15M | 15 | 20.0% | -0.199 | -4.68€ | 0.00€ | 🚫 desactivada |
-| GBM_LATE_60M | 19 | 15.8% | -0.294 | -6.97€ | 0.00€ | 🚫 desactivada |
+| GBM_LATE_60M | 20 | 20.0% | -0.273 | -6.68€ | 0.00€ | 🚫 desactivada |
 | SMART_FLOW_1H | 29 | 20.7% | -0.274 | -13.82€ | 0.00€ | 🚫 desactivada |
 | UPDOWN_OU_5M | 84 | 28.6% | -0.209 | -18.89€ | 0.00€ | 🚫 desactivada |
 | WEEKLY_PRICE | 112 | 45.5% | -0.044 | -26.37€ | 0.50€ | ⚠️ IC negativo |
@@ -40,22 +40,22 @@
 
 | Timestamp | Estrategia | Mercado | Resultado | PNL |
 |---|---|---|---|---|
+| 2026-07-06T17:01 | GBM_LATE_60M#BTC#60min | Bitcoin Up or Down - July 6, 12PM ET… | ✅ WIN | +0.29€ |
 | 2026-07-06T17:00 | GBM_LATE_60M#SOL#60min | Solana Up or Down - July 6, 12PM ET… | ❌ LOSS | -0.51€ |
 | 2026-07-06T17:00 | GBM_LATE_60M#ETH#60min | Ethereum Up or Down - July 6, 12PM ET… | ❌ LOSS | -0.51€ |
 | 2026-07-06T16:50 | GBM_LATE_15M#BTC#15min | Bitcoin Up or Down - July 6, 12:30PM-12:45PM ET… | ✅ WIN | +0.87€ |
 | 2026-07-06T16:48 | GBM_LATE_15M#SOL#15min | Solana Up or Down - July 6, 12:30PM-12:45PM ET… | ✅ WIN | +1.60€ |
-| 2026-07-06T16:48 | GBM_LATE_15M#ETH#15min | Ethereum Up or Down - July 6, 12:30PM-12:45PM ET… | ✅ WIN | +1.29€ |
 
 ## Calidad de datos
 
-⚠️ **DEGRADED** — última verificación 2026-07-06T17:00 UTC | rechazos 1h: 7 (rango=0, spike=0)
+⚠️ **DEGRADED** — última verificación 2026-07-06T17:01 UTC | rechazos 1h: 7 (rango=0, spike=0)
 
 | Asset | Precio | Age | Alertas |
 |---|---|---|---|
-| ✅ BTC | $63,646.36 | 0.1min |  |
-| ✅ ETH | $1,790.24 | 0.1min |  |
-| ✅ SOL | $82.08 | 0.1min |  |
-| ✅ XRP | $1.15 | 0.1min |  |
+| ✅ BTC | $63,646.36 | 0.0min |  |
+| ✅ ETH | $1,790.24 | 0.0min |  |
+| ✅ SOL | $81.98 | 0.0min |  |
+| ✅ XRP | $1.15 | 0.0min |  |
 
 **Cross-source** (binance, coinbase, kraken):
 
