@@ -1,10 +1,39 @@
 # CLAUDE.md — Polymarket Research Bot
-**Actualizado: 2026-06-30** | Live activo desde hoy (cron ON 13:00 UTC)
+**Actualizado: 2026-07-06** | Live REABIERTO 06-Jul 06:00 UTC (objetivo: recuperar 8.50€, suelo 1€)
 
 ## Reglas de comportamiento
 - **Fail Loud**: "completado"/"verificado" es INCORRECTO si algo se asumió sin confirmar explícitamente. Surfacear incertidumbre siempre.
 - **Checkpoint**: en tareas ≥3 pasos, resumir tras cada paso qué está verificado y qué queda antes de continuar.
 - **Antes de escribir código nuevo** (decisión ladder): ¿ya existe en el codebase? → ¿lo hace la stdlib/requests/csv/json? → ¿una línea? → solo entonces: mínimo viable. Excepción: código de seguridad live (circuit breakers, filtros end_date, Kelly) — no minimizar.
+
+## ⚠️ Manual operativo — errores que NO cometer (escrito para cualquier modelo)
+Cada error va con la regla que lo previene. Si dudas entre dos interpretaciones, aplica la regla, no tu intuición.
+
+**Errores de datos:**
+1. **Inventar nombres de columna/clave** (`pnl` en vez de `pnl_neto`, `ic_efectivo` en vez de `ic_bayes`). Regla: antes de escribir código que lea un CSV/JSON, verifica el nombre exacto con `head -1 <csv>` o contra la sección "Esquema de datos clave". No escribas ningún lector de datos de memoria.
+2. **Concluir con n insuficiente**. Regla: ninguna conclusión de estrategia con n<15; ninguna promoción/desactivación fuera de los umbrales documentados (live: IC≥0.08 n≥40; desactivar: IC<-0.20 n≥8). Todo análisis cita n, IC y fichero fuente.
+3. **Confundir shadow con live**. `results.csv` = simulado, `data/live/trades.csv` = dinero real. Regla: al reportar PnL di siempre cuál de los dos es.
+
+**Errores de código:**
+4. **"Simplificar" o refactorizar código de seguridad live** (circuit breakers, vetos, Kelly, whitelist, frenos). Regla: ese código solo se toca con petición explícita del usuario, y cada guardia nueva es fail-closed (ante error/dato faltante → NO operar).
+5. **Experimentar en producción**. Regla: experimentos en `/root/polymarket-research-dev` (worktree dev). En main solo fixes verificados. Nunca un `python3 -c` inline que escriba en `data/` de producción.
+6. **Escribir código que ya existe**. Regla: decisión ladder (arriba) antes de cada función nueva.
+
+**Errores de operación:**
+7. **Resolver conflictos git de data/ a mano**. Regla: `git checkout --theirs data/shadow/*.json data/prices/*.csv` — siempre theirs, los loops son la fuente de verdad.
+8. **Reiniciar screens/loops como primer reflejo**. Regla: primero diagnostica (`logs/fast.log` — los tracebacks live van ahí, NO a live.log; `data_quality.json`; `screen -ls`). El watchdog ya reinicia solo; si reinicia él y tú, duplicas procesos.
+9. **Tocar el weather bot**. `/root/polymarket-weather` es un sistema independiente con su propio CLAUDE.md. Regla: no mezclar datos, código ni params.
+
+**Escalación (cuándo preguntar al usuario):**
+- **Preguntar SIEMPRE**: cambios que afectan dinero real (params de riesgo live, stakes, frenos, whitelist, switch on/off), borrar datos históricos, `git push --force`.
+- **Autonomía plena**: params shadow, hipótesis custom, análisis, notas, código en dev.
+- **Parar y surfacear** (no adivinar): columna/clave que no existe, JSON corrupto, PnL que no cuadra entre ficheros, cualquier número que contradiga a otro.
+
+**Barra de calidad por entregable (checkeable, no adjetivos):**
+- Cambio de código: `python3 -m py_compile <fichero>` pasa + el commit no mezcla código con ficheros de `data/`.
+- Análisis: incluye n, IC, periodo y comando/fichero de origen reproducible.
+- Cambio de config: valor antes→después + quién lo aprobó + fecha, anotado en el propio commit o en CLAUDE.md.
+- Reporte de estado: cada afirmación "hecho/funciona" apunta a la salida de un comando de esta sesión.
 
 ---
 
