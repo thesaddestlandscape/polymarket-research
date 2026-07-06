@@ -189,27 +189,94 @@ def load_live_trades():
 def compute_live_data():
     trades = load_live_trades()
     switch_on = LIVE_SWITCH_PATH.exists()
-    pnl_total = sum(float(t.get("pnl_neto_eur") or 0) for t in trades if t.get("status") == "CLOSED")
-    pnl_hoy = 0.0
-    hoy = datetime.now(timezone.utc).strftime("%Y-%m-%d")
-    for t in trades:
-        if (t.get("timestamp_utc") or "")[:10] == hoy and t.get("status") == "CLOSED":
-            pnl_hoy += float(t.get("pnl_neto_eur") or 0)
-    open_trades = [t for t in trades if t.get("status") == "OPEN"]
     closed = [t for t in trades if t.get("status") == "CLOSED"]
+    # Orden cronológico por cierre — trades.csv está ordenado por apertura,
+    # pero equity/daily se construyen sobre el momento en que se realiza el PnL
+    closed.sort(key=lambda t: t.get("close_timestamp") or t.get("timestamp_utc") or "")
+    pnl_total = sum(float(t.get("pnl_neto_eur") or 0) for t in closed)
+
+    # PnL hoy en día Madrid sobre close_timestamp — mismo criterio que
+    # live_stake.pnl_live_hoy() (el freno diario); antes usaba día UTC sobre
+    # timestamp de apertura y no cuadraba con lo que reporta el circuit breaker
+    try:
+        from zoneinfo import ZoneInfo
+        madrid_hoy = datetime.now(ZoneInfo("Europe/Madrid")).replace(
+            hour=0, minute=0, second=0, microsecond=0)
+        ts_ini_hoy = madrid_hoy.astimezone(timezone.utc).isoformat(timespec="seconds")
+    except Exception:
+        ts_ini_hoy = datetime.now(timezone.utc).strftime("%Y-%m-%dT00:00:00")
+    ts_ini_7d = (datetime.now(timezone.utc) - timedelta(days=7)).isoformat(timespec="seconds")
+
+    def _cierre(t):
+        return t.get("close_timestamp") or t.get("timestamp_utc") or ""
+    pnl_hoy = sum(float(t.get("pnl_neto_eur") or 0) for t in closed if _cierre(t) >= ts_ini_hoy)
+    pnl_7d  = sum(float(t.get("pnl_neto_eur") or 0) for t in closed if _cierre(t) >= ts_ini_7d)
+
+    open_trades = [t for t in trades if t.get("status") == "OPEN"]
     wins = sum(1 for t in closed if float(t.get("pnl_neto_eur") or 0) > 0)
     recent = sorted(trades, key=lambda t: t.get("timestamp_utc",""), reverse=True)[:10]
+
+    # ── Equity curve (mismo formato que la shadow: {time, value}) ────────────
+    bankroll = LIVE_BANKROLL_INICIAL
+    seen = {}
+    for t in closed:
+        ts = _ts(_cierre(t))
+        if not ts:
+            continue
+        bankroll += float(t.get("pnl_neto_eur") or 0)
+        seen[ts] = round(bankroll, 4)   # dedup por segundo — LW exige tiempos crecientes
+    equity = [{"time": ts, "value": v} for ts, v in sorted(seen.items())]
+    if equity:
+        equity = [{"time": equity[0]["time"] - 1, "value": LIVE_BANKROLL_INICIAL}] + equity
+
+    # ── PnL diario ────────────────────────────────────────────────────────────
+    daily = defaultdict(lambda: {"pnl": 0.0, "n": 0, "wins": 0})
+    for t in closed:
+        d = _cierre(t)[:10]
+        if d:
+            pnl = float(t.get("pnl_neto_eur") or 0)
+            daily[d]["pnl"]  += pnl
+            daily[d]["n"]    += 1
+            daily[d]["wins"] += 1 if pnl > 0 else 0
+    daily_pnl = sorted([
+        {"time": d, "value": round(v["pnl"], 4), "n": v["n"],
+         "wr": round(v["wins"] / v["n"] * 100, 1) if v["n"] else 0,
+         "color": "#26a69a" if v["pnl"] >= 0 else "#ef5350"}
+        for d, v in daily.items()
+    ], key=lambda x: x["time"])
+
+    # ── Por tupla estrategia#subtype dirección ────────────────────────────────
+    strat = defaultdict(lambda: {"n": 0, "wins": 0, "pnl": 0.0})
+    for t in closed:
+        k = f"{t.get('strategy','?')}#{t.get('subtype','?')} {t.get('direction','')}"
+        pnl = float(t.get("pnl_neto_eur") or 0)
+        strat[k]["n"]    += 1
+        strat[k]["wins"] += 1 if pnl > 0 else 0
+        strat[k]["pnl"]  += pnl
+    by_strategy = sorted([
+        {"name": k, "n": d["n"],
+         "ic": round(_ic(d["wins"], d["n"]), 4),
+         "wr": round(d["wins"] / d["n"] * 100, 1) if d["n"] else 0,
+         "pnl": round(d["pnl"], 2),
+         "avg": round(d["pnl"] / d["n"], 4)}
+        for k, d in strat.items() if d["n"] >= 3
+    ], key=lambda x: x["pnl"], reverse=True)
+
     return {
         "switch": switch_on,
         "bankroll": round(LIVE_BANKROLL_INICIAL + pnl_total, 2),
         "bankroll_inicial": LIVE_BANKROLL_INICIAL,
         "pnl_total": round(pnl_total, 2),
         "pnl_hoy": round(pnl_hoy, 2),
+        "pnl_7d": round(pnl_7d, 2),
         "n_total": len(trades),
         "n_open": len(open_trades),
         "n_closed": len(closed),
         "win_rate": round(wins / len(closed) * 100, 1) if closed else 0,
         "recent_trades": recent,
+        "equity_curve": equity,
+        "daily_pnl": daily_pnl,
+        "by_strategy": by_strategy,
     }
 
 # ─── Procesamiento ───────────────────────────────────────────────────────────
@@ -580,7 +647,7 @@ footer { text-align: center; padding: 10px; font-size: 10px; color: var(--muted)
     <span style="font-size:13px;font-weight:600;color:#e0e0e0">LIVE TRADING — Polymarket</span>
     <span style="font-size:11px;color:var(--muted);margin-left:4px">inicio: 25.44 USDC · 2026-06-29</span>
   </div>
-  <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-bottom:10px">
+  <div style="display:grid;grid-template-columns:repeat(6,1fr);gap:8px;margin-bottom:10px">
     <div style="background:#ffffff08;border-radius:6px;padding:8px;text-align:center">
       <div style="font-size:9px;color:var(--muted)">💰 Bankroll live</div>
       <div id="live-bankroll" style="font-size:20px;font-weight:700">—</div>
@@ -594,6 +661,10 @@ footer { text-align: center; padding: 10px; font-size: 10px; color: var(--muted)
       <div id="live-pnl-hoy" style="font-size:20px;font-weight:700">—</div>
     </div>
     <div style="background:#ffffff08;border-radius:6px;padding:8px;text-align:center">
+      <div style="font-size:9px;color:var(--muted)">📅 Últimos 7 días</div>
+      <div id="live-pnl-7d" style="font-size:20px;font-weight:700">—</div>
+    </div>
+    <div style="background:#ffffff08;border-radius:6px;padding:8px;text-align:center">
       <div style="font-size:9px;color:var(--muted)">✅ Win rate</div>
       <div id="live-wr" style="font-size:20px;font-weight:700">—</div>
     </div>
@@ -602,6 +673,30 @@ footer { text-align: center; padding: 10px; font-size: 10px; color: var(--muted)
       <div id="live-trades-count" style="font-size:20px;font-weight:700">—</div>
     </div>
   </div>
+
+  <!-- Charts live — mismo escritorio que el modelo simulado -->
+  <div style="display:grid;grid-template-columns:2fr 1fr;gap:8px;margin-bottom:10px">
+    <div style="background:#ffffff05;border-radius:6px;padding:10px">
+      <div class="panel-title">📈 Evolución del capital live — cada punto es un trade cerrado</div>
+      <div class="chart-host" id="live-equity-chart" style="height:180px"></div>
+    </div>
+    <div style="background:#ffffff05;border-radius:6px;padding:10px">
+      <div class="panel-title">📊 Ganancia / Pérdida por día — live</div>
+      <div class="chart-host" id="live-daily-chart" style="height:180px"></div>
+    </div>
+  </div>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px">
+    <div style="background:#ffffff05;border-radius:6px;padding:10px">
+      <div class="panel-title">🧠 Ventaja por estrategia live (tuplas cerradas, n≥3)</div>
+      <div id="live-strat-bars"><span style="color:var(--muted);font-size:11px">Sin datos aún</span></div>
+    </div>
+    <div style="background:#ffffff05;border-radius:6px;padding:10px">
+      <div class="panel-title">💶 Ganancia neta media por trade y estrategia — live</div>
+      <div id="live-perbet-bars"><span style="color:var(--muted);font-size:11px">Sin datos aún</span></div>
+    </div>
+  </div>
+
   <table class="mini-table" id="live-trades-table">
     <thead><tr>
       <th>Hora</th><th>Estrategia</th><th>Mercado</th><th>Dir.</th>
@@ -738,7 +833,8 @@ const COLORS   = ["#2962ff","#26a69a","#f0c832","#9c27b0","#ff6d00","#00bcd4","#
 
 // ─── Instancias de charts LW ─────────────────────────────────────────────────
 let eqChart, eqArea, dailyChart, dailySeries, priceChart, btcLine, ethLine, solLine,
-    rollingChart, rollingSeries = {};
+    rollingChart, rollingSeries = {},
+    liveEqChart, liveEqArea, liveDailyChart, liveDailySeries;
 
 function makeLWChart(id, opts = {}) {
   const el = document.getElementById(id);
@@ -786,11 +882,26 @@ function initCharts() {
   rollingChart.addLineSeries({ color: "#2a2e3988", lineWidth: 1, lineStyle: 2, priceScaleId: "right" })
     .setData([]);
 
+  // Live equity — mismo estilo que la equity shadow
+  liveEqChart = makeLWChart("live-equity-chart");
+  liveEqArea = liveEqChart.addAreaSeries({
+    lineColor: "#26a69a", topColor: "#26a69a44", bottomColor: "#26a69a00",
+    lineWidth: 2, priceFormat: { type: "price", precision: 2, minMove: 0.01 },
+    title: "$",
+  });
+
+  // Live daily PnL histogram
+  liveDailyChart = makeLWChart("live-daily-chart", { timeScale: { visible: true } });
+  liveDailySeries = liveDailyChart.addHistogramSeries({
+    color: "#26a69a", priceFormat: { type: "price", precision: 2, minMove: 0.01 },
+  });
+
   // Responsive
   window.addEventListener("resize", () => {
     for (const [id, chart] of [
       ["equity-chart", eqChart], ["daily-chart", dailyChart],
-      ["price-chart", priceChart], ["rolling-chart", rollingChart]
+      ["price-chart", priceChart], ["rolling-chart", rollingChart],
+      ["live-equity-chart", liveEqChart], ["live-daily-chart", liveDailyChart]
     ]) {
       const el = document.getElementById(id);
       if (el) chart.applyOptions({ width: el.offsetWidth });
@@ -835,9 +946,32 @@ function renderLive(live) {
   document.getElementById("live-bankroll").textContent = `${live.bankroll.toFixed(2)}$`;
   document.getElementById("live-pnl").innerHTML = fmtPnl(live.pnl_total);
   document.getElementById("live-pnl-hoy").innerHTML = fmtPnl(live.pnl_hoy);
+  document.getElementById("live-pnl-7d").innerHTML = fmtPnl(live.pnl_7d || 0);
   document.getElementById("live-wr").textContent = live.n_closed ? `${live.win_rate}%` : "—";
   document.getElementById("live-trades-count").textContent =
     `${live.n_total} (${live.n_open} abiertas)`;
+
+  // Equity curve live — mismo filtro de periodo que las tabs del shadow
+  if (liveEqArea && live.equity_curve?.length) {
+    const eqData = filterByPeriod(live.equity_curve, PERIOD);
+    if (eqData.length) {
+      liveEqArea.setData(eqData);
+      liveEqChart.timeScale().fitContent();
+    }
+  }
+  if (liveDailySeries && live.daily_pnl?.length) {
+    liveDailySeries.setData(filterDailyByPeriod(live.daily_pnl, PERIOD));
+    liveDailyChart.timeScale().fitContent();
+  }
+
+  // Barras por estrategia live (ventaja) + €/trade — mismas funciones que shadow
+  if (live.by_strategy?.length) {
+    renderBars("live-strat-bars", live.by_strategy, d => simpleName(d.name), d => d.ic,
+      () => true, d => `${d.ic >= 0 ? "+" : ""}${(d.ic*100).toFixed(1)}%`, d => `${d.n} tr.`);
+    const sortedAvg = [...live.by_strategy].sort((a, b) => b.avg - a.avg);
+    renderBars("live-perbet-bars", sortedAvg, d => simpleName(d.name), d => d.avg,
+      () => true, d => `${d.avg >= 0 ? "+" : ""}${d.avg.toFixed(3)}€`, d => `${d.n} tr.`);
+  }
   // Tabla trades
   const tbody = document.getElementById("live-trades-body");
   if (!live.recent_trades || live.recent_trades.length === 0) {

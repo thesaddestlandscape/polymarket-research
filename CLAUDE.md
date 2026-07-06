@@ -226,6 +226,8 @@ freno_ventana=0.20 | freno_diario=0.30 (05-Jul, antes 0.15) | bankroll_min=1.00 
 results.csv:       pnl_neto (NO "pnl") | acierto | strategy | subtype | decision | precio_yes_mercado | prob_yes_modelo
 strategy_params.json: ic_bayes (NO "ic_efectivo") | n | activa | apuesta_kelly | ic_BUY_NO | ic_BUY_YES | n_BUY_NO | n_BUY_YES
 trades.csv:        pnl_neto_eur | stake_eur | entry_price | status (OPEN/CLOSED/STUB) | direction
+                   ⚠️ edge_neto SIEMPRE en perspectiva YES: en filas BUY_NO el edge a favor es −edge_neto
+                   (la ejecución usa edge_dir con signo resuelto; el CSV registra el crudo de predictions)
 ```
 **Git conflicto en data/ CSV**: siempre `git checkout --theirs data/shadow/*.json data/prices/*.csv`
 
