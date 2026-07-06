@@ -27,8 +27,19 @@ RESULTS = DIR / "data/shadow/results.csv"
 
 # Prioridad: qué tan lejos llegó la señal en el pipeline live. Si un mercado
 # tiene varios snapshots (reintentos ~20s), el motivo final es el más alto.
+# fuera_ventana (05-Jul, acumulación 24/7) va al final: cualquier contacto real
+# con la fase de ejecución pesa más que un snapshot pasivo fuera de horario.
 PRIORIDAD = ["ejecutada", "fok_kill", "abort_requote",
-             "veto_profundidad", "veto_sin_datos", "no_viable_stake"]
+             "veto_profundidad", "veto_sin_datos", "no_viable_stake",
+             "fuera_ventana"]
+
+
+def _prio(motivo: str) -> int:
+    """Índice de prioridad tolerante a motivos nuevos no listados (al final)."""
+    try:
+        return PRIORIDAD.index(motivo)
+    except ValueError:
+        return len(PRIORIDAD)
 N_MIN_DECISION = 30
 
 
@@ -56,7 +67,7 @@ def main() -> int:
                 continue
             key = (r["market_id"], r["strategy"], r["direction"])
             prev = senales.get(key)
-            if prev is None or PRIORIDAD.index(r["motivo"]) < PRIORIDAD.index(prev["motivo"]):
+            if prev is None or _prio(r["motivo"]) < _prio(prev["motivo"]):
                 senales[key] = {"motivo": r["motivo"],
                                 "ratio": r.get("ratio_vs_stake", ""),
                                 "ts": r["timestamp_utc"]}
