@@ -1916,6 +1916,16 @@ GBM_LATE_15M_REST_MIN_HI = 12.0   # min restantes máximos (salta los 3 primeros
 GBM_LATE_60M_REST_MIN_LO = 5.0    # 60min: suelo más alto — libros finos al final
 GBM_LATE_60M_REST_MIN_HI = 20.0   # 60min: último tercio de la ventana (T_h<0.33)
 GBM_LATE_15M_PARES = {"BTC", "ETH", "SOL", "XRP"}
+# Estrategias shadow-puras que deben SEGUIR generando predicciones aunque el
+# postmortem las desactive por IC negativo con n pequeño. Sin esto caen en un
+# estado ABSORBENTE: desactivada (n=8, 1 win → ic_bayes=-0.30 < umbral) → no
+# genera → n nunca crece → sigue desactivada para siempre, matando el propósito
+# del shadow (aprender). El gate real de dinero es la whitelist por tupla de
+# live_trade (pares_permitidos_live); estas NO están ahí, así que forzar su
+# generación no toca dinero real. GBM_LATE_60M = clon de entrada tardía 60min,
+# necesita acumular n para medir si el edge tardío (probado en 15min, IC=+0.279)
+# transfiere a ventanas 60min más profundas. (2026-07-06)
+ACUMULAR_SHADOW_AUNQUE_DESACTIVADA = {"GBM_LATE_60M"}
 # Photo finish (2026-07-05): entrar con el precio pegado al strike es moneda
 # al aire cobrada como favorito. |drift_ventana|<0.02% → IC=-0.145 n=181
 # (win 35%), estable en ambas mitades temporales (-0.163/-0.127) y monótono
@@ -2493,8 +2503,11 @@ def main():
                     lookup_keys = [nombre]
                 sp = next((params_din[k] for k in lookup_keys if k in params_din), {})
                 # Si CUALQUIER clave de la jerarquía está desactivada → saltar
-                # (evita que BTC#240min quede activo cuando #240min está desactivado)
-                if any(not params_din.get(k, {}).get("activa", True) for k in lookup_keys if k in params_din):
+                # (evita que BTC#240min quede activo cuando #240min está desactivado).
+                # Excepción: estrategias shadow-puras en ACUMULAR_SHADOW_AUNQUE_DESACTIVADA
+                # siguen generando para romper el estado absorbente (nunca en whitelist live).
+                if (any(not params_din.get(k, {}).get("activa", True) for k in lookup_keys if k in params_din)
+                        and nombre not in ACUMULAR_SHADOW_AUNQUE_DESACTIVADA):
                     continue
                 edge_min = sp.get("edge_minimo") or EDGE_MINIMO
                 # Apuesta Kelly: escala con IC confirmado, mínimo 0.50€ si activa
