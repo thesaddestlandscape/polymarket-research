@@ -99,8 +99,8 @@
   "_min_ic_asimetrico_nota": "Barra más alta de IC para strategy#decision específicos, en vez del min_ic_para_live global. Añadido 2026-07-01 tras H-CUSTOM-GBM-BUYYES-GLOBAL-MALO: BUY_NO gana a BUY_YES en las 4 estrategias activas sin excepción (GBM confirmado n=507 IC=-0.076). No auto-desactiva BUY_YES de golpe — exige evidencia direccional más fuerte (doble del umbral normal) antes de confiar en una señal BUY_YES de GBM en vivo. A día de hoy no cambia ningún subtype ya elegible (todos los ic_BUY_YES direccionales de los subtypes permitidos en vivo ya están en negativo, muy por debajo incluso del umbral normal) — es una salvaguarda hacia adelante.",
   "min_ic_asimetrico": {
    "UPDOWN_GBM#BUY_YES": 0.16,
-   "_GBM_LATE_BUY_NO_nota": "2026-07-03: en GBM_LATE la dirección fuerte es BUY_YES (SOL 0.144, XRP 0.211); BUY_NO direccional está bajo el umbral (SOL 0.079 n=36, XRP 0.071 n=33) pero el ic_bayes AGREGADO (inflado por BUY_YES) sí pasaría 0.08 vía fallback. Barra doble para que BUY_NO solo opere con evidencia direccional fuerte propia.",
-   "GBM_LATE_15M#BUY_NO": 0.16
+   "_GBM_LATE_BUY_NO_nota": "2026-07-03: barra doble 0.16 puesta cuando BUY_NO direccional estaba bajo umbral (SOL 0.079 n=36, XRP 0.071 n=33) y solo el ic_bayes agregado (inflado por BUY_YES) pasaba 0.08. 2026-07-06: refutada con 4x mas datos — SOL#15min#BUY_NO IC=0.148 n=160 CLV+0.200 (ult40 win70% CLV+0.263), XRP#15min#BUY_NO IC=0.145 n=139 CLV+0.149. Ambas tienen evidencia direccional PROPIA fuerte (>0.08 con n>=139), no dependen ya del fallback agregado. Barra bajada 0.16->0.12: sigue exigiendo mas que el 0.08 global (buffer si el IC oscila) pero deja pasar el edge ya maduro. Solo afecta a SOL/XRP#15min#BUY_NO (unicas GBM_LATE BUY_NO en whitelist).",
+   "GBM_LATE_15M#BUY_NO": 0.12
   },
   "_min_stake_nota": "2026-07-03: el CLOB rechaza órdenes marketable BUY < $1 ('invalid amount for a marketable BUY order, min size: 1') — 2 señales perdidas hoy con stake 0.94€/0.98€ (Kelly con bankroll 16.33€). El suelo se sube a 1.05 (buffer 0.05 para que el reintento stake±0.01 de live_trade nunca baje de $1). Efecto: señales con Kelly < 1.05€ se ejecutan a 1.05€ (leve sobre-apuesta vs half-Kelly, sigue < full-Kelly y < max10%).",
   "min_stake_eur": 1.05,
@@ -128,13 +128,15 @@
   },
   "_stake_nota": "2026-07-03 17:30: usuario fija stake=min=1.05€ (max=min) tras evidencia de selección adversa taker (fills 19% hit vs 83% las vetadas por profundidad). Se mantiene hasta validar entrada maker — NO autoexpira. Revertir a 2.00 solo con decisión explícita."
  },
- "_pares_nota": "2026-07-03: sustituye a estrategias_permitidas_live + subtypes_permitidos_live. El producto cartesiano de las dos listas dejaba pasar combinaciones nunca aprobadas: UPDOWN_GBM#SOL#15min (02-Jul, -2.00€) y UPDOWN_GBM#BTC#15min (03-Jul, -2.00€, hora 06 UTC cuando BTC#15min solo se rescató para hora>=16). Formato: STRATEGY#SUBTYPE#DIRECTION, comparación exacta. Los BUY_NO de GBM_LATE y el BUY_YES de UPDOWN_GBM siguen además gateados por min_ic_asimetrico=0.16. Fail-closed: lista vacía o ausente = no se opera nada.",
+ "_pares_nota": "2026-07-03: sustituye a estrategias_permitidas_live + subtypes_permitidos_live. El producto cartesiano de las dos listas dejaba pasar combinaciones nunca aprobadas: UPDOWN_GBM#SOL#15min (02-Jul, -2.00€) y UPDOWN_GBM#BTC#15min (03-Jul, -2.00€, hora 06 UTC cuando BTC#15min solo se rescató para hora>=16). Formato: STRATEGY#SUBTYPE#DIRECTION, comparación exacta. Los BUY_NO de GBM_LATE (min_ic_asimetrico=0.12 desde 06-Jul) y el BUY_YES de UPDOWN_GBM (0.16) siguen además gateados por la barra asimétrica. Fail-closed: lista vacía o ausente = no se opera nada.",
  "_pares_eth_buyyes_nota": "2026-07-03 sesión 5: UPDOWN_GBM#ETH#15min#BUY_YES retirado — shadow 3d: n=104 hit=0.41 pnl=-6.03€ clv=-0.074, ic_BUY_YES(ETH)=-0.051. La barra asimétrica 0.16 ya lo bloqueaba; se quita de la whitelist para que ninguna ruta lo cuele (belt-and-braces).",
+ "_pares_gbmlate_eth_buyyes_nota": "2026-07-06: ANADIDO GBM_LATE_15M#ETH#15min#BUY_YES. NO confundir con el UPDOWN_GBM#ETH#15min#BUY_YES retirado (nota anterior): estrategia DISTINTA — GBM_LATE es entrada tardia (ultimos 5-20 min), UPDOWN_GBM entra throughout. Datos GBM_LATE ETH BUY_YES: ic_BUY_YES=0.090 n=154 (>=0.08 global), CLV+0.144, ult40 win68% CLV+0.204, pnl shadow +23.5€. El edge de entrada tardia se extiende de SOL/XRP a ETH. BTC#15min#BUY_YES queda en tracking (IC 0.075<0.08, CLV+0.087). Sin barra asimetrica para GBM_LATE BUY_YES: es la direccion fuerte de la estrategia, ya viva en SOL/XRP. Guardia contra doble exposicion en ETH (ya hay UPDOWN_GBM#ETH#BUY_NO en whitelist, direccion opuesta): live_trade dedup por market_id (ya_operados, incl. add dentro del ciclo) -> un market_id recibe 1 solo trade, nunca YES y NO a la vez.",
  "pares_permitidos_live": [
   "UPDOWN_GBM#ETH#15min#BUY_NO",
   "GBM_LATE_15M#SOL#15min#BUY_YES",
   "GBM_LATE_15M#XRP#15min#BUY_YES",
   "GBM_LATE_15M#SOL#15min#BUY_NO",
-  "GBM_LATE_15M#XRP#15min#BUY_NO"
+  "GBM_LATE_15M#XRP#15min#BUY_NO",
+  "GBM_LATE_15M#ETH#15min#BUY_YES"
  ]
 }
