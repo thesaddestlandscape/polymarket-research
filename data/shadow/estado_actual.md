@@ -1,4 +1,4 @@
-# Estado del bot — 2026-07-06 05:18 UTC
+# Estado del bot — 2026-07-06 05:19 UTC
 
 ## Capital
 | | |
@@ -11,19 +11,19 @@
 | | |
 |---|---|
 | Inicio | 25.44 € |
-| Actual | **256.09 €** |
-| P&L acumulado | 🟢 **+230.65 €** |
-| ROI s/ operativo | +906.66% |
-| ROI s/ depósito | +768.85% |
-| P&L hoy (2026-07-06) | 🟢 +35.66 € |
-| Operaciones resueltas | 4161 (2140 WIN / 2021 LOSS) — 51.4% |
-| Señales abiertas | 172 |
+| Actual | **256.26 €** |
+| P&L acumulado | 🟢 **+230.82 €** |
+| ROI s/ operativo | +907.33% |
+| ROI s/ depósito | +769.42% |
+| P&L hoy (2026-07-06) | 🟢 +35.83 € |
+| Operaciones resueltas | 4164 (2142 WIN / 2022 LOSS) — 51.4% |
+| Señales abiertas | 169 |
 
 ## Estrategias (visión global)
 
 | Estrategia | n | Win% | IC_efectivo | PNL | Apuesta | Estado |
 |---|---|---|---|---|---|---|
-| GBM_LATE_15M | 1272 | 59.6% | +0.096 | +325.44€ | 0.96€ | ✅ activa |
+| GBM_LATE_15M | 1274 | 59.7% | +0.096 | +326.12€ | 0.96€ | ✅ activa |
 | PRICE_TARGET_GBM | 107 | 40.2% | -0.096 | +10.21€ | 0.50€ | ⚠️ IC negativo |
 | ORDER_FLOW_5M | 1544 | 51.2% | +0.012 | +9.56€ | 0.50€ | ✅ activa |
 | RESOLUTION_SNIPER | 6 | 100.0% | +0.112 | +2.85€ | 1.12€ | ⏳ acumulando |
@@ -34,27 +34,27 @@
 | SMART_FLOW_1H | 29 | 20.7% | -0.274 | -13.82€ | 0.00€ | 🚫 desactivada |
 | UPDOWN_OU_5M | 84 | 28.6% | -0.209 | -18.89€ | 0.00€ | 🚫 desactivada |
 | WEEKLY_PRICE | 100 | 45.0% | -0.049 | -24.34€ | 0.50€ | ⚠️ IC negativo |
-| UPDOWN_GBM | 979 | 46.4% | -0.036 | -53.81€ | 0.50€ | ⚠️ IC negativo |
+| UPDOWN_GBM | 980 | 46.3% | -0.037 | -54.32€ | 0.50€ | ⚠️ IC negativo |
 
 ## Últimas 5 resoluciones
 
 | Timestamp | Estrategia | Mercado | Resultado | PNL |
 |---|---|---|---|---|
+| 2026-07-06T05:19 | GBM_LATE_15M#ETH#15min | Ethereum Up or Down - July 6, 1:00AM-1:15AM ET… | ✅ WIN | +0.39€ |
+| 2026-07-06T05:19 | GBM_LATE_15M#BTC#15min | Bitcoin Up or Down - July 6, 1:00AM-1:15AM ET… | ✅ WIN | +0.29€ |
+| 2026-07-06T05:19 | UPDOWN_GBM#ETH#15min | Ethereum Up or Down - July 6, 1:00AM-1:15AM ET… | ❌ LOSS | -0.51€ |
 | 2026-07-06T05:15 | GBM_LATE_15M#XRP#15min | XRP Up or Down - July 6, 1:00AM-1:15AM ET… | ✅ WIN | +1.38€ |
 | 2026-07-06T05:01 | GBM_LATE_15M#ETH#15min | Ethereum Up or Down - July 6, 12:45AM-1:00AM ET… | ✅ WIN | +0.48€ |
-| 2026-07-06T05:01 | UPDOWN_GBM#ETH#15min | Ethereum Up or Down - July 6, 12:45AM-1:00AM ET… | ❌ LOSS | -0.51€ |
-| 2026-07-06T04:45 | GBM_LATE_15M#ETH#15min | Ethereum Up or Down - July 6, 12:30AM-12:45AM ET… | ✅ WIN | +0.91€ |
-| 2026-07-06T04:45 | GBM_LATE_15M#BTC#15min | Bitcoin Up or Down - July 6, 12:30AM-12:45AM ET… | ✅ WIN | +0.73€ |
 
 ## Calidad de datos
 
-⚠️ **DEGRADED** — última verificación 2026-07-06T05:18 UTC | rechazos 1h: 7 (rango=0, spike=0)
+⚠️ **DEGRADED** — última verificación 2026-07-06T05:19 UTC | rechazos 1h: 7 (rango=0, spike=0)
 
 | Asset | Precio | Age | Alertas |
 |---|---|---|---|
 | ✅ BTC | $63,167.28 | 0.0min |  |
 | ✅ ETH | $1,774.38 | 0.0min |  |
-| ✅ SOL | $80.63 | 0.0min |  |
+| ✅ SOL | $80.60 | 0.0min |  |
 | ✅ XRP | $1.14 | 0.0min |  |
 
 **Cross-source** (binance, coinbase, kraken):
