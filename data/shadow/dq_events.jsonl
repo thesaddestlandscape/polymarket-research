@@ -10716,3 +10716,5 @@
 {"ts": "2026-07-06T14:26:01+00:00", "sym": "BTC", "value": 61933.0, "reason": "cross_source_warn coingecko=61933.0000 vs mediana=62133.7650 (0.65%)"}
 {"ts": "2026-07-06T14:26:01+00:00", "sym": "ETH", "value": 1748.92, "reason": "cross_source_warn coingecko=1748.9200 vs mediana=1754.7725 (0.67%)"}
 {"ts": "2026-07-06T14:26:01+00:00", "sym": "SOL", "value": 80.685, "reason": "cross_source_warn coinbase=80.6850 vs mediana=80.3825 (0.76%)"}
+{"ts": "2026-07-06T14:26:27+00:00", "sym": "DOGE", "value": 0.6355, "reason": "cambio_fuente coingecko->binance"}
+{"ts": "2026-07-06T14:26:27+00:00", "sym": "BNB", "value": 0.2604, "reason": "cambio_fuente coingecko->binance"}
