@@ -1143,6 +1143,16 @@ REGIME_BUY_NO_THRESHOLD = 0.7  # %/h, solo para ventanas ≥60min
 # (H-CUSTOM-BUYYES-15MIN-POSTFILTRO). Ninguna zona drift es positiva forward.
 DRIFT_60_BUY_YES_15M_LO = 0.0   # %/h — mínimo (drift plano o ligeramente alcista)
 DRIFT_60_BUY_YES_15M_HI = 0.25  # %/h — máximo (2026-07-05, antes 0.5: IC=-0.071 en [0.25,0.5))
+# BUY_YES #15min SOLO TARDÍO (2026-07-06): el sesgo retail "Up" infla el YES al
+# principio de la ventana y se disuelve cerca del cierre. Medido en results.csv:
+# BUY_YES 15min con T_h>=0.2 (entrada temprana) IC=-0.062 n=404 PNL=-46.2€ vs
+# T_h<0.2 (tardía, <=12min restantes) IC=+0.123 n=51. El mismo signo que voltea
+# GBM_LATE_15M BUY_YES (+0.119 n=672). Bloquear temprano NO pierde la señal: el
+# fast loop re-evalúa cada ~20s y la predicción se dispara sola al entrar el
+# mercado en zona tardía (si la señal sigue viva) → entrada tardía deliberada.
+# BUY_NO no se toca (temprana break-even con bolsillos positivos: zona moneda
+# IC=+0.162). Forward gate hacia live: H-CUSTOM-BUYYES15-SOLO-TARDIO.
+BUY_YES_15M_TH_MAX = 0.2        # T_h máximo para permitir BUY_YES #15min
 
 # Filtro ETH#15min BUY_NO — skip si el mercado ya da >55% al YES (NO longshot).
 # Análisis 2026-07-02 últ.60 shadow: py_mkt~0.5 → wr 0.67 PNL=+29.3€ (n=49);
@@ -1360,6 +1370,11 @@ def s_updown_gbm(market, ctx):
     # IC fuera del rango ≈ 0 (n=59, PNL=−7.94€ total) vs IC=+0.208 dentro (n=22).
     # Si drift_60 es None (sin histórico 60min), bloquear BUY_YES — sin datos no apostar.
     if tipo == 'slot' and ventana_min == 15 and p_up > market.get("_precio_yes", 0.5):
+        # Solo tardío (2026-07-06): temprana IC=-0.062 n=404 vs tardía +0.123 n=51.
+        # El skip deja el mercado sin predecir → el loop lo re-evalúa y la señal
+        # entra sola al cruzar T_h<0.2 (ver nota en BUY_YES_15M_TH_MAX).
+        if T_h >= BUY_YES_15M_TH_MAX:
+            return None  # BUY_YES #15min temprano → esperar zona tardía
         if drift_60 is None:
             return None  # BUY_YES #15min sin histórico 60min → no apostar
         drift_60_pct = drift_60 * 100
