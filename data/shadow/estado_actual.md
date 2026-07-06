@@ -1,4 +1,4 @@
-# Estado del bot — 2026-07-06 16:44 UTC
+# Estado del bot — 2026-07-06 16:46 UTC
 
 ## Capital
 | | |
@@ -11,19 +11,19 @@
 | | |
 |---|---|
 | Inicio | 25.44 € |
-| Actual | **315.40 €** |
-| P&L acumulado | 🟢 **+289.96 €** |
-| ROI s/ operativo | +1139.78% |
-| ROI s/ depósito | +966.53% |
-| P&L hoy (2026-07-06) | 🟢 +94.97 € |
-| Operaciones resueltas | 4382 (2266 WIN / 2116 LOSS) — 51.7% |
-| Señales abiertas | 180 |
+| Actual | **317.17 €** |
+| P&L acumulado | 🟢 **+291.73 €** |
+| ROI s/ operativo | +1146.72% |
+| ROI s/ depósito | +972.42% |
+| P&L hoy (2026-07-06) | 🟢 +96.73 € |
+| Operaciones resueltas | 4383 (2267 WIN / 2116 LOSS) — 51.7% |
+| Señales abiertas | 179 |
 
 ## Estrategias (visión global)
 
 | Estrategia | n | Win% | IC_efectivo | PNL | Apuesta | Estado |
 |---|---|---|---|---|---|---|
-| GBM_LATE_15M | 1426 | 60.2% | +0.102 | +396.65€ | 1.02€ | ✅ activa |
+| GBM_LATE_15M | 1427 | 60.2% | +0.102 | +398.42€ | 1.02€ | ✅ activa |
 | ORDER_FLOW_5M | 1544 | 51.2% | +0.012 | +9.56€ | 0.50€ | ✅ activa |
 | PRICE_TARGET_GBM | 116 | 37.1% | -0.127 | +5.14€ | 0.50€ | ⚠️ IC negativo |
 | LATE_WINDOW_5MIN | 16 | 75.0% | +0.178 | +4.37€ | 1.78€ | ✅ activa |
@@ -40,21 +40,21 @@
 
 | Timestamp | Estrategia | Mercado | Resultado | PNL |
 |---|---|---|---|---|
+| 2026-07-06T16:45 | GBM_LATE_15M#XRP#15min | XRP Up or Down - July 6, 12:30PM-12:45PM ET… | ✅ WIN | +1.77€ |
 | 2026-07-06T16:32 | GBM_LATE_15M#SOL#15min | Solana Up or Down - July 6, 12:15PM-12:30PM ET… | ✅ WIN | +3.43€ |
 | 2026-07-06T16:32 | STREAK_FADE_15M#SOL#15min | Solana Up or Down - July 6, 12:15PM-12:30PM ET… | ✅ WIN | +0.44€ |
 | 2026-07-06T16:31 | GBM_LATE_15M#XRP#15min | XRP Up or Down - July 6, 12:15PM-12:30PM ET… | ❌ LOSS | -1.92€ |
 | 2026-07-06T16:31 | STREAK_FADE_15M#XRP#15min | XRP Up or Down - July 6, 12:15PM-12:30PM ET… | ✅ WIN | +0.44€ |
-| 2026-07-06T16:31 | GBM_LATE_15M#ETH#15min | Ethereum Up or Down - July 6, 12:15PM-12:30PM ET… | ❌ LOSS | -1.27€ |
 
 ## Calidad de datos
 
-⚠️ **DEGRADED** — última verificación 2026-07-06T16:44 UTC | rechazos 1h: 11 (rango=0, spike=0)
+⚠️ **DEGRADED** — última verificación 2026-07-06T16:45 UTC | rechazos 1h: 11 (rango=0, spike=0)
 
 | Asset | Precio | Age | Alertas |
 |---|---|---|---|
 | ✅ BTC | $63,624.96 | 0.0min |  |
 | ✅ ETH | $1,791.60 | 0.0min |  |
-| ✅ SOL | $82.05 | 0.0min |  |
+| ✅ SOL | $82.00 | 0.0min |  |
 | ✅ XRP | $1.15 | 0.0min |  |
 
 **Cross-source** (binance, coinbase, kraken):
