@@ -21,7 +21,11 @@ while true; do
     $PYTHON "$REPO_DIR/capture_trades.py"   >> "$LOG" 2>&1 || true
     $PYTHON "$REPO_DIR/generate_report.py"  >> "$LOG" 2>&1 || true
     $PYTHON "$REPO_DIR/arb_scanner.py"           >> "$LOG" 2>&1 || true
-    $PYTHON "$REPO_DIR/cross_platform_arb.py"    >> "$LOG" 2>&1 || true
+    # cross_platform_arb DESACTIVADO 2026-07-06: 6 días sin una sola opp accionable
+    # real — todas Polymarket→Kalshi con liqB=0 (sin libro; Kalshi es US-only,
+    # inaccesible desde el VPS finlandés). Generaba ~5MB/día de CSV humo. Reactivar
+    # solo si se añade una plataforma con libro accesible y se exige liq>0 en ambas patas.
+    # $PYTHON "$REPO_DIR/cross_platform_arb.py"    >> "$LOG" 2>&1 || true
     $PYTHON "$REPO_DIR/combi_arb.py"             >> "$LOG" 2>&1 || true
     $PYTHON "$REPO_DIR/combi_arb_prep.py"        >> "$LOG" 2>&1 || true
 
