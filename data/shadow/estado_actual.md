@@ -1,4 +1,4 @@
-# Estado del bot — 2026-07-06 23:52 UTC
+# Estado del bot — 2026-07-06 23:53 UTC
 
 ## Capital
 | | |
@@ -48,13 +48,13 @@
 
 ## Calidad de datos
 
-✅ **OK** — última verificación 2026-07-06T23:51 UTC
+✅ **OK** — última verificación 2026-07-06T23:53 UTC
 
 | Asset | Precio | Age | Alertas |
 |---|---|---|---|
 | ✅ BTC | $64,049.40 | 0.0min |  |
 | ✅ ETH | $1,799.62 | 0.0min |  |
-| ✅ SOL | $81.96 | 0.0min |  |
+| ✅ SOL | $82.04 | 0.0min |  |
 | ✅ XRP | $1.14 | 0.0min |  |
 
 **Cross-source** (binance, coinbase, kraken):
