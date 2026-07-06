@@ -149,6 +149,62 @@ def restart_screen(name: str) -> bool:
 
 
 # ──────────────────────────────────────────────────────────────────────────────
+# CHECK: deploy obsoleto — screen corriendo código MÁS VIEJO que el fichero en
+# disco. Los loops (run_fast/run_slow) son `while true` de larga duración y los
+# screens python (control/dash/pfinish) son procesos únicos: NINGUNO relee su
+# fichero de entrada, así que un fix commiteado queda INACTIVO hasta reiniciar la
+# screen. Pasó el 2026-07-06 (run_slow.sh con --autostash committeado pero el
+# proceso seguía con el código del 01-Jul → rebase-fails persistían). Verificar
+# el DEPLOY, no fiarse del commit. Solo ALERTA: reiniciar `fast` (dinero real) es
+# decisión deliberada. Los .py que los loops invocan cada ciclo como subproceso
+# (live_trade.py, shadow_predict.py…) SÍ se recargan → no aplican aquí.
+# ──────────────────────────────────────────────────────────────────────────────
+def _entrypoint_script(cmd: str) -> str | None:
+    """Fichero de entrada de un comando de screen: 'bash run_fast.sh …' → run_fast.sh."""
+    m = re.search(r"(\S+\.(?:sh|py))", cmd)
+    return m.group(1) if m else None
+
+
+def check_stale_deploys(screens_up: dict) -> list[str]:
+    """Nombres de screen cuyo fichero de entrada en disco es más nuevo que el
+    proceso en marcha (deploy no aplicado). Margen 120s para no marcar el propio
+    arranque como stale."""
+    stale = []
+    now = time.time()
+    for name, cmd in SCREEN_RESTART.items():
+        if not screens_up.get(name):
+            continue
+        script = _entrypoint_script(cmd)
+        if not script:
+            continue
+        p = REPO / script
+        if not p.exists():
+            continue
+        try:
+            r = subprocess.run(["pgrep", "-f", script], capture_output=True,
+                               text=True, timeout=5)
+            pids = [x for x in r.stdout.split() if x]
+            edades = []
+            for pid in pids:
+                e = subprocess.run(["ps", "-o", "etimes=", "-p", pid],
+                                   capture_output=True, text=True, timeout=5)
+                try:
+                    edades.append(int(e.stdout.strip()))
+                except ValueError:
+                    pass
+            if not edades:
+                continue
+            proc_start = now - max(edades)          # arranque del proceso más antiguo
+            if p.stat().st_mtime > proc_start + 120:
+                dm = (p.stat().st_mtime - proc_start) / 60
+                stale.append(f"{name} ({script}): disco {dm:.0f} min más nuevo que "
+                             f"el proceso — deploy NO aplicado, reinicia la screen")
+        except Exception:
+            continue
+    return stale
+
+
+# ──────────────────────────────────────────────────────────────────────────────
 # CHECK: sintaxis de todos los scripts del pipeline
 # ──────────────────────────────────────────────────────────────────────────────
 def syntax_check_all() -> list[str]:
@@ -399,6 +455,7 @@ def main():
     log("=== pipeline_watchdog v2 arrancado ===")
     consecutivos_silencio = 0
     screens_caidas_count: dict[str, int] = {}
+    stale_deploy_alertado: set = set()
     ciclo = 0
 
     while True:
@@ -448,6 +505,24 @@ def main():
                     if name in SCREEN_RESTART:
                         log(f"  → Reiniciando screen '{name}'")
                         restart_screen(name)
+
+            # ── 2b. Deploy obsoleto (fix commiteado pero screen sin reiniciar) ─
+            stale = check_stale_deploys(screens)
+            stale_ahora = {s.split()[0] for s in stale}
+            for msg in stale:
+                log(f"⚠ DEPLOY OBSOLETO: {msg}")
+            nuevos = stale_ahora - stale_deploy_alertado
+            if nuevos:
+                try:
+                    from shadow_digest import enviar_telegram
+                    enviar_telegram(
+                        "⚠️ *Deploy obsoleto*\n"
+                        + "\n".join(m for m in stale if m.split()[0] in nuevos)
+                        + "\n\nReinicia la screen para aplicar el cambio."
+                    )
+                except Exception:
+                    pass
+            stale_deploy_alertado = stale_ahora
 
             # ── 3. Si hay silencio, buscar errores en fast.log ────────────────
             if consecutivos_silencio >= 2:
