@@ -95,6 +95,9 @@ def analizar_oportunidades(por_id: dict) -> list:
             # si se ejecutara al precio real. Fallback a price_yes solo si
             # best_ask no viene informado (no observado en la práctica).
             ask = float(r.get("best_ask") or 0) or yes
+            # Bid del YES = ask del NO es 1-bid. Para el basket-NO (ver más abajo)
+            # necesitamos el precio real al que se COMPRA cada NO = 1 - best_bid.
+            bid = float(r.get("best_bid") or 0)
             liq = float(r.get("liquidity") or 0)
             if yes <= 0 or ask <= 0:
                 continue
@@ -106,6 +109,7 @@ def analizar_oportunidades(por_id: dict) -> list:
             "question":   r.get("question", ""),
             "yes":        yes,
             "ask":        ask,
+            "bid":        bid,
             "liquidity":  liq,
             "end_date":   r.get("end_date", "")[:10],
             "event":      r.get("event_title", ""),
@@ -121,27 +125,48 @@ def analizar_oportunidades(por_id: dict) -> list:
         if any(m["yes"] > NEAR_RESOLVED_THRESHOLD for m in mercados):
             continue
 
+        n_brk     = len(mercados)
         # Coste real de ejecutar el bracket completo = suma de ASKs, no de mids.
         suma_yes  = sum(m["yes"] for m in mercados)   # referencia/display
-        suma_ask  = sum(m["ask"] for m in mercados)   # coste ejecutable real
+        suma_ask  = sum(m["ask"] for m in mercados)   # coste ejecutable real basket-YES
+        suma_bid  = sum(m["bid"] for m in mercados)   # para el basket-NO
         liq_min   = min(m["liquidity"] for m in mercados)
         liq_total = sum(m["liquidity"] for m in mercados)
 
         # Payout neto si gana un bracket: 1 × (1 - FEE_PAYOUT)
         payout_neto = 1.0 - FEE_PAYOUT
-        # Profit real = payout_neto - suma_invertida (al precio que realmente se paga)
+        # --- Basket-YES: comprar 1 YES de cada bracket. Gana el único que resuelva.
+        # Profit = payout_neto - suma pagada (asks). Riesgo de cola: si el precio
+        # cae FUERA del rango cubierto, no gana ninguno → pérdida total.
         profit_neto = payout_neto - suma_ask
         profit_pct  = profit_neto * 100
 
+        # --- Basket-NO: comprar 1 NO de cada bracket (precio NO = 1 - bid del YES).
+        # En un evento mutuamente excluyente ("between $X and $Y") como máximo un
+        # YES gana → al menos n-1 NOs pagan 1. Coste = n - suma_bid. Payout ≥ n-1.
+        # Es el ESPEJO del basket-YES y estructuralmente MÁS SEGURO: si el precio
+        # se escapa del rango, ganan TODOS los NO (payout=n, aún mejor). Rentable
+        # cuando suma_bid > 1 + fee·(n-1). Solo cuenta con best_bid real informado.
+        coste_no      = n_brk - suma_bid
+        payout_no     = (n_brk - 1) * payout_neto
+        profit_no     = payout_no - coste_no
+        roi_no_pct    = (profit_no / coste_no * 100) if coste_no > 0 else 0.0
+        bid_ok        = all(m["bid"] > 0 for m in mercados)
+
         if suma_ask < UMBRAL_ARB and liq_min >= LIQ_MIN:
             tipo = "BRACKET_ARB"
+        elif bid_ok and profit_no > 0 and liq_min >= LIQ_MIN:
+            tipo = "BRACKET_ARB_NO"
         elif suma_yes > UMBRAL_OVER:
             tipo = "OVERROUND"
         else:
             continue
 
-        # Accionable: gap ≥ 5% (suma < 0.95) sobre el coste ejecutable real
-        accionable = (tipo == "BRACKET_ARB" and suma_ask < UMBRAL_ACCIONABLE)
+        # Accionable YES: gap ≥ 5% (suma < 0.95). Accionable NO: ROI ≥ 2%.
+        accionable = (
+            (tipo == "BRACKET_ARB"    and suma_ask < UMBRAL_ACCIONABLE) or
+            (tipo == "BRACKET_ARB_NO" and roi_no_pct >= 2.0)
+        )
 
         # Rango cubierto por los brackets (para estimar el riesgo de cola)
         preguntas = [m["question"] for m in mercados]
@@ -161,8 +186,10 @@ def analizar_oportunidades(por_id: dict) -> list:
             "n_brackets":  len(mercados),
             "suma_yes":    round(suma_yes, 4),
             "suma_ask":    round(suma_ask, 4),
+            "suma_bid":    round(suma_bid, 4),
             "gap_pct":     round((1.0 - suma_ask) * 100, 2),
             "profit_pct":  round(profit_pct, 2),
+            "roi_no_pct":  round(roi_no_pct, 2),
             "liq_min":     round(liq_min, 0),
             "liq_total":   round(liq_total, 0),
             "rango_min":   rango_min,
@@ -179,10 +206,28 @@ def guardar_csv(oportunidades: list, fecha: str):
     path = DIR_SHADOW / f"arb_scan_{fecha}.csv"
     columnas = [
         "timestamp_utc", "tipo", "accionable", "event", "end_date",
-        "n_brackets", "suma_yes", "gap_pct", "profit_pct",
+        "n_brackets", "suma_yes", "suma_ask", "suma_bid", "gap_pct",
+        "profit_pct", "roi_no_pct",
         "liq_min", "liq_total", "rango_min", "rango_max",
     ]
     ts = datetime.now(timezone.utc).isoformat(timespec="seconds")
+
+    # Migración de cabecera: si el fichero de hoy tiene columnas antiguas (p.ej.
+    # se añadieron suma_ask/suma_bid/roi_no_pct a mitad del día), reescribirlo con
+    # la cabecera nueva rellenando '' en las columnas que faltaban — evita filas
+    # desalineadas respecto al header al hacer append.
+    if path.exists():
+        with open(path, newline="", encoding="utf-8") as f:
+            r = csv.DictReader(f)
+            cabecera_vieja = r.fieldnames or []
+            filas_previas = list(r) if cabecera_vieja != columnas else None
+        if filas_previas is not None:
+            with open(path, "w", newline="", encoding="utf-8") as f:
+                w = csv.DictWriter(f, fieldnames=columnas, extrasaction="ignore")
+                w.writeheader()
+                for fila in filas_previas:
+                    w.writerow({c: fila.get(c, "") for c in columnas})
+
     nuevo = not path.exists()
     with open(path, "a", newline="", encoding="utf-8") as f:
         w = csv.DictWriter(f, fieldnames=columnas, extrasaction="ignore")
@@ -209,12 +254,21 @@ def main():
     arb        = [o for o in oportunidades if o["tipo"] == "BRACKET_ARB"]
     accionable = [o for o in arb if o["accionable"]]
     detectable = [o for o in arb if not o["accionable"]]
+    arb_no     = [o for o in oportunidades if o["tipo"] == "BRACKET_ARB_NO"]
+    acc_no     = [o for o in arb_no if o["accionable"]]
     over       = [o for o in oportunidades if o["tipo"] == "OVERROUND"]
 
-    print(f"  BRACKET_ARB detectable (gap>3%, suma<0.97): {len(arb)}")
-    print(f"    → ACCIONABLE (gap≥5%, suma<0.95):         {len(accionable)}")
-    print(f"    → solo detectable (gap 3-5%):             {len(detectable)}")
-    print(f"  OVERROUND (suma>1.02):                      {len(over)}")
+    print(f"  BRACKET_ARB (YES) detectable (gap>3%, suma<0.97): {len(arb)}")
+    print(f"    → ACCIONABLE (gap≥5%, suma<0.95):             {len(accionable)}")
+    print(f"    → solo detectable (gap 3-5%):                 {len(detectable)}")
+    print(f"  BRACKET_ARB_NO (basket NO, sin riesgo cola):    {len(arb_no)}")
+    print(f"    → ACCIONABLE (ROI≥2%):                        {len(acc_no)}")
+    print(f"  OVERROUND (suma>1.02):                          {len(over)}")
+
+    for op in acc_no:
+        print(f"\n  🎯 NO-BASKET | {op['event']} ({op['n_brackets']} brackets)")
+        print(f"     suma_bid={op['suma_bid']:.3f}  ROI_no={op['roi_no_pct']:+.1f}%"
+              f"  liq_min={op['liq_min']:.0f}  vence={op['end_date']}")
 
     for op in accionable:
         print(f"\n  🎯 ACCIONABLE | {op['event']} ({op['n_brackets']} brackets)")
