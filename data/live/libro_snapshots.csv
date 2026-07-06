@@ -83,3 +83,4 @@ timestamp_utc,market_id,strategy,subtype,direction,motivo,precio_plan,stake_eur,
 2026-07-06T07:18:48+00:00,2804324,GBM_LATE_15M,SOL#15min,BUY_YES,veto_profundidad,0.505,1.05,0.65,0.0,35,0.0
 2026-07-06T07:19:10+00:00,2804324,GBM_LATE_15M,SOL#15min,BUY_YES,veto_profundidad,0.505,1.05,0.6,0.0,40,0.0
 2026-07-06T07:19:11+00:00,2804313,GBM_LATE_15M,ETH#15min,BUY_YES,ejecutada,0.505,1.05,0.42,718.71,58,684.5
+2026-07-06T07:19:51+00:00,2804324,GBM_LATE_15M,SOL#15min,BUY_YES,no_viable_stake,0.505,1.05,0.48,187.29,52,178.4
