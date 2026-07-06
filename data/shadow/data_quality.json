@@ -1,15 +1,14 @@
 {
-  "timestamp_utc": "2026-07-06T14:30:07+00:00",
+  "timestamp_utc": "2026-07-06T14:31:42+00:00",
   "estado_global": "DEGRADED",
   "alertas": [
-    "rechazos_1h:8 (rango=0, spike=0)",
-    "ETH:divergencia_0.65%"
+    "rechazos_1h:8 (rango=0, spike=0)"
   ],
   "rechazos_1h": {
     "rango": 0,
     "spike": 0,
     "total": 8,
-    "cambio_fuente": 102,
+    "cambio_fuente": 100,
     "por_sym": {
       "SOL": 2,
       "XRP": 3,
@@ -20,63 +19,51 @@
   "assets": {
     "BTC": {
       "estado": "OK",
-      "n": 6783,
-      "age_seconds": 2.5,
-      "ultimo_precio": 62232.33,
+      "n": 6787,
+      "age_seconds": 1.5,
+      "ultimo_precio": 62042.5,
       "gaps": [],
       "alertas": []
     },
     "ETH": {
       "estado": "OK",
-      "n": 6783,
-      "age_seconds": 2.5,
-      "ultimo_precio": 1750.24,
+      "n": 6787,
+      "age_seconds": 1.5,
+      "ultimo_precio": 1752.895,
       "gaps": [],
       "alertas": []
     },
     "SOL": {
       "estado": "OK",
-      "n": 6783,
-      "age_seconds": 2.5,
+      "n": 6787,
+      "age_seconds": 1.5,
       "ultimo_precio": 80.39,
       "gaps": [],
       "alertas": []
     },
     "XRP": {
       "estado": "OK",
-      "n": 6783,
-      "age_seconds": 2.5,
-      "ultimo_precio": 1.1216,
+      "n": 6787,
+      "age_seconds": 1.5,
+      "ultimo_precio": 1.1235,
       "gaps": [],
       "alertas": []
     }
   },
   "cross_source": {
-    "timestamp_utc": "2026-07-06T14:25:45+00:00",
+    "timestamp_utc": "2026-07-06T14:30:56+00:00",
     "fuentes_activas": [
       "binance",
       "coinbase",
       "kraken"
     ],
     "consenso": {
-      "BTC": 62335.7,
-      "ETH": 1759.97,
-      "SOL": 80.7,
-      "XRP": 1.12547
+      "BTC": 62042.5,
+      "ETH": 1752.895,
+      "SOL": 80.33,
+      "XRP": 1.12105
     },
-    "alertas": [
-      {
-        "sym": "ETH",
-        "max_div_pct": 0.646,
-        "fuentes": {
-          "binance": 1761.55,
-          "coinbase": 1750.24,
-          "kraken": 1759.97
-        },
-        "consenso": 1759.97,
-        "accion": "ALERTA"
-      }
-    ],
+    "alertas": [],
     "bloqueados": []
   }
 }
