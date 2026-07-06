@@ -44,6 +44,12 @@ cada categoría es una cicatriz real del proyecto):
 - Cambio de config: valor antes→después + quién lo aprobó + fecha, anotado en el propio commit o en CLAUDE.md.
 - Reporte de estado: cada afirmación "hecho/funciona" apunta a la salida de un comando de esta sesión.
 
+**Test de humo para un modelo nuevo** (si respondes mal alguna, relee este manual antes de tocar nada):
+1. El shadow ganó +100€ hoy. ¿Cuánto de eso es cobrable en live? → *No extrapolable: el shadow no mide fill-ability; la conversión medida ronda el 8% y las señales vetadas por profundidad aciertan MÁS que las ejecutadas (selección adversa).*
+2. Un bucket muestra IC=+0.30 con n=12. ¿Se promociona o se filtra? → *Ni lo uno ni lo otro: n<15 no concluye nada. Y si el resultado es espectacular, la primera hipótesis es un bug.*
+3. Quieres el PnL de results.csv y el IC de strategy_params. ¿Qué columnas/claves? → *`pnl_neto` (no "pnl") e `ic_bayes` (no "ic_efectivo"). Si dudaste, `head -1` antes de escribir código.*
+4. Una señal live llega y la consulta del libro falla. ¿Se ejecuta? → *No. Fail-closed: sin datos → no operar. Nunca al revés.*
+
 ---
 
 ## Skills (`/nombre`)
