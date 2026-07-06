@@ -1,4 +1,4 @@
-# Hipótesis automáticas — 2026-07-06 12:11 UTC
+# Hipótesis automáticas — 2026-07-06 12:13 UTC
 _Generado por shadow_postmortem.py sobre 4264 resoluciones (PNL=+264.90€)_
 
 ## Patrones causales activos
@@ -763,3 +763,10 @@ _Derivadas de los patrones aprendidos:_
   - _Umbral_: 200
   - _Acción_: Si EV>2x sostenido con n≥200 → proponer watcher de ejecución dedicado (decisión de Javi: toca dinero real y requiere loop sub-5s). Si win rate ≈ ask (mercado calibrado también aquí) → archivar.
   - _Estado_: 0/200 ops en el filtro definido (IC actual=+0.000 PNL=+0.00€)
+
+**🔴 H-CUSTOM-LATE15-BTC-BUYNO-COINFLIP** — GBM_LATE_15M BTC#BUY_NO es moneda al aire — candidata a quitar del motor estrella
+  - _Hipótesis_: Detectado 2026-07-06 desglosando la estrategia que carga el bankroll shadow (GBM_LATE_15M, +364€): por par×dirección, BTC#BUY_NO es la única tupla sin edge — 90/182 (49.5%) PNL=+8.92€, prácticamente coinflip, arrastrando a la baja el IC medio del subtipo. Contraste con las estrellas del mismo motor: SOL#BUY_NO 66.1% (+86.70€), XRP#BUY_YES 67.4% (+80.35€), SOL#BUY_YES 64.4% (+77.08€). ETH#BUY_NO (53.6%) es débil pero positivo; BTC#BUY_YES (57.8%) sí funciona. Hipótesis: el edge de entrada tardía en 15min es fuerte en SOL/XRP, medio en ETH/BTC alcista, y NULO en BTC bajista (BTC es el par más eficiente/arbitrado). Quitar BTC#BUY_NO sube el IC del subtipo sin perder PNL real. NO afecta live (la whitelist live es SOL/XRP BUY_NO + ETH BUY_YES, BTC no está).
+  - _Umbral_: n≥150 y IC<+0.03 (n=182 ya disponible al crearla)
+  - _Acción_: Si IC<+0.03 con n≥150 → filtro causal skip GBM_LATE_15M BTC#BUY_NO en shadow_predict (deja de diluir el subtipo). Si IC sube >+0.08 → mantener.
+  - _Estado_: SEÑAL NEGATIVA confirmada: IC=-0.005 < 0.03 con n=182 PNL=+8.92€
+  - _Datos_: n=182 IC=-0.005 PNL=+8.92€
