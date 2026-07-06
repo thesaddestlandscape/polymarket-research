@@ -29,6 +29,15 @@ Cada error va con la regla que lo previene. Si dudas entre dos interpretaciones,
 - **Autonomía plena**: params shadow, hipótesis custom, análisis, notas, código en dev.
 - **Parar y surfacear** (no adivinar): columna/clave que no existe, JSON corrupto, PnL que no cuadra entre ficheros, cualquier número que contradiga a otro.
 
+**Pase de casos límite ANTES de escribir código que toque dinero** (en este orden, siempre —
+cada categoría es una cicatriz real del proyecto):
+1. ¿El dinero no cuadra? → definir qué hace el sistema (parar, no "log y seguir")
+2. ¿La API falla a medias? (orden enviada sin confirmación, auth caduca mid-ciclo) → estado recuperable
+3. ¿Se puede ejecutar dos veces? → idempotencia (cf. ledger ya_operados; señal viva reintenta cada 20s)
+4. ¿Datos viejos o faltantes? → fail-closed (cf. _cargar_spot silencioso, veto_sin_datos)
+5. ¿Límites del exchange? → min $1, decimales, tick size (cf. bug decimales CLOB, min size 03-Jul)
+6. ¿Reinicio a mitad? → estado persistente, no en memoria (cf. freno ventana stateless → latch)
+
 **Barra de calidad por entregable (checkeable, no adjetivos):**
 - Cambio de código: `python3 -m py_compile <fichero>` pasa + el commit no mezcla código con ficheros de `data/`.
 - Análisis: incluye n, IC, periodo y comando/fichero de origen reproducible.
