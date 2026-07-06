@@ -767,6 +767,22 @@
    },
    "umbral_n": 200,
    "umbral_ic_min": 0.08
+  },
+  {
+   "id": "H-CUSTOM-LATE15-BTC-BUYNO-COINFLIP",
+   "nombre": "GBM_LATE_15M BTC#BUY_NO es moneda al aire — candidata a quitar del motor estrella",
+   "descripcion": "Detectado 2026-07-06 desglosando la estrategia que carga el bankroll shadow (GBM_LATE_15M, +364€): por par×dirección, BTC#BUY_NO es la única tupla sin edge — 90/182 (49.5%) PNL=+8.92€, prácticamente coinflip, arrastrando a la baja el IC medio del subtipo. Contraste con las estrellas del mismo motor: SOL#BUY_NO 66.1% (+86.70€), XRP#BUY_YES 67.4% (+80.35€), SOL#BUY_YES 64.4% (+77.08€). ETH#BUY_NO (53.6%) es débil pero positivo; BTC#BUY_YES (57.8%) sí funciona. Hipótesis: el edge de entrada tardía en 15min es fuerte en SOL/XRP, medio en ETH/BTC alcista, y NULO en BTC bajista (BTC es el par más eficiente/arbitrado). Quitar BTC#BUY_NO sube el IC del subtipo sin perder PNL real. NO afecta live (la whitelist live es SOL/XRP BUY_NO + ETH BUY_YES, BTC no está).",
+   "tipo": "filtro",
+   "umbral": "n≥150 y IC<+0.03 (n=182 ya disponible al crearla)",
+   "accion": "Si IC<+0.03 con n≥150 → filtro causal skip GBM_LATE_15M BTC#BUY_NO en shadow_predict (deja de diluir el subtipo). Si IC sube >+0.08 → mantener.",
+   "filtro": {
+    "strategy_prefix": "GBM_LATE_15M",
+    "par": "BTC",
+    "subtype_contains": "15min",
+    "decision": "BUY_NO"
+   },
+   "umbral_n": 150,
+   "umbral_ic_max": 0.03
   }
  ]
 }
