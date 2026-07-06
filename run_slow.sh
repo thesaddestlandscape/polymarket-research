@@ -37,7 +37,7 @@ while true; do
     git add data/prices/ data/wallets/leaderboard_*.csv data/shadow/hipotesis_*.md data/shadow/hipotesis_pendientes.json data/shadow/arb_scan_*.csv data/shadow/cross_arb_*.csv data/shadow/combi_arb_*.csv data/shadow/combi_candidates.json >> "$LOG" 2>&1 || true
     if ! git diff --cached --quiet 2>/dev/null; then
         timeout 30s git commit -m "data: ciclo slow $CICLO $(date -u +%Y-%m-%dT%H:%MZ)" >> "$LOG" 2>&1 || true
-        timeout 60s git pull --rebase origin main >> "$LOG" 2>&1 || true
+        timeout 60s git pull --rebase --autostash -X ours origin main >> "$LOG" 2>&1 || true
         timeout 60s git push origin main >> "$LOG" 2>&1 || true
         log "  Push OK"
     fi

@@ -969,7 +969,7 @@ def main():
     ya_operados  = _ya_operados_hoy()
     bkr          = bankroll_actual()
 
-    log(f"  Predicciones hoy: {len(predicciones)} | Bankroll: {bkr:.2f}€ | Ya operados hoy: {len(ya_operados)}")
+    log(f"  Predicciones hoy: {len(predicciones)} | Bankroll: {bkr:.2f}€ | Mercados ya operados (histórico): {len(ya_operados)}")
 
     ejecutados = 0
     for pred in predicciones:
