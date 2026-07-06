@@ -1,5 +1,5 @@
-# Hipótesis automáticas — 2026-07-06 03:59 UTC
-_Generado por shadow_postmortem.py sobre 4140 resoluciones (PNL=+220.93€)_
+# Hipótesis automáticas — 2026-07-06 04:01 UTC
+_Generado por shadow_postmortem.py sobre 4141 resoluciones (PNL=+220.42€)_
 
 ## Patrones causales activos
 
@@ -269,16 +269,16 @@ _Derivadas de los patrones aprendidos:_
 | ✅ ORDER_FLOW_5M#SOL#5min | 305 | +0.041 | +10.26€ | 0 | 0 |
 | ✅ ORDER_FLOW_5M#XRP | 184 | +0.000 | -1.63€ | 0 | 0 |
 | ✅ ORDER_FLOW_5M#XRP#5min | 184 | +0.000 | -1.63€ | 0 | 0 |
-| ✅ PRICE_TARGET_GBM | 106 | -0.093 | +10.72€ | 0 | 0 |
-| ✅ PRICE_TARGET_GBM#BTC | 51 | -0.198 | -12.15€ | 0 | 0 |
+| ✅ PRICE_TARGET_GBM | 107 | -0.096 | +10.21€ | 0 | 0 |
+| 🚫 PRICE_TARGET_GBM#BTC | 52 | -0.204 | -12.66€ | 0 | 0 |
 | 🚫 PRICE_TARGET_GBM#BTC#atexpiry | 46 | -0.229 | -11.92€ | 0 | 0 |
-| ✅ PRICE_TARGET_GBM#BTC#reach | 5 | +0.018 | -0.23€ | 0 | 0 |
+| ✅ PRICE_TARGET_GBM#BTC#reach | 6 | +0.000 | -0.74€ | 0 | 0 |
 | ✅ PRICE_TARGET_GBM#ETH | 37 | -0.013 | +10.79€ | 0 | 0 |
 | ✅ PRICE_TARGET_GBM#ETH#atexpiry | 34 | -0.056 | +5.97€ | 0 | 0 |
 | ✅ PRICE_TARGET_GBM#SOL | 18 | +0.045 | +12.08€ | 0 | 0 |
 | ✅ PRICE_TARGET_GBM#SOL#atexpiry | 17 | +0.022 | +11.29€ | 0 | 0 |
 | ✅ PRICE_TARGET_GBM#atexpiry | 97 | -0.126 | +5.34€ | 0 | 0 |
-| ✅ PRICE_TARGET_GBM#reach | 9 | +0.102 | +5.38€ | 0 | 0 |
+| ✅ PRICE_TARGET_GBM#reach | 10 | +0.083 | +4.87€ | 0 | 0 |
 | ✅ RESOLUTION_SNIPER | 6 | +0.113 | +2.85€ | 0 | 0 |
 | ✅ RESOLUTION_SNIPER#sniper | 6 | +0.113 | +2.85€ | 0 | 0 |
 | 🚫 SMART_FLOW_1H | 29 | -0.274 | -13.82€ | 0 | 0 |
@@ -680,8 +680,8 @@ _Derivadas de los patrones aprendidos:_
   - _Hipótesis_: Analizado 2026-07-01: BTC#atexpiry BUY_YES 2/16 (12%) IC=-0.267 PNL=-8.83€; ETH#atexpiry BUY_YES 2/8 (25%) IC=-0.080 PNL=-3.70€. Mientras BUY_NO en ambos activos está en break-even (IC≈0 a +0.02). Prácticamente toda la sangría de la estrategia completa (-13€ de -13.08€ totales) es BUY_YES. Podría rescatar una estrategia que hoy está en la lista de revisar-desactivación.
   - _Umbral_: n≥30 en BUY_YES y IC<-0.15 para confirmar bloqueo
   - _Acción_: Si se confirma con n≥30 → filtro causal decision==BUY_YES → skip en PRICE_TARGET_GBM, dejar solo BUY_NO activo
-  - _Estado_: n=48 IC=-0.040 PNL=+21.50€ — sin señal clara aún (umbral IC: min=None max=-0.15)
-  - _Datos_: n=48 IC=-0.040 PNL=+21.50€
+  - _Estado_: n=49 IC=-0.049 PNL=+20.99€ — sin señal clara aún (umbral IC: min=None max=-0.15)
+  - _Datos_: n=49 IC=-0.049 PNL=+20.99€
 
 **⏳ H-CUSTOM-WEEKLY-INRANGE-BUYYES** — WEEKLY_PRICE BUY_YES con in_range=1 — ¿estructuralmente sobrevalorado?
   - _Hipótesis_: Analizado 2026-07-01, n=10 (evidencia mínima): BUY_YES cuando in_range=1 fue 0/3 (todo pérdida). Mecanismo propuesto: acertar un rango de precio estrecho al vencimiento es intrínsecamente poco probable, el mercado puede estar sobrevalorando el 'sí'. Ver H-CUSTOM-WEEKLY-PCTDIST-BUYNO para el lado complementario (BUY_NO con pct_dist alto).

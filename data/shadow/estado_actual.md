@@ -1,4 +1,4 @@
-# Estado del bot — 2026-07-06 03:59 UTC
+# Estado del bot — 2026-07-06 04:01 UTC
 
 ## Capital
 | | |
@@ -11,12 +11,12 @@
 | | |
 |---|---|
 | Inicio | 25.44 € |
-| Actual | **246.37 €** |
-| P&L acumulado | 🟢 **+220.93 €** |
-| ROI s/ operativo | +868.43% |
-| ROI s/ depósito | +736.43% |
-| P&L hoy (2026-07-06) | 🟢 +25.93 € |
-| Operaciones resueltas | 4140 (2125 WIN / 2015 LOSS) — 51.3% |
+| Actual | **245.86 €** |
+| P&L acumulado | 🟢 **+220.42 €** |
+| ROI s/ operativo | +866.42% |
+| ROI s/ depósito | +734.73% |
+| P&L hoy (2026-07-06) | 🟢 +25.42 € |
+| Operaciones resueltas | 4141 (2125 WIN / 2016 LOSS) — 51.3% |
 | Señales abiertas | 172 |
 
 ## Estrategias (visión global)
@@ -24,7 +24,7 @@
 | Estrategia | n | Win% | IC_efectivo | PNL | Apuesta | Estado |
 |---|---|---|---|---|---|---|
 | GBM_LATE_15M | 1256 | 59.4% | +0.094 | +316.17€ | 0.94€ | ✅ activa |
-| PRICE_TARGET_GBM | 106 | 40.6% | -0.093 | +10.72€ | 0.50€ | ⚠️ IC negativo |
+| PRICE_TARGET_GBM | 107 | 40.2% | -0.096 | +10.21€ | 0.50€ | ⚠️ IC negativo |
 | ORDER_FLOW_5M | 1543 | 51.1% | +0.011 | +9.06€ | 0.50€ | ✅ activa |
 | RESOLUTION_SNIPER | 6 | 100.0% | +0.112 | +2.85€ | 1.12€ | ⏳ acumulando |
 | LATE_WINDOW_5MIN | 11 | 63.6% | +0.063 | +1.47€ | 0.64€ | ✅ activa |
@@ -40,15 +40,15 @@
 
 | Timestamp | Estrategia | Mercado | Resultado | PNL |
 |---|---|---|---|---|
+| 2026-07-06T04:01 | PRICE_TARGET_GBM#BTC#reach | Will Bitcoin reach $64,000 June 29-July 5?… | ❌ LOSS | -0.51€ |
 | 2026-07-06T03:48 | GBM_LATE_15M#BTC#15min | Bitcoin Up or Down - July 5, 11:30PM-11:45PM ET… | ✅ WIN | +0.52€ |
 | 2026-07-06T03:48 | GBM_LATE_15M#SOL#15min | Solana Up or Down - July 5, 11:30PM-11:45PM ET… | ✅ WIN | +1.43€ |
 | 2026-07-06T03:48 | STREAK_FADE_15M#SOL#15min | Solana Up or Down - July 5, 11:30PM-11:45PM ET… | ❌ LOSS | -0.51€ |
 | 2026-07-06T03:45 | GBM_LATE_15M#ETH#15min | Ethereum Up or Down - July 5, 11:30PM-11:45PM ET… | ✅ WIN | +0.54€ |
-| 2026-07-06T03:30 | GBM_LATE_15M#BTC#15min | Bitcoin Up or Down - July 5, 11:15PM-11:30PM ET… | ✅ WIN | +0.52€ |
 
 ## Calidad de datos
 
-✅ **OK** — última verificación 2026-07-06T03:59 UTC | rechazos 1h: 2 (rango=0, spike=0)
+✅ **OK** — última verificación 2026-07-06T04:01 UTC | rechazos 1h: 2 (rango=0, spike=0)
 
 | Asset | Precio | Age | Alertas |
 |---|---|---|---|
