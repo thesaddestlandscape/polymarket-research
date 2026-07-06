@@ -804,31 +804,31 @@
     {
       "id": "H-CUSTOM-GBM-04H-ASIA",
       "nombre": "UPDOWN_GBM 04h-05h UTC — media sesión asiática, ¿mejor franja nocturna?",
-      "descripcion": "Detectado 2026-07-06 al evaluar si la apertura china (01:30 UTC) merece ventana: la apertura en sí es NEGATIVA (01h IC=0.000, 02h IC=-0.066 — mismo mecanismo que los opens US 9/10/18h: flujo informado rompe el GBM), pero la media sesión asiática 04h-05h UTC es la mejor franja nocturna sin ventana: UPDOWN_GBM+GBM_LATE 04h IC=+0.112 n=96, 05h IC=+0.067 n=125, +63€. Mecanismo: mercado tranquilo, sigma baja — coherente con el patrón causal sigma_h<0.0084→IC=+0.125 confirmado el mismo día. CAVEATS: (1) mejor-de-9-horas mirado a posteriori — sesgo de selección, por eso barra n≥40 forward; (2) el shadow no mide fill-ability y a las 04h UTC los libros pueden estar vacíos — medir profundidad con libro_snapshots (motivo fuera_ventana, 24/7) antes de proponer ventana live 06:00-07:00 Madrid. Ver gemela H-CUSTOM-LATE-04H-ASIA.",
+      "descripcion": "Detectado 2026-07-06 al evaluar si la apertura china (01:30 UTC) merece ventana: la apertura en sí es NEGATIVA (01h IC=0.000, 02h IC=-0.066 — mismo mecanismo que los opens US 9/10/18h: flujo informado rompe el GBM), pero la media sesión asiática 04h-05h UTC es la mejor franja nocturna sin ventana: UPDOWN_GBM+GBM_LATE 04h IC=+0.112 n=96, 05h IC=+0.067 n=125, +63€. Mecanismo: mercado tranquilo, sigma baja — coherente con el patrón causal sigma_h<0.0084→IC=+0.125 confirmado el mismo día. CAVEATS: (1) mejor-de-9-horas mirado a posteriori — sesgo de selección, por eso barra n≥40 forward; (2) el shadow no mide fill-ability y a las 04h UTC los libros pueden estar vacíos — medir profundidad con libro_snapshots (motivo fuera_ventana, 24/7) antes de proponer ventana live 06:00-07:00 Madrid. Ver gemela H-CUSTOM-LATE-04H-ASIA. BASELINE 2026-07-06: n=62 IC=-0.016 — en UPDOWN_GBM la franja es PLANA (el edge agregado que motivó la hipótesis era de GBM_LATE); umbral_n=102 para que la evaluación sea forward (+40 sobre baseline).",
       "tipo": "boost",
-      "umbral": "n≥40 forward y IC>+0.08",
+      "umbral": "n≥102 (baseline 62 + 40 forward) y IC>+0.08",
       "accion": "Si confirma IC≥0.08 n≥40 forward Y la profundidad de libro a 04-05h es viable → proponer a Javi ventana live 06:00-07:00 Madrid (decisión suya, dinero real). Si IC<0 con n≥40 → archivar y no volver a mirar horas sueltas sin mecanismo.",
       "filtro": {
         "strategy_prefix": "UPDOWN_GBM",
         "hora_utc_desde": 4,
         "hora_utc_hasta": 5
       },
-      "umbral_n": 40,
+      "umbral_n": 102,
       "umbral_ic_min": 0.08
     },
     {
       "id": "H-CUSTOM-LATE-04H-ASIA",
       "nombre": "GBM_LATE_15M 04h-05h UTC — media sesión asiática (gemela de GBM-04H-ASIA)",
-      "descripcion": "Gemela de H-CUSTOM-GBM-04H-ASIA para la estrategia live principal (GBM_LATE_15M). El tracker no soporta dos strategy_prefix en un filtro — mismas horas, misma barra, misma acción. Se evalúan por separado y solo se propone ventana si AMBAS confirman o la que confirme tiene n≥40 propio.",
+      "descripcion": "Gemela de H-CUSTOM-GBM-04H-ASIA para la estrategia live principal (GBM_LATE_15M). El tracker no soporta dos strategy_prefix en un filtro — mismas horas, misma barra, misma acción. Se evalúan por separado y solo se propone ventana si AMBAS confirman o la que confirme tiene n≥40 propio. BASELINE 2026-07-06: n=112 IC=+0.123 PNL=+40.09€ — retrospectivo ya positivo, pero es el mismo dato que generó la hipótesis (sesgo de selección). umbral_n=152 exige 40 resoluciones forward antes de confirmar. El edge 04-05h es de GBM_LATE, no de UPDOWN_GBM (ver gemela: plana).",
       "tipo": "boost",
-      "umbral": "n≥40 forward y IC>+0.08",
+      "umbral": "n≥152 (baseline 112 + 40 forward) y IC>+0.08",
       "accion": "Ver H-CUSTOM-GBM-04H-ASIA — misma decisión conjunta.",
       "filtro": {
         "strategy_prefix": "GBM_LATE_15M",
         "hora_utc_desde": 4,
         "hora_utc_hasta": 5
       },
-      "umbral_n": 40,
+      "umbral_n": 152,
       "umbral_ic_min": 0.08
     }
   ]
