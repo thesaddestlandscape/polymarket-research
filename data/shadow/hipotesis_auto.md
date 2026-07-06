@@ -1,4 +1,4 @@
-# Hipótesis automáticas — 2026-07-06 13:10 UTC
+# Hipótesis automáticas — 2026-07-06 13:11 UTC
 _Generado por shadow_postmortem.py sobre 4280 resoluciones (PNL=+273.51€)_
 
 ## Patrones causales activos
@@ -771,3 +771,10 @@ _Derivadas de los patrones aprendidos:_
   - _Acción_: Si IC<+0.03 con n≥150 → filtro causal skip GBM_LATE_15M BTC#BUY_NO en shadow_predict (deja de diluir el subtipo). Si IC sube >+0.08 → mantener.
   - _Estado_: SEÑAL NEGATIVA confirmada: IC=-0.005 < 0.03 con n=184 PNL=+8.93€
   - _Datos_: n=184 IC=-0.005 PNL=+8.93€
+
+**🟡 H-CUSTOM-BUYYES15-SOLO-TARDIO** — UPDOWN_GBM BUY_YES #15min solo tardío (T_h<0.2) — gate forward hacia live
+  - _Hipótesis_: Implementado 2026-07-06 (BUY_YES_15M_TH_MAX=0.2 en shadow_predict): BUY_YES #15min solo se permite en zona tardía. Motivo medido: temprana IC=-0.062 n=404 PNL=-46.2€ vs tardía IC=+0.123 n=51 — el sesgo retail 'Up' infla el YES al inicio de la ventana y se disuelve cerca del cierre (mismo mecanismo que GBM_LATE_15M BUY_YES +0.119 n=672, y coherente con H-CUSTOM-GBM-BUYYES-GLOBAL-MALO y H-CUSTOM-LATE-ENTRY-15MIN). El skip temprano deja el mercado sin predecir y el loop lo re-evalúa → la entrada tardía es deliberada, no accidental. CAVEAT: el n=51 tardío es retrospectivo y multi-par; esta hipótesis mide el FORWARD post-implementación con la barra live (n≥40 IC≥0.08). No proponer live sin además comprobar solapamiento con GBM_LATE_15M (misma ventana/mercados → correlación, techo 2 posiciones misma dirección).
+  - _Umbral_: n≥40 forward y IC>+0.08 (barra live estándar)
+  - _Acción_: Si confirma forward con n≥40 IC≥0.08 → discutir whitelist live SOLO si aporta algo que GBM_LATE_15M no cubre (franja T_h u ocasiones distintas); si IC<0 con n≥40 → cerrar BUY_YES #15min por completo (culmina H-CUSTOM-BUYYES-15MIN-POSTFILTRO).
+  - _Estado_: SEÑAL POSITIVA confirmada: IC=+0.123 > 0.08 con n=51 PNL=+1.02€
+  - _Datos_: n=51 IC=+0.123 PNL=+1.02€
