@@ -7,6 +7,7 @@ data/binance/
 data/markets/
 data/trades/
 data/wallets/positions_*.csv
+data/wallets/leaderboard_*.csv
 data/funding/
 data/alerts/
 data/live/LIVE_MODE_ON
@@ -21,3 +22,4 @@ data/shadow/_cache_*.pkl
 data/funding_rates_cache.json
 data/shadow/postmortem.csv
 data/shadow/combi_arb_llm_*.csv
+data/shadow/cross_arb_*.csv
