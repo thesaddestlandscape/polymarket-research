@@ -203,7 +203,7 @@ EDGE_MINIMO = 0.02 | SLIPPAGE_ESTIMADO = 0.02 (dinámico desde 03-Jul: mediana s
 GBM_LATE_DRIFT_VENT_MIN_PCT = 0.02  # photo finish (05-Jul): GBM_LATE skip si |drift_ventana|<0.02%
 DELTA_MIN = 0.38 | DELTA_MAX = 0.46  # OF solo BUY_NO (delta<0)
 KELLY_COMPUESTO_BOOST = 1.5 | KELLY_COMPUESTO_MAX = 2.00
-ORDER_FLOW_BLACKLIST_HOURS = {2,7,9,10,11,22}  # UTC — evaluado sobre BTC+SOL
+ORDER_FLOW_BLACKLIST_HOURS = {2,7,9,22}  # UTC BTC+SOL. 07-Jul: quitadas h10/h11 (blacklist invertido — eran BUENAS en BUY_NO; el IC malo previo era del BUY_YES OF, muerto desde 26-Jun). scan_blacklist_hours.py
 ORDER_FLOW_PAIR_BLACKLIST  = {'ETH','BNB','XRP','DOGE'}
 # Longshot: BUY_NO py_mkt<0.20 → ×1.1
 # poly_drift_5obs: confluencia→×1.1 | divergencia fuerte→×0.85
