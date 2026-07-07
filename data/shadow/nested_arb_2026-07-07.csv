@@ -1965,3 +1965,8 @@ timestamp_utc,activo,nesting,combo,coste,profit_min_pct,gap_opens_pct,depth_usd,
 2026-07-07T16:58:07+00:00,ETH,5min15m,YESout+NOin,1.03,-3.0,0.2523,0.95,112,0.05,0.98,1806.22,1801.675,eth-updown-5m-1783443300,eth-updown-15m-1783442700
 2026-07-07T16:58:07+00:00,SOL,5min15m,YESout+NOin,1.47,-47.0,0.1338,4.9,112,0.49,0.98,82.35,82.24,sol-updown-5m-1783443300,sol-updown-15m-1783442700
 2026-07-07T16:58:08+00:00,XRP,5min15m,NOout+YESin,0.99,1.0,-0.0354,0.15,111,0.96,0.03,1.1309,1.1313,xrp-updown-5m-1783443300,xrp-updown-15m-1783442700
+2026-07-07T16:59:06+00:00,BTC,15min60m,YESout+NOin,1.95,-95.0,0.1785,381.12,53,0.99,0.96,63979.995,63866.0,btc-updown-15m-1783442700,bitcoin-up-or-down-july-7-2026-12pm-et
+2026-07-07T16:59:06+00:00,ETH,15min60m,YESout+NOin,1.979,-97.9,0.3607,4.9,53,0.999,0.98,1801.675,1795.2,eth-updown-15m-1783442700,ethereum-up-or-down-july-7-2026-12pm-et
+2026-07-07T16:59:06+00:00,SOL,15min60m,YESout+NOin,1.608,-60.8,0.1827,6.2,53,0.988,0.62,82.24,82.09,sol-updown-15m-1783442700,solana-up-or-down-july-7-2026-12pm-et
+2026-07-07T16:59:07+00:00,XRP,15min60m,YESout+NOin,1.16,-16.0,0.115,1.0,52,0.17,0.99,1.1313,1.13,xrp-updown-15m-1783442700,xrp-up-or-down-july-7-2026-12pm-et
+2026-07-07T16:59:08+00:00,XRP,5min15m,NOout+YESin,1.0,0.0,-0.0354,1.17,51,0.99,0.01,1.1309,1.1313,xrp-updown-5m-1783443300,xrp-updown-15m-1783442700
