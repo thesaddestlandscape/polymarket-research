@@ -198,10 +198,29 @@ def construir_digest() -> str:
         from live_balance import cargar_balance_real
         _snap = cargar_balance_real(max_edad_s=3600)
         if _snap and not _snap.get("_rancio"):
+            # Win rate + trades reales ejecutados (trades.csv CLOSED) — mismas
+            # métricas que la sección live del dashboard.
+            wr_str = ""
+            try:
+                import csv as _csv
+                from pathlib import Path as _P
+                _cl = [r for r in _csv.DictReader(open(_P("data/live/trades.csv"), encoding="utf-8"))
+                       if r.get("status") == "CLOSED"]
+                _n = len(_cl)
+                _w = sum(1 for r in _cl if float(r.get("pnl_neto_eur") or 0) > 0)
+                if _n:
+                    wr_str = f"Win rate: {_w/_n*100:.0f}%  ·  Trades: {_n}"
+            except Exception:
+                pass
+            _hoy = _snap.get("pnl_hoy_real")
+            _7d  = _snap.get("pnl_7d_real")
             lineas.append("── LIVE (dinero real on-chain) ──")
-            lineas.append(f"Balance wallet: {_snap['total']:.2f}$  "
-                          f"(depósito {_snap['deposito_inicial']:.2f})")
-            lineas.append(f"P&L real acumulado: {formato_eur(_snap['pnl_real'])}")
+            lineas.append(f"Depósito {_snap['deposito_inicial']:.2f}$  →  Balance {_snap['total']:.2f}$")
+            lineas.append(f"P&L real total: {formato_eur(_snap['pnl_real'])}")
+            if _hoy is not None and _7d is not None:
+                lineas.append(f"Hoy: {formato_eur(_hoy)}  ·  7 días: {formato_eur(_7d)}")
+            if wr_str:
+                lineas.append(wr_str)
             lineas.append("")
     except Exception:
         pass
