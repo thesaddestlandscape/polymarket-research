@@ -1,4 +1,4 @@
-# Estado del bot — 2026-07-07 06:30 UTC
+# Estado del bot — 2026-07-07 06:31 UTC
 
 ## Capital
 | | |
@@ -11,19 +11,19 @@
 | | |
 |---|---|
 | Inicio | 25.44 € |
-| Actual | **410.65 €** |
-| P&L acumulado | 🟢 **+385.21 €** |
-| ROI s/ operativo | +1514.20% |
-| ROI s/ depósito | +1284.04% |
-| P&L hoy (2026-07-07) | 🟢 +46.38 € |
-| Operaciones resueltas | 4691 (2458 WIN / 2233 LOSS) — 52.4% |
-| Señales abiertas | 146 |
+| Actual | **414.42 €** |
+| P&L acumulado | 🟢 **+388.98 €** |
+| ROI s/ operativo | +1529.00% |
+| ROI s/ depósito | +1296.59% |
+| P&L hoy (2026-07-07) | 🟢 +50.14 € |
+| Operaciones resueltas | 4694 (2461 WIN / 2233 LOSS) — 52.4% |
+| Señales abiertas | 143 |
 
 ## Estrategias (visión global)
 
 | Estrategia | n | Win% | IC_efectivo | PNL | Apuesta | Estado |
 |---|---|---|---|---|---|---|
-| GBM_LATE_15M | 1645 | 61.0% | +0.110 | +484.94€ | 1.10€ | ✅ activa |
+| GBM_LATE_15M | 1648 | 61.1% | +0.111 | +488.70€ | 1.11€ | ✅ activa |
 | ORDER_FLOW_5M | 1548 | 51.3% | +0.013 | +14.80€ | 0.50€ | ✅ activa |
 | PRICE_TARGET_GBM | 116 | 37.1% | -0.127 | +5.14€ | 0.50€ | ⚠️ IC negativo |
 | LATE_WINDOW_5MIN | 20 | 70.0% | +0.182 | +3.80€ | 1.82€ | ✅ activa |
@@ -40,15 +40,15 @@
 
 | Timestamp | Estrategia | Mercado | Resultado | PNL |
 |---|---|---|---|---|
+| 2026-07-07T06:31 | GBM_LATE_15M#XRP#15min | XRP Up or Down - July 7, 2:15AM-2:30AM ET… | ✅ WIN | +1.70€ |
+| 2026-07-07T06:31 | GBM_LATE_15M#BTC#15min | Bitcoin Up or Down - July 7, 2:15AM-2:30AM ET… | ✅ WIN | +0.83€ |
+| 2026-07-07T06:31 | GBM_LATE_15M#ETH#15min | Ethereum Up or Down - July 7, 2:15AM-2:30AM ET… | ✅ WIN | +1.24€ |
 | 2026-07-07T06:18 | GBM_LATE_15M#XRP#15min | XRP Up or Down - July 7, 2:00AM-2:15AM ET… | ✅ WIN | +1.54€ |
 | 2026-07-07T06:18 | GBM_LATE_15M#SOL#15min | Solana Up or Down - July 7, 2:00AM-2:15AM ET… | ✅ WIN | +1.59€ |
-| 2026-07-07T06:18 | GBM_LATE_15M#ETH#15min | Ethereum Up or Down - July 7, 2:00AM-2:15AM ET… | ✅ WIN | +0.54€ |
-| 2026-07-07T06:15 | GBM_LATE_15M#BTC#15min | Bitcoin Up or Down - July 7, 2:00AM-2:15AM ET… | ✅ WIN | +0.44€ |
-| 2026-07-07T06:15 | UPDOWN_GBM#BTC#15min | Bitcoin Up or Down - July 7, 2:00AM-2:15AM ET… | ✅ WIN | +1.24€ |
 
 ## Calidad de datos
 
-✅ **OK** — última verificación 2026-07-07T06:29 UTC | rechazos 1h: 5 (rango=0, spike=0)
+✅ **OK** — última verificación 2026-07-07T06:31 UTC | rechazos 1h: 5 (rango=0, spike=0)
 
 | Asset | Precio | Age | Alertas |
 |---|---|---|---|
