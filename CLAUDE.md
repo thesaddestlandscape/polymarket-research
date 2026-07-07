@@ -218,7 +218,7 @@ UMBRAL_DESACTIVAR=(-0.20, 8)  # IC<-0.20 en n≥8 ciclos → desactivar
 
 ### live_stake.py / data/live/config_live.json
 ```python
-max_pct_bankroll=0.10 | min_stake_eur=1.05 (CLOB exige ≥$1 en marketable BUY) | max_stake_eur=1.05 (03-Jul: stake=min hasta validar maker; antes 2.00)
+max_pct_bankroll=0.10 | min_stake_eur=1.05 (CLOB exige ≥$1 en marketable BUY) | max_stake_eur=1.75 (07-Jul: des-pineado 1.05→1.75, aprobado Javi, para arrancar compounding — forward BUY_YES net-positivo +12.03€; Gate #1 prueba edge-a-tamaño; antes 1.05 desde 03-Jul, antes 2.00)
 freno_ventana=0.20 | freno_diario=0.30 (05-Jul, antes 0.15) | bankroll_min=1.00 (05-Jul) | racha=4
 # ⚠️ SELECCIÓN ADVERSA TAKER (03-Jul): fills live 19% hit vs 83% señales vetadas por profundidad
 # (mismas tuplas/día; shadow pierde los MISMOS mercados a precio plan → no es slippage, es fill-ability).
