@@ -63,11 +63,19 @@ COSTE_LOG_MAX = 9.9     # registrar TODA medición en fase activa (~140 filas/d�
 SIM_CSV = DIR_SHADOW / "nested_arb_sim.csv"
 SIM_MIN_DEPTH_USD = 10.0   # mismo listón que el análisis del 05-Jul
 SIM_CAP_COSTE_USD = 10.0   # coste máximo por oportunidad simulada
+# Filtro pre-entrada validado 2026-07-07 (analisis re-medición n=28 cerradas):
+# las 4 que ROMPIERON la garantía (−40€, borraron las 23 buenas) tenían gap 3× más
+# ancho (0.051% vs 0.017%) y libro ½ ($11.7 vs $21). Ambos observables A LA ENTRADA.
+# gap<0.04% & depth>$15 → 100% garantía y +8.48$ en el subconjunto (n=7, aún <30).
+# NO gatea la entrada (se sigue midiendo todo); solo TAGUEA para acumular garantía
+# forward del subconjunto filtrado. Paso a live: pasa_filtro con n≥30 y garantía~100%.
+NESTED_GAP_MAX_PCT = 0.04    # |gap_opens_pct| máximo para el subconjunto de confianza
+NESTED_DEPTH_MIN_USD = 15.0  # profundidad mínima del libro ($) para el subconjunto
 SIM_CAMPOS = ["ts_entrada", "activo", "nesting", "combo", "coste", "n_shares",
               "coste_total_usd", "ask_leg1", "ask_leg2", "gap_opens_pct",
               "depth_usd", "min_orden_ok", "end_utc", "inner_slug",
               "outer_slug", "status", "ts_cierre", "gano_leg1", "gano_leg2",
-              "payout_por_share", "pnl_usd", "garantia_ok"]
+              "payout_por_share", "pnl_usd", "garantia_ok", "pasa_filtro"]
 
 
 def _log(msg):
@@ -310,6 +318,10 @@ def _sim_entrar(filas: list, ends: dict, rows: list) -> bool:
             "status": "OPEN", "ts_cierre": "", "gano_leg1": "",
             "gano_leg2": "", "payout_por_share": "", "pnl_usd": "",
             "garantia_ok": "",
+            # Subconjunto de confianza (gap estrecho + libro profundo): las rotas
+            # de la autopsia 07-Jul tenían gap ancho y libro fino. Tag, no gate.
+            "pasa_filtro": 1 if (abs(f["gap_opens_pct"]) < NESTED_GAP_MAX_PCT
+                                 and f["depth_usd"] > NESTED_DEPTH_MIN_USD) else 0,
         })
         abiertos.add(key)
         cambiado = True

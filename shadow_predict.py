@@ -629,6 +629,11 @@ def construir_contexto():
                 if isinstance(klines, list) and klines:
                     spot_prices[sym] = float(klines[-1][4])
                     klines_raw[sym]  = klines   # todas las velas, con flow si está disponible
+            # VWAP de sesión (dict {activo: vwap}) — clave "vwap" del mismo JSON.
+            # El bucle de arriba la ignora (no es lista). Feature dist_vwap_pct.
+            _vw = kd.get("vwap")
+            if isinstance(_vw, dict):
+                ctx["vwap_sesion"] = _vw
     except Exception:
         pass
     ctx["spot_prices"] = spot_prices
@@ -1459,6 +1464,13 @@ def s_updown_gbm(market, ctx):
         c15 = float(k15[-1][4])
         if (h15 - l15) > 1e-8:
             features["ibs_15"] = round((c15 - l15) / (h15 - l15), 4)
+    # dist_vwap_pct (aprobada 05-Jul, impl 07-Jul): distancia % del spot a la VWAP
+    # de sesión UTC (ancla 00:00), ponderada por volumen. Única feature GBM que usa
+    # volumen. Shadow-only: se loguea, el postmortem decide si filtra/boostea.
+    # Fail-closed: sin VWAP (fetch falló o Kraken fallback) → no se añade.
+    _vwap = ctx.get("vwap_sesion", {}).get(activo)
+    if _vwap and spot and _vwap > 0:
+        features["dist_vwap_pct"] = round((spot - _vwap) / _vwap * 100, 4)
     # poly_drift_5obs: drift del precio YES DENTRO de Polymarket en últimas 5 obs (~5min).
     # Negativo → el mercado interno está vendiendo YES (demanda NO). Positivo → demanda YES.
     # Si poly_drift y nuestra predicción coinciden → señal reforzada (cross-confirmation).
