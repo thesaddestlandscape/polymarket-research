@@ -113,6 +113,42 @@ def fetch_binance(asset: str, with_flow: bool = False) -> list | None:
         return None
 
 
+def fetch_session_vwap(asset: str) -> float | None:
+    """VWAP de la sesión UTC (ancla 00:00) desde klines 1min Binance, ponderada
+    por volumen. Feature dist_vwap_pct (shadow-only). Fetch aparte porque el
+    principal solo trae LIMIT=25 velas; aquí startTime=00:00 UTC hoy, limit=1500
+    (día completo = 1440 velas < 1500 → una sola llamada cubre la sesión).
+    Solo Binance: Kraken devuelve semántica de volumen distinta → fail-closed
+    (sin VWAP la feature no se añade y la predicción sigue igual)."""
+    symbol = BINANCE_SYMBOLS.get(asset)
+    if not symbol:
+        return None
+    try:
+        now = datetime.now(timezone.utc)
+        inicio_ms = int(now.replace(hour=0, minute=0, second=0,
+                                    microsecond=0).timestamp() * 1000)
+        r = requests.get(
+            "https://api.binance.com/api/v3/klines",
+            params={"symbol": symbol, "interval": "1m",
+                    "startTime": inicio_ms, "limit": 1500},
+            timeout=TIMEOUT,
+        )
+        r.raise_for_status()
+        num = den = 0.0
+        for k in r.json():
+            # típico = (high+low+close)/3, peso = volumen base (col 5)
+            typ = (float(k[2]) + float(k[3]) + float(k[4])) / 3.0
+            v = float(k[5])
+            num += typ * v
+            den += v
+        if den <= 0:
+            return None
+        return round(num / den, 6)
+    except Exception as e:
+        print(f"  [WARN] session VWAP {asset}: {type(e).__name__}: {e}", file=sys.stderr)
+        return None
+
+
 def _log_evento_fuente(sym: str, fuente_prev: str, fuente_nueva: str, salto_pct: float) -> None:
     """Deja constancia en dq_events.jsonl (mismo log que L1) de un cambio de
     fuente de precio para un activo, con el salto de precio asociado — antes
@@ -163,6 +199,18 @@ def main():
     if not any_success:
         print("[WARN] No klines fetched — all sources unreachable. Exiting 0.")
         sys.exit(0)
+
+    # VWAP de sesión (ancla 00:00 UTC) para dist_vwap_pct — solo activos GBM.
+    # Se añade al mismo JSON; shadow_predict lo lee. Fail-closed: si algún fetch
+    # falla, ese activo no entra y su feature no se loguea (no rompe nada).
+    vwaps = {}
+    for _asset in ("BTC", "ETH", "SOL", "XRP"):
+        _v = fetch_session_vwap(_asset)
+        if _v is not None:
+            vwaps[_asset] = _v
+    if vwaps:
+        data["vwap"] = vwaps
+        print(f"  VWAP sesión: {{{', '.join(f'{k}={v:.4g}' for k, v in vwaps.items())}}}")
 
     out_path = DIR_BINANCE / f"klines_{fecha}.json"
     with open(out_path, "w", encoding="utf-8") as f:
