@@ -49,6 +49,12 @@ try:
 except Exception:
     BLACKLIST_HOURS = {2, 7, 9, 10, 11, 22}  # UTC — fallback si el import falla
 
+try:
+    # Balance REAL on-chain (verdad de suelo), cacheado por live_balance.py.
+    from live_balance import cargar_balance_real
+except Exception:
+    cargar_balance_real = lambda **_: None  # fail-closed: sin módulo → sin real
+
 # ─── Cache ───────────────────────────────────────────────────────────────────
 _cache_lock = threading.Lock()
 _cache_data  = None
@@ -89,6 +95,29 @@ def _win(r):
         return int(r.get("acierto", 0) or 0)
     except Exception:
         return 0
+
+# Simulación FIEL: el bankroll compuesto (+1900%) es una ficción — compone Kelly
+# sobre tamaño que en live no se puede colocar. Este PnL usa STAKE FIJO (sin
+# compounding) y descuenta el slippage estimado del modelo. Sigue SIN modelar
+# fill-ability (conversión ~8%, selección adversa) → cota superior, no cobrable.
+STAKE_FIJO_SIM = 1.0
+SLIP_SIM = 0.02  # = shadow_predict.SLIPPAGE_ESTIMADO (clamp [0.005, 0.02])
+
+def _pnl_realista(r):
+    """PnL de una resolución a stake fijo 1€ con slippage real. None si no aplica."""
+    dec = r.get("decision", "")
+    if dec not in ("BUY_YES", "BUY_NO"):
+        return None
+    try:
+        p_yes = float(r.get("precio_yes_mercado"))
+        ac = int(r.get("acierto", 0) or 0)
+    except Exception:
+        return None
+    p_dir = p_yes if dec == "BUY_YES" else (1.0 - p_yes)
+    if not (0.01 < p_dir < 0.99):
+        return None
+    p_exec = min(p_dir + SLIP_SIM, 0.98)  # compra adversa: cuesta más
+    return STAKE_FIJO_SIM * (1.0 / p_exec - 1.0) if ac == 1 else -STAKE_FIJO_SIM
 
 # ─── Carga de datos ──────────────────────────────────────────────────────────
 
@@ -262,10 +291,31 @@ def compute_live_data():
         for k, d in strat.items() if d["n"] >= 3
     ], key=lambda x: x["pnl"], reverse=True)
 
+    # ── Balance REAL on-chain (verdad de suelo) ───────────────────────────────
+    # trades.csv da PnL de PLAN (precio previsto, fee=0); nunca cuadra con el
+    # wallet. Anclamos a lo que Polymarket dice de verdad. Fail-closed: si el
+    # cache falta o está rancio (>1h), real_* = None y el front muestra "n/d".
+    real = cargar_balance_real(max_edad_s=3600)
+    if real and not real.get("_rancio"):
+        real_total = real.get("total")
+        real_pnl   = real.get("pnl_real")
+        real_ts    = real.get("ts")
+        real_stale = False
+        # tracking error de ejecución: modelo(trades.csv) − real. >0 = optimista.
+        tracking_error = round(pnl_total - real_pnl, 2) if real_pnl is not None else None
+    else:
+        real_total = real_pnl = real_ts = tracking_error = None
+        real_stale = bool(real and real.get("_rancio"))
+
     return {
         "switch": switch_on,
         "bankroll": round(LIVE_BANKROLL_INICIAL + pnl_total, 2),
         "bankroll_inicial": LIVE_BANKROLL_INICIAL,
+        "real_total": real_total,
+        "real_pnl": real_pnl,
+        "real_ts": real_ts,
+        "real_stale": real_stale,
+        "tracking_error": tracking_error,
         "pnl_total": round(pnl_total, 2),
         "pnl_hoy": round(pnl_hoy, 2),
         "pnl_7d": round(pnl_7d, 2),
@@ -522,6 +572,8 @@ def compute_data():
             "n_ops":     n_total,
             "n_hoy":     len(rows_hoy),
             "updated":   now.strftime("%H:%M:%S UTC"),
+            # PnL fiel (stake fijo + slippage, sin compounding ni fill-ability)
+            "pnl_realista": round(sum(v for v in (_pnl_realista(r) for r in rows) if v is not None), 2),
         },
         "equity_curve":  equity,
         "daily_pnl":     daily_pnl,
@@ -646,22 +698,25 @@ footer { text-align: center; padding: 10px; font-size: 10px; color: var(--muted)
     <div id="live-switch-badge" style="font-size:12px;font-weight:700;padding:3px 10px;border-radius:20px">…</div>
     <span style="font-size:13px;font-weight:600;color:#e0e0e0">LIVE TRADING — Polymarket</span>
     <span style="font-size:11px;color:var(--muted);margin-left:4px">inicio: 25.44 USDC · 2026-06-29</span>
+    <span id="live-real-freshness" style="font-size:10px;color:var(--muted);margin-left:auto">balance on-chain: —</span>
   </div>
   <div style="display:grid;grid-template-columns:repeat(6,1fr);gap:8px;margin-bottom:10px">
     <div style="background:#ffffff08;border-radius:6px;padding:8px;text-align:center">
-      <div style="font-size:9px;color:var(--muted)">💰 Bankroll live</div>
+      <div style="font-size:9px;color:var(--muted)">💰 Bankroll real <span style="opacity:.6">on-chain</span></div>
       <div id="live-bankroll" style="font-size:20px;font-weight:700">—</div>
+      <div id="live-bankroll-sub" style="font-size:9px;color:var(--muted)">&nbsp;</div>
     </div>
     <div style="background:#ffffff08;border-radius:6px;padding:8px;text-align:center">
-      <div style="font-size:9px;color:var(--muted)">📈 PNL total</div>
+      <div style="font-size:9px;color:var(--muted)">📈 PNL real <span style="opacity:.6">wallet</span></div>
       <div id="live-pnl" style="font-size:20px;font-weight:700">—</div>
+      <div id="live-pnl-sub" style="font-size:9px;color:var(--muted)">&nbsp;</div>
     </div>
     <div style="background:#ffffff08;border-radius:6px;padding:8px;text-align:center">
-      <div style="font-size:9px;color:var(--muted)">🎯 PNL hoy</div>
+      <div style="font-size:9px;color:var(--muted)">🎯 PNL hoy <span style="opacity:.6">modelo</span></div>
       <div id="live-pnl-hoy" style="font-size:20px;font-weight:700">—</div>
     </div>
     <div style="background:#ffffff08;border-radius:6px;padding:8px;text-align:center">
-      <div style="font-size:9px;color:var(--muted)">📅 Últimos 7 días</div>
+      <div style="font-size:9px;color:var(--muted)">📅 Últimos 7 días <span style="opacity:.6">modelo</span></div>
       <div id="live-pnl-7d" style="font-size:20px;font-weight:700">—</div>
     </div>
     <div style="background:#ffffff08;border-radius:6px;padding:8px;text-align:center">
@@ -677,7 +732,7 @@ footer { text-align: center; padding: 10px; font-size: 10px; color: var(--muted)
   <!-- Charts live — mismo escritorio que el modelo simulado -->
   <div style="display:grid;grid-template-columns:2fr 1fr;gap:8px;margin-bottom:10px">
     <div style="background:#ffffff05;border-radius:6px;padding:10px">
-      <div class="panel-title">📈 Evolución del capital live — cada punto es un trade cerrado</div>
+      <div class="panel-title">📈 Evolución del capital live — estimación modelo (cada punto = trade cerrado; el bankroll real es el de arriba)</div>
       <div class="chart-host" id="live-equity-chart" style="height:180px"></div>
     </div>
     <div style="background:#ffffff05;border-radius:6px;padding:10px">
@@ -706,12 +761,19 @@ footer { text-align: center; padding: 10px; font-size: 10px; color: var(--muted)
   </table>
 </div>
 
-<!-- Stats row -->
+<!-- Separador: a partir de aquí TODO es simulación, no dinero real -->
+<div style="margin:14px 8px 4px;padding:8px 14px;background:#3a2a0d;border:1px solid #d1932655;border-radius:8px;display:flex;align-items:center;gap:10px">
+  <span style="font-size:12px;font-weight:700;color:#e0a53a">🧪 MODELO SIMULADO</span>
+  <span style="font-size:11px;color:var(--muted)">shadow sin fricciones — <b>no es dinero real</b>. No descuenta fill-ability (conversión medida ~8%) ni slippage; es una cota superior, no lo cobrable en live.</span>
+</div>
+
+<!-- Stats row (simulado) -->
 <div class="stats-row">
-  <div class="stat-card"><div class="label">💰 Capital disponible</div><div class="value neu" id="s-bankroll">—</div></div>
-  <div class="stat-card"><div class="label">📈 Beneficio total</div><div class="value" id="s-pnl">—</div></div>
-  <div class="stat-card"><div class="label">🎯 Beneficio hoy</div><div class="value" id="s-pnl-hoy">—</div></div>
-  <div class="stat-card"><div class="label">📅 Últimos 7 días</div><div class="value" id="s-pnl-7d">—</div></div>
+  <div class="stat-card"><div class="label">🧪 Capital simulado</div><div class="value neu" id="s-bankroll">—</div></div>
+  <div class="stat-card"><div class="label">📈 Beneficio simulado <span style="opacity:.6">compuesto</span></div><div class="value" id="s-pnl">—</div></div>
+  <div class="stat-card" title="Stake fijo 1€ + slippage real 0.02, sin compounding. NO modela fill-ability (~8% conversión) → sigue siendo cota superior."><div class="label">🧮 PnL fiel <span style="opacity:.6">stake fijo</span></div><div class="value" id="s-pnl-real">—</div></div>
+  <div class="stat-card"><div class="label">🎯 Simulado hoy</div><div class="value" id="s-pnl-hoy">—</div></div>
+  <div class="stat-card"><div class="label">📅 Últimos 7 días (sim)</div><div class="value" id="s-pnl-7d">—</div></div>
   <div class="stat-card"><div class="label">✅ Apuestas acertadas</div><div class="value neu" id="s-wr">—</div></div>
   <div class="stat-card"><div class="label">🎲 Apuestas (hoy)</div><div class="value neu" id="s-ops">—</div></div>
 </div>
@@ -943,8 +1005,34 @@ function renderLive(live) {
     badge.style.color = "#888";
     badge.style.border = "1px solid #ffffff22";
   }
-  document.getElementById("live-bankroll").textContent = `${live.bankroll.toFixed(2)}$`;
-  document.getElementById("live-pnl").innerHTML = fmtPnl(live.pnl_total);
+  // Bankroll y PNL REALES (balance on-chain). Fail-closed: si no hay dato real
+  // fresco, mostramos "n/d" en vez de la cifra de plan (que es engañosa).
+  const bkEl = document.getElementById("live-bankroll");
+  const bkSub = document.getElementById("live-bankroll-sub");
+  const pnlEl = document.getElementById("live-pnl");
+  const pnlSub = document.getElementById("live-pnl-sub");
+  if (live.real_total != null) {
+    bkEl.textContent = `${live.real_total.toFixed(2)}$`;
+    bkSub.innerHTML = `modelo ${live.bankroll.toFixed(2)}$`;
+    pnlEl.innerHTML = fmtPnl(live.real_pnl);
+    // tracking error: modelo − real. >0 = trades.csv es optimista.
+    const te = live.tracking_error;
+    if (te != null) {
+      const cls = Math.abs(te) < 0.5 ? "neu" : "neg";
+      pnlSub.innerHTML = `modelo ${live.pnl_total > 0 ? "+" : ""}${live.pnl_total.toFixed(2)}€ · <span class="${cls}">Δ ${te > 0 ? "+" : ""}${te.toFixed(2)}€</span>`;
+    } else { pnlSub.innerHTML = "&nbsp;"; }
+  } else {
+    bkEl.textContent = "n/d";
+    bkSub.innerHTML = `modelo ${live.bankroll.toFixed(2)}$`;
+    pnlEl.innerHTML = `<span class="neu">n/d</span>`;
+    pnlSub.innerHTML = `modelo ${live.pnl_total > 0 ? "+" : ""}${live.pnl_total.toFixed(2)}€`;
+  }
+  const freshEl = document.getElementById("live-real-freshness");
+  if (freshEl) {
+    if (live.real_ts) freshEl.textContent = `balance on-chain: ${live.real_ts.replace("T", " ").slice(0, 16)}Z`;
+    else if (live.real_stale) freshEl.textContent = "balance on-chain: ⚠️ rancio (>1h)";
+    else freshEl.textContent = "balance on-chain: n/d";
+  }
   document.getElementById("live-pnl-hoy").innerHTML = fmtPnl(live.pnl_hoy);
   document.getElementById("live-pnl-7d").innerHTML = fmtPnl(live.pnl_7d || 0);
   document.getElementById("live-wr").textContent = live.n_closed ? `${live.win_rate}%` : "—";
@@ -1013,6 +1101,8 @@ function renderAll() {
   };
   document.getElementById("s-bankroll").innerHTML = `${stats.bankroll.toFixed(2)}€`;
   document.getElementById("s-pnl").innerHTML      = fmt(stats.pnl_total);
+  if (stats.pnl_realista != null)
+    document.getElementById("s-pnl-real").innerHTML = fmt(stats.pnl_realista);
   document.getElementById("s-pnl-hoy").innerHTML  = fmt(stats.pnl_hoy);
   document.getElementById("s-pnl-7d").innerHTML   = fmt(stats.pnl_7d);
   document.getElementById("s-wr").textContent     = `${stats.win_rate}%`;
