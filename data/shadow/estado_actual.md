@@ -1,4 +1,4 @@
-# Estado del bot — 2026-07-07 01:48 UTC
+# Estado del bot — 2026-07-07 01:50 UTC
 
 ## Capital
 | | |
@@ -11,19 +11,19 @@
 | | |
 |---|---|
 | Inicio | 25.44 € |
-| Actual | **373.95 €** |
-| P&L acumulado | 🟢 **+348.51 €** |
-| ROI s/ operativo | +1369.94% |
-| ROI s/ depósito | +1161.71% |
-| P&L hoy (2026-07-07) | 🟢 +9.68 € |
-| Operaciones resueltas | 4582 (2394 WIN / 2188 LOSS) — 52.2% |
-| Señales abiertas | 145 |
+| Actual | **373.44 €** |
+| P&L acumulado | 🟢 **+348.00 €** |
+| ROI s/ operativo | +1367.93% |
+| ROI s/ depósito | +1160.01% |
+| P&L hoy (2026-07-07) | 🟢 +9.17 € |
+| Operaciones resueltas | 4583 (2394 WIN / 2189 LOSS) — 52.2% |
+| Señales abiertas | 144 |
 
 ## Estrategias (visión global)
 
 | Estrategia | n | Win% | IC_efectivo | PNL | Apuesta | Estado |
 |---|---|---|---|---|---|---|
-| GBM_LATE_15M | 1571 | 60.7% | +0.106 | +445.51€ | 1.06€ | ✅ activa |
+| GBM_LATE_15M | 1572 | 60.6% | +0.106 | +445.00€ | 1.06€ | ✅ activa |
 | ORDER_FLOW_5M | 1545 | 51.2% | +0.012 | +11.06€ | 0.50€ | ✅ activa |
 | PRICE_TARGET_GBM | 116 | 37.1% | -0.127 | +5.14€ | 0.50€ | ⚠️ IC negativo |
 | LATE_WINDOW_5MIN | 19 | 68.4% | +0.158 | +3.09€ | 1.58€ | ✅ activa |
@@ -40,15 +40,15 @@
 
 | Timestamp | Estrategia | Mercado | Resultado | PNL |
 |---|---|---|---|---|
+| 2026-07-07T01:50 | GBM_LATE_15M#BTC#15min | Bitcoin Up or Down - July 6, 9:30PM-9:45PM ET… | ❌ LOSS | -0.51€ |
 | 2026-07-07T01:48 | GBM_LATE_15M#SOL#15min | Solana Up or Down - July 6, 9:30PM-9:45PM ET… | ✅ WIN | +1.27€ |
 | 2026-07-07T01:48 | GBM_LATE_15M#ETH#15min | Ethereum Up or Down - July 6, 9:30PM-9:45PM ET… | ✅ WIN | +1.06€ |
 | 2026-07-07T01:48 | UPDOWN_GBM#ETH#15min | Ethereum Up or Down - July 6, 9:30PM-9:45PM ET… | ❌ LOSS | -0.54€ |
 | 2026-07-07T01:35 | GBM_LATE_15M#BTC#15min | Bitcoin Up or Down - July 6, 9:15PM-9:30PM ET… | ✅ WIN | +0.86€ |
-| 2026-07-07T01:34 | ORDER_FLOW_5M#BTC#5min | Bitcoin Up or Down - July 6, 9:25PM-9:30PM ET… | ✅ WIN | +1.50€ |
 
 ## Calidad de datos
 
-✅ **OK** — última verificación 2026-07-07T01:48 UTC | rechazos 1h: 2 (rango=0, spike=0)
+✅ **OK** — última verificación 2026-07-07T01:50 UTC | rechazos 1h: 2 (rango=0, spike=0)
 
 | Asset | Precio | Age | Alertas |
 |---|---|---|---|
