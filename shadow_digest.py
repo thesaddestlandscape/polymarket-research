@@ -165,7 +165,7 @@ def pendientes_por_horizonte() -> dict:
 
 def formato_eur(x: float) -> str:
     signo = "+" if x >= 0 else ""
-    return f"{signo}{x:.2f}€"
+    return f"{signo}{x:.2f}$"
 
 
 def construir_digest() -> str:

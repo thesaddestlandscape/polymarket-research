@@ -946,8 +946,8 @@ def main():
         enviar_telegram(
             f"🛑 *CIRCUIT BREAKER DISPARADO*\n"
             f"{motivo_cb}\n"
-            f"Bankroll modelo: {bankroll_actual():.2f}€\n"
-            f"PNL hoy (modelo): {pnl_live_hoy():+.2f}€\n"
+            f"Bankroll modelo: {bankroll_actual():.2f}$\n"
+            f"PNL hoy (modelo): {pnl_live_hoy():+.2f}$\n"
             f"{_real_cb}"
             f"Bot parado. Usa `/live_switch.sh on` para reactivar."
         )
@@ -1163,8 +1163,8 @@ def main():
                 f"Dirección: {dec}\n"
                 f"Precio fill: {resultado['entry_price']:.4f} "
                 f"(slip {resultado.get('slip_real', 0):+.4f})\n"
-                f"Stake: {stake:.2f}€  |  IC: {ic_hist:+.3f}\n"
-                f"Bankroll modelo: {bankroll_actual():.2f}€ (real al cierre de ciclo)"
+                f"Stake: {stake:.2f}$  |  IC: {ic_hist:+.3f}\n"
+                f"Bankroll modelo: {bankroll_actual():.2f}$ (real al cierre de ciclo)"
             )
         else:
             enviar_telegram(
@@ -1189,13 +1189,13 @@ def main():
         snap = actualizar_balance_real()
         if snap:
             linea_real = (f"Balance real: {snap['total']:.2f}$ "
-                          f"(PnL real {snap['pnl_real']:+.2f} · modelo {bkr_final:.2f}€)")
+                          f"(PnL real {snap['pnl_real']:+.2f} · modelo {bkr_final:.2f}$)")
         else:
-            linea_real = f"Bankroll modelo: {bkr_final:.2f}€ (balance real n/d)"
+            linea_real = f"Bankroll modelo: {bkr_final:.2f}$ (balance real n/d)"
         enviar_telegram(
             f"📊 *Ciclo live completado*\n"
             f"Operaciones este ciclo: {ejecutados}\n"
-            f"PNL hoy (modelo): {pnl_d:+.2f}€\n"
+            f"PNL hoy (modelo): {pnl_d:+.2f}$\n"
             f"{linea_real}"
         )
 

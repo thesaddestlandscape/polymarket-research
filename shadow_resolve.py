@@ -600,7 +600,7 @@ def _notificar_cierre_live(trade: dict, pnl_neto: float, acierto_dir: bool):
         _snap = None
 
     signo   = "✅ WIN" if acierto_dir else "❌ LOSS"
-    pnl_str = f"{pnl_neto:+.2f}€"
+    pnl_str = f"{pnl_neto:+.2f}$"
     q       = trade.get("question", "")[:55]
     entry_p = float(trade.get("entry_price") or 0)
     dir_    = trade.get("direction", "")
@@ -623,10 +623,10 @@ def _notificar_cierre_live(trade: dict, pnl_neto: float, acierto_dir: bool):
     if _snap and not _snap.get("_rancio"):
         bkr_color = "📈" if _snap["pnl_real"] >= 0 else "📉"
         linea_bkr = (f"{bkr_color} Balance real: *{_snap['total']:.2f}$*  "
-                     f"({_snap['pnl_real']:+.2f} total · modelo {bkr:.2f}€)")
+                     f"({_snap['pnl_real']:+.2f} total · modelo {bkr:.2f}$)")
     else:
         bkr_color = "📈" if bkr >= bkr_ini else "📉"
-        linea_bkr = f"{bkr_color} Bankroll modelo: *{bkr:.2f}€* ({pnl_total:+.2f}€ · real n/d)"
+        linea_bkr = f"{bkr_color} Bankroll modelo: *{bkr:.2f}$* ({pnl_total:+.2f}$ · real n/d)"
     msg = (
         f"{'🏆' if acierto_dir else '💸'} *TRADE LIVE — {signo}*\n"
         f"\n"
@@ -635,7 +635,7 @@ def _notificar_cierre_live(trade: dict, pnl_neto: float, acierto_dir: bool):
         f"P&L trade: *{pnl_str}*\n"
         f"\n"
         f"{linea_bkr}\n"
-        f"Hoy (modelo): {pnl_d:+.2f}€  |  {racha}"
+        f"Hoy (modelo): {pnl_d:+.2f}$  |  {racha}"
     )
     try:
         requests.post(
