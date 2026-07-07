@@ -297,14 +297,20 @@ def compute_live_data():
     # cache falta o está rancio (>1h), real_* = None y el front muestra "n/d".
     real = cargar_balance_real(max_edad_s=3600)
     if real and not real.get("_rancio"):
-        real_total = real.get("total")
-        real_pnl   = real.get("pnl_real")
-        real_ts    = real.get("ts")
-        real_stale = False
+        real_total   = real.get("total")
+        real_pnl     = real.get("pnl_real")
+        real_ts      = real.get("ts")
+        real_deposito = real.get("deposito_inicial")
+        real_hoy     = real.get("pnl_hoy_real")
+        real_7d      = real.get("pnl_7d_real")
+        real_daily   = real.get("daily_real") or []
+        real_stale   = False
         # tracking error de ejecución: modelo(trades.csv) − real. >0 = optimista.
         tracking_error = round(pnl_total - real_pnl, 2) if real_pnl is not None else None
     else:
         real_total = real_pnl = real_ts = tracking_error = None
+        real_deposito = real_hoy = real_7d = None
+        real_daily = []
         real_stale = bool(real and real.get("_rancio"))
 
     return {
@@ -314,6 +320,10 @@ def compute_live_data():
         "real_total": real_total,
         "real_pnl": real_pnl,
         "real_ts": real_ts,
+        "real_deposito": real_deposito,
+        "real_hoy": real_hoy,
+        "real_7d": real_7d,
+        "real_daily": real_daily,
         "real_stale": real_stale,
         "tracking_error": tracking_error,
         "pnl_total": round(pnl_total, 2),
@@ -697,46 +707,56 @@ footer { text-align: center; padding: 10px; font-size: 10px; color: var(--muted)
   <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px">
     <div id="live-switch-badge" style="font-size:12px;font-weight:700;padding:3px 10px;border-radius:20px">…</div>
     <span style="font-size:13px;font-weight:600;color:#e0e0e0">LIVE TRADING — Polymarket</span>
-    <span style="font-size:11px;color:var(--muted);margin-left:4px">inicio: 25.44 USDC · 2026-06-29</span>
+    <span style="font-size:11px;color:#26a69a;margin-left:4px">💵 dinero real · todas las cifras del wallet on-chain</span>
     <span id="live-real-freshness" style="font-size:10px;color:var(--muted);margin-left:auto">balance on-chain: —</span>
   </div>
-  <div style="display:grid;grid-template-columns:repeat(6,1fr);gap:8px;margin-bottom:10px">
+  <div style="display:grid;grid-template-columns:repeat(7,1fr);gap:8px;margin-bottom:6px">
     <div style="background:#ffffff08;border-radius:6px;padding:8px;text-align:center">
-      <div style="font-size:9px;color:var(--muted)">💰 Bankroll real <span style="opacity:.6">on-chain</span></div>
+      <div style="font-size:9px;color:var(--muted)">💰 Depósito inicial</div>
+      <div id="live-deposito" style="font-size:20px;font-weight:700">—</div>
+      <div style="font-size:9px;color:var(--muted)">2026-06-29</div>
+    </div>
+    <div style="background:#ffffff08;border-radius:6px;padding:8px;text-align:center">
+      <div style="font-size:9px;color:var(--muted)">🏦 Dinero actual</div>
       <div id="live-bankroll" style="font-size:20px;font-weight:700">—</div>
-      <div id="live-bankroll-sub" style="font-size:9px;color:var(--muted)">&nbsp;</div>
+      <div style="font-size:9px;color:var(--muted)">balance wallet</div>
     </div>
     <div style="background:#ffffff08;border-radius:6px;padding:8px;text-align:center">
-      <div style="font-size:9px;color:var(--muted)">📈 PNL real <span style="opacity:.6">wallet</span></div>
+      <div style="font-size:9px;color:var(--muted)">📈 PNL real total</div>
       <div id="live-pnl" style="font-size:20px;font-weight:700">—</div>
-      <div id="live-pnl-sub" style="font-size:9px;color:var(--muted)">&nbsp;</div>
+      <div style="font-size:9px;color:var(--muted)">desde el depósito</div>
     </div>
     <div style="background:#ffffff08;border-radius:6px;padding:8px;text-align:center">
-      <div style="font-size:9px;color:var(--muted)">🎯 PNL hoy <span style="opacity:.6">modelo</span></div>
+      <div style="font-size:9px;color:var(--muted)">🎯 PNL hoy</div>
       <div id="live-pnl-hoy" style="font-size:20px;font-weight:700">—</div>
+      <div style="font-size:9px;color:var(--muted)">real · día UTC</div>
     </div>
     <div style="background:#ffffff08;border-radius:6px;padding:8px;text-align:center">
-      <div style="font-size:9px;color:var(--muted)">📅 Últimos 7 días <span style="opacity:.6">modelo</span></div>
+      <div style="font-size:9px;color:var(--muted)">📅 Últimos 7 días</div>
       <div id="live-pnl-7d" style="font-size:20px;font-weight:700">—</div>
+      <div style="font-size:9px;color:var(--muted)">real</div>
     </div>
     <div style="background:#ffffff08;border-radius:6px;padding:8px;text-align:center">
       <div style="font-size:9px;color:var(--muted)">✅ Win rate</div>
       <div id="live-wr" style="font-size:20px;font-weight:700">—</div>
+      <div style="font-size:9px;color:var(--muted)">trades cerrados</div>
     </div>
     <div style="background:#ffffff08;border-radius:6px;padding:8px;text-align:center">
       <div style="font-size:9px;color:var(--muted)">🎲 Trades</div>
       <div id="live-trades-count" style="font-size:20px;font-weight:700">—</div>
+      <div style="font-size:9px;color:var(--muted)">total · abiertas</div>
     </div>
   </div>
+  <div id="live-modelo-nota" style="font-size:10px;color:var(--muted);margin-bottom:10px">&nbsp;</div>
 
   <!-- Charts live — mismo escritorio que el modelo simulado -->
   <div style="display:grid;grid-template-columns:2fr 1fr;gap:8px;margin-bottom:10px">
     <div style="background:#ffffff05;border-radius:6px;padding:10px">
-      <div class="panel-title">📈 Evolución del capital live — estimación modelo (cada punto = trade cerrado; el bankroll real es el de arriba)</div>
+      <div class="panel-title">📈 Evolución del capital real — balance del wallet al cierre de cada día (on-chain)</div>
       <div class="chart-host" id="live-equity-chart" style="height:180px"></div>
     </div>
     <div style="background:#ffffff05;border-radius:6px;padding:10px">
-      <div class="panel-title">📊 Ganancia / Pérdida por día — live</div>
+      <div class="panel-title">📊 PnL real por día — on-chain (redenciones − compras)</div>
       <div class="chart-host" id="live-daily-chart" style="height:180px"></div>
     </div>
   </div>
@@ -1005,27 +1025,31 @@ function renderLive(live) {
     badge.style.color = "#888";
     badge.style.border = "1px solid #ffffff22";
   }
-  // Bankroll y PNL REALES (balance on-chain). Fail-closed: si no hay dato real
-  // fresco, mostramos "n/d" en vez de la cifra de plan (que es engañosa).
-  const bkEl = document.getElementById("live-bankroll");
-  const bkSub = document.getElementById("live-bankroll-sub");
-  const pnlEl = document.getElementById("live-pnl");
-  const pnlSub = document.getElementById("live-pnl-sub");
-  if (live.real_total != null) {
-    bkEl.textContent = `${live.real_total.toFixed(2)}$`;
-    bkSub.innerHTML = `modelo ${live.bankroll.toFixed(2)}$`;
-    pnlEl.innerHTML = fmtPnl(live.real_pnl);
-    // tracking error: modelo − real. >0 = trades.csv es optimista.
-    const te = live.tracking_error;
-    if (te != null) {
-      const cls = Math.abs(te) < 0.5 ? "neu" : "neg";
-      pnlSub.innerHTML = `modelo ${live.pnl_total > 0 ? "+" : ""}${live.pnl_total.toFixed(2)}$ · <span class="${cls}">Δ ${te > 0 ? "+" : ""}${te.toFixed(2)}$</span>`;
-    } else { pnlSub.innerHTML = "&nbsp;"; }
-  } else {
-    bkEl.textContent = "n/d";
-    bkSub.innerHTML = `modelo ${live.bankroll.toFixed(2)}$`;
-    pnlEl.innerHTML = `<span class="neu">n/d</span>`;
-    pnlSub.innerHTML = `modelo ${live.pnl_total > 0 ? "+" : ""}${live.pnl_total.toFixed(2)}$`;
+  // TODAS las cifras de dinero son REALES (wallet on-chain). Fail-closed: si el
+  // dato real no está fresco, mostramos "n/d" en vez de la cifra de plan.
+  const nd = `<span class="neu">n/d</span>`;
+  const fmtOr = (v) => (v != null ? fmtPnl(v) : nd);
+  // Depósito inicial (constante conocida, viene del snapshot real)
+  document.getElementById("live-deposito").textContent =
+    live.real_deposito != null ? `${live.real_deposito.toFixed(2)}$` : "25.44$";
+  // Dinero actual = balance real del wallet
+  document.getElementById("live-bankroll").textContent =
+    live.real_total != null ? `${live.real_total.toFixed(2)}$` : "n/d";
+  // PNL real total / hoy / 7 días — todo del wallet on-chain
+  document.getElementById("live-pnl").innerHTML     = fmtOr(live.real_pnl);
+  document.getElementById("live-pnl-hoy").innerHTML = fmtOr(live.real_hoy);
+  document.getElementById("live-pnl-7d").innerHTML  = fmtOr(live.real_7d);
+  // Win rate y trades (trades ejecutados reales, de trades.csv)
+  document.getElementById("live-wr").textContent = live.n_closed ? `${live.win_rate}%` : "—";
+  document.getElementById("live-trades-count").textContent =
+    `${(live.n_closed || 0) + (live.n_open || 0)} · ${live.n_open || 0} ab.`;
+  // Nota discreta con la estimación del modelo (plan) y su desvío vs real.
+  const notaEl = document.getElementById("live-modelo-nota");
+  if (notaEl) {
+    if (live.tracking_error != null) {
+      const cls = Math.abs(live.tracking_error) < 0.5 ? "neu" : "neg";
+      notaEl.innerHTML = `ℹ️ Referencia — estimación del modelo (trades.csv, precio de plan): PNL total ${live.pnl_total > 0 ? "+" : ""}${live.pnl_total.toFixed(2)}$ · desvío vs real <span class="${cls}">Δ ${live.tracking_error > 0 ? "+" : ""}${live.tracking_error.toFixed(2)}$</span> (el modelo no descuenta slippage/liquidación; vale el real).`;
+    } else { notaEl.innerHTML = "&nbsp;"; }
   }
   const freshEl = document.getElementById("live-real-freshness");
   if (freshEl) {
@@ -1033,23 +1057,26 @@ function renderLive(live) {
     else if (live.real_stale) freshEl.textContent = "balance on-chain: ⚠️ rancio (>1h)";
     else freshEl.textContent = "balance on-chain: n/d";
   }
-  document.getElementById("live-pnl-hoy").innerHTML = fmtPnl(live.pnl_hoy);
-  document.getElementById("live-pnl-7d").innerHTML = fmtPnl(live.pnl_7d || 0);
-  document.getElementById("live-wr").textContent = live.n_closed ? `${live.win_rate}%` : "—";
-  document.getElementById("live-trades-count").textContent =
-    `${live.n_total} (${live.n_open} abiertas)`;
 
-  // Equity curve live — mismo filtro de periodo que las tabs del shadow
-  if (liveEqArea && live.equity_curve?.length) {
-    const eqData = filterByPeriod(live.equity_curve, PERIOD);
-    if (eqData.length) {
-      liveEqArea.setData(eqData);
+  // Charts REALES desde el PnL diario on-chain (live.real_daily = [{date,pnl}]).
+  // Equity real = depósito + acumulado; barras = PnL real de cada día.
+  if (live.real_daily && live.real_daily.length) {
+    const dep = live.real_deposito != null ? live.real_deposito : 25.44;
+    let acc = dep;
+    const eqReal = live.real_daily.map(d => { acc += d.pnl; return { time: d.date, value: +acc.toFixed(2) }; });
+    // punto de arranque = depósito el día previo al primer trade
+    eqReal.unshift({ time: live.real_daily[0].date, value: dep });
+    if (liveEqArea) {
+      liveEqArea.setData(eqReal);
       liveEqChart.timeScale().fitContent();
     }
-  }
-  if (liveDailySeries && live.daily_pnl?.length) {
-    liveDailySeries.setData(filterDailyByPeriod(live.daily_pnl, PERIOD));
-    liveDailyChart.timeScale().fitContent();
+    if (liveDailySeries) {
+      liveDailySeries.setData(live.real_daily.map(d => ({
+        time: d.date, value: +d.pnl.toFixed(2),
+        color: d.pnl >= 0 ? "#26a69a" : "#ef5350",
+      })));
+      liveDailyChart.timeScale().fitContent();
+    }
   }
 
   // Barras por estrategia live (ventaja) + $/trade — mismas funciones que shadow

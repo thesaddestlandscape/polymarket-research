@@ -21,7 +21,7 @@ import json
 import os
 import sys
 import time
-from datetime import datetime, timezone
+from datetime import datetime, timezone, timedelta
 from pathlib import Path
 
 import requests
@@ -86,6 +86,42 @@ def _positions_value(wallet: str) -> float:
     return 0.0
 
 
+def _daily_real_pnl(wallet: str) -> tuple[list, float, float]:
+    """PnL real por día desde la actividad on-chain (redeems − buys por fecha).
+
+    Base caja: para mercados up/down (15min) compra y redención caen el mismo
+    día, así que el flujo neto diario ≈ PnL realizado real de ese día. La suma
+    cuadra con la variación del balance del wallet. Best-effort: si falla,
+    devuelve vacío (el balance sigue siendo la métrica crítica).
+    """
+    from collections import defaultdict
+    r = requests.get(f"{DATA_API}/activity",
+                     params={"user": wallet, "limit": 1000}, timeout=25)
+    r.raise_for_status()
+    evs = r.json()
+    if not isinstance(evs, list):
+        return [], 0.0, 0.0
+    daily = defaultdict(float)
+    for a in evs:
+        t = (a.get("type") or "").upper()
+        try:
+            u = float(a.get("usdcSize") or 0)
+            day = datetime.fromtimestamp(int(a.get("timestamp") or 0),
+                                         tz=timezone.utc).strftime("%Y-%m-%d")
+        except Exception:
+            continue
+        if t == "TRADE":
+            daily[day] -= u          # compra: USDC sale
+        elif t == "REDEEM":
+            daily[day] += u          # redención: USDC entra
+    daily_list = [{"date": d, "pnl": round(v, 2)} for d, v in sorted(daily.items())]
+    hoy = datetime.now(timezone.utc).strftime("%Y-%m-%d")
+    d7 = (datetime.now(timezone.utc) - timedelta(days=7)).strftime("%Y-%m-%d")
+    pnl_hoy = round(daily.get(hoy, 0.0), 2)
+    pnl_7d = round(sum(v for d, v in daily.items() if d >= d7), 2)
+    return daily_list, pnl_hoy, pnl_7d
+
+
 def fetch_balance_real() -> dict:
     """Consulta el balance real. Lanza excepción si algo falla (fail-closed)."""
     wallet = os.getenv("POLY_DEPOSIT_WALLET")
@@ -95,6 +131,11 @@ def fetch_balance_real() -> dict:
     free = _free_usdc(client)
     pos = _positions_value(wallet)
     total = free + pos
+    # PnL real por día — best-effort (no debe tumbar el balance si la API falla)
+    try:
+        daily_real, pnl_hoy_real, pnl_7d_real = _daily_real_pnl(wallet)
+    except Exception:
+        daily_real, pnl_hoy_real, pnl_7d_real = [], None, None
     return {
         "ts": datetime.now(timezone.utc).isoformat(timespec="seconds"),
         "wallet": wallet,
@@ -103,6 +144,9 @@ def fetch_balance_real() -> dict:
         "total": round(total, 4),
         "deposito_inicial": DEPOSITO_INICIAL,
         "pnl_real": round(total - DEPOSITO_INICIAL, 4),
+        "daily_real": daily_real,
+        "pnl_hoy_real": pnl_hoy_real,
+        "pnl_7d_real": pnl_7d_real,
     }
 
 
