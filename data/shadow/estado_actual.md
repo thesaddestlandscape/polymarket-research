@@ -1,4 +1,4 @@
-# Estado del bot — 2026-07-07 10:02 UTC
+# Estado del bot — 2026-07-07 10:03 UTC
 
 ## Capital
 | | |
@@ -11,13 +11,13 @@
 | | |
 |---|---|
 | Inicio | 25.44 € |
-| Actual | **443.93 €** |
-| P&L acumulado | 🟢 **+418.49 €** |
-| ROI s/ operativo | +1645.00% |
-| ROI s/ depósito | +1394.96% |
-| P&L hoy (2026-07-07) | 🟢 +79.65 € |
-| Operaciones resueltas | 4762 (2502 WIN / 2260 LOSS) — 52.5% |
-| Señales abiertas | 148 |
+| Actual | **444.06 €** |
+| P&L acumulado | 🟢 **+418.62 €** |
+| ROI s/ operativo | +1645.53% |
+| ROI s/ depósito | +1395.41% |
+| P&L hoy (2026-07-07) | 🟢 +79.79 € |
+| Operaciones resueltas | 4763 (2503 WIN / 2260 LOSS) — 52.6% |
+| Señales abiertas | 149 |
 
 ## Estrategias (visión global)
 
@@ -31,7 +31,7 @@
 | STREAK_FADE_15M | 39 | 51.3% | +0.012 | -0.60€ | 0.50€ | ✅ activa |
 | STRUCT_NO_15M | 15 | 20.0% | -0.199 | -4.68€ | 0.00€ | 🚫 desactivada |
 | SMART_FLOW_1H | 29 | 20.7% | -0.274 | -13.82€ | 0.00€ | 🚫 desactivada |
-| GBM_LATE_60M | 53 | 18.9% | -0.300 | -18.57€ | 0.00€ | 🚫 desactivada |
+| GBM_LATE_60M | 54 | 20.4% | -0.286 | -18.44€ | 0.00€ | 🚫 desactivada |
 | UPDOWN_OU_5M | 84 | 28.6% | -0.209 | -18.89€ | 0.00€ | 🚫 desactivada |
 | WEEKLY_PRICE | 112 | 45.5% | -0.044 | -26.37€ | 0.50€ | ⚠️ IC negativo |
 | UPDOWN_GBM | 1042 | 47.1% | -0.029 | -44.63€ | 0.50€ | ⚠️ IC negativo |
@@ -40,21 +40,21 @@
 
 | Timestamp | Estrategia | Mercado | Resultado | PNL |
 |---|---|---|---|---|
+| 2026-07-07T10:03 | GBM_LATE_60M#BTC#60min | Bitcoin Up or Down - July 7, 5AM ET… | ✅ WIN | +0.14€ |
 | 2026-07-07T10:00 | GBM_LATE_60M#ETH#60min | Ethereum Up or Down - July 7, 5AM ET… | ✅ WIN | +0.10€ |
 | 2026-07-07T09:49 | GBM_LATE_15M#XRP#15min | XRP Up or Down - July 7, 5:30AM-5:45AM ET… | ❌ LOSS | -1.73€ |
 | 2026-07-07T09:49 | GBM_LATE_15M#BTC#15min | Bitcoin Up or Down - July 7, 5:30AM-5:45AM ET… | ❌ LOSS | -0.51€ |
 | 2026-07-07T09:49 | GBM_LATE_15M#SOL#15min | Solana Up or Down - July 7, 5:30AM-5:45AM ET… | ❌ LOSS | -1.83€ |
-| 2026-07-07T09:38 | GBM_LATE_15M#ETH#15min | Ethereum Up or Down - July 7, 5:15AM-5:30AM ET… | ❌ LOSS | -1.14€ |
 
 ## Calidad de datos
 
-✅ **OK** — última verificación 2026-07-07T10:02 UTC | rechazos 1h: 1 (rango=0, spike=0)
+✅ **OK** — última verificación 2026-07-07T10:03 UTC | rechazos 1h: 1 (rango=0, spike=0)
 
 | Asset | Precio | Age | Alertas |
 |---|---|---|---|
 | ✅ BTC | $63,199.32 | 0.0min |  |
 | ✅ ETH | $1,776.67 | 0.0min |  |
-| ✅ SOL | $81.33 | 0.0min |  |
+| ✅ SOL | $81.54 | 0.0min |  |
 | ✅ XRP | $1.13 | 0.0min |  |
 
 **Cross-source** (binance, coinbase, kraken):
