@@ -116,6 +116,25 @@ def _append_history(snap: dict) -> None:
                 f"{snap['total']},{snap['pnl_real']}\n")
 
 
+def actualizar_balance_real() -> dict | None:
+    """Refresca el cache de balance AHORA (fetch + write). Guardado: nunca lanza.
+
+    Pensado para engancharse tras abrir/cerrar un trade real, de modo que el
+    dashboard y los mensajes de Telegram reflejen el balance del wallet al
+    instante en vez de esperar al cron de 15min. Devuelve el snapshot o None.
+    """
+    try:
+        snap = fetch_balance_real()
+        CACHE_PATH.write_text(json.dumps(snap, indent=1), encoding="utf-8")
+        try:
+            _append_history(snap)
+        except Exception:
+            pass
+        return snap
+    except Exception:
+        return None
+
+
 def cargar_balance_real(max_edad_s: int | None = None) -> dict | None:
     """Lee el JSON cacheado. Devuelve None si falta o está rancio (fail-closed)."""
     try:

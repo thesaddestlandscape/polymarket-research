@@ -22,6 +22,7 @@ from pathlib import Path
 from live_guard import puede_operar_live, estado_live, switch_activo
 from live_stake import calcular_stake, bankroll_actual, verificar_circuit_breaker, pnl_live_hoy, stakes_desplegados_ventana_actual
 from shadow_digest import enviar_telegram
+from live_balance import actualizar_balance_real, cargar_balance_real
 
 DIR_LIVE    = Path("data/live")
 DIR_SHADOW  = Path("data/shadow")
@@ -939,11 +940,15 @@ def main():
 
     if disparado:
         log(f"  🛑 CIRCUIT BREAKER: {motivo_cb}")
+        _snap_cb = cargar_balance_real(max_edad_s=3600)
+        _real_cb = (f"Balance real: {_snap_cb['total']:.2f}$ (PnL real {_snap_cb['pnl_real']:+.2f})\n"
+                    if _snap_cb and not _snap_cb.get("_rancio") else "")
         enviar_telegram(
             f"🛑 *CIRCUIT BREAKER DISPARADO*\n"
             f"{motivo_cb}\n"
-            f"Bankroll actual: {bankroll_actual():.2f}€\n"
-            f"PNL hoy: {pnl_live_hoy():+.2f}€\n"
+            f"Bankroll modelo: {bankroll_actual():.2f}€\n"
+            f"PNL hoy (modelo): {pnl_live_hoy():+.2f}€\n"
+            f"{_real_cb}"
             f"Bot parado. Usa `/live_switch.sh on` para reactivar."
         )
         return
@@ -1159,7 +1164,7 @@ def main():
                 f"Precio fill: {resultado['entry_price']:.4f} "
                 f"(slip {resultado.get('slip_real', 0):+.4f})\n"
                 f"Stake: {stake:.2f}€  |  IC: {ic_hist:+.3f}\n"
-                f"Bankroll: {bankroll_actual():.2f}€"
+                f"Bankroll modelo: {bankroll_actual():.2f}€ (real al cierre de ciclo)"
             )
         else:
             enviar_telegram(
@@ -1179,11 +1184,19 @@ def main():
     if ejecutados > 0:
         bkr_final = bankroll_actual()
         pnl_d     = pnl_live_hoy()
+        # Refresca el balance REAL on-chain tras abrir posiciones → el dashboard
+        # y este mensaje reflejan el wallet al instante (no esperan al cron 15min).
+        snap = actualizar_balance_real()
+        if snap:
+            linea_real = (f"Balance real: {snap['total']:.2f}$ "
+                          f"(PnL real {snap['pnl_real']:+.2f} · modelo {bkr_final:.2f}€)")
+        else:
+            linea_real = f"Bankroll modelo: {bkr_final:.2f}€ (balance real n/d)"
         enviar_telegram(
             f"📊 *Ciclo live completado*\n"
             f"Operaciones este ciclo: {ejecutados}\n"
-            f"PNL hoy: {pnl_d:+.2f}€\n"
-            f"Bankroll actual: {bkr_final:.2f}€"
+            f"PNL hoy (modelo): {pnl_d:+.2f}€\n"
+            f"{linea_real}"
         )
 
     log(f"=== Fin live_trade ===")

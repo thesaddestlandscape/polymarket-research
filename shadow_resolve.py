@@ -580,7 +580,7 @@ def _notificar_cierre_live(trade: dict, pnl_neto: float, acierto_dir: bool):
     if not tok or not cid:
         return
 
-    # Calcular bankroll actualizado y P&L del día leyendo trades.csv completo
+    # Calcular bankroll modelo y P&L del día leyendo trades.csv completo
     try:
         from live_stake import bankroll_actual, pnl_live_hoy, CAPITAL_OPERATIVO_INICIAL
         bkr   = bankroll_actual()
@@ -589,6 +589,15 @@ def _notificar_cierre_live(trade: dict, pnl_neto: float, acierto_dir: bool):
         pnl_total = bkr - bkr_ini
     except Exception:
         bkr = pnl_d = pnl_total = 0.0
+        bkr_ini = 25.44
+
+    # Balance REAL on-chain (verdad de suelo) — coordinado con el dashboard.
+    # Antes este mensaje llamaba "Bankroll real" al bankroll de PLAN (engañoso).
+    try:
+        from live_balance import cargar_balance_real
+        _snap = cargar_balance_real(max_edad_s=1800)
+    except Exception:
+        _snap = None
 
     signo   = "✅ WIN" if acierto_dir else "❌ LOSS"
     pnl_str = f"{pnl_neto:+.2f}€"
@@ -611,7 +620,13 @@ def _notificar_cierre_live(trade: dict, pnl_neto: float, acierto_dir: bool):
     except Exception:
         racha = ""
 
-    bkr_color = "📈" if bkr >= bkr_ini else "📉"
+    if _snap and not _snap.get("_rancio"):
+        bkr_color = "📈" if _snap["pnl_real"] >= 0 else "📉"
+        linea_bkr = (f"{bkr_color} Balance real: *{_snap['total']:.2f}$*  "
+                     f"({_snap['pnl_real']:+.2f} total · modelo {bkr:.2f}€)")
+    else:
+        bkr_color = "📈" if bkr >= bkr_ini else "📉"
+        linea_bkr = f"{bkr_color} Bankroll modelo: *{bkr:.2f}€* ({pnl_total:+.2f}€ · real n/d)"
     msg = (
         f"{'🏆' if acierto_dir else '💸'} *TRADE LIVE — {signo}*\n"
         f"\n"
@@ -619,8 +634,8 @@ def _notificar_cierre_live(trade: dict, pnl_neto: float, acierto_dir: bool):
         f"Dir: {dir_}  |  Entrada: {entry_p:.3f}  |  Sub: {sub}\n"
         f"P&L trade: *{pnl_str}*\n"
         f"\n"
-        f"{bkr_color} Bankroll real: *{bkr:.2f}€*  ({pnl_total:+.2f}€ total)\n"
-        f"Hoy: {pnl_d:+.2f}€  |  {racha}"
+        f"{linea_bkr}\n"
+        f"Hoy (modelo): {pnl_d:+.2f}€  |  {racha}"
     )
     try:
         requests.post(
@@ -698,6 +713,13 @@ def _cerrar_trades_live(nuevos_resultados: list, ts: str):
             w = csv.DictWriter(f, fieldnames=cols)
             w.writeheader()
             w.writerows(trades)
+        # Refresca el balance REAL on-chain tras redimir → dashboard y notificación
+        # reflejan el wallet al instante (no esperan al cron 15min). Guardado.
+        try:
+            from live_balance import actualizar_balance_real
+            actualizar_balance_real()
+        except Exception:
+            pass
         # Notificar cada cierre por Telegram
         for t, pnl_neto, acierto_dir in cierres:
             _notificar_cierre_live(t, pnl_neto, acierto_dir)

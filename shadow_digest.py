@@ -192,6 +192,20 @@ def construir_digest() -> str:
     lineas.append(f"Resoluciones nuevas: {n_resueltas_dia}")
     lineas.append("")
 
+    # LIVE real (verdad de suelo on-chain) — coordinado con el dashboard. El
+    # horserace de abajo es SHADOW simulado (sin fricciones); esto es el wallet.
+    try:
+        from live_balance import cargar_balance_real
+        _snap = cargar_balance_real(max_edad_s=3600)
+        if _snap and not _snap.get("_rancio"):
+            lineas.append("── LIVE (dinero real on-chain) ──")
+            lineas.append(f"Balance wallet: {_snap['total']:.2f}$  "
+                          f"(depósito {_snap['deposito_inicial']:.2f})")
+            lineas.append(f"P&L real acumulado: {formato_eur(_snap['pnl_real'])}")
+            lineas.append("")
+    except Exception:
+        pass
+
     if hr_global:
         lineas.append("── HORSERACE GLOBAL (P&L acumulado) ──")
         ranking = sorted(hr_global.items(), key=lambda kv: kv[1]["pnl"],
