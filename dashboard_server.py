@@ -104,7 +104,7 @@ STAKE_FIJO_SIM = 1.0
 SLIP_SIM = 0.02  # = shadow_predict.SLIPPAGE_ESTIMADO (clamp [0.005, 0.02])
 
 def _pnl_realista(r):
-    """PnL de una resolución a stake fijo 1€ con slippage real. None si no aplica."""
+    """PnL de una resolución a stake fijo 1$ con slippage real. None si no aplica."""
     dec = r.get("decision", "")
     if dec not in ("BUY_YES", "BUY_NO"):
         return None
@@ -502,12 +502,12 @@ def compute_data():
     wins_pnl  = [p for p in all_pnls if p > 0]
     loss_pnl  = [p for p in all_pnls if p < 0]
     BUCKETS = [
-        ("< −1€",        None, -1.0),
-        ("−1€ a −0.5€",  -1.0, -0.5),
-        ("−0.5€ a 0€",   -0.5,  0.0),
-        ("0€ a +0.5€",    0.0,  0.5),
-        ("+0.5€ a +1€",   0.5,  1.0),
-        ("> +1€",          1.0, None),
+        ("< −1$",        None, -1.0),
+        ("−1$ a −0.5$",  -1.0, -0.5),
+        ("−0.5$ a 0$",   -0.5,  0.0),
+        ("0$ a +0.5$",    0.0,  0.5),
+        ("+0.5$ a +1$",   0.5,  1.0),
+        ("> +1$",          1.0, None),
     ]
     dist = []
     for label_b, lo, hi in BUCKETS:
@@ -771,7 +771,7 @@ footer { text-align: center; padding: 10px; font-size: 10px; color: var(--muted)
 <div class="stats-row">
   <div class="stat-card"><div class="label">🧪 Capital simulado</div><div class="value neu" id="s-bankroll">—</div></div>
   <div class="stat-card"><div class="label">📈 Beneficio simulado <span style="opacity:.6">compuesto</span></div><div class="value" id="s-pnl">—</div></div>
-  <div class="stat-card" title="Stake fijo 1€ + slippage real 0.02, sin compounding. NO modela fill-ability (~8% conversión) → sigue siendo cota superior."><div class="label">🧮 PnL fiel <span style="opacity:.6">stake fijo</span></div><div class="value" id="s-pnl-real">—</div></div>
+  <div class="stat-card" title="Stake fijo 1$ + slippage real 0.02, sin compounding. NO modela fill-ability (~8% conversión) → sigue siendo cota superior."><div class="label">🧮 PnL fiel <span style="opacity:.6">stake fijo</span></div><div class="value" id="s-pnl-real">—</div></div>
   <div class="stat-card"><div class="label">🎯 Simulado hoy</div><div class="value" id="s-pnl-hoy">—</div></div>
   <div class="stat-card"><div class="label">📅 Últimos 7 días (sim)</div><div class="value" id="s-pnl-7d">—</div></div>
   <div class="stat-card"><div class="label">✅ Apuestas acertadas</div><div class="value neu" id="s-wr">—</div></div>
@@ -918,7 +918,7 @@ function initCharts() {
   eqArea = eqChart.addAreaSeries({
     lineColor: "#26a69a", topColor: "#26a69a44", bottomColor: "#26a69a00",
     lineWidth: 2, priceFormat: { type: "price", precision: 2, minMove: 0.01 },
-    title: "€",
+    title: "$",
   });
 
   // Daily PnL histogram
@@ -990,7 +990,7 @@ function renderLive(live) {
   if (!live) return;
   const fmtPnl = v => {
     const cls = v > 0 ? "pos" : v < 0 ? "neg" : "neu";
-    return `<span class="${cls}">${v > 0 ? "+" : ""}${v.toFixed(2)}€</span>`;
+    return `<span class="${cls}">${v > 0 ? "+" : ""}${v.toFixed(2)}$</span>`;
   };
   // Switch badge
   const badge = document.getElementById("live-switch-badge");
@@ -1019,13 +1019,13 @@ function renderLive(live) {
     const te = live.tracking_error;
     if (te != null) {
       const cls = Math.abs(te) < 0.5 ? "neu" : "neg";
-      pnlSub.innerHTML = `modelo ${live.pnl_total > 0 ? "+" : ""}${live.pnl_total.toFixed(2)}€ · <span class="${cls}">Δ ${te > 0 ? "+" : ""}${te.toFixed(2)}€</span>`;
+      pnlSub.innerHTML = `modelo ${live.pnl_total > 0 ? "+" : ""}${live.pnl_total.toFixed(2)}$ · <span class="${cls}">Δ ${te > 0 ? "+" : ""}${te.toFixed(2)}$</span>`;
     } else { pnlSub.innerHTML = "&nbsp;"; }
   } else {
     bkEl.textContent = "n/d";
     bkSub.innerHTML = `modelo ${live.bankroll.toFixed(2)}$`;
     pnlEl.innerHTML = `<span class="neu">n/d</span>`;
-    pnlSub.innerHTML = `modelo ${live.pnl_total > 0 ? "+" : ""}${live.pnl_total.toFixed(2)}€`;
+    pnlSub.innerHTML = `modelo ${live.pnl_total > 0 ? "+" : ""}${live.pnl_total.toFixed(2)}$`;
   }
   const freshEl = document.getElementById("live-real-freshness");
   if (freshEl) {
@@ -1052,13 +1052,13 @@ function renderLive(live) {
     liveDailyChart.timeScale().fitContent();
   }
 
-  // Barras por estrategia live (ventaja) + €/trade — mismas funciones que shadow
+  // Barras por estrategia live (ventaja) + $/trade — mismas funciones que shadow
   if (live.by_strategy?.length) {
     renderBars("live-strat-bars", live.by_strategy, d => simpleName(d.name), d => d.ic,
       () => true, d => `${d.ic >= 0 ? "+" : ""}${(d.ic*100).toFixed(1)}%`, d => `${d.n} tr.`);
     const sortedAvg = [...live.by_strategy].sort((a, b) => b.avg - a.avg);
     renderBars("live-perbet-bars", sortedAvg, d => simpleName(d.name), d => d.avg,
-      () => true, d => `${d.avg >= 0 ? "+" : ""}${d.avg.toFixed(3)}€`, d => `${d.n} tr.`);
+      () => true, d => `${d.avg >= 0 ? "+" : ""}${d.avg.toFixed(3)}$`, d => `${d.n} tr.`);
   }
   // Tabla trades
   const tbody = document.getElementById("live-trades-body");
@@ -1069,7 +1069,7 @@ function renderLive(live) {
   tbody.innerHTML = live.recent_trades.map(t => {
     const pnl = t.pnl_neto_eur ? parseFloat(t.pnl_neto_eur) : null;
     const pnlHtml = pnl !== null && t.status === "CLOSED"
-      ? `<span class="${pnl>0?"pos":"neg"}">${pnl>0?"+":""}${pnl.toFixed(2)}€</span>`
+      ? `<span class="${pnl>0?"pos":"neg"}">${pnl>0?"+":""}${pnl.toFixed(2)}$</span>`
       : "—";
     const hora = (t.timestamp_utc || "").slice(11, 16);
     const q = (t.question || "").slice(0, 45);
@@ -1079,7 +1079,7 @@ function renderLive(live) {
       <td>${t.strategy}#${t.subtype}</td>
       <td title="${t.question}">${q}…</td>
       <td><b>${t.direction}</b></td>
-      <td>${parseFloat(t.stake_eur||0).toFixed(2)}€</td>
+      <td>${parseFloat(t.stake_eur||0).toFixed(2)}$</td>
       <td>${parseFloat(t.entry_price||0).toFixed(3)}</td>
       <td style="color:${statusColor}">${t.status}</td>
       <td>${pnlHtml}</td>
@@ -1097,9 +1097,9 @@ function renderAll() {
   // Stats
   const fmt = (v, prefix="") => {
     const cls = v > 0 ? "pos" : v < 0 ? "neg" : "neu";
-    return `<span class="${cls}">${prefix}${v > 0 ? "+" : ""}${v.toFixed(2)}€</span>`;
+    return `<span class="${cls}">${prefix}${v > 0 ? "+" : ""}${v.toFixed(2)}$</span>`;
   };
-  document.getElementById("s-bankroll").innerHTML = `${stats.bankroll.toFixed(2)}€`;
+  document.getElementById("s-bankroll").innerHTML = `${stats.bankroll.toFixed(2)}$`;
   document.getElementById("s-pnl").innerHTML      = fmt(stats.pnl_total);
   if (stats.pnl_realista != null)
     document.getElementById("s-pnl-real").innerHTML = fmt(stats.pnl_realista);
@@ -1158,7 +1158,7 @@ function renderAll() {
     const color = h.blacklisted ? "#ef535077"
                 : h.ic > 0 ? `#26a69a${Math.round(40 + pct * 0.6).toString(16)}` : "#ef535077";
     const bl    = h.blacklisted ? " hour-bl" : "";
-    const tip   = `${h.hour}:00h UTC${h.blacklisted?" — BLOQUEADA":""} | Ventaja: ${h.ic>=0?"+":""}${(h.ic*100).toFixed(1)}% | Apuestas: ${h.n} | Aciertos: ${h.wr}% | Beneficio: ${h.pnl>=0?"+":""}${h.pnl}€`;
+    const tip   = `${h.hour}:00h UTC${h.blacklisted?" — BLOQUEADA":""} | Ventaja: ${h.ic>=0?"+":""}${(h.ic*100).toFixed(1)}% | Apuestas: ${h.n} | Aciertos: ${h.wr}% | Beneficio: ${h.pnl>=0?"+":""}${h.pnl}$`;
     return `<div class="hour-bar-wrap${bl}" title="${tip}">
       <div class="hour-bar" style="height:${Math.max(4, pct * 0.9)}px;background:${color}"></div>
       <div class="hour-label">${String(h.hour).padStart(2,"0")}</div>
@@ -1173,7 +1173,7 @@ function renderAll() {
     return `<div class="ventana-card ${cls}">
       <div class="ventana-time">${v.label}</div>
       <div class="ventana-ic" style="color:${icColor}">${v.ic > 0 ? "+" : ""}${(v.ic*100).toFixed(1)}%</div>
-      <div class="ventana-sub">${v.wr}% aciertos · ${v.n} apuestas · ${v.pnl >= 0 ? "+" : ""}${v.pnl}€</div>
+      <div class="ventana-sub">${v.wr}% aciertos · ${v.n} apuestas · ${v.pnl >= 0 ? "+" : ""}${v.pnl}$</div>
     </div>`;
   }).join("");
 
@@ -1196,7 +1196,7 @@ function renderAll() {
       <td>${s.n}</td>
       <td>${s.wr}%</td>
       <td style="color:${icColor}">${s.ic >= 0 ? "+" : ""}${(s.ic*100).toFixed(1)}%</td>
-      <td style="color:${pColor}">${s.pnl >= 0 ? "+" : ""}${s.pnl}€</td>
+      <td style="color:${pColor}">${s.pnl >= 0 ? "+" : ""}${s.pnl}$</td>
     </tr>`;
   }).join("");
 
@@ -1228,12 +1228,12 @@ function renderPerBet(per_bet) {
 
   // Stats
   const avgEl = document.getElementById("pb-avg");
-  avgEl.textContent = `${avg_total >= 0 ? "+" : ""}${avg_total.toFixed(4)}€`;
+  avgEl.textContent = `${avg_total >= 0 ? "+" : ""}${avg_total.toFixed(4)}$`;
   avgEl.style.color = avg_total >= 0 ? "var(--green)" : "var(--red)";
 
   document.getElementById("pb-ratio").textContent = `${ratio.toFixed(2)}x`;
-  document.getElementById("pb-win").textContent   = `+${avg_win.toFixed(3)}€`;
-  document.getElementById("pb-loss").textContent  = `${avg_loss.toFixed(3)}€`;
+  document.getElementById("pb-win").textContent   = `+${avg_win.toFixed(3)}$`;
+  document.getElementById("pb-loss").textContent  = `${avg_loss.toFixed(3)}$`;
 
   // Distribución
   const distEl = document.getElementById("pb-dist");
@@ -1251,7 +1251,7 @@ function renderPerBet(per_bet) {
     </div>`;
   }).join("");
 
-  // Por estrategia (avg €/apuesta)
+  // Por estrategia (avg $/apuesta)
   const stratEl = document.getElementById("pb-strat");
   const maxAvg = Math.max(...by_strategy.map(d => Math.abs(d.avg)), 0.01);
   stratEl.innerHTML = by_strategy.slice(0, 16).map(d => {
@@ -1264,7 +1264,7 @@ function renderPerBet(per_bet) {
       <div class="bar-track">
         <div class="bar-fill" style="width:${pct}%;background:${color}${opacity}"></div>
       </div>
-      <div class="bar-val" style="color:${color};width:64px">${d.avg >= 0 ? "+" : ""}${d.avg.toFixed(4)}€</div>
+      <div class="bar-val" style="color:${color};width:64px">${d.avg >= 0 ? "+" : ""}${d.avg.toFixed(4)}$</div>
       <div class="bar-n">${d.n} ap.</div>
     </div>`;
   }).join("");
