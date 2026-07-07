@@ -185,6 +185,7 @@ predictions (features JSON) → postmortem:
 | P12 | Smart money wallets + trade size feature | Descargar Jon-Becker (`s3.jbecker.dev/data.tar.zst` 36GB) |
 | P13 | Arb de contención ventanas anidadas → live | **Análisis 05-Jul: 157 opps/4d con profit>1% y depth≥$10, mediana +14%.** Sim ejecución activa (nested_arb_sim.csv); a live con n≥30 cerradas y garantia_ok~100% |
 | ~~P14~~ | **RESUELTO 2026-07-03: quedarse taker.** maker_sim n=375: fill 53.6%, EV taker +0.147€/señal vs maker -0.21€/señal (selección adversa). maker_sim sigue acumulando por si cambia con más liquidez | — |
+| P15 | **Doble-conteo de boosts horarios en el stake** (no en prob/edge: la ruta de IC está limpia). Boosts multiplicativos de "hora buena" se apilan: hardcoded 24H `{5,6,7,15,16,17,18,19}` (`shadow_predict.py:2695`) × meta `hora_boost_factor` (`:2664`) × posible bucket causal sobre `hora_utc` → cuenta el mismo fenómeno 2-3×. **Impacto live HOY = 0** (max_stake pinned 1,05€). Arreglo = colapsar en una sola fuente de verdad. Mapeado en shadow (read-only) para ver si los buckets sobre-boosteados rinden peor. | **Al despinnar max_stake_eur del suelo** (tras validar maker / más bankroll) |
 
 ---
 
