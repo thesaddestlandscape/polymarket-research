@@ -26,6 +26,8 @@ RESULTS_PATH    = DIR_SHADOW / "results.csv"
 POSTMORTEM_PATH = DIR_SHADOW / "postmortem.csv"
 PARAMS_PATH     = DIR_SHADOW / "strategy_params.json"
 PERFORMANCE_PATH = DIR_SHADOW / "performance.csv"
+EV_KELLY_HIST_PATH = DIR_SHADOW / "ev_kelly_historico.csv"
+EV_KELLY_HIST_THROTTLE_MIN = 15  # no más de una fila cada 15min (performance.csv se recalcula c/60s)
 
 APUESTA_SHADOW = 0.90
 
@@ -601,6 +603,23 @@ def generar_performance(resultados: list, pred_index: dict) -> list:
         confianza   = min(1.0, n / 20)
         ic_efectivo = round(ic_bayes * confianza, 4)
 
+        # 08-Jul (artículo EV/Kelly/LLN): comparación shadow, NO sustituye
+        # ic_efectivo (que sí consume live_stake.py vía strategy_params.json).
+        # (a) confianza alternativa saturando en n=40 (el propio umbral de
+        #     promoción live) en vez de n=20 — hoy confianza=1.0 trata igual
+        #     un patrón con n=20 que uno con n=280, sin más matiz.
+        # (b) n necesario para que el IC excluya cero al 95% (binomial approx,
+        #     p=hit_rate): cuantifica si n>=40 es la vara correcta para nuestra
+        #     magnitud de edge (mucho mayor que el 50.75% de Renaissance) o si
+        #     sobra/falta margen.
+        confianza_n40   = min(1.0, n / 40)
+        ic_efectivo_n40 = round(ic_bayes * confianza_n40, 4)
+        if abs(ic_bayes) > 1e-6:
+            p_var = max(hit_rate * (1 - hit_rate), 1e-6)
+            n_necesario_95 = math.ceil((1.96 ** 2) * p_var / (ic_bayes ** 2))
+        else:
+            n_necesario_95 = None
+
         # Kelly fracción óptima
         if hit_rate > 0 and avg_loss < 0:
             b     = avg_win / abs(avg_loss)
@@ -642,6 +661,9 @@ def generar_performance(resultados: list, pred_index: dict) -> list:
             "avg_horas_perdedora": round(avg_horas_loss, 1),
             "kelly_optimo":        round(kelly, 4),
             "causa_perdida_principal": causa_principal,
+            "confianza_n40":       round(confianza_n40, 4),
+            "ic_efectivo_n40":     ic_efectivo_n40,
+            "n_necesario_95":      n_necesario_95,
         })
 
     performance.sort(key=lambda x: x["pnl_total"], reverse=True)
@@ -1113,6 +1135,56 @@ def guardar_performance(performance: list):
     print(f"  Performance guardado: {PERFORMANCE_PATH}")
 
 
+def actualizar_ev_kelly_historico(performance: list):
+    """
+    Snapshot append-only de EV/Kelly agregado (08-Jul, artículo EV/Kelly/LLN).
+    performance.csv se SOBREESCRIBE cada ciclo (solo el estado actual) — no
+    deja rastro de si edge_real converge hacia edge_medio_pred con el tiempo.
+    Aquí se añade una fila agregada (ponderada por n) cada
+    EV_KELLY_HIST_THROTTLE_MIN minutos, para poder revisar en unos días la
+    tendencia de calibración y de Kelly óptimo. Puramente observacional — no
+    gatea nada, no lo lee ningún proceso live.
+    """
+    activos = [p for p in performance if p.get("n_total", 0) >= 5]
+    if not activos:
+        return
+
+    if EV_KELLY_HIST_PATH.exists():
+        try:
+            ultima = None
+            with open(EV_KELLY_HIST_PATH, encoding="utf-8") as f:
+                for ultima in csv.DictReader(f):
+                    pass
+            if ultima:
+                prev_ts = datetime.fromisoformat(ultima["timestamp_utc"])
+                if (datetime.now(timezone.utc) - prev_ts).total_seconds() < EV_KELLY_HIST_THROTTLE_MIN * 60:
+                    return
+        except Exception:
+            pass
+
+    n_tot = sum(p["n_total"] for p in activos)
+    edge_pred_pond  = sum(p["edge_medio_pred"] * p["n_total"] for p in activos) / n_tot
+    edge_real_pond  = sum(p["edge_real"] * p["n_total"] for p in activos) / n_tot
+    kelly_pond      = sum(p["kelly_optimo"] * p["n_total"] for p in activos) / n_tot
+    fila = {
+        "timestamp_utc":          datetime.now(timezone.utc).isoformat(timespec="seconds"),
+        "n_estrategias_activas":  len(activos),
+        "n_total_ops":            n_tot,
+        "edge_pred_ponderado":    round(edge_pred_pond, 4),
+        "edge_real_ponderado":    round(edge_real_pond, 4),
+        "gap_calibracion":        round(edge_real_pond - edge_pred_pond, 4),
+        "kelly_optimo_ponderado": round(kelly_pond, 4),
+    }
+    nuevo = not EV_KELLY_HIST_PATH.exists()
+    with open(EV_KELLY_HIST_PATH, "a", newline="", encoding="utf-8") as f:
+        w = csv.DictWriter(f, fieldnames=list(fila.keys()))
+        if nuevo:
+            w.writeheader()
+        w.writerow(fila)
+    print(f"  EV/Kelly histórico: gap_calibracion={fila['gap_calibracion']:+.4f} "
+          f"(pred={fila['edge_pred_ponderado']:+.4f} real={fila['edge_real_ponderado']:+.4f})")
+
+
 def main():
     ts = datetime.now(timezone.utc).isoformat(timespec="seconds")
     print(f"[{ts}] === Postmortem ===")
@@ -1277,6 +1349,7 @@ def main():
     # Performance completo
     performance = generar_performance(todos_con_causa, pred_index)
     guardar_performance(performance)
+    actualizar_ev_kelly_historico(performance)
 
     print(f"\n  Ranking de estrategias por P&L:")
     for p in performance:

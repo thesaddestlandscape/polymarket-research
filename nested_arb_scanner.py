@@ -75,7 +75,30 @@ SIM_CAMPOS = ["ts_entrada", "activo", "nesting", "combo", "coste", "n_shares",
               "coste_total_usd", "ask_leg1", "ask_leg2", "gap_opens_pct",
               "depth_usd", "min_orden_ok", "end_utc", "inner_slug",
               "outer_slug", "status", "ts_cierre", "gano_leg1", "gano_leg2",
-              "payout_por_share", "pnl_usd", "garantia_ok", "pasa_filtro"]
+              "payout_por_share", "pnl_usd", "garantia_ok", "pasa_filtro",
+              "persistio_ciclo_anterior"]
+
+# --- Duración de episodio + sondeo ráfaga (08-Jul, tras leer Cheng/Yang/Zou
+# arXiv:2605.00864 — arbitraje NBA en Polymarket vía 75M snapshots de libro).
+# Su hallazgo clave: mediana de episodio combinatorio = 16s (17.2% <=4s) con
+# un polling de 3.6-5.5s — MÁS RÁPIDO que nuestro cron de 1min. Si el patrón
+# se repite aquí, 1min/scan puede estar subcontando episodios reales que
+# abren y cierran entre dos sondeos. Dos medidas puramente observacionales,
+# NO gatean sim ni live:
+#   (a) trackear inicio/fin de cada racha (inner,outer,combo) con coste<1
+#       entre sondeos consecutivos -> duración real medida, no asumida.
+#   (b) sondeo en ráfaga (varias pasadas internas, no solo 1) SOLO en los
+#       últimos UMBRAL_BURST_S de la ventana más ajustada -> igual que su
+#       hallazgo de concentración en "los últimos minutos", sin subir el
+#       coste el resto del día. flock -n del cron ya evita solapes: si la
+#       ráfaga se alarga más de 1min, el siguiente tick simplemente no entra.
+DURACIONES_CSV   = DIR_SHADOW / "nested_arb_duraciones.csv"
+RACHA_STATE_PATH = DIR_SHADOW / "nested_arb_racha_state.json"
+UMBRAL_BURST_S   = 150   # si la tarea más ajustada tiene menos de esto, ráfaga
+BURST_ITERACIONES = 4    # pasadas internas en modo ráfaga
+BURST_SLEEP_S      = 10  # separación entre pasadas (4×10s ≈ 40s, cabe en el minuto)
+DURACIONES_CAMPOS = ["activo", "nesting", "combo", "inicio", "fin",
+                     "duracion_s", "coste_min", "depth_max_usd", "n_sondeos"]
 
 
 def _log(msg):
@@ -218,6 +241,83 @@ def evaluar_par(act, inner_slug, outer_slug, end_utc, inner_ini, outer_ini, prec
                  f"gap={gap_opens_pct:+.2f}%, depth=${depth_usd}, quedan {int(restante_s)}s)")
 
 
+def _racha_cargar() -> dict:
+    if not RACHA_STATE_PATH.exists():
+        return {}
+    try:
+        return json.loads(RACHA_STATE_PATH.read_text())
+    except Exception:
+        return {}
+
+
+def _racha_guardar(state: dict):
+    RACHA_STATE_PATH.write_text(json.dumps(state))
+
+
+def _duracion_registrar(row: dict):
+    nuevo = not DURACIONES_CSV.exists()
+    with open(DURACIONES_CSV, "a", newline="", encoding="utf-8") as f:
+        w = csv.DictWriter(f, fieldnames=DURACIONES_CAMPOS)
+        if nuevo:
+            w.writeheader()
+        w.writerow(row)
+
+
+def _actualizar_rachas(filas: list, state: dict, ahora: datetime) -> tuple[set, dict]:
+    """
+    Actualiza el estado de rachas (inner,outer,combo) con coste<1 entre
+    sondeos. Cierra (mide duración real y la loguea) las rachas vistas en el
+    estado previo que NO aparecen en este sondeo. Devuelve (persistentes,
+    nuevo_state): persistentes = claves YA activas en el estado previo (para
+    taguear sim_entrar sin gatear nada); nuevo_state = estado a pasar a la
+    siguiente pasada/ejecución.
+    """
+    vistas_ahora = {}
+    for f in filas:
+        if f["coste"] >= 1.0:
+            continue
+        key = f"{f['inner_slug']}|{f['outer_slug']}|{f['combo']}"
+        vistas_ahora[key] = f
+
+    persistentes = set(state.keys()) & set(vistas_ahora.keys())
+
+    nuevo_state = {}
+    for key, f in vistas_ahora.items():
+        if key in state:
+            prev = state[key]
+            nuevo_state[key] = {
+                "activo": f["activo"], "nesting": f["nesting"], "combo": f["combo"],
+                "inicio": prev["inicio"],
+                "coste_min": min(prev["coste_min"], f["coste"]),
+                "depth_max_usd": max(prev["depth_max_usd"], f["depth_usd"]),
+                "n_sondeos": prev["n_sondeos"] + 1,
+            }
+        else:
+            nuevo_state[key] = {
+                "activo": f["activo"], "nesting": f["nesting"], "combo": f["combo"],
+                "inicio": ahora.isoformat(timespec="seconds"),
+                "coste_min": f["coste"], "depth_max_usd": f["depth_usd"],
+                "n_sondeos": 1,
+            }
+
+    for key, prev in state.items():
+        if key in vistas_ahora:
+            continue
+        try:
+            inicio_dt = datetime.fromisoformat(prev["inicio"])
+        except Exception:
+            continue
+        _duracion_registrar({
+            "activo": prev["activo"], "nesting": prev["nesting"], "combo": prev["combo"],
+            "inicio": prev["inicio"], "fin": ahora.isoformat(timespec="seconds"),
+            "duracion_s": round((ahora - inicio_dt).total_seconds(), 1),
+            "coste_min": prev["coste_min"], "depth_max_usd": prev["depth_max_usd"],
+            "n_sondeos": prev["n_sondeos"],
+        })
+
+    return persistentes, nuevo_state
+
+
 def _sim_cargar() -> list:
     if not SIM_CSV.exists():
         return []
@@ -286,7 +386,7 @@ def _sim_resolver(rows: list) -> bool:
     return cambiado
 
 
-def _sim_entrar(filas: list, ends: dict, rows: list) -> bool:
+def _sim_entrar(filas: list, ends: dict, rows: list, persistentes: set) -> bool:
     """Registra entradas simuladas para oportunidades coste<1 con depth."""
     abiertos = {(r["inner_slug"], r["outer_slug"], r["combo"]) for r in rows}
     cambiado = False
@@ -322,6 +422,12 @@ def _sim_entrar(filas: list, ends: dict, rows: list) -> bool:
             # de la autopsia 07-Jul tenían gap ancho y libro fino. Tag, no gate.
             "pasa_filtro": 1 if (abs(f["gap_opens_pct"]) < NESTED_GAP_MAX_PCT
                                  and f["depth_usd"] > NESTED_DEPTH_MIN_USD) else 0,
+            # 08-Jul (arXiv:2605.00864): ¿esta señal ya estaba activa en el
+            # sondeo anterior (~1min antes), o es la primera vez que se ve?
+            # No gatea entrada — solo tag para comparar garantia_ok forward
+            # entre señales persistentes vs de un solo sondeo (posible
+            # artefacto de micro-desincronización entre las 2 patas).
+            "persistio_ciclo_anterior": 1 if f"{f['inner_slug']}|{f['outer_slug']}|{f['combo']}" in persistentes else 0,
         })
         abiertos.add(key)
         cambiado = True
@@ -355,35 +461,60 @@ def main():
 
     sim_rows = _sim_cargar()
     sim_dirty = _sim_resolver(sim_rows)
+    racha_state = _racha_cargar()
 
     if not tareas:
+        # Fuera de fase activa: ninguna racha puede seguir viva (la ventana
+        # cambió) — cerrar cualquier resto y limpiar estado para no arrastrar
+        # claves muertas a la próxima fase activa.
+        if racha_state:
+            _actualizar_rachas([], racha_state, ahora)
+            _racha_guardar({})
         if sim_dirty:
             _sim_guardar(sim_rows)
         return  # fuera de fase activa — salida silenciosa
 
-    precios = _precios_minuto()
-    filas = []
-    for t in tareas:
-        try:
-            evaluar_par(*t, precios, filas)
-        except Exception as e:
-            _log(f"  [warn] {t[0]}: {type(e).__name__}: {e}")
-        time.sleep(0.15)
-
-    if filas:
-        out = DIR_SHADOW / f"nested_arb_{ahora.date()}.csv"
-        nuevo = not out.exists()
-        with open(out, "a", newline="", encoding="utf-8") as f:
-            w = csv.DictWriter(f, fieldnames=list(filas[0].keys()))
-            if nuevo:
-                w.writeheader()
-            w.writerows(filas)
-        n_arb = sum(1 for r in filas if r["coste"] < 1.0)
-        _log(f"nested_arb: {len(filas)} mediciones, {n_arb} con coste<1")
-
+    # Ráfaga (08-Jul, arXiv:2605.00864 Cheng/Yang/Zou): su mediana de episodio
+    # combinatorio es 16s con un polling de 3.6-5.5s — más rápido que nuestro
+    # cron de 1min. Si la tarea más ajustada tiene menos de UMBRAL_BURST_S,
+    # varias pasadas internas en vez de 1 sola, concentrando el sondeo justo
+    # donde el paper encuentra la mayoría de episodios reales. flock -n del
+    # cron ya evita solapes si la ráfaga se alarga más de 1min.
+    restante_tarea = min((t[3] - ahora).total_seconds() for t in tareas)
+    n_pasadas = BURST_ITERACIONES if restante_tarea < UMBRAL_BURST_S else 1
     ends = {t[1]: t[3] for t in tareas}
-    if _sim_entrar(filas, ends, sim_rows):
-        sim_dirty = True
+
+    for pasada in range(n_pasadas):
+        ahora_pasada = datetime.now(timezone.utc)
+        precios = _precios_minuto()
+        filas = []
+        for t in tareas:
+            try:
+                evaluar_par(*t, precios, filas)
+            except Exception as e:
+                _log(f"  [warn] {t[0]}: {type(e).__name__}: {e}")
+            time.sleep(0.15)
+
+        if filas:
+            out = DIR_SHADOW / f"nested_arb_{ahora_pasada.date()}.csv"
+            nuevo = not out.exists()
+            with open(out, "a", newline="", encoding="utf-8") as f:
+                w = csv.DictWriter(f, fieldnames=list(filas[0].keys()))
+                if nuevo:
+                    w.writeheader()
+                w.writerows(filas)
+            n_arb = sum(1 for r in filas if r["coste"] < 1.0)
+            sufijo = f" [ráfaga {pasada + 1}/{n_pasadas}]" if n_pasadas > 1 else ""
+            _log(f"nested_arb: {len(filas)} mediciones, {n_arb} con coste<1{sufijo}")
+
+        persistentes, racha_state = _actualizar_rachas(filas, racha_state, ahora_pasada)
+        if _sim_entrar(filas, ends, sim_rows, persistentes):
+            sim_dirty = True
+
+        if pasada < n_pasadas - 1:
+            time.sleep(BURST_SLEEP_S)
+
+    _racha_guardar(racha_state)
     if sim_dirty:
         _sim_guardar(sim_rows)
 
