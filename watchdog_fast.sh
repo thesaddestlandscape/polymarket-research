@@ -4,7 +4,9 @@
 
 REPO_DIR="/root/polymarket-research"
 LOG="$REPO_DIR/logs/watchdog.log"
-MAX_SILENCE_S=600   # 10 minutos sin commit → loop muerto
+MAX_SILENCE_S=900   # 15 min sin commit → loop muerto (900 desde 08-Jul: el fast
+                    # commitea en batch c/5min — con 600 un hipo puntual de git
+                    # disparaba restart espurio; 900 mantiene margen 3×)
 
 log() { echo "[$(date -u +%Y-%m-%dT%H:%M:%SZ)] $*" >> "$LOG"; }
 
