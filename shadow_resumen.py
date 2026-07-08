@@ -116,25 +116,52 @@ def main():
     emoji_roi    = "🟢" if pnl_total >= 0 else "🔴"
     emoji_hoy    = "🟢" if pnl_hoy   >= 0 else "🔴"
 
+    # ── Live real on-chain (mismo origen que dashboard/digest/Telegram) ──────
+    try:
+        from live_balance import cargar_balance_real
+        snap = cargar_balance_real(max_edad_s=3600)
+    except Exception:
+        snap = None
+    if snap and not snap.get("_rancio"):
+        em_live = "🟢" if snap["pnl_real"] >= 0 else "🔴"
+        hoy_r = snap.get("pnl_hoy_real")
+        d7_r  = snap.get("pnl_7d_real")
+        live_rows = [
+            f"| Depósito inicial | {snap['deposito_inicial']:.2f} $ |",
+            f"| Balance on-chain | **{snap['total']:.2f} $** |",
+            f"| P&L real total | {em_live} **{snap['pnl_real']:+.2f} $** |",
+        ]
+        if hoy_r is not None:
+            live_rows.append(f"| P&L real hoy | {hoy_r:+.2f} $ |")
+        if d7_r is not None:
+            live_rows.append(f"| P&L real 7 días | {d7_r:+.2f} $ |")
+    else:
+        live_rows = ["| ⚠️ | Sin snapshot on-chain fresco (live_balance.py, cron 15min) |"]
+
+    # PnL fiel: stake fijo 1$ + slippage, sin compounding — misma función que el
+    # dashboard. Cota superior: no modela fill-ability (~8%, selección adversa).
+    try:
+        from dashboard_server import _pnl_realista
+        pnl_fiel = sum(v for v in (_pnl_realista(r) for r in resultados)
+                       if v is not None)
+        fiel_row = f"| P&L fiel (stake fijo 1$) | {pnl_fiel:+.2f} $ |"
+    except Exception:
+        fiel_row = "| P&L fiel (stake fijo 1$) | ⚠️ error |"
+
     lines = [
         f"# Estado del bot — {ts}",
         "",
-        "## Capital",
+        "## Live — dinero real (on-chain)",
         f"| | |",
         f"|---|---|",
-        f"| Depósito total | **{DEPOSITO_TOTAL:.0f} €** |",
-        f"| Capital operativo | **{CAPITAL_OPERATIVO:.0f} €** |",
-        f"| Reserva intocable | **{RESERVA:.0f} €** |",
+    ] + live_rows + [
         "",
-        "## Bankroll simulado",
+        "## Shadow — MODELO SIMULADO (no cobrable)",
         f"| | |",
         f"|---|---|",
-        f"| Inicio | {CAPITAL_OPERATIVO:.2f} € |",
-        f"| Actual | **{bankroll:.2f} €** |",
-        f"| P&L acumulado | {emoji_roi} **{signo_pnl}{pnl_total:.2f} €** |",
-        f"| ROI s/ operativo | {signo_pnl}{roi_op:.2f}% |",
-        f"| ROI s/ depósito | {signo_pnl}{roi_dep:.2f}% |",
-        f"| P&L hoy ({hoy}) | {emoji_hoy} {signo_hoy}{pnl_hoy:.2f} € |",
+        fiel_row,
+        f"| P&L sim compuesto | {emoji_roi} {signo_pnl}{pnl_total:.2f} $ (ficción Kelly: {signo_pnl}{roi_op:.0f}% s/ operativo) |",
+        f"| P&L sim hoy ({hoy}) | {emoji_hoy} {signo_hoy}{pnl_hoy:.2f} $ |",
         f"| Operaciones resueltas | {n_total} ({n_win} WIN / {n_total-n_win} LOSS) — {wr_g:.1f}% |",
         f"| Señales abiertas | {abiertas} |",
         "",
@@ -165,7 +192,7 @@ def main():
 
         signo = "+" if pnl >= 0 else ""
         lines.append(
-            f"| {s} | {n} | {wr:.1f}% | {ic_ef:+.3f} | {signo}{pnl:.2f}€ | {apuesta:.2f}€ | {est_str} |"
+            f"| {s} | {n} | {wr:.1f}% | {ic_ef:+.3f} | {signo}{pnl:.2f}$ | {apuesta:.2f}$ | {est_str} |"
         )
 
     lines += [
@@ -186,7 +213,7 @@ def main():
         emoji  = "✅ WIN" if acierto == "1" else "❌ LOSS"
         pnl_r  = float(r.get("pnl_neto", 0))
         signo_r = "+" if pnl_r >= 0 else ""
-        lines.append(f"| {ts_r} | {label} | {q}… | {emoji} | {signo_r}{pnl_r:.2f}€ |")
+        lines.append(f"| {ts_r} | {label} | {q}… | {emoji} | {signo_r}{pnl_r:.2f}$ |")
 
     # ─── Sección calidad de datos ──────────────────────────────────────────
     dq = leer_estado_calidad()
