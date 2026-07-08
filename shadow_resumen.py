@@ -351,44 +351,41 @@ def _telegram_periodico(ahora, bankroll, pnl_total, pnl_hoy,
         est       = estado_live()
         switch_on = est["switch"]
         en_ventana = est["en_ventana"]
-        prox      = est.get("proxima_ventana", "")
+        # estado_live no expone 'proxima_ventana'; la próxima va dentro de motivo,
+        # p.ej. "fuera_de_ventana (proxima: hoy 08:30)"
         if en_ventana:
             live_estado = f"✅ ON — en ventana"
         elif switch_on:
-            live_estado = f"🟡 ON — próx. ventana: {prox}"
+            live_estado = f"🟡 ON — {_esc(est.get('motivo', ''))}"
         else:
-            live_estado = f"❌ OFF — próx. ventana: {prox}"
+            live_estado = f"❌ OFF — {_esc(est.get('motivo', ''))}"
     except Exception as e:
         print(f"[shadow_resumen] excepción en estado_live(): {type(e).__name__}: {e}")
         live_estado = "? (error)"
 
-    # ── Stats live reales (dinero real de trades.csv) ────────────────────────
+    # ── Stats live: balance real on-chain (mismo origen que dashboard/digest) ─
     try:
-        from live_stake import bankroll_actual, pnl_live_hoy, CAPITAL_OPERATIVO_INICIAL
-        bkr_real   = bankroll_actual()
-        pnl_d_real = pnl_live_hoy()
-        pnl_t_real = bkr_real - CAPITAL_OPERATIVO_INICIAL
-        trades_csv = Path("data/live/trades.csv")
-        trades_all = list(csv.reader(open(trades_csv))) if trades_csv.exists() else []
-        hoy = ahora.strftime("%Y-%m-%d")
-        n_live_hoy = sum(
-            1 for row in csv.DictReader(open(trades_csv)) if row.get("status") == "CLOSED"
-            and row.get("close_timestamp", "").startswith(hoy)
-        ) if trades_csv.exists() and trades_csv.stat().st_size > 100 else 0
-        n_live_total = sum(
-            1 for row in csv.DictReader(open(trades_csv)) if row.get("status") == "CLOSED"
-        ) if trades_csv.exists() and trades_csv.stat().st_size > 100 else 0
-        w_live_total = sum(
-            1 for row in csv.DictReader(open(trades_csv))
-            if row.get("status") == "CLOSED" and float(row.get("pnl_neto_eur", 0) or 0) > 0
-        ) if trades_csv.exists() and trades_csv.stat().st_size > 100 else 0
-        tiene_live = n_live_total > 0
+        from live_balance import cargar_balance_real
+        snap = cargar_balance_real(max_edad_s=3600)
     except Exception as e:
-        print(f"[shadow_resumen] excepción en stats live reales (bankroll/pnl mostrados serán placeholder): {type(e).__name__}: {e}")
-        bkr_real = CAPITAL_OPERATIVO_INICIAL = 25.44
-        pnl_d_real = pnl_t_real = 0.0
-        n_live_hoy = n_live_total = w_live_total = 0
-        tiene_live = False
+        print(f"[shadow_resumen] excepción cargando balance real: {type(e).__name__}: {e}")
+        snap = None
+
+    # WR y nº de trades reales desde trades.csv (métricas de actividad, no de saldo)
+    trades_csv = Path("data/live/trades.csv")
+    hoy = ahora.strftime("%Y-%m-%d")
+    n_live_hoy = n_live_total = w_live_total = 0
+    try:
+        if trades_csv.exists() and trades_csv.stat().st_size > 100:
+            cerrados = [r for r in csv.DictReader(open(trades_csv, encoding="utf-8"))
+                        if r.get("status") == "CLOSED"]
+            n_live_total = len(cerrados)
+            n_live_hoy   = sum(1 for r in cerrados
+                               if (r.get("close_timestamp", "") or "").startswith(hoy))
+            w_live_total = sum(1 for r in cerrados
+                               if float(r.get("pnl_neto_eur") or 0) > 0)
+    except Exception as e:
+        print(f"[shadow_resumen] excepción leyendo trades.csv: {type(e).__name__}: {e}")
 
     # ── Stats shadow curadas de results.csv ──────────────────────────────────
     resultados_raw = cargar_csv(RESULTS_PATH)
@@ -412,7 +409,7 @@ def _telegram_periodico(ahora, bankroll, pnl_total, pnl_hoy,
             ico = "⚠️"
         else:
             ico = "▸ "
-        return f"{ico} {_esc(label):<18} {prog:<8} IC={ic:+.3f}  {sp}{pnl:.2f}€"
+        return f"{ico} {_esc(label):<18} {prog:<8} IC={ic:+.3f}  {sp}{pnl:.2f}$"
 
     def _post(msg):
         _requests.post(
@@ -422,49 +419,81 @@ def _telegram_periodico(ahora, bankroll, pnl_total, pnl_hoy,
         )
 
     # ════════════════════════════════════════════════════════════════════════
-    # MENSAJE 1 — LIVE (dinero real)
+    # MENSAJE 1 — LIVE (dinero real, verdad de suelo on-chain)
     # ════════════════════════════════════════════════════════════════════════
-    bkr_em = "📈" if pnl_t_real >= 0 else "📉"
-    if tiene_live:
-        wr_live = w_live_total / n_live_total * 100 if n_live_total else 0
-        live_perf = (
-            f"Trades totales: {n_live_total}  |  WR {wr_live:.0f}%\n"
-            f"Hoy: {n_live_hoy} trades cerrados  |  PNL hoy: {pnl_d_real:+.2f}€"
+    if snap and not snap.get("_rancio"):
+        pnl_t_real = snap["pnl_real"]
+        bkr_em = "📈" if pnl_t_real >= 0 else "📉"
+        hoy_str = (f"{snap['pnl_hoy_real']:+.2f}$"
+                   if snap.get("pnl_hoy_real") is not None else "—")
+        d7_str  = (f"{snap['pnl_7d_real']:+.2f}$"
+                   if snap.get("pnl_7d_real") is not None else "—")
+        if n_live_total:
+            wr_live = w_live_total / n_live_total * 100
+            live_perf = (
+                f"Trades: {n_live_total}  |  WR {wr_live:.0f}%  |  hoy {n_live_hoy} cerrados\n"
+                f"PnL hoy: {hoy_str}  ·  7 días: {d7_str}"
+            )
+        else:
+            live_perf = "Sin trades cerrados aún — esperando primera ventana"
+        msg_live = (
+            f"💰 *BOT LIVE — dinero real (on-chain)* — {ahora.strftime('%H:%M UTC')}\n"
+            f"\n"
+            f"{bkr_em} Balance: *{snap['total']:.2f}$*  "
+            f"(depósito {snap['deposito_inicial']:.2f}$ → {pnl_t_real:+.2f}$)\n"
+            f"{live_perf}\n"
+            f"\n"
+            f"Estado: {live_estado}"
         )
     else:
-        live_perf = "Sin trades cerrados aún — esperando primera ventana"
-
-    msg_live = (
-        f"💰 *BOT LIVE — dinero real* — {ahora.strftime('%H:%M UTC')}\n"
-        f"\n"
-        f"{bkr_em} Bankroll: *{bkr_real:.2f}€*  ({pnl_t_real:+.2f}€ vs inicio)\n"
-        f"{live_perf}\n"
-        f"\n"
-        f"Estado: {live_estado}"
-    )
+        # Fail loud: sin snapshot on-chain fresco no se inventan saldos.
+        msg_live = (
+            f"💰 *BOT LIVE* — {ahora.strftime('%H:%M UTC')}\n"
+            f"\n"
+            f"⚠️ Sin balance on-chain fresco (live\\_balance.py corre por cron cada "
+            f"15min) — no muestro saldo hasta recuperarlo.\n"
+            f"\n"
+            f"Estado: {live_estado}"
+        )
 
     # ════════════════════════════════════════════════════════════════════════
-    # MENSAJE 2 — SHADOW (simulación, no es dinero real)
+    # MENSAJE 2 — SHADOW (modelo simulado, coordinado con el dashboard)
     # ════════════════════════════════════════════════════════════════════════
     wr_g  = n_win / n_total * 100 if n_total else 0
     sp_t  = "+" if pnl_total >= 0 else ""
     sp_h  = "+" if pnl_hoy   >= 0 else ""
 
+    # PnL fiel: stake fijo 1$ + slippage, sin compounding — misma función que
+    # usa el dashboard (dashboard_server._pnl_realista). Cota superior: no
+    # modela fill-ability (~8% conversión, selección adversa).
+    try:
+        from dashboard_server import _pnl_realista
+        pnl_fiel = sum(v for v in (_pnl_realista(r) for r in resultados_raw)
+                       if v is not None)
+        sp_f = "+" if pnl_fiel >= 0 else ""
+        fiel_line = f"PnL fiel (stake fijo 1$, cota sup.): {sp_f}{pnl_fiel:.2f}$"
+    except Exception as e:
+        print(f"[shadow_resumen] excepción en PnL fiel: {type(e).__name__}: {e}")
+        fiel_line = "PnL fiel: ⚠️ error calculando"
+
     lineas_shadow = [
-        f"🧪 *SHADOW (simulación)* — {ahora.strftime('%H:%M UTC')}",
-        f"_(No es dinero real — incluye BUY\\_YES y estrategias en prueba)_",
+        f"🧪 *SHADOW — MODELO SIMULADO* — {ahora.strftime('%H:%M UTC')}",
+        f"_(No es dinero real ni cobrable — el compuesto es ficción Kelly)_",
         "",
-        f"Bankroll sim: {bankroll:.2f}€  ({sp_t}{pnl_total:.2f}€ total | hoy: {sp_h}{pnl_hoy:.2f}€)",
+        f"{fiel_line}",
+        f"PnL sim compuesto: {sp_t}{pnl_total:.2f}$  (hoy: {sp_h}{pnl_hoy:.2f}$)",
         f"{n_total} ops  |  {wr_g:.1f}% WR global",
         "",
-        "*Estrategia live activa* (BUY\\_NO #15min):",
+        "*Whitelist live* (config\\_live.json):",
     ]
 
-    f_buyno = fila("BUY\\_NO#15min", buyno)
-    if f_buyno:
-        lineas_shadow.append(f_buyno)
-    else:
-        lineas_shadow.append("  (sin datos aún)")
+    try:
+        with open("data/live/config_live.json", encoding="utf-8") as f:
+            wl = json.load(f).get("pares_permitidos_live", [])
+        lineas_shadow += [f"  · {_esc(t)}" for t in wl] or ["  (vacía)"]
+    except Exception as e:
+        print(f"[shadow_resumen] excepción leyendo whitelist: {type(e).__name__}: {e}")
+        lineas_shadow.append("  ⚠️ error leyendo config_live.json")
 
     lineas_shadow += ["", "*Otras GBM en observación:*"]
     ORDER_GBM = ['BTC#15min', 'ETH#15min', 'SOL#15min', 'ETH#60min', 'BTC#60min', 'SOL#60min']
@@ -481,7 +510,7 @@ def _telegram_periodico(ahora, bankroll, pnl_total, pnl_hoy,
         sp_of = "+" if pnl_of >= 0 else ""
         lineas_shadow += [
             "",
-            f"*ORDER FLOW* (BTC+SOL): n={n_of}  IC={ic_of:+.3f}  {sp_of}{pnl_of:.2f}€",
+            f"*ORDER FLOW* (BTC+SOL): n={n_of}  IC={ic_of:+.3f}  {sp_of}{pnl_of:.2f}$",
         ]
 
     msg_shadow = "\n".join(lineas_shadow)

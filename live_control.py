@@ -69,12 +69,29 @@ def get_updates(offset: int) -> list:
 
 def estado_completo() -> str:
     from live_guard import estado_live
-    from live_stake import bankroll_actual, pnl_live_hoy, verificar_circuit_breaker
+    from live_stake import verificar_circuit_breaker
+    from live_balance import cargar_balance_real
 
     est    = estado_live()
-    bkr    = bankroll_actual()
-    pnl_h  = pnl_live_hoy()
     cb, _  = verificar_circuit_breaker()
+
+    # Saldo/PnL: balance real on-chain (misma fuente que dashboard y digest).
+    # Fail loud si el snapshot no está fresco — no se inventan saldos.
+    snap = None
+    try:
+        snap = cargar_balance_real(max_edad_s=3600)
+    except Exception as e:
+        log(f"estado_completo: error cargando balance real: {e}")
+    if snap and not snap.get("_rancio"):
+        hoy = snap.get("pnl_hoy_real")
+        hoy_txt = f"{hoy:+.2f}$" if hoy is not None else "—"
+        saldo_txt = (
+            f"Balance real:   {snap['total']:.2f}$ (on-chain)\n"
+            f"PNL total:      {snap['pnl_real']:+.2f}$\n"
+            f"PNL hoy:        {hoy_txt}"
+        )
+    else:
+        saldo_txt = "⚠️ Sin balance on-chain fresco (cron live_balance.py, 15min)"
 
     switch_txt  = "✅ ON"  if est["switch"]     else "❌ OFF"
     ventana_txt = f"✅ {est['motivo']}" if est["en_ventana"] else f"❌ {est['motivo']}"
@@ -87,8 +104,7 @@ def estado_completo() -> str:
         f"Switch:         {switch_txt}\n"
         f"Ventana:        {ventana_txt}\n"
         f"Circuit break:  {cb_txt}\n\n"
-        f"Bankroll:       {bkr:.2f}€\n"
-        f"PNL hoy:        {pnl_h:+.2f}€\n\n"
+        f"{saldo_txt}\n\n"
         f"{puede_txt}"
     )
 
