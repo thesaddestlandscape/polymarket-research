@@ -18,12 +18,21 @@ import csv
 import glob
 import json
 import math
+import os
 import re
 import time
 from datetime import datetime, timezone
 from pathlib import Path
 
 import requests
+
+# Credenciales antes de leer POLY_DEPOSIT_WALLET en _fees_reales_recientes.
+# Fix 08-Jul (code-review): sin esto os.getenv devuelve None en producción
+# (run_fast.sh no exporta .env al proceso) y toda la confirmación de fee real
+# queda inerte en silencio -- el mismo bug que ledger_fiscal.py/reconciliar.py
+# ya evitan haciendo esto mismo al principio del fichero.
+from dotenv import load_dotenv
+load_dotenv(Path("data/live/.env"))
 
 
 def _infer_subtype(pred: dict) -> str:
@@ -648,6 +657,108 @@ def _notificar_cierre_live(trade: dict, pnl_neto: float, acierto_dir: bool):
         print(f"  [telegram] Error notificando cierre live: {e}")
 
 
+DATA_API_ACTIVITY = "https://data-api.polymarket.com/activity"
+FEE_MAX_FRACCION_STAKE = 0.15  # observado 2.9%-6.7%; techo generoso, no cero
+
+
+def _fees_reales_recientes(limit_paginas: int = 3, pagina: int = 500) -> dict:
+    """{timestamp_unix: [(usdc_pagado, shares, precio), ...]} de los TRADE BUY
+    reales más recientes de la wallet, vía data-api (público, sin clave).
+    Lista por timestamp (no un solo valor) porque dos fills pueden caer en el
+    mismo segundo -- un dict de valor único los pisaría en silencio.
+
+    Fix 08-Jul: el fee real de Polymarket (cobrado SOLO al comprar, nunca al
+    canjear) no aparece en `resp.get("feeRateBps")` -- ese campo nunca vino
+    poblado en 104/104 trades históricos, así que fee_eur quedó en 0.0 siempre
+    y pnl_neto_eur sobreestimaba la ganancia real ~3.78% del stake de media
+    (verificado cruzando data-api/activity: usdcSize pagado > shares*price).
+    En vez de reproducir la fórmula interna del fee (curva price*(1-price)^exp,
+    con AL MENOS dos orígenes de tasa distintos en la librería del CLOB, unidades
+    ambiguas) se lee el gasto real ya asentado on-chain -- ground truth, no
+    estimación, y sobrevive a cualquier cambio futuro del esquema de fees.
+
+    Paginado (no un solo limit=300): un día con mucha actividad podía dejar
+    fuera del corte un BUY temprano y reportarlo como "no confirmado" por una
+    razón evitable, no por falta de dato real.
+    """
+    wallet = os.getenv("POLY_DEPOSIT_WALLET")
+    if not wallet:
+        print("  [WARN] _fees_reales_recientes: POLY_DEPOSIT_WALLET no disponible "
+              "(revisar que data/live/.env se cargó) -- fee_eur quedará sin confirmar esta vuelta")
+        return {}
+    eventos = []
+    for i in range(limit_paginas):
+        try:
+            r = requests.get(DATA_API_ACTIVITY,
+                             params={"user": wallet, "limit": pagina, "offset": i * pagina},
+                             timeout=15)
+            r.raise_for_status()
+            chunk = r.json() or []
+        except Exception as e:
+            print(f"  [WARN] _fees_reales_recientes: {type(e).__name__}: {e} "
+                  "-- fee_eur quedará sin confirmar esta vuelta")
+            break
+        if not chunk:
+            break
+        eventos.extend(chunk)
+        if len(chunk) < pagina:
+            break
+    out: dict = {}
+    for a in eventos:
+        if a.get("type") != "TRADE" or a.get("side") != "BUY":
+            continue
+        try:
+            registro = (float(a["usdcSize"]), float(a["size"]), float(a["price"]))
+        except (KeyError, ValueError, TypeError):
+            continue
+        out.setdefault(int(a["timestamp"]), []).append(registro)
+    return out
+
+
+def _fee_real_para_trade(t: dict, fees_recientes: dict, tolerancia_s: int = 90) -> float | None:
+    """Busca el TRADE real más cercano en el tiempo al timestamp_utc del trade,
+    desambiguando por nº de shares esperado (stake/entry_price) para no cruzar
+    el fee de OTRO trade cuando hay 2 posiciones abiertas simultáneas (el
+    sistema lo permite, config_live.json::max_posiciones_abiertas_misma_direccion).
+    None si no hay match dentro de tolerancia+shares -- fail-loud, no se inventa
+    un fee ni se disfraza de "fuera de tolerancia" una causa distinta (credencial
+    ausente, API caída: eso ya se avisa aparte en _fees_reales_recientes)."""
+    try:
+        ts_trade = datetime.fromisoformat(t["timestamp_utc"].replace("Z", "+00:00"))
+        if ts_trade.tzinfo is None:
+            ts_trade = ts_trade.replace(tzinfo=timezone.utc)
+        ts_unix = ts_trade.timestamp()
+        stake = float(t.get("stake_eur") or 0)
+        entry_p = float(t.get("entry_price") or 0)
+    except (KeyError, ValueError, TypeError, AttributeError):
+        return None
+    if stake <= 0 or entry_p <= 0:
+        return None
+    shares_esperadas = stake / entry_p
+
+    candidatos = []
+    for ts_ev, registros in fees_recientes.items():
+        delta = abs(ts_ev - ts_unix)
+        if delta > tolerancia_s:
+            continue
+        for usdc, shares, precio in registros:
+            # desambiguación: el nº de shares real debe parecerse al esperado
+            # (stake/entry_price) -- filtra el caso de 2 trades cerrando en el
+            # mismo ciclo con matches cercanos en el tiempo pero de mercados
+            # distintos (montos/precios distintos -> shares distintas).
+            if abs(shares - shares_esperadas) / shares_esperadas > 0.15:
+                continue
+            candidatos.append((delta, usdc, shares, precio))
+    if not candidatos:
+        return None
+    _, usdc_pagado, shares, precio = min(candidatos, key=lambda c: c[0])
+    fee = usdc_pagado - shares * precio
+    # clamp de seguridad (mismo espíritu que el techo/piso de entry_p arriba):
+    # un match erróneo residual no debe poder corromper pnl_neto_eur real con
+    # un fee absurdo. Rango observado 2.9%-6.7% del stake; techo generoso.
+    return round(max(0.0, min(fee, stake * FEE_MAX_FRACCION_STAKE)), 4)
+
+
 def _cerrar_trades_live(nuevos_resultados: list, ts: str):
     """Actualiza data/live/trades.csv: cierra trades OPEN cuyo mercado ya resolvió."""
     LIVE_CSV = Path("data/live/trades.csv")
@@ -665,6 +776,7 @@ def _cerrar_trades_live(nuevos_resultados: list, ts: str):
     trades = list(csv.DictReader(open(LIVE_CSV, encoding="utf-8")))
     modificado = False
     cierres = []
+    fees_recientes = None  # lazy: solo se pide a data-api si de verdad hay algo que cerrar
 
     for t in trades:
         if t.get("status") != "OPEN":
@@ -672,6 +784,9 @@ def _cerrar_trades_live(nuevos_resultados: list, ts: str):
         mid = str(t.get("market_id", ""))
         if mid not in outcomes:
             continue
+
+        if fees_recientes is None:
+            fees_recientes = _fees_reales_recientes()
 
         outcome = outcomes[mid]["outcome_real"]
         acierto = outcomes[mid]["acierto"]
@@ -685,9 +800,26 @@ def _cerrar_trades_live(nuevos_resultados: list, ts: str):
             # entry_price corrupto >1 convertiría un WIN real en pérdida
             # via pnl_bruto = stake*(1/entry_p - 1) negativo.
             entry_p    = min(0.99, max(0.01, float(t.get("entry_price") or 0.5)))
-            fee        = float(t.get("fee_eur") or 0)
         except ValueError:
             continue
+
+        fee_real = _fee_real_para_trade(t, fees_recientes)
+        if fee_real is not None:
+            fee = fee_real
+        else:
+            # fail-loud: no se encontró/confirmó el TRADE real (credencial
+            # ausente, API caída, o genuinamente fuera de tolerancia -- la
+            # causa concreta ya se avisó aparte en _fees_reales_recientes si
+            # aplica; aquí NO se afirma cuál fue para no disfrazar de "detalle
+            # normal" lo que puede ser un fallo sistemático). Se cierra igual
+            # (no bloquear el resolver por una métrica secundaria) con el
+            # fallback anterior, protegido: fee_eur corrupto en el CSV no debe
+            # tumbar el cierre de TODOS los trades de este ciclo.
+            try:
+                fee = float(t.get("fee_eur") or 0)
+            except ValueError:
+                fee = 0.0
+            print(f"  ⚠️  fee real no confirmado para market={mid} -- fee_eur queda sin confirmar")
 
         if acierto_dir and entry_p > 0:
             pnl_bruto = stake * (1.0 / entry_p - 1.0)
@@ -699,8 +831,11 @@ def _cerrar_trades_live(nuevos_resultados: list, ts: str):
         t["close_timestamp"] = ts
         t["exit_price"]      = "1.0" if acierto_dir else "0.0"
         t["outcome_real"]    = outcome
+        t["fee_eur"]         = f"{fee:.4f}"
         t["pnl_bruto_eur"]   = f"{pnl_bruto:.4f}"
         t["pnl_neto_eur"]    = f"{pnl_neto:.4f}"
+        nota_fee = "fee_confirmado=1" if fee_real is not None else "fee_confirmado=0"
+        t["notas"] = f"{t.get('notas','')} {nota_fee}".strip()
         modificado = True
         cierres.append((t, pnl_neto, acierto_dir))
         signo = "✅" if acierto_dir else "❌"
