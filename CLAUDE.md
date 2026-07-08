@@ -40,6 +40,7 @@ cada categoría es una cicatriz real del proyecto):
 
 **Barra de calidad por entregable (checkeable, no adjetivos):**
 - Cambio de código: `python3 -m py_compile <fichero>` pasa + `python3 verify_deploy.py` sin STALE (si toca proceso persistente, restart con `--restart <screen>`) + el commit no mezcla código con ficheros de `data/`.
+- **Código que toca dinero** (live_trade.py, live_stake.py, live_guard.py, config_live.json): además de lo anterior, `/code-review` adversarial ANTES de commitear — sin excepción. Historia que lo justifica: bug decimales CLOB, freno ventana stateless, whitelist cartesiana — todos escritos por un agente convencido de que estaban bien; la auditoría del 01-Jul cazó ~20 bugs.
 - Análisis: incluye n, IC, periodo y comando/fichero de origen reproducible.
 - Cambio de config: valor antes→después + quién lo aprobó + fecha, anotado en el propio commit o en CLAUDE.md.
 - Reporte de estado: cada afirmación "hecho/funciona" apunta a la salida de un comando de esta sesión.
