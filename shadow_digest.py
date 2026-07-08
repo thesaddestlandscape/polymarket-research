@@ -39,6 +39,15 @@ TIMEOUT = 15
 DIR_SHADOW = Path("data/shadow")
 RESULTS_PATH = DIR_SHADOW / "results.csv"
 
+# Credenciales también desde data/live/.env: así un restart de screen desde un
+# shell sin las vars exportadas no deja Telegram mudo. En GitHub Actions el
+# fichero no existe y load_dotenv es no-op (siguen valiendo los secrets).
+try:
+    from dotenv import load_dotenv
+    load_dotenv(Path(__file__).parent / "data" / "live" / ".env")
+except ImportError:
+    pass
+
 TELEGRAM_TOKEN = os.environ.get("TELEGRAM_TOKEN", "")
 TELEGRAM_CHAT_ID = os.environ.get("TELEGRAM_CHAT_ID", "")
 

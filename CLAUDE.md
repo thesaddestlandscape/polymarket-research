@@ -39,7 +39,7 @@ cada categoría es una cicatriz real del proyecto):
 6. ¿Reinicio a mitad? → estado persistente, no en memoria (cf. freno ventana stateless → latch)
 
 **Barra de calidad por entregable (checkeable, no adjetivos):**
-- Cambio de código: `python3 -m py_compile <fichero>` pasa + el commit no mezcla código con ficheros de `data/`.
+- Cambio de código: `python3 -m py_compile <fichero>` pasa + `python3 verify_deploy.py` sin STALE (si toca proceso persistente, restart con `--restart <screen>`) + el commit no mezcla código con ficheros de `data/`.
 - Análisis: incluye n, IC, periodo y comando/fichero de origen reproducible.
 - Cambio de config: valor antes→después + quién lo aprobó + fecha, anotado en el propio commit o en CLAUDE.md.
 - Reporte de estado: cada afirmación "hecho/funciona" apunta a la salida de un comando de esta sesión.
@@ -62,6 +62,7 @@ cada categoría es una cicatriz real del proyecto):
 | `/analizar <estrategia>` | Features por bucket, umbrales óptimos (usar cuando n≥30) |
 | `/calibrar` | Revisar BLACKLIST_HOURS, DELTA_MIN/MAX, drift thresholds (cada 50+ ops) |
 | `/dev` | Worktree dev sin tocar producción |
+| `/verify-deploy` | Tras editar cualquier .py: ¿los procesos persistentes corren lo del disco? (`verify_deploy.py`, restart+probe) |
 
 **Flujo sesión**: `/inicio` → `/decision` (si alertas) → `/analizar X` (n≥30) → `/calibrar` (c/50 ops nuevas)
 

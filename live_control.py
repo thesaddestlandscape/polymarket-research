@@ -18,6 +18,13 @@ import requests
 from datetime import datetime, timezone, timedelta
 from pathlib import Path
 
+# Credenciales también desde data/live/.env (restart-proof, ver verify-deploy)
+try:
+    from dotenv import load_dotenv
+    load_dotenv(Path(__file__).parent / "data" / "live" / ".env")
+except ImportError:
+    pass
+
 TELEGRAM_TOKEN   = os.environ.get("TELEGRAM_TOKEN", "")
 TELEGRAM_CHAT_ID = os.environ.get("TELEGRAM_CHAT_ID", "")
 SWITCH_PATH      = Path("data/live/LIVE_MODE_ON")
