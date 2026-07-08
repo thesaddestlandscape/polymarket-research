@@ -1,4 +1,4 @@
-# Estado del bot — 2026-07-08 06:39 UTC
+# Estado del bot — 2026-07-08 06:41 UTC
 
 ## Live — dinero real (on-chain)
 | | |
@@ -12,11 +12,11 @@
 ## Shadow — MODELO SIMULADO (no cobrable)
 | | |
 |---|---|
-| P&L fiel (stake fijo 1$) | +310.58 $ |
-| P&L sim compuesto | 🟢 +555.19 $ (ficción Kelly: +2182% s/ operativo) |
-| P&L sim hoy (2026-07-08) | 🟢 +49.52 $ |
-| Operaciones resueltas | 5234 (2781 WIN / 2453 LOSS) — 53.1% |
-| Señales abiertas | 151 |
+| P&L fiel (stake fijo 1$) | +312.45 $ |
+| P&L sim compuesto | 🟢 +556.18 $ (ficción Kelly: +2186% s/ operativo) |
+| P&L sim hoy (2026-07-08) | 🟢 +50.51 $ |
+| Operaciones resueltas | 5236 (2783 WIN / 2453 LOSS) — 53.2% |
+| Señales abiertas | 154 |
 
 ## Estrategias (visión global)
 
@@ -26,8 +26,8 @@
 | ORDER_FLOW_5M | 1553 | 51.3% | +0.013 | +17.05$ | 0.50$ | ✅ activa |
 | LATE_WINDOW_5MIN | 24 | 75.0% | +0.231 | +7.68$ | 2.00$ | ✅ activa |
 | RESOLUTION_SNIPER | 7 | 100.0% | +0.136 | +3.04$ | 1.36$ | ⏳ acumulando |
+| STREAK_MOM_5M | 3 | 100.0% | +0.045 | +1.48$ | 0.50$ | ⏳ acumulando |
 | PRICE_TARGET_GBM | 124 | 34.7% | -0.151 | +0.90$ | 0.50$ | ⚠️ IC negativo |
-| STREAK_MOM_5M | 1 | 100.0% | +0.008 | +0.49$ | 0.50$ | ⏳ acumulando |
 | STREAK_FADE_15M | 57 | 54.4% | +0.042 | +0.24$ | 0.50$ | ✅ activa |
 | STRUCT_NO_15M | 15 | 20.0% | -0.199 | -4.68$ | 0.00$ | 🚫 desactivada |
 | GBM_LATE_60M | 98 | 33.7% | -0.160 | -12.19$ | 0.50$ | ⚠️ IC negativo |
@@ -40,21 +40,21 @@
 
 | Timestamp | Estrategia | Mercado | Resultado | PNL |
 |---|---|---|---|---|
+| 2026-07-08T06:41 | STREAK_MOM_5M#SOL#5min | Solana Up or Down - July 8, 2:35AM-2:40AM ET… | ✅ WIN | +0.50$ |
+| 2026-07-08T06:41 | STREAK_MOM_5M#SOL#5min | Solana Up or Down - July 8, 2:30AM-2:35AM ET… | ✅ WIN | +0.49$ |
 | 2026-07-08T06:36 | GBM_LATE_15M#BTC#15min | Bitcoin Up or Down - July 8, 2:15AM-2:30AM ET… | ❌ LOSS | -0.70$ |
 | 2026-07-08T06:33 | GBM_LATE_15M#ETH#15min | Ethereum Up or Down - July 8, 2:15AM-2:30AM ET… | ❌ LOSS | -1.22$ |
 | 2026-07-08T06:32 | GBM_LATE_15M#SOL#15min | Solana Up or Down - July 8, 2:15AM-2:30AM ET… | ✅ WIN | +1.93$ |
-| 2026-07-08T06:32 | STREAK_FADE_15M#XRP#15min | XRP Up or Down - July 8, 2:15AM-2:30AM ET… | ❌ LOSS | -0.75$ |
-| 2026-07-08T06:32 | GBM_LATE_15M#XRP#15min | XRP Up or Down - July 8, 2:15AM-2:30AM ET… | ✅ WIN | +1.87$ |
 
 ## Calidad de datos
 
-✅ **OK** — última verificación 2026-07-08T06:39 UTC
+✅ **OK** — última verificación 2026-07-08T06:41 UTC
 
 | Asset | Precio | Age | Alertas |
 |---|---|---|---|
 | ✅ BTC | $62,433.04 | 0.0min |  |
 | ✅ ETH | $1,745.66 | 0.0min |  |
-| ✅ SOL | $77.97 | 0.0min |  |
+| ✅ SOL | $78.13 | 0.0min |  |
 | ✅ XRP | $1.09 | 0.0min |  |
 
 **Cross-source** (binance, coinbase, kraken):
