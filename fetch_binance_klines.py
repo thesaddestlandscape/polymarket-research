@@ -16,7 +16,7 @@ open_time_ms is Unix milliseconds (consistent with Binance format).
 
 If all sources are unreachable, prints a warning and exits 0.
 """
-import csv, json, sys, time
+import csv, json, os, sys, time
 from concurrent.futures import ThreadPoolExecutor
 from datetime import datetime, timezone
 from pathlib import Path
@@ -54,6 +54,80 @@ BINANCE_SYMBOLS = {
 
 DIR_BINANCE = Path("data") / "binance"
 DIR_BINANCE.mkdir(parents=True, exist_ok=True)
+
+OUTCOMES_5M_PATH = Path("data") / "shadow" / "outcomes_5m_klines.json"
+OUTCOMES_5M_RETENCION_H = 48
+OUTCOMES_5M_ASSETS = ("BTC", "ETH", "SOL", "XRP")
+
+
+def actualizar_outcomes_5m(data: dict) -> None:
+    """Deriva outcomes de ventanas 5min COMPLETAS del snapshot de klines y los
+    persiste en OUTCOMES_5M_PATH (rolling 48h, idempotente: una ventana ya
+    escrita no se re-escribe aunque un recompute posterior discrepe, p.ej. por
+    alternancia Binance↔Kraken).
+
+    Motivo (08-Jul): results.csv solo cubre ventanas 5min cuando alguna
+    estrategia predijo (4-14/día, nunca adyacentes) → STREAK_MOM_5M no
+    disparaba jamás. shadow_predict._cargar_outcomes_recientes mergea este
+    store (el outcome oficial de results.csv gana en conflicto).
+    Convención YES=Up si close(última vela) > open(primera vela), validada
+    98.6% (n=738, 48h) contra outcome_real oficial en ventanas 15min.
+    Cualquier excepción se loguea y NO rompe el fetch.
+    """
+    try:
+        try:
+            store = json.loads(OUTCOMES_5M_PATH.read_text())
+            if not isinstance(store, dict):
+                store = {}
+        except Exception:
+            store = {}
+        paso = 300_000  # 5 min en ms
+        ahora_ms = int(time.time() * 1000)
+        lim_ms = ahora_ms - OUTCOMES_5M_RETENCION_H * 3_600_000
+        cambiado = False
+        for asset in OUTCOMES_5M_ASSETS:
+            velas = data.get(asset)
+            if not (velas and isinstance(velas, list)):
+                continue
+            por_ts = {}
+            for v in velas:
+                try:
+                    por_ts[int(v[0])] = v
+                except (ValueError, TypeError, IndexError):
+                    continue
+            if not por_ts:
+                continue
+            outs = store.setdefault(asset, {})
+            t_start = -(-min(por_ts) // paso) * paso  # ceil-align a frontera 5min
+            while t_start + paso <= ahora_ms:  # solo ventanas cuya última vela ya cerró
+                first = por_ts.get(t_start)
+                last = por_ts.get(t_start + paso - 60_000)
+                if first is None or last is None:
+                    t_start += paso
+                    continue
+                iso = datetime.fromtimestamp((t_start + paso) / 1000,
+                                             tz=timezone.utc).isoformat()
+                if iso not in outs:
+                    try:
+                        outs[iso] = "YES" if float(last[4]) > float(first[1]) else "NO"
+                        cambiado = True
+                    except (ValueError, TypeError, IndexError):
+                        pass
+                t_start += paso
+            for k in list(outs):
+                try:
+                    if datetime.fromisoformat(k).timestamp() * 1000 < lim_ms:
+                        del outs[k]
+                        cambiado = True
+                except ValueError:
+                    del outs[k]
+                    cambiado = True
+        if cambiado:
+            tmp = OUTCOMES_5M_PATH.with_suffix(".json.tmp")
+            tmp.write_text(json.dumps(store, separators=(",", ":")))
+            os.replace(tmp, OUTCOMES_5M_PATH)
+    except Exception as e:
+        print(f"  [WARN] actualizar_outcomes_5m falló (no bloquea fetch): {e}")
 
 
 def fetch_kraken(asset: str) -> list | None:
@@ -216,6 +290,8 @@ def main():
     with open(out_path, "w", encoding="utf-8") as f:
         json.dump(data, f, separators=(",", ":"))
     print(f"  Saved -> {out_path}")
+
+    actualizar_outcomes_5m(data)
 
     # Escribir spot price (close de última vela) en prices CSV cada 60s
     # Solo si el archivo ya existe (capture_markets lo crea con el header completo)

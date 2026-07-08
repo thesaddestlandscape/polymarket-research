@@ -2259,6 +2259,30 @@ def _cargar_outcomes_recientes():
     for key, d in acc.items():
         seqs[key] = [(edt, ("YES" if o.count("YES") >= o.count("NO") else "NO"))
                      for edt, o in ((e, d[e]) for e in sorted(d))]
+    # Cobertura 5min desde klines (fix 08-Jul): results.csv solo tiene ventanas
+    # 5min cuando alguna estrategia predijo (4-14/día, nunca adyacentes) →
+    # STREAK_MOM_5M no disparaba jamás. fetch_binance_klines mantiene
+    # outcomes_5m_klines.json (rolling 48h, convención validada 98.6% n=738
+    # contra outcome oficial). El outcome oficial de results.csv gana en conflicto.
+    try:
+        kl = json.loads((DIR_SHADOW / "outcomes_5m_klines.json").read_text())
+    except Exception:
+        kl = {}
+    for activo, outs in kl.items():
+        if activo not in ("BTC", "ETH", "SOL", "XRP") or not isinstance(outs, dict):
+            continue
+        d5 = dict(seqs.get((activo, 5), []))
+        for iso, out in outs.items():
+            if out not in ("YES", "NO"):
+                continue
+            try:
+                edt = datetime.fromisoformat(iso)
+                if edt.tzinfo is None:
+                    edt = edt.replace(tzinfo=timezone.utc)
+            except ValueError:
+                continue
+            d5.setdefault(edt, out)
+        seqs[(activo, 5)] = sorted(d5.items())
     _STREAK_SEQ = seqs
     return _STREAK_SEQ
 
