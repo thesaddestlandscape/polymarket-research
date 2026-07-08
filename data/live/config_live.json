@@ -55,6 +55,12 @@
       "fin": "02:00",
       "nombre": "prueba_23h_utc",
       "_nota": "2026-07-01: prueba de 23h UTC (=01:00-02:00 Madrid verano), IC=+0.130 agregado (n=52), GBM solo IC=+0.178 (n=16). OJO: un viernes 23h UTC cae en sábado 01:00 Madrid → se evalúa con reglas de fin de semana, no de lunes-viernes; revisar si hace falta añadir esta franja también a ventanas_fin_de_semana."
+    },
+    {
+      "inicio": "06:00",
+      "fin": "07:00",
+      "nombre": "asia_04h_utc",
+      "_nota": "2026-07-08: abierta a petición explícita de Javi para generar dato real de fill-ability en GBM_LATE_15M (hoy 0 dato, libro_snapshots solo tenía fuera_ventana en esta franja). Shadow: H-CUSTOM-LATE-04H-ASIA confirmada IC=+0.131 n=177 +68.47€ forward (umbral 152 cumplido). Su gemela UPDOWN_GBM en la misma franja NO confirma (plana) -- el edge es específico de GBM_LATE_15M. Ningún otro parámetro tocado: mismo stake/frenos/whitelist que el resto de ventanas."
     }
   ],
   "_mediodia_eliminada": "12:30-13:30 eliminada: GBM IC=-0.154 PNL=-7.96€, OF IC=-0.033 PNL=-5.43€ — peor ventana en ambas estrategias (n≥30)",
