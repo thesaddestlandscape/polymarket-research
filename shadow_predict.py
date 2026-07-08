@@ -2176,6 +2176,25 @@ STRUCT_NO_PY_LO = 0.44   # banda coinflip observada (fires ~[0.47,0.50), resto S
 STRUCT_NO_PY_HI = 0.50
 STRUCT_NO_PROB_YES = 0.43  # P(YES) justo ≈ 1 - P(NO)(0.556) en la sub-banda de disparo
 
+def _libro_calidad(market: dict) -> dict:
+    """spread/liquidez del libro en el momento de la señal (item 7 checklist
+    08-Jul, idea del playbook KOL Layer 1: "libro limpio" antes de entrar).
+    Campos ya presentes en el market dict (capture_markets), sin llamada extra.
+    Solo LOGUEA — el pipeline causal existente (postmortem -> IC_bucket ->
+    filtro_causal, N_BUCKET_MIN=15) decide solo si hace falta un umbral; no se
+    hardcodea ninguno aquí para no perder N en shadow con estrategias que aún
+    no están live (STREAK_*/STRUCT_NO_15M fuera de whitelist hoy)."""
+    try:
+        spread = float(market.get("spread") or 0)
+    except (ValueError, TypeError):
+        spread = None
+    try:
+        liquidez = float(market.get("liquidity") or 0)
+    except (ValueError, TypeError):
+        liquidez = None
+    return {"libro_spread": spread, "libro_liquidez": liquidez}
+
+
 def s_struct_no_15m(market, ctx):
     question = market.get("question", "")
     if "up or down" not in question.lower():
@@ -2207,6 +2226,7 @@ def s_struct_no_15m(market, ctx):
             "py_entrada":   round(py, 3),
             "restante_min": restante_min,
             "hora_utc":     datetime.now(timezone.utc).hour,
+            **_libro_calidad(market),
         },
     }
 
@@ -2354,6 +2374,7 @@ def s_streak_mom_5m(market, ctx):
             "streak_dir_up": 1 if d == "YES" else 0,
             "py_entrada":    round(py, 3),
             "hora_utc":      datetime.now(timezone.utc).hour,
+            **_libro_calidad(market),
         },
     }
 
@@ -2387,6 +2408,7 @@ def s_streak_fade_15m(market, ctx):
             "streak_dir_up": 1 if d == "YES" else 0,
             "py_entrada":    round(py, 3),
             "hora_utc":      datetime.now(timezone.utc).hour,
+            **_libro_calidad(market),
         },
     }
 
