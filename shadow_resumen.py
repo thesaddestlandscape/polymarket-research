@@ -138,6 +138,18 @@ def main():
     else:
         live_rows = ["| ⚠️ | Sin snapshot on-chain fresco (live_balance.py, cron 15min) |"]
 
+    # Fees reales pagados (fix 08-Jul) -- coste de Polymarket antes invisible,
+    # cobrado solo al comprar. Mismo trades.csv que dashboard/Telegram.
+    try:
+        trades_csv_md = Path("data/live/trades.csv")
+        if trades_csv_md.exists() and trades_csv_md.stat().st_size > 100:
+            cerrados_md = [r for r in csv.DictReader(open(trades_csv_md, encoding="utf-8"))
+                          if r.get("status") == "CLOSED"]
+            fees_md = sum(float(r.get("fee_eur") or 0) for r in cerrados_md)
+            live_rows.append(f"| Fees pagados (real) | {fees_md:.2f} $ |")
+    except Exception:
+        pass
+
     # PnL fiel: stake fijo 1$ + slippage, sin compounding — misma función que el
     # dashboard. Cota superior: no modela fill-ability (~8%, selección adversa).
     try:
@@ -402,6 +414,7 @@ def _telegram_periodico(ahora, bankroll, pnl_total, pnl_hoy,
     trades_csv = Path("data/live/trades.csv")
     hoy = ahora.strftime("%Y-%m-%d")
     n_live_hoy = n_live_total = w_live_total = 0
+    fees_total_live = 0.0
     try:
         if trades_csv.exists() and trades_csv.stat().st_size > 100:
             cerrados = [r for r in csv.DictReader(open(trades_csv, encoding="utf-8"))
@@ -411,6 +424,8 @@ def _telegram_periodico(ahora, bankroll, pnl_total, pnl_hoy,
                                if (r.get("close_timestamp", "") or "").startswith(hoy))
             w_live_total = sum(1 for r in cerrados
                                if float(r.get("pnl_neto_eur") or 0) > 0)
+            # fees reales pagados (fix 08-Jul) -- coste de verdad, antes invisible
+            fees_total_live = sum(float(r.get("fee_eur") or 0) for r in cerrados)
     except Exception as e:
         print(f"[shadow_resumen] excepción leyendo trades.csv: {type(e).__name__}: {e}")
 
@@ -459,7 +474,8 @@ def _telegram_periodico(ahora, bankroll, pnl_total, pnl_hoy,
             wr_live = w_live_total / n_live_total * 100
             live_perf = (
                 f"Trades: {n_live_total}  |  WR {wr_live:.0f}%  |  hoy {n_live_hoy} cerrados\n"
-                f"PnL hoy: {hoy_str}  ·  7 días: {d7_str}"
+                f"PnL hoy: {hoy_str}  ·  7 días: {d7_str}\n"
+                f"Fees pagados (real): {fees_total_live:.2f}$"
             )
         else:
             live_perf = "Sin trades cerrados aún — esperando primera ventana"

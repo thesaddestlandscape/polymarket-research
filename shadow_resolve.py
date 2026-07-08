@@ -615,6 +615,17 @@ def _notificar_cierre_live(trade: dict, pnl_neto: float, acierto_dir: bool):
     dir_    = trade.get("direction", "")
     sub     = trade.get("subtype", "")
 
+    # Desglose de coste real (fix 08-Jul): stake + fee = coste total; el fee de
+    # Polymarket (cobrado solo al comprar) no se veía en ningún sitio antes.
+    stake_t   = float(trade.get("stake_eur") or 0)
+    fee_t     = float(trade.get("fee_eur") or 0)
+    pnl_bruto_t = float(trade.get("pnl_bruto_eur") or 0)
+    coste_total = stake_t + fee_t
+    fee_confirmado = "fee_confirmado=1" in (trade.get("notas") or "")
+    linea_coste = (f"Coste: {stake_t:.2f}$ stake + {fee_t:.4f}$ fee{'' if fee_confirmado else ' (sin confirmar⚠)'} "
+                   f"= {coste_total:.2f}$\n"
+                   f"Bruto: {pnl_bruto_t:+.2f}$  →  Neto: *{pnl_str}*")
+
     # Racha: contar wins/losses en trades.csv para el día
     try:
         trades_hoy = []
@@ -641,7 +652,7 @@ def _notificar_cierre_live(trade: dict, pnl_neto: float, acierto_dir: bool):
         f"\n"
         f"Mercado: _{q}_\n"
         f"Dir: {dir_}  |  Entrada: {entry_p:.3f}  |  Sub: {sub}\n"
-        f"P&L trade: *{pnl_str}*\n"
+        f"{linea_coste}\n"
         f"\n"
         f"{linea_bkr}\n"
         f"Hoy (modelo): {pnl_d:+.2f}$  |  {racha}"

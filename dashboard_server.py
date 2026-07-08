@@ -243,6 +243,8 @@ def compute_live_data():
 
     open_trades = [t for t in trades if t.get("status") == "OPEN"]
     wins = sum(1 for t in closed if float(t.get("pnl_neto_eur") or 0) > 0)
+    fees_total = sum(float(t.get("fee_eur") or 0) for t in closed)
+    fees_sin_confirmar = sum(1 for t in closed if "fee_confirmado=1" not in (t.get("notas") or ""))
     recent = sorted(trades, key=lambda t: t.get("timestamp_utc",""), reverse=True)[:10]
 
     # ── Equity curve (mismo formato que la shadow: {time, value}) ────────────
@@ -332,6 +334,8 @@ def compute_live_data():
         "n_total": len(trades),
         "n_open": len(open_trades),
         "n_closed": len(closed),
+        "fees_total": round(fees_total, 4),
+        "fees_sin_confirmar": fees_sin_confirmar,
         "win_rate": round(wins / len(closed) * 100, 1) if closed else 0,
         "recent_trades": recent,
         "equity_curve": equity,
@@ -710,7 +714,7 @@ footer { text-align: center; padding: 10px; font-size: 10px; color: var(--muted)
     <span style="font-size:11px;color:#26a69a;margin-left:4px">💵 dinero real · todas las cifras del wallet on-chain</span>
     <span id="live-real-freshness" style="font-size:10px;color:var(--muted);margin-left:auto">balance on-chain: —</span>
   </div>
-  <div style="display:grid;grid-template-columns:repeat(7,1fr);gap:8px;margin-bottom:6px">
+  <div style="display:grid;grid-template-columns:repeat(8,1fr);gap:8px;margin-bottom:6px">
     <div style="background:#ffffff08;border-radius:6px;padding:8px;text-align:center">
       <div style="font-size:9px;color:var(--muted)">💰 Depósito inicial</div>
       <div id="live-deposito" style="font-size:20px;font-weight:700">—</div>
@@ -746,6 +750,11 @@ footer { text-align: center; padding: 10px; font-size: 10px; color: var(--muted)
       <div id="live-trades-count" style="font-size:20px;font-weight:700">—</div>
       <div style="font-size:9px;color:var(--muted)">total · abiertas</div>
     </div>
+    <div style="background:#ffffff08;border-radius:6px;padding:8px;text-align:center" title="Fee real de Polymarket cobrado en cada compra (nunca al canjear); contabilizado desde el fix del 08-Jul">
+      <div style="font-size:9px;color:var(--muted)">💸 Fees pagados</div>
+      <div id="live-fees-total" style="font-size:20px;font-weight:700">—</div>
+      <div style="font-size:9px;color:var(--muted)">real · acumulado</div>
+    </div>
   </div>
   <div id="live-modelo-nota" style="font-size:10px;color:var(--muted);margin-bottom:10px">&nbsp;</div>
 
@@ -775,9 +784,9 @@ footer { text-align: center; padding: 10px; font-size: 10px; color: var(--muted)
   <table class="mini-table" id="live-trades-table">
     <thead><tr>
       <th>Hora</th><th>Estrategia</th><th>Mercado</th><th>Dir.</th>
-      <th>Stake</th><th>Precio</th><th>Estado</th><th>PNL</th>
+      <th>Stake</th><th>Precio</th><th>Fee</th><th>Estado</th><th>PNL neto</th>
     </tr></thead>
-    <tbody id="live-trades-body"><tr><td colspan="8" style="color:var(--muted);text-align:center">Sin trades aún</td></tr></tbody>
+    <tbody id="live-trades-body"><tr><td colspan="9" style="color:var(--muted);text-align:center">Sin trades aún</td></tr></tbody>
   </table>
 </div>
 
@@ -1043,6 +1052,12 @@ function renderLive(live) {
   document.getElementById("live-wr").textContent = live.n_closed ? `${live.win_rate}%` : "—";
   document.getElementById("live-trades-count").textContent =
     `${(live.n_closed || 0) + (live.n_open || 0)} · ${live.n_open || 0} ab.`;
+  const feesEl = document.getElementById("live-fees-total");
+  if (feesEl) {
+    const ft = live.fees_total || 0;
+    const sinConf = live.fees_sin_confirmar || 0;
+    feesEl.innerHTML = `${ft.toFixed(2)}$${sinConf > 0 ? ` <span style="font-size:9px;color:var(--muted)" title="${sinConf} trade(s) sin fee confirmado on-chain">⚠${sinConf}</span>` : ""}`;
+  }
   // Nota discreta con la estimación del modelo (plan) y su desvío vs real.
   const notaEl = document.getElementById("live-modelo-nota");
   if (notaEl) {
@@ -1090,13 +1105,22 @@ function renderLive(live) {
   // Tabla trades
   const tbody = document.getElementById("live-trades-body");
   if (!live.recent_trades || live.recent_trades.length === 0) {
-    tbody.innerHTML = '<tr><td colspan="8" style="color:var(--muted);text-align:center">Sin trades aún</td></tr>';
+    tbody.innerHTML = '<tr><td colspan="9" style="color:var(--muted);text-align:center">Sin trades aún</td></tr>';
     return;
   }
   tbody.innerHTML = live.recent_trades.map(t => {
     const pnl = t.pnl_neto_eur ? parseFloat(t.pnl_neto_eur) : null;
+    const pnlBruto = t.pnl_bruto_eur ? parseFloat(t.pnl_bruto_eur) : null;
+    const feeConfirmado = (t.notas || "").includes("fee_confirmado=1");
+    const tooltipPnl = pnlBruto !== null
+      ? `bruto ${pnlBruto>=0?"+":""}${pnlBruto.toFixed(2)}$ − fee ${parseFloat(t.fee_eur||0).toFixed(4)}$ = neto`
+      : "";
     const pnlHtml = pnl !== null && t.status === "CLOSED"
-      ? `<span class="${pnl>0?"pos":"neg"}">${pnl>0?"+":""}${pnl.toFixed(2)}$</span>`
+      ? `<span class="${pnl>0?"pos":"neg"}" title="${tooltipPnl}">${pnl>0?"+":""}${pnl.toFixed(2)}$</span>`
+      : "—";
+    const feeVal = t.fee_eur ? parseFloat(t.fee_eur) : 0;
+    const feeHtml = t.status === "CLOSED"
+      ? `<span style="color:var(--muted)" title="${feeConfirmado ? "confirmado on-chain" : "sin confirmar, puede quedar bajo lo real"}">${feeVal.toFixed(3)}$${feeConfirmado ? "" : "⚠"}</span>`
       : "—";
     const hora = (t.timestamp_utc || "").slice(11, 16);
     const q = (t.question || "").slice(0, 45);
@@ -1108,6 +1132,7 @@ function renderLive(live) {
       <td><b>${t.direction}</b></td>
       <td>${parseFloat(t.stake_eur||0).toFixed(2)}$</td>
       <td>${parseFloat(t.entry_price||0).toFixed(3)}</td>
+      <td>${feeHtml}</td>
       <td style="color:${statusColor}">${t.status}</td>
       <td>${pnlHtml}</td>
     </tr>`;
