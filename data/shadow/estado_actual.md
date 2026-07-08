@@ -1,13 +1,13 @@
-# Estado del bot — 2026-07-08 08:54 UTC
+# Estado del bot — 2026-07-08 09:00 UTC
 
 ## Live — dinero real (on-chain)
 | | |
 |---|---|
 | Depósito inicial | 25.44 $ |
-| Balance on-chain | **27.39 $** |
-| P&L real total | 🟢 **+1.95 $** |
-| P&L real hoy | -0.13 $ |
-| P&L real 7 días | -2.09 $ |
+| Balance on-chain | **26.73 $** |
+| P&L real total | 🟢 **+1.29 $** |
+| P&L real hoy | -1.22 $ |
+| P&L real 7 días | -3.18 $ |
 
 ## Shadow — MODELO SIMULADO (no cobrable)
 | | |
@@ -48,22 +48,22 @@
 
 ## Calidad de datos
 
-⚠️ **DEGRADED** — última verificación 2026-07-08T08:54 UTC | rechazos 1h: 8 (rango=0, spike=0)
+⚠️ **DEGRADED** — última verificación 2026-07-08T09:00 UTC | rechazos 1h: 8 (rango=0, spike=0)
 
 | Asset | Precio | Age | Alertas |
 |---|---|---|---|
-| ✅ BTC | $62,098.40 | 0.0min |  |
-| ✅ ETH | $1,737.57 | 0.0min |  |
-| ✅ SOL | $77.49 | 0.0min |  |
+| ✅ BTC | $62,148.01 | 0.0min |  |
+| ✅ ETH | $1,738.34 | 0.0min |  |
+| ✅ SOL | $77.21 | 0.0min |  |
 | ✅ XRP | $1.08 | 0.0min |  |
 
 **Cross-source** (binance, coinbase, kraken):
 
 | Asset | Consenso | Fuente | Estado |
 |---|---|---|---|
-| BTC | $62,113.40 | consenso |  |
-| ETH | $1,737.57 | consenso |  |
-| SOL | $77.39 | consenso |  |
+| BTC | $62,148.01 | consenso |  |
+| ETH | $1,738.34 | consenso |  |
+| SOL | $77.46 | consenso |  |
 | XRP | $1.08 | consenso |  |
 
 **Alertas activas:**
