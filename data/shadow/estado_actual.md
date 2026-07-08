@@ -1,13 +1,13 @@
-# Estado del bot — 2026-07-08 07:20 UTC
+# Estado del bot — 2026-07-08 07:21 UTC
 
 ## Live — dinero real (on-chain)
 | | |
 |---|---|
 | Depósito inicial | 25.44 $ |
-| Balance on-chain | **23.48 $** |
-| P&L real total | 🔴 **-1.96 $** |
-| P&L real hoy | +0.00 $ |
-| P&L real 7 días | -1.96 $ |
+| Balance on-chain | **23.20 $** |
+| P&L real total | 🔴 **-2.24 $** |
+| P&L real hoy | -1.10 $ |
+| P&L real 7 días | -3.06 $ |
 
 ## Shadow — MODELO SIMULADO (no cobrable)
 | | |
@@ -48,14 +48,14 @@
 
 ## Calidad de datos
 
-✅ **OK** — última verificación 2026-07-08T07:19 UTC
+✅ **OK** — última verificación 2026-07-08T07:21 UTC
 
 | Asset | Precio | Age | Alertas |
 |---|---|---|---|
-| ✅ BTC | $62,655.79 | 0.0min |  |
-| ✅ ETH | $1,748.58 | 0.0min |  |
-| ✅ SOL | $78.06 | 0.0min |  |
-| ✅ XRP | $1.09 | 0.0min |  |
+| ✅ BTC | $62,655.79 | 0.1min |  |
+| ✅ ETH | $1,748.58 | 0.1min |  |
+| ✅ SOL | $78.00 | 0.1min |  |
+| ✅ XRP | $1.09 | 0.1min |  |
 
 **Cross-source** (binance, coinbase, kraken):
 
