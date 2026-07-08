@@ -1,4 +1,4 @@
-# Estado del bot — 2026-07-08 06:07 UTC
+# Estado del bot — 2026-07-08 06:08 UTC
 
 ## Live — dinero real (on-chain)
 | | |
@@ -47,22 +47,22 @@
 
 ## Calidad de datos
 
-✅ **OK** — última verificación 2026-07-08T06:07 UTC
+✅ **OK** — última verificación 2026-07-08T06:08 UTC
 
 | Asset | Precio | Age | Alertas |
 |---|---|---|---|
-| ✅ BTC | $62,555.17 | 0.0min |  |
-| ✅ ETH | $1,751.05 | 0.0min |  |
-| ✅ SOL | $78.37 | 0.0min |  |
+| ✅ BTC | $62,580.78 | 0.0min |  |
+| ✅ ETH | $1,751.66 | 0.0min |  |
+| ✅ SOL | $78.31 | 0.0min |  |
 | ✅ XRP | $1.09 | 0.0min |  |
 
 **Cross-source** (binance, coinbase, kraken):
 
 | Asset | Consenso | Fuente | Estado |
 |---|---|---|---|
-| BTC | $62,561.90 | consenso |  |
-| ETH | $1,751.05 | consenso |  |
-| SOL | $78.22 | consenso |  |
+| BTC | $62,580.78 | consenso |  |
+| ETH | $1,751.66 | consenso |  |
+| SOL | $78.31 | consenso |  |
 | XRP | $1.09 | consenso |  |
 
 ---
