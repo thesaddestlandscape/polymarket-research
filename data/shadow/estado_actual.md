@@ -1,4 +1,4 @@
-# Estado del bot — 2026-07-09 12:49 UTC
+# Estado del bot — 2026-07-09 12:55 UTC
 
 ## Live — dinero real (on-chain)
 | | |
@@ -13,11 +13,11 @@
 ## Shadow — MODELO SIMULADO (no cobrable)
 | | |
 |---|---|
-| P&L fiel (stake fijo 1$) | +482.14 $ |
-| P&L sim compuesto | 🟢 +782.17 $ (ficción Kelly: +3075% s/ operativo) |
-| P&L sim hoy (2026-07-09) | 🟢 +136.68 $ |
-| Operaciones resueltas | 6272 (3374 WIN / 2898 LOSS) — 53.8% |
-| Señales abiertas | 154 |
+| P&L fiel (stake fijo 1$) | +481.14 $ |
+| P&L sim compuesto | 🟢 +781.04 $ (ficción Kelly: +3070% s/ operativo) |
+| P&L sim hoy (2026-07-09) | 🟢 +135.55 $ |
+| Operaciones resueltas | 6273 (3374 WIN / 2899 LOSS) — 53.8% |
+| Señales abiertas | 157 |
 
 ## Estrategias (visión global)
 
@@ -39,36 +39,36 @@
 | STREAK_MOM_5M | 257 | 46.7% | -0.033 | 📉 agota (-0.08) | -14.17$ | 0.50$ | ⚠️ IC negativo |
 | UPDOWN_OU_5M | 84 | 28.6% | -0.209 | 📉 agota (-0.14) | -18.89$ | 0.00$ | 🚫 desactivada |
 | WEEKLY_PRICE | 144 | 52.1% | +0.021 | 📈 madura (+0.09) | -20.78$ | 0.50$ | ✅ activa |
-| UPDOWN_GBM | 1161 | 47.8% | -0.022 | ➡️ estable | -27.32$ | 0.50$ | ⚠️ IC negativo |
+| UPDOWN_GBM | 1162 | 47.8% | -0.022 | ➡️ estable | -28.46$ | 0.50$ | ⚠️ IC negativo |
 
 ## Últimas 5 resoluciones
 
 | Timestamp | Estrategia | Mercado | Resultado | PNL |
 |---|---|---|---|---|
+| 2026-07-09T12:50 | UPDOWN_GBM#BTC#15min | Bitcoin Up or Down - July 9, 8:30AM-8:45AM ET… | ❌ LOSS | -1.13$ |
 | 2026-07-09T12:49 | STREAK_MOM_5M#XRP#5min | XRP Up or Down - July 9, 8:40AM-8:45AM ET… | ❌ LOSS | -0.51$ |
 | 2026-07-09T12:49 | GBM_LATE_15M_ESPACIO_ATR#XRP#15min | XRP Up or Down - July 9, 8:30AM-8:45AM ET… | ❌ LOSS | -0.51$ |
 | 2026-07-09T12:49 | GBM_LATE_15M_TARDIO#XRP#15min | XRP Up or Down - July 9, 8:30AM-8:45AM ET… | ❌ LOSS | -0.99$ |
 | 2026-07-09T12:49 | GBM_LATE_15M#XRP#15min | XRP Up or Down - July 9, 8:30AM-8:45AM ET… | ❌ LOSS | -1.73$ |
-| 2026-07-09T12:47 | STREAK_MOM_5M#SOL#5min | Solana Up or Down - July 9, 8:40AM-8:45AM ET… | ❌ LOSS | -0.51$ |
 
 ## Calidad de datos
 
-✅ **OK** — última verificación 2026-07-09T12:49 UTC
+✅ **OK** — última verificación 2026-07-09T12:55 UTC
 
 | Asset | Precio | Age | Alertas |
 |---|---|---|---|
-| ✅ BTC | $62,437.83 | 0.0min |  |
-| ✅ ETH | $1,734.61 | 0.0min |  |
-| ✅ SOL | $77.61 | 0.0min |  |
+| ✅ BTC | $62,586.86 | 0.0min |  |
+| ✅ ETH | $1,740.74 | 0.0min |  |
+| ✅ SOL | $77.74 | 0.0min |  |
 | ✅ XRP | $1.09 | 0.0min |  |
 
 **Cross-source** (binance, coinbase, kraken):
 
 | Asset | Consenso | Fuente | Estado |
 |---|---|---|---|
-| BTC | $62,450.00 | consenso |  |
-| ETH | $1,734.61 | consenso |  |
-| SOL | $77.65 | consenso |  |
+| BTC | $62,586.86 | consenso |  |
+| ETH | $1,740.88 | consenso |  |
+| SOL | $77.71 | consenso |  |
 | XRP | $1.09 | consenso |  |
 
 ---
