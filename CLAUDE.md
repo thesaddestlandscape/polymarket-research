@@ -148,13 +148,15 @@ Estado live en `data/shadow/hipotesis_auto.md` (actualizado cada postmortem ~23m
 | H-DRIFT60-BUY_YES_15MIN | ✅ IMPL | BUY_YES #15min: drift_60min∈[0,+0.5%) |
 | H-DRIFT15-MOMENTUM | ✅ IMPL | BTC#15min: skip si drift_15min<0.3%/h |
 | H-BTC-ETH-MOMENTUM-REVERSION | 🔬 TRACKING | ETH drift<-1 → n≥20 → boost ×1.1 |
-| H-OU-5MIN | ❌ DESACTIVADA | IC=-0.229 — sin Jon-Becker no avanzar |
+| H-OU-5MIN | ❌ DESACTIVADA | IC=-0.229 — confirmada 09-Jul con fills Jon-Becker (test causal sin lookahead, n=67k, nulo) |
 | H-5MIN-REVERSIÓN | ✅ CONF | GBM#5min todos pares desactivados |
 | H-WEEKLY-PRICE | ⏳ n=57 | SOL sostenido; BTC neg; esperar n≥15/par |
 | H-GBM-18H | ⏳ AUTO | hypothesis_tracker auto-aplica cuando n≥15 IC<-0.08 |
 | H-CROSS-ASSET | ⏳ n→20 | GBM+OF BUY_NO mismo activo → boost ×1.5 |
 | H-KELLY-HORA | ⏳ AUTO | Solo H=17h sólido; esperar n≥40/hora |
 | H-BLACKLIST-02H/07H | ⏳ AUTO | OF BTC+SOL; revisar n≥20 por hora |
+| STRUCT_NO_15M | ⚠️ **NO PROMOCIONAR** | ic_bayes agregado -0.1985 n=15 (ya negativo en shadow forward). Además 09-Jul: recontrastado con fills reales Polymarket (n=6372, 14× el backtest original) → calibración casi perfecta en la zona [0.47,0.50) que usa como gate, SIN el +5.6pp de mispricing que motivó su creación. Antes de cualquier propuesta de whitelist, leer memoria `idea_structno_no_replica_fills` |
+| LEADLAG-BTC-XRP | 🔬 TRACKING shadow desde 09-Jul | Momentum propio de fills BTC (order flow Polymarket) → outcome XRP misma ventana. Hallazgo offline (Jon-Becker, n=826 top-decile, z=2.4-2.8 estable split-half) — acumulando forward en shadow puro, ver `LEADLAG_BTC_XRP_15M` en shadow_predict.py. Sin n forward suficiente todavía, no evaluar antes de n≥40 |
 
 **Hipótesis custom en `data/shadow/hipotesis_custom.json`** (editar sin tocar código):
 GBM-17H-BTC | OF-MADRUGADA | GBM-SIGMA-ALTO/BAJO | OF-02H/07H-BTCSOL | GBM-60MIN-BUYYES/NO | GBM-18H | BUYYES-15MIN-POSTFILTRO | BTC15-TENDENCIA | DRIFT15-ZONA-MUERTA | DRIFT15-MOMENTUM | ETH15-REVERSION | LONGSHOT-BIAS

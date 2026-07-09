@@ -2413,6 +2413,100 @@ def s_streak_fade_15m(market, ctx):
     }
 
 
+# ── LEADLAG_BTC_XRP_15M — order flow propio de BTC -> outcome de XRP misma ventana ──
+# Hallazgo 2026-07-09 (fills reales Jon-Becker, luego validado contra la API real
+# de Polymarket con timestamps reales): el momentum temprano del propio mercado
+# BTC#15min (primeros ~3min de vida de la ventana) correlaciona con el outcome de
+# XRP en la MISMA ventana de 15min. No es "spot BTC lidera precio" (esa premisa ya
+# se refutó, ver idea_lead_lag_refutado) — es order flow/posicionamiento propio de
+# Polymarket. BTC->XRP fue el ÚNICO par que sobrevivió el control split-half
+# cronológico (z=2.4-2.8 en ambas mitades, n~400/mitad); BTC->ETH/SOL NO son
+# estables (se desinflan a la mitad más reciente) y NO se implementan aquí.
+# prob_yes fijo por signo (no escalado por magnitud: sin calibración forward
+# todavía) — el pipeline causal existente (postmortem IC_bucket, N_BUCKET_MIN=15)
+# descubrirá si hace falta un umbral de magnitud sobre btc_momentum, igual que
+# con libro_spread/liquidez en STRUCT_NO/STREAK. Shadow puro: NO está en
+# pares_permitidos_live → jamás opera en vivo. Ver idea_leadlag_btc_xrp_revive_parcial.
+LEADLAG_STATE_PATH = DIR_SHADOW / "leadlag_btc_state.json"
+LEADLAG_MIN_MUESTRAS = 3
+LEADLAG_VENTANA_MIN = 3.0  # minutos desde apertura de la ventana BTC a muestrear
+
+
+def _actualizar_leadlag_btc_state(operables):
+    """Acumula precio_yes de BTC#15min en los primeros minutos de cada ventana,
+    para que s_leadlag_btc_xrp lea el momentum temprano al evaluar XRP de la
+    MISMA ventana. Solo logging -- nunca lanza, nunca bloquea el ciclo."""
+    try:
+        estado = json.loads(LEADLAG_STATE_PATH.read_text()) if LEADLAG_STATE_PATH.exists() else {}
+    except Exception:
+        estado = {}
+    ahora = datetime.now(timezone.utc)
+    tocado = False
+    for m in operables:
+        q = m.get("question", "")
+        if "up or down" not in q.lower():
+            continue
+        tipo, vent = _parse_updown_tipo(q)
+        if tipo != "slot" or vent != 15 or identificar_activo(q) != "BTC":
+            continue
+        end_date = m.get("end_date", "")
+        if not end_date:
+            continue
+        try:
+            end_dt = datetime.fromisoformat(end_date.replace("Z", "+00:00"))
+            if end_dt.tzinfo is None:
+                end_dt = end_dt.replace(tzinfo=timezone.utc)
+        except Exception:
+            continue
+        restante_min = (end_dt - ahora).total_seconds() / 60.0
+        elapsed_min = 15.0 - restante_min
+        if not (0 <= elapsed_min <= LEADLAG_VENTANA_MIN):
+            continue
+        estado.setdefault(end_date, []).append({"t": ahora.timestamp(), "py": m["_precio_yes"]})
+        tocado = True
+    if tocado:
+        corte = ahora.timestamp() - 7200  # poda: ventanas de las últimas 2h
+        estado = {k: v for k, v in estado.items() if v and v[-1]["t"] >= corte}
+        try:
+            LEADLAG_STATE_PATH.write_text(json.dumps(estado))
+        except Exception:
+            pass
+
+
+def s_leadlag_btc_xrp(market, ctx):
+    q = market.get("question", "")
+    if "up or down" not in q.lower():
+        return None
+    tipo, vent = _parse_updown_tipo(q)
+    if tipo != "slot" or vent != 15 or identificar_activo(q) != "XRP":
+        return None
+    end_date = market.get("end_date", "")
+    if not end_date:
+        return None
+    try:
+        estado = json.loads(LEADLAG_STATE_PATH.read_text()) if LEADLAG_STATE_PATH.exists() else {}
+    except Exception:
+        return None
+    muestras = estado.get(end_date)
+    if not muestras or len(muestras) < LEADLAG_MIN_MUESTRAS:
+        return None
+    precios = [x["py"] for x in muestras]
+    btc_momentum = precios[-1] - precios[0]
+    prob_yes = 0.53 if btc_momentum > 0 else (0.47 if btc_momentum < 0 else 0.50)
+    return {
+        "prob_yes": prob_yes,
+        "razon":    f"leadlag_btc_xrp btc_momentum={btc_momentum:+.4f} n_muestras={len(precios)}",
+        "subtype":  "XRP#15min",
+        "features": {
+            "btc_momentum":   round(btc_momentum, 5),
+            "n_muestras_btc": len(precios),
+            "py_entrada":     round(market.get("_precio_yes", 0), 3),
+            "hora_utc":       datetime.now(timezone.utc).hour,
+            **_libro_calidad(market),
+        },
+    }
+
+
 ESTRATEGIAS = [
     ("WEEKLY_PRICE",        s_weekly_price),
     ("PRICE_MOMENTUM",      s_price_momentum),
@@ -2428,6 +2522,7 @@ ESTRATEGIAS = [
     ("STRUCT_NO_15M",       s_struct_no_15m),
     ("STREAK_MOM_5M",       s_streak_mom_5m),
     ("STREAK_FADE_15M",     s_streak_fade_15m),
+    ("LEADLAG_BTC_XRP_15M", s_leadlag_btc_xrp),
     # ("BINANCE_UPDOWN", s_binance_updown),  # retirada — IC -0.50
 ]
 
@@ -2485,6 +2580,10 @@ def main():
     if not operables:
         print("  Nada que predecir.")
         return
+    try:
+        _actualizar_leadlag_btc_state(operables)
+    except Exception as e:
+        print(f"  Aviso leadlag_btc_state: {e}")
 
     # Lookup precio_yes por (activo, ventana) — feature de spread entre
     # ventanas relacionadas del mismo activo (H-CUSTOM-CROSS-WINDOW-SPREAD).
