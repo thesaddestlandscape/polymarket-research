@@ -1,4 +1,4 @@
-# Estado del bot — 2026-07-09 04:04 UTC
+# Estado del bot — 2026-07-09 04:10 UTC
 
 ## Live — dinero real (on-chain)
 | | |
@@ -13,60 +13,60 @@
 ## Shadow — MODELO SIMULADO (no cobrable)
 | | |
 |---|---|
-| P&L fiel (stake fijo 1$) | +391.90 $ |
-| P&L sim compuesto | 🟢 +684.26 $ (ficción Kelly: +2690% s/ operativo) |
-| P&L sim hoy (2026-07-09) | 🟢 +38.76 $ |
-| Operaciones resueltas | 5942 (3171 WIN / 2771 LOSS) — 53.4% |
+| P&L fiel (stake fijo 1$) | +393.61 $ |
+| P&L sim compuesto | 🟢 +684.71 $ (ficción Kelly: +2691% s/ operativo) |
+| P&L sim hoy (2026-07-09) | 🟢 +39.22 $ |
+| Operaciones resueltas | 5946 (3174 WIN / 2772 LOSS) — 53.4% |
 | Señales abiertas | 147 |
 
 ## Estrategias (visión global)
 
 | Estrategia | n | Win% | IC_efectivo | PNL | Apuesta | Estado |
 |---|---|---|---|---|---|---|
-| GBM_LATE_15M | 2362 | 61.3% | +0.113 | +752.68$ | 1.13$ | ✅ activa |
+| GBM_LATE_15M | 2364 | 61.3% | +0.113 | +752.17$ | 1.13$ | ✅ activa |
 | ORDER_FLOW_5M | 1560 | 51.3% | +0.013 | +18.55$ | 0.50$ | ✅ activa |
 | LATE_WINDOW_5MIN | 28 | 67.9% | +0.167 | +4.54$ | 1.67$ | ✅ activa |
 | GBM_LATE_60M | 149 | 36.2% | -0.136 | +3.52$ | 0.50$ | ⚠️ IC negativo |
 | RESOLUTION_SNIPER | 8 | 100.0% | +0.160 | +3.47$ | 1.60$ | ✅ activa |
+| STREAK_FADE_15M | 87 | 52.9% | +0.028 | +0.05$ | 0.50$ | ✅ activa |
 | GBM_LATE_15M_MULTIHORIZONTE | 6 | 50.0% | +0.000 | -0.08$ | 0.50$ | ⏳ acumulando |
 | PRICE_TARGET_GBM | 129 | 34.1% | -0.156 | -0.43$ | 0.50$ | ⚠️ IC negativo |
-| STREAK_FADE_15M | 86 | 52.3% | +0.023 | -0.43$ | 0.50$ | ✅ activa |
 | GBM_LATE_15M_TARDIO | 11 | 45.5% | -0.021 | -1.29$ | 0.50$ | ⚠️ IC negativo |
 | STRUCT_NO_15M | 15 | 20.0% | -0.199 | -4.68$ | 0.00$ | 🚫 desactivada |
 | STREAK_MOM_5M | 181 | 48.1% | -0.019 | -8.16$ | 0.50$ | ⚠️ IC negativo |
 | SMART_FLOW_1H | 29 | 20.7% | -0.274 | -13.82$ | 0.00$ | 🚫 desactivada |
 | UPDOWN_OU_5M | 84 | 28.6% | -0.209 | -18.89$ | 0.00$ | 🚫 desactivada |
 | WEEKLY_PRICE | 144 | 52.1% | +0.021 | -20.78$ | 0.50$ | ✅ activa |
-| UPDOWN_GBM | 1150 | 47.7% | -0.023 | -29.94$ | 0.50$ | ⚠️ IC negativo |
+| UPDOWN_GBM | 1151 | 47.7% | -0.023 | -29.46$ | 0.50$ | ⚠️ IC negativo |
 
 ## Últimas 5 resoluciones
 
 | Timestamp | Estrategia | Mercado | Resultado | PNL |
 |---|---|---|---|---|
+| 2026-07-09T04:07 | GBM_LATE_15M#ETH#15min | Ethereum Up or Down - July 8, 11:45PM-12:00AM ET… | ❌ LOSS | -0.99$ |
+| 2026-07-09T04:07 | GBM_LATE_15M#BTC#15min | Bitcoin Up or Down - July 8, 11:45PM-12:00AM ET… | ✅ WIN | +0.48$ |
+| 2026-07-09T04:07 | STREAK_FADE_15M#ETH#15min | Ethereum Up or Down - July 8, 11:45PM-12:00AM ET… | ✅ WIN | +0.48$ |
+| 2026-07-09T04:07 | UPDOWN_GBM#ETH#15min | Ethereum Up or Down - July 8, 11:45PM-12:00AM ET… | ✅ WIN | +0.48$ |
 | 2026-07-09T04:02 | GBM_LATE_15M#XRP#15min | XRP Up or Down - July 8, 11:45PM-12:00AM ET… | ❌ LOSS | -1.75$ |
-| 2026-07-09T04:02 | GBM_LATE_15M#SOL#15min | Solana Up or Down - July 8, 11:45PM-12:00AM ET… | ✅ WIN | +1.50$ |
-| 2026-07-09T04:01 | GBM_LATE_60M#SOL#60min | Solana Up or Down - July 8, 11PM ET… | ❌ LOSS | -0.51$ |
-| 2026-07-09T04:00 | ORDER_FLOW_5M#BTC#5min | Bitcoin Up or Down - July 8, 11:50PM-11:55PM ET… | ❌ LOSS | -1.32$ |
-| 2026-07-09T04:00 | GBM_LATE_60M#ETH#60min | Ethereum Up or Down - July 8, 11PM ET… | ❌ LOSS | -0.51$ |
 
 ## Calidad de datos
 
-✅ **OK** — última verificación 2026-07-09T04:04 UTC
+✅ **OK** — última verificación 2026-07-09T04:10 UTC
 
 | Asset | Precio | Age | Alertas |
 |---|---|---|---|
-| ✅ BTC | $61,957.35 | 0.1min |  |
-| ✅ ETH | $1,729.84 | 0.1min |  |
-| ✅ SOL | $77.34 | 0.1min |  |
-| ✅ XRP | $1.09 | 0.1min |  |
+| ✅ BTC | $61,992.28 | 0.0min |  |
+| ✅ ETH | $1,730.57 | 0.0min |  |
+| ✅ SOL | $77.33 | 0.0min |  |
+| ✅ XRP | $1.09 | 0.0min |  |
 
 **Cross-source** (binance, coinbase, kraken):
 
 | Asset | Consenso | Fuente | Estado |
 |---|---|---|---|
-| BTC | $61,962.80 | consenso |  |
-| ETH | $1,729.84 | consenso |  |
-| SOL | $77.30 | consenso |  |
+| BTC | $61,992.28 | consenso |  |
+| ETH | $1,730.57 | consenso |  |
+| SOL | $77.27 | consenso |  |
 | XRP | $1.09 | consenso |  |
 
 ---
