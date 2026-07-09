@@ -2378,6 +2378,47 @@ def s_streak_mom_5m(market, ctx):
         },
     }
 
+# Items 11/12 del checklist 08-Jul (idea_streak_fade_15m, artículo Spicy
+# mean-reversion): régimen (¿la reversión funciona mejor en choppy que en
+# tendencia?) y combustible (¿la racha con más volumen revierte más fuerte,
+# más atrapados forzados a salir?). Solo LOGUEAN — mismo patrón que
+# _libro_calidad: el pipeline causal (postmortem IC_bucket, N_BUCKET_MIN=15)
+# descubre el corte cuando haya n suficiente, no se hardcodea ningún umbral.
+
+def _regimen_ma_toques(activo, ctx, n_velas=15, periodo_ma=5):
+    """Nº de cruces del precio sobre su propia media móvil en las últimas
+    n_velas velas de 1min -- proxy barato de régimen: cerca de 0 = tendencia
+    persistente (malo para reversión); muchos toques = choppy/lateral
+    (bueno para reversión, hipótesis del artículo Spicy)."""
+    klines = ctx.get("klines_raw", {}).get(activo, [])
+    if len(klines) < n_velas + periodo_ma:
+        return None
+    try:
+        closes = [float(k[4]) for k in klines[-(n_velas + periodo_ma):]]
+    except (ValueError, TypeError, IndexError):
+        return None
+    toques = 0
+    for i in range(periodo_ma, len(closes)):
+        ma = sum(closes[i - periodo_ma:i]) / periodo_ma
+        if (closes[i - 1] - ma) * (closes[i] - ma) < 0:
+            toques += 1
+    return toques
+
+
+def _volumen_racha(activo, ctx, n_velas=15):
+    """Volumen acumulado (klines 1min) en los minutos previos a la señal --
+    proxy de 'combustible': racha con más volumen = más posiciones atrapadas
+    que se ven forzadas a salir, reversión más fuerte."""
+    klines = ctx.get("klines_raw", {}).get(activo, [])
+    if len(klines) < n_velas:
+        return None
+    try:
+        total = sum(float(k[5]) for k in klines[-n_velas:])
+    except (ValueError, TypeError, IndexError):
+        return None
+    return round(total, 4)
+
+
 def s_streak_fade_15m(market, ctx):
     q = market.get("question", "")
     if "up or down" not in q.lower():
@@ -2408,6 +2449,8 @@ def s_streak_fade_15m(market, ctx):
             "streak_dir_up": 1 if d == "YES" else 0,
             "py_entrada":    round(py, 3),
             "hora_utc":      datetime.now(timezone.utc).hour,
+            "regimen_ma_toques": _regimen_ma_toques(activo, ctx),
+            "volumen_racha":     _volumen_racha(activo, ctx),
             **_libro_calidad(market),
         },
     }
