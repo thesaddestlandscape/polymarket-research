@@ -1944,6 +1944,11 @@ def s_late_window_5min(market: dict, ctx: dict):
 
 GBM_LATE_15M_REST_MIN_LO = 3.0    # min restantes mínimos (suelo operables = 3min)
 GBM_LATE_15M_REST_MIN_HI = 12.0   # min restantes máximos (salta los 3 primeros min)
+GBM_LATE_15M_TARDIO_REST_MIN_HI = 10.5  # variante "entra más tarde" (reimplementada 09-Jul,
+# la primera vez se perdió sin commitear — ver idea_gbm_late_tardio_08jul). Bucketing 08-Jul
+# (n=645+71+24+16+5) sugería un sweet spot en [9,10.5)min IC+0.199, no una mejora monótona al
+# alargar la espera ([5,7) cae a IC+0.056) — esta variante estrecha la ventana [3,12]->[3,10.5]
+# para medir forward si ese sweet spot aguanta con n propio, no si "más tarde siempre es mejor".
 GBM_LATE_60M_REST_MIN_LO = 5.0    # 60min: suelo más alto — libros finos al final
 GBM_LATE_60M_REST_MIN_HI = 20.0   # 60min: último tercio de la ventana (T_h<0.33)
 GBM_LATE_15M_PARES = {"BTC", "ETH", "SOL", "XRP"}
@@ -1956,7 +1961,7 @@ GBM_LATE_15M_PARES = {"BTC", "ETH", "SOL", "XRP"}
 # generación no toca dinero real. GBM_LATE_60M = clon de entrada tardía 60min,
 # necesita acumular n para medir si el edge tardío (probado en 15min, IC=+0.279)
 # transfiere a ventanas 60min más profundas. (2026-07-06)
-ACUMULAR_SHADOW_AUNQUE_DESACTIVADA = {"GBM_LATE_60M"}
+ACUMULAR_SHADOW_AUNQUE_DESACTIVADA = {"GBM_LATE_60M", "GBM_LATE_15M_TARDIO"}
 # Photo finish (2026-07-05): entrar con el precio pegado al strike es moneda
 # al aire cobrada como favorito. |drift_ventana|<0.02% → IC=-0.145 n=181
 # (win 35%), estable en ambas mitades temporales (-0.163/-0.127) y monótono
@@ -2002,6 +2007,30 @@ def s_gbm_late_60min(market, ctx):
     return _s_gbm_late(market, ctx, ventana_min=60,
                        rest_lo=GBM_LATE_60M_REST_MIN_LO,
                        rest_hi=GBM_LATE_60M_REST_MIN_HI)
+
+
+def s_gbm_late_15min_tardio(market, ctx):
+    """
+    Variante de GBM_LATE_15M que espera más antes de entrar — REST_MIN_HI
+    10.5 en vez de 12.0, estrechando la ventana de entrada a [3,10.5] min
+    restantes (vs [3,12] de la estrategia real). Reimplementada 09-Jul: la
+    primera versión (08-Jul) se perdió sin commitear (nunca llegó a git,
+    dejó de generar predicciones desde las 15:20 UTC del 08-Jul sin que
+    nadie lo notara). Pregunta: el bucketing retrospectivo de 08-Jul mostró
+    un sweet spot en restante_min∈[9,10.5) (IC+0.199, n=71) mejor que la
+    zona dominante [10.5,12) (IC+0.129, n=645) — pero [5,7) cae a IC+0.056,
+    o sea NO es "cuanto más tarde mejor" sino un óptimo con tradeoff
+    (mejor lectura del drift vs. libro que se adelgaza cerca del cierre).
+    Esta estrategia mide forward, con n propio, si ese sweet spot aguanta.
+
+    Estrategia SEPARADA de GBM_LATE_15M a propósito (mismo patrón que
+    GBM_LATE_60M): dedup por (strategy, market_id) exige nombre propio;
+    acumula su propio IC desde cero. NO está en pares_permitidos_live →
+    imposible que toque dinero real hasta decisión explícita con n≥40.
+    """
+    return _s_gbm_late(market, ctx, ventana_min=15,
+                       rest_lo=GBM_LATE_15M_REST_MIN_LO,
+                       rest_hi=GBM_LATE_15M_TARDIO_REST_MIN_HI)
 
 
 def _s_gbm_late(market, ctx, ventana_min, rest_lo, rest_hi):
@@ -2561,6 +2590,7 @@ ESTRATEGIAS = [
     ("RESOLUTION_SNIPER",   s_resolution_sniper),
     ("LATE_WINDOW_5MIN",    s_late_window_5min),
     ("GBM_LATE_15M",        s_gbm_late_15min),
+    ("GBM_LATE_15M_TARDIO", s_gbm_late_15min_tardio),
     ("GBM_LATE_60M",        s_gbm_late_60min),
     ("STRUCT_NO_15M",       s_struct_no_15m),
     ("STREAK_MOM_5M",       s_streak_mom_5m),
