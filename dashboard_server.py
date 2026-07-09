@@ -1154,8 +1154,9 @@ function renderLive(live) {
     else freshEl.textContent = "balance on-chain: n/d";
   }
 
-  // Chart de capital real: histórico granular (snapshot ~15min, live.real_history)
-  // si hay datos; si no, fallback al reconstruido por días (live.real_daily).
+  // Chart de capital real: live.real_history ya viene fusionado desde el backend
+  // (backbone diario desde el lanzamiento + snapshot ~15min reciente donde hay
+  // dato fino). Fallback solo si el backend no pudo construirlo por lo que sea.
   const dep = live.real_deposito != null ? live.real_deposito : 25.44;
   if (live.real_history && live.real_history.length) {
     if (liveEqArea) {
