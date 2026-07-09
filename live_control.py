@@ -90,11 +90,17 @@ def estado_completo() -> str:
     except Exception as e:
         log(f"estado_completo: error cargando balance real: {e}")
     if snap and not snap.get("_rancio"):
+        deposito = snap.get("deposito_inicial")
+        pnl_real = snap.get("pnl_real")
         hoy = snap.get("pnl_hoy_real")
-        hoy_txt = f"{hoy:+.2f}$" if hoy is not None else "—"
+        pct_total_txt = (f" ({pnl_real/deposito*100:+.1f}%)"
+                          if deposito and pnl_real is not None else "")
+        pct_hoy_txt = (f" ({hoy/deposito*100:+.1f}%)"
+                        if deposito and hoy is not None else "")
+        hoy_txt = f"{hoy:+.2f}${pct_hoy_txt}" if hoy is not None else "—"
         saldo_txt = (
             f"Balance real:   {snap['total']:.2f}$ (on-chain)\n"
-            f"PNL total:      {snap['pnl_real']:+.2f}$\n"
+            f"PNL total:      {pnl_real:+.2f}${pct_total_txt}\n"
             f"PNL hoy:        {hoy_txt}"
         )
     else:
@@ -141,38 +147,15 @@ def procesar_comando(texto: str) -> str:
         return estado_completo()
 
     elif cmd in ("/update", "update", "/resumen", "resumen"):
+        # Solo live (dinero real) — las simulaciones se consultan en el
+        # dashboard, ver _telegram_periodico en shadow_resumen.py.
         try:
-            from shadow_resumen import (
-                cargar_csv, cargar_params, RESULTS_PATH,
-                CAPITAL_OPERATIVO, LAST_TG_PATH,
-                _ic_bayes, _esc, _telegram_periodico
-            )
-            from collections import defaultdict
+            from shadow_resumen import LAST_TG_PATH, _telegram_periodico
             from datetime import datetime, timezone
-            resultados = cargar_csv(RESULTS_PATH)
-            params     = cargar_params()
-            ahora      = datetime.now(timezone.utc)
-            pnl_total  = sum(float(r.get("pnl_neto", 0)) for r in resultados)
-            bankroll   = CAPITAL_OPERATIVO + pnl_total
-            hoy        = ahora.strftime("%Y-%m-%d")
-            pnl_hoy    = sum(float(r.get("pnl_neto", 0)) for r in resultados
-                             if (r.get("resolution_timestamp","") or "")[:10] == hoy)
-            n_total    = len(resultados)
-            n_win      = sum(int(r.get("acierto", 0)) for r in resultados)
-            por_strat  = defaultdict(lambda: {"n": 0, "win": 0, "pnl": 0.0})
-            for r in resultados:
-                key = r.get("strategy","?")
-                sub = r.get("subtype","")
-                if sub: key = f"{key}#{sub}"
-                por_strat[key]["n"]   += 1
-                por_strat[key]["win"] += int(r.get("acierto", 0))
-                por_strat[key]["pnl"] += float(r.get("pnl_neto", 0))
-            # Forzar envío borrando el timestamp guard
             if LAST_TG_PATH.exists():
-                LAST_TG_PATH.unlink()
-            _telegram_periodico(ahora, bankroll, pnl_total, pnl_hoy,
-                                n_total, n_win, por_strat, params)
-            return "✅ Resumen enviado."
+                LAST_TG_PATH.unlink()  # forzar envío saltando el guard de intervalo
+            _telegram_periodico(datetime.now(timezone.utc))
+            return "✅ Resumen live enviado."
         except Exception as e:
             return f"❌ Error generando resumen: {e}"
 

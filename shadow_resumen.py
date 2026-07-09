@@ -302,9 +302,8 @@ def main():
           f"({signo_pnl}{roi_op:.1f}% op) | Hoy={signo_hoy}{pnl_hoy:.2f}€ | "
           f"n={n_total} wr={wr_g:.1f}% | abiertas={abiertas}")
 
-    # Telegram periódico
-    _telegram_periodico(ahora, bankroll, pnl_total, pnl_hoy, n_total, n_win,
-                        por_strat, params)
+    # Telegram periódico (solo LIVE, ver _telegram_periodico)
+    _telegram_periodico(ahora)
 
 
 def _ic_bayes(win, n):
@@ -367,8 +366,7 @@ def _stats_directas(resultados):
     return gbm, of_btc_sol, buyno_15min, buyyes_60min
 
 
-def _telegram_periodico(ahora, bankroll, pnl_total, pnl_hoy,
-                         n_total, n_win, por_strat, params):
+def _telegram_periodico(ahora):
     tok = os.environ.get("TELEGRAM_TOKEN", "")
     cid = os.environ.get("TELEGRAM_CHAT_ID", "")
     if not tok or not cid:
@@ -429,30 +427,6 @@ def _telegram_periodico(ahora, bankroll, pnl_total, pnl_hoy,
     except Exception as e:
         print(f"[shadow_resumen] excepción leyendo trades.csv: {type(e).__name__}: {e}")
 
-    # ── Stats shadow curadas de results.csv ──────────────────────────────────
-    resultados_raw = cargar_csv(RESULTS_PATH)
-    gbm, of_bs, buyno, buyyes = _stats_directas(resultados_raw)
-
-    LIVE_IC = 0.08
-    LIVE_N  = 40
-
-    def fila(label, d):
-        n, win, pnl = d['n'], d['win'], d['pnl']
-        if n == 0:
-            return None
-        ic  = _ic_bayes(win, n)
-        sp  = "+" if pnl >= 0 else ""
-        prog = f"n={n}/{LIVE_N}" if n < LIVE_N else f"n={n}✓"
-        if ic >= LIVE_IC and n >= LIVE_N:
-            ico = "🔥"
-        elif ic >= LIVE_IC * 0.75 and n >= LIVE_N * 0.75:
-            ico = "⏳"
-        elif ic < 0:
-            ico = "⚠️"
-        else:
-            ico = "▸ "
-        return f"{ico} {_esc(label):<18} {prog:<8} IC={ic:+.3f}  {sp}{pnl:.2f}$"
-
     def _post(msg):
         _requests.post(
             f"https://api.telegram.org/bot{tok}/sendMessage",
@@ -465,9 +439,13 @@ def _telegram_periodico(ahora, bankroll, pnl_total, pnl_hoy,
     # ════════════════════════════════════════════════════════════════════════
     if snap and not snap.get("_rancio"):
         pnl_t_real = snap["pnl_real"]
+        deposito = snap["deposito_inicial"]
         bkr_em = "📈" if pnl_t_real >= 0 else "📉"
-        hoy_str = (f"{snap['pnl_hoy_real']:+.2f}$"
-                   if snap.get("pnl_hoy_real") is not None else "—")
+        pct_total = (pnl_t_real / deposito * 100) if deposito else None
+        pct_hoy = (snap["pnl_hoy_real"] / deposito * 100
+                   if deposito and snap.get("pnl_hoy_real") is not None else None)
+        hoy_str = (f"{snap['pnl_hoy_real']:+.2f}$ ({pct_hoy:+.1f}%)"
+                   if snap.get("pnl_hoy_real") is not None and pct_hoy is not None else "—")
         d7_str  = (f"{snap['pnl_7d_real']:+.2f}$"
                    if snap.get("pnl_7d_real") is not None else "—")
         if n_live_total:
@@ -479,11 +457,12 @@ def _telegram_periodico(ahora, bankroll, pnl_total, pnl_hoy,
             )
         else:
             live_perf = "Sin trades cerrados aún — esperando primera ventana"
+        pct_str = f" ({pct_total:+.1f}% sobre depósito)" if pct_total is not None else ""
         msg_live = (
-            f"💰 *BOT LIVE — dinero real (on-chain)* — {ahora.strftime('%H:%M UTC')}\n"
+            f"💰 *BOT LIVE — dinero real* — {ahora.strftime('%H:%M UTC')}\n"
             f"\n"
             f"{bkr_em} Balance: *{snap['total']:.2f}$*  "
-            f"(depósito {snap['deposito_inicial']:.2f}$ → {pnl_t_real:+.2f}$)\n"
+            f"(depósito {deposito:.2f}$ → {pnl_t_real:+.2f}${pct_str})\n"
             f"{live_perf}\n"
             f"\n"
             f"Estado: {live_estado}"
@@ -499,71 +478,16 @@ def _telegram_periodico(ahora, bankroll, pnl_total, pnl_hoy,
             f"Estado: {live_estado}"
         )
 
-    # ════════════════════════════════════════════════════════════════════════
-    # MENSAJE 2 — SHADOW (modelo simulado, coordinado con el dashboard)
-    # ════════════════════════════════════════════════════════════════════════
-    wr_g  = n_win / n_total * 100 if n_total else 0
-    sp_t  = "+" if pnl_total >= 0 else ""
-    sp_h  = "+" if pnl_hoy   >= 0 else ""
-
-    # PnL fiel: stake fijo 1$ + slippage, sin compounding — misma función que
-    # usa el dashboard (dashboard_server._pnl_realista). Cota superior: no
-    # modela fill-ability (~8% conversión, selección adversa).
-    try:
-        from dashboard_server import _pnl_realista
-        pnl_fiel = sum(v for v in (_pnl_realista(r) for r in resultados_raw)
-                       if v is not None)
-        sp_f = "+" if pnl_fiel >= 0 else ""
-        fiel_line = f"PnL fiel (stake fijo 1$, cota sup.): {sp_f}{pnl_fiel:.2f}$"
-    except Exception as e:
-        print(f"[shadow_resumen] excepción en PnL fiel: {type(e).__name__}: {e}")
-        fiel_line = "PnL fiel: ⚠️ error calculando"
-
-    lineas_shadow = [
-        f"🧪 *SHADOW — MODELO SIMULADO* — {ahora.strftime('%H:%M UTC')}",
-        f"_(No es dinero real ni cobrable — el compuesto es ficción Kelly)_",
-        "",
-        f"{fiel_line}",
-        f"PnL sim compuesto: {sp_t}{pnl_total:.2f}$  (hoy: {sp_h}{pnl_hoy:.2f}$)",
-        f"{n_total} ops  |  {wr_g:.1f}% WR global",
-        "",
-        "*Whitelist live* (config\\_live.json):",
-    ]
-
-    try:
-        with open("data/live/config_live.json", encoding="utf-8") as f:
-            wl = json.load(f).get("pares_permitidos_live", [])
-        lineas_shadow += [f"  · {_esc(t)}" for t in wl] or ["  (vacía)"]
-    except Exception as e:
-        print(f"[shadow_resumen] excepción leyendo whitelist: {type(e).__name__}: {e}")
-        lineas_shadow.append("  ⚠️ error leyendo config_live.json")
-
-    lineas_shadow += ["", "*Otras GBM en observación:*"]
-    ORDER_GBM = ['BTC#15min', 'ETH#15min', 'SOL#15min', 'ETH#60min', 'BTC#60min', 'SOL#60min']
-    for key in ORDER_GBM:
-        d = gbm.get(key)
-        if d:
-            f = fila(key, d)
-            if f:
-                lineas_shadow.append(f)
-
-    n_of, win_of, pnl_of = of_bs['n'], of_bs['win'], of_bs['pnl']
-    if n_of > 0:
-        ic_of = _ic_bayes(win_of, n_of)
-        sp_of = "+" if pnl_of >= 0 else ""
-        lineas_shadow += [
-            "",
-            f"*ORDER FLOW* (BTC+SOL): n={n_of}  IC={ic_of:+.3f}  {sp_of}{pnl_of:.2f}$",
-        ]
-
-    msg_shadow = "\n".join(lineas_shadow)
-
-    # Enviar ambos mensajes
+    # Solo se envía el mensaje LIVE por Telegram (petición Javi 09-Jul: las
+    # simulaciones (shadow) ya se consultan en el dashboard — Telegram queda
+    # reservado a lo que está pasando de verdad, dinero real). El resumen
+    # shadow completo (GBM en observación, whitelist, PnL fiel) sigue
+    # generándose en data/shadow/estado_actual.md y en el dashboard, solo
+    # dejó de duplicarse por Telegram.
     try:
         _post(msg_live)
-        _post(msg_shadow)
         LAST_TG_PATH.write_text(str(ahora_ts))
-        print(f"  [telegram] Mensajes live+shadow enviados ({ahora.strftime('%H:%M UTC')})")
+        print(f"  [telegram] Mensaje live enviado ({ahora.strftime('%H:%M UTC')})")
     except Exception as e:
         print(f"  [telegram] Error: {e}")
 

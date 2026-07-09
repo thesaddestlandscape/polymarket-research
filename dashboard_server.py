@@ -35,6 +35,7 @@ RESULTS_CSV      = REPO / "data/shadow/results.csv"
 STRATEGY_PARAMS  = REPO / "data/shadow/strategy_params.json"
 PRICES_DIR       = REPO / "data/prices"
 LIVE_TRADES_CSV  = REPO / "data/live/trades.csv"
+LIVE_BALANCE_HISTORY_CSV = REPO / "data/live/balance_history.csv"
 LIVE_SWITCH_PATH = REPO / "data/live/LIVE_MODE_ON"
 LIVE_BANKROLL_INICIAL = 25.44  # depósito real 2026-06-29
 BANKROLL_INICIAL = 20.0
@@ -215,6 +216,29 @@ def load_live_trades():
     except Exception:
         return []
 
+def load_balance_history():
+    """Serie granular del balance real on-chain (cron live_balance.py, ~15min).
+    A diferencia de real_daily (un punto por día, reconstruido del PnL diario),
+    esto es el snapshot real tal cual se capturó — más fiel para ver movimiento
+    intradía, no solo el cierre de cada día."""
+    if not LIVE_BALANCE_HISTORY_CSV.exists():
+        return []
+    try:
+        rows = list(csv.DictReader(open(LIVE_BALANCE_HISTORY_CSV, encoding="utf-8")))
+    except Exception:
+        return []
+    seen = {}
+    for r in rows:
+        ts = _ts(r.get("ts", ""))
+        try:
+            total = float(r.get("total") or 0)
+        except (ValueError, TypeError):
+            continue
+        if not ts or not total:
+            continue
+        seen[ts] = round(total, 4)  # dedup por segundo, igual que el resto de charts
+    return [{"time": t, "value": v} for t, v in sorted(seen.items())]
+
 def compute_live_data():
     trades = load_live_trades()
     switch_on = LIVE_SWITCH_PATH.exists()
@@ -315,6 +339,40 @@ def compute_live_data():
         real_daily = []
         real_stale = bool(real and real.get("_rancio"))
 
+    # % de beneficio sobre el depósito inicial — pedido explícito 09-Jul: no
+    # solo el $ absoluto, también el % relativo al depósito (por día y total).
+    real_pct_total = (round(real_pnl / real_deposito * 100, 2)
+                       if real_pnl is not None and real_deposito else None)
+    real_pct_hoy = (round(real_hoy / real_deposito * 100, 2)
+                     if real_hoy is not None and real_deposito else None)
+    real_pct_7d = (round(real_7d / real_deposito * 100, 2)
+                    if real_7d is not None and real_deposito else None)
+    if real_daily and real_deposito:
+        for d in real_daily:
+            d["pct"] = round(d.get("pnl", 0) / real_deposito * 100, 2)
+
+    # Histórico del capital real, DESDE EL LANZAMIENTO del bot (pedido 09-Jul):
+    # backbone diario reconstruido de real_daily (cubre desde el primer día
+    # real de trading, 07-01 — 06-29/06-30 fueron depósito y un intento con
+    # error, sin actividad on-chain) + detalle fino donde ya hay snapshots de
+    # 15min (live_balance.py, cron desde 07-07). Ambas fuentes en unix
+    # seconds (_ts) para poder concatenarlas en una sola serie LightweightCharts.
+    real_history_fine = load_balance_history()
+    if real_daily and real_deposito:
+        corte = real_history_fine[0]["time"] if real_history_fine else None
+        acc = real_deposito
+        t0 = _ts(real_daily[0]["date"])
+        backbone = [{"time": t0 - 1, "value": round(real_deposito, 4)}] if t0 else []
+        for d in real_daily:
+            acc += d.get("pnl", 0)
+            t = _ts(d["date"])
+            if not t or (corte is not None and t >= corte):
+                continue
+            backbone.append({"time": t, "value": round(acc, 4)})
+        real_history = backbone + real_history_fine
+    else:
+        real_history = real_history_fine
+
     return {
         "switch": switch_on,
         "bankroll": round(LIVE_BANKROLL_INICIAL + pnl_total, 2),
@@ -326,6 +384,10 @@ def compute_live_data():
         "real_hoy": real_hoy,
         "real_7d": real_7d,
         "real_daily": real_daily,
+        "real_history": real_history,
+        "real_pct_total": real_pct_total,
+        "real_pct_hoy": real_pct_hoy,
+        "real_pct_7d": real_pct_7d,
         "real_stale": real_stale,
         "tracking_error": tracking_error,
         "pnl_total": round(pnl_total, 2),
@@ -714,7 +776,7 @@ footer { text-align: center; padding: 10px; font-size: 10px; color: var(--muted)
     <span style="font-size:11px;color:#26a69a;margin-left:4px">💵 dinero real · todas las cifras del wallet on-chain</span>
     <span id="live-real-freshness" style="font-size:10px;color:var(--muted);margin-left:auto">balance on-chain: —</span>
   </div>
-  <div style="display:grid;grid-template-columns:repeat(8,1fr);gap:8px;margin-bottom:6px">
+  <div style="display:grid;grid-template-columns:repeat(10,1fr);gap:8px;margin-bottom:6px">
     <div style="background:#ffffff08;border-radius:6px;padding:8px;text-align:center">
       <div style="font-size:9px;color:var(--muted)">💰 Depósito inicial</div>
       <div id="live-deposito" style="font-size:20px;font-weight:700">—</div>
@@ -730,10 +792,20 @@ footer { text-align: center; padding: 10px; font-size: 10px; color: var(--muted)
       <div id="live-pnl" style="font-size:20px;font-weight:700">—</div>
       <div style="font-size:9px;color:var(--muted)">desde el depósito</div>
     </div>
+    <div style="background:#ffffff08;border-radius:6px;padding:8px;text-align:center" title="PNL real total dividido entre el depósito inicial">
+      <div style="font-size:9px;color:var(--muted)">📊 % total</div>
+      <div id="live-pct-total" style="font-size:20px;font-weight:700">—</div>
+      <div style="font-size:9px;color:var(--muted)">sobre depósito</div>
+    </div>
     <div style="background:#ffffff08;border-radius:6px;padding:8px;text-align:center">
       <div style="font-size:9px;color:var(--muted)">🎯 PNL hoy</div>
       <div id="live-pnl-hoy" style="font-size:20px;font-weight:700">—</div>
       <div style="font-size:9px;color:var(--muted)">real · día UTC</div>
+    </div>
+    <div style="background:#ffffff08;border-radius:6px;padding:8px;text-align:center" title="PNL de hoy dividido entre el depósito inicial">
+      <div style="font-size:9px;color:var(--muted)">📊 % hoy</div>
+      <div id="live-pct-hoy" style="font-size:20px;font-weight:700">—</div>
+      <div style="font-size:9px;color:var(--muted)">sobre depósito</div>
     </div>
     <div style="background:#ffffff08;border-radius:6px;padding:8px;text-align:center">
       <div style="font-size:9px;color:var(--muted)">📅 Últimos 7 días</div>
@@ -761,7 +833,7 @@ footer { text-align: center; padding: 10px; font-size: 10px; color: var(--muted)
   <!-- Charts live — mismo escritorio que el modelo simulado -->
   <div style="display:grid;grid-template-columns:2fr 1fr;gap:8px;margin-bottom:10px">
     <div style="background:#ffffff05;border-radius:6px;padding:10px">
-      <div class="panel-title">📈 Evolución del capital real — balance del wallet al cierre de cada día (on-chain)</div>
+      <div class="panel-title">📈 Evolución del capital real — desde el lanzamiento (diario + snapshot ~15min recientes, on-chain)</div>
       <div class="chart-host" id="live-equity-chart" style="height:180px"></div>
     </div>
     <div style="background:#ffffff05;border-radius:6px;padding:10px">
@@ -1021,6 +1093,10 @@ function renderLive(live) {
     const cls = v > 0 ? "pos" : v < 0 ? "neg" : "neu";
     return `<span class="${cls}">${v > 0 ? "+" : ""}${v.toFixed(2)}$</span>`;
   };
+  const fmtPct = v => {
+    const cls = v > 0 ? "pos" : v < 0 ? "neg" : "neu";
+    return `<span class="${cls}">${v > 0 ? "+" : ""}${v.toFixed(2)}%</span>`;
+  };
   // Switch badge
   const badge = document.getElementById("live-switch-badge");
   if (live.switch) {
@@ -1048,6 +1124,11 @@ function renderLive(live) {
   document.getElementById("live-pnl").innerHTML     = fmtOr(live.real_pnl);
   document.getElementById("live-pnl-hoy").innerHTML = fmtOr(live.real_hoy);
   document.getElementById("live-pnl-7d").innerHTML  = fmtOr(live.real_7d);
+  // % de beneficio sobre el depósito inicial (no sobre el balance del día)
+  document.getElementById("live-pct-total").innerHTML =
+    live.real_pct_total != null ? fmtPct(live.real_pct_total) : nd;
+  document.getElementById("live-pct-hoy").innerHTML =
+    live.real_pct_hoy != null ? fmtPct(live.real_pct_hoy) : nd;
   // Win rate y trades (trades ejecutados reales, de trades.csv)
   document.getElementById("live-wr").textContent = live.n_closed ? `${live.win_rate}%` : "—";
   document.getElementById("live-trades-count").textContent =
@@ -1073,10 +1154,15 @@ function renderLive(live) {
     else freshEl.textContent = "balance on-chain: n/d";
   }
 
-  // Charts REALES desde el PnL diario on-chain (live.real_daily = [{date,pnl}]).
-  // Equity real = depósito + acumulado; barras = PnL real de cada día.
-  if (live.real_daily && live.real_daily.length) {
-    const dep = live.real_deposito != null ? live.real_deposito : 25.44;
+  // Chart de capital real: histórico granular (snapshot ~15min, live.real_history)
+  // si hay datos; si no, fallback al reconstruido por días (live.real_daily).
+  const dep = live.real_deposito != null ? live.real_deposito : 25.44;
+  if (live.real_history && live.real_history.length) {
+    if (liveEqArea) {
+      liveEqArea.setData(live.real_history);
+      liveEqChart.timeScale().fitContent();
+    }
+  } else if (live.real_daily && live.real_daily.length) {
     let acc = dep;
     const eqReal = live.real_daily.map(d => { acc += d.pnl; return { time: d.date, value: +acc.toFixed(2) }; });
     // punto de arranque = depósito el día previo al primer trade
@@ -1085,13 +1171,16 @@ function renderLive(live) {
       liveEqArea.setData(eqReal);
       liveEqChart.timeScale().fitContent();
     }
-    if (liveDailySeries) {
-      liveDailySeries.setData(live.real_daily.map(d => ({
-        time: d.date, value: +d.pnl.toFixed(2),
-        color: d.pnl >= 0 ? "#26a69a" : "#ef5350",
-      })));
-      liveDailyChart.timeScale().fitContent();
-    }
+  }
+  // Barras diarias — SIEMPRE desde real_daily (independiente de si el
+  // histórico granular está disponible arriba, es "el diario" que se pidió
+  // mantener además del histórico completo).
+  if (live.real_daily && live.real_daily.length && liveDailySeries) {
+    liveDailySeries.setData(live.real_daily.map(d => ({
+      time: d.date, value: +d.pnl.toFixed(2),
+      color: d.pnl >= 0 ? "#26a69a" : "#ef5350",
+    })));
+    liveDailyChart.timeScale().fitContent();
   }
 
   // Barras por estrategia live (ventaja) + $/trade — mismas funciones que shadow
