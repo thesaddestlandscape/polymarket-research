@@ -1,5 +1,5 @@
-# Hipótesis automáticas — 2026-07-09 01:55 UTC
-_Generado por shadow_postmortem.py sobre 5879 resoluciones (PNL=+659.45€)_
+# Hipótesis automáticas — 2026-07-09 01:58 UTC
+_Generado por shadow_postmortem.py sobre 5881 resoluciones (PNL=+660.43€)_
 
 ## Patrones causales activos
 
@@ -284,10 +284,10 @@ _Derivadas de los patrones aprendidos:_
 | ✅ STREAK_FADE_15M#SOL#15min | 29 | -0.048 | -2.33€ | 0 | 0 |
 | ✅ STREAK_FADE_15M#XRP | 40 | +0.024 | -0.51€ | 0 | 0 |
 | ✅ STREAK_FADE_15M#XRP#15min | 40 | +0.024 | -0.51€ | 0 | 0 |
-| ✅ STREAK_MOM_5M | 166 | -0.012 | -6.50€ | 0 | 0 |
-| ✅ STREAK_MOM_5M#5min | 166 | -0.012 | -6.50€ | 0 | 0 |
-| ✅ STREAK_MOM_5M#ETH | 44 | -0.043 | -2.45€ | 0 | 0 |
-| ✅ STREAK_MOM_5M#ETH#5min | 44 | -0.043 | -2.45€ | 0 | 0 |
+| ✅ STREAK_MOM_5M | 168 | -0.006 | -5.52€ | 0 | 0 |
+| ✅ STREAK_MOM_5M#5min | 168 | -0.006 | -5.52€ | 0 | 0 |
+| ✅ STREAK_MOM_5M#ETH | 46 | -0.021 | -1.47€ | 0 | 0 |
+| ✅ STREAK_MOM_5M#ETH#5min | 46 | -0.021 | -1.47€ | 0 | 0 |
 | ✅ STREAK_MOM_5M#SOL | 66 | +0.044 | +0.94€ | 0 | 0 |
 | ✅ STREAK_MOM_5M#SOL#5min | 66 | +0.044 | +0.94€ | 0 | 0 |
 | ✅ STREAK_MOM_5M#XRP | 56 | -0.052 | -4.99€ | 0 | 0 |
@@ -384,7 +384,7 @@ _Derivadas de los patrones aprendidos:_
 **🟡 H-STREAK-COOLDOWN** — Cooldown tras 2 derrotas consecutivas (mismo subtype)
   - _Umbral_: n≥40 tras 2 losses y gap(IC_tras_win - IC_tras_2loss)≥0.05
   - _Acción_: Reducir stake (no desactivar) 1-2h tras 2 derrotas consecutivas en el mismo subtype
-  - _Estado_: tras_win IC=+0.055 n=3083 | tras_1loss IC=+0.009 n=2675 | tras_2loss IC=-0.019 n=1288/40 | gap=+0.074 (umbral 0.05)
+  - _Estado_: tras_win IC=+0.056 n=3085 | tras_1loss IC=+0.009 n=2675 | tras_2loss IC=-0.019 n=1288/40 | gap=+0.074 (umbral 0.05)
 
 **🟡 H-KALMAN** — Kalman filter para drift adaptativo
   - _Umbral_: n≥200 por subtipo para calibrar parámetros Q/R del KF
@@ -403,7 +403,7 @@ _Derivadas de los patrones aprendidos:_
 **⏳ H-CROSS-ASSET** — Cross-asset confirmation GBM+OF BUY_NO
   - _Umbral_: n_overlaps≥20 y IC_overlap > IC_base + 0.05
   - _Acción_: Cambiar _aplicar_kelly_compuesto: match por activo, no market_id
-  - _Estado_: n_overlaps=28, boost estimado=+0.004. Necesita 0 más y boost>0.05
+  - _Estado_: n_overlaps=28, boost estimado=+0.003. Necesita 0 más y boost>0.05
 
 **⏳ H-KELLY-HORA** — Kelly boost ×1.2 en horas top (15/17/19h UTC)
   - _Umbral_: n≥40 por hora con IC estable ≥+0.10 confirmado en forward
@@ -666,8 +666,8 @@ _Derivadas de los patrones aprendidos:_
   - _Hipótesis_: Mismo origen que H-CUSTOM-MOON-LLENA (paper de Fornero, 43 Jornadas SADAF 2023). Qi, Wang & Zhang (2022, 48 mercados, 1973-2019): rendimientos 3.33%/año más bajos durante Mercurio retrógrado. Kou & Ma (2022) en China (99.8% cuentas retail): hasta -31% anualizado. Ambos estudios confirman que el mecanismo es la creencia/superstición de inversores retail (mayor efecto cuanto más retail y más supersticioso el mercado), no un efecto astral literal — Polymarket encaja en ese perfil. Ventanas 2026 (fuente pública, actualizar cada año): 26-feb a 20-mar, 29-jun a 23-jul, 24-oct a 13-nov.
   - _Umbral_: n≥100 PERO ADEMÁS necesita cubrir al menos 2-3 ventanas de retrogradación distintas (no solo la de jun-jul 2026) — esperar mínimo hasta después de la ventana de oct-nov 2026
   - _Acción_: Si IC en mercury_retrogrado=1 < IC en mercury_retrogrado=0 con margen ≥0.05 y ≥2 ventanas distintas cubiertas → considerar boost/filtro. No implementar tras una sola ventana (jun-jul 2026) por more que n sea alto — sería solo un evento, no un patrón.
-  - _Estado_: n=3421 IC=+0.072 PNL=+735.33€ — sin señal clara aún (umbral IC: min=None max=-0.03)
-  - _Datos_: n=3421 IC=+0.072 PNL=+735.33€
+  - _Estado_: n=3423 IC=+0.072 PNL=+736.31€ — sin señal clara aún (umbral IC: min=None max=-0.03)
+  - _Datos_: n=3423 IC=+0.072 PNL=+736.31€
 
 **〰️ H-CUSTOM-SMART-MONEY-CONSENSUS** — Consenso de wallets 'smart money' — ¿confirma nuestra dirección?
   - _Hipótesis_: Javi propuso estudiar bots/wallets que operan bien en nuestros mismos mercados. En vez de creer artículos (ya verificamos 2 veces esta semana que las narrativas no aguantan el cruce con datos reales), smart_money_tracker.py mide el track record REAL de wallets activas en BTC/ETH/SOL/XRP Up-or-Down 5/15/60min vía data-api.polymarket.com/positions, filtrado a posiciones 'Up or Down'. Clasifica como 'smart' las wallets con n>=10 posiciones, win_rate>=0.55 y pnl_total>0. smart_money_consensus es el sesgo direccional reciente (Up-Down)/(Up+Down) de esas wallets 'smart' por activo. Hipótesis: si nuestra decisión (BUY_YES/BUY_NO) coincide con el consenso smart money, mejor IC que cuando diverge. RESET METODOLOGICO 2026-07-02: la clasificacion 'smart' original via /positions estaba INVERTIDA para wallets de alta frecuencia (el endpoint solo retiene el residuo perdedor sin redimir; verificado: 'wowitsamazing' figuraba como -$478k y es +$10k/mes en el leaderboard oficial). Desde 2026-07-02T06:12Z el consenso se construye solo con wallets verificadas en el leaderboard oficial (pnl_mes>=$1000, 24 wallets). Los valores de smart_money_consensus capturados en features ANTES de esa fecha provienen de la clasificacion rota — descontar ese tramo al evaluar.
