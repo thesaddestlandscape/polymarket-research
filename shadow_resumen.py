@@ -79,12 +79,15 @@ def main():
         por_strat[key]["pnl"] += float(r.get("pnl_neto", 0))
 
     # Agrupar también a nivel estrategia base
-    por_base = defaultdict(lambda: {"n": 0, "win": 0, "pnl": 0.0})
+    por_base = defaultdict(lambda: {"n": 0, "win": 0, "pnl": 0.0, "cronologico": []})
     for r in resultados:
         key = r.get("strategy", "?")
         por_base[key]["n"]   += 1
         por_base[key]["win"] += int(r.get("acierto", 0))
         por_base[key]["pnl"] += float(r.get("pnl_neto", 0))
+        por_base[key]["cronologico"].append(
+            (r.get("resolution_timestamp", ""), int(r.get("acierto", 0)))
+        )
 
     # ── Últimas 5 resoluciones ────────────────────────────────────────────────
     ultimas = resultados[-5:] if resultados else []
@@ -179,8 +182,8 @@ def main():
         "",
         "## Estrategias (visión global)",
         "",
-        "| Estrategia | n | Win% | IC_efectivo | PNL | Apuesta | Estado |",
-        "|---|---|---|---|---|---|---|",
+        "| Estrategia | n | Win% | IC_efectivo | Tendencia | PNL | Apuesta | Estado |",
+        "|---|---|---|---|---|---|---|---|",
     ]
 
     # Estrategias base ordenadas por PNL
@@ -191,6 +194,7 @@ def main():
         ic  = (d["win"] + 1) / (n + 2) - 0.5
         confianza = min(1.0, n / 20)
         ic_ef = ic * confianza
+        tendencia = _tendencia(d["cronologico"])
 
         sp = params.get(s, {})
         activa = sp.get("activa", True)
@@ -204,7 +208,7 @@ def main():
 
         signo = "+" if pnl >= 0 else ""
         lines.append(
-            f"| {s} | {n} | {wr:.1f}% | {ic_ef:+.3f} | {signo}{pnl:.2f}$ | {apuesta:.2f}$ | {est_str} |"
+            f"| {s} | {n} | {wr:.1f}% | {ic_ef:+.3f} | {tendencia} | {signo}{pnl:.2f}$ | {apuesta:.2f}$ | {est_str} |"
         )
 
     lines += [
@@ -308,6 +312,28 @@ def main():
 
 def _ic_bayes(win, n):
     return ((win + 1) / (n + 2) - 0.5) * min(1.0, n / 20)
+
+
+def _tendencia(cronologico):
+    """Propuesta #5 (artículo breakout, 09-Jul, ver ic_rolling.py): split-half
+    cronológico para ver si el edge MADURA o se AGOTA sin correr el script a
+    mano. n<30 (o <15 por mitad) no concluye nada — mismo umbral que el resto
+    del proyecto."""
+    n = len(cronologico)
+    if n < 30:
+        return "—"
+    ordenado = sorted(cronologico, key=lambda x: x[0])
+    mid = n // 2
+    primera, segunda = ordenado[:mid], ordenado[mid:]
+
+    def ic(rows):
+        wins = sum(a for _, a in rows)
+        return (wins + 1) / (len(rows) + 2) - 0.5
+
+    gap = ic(segunda) - ic(primera)
+    if abs(gap) < 0.03:
+        return "➡️ estable"
+    return f"📈 madura ({gap:+.2f})" if gap > 0 else f"📉 agota ({gap:+.2f})"
 
 
 def _esc(s):
