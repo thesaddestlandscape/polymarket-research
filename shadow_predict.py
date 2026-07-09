@@ -2129,19 +2129,40 @@ def _s_gbm_late(market, ctx, ventana_min, rest_lo, rest_hi, espacio_k=None):
     if abs(edge) < 0.03:
         return None
 
+    # Anchura de mercado (09-Jul, análisis con precios reales 05-09jul, n=802):
+    # media del retorno concurrente (mismo tramo de ventana, sin fuga — solo
+    # hasta "ahora") de los otros 3 majors de GBM_LATE_15M. Señal real y NO
+    # redundante con drift_ventana_pct propio (correlación 0.26): decil bajo
+    # IC=-0.146 hit=35% vs decil alto IC=+0.29 hit~75-80%, monótono. Puro
+    # logging — no cambia edge ni decisión, alimenta el bucket causal existente
+    # (postmortem IC_bucket) y H-CUSTOM-GBMLATE-ANCHURA-MERCADO.
+    spot_map = _cargar_spot()
+    otros_rets = []
+    for otro in GBM_LATE_15M_PARES:
+        if otro == activo:
+            continue
+        spot_otro = spot_map.get(otro)
+        ref_otro = _precio_en(otro, window_start, precios_data, tol_min=3)
+        if not spot_otro or spot_otro <= 0 or not ref_otro or ref_otro <= 0:
+            continue
+        otros_rets.append(spot_otro / ref_otro - 1)
+    mercado_anchura_pct = (round(sum(otros_rets) / len(otros_rets) * 100, 4)
+                           if len(otros_rets) == len(GBM_LATE_15M_PARES) - 1 else None)
+
     return {
         "prob_yes": round(p_up, 4),
         "razon":    (f"gbm_late_{ventana_min}min {activo} drift_vent={drift_ventana*100:+.3f}% "
                      f"rest={restante_min:.1f}min d={d:+.2f} p_up={p_up:.2f} py={py:.2f}"),
         "subtype":  f"{activo}#{ventana_min}min",
         "features": {
-            "drift_ventana_pct": round(drift_ventana * 100, 4),
-            "restante_min":      round(restante_min, 2),
-            "T_h":               round(T_rem_h, 4),
-            "sigma_h":           round(sigma_h, 5),
-            "d_gbm":             round(d, 3),
-            "py_entrada":        round(py, 3),
-            "hora_utc":          now_utc.hour,
+            "drift_ventana_pct":   round(drift_ventana * 100, 4),
+            "restante_min":        round(restante_min, 2),
+            "T_h":                 round(T_rem_h, 4),
+            "sigma_h":             round(sigma_h, 5),
+            "d_gbm":               round(d, 3),
+            "py_entrada":          round(py, 3),
+            "hora_utc":            now_utc.hour,
+            "mercado_anchura_pct": mercado_anchura_pct,
         },
     }
 
