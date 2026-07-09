@@ -1961,13 +1961,29 @@ GBM_LATE_15M_PARES = {"BTC", "ETH", "SOL", "XRP"}
 # generación no toca dinero real. GBM_LATE_60M = clon de entrada tardía 60min,
 # necesita acumular n para medir si el edge tardío (probado en 15min, IC=+0.279)
 # transfiere a ventanas 60min más profundas. (2026-07-06)
-ACUMULAR_SHADOW_AUNQUE_DESACTIVADA = {"GBM_LATE_60M", "GBM_LATE_15M_TARDIO"}
+ACUMULAR_SHADOW_AUNQUE_DESACTIVADA = {"GBM_LATE_60M", "GBM_LATE_15M_TARDIO", "GBM_LATE_15M_ESPACIO_ATR"}
 # Photo finish (2026-07-05): entrar con el precio pegado al strike es moneda
 # al aire cobrada como favorito. |drift_ventana|<0.02% → IC=-0.145 n=181
 # (win 35%), estable en ambas mitades temporales (-0.163/-0.127) y monótono
 # con la distancia; buffer [0.02,0.05) ya es positivo en los 4 pares.
 # Tracking forward: H-CUSTOM-LATE15-PHOTO-FINISH.
 GBM_LATE_DRIFT_VENT_MIN_PCT = 0.02  # % — distancia mínima |spot vs ref ventana|
+
+# Propuesta #1 (artículo breakout trading, 09-Jul): el "espacio" debería
+# escalar con volatilidad propia del activo (ATR-multiplier), no ser un %
+# fijo igual para BTC que para XRP. `d` ya se calcula en _s_gbm_late como
+# log(spot/ref)/(sigma_h*sqrt(T_restante)) — es exactamente ese espacio
+# estandarizado, solo que hoy no se usa como filtro. Analizado 09-Jul sobre
+# GBM_LATE_15M (n=2462, feature d_gbm ya logueada): relación MONÓTONA fuerte,
+# no un pico — hit 61.4%(n=2462)→64.5%(n=2010,|d|≥0.1)→69.4%(n=546,|d|≥0.4)
+# →80.6%(n=62,|d|≥0.8). k=0.3 elegido como punto de partida con volumen
+# comparable al filtro pct actual (n=841, hit 66.9%, edge+0.060) — no el
+# óptimo del barrido (sería sobreajustar al mismo dataset que lo sugiere).
+# Variante SEPARADA (mismo patrón que TARDIO/60M): dedup por (strategy,
+# market_id) exige nombre propio, acumula IC desde cero. NO está en
+# pares_permitidos_live — imposible que toque dinero real sin decisión
+# explícita con n≥40.
+GBM_LATE_ESPACIO_K = 0.3
 
 
 def s_gbm_late_15min(market, ctx):
@@ -2033,7 +2049,21 @@ def s_gbm_late_15min_tardio(market, ctx):
                        rest_hi=GBM_LATE_15M_TARDIO_REST_MIN_HI)
 
 
-def _s_gbm_late(market, ctx, ventana_min, rest_lo, rest_hi):
+def s_gbm_late_15min_espacio_atr(market, ctx):
+    """
+    Variante de GBM_LATE_15M con el "espacio" (distancia mínima al ancla)
+    escalado por volatilidad propia del activo en vez de un % fijo — ver
+    GBM_LATE_ESPACIO_K arriba para el análisis que motiva k=0.3. Mide
+    forward si sustituir GBM_LATE_DRIFT_VENT_MIN_PCT por |d|>=k mejora el
+    edge sin perder demasiado volumen, con n propio (n=0 al arrancar).
+    """
+    return _s_gbm_late(market, ctx, ventana_min=15,
+                       rest_lo=GBM_LATE_15M_REST_MIN_LO,
+                       rest_hi=GBM_LATE_15M_REST_MIN_HI,
+                       espacio_k=GBM_LATE_ESPACIO_K)
+
+
+def _s_gbm_late(market, ctx, ventana_min, rest_lo, rest_hi, espacio_k=None):
     question = market.get("question", "")
     if "up or down" not in question.lower():
         return None
@@ -2080,8 +2110,14 @@ def _s_gbm_late(market, ctx, ventana_min, rest_lo, rest_hi):
     p_up = _norm_cdf(d)
 
     drift_ventana = spot / ref - 1
-    # Photo finish: sin distancia real al strike no hay señal, solo ruido 50/50
-    if abs(drift_ventana * 100) < GBM_LATE_DRIFT_VENT_MIN_PCT:
+    # Photo finish: sin distancia real al strike no hay señal, solo ruido 50/50.
+    # espacio_k (propuesta #1, 09-Jul): variante que sustituye el % fijo por
+    # el espacio ya estandarizado por volatilidad (|d|), en vez de apilar
+    # ambos filtros sobre la misma variante.
+    if espacio_k is not None:
+        if abs(d) < espacio_k:
+            return None
+    elif abs(drift_ventana * 100) < GBM_LATE_DRIFT_VENT_MIN_PCT:
         return None
     py = market.get("_precio_yes")
     if py is None:
@@ -2591,6 +2627,7 @@ ESTRATEGIAS = [
     ("LATE_WINDOW_5MIN",    s_late_window_5min),
     ("GBM_LATE_15M",        s_gbm_late_15min),
     ("GBM_LATE_15M_TARDIO", s_gbm_late_15min_tardio),
+    ("GBM_LATE_15M_ESPACIO_ATR", s_gbm_late_15min_espacio_atr),
     ("GBM_LATE_60M",        s_gbm_late_60min),
     ("STRUCT_NO_15M",       s_struct_no_15m),
     ("STREAK_MOM_5M",       s_streak_mom_5m),
