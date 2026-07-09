@@ -648,6 +648,38 @@ def _aplicar_filtro(row, filtro):
     return True
 
 
+def _cross_pair_check(rows, filtro, direccion):
+    """Propuesta #4 (artículo breakout, 09-Jul): una hipótesis descubierta en un
+    solo par no se da por 'confirmada' sin verse en al menos 2 pares MÁS (3
+    en total). Solo aplica cuando el filtro fija un 'par' concreto — si ya es
+    agregado multi-par, no hay nada que cruzar.
+    direccion: 'positivo' (ic_min, señal alcista) o 'negativo' (ic_max, señal bajista).
+    Devuelve (ok: bool, detalle: str)."""
+    par_actual = filtro.get("par")
+    if not par_actual:
+        return True, ""
+
+    filtro_sin_par = {k: v for k, v in filtro.items() if k != "par"}
+    universo = [r for r in rows if _aplicar_filtro(r, filtro_sin_par)]
+    pares = sorted({r["subtype"].split("#", 1)[0]
+                     for r in universo if "#" in r.get("subtype", "")})
+    otros_pares = [p for p in pares if p != par_actual]
+
+    confirmados, detalle = [], []
+    for p in otros_pares:
+        filtro_p = dict(filtro_sin_par, par=p)
+        sp = _stats([r for r in rows if _aplicar_filtro(r, filtro_p)])
+        ok_p = sp["n"] >= 15 and (
+            (direccion == "positivo" and sp["ic"] > 0) or
+            (direccion == "negativo" and sp["ic"] < 0)
+        )
+        detalle.append(f"{p}: n={sp['n']} IC={sp['ic']:+.3f}" + (" ✓" if ok_p else ""))
+        if ok_p:
+            confirmados.append(p)
+
+    return len(confirmados) >= 2, "; ".join(detalle)
+
+
 def _eval_custom(h_def, rows):
     """Evalúa una hipótesis custom definida en JSON."""
     filtro = h_def.get("filtro", {})
@@ -663,10 +695,20 @@ def _eval_custom(h_def, rows):
                 "rec": f"{s['n']}/{umbral_n} ops en el filtro definido (IC actual={s['ic']:+.3f} PNL={s['pnl']:+.2f}€)"}
 
     if ic_max is not None and s["ic"] < ic_max:
+        ok, detalle = _cross_pair_check(rows, filtro, "negativo")
+        if not ok:
+            return {**s, "status": "LISTA_1PAR",
+                    "rec": f"SEÑAL NEGATIVA en {filtro.get('par')} (IC={s['ic']:+.3f} n={s['n']}) "
+                           f"pero sin cruzar ≥2 pares más — {detalle or 'sin otros pares con datos'}"}
         return {**s, "status": "LISTA_IMPLEMENTAR",
                 "rec": f"SEÑAL NEGATIVA confirmada: IC={s['ic']:+.3f} < {ic_max} con n={s['n']} PNL={s['pnl']:+.2f}€"}
 
     if ic_min is not None and s["ic"] > ic_min:
+        ok, detalle = _cross_pair_check(rows, filtro, "positivo")
+        if not ok:
+            return {**s, "status": "LISTA_1PAR",
+                    "rec": f"SEÑAL POSITIVA en {filtro.get('par')} (IC={s['ic']:+.3f} n={s['n']}) "
+                           f"pero sin cruzar ≥2 pares más — {detalle or 'sin otros pares con datos'}"}
         return {**s, "status": "LISTA_EVALUAR",
                 "rec": f"SEÑAL POSITIVA confirmada: IC={s['ic']:+.3f} > {ic_min} con n={s['n']} PNL={s['pnl']:+.2f}€"}
 
@@ -895,6 +937,7 @@ HIPOTESIS = [
 STATUS_ICON = {
     "LISTA_IMPLEMENTAR":    "🔴",
     "LISTA_EVALUAR":        "🟡",
+    "LISTA_1PAR":           "🔶",
     "LISTA_LIVE":           "🟢",
     "DATASET_DISPONIBLE":   "🟡",
     "N_ALCANZADO_IC_BAJO":  "⚠️",
