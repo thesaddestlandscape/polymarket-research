@@ -3377,3 +3377,4 @@ timestamp_utc,market_id,strategy,subtype,direction,motivo,precio_plan,stake_eur,
 2026-07-10T09:21:26+00:00,2857482,GBM_LATE_15M,SOL#15min,BUY_YES,no_viable_stake,0.615,1.05,0.92,0.0,8,0.0
 2026-07-10T09:33:05+00:00,2857514,GBM_LATE_15M,ETH#15min,BUY_YES,fuera_ventana,0.495,1.05,0.68,0.0,32,0.0
 2026-07-10T09:33:05+00:00,2857523,GBM_LATE_15M,SOL#15min,BUY_YES,fuera_ventana,0.495,1.05,0.76,0.0,24,0.0
+2026-07-10T09:49:14+00:00,2857663,GBM_LATE_15M,ETH#15min,BUY_YES,fuera_ventana,0.475,1.05,0.44,269.42,56,256.6
