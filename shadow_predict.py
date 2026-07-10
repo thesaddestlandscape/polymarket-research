@@ -1135,6 +1135,46 @@ def _drift_e_ibs_ventana(sym, precios_data, n_min):
     return round(drift_pct, 4), round(ibs, 4)
 
 
+def _dist_ancla_estructural_pct(sym, precios_data, horas_lookback=3):
+    """VWAP anclada a un punto estructural (10-Jul, propuesta #4 libro Shannon
+    "Anchored VWAP"): en vez de anclar a las 00:00 UTC fija (dist_vwap_pct
+    existente, solo UPDOWN_GBM) — arbitrario para un activo 24/7 sin apertura
+    de sesión real — ancla al extremo (máx o mín) de las últimas
+    `horas_lookback`. Aproximación DELIBERADA y documentada, no la Anchored
+    VWAP completa de Shannon: (a) es media SIN ponderar por volumen —
+    precios_intraday (data/prices/*.csv) no tiene volumen, solo
+    data/binance/klines lo tiene y con ~25min de profundidad, insuficiente
+    para un ancla de horas; volumen-ponderar exigiría una llamada nueva a la
+    API dedicada (mismo patrón que fetch_session_vwap) que hoy NO se añade
+    para no revertir el ahorro de latencia del mismo día (ver
+    project_hallazgo_latencia_10jul); (b) el "extremo de la ventana" es una
+    detección de swing ingenua (no un detector de pivotes real) — en un
+    mercado en tendencia fuerte, el extremo tiende a coincidir con el inicio
+    de la ventana, casi indistinguible de una media de lookback fijo. SIN
+    VALIDAR con datos históricos (no se puede: la feature no existía antes de
+    hoy, no hay forma de reconstruir retroactivamente qué habría dicho en
+    trades pasados). Puro logging — el pipeline causal decide con n futuro."""
+    ahora = datetime.now(timezone.utc)
+    corte = ahora - timedelta(hours=horas_lookback)
+    serie = [(ts, p[sym]) for ts, p in precios_data if sym in p and ts >= corte]
+    if len(serie) < 10:
+        return None
+    valores = [v for _, v in serie]
+    idx_max = valores.index(max(valores))
+    idx_min = valores.index(min(valores))
+    # ancla = el extremo MÁS RECIENTE de los dos (más probable que sea el
+    # swing point relevante "ahora" que el más antiguo de la ventana)
+    idx_ancla = idx_max if idx_max > idx_min else idx_min
+    desde_ancla = valores[idx_ancla:]
+    if len(desde_ancla) < 2:
+        return None
+    media_ancla = sum(desde_ancla) / len(desde_ancla)
+    if media_ancla <= 0:
+        return None
+    spot = valores[-1]
+    return round((spot - media_ancla) / media_ancla * 100, 4)
+
+
 def _calcular_delta_ratio_macro(sym, klines_raw):
     """
     Delta ratio acumulado sobre todas las klines disponibles con taker_buy_vol.
@@ -2182,6 +2222,7 @@ def _s_gbm_late(market, ctx, ventana_min, rest_lo, rest_hi, espacio_k=None):
     # muy reciente, distinto de drift_ventana_pct (que mide desde la apertura
     # de ESTA ventana de {ventana_min}min, no una ventana fija de 20min).
     drift_20min_pct, ibs_20min = _drift_e_ibs_ventana(activo, precios_data, 20)
+    dist_ancla_estructural_pct = _dist_ancla_estructural_pct(activo, precios_data, horas_lookback=3)
 
     return {
         "prob_yes": round(p_up, 4),
@@ -2199,6 +2240,7 @@ def _s_gbm_late(market, ctx, ventana_min, rest_lo, rest_hi, espacio_k=None):
             "mercado_anchura_pct": mercado_anchura_pct,
             "drift_20min_pct":     drift_20min_pct,
             "ibs_20min":           ibs_20min,
+            "dist_ancla_estructural_pct": dist_ancla_estructural_pct,
         },
     }
 
