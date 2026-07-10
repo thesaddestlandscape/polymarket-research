@@ -634,6 +634,11 @@ def construir_contexto():
             _vw = kd.get("vwap")
             if isinstance(_vw, dict):
                 ctx["vwap_sesion"] = _vw
+            # Régimen de volumen (10-Jul, propuesta #5): clave "volumen_regimen"
+            # del mismo JSON, mismo patrón que vwap arriba.
+            _vr = kd.get("volumen_regimen")
+            if isinstance(_vr, dict):
+                ctx["volumen_regimen"] = _vr
     except Exception:
         pass
     ctx["spot_prices"] = spot_prices
@@ -2223,6 +2228,7 @@ def _s_gbm_late(market, ctx, ventana_min, rest_lo, rest_hi, espacio_k=None):
     # de ESTA ventana de {ventana_min}min, no una ventana fija de 20min).
     drift_20min_pct, ibs_20min = _drift_e_ibs_ventana(activo, precios_data, 20)
     dist_ancla_estructural_pct = _dist_ancla_estructural_pct(activo, precios_data, horas_lookback=3)
+    volumen_regimen = ctx.get("volumen_regimen", {}).get(activo)
 
     return {
         "prob_yes": round(p_up, 4),
@@ -2241,6 +2247,7 @@ def _s_gbm_late(market, ctx, ventana_min, rest_lo, rest_hi, espacio_k=None):
             "drift_20min_pct":     drift_20min_pct,
             "ibs_20min":           ibs_20min,
             "dist_ancla_estructural_pct": dist_ancla_estructural_pct,
+            "volumen_regimen":     volumen_regimen,
         },
     }
 

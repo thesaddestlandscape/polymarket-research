@@ -223,6 +223,44 @@ def fetch_session_vwap(asset: str) -> float | None:
         return None
 
 
+def fetch_volume_regimen(asset: str, horas_lookback: int = 3, minutos_ventana: int = 20) -> float | None:
+    """Ratio de volumen reciente vs línea base (10-Jul, propuesta #5 libro
+    Shannon "multiple timeframes"): volumen de los últimos `minutos_ventana`
+    (misma ventana que drift_20min_pct/ibs_20min) dividido entre el volumen
+    medio por bloque equivalente en las últimas `horas_lookback` horas.
+    >1 = actividad reciente elevada vs el propio histórico corto del activo;
+    <1 = diminuida. Llamada dedicada (mismo patrón que fetch_session_vwap) —
+    NO reusa el snapshot de 25 velas del fetch principal (insuficiente
+    profundidad para una línea base de horas). Fail-closed: cualquier fallo
+    devuelve None y la feature no se añade (no rompe nada aguas abajo)."""
+    symbol = BINANCE_SYMBOLS.get(asset)
+    if not symbol:
+        return None
+    try:
+        now = datetime.now(timezone.utc)
+        inicio_ms = int((now.timestamp() - horas_lookback * 3600) * 1000)
+        r = requests.get(
+            "https://api.binance.com/api/v3/klines",
+            params={"symbol": symbol, "interval": "1m",
+                    "startTime": inicio_ms, "limit": 1000},
+            timeout=TIMEOUT,
+        )
+        r.raise_for_status()
+        velas = r.json()
+        if len(velas) < minutos_ventana * 2:
+            return None  # histórico insuficiente para una línea base fiable
+        vol_reciente = sum(float(k[5]) for k in velas[-minutos_ventana:])
+        vol_total = sum(float(k[5]) for k in velas)
+        n_bloques = len(velas) / minutos_ventana
+        vol_base_por_bloque = vol_total / n_bloques if n_bloques > 0 else 0
+        if vol_base_por_bloque <= 0:
+            return None
+        return round(vol_reciente / vol_base_por_bloque, 4)
+    except Exception as e:
+        print(f"  [WARN] volume regimen {asset}: {type(e).__name__}: {e}", file=sys.stderr)
+        return None
+
+
 def _log_evento_fuente(sym: str, fuente_prev: str, fuente_nueva: str, salto_pct: float) -> None:
     """Deja constancia en dq_events.jsonl (mismo log que L1) de un cambio de
     fuente de precio para un activo, con el salto de precio asociado — antes
@@ -285,6 +323,17 @@ def main():
     if vwaps:
         data["vwap"] = vwaps
         print(f"  VWAP sesión: {{{', '.join(f'{k}={v:.4g}' for k, v in vwaps.items())}}}")
+
+    # Régimen de volumen (10-Jul, propuesta #5) — mismo patrón fail-closed
+    # que vwaps arriba. Llamada dedicada, no reusa el snapshot principal.
+    vol_regimen = {}
+    for _asset in ("BTC", "ETH", "SOL", "XRP"):
+        _vr = fetch_volume_regimen(_asset)
+        if _vr is not None:
+            vol_regimen[_asset] = _vr
+    if vol_regimen:
+        data["volumen_regimen"] = vol_regimen
+        print(f"  Volumen régimen: {{{', '.join(f'{k}={v:.2f}x' for k, v in vol_regimen.items())}}}")
 
     out_path = DIR_BINANCE / f"klines_{fecha}.json"
     with open(out_path, "w", encoding="utf-8") as f:
