@@ -152,7 +152,11 @@
   "_pares_xrp_retirada_nota": "2026-07-10 (decisión Javi): GBM_LATE_15M#XRP#15min#BUY_YES RETIRADA de whitelist. Único tuple net-NEGATIVO en los fills reales (analisis_fills por par, histórico completo): ejecutadas n=41 hit 41% -8.28€ a precio plan (vs ETH +7.97€ y SOL +8.38€, ambos positivos), abort_requote 24% -13.26€, fok_kill 30% -6.19€. Reciente aún peor: 36h 1/11 hit -9.74€. NO es el modelo (shadow XRP 60%, feed coincide 0/11 con settlement Polymarket) ni varianza (p≈0.0003) — es selección adversa taker (vetadas por profundidad 60% vs ejecutadas 41%) especialmente tóxica en XRP: su microestructura da los peores fills de los 3. ETH/SOL se mantienen (mismo gap de selección adversa ~17-20pt pero fills aún net-positivos). Ver memoria project_diagnostico_perdidas_10jul. RE-AÑADIR solo si (a) el edge taker de XRP vuelve net-positivo con n≥30, o (b) se implementa entrada maker sobre señales vetadas y XRP la pasa.",
   "_pares_permitidos_nota_2026-07-06": "BUY_NO retirados del live (decisión Javi 06-Jul): selección adversa direccional — live BUY_NO 31% hit −16.33€ (todas las tuplas negativas) vs BUY_YES 53% +9.08€; los NO siguen en shadow y vuelven vía filtro fill-ability (analisis_fills, veto_profundidad 24/24 hit, decisión con n≥30).",
   "_candidatos_evaluacion_nota": "Tuplas en evaluacion pre-whitelist: solo lectura de libro via _snapshots_candidatos_evaluacion (live_trade.py), NUNCA ejecuta. Anadida 2026-07-09 para BTC UPDOWN_GBM BUY_YES tardio (H-CUSTOM-UPDOWNGBM-BTC15-TARDIO, hipotesis_custom.json): gate n>=80 antes de considerar whitelist.",
+  "_candidatos_streak_fade_nota": "2026-07-10: ANADIDAS las 3 tuplas STREAK_FADE_15M#{par}#15min#BUY_YES. Mecanismo DISTINTO a GBM_LATE (fade de rachas >=4, no entrada tardia contra flujo informado) -> posible dinamica de fill diferente, digno de medir antes de descartar por el mismo muro de selección adversa. BUY_YES es la direccion prometedora: agregado ic_BUY_YES=+0.123 n=59 (YA cruza gate n>=40 IC>=0.08 a nivel agregado, ningun par individual todavia: ETH ic=+0.208 n=10 el mas fuerte pero fino, XRP ic=+0.062 n=30, SOL ic=+0.023 n=19). BUY_NO plano en los 3 pares (max +0.068), NO instrumentado. Gate: n_par>=40 o decision explicita de Javi sobre promocion a nivel agregado con este dato de fill-ability ya acumulado.",
   "candidatos_evaluacion_live": [
-    "UPDOWN_GBM#BTC#15min#BUY_YES"
+    "UPDOWN_GBM#BTC#15min#BUY_YES",
+    "STREAK_FADE_15M#XRP#15min#BUY_YES",
+    "STREAK_FADE_15M#SOL#15min#BUY_YES",
+    "STREAK_FADE_15M#ETH#15min#BUY_YES"
   ]
 }
