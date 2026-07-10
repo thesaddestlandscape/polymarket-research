@@ -605,7 +605,14 @@ def _aplicar_filtro(row, filtro):
     sub   = row.get("subtype", "")
     dec   = row.get("decision", "")
 
-    if "strategy_prefix" in filtro and not strat.startswith(filtro["strategy_prefix"]):
+    # Match EXACTO de estrategia (la columna 'strategy' nunca lleva sufijo #subtype).
+    # Antes se usaba startswith, que agrupaba variantes _VARIANTE (p.ej. GBM_LATE_15M
+    # pool-eaba _TARDIO/_ESPACIO_ATR/_MULTIHORIZONTE) e inflaba n/IC → falso
+    # LISTA_IMPLEMENTAR en H-CUSTOM-GBMLATE-PYBAJO-LONGSHOT (10-Jul). Los 7 valores de
+    # strategy_prefix en uso apuntan a la estrategia base exacta; solo GBM_LATE_15M
+    # tenía variantes que lo hacía divergir. Se mantiene la clave 'strategy_prefix' por
+    # compatibilidad con hipotesis_custom.json (semántica ahora = exacto).
+    if "strategy_prefix" in filtro and strat != filtro["strategy_prefix"]:
         return False
     if "subtype_contains" in filtro and filtro["subtype_contains"] not in sub:
         return False
