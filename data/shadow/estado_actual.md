@@ -1,4 +1,4 @@
-# Estado del bot — 2026-07-10 16:08 UTC
+# Estado del bot — 2026-07-10 16:15 UTC
 
 ## Live — dinero real (on-chain)
 | | |
@@ -13,11 +13,11 @@
 ## Shadow — MODELO SIMULADO (no cobrable)
 | | |
 |---|---|
-| P&L fiel (stake fijo 1$) | +783.20 $ |
-| P&L sim compuesto | 🟢 +1187.34 $ (ficción Kelly: +4667% s/ operativo) |
-| P&L sim hoy (2026-07-10) | 🟢 +275.41 $ |
-| Operaciones resueltas | 7817 (4319 WIN / 3498 LOSS) — 55.3% |
-| Señales abiertas | 193 |
+| P&L fiel (stake fijo 1$) | +780.20 $ |
+| P&L sim compuesto | 🟢 +1185.81 $ (ficción Kelly: +4661% s/ operativo) |
+| P&L sim hoy (2026-07-10) | 🟢 +273.88 $ |
+| Operaciones resueltas | 7820 (4319 WIN / 3501 LOSS) — 55.2% |
+| Señales abiertas | 191 |
 
 ## Estrategias (visión global)
 
@@ -29,7 +29,7 @@
 | ORDER_FLOW_5M | 1570 | 51.3% | +0.013 | ➡️ estable | +17.57$ | 0.50$ | ✅ activa |
 | STREAK_FADE_15M | 118 | 61.0% | +0.108 | 📈 madura (+0.13) | +16.00$ | 1.08$ | ✅ activa |
 | LATE_WINDOW_5MIN | 35 | 71.4% | +0.203 | 📉 agota (-0.09) | +10.30$ | 2.00$ | ✅ activa |
-| FAVORITO_CONFIRMADO | 97 | 77.3% | +0.268 | 📈 madura (+0.16) | +9.70$ | 2.00$ | ✅ activa |
+| FAVORITO_CONFIRMADO | 100 | 75.0% | +0.245 | 📈 madura (+0.10) | +8.17$ | 2.00$ | ✅ activa |
 | GBM_LATE_60M | 233 | 37.8% | -0.121 | 📈 madura (+0.06) | +5.37$ | 0.50$ | ⚠️ IC negativo |
 | RESOLUTION_SNIPER | 8 | 100.0% | +0.160 | — | +3.47$ | 1.60$ | ✅ activa |
 | LEADLAG_BTC_XRP_15M | 26 | 57.7% | +0.071 | — | +1.86$ | 0.71$ | ✅ activa |
@@ -46,30 +46,30 @@
 
 | Timestamp | Estrategia | Mercado | Resultado | PNL |
 |---|---|---|---|---|
+| 2026-07-10T16:14 | FAVORITO_CONFIRMADO#ETH#5min | Ethereum Up or Down - July 10, 12:05PM-12:10PM ET… | ❌ LOSS | -0.51$ |
+| 2026-07-10T16:14 | FAVORITO_CONFIRMADO#BTC#5min | Bitcoin Up or Down - July 10, 12:05PM-12:10PM ET… | ❌ LOSS | -0.51$ |
+| 2026-07-10T16:12 | FAVORITO_CONFIRMADO#SOL#5min | Solana Up or Down - July 10, 12:05PM-12:10PM ET… | ❌ LOSS | -0.51$ |
 | 2026-07-10T16:08 | PRICE_TARGET_GBM#SOL#atexpiry | Will the price of Solana be above $80 on July 10?… | ✅ WIN | +0.77$ |
 | 2026-07-10T16:08 | WEEKLY_PRICE#ETH | Will the price of Ethereum be between $1,700 and $… | ✅ WIN | +1.01$ |
-| 2026-07-10T16:08 | WEEKLY_PRICE#SOL | Will the price of Solana be between $70 and $80 on… | ❌ LOSS | -0.51$ |
-| 2026-07-10T16:06 | WEEKLY_PRICE#BTC | Will the price of Bitcoin be between $64,000 and $… | ❌ LOSS | -1.39$ |
-| 2026-07-10T16:06 | WEEKLY_PRICE#BTC | Will the price of Bitcoin be between $62,000 and $… | ❌ LOSS | -0.51$ |
 
 ## Calidad de datos
 
-✅ **OK** — última verificación 2026-07-10T16:07 UTC
+✅ **OK** — última verificación 2026-07-10T16:14 UTC
 
 | Asset | Precio | Age | Alertas |
 |---|---|---|---|
-| ✅ BTC | $63,949.21 | 0.1min |  |
-| ✅ ETH | $1,788.32 | 0.1min |  |
-| ✅ SOL | $77.98 | 0.1min |  |
+| ✅ BTC | $63,954.64 | 0.1min |  |
+| ✅ ETH | $1,790.34 | 0.1min |  |
+| ✅ SOL | $78.11 | 0.1min |  |
 | ✅ XRP | $1.10 | 0.1min |  |
 
 **Cross-source** (binance, coinbase, kraken):
 
 | Asset | Consenso | Fuente | Estado |
 |---|---|---|---|
-| BTC | $63,952.60 | consenso |  |
-| ETH | $1,788.47 | consenso |  |
-| SOL | $77.90 | consenso |  |
+| BTC | $63,964.20 | consenso |  |
+| ETH | $1,790.47 | consenso |  |
+| SOL | $77.98 | consenso |  |
 | XRP | $1.10 | consenso |  |
 
 ---
