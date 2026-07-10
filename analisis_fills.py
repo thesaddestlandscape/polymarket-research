@@ -29,9 +29,16 @@ RESULTS = DIR / "data/shadow/results.csv"
 # tiene varios snapshots (reintentos ~20s), el motivo final es el más alto.
 # fuera_ventana (05-Jul, acumulación 24/7) va al final: cualquier contacto real
 # con la fase de ejecución pesa más que un snapshot pasivo fuera de horario.
+# maker_colocada va al FINAL a propósito (code-review 10-Jul): la señal que
+# recibe orden maker YA fue vetada por profundidad y debe SEGUIR clasificada
+# veto_profundidad aquí — es el baseline (97% hit) contra el que se mide el
+# piloto. Si maker_colocada ganara la clasificación, cada colocación sacaría
+# la señal del bucket veto y el denominador del go/no-go se encogería durante
+# la vida del propio piloto. Los fills maker se analizan por trades.csv
+# (notas maker_pilot=1) y maker_orders.json, no por este CSV.
 PRIORIDAD = ["ejecutada", "fok_kill", "abort_requote",
              "veto_profundidad", "veto_sin_datos", "no_viable_stake",
-             "fuera_ventana", "senal_caducada"]
+             "fuera_ventana", "senal_caducada", "maker_colocada"]
 
 
 def _prio(motivo: str) -> int:

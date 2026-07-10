@@ -695,6 +695,360 @@ REQUOTE_PRECIO_MAX = 0.95  # nunca pagar más de esto por el token, pase lo que 
 MIN_ORDEN_CLOB_USD = 1.00  # el CLOB rechaza marketable BUY < $1 ("min size: 1")
 REQUOTE_DIVERGENCIA_MAX = 0.10  # |ask - plan| máx; más allá el modelo está desfasado
 
+
+# ============================================================================
+# PILOTO MAKER-SOBRE-VETADAS (2026-07-10, aprobado Javi — propuesta #1)
+#
+# Motivación (analisis_fills, histórico completo, ambos lados n>=30): las
+# señales vetadas por profundidad aciertan 97% (+123.59€ a precio plan, n=86)
+# vs 47% las ejecutadas taker (n=131) — selección adversa. maker_sim refutó
+# maker GENERAL (EV−, fill 53.6%), pero nunca se probó maker CONDICIONAL al
+# subconjunto vetado (tensión documentada en project_diagnostico_perdidas_10jul).
+# Este piloto la resuelve con dinero real acotado: limit GTD post-solo-precio
+# (nunca cruza el ask) únicamente en señales que pasaron TODOS los gates
+# (whitelist, IC, CLV, evaluador, stake, techo dirección, latencia<100s) y
+# murieron exclusivamente en veto_profundidad.
+#
+# Seguridad (código de dinero real — no minimizar):
+#  - GTD: la orden expira SOLA en el exchange a T-cancelar_antes_fin_seg
+#    (mismo margen CANCEL_MIN=4min que maker_sim). Si este proceso muere, no
+#    queda orden eterna colgada.
+#  - Estado persistente en maker_orders.json; intent se escribe ANTES de
+#    postear (crash entre post y save → la huérfana se adopta o descarta en
+#    la reconciliación vía get_open_orders).
+#  - Fill solo se registra en trades.csv cuando la API lo confirma
+#    (get_order: size_matched>0); stake real = size_matched × precio.
+#  - Señal con orden maker viva se salta también la ruta taker (el libro
+#    fluctúa: sin este check, un ciclo posterior podría pasar el veto y
+#    ejecutar taker → doble posición en el mismo mercado).
+#  - Killswitch: config maker_pilot.activo=false apaga la colocación (la
+#    reconciliación de órdenes ya vivas sigue corriendo siempre).
+#  - Caps: max_ordenes_abiertas simultáneas, stake fijo del piloto.
+#  - Las órdenes maker abiertas NO computan en el freno diario prospectivo
+#    (bloquean USDC en el CLOB sin ser posición) — exposición acotada por
+#    max_ordenes_abiertas × stake ≈ 2.10€, documentado y aceptado en el
+#    diseño del piloto.
+# ============================================================================
+MAKER_ORDERS_JSON = DIR_LIVE / "maker_orders.json"
+MAKER_GTD_BUFFER_MIN_SEG = 90   # no colocar si la expiración quedaría a <90s
+# ⚠️ GTD y el "1 minute security threshold" del CLOB (README py-clob-client):
+# el exchange exige expiration > ahora + ~60s. El buffer de 90s lo cubre. Si
+# la semántica real fuera "expira en expiration−60s", la orden moriría a
+# T-300s en vez de T-240s — dirección SEGURA (muere antes, nunca después del
+# margen anti-sniper diseñado). No "compensar" sumando 60s a expiration: eso
+# invertiría el error hacia el lado peligroso (viva en la fase sniper).
+
+
+def _maker_pilot_cfg() -> dict:
+    cfg = _cargar_config().get("maker_pilot", {})
+    return {
+        "activo": bool(cfg.get("activo", False)),   # fail-closed: ausente = off
+        "max_ordenes_abiertas": int(cfg.get("max_ordenes_abiertas", 2)),
+        "stake_eur": float(cfg.get("stake_eur", 1.05)),
+        "cancelar_antes_fin_seg": int(cfg.get("cancelar_antes_fin_seg", 240)),
+    }
+
+
+def _maker_estado_cargar() -> list:
+    try:
+        if MAKER_ORDERS_JSON.exists():
+            data = json.loads(MAKER_ORDERS_JSON.read_text())
+            if isinstance(data, list):
+                return data
+    except Exception as e:
+        # Fail-closed: estado ilegible → tratar como "hay órdenes" es
+        # imposible sin datos; se loguea fuerte y se devuelve lista vacía,
+        # pero la colocación queda bloqueada vía _maker_estado_ok.
+        log(f"  ⚠️ maker_orders.json ilegible: {e}")
+        return None
+    return []
+
+
+def _maker_estado_guardar(ordenes: list) -> None:
+    # Prune (code-review 10-Jul): los estados terminales se quedaban para
+    # siempre y el fichero (leído+reescrito entero en el hot loop) crecía
+    # sin límite. Se conservan 7 días de terminales para análisis del piloto.
+    corte = (datetime.now(timezone.utc) - timedelta(days=7)).isoformat()
+    vivos = [o for o in ordenes
+             if o.get("estado") in ("enviando", "abierta")
+             or str(o.get("ts_colocacion", "")) >= corte]
+    tmp = MAKER_ORDERS_JSON.with_suffix(".json.tmp")
+    tmp.write_text(json.dumps(vivos, indent=1, ensure_ascii=False))
+    tmp.replace(MAKER_ORDERS_JSON)
+
+
+def _maker_mids_activos(ordenes: list | None) -> set:
+    if not ordenes:
+        return set()
+    return {o.get("market_id", "") for o in ordenes
+            if o.get("estado") in ("enviando", "abierta")}
+
+
+def _maker_registrar_fill(o: dict, size_matched: float, precio_fill: float) -> bool:
+    """Fila en trades.csv con la economía REAL del fill (API-confirmada).
+    shadow_resolve la cierra a resolución como cualquier trade live.
+    IDEMPOTENTE por market_id (code-review 10-Jul): si el mercado ya tiene
+    fila en trades.csv (crash entre este append y la persistencia del estado
+    'fill' en maker_orders.json → el ciclo siguiente re-ve MATCHED y volvería
+    a entrar aquí), NO se duplica. Devuelve True solo si registró de verdad
+    (el caller decide el Telegram con eso — nunca notificar un dedup)."""
+    mid = o.get("market_id", "")
+    if mid in _ya_operados_hoy():
+        log(f"  ℹ️ maker fill ya registrado (dedup idempotente): {mid}")
+        return False
+    stake_real = round(size_matched * precio_fill, 4)
+    trade = {
+        "timestamp_utc":    datetime.now(timezone.utc).isoformat(timespec="seconds"),
+        "market_id":        mid,
+        "question":         o.get("question", ""),
+        "end_date":         o.get("end_date", ""),
+        "strategy":         o.get("strategy", ""),
+        "subtype":          o.get("subtype", ""),
+        "direction":        o.get("direction", ""),
+        "stake_eur":        stake_real,
+        "entry_price":      precio_fill,
+        "ic_modelo":        o.get("ic_modelo", ""),
+        "edge_neto":        o.get("edge_neto", ""),
+        "conviction_score": o.get("conviction_score", ""),
+        "kelly_recomendado": o.get("stake_eur", ""),
+        "status":           "OPEN",
+        "fee_eur":          0.0,   # maker no paga fee de trading en el CLOB
+        "notas":            (f"maker_pilot=1 precio_limit={o.get('precio_limit')} "
+                             f"ask_colocacion={o.get('mejor_ask_colocacion')} "
+                             f"size_matched={size_matched}"),
+    }
+    _registrar_trade(trade)
+    return True
+
+
+def _reconciliar_ordenes_maker() -> None:
+    """Cada ciclo: consulta el estado real de cada orden maker no terminal.
+    Nunca lanza. Solo construye el ClobClient si hay algo que reconciliar."""
+    try:
+        ordenes = _maker_estado_cargar()
+        if not ordenes:   # None (ilegible) o lista vacía → nada que hacer aquí
+            return
+        pendientes = [o for o in ordenes if o.get("estado") in ("enviando", "abierta")]
+        if not pendientes:
+            return
+        client = _get_clob_client()
+        ahora = datetime.now(timezone.utc)
+        cambiado = False
+        for o in pendientes:
+            try:
+                # Huérfana: intent escrito pero sin order_id (crash antes de
+                # guardar, o post OK con id bajo clave inesperada — ambos
+                # dejan estado='enviando', recuperable). Se busca en las
+                # órdenes abiertas reales del token. Precio comparado como
+                # FLOAT con tolerancia (code-review 10-Jul: str(0.5) != '0.50'
+                # del API mataba órdenes vivas). Margen de 120s antes de dar
+                # por muerta: el post puede tardar en reflejarse.
+                if o.get("estado") == "enviando" and not o.get("order_id"):
+                    try:
+                        from py_clob_client_v2 import OpenOrderParams
+                        abiertas = client.get_open_orders(
+                            OpenOrderParams(asset_id=o.get("token_id", ""))) or []
+                        candidata = None
+                        for a in abiertas:
+                            try:
+                                if (a.get("side", "").upper() == "BUY" and
+                                        abs(float(a.get("price")) -
+                                            float(o.get("precio_limit"))) < 0.005):
+                                    candidata = a
+                                    break
+                            except (TypeError, ValueError):
+                                continue
+                        if candidata:
+                            o["order_id"] = candidata.get("id", "")
+                            o["estado"] = "abierta"
+                            cambiado = True
+                        else:
+                            ts_col = datetime.fromisoformat(
+                                str(o.get("ts_colocacion", "1970-01-01T00:00:00+00:00")))
+                            if ts_col.tzinfo is None:
+                                ts_col = ts_col.replace(tzinfo=timezone.utc)
+                            if (ahora - ts_col).total_seconds() > 120:
+                                o["estado"] = "muerta_sin_post"
+                                cambiado = True
+                    except Exception as e:
+                        log(f"  ⚠️ maker: no se pudo adoptar huérfana {o.get('market_id')}: {e}")
+                    continue
+
+                info = client.get_order(o["order_id"]) or {}
+                status = str(info.get("status", "")).upper()
+                size_matched = float(info.get("size_matched", 0) or 0)
+                precio_fill = float(info.get("price", o.get("precio_limit", 0)) or 0)
+
+                # Timeout zombie (code-review 10-Jul): status no reconocido
+                # (purgada → '', 'UNMATCHED'...) dejaba la orden 'abierta'
+                # eterna, bloqueando el mercado y un slot del piloto. Pasado
+                # el fin de mercado + 10min, se fuerza terminal registrando
+                # el fill parcial si lo hubo.
+                zombie = False
+                try:
+                    end_dt = datetime.fromisoformat(
+                        str(o.get("end_date", "")).replace("Z", "+00:00"))
+                    if end_dt.tzinfo is None:
+                        end_dt = end_dt.replace(tzinfo=timezone.utc)
+                    zombie = (ahora - end_dt).total_seconds() > 600
+                except Exception:
+                    pass
+
+                es_fill = (status in ("MATCHED", "FILLED")
+                           or (status in ("CANCELED", "CANCELLED", "EXPIRED")
+                               and size_matched > 0)
+                           or (zombie and size_matched > 0))
+                if es_fill:
+                    # Orden crítico anti-duplicado/anti-fantasma:
+                    # (1) trades.csv (fuente de verdad de posiciones),
+                    # (2) persistir estado YA (no al final del loop),
+                    # (3) Telegram al final y solo si registró de verdad.
+                    # Crash entre (1) y (2): el próximo ciclo re-entra y el
+                    # dedup de _maker_registrar_fill lo hace idempotente.
+                    registrado = _maker_registrar_fill(o, size_matched, precio_fill)
+                    o["estado"] = "fill"
+                    o["size_matched"] = size_matched
+                    _maker_estado_guardar(ordenes)
+                    cambiado = False
+                    if registrado:
+                        enviar_telegram(
+                            f"🧷 *Fill MAKER (piloto vetadas)*\n"
+                            f"{o.get('strategy')}#{o.get('subtype')} {o.get('direction')}\n"
+                            f"Precio: {precio_fill:.4f} (limit {o.get('precio_limit')})\n"
+                            f"Stake real: {size_matched * precio_fill:.2f}$ "
+                            f"({size_matched} shares)"
+                        )
+                elif status in ("CANCELED", "CANCELLED", "EXPIRED") or zombie:
+                    o["estado"] = "expirada_sin_fill" if not zombie else "zombie_cerrada"
+                    cambiado = True
+                    log(f"  ⏹ maker {o['estado']}: {o.get('market_id')} "
+                        f"limit={o.get('precio_limit')} status_api={status or 'N/A'}")
+                else:
+                    # Sigue viva: si el mercado ya cerró y la orden no expiró
+                    # (reloj del exchange vs el nuestro), cancelar activamente.
+                    try:
+                        end_dt = datetime.fromisoformat(
+                            str(o.get("end_date", "")).replace("Z", "+00:00"))
+                        if end_dt.tzinfo is None:
+                            end_dt = end_dt.replace(tzinfo=timezone.utc)
+                        if ahora > end_dt:
+                            from py_clob_client_v2 import OrderPayload
+                            client.cancel_order(OrderPayload(orderID=o["order_id"]))
+                            log(f"  ⏹ maker cancelada post-cierre: {o.get('market_id')}")
+                            # el estado real (fill parcial incluido) se lee en
+                            # el próximo ciclo vía get_order — no se asume nada
+                    except Exception:
+                        pass
+            except Exception as e:
+                # Un fallo en UNA orden no bloquea el resto; la orden queda
+                # tal cual y se reintenta el ciclo siguiente. GTD garantiza
+                # que aunque esto falle para siempre, la orden muere sola.
+                log(f"  ⚠️ maker: error reconciliando {o.get('market_id')}: {e}")
+        if cambiado:
+            _maker_estado_guardar(ordenes)
+    except Exception as e:
+        log(f"  ⚠️ maker: reconciliación abortada: {e}")
+
+
+def _colocar_orden_maker(pred: dict, dec: str, stake_aprobado: float,
+                         contexto: dict) -> bool:
+    """Coloca limit GTD a precio que NO cruza el ask, solo para señales
+    recién vetadas por profundidad. Devuelve True si quedó colocada.
+    Fail-closed en todo: cualquier duda → no colocar."""
+    try:
+        cfg = _maker_pilot_cfg()
+        if not cfg["activo"]:
+            return False
+        ordenes = _maker_estado_cargar()
+        if ordenes is None:   # estado ilegible → no colocar nada nuevo
+            return False
+        mid = pred.get("market_id", "")
+        if mid in _maker_mids_activos(ordenes):
+            return False   # ya hay orden viva para este mercado
+        n_abiertas = sum(1 for o in ordenes
+                         if o.get("estado") in ("enviando", "abierta"))
+        if n_abiertas >= cfg["max_ordenes_abiertas"]:
+            return False
+
+        # Expiración GTD: T_fin - margen anti-sniper (maker_sim CANCEL_MIN).
+        end_str = pred.get("end_date", "")
+        end_dt = datetime.fromisoformat(end_str.replace("Z", "+00:00"))
+        if end_dt.tzinfo is None:
+            end_dt = end_dt.replace(tzinfo=timezone.utc)
+        expiracion = end_dt.timestamp() - cfg["cancelar_antes_fin_seg"]
+        ahora_ts = datetime.now(timezone.utc).timestamp()
+        if expiracion - ahora_ts < MAKER_GTD_BUFFER_MIN_SEG:
+            return False   # demasiado tarde para que la limit tenga sentido
+
+        # Libro fresco para fijar el precio límite sin cruzar.
+        yes_token, no_token = _get_token_ids(mid)
+        precio_yes = float(pred.get("precio_yes_mercado", 0.5))
+        if dec == "BUY_YES":
+            token_id, precio_plan = yes_token, precio_yes
+        else:
+            token_id, precio_plan = no_token, round(1.0 - precio_yes, 6)
+        stake = min(cfg["stake_eur"], stake_aprobado)
+        depth = _consultar_profundidad_libro(None, token_id, precio_plan, stake)
+        mejor_ask = depth.get("mejor_ask") if depth.get("ok") else None
+        if mejor_ask is None:
+            return False   # sin ask no hay referencia para no cruzar
+        precio_limit = round(min(precio_plan, float(mejor_ask) - 0.01), 2)
+        if precio_limit < 0.01 or precio_limit > REQUOTE_PRECIO_MAX:
+            return False
+        size = round(stake / precio_limit, 2)
+        # Fail-closed (code-review 10-Jul): si el notional queda bajo el
+        # mínimo CLOB, NO se infla el tamaño (el bump podía exceder el stake
+        # aprobado por riesgo) — simplemente no se coloca. Con el stake del
+        # piloto (1.05€) esto no ocurre para ningún precio [0.01, 0.95]
+        # (verificado numéricamente); la guardia protege contra configs
+        # futuras con stake menor.
+        if size * precio_limit < MIN_ORDEN_CLOB_USD:
+            return False
+
+        # Intent ANTES de postear (recuperable si morimos a mitad).
+        entrada = {
+            "estado": "enviando", "order_id": "",
+            "market_id": mid, "token_id": token_id,
+            "question": pred.get("question", ""),
+            "end_date": end_str,
+            "strategy": contexto.get("strategy", ""),
+            "subtype": contexto.get("subtype", ""),
+            "direction": dec,
+            "stake_eur": round(size * precio_limit, 4),
+            "precio_limit": precio_limit, "size": size,
+            "mejor_ask_colocacion": mejor_ask,
+            "ic_modelo": pred.get("prob_yes_modelo", ""),
+            "edge_neto": pred.get("edge_neto", ""),
+            "conviction_score": contexto.get("ic_hist", ""),
+            "expiracion_utc": int(expiracion),
+            "ts_colocacion": datetime.now(timezone.utc).isoformat(timespec="seconds"),
+        }
+        ordenes.append(entrada)
+        _maker_estado_guardar(ordenes)
+
+        from py_clob_client_v2 import OrderArgsV2, OrderType
+        client = _get_clob_client()
+        order_args = OrderArgsV2(token_id=token_id, price=precio_limit,
+                                 size=size, side="BUY",
+                                 expiration=int(expiracion))
+        signed = client.create_order(order_args)
+        resp = client.post_order(signed, OrderType.GTD)
+        entrada["order_id"] = resp.get("orderID") or resp.get("id") or ""
+        # Sin order_id parseable NO es terminal (code-review 10-Jul): el post
+        # pudo triunfar con el id bajo otra clave — se deja 'enviando' y la
+        # rama de adopción de huérfanas lo resuelve (adopta si está viva en
+        # el exchange, muerta_sin_post si tras 120s no aparece).
+        entrada["estado"] = "abierta" if entrada["order_id"] else "enviando"
+        _maker_estado_guardar(ordenes)
+        _registrar_snapshot_libro("maker_colocada", mid, dec,
+                                  precio_plan, stake, depth, contexto)
+        log(f"  🧷 MAKER colocada (piloto vetadas): {mid} {dec} "
+            f"limit={precio_limit} size={size} exp=T-{cfg['cancelar_antes_fin_seg']}s")
+        return bool(entrada["order_id"])
+    except Exception as e:
+        log(f"  ⚠️ maker: colocación falló ({pred.get('market_id')}): {e}")
+        return False
+
 # Latencia máxima señal→ejecución (2026-07-10, hallazgo racha de pérdidas):
 # predictions.csv loguea prob_yes_modelo/edge UNA vez (dedup ya_predichos) y
 # live_trade reintenta la MISMA señal cada ciclo (~20-40s) hasta ejecutar o
@@ -1066,6 +1420,11 @@ def main():
         f"Hora Madrid: {est['hora_madrid']} ({est['dia']})")
 
     _snapshots_candidatos_evaluacion()
+    # Reconciliación maker ANTES del gate de ventana: un fill puede llegar en
+    # cualquier momento y debe registrarse pronto (shadow_resolve lo cierra,
+    # los frenos lo cuentan). Es bookkeeping de órdenes ya colocadas, no
+    # riesgo nuevo.
+    _reconciliar_ordenes_maker()
 
     if not puede:
         log(f"  → Fuera de operación. Motivo: {motivo}")
@@ -1112,6 +1471,20 @@ def main():
     if not pares_ok:
         log("  ⚠️ pares_permitidos_live vacío o ausente en config — no se opera (fail-closed)")
     ya_operados  = _ya_operados_hoy()
+    # Mercados con orden maker viva (piloto): también se saltan la ruta
+    # taker — el libro fluctúa y un ciclo posterior podría pasar el veto de
+    # profundidad y ejecutar taker con la maker aún abierta → doble posición.
+    # FAIL-CLOSED (code-review 10-Jul): estado ilegible (None) = no sabemos
+    # QUÉ mercados tienen órdenes vivas → no se abre NINGÚN trade nuevo este
+    # ciclo. Las GTD ya colocadas expiran solas en el exchange; los fills
+    # previos ya están en trades.csv. Antes esto degradaba a set() vacío y
+    # el guard anti-doble-posición quedaba fail-OPEN con el fichero corrupto.
+    _estado_maker = _maker_estado_cargar()
+    if _estado_maker is None:
+        log("  ⛔ maker_orders.json ILEGIBLE — fail-closed: sin trades nuevos "
+            "este ciclo (arreglar/borrar el fichero para reanudar)")
+        return
+    mids_maker   = _maker_mids_activos(_estado_maker)
     bkr          = bankroll_actual()
 
     log(f"  Predicciones hoy: {len(predicciones)} | Bankroll: {bkr:.2f}€ | Mercados ya operados (histórico): {len(ya_operados)}")
@@ -1128,6 +1501,8 @@ def main():
             continue
         if mid in ya_operados:
             continue
+        if mid in mids_maker:
+            continue  # orden maker viva en este mercado (ver nota arriba)
 
         # Mercado ya cerrado → no operar (evita "invalid order version" de la API).
         # Fail-closed: end_date vacío o sin parsear NO debe dejar pasar el
@@ -1292,6 +1667,15 @@ def main():
         # FOK kill o edge evaporado en re-quote = no registrar ni contar;
         # la señal puede reintentarse en ciclos siguientes si sigue viva.
         if resultado.get("no_fill"):
+            # Piloto maker-sobre-vetadas: SOLO si el motivo fue exactamente
+            # veto_profundidad (libro_vacio) — la señal ya pasó todos los
+            # gates y el subconjunto vetado acierta 97% (analisis_fills).
+            if resultado.get("libro_vacio"):
+                if _colocar_orden_maker(pred, dec, stake,
+                                        {"strategy": strategy,
+                                         "subtype": subtype,
+                                         "ic_hist": round(ic_hist, 4)}):
+                    mids_maker.add(mid)
             continue
 
         # 5. Registrar
