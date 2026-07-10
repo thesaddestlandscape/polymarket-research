@@ -14,6 +14,7 @@ Flujo por ciclo:
 
 import csv
 import json
+import math
 import os
 import requests
 from datetime import datetime, timezone, timedelta
@@ -486,6 +487,38 @@ def _consultar_profundidad_libro(client, token_id: str, precio_entrada: float,
         return {"ok": False, "error": str(e)}
 
 
+# Estimador empírico de slippage por profundidad (10-Jul, propuesta #4 quant-
+# desk "Kyle's lambda"). NO es Kyle's lambda clásico (que predice MENOS
+# impacto con MÁS profundidad) — aquí el signo medido es el CONTRARIO: más
+# ratio_vs_stake en el momento de ejecutar correlaciona con PEOR slip_real
+# (n=130 ejecutadas, robusto por par: SOL corr=-0.57 ETH=-0.55 XRP=-0.77).
+# Hipótesis de mecanismo: un libro muy profundo en el micro-instante de nuestra
+# ejecución probablemente señala una orden grande de un market-maker
+# profesional activo justo ahí (los mismos actores del estudio de ballenas
+# 10-Jul), no "liquidez fácil". OJO: comprobado que EXCLUIR esas señales
+# EMPEORA el PnL real (n=130: sin techo +0.109€/trade, con techo ratio<=200
+# -0.127€/trade) — los libros profundos llevan más edge genuino, no menos;
+# el re-quote actúa de filtro (solo sobrevive al deterioro una señal con edge
+# de partida fuerte). Por eso esto es SOLO una estimación logueada para
+# comparar con slip_real, NUNCA un veto ni cambia edge_neto/decisión.
+# Ajuste: slip_estimado = a + b*sqrt(ratio_vs_stake), OLS sobre n=130
+# ejecutadas reales, R²=0.395 (mejor que lineal en ratio R²=0.32 o en
+# ln(ratio) R²=0.38).
+_SLIP_KYLE_A = -0.00105
+_SLIP_KYLE_B = 0.00286
+
+
+def _estimar_slip_kyle(ratio_vs_stake: float | None) -> float | None:
+    """|slip| esperado dado el ratio_vs_stake al momento de ejecutar. Solo
+    logging — comparar contra slip_real post-hoc para validar el modelo antes
+    de plantear si algún día sustituye a SLIPPAGE_ESTIMADO (decisión futura,
+    no hoy). None si no hay ratio (mismo comportamiento fail-soft que el resto
+    de este módulo: falta de dato no bloquea nada, solo no se loguea)."""
+    if ratio_vs_stake is None or ratio_vs_stake < 0:
+        return None
+    return round(max(0.0, _SLIP_KYLE_A + _SLIP_KYLE_B * math.sqrt(ratio_vs_stake)), 5)
+
+
 SNAPSHOT_LIBRO_CSV = DIR_LIVE / "libro_snapshots.csv"
 
 
@@ -816,6 +849,12 @@ def _ejecutar_orden_polymarket(market_id: str, direction: str,
                     "fee_eur": 0.0, "error": f"requote: {motivo_rq}",
                 }
 
+        # Estimación Kyle (10-Jul, solo logging — ver _estimar_slip_kyle):
+        # ratio del snapshot de profundidad YA calculado arriba, antes del
+        # requote. No cambia ninguna decisión, se compara con slip_real real
+        # una vez conocido más abajo.
+        slip_estimado_kyle = _estimar_slip_kyle(depth.get("ratio_vs_stake") if depth.get("ok") else None)
+
         client = _get_clob_client()  # recién aquí: vetos/requote ya pasaron, orden real inminente
         _marcar_orden_en_curso(market_id, direction)
         try:
@@ -898,6 +937,7 @@ def _ejecutar_orden_polymarket(market_id: str, direction: str,
             "entry_price": filled_price,
             "fee_eur":     fee,
             "slip_real":   slip_real,
+            "slip_estimado_kyle": slip_estimado_kyle,
             "error":       "",
         }
     except Exception as e:
@@ -1278,6 +1318,8 @@ def main():
             "pnl_bruto_eur":   "",
             "pnl_neto_eur":    "",
             "notas":           (f"slip_real={resultado['slip_real']:+.4f}"
+                                + (f" slip_est_kyle={resultado['slip_estimado_kyle']:.4f}"
+                                   if resultado.get("slip_estimado_kyle") is not None else "")
                                 if resultado.get("ok") and "slip_real" in resultado
                                 else resultado.get("error", "")),
         }
