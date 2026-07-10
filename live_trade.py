@@ -630,6 +630,26 @@ REQUOTE_PRECIO_MAX = 0.95  # nunca pagar más de esto por el token, pase lo que 
 MIN_ORDEN_CLOB_USD = 1.00  # el CLOB rechaza marketable BUY < $1 ("min size: 1")
 REQUOTE_DIVERGENCIA_MAX = 0.10  # |ask - plan| máx; más allá el modelo está desfasado
 
+# Latencia máxima señal→ejecución (2026-07-10, hallazgo racha de pérdidas):
+# predictions.csv loguea prob_yes_modelo/edge UNA vez (dedup ya_predichos) y
+# live_trade reintenta la MISMA señal cada ciclo (~20-40s) hasta ejecutar o
+# expirar la ventana — el re-quote solo refresca el PRECIO, nunca el modelo
+# subyacente. Mecanismo confirmado en libro_snapshots: 11/12 señales con
+# latencia≥100s tuvieron múltiples veto_profundidad antes de ejecutar (el
+# libro, servido por bots de market-making activos en TODOS estos mercados,
+# fluctúa de profundidad y solo deja pasar la señal por azar). Backtest sobre
+# n=121 trades live (histórico completo, confound-checked por par y hora):
+# latencia<100s → PnL total +32.26€; latencia≥100s → PnL total -16.45€. El
+# efecto se sostiene DENTRO de cada par por separado (SOL delta -1.03€/trade,
+# ETH -0.91€/trade), no es artefacto de un solo par. Código de seguridad
+# live — no minimizar.
+# ⚠️ Umbral plano aplicado a TODA predicción que llegue a este loop, pero el
+# backtest que lo respalda es de GBM_LATE_15M (única estrategia en whitelist
+# hoy, ventana de entrada 3-12min). Si se promociona a live una estrategia con
+# ventana muy distinta (60min, daily...), revalidar 100s para esa estrategia
+# antes de asumir que el mismo umbral aplica — no extender sin re-medir.
+SENAL_MAX_LATENCIA_SEG = 100
+
 
 def _decidir_requote(edge_dir: float, precio_plan: float,
                      mejor_ask: float | None) -> tuple[float, float, bool, str]:
@@ -1047,6 +1067,35 @@ def main():
             if end_dt <= datetime.now(timezone.utc):
                 continue
         except Exception:
+            continue
+
+        # Señal caducada (2026-07-10, ver SENAL_MAX_LATENCIA_SEG arriba):
+        # prob_yes_modelo/edge se calculan UNA vez en shadow_predict; si han
+        # pasado >=100s sin ejecutar (reintentos bloqueados por veto_profundidad
+        # mientras el libro fluctúa), el edge ya no es fiable — no operar.
+        # Fail-closed: timestamp_utc vacío o sin parsear = tratar como caducada.
+        ts_pred_str = pred.get("timestamp_utc", "")
+        try:
+            if not ts_pred_str:
+                raise ValueError("timestamp_utc vacío")
+            ts_pred = datetime.fromisoformat(ts_pred_str.replace("Z", "+00:00"))
+            if ts_pred.tzinfo is None:
+                ts_pred = ts_pred.replace(tzinfo=timezone.utc)
+            latencia_seg = (datetime.now(timezone.utc) - ts_pred).total_seconds()
+        except Exception:
+            latencia_seg = None
+        if latencia_seg is None or latencia_seg >= SENAL_MAX_LATENCIA_SEG:
+            log(f"  ⛔ Señal caducada: {strategy}#{subtype} {dec} mid={mid} "
+                f"latencia={latencia_seg if latencia_seg is not None else '?'}s "
+                f"(máx {SENAL_MAX_LATENCIA_SEG}s) — no se ejecuta")
+            try:
+                precio_yes_caduca = float(pred.get("precio_yes_mercado", 0.5))
+            except (TypeError, ValueError):
+                precio_yes_caduca = 0.5
+            _snapshot_senal_bloqueada(mid, dec, precio_yes_caduca,
+                                      riesgo.get("min_stake_eur", 1.05),
+                                      {"strategy": strategy, "subtype": subtype},
+                                      motivo="senal_caducada")
             continue
 
         # IC mínimo confirmado en histórico (n_hist siempre corresponde a la

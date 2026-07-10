@@ -31,7 +31,7 @@ RESULTS = DIR / "data/shadow/results.csv"
 # con la fase de ejecución pesa más que un snapshot pasivo fuera de horario.
 PRIORIDAD = ["ejecutada", "fok_kill", "abort_requote",
              "veto_profundidad", "veto_sin_datos", "no_viable_stake",
-             "fuera_ventana"]
+             "fuera_ventana", "senal_caducada"]
 
 
 def _prio(motivo: str) -> int:
