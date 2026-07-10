@@ -92,6 +92,18 @@
       "fin": "02:00",
       "nombre": "fds_prueba_23h_utc",
       "_nota": "2026-07-01: replica de prueba_23h_utc — un viernes 23h UTC cae en sábado de madrugada Madrid, sin esto esa franja quedaba sin cubrir ningún día."
+    },
+    {
+      "inicio": "23:00",
+      "fin": "23:59",
+      "nombre": "fds_noche",
+      "_nota": "2026-07-10: AÑADIDA — mejor hora del día en shadow de fin de semana para GBM_LATE_15M BUY_YES: n=16 (4 pares, cumple n>=15) hit 87.5% +17.62€ (+1.10€/trade); restringido a SOL+ETH (los que viven en live hoy) n=6 hit 83.3% +0.94€/trade, mismo signo aunque n insuficiente para concluir solo. Fin en 23:59 no 00:00: live_guard.py compara horas con h_ini<=hora<=h_fin sin manejar cruce de medianoche — un fin literal '00:00' (time menor que 23:00) nunca activaría la ventana. 23:59 evita el bug sin tocar live_guard.py, mismo patrón HH:MM que el resto de ventanas (pierde el último minuto igual que todas, no es un caso nuevo)."
+    },
+    {
+      "inicio": "06:00",
+      "fin": "07:00",
+      "nombre": "asia_04h_utc",
+      "_nota": "2026-07-10: AÑADIDA — ya confirmada fuerte en ventanas_lunes_viernes (H-CUSTOM-LATE-04H-ASIA, IC+0.131 n=177 forward +68.47€) pero faltaba en fin de semana, sin razón documentada (parece descuido del 08-Jul, no una exclusión deliberada). En finde específicamente: n=20 (4 pares) hit 75% +13.61€ (+0.681€/trade)."
     }
   ],
   "riesgo": {
