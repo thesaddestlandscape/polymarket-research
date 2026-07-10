@@ -1106,6 +1106,35 @@ def _calcular_drift_h(sym, precios_data, n_min):
     return (now_p / ref_p - 1) / (n_min / 60)  # fracción por hora
 
 
+def _drift_e_ibs_ventana(sym, precios_data, n_min):
+    """Momentum reciente MUY corto (10-Jul, libro Shannon 'multiple timeframes'
+    aplicado a nuestra escala): probado que la alineación con tendencia a 60min
+    NO aporta nada (EV+0.32 igual con o sin ella, n=1635) porque a esa distancia
+    la señal ya está diluida/es ruido para una apuesta de 15min — pero a ~20min
+    (≈1.3x nuestra propia ventana) SÍ hay señal real: alineado 65% hit EV+0.34
+    vs no-alineado 59% hit EV+0.27 (n=1133/508). Devuelve (drift_pct_crudo,
+    ibs) — ibs es la posición dentro del rango [min,max] de la ventana (0=en
+    el mínimo, 1=en el máximo), mismo concepto que ibs_15 de UPDOWN_GBM
+    (klines) pero aquí sobre precios_intraday para no depender de klines_raw.
+    Confirmado el 10-Jul también con estructura de swing: entrar EN un
+    extremo fresco a favor de la apuesta (ibs≈1 para BUY_YES, ibs≈0 para
+    BUY_NO) da 70% hit EV+0.42 (n=398); entrar contra el extremo fresco
+    (ibs≈0 para BUY_YES) cae a 19% hit EV-0.27 (n=16, fino, vigilar).
+    Puro logging — no cambia decisión, alimenta el bucket causal existente."""
+    ahora = datetime.now(timezone.utc)
+    corte = ahora - timedelta(minutes=n_min)
+    subset = [p[sym] for ts, p in precios_data if sym in p and ts >= corte]
+    if len(subset) < 5:
+        return None, None
+    ref_p, now_p = subset[0], subset[-1]
+    if ref_p <= 0:
+        return None, None
+    drift_pct = (now_p / ref_p - 1) * 100
+    lo, hi = min(subset), max(subset)
+    ibs = (now_p - lo) / (hi - lo) if (hi - lo) > 1e-9 else 0.5
+    return round(drift_pct, 4), round(ibs, 4)
+
+
 def _calcular_delta_ratio_macro(sym, klines_raw):
     """
     Delta ratio acumulado sobre todas las klines disponibles con taker_buy_vol.
@@ -2149,6 +2178,11 @@ def _s_gbm_late(market, ctx, ventana_min, rest_lo, rest_hi, espacio_k=None):
     mercado_anchura_pct = (round(sum(otros_rets) / len(otros_rets) * 100, 4)
                            if len(otros_rets) == len(GBM_LATE_15M_PARES) - 1 else None)
 
+    # drift_20min_pct / ibs_20min (10-Jul, ver _drift_e_ibs_ventana): momentum
+    # muy reciente, distinto de drift_ventana_pct (que mide desde la apertura
+    # de ESTA ventana de {ventana_min}min, no una ventana fija de 20min).
+    drift_20min_pct, ibs_20min = _drift_e_ibs_ventana(activo, precios_data, 20)
+
     return {
         "prob_yes": round(p_up, 4),
         "razon":    (f"gbm_late_{ventana_min}min {activo} drift_vent={drift_ventana*100:+.3f}% "
@@ -2163,6 +2197,8 @@ def _s_gbm_late(market, ctx, ventana_min, rest_lo, rest_hi, espacio_k=None):
             "py_entrada":          round(py, 3),
             "hora_utc":            now_utc.hour,
             "mercado_anchura_pct": mercado_anchura_pct,
+            "drift_20min_pct":     drift_20min_pct,
+            "ibs_20min":           ibs_20min,
         },
     }
 
