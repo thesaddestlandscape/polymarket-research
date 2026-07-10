@@ -2317,6 +2317,85 @@ def s_struct_no_15m(market, ctx):
     }
 
 
+# ── FAVORITO_CONFIRMADO — model-free, replica el patrón de las wallets ──────────
+# ganadoras estudiadas 2026-07-10 (project_estudio_bots_ganadores_10jul): 0x20d2309c
+# (+447€, 97% TAKER, paga el mismo fee que nosotros) y BoneOhio (+527€, compra y
+# mantiene igual que nosotros) NO tienen ventaja de estructura de fee — su edge es
+# comprar el lado que el MERCADO ya confirma como favorito (precio_yes mediana 0.63
+# y 0.67 respectivamente, 58%/62% de sus entradas en zona >=0.55), sin sesgo
+# direccional (46-56% Up en todas las wallets estudiadas). El timing NO separa
+# ganadores de perdedores (0x20d2309c entra al 58.7% de ventana restante, la
+# perdedora sixx7 casi igual, 58.3%) — la señal es puramente el NIVEL DE PRECIO.
+#
+# Model-free a propósito (mismo patrón que STRUCT_NO_15M): no hay estimación de
+# drift/sigma detrás, solo la hipótesis "el mercado seguirá confirmando lo que ya
+# empezó a confirmar" (momentum de consenso), la hipótesis contraria a nuestras
+# estrategias GBM que buscan entrar ANTES de que el precio lo refleje (backtest
+# 10-Jul: nuestro edge real vive en precio_yes∈[0.45,0.53), EV+0.308 n=955 —
+# filtrar por precio>=0.55 ahí DESTRUYE el 95% de ese EV, ver
+# idea_4_propuestas_09jul_resueltas). Por eso esta es una estrategia SEPARADA, no
+# un filtro sobre GBM_LATE: mide si el momentum-de-consenso tiene edge PROPIO,
+# independiente del edge de anticipación que ya capturamos en otro sitio.
+#
+# El nudge de prob_yes es un valor de partida (no calibrado) solo para que la
+# señal cruce EDGE_MINIMO y genere volumen medible — el veredicto real lo da
+# ic_bayes del bucket en shadow_postmortem con n>=40, no este número.
+# Shadow puro: NO está en pares_permitidos_live → jamás opera en vivo.
+FAVORITO_CONFIRMADO_PARES = {"BTC", "ETH", "SOL", "XRP"}
+FAVORITO_CONFIRMADO_UMBRAL = 0.55  # nivel de precio que "confirma" favorito
+FAVORITO_CONFIRMADO_UMBRAL_BAJO = round(1.0 - FAVORITO_CONFIRMADO_UMBRAL, 4)  # 0.45 exacto —
+# NO derivar como "1.0 - FAVORITO_CONFIRMADO_UMBRAL" inline en la comparación: sin el
+# round(), da 0.44999999999999996 (float) y excluye py=0.45 exacto del lado NO, justo
+# el valor más probable de aparecer (Polymarket cotiza en incrementos limpios). Cazado
+# por test unitario antes de desplegar.
+FAVORITO_CONFIRMADO_NUDGE = 0.06   # empuje de la hipótesis, sin calibrar
+
+
+def s_favorito_confirmado(market, ctx):
+    question = market.get("question", "")
+    if "up or down" not in question.lower():
+        return None
+    tipo, vent = _parse_updown_tipo(question)
+    if tipo not in ("slot", "hourly"):
+        return None
+    activo = identificar_activo(question)
+    if activo not in FAVORITO_CONFIRMADO_PARES:
+        return None
+    py = market.get("_precio_yes")
+    if py is None:
+        return None
+
+    if py >= FAVORITO_CONFIRMADO_UMBRAL:
+        prob_yes = min(0.97, py + FAVORITO_CONFIRMADO_NUDGE)
+        lado = "YES"
+    elif py <= FAVORITO_CONFIRMADO_UMBRAL_BAJO:
+        prob_yes = max(0.03, py - FAVORITO_CONFIRMADO_NUDGE)
+        lado = "NO"
+    else:
+        return None  # zona coinflip — no es la hipótesis que medimos aquí
+
+    restante_min = None
+    try:
+        end_dt = datetime.fromisoformat(market.get("end_date", "").replace("Z", "+00:00"))
+        if end_dt.tzinfo is None:
+            end_dt = end_dt.replace(tzinfo=timezone.utc)
+        restante_min = round((end_dt - datetime.now(timezone.utc)).total_seconds() / 60.0, 2)
+    except Exception:
+        pass
+
+    return {
+        "prob_yes": prob_yes,
+        "razon":    f"favorito_confirmado {activo} py={py:.3f} lado={lado} (momentum-consenso, model-free)",
+        "subtype":  f"{activo}#{vent}min" if vent else activo,
+        "features": {
+            "py_entrada":   round(py, 3),
+            "restante_min": restante_min,
+            "hora_utc":     datetime.now(timezone.utc).hour,
+            **_libro_calidad(market),
+        },
+    }
+
+
 # ── STREAK — momentum (5min) / reversión (15min) en la SECUENCIA de resoluciones ──
 # Hallazgo 2026-07-05: nadie miraba la secuencia de ventanas (todas las estrategias
 # las tratan como independientes). El signo se INVIERTE por escala:
@@ -2651,6 +2730,7 @@ ESTRATEGIAS = [
     ("GBM_LATE_15M_ESPACIO_ATR", s_gbm_late_15min_espacio_atr),
     ("GBM_LATE_60M",        s_gbm_late_60min),
     ("STRUCT_NO_15M",       s_struct_no_15m),
+    ("FAVORITO_CONFIRMADO", s_favorito_confirmado),
     ("STREAK_MOM_5M",       s_streak_mom_5m),
     ("STREAK_FADE_15M",     s_streak_fade_15m),
     ("LEADLAG_BTC_XRP_15M", s_leadlag_btc_xrp),
