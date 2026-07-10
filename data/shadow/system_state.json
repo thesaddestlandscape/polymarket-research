@@ -1,10 +1,10 @@
 {
-  "timestamp_utc": "2026-07-10T16:20:19+00:00",
+  "timestamp_utc": "2026-07-10T16:26:23+00:00",
   "bankroll_sim": 1208.11,
   "pnl_total": 1188.11,
   "n_ops": 7836,
   "win_rate": 0.5522,
-  "estrategias_activas": 170,
+  "estrategias_activas": 169,
   "desactivadas": [
     "UPDOWN_GBM#SOL#5min",
     "UPDOWN_GBM#5min",
@@ -24,7 +24,8 @@
     "UPDOWN_OU_5M#BNB#5min",
     "UPDOWN_OU_5M#BNB",
     "STRUCT_NO_15M",
-    "STRUCT_NO_15M#15min"
+    "STRUCT_NO_15M#15min",
+    "STREAK_MOM_5M"
   ],
   "top3_ic": [
     {

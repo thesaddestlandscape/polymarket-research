@@ -1,4 +1,4 @@
-# Hipótesis automáticas — 2026-07-10 16:22 UTC
+# Hipótesis automáticas — 2026-07-10 16:26 UTC
 _Generado por shadow_postmortem.py sobre 7836 resoluciones (PNL=+1188.11€)_
 
 ## Patrones causales activos
@@ -356,7 +356,7 @@ _Derivadas de los patrones aprendidos:_
 | ✅ STREAK_FADE_15M#SOL#15min | 41 | +0.081 | +2.87€ | 0 | 0 |
 | ✅ STREAK_FADE_15M#XRP | 52 | +0.056 | +1.21€ | 0 | 0 |
 | ✅ STREAK_FADE_15M#XRP#15min | 52 | +0.056 | +1.21€ | 0 | 0 |
-| ✅ STREAK_MOM_5M | 306 | -0.052 | -22.14€ | 0 | 0 |
+| 🚫 STREAK_MOM_5M | 306 | -0.052 | -22.14€ | 0 | 0 |
 | ✅ STREAK_MOM_5M#5min | 306 | -0.052 | -22.14€ | 0 | 0 |
 | ✅ STREAK_MOM_5M#ETH | 100 | -0.039 | -4.81€ | 0 | 0 |
 | ✅ STREAK_MOM_5M#ETH#5min | 100 | -0.039 | -4.81€ | 0 | 0 |
