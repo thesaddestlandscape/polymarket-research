@@ -423,6 +423,28 @@ def _get_token_ids(market_id: str) -> tuple[str, str]:
     )
 
 
+CLOB_BOOK_URL = "https://clob.polymarket.com/book"
+
+
+def _fetch_book_publico(token_id: str) -> dict | None:
+    """Libro de un token vía REST público (sin auth, sin construir ClobClient).
+    2026-07-10: perfilado mostró que importar py_clob_client_v2 cuesta ~270ms
+    (el objeto en sí es ~2ms — el coste es el import de web3/eth_account), y
+    /book es público (verificado: 200 OK sin credenciales). El cliente
+    autenticado solo hace falta para FIRMAR una orden real, nunca para leer
+    el libro. Antes se pagaba ese import en CADA consulta de profundidad —
+    incluidas las de solo-instrumentación (candidatos_evaluacion_live,
+    fuera_ventana, senal_caducada) que son ~95% de las llamadas y NUNCA
+    ordenan (veto_profundidad 2515 vs ejecutada 129, histórico). None en
+    error — mismo contrato que antes (el caller ya lo trata como fail-closed)."""
+    try:
+        r = requests.get(CLOB_BOOK_URL, params={"token_id": token_id}, timeout=10)
+        r.raise_for_status()
+        return r.json()
+    except Exception:
+        return None
+
+
 def _consultar_profundidad_libro(client, token_id: str, precio_entrada: float,
                                  stake_eur: float) -> dict:
     """
@@ -431,9 +453,16 @@ def _consultar_profundidad_libro(client, token_id: str, precio_entrada: float,
     profundidad hay en el lado ask cerca del precio de entrada. Se loguea
     junto a cada orden para poder cruzar después si los kills de FOK
     ("sin liquidez a ese precio") correlacionan con libros finos.
+
+    client=None usa el endpoint público /book (ver _fetch_book_publico) — es
+    el camino por defecto para toda consulta de solo lectura. Pasar un
+    ClobClient real solo aporta algo distinto si algún día hace falta el
+    libro autenticado (no es el caso hoy: /book es idéntico autenticado o no).
     """
     try:
-        book = client.get_order_book(token_id)
+        book = _fetch_book_publico(token_id) if client is None else client.get_order_book(token_id)
+        if book is None:
+            return {"ok": False, "error": "sin respuesta del libro (público)"}
         asks = (book.get("asks") if isinstance(book, dict) else getattr(book, "asks", None)) or []
         techo = precio_entrada * 1.05  # banda razonable sobre el precio objetivo
         profundidad_eur = 0.0
@@ -522,8 +551,11 @@ def _snapshot_senal_bloqueada(market_id: str, direction: str, precio_yes,
             token_id, precio = yes_token, float(precio_yes)
         else:
             token_id, precio = no_token, round(1.0 - float(precio_yes), 6)
-        client = _get_clob_client()
-        depth = _consultar_profundidad_libro(client, token_id, precio, stake_ref)
+        # client=None -> libro público (2026-07-10): esta función NUNCA ordena,
+        # solo instrumenta (no_viable_stake/fuera_ventana/senal_caducada/
+        # candidato_evaluacion) — construir el ClobClient autenticado aquí
+        # pagaba ~270ms de import por nada en cada una de estas llamadas.
+        depth = _consultar_profundidad_libro(None, token_id, precio, stake_ref)
         _registrar_snapshot_libro(motivo, market_id, direction,
                                   precio, stake_ref, depth, contexto)
     except Exception:
@@ -726,9 +758,13 @@ def _ejecutar_orden_polymarket(market_id: str, direction: str,
             precio   = round(1.0 - entry_price, 6)
         precio_plan = precio   # precio del token en el momento de la señal
 
-        client = _get_clob_client()
-
-        depth = _consultar_profundidad_libro(client, token_id, precio, stake_eur)
+        # Libro público (2026-07-10): el ClobClient autenticado NO hace falta
+        # para leer profundidad (/book es público) — construirlo aquí pagaba
+        # ~270ms de import EN TODO INTENTO, incluidos los que terminan en
+        # veto_profundidad/veto_sin_datos/abort_requote (la inmensa mayoría:
+        # histórico 2515+345 vetos vs 129 ejecutadas). Se construye más abajo,
+        # SOLO si de verdad vamos a firmar y enviar la orden.
+        depth = _consultar_profundidad_libro(None, token_id, precio, stake_eur)
         if depth.get("ok"):
             log(f"  📊 Libro {market_id}/{direction}: mejor_ask={depth['mejor_ask']} "
                 f"profundidad≈{depth['profundidad_eur']:.2f}€ "
@@ -780,6 +816,7 @@ def _ejecutar_orden_polymarket(market_id: str, direction: str,
                     "fee_eur": 0.0, "error": f"requote: {motivo_rq}",
                 }
 
+        client = _get_clob_client()  # recién aquí: vetos/requote ya pasaron, orden real inminente
         _marcar_orden_en_curso(market_id, direction)
         try:
             # py_clob_client_v2 calcula makerAmount/takerAmount dividiendo
