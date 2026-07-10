@@ -16,6 +16,7 @@ data/live/.env
 data/live/orden_en_curso.json
 data/live/freno_ventana_latch.json
 data/live/overrides_notificados.json
+data/live/vigia_pybajo_latch.json
 data/reports/
 data/backfill/klines/
 data/shadow/_cache_*.pkl
