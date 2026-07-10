@@ -2657,6 +2657,35 @@ ESTRATEGIAS = [
     # ("BINANCE_UPDOWN", s_binance_updown),  # retirada — IC -0.50
 ]
 
+# ── Boost horario de stake: UNA fuente de verdad (P15, colapsado 2026-07-10) ──
+# Antes convivían dos multiplicadores horarios sobre `apuesta` que se apilaban:
+# (a) set 24H hardcoded ×1.1 y (b) meta.hora_boost_factor. Ahora se aplican una
+# sola vez aquí, con prioridad al dato aprendido (H-KELLY-HORA). h18 quitada del
+# fallback (dud: EV +0.066 dentro de un set que promedia +0.38 en GBM_LATE_15M;
+# coincide con analisis_hora_boost n=1996, h18=-0.011). El bucket causal sobre
+# hora_utc (causal_boost) sigue siendo una capa ADITIVA separada — al des-pinear
+# max_stake, decidir si excluir hora del causal para tener literalmente 1 fuente.
+HORA_BOOST_15M_BUYYES = frozenset({5, 6, 7, 15, 16, 17, 19})
+
+
+def _hora_stake_factor(dec: str, subtype: str, meta: dict) -> float:
+    """Multiplicador de stake por hora, aplicado UNA sola vez. meta.hora_boost_factor
+    (dato aprendido) manda si define la hora actual; si no, fallback estático ×1.1
+    para BUY_YES#15min en las horas históricamente buenas."""
+    if dec not in ("BUY_YES", "BUY_NO"):
+        return 1.0
+    h = datetime.now(timezone.utc).hour
+    meta_map = (meta or {}).get("hora_boost_factor", {}) or {}
+    if str(h) in meta_map:
+        try:
+            return float(meta_map[str(h)])
+        except (TypeError, ValueError):
+            return 1.0
+    if dec == "BUY_YES" and subtype.endswith("15min") and h in HORA_BOOST_15M_BUYYES:
+        return 1.1
+    return 1.0
+
+
 def main():
     global SLIPPAGE_ESTIMADO
     ts = datetime.now(timezone.utc).isoformat(timespec="seconds")
@@ -2936,12 +2965,11 @@ def main():
                     dir_stake = sp.get(f"apuesta_kelly_{dec}")
                     if dir_stake is not None:
                         apuesta = max(0.50, min(2.00, float(dir_stake) + causal_boost))
-                # Meta auto-params: boost horario (hypothesis_tracker H-KELLY-HORA)
-                hora_boost_map = meta_params.get("hora_boost_factor", {})
-                if hora_boost_map and dec in ("BUY_YES", "BUY_NO"):
-                    factor = hora_boost_map.get(str(datetime.now(timezone.utc).hour), 1.0)
-                    if factor and factor != 1.0:
-                        apuesta = min(2.00, apuesta * float(factor))
+                # Boost horario de stake — UNA sola fuente de verdad (P15, 10-Jul):
+                # antes el set 24H hardcoded ×1.1 (abajo, ya eliminado) y
+                # meta.hora_boost_factor se aplicaban por separado y se apilaban
+                # multiplicativamente. Ahora un único factor, meta con prioridad.
+                apuesta = min(2.00, apuesta * _hora_stake_factor(dec, subtype, meta_params))
                 # Longshot bias (Jon-Becker, 2026-06-27): mercados con py_mkt<0.20 tienen
                 # win_rate<precio_implícito para compradores de YES (EV negativo en longshots).
                 # BUY_NO en estos mercados tiene edge estructural adicional → boost ×1.1.
@@ -2965,13 +2993,6 @@ def main():
                 drift_15_val = pred_features.get("drift_15min")
                 if (dec == "BUY_YES" and subtype == "ETH#15min" and drift_15_val is not None
                         and float(drift_15_val) < -1.0):
-                    apuesta = min(2.00, apuesta * 1.1)
-                # H-24H-GBM-BUYYES-MADRUGADA/TARDE (confirmadas 2026-07-01: IC=+0.096 n=45
-                # en 05-07h UTC, IC=+0.154 n=50 en 15-19h UTC): GBM BUY_YES#15min tiene edge
-                # forward extra en estas franjas horarias, independiente del filtro
-                # drift_60min ya aplicado arriba. Boost ×1.1.
-                if (dec == "BUY_YES" and subtype.endswith("15min")
-                        and datetime.now(timezone.utc).hour in (5, 6, 7, 15, 16, 17, 18, 19)):
                     apuesta = min(2.00, apuesta * 1.1)
                 ed = en if dec != "BUY_NO" else -en
                 if dec != "SKIP":
