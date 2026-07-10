@@ -507,10 +507,15 @@ def _snapshot_senal_bloqueada(market_id: str, direction: str, precio_yes,
         if SNAPSHOT_LIBRO_CSV.exists():
             with open(SNAPSHOT_LIBRO_CSV, newline="", encoding="utf-8") as f:
                 for row in csv.DictReader(f):
+                    fila_motivo = row.get("motivo")
+                    mismo_grupo = (
+                        fila_motivo == motivo
+                        or (fila_motivo in ("no_viable_stake", "fuera_ventana")
+                            and motivo in ("no_viable_stake", "fuera_ventana"))
+                    )
                     if (str(row.get("market_id")) == str(market_id)
                             and row.get("direction") == direction
-                            and row.get("motivo") in ("no_viable_stake",
-                                                      "fuera_ventana")):
+                            and mismo_grupo):
                         return
         yes_token, no_token = _get_token_ids(market_id)
         if direction == "BUY_YES":
@@ -525,6 +530,62 @@ def _snapshot_senal_bloqueada(market_id: str, direction: str, precio_yes,
         pass
 
 
+def _snapshots_por_lista(tuplas: set, motivo: str, aplicar_gate_ic: bool) -> None:
+    """Núcleo compartido de _snapshots_fuera_ventana y
+    _snapshots_candidatos_evaluacion: recorre las predicciones de hoy, filtra
+    por tupla strategy#subtype#decision, descarta mercados ya cerrados y
+    snapshotea el libro (solo lectura, nunca ordena). aplicar_gate_ic=True
+    exige además la barra IC/n de riesgo (uso: tuplas YA whitelisted, fuera de
+    ventana); aplicar_gate_ic=False no filtra por IC (uso: candidatos aún sin
+    barra que cumplir, el objetivo es medir profundidad ANTES de decidir)."""
+    if not tuplas:
+        return
+    config = _cargar_config()
+    riesgo = config.get("riesgo", {})
+    stake_ref = riesgo.get("min_stake_eur", 1.05)
+    if aplicar_gate_ic:
+        params      = _cargar_params()
+        min_ic      = riesgo.get("min_ic_para_live", 0.08)
+        min_n       = riesgo.get("min_n_para_live", 40)
+        min_ic_asim = riesgo.get("min_ic_asimetrico", {})
+    ahora = datetime.now(timezone.utc)
+    for pred in _cargar_predicciones_hoy():
+        strategy = pred.get("strategy", "")
+        subtype  = pred.get("subtype", "")
+        mid      = pred.get("market_id", "")
+        dec      = pred.get("decision", "")
+        if f"{strategy}#{subtype}#{dec}" not in tuplas:
+            continue
+        end_str = pred.get("end_date", "")
+        try:
+            if not end_str:
+                continue
+            end_dt = datetime.fromisoformat(end_str.replace("Z", "+00:00"))
+            if end_dt.tzinfo is None:
+                end_dt = end_dt.replace(tzinfo=timezone.utc)
+            if end_dt <= ahora:
+                continue
+        except Exception:
+            continue
+        if aplicar_gate_ic:
+            min_ic_efectivo = min_ic_asim.get(f"{strategy}#{dec}", min_ic)
+            try:
+                feats = json.loads(pred.get("features", "{}") or "{}")
+            except Exception:
+                feats = {}
+            ic_h, n_h = _ic_n_para_subtype(strategy, subtype, params,
+                                           decision=dec, min_n=min_n,
+                                           min_ic=min_ic_efectivo,
+                                           features=feats)
+            if ic_h < min_ic_efectivo or n_h < min_n:
+                continue
+        _snapshot_senal_bloqueada(mid, dec,
+                                  pred.get("precio_yes_mercado", 0.5),
+                                  stake_ref,
+                                  {"strategy": strategy, "subtype": subtype},
+                                  motivo=motivo)
+
+
 def _snapshots_fuera_ventana() -> None:
     """Acumula libro_snapshots también con el live cerrado (switch OFF, fuera
     de ventana, fin de semana). Motivo: el dataset de fill-ability — criterio
@@ -537,49 +598,29 @@ def _snapshots_fuera_ventana() -> None:
     try:
         config   = _cargar_config()
         pares_ok = set(config.get("pares_permitidos_live", []))
-        if not pares_ok:
-            return
-        params  = _cargar_params()
-        riesgo  = config.get("riesgo", {})
-        min_ic  = riesgo.get("min_ic_para_live", 0.08)
-        min_n   = riesgo.get("min_n_para_live", 40)
-        min_ic_asim = riesgo.get("min_ic_asimetrico", {})
-        stake_ref   = riesgo.get("min_stake_eur", 1.05)
-        ahora = datetime.now(timezone.utc)
-        for pred in _cargar_predicciones_hoy():
-            strategy = pred.get("strategy", "")
-            subtype  = pred.get("subtype", "")
-            mid      = pred.get("market_id", "")
-            dec      = pred.get("decision", "")
-            if f"{strategy}#{subtype}#{dec}" not in pares_ok:
-                continue
-            end_str = pred.get("end_date", "")
-            try:
-                if not end_str:
-                    continue
-                end_dt = datetime.fromisoformat(end_str.replace("Z", "+00:00"))
-                if end_dt.tzinfo is None:
-                    end_dt = end_dt.replace(tzinfo=timezone.utc)
-                if end_dt <= ahora:
-                    continue
-            except Exception:
-                continue
-            min_ic_efectivo = min_ic_asim.get(f"{strategy}#{dec}", min_ic)
-            try:
-                feats = json.loads(pred.get("features", "{}") or "{}")
-            except Exception:
-                feats = {}
-            ic_h, n_h = _ic_n_para_subtype(strategy, subtype, params,
-                                           decision=dec, min_n=min_n,
-                                           min_ic=min_ic_efectivo,
-                                           features=feats)
-            if ic_h < min_ic_efectivo or n_h < min_n:
-                continue
-            _snapshot_senal_bloqueada(mid, dec,
-                                      pred.get("precio_yes_mercado", 0.5),
-                                      stake_ref,
-                                      {"strategy": strategy, "subtype": subtype},
-                                      motivo="fuera_ventana")
+        _snapshots_por_lista(pares_ok, motivo="fuera_ventana", aplicar_gate_ic=True)
+    except Exception:
+        pass
+
+
+def _snapshots_candidatos_evaluacion() -> None:
+    """Acumula libro_snapshots para tuplas que NO están en pares_permitidos_live
+    todavía pero se están evaluando como candidatas a promoción (ver
+    candidatos_evaluacion_live en config_live.json). Motivo: cada promoción
+    anterior (SOL/XRP BUY_NO) se decidió por fill-ability, no por IC — pero
+    el dataset de profundidad solo se llena para tuplas YA whitelisted
+    (_snapshots_fuera_ventana), así que una tupla nueva siempre arranca desde
+    cero justo cuando más falta hace el dato. Esta función mide profundidad
+    real ANTES de que la tupla cruce el gate de IC/n (aplicar_gate_ic=False:
+    un candidato por definición no lo cumple todavía), para no perder tiempo
+    cuando llegue el momento de decidir. Se llama en cada ciclo, dentro y
+    fuera de ventana — no participa en la ejecución real, no toca
+    pares_permitidos_live, no ordena. Solo lee el libro."""
+    try:
+        config     = _cargar_config()
+        candidatos = set(config.get("candidatos_evaluacion_live", []))
+        _snapshots_por_lista(candidatos, motivo="candidato_evaluacion",
+                             aplicar_gate_ic=False)
     except Exception:
         pass
 
@@ -926,6 +967,8 @@ def main():
     log(f"  Switch: {'ON' if est['switch'] else 'OFF'} | "
         f"Ventana: {'SÍ' if est['en_ventana'] else 'NO'} ({motivo}) | "
         f"Hora Madrid: {est['hora_madrid']} ({est['dia']})")
+
+    _snapshots_candidatos_evaluacion()
 
     if not puede:
         log(f"  → Fuera de operación. Motivo: {motivo}")
