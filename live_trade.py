@@ -21,7 +21,9 @@ from datetime import datetime, timezone, timedelta
 from pathlib import Path
 
 from live_guard import puede_operar_live, estado_live, switch_activo
-from live_stake import calcular_stake, bankroll_actual, verificar_circuit_breaker, pnl_live_hoy, stakes_desplegados_ventana_actual
+from live_stake import (calcular_stake, bankroll_actual, verificar_circuit_breaker,
+                        pnl_live_hoy, stakes_desplegados_ventana_actual,
+                        stakes_abiertos_total, freno_diario_pct_hoy, bankroll_inicio_dia)
 from shadow_digest import enviar_telegram
 from live_balance import actualizar_balance_real, cargar_balance_real
 
@@ -698,6 +700,14 @@ def _snapshots_candidatos_evaluacion() -> None:
 REQUOTE_EDGE_MIN  = 0.02   # mismo listón que EDGE_MINIMO de shadow_predict
 REQUOTE_PRECIO_MAX = 0.95  # nunca pagar más de esto por el token, pase lo que pase
 MIN_ORDEN_CLOB_USD = 1.00  # el CLOB rechaza marketable BUY < $1 ("min size: 1")
+# Descubierto 11-Jul: las órdenes limit/GTD (no marketable) tienen un mínimo
+# DISTINTO al de arriba — 5 shares, no $1 notional. Con maker_pilot.stake_eur
+# a 1.05€ y precios ~0.48-0.52 (zona típica GBM_LATE) el size salía ~2.0-2.2,
+# rechazado 5/5 veces reales ("Size (2.02) lower than the minimum: 5"). Fix:
+# stake del piloto subido a 2.75€ (aprobado Javi) + esta guardia fail-closed
+# como red de seguridad si el precio sube lo bastante para volver a caer
+# bajo el mínimo con el nuevo stake.
+MIN_SHARES_CLOB_LIMIT = 5.0
 REQUOTE_DIVERGENCIA_MAX = 0.10  # |ask - plan| máx; más allá el modelo está desfasado
 
 
@@ -955,8 +965,7 @@ def _reconciliar_ordenes_maker() -> None:
         log(f"  ⚠️ maker: reconciliación abortada: {e}")
 
 
-def _colocar_orden_maker(pred: dict, dec: str, stake_aprobado: float,
-                         contexto: dict) -> bool:
+def _colocar_orden_maker(pred: dict, dec: str, contexto: dict) -> bool:
     """Coloca limit GTD a precio que NO cruza el ask, solo para señales
     recién vetadas por profundidad. Devuelve True si quedó colocada.
     Fail-closed en todo: cualquier duda → no colocar."""
@@ -992,7 +1001,43 @@ def _colocar_orden_maker(pred: dict, dec: str, stake_aprobado: float,
             token_id, precio_plan = yes_token, precio_yes
         else:
             token_id, precio_plan = no_token, round(1.0 - precio_yes, 6)
-        stake = min(cfg["stake_eur"], stake_aprobado)
+        # Stake del piloto es SU PROPIA exposición acotada (max_ordenes_abiertas
+        # x stake_eur, ya aprobada), no un techo adicional sobre stake_aprobado:
+        # con el stake global pineado (max=min=1.05€), min(cfg_stake, stake_aprobado)
+        # devolvía siempre 1.05€ pase lo que pase en config — bug descubierto
+        # 11-Jul al intentar subir cfg_stake para cubrir el mínimo de 5 shares
+        # del CLOB en órdenes limit y comprobar que no tenía ningún efecto. La
+        # señal ya pasó IC/n/CLV/whitelist antes de llegar aquí (mismo bar que
+        # cualquier señal taker), así que no hay conviction diferencial que
+        # preservar limitando por stake_aprobado.
+        stake = cfg["stake_eur"]
+
+        # Freno diario prospectivo (code-review 11-Jul, mismo cálculo que
+        # calcular_stake en live_stake.py): al dejar de capar por
+        # stake_aprobado, el stake del piloto ya no heredaba este control —
+        # mismo tipo de gap que el bug del 03-Jul (stakes abiertos sin
+        # descontar dejó desplegar 6.54€ con el freno del 15%). Si el peor
+        # caso (este stake + todo lo ya abierto perdido entero) rompe el
+        # freno diario o el suelo de bankroll, no se coloca. Fail-closed.
+        config_completo = _cargar_config()
+        bkr_ini_dia = bankroll_inicio_dia()
+        if bkr_ini_dia > 0:
+            bkr_min = config_completo.get("riesgo", {}).get("circuit_breaker", {}).get("bankroll_minimo_eur", 5.0)
+            # stakes_abiertos_total() solo ve trades.csv (posiciones YA
+            # ejecutadas); las órdenes maker 'enviando'/'abierta' de este
+            # mismo piloto aún no están ahí pero SÍ pueden llegar a llenarse
+            # — hay que sumarlas o dos órdenes maker seguidas pasarían cada
+            # una su propio check sin ver el riesgo pendiente de la otra
+            # (mismo patrón que el bug de stakes abiertos del 03-Jul).
+            pendientes_maker = sum(o.get("stake_eur", 0) or 0 for o in ordenes
+                                    if o.get("estado") in ("enviando", "abierta"))
+            abiertos = stakes_abiertos_total() + pendientes_maker
+            margen_freno = bkr_ini_dia * freno_diario_pct_hoy(config_completo) + pnl_live_hoy() - abiertos
+            margen_suelo = bankroll_actual() - bkr_min - abiertos
+            margen_dia = min(margen_freno, margen_suelo)
+            if stake > margen_dia:
+                return False   # sin margen suficiente hoy para el stake del piloto
+
         depth = _consultar_profundidad_libro(None, token_id, precio_plan, stake)
         mejor_ask = depth.get("mejor_ask") if depth.get("ok") else None
         if mejor_ask is None:
@@ -1001,13 +1046,15 @@ def _colocar_orden_maker(pred: dict, dec: str, stake_aprobado: float,
         if precio_limit < 0.01 or precio_limit > REQUOTE_PRECIO_MAX:
             return False
         size = round(stake / precio_limit, 2)
-        # Fail-closed (code-review 10-Jul): si el notional queda bajo el
-        # mínimo CLOB, NO se infla el tamaño (el bump podía exceder el stake
-        # aprobado por riesgo) — simplemente no se coloca. Con el stake del
-        # piloto (1.05€) esto no ocurre para ningún precio [0.01, 0.95]
-        # (verificado numéricamente); la guardia protege contra configs
-        # futuras con stake menor.
+        # Fail-closed (code-review 10-Jul, actualizado 11-Jul): si el notional
+        # o el nº de shares quedan bajo el mínimo del CLOB, NO se infla el
+        # tamaño (el bump podía exceder el stake aprobado por riesgo) —
+        # simplemente no se coloca. Con stake_eur=2.75€ (11-Jul) esto no
+        # ocurre en el rango de precios observado (~0.48-0.52); la guardia
+        # protege si el precio se aleja de esa zona o el stake baja de nuevo.
         if size * precio_limit < MIN_ORDEN_CLOB_USD:
+            return False
+        if size < MIN_SHARES_CLOB_LIMIT:
             return False
 
         # Intent ANTES de postear (recuperable si morimos a mitad).
@@ -1707,7 +1754,7 @@ def main():
             # veto_profundidad (libro_vacio) — la señal ya pasó todos los
             # gates y el subconjunto vetado acierta 97% (analisis_fills).
             if resultado.get("libro_vacio"):
-                if _colocar_orden_maker(pred, dec, stake,
+                if _colocar_orden_maker(pred, dec,
                                         {"strategy": strategy,
                                          "subtype": subtype,
                                          "ic_hist": round(ic_hist, 4)}):
