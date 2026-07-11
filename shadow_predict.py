@@ -1864,6 +1864,7 @@ def s_order_flow_5m(market, ctx):
             "total_vol_5m": round(total_vol, 4),
             "has_real_flow": int(has_real_flow),
             "hora_utc": hora_utc,
+            "es_ntm_5min": _es_ntm_5min(market),
         },
     }
 
@@ -2012,6 +2013,7 @@ def s_late_window_5min(market: dict, ctx: dict):
             "elapsed_s":          round(elapsed_s, 1),
             "drift_15min":        round(drift_15 * 100, 4) if drift_15 is not None else None,
             "drift_60min":        round(drift_60 * 100, 4) if drift_60 is not None else None,
+            "es_ntm_5min":        _es_ntm_5min(market),
         },
     }
 
@@ -2035,7 +2037,8 @@ GBM_LATE_15M_PARES = {"BTC", "ETH", "SOL", "XRP"}
 # generación no toca dinero real. GBM_LATE_60M = clon de entrada tardía 60min,
 # necesita acumular n para medir si el edge tardío (probado en 15min, IC=+0.279)
 # transfiere a ventanas 60min más profundas. (2026-07-06)
-ACUMULAR_SHADOW_AUNQUE_DESACTIVADA = {"GBM_LATE_60M", "GBM_LATE_15M_TARDIO", "GBM_LATE_15M_ESPACIO_ATR"}
+ACUMULAR_SHADOW_AUNQUE_DESACTIVADA = {"GBM_LATE_60M", "GBM_LATE_15M_TARDIO", "GBM_LATE_15M_ESPACIO_ATR",
+                                      "STREAK_MOM_5M"}  # 2026-07-10: -0.052 IC n=306, no cruza umbral auto pero sin edge; desactivada manualmente en strategy_params.json (motivo "DESACTIVADA MANUALMENTE"), sigue midiendo sin ruido de atención
 # Photo finish (2026-07-05): entrar con el precio pegado al strike es moneda
 # al aire cobrada como favorito. |drift_ventana|<0.02% → IC=-0.145 n=181
 # (win 35%), estable en ambas mitades temporales (-0.163/-0.127) y monótono
@@ -2315,6 +2318,7 @@ def s_updown_ou_5m(market, ctx):
         "pct_spot_vs_ref": round(pct * 100, 4),
         "sigma_h":          round(sigma_h, 6),
         "theta_ou":         THETA_OU,
+        "es_ntm_5min":      _es_ntm_5min(market),
     }
     if drift_15 is not None: features["drift_15min"] = round(drift_15 * 100, 4)
     if drift_60 is not None: features["drift_60min"] = round(drift_60 * 100, 4)
@@ -2364,6 +2368,21 @@ def _libro_calidad(market: dict) -> dict:
     except (ValueError, TypeError):
         liquidez = None
     return {"libro_spread": spread, "libro_liquidez": liquidez}
+
+
+def _es_ntm_5min(market: dict, ancho: float = 0.05) -> int:
+    """Flag near-the-money (propuesta #14, 13-jul, paper Dai/Jia/Yu
+    "Settlement Manipulation in Prediction Markets"): precio YES a menos de
+    `ancho` de 0.50 al momento de la señal. Hallazgo del paper: en el
+    contrato de 5min, ciclos NTM (cerca de 50%) se voltean 65% de las veces
+    con manipulación de push en los últimos ~10s (vs 41% normal); en 15min
+    el patrón casi desaparece. Solo LOGUEA — mismo patrón que
+    _libro_calidad: el pipeline causal decide si hace falta filtrar, no se
+    hardcodea ningún veto aquí."""
+    py = market.get("_precio_yes")
+    if py is None:
+        return 0
+    return int(abs(py - 0.5) <= ancho)
 
 
 def s_struct_no_15m(market, ctx):
@@ -2624,6 +2643,7 @@ def s_streak_mom_5m(market, ctx):
             "streak_dir_up": 1 if d == "YES" else 0,
             "py_entrada":    round(py, 3),
             "hora_utc":      datetime.now(timezone.utc).hour,
+            "es_ntm_5min":   _es_ntm_5min(market),
             **_libro_calidad(market),
         },
     }
