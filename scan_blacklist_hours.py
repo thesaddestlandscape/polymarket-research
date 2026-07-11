@@ -102,3 +102,5 @@ if __name__ == "__main__":
     scan("SMART_FLOW_1H BUY_YES", rows_of("SMART_FLOW_1H", "BUY_YES"))
     scan("UPDOWN_GBM 5min BUY_YES (desactivada)", rows_of("UPDOWN_GBM", "BUY_YES", subtype_contains="5min"))
     scan("UPDOWN_GBM 5min BUY_NO (desactivada)", rows_of("UPDOWN_GBM", "BUY_NO", subtype_contains="5min"))
+    scan("STREAK_MOM_5M BUY_YES (desactivada, ACUMULAR_SHADOW)", rows_of("STREAK_MOM_5M", "BUY_YES"))
+    scan("STREAK_MOM_5M BUY_NO (desactivada, ACUMULAR_SHADOW)", rows_of("STREAK_MOM_5M", "BUY_NO"))
