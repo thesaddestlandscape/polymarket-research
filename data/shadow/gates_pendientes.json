@@ -1,0 +1,90 @@
+{
+  "_instrucciones": [
+    "Registro de bloqueos/decisiones con una condición de reapertura EXPLÍCITA",
+    "('mantener bloqueado hasta n>=X') que hasta el 11-Jul vivían solo como",
+    "comentario en el código — nadie las revisaba salvo que alguien hiciera un",
+    "análisis manual profundo. Motivo: BNB en ORDER_FLOW_PAIR_BLACKLIST llevaba",
+    "desde el 26-jun con nota 'revisar en n>=150', cruzó el umbral (n=191) y",
+    "nadie lo notó hasta que se investigó a fondo 11-Jul. No puede repetirse.",
+    "",
+    "vigia_gates_pendientes.py (cron horario) lee este fichero, recalcula n para",
+    "cada gate no avisado y manda Telegram + marca avisado=true al cruzar el",
+    "umbral. Campos: id, descripcion, strategy, par (opcional), decision",
+    "(opcional), hora_utc (opcional), fecha_desde (opcional, corta datos previos",
+    "a esa fecha — clave para no contaminar con ráfagas viejas tipo 24-25jun),",
+    "n_objetivo, accion (qué decidir al cruzar), avisado.",
+    "",
+    "Añadir aquí SIEMPRE que un bloqueo/filtro lleve una condición de",
+    "reapertura con número — no dejarlo solo en comentario de código."
+  ],
+  "gates": [
+    {
+      "id": "OF5M_REAPERTURA_ETH",
+      "descripcion": "ETH reabierto en ORDER_FLOW_PAIR_BLACKLIST (11-Jul) tras descubrir que el bloqueo original era 93% ráfaga 24-25jun sin dato fresco desde entonces",
+      "strategy": "ORDER_FLOW_5M",
+      "par": "ETH",
+      "decision": "BUY_NO",
+      "fecha_desde": "2026-07-11",
+      "n_objetivo": 40,
+      "accion": "evaluar ic_bayes con dato fresco; si IC>=0.08 considerar mantener abierto, si IC<-0.12 volver a bloquear",
+      "avisado": false
+    },
+    {
+      "id": "OF5M_REAPERTURA_XRP",
+      "descripcion": "XRP reabierto en ORDER_FLOW_PAIR_BLACKLIST (11-Jul), mismo motivo que ETH",
+      "strategy": "ORDER_FLOW_5M",
+      "par": "XRP",
+      "decision": "BUY_NO",
+      "fecha_desde": "2026-07-11",
+      "n_objetivo": 40,
+      "accion": "evaluar ic_bayes con dato fresco; si IC>=0.08 considerar mantener abierto, si IC<-0.12 volver a bloquear",
+      "avisado": false
+    },
+    {
+      "id": "OF5M_REAPERTURA_DOGE",
+      "descripcion": "DOGE reabierto en ORDER_FLOW_PAIR_BLACKLIST (11-Jul), mismo motivo que ETH",
+      "strategy": "ORDER_FLOW_5M",
+      "par": "DOGE",
+      "decision": "BUY_NO",
+      "fecha_desde": "2026-07-11",
+      "n_objetivo": 40,
+      "accion": "evaluar ic_bayes con dato fresco; si IC>=0.08 considerar mantener abierto, si IC<-0.12 volver a bloquear",
+      "avisado": false
+    },
+    {
+      "id": "OF5M_REAPERTURA_BNB",
+      "descripcion": "BNB reabierto en ORDER_FLOW_PAIR_BLACKLIST (11-Jul) — el que disparó este registro: nota original decía 'mantener hasta n>=150', llegó a n=191 (todo ráfaga 24-25jun) sin que nadie lo revisara",
+      "strategy": "ORDER_FLOW_5M",
+      "par": "BNB",
+      "decision": "BUY_NO",
+      "fecha_desde": "2026-07-11",
+      "n_objetivo": 40,
+      "accion": "evaluar ic_bayes con dato fresco; si IC>=0.08 considerar mantener abierto, si IC<-0.12 volver a bloquear",
+      "avisado": false
+    },
+    {
+      "id": "OF5M_HORA_09_BTCSOL",
+      "descripcion": "Hora 9 UTC en ORDER_FLOW_BLACKLIST_HOURS — scan 07-Jul BTC+SOL n=7 hit86% edge+0.147, 'prometedora, mantener hasta n>=15'",
+      "strategy": "ORDER_FLOW_5M",
+      "par_in": ["BTC", "SOL"],
+      "decision": "BUY_NO",
+      "hora_utc": 9,
+      "fecha_desde": null,
+      "n_objetivo": 15,
+      "accion": "si edge se mantiene positivo con n>=15, quitar 9 de ORDER_FLOW_BLACKLIST_HOURS (aprobar con Javi por tocar código de filtro horario)",
+      "avisado": false
+    },
+    {
+      "id": "OF5M_HORA_22_BTCSOL",
+      "descripcion": "Hora 22 UTC en ORDER_FLOW_BLACKLIST_HOURS — scan 07-Jul BTC+SOL n=7 hit71% edge+0.083, 'prometedora, mantener hasta n>=15'",
+      "strategy": "ORDER_FLOW_5M",
+      "par_in": ["BTC", "SOL"],
+      "decision": "BUY_NO",
+      "hora_utc": 22,
+      "fecha_desde": null,
+      "n_objetivo": 15,
+      "accion": "si edge se mantiene positivo con n>=15, quitar 22 de ORDER_FLOW_BLACKLIST_HOURS (aprobar con Javi por tocar código de filtro horario)",
+      "avisado": false
+    }
+  ]
+}
