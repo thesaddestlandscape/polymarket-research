@@ -85,24 +85,57 @@ def shuffle_percentile(rows, ic_real, n_shuffle=N_SHUFFLE):
     return supera / n_shuffle
 
 
+def benjamini_hochberg(pvals, fdr=0.10):
+    """Corrección por comparaciones múltiples (propuesta #23 backlog, artículo
+    DSR/PBO/FDR 11-Jul): con K candidatas evaluadas A LA VEZ, un umbral fijo
+    p<0.05 por tupla es una máquina de falsos descubrimientos — bajo el nulo,
+    0.05×K tuplas lo cruzan por azar. BH controla la fracción esperada de
+    falsos positivos ENTRE las aceptadas (FDR), endureciendo el umbral con K.
+    Devuelve lista de bool (True = sobrevive) alineada con pvals."""
+    indexed = sorted(range(len(pvals)), key=lambda i: pvals[i])
+    n = len(pvals)
+    keep = [False] * n
+    cutoff = -1
+    for rank, i in enumerate(indexed, start=1):
+        if pvals[i] <= fdr * rank / n:
+            cutoff = rank
+    for rank, i in enumerate(indexed, start=1):
+        if rank <= cutoff:
+            keep[i] = True
+    return keep
+
+
 def main():
     claves = cargar_candidatos()
     filas_por_clave = cargar_filas(claves)
 
-    print(f"{'tupla':<45} {'n':>4} {'hit%':>6} {'IC':>7} {'Wilson90%':>18} {'p_shuffle':>10}  veredicto")
-    print("-" * 115)
+    resultados = []
     for tupla, strat, sub, dec in claves:
         rows = filas_por_clave.get((strat, sub, dec), [])
         n = len(rows)
         if n == 0:
-            print(f"{tupla:<45} {0:>4}  {'--':>5} {'--':>7} {'--':>18} {'--':>10}  sin datos")
+            resultados.append((tupla, 0, None, None, None, None, None))
             continue
         aciertos = sum(1 for r in rows if r["acierto"] == "1")
         hit = aciertos / n
         ic = ic_bayes(aciertos, n)
         lo, hi = wilson_ci(aciertos, n)
         p_shuf = shuffle_percentile(rows, ic)
+        resultados.append((tupla, n, hit, ic, lo, hi, p_shuf))
 
+    # BH sobre el conjunto completo de candidatas con datos — el denominador
+    # honesto es cuántas se evalúan a la vez, no cada una aislada.
+    con_datos = [(i, r[6]) for i, r in enumerate(resultados) if r[6] is not None]
+    keep_bh = benjamini_hochberg([p for _, p in con_datos]) if con_datos else []
+    bh_ok = {con_datos[j][0] for j, k in enumerate(keep_bh) if k}
+
+    print(f"K={len(con_datos)} candidatas evaluadas simultáneamente — FDR (Benjamini-Hochberg) al 10%")
+    print(f"{'tupla':<45} {'n':>4} {'hit%':>6} {'IC':>7} {'Wilson90%':>18} {'p_shuffle':>10}  veredicto")
+    print("-" * 115)
+    for i, (tupla, n, hit, ic, lo, hi, p_shuf) in enumerate(resultados):
+        if n == 0:
+            print(f"{tupla:<45} {0:>4}  {'--':>5} {'--':>7} {'--':>18} {'--':>10}  sin datos")
+            continue
         razones = []
         if n < N_LIVE_MIN:
             razones.append(f"n<{N_LIVE_MIN}")
@@ -112,6 +145,8 @@ def main():
             razones.append("Wilson cruza 0.5")
         if p_shuf > 0.05:
             razones.append(f"no bate shuffle (p={p_shuf:.3f})")
+        if i not in bh_ok:
+            razones.append("no sobrevive FDR-BH multi-test")
         veredicto = "GATE OK" if not razones else "NO CONCLUYENTE: " + ", ".join(razones)
 
         print(f"{tupla:<45} {n:>4} {hit*100:>5.1f}% {ic:>+7.3f} [{lo:>6.3f},{hi:>6.3f}] {p_shuf:>10.3f}  {veredicto}")
