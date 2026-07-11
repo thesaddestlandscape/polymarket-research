@@ -2105,7 +2105,26 @@ ACUMULAR_SHADOW_AUNQUE_DESACTIVADA = {"GBM_LATE_60M", "GBM_LATE_15M_TARDIO", "GB
 # (win 35%), estable en ambas mitades temporales (-0.163/-0.127) y monótono
 # con la distancia; buffer [0.02,0.05) ya es positivo en los 4 pares.
 # Tracking forward: H-CUSTOM-LATE15-PHOTO-FINISH.
-GBM_LATE_DRIFT_VENT_MIN_PCT = 0.02  # % — distancia mínima |spot vs ref ventana|
+# 2026-07-11 (propuesta #5 backlog quant-desk, aprobado Javi): subido
+# 0.02->0.03. barrido_vecinos.py con franja MARGINAL (analisis_drift_vent_
+# por_par.py) mostró que la franja 0.02-0.03 es consistentemente mala en
+# los 3 pares/direcciones con n suficiente: BTC n=100 hit=38.0% edge=-0.036,
+# ETH#BUY_YES n=30 hit=36.7% edge=-0.017, SOL#BUY_YES n=19 hit=26.3%
+# edge=-0.048 — las tres coinciden en recortarla, 0.03 es el único valor
+# soportado por ETH y SOL (las 2 tuplas live) A LA VEZ. NO se sube más allá
+# (a 0.05, donde BTC/ETH siguen mejorando) porque la franja 0.03-0.05 es
+# BUENA específicamente para SOL (n=52 hit=65.4% edge=+0.023) — un umbral
+# único más alto le cortaría a SOL una franja que rinde. Ver también
+# ic_rolling.py (propuesta #5, gap pareado por activo: 0 divergencias en
+# 117 claves — confirma que el efecto no es artefacto de composición).
+# TODO (idea anotada, NO implementada — propuesta #5b, revisar con más n):
+# separar este umbral por par en vez de un valor único (0.03 SOL / 0.05
+# ETH+BTC parecen los óptimos individuales) — hoy las franjas marginales
+# más finas por par (ej. SOL n=19 en la banda decisiva) están justo en el
+# límite n>=15 del proyecto, demasiado ajustado para fiarse de un ajuste
+# por par todavía. Revisar analisis_drift_vent_por_par.py cuando cada par
+# tenga más resoluciones.
+GBM_LATE_DRIFT_VENT_MIN_PCT = 0.03  # % — distancia mínima |spot vs ref ventana| (antes 0.02)
 
 # Propuesta #1 (artículo breakout trading, 09-Jul): el "espacio" debería
 # escalar con volatilidad propia del activo (ATR-multiplier), no ser un %
