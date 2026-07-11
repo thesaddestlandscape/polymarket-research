@@ -127,6 +127,8 @@
     "min_profundidad_ratio_libro": 5.0,
     "_max_posiciones_nota": "2026-07-03: techo de correlación — los pares cripto se mueven al unísono intradía; N posiciones misma dirección abiertas a la vez = 1 apuesta con stake ×N (cluster shadow 02-Jul 01h UTC: -24.4€ en 17 BUY_NO simultáneos).",
     "max_posiciones_abiertas_misma_direccion": 2,
+    "_factor_ic_concurrente_nota": "2026-07-11 (propuesta #7, aprobado Javi): con 1+ posición ya abierta en la misma dirección, exige IC >= min_ic_efectivo x (1+este factor) antes de abrir una 2ª — el techo de arriba solo limita CANTIDAD, esto exige más CONVICCIÓN dado el riesgo de correlación entre pares. 0.25 = +25% sobre el mínimo vigente (0.08 -> 0.10). Sin datos forward todavía, revisar tras acumular señales bloqueadas por este gate.",
+    "factor_ic_2a_senal_concurrente": 0.25,
     "circuit_breaker": {
       "freno_ventana_pct": 0.2,
       "_reapertura_2026-07-06_nota": "Decisión usuario 05-Jul: reabrir live desde el lunes 06-Jul (at job toca LIVE_MODE_ON a las 06:00 UTC) e intentar recuperar con el bankroll restante, parando solo al quedarse sin dinero. freno_diario 0.15→0.30 (con stakes 1.05€ sobre ~8.50€ el 15% cortaba el día tras 1 pérdida — con 30% caben ~2). bankroll_minimo 3→1: el breaker 1 apaga el switch y avisa por Telegram al cruzar 1€; por debajo de ~2€ ni se puede absorber una pérdida sin quedar bajo el mínimo CLOB ($1/orden). Racha 4 y freno ventana 0.20 se mantienen (fallo sistemático ≠ varianza).",

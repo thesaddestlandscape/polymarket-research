@@ -1461,6 +1461,7 @@ def main():
     min_n        = riesgo.get("min_n_para_live", 40)
     min_n_overrides   = riesgo.get("min_n_overrides", {})
     min_ic_asimetrico = riesgo.get("min_ic_asimetrico", {})
+    factor_ic_concurrente = riesgo.get("factor_ic_2a_senal_concurrente", 0.25)
     # Whitelist por tupla exacta STRATEGY#SUBTYPE#DIRECTION. Antes eran dos
     # listas independientes (estrategias × subtypes) y el producto cartesiano
     # dejaba pasar combinaciones nunca aprobadas: UPDOWN_GBM#SOL#15min
@@ -1617,6 +1618,24 @@ def main():
             log(f"  SKIP {strategy}#{subtype} {dec}: ya hay {abiertas_dir} "
                 f"posiciones abiertas {dec} (techo correlación = {max_misma_dir})")
             continue
+
+        # Filtro de calidad en 2ª señal concurrente (propuesta #7, 10-Jul,
+        # aprobado Javi 11-Jul): con 1+ posición ya abierta en la misma
+        # dirección, el riesgo de correlación (los pares cripto se mueven casi
+        # al unísono) exige más convicción, no solo hueco bajo el techo. Exige
+        # IC un factor más alto que el mínimo vigente para esa tupla (mismo
+        # min_ic_efectivo ya usado más arriba, respeta la barra asimétrica).
+        if abiertas_dir >= 1:
+            # Fail-closed: si min_ic_efectivo no es positivo (dato/config
+            # corrupta), el factor multiplicativo invertiría la barra en vez
+            # de subirla — se cae al mínimo global positivo en ese caso.
+            base_ic_concurrente = min_ic_efectivo if min_ic_efectivo > 0 else min_ic
+            ic_min_concurrente = base_ic_concurrente * (1 + factor_ic_concurrente)
+            if ic_hist < ic_min_concurrente:
+                log(f"  SKIP {strategy}#{subtype} {dec}: ya hay {abiertas_dir} "
+                    f"posición(es) {dec} abierta(s) — exige IC≥{ic_min_concurrente:.3f} "
+                    f"({(1+factor_ic_concurrente):.0%} del mínimo, tiene {ic_hist:+.3f})")
+                continue
 
         stake_info = calcular_stake(ic_hist, strategy, subtype, direction=dec)
         if not stake_info["viable"]:
