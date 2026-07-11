@@ -142,6 +142,47 @@ def _monitor_5min(resultados: list) -> dict:
     return {"ou_5m": ou_state, "of_buy_yes": of_yes_state, "of_decay": of_state, "alertas": alertas}
 
 
+IC_GATE_LIVE = 0.08  # mismo umbral que exige la promoción a pares_permitidos_live
+
+
+def _monitor_ic_live(params: dict) -> list:
+    """
+    Vigía de decaimiento — petición Javi 11-Jul: "vigila el ETH de cerca y
+    avísame si baja de 0.08". Cada tupla de `pares_permitidos_live`
+    (config_live.json) es dinero real; si su ic_bayes (o ic_BUY_YES/
+    ic_BUY_NO según la dirección de la tupla) cae por debajo del MISMO
+    umbral que exigió su promoción, avisa por Telegram. Sin latch a
+    propósito (dinero real, mejor recordar de más que de menos) — se
+    integra en el ciclo de postmortem (~23min), no añade cron nuevo.
+    """
+    alertas = []
+    try:
+        config = json.loads(Path("data/live/config_live.json").read_text())
+    except Exception:
+        return alertas
+    estrategias = params.get("estrategias", {})
+    for tupla in config.get("pares_permitidos_live", []):
+        partes = tupla.split("#")
+        if len(partes) != 4:
+            continue
+        estrategia, activo, duracion, direccion = partes
+        clave = f"{estrategia}#{activo}#{duracion}"
+        sp = estrategias.get(clave)
+        if not sp:
+            continue
+        campo_ic = f"ic_{direccion}"
+        campo_n  = f"n_{direccion}"
+        ic = sp.get(campo_ic, sp.get("ic_bayes"))
+        n  = sp.get(campo_n, sp.get("n", 0))
+        if ic is None:
+            continue
+        if ic < IC_GATE_LIVE:
+            alertas.append(f"🔴 LIVE {tupla}: ic={ic:+.4f} < {IC_GATE_LIVE} (n={n}) — por debajo del gate que la promovió")
+        elif ic < IC_GATE_LIVE + 0.02:
+            alertas.append(f"🟡 LIVE {tupla}: ic={ic:+.4f} cerca del gate {IC_GATE_LIVE} (n={n}) — vigilar")
+    return alertas
+
+
 def _escribir_state(params: dict, resultados: list):
     """Gap 2: state file machine-generated con snapshot del sistema."""
     estrategias = params.get("estrategias", {})
@@ -156,6 +197,16 @@ def _escribir_state(params: dict, resultados: list):
     wins         = sum(int(r.get("acierto", 0)) for r in resultados)
     top3         = sorted(activas.items(), key=lambda x: x[1].get("ic_bayes", 0), reverse=True)[:3]
     monitor_5m   = _monitor_5min(resultados)
+
+    alertas_ic_live = _monitor_ic_live(params)
+    if alertas_ic_live:
+        for a in alertas_ic_live:
+            print(f"  [IC LIVE] {a}")
+        try:
+            from shadow_digest import enviar_telegram
+            enviar_telegram("📊 *Vigía IC live*\n" + "\n".join(alertas_ic_live))
+        except Exception as e:
+            print(f"  [aviso IC live] no se pudo notificar Telegram: {e}")
     state = {
         "timestamp_utc":   datetime.now(timezone.utc).isoformat(timespec="seconds"),
         "bankroll_sim":    round(20.0 + pnl_total, 2),
