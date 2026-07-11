@@ -2355,6 +2355,15 @@ def _s_gbm_late(market, ctx, ventana_min, rest_lo, rest_hi, espacio_k=None):
     dist_ancla_estructural_pct = _dist_ancla_estructural_pct(activo, precios_data, horas_lookback=3)
     volumen_regimen = ctx.get("volumen_regimen", {}).get(activo)
 
+    # dist_vwap_pct (11-Jul, paper Zarattini/Aziz "VWAP the Holy Grail"): ya
+    # existía en UPDOWN_GBM desde 07-Jul pero nunca se extendió aquí. Chequeo
+    # manual sobre UPDOWN_GBM (ver FEATURE_RULES en shadow_postmortem.py):
+    # BUY_NO a-favor-de-tendencia (spot<VWAP) ic+0.038 n=78 vs contra-tendencia
+    # (spot>=VWAP) ic-0.105 n=36 — puro logging, no cambia edge ni decisión.
+    _vwap_sesion = ctx.get("vwap_sesion", {}).get(activo)
+    dist_vwap_pct = (round((spot - _vwap_sesion) / _vwap_sesion * 100, 4)
+                      if _vwap_sesion and spot and _vwap_sesion > 0 else None)
+
     # SE aproximado de d_gbm (propuesta #2, backlog quant-desk 13-jul, Part
     # II del artículo de simulación cuantitativa): la varianza del estimador
     # es máxima justo en p=0.5, donde opera GBM_LATE. sigma_h tiene un error
@@ -2391,6 +2400,7 @@ def _s_gbm_late(market, ctx, ventana_min, rest_lo, rest_hi, espacio_k=None):
             "n_obs_vol_h":         n_obs_vol,
             "se_d_gbm_aprox":      se_d_gbm_aprox,
             "sigma_h_ewma10":      round(sigma_h_ewma10, 5) if sigma_h_ewma10 is not None else None,
+            "dist_vwap_pct":       dist_vwap_pct,
         },
     }
 

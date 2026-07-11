@@ -787,6 +787,16 @@ _BASE_GBM = [
     # El postmortem descubrirá automáticamente qué umbral separa ganadores de perdedores
     ("ibs_15",           "gt",     "lt"),
     ("ibs_15",           "lt",     "gt"),
+    # ── VWAP relativo (11-Jul, paper Zarattini/Aziz "VWAP the Holy Grail") ─────
+    # spot>VWAP = tendencia alcista de sesión; spot<VWAP = bajista. Chequeo manual
+    # UPDOWN_GBM BUY_NO n=114: contra-tendencia (spot>=VWAP) ic=-0.105 n=36 vs
+    # a-favor (spot<VWAP) ic=+0.038 n=78 — mismo patrón cualitativo que el paper
+    # (operar a favor del VWAP bate ir en contra). BUY_YES más débil pero mismo
+    # signo (+0.162 a-favor vs +0.087 en contra). Nunca estaba en FEATURE_RULES
+    # pese a llevar logueado desde el 07-Jul — el pipeline no podía verlo solo.
+    # Es signo, no magnitud (mismo patrón que hora_utc) -> ambas direcciones.
+    ("dist_vwap_pct",    "lt",     "gt"),
+    ("dist_vwap_pct",    "gt",     "lt"),
 ]
 
 FEATURE_RULES = {
