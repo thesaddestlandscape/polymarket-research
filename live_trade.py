@@ -1552,6 +1552,28 @@ def main():
         # Filtros de elegibilidad — tupla exacta aprobada para live
         if f"{strategy}#{subtype}#{dec}" not in pares_ok:
             continue
+        # Veto activa=False (code-review 11-Jul): antes de hoy ninguna tupla
+        # whitelisted pertenecía a ACUMULAR_SHADOW_AUNQUE_DESACTIVADA
+        # (shadow_predict.py) — estrategias que siguen generando predicciones
+        # aunque strategy_params.json las marque desactivadas, precisamente
+        # para seguir midiendo. Este código nunca miraba 'activa', solo
+        # IC/n — con GBM_LATE_15M_ESPACIO_ATR entrando hoy en whitelist (SÍ
+        # está en ese set), una desactivación manual futura (no solo por IC
+        # bajo, que ya bloquearía por el gate de abajo) seguiría operando
+        # dinero real en silencio. Fail-closed: cualquier nivel de la
+        # jerarquía marcado activa=False bloquea, igual que hace
+        # shadow_predict.py para generar.
+        if "#" in subtype:
+            _a, _d = subtype.split("#", 1)
+            _activa_keys = [f"{strategy}#{subtype}", f"{strategy}#{_a}", f"{strategy}#{_d}", strategy]
+        elif subtype:
+            _activa_keys = [f"{strategy}#{subtype}", strategy]
+        else:
+            _activa_keys = [strategy]
+        if any(not params.get(k, {}).get("activa", True) for k in _activa_keys if k in params):
+            log(f"  ⛔ {strategy}#{subtype} {dec}: estrategia desactivada (activa=False) "
+                f"pese a estar en whitelist — no se ejecuta")
+            continue
         if mid in ya_operados:
             continue
         if mid in mids_maker:
