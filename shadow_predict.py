@@ -1056,13 +1056,35 @@ def cargar_precios_intraday():
     return deduped
 
 
-def _estimar_vol_h(sym, precios_data, n_min=120):
-    """Vol por hora a partir de las últimas n_min de precios spot. None si insuficiente."""
+def _subset_precios_recientes(sym, precios_data, n_min):
+    """(ts, precio) de sym en los últimos n_min minutos, con fallback a los
+    últimos 60 puntos si hay menos de 5 — lógica compartida por
+    _estimar_vol_h y _n_obs_vol_h (antes duplicada en las dos, riesgo de
+    que divergieran si se editaba una sin la otra)."""
     ahora = datetime.now(timezone.utc)
     corte = ahora - timedelta(minutes=n_min)
     subset = [(ts, p[sym]) for ts, p in precios_data if sym in p and ts >= corte]
     if len(subset) < 5:
         subset = [(ts, p[sym]) for ts, p in precios_data if sym in p][-60:]
+    return subset
+
+
+def _n_obs_vol_h(sym, precios_data, n_min=120):
+    """Nº de log-retornos que usaría _estimar_vol_h para este sym/ventana —
+    para exponer barato cuántas observaciones respaldan sigma_h (propuesta
+    #2, backlog quant-desk 13-jul: distinguir sigma_h bien estimado de
+    sigma_h con pocas klines detrás). Ver _estimar_vol_h."""
+    subset = _subset_precios_recientes(sym, precios_data, n_min)
+    if len(subset) < 2:
+        return 0
+    prices = [p for _, p in subset]
+    return sum(1 for i in range(1, len(prices))
+               if prices[i - 1] > 0 and prices[i] > 0)
+
+
+def _estimar_vol_h(sym, precios_data, n_min=120):
+    """Vol por hora a partir de las últimas n_min de precios spot. None si insuficiente."""
+    subset = _subset_precios_recientes(sym, precios_data, n_min)
     if len(subset) < 2:
         return None
     prices = [p for _, p in subset]
@@ -2233,6 +2255,17 @@ def _s_gbm_late(market, ctx, ventana_min, rest_lo, rest_hi, espacio_k=None):
     dist_ancla_estructural_pct = _dist_ancla_estructural_pct(activo, precios_data, horas_lookback=3)
     volumen_regimen = ctx.get("volumen_regimen", {}).get(activo)
 
+    # SE aproximado de d_gbm (propuesta #2, backlog quant-desk 13-jul, Part
+    # II del artículo de simulación cuantitativa): la varianza del estimador
+    # es máxima justo en p=0.5, donde opera GBM_LATE. sigma_h tiene un error
+    # de estimación relativo ~1/sqrt(2N) (N=nº de log-retornos usados, delta
+    # method sobre la varianza muestral); como d=C/sigma_h, se propaga a
+    # SE(d)≈|d|/sqrt(2N). Solo LOGUEA — no cambia edge/decisión, mismo
+    # patrón que libro_spread/es_ntm_5min: el pipeline causal decide si
+    # hace falta filtrar señales con sigma_h mal estimado.
+    n_obs_vol = _n_obs_vol_h(activo, precios_data, n_min=20)
+    se_d_gbm_aprox = round(abs(d) / math.sqrt(2 * n_obs_vol), 4) if n_obs_vol >= 2 else None
+
     return {
         "prob_yes": round(p_up, 4),
         "razon":    (f"gbm_late_{ventana_min}min {activo} drift_vent={drift_ventana*100:+.3f}% "
@@ -2251,6 +2284,8 @@ def _s_gbm_late(market, ctx, ventana_min, rest_lo, rest_hi, espacio_k=None):
             "ibs_20min":           ibs_20min,
             "dist_ancla_estructural_pct": dist_ancla_estructural_pct,
             "volumen_regimen":     volumen_regimen,
+            "n_obs_vol_h":         n_obs_vol,
+            "se_d_gbm_aprox":      se_d_gbm_aprox,
         },
     }
 
