@@ -196,6 +196,32 @@ MERCURIO_RETROGRADO_VENTANAS = [
 def _mercurio_retrogrado(dt):
     return any(lo <= dt <= hi for lo, hi in MERCURIO_RETROGRADO_VENTANAS)
 
+
+# Pre-FOMC announcement drift (Lucca & Moench, JF/NY Fed, SSRN 1923197,
+# artículo pasado por Javi 11-Jul): gran parte de la prima de equities se
+# concentra en las ~24h ANTES del anuncio programado del FOMC (14:00 ET del
+# 2º día de reunión). Cripto correlaciona con equities en macro → feature
+# observacional de calendario, mismo patrón que moon_phase/mercury: solo
+# loguea, NO toca ninguna decisión. n acumula lento (8 reuniones/año) — el
+# pipeline causal decidirá con n suficiente si BUY_YES pre-FOMC rinde
+# distinto. Fechas confirmadas federalreserve.gov 11-Jul-2026; 14:00 ET =
+# 18:00 UTC en horario de verano, 19:00 UTC en invierno (Oct salida DST 01-Nov).
+FOMC_ANUNCIOS_UTC = [
+    datetime(2026, 7, 29, 18, 0, tzinfo=timezone.utc),
+    datetime(2026, 9, 16, 18, 0, tzinfo=timezone.utc),
+    datetime(2026, 10, 28, 18, 0, tzinfo=timezone.utc),
+    datetime(2026, 12, 9, 19, 0, tzinfo=timezone.utc),
+]
+
+def _horas_hasta_fomc(dt):
+    """Horas hasta el próximo anuncio FOMC (float, redondeado a 0.1h).
+    None si no hay anuncio futuro en el calendario (fail-soft: recordar
+    ampliar FOMC_ANUNCIOS_UTC con el calendario 2027 en diciembre)."""
+    futuros = [f for f in FOMC_ANUNCIOS_UTC if f > dt]
+    if not futuros:
+        return None
+    return round((min(futuros) - dt).total_seconds() / 3600.0, 1)
+
 ACTIVOS_REF = {
     "BTC":  ("bitcoin",  "btc"),
     "ETH":  ("ethereum", "eth"),
@@ -3116,6 +3142,7 @@ def main():
     precios_ventanas_hoy = {k: sum(v) / len(v) for k, v in _precios_ventanas_acc.items()}
     _moon_phase_hoy = _moon_phase(datetime.now(timezone.utc))
     _mercury_retro_hoy = _mercurio_retrogrado(datetime.now(timezone.utc))
+    _horas_hasta_fomc_hoy = _horas_hasta_fomc(datetime.now(timezone.utc))
     try:
         _smart_money_consenso = json.loads(
             (DIR_SHADOW / "smart_money_consensus.json").read_text(encoding="utf-8")
@@ -3209,6 +3236,7 @@ def main():
                 # no afecta ninguna decisión, solo se acumula para análisis futuro
                 pred_features["moon_phase"] = _moon_phase_hoy
                 pred_features["mercury_retrogrado"] = 1 if _mercury_retro_hoy else 0
+                pred_features["horas_hasta_fomc"] = _horas_hasta_fomc_hoy
                 _activo_pred = subtype.split("#", 1)[0].upper() if subtype else ""
                 _consenso_activo = _smart_money_consenso.get(_activo_pred)
                 if _consenso_activo:
