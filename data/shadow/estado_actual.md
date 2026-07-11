@@ -1,4 +1,4 @@
-# Estado del bot — 2026-07-11 07:07 UTC
+# Estado del bot — 2026-07-11 07:13 UTC
 
 ## Live — dinero real (on-chain)
 | | |
@@ -13,11 +13,11 @@
 ## Shadow — MODELO SIMULADO (no cobrable)
 | | |
 |---|---|
-| P&L fiel (stake fijo 1$) | +914.64 $ |
-| P&L sim compuesto | 🟢 +1405.18 $ (ficción Kelly: +5524% s/ operativo) |
-| P&L sim hoy (2026-07-11) | 🟢 +125.77 $ |
-| Operaciones resueltas | 8813 (4921 WIN / 3892 LOSS) — 55.8% |
-| Señales abiertas | 157 |
+| P&L fiel (stake fijo 1$) | +915.40 $ |
+| P&L sim compuesto | 🟢 +1405.58 $ (ficción Kelly: +5525% s/ operativo) |
+| P&L sim hoy (2026-07-11) | 🟢 +126.17 $ |
+| Operaciones resueltas | 8814 (4922 WIN / 3892 LOSS) — 55.8% |
+| Señales abiertas | 169 |
 
 ## Estrategias (visión global)
 
@@ -39,37 +39,37 @@
 | WEEKLY_PRICE | 175 | 57.1% | +0.071 | 📈 madura (+0.17) | -13.32$ | 0.71$ | ✅ activa |
 | SMART_FLOW_1H | 29 | 20.7% | -0.274 | — | -13.82$ | 0.00$ | 🚫 desactivada |
 | UPDOWN_OU_5M | 84 | 28.6% | -0.209 | 📉 agota (-0.14) | -18.89$ | 0.00$ | 🚫 desactivada |
-| FAVORITO_CONFIRMADO | 361 | 67.0% | +0.169 | 📉 agota (-0.06) | -20.36$ | 1.69$ | ✅ activa |
+| FAVORITO_CONFIRMADO | 362 | 67.1% | +0.170 | 📉 agota (-0.06) | -19.96$ | 1.70$ | ✅ activa |
 | STREAK_MOM_5M | 307 | 44.6% | -0.053 | 📉 agota (-0.05) | -22.65$ | 0.50$ | 🚫 desactivada |
 
 ## Últimas 5 resoluciones
 
 | Timestamp | Estrategia | Mercado | Resultado | PNL |
 |---|---|---|---|---|
+| 2026-07-11T07:08 | FAVORITO_CONFIRMADO#ETH#60min | Ethereum Up or Down - July 11, 2AM ET… | ✅ WIN | +0.40$ |
 | 2026-07-11T07:06 | GBM_LATE_60M#BTC#60min | Bitcoin Up or Down - July 11, 2AM ET… | ✅ WIN | +0.14$ |
 | 2026-07-11T07:06 | FAVORITO_CONFIRMADO#BTC#60min | Bitcoin Up or Down - July 11, 2AM ET… | ✅ WIN | +1.12$ |
 | 2026-07-11T07:03 | GBM_LATE_15M_ESPACIO_ATR#BTC#15min | Bitcoin Up or Down - July 11, 2:45AM-3:00AM ET… | ✅ WIN | +4.98$ |
 | 2026-07-11T07:03 | FAVORITO_CONFIRMADO#SOL#15min | Solana Up or Down - July 11, 2:45AM-3:00AM ET… | ✅ WIN | +0.24$ |
-| 2026-07-11T07:03 | FAVORITO_CONFIRMADO#BTC#15min | Bitcoin Up or Down - July 11, 2:45AM-3:00AM ET… | ❌ LOSS | -1.95$ |
 
 ## Calidad de datos
 
-✅ **OK** — última verificación 2026-07-11T07:06 UTC
+✅ **OK** — última verificación 2026-07-11T07:12 UTC
 
 | Asset | Precio | Age | Alertas |
 |---|---|---|---|
-| ✅ BTC | $64,176.00 | 0.1min |  |
-| ✅ ETH | $1,798.41 | 0.1min |  |
-| ✅ SOL | $77.98 | 0.1min |  |
+| ✅ BTC | $64,133.17 | 0.1min |  |
+| ✅ ETH | $1,796.88 | 0.1min |  |
+| ✅ SOL | $78.01 | 0.1min |  |
 | ✅ XRP | $1.11 | 0.1min |  |
 
 **Cross-source** (binance, coinbase, kraken):
 
 | Asset | Consenso | Fuente | Estado |
 |---|---|---|---|
-| BTC | $64,176.00 | consenso |  |
-| ETH | $1,798.41 | consenso |  |
-| SOL | $78.03 | consenso |  |
+| BTC | $64,139.10 | consenso |  |
+| ETH | $1,797.07 | consenso |  |
+| SOL | $77.90 | consenso |  |
 | XRP | $1.11 | consenso |  |
 
 ---
