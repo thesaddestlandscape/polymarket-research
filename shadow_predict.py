@@ -2762,6 +2762,61 @@ def s_streak_mom_5m(market, ctx):
         },
     }
 
+STREAK_FADE_5M_PARES = {"SOL", "ETH", "XRP"}  # mismo universo que STREAK_MOM_5M
+
+def s_streak_fade_5m(market, ctx):
+    """
+    Espejo invertido de STREAK_MOM_5M (11-Jul, bloque B backlog ítem 1 —
+    Javi: "1 y 2 no tienen otra visión que les haga candidatos a
+    estrategia"). STREAK_MOM_5M (sigue la racha, k>=3, mismos 3 pares)
+    lleva IC_bayes=-0.0548 n=308 (desactivada 10-Jul). Un IC negativo en
+    una apuesta direccional es matemáticamente evidencia a favor de la
+    apuesta OPUESTA: invertir cada decisión histórica (BUY_YES<->BUY_NO)
+    da IC_bayes=+0.0548 n=308 (BUY_YES original -0.0685 n=144 -> fade
+    +0.0685; BUY_NO original -0.0422 n=164 -> fade +0.0422). No cruza
+    todavía el gate live (IC>=0.08 n>=40) y es la MISMA muestra que ya
+    generó el hallazgo (no es validación forward independiente) — por eso
+    nace como estrategia separada, mide su propio n desde cero con precio
+    de entrada real del lado contrario (distinto slippage/edge_neto que
+    negar directamente el histórico de MOM). Mismo patrón que
+    STREAK_FADE_15M (reversión probada ahí, IC+0.117) pero a 5min.
+    NO está en pares_permitidos_live — shadow puro, cero riesgo real.
+    """
+    q = market.get("question", "")
+    if "up or down" not in q.lower():
+        return None
+    tipo, vent = _parse_updown_tipo(q)
+    if tipo != "slot" or vent != 5:
+        return None
+    activo = identificar_activo(q)
+    if activo not in STREAK_FADE_5M_PARES:
+        return None
+    py = market.get("_precio_yes")
+    if py is None or not (STREAK_PY_LO <= py <= STREAK_PY_HI):
+        return None
+    edt = _streak_end_dt(market)
+    if edt is None:
+        return None
+    k, d = _racha_actual(activo, 5, edt)
+    if k < 3 or d is None:
+        return None
+    # reversión: FADEAR la racha (espejo de streak_mom_5m, que la sigue)
+    prob_yes = 0.42 if d == "YES" else 0.58
+    return {
+        "prob_yes": prob_yes,
+        "razon":    f"streak_fade_5m {activo} racha={k}x{d} py={py:.3f} (reversión, espejo de MOM)",
+        "subtype":  f"{activo}#5min",
+        "features": {
+            "streak_len":    k,
+            "streak_dir_up": 1 if d == "YES" else 0,
+            "py_entrada":    round(py, 3),
+            "hora_utc":      datetime.now(timezone.utc).hour,
+            "es_ntm_5min":   _es_ntm_5min(market),
+            **_libro_calidad(market),
+        },
+    }
+
+
 # Items 11/12 del checklist 08-Jul (idea_streak_fade_15m, artículo Spicy
 # mean-reversion): régimen (¿la reversión funciona mejor en choppy que en
 # tendencia?) y combustible (¿la racha con más volumen revierte más fuerte,
@@ -2951,6 +3006,7 @@ ESTRATEGIAS = [
     ("STRUCT_NO_15M",       s_struct_no_15m),
     ("FAVORITO_CONFIRMADO", s_favorito_confirmado),
     ("STREAK_MOM_5M",       s_streak_mom_5m),
+    ("STREAK_FADE_5M",      s_streak_fade_5m),
     ("STREAK_FADE_15M",     s_streak_fade_15m),
     ("LEADLAG_BTC_XRP_15M", s_leadlag_btc_xrp),
     # ("BINANCE_UPDOWN", s_binance_updown),  # retirada — IC -0.50
