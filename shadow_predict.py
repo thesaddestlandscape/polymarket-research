@@ -1103,6 +1103,45 @@ def _estimar_vol_h(sym, precios_data, n_min=120):
     return math.sqrt(var / avg_dur * 60)  # vol por hora
 
 
+def _estimar_vol_h_ewma(sym, precios_data, n_min=120, half_life_min=10):
+    """Como _estimar_vol_h pero pondera cada retorno al cuadrado por
+    decaimiento exponencial (más peso a lo reciente) en vez de ventana
+    plana — propuesta #11 backlog quant-desk 13-jul. Backtest
+    (analisis_ewma_vol.py, n=4210/activo sobre 21 días de precios reales,
+    lookback 20min/forward 15min igual que GBM_LATE_15M) contra el sigma_h
+    REALIZADO en los 15min siguientes: mejora modesta pero consistente en
+    las 4 monedas frente al flat actual (MAE -0.3% a -3%, corr +0.006 a
+    +0.037; half_life=10min mejor que 5min salvo XRP). El mismo backtest
+    REFUTA el efecto apalancamiento tipo Heston en cripto (drift reciente
+    vs vol futura: corr +0.003 a +0.112, cerca de cero y de signo
+    equivocado si hubiera efecto — no construir nada que lo asuma). Solo
+    LOGUEA (sigma_h_ewma10 en _s_gbm_late) — sigma_h sigue siendo
+    _estimar_vol_h, esta función NO alimenta la decisión ni el stake de
+    GBM_LATE_15M (estrategia en vivo); el pipeline causal decide con datos
+    forward reales si alguna vez merece sustituirla."""
+    subset = _subset_precios_recientes(sym, precios_data, n_min)
+    if len(subset) < 2:
+        return None
+    log_r = [(subset[i][0], math.log(subset[i][1] / subset[i-1][1]))
+             for i in range(1, len(subset))
+             if subset[i-1][1] > 0 and subset[i][1] > 0]
+    if len(log_r) < 2:
+        return None
+    ahora = datetime.now(timezone.utc)
+    decay = math.log(2) / half_life_min
+    pesos = [math.exp(-decay * (ahora - t).total_seconds() / 60) for t, _ in log_r]
+    peso_total = sum(pesos)
+    if peso_total <= 0:
+        return None
+    var = sum(w * r * r for w, (_, r) in zip(pesos, log_r)) / peso_total
+    durs = [(subset[i][0] - subset[i-1][0]).total_seconds() / 60
+            for i in range(1, len(subset))]
+    avg_dur = sum(durs) / len(durs)
+    if avg_dur <= 0:
+        return None
+    return math.sqrt(var / avg_dur * 60)
+
+
 def _precio_en(activo, ref_time, precios_data, tol_min=10):
     """Precio más cercano a ref_time (tolerancia ±tol_min minutos). None si no hay."""
     best_p, best_d = None, None
@@ -2266,6 +2305,10 @@ def _s_gbm_late(market, ctx, ventana_min, rest_lo, rest_hi, espacio_k=None):
     n_obs_vol = _n_obs_vol_h(activo, precios_data, n_min=20)
     se_d_gbm_aprox = round(abs(d) / math.sqrt(2 * n_obs_vol), 4) if n_obs_vol >= 2 else None
 
+    # sigma_h EWMA half_life=10min, solo logueo (propuesta #11, ver
+    # _estimar_vol_h_ewma) — n_min=20 igual que sigma_h real de esta función.
+    sigma_h_ewma10 = _estimar_vol_h_ewma(activo, precios_data, n_min=20, half_life_min=10)
+
     return {
         "prob_yes": round(p_up, 4),
         "razon":    (f"gbm_late_{ventana_min}min {activo} drift_vent={drift_ventana*100:+.3f}% "
@@ -2286,6 +2329,7 @@ def _s_gbm_late(market, ctx, ventana_min, rest_lo, rest_hi, espacio_k=None):
             "volumen_regimen":     volumen_regimen,
             "n_obs_vol_h":         n_obs_vol,
             "se_d_gbm_aprox":      se_d_gbm_aprox,
+            "sigma_h_ewma10":      round(sigma_h_ewma10, 5) if sigma_h_ewma10 is not None else None,
         },
     }
 
