@@ -6,3 +6,18 @@ data/shadow/*.csv       merge=union
 data/wallets/*.csv      merge=union
 data/markets/*.csv      merge=union
 data/binance/*.json     merge=union
+
+# 11-Jul: data/live/*.csv NO estaba cubierto -- run_fast.sh usa
+# `git pull --rebase --autostash -X ours`, y sin merge=union un conflicto de
+# rebase puede DESCARTAR una fila local recién escrita en vez de fusionarla
+# (dinero real). Confirmado con un trade real (market 2852873, 09-jul) que
+# ejecutó, se escribió en disco (verificado por el propio circuit breaker
+# segundos después) y desapareció del working tree en el siguiente commit --
+# la fila sobrevivió solo en el commit interno de autostash (`a5aedd24b`),
+# nunca llegó a un commit real. Ver project_tracking_error_arqueologia_11jul.
+# Todos los tres son append puro ("a" mode, verificado en el código, nunca
+# reescritura completa) -- bankroll.csv/reconciliacion.csv NO están aquí
+# porque reescriben el fichero completo cada vez, union crearía duplicados.
+data/live/trades.csv           merge=union
+data/live/libro_snapshots.csv  merge=union
+data/live/smart_exit_prices.csv merge=union
