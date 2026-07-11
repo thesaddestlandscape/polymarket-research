@@ -38,7 +38,8 @@ RESULTS = DIR / "data/shadow/results.csv"
 # (notas maker_pilot=1) y maker_orders.json, no por este CSV.
 PRIORIDAD = ["ejecutada", "fok_kill", "abort_requote",
              "veto_profundidad", "veto_sin_datos", "no_viable_stake",
-             "fuera_ventana", "senal_caducada", "maker_colocada"]
+             "veto_discrepancia_tuplas", "fuera_ventana", "senal_caducada",
+             "maker_colocada"]
 
 
 def _prio(motivo: str) -> int:

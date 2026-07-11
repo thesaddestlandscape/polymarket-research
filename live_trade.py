@@ -17,6 +17,7 @@ import json
 import math
 import os
 import requests
+from collections import defaultdict
 from datetime import datetime, timezone, timedelta
 from pathlib import Path
 
@@ -1460,6 +1461,36 @@ def _avisar_override_superado(key: str, n_real: int, min_n_global: int):
     OVERRIDES_NOTIF_PATH.write_text(json.dumps(notificados, indent=2))
 
 
+def _latencia_seg(pred: dict) -> float | None:
+    """Segundos desde timestamp_utc de la predicción hasta ahora. None si
+    vacío o sin parsear (fail-closed: el llamante debe tratar None como
+    caducado, igual que el chequeo de señal caducada en main())."""
+    ts_str = pred.get("timestamp_utc", "")
+    try:
+        if not ts_str:
+            return None
+        ts = datetime.fromisoformat(ts_str.replace("Z", "+00:00"))
+        if ts.tzinfo is None:
+            ts = ts.replace(tzinfo=timezone.utc)
+        return (datetime.now(timezone.utc) - ts).total_seconds()
+    except Exception:
+        return None
+
+
+def _tupla_activa(strategy: str, subtype: str, params: dict) -> bool:
+    """True si NINGÚN nivel de la jerarquía strategy/subtype/activo/dirección
+    está marcado activa=False en strategy_params.json. Fail-closed: cualquier
+    nivel desactivado bloquea, igual que shadow_predict.py para generar."""
+    if "#" in subtype:
+        _a, _d = subtype.split("#", 1)
+        keys = [f"{strategy}#{subtype}", f"{strategy}#{_a}", f"{strategy}#{_d}", strategy]
+    elif subtype:
+        keys = [f"{strategy}#{subtype}", strategy]
+    else:
+        keys = [strategy]
+    return not any(not params.get(k, {}).get("activa", True) for k in keys if k in params)
+
+
 def main():
     ts = datetime.now(timezone.utc).isoformat(timespec="seconds")
     log(f"=== live_trade ciclo {ts} ===")
@@ -1523,6 +1554,40 @@ def main():
     pares_ok = set(config.get("pares_permitidos_live", []))
     if not pares_ok:
         log("  ⚠️ pares_permitidos_live vacío o ausente en config — no se opera (fail-closed)")
+
+    # Ensemble entre tuplas whitelisted (propuesta #8 backlog quant-desk,
+    # aprobado Javi 11-Jul, ver analisis_ensemble_estrategias.py): dos tuplas
+    # whitelisted distintas prediciendo sobre el MISMO market_id no son
+    # independientes. Shadow (7 tuplas exactas de pares_permitidos_live,
+    # results.csv): coinciden en dirección → hit 67.8% n=239 (vs 62.7% n=833
+    # solas); discrepan en dirección → hit 50.0% n=30, y ese n=30 es
+    # ÍNTEGRAMENTE un solo par estructural (FAVORITO_CONFIRMADO#BTC#BUY_NO vs
+    # GBM_LATE_15M_ESPACIO_ATR#BTC#BUY_YES, ambas whitelisted en direcciones
+    # opuestas sobre el mismo activo/ventana). Mapa mid → decision →
+    # {tuplas}, construido UNA vez por ciclo a partir de las predicciones de
+    # HOY (no solo las que llegan a ejecutarse) para que la señal que se
+    # procesa primero en el bucle no decida el conflicto por orden arbitrario.
+    # Mismos dos filtros fail-closed que ya se exigen a la señal que se
+    # ejecuta (code-review adversarial 11-Jul, antes de esto el mapa se
+    # construía sin ellos): (1) latencia < SENAL_MAX_LATENCIA_SEG — sin esto
+    # una fila de hace horas del mismo mercado (aún abierto) podía vetar/
+    # boostear con datos caducos; (2) activa=True — sin esto una tupla
+    # desactivada que sigue emitiendo por ACUMULAR_SHADOW_AUNQUE_DESACTIVADA
+    # podía vetar a una tupla hermana que sí es plenamente ejecutable.
+    _wl_por_mercado: dict[str, dict[str, set]] = defaultdict(lambda: defaultdict(set))
+    for _p in predicciones:
+        _p_strat, _p_sub, _p_dec = _p.get("strategy", ""), _p.get("subtype", ""), _p.get("decision", "")
+        _key = f"{_p_strat}#{_p_sub}#{_p_dec}"
+        if _key not in pares_ok:
+            continue
+        _lat = _latencia_seg(_p)
+        if _lat is None or _lat >= SENAL_MAX_LATENCIA_SEG:
+            continue
+        if not _tupla_activa(_p_strat, _p_sub, params):
+            continue
+        _wl_por_mercado[_p.get("market_id", "")][_p_dec].add(_key)
+    boost_ic_coincidencia = riesgo.get("boost_ic_coincidencia_tuplas", 1.0)
+
     ya_operados  = _ya_operados_hoy()
     # Mercados con orden maker viva (piloto): también se saltan la ruta
     # taker — el libro fluctúa y un ciclo posterior podría pasar el veto de
@@ -1563,14 +1628,7 @@ def main():
         # dinero real en silencio. Fail-closed: cualquier nivel de la
         # jerarquía marcado activa=False bloquea, igual que hace
         # shadow_predict.py para generar.
-        if "#" in subtype:
-            _a, _d = subtype.split("#", 1)
-            _activa_keys = [f"{strategy}#{subtype}", f"{strategy}#{_a}", f"{strategy}#{_d}", strategy]
-        elif subtype:
-            _activa_keys = [f"{strategy}#{subtype}", strategy]
-        else:
-            _activa_keys = [strategy]
-        if any(not params.get(k, {}).get("activa", True) for k in _activa_keys if k in params):
+        if not _tupla_activa(strategy, subtype, params):
             log(f"  ⛔ {strategy}#{subtype} {dec}: estrategia desactivada (activa=False) "
                 f"pese a estar en whitelist — no se ejecuta")
             continue
@@ -1601,16 +1659,7 @@ def main():
         # pasado >=100s sin ejecutar (reintentos bloqueados por veto_profundidad
         # mientras el libro fluctúa), el edge ya no es fiable — no operar.
         # Fail-closed: timestamp_utc vacío o sin parsear = tratar como caducada.
-        ts_pred_str = pred.get("timestamp_utc", "")
-        try:
-            if not ts_pred_str:
-                raise ValueError("timestamp_utc vacío")
-            ts_pred = datetime.fromisoformat(ts_pred_str.replace("Z", "+00:00"))
-            if ts_pred.tzinfo is None:
-                ts_pred = ts_pred.replace(tzinfo=timezone.utc)
-            latencia_seg = (datetime.now(timezone.utc) - ts_pred).total_seconds()
-        except Exception:
-            latencia_seg = None
+        latencia_seg = _latencia_seg(pred)
         if latencia_seg is None or latencia_seg >= SENAL_MAX_LATENCIA_SEG:
             log(f"  ⛔ Señal caducada: {strategy}#{subtype} {dec} mid={mid} "
                 f"latencia={latencia_seg if latencia_seg is not None else '?'}s "
@@ -1697,6 +1746,58 @@ def main():
                 f"fee_est={fee_est:.4f} → tras fee={edge_tras_fee:+.4f} <= 0, no se ejecuta")
             continue
 
+        # Veto discrepancia entre tuplas whitelisted (propuesta #8, ver nota
+        # junto a _wl_por_mercado más arriba): otra tupla whitelisted DE OTRA
+        # ESTRATEGIA/SUBTYPE predice HOY la dirección OPUESTA sobre este mismo
+        # market_id → esta señal ya no es la de 62.7-67.8% que su propio IC
+        # dice, es la mitad de un conflicto que en shadow acierta 50.0%
+        # (n=30). Fail-closed: no ejecuta NINGUNA de las dos (la conflictiva
+        # se procesará después en este mismo bucle y verá el mismo mapa,
+        # también se saltará — ningún orden de iteración deja pasar una).
+        # n=30 está en el límite del umbral n≥15 del proyecto, no n≥40: veto
+        # conservador mientras se acumula más dato, no una desactivación
+        # permanente. Excluye conflictos de la MISMA strategy#subtype
+        # (code-review 11-Jul): shadow_predict recalcula `dec` cada ciclo
+        # desde el precio actual sin histéresis, así que una tupla puede
+        # cambiar de dirección entre ciclos dentro de la vida del mismo
+        # mercado — sin este filtro esa fila vieja (aunque ya filtrada por
+        # latencia arriba, podría seguir dentro de los 100s) se auto-vetaría.
+        own_prefix = f"{strategy}#{subtype}#"
+        decs_en_mercado = _wl_por_mercado.get(mid, {})
+        conflictos = sorted(k for d, ks in decs_en_mercado.items() if d != dec
+                             for k in ks if not k.startswith(own_prefix))
+        if conflictos:
+            log(f"  ⛔ Veto discrepancia: {strategy}#{subtype} {dec} mid={mid} — "
+                f"otra tupla whitelist predice dirección opuesta en el mismo "
+                f"mercado ({conflictos}) — no se ejecuta ninguna")
+            _snapshot_senal_bloqueada(mid, dec, precio,
+                                      riesgo.get("min_stake_eur", 1.05),
+                                      {"strategy": strategy, "subtype": subtype},
+                                      motivo="veto_discrepancia_tuplas")
+            continue
+
+        # Boost por coincidencia: otra tupla whitelisted distinta predice HOY
+        # la MISMA dirección sobre este mismo market_id → en shadow ese
+        # subconjunto acierta 67.8% (n=239) vs 62.7% (n=833) en solitario.
+        # Solo afecta el TAMAÑO (ic_para_stake, entra en calcular_stake), no
+        # la elegibilidad — ic_hist crudo ya pasó su propio gate arriba sin
+        # ayuda de este boost. Reutiliza todos los techos existentes de
+        # calcular_stake (Kelly, 10% bankroll, max_stake_eur, freno diario),
+        # no introduce un techo nuevo. boost=1.0 por defecto (sin efecto si
+        # no está en config). Impacto hoy GARANTIZADO 0€, no solo probable:
+        # max_stake_eur está pineado exactamente igual que min_stake_eur
+        # (ambos 1.05€, re-pineado 07-Jul) → calcular_stake devuelve 1.05€
+        # siempre, sea cual sea el IC de entrada. El boost queda correctamente
+        # cableado y se activa solo el día que max_stake_eur se despinee
+        # (mismo patrón ya documentado para P15 en CLAUDE.md).
+        coincide = bool(decs_en_mercado.get(dec, set()) - {override_key})
+        ic_para_stake = ic_hist
+        if coincide and boost_ic_coincidencia != 1.0:
+            ic_para_stake = ic_hist * boost_ic_coincidencia
+            log(f"  ✚ Coincidencia: {strategy}#{subtype} {dec} mid={mid} — otra tupla "
+                f"whitelist coincide en dirección, ic_para_stake {ic_hist:+.3f}→"
+                f"{ic_para_stake:+.3f} (boost×{boost_ic_coincidencia:.2f})")
+
         # Stake (con penalización de inventario direccional)
         # Techo de correlación direccional: los pares cripto se mueven casi
         # al unísono — más de N posiciones abiertas en la misma dirección es
@@ -1727,7 +1828,7 @@ def main():
                     f"({(1+factor_ic_concurrente):.0%} del mínimo, tiene {ic_hist:+.3f})")
                 continue
 
-        stake_info = calcular_stake(ic_hist, strategy, subtype, direction=dec)
+        stake_info = calcular_stake(ic_para_stake, strategy, subtype, direction=dec)
         if not stake_info["viable"]:
             log(f"  SKIP {strategy}#{subtype}: stake no viable — {stake_info['motivo']}")
             _snapshot_senal_bloqueada(mid, dec, precio,
@@ -1806,11 +1907,12 @@ def main():
             "fee_eur":         resultado.get("fee_eur", 0),
             "pnl_bruto_eur":   "",
             "pnl_neto_eur":    "",
-            "notas":           (f"slip_real={resultado['slip_real']:+.4f}"
+            "notas":           ((f"slip_real={resultado['slip_real']:+.4f}"
                                 + (f" slip_est_kyle={resultado['slip_estimado_kyle']:.4f}"
                                    if resultado.get("slip_estimado_kyle") is not None else "")
                                 if resultado.get("ok") and "slip_real" in resultado
-                                else resultado.get("error", "")),
+                                else resultado.get("error", ""))
+                                + (f" coincide_tupla=1 ic_boost={ic_para_stake:+.3f}" if coincide else "")),
         }
         _registrar_trade(trade)
         ya_operados.add(mid)
