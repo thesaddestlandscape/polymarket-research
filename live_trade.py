@@ -30,6 +30,11 @@ DIR_SHADOW  = Path("data/shadow")
 
 CLV_VETO_MIN_N = 20   # resoluciones con clv en ventana para poder vetar
 CLV_VETO_DIAS  = 7    # ventana móvil del CLV medio por tupla
+# Fee real taker Polymarket (validado 10-Jul contra fees on-chain al céntimo,
+# ver project_fee_real_no_contabilizado): fee = FEE_RATE_TAKER_CRYPTO * p * (1-p).
+# Solo se paga en taker (nuestras órdenes son FOK); shadow_predict.py neta
+# slippage en edge_neto pero NUNCA este fee — se veta aquí, alcance live only.
+FEE_RATE_TAKER_CRYPTO = 0.07
 _CLV_CACHE: dict | None = None  # tupla → [clv,...]; una lectura por ciclo
 
 
@@ -1607,6 +1612,22 @@ def main():
         except ValueError:
             continue
 
+        # Veto fee real taker (propuesta #5, 11-Jul, aprobado Javi — alcance
+        # SOLO live, no toca shadow_predict.py/EDGE_MINIMO global para no
+        # invalidar el IC histórico de las ~170 estrategias shadow). edge_neto
+        # neta slippage pero nunca el fee de Polymarket; en p~0.5 el fee real
+        # (~1.7¢) se comía casi todo el EDGE_MINIMO=0.02, dejando ~break-even.
+        # edge_dir = edge_neto con el signo resuelto hacia nuestra dirección
+        # (shadow_predict: en>=min → BUY_YES, -en>=min → BUY_NO); se calcula
+        # aquí una sola vez y se reutiliza más abajo para _decidir_requote.
+        edge_dir = edge if dec == "BUY_YES" else -edge
+        fee_est = FEE_RATE_TAKER_CRYPTO * precio * (1 - precio)
+        edge_tras_fee = edge_dir - fee_est
+        if edge_tras_fee <= 0:
+            log(f"  ⛔ Veto fee: {strategy}#{subtype} {dec} edge_neto={edge_dir:+.4f} "
+                f"fee_est={fee_est:.4f} → tras fee={edge_tras_fee:+.4f} <= 0, no se ejecuta")
+            continue
+
         # Stake (con penalización de inventario direccional)
         # Techo de correlación direccional: los pares cripto se mueven casi
         # al unísono — más de N posiciones abiertas en la misma dirección es
@@ -1674,10 +1695,6 @@ def main():
         # silenciosos quedan en live.log; Telegram solo recibe fills y
         # errores reales, una vez, porque ambos se registran en trades.csv y
         # el mercado entra en ya_operados.
-        # edge_dir = edge_neto con el signo resuelto hacia
-        # nuestra dirección (shadow_predict: en>=min → BUY_YES, -en>=min →
-        # BUY_NO), para que _decidir_requote pueda recortar por deterioro.
-        edge_dir = edge if dec == "BUY_YES" else -edge
         resultado = _ejecutar_orden_polymarket(mid, dec, stake, entry_p,
                                                edge_dir=edge_dir,
                                                contexto={"strategy": strategy,
