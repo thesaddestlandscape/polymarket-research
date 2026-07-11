@@ -757,9 +757,15 @@ FEATURE_RULES = {
     "UPDOWN_GBM#ETH#60min": _BASE_GBM,
     "UPDOWN_GBM#SOL#60min": _BASE_GBM,
     # ORDER_FLOW: delta_ratio es la señal principal + hora
+    # total_vol_5m (11-Jul, análisis manual SOL#5min): terciles invertidos —
+    # vol BAJO ic_bayes+0.038→+0.119 forward, vol ALTO ic=0.000→-0.100 forward
+    # (n=94/n=8, replica fuera de la ventana burst 24-25jun que calibró los
+    # demás filtros). Nunca estaba en FEATURE_RULES pese a llevar logueado
+    # desde el principio — el pipeline automático no podía descubrirlo solo.
     "ORDER_FLOW_5M":       [("delta_ratio",        "abs_lt", "abs_gt"),
                             ("hora_utc",            "lt",     "gt"),
-                            ("hora_utc",            "gt",     "lt")],
+                            ("hora_utc",            "gt",     "lt"),
+                            ("total_vol_5m",        "gt",     "lt")],
 }
 
 IC_FILTRO_MIN   = -0.12   # IC para activar filtro (evitar)
