@@ -79,6 +79,7 @@ def sweep(label, rows, feature, current, steps, bound_type, extra=None, transfor
         return
 
     resultados = []
+    sel_por_umbral = {}
     for umbral in sorted(set(steps + [current])):
         sel = []
         for r, v in pre:
@@ -89,15 +90,33 @@ def sweep(label, rows, feature, current, steps, bound_type, extra=None, transfor
                 ok = tv < umbral
             if ok:
                 sel.append(r)
+        sel_por_umbral[umbral] = set(id(r) for r in sel)
         n, hit, edge = agg(sel)
-        resultados.append((umbral, n, hit, edge))
+        resultados.append((umbral, n, hit, edge, sel))
 
-    for umbral, n, hit, edge in resultados:
+    for i, (umbral, n, hit, edge, sel) in enumerate(resultados):
         marca = "  <- ACTUAL" if abs(umbral - current) < 1e-9 else ""
         if n < N_MIN:
             print(f"  umbral={umbral:<7} n={n:<5} (insuficiente){marca}")
         else:
             print(f"  umbral={umbral:<7} n={n:<5} hit={hit*100:5.1f}%  edge_real={edge:+.4f}{marca}")
+        # Propuesta #5 backlog quant-desk (Part V reducción de varianza):
+        # umbral y vecino son conjuntos ANIDADOS (comparten casi todas las
+        # filas), así que comparar sus edges agregados diluye la señal real
+        # con ruido compartido. La franja MARGINAL (solo las filas que un
+        # umbral tiene y el anterior no) aísla justo lo que el barrido
+        # pregunta: ¿las filas que se ganan/pierden al mover el umbral son
+        # buenas o malas? Mucho más sensible para detectar pico vs meseta.
+        if i > 0:
+            umbral_prev = resultados[i - 1][0]
+            ids_prev, ids_cur = sel_por_umbral[umbral_prev], sel_por_umbral[umbral]
+            marginal_ids = ids_cur ^ ids_prev  # diferencia simétrica
+            if marginal_ids:
+                marginal_rows = [r for r, _ in pre if id(r) in marginal_ids]
+                n_m, hit_m, edge_m = agg(marginal_rows)
+                if n_m >= N_MIN:
+                    print(f"           franja marginal vs {umbral_prev}: n={n_m:<4} "
+                          f"hit={hit_m*100:5.1f}%  edge_real={edge_m:+.4f}")
 
     # Veredicto simple: comparar el edge del actual con la media de sus dos vecinos
     # inmediatos (si tienen n suficiente).
