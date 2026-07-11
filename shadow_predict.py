@@ -1801,7 +1801,10 @@ ORDER_FLOW_BLACKLIST_HOURS = {2, 7, 9, 22}
 # Pares con IC negativo en sweet spot [0.38-0.46] (conf=1.00, n≥80):
 # ETH: n=112, IC=-0.026 | XRP: n=119, IC=-0.004 (-6.13€ el 2026-06-25) | DOGE: n=83, IC=-0.006
 # BNB: n=63, IC=+0.038 shadow — backfill 90d negativo, mantener bloqueado hasta n≥150
-ORDER_FLOW_PAIR_BLACKLIST = {'ETH', 'BNB', 'XRP', 'DOGE'}
+# BTC: n=? IC=0.000 (p_shuffle=0.51, no bate control aleatorio zero-intelligence,
+# analisis_zero_intelligence_of.py 11-Jul) — bloqueado 11-Jul (aprobado Javi). Deja
+# SOL como único par activo (IC+0.060, p_shuffle=0.038, sí bate el control).
+ORDER_FLOW_PAIR_BLACKLIST = {'ETH', 'BNB', 'XRP', 'DOGE', 'BTC'}
 
 
 def s_order_flow_5m(market, ctx):
