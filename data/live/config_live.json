@@ -163,8 +163,11 @@
   "_pares_eth_buyno_retirada_nota": "2026-07-06: UPDOWN_GBM#ETH#15min#BUY_NO RETIRADA de whitelist. Perdió 2 trades reales seguidos hoy (-2.10€, ambos resolvieron YES en tape alcista) y decayó: ic_BUY_NO=0.06 (<0.08), CLV medio ult30=-0.032 (<0). Ya estaba doble-bloqueada (gate IC + veto CLV) pero existía atajo por patron causal (sigma_h/ibs_15 a nivel UPDOWN_GBM#15min; con su ic propio>=0 el codigo NO lo vetaba) que podria dispararla antes de recuperarse limpia — mismo fallo que el SOL 02-Jul. Se saca para que la reactivacion sea decision explicita, no ruta lateral. RE-AÑADIR solo cuando ic_BUY_NO>=0.08 Y CLV medio>=0 sostenidos.",
   "pares_permitidos_live": [
     "GBM_LATE_15M#SOL#15min#BUY_YES",
-    "GBM_LATE_15M#ETH#15min#BUY_YES"
+    "GBM_LATE_15M#ETH#15min#BUY_YES",
+    "FAVORITO_CONFIRMADO#BTC#15min#BUY_NO",
+    "FAVORITO_CONFIRMADO#SOL#15min#BUY_YES"
   ],
+  "_pares_favorito_nota_2026-07-11": "2026-07-11 (aprobado Javi): AÑADIDAS solo las 2 tuplas FAVORITO_CONFIRMADO que cruzan n>=40 POR SÍ SOLAS (no el agregado por par): BTC#15min#BUY_NO (n=40, ic_BUY_NO=0.1905) y SOL#15min#BUY_YES (n=41, ic_BUY_YES=0.1977). Las otras 4 tuplas (BTC/ETH/SOL, resto de direcciones, n=34-39) se quedan en candidatos_evaluacion_live hasta cruzar 40 cada una — el gate documentado hablaba de n_par agregado, pero con selección adversa direccional ya confirmada en GBM_LATE (BUY_NO peor que BUY_YES) se exige el gate por tupla exacta, no por par. Mecanismo maker/momentum-consenso, distinto de la entrada tardía taker de GBM_LATE — primera vez que se ejecuta en real, vigilar fill-ability con libro_snapshots desde el primer trade. Stake estándar 1.05€ (no se aplicó #6 stake escalonado, revertido/no implementado).",
   "_pares_xrp_retirada_nota": "2026-07-10 (decisión Javi): GBM_LATE_15M#XRP#15min#BUY_YES RETIRADA de whitelist. Único tuple net-NEGATIVO en los fills reales (analisis_fills por par, histórico completo): ejecutadas n=41 hit 41% -8.28€ a precio plan (vs ETH +7.97€ y SOL +8.38€, ambos positivos), abort_requote 24% -13.26€, fok_kill 30% -6.19€. Reciente aún peor: 36h 1/11 hit -9.74€. NO es el modelo (shadow XRP 60%, feed coincide 0/11 con settlement Polymarket) ni varianza (p≈0.0003) — es selección adversa taker (vetadas por profundidad 60% vs ejecutadas 41%) especialmente tóxica en XRP: su microestructura da los peores fills de los 3. ETH/SOL se mantienen (mismo gap de selección adversa ~17-20pt pero fills aún net-positivos). Ver memoria project_diagnostico_perdidas_10jul. RE-AÑADIR solo si (a) el edge taker de XRP vuelve net-positivo con n≥30, o (b) se implementa entrada maker sobre señales vetadas y XRP la pasa.",
   "_pares_permitidos_nota_2026-07-06": "BUY_NO retirados del live (decisión Javi 06-Jul): selección adversa direccional — live BUY_NO 31% hit −16.33€ (todas las tuplas negativas) vs BUY_YES 53% +9.08€; los NO siguen en shadow y vuelven vía filtro fill-ability (analisis_fills, veto_profundidad 24/24 hit, decisión con n≥30).",
   "_candidatos_evaluacion_nota": "Tuplas en evaluacion pre-whitelist: solo lectura de libro via _snapshots_candidatos_evaluacion (live_trade.py), NUNCA ejecuta. Anadida 2026-07-09 para BTC UPDOWN_GBM BUY_YES tardio (H-CUSTOM-UPDOWNGBM-BTC15-TARDIO, hipotesis_custom.json): gate n>=80 antes de considerar whitelist.",
@@ -178,7 +181,7 @@
     "cancelar_antes_fin_seg": 240,
     "_nota": "2026-07-10 (propuesta #1 aprobada Javi): piloto maker-sobre-vetadas. Limit GTD (expira sola en el exchange) a min(precio_plan, ask-0.01) SOLO en señales que pasaron todos los gates y murieron en veto_profundidad (ese subconjunto acierta 97% n=86 vs 47% ejecutadas, analisis_fills). maker_sim refutó maker GENERAL; esto prueba maker CONDICIONAL al subconjunto vetado — la tensión sin resolver de project_diagnostico_perdidas_10jul. Estado en maker_orders.json, fills entran en trades.csv con notas maker_pilot=1 (separables en el análisis). Exposición acotada: 2 órdenes × 1.05€. Revisar con n>=15 fills: si hit maker-sobre-vetadas se acerca al 97% del plan, escalar; si cae al ~50% (la adversa selección se come también al maker), apagar activo=false y cerrar la tensión con dato definitivo."
   },
-  "_candidatos_favorito_nota": "2026-07-10 (propuesta #2 aprobada Javi): AÑADIDAS las 6 tuplas FAVORITO_CONFIRMADO#{BTC,ETH,SOL}#15min#{BUY_YES,BUY_NO}. Agregado ic_bayes=0.2556 n=88 (cruza gate de sobra; por dirección YES 0.25 n=38 / NO 0.25 n=50, ambas fuertes; por par aún fino: ETH#15min YES 0.12 n=8). Mecanismo maker/momentum-consenso — distinto de la entrada tardía taker de GBM_LATE, posible dinámica de fill diferente (mismo razonamiento que STREAK_FADE). BUY_NO instrumentado también: sigue estructuralmente fuera de live, pero su ruta de reapertura es exactamente fill-ability. Gate: n_par>=40 antes de proponer whitelist.",
+  "_candidatos_favorito_nota": "2026-07-10 (propuesta #2 aprobada Javi): AÑADIDAS originalmente las 6 tuplas FAVORITO_CONFIRMADO#{BTC,ETH,SOL}#15min#{BUY_YES,BUY_NO}. Agregado ic_bayes=0.2556 n=88 (cruza gate de sobra; por dirección YES 0.25 n=38 / NO 0.25 n=50, ambas fuertes; por par aún fino: ETH#15min YES 0.12 n=8). Mecanismo maker/momentum-consenso — distinto de la entrada tardía taker de GBM_LATE, posible dinámica de fill diferente (mismo razonamiento que STREAK_FADE). Gate original: n_par>=40 antes de proponer whitelist. ⚠️ 2026-07-11: 2 de las 6 GRADUARON a pares_permitidos_live (BTC#BUY_NO n=40, SOL#BUY_YES n=41 — cruzan el gate por TUPLA exacta, no solo el agregado por par, ver _pares_favorito_nota_2026-07-11). Quedan aquí solo las 4 restantes (BTC#BUY_YES, ETH#BUY_YES, ETH#BUY_NO, SOL#BUY_NO) hasta que cada una cruce n>=40 por sí sola.",
   "candidatos_evaluacion_live": [
     "UPDOWN_GBM#BTC#15min#BUY_YES",
     "STREAK_FADE_15M#XRP#15min#BUY_YES",
@@ -188,10 +191,8 @@
     "GBM_LATE_15M_ESPACIO_ATR#ETH#15min#BUY_YES",
     "GBM_LATE_15M_TARDIO#XRP#15min#BUY_YES",
     "FAVORITO_CONFIRMADO#BTC#15min#BUY_YES",
-    "FAVORITO_CONFIRMADO#BTC#15min#BUY_NO",
     "FAVORITO_CONFIRMADO#ETH#15min#BUY_YES",
     "FAVORITO_CONFIRMADO#ETH#15min#BUY_NO",
-    "FAVORITO_CONFIRMADO#SOL#15min#BUY_YES",
     "FAVORITO_CONFIRMADO#SOL#15min#BUY_NO"
   ]
 }
