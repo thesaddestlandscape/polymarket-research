@@ -1798,13 +1798,26 @@ def s_price_target_gbm(market, ctx):
 # Antes: {2, 7, 9, 10, 11, 22}. Después: {2, 7, 9, 22}. (18h/20h ya se quitaron antes.)
 ORDER_FLOW_BLACKLIST_HOURS = {2, 7, 9, 22}
 
-# Pares con IC negativo en sweet spot [0.38-0.46] (conf=1.00, n≥80):
-# ETH: n=112, IC=-0.026 | XRP: n=119, IC=-0.004 (-6.13€ el 2026-06-25) | DOGE: n=83, IC=-0.006
-# BNB: n=63, IC=+0.038 shadow — backfill 90d negativo, mantener bloqueado hasta n≥150
-# BTC: n=? IC=0.000 (p_shuffle=0.51, no bate control aleatorio zero-intelligence,
-# analisis_zero_intelligence_of.py 11-Jul) — bloqueado 11-Jul (aprobado Javi). Deja
-# SOL como único par activo (IC+0.060, p_shuffle=0.038, sí bate el control).
-ORDER_FLOW_PAIR_BLACKLIST = {'ETH', 'BNB', 'XRP', 'DOGE', 'BTC'}
+# Pares con IC negativo en sweet spot [0.38-0.46] (conf=1.00, n≥80) — HISTÓRICO,
+# ver reapertura abajo: ETH n=112 IC=-0.026 | XRP n=119 IC=-0.004 | DOGE n=83 IC=-0.006
+# | BNB n=63 IC=+0.038 (nota original: "backfill 90d negativo, mantener hasta n≥150").
+#
+# REABIERTOS 11-Jul (aprobado Javi, shadow puro — OF_5M no está en pares_permitidos_live,
+# cero riesgo real): el 93% del histórico de estos 4 pares (n=1465/1574 del total
+# ORDER_FLOW_5M) viene de una ráfaga de 48h (24-25jun) — la MISMA ventana que calibró
+# DELTA_MIN/MAX y ORDER_FLOW_BLACKLIST_HOURS. Verificado con results.csv: 0 predicciones
+# de ETH/XRP/DOGE/BNB desde el 26-jun — nunca se re-testaron bajo los filtros actuales
+# (más estrictos que cuando se bloquearon). BNB ya superaba su propio umbral de reapertura
+# (n≥150, real n=191) sin que nadie lo revisara — mismo patrón de estado absorbente que
+# UPDOWN_OU_5M a nivel de estrategia. Acumulan desde cero bajo delta band + horas + el
+# nuevo total_vol_5m (FEATURE_RULES, shadow_postmortem.py) — decisión de reactivar cada
+# uno como par vivo con n≥40 propio, igual que cualquier otra hipótesis.
+#
+# BTC: n=291, IC=0.000 (p_shuffle=0.51, no bate control aleatorio zero-intelligence,
+# analisis_zero_intelligence_of.py 11-Jul, DATO FRESCO no de la ráfaga) — bloqueado
+# 11-Jul (aprobado Javi), se queda fuera. SOL sigue siendo el único confirmado
+# (IC+0.060, p_shuffle=0.038, sí bate el control).
+ORDER_FLOW_PAIR_BLACKLIST = {'BTC'}
 
 
 def s_order_flow_5m(market, ctx):
