@@ -23,6 +23,12 @@ patron_ganador vigente muestra signo CONTRARIO entre shadow e ejecutable
 con n≥15 en ambas capas — la misma señal que habría cazado el caso SOL
 automáticamente en vez de a mano.
 
+12-Jul (petición Javi: "esta es la lógica que hay que seguir en todo el
+modelo"): añadido el espejo — también cruza `filtros_causales` (las
+reglas que SALTAN una operación). Si la zona que shadow marca "mala" no
+rinde peor de verdad en el subconjunto ejecutable, el filtro puede estar
+descartando señal rentable en vez de protegiendo — mismo n≥15 por capa.
+
 Solo lectura sobre resultados/config; no toca pares_permitidos_live ni
 ninguna decisión de trading. Pensado para cron cada ~30-60min.
 """
@@ -157,6 +163,20 @@ def _clave_aplica_a_activo(clave, strategy, activo):
     return activo in clave.split("#")
 
 
+def _particiona(subset, feature, condicion, umbral):
+    """Divide subset en (malo, bueno) según el filtro — a diferencia de
+    `_eval` solo, excluye explícitamente filas sin la feature de AMBOS
+    lados (None no cuenta ni como malo ni como bueno)."""
+    malo, bueno = [], []
+    for row in subset:
+        v = _eval(row[-1]["feats"], feature, condicion, umbral)
+        if v is True:
+            malo.append(row)
+        elif v is False:
+            bueno.append(row)
+    return malo, bueno
+
+
 def stats(rows):
     n = len(rows)
     if n == 0:
@@ -179,11 +199,14 @@ def _evaluar_estrategia(strategy, fuente_rows, est, latch, avisos, fuente_label)
         return entry
 
     patrones = []
+    filtros = []
     for clave, v in est.items():
         if clave != strategy and not clave.startswith(f"{strategy}#"):
             continue
         for p in v.get("patrones_ganadores", []) or []:
             patrones.append((clave, p))
+        for f in v.get("filtros_causales", []) or []:
+            filtros.append((clave, f))
 
     activos = sorted({a for _, a, _ in fuente_rows})
     for activo in activos:
@@ -225,6 +248,46 @@ def _evaluar_estrategia(strategy, fuente_rows, est, latch, avisos, fuente_label)
                             f"[{etiqueta}] {clave} {clave_activo} {p['feature']}{p['condicion']}{p['umbral']}: "
                             f"shadow uplift={uplift_shadow:+.3f} (n_patron={p['n_patron']}) pero "
                             f"{fuente_label} uplift={uplift_fillable:+.3f}€/trade (n={sf['n']}) — signo CONTRARIO"
+                        )
+                        latch[latch_key] = True
+                else:
+                    latch[latch_key] = False
+
+            # Espejo: filtros_causales — ¿la zona que shadow marca "mala" (skip)
+            # de verdad rinde peor en ejecución real, o estamos saltando
+            # oportunidades rentables? A diferencia del patrón (donde shadow
+            # siempre dice "malo" por construcción, ic_malo<0), aquí se compara
+            # directamente malo vs bueno DENTRO de lo ejecutable — no hace
+            # falta comparar signos de shadow.
+            entry["activos"][clave_activo]["filtros"] = []
+            for clave, f in filtros:
+                if f.get("direccion") != direccion:
+                    continue
+                if not _clave_aplica_a_activo(clave, strategy, activo):
+                    continue
+                malo, bueno = _particiona(subset, f["feature"], f["condicion"], f["umbral"])
+                sm, sg = stats(malo), stats(bueno)
+                if not sm or sm["n"] < N_MIN_CAPA or not sg or sg["n"] < N_MIN_CAPA:
+                    continue  # n-por-capa en AMBOS lados de la partición
+                injustificado = sm["pnl_trade"] >= sg["pnl_trade"]
+                reg_f = {
+                    "clave": clave, "feature": f["feature"], "condicion": f["condicion"],
+                    "umbral": f["umbral"], "ic_malo_shadow": f["ic_malo"],
+                    "n_malo_fillable": sm["n"], "pnl_trade_malo_fillable": sm["pnl_trade"],
+                    "n_bueno_fillable": sg["n"], "pnl_trade_bueno_fillable": sg["pnl_trade"],
+                    "injustificado": injustificado,
+                }
+                entry["activos"][clave_activo]["filtros"].append(reg_f)
+
+                latch_key = f"FILTRO#{fuente_label}#{clave}#{clave_activo}#{f['feature']}{f['condicion']}{f['umbral']}"
+                if injustificado:
+                    if not latch.get(latch_key):
+                        etiqueta = "🔴 LIVE" if fuente_label == "live_real" else "candidata"
+                        avisos.append(
+                            f"[{etiqueta}][FILTRO] {clave} {clave_activo} {f['feature']}{f['condicion']}{f['umbral']}: "
+                            f"shadow ic_malo={f['ic_malo']:+.3f} pero en ejecutable la zona 'mala' "
+                            f"(n={sm['n']}) rinde {sm['pnl_trade']:+.4f}€/trade vs {sg['pnl_trade']:+.4f}€/trade "
+                            f"de la zona 'buena' (n={sg['n']}) — el filtro puede estar saltando señal rentable"
                         )
                         latch[latch_key] = True
                 else:
