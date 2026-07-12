@@ -1,5 +1,5 @@
 {
-  "timestamp_utc": "2026-07-12T01:39:05+00:00",
+  "timestamp_utc": "2026-07-12T01:45:18+00:00",
   "estrategias": {
     "UPDOWN_GBM": {
       "activa": true,
@@ -74,7 +74,7 @@
           "n_malo": 28,
           "n_bueno": 10,
           "direccion": "BUY_YES",
-          "descubierto": "2026-07-12T01:39:27+00:00"
+          "descubierto": "2026-07-12T01:45:42+00:00"
         },
         {
           "feature": "sigma_h",
@@ -85,7 +85,7 @@
           "n_malo": 28,
           "n_bueno": 10,
           "direccion": "BUY_YES",
-          "descubierto": "2026-07-12T01:39:27+00:00"
+          "descubierto": "2026-07-12T01:45:42+00:00"
         },
         {
           "feature": "pct_spot_vs_ref",
@@ -96,7 +96,7 @@
           "n_malo": 16,
           "n_bueno": 21,
           "direccion": "BUY_NO",
-          "descubierto": "2026-07-12T01:39:27+00:00"
+          "descubierto": "2026-07-12T01:45:42+00:00"
         },
         {
           "feature": "sigma_h",
@@ -107,7 +107,7 @@
           "n_malo": 26,
           "n_bueno": 11,
           "direccion": "BUY_NO",
-          "descubierto": "2026-07-12T01:39:27+00:00"
+          "descubierto": "2026-07-12T01:45:42+00:00"
         }
       ],
       "patrones_ganadores": []
@@ -201,7 +201,7 @@
           "n_malo": 16,
           "n_bueno": 33,
           "direccion": "BUY_YES",
-          "descubierto": "2026-07-12T01:39:27+00:00"
+          "descubierto": "2026-07-12T01:45:42+00:00"
         },
         {
           "feature": "drift_15min",
@@ -212,7 +212,7 @@
           "n_malo": 29,
           "n_bueno": 11,
           "direccion": "BUY_YES",
-          "descubierto": "2026-07-12T01:39:27+00:00"
+          "descubierto": "2026-07-12T01:45:42+00:00"
         },
         {
           "feature": "delta_ratio_macro",
@@ -223,7 +223,7 @@
           "n_malo": 27,
           "n_bueno": 14,
           "direccion": "BUY_YES",
-          "descubierto": "2026-07-12T01:39:27+00:00"
+          "descubierto": "2026-07-12T01:45:42+00:00"
         },
         {
           "feature": "drift_60min",
@@ -234,7 +234,7 @@
           "n_malo": 15,
           "n_bueno": 32,
           "direccion": "BUY_NO",
-          "descubierto": "2026-07-12T01:39:27+00:00"
+          "descubierto": "2026-07-12T01:45:42+00:00"
         },
         {
           "feature": "drift_15min",
@@ -245,7 +245,7 @@
           "n_malo": 23,
           "n_bueno": 24,
           "direccion": "BUY_NO",
-          "descubierto": "2026-07-12T01:39:27+00:00"
+          "descubierto": "2026-07-12T01:45:42+00:00"
         },
         {
           "feature": "delta_ratio_macro",
@@ -256,7 +256,7 @@
           "n_malo": 15,
           "n_bueno": 32,
           "direccion": "BUY_NO",
-          "descubierto": "2026-07-12T01:39:27+00:00"
+          "descubierto": "2026-07-12T01:45:42+00:00"
         },
         {
           "feature": "hora_utc",
@@ -267,7 +267,7 @@
           "n_malo": 18,
           "n_bueno": 20,
           "direccion": "BUY_NO",
-          "descubierto": "2026-07-12T01:39:27+00:00"
+          "descubierto": "2026-07-12T01:45:42+00:00"
         }
       ],
       "patrones_ganadores": []
@@ -297,7 +297,7 @@
           "n_malo": 86,
           "n_bueno": 330,
           "direccion": "BUY_YES",
-          "descubierto": "2026-07-12T01:39:27+00:00"
+          "descubierto": "2026-07-12T01:45:42+00:00"
         }
       ],
       "patrones_ganadores": [
@@ -310,7 +310,7 @@
           "n_patron": 209,
           "kelly_boost": 0.75,
           "direccion": "BUY_YES",
-          "descubierto": "2026-07-12T01:39:27+00:00"
+          "descubierto": "2026-07-12T01:45:42+00:00"
         },
         {
           "feature": "dist_vwap_pct",
@@ -321,7 +321,7 @@
           "n_patron": 69,
           "kelly_boost": 1.0,
           "direccion": "BUY_YES",
-          "descubierto": "2026-07-12T01:39:27+00:00"
+          "descubierto": "2026-07-12T01:45:42+00:00"
         },
         {
           "feature": "dist_vwap_pct",
@@ -332,7 +332,7 @@
           "n_patron": 74,
           "kelly_boost": 0.86,
           "direccion": "BUY_YES",
-          "descubierto": "2026-07-12T01:39:27+00:00"
+          "descubierto": "2026-07-12T01:45:42+00:00"
         },
         {
           "feature": "ibs_15",
@@ -343,7 +343,7 @@
           "n_patron": 127,
           "kelly_boost": 0.68,
           "direccion": "BUY_NO",
-          "descubierto": "2026-07-12T01:39:27+00:00"
+          "descubierto": "2026-07-12T01:45:42+00:00"
         }
       ]
     },
@@ -372,7 +372,7 @@
           "n_malo": 16,
           "n_bueno": 9,
           "direccion": "BUY_YES",
-          "descubierto": "2026-07-12T01:39:27+00:00"
+          "descubierto": "2026-07-12T01:45:42+00:00"
         },
         {
           "feature": "sigma_h",
@@ -383,7 +383,7 @@
           "n_malo": 18,
           "n_bueno": 7,
           "direccion": "BUY_YES",
-          "descubierto": "2026-07-12T01:39:27+00:00"
+          "descubierto": "2026-07-12T01:45:42+00:00"
         },
         {
           "feature": "drift_15min",
@@ -394,7 +394,7 @@
           "n_malo": 17,
           "n_bueno": 6,
           "direccion": "BUY_YES",
-          "descubierto": "2026-07-12T01:39:27+00:00"
+          "descubierto": "2026-07-12T01:45:42+00:00"
         },
         {
           "feature": "ibs_15",
@@ -405,7 +405,7 @@
           "n_malo": 21,
           "n_bueno": 22,
           "direccion": "BUY_NO",
-          "descubierto": "2026-07-12T01:39:27+00:00"
+          "descubierto": "2026-07-12T01:45:42+00:00"
         }
       ],
       "patrones_ganadores": [
@@ -418,7 +418,7 @@
           "n_patron": 28,
           "kelly_boost": 1.0,
           "direccion": "BUY_NO",
-          "descubierto": "2026-07-12T01:39:27+00:00"
+          "descubierto": "2026-07-12T01:45:42+00:00"
         },
         {
           "feature": "drift_15min",
@@ -429,7 +429,7 @@
           "n_patron": 25,
           "kelly_boost": 0.83,
           "direccion": "BUY_NO",
-          "descubierto": "2026-07-12T01:39:27+00:00"
+          "descubierto": "2026-07-12T01:45:42+00:00"
         },
         {
           "feature": "delta_ratio_macro",
@@ -440,7 +440,7 @@
           "n_patron": 25,
           "kelly_boost": 0.65,
           "direccion": "BUY_NO",
-          "descubierto": "2026-07-12T01:39:27+00:00"
+          "descubierto": "2026-07-12T01:45:42+00:00"
         },
         {
           "feature": "hora_utc",
@@ -451,7 +451,7 @@
           "n_patron": 15,
           "kelly_boost": 0.74,
           "direccion": "BUY_NO",
-          "descubierto": "2026-07-12T01:39:27+00:00"
+          "descubierto": "2026-07-12T01:45:42+00:00"
         },
         {
           "feature": "ibs_15",
@@ -462,7 +462,7 @@
           "n_patron": 22,
           "kelly_boost": 1.0,
           "direccion": "BUY_NO",
-          "descubierto": "2026-07-12T01:39:27+00:00"
+          "descubierto": "2026-07-12T01:45:42+00:00"
         }
       ]
     },
@@ -507,7 +507,7 @@
           "n_malo": 19,
           "n_bueno": 20,
           "direccion": "BUY_NO",
-          "descubierto": "2026-07-12T01:39:27+00:00"
+          "descubierto": "2026-07-12T01:45:42+00:00"
         }
       ],
       "patrones_ganadores": [
@@ -520,7 +520,7 @@
           "n_patron": 99,
           "kelly_boost": 0.67,
           "direccion": "BUY_YES",
-          "descubierto": "2026-07-12T01:39:27+00:00"
+          "descubierto": "2026-07-12T01:45:42+00:00"
         },
         {
           "feature": "hora_utc",
@@ -531,7 +531,7 @@
           "n_patron": 111,
           "kelly_boost": 0.86,
           "direccion": "BUY_YES",
-          "descubierto": "2026-07-12T01:39:27+00:00"
+          "descubierto": "2026-07-12T01:45:42+00:00"
         },
         {
           "feature": "ibs_15",
@@ -542,7 +542,7 @@
           "n_patron": 109,
           "kelly_boost": 0.74,
           "direccion": "BUY_YES",
-          "descubierto": "2026-07-12T01:39:27+00:00"
+          "descubierto": "2026-07-12T01:45:42+00:00"
         },
         {
           "feature": "ibs_15",
@@ -553,7 +553,7 @@
           "n_patron": 109,
           "kelly_boost": 0.79,
           "direccion": "BUY_YES",
-          "descubierto": "2026-07-12T01:39:27+00:00"
+          "descubierto": "2026-07-12T01:45:42+00:00"
         },
         {
           "feature": "dist_vwap_pct",
@@ -564,7 +564,7 @@
           "n_patron": 24,
           "kelly_boost": 1.0,
           "direccion": "BUY_YES",
-          "descubierto": "2026-07-12T01:39:27+00:00"
+          "descubierto": "2026-07-12T01:45:42+00:00"
         },
         {
           "feature": "pct_spot_vs_ref",
@@ -575,7 +575,7 @@
           "n_patron": 30,
           "kelly_boost": 0.62,
           "direccion": "BUY_NO",
-          "descubierto": "2026-07-12T01:39:27+00:00"
+          "descubierto": "2026-07-12T01:45:42+00:00"
         },
         {
           "feature": "sigma_h",
@@ -586,7 +586,7 @@
           "n_patron": 15,
           "kelly_boost": 1.0,
           "direccion": "BUY_NO",
-          "descubierto": "2026-07-12T01:39:27+00:00"
+          "descubierto": "2026-07-12T01:45:42+00:00"
         },
         {
           "feature": "ibs_15",
@@ -597,7 +597,7 @@
           "n_patron": 20,
           "kelly_boost": 1.0,
           "direccion": "BUY_NO",
-          "descubierto": "2026-07-12T01:39:27+00:00"
+          "descubierto": "2026-07-12T01:45:42+00:00"
         }
       ]
     },
@@ -626,7 +626,7 @@
           "n_malo": 19,
           "n_bueno": 19,
           "direccion": "BUY_YES",
-          "descubierto": "2026-07-12T01:39:27+00:00"
+          "descubierto": "2026-07-12T01:45:42+00:00"
         },
         {
           "feature": "hora_utc",
@@ -637,7 +637,7 @@
           "n_malo": 15,
           "n_bueno": 9,
           "direccion": "BUY_YES",
-          "descubierto": "2026-07-12T01:39:27+00:00"
+          "descubierto": "2026-07-12T01:45:42+00:00"
         },
         {
           "feature": "ibs_15",
@@ -648,7 +648,7 @@
           "n_malo": 17,
           "n_bueno": 7,
           "direccion": "BUY_YES",
-          "descubierto": "2026-07-12T01:39:27+00:00"
+          "descubierto": "2026-07-12T01:45:42+00:00"
         }
       ],
       "patrones_ganadores": []
@@ -678,7 +678,7 @@
           "n_malo": 22,
           "n_bueno": 67,
           "direccion": "BUY_YES",
-          "descubierto": "2026-07-12T01:39:27+00:00"
+          "descubierto": "2026-07-12T01:45:42+00:00"
         },
         {
           "feature": "hora_utc",
@@ -689,7 +689,7 @@
           "n_malo": 24,
           "n_bueno": 27,
           "direccion": "BUY_YES",
-          "descubierto": "2026-07-12T01:39:27+00:00"
+          "descubierto": "2026-07-12T01:45:42+00:00"
         },
         {
           "feature": "ibs_15",
@@ -700,7 +700,7 @@
           "n_malo": 38,
           "n_bueno": 13,
           "direccion": "BUY_YES",
-          "descubierto": "2026-07-12T01:39:27+00:00"
+          "descubierto": "2026-07-12T01:45:42+00:00"
         },
         {
           "feature": "ibs_15",
@@ -711,7 +711,7 @@
           "n_malo": 25,
           "n_bueno": 26,
           "direccion": "BUY_YES",
-          "descubierto": "2026-07-12T01:39:27+00:00"
+          "descubierto": "2026-07-12T01:45:42+00:00"
         },
         {
           "feature": "pct_spot_vs_ref",
@@ -722,7 +722,7 @@
           "n_malo": 18,
           "n_bueno": 20,
           "direccion": "BUY_NO",
-          "descubierto": "2026-07-12T01:39:27+00:00"
+          "descubierto": "2026-07-12T01:45:42+00:00"
         },
         {
           "feature": "hora_utc",
@@ -733,7 +733,7 @@
           "n_malo": 17,
           "n_bueno": 7,
           "direccion": "BUY_NO",
-          "descubierto": "2026-07-12T01:39:27+00:00"
+          "descubierto": "2026-07-12T01:45:42+00:00"
         },
         {
           "feature": "ibs_15",
@@ -744,7 +744,7 @@
           "n_malo": 18,
           "n_bueno": 6,
           "direccion": "BUY_NO",
-          "descubierto": "2026-07-12T01:39:27+00:00"
+          "descubierto": "2026-07-12T01:45:42+00:00"
         }
       ],
       "patrones_ganadores": []
@@ -774,7 +774,7 @@
           "n_malo": 26,
           "n_bueno": 9,
           "direccion": "BUY_YES",
-          "descubierto": "2026-07-12T01:39:27+00:00"
+          "descubierto": "2026-07-12T01:45:42+00:00"
         },
         {
           "feature": "ibs_15",
@@ -785,7 +785,7 @@
           "n_malo": 15,
           "n_bueno": 5,
           "direccion": "BUY_YES",
-          "descubierto": "2026-07-12T01:39:27+00:00"
+          "descubierto": "2026-07-12T01:45:42+00:00"
         }
       ],
       "patrones_ganadores": []
@@ -845,7 +845,7 @@
           "n_patron": 60,
           "kelly_boost": 1.0,
           "direccion": "BUY_YES",
-          "descubierto": "2026-07-12T01:39:27+00:00"
+          "descubierto": "2026-07-12T01:45:42+00:00"
         },
         {
           "feature": "dist_vwap_pct",
@@ -856,7 +856,7 @@
           "n_patron": 56,
           "kelly_boost": 0.78,
           "direccion": "BUY_YES",
-          "descubierto": "2026-07-12T01:39:27+00:00"
+          "descubierto": "2026-07-12T01:45:42+00:00"
         }
       ]
     },
@@ -943,7 +943,7 @@
         "n_oos_validado": 1053,
         "n_requerido": 112.5,
         "mejora_media_oos": 0.1337,
-        "actualizado": "2026-07-12T01:39:13+00:00"
+        "actualizado": "2026-07-12T01:45:26+00:00"
       },
       "filtros_causales": [
         {
@@ -955,7 +955,7 @@
           "n_malo": 35,
           "n_bueno": 51,
           "direccion": "BUY_NO",
-          "descubierto": "2026-07-12T01:39:27+00:00"
+          "descubierto": "2026-07-12T01:45:42+00:00"
         }
       ],
       "patrones_ganadores": [
@@ -968,7 +968,7 @@
           "n_patron": 51,
           "kelly_boost": 0.71,
           "direccion": "BUY_NO",
-          "descubierto": "2026-07-12T01:39:27+00:00"
+          "descubierto": "2026-07-12T01:45:42+00:00"
         }
       ]
     },
@@ -1856,14 +1856,14 @@
     "GBM_LATE_15M": {
       "activa": true,
       "edge_minimo": 0.02,
-      "ic_bayes": 0.1122,
-      "n": 3415,
-      "pnl_total": 1098.8484,
+      "ic_bayes": 0.1123,
+      "n": 3416,
+      "pnl_total": 1099.9438,
       "causa_principal": "TIMING_CORTO",
-      "motivo": "IC_bayes=+0.112 n=3415 conf=1.00",
+      "motivo": "IC_bayes=+0.112 n=3416 conf=1.00",
       "apuesta_kelly": 1.12,
-      "n_BUY_YES": 1663,
-      "ic_BUY_YES": 0.1162,
+      "n_BUY_YES": 1664,
+      "ic_BUY_YES": 0.1164,
       "apuesta_kelly_BUY_YES": 1.16,
       "n_BUY_NO": 1752,
       "ic_BUY_NO": 0.1083,
@@ -1904,14 +1904,14 @@
     "GBM_LATE_15M#15min": {
       "activa": true,
       "edge_minimo": 0.02,
-      "ic_bayes": 0.1122,
-      "n": 3415,
-      "pnl_total": 1098.8484,
+      "ic_bayes": 0.1123,
+      "n": 3416,
+      "pnl_total": 1099.9438,
       "causa_principal": "TIMING_CORTO",
-      "motivo": "IC_bayes=+0.112 n=3415 conf=1.00",
+      "motivo": "IC_bayes=+0.112 n=3416 conf=1.00",
       "apuesta_kelly": 1.12,
-      "n_BUY_YES": 1663,
-      "ic_BUY_YES": 0.1162,
+      "n_BUY_YES": 1664,
+      "ic_BUY_YES": 0.1164,
       "apuesta_kelly_BUY_YES": 1.16,
       "n_BUY_NO": 1752,
       "ic_BUY_NO": 0.1083,
@@ -1984,34 +1984,34 @@
     "GBM_LATE_15M#ETH#15min": {
       "activa": true,
       "edge_minimo": 0.02,
-      "ic_bayes": 0.0722,
-      "n": 870,
-      "pnl_total": 134.4175,
+      "ic_bayes": 0.0727,
+      "n": 871,
+      "pnl_total": 135.5129,
       "causa_principal": "TIMING_CORTO",
-      "motivo": "IC_bayes=+0.072 n=870 conf=1.00",
-      "apuesta_kelly": 0.72,
+      "motivo": "IC_bayes=+0.073 n=871 conf=1.00",
+      "apuesta_kelly": 0.73,
       "n_BUY_NO": 449,
       "ic_BUY_NO": 0.0521,
       "apuesta_kelly_BUY_NO": 0.52,
-      "n_BUY_YES": 421,
-      "ic_BUY_YES": 0.0934,
-      "apuesta_kelly_BUY_YES": 0.93
+      "n_BUY_YES": 422,
+      "ic_BUY_YES": 0.0943,
+      "apuesta_kelly_BUY_YES": 0.94
     },
     "GBM_LATE_15M#ETH": {
       "activa": true,
       "edge_minimo": 0.02,
-      "ic_bayes": 0.0722,
-      "n": 870,
-      "pnl_total": 134.4175,
+      "ic_bayes": 0.0727,
+      "n": 871,
+      "pnl_total": 135.5129,
       "causa_principal": "TIMING_CORTO",
-      "motivo": "IC_bayes=+0.072 n=870 conf=1.00",
-      "apuesta_kelly": 0.72,
+      "motivo": "IC_bayes=+0.073 n=871 conf=1.00",
+      "apuesta_kelly": 0.73,
       "n_BUY_NO": 449,
       "ic_BUY_NO": 0.0521,
       "apuesta_kelly_BUY_NO": 0.52,
-      "n_BUY_YES": 421,
-      "ic_BUY_YES": 0.0934,
-      "apuesta_kelly_BUY_YES": 0.93
+      "n_BUY_YES": 422,
+      "ic_BUY_YES": 0.0943,
+      "apuesta_kelly_BUY_YES": 0.94
     },
     "LATE_WINDOW_5MIN": {
       "activa": true,
@@ -2600,7 +2600,7 @@
         "n_oos_validado": 206,
         "n_requerido": 139.9,
         "mejora_media_oos": 0.0379,
-        "actualizado": "2026-07-12T01:39:22+00:00"
+        "actualizado": "2026-07-12T01:45:36+00:00"
       }
     },
     "STREAK_MOM_5M#SOL#5min": {
@@ -2718,15 +2718,15 @@
     "GBM_LATE_15M_TARDIO": {
       "activa": true,
       "edge_minimo": 0.02,
-      "ic_bayes": 0.0798,
-      "n": 957,
-      "pnl_total": 215.1033,
+      "ic_bayes": 0.0802,
+      "n": 958,
+      "pnl_total": 215.6922,
       "causa_principal": "TIMING_CORTO",
-      "motivo": "IC_bayes=+0.080 n=957 conf=1.00",
+      "motivo": "IC_bayes=+0.080 n=958 conf=1.00",
       "apuesta_kelly": 0.8,
-      "n_BUY_YES": 487,
-      "ic_BUY_YES": 0.0787,
-      "apuesta_kelly_BUY_YES": 0.79,
+      "n_BUY_YES": 488,
+      "ic_BUY_YES": 0.0796,
+      "apuesta_kelly_BUY_YES": 0.8,
       "n_BUY_NO": 470,
       "ic_BUY_NO": 0.0805,
       "apuesta_kelly_BUY_NO": 0.81
@@ -2766,15 +2766,15 @@
     "GBM_LATE_15M_TARDIO#15min": {
       "activa": true,
       "edge_minimo": 0.02,
-      "ic_bayes": 0.0798,
-      "n": 957,
-      "pnl_total": 215.1033,
+      "ic_bayes": 0.0802,
+      "n": 958,
+      "pnl_total": 215.6922,
       "causa_principal": "TIMING_CORTO",
-      "motivo": "IC_bayes=+0.080 n=957 conf=1.00",
+      "motivo": "IC_bayes=+0.080 n=958 conf=1.00",
       "apuesta_kelly": 0.8,
-      "n_BUY_YES": 487,
-      "ic_BUY_YES": 0.0787,
-      "apuesta_kelly_BUY_YES": 0.79,
+      "n_BUY_YES": 488,
+      "ic_BUY_YES": 0.0796,
+      "apuesta_kelly_BUY_YES": 0.8,
       "n_BUY_NO": 470,
       "ic_BUY_NO": 0.0805,
       "apuesta_kelly_BUY_NO": 0.81
@@ -2846,14 +2846,14 @@
     "GBM_LATE_15M_TARDIO#ETH#15min": {
       "activa": true,
       "edge_minimo": 0.02,
-      "ic_bayes": 0.0082,
-      "n": 242,
-      "pnl_total": 5.1881,
+      "ic_bayes": 0.0102,
+      "n": 243,
+      "pnl_total": 5.777,
       "causa_principal": "TIMING_CORTO",
-      "motivo": "IC_bayes=+0.008 n=242 conf=1.00",
+      "motivo": "IC_bayes=+0.010 n=243 conf=1.00",
       "apuesta_kelly": 0.5,
-      "n_BUY_YES": 127,
-      "ic_BUY_YES": 0.0271,
+      "n_BUY_YES": 128,
+      "ic_BUY_YES": 0.0308,
       "apuesta_kelly_BUY_YES": 0.5,
       "n_BUY_NO": 115,
       "ic_BUY_NO": -0.0128,
@@ -2862,14 +2862,14 @@
     "GBM_LATE_15M_TARDIO#ETH": {
       "activa": true,
       "edge_minimo": 0.02,
-      "ic_bayes": 0.0082,
-      "n": 242,
-      "pnl_total": 5.1881,
+      "ic_bayes": 0.0102,
+      "n": 243,
+      "pnl_total": 5.777,
       "causa_principal": "TIMING_CORTO",
-      "motivo": "IC_bayes=+0.008 n=242 conf=1.00",
+      "motivo": "IC_bayes=+0.010 n=243 conf=1.00",
       "apuesta_kelly": 0.5,
-      "n_BUY_YES": 127,
-      "ic_BUY_YES": 0.0271,
+      "n_BUY_YES": 128,
+      "ic_BUY_YES": 0.0308,
       "apuesta_kelly_BUY_YES": 0.5,
       "n_BUY_NO": 115,
       "ic_BUY_NO": -0.0128,
@@ -3084,18 +3084,18 @@
     "GBM_LATE_15M_ESPACIO_ATR": {
       "activa": true,
       "edge_minimo": 0.02,
-      "ic_bayes": 0.152,
-      "n": 791,
-      "pnl_total": 369.0458,
+      "ic_bayes": 0.1524,
+      "n": 792,
+      "pnl_total": 370.8714,
       "causa_principal": "TIMING_CORTO",
-      "motivo": "IC_bayes=+0.152 n=791 conf=1.00",
+      "motivo": "IC_bayes=+0.152 n=792 conf=1.00",
       "apuesta_kelly": 1.52,
       "n_BUY_NO": 396,
       "ic_BUY_NO": 0.1382,
       "apuesta_kelly_BUY_NO": 1.38,
-      "n_BUY_YES": 395,
-      "ic_BUY_YES": 0.165,
-      "apuesta_kelly_BUY_YES": 1.65
+      "n_BUY_YES": 396,
+      "ic_BUY_YES": 0.1658,
+      "apuesta_kelly_BUY_YES": 1.66
     },
     "GBM_LATE_15M_ESPACIO_ATR#XRP#15min": {
       "activa": true,
@@ -3132,18 +3132,18 @@
     "GBM_LATE_15M_ESPACIO_ATR#15min": {
       "activa": true,
       "edge_minimo": 0.02,
-      "ic_bayes": 0.152,
-      "n": 791,
-      "pnl_total": 369.0458,
+      "ic_bayes": 0.1524,
+      "n": 792,
+      "pnl_total": 370.8714,
       "causa_principal": "TIMING_CORTO",
-      "motivo": "IC_bayes=+0.152 n=791 conf=1.00",
+      "motivo": "IC_bayes=+0.152 n=792 conf=1.00",
       "apuesta_kelly": 1.52,
       "n_BUY_NO": 396,
       "ic_BUY_NO": 0.1382,
       "apuesta_kelly_BUY_NO": 1.38,
-      "n_BUY_YES": 395,
-      "ic_BUY_YES": 0.165,
-      "apuesta_kelly_BUY_YES": 1.65
+      "n_BUY_YES": 396,
+      "ic_BUY_YES": 0.1658,
+      "apuesta_kelly_BUY_YES": 1.66
     },
     "GBM_LATE_15M_ESPACIO_ATR#SOL#15min": {
       "activa": true,
@@ -3180,15 +3180,15 @@
     "GBM_LATE_15M_ESPACIO_ATR#ETH#15min": {
       "activa": true,
       "edge_minimo": 0.02,
-      "ic_bayes": 0.1239,
-      "n": 216,
-      "pnl_total": 68.6203,
+      "ic_bayes": 0.1256,
+      "n": 217,
+      "pnl_total": 70.4459,
       "causa_principal": "TIMING_CORTO",
-      "motivo": "IC_bayes=+0.124 n=216 conf=1.00",
-      "apuesta_kelly": 1.24,
-      "n_BUY_YES": 117,
-      "ic_BUY_YES": 0.1555,
-      "apuesta_kelly_BUY_YES": 1.55,
+      "motivo": "IC_bayes=+0.126 n=217 conf=1.00",
+      "apuesta_kelly": 1.26,
+      "n_BUY_YES": 118,
+      "ic_BUY_YES": 0.1583,
+      "apuesta_kelly_BUY_YES": 1.58,
       "n_BUY_NO": 99,
       "ic_BUY_NO": 0.0842,
       "apuesta_kelly_BUY_NO": 0.84
@@ -3196,15 +3196,15 @@
     "GBM_LATE_15M_ESPACIO_ATR#ETH": {
       "activa": true,
       "edge_minimo": 0.02,
-      "ic_bayes": 0.1239,
-      "n": 216,
-      "pnl_total": 68.6203,
+      "ic_bayes": 0.1256,
+      "n": 217,
+      "pnl_total": 70.4459,
       "causa_principal": "TIMING_CORTO",
-      "motivo": "IC_bayes=+0.124 n=216 conf=1.00",
-      "apuesta_kelly": 1.24,
-      "n_BUY_YES": 117,
-      "ic_BUY_YES": 0.1555,
-      "apuesta_kelly_BUY_YES": 1.55,
+      "motivo": "IC_bayes=+0.126 n=217 conf=1.00",
+      "apuesta_kelly": 1.26,
+      "n_BUY_YES": 118,
+      "ic_BUY_YES": 0.1583,
+      "apuesta_kelly_BUY_YES": 1.58,
       "n_BUY_NO": 99,
       "ic_BUY_NO": 0.0842,
       "apuesta_kelly_BUY_NO": 0.84
@@ -3244,14 +3244,14 @@
     "FAVORITO_CONFIRMADO": {
       "activa": true,
       "edge_minimo": 0.02,
-      "ic_bayes": 0.1671,
-      "n": 695,
-      "pnl_total": -21.0933,
+      "ic_bayes": 0.1676,
+      "n": 696,
+      "pnl_total": -20.7941,
       "causa_principal": "TIMING_CORTO",
-      "motivo": "IC_bayes=+0.167 n=695 conf=1.00",
-      "apuesta_kelly": 1.67,
-      "n_BUY_YES": 339,
-      "ic_BUY_YES": 0.2097,
+      "motivo": "IC_bayes=+0.168 n=696 conf=1.00",
+      "apuesta_kelly": 1.68,
+      "n_BUY_YES": 340,
+      "ic_BUY_YES": 0.2105,
       "apuesta_kelly_BUY_YES": 2.0,
       "n_BUY_NO": 356,
       "ic_BUY_NO": 0.1257,
@@ -3292,14 +3292,14 @@
     "FAVORITO_CONFIRMADO#15min": {
       "activa": true,
       "edge_minimo": 0.02,
-      "ic_bayes": 0.2043,
-      "n": 441,
-      "pnl_total": -7.0944,
+      "ic_bayes": 0.205,
+      "n": 442,
+      "pnl_total": -6.7952,
       "causa_principal": "TIMING_CORTO",
-      "motivo": "IC_bayes=+0.204 n=441 conf=1.00",
+      "motivo": "IC_bayes=+0.205 n=442 conf=1.00",
       "apuesta_kelly": 2.0,
-      "n_BUY_YES": 220,
-      "ic_BUY_YES": 0.2297,
+      "n_BUY_YES": 221,
+      "ic_BUY_YES": 0.2309,
       "apuesta_kelly_BUY_YES": 2.0,
       "n_BUY_NO": 221,
       "ic_BUY_NO": 0.1771,
@@ -3308,14 +3308,14 @@
     "FAVORITO_CONFIRMADO#ETH#15min": {
       "activa": true,
       "edge_minimo": 0.02,
-      "ic_bayes": 0.2047,
-      "n": 147,
-      "pnl_total": 0.1025,
+      "ic_bayes": 0.2067,
+      "n": 148,
+      "pnl_total": 0.4017,
       "causa_principal": "TIMING_CORTO",
-      "motivo": "IC_bayes=+0.205 n=147 conf=1.00",
+      "motivo": "IC_bayes=+0.207 n=148 conf=1.00",
       "apuesta_kelly": 2.0,
-      "n_BUY_YES": 74,
-      "ic_BUY_YES": 0.2632,
+      "n_BUY_YES": 75,
+      "ic_BUY_YES": 0.2662,
       "apuesta_kelly_BUY_YES": 2.0,
       "n_BUY_NO": 73,
       "ic_BUY_NO": 0.14,
@@ -3324,14 +3324,14 @@
     "FAVORITO_CONFIRMADO#ETH": {
       "activa": true,
       "edge_minimo": 0.02,
-      "ic_bayes": 0.1586,
-      "n": 247,
-      "pnl_total": -1.6293,
+      "ic_bayes": 0.16,
+      "n": 248,
+      "pnl_total": -1.3301,
       "causa_principal": "TIMING_CORTO",
-      "motivo": "IC_bayes=+0.159 n=247 conf=1.00",
-      "apuesta_kelly": 1.59,
-      "n_BUY_YES": 123,
-      "ic_BUY_YES": 0.228,
+      "motivo": "IC_bayes=+0.160 n=248 conf=1.00",
+      "apuesta_kelly": 1.6,
+      "n_BUY_YES": 124,
+      "ic_BUY_YES": 0.2302,
       "apuesta_kelly_BUY_YES": 2.0,
       "n_BUY_NO": 124,
       "ic_BUY_NO": 0.0873,
@@ -3596,18 +3596,18 @@
     "STREAK_FADE_5M": {
       "activa": true,
       "edge_minimo": 0.02,
-      "ic_bayes": 0.027,
-      "n": 72,
-      "pnl_total": 0.8147,
+      "ic_bayes": 0.02,
+      "n": 73,
+      "pnl_total": -0.0931,
       "causa_principal": "TIMING_CORTO",
-      "motivo": "IC_bayes=+0.027 n=72 conf=1.00",
+      "motivo": "IC_bayes=+0.020 n=73 conf=1.00",
       "apuesta_kelly": 0.5,
       "n_BUY_YES": 47,
       "ic_BUY_YES": -0.0102,
       "apuesta_kelly_BUY_YES": 0.5,
-      "n_BUY_NO": 25,
-      "ic_BUY_NO": 0.0926,
-      "apuesta_kelly_BUY_NO": 0.93
+      "n_BUY_NO": 26,
+      "ic_BUY_NO": 0.0714,
+      "apuesta_kelly_BUY_NO": 0.71
     },
     "STREAK_FADE_5M#XRP#5min": {
       "activa": true,
@@ -3644,18 +3644,18 @@
     "STREAK_FADE_5M#5min": {
       "activa": true,
       "edge_minimo": 0.02,
-      "ic_bayes": 0.027,
-      "n": 72,
-      "pnl_total": 0.8147,
+      "ic_bayes": 0.02,
+      "n": 73,
+      "pnl_total": -0.0931,
       "causa_principal": "TIMING_CORTO",
-      "motivo": "IC_bayes=+0.027 n=72 conf=1.00",
+      "motivo": "IC_bayes=+0.020 n=73 conf=1.00",
       "apuesta_kelly": 0.5,
       "n_BUY_YES": 47,
       "ic_BUY_YES": -0.0102,
       "apuesta_kelly_BUY_YES": 0.5,
-      "n_BUY_NO": 25,
-      "ic_BUY_NO": 0.0926,
-      "apuesta_kelly_BUY_NO": 0.93
+      "n_BUY_NO": 26,
+      "ic_BUY_NO": 0.0714,
+      "apuesta_kelly_BUY_NO": 0.71
     },
     "STREAK_FADE_5M#ETH#5min": {
       "activa": true,
@@ -3692,34 +3692,34 @@
     "STREAK_FADE_5M#SOL#5min": {
       "activa": true,
       "edge_minimo": 0.02,
-      "ic_bayes": 0.0312,
-      "n": 30,
-      "pnl_total": 0.2046,
+      "ic_bayes": 0.0152,
+      "n": 31,
+      "pnl_total": -0.7032,
       "causa_principal": "TIMING_CORTO",
-      "motivo": "IC_bayes=+0.031 n=30 conf=1.00",
+      "motivo": "IC_bayes=+0.015 n=31 conf=1.00",
       "apuesta_kelly": 0.5,
       "n_BUY_YES": 24,
       "ic_BUY_YES": -0.0385,
       "apuesta_kelly_BUY_YES": 0.5,
-      "n_BUY_NO": 6,
-      "ic_BUY_NO": 0.075,
-      "apuesta_kelly_BUY_NO": 0.75
+      "n_BUY_NO": 7,
+      "ic_BUY_NO": 0.0583,
+      "apuesta_kelly_BUY_NO": 0.58
     },
     "STREAK_FADE_5M#SOL": {
       "activa": true,
       "edge_minimo": 0.02,
-      "ic_bayes": 0.0312,
-      "n": 30,
-      "pnl_total": 0.2046,
+      "ic_bayes": 0.0152,
+      "n": 31,
+      "pnl_total": -0.7032,
       "causa_principal": "TIMING_CORTO",
-      "motivo": "IC_bayes=+0.031 n=30 conf=1.00",
+      "motivo": "IC_bayes=+0.015 n=31 conf=1.00",
       "apuesta_kelly": 0.5,
       "n_BUY_YES": 24,
       "ic_BUY_YES": -0.0385,
       "apuesta_kelly_BUY_YES": 0.5,
-      "n_BUY_NO": 6,
-      "ic_BUY_NO": 0.075,
-      "apuesta_kelly_BUY_NO": 0.75
+      "n_BUY_NO": 7,
+      "ic_BUY_NO": 0.0583,
+      "apuesta_kelly_BUY_NO": 0.58
     }
   },
   "meta": {
