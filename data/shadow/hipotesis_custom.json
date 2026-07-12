@@ -978,6 +978,22 @@
    },
    "umbral_n": 40,
    "umbral_ic_min": 0.08
+  },
+  {
+   "id": "H-CUSTOM-GBM18H-XRP-EXCEPCION",
+   "nombre": "UPDOWN_GBM XRP a las 18h UTC -- puede estar mal incluida en el blacklist horario global",
+   "descripcion": "12-Jul: gbm_blacklist_hours_auto=[9,10,18] bloquea GBM en las 4 monedas a las 18h. Desagregando por activo (h9/h10 no tienen dato retrospectivo -- el propio blacklist impide que se genere): BTC ic=-0.140 (n=48), ETH ic=-0.136 (n=42), SOL ic=-0.167 (n=22) consistentes con el bloqueo, pero XRP ic=+0.100 (n=23) -- signo OPUESTO. El bloqueo agregado puede estar sobre-bloqueando XRP especificamente.",
+   "tipo": "boost",
+   "umbral": "n>=40 y IC>0.08",
+   "accion": "Si confirma con n>=40 IC>0.08 -> considerar excepcion de XRP en gbm_blacklist_hours_auto para la hora 18 (shadow puro, UPDOWN_GBM no esta live)",
+   "filtro": {
+    "strategy_prefix": "UPDOWN_GBM",
+    "par": "XRP",
+    "subtype_contains": "15min",
+    "hora_utc": 18
+   },
+   "umbral_n": 40,
+   "umbral_ic_min": 0.08
   }
  ]
 }
