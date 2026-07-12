@@ -1491,6 +1491,18 @@ def s_updown_gbm(market, ctx):
     if not sigma_h or sigma_h <= 0:
         return None
 
+    # sigma_ewma_delta_pct (12-Jul, propuesta #6 lista puntos ciegos): mismo
+    # feature ya validado en _s_gbm_late (efecto real pero de SIGNO distinto
+    # por activo: ETH/BTC mejoran cuando la vol acelera, XRP empeora) —
+    # extendido aquí porque UPDOWN_GBM tiene mucho más volumen (ya desagregada
+    # por activo en FEATURE_RULES) y validará el feature 3-4x más rápido.
+    # Solo logueo, no cambia p_up/decisión.
+    _sigma_h_ewma10 = _estimar_vol_h_ewma(activo, precios_data, n_min=vol_win, half_life_min=10)
+    _sigma_ewma_delta_pct = (
+        round((_sigma_h_ewma10 - sigma_h) / sigma_h * 100, 3)
+        if _sigma_h_ewma10 is not None and sigma_h > 0 else None
+    )
+
     pct = (spot / ref - 1) * 100
 
     # Drift macro: tendencia de las últimas 1h y 15min desde precios_intraday.
@@ -1607,6 +1619,8 @@ def s_updown_gbm(market, ctx):
         "T_h":             round(T_h, 4),
         "hora_utc":        datetime.now(timezone.utc).hour,
     }
+    if _sigma_ewma_delta_pct is not None:
+        features["sigma_ewma_delta_pct"] = _sigma_ewma_delta_pct
     if drift_15 is not None:
         features["drift_15min"] = round(drift_15 * 100, 4)   # %/hora
     if drift_60 is not None:
