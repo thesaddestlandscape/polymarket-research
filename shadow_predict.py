@@ -2379,6 +2379,18 @@ def _s_gbm_late(market, ctx, ventana_min, rest_lo, rest_hi, espacio_k=None):
     # sigma_h EWMA half_life=10min, solo logueo (propuesta #11, ver
     # _estimar_vol_h_ewma) — n_min=20 igual que sigma_h real de esta función.
     sigma_h_ewma10 = _estimar_vol_h_ewma(activo, precios_data, n_min=20, half_life_min=10)
+    # Aceleración de volatilidad = EWMA reciente vs ventana plana, en % relativo
+    # (12-Jul, petición Javi "modelo más rápido" + sugerencia de desagregar por
+    # activo): verificado con forward n=66-86/activo que el SIGNO de este efecto
+    # NO es uniforme — ETH +16pp / BTC +10.5pp cuando la vol acelera (ewma>flat),
+    # XRP -11.7pp (signo OPUESTO), SOL sin efecto. Mezclado en agregado esto se
+    # diluye a un +3.5pp que parece débil — desagregado por activo es mucho más
+    # fuerte en 3 de los 4. Solo LOGUEA aquí; entra en FEATURE_RULES abajo para
+    # que el pipeline causal descubra el umbral/signo correcto POR ACTIVO solo.
+    sigma_ewma_delta_pct = (
+        round((sigma_h_ewma10 - sigma_h) / sigma_h * 100, 3)
+        if sigma_h_ewma10 is not None and sigma_h > 0 else None
+    )
 
     return {
         "prob_yes": round(p_up, 4),
@@ -2401,6 +2413,7 @@ def _s_gbm_late(market, ctx, ventana_min, rest_lo, rest_hi, espacio_k=None):
             "n_obs_vol_h":         n_obs_vol,
             "se_d_gbm_aprox":      se_d_gbm_aprox,
             "sigma_h_ewma10":      round(sigma_h_ewma10, 5) if sigma_h_ewma10 is not None else None,
+            "sigma_ewma_delta_pct": sigma_ewma_delta_pct,
             "dist_vwap_pct":       dist_vwap_pct,
         },
     }

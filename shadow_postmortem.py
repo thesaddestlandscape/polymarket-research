@@ -833,6 +833,14 @@ _BASE_GBM = [
     # Es signo, no magnitud (mismo patrón que hora_utc) -> ambas direcciones.
     ("dist_vwap_pct",    "lt",     "gt"),
     ("dist_vwap_pct",    "gt",     "lt"),
+    # ── Aceleración de volatilidad (12-Jul, petición Javi "modelo más rápido") ─
+    # sigma_ewma_delta_pct = (EWMA10min - flat)/flat. Verificado forward
+    # n=66-86/activo: el SIGNO no es uniforme — ETH/BTC mejoran cuando la vol
+    # acelera, XRP empeora, SOL plano. Solo detectable desagregado por activo
+    # (agregado se diluye a ruido) — exactamente el motivo por el que este
+    # feature entra aquí en vez de en un umbral global hardcoded.
+    ("sigma_ewma_delta_pct", "lt", "gt"),
+    ("sigma_ewma_delta_pct", "gt", "lt"),
 ]
 
 FEATURE_RULES = {
