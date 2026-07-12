@@ -222,6 +222,12 @@
     "FAVORITO_CONFIRMADO#SOL#15min#BUY_YES",
     "FAVORITO_CONFIRMADO#ETH#15min#BUY_YES",
     "GBM_LATE_15M_ESPACIO_ATR#BTC#15min#BUY_YES",
-    "GBM_LATE_15M_ESPACIO_ATR#ETH#15min#BUY_YES"
-  ]
+    "GBM_LATE_15M_ESPACIO_ATR#ETH#15min#BUY_YES",
+    "GBM_LATE_15M_ESPACIO_ATR#XRP#15min#BUY_YES",
+    "GBM_LATE_15M_ESPACIO_ATR#SOL#15min#BUY_YES",
+    "GBM_LATE_15M_TARDIO#BTC#15min#BUY_YES",
+    "GBM_LATE_15M_TARDIO#ETH#15min#BUY_YES",
+    "GBM_LATE_15M_TARDIO#SOL#15min#BUY_YES"
+  ],
+  "_candidatos_cobertura_nota_2026-07-12_tarde": "Ampliada cobertura de fill-ability (mandato Javi: conectar el aprendizaje causal a la realidad de ejecución, ajustar shadow a live): ESPACIO_ATR#XRP/SOL y TARDIO#BTC/ETH/SOL no tenían snapshots de libro pese a tener IC shadow positivo por activo (XRP es el MEJOR de ESPACIO_ATR +0.276, y no se medía). Solo añade logging, no toca pares_permitidos_live ni dinero real."
 }
