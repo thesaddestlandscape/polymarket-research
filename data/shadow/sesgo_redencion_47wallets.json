@@ -1,0 +1,551 @@
+{
+  "fecha": "2026-07-12T13:11:44+00:00",
+  "n_wallets": 54,
+  "n_posiciones_totales": 9694,
+  "pct_redeemed": 58.39,
+  "pct_vendido_sin_redimir": 9.25,
+  "pct_vendido_sin_redimir_precio_alto": 62.32,
+  "pct_ni_vendido_ni_redimido": 32.36,
+  "por_wallet": [
+    {
+      "wallet": "0x20d2309cd92b797ae7ca175ed828ed8a27fbe29d",
+      "n_mercados": 0,
+      "redeemed": 0,
+      "vendido_sin_redimir": 0,
+      "vendido_alto_precio": 0,
+      "ni_uno_ni_otro": 0,
+      "excluidos_recientes": 171,
+      "nombre": "sin_nombre_20d2"
+    },
+    {
+      "wallet": "0xee55214ee3a9ee22a404663c76ca832577df7b04",
+      "n_mercados": 0,
+      "redeemed": 0,
+      "vendido_sin_redimir": 0,
+      "vendido_alto_precio": 0,
+      "ni_uno_ni_otro": 0,
+      "excluidos_recientes": 100,
+      "nombre": "sixx7"
+    },
+    {
+      "wallet": "0x48ac40fc545cf327edd5365435c3a9f385614a7e",
+      "n_mercados": 77,
+      "redeemed": 45,
+      "vendido_sin_redimir": 0,
+      "vendido_alto_precio": 0,
+      "ni_uno_ni_otro": 32,
+      "excluidos_recientes": 700,
+      "nombre": "BoneOhio"
+    },
+    {
+      "wallet": "0xfcdc071df7080c214196bb0b3b751e5417f9d8e3",
+      "n_mercados": 0,
+      "redeemed": 0,
+      "vendido_sin_redimir": 0,
+      "vendido_alto_precio": 0,
+      "ni_uno_ni_otro": 0,
+      "excluidos_recientes": 181,
+      "nombre": "neversmiling"
+    },
+    {
+      "wallet": "0xe3eeb127d5763a6e4ad597f773f9d259c94d5176",
+      "n_mercados": 0,
+      "redeemed": 0,
+      "vendido_sin_redimir": 0,
+      "vendido_alto_precio": 0,
+      "ni_uno_ni_otro": 0,
+      "excluidos_recientes": 174,
+      "nombre": "sin_nombre_e3ee"
+    },
+    {
+      "wallet": "0x0479be41c67b588ece5bdc8913beb2adb3ca8177",
+      "n_mercados": 1317,
+      "redeemed": 1015,
+      "vendido_sin_redimir": 0,
+      "vendido_alto_precio": 0,
+      "ni_uno_ni_otro": 302,
+      "excluidos_recientes": 378,
+      "nombre": "cybermaxs"
+    },
+    {
+      "wallet": "0x3deac23f85896126e9fc8134247a643092087b7b",
+      "n_mercados": 325,
+      "redeemed": 207,
+      "vendido_sin_redimir": 0,
+      "vendido_alto_precio": 0,
+      "ni_uno_ni_otro": 118,
+      "excluidos_recientes": 712,
+      "nombre": "EvanChance"
+    },
+    {
+      "wallet": "0x0d7dfb4f0299335c81991c8c011df5d7cebb15c0",
+      "n_mercados": 1105,
+      "redeemed": 992,
+      "vendido_sin_redimir": 65,
+      "vendido_alto_precio": 14,
+      "ni_uno_ni_otro": 48,
+      "excluidos_recientes": 124,
+      "nombre": "manual-large"
+    },
+    {
+      "wallet": "0xdc8923aa7d6b293af2974c521092d0026ac37ac3",
+      "n_mercados": 0,
+      "redeemed": 0,
+      "vendido_sin_redimir": 0,
+      "vendido_alto_precio": 0,
+      "ni_uno_ni_otro": 0,
+      "excluidos_recientes": 121,
+      "nombre": "sin_nombre_dc89"
+    },
+    {
+      "wallet": "0xee65685de42f8de9a03b4c53ee77d56a20d2cfc9",
+      "n_mercados": 0,
+      "redeemed": 0,
+      "vendido_sin_redimir": 0,
+      "vendido_alto_precio": 0,
+      "ni_uno_ni_otro": 0,
+      "excluidos_recientes": 533,
+      "nombre": "0xee65685d"
+    },
+    {
+      "wallet": "0xeebde7a0e019a63e6b476eb425505b7b3e6eba30",
+      "n_mercados": 0,
+      "redeemed": 0,
+      "vendido_sin_redimir": 0,
+      "vendido_alto_precio": 0,
+      "ni_uno_ni_otro": 0,
+      "excluidos_recientes": 66,
+      "nombre": "0xeebde7a0"
+    },
+    {
+      "wallet": "0x9d57c42e847173d06841703825d3fe2299e456ea",
+      "n_mercados": 0,
+      "redeemed": 0,
+      "vendido_sin_redimir": 0,
+      "vendido_alto_precio": 0,
+      "ni_uno_ni_otro": 0,
+      "excluidos_recientes": 52,
+      "nombre": "0x9d57c42e"
+    },
+    {
+      "wallet": "0xf27d40745542dc871e127acff3a1c9d3910d9a88",
+      "n_mercados": 0,
+      "redeemed": 0,
+      "vendido_sin_redimir": 0,
+      "vendido_alto_precio": 0,
+      "ni_uno_ni_otro": 0,
+      "excluidos_recientes": 76,
+      "nombre": "0xf27d4074"
+    },
+    {
+      "wallet": "0x0c7c5204404e9d5402d258fedac59c7212bae4cb",
+      "n_mercados": 0,
+      "redeemed": 0,
+      "vendido_sin_redimir": 0,
+      "vendido_alto_precio": 0,
+      "ni_uno_ni_otro": 0,
+      "excluidos_recientes": 318,
+      "nombre": "0x0c7c5204"
+    },
+    {
+      "wallet": "0xb55fa1296e6ec55d0ce53d93b9237389f11764d4",
+      "n_mercados": 0,
+      "redeemed": 0,
+      "vendido_sin_redimir": 0,
+      "vendido_alto_precio": 0,
+      "ni_uno_ni_otro": 0,
+      "excluidos_recientes": 104,
+      "nombre": "0xb55fa129"
+    },
+    {
+      "wallet": "0x251c1a283703beed41590b0875a8dcb8ddd1541f",
+      "n_mercados": 0,
+      "redeemed": 0,
+      "vendido_sin_redimir": 0,
+      "vendido_alto_precio": 0,
+      "ni_uno_ni_otro": 0,
+      "excluidos_recientes": 210,
+      "nombre": "0x251c1a28"
+    },
+    {
+      "wallet": "0xdf0d2ccfe3d7c2ef120395534e43afe283509f79",
+      "n_mercados": 0,
+      "redeemed": 0,
+      "vendido_sin_redimir": 0,
+      "vendido_alto_precio": 0,
+      "ni_uno_ni_otro": 0,
+      "excluidos_recientes": 656,
+      "nombre": "0xdf0d2ccf"
+    },
+    {
+      "wallet": "0xce25e214d5cfe4f459cf67f08df581885aae7fdc",
+      "n_mercados": 0,
+      "redeemed": 0,
+      "vendido_sin_redimir": 0,
+      "vendido_alto_precio": 0,
+      "ni_uno_ni_otro": 0,
+      "excluidos_recientes": 121,
+      "nombre": "0xce25e214"
+    },
+    {
+      "wallet": "0xe3cb28f7c62ac636f407014005499d2687b5ac21",
+      "n_mercados": 201,
+      "redeemed": 124,
+      "vendido_sin_redimir": 4,
+      "vendido_alto_precio": 1,
+      "ni_uno_ni_otro": 73,
+      "excluidos_recientes": 0,
+      "nombre": "0xe3cb28f7"
+    },
+    {
+      "wallet": "0x3c58ef422754ff22c7e806336feba0064d8b776b",
+      "n_mercados": 0,
+      "redeemed": 0,
+      "vendido_sin_redimir": 0,
+      "vendido_alto_precio": 0,
+      "ni_uno_ni_otro": 0,
+      "excluidos_recientes": 496,
+      "nombre": "0x3c58ef42"
+    },
+    {
+      "wallet": "0xdf7930e89a2c47560165331863c31deca0733dcd",
+      "n_mercados": 0,
+      "redeemed": 0,
+      "vendido_sin_redimir": 0,
+      "vendido_alto_precio": 0,
+      "ni_uno_ni_otro": 0,
+      "excluidos_recientes": 74,
+      "nombre": "0xdf7930e8"
+    },
+    {
+      "wallet": "0xcb92e59eef071c7dfac33fbc64c60952d277e62f",
+      "n_mercados": 110,
+      "redeemed": 85,
+      "vendido_sin_redimir": 23,
+      "vendido_alto_precio": 5,
+      "ni_uno_ni_otro": 2,
+      "excluidos_recientes": 198,
+      "nombre": "0xcb92e59e"
+    },
+    {
+      "wallet": "0x8d1d5d1c6041b13fc708b5d9f668070e1724ed4a",
+      "n_mercados": 0,
+      "redeemed": 0,
+      "vendido_sin_redimir": 0,
+      "vendido_alto_precio": 0,
+      "ni_uno_ni_otro": 0,
+      "excluidos_recientes": 229,
+      "nombre": "0x8d1d5d1c"
+    },
+    {
+      "wallet": "0x4228048ea2f8f571ff2777cc32baee584c5134cb",
+      "n_mercados": 352,
+      "redeemed": 261,
+      "vendido_sin_redimir": 26,
+      "vendido_alto_precio": 7,
+      "ni_uno_ni_otro": 65,
+      "excluidos_recientes": 550,
+      "nombre": "0x4228048e"
+    },
+    {
+      "wallet": "0xc2ad03f79ca3f3c17d8c7de2612ce0c89b7d40ed",
+      "n_mercados": 0,
+      "redeemed": 0,
+      "vendido_sin_redimir": 0,
+      "vendido_alto_precio": 0,
+      "ni_uno_ni_otro": 0,
+      "excluidos_recientes": 423,
+      "nombre": "0xc2ad03f7"
+    },
+    {
+      "wallet": "0x7e5d2991c2647de2348287e2f499329fc6a6c4c3",
+      "n_mercados": 0,
+      "redeemed": 0,
+      "vendido_sin_redimir": 0,
+      "vendido_alto_precio": 0,
+      "ni_uno_ni_otro": 0,
+      "excluidos_recientes": 42,
+      "nombre": "0x7e5d2991"
+    },
+    {
+      "wallet": "0x3725d52f3c252e8374999cc8617292ea2608ad88",
+      "n_mercados": 0,
+      "redeemed": 0,
+      "vendido_sin_redimir": 0,
+      "vendido_alto_precio": 0,
+      "ni_uno_ni_otro": 0,
+      "excluidos_recientes": 427,
+      "nombre": "0x3725d52f"
+    },
+    {
+      "wallet": "0x32ed2e546b187ca15e2841edc82b22c713cf8ec3",
+      "n_mercados": 0,
+      "redeemed": 0,
+      "vendido_sin_redimir": 0,
+      "vendido_alto_precio": 0,
+      "ni_uno_ni_otro": 0,
+      "excluidos_recientes": 412,
+      "nombre": "0x32ed2e54"
+    },
+    {
+      "wallet": "0xcc500cbcc8b7cf5bd21975ebbea34f21b5644c82",
+      "n_mercados": 273,
+      "redeemed": 140,
+      "vendido_sin_redimir": 0,
+      "vendido_alto_precio": 0,
+      "ni_uno_ni_otro": 133,
+      "excluidos_recientes": 39,
+      "nombre": "0xcc500cbc"
+    },
+    {
+      "wallet": "0x80cd8310aa624521e9e1b2b53b568cafb0ef0273",
+      "n_mercados": 115,
+      "redeemed": 63,
+      "vendido_sin_redimir": 0,
+      "vendido_alto_precio": 0,
+      "ni_uno_ni_otro": 52,
+      "excluidos_recientes": 6,
+      "nombre": "0x80cd8310"
+    },
+    {
+      "wallet": "0x55be7aa03ecfbe37aa5460db791205f7ac9ddca3",
+      "n_mercados": 2,
+      "redeemed": 1,
+      "vendido_sin_redimir": 0,
+      "vendido_alto_precio": 0,
+      "ni_uno_ni_otro": 1,
+      "excluidos_recientes": 6,
+      "nombre": "0x55be7aa0"
+    },
+    {
+      "wallet": "0x06dc51826bc524d9a83770e7de9dd7e005b04524",
+      "n_mercados": 40,
+      "redeemed": 16,
+      "vendido_sin_redimir": 0,
+      "vendido_alto_precio": 0,
+      "ni_uno_ni_otro": 24,
+      "excluidos_recientes": 128,
+      "nombre": "0x06dc5182"
+    },
+    {
+      "wallet": "0x252d7bae5ec87553dcafb23e275c202ac0d3c456",
+      "n_mercados": 128,
+      "redeemed": 66,
+      "vendido_sin_redimir": 0,
+      "vendido_alto_precio": 0,
+      "ni_uno_ni_otro": 62,
+      "excluidos_recientes": 10,
+      "nombre": "0x252d7bae"
+    },
+    {
+      "wallet": "0x52bebe9a1099216a9e57250f3418acdb809a8bde",
+      "n_mercados": 53,
+      "redeemed": 0,
+      "vendido_sin_redimir": 11,
+      "vendido_alto_precio": 0,
+      "ni_uno_ni_otro": 42,
+      "excluidos_recientes": 3,
+      "nombre": "0x52bebe9a"
+    },
+    {
+      "wallet": "0x388537259dc9e693c1c9b96fdf07a63f6b7aca77",
+      "n_mercados": 75,
+      "redeemed": 50,
+      "vendido_sin_redimir": 0,
+      "vendido_alto_precio": 0,
+      "ni_uno_ni_otro": 25,
+      "excluidos_recientes": 6,
+      "nombre": "0x38853725"
+    },
+    {
+      "wallet": "0x98f5d88798331947dc2a0f9087308a17c41f754f",
+      "n_mercados": 573,
+      "redeemed": 384,
+      "vendido_sin_redimir": 0,
+      "vendido_alto_precio": 0,
+      "ni_uno_ni_otro": 189,
+      "excluidos_recientes": 40,
+      "nombre": "0x98f5d887"
+    },
+    {
+      "wallet": "0xf705fa045201391d9632b7f3cde06a5e24453ca7",
+      "n_mercados": 177,
+      "redeemed": 44,
+      "vendido_sin_redimir": 56,
+      "vendido_alto_precio": 19,
+      "ni_uno_ni_otro": 77,
+      "excluidos_recientes": 7,
+      "nombre": "0xf705fa04"
+    },
+    {
+      "wallet": "0x946769f131a690e168efb9e26e6628f4152ed15f",
+      "n_mercados": 285,
+      "redeemed": 285,
+      "vendido_sin_redimir": 0,
+      "vendido_alto_precio": 0,
+      "ni_uno_ni_otro": 0,
+      "excluidos_recientes": 73,
+      "nombre": "0x946769f1"
+    },
+    {
+      "wallet": "0x31393e2f8333d4a6e2e31ca6424defe8b6cb9e2e",
+      "n_mercados": 0,
+      "redeemed": 0,
+      "vendido_sin_redimir": 0,
+      "vendido_alto_precio": 0,
+      "ni_uno_ni_otro": 0,
+      "excluidos_recientes": 48,
+      "nombre": "0x31393e2f"
+    },
+    {
+      "wallet": "0xeee92f1cc6d6e0ad0b4ffda20b01cf3678e27ecb",
+      "n_mercados": 20,
+      "redeemed": 13,
+      "vendido_sin_redimir": 5,
+      "vendido_alto_precio": 4,
+      "ni_uno_ni_otro": 2,
+      "excluidos_recientes": 43,
+      "nombre": "0xeee92f1c"
+    },
+    {
+      "wallet": "0x4ee29e4e7d4c380babeae5e22e5c02400c2246e1",
+      "n_mercados": 168,
+      "redeemed": 101,
+      "vendido_sin_redimir": 1,
+      "vendido_alto_precio": 1,
+      "ni_uno_ni_otro": 66,
+      "excluidos_recientes": 13,
+      "nombre": "0x4ee29e4e"
+    },
+    {
+      "wallet": "0xf3531b23b504cf0aed4ff21325232b2a2d496685",
+      "n_mercados": 0,
+      "redeemed": 0,
+      "vendido_sin_redimir": 0,
+      "vendido_alto_precio": 0,
+      "ni_uno_ni_otro": 0,
+      "excluidos_recientes": 244,
+      "nombre": "0xf3531b23"
+    },
+    {
+      "wallet": "0xb0143b386a9e1e2d8580f6f607cc7bdaa1d3a357",
+      "n_mercados": 279,
+      "redeemed": 192,
+      "vendido_sin_redimir": 2,
+      "vendido_alto_precio": 0,
+      "ni_uno_ni_otro": 85,
+      "excluidos_recientes": 0,
+      "nombre": "0xb0143b38"
+    },
+    {
+      "wallet": "0x76dc22ed9446390005978b15dab35af20e055e71",
+      "n_mercados": 416,
+      "redeemed": 228,
+      "vendido_sin_redimir": 33,
+      "vendido_alto_precio": 17,
+      "ni_uno_ni_otro": 155,
+      "excluidos_recientes": 2,
+      "nombre": "0x76dc22ed"
+    },
+    {
+      "wallet": "0xb78654d2ffeef5a129cf150dde18134e7bb12c2d",
+      "n_mercados": 54,
+      "redeemed": 33,
+      "vendido_sin_redimir": 7,
+      "vendido_alto_precio": 1,
+      "ni_uno_ni_otro": 14,
+      "excluidos_recientes": 0,
+      "nombre": "0xb78654d2"
+    },
+    {
+      "wallet": "0x27091ce48a08a3e21d63c42d33428cf1e55d20f5",
+      "n_mercados": 104,
+      "redeemed": 77,
+      "vendido_sin_redimir": 0,
+      "vendido_alto_precio": 0,
+      "ni_uno_ni_otro": 27,
+      "excluidos_recientes": 0,
+      "nombre": "0x27091ce4"
+    },
+    {
+      "wallet": "0x3af44a6f6ce7249e0bc93afbb102d28b41966e19",
+      "n_mercados": 58,
+      "redeemed": 39,
+      "vendido_sin_redimir": 0,
+      "vendido_alto_precio": 0,
+      "ni_uno_ni_otro": 19,
+      "excluidos_recientes": 0,
+      "nombre": "0x3af44a6f"
+    },
+    {
+      "wallet": "0x12c2782b74d3b2a051b55be2e5167970ace01381",
+      "n_mercados": 34,
+      "redeemed": 18,
+      "vendido_sin_redimir": 0,
+      "vendido_alto_precio": 0,
+      "ni_uno_ni_otro": 16,
+      "excluidos_recientes": 52,
+      "nombre": "0x12c2782b"
+    },
+    {
+      "wallet": "0x69919f9f47fdeda08da66d44f8be3c240806151c",
+      "n_mercados": 52,
+      "redeemed": 38,
+      "vendido_sin_redimir": 0,
+      "vendido_alto_precio": 0,
+      "ni_uno_ni_otro": 14,
+      "excluidos_recientes": 0,
+      "nombre": "0x69919f9f"
+    },
+    {
+      "wallet": "0x1465b79bff7992bc703e1aafb3683b1089647072",
+      "n_mercados": 60,
+      "redeemed": 43,
+      "vendido_sin_redimir": 1,
+      "vendido_alto_precio": 1,
+      "ni_uno_ni_otro": 16,
+      "excluidos_recientes": 8,
+      "nombre": "0x1465b79b"
+    },
+    {
+      "wallet": "0x46992d0e547e3822a9c28723f51bfa804ae4e03c",
+      "n_mercados": 542,
+      "redeemed": 419,
+      "vendido_sin_redimir": 88,
+      "vendido_alto_precio": 85,
+      "ni_uno_ni_otro": 35,
+      "excluidos_recientes": 87,
+      "nombre": "0x46992d0e"
+    },
+    {
+      "wallet": "0x1e3b6822abfb39331b863eb729cdc251f607c850",
+      "n_mercados": 1086,
+      "redeemed": 109,
+      "vendido_sin_redimir": 493,
+      "vendido_alto_precio": 380,
+      "ni_uno_ni_otro": 484,
+      "excluidos_recientes": 4,
+      "nombre": "0x1e3b6822"
+    },
+    {
+      "wallet": "0xab51c55eb5cefec49c52a174acc10b3cd69e2473",
+      "n_mercados": 557,
+      "redeemed": 22,
+      "vendido_sin_redimir": 82,
+      "vendido_alto_precio": 24,
+      "ni_uno_ni_otro": 453,
+      "excluidos_recientes": 0,
+      "nombre": "0xab51c55e"
+    },
+    {
+      "wallet": "0xef104cc70851a4246e8e06790d7fad9708190b43",
+      "n_mercados": 1056,
+      "redeemed": 550,
+      "vendido_sin_redimir": 0,
+      "vendido_alto_precio": 0,
+      "ni_uno_ni_otro": 506,
+      "excluidos_recientes": 18,
+      "nombre": "0xef104cc7"
+    }
+  ]
+}
