@@ -1061,6 +1061,22 @@ IC_FILTRO_MIN   = -0.12   # IC para activar filtro (evitar)
 IC_PATRON_MIN   = +0.12   # IC para activar patrón ganador (amplificar)
 N_BUCKET_MIN    = 15      # mínimo de observaciones en cualquier bucket (subido de 8: n<15 → demasiado ruidoso para kelly_boost)
 
+# Patrones ganadores bloqueados (12-Jul, aprobado Javi, vigia_causal_vs_fillable.py):
+# el strat_key AGREGADO (sin activo) mezcla los 4 activos de GBM_LATE_15M en un
+# solo bucket — "sigma_h>0.0151 BUY_YES" salía positivo en shadow (ic 0.1395)
+# pero desagregado por activo el signo lo sostenía CASI SOLO XRP (ic 0.175 n=253;
+# BTC/ETH/SOL planos o peor: 0.000/0.071/0.095 vs sus propios ic_base). Cruzado
+# con ejecución real (trades.csv): la zona "boosteada" de SOL vivo rinde
+# +0.007€/trade frente a +0.24€/trade del resto de SOL — el boost se aplicaba
+# sobre el peor segmento, no el mejor. Además, junto con la regla propia de SOL
+# (GBM_LATE_15M#SOL#15min: sigma_h<0.0162, esa SÍ se sostiene en real) las dos
+# condiciones juntas cubrían el 100% de los valores de sigma_h — el "boost
+# condicional" era en la práctica incondicional. Se bloquea solo el patrón
+# AGREGADO (strat_key sin activo); las reglas propias de SOL/ETH no se tocan.
+PATRONES_BLOQUEADOS = {
+    ("GBM_LATE_15M", "sigma_h", "BUY_YES"),
+}
+
 
 def _evaluar_bucket(vals, umbral, condicion_mala):
     """Separa vals en [malo, bueno] según condicion_mala y umbral."""
@@ -1193,6 +1209,8 @@ def aprender_patrones_causales(resultados: list, pred_index: dict) -> dict:
                         }
 
                     # ── Patrón ganador: el bucket bueno es suficientemente bueno ──
+                    if ((strat_key, feature, direccion) in PATRONES_BLOQUEADOS):
+                        continue  # ver PATRONES_BLOQUEADOS: contradicho por ejecución real
                     if ic_bueno > IC_PATRON_MIN and len(bueno) >= N_BUCKET_MIN and dif > mejor_dif_patron:
                         # Kelly boost: cuánto apostar extra cuando esta condición se cumple
                         kelly_boost = round(min(1.00, max(0.10, 20.0 * ic_bueno * 0.25)), 2)
