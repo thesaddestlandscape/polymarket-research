@@ -1,4 +1,4 @@
-# Hipótesis automáticas — 2026-07-12 08:18 UTC
+# Hipótesis automáticas — 2026-07-12 08:24 UTC
 _Generado por shadow_postmortem.py sobre 10651 resoluciones (PNL=+1839.55€)_
 
 ## Patrones causales activos
@@ -1762,3 +1762,17 @@ _Derivadas de los patrones aprendidos:_
   - _Acción_: Si confirma con n>=40 -> proponer kelly_boost condicionado a sigma_ewma_delta_pct<0 en XRP#15min
   - _Estado_: 3/40 ops en el filtro definido (IC actual=-0.015 PNL=-2.16€)
   - _Datos_: n=3 IC=-0.015 PNL=-2.16€
+
+**🟡 H-CUSTOM-SMARTMONEY-FAVORITO-SOL** — FAVORITO_CONFIRMADO SOL — alineado con smart_money_consensus bate ir en contra (REABRE hallazgo cerrado 08-Jul)
+  - _Hipótesis_: 12-Jul: el cierre 08-Jul (n=2494, sin desagregar por estrategia/activo) encontro ruido puro. Desagregando por estrategia+activo (mecanismo nuevo): FAVORITO_CONFIRMADO#SOL alineado con smart_money_consensus (|consenso|>0.1, n_wallets>=3) hit=78.4% (n=37) vs contrario hit=52.4% (n=42), z=+2.41. GBM_LATE_15M tambien muestra el mismo signo en BTC/ETH/XRP (z=0.86-1.61, mas debil) pero SOL plano ahi -- inconsistencia entre estrategias que hay que entender antes de actuar.
+  - _Umbral_: n>=40 por lado y z>=2
+  - _Acción_: Si confirma con n>=40 y z>=2 -> considerar boost condicionado a alineacion con smart_money_consensus en FAVORITO_CONFIRMADO#SOL
+  - _Estado_: SEÑAL POSITIVA confirmada: IC=+0.160 > 0.08 con n=48 PNL=-0.90€
+  - _Datos_: n=48 IC=+0.160 PNL=-0.90€
+
+**🟡 H-CUSTOM-FAVORITO-SOL-ALTACONVICCION** — FAVORITO_CONFIRMADO SOL BUY_YES alta conviccion (py_entrada alto) — UNICO caso positivo en fill-ability de hoy
+  - _Hipótesis_: 12-Jul: auditoria de fill-ability de las 8 candidatas encontro las 8 negativas en agregado. Pero desagregando FAVORITO_CONFIRMADO por activo (mecanismo nuevo, no mirado hasta hoy): SOL#BUY_YES con py_entrada>=0.665-0.695 da pnl/trade POSITIVO en el subconjunto fillable real (+0.12 a +0.41 EUR/trade, n=6-17 segun el corte exacto) -- unico resultado positivo de toda la auditoria de candidatas. n todavia bajo, necesita mas dato antes de proponer nada.
+  - _Umbral_: n>=40 y pnl/trade fillable > 0 sostenido
+  - _Acción_: Seguir acumulando snapshots candidato_evaluacion para SOL#15min#BUY_YES en FAVORITO_CONFIRMADO; re-evaluar fill-ability con n>=40 antes de proponer whitelist
+  - _Estado_: SEÑAL POSITIVA confirmada: IC=+0.350 > 0.08 con n=58 PNL=+11.45€
+  - _Datos_: n=58 IC=+0.350 PNL=+11.45€
