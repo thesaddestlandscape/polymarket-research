@@ -431,6 +431,25 @@ def _brier(pred: dict, res: dict) -> str:
         return ""
 
 
+def _log_loss(pred: dict, res: dict) -> str:
+    """Log loss = -[o*ln(p) + (1-o)*ln(1-p)]. Complementa Brier: penaliza mucho
+    más fuerte estar MUY seguro y equivocado (una p=0.95 que falla cuesta
+    ln(20)≈3.0 en log loss vs solo 0.9 en Brier) — el fallo que más costó esta
+    sesión (FAVORITO_CONFIRMADO con 60% hit pero pnl negativo en ejecución
+    real: alta confianza mal calibrada). Clip a [1e-9,1-1e-9] para evitar -inf
+    en p=0 o p=1 exactos. Artículo 12-Jul sobre probabilidad bayesiana bien
+    calibrada — parte 6 (calibración), ver memoria idea_bayes_calibracion_bot."""
+    try:
+        p = float(pred.get("prob_yes_modelo", 0.5) or 0.5)
+        p = min(max(p, 1e-9), 1 - 1e-9)
+        outcome_yes = 1.0 if res["outcome_real"] == "YES" else 0.0
+        import math
+        ll = -(outcome_yes * math.log(p) + (1 - outcome_yes) * math.log(1 - p))
+        return f"{ll:.4f}"
+    except Exception:
+        return ""
+
+
 def _clv(pred: dict, res: dict) -> str:
     """
     Closing Line Value: mide si nuestra predicción tenía edge respecto al mercado.
@@ -530,6 +549,7 @@ def main():
             "features": pred.get("features", ""),
             "brier_score": _brier(pred, res),
             "clv": _clv(pred, res),
+            "log_loss": _log_loss(pred, res),
         })
 
         # Simulación maker (observacional, best-effort — jamás afecta a la
