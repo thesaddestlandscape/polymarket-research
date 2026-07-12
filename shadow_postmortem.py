@@ -18,6 +18,7 @@ import json
 import math
 import random
 import re
+from collections import Counter
 from datetime import datetime, timezone
 from pathlib import Path
 
@@ -37,10 +38,34 @@ UMBRAL_DESACTIVAR = (-0.20, 8)  # bajado de -0.30: desactiva antes estrategias c
 
 
 def cargar_results() -> list:
+    """Carga results.csv deduplicado por (strategy, market_id, decision).
+
+    12-Jul: hallado en auditoría general un duplicado real — FAVORITO_
+    CONFIRMADO#2866629#BUY_YES resuelto dos veces (resolution_timestamp
+    03:13:26 y 03:16:24, 11-Jul), filas por lo demás idénticas. Causa más
+    probable: shadow_resolve.py lee results.csv fresco cada ciclo para
+    saber qué ya está resuelto, y una carrera con el stash/rebase/push del
+    fast loop (run_fast.sh) puede dejarle ver una versión momentáneamente
+    desactualizada del fichero, re-resolviendo un mercado que otro ciclo
+    ya había resuelto segundos/minutos antes; merge=union (protege contra
+    PÉRDIDA de filas) preserva ambas copias en vez de detectar el choque.
+    Este loader es el punto único de lectura para IC/n/filtros_causales/
+    patrones_ganadores — deduplicar aquí protege TODOS los consumidores
+    sin depender de arreglar la causa raíz de la carrera en el loop.
+    Se queda la fila con resolution_timestamp más temprano (la resolución
+    real); las demás son el eco de la re-resolución.
+    """
     if not RESULTS_PATH.exists():
         return []
     with open(RESULTS_PATH, encoding="utf-8") as f:
-        return list(csv.DictReader(f))
+        rows = list(csv.DictReader(f))
+    vistas = {}
+    for r in rows:
+        clave = (r.get("strategy", ""), r.get("market_id", ""), r.get("decision", ""))
+        actual = vistas.get(clave)
+        if actual is None or r.get("resolution_timestamp", "") < actual.get("resolution_timestamp", ""):
+            vistas[clave] = r
+    return list(vistas.values())
 
 
 def _verificar_integridad() -> list[str]:
@@ -58,6 +83,17 @@ def _verificar_integridad() -> list[str]:
         bad = sum(1 for r in rows if r.get("pnl_neto") in (None, ""))
         if bad:
             alertas.append(f"{bad} filas con pnl_neto inválido")
+        # 12-Jul: detecta duplicados (strategy, market_id, decision) — ya
+        # deduplicados de forma transparente en cargar_results(), pero se
+        # avisa igual para poder investigar la causa raíz (carrera git) si
+        # empieza a repetirse con frecuencia en vez de ser un caso aislado.
+        contador = Counter((r.get("strategy",""), r.get("market_id",""), r.get("decision",""))
+                           for r in rows)
+        dup_keys = [k for k, n in contador.items() if n > 1]
+        if dup_keys:
+            ejemplos = ", ".join(f"{s}#{m}#{d}" for s, m, d in dup_keys[:3])
+            alertas.append(f"{len(dup_keys)} predicción(es) resuelta(s) más de una vez "
+                            f"(deduplicado automáticamente en cargar_results): {ejemplos}")
     return alertas
 
 
