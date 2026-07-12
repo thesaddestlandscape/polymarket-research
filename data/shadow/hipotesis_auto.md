@@ -1,4 +1,4 @@
-# Hipótesis automáticas — 2026-07-12 15:24 UTC
+# Hipótesis automáticas — 2026-07-12 15:30 UTC
 _Generado por shadow_postmortem.py sobre 11078 resoluciones (PNL=+2053.17€)_
 
 ## Patrones causales activos
@@ -12,6 +12,14 @@ _Generado por shadow_postmortem.py sobre 11078 resoluciones (PNL=+2053.17€)_
   - _Por qué funciona_: hora temprana → mercados cripto menos líquidos, spreads más amplios; edge real menor
   - _Acción_: Kelly boost +1.00€ cuando `hora_utc` < 8.0 (IC base=+0.213)
 
+- **PATRÓN** `py_entrada` > `0.585` → IC=+0.247 (n=354)
+
+  - _Acción_: Kelly boost +1.00€ cuando `py_entrada` > 0.585 (IC base=+0.213)
+
+- **PATRÓN** `libro_liquidez` > `2790.6958` → IC=+0.225 (n=303)
+
+  - _Acción_: Kelly boost +1.00€ cuando `libro_liquidez` > 2790.6958 (IC base=+0.213)
+
 - **PATRÓN** `hora_utc` > `17.0` → IC=+0.167 (n=121)
   - _Por qué funciona_: hora tardía/noche → sesión US cerrada, menos participantes informados; señales más ruidosas
   - _Acción_: Kelly boost +0.83€ cuando `hora_utc` > 17.0 (IC base=+0.147)
@@ -19,6 +27,10 @@ _Generado por shadow_postmortem.py sobre 11078 resoluciones (PNL=+2053.17€)_
 - **PATRÓN** `hora_utc` < `9.0` → IC=+0.216 (n=167)
   - _Por qué funciona_: hora temprana → mercados cripto menos líquidos, spreads más amplios; edge real menor
   - _Acción_: Kelly boost +1.00€ cuando `hora_utc` < 9.0 (IC base=+0.147)
+
+- **PATRÓN** `py_entrada` < `0.275` → IC=+0.306 (n=127)
+
+  - _Acción_: Kelly boost +1.00€ cuando `py_entrada` < 0.275 (IC base=+0.147)
 
 - **PATRÓN** `libro_spread` < `0.01` → IC=+0.152 (n=412)
 
@@ -36,6 +48,10 @@ _Generado por shadow_postmortem.py sobre 11078 resoluciones (PNL=+2053.17€)_
 - **PATRÓN** `hora_utc` < `17.0` → IC=+0.191 (n=79)
   - _Por qué funciona_: hora temprana → mercados cripto menos líquidos, spreads más amplios; edge real menor
   - _Acción_: Kelly boost +0.96€ cuando `hora_utc` < 17.0 (IC base=+0.189)
+
+- **PATRÓN** `py_entrada` > `0.605` → IC=+0.234 (n=77)
+
+  - _Acción_: Kelly boost +1.00€ cuando `py_entrada` > 0.605 (IC base=+0.189)
 
 - **PATRÓN** `hora_utc` > `9.0` → IC=+0.229 (n=68)
   - _Por qué funciona_: hora tardía/noche → sesión US cerrada, menos participantes informados; señales más ruidosas
@@ -77,6 +93,10 @@ _Generado por shadow_postmortem.py sobre 11078 resoluciones (PNL=+2053.17€)_
 - **PATRÓN** `hora_utc` < `9.0` → IC=+0.158 (n=36)
   - _Por qué funciona_: hora temprana → mercados cripto menos líquidos, spreads más amplios; edge real menor
   - _Acción_: Kelly boost +0.79€ cuando `hora_utc` < 9.0 (IC base=+0.157)
+
+- **PATRÓN** `py_entrada` < `0.245` → IC=+0.259 (n=27)
+
+  - _Acción_: Kelly boost +1.00€ cuando `py_entrada` < 0.245 (IC base=+0.157)
 
 ### FAVORITO_CONFIRMADO#SOL#15min
 - **PATRÓN** `hora_utc` > `18.0` → IC=+0.278 (n=25)
@@ -1136,18 +1156,18 @@ _Derivadas de los patrones aprendidos:_
 
 | Estrategia | n | IC | PNL | Filtros | Patrones |
 |---|---|---|---|---|---|
-| ✅ FAVORITO_CONFIRMADO | 933 | +0.179 | -1.44€ | 0 | 6 |
+| ✅ FAVORITO_CONFIRMADO | 933 | +0.179 | -1.44€ | 0 | 9 |
 | ✅ FAVORITO_CONFIRMADO#15min | 600 | +0.209 | +7.12€ | 0 | 0 |
 | ✅ FAVORITO_CONFIRMADO#240min | 37 | +0.064 | +1.18€ | 0 | 0 |
 | ✅ FAVORITO_CONFIRMADO#5min | 140 | +0.085 | -15.25€ | 0 | 0 |
 | ✅ FAVORITO_CONFIRMADO#60min | 156 | +0.171 | +5.51€ | 0 | 0 |
 | ✅ FAVORITO_CONFIRMADO#BTC | 274 | +0.181 | -7.68€ | 0 | 0 |
-| ✅ FAVORITO_CONFIRMADO#BTC#15min | 200 | +0.203 | -9.10€ | 0 | 6 |
+| ✅ FAVORITO_CONFIRMADO#BTC#15min | 200 | +0.203 | -9.10€ | 0 | 7 |
 | ✅ FAVORITO_CONFIRMADO#BTC#240min | 12 | +0.086 | +1.65€ | 0 | 0 |
 | 🚫 FAVORITO_CONFIRMADO#BTC#5min | 10 | -0.125 | -3.77€ | 0 | 0 |
 | ✅ FAVORITO_CONFIRMADO#BTC#60min | 52 | +0.185 | +3.54€ | 0 | 0 |
 | ✅ FAVORITO_CONFIRMADO#ETH | 331 | +0.167 | +0.91€ | 0 | 0 |
-| ✅ FAVORITO_CONFIRMADO#ETH#15min | 199 | +0.206 | +4.62€ | 0 | 6 |
+| ✅ FAVORITO_CONFIRMADO#ETH#15min | 199 | +0.206 | +4.62€ | 0 | 7 |
 | ✅ FAVORITO_CONFIRMADO#ETH#240min | 12 | -0.043 | -1.12€ | 0 | 0 |
 | ✅ FAVORITO_CONFIRMADO#ETH#5min | 68 | +0.086 | -8.82€ | 0 | 0 |
 | ✅ FAVORITO_CONFIRMADO#ETH#60min | 52 | +0.167 | +6.24€ | 0 | 0 |
