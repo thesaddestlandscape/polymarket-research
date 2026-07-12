@@ -1,4 +1,4 @@
-# Estado del bot — 2026-07-12 05:56 UTC
+# Estado del bot — 2026-07-12 06:02 UTC
 
 ## Live — dinero real (on-chain)
 | | |
@@ -13,11 +13,11 @@
 ## Shadow — MODELO SIMULADO (no cobrable)
 | | |
 |---|---|
-| P&L fiel (stake fijo 1$) | +1127.08 $ |
-| P&L sim compuesto | 🟢 +1750.48 $ (ficción Kelly: +6881% s/ operativo) |
-| P&L sim hoy (2026-07-12) | 🟢 +145.77 $ |
-| Operaciones resueltas | 10451 (5922 WIN / 4529 LOSS) — 56.7% |
-| Señales abiertas | 152 |
+| P&L fiel (stake fijo 1$) | +1123.83 $ |
+| P&L sim compuesto | 🟢 +1747.95 $ (ficción Kelly: +6871% s/ operativo) |
+| P&L sim hoy (2026-07-12) | 🟢 +143.24 $ |
+| Operaciones resueltas | 10456 (5923 WIN / 4533 LOSS) — 56.6% |
+| Señales abiertas | 149 |
 
 ## Estrategias (visión global)
 
@@ -31,12 +31,12 @@
 | ORDER_FLOW_5M | 1584 | 51.3% | +0.013 | ➡️ estable | +17.50$ | 0.50$ | ✅ activa |
 | UPDOWN_GBM | 1302 | 49.2% | -0.008 | 📈 madura (+0.05) | +16.20$ | 0.50$ | ⚠️ IC negativo |
 | LATE_WINDOW_5MIN | 35 | 71.4% | +0.203 | 📉 agota (-0.09) | +10.30$ | 2.00$ | ✅ activa |
-| GBM_LATE_60M | 305 | 38.7% | -0.112 | ➡️ estable | +8.14$ | 0.50$ | ⚠️ IC negativo |
+| GBM_LATE_60M | 307 | 38.4% | -0.115 | ➡️ estable | +7.12$ | 0.50$ | ⚠️ IC negativo |
 | RESOLUTION_SNIPER | 9 | 100.0% | +0.184 | — | +3.91$ | 1.84$ | ✅ activa |
 | GBM_LATE_15M_MULTIHORIZONTE | 6 | 50.0% | +0.000 | — | -0.08$ | 0.50$ | ⏳ acumulando |
-| FAVORITO_CONFIRMADO | 766 | 67.9% | +0.178 | ➡️ estable | -0.13$ | 1.78$ | ✅ activa |
 | PRICE_TARGET_GBM | 136 | 34.6% | -0.152 | 📉 agota (-0.13) | -0.14$ | 0.50$ | ⚠️ IC negativo |
-| STREAK_FADE_5M | 114 | 50.9% | +0.009 | ➡️ estable | -1.99$ | 0.50$ | ✅ activa |
+| FAVORITO_CONFIRMADO | 768 | 67.8% | +0.178 | ➡️ estable | -1.13$ | 1.78$ | ✅ activa |
+| STREAK_FADE_5M | 115 | 50.4% | +0.004 | ➡️ estable | -2.50$ | 0.50$ | ✅ activa |
 | STRUCT_NO_15M | 15 | 20.0% | -0.199 | — | -4.68$ | 0.00$ | 🚫 desactivada |
 | WEEKLY_PRICE | 192 | 57.8% | +0.077 | 📈 madura (+0.23) | -13.59$ | 0.77$ | ✅ activa |
 | SMART_FLOW_1H | 29 | 20.7% | -0.274 | — | -13.82$ | 0.00$ | 🚫 desactivada |
@@ -47,30 +47,30 @@
 
 | Timestamp | Estrategia | Mercado | Resultado | PNL |
 |---|---|---|---|---|
-| 2026-07-12T05:50 | STREAK_FADE_5M#XRP#5min | XRP Up or Down - July 12, 1:40AM-1:45AM ET… | ✅ WIN | +0.49$ |
-| 2026-07-12T05:49 | GBM_LATE_15M_ESPACIO_ATR#SOL#15min | Solana Up or Down - July 12, 1:30AM-1:45AM ET… | ❌ LOSS | -0.95$ |
-| 2026-07-12T05:49 | GBM_LATE_15M_ESPACIO_ATR#XRP#15min | XRP Up or Down - July 12, 1:30AM-1:45AM ET… | ✅ WIN | +1.92$ |
-| 2026-07-12T05:49 | FAVORITO_CONFIRMADO#BTC#15min | Bitcoin Up or Down - July 12, 1:30AM-1:45AM ET… | ✅ WIN | +0.38$ |
-| 2026-07-12T05:49 | GBM_LATE_15M_TARDIO#SOL#15min | Solana Up or Down - July 12, 1:30AM-1:45AM ET… | ✅ WIN | +0.76$ |
+| 2026-07-12T06:02 | GBM_LATE_60M#ETH#60min | Ethereum Up or Down - July 12, 1AM ET… | ❌ LOSS | -0.51$ |
+| 2026-07-12T06:02 | FAVORITO_CONFIRMADO#ETH#60min | Ethereum Up or Down - July 12, 1AM ET… | ❌ LOSS | -2.04$ |
+| 2026-07-12T06:00 | STREAK_FADE_5M#ETH#5min | Ethereum Up or Down - July 12, 1:55AM-2:00AM ET… | ❌ LOSS | -0.51$ |
+| 2026-07-12T06:00 | GBM_LATE_60M#SOL#60min | Solana Up or Down - July 12, 1AM ET… | ❌ LOSS | -0.51$ |
+| 2026-07-12T06:00 | FAVORITO_CONFIRMADO#SOL#60min | Solana Up or Down - July 12, 1AM ET… | ✅ WIN | +1.04$ |
 
 ## Calidad de datos
 
-✅ **OK** — última verificación 2026-07-12T05:55 UTC
+✅ **OK** — última verificación 2026-07-12T06:02 UTC
 
 | Asset | Precio | Age | Alertas |
 |---|---|---|---|
-| ✅ BTC | $63,926.00 | 0.1min |  |
-| ✅ ETH | $1,802.94 | 0.1min |  |
-| ✅ SOL | $76.48 | 0.1min |  |
+| ✅ BTC | $63,947.03 | 0.1min |  |
+| ✅ ETH | $1,802.64 | 0.1min |  |
+| ✅ SOL | $76.41 | 0.1min |  |
 | ✅ XRP | $1.09 | 0.1min |  |
 
 **Cross-source** (binance, coinbase, kraken):
 
 | Asset | Consenso | Fuente | Estado |
 |---|---|---|---|
-| BTC | $63,929.20 | consenso |  |
-| ETH | $1,802.94 | consenso |  |
-| SOL | $76.40 | consenso |  |
+| BTC | $63,947.03 | consenso |  |
+| ETH | $1,802.74 | consenso |  |
+| SOL | $76.42 | consenso |  |
 | XRP | $1.09 | consenso |  |
 
 ---
