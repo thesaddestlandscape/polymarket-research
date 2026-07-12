@@ -1,4 +1,4 @@
-# Estado del bot — 2026-07-12 10:09 UTC
+# Estado del bot — 2026-07-12 10:14 UTC
 
 ## Live — dinero real (on-chain)
 | | |
@@ -13,11 +13,11 @@
 ## Shadow — MODELO SIMULADO (no cobrable)
 | | |
 |---|---|
-| P&L fiel (stake fijo 1$) | +1177.69 $ |
-| P&L sim compuesto | 🟢 +1863.67 $ (ficción Kelly: +7326% s/ operativo) |
-| P&L sim hoy (2026-07-12) | 🟢 +258.96 $ |
-| Operaciones resueltas | 10762 (6118 WIN / 4644 LOSS) — 56.8% |
-| Señales abiertas | 148 |
+| P&L fiel (stake fijo 1$) | +1176.69 $ |
+| P&L sim compuesto | 🟢 +1862.72 $ (ficción Kelly: +7322% s/ operativo) |
+| P&L sim hoy (2026-07-12) | 🟢 +258.01 $ |
+| Operaciones resueltas | 10763 (6118 WIN / 4645 LOSS) — 56.8% |
+| Señales abiertas | 150 |
 
 ## Estrategias (visión global)
 
@@ -37,7 +37,7 @@
 | GBM_LATE_15M_MULTIHORIZONTE | 6 | 50.0% | +0.000 | — | -0.08$ | 0.50$ | ⏳ acumulando |
 | PRICE_TARGET_GBM | 136 | 34.6% | -0.152 | 📉 agota (-0.13) | -0.14$ | 0.50$ | ⚠️ IC negativo |
 | STRUCT_NO_15M | 15 | 20.0% | -0.199 | — | -4.68$ | 0.00$ | 🚫 desactivada |
-| STREAK_FADE_5M | 154 | 44.8% | -0.051 | 📉 agota (-0.09) | -11.98$ | 0.50$ | ⚠️ IC negativo |
+| STREAK_FADE_5M | 155 | 44.5% | -0.054 | 📉 agota (-0.09) | -12.93$ | 0.50$ | ⚠️ IC negativo |
 | WEEKLY_PRICE | 192 | 57.8% | +0.077 | 📈 madura (+0.23) | -13.59$ | 0.77$ | ✅ activa |
 | SMART_FLOW_1H | 29 | 20.7% | -0.274 | — | -13.82$ | 0.00$ | 🚫 desactivada |
 | UPDOWN_OU_5M | 84 | 28.6% | -0.209 | 📉 agota (-0.14) | -18.89$ | 0.00$ | 🚫 desactivada |
@@ -47,15 +47,15 @@
 
 | Timestamp | Estrategia | Mercado | Resultado | PNL |
 |---|---|---|---|---|
+| 2026-07-12T10:12 | STREAK_FADE_5M#XRP#5min | XRP Up or Down - July 12, 6:05AM-6:10AM ET… | ❌ LOSS | -0.95$ |
 | 2026-07-12T10:06 | STREAK_FADE_5M#XRP#5min | XRP Up or Down - July 12, 6:00AM-6:05AM ET… | ❌ LOSS | -0.95$ |
 | 2026-07-12T10:06 | FAVORITO_CONFIRMADO#SOL#60min | Solana Up or Down - July 12, 5AM ET… | ❌ LOSS | -2.04$ |
 | 2026-07-12T10:05 | GBM_LATE_60M#BTC#60min | Bitcoin Up or Down - July 12, 5AM ET… | ❌ LOSS | -1.64$ |
 | 2026-07-12T10:05 | FAVORITO_CONFIRMADO#ETH#60min | Ethereum Up or Down - July 12, 5AM ET… | ✅ WIN | +0.94$ |
-| 2026-07-12T10:05 | FAVORITO_CONFIRMADO#BTC#60min | Bitcoin Up or Down - July 12, 5AM ET… | ✅ WIN | +1.38$ |
 
 ## Calidad de datos
 
-✅ **OK** — última verificación 2026-07-12T10:08 UTC
+✅ **OK** — última verificación 2026-07-12T10:13 UTC
 
 | Asset | Precio | Age | Alertas |
 |---|---|---|---|
