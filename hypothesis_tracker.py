@@ -91,9 +91,11 @@ def _hour_from_ts(r):
 
 
 def _load_results():
-    if not RESULTS_CSV.exists():
-        return []
-    return list(csv.DictReader(open(RESULTS_CSV, encoding="utf-8")))
+    # 13-Jul: deduplicado por (strategy, market_id, decision) vía módulo
+    # compartido (ver resultados_dedup.py) — antes leía el CSV crudo,
+    # divergiendo de shadow_postmortem.py si una resolución se duplica.
+    from resultados_dedup import cargar_results_dedup
+    return cargar_results_dedup(RESULTS_CSV)
 
 
 def _jon_becker_disponible():

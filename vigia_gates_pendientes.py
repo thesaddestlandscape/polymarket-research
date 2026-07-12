@@ -23,12 +23,10 @@ RESULTS = REPO / "data/shadow/results.csv"
 
 
 def _cargar_resultados():
-    import csv
-    rows = []
-    with open(RESULTS, newline="") as f:
-        for row in csv.DictReader(f):
-            rows.append(row)
-    return rows
+    # 13-Jul: deduplicado por (strategy, market_id, decision) — ver
+    # resultados_dedup.py, mismo fix que shadow_postmortem.cargar_results.
+    from resultados_dedup import cargar_results_dedup
+    return cargar_results_dedup(RESULTS)
 
 
 def _cumple(row, gate):

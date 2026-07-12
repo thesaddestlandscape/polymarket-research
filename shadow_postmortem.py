@@ -54,18 +54,13 @@ def cargar_results() -> list:
     sin depender de arreglar la causa raíz de la carrera en el loop.
     Se queda la fila con resolution_timestamp más temprano (la resolución
     real); las demás son el eco de la re-resolución.
+
+    13-Jul: lógica extraída a resultados_dedup.py (propuesta #4 lista puntos
+    ciegos) para que otros consumidores (hypothesis_tracker.py, vigias) no
+    reimplementen su propio csv.DictReader crudo — un solo punto de verdad.
     """
-    if not RESULTS_PATH.exists():
-        return []
-    with open(RESULTS_PATH, encoding="utf-8") as f:
-        rows = list(csv.DictReader(f))
-    vistas = {}
-    for r in rows:
-        clave = (r.get("strategy", ""), r.get("market_id", ""), r.get("decision", ""))
-        actual = vistas.get(clave)
-        if actual is None or r.get("resolution_timestamp", "") < actual.get("resolution_timestamp", ""):
-            vistas[clave] = r
-    return list(vistas.values())
+    from resultados_dedup import cargar_results_dedup
+    return cargar_results_dedup(RESULTS_PATH)
 
 
 def _verificar_integridad() -> list[str]:

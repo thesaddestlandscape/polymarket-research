@@ -32,26 +32,46 @@ sys.path.insert(0, str(REPO))
 
 RESULTS = REPO / "data/shadow/results.csv"
 TRADES = REPO / "data/live/trades.csv"
+CONFIG_LIVE = REPO / "data/live/config_live.json"
 OUT = REPO / "data/shadow/degradacion_live.csv"
 LATCH = REPO / "data/live/vigia_degradacion_live_latch.json"
 
-PARES = ["SOL", "ETH"]
-ESTRATEGIA = "GBM_LATE_15M"
-DIRECCION = "BUY_YES"
 VENTANA_RECIENTE = 30
 UMBRAL_RECUPERACION = 0.05  # €/trade — por encima de esto se resetea el latch
+
+# Fail-safe (13-Jul, propuesta #4 lista puntos ciegos): si config_live.json no
+# se puede leer, monitorizar las tuplas conocidas de HOY en vez de vigilar la
+# nada — mismo espíritu fail-safe que _es_par_live_protegido en shadow_predict.
+_FALLBACK_TUPLAS = [("GBM_LATE_15M", "SOL", "15min", "BUY_YES"),
+                    ("GBM_LATE_15M", "ETH", "15min", "BUY_YES")]
 
 _CAMPOS = ["fecha", "par", "n_shadow", "ic_shadow", "n_ejecutado_total",
            "hit_total_pct", "pnl_trade_total", "n_ult30", "hit_ult30_pct",
            "pnl_trade_ult30"]
 
 
-def _shadow_ic(par: str):
+def _tuplas_live() -> list:
+    """Lee pares_permitidos_live dinámicamente en vez de tener SOL/ETH
+    hardcodeado — si la whitelist cambia mañana, este vigía la sigue solo."""
+    try:
+        cfg = json.loads(CONFIG_LIVE.read_text(encoding="utf-8"))
+        pares = cfg.get("pares_permitidos_live", [])
+        tuplas = []
+        for p in pares:
+            partes = p.split("#")
+            if len(partes) == 4:
+                tuplas.append(tuple(partes))
+        return tuplas or _FALLBACK_TUPLAS
+    except Exception:
+        return _FALLBACK_TUPLAS
+
+
+def _shadow_ic(strategy: str, subtype: str, direccion: str):
     n, hits = 0, 0
     with open(RESULTS, encoding="utf-8") as f:
         for r in csv.DictReader(f):
-            if (r.get("strategy") == ESTRATEGIA and r.get("subtype") == f"{par}#15min"
-                    and r.get("decision") == DIRECCION):
+            if (r.get("strategy") == strategy and r.get("subtype") == subtype
+                    and r.get("decision") == direccion):
                 n += 1
                 hits += int(r.get("acierto") or 0)
     if n == 0:
@@ -60,12 +80,12 @@ def _shadow_ic(par: str):
     return n, ic
 
 
-def _ejecutado_real(par: str):
+def _ejecutado_real(strategy: str, subtype: str, direccion: str):
     filas = []
     with open(TRADES, encoding="utf-8") as f:
         for r in csv.DictReader(f):
-            if (r.get("strategy") == ESTRATEGIA and r.get("subtype") == f"{par}#15min"
-                    and r.get("direction") == DIRECCION and r.get("status") == "CLOSED"
+            if (r.get("strategy") == strategy and r.get("subtype") == subtype
+                    and r.get("direction") == direccion and r.get("status") == "CLOSED"
                     and "maker_pilot=1" not in (r.get("notas") or "")):
                 try:
                     filas.append((r.get("close_timestamp", ""), float(r.get("pnl_neto_eur") or 0),
@@ -96,9 +116,11 @@ def main() -> int:
         if nuevo_archivo:
             w.writeheader()
 
-        for par in PARES:
-            n_shadow, ic_shadow = _shadow_ic(par)
-            filas = _ejecutado_real(par)
+        for strategy, activo, duracion, direccion in _tuplas_live():
+            subtype = f"{activo}#{duracion}"
+            clave = f"{strategy}#{subtype}#{direccion}"
+            n_shadow, ic_shadow = _shadow_ic(strategy, subtype, direccion)
+            filas = _ejecutado_real(strategy, subtype, direccion)
             n_tot = len(filas)
             if n_tot == 0:
                 continue
@@ -110,13 +132,13 @@ def main() -> int:
             hit_ult = sum(1 for _, _, ok in ult30 if ok) / n_ult * 100 if n_ult else None
             pnl_ult = sum(p for _, p, _ in ult30) / n_ult if n_ult else None
 
-            print(f"[vigia_degradacion_live] {par}: shadow n={n_shadow} ic={ic_shadow:+.3f} | "
+            print(f"[vigia_degradacion_live] {clave}: shadow n={n_shadow} ic={ic_shadow:+.3f} | "
                   f"ejecutado n={n_tot} hit={hit_tot:.1f}% pnl/trade={pnl_tot:+.3f} | "
                   f"ult{n_ult} hit={hit_ult:.1f}% pnl/trade={pnl_ult:+.3f}" if hit_ult is not None
-                  else f"[vigia_degradacion_live] {par}: sin datos suficientes")
+                  else f"[vigia_degradacion_live] {clave}: sin datos suficientes")
 
             w.writerow({
-                "fecha": fecha, "par": par, "n_shadow": n_shadow,
+                "fecha": fecha, "par": clave, "n_shadow": n_shadow,
                 "ic_shadow": round(ic_shadow, 4) if ic_shadow is not None else "",
                 "n_ejecutado_total": n_tot, "hit_total_pct": round(hit_tot, 1),
                 "pnl_trade_total": round(pnl_tot, 4),
@@ -128,16 +150,16 @@ def main() -> int:
             if n_ult < 10 or pnl_ult is None:
                 continue  # ventana reciente demasiado corta para fiarse
 
-            ya_alertado = latch.get(par, {}).get("negativo", False)
+            ya_alertado = latch.get(clave, {}).get("negativo", False)
             if pnl_ult < 0 and not ya_alertado:
                 avisos.append(
-                    f"{par}: últimos {n_ult} ejecutados hit={hit_ult:.1f}% "
+                    f"{clave}: últimos {n_ult} ejecutados hit={hit_ult:.1f}% "
                     f"pnl/trade={pnl_ult:+.3f}€ (shadow de papel: {n_shadow} señales, "
                     f"ic={ic_shadow:+.3f})"
                 )
-                latch.setdefault(par, {})["negativo"] = True
+                latch.setdefault(clave, {})["negativo"] = True
             elif pnl_ult > UMBRAL_RECUPERACION and ya_alertado:
-                latch.setdefault(par, {})["negativo"] = False
+                latch.setdefault(clave, {})["negativo"] = False
 
     if avisos:
         msg = (
