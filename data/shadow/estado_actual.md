@@ -1,4 +1,4 @@
-# Estado del bot — 2026-07-12 14:15 UTC
+# Estado del bot — 2026-07-12 14:20 UTC
 
 ## Live — dinero real (on-chain)
 | | |
@@ -13,27 +13,27 @@
 ## Shadow — MODELO SIMULADO (no cobrable)
 | | |
 |---|---|
-| P&L fiel (stake fijo 1$) | +1235.62 $ |
-| P&L sim compuesto | 🟢 +1987.21 $ (ficción Kelly: +7811% s/ operativo) |
-| P&L sim hoy (2026-07-12) | 🟢 +382.50 $ |
-| Operaciones resueltas | 11000 (6270 WIN / 4730 LOSS) — 57.0% |
-| Señales abiertas | 150 |
+| P&L fiel (stake fijo 1$) | +1248.47 $ |
+| P&L sim compuesto | 🟢 +2008.55 $ (ficción Kelly: +7895% s/ operativo) |
+| P&L sim hoy (2026-07-12) | 🟢 +403.84 $ |
+| Operaciones resueltas | 11016 (6284 WIN / 4732 LOSS) — 57.0% |
+| Señales abiertas | 140 |
 
 ## Estrategias (visión global)
 
 | Estrategia | n | Win% | IC_efectivo | Tendencia | PNL | Apuesta | Estado |
 |---|---|---|---|---|---|---|---|
-| GBM_LATE_15M | 3597 | 61.3% | +0.113 | ➡️ estable | +1182.69$ | 1.13$ | ✅ activa |
-| GBM_LATE_15M_ESPACIO_ATR | 957 | 66.2% | +0.162 | ➡️ estable | +517.65$ | 1.62$ | ✅ activa |
-| GBM_LATE_15M_TARDIO | 1122 | 58.1% | +0.081 | ➡️ estable | +271.95$ | 0.81$ | ✅ activa |
-| UPDOWN_GBM | 1323 | 49.3% | -0.007 | 📈 madura (+0.05) | +25.00$ | 0.50$ | ⚠️ IC negativo |
+| GBM_LATE_15M | 3601 | 61.4% | +0.114 | ➡️ estable | +1190.70$ | 1.14$ | ✅ activa |
+| GBM_LATE_15M_ESPACIO_ATR | 961 | 66.4% | +0.164 | ➡️ estable | +526.47$ | 1.64$ | ✅ activa |
+| GBM_LATE_15M_TARDIO | 1126 | 58.3% | +0.082 | ➡️ estable | +278.71$ | 0.82$ | ✅ activa |
+| UPDOWN_GBM | 1324 | 49.3% | -0.007 | 📈 madura (+0.05) | +25.50$ | 0.50$ | ⚠️ IC negativo |
 | STREAK_FADE_15M | 151 | 61.6% | +0.114 | 📈 madura (+0.19) | +18.94$ | 1.14$ | ✅ activa |
 | LEADLAG_BTC_XRP_15M | 66 | 62.1% | +0.118 | ➡️ estable | +18.50$ | 1.18$ | ✅ activa |
 | ORDER_FLOW_5M | 1584 | 51.3% | +0.013 | ➡️ estable | +17.50$ | 0.50$ | ✅ activa |
 | LATE_WINDOW_5MIN | 35 | 71.4% | +0.203 | 📉 agota (-0.09) | +10.30$ | 2.00$ | ✅ activa |
 | GBM_LATE_60M | 310 | 38.4% | -0.115 | ➡️ estable | +4.97$ | 0.50$ | ⚠️ IC negativo |
 | RESOLUTION_SNIPER | 9 | 100.0% | +0.184 | — | +3.91$ | 1.84$ | ✅ activa |
-| FAVORITO_CONFIRMADO | 915 | 68.1% | +0.180 | 📈 madura (+0.04) | +3.08$ | 1.80$ | ✅ activa |
+| FAVORITO_CONFIRMADO | 918 | 68.0% | +0.179 | 📈 madura (+0.03) | +0.32$ | 1.79$ | ✅ activa |
 | GBM_LATE_15M_MULTIHORIZONTE | 6 | 50.0% | +0.000 | — | -0.08$ | 0.50$ | ⏳ acumulando |
 | PRICE_TARGET_GBM | 136 | 34.6% | -0.152 | 📉 agota (-0.13) | -0.14$ | 0.50$ | ⚠️ IC negativo |
 | STRUCT_NO_15M | 15 | 20.0% | -0.199 | — | -4.68$ | 0.00$ | 🚫 desactivada |
@@ -47,15 +47,15 @@
 
 | Timestamp | Estrategia | Mercado | Resultado | PNL |
 |---|---|---|---|---|
-| 2026-07-12T14:06 | FAVORITO_CONFIRMADO#SOL#60min | Solana Up or Down - July 12, 9AM ET… | ❌ LOSS | -2.04$ |
-| 2026-07-12T14:04 | FAVORITO_CONFIRMADO#SOL#15min | Solana Up or Down - July 12, 9:45AM-10:00AM ET… | ✅ WIN | +0.72$ |
-| 2026-07-12T14:04 | GBM_LATE_15M_ESPACIO_ATR#SOL#15min | Solana Up or Down - July 12, 9:45AM-10:00AM ET… | ✅ WIN | +1.92$ |
-| 2026-07-12T14:04 | GBM_LATE_15M_TARDIO#XRP#15min | XRP Up or Down - July 12, 9:45AM-10:00AM ET… | ✅ WIN | +2.00$ |
-| 2026-07-12T14:04 | GBM_LATE_15M_TARDIO#SOL#15min | Solana Up or Down - July 12, 9:45AM-10:00AM ET… | ✅ WIN | +1.44$ |
+| 2026-07-12T14:18 | GBM_LATE_15M_ESPACIO_ATR#ETH#15min | Ethereum Up or Down - July 12, 10:00AM-10:15AM ET… | ✅ WIN | +2.12$ |
+| 2026-07-12T14:18 | GBM_LATE_15M_TARDIO#ETH#15min | Ethereum Up or Down - July 12, 10:00AM-10:15AM ET… | ✅ WIN | +1.93$ |
+| 2026-07-12T14:18 | GBM_LATE_15M#ETH#15min | Ethereum Up or Down - July 12, 10:00AM-10:15AM ET… | ✅ WIN | +1.94$ |
+| 2026-07-12T14:18 | GBM_LATE_15M_ESPACIO_ATR#BTC#15min | Bitcoin Up or Down - July 12, 10:00AM-10:15AM ET… | ✅ WIN | +2.67$ |
+| 2026-07-12T14:18 | GBM_LATE_15M_TARDIO#BTC#15min | Bitcoin Up or Down - July 12, 10:00AM-10:15AM ET… | ✅ WIN | +1.84$ |
 
 ## Calidad de datos
 
-✅ **OK** — última verificación 2026-07-12T14:14 UTC
+✅ **OK** — última verificación 2026-07-12T14:19 UTC
 
 | Asset | Precio | Age | Alertas |
 |---|---|---|---|
