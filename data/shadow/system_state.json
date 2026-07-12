@@ -1,9 +1,9 @@
 {
-  "timestamp_utc": "2026-07-12T09:11:47+00:00",
-  "bankroll_sim": 1871.92,
-  "pnl_total": 1851.92,
-  "n_ops": 10696,
-  "win_rate": 0.5682,
+  "timestamp_utc": "2026-07-12T09:17:09+00:00",
+  "bankroll_sim": 1867.57,
+  "pnl_total": 1847.57,
+  "n_ops": 10707,
+  "win_rate": 0.5679,
   "estrategias_activas": 178,
   "desactivadas": [
     "UPDOWN_GBM#SOL#5min",
@@ -41,12 +41,12 @@
     },
     {
       "k": "FAVORITO_CONFIRMADO#BTC#15min",
-      "ic": 0.2191,
-      "n": 176
+      "ic": 0.2151,
+      "n": 177
     }
   ],
-  "brier_medio": 0.2383,
-  "clv_medio": 0.0775,
+  "brier_medio": 0.2384,
+  "clv_medio": 0.0771,
   "monitor_5min": {
     "ou_5m": {
       "n": 84,
