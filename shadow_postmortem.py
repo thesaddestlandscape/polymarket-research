@@ -843,6 +843,30 @@ _BASE_GBM = [
     ("sigma_ewma_delta_pct", "gt", "lt"),
 ]
 
+# Features de FAVORITO_CONFIRMADO (momentum-consenso, model-free — NO usa el
+# estadístico GBM, _BASE_GBM no le sirve: sus features son otras).
+_BASE_FAVORITO = [
+    ("hora_utc",      "lt", "gt"),
+    ("hora_utc",      "gt", "lt"),
+    ("py_entrada",    "gt", "lt"),
+    ("py_entrada",    "lt", "gt"),
+    ("libro_spread",  "gt", "lt"),
+    ("libro_liquidez","lt", "gt"),
+]
+
+# Features de STREAK_FADE_15M (reversión de racha, features propias).
+_BASE_STREAK_FADE = [
+    ("hora_utc",          "lt", "gt"),
+    ("hora_utc",          "gt", "lt"),
+    ("py_entrada",        "gt", "lt"),
+    ("py_entrada",        "lt", "gt"),
+    ("streak_len",        "gt", "lt"),
+    ("regimen_ma_toques", "lt", "gt"),
+    ("volumen_racha",     "gt", "lt"),
+    ("libro_spread",      "gt", "lt"),
+    ("libro_liquidez",    "lt", "gt"),
+]
+
 FEATURE_RULES = {
     # 5min: desactivadas manualmente, pero seguimos aprendiendo por si acaso se reactivan
     "UPDOWN_GBM#5min":     _BASE_GBM,
@@ -875,6 +899,47 @@ FEATURE_RULES = {
     "GBM_LATE_15M#ETH#15min": _BASE_GBM,
     "GBM_LATE_15M#SOL#15min": _BASE_GBM,
     "GBM_LATE_15M#XRP#15min": _BASE_GBM,
+
+    # Variantes de GBM_LATE_15M (12-Jul, petición Javi "desagregar todo por
+    # activo"): TARDIO/ESPACIO_ATR/60M reusan el mismo motor _s_gbm_late, así
+    # que su dict de features es IDÉNTICO a GBM_LATE_15M — _BASE_GBM aplica
+    # directo. Ninguna tenía NINGÚN aprendizaje causal, ni agregado ni por
+    # activo, pese a ser candidatas activas a whitelist hoy mismo.
+    "GBM_LATE_15M_TARDIO":         _BASE_GBM,
+    "GBM_LATE_15M_TARDIO#BTC#15min": _BASE_GBM,
+    "GBM_LATE_15M_TARDIO#ETH#15min": _BASE_GBM,
+    "GBM_LATE_15M_TARDIO#SOL#15min": _BASE_GBM,
+    "GBM_LATE_15M_TARDIO#XRP#15min": _BASE_GBM,
+    "GBM_LATE_15M_ESPACIO_ATR":         _BASE_GBM,
+    "GBM_LATE_15M_ESPACIO_ATR#BTC#15min": _BASE_GBM,
+    "GBM_LATE_15M_ESPACIO_ATR#ETH#15min": _BASE_GBM,
+    "GBM_LATE_15M_ESPACIO_ATR#SOL#15min": _BASE_GBM,
+    "GBM_LATE_15M_ESPACIO_ATR#XRP#15min": _BASE_GBM,
+    "GBM_LATE_60M":         _BASE_GBM,
+    "GBM_LATE_60M#BTC#60min": _BASE_GBM,
+    "GBM_LATE_60M#ETH#60min": _BASE_GBM,
+    "GBM_LATE_60M#SOL#60min": _BASE_GBM,
+    "GBM_LATE_60M#XRP#60min": _BASE_GBM,
+
+    # FAVORITO_CONFIRMADO (12-Jul): candidata top de hoy (6 tuplas BTC/ETH/SOL
+    # x BUY_YES/BUY_NO), 0 aprendizaje causal hasta ahora — mecanismo distinto
+    # (model-free), features propias vía _BASE_FAVORITO.
+    "FAVORITO_CONFIRMADO":            _BASE_FAVORITO,
+    "FAVORITO_CONFIRMADO#BTC#15min":  _BASE_FAVORITO,
+    "FAVORITO_CONFIRMADO#ETH#15min":  _BASE_FAVORITO,
+    "FAVORITO_CONFIRMADO#SOL#15min":  _BASE_FAVORITO,
+    "FAVORITO_CONFIRMADO#BTC#60min":  _BASE_FAVORITO,
+    "FAVORITO_CONFIRMADO#ETH#60min":  _BASE_FAVORITO,
+    "FAVORITO_CONFIRMADO#SOL#60min":  _BASE_FAVORITO,
+
+    # STREAK_FADE_15M (12-Jul): shadow activa con IC prometedor, 0 aprendizaje
+    # causal por activo hasta ahora.
+    "STREAK_FADE_15M":         _BASE_STREAK_FADE,
+    "STREAK_FADE_15M#BTC#15min": _BASE_STREAK_FADE,
+    "STREAK_FADE_15M#ETH#15min": _BASE_STREAK_FADE,
+    "STREAK_FADE_15M#SOL#15min": _BASE_STREAK_FADE,
+    "STREAK_FADE_15M#XRP#15min": _BASE_STREAK_FADE,
+
     # ORDER_FLOW: delta_ratio es la señal principal + hora
     # total_vol_5m (11-Jul, análisis manual SOL#5min): terciles invertidos —
     # vol BAJO ic_bayes+0.038→+0.119 forward, vol ALTO ic=0.000→-0.100 forward
