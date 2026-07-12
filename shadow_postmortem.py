@@ -887,6 +887,16 @@ _BASE_PRICE_TARGET = [
     ("pct_vs_K",   "abs_gt", "abs_lt"),
 ]
 
+# Features de ORDER_FLOW_5M (delta_ratio es la señal principal + hora +
+# volumen). Extraída a variable reusable (12-Jul) para poder aplicarla tanto
+# al agregado como a cada activo por separado.
+_BASE_ORDER_FLOW = [
+    ("delta_ratio",  "abs_lt", "abs_gt"),
+    ("hora_utc",     "lt",     "gt"),
+    ("hora_utc",     "gt",     "lt"),
+    ("total_vol_5m", "gt",     "lt"),
+]
+
 # Features de LEADLAG_BTC_XRP_15M (single-asset por diseño: solo opera XRP
 # siguiendo el momentum de BTC, no hay "por activo" que desagregar aquí).
 _BASE_LEADLAG = [
@@ -1012,10 +1022,17 @@ FEATURE_RULES = {
     # (n=94/n=8, replica fuera de la ventana burst 24-25jun que calibró los
     # demás filtros). Nunca estaba en FEATURE_RULES pese a llevar logueado
     # desde el principio — el pipeline automático no podía descubrirlo solo.
-    "ORDER_FLOW_5M":       [("delta_ratio",        "abs_lt", "abs_gt"),
-                            ("hora_utc",            "lt",     "gt"),
-                            ("hora_utc",            "gt",     "lt"),
-                            ("total_vol_5m",        "gt",     "lt")],
+    "ORDER_FLOW_5M":       _BASE_ORDER_FLOW,
+    # Por activo (12-Jul): ya sabíamos que BTC/SOL se comportan distinto
+    # (BTC bloqueado por zero-intelligence 11-Jul, SOL único con IC real) —
+    # pero el aprendizaje causal solo miraba el agregado. Con esto, cada
+    # activo acumula su propio filtro/patrón en vez de heredar el ajeno.
+    "ORDER_FLOW_5M#SOL#5min": _BASE_ORDER_FLOW,
+    "ORDER_FLOW_5M#BTC#5min": _BASE_ORDER_FLOW,
+    "ORDER_FLOW_5M#ETH#5min": _BASE_ORDER_FLOW,
+    "ORDER_FLOW_5M#XRP#5min": _BASE_ORDER_FLOW,
+    "ORDER_FLOW_5M#DOGE#5min": _BASE_ORDER_FLOW,
+    "ORDER_FLOW_5M#BNB#5min": _BASE_ORDER_FLOW,
 }
 
 IC_FILTRO_MIN   = -0.12   # IC para activar filtro (evitar)
