@@ -529,6 +529,58 @@ def _estimar_slip_kyle(ratio_vs_stake: float | None) -> float | None:
 
 SNAPSHOT_LIBRO_CSV = DIR_LIVE / "libro_snapshots.csv"
 
+# ── Tendencia de profundidad (12-Jul, idea VPIN/order-book-imbalance) ──────
+# Javi compartió técnicas de detección de toxic flow de market making
+# (canarios, pull-quotes-and-fade, VPIN). Los canarios no aplican (CLOB
+# exige mínimo $1, no hay hueco para sondas), pull-quotes-and-fade explica
+# el mecanismo ya conocido de selección adversa (no es algo que hagamos
+# nosotros). VPIN/order-book-imbalance SÍ tiene un ángulo nuevo: H-OBI se
+# archivó como "irrecuperable" (idea_hobi_refutada_sin_dato) porque el
+# dataset histórico Jon-Becker no tiene order book — pero eso solo bloquea
+# el BACKTEST; hacia adelante, el reintento del ciclo rápido (~cada 4-5s)
+# ya vuelve a consultar el mismo mercado varias veces, así que podemos medir
+# la TENDENCIA de profundidad (¿se llena o se vacía entre lecturas?) gratis,
+# sin infraestructura nueva. Puramente observacional: se logea junto al
+# snapshot existente, nunca decide nada. Validar con el mismo pipeline
+# causal×fillable ya construido antes de plantear cualquier veto.
+PROFUNDIDAD_TENDENCIA_JSON = DIR_LIVE / "profundidad_tendencia_state.json"
+PROFUNDIDAD_TENDENCIA_TTL_SEG = 1800  # 30min — más que suficiente para 15min de vida de mercado más margen
+
+
+def _tendencia_profundidad(market_id: str, strategy: str, direction: str,
+                            profundidad_eur) -> float | None:
+    """Delta de profundidad_eur vs la última lectura de esta MISMA tupla
+    (market_id+strategy+direction). None si es la primera lectura o si la
+    anterior es demasiado vieja (mercado distinto reutilizando el id no
+    debería pasar, pero TTL protege igual). Nunca lanza — solo lectura."""
+    try:
+        estado = json.loads(PROFUNDIDAD_TENDENCIA_JSON.read_text()) \
+            if PROFUNDIDAD_TENDENCIA_JSON.exists() else {}
+    except Exception:
+        estado = {}
+    clave = f"{market_id}#{strategy}#{direction}"
+    ahora = datetime.now(timezone.utc)
+    delta = None
+    if profundidad_eur is not None and profundidad_eur != "":
+        try:
+            pf_actual = float(profundidad_eur)
+            prev = estado.get(clave)
+            if prev:
+                prev_ts = datetime.fromisoformat(prev["ts"])
+                if (ahora - prev_ts).total_seconds() <= PROFUNDIDAD_TENDENCIA_TTL_SEG:
+                    delta = round(pf_actual - float(prev["profundidad_eur"]), 4)
+            estado[clave] = {"profundidad_eur": pf_actual, "ts": ahora.isoformat(timespec="seconds")}
+        except Exception:
+            pass
+    # poda: fuera del TTL, para no crecer sin límite durante el día
+    estado = {k: v for k, v in estado.items()
+              if (ahora - datetime.fromisoformat(v["ts"])).total_seconds() <= PROFUNDIDAD_TENDENCIA_TTL_SEG}
+    try:
+        PROFUNDIDAD_TENDENCIA_JSON.write_text(json.dumps(estado))
+    except Exception:
+        pass
+    return delta
+
 
 def _registrar_snapshot_libro(motivo: str, market_id: str, direction: str,
                               precio_plan, stake_eur, depth: dict | None,
@@ -544,6 +596,8 @@ def _registrar_snapshot_libro(motivo: str, market_id: str, direction: str,
     try:
         ctx = contexto or {}
         d = depth or {}
+        delta_prof = _tendencia_profundidad(market_id, ctx.get("strategy", ""),
+                                             direction, d.get("profundidad_eur"))
         nuevo = not SNAPSHOT_LIBRO_CSV.exists()
         with open(SNAPSHOT_LIBRO_CSV, "a", newline="", encoding="utf-8") as f:
             w = csv.writer(f)
@@ -551,12 +605,13 @@ def _registrar_snapshot_libro(motivo: str, market_id: str, direction: str,
                 w.writerow(["timestamp_utc", "market_id", "strategy", "subtype",
                             "direction", "motivo", "precio_plan", "stake_eur",
                             "mejor_ask", "profundidad_eur", "n_niveles",
-                            "ratio_vs_stake"])
+                            "ratio_vs_stake", "delta_profundidad_eur"])
             w.writerow([datetime.now(timezone.utc).isoformat(timespec="seconds"),
                         market_id, ctx.get("strategy", ""), ctx.get("subtype", ""),
                         direction, motivo, precio_plan, stake_eur,
                         d.get("mejor_ask", ""), d.get("profundidad_eur", ""),
-                        d.get("n_niveles", ""), d.get("ratio_vs_stake", "")])
+                        d.get("n_niveles", ""), d.get("ratio_vs_stake", ""),
+                        delta_prof if delta_prof is not None else ""])
     except Exception:
         pass
 
