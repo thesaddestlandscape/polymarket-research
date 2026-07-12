@@ -867,6 +867,38 @@ _BASE_STREAK_FADE = [
     ("libro_liquidez",    "lt", "gt"),
 ]
 
+# Features de WEEKLY_PRICE (2 variantes: in_range/pct_dist o ratio/is_above,
+# ambas comparten T_h; las que no existan en una fila se saltan solas).
+_BASE_WEEKLY = [
+    ("T_h",        "gt", "lt"),
+    ("T_h",        "lt", "gt"),
+    ("pct_dist",   "abs_gt", "abs_lt"),
+    ("in_range",   "lt", "gt"),
+    ("ratio",      "gt", "lt"),
+    ("ratio",      "lt", "gt"),
+]
+
+# Features de PRICE_TARGET_GBM (motor GBM propio, distinto de _s_gbm_late).
+_BASE_PRICE_TARGET = [
+    ("sigma_h",    "gt", "lt"),
+    ("sigma_h",    "lt", "gt"),
+    ("T_h",        "gt", "lt"),
+    ("T_h",        "lt", "gt"),
+    ("pct_vs_K",   "abs_gt", "abs_lt"),
+]
+
+# Features de LEADLAG_BTC_XRP_15M (single-asset por diseño: solo opera XRP
+# siguiendo el momentum de BTC, no hay "por activo" que desagregar aquí).
+_BASE_LEADLAG = [
+    ("hora_utc",       "lt", "gt"),
+    ("hora_utc",       "gt", "lt"),
+    ("py_entrada",     "gt", "lt"),
+    ("py_entrada",     "lt", "gt"),
+    ("btc_momentum",   "abs_gt", "abs_lt"),
+    ("libro_spread",   "gt", "lt"),
+    ("libro_liquidez", "lt", "gt"),
+]
+
 FEATURE_RULES = {
     # 5min: desactivadas manualmente, pero seguimos aprendiendo por si acaso se reactivan
     "UPDOWN_GBM#5min":     _BASE_GBM,
@@ -939,6 +971,40 @@ FEATURE_RULES = {
     "STREAK_FADE_15M#ETH#15min": _BASE_STREAK_FADE,
     "STREAK_FADE_15M#SOL#15min": _BASE_STREAK_FADE,
     "STREAK_FADE_15M#XRP#15min": _BASE_STREAK_FADE,
+
+    # STREAK_MOM_5M / STREAK_FADE_5M (12-Jul): 465+145 predicciones en 3 días,
+    # 0 aprendizaje causal por activo hasta ahora. Mismo esquema de features
+    # que STREAK_FADE_15M (streak_len/py_entrada/hora_utc/libro_calidad).
+    # Universo SOL/ETH/XRP (BTC excluido por diseño, ver STREAK_MOM_5M_PARES).
+    "STREAK_MOM_5M":         _BASE_STREAK_FADE,
+    "STREAK_MOM_5M#SOL#5min": _BASE_STREAK_FADE,
+    "STREAK_MOM_5M#ETH#5min": _BASE_STREAK_FADE,
+    "STREAK_MOM_5M#XRP#5min": _BASE_STREAK_FADE,
+    "STREAK_FADE_5M":         _BASE_STREAK_FADE,
+    "STREAK_FADE_5M#SOL#5min": _BASE_STREAK_FADE,
+    "STREAK_FADE_5M#ETH#5min": _BASE_STREAK_FADE,
+    "STREAK_FADE_5M#XRP#5min": _BASE_STREAK_FADE,
+
+    # WEEKLY_PRICE (12-Jul): 404 predicciones en 3 días, 0 aprendizaje causal
+    # por activo. subtype=activo (sin sufijo de duración).
+    "WEEKLY_PRICE":     _BASE_WEEKLY,
+    "WEEKLY_PRICE#BTC": _BASE_WEEKLY,
+    "WEEKLY_PRICE#ETH": _BASE_WEEKLY,
+    "WEEKLY_PRICE#SOL": _BASE_WEEKLY,
+
+    # PRICE_TARGET_GBM (12-Jul): 332 predicciones en 3 días (ETH/SOL, #atexpiry
+    # y #reach), 0 aprendizaje causal.
+    "PRICE_TARGET_GBM":            _BASE_PRICE_TARGET,
+    "PRICE_TARGET_GBM#ETH#atexpiry": _BASE_PRICE_TARGET,
+    "PRICE_TARGET_GBM#SOL#atexpiry": _BASE_PRICE_TARGET,
+    "PRICE_TARGET_GBM#ETH#reach":    _BASE_PRICE_TARGET,
+    "PRICE_TARGET_GBM#SOL#reach":    _BASE_PRICE_TARGET,
+
+    # LEADLAG_BTC_XRP_15M (12-Jul): 223 predicciones en 3 días, single-asset
+    # por diseño (solo XRP) -- no hay "por activo" que desagregar, pero
+    # tampoco tenía NINGÚN aprendizaje causal (ni siquiera agregado).
+    "LEADLAG_BTC_XRP_15M":          _BASE_LEADLAG,
+    "LEADLAG_BTC_XRP_15M#XRP#15min": _BASE_LEADLAG,
 
     # ORDER_FLOW: delta_ratio es la señal principal + hora
     # total_vol_5m (11-Jul, análisis manual SOL#5min): terciles invertidos —
