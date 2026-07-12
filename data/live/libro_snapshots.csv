@@ -4261,3 +4261,4 @@ timestamp_utc,market_id,strategy,subtype,direction,motivo,precio_plan,stake_eur,
 2026-07-12T03:18:49+00:00,2877162,GBM_LATE_15M_ESPACIO_ATR,ETH#15min,BUY_YES,candidato_evaluacion,0.52,1.05,0.62,0.0,38,0.0
 2026-07-12T03:18:49+00:00,2877170,GBM_LATE_15M_ESPACIO_ATR,BTC#15min,BUY_YES,candidato_evaluacion,0.525,1.05,0.66,0.0,34,0.0
 2026-07-12T03:18:49+00:00,2877162,GBM_LATE_15M,ETH#15min,BUY_YES,fuera_ventana,0.52,1.05,0.62,0.0,38,0.0
+2026-07-12T03:21:59+00:00,2877174,FAVORITO_CONFIRMADO,SOL#15min,BUY_YES,candidato_evaluacion,0.585,1.05,0.61,87.84,39,83.7
