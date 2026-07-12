@@ -1075,6 +1075,20 @@ N_BUCKET_MIN    = 15      # mínimo de observaciones en cualquier bucket (subido
 # AGREGADO (strat_key sin activo); las reglas propias de SOL/ETH no se tocan.
 PATRONES_BLOQUEADOS = {
     ("GBM_LATE_15M", "sigma_h", "BUY_YES"),
+    # FAVORITO_CONFIRMADO (candidata, sin dinero real — 12-Jul, mismo vigía):
+    # de las 14 contradicciones que salieron en el primer barrido, se bloquean
+    # solo las que tenían MAYORÍA de activos contrarios Y un gap real (no
+    # ruido de <0.02€/trade) — no todas mecánicamente. Criterio y detalle
+    # completo (por activo, n, gap) en memoria project_vigia_causal_fillable_12jul.
+    ("FAVORITO_CONFIRMADO", "libro_liquidez", "BUY_YES"),   # 2/2 activos, BTC gap=0.00 ETH gap=-0.097
+    ("FAVORITO_CONFIRMADO", "py_entrada", "BUY_NO"),        # 2/3 activos, ETH gap=-0.058
+    ("FAVORITO_CONFIRMADO", "py_entrada", "BUY_YES"),       # 2/3 activos, BTC gap=-0.152 SOL gap=-0.135
+    ("FAVORITO_CONFIRMADO#BTC#15min", "py_entrada", "BUY_YES"),  # 1/1, gap=-0.165
+    ("FAVORITO_CONFIRMADO#ETH#15min", "py_entrada", "BUY_NO"),   # 1/1, gap=-0.138 (n=16, límite)
+    # NO bloqueados (evidencia mixta o gap<0.02€/trade, se dejan vigilar):
+    # FAVORITO_CONFIRMADO hora_utc BUY_NO/BUY_YES, #BTC#15min hora_utc,
+    # #SOL#15min hora_utc/py_entrada BUY_NO — mayoría de activos SÍ confirma
+    # el boost o el gap contrario es ruido (<0.02€/trade).
 }
 
 
