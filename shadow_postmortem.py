@@ -817,6 +817,20 @@ FEATURE_RULES = {
     "UPDOWN_GBM#BTC#60min": _BASE_GBM,
     "UPDOWN_GBM#ETH#60min": _BASE_GBM,
     "UPDOWN_GBM#SOL#60min": _BASE_GBM,
+    # GBM_LATE_15M (11-Jul/12-Jul, aprobado Javi): estrategia live principal,
+    # nunca había estado en FEATURE_RULES — todo su aprendizaje causal venía
+    # de scripts manuales/hipótesis custom, no del pipeline automático. Dry
+    # run 12-Jul (mismo _BASE_GBM que UPDOWN_GBM) sobre el histórico real:
+    # 0 filtros_causales (ningún bucket cruza IC<-0.12, no se saltaría
+    # ninguna señal viva hoy), solo patrones_ganadores/boosts — y esos boosts
+    # no mueven dinero real mientras el stake siga pineado a 1.05€ (
+    # live_stake.calcular_stake ignora apuesta_kelly). Empieza a acumular
+    # aprendizaje ahora para cuando se despinee el stake.
+    "GBM_LATE_15M":        _BASE_GBM,
+    "GBM_LATE_15M#BTC#15min": _BASE_GBM,
+    "GBM_LATE_15M#ETH#15min": _BASE_GBM,
+    "GBM_LATE_15M#SOL#15min": _BASE_GBM,
+    "GBM_LATE_15M#XRP#15min": _BASE_GBM,
     # ORDER_FLOW: delta_ratio es la señal principal + hora
     # total_vol_5m (11-Jul, análisis manual SOL#5min): terciles invertidos —
     # vol BAJO ic_bayes+0.038→+0.119 forward, vol ALTO ic=0.000→-0.100 forward
