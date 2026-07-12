@@ -1,31 +1,31 @@
 {
   "ETH": {
-    "smart_money_consensus": -0.2733,
-    "n_trades_smart": 322,
-    "n_wallets_smart": 12,
-    "smart_money_consensus_ponderado": -0.2587,
-    "n_wallets_smart_ponderado": 12
+    "smart_money_consensus": 0.1789,
+    "n_trades_smart": 246,
+    "n_wallets_smart": 9,
+    "smart_money_consensus_ponderado": 0.2539,
+    "n_wallets_smart_ponderado": 9
   },
   "XRP": {
-    "smart_money_consensus": -0.0263,
-    "n_trades_smart": 152,
-    "n_wallets_smart": 6,
-    "smart_money_consensus_ponderado": -0.082,
-    "n_wallets_smart_ponderado": 6
+    "smart_money_consensus": 0.0166,
+    "n_trades_smart": 362,
+    "n_wallets_smart": 10,
+    "smart_money_consensus_ponderado": 0.1461,
+    "n_wallets_smart_ponderado": 10
   },
   "SOL": {
-    "smart_money_consensus": 0.0093,
-    "n_trades_smart": 216,
-    "n_wallets_smart": 8,
-    "smart_money_consensus_ponderado": 0.1233,
-    "n_wallets_smart_ponderado": 8
+    "smart_money_consensus": -0.0337,
+    "n_trades_smart": 356,
+    "n_wallets_smart": 11,
+    "smart_money_consensus_ponderado": -0.1552,
+    "n_wallets_smart_ponderado": 11
   },
   "BTC": {
-    "smart_money_consensus": 0.0769,
-    "n_trades_smart": 13,
+    "smart_money_consensus": 0.25,
+    "n_trades_smart": 32,
     "n_wallets_smart": 1,
-    "smart_money_consensus_ponderado": -0.7568,
+    "smart_money_consensus_ponderado": 0.5401,
     "n_wallets_smart_ponderado": 1
   },
-  "_actualizado": "2026-07-12T13:45:03+00:00"
+  "_actualizado": "2026-07-12T14:01:11+00:00"
 }
