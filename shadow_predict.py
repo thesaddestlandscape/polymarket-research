@@ -1681,6 +1681,7 @@ def s_updown_gbm(market, ctx):
             diffs = [abs(logit_prices[i] - logit_prices[i-1]) for i in range(1, len(logit_prices))]
             sigma_b = (sum(d**2 for d in diffs) / len(diffs)) ** 0.5
             features["sigma_b"] = round(sigma_b, 4)
+    features.update(_libro_calidad(market))
     return {
         "prob_yes": max(0.05, min(0.95, p_up)),
         "razon":   razon,
@@ -1983,6 +1984,7 @@ def s_order_flow_5m(market, ctx):
             "has_real_flow": int(has_real_flow),
             "hora_utc": hora_utc,
             "es_ntm_5min": _es_ntm_5min(market),
+            **_libro_calidad(market),
         },
     }
 
@@ -2429,6 +2431,7 @@ def _s_gbm_late(market, ctx, ventana_min, rest_lo, rest_hi, espacio_k=None):
             "sigma_h_ewma10":      round(sigma_h_ewma10, 5) if sigma_h_ewma10 is not None else None,
             "sigma_ewma_delta_pct": sigma_ewma_delta_pct,
             "dist_vwap_pct":       dist_vwap_pct,
+            **_libro_calidad(market),
         },
     }
 
