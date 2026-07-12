@@ -1,0 +1,36 @@
+{
+  "fecha": "2026-07-12T13:36:54+00:00",
+  "n_wallets": 54,
+  "n_posiciones": 15618,
+  "cortes": {
+    "bucket_tamano": {
+      ">=2x_mediana": {
+        "n": 4210,
+        "win_rate_antiguo": 69.22,
+        "win_rate_corregido": 73.56
+      },
+      "0.5x-2x_mediana": {
+        "n": 7261,
+        "win_rate_antiguo": 62.9,
+        "win_rate_corregido": 68.17
+      },
+      "<=0.5x_mediana": {
+        "n": 4147,
+        "win_rate_antiguo": 51.36,
+        "win_rate_corregido": 52.81
+      }
+    },
+    "activo_habitual": {
+      "True": {
+        "n": 9807,
+        "win_rate_antiguo": 60.01,
+        "win_rate_corregido": 65.32
+      },
+      "False": {
+        "n": 5811,
+        "win_rate_antiguo": 64.12,
+        "win_rate_corregido": 65.93
+      }
+    }
+  }
+}
