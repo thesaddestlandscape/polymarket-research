@@ -174,6 +174,8 @@ def _monitor_5min(resultados: list) -> dict:
 
 
 IC_GATE_LIVE = 0.08  # mismo umbral que exige la promoción a pares_permitidos_live
+LATCH_IC_LIVE = Path("data/shadow/vigia_ic_live_latch.json")
+_NIVEL_ORDEN = {"verde": 0, "amarillo": 1, "rojo": 2}
 
 
 def _monitor_ic_live(params: dict) -> list:
@@ -182,15 +184,27 @@ def _monitor_ic_live(params: dict) -> list:
     avísame si baja de 0.08". Cada tupla de `pares_permitidos_live`
     (config_live.json) es dinero real; si su ic_bayes (o ic_BUY_YES/
     ic_BUY_NO según la dirección de la tupla) cae por debajo del MISMO
-    umbral que exigió su promoción, avisa por Telegram. Sin latch a
-    propósito (dinero real, mejor recordar de más que de menos) — se
-    integra en el ciclo de postmortem (~23min), no añade cron nuevo.
+    umbral que exigió su promoción, avisa por Telegram.
+
+    12-Jul: añadido latch por tupla (antes "sin latch a propósito" —
+    correcto en la intención, pero el ciclo lento corre cada ~60-90s, no
+    cada ~23min como se pensaba, y sin latch reenviaba el MISMO aviso
+    cientos de veces mientras el IC se quedaba parado en la misma zona
+    (832 envíos acumulados en logs/fast.log, spam confirmado por Javi).
+    Ahora solo avisa al ENTRAR o EMPEORAR de zona (verde→amarillo→rojo);
+    la recuperación a verde resetea el latch en silencio, así que un
+    nuevo bajón futuro sí vuelve a avisar — sigue "recordar de más que
+    de menos" en las transiciones que importan, sin martillear.
     """
     alertas = []
     try:
         config = json.loads(Path("data/live/config_live.json").read_text())
     except Exception:
         return alertas
+    try:
+        latch = json.loads(LATCH_IC_LIVE.read_text()) if LATCH_IC_LIVE.exists() else {}
+    except Exception:
+        latch = {}
     estrategias = params.get("estrategias", {})
     for tupla in config.get("pares_permitidos_live", []):
         partes = tupla.split("#")
@@ -208,9 +222,22 @@ def _monitor_ic_live(params: dict) -> list:
         if ic is None:
             continue
         if ic < IC_GATE_LIVE:
-            alertas.append(f"🔴 LIVE {tupla}: ic={ic:+.4f} < {IC_GATE_LIVE} (n={n}) — por debajo del gate que la promovió")
+            nivel, texto = "rojo", f"🔴 LIVE {tupla}: ic={ic:+.4f} < {IC_GATE_LIVE} (n={n}) — por debajo del gate que la promovió"
         elif ic < IC_GATE_LIVE + 0.02:
-            alertas.append(f"🟡 LIVE {tupla}: ic={ic:+.4f} cerca del gate {IC_GATE_LIVE} (n={n}) — vigilar")
+            nivel, texto = "amarillo", f"🟡 LIVE {tupla}: ic={ic:+.4f} cerca del gate {IC_GATE_LIVE} (n={n}) — vigilar"
+        else:
+            nivel, texto = "verde", None
+        nivel_previo = latch.get(tupla)
+        if nivel == "verde":
+            if nivel_previo is not None:
+                latch[tupla] = None  # recuperado, reset silencioso
+        elif nivel != nivel_previo:
+            alertas.append(texto)
+            latch[tupla] = nivel
+    try:
+        LATCH_IC_LIVE.write_text(json.dumps(latch, ensure_ascii=False, indent=1))
+    except Exception as e:
+        print(f"  [vigia IC live] no se pudo guardar latch: {e}")
     return alertas
 
 
