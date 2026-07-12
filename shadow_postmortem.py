@@ -1074,21 +1074,23 @@ N_BUCKET_MIN    = 15      # mínimo de observaciones en cualquier bucket (subido
 # condicional" era en la práctica incondicional. Se bloquea solo el patrón
 # AGREGADO (strat_key sin activo); las reglas propias de SOL/ETH no se tocan.
 PATRONES_BLOQUEADOS = {
+    # GBM_LATE_15M sigma_h BUY_YES: se mantiene bloqueado, pero por una razón
+    # ESTRUCTURAL/matemática, no estadística — un test de permutación sobre
+    # el gap de pnl live (SOL, n=27 vs n=30) dio p=0.219, NO significativo al
+    # 0.05 por sí solo. La razón real para bloquearlo: junto con la regla
+    # propia de SOL (sigma_h<0.0162) las dos condiciones cubrían el 100% del
+    # rango de sigma_h — el boost "condicional" no discriminaba nada, hecho
+    # verificable sin estadística. Ver project_vigia_causal_fillable_12jul.
     ("GBM_LATE_15M", "sigma_h", "BUY_YES"),
-    # FAVORITO_CONFIRMADO (candidata, sin dinero real — 12-Jul, mismo vigía):
-    # de las 14 contradicciones que salieron en el primer barrido, se bloquean
-    # solo las que tenían MAYORÍA de activos contrarios Y un gap real (no
-    # ruido de <0.02€/trade) — no todas mecánicamente. Criterio y detalle
-    # completo (por activo, n, gap) en memoria project_vigia_causal_fillable_12jul.
-    ("FAVORITO_CONFIRMADO", "libro_liquidez", "BUY_YES"),   # 2/2 activos, BTC gap=0.00 ETH gap=-0.097
-    ("FAVORITO_CONFIRMADO", "py_entrada", "BUY_NO"),        # 2/3 activos, ETH gap=-0.058
-    ("FAVORITO_CONFIRMADO", "py_entrada", "BUY_YES"),       # 2/3 activos, BTC gap=-0.152 SOL gap=-0.135
-    ("FAVORITO_CONFIRMADO#BTC#15min", "py_entrada", "BUY_YES"),  # 1/1, gap=-0.165
-    ("FAVORITO_CONFIRMADO#ETH#15min", "py_entrada", "BUY_NO"),   # 1/1, gap=-0.138 (n=16, límite)
-    # NO bloqueados (evidencia mixta o gap<0.02€/trade, se dejan vigilar):
-    # FAVORITO_CONFIRMADO hora_utc BUY_NO/BUY_YES, #BTC#15min hora_utc,
-    # #SOL#15min hora_utc/py_entrada BUY_NO — mayoría de activos SÍ confirma
-    # el boost o el gap contrario es ruido (<0.02€/trade).
+    # Los 5 bloqueos de FAVORITO_CONFIRMADO del primer barrido (12-Jul) se
+    # REVIRTIERON el mismo día: un test de permutación retroactivo dio
+    # p=0.29-0.997 en los 5 (ninguno significativo al 0.05; el de
+    # py_entrada BUY_NO, p=0.997, es prácticamente ruido puro). El criterio
+    # "mayoría de activos + gap>0.02€/trade" usado para bloquearlos no
+    # sustituye un test de significancia — n=15-25 por grupo es demasiado
+    # poco para que ese gap sea distinguible de una partición aleatoria.
+    # Se dejan sin bloquear, vigilando con más n. Ver
+    # feedback_shuffle_antes_de_bloquear y project_vigia_causal_fillable_12jul.
 }
 
 

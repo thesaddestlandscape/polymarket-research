@@ -29,14 +29,33 @@ reglas que SALTAN una operación). Si la zona que shadow marca "mala" no
 rinde peor de verdad en el subconjunto ejecutable, el filtro puede estar
 descartando señal rentable en vez de protegiendo — mismo n≥15 por capa.
 
+12-Jul (corrección, misma tarde): el primer barrido bloqueó 5 patrones de
+FAVORITO_CONFIRMADO usando solo "mayoría de activos + gap>0.02€/trade" —
+un test de permutación retroactivo dio p=0.29-0.997 en los 5 (ninguno
+significativo), y se revirtieron. Añadido `_perm_pvalue` (mismo método que
+`analisis_shuffle_patrones_causales.py`, ya usado en el proyecto): el gap
+de pnl/trade entre el bucket señalado y su complemento se compara contra
+N_SHUFFLE particiones aleatorias de los MISMOS datos. Sin esto, "contrario"
++ n≥15 no basta para justificar bloquear nada — n=15-25 por grupo es
+insuficiente para que un gap sea distinguible del azar sin la prueba.
+`avisos` (y el latch) ahora solo se disparan con p_shuffle<0.10; los
+"contrario" con p alto se guardan en el JSON para seguimiento pero no
+generan ruido ni deberían usarse para bloquear nada en PATRONES_BLOQUEADOS.
+
 Solo lectura sobre resultados/config; no toca pares_permitidos_live ni
 ninguna decisión de trading. Pensado para cron cada ~30-60min.
 """
 import csv
 import json
+import random
 import sys
 from pathlib import Path
 from datetime import datetime, timezone
+
+random.seed(12)  # determinista: mismo resultado en corridas repetidas con los mismos datos
+N_SHUFFLE = 2000
+P_SHUFFLE_ALERTA = 0.10  # umbral para avisar/latchear; más laxo que el 0.05 clásico
+                         # a propósito (n pequeño ya penaliza la potencia; ver memoria)
 
 REPO = Path(__file__).resolve().parent
 sys.path.insert(0, str(REPO))
@@ -151,6 +170,26 @@ def _eval(feats, feature, condicion, umbral):
     return None
 
 
+def _perm_pvalue(vals_a, vals_b, n_shuffle=N_SHUFFLE):
+    """Test de permutación de dos muestras (mismo método que
+    analisis_shuffle_patrones_causales.py): ¿el gap de medias observado es
+    distinguible de una partición aleatoria de los MISMOS valores? p alto =
+    el gap podría ser puro azar con este n."""
+    if len(vals_a) < 5 or len(vals_b) < 5:
+        return 1.0
+    obs = abs(sum(vals_a) / len(vals_a) - sum(vals_b) / len(vals_b))
+    pool = list(vals_a) + list(vals_b)
+    na = len(vals_a)
+    supera = 0
+    for _ in range(n_shuffle):
+        random.shuffle(pool)
+        a, b = pool[:na], pool[na:]
+        d = abs(sum(a) / len(a) - sum(b) / len(b))
+        if d >= obs:
+            supera += 1
+    return supera / n_shuffle
+
+
 def _clave_aplica_a_activo(clave, strategy, activo):
     """Evita cruzar un patrón descubierto para UN activo contra el fillable
     de OTRO (bug encontrado 12-Jul en analisis_causal_fillability_general.py,
@@ -223,31 +262,35 @@ def _evaluar_estrategia(strategy, fuente_rows, est, latch, avisos, fuente_label)
                     continue
                 if not _clave_aplica_a_activo(clave, strategy, activo):
                     continue
-                filtrado = [(d, a, x) for d, a, x in subset
-                            if _eval(x["feats"], p["feature"], p["condicion"], p["umbral"])]
+                filtrado, complemento = _particiona(subset, p["feature"], p["condicion"], p["umbral"])
                 sf = stats(filtrado)
                 if not sf or sf["n"] < N_MIN_CAPA:
                     continue  # n-por-capa también en el subconjunto filtrado por el patrón
                 uplift_shadow = p["ic_patron"] - p["ic_base"]
                 uplift_fillable = sf["pnl_trade"] - sb["pnl_trade"]
                 contrario = (uplift_shadow > 0) != (uplift_fillable > 0)
+                p_shuffle = (_perm_pvalue([float(x["pnl_neto"]) for _, _, x in filtrado],
+                                          [float(x["pnl_neto"]) for _, _, x in complemento])
+                             if contrario else None)
                 reg = {
                     "clave": clave, "feature": p["feature"], "condicion": p["condicion"],
                     "umbral": p["umbral"], "ic_patron_shadow": p["ic_patron"],
                     "ic_base_shadow": p["ic_base"], "n_fillable_filtrado": sf["n"],
                     "pnl_trade_fillable_filtrado": sf["pnl_trade"],
                     "pnl_trade_fillable_base": sb["pnl_trade"], "contrario": contrario,
+                    "p_shuffle": p_shuffle,
                 }
                 entry["activos"][clave_activo]["patrones"].append(reg)
 
                 latch_key = f"{fuente_label}#{clave}#{clave_activo}#{p['feature']}{p['condicion']}{p['umbral']}"
-                if contrario:
+                if contrario and p_shuffle is not None and p_shuffle < P_SHUFFLE_ALERTA:
                     if not latch.get(latch_key):
                         etiqueta = "🔴 LIVE" if fuente_label == "live_real" else "candidata"
                         avisos.append(
                             f"[{etiqueta}] {clave} {clave_activo} {p['feature']}{p['condicion']}{p['umbral']}: "
                             f"shadow uplift={uplift_shadow:+.3f} (n_patron={p['n_patron']}) pero "
-                            f"{fuente_label} uplift={uplift_fillable:+.3f}€/trade (n={sf['n']}) — signo CONTRARIO"
+                            f"{fuente_label} uplift={uplift_fillable:+.3f}€/trade (n={sf['n']}) — signo CONTRARIO "
+                            f"y p_shuffle={p_shuffle:.3f} (<{P_SHUFFLE_ALERTA})"
                         )
                         latch[latch_key] = True
                 else:
@@ -270,24 +313,28 @@ def _evaluar_estrategia(strategy, fuente_rows, est, latch, avisos, fuente_label)
                 if not sm or sm["n"] < N_MIN_CAPA or not sg or sg["n"] < N_MIN_CAPA:
                     continue  # n-por-capa en AMBOS lados de la partición
                 injustificado = sm["pnl_trade"] >= sg["pnl_trade"]
+                p_shuffle = (_perm_pvalue([float(x["pnl_neto"]) for _, _, x in malo],
+                                          [float(x["pnl_neto"]) for _, _, x in bueno])
+                             if injustificado else None)
                 reg_f = {
                     "clave": clave, "feature": f["feature"], "condicion": f["condicion"],
                     "umbral": f["umbral"], "ic_malo_shadow": f["ic_malo"],
                     "n_malo_fillable": sm["n"], "pnl_trade_malo_fillable": sm["pnl_trade"],
                     "n_bueno_fillable": sg["n"], "pnl_trade_bueno_fillable": sg["pnl_trade"],
-                    "injustificado": injustificado,
+                    "injustificado": injustificado, "p_shuffle": p_shuffle,
                 }
                 entry["activos"][clave_activo]["filtros"].append(reg_f)
 
                 latch_key = f"FILTRO#{fuente_label}#{clave}#{clave_activo}#{f['feature']}{f['condicion']}{f['umbral']}"
-                if injustificado:
+                if injustificado and p_shuffle is not None and p_shuffle < P_SHUFFLE_ALERTA:
                     if not latch.get(latch_key):
                         etiqueta = "🔴 LIVE" if fuente_label == "live_real" else "candidata"
                         avisos.append(
                             f"[{etiqueta}][FILTRO] {clave} {clave_activo} {f['feature']}{f['condicion']}{f['umbral']}: "
                             f"shadow ic_malo={f['ic_malo']:+.3f} pero en ejecutable la zona 'mala' "
                             f"(n={sm['n']}) rinde {sm['pnl_trade']:+.4f}€/trade vs {sg['pnl_trade']:+.4f}€/trade "
-                            f"de la zona 'buena' (n={sg['n']}) — el filtro puede estar saltando señal rentable"
+                            f"de la zona 'buena' (n={sg['n']}) — el filtro puede estar saltando señal rentable "
+                            f"(p_shuffle={p_shuffle:.3f})"
                         )
                         latch[latch_key] = True
                 else:
