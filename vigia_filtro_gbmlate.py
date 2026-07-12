@@ -1,19 +1,21 @@
 #!/usr/bin/env python3
-"""Vigía filtro_causal en GBM_LATE_15M: avisa por Telegram si alguna vez
-aparece un filtro_causal (skip automático de señal live) en las claves
-recién añadidas a FEATURE_RULES (12-Jul, ver shadow_postmortem.py).
+"""Vigía filtro_causal en GBM_LATE_15M: avisa por Telegram la primera vez
+que aparece un filtro_causal en las claves recién añadidas a FEATURE_RULES
+(12-Jul, ver shadow_postmortem.py).
 
 Origen: /code-review sobre el commit que añadió GBM_LATE_15M a
 FEATURE_RULES encontró que, por primera vez, un results.csv corrupto/
-duplicado (ya pasó una vez, ver memoria project_tracking_error_
-arqueologia_11jul) podría generar un filtro_causal con n>=15 IC<-0.12 que
-saltaría señales live reales (SOL/ETH BUY_YES) sin que nadie lo note hasta
-mirar estado_actual.md a mano. Dry-run 12-Jul: 0 filtros hoy, solo
-patrones_ganadores (boosts, inertes mientras el stake siga pineado).
+duplicado podría generar un filtro_causal con n>=15 IC<-0.12 sobre una
+señal live real (SOL/ETH BUY_YES). Arreglo ESTRUCTURAL aplicado el mismo
+día en shadow_predict.py (`_es_par_live_protegido`): un filtro_causal
+NUNCA puede saltar automáticamente una señal cuyo par ya está en
+`pares_permitidos_live` — se ignora y se loguea, requiere promoción manual
+explícita (mismo criterio que cualquier otra whitelist). Este vigía es la
+CAPA 2 (defensa en profundidad): no previene nada por sí solo, solo avisa
+para que Javi decida si el filtro descubierto merece promocionarse.
 
 Read-only, no toca dinero ni config — solo lee strategy_params.json y
-avisa. No bloquea nada (fail-loud, no fail-closed): si dispara, Javi decide
-si el filtro es legítimo o síntoma de datos corruptos.
+avisa.
 """
 import json
 import sys
@@ -74,12 +76,14 @@ def main() -> int:
             for clave, f in nuevos
         )
         msg = (
-            f"⚠️ VIGÍA: nuevo filtro_causal en GBM_LATE_15M (estrategia live)\n"
+            f"⚠️ VIGÍA: nuevo filtro_causal descubierto en GBM_LATE_15M\n"
             f"{detalle}\n"
-            f"Esto puede saltar señales live reales (SOL/ETH BUY_YES) desde el "
-            f"próximo ciclo de predict. Revisar si el bucket tiene sentido o es "
-            f"síntoma de datos corruptos en results.csv (ic_bucket/n arriba) "
-            f"antes de asumir que es un hallazgo real. No se ha bloqueado nada."
+            f"Ya NO puede saltar señales live (guardia estructural en "
+            f"shadow_predict._es_par_live_protegido, 12-Jul) — se está "
+            f"ignorando en los pares live hasta promoción manual. Revisar si "
+            f"el bucket tiene sentido o es síntoma de datos corruptos en "
+            f"results.csv (ic_malo/n_malo arriba) antes de decidir si "
+            f"promocionarlo."
         )
         ok = enviar_telegram(msg)
         print(f"[vigia_filtro_gbmlate] aviso enviado (telegram={ok})")

@@ -41,6 +41,7 @@ MIN_LIQUIDEZ = 500
 
 DIR_DATA    = Path("data")
 DIR_SHADOW  = DIR_DATA / "shadow"
+DIR_LIVE    = DIR_DATA / "live"
 
 
 def _slippage_estimado_dinamico() -> float:
@@ -3160,6 +3161,31 @@ def main():
     except Exception:
         _smart_money_consenso = {}
 
+    # Fail-safe (12-Jul, aprobado Javi, code-review sobre FEATURE_RULES de
+    # GBM_LATE_15M): un filtro_causal recién descubierto (aprender_patrones_
+    # causales, shadow_postmortem.py) NUNCA debe poder saltar en silencio
+    # una señal de un par que YA está en pares_permitidos_live (dinero
+    # real) — se trata como "candidato", igual que cualquier otra promoción
+    # de whitelist, y no se auto-aplica sin revisión humana explícita.
+    # _pares_live_hoy=None (lectura falló: JSON corrupto, fichero ausente,
+    # etc.) es el estado MÁS seguro posible: _es_par_live_protegido()
+    # entonces asume "no puedo confirmar que NO sea live" y NO aplica el
+    # filtro — el error inverso (asumir "no es live" y dejar que el filtro
+    # salte una señal real) es exactamente el fallo que este guardia existe
+    # para prevenir, así que nunca se toma ese camino.
+    try:
+        _pares_live_hoy = set(
+            json.loads((DIR_LIVE / "config_live.json").read_text(encoding="utf-8"))
+            .get("pares_permitidos_live", [])
+        )
+    except Exception:
+        _pares_live_hoy = None
+
+    def _es_par_live_protegido(nombre_estr: str, sub: str, direccion: str) -> bool:
+        if _pares_live_hoy is None:
+            return True
+        return f"{nombre_estr}#{sub}#{direccion}" in _pares_live_hoy
+
     ctx = construir_contexto()
     ctx["precios_ventanas_hoy"] = precios_ventanas_hoy
     params_din = _cargar_params_dinamicos()
@@ -3313,6 +3339,7 @@ def main():
                 # BUY_NO en el mismo bucket causal.
                 if dec in ("BUY_YES", "BUY_NO"):
                     skip_causal = False
+                    filtro_matched = None
                     for lk in lookup_keys:
                         for f in params_din.get(lk, {}).get("filtros_causales", []):
                             if f.get("direccion") not in (None, dec):
@@ -3320,11 +3347,24 @@ def main():
                             fv = pred_features.get(f.get("feature"))
                             if fv is not None and _feature_match(fv, f.get("condicion",""), f.get("umbral",999)):
                                 skip_causal = True
+                                filtro_matched = (lk, f)
                                 break
                         if skip_causal:
                             break
                     if skip_causal:
-                        dec = "SKIP"
+                        if _es_par_live_protegido(nombre, subtype, dec):
+                            # Ver nota fail-safe arriba (_es_par_live_protegido):
+                            # este par YA es dinero real hoy — un filtro recién
+                            # descubierto no lo salta solo, requiere promoción
+                            # explícita. Se loguea fuerte para que no pase
+                            # desapercibido (vigia_filtro_gbmlate.py también lo
+                            # detecta vía strategy_params.json).
+                            print(f"  ⚠️ filtro_causal matcheó en PAR LIVE "
+                                  f"{nombre}#{subtype}#{dec} pero se IGNORA "
+                                  f"(fail-safe, requiere promoción manual): "
+                                  f"{filtro_matched}")
+                        else:
+                            dec = "SKIP"
 
                 # 2. Patrones ganadores — direccionales, y se toma el de mayor
                 # ic_patron entre los que matchean (no se suman): sumar boosts
