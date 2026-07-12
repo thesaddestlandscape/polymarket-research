@@ -34,12 +34,15 @@ import csv
 import json
 import random
 import re
+import statistics as st
 import time
 from collections import defaultdict
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
 import requests
+
+from wallet_pnl_diario import fetch_activity
 
 DIR_MARKETS = Path("data/markets")
 DIR_SHADOW = Path("data/shadow")
@@ -86,6 +89,28 @@ MIN_WINRATE_SMART = 0.55
 # /positions se conservan solo como dato informativo, no como criterio.
 DIR_WALLETS = Path("data/wallets")
 MIN_PNL_LEADERBOARD_SMART = 1000.0  # USD/mes en leaderboard oficial
+
+# Consenso ponderado por tamaño (P16, CLAUDE.md — cerrado 12-Jul en
+# analisis_p16_redencion_corregido.py: el eje de TAMAÑO de apuesta relativo
+# a la mediana propia de cada wallet sobreviva y se refuerza tras corregir
+# el sesgo de redención (17.8→20.8pp de gap ≥2x vs ≤0.5x); el eje de
+# novedad de activo se evaporó y NO se usa aquí). Cada trade de una wallet
+# "smart" pesa según su tamaño relativo a la mediana histórica de apuesta
+# de ESA wallet (vía /activity), no 1 voto por trade. CAP_RATIO evita que
+# una única apuesta enorme de una wallet normalmente pequeña domine el
+# consenso (mismo motivo por el que existía el voto plano).
+MAX_EVENTOS_MEDIANA = 500
+REFRESH_MEDIANA_HORAS = 24
+CAP_RATIO = 5.0
+
+
+def _mediana_apuesta_wallet(wallet: str) -> float | None:
+    eventos = fetch_activity(wallet, max_events=MAX_EVENTOS_MEDIANA)
+    buys = [float(e.get("usdcSize", 0) or 0) for e in eventos
+            if e.get("type") == "TRADE" and e.get("side") == "BUY" and float(e.get("usdcSize", 0) or 0) > 0]
+    if not buys:
+        return None
+    return st.median(buys)
 
 
 def _leaderboard_pnl() -> dict:
@@ -234,6 +259,7 @@ def main():
     actividad_wallet = defaultdict(lambda: {
         "n": 0,
         "activos": defaultdict(lambda: {"up": 0, "down": 0}),
+        "activos_usd": defaultdict(lambda: {"up": [], "down": []}),
         "duraciones": defaultdict(int),
     })
     for cid in condition_ids:
@@ -250,6 +276,8 @@ def main():
             # todo como "down", sesgando el consenso hacia negativo.
             lado = "up" if (t.get("outcome") or "").strip().lower() in ("up", "yes") else "down"
             actividad_wallet[w]["activos"][info["activo"]][lado] += 1
+            usd = float(t.get("size", 0) or 0) * float(t.get("price", 0) or 0)
+            actividad_wallet[w]["activos_usd"][info["activo"]][lado].append(usd)
 
     print(f"  Wallets distintas vistas: {len(actividad_wallet)}")
     duraciones_totales = defaultdict(int)
@@ -305,6 +333,23 @@ def main():
             clasificacion = "candidato_posiciones"
         else:
             clasificacion = "normal"
+
+        # Mediana de apuesta propia (P16) — solo se pide para wallets "smart"
+        # (las únicas que cuentan en el consenso), cacheada aparte con su
+        # propia cadencia porque el tamaño típico cambia más despacio que el
+        # win-rate de /positions.
+        mediana_apuesta = prev.get("mediana_apuesta_usd")
+        mediana_actualizada = prev.get("mediana_actualizada")
+        mediana_fresca = False
+        if mediana_actualizada:
+            try:
+                mediana_fresca = (ahora - datetime.fromisoformat(mediana_actualizada)) < timedelta(hours=REFRESH_MEDIANA_HORAS)
+            except Exception:
+                mediana_fresca = False
+        if clasificacion == "smart" and not mediana_fresca:
+            mediana_apuesta = _mediana_apuesta_wallet(w)
+            mediana_actualizada = ahora.isoformat(timespec="seconds")
+
         wallets_db[w] = {
             **stats,
             "clasificacion": clasificacion,
@@ -314,6 +359,8 @@ def main():
             "duraciones_muestra_reciente": dict(act["duraciones"]),
             "primera_vez_visto": prev.get("primera_vez_visto", ahora.isoformat(timespec="seconds")),
             "ultima_actualizacion": ahora.isoformat(timespec="seconds") if not fresca else ultima,
+            **({"mediana_apuesta_usd": round(mediana_apuesta, 2)} if mediana_apuesta else {}),
+            **({"mediana_actualizada": mediana_actualizada} if mediana_actualizada else {}),
         }
         if weekly_stats is not None:
             wallets_db[w]["weekly"] = weekly_stats
@@ -323,13 +370,29 @@ def main():
 
     # Consenso direccional de las wallets "smart" en la muestra reciente, por activo
     consenso = defaultdict(lambda: {"up": 0, "down": 0, "n_wallets_smart": 0})
+    # Consenso ponderado por tamaño (P16): cada trade pesa usd/mediana_propia,
+    # tope CAP_RATIO. Wallets sin mediana cacheada aún (primera vez "smart"
+    # o /activity vacío) caen al peso plano 1.0 por trade, igual que el
+    # consenso sin ponderar, hasta que se compute su baseline.
+    consenso_pond = defaultdict(lambda: {"up": 0.0, "down": 0.0, "n_wallets_smart": 0})
     for w, act in candidatos.items():
-        if wallets_db.get(w, {}).get("clasificacion") != "smart":
+        info_w = wallets_db.get(w, {})
+        if info_w.get("clasificacion") != "smart":
             continue
+        mediana = info_w.get("mediana_apuesta_usd")
         for activo, dirs in act["activos"].items():
             consenso[activo]["up"] += dirs["up"]
             consenso[activo]["down"] += dirs["down"]
             consenso[activo]["n_wallets_smart"] += 1
+        for activo, usd_dirs in act["activos_usd"].items():
+            n_lado = 0
+            for lado in ("up", "down"):
+                for usd in usd_dirs[lado]:
+                    peso = min(usd / mediana, CAP_RATIO) if mediana else 1.0
+                    consenso_pond[activo][lado] += peso
+                    n_lado += 1
+            if n_lado:
+                consenso_pond[activo]["n_wallets_smart"] += 1
 
     consenso_final = {}
     for activo, d in consenso.items():
@@ -341,6 +404,11 @@ def main():
             "n_trades_smart": total,
             "n_wallets_smart": d["n_wallets_smart"],
         }
+        dp = consenso_pond.get(activo)
+        total_p = (dp["up"] + dp["down"]) if dp else 0
+        if dp and total_p > 0:
+            consenso_final[activo]["smart_money_consensus_ponderado"] = round((dp["up"] - dp["down"]) / total_p, 4)
+            consenso_final[activo]["n_wallets_smart_ponderado"] = dp["n_wallets_smart"]
     consenso_final["_actualizado"] = ahora.isoformat(timespec="seconds")
     CONSENSUS_PATH.write_text(json.dumps(consenso_final, indent=2, ensure_ascii=False), encoding="utf-8")
 

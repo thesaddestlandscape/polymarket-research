@@ -3308,6 +3308,12 @@ def main():
                 if _consenso_activo:
                     pred_features["smart_money_consensus"] = _consenso_activo.get("smart_money_consensus")
                     pred_features["smart_money_n_wallets"] = _consenso_activo.get("n_wallets_smart")
+                    # P16 (12-Jul): consenso ponderado por tamaño de apuesta relativo a
+                    # la mediana propia de cada wallet — observacional, NO sustituye al
+                    # plano hasta n≥40 forward (ver CLAUDE.md P16 y smart_money_tracker.py)
+                    if "smart_money_consensus_ponderado" in _consenso_activo:
+                        pred_features["smart_money_consensus_ponderado"] = _consenso_activo.get("smart_money_consensus_ponderado")
+                        pred_features["smart_money_n_wallets_ponderado"] = _consenso_activo.get("n_wallets_smart_ponderado")
                 pred["features"] = pred_features
 
                 def _feature_match(feat_val, cond, umbral):
