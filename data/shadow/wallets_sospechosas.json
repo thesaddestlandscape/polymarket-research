@@ -1,10 +1,81 @@
 {
   "_nota": "12-Jul: wallets que aparecen desproporcionadamente en el lado ganador (contrario a nosotros) en pérdidas reales de GBM_LATE_15M SOL/ETH BUY_YES vs ganancias reales (control), z-test de proporciones sobre n=49 pérdidas / 48 ganancias. Semilla inicial -- wallet_contraparte_tracker.py sigue acumulando evidencia forward. NO es un veto todavía, solo observación.",
   "wallets": {
-    "0x20d2309cd92b797ae7ca175ed828ed8a27fbe29d": {"z_inicial": 2.69, "clasificacion": "smart", "pnl_leaderboard_mes": 62532.32, "descubierta": "2026-07-12"},
-    "0xcb5c1844d9a5b39d3747ca92af659491fb036b2b": {"z_inicial": 3.05, "clasificacion": "normal", "descubierta": "2026-07-12"},
-    "0x3deac23f85896126e9fc8134247a643092087b7b": {"z_inicial": 2.25, "clasificacion": "normal", "descubierta": "2026-07-12"},
-    "0xb798fd5d803d52a15b2708d24b54c4216fe237ca": {"z_inicial": 2.72, "clasificacion": "normal", "descubierta": "2026-07-12"},
-    "0xce25e214d5cfe4f459cf67f08df581885aae7fdc": {"z_inicial": 1.45, "clasificacion": "smart", "pnl_leaderboard_mes": 49588.98, "descubierta": "2026-07-12"}
+    "0x20d2309cd92b797ae7ca175ed828ed8a27fbe29d": {
+      "z_inicial": 2.69,
+      "clasificacion": "smart",
+      "pnl_leaderboard_mes": 62532.32,
+      "descubierta": "2026-07-12"
+    },
+    "0xcb5c1844d9a5b39d3747ca92af659491fb036b2b": {
+      "z_inicial": 3.05,
+      "clasificacion": "normal",
+      "descubierta": "2026-07-12"
+    },
+    "0x3deac23f85896126e9fc8134247a643092087b7b": {
+      "z_inicial": 2.25,
+      "clasificacion": "normal",
+      "descubierta": "2026-07-12"
+    },
+    "0xb798fd5d803d52a15b2708d24b54c4216fe237ca": {
+      "z_inicial": 2.72,
+      "clasificacion": "normal",
+      "descubierta": "2026-07-12"
+    },
+    "0xce25e214d5cfe4f459cf67f08df581885aae7fdc": {
+      "z_inicial": 1.45,
+      "clasificacion": "smart",
+      "pnl_leaderboard_mes": 49588.98,
+      "descubierta": "2026-07-12"
+    },
+    "0x43d20d9b2b701ec2a01d53a1d675a10cc860d3fa": {
+      "z_inicial": 2.18,
+      "clasificacion": "por_verificar",
+      "descubierta": "2026-07-12",
+      "n_perdidas_muestra": 7,
+      "n_ganadas_muestra": 1
+    },
+    "0x704849e569f6007fee277c2a5ffcf1d9f3e853e0": {
+      "z_inicial": 2.27,
+      "clasificacion": "por_verificar",
+      "descubierta": "2026-07-12",
+      "n_perdidas_muestra": 5,
+      "n_ganadas_muestra": 0
+    },
+    "0x59178ed0f66bcfa02193bcc77097715399bedb33": {
+      "z_inicial": 2.02,
+      "clasificacion": "por_verificar",
+      "descubierta": "2026-07-12",
+      "n_perdidas_muestra": 4,
+      "n_ganadas_muestra": 0
+    },
+    "0x5c3d055aee56f79d755a9388b8dbf483fce9182c": {
+      "z_inicial": 2.02,
+      "clasificacion": "por_verificar",
+      "descubierta": "2026-07-12",
+      "n_perdidas_muestra": 4,
+      "n_ganadas_muestra": 0
+    },
+    "0xe5fdb42ce16299be4c3d1a52ecc0ade4f603842d": {
+      "z_inicial": 2.5,
+      "clasificacion": "por_verificar",
+      "descubierta": "2026-07-12",
+      "n_perdidas_muestra": 6,
+      "n_ganadas_muestra": 0
+    },
+    "0x0d7dfb4f0299335c81991c8c011df5d7cebb15c0": {
+      "z_inicial": 2.02,
+      "clasificacion": "por_verificar",
+      "descubierta": "2026-07-12",
+      "n_perdidas_muestra": 4,
+      "n_ganadas_muestra": 0
+    },
+    "0x634ca733fa43fac1ad98f3cf948e931d4628c89f": {
+      "z_inicial": 2.02,
+      "clasificacion": "por_verificar",
+      "descubierta": "2026-07-12",
+      "n_perdidas_muestra": 4,
+      "n_ganadas_muestra": 0
+    }
   }
 }
