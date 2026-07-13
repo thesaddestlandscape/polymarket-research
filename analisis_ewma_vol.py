@@ -33,7 +33,7 @@ SYMS = ["BTC", "ETH", "SOL", "XRP"]
 LOOKBACK_MIN = 20   # igual que _s_gbm_late (n_min=20)
 FORWARD_MIN = 15    # T_h de GBM_LATE_15M
 STEP_MIN = 5         # cadencia de puntos de muestreo del backtest
-HALF_LIVES = [5, 10]  # minutos, candidatos a testear
+HALF_LIVES = [2, 3, 5, 7, 10, 15, 20, 30]  # minutos, candidatos a testear
 
 
 def cargar_precios(desde=None, hasta=None):
