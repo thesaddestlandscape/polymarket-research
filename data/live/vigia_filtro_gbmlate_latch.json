@@ -1,7 +1,11 @@
 {
  "GBM_LATE_15M": [],
- "GBM_LATE_15M#BTC#15min": [],
- "GBM_LATE_15M#ETH#15min": [],
+ "GBM_LATE_15M#BTC#15min": [
+  "sigma_ewma_delta_pct|lt|6.604|BUY_YES"
+ ],
+ "GBM_LATE_15M#ETH#15min": [
+  "sigma_ewma_delta_pct|lt|5.794|BUY_YES"
+ ],
  "GBM_LATE_15M#SOL#15min": [],
  "GBM_LATE_15M#XRP#15min": []
 }
