@@ -1173,6 +1173,35 @@ def _precio_en(activo, ref_time, precios_data, tol_min=10):
     return None
 
 
+def _calcular_retest_pct(activo, window_start, now_utc, ref, spot, precios_data):
+    """% de retroceso desde el máximo alejamiento (en la dirección del
+    movimiento final) antes del instante actual — ver
+    analisis_retest_gbm_late.py (13-Jul, idea_retest_gbm_late_15m_13jul):
+    hallazgo con permutación+BH-FDR+split temporal de que retest_pct==0
+    (nunca retrocedió, recorrido monótono) acierta MÁS en GBM_LATE_15M#SOL#
+    BUY_YES (n=528 gap=-0.182 p=0.0000, estable en ambas mitades del
+    periodo) que retest_pct>0. Signo CONTRARIO al break-and-retest de ORB
+    que inspiró la idea. Solo LOGUEA — no toca prob_yes/edge/decision;
+    cualquier uso como filtro en el par live requiere aprobación explícita
+    + /code-review (CLAUDE.md, código que toca dinero real)."""
+    if not ref or ref <= 0 or not spot or spot <= 0:
+        return None
+    camino = [(ts, p[activo]) for ts, p in precios_data
+              if activo in p and window_start <= ts <= now_utc]
+    if len(camino) < 4:
+        return None
+    signo_final = 1 if spot > ref else -1
+    excursion_max = 0.0
+    for _, p in camino:
+        dev = (p - ref) / ref * signo_final
+        if dev > excursion_max:
+            excursion_max = dev
+    if excursion_max <= 1e-9:
+        return None
+    dev_final = (spot - ref) / ref * signo_final
+    return round(max(0.0, (excursion_max - dev_final) / excursion_max), 4)
+
+
 def _calcular_drift_h(sym, precios_data, n_min):
     """
     Drift observado en las últimas n_min, expresado como fracción por hora.
@@ -2469,6 +2498,10 @@ def _s_gbm_late(market, ctx, ventana_min, rest_lo, rest_hi, espacio_k=None):
         if sigma_h_ewma10 is not None and sigma_h > 0 else None
     )
 
+    # retest_pct (13-Jul, ver analisis_retest_gbm_late.py / _calcular_retest_pct):
+    # solo logueo, no cambia edge ni decisión — ver docstring del helper.
+    retest_pct = _calcular_retest_pct(activo, window_start, now_utc, ref, spot, precios_data)
+
     return {
         "prob_yes": round(p_up, 4),
         "razon":    (f"gbm_late_{ventana_min}min {activo} drift_vent={drift_ventana*100:+.3f}% "
@@ -2492,6 +2525,7 @@ def _s_gbm_late(market, ctx, ventana_min, rest_lo, rest_hi, espacio_k=None):
             "sigma_h_ewma10":      round(sigma_h_ewma10, 5) if sigma_h_ewma10 is not None else None,
             "sigma_ewma_delta_pct": sigma_ewma_delta_pct,
             "dist_vwap_pct":       dist_vwap_pct,
+            "retest_pct":          retest_pct,
             **_libro_calidad(market),
         },
     }
