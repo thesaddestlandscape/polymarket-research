@@ -732,7 +732,16 @@ def _cargar_hipotesis_custom():
     try:
         data = json.loads(HIPOTESIS_CUSTOM.read_text(encoding="utf-8"))
         return data.get("hipotesis", [])
-    except Exception:
+    except Exception as e:
+        # Fail loud (13-Jul, purificación): si esto falla, el bucle de
+        # hipótesis custom en main() itera 0 veces — indistinguible de "no
+        # hay hipótesis custom definidas" en hipotesis_auto.md. Un JSON
+        # corrupto apagaría en silencio TODO el subsistema de hipótesis
+        # custom (incluido el auto-apply a meta.hora_boost_factor/
+        # gbm_blacklist_hours_auto) sin que nada lo marque como ERROR.
+        print(f"  ⚠️ hipotesis_custom.json ilegible ({type(e).__name__}: {e}) "
+              f"— 0 hipótesis custom evaluadas este ciclo, no por falta de "
+              f"definiciones sino por este fallo")
         return []
 
 

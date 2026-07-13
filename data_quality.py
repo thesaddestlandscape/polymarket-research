@@ -18,7 +18,6 @@ Fuentes de datos y rol en el sistema:
 Importado por: fetch_binance_klines, capture_markets, shadow_predict, shadow_resumen.
 Ejecutable standalone para diagnóstico: python3 data_quality.py
 """
-import csv
 import json
 import concurrent.futures
 from datetime import datetime, timezone, timedelta
@@ -360,24 +359,6 @@ def validar_precio(sym: str, price: float,
     return True, "OK"
 
 
-def leer_ultimo_precio(sym: str, prices_path: Path) -> Optional[float]:
-    """Lee el último precio válido de un símbolo desde el CSV del día."""
-    if not prices_path.exists():
-        return None
-    last: Optional[float] = None
-    try:
-        with open(prices_path, "r", newline="", encoding="utf-8") as f:
-            for row in csv.DictReader(f):
-                if row.get("asset", "").strip().upper() == sym.upper():
-                    try:
-                        last = float(row["price_usd"])
-                    except (ValueError, TypeError):
-                        pass
-    except Exception:
-        pass
-    return last
-
-
 def _log_evento(sym: str, value: float, reason: str) -> None:
     try:
         DIR_SHADOW.mkdir(parents=True, exist_ok=True)
@@ -620,6 +601,16 @@ def leer_estado_calidad() -> dict:
 def simbolo_bloqueado(sym: str) -> bool:
     """True si el asset está en estado CRITICAL y las predicciones deben omitirse."""
     dq = leer_estado_calidad()
+    # Fail loud (13-Jul, purificación) — NO se cambia el fail-open todavía,
+    # solo se hace visible: si data_quality.json no se pudo leer/no existe,
+    # esta función hoy devuelve False para CUALQUIER símbolo (nada bloqueado)
+    # en vez de fail-closed, al contrario del resto del proyecto
+    # ("_cargar_spot silencioso, veto_sin_datos" en CLAUDE.md). Requiere
+    # decisión explícita antes de cambiar el comportamiento real.
+    if dq.get("estado_global") in ("ERROR_LECTURA", "DESCONOCIDO"):
+        print(f"  ⚠️ simbolo_bloqueado({sym}): data_quality.json "
+              f"{dq.get('estado_global')} — devolviendo False (NO bloqueado) "
+              f"sin poder confirmarlo, ver nota fail-open en el código")
     info = dq.get("assets", {}).get(sym.upper(), {})
     return info.get("estado") == "CRITICAL"
 
