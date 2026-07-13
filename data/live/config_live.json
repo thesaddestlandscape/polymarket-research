@@ -1,5 +1,4 @@
 {
-  "zona_horaria": "Europe/Madrid",
   "utc_offset_verano": 2,
   "_ventanas_originales": [
     {
@@ -108,7 +107,6 @@
   ],
   "riesgo": {
     "max_pct_bankroll_por_trade": 0.1,
-    "pct_bankroll_diario": 0.3,
     "half_kelly": true,
     "min_ic_para_live": 0.08,
     "min_n_para_live": 40,
