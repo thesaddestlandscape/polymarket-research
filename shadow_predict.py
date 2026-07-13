@@ -3018,6 +3018,17 @@ def s_streak_fade_15m(market, ctx):
             "hora_utc":      datetime.now(timezone.utc).hour,
             "regimen_ma_toques": _regimen_ma_toques(activo, ctx),
             "volumen_racha":     _volumen_racha(activo, ctx),
+            # 13-Jul (retomando idea_racha_correlacion... no, ver
+            # project_volumen_racha_signo_contrario_13jul): volumen_racha
+            # (15min) salió con signo CONTRARIO a la hipótesis de origen
+            # (Spicy: volumen en el EXTREMO del spike, no acumulado en
+            # toda la racha). No se puede reconstruir retroactivo -- el
+            # caché de klines solo guarda ~25 velas por ciclo, sin
+            # histórico minuto-a-minuto del pasado. Se loguea AHORA una
+            # ventana corta (3min, más fiel a "el extremo") en paralelo a
+            # la de 15min, puramente observacional, para comparar signo
+            # cuando acumule n. No sustituye volumen_racha, no toca dec.
+            "volumen_racha_corto": _volumen_racha(activo, ctx, n_velas=3),
             **_libro_calidad(market),
         },
     }
