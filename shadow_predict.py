@@ -905,16 +905,6 @@ def _cargar_spot():
         pass
     return SPOT_PRECIOS
 
-def _extraer_precio_objetivo(question):
-    q = question.replace(",", "").replace("$", "")
-    m = _re.search(r'\b(\d+(?:\.\d+)?)[kK]\b', q)
-    if m:
-        return float(m.group(1)) * 1000
-    m = _re.search(r'\b(\d{4,}(?:\.\d+)?)\b', q)
-    if m:
-        return float(m.group(1))
-    return None
-
 def s_weekly_price(market, ctx):
     import re as _re2
     tags = (market.get("event_tags") or "").lower()
