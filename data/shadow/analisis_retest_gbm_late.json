@@ -1,0 +1,55 @@
+{
+  "global_gap": 0.115,
+  "global_p": 1.0,
+  "global_n": 6735,
+  "por_celda": [
+    {
+      "celda": "GBM_LATE_15M#SOL#BUY_NO",
+      "n": 531,
+      "gap": -0.0211,
+      "p": 0.646
+    },
+    {
+      "celda": "GBM_LATE_15M#SOL#BUY_YES",
+      "n": 528,
+      "gap": -0.1767,
+      "p": 0.0
+    },
+    {
+      "celda": "GBM_LATE_15M#XRP#BUY_NO",
+      "n": 523,
+      "gap": -0.0367,
+      "p": 0.3981
+    },
+    {
+      "celda": "GBM_LATE_15M#XRP#BUY_YES",
+      "n": 462,
+      "gap": -0.1116,
+      "p": 0.014
+    },
+    {
+      "celda": "GBM_LATE_15M_TARDIO#XRP#BUY_NO",
+      "n": 216,
+      "gap": -0.1364,
+      "p": 0.035
+    },
+    {
+      "celda": "GBM_LATE_15M_TARDIO#SOL#BUY_NO",
+      "n": 199,
+      "gap": -0.1234,
+      "p": 0.0864
+    },
+    {
+      "celda": "GBM_LATE_15M_TARDIO#SOL#BUY_YES",
+      "n": 167,
+      "gap": -0.3222,
+      "p": 0.0
+    },
+    {
+      "celda": "GBM_LATE_15M_TARDIO#XRP#BUY_YES",
+      "n": 160,
+      "gap": -0.0244,
+      "p": 0.8665
+    }
+  ]
+}
