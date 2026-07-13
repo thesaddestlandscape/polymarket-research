@@ -3368,6 +3368,33 @@ def main():
                         and dec == "BUY_YES"):
                     dec = "SKIP"
 
+                # GBM_LATE_15M#ETH#15min BUY_YES: promoción manual explícita
+                # (13-Jul, aprobado Javi) del filtro_causal descubierto por
+                # postmortem sobre par live-protegido (ver _es_par_live_protegido
+                # abajo, que por diseño NUNCA lo aplica solo). sigma_ewma_delta_pct
+                # < 4.947 → IC=-0.157 n=33 (malo) vs IC=+0.239 n=21 (bueno).
+                # Verificado antes de promocionar: permutación 20k shuffles
+                # p=0.0026; estable en split temporal (primera mitad 35.7%/76.9%
+                # hit, segunda mitad 31.6%/75.0% hit — mismo gap en ambas mitades);
+                # patrón coherente cross-asset en los 4 pares (BTC/SOL/XRP/ETH,
+                # mismo signo: sigma bajo→peor, sigma alto→mejor) y ya aplicado
+                # automáticamente en BTC (umbral 6.604) porque BTC no está en
+                # pares_permitidos_live. Mecanismo: GBM_LATE_15M apuesta a
+                # continuación direccional — con volatilidad plana/cayendo el
+                # precio tiende a no moverse y la apuesta falla más.
+                # Caveat: feature nuevo, solo ~30h de historia (desde 12-Jul
+                # 07:50 UTC) — no hay validación out-of-time de varios días.
+                # Revisar de nuevo con más n/días; no ampliar a otros pares sin
+                # repetir esta misma verificación.
+                if nombre == "GBM_LATE_15M" and subtype == "ETH#15min" and dec == "BUY_YES":
+                    _sigma_eth = pred_features.get("sigma_ewma_delta_pct")
+                    if _sigma_eth is not None:
+                        try:
+                            if float(_sigma_eth) < 4.947:
+                                dec = "SKIP"
+                        except (TypeError, ValueError):
+                            pass
+
                 # 1. Filtros causales — direccionales (BUY_YES/BUY_NO), se
                 # evalúan aquí (ya se conoce `dec`) para exigir que el filtro
                 # coincida con la dirección real. Antes se evaluaban sin
