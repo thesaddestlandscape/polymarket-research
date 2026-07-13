@@ -1,7 +1,4 @@
 {
- "UPDOWN_GBM#XRP#15min#BUY_NO": {
-  "avisado": true
- },
  "FAVORITO_CONFIRMADO#ETH#5min#BUY_YES": {
   "avisado": true
  },
@@ -20,9 +17,6 @@
  "GBM_LATE_15M_TARDIO#XRP#15min#BUY_NO": {
   "avisado": true
  },
- "GBM_LATE_15M_ESPACIO_ATR#SOL#15min#BUY_YES": {
-  "avisado": true
- },
  "GBM_LATE_15M_ESPACIO_ATR#SOL#15min#BUY_NO": {
   "avisado": true
  },
@@ -32,10 +26,13 @@
  "GBM_LATE_15M_ESPACIO_ATR#ETH#15min#BUY_NO": {
   "avisado": true
  },
- "GBM_LATE_15M_ESPACIO_ATR#XRP#15min#BUY_YES": {
+ "GBM_LATE_15M_ESPACIO_ATR#XRP#15min#BUY_NO": {
   "avisado": true
  },
- "GBM_LATE_15M_ESPACIO_ATR#XRP#15min#BUY_NO": {
+ "FAVORITO_CONFIRMADO#SOL#5min#BUY_NO": {
+  "avisado": true
+ },
+ "GBM_LATE_15M_TARDIO#BTC#15min#BUY_NO": {
   "avisado": true
  }
 }
