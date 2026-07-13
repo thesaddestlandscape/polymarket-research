@@ -3368,6 +3368,16 @@ def main():
                         and dec == "BUY_YES"):
                     dec = "SKIP"
 
+                # WEEKLY_PRICE BUY_YES con in_range=1 (13-Jul, H-CUSTOM-WEEKLY-
+                # INRANGE-BUYYES confirmada con n=35, IC=-0.257 < umbral -0.10):
+                # acertar que el spot YA está dentro del rango estrecho al
+                # vencimiento es intrínsecamente poco probable y el mercado
+                # sobrevalora el "sí" en ese caso. Shadow-only (WEEKLY_PRICE no
+                # está en pares_permitidos_live), sin riesgo de dinero real.
+                if nombre == "WEEKLY_PRICE" and dec == "BUY_YES":
+                    if pred_features.get("in_range") == 1:
+                        dec = "SKIP"
+
                 # GBM_LATE_15M#ETH#15min BUY_YES: promoción manual explícita
                 # (13-Jul, aprobado Javi) del filtro_causal descubierto por
                 # postmortem sobre par live-protegido (ver _es_par_live_protegido
