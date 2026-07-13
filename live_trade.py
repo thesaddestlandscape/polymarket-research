@@ -1589,17 +1589,53 @@ def main():
 
     if disparado:
         log(f"  🛑 CIRCUIT BREAKER: {motivo_cb}")
-        _snap_cb = cargar_balance_real(max_edad_s=3600)
-        _real_cb = (f"Balance real: {_snap_cb['total']:.2f}$ (PnL real {_snap_cb['pnl_real']:+.2f})\n"
-                    if _snap_cb and not _snap_cb.get("_rancio") else "")
-        enviar_telegram(
-            f"🛑 *CIRCUIT BREAKER DISPARADO*\n"
-            f"{motivo_cb}\n"
-            f"Bankroll operativo: {bankroll_actual():.2f}$\n"
-            f"PNL hoy (operativo): {pnl_live_hoy():+.2f}$\n"
-            f"{_real_cb}"
-            f"Bot parado. Usa `/live_switch.sh on` para reactivar."
-        )
+        # Aviso Telegram UNA vez por día Madrid Y POR TIPO de freno (petición
+        # Javi 13-Jul: el ciclo rápido reintenta live_trade 4x/~20s, así que
+        # sin latch esto reenviaba el mismo aviso cada pocos segundos —
+        # mismo patrón de spam ya resuelto en vigia_ic_live_latch.json
+        # (12-Jul). Clave por TIPO, no por motivo_cb completo: motivo_cb
+        # lleva números que cambian cada ciclo (bkr, %, racha), así que
+        # dedupar por el string entero no dedupa nada; clave por fecha SOLA
+        # tampoco vale, silenciaría un freno DISTINTO y más grave que se
+        # disparase el mismo día tras uno más leve (ej. racha=4 por la
+        # mañana, bankroll_minimo por la tarde) — cada tipo avisa una vez,
+        # independientemente de si otro tipo ya avisó hoy. Se resetea solo
+        # con el día nuevo, sin acción manual.
+        if "bankroll" in motivo_cb and "mínimo" in motivo_cb:
+            _tipo_cb = "bankroll_minimo"
+        elif "caída diaria" in motivo_cb:
+            _tipo_cb = "freno_diario"
+        elif "pérdidas live consecutivas" in motivo_cb:
+            _tipo_cb = "racha"
+        elif "ventana" in motivo_cb:
+            _tipo_cb = "freno_ventana"
+        else:
+            _tipo_cb = "otro"
+        _cb_latch_path = DIR_LIVE / "circuit_breaker_aviso_latch.json"
+        try:
+            _cb_latch = json.loads(_cb_latch_path.read_text()) if _cb_latch_path.exists() else {}
+        except Exception:
+            _cb_latch = {}
+        _fecha_hoy = est.get("fecha", "")
+        _clave_cb = f"{_fecha_hoy}#{_tipo_cb}"
+        if _cb_latch.get("clave") != _clave_cb:
+            _snap_cb = cargar_balance_real(max_edad_s=3600)
+            _real_cb = (f"Balance real: {_snap_cb['total']:.2f}$ (PnL real {_snap_cb['pnl_real']:+.2f})\n"
+                        if _snap_cb and not _snap_cb.get("_rancio") else "")
+            ok = enviar_telegram(
+                f"🛑 *CIRCUIT BREAKER DISPARADO*\n"
+                f"{motivo_cb}\n"
+                f"Bankroll operativo: {bankroll_actual():.2f}$\n"
+                f"PNL hoy (operativo): {pnl_live_hoy():+.2f}$\n"
+                f"{_real_cb}"
+                f"Bot parado. Usa `/live_switch.sh on` para reactivar.\n"
+                f"(Este aviso solo llega una vez por tipo de freno al día — "
+                f"el freno sigue activo aunque no recibas más mensajes de este tipo.)"
+            )
+            try:
+                _cb_latch_path.write_text(json.dumps({"clave": _clave_cb, "motivo": motivo_cb, "telegram_ok": ok}))
+            except Exception:
+                pass  # best-effort, igual que _escribir_latch_ventana — el freno ya paró el ciclo
         return
 
     # 3. Cargar predicciones y parámetros

@@ -151,6 +151,7 @@ def estado_live() -> dict:
         "en_ventana":    en_v,
         "motivo":        mv,
         "hora_madrid":   ahora.strftime("%H:%M"),
+        "fecha":         ahora.strftime("%Y-%m-%d"),
         "dia":           ["lun","mar","mié","jue","vie","sáb","dom"][ahora.weekday()],
         "puede_operar":  sw and en_v,
     }
