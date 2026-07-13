@@ -126,6 +126,42 @@ def main():
     print(f"Log-loss:     mercado_crudo={ll_mkt:.5f}  wang_corregido={ll_wang:.5f}  "
           f"({'MEJORA' if ll_wang < ll_mkt else 'EMPEORA'} el Wang Transform)")
 
+    # Lambda propio ajustado a nuestros datos (en vez de asumir 0.183 del
+    # paper) -- responde "¿no interesa probarlo ajustado a nuestros
+    # mercados?": busca el lambda que minimiza Brier, y valida fuera de
+    # muestra (mitad temporal 1 -> aplicado a mitad 2) para no confundir
+    # ajuste con ruido.
+    print()
+    print("--- Lambda propio ajustado (no el 0.183 del paper) ---")
+    rows_sorted_ts = sorted(rows, key=lambda r: r["ts"])
+    mid = len(rows_sorted_ts) // 2
+    primera, segunda = rows_sorted_ts[:mid], rows_sorted_ts[mid:]
+
+    def brier_lambda(subset, lam):
+        errs = []
+        for r in subset:
+            z = norm_ppf(r["p_mercado"])
+            p = norm_cdf(z - lam)
+            errs.append((p - r["acierto"]) ** 2)
+        return sum(errs) / len(errs)
+
+    def mejor_lambda(subset, lo=-1.0, hi=1.0, pasos=4000):
+        mejor_l, mejor_b = 0.0, brier_lambda(subset, 0.0)
+        for i in range(pasos + 1):
+            lam = lo + (hi - lo) * i / pasos
+            b = brier_lambda(subset, lam)
+            if b < mejor_b:
+                mejor_b, mejor_l = b, lam
+        return mejor_l, mejor_b
+
+    l_p, _ = mejor_lambda(primera)
+    b0_s = brier_lambda(segunda, 0.0)
+    b_cruzado = brier_lambda(segunda, l_p)
+    print(f"lambda optimo (1a mitad, n={len(primera)}) = {l_p:+.4f} (vs 0.183 del paper)")
+    print(f"OOS en 2a mitad (n={len(segunda)}): brier(lambda_1a_mitad)={b_cruzado:.5f} "
+          f"vs brier(lambda=0)={b0_s:.5f}  mejora={b0_s-b_cruzado:+.5f} "
+          f"({'real pero mira la magnitud' if b_cruzado < b0_s else 'no mejora'})")
+
     # Por subtype (activo#horizonte) para ver si el patron es consistente
     print()
     print("--- Por subtype (n>=40) ---")
