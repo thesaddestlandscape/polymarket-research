@@ -1,5 +1,5 @@
 {
-  "fecha": "2026-07-13T06:37:02+00:00",
+  "fecha": "2026-07-13T07:07:01+00:00",
   "n_min_capa": 15,
   "ratio_min": 5.0,
   "estrategias": {
@@ -7,9 +7,9 @@
       "candidato_proxy": {
         "fuente": "candidato_proxy",
         "fillable_total": {
-          "n": 419,
-          "hit_pct": 59.9,
-          "pnl_trade": -0.2242
+          "n": 427,
+          "hit_pct": 60.0,
+          "pnl_trade": -0.2234
         },
         "activos": {
           "BTC#BUY_YES": {
@@ -25,7 +25,7 @@
                 "condicion": "gt",
                 "umbral": 7.0,
                 "ic_patron_shadow": 0.2097,
-                "ic_base_shadow": 0.2017,
+                "ic_base_shadow": 0.1974,
                 "n_fillable_filtrado": 29,
                 "pnl_trade_fillable_filtrado": -0.4246,
                 "pnl_trade_fillable_base": -0.414,
@@ -37,8 +37,8 @@
                 "feature": "hora_utc",
                 "condicion": "lt",
                 "umbral": 18.0,
-                "ic_patron_shadow": 0.2156,
-                "ic_base_shadow": 0.2017,
+                "ic_patron_shadow": 0.2099,
+                "ic_base_shadow": 0.1974,
                 "n_fillable_filtrado": 35,
                 "pnl_trade_fillable_filtrado": -0.3806,
                 "pnl_trade_fillable_base": -0.414,
@@ -50,8 +50,8 @@
                 "feature": "py_entrada",
                 "condicion": "gt",
                 "umbral": 0.585,
-                "ic_patron_shadow": 0.2316,
-                "ic_base_shadow": 0.2017,
+                "ic_patron_shadow": 0.2306,
+                "ic_base_shadow": 0.1974,
                 "n_fillable_filtrado": 30,
                 "pnl_trade_fillable_filtrado": -0.3613,
                 "pnl_trade_fillable_base": -0.414,
@@ -62,9 +62,9 @@
                 "clave": "FAVORITO_CONFIRMADO",
                 "feature": "libro_liquidez",
                 "condicion": "gt",
-                "umbral": 2903.7374,
-                "ic_patron_shadow": 0.2154,
-                "ic_base_shadow": 0.2017,
+                "umbral": 2905.1492,
+                "ic_patron_shadow": 0.2074,
+                "ic_base_shadow": 0.1974,
                 "n_fillable_filtrado": 50,
                 "pnl_trade_fillable_filtrado": -0.414,
                 "pnl_trade_fillable_base": -0.414,
@@ -167,21 +167,21 @@
           },
           "BTC#BUY_NO": {
             "fillable": {
-              "n": 76,
-              "hit_pct": 64.5,
-              "pnl_trade": -0.1421
+              "n": 78,
+              "hit_pct": 65.4,
+              "pnl_trade": -0.1146
             },
             "patrones": [
               {
                 "clave": "FAVORITO_CONFIRMADO",
                 "feature": "hora_utc",
                 "condicion": "lt",
-                "umbral": 9.0,
-                "ic_patron_shadow": 0.2342,
-                "ic_base_shadow": 0.1661,
-                "n_fillable_filtrado": 22,
-                "pnl_trade_fillable_filtrado": -0.0073,
-                "pnl_trade_fillable_base": -0.1421,
+                "umbral": 5.0,
+                "ic_patron_shadow": 0.2317,
+                "ic_base_shadow": 0.1672,
+                "n_fillable_filtrado": 15,
+                "pnl_trade_fillable_filtrado": 0.3451,
+                "pnl_trade_fillable_base": -0.1146,
                 "contrario": false,
                 "p_shuffle": null
               },
@@ -191,23 +191,23 @@
                 "condicion": "lt",
                 "umbral": 0.275,
                 "ic_patron_shadow": 0.3246,
-                "ic_base_shadow": 0.1661,
+                "ic_base_shadow": 0.1672,
                 "n_fillable_filtrado": 23,
                 "pnl_trade_fillable_filtrado": -0.1258,
-                "pnl_trade_fillable_base": -0.1421,
-                "contrario": false,
-                "p_shuffle": null
+                "pnl_trade_fillable_base": -0.1146,
+                "contrario": true,
+                "p_shuffle": 0.963
               },
               {
                 "clave": "FAVORITO_CONFIRMADO",
                 "feature": "libro_liquidez",
                 "condicion": "gt",
-                "umbral": 6040.4209,
-                "ic_patron_shadow": 0.2083,
-                "ic_base_shadow": 0.1661,
+                "umbral": 6022.4705,
+                "ic_patron_shadow": 0.2097,
+                "ic_base_shadow": 0.1672,
                 "n_fillable_filtrado": 63,
                 "pnl_trade_fillable_filtrado": -0.0316,
-                "pnl_trade_fillable_base": -0.1421,
+                "pnl_trade_fillable_base": -0.1146,
                 "contrario": false,
                 "p_shuffle": null
               },
@@ -215,14 +215,14 @@
                 "clave": "FAVORITO_CONFIRMADO#BTC#15min",
                 "feature": "hora_utc",
                 "condicion": "gt",
-                "umbral": 8.0,
-                "ic_patron_shadow": 0.234,
-                "ic_base_shadow": 0.2333,
-                "n_fillable_filtrado": 54,
-                "pnl_trade_fillable_filtrado": -0.197,
-                "pnl_trade_fillable_base": -0.1421,
+                "umbral": 18.0,
+                "ic_patron_shadow": 0.2368,
+                "ic_base_shadow": 0.2372,
+                "n_fillable_filtrado": 18,
+                "pnl_trade_fillable_filtrado": 0.2238,
+                "pnl_trade_fillable_base": -0.1146,
                 "contrario": true,
-                "p_shuffle": 0.575
+                "p_shuffle": 0.208
               },
               {
                 "clave": "FAVORITO_CONFIRMADO#BTC#15min",
@@ -230,10 +230,10 @@
                 "condicion": "lt",
                 "umbral": 5.0,
                 "ic_patron_shadow": 0.3056,
-                "ic_base_shadow": 0.2333,
+                "ic_base_shadow": 0.2372,
                 "n_fillable_filtrado": 15,
                 "pnl_trade_fillable_filtrado": 0.3451,
-                "pnl_trade_fillable_base": -0.1421,
+                "pnl_trade_fillable_base": -0.1146,
                 "contrario": false,
                 "p_shuffle": null
               },
@@ -241,12 +241,12 @@
                 "clave": "FAVORITO_CONFIRMADO#BTC#15min",
                 "feature": "libro_liquidez",
                 "condicion": "gt",
-                "umbral": 7704.0798,
-                "ic_patron_shadow": 0.2826,
-                "ic_base_shadow": 0.2333,
+                "umbral": 7675.0798,
+                "ic_patron_shadow": 0.2857,
+                "ic_base_shadow": 0.2372,
                 "n_fillable_filtrado": 32,
                 "pnl_trade_fillable_filtrado": 0.1755,
-                "pnl_trade_fillable_base": -0.1421,
+                "pnl_trade_fillable_base": -0.1146,
                 "contrario": false,
                 "p_shuffle": null
               },
@@ -257,9 +257,9 @@
                 "umbral": 12.0,
                 "ic_patron_shadow": 0.2619,
                 "ic_base_shadow": 0.1757,
-                "n_fillable_filtrado": 32,
-                "pnl_trade_fillable_filtrado": 0.0433,
-                "pnl_trade_fillable_base": -0.1421,
+                "n_fillable_filtrado": 34,
+                "pnl_trade_fillable_filtrado": 0.0954,
+                "pnl_trade_fillable_base": -0.1146,
                 "contrario": false,
                 "p_shuffle": null
               },
@@ -270,9 +270,9 @@
                 "umbral": 0.405,
                 "ic_patron_shadow": 0.2273,
                 "ic_base_shadow": 0.1757,
-                "n_fillable_filtrado": 58,
-                "pnl_trade_fillable_filtrado": -0.1062,
-                "pnl_trade_fillable_base": -0.1421,
+                "n_fillable_filtrado": 60,
+                "pnl_trade_fillable_filtrado": -0.0717,
+                "pnl_trade_fillable_base": -0.1146,
                 "contrario": false,
                 "p_shuffle": null
               },
@@ -285,7 +285,7 @@
                 "ic_base_shadow": 0.1757,
                 "n_fillable_filtrado": 43,
                 "pnl_trade_fillable_filtrado": 0.0484,
-                "pnl_trade_fillable_base": -0.1421,
+                "pnl_trade_fillable_base": -0.1146,
                 "contrario": false,
                 "p_shuffle": null
               }
@@ -294,9 +294,9 @@
           },
           "ETH#BUY_YES": {
             "fillable": {
-              "n": 48,
-              "hit_pct": 56.2,
-              "pnl_trade": -0.3399
+              "n": 50,
+              "hit_pct": 54.0,
+              "pnl_trade": -0.4079
             },
             "patrones": [
               {
@@ -305,10 +305,10 @@
                 "condicion": "gt",
                 "umbral": 7.0,
                 "ic_patron_shadow": 0.2097,
-                "ic_base_shadow": 0.2017,
+                "ic_base_shadow": 0.1974,
                 "n_fillable_filtrado": 35,
                 "pnl_trade_fillable_filtrado": -0.2934,
-                "pnl_trade_fillable_base": -0.3399,
+                "pnl_trade_fillable_base": -0.4079,
                 "contrario": false,
                 "p_shuffle": null
               },
@@ -317,11 +317,11 @@
                 "feature": "hora_utc",
                 "condicion": "lt",
                 "umbral": 18.0,
-                "ic_patron_shadow": 0.2156,
-                "ic_base_shadow": 0.2017,
-                "n_fillable_filtrado": 27,
-                "pnl_trade_fillable_filtrado": -0.194,
-                "pnl_trade_fillable_base": -0.3399,
+                "ic_patron_shadow": 0.2099,
+                "ic_base_shadow": 0.1974,
+                "n_fillable_filtrado": 29,
+                "pnl_trade_fillable_filtrado": -0.3213,
+                "pnl_trade_fillable_base": -0.4079,
                 "contrario": false,
                 "p_shuffle": null
               },
@@ -330,11 +330,11 @@
                 "feature": "py_entrada",
                 "condicion": "gt",
                 "umbral": 0.585,
-                "ic_patron_shadow": 0.2316,
-                "ic_base_shadow": 0.2017,
+                "ic_patron_shadow": 0.2306,
+                "ic_base_shadow": 0.1974,
                 "n_fillable_filtrado": 36,
                 "pnl_trade_fillable_filtrado": -0.2811,
-                "pnl_trade_fillable_base": -0.3399,
+                "pnl_trade_fillable_base": -0.4079,
                 "contrario": false,
                 "p_shuffle": null
               },
@@ -342,14 +342,14 @@
                 "clave": "FAVORITO_CONFIRMADO",
                 "feature": "libro_liquidez",
                 "condicion": "gt",
-                "umbral": 2903.7374,
-                "ic_patron_shadow": 0.2154,
-                "ic_base_shadow": 0.2017,
-                "n_fillable_filtrado": 42,
-                "pnl_trade_fillable_filtrado": -0.383,
-                "pnl_trade_fillable_base": -0.3399,
+                "umbral": 2905.1492,
+                "ic_patron_shadow": 0.2074,
+                "ic_base_shadow": 0.1974,
+                "n_fillable_filtrado": 44,
+                "pnl_trade_fillable_filtrado": -0.4583,
+                "pnl_trade_fillable_base": -0.4079,
                 "contrario": true,
-                "p_shuffle": 0.5825
+                "p_shuffle": 0.565
               },
               {
                 "clave": "FAVORITO_CONFIRMADO#ETH#15min",
@@ -357,10 +357,10 @@
                 "condicion": "gt",
                 "umbral": 7.0,
                 "ic_patron_shadow": 0.2586,
-                "ic_base_shadow": 0.228,
+                "ic_base_shadow": 0.2222,
                 "n_fillable_filtrado": 35,
                 "pnl_trade_fillable_filtrado": -0.2934,
-                "pnl_trade_fillable_base": -0.3399,
+                "pnl_trade_fillable_base": -0.4079,
                 "contrario": false,
                 "p_shuffle": null
               },
@@ -369,11 +369,11 @@
                 "feature": "hora_utc",
                 "condicion": "lt",
                 "umbral": 18.0,
-                "ic_patron_shadow": 0.2374,
-                "ic_base_shadow": 0.228,
-                "n_fillable_filtrado": 27,
-                "pnl_trade_fillable_filtrado": -0.194,
-                "pnl_trade_fillable_base": -0.3399,
+                "ic_patron_shadow": 0.23,
+                "ic_base_shadow": 0.2222,
+                "n_fillable_filtrado": 29,
+                "pnl_trade_fillable_filtrado": -0.3213,
+                "pnl_trade_fillable_base": -0.4079,
                 "contrario": false,
                 "p_shuffle": null
               },
@@ -381,12 +381,25 @@
                 "clave": "FAVORITO_CONFIRMADO#ETH#15min",
                 "feature": "libro_liquidez",
                 "condicion": "gt",
-                "umbral": 4834.1948,
-                "ic_patron_shadow": 0.2955,
-                "ic_base_shadow": 0.228,
-                "n_fillable_filtrado": 22,
-                "pnl_trade_fillable_filtrado": -0.2983,
-                "pnl_trade_fillable_base": -0.3399,
+                "umbral": 3300.5795,
+                "ic_patron_shadow": 0.2474,
+                "ic_base_shadow": 0.2222,
+                "n_fillable_filtrado": 40,
+                "pnl_trade_fillable_filtrado": -0.4519,
+                "pnl_trade_fillable_base": -0.4079,
+                "contrario": true,
+                "p_shuffle": 0.688
+              },
+              {
+                "clave": "FAVORITO_CONFIRMADO#ETH#60min",
+                "feature": "hora_utc",
+                "condicion": "lt",
+                "umbral": 13.0,
+                "ic_patron_shadow": 0.2778,
+                "ic_base_shadow": 0.2273,
+                "n_fillable_filtrado": 24,
+                "pnl_trade_fillable_filtrado": -0.3081,
+                "pnl_trade_fillable_base": -0.4079,
                 "contrario": false,
                 "p_shuffle": null
               }
@@ -395,23 +408,23 @@
           },
           "ETH#BUY_NO": {
             "fillable": {
-              "n": 78,
-              "hit_pct": 60.3,
-              "pnl_trade": -0.1359
+              "n": 79,
+              "hit_pct": 60.8,
+              "pnl_trade": -0.1231
             },
             "patrones": [
               {
                 "clave": "FAVORITO_CONFIRMADO",
                 "feature": "hora_utc",
                 "condicion": "lt",
-                "umbral": 9.0,
-                "ic_patron_shadow": 0.2342,
-                "ic_base_shadow": 0.1661,
-                "n_fillable_filtrado": 26,
-                "pnl_trade_fillable_filtrado": -0.2967,
-                "pnl_trade_fillable_base": -0.1359,
+                "umbral": 5.0,
+                "ic_patron_shadow": 0.2317,
+                "ic_base_shadow": 0.1672,
+                "n_fillable_filtrado": 18,
+                "pnl_trade_fillable_filtrado": -0.2054,
+                "pnl_trade_fillable_base": -0.1231,
                 "contrario": true,
-                "p_shuffle": 0.355
+                "p_shuffle": 0.727
               },
               {
                 "clave": "FAVORITO_CONFIRMADO",
@@ -419,23 +432,23 @@
                 "condicion": "lt",
                 "umbral": 0.275,
                 "ic_patron_shadow": 0.3246,
-                "ic_base_shadow": 0.1661,
+                "ic_base_shadow": 0.1672,
                 "n_fillable_filtrado": 20,
                 "pnl_trade_fillable_filtrado": -0.2041,
-                "pnl_trade_fillable_base": -0.1359,
+                "pnl_trade_fillable_base": -0.1231,
                 "contrario": true,
-                "p_shuffle": 0.75
+                "p_shuffle": 0.7105
               },
               {
                 "clave": "FAVORITO_CONFIRMADO",
                 "feature": "libro_liquidez",
                 "condicion": "gt",
-                "umbral": 6040.4209,
-                "ic_patron_shadow": 0.2083,
-                "ic_base_shadow": 0.1661,
+                "umbral": 6022.4705,
+                "ic_patron_shadow": 0.2097,
+                "ic_base_shadow": 0.1672,
                 "n_fillable_filtrado": 23,
                 "pnl_trade_fillable_filtrado": 0.0903,
-                "pnl_trade_fillable_base": -0.1359,
+                "pnl_trade_fillable_base": -0.1231,
                 "contrario": false,
                 "p_shuffle": null
               },
@@ -445,10 +458,10 @@
                 "condicion": "gt",
                 "umbral": 16.0,
                 "ic_patron_shadow": 0.1923,
-                "ic_base_shadow": 0.1765,
+                "ic_base_shadow": 0.1788,
                 "n_fillable_filtrado": 22,
                 "pnl_trade_fillable_filtrado": -0.0314,
-                "pnl_trade_fillable_base": -0.1359,
+                "pnl_trade_fillable_base": -0.1231,
                 "contrario": false,
                 "p_shuffle": null
               },
@@ -457,13 +470,13 @@
                 "feature": "hora_utc",
                 "condicion": "lt",
                 "umbral": 12.0,
-                "ic_patron_shadow": 0.1761,
-                "ic_base_shadow": 0.1765,
-                "n_fillable_filtrado": 37,
-                "pnl_trade_fillable_filtrado": -0.1282,
-                "pnl_trade_fillable_base": -0.1359,
-                "contrario": true,
-                "p_shuffle": 0.9435
+                "ic_patron_shadow": 0.1806,
+                "ic_base_shadow": 0.1788,
+                "n_fillable_filtrado": 38,
+                "pnl_trade_fillable_filtrado": -0.1017,
+                "pnl_trade_fillable_base": -0.1231,
+                "contrario": false,
+                "p_shuffle": null
               },
               {
                 "clave": "FAVORITO_CONFIRMADO#ETH#15min",
@@ -471,25 +484,25 @@
                 "condicion": "lt",
                 "umbral": 0.245,
                 "ic_patron_shadow": 0.3158,
-                "ic_base_shadow": 0.1765,
+                "ic_base_shadow": 0.1788,
                 "n_fillable_filtrado": 17,
                 "pnl_trade_fillable_filtrado": -0.3235,
-                "pnl_trade_fillable_base": -0.1359,
+                "pnl_trade_fillable_base": -0.1231,
                 "contrario": true,
-                "p_shuffle": 0.4275
+                "p_shuffle": 0.4095
               },
               {
                 "clave": "FAVORITO_CONFIRMADO#ETH#15min",
                 "feature": "libro_liquidez",
                 "condicion": "gt",
-                "umbral": 3498.8855,
-                "ic_patron_shadow": 0.1796,
-                "ic_base_shadow": 0.1765,
-                "n_fillable_filtrado": 60,
-                "pnl_trade_fillable_filtrado": -0.0448,
-                "pnl_trade_fillable_base": -0.1359,
-                "contrario": false,
-                "p_shuffle": null
+                "umbral": 3923.8281,
+                "ic_patron_shadow": 0.1774,
+                "ic_base_shadow": 0.1788,
+                "n_fillable_filtrado": 56,
+                "pnl_trade_fillable_filtrado": -0.0249,
+                "pnl_trade_fillable_base": -0.1231,
+                "contrario": true,
+                "p_shuffle": 0.2215
               },
               {
                 "clave": "FAVORITO_CONFIRMADO#ETH#60min",
@@ -498,9 +511,9 @@
                 "umbral": 12.0,
                 "ic_patron_shadow": 0.1667,
                 "ic_base_shadow": 0.0897,
-                "n_fillable_filtrado": 37,
-                "pnl_trade_fillable_filtrado": -0.1282,
-                "pnl_trade_fillable_base": -0.1359,
+                "n_fillable_filtrado": 38,
+                "pnl_trade_fillable_filtrado": -0.1017,
+                "pnl_trade_fillable_base": -0.1231,
                 "contrario": false,
                 "p_shuffle": null
               },
@@ -511,9 +524,9 @@
                 "umbral": 0.405,
                 "ic_patron_shadow": 0.1818,
                 "ic_base_shadow": 0.0897,
-                "n_fillable_filtrado": 55,
-                "pnl_trade_fillable_filtrado": -0.1288,
-                "pnl_trade_fillable_base": -0.1359,
+                "n_fillable_filtrado": 56,
+                "pnl_trade_fillable_filtrado": -0.1108,
+                "pnl_trade_fillable_base": -0.1231,
                 "contrario": false,
                 "p_shuffle": null
               },
@@ -526,7 +539,7 @@
                 "ic_base_shadow": 0.0897,
                 "n_fillable_filtrado": 29,
                 "pnl_trade_fillable_filtrado": 0.0627,
-                "pnl_trade_fillable_base": -0.1359,
+                "pnl_trade_fillable_base": -0.1231,
                 "contrario": false,
                 "p_shuffle": null
               }
@@ -535,9 +548,9 @@
           },
           "SOL#BUY_YES": {
             "fillable": {
-              "n": 72,
-              "hit_pct": 62.5,
-              "pnl_trade": -0.1748
+              "n": 74,
+              "hit_pct": 62.2,
+              "pnl_trade": -0.1827
             },
             "patrones": [
               {
@@ -546,10 +559,10 @@
                 "condicion": "gt",
                 "umbral": 7.0,
                 "ic_patron_shadow": 0.2097,
-                "ic_base_shadow": 0.2017,
+                "ic_base_shadow": 0.1974,
                 "n_fillable_filtrado": 46,
                 "pnl_trade_fillable_filtrado": -0.1378,
-                "pnl_trade_fillable_base": -0.1748,
+                "pnl_trade_fillable_base": -0.1827,
                 "contrario": false,
                 "p_shuffle": null
               },
@@ -558,26 +571,26 @@
                 "feature": "hora_utc",
                 "condicion": "lt",
                 "umbral": 18.0,
-                "ic_patron_shadow": 0.2156,
-                "ic_base_shadow": 0.2017,
-                "n_fillable_filtrado": 49,
-                "pnl_trade_fillable_filtrado": -0.2202,
-                "pnl_trade_fillable_base": -0.1748,
+                "ic_patron_shadow": 0.2099,
+                "ic_base_shadow": 0.1974,
+                "n_fillable_filtrado": 51,
+                "pnl_trade_fillable_filtrado": -0.2298,
+                "pnl_trade_fillable_base": -0.1827,
                 "contrario": true,
-                "p_shuffle": 0.678
+                "p_shuffle": 0.6405
               },
               {
                 "clave": "FAVORITO_CONFIRMADO",
                 "feature": "py_entrada",
                 "condicion": "gt",
                 "umbral": 0.585,
-                "ic_patron_shadow": 0.2316,
-                "ic_base_shadow": 0.2017,
-                "n_fillable_filtrado": 60,
-                "pnl_trade_fillable_filtrado": -0.2369,
-                "pnl_trade_fillable_base": -0.1748,
+                "ic_patron_shadow": 0.2306,
+                "ic_base_shadow": 0.1974,
+                "n_fillable_filtrado": 62,
+                "pnl_trade_fillable_filtrado": -0.2442,
+                "pnl_trade_fillable_base": -0.1827,
                 "contrario": true,
-                "p_shuffle": 0.3845
+                "p_shuffle": 0.374
               },
               {
                 "clave": "FAVORITO_CONFIRMADO#SOL#15min",
@@ -585,10 +598,10 @@
                 "condicion": "gt",
                 "umbral": 12.0,
                 "ic_patron_shadow": 0.2385,
-                "ic_base_shadow": 0.2244,
+                "ic_base_shadow": 0.2266,
                 "n_fillable_filtrado": 34,
                 "pnl_trade_fillable_filtrado": -0.1023,
-                "pnl_trade_fillable_base": -0.1748,
+                "pnl_trade_fillable_base": -0.1827,
                 "contrario": false,
                 "p_shuffle": null
               },
@@ -596,38 +609,38 @@
                 "clave": "FAVORITO_CONFIRMADO#SOL#15min",
                 "feature": "hora_utc",
                 "condicion": "lt",
-                "umbral": 5.0,
-                "ic_patron_shadow": 0.2222,
-                "ic_base_shadow": 0.2244,
-                "n_fillable_filtrado": 16,
-                "pnl_trade_fillable_filtrado": -0.1512,
-                "pnl_trade_fillable_base": -0.1748,
+                "umbral": 6.0,
+                "ic_patron_shadow": 0.2273,
+                "ic_base_shadow": 0.2266,
+                "n_fillable_filtrado": 19,
+                "pnl_trade_fillable_filtrado": -0.2041,
+                "pnl_trade_fillable_base": -0.1827,
                 "contrario": true,
-                "p_shuffle": 0.9275
+                "p_shuffle": 0.9355
               },
               {
                 "clave": "FAVORITO_CONFIRMADO#SOL#15min",
                 "feature": "py_entrada",
                 "condicion": "gt",
                 "umbral": 0.625,
-                "ic_patron_shadow": 0.2841,
-                "ic_base_shadow": 0.2244,
-                "n_fillable_filtrado": 45,
-                "pnl_trade_fillable_filtrado": -0.2293,
-                "pnl_trade_fillable_base": -0.1748,
+                "ic_patron_shadow": 0.2865,
+                "ic_base_shadow": 0.2266,
+                "n_fillable_filtrado": 47,
+                "pnl_trade_fillable_filtrado": -0.2394,
+                "pnl_trade_fillable_base": -0.1827,
                 "contrario": true,
-                "p_shuffle": 0.671
+                "p_shuffle": 0.624
               },
               {
                 "clave": "FAVORITO_CONFIRMADO#SOL#15min",
                 "feature": "libro_liquidez",
                 "condicion": "gt",
-                "umbral": 1883.122,
+                "umbral": 1888.7041,
                 "ic_patron_shadow": 0.2556,
-                "ic_base_shadow": 0.2244,
-                "n_fillable_filtrado": 31,
-                "pnl_trade_fillable_filtrado": 0.1753,
-                "pnl_trade_fillable_base": -0.1748,
+                "ic_base_shadow": 0.2266,
+                "n_fillable_filtrado": 32,
+                "pnl_trade_fillable_filtrado": 0.0909,
+                "pnl_trade_fillable_base": -0.1827,
                 "contrario": false,
                 "p_shuffle": null
               }
@@ -636,21 +649,21 @@
           },
           "SOL#BUY_NO": {
             "fillable": {
-              "n": 95,
-              "hit_pct": 60.0,
-              "pnl_trade": -0.2416
+              "n": 96,
+              "hit_pct": 60.4,
+              "pnl_trade": -0.2304
             },
             "patrones": [
               {
                 "clave": "FAVORITO_CONFIRMADO",
                 "feature": "hora_utc",
                 "condicion": "lt",
-                "umbral": 9.0,
-                "ic_patron_shadow": 0.2342,
-                "ic_base_shadow": 0.1661,
-                "n_fillable_filtrado": 32,
-                "pnl_trade_fillable_filtrado": -0.0425,
-                "pnl_trade_fillable_base": -0.2416,
+                "umbral": 5.0,
+                "ic_patron_shadow": 0.2317,
+                "ic_base_shadow": 0.1672,
+                "n_fillable_filtrado": 21,
+                "pnl_trade_fillable_filtrado": -0.1264,
+                "pnl_trade_fillable_base": -0.2304,
                 "contrario": false,
                 "p_shuffle": null
               },
@@ -660,23 +673,10 @@
                 "condicion": "lt",
                 "umbral": 0.275,
                 "ic_patron_shadow": 0.3246,
-                "ic_base_shadow": 0.1661,
+                "ic_base_shadow": 0.1672,
                 "n_fillable_filtrado": 28,
                 "pnl_trade_fillable_filtrado": -0.2087,
-                "pnl_trade_fillable_base": -0.2416,
-                "contrario": false,
-                "p_shuffle": null
-              },
-              {
-                "clave": "FAVORITO_CONFIRMADO#SOL#15min",
-                "feature": "hora_utc",
-                "condicion": "gt",
-                "umbral": 16.0,
-                "ic_patron_shadow": 0.1939,
-                "ic_base_shadow": 0.1963,
-                "n_fillable_filtrado": 29,
-                "pnl_trade_fillable_filtrado": -0.5397,
-                "pnl_trade_fillable_base": -0.2416,
+                "pnl_trade_fillable_base": -0.2304,
                 "contrario": false,
                 "p_shuffle": null
               },
@@ -685,11 +685,11 @@
                 "feature": "hora_utc",
                 "condicion": "lt",
                 "umbral": 17.0,
-                "ic_patron_shadow": 0.2157,
-                "ic_base_shadow": 0.1963,
-                "n_fillable_filtrado": 66,
-                "pnl_trade_fillable_filtrado": -0.1106,
-                "pnl_trade_fillable_base": -0.2416,
+                "ic_patron_shadow": 0.2184,
+                "ic_base_shadow": 0.1985,
+                "n_fillable_filtrado": 67,
+                "pnl_trade_fillable_filtrado": -0.0965,
+                "pnl_trade_fillable_base": -0.2304,
                 "contrario": false,
                 "p_shuffle": null
               },
@@ -698,11 +698,11 @@
                 "feature": "py_entrada",
                 "condicion": "lt",
                 "umbral": 0.315,
-                "ic_patron_shadow": 0.2714,
-                "ic_base_shadow": 0.1963,
-                "n_fillable_filtrado": 40,
-                "pnl_trade_fillable_filtrado": -0.2018,
-                "pnl_trade_fillable_base": -0.2416,
+                "ic_patron_shadow": 0.2746,
+                "ic_base_shadow": 0.1985,
+                "n_fillable_filtrado": 41,
+                "pnl_trade_fillable_filtrado": -0.1764,
+                "pnl_trade_fillable_base": -0.2304,
                 "contrario": false,
                 "p_shuffle": null
               },
@@ -711,13 +711,13 @@
                 "feature": "libro_liquidez",
                 "condicion": "gt",
                 "umbral": 1648.9469,
-                "ic_patron_shadow": 0.2157,
-                "ic_base_shadow": 0.1963,
-                "n_fillable_filtrado": 69,
-                "pnl_trade_fillable_filtrado": -0.2463,
-                "pnl_trade_fillable_base": -0.2416,
+                "ic_patron_shadow": 0.2184,
+                "ic_base_shadow": 0.1985,
+                "n_fillable_filtrado": 70,
+                "pnl_trade_fillable_filtrado": -0.2308,
+                "pnl_trade_fillable_base": -0.2304,
                 "contrario": true,
-                "p_shuffle": 0.951
+                "p_shuffle": 0.9965
               },
               {
                 "clave": "FAVORITO_CONFIRMADO#SOL#60min",
@@ -728,9 +728,9 @@
                 "ic_base_shadow": 0.1047,
                 "n_fillable_filtrado": 29,
                 "pnl_trade_fillable_filtrado": -0.5397,
-                "pnl_trade_fillable_base": -0.2416,
+                "pnl_trade_fillable_base": -0.2304,
                 "contrario": true,
-                "p_shuffle": 0.1205
+                "p_shuffle": 0.1115
               },
               {
                 "clave": "FAVORITO_CONFIRMADO#SOL#60min",
@@ -739,9 +739,9 @@
                 "umbral": 0.35,
                 "ic_patron_shadow": 0.2059,
                 "ic_base_shadow": 0.1047,
-                "n_fillable_filtrado": 48,
-                "pnl_trade_fillable_filtrado": -0.1634,
-                "pnl_trade_fillable_base": -0.2416,
+                "n_fillable_filtrado": 49,
+                "pnl_trade_fillable_filtrado": -0.1429,
+                "pnl_trade_fillable_base": -0.2304,
                 "contrario": false,
                 "p_shuffle": null
               }
@@ -764,9 +764,9 @@
       "live_real": {
         "fuente": "live_real",
         "fillable_total": {
-          "n": 151,
-          "hit_pct": 45.0,
-          "pnl_trade": -0.0417
+          "n": 152,
+          "hit_pct": 44.7,
+          "pnl_trade": -0.0549
         },
         "activos": {
           "ETH#BUY_YES": {
@@ -780,9 +780,9 @@
           },
           "SOL#BUY_YES": {
             "fillable": {
-              "n": 58,
-              "hit_pct": 51.7,
-              "pnl_trade": 0.2201
+              "n": 59,
+              "hit_pct": 50.8,
+              "pnl_trade": 0.1818
             },
             "patrones": [
               {
@@ -790,11 +790,11 @@
                 "feature": "sigma_h",
                 "condicion": "lt",
                 "umbral": 0.0161,
-                "ic_patron_shadow": 0.1361,
-                "ic_base_shadow": 0.1201,
-                "n_fillable_filtrado": 34,
-                "pnl_trade_fillable_filtrado": 0.6137,
-                "pnl_trade_fillable_base": 0.2201,
+                "ic_patron_shadow": 0.1345,
+                "ic_base_shadow": 0.1189,
+                "n_fillable_filtrado": 35,
+                "pnl_trade_fillable_filtrado": 0.5379,
+                "pnl_trade_fillable_base": 0.1818,
                 "contrario": false,
                 "p_shuffle": null
               },
@@ -804,10 +804,10 @@
                 "condicion": "gt",
                 "umbral": 16.0,
                 "ic_patron_shadow": 0.1497,
-                "ic_base_shadow": 0.1201,
+                "ic_base_shadow": 0.1189,
                 "n_fillable_filtrado": 23,
                 "pnl_trade_fillable_filtrado": 0.4918,
-                "pnl_trade_fillable_base": 0.2201,
+                "pnl_trade_fillable_base": 0.1818,
                 "contrario": false,
                 "p_shuffle": null
               }
@@ -881,7 +881,21 @@
               "hit_pct": 30.0,
               "pnl_trade": -0.0936
             },
-            "patrones": [],
+            "patrones": [
+              {
+                "clave": "GBM_LATE_15M_ESPACIO_ATR#BTC#15min",
+                "feature": "sigma_h",
+                "condicion": "lt",
+                "umbral": 0.0063,
+                "ic_patron_shadow": 0.1441,
+                "ic_base_shadow": 0.141,
+                "n_fillable_filtrado": 18,
+                "pnl_trade_fillable_filtrado": 0.1227,
+                "pnl_trade_fillable_base": -0.0936,
+                "contrario": false,
+                "p_shuffle": null
+              }
+            ],
             "filtros": []
           },
           "ETH#BUY_YES": {
@@ -896,21 +910,21 @@
                 "feature": "hora_utc",
                 "condicion": "lt",
                 "umbral": 18.0,
-                "ic_patron_shadow": 0.1781,
-                "ic_base_shadow": 0.169,
+                "ic_patron_shadow": 0.1735,
+                "ic_base_shadow": 0.1655,
                 "n_fillable_filtrado": 15,
                 "pnl_trade_fillable_filtrado": -1.5232,
                 "pnl_trade_fillable_base": -0.8053,
                 "contrario": true,
-                "p_shuffle": 0.0045
+                "p_shuffle": 0.006
               },
               {
                 "clave": "GBM_LATE_15M_ESPACIO_ATR#ETH#15min",
                 "feature": "hora_utc",
                 "condicion": "lt",
                 "umbral": 18.0,
-                "ic_patron_shadow": 0.1746,
-                "ic_base_shadow": 0.1522,
+                "ic_patron_shadow": 0.1693,
+                "ic_base_shadow": 0.1481,
                 "n_fillable_filtrado": 15,
                 "pnl_trade_fillable_filtrado": -1.5232,
                 "pnl_trade_fillable_base": -0.8053,
@@ -927,9 +941,9 @@
       "candidato_proxy": {
         "fuente": "candidato_proxy",
         "fillable_total": {
-          "n": 22,
-          "hit_pct": 22.7,
-          "pnl_trade": -0.8994
+          "n": 23,
+          "hit_pct": 21.7,
+          "pnl_trade": -0.8847
         },
         "activos": {}
       }
