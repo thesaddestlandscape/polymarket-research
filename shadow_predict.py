@@ -1353,6 +1353,77 @@ def _aplicar_kelly_compuesto(rows: list) -> list:
     return rows
 
 
+# ── Conexiones detectadas 13-Jul (sesión de auditoría estrategia↔problema),
+# implementadas en shadow como features observacionales — nunca tocan
+# dec/apuesta. El pipeline causal (postmortem→FEATURE_RULES) las descubrirá
+# solo si hace falta un filtro/boost, con n suficiente, igual que el resto
+# de features del sistema. Ver idea_awesome_quant_hallazgos_13jul y
+# project_auditoria_estrategia_problema_13jul (memoria nativa Claude).
+GBM_LATE_FAMILIA = {"GBM_LATE_15M", "GBM_LATE_15M_TARDIO", "GBM_LATE_15M_ESPACIO_ATR"}
+
+# Wang Transform (Yang, Y. 2026, "Pricing Prediction Markets" — calibrado
+# sobre 291,309 contratos reales, 6 plataformas): p_mercado =
+# Phi(Phi^-1(p_real) + lambda), lambda_hat=0.183 global (p<1e-15). Formaliza
+# el mismo sesgo favorito-longshot que FAVORITO_CONFIRMADO ya explota
+# ad-hoc. Se usa el lambda GLOBAL (no el jerárquico por volumen/plazo — su
+# dependencia de "días a vencimiento" no tiene análogo directo en mercados
+# de minutos, ver caveat en la nota de origen) hasta que haya n suficiente
+# para recalibrar sobre nuestra propia escala.
+WANG_LAMBDA = 0.183
+
+
+def _inyectar_features_cruzadas(rows: list) -> list:
+    """
+    rows: mismo formato que _aplicar_kelly_compuesto (índices: 1=strategy,
+    6=precio_yes, 7=prob_yes_modelo, 11=decision, 15=features_json).
+
+    Dos conexiones detectadas al auditar el sistema (13-Jul), medidas aquí
+    por primera vez para que dejen de vivir solo en el análisis retrospectivo:
+
+    1. Wang Transform sobre FAVORITO_CONFIRMADO: p_implicito = probabilidad
+       "justa" que implica el precio de mercado tras deshacer el sesgo
+       lambda. wang_gap = cuánto se aleja nuestro prob_yes_modelo de esa
+       corrección — si FAVORITO_CONFIRMADO ya captura el mismo sesgo,
+       wang_gap debería ser pequeño; si no, es una corrección potencialmente
+       complementaria (a estudiar, no aplicada).
+    2. Confirmación cruzada FAVORITO_CONFIRMADO -> familia GBM_LATE_15M:
+       mecanismo distinto (convicción de favorito vs continuación GBM) sobre
+       el MISMO market_id — favorito_confirma_coincide=1 si están de
+       acuerdo en dirección. Candidata a alimentar `boost_ic_coincidencia_tuplas`
+       (P8) el día que FAVORITO_CONFIRMADO entre en pares_permitidos_live;
+       hoy solo se mide.
+    """
+    favorito_row = next((r for r in rows if r[1] == "FAVORITO_CONFIRMADO" and r[11] != "SKIP"), None)
+    for r in rows:
+        try:
+            feats = json.loads(r[15]) if r[15] else {}
+        except Exception:
+            feats = {}
+        cambiado = False
+
+        if r[1] == "FAVORITO_CONFIRMADO" and r[11] != "SKIP":
+            try:
+                wang_p_implicito = _norm_cdf(_norm_ppf(float(r[6])) - WANG_LAMBDA)
+                feats["wang_p_implicito"] = round(wang_p_implicito, 4)
+                feats["wang_gap"] = round(float(r[7]) - wang_p_implicito, 4)
+                cambiado = True
+            except (TypeError, ValueError, ZeroDivisionError):
+                pass
+
+        if r[1] in GBM_LATE_FAMILIA and r[11] != "SKIP":
+            if favorito_row is not None:
+                feats["favorito_confirma_decision"] = favorito_row[11]
+                feats["favorito_confirma_coincide"] = 1 if favorito_row[11] == r[11] else 0
+            else:
+                feats["favorito_confirma_decision"] = None
+                feats["favorito_confirma_coincide"] = None
+            cambiado = True
+
+        if cambiado:
+            r[15] = json.dumps(feats, separators=(",", ":"))
+    return rows
+
+
 def _gbm_p_up(spot, ref, sigma_h, T_h, mu_h=0.0):
     """
     P(S_T > ref | S_t=spot) via Black-Scholes digital.
@@ -3245,6 +3316,11 @@ def main():
     print(f"  Pares (strategy,market_id) ya predichos hoy: {len(ya_predichos)}")
     total, ops, skipped_dup, skipped_extremo = 0, 0, 0, 0
     contador = {nombre: {"aplica": 0, "operable": 0} for nombre, _ in ESTRATEGIAS}
+    # Conexión "correlación de ventana" (13-Jul, idea_racha_correlacion_ventana):
+    # (end_date, dirección) -> {activos que ya dispararon GBM_LATE_15M/familia
+    # esta ventana}. Se rellena según se procesan los mercados de este ciclo
+    # (orden de llegada real, no retrospectivo) — puramente observacional.
+    _ventana_activos_gbmlate = {}
     with open(archivo, "a", newline="", encoding="utf-8") as f:
         w = csv.writer(f)
         if nuevo:
@@ -3532,6 +3608,21 @@ def main():
                 if dec != "SKIP":
                     ops += 1
                     ya_predichos.add((nombre, mid))
+                # Conexión "correlación de ventana" (ver init de
+                # _ventana_activos_gbmlate arriba): cuántos OTROS activos ya
+                # dispararon la misma dirección en esta ventana antes que yo,
+                # este ciclo. idea_racha_correlacion_ventana ya tenía evidencia
+                # fuerte (n=238, dependencia de cola 3-5x) de que pares
+                # correlacionados en la misma ventana explican los disparos
+                # del freno=4 mejor que "régimen de mercado" (refutado hoy en
+                # analisis_regimen_sesion.py) — esto lo mide en vivo, trade a
+                # trade, en vez de solo retrospectivo.
+                if nombre in GBM_LATE_FAMILIA and dec in ("BUY_YES", "BUY_NO"):
+                    _activo_actual = subtype.split("#", 1)[0] if "#" in subtype else ""
+                    _vkey = (m.get("end_date", ""), dec)
+                    _previos = _ventana_activos_gbmlate.setdefault(_vkey, set())
+                    pred_features["ventana_activos_previos_mismo_signo"] = len(_previos - {_activo_actual})
+                    _previos.add(_activo_actual)
                 features_json = json.dumps(pred.get("features", {}), separators=(",", ":"))
                 market_rows.append([
                     ts, nombre, mid,
@@ -3544,6 +3635,9 @@ def main():
 
             # Kelly compuesto: boost si UPDOWN_GBM y ORDER_FLOW_5M coinciden
             market_rows = _aplicar_kelly_compuesto(market_rows)
+            # Wang Transform (FAVORITO_CONFIRMADO) + confirmación cruzada
+            # FAVORITO_CONFIRMADO<->familia GBM_LATE_15M — solo observacional
+            market_rows = _inyectar_features_cruzadas(market_rows)
 
             for row in market_rows:
                 if row[11] != "SKIP":
