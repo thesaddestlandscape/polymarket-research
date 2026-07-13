@@ -1,5 +1,5 @@
-# Hipótesis automáticas — 2026-07-13 01:04 UTC
-_Generado por shadow_postmortem.py sobre 11703 resoluciones (PNL=+2271.99€)_
+# Hipótesis automáticas — 2026-07-13 01:10 UTC
+_Generado por shadow_postmortem.py sobre 11704 resoluciones (PNL=+2272.48€)_
 
 ## Patrones causales activos
 
@@ -686,7 +686,7 @@ _Generado por shadow_postmortem.py sobre 11703 resoluciones (PNL=+2271.99€)_
 - **FILTRO** `hora_utc` > `4.0` → IC=-0.122 (n=35)
   - _Por qué funciona_: hora tardía/noche → sesión US cerrada, menos participantes informados; señales más ruidosas
   - _Acción_: SKIP cuando `hora_utc` > 4.0
-  - _Potencial_: sin este filtro IC_bueno=+0.110 (n=57)
+  - _Potencial_: sin este filtro IC_bueno=+0.117 (n=58)
 
 ### ORDER_FLOW_5M#BNB#5min
 - **PATRÓN** `total_vol_5m` < `197.886` → IC=+0.186 (n=33)
@@ -1320,8 +1320,8 @@ _Derivadas de los patrones aprendidos:_
 | ✅ LEADLAG_BTC_XRP_15M#15min | 76 | +0.128 | +23.12€ | 0 | 0 |
 | ✅ LEADLAG_BTC_XRP_15M#XRP | 76 | +0.128 | +23.12€ | 0 | 0 |
 | ✅ LEADLAG_BTC_XRP_15M#XRP#15min | 76 | +0.128 | +23.12€ | 0 | 2 |
-| ✅ ORDER_FLOW_5M | 1587 | +0.012 | +15.15€ | 1 | 0 |
-| ✅ ORDER_FLOW_5M#5min | 1451 | +0.008 | +2.55€ | 0 | 0 |
+| ✅ ORDER_FLOW_5M | 1588 | +0.013 | +15.64€ | 1 | 0 |
+| ✅ ORDER_FLOW_5M#5min | 1452 | +0.008 | +3.04€ | 0 | 0 |
 | ✅ ORDER_FLOW_5M#BNB | 193 | +0.049 | +7.28€ | 0 | 0 |
 | ✅ ORDER_FLOW_5M#BNB#5min | 193 | +0.049 | +7.28€ | 0 | 1 |
 | ✅ ORDER_FLOW_5M#BTC | 291 | -0.019 | -5.24€ | 0 | 0 |
@@ -1332,8 +1332,8 @@ _Derivadas de los patrones aprendidos:_
 | ✅ ORDER_FLOW_5M#ETH#5min | 251 | -0.018 | -7.93€ | 0 | 0 |
 | ✅ ORDER_FLOW_5M#SOL | 321 | +0.039 | +12.69€ | 0 | 0 |
 | ✅ ORDER_FLOW_5M#SOL#5min | 321 | +0.039 | +12.69€ | 0 | 0 |
-| ✅ ORDER_FLOW_5M#XRP | 187 | -0.003 | -2.88€ | 0 | 0 |
-| ✅ ORDER_FLOW_5M#XRP#5min | 187 | -0.003 | -2.88€ | 1 | 0 |
+| ✅ ORDER_FLOW_5M#XRP | 188 | +0.000 | -2.39€ | 0 | 0 |
+| ✅ ORDER_FLOW_5M#XRP#5min | 188 | +0.000 | -2.39€ | 1 | 0 |
 | ✅ PRICE_TARGET_GBM | 138 | -0.150 | +0.19€ | 4 | 1 |
 | 🚫 PRICE_TARGET_GBM#BTC | 62 | -0.250 | -18.09€ | 0 | 0 |
 | 🚫 PRICE_TARGET_GBM#BTC#atexpiry | 56 | -0.276 | -17.35€ | 0 | 0 |
@@ -1471,7 +1471,7 @@ _Derivadas de los patrones aprendidos:_
 **🟡 H-STREAK-COOLDOWN** — Cooldown tras 2 derrotas consecutivas (mismo subtype)
   - _Umbral_: n≥40 tras 2 losses y gap(IC_tras_win - IC_tras_2loss)≥0.05
   - _Acción_: Reducir stake (no desactivar) 1-2h tras 2 derrotas consecutivas en el mismo subtype
-  - _Estado_: tras_win IC=+0.094 n=6664 | tras_1loss IC=+0.050 n=4900 | tras_2loss IC=+0.018 n=2178/40 | gap=+0.076 (umbral 0.05)
+  - _Estado_: tras_win IC=+0.094 n=6664 | tras_1loss IC=+0.050 n=4901 | tras_2loss IC=+0.018 n=2179/40 | gap=+0.076 (umbral 0.05)
 
 **🟡 H-KALMAN** — Kalman filter para drift adaptativo
   - _Umbral_: n≥200 por subtipo para calibrar parámetros Q/R del KF
@@ -1490,7 +1490,7 @@ _Derivadas de los patrones aprendidos:_
 **⏳ H-CROSS-ASSET** — Cross-asset confirmation GBM+OF BUY_NO
   - _Umbral_: n_overlaps≥20 y IC_overlap > IC_base + 0.05
   - _Acción_: Cambiar _aplicar_kelly_compuesto: match por activo, no market_id
-  - _Estado_: n_overlaps=31, boost estimado=-0.030. Necesita 0 más y boost>0.05
+  - _Estado_: n_overlaps=31, boost estimado=-0.031. Necesita 0 más y boost>0.05
 
 **⏳ H-KELLY-HORA** — Kelly boost ×1.2 en horas top (15/17/19h UTC)
   - _Umbral_: n≥40 por hora con IC estable ≥+0.10 confirmado en forward
@@ -1720,8 +1720,8 @@ _Derivadas de los patrones aprendidos:_
   - _Hipótesis_: Inspirado en un artículo sobre 'volume trading strategy' (mean-reversion en SPY): la idea es que un mismo movimiento de precio con volumen inusualmente alto refleja pánico/liquidación forzada y tiene más probabilidad de revertir que el mismo movimiento con volumen normal. No es transplantable tal cual (esa estrategia opera en barras diarias de SPY, nosotros en ventanas de 15-60min de cripto), pero el feature total_vol_5m ya se captura en cada predicción de ORDER_FLOW_5M (shadow_predict.py) y nunca se ha usado como filtro independiente — solo sirve de denominador para calcular delta_ratio. Hipótesis: dentro de las señales que ya pasan el filtro de delta_ratio, un total_vol_5m alto (volumen real, no solo desequilibrio) mejora el IC. Distribución real en predictions_*.csv (n=843): mediana=1696, p75=108522 (muy asimétrica) — se usa p75 como umbral de 'volumen alto'.
   - _Umbral_: n≥40 y IC>+0.08
   - _Acción_: Si IC_volumen_alto > IC_baseline + 0.05 con n≥40 → boost ×1.1 en ORDER_FLOW_5M cuando total_vol_5m>100000
-  - _Estado_: n=347 IC=-0.007 PNL=-5.82€ — sin señal clara aún (umbral IC: min=0.08 max=None)
-  - _Datos_: n=347 IC=-0.007 PNL=-5.82€
+  - _Estado_: n=348 IC=-0.006 PNL=-5.33€ — sin señal clara aún (umbral IC: min=0.08 max=None)
+  - _Datos_: n=348 IC=-0.006 PNL=-5.33€
 
 **🟡 H-CUSTOM-CROSS-WINDOW-SPREAD-POS** — GBM 15min/60min: spread positivo alto de precio_yes contra la ventana relacionada
   - _Hipótesis_: Inspirado en un artículo sobre bots de Polymarket: mercados de distinta duración del mismo activo (ej. BTC#15min vs BTC#60min) no repriciician a la misma velocidad — uno puede quedarse rezagado tras un movimiento. Si el spread entre ambos se sale de lo normal, puede indicar que uno de los dos aún no ha incorporado la información que el otro ya tiene. No es transplantable tal cual (el artículo lo usa para arbitraje comprando ambos lados a la vez, algo que no hacemos — ver idea_bidirectional_accumulation aparcada), pero el feature cross_window_spread (precio_yes propio menos precio_yes de la ventana relacionada, sin normalizar aún por z-score) ya se captura para GBM#15min (contra 60min) y GBM#60min (contra 15min) desde el 2026-07-01, sin cambiar ninguna decisión. Esta hipótesis cubre el lado positivo (mercado propio más caro que el relacionado); ver H-CUSTOM-CROSS-WINDOW-SPREAD-NEG para el lado negativo.
@@ -1748,8 +1748,8 @@ _Derivadas de los patrones aprendidos:_
   - _Hipótesis_: Mismo origen que H-CUSTOM-MOON-LLENA (paper de Fornero, 43 Jornadas SADAF 2023). Qi, Wang & Zhang (2022, 48 mercados, 1973-2019): rendimientos 3.33%/año más bajos durante Mercurio retrógrado. Kou & Ma (2022) en China (99.8% cuentas retail): hasta -31% anualizado. Ambos estudios confirman que el mecanismo es la creencia/superstición de inversores retail (mayor efecto cuanto más retail y más supersticioso el mercado), no un efecto astral literal — Polymarket encaja en ese perfil. Ventanas 2026 (fuente pública, actualizar cada año): 26-feb a 20-mar, 29-jun a 23-jul, 24-oct a 13-nov.
   - _Umbral_: n≥100 PERO ADEMÁS necesita cubrir al menos 2-3 ventanas de retrogradación distintas (no solo la de jun-jul 2026) — esperar mínimo hasta después de la ventana de oct-nov 2026
   - _Acción_: Si IC en mercury_retrogrado=1 < IC en mercury_retrogrado=0 con margen ≥0.05 y ≥2 ventanas distintas cubiertas → considerar boost/filtro. No implementar tras una sola ventana (jun-jul 2026) por more que n sea alto — sería solo un evento, no un patrón.
-  - _Estado_: n=9245 IC=+0.100 PNL=+2347.88€ — sin señal clara aún (umbral IC: min=None max=-0.03)
-  - _Datos_: n=9245 IC=+0.100 PNL=+2347.88€
+  - _Estado_: n=9246 IC=+0.100 PNL=+2348.37€ — sin señal clara aún (umbral IC: min=None max=-0.03)
+  - _Datos_: n=9246 IC=+0.100 PNL=+2348.37€
 
 **〰️ H-CUSTOM-SMART-MONEY-CONSENSUS** — Consenso de wallets 'smart money' — ¿confirma nuestra dirección?
   - _Hipótesis_: Javi propuso estudiar bots/wallets que operan bien en nuestros mismos mercados. En vez de creer artículos (ya verificamos 2 veces esta semana que las narrativas no aguantan el cruce con datos reales), smart_money_tracker.py mide el track record REAL de wallets activas en BTC/ETH/SOL/XRP Up-or-Down 5/15/60min vía data-api.polymarket.com/positions, filtrado a posiciones 'Up or Down'. Clasifica como 'smart' las wallets con n>=10 posiciones, win_rate>=0.55 y pnl_total>0. smart_money_consensus es el sesgo direccional reciente (Up-Down)/(Up+Down) de esas wallets 'smart' por activo. Hipótesis: si nuestra decisión (BUY_YES/BUY_NO) coincide con el consenso smart money, mejor IC que cuando diverge. RESET METODOLOGICO 2026-07-02: la clasificacion 'smart' original via /positions estaba INVERTIDA para wallets de alta frecuencia (el endpoint solo retiene el residuo perdedor sin redimir; verificado: 'wowitsamazing' figuraba como -$478k y es +$10k/mes en el leaderboard oficial). Desde 2026-07-02T06:12Z el consenso se construye solo con wallets verificadas en el leaderboard oficial (pnl_mes>=$1000, 24 wallets). Los valores de smart_money_consensus capturados en features ANTES de esa fecha provienen de la clasificacion rota — descontar ese tramo al evaluar.
