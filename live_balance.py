@@ -111,6 +111,14 @@ def _daily_real_pnl(wallet: str) -> tuple[list, float, float]:
         except Exception:
             continue
         if t == "TRADE":
+            # ⚠️ Asume TODO TRADE es compra (sin leer campo `side`) — cierto
+            # hoy porque live_trade.py solo envía side="BUY". Si Smart Exit
+            # (ver MEMORY.md, paso 1 en marcha) añade ventas de salida
+            # anticipada, un TRADE de venta sumaría aquí como si fuera una
+            # compra más, invirtiendo el signo real de ese evento. Desde
+            # 13-Jul pnl_hoy_real alimenta directamente el freno diario
+            # live (live_stake.pnl_live_hoy) — revisar este `if` (leer
+            # `side`) ANTES de activar ventas reales.
             daily[day] -= u          # compra: USDC sale
         elif t == "REDEEM":
             daily[day] += u          # redención: USDC entra

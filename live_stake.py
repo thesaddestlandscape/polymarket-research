@@ -28,6 +28,7 @@ mecanismo de "presupuesto por ventana" que nunca se implementó así):
 
 import csv
 import json
+import time
 from datetime import datetime, timezone, timedelta
 from pathlib import Path
 
@@ -54,8 +55,105 @@ def _ahora_madrid(config: dict) -> datetime:
 
 # ── Bankroll ──────────────────────────────────────────────────────────────────
 
+_BALANCE_REAL_MAX_EDAD_S = 1800  # 30min: cron live_balance cada 15min + refresco por-trade
+_memo_balance_real: dict = {"snap": "unset", "ts_monotonic": 0.0}
+_MEMO_TTL_S = 5.0  # memoiza dentro de un mismo ciclo del fast loop (~20s, ~3s de trabajo real)
+
+
+def _balance_real_fresco() -> dict | None:
+    """Snapshot de balance real on-chain si está cacheado, fresco y con
+    pnl_hoy_real válido; si no, None (fail-closed → el llamante cae al ledger).
+
+    Memoizado ~5s en memoria de proceso (code-review 13-Jul): calcular_stake()
+    y verificar_circuit_breaker() llaman a bankroll_actual()/pnl_live_hoy()
+    varias veces cada uno dentro de la misma fórmula (bkr_ini_dia, margen_freno,
+    etc.) — sin memoizar, cada llamada relee data/live/balance_real.json por
+    separado, y si el cron/refresco por-trade lo reescribe justo entre dos de
+    esas lecturas dentro del mismo ciclo, dos términos de la MISMA fórmula
+    podrían leer real vs ledger de forma inconsistente. Cada invocación del
+    fast loop arranca el proceso desde cero (ver run_fast.sh), así que el TTL
+    corto no esconde datos rancios entre ciclos, solo estabiliza uno.
+
+    Import perezoso (evita import circular: live_balance.py hace
+    `from live_stake import CAPITAL_OPERATIVO_INICIAL` a nivel de módulo).
+    Se exige pnl_hoy_real no-None además de `total`: fetch_balance_real()
+    calcula pnl_hoy_real best-effort desde /activity y puede venir None en
+    un snapshot por lo demás fresco (fallo puntual de esa sub-consulta) —
+    usar `total` real con un pnl_hoy de ledger mezclaría dos fuentes con
+    fronteras de día distintas (real=UTC, ledger=Madrid) e inconsistentes
+    entre sí dentro de la misma fórmula de freno.
+
+    Además del chequeo de edad (max_edad_s), se exige que `ts` sea del
+    mismo día UTC que "ahora" (code-review 13-Jul): pnl_hoy_real se calcula
+    UNA vez por fetch y queda fijo en el JSON — un snapshot de las 23:55
+    UTC (pnl de AYER-UTC) sigue "fresco" por edad a las 00:05 UTC del día
+    siguiente sin haber rotado, y la ventana live `prueba_23h_utc`
+    (01:00-02:00 Madrid = 23:00-00:00 UTC) cruza justo ese límite. Sin este
+    chequeo, bankroll_inicio_dia() quedaría corrupto ~30min tras cada
+    medianoche UTC con el pnl_hoy_real del día equivocado.
+    """
+    ahora_mono = time.monotonic()
+    if ahora_mono - _memo_balance_real["ts_monotonic"] < _MEMO_TTL_S:
+        cached = _memo_balance_real["snap"]
+        if cached != "unset":
+            return cached
+
+    def _memoizar(resultado):
+        _memo_balance_real["snap"] = resultado
+        _memo_balance_real["ts_monotonic"] = ahora_mono
+        return resultado
+
+    try:
+        from live_balance import cargar_balance_real
+    except Exception:
+        return _memoizar(None)
+    snap = cargar_balance_real(max_edad_s=_BALANCE_REAL_MAX_EDAD_S)
+    if not snap or snap.get("_rancio"):
+        return _memoizar(None)
+    if snap.get("total") is None or snap.get("pnl_hoy_real") is None:
+        return _memoizar(None)
+    try:
+        ts_snap = datetime.fromisoformat(snap["ts"])
+        if ts_snap.date() != datetime.now(timezone.utc).date():
+            return _memoizar(None)
+    except Exception:
+        return _memoizar(None)
+    return _memoizar(snap)
+
+
 def bankroll_actual() -> float:
-    """Capital total = inicial + PNL de todos los trades cerrados."""
+    """Capital total: balance real on-chain (ver live_balance.py) si el
+    cache está fresco, si no PNL de plan (inicial + trades cerrados).
+
+    Decisión 13-Jul (aprobado Javi): el freno diario y el Kelly estaban
+    anclados al PnL de *plan* (precio de entrada previsto), que diverge del
+    real liquidado — 13-Jul: ledger -16.77€ vs real -14.32€, ~2.45€ de
+    drift (mismo "tracking error" ya documentado el 07-Jul,
+    project_reconciliacion_dashboard.md). El bloqueo del freno diario se
+    calculaba sobre el número más pesimista, más restrictivo que la caja
+    real. Fallback a ledger si el cache real falta/está rancio: por el
+    signo de ese drift históricamente observado (ledger más pesimista que
+    real), caer al ledger nunca infla el apetito de riesgo respecto al
+    real — sigue siendo fail-closed.
+    """
+    real = _balance_real_fresco()
+    if real is not None:
+        return real["total"]
+    return _bankroll_ledger()
+
+
+def _bankroll_ledger() -> float:
+    """Capital de plan puro: inicial + PNL de todos los trades cerrados.
+
+    Separado de bankroll_actual() (13-Jul) para el freno de ventana: no hay
+    PnL real con granularidad de ventana (solo diaria, en balance_real.json
+    daily_real), así que bkr_ini_v = bkr - pnl_v en verificar_circuit_breaker
+    necesita SIEMPRE la misma fuente en los dos términos — mezclar un bkr
+    real (diario) con un pnl_v de ledger (intradía) daría una base de
+    ventana incoherente. El freno diario sí puede usar real en ambos
+    términos (bankroll_actual + pnl_live_hoy, ambos con fallback
+    coordinado); el de ventana no tiene esa opción y se queda en ledger.
+    """
     if not TRADES_CSV.exists():
         return CAPITAL_OPERATIVO_INICIAL
     pnl = 0.0
@@ -171,13 +269,25 @@ def stakes_desplegados_ventana_actual() -> float:
 
 def pnl_live_hoy() -> float:
     """
-    PNL neto de trades cerrados hoy (día Madrid). Compara datetimes reales
-    contra las 00:00 Madrid de hoy en UTC, no substrings de fecha — comparar
-    fecha UTC de close_timestamp contra "hoy" en Madrid excluía para siempre
-    los trades que cierran entre 22:00-23:59 UTC (00:00-01:59 Madrid del día
-    siguiente, dentro de la ventana de prueba 01:00-02:00 Madrid), corrompiendo
-    el freno diario del circuit breaker.
+    PNL neto real de hoy (día UTC, ver live_balance.py) si el balance real
+    está fresco — para mantener consistencia con bankroll_actual() dentro de
+    la misma fórmula de freno (mezclar bkr real con pnl de ledger, o
+    viceversa, sería incoherente). Si no, PNL de plan de trades cerrados hoy
+    (día Madrid): compara datetimes reales contra las 00:00 Madrid de hoy en
+    UTC, no substrings de fecha — comparar fecha UTC de close_timestamp
+    contra "hoy" en Madrid excluía para siempre los trades que cierran entre
+    22:00-23:59 UTC (00:00-01:59 Madrid del día siguiente, dentro de la
+    ventana de prueba 01:00-02:00 Madrid), corrompiendo el freno diario.
+
+    Nota (13-Jul): en modo real el "día" es UTC, no Madrid — pequeña
+    diferencia de frontera en horas tempranas de Madrid (00:00-02:00), igual
+    que la ya documentada arriba pero en sentido inverso. Aceptado: preferir
+    coherencia bkr↔pnl dentro del cálculo del freno sobre coincidencia exacta
+    de frontera de día, que además solo importa en una franja horaria corta.
     """
+    real = _balance_real_fresco()
+    if real is not None:
+        return real["pnl_hoy_real"]
     if not TRADES_CSV.exists():
         return 0.0
     config    = _cargar_config()
@@ -347,11 +457,22 @@ def verificar_circuit_breaker() -> tuple[bool, str]:
     bkr     = bankroll_actual()
     bkr_min = cb.get("bankroll_minimo_eur", 5.0)
 
-    # Freno 1 — bankroll mínimo absoluto
-    if bkr <= bkr_min:
+    # Freno 1 — bankroll mínimo absoluto (máxima prioridad, apaga el switch).
+    # Usa min(real, ledger) explícitamente, no solo lo que bankroll_actual()
+    # eligió (code-review 13-Jul): el fallback a ledger cuando el real
+    # falta/está rancio asume que el ledger es más pesimista que el real
+    # (cierto hoy, ~2.45€ de drift documentado), pero es una observación
+    # histórica, no una garantía. Si algún día el real es PEOR que el
+    # ledger (ej. fee/slippage no modelado) justo cuando el cache real cae
+    # rancio, bankroll_actual() a secas reportaría el número más optimista
+    # en el único freno con veto sobre todos los demás. min() es barato
+    # (_bankroll_ledger() siempre disponible desde trades.csv) y cierra ese
+    # hueco sin depender del signo del drift.
+    bkr_suelo = min(bkr, _bankroll_ledger())
+    if bkr_suelo <= bkr_min:
         if SWITCH_PATH.exists():
             SWITCH_PATH.unlink()
-        return True, f"🛑 bankroll {bkr:.2f}€ ≤ mínimo {bkr_min:.2f}€ — switch desactivado"
+        return True, f"🛑 bankroll {bkr_suelo:.2f}€ ≤ mínimo {bkr_min:.2f}€ — switch desactivado"
 
     # Freno 2 — caída diaria (pct puede venir de un override con fecha)
     freno_dia_pct = freno_diario_pct_hoy(config)
@@ -385,7 +506,11 @@ def verificar_circuit_breaker() -> tuple[bool, str]:
                           f"{latch.get('ts','?')} — no reabre hasta la siguiente ventana")
         pnl_v       = pnl_live_ventana_actual()
         desp        = stakes_desplegados_ventana_actual()
-        bkr_ini_v   = bkr - pnl_v           # bankroll al inicio de esta ventana
+        # _bankroll_ledger() (no bkr, que puede ser real): pnl_v es de ledger
+        # y no hay real con granularidad de ventana — ver docstring de
+        # _bankroll_ledger(). Mezclar bkr real con pnl_v de ledger daría una
+        # base de ventana incoherente.
+        bkr_ini_v   = _bankroll_ledger() - pnl_v  # bankroll al inicio de esta ventana
         if bkr_ini_v > 0 and pnl_v < 0:
             caida_v = abs(pnl_v) / bkr_ini_v
             if caida_v >= freno_v_pct:

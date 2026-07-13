@@ -609,7 +609,7 @@ def _notificar_cierre_live(trade: dict, pnl_neto: float, acierto_dir: bool):
     if not tok or not cid:
         return
 
-    # Calcular bankroll modelo y P&L del día leyendo trades.csv completo
+    # Bankroll operativo (real on-chain si está fresco, si no ledger) y P&L del día
     try:
         from live_stake import bankroll_actual, pnl_live_hoy, CAPITAL_OPERATIVO_INICIAL
         bkr   = bankroll_actual()
@@ -663,10 +663,10 @@ def _notificar_cierre_live(trade: dict, pnl_neto: float, acierto_dir: bool):
     if _snap and not _snap.get("_rancio"):
         bkr_color = "📈" if _snap["pnl_real"] >= 0 else "📉"
         linea_bkr = (f"{bkr_color} Balance real: *{_snap['total']:.2f}$*  "
-                     f"({_snap['pnl_real']:+.2f} total · modelo {bkr:.2f}$)")
+                     f"({_snap['pnl_real']:+.2f} total · operativo {bkr:.2f}$)")
     else:
         bkr_color = "📈" if bkr >= bkr_ini else "📉"
-        linea_bkr = f"{bkr_color} Bankroll modelo: *{bkr:.2f}$* ({pnl_total:+.2f}$ · real n/d)"
+        linea_bkr = f"{bkr_color} Bankroll operativo: *{bkr:.2f}$* ({pnl_total:+.2f}$ · real n/d)"
     msg = (
         f"{'🏆' if acierto_dir else '💸'} *TRADE LIVE — {signo}*\n"
         f"\n"
@@ -675,7 +675,7 @@ def _notificar_cierre_live(trade: dict, pnl_neto: float, acierto_dir: bool):
         f"{linea_coste}\n"
         f"\n"
         f"{linea_bkr}\n"
-        f"Hoy (modelo): {pnl_d:+.2f}$  |  {racha}"
+        f"Hoy (operativo): {pnl_d:+.2f}$  |  {racha}"
     )
     try:
         requests.post(
