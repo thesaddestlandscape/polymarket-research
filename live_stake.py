@@ -526,7 +526,16 @@ def _leer_latch_ventana() -> dict:
         return {}
     try:
         return json.loads(LATCH_VENTANA_PATH.read_text(encoding="utf-8"))
-    except Exception:
+    except Exception as e:
+        # Fail loud (13-Jul, purificación): un latch corrupto se lee igual
+        # que "nunca disparó" (dict vacío) — reproduce EXACTAMENTE el bug
+        # del 03-Jul que este latch existe para prevenir (freno de ventana
+        # se rearmaba solo al recuperar PnL, disparó 14:35, un WIN lo
+        # rearmó a los 50s y siguió operando en la misma ventana). No se
+        # cambia el fail-open aquí (sería una decisión de riesgo nueva, no
+        # una limpieza) — solo se deja rastro de que pasó.
+        print(f"  ⚠️ latch de ventana ilegible ({type(e).__name__}: {e}) — "
+              f"se trata como si el freno de ventana NUNCA hubiera disparado hoy")
         return {}
 
 
@@ -537,8 +546,12 @@ def _escribir_latch_ventana(nombre_ventana: str, config: dict) -> None:
             "ventana": nombre_ventana,
             "ts": _ahora_madrid(config).strftime("%H:%M"),
         }), encoding="utf-8")
-    except Exception:
-        pass  # el freno ya devuelve True este ciclo; el latch es best-effort
+    except Exception as e:
+        # el freno ya devuelve True este ciclo (no bloquea); ver nota en
+        # _leer_latch_ventana sobre por qué SÍ importa que esto se vea.
+        print(f"  ⚠️ fallo al escribir latch de ventana ({type(e).__name__}: {e}) "
+              f"— si no se persiste, el freno de esta ventana podría no "
+              f"recordarse en ciclos futuros")
 
 
 # ── Inventario direccional (Shaw & Dalen 2025 — AS en logit space) ───────────
