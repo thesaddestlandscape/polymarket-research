@@ -3451,17 +3451,45 @@ def main():
                 # sobreviva al override del Kelly por dirección de abajo.
                 causal_boost = 0.0
                 if dec in ("BUY_YES", "BUY_NO"):
+                    # Fail-safe (13-Jul): mismo criterio que ya existe para
+                    # filtros_causales (ver _es_par_live_protegido arriba) —
+                    # un patron_ganador recién descubierto por postmortem
+                    # tampoco puede subir el stake en un par YA live sin
+                    # promoción manual explícita. Antes esta rama no tenía
+                    # ningún guardia (asimetría real: el filtro que SALTA una
+                    # señal live sí lo tenía desde el episodio GBM_LATE_15M
+                    # de FEATURE_RULES, el que SUBE el stake no). Impacto real
+                    # detectado al auditar: cero hasta hoy porque max_stake_eur
+                    # está pineado por debajo de donde llegaría el boost, pero
+                    # es el mismo tipo de gap que P15 (boosts horarios sin
+                    # gatear) — se cierra ahora que no cuesta nada, no cuando
+                    # ya esté despineado.
+                    _par_protegido_boost = _es_par_live_protegido(nombre, subtype, dec)
                     mejor_ic_patron = None
+                    _bloqueados_boost = []
                     for lk in lookup_keys:
                         for g in params_din.get(lk, {}).get("patrones_ganadores", []):
                             if g.get("direccion") not in (None, dec):
                                 continue
                             fv = pred_features.get(g.get("feature"))
                             if fv is not None and _feature_match(fv, g.get("condicion",""), g.get("umbral",999)):
+                                if _par_protegido_boost:
+                                    _bloqueados_boost.append(
+                                        f"{lk}:{g.get('feature')} {g.get('condicion')} "
+                                        f"{g.get('umbral')} kelly_boost={g.get('kelly_boost')}")
+                                    continue
                                 ic_g = float(g.get("ic_patron", 0))
                                 if mejor_ic_patron is None or ic_g > mejor_ic_patron:
                                     mejor_ic_patron = ic_g
                                     causal_boost = float(g.get("kelly_boost", 0))
+                    # Un solo aviso consolidado por predicción (no uno por cada
+                    # patron_ganador que matchea) — evita inundar logs/fast.log
+                    # cuando varios niveles de jerarquía matchean a la vez.
+                    if _bloqueados_boost:
+                        print(f"  ⚠️ patron_ganador matcheó en PAR LIVE "
+                              f"{nombre}#{subtype}#{dec} pero se IGNORA "
+                              f"(fail-safe, requiere promoción manual): "
+                              f"{'; '.join(_bloqueados_boost)}")
                     if causal_boost > 0:
                         apuesta = min(2.00, apuesta + causal_boost)
 

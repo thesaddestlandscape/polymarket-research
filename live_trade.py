@@ -210,20 +210,29 @@ def _ic_n_para_subtype(strategy: str, subtype: str, params: dict,
     comparaba min_n contra el n agregado aunque se usara un IC direccional
     de muestra mucho menor).
 
-    2026-07-01: si el resultado normal (direccional o agregado) NO alcanza
-    min_n Y min_ic a la vez — exactamente los mismos umbrales que ya
-    aplicaba el caller después de llamar a esta función — se comprueba si
-    esta predicción concreta cumple la condición de un patrón causal ya
-    confirmado (patrones_ganadores con su propio n_patron>=min_n e
-    ic_patron>=min_ic). Si es así, se devuelve el IC/n de ese patrón.
+    2026-07-01 a 13-Jul: esta función tenía un fallback que, si el resultado
+    normal no alcanzaba min_n+min_ic, comprobaba si un patrón causal ya
+    confirmado (patrones_ganadores) rehabilitaba la señal, y si la
+    rehabilitación se colaba, la trataba como si fuera dinero real
+    autorizado — un patrón recién descubierto por postmortem, sin revisión
+    humana, podía así autorizar un trade real (ej. GBM_LATE_15M#ETH#15min
+    #BUY_YES, tupla ya en pares_permitidos_live).
 
-    Es puramente aditivo respecto al caso ACEPTADO: cualquier combinación
-    que antes pasaba el filtro (ic>=min_ic y n>=min_n) sigue devolviendo
-    exactamente el mismo (ic, n) y se acepta igual — se comprueba esa
-    condición antes de mirar ningún patrón. Solo cambia el resultado en
-    combinaciones que HOY se rechazan (ej. ORDER_FLOW_5M: n direccional de
-    sobra pero IC diluido por debajo de 0.08 en el agregado, mientras que su
-    patrón delta_ratio confirmado si tiene ic_patron>=0.08)."""
+    13-Jul: RETIRADO. Los dos únicos llamadores de esta función en todo el
+    repo (main(), la ejecución real, y _snapshots_por_lista/
+    _snapshots_fuera_ventana, el snapshot de fill-ability) ya filtran la
+    tupla contra pares_permitidos_live ANTES de llegar aquí — es decir,
+    CUALQUIER llamada a esta función hoy es sobre un par que YA es dinero
+    real, sin excepción. Por eso un fail-safe "solo si es par live" sería
+    una tautología (siempre cierto) y no protegería nada de verdad — la
+    única forma honesta de cerrar el gap es que la rehabilitación por
+    patrones_ganadores nunca se aplique aquí, punto (mismo criterio de
+    promoción manual explícita que _es_par_live_protegido en
+    shadow_predict.py exige para los filtros/patrones que sí tocan pares
+    live). Se deja el escaneo y el log de qué patrón HABRÍA rehabilitado
+    (más abajo) para que la evidencia siga siendo visible y así decidir a
+    mano si algún día merece un mecanismo de promoción explícito — pero
+    nunca se aplica solo."""
     claves = []
     if "#" in subtype:
         a, d = subtype.split("#", 1)
@@ -291,7 +300,10 @@ def _ic_n_para_subtype(strategy: str, subtype: str, params: dict,
                 if mejor_patron is None or ic_patron > mejor_patron[0]:
                     mejor_patron = (ic_patron, n_patron)
         if mejor_patron:
-            return mejor_patron
+            log(f"  ⚠️ patron_ganador {strategy}#{subtype}#{decision} "
+                f"(ic_patron={mejor_patron[0]:+.3f} n_patron={mejor_patron[1]}) "
+                f"rehabilitaría la señal pero NO se aplica (fail-safe 13-Jul: "
+                f"requiere promoción manual explícita, ver docstring)")
 
     return ic_normal, n_normal
 
