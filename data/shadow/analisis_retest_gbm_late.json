@@ -1,55 +1,240 @@
 {
-  "global_gap": 0.115,
-  "global_p": 1.0,
-  "global_n": 6735,
+  "global_gap": -0.0884,
+  "global_p": 0.0,
+  "global_n": 6746,
   "por_celda": [
     {
       "celda": "GBM_LATE_15M#SOL#BUY_NO",
-      "n": 531,
-      "gap": -0.0211,
-      "p": 0.646
+      "n": 532,
+      "gap": -0.0184,
+      "p": 0.7082,
+      "bh_fdr_sobrevive": false
     },
     {
       "celda": "GBM_LATE_15M#SOL#BUY_YES",
       "n": 528,
-      "gap": -0.1767,
-      "p": 0.0
+      "gap": -0.1818,
+      "p": 0.0,
+      "bh_fdr_sobrevive": true,
+      "split_temporal": [
+        {
+          "mitad": "1a",
+          "n": 264,
+          "gap": -0.1761
+        },
+        {
+          "mitad": "2a",
+          "n": 264,
+          "gap": -0.1949
+        }
+      ],
+      "split_temporal_estable": true
     },
     {
       "celda": "GBM_LATE_15M#XRP#BUY_NO",
-      "n": 523,
-      "gap": -0.0367,
-      "p": 0.3981
+      "n": 524,
+      "gap": 0.0115,
+      "p": 0.8455,
+      "bh_fdr_sobrevive": false
+    },
+    {
+      "celda": "GBM_LATE_15M#ETH#BUY_NO",
+      "n": 509,
+      "gap": -0.1362,
+      "p": 0.0025,
+      "bh_fdr_sobrevive": true,
+      "split_temporal": [
+        {
+          "mitad": "1a",
+          "n": 254,
+          "gap": -0.1371
+        },
+        {
+          "mitad": "2a",
+          "n": 255,
+          "gap": -0.1389
+        }
+      ],
+      "split_temporal_estable": true
+    },
+    {
+      "celda": "GBM_LATE_15M#BTC#BUY_NO",
+      "n": 498,
+      "gap": -0.1007,
+      "p": 0.0271,
+      "bh_fdr_sobrevive": false
+    },
+    {
+      "celda": "GBM_LATE_15M#ETH#BUY_YES",
+      "n": 483,
+      "gap": -0.1159,
+      "p": 0.0127,
+      "bh_fdr_sobrevive": false
     },
     {
       "celda": "GBM_LATE_15M#XRP#BUY_YES",
       "n": 462,
-      "gap": -0.1116,
-      "p": 0.014
+      "gap": -0.0907,
+      "p": 0.0514,
+      "bh_fdr_sobrevive": false
+    },
+    {
+      "celda": "GBM_LATE_15M#BTC#BUY_YES",
+      "n": 456,
+      "gap": -0.1111,
+      "p": 0.0187,
+      "bh_fdr_sobrevive": false
     },
     {
       "celda": "GBM_LATE_15M_TARDIO#XRP#BUY_NO",
-      "n": 216,
-      "gap": -0.1364,
-      "p": 0.035
+      "n": 217,
+      "gap": -0.072,
+      "p": 0.3173,
+      "bh_fdr_sobrevive": false
+    },
+    {
+      "celda": "GBM_LATE_15M_ESPACIO_ATR#SOL#BUY_NO",
+      "n": 209,
+      "gap": -0.1613,
+      "p": 0.0297,
+      "bh_fdr_sobrevive": false
     },
     {
       "celda": "GBM_LATE_15M_TARDIO#SOL#BUY_NO",
-      "n": 199,
-      "gap": -0.1234,
-      "p": 0.0864
+      "n": 200,
+      "gap": -0.1601,
+      "p": 0.0306,
+      "bh_fdr_sobrevive": false
+    },
+    {
+      "celda": "GBM_LATE_15M_TARDIO#BTC#BUY_NO",
+      "n": 191,
+      "gap": 0.0238,
+      "p": 0.7644,
+      "bh_fdr_sobrevive": false
+    },
+    {
+      "celda": "GBM_LATE_15M_ESPACIO_ATR#ETH#BUY_YES",
+      "n": 183,
+      "gap": -0.1605,
+      "p": 0.0361,
+      "bh_fdr_sobrevive": false
+    },
+    {
+      "celda": "GBM_LATE_15M_ESPACIO_ATR#BTC#BUY_NO",
+      "n": 183,
+      "gap": -0.0039,
+      "p": 1.0,
+      "bh_fdr_sobrevive": false
+    },
+    {
+      "celda": "GBM_LATE_15M_ESPACIO_ATR#ETH#BUY_NO",
+      "n": 174,
+      "gap": -0.081,
+      "p": 0.3121,
+      "bh_fdr_sobrevive": false
+    },
+    {
+      "celda": "GBM_LATE_15M_ESPACIO_ATR#BTC#BUY_YES",
+      "n": 170,
+      "gap": -0.2449,
+      "p": 0.001,
+      "bh_fdr_sobrevive": true,
+      "split_temporal": [
+        {
+          "mitad": "1a",
+          "n": 85,
+          "gap": -0.2818
+        },
+        {
+          "mitad": "2a",
+          "n": 85,
+          "gap": -0.1928
+        }
+      ],
+      "split_temporal_estable": true
     },
     {
       "celda": "GBM_LATE_15M_TARDIO#SOL#BUY_YES",
       "n": 167,
-      "gap": -0.3222,
-      "p": 0.0
+      "gap": -0.2788,
+      "p": 0.0002,
+      "bh_fdr_sobrevive": true,
+      "split_temporal": [
+        {
+          "mitad": "1a",
+          "n": 83,
+          "gap": -0.2026
+        },
+        {
+          "mitad": "2a",
+          "n": 84,
+          "gap": -0.3328
+        }
+      ],
+      "split_temporal_estable": true
+    },
+    {
+      "celda": "GBM_LATE_15M_TARDIO#ETH#BUY_YES",
+      "n": 167,
+      "gap": -0.1915,
+      "p": 0.0179,
+      "bh_fdr_sobrevive": false
+    },
+    {
+      "celda": "GBM_LATE_15M_ESPACIO_ATR#SOL#BUY_YES",
+      "n": 166,
+      "gap": -0.229,
+      "p": 0.0073,
+      "bh_fdr_sobrevive": true,
+      "split_temporal": [
+        {
+          "mitad": "1a",
+          "n": 83,
+          "gap": -0.2224
+        },
+        {
+          "mitad": "2a",
+          "n": 83,
+          "gap": -0.227
+        }
+      ],
+      "split_temporal_estable": true
     },
     {
       "celda": "GBM_LATE_15M_TARDIO#XRP#BUY_YES",
       "n": 160,
-      "gap": -0.0244,
-      "p": 0.8665
+      "gap": -0.0155,
+      "p": 0.857,
+      "bh_fdr_sobrevive": false
+    },
+    {
+      "celda": "GBM_LATE_15M_ESPACIO_ATR#XRP#BUY_NO",
+      "n": 150,
+      "gap": -0.0672,
+      "p": 0.4117,
+      "bh_fdr_sobrevive": false
+    },
+    {
+      "celda": "GBM_LATE_15M_TARDIO#BTC#BUY_YES",
+      "n": 146,
+      "gap": -0.1046,
+      "p": 0.2323,
+      "bh_fdr_sobrevive": false
+    },
+    {
+      "celda": "GBM_LATE_15M_TARDIO#ETH#BUY_NO",
+      "n": 142,
+      "gap": -0.0745,
+      "p": 0.396,
+      "bh_fdr_sobrevive": false
+    },
+    {
+      "celda": "GBM_LATE_15M_ESPACIO_ATR#XRP#BUY_YES",
+      "n": 129,
+      "gap": -0.0579,
+      "p": 0.5207,
+      "bh_fdr_sobrevive": false
     }
   ]
 }
