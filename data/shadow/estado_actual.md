@@ -1,4 +1,4 @@
-# Estado del bot — 2026-07-13 09:08 UTC
+# Estado del bot — 2026-07-13 09:13 UTC
 
 ## Live — dinero real (on-chain)
 | | |
@@ -17,7 +17,7 @@
 | P&L sim compuesto | 🟢 +2350.60 $ (ficción Kelly: +9240% s/ operativo) |
 | P&L sim hoy (2026-07-13) | 🟢 +137.13 $ |
 | Operaciones resueltas | 12220 (7018 WIN / 5202 LOSS) — 57.4% |
-| Señales abiertas | 119 |
+| Señales abiertas | 121 |
 
 ## Estrategias (visión global)
 
@@ -55,22 +55,22 @@
 
 ## Calidad de datos
 
-✅ **OK** — última verificación 2026-07-13T09:07 UTC
+✅ **OK** — última verificación 2026-07-13T09:12 UTC
 
 | Asset | Precio | Age | Alertas |
 |---|---|---|---|
-| ✅ BTC | $63,098.00 | 0.1min |  |
-| ✅ ETH | $1,787.41 | 0.1min |  |
-| ✅ SOL | $76.67 | 0.1min |  |
+| ✅ BTC | $63,083.58 | 0.1min |  |
+| ✅ ETH | $1,787.08 | 0.1min |  |
+| ✅ SOL | $76.71 | 0.1min |  |
 | ✅ XRP | $1.08 | 0.1min |  |
 
 **Cross-source** (binance, coinbase, kraken):
 
 | Asset | Consenso | Fuente | Estado |
 |---|---|---|---|
-| BTC | $63,117.90 | consenso |  |
-| ETH | $1,787.53 | consenso |  |
-| SOL | $76.59 | consenso |  |
+| BTC | $63,083.58 | consenso |  |
+| ETH | $1,787.08 | consenso |  |
+| SOL | $76.61 | consenso |  |
 | XRP | $1.08 | consenso |  |
 
 ---
