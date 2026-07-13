@@ -1642,8 +1642,18 @@ def main():
                     existing_meta["gbm_blacklist_hours_auto"] = sorted(merged_bl)
                 existing_meta.update({k: v for k, v in new_meta.items() if k != "gbm_blacklist_hours_auto"})
                 params["meta"] = existing_meta
-        except Exception:
-            pass
+        except Exception as e:
+            # Fail loud (13-Jul, purificación): este bloque preserva
+            # desactivaciones MANUALES (activa=False que Javi puso a mano) y
+            # la sección meta (hora_boost_factor, gbm_blacklist_hours_auto,
+            # que shadow_predict.py lee cada ciclo) por encima de lo que este
+            # postmortem acaba de recalcular. Si falla en silencio, params
+            # se escribe igual unas líneas más abajo SIN esa preservación —
+            # una estrategia desactivada a mano podría reactivarse sola y el
+            # meta aprendido se perdería, sin ningún rastro de por qué.
+            print(f"  ⚠️ fallo preservando desactivaciones manuales/meta de "
+                  f"strategy_params.json: {type(e).__name__}: {e} — el "
+                  f"guardado de este ciclo NO las conserva")
 
     # Aviso Telegram una sola vez cuando la recalibración Platt de una estrategia
     # pasa de no-validada a validada (walk-forward + potencia estadística OK) —
