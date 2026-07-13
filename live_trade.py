@@ -84,15 +84,23 @@ def _marcar_orden_en_curso(market_id: str, direction: str):
             "market_id": market_id, "direction": direction,
             "ts": datetime.now(timezone.utc).isoformat(timespec="seconds"),
         }), encoding="utf-8")
-    except Exception:
-        pass
+    except Exception as e:
+        # Fail loud (13-Jul, auditoría de purificación): si esto falla en
+        # silencio, watchdog_fast.sh pierde la única señal que le impide
+        # matar 'fast' a mitad de una orden ya enviada al exchange — el
+        # propio mecanismo de seguridad que este marker existe para dar,
+        # sin dejar rastro de por qué. La orden sigue enviándose igual
+        # (esto no bloquea el flujo), solo se pierde la protección.
+        log(f"  ⚠️ fallo al escribir orden_en_curso.json ({market_id}): {e} "
+            f"— watchdog podría matar 'fast' a mitad de esta orden")
 
 
 def _limpiar_orden_en_curso():
     try:
         ORDEN_EN_CURSO_PATH.unlink(missing_ok=True)
-    except Exception:
-        pass
+    except Exception as e:
+        log(f"  ⚠️ fallo al borrar orden_en_curso.json: {e} — quedará un "
+            f"marker obsoleto (watchdog lo detecta y avisa, no bloquea)")
 
 TRADES_COLS = [
     "timestamp_utc", "market_id", "question", "end_date",
