@@ -37,7 +37,13 @@ def cargar_tuplas(clave_config):
     tuplas = cfg.get(clave_config, [])
     claves = []
     for t in tuplas:
-        strat, pair, tf, dec = t.split("#")
+        partes = t.split("#")
+        if len(partes) != 4:
+            # p.ej. WEEKLY_PRICE#BTC#BUY_NO (sin timeframe en el nombre) —
+            # fuera del alcance de este análisis (asume STRAT#PAR#TF#DEC).
+            print(f"  (omitida, formato no soportado: {t})")
+            continue
+        strat, pair, tf, dec = partes
         claves.append((t, strat, f"{pair}#{tf}", dec))
     return claves
 
