@@ -5788,3 +5788,4 @@ timestamp_utc,market_id,strategy,subtype,direction,motivo,precio_plan,stake_eur,
 2026-07-14T07:21:02+00:00,2903742,GBM_LATE_15M,SOL#15min,BUY_YES,veto_profundidad,0.535,1.05,0.76,0.0,24,0.0,0.0
 2026-07-14T07:21:12+00:00,2903742,GBM_LATE_15M,SOL#15min,BUY_YES,senal_caducada,0.535,1.05,0.77,0.0,23,0.0,0.0
 2026-07-14T07:21:34+00:00,2903742,GBM_LATE_15M_TARDIO,SOL#15min,BUY_YES,candidato_evaluacion,0.535,1.05,0.8,0.0,20,0.0,
+2026-07-14T07:26:40+00:00,2903735,GBM_LATE_15M_ESPACIO_ATR,XRP#15min,BUY_YES,candidato_evaluacion,0.495,1.05,0.99,0.0,1,0.0,
