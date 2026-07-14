@@ -956,9 +956,14 @@
       "filtro": {
         "strategy_prefix": "FAVORITO_CONFIRMADO",
         "par": "SOL",
-        "feature": "smart_money_consensus",
-        "feature_lo": 0.1
+        "feature_dir": {
+          "feature": "smart_money_consensus",
+          "umbral": 0.1,
+          "feature_n": "smart_money_n_wallets",
+          "n_minimo": 3
+        }
       },
+      "_fix_2026-07-14_nota": "Filtro corregido (sesión siguiente al 14-Jul): el anterior 'feature'/'feature_lo':0.1 era ciego a 'decision' — colaba BUY_YES alineado y BUY_NO contrario en el mismo bucket, dando PNL=-9.79€ n=132 engañoso. 'feature_dir' (nuevo, hypothesis_tracker.py) exige que el signo del consenso coincida con la dirección de la apuesta. Verificación manual con esta lógica correcta (results.csv, misma sesión): alineado n=95 hit=73.7% pnl=+10.03€ vs contrario n=98 hit=59.2% pnl=-23.03€, z≈2.13 — sigue cruzando el umbral propio. El tracker ahora solo evalúa el lado ALINEADO (n/IC/PNL de ese subconjunto); el z-test contra el lado contrario sigue siendo manual.",
       "umbral_n": 40,
       "umbral_ic_min": 0.08
     },

@@ -654,6 +654,30 @@ def _aplicar_filtro(row, filtro):
         if "feature_hi" in filtro and filtro["feature_hi"] is not None and val >= filtro["feature_hi"]:
             return False
 
+    # Alineación direccional (14-Jul, fix bug hallado en H-CUSTOM-SMARTMONEY-
+    # FAVORITO-SOL): feature_lo/feature_hi arriba son ciegos a 'decision' —
+    # un filtro feature_lo=0.1 sobre smart_money_consensus cuela tanto
+    # BUY_YES alineado (consenso>0.1, bueno) como BUY_NO CONTRARIO
+    # (consenso>0.1 con decision=BUY_NO, malo), mezclando ambos en el mismo
+    # bucket y dando un IC/PNL agregado engañoso (el caso real: PNL=-9.79€
+    # con el filtro viejo vs +10.03€ alineado/-23.03€ contrario calculado a
+    # mano con esta misma lógica). Generaliza "el signo de una feature
+    # direccional coincide con decision" para cualquier hipótesis futura del
+    # mismo tipo (order flow, momentum, etc.), no solo esta.
+    if "feature_dir" in filtro:
+        cfg = filtro["feature_dir"]
+        val = _feat(row, cfg.get("feature", ""))
+        umbral = cfg.get("umbral", 0.0)
+        if val is None or abs(val) <= umbral:
+            return False
+        if (dec == "BUY_YES") != (val > 0):
+            return False
+        feat_n, n_minimo = cfg.get("feature_n"), cfg.get("n_minimo")
+        if feat_n:
+            n_val = _feat(row, feat_n)
+            if n_val is None or n_val < (n_minimo or 0):
+                return False
+
     return True
 
 
