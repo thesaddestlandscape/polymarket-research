@@ -2246,12 +2246,22 @@ GBM_LATE_5M_REST_MIN_LO = 1.0
 GBM_LATE_5M_REST_MIN_HI = 4.5
 GBM_LATE_5M_PARES = {"BTC", "ETH", "SOL"}  # XRP excluido: z=+1.58 no concluyente (14-Jul)
 # Banda de precio_yes_mercado donde el z-test confirmó edge real y repartido
-# (no 1-2 wallets) en BTC#15min y en 5min BTC/ETH/SOL — favorito moderado/
-# fuerte ya formado, no un longshot barato (esa banda <0.05 SÍ resultó ser
-# 1-2 wallets, descartada). Usada por s_gbm_late_15min_py_confirmado y
-# s_gbm_late_5min.
-GBM_LATE_PY_CONFIRMADO_LO = 0.5
-GBM_LATE_PY_CONFIRMADO_HI = 0.9
+# (no 1-2 wallets) — favorito moderado/fuerte ya formado, no un longshot
+# barato (esa banda <0.05 SÍ resultó ser 1-2 wallets, descartada). AJUSTADA
+# 14-Jul (misma sesión, muestra ampliada): la primera pasada usaba solo las
+# 53 wallets "smart" preclasificadas (sesgo de muestreo: lista construida
+# para otro propósito, P16). Repetido con TODAS las wallets que operan de
+# verdad estos mercados (muestreadas directamente de 84 mercados reales
+# 15/60min vía /trades, no de una lista precocinada — 1144 wallets
+# distintas, n=7261): la banda [0.5,0.7) deja de ser significativa en la
+# muestra ampliada, pero [0.70,0.90) se confirma MUCHO más fuerte
+# (EV+0.09 a +0.27, no +0.02 a +0.16) y MUCHO más universal — 4/4 monedas
+# en 15min, BTC+SOL en 60min (ETH#60min excluido: top1=58%, concentrado).
+# Estrechada 0.5-0.9 -> 0.70-0.90. Usada por s_gbm_late_15min_py_confirmado,
+# s_gbm_late_60min_py_confirmado y s_gbm_late_5min.
+GBM_LATE_PY_CONFIRMADO_LO = 0.70
+GBM_LATE_PY_CONFIRMADO_HI = 0.90
+GBM_LATE_60M_PYCONFIRMADO_PARES = {"BTC", "SOL"}  # ETH excluido: concentrado en 1 wallet (14-Jul)
 # Estrategias shadow-puras que deben SEGUIR generando predicciones aunque el
 # postmortem las desactive por IC negativo con n pequeño. Sin esto caen en un
 # estado ABSORBENTE: desactivada (n=8, 1 win → ic_bayes=-0.30 < umbral) → no
@@ -2385,21 +2395,22 @@ def s_gbm_late_15min_espacio_atr(market, ctx):
 
 def s_gbm_late_15min_py_confirmado(market, ctx):
     """
-    Variante de GBM_LATE_15M restringida a BTC y a la banda de precio donde
-    el análisis de timing de wallets 'smart' (14-Jul, sesión siguiente,
-    analisis_timing_wallets_por_activo.py) confirmó edge real CON
-    significancia: precio_yes_mercado ya en [0.5,0.9) (favorito
-    moderado/fuerte ya formado) en el momento de la señal.
+    Variante de GBM_LATE_15M restringida a la banda de precio donde el
+    análisis de timing de wallets confirmó edge real CON significancia:
+    precio_yes_mercado ya en [0.70,0.90) (favorito moderado/fuerte ya
+    formado, no un longshot barato) en el momento de la señal.
 
-    z-test contra el precio implicado (H0: mercado eficiente, gana con
-    prob=precio): banda [0.50,0.70) z=+2.63 n=188, banda [0.70,0.90)
-    z=+2.27 n=61 — ambas con reparto amplio entre wallets (16/10 distintas,
-    ninguna aporta más del 32%/24% del PnL). Solo BTC: fue la ÚNICA moneda
-    que pasó las dos barras (significancia Y reparto, no 1-2 cuentas) en
-    15min — ETH/SOL/XRP en la misma banda mostraron señales igual de
-    "espectaculares" (z hasta 3.2) pero resultaron ser 77-95% el PnL de UNA
-    sola wallet, descartadas. BTC#60min banda barata también descartada
-    por el mismo motivo (top1=78%).
+    AMPLIADA 14-Jul (misma sesión, 2ª pasada con muestra correcta): la 1ª
+    versión se limitó a BTC porque solo se habían mirado las 53 wallets
+    "smart" preclasificadas (sesgo de muestreo — lista construida para
+    otro propósito, P16). Repetido muestreando DIRECTAMENTE las wallets
+    que operan estos mercados (84 mercados reales vía /trades, no una
+    lista precocinada — 1144 wallets, n=7261): la banda [0.70,0.90) se
+    confirma en las 4 monedas, no solo BTC — z-test contra el precio
+    implicado (H0: mercado eficiente): BTC z=+3.36 n=60 40 wallets top1=15%,
+    ETH z=+5.28 n=124 70 wallets top1=11%, SOL z=+6.57 n=258 82 wallets
+    top1=14%, XRP z=+3.19 n=202 61 wallets top1=32% — las 4 pasan las dos
+    barras (significancia Y reparto, ninguna es 1-2 cuentas).
 
     Estrategia SEPARADA de GBM_LATE_15M a propósito (dedup por
     (strategy, market_id) exige nombre propio; acumula su propio IC desde
@@ -2408,7 +2419,7 @@ def s_gbm_late_15min_py_confirmado(market, ctx):
     idea_timing_wallets_smart_vs_sistema_14jul.
     """
     activo = identificar_activo(market.get("question", ""))
-    if activo != "BTC":
+    if activo not in GBM_LATE_15M_PARES:
         return None
     py = market.get("_precio_yes")
     if py is None or not (GBM_LATE_PY_CONFIRMADO_LO <= py < GBM_LATE_PY_CONFIRMADO_HI):
@@ -2416,6 +2427,34 @@ def s_gbm_late_15min_py_confirmado(market, ctx):
     return _s_gbm_late(market, ctx, ventana_min=15,
                        rest_lo=GBM_LATE_15M_REST_MIN_LO,
                        rest_hi=GBM_LATE_15M_REST_MIN_HI)
+
+
+def s_gbm_late_60min_py_confirmado(market, ctx):
+    """
+    Variante de GBM_LATE_60M restringida a BTC/SOL y a la banda de precio
+    [0.70,0.90) — mismo mecanismo y misma banda que
+    s_gbm_late_15min_py_confirmado, pero a 60min (14-Jul, misma sesión,
+    muestra de 1144 wallets reales vía /trades). z-test: BTC z=+5.22 n=110
+    35 wallets top1=18% EV=+0.196, SOL z=+3.60 n=226 48 wallets top1=26%
+    EV=+0.096 — ambas pasan las dos barras. ETH#60min EXCLUIDO
+    deliberadamente: z=+8.62 (el más fuerte de todos) pero top1=58%, más
+    de la mitad del PnL de UNA sola wallet — no es un patrón de mercado
+    amplio, mismo criterio que descartó otros hallazgos "espectaculares"
+    de la sesión.
+
+    Estrategia SEPARADA (dedup exige nombre propio). NO está en
+    pares_permitidos_live — shadow puro hasta n≥40 propio y decisión
+    explícita de Javi. Ver memoria idea_timing_wallets_smart_vs_sistema_14jul.
+    """
+    activo = identificar_activo(market.get("question", ""))
+    if activo not in GBM_LATE_60M_PYCONFIRMADO_PARES:
+        return None
+    py = market.get("_precio_yes")
+    if py is None or not (GBM_LATE_PY_CONFIRMADO_LO <= py < GBM_LATE_PY_CONFIRMADO_HI):
+        return None
+    return _s_gbm_late(market, ctx, ventana_min=60,
+                       rest_lo=GBM_LATE_60M_REST_MIN_LO,
+                       rest_hi=GBM_LATE_60M_REST_MIN_HI)
 
 
 def s_gbm_late_5min(market, ctx):
@@ -3262,6 +3301,7 @@ ESTRATEGIAS = [
     ("GBM_LATE_15M_TARDIO", s_gbm_late_15min_tardio),
     ("GBM_LATE_15M_ESPACIO_ATR", s_gbm_late_15min_espacio_atr),
     ("GBM_LATE_15M_PYCONFIRMADO", s_gbm_late_15min_py_confirmado),
+    ("GBM_LATE_60M_PYCONFIRMADO", s_gbm_late_60min_py_confirmado),
     ("GBM_LATE_5M",         s_gbm_late_5min),
     ("GBM_LATE_60M",        s_gbm_late_60min),
     ("STRUCT_NO_15M",       s_struct_no_15m),
