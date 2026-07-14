@@ -1552,10 +1552,19 @@ def _latencia_seg(pred: dict) -> float | None:
         return None
 
 
-def _tupla_activa(strategy: str, subtype: str, params: dict) -> bool:
+def _tupla_activa(strategy: str, subtype: str, params: dict, direccion: str = "") -> bool:
     """True si NINGÚN nivel de la jerarquía strategy/subtype/activo/dirección
-    está marcado activa=False en strategy_params.json. Fail-closed: cualquier
-    nivel desactivado bloquea, igual que shadow_predict.py para generar."""
+    está desactivado en strategy_params.json. Fail-closed: cualquier nivel
+    desactivado bloquea, igual que shadow_predict.py para generar.
+
+    Direction-aware (auditoría 15-Jul): el 'activa' de cada nivel se calcula
+    en shadow_postmortem.py sobre el IC MIXTO (BUY_YES+BUY_NO); una tupla
+    live es siempre de una sola dirección, así que un BUY_NO hundido (aunque
+    ni siquiera sea live) podía apagar en silencio un BUY_YES live sano, o
+    al revés enmascarar uno malo. Si se pasa `direccion` y el nivel tiene el
+    campo direction-aware `activa_{direccion}`, se usa ese; si no existe
+    (datos viejos u otra dirección sin volumen), cae al 'activa' mixto —
+    mismo comportamiento fail-closed de antes."""
     if "#" in subtype:
         _a, _d = subtype.split("#", 1)
         keys = [f"{strategy}#{subtype}", f"{strategy}#{_a}", f"{strategy}#{_d}", strategy]
@@ -1563,7 +1572,17 @@ def _tupla_activa(strategy: str, subtype: str, params: dict) -> bool:
         keys = [f"{strategy}#{subtype}", strategy]
     else:
         keys = [strategy]
-    return not any(not params.get(k, {}).get("activa", True) for k in keys if k in params)
+    campo_dir = f"activa_{direccion}" if direccion else None
+    for k in keys:
+        entry = params.get(k)
+        if not entry:
+            continue
+        if campo_dir and campo_dir in entry:
+            if not entry[campo_dir]:
+                return False
+        elif not entry.get("activa", True):
+            return False
+    return True
 
 
 def main():
@@ -1694,7 +1713,7 @@ def main():
         _lat = _latencia_seg(_p)
         if _lat is None or _lat >= SENAL_MAX_LATENCIA_SEG:
             continue
-        if not _tupla_activa(_p_strat, _p_sub, params):
+        if not _tupla_activa(_p_strat, _p_sub, params, _p_dec):
             continue
         _wl_por_mercado[_p.get("market_id", "")][_p_dec].add(_key)
     boost_ic_coincidencia = riesgo.get("boost_ic_coincidencia_tuplas", 1.0)
@@ -1739,7 +1758,7 @@ def main():
         # dinero real en silencio. Fail-closed: cualquier nivel de la
         # jerarquía marcado activa=False bloquea, igual que hace
         # shadow_predict.py para generar.
-        if not _tupla_activa(strategy, subtype, params):
+        if not _tupla_activa(strategy, subtype, params, dec):
             log(f"  ⛔ {strategy}#{subtype} {dec}: estrategia desactivada (activa=False) "
                 f"pese a estar en whitelist — no se ejecuta")
             continue

@@ -610,9 +610,16 @@ def calcular_params(resultados: list) -> dict:
                 d_ap = round(min(2.00, max(0.50, 20.0 * d_ic_e * 0.5)), 2)
             else:
                 d_ap = 0.50
+            # activa por dirección (mismo umbral que el 'activa' mixto de
+            # arriba, pero sobre el IC de ESA dirección sola): evita que un
+            # BUY_NO shadow hundido apague en silencio una tupla BUY_YES
+            # live sana (o al revés) — ver auditoría 15-Jul, _tupla_activa
+            # en live_trade.py ya la usa con fallback al 'activa' mixto.
+            d_activa = not (dn >= UMBRAL_DESACTIVAR[1] and d_ic_b < UMBRAL_DESACTIVAR[0])
             entry[f"n_{dec_name}"]               = dn
             entry[f"ic_{dec_name}"]              = d_ic_e
             entry[f"apuesta_kelly_{dec_name}"]   = d_ap
+            entry[f"activa_{dec_name}"]          = d_activa
 
         # Recalibración Platt: solo a nivel agregado de estrategia (sin '#'),
         # que es el único nivel validado con walk-forward (ver docstring arriba)

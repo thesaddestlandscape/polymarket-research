@@ -3401,7 +3401,20 @@ def main():
                 # (evita que BTC#240min quede activo cuando #240min está desactivado).
                 # Excepción: estrategias shadow-puras en ACUMULAR_SHADOW_AUNQUE_DESACTIVADA
                 # siguen generando para romper el estado absorbente (nunca en whitelist live).
-                if (any(not params_din.get(k, {}).get("activa", True) for k in lookup_keys if k in params_din)
+                # Direction-aware (auditoría 15-Jul, mismo fix que live_trade.py::_tupla_activa):
+                # 'activa' por nivel es el IC MIXTO (BUY_YES+BUY_NO); sin esto, un BUY_NO
+                # shadow hundido podía apagar la GENERACIÓN de un BUY_YES sano — más grave
+                # que el veto de live_trade.py, porque ni siquiera llega una fila que vetar.
+                # Si existe el campo direction-aware activa_{decision} se usa ese; si no
+                # (dato pre-deploy u otra dirección sin volumen), cae al 'activa' mixto.
+                _dec_gate = pred.get("decision", "")
+                _campo_dir_gate = f"activa_{_dec_gate}" if _dec_gate else None
+                def _nivel_bloqueado(k, _cd=_campo_dir_gate):
+                    e = params_din.get(k, {})
+                    if _cd and _cd in e:
+                        return not e[_cd]
+                    return not e.get("activa", True)
+                if (any(_nivel_bloqueado(k) for k in lookup_keys if k in params_din)
                         and nombre not in ACUMULAR_SHADOW_AUNQUE_DESACTIVADA):
                     continue
                 edge_min = sp.get("edge_minimo") or EDGE_MINIMO
