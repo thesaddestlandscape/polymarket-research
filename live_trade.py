@@ -40,6 +40,17 @@ CLV_VETO_DIAS  = 7    # ventana móvil del CLV medio por tupla
 FEE_RATE_TAKER_CRYPTO = 0.07
 _CLV_CACHE: dict | None = None  # tupla → [clv,...]; una lectura por ciclo
 
+# H-CUSTOM-SMARTMONEY-FAVORITO-SOL (confirmada 12-Jul, re-verificada 14-Jul
+# 3 veces con n creciente, última: alineado n=95 hit=73.7% pnl=+10.03€ vs
+# contrario n=98 hit=59.2% pnl=-23.03€, z≈2.13): mismo umbral que el análisis
+# manual que confirmó la hipótesis — no cambiar sin repetir esa validación.
+SMARTMONEY_SOL_CONSENSO_MIN   = 0.1  # |smart_money_consensus| mínimo para considerar "con convicción"
+SMARTMONEY_SOL_N_WALLETS_MIN  = 3    # wallets "smart" mínimas detrás del consenso
+# Techo sobre el boost COMBINADO de ic_para_stake (coincidencia × smartmoney,
+# y cualquier boost futuro que se añada al mismo patrón) — ninguno de los
+# boosts individuales se validó contra la combinación de ambos a la vez.
+BOOST_IC_COMBINADO_MAX = 1.3
+
 
 def _clv_tupla(strategy: str, subtype: str, decision: str) -> tuple[float, int]:
     """
@@ -1716,7 +1727,8 @@ def main():
         if not _tupla_activa(_p_strat, _p_sub, params, _p_dec):
             continue
         _wl_por_mercado[_p.get("market_id", "")][_p_dec].add(_key)
-    boost_ic_coincidencia = riesgo.get("boost_ic_coincidencia_tuplas", 1.0)
+    boost_ic_coincidencia   = riesgo.get("boost_ic_coincidencia_tuplas", 1.0)
+    boost_ic_smartmoney_sol = riesgo.get("boost_ic_smartmoney_favorito_sol", 1.0)
 
     ya_operados  = _ya_operados_hoy()
     # Mercados con orden maker viva (piloto): también se saltan la ruta
@@ -1928,6 +1940,50 @@ def main():
                 f"whitelist coincide en dirección, ic_para_stake {ic_hist:+.3f}→"
                 f"{ic_para_stake:+.3f} (boost×{boost_ic_coincidencia:.2f})")
 
+        # Boost condicionado a smart money para FAVORITO_CONFIRMADO#SOL (ver
+        # H-CUSTOM-SMARTMONEY-FAVORITO-SOL arriba). Mismo patrón que el boost
+        # de coincidencia: solo afecta ic_para_stake (tamaño, entra en
+        # calcular_stake), nunca la elegibilidad — ic_hist crudo ya pasó su
+        # propio gate arriba sin ayuda de este boost. Implementado 14-Jul
+        # pero DEJADO INACTIVO (boost=1.0 en config) a petición explícita de
+        # Javi: activar más adelante junto al despineo de max_stake_eur —
+        # hasta entonces impacto en euros GARANTIZADO 0 (boost=1.0 es no-op
+        # explícito, ni siquiera depende del pineo actual de min/max_stake_eur
+        # como el de coincidencia). La hipótesis sigue acumulando n en shadow
+        # vía hypothesis_tracker.py sin depender de este cableado.
+        smartmoney_boost_aplicado = False
+        if strategy == "FAVORITO_CONFIRMADO" and subtype.startswith("SOL") and boost_ic_smartmoney_sol != 1.0:
+            sm_consenso  = feats_pred.get("smart_money_consensus")
+            sm_n_wallets = feats_pred.get("smart_money_n_wallets") or 0
+            if (sm_consenso is not None and sm_n_wallets >= SMARTMONEY_SOL_N_WALLETS_MIN
+                    and abs(sm_consenso) > SMARTMONEY_SOL_CONSENSO_MIN):
+                alineado_sm = (dec == "BUY_YES" and sm_consenso > SMARTMONEY_SOL_CONSENSO_MIN) or \
+                              (dec == "BUY_NO" and sm_consenso < -SMARTMONEY_SOL_CONSENSO_MIN)
+                if alineado_sm:
+                    ic_prev = ic_para_stake
+                    ic_para_stake = ic_para_stake * boost_ic_smartmoney_sol
+                    smartmoney_boost_aplicado = True
+                    log(f"  ✚ Smart money alineado: {strategy}#{subtype} {dec} mid={mid} — "
+                        f"consenso={sm_consenso:+.3f} (n_wallets={sm_n_wallets}), "
+                        f"ic_para_stake {ic_prev:+.3f}→{ic_para_stake:+.3f} "
+                        f"(boost×{boost_ic_smartmoney_sol:.2f})")
+
+        # Techo al boost COMBINADO (code-review 14-Jul, sesión siguiente):
+        # coincidencia y smartmoney son independientes y se aplican en
+        # cascada sobre la misma ic_para_stake — si algún día ambas están
+        # activas a la vez sobre la misma señal (posible: una tupla
+        # FAVORITO_CONFIRMADO#SOL que además coincide en dirección con otra
+        # tupla whitelist), se compondrían multiplicativamente sin que
+        # ninguna de las dos validaciones (n=239/833 la de coincidencia,
+        # n=95/98 z≈2.13 la de smartmoney) midiera esa combinación. Mismo
+        # patrón de "techo sobre un boost compuesto" que KELLY_COMPUESTO_MAX
+        # en shadow_predict.py (ahí para rachas, aquí para boosts
+        # independientes). Con las dos activas a 1.15/1.2 el producto sería
+        # ×1.38 — el techo se fija en el orden del boost más agresivo
+        # previsto (KELLY_COMPUESTO_MAX=2.00 es para otro mecanismo, no
+        # reutilizable aquí sin mezclar fenómenos distintos).
+        ic_para_stake = min(ic_para_stake, ic_hist * BOOST_IC_COMBINADO_MAX)
+
         # Stake (con penalización de inventario direccional)
         # Techo de correlación direccional: los pares cripto se mueven casi
         # al unísono — más de N posiciones abiertas en la misma dirección es
@@ -2042,7 +2098,8 @@ def main():
                                    if resultado.get("slip_estimado_kyle") is not None else "")
                                 if resultado.get("ok") and "slip_real" in resultado
                                 else resultado.get("error", ""))
-                                + (f" coincide_tupla=1 ic_boost={ic_para_stake:+.3f}" if coincide else "")),
+                                + (f" coincide_tupla=1 ic_boost={ic_para_stake:+.3f}" if coincide else "")
+                                + (f" smartmoney_boost=1 ic_boost={ic_para_stake:+.3f}" if smartmoney_boost_aplicado else "")),
         }
         _registrar_trade(trade)
         ya_operados.add(mid)
