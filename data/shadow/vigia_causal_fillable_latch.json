@@ -470,5 +470,16 @@
  "candidato_proxy#FAVORITO_CONFIRMADO#BTC#15min#BTC#BUY_YES#libro_liquidezgt9562.5797": false,
  "candidato_proxy#FAVORITO_CONFIRMADO#SOL#BUY_YES#hora_utclt5.0": false,
  "candidato_proxy#GBM_LATE_15M#ETH#BUY_NO#dist_vwap_pctlt0.4536": false,
- "live_real#GBM_LATE_15M#XRP#15min#XRP#BUY_YES#sigma_hlt0.0287": false
+ "live_real#GBM_LATE_15M#XRP#15min#XRP#BUY_YES#sigma_hlt0.0287": false,
+ "candidato_proxy#FAVORITO_CONFIRMADO#BTC#BUY_YES#libro_liquidezgt4364.0743": false,
+ "candidato_proxy#FAVORITO_CONFIRMADO#BTC#BUY_NO#hora_utclt12.0": false,
+ "candidato_proxy#FAVORITO_CONFIRMADO#BTC#BUY_NO#libro_liquidezgt6245.1714": false,
+ "candidato_proxy#FAVORITO_CONFIRMADO#BTC#15min#BTC#BUY_NO#hora_utcgt16.0": false,
+ "candidato_proxy#FAVORITO_CONFIRMADO#BTC#60min#BTC#BUY_NO#hora_utclt11.0": false,
+ "candidato_proxy#FAVORITO_CONFIRMADO#ETH#BUY_YES#libro_liquidezgt4364.0743": false,
+ "candidato_proxy#FAVORITO_CONFIRMADO#ETH#BUY_NO#hora_utclt12.0": false,
+ "candidato_proxy#FAVORITO_CONFIRMADO#ETH#BUY_NO#libro_liquidezgt6245.1714": false,
+ "candidato_proxy#FAVORITO_CONFIRMADO#SOL#BUY_NO#hora_utclt12.0": false,
+ "candidato_proxy#FAVORITO_CONFIRMADO#SOL#60min#SOL#BUY_NO#py_entradalt0.335": false,
+ "candidato_proxy#GBM_LATE_15M#ETH#BUY_NO#dist_vwap_pctlt0.4455": false
 }
