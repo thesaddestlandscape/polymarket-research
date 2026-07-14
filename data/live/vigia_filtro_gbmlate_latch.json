@@ -12,5 +12,7 @@
   "sigma_ewma_delta_pct|lt|9.579|BUY_YES"
  ],
  "GBM_LATE_15M#SOL#15min": [],
- "GBM_LATE_15M#XRP#15min": []
+ "GBM_LATE_15M#XRP#15min": [
+  "dist_vwap_pct|gt|0.4622|BUY_YES"
+ ]
 }
