@@ -107,6 +107,7 @@ def recolectar(n_wallets: int, max_events: int) -> list[dict]:
             if dur is None or activo is None:
                 continue
             trades_up_down.append({
+                "wallet": w,
                 "conditionId": e.get("conditionId", ""),
                 "timestamp": e["timestamp"],
                 "price": e.get("price"),
@@ -166,7 +167,7 @@ def recolectar(n_wallets: int, max_events: int) -> list[dict]:
         compro_yes = (t["outcomeIndex"] == 0)
         acierto = (compro_yes and outcome_real == "YES") or (not compro_yes and outcome_real == "NO")
         resultados.append({
-            "activo": t["activo"], "dur_min": t["dur_min"],
+            "wallet": t["wallet"], "activo": t["activo"], "dur_min": t["dur_min"],
             "restante_min": round(restante_min, 2), "precio": precio,
             "acierto": acierto,
         })
@@ -196,14 +197,26 @@ def main():
         grupos[(r["activo"], r["dur_min"])].append(r)
 
     print("\n=== Por activo x marco temporal (n>=15 para reportar) ===")
+    print("    (n_wallets = wallets distintas detrás del bucket; top1% = cuota del PnL")
+    print("     positivo que aporta la wallet más concentrada, para detectar si el edge")
+    print("     es de 1 cuenta o de verdad está repartido — mismo error que SOL#5min)")
     for (activo, dur), rs in sorted(grupos.items(), key=lambda kv: -len(kv[1])):
         n = len(rs)
         if n < 15:
             continue
         hit = sum(1 for r in rs if r["acierto"]) / n * 100
         precio_medio = sum(r["precio"] for r in rs) / n
-        ev = sum((1 - r["precio"] if r["acierto"] else -r["precio"]) for r in rs) / n
-        print(f"  {activo:<5} {dur:>4}min: n={n:>4} hit={hit:>5.1f}% precio_medio={precio_medio:.3f} EV/1USD={ev:+.3f}")
+        pnl_por_fila = [(1 - r["precio"] if r["acierto"] else -r["precio"]) for r in rs]
+        ev = sum(pnl_por_fila) / n
+        pnl_total = sum(pnl_por_fila)
+        n_wallets = len({r["wallet"] for r in rs})
+        pnl_por_wallet = Counter()
+        for r, p in zip(rs, pnl_por_fila):
+            pnl_por_wallet[r["wallet"]] += p
+        top1_pnl = pnl_por_wallet.most_common(1)[0][1] if pnl_por_wallet else 0
+        top1_pct = (top1_pnl / pnl_total * 100) if pnl_total > 0 else float("nan")
+        print(f"  {activo:<5} {dur:>4}min: n={n:>4} hit={hit:>5.1f}% precio_medio={precio_medio:.3f} "
+              f"EV/1USD={ev:+.3f} pnl_total={pnl_total:+7.2f} n_wallets={n_wallets:>2} top1={top1_pct:>5.0f}%")
 
     # Timing de solo las GANADORAS, por (activo, marco)
     print("\n=== Timing EXACTO de apuestas GANADORAS, por activo x marco (n>=15) ===")
