@@ -13,6 +13,7 @@
  ],
  "GBM_LATE_15M#SOL#15min": [],
  "GBM_LATE_15M#XRP#15min": [
+  "dist_vwap_pct|gt|0.4569|BUY_YES",
   "dist_vwap_pct|gt|0.4622|BUY_YES"
  ]
 }
