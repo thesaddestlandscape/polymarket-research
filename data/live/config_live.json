@@ -371,8 +371,17 @@
     "UPDOWN_OU_5M#SOL#5min#BUY_NO",
     "UPDOWN_OU_5M#SOL#5min#BUY_YES",
     "UPDOWN_OU_5M#XRP#5min#BUY_NO",
-    "UPDOWN_OU_5M#XRP#5min#BUY_YES"
+    "UPDOWN_OU_5M#XRP#5min#BUY_YES",
+    "GBM_LATE_15M_PYCONFIRMADO#BTC#15min#BUY_YES",
+    "GBM_LATE_15M_PYCONFIRMADO#BTC#15min#BUY_NO",
+    "GBM_LATE_5M#BTC#5min#BUY_YES",
+    "GBM_LATE_5M#BTC#5min#BUY_NO",
+    "GBM_LATE_5M#ETH#5min#BUY_YES",
+    "GBM_LATE_5M#ETH#5min#BUY_NO",
+    "GBM_LATE_5M#SOL#5min#BUY_YES",
+    "GBM_LATE_5M#SOL#5min#BUY_NO"
   ],
+  "_candidatos_gbmlate_pyconfirmado_5m_nota_2026-07-14": "14-Jul noche (sesión siguiente, petición Javi tras construir las 2 estrategias nuevas basadas en wallet-timing analysis, commit a276209fbc): AÑADIDAS GBM_LATE_15M_PYCONFIRMADO#BTC#15min (ambas direcciones) y GBM_LATE_5M#BTC/ETH/SOL#5min (ambas direcciones) a candidatos_evaluacion_live desde el primer ciclo — evita el error ya cazado el 12-Jul con LATE_WINDOW_5MIN (estrategia con gate de IC cumplido sin un solo snapshot de fill-ability acumulado). Ambas estrategias son 100% shadow (no en pares_permitidos_live), n=0 al arrancar. Objetivo: cuando crucen el gate n≥40 IC≥0.08 (con el rigor extra de la familia GBM_LATE, probablemente n≥289 dado el precedente), ya haya fill-ability real acumulada para decidir con datos, no solo con IC. Ver memoria idea_timing_wallets_smart_vs_sistema_14jul para la metodología completa (z-test + verificación de concentración por wallet) que motivó estas 2 estrategias.",
   "_candidatos_cobertura_nota_2026-07-12_tarde3": "Tercera ampliación (mismo mandato, revisión estrategia-a-estrategia): ORDER_FLOW_5M (activa=true, n=1584, solo BUY_NO) no tenía NINGÚN dato de fill-ability pese a estar activa en shadow con IC agregado +0.013 (débil pero real, SOL+0.04/BNB+0.05 por activo). PRICE_TARGET_GBM queda fuera por ahora (IC ya negativo -0.152 agregado, no es candidata real a corto plazo). Solo logging, ninguna toca pares_permitidos_live.",
   "_candidatos_cobertura_nota_2026-07-12_tarde": "Ampliada cobertura de fill-ability (mandato Javi: conectar el aprendizaje causal a la realidad de ejecución, ajustar shadow a live): ESPACIO_ATR#XRP/SOL y TARDIO#BTC/ETH/SOL no tenían snapshots de libro pese a tener IC shadow positivo por activo (XRP es el MEJOR de ESPACIO_ATR +0.276, y no se medía). Solo añade logging, no toca pares_permitidos_live ni dinero real.",
   "_candidatos_cobertura_nota_2026-07-12_tarde2": "Segunda ampliación (mismo mandato): vigia_causal_vs_fillable.py añadió el chequeo espejo de filtros_causales (¿la zona 'mala' que se salta rinde de verdad peor en lo ejecutable?) pero dio 0 evaluables — ningún filtro_causales activo tenía candidatos_evaluacion_live. Añadidas las 7 tuplas activas (activa=true en strategy_params.json) de UPDOWN_GBM con filtros_causales vigentes: SOL/XRP#15min (ambas direcciones), BTC#15min#BUY_NO (BUY_YES ya cubierto), ETH#60min y BTC#60min (BUY_YES). Solo logging, cero riesgo — UPDOWN_GBM no está en pares_permitidos_live.",
