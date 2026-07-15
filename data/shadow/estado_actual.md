@@ -1,4 +1,4 @@
-# Estado del bot — 2026-07-15 18:36 UTC
+# Estado del bot — 2026-07-15 18:41 UTC
 
 ## Live — dinero real (on-chain)
 | | |
@@ -13,11 +13,11 @@
 ## Shadow — MODELO SIMULADO (no cobrable)
 | | |
 |---|---|
-| P&L fiel (stake fijo 1$) | +1803.97 $ |
-| P&L sim compuesto | 🟢 +3171.28 $ (ficción Kelly: +12466% s/ operativo) |
-| P&L sim hoy (2026-07-15) | 🟢 +362.63 $ |
-| Operaciones resueltas | 15766 (9209 WIN / 6557 LOSS) — 58.4% |
-| Señales abiertas | 63 |
+| P&L fiel (stake fijo 1$) | +1804.62 $ |
+| P&L sim compuesto | 🟢 +3172.49 $ (ficción Kelly: +12470% s/ operativo) |
+| P&L sim hoy (2026-07-15) | 🟢 +363.84 $ |
+| Operaciones resueltas | 15768 (9211 WIN / 6557 LOSS) — 58.4% |
+| Señales abiertas | 65 |
 
 ## Estrategias (visión global)
 
@@ -47,36 +47,36 @@
 | UPDOWN_OU_5M | 84 | 28.6% | -0.209 | 📉 agota (-0.14) | -18.89$ | 0.00$ | 🚫 desactivada |
 | STREAK_MOM_5M | 309 | 44.3% | -0.056 | 📉 agota (-0.06) | -23.67$ | 0.50$ | 🚫 desactivada |
 | STREAK_FADE_5M | 246 | 45.1% | -0.048 | 📉 agota (-0.06) | -24.96$ | 0.50$ | ⚠️ IC negativo |
-| FAVORITO_CONFIRMADO | 2253 | 67.5% | +0.175 | ➡️ estable | -33.80$ | 1.75$ | ✅ activa |
+| FAVORITO_CONFIRMADO | 2255 | 67.5% | +0.175 | ➡️ estable | -32.59$ | 1.75$ | ✅ activa |
 
 ## Últimas 5 resoluciones
 
 | Timestamp | Estrategia | Mercado | Resultado | PNL |
 |---|---|---|---|---|
+| 2026-07-15T18:41 | FAVORITO_CONFIRMADO#ETH#5min | Ethereum Up or Down - July 15, 2:35PM-2:40PM ET… | ✅ WIN | +0.56$ |
+| 2026-07-15T18:41 | FAVORITO_CONFIRMADO#SOL#5min | Solana Up or Down - July 15, 2:35PM-2:40PM ET… | ✅ WIN | +0.65$ |
 | 2026-07-15T18:35 | GBM_LATE_15M_ESPACIO_ATR#BTC#15min | Bitcoin Up or Down - July 15, 2:15PM-2:30PM ET… | ❌ LOSS | -1.18$ |
 | 2026-07-15T18:35 | GBM_LATE_15M_TARDIO#BTC#15min | Bitcoin Up or Down - July 15, 2:15PM-2:30PM ET… | ❌ LOSS | -1.50$ |
 | 2026-07-15T18:35 | GBM_LATE_15M#BTC#15min | Bitcoin Up or Down - July 15, 2:15PM-2:30PM ET… | ❌ LOSS | -1.41$ |
-| 2026-07-15T18:35 | FAVORITO_CONFIRMADO#BTC#15min | Bitcoin Up or Down - July 15, 2:15PM-2:30PM ET… | ✅ WIN | +1.21$ |
-| 2026-07-15T18:31 | GBM_LATE_15M_ESPACIO_ATR#XRP#15min | XRP Up or Down - July 15, 2:15PM-2:30PM ET… | ✅ WIN | +1.92$ |
 
 ## Calidad de datos
 
-✅ **OK** — última verificación 2026-07-15T18:35 UTC | rechazos 1h: 1 (rango=0, spike=0)
+✅ **OK** — última verificación 2026-07-15T18:40 UTC | rechazos 1h: 1 (rango=0, spike=0)
 
 | Asset | Precio | Age | Alertas |
 |---|---|---|---|
-| ✅ BTC | $65,041.61 | 0.1min |  |
-| ✅ ETH | $1,932.12 | 0.1min |  |
-| ✅ SOL | $77.93 | 0.1min |  |
+| ✅ BTC | $64,985.50 | 0.1min |  |
+| ✅ ETH | $1,929.43 | 0.1min |  |
+| ✅ SOL | $77.87 | 0.1min |  |
 | ✅ XRP | $1.12 | 0.1min |  |
 
-**Cross-source** (binance, coinbase, kraken):
+**Cross-source** (coinbase, kraken):
 
 | Asset | Consenso | Fuente | Estado |
 |---|---|---|---|
-| BTC | $65,044.50 | consenso |  |
-| ETH | $1,932.12 | consenso |  |
-| SOL | $77.93 | consenso |  |
+| BTC | $64,999.25 | consenso |  |
+| ETH | $1,929.32 | consenso |  |
+| SOL | $77.85 | consenso |  |
 | XRP | $1.12 | consenso |  |
 
 **Alertas activas:**
