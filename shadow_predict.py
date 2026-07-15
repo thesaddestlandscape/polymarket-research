@@ -14,6 +14,7 @@ from data_quality import (
     SIGMA_H_MAX, DRIFT_MAX, ASSETS_GBM,
     validar_features_gbm, simbolo_bloqueado, generar_reporte, obtener_consensus_spot,
 )
+from smart_money_tracker import ACTIVOS as ACTIVOS_TICKERS
 
 _HAS_PANDAS: bool | None = None   # None = not yet checked; True/False after first use
 _pd = None                         # populated lazily on first cache miss
@@ -2262,6 +2263,49 @@ GBM_LATE_5M_PARES = {"BTC", "ETH", "SOL"}  # XRP excluido: z=+1.58 no concluyent
 GBM_LATE_PY_CONFIRMADO_LO = 0.70
 GBM_LATE_PY_CONFIRMADO_HI = 0.90
 GBM_LATE_60M_PYCONFIRMADO_PARES = {"BTC", "SOL"}  # ETH excluido: concentrado en 1 wallet (14-Jul)
+
+# ── Ballenas observer: "gasolina" viva para las 3 estrategias *_PYCONFIRMADO/
+# 5M (15-Jul, petición Javi) ──────────────────────────────────────────────
+# ballenas_observer.py (cron propio, hourly) recalcula con datos frescos la
+# banda de precio + ventana de timing donde las wallets ganan de verdad, por
+# activo x marco, y las persiste en BALLENAS_TIMING_STATE. En vez de las
+# constantes fijas de la primera pasada manual del 14-Jul, cada ciclo lee el
+# estado vivo — si el combo activo#marco aún no es significativo (n<40,
+# z<2, o concentrado en <2 wallets) cae a esas mismas constantes como
+# fallback, nunca se queda sin filtro. Carga perezosa UNA VEZ por proceso
+# (shadow_predict.py corre como subprocess fresco cada ciclo del fast loop,
+# ~20s de vida) — el resto de llamadas en el mismo ciclo son un lookup en
+# memoria (microsegundos), sin red ni cómputo en el camino de la señal.
+BALLENAS_TIMING_STATE = Path("data/shadow/ballenas_timing_state.json")
+_ballenas_timing_cache = None
+
+
+def _cargar_ballenas_timing_state():
+    global _ballenas_timing_cache
+    if _ballenas_timing_cache is None:
+        try:
+            _ballenas_timing_cache = json.loads(BALLENAS_TIMING_STATE.read_text(encoding="utf-8"))
+        except Exception:
+            _ballenas_timing_cache = {}
+    return _ballenas_timing_cache
+
+
+def _banda_y_timing_ballenas(activo, marco, lo_default, hi_default, rest_lo_default, rest_hi_default):
+    """Banda de precio + ventana de minutos restantes para (activo,marco),
+    del estado vivo del observador si es significativo, si no de los
+    valores por defecto (fallback fail-safe, nunca deja el filtro sin
+    banda)."""
+    estado = _cargar_ballenas_timing_state().get(f"{activo}#{marco}")
+    if not estado or not estado.get("significativo"):
+        return lo_default, hi_default, rest_lo_default, rest_hi_default
+    vals = (estado.get("banda_lo"), estado.get("banda_hi"),
+            estado.get("rest_lo_min"), estado.get("rest_hi_min"))
+    if not all(isinstance(v, (int, float)) and not isinstance(v, bool) for v in vals):
+        return lo_default, hi_default, rest_lo_default, rest_hi_default
+    lo, hi, rl, rh = vals
+    if not (0 <= lo < hi <= 1) or not (0 < rl < rh):
+        return lo_default, hi_default, rest_lo_default, rest_hi_default
+    return lo, hi, rl, rh
 # Estrategias shadow-puras que deben SEGUIR generando predicciones aunque el
 # postmortem las desactive por IC negativo con n pequeño. Sin esto caen en un
 # estado ABSORBENTE: desactivada (n=8, 1 win → ic_bayes=-0.30 < umbral) → no
@@ -2417,16 +2461,29 @@ def s_gbm_late_15min_py_confirmado(market, ctx):
     cero). NO está en pares_permitidos_live — shadow puro hasta n≥40
     propio y decisión explícita de Javi. Ver memoria
     idea_timing_wallets_smart_vs_sistema_14jul.
+
+    15-Jul: banda+timing ya no son fijos — se leen de
+    ballenas_observer.py (ver _banda_y_timing_ballenas arriba), que los
+    recalcula cada hora con datos frescos. Fallback a estas mismas
+    constantes si el combo activo#15m todavía no es significativo. El
+    universo de activos también se amplía: GBM_LATE_15M_PARES ya no es un
+    techo, solo el fallback mínimo — si el observer confirma un activo
+    nuevo (fuera de las 4 monedas originales) puramente en shadow, se
+    activa solo; cero riesgo, esta estrategia no toca dinero real.
     """
     activo = identificar_activo(market.get("question", ""))
-    if activo not in GBM_LATE_15M_PARES:
+    if activo not in ACTIVOS_TICKERS:
         return None
+    estado_sig = _cargar_ballenas_timing_state().get(f"{activo}#15m", {}).get("significativo", False)
+    if activo not in GBM_LATE_15M_PARES and not estado_sig:
+        return None  # fuera del set validado y el observer tampoco lo confirma aún
     py = market.get("_precio_yes")
-    if py is None or not (GBM_LATE_PY_CONFIRMADO_LO <= py < GBM_LATE_PY_CONFIRMADO_HI):
+    lo, hi, rest_lo, rest_hi = _banda_y_timing_ballenas(
+        activo, "15m", GBM_LATE_PY_CONFIRMADO_LO, GBM_LATE_PY_CONFIRMADO_HI,
+        GBM_LATE_15M_REST_MIN_LO, GBM_LATE_15M_REST_MIN_HI)
+    if py is None or not (lo <= py < hi):
         return None
-    return _s_gbm_late(market, ctx, ventana_min=15,
-                       rest_lo=GBM_LATE_15M_REST_MIN_LO,
-                       rest_hi=GBM_LATE_15M_REST_MIN_HI)
+    return _s_gbm_late(market, ctx, ventana_min=15, rest_lo=rest_lo, rest_hi=rest_hi)
 
 
 def s_gbm_late_60min_py_confirmado(market, ctx):
@@ -2445,16 +2502,23 @@ def s_gbm_late_60min_py_confirmado(market, ctx):
     Estrategia SEPARADA (dedup exige nombre propio). NO está en
     pares_permitidos_live — shadow puro hasta n≥40 propio y decisión
     explícita de Javi. Ver memoria idea_timing_wallets_smart_vs_sistema_14jul.
+
+    15-Jul: banda+timing dinámicos vía ballenas_observer.py, mismo patrón
+    que s_gbm_late_15min_py_confirmado — ver ahí el detalle.
     """
     activo = identificar_activo(market.get("question", ""))
-    if activo not in GBM_LATE_60M_PYCONFIRMADO_PARES:
+    if activo not in ACTIVOS_TICKERS:
+        return None
+    estado_sig = _cargar_ballenas_timing_state().get(f"{activo}#60m", {}).get("significativo", False)
+    if activo not in GBM_LATE_60M_PYCONFIRMADO_PARES and not estado_sig:
         return None
     py = market.get("_precio_yes")
-    if py is None or not (GBM_LATE_PY_CONFIRMADO_LO <= py < GBM_LATE_PY_CONFIRMADO_HI):
+    lo, hi, rest_lo, rest_hi = _banda_y_timing_ballenas(
+        activo, "60m", GBM_LATE_PY_CONFIRMADO_LO, GBM_LATE_PY_CONFIRMADO_HI,
+        GBM_LATE_60M_REST_MIN_LO, GBM_LATE_60M_REST_MIN_HI)
+    if py is None or not (lo <= py < hi):
         return None
-    return _s_gbm_late(market, ctx, ventana_min=60,
-                       rest_lo=GBM_LATE_60M_REST_MIN_LO,
-                       rest_hi=GBM_LATE_60M_REST_MIN_HI)
+    return _s_gbm_late(market, ctx, ventana_min=60, rest_lo=rest_lo, rest_hi=rest_hi)
 
 
 def s_gbm_late_5min(market, ctx):
@@ -2482,16 +2546,23 @@ def s_gbm_late_5min(market, ctx):
     Estrategia SEPARADA (dedup exige nombre propio). NO está en
     pares_permitidos_live — shadow puro hasta n≥40 propio y decisión
     explícita de Javi. Ver memoria idea_timing_wallets_smart_vs_sistema_14jul.
+
+    15-Jul: banda+timing dinámicos vía ballenas_observer.py, mismo patrón
+    que s_gbm_late_15min_py_confirmado — ver ahí el detalle.
     """
     activo = identificar_activo(market.get("question", ""))
-    if activo not in GBM_LATE_5M_PARES:
+    if activo not in ACTIVOS_TICKERS:
+        return None
+    estado_sig = _cargar_ballenas_timing_state().get(f"{activo}#5m", {}).get("significativo", False)
+    if activo not in GBM_LATE_5M_PARES and not estado_sig:
         return None
     py = market.get("_precio_yes")
-    if py is None or not (GBM_LATE_PY_CONFIRMADO_LO <= py < GBM_LATE_PY_CONFIRMADO_HI):
+    lo, hi, rest_lo, rest_hi = _banda_y_timing_ballenas(
+        activo, "5m", GBM_LATE_PY_CONFIRMADO_LO, GBM_LATE_PY_CONFIRMADO_HI,
+        GBM_LATE_5M_REST_MIN_LO, GBM_LATE_5M_REST_MIN_HI)
+    if py is None or not (lo <= py < hi):
         return None
-    return _s_gbm_late(market, ctx, ventana_min=5,
-                       rest_lo=GBM_LATE_5M_REST_MIN_LO,
-                       rest_hi=GBM_LATE_5M_REST_MIN_HI)
+    return _s_gbm_late(market, ctx, ventana_min=5, rest_lo=rest_lo, rest_hi=rest_hi)
 
 
 def _s_gbm_late(market, ctx, ventana_min, rest_lo, rest_hi, espacio_k=None):
