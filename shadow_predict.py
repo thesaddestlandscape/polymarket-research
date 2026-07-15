@@ -3063,6 +3063,54 @@ def s_favorito_confirmado(market, ctx):
     }
 
 
+FAVORITO_SOL_ALTACONVICCION_TH = 0.665  # ver H-CUSTOM-FAVORITO-SOL-ALTACONVICCION
+
+
+def s_favorito_confirmado_sol_altaconviccion(market, ctx):
+    """
+    Subconjunto de alta convicción de FAVORITO_CONFIRMADO#SOL#15min#BUY_YES
+    (py_entrada>=0.665, vs el umbral base 0.55 de la estrategia madre) —
+    hipótesis H-CUSTOM-FAVORITO-SOL-ALTACONVICCION (hipotesis_custom.json).
+    Auditoría de fill-ability del 12-Jul: de las 8 candidatas evaluadas ese
+    día, este fue el ÚNICO subconjunto con pnl/trade POSITIVO en el
+    subconjunto fillable real (+0.12 a +0.41€/trade, n=6-17 según el corte
+    exacto) — el resto dio negativo en agregado. n todavía bajo, umbral de
+    la hipótesis: n>=40 y pnl/trade fillable > 0 sostenido antes de
+    proponer nada.
+
+    15-Jul (petición Javi): pasar a minar fill-ability en primera plana.
+    IMPORTANTE — FAVORITO_CONFIRMADO#SOL#15min#BUY_YES YA ESTÁ LIVE entera
+    (pares_permitidos_live), pero la hipótesis habla de un SUBCONJUNTO
+    (py_entrada alto), no de la tupla completa — igual que
+    UPDOWN_GBM_15M_TARDIO el mismo día, promocionar la tupla madre entera
+    a un nuevo tracking no aislaría el subconjunto que interesa. Estrategia
+    SEPARADA que envuelve s_favorito_confirmado() sin duplicar su lógica
+    (gate py>=0.665 + SOL + 15min ANTES de llamarla, pasa su resultado tal
+    cual) — dedup por (strategy, market_id) exige nombre propio, acumula
+    su propio n de fill-ability desde cero vía candidatos_evaluacion_live.
+    Restringida a 15min porque es lo que audita el hallazgo original (el
+    12-Jul auditó fill-ability de las tuplas #15min ya vivas ese día;
+    FAVORITO_CONFIRMADO#SOL#60min#BUY_YES es una tupla live DISTINTA, sin
+    evidencia propia de que el mismo corte de convicción aplique ahí).
+
+    SOLO en candidatos_evaluacion_live — NO en pares_permitidos_live, cero
+    dinero real. Snapshots de libro vía _snapshots_candidatos_evaluacion()
+    en live_trade.py, mismo mecanismo read-only que el resto de candidatas.
+    """
+    question = market.get("question", "")
+    if "up or down" not in question.lower():
+        return None
+    tipo, vent = _parse_updown_tipo(question)
+    if tipo != "slot" or vent != 15:
+        return None
+    if identificar_activo(question) != "SOL":
+        return None
+    py = market.get("_precio_yes")
+    if py is None or py < FAVORITO_SOL_ALTACONVICCION_TH:
+        return None
+    return s_favorito_confirmado(market, ctx)
+
+
 # ── STREAK — momentum (5min) / reversión (15min) en la SECUENCIA de resoluciones ──
 # Hallazgo 2026-07-05: nadie miraba la secuencia de ventanas (todas las estrategias
 # las tratan como independientes). El signo se INVIERTE por escala:
@@ -3469,6 +3517,7 @@ ESTRATEGIAS = [
     ("GBM_LATE_60M",        s_gbm_late_60min),
     ("STRUCT_NO_15M",       s_struct_no_15m),
     ("FAVORITO_CONFIRMADO", s_favorito_confirmado),
+    ("FAVORITO_CONFIRMADO_SOL_ALTACONVICCION", s_favorito_confirmado_sol_altaconviccion),
     ("STREAK_MOM_5M",       s_streak_mom_5m),
     ("STREAK_FADE_5M",      s_streak_fade_5m),
     ("STREAK_FADE_15M",     s_streak_fade_15m),
