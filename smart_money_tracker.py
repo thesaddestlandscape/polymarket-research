@@ -170,21 +170,30 @@ def mercados_recientes() -> dict:
                     tags = (row.get("event_tags") or "").split("|")
                     question = row.get("question") or ""
                     duracion = next((TAG_A_DURACION[t] for t in tags if t in TAG_A_DURACION), None)
-                    activo = None
-                    if duracion is not None:
-                        if "Up or Down" not in question:
-                            continue
-                        activo = next((a for a in ACTIVOS if a in [t.upper() for t in tags]
-                                       or a.lower() in question.lower()), None)
-                    elif "Up or Down" not in question and (
+                    if duracion is not None and "Up or Down" not in question:
+                        continue
+                    elif duracion is None and "Up or Down" not in question and (
                         "weekly" in [t.lower() for t in tags] or "week" in question.lower()
                     ):
                         # WEEKLY_PRICE: mismo universo que shadow_predict.py::s_weekly_price
                         # (pregunta "the price of <nombre completo> be above/below/between..."),
                         # nombre completo del activo, no ticker.
                         duracion = "weekly"
-                        activo = next((tk for nombre, tk in NOMBRE_A_TICKER.items()
-                                       if nombre in question.lower()), None)
+                    # Detección de activo por NOMBRE COMPLETO en la pregunta
+                    # (bitcoin/ethereum/solana/xrp), NUNCA por ticker/tag —
+                    # Polymarket etiqueta estos mercados con el nombre
+                    # completo ("Bitcoin", no "BTC"). BUG REAL encontrado
+                    # 15-Jul (Javi notó que BTC nunca salía en el consenso):
+                    # la rama Up-or-Down comprobaba ticker en tags/pregunta
+                    # y solo "funcionaba" para ETH/SOL por coincidencia
+                    # (ticker=substring del nombre: "eth" en "ethereum",
+                    # "sol" en "solana") y XRP (ticker=nombre) — "btc" NO es
+                    # substring de "bitcoin", así que TODO mercado de
+                    # Bitcoin Up-or-Down quedaba silenciosamente fuera desde
+                    # que este tracker existe. La rama weekly ya usaba
+                    # NOMBRE_A_TICKER (correcto) — unificadas ambas ramas.
+                    activo = next((tk for nombre, tk in NOMBRE_A_TICKER.items()
+                                   if nombre in question.lower()), None)
                     if duracion is None or not activo:
                         continue
                     ts = row.get("timestamp_utc", "")
