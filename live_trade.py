@@ -22,7 +22,7 @@ from datetime import datetime, timezone, timedelta
 from pathlib import Path
 
 from live_guard import puede_operar_live, estado_live, switch_activo
-from live_stake import (calcular_stake, bankroll_actual, verificar_circuit_breaker,
+from live_stake import (calcular_stake, bankroll_actual, verificar_circuit_breaker, cooldown_factor_streak,
                         pnl_live_hoy, stakes_desplegados_ventana_actual,
                         stakes_abiertos_total, freno_diario_pct_hoy, bankroll_inicio_dia)
 from shadow_digest import enviar_telegram
@@ -2014,6 +2014,20 @@ def main():
                     f"({(1+factor_ic_concurrente):.0%} del mínimo, tiene {ic_hist:+.3f})")
                 continue
 
+        # Cooldown streak (H-STREAK-COOLDOWN, ver live_stake.py::cooldown_factor_streak):
+        # 2 derrotas reales seguidas en esta misma strategy#subtype reducen
+        # ic_para_stake temporalmente. Mismo patrón que los boosts de arriba
+        # (afecta solo tamaño, nunca elegibilidad — ic_hist crudo ya pasó su
+        # gate). factor=1.0 por defecto (riesgo.circuit_breaker.streak_cooldown_factor_ic
+        # ausente/1.0) = no-op explícito, igual que boost_ic_smartmoney_favorito_sol.
+        # config= reutiliza el ya cargado arriba en vez de releer config_live.json
+        # del disco en cada señal candidata del ciclo.
+        cooldown_factor, cooldown_motivo = cooldown_factor_streak(strategy, subtype, config)
+        cooldown_activo = cooldown_factor != 1.0
+        if cooldown_activo:
+            ic_para_stake = ic_para_stake * cooldown_factor
+            log(f"  ⏸ {cooldown_motivo} — ic_para_stake→{ic_para_stake:+.3f}")
+
         stake_info = calcular_stake(ic_para_stake, strategy, subtype, direction=dec)
         if not stake_info["viable"]:
             log(f"  SKIP {strategy}#{subtype}: stake no viable — {stake_info['motivo']}")
@@ -2099,7 +2113,8 @@ def main():
                                 if resultado.get("ok") and "slip_real" in resultado
                                 else resultado.get("error", ""))
                                 + (f" coincide_tupla=1 ic_boost={ic_para_stake:+.3f}" if coincide else "")
-                                + (f" smartmoney_boost=1 ic_boost={ic_para_stake:+.3f}" if smartmoney_boost_aplicado else "")),
+                                + (f" smartmoney_boost=1 ic_boost={ic_para_stake:+.3f}" if smartmoney_boost_aplicado else "")
+                                + (f" streak_cooldown=1 ic_cooldown={ic_para_stake:+.3f}" if cooldown_activo else "")),
         }
         _registrar_trade(trade)
         ya_operados.add(mid)

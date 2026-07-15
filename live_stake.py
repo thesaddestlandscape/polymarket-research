@@ -366,6 +366,81 @@ def racha_perdidas_consecutivas() -> int:
     return racha
 
 
+def cooldown_factor_streak(strategy: str, subtype: str, config: dict | None = None) -> tuple[float, str]:
+    """
+    H-STREAK-COOLDOWN (hypothesis_tracker.py::_eval_streak_cooldown, confirmado
+    15-Jul: n=2664, tras_win IC=+0.099 -> tras_2loss IC=+0.026, gap=+0.072
+    sobre umbral 0.05). Tras 2 derrotas CLOSED reales consecutivas en el
+    MISMO strategy#subtype (sin filtrar dirección, igual que el tracker —
+    subtype ya incluye activo+timeframe), reduce el stake (no lo anula)
+    durante riesgo.streak_cooldown_horas. Distinto del freno de racha global
+    de verificar_circuit_breaker() (para el día entero, cualquier subtype);
+    esto es granular por subtype y temporal (se levanta solo tras el
+    cooldown, no hace falta cambio de ventana/día). Código de seguridad
+    live — no minimizar.
+    """
+    config = config or _cargar_config()
+    cb = config.get("riesgo", {}).get("circuit_breaker", {})
+    factor_raw = cb.get("streak_cooldown_factor_ic", 1.0)
+    # Config corrupta (null, string, etc. — p.ej. un typo al editar el JSON a
+    # mano) no debe tumbar con TypeError el resto del ciclo de main(): esta
+    # función no tiene ningún try/except alrededor en live_trade.py, así que
+    # una excepción aquí para UNA señal aborta TODAS las señales del ciclo.
+    # Se trata igual que "no configurado" (no-op) en vez de crashear.
+    if not isinstance(factor_raw, (int, float)) or isinstance(factor_raw, bool):
+        if factor_raw != 1.0:  # solo avisar si alguien puso algo raro a propósito
+            print(f"  ⚠️ cooldown_factor_streak: streak_cooldown_factor_ic no numérico "
+                  f"({factor_raw!r}) — tratado como inactivo")
+        return 1.0, ""
+    factor = float(factor_raw)
+    if not (0 < factor < 1.0):
+        # No-op explícito (1.0, config ausente) o config inválida (>=1.0
+        # sería un boost, no un cooldown, y se colaría después del techo
+        # BOOST_IC_COMBINADO_MAX que solo se aplica más arriba en la
+        # llamada) — cualquier valor fuera de (0, 1) se trata como inactivo.
+        return 1.0, ""
+    if not TRADES_CSV.exists():
+        print("  ⚠️ cooldown_factor_streak: trades.csv no existe — sin cooldown este ciclo (fail-open documentado, mismo comportamiento que racha_perdidas_consecutivas)")
+        return 1.0, ""
+    horas_raw = cb.get("streak_cooldown_horas", 2.0)
+    if not isinstance(horas_raw, (int, float)) or isinstance(horas_raw, bool) or horas_raw <= 0:
+        print(f"  ⚠️ cooldown_factor_streak: streak_cooldown_horas inválido ({horas_raw!r}) — cooldown inactivo este ciclo")
+        return 1.0, ""
+    horas = float(horas_raw)
+    # Un solo paso: trades.csv se escribe en orden cronológico (append-only),
+    # así que basta con quedarse con las 2 últimas filas CLOSED que matchean
+    # sin acumular ni ordenar todo el histórico de la tupla (antes: sort()
+    # sobre toda la lista, O(n log n) y memoria O(n) para quedarse solo con
+    # las 2 últimas).
+    ultimas: list[tuple] = []
+    with open(TRADES_CSV, encoding="utf-8") as f:
+        for row in csv.DictReader(f):
+            if row.get("status") != "CLOSED":
+                continue
+            if row.get("strategy") != strategy or row.get("subtype") != subtype:
+                continue
+            ts = _parse_ts(row.get("close_timestamp") or "")
+            if ts is None:
+                continue
+            try:
+                pnl = float(row.get("pnl_neto_eur", 0) or 0)
+            except ValueError:
+                continue
+            ultimas.append((ts, pnl))
+            if len(ultimas) > 2:
+                ultimas.pop(0)
+    if len(ultimas) < 2:
+        return 1.0, ""
+    (_, pnl_prev), (ts_ultimo, pnl_ultimo) = ultimas
+    if pnl_prev >= 0 or pnl_ultimo >= 0:
+        return 1.0, ""
+    horas_desde = (datetime.now(timezone.utc) - ts_ultimo).total_seconds() / 3600
+    if horas_desde >= horas:
+        return 1.0, ""
+    return factor, (f"cooldown streak: 2 derrotas seguidas en {strategy}#{subtype} "
+                     f"(última hace {horas_desde:.1f}h < {horas:.1f}h) — stake ×{factor:.2f}")
+
+
 # ── Circuit breaker ───────────────────────────────────────────────────────────
 
 def freno_diario_pct_hoy(config: dict | None = None) -> float:
