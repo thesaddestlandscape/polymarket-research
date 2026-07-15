@@ -1902,6 +1902,57 @@ def s_updown_gbm_eth_15min_hora7(market, ctx):
     return s_updown_gbm(market, ctx)
 
 
+CROSS_WINDOW_SPREAD_MIN = 0.05  # ver H-CUSTOM-CROSS-WINDOW-SPREAD-POS
+CROSS_WINDOW_SPREAD_PARES = {"BTC", "ETH"}  # SOL n=4 insuficiente, XRP sin dato — 15-Jul
+
+
+def s_updown_gbm_15min_cross_window_spread(market, ctx):
+    """
+    UPDOWN_GBM#15min BUY_YES con cross_window_spread alto (mercado propio
+    más caro que la ventana relacionada de 60min del mismo activo) —
+    hallazgo H-CUSTOM-CROSS-WINDOW-SPREAD-POS (hipotesis_custom.json),
+    refrescado 15-Jul: agregado n=80 IC=+0.207 (cruza n≥40/IC≥0.08 de
+    sobra), pero la dirección importa mucho: BUY_YES n=66 IC=+0.265
+    (fuerte) vs BUY_NO n=14 IC=-0.063 (negativo, descartado aquí).
+    Desagregado BUY_YES por activo: BTC n=37 IC=+0.269 hit=78.4%, ETH
+    n=29 IC=+0.242 hit=75.9% — ambos con n≥15 propio y consistentes
+    entre sí. SOL n=4 insuficiente, XRP sin dato — excluidos por ahora,
+    no por evidencia negativa sino por falta de evidencia.
+
+    A diferencia de UPDOWN_GBM_15M_TARDIO (T_h disponible ANTES de
+    llamar a s_updown_gbm vía market["_horas"]), cross_window_spread solo
+    se calcula DENTRO de s_updown_gbm (usa ctx["precios_ventanas_hoy"]) —
+    aquí se filtra DESPUÉS de llamarla, sobre el resultado ya devuelto.
+    "BUY_YES" se aproxima como prob_yes > precio_yes_mercado, el mismo
+    patrón que s_updown_gbm ya usa internamente para su propio filtro de
+    BUY_YES#15min (línea ~1642). Estrategia SEPARADA (dedup por nombre
+    propio, no colisiona con UPDOWN_GBM base ni con
+    UPDOWN_GBM_15M_TARDIO/UPDOWN_GBM_ETH_15M_HORA7).
+
+    SOLO en candidatos_evaluacion_live — UPDOWN_GBM no opera dinero real
+    en ninguna tupla, cero riesgo. Umbral ya cruzado en agregado; pendiente
+    fill-ability (nunca medida para este combo) antes de proponer whitelist.
+    """
+    question = market.get("question", "")
+    if "up or down" not in question.lower():
+        return None
+    tipo, ventana_min = _parse_updown_tipo(question)
+    if tipo != "slot" or ventana_min != 15:
+        return None
+    if identificar_activo(question) not in CROSS_WINDOW_SPREAD_PARES:
+        return None
+    resultado = s_updown_gbm(market, ctx)
+    if resultado is None:
+        return None
+    cws = resultado["features"].get("cross_window_spread")
+    if cws is None or cws < CROSS_WINDOW_SPREAD_MIN:
+        return None
+    py_mkt = market.get("_precio_yes")
+    if py_mkt is None or resultado["prob_yes"] <= py_mkt:
+        return None  # no es señal BUY_YES
+    return resultado
+
+
 # ─────────────────────────────────────────────────────────────────────────────
 # PRICE_TARGET_GBM — mercados de precio objetivo via Black-Scholes digital/barrera
 # ─────────────────────────────────────────────────────────────────────────────
@@ -3543,6 +3594,7 @@ ESTRATEGIAS = [
     ("UPDOWN_GBM",          s_updown_gbm),
     ("UPDOWN_GBM_15M_TARDIO", s_updown_gbm_15min_tardio),
     ("UPDOWN_GBM_ETH_15M_HORA7", s_updown_gbm_eth_15min_hora7),
+    ("UPDOWN_GBM_15M_CROSS_WINDOW_SPREAD", s_updown_gbm_15min_cross_window_spread),
     ("UPDOWN_OU_5M",        s_updown_ou_5m),
     ("PRICE_TARGET_GBM",    s_price_target_gbm),
     ("ORDER_FLOW_5M",       s_order_flow_5m),
