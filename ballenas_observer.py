@@ -65,10 +65,7 @@ from collections import defaultdict
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
-from smart_money_tracker import (
-    TAG_A_DURACION, NOMBRE_A_TICKER, ACTIVOS as ACTIVOS_TICKERS,
-    trades_de_mercado,
-)
+from smart_money_tracker import TAG_A_DURACION, NOMBRE_A_TICKER, trades_de_mercado
 from shadow_resolve import fetch_mercados_paralelo, parse_outcome_prices
 
 DIR = Path(__file__).parent
@@ -156,18 +153,27 @@ def _universo_mercados_resueltos(ahora):
                     tags = (row.get("event_tags") or "").split("|")
                     question = row.get("question") or ""
                     duracion = next((TAG_A_DURACION[t] for t in tags if t in TAG_A_DURACION), None)
-                    activo = None
-                    if duracion is not None:
-                        if "Up or Down" not in question:
-                            continue
-                        activo = next((a for a in ACTIVOS_TICKERS if a in [t.upper() for t in tags]
-                                       or a.lower() in question.lower()), None)
-                    elif "Up or Down" not in question and (
+                    if duracion is not None and "Up or Down" not in question:
+                        continue
+                    elif duracion is None and "Up or Down" not in question and (
                         "weekly" in [t.lower() for t in tags] or "week" in question.lower()
                     ):
                         duracion = "weekly"
-                        activo = next((tk for nombre, tk in NOMBRE_A_TICKER.items()
-                                       if nombre in question.lower()), None)
+                    # Detección de activo por NOMBRE COMPLETO en la pregunta
+                    # (bitcoin/ethereum/solana/xrp), NUNCA por ticker/tag —
+                    # Polymarket etiqueta estos mercados con el nombre
+                    # completo ("Bitcoin", no "BTC"), y "btc" no es substring
+                    # de "bitcoin". Bug real encontrado en producción: la
+                    # primera versión de este filtro (copiada de
+                    # smart_money_tracker.mercados_recientes(), que tiene el
+                    # mismo bug) solo detectaba ETH/SOL (ticker=substring
+                    # casual del nombre) y XRP (ticker=nombre) — BTC quedaba
+                    # silenciosamente fuera de TODO el universo, 0 filas en
+                    # 30k+ trades acumulados hasta que Javi lo notó. Mismo
+                    # mapeo NOMBRE_A_TICKER que ya usa la rama weekly (que
+                    # sí detectaba BTC bien) — unificado para las dos ramas.
+                    activo = next((tk for nombre, tk in NOMBRE_A_TICKER.items()
+                                   if nombre in question.lower()), None)
                     if duracion is None or not activo:
                         continue
                     por_marco[duracion][cid] = {
