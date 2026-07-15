@@ -91,6 +91,16 @@ VENTANA_LOOKBACK_HORAS = {"5m": 24 * 3, "15m": 24 * 5, "60m": 24 * 10,
 CUOTA_POR_MARCO = {"5m": 40, "15m": 40, "60m": 20, "240m": 15, "weekly": 5}
 MARGEN_RESOLUCION_MIN = 5  # solo procesar mercados cuyo end_date pasó hace >=5min
 
+# Duración nominal (min) de cada marco de duración fija — weekly queda
+# fuera a propósito (no tiene ventana fija conocida desde este CSV).
+# Sirve para descartar trades con restante_min fuera de lo físicamente
+# posible (visto en datos reales: ~0.1-0.4% de las filas con
+# restante_min de horas/días en mercados de 5-240min — condition_id o
+# end_date mal etiquetado en algún snapshot, no señal real). Buffer de
+# 5min por posible desfase de reloj/snapshot.
+MARCO_DURACION_MIN = {"5m": 5, "15m": 15, "60m": 60, "240m": 240}
+BUFFER_DURACION_MIN = 5
+
 BANDAS_PRECIO = [(0.0, 0.05), (0.05, 0.30), (0.30, 0.50),
                   (0.50, 0.70), (0.70, 0.90), (0.90, 1.00)]
 Z_MIN = 2.0
@@ -218,6 +228,17 @@ def _procesar_mercados(seleccion):
         if end_dt is None:
             continue
         for t in trades_de_mercado(cid):
+            # SOLO compras: /trades devuelve BUY y SELL mezclados. Una venta
+            # ("Up" SELL a 0.99) no es una apuesta direccional a ese precio —
+            # es cerrar/reducir una posición ya abierta (toma de beneficio,
+            # corte de pérdida, etc.), economía distinta de una compra fresca.
+            # El análisis manual original (14-Jul, vía /activity) ya filtraba
+            # side=="BUY" explícitamente; se perdió al cambiar a /trades para
+            # muestrear TODAS las wallets en vez de una lista precocinada —
+            # sin este filtro, mezclar compras y ventas contamina el z-test
+            # y el hit-rate con una población que no está apostando nada.
+            if (t.get("side") or "").strip().upper() != "BUY":
+                continue
             w = t.get("proxyWallet")
             ts = t.get("timestamp")
             precio = t.get("price")
@@ -232,6 +253,9 @@ def _procesar_mercados(seleccion):
             restante_min = (end_dt - t_dt).total_seconds() / 60.0
             if restante_min < -2:  # trade posterior al cierre — dato corrupto
                 continue
+            dur_nominal = MARCO_DURACION_MIN.get(m["marco"])
+            if dur_nominal is not None and restante_min > dur_nominal + BUFFER_DURACION_MIN:
+                continue  # fuera de lo físicamente posible para este marco — etiquetado corrupto
             compro_yes = outcome in ("up", "yes")
             acierto = (compro_yes and outcome_real == "YES") or (not compro_yes and outcome_real == "NO")
             filas.append({

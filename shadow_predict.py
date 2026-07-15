@@ -2274,20 +2274,29 @@ GBM_LATE_60M_PYCONFIRMADO_PARES = {"BTC", "SOL"}  # ETH excluido: concentrado en
 # z<2, o concentrado en <2 wallets) cae a esas mismas constantes como
 # fallback, nunca se queda sin filtro. Carga perezosa UNA VEZ por proceso
 # (shadow_predict.py corre como subprocess fresco cada ciclo del fast loop,
-# ~20s de vida) — el resto de llamadas en el mismo ciclo son un lookup en
-# memoria (microsegundos), sin red ni cómputo en el camino de la señal.
+# ~20s de vida, así que en la práctica esto se lee del disco una vez por
+# ciclo) — cacheado por mtime, no "una vez para siempre": si algún proceso
+# de vida larga (dash/control) llegase a llamar a estas funciones, un
+# stat() (microsegundos) detecta que el observer escribió una hora nueva
+# y recarga, en vez de servir el estado del arranque para siempre. El
+# resto de llamadas dentro del mismo ciclo son un lookup en memoria, sin
+# red ni cómputo en el camino de la señal.
 BALLENAS_TIMING_STATE = Path("data/shadow/ballenas_timing_state.json")
-_ballenas_timing_cache = None
+_ballenas_timing_cache = {"mtime": None, "data": {}}
 
 
 def _cargar_ballenas_timing_state():
-    global _ballenas_timing_cache
-    if _ballenas_timing_cache is None:
+    try:
+        mtime = BALLENAS_TIMING_STATE.stat().st_mtime
+    except OSError:
+        return {}
+    if _ballenas_timing_cache["mtime"] != mtime:
         try:
-            _ballenas_timing_cache = json.loads(BALLENAS_TIMING_STATE.read_text(encoding="utf-8"))
+            _ballenas_timing_cache["data"] = json.loads(BALLENAS_TIMING_STATE.read_text(encoding="utf-8"))
         except Exception:
-            _ballenas_timing_cache = {}
-    return _ballenas_timing_cache
+            _ballenas_timing_cache["data"] = {}
+        _ballenas_timing_cache["mtime"] = mtime
+    return _ballenas_timing_cache["data"]
 
 
 def _banda_y_timing_ballenas(activo, marco, lo_default, hi_default, rest_lo_default, rest_hi_default):
