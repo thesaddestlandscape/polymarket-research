@@ -1317,6 +1317,53 @@ DRIFT_DAMPING = {
 }
 DRIFT_DAMPING_DEFAULT = 0.10  # daily y ventanas no catalogadas
 
+# H-KALMAN (hypothesis_tracker.py): filtro de Kalman 1D random-walk que
+# SUAVIZA EN EL TIEMPO la señal ya amortiguada (mu_h = drift_60*DRIFT_DAMPING),
+# puramente observacional -- NO sustituye DRIFT_DAMPING ni toca p_up/decisión.
+# Gate propio cruzado 15-Jul (6 subtypes UPDOWN_GBM con n>=200, umbral eran 3).
+# Calibración retrospectiva sin lookahead (analisis_kalman_drift.py, 15-Jul,
+# n=986 walk-forward sobre results.csv, outcomes re-verificados 99.87% contra
+# gamma-api en vivo): Q=0.001 R=0.01 bate al estático en el MISMO pool de filas
+# (IC+0.0749 vs +0.0647). Importante: el diseño que funciona es suavizar la
+# señal YA escalada por DRIFT_DAMPING -- un primer diseño que dejaba al KF
+# reconstruir la escala desde el drift crudo perdía sistemáticamente contra
+# el estático en todo el grid Q/R probado (ver análisis, no repetir ese diseño).
+KALMAN_DRIFT_STATE_PATH = DIR_SHADOW / "kalman_drift_state.json"
+KALMAN_DRIFT_Q  = 0.001
+KALMAN_DRIFT_R  = 0.01
+KALMAN_DRIFT_P0 = 0.01
+
+
+def _kalman_drift_actualizar(ventana_min, market_id, mu_h_damped):
+    """
+    Devuelve mu_prior (estado ANTES de ver la observación de este mercado,
+    evita lookahead) y persiste el estado actualizado para el siguiente.
+    Dedup por market_id: el mismo mercado se re-evalúa muchas veces por
+    ciclo de ~20s antes de resolver, pero la calibración trató cada MERCADO
+    como una observación -- actualizar en cada ciclo sobre-contaría y
+    desajustaría Q/R respecto a lo calibrado. Puro logging: nunca lanza,
+    nunca bloquea el ciclo (fallo → None, el caller simplemente no loguea).
+    """
+    try:
+        estado = json.loads(KALMAN_DRIFT_STATE_PATH.read_text()) if KALMAN_DRIFT_STATE_PATH.exists() else {}
+    except Exception:
+        estado = {}
+    key = str(ventana_min)
+    st = estado.get(key, {"mu": 0.0, "P": KALMAN_DRIFT_P0, "last_market_id": None})
+    if st.get("last_market_id") == market_id:
+        return st.get("mu")
+    mu_prior = st.get("mu", 0.0)
+    P_prior  = st.get("P", KALMAN_DRIFT_P0)
+    K = P_prior / (P_prior + KALMAN_DRIFT_R)
+    mu_post = mu_prior + K * (mu_h_damped - mu_prior)
+    P_post  = (1 - K) * P_prior + KALMAN_DRIFT_Q
+    estado[key] = {"mu": mu_post, "P": P_post, "last_market_id": market_id}
+    try:
+        KALMAN_DRIFT_STATE_PATH.write_text(json.dumps(estado))
+    except Exception:
+        pass
+    return mu_prior
+
 # Filtro régimen — solo activo en ventanas ≥60min y solo para BUY_NO alcista.
 # Backfill 90d: 60min drift>+0.7 BUY_NO IC=−0.004; 240min IC=−0.050 → mala señal.
 # drift<−0.7 BUY_YES en 60min IC=+0.169 → buena señal, no filtrar.
@@ -1618,6 +1665,13 @@ def s_updown_gbm(market, ctx):
     _dd = DRIFT_DAMPING.get(ventana_min, DRIFT_DAMPING_DEFAULT)
     mu_h = (drift_60 or 0.0) * _dd
 
+    # H-KALMAN observacional: suaviza mu_h en el tiempo, NUNCA participa en
+    # p_up/decisión (ver nota en KALMAN_DRIFT_STATE_PATH). Solo logging.
+    try:
+        _kalman_mu_h = _kalman_drift_actualizar(ventana_min, market.get("market_id"), mu_h)
+    except Exception:
+        _kalman_mu_h = None
+
     p_up = _gbm_p_up(spot, ref, sigma_h, T_h, mu_h=mu_h)
     if p_up is None:
         return None
@@ -1716,6 +1770,8 @@ def s_updown_gbm(market, ctx):
         features["drift_15min"] = round(drift_15 * 100, 4)   # %/hora
     if drift_60 is not None:
         features["drift_60min"] = round(drift_60 * 100, 4)   # %/hora
+    if _kalman_mu_h is not None:
+        features["kalman_mu_h"] = round(_kalman_mu_h, 6)  # observacional, no toca p_up
     if delta_macro is not None:
         features["delta_ratio_macro"] = round(delta_macro, 4)
     if cross_window_spread is not None:
