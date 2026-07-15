@@ -1781,6 +1781,88 @@ def s_updown_gbm(market, ctx):
     }
 
 
+def s_updown_gbm_15min_tardio(market, ctx):
+    """
+    Variante tardía de UPDOWN_GBM restringida a slots 15min con T_h<0.2 (T_h
+    en HORAS, igual que en s_updown_gbm — 0.2h = 12min, no 3: son los últimos
+    12 de los 15min de ventana, no solo el cierre) — mismo mecanismo de
+    confirmación tardía que GBM_LATE_15M, aplicado a la estrategia UPDOWN_GBM
+    base. Detectado en el barrido del postmortem del 14-Jul (ver memoria
+    project_barrido_postmortem_hipotesis_maduras_14jul), refrescado con n vivo
+    15-Jul: BTC BUY_YES n=122 IC=+0.210 PnL_shadow=+54.95€, fill-ability
+    21/44=47.7% (ratio_vs_stake≥5x, cruza el mínimo n≥30 del proyecto por
+    primera vez) — las 3 barras a la vez (n≥40, IC≥0.08, fill-ability con
+    n≥30), candidato limpio. ETH BUY_YES (n=128 IC=+0.108) y ETH BUY_NO
+    (n=55 IC=+0.272) siguen fuertes en shadow pero con fill-ability
+    insuficiente (n=3/n=6) — la función los sigue generando (no está
+    restringida a BTC) para que acumulen dato, pero solo BTC entra en
+    pares_permitidos_live por ahora.
+
+    Envuelve s_updown_gbm() SIN duplicar su lógica (250 líneas de GBM y
+    filtros delicados, con consumidores existentes — hypothesis_tracker,
+    el cross-check "model-free" de FAVORITO_CONFIRMADO que busca la fila
+    UPDOWN_GBM del mismo ciclo) — solo añade el gate T_h<0.2 ANTES de
+    llamarla y pasa su resultado tal cual. Estrategia SEPARADA a propósito
+    (dedup por (strategy, market_id) exige nombre propio; acumula su
+    propio IC desde cero, mismo patrón que GBM_LATE_15M_TARDIO). Restringida
+    a slots 15min porque es lo único validado — T_h<0.2 en una ventana de
+    60min/daily es un umbral absoluto de minutos totalmente distinto, sin
+    evidencia propia. IMPORTANTE (15-Jul, hypothesis_tracker.py): varios
+    evaluadores built-in de UPDOWN_GBM usaban startswith("UPDOWN_GBM") — se
+    corrigieron a match exacto para que esta estrategia nueva NO poolee su
+    n/IC con el UPDOWN_GBM base (uno de ellos auto-aplica a
+    meta.gbm_blacklist_hours_auto sin revisión humana, y ese meta lo lee
+    s_updown_gbm(), que esta función envuelve).
+
+    Nota de eficiencia: llama a s_updown_gbm() completo (recalcula el GBM
+    entero), duplicando el cómputo que la entrada "UPDOWN_GBM" plana ya hace
+    sobre el mismo market en el mismo ciclo — aceptado a propósito en vez de
+    extraer un núcleo compartido (como _s_gbm_late) porque s_updown_gbm tiene
+    ~250 líneas de filtros delicados con muchos consumidores ya en producción;
+    el riesgo de un refactor ahí supera el coste de recalcular (sin I/O, solo
+    CPU) para una única tupla live.
+
+    Ballenas (ballenas_observer.py, 15-Jul): la ventana de entrada real de
+    las wallets ganadoras en BTC#15m es MUCHO más estrecha que T_h<0.2
+    (rest_lo_min/rest_hi_min ~0.02-0.08min, los últimos 1-5 segundos) —
+    demasiado ajustada para imponerla como filtro duro aquí sin evidencia
+    de que UPDOWN_GBM (modelo GBM/Black-Scholes) gane en esa ventana
+    exacta, un mecanismo distinto al de GBM_LATE. Se loguea como features
+    observacionales (banda de precio + ventana de timing vigentes, vía el
+    mismo _banda_y_timing_ballenas() que usa la familia PYCONFIRMADO — sin
+    defaults, para detectar "no significativo/inválido" como None y no
+    loguear nada en ese caso) para que el pipeline causal
+    (postmortem→IC_bucket, igual que el resto del sistema) descubra solo,
+    con datos forward, si hace falta estrechar. NO cambia prob_yes ni la
+    decisión — mismo principio que el resto de features observacionales de
+    este fichero (dist_vwap_pct, sigma_b...).
+    """
+    question = market.get("question", "")
+    if "up or down" not in question.lower():
+        return None
+    tipo, ventana_min = _parse_updown_tipo(question)
+    if tipo != "slot" or ventana_min != 15:
+        return None
+    T_h = market.get("_horas")
+    if T_h is None or T_h >= BUY_YES_15M_TH_MAX:
+        return None
+    resultado = s_updown_gbm(market, ctx)
+    if resultado is None:
+        return None
+    activo = identificar_activo(question)
+    lo, hi, rl, rh = _banda_y_timing_ballenas(activo, "15m", None, None, None, None)
+    resultado["features"]["ballenas_significativo"] = lo is not None
+    if lo is not None:
+        py = market.get("_precio_yes")
+        resultado["features"]["ballenas_banda_lo"] = lo
+        resultado["features"]["ballenas_banda_hi"] = hi
+        resultado["features"]["ballenas_rest_lo_min"] = rl
+        resultado["features"]["ballenas_rest_hi_min"] = rh
+        if py is not None:
+            resultado["features"]["ballenas_dentro_banda"] = bool(lo <= py < hi)
+    return resultado
+
+
 # ─────────────────────────────────────────────────────────────────────────────
 # PRICE_TARGET_GBM — mercados de precio objetivo via Black-Scholes digital/barrera
 # ─────────────────────────────────────────────────────────────────────────────
@@ -3372,6 +3454,7 @@ ESTRATEGIAS = [
     ("PRICE_MOMENTUM",      s_price_momentum),
     ("SMART_FLOW_1H",       s_smart_flow_1h),
     ("UPDOWN_GBM",          s_updown_gbm),
+    ("UPDOWN_GBM_15M_TARDIO", s_updown_gbm_15min_tardio),
     ("UPDOWN_OU_5M",        s_updown_ou_5m),
     ("PRICE_TARGET_GBM",    s_price_target_gbm),
     ("ORDER_FLOW_5M",       s_order_flow_5m),

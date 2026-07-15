@@ -1426,6 +1426,7 @@ document.querySelectorAll(".tab").forEach(tab => {
 function simpleName(k) {
   return k
     .replace("ORDER_FLOW_5M#", "Flujo órdenes · ")
+    .replace("UPDOWN_GBM_15M_TARDIO#", "Tendencia tardía 15m · ")
     .replace("UPDOWN_GBM#", "Tendencia · ")
     .replace("UPDOWN_OU_5M#", "Reversión · ")
     .replace("SMART_FLOW_1H#", "Flujo inteligente · ")

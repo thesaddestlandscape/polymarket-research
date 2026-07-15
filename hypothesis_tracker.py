@@ -108,7 +108,13 @@ def _eval_gbm_18h(rows):
     """Bloquear hora 18h UTC en GBM. Trigger: n≥15 con IC<-0.05."""
     gbm_18h = []
     for r in rows:
-        if not r.get("strategy", "").startswith("UPDOWN_GBM"):
+        # Match EXACTO (15-Jul, mismo bug ya corregido en _aplicar_filtro el
+        # 10-Jul para GBM_LATE_15M): startswith poolearía UPDOWN_GBM_15M_TARDIO
+        # (T_h<0.2 únicamente) con el UPDOWN_GBM base (todo T_h/todo marco),
+        # inflando n/IC de este bucket auto-aplicado a meta.gbm_blacklist_hours_auto
+        # sin revisión humana — y ese meta lo lee s_updown_gbm(), que
+        # UPDOWN_GBM_15M_TARDIO envuelve, contaminando la propia tupla live.
+        if r.get("strategy", "") != "UPDOWN_GBM":
             continue
         h = _feat(r, "hora_utc")
         if h is None:
@@ -170,8 +176,10 @@ def _eval_ibs15(rows):
 
 def _eval_hora_gbm(rows):
     """hora_utc como feature causal en GBM forward data."""
+    # Match EXACTO (15-Jul, ver nota en _eval_gbm_18h) — no poolear con
+    # UPDOWN_GBM_15M_TARDIO (T_h<0.2 únicamente).
     gbm_rows = [r for r in rows
-                if r.get("strategy", "").startswith("UPDOWN_GBM")
+                if r.get("strategy", "") == "UPDOWN_GBM"
                 and _feat(r, "hora_utc") is not None]
 
     if len(gbm_rows) < 20:
@@ -227,7 +235,9 @@ def _eval_cross_asset(rows):
             continue
 
         key = (asset, hour_key)
-        if strat.startswith("UPDOWN_GBM"):
+        # Match EXACTO (15-Jul, ver nota en _eval_gbm_18h) — no poolear con
+        # UPDOWN_GBM_15M_TARDIO.
+        if strat == "UPDOWN_GBM":
             by_key[key]["gbm"].append(r)
         elif strat == "ORDER_FLOW_5M":
             by_key[key]["of"].append(r)
@@ -512,7 +522,10 @@ def _eval_60min_live(rows):
     """BTC/ETH/SOL 60min → live cuando IC≥0.08 n≥40."""
     by_sub = defaultdict(list)
     for r in rows:
-        if not r.get("strategy", "").startswith("UPDOWN_GBM"):
+        # Match EXACTO (15-Jul, ver nota en _eval_gbm_18h). UPDOWN_GBM_15M_TARDIO
+        # solo genera subtypes #15min, así que el filtro '60min' de abajo ya lo
+        # excluiría en la práctica, pero exacto evita depender de ese efecto lateral.
+        if r.get("strategy", "") != "UPDOWN_GBM":
             continue
         sub = r.get("subtype", "")
         if "60min" not in sub:
@@ -545,8 +558,11 @@ def _eval_60min_live(rows):
 
 def _eval_sol_15min_live(rows):
     """SOL#15min → live cuando IC≥0.08 n≥40."""
+    # Match EXACTO (15-Jul, ver nota en _eval_gbm_18h) — sin esto,
+    # UPDOWN_GBM_15M_TARDIO#SOL#15min (T_h<0.2 únicamente) se poolearía con
+    # el UPDOWN_GBM#SOL#15min base (todo T_h) en esta decisión de promoción.
     sol_rows = [r for r in rows
-                if r.get("strategy", "").startswith("UPDOWN_GBM")
+                if r.get("strategy", "") == "UPDOWN_GBM"
                 and "SOL" in r.get("subtype", "")
                 and "15min" in r.get("subtype", "")]
     s = _stats(sol_rows)
@@ -787,15 +803,22 @@ def _eval_kalman(rows):
         sp = {}
     estrats = sp.get("estrategias", {})
 
-    # Ver cuántos subtypes han alcanzado n≥200
+    # Ver cuántos subtypes han alcanzado n≥200. Claves jerárquicas del propio
+    # UPDOWN_GBM ("UPDOWN_GBM", "UPDOWN_GBM#BTC", "UPDOWN_GBM#BTC#15min"...) —
+    # NO "UPDOWN_GBM_15M_TARDIO..." (15-Jul, ver nota en _eval_gbm_18h): ese
+    # substring "in" también la habría capturado, pooleando su n con el de
+    # UPDOWN_GBM para esta cuenta.
+    def _es_updown_gbm_base(k):
+        return k == "UPDOWN_GBM" or k.startswith("UPDOWN_GBM#")
+
     n200 = {k: v.get("n", 0) for k, v in estrats.items()
-            if v.get("n", 0) >= 200 and "UPDOWN_GBM" in k}
+            if v.get("n", 0) >= 200 and _es_updown_gbm_base(k)}
 
     if len(n200) >= 3:
         return {"status": "LISTA_EVALUAR", "subtypes_listos": list(n200.keys()),
                 "rec": f"{len(n200)} subtypes con n≥200: {', '.join(list(n200)[:5])}"}
 
-    n_actuales = {k: v.get("n", 0) for k, v in estrats.items() if "UPDOWN_GBM" in k}
+    n_actuales = {k: v.get("n", 0) for k, v in estrats.items() if _es_updown_gbm_base(k)}
     max_n = max(n_actuales.values(), default=0)
     return {"status": "ACUMULANDO", "max_n": max_n,
             "rec": f"Máximo n actual en GBM: {max_n}/200. Esperar 3+ subtypes con n≥200."}
