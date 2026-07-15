@@ -1863,6 +1863,45 @@ def s_updown_gbm_15min_tardio(market, ctx):
     return resultado
 
 
+def s_updown_gbm_eth_15min_hora7(market, ctx):
+    """
+    UPDOWN_GBM#ETH#15min#BUY_YES restringido a hora_utc==7 — hallazgo
+    refinado de H-24H-GBM-BUYYES-MADRUGADA (hipotesis_custom.json) el
+    15-Jul. La hipótesis original agrupaba 3 horas (05-07h UTC, "apertura
+    europea") como si fueran un solo patrón — refrescado con dato actual:
+    n=58 agregado IC=+0.067 (no cruza el 0.08 propio), pero desagregado
+    por hora se invierte: h5 IC=-0.167 n=13, h6 IC=-0.136 n=9, **h7
+    IC=+0.211 n=36** — toda la señal positiva vive en h7, h5/h6 son
+    NEGATIVAS. Desagregado h7 por activo: ETH n=26 IC=+0.214 hit=73.1%
+    (único con n≥15 propio; BTC n=7/BNB n=2/XRP n=1 insuficientes).
+
+    Envuelve s_updown_gbm() sin duplicar su lógica (gate ETH+15min+
+    hora_utc==7 antes de llamarla, pasa el resultado tal cual) — mismo
+    patrón que UPDOWN_GBM_15M_TARDIO y FAVORITO_CONFIRMADO_SOL_
+    ALTACONVICCION el mismo día. UPDOWN_GBM no está en pares_permitidos_
+    live en ninguna tupla — cero riesgo de contaminar dinero real. Nombre
+    de estrategia propio para dedup y para NO ser capturado por los
+    evaluadores built-in de hypothesis_tracker.py (ya corregidos el mismo
+    día a match exacto "== UPDOWN_GBM", no substring/startswith).
+
+    SOLO en candidatos_evaluacion_live — snapshots de libro read-only,
+    acumulando n propio (n=26 hoy, umbral n≥40 antes de proponer
+    whitelist) y fill-ability (UPDOWN_GBM nunca ha operado dinero real,
+    sin dato de fill-ability todavía para esta hora/activo).
+    """
+    question = market.get("question", "")
+    if "up or down" not in question.lower():
+        return None
+    tipo, ventana_min = _parse_updown_tipo(question)
+    if tipo != "slot" or ventana_min != 15:
+        return None
+    if identificar_activo(question) != "ETH":
+        return None
+    if datetime.now(timezone.utc).hour != 7:
+        return None
+    return s_updown_gbm(market, ctx)
+
+
 # ─────────────────────────────────────────────────────────────────────────────
 # PRICE_TARGET_GBM — mercados de precio objetivo via Black-Scholes digital/barrera
 # ─────────────────────────────────────────────────────────────────────────────
@@ -3503,6 +3542,7 @@ ESTRATEGIAS = [
     ("SMART_FLOW_1H",       s_smart_flow_1h),
     ("UPDOWN_GBM",          s_updown_gbm),
     ("UPDOWN_GBM_15M_TARDIO", s_updown_gbm_15min_tardio),
+    ("UPDOWN_GBM_ETH_15M_HORA7", s_updown_gbm_eth_15min_hora7),
     ("UPDOWN_OU_5M",        s_updown_ou_5m),
     ("PRICE_TARGET_GBM",    s_price_target_gbm),
     ("ORDER_FLOW_5M",       s_order_flow_5m),
