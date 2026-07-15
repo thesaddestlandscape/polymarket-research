@@ -1,4 +1,4 @@
-# Estado del bot — 2026-07-15 08:26 UTC
+# Estado del bot — 2026-07-15 08:32 UTC
 
 ## Live — dinero real (on-chain)
 | | |
@@ -58,12 +58,12 @@
 
 ## Calidad de datos
 
-✅ **OK** — última verificación 2026-07-15T08:25 UTC | rechazos 1h: 1 (rango=0, spike=0)
+✅ **OK** — última verificación 2026-07-15T08:31 UTC | rechazos 1h: 2 (rango=0, spike=0)
 
 | Asset | Precio | Age | Alertas |
 |---|---|---|---|
-| ✅ BTC | $64,521.92 | 0.1min |  |
-| ✅ ETH | $1,871.21 | 0.1min |  |
+| ✅ BTC | $64,592.83 | 0.1min |  |
+| ✅ ETH | $1,873.40 | 0.1min |  |
 | ✅ SOL | $77.35 | 0.1min |  |
 | ✅ XRP | $1.11 | 0.1min |  |
 
@@ -71,13 +71,13 @@
 
 | Asset | Consenso | Fuente | Estado |
 |---|---|---|---|
-| BTC | $64,533.30 | consenso |  |
-| ETH | $1,871.21 | consenso |  |
-| SOL | $77.20 | consenso |  |
-| XRP | $1.10 | consenso |  |
+| BTC | $64,592.83 | consenso |  |
+| ETH | $1,873.40 | consenso |  |
+| SOL | $77.36 | consenso |  |
+| XRP | $1.11 | consenso |  |
 
 **Alertas activas:**
-- ⚠ rechazos_1h:1 (rango=0, spike=0)
+- ⚠ rechazos_1h:2 (rango=0, spike=0)
 
 ---
 *Actualizado automáticamente cada ~60s por el fast loop*
