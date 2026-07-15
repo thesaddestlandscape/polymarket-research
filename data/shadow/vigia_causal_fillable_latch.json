@@ -652,5 +652,6 @@
  "candidato_proxy#FAVORITO_CONFIRMADO#SOL#60min#SOL#BUY_YES#hora_utcgt17.0": false,
  "candidato_proxy#GBM_LATE_15M#BTC#BUY_NO#hora_utclt11.0": false,
  "candidato_proxy#GBM_LATE_15M#BTC#15min#BTC#BUY_NO#sigma_ewma_delta_pctgt3.004": false,
- "candidato_proxy#GBM_LATE_15M#ETH#BUY_NO#hora_utclt11.0": false
+ "candidato_proxy#GBM_LATE_15M#ETH#BUY_NO#hora_utclt11.0": false,
+ "candidato_proxy#GBM_LATE_15M#BTC#15min#BTC#BUY_NO#dist_vwap_pctlt0.3552": false
 }
