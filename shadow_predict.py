@@ -1797,7 +1797,7 @@ def s_updown_gbm(market, ctx):
     # poly_drift_5obs: drift del precio YES DENTRO de Polymarket en últimas 5 obs (~5min).
     # Negativo → el mercado interno está vendiendo YES (demanda NO). Positivo → demanda YES.
     # Si poly_drift y nuestra predicción coinciden → señal reforzada (cross-confirmation).
-    mid_market = market.get("id")
+    mid_market = market.get("market_id")
     hist_mkt = ctx.get("historial_mercados", {}).get(mid_market, [])
     if len(hist_mkt) >= 5:
         prices_hist = [p for _, p in hist_mkt[-5:]]
