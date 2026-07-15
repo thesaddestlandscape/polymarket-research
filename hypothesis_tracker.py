@@ -1019,9 +1019,17 @@ STATUS_ICON = {
 
 def _auto_apply(resultados):
     """
-    Para hipótesis con status LISTA_IMPLEMENTAR, aplica el cambio directamente
-    en strategy_params.json bajo la clave 'meta', sin tocar código Python.
-    shadow_predict.py lee 'meta' al inicio de cada ciclo.
+    HASTA 15-Jul aplicaba H-GBM-18H/H-KELLY-HORA directamente en 'meta' de
+    strategy_params.json sin revisión humana. Petición explícita de Javi
+    (15-Jul, tras el /code-review de UPDOWN_GBM_15M_TARDIO que encontró que
+    un bucket contaminado de otro evaluador auto-aplicado podía gatear una
+    tupla live sin que nadie lo revisara): NINGÚN cambio que afecte a
+    shadow_predict.py/live_stake.py se aplica solo — solo se avisa por
+    Telegram y strategy_params.json queda intacto hasta que alguien lo
+    aplique a mano. No hace falta fichero de estado aparte para no repetir
+    el aviso: mientras 'meta' no refleje ya el cambio (comprobado cada vez
+    contra el JSON real), se sigue avisando en cada ciclo del postmortem
+    (~23min) — en cuanto se aplica a mano, deja de avisar solo.
     """
     if not STRATEGY_PARAMS.exists():
         return []
@@ -1031,36 +1039,43 @@ def _auto_apply(resultados):
     except Exception:
         return []
 
-    meta = sp.setdefault("meta", {})
-    aplicados = []
+    meta = sp.get("meta", {})
+    pendientes = []
 
     # H-GBM-18H: bloquear hora 18 UTC en GBM
     h = resultados.get("H-GBM-18H", {})
     if h.get("status") == "LISTA_IMPLEMENTAR":
         blacklist = set(meta.get("gbm_blacklist_hours_auto", []))
         if 18 not in blacklist:
-            blacklist.add(18)
-            meta["gbm_blacklist_hours_auto"] = sorted(blacklist)
-            meta["gbm_blacklist_hours_auto_motivo"] = (
-                f"H-GBM-18H auto-aplicada: IC={h.get('ic',0):+.3f} n={h.get('n',0)}")
-            aplicados.append("H-GBM-18H → hora 18 añadida a gbm_blacklist_hours_auto")
+            pendientes.append(
+                f"🔔 H-GBM-18H lista para aplicar (IC={h.get('ic',0):+.3f} "
+                f"n={h.get('n',0)}): bloquear hora 18 UTC en GBM "
+                f"(meta.gbm_blacklist_hours_auto). NO aplicado — pendiente "
+                f"de confirmación manual.")
 
     # H-KELLY-HORA: boost por hora cuando IC≥0.15 y n≥40 confirmado
     h = resultados.get("H-KELLY-HORA", {})
     if h.get("status") == "LISTA_EVALUAR":
-        hora_boost = {}
-        for hora_str, d in h.get("by_hour", {}).items():
-            if d.get("n", 0) >= 40 and d.get("ic", 0) >= 0.15:
-                hora_boost[hora_str] = 1.2
-        if hora_boost:
-            meta["hora_boost_factor"] = hora_boost
-            aplicados.append(f"H-KELLY-HORA → boost ×1.2 en horas {list(hora_boost.keys())}")
+        boost_actual = meta.get("hora_boost_factor", {})
+        candidatas = {hora_str: 1.2 for hora_str, d in h.get("by_hour", {}).items()
+                      if d.get("n", 0) >= 40 and d.get("ic", 0) >= 0.15}
+        sin_aplicar = {hr: v for hr, v in candidatas.items() if boost_actual.get(hr) != v}
+        if sin_aplicar:
+            pendientes.append(
+                f"🔔 H-KELLY-HORA lista para aplicar: boost ×1.2 en horas "
+                f"{list(sin_aplicar.keys())} (meta.hora_boost_factor). "
+                f"NO aplicado — pendiente de confirmación manual.")
 
-    if aplicados:
-        sp["meta"] = meta
-        STRATEGY_PARAMS.write_text(json.dumps(sp, indent=2, ensure_ascii=False))
+    if pendientes:
+        for msg in pendientes:
+            print(f"  [PENDIENTE-CONFIRMAR] {msg}")
+        try:
+            from shadow_digest import enviar_telegram  # noqa: PLC0415
+            enviar_telegram("\n\n".join(pendientes))
+        except Exception as e:
+            print(f"  [WARN] no se pudo notificar por Telegram: {e}")
 
-    return aplicados
+    return pendientes
 
 
 def run(rows=None):
@@ -1111,11 +1126,9 @@ def run(rows=None):
 
     HIPOTESIS_JSON.write_text(json.dumps(resultados, indent=2, ensure_ascii=False))
 
-    # Auto-apply cambios que ya superaron el umbral
-    aplicados = _auto_apply(resultados)
-    if aplicados:
-        for msg in aplicados:
-            print(f"  [AUTO-APPLY] {msg}")
+    # Cambios que superaron el umbral: NO se aplican solos (15-Jul, petición
+    # Javi) — _auto_apply ya imprime y notifica por Telegram internamente.
+    _auto_apply(resultados)
 
     return resultados
 
