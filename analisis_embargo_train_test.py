@@ -26,8 +26,7 @@ import subprocess
 from collections import defaultdict
 from datetime import datetime, timedelta, timezone
 
-from analisis_gate_riguroso import (RES, CONFIG_LIVE, wilson_ci, ic_bayes,
-                                     shuffle_percentile, IC_LIVE_MIN, N_LIVE_MIN)
+from analisis_gate_riguroso import RES, CONFIG_LIVE, gate
 
 EMBARGO_HORAS = 6
 
@@ -86,28 +85,6 @@ def _ts_pred(row):
         return None
 
 
-def gate(rows):
-    n = len(rows)
-    if n == 0:
-        return None
-    aciertos = sum(1 for r in rows if r["acierto"] == "1")
-    ic = ic_bayes(aciertos, n)
-    lo, hi = wilson_ci(aciertos, n)
-    p_shuf = shuffle_percentile(rows, ic)
-    razones = []
-    if n < N_LIVE_MIN:
-        razones.append(f"n<{N_LIVE_MIN}")
-    if ic < IC_LIVE_MIN:
-        razones.append(f"IC<{IC_LIVE_MIN}")
-    if lo <= 0.5:
-        razones.append("Wilson cruza 0.5")
-    if p_shuf > 0.05:
-        razones.append(f"no bate shuffle (p={p_shuf:.3f})")
-    veredicto = "GATE OK" if not razones else "NO CONCLUYENTE: " + ", ".join(razones)
-    return {"n": n, "hit": aciertos / n, "ic": ic, "lo": lo, "hi": hi,
-            "p_shuf": p_shuf, "veredicto": veredicto}
-
-
 def evaluar(claves, filas_por_clave):
     for tupla, strat, sub, dec in claves:
         rows = filas_por_clave.get((strat, sub, dec), [])
@@ -134,10 +111,15 @@ def evaluar(claves, filas_por_clave):
         g_todo = gate(rows)
         g_post = gate(rows_post)
 
+        def _fmt_pnl(g):
+            if "pnl_media" not in g:
+                return "PnL=sin datos"
+            return f"PnL={g['pnl_media']:+.4f}/trade CI90%=[{g['pnl_lo']:+.4f},{g['pnl_hi']:+.4f}]"
+
         if g_todo:
             print(f"  todo-n:         n={g_todo['n']:4d} hit={g_todo['hit']*100:5.1f}% "
                   f"IC={g_todo['ic']:+.3f} Wilson=[{g_todo['lo']:.3f},{g_todo['hi']:.3f}] "
-                  f"p_shuf={g_todo['p_shuf']:.3f} → {g_todo['veredicto']}")
+                  f"p_shuf={g_todo['p_shuf']:.3f} {_fmt_pnl(g_todo)} → {g_todo['veredicto']}")
         else:
             print("  todo-n: sin datos")
         if len(rows_pre) > 0:
@@ -146,7 +128,7 @@ def evaluar(claves, filas_por_clave):
         if g_post:
             print(f"  post-embargo:   n={g_post['n']:4d} hit={g_post['hit']*100:5.1f}% "
                   f"IC={g_post['ic']:+.3f} Wilson=[{g_post['lo']:.3f},{g_post['hi']:.3f}] "
-                  f"p_shuf={g_post['p_shuf']:.3f} → {g_post['veredicto']}")
+                  f"p_shuf={g_post['p_shuf']:.3f} {_fmt_pnl(g_post)} → {g_post['veredicto']}")
         else:
             print(f"  post-embargo: sin datos limpios todavía (0 filas tras "
                   f"{EMBARGO_HORAS}h de embargo)")
