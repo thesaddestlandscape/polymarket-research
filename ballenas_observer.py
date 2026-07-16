@@ -106,7 +106,16 @@ N_MIN = 40
 N_MIN_INFORMATIVO = 15  # umbral más bajo solo para reportar la banda en el detalle, no para activarla
 
 HISTORY_COLS = ["condition_id", "activo", "marco", "ts_trade", "wallet",
-                 "precio", "restante_min", "acierto"]
+                 "precio", "restante_min", "acierto", "compro_yes"]
+# compro_yes (16-Jul, petición Javi tras corrección de
+# idea_vigia_ballenas_tiempo_real_no_viable_16jul): antes solo se guardaba
+# si el trade acertó, no de qué LADO apostó — sin el lado no se puede medir
+# si la CONCENTRACIÓN del flujo de ballenas en un mercado concreto (no solo
+# el agregado histórico banda+ventana que ya usa PYCONFIRMADO) predice el
+# resultado. Filas viejas (antes de este cambio) no tienen esta columna;
+# _cargar_historia_podada las relee sin fallar (DictWriter usa restval=''
+# para la clave que falta) — quedan con compro_yes='' y se filtran aparte
+# en cualquier análisis de dosis-respuesta futuro.
 
 
 def _cargar_json(path, default):
@@ -268,6 +277,7 @@ def _procesar_mercados(seleccion):
                 "condition_id": cid, "activo": m["activo"], "marco": m["marco"],
                 "ts_trade": t_dt.isoformat(), "wallet": w, "precio": round(precio, 4),
                 "restante_min": round(restante_min, 2), "acierto": int(acierto),
+                "compro_yes": int(compro_yes),
             })
         resultado_por_cid[cid] = "ok"
     return filas, resultado_por_cid
@@ -305,12 +315,19 @@ def _cargar_historia_podada(ahora):
                 row["acierto"] = bool(int(row["acierto"]))
             except (ValueError, KeyError, TypeError):
                 continue
+            # compro_yes puede faltar en filas anteriores a este campo (16-Jul)
+            # — se deja como None (desconocido), no se descarta la fila entera
+            # solo por eso (acierto/precio/restante_min siguen siendo válidos).
+            cy = row.get("compro_yes", "")
+            row["compro_yes"] = bool(int(cy)) if cy not in (None, "") else None
             filas.append(row)
     with open(HISTORY_CSV, "w", newline="", encoding="utf-8") as f:
         w = csv.DictWriter(f, fieldnames=HISTORY_COLS)
         w.writeheader()
         for row in filas:
-            w.writerow({**row, "acierto": int(row["acierto"])})
+            cy = row["compro_yes"]
+            w.writerow({**row, "acierto": int(row["acierto"]),
+                        "compro_yes": "" if cy is None else int(cy)})
     return filas
 
 
