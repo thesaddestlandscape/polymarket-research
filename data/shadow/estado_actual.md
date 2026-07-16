@@ -1,4 +1,4 @@
-# Estado del bot — 2026-07-16 10:48 UTC
+# Estado del bot — 2026-07-16 10:54 UTC
 
 ## Live — dinero real (on-chain)
 | | |
@@ -13,19 +13,19 @@
 ## Shadow — MODELO SIMULADO (no cobrable)
 | | |
 |---|---|
-| P&L fiel (stake fijo 1$) | +1955.60 $ |
-| P&L sim compuesto | 🟢 +3430.19 $ (ficción Kelly: +13483% s/ operativo) |
-| P&L sim hoy (2026-07-16) | 🟢 +161.76 $ |
-| Operaciones resueltas | 16837 (9882 WIN / 6955 LOSS) — 58.7% |
-| Señales abiertas | 59 |
+| P&L fiel (stake fijo 1$) | +1952.60 $ |
+| P&L sim compuesto | 🟢 +3424.87 $ (ficción Kelly: +13463% s/ operativo) |
+| P&L sim hoy (2026-07-16) | 🟢 +156.44 $ |
+| Operaciones resueltas | 16840 (9882 WIN / 6958 LOSS) — 58.7% |
+| Señales abiertas | 70 |
 
 ## Estrategias (visión global)
 
 | Estrategia | n | Win% | IC_efectivo | Tendencia | PNL | Apuesta | Estado |
 |---|---|---|---|---|---|---|---|
 | GBM_LATE_15M | 4861 | 60.2% | +0.102 | ➡️ estable | +1516.78$ | 1.02$ | ✅ activa |
-| GBM_LATE_15M_ESPACIO_ATR | 2084 | 64.9% | +0.149 | ➡️ estable | +1210.53$ | 1.49$ | ✅ activa |
-| GBM_LATE_15M_TARDIO | 2059 | 59.1% | +0.091 | ➡️ estable | +618.22$ | 0.91$ | ✅ activa |
+| GBM_LATE_15M_ESPACIO_ATR | 2085 | 64.8% | +0.148 | ➡️ estable | +1208.49$ | 1.48$ | ✅ activa |
+| GBM_LATE_15M_TARDIO | 2060 | 59.1% | +0.091 | ➡️ estable | +616.98$ | 0.91$ | ✅ activa |
 | UPDOWN_GBM | 1595 | 51.0% | +0.010 | 📈 madura (+0.09) | +76.14$ | 0.50$ | ✅ activa |
 | UPDOWN_GBM_15M_TARDIO | 122 | 68.9% | +0.185 | 📉 agota (-0.13) | +35.66$ | 1.85$ | ✅ activa |
 | STREAK_FADE_15M | 204 | 59.8% | +0.097 | 📈 madura (+0.04) | +29.12$ | 0.97$ | ✅ activa |
@@ -47,36 +47,36 @@
 | UPDOWN_OU_5M | 84 | 28.6% | -0.209 | 📉 agota (-0.14) | -18.89$ | 0.00$ | 🚫 desactivada |
 | STREAK_MOM_5M | 313 | 44.4% | -0.056 | 📉 agota (-0.07) | -23.62$ | 0.50$ | 🚫 desactivada |
 | STREAK_FADE_5M | 246 | 45.1% | -0.048 | 📉 agota (-0.06) | -24.96$ | 0.50$ | ⚠️ IC negativo |
-| FAVORITO_CONFIRMADO | 2527 | 67.3% | +0.173 | ➡️ estable | -71.73$ | 1.72$ | ✅ activa |
+| FAVORITO_CONFIRMADO | 2528 | 67.2% | +0.172 | ➡️ estable | -73.77$ | 1.72$ | ✅ activa |
 
 ## Últimas 5 resoluciones
 
 | Timestamp | Estrategia | Mercado | Resultado | PNL |
 |---|---|---|---|---|
+| 2026-07-16T10:51 | GBM_LATE_15M_TARDIO#ETH#15min | Ethereum Up or Down - July 16, 6:30AM-6:45AM ET… | ❌ LOSS | -1.23$ |
+| 2026-07-16T10:51 | GBM_LATE_15M_ESPACIO_ATR#ETH#15min | Ethereum Up or Down - July 16, 6:30AM-6:45AM ET… | ❌ LOSS | -2.04$ |
+| 2026-07-16T10:51 | FAVORITO_CONFIRMADO#ETH#15min | Ethereum Up or Down - July 16, 6:30AM-6:45AM ET… | ❌ LOSS | -2.04$ |
 | 2026-07-16T10:47 | GBM_LATE_15M_PYCONFIRMADO#XRP#15min | XRP Up or Down - July 16, 6:30AM-6:45AM ET… | ❌ LOSS | -2.04$ |
 | 2026-07-16T10:47 | GBM_LATE_15M_ESPACIO_ATR#SOL#15min | Solana Up or Down - July 16, 6:30AM-6:45AM ET… | ❌ LOSS | -1.19$ |
-| 2026-07-16T10:47 | GBM_LATE_15M_TARDIO#SOL#15min | Solana Up or Down - July 16, 6:30AM-6:45AM ET… | ✅ WIN | +1.48$ |
-| 2026-07-16T10:47 | GBM_LATE_15M_TARDIO#XRP#15min | XRP Up or Down - July 16, 6:30AM-6:45AM ET… | ✅ WIN | +1.92$ |
-| 2026-07-16T10:47 | GBM_LATE_15M_TARDIO#BTC#15min | Bitcoin Up or Down - July 16, 6:30AM-6:45AM ET… | ❌ LOSS | -1.39$ |
 
 ## Calidad de datos
 
-✅ **OK** — última verificación 2026-07-16T10:47 UTC | rechazos 1h: 1 (rango=0, spike=0)
+✅ **OK** — última verificación 2026-07-16T10:53 UTC | rechazos 1h: 1 (rango=0, spike=0)
 
 | Asset | Precio | Age | Alertas |
 |---|---|---|---|
-| ✅ BTC | $64,142.99 | 0.1min |  |
-| ✅ ETH | $1,887.30 | 0.1min |  |
-| ✅ SOL | $76.15 | 0.1min |  |
+| ✅ BTC | $64,117.93 | 0.1min |  |
+| ✅ ETH | $1,885.25 | 0.1min |  |
+| ✅ SOL | $76.17 | 0.1min |  |
 | ✅ XRP | $1.11 | 0.1min |  |
 
-**Cross-source** (coinbase, kraken):
+**Cross-source** (binance, coinbase, kraken):
 
 | Asset | Consenso | Fuente | Estado |
 |---|---|---|---|
-| BTC | $64,140.54 | consenso |  |
-| ETH | $1,887.09 | consenso |  |
-| SOL | $76.16 | consenso |  |
+| BTC | $64,130.00 | consenso |  |
+| ETH | $1,885.25 | consenso |  |
+| SOL | $76.11 | consenso |  |
 | XRP | $1.11 | consenso |  |
 
 **Alertas activas:**
