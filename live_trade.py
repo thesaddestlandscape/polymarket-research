@@ -1447,6 +1447,32 @@ def _ejecutar_orden_polymarket(market_id: str, direction: str,
                 "fee_eur":  0.0,
                 "error":    err_str,
             }
+        # post_only_mode (16-Jul, primera vez visto en real: FAVORITO_CONFIRMADO
+        # #SOL#60min, 04:08 UTC): el CLOB entra en un estado temporal donde solo
+        # acepta post-only/cancels, y la propia respuesta incluye
+        # "retry_after_seconds" — es transitorio del exchange, no un problema
+        # con nuestra orden. Antes caía al branch genérico de abajo con
+        # no_fill=False, así que el caller (main()) escribía un trade ERROR y
+        # el market_id quedaba bloqueado en ya_operados_hoy para siempre — la
+        # señal se perdía pese a que la propia API pedía reintentar. Tratado
+        # igual que FOK kill: no_fill=True, no se registra nada, la señal
+        # sigue viva y el próximo ciclo (~5s, ya menor que el retry_after_seconds
+        # típico de 6s) la re-evalúa: si sigue siendo buena (sigue viva,
+        # latencia<100s, pasa los mismos gates) se reintenta sola; si el
+        # estado persiste hasta que la señal caduque, muere por señal_caducada
+        # como cualquier otra — nunca se fuerza un reintento bloqueante aquí.
+        if "post_only_mode" in err_str or "post-only mode" in err_str:
+            log(f"  ⚠️  CLOB en post-only mode (temporal, reintentable) — no fill: {e}")
+            _registrar_snapshot_libro("post_only_mode", market_id, direction,
+                                      precio_plan, stake_eur, depth, contexto)
+            return {
+                "ok":       False,
+                "no_fill":  True,
+                "order_id": None,
+                "entry_price": entry_price,
+                "fee_eur":  0.0,
+                "error":    err_str,
+            }
         log(f"  ❌ Error ejecutando orden: {e}")
         return {
             "ok":          False,
