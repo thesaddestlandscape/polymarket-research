@@ -1,5 +1,5 @@
-# Hipótesis automáticas — 2026-07-16 03:49 UTC
-_Generado por shadow_postmortem.py sobre 16405 resoluciones (PNL=+3339.50€)_
+# Hipótesis automáticas — 2026-07-16 03:51 UTC
+_Generado por shadow_postmortem.py sobre 16406 resoluciones (PNL=+3340.07€)_
 
 ## Patrones causales activos
 
@@ -836,7 +836,7 @@ _Generado por shadow_postmortem.py sobre 16405 resoluciones (PNL=+3339.50€)_
 - **FILTRO** `hora_utc` > `4.0` → IC=-0.122 (n=35)
   - _Por qué funciona_: hora tardía/noche → sesión US cerrada, menos participantes informados; señales más ruidosas
   - _Acción_: SKIP cuando `hora_utc` > 4.0
-  - _Potencial_: sin este filtro IC_bueno=+0.066 (n=81)
+  - _Potencial_: sin este filtro IC_bueno=+0.071 (n=82)
 
 ### ORDER_FLOW_5M#BNB#5min
 - **PATRÓN** `total_vol_5m` < `197.886` → IC=+0.186 (n=33)
@@ -1570,8 +1570,8 @@ _Derivadas de los patrones aprendidos:_
 | ✅ LEADLAG_BTC_XRP_15M#15min | 134 | +0.096 | +30.14€ | 0 | 0 |
 | ✅ LEADLAG_BTC_XRP_15M#XRP | 134 | +0.096 | +30.14€ | 0 | 0 |
 | ✅ LEADLAG_BTC_XRP_15M#XRP#15min | 134 | +0.096 | +30.14€ | 0 | 5 |
-| ✅ ORDER_FLOW_5M | 1611 | +0.011 | +11.84€ | 1 | 0 |
-| ✅ ORDER_FLOW_5M#5min | 1475 | +0.007 | -0.76€ | 0 | 0 |
+| ✅ ORDER_FLOW_5M | 1612 | +0.012 | +12.40€ | 1 | 0 |
+| ✅ ORDER_FLOW_5M#5min | 1476 | +0.007 | -0.19€ | 0 | 0 |
 | ✅ ORDER_FLOW_5M#BNB | 197 | +0.043 | +5.96€ | 0 | 0 |
 | ✅ ORDER_FLOW_5M#BNB#5min | 197 | +0.043 | +5.96€ | 0 | 1 |
 | ✅ ORDER_FLOW_5M#BTC | 291 | -0.019 | -5.24€ | 0 | 0 |
@@ -1580,8 +1580,8 @@ _Derivadas de los patrones aprendidos:_
 | ✅ ORDER_FLOW_5M#DOGE#5min | 215 | -0.002 | -2.61€ | 2 | 0 |
 | ✅ ORDER_FLOW_5M#ETH | 257 | -0.017 | -7.96€ | 0 | 0 |
 | ✅ ORDER_FLOW_5M#ETH#5min | 257 | -0.017 | -7.96€ | 0 | 0 |
-| ✅ ORDER_FLOW_5M#SOL | 322 | +0.040 | +13.28€ | 0 | 0 |
-| ✅ ORDER_FLOW_5M#SOL#5min | 322 | +0.040 | +13.28€ | 0 | 0 |
+| ✅ ORDER_FLOW_5M#SOL | 323 | +0.042 | +13.85€ | 0 | 0 |
+| ✅ ORDER_FLOW_5M#SOL#5min | 323 | +0.042 | +13.85€ | 0 | 0 |
 | ✅ ORDER_FLOW_5M#XRP | 193 | -0.003 | -4.19€ | 0 | 0 |
 | ✅ ORDER_FLOW_5M#XRP#5min | 193 | -0.003 | -4.19€ | 1 | 0 |
 | ✅ PRICE_TARGET_GBM | 147 | -0.164 | -3.25€ | 4 | 1 |
@@ -1724,7 +1724,7 @@ _Derivadas de los patrones aprendidos:_
 **🟡 H-OF-PAR** — ORDER_FLOW per-pair delta_ratio ranges
   - _Umbral_: n≥200 por par con delta_ratio feature en shadow
   - _Acción_: Añadir DELTA_MIN/MAX por par dict en shadow_predict.py
-  - _Estado_: BTC: 187 ops con delta_ratio | SOL: 220 ops con delta_ratio
+  - _Estado_: BTC: 187 ops con delta_ratio | SOL: 221 ops con delta_ratio
 
 **⚠️ H-SOL-15MIN** — SOL#15min → umbral live (IC≥0.08 n≥40)
   - _Umbral_: IC≥0.08 y n≥40
@@ -1740,7 +1740,7 @@ _Derivadas de los patrones aprendidos:_
 **🟡 H-STREAK-COOLDOWN** — Cooldown tras 2 derrotas consecutivas (mismo subtype)
   - _Umbral_: n≥40 tras 2 losses y gap(IC_tras_win - IC_tras_2loss)≥0.05
   - _Acción_: Reducir stake (no desactivar) 1-2h tras 2 derrotas consecutivas en el mismo subtype
-  - _Estado_: tras_win IC=+0.102 n=9530 | tras_1loss IC=+0.067 n=6661 | tras_2loss IC=+0.034 n=2852/40 | gap=+0.067 (umbral 0.05)
+  - _Estado_: tras_win IC=+0.102 n=9531 | tras_1loss IC=+0.067 n=6661 | tras_2loss IC=+0.034 n=2852/40 | gap=+0.067 (umbral 0.05)
 
 **🟡 H-KALMAN** — Kalman filter para drift adaptativo
   - _Umbral_: n≥200 por subtipo para calibrar parámetros Q/R del KF
@@ -1845,8 +1845,8 @@ _Derivadas de los patrones aprendidos:_
   - _Hipótesis_: Las horas 0-6h UTC en ORDER_FLOW. El blacklist fue calculado con todos los pares incluyendo los negativos (ETH/XRP/DOGE). ¿Con BTC+SOL sigue siendo negativo?
   - _Umbral_: n≥30 y IC<-0.05
   - _Acción_: Mantener bloqueo si IC<-0.05; desbloquear si IC>0 con n≥30
-  - _Estado_: n=97 IC=+0.066 PNL=+11.79€ — sin señal clara aún (umbral IC: min=None max=-0.05)
-  - _Datos_: n=97 IC=+0.066 PNL=+11.79€
+  - _Estado_: n=98 IC=+0.070 PNL=+12.36€ — sin señal clara aún (umbral IC: min=None max=-0.05)
+  - _Datos_: n=98 IC=+0.070 PNL=+12.36€
 
 **〰️ H-CUSTOM-GBM-SIGMA-ALTO** — GBM con sigma_h alto (>0.002/h) — ¿destruye edge?
   - _Hipótesis_: Cuando la volatilidad horaria es muy alta el GBM puede sobreestimar el edge. Testear.
@@ -2018,8 +2018,8 @@ _Derivadas de los patrones aprendidos:_
   - _Hipótesis_: Mismo origen que H-CUSTOM-MOON-LLENA (paper de Fornero, 43 Jornadas SADAF 2023). Qi, Wang & Zhang (2022, 48 mercados, 1973-2019): rendimientos 3.33%/año más bajos durante Mercurio retrógrado. Kou & Ma (2022) en China (99.8% cuentas retail): hasta -31% anualizado. Ambos estudios confirman que el mecanismo es la creencia/superstición de inversores retail (mayor efecto cuanto más retail y más supersticioso el mercado), no un efecto astral literal — Polymarket encaja en ese perfil. Ventanas 2026 (fuente pública, actualizar cada año): 26-feb a 20-mar, 29-jun a 23-jul, 24-oct a 13-nov.
   - _Umbral_: n≥100 PERO ADEMÁS necesita cubrir al menos 2-3 ventanas de retrogradación distintas (no solo la de jun-jul 2026) — esperar mínimo hasta después de la ventana de oct-nov 2026
   - _Acción_: Si IC en mercury_retrogrado=1 < IC en mercury_retrogrado=0 con margen ≥0.05 y ≥2 ventanas distintas cubiertas → considerar boost/filtro. No implementar tras una sola ventana (jun-jul 2026) por more que n sea alto — sería solo un evento, no un patrón.
-  - _Estado_: n=13947 IC=+0.105 PNL=+3415.39€ — sin señal clara aún (umbral IC: min=None max=-0.03)
-  - _Datos_: n=13947 IC=+0.105 PNL=+3415.39€
+  - _Estado_: n=13948 IC=+0.105 PNL=+3415.95€ — sin señal clara aún (umbral IC: min=None max=-0.03)
+  - _Datos_: n=13948 IC=+0.105 PNL=+3415.95€
 
 **〰️ H-CUSTOM-SMART-MONEY-CONSENSUS** — Consenso de wallets 'smart money' — ¿confirma nuestra dirección?
   - _Hipótesis_: Javi propuso estudiar bots/wallets que operan bien en nuestros mismos mercados. En vez de creer artículos (ya verificamos 2 veces esta semana que las narrativas no aguantan el cruce con datos reales), smart_money_tracker.py mide el track record REAL de wallets activas en BTC/ETH/SOL/XRP Up-or-Down 5/15/60min vía data-api.polymarket.com/positions, filtrado a posiciones 'Up or Down'. Clasifica como 'smart' las wallets con n>=10 posiciones, win_rate>=0.55 y pnl_total>0. smart_money_consensus es el sesgo direccional reciente (Up-Down)/(Up+Down) de esas wallets 'smart' por activo. Hipótesis: si nuestra decisión (BUY_YES/BUY_NO) coincide con el consenso smart money, mejor IC que cuando diverge. RESET METODOLOGICO 2026-07-02: la clasificacion 'smart' original via /positions estaba INVERTIDA para wallets de alta frecuencia (el endpoint solo retiene el residuo perdedor sin redimir; verificado: 'wowitsamazing' figuraba como -$478k y es +$10k/mes en el leaderboard oficial). Desde 2026-07-02T06:12Z el consenso se construye solo con wallets verificadas en el leaderboard oficial (pnl_mes>=$1000, 24 wallets). Los valores de smart_money_consensus capturados en features ANTES de esa fecha provienen de la clasificacion rota — descontar ese tramo al evaluar.
@@ -2177,8 +2177,8 @@ _Derivadas de los patrones aprendidos:_
   - _Hipótesis_: Detectado 11-Jul revisando el backlog quant-desk (reencuadre de ORDER_FLOW_5M). ORDER_FLOW_5M solo dispara BUY_NO (presión vendedora en Binance). Split retrospectivo SOL#5min por smart_money_consensus (ya logueado, nunca cruzado con esta estrategia): cuando el consenso on-chain es BAJISTA (smart_money_consensus<0, 'confirma' la señal CEX) el hit cae a 47.1% (ic_bayes=-0.026, n=17); cuando el consenso es ALCISTA/neutro (smart_money_consensus>=0, CONTRARIO a la señal CEX) el hit sube a 65.0% (ic_bayes=+0.136, n=20, pnl/trade+0.294). Contraintuitivo: la 'confirmación' de dos fuentes empeora, la divergencia mejora. Hipótesis mecánica: el flujo de Binance ya captura la información rápida de 5min; smart money on-chain se mueve más lento (posiciones ya tomadas), así que cuando coincide con el flujo CEX puede ser la MISMA información ya vista dos veces sin dar nada nuevo (o incluso momentum ya agotado), mientras que la divergencia indica que el flujo CEX es el que se está moviendo AHORA sobre información fresca que smart money aún no reflejó. Distinto del cierre 08-Jul del consenso poblacional plano (n=2494, ruido puro) — aquello era agregado sobre TODAS las estrategias; esto es específico del mecanismo de ORDER_FLOW_5M. n=17/20 insuficiente para concluir (regla del proyecto n≥15 es el mínimo absoluto, no un veredicto) — vigilar forward.
   - _Umbral_: 40
   - _Acción_: Si confirma con n≥40 e ic_bayes contrario≥+0.08 (con alineado claramente peor) → boost Kelly en ORDER_FLOW_5M BUY_NO cuando smart_money_consensus>=0; considerar filtro/veto cuando smart_money_consensus<0 y muy negativo (posible señal 'ya vista', sin ventaja).
-  - _Estado_: 21/40 ops en el filtro definido (IC actual=+0.152 PNL=+6.46€)
-  - _Datos_: n=21 IC=+0.152 PNL=+6.46€
+  - _Estado_: 22/40 ops en el filtro definido (IC actual=+0.167 PNL=+7.03€)
+  - _Datos_: n=22 IC=+0.167 PNL=+7.03€
 
 **🟡 H-CUSTOM-ETH15-SIGMA-ACCEL** — GBM_LATE_15M ETH — vol acelerando (EWMA10>flat) mejora la señal
   - _Hipótesis_: 12-Jul: sigma_ewma_delta_pct = (sigma_h_ewma10-sigma_h)/sigma_h. Verificado ad-hoc n=47: cuando la vol reciente (EWMA half-life 10min) supera la ventana plana, hit sube de 59.5% (agregado ETH) a 66.0%, ic_bayes=+0.153. Efecto NO uniforme entre activos (ver hermanas BTC/XRP) -- desagregar por activo es obligatorio, el agregado GBM_LATE_15M diluye esto a ruido.
