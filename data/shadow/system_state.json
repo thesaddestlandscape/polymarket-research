@@ -1,9 +1,9 @@
 {
-  "timestamp_utc": "2026-07-16T00:25:06+00:00",
-  "bankroll_sim": 3273.68,
-  "pnl_total": 3253.68,
-  "n_ops": 16153,
-  "win_rate": 0.585,
+  "timestamp_utc": "2026-07-16T00:31:08+00:00",
+  "bankroll_sim": 3282.35,
+  "pnl_total": 3262.35,
+  "n_ops": 16171,
+  "win_rate": 0.5853,
   "estrategias_activas": 222,
   "desactivadas": [
     "UPDOWN_GBM#SOL#5min",
@@ -47,12 +47,12 @@
     },
     {
       "k": "GBM_LATE_15M_ESPACIO_ATR#XRP#15min",
-      "ic": 0.2705,
-      "n": 412
+      "ic": 0.2711,
+      "n": 413
     }
   ],
-  "brier_medio": 0.2295,
-  "clv_medio": 0.0812,
+  "brier_medio": 0.2293,
+  "clv_medio": 0.0814,
   "monitor_5min": {
     "ou_5m": {
       "n": 84,
@@ -67,12 +67,12 @@
       "alerta_proxima": "n=604/400, CLV=-0.027/−0.030"
     },
     "of_decay": {
-      "clv_historico": 0.0082,
-      "clv_ult30": -0.058,
-      "decay_ratio": -7.03
+      "clv_historico": 0.0086,
+      "clv_ult30": -0.025,
+      "decay_ratio": -2.91
     },
     "alertas": [
-      "⚠️ ORDER_FLOW alpha decay: CLV histórico=+0.008 → últimas30=-0.058 (ratio=-7.0x, 4 días)"
+      "⚠️ ORDER_FLOW alpha decay: CLV histórico=+0.009 → últimas30=-0.025 (ratio=-2.9x, 5 días)"
     ]
   }
 }
