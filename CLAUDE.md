@@ -181,6 +181,7 @@ predictions (features JSON) → postmortem:
 | P | Tarea | Condición de activación |
 |---|---|---|
 | **P-LIVE** | **Monitorear primer trade real** | **Ventana 15:00 Madrid (13:00 UTC)** |
+| **P18** ⭐prioridad Javi 16-Jul | **Smart Exit — STOP-LOSS** (lado perdedor, espejo del take-profit original). 16-Jul: simulación sobre 27 pérdidas reales con historial en `smart_exit_prices.csv` (precio MID, sin spread/fee de venta — optimista): umbral -0.30€ dispara en 27/27, pnl real -39.52€ → con stop-loss -26.92€ (mejora +12.61€, -32% de la pérdida). Mayoría de pérdidas pasan varios minutos en meseta a precio intermedio antes de caer a 0 — sí hay ventana real para vender. Detalle completo en memoria `idea_smart_exit.md`. Gate de datos (≥50 trades live) ya cumplido (n=199). | Repetir la simulación con **bid real del CLOB** (no mid) + **fee de venta** descontado — si la mejora sobrevive, implementar como `_check_early_exit` con 2 umbrales (take-profit + stop-loss). Toca ejecución de dinero real: `/code-review` + aprobación explícita de Javi antes de tocar código live |
 | P6 | Cross-asset: GBM+OF BUY_NO mismo activo → ×1.5 | n≥20 ops OF BUY_NO post-filtro |
 | P7 | Kelly por hora boost h=15/17/19 UTC | n≥40/hora forward (hypothesis_tracker vigila) |
 | P8 | OF rangos per-par (BTC 0.42-0.44, SOL 0.36-0.40) | n≥200 con filtros actuales |
