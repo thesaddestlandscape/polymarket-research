@@ -65,10 +65,12 @@ BOOST_IC_COMBINADO_MAX = 1.3
 # SOLO se activa cuando el precio de nuestra señal cae dentro de la banda ya
 # validada para ese (activo,marco) — fuera de esa banda (ej. GBM_LATE entrando
 # cerca de 0.50, sin confirmar todavía) no hay evidencia y el veto no aplica
-# (no bloquea, tampoco genera falsa confianza). Alcance inicial: solo
-# combos_validados en config (SOL#15m — el único con tuplas ya en
-# pares_permitidos_live y backtest propio; BTC#15m excluido por ventana de
-# ballenas degenerada [0.07,0.52]min, 60min sin backtest propio todavía).
+# (no bloquea, tampoco genera falsa confianza). Alcance real vive en
+# combos_validados en config_live.json (16-Jul: SOL#15m, ETH#15m, SOL#60m,
+# BTC#60m, ETH#60m — ver `_veto_ballenas_nota` para el backtest propio de
+# cada uno; BTC#15m sigue excluido por ventana de ballenas degenerada
+# [0.07,0.52]min). No hardcodear la lista aquí — es la ÚNICA fuente de
+# verdad, ya vive en config para poder ampliarse sin tocar código.
 #
 # Fail-open ante datos insuficientes (n<min_trades) o error de API — decisión
 # EXPLÍCITA de Javi 16-Jul tras discutir la tensión con la regla CLAUDE.md

@@ -50,6 +50,11 @@ STATE_JSON = DIR / "data/shadow/ballenas_timing_state.json"
 DIR_MARKETS = DIR / "data/markets"
 
 COMBOS = ["SOL#15m", "ETH#15m", "XRP#15m"]  # BTC#15m excluido (ventana degenerada)
+if len(sys.argv) > 1:
+    # extensión 16-Jul tarde (roadmap ballenas paso 1, combos 60min): permite
+    # re-usar el mismo método sin duplicar código para cualquier lista de
+    # combos vía argv, en vez de hardcodear un segundo script casi idéntico.
+    COMBOS = sys.argv[1].split(",")
 MUESTRA_MAX_POR_COMBO = 250  # ampliado 16-Jul (1ª pasada 90/combo, n=247, 2 buckets bajos <15
                               # -- petición Javi: replicar con muestra más grande antes de decidir nada)
 MIN_TRADES_MERCADO = 3
@@ -60,6 +65,8 @@ def cargar_bandas():
     estado = json.loads(STATE_JSON.read_text())
     bandas = {}
     for combo in COMBOS:
+        if combo not in estado:
+            print(f"  aviso: '{combo}' no existe en {STATE_JSON.name} (typo?)")
         e = estado.get(combo, {})
         if not e.get("significativo"):
             continue
@@ -202,6 +209,22 @@ def main():
 
     acc_global = sum(f[4] for f in filas_resultado) / len(filas_resultado)
     print(f"\nAccuracy global (lado mayoritario del flujo de ballenas): {acc_global*100:.1f}% (n={len(filas_resultado)})")
+
+    # Desagregado por combo (16-Jul tarde, roadmap 60min): el agregado
+    # arriba mezcla activos -- necesario para decidir combo por combo si
+    # entra en combos_validados, no solo "el fenómeno existe en general".
+    print(f"\n{'combo':<10} {'bucket pct_mayoria':<20} {'n':>5} {'accuracy':>10}")
+    print("-" * 50)
+    for combo in sorted(set(f[0] for f in filas_resultado)):
+        sub_combo = [f for f in filas_resultado if f[0] == combo]
+        for lo, hi in buckets:
+            sub = [f for f in sub_combo if lo <= f[2] < hi]
+            if not sub:
+                continue
+            acc = sum(f[4] for f in sub) / len(sub)
+            print(f"{combo:<10} [{lo:.1f},{hi:.1f})".ljust(30) + f"{len(sub):>5}" + f"{acc*100:>9.1f}%")
+        acc_c = sum(f[4] for f in sub_combo) / len(sub_combo)
+        print(f"{combo:<10} {'TOTAL':<20} {len(sub_combo):>5} {acc_c*100:>9.1f}%")
 
 
 if __name__ == "__main__":
