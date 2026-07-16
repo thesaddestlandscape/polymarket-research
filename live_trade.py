@@ -1458,6 +1458,109 @@ def _ejecutar_orden_polymarket(market_id: str, direction: str,
         }
 
 
+# ── Smart Exit — stop-loss (16-Jul, petición Javi) ─────────────────────────
+# Venta anticipada de una posición live OPEN antes de resolución, cuando la
+# pérdida no realizada (con haircut de spread+fee real) cruza un umbral —
+# espejo del take-profit original de idea_smart_exit.md. Calibración: n=28
+# pérdidas reales (smart_exit_prices.csv desde 10-Jul), umbral -0.30€ mejora
+# esas 28 en +12.68€ SI se pudiera vender cualquier tamaño; la restricción
+# real del CLOB (min_order_size del libro, shares=stake/entry_price casi
+# siempre <5 con stake pineado en 1.05€) recorta la mejora a +1.71€ (6/28
+# elegibles). Gateado por riesgo.smart_exit_stop_loss.activo en
+# config_live.json — shadow_resolve._check_salidas_tempranas no llama a
+# nada de esto mientras activo=false (default). Fail-closed en cada paso:
+# libro no consultable, shares por debajo del mínimo del CLOB, o cualquier
+# error de firma/red → no vende, la posición sigue OPEN y el camino normal
+# de resolución sigue intacto. Nunca puede empeorar el resultado. Código de
+# seguridad live — no minimizar.
+
+def _consultar_libro_venta(token_id: str, min_order_size_fallback: float) -> dict:
+    """Lado bid del libro (donde vendemos), vía el mismo endpoint público que
+    _fetch_book_publico. min_order_size viene del propio libro (campo real
+    del CLOB, verificado 16-Jul en ~10 mercados cripto) si lo expone; si no,
+    se usa el fallback de config. Nunca lanza — ok=False en cualquier duda."""
+    try:
+        book = _fetch_book_publico(token_id)
+        if book is None:
+            return {"ok": False, "error": "sin respuesta del libro (público)"}
+        bids = (book.get("bids") if isinstance(book, dict) else getattr(book, "bids", None)) or []
+        if not bids:
+            return {"ok": False, "error": "libro sin bids"}
+        try:
+            min_order_size = float(book.get("min_order_size"))
+        except (TypeError, ValueError):
+            min_order_size = min_order_size_fallback
+        mejor_bid = max(float(b.get("price") if isinstance(b, dict) else b.price) for b in bids)
+        return {"ok": True, "mejor_bid": mejor_bid, "min_order_size": min_order_size}
+    except Exception as e:
+        return {"ok": False, "error": str(e)}
+
+
+def _ejecutar_venta_temprana(market_id: str, direction: str, entry_price: float,
+                             stake_eur: float) -> dict:
+    """Vende anticipadamente en el CLOB la posición (market_id, direction)
+    comprada a entry_price/stake_eur. Devuelve siempre {"ok": ...} — nunca
+    lanza; el caller (shadow_resolve._check_salidas_tempranas) deja la
+    posición OPEN sin cambios si ok=False."""
+    try:
+        if entry_price <= 0 or stake_eur <= 0:
+            return {"ok": False, "error": "entry_price/stake_eur inválidos"}
+        from py_clob_client_v2 import MarketOrderArgsV2, OrderType
+        yes_token, no_token = _get_token_ids(market_id)
+        token_id = yes_token if direction == "BUY_YES" else no_token
+        shares = stake_eur / entry_price
+
+        cfg = _cargar_config().get("riesgo", {}).get("smart_exit_stop_loss", {})
+        min_fallback = float(cfg.get("min_profundidad_ratio_bid", 5.0))
+
+        libro = _consultar_libro_venta(token_id, min_fallback)
+        if not libro.get("ok"):
+            log(f"  ⛔ Smart-exit stop-loss: libro no consultable ({libro.get('error')}) — no se vende, sigue OPEN")
+            return {"ok": False, "no_fill": True, "error": libro.get("error")}
+
+        min_order_size = libro["min_order_size"]
+        if shares < min_order_size:
+            log(f"  ⛔ Smart-exit stop-loss: shares={shares:.3f} < min_order_size={min_order_size} — no se vende, sigue OPEN")
+            return {"ok": False, "no_fill": True, "shares_insuficientes": True,
+                    "error": f"shares {shares:.3f} < min_order_size {min_order_size}"}
+
+        client = _get_clob_client()
+        _marcar_orden_en_curso(market_id, direction)
+        try:
+            order_args = MarketOrderArgsV2(
+                token_id=token_id,
+                amount=round(shares, 4),
+                side="SELL",
+                price=0,  # auto-calculado por el cliente contra el libro real al firmar
+            )
+            signed_order = client.create_market_order(order_args)
+            resp = client.post_order(signed_order, OrderType.FOK)
+        finally:
+            _limpiar_orden_en_curso()
+
+        order_id = resp.get("orderID") or resp.get("id") or str(resp)
+        filled_price = float(resp.get("price", libro.get("mejor_bid", 0)))
+        valor_venta_eur = filled_price * shares
+        fee = float(resp.get("feeRateBps", 0)) / 10000 * valor_venta_eur
+        pnl_neto = valor_venta_eur - stake_eur - fee
+
+        log(f"  🔴 Smart-exit stop-loss EJECUTADO: {market_id}/{direction} "
+            f"shares={shares:.3f} precio_venta={filled_price:.4f} "
+            f"pnl_neto={pnl_neto:+.2f}€ order_id={order_id}")
+        return {
+            "ok": True, "order_id": order_id, "exit_price": filled_price,
+            "valor_venta_eur": round(valor_venta_eur, 4),
+            "fee_eur": round(fee, 4), "pnl_neto_eur": round(pnl_neto, 4),
+        }
+    except Exception as e:
+        err = str(e)
+        if "couldn't be fully filled" in err or "FOK" in err:
+            log(f"  ⚠️  Smart-exit stop-loss FOK kill (sin liquidez) — sigue OPEN: {e}")
+        else:
+            log(f"  ❌ Error en venta anticipada (smart-exit stop-loss) — sigue OPEN: {e}")
+        return {"ok": False, "no_fill": True, "error": err}
+
+
 def _evaluar_pre_trade(pred: dict, decision: str) -> tuple[bool, str]:
     """
     Evaluador independiente pre-trade (generator/evaluator split — Loop Engineering).

@@ -475,6 +475,14 @@ def main():
     ts = datetime.now(timezone.utc).isoformat(timespec="seconds")
     print(f"[{ts}] === Shadow resolve ===")
 
+    # Smart Exit stop-loss (16-Jul): independiente de si hay resoluciones
+    # nuevas este ciclo — revisa las posiciones OPEN antes de que su mercado
+    # resuelva. No-op mientras riesgo.smart_exit_stop_loss.activo sea false.
+    try:
+        _check_salidas_tempranas(ts)
+    except Exception as e:
+        print(f"  ⚠️  _check_salidas_tempranas: {e} — posiciones OPEN sin tocar, resolución normal sigue")
+
     pendientes = cargar_predicciones_pendientes()
     ya_resueltas = cargar_ya_resueltas()
 
@@ -599,6 +607,112 @@ def main():
 
     # Cerrar trades live que hayan resuelto
     _cerrar_trades_live(nuevos_resultados, ts)
+
+
+def _check_salidas_tempranas(ts: str):
+    """Smart Exit — stop-loss (16-Jul, petición Javi de espejar el take-profit
+    original para el lado perdedor). Revisa cada trade live OPEN y, solo si
+    la config lo activa, vende anticipadamente cuando la pérdida no
+    realizada (con haircut de spread+fee real) cruza el umbral configurado.
+    Calibración y contexto completo en idea_smart_exit.md; gate en
+    config_live.json::riesgo.smart_exit_stop_loss. Mientras 'activo' sea
+    false (default), esto es un no-op completo — ni siquiera consulta
+    mercados. Fail-closed en cada paso (ver live_trade._ejecutar_venta_temprana):
+    cualquier duda deja la posición OPEN, el camino normal de resolución
+    sigue intacto — nunca puede empeorar el resultado. Código de seguridad
+    live — no minimizar."""
+    LIVE_CSV = Path("data/live/trades.csv")
+    if not LIVE_CSV.exists():
+        return
+    try:
+        cfg = json.loads(Path("data/live/config_live.json").read_text(encoding="utf-8"))
+    except Exception:
+        return
+    sl_cfg = cfg.get("riesgo", {}).get("smart_exit_stop_loss", {})
+    if not sl_cfg.get("activo"):
+        return
+
+    trades = list(csv.DictReader(open(LIVE_CSV, encoding="utf-8")))
+    abiertas = [t for t in trades if t.get("status") == "OPEN" and t.get("market_id")]
+    if not abiertas:
+        return
+
+    try:
+        umbral  = float(sl_cfg.get("umbral_perdida_eur", 0.30))
+        haircut = float(sl_cfg.get("fee_rate_taker_estimado", 0.07))
+    except (TypeError, ValueError):
+        return
+
+    import live_trade
+    cols = list(trades[0].keys())
+    for t in abiertas:
+        mid = t.get("market_id", "")
+        direction = t.get("direction", "")
+        try:
+            entry_p = float(t.get("entry_price") or 0)
+            stake   = float(t.get("stake_eur") or 0)
+        except ValueError:
+            continue
+        if entry_p <= 0 or stake <= 0:
+            continue
+
+        mercado = estado_mercado(mid)
+        if not mercado:
+            continue  # fail-closed: sin dato de mercado, no se evalúa esta posición
+        if mercado.get("closed") or mercado.get("resolved") or mercado.get("archived"):
+            continue  # ya en camino de resolución normal, no se toca aquí
+
+        op = parse_outcome_prices(mercado.get("outcomePrices"))
+        if not op or len(op) < 2:
+            continue
+        try:
+            pyes, pno = float(op[0]), float(op[1])
+        except (TypeError, ValueError):
+            continue
+        p_lado = pyes if direction == "BUY_YES" else pno
+
+        shares = stake / entry_p
+        valor_ajustado = shares * p_lado * (1.0 - haircut)
+        pnl_ajustado = valor_ajustado - stake
+        if pnl_ajustado > -umbral:
+            continue  # todavía no cruza el umbral
+
+        resultado = live_trade._ejecutar_venta_temprana(mid, direction, entry_p, stake)
+        if not resultado.get("ok"):
+            continue  # fail-closed: sigue OPEN, la resolución normal seguirá su curso
+
+        t["status"]          = "CLOSED"
+        t["close_timestamp"] = ts
+        t["exit_price"]      = f"{resultado['exit_price']:.4f}"
+        t["outcome_real"]    = "STOP_LOSS_TEMPRANO"
+        t["fee_eur"]         = f"{resultado['fee_eur']:.4f}"
+        t["pnl_bruto_eur"]   = f"{(resultado['valor_venta_eur'] - stake):.4f}"
+        t["pnl_neto_eur"]    = f"{resultado['pnl_neto_eur']:.4f}"
+        t["notas"] = f"{t.get('notas','')} smart_exit_stop_loss".strip()
+
+        # Persistir INMEDIATAMENTE tras esta venta real, antes de seguir
+        # evaluando el resto de posiciones OPEN (16-Jul, code-review: 4
+        # ángulos independientes marcaron el batch al final del bucle como
+        # riesgo de idempotencia — si el proceso muere entre la venta #1 y
+        # el fin del loop, esa venta ya ejecutada on-chain nunca se
+        # persistía y la fila quedaba status=OPEN para siempre). Reescribe
+        # el CSV completo (mismo patrón no atómico que _cerrar_trades_live),
+        # pero ahora una vez POR TRADE cerrado, no una vez por ciclo.
+        with open(LIVE_CSV, "w", newline="", encoding="utf-8") as f:
+            w = csv.DictWriter(f, fieldnames=cols)
+            w.writeheader()
+            w.writerows(trades)
+        try:
+            from live_balance import actualizar_balance_real
+            actualizar_balance_real()
+        except Exception:
+            pass
+        try:
+            _notificar_cierre_live(t, resultado["pnl_neto_eur"], acierto_dir=False)
+        except Exception:
+            pass
+        print(f"  🔴 Smart-exit stop-loss: {t['strategy']}#{t['subtype']} {direction} "
+              f"market={mid} PNL={resultado['pnl_neto_eur']:+.4f}€ (corte anticipado, no resolución)")
 
 
 def _notificar_cierre_live(trade: dict, pnl_neto: float, acierto_dir: bool):
