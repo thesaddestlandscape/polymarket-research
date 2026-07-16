@@ -1,5 +1,5 @@
-# Hipótesis automáticas — 2026-07-16 04:10 UTC
-_Generado por shadow_postmortem.py sobre 16427 resoluciones (PNL=+3350.82€)_
+# Hipótesis automáticas — 2026-07-16 04:12 UTC
+_Generado por shadow_postmortem.py sobre 16428 resoluciones (PNL=+3351.45€)_
 
 ## Patrones causales activos
 
@@ -852,7 +852,7 @@ _Generado por shadow_postmortem.py sobre 16427 resoluciones (PNL=+3350.82€)_
 - **FILTRO** `hora_utc` > `4.0` → IC=-0.122 (n=35)
   - _Por qué funciona_: hora tardía/noche → sesión US cerrada, menos participantes informados; señales más ruidosas
   - _Acción_: SKIP cuando `hora_utc` > 4.0
-  - _Potencial_: sin este filtro IC_bueno=+0.076 (n=83)
+  - _Potencial_: sin este filtro IC_bueno=+0.081 (n=84)
 
 ### ORDER_FLOW_5M#BNB#5min
 - **PATRÓN** `total_vol_5m` < `197.886` → IC=+0.186 (n=33)
@@ -884,6 +884,11 @@ _Generado por shadow_postmortem.py sobre 16427 resoluciones (PNL=+3350.82€)_
 
   - _Acción_: SKIP cuando `total_vol_5m` > 1108292.0
   - _Potencial_: sin este filtro IC_bueno=+0.103 (n=61)
+
+### ORDER_FLOW_5M#SOL#5min
+- **PATRÓN** `hora_utc` < `4.0` → IC=+0.121 (n=27)
+  - _Por qué funciona_: hora temprana → mercados cripto menos líquidos, spreads más amplios; edge real menor
+  - _Acción_: Kelly boost +0.60€ cuando `hora_utc` < 4.0 (IC base=+0.065)
 
 ### ORDER_FLOW_5M#XRP#5min
 - **FILTRO** `delta_ratio` |x|≤ `0.4307` → IC=-0.136 (n=20)
@@ -1585,8 +1590,8 @@ _Derivadas de los patrones aprendidos:_
 | ✅ LEADLAG_BTC_XRP_15M#15min | 134 | +0.096 | +30.14€ | 0 | 0 |
 | ✅ LEADLAG_BTC_XRP_15M#XRP | 134 | +0.096 | +30.14€ | 0 | 0 |
 | ✅ LEADLAG_BTC_XRP_15M#XRP#15min | 134 | +0.096 | +30.14€ | 0 | 5 |
-| ✅ ORDER_FLOW_5M | 1613 | +0.012 | +12.89€ | 1 | 0 |
-| ✅ ORDER_FLOW_5M#5min | 1477 | +0.008 | +0.30€ | 0 | 0 |
+| ✅ ORDER_FLOW_5M | 1614 | +0.012 | +13.52€ | 1 | 0 |
+| ✅ ORDER_FLOW_5M#5min | 1478 | +0.008 | +0.93€ | 0 | 0 |
 | ✅ ORDER_FLOW_5M#BNB | 197 | +0.043 | +5.96€ | 0 | 0 |
 | ✅ ORDER_FLOW_5M#BNB#5min | 197 | +0.043 | +5.96€ | 0 | 1 |
 | ✅ ORDER_FLOW_5M#BTC | 291 | -0.019 | -5.24€ | 0 | 0 |
@@ -1595,8 +1600,8 @@ _Derivadas de los patrones aprendidos:_
 | ✅ ORDER_FLOW_5M#DOGE#5min | 216 | +0.000 | -2.12€ | 2 | 0 |
 | ✅ ORDER_FLOW_5M#ETH | 257 | -0.017 | -7.96€ | 0 | 0 |
 | ✅ ORDER_FLOW_5M#ETH#5min | 257 | -0.017 | -7.96€ | 0 | 0 |
-| ✅ ORDER_FLOW_5M#SOL | 323 | +0.042 | +13.85€ | 0 | 0 |
-| ✅ ORDER_FLOW_5M#SOL#5min | 323 | +0.042 | +13.85€ | 0 | 0 |
+| ✅ ORDER_FLOW_5M#SOL | 324 | +0.043 | +14.48€ | 0 | 0 |
+| ✅ ORDER_FLOW_5M#SOL#5min | 324 | +0.043 | +14.48€ | 0 | 1 |
 | ✅ ORDER_FLOW_5M#XRP | 193 | -0.003 | -4.19€ | 0 | 0 |
 | ✅ ORDER_FLOW_5M#XRP#5min | 193 | -0.003 | -4.19€ | 1 | 0 |
 | ✅ PRICE_TARGET_GBM | 147 | -0.164 | -3.25€ | 4 | 1 |
@@ -1739,7 +1744,7 @@ _Derivadas de los patrones aprendidos:_
 **🟡 H-OF-PAR** — ORDER_FLOW per-pair delta_ratio ranges
   - _Umbral_: n≥200 por par con delta_ratio feature en shadow
   - _Acción_: Añadir DELTA_MIN/MAX por par dict en shadow_predict.py
-  - _Estado_: BTC: 187 ops con delta_ratio | SOL: 221 ops con delta_ratio
+  - _Estado_: BTC: 187 ops con delta_ratio | SOL: 222 ops con delta_ratio
 
 **⚠️ H-SOL-15MIN** — SOL#15min → umbral live (IC≥0.08 n≥40)
   - _Umbral_: IC≥0.08 y n≥40
@@ -1755,7 +1760,7 @@ _Derivadas de los patrones aprendidos:_
 **🟡 H-STREAK-COOLDOWN** — Cooldown tras 2 derrotas consecutivas (mismo subtype)
   - _Umbral_: n≥40 tras 2 losses y gap(IC_tras_win - IC_tras_2loss)≥0.05
   - _Acción_: Reducir stake (no desactivar) 1-2h tras 2 derrotas consecutivas en el mismo subtype
-  - _Estado_: tras_win IC=+0.102 n=9537 | tras_1loss IC=+0.068 n=6675 | tras_2loss IC=+0.035 n=2854/40 | gap=+0.067 (umbral 0.05)
+  - _Estado_: tras_win IC=+0.102 n=9538 | tras_1loss IC=+0.068 n=6675 | tras_2loss IC=+0.035 n=2854/40 | gap=+0.067 (umbral 0.05)
 
 **🟡 H-KALMAN** — Kalman filter para drift adaptativo
   - _Umbral_: n≥200 por subtipo para calibrar parámetros Q/R del KF
@@ -1860,8 +1865,8 @@ _Derivadas de los patrones aprendidos:_
   - _Hipótesis_: Las horas 0-6h UTC en ORDER_FLOW. El blacklist fue calculado con todos los pares incluyendo los negativos (ETH/XRP/DOGE). ¿Con BTC+SOL sigue siendo negativo?
   - _Umbral_: n≥30 y IC<-0.05
   - _Acción_: Mantener bloqueo si IC<-0.05; desbloquear si IC>0 con n≥30
-  - _Estado_: n=98 IC=+0.070 PNL=+12.36€ — sin señal clara aún (umbral IC: min=None max=-0.05)
-  - _Datos_: n=98 IC=+0.070 PNL=+12.36€
+  - _Estado_: n=99 IC=+0.074 PNL=+12.99€ — sin señal clara aún (umbral IC: min=None max=-0.05)
+  - _Datos_: n=99 IC=+0.074 PNL=+12.99€
 
 **〰️ H-CUSTOM-GBM-SIGMA-ALTO** — GBM con sigma_h alto (>0.002/h) — ¿destruye edge?
   - _Hipótesis_: Cuando la volatilidad horaria es muy alta el GBM puede sobreestimar el edge. Testear.
@@ -2033,8 +2038,8 @@ _Derivadas de los patrones aprendidos:_
   - _Hipótesis_: Mismo origen que H-CUSTOM-MOON-LLENA (paper de Fornero, 43 Jornadas SADAF 2023). Qi, Wang & Zhang (2022, 48 mercados, 1973-2019): rendimientos 3.33%/año más bajos durante Mercurio retrógrado. Kou & Ma (2022) en China (99.8% cuentas retail): hasta -31% anualizado. Ambos estudios confirman que el mecanismo es la creencia/superstición de inversores retail (mayor efecto cuanto más retail y más supersticioso el mercado), no un efecto astral literal — Polymarket encaja en ese perfil. Ventanas 2026 (fuente pública, actualizar cada año): 26-feb a 20-mar, 29-jun a 23-jul, 24-oct a 13-nov.
   - _Umbral_: n≥100 PERO ADEMÁS necesita cubrir al menos 2-3 ventanas de retrogradación distintas (no solo la de jun-jul 2026) — esperar mínimo hasta después de la ventana de oct-nov 2026
   - _Acción_: Si IC en mercury_retrogrado=1 < IC en mercury_retrogrado=0 con margen ≥0.05 y ≥2 ventanas distintas cubiertas → considerar boost/filtro. No implementar tras una sola ventana (jun-jul 2026) por more que n sea alto — sería solo un evento, no un patrón.
-  - _Estado_: n=13969 IC=+0.105 PNL=+3426.70€ — sin señal clara aún (umbral IC: min=None max=-0.03)
-  - _Datos_: n=13969 IC=+0.105 PNL=+3426.70€
+  - _Estado_: n=13970 IC=+0.105 PNL=+3427.33€ — sin señal clara aún (umbral IC: min=None max=-0.03)
+  - _Datos_: n=13970 IC=+0.105 PNL=+3427.33€
 
 **〰️ H-CUSTOM-SMART-MONEY-CONSENSUS** — Consenso de wallets 'smart money' — ¿confirma nuestra dirección?
   - _Hipótesis_: Javi propuso estudiar bots/wallets que operan bien en nuestros mismos mercados. En vez de creer artículos (ya verificamos 2 veces esta semana que las narrativas no aguantan el cruce con datos reales), smart_money_tracker.py mide el track record REAL de wallets activas en BTC/ETH/SOL/XRP Up-or-Down 5/15/60min vía data-api.polymarket.com/positions, filtrado a posiciones 'Up or Down'. Clasifica como 'smart' las wallets con n>=10 posiciones, win_rate>=0.55 y pnl_total>0. smart_money_consensus es el sesgo direccional reciente (Up-Down)/(Up+Down) de esas wallets 'smart' por activo. Hipótesis: si nuestra decisión (BUY_YES/BUY_NO) coincide con el consenso smart money, mejor IC que cuando diverge. RESET METODOLOGICO 2026-07-02: la clasificacion 'smart' original via /positions estaba INVERTIDA para wallets de alta frecuencia (el endpoint solo retiene el residuo perdedor sin redimir; verificado: 'wowitsamazing' figuraba como -$478k y es +$10k/mes en el leaderboard oficial). Desde 2026-07-02T06:12Z el consenso se construye solo con wallets verificadas en el leaderboard oficial (pnl_mes>=$1000, 24 wallets). Los valores de smart_money_consensus capturados en features ANTES de esa fecha provienen de la clasificacion rota — descontar ese tramo al evaluar.
