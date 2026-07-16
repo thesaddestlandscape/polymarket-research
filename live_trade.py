@@ -27,6 +27,7 @@ from live_stake import (calcular_stake, bankroll_actual, verificar_circuit_break
                         stakes_abiertos_total, freno_diario_pct_hoy, bankroll_inicio_dia)
 from shadow_digest import enviar_telegram
 from live_balance import actualizar_balance_real, cargar_balance_real
+from smart_money_tracker import trades_de_mercado
 
 DIR_LIVE    = Path("data/live")
 DIR_SHADOW  = Path("data/shadow")
@@ -50,6 +51,169 @@ SMARTMONEY_SOL_N_WALLETS_MIN  = 3    # wallets "smart" mínimas detrás del cons
 # y cualquier boost futuro que se añada al mismo patrón) — ninguno de los
 # boosts individuales se validó contra la combinación de ambos a la vez.
 BOOST_IC_COMBINADO_MAX = 1.3
+
+# veto_ballenas (16-Jul, decisión Javi tras idea_vigia_ballenas_tiempo_real_no_viable_16jul
+# corregida + analisis_ballenas_dosis_respuesta_16jul.py): a diferencia del boost
+# smartmoney de arriba (consenso de wallets, agregado, solo afecta STAKE y hoy
+# es no-op porque min=max=1.05€), esto es un VETO de ejecución — solo puede
+# reducir riesgo (saltar una señal), nunca aumentarlo. Mide la concentración
+# del flujo de ballenas EN ESE MERCADO CONCRETO dentro de la banda de precio
+# ya calibrada por ballenas_observer.py para (activo,marco): dosis-respuesta
+# verificada 16-Jul sobre 366 mercados SOL/ETH/XRP#15min ya resueltos
+# (banda de precio constante) — concentración 50-60% acierta 52.6% (n=19,
+# coinflip real) vs concentración 90-100% acierta 98.5% (n=273). El chequeo
+# SOLO se activa cuando el precio de nuestra señal cae dentro de la banda ya
+# validada para ese (activo,marco) — fuera de esa banda (ej. GBM_LATE entrando
+# cerca de 0.50, sin confirmar todavía) no hay evidencia y el veto no aplica
+# (no bloquea, tampoco genera falsa confianza). Alcance inicial: solo
+# combos_validados en config (SOL#15m — el único con tuplas ya en
+# pares_permitidos_live y backtest propio; BTC#15m excluido por ventana de
+# ballenas degenerada [0.07,0.52]min, 60min sin backtest propio todavía).
+#
+# Fail-open ante datos insuficientes (n<min_trades) o error de API — decisión
+# EXPLÍCITA de Javi 16-Jul tras discutir la tensión con la regla CLAUDE.md
+# "cada guardia nueva es fail-closed": fallar cerrado aquí podría vaciar el
+# volumen de SOL#15min (una de las mejores tuplas live) sin evidencia de que
+# bloquear ahí sea correcto — es la primera vez que se consulta esto EN el
+# momento de ejecución, cobertura real desconocida todavía. Mitigación:
+# cada evaluación (con o sin datos) se registra en
+# data/live/veto_ballenas_eventos.jsonl; vigia_ballenas_cobertura.py (cron)
+# alerta por Telegram si el % de sin_datos se dispara — fail-open vigilado,
+# no fail-open silencioso.
+#
+# code-review 16-Jul (antes de desplegar): el diseño original ponía este
+# chequeo DESPUÉS del re-quote — bug real, corregido. Las 1-2 llamadas de
+# red que necesita (hasta ~20s en el peor caso) habrían invalidado la
+# garantía de precio fresco que el re-quote existe para dar (mismo patrón
+# de fallo que el bug de precio stale de 2026-07-03). Por eso se evalúa
+# ANTES de consultar el libro — no depende de `depth`, así que no pierde
+# nada por ir antes; el re-quote sigue siendo el último chequeo antes de
+# firmar, como estaba diseñado originalmente.
+VETO_BALLENAS_UMBRAL_PCT_DEFAULT = 0.6
+VETO_BALLENAS_MIN_TRADES_DEFAULT = 3
+VETO_BALLENAS_EVENTOS_PATH = DIR_LIVE / "veto_ballenas_eventos.jsonl"
+_MARCO_BALLENAS_MAP = {"5min": "5m", "15min": "15m", "60min": "60m", "240min": "240m"}
+
+
+def _cargar_ballenas_timing_state() -> dict:
+    """Estado de ballenas_observer.py (banda de precio + ventana de tiempo
+    calibradas por (activo,marco)), leído fresco cada vez -- sin caché: el
+    proceso se reinvoca desde cero en cada uno de los 4 reintentos por
+    ciclo (run_fast.sh), así que un caché en memoria no sobrevive entre
+    invocaciones y solo añade estado que mantener sin beneficio real
+    (fichero ~30KB, parseo sub-milisegundo). Mismo fichero que consume
+    shadow_predict.py para PYCONFIRMADO (con su propio caché por mtime,
+    justificado ahí porque shadow_predict.py sí procesa muchos mercados
+    dentro de la misma invocación)."""
+    path = DIR_SHADOW / "ballenas_timing_state.json"
+    try:
+        return json.loads(path.read_text(encoding="utf-8"))
+    except Exception:
+        return {}
+
+
+def _marco_ballenas(subtype: str) -> str | None:
+    """'SOL#15min' -> '15m' (nomenclatura de ballenas_observer.py). Split
+    exacto por '#' en vez de substring — evita que "5min" cuele dentro de
+    "15min" si el mapeo se recorre en el orden equivocado."""
+    partes = (subtype or "").split("#")
+    if len(partes) < 2:
+        return None
+    return _MARCO_BALLENAS_MAP.get(partes[1])
+
+
+def _ballenas_conviccion_mercado(condition_id: str, banda_lo: float, banda_hi: float,
+                                  lado_deseado: str) -> tuple[float | None, int]:
+    """% del flujo BUY de ballenas en ESTE mercado, dentro de la banda de
+    precio dada, que apostó por `lado_deseado` ('YES'/'NO' -- misma
+    dirección que nuestra señal). Devuelve (None, 0) si no hay trades
+    suficientes en banda -- fail-open, ver nota junto a las constantes."""
+    try:
+        trades = trades_de_mercado(condition_id)
+    except Exception:
+        return None, 0
+    n_total = 0
+    n_nuestro = 0
+    for t in trades:
+        if (t.get("side") or "").strip().upper() != "BUY":
+            continue
+        precio_t = t.get("price")
+        outcome_t = (t.get("outcome") or "").strip().lower()
+        if precio_t is None or outcome_t not in ("up", "down", "yes", "no"):
+            continue
+        try:
+            precio_t = float(precio_t)
+        except (ValueError, TypeError):
+            continue
+        if not (banda_lo <= precio_t < banda_hi):
+            continue
+        n_total += 1
+        compro_yes = outcome_t in ("up", "yes")
+        lado_t = "YES" if compro_yes else "NO"
+        if lado_t == lado_deseado:
+            n_nuestro += 1
+    if n_total == 0:
+        return None, 0
+    return n_nuestro / n_total, n_total
+
+
+def _evaluar_veto_ballenas(condition_id: str | None, activo: str, marco: str | None,
+                           precio_plan: float, direction: str, config: dict) -> dict:
+    """Evalúa el veto_ballenas para una señal ya identificada (condition_id
+    reusado de _get_token_ids, cero llamadas de red extra hasta que hace
+    falta de verdad). Guard clauses planas (early-return), ver nota de
+    altitud en code-review 16-Jul.
+
+    Devuelve dict con 'aplica' (False = combo/banda no validados, no-op
+    total) y si aplica, 'motivo' + 'veta' (bool) + 'pct'/'n' cuando hay
+    datos. 'banda_no_significativa' cubre el caso en que
+    ballenas_observer.py dejó de confirmar el combo (deriva de calibración)
+    aunque siga en combos_validados -- evita usar una banda_lo/banda_hi
+    obsoleta sin darse cuenta."""
+    veto_cfg = config.get("riesgo", {}).get("veto_ballenas", {})
+    if not veto_cfg.get("activo") or not marco:
+        return {"aplica": False}
+    combo = f"{activo}#{marco}"
+    if combo not in set(veto_cfg.get("combos_validados", [])):
+        return {"aplica": False}
+    banda = _cargar_ballenas_timing_state().get(combo, {})
+    if not banda.get("significativo"):
+        return {"aplica": False, "combo": combo, "motivo_no_aplica": "banda_no_significativa"}
+    banda_lo, banda_hi = banda.get("banda_lo"), banda.get("banda_hi")
+    if not (isinstance(banda_lo, (int, float)) and isinstance(banda_hi, (int, float))):
+        return {"aplica": False, "combo": combo, "motivo_no_aplica": "banda_invalida"}
+    if not (banda_lo <= precio_plan < banda_hi):
+        return {"aplica": False, "combo": combo, "motivo_no_aplica": "fuera_de_banda"}
+    if not condition_id:
+        return {"aplica": True, "veta": False, "motivo": "sin_condition_id",
+                "combo": combo, "pct": None, "n": 0}
+
+    lado_deseado = "YES" if direction == "BUY_YES" else "NO"
+    pct, n = _ballenas_conviccion_mercado(condition_id, banda_lo, banda_hi, lado_deseado)
+    min_trades = veto_cfg.get("min_trades", VETO_BALLENAS_MIN_TRADES_DEFAULT)
+    umbral = veto_cfg.get("umbral_pct", VETO_BALLENAS_UMBRAL_PCT_DEFAULT)
+    if pct is None or n < min_trades:
+        return {"aplica": True, "veta": False, "motivo": "sin_datos",
+                "combo": combo, "pct": pct, "n": n}
+    if pct < umbral:
+        return {"aplica": True, "veta": True, "motivo": "concentracion_debil",
+                "combo": combo, "pct": pct, "n": n, "umbral": umbral}
+    return {"aplica": True, "veta": False, "motivo": "concentracion_ok",
+            "combo": combo, "pct": pct, "n": n, "umbral": umbral}
+
+
+def _registrar_evento_ballenas(market_id: str, veto_vb: dict) -> None:
+    """Log JSONL de cada evaluación del veto_ballenas (aplique o no haya
+    datos) -- consumido por vigia_ballenas_cobertura.py para alertar si el
+    % de 'sin_datos' se dispara. Nunca lanza (logging best-effort, igual
+    que _registrar_snapshot_libro)."""
+    try:
+        evento = {"ts": datetime.now(timezone.utc).isoformat(timespec="seconds"),
+                  "market_id": market_id, **veto_vb}
+        with open(VETO_BALLENAS_EVENTOS_PATH, "a", encoding="utf-8") as f:
+            f.write(json.dumps(evento, ensure_ascii=False) + "\n")
+    except Exception:
+        pass
 
 
 def _clv_tupla(strategy: str, subtype: str, decision: str) -> tuple[float, int]:
@@ -424,21 +588,28 @@ def _get_clob_client():
     )
 
 
-def _get_token_ids(market_id: str) -> tuple[str, str]:
-    """Devuelve (yes_token_id, no_token_id) desde Gamma API.
+def _get_token_ids(market_id: str) -> tuple[str, str, str | None]:
+    """Devuelve (yes_token_id, no_token_id, condition_id) desde Gamma API.
 
     Valida el orden real contra `outcomes` en vez de asumir ciegamente
     clobTokenIds[0]=YES/UP — si algún mercado trajera el orden invertido,
     asumirlo a ciegas compraría el token contrario con dinero real sin
     ningún aviso. Si `outcomes` no trae las etiquetas esperadas, falla
     fuerte (se captura arriba en _ejecutar_orden_polymarket) en vez de
-    arriesgar una dirección adivinada."""
+    arriesgar una dirección adivinada.
+
+    condition_id (16-Jul, veto_ballenas): la misma respuesta ya trae
+    `conditionId` — devolverlo aquí evita una 2ª llamada idéntica a Gamma
+    API solo para ese campo (código de seguridad live 03-Jul: "el import
+    de py_clob_client se paga solo cuando toca" tiene el mismo espíritu,
+    no pagar dos veces la misma llamada de red)."""
     resp = requests.get(
         f"https://gamma-api.polymarket.com/markets/{market_id}",
         timeout=10
     )
     resp.raise_for_status()
     data = resp.json()
+    condition_id = data.get("conditionId") or None
     raw = data.get("clobTokenIds", [])
     tokens = json.loads(raw) if isinstance(raw, str) else raw
     if len(tokens) < 2:
@@ -454,9 +625,9 @@ def _get_token_ids(market_id: str) -> tuple[str, str]:
     o0 = str(outcomes[0]).strip().lower()
     o1 = str(outcomes[1]).strip().lower()
     if o0 in AFIRMATIVOS and o1 in NEGATIVOS:
-        return tokens[0], tokens[1]
+        return tokens[0], tokens[1], condition_id
     if o0 in NEGATIVOS and o1 in AFIRMATIVOS:
-        return tokens[1], tokens[0]
+        return tokens[1], tokens[0], condition_id
     raise ValueError(
         f"outcomes inesperados para market {market_id}: {outcomes} — "
         f"no se puede mapear YES/NO con seguridad"
@@ -673,7 +844,7 @@ def _snapshot_senal_bloqueada(market_id: str, direction: str, precio_yes,
                             and row.get("direction") == direction
                             and mismo_grupo):
                         return
-        yes_token, no_token = _get_token_ids(market_id)
+        yes_token, no_token, _ = _get_token_ids(market_id)
         if direction == "BUY_YES":
             token_id, precio = yes_token, float(precio_yes)
         else:
@@ -1082,7 +1253,7 @@ def _colocar_orden_maker(pred: dict, dec: str, contexto: dict) -> bool:
             return False   # demasiado tarde para que la limit tenga sentido
 
         # Libro fresco para fijar el precio límite sin cruzar.
-        yes_token, no_token = _get_token_ids(mid)
+        yes_token, no_token, _ = _get_token_ids(mid)
         precio_yes = float(pred.get("precio_yes_mercado", 0.5))
         if dec == "BUY_YES":
             token_id, precio_plan = yes_token, precio_yes
@@ -1275,7 +1446,7 @@ def _ejecutar_orden_polymarket(market_id: str, direction: str,
     precio_plan = entry_price
     try:
         from py_clob_client_v2 import MarketOrderArgsV2, OrderType
-        yes_token, no_token = _get_token_ids(market_id)
+        yes_token, no_token, condition_id = _get_token_ids(market_id)
         if direction == "BUY_YES":
             token_id = yes_token
             precio   = entry_price
@@ -1283,6 +1454,39 @@ def _ejecutar_orden_polymarket(market_id: str, direction: str,
             token_id = no_token
             precio   = round(1.0 - entry_price, 6)
         precio_plan = precio   # precio del token en el momento de la señal
+
+        # veto_ballenas (16-Jul, ver constantes/docstring arriba): evaluado
+        # AQUÍ, antes del libro/re-quote, a propósito -- no depende de
+        # `depth`, y así el re-quote sigue siendo el último chequeo antes de
+        # firmar (moverlo después del re-quote fue el bug real que cazó el
+        # code-review de este mismo día: sus llamadas de red podían dejar
+        # stale el precio que el re-quote acababa de confirmar fresco).
+        ctx = contexto or {}
+        activo_vb = (ctx.get("subtype") or "").split("#")[0]
+        marco_vb = _marco_ballenas(ctx.get("subtype") or "")
+        veto_vb = _evaluar_veto_ballenas(condition_id, activo_vb, marco_vb, precio_plan,
+                                         direction, _cargar_config())
+        if veto_vb.get("aplica"):
+            _registrar_evento_ballenas(market_id, veto_vb)
+            motivo_vb = veto_vb.get("motivo")
+            if motivo_vb in ("sin_datos", "sin_condition_id"):
+                log(f"  🐋 Ballenas {veto_vb.get('combo')}: SIN DATOS ({motivo_vb}, n={veto_vb.get('n', 0)}) "
+                    f"— fail-open vigilado (vigia_ballenas_cobertura.py), se sigue evaluando normal")
+            elif veto_vb.get("veta"):
+                log(f"  🐋 Ballenas {veto_vb['combo']}: {veto_vb['pct']*100:.1f}% a favor (n={veto_vb['n']}) "
+                    f"< umbral {veto_vb['umbral']*100:.0f}% — VETO")
+                _registrar_snapshot_libro("veto_ballenas_debil", market_id, direction,
+                                          precio_plan, stake_eur, depth, contexto)
+                return {
+                    "ok": False, "no_fill": True, "ballenas_debil": True,
+                    "order_id": None, "entry_price": entry_price,
+                    "fee_eur": 0.0,
+                    "error": f"ballenas {veto_vb['pct']*100:.1f}% (n={veto_vb['n']}) "
+                             f"< umbral {veto_vb['umbral']*100:.0f}%",
+                }
+            else:
+                log(f"  🐋 Ballenas {veto_vb['combo']}: {veto_vb['pct']*100:.1f}% a favor (n={veto_vb['n']}) "
+                    f">= umbral {veto_vb['umbral']*100:.0f}% — OK")
 
         # Libro público (2026-07-10): el ClobClient autenticado NO hace falta
         # para leer profundidad (/book es público) — construirlo aquí pagaba
@@ -1532,7 +1736,7 @@ def _ejecutar_venta_temprana(market_id: str, direction: str, entry_price: float,
         if entry_price <= 0 or stake_eur <= 0:
             return {"ok": False, "error": "entry_price/stake_eur inválidos"}
         from py_clob_client_v2 import MarketOrderArgsV2, OrderType
-        yes_token, no_token = _get_token_ids(market_id)
+        yes_token, no_token, _ = _get_token_ids(market_id)
         token_id = yes_token if direction == "BUY_YES" else no_token
         shares = stake_eur / entry_price
 
