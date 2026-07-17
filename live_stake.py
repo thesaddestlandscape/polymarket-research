@@ -465,6 +465,45 @@ def freno_diario_pct_hoy(config: dict | None = None) -> float:
     return pct
 
 
+def bankroll_minimo_eur_hoy(config: dict | None = None) -> float:
+    """
+    Suelo de bankroll para el MARGEN PROSPECTIVO de sizing (calcular_stake /
+    _colocar_orden_maker) — NO para el kill-switch absoluto de
+    verificar_circuit_breaker (Freno 1), que sigue leyendo
+    bankroll_minimo_eur directo y fail-closed, sin pasar por este override
+    (code-review 17-Jul: compartir el mismo valor entre ambos hacía que
+    "desbloquear un trade" también moviera el freno de emergencia de todo
+    el día — dos guardias con intención distinta, no deben compartir el
+    mismo botón).
+
+    Mismo patrón que freno_diario_pct_hoy/freno_ventana_pct_hoy: override
+    puntual con fecha (riesgo.circuit_breaker.bankroll_minimo_eur_override =
+    {fecha, valor, aprobado_por}) que solo aplica si fecha == hoy (Madrid) —
+    al día siguiente vuelve solo al valor normal, sin depender de que nadie
+    revierta el config a mano.
+
+    2026-07-17 (decisión explícita Javi): con bankroll real 1.85€, el suelo
+    de 1.00€ + min_stake_eur=1.05€ exige bankroll≥2.05€ para que cualquier
+    trade sea viable — deadlock estructural (verificado: bankroll congelado
+    exacto desde las 06:45 UTC de hoy, 8h+ sin ejecutar nada). Javi pidió
+    explícitamente que el bot pueda operar al menos una vez más hoy antes de
+    la recarga de capital prevista la semana que viene, aceptando que el
+    margen de sizing baje temporalmente — el suelo de emergencia real
+    (Freno 1) no se toca.
+    """
+    if config is None:
+        config = _cargar_config()
+    cb  = config.get("riesgo", {}).get("circuit_breaker", {})
+    val = cb.get("bankroll_minimo_eur", 5.0)
+    ov  = cb.get("bankroll_minimo_eur_override") or {}
+    try:
+        if ov.get("fecha") == _ahora_madrid(config).date().isoformat():
+            return float(ov["valor"])
+    except (KeyError, TypeError, ValueError):
+        pass
+    return val
+
+
 def freno_ventana_pct_hoy(config: dict | None = None) -> float:
     """
     Como freno_diario_pct_hoy pero para el freno de ventana: override puntual
@@ -618,6 +657,14 @@ def verificar_circuit_breaker() -> tuple[bool, str]:
     config  = _cargar_config()
     cb      = config.get("riesgo", {}).get("circuit_breaker", {})
     bkr     = bankroll_actual()
+    # Freno 1 usa el suelo BASE, nunca bankroll_minimo_eur_hoy(): ese override
+    # está pensado para el margen prospectivo de calcular_stake (permitir
+    # intentar un trade más), no para mover el kill-switch absoluto del día
+    # (code-review 17-Jul: un primer intento hacía compartir el mismo valor
+    # entre ambos, así que bajar el suelo para desbloquear un trade también
+    # bajaba el freno de emergencia para el resto del día — doblaba la
+    # exposición sin red que Javi aceptó explícitamente solo para "una vez
+    # más", no para toda la sesión).
     bkr_min = cb.get("bankroll_minimo_eur", 5.0)
 
     # Freno 1 — bankroll mínimo absoluto (máxima prioridad, apaga el switch).
@@ -836,7 +883,7 @@ def calcular_stake(ic: float, strategy: str = "", subtype: str = "",
     # trade antes). Código de seguridad live — no minimizar.
     freno_str = ""
     freno_dia_pct = freno_diario_pct_hoy(config)
-    bkr_min       = riesgo.get("circuit_breaker", {}).get("bankroll_minimo_eur", 5.0)
+    bkr_min       = bankroll_minimo_eur_hoy(config)
     bkr_ini_dia   = bankroll_inicio_dia()
     abiertos      = stakes_abiertos_total()
     if bkr_ini_dia > 0:

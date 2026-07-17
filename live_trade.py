@@ -25,7 +25,8 @@ from pathlib import Path
 from live_guard import puede_operar_live, estado_live, switch_activo
 from live_stake import (calcular_stake, bankroll_actual, verificar_circuit_breaker, cooldown_factor_streak,
                         pnl_live_hoy, stakes_desplegados_ventana_actual,
-                        stakes_abiertos_total, freno_diario_pct_hoy, bankroll_inicio_dia)
+                        stakes_abiertos_total, freno_diario_pct_hoy, bankroll_inicio_dia,
+                        bankroll_minimo_eur_hoy)
 from shadow_digest import enviar_telegram
 from live_balance import actualizar_balance_real, cargar_balance_real
 from smart_money_tracker import trades_de_mercado
@@ -1292,7 +1293,7 @@ def _colocar_orden_maker(pred: dict, dec: str, contexto: dict) -> bool:
         config_completo = _cargar_config()
         bkr_ini_dia = bankroll_inicio_dia()
         if bkr_ini_dia > 0:
-            bkr_min = config_completo.get("riesgo", {}).get("circuit_breaker", {}).get("bankroll_minimo_eur", 5.0)
+            bkr_min = bankroll_minimo_eur_hoy(config_completo)
             # stakes_abiertos_total() solo ve trades.csv (posiciones YA
             # ejecutadas); las órdenes maker 'enviando'/'abierta' de este
             # mismo piloto aún no están ahí pero SÍ pueden llegar a llenarse
