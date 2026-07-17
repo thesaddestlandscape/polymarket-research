@@ -38,7 +38,7 @@ from pathlib import Path
 import requests
 
 import live_trade as lt
-from live_guard import switch_activo, en_ventana_horaria
+from live_guard import puede_operar_live
 from live_stake import calcular_stake, verificar_circuit_breaker
 from smart_money_tracker import trades_de_mercado
 
@@ -54,10 +54,9 @@ ASSET = "BTC"
 VENTANA_MIN = 15
 COMBO = "BTC#15m"
 
-DRY_RUN = True  # Fase 1 -- NO cambiar sin resolver el hueco de whitelist (ver /code-review 17-Jul):
-                 # BALLENAS_TARDIAS#BTC#15min#BUY_YES no está en pares_permitidos_live y este
-                 # executor nunca pasa por el pipeline principal que la aplica -- decisión de
-                 # Javi pendiente (CLAUDE.md: cambios de whitelist siempre se preguntan)
+DRY_RUN = False  # Fase 2 (17-Jul, activada: aprobación explícita Javi + /code-review +
+                  # gate formal de dosis-respuesta corrido para BTC#15m específicamente,
+                  # ver _pares_ballenas_tardias_btc15m_promocion_nota_2026-07-17 en config_live.json
 
 WATCH_LEAD_S = 90        # empieza a vigilar 90s antes del cierre (antes de que
                           # abra la ventana real de 4-32s, para tener margen)
@@ -266,17 +265,18 @@ def disparar(mercado: dict, py: float, edge: float, restante_s: float) -> bool:
     # Este executor es un proceso PERSISTENTE aparte de live_trade.py y nunca
     # pasa por su pipeline principal (llama _ejecutar_orden_polymarket
     # directo) -- así que ninguno de los guardias que viven ahí se aplica
-    # solo, hay que repetirlos aquí explícitamente. Hallazgo del barrido
-    # previo a activar (17-Jul): faltaban switch/ventana/correlación por
-    # completo. Fail-closed: cualquiera de los tres bloquea, ninguno se
-    # puede saltar.
-    if not switch_activo():
-        log(f"  switch LIVE_MODE_ON desactivado -- {'[DRY-RUN] no ejecutaría' if DRY_RUN else 'no se ejecuta'}")
-        return False
-
-    en_ventana, motivo_ventana = en_ventana_horaria()
-    if not en_ventana:
-        log(f"  fuera de ventana horaria ({motivo_ventana}) -- {'[DRY-RUN] no ejecutaría' if DRY_RUN else 'no se ejecuta'}")
+    # solo, hay que repetirlos aquí explícitamente. Hallazgo del /code-review
+    # 17-Jul (angle "reuse"): la primera versión llamaba switch_activo() +
+    # en_ventana_horaria() por separado, reinventando 2/3 de
+    # puede_operar_live() y dejando fuera la 3ª pieza -- la whitelist
+    # (pares_permitidos_live). BALLENAS_TARDIAS#BTC#15min#BUY_YES no estaba
+    # en la lista y este executor no tenía NINGÚN mecanismo para
+    # comprobarla; corregido usando la función real combinada, no una
+    # reimplementación parcial. Fail-closed: bloquea si falta cualquiera de
+    # las tres piezas.
+    ok_operar, motivo_operar = puede_operar_live(STRATEGY, subtype)
+    if not ok_operar:
+        log(f"  {motivo_operar} -- {'[DRY-RUN] no ejecutaría' if DRY_RUN else 'no se ejecuta'}")
         return False
 
     config = lt._cargar_config()
