@@ -2723,35 +2723,58 @@ def s_gbm_late_15min_py_confirmado(market, ctx):
     return _s_gbm_late(market, ctx, ventana_min=15, rest_lo=rest_lo, rest_hi=rest_hi)
 
 
-# BALLENAS_CONFIRMADAS_15M (17-Jul): mismo problema de fondo diagnosticado hoy
-# en GBM_LATE_15M#{SOL,ETH,XRP}#15min#BUY_NO -- las 3 pasan el gate riguroso
-# (IC/PnL) pero muestran el MISMO patrón de selección adversa ya visto en
-# FAVORITO_CONFIRMADO#*#15min#BUY_NO (idea_ballenas_explica_seleccion_
-# adversa_favoritoconfirmado_16jul): fillable pierde, no_fillable ganaría.
-# Repliqué el veto_ballenas real de live_trade.py sobre las 3 -- NO se activa
-# nunca: la señal GBM dispara a mediana ~11min restantes, mucho antes de que
-# empiece la ventana real de ballenas (0.7-8.4min según activo). No es un
-# problema de banda de precio (la banda [0.5,0.7) SÍ está validada para las
-# 3 en ballenas_timing_state.json), es que la señal muere (SENAL_MAX_
+# BALLENAS_CONFIRMADAS_15M (17-Jul, extendida a BUY_YES el mismo día):
+# mismo problema de fondo diagnosticado en GBM_LATE_15M#{SOL,ETH,XRP}
+# #15min#BUY_NO -- las 3 pasan el gate riguroso (IC/PnL) pero muestran el
+# MISMO patrón de selección adversa ya visto en FAVORITO_CONFIRMADO#*#15min
+# #BUY_NO (idea_ballenas_explica_seleccion_adversa_favoritoconfirmado_16jul):
+# fillable pierde, no_fillable ganaría. Repliqué el veto_ballenas real de
+# live_trade.py sobre las 3 -- NO se activa nunca: la señal GBM dispara a
+# mediana ~11min restantes, mucho antes de que empiece la ventana real de
+# ballenas (0.7-8.4min según activo). No es un problema de banda de precio
+# (la banda [0.5,0.7) SÍ está validada para las 3 en
+# ballenas_timing_state.json), es que la señal muere (SENAL_MAX_
 # LATENCIA_SEG=100s) antes de que las ballenas digan nada útil.
 # Ver idea_seleccion_adversa_15min_buyno_generaliza_17jul.
 #
-# Esta estrategia NO parte del GBM -- decide BUY_NO directamente de la
-# concentración de ballenas EN TIEMPO REAL dentro de la banda [0.5,0.7),
-# mismo patrón que BALLENAS_TARDIAS#BTC#15min (worktree feat/ballenas-fast-
-# btc15m) pero SIN necesitar su arquitectura de baja latencia: la ventana
-# real de ballenas para SOL/ETH/XRP es de varios minutos (no los 4-32s
-# degenerados de BTC), así que cabe de sobra en el ciclo normal (~20-23s).
-# BTC excluido a propósito -- ya tiene su ejecutor dedicado para la banda
-# [0.7,0.9) tardía; no se duplica aquí.
+# Esta estrategia NO parte del GBM -- decide la dirección directamente de la
+# concentración de ballenas EN TIEMPO REAL dentro de la banda de precio
+# activa, mismo patrón que BALLENAS_TARDIAS#BTC#15min (worktree feat/
+# ballenas-fast-btc15m) pero SIN necesitar su arquitectura de baja latencia:
+# la ventana real de ballenas para SOL/ETH/XRP es de varios minutos (no los
+# 4-32s degenerados de BTC), así que cabe de sobra en el ciclo normal
+# (~20-23s). BTC excluido a propósito -- ya tiene su ejecutor dedicado para
+# la banda [0.7,0.9) tardía; no se duplica aquí.
+#
+# EXTENSIÓN 17-Jul (petición Javi, "cruzalo con ballenas... tenemos que ir
+# donde van las ballenas, en el mismo margen, con tiempo para entrar y sacar
+# la pasta"): analisis_ic_fillable.py + analisis_ballenas_favorito_15min_
+# buyyes_17jul.py encontraron el mismo mecanismo en dirección BUY_YES para
+# FAVORITO_CONFIRMADO#SOL/ETH#15min (live, dinero real) -- en los mercados
+# donde nos vetan por profundidad, las ballenas ya se habían volcado a YES
+# temprano (SOL 71.5%/precio 0.905 con ~4.5min de margen todavía) y se
+# llevaron la liquidez barata antes de que FAVORITO_CONFIRMADO (que dispara
+# tarde, por precio) pudiera reaccionar. La idea de Javi es la misma que ya
+# resolvió el caso BUY_NO: no depender del trigger de otra estrategia, IR
+# directamente donde ballenas confirman, mientras la banda de precio validada
+# ([0.7,0.9), pasa_gates=True para SOL/ETH/BTC#15m en ballenas_timing_state.json,
+# la misma banda ya usada por GBM_LATE_15M_PYCONFIRMADO) todavía deja
+# tiempo/profundidad para entrar -- justo la banda ANTERIOR a la [0.9,1.0)
+# donde ya no queda nada que capturar. Las bandas YES [0.7,0.9) y NO
+# [0.5,0.7) son mutuamente excluyentes en precio_yes, así que un mismo
+# mercado nunca dispara las dos direcciones a la vez; la función evalúa
+# ambas desde UNA sola consulta a trades_de_mercado() (barato, no duplica
+# el coste de red).
 #
 # Consulta en vivo (trades_de_mercado, mismo endpoint que veto_ballenas/
-# ballenas_observer) SOLO si el precio ya cayó en la banda -- barato en la
-# inmensa mayoría de mercados que no aplican, coste real solo cuando hace
+# ballenas_observer) SOLO si el precio ya cayó en alguna banda -- barato en
+# la inmensa mayoría de mercados que no aplican, coste real solo cuando hace
 # falta. Shadow puro: NO está en pares_permitidos_live, no toca dinero.
 BALLENAS_CONFIRMADAS_ACTIVOS = {"SOL", "ETH", "XRP"}
-BALLENAS_CONFIRMADAS_BANDA_LO = 0.5
-BALLENAS_CONFIRMADAS_BANDA_HI = 0.7
+BALLENAS_CONFIRMADAS_BANDA_NO_LO = 0.5   # precio_no en [0.5,0.7) -> confirma BUY_NO
+BALLENAS_CONFIRMADAS_BANDA_NO_HI = 0.7
+BALLENAS_CONFIRMADAS_BANDA_YES_LO = 0.7  # precio_yes en [0.7,0.9) -> confirma BUY_YES
+BALLENAS_CONFIRMADAS_BANDA_YES_HI = 0.9
 BALLENAS_CONFIRMADAS_UMBRAL_PCT = 0.6   # mismo umbral que veto_ballenas (live_trade.py)
 BALLENAS_CONFIRMADAS_MIN_TRADES = 3     # mismo mínimo que veto_ballenas
 
@@ -2773,16 +2796,19 @@ def _banda_confirmada_ballenas(activo: str, marco: str, lo: float, hi: float) ->
 
 def s_ballenas_confirmadas_15m(market, ctx):
     """
-    BUY_NO en SOL/ETH/XRP#15min cuando el precio ya cotiza NO en la banda
-    [0.5,0.7) (validada en ballenas_timing_state.json, z>=2, n>=40,
-    top1_share<0.40 -- mismos gates que ballenas_observer.py) Y la
-    concentración de ballenas EN ESE MERCADO CONCRETO, ahora mismo, confirma
-    el lado NO por encima del umbral. Dirección fija a BUY_NO (a diferencia
-    de BALLENAS_TARDIAS, que deja que la mayoría decida el lado) porque el
-    caso de negocio es concreto: arreglar la selección adversa ya
-    diagnosticada de GBM_LATE_15M#*#15min#BUY_NO, no una exploración
-    abierta. Ver nota de la estrategia arriba y
-    idea_seleccion_adversa_15min_buyno_generaliza_17jul (17-Jul).
+    BUY_YES o BUY_NO en SOL/ETH/XRP#15min cuando el precio ya cotiza dentro
+    de una banda validada en ballenas_timing_state.json (z>=2, n>=40,
+    top1_share<0.40 -- mismos gates que ballenas_observer.py: [0.7,0.9) para
+    YES, [0.5,0.7) para NO) Y la concentración de ballenas EN ESE MERCADO
+    CONCRETO, ahora mismo, confirma ESE lado por encima del umbral. La
+    dirección la decide la banda de precio en la que cae el mercado (nunca
+    las dos a la vez, son rangos excluyentes de precio_yes) -- no una
+    mayoría abierta de voto como BALLENAS_TARDIAS. Caso de negocio concreto
+    en ambas direcciones: arreglar la selección adversa ya diagnosticada de
+    GBM_LATE_15M#*#15min#BUY_NO (16/17-Jul) y de FAVORITO_CONFIRMADO#SOL/ETH
+    #15min#BUY_YES (17-Jul, live). Ver nota de la estrategia arriba,
+    idea_seleccion_adversa_15min_buyno_generaliza_17jul e
+    idea_ballenas_explica_seleccion_adversa_favorito_buyyes_15min_17jul.
     """
     question = market.get("question", "")
     tipo, vent = _parse_updown_tipo(question)
@@ -2802,10 +2828,19 @@ def s_ballenas_confirmadas_15m(market, ctx):
     if py is None:
         return None
     precio_no = round(1.0 - py, 6)
-    if not (BALLENAS_CONFIRMADAS_BANDA_LO <= precio_no < BALLENAS_CONFIRMADAS_BANDA_HI):
-        return None
-    banda_info = _banda_confirmada_ballenas(
-        activo, "15m", BALLENAS_CONFIRMADAS_BANDA_LO, BALLENAS_CONFIRMADAS_BANDA_HI)
+
+    if BALLENAS_CONFIRMADAS_BANDA_YES_LO <= py < BALLENAS_CONFIRMADAS_BANDA_YES_HI:
+        direccion = "BUY_YES"
+        banda_lo, banda_hi = BALLENAS_CONFIRMADAS_BANDA_YES_LO, BALLENAS_CONFIRMADAS_BANDA_YES_HI
+        precio_lado = py
+    elif BALLENAS_CONFIRMADAS_BANDA_NO_LO <= precio_no < BALLENAS_CONFIRMADAS_BANDA_NO_HI:
+        direccion = "BUY_NO"
+        banda_lo, banda_hi = BALLENAS_CONFIRMADAS_BANDA_NO_LO, BALLENAS_CONFIRMADAS_BANDA_NO_HI
+        precio_lado = precio_no
+    else:
+        return None  # fuera de ambas bandas -- ninguna dirección aplica
+
+    banda_info = _banda_confirmada_ballenas(activo, "15m", banda_lo, banda_hi)
     if banda_info is None:
         return None  # el observer no confirma esta banda concreta para este activo ahora
 
@@ -2833,7 +2868,7 @@ def s_ballenas_confirmadas_15m(market, ctx):
             precio_t = float(precio_t)
         except (ValueError, TypeError):
             continue
-        if not (BALLENAS_CONFIRMADAS_BANDA_LO <= precio_t < BALLENAS_CONFIRMADAS_BANDA_HI):
+        if not (banda_lo <= precio_t < banda_hi):
             continue
         if outcome_t in ("down", "no"):
             n_no += 1
@@ -2842,23 +2877,25 @@ def s_ballenas_confirmadas_15m(market, ctx):
     n = n_no + n_yes
     if n < BALLENAS_CONFIRMADAS_MIN_TRADES:
         return None
-    pct_no = n_no / n
-    if pct_no < BALLENAS_CONFIRMADAS_UMBRAL_PCT:
+    n_lado = n_yes if direccion == "BUY_YES" else n_no
+    pct_lado = n_lado / n
+    if pct_lado < BALLENAS_CONFIRMADAS_UMBRAL_PCT:
         return None
 
-    prob_no = banda_info["hit"]   # probabilidad empírica calibrada del bucket (lado NO)
-    prob_yes = round(1.0 - prob_no, 4)
+    hit_lado = banda_info["hit"]   # probabilidad empírica calibrada del bucket (lado confirmado)
+    prob_yes = round(hit_lado, 4) if direccion == "BUY_YES" else round(1.0 - hit_lado, 4)
     return {
         "prob_yes": prob_yes,
-        "razon": (f"ballenas_confirmadas_15m {activo} precio_no={precio_no:.3f} "
-                  f"concentracion_no={pct_no:.2f} (n={n}) banda_hit={prob_no:.3f}"),
+        "razon": (f"ballenas_confirmadas_15m {activo} {direccion} precio_lado={precio_lado:.3f} "
+                  f"concentracion={pct_lado:.2f} (n={n}) banda_hit={hit_lado:.3f}"),
         "subtype": f"{activo}#15min",
         "features": {
             "py_entrada": round(py, 4),
             "precio_no_entrada": precio_no,
-            "concentracion_no": round(pct_no, 4),
+            "direccion_confirmada": direccion,
+            "concentracion_lado": round(pct_lado, 4),
             "n_ballena_banda": n,
-            "banda_hit_calibrado": prob_no,
+            "banda_hit_calibrado": hit_lado,
             "banda_z": banda_info.get("z"),
             "banda_n_historico": banda_info.get("n"),
             "hora_utc": datetime.now(timezone.utc).hour,
