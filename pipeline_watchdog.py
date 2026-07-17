@@ -69,6 +69,10 @@ SCREEN_RESTART = {
     "control": f"cd {REPO} && .venv/bin/python live_control.py >> logs/live_control.log 2>&1",
     "dash":    f"cd {REPO} && python3 dashboard_server.py >> logs/dashboard.log 2>&1",
     "pfinish": f"cd {REPO} && .venv/bin/python photo_finish_logger.py >> logs/photo_finish.log 2>&1",
+    # ballenas_fast (17-Jul, fusionado desde feat/ballenas-fast-btc15m):
+    # ejecutor dedicado de baja latencia BALLENAS_TARDIAS#BTC#15min, DRY_RUN=True
+    # (no toca dinero). Screen de proceso único, mismo patrón que pfinish.
+    "ballenas_fast": f"cd {REPO} && .venv/bin/python ballenas_executor_btc15m.py >> logs/ballenas_fast.log 2>&1",
 }
 
 # Cuando stdout está redirigido (screen >> watchdog.log), print() ya escribe al fichero
@@ -129,7 +133,7 @@ def check_screens() -> dict[str, bool]:
         r = subprocess.run(["screen", "-ls"], capture_output=True, text=True, timeout=5)
         output = r.stdout + r.stderr
         return {name: (f".{name}\t" in output or f".{name} " in output)
-                for name in ["fast", "slow", "control", "dash", "pfinish"]}
+                for name in ["fast", "slow", "control", "dash", "pfinish", "ballenas_fast"]}
     except Exception:
         return {}
 

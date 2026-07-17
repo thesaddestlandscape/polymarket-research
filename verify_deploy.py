@@ -31,6 +31,8 @@ SCREENS = {
     "dash":    {"entry": "dashboard_server.py",    "probe": "http:8888"},
     "control": {"entry": "live_control.py",        "probe": "log:logs/live_control.log:escuchando comandos"},
     "pfinish": {"entry": "photo_finish_logger.py", "probe": None},
+    "ballenas_fast": {"entry": "ballenas_executor_btc15m.py",
+                       "probe": "log:logs/ballenas_fast.log:arrancado"},
     # Solo se vigila el .sh (sus hijos python son proceso fresco cada ciclo).
     "fast":    {"entry": "run_fast.sh", "shallow": True, "no_restart": True},
     "slow":    {"entry": "run_slow.sh", "shallow": True, "no_restart": True},
