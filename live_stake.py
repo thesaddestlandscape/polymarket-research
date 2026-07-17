@@ -516,6 +516,39 @@ def pnl_live_ventana_actual() -> float:
     return pnl
 
 
+def _bankroll_minimo_usa_solo_real_hoy(config: dict | None = None) -> bool:
+    """Override puntual con fecha (mismo patrón que freno_diario_pct_hoy/
+    freno_ventana_pct_hoy) — riesgo.circuit_breaker.bankroll_minimo_usa_solo_real_override
+    = {fecha, motivo, aprobado_por}. Solo aplica si fecha == hoy (Madrid); al
+    día siguiente vuelve sola al min(real,ledger) por defecto sin depender de
+    que nadie revierta el config a mano.
+
+    2026-07-17 (decisión explícita Javi, revisado en /code-review): el
+    min(real,ledger) de freno 1 disparó con bkr real=2.94€ (sano) solo porque
+    el ledger de PLAN marcaba 0.43€ — drift YA investigado y cerrado dos veces
+    (07-Jul project_reconciliacion_dashboard, 11-Jul
+    project_tracking_error_arqueologia): redondeo de tick del CLOB al
+    ejecutar, PLANO desde el 12-Jul (reconciliar.py), no es un bug activo.
+    Pero el propio code-review de hoy encontró que quitar el min() de forma
+    PERMANENTE también quita la única defensa contra el escenario contrario
+    (el real reportando de más por un fallo silencioso de refresco —
+    `except Exception: pass` en el refresco de balance_real.json — o por
+    `positions_value` desfasado cerca de una resolución). Por eso el fix es
+    un override fecha-acotado, no un cambio de código permanente: hoy usa
+    bkr real solo (para no quedarse bloqueado con dinero real disponible),
+    pero el min() de seguridad vuelve automáticamente en cuanto pase la
+    fecha, salvo que se reextienda explícitamente como los demás overrides
+    de este fichero."""
+    if config is None:
+        config = _cargar_config()
+    cb = config.get("riesgo", {}).get("circuit_breaker", {})
+    ov = cb.get("bankroll_minimo_usa_solo_real_override") or {}
+    try:
+        return ov.get("fecha") == _ahora_madrid(config).date().isoformat()
+    except (KeyError, TypeError, ValueError):
+        return False
+
+
 def verificar_circuit_breaker() -> tuple[bool, str]:
     """
     Tres niveles de freno (de mayor a menor prioridad):
@@ -533,17 +566,14 @@ def verificar_circuit_breaker() -> tuple[bool, str]:
     bkr_min = cb.get("bankroll_minimo_eur", 5.0)
 
     # Freno 1 — bankroll mínimo absoluto (máxima prioridad, apaga el switch).
-    # Usa min(real, ledger) explícitamente, no solo lo que bankroll_actual()
-    # eligió (code-review 13-Jul): el fallback a ledger cuando el real
-    # falta/está rancio asume que el ledger es más pesimista que el real
-    # (cierto hoy, ~2.45€ de drift documentado), pero es una observación
-    # histórica, no una garantía. Si algún día el real es PEOR que el
-    # ledger (ej. fee/slippage no modelado) justo cuando el cache real cae
-    # rancio, bankroll_actual() a secas reportaría el número más optimista
-    # en el único freno con veto sobre todos los demás. min() es barato
-    # (_bankroll_ledger() siempre disponible desde trades.csv) y cierra ese
-    # hueco sin depender del signo del drift.
-    bkr_suelo = min(bkr, _bankroll_ledger())
+    # Por defecto sigue siendo min(real, ledger) (13-Jul, fail-closed general
+    # — protege contra el real reportando de más por un fallo silencioso de
+    # refresco o un positions_value desfasado cerca de una resolución). Ver
+    # _bankroll_minimo_usa_solo_real_hoy() para el override fecha-acotado de
+    # hoy (17-Jul): el drift de ~2.5€ del ledger está diagnosticado y cerrado,
+    # así que hoy se usa solo el real; el min() de seguridad vuelve solo en
+    # cuanto pase la fecha, sin depender de que nadie lo revierta a mano.
+    bkr_suelo = bkr if _bankroll_minimo_usa_solo_real_hoy(config) else min(bkr, _bankroll_ledger())
     if bkr_suelo <= bkr_min:
         if SWITCH_PATH.exists():
             SWITCH_PATH.unlink()
