@@ -14,7 +14,9 @@ Checks en cada ciclo:
   2. Screens fast/slow/control corriendo → restart si caídas
   3. Errores en fast.log → patrón conocido → fix automático
   4. postmortem.csv > 50MB → regenerar
-  5. fast.log > 200MB → rotar (keep last 10000 lines)
+  5. fast.log/live.log/slow.log > 200MB → rotar (keep last 10000 lines) — hasta
+     17-Jul solo cubría fast.log (barrido de coherencia: live.log es el log de
+     ejecución de dinero real y crecía sin freno desde 25-Jun, 45MB entonces)
   6. strategy_params.json válido (JSON + estructura)
   7. Disco < 85% libre
 
@@ -41,6 +43,7 @@ from pathlib import Path
 REPO       = Path(__file__).parent
 LOG_FAST   = REPO / "logs" / "fast.log"
 LOG_LIVE   = REPO / "logs" / "live.log"
+LOG_SLOW   = REPO / "logs" / "slow.log"
 LOG_WATCH  = REPO / "logs" / "watchdog.log"
 DIR_SHADOW = REPO / "data" / "shadow"
 DIR_BINANCE = REPO / "data" / "binance"
@@ -48,7 +51,7 @@ DIR_BINANCE = REPO / "data" / "binance"
 CHECK_INTERVAL     = 120   # segundos entre ciclos
 MAX_PRED_SILENCE   = 300   # sin actualizar predictions → alerta
 MAX_POSTMORTEM_MB  = 50    # MB máx postmortem.csv
-MAX_FAST_LOG_MB    = 200   # MB máx fast.log antes de rotar
+MAX_LOG_MB         = 200   # MB máx por log (fast/live/slow) antes de rotar
 DISK_WARN_PCT      = 85    # % usado → warning
 SYNTAX_CHECK_EVERY = 5     # ciclos entre chequeos de sintaxis de todos los scripts
 
@@ -365,24 +368,28 @@ def fix_postmortem_bloat() -> bool:
 
 
 # ──────────────────────────────────────────────────────────────────────────────
-# FIX C: fast.log demasiado grande → rotar
+# FIX C: logs demasiado grandes → rotar (copytruncate in-place: los procesos
+# que ya tienen el fd abierto en O_APPEND vía `screen ... >> logs/x.log`
+# siguen escribiendo sin reinicio, igual que fast.log desde el origen)
 # ──────────────────────────────────────────────────────────────────────────────
 def fix_log_size() -> bool:
-    if not LOG_FAST.exists():
-        return False
-    size_mb = LOG_FAST.stat().st_size / 1_000_000
-    if size_mb < MAX_FAST_LOG_MB:
-        return False
-    log(f"  [FIX-C] fast.log {size_mb:.0f}MB > {MAX_FAST_LOG_MB}MB → rotando (last 10000 lines)")
-    try:
-        r = subprocess.run(["tail", "-n", "10000", str(LOG_FAST)],
-                           capture_output=True, text=True, timeout=10)
-        LOG_FAST.write_text(r.stdout, encoding="utf-8")
-        log("  [FIX-C] ✅ fast.log rotado")
-        return True
-    except Exception as e:
-        log(f"  [FIX-C] Error rotando fast.log: {e}")
-        return False
+    rotado_alguno = False
+    for logf in (LOG_FAST, LOG_LIVE, LOG_SLOW):
+        if not logf.exists():
+            continue
+        size_mb = logf.stat().st_size / 1_000_000
+        if size_mb < MAX_LOG_MB:
+            continue
+        log(f"  [FIX-C] {logf.name} {size_mb:.0f}MB > {MAX_LOG_MB}MB → rotando (last 10000 lines)")
+        try:
+            r = subprocess.run(["tail", "-n", "10000", str(logf)],
+                               capture_output=True, text=True, timeout=10)
+            logf.write_text(r.stdout, encoding="utf-8")
+            log(f"  [FIX-C] ✅ {logf.name} rotado")
+            rotado_alguno = True
+        except Exception as e:
+            log(f"  [FIX-C] Error rotando {logf.name}: {e}")
+    return rotado_alguno
 
 
 # ──────────────────────────────────────────────────────────────────────────────

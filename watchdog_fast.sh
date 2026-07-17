@@ -10,6 +10,15 @@ MAX_SILENCE_S=900   # 15 min sin commit → loop muerto (900 desde 08-Jul: el fa
 
 log() { echo "[$(date -u +%Y-%m-%dT%H:%M:%SZ)] $*" >> "$LOG"; }
 
+# Nadie más vigila la screen 'watchdog' (pipeline_watchdog.py) — si muere no
+# puede reiniciarse a sí misma, y sin ella se pierden rotación de logs, disco,
+# sintaxis y freno por ventana en silencio. Barrido de coherencia 17-Jul.
+if ! screen -ls | grep -q '\.watchdog\s'; then
+    log "ALERTA: screen 'watchdog' caída. Reiniciando..."
+    screen -dmS watchdog bash -c "cd $REPO_DIR && python3 pipeline_watchdog.py"
+    log "Screen 'watchdog' reiniciada."
+fi
+
 LAST_COMMIT_TS=$(git -C "$REPO_DIR" log -1 --format="%ct" -- data/shadow/ 2>/dev/null || echo 0)
 AGE_S=$(( $(date +%s) - LAST_COMMIT_TS ))
 
