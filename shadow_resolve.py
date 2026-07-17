@@ -15,6 +15,7 @@ Ejecutado tras shadow_predict.py en el mismo workflow.
 """
 
 import csv
+import fcntl
 import glob
 import json
 import math
@@ -632,11 +633,6 @@ def _check_salidas_tempranas(ts: str):
     if not sl_cfg.get("activo"):
         return
 
-    trades = list(csv.DictReader(open(LIVE_CSV, encoding="utf-8")))
-    abiertas = [t for t in trades if t.get("status") == "OPEN" and t.get("market_id")]
-    if not abiertas:
-        return
-
     try:
         umbral  = float(sl_cfg.get("umbral_perdida_eur", 0.30))
         haircut = float(sl_cfg.get("fee_rate_taker_estimado", 0.07))
@@ -644,6 +640,35 @@ def _check_salidas_tempranas(ts: str):
         return
 
     import live_trade
+    # flock (17-Jul, code-review del ejecutor ballenas_fast: 3 ángulos
+    # independientes encontraron que esta reescritura completa del CSV no
+    # estaba protegida por el mismo lock que _registrar_trade() -- un
+    # append de otro proceso (ballenas_executor_btc15m.py, persistente,
+    # fuera del orden secuencial de run_fast.sh) cayendo entre la lectura
+    # y la reescritura de aquí se perdía en silencio. Se toma UNA vez para
+    # toda la lectura+bucle+escritura(s), no por-write, porque el bucle
+    # puede reescribir varias veces sobre el mismo `trades` en memoria
+    # (una vez por posición cerrada) y todas comparten la misma foto de
+    # lectura inicial.
+    lock_f = open(live_trade.TRADES_LOCK_PATH, "w")
+    fcntl.flock(lock_f, fcntl.LOCK_EX)
+    try:
+        _check_salidas_tempranas_bajo_lock(LIVE_CSV, ts, umbral, haircut)
+    finally:
+        fcntl.flock(lock_f, fcntl.LOCK_UN)
+        lock_f.close()
+
+
+def _check_salidas_tempranas_bajo_lock(LIVE_CSV: Path, ts: str, umbral: float, haircut: float):
+    """Cuerpo real de _check_salidas_tempranas, ejecutado con el lock de
+    trades.csv ya adquirido (ver ahí el motivo). Separado en función propia
+    para no anidar el bucle entero dentro de un try/finally."""
+    import live_trade
+    trades = list(csv.DictReader(open(LIVE_CSV, encoding="utf-8")))
+    abiertas = [t for t in trades if t.get("status") == "OPEN" and t.get("market_id")]
+    if not abiertas:
+        return
+
     cols = list(trades[0].keys())
     for t in abiertas:
         mid = t.get("market_id", "")
@@ -918,6 +943,27 @@ def _cerrar_trades_live(nuevos_resultados: list, ts: str):
             "acierto":      int(r["acierto"]),
         }
 
+    import live_trade
+    # flock (17-Jul, mismo motivo que _check_salidas_tempranas arriba):
+    # protege esta reescritura completa del CSV frente a un append
+    # concurrente de _registrar_trade() desde otro proceso.
+    lock_f = open(live_trade.TRADES_LOCK_PATH, "w")
+    fcntl.flock(lock_f, fcntl.LOCK_EX)
+    try:
+        _cerrar_trades_live_bajo_lock(LIVE_CSV, outcomes, ts)
+    finally:
+        fcntl.flock(lock_f, fcntl.LOCK_UN)
+        lock_f.close()
+
+    # Fuera del lock a propósito: no tocan trades.csv, no hace falta
+    # retener el lock más de lo necesario.
+    actualizar_strategy_accuracy(nuevos_resultados, ts)
+    print(f"[{ts}] === Fin shadow resolve ===")
+
+
+def _cerrar_trades_live_bajo_lock(LIVE_CSV: Path, outcomes: dict, ts: str):
+    """Cuerpo real de _cerrar_trades_live, ejecutado con el lock de
+    trades.csv ya adquirido (ver ahí el motivo)."""
     trades = list(csv.DictReader(open(LIVE_CSV, encoding="utf-8")))
     modificado = False
     cierres = []
@@ -1003,10 +1049,6 @@ def _cerrar_trades_live(nuevos_resultados: list, ts: str):
         # Notificar cada cierre por Telegram
         for t, pnl_neto, acierto_dir in cierres:
             _notificar_cierre_live(t, pnl_neto, acierto_dir)
-
-    actualizar_strategy_accuracy(nuevos_resultados, ts)
-
-    print(f"[{ts}] === Fin shadow resolve ===")
 
 
 if __name__ == "__main__":

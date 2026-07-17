@@ -13,6 +13,7 @@ Flujo por ciclo:
 """
 
 import csv
+import fcntl
 import json
 import math
 import os
@@ -250,6 +251,15 @@ PARAMS_PATH = DIR_SHADOW / "strategy_params.json"
 LOG_PATH    = Path("logs/live.log")
 LOG_PATH.parent.mkdir(parents=True, exist_ok=True)
 ORDEN_EN_CURSO_PATH = DIR_LIVE / "orden_en_curso.json"
+# TRADES_LOCK_PATH (16-Jul, ballenas_executor_btc15m.py): _registrar_trade()
+# no tenía ningún lock -- inofensivo mientras live_trade.py corría en un
+# solo proceso a la vez (4 reintentos SECUENCIALES por ciclo desde
+# run_fast.sh). Con un segundo proceso persistente escribiendo al mismo
+# trades.csv, dos escrituras concurrentes podían entrelazarse a nivel de
+# fichero. flock() es barato (un solo fichero, nunca contended en la
+# práctica -- las ventanas de señal de ambos ejecutores no se solapan en
+# el tiempo) y cierra ese caso sin rediseñar el resto del pipeline.
+TRADES_LOCK_PATH = DIR_LIVE / ".trades_lock"
 
 
 def _marcar_orden_en_curso(market_id: str, direction: str):
@@ -1850,12 +1860,22 @@ def _evaluar_pre_trade(pred: dict, decision: str) -> tuple[bool, str]:
 
 
 def _registrar_trade(row: dict):
-    nuevo = not TRADES_CSV.exists()
-    with open(TRADES_CSV, "a", newline="", encoding="utf-8") as f:
-        w = csv.DictWriter(f, fieldnames=TRADES_COLS)
-        if nuevo:
-            w.writeheader()
-        w.writerow({col: row.get(col, "") for col in TRADES_COLS})
+    # flock (16-Jul): ver nota junto a TRADES_LOCK_PATH -- protege el
+    # append en sí de un entrelazado entre dos procesos escribiendo a la
+    # vez (no es una garantía TOCTOU completa sobre ya_operados, pero
+    # cierra el riesgo real que existe hoy: dos escrituras simultáneas al
+    # mismo fichero).
+    with open(TRADES_LOCK_PATH, "w") as lock_f:
+        fcntl.flock(lock_f, fcntl.LOCK_EX)
+        try:
+            nuevo = not TRADES_CSV.exists()
+            with open(TRADES_CSV, "a", newline="", encoding="utf-8") as f:
+                w = csv.DictWriter(f, fieldnames=TRADES_COLS)
+                if nuevo:
+                    w.writeheader()
+                w.writerow({col: row.get(col, "") for col in TRADES_COLS})
+        finally:
+            fcntl.flock(lock_f, fcntl.LOCK_UN)
 
 
 OVERRIDES_NOTIF_PATH = DIR_LIVE / "overrides_notificados.json"
