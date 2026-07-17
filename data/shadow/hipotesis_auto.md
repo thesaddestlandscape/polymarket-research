@@ -1,5 +1,5 @@
-# Hipótesis automáticas — 2026-07-17 21:05 UTC
-_Generado por shadow_postmortem.py sobre 19415 resoluciones (PNL=+4373.65€)_
+# Hipótesis automáticas — 2026-07-17 21:12 UTC
+_Generado por shadow_postmortem.py sobre 19416 resoluciones (PNL=+4374.44€)_
 
 ## Patrones causales activos
 
@@ -24,9 +24,9 @@ _Generado por shadow_postmortem.py sobre 19415 resoluciones (PNL=+4373.65€)_
 
   - _Acción_: Kelly boost +0.93€ cuando `libro_liquidez` > 4419.1321 (IC base=+0.182)
 
-- **PATRÓN** `hora_utc` > `17.0` → IC=+0.193 (n=463)
+- **PATRÓN** `hora_utc` > `17.0` → IC=+0.193 (n=464)
   - _Por qué funciona_: hora tardía/noche → sesión US cerrada, menos participantes informados; señales más ruidosas
-  - _Acción_: Kelly boost +0.96€ cuando `hora_utc` > 17.0 (IC base=+0.173)
+  - _Acción_: Kelly boost +0.97€ cuando `hora_utc` > 17.0 (IC base=+0.173)
 
 - **PATRÓN** `hora_utc` < `6.0` → IC=+0.216 (n=442)
   - _Por qué funciona_: hora temprana → mercados cripto menos líquidos, spreads más amplios; edge real menor
@@ -36,7 +36,7 @@ _Generado por shadow_postmortem.py sobre 19415 resoluciones (PNL=+4373.65€)_
 
   - _Acción_: Kelly boost +1.00€ cuando `py_entrada` < 0.265 (IC base=+0.173)
 
-- **PATRÓN** `libro_spread` < `0.01` → IC=+0.179 (n=1398)
+- **PATRÓN** `libro_spread` < `0.01` → IC=+0.179 (n=1399)
 
   - _Acción_: Kelly boost +0.90€ cuando `libro_spread` < 0.01 (IC base=+0.173)
 
@@ -152,21 +152,21 @@ _Generado por shadow_postmortem.py sobre 19415 resoluciones (PNL=+4373.65€)_
 
   - _Acción_: Kelly boost +1.00€ cuando `libro_liquidez` > 6180.6461 (IC base=+0.171)
 
-- **PATRÓN** `hora_utc` > `17.0` → IC=+0.180 (n=23)
+- **PATRÓN** `hora_utc` > `17.0` → IC=+0.192 (n=24)
   - _Por qué funciona_: hora tardía/noche → sesión US cerrada, menos participantes informados; señales más ruidosas
-  - _Acción_: Kelly boost +0.90€ cuando `hora_utc` > 17.0 (IC base=+0.156)
+  - _Acción_: Kelly boost +0.96€ cuando `hora_utc` > 17.0 (IC base=+0.160)
 
 - **PATRÓN** `hora_utc` < `6.0` → IC=+0.241 (n=25)
   - _Por qué funciona_: hora temprana → mercados cripto menos líquidos, spreads más amplios; edge real menor
-  - _Acción_: Kelly boost +1.00€ cuando `hora_utc` < 6.0 (IC base=+0.156)
+  - _Acción_: Kelly boost +1.00€ cuando `hora_utc` < 6.0 (IC base=+0.160)
 
-- **PATRÓN** `py_entrada` < `0.405` → IC=+0.217 (n=51)
+- **PATRÓN** `py_entrada` < `0.405` → IC=+0.222 (n=52)
 
-  - _Acción_: Kelly boost +1.00€ cuando `py_entrada` < 0.405 (IC base=+0.156)
+  - _Acción_: Kelly boost +1.00€ cuando `py_entrada` < 0.405 (IC base=+0.160)
 
-- **PATRÓN** `libro_liquidez` > `6141.7061` → IC=+0.227 (n=31)
+- **PATRÓN** `libro_liquidez` > `6104.3669` → IC=+0.235 (n=32)
 
-  - _Acción_: Kelly boost +1.00€ cuando `libro_liquidez` > 6141.7061 (IC base=+0.156)
+  - _Acción_: Kelly boost +1.00€ cuando `libro_liquidez` > 6104.3669 (IC base=+0.160)
 
 ### FAVORITO_CONFIRMADO#SOL#15min
 - **PATRÓN** `hora_utc` > `18.0` → IC=+0.253 (n=87)
@@ -1518,21 +1518,21 @@ _Derivadas de los patrones aprendidos:_
 | ✅ BALLENAS_CONFIRMADAS_15M#SOL#15min | 20 | +0.318 | +10.04€ | 0 | 0 |
 | ✅ BALLENAS_CONFIRMADAS_15M#XRP | 18 | -0.045 | -1.38€ | 0 | 0 |
 | ✅ BALLENAS_CONFIRMADAS_15M#XRP#15min | 18 | -0.045 | -1.38€ | 0 | 0 |
-| ✅ FAVORITO_CONFIRMADO | 3119 | +0.177 | -34.95€ | 0 | 10 |
+| ✅ FAVORITO_CONFIRMADO | 3120 | +0.177 | -34.16€ | 0 | 10 |
 | ✅ FAVORITO_CONFIRMADO#15min | 2022 | +0.210 | +31.28€ | 0 | 0 |
 | ✅ FAVORITO_CONFIRMADO#240min | 133 | +0.048 | -7.50€ | 0 | 0 |
 | ✅ FAVORITO_CONFIRMADO#5min | 431 | +0.089 | -78.24€ | 0 | 0 |
-| ✅ FAVORITO_CONFIRMADO#60min | 533 | +0.152 | +19.51€ | 0 | 0 |
+| ✅ FAVORITO_CONFIRMADO#60min | 534 | +0.153 | +20.30€ | 0 | 0 |
 | ✅ FAVORITO_CONFIRMADO#BTC | 907 | +0.183 | -6.00€ | 0 | 0 |
 | ✅ FAVORITO_CONFIRMADO#BTC#15min | 675 | +0.200 | -23.42€ | 0 | 6 |
 | ✅ FAVORITO_CONFIRMADO#BTC#240min | 44 | +0.065 | -0.90€ | 0 | 0 |
 | 🚫 FAVORITO_CONFIRMADO#BTC#5min | 10 | -0.125 | -3.77€ | 0 | 0 |
 | ✅ FAVORITO_CONFIRMADO#BTC#60min | 178 | +0.172 | +22.10€ | 0 | 9 |
-| ✅ FAVORITO_CONFIRMADO#ETH | 1110 | +0.171 | -13.83€ | 0 | 0 |
+| ✅ FAVORITO_CONFIRMADO#ETH | 1111 | +0.171 | -13.04€ | 0 | 0 |
 | ✅ FAVORITO_CONFIRMADO#ETH#15min | 670 | +0.207 | +10.26€ | 0 | 8 |
 | ✅ FAVORITO_CONFIRMADO#ETH#240min | 44 | -0.022 | -9.21€ | 0 | 0 |
 | ✅ FAVORITO_CONFIRMADO#ETH#5min | 219 | +0.102 | -32.24€ | 0 | 0 |
-| ✅ FAVORITO_CONFIRMADO#ETH#60min | 177 | +0.165 | +17.35€ | 0 | 7 |
+| ✅ FAVORITO_CONFIRMADO#ETH#60min | 178 | +0.167 | +18.14€ | 0 | 7 |
 | ✅ FAVORITO_CONFIRMADO#SOL | 1092 | +0.178 | -13.68€ | 0 | 0 |
 | ✅ FAVORITO_CONFIRMADO#SOL#15min | 667 | +0.225 | +45.88€ | 0 | 7 |
 | ✅ FAVORITO_CONFIRMADO#SOL#240min | 45 | +0.096 | +2.61€ | 0 | 0 |
@@ -1780,7 +1780,7 @@ _Derivadas de los patrones aprendidos:_
 **🟡 H-STREAK-COOLDOWN** — Cooldown tras 2 derrotas consecutivas (mismo subtype)
   - _Umbral_: n≥40 tras 2 losses y gap(IC_tras_win - IC_tras_2loss)≥0.05
   - _Acción_: Reducir stake (no desactivar) 1-2h tras 2 derrotas consecutivas en el mismo subtype
-  - _Estado_: tras_win IC=+0.110 n=11495 | tras_1loss IC=+0.078 n=7726 | tras_2loss IC=+0.045 n=3226/40 | gap=+0.065 (umbral 0.05)
+  - _Estado_: tras_win IC=+0.110 n=11496 | tras_1loss IC=+0.078 n=7726 | tras_2loss IC=+0.045 n=3226/40 | gap=+0.065 (umbral 0.05)
 
 **🟡 H-KALMAN** — Kalman filter para drift adaptativo
   - _Umbral_: n≥200 por subtipo para calibrar parámetros Q/R del KF
@@ -2058,8 +2058,8 @@ _Derivadas de los patrones aprendidos:_
   - _Hipótesis_: Mismo origen que H-CUSTOM-MOON-LLENA (paper de Fornero, 43 Jornadas SADAF 2023). Qi, Wang & Zhang (2022, 48 mercados, 1973-2019): rendimientos 3.33%/año más bajos durante Mercurio retrógrado. Kou & Ma (2022) en China (99.8% cuentas retail): hasta -31% anualizado. Ambos estudios confirman que el mecanismo es la creencia/superstición de inversores retail (mayor efecto cuanto más retail y más supersticioso el mercado), no un efecto astral literal — Polymarket encaja en ese perfil. Ventanas 2026 (fuente pública, actualizar cada año): 26-feb a 20-mar, 29-jun a 23-jul, 24-oct a 13-nov.
   - _Umbral_: n≥100 PERO ADEMÁS necesita cubrir al menos 2-3 ventanas de retrogradación distintas (no solo la de jun-jul 2026) — esperar mínimo hasta después de la ventana de oct-nov 2026
   - _Acción_: Si IC en mercury_retrogrado=1 < IC en mercury_retrogrado=0 con margen ≥0.05 y ≥2 ventanas distintas cubiertas → considerar boost/filtro. No implementar tras una sola ventana (jun-jul 2026) por more que n sea alto — sería solo un evento, no un patrón.
-  - _Estado_: n=16957 IC=+0.113 PNL=+4449.54€ — sin señal clara aún (umbral IC: min=None max=-0.03)
-  - _Datos_: n=16957 IC=+0.113 PNL=+4449.54€
+  - _Estado_: n=16958 IC=+0.113 PNL=+4450.33€ — sin señal clara aún (umbral IC: min=None max=-0.03)
+  - _Datos_: n=16958 IC=+0.113 PNL=+4450.33€
 
 **〰️ H-CUSTOM-SMART-MONEY-CONSENSUS** — Consenso de wallets 'smart money' — ¿confirma nuestra dirección?
   - _Hipótesis_: Javi propuso estudiar bots/wallets que operan bien en nuestros mismos mercados. En vez de creer artículos (ya verificamos 2 veces esta semana que las narrativas no aguantan el cruce con datos reales), smart_money_tracker.py mide el track record REAL de wallets activas en BTC/ETH/SOL/XRP Up-or-Down 5/15/60min vía data-api.polymarket.com/positions, filtrado a posiciones 'Up or Down'. Clasifica como 'smart' las wallets con n>=10 posiciones, win_rate>=0.55 y pnl_total>0. smart_money_consensus es el sesgo direccional reciente (Up-Down)/(Up+Down) de esas wallets 'smart' por activo. Hipótesis: si nuestra decisión (BUY_YES/BUY_NO) coincide con el consenso smart money, mejor IC que cuando diverge. RESET METODOLOGICO 2026-07-02: la clasificacion 'smart' original via /positions estaba INVERTIDA para wallets de alta frecuencia (el endpoint solo retiene el residuo perdedor sin redimir; verificado: 'wowitsamazing' figuraba como -$478k y es +$10k/mes en el leaderboard oficial). Desde 2026-07-02T06:12Z el consenso se construye solo con wallets verificadas en el leaderboard oficial (pnl_mes>=$1000, 24 wallets). Los valores de smart_money_consensus capturados en features ANTES de esa fecha provienen de la clasificacion rota — descontar ese tramo al evaluar.
