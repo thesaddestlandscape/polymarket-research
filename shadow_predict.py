@@ -14,7 +14,7 @@ from data_quality import (
     SIGMA_H_MAX, DRIFT_MAX, ASSETS_GBM,
     validar_features_gbm, simbolo_bloqueado, generar_reporte, obtener_consensus_spot,
 )
-from smart_money_tracker import ACTIVOS as ACTIVOS_TICKERS
+from smart_money_tracker import ACTIVOS as ACTIVOS_TICKERS, trades_de_mercado
 
 _HAS_PANDAS: bool | None = None   # None = not yet checked; True/False after first use
 _pd = None                         # populated lazily on first cache miss
@@ -2723,6 +2723,150 @@ def s_gbm_late_15min_py_confirmado(market, ctx):
     return _s_gbm_late(market, ctx, ventana_min=15, rest_lo=rest_lo, rest_hi=rest_hi)
 
 
+# BALLENAS_CONFIRMADAS_15M (17-Jul): mismo problema de fondo diagnosticado hoy
+# en GBM_LATE_15M#{SOL,ETH,XRP}#15min#BUY_NO -- las 3 pasan el gate riguroso
+# (IC/PnL) pero muestran el MISMO patrón de selección adversa ya visto en
+# FAVORITO_CONFIRMADO#*#15min#BUY_NO (idea_ballenas_explica_seleccion_
+# adversa_favoritoconfirmado_16jul): fillable pierde, no_fillable ganaría.
+# Repliqué el veto_ballenas real de live_trade.py sobre las 3 -- NO se activa
+# nunca: la señal GBM dispara a mediana ~11min restantes, mucho antes de que
+# empiece la ventana real de ballenas (0.7-8.4min según activo). No es un
+# problema de banda de precio (la banda [0.5,0.7) SÍ está validada para las
+# 3 en ballenas_timing_state.json), es que la señal muere (SENAL_MAX_
+# LATENCIA_SEG=100s) antes de que las ballenas digan nada útil.
+# Ver idea_seleccion_adversa_15min_buyno_generaliza_17jul.
+#
+# Esta estrategia NO parte del GBM -- decide BUY_NO directamente de la
+# concentración de ballenas EN TIEMPO REAL dentro de la banda [0.5,0.7),
+# mismo patrón que BALLENAS_TARDIAS#BTC#15min (worktree feat/ballenas-fast-
+# btc15m) pero SIN necesitar su arquitectura de baja latencia: la ventana
+# real de ballenas para SOL/ETH/XRP es de varios minutos (no los 4-32s
+# degenerados de BTC), así que cabe de sobra en el ciclo normal (~20-23s).
+# BTC excluido a propósito -- ya tiene su ejecutor dedicado para la banda
+# [0.7,0.9) tardía; no se duplica aquí.
+#
+# Consulta en vivo (trades_de_mercado, mismo endpoint que veto_ballenas/
+# ballenas_observer) SOLO si el precio ya cayó en la banda -- barato en la
+# inmensa mayoría de mercados que no aplican, coste real solo cuando hace
+# falta. Shadow puro: NO está en pares_permitidos_live, no toca dinero.
+BALLENAS_CONFIRMADAS_ACTIVOS = {"SOL", "ETH", "XRP"}
+BALLENAS_CONFIRMADAS_BANDA_LO = 0.5
+BALLENAS_CONFIRMADAS_BANDA_HI = 0.7
+BALLENAS_CONFIRMADAS_UMBRAL_PCT = 0.6   # mismo umbral que veto_ballenas (live_trade.py)
+BALLENAS_CONFIRMADAS_MIN_TRADES = 3     # mismo mínimo que veto_ballenas
+
+
+def _banda_confirmada_ballenas(activo: str, marco: str, lo: float, hi: float) -> dict | None:
+    """Busca en ballenas_timing_state.json una banda CONCRETA (no
+    necesariamente la de mayor z, a diferencia de _banda_y_timing_ballenas)
+    que pase sus propios gates de significancia para (activo,marco). None
+    si el observer no confirma esta banda exacta ahora mismo -- fail-closed,
+    nunca inventa una banda no validada."""
+    estado = _cargar_ballenas_timing_state().get(f"{activo}#{marco}", {})
+    for b in estado.get("bandas", []):
+        if (b.get("pasa_gates") and isinstance(b.get("banda_lo"), (int, float))
+                and isinstance(b.get("banda_hi"), (int, float))
+                and abs(b["banda_lo"] - lo) < 1e-9 and abs(b["banda_hi"] - hi) < 1e-9):
+            return b
+    return None
+
+
+def s_ballenas_confirmadas_15m(market, ctx):
+    """
+    BUY_NO en SOL/ETH/XRP#15min cuando el precio ya cotiza NO en la banda
+    [0.5,0.7) (validada en ballenas_timing_state.json, z>=2, n>=40,
+    top1_share<0.40 -- mismos gates que ballenas_observer.py) Y la
+    concentración de ballenas EN ESE MERCADO CONCRETO, ahora mismo, confirma
+    el lado NO por encima del umbral. Dirección fija a BUY_NO (a diferencia
+    de BALLENAS_TARDIAS, que deja que la mayoría decida el lado) porque el
+    caso de negocio es concreto: arreglar la selección adversa ya
+    diagnosticada de GBM_LATE_15M#*#15min#BUY_NO, no una exploración
+    abierta. Ver nota de la estrategia arriba y
+    idea_seleccion_adversa_15min_buyno_generaliza_17jul (17-Jul).
+    """
+    question = market.get("question", "")
+    tipo, vent = _parse_updown_tipo(question)
+    if tipo != "slot" or vent != 15:
+        return None  # solo slots up/down de 15min real (nunca 'hourly',
+                      # que siempre es vent=60) -- sin esto
+                      # también disparaba en mercados de precio-objetivo a
+                      # semanas/meses vista (mismo activo, mismo rango de
+                      # precio_no, pero la calibración de ballenas_timing_state
+                      # asume resolución en minutos, no tiene sentido ahí
+                      # (bug real cazado en el smoke test 17-Jul antes de
+                      # commitear, mismo check que ya usa _s_gbm_late arriba)
+    activo = identificar_activo(question)
+    if activo not in BALLENAS_CONFIRMADAS_ACTIVOS:
+        return None
+    py = market.get("_precio_yes")
+    if py is None:
+        return None
+    precio_no = round(1.0 - py, 6)
+    if not (BALLENAS_CONFIRMADAS_BANDA_LO <= precio_no < BALLENAS_CONFIRMADAS_BANDA_HI):
+        return None
+    banda_info = _banda_confirmada_ballenas(
+        activo, "15m", BALLENAS_CONFIRMADAS_BANDA_LO, BALLENAS_CONFIRMADAS_BANDA_HI)
+    if banda_info is None:
+        return None  # el observer no confirma esta banda concreta para este activo ahora
+
+    condition_id = market.get("condition_id")
+    if not condition_id:
+        return None
+    try:
+        trades = trades_de_mercado(condition_id)
+    except Exception:
+        return None  # fail-closed: sin datos de ballenas, no hay señal (a diferencia
+                      # del veto_ballenas de live_trade.py, que es fail-OPEN porque
+                      # ahí solo puede reducir riesgo de una señal que ya existe por
+                      # otra vía -- aquí la señal ES el chequeo de ballenas, sin datos
+                      # no hay nada que decidir)
+
+    n_no = n_yes = 0
+    for t in trades:
+        if (t.get("side") or "").strip().upper() != "BUY":
+            continue
+        precio_t = t.get("price")
+        outcome_t = (t.get("outcome") or "").strip().lower()
+        if precio_t is None or outcome_t not in ("up", "down", "yes", "no"):
+            continue
+        try:
+            precio_t = float(precio_t)
+        except (ValueError, TypeError):
+            continue
+        if not (BALLENAS_CONFIRMADAS_BANDA_LO <= precio_t < BALLENAS_CONFIRMADAS_BANDA_HI):
+            continue
+        if outcome_t in ("down", "no"):
+            n_no += 1
+        else:
+            n_yes += 1
+    n = n_no + n_yes
+    if n < BALLENAS_CONFIRMADAS_MIN_TRADES:
+        return None
+    pct_no = n_no / n
+    if pct_no < BALLENAS_CONFIRMADAS_UMBRAL_PCT:
+        return None
+
+    prob_no = banda_info["hit"]   # probabilidad empírica calibrada del bucket (lado NO)
+    prob_yes = round(1.0 - prob_no, 4)
+    return {
+        "prob_yes": prob_yes,
+        "razon": (f"ballenas_confirmadas_15m {activo} precio_no={precio_no:.3f} "
+                  f"concentracion_no={pct_no:.2f} (n={n}) banda_hit={prob_no:.3f}"),
+        "subtype": f"{activo}#15min",
+        "features": {
+            "py_entrada": round(py, 4),
+            "precio_no_entrada": precio_no,
+            "concentracion_no": round(pct_no, 4),
+            "n_ballena_banda": n,
+            "banda_hit_calibrado": prob_no,
+            "banda_z": banda_info.get("z"),
+            "banda_n_historico": banda_info.get("n"),
+            "hora_utc": datetime.now(timezone.utc).hour,
+            **_libro_calidad(market),
+        },
+    }
+
+
 def s_gbm_late_60min_py_confirmado(market, ctx):
     """
     Variante de GBM_LATE_60M restringida a BTC/SOL y a la banda de precio
@@ -3660,6 +3804,7 @@ ESTRATEGIAS = [
     ("GBM_LATE_15M_TARDIO", s_gbm_late_15min_tardio),
     ("GBM_LATE_15M_ESPACIO_ATR", s_gbm_late_15min_espacio_atr),
     ("GBM_LATE_15M_PYCONFIRMADO", s_gbm_late_15min_py_confirmado),
+    ("BALLENAS_CONFIRMADAS_15M", s_ballenas_confirmadas_15m),
     ("GBM_LATE_60M_PYCONFIRMADO", s_gbm_late_60min_py_confirmado),
     ("GBM_LATE_5M",         s_gbm_late_5min),
     ("GBM_LATE_60M",        s_gbm_late_60min),
