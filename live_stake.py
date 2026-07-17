@@ -516,6 +516,34 @@ def pnl_live_ventana_actual() -> float:
     return pnl
 
 
+def _ultimo_cierre_ventana_ts(config: dict) -> datetime | None:
+    """Timestamp del cierre CLOSED más reciente dentro de la ventana
+    horaria actual, o None si ninguno. 17-Jul, añadido tras /code-review
+    del fix de freno 3 (3 ángulos independientes encontraron el mismo
+    fail-open: si el snapshot de balance real no ha capturado TODAVÍA la
+    pérdida que se acaba de cerrar -- refresco por-trade en
+    shadow_resolve.py falla en silencio, `except Exception: pass` -- bkr
+    seguiría reflejando el saldo PRE-pérdida, inflando bkr_ini_v y
+    subestimando caida_v: el freno de ventana NO saltaría justo cuando
+    más falta hace). Se usa para exigir que el snapshot real sea AL MENOS
+    tan reciente como este cierre antes de confiar en el cálculo mixto."""
+    if not TRADES_CSV.exists():
+        return None
+    v = _ventana_actual(config)
+    if v is None:
+        return None
+    ts_ini = _ts_inicio_ventana_utc(v, config)
+    ultimo = None
+    with open(TRADES_CSV, encoding="utf-8") as f:
+        for row in csv.DictReader(f):
+            if row.get("status") != "CLOSED":
+                continue
+            ts = _parse_ts(row.get("close_timestamp") or row.get("timestamp_utc") or "")
+            if ts is not None and ts >= ts_ini and (ultimo is None or ts > ultimo):
+                ultimo = ts
+    return ultimo
+
+
 def _bankroll_minimo_usa_solo_real_hoy(config: dict | None = None) -> bool:
     """Override puntual con fecha (mismo patrón que freno_diario_pct_hoy/
     freno_ventana_pct_hoy) — riesgo.circuit_breaker.bankroll_minimo_usa_solo_real_override
@@ -543,6 +571,33 @@ def _bankroll_minimo_usa_solo_real_hoy(config: dict | None = None) -> bool:
         config = _cargar_config()
     cb = config.get("riesgo", {}).get("circuit_breaker", {})
     ov = cb.get("bankroll_minimo_usa_solo_real_override") or {}
+    try:
+        return ov.get("fecha") == _ahora_madrid(config).date().isoformat()
+    except (KeyError, TypeError, ValueError):
+        return False
+
+
+def _freno_ventana_usa_solo_real_hoy(config: dict | None = None) -> bool:
+    """Override puntual con fecha (mismo patrón que
+    _bankroll_minimo_usa_solo_real_hoy/freno_diario_pct_hoy) —
+    riesgo.circuit_breaker.freno_ventana_usa_solo_real_override =
+    {fecha, motivo, aprobado_por}. Solo aplica si fecha == hoy (Madrid).
+
+    2026-07-17 (decisión explícita Javi, misma sesión que el fix de freno 1):
+    freno 3 (caída en ventana) disparó con solo 1 pérdida real (-1.09€)
+    porque su base (_bankroll_ledger()) es negativa (-0.67€) por el MISMO
+    drift ledger-vs-real ya diagnosticado y cerrado dos veces (07-Jul/11-Jul,
+    ver bankroll_minimo_usa_solo_real_override) — con esa base, cualquier
+    pérdida normal cruza el 70% aunque el bankroll real (1.85€) esté sano.
+    Con esta fecha activa, freno 3 usa bkr real (ya calculado arriba en
+    verificar_circuit_breaker) menos el pnl_v de ESTA ventana (ledger, pero
+    de una sola ventana — su propio drift es céntimos, no el problema) en
+    vez de _bankroll_ledger() íntegro. Vuelve sola al comportamiento
+    original mañana salvo que se reextienda con dato nuevo."""
+    if config is None:
+        config = _cargar_config()
+    cb = config.get("riesgo", {}).get("circuit_breaker", {})
+    ov = cb.get("freno_ventana_usa_solo_real_override") or {}
     try:
         return ov.get("fecha") == _ahora_madrid(config).date().isoformat()
     except (KeyError, TypeError, ValueError):
@@ -614,8 +669,30 @@ def verificar_circuit_breaker() -> tuple[bool, str]:
         # _bankroll_ledger() (no bkr, que puede ser real): pnl_v es de ledger
         # y no hay real con granularidad de ventana — ver docstring de
         # _bankroll_ledger(). Mezclar bkr real con pnl_v de ledger daría una
-        # base de ventana incoherente.
-        bkr_ini_v   = _bankroll_ledger() - pnl_v  # bankroll al inicio de esta ventana
+        # base de ventana incoherente -- EXCEPTO hoy (ver
+        # _freno_ventana_usa_solo_real_hoy), donde la base de ledger está
+        # rota (negativa) por el drift ya diagnosticado y el mix puntual
+        # (real - pnl_v de una sola ventana) es más fiable que la ledger íntegra.
+        real_confirma_ultimo_cierre = True
+        if _freno_ventana_usa_solo_real_hoy(config):
+            real = _balance_real_fresco()
+            ultimo_cierre = _ultimo_cierre_ventana_ts(config)
+            if real is not None and ultimo_cierre is not None:
+                try:
+                    ts_real = datetime.fromisoformat(real["ts"])
+                    if ts_real.tzinfo is None:
+                        ts_real = ts_real.replace(tzinfo=timezone.utc)
+                    real_confirma_ultimo_cierre = ts_real >= ultimo_cierre
+                except Exception:
+                    real_confirma_ultimo_cierre = False
+        if _freno_ventana_usa_solo_real_hoy(config) and real_confirma_ultimo_cierre:
+            bkr_ini_v = bkr - pnl_v
+        else:
+            bkr_ini_v = _bankroll_ledger() - pnl_v  # bankroll al inicio de esta ventana
+                                                      # (fail-closed: si el override está
+                                                      # activo pero el cache real todavía no
+                                                      # confirma el último cierre, se queda en
+                                                      # el cálculo más restrictivo)
         if bkr_ini_v > 0 and pnl_v < 0:
             caida_v = abs(pnl_v) / bkr_ini_v
             if caida_v >= freno_v_pct:
