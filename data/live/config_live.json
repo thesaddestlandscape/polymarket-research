@@ -152,6 +152,11 @@
         "motivo": "Freno 1 (bankroll mínimo) usa por defecto min(balance_real, ledger_plan) — se disparó 2026-07-16T23:31:49Z con real=2.94€ (sano) solo porque el ledger de PLAN marcaba 0.43€. Ese drift (~2.5€) ya está investigado y cerrado dos veces (07-Jul project_reconciliacion_dashboard, 11-Jul project_tracking_error_arqueologia): redondeo de tick del CLOB al ejecutar (stake_eur en trades.csv guarda el importe de plan, no el coste exacto liquidado), plano desde el 12-Jul según reconciliar.py (2.4458→2.5131), no es un bug activo ni crece. Hoy el freno usa solo balance_real (aprobado explícitamente por Javi tras /code-review); el min() de seguridad por defecto (protege contra el real reportando de más por un fallo silencioso de refresco de balance_real.json o un positions_value desfasado cerca de una resolución) vuelve solo mañana salvo que se reextienda con dato nuevo, mismo patrón que freno_diario_pct_override/freno_ventana_pct_override.",
         "aprobado_por": "Javi"
       },
+      "freno_ventana_usa_solo_real_override": {
+        "fecha": "2026-07-17",
+        "motivo": "Freno 3 (caída en ventana) disparó 2026-07-17T~08:52Z en la ventana apertura_europea tras 1 sola pérdida real de -1.09€ — no por racha, la base de cálculo (_bankroll_ledger()) es NEGATIVA (-0.6655€) por el mismo drift ledger-vs-real ya diagnosticado y cerrado (ver bankroll_minimo_usa_solo_real_override arriba), así que cualquier pérdida normal cruza el 70% de una base rota. Bankroll real en ese momento 1.85€ (sano). Petición explícita Javi: 'levanta el freno para que el bot pueda operar con lo que quede, ya la semana que viene lo recargaré'. Hoy freno 3 usa balance_real menos el pnl de ESTA ventana (no _bankroll_ledger() íntegro) — vuelve sola al comportamiento original mañana. Verificado retroactivo: con base real, esta pérdida solo fue 37.2% de caída de ventana, bajo el 70% — nunca debería haber disparado.",
+        "aprobado_por": "Javi"
+      },
       "freno_diario_pct_override": {
         "fecha": "2026-07-17",
         "pct": 0.70,
