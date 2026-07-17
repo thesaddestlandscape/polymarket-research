@@ -38,6 +38,7 @@ from pathlib import Path
 import requests
 
 import live_trade as lt
+from live_guard import switch_activo, en_ventana_horaria
 from live_stake import calcular_stake, verificar_circuit_breaker
 from smart_money_tracker import trades_de_mercado
 
@@ -53,7 +54,10 @@ ASSET = "BTC"
 VENTANA_MIN = 15
 COMBO = "BTC#15m"
 
-DRY_RUN = True  # Fase 1 (ver plan) -- NO cambiar sin code-review + aprobación Javi
+DRY_RUN = True  # Fase 1 -- NO cambiar sin resolver el hueco de whitelist (ver /code-review 17-Jul):
+                 # BALLENAS_TARDIAS#BTC#15min#BUY_YES no está en pares_permitidos_live y este
+                 # executor nunca pasa por el pipeline principal que la aplica -- decisión de
+                 # Javi pendiente (CLAUDE.md: cambios de whitelist siempre se preguntan)
 
 WATCH_LEAD_S = 90        # empieza a vigilar 90s antes del cierre (antes de que
                           # abra la ventana real de 4-32s, para tener margen)
@@ -259,12 +263,58 @@ def disparar(mercado: dict, py: float, edge: float, restante_s: float) -> bool:
     del sistema, no un silo aparte."""
     subtype = f"{ASSET}#{VENTANA_MIN}min"
 
+    # Este executor es un proceso PERSISTENTE aparte de live_trade.py y nunca
+    # pasa por su pipeline principal (llama _ejecutar_orden_polymarket
+    # directo) -- así que ninguno de los guardias que viven ahí se aplica
+    # solo, hay que repetirlos aquí explícitamente. Hallazgo del barrido
+    # previo a activar (17-Jul): faltaban switch/ventana/correlación por
+    # completo. Fail-closed: cualquiera de los tres bloquea, ninguno se
+    # puede saltar.
+    if not switch_activo():
+        log(f"  switch LIVE_MODE_ON desactivado -- {'[DRY-RUN] no ejecutaría' if DRY_RUN else 'no se ejecuta'}")
+        return False
+
+    en_ventana, motivo_ventana = en_ventana_horaria()
+    if not en_ventana:
+        log(f"  fuera de ventana horaria ({motivo_ventana}) -- {'[DRY-RUN] no ejecutaría' if DRY_RUN else 'no se ejecuta'}")
+        return False
+
+    config = lt._cargar_config()
+    max_misma_dir = config.get("riesgo", {}).get("max_posiciones_abiertas_misma_direccion", 2)
+    abiertas_dir = lt._posiciones_abiertas_misma_direccion("BUY_YES")
+    if abiertas_dir >= max_misma_dir:
+        log(f"  techo de correlación: {abiertas_dir} posiciones BUY_YES abiertas ≥ {max_misma_dir} -- "
+            f"{'[DRY-RUN] no ejecutaría' if DRY_RUN else 'no se ejecuta'}")
+        return False
+
+    # Rechequeo de idempotencia (/code-review 17-Jul): watch_window solo
+    # comprueba _ya_operados_hoy() UNA vez al resolver el mercado, hasta
+    # WATCH_LEAD_S=90s antes del cierre -- el fast loop (proceso
+    # independiente, whitelist propia) puede operar ese mismo market_id en
+    # los ~87s que pasan hasta que se dispara esta función. Repetir el check
+    # aquí, lo más tarde posible antes de la orden real, no lo elimina del
+    # todo (sigue sin lock cruzado entre procesos) pero cierra la mayor
+    # parte de la ventana.
+    if mercado["market_id"] in lt._ya_operados_hoy():
+        log(f"  {mercado['market_id']} ya operado por otro proceso en la última ventana -- "
+            f"{'[DRY-RUN] no ejecutaría' if DRY_RUN else 'no se ejecuta'}")
+        return False
+
     ok_breaker, motivo_breaker = verificar_circuit_breaker()
     if not ok_breaker:
         log(f"  circuit breaker activo ({motivo_breaker}) -- {'[DRY-RUN] no ejecutaría' if DRY_RUN else 'no se ejecuta'}")
         return False
 
-    stake_info = calcular_stake(edge, STRATEGY, subtype, direction="BUY_YES")
+    # ic_conviccion: /code-review 17-Jul encontró que se pasaba `edge` crudo
+    # (PROB_BUCKET - py, ~0.02-0.08) donde calcular_stake espera un IC
+    # histórico validado (ic_bayes, lo que usa cualquier otra tupla live).
+    # Sin efecto en euros HOY (min_stake_eur=max_stake_eur=1.05€ pineado,
+    # clamp lo absorbe) pero quedaría mal calibrado en cuanto se despinee.
+    # PROB_BUCKET es la probabilidad calibrada por el backtest de
+    # dosis-respuesta (n=273, analisis_ballenas_dosis_respuesta_16jul.py) --
+    # el análogo real a un ic_bayes es su distancia a un lanzamiento justo.
+    ic_conviccion = (PROB_BUCKET - 0.5) * 2
+    stake_info = calcular_stake(ic_conviccion, STRATEGY, subtype, direction="BUY_YES")
     if not stake_info.get("viable"):
         log(f"  stake no viable: {stake_info.get('motivo')} -- {'[DRY-RUN] no ejecutaría' if DRY_RUN else 'no se ejecuta'}")
         return False
