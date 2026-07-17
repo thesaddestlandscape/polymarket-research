@@ -39,8 +39,6 @@ def log(msg: str):
     ts   = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
     line = f"[{ts}] {msg}"
     print(line, flush=True)
-    with open(LOG_PATH, "a") as f:
-        f.write(line + "\n")
 
 
 def enviar(texto: str) -> bool:

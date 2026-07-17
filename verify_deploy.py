@@ -137,6 +137,19 @@ def informe(est: dict) -> int:
 
 
 def reiniciar(nombre: str) -> int:
+    """17-Jul: antes construía su propio comando de arranque
+    (["screen","-dmS",nombre,"python3",cfg["entry"]]) -- sin redirección de
+    stdout/stderr y con el python3 del sistema, no el venv del proyecto.
+    Divergía del comando REAL de producción (pipeline_watchdog.SCREEN_RESTART),
+    la única fuente de verdad hasta hoy vivía duplicada en dos sitios. Un
+    restart manual con este comando roto dejaba el proceso vivo pero sin
+    log (probe fallaba en silencio) y, si coincidía con un ciclo del
+    watchdog (cron */5), producía 2 screens con el mismo nombre -- 'screen
+    -S <nombre> -X quit' deja de poder matar NINGUNA en cuanto hay
+    ambigüedad, así que el problema se autoagravaba en vez de corregirse
+    solo (ver idea_race_restart_verify_deploy_watchdog_17jul). Ahora
+    reutiliza el comando real y mata TODAS las instancias por PID antes de
+    arrancar una nueva, nunca por nombre (evita la ambigüedad de raíz)."""
     cfg = SCREENS.get(nombre)
     if cfg is None:
         print(f"screen desconocida: {nombre} (válidas: {', '.join(SCREENS)})")
@@ -145,10 +158,21 @@ def reiniciar(nombre: str) -> int:
         print(f"🚫 {nombre} no se reinicia desde aquí (regla #8: diagnostica primero; "
               f"watchdog + marker orden_en_curso.json). Hazlo a mano si procede.")
         return 2
-    subprocess.run(["screen", "-S", nombre, "-X", "quit"], capture_output=True)
+
+    import pipeline_watchdog
+    cmd = pipeline_watchdog.SCREEN_RESTART.get(nombre)
+    if cmd is None:
+        print(f"🚨 {nombre}: sin comando de arranque en pipeline_watchdog.SCREEN_RESTART "
+              f"-- añádelo ahí primero (única fuente de verdad)")
+        return 2
+
+    r = subprocess.run(["screen", "-ls"], capture_output=True, text=True)
+    pids = re.findall(rf"(\d+)\.{re.escape(nombre)}[\s\t]", r.stdout)
+    for pid in pids:
+        subprocess.run(["screen", "-S", f"{pid}.{nombre}", "-X", "quit"], capture_output=True)
     time.sleep(1)
     t0 = time.time()
-    subprocess.run(["screen", "-dmS", nombre, "python3", cfg["entry"]], cwd=BASE)
+    subprocess.run(["screen", "-dmS", nombre, "bash", "-c", cmd], cwd=BASE)
     time.sleep(3)
     proc = proceso_de(cfg["entry"])
     if proc is None:
