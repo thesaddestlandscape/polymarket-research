@@ -6,6 +6,15 @@
 - **Checkpoint**: en tareas ≥3 pasos, resumir tras cada paso qué está verificado y qué queda antes de continuar.
 - **Antes de escribir código nuevo** (decisión ladder): ¿ya existe en el codebase? → ¿lo hace la stdlib/requests/csv/json? → ¿una línea? → solo entonces: mínimo viable. Excepción: código de seguridad live (circuit breakers, filtros end_date, Kelly) — no minimizar.
 
+## Protocolo de arranque de sesión (obligatorio, antes de responder nada)
+Petición explícita de Javi, 2026-07-17. En cada conexión, ANTES de atender cualquier petición del usuario, y sin que se pida:
+1. **Leer la misión y los objetivos** — memoria nativa `project_mision_sistema.md` y `project_roadmap_150k.md` (`/root/.claude/projects/-root-polymarket-research/memory/`). Este proyecto es **el proyecto de vida del usuario**: toda decisión de la sesión, grande o pequeña, tiene que ir alineada sin excepción a cumplir esos objetivos (€150-200k/año, las 8 cualidades del sistema). No es una tarea más entre otras — es el criterio de fondo de todo lo demás.
+2. **Barrido de salud del sistema**: comprobar que no haya bugs, fallos, sangrados silenciosos o evidentes, ni cables desconectados (procesos/screens, cron, config↔código, datos, logs, dinero real, git) — mismo rigor que un barrido de coherencia completo (ver el del 17-Jul en el historial de commits como referencia de profundidad), no un vistazo superficial. No hace falta rehacerlo entero si ya se hizo hace poco y nada cambió, pero ante cualquier duda o señal de alerta, repetirlo.
+3. **Revisar contexto completo antes de hablar**: `MEMORY.md` entero (memoria nativa), los cierres/checkpoints de sesión más recientes, el estado real de los datos (`estado_actual.md`, `hipotesis_auto.md`, `trades.csv`) y el vault de Obsidian (`gh repo clone thesaddestlandscape/second-brain` — ver memoria `reference_obsidian_vault`) — para saber exactamente de qué se habló antes de responder a nada.
+4. **Retomar y recitar los pendientes sin cerrar** de sesiones anteriores, proactivamente, sin que el usuario los pida (checklist vigente en memoria, p.ej. `project_revision_pendiente_08jul.md`, o el checkpoint más reciente que lo sustituya).
+
+Permanente, no expira, se aplica en cada conexión — no solo la primera vez.
+
 ## ⚠️ Manual operativo — errores que NO cometer (escrito para cualquier modelo)
 Cada error va con la regla que lo previene. Si dudas entre dos interpretaciones, aplica la regla, no tu intuición.
 
