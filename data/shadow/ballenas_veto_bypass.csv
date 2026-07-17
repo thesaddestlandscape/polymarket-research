@@ -1,3 +1,3 @@
 market_id,ts_bloqueo,combo,pct_ballenas,n_ballenas,umbral,n_intentos,strategy,subtype,decision,precio_yes_mercado,edge_neto,ic_hist,n_hist,resuelto,outcome_real,acierto_dir,pnl_neto_hipotetico_eur,fee_est_eur,motivo_sin_match
 2926674,2026-07-16T23:10:02+00:00,ETH#60m,0.125,8,0.6,12,FAVORITO_CONFIRMADO,ETH#60min,BUY_NO,0.4050,-0.0550,0.1667,82,1,NO,1,0.697,0.0177,
-2935074,2026-07-17T15:03:56+00:00,ETH#60m,0.3333333333333333,12,0.6,12,FAVORITO_CONFIRMADO,ETH#60min,BUY_NO,0.4150,-0.0550,0.1742,87,0,,,,,
+2935074,2026-07-17T15:03:56+00:00,ETH#60m,0.3333333333333333,12,0.6,12,FAVORITO_CONFIRMADO,ETH#60min,BUY_NO,0.4150,-0.0550,0.1667,88,1,YES,0,-1.0678,0.0178,
