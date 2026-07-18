@@ -4040,7 +4040,12 @@ def main():
             py  = m["_precio_yes"]
             mid = m.get("market_id", "")
             for nombre, func in ESTRATEGIAS:
-                if m.get("_solo_late") and nombre != "LATE_WINDOW_5MIN":
+                # 18-Jul: GBM_LATE_5M (nacida 14-Jul, después de esta puerta del
+                # 02-Jul) pide ventanas <3min calibradas por ballenas_observer.py
+                # (SOL/XRP/ETH/BTC) -- sin esta excepción quedaba vetada por
+                # diseño en la única zona donde puede operar, sin relación con
+                # su edge real. Ver idea_gbmlate5m_solo_late_gate_18jul.
+                if m.get("_solo_late") and nombre not in ("LATE_WINDOW_5MIN", "GBM_LATE_5M"):
                     continue
                 if (nombre, mid) in ya_predichos:
                     skipped_dup += 1
