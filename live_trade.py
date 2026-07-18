@@ -682,6 +682,13 @@ def _consultar_profundidad_libro(client, token_id: str, precio_entrada: float,
     el camino por defecto para toda consulta de solo lectura. Pasar un
     ClobClient real solo aporta algo distinto si algún día hace falta el
     libro autenticado (no es el caso hoy: /book es idéntico autenticado o no).
+
+    18-Jul: NO tocar esta función para reutilizar parseo con código nuevo
+    (Smart Exit) — código de seguridad live, CLAUDE.md exige petición
+    explícita. Un intento de deduplicar 6 líneas con _niveles_libro() dejó
+    esta función rota (NameError en 'asks', bloqueaba el 100% de las
+    compras live) hasta que /code-review lo cazó antes de commitear. Ver
+    project_smart_exit_9hallazgos_arreglados_18jul en memoria.
     """
     try:
         book = _fetch_book_publico(token_id) if client is None else client.get_order_book(token_id)
@@ -1721,30 +1728,43 @@ def _consultar_libro_venta(token_id: str, min_order_size_fallback: float) -> dic
     """Lado bid del libro (donde vendemos), vía el mismo endpoint público que
     _fetch_book_publico. min_order_size viene del propio libro (campo real
     del CLOB, verificado 16-Jul en ~10 mercados cripto) si lo expone; si no,
-    se usa el fallback de config. Nunca lanza — ok=False en cualquier duda."""
+    se usa el fallback (MIN_SHARES_CLOB_LIMIT del caller). Nunca lanza —
+    ok=False en cualquier duda.
+
+    18-Jul: parseo propio, deliberadamente SIN compartir helper con
+    _consultar_profundidad_libro (código de seguridad live del lado de
+    compra, no se toca sin petición explícita — ver su docstring). Un nivel
+    de libro con price/size no parseable hace fallar la función entera
+    (fail-closed), igual que el patrón ya establecido en el resto del
+    proyecto para datos de mercado corruptos."""
     try:
         book = _fetch_book_publico(token_id)
         if book is None:
             return {"ok": False, "error": "sin respuesta del libro (público)"}
-        bids = (book.get("bids") if isinstance(book, dict) else getattr(book, "bids", None)) or []
-        if not bids:
+        bids_crudos = (book.get("bids") if isinstance(book, dict) else getattr(book, "bids", None)) or []
+        if not bids_crudos:
             return {"ok": False, "error": "libro sin bids"}
+        precios = [float(b.get("price") if isinstance(b, dict) else b.price) for b in bids_crudos]
         try:
             min_order_size = float(book.get("min_order_size"))
         except (TypeError, ValueError):
             min_order_size = min_order_size_fallback
-        mejor_bid = max(float(b.get("price") if isinstance(b, dict) else b.price) for b in bids)
+        mejor_bid = max(precios)
         return {"ok": True, "mejor_bid": mejor_bid, "min_order_size": min_order_size}
     except Exception as e:
         return {"ok": False, "error": str(e)}
 
 
 def _ejecutar_venta_temprana(market_id: str, direction: str, entry_price: float,
-                             stake_eur: float) -> dict:
+                             stake_eur: float, contexto: dict | None = None) -> dict:
     """Vende anticipadamente en el CLOB la posición (market_id, direction)
     comprada a entry_price/stake_eur. Devuelve siempre {"ok": ...} — nunca
     lanza; el caller (shadow_resolve._check_salidas_tempranas) deja la
-    posición OPEN sin cambios si ok=False."""
+    posición OPEN sin cambios si ok=False. contexto={"strategy","subtype"}
+    solo para el snapshot de libro_snapshots.csv (18-Jul, hallazgo
+    /code-review: sin esto el dataset de fill-ability quedaba ciego a estos
+    intentos)."""
+    ctx = contexto or {}
     try:
         if entry_price <= 0 or stake_eur <= 0:
             return {"ok": False, "error": "entry_price/stake_eur inválidos"}
@@ -1753,31 +1773,73 @@ def _ejecutar_venta_temprana(market_id: str, direction: str, entry_price: float,
         token_id = yes_token if direction == "BUY_YES" else no_token
         shares = stake_eur / entry_price
 
-        cfg = _cargar_config().get("riesgo", {}).get("smart_exit_stop_loss", {})
-        min_fallback = float(cfg.get("min_profundidad_ratio_bid", 5.0))
-
-        libro = _consultar_libro_venta(token_id, min_fallback)
+        # 18-Jul (hallazgo /code-review): el fallback ya no vive en config con
+        # un nombre que sugería "ratio" para lo que es un nº absoluto de
+        # shares — reusa la constante real que ya protege el mismo límite en
+        # el lado de compra.
+        libro = _consultar_libro_venta(token_id, MIN_SHARES_CLOB_LIMIT)
         if not libro.get("ok"):
             log(f"  ⛔ Smart-exit stop-loss: libro no consultable ({libro.get('error')}) — no se vende, sigue OPEN")
+            _registrar_snapshot_libro("smart_exit_sin_datos", market_id, direction,
+                                      entry_price, stake_eur, None, ctx)
             return {"ok": False, "no_fill": True, "error": libro.get("error")}
 
         min_order_size = libro["min_order_size"]
-        if shares < min_order_size:
-            log(f"  ⛔ Smart-exit stop-loss: shares={shares:.3f} < min_order_size={min_order_size} — no se vende, sigue OPEN")
+        notional_usd = shares * libro["mejor_bid"]
+        # 18-Jul (hallazgo /code-review): NO meter mejor_bid en la columna
+        # "mejor_ask" del snapshot — mezclaría precios bid/ask bajo el mismo
+        # nombre de columna para cualquier análisis futuro que no filtre por
+        # motivo. Vacío es más seguro que un dato con la etiqueta equivocada;
+        # _registrar_snapshot_libro ya tolera depth=None (deja las columnas
+        # de profundidad en blanco, el resto de la fila —motivo, market_id,
+        # stake— sigue siendo útil).
+        depth_snapshot = None
+        if shares < min_order_size or notional_usd < MIN_ORDEN_CLOB_USD:
+            log(f"  ⛔ Smart-exit stop-loss: shares={shares:.3f} (min={min_order_size}) "
+                f"notional=${notional_usd:.2f} (min=${MIN_ORDEN_CLOB_USD:.2f}) — no se vende, sigue OPEN")
+            _registrar_snapshot_libro("smart_exit_veto_profundidad", market_id, direction,
+                                      entry_price, stake_eur, depth_snapshot, ctx)
             return {"ok": False, "no_fill": True, "shares_insuficientes": True,
-                    "error": f"shares {shares:.3f} < min_order_size {min_order_size}"}
+                    "error": f"shares {shares:.3f} < min_order_size {min_order_size} "
+                             f"o notional ${notional_usd:.2f} < ${MIN_ORDEN_CLOB_USD:.2f}"}
 
         client = _get_clob_client()
         _marcar_orden_en_curso(market_id, direction)
         try:
-            order_args = MarketOrderArgsV2(
-                token_id=token_id,
-                amount=round(shares, 4),
-                side="SELL",
-                price=0,  # auto-calculado por el cliente contra el libro real al firmar
-            )
-            signed_order = client.create_market_order(order_args)
-            resp = client.post_order(signed_order, OrderType.FOK)
+            # Mismo patrón de reintento que el lado de compra (bug de
+            # precisión float en order_builder de py_clob_client_v2, ver
+            # comentario en _ejecutar_orden_polymarket): perturbar las
+            # shares un poco cambia el resultado de la división interna y
+            # evita la colisión. El rechazo es previo al match, así que
+            # reintentar no puede duplicar la venta. A diferencia del lado
+            # de compra (perturba un PRESUPUESTO en euros, exceder unos
+            # céntimos es inofensivo), aquí `shares` es el balance real
+            # on-chain de la posición — solo se prueba hacia abajo (nunca
+            # pedir vender más de lo que se tiene).
+            intentos_shares = [round(shares, 4), round(shares - 0.0005, 4)]
+            intentos_shares = [s for s in intentos_shares if s > 0]
+            resp = None
+            for intento, amt in enumerate(intentos_shares):
+                order_args = MarketOrderArgsV2(
+                    token_id=token_id,
+                    amount=amt,
+                    side="SELL",
+                    price=0,  # auto-calculado por el cliente contra el libro real al firmar
+                )
+                try:
+                    signed_order = client.create_market_order(order_args)
+                    resp = client.post_order(signed_order, OrderType.FOK)
+                    shares = amt
+                    if intento > 0:
+                        log(f"  ⚠️  Smart-exit venta aceptada en reintento {intento} con shares={amt:.4f} "
+                            f"(precisión decimal, mismo patrón que el lado de compra)")
+                    break
+                except Exception as e_intento:
+                    if "invalid amounts" not in str(e_intento) or intento == len(intentos_shares) - 1:
+                        raise
+                    log(f"  ⚠️  'invalid amounts' con shares={amt:.4f}, reintentando con otro monto...")
+            if resp is None:
+                raise RuntimeError("no se pudo construir una orden de venta con amounts válidos")
         finally:
             _limpiar_orden_en_curso()
 
@@ -1790,6 +1852,8 @@ def _ejecutar_venta_temprana(market_id: str, direction: str, entry_price: float,
         log(f"  🔴 Smart-exit stop-loss EJECUTADO: {market_id}/{direction} "
             f"shares={shares:.3f} precio_venta={filled_price:.4f} "
             f"pnl_neto={pnl_neto:+.2f}€ order_id={order_id}")
+        _registrar_snapshot_libro("smart_exit_ejecutado", market_id, direction,
+                                  entry_price, stake_eur, depth_snapshot, ctx)
         return {
             "ok": True, "order_id": order_id, "exit_price": filled_price,
             "valor_venta_eur": round(valor_venta_eur, 4),
@@ -1799,6 +1863,8 @@ def _ejecutar_venta_temprana(market_id: str, direction: str, entry_price: float,
         err = str(e)
         if "couldn't be fully filled" in err or "FOK" in err:
             log(f"  ⚠️  Smart-exit stop-loss FOK kill (sin liquidez) — sigue OPEN: {e}")
+            _registrar_snapshot_libro("smart_exit_fok_kill", market_id, direction,
+                                      entry_price, stake_eur, None, ctx)
         else:
             log(f"  ❌ Error en venta anticipada (smart-exit stop-loss) — sigue OPEN: {e}")
         return {"ok": False, "no_fill": True, "error": err}

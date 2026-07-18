@@ -630,7 +630,11 @@ def _check_salidas_tempranas(ts: str):
     except Exception:
         return
     sl_cfg = cfg.get("riesgo", {}).get("smart_exit_stop_loss", {})
-    if not sl_cfg.get("activo"):
+    # 18-Jul (hallazgo /code-review): comprobación de tipo estricta -- un
+    # "false" string (típico error de edición manual de JSON) es truthy en
+    # Python y habría activado el mecanismo sin querer. Solo True booleano
+    # activa; cualquier otra cosa (incluida ausencia de la clave) es inerte.
+    if sl_cfg.get("activo") is not True:
         return
 
     try:
@@ -669,7 +673,13 @@ def _check_salidas_tempranas_bajo_lock(LIVE_CSV: Path, ts: str, umbral: float, h
     if not abiertas:
         return
 
+    # 18-Jul (hallazgo /code-review): estado_mercado(mid) secuencial, una
+    # llamada HTTP por posición OPEN -- ya existe fetch_mercados_paralelo en
+    # este mismo fichero (throttle 3 workers/100ms) para exactamente esto.
+    mercados = fetch_mercados_paralelo([t.get("market_id", "") for t in abiertas])
+
     cols = list(trades[0].keys())
+    fees_recientes = None  # lazy: solo se pide a data-api si de verdad hay una venta que cerrar
     for t in abiertas:
         mid = t.get("market_id", "")
         direction = t.get("direction", "")
@@ -681,7 +691,7 @@ def _check_salidas_tempranas_bajo_lock(LIVE_CSV: Path, ts: str, umbral: float, h
         if entry_p <= 0 or stake <= 0:
             continue
 
-        mercado = estado_mercado(mid)
+        mercado = mercados.get(mid)
         if not mercado:
             continue  # fail-closed: sin dato de mercado, no se evalúa esta posición
         if mercado.get("closed") or mercado.get("resolved") or mercado.get("archived"):
@@ -702,18 +712,55 @@ def _check_salidas_tempranas_bajo_lock(LIVE_CSV: Path, ts: str, umbral: float, h
         if pnl_ajustado > -umbral:
             continue  # todavía no cruza el umbral
 
-        resultado = live_trade._ejecutar_venta_temprana(mid, direction, entry_p, stake)
+        resultado = live_trade._ejecutar_venta_temprana(
+            mid, direction, entry_p, stake,
+            contexto={"strategy": t.get("strategy", ""), "subtype": t.get("subtype", "")})
         if not resultado.get("ok"):
             continue  # fail-closed: sigue OPEN, la resolución normal seguirá su curso
+
+        # 18-Jul (hallazgo /code-review, el más importante de los 9):
+        # resultado["pnl_neto_eur"] solo descuenta el fee de LA VENTA -- el
+        # fee de la COMPRA original (fee_eur al abrir casi siempre 0, nunca
+        # se confirmó contra data-api en esta ruta) faltaba por completo,
+        # sobreestimando el PnL real ~2.9-6.7% del stake (mismo rango que
+        # ya corrige _fee_real_para_trade en el cierre normal). Reusa
+        # exactamente esa función -- el fee de apertura es el mismo evento
+        # real independientemente de cómo cierre la posición después.
+        if fees_recientes is None:
+            fees_recientes = _fees_reales_recientes()
+        fee_apertura = _fee_real_para_trade(t, fees_recientes)
+        # Capturar la confirmación ANTES del fallback (18-Jul, 2º hallazgo
+        # /code-review sobre este mismo fix): reasignar fee_apertura más
+        # abajo si es None hacía que la nota "confirmado=1/0" ya no pudiera
+        # ver el None nunca -- mismo bug que ya se evitó en
+        # _cerrar_trades_live_bajo_lock (línea ~997) capturando fee_real
+        # aparte de fee. Aquí replica ese patrón correcto.
+        fee_confirmado = fee_apertura is not None
+        if fee_apertura is None:
+            try:
+                fee_apertura = float(t.get("fee_eur") or 0)
+            except ValueError:
+                fee_apertura = 0.0
+            print(f"  ⚠️  fee de apertura no confirmado para market={mid} (smart-exit) -- usando fallback")
+        fee_venta   = resultado["fee_eur"]
+        fee_total   = round(fee_apertura + fee_venta, 4)
+        pnl_bruto   = resultado["valor_venta_eur"] - stake
+        # 18-Jul (hallazgo /code-review): el comentario anterior afirmaba
+        # que resultado['pnl_neto_eur'] "ya resta fee_venta" pero pnl_bruto
+        # se deriva de valor_venta_eur (bruto), no de ese campo -- fee_venta
+        # nunca se restaba de verdad. Restar fee_total (apertura+venta), no
+        # solo fee_apertura.
+        pnl_neto    = round(pnl_bruto - fee_total, 4)
 
         t["status"]          = "CLOSED"
         t["close_timestamp"] = ts
         t["exit_price"]      = f"{resultado['exit_price']:.4f}"
         t["outcome_real"]    = "STOP_LOSS_TEMPRANO"
-        t["fee_eur"]         = f"{resultado['fee_eur']:.4f}"
-        t["pnl_bruto_eur"]   = f"{(resultado['valor_venta_eur'] - stake):.4f}"
-        t["pnl_neto_eur"]    = f"{resultado['pnl_neto_eur']:.4f}"
-        t["notas"] = f"{t.get('notas','')} smart_exit_stop_loss".strip()
+        t["fee_eur"]         = f"{fee_total:.4f}"
+        t["pnl_bruto_eur"]   = f"{pnl_bruto:.4f}"
+        t["pnl_neto_eur"]    = f"{pnl_neto:.4f}"
+        nota_fee = "fee_apertura_confirmado=1" if fee_confirmado else "fee_apertura_confirmado=0"
+        t["notas"] = f"{t.get('notas','')} smart_exit_stop_loss {nota_fee}".strip()
 
         # Persistir INMEDIATAMENTE tras esta venta real, antes de seguir
         # evaluando el resto de posiciones OPEN (16-Jul, code-review: 4
@@ -733,11 +780,18 @@ def _check_salidas_tempranas_bajo_lock(LIVE_CSV: Path, ts: str, umbral: float, h
         except Exception:
             pass
         try:
-            _notificar_cierre_live(t, resultado["pnl_neto_eur"], acierto_dir=False)
+            # 18-Jul (hallazgo /code-review): acierto_dir hardcodeado a False
+            # ocultaba visualmente cualquier caso donde el corte terminara en
+            # PnL positivo (poco frecuente por diseño, pero posible si el
+            # haircut estimado fue más pesimista que el fill real) y habría
+            # escondido silenciosamente una futura corrección a medias del
+            # cálculo de PnL. Se deriva del signo real.
+            _notificar_cierre_live(t, pnl_neto, acierto_dir=(pnl_neto > 0))
         except Exception:
             pass
         print(f"  🔴 Smart-exit stop-loss: {t['strategy']}#{t['subtype']} {direction} "
-              f"market={mid} PNL={resultado['pnl_neto_eur']:+.4f}€ (corte anticipado, no resolución)")
+              f"market={mid} PNL={pnl_neto:+.4f}€ (fee_apertura={fee_apertura:.4f}€, "
+              f"corte anticipado, no resolución)")
 
 
 def _notificar_cierre_live(trade: dict, pnl_neto: float, acierto_dir: bool):
