@@ -40,7 +40,14 @@ GATE_N_AVISO = 40
 
 
 def _firma(clave: str, tipo: str, f: dict) -> str:
-    return f"{clave}|{tipo}|{f.get('feature')}|{f.get('condicion')}|{f.get('umbral')}|{f.get('direccion')}"
+    """18-Jul: el umbral NO entra en la firma -- el postmortem lo recalcula
+    (dosdea) cada vez que corre, así que incluirlo hacía que el MISMO patrón
+    causal se marcara "nuevo" en cada pequeño desplazamiento del umbral y
+    reenviara el aviso por Telegram sin parar (737 avisos en 5 días, un
+    patrón solo llegó a 134 reenvíos). La identidad real del patrón es
+    clave+tipo+feature+condición+dirección; el umbral es solo su valor
+    actual, no lo que lo distingue de "ya visto"."""
+    return f"{clave}|{tipo}|{f.get('feature')}|{f.get('condicion')}|{f.get('direccion')}"
 
 
 def _n_de(f: dict, tipo: str) -> int:
