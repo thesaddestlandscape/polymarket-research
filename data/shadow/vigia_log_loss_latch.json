@@ -17,9 +17,9 @@
  "STREAK_MOM_5M": true,
  "STRUCT_NO_15M": true,
  "UPDOWN_GBM": true,
- "UPDOWN_GBM_15M_CROSS_WINDOW_SPREAD": false,
+ "UPDOWN_GBM_15M_CROSS_WINDOW_SPREAD": true,
  "UPDOWN_GBM_15M_TARDIO": false,
  "UPDOWN_OU_5M": true,
  "WEEKLY_PRICE": true,
- "GBM_LATE_5M": false
+ "GBM_LATE_5M": true
 }
