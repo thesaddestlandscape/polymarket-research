@@ -2527,6 +2527,53 @@ def _cargar_ballenas_timing_state():
     return _ballenas_timing_cache["data"]
 
 
+# P17 (CLAUDE.md backlog, 11-Jul / implementado 18-Jul): meta-score Ridge
+# (regresión logística L2, entrenar_meta_score_gbm_late_p17.py) sobre
+# GBM_LATE_15M#BUY_YES. PURAMENTE INFORMATIVO -- logueado como feature
+# meta_score_gbm_late, NUNCA sustituye prob_yes/edge/decisión. Exige
+# ≥2 semanas / n≥300 forward de este logueo + aprobación explícita de Javi
+# + /code-review antes de proponer tocar la probabilidad real (barrera ya
+# fijada en CLAUDE.md, no relajable aquí).
+META_SCORE_GBM_LATE_MODEL = Path("data/shadow/meta_score_gbm_late_model.json")
+_meta_score_gbm_late_cache = {"mtime": None, "modelo": None}
+
+
+def _cargar_meta_score_gbm_late_modelo():
+    try:
+        mtime = META_SCORE_GBM_LATE_MODEL.stat().st_mtime
+    except OSError:
+        return None
+    if _meta_score_gbm_late_cache["mtime"] != mtime:
+        try:
+            _meta_score_gbm_late_cache["modelo"] = json.loads(
+                META_SCORE_GBM_LATE_MODEL.read_text(encoding="utf-8"))
+        except Exception:
+            _meta_score_gbm_late_cache["modelo"] = None
+        _meta_score_gbm_late_cache["mtime"] = mtime
+    return _meta_score_gbm_late_cache["modelo"]
+
+
+def _meta_score_gbm_late(d_gbm, sigma_h, drift_ventana_pct, hora_utc, restante_min, t_h):
+    """Aplica el modelo entrenado offline (regresión logística L2
+    estandarizada) con aritmética pura -- sin sklearn en el camino
+    caliente, solo un producto escalar + sigmoide. None si el modelo no
+    existe todavía (nunca bloquea la predicción real)."""
+    modelo = _cargar_meta_score_gbm_late_modelo()
+    if not modelo:
+        return None
+    valores = {"d_gbm": d_gbm, "sigma_h": sigma_h, "drift_ventana_pct": drift_ventana_pct,
+               "hora_utc": hora_utc, "restante_min": restante_min, "T_h": t_h}
+    try:
+        z = modelo["intercept"]
+        for nombre, coef, mean, std in zip(modelo["feature_order"], modelo["coef"],
+                                            modelo["mean"], modelo["std"]):
+            x = valores[nombre]
+            z += coef * ((x - mean) / std if std else 0.0)
+        return round(1.0 / (1.0 + math.exp(-z)), 4)
+    except Exception:
+        return None
+
+
 def _banda_y_timing_ballenas(activo, marco, lo_default, hi_default, rest_lo_default, rest_hi_default):
     """Banda de precio + ventana de minutos restantes para (activo,marco),
     del estado vivo del observador si es significativo, si no de los
@@ -3140,6 +3187,8 @@ def _s_gbm_late(market, ctx, ventana_min, rest_lo, rest_hi, espacio_k=None):
             "sigma_ewma_delta_pct": sigma_ewma_delta_pct,
             "dist_vwap_pct":       dist_vwap_pct,
             "retest_pct":          retest_pct,
+            "meta_score_gbm_late": _meta_score_gbm_late(
+                d, sigma_h, drift_ventana * 100, now_utc.hour, restante_min, T_rem_h),
             **_libro_calidad(market),
         },
     }
