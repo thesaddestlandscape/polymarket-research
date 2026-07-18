@@ -3,6 +3,7 @@
   "GBM_LATE_15M#BTC#15min|filtro|sigma_ewma_delta_pct|lt|BUY_YES",
   "GBM_LATE_15M#BTC#15min|patron|sigma_ewma_delta_pct|gt|BUY_NO",
   "GBM_LATE_15M#BTC#15min|patron|sigma_ewma_delta_pct|gt|BUY_YES",
+  "GBM_LATE_15M#BTC#15min|patron|sigma_h|lt|BUY_YES",
   "GBM_LATE_15M#ETH#15min|filtro|sigma_ewma_delta_pct|lt|BUY_YES",
   "GBM_LATE_15M#ETH#15min|patron|sigma_ewma_delta_pct|gt|BUY_NO",
   "GBM_LATE_15M#ETH#15min|patron|sigma_ewma_delta_pct|gt|BUY_YES",
