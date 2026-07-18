@@ -194,9 +194,9 @@
     "smart_exit_stop_loss": {
       "activo": false,
       "umbral_perdida_eur": 0.30,
-      "min_profundidad_ratio_bid": 5.0,
       "fee_rate_taker_estimado": 0.07
-    }
+    },
+    "_smart_exit_9_hallazgos_arreglados_nota_2026-07-18": "18-Jul: arreglados los 9 hallazgos de /code-review que quedaron pendientes el 16-Jul (ver project_smart_exit_stoploss_implementado_16jul en memoria para la lista original) -- fee de apertura real (antes solo restaba el fee de venta, sobreestimaba PnL), mínimo notional $1 del CLOB (antes solo shares vs min_order_size), snapshot en libro_snapshots.csv (motivos smart_exit_ejecutado/veto_profundidad/sin_datos/fok_kill), activo con comprobación de tipo estricta (is True, no truthy), min_profundidad_ratio_bid eliminado de config (reusa MIN_SHARES_CLOB_LIMIT=5.0 ya existente, la clave de arriba ya no existe), fetch_mercados_paralelo en vez de estado_mercado secuencial, reintento ±shares en la venta (mismo patrón que el bug de redondeo del lado de compra), acierto_dir derivado del signo real del PnL (antes hardcodeado False). Sigue activo=false -- pendiente aprobación explícita de Javi para flip a true, y otra pasada de /code-review sobre este diff antes de activar (código que toca dinero real, CLAUDE.md lo exige sin excepción)."
   },
   "_pares_nota": "2026-07-03: sustituye a estrategias_permitidas_live + subtypes_permitidos_live. El producto cartesiano de las dos listas dejaba pasar combinaciones nunca aprobadas: UPDOWN_GBM#SOL#15min (02-Jul, -2.00€) y UPDOWN_GBM#BTC#15min (03-Jul, -2.00€, hora 06 UTC cuando BTC#15min solo se rescató para hora>=16). Formato: STRATEGY#SUBTYPE#DIRECTION, comparación exacta. Los BUY_NO de GBM_LATE (min_ic_asimetrico=0.12 desde 06-Jul) y el BUY_YES de UPDOWN_GBM (0.16) siguen además gateados por la barra asimétrica. Fail-closed: lista vacía o ausente = no se opera nada.",
   "_pares_eth_buyyes_nota": "2026-07-03 sesión 5: UPDOWN_GBM#ETH#15min#BUY_YES retirado — shadow 3d: n=104 hit=0.41 pnl=-6.03€ clv=-0.074, ic_BUY_YES(ETH)=-0.051. La barra asimétrica 0.16 ya lo bloqueaba; se quita de la whitelist para que ninguna ruta lo cuele (belt-and-braces).",
