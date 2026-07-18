@@ -56,6 +56,7 @@ DISK_WARN_PCT      = 85    # % usado → warning
 SYNTAX_CHECK_EVERY = 5     # ciclos entre chequeos de sintaxis de todos los scripts
 
 SWITCH_ALERTA_COOLDOWN = 1800  # segundos entre alertas de switch apagado (30 min)
+DEADLOCK_ALERTA_COOLDOWN = 1800  # segundos entre alertas de deadlock de bankroll (30 min)
 RESOLVE_LAG_SECS   = 7200  # 2h sin nuevas resoluciones → warning
 
 PIPELINE_SCRIPTS = [
@@ -460,6 +461,52 @@ def check_switch_ventana() -> None:
 
 
 # ──────────────────────────────────────────────────────────────────────────────
+# CHECK 11: Bankroll en zona muerta de sizing → alerta Telegram
+# ──────────────────────────────────────────────────────────────────────────────
+# 17-Jul: bankroll_minimo_eur(1.00€) + min_stake_eur(1.05€) exigían
+# bankroll>=2.05€ para que CUALQUIER trade fuera viable. El bankroll cruzó
+# esa zona a las 06:45 UTC y quedó parado 8h+ generando no_viable_stake/
+# senal_caducada en fast.log sin ninguna alerta — el circuit breaker real
+# (Freno 1, bankroll_minimo_eur) solo avisa al cruzar el suelo absoluto, no
+# esta zona intermedia. Ver project_bankroll_deadlock_stake_17jul (memoria).
+_deadlock_alerta_ts: float = 0.0  # timestamp del último alerta enviado
+
+
+def check_bankroll_deadlock() -> None:
+    """Alerta por Telegram si ninguna señal puede ser viable pase lo que
+    pase el IC (probado con IC=1.0, el máximo posible) pese a que el switch
+    está ON y el circuit breaker real todavía no ha saltado. Reutiliza
+    calcular_stake() tal cual (no duplica su lógica de frenos/margen)."""
+    global _deadlock_alerta_ts
+    try:
+        from live_stake import calcular_stake, bankroll_minimo_eur_hoy
+        from live_guard import switch_activo
+        from shadow_digest import enviar_telegram
+
+        r = calcular_stake(ic=1.0)
+        en_deadlock = switch_activo() and not r["viable"] and r["bankroll"] > bankroll_minimo_eur_hoy()
+
+        if en_deadlock:
+            if time.time() - _deadlock_alerta_ts > DEADLOCK_ALERTA_COOLDOWN:
+                _deadlock_alerta_ts = time.time()
+                log(f"⚠ Bankroll en zona muerta de sizing — alerta Telegram enviada. {r['motivo']}")
+                enviar_telegram(
+                    "⚠️ *Bankroll en zona muerta (deadlock de sizing)*\n"
+                    f"{r['motivo']}\n\n"
+                    "Switch ON, circuit breaker real sin disparar, pero NINGUNA señal "
+                    "puede ser viable pase lo que pase el IC (probado con IC=1.0) — "
+                    "el sistema queda parado en silencio (`no_viable_stake`/`senal_caducada` "
+                    "repetidos en fast.log).\n"
+                    "Necesita recarga de capital o un override puntual "
+                    "(`bankroll_minimo_eur_override` / `freno_diario_pct_override` en config_live.json)."
+                )
+        else:
+            _deadlock_alerta_ts = 0.0  # reset al salir de la zona muerta
+    except Exception as e:
+        log(f"  [check-deadlock] Error: {e}")
+
+
+# ──────────────────────────────────────────────────────────────────────────────
 # BUCLE PRINCIPAL
 # ──────────────────────────────────────────────────────────────────────────────
 def main():
@@ -612,6 +659,9 @@ def main():
 
             # ── 10. Switch OFF durante ventana horaria ────────────────────
             check_switch_ventana()
+
+            # ── 11. Bankroll en zona muerta de sizing ──────────────────────
+            check_bankroll_deadlock()
 
         except Exception as e:
             log(f"Error interno watchdog: {e}")
