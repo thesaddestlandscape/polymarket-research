@@ -77,6 +77,10 @@ SCREEN_RESTART = {
     # ejecutor dedicado de baja latencia BALLENAS_TARDIAS#BTC#15min, DRY_RUN=True
     # (no toca dinero). Screen de proceso único, mismo patrón que pfinish.
     "ballenas_fast": f"cd {REPO} && .venv/bin/python ballenas_executor_btc15m.py >> logs/ballenas_fast.log 2>&1",
+    # ballenas_5m (18-Jul): ejecutor de baja latencia BALLENAS_TARDIAS#{ETH,SOL,XRP}#5min,
+    # DRY_RUN=True, proceso separado de ballenas_fast (BTC15m, live) para no
+    # mezclar blast radius. Ver /root/.claude/plans/ethereal-dazzling-thacker.md
+    "ballenas_5m": f"cd {REPO} && .venv/bin/python ballenas_executor_5min.py >> logs/ballenas_5m.log 2>&1",
 }
 
 # Cuando stdout está redirigido (screen >> watchdog.log), print() ya escribe al fichero
@@ -137,7 +141,7 @@ def check_screens() -> dict[str, bool]:
         r = subprocess.run(["screen", "-ls"], capture_output=True, text=True, timeout=5)
         output = r.stdout + r.stderr
         return {name: (f".{name}\t" in output or f".{name} " in output)
-                for name in ["fast", "slow", "control", "dash", "pfinish", "ballenas_fast"]}
+                for name in ["fast", "slow", "control", "dash", "pfinish", "ballenas_fast", "ballenas_5m"]}
     except Exception:
         return {}
 

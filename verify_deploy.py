@@ -33,6 +33,8 @@ SCREENS = {
     "pfinish": {"entry": "photo_finish_logger.py", "probe": None},
     "ballenas_fast": {"entry": "ballenas_executor_btc15m.py",
                        "probe": "log:logs/ballenas_fast.log:arrancado"},
+    "ballenas_5m": {"entry": "ballenas_executor_5min.py",
+                     "probe": "log:logs/ballenas_5m.log:arrancado"},
     # Solo se vigila el .sh (sus hijos python son proceso fresco cada ciclo).
     "fast":    {"entry": "run_fast.sh", "shallow": True, "no_restart": True},
     "slow":    {"entry": "run_slow.sh", "shallow": True, "no_restart": True},
