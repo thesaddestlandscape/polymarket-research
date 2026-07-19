@@ -124,6 +124,7 @@
   "UPDOWN_GBM#ETH#15min|patron|sigma_h|lt|BUY_NO",
   "UPDOWN_GBM#SOL#15min|filtro|sigma_h|gt|BUY_YES",
   "UPDOWN_GBM#SOL#15min|filtro|sigma_h|lt|BUY_YES",
+  "UPDOWN_GBM#SOL#15min|patron|sigma_h|lt|BUY_NO",
   "UPDOWN_GBM#XRP#15min|filtro|sigma_h|gt|BUY_YES",
   "UPDOWN_GBM#XRP#15min|filtro|sigma_h|lt|BUY_YES",
   "UPDOWN_GBM#XRP#15min|patron|sigma_h|gt|BUY_NO",
