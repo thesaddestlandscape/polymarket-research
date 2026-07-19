@@ -1,9 +1,9 @@
 {
-  "timestamp_utc": "2026-07-19T02:01:42+00:00",
-  "bankroll_sim": 5218.57,
-  "pnl_total": 5198.57,
-  "n_ops": 21682,
-  "win_rate": 0.6033,
+  "timestamp_utc": "2026-07-19T02:09:00+00:00",
+  "bankroll_sim": 5224.34,
+  "pnl_total": 5204.34,
+  "n_ops": 21703,
+  "win_rate": 0.6034,
   "estrategias_activas": 233,
   "desactivadas": [
     "UPDOWN_GBM#SOL#5min",
@@ -49,8 +49,8 @@
     },
     {
       "k": "FAVORITO_CONFIRMADO_SOL_ALTACONVICCION",
-      "ic": 0.3134,
-      "n": 132
+      "ic": 0.3148,
+      "n": 133
     }
   ],
   "brier_medio": 0.2233,
