@@ -1,4 +1,4 @@
-# Estado del bot — 2026-07-19 17:30 UTC
+# Estado del bot — 2026-07-19 17:36 UTC
 
 ## Live — dinero real (on-chain)
 | | |
@@ -13,23 +13,23 @@
 ## Shadow — MODELO SIMULADO (no cobrable)
 | | |
 |---|---|
-| P&L fiel (stake fijo 1$) | +3111.90 $ |
-| P&L sim compuesto | 🟢 +5654.36 $ (ficción Kelly: +22226% s/ operativo) |
-| P&L sim hoy (2026-07-19) | 🟢 +492.60 $ |
-| Operaciones resueltas | 22914 (13898 WIN / 9016 LOSS) — 60.7% |
-| Señales abiertas | 152 |
+| P&L fiel (stake fijo 1$) | +3102.47 $ |
+| P&L sim compuesto | 🟢 +5637.52 $ (ficción Kelly: +22160% s/ operativo) |
+| P&L sim hoy (2026-07-19) | 🟢 +475.75 $ |
+| Operaciones resueltas | 22933 (13904 WIN / 9029 LOSS) — 60.6% |
+| Señales abiertas | 147 |
 
 ## Estrategias (visión global)
 
 | Estrategia | n | Win% | IC_efectivo | Tendencia | PNL | Apuesta | Estado |
 |---|---|---|---|---|---|---|---|
-| GBM_LATE_15M | 5892 | 60.7% | +0.107 | ➡️ estable | +2005.78$ | 1.07$ | ✅ activa |
-| GBM_LATE_15M_ESPACIO_ATR | 3120 | 65.2% | +0.152 | ➡️ estable | +1864.43$ | 1.51$ | ✅ activa |
-| GBM_LATE_15M_TARDIO | 3069 | 60.1% | +0.101 | 📈 madura (+0.04) | +1089.42$ | 1.01$ | ✅ activa |
-| UPDOWN_GBM_15M_TARDIO | 653 | 67.8% | +0.178 | ➡️ estable | +288.73$ | 1.78$ | ✅ activa |
-| UPDOWN_GBM | 1848 | 52.2% | +0.022 | 📈 madura (+0.12) | +140.03$ | 0.50$ | ✅ activa |
+| GBM_LATE_15M | 5896 | 60.7% | +0.107 | ➡️ estable | +2004.40$ | 1.07$ | ✅ activa |
+| GBM_LATE_15M_ESPACIO_ATR | 3124 | 65.1% | +0.151 | ➡️ estable | +1857.87$ | 1.51$ | ✅ activa |
+| GBM_LATE_15M_TARDIO | 3073 | 60.0% | +0.100 | 📈 madura (+0.04) | +1082.10$ | 1.00$ | ✅ activa |
+| UPDOWN_GBM_15M_TARDIO | 656 | 67.7% | +0.176 | ➡️ estable | +287.42$ | 1.76$ | ✅ activa |
+| UPDOWN_GBM | 1849 | 52.1% | +0.021 | 📈 madura (+0.12) | +138.26$ | 0.50$ | ✅ activa |
 | GBM_LATE_15M_PYCONFIRMADO | 171 | 64.9% | +0.147 | 📈 madura (+0.05) | +91.10$ | 1.47$ | ✅ activa |
-| FAVORITO_CONFIRMADO | 3894 | 68.7% | +0.187 | ➡️ estable | +67.36$ | 1.87$ | ✅ activa |
+| FAVORITO_CONFIRMADO | 3897 | 68.7% | +0.187 | ➡️ estable | +68.84$ | 1.87$ | ✅ activa |
 | WEEKLY_PRICE | 295 | 65.8% | +0.157 | 📈 madura (+0.25) | +49.68$ | 1.57$ | ✅ activa |
 | STREAK_FADE_15M | 225 | 59.6% | +0.095 | ➡️ estable | +33.25$ | 0.95$ | ✅ activa |
 | LATE_WINDOW_5MIN | 49 | 73.5% | +0.225 | ➡️ estable | +24.54$ | 2.00$ | ✅ activa |
@@ -55,22 +55,22 @@
 
 | Timestamp | Estrategia | Mercado | Resultado | PNL |
 |---|---|---|---|---|
-| 2026-07-19T17:21 | UPDOWN_GBM_15M_TARDIO#DOGE#15min | Dogecoin Up or Down - July 19, 1:00PM-1:15PM ET… | ❌ LOSS | -2.04$ |
-| 2026-07-19T17:21 | UPDOWN_GBM#DOGE#15min | Dogecoin Up or Down - July 19, 1:00PM-1:15PM ET… | ❌ LOSS | -1.01$ |
-| 2026-07-19T17:18 | FAVORITO_CONFIRMADO#ETH#15min | Ethereum Up or Down - July 19, 1:00PM-1:15PM ET… | ❌ LOSS | -2.04$ |
-| 2026-07-19T17:18 | GBM_LATE_15M_ESPACIO_ATR#ETH#15min | Ethereum Up or Down - July 19, 1:00PM-1:15PM ET… | ❌ LOSS | -2.04$ |
-| 2026-07-19T17:18 | GBM_LATE_15M#ETH#15min | Ethereum Up or Down - July 19, 1:00PM-1:15PM ET… | ❌ LOSS | -1.50$ |
+| 2026-07-19T17:32 | GBM_LATE_15M_ESPACIO_ATR#XRP#15min | XRP Up or Down - July 19, 1:15PM-1:30PM ET… | ❌ LOSS | -2.04$ |
+| 2026-07-19T17:32 | GBM_LATE_15M_ESPACIO_ATR#BTC#15min | Bitcoin Up or Down - July 19, 1:15PM-1:30PM ET… | ❌ LOSS | -1.25$ |
+| 2026-07-19T17:32 | GBM_LATE_15M_TARDIO#XRP#15min | XRP Up or Down - July 19, 1:15PM-1:30PM ET… | ❌ LOSS | -2.04$ |
+| 2026-07-19T17:32 | GBM_LATE_15M#XRP#15min | XRP Up or Down - July 19, 1:15PM-1:30PM ET… | ❌ LOSS | -2.04$ |
+| 2026-07-19T17:32 | GBM_LATE_15M_ESPACIO_ATR#SOL#15min | Solana Up or Down - July 19, 1:15PM-1:30PM ET… | ❌ LOSS | -1.22$ |
 
 ## Calidad de datos
 
-✅ **OK** — última verificación 2026-07-19T17:29 UTC
+✅ **OK** — última verificación 2026-07-19T17:34 UTC
 
 | Asset | Precio | Age | Alertas |
 |---|---|---|---|
 | ✅ BTC | $64,633.00 | 0.1min |  |
 | ✅ ETH | $1,867.85 | 0.1min |  |
-| ✅ SOL | $76.10 | 0.1min |  |
-| ✅ XRP | $1.09 | 0.1min |  |
+| ✅ SOL | $76.16 | 0.1min |  |
+| ✅ XRP | $1.10 | 0.1min |  |
 
 **Cross-source** (binance, coinbase, kraken):
 
