@@ -1,37 +1,37 @@
 {
   "estrategias": {
     "BALLENAS_CONFIRMADAS_15M": {
-      "n": 298,
-      "log_loss_modelo": 0.6714,
-      "log_loss_mercado": 0.629,
-      "gap": -0.0425,
+      "n": 307,
+      "log_loss_modelo": 0.6617,
+      "log_loss_mercado": 0.6233,
+      "gap": -0.0384,
       "peor_que_mercado": true
     },
     "FAVORITO_CONFIRMADO": {
-      "n": 3805,
-      "log_loss_modelo": 0.6005,
-      "log_loss_mercado": 0.597,
-      "gap": -0.0035,
+      "n": 3821,
+      "log_loss_modelo": 0.5997,
+      "log_loss_mercado": 0.5964,
+      "gap": -0.0033,
       "peor_que_mercado": true
     },
     "FAVORITO_CONFIRMADO_SOL_ALTACONVICCION": {
-      "n": 149,
-      "log_loss_modelo": 0.484,
-      "log_loss_mercado": 0.4797,
-      "gap": -0.0043,
+      "n": 151,
+      "log_loss_modelo": 0.4785,
+      "log_loss_mercado": 0.4752,
+      "gap": -0.0033,
       "peor_que_mercado": true
     },
     "GBM_LATE_15M": {
-      "n": 5817,
-      "log_loss_modelo": 0.6322,
-      "log_loss_mercado": 0.6682,
-      "gap": 0.036,
+      "n": 5833,
+      "log_loss_modelo": 0.6319,
+      "log_loss_mercado": 0.6681,
+      "gap": 0.0361,
       "peor_que_mercado": false
     },
     "GBM_LATE_15M_ESPACIO_ATR": {
-      "n": 3046,
-      "log_loss_modelo": 0.5762,
-      "log_loss_mercado": 0.6482,
+      "n": 3060,
+      "log_loss_modelo": 0.5759,
+      "log_loss_mercado": 0.648,
       "gap": 0.0721,
       "peor_que_mercado": false
     },
@@ -43,17 +43,17 @@
       "peor_que_mercado": false
     },
     "GBM_LATE_15M_TARDIO": {
-      "n": 2995,
-      "log_loss_modelo": 0.6144,
+      "n": 3010,
+      "log_loss_modelo": 0.614,
       "log_loss_mercado": 0.6488,
-      "gap": 0.0345,
+      "gap": 0.0348,
       "peor_que_mercado": false
     },
     "GBM_LATE_5M": {
-      "n": 103,
-      "log_loss_modelo": 0.6419,
-      "log_loss_mercado": 0.5525,
-      "gap": -0.0894,
+      "n": 107,
+      "log_loss_modelo": 0.6363,
+      "log_loss_mercado": 0.5388,
+      "gap": -0.0976,
       "peor_que_mercado": true
     },
     "GBM_LATE_60M": {
@@ -127,7 +127,7 @@
       "peor_que_mercado": true
     },
     "UPDOWN_GBM": {
-      "n": 1823,
+      "n": 1825,
       "log_loss_modelo": 0.7031,
       "log_loss_mercado": 0.6783,
       "gap": -0.0248,
@@ -141,10 +141,10 @@
       "peor_que_mercado": true
     },
     "UPDOWN_GBM_15M_TARDIO": {
-      "n": 616,
-      "log_loss_modelo": 0.6044,
-      "log_loss_mercado": 0.6678,
-      "gap": 0.0634,
+      "n": 618,
+      "log_loss_modelo": 0.604,
+      "log_loss_mercado": 0.6669,
+      "gap": 0.063,
       "peor_que_mercado": false
     },
     "UPDOWN_OU_5M": {
