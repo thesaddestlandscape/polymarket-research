@@ -171,7 +171,7 @@ Estado live en `data/shadow/hipotesis_auto.md` (actualizado cada postmortem ~23m
 **Hipótesis custom en `data/shadow/hipotesis_custom.json`** (editar sin tocar código):
 GBM-17H-BTC | OF-MADRUGADA | GBM-SIGMA-ALTO/BAJO | OF-02H/07H-BTCSOL | GBM-60MIN-BUYYES/NO | GBM-18H | BUYYES-15MIN-POSTFILTRO | BTC15-TENDENCIA | DRIFT15-ZONA-MUERTA | DRIFT15-MOMENTUM | ETH15-REVERSION | LONGSHOT-BIAS
 
-**Auto-apply**: H-GBM-18H → `meta.gbm_blacklist_hours_auto` | H-KELLY-HORA → `meta.hora_boost_factor`
+**Auto-apply**: DESACTIVADO desde 15-Jul (petición Javi, tras `/code-review` de UPDOWN_GBM_15M_TARDIO que encontró un bucket contaminado auto-aplicado sin revisión). H-GBM-18H y H-KELLY-HORA ya NO escriben `meta.gbm_blacklist_hours_auto`/`meta.hora_boost_factor` solos — `hypothesis_tracker.py::_auto_apply` solo avisa por Telegram cada ciclo (~23min) hasta que alguien lo aplica a mano; el aviso de H-KELLY-HORA exige IC≥0.15 por hora (más estricto que el ≥0.10 de "confirmada" en `hipotesis_auto.md`).
 
 ---
 
@@ -221,7 +221,7 @@ GBM_LATE_DRIFT_VENT_MIN_PCT = 0.02  # photo finish (05-Jul): GBM_LATE skip si |d
 DELTA_MIN = 0.38 | DELTA_MAX = 0.46  # OF solo BUY_NO (delta<0)
 KELLY_COMPUESTO_BOOST = 1.5 | KELLY_COMPUESTO_MAX = 2.00
 ORDER_FLOW_BLACKLIST_HOURS = {2,7,9,22}  # UTC BTC+SOL. 07-Jul: quitadas h10/h11 (blacklist invertido — eran BUENAS en BUY_NO; el IC malo previo era del BUY_YES OF, muerto desde 26-Jun). scan_blacklist_hours.py
-ORDER_FLOW_PAIR_BLACKLIST  = {'ETH','BNB','XRP','DOGE'}
+ORDER_FLOW_PAIR_BLACKLIST  = {'BTC'}  # 11-Jul: ETH/BNB/XRP/DOGE reabiertos (aprobado Javi, shadow puro, 93% del histórico que los bloqueó era una ráfaga 24-25jun); BTC bloqueado ese mismo día por no batir control zero-intelligence (p_shuffle=0.51)
 # Longshot: BUY_NO py_mkt<0.20 → ×1.1
 # poly_drift_5obs: confluencia→×1.1 | divergencia fuerte→×0.85
 ```
