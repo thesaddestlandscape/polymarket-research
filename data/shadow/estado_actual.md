@@ -1,4 +1,4 @@
-# Estado del bot — 2026-07-20 06:13 UTC
+# Estado del bot — 2026-07-20 06:18 UTC
 
 ## Live — dinero real (on-chain)
 | | |
@@ -13,23 +13,23 @@
 ## Shadow — MODELO SIMULADO (no cobrable)
 | | |
 |---|---|
-| P&L fiel (stake fijo 1$) | +3352.82 $ |
-| P&L sim compuesto | 🟢 +6148.47 $ (ficción Kelly: +24168% s/ operativo) |
-| P&L sim hoy (2026-07-20) | 🟢 +150.14 $ |
-| Operaciones resueltas | 23987 (14599 WIN / 9388 LOSS) — 60.9% |
-| Señales abiertas | 138 |
+| P&L fiel (stake fijo 1$) | +3350.35 $ |
+| P&L sim compuesto | 🟢 +6144.66 $ (ficción Kelly: +24154% s/ operativo) |
+| P&L sim hoy (2026-07-20) | 🟢 +146.33 $ |
+| Operaciones resueltas | 23991 (14600 WIN / 9391 LOSS) — 60.9% |
+| Señales abiertas | 135 |
 
 ## Estrategias (visión global)
 
 | Estrategia | n | Win% | IC_efectivo | Tendencia | PNL | Apuesta | Estado |
 |---|---|---|---|---|---|---|---|
-| GBM_LATE_15M | 6058 | 60.8% | +0.108 | ➡️ estable | +2139.69$ | 1.08$ | ✅ activa |
-| GBM_LATE_15M_ESPACIO_ATR | 3277 | 65.5% | +0.154 | ➡️ estable | +2030.98$ | 1.54$ | ✅ activa |
-| GBM_LATE_15M_TARDIO | 3241 | 60.4% | +0.104 | 📈 madura (+0.05) | +1214.36$ | 1.04$ | ✅ activa |
+| GBM_LATE_15M | 6059 | 60.8% | +0.108 | ➡️ estable | +2138.24$ | 1.08$ | ✅ activa |
+| GBM_LATE_15M_ESPACIO_ATR | 3278 | 65.4% | +0.154 | ➡️ estable | +2028.94$ | 1.54$ | ✅ activa |
+| GBM_LATE_15M_TARDIO | 3242 | 60.4% | +0.104 | 📈 madura (+0.05) | +1212.93$ | 1.04$ | ✅ activa |
 | UPDOWN_GBM_15M_TARDIO | 755 | 67.4% | +0.174 | ➡️ estable | +338.50$ | 1.74$ | ✅ activa |
 | UPDOWN_GBM | 1909 | 52.2% | +0.022 | 📈 madura (+0.11) | +135.58$ | 0.50$ | ✅ activa |
 | GBM_LATE_15M_PYCONFIRMADO | 180 | 65.6% | +0.154 | 📈 madura (+0.07) | +96.33$ | 1.54$ | ✅ activa |
-| FAVORITO_CONFIRMADO | 4120 | 68.8% | +0.188 | ➡️ estable | +81.30$ | 1.88$ | ✅ activa |
+| FAVORITO_CONFIRMADO | 4121 | 68.8% | +0.188 | ➡️ estable | +82.41$ | 1.88$ | ✅ activa |
 | WEEKLY_PRICE | 295 | 65.8% | +0.157 | 📈 madura (+0.25) | +49.68$ | 1.57$ | ✅ activa |
 | STREAK_FADE_15M | 231 | 59.3% | +0.092 | ➡️ estable | +31.29$ | 0.92$ | ✅ activa |
 | LATE_WINDOW_5MIN | 55 | 70.9% | +0.202 | ➡️ estable | +23.91$ | 2.00$ | ✅ activa |
@@ -55,30 +55,30 @@
 
 | Timestamp | Estrategia | Mercado | Resultado | PNL |
 |---|---|---|---|---|
+| 2026-07-20T06:17 | FAVORITO_CONFIRMADO#BTC#15min | Bitcoin Up or Down - July 20, 2:00AM-2:15AM ET… | ✅ WIN | +1.11$ |
+| 2026-07-20T06:17 | GBM_LATE_15M_TARDIO#BTC#15min | Bitcoin Up or Down - July 20, 2:00AM-2:15AM ET… | ❌ LOSS | -1.43$ |
+| 2026-07-20T06:17 | GBM_LATE_15M_ESPACIO_ATR#BTC#15min | Bitcoin Up or Down - July 20, 2:00AM-2:15AM ET… | ❌ LOSS | -2.04$ |
+| 2026-07-20T06:17 | GBM_LATE_15M#BTC#15min | Bitcoin Up or Down - July 20, 2:00AM-2:15AM ET… | ❌ LOSS | -1.45$ |
 | 2026-07-20T06:12 | GBM_LATE_5M#XRP#5min | XRP Up or Down - July 20, 2:05AM-2:10AM ET… | ❌ LOSS | -0.78$ |
-| 2026-07-20T06:07 | GBM_LATE_5M#XRP#5min | XRP Up or Down - July 20, 2:00AM-2:05AM ET… | ✅ WIN | +0.73$ |
-| 2026-07-20T06:04 | GBM_LATE_5M#SOL#5min | Solana Up or Down - July 20, 1:55AM-2:00AM ET… | ❌ LOSS | -0.51$ |
-| 2026-07-20T06:04 | GBM_LATE_15M_ESPACIO_ATR#XRP#15min | XRP Up or Down - July 20, 1:45AM-2:00AM ET… | ✅ WIN | +2.17$ |
-| 2026-07-20T06:04 | UPDOWN_GBM_15M_TARDIO#XRP#15min | XRP Up or Down - July 20, 1:45AM-2:00AM ET… | ✅ WIN | +2.17$ |
 
 ## Calidad de datos
 
-✅ **OK** — última verificación 2026-07-20T06:12 UTC
+✅ **OK** — última verificación 2026-07-20T06:17 UTC
 
 | Asset | Precio | Age | Alertas |
 |---|---|---|---|
-| ✅ BTC | $64,090.83 | 0.1min |  |
-| ✅ ETH | $1,853.95 | 0.1min |  |
-| ✅ SOL | $75.92 | 0.1min |  |
+| ✅ BTC | $64,128.33 | 0.1min |  |
+| ✅ ETH | $1,855.52 | 0.1min |  |
+| ✅ SOL | $75.97 | 0.1min |  |
 | ✅ XRP | $1.09 | 0.1min |  |
 
 **Cross-source** (binance, coinbase, kraken):
 
 | Asset | Consenso | Fuente | Estado |
 |---|---|---|---|
-| BTC | $64,110.60 | consenso |  |
-| ETH | $1,854.60 | consenso |  |
-| SOL | $75.95 | consenso |  |
+| BTC | $64,139.60 | consenso |  |
+| ETH | $1,855.52 | consenso |  |
+| SOL | $75.93 | consenso |  |
 | XRP | $1.09 | consenso |  |
 
 ---
