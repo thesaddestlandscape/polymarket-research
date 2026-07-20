@@ -2527,6 +2527,34 @@ def _cargar_ballenas_timing_state():
     return _ballenas_timing_cache["data"]
 
 
+# Wallet edge score (20-Jul, wallet_edge_tracker.py, cron propio): "smart"
+# (PnL verificado del leaderboard oficial) no es lo mismo que "informativo
+# para Up/Down 5-15min" -- cruzando las 66 wallets smart contra el histórico
+# real de ballenas_timing_history.csv, la mayoría no tiene edge demostrable
+# ahí (su rentabilidad viene de otro sitio), y al menos una con n=10023
+# tiene edge NEGATIVO estable concentrado en SOL/ETH#15min, justo el hueco
+# de s_ballenas_confirmadas_15m. PURAMENTE INFORMATIVO por ahora, mismo
+# trato que meta_score_gbm_late (P17): se loguea como feature, nunca toca
+# prob_yes/concentracion_lado/decisión -- necesita su propio periodo de
+# logueo forward antes de plantear pesar el conteo por wallet.
+WALLET_EDGE_SCORE = Path("data/shadow/wallet_edge_score.json")
+_wallet_edge_cache = {"mtime": None, "data": {}}
+
+
+def _cargar_wallet_edge_score():
+    try:
+        mtime = WALLET_EDGE_SCORE.stat().st_mtime
+    except OSError:
+        return {}
+    if _wallet_edge_cache["mtime"] != mtime:
+        try:
+            _wallet_edge_cache["data"] = json.loads(WALLET_EDGE_SCORE.read_text(encoding="utf-8"))
+        except Exception:
+            _wallet_edge_cache["data"] = {}
+        _wallet_edge_cache["mtime"] = mtime
+    return _wallet_edge_cache["data"]
+
+
 # P17 (CLAUDE.md backlog, 11-Jul / implementado 18-Jul): meta-score Ridge
 # (regresión logística L2, entrenar_meta_score_gbm_late_p17.py) sobre
 # GBM_LATE_15M#BUY_YES. PURAMENTE INFORMATIVO -- logueado como feature
@@ -2904,6 +2932,7 @@ def s_ballenas_confirmadas_15m(market, ctx):
                       # no hay nada que decidir)
 
     n_no = n_yes = 0
+    lado_yes_wallets, lado_no_wallets = [], []
     for t in trades:
         if (t.get("side") or "").strip().upper() != "BUY":
             continue
@@ -2917,10 +2946,15 @@ def s_ballenas_confirmadas_15m(market, ctx):
             continue
         if not (banda_lo <= precio_t < banda_hi):
             continue
+        w = (t.get("proxyWallet") or "").lower()
         if outcome_t in ("down", "no"):
             n_no += 1
+            if w:
+                lado_no_wallets.append(w)
         else:
             n_yes += 1
+            if w:
+                lado_yes_wallets.append(w)
     n = n_no + n_yes
     if n < BALLENAS_CONFIRMADAS_MIN_TRADES:
         return None
@@ -2928,15 +2962,29 @@ def s_ballenas_confirmadas_15m(market, ctx):
     pct_lado = n_lado / n
     if pct_lado < BALLENAS_CONFIRMADAS_UMBRAL_PCT:
         return None
+    wallets_lado = lado_yes_wallets if direccion == "BUY_YES" else lado_no_wallets
 
     hit_lado = banda_info["hit"]   # probabilidad empírica calibrada del bucket (lado confirmado)
     prob_yes = round(hit_lado, 4) if direccion == "BUY_YES" else round(1.0 - hit_lado, 4)
+
+    # Feature observacional (20-Jul, wallet_edge_tracker.py) -- edge medio de
+    # las wallets concretas que componen el lado confirmado, PURAMENTE
+    # informativo, no toca prob_yes ni pct_lado/decisión. Ver comentario en
+    # _cargar_wallet_edge_score.
+    score_db = _cargar_wallet_edge_score()
+    edges_conocidos = [score_db[w]["edge_pp"] for w in wallets_lado if w in score_db]
+    n_sig_negativo = sum(1 for w in wallets_lado
+                          if w in score_db and score_db[w]["sig_bhfdr"] and score_db[w]["edge_pp"] < 0)
+
     return {
         "prob_yes": prob_yes,
         "razon": (f"ballenas_confirmadas_15m {activo} {direccion} precio_lado={precio_lado:.3f} "
                   f"concentracion={pct_lado:.2f} (n={n}) banda_hit={hit_lado:.3f}"),
         "subtype": f"{activo}#15min",
         "features": {
+            "ballenas_wallet_edge_medio": round(sum(edges_conocidos) / len(edges_conocidos), 3) if edges_conocidos else None,
+            "ballenas_wallet_n_con_score": len(edges_conocidos),
+            "ballenas_wallet_n_sig_negativo": n_sig_negativo,
             "py_entrada": round(py, 4),
             "precio_no_entrada": precio_no,
             "direccion_confirmada": direccion,
