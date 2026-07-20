@@ -1,7 +1,4 @@
 {
- "GBM_LATE_15M_PYCONFIRMADO": {
-  "avisado": true
- },
  "UPDOWN_GBM_15M_TARDIO": {
   "avisado": true
  },
@@ -12,6 +9,9 @@
   "avisado": true
  },
  "GBM_LATE_5M": {
+  "avisado": true
+ },
+ "UPDOWN_GBM_15M_CROSS_WINDOW_SPREAD": {
   "avisado": true
  }
 }
