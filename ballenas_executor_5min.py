@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 ballenas_executor_5min.py — Ejecutor de baja latencia multi-activo para
-BALLENAS_TARDIAS#{ETH,SOL,XRP}#5min#BUY_YES.
+BALLENAS_TARDIAS#{ETH,SOL,XRP,DOGE}#5min#BUY_YES.
 
 Origen (18-Jul): tras corregir el gate _solo_late que bloqueaba
 GBM_LATE_5M desde su nacimiento (commit 820422edff), se corrió el mismo
@@ -14,6 +14,13 @@ hit=93.9% Wilson=[83.5,97.9]%). Los 3 superan el precedente que aprobó
 BTC#15min (98.5% n=48). BTC#5m queda FUERA (n=14, ventana casi
 degenerada ~0s) — mismo motivo que excluye BTC#15m de
 veto_ballenas.combos_validados, Javi lo trata aparte.
+
+DOGE añadido 20-Jul tras arreglar la exclusión de NOMBRE_A_TICKER
+(smart_money_tracker.py, commit 6450288420) — significativo en el primer
+ciclo de ballenas_observer.py, pero con n=9 en la dosis-respuesta propia
+(ver ACTIVOS abajo) — MUCHO más flojo que los otros 3. Se añade solo para
+que DRY_RUN acumule su propia confirmación en tiempo real, no porque ya
+esté validado al mismo nivel.
 
 Diseño: UN proceso, 3 hilos (uno por activo) en vez de 3 procesos —
 coordinar el ritmo de sondeo contra data-api.polymarket.com/trades (sin
@@ -77,6 +84,19 @@ ACTIVOS = {
     "ETH": {"watch_lead_s": 90,  "prob_bucket": 0.93},
     "SOL": {"watch_lead_s": 160, "prob_bucket": 0.93},
     "XRP": {"watch_lead_s": 220, "prob_bucket": 0.83},
+    # DOGE (20-Jul): NOMBRE_A_TICKER llevaba excluyendo DOGE de todo el
+    # pipeline de ballenas desde su origen (fix en smart_money_tracker.py,
+    # commit 6450288420) -- tras el fix, DOGE#5m salió "significativo" en
+    # el primer ciclo de ballenas_observer.py (banda [0.7,0.9), z=3.67,
+    # n=133, 58 wallets, top1_share=0.17 -- bien repartido). PERO la
+    # dosis-respuesta propia (analisis_ballenas_dosis_respuesta_16jul.py
+    # DOGE#5m) da n=9 en el bucket concentracion>=0.9 -- muy por debajo
+    # de ETH/SOL/XRP cuando se calibraron (n=48-57) y del propio umbral
+    # n>=15 del proyecto para concluir nada. prob_bucket aquí es el
+    # Wilson90 inferior de 9/9 (0.769), NO un número con la misma
+    # confianza que los otros 3 -- solo para que DRY_RUN loguee algo
+    # razonable mientras acumula. Recalibrar en cuanto n cruce ~40.
+    "DOGE": {"watch_lead_s": 170, "prob_bucket": 0.77},
 }
 
 _session = requests.Session()
