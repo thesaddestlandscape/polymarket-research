@@ -81,6 +81,11 @@ SCREEN_RESTART = {
     # DRY_RUN=True, proceso separado de ballenas_fast (BTC15m, live) para no
     # mezclar blast radius. Ver /root/.claude/plans/ethereal-dazzling-thacker.md
     "ballenas_5m": f"cd {REPO} && .venv/bin/python ballenas_executor_5min.py >> logs/ballenas_5m.log 2>&1",
+    # chainlink (20-Jul): captura continua de precios Chainlink vía el websocket
+    # público de Polymarket (RTDS) -- fuente de resolución oficial de los
+    # mercados Up/Down, distinta de Binance/Kraken. Solo lectura, no toca
+    # dinero. Mismo patrón de proceso único que pfinish.
+    "chainlink": f"cd {REPO} && .venv/bin/python fetch_chainlink_prices.py >> logs/chainlink.log 2>&1",
 }
 
 # Cuando stdout está redirigido (screen >> watchdog.log), print() ya escribe al fichero
@@ -141,7 +146,7 @@ def check_screens() -> dict[str, bool]:
         r = subprocess.run(["screen", "-ls"], capture_output=True, text=True, timeout=5)
         output = r.stdout + r.stderr
         return {name: (f".{name}\t" in output or f".{name} " in output)
-                for name in ["fast", "slow", "control", "dash", "pfinish", "ballenas_fast", "ballenas_5m"]}
+                for name in ["fast", "slow", "control", "dash", "pfinish", "ballenas_fast", "ballenas_5m", "chainlink"]}
     except Exception:
         return {}
 

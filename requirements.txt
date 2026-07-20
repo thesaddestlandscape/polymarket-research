@@ -1,3 +1,4 @@
 requests>=2.31,<3
 openpyxl>=3.1,<4
 py-clob-client-v2
+websockets>=16,<17

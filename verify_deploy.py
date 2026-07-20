@@ -31,6 +31,7 @@ SCREENS = {
     "dash":    {"entry": "dashboard_server.py",    "probe": "http:8888"},
     "control": {"entry": "live_control.py",        "probe": "log:logs/live_control.log:escuchando comandos"},
     "pfinish": {"entry": "photo_finish_logger.py", "probe": None},
+    "chainlink": {"entry": "fetch_chainlink_prices.py", "probe": None},
     "ballenas_fast": {"entry": "ballenas_executor_btc15m.py",
                        "probe": "log:logs/ballenas_fast.log:arrancado"},
     "ballenas_5m": {"entry": "ballenas_executor_5min.py",

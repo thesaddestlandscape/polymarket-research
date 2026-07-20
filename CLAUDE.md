@@ -128,6 +128,7 @@ screen fast    → run_fast.sh   (~20s): klines→predict→live_trade→resolve
 screen slow    → run_slow.sh  (~23min): markets→wallets→trades→report→arb→push
 screen control → live_control.py (Telegram: /on /off /status /help)
 screen pfinish → photo_finish_logger.py (captura photo finish c/frontera 5min)
+screen chainlink → fetch_chainlink_prices.py (precios Chainlink en vivo, fuente de resolución oficial)
 cron */5       → watchdog_fast.sh (9 checks, restart screens, alerta disco)
 ```
 
@@ -150,6 +151,7 @@ cron */5       → watchdog_fast.sh (9 checks, restart screens, alerta disco)
 | `nested_arb_scanner.py` | Arb de contención ventanas anidadas (cron 1min) → nested_arb_YYYY-MM-DD.csv + **sim ejecución FOK** (05-Jul) → nested_arb_sim.csv (entrada a asks reales, cierre con outcome oficial, `garantia_ok`; paso a live: n≥30 con garantía ~100%) |
 | `maker_sim.py` | Sim entrada maker vs taker (invocado por shadow_resolve) → maker_sim.csv |
 | `photo_finish_logger.py` | Screen `pfinish`: libro del lado rezagado a T-10s en photo finishes (|dist|<0.15%) + outcome oficial → photo_finish_YYYY-MM-DD.csv (H-CUSTOM-PHOTO-FINISH-SNIPER, solo captura) |
+| `fetch_chainlink_prices.py` | Screen `chainlink` (20-Jul): captura continua vía websocket público de Polymarket (RTDS, sin auth) de precios Chainlink BTC/ETH/SOL/XRP — fuente de resolución OFICIAL de los mercados Up/Down (`resolutionSource` en gamma-api), distinta de Binance/Kraken → `data/prices/chainlink_YYYY-MM-DD.csv`. Origen: diagnóstico de 13 roturas de garantía en `nested_arb_sim.csv` (ver nota en `analisis_nested_arb_gate.py`/memoria) — `nested_arb_scanner.py` estimaba o_inner/o_outer con klines Binance/Kraken, y el ruido normal Binance-vs-Chainlink bastaba para invertir el orden percibido en gaps estrechos, rompiendo una garantía que en teoría es matemáticamente segura. Solo lectura, no toca dinero ni ninguna decisión todavía. |
 
 ---
 
