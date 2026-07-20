@@ -1719,8 +1719,8 @@
  "live_real#GBM_LATE_15M#XRP#15min#XRP#BUY_YES#sigma_hlt0.0268": false,
  "candidato_proxy#UPDOWN_GBM#XRP#15min#XRP#BUY_NO#sigma_hlt0.0126": false,
  "candidato_proxy#FAVORITO_CONFIRMADO#BTC#60min#BTC#BUY_NO#libro_liquidezgt6109.1155": false,
- "candidato_proxy#GBM_LATE_15M#BTC#BUY_YES#dist_vwap_pctlt0.124": false,
- "candidato_proxy#GBM_LATE_15M#BTC#15min#BTC#BUY_YES#dist_vwap_pctlt0.1117": false,
+ "candidato_proxy#GBM_LATE_15M#BTC#BUY_YES#dist_vwap_pctlt0.124": true,
+ "candidato_proxy#GBM_LATE_15M#BTC#15min#BTC#BUY_YES#dist_vwap_pctlt0.1117": true,
  "candidato_proxy#GBM_LATE_15M#SOL#BUY_YES#dist_vwap_pctlt0.124": false,
  "candidato_proxy#GBM_LATE_15M#XRP#BUY_YES#dist_vwap_pctlt0.124": false,
  "candidato_proxy#GBM_LATE_15M#XRP#15min#XRP#BUY_YES#dist_vwap_pctlt0.1104": false,
@@ -1739,5 +1739,16 @@
  "candidato_proxy#GBM_LATE_15M#SOL#BUY_NO#dist_vwap_pctlt0.8202": false,
  "candidato_proxy#GBM_LATE_15M#XRP#BUY_NO#dist_vwap_pctlt0.8202": false,
  "candidato_proxy#UPDOWN_GBM#ETH#15min#ETH#BUY_NO#sigma_ewma_delta_pctlt8.241": false,
- "candidato_proxy#UPDOWN_GBM#XRP#15min#XRP#BUY_NO#ibs_15lt0.1613": false
+ "candidato_proxy#UPDOWN_GBM#XRP#15min#XRP#BUY_NO#ibs_15lt0.1613": false,
+ "candidato_proxy#FAVORITO_CONFIRMADO#BTC#BUY_NO#libro_liquidezgt4196.8799": false,
+ "candidato_proxy#FAVORITO_CONFIRMADO#ETH#BUY_NO#libro_liquidezgt4196.8799": false,
+ "candidato_proxy#FAVORITO_CONFIRMADO#SOL#15min#SOL#BUY_NO#py_entradalt0.225": false,
+ "candidato_proxy#GBM_LATE_15M#BTC#BUY_NO#dist_vwap_pctgt0.1376": false,
+ "candidato_proxy#GBM_LATE_15M#BTC#BUY_NO#dist_vwap_pctlt0.819": false,
+ "candidato_proxy#GBM_LATE_15M#ETH#BUY_NO#dist_vwap_pctgt0.1376": false,
+ "candidato_proxy#GBM_LATE_15M#ETH#BUY_NO#dist_vwap_pctlt0.819": true,
+ "candidato_proxy#GBM_LATE_15M#SOL#BUY_NO#dist_vwap_pctlt0.819": false,
+ "candidato_proxy#GBM_LATE_15M#XRP#BUY_NO#dist_vwap_pctlt0.819": false,
+ "candidato_proxy#GBM_LATE_15M#XRP#15min#XRP#BUY_NO#sigma_hlt0.0092": false,
+ "candidato_proxy#UPDOWN_GBM#XRP#15min#XRP#BUY_NO#sigma_hlt0.0111": false
 }
