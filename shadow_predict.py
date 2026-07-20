@@ -2602,6 +2602,13 @@ def _meta_score_gbm_late(d_gbm, sigma_h, drift_ventana_pct, hora_utc, restante_m
         return None
 
 
+# Mapeo subtype ("BTC#15min") -> clave de marco en ballenas_timing_state.json
+# ("15m") -- mismo mapeo que _MARCO_BALLENAS_MAP en live_trade.py, duplicado
+# a propósito (ligero, un dict de 4 entradas) para no crear un import cruzado
+# entre el pipeline de predicción y el de ejecución.
+MARCO_BALLENAS_MAP = {"5min": "5m", "15min": "15m", "60min": "60m", "240min": "240m", "weekly": "weekly"}
+
+
 def _banda_y_timing_ballenas(activo, marco, lo_default, hi_default, rest_lo_default, rest_hi_default):
     """Banda de precio + ventana de minutos restantes para (activo,marco),
     del estado vivo del observador si es significativo, si no de los
@@ -4210,6 +4217,29 @@ def main():
                     if "smart_money_consensus_ponderado" in _consenso_activo:
                         pred_features["smart_money_consensus_ponderado"] = _consenso_activo.get("smart_money_consensus_ponderado")
                         pred_features["smart_money_n_wallets_ponderado"] = _consenso_activo.get("n_wallets_smart_ponderado")
+                # Banda de ballenas — UNIVERSAL para todas las estrategias/direcciones
+                # (20-Jul, idea_filtro_banda_ballenas_generalizado_19jul): antes solo
+                # s_updown_gbm_15min_tardio logueaba esto (hardcoded a 15m). Generalizado
+                # aquí para que el pipeline causal (postmortem→IC_bucket, ya desagregado
+                # por strategy#activo#marco#direccion, ver jerarquía lookup_keys arriba)
+                # aprenda solo, por cada estrategia/activo/franja/dirección, si evitar u
+                # ocupar la banda [banda_lo,banda_hi) donde se concentran las ballenas
+                # ayuda o perjudica — sin tocar prob_yes ni ninguna decisión, mismo
+                # principio que moon_phase/smart_money_consensus arriba. Redundante mas
+                # no conflictivo con el logueo específico de UPDOWN_GBM_15M_TARDIO (mismo
+                # cálculo, mismo resultado, se deja intacto para no tocar código ya en
+                # producción sin necesidad).
+                _marco_pred = MARCO_BALLENAS_MAP.get(subtype.split("#", 1)[1]) if "#" in subtype else None
+                if _marco_pred:
+                    _bb_lo, _bb_hi, _bb_rl, _bb_rh = _banda_y_timing_ballenas(
+                        _activo_pred, _marco_pred, None, None, None, None)
+                    pred_features["ballenas_significativo"] = _bb_lo is not None
+                    if _bb_lo is not None:
+                        pred_features["ballenas_banda_lo"] = _bb_lo
+                        pred_features["ballenas_banda_hi"] = _bb_hi
+                        pred_features["ballenas_rest_lo_min"] = _bb_rl
+                        pred_features["ballenas_rest_hi_min"] = _bb_rh
+                        pred_features["ballenas_dentro_banda"] = bool(_bb_lo <= py < _bb_hi)
                 pred["features"] = pred_features
 
                 def _feature_match(feat_val, cond, umbral):
