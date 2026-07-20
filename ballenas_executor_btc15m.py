@@ -29,6 +29,8 @@ aprobación explícita de Javi (código que toca dinero real).
 Corre en screen propia:
   screen -dmS ballenas_fast bash -c "cd /root/polymarket-research && .venv/bin/python ballenas_executor_btc15m.py >> logs/ballenas_fast.log 2>&1"
 """
+import csv
+import fcntl
 import json
 import time
 from concurrent.futures import ThreadPoolExecutor
@@ -45,6 +47,13 @@ from smart_money_tracker import trades_de_mercado
 DIR = Path(__file__).resolve().parent
 DIR_SHADOW = DIR / "data" / "shadow"
 LOG_PATH = DIR / "logs" / "ballenas_fast.log"
+STRATEGY_PARAMS_PATH = DIR_SHADOW / "strategy_params.json"
+# Mismo motivo que TRADES_LOCK_PATH en live_trade.py (16-Jul, este mismo
+# executor): predictions_YYYY-MM-DD.csv ahora tiene DOS escritores
+# concurrentes (el ciclo normal de shadow_predict.py + este proceso
+# persistente) -- sin lock, dos escrituras podrían entrelazarse a nivel de
+# fichero. flock() barato, nunca contended en la práctica.
+PREDICTIONS_LOCK_PATH = DIR_SHADOW / ".predictions_lock"
 
 GAMMA = "https://gamma-api.polymarket.com"
 CLOB = "https://clob.polymarket.com"
@@ -185,6 +194,77 @@ def cargar_banda_btc15m() -> tuple[float, float] | None:
     return lo, hi
 
 
+def _activa_permite_disparo() -> tuple[bool, str]:
+    """20-Jul (Javi: "por qué no haces que aprenda como el resto del
+    sistema"): este executor no pasa por shadow_predict.py, así que no
+    hereda gratis el gate `activa` que frena a cualquier otra estrategia
+    cuando su IC real cae. Replica el mismo lookup en cascada que usa
+    shadow_predict.py (más específico -> más general) sobre el MISMO
+    strategy_params.json que alimenta shadow_postmortem.py -- en cuanto
+    _registrar_prediccion() acumule resoluciones reales, el postmortem
+    calculará un ic_bayes propio para BALLENAS_TARDIAS y podrá desactivarlo
+    solo, igual que cualquier otra estrategia. Fail-open si no hay entrada
+    todavía (n insuficiente) -- mismo criterio que el resto del sistema:
+    bloquea por evidencia negativa explícita, no por falta de dato."""
+    subtype = f"{ASSET}#{VENTANA_MIN}min"
+    lookup_keys = [f"{STRATEGY}#{subtype}", f"{STRATEGY}#{ASSET}", f"{STRATEGY}#{VENTANA_MIN}min"]
+    try:
+        params = json.loads(STRATEGY_PARAMS_PATH.read_text(encoding="utf-8")).get("estrategias", {})
+    except Exception:
+        return True, "sin strategy_params.json legible -- fail-open"
+    for k in lookup_keys:
+        e = params.get(k)
+        if e is None:
+            continue
+        campo = "activa_BUY_YES" if "activa_BUY_YES" in e else "activa"
+        if not e.get(campo, True):
+            return False, f"postmortem desactivó {k} ({campo}=False)"
+    return True, "activa"
+
+
+def _registrar_prediccion(mercado: dict, py: float, edge: float, restante_s: float,
+                           pct_yes: float, n_ballenas: int, banda_lo: float, banda_hi: float):
+    """Deja rastro en predictions_YYYY-MM-DD.csv con el MISMO formato que
+    escribe shadow_predict.py -- así shadow_resolve.py lo resuelve y
+    shadow_postmortem.py aprende de él exactamente igual que de cualquier
+    otra estrategia, sin duplicar esa lógica aquí. Se registra SIEMPRE que
+    se confirma la señal, se ejecute luego de verdad o no (switch OFF,
+    whitelist, breaker...) -- igual que libro_snapshots acumula 24/7, el
+    aprendizaje no debe depender de si hubo bankroll para actuar."""
+    ts = datetime.now(timezone.utc).isoformat(timespec="seconds")
+    archivo = DIR_SHADOW / f"predictions_{ts[:10]}.csv"
+    subtype = f"{ASSET}#{VENTANA_MIN}min"
+    features = json.dumps({
+        "concentracion_yes": round(pct_yes, 4), "n_ballenas": n_ballenas,
+        "restante_s_al_confirmar": round(restante_s, 2),
+        "banda_lo": banda_lo, "banda_hi": banda_hi,
+    }, separators=(",", ":"))
+    try:
+        with open(PREDICTIONS_LOCK_PATH, "w") as lock_f:
+            fcntl.flock(lock_f, fcntl.LOCK_EX)
+            try:
+                nuevo = not archivo.exists()  # re-comprobar bajo el lock
+                with open(archivo, "a", newline="", encoding="utf-8") as f:
+                    w = csv.writer(f)
+                    if nuevo:
+                        w.writerow([
+                            "timestamp_utc", "strategy", "market_id", "question", "end_date",
+                            "horas_a_vencimiento", "precio_yes_mercado", "prob_yes_modelo",
+                            "edge_bruto", "edge_neto", "edge_direccional", "decision", "razon",
+                            "subtype", "apuesta", "features",
+                        ])
+                    w.writerow([
+                        ts, STRATEGY, mercado["market_id"], "", mercado.get("end_date", ""),
+                        f"{restante_s / 3600:.4f}", f"{py:.4f}", f"{PROB_BUCKET:.4f}",
+                        f"{edge:.4f}", f"{edge:.4f}", f"{edge:.4f}", "BUY_YES",
+                        "ballenas_confirmado", subtype, "1.05", features,
+                    ])
+            finally:
+                fcntl.flock(lock_f, fcntl.LOCK_UN)
+    except Exception as e:
+        log(f"  aviso: no se pudo registrar predicción para postmortem: {e}")
+
+
 def watch_window(ts_end: int) -> bool:
     """Vigila un mercado BTC#15min concreto desde WATCH_LEAD_S hasta el
     cierre. True si ejecutó (o habría ejecutado en DRY_RUN)."""
@@ -249,6 +329,7 @@ def watch_window(ts_end: int) -> bool:
             edge = PROB_BUCKET - py
             log(f"[{ts_end}] CONFIRMADO concentracion={pct_yes:.2f} n={n} py={py:.3f} "
                 f"edge={edge:+.3f} restante={restante:.1f}s")
+            _registrar_prediccion(mercado, py, edge, restante, pct_yes, n, banda_lo, banda_hi)
             return disparar(mercado, py, edge, restante)
 
         time.sleep(POLL_INTERVAL_S)
@@ -274,6 +355,16 @@ def disparar(mercado: dict, py: float, edge: float, restante_s: float) -> bool:
     # comprobarla; corregido usando la función real combinada, no una
     # reimplementación parcial. Fail-closed: bloquea si falta cualquiera de
     # las tres piezas.
+    # 20-Jul (Javi: "que aprenda como el resto del sistema"): antes de
+    # cualquier otro guardia, respeta el veredicto del postmortem sobre SU
+    # PROPIO ic_bayes real -- una vez tenga n>=15 resoluciones (vía
+    # _registrar_prediccion), si el edge no se sostiene esto lo apaga solo,
+    # igual que cualquier otra estrategia vía shadow_predict.py.
+    ok_activa, motivo_activa = _activa_permite_disparo()
+    if not ok_activa:
+        log(f"  {motivo_activa} -- {'[DRY-RUN] no ejecutaría' if DRY_RUN else 'no se ejecuta'}")
+        return False
+
     ok_operar, motivo_operar = puede_operar_live(STRATEGY, subtype)
     if not ok_operar:
         log(f"  {motivo_operar} -- {'[DRY-RUN] no ejecutaría' if DRY_RUN else 'no se ejecuta'}")
