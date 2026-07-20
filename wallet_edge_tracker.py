@@ -30,12 +30,27 @@ s_ballenas_confirmadas_15m (peso por wallet en vez de conteo plano),
 SIN tocar prob_yes -- ese cableado es un paso aparte, deliberadamente
 separado de este script.
 
-Output: data/shadow/wallet_edge_score.json
-  {wallet_lower: {n, hit, precio_medio, edge_pp, p_shuffle, sig_bhfdr,
-                   actualizado}}
+20-Jul (extensión, petición Javi): añadido desglose por MARCO por separado
+(data/shadow/wallet_edge_score_por_marco.json) -- "smart en general" puede
+ser plana o mala en un marco concreto y buena en otro (ya visto: una wallet
+va muy bien en BTC#15min y muy mal en SOL#5min a la vez). Cada marco lleva
+su propia corrección BH-FDR (multiplicidad separada, no mezclada -- mismo
+criterio que feedback_desagregar_por_activo_siempre) en vez de una sola
+corrección global que diluiría marcos con pocos candidatos. Incluye
+pnl_proxy (EUR de payoff por cada 1 EUR apostado, sumado sobre los n
+trades -- normalizado a stake unitario porque el CSV no registra tamaño
+real; sirve para rankear "cuánta pasta genera" sin necesitar tamaño real)
+usando la misma fórmula que _stats_banda() en ballenas_observer.py.
+
+Output: data/shadow/wallet_edge_score.json (agregado, todos los marcos)
+  {wallet_lower: {n, hit, precio_medio, edge_pp, pnl_proxy, p_shuffle,
+                   sig_bhfdr, actualizado}}
+Output: data/shadow/wallet_edge_score_por_marco.json (desagregado)
+  {"wallet_lower#marco": {..mismas columnas.., marco, wallet}}
 """
 import csv
 import json
+from collections import defaultdict
 from datetime import datetime, timezone
 from pathlib import Path
 
@@ -46,29 +61,43 @@ from shadow_postmortem import _benjamini_hochberg  # reutiliza el método ya
 DIR_SHADOW = Path("data/shadow")
 HIST = DIR_SHADOW / "ballenas_timing_history.csv"
 OUT = DIR_SHADOW / "wallet_edge_score.json"
+OUT_POR_MARCO = DIR_SHADOW / "wallet_edge_score_por_marco.json"
 
 N_MIN = 15          # mismo suelo de rigor que el resto del proyecto
 N_SHUFFLE = 2000
 FDR = 0.10           # mismo FDR que shadow_postmortem/analisis_shuffle_patrones_causales
 
 
-def _cargar_por_wallet():
-    por_wallet = {}
+def _stat_vacia():
+    return {"n": 0, "aciertos": 0, "suma_precio": 0.0, "pnl_proxy": 0.0}
+
+
+def _acumular(d, precio, acierto):
+    d["n"] += 1
+    d["aciertos"] += acierto
+    d["suma_precio"] += precio
+    d["pnl_proxy"] += (1.0 - precio) if acierto else -precio
+
+
+def _cargar_por_wallet_y_marco():
+    """Un solo paso por el CSV: acumula agregado (todos los marcos) y por
+    (wallet, marco) a la vez -- no relee el fichero dos veces."""
+    por_wallet = defaultdict(_stat_vacia)
+    por_wallet_marco = defaultdict(_stat_vacia)
     with open(HIST, encoding="utf-8") as f:
         for r in csv.DictReader(f):
-            w = r["wallet"].lower()
             try:
+                w = r["wallet"].lower()
+                marco = r["marco"]
                 precio = float(r["precio"])
                 acierto = int(r["acierto"])
-            except (ValueError, TypeError, KeyError):
+            except (ValueError, TypeError, KeyError, AttributeError):
                 continue
             if not (0.0 < precio < 1.0):
                 continue  # precio_medio=0 o 1 rompe el shuffle (p fijo degenerado)
-            d = por_wallet.setdefault(w, {"n": 0, "aciertos": 0, "suma_precio": 0.0})
-            d["n"] += 1
-            d["aciertos"] += acierto
-            d["suma_precio"] += precio
-    return por_wallet
+            _acumular(por_wallet[w], precio, acierto)
+            _acumular(por_wallet_marco[(w, marco)], precio, acierto)
+    return por_wallet, por_wallet_marco
 
 
 def _shuffle_pvalue_edge(n: int, precio_medio: float, hit_real: float, seed: int,
@@ -86,27 +115,24 @@ def _shuffle_pvalue_edge(n: int, precio_medio: float, hit_real: float, seed: int
     return float(np.mean(dist_sim >= dist_real))
 
 
-def main():
-    ahora = datetime.now(timezone.utc)
-    print(f"[wallet_edge_tracker] {ahora.isoformat(timespec='seconds')}")
-    por_wallet = _cargar_por_wallet()
-    print(f"  wallets distintas en histórico: {len(por_wallet)}")
-
-    candidatas = {w: d for w, d in por_wallet.items() if d["n"] >= N_MIN}
-    print(f"  con n>={N_MIN}: {len(candidatas)}")
-
+def _filas_con_significancia(grupos, ahora, etiqueta):
+    """grupos: {clave: stat_dict} -- calcula edge/p_shuffle y aplica BH-FDR
+    SOLO dentro de este grupo de tests (el llamador decide el alcance de la
+    multiplicidad: todo el lote para el agregado, por-marco para el
+    desglose)."""
+    candidatas = {k: d for k, d in grupos.items() if d["n"] >= N_MIN}
     filas = []
-    for w, d in candidatas.items():
+    for k, d in candidatas.items():
         n = d["n"]
         hit = d["aciertos"] / n
         precio_medio = d["suma_precio"] / n
-        seed = (hash(w) ^ n) & 0xFFFFFFFF
+        seed = (hash(k) ^ n) & 0xFFFFFFFF
         p = _shuffle_pvalue_edge(n, precio_medio, hit, seed)
-        filas.append({"wallet": w, "n": n, "hit": round(hit, 4),
+        filas.append({"clave": k, "n": n, "hit": round(hit, 4),
                        "precio_medio": round(precio_medio, 4),
                        "edge_pp": round((hit - precio_medio) * 100, 3),
+                       "pnl_proxy": round(d["pnl_proxy"], 3),
                        "p_shuffle": p})
-
     pvals = [f["p_shuffle"] for f in filas]
     keep = _benjamini_hochberg(pvals, fdr=FDR)
     n_sig = 0
@@ -114,11 +140,36 @@ def main():
         f["sig_bhfdr"] = bool(sig)
         f["actualizado"] = ahora.isoformat(timespec="seconds")
         n_sig += int(sig)
-    print(f"  significativas tras BH-FDR({FDR}) sobre {len(filas)} tests: {n_sig}")
+    print(f"  [{etiqueta}] n>={N_MIN}: {len(candidatas)} candidatas, "
+          f"significativas tras BH-FDR({FDR}): {n_sig}")
+    return filas
 
-    salida = {f["wallet"]: {k: v for k, v in f.items() if k != "wallet"} for f in filas}
-    OUT.write_text(json.dumps(salida, indent=2, ensure_ascii=False), encoding="utf-8")
-    print(f"  escrito {OUT} ({len(salida)} wallets)")
+
+def main():
+    ahora = datetime.now(timezone.utc)
+    print(f"[wallet_edge_tracker] {ahora.isoformat(timespec='seconds')}")
+    por_wallet, por_wallet_marco = _cargar_por_wallet_y_marco()
+    print(f"  wallets distintas en histórico: {len(por_wallet)}")
+
+    filas_agg = _filas_con_significancia(por_wallet, ahora, "agregado")
+    salida_agg = {f["clave"]: {k: v for k, v in f.items() if k != "clave"} for f in filas_agg}
+    OUT.write_text(json.dumps(salida_agg, indent=2, ensure_ascii=False), encoding="utf-8")
+    print(f"  escrito {OUT} ({len(salida_agg)} wallets)")
+
+    # por marco: multiplicidad separada por marco (no mezclar 5m con 60m)
+    por_marco_agrupado = defaultdict(dict)
+    for (w, marco), d in por_wallet_marco.items():
+        por_marco_agrupado[marco][(w, marco)] = d
+    salida_marco = {}
+    for marco, grupo in por_marco_agrupado.items():
+        filas_m = _filas_con_significancia(grupo, ahora, f"marco={marco}")
+        for f in filas_m:
+            w, marco_k = f["clave"]
+            clave_out = f"{w}#{marco_k}"
+            salida_marco[clave_out] = {"wallet": w, "marco": marco_k,
+                                        **{k: v for k, v in f.items() if k != "clave"}}
+    OUT_POR_MARCO.write_text(json.dumps(salida_marco, indent=2, ensure_ascii=False), encoding="utf-8")
+    print(f"  escrito {OUT_POR_MARCO} ({len(salida_marco)} filas wallet#marco)")
 
 
 if __name__ == "__main__":

@@ -63,6 +63,32 @@ from smart_money_tracker import trades_de_mercado
 DIR = Path(__file__).resolve().parent
 DIR_SHADOW = DIR / "data" / "shadow"
 
+# Wallet edge score por marco (20-Jul, wallet_edge_tracker.py) -- PURAMENTE
+# INFORMATIVO en texto de log, no toca pct_yes/CONCENTRACION_MIN/decisión.
+# Mismo hallazgo que motivó el cableado gemelo en shadow_predict.py
+# (s_ballenas_confirmadas_15m): "smart" (leaderboard) no es lo mismo que
+# "informativo para Up/Down 5min" -- este campo deja constancia en el log
+# DRY_RUN de qué wallets concretas confirmaron cada señal, para poder
+# auditar después si las que más pasta generan de verdad (edge_pp alto,
+# marco=5m) son las que están detrás de las confirmaciones reales.
+WALLET_EDGE_POR_MARCO = DIR_SHADOW / "wallet_edge_score_por_marco.json"
+_wallet_edge_cache = {"mtime": None, "data": {}}
+
+
+def _cargar_wallet_edge_5m():
+    try:
+        mtime = WALLET_EDGE_POR_MARCO.stat().st_mtime
+    except OSError:
+        return {}
+    if _wallet_edge_cache["mtime"] != mtime:
+        try:
+            todo = json.loads(WALLET_EDGE_POR_MARCO.read_text(encoding="utf-8"))
+            _wallet_edge_cache["data"] = {v["wallet"]: v for v in todo.values() if v.get("marco") == "5m"}
+        except Exception:
+            _wallet_edge_cache["data"] = {}
+        _wallet_edge_cache["mtime"] = mtime
+    return _wallet_edge_cache["data"]
+
 GAMMA = "https://gamma-api.polymarket.com"
 CLOB = "https://clob.polymarket.com"
 
@@ -151,14 +177,18 @@ def libro_publico(token_id: str) -> dict | None:
         return None
 
 
-def concentracion_ballenas(condition_id: str, banda_lo: float, banda_hi: float) -> tuple[float | None, int, str]:
-    """(pct_yes, n, motivo) -- idéntico a ballenas_executor_btc15m.concentracion_ballenas,
-    mide ambos lados porque la dirección todavía no está fijada."""
+def concentracion_ballenas(condition_id: str, banda_lo: float, banda_hi: float) -> tuple[float | None, int, str, list]:
+    """(pct_yes, n, motivo, wallets_yes) -- idéntico a
+    ballenas_executor_btc15m.concentracion_ballenas, mide ambos lados porque
+    la dirección todavía no está fijada. wallets_yes (nuevo 20-Jul) son las
+    wallets del lado YES, guardadas SOLO para logging informativo del
+    wallet-edge-score -- no participan en pct_yes ni en ninguna decisión."""
     try:
         trades = trades_de_mercado(condition_id)
     except Exception:
-        return None, 0, "error_api"
+        return None, 0, "error_api", []
     n_yes = n_no = 0
+    wallets_yes = []
     for t in trades:
         if (t.get("side") or "").strip().upper() != "BUY":
             continue
@@ -174,12 +204,29 @@ def concentracion_ballenas(condition_id: str, banda_lo: float, banda_hi: float) 
             continue
         if outcome_t in ("up", "yes"):
             n_yes += 1
+            w = (t.get("proxyWallet") or "").lower()
+            if w:
+                wallets_yes.append(w)
         else:
             n_no += 1
     n = n_yes + n_no
     if n == 0:
-        return None, 0, "sin_trades_en_banda"
-    return n_yes / n, n, "ok"
+        return None, 0, "sin_trades_en_banda", []
+    return n_yes / n, n, "ok", wallets_yes
+
+
+def _resumen_wallet_edge(wallets: list) -> str:
+    """Texto corto para el log: cuántas de las wallets confirmando tienen
+    score conocido, su edge medio, y cuántas son negativas-significativas
+    (mismo criterio 20-Jul que shadow_predict.s_ballenas_confirmadas_15m).
+    Puramente informativo."""
+    db = _cargar_wallet_edge_5m()
+    edges = [db[w]["edge_pp"] for w in wallets if w in db]
+    n_sig_neg = sum(1 for w in wallets if w in db and db[w]["sig_bhfdr"] and db[w]["edge_pp"] < 0)
+    if not edges:
+        return "wallet_edge=sin_dato"
+    medio = sum(edges) / len(edges)
+    return f"wallet_edge_medio={medio:+.2f}pp(n_con_score={len(edges)},n_sig_neg={n_sig_neg})"
 
 
 def cargar_banda(activo: str) -> tuple[float, float] | None:
@@ -238,7 +285,7 @@ def watch_window(activo: str, ts_end: int) -> bool:
         with ThreadPoolExecutor(max_workers=2) as ex:
             f_conc = ex.submit(concentracion_ballenas, mercado["condition_id"], banda_lo, banda_hi)
             f_libro = ex.submit(libro_publico, mercado["yes_token"])
-            pct_yes, n, motivo_conc = f_conc.result()
+            pct_yes, n, motivo_conc, wallets_yes = f_conc.result()
             libro = f_libro.result()
 
         contadores[motivo_conc] = contadores.get(motivo_conc, 0) + 1
@@ -255,7 +302,7 @@ def watch_window(activo: str, ts_end: int) -> bool:
             py = libro["best_ask"]
             edge = cfg["prob_bucket"] - py
             log(f"[{ts_end}] CONFIRMADO concentracion={pct_yes:.2f} n={n} py={py:.3f} "
-                f"edge={edge:+.3f} restante={restante:.1f}s", activo)
+                f"edge={edge:+.3f} restante={restante:.1f}s {_resumen_wallet_edge(wallets_yes)}", activo)
             return disparar(activo, mercado, py, edge, restante)
 
         time.sleep(POLL_INTERVAL_S)
