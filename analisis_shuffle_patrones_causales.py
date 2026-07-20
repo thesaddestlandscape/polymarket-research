@@ -23,23 +23,30 @@ patrones+filtros evaluados HOY (no solo las candidatas a whitelist).
 Solo lectura, NO modifica strategy_params.json ni desactiva nada -- es una
 capa de escepticismo adicional para decidir con ojos abiertos, igual que el
 gate riguroso ya hace con las candidatas.
+
+20-Jul: reusa sp._shuffle_pvalue/sp._benjamini_hochberg (misma fuente que el
+gate real de patrones_ganadores en aprender_patrones_causales) en vez de una
+copia local -- la copia local anterior aplicaba SIEMPRE la cola "alta" del
+test (P(ic_sim>=ic_real)) tanto a FILTRO como a PATRON. Para FILTRO ic_real
+es negativo, y esa cola da p~1 casi siempre sin importar si el efecto es
+real (un shuffle 50/50 rara vez cae por debajo de un número negativo) --
+resultado observado: 0/98 filtros "sobreviviendo" BH-FDR, un artefacto del
+test mal orientado. Ahora se pasa cola="alta" para PATRON y cola="baja"
+para FILTRO (¿es sorprendentemente MALO, no bueno?).
 """
 import json
-import random
 import sys
 from pathlib import Path
 
 REPO = Path(__file__).resolve().parent
 sys.path.insert(0, str(REPO))
 
-import shadow_postmortem as sp  # noqa: E402 — reusa cargar_results/_extraer_features/FEATURE_RULES
+import shadow_postmortem as sp  # noqa: E402 — reusa cargar_results/_extraer_features/FEATURE_RULES/_ic_bayes/_shuffle_pvalue/_benjamini_hochberg
 
 N_SHUFFLE = 2000
 FDR = 0.10
 
-
-def _ic_bayes(aciertos, n):
-    return (aciertos + 1) / (n + 2) - 0.5
+_ic_bayes = sp._ic_bayes  # 20-Jul: fuente única, ver shadow_postmortem._ic_bayes
 
 
 def _posibles(s, sub):
@@ -62,33 +69,6 @@ def _feature_match(feat_val, cond, umbral):
     except (TypeError, ValueError):
         pass
     return False
-
-
-def _shuffle_pvalue(outcomes_yes, ic_real, n_shuffle=N_SHUFFLE):
-    n = len(outcomes_yes)
-    if n == 0:
-        return 1.0
-    supera = 0
-    for _ in range(n_shuffle):
-        aciertos_sim = sum(1 for oy in outcomes_yes if (random.random() < 0.5) == oy)
-        if _ic_bayes(aciertos_sim, n) >= ic_real:
-            supera += 1
-    return supera / n_shuffle
-
-
-def benjamini_hochberg(pvals, fdr=FDR):
-    indexed = sorted(range(len(pvals)), key=lambda i: pvals[i])
-    n = len(pvals)
-    keep = [False] * n
-    cutoff = -1
-    for rank, i in enumerate(indexed, start=1):
-        if pvals[i] <= fdr * rank / n:
-            cutoff = rank
-    if cutoff >= 0:
-        for rank, i in enumerate(indexed, start=1):
-            if rank <= cutoff:
-                keep[i] = True
-    return keep
 
 
 def main():
@@ -136,14 +116,15 @@ def main():
             continue
         aciertos = sum(filas)
         ic_reconstruido = _ic_bayes(aciertos, n_reconstruido)
-        p = _shuffle_pvalue(filas, ic_reconstruido)
+        cola = "alta" if tipo == "PATRON" else "baja"
+        p = sp._shuffle_pvalue(n_reconstruido, ic_reconstruido, cola=cola, n_shuffle=N_SHUFFLE)
         resultados_shuffle.append({
             "clave": strat_key, "tipo": tipo, "feature": feature, "direccion": direccion,
             "n": n_reconstruido, "ic": ic_reconstruido, "p_shuffle": p,
         })
 
     pvals = [r["p_shuffle"] for r in resultados_shuffle]
-    sobrevive = benjamini_hochberg(pvals, FDR)
+    sobrevive = sp._benjamini_hochberg(pvals, FDR)
 
     n_ok = sum(sobrevive)
     print(f"Reconstruidos: {len(resultados_shuffle)} | sobreviven BH-FDR(10%): {n_ok} | "

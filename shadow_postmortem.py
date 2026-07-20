@@ -20,7 +20,10 @@ import random
 import re
 from collections import Counter
 from datetime import datetime, timezone
+from functools import lru_cache
 from pathlib import Path
+
+import numpy as np
 
 DIR_SHADOW      = Path("data/shadow")
 RESULTS_PATH    = DIR_SHADOW / "results.csv"
@@ -35,6 +38,14 @@ APUESTA_SHADOW = 0.90
 UMBRAL_SUBIR_EDGE = (-0.10, 3)
 UMBRAL_SUBIR_MAS  = (-0.20, 5)
 UMBRAL_DESACTIVAR = (-0.20, 8)  # bajado de -0.30: desactiva antes estrategias con IC negativo claro
+
+
+def _ic_bayes(aciertos, n) -> float:
+    """IC Bayesiano suavizado: (aciertos+1)/(n+2)-0.5 — fuente única (20-Jul,
+    hallazgo code-review: la misma fórmula vivía inline en 6+ sitios de este
+    fichero además de copias en analisis_gate_riguroso.py y
+    analisis_shuffle_patrones_causales.py)."""
+    return (aciertos + 1) / (n + 2) - 0.5
 
 
 def cargar_results() -> list:
@@ -563,7 +574,7 @@ def calcular_params(resultados: list) -> dict:
 
     for s, d in por_estrategia.items():
         n = d["n"]
-        ic_bayes   = (d["aciertos"] + 1) / (n + 2) - 0.5
+        ic_bayes   = _ic_bayes(d["aciertos"], n)
         confianza  = min(1.0, n / 20)
         ic_efectivo = round(ic_bayes * confianza, 4)
 
@@ -604,7 +615,7 @@ def calcular_params(resultados: list) -> dict:
         # Kelly por dirección (BUY_YES / BUY_NO separados)
         for dec_name, dec_d in d.get("por_decision", {}).items():
             dn = dec_d["n"]
-            d_ic_b = (dec_d["aciertos"] + 1) / (dn + 2) - 0.5
+            d_ic_b = _ic_bayes(dec_d["aciertos"], dn)
             d_ic_e = round(d_ic_b * min(1.0, dn / 20), 4)
             if dn >= 5 and d_ic_e > 0:
                 d_ap = round(min(2.00, max(0.50, 20.0 * d_ic_e * 0.5)), 2)
@@ -715,7 +726,7 @@ def generar_performance(resultados: list, pred_index: dict) -> list:
         edge_real       = pnl_medio / APUESTA_SHADOW if APUESTA_SHADOW else 0.0
 
         # IC Bayesiano
-        ic_bayes    = (aciertos + 1) / (n + 2) - 0.5
+        ic_bayes    = _ic_bayes(aciertos, n)
         confianza   = min(1.0, n / 20)
         ic_efectivo = round(ic_bayes * confianza, 4)
 
@@ -1067,6 +1078,13 @@ FEATURE_RULES = {
 IC_FILTRO_MIN   = -0.12   # IC para activar filtro (evitar)
 IC_PATRON_MIN   = +0.12   # IC para activar patrón ganador (amplificar)
 N_BUCKET_MIN    = 15      # mínimo de observaciones en cualquier bucket (subido de 8: n<15 → demasiado ruidoso para kelly_boost)
+PERCENTILES_MIN_ESTABLES = 2  # 20-Jul (code-review, hallazgo de altitud): exigir que
+# al menos 2 de los 5 percentiles candidatos califiquen de forma independiente,
+# no solo el que gana el argmax por `dif` — evita un pico aislado de un único
+# percentile (el caso real: GBM_LATE_15M#ETH#15min dist_vwap_pct BUY_YES,
+# n=19, solo un percentil cruzaba el umbral). Complementa (no sustituye) el
+# gate de shuffle+BH-FDR de más abajo: esto filtra en el grid original de 5
+# candidatos, el shuffle filtra en la muestra final ya elegida.
 
 # Patrones ganadores bloqueados (12-Jul, aprobado Javi, vigia_causal_vs_fillable.py):
 # el strat_key AGREGADO (sin activo) mezcla los 4 activos de GBM_LATE_15M en un
@@ -1098,7 +1116,107 @@ PATRONES_BLOQUEADOS = {
     # poco para que ese gap sea distinguible de una partición aleatoria.
     # Se dejan sin bloquear, vigilando con más n. Ver
     # feedback_shuffle_antes_de_bloquear y project_vigia_causal_fillable_12jul.
+
+    # 20-Jul: dist_vwap_pct BUY_YES de GBM_LATE_15M#ETH#15min (patrón real en
+    # pares_permitidos_live, kelly_boost activo) verificado FRÁGIL en dos vías
+    # independientes: (1) barrido fino de percentiles (0.05 a 0.95) sin meseta
+    # — IC rebota 0.04-0.16 sin zona estable, el umbral elegido no destaca de
+    # sus vecinos; (2) shuffle test (2000 tiradas) NO sobrevive BH-FDR
+    # (p=0.074 sobre n=19-20, ver data/shadow/shuffle_patrones_causales.csv).
+    # El resto de patrones de esta misma clave (sigma_h, sigma_ewma_delta_pct)
+    # sí sostienen meseta+shuffle. Ver idea_estabilidad_umbrales_patrones_19jul.md.
+    #
+    # RETIRADO el mismo 20-Jul (code-review): esta clave bloquea por
+    # (strat_key, feature, direccion), SIN distinguir condicion — bloqueaba a
+    # la vez el "gt" frágil (n=19-20, el caso de arriba) Y un "lt" DISTINTO
+    # (dist_vwap_pct<0.2869, n=91, p_shuffle=0.006) que es un patrón real,
+    # verificado con el gate nuevo de vecinos+shuffle (PERCENTILES_MIN_
+    # ESTABLES + _shuffle_pvalue) que ahora hace este bloqueo manual
+    # redundante: probado con el blocklist vacío en memoria, el gate solo
+    # acepta el "lt" (n=91) y rechaza el "gt" (n=19-20) correctamente, sin
+    # ayuda de esta entrada. Mantenerla habría suprimido un patrón bueno por
+    # error de granularidad. Si el gate nuevo alguna vez deja pasar un pico
+    # aislado real, bloquear aquí por (strat_key, feature, CONDICION,
+    # direccion) — no repetir el bloqueo por feature entera.
 }
+
+
+N_SHUFFLE_GATE = 1000   # tiradas por candidato — cada ciclo (~60s), cientos de candidatos
+SHUFFLE_FDR = 0.10  # mismo FDR que analisis_shuffle_patrones_causales.py (13-Jul)
+
+
+@lru_cache(maxsize=None)
+def _simular_null_binomial(n: int, n_shuffle: int) -> np.ndarray:
+    """Distribución nula Binomial(n, 0.5) para el shuffle test — array de
+    `ic_sim` simulados, cacheada por (n, n_shuffle).
+
+    20-Jul, hallazgo code-review: la versión anterior llamaba random.random()
+    sin semilla dentro de un bucle Python O(n_shuffle*n) — dos problemas a la
+    vez: (1) NO DETERMINISTA (dos ciclos consecutivos sobre los MISMOS datos
+    podían aceptar/rechazar un patrón distinto solo por ruido de muestreo,
+    verificado: hasta 5 entradas cambiaban entre dos llamadas idénticas); (2)
+    lento (~3.5-4s/ciclo medido con ~340 candidatos, 61% del tiempo total de
+    aprender_patrones_causales). Semilla determinista = n (mismo n -> misma
+    muestra SIEMPRE, sin importar cuántas veces se llame ni en qué ciclo) +
+    numpy vectorizado (ya dependencia del repo) en vez del bucle Python +
+    cacheada por (n, n_shuffle) dentro del proceso — como cada invocación de
+    shadow_postmortem.py es un proceso nuevo (run_fast.sh lo lanza como
+    subproceso cada ciclo), no hace falta gestionar expiración del caché."""
+    rng = np.random.default_rng(seed=n)
+    aciertos_sim = rng.binomial(n, 0.5, size=n_shuffle)
+    return (aciertos_sim + 1) / (n + 2) - 0.5
+
+
+def _shuffle_pvalue(n: int, ic_real: float, cola: str = "alta",
+                    n_shuffle: int = N_SHUFFLE_GATE) -> float:
+    """Fracción de tiradas 50/50 (n observaciones) que igualan o superan
+    (cola="alta") / igualan o quedan por debajo (cola="baja") de ic_real.
+
+    cola="alta": ¿es sorprendentemente BUENO? — uso correcto para PATRON
+    (ic_real positivo, kelly_boost).
+    cola="baja": ¿es sorprendentemente MALO? — uso correcto para FILTRO
+    (ic_real negativo, el bucket que se salta). Antes de 20-Jul,
+    analisis_shuffle_patrones_causales.py aplicaba SIEMPRE la cola "alta"
+    a ambos tipos: para un ic_real negativo (FILTRO), P(ic_sim >= ic_real)
+    es casi 1 sin importar si el efecto es real (un shuffle 50/50 centrado
+    en 0 rara vez cae POR DEBAJO de un número negativo) — el resultado
+    observado era 0/98 filtros "sobreviviendo" BH-FDR, un artefacto del test
+    mal orientado, no evidencia real de que todos los filtros sean ruido.
+
+    Mismo modelo nulo que shuffle_percentile() en analisis_gate_riguroso.py
+    (el gate que ya decide promoción a whitelist) — no se inventa un
+    criterio nuevo; de hecho ese script ahora delega en esta función (ver
+    analisis_gate_riguroso.py). Nota: el resultado de "coinflip ==
+    outcome_real" tiene probabilidad 0.5 sea cual sea outcome_real, así que
+    el test solo depende de n (no hace falta la lista de outcomes fila a
+    fila) — ver _simular_null_binomial."""
+    if n == 0:
+        return 1.0
+    ic_sims = _simular_null_binomial(n, n_shuffle)
+    if cola == "alta":
+        return float(np.mean(ic_sims >= ic_real))
+    return float(np.mean(ic_sims <= ic_real))
+
+
+def _benjamini_hochberg(pvals: list, fdr: float = SHUFFLE_FDR) -> list:
+    """Qué p-valores sobreviven controlando la tasa de falsos descubrimientos
+    a `fdr` sobre TODO el lote — mismo método y mismo FDR=0.10 que
+    analisis_shuffle_patrones_causales.py (13-Jul), ahora como gate real en
+    vez de auditoría manual posterior."""
+    n = len(pvals)
+    if n == 0:
+        return []
+    indexed = sorted(range(n), key=lambda i: pvals[i])
+    keep = [False] * n
+    cutoff = -1
+    for rank, i in enumerate(indexed, start=1):
+        if pvals[i] <= fdr * rank / n:
+            cutoff = rank
+    if cutoff >= 0:
+        for rank, i in enumerate(indexed, start=1):
+            if rank <= cutoff:
+                keep[i] = True
+    return keep
 
 
 def _evaluar_bucket(vals, umbral, condicion_mala):
@@ -1134,9 +1252,24 @@ def aprender_patrones_causales(resultados: list, pred_index: dict) -> dict:
       - patrones_ganadores: rangos de features donde gana consistentemente → boost kelly
 
     El aprendizaje es completamente automático y se actualiza cada ciclo.
+
+    20-Jul: tanto patrones_ganadores (kelly_boost) como filtros_causales
+    (skip señal) pasan un gate de shuffle+BH-FDR conjunto sobre TODOS los
+    candidatos del ciclo antes de aceptarse — antes se elegía el mejor de 5
+    percentiles por feature sin comprobar estabilidad ni corregir por
+    multiplicidad (ver PATRONES_BLOQUEADOS, entrada dist_vwap_pct/
+    GBM_LATE_15M#ETH#15min, y idea_estabilidad_umbrales_patrones_19jul.md).
+    Cada tipo usa la cola correcta del test (PATRON: ¿sorprendentemente
+    bueno?; FILTRO: ¿sorprendentemente malo? — antes de corregir _shuffle_
+    pvalue el 20-Jul, aplicar la cola de PATRON a FILTRO daba 0/98 filtros
+    "sobreviviendo", un artefacto, no una refutación real). Preferible dejar
+    pasar una señal que un filtro no distinguible de ruido bloqueaba sin
+    motivo real (decisión Javi 20-Jul) — el filtro sigue aprendiéndose y
+    reevaluándose cada ciclo, solo deja de aplicarse mientras no sea estable.
     """
     ts_ahora = datetime.now(timezone.utc).isoformat(timespec="seconds")
     resultado_final = {}
+    candidatos_shuffle = []  # [(strat_key, "FILTRO"|"PATRON", dict), ...] — gate al final
 
     for strat_key, feature_specs in FEATURE_RULES.items():
         # Separado por dirección (BUY_YES/BUY_NO) desde el principio — antes
@@ -1176,15 +1309,11 @@ def aprender_patrones_causales(resultados: list, pred_index: dict) -> dict:
             if feats:
                 datos_por_dir[dec].append((r, feats))
 
-        filtros_strat  = []
-        patrones_strat = []
-
         for direccion, datos in datos_por_dir.items():
             if len(datos) < N_BUCKET_MIN:
                 continue
 
-            ic_base = ((sum(int(r.get("acierto", 0)) for r, _ in datos) + 1)
-                       / (len(datos) + 2) - 0.5)
+            ic_base = _ic_bayes(sum(int(r.get("acierto", 0)) for r, _ in datos), len(datos))
 
             for feature, cond_mala, cond_buena in feature_specs:
                 vals = [(r, f[feature]) for r, f in datos if feature in f]
@@ -1199,6 +1328,8 @@ def aprender_patrones_causales(resultados: list, pred_index: dict) -> dict:
                 mejor_patron  = None
                 mejor_dif_filtro = 0.0
                 mejor_dif_patron = 0.0
+                n_percentiles_filtro_ok = 0
+                n_percentiles_patron_ok = 0
 
                 for p in percentiles:
                     idx = int(len(abs_vals) * p)
@@ -1212,54 +1343,75 @@ def aprender_patrones_causales(resultados: list, pred_index: dict) -> dict:
 
                     wins_malo  = sum(int(r.get("acierto", 0)) for r, _ in malo)
                     wins_bueno = sum(int(r.get("acierto", 0)) for r, _ in bueno)
-                    ic_malo    = (wins_malo  + 1) / (len(malo)  + 2) - 0.5
-                    ic_bueno   = (wins_bueno + 1) / (len(bueno) + 2) - 0.5
+                    ic_malo    = _ic_bayes(wins_malo,  len(malo))
+                    ic_bueno   = _ic_bayes(wins_bueno, len(bueno))
                     dif        = ic_bueno - ic_malo
 
                     # ── Filtro: el bucket malo es suficientemente malo ──
-                    if ic_malo < IC_FILTRO_MIN and dif > mejor_dif_filtro:
-                        mejor_dif_filtro = dif
-                        mejor_filtro = {
-                            "feature":    feature,
-                            "condicion":  cond_mala,
-                            "umbral":     round(umbral, 4),
-                            "ic_malo":    round(ic_malo,  4),
-                            "ic_bueno":   round(ic_bueno, 4),
-                            "n_malo":     len(malo),
-                            "n_bueno":    len(bueno),
-                            "direccion":  direccion,
-                            "descubierto": ts_ahora,
-                        }
+                    if ic_malo < IC_FILTRO_MIN:
+                        n_percentiles_filtro_ok += 1
+                        if dif > mejor_dif_filtro:
+                            mejor_dif_filtro = dif
+                            mejor_filtro = {
+                                "feature":    feature,
+                                "condicion":  cond_mala,
+                                "umbral":     round(umbral, 4),
+                                "ic_malo":    round(ic_malo,  4),
+                                "ic_bueno":   round(ic_bueno, 4),
+                                "n_malo":     len(malo),
+                                "n_bueno":    len(bueno),
+                                "direccion":  direccion,
+                                "descubierto": ts_ahora,
+                            }
 
                     # ── Patrón ganador: el bucket bueno es suficientemente bueno ──
                     if ((strat_key, feature, direccion) in PATRONES_BLOQUEADOS):
                         continue  # ver PATRONES_BLOQUEADOS: contradicho por ejecución real
-                    if ic_bueno > IC_PATRON_MIN and len(bueno) >= N_BUCKET_MIN and dif > mejor_dif_patron:
-                        # Kelly boost: cuánto apostar extra cuando esta condición se cumple
-                        kelly_boost = round(min(1.00, max(0.10, 20.0 * ic_bueno * 0.25)), 2)
-                        mejor_dif_patron = dif
-                        mejor_patron = {
-                            "feature":     feature,
-                            "condicion":   cond_buena,
-                            "umbral":      round(umbral, 4),
-                            "ic_patron":   round(ic_bueno, 4),
-                            "ic_base":     round(ic_base,  4),
-                            "n_patron":    len(bueno),
-                            "kelly_boost": kelly_boost,
-                            "direccion":   direccion,
-                            "descubierto": ts_ahora,
-                        }
+                    if ic_bueno > IC_PATRON_MIN and len(bueno) >= N_BUCKET_MIN:
+                        n_percentiles_patron_ok += 1
+                        if dif > mejor_dif_patron:
+                            # Kelly boost: cuánto apostar extra cuando esta condición se cumple
+                            kelly_boost = round(min(1.00, max(0.10, 20.0 * ic_bueno * 0.25)), 2)
+                            mejor_dif_patron = dif
+                            mejor_patron = {
+                                "feature":     feature,
+                                "condicion":   cond_buena,
+                                "umbral":      round(umbral, 4),
+                                "ic_patron":   round(ic_bueno, 4),
+                                "ic_base":     round(ic_base,  4),
+                                "n_patron":    len(bueno),
+                                "kelly_boost": kelly_boost,
+                                "direccion":   direccion,
+                                "descubierto": ts_ahora,
+                            }
 
-                if mejor_filtro:
-                    filtros_strat.append(mejor_filtro)
-                if mejor_patron:
-                    patrones_strat.append(mejor_patron)
+                # PERCENTILES_MIN_ESTABLES: no basta con el mejor de 5 —
+                # exige que al menos otro percentil vecino también califique
+                # (evita el pico aislado, ver comentario en la constante).
+                if mejor_filtro and n_percentiles_filtro_ok >= PERCENTILES_MIN_ESTABLES:
+                    candidatos_shuffle.append((strat_key, "FILTRO", mejor_filtro))
+                if mejor_patron and n_percentiles_patron_ok >= PERCENTILES_MIN_ESTABLES:
+                    candidatos_shuffle.append((strat_key, "PATRON", mejor_patron))
 
-        if filtros_strat or patrones_strat:
-            resultado_final[strat_key] = {
-                "filtros_causales":  filtros_strat,
-                "patrones_ganadores": patrones_strat,
-            }
+    # ── Gate de significancia: shuffle+BH-FDR conjunto sobre TODOS los
+    # candidatos del ciclo (filtros_causales Y patrones_ganadores, mismo lote
+    # — ver docstring de la función) ──
+    if candidatos_shuffle:
+        pvals = [
+            _shuffle_pvalue(cand["n_patron"], cand["ic_patron"], cola="alta")
+            if tipo == "PATRON" else
+            _shuffle_pvalue(cand["n_malo"], cand["ic_malo"], cola="baja")
+            for _, tipo, cand in candidatos_shuffle
+        ]
+        sobrevive = _benjamini_hochberg(pvals, SHUFFLE_FDR)
+        for (strat_key, tipo, cand), ok, pval in zip(candidatos_shuffle, sobrevive, pvals):
+            if not ok:
+                continue
+            cand["p_shuffle"] = round(pval, 4)
+            if strat_key not in resultado_final:
+                resultado_final[strat_key] = {"filtros_causales": [], "patrones_ganadores": []}
+            clave = "patrones_ganadores" if tipo == "PATRON" else "filtros_causales"
+            resultado_final[strat_key][clave].append(cand)
 
     return resultado_final
 

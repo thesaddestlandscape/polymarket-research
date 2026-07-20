@@ -30,8 +30,12 @@ No sustituye N_BUCKET_MIN=15 / n>=40 IC>=0.08 (CLAUDE.md) — es una capa
 adicional de lectura antes de proponer una promoción. No escribe nada.
 Correr desde la raíz del repo:  python3 analisis_gate_riguroso.py
 """
-import csv, json, os, random, math
+import csv, json, os, random, math, sys
 from collections import defaultdict
+from pathlib import Path
+
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+import shadow_postmortem as sp  # noqa: E402 — reusa _ic_bayes/_shuffle_pvalue/_benjamini_hochberg (20-Jul, evita 3 copias casi idénticas del mismo test)
 
 BASE = os.path.dirname(os.path.abspath(__file__))
 RES = os.path.join(BASE, "data", "shadow", "results.csv")
@@ -82,24 +86,19 @@ def wilson_ci(aciertos, n, z=Z_90):
     return ((centro - ajuste) / denom, (centro + ajuste) / denom)
 
 
-def ic_bayes(aciertos, n):
-    return (aciertos + 1) / (n + 2) - 0.5
+# 20-Jul: ic_bayes/shuffle_percentile/benjamini_hochberg delegan en
+# shadow_postmortem (fuente única, ver _ic_bayes/_shuffle_pvalue/
+# _benjamini_hochberg allí) en vez de mantener copias locales — code-review
+# encontró 3 implementaciones casi idénticas del mismo test en el repo.
+ic_bayes = sp._ic_bayes
 
 
 def shuffle_percentile(rows, ic_real, n_shuffle=N_SHUFFLE):
-    """% de tiradas aleatorias (misma n, mismas resoluciones) que igualan o superan el IC real."""
-    outcomes_yes = [row["outcome_real"] == "YES" for row in rows]
-    n = len(outcomes_yes)
-    if n == 0:
-        return 1.0
-    supera = 0
-    for _ in range(n_shuffle):
-        aciertos_sim = sum(
-            1 for oy in outcomes_yes if (random.random() < 0.5) == oy
-        )
-        if ic_bayes(aciertos_sim, n) >= ic_real:
-            supera += 1
-    return supera / n_shuffle
+    """% de tiradas aleatorias (misma n) que igualan o superan el IC real.
+    El resultado solo depende de n (no de los outcomes fila a fila, ver
+    _shuffle_pvalue) — mismo modelo nulo de siempre, ahora determinista y
+    vectorizado (antes: random.random() sin semilla, bucle Python)."""
+    return sp._shuffle_pvalue(len(rows), ic_real, cola="alta", n_shuffle=n_shuffle)
 
 
 def pnl_bootstrap(rows, n_boot=N_SHUFFLE):
@@ -164,24 +163,14 @@ def gate(rows):
     return resultado
 
 
-def benjamini_hochberg(pvals, fdr=0.10):
-    """Corrección por comparaciones múltiples (propuesta #23 backlog, artículo
-    DSR/PBO/FDR 11-Jul): con K candidatas evaluadas A LA VEZ, un umbral fijo
-    p<0.05 por tupla es una máquina de falsos descubrimientos — bajo el nulo,
-    0.05×K tuplas lo cruzan por azar. BH controla la fracción esperada de
-    falsos positivos ENTRE las aceptadas (FDR), endureciendo el umbral con K.
-    Devuelve lista de bool (True = sobrevive) alineada con pvals."""
-    indexed = sorted(range(len(pvals)), key=lambda i: pvals[i])
-    n = len(pvals)
-    keep = [False] * n
-    cutoff = -1
-    for rank, i in enumerate(indexed, start=1):
-        if pvals[i] <= fdr * rank / n:
-            cutoff = rank
-    for rank, i in enumerate(indexed, start=1):
-        if rank <= cutoff:
-            keep[i] = True
-    return keep
+# Corrección por comparaciones múltiples (propuesta #23 backlog, artículo
+# DSR/PBO/FDR 11-Jul): con K candidatas evaluadas A LA VEZ, un umbral fijo
+# p<0.05 por tupla es una máquina de falsos descubrimientos — bajo el nulo,
+# 0.05×K tuplas lo cruzan por azar. BH controla la fracción esperada de
+# falsos positivos ENTRE las aceptadas (FDR), endureciendo el umbral con K.
+# Devuelve lista de bool (True = sobrevive) alineada con pvals. 20-Jul:
+# delega en shadow_postmortem._benjamini_hochberg (fuente única).
+benjamini_hochberg = sp._benjamini_hochberg
 
 
 def main():
