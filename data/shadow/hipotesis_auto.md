@@ -1,4 +1,4 @@
-# Hipótesis automáticas — 2026-07-20 05:25 UTC
+# Hipótesis automáticas — 2026-07-20 05:28 UTC
 _Generado por shadow_postmortem.py sobre 23917 resoluciones (PNL=+6137.44€)_
 
 ## Patrones causales activos
@@ -950,11 +950,6 @@ _Generado por shadow_postmortem.py sobre 23917 resoluciones (PNL=+6137.44€)_
   - _Acción_: SKIP cuando `total_vol_5m` > 1108292.0
   - _Potencial_: sin este filtro IC_bueno=+0.103 (n=61)
 
-### ORDER_FLOW_5M#SOL#5min
-- **PATRÓN** `hora_utc` < `4.0` → IC=+0.133 (n=28)
-  - _Por qué funciona_: hora temprana → mercados cripto menos líquidos, spreads más amplios; edge real menor
-  - _Acción_: Kelly boost +0.67€ cuando `hora_utc` < 4.0 (IC base=+0.067)
-
 ### ORDER_FLOW_5M#XRP#5min
 - **FILTRO** `delta_ratio` |x|≤ `0.4307` → IC=-0.136 (n=20)
   - _Por qué funciona_: delta_ratio bajo → order flow débil; señal insuficiente para batir el spread
@@ -1214,14 +1209,6 @@ _Generado por shadow_postmortem.py sobre 23917 resoluciones (PNL=+6137.44€)_
 
   - _Acción_: SKIP cuando `libro_liquidez` < 3331.5444
   - _Potencial_: sin este filtro IC_bueno=+0.043 (n=33)
-
-- **PATRÓN** `hora_utc` < `9.0` → IC=+0.130 (n=25)
-  - _Por qué funciona_: hora temprana → mercados cripto menos líquidos, spreads más amplios; edge real menor
-  - _Acción_: Kelly boost +0.65€ cuando `hora_utc` < 9.0 (IC base=+0.031)
-
-- **PATRÓN** `libro_spread` < `0.01` → IC=+0.125 (n=22)
-
-  - _Acción_: Kelly boost +0.62€ cuando `libro_spread` < 0.01 (IC base=+0.031)
 
 ### STREAK_MOM_5M#XRP#5min
 - **FILTRO** `py_entrada` < `0.5` → IC=-0.147 (n=15)
@@ -1660,7 +1647,7 @@ _Derivadas de los patrones aprendidos:_
 | ✅ ORDER_FLOW_5M#ETH | 262 | -0.019 | -8.49€ | 0 | 0 |
 | ✅ ORDER_FLOW_5M#ETH#5min | 262 | -0.019 | -8.49€ | 0 | 0 |
 | ✅ ORDER_FLOW_5M#SOL | 325 | +0.044 | +15.10€ | 0 | 0 |
-| ✅ ORDER_FLOW_5M#SOL#5min | 325 | +0.044 | +15.10€ | 0 | 1 |
+| ✅ ORDER_FLOW_5M#SOL#5min | 325 | +0.044 | +15.10€ | 0 | 0 |
 | ✅ ORDER_FLOW_5M#XRP | 202 | -0.005 | -4.86€ | 0 | 0 |
 | ✅ ORDER_FLOW_5M#XRP#5min | 202 | -0.005 | -4.86€ | 1 | 0 |
 | ✅ PRICE_TARGET_GBM | 150 | -0.171 | -4.78€ | 4 | 1 |
@@ -1701,7 +1688,7 @@ _Derivadas de los patrones aprendidos:_
 | ✅ STREAK_MOM_5M#ETH | 106 | -0.056 | -6.82€ | 0 | 0 |
 | ✅ STREAK_MOM_5M#ETH#5min | 106 | -0.056 | -6.82€ | 2 | 0 |
 | ✅ STREAK_MOM_5M#SOL | 111 | -0.013 | -5.19€ | 0 | 0 |
-| ✅ STREAK_MOM_5M#SOL#5min | 111 | -0.013 | -5.19€ | 2 | 2 |
+| ✅ STREAK_MOM_5M#SOL#5min | 111 | -0.013 | -5.19€ | 2 | 0 |
 | ✅ STREAK_MOM_5M#XRP | 98 | -0.110 | -13.35€ | 0 | 0 |
 | ✅ STREAK_MOM_5M#XRP#5min | 98 | -0.110 | -13.35€ | 5 | 0 |
 | 🚫 STRUCT_NO_15M | 15 | -0.199 | -4.68€ | 0 | 0 |
