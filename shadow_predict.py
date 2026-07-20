@@ -671,6 +671,12 @@ def construir_contexto():
         pass
     ctx["spot_prices"] = spot_prices
     ctx["klines_raw"]  = klines_raw
+    # Quarter-Hour Effect (19-Jul, ver _delta_ratio_ultima_marca_cuarto_hora):
+    # una vez por ciclo y por activo (no por mercado/estrategia -- es una
+    # señal del activo subyacente, no de un mercado Polymarket concreto).
+    ctx["qhe_por_activo"] = {
+        sym: _delta_ratio_ultima_marca_cuarto_hora(kl) for sym, kl in klines_raw.items()
+    }
     has_flow = any(len(v[0]) >= 7 for v in klines_raw.values() if v)
     print(f"  UPDOWN_GBM: {len(precios_data)} pts intraday | spot={{{', '.join(f'{k}={v:.4g}' for k, v in list(spot_prices.items())[:4])}}}")
     print(f"  ORDER_FLOW: klines de {len(klines_raw)} activos | flow_real={'sí' if has_flow else 'no (Kraken fallback)'}")
@@ -1286,6 +1292,56 @@ def _dist_ancla_estructural_pct(sym, precios_data, horas_lookback=3):
         return None
     spot = valores[-1]
     return round((spot - media_ancla) / media_ancla * 100, 4)
+
+
+def _delta_ratio_ultima_marca_cuarto_hora(klines):
+    """Order imbalance (delta_ratio) de las 5 velas justo tras la última
+    marca de cuarto de hora (minuto 0/15/30/45) ya cerrada en la serie.
+
+    arXiv 2607.09426 (Kim & Hansen, "The Quarter-Hour Effect") + réplica
+    con datos propios 19-Jul (analisis_orderflow_forward_return_19jul.py,
+    92 días, 6 activos): el desequilibrio de orden medido en los primeros
+    5min tras la apertura de hora/cuarto-hora predice el retorno forward a
+    4h (p_shuffle=0.000 en los 6 activos) y a 12h (5/6, ETH no
+    significativo). Mismo horizonte que las estrategias 60min/240min, hoy
+    las más débiles del sistema -- feature puramente observacional, NO
+    toca prob_yes ni ninguna decisión; el pipeline causal
+    (postmortem->IC_bucket) decide solo si hace falta un boost/filtro con
+    más n forward.
+
+    Requiere taker_buy real (Binance) -- misma metodología exacta que el
+    análisis que validó el hallazgo, no se inventa un fallback Kraken sin
+    validar. Devuelve (delta_ratio, marca_minuto, minutos_desde_marca) o
+    (None, None, None) si no hay dato suficiente."""
+    if len(klines) < 5:
+        return None, None, None
+    marca_idx = None
+    for i in range(len(klines) - 1, -1, -1):
+        try:
+            ts_ms = int(klines[i][0])
+        except (TypeError, ValueError, IndexError):
+            continue
+        if ((ts_ms // 60000) % 60) in (0, 15, 30, 45):
+            marca_idx = i
+            break
+    if marca_idx is None or marca_idx + 5 > len(klines):
+        return None, None, None
+    velas = klines[marca_idx:marca_idx + 5]
+    if len(velas[0]) < 7:
+        return None, None, None
+    cum_delta, total_vol = 0.0, 0.0
+    for k in velas:
+        try:
+            vol, taker_buy = float(k[5]), float(k[6])
+        except (ValueError, TypeError, IndexError):
+            return None, None, None
+        total_vol += vol
+        cum_delta += 2 * taker_buy - vol
+    if total_vol <= 0:
+        return None, None, None
+    marca_minuto = (int(klines[marca_idx][0]) // 60000) % 60
+    minutos_desde_marca = (int(klines[-1][0]) - int(klines[marca_idx][0])) / 60000.0
+    return round(cum_delta / total_vol, 4), marca_minuto, round(minutos_desde_marca, 1)
 
 
 def _calcular_delta_ratio_macro(sym, klines_raw):
@@ -4240,6 +4296,18 @@ def main():
                         pred_features["ballenas_rest_lo_min"] = _bb_rl
                         pred_features["ballenas_rest_hi_min"] = _bb_rh
                         pred_features["ballenas_dentro_banda"] = bool(_bb_lo <= py < _bb_hi)
+                # Quarter-Hour Effect (20-Jul, idea_quarter_hour_effect_confirmado_19jul):
+                # order imbalance de la última marca 0/15/30/45 del activo, calculado
+                # una vez por ciclo arriba (ctx["qhe_por_activo"]). Universal por
+                # activo -- el paper apunta a horizonte 4-12h (60min/240min), pero se
+                # loguea para todos los marcos y que el pipeline causal (ya desagregado
+                # por strategy#activo#marco) decida solo dónde importa, mismo principio
+                # que ballenas_dentro_banda arriba.
+                _qhe = ctx.get("qhe_por_activo", {}).get(_activo_pred)
+                if _qhe and _qhe[0] is not None:
+                    pred_features["qhe_delta_apertura"] = _qhe[0]
+                    pred_features["qhe_marca_minuto"] = _qhe[1]
+                    pred_features["qhe_minutos_desde_marca"] = _qhe[2]
                 pred["features"] = pred_features
 
                 def _feature_match(feat_val, cond, umbral):
