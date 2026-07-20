@@ -14,7 +14,14 @@ analisis_ballenas_dosis_respuesta_16jul.py, pero en vez de mirar
 consumida en USD por cada trade dentro de banda+ventana — proxy directo
 de si nuestro stake (~1.05-2€) habría cabido.
 
-Uso: python3 analisis_ballenas_btc15m_fillability_retro_16jul.py
+20-Jul: generalizado a cualquier combo activo#marco (antes hardcodeado a
+BTC#15m) para responder la misma pregunta sobre ETH/SOL/XRP#15m antes de
+plantear extender ballenas_executor_btc15m.py — mismo método exacto,
+solo parametrizado, sin duplicar el fichero. Sin argumento se comporta
+igual que el 16-Jul (BTC#15m), para no romper el uso histórico.
+
+Uso: python3 analisis_ballenas_btc15m_fillability_retro_16jul.py [COMBO]
+     (COMBO por defecto: BTC#15m — ej. ETH#15m, SOL#15m, XRP#15m)
 """
 import sys
 from pathlib import Path
@@ -29,17 +36,18 @@ STAKE_EUR_REF = 1.05  # suelo de stake real vigente hoy (config_live.json)
 
 
 def main():
-    base.COMBOS = ["BTC#15m"]
+    combo = sys.argv[1] if len(sys.argv) > 1 else "BTC#15m"
+    base.COMBOS = [combo]
     bandas = base.cargar_bandas()
-    print(f"Banda BTC#15m: {bandas}")
-    if "BTC#15m" not in bandas:
-        print("BTC#15m no está marcado 'significativo' en ballenas_timing_state.json — nada que analizar.")
+    print(f"Banda {combo}: {bandas}")
+    if combo not in bandas:
+        print(f"{combo} no está marcado 'significativo' en ballenas_timing_state.json — nada que analizar.")
         return
 
-    lo, hi, rest_lo, rest_hi = bandas["BTC#15m"]
+    lo, hi, rest_lo, rest_hi = bandas[combo]
     seleccion = base.muestrear_mercados(bandas)
-    cids = seleccion.get("BTC#15m", [])
-    print(f"Muestra BTC#15m con >=3 trades históricos en banda+ventana: {len(cids)} mercados")
+    cids = seleccion.get(combo, [])
+    print(f"Muestra {combo} con >=3 trades históricos en banda+ventana: {len(cids)} mercados")
 
     mapa_cid_mid = base.mapear_condition_a_market()
     print(f"  mapa: {len(mapa_cid_mid)} condition_id conocidos")
