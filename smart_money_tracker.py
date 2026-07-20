@@ -66,7 +66,18 @@ TAG_A_DURACION = {"5M": "5m", "15M": "15m", "1H": "60m", "4H": "240m"}
 # "Will the price of X be above/below/between $A and $B on <fecha>?") usan
 # el nombre completo del activo en vez del ticker — ni en tags ni en la
 # pregunta aparece "BTC"/"ETH" literal.
-NOMBRE_A_TICKER = {"bitcoin": "BTC", "ethereum": "ETH", "solana": "SOL", "xrp": "XRP"}
+NOMBRE_A_TICKER = {"bitcoin": "BTC", "ethereum": "ETH", "solana": "SOL", "xrp": "XRP",
+                    "dogecoin": "DOGE"}
+# 20-Jul: DOGE llevaba excluido de TODO este pipeline desde su origen —
+# mismo bug ya cazado para BTC (ver comentario más abajo, 15-Jul): 0 filas
+# de DOGE en 325.913 acumuladas en ballenas_timing_history.csv, verificado
+# antes de este fix. "dogecoin" no es substring de ningún otro nombre de
+# este dict (ni al revés) — sin riesgo de colisión. Puramente aditivo: no
+# cambia qué mercados BTC/ETH/SOL/XRP se reconocían antes, solo añade
+# DOGE al universo muestreado desde ahora. ballenas_observer.py corre
+# cada hora (cron) — hace falta acumular varios días de historia antes de
+# que DOGE cruce N_MIN=40 en alguna banda y aparezca como "significativo"
+# en ballenas_timing_state.json, igual que tardó BTC tras su propio fix.
 _RE_WEEKLY_TITLE = re.compile(r"the price of .* be (above|below|less than|greater than|between)", re.I)
 
 VENTANA_MERCADOS_HORAS = 30      # cuántas horas hacia atrás muestrear mercados
