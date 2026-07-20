@@ -2054,5 +2054,14 @@
  "candidato_proxy#GBM_LATE_15M#SOL#BUY_NO#dist_vwap_pctgt0.1518": false,
  "candidato_proxy#GBM_LATE_15M#SOL#BUY_NO#dist_vwap_pctlt0.3806": false,
  "candidato_proxy#GBM_LATE_15M#SOL#15min#SOL#BUY_NO#sigma_hgt0.0088": false,
- "candidato_proxy#GBM_LATE_15M#XRP#BUY_NO#dist_vwap_pctlt0.3806": false
+ "candidato_proxy#GBM_LATE_15M#XRP#BUY_NO#dist_vwap_pctlt0.3806": false,
+ "candidato_proxy#FAVORITO_CONFIRMADO#BTC#15min#BTC#BUY_YES#hora_utcgt18.0": false,
+ "candidato_proxy#GBM_LATE_15M#BTC#BUY_NO#dist_vwap_pctgt0.1521": false,
+ "candidato_proxy#GBM_LATE_15M#BTC#BUY_NO#dist_vwap_pctlt0.3809": false,
+ "candidato_proxy#GBM_LATE_15M#BTC#15min#BTC#BUY_NO#dist_vwap_pctlt0.3502": false,
+ "candidato_proxy#GBM_LATE_15M#ETH#BUY_NO#dist_vwap_pctgt0.1521": false,
+ "candidato_proxy#GBM_LATE_15M#ETH#BUY_NO#dist_vwap_pctlt0.3809": false,
+ "candidato_proxy#GBM_LATE_15M#SOL#BUY_NO#dist_vwap_pctgt0.1521": false,
+ "candidato_proxy#GBM_LATE_15M#SOL#BUY_NO#dist_vwap_pctlt0.3809": false,
+ "candidato_proxy#GBM_LATE_15M#XRP#BUY_NO#dist_vwap_pctlt0.3809": false
 }
