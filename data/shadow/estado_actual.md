@@ -1,4 +1,4 @@
-# Estado del bot — 2026-07-20 22:03 UTC
+# Estado del bot — 2026-07-20 22:08 UTC
 
 ## Live — dinero real (on-chain)
 | | |
@@ -13,11 +13,11 @@
 ## Shadow — MODELO SIMULADO (no cobrable)
 | | |
 |---|---|
-| P&L fiel (stake fijo 1$) | +3440.13 $ |
-| P&L sim compuesto | 🟢 +6370.57 $ (ficción Kelly: +25042% s/ operativo) |
-| P&L sim hoy (2026-07-20) | 🟢 +372.24 $ |
-| Operaciones resueltas | 25329 (15395 WIN / 9934 LOSS) — 60.8% |
-| Señales abiertas | 127 |
+| P&L fiel (stake fijo 1$) | +3443.59 $ |
+| P&L sim compuesto | 🟢 +6375.78 $ (ficción Kelly: +25062% s/ operativo) |
+| P&L sim hoy (2026-07-20) | 🟢 +377.46 $ |
+| Operaciones resueltas | 25333 (15399 WIN / 9934 LOSS) — 60.8% |
+| Señales abiertas | 144 |
 
 ## Estrategias (visión global)
 
@@ -26,10 +26,10 @@
 | GBM_LATE_15M | 6278 | 60.6% | +0.106 | ➡️ estable | +2168.22$ | 1.06$ | ✅ activa |
 | GBM_LATE_15M_ESPACIO_ATR | 3482 | 65.1% | +0.151 | ➡️ estable | +2127.32$ | 1.51$ | ✅ activa |
 | GBM_LATE_15M_TARDIO | 3465 | 59.9% | +0.099 | 📈 madura (+0.03) | +1251.46$ | 0.99$ | ✅ activa |
-| UPDOWN_GBM_15M_TARDIO | 855 | 66.7% | +0.166 | 📉 agota (-0.03) | +375.62$ | 1.66$ | ✅ activa |
-| UPDOWN_GBM | 1984 | 52.2% | +0.022 | 📈 madura (+0.11) | +140.34$ | 0.50$ | ✅ activa |
+| UPDOWN_GBM_15M_TARDIO | 856 | 66.7% | +0.167 | 📉 agota (-0.03) | +377.79$ | 1.67$ | ✅ activa |
+| UPDOWN_GBM | 1985 | 52.2% | +0.022 | 📈 madura (+0.12) | +141.19$ | 0.50$ | ✅ activa |
 | GBM_LATE_15M_PYCONFIRMADO | 192 | 65.6% | +0.155 | 📈 madura (+0.08) | +105.61$ | 1.55$ | ✅ activa |
-| FAVORITO_CONFIRMADO | 4385 | 68.6% | +0.186 | ➡️ estable | +68.06$ | 1.86$ | ✅ activa |
+| FAVORITO_CONFIRMADO | 4387 | 68.6% | +0.186 | ➡️ estable | +70.25$ | 1.86$ | ✅ activa |
 | WEEKLY_PRICE | 305 | 66.2% | +0.161 | 📈 madura (+0.23) | +51.01$ | 1.61$ | ✅ activa |
 | STREAK_FADE_15M | 238 | 60.1% | +0.100 | ➡️ estable | +40.35$ | 1.00$ | ✅ activa |
 | LATE_WINDOW_5MIN | 78 | 69.2% | +0.188 | 📉 agota (-0.05) | +30.95$ | 1.88$ | ✅ activa |
@@ -56,34 +56,34 @@
 
 | Timestamp | Estrategia | Mercado | Resultado | PNL |
 |---|---|---|---|---|
+| 2026-07-20T22:07 | UPDOWN_GBM_15M_TARDIO#BNB#15min | BNB Up or Down - July 20, 5:45PM-6:00PM ET… | ✅ WIN | +2.17$ |
+| 2026-07-20T22:07 | UPDOWN_GBM#BNB#15min | BNB Up or Down - July 20, 5:45PM-6:00PM ET… | ✅ WIN | +0.86$ |
+| 2026-07-20T22:07 | FAVORITO_CONFIRMADO#ETH#60min | Ethereum Up or Down - July 20, 5PM ET… | ✅ WIN | +1.02$ |
+| 2026-07-20T22:04 | FAVORITO_CONFIRMADO#BTC#60min | Bitcoin Up or Down - July 20, 5PM ET… | ✅ WIN | +1.17$ |
 | 2026-07-20T22:02 | LATE_WINDOW_5MIN#BTC#5min | Bitcoin Up or Down - July 20, 5:55PM-6:00PM ET… | ✅ WIN | +1.30$ |
-| 2026-07-20T22:02 | LATE_WINDOW_5MIN#BTC#5min | Bitcoin Up or Down - July 20, 5:50PM-5:55PM ET… | ✅ WIN | +1.17$ |
-| 2026-07-20T22:02 | GBM_LATE_15M_TARDIO#BTC#15min | Bitcoin Up or Down - July 20, 5:45PM-6:00PM ET… | ✅ WIN | +0.85$ |
-| 2026-07-20T22:02 | GBM_LATE_15M_TARDIO#SOL#15min | Solana Up or Down - July 20, 5:45PM-6:00PM ET… | ✅ WIN | +1.62$ |
-| 2026-07-20T22:02 | UPDOWN_GBM_15M_TARDIO#SOL#15min | Solana Up or Down - July 20, 5:45PM-6:00PM ET… | ✅ WIN | +0.83$ |
 
 ## Calidad de datos
 
-✅ **OK** — última verificación 2026-07-20T22:01 UTC | rechazos 1h: 2 (rango=0, spike=0)
+✅ **OK** — última verificación 2026-07-20T22:07 UTC | rechazos 1h: 1 (rango=0, spike=0)
 
 | Asset | Precio | Age | Alertas |
 |---|---|---|---|
-| ✅ BTC | $65,177.29 | 0.1min |  |
-| ✅ ETH | $1,900.12 | 0.1min |  |
-| ✅ SOL | $77.64 | 0.1min |  |
+| ✅ BTC | $65,099.82 | 0.1min |  |
+| ✅ ETH | $1,898.14 | 0.1min |  |
+| ✅ SOL | $77.75 | 0.1min |  |
 | ✅ XRP | $1.11 | 0.1min |  |
 
 **Cross-source** (binance, coinbase, kraken):
 
 | Asset | Consenso | Fuente | Estado |
 |---|---|---|---|
-| BTC | $65,196.80 | consenso |  |
-| ETH | $1,900.12 | consenso |  |
-| SOL | $77.61 | consenso |  |
+| BTC | $65,113.40 | consenso |  |
+| ETH | $1,898.14 | consenso |  |
+| SOL | $77.58 | consenso |  |
 | XRP | $1.11 | consenso |  |
 
 **Alertas activas:**
-- ⚠ rechazos_1h:2 (rango=0, spike=0)
+- ⚠ rechazos_1h:1 (rango=0, spike=0)
 
 ---
 *Actualizado automáticamente cada ~60s por el fast loop*
