@@ -1,4 +1,4 @@
-# Estado del bot — 2026-07-20 09:54 UTC
+# Estado del bot — 2026-07-20 09:59 UTC
 
 ## Live — dinero real (on-chain)
 | | |
@@ -13,11 +13,11 @@
 ## Shadow — MODELO SIMULADO (no cobrable)
 | | |
 |---|---|
-| P&L fiel (stake fijo 1$) | +3393.72 $ |
-| P&L sim compuesto | 🟢 +6251.98 $ (ficción Kelly: +24575% s/ operativo) |
-| P&L sim hoy (2026-07-20) | 🟢 +253.66 $ |
-| Operaciones resueltas | 24326 (14806 WIN / 9520 LOSS) — 60.9% |
-| Señales abiertas | 124 |
+| P&L fiel (stake fijo 1$) | +3392.72 $ |
+| P&L sim compuesto | 🟢 +6249.94 $ (ficción Kelly: +24567% s/ operativo) |
+| P&L sim hoy (2026-07-20) | 🟢 +251.62 $ |
+| Operaciones resueltas | 24327 (14806 WIN / 9521 LOSS) — 60.9% |
+| Señales abiertas | 123 |
 
 ## Estrategias (visión global)
 
@@ -32,7 +32,7 @@
 | FAVORITO_CONFIRMADO | 4178 | 68.6% | +0.186 | ➡️ estable | +72.03$ | 1.86$ | ✅ activa |
 | WEEKLY_PRICE | 295 | 65.8% | +0.157 | 📈 madura (+0.25) | +49.68$ | 1.57$ | ✅ activa |
 | STREAK_FADE_15M | 234 | 59.8% | +0.097 | ➡️ estable | +37.13$ | 0.98$ | ✅ activa |
-| GBM_LATE_5M | 190 | 58.4% | +0.083 | ➡️ estable | +29.32$ | 0.83$ | ✅ activa |
+| GBM_LATE_5M | 191 | 58.1% | +0.080 | ➡️ estable | +27.28$ | 0.80$ | ✅ activa |
 | LATE_WINDOW_5MIN | 55 | 70.9% | +0.202 | ➡️ estable | +23.91$ | 2.00$ | ✅ activa |
 | BALLENAS_CONFIRMADAS_15M | 417 | 64.0% | +0.140 | ➡️ estable | +16.90$ | 1.40$ | ✅ activa |
 | UPDOWN_GBM_15M_CROSS_WINDOW_SPREAD | 83 | 79.5% | +0.288 | 📉 agota (-0.11) | +15.82$ | 2.00$ | ✅ activa |
@@ -55,11 +55,11 @@
 
 | Timestamp | Estrategia | Mercado | Resultado | PNL |
 |---|---|---|---|---|
+| 2026-07-20T09:58 | GBM_LATE_5M#XRP#5min | XRP Up or Down - July 20, 5:50AM-5:55AM ET… | ❌ LOSS | -2.04$ |
 | 2026-07-20T09:50 | FAVORITO_CONFIRMADO#ETH#5min | Ethereum Up or Down - July 20, 5:40AM-5:45AM ET… | ❌ LOSS | -1.31$ |
 | 2026-07-20T09:48 | GBM_LATE_15M_ESPACIO_ATR#ETH#15min | Ethereum Up or Down - July 20, 5:30AM-5:45AM ET… | ❌ LOSS | -2.04$ |
 | 2026-07-20T09:48 | FAVORITO_CONFIRMADO#ETH#15min | Ethereum Up or Down - July 20, 5:30AM-5:45AM ET… | ✅ WIN | +0.59$ |
 | 2026-07-20T09:48 | BALLENAS_CONFIRMADAS_15M#ETH#15min | Ethereum Up or Down - July 20, 5:30AM-5:45AM ET… | ✅ WIN | +0.59$ |
-| 2026-07-20T09:48 | FAVORITO_CONFIRMADO_SOL_ALTACONVICCION#SOL#15min | Solana Up or Down - July 20, 5:30AM-5:45AM ET… | ✅ WIN | +0.63$ |
 
 ## Calidad de datos
 
