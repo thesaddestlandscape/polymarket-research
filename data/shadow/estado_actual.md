@@ -1,23 +1,23 @@
-# Estado del bot — 2026-07-21 16:11 UTC
+# Estado del bot — 2026-07-21 16:17 UTC
 
 ## Live — dinero real (on-chain)
 | | |
 |---|---|
 | Total depositado | 51.22 $ |
-| Balance on-chain | **25.41 $** |
-| P&L real total | 🔴 **-25.81 $** |
-| P&L real hoy | -0.37 $ |
-| P&L real 7 días | -9.62 $ |
+| Balance on-chain | **25.10 $** |
+| P&L real total | 🔴 **-26.12 $** |
+| P&L real hoy | -1.45 $ |
+| P&L real 7 días | -10.70 $ |
 | Fees pagados (real) | 8.82 $ |
 
 ## Shadow — MODELO SIMULADO (no cobrable)
 | | |
 |---|---|
-| P&L fiel (stake fijo 1$) | +3280.56 $ |
-| P&L sim compuesto | 🟢 +6232.58 $ (ficción Kelly: +24499% s/ operativo) |
-| P&L sim hoy (2026-07-21) | 🔴 -182.90 $ |
-| Operaciones resueltas | 27098 (16288 WIN / 10810 LOSS) — 60.1% |
-| Señales abiertas | 129 |
+| P&L fiel (stake fijo 1$) | +3279.80 $ |
+| P&L sim compuesto | 🟢 +6231.42 $ (ficción Kelly: +24495% s/ operativo) |
+| P&L sim hoy (2026-07-21) | 🔴 -184.06 $ |
+| Operaciones resueltas | 27101 (16289 WIN / 10812 LOSS) — 60.1% |
+| Señales abiertas | 130 |
 
 ## Estrategias (visión global)
 
@@ -29,7 +29,7 @@
 | UPDOWN_GBM_15M_TARDIO | 1003 | 66.7% | +0.167 | 📉 agota (-0.03) | +454.77$ | 1.67$ | ✅ activa |
 | UPDOWN_GBM | 2070 | 52.7% | +0.027 | 📈 madura (+0.11) | +169.83$ | 0.50$ | ✅ activa |
 | GBM_LATE_15M_PYCONFIRMADO | 213 | 62.0% | +0.119 | 📉 agota (-0.04) | +100.10$ | 1.19$ | ✅ activa |
-| FAVORITO_CONFIRMADO | 4673 | 68.6% | +0.186 | ➡️ estable | +76.64$ | 1.86$ | ✅ activa |
+| FAVORITO_CONFIRMADO | 4675 | 68.6% | +0.185 | ➡️ estable | +73.96$ | 1.85$ | ✅ activa |
 | WEEKLY_PRICE | 321 | 67.3% | +0.172 | 📈 madura (+0.23) | +63.81$ | 1.72$ | ✅ activa |
 | STREAK_FADE_15M | 256 | 58.2% | +0.081 | 📉 agota (-0.08) | +29.43$ | 0.81$ | ✅ activa |
 | UPDOWN_GBM_15M_CROSS_WINDOW_SPREAD | 104 | 79.8% | +0.292 | ➡️ estable | +20.82$ | 2.00$ | ✅ activa |
@@ -38,8 +38,8 @@
 | FAVORITO_CONFIRMADO_SOL_ALTACONVICCION | 225 | 81.8% | +0.315 | ➡️ estable | +12.24$ | 2.00$ | ✅ activa |
 | LEADLAG_BTC_XRP_15M | 253 | 51.4% | +0.014 | 📉 agota (-0.14) | +11.32$ | 0.50$ | ✅ activa |
 | ORDER_FLOW_5M | 1644 | 51.1% | +0.011 | ➡️ estable | +11.30$ | 0.50$ | ✅ activa |
+| LATE_WINDOW_5MIN | 219 | 49.8% | -0.002 | 📉 agota (-0.21) | +6.00$ | 0.50$ | ⚠️ IC negativo |
 | GBM_LATE_60M | 329 | 38.6% | -0.113 | ➡️ estable | +5.97$ | 0.50$ | ⚠️ IC negativo |
-| LATE_WINDOW_5MIN | 218 | 49.5% | -0.005 | 📉 agota (-0.22) | +4.48$ | 0.50$ | ⚠️ IC negativo |
 | RESOLUTION_SNIPER | 11 | 90.9% | +0.190 | — | +3.49$ | 1.90$ | ✅ activa |
 | BALLENAS_TARDIAS | 8 | 87.5% | +0.120 | — | +0.13$ | 1.20$ | ✅ activa |
 | GBM_LATE_15M_MULTIHORIZONTE | 6 | 50.0% | +0.000 | — | -0.08$ | 0.50$ | ⏳ acumulando |
@@ -56,34 +56,34 @@
 
 | Timestamp | Estrategia | Mercado | Resultado | PNL |
 |---|---|---|---|---|
+| 2026-07-21T16:16 | LATE_WINDOW_5MIN#BTC#5min | Bitcoin Up or Down - July 21, 12:00PM-12:05PM ET… | ✅ WIN | +1.52$ |
+| 2026-07-21T16:13 | FAVORITO_CONFIRMADO#SOL#5min | Solana Up or Down - July 21, 12:00PM-12:05PM ET… | ❌ LOSS | -1.76$ |
+| 2026-07-21T16:13 | FAVORITO_CONFIRMADO#SOL#60min | Solana Up or Down - July 21, 11AM ET… | ❌ LOSS | -0.92$ |
 | 2026-07-21T16:09 | FAVORITO_CONFIRMADO#ETH#60min | Ethereum Up or Down - July 21, 11AM ET… | ✅ WIN | +0.79$ |
 | 2026-07-21T16:09 | FAVORITO_CONFIRMADO#ETH#240min | Ethereum Up or Down - July 21, 8:00AM-12:00PM ET… | ❌ LOSS | -1.63$ |
-| 2026-07-21T16:05 | UPDOWN_GBM_15M_TARDIO#BTC#15min | Bitcoin Up or Down - July 21, 11:45AM-12:00PM ET… | ❌ LOSS | -0.51$ |
-| 2026-07-21T16:05 | FAVORITO_CONFIRMADO_SOL_ALTACONVICCION#SOL#15min | Solana Up or Down - July 21, 11:45AM-12:00PM ET… | ✅ WIN | +0.12$ |
-| 2026-07-21T16:05 | FAVORITO_CONFIRMADO#ETH#15min | Ethereum Up or Down - July 21, 11:45AM-12:00PM ET… | ✅ WIN | +1.16$ |
 
 ## Calidad de datos
 
-✅ **OK** — última verificación 2026-07-21T16:08 UTC | rechazos 1h: 1 (rango=0, spike=0)
+✅ **OK** — última verificación 2026-07-21T16:16 UTC | rechazos 1h: 2 (rango=0, spike=0)
 
 | Asset | Precio | Age | Alertas |
 |---|---|---|---|
-| ✅ BTC | $66,638.71 | 0.1min |  |
-| ✅ ETH | $1,931.58 | 0.1min |  |
-| ✅ SOL | $78.10 | 0.1min |  |
+| ✅ BTC | $66,623.49 | 0.1min |  |
+| ✅ ETH | $1,930.61 | 0.1min |  |
+| ✅ SOL | $78.08 | 0.1min |  |
 | ✅ XRP | $1.15 | 0.1min |  |
 
 **Cross-source** (binance, coinbase, kraken):
 
 | Asset | Consenso | Fuente | Estado |
 |---|---|---|---|
-| BTC | $66,641.80 | consenso |  |
-| ETH | $1,931.58 | consenso |  |
-| SOL | $78.09 | consenso |  |
-| XRP | $1.16 | consenso |  |
+| BTC | $66,623.49 | consenso |  |
+| ETH | $1,930.61 | consenso |  |
+| SOL | $78.06 | consenso |  |
+| XRP | $1.15 | consenso |  |
 
 **Alertas activas:**
-- ⚠ rechazos_1h:1 (rango=0, spike=0)
+- ⚠ rechazos_1h:2 (rango=0, spike=0)
 
 ---
 *Actualizado automáticamente cada ~60s por el fast loop*
