@@ -2928,7 +2928,9 @@ def s_gbm_late_15min_py_confirmado(market, ctx):
 # ballenas_observer) SOLO si el precio ya cayó en alguna banda -- barato en
 # la inmensa mayoría de mercados que no aplican, coste real solo cuando hace
 # falta. Shadow puro: NO está en pares_permitidos_live, no toca dinero.
-BALLENAS_CONFIRMADAS_ACTIVOS = {"SOL", "ETH", "XRP"}
+BALLENAS_CONFIRMADAS_ACTIVOS = {"SOL", "ETH", "XRP", "DOGE"}  # DOGE añadido 21-Jul:
+# mismo criterio que ballenas_executor_5min.py (DOGE añadido 20-Jul) -- shadow
+# puro, deja acumular n desde cero antes de sacar conclusiones.
 BALLENAS_CONFIRMADAS_BANDA_NO_LO = 0.5   # precio_no en [0.5,0.7) -> confirma BUY_NO
 BALLENAS_CONFIRMADAS_BANDA_NO_HI = 0.7
 BALLENAS_CONFIRMADAS_BANDA_YES_LO = 0.7  # precio_yes en [0.7,0.9) -> confirma BUY_YES
