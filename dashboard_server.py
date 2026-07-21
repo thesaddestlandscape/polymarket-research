@@ -330,6 +330,7 @@ def compute_live_data():
         real_hoy     = real.get("pnl_hoy_real")
         real_7d      = real.get("pnl_7d_real")
         real_daily   = real.get("daily_real") or []
+        real_por_deposito = real.get("pnl_por_deposito") or []
         real_stale   = False
         # tracking error de ejecución: modelo(trades.csv) − real. >0 = optimista.
         tracking_error = round(pnl_total - real_pnl, 2) if real_pnl is not None else None
@@ -337,6 +338,7 @@ def compute_live_data():
         real_total = real_pnl = real_ts = tracking_error = None
         real_deposito = real_hoy = real_7d = None
         real_daily = []
+        real_por_deposito = []
         real_stale = bool(real and real.get("_rancio"))
 
     # % de beneficio sobre el depósito inicial — pedido explícito 09-Jul: no
@@ -384,6 +386,7 @@ def compute_live_data():
         "real_hoy": real_hoy,
         "real_7d": real_7d,
         "real_daily": real_daily,
+        "real_por_deposito": real_por_deposito,
         "real_history": real_history,
         "real_pct_total": real_pct_total,
         "real_pct_hoy": real_pct_hoy,
@@ -830,6 +833,17 @@ footer { text-align: center; padding: 10px; font-size: 10px; color: var(--muted)
   </div>
   <div id="live-modelo-nota" style="font-size:10px;color:var(--muted);margin-bottom:10px">&nbsp;</div>
 
+  <!-- Recargas — desglose por período de depósito -->
+  <div style="background:#ffffff05;border-radius:6px;padding:10px;margin-bottom:10px">
+    <div class="panel-title">💰 Recargas — rendimiento por depósito (ledger de trades.csv, no incluye redondeo CLOB)</div>
+    <table class="mini-table" id="live-depositos-table">
+      <thead><tr>
+        <th>Fecha</th><th>Aportado</th><th>Nota</th><th>Trades</th><th>PNL periodo</th><th>Rendimiento</th>
+      </tr></thead>
+      <tbody><tr><td colspan="6" style="color:var(--muted)">Sin datos aún</td></tr></tbody>
+    </table>
+  </div>
+
   <!-- Charts live — mismo escritorio que el modelo simulado -->
   <div style="display:grid;grid-template-columns:2fr 1fr;gap:8px;margin-bottom:10px">
     <div style="background:#ffffff05;border-radius:6px;padding:10px">
@@ -1146,6 +1160,22 @@ function renderLive(live) {
       const cls = Math.abs(live.tracking_error) < 0.5 ? "neu" : "neg";
       notaEl.innerHTML = `ℹ️ Referencia — estimación del modelo (trades.csv, precio de plan): PNL total ${live.pnl_total > 0 ? "+" : ""}${live.pnl_total.toFixed(2)}$ · desvío vs real <span class="${cls}">Δ ${live.tracking_error > 0 ? "+" : ""}${live.tracking_error.toFixed(2)}$</span> (el modelo no descuenta slippage/liquidación; vale el real).`;
     } else { notaEl.innerHTML = "&nbsp;"; }
+  }
+  // Recargas — desglose por depósito (fecha, aportado, nota, PnL y % de ese período)
+  const depTbody = document.querySelector("#live-depositos-table tbody");
+  if (depTbody) {
+    if (live.real_por_deposito?.length) {
+      depTbody.innerHTML = live.real_por_deposito.map(d => `<tr>
+        <td>${d.fecha}</td>
+        <td>${d.eur.toFixed(2)}$</td>
+        <td style="color:var(--muted);font-size:10px">${d.nota || ""}</td>
+        <td>${d.n_trades}</td>
+        <td>${fmtPnl(d.pnl_ledger)}</td>
+        <td>${d.rendimiento_pct != null ? fmtPct(d.rendimiento_pct) : nd}</td>
+      </tr>`).join("");
+    } else {
+      depTbody.innerHTML = `<tr><td colspan="6" style="color:var(--muted)">Sin datos aún</td></tr>`;
+    }
   }
   const freshEl = document.getElementById("live-real-freshness");
   if (freshEl) {
