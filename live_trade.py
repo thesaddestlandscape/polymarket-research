@@ -206,6 +206,59 @@ def _evaluar_veto_ballenas(condition_id: str | None, activo: str, marco: str | N
             "combo": combo, "pct": pct, "n": n, "umbral": umbral}
 
 
+# veto_fuera_banda_ballenas (21-Jul, petición explícita Javi): complementario
+# a veto_ballenas de arriba, no un reemplazo. veto_ballenas SOLO actúa
+# DENTRO de la banda calibrada (mide concentración de flujo real en ese
+# mercado); este chequeo actúa SOLO FUERA de ella y no mide concentración,
+# sino un hallazgo agregado y verificado (analisis_filtro_banda_ballenas_20jul.py
+# sobre results.csv): para FAVORITO_CONFIRMADO#ETH#15min#BUY_YES el agregado
+# es NO CONCLUYENTE en PnL (n=490, CI90%=[-0.041,+0.161] cruza cero) pero el
+# subconjunto DENTRO de banda (n=184) pasa el gate riguroso limpio
+# (hit=85.3%, PnL/trade=+0.125€, CI90%=[+0.015,+0.234] NO cruza cero,
+# g(f=10%)=+0.0055 PASA) — fuera de banda esa misma tupla no tiene evidencia
+# de edge limpio. NO generaliza: repetido para SOL#15min#BUY_YES (PnL sigue
+# sin concluir dentro de banda) y BTC#15min#BUY_YES (payout inverso incluso
+# dentro de banda) de la misma familia — por eso el alcance es una allowlist
+# EXPLÍCITA de tuplas STRATEGY#SUBTYPE#DIRECTION completas, no activo#marco
+# como veto_ballenas (que sí generaliza por mercado). Fail-open: sin banda
+# calibrada/significativa o tupla no en la allowlist → no aplica, la señal
+# sigue su camino normal — nunca bloquea por falta de dato, mismo principio
+# ya aprobado por Javi para veto_ballenas (16-Jul).
+VETO_FUERA_BANDA_TUPLAS_VALIDADAS_DEFAULT: tuple[str, ...] = ()
+
+
+def _evaluar_veto_fuera_banda_ballenas(strategy: str, subtype: str, direction: str,
+                                        precio_plan: float, config: dict) -> dict:
+    """Veta (skip) una señal cuyo precio cae FUERA de la banda de precio
+    calibrada por ballenas_observer.py para (activo,marco) -- solo para
+    tuplas STRATEGY#SUBTYPE#DIRECTION explícitamente validadas en
+    config_live.json::riesgo.veto_fuera_banda_ballenas.tuplas_validadas.
+    Ver nota completa junto a las constantes arriba."""
+    veto_cfg = config.get("riesgo", {}).get("veto_fuera_banda_ballenas", {})
+    if not veto_cfg.get("activo"):
+        return {"aplica": False}
+    tupla = f"{strategy}#{subtype}#{direction}"
+    tuplas_validadas = set(veto_cfg.get("tuplas_validadas", VETO_FUERA_BANDA_TUPLAS_VALIDADAS_DEFAULT))
+    if tupla not in tuplas_validadas:
+        return {"aplica": False}
+    marco = _marco_ballenas(subtype)
+    activo = (subtype or "").split("#")[0]
+    if not marco:
+        return {"aplica": False, "motivo_no_aplica": "marco_desconocido"}
+    combo = f"{activo}#{marco}"
+    banda = _cargar_ballenas_timing_state().get(combo, {})
+    if not banda.get("significativo"):
+        return {"aplica": True, "veta": False, "motivo": "banda_no_significativa", "combo": combo}
+    banda_lo, banda_hi = banda.get("banda_lo"), banda.get("banda_hi")
+    if not (isinstance(banda_lo, (int, float)) and isinstance(banda_hi, (int, float))):
+        return {"aplica": True, "veta": False, "motivo": "banda_invalida", "combo": combo}
+    if banda_lo <= precio_plan < banda_hi:
+        return {"aplica": True, "veta": False, "motivo": "dentro_banda", "combo": combo,
+                "banda_lo": banda_lo, "banda_hi": banda_hi}
+    return {"aplica": True, "veta": True, "motivo": "fuera_banda_no_validada", "combo": combo,
+            "banda_lo": banda_lo, "banda_hi": banda_hi}
+
+
 def _registrar_evento_ballenas(market_id: str, veto_vb: dict) -> None:
     """Log JSONL de cada evaluación del veto_ballenas (aplique o no haya
     datos) -- consumido por vigia_ballenas_cobertura.py para alertar si el
@@ -1507,6 +1560,27 @@ def _ejecutar_orden_polymarket(market_id: str, direction: str,
             else:
                 log(f"  🐋 Ballenas {veto_vb['combo']}: {veto_vb['pct']*100:.1f}% a favor (n={veto_vb['n']}) "
                     f">= umbral {veto_vb['umbral']*100:.0f}% — OK")
+
+        # veto_fuera_banda_ballenas (21-Jul): complementario al de arriba,
+        # ver docstring/constantes junto a _evaluar_veto_fuera_banda_ballenas.
+        # Mismo motivo de orden (antes del libro/re-quote): no depende de
+        # `depth`, cero coste de red extra (ballenas_timing_state.json ya
+        # se lee del disco, igual que veto_ballenas arriba).
+        veto_fb = _evaluar_veto_fuera_banda_ballenas(ctx.get("strategy") or "", ctx.get("subtype") or "",
+                                                      direction, precio_plan, _cargar_config())
+        if veto_fb.get("aplica") and veto_fb.get("veta"):
+            log(f"  🐋 Fuera de banda ballenas {veto_fb.get('combo')} "
+                f"[{veto_fb.get('banda_lo')},{veto_fb.get('banda_hi')}) a precio={precio_plan:.4f} "
+                f"— VETO (tupla validada 21-Jul)")
+            _registrar_snapshot_libro("veto_fuera_banda_ballenas", market_id, direction,
+                                      precio_plan, stake_eur, depth, contexto)
+            return {
+                "ok": False, "no_fill": True, "ballenas_fuera_banda": True,
+                "order_id": None, "entry_price": entry_price,
+                "fee_eur": 0.0,
+                "error": f"fuera de banda ballenas {veto_fb.get('combo')} "
+                         f"[{veto_fb.get('banda_lo')},{veto_fb.get('banda_hi')})",
+            }
 
         # Libro público (2026-07-10): el ClobClient autenticado NO hace falta
         # para leer profundidad (/book es público) — construirlo aquí pagaba
