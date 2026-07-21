@@ -152,6 +152,35 @@ def check_screens() -> dict[str, bool]:
 
 
 def restart_screen(name: str) -> bool:
+    # 'fast' (dinero real, live_trade.py corre dentro) NUNCA se reinicia con
+    # el screen -dmS desnudo de abajo -- code-review 21-Jul: este camino no
+    # tenía chequeo de orden_en_curso.json ni espera/verificación de que la
+    # screen vieja hubiera muerto de verdad, y reabría exactamente la misma
+    # carrera de duplicados en results.csv que watchdog_fast.sh ya arregló
+    # por su lado (FAVORITO_CONFIRMADO#2866629#BUY_YES 11-Jul, LATE_WINDOW_
+    # 5MIN#2998086#BUY_NO 21-Jul). restart_fast_seguro.sh es ahora el único
+    # punto de verdad para reiniciar 'fast', compartido con watchdog_fast.sh
+    # (cron */5min) -- no reimplementar la lógica aquí.
+    if name == "fast":
+        try:
+            r = subprocess.run(["bash", str(REPO / "restart_fast_seguro.sh")],
+                               timeout=30, capture_output=True, text=True)
+            if r.returncode == 0:
+                log("  [SCREEN] ✅ Screen 'fast' reiniciada (restart_fast_seguro.sh)")
+                return True
+            elif r.returncode == 1:
+                log("  [SCREEN] Reinicio de 'fast' pospuesto (orden en curso, o ya había otra invocación en marcha)")
+                return False
+            elif r.returncode == 3:
+                log("  [SCREEN] 🚨 CARRERA REAL: hay 2+ screens 'fast' vivas tras el reinicio — revisar manualmente YA")
+                return False
+            else:
+                log(f"  [SCREEN] restart_fast_seguro.sh no pudo limpiar la screen 'fast' vieja (exit {r.returncode})")
+                return False
+        except Exception as e:
+            log(f"  [SCREEN] Error ejecutando restart_fast_seguro.sh: {e}")
+            return False
+
     cmd = SCREEN_RESTART.get(name)
     if not cmd:
         return False

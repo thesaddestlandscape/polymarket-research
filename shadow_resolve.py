@@ -67,6 +67,7 @@ APUESTA_SIMULADA = 0.90  # consistente con el bot anterior (3% de 30€)
 DIR_SHADOW = Path("data/shadow")
 DIR_SHADOW.mkdir(parents=True, exist_ok=True)
 RESULTS_PATH = DIR_SHADOW / "results.csv"
+RESOLVE_LOCK_PATH = DIR_SHADOW / "shadow_resolve.lock"
 ACCURACY_PATH = DIR_SHADOW / "strategy_accuracy.csv"
 CONFIRM_STATE_PATH = DIR_SHADOW / "resolucion_confirmacion_state.json"
 # 21-Jul (code-review pendiente desde 15-Jul, idea_shadow_resolve_cierre_prematuro):
@@ -641,6 +642,40 @@ def main():
     except Exception as e:
         print(f"  ⚠️  _check_salidas_tempranas: {e} — posiciones OPEN sin tocar, resolución normal sigue")
 
+    # flock (21-Jul, diagnóstico de duplicados reales en results.csv --
+    # FAVORITO_CONFIRMADO#2866629#BUY_YES resuelto dos veces 11-Jul,
+    # LATE_WINDOW_5MIN#2998086#BUY_NO resuelto dos veces 21-Jul, mismo
+    # patrón ambas veces: ~2-3min de diferencia, contenido idéntico salvo
+    # resolution_timestamp). cargar_ya_resueltas() lee results.csv fresco
+    # y SIN este lock nada impide que dos invocaciones de main() (proceso
+    # duplicado -- ver idea_race_restart_verify_deploy_watchdog_17jul,
+    # mismo bug ya visto con la screen 'control': verify_deploy.py/
+    # pipeline_watchdog.py pueden reiniciar 'fast'/crear una screen
+    # duplicada sin coordinarse) lean el mismo estado "no resuelto
+    # todavía" y cada una escriba su propia fila para el mismo mercado.
+    # Mismo patrón que TRADES_LOCK_PATH en live_trade.py (ya protege
+    # trades.csv de exactamente esta clase de carrera con
+    # ballenas_executor_btc15m.py) -- aquí protege results.csv de la
+    # misma clase de carrera entre invocaciones de shadow_resolve.py.
+    # Todo el tramo lectura(ya_resueltas)+decisión+escritura debe ser
+    # atómico: adquirir el lock ANTES de cargar_ya_resueltas(), liberarlo
+    # después de escribir, para que una 2ª invocación que esperaba el
+    # lock vea, al adquirirlo, el results.csv ya actualizado por la 1ª.
+    lock_f = open(RESOLVE_LOCK_PATH, "w")
+    fcntl.flock(lock_f, fcntl.LOCK_EX)
+    try:
+        _resolver_bajo_lock(ts)
+    finally:
+        fcntl.flock(lock_f, fcntl.LOCK_UN)
+        lock_f.close()
+
+
+def _resolver_bajo_lock(ts: str) -> None:
+    """Cuerpo real de main() (resolución + escritura en results.csv),
+    ejecutado con RESOLVE_LOCK_PATH ya adquirido -- ver el comentario en
+    main() para el motivo. Separado en función propia para no anidar todo
+    el cuerpo dentro de un try/finally (mismo patrón que
+    _check_salidas_tempranas/_check_salidas_tempranas_bajo_lock)."""
     pendientes = cargar_predicciones_pendientes()
     ya_resueltas = cargar_ya_resueltas()
     estado_confirmacion = _cargar_estado_confirmacion()
