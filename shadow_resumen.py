@@ -130,7 +130,7 @@ def main():
         hoy_r = snap.get("pnl_hoy_real")
         d7_r  = snap.get("pnl_7d_real")
         live_rows = [
-            f"| Depósito inicial | {snap['deposito_inicial']:.2f} $ |",
+            f"| Total depositado | {snap['deposito_inicial']:.2f} $ |",
             f"| Balance on-chain | **{snap['total']:.2f} $** |",
             f"| P&L real total | {em_live} **{snap['pnl_real']:+.2f} $** |",
         ]

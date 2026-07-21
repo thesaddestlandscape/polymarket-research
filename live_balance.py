@@ -17,6 +17,7 @@ posiciones abiertas.
 Uso:  python3 live_balance.py          # fetch + cache
       from live_balance import cargar_balance_real   # lectura cacheada
 """
+import csv
 import json
 import os
 import sys
@@ -31,9 +32,67 @@ CACHE_PATH = DIR_LIVE / "balance_real.json"
 HIST_PATH = DIR_LIVE / "balance_history.csv"
 
 try:
-    from live_stake import CAPITAL_OPERATIVO_INICIAL as DEPOSITO_INICIAL
+    from live_stake import CAPITAL_OPERATIVO_INICIAL as _PRIMER_DEPOSITO
 except Exception:
-    DEPOSITO_INICIAL = 25.44  # depósito real 2026-06-29 (fallback)
+    _PRIMER_DEPOSITO = 25.44  # depósito real 2026-06-29 (fallback)
+
+DEPOSITO_INICIAL = _PRIMER_DEPOSITO  # compatibilidad: módulos que importan este símbolo
+
+
+def _cargar_depositos_config() -> list:
+    """Lee config_live.json::depositos. Devuelve lista vacía ante cualquier error (fail-safe)."""
+    cfg_path = DIR_LIVE / "config_live.json"
+    try:
+        deps = json.loads(cfg_path.read_text(encoding="utf-8")).get("depositos", [])
+        return [d for d in deps if isinstance(d, dict) and d.get("eur")]
+    except Exception:
+        return []
+
+
+def _pnl_por_deposito(depositos: list) -> list:
+    """PNL de trades CLOSED agrupado por período de depósito (ledger, trades.csv).
+
+    Para cada depósito i, suma los trades cuyo timestamp_utc cae entre
+    deposito[i].fecha y deposito[i+1].fecha (o hasta hoy para el último).
+    Puramente informativo — no toca ninguna decisión de trading.
+    """
+    if not depositos:
+        return []
+    deps = sorted(depositos, key=lambda d: d.get("fecha", ""))
+    cortes = [d["fecha"] for d in deps]  # fecha de inicio de cada período
+    pnls = [0.0] * len(deps)
+    ns   = [0]   * len(deps)
+    trades_csv = DIR_LIVE.parent / "live" / "trades.csv"
+    if trades_csv.exists():
+        with open(trades_csv, encoding="utf-8") as f:
+            for row in csv.DictReader(f):
+                if row.get("status") != "CLOSED":
+                    continue
+                ts = (row.get("timestamp_utc") or "")[:10]
+                if not ts:
+                    continue
+                try:
+                    pnl = float(row.get("pnl_neto_eur", 0) or 0)
+                except ValueError:
+                    continue
+                # Asignar al período más reciente cuya fecha de inicio ≤ ts
+                idx = 0
+                for i, corte in enumerate(cortes):
+                    if ts >= corte:
+                        idx = i
+                pnls[idx] += pnl
+                ns[idx]   += 1
+    return [
+        {
+            "fecha": d["fecha"],
+            "eur": d["eur"],
+            "nota": d.get("nota", ""),
+            "pnl_ledger": round(pnls[i], 4),
+            "n_trades": ns[i],
+            "rendimiento_pct": round(pnls[i] / d["eur"] * 100, 1) if d["eur"] else None,
+        }
+        for i, d in enumerate(deps)
+    ]
 
 DATA_API = "https://data-api.polymarket.com"
 USDC_DECIMALS = 1_000_000  # USDC = 6 decimales
@@ -144,14 +203,19 @@ def fetch_balance_real() -> dict:
         daily_real, pnl_hoy_real, pnl_7d_real = _daily_real_pnl(wallet)
     except Exception:
         daily_real, pnl_hoy_real, pnl_7d_real = [], None, None
+    depositos = _cargar_depositos_config()
+    deposito_total = (sum(float(d["eur"]) for d in depositos)
+                      if depositos else DEPOSITO_INICIAL)
+    pnl_desglose = _pnl_por_deposito(depositos)
     return {
         "ts": datetime.now(timezone.utc).isoformat(timespec="seconds"),
         "wallet": wallet,
         "free_usdc": round(free, 4),
         "positions_value": round(pos, 4),
         "total": round(total, 4),
-        "deposito_inicial": DEPOSITO_INICIAL,
-        "pnl_real": round(total - DEPOSITO_INICIAL, 4),
+        "deposito_inicial": round(deposito_total, 4),  # total acumulado (sum de todos los depósitos)
+        "pnl_real": round(total - deposito_total, 4),
+        "pnl_por_deposito": pnl_desglose,              # nuevo: desglose por período
         "daily_real": daily_real,
         "pnl_hoy_real": pnl_hoy_real,
         "pnl_7d_real": pnl_7d_real,

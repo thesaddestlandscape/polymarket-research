@@ -38,7 +38,7 @@ TRADES_CSV            = DIR_LIVE / "trades.csv"
 SWITCH_PATH           = DIR_LIVE / "LIVE_MODE_ON"
 LATCH_VENTANA_PATH    = DIR_LIVE / "freno_ventana_latch.json"
 
-CAPITAL_OPERATIVO_INICIAL = 25.44  # depósito real 2026-06-29
+CAPITAL_OPERATIVO_INICIAL = 25.44  # primer depósito 2026-06-29 (fallback; fuente de verdad: config_live.json::depositos)
 
 
 def _cargar_config() -> dict:
@@ -142,8 +142,26 @@ def bankroll_actual() -> float:
     return _bankroll_ledger()
 
 
-def _bankroll_ledger() -> float:
-    """Capital de plan puro: inicial + PNL de todos los trades cerrados.
+def _capital_total_depositado(config: dict | None = None) -> float:
+    """Suma de todos los depósitos registrados en config_live.json::depositos.
+
+    Fail-closed: si la clave falta, está vacía o hay error de parseo,
+    devuelve CAPITAL_OPERATIVO_INICIAL (primer depósito hardcoded).
+    Nunca lanza excepción.
+    """
+    if config is None:
+        config = _cargar_config()
+    try:
+        deps = config.get("depositos", [])
+        if deps:
+            return sum(float(d.get("eur", 0)) for d in deps)
+    except Exception:
+        pass
+    return CAPITAL_OPERATIVO_INICIAL
+
+
+def _bankroll_ledger(config: dict | None = None) -> float:
+    """Capital de plan puro: total depositado + PNL de todos los trades cerrados.
 
     Separado de bankroll_actual() (13-Jul) para el freno de ventana: no hay
     PnL real con granularidad de ventana (solo diaria, en balance_real.json
@@ -153,9 +171,14 @@ def _bankroll_ledger() -> float:
     ventana incoherente. El freno diario sí puede usar real en ambos
     términos (bankroll_actual + pnl_live_hoy, ambos con fallback
     coordinado); el de ventana no tiene esa opción y se queda en ledger.
+
+    El capital base se lee de config_live.json::depositos (suma de todos los
+    depósitos históricos) vía _capital_total_depositado(). Fallback a
+    CAPITAL_OPERATIVO_INICIAL si la clave no está en config.
     """
+    capital = _capital_total_depositado(config)
     if not TRADES_CSV.exists():
-        return CAPITAL_OPERATIVO_INICIAL
+        return capital
     pnl = 0.0
     with open(TRADES_CSV, encoding="utf-8") as f:
         for row in csv.DictReader(f):
@@ -164,7 +187,7 @@ def _bankroll_ledger() -> float:
                     pnl += float(row.get("pnl_neto_eur", 0) or 0)
                 except ValueError:
                     pass
-    return CAPITAL_OPERATIVO_INICIAL + pnl
+    return capital + pnl
 
 
 # ── Ventanas ──────────────────────────────────────────────────────────────────
@@ -675,7 +698,7 @@ def verificar_circuit_breaker() -> tuple[bool, str]:
     # hoy (17-Jul): el drift de ~2.5€ del ledger está diagnosticado y cerrado,
     # así que hoy se usa solo el real; el min() de seguridad vuelve solo en
     # cuanto pase la fecha, sin depender de que nadie lo revierta a mano.
-    bkr_suelo = bkr if _bankroll_minimo_usa_solo_real_hoy(config) else min(bkr, _bankroll_ledger())
+    bkr_suelo = bkr if _bankroll_minimo_usa_solo_real_hoy(config) else min(bkr, _bankroll_ledger(config))
     if bkr_suelo <= bkr_min:
         if SWITCH_PATH.exists():
             SWITCH_PATH.unlink()
@@ -735,7 +758,7 @@ def verificar_circuit_breaker() -> tuple[bool, str]:
         if _freno_ventana_usa_solo_real_hoy(config) and real_confirma_ultimo_cierre:
             bkr_ini_v = bkr - pnl_v
         else:
-            bkr_ini_v = _bankroll_ledger() - pnl_v  # bankroll al inicio de esta ventana
+            bkr_ini_v = _bankroll_ledger(config) - pnl_v  # bankroll al inicio de esta ventana
                                                       # (fail-closed: si el override está
                                                       # activo pero el cache real todavía no
                                                       # confirma el último cierre, se queda en
