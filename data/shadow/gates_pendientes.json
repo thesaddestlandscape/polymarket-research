@@ -63,6 +63,17 @@
       "avisado": false
     },
     {
+      "id": "FAVORITOCONFIRMADO_ETHBUYNO60M_REAPERTURA",
+      "descripcion": "FAVORITO_CONFIRMADO#ETH#60min#BUY_NO pausada (21-Jul, retirada de pares_permitidos_live a candidatos_evaluacion_live) — pasa el gate de IC (n=149, hit=62.4%) pero falla el gate de crecimiento logarítmico: g(f=10%)=-0.00237, payout inverso. Ver _pares_ethbuyno60min_pausa_nota_2026-07-21 en config_live.json.",
+      "strategy": "FAVORITO_CONFIRMADO",
+      "par": "ETH#60min",
+      "decision": "BUY_NO",
+      "fecha_desde": "2026-07-21",
+      "n_objetivo": 40,
+      "accion": "revisar con `python3 analisis_log_growth.py FAVORITO_CONFIRMADO ETH#60min BUY_NO` (no solo ic_bayes) con este dato fresco post-pausa; si g(f=10%)>0, considerar reactivar en pares_permitidos_live (decisión de Javi, no automática); si sigue g<0, mantener en candidatos_evaluacion_live y repetir este mismo gate más adelante",
+      "avisado": false
+    },
+    {
       "id": "OF5M_HORA_09_BTCSOL",
       "descripcion": "Hora 9 UTC en ORDER_FLOW_BLACKLIST_HOURS — scan 07-Jul BTC+SOL n=7 hit86% edge+0.147, 'prometedora, mantener hasta n>=15'",
       "strategy": "ORDER_FLOW_5M",
