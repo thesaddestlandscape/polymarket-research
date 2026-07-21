@@ -8,10 +8,10 @@
       "peor_que_mercado": true
     },
     "FAVORITO_CONFIRMADO": {
-      "n": 4588,
-      "log_loss_modelo": 0.5991,
+      "n": 4596,
+      "log_loss_modelo": 0.599,
       "log_loss_mercado": 0.5961,
-      "gap": -0.003,
+      "gap": -0.0029,
       "peor_que_mercado": true
     },
     "FAVORITO_CONFIRMADO_SOL_ALTACONVICCION": {
@@ -22,17 +22,17 @@
       "peor_que_mercado": true
     },
     "GBM_LATE_15M": {
-      "n": 6429,
-      "log_loss_modelo": 0.6584,
+      "n": 6435,
+      "log_loss_modelo": 0.6592,
       "log_loss_mercado": 0.6674,
-      "gap": 0.009,
+      "gap": 0.0082,
       "peor_que_mercado": false
     },
     "GBM_LATE_15M_ESPACIO_ATR": {
-      "n": 3625,
-      "log_loss_modelo": 0.627,
-      "log_loss_mercado": 0.6501,
-      "gap": 0.0232,
+      "n": 3631,
+      "log_loss_modelo": 0.6285,
+      "log_loss_mercado": 0.6502,
+      "gap": 0.0218,
       "peor_que_mercado": false
     },
     "GBM_LATE_15M_PYCONFIRMADO": {
@@ -43,10 +43,10 @@
       "peor_que_mercado": true
     },
     "GBM_LATE_15M_TARDIO": {
-      "n": 3599,
-      "log_loss_modelo": 0.66,
-      "log_loss_mercado": 0.6484,
-      "gap": -0.0115,
+      "n": 3604,
+      "log_loss_modelo": 0.659,
+      "log_loss_mercado": 0.6485,
+      "gap": -0.0105,
       "peor_que_mercado": true
     },
     "GBM_LATE_5M": {
@@ -64,10 +64,10 @@
       "peor_que_mercado": true
     },
     "LATE_WINDOW_5MIN": {
-      "n": 180,
-      "log_loss_modelo": 0.7097,
-      "log_loss_mercado": 0.6292,
-      "gap": -0.0805,
+      "n": 184,
+      "log_loss_modelo": 0.7066,
+      "log_loss_mercado": 0.6321,
+      "gap": -0.0746,
       "peor_que_mercado": true
     },
     "LEADLAG_BTC_XRP_15M": {
@@ -99,10 +99,10 @@
       "peor_que_mercado": true
     },
     "STREAK_FADE_15M": {
-      "n": 250,
-      "log_loss_modelo": 0.7024,
-      "log_loss_mercado": 0.6895,
-      "gap": -0.0129,
+      "n": 252,
+      "log_loss_modelo": 0.7064,
+      "log_loss_mercado": 0.6897,
+      "gap": -0.0167,
       "peor_que_mercado": true
     },
     "STREAK_FADE_5M": {
@@ -127,7 +127,7 @@
       "peor_que_mercado": true
     },
     "UPDOWN_GBM": {
-      "n": 2045,
+      "n": 2046,
       "log_loss_modelo": 0.6924,
       "log_loss_mercado": 0.6755,
       "gap": -0.0169,
