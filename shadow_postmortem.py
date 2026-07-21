@@ -1597,14 +1597,21 @@ def _sugerir_estrategias(patrones: dict, params: dict, resultados: list) -> list
             )
 
     # 3. Si IBS aparece como patrón ganador → proponer IBS-boost en shadow_predict
+    # 21-Jul: dir_text ANTES se inferia de la condicion (gt→BUY_NO, lt→BUY_YES),
+    # asumiendo ciegamente "IBS alto = reversión, apuesta NO" -- pero el patrón
+    # ya trae su direccion real (el bucket BUY_YES/BUY_NO donde se descubrió,
+    # separados desde aprender_patrones_causales). Los 3 patrones IBS vistos
+    # hasta ahora (general/BTC/ETH #15min) viven TODOS en direccion=BUY_YES: no
+    # es una señal de reversión que pide cambiar a NO, es que dentro de un BUY_YES
+    # ya decidido, IBS alto (precio cerca de máximos recientes) confirma más
+    # aciertos -- ver idea_ibs_updowngbm_hallazgo_21jul.md.
     for key, pdata in patrones.items():
         for g in pdata.get("patrones_ganadores", []):
             if g["feature"] == "ibs_15" and g["ic_patron"] > 0.15 and g["n_patron"] >= 15:
-                dir_text = "BUY_NO" if g["condicion"] == "gt" else "BUY_YES"
                 sugs.append(
-                    f"**H-IBS-{key}**: IBS {_cond_legible(g['condicion'])} {g['umbral']} "
-                    f"correlaciona con éxito en {key} (IC={g['ic_patron']:+.3f} n={g['n_patron']}). "
-                    f"Confirma señal de reversión media → alinear con {dir_text}."
+                    f"**H-IBS-{key}**: dentro de {g['direccion']}, IBS {_cond_legible(g['condicion'])} {g['umbral']} "
+                    f"sube el IC de {g['ic_base']:+.3f} a {g['ic_patron']:+.3f} en {key} (n={g['n_patron']}). "
+                    f"Ya aplicado como kelly_boost=+{g['kelly_boost']:.2f}€ automático (shadow) — no es señal de reversión a la dirección contraria."
                 )
 
     # 4. Si hay estrategia activa con IC creciente y n acercándose a 40 → alertar
