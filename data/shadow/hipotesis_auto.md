@@ -1,4 +1,4 @@
-# Hipótesis automáticas — 2026-07-21 17:56 UTC
+# Hipótesis automáticas — 2026-07-21 17:59 UTC
 _Generado por shadow_postmortem.py sobre 27245 resoluciones (PNL=+6216.50€)_
 
 ## Patrones causales activos
