@@ -854,7 +854,7 @@ def _inventory_penalty(direction: str, inv: dict) -> float:
 # ── Calcular stake ────────────────────────────────────────────────────────────
 
 def calcular_stake(ic: float, strategy: str = "", subtype: str = "",
-                   direction: str = "") -> dict:
+                   direction: str = "", techo_override: float | None = None) -> dict:
     """
     Stake para una señal con IC dado.
     Opera con el bankroll completo en cada ventana (compounding natural).
@@ -862,7 +862,18 @@ def calcular_stake(ic: float, strategy: str = "", subtype: str = "",
     Techos en cascada:
       1. Kelly half: IC × bankroll × 0.5
       2. Máx 10% del bankroll por trade (nunca más de 2€ con bankroll=20€)
-      3. Máximo absoluto del config (2€)
+      3. Máximo absoluto del config (2€), o `techo_override` si se pasa
+
+    techo_override (21-Jul, aprobado Javi -- primer paso escalonado para
+    conectar Kelly a franjas de ballenas con evidencia sólida, ver
+    project_techo_stake_condicional_eth15min_ballenas_21jul en memoria):
+    permite a un caller sustituir SOLO el techo 3 (max_stake_eur global)
+    por un valor distinto para una señal concreta, sin afectar a ninguna
+    otra llamada (default None = comportamiento idéntico al de siempre).
+    El caller es responsable de decidir cuándo pasarlo -- calcular_stake()
+    no sabe nada de bandas de ballenas ni de qué tupla es "especial", solo
+    aplica el número que le llega. Sigue pasando por TODOS los demás
+    techos (Kelly, 10% bankroll, freno diario, inventario) sin excepción.
     """
     config     = _cargar_config()
     riesgo     = config.get("riesgo", {})
@@ -874,7 +885,7 @@ def calcular_stake(ic: float, strategy: str = "", subtype: str = "",
 
     techo_kelly  = bkr * abs(ic) * (0.5 if half_kelly else 1.0)
     techo_pct    = bkr * max_pct
-    techo_config = max_stake
+    techo_config = techo_override if techo_override is not None else max_stake
 
     stake = min(techo_kelly, techo_pct, techo_config)
     stake = max(stake, min_stake) if bkr >= min_stake else 0.0

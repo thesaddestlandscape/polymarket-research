@@ -2556,7 +2556,19 @@ def main():
             ic_para_stake = ic_para_stake * cooldown_factor
             log(f"  ⏸ {cooldown_motivo} — ic_para_stake→{ic_para_stake:+.3f}")
 
-        stake_info = calcular_stake(ic_para_stake, strategy, subtype, direction=dec)
+        # Techo condicional (21-Jul, aprobado Javi, ver
+        # project_techo_stake_condicional_eth15min_ballenas_21jul en
+        # memoria): SOLO cuando ballenas_boost_aplicado es True arriba
+        # (misma señal exacta: FAVORITO_CONFIRMADO#ETH#15min#BUY_YES +
+        # ballenas_dentro_banda=True), se sustituye el techo global
+        # max_stake_eur (1.05€) por uno alternativo más alto para ESTA
+        # señal -- primer paso escalonado, no un despineo general. El
+        # resto de señales (incluida esta misma tupla fuera de banda)
+        # siguen exactamente igual que antes.
+        techo_ballenas = (riesgo.get("max_stake_eur_ballenas_eth15_dentro_banda")
+                           if ballenas_boost_aplicado else None)
+        stake_info = calcular_stake(ic_para_stake, strategy, subtype, direction=dec,
+                                    techo_override=techo_ballenas)
         if not stake_info["viable"]:
             log(f"  SKIP {strategy}#{subtype}: stake no viable — {stake_info['motivo']}")
             _snapshot_senal_bloqueada(mid, dec, precio,
