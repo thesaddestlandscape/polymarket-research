@@ -20,6 +20,6 @@
  "UPDOWN_GBM_15M_CROSS_WINDOW_SPREAD": false,
  "UPDOWN_GBM_15M_TARDIO": false,
  "UPDOWN_OU_5M": true,
- "WEEKLY_PRICE": true,
+ "WEEKLY_PRICE": false,
  "GBM_LATE_5M": true
 }
