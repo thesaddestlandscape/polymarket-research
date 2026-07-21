@@ -1,86 +1,88 @@
 #!/usr/bin/env python3
-"""Reabre el análisis de fill-ability de analisis_fills.py, pero filtrado a
-BUY_NO#15min -- el corte exacto que se retiró en bloque de live el 06-Jul por
-"selección adversa direccional" (CLAUDE.md: "vuelven vía filtro fill-ability
-con n≥30"), pendiente de decisión formal desde el 05-Jul ("inminente").
+"""Reabre la revisión de fill-ability de BUY_NO#15min pendiente desde el
+05-Jul ("inminente" en CLAUDE.md, nunca cerrada formalmente).
 
-Misma lógica de agregación por motivo que analisis_fills.py (prioridad de
-snapshot por señal, cruce con outcome shadow a precio de plan) -- solo
-añade el filtro direction=="BUY_NO" and "15min" in subtype. No reimplementa
-el resto: reusa PRIORIDAD/_prio tal cual.
+21-Jul: primera versión de este script reusaba la lista PRIORIDAD de
+analisis_fills.py para elegir un único motivo por señal -- esa lista NO
+incluye "candidato_evaluacion" (el motivo real que domina para tuplas que
+solo están en candidatos_evaluacion_live, no en pares_permitidos_live), así
+que el reporte lo descartaba en silencio y parecía que el dato llevaba
+congelado desde el 11-Jul. Era un bug del script, no un freeze real -- el
+dato se sigue acumulando sin parar (miles de filas nuevas cada semana).
+
+Corregido: usa directamente candidato_evaluacion como proxy de profundidad
+(ratio_vs_stake>=5 = habría pasado el gate real de _consultar_profundidad_
+libro) cruzado con el outcome shadow a precio de plan, un mercado único por
+(market_id, strategy) con el snapshot más reciente disponible.
 """
 import csv
-from collections import defaultdict
+import math
 from pathlib import Path
 
-import analisis_fills as af
-
 DIR = Path(__file__).parent
+SNAPSHOTS = DIR / "data/live/libro_snapshots.csv"
+RESULTS = DIR / "data/shadow/results.csv"
 N_MIN = 30
 
 
 def main():
-    senales = {}
-    with open(af.SNAPSHOTS, newline="", encoding="utf-8") as f:
-        for r in csv.DictReader(f):
-            if r["direction"] != "BUY_NO" or "15min" not in r["subtype"]:
-                continue
-            key = (r["market_id"], r["strategy"], r["direction"])
-            prev = senales.get(key)
-            if prev is None or af._prio(r["motivo"]) < af._prio(prev["motivo"]):
-                senales[key] = {"motivo": r["motivo"], "ts": r["timestamp_utc"]}
-
     outcomes = {}
-    with open(af.RESULTS, newline="", encoding="utf-8") as f:
+    with open(RESULTS, newline="", encoding="utf-8") as f:
         for r in csv.DictReader(f):
             outcomes[(r["market_id"], r["strategy"], r["decision"])] = (
                 int(r["acierto"]), float(r["pnl_neto"]))
 
-    agg = defaultdict(lambda: [0, 0, 0.0, 0])
-    for key, s in senales.items():
-        out = outcomes.get(key)
+    with open(SNAPSHOTS, newline="", encoding="utf-8") as f:
+        rows = [r for r in csv.DictReader(f)
+                if r.get("direction") == "BUY_NO" and "15min" in r.get("subtype", "")
+                and r.get("motivo") == "candidato_evaluacion"]
+
+    ultimo = {}
+    for r in rows:
+        key = (r["market_id"], r["strategy"])
+        if key not in ultimo or r["timestamp_utc"] > ultimo[key]["timestamp_utc"]:
+            ultimo[key] = r
+
+    pasaria, no_pasaria = [], []
+    for (mid, strat), r in ultimo.items():
+        out = outcomes.get((mid, strat, "BUY_NO"))
         if out is None:
-            agg[s["motivo"]][3] += 1
             continue
-        acierto, pnl = out
-        a = agg[s["motivo"]]
-        a[0] += acierto
-        a[1] += 1
-        a[2] += pnl
+        try:
+            ratio = float(r.get("ratio_vs_stake") or 0.0)
+        except ValueError:
+            ratio = 0.0
+        (pasaria if ratio >= 5 else no_pasaria).append(out)
 
-    print("Fills condicional al libro -- SOLO BUY_NO#15min (histórico completo)")
-    print(f"{'motivo':<18}{'n':>5}{'hit':>7}{'pnl_medio':>11}{'pnl_total':>11}  n>={N_MIN}")
-    for motivo in af.PRIORIDAD:
-        if motivo not in agg:
-            continue
-        w, n, pnl, sin = agg[motivo]
+    def resumen(label, lst):
+        n = len(lst)
         if n == 0:
-            print(f"{motivo:<18}{0:>5}{'—':>7}{'—':>11}{'—':>11}  (pendiente: {sin} sin resolver)")
-            continue
-        listo = "OK" if n >= N_MIN else f"({n}/{N_MIN})"
-        extra = f" | {sin} sin resolver aún" if sin else ""
-        print(f"{motivo:<18}{n:>5}{w/n:>7.0%}{pnl/n:>+10.3f}€{pnl:>+10.2f}€  {listo}{extra}")
+            print(f"{label}: n=0")
+            return None
+        hit = sum(a for a, _ in lst) / n
+        pnl = sum(p for _, p in lst)
+        print(f"{label}: n={n} hit={hit*100:.1f}% pnl_total={pnl:+.2f}€ "
+              f"pnl_medio={pnl/n:+.3f}€  {'OK' if n >= N_MIN else f'({n}/{N_MIN})'}")
+        return n, hit
 
-    ejec = agg.get("ejecutada")
-    veto = agg.get("veto_profundidad")
-    print()
-    if ejec and ejec[1] >= N_MIN and veto and veto[1] >= N_MIN:
-        gap = veto[0] / veto[1] - ejec[0] / ejec[1]
-        if gap > 0.15:
-            print(f"-> Selección adversa CONFIRMADA en BUY_NO#15min con n>={N_MIN}: "
-                  f"hit veto {veto[0]/veto[1]:.0%} vs ejecutadas {ejec[0]/ejec[1]:.0%}. "
-                  "Sigue bloqueado.")
+    p1 = resumen("Habría PASADO el gate 5x (ratio>=5)", pasaria)
+    p2 = resumen("Habría sido VETADO (ratio<5)", no_pasaria)
+
+    if p1 and p2:
+        n1, h1 = p1
+        n2, h2 = p2
+        x1, x2 = n1 * h1, n2 * h2
+        p_pool = (x1 + x2) / (n1 + n2)
+        se = math.sqrt(p_pool * (1 - p_pool) * (1 / n1 + 1 / n2))
+        z = (h2 - h1) / se if se > 0 else 0.0
+        p_val = 2 * (1 - 0.5 * (1 + math.erf(abs(z) / math.sqrt(2))))
+        print(f"\nz={z:.2f} p≈{p_val:.2e}")
+        gap = h2 - h1
+        if p_val < 0.05 and gap > 0.15:
+            print("-> Selección adversa RECONFIRMADA con dato fresco y n grande. "
+                  "Sigue bloqueado -- no reabrir BUY_NO#15min a taker plano.")
         else:
-            print(f"-> Gap veto-vs-ejecutadas {gap:+.0%} con n>={N_MIN}: "
-                  "la selección adversa NO se confirma en BUY_NO#15min con dato actual "
-                  "-- revisar si sigue justificado el bloqueo en bloque.")
-    else:
-        faltan = []
-        for nombre, a in (("ejecutada", ejec), ("veto_profundidad", veto)):
-            n = a[1] if a else 0
-            if n < N_MIN:
-                faltan.append(f"{nombre} {n}/{N_MIN}")
-        print(f"-> Aún sin n suficiente para decidir: {', '.join(faltan)}")
+            print("-> Gap no significativo o por debajo del umbral -- revisar antes de decidir.")
 
 
 if __name__ == "__main__":
