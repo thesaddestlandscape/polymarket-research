@@ -32,6 +32,7 @@ PARAMS_PATH     = DIR_SHADOW / "strategy_params.json"
 PERFORMANCE_PATH = DIR_SHADOW / "performance.csv"
 EV_KELLY_HIST_PATH = DIR_SHADOW / "ev_kelly_historico.csv"
 EV_KELLY_HIST_THROTTLE_MIN = 15  # no más de una fila cada 15min (performance.csv se recalcula c/60s)
+INTEGRIDAD_LATCH_PATH = DIR_SHADOW / "integridad_pipeline_latch.json"
 
 APUESTA_SHADOW = 0.90
 
@@ -74,32 +75,43 @@ def cargar_results() -> list:
     return cargar_results_dedup(RESULTS_PATH)
 
 
-def _verificar_integridad() -> list[str]:
-    """Grader independiente: valida results.csv antes de que el postmortem lo procese."""
+def _verificar_integridad() -> list[tuple[str, str]]:
+    """Grader independiente: valida results.csv antes de que el postmortem lo procese.
+
+    Devuelve (clave_estable, mensaje) en vez de solo el mensaje (21-Jul,
+    hallazgo: la clave de duplicados vive en el propio results.csv desde el
+    12-Jul — FAVORITO_CONFIRMADO#2866629#BUY_YES nunca se limpia del CSV
+    porque el dedup es solo en memoria vía cargar_results_dedup, así que la
+    misma alerta se reenviaba por Telegram cada ciclo (~23min) durante 10
+    días). La clave identifica el CONTENIDO real del problema (qué filas
+    duplicadas exactas, no solo "hay duplicados") para que el latch del
+    llamante distinga un duplicado NUEVO (debe avisar) de uno YA VISTO que
+    sigue sin limpiarse (no debe repetir el aviso)."""
     alertas = []
     if not RESULTS_PATH.exists():
-        return ["results.csv no existe"]
+        return [("results_csv_no_existe", "results.csv no existe")]
     content = RESULTS_PATH.read_text(encoding="utf-8")
     if any(m in content for m in ["<<<<<<<", ">>>>>>>", "======="]):
-        alertas.append("CONFLICT MARKERS en results.csv — git rebase incompleto")
+        alertas.append(("conflict_markers", "CONFLICT MARKERS en results.csv — git rebase incompleto"))
     rows = list(csv.DictReader(content.splitlines()))
     if rows:
         if "features" not in rows[0]:
-            alertas.append("Falta columna 'features' en results.csv — fix urgente")
+            alertas.append(("falta_columna_features", "Falta columna 'features' en results.csv — fix urgente"))
         bad = sum(1 for r in rows if r.get("pnl_neto") in (None, ""))
         if bad:
-            alertas.append(f"{bad} filas con pnl_neto inválido")
+            alertas.append((f"pnl_neto_invalido:{bad}", f"{bad} filas con pnl_neto inválido"))
         # 12-Jul: detecta duplicados (strategy, market_id, decision) — ya
         # deduplicados de forma transparente en cargar_results(), pero se
         # avisa igual para poder investigar la causa raíz (carrera git) si
         # empieza a repetirse con frecuencia en vez de ser un caso aislado.
         contador = Counter((r.get("strategy",""), r.get("market_id",""), r.get("decision",""))
                            for r in rows)
-        dup_keys = [k for k, n in contador.items() if n > 1]
+        dup_keys = sorted(k for k, n in contador.items() if n > 1)
         if dup_keys:
             ejemplos = ", ".join(f"{s}#{m}#{d}" for s, m, d in dup_keys[:3])
-            alertas.append(f"{len(dup_keys)} predicción(es) resuelta(s) más de una vez "
-                            f"(deduplicado automáticamente en cargar_results): {ejemplos}")
+            clave = "duplicados:" + ",".join(f"{s}#{m}#{d}" for s, m, d in dup_keys)
+            alertas.append((clave, f"{len(dup_keys)} predicción(es) resuelta(s) más de una vez "
+                            f"(deduplicado automáticamente en cargar_results): {ejemplos}"))
     return alertas
 
 
@@ -1680,19 +1692,45 @@ def main():
     # Gap 1: grader independiente
     alertas = _verificar_integridad()
     if alertas:
-        for a in alertas:
-            print(f"  [ALERTA INTEGRIDAD] {a}")
+        for _, msg_a in alertas:
+            print(f"  [ALERTA INTEGRIDAD] {msg_a}")
+        # Latch por clave estable (21-Jul, ver docstring de _verificar_
+        # integridad): solo notifica por Telegram las claves NUEVAS desde
+        # el último aviso -- una condición que persiste sin limpiarse (ej.
+        # el duplicado FAVORITO_CONFIRMADO#2866629#BUY_YES, sin tocar desde
+        # el 11-Jul) ya no reenvía el mismo mensaje cada ciclo (~23min).
         try:
-            import os, requests
-            tok = os.environ.get("TELEGRAM_TOKEN", "")
-            cid = os.environ.get("TELEGRAM_CHAT_ID", "")
-            if tok and cid:
-                msg = "⚠️ *Alerta integridad pipeline*\n" + "\n".join(f"• {a}" for a in alertas)
-                requests.post(f"https://api.telegram.org/bot{tok}/sendMessage",
-                              json={"chat_id": cid, "text": msg, "parse_mode": "Markdown"},
-                              timeout=10)
-        except Exception as e:
-            print(f"  [aviso integridad] no se pudo notificar Telegram: {e}")
+            claves_vistas = set(json.loads(INTEGRIDAD_LATCH_PATH.read_text()).get("claves", []))
+        except Exception:
+            claves_vistas = set()
+        claves_actuales = {clave for clave, _ in alertas}
+        nuevas = [(c, m) for c, m in alertas if c not in claves_vistas]
+        if nuevas:
+            try:
+                import os, requests
+                tok = os.environ.get("TELEGRAM_TOKEN", "")
+                cid = os.environ.get("TELEGRAM_CHAT_ID", "")
+                if tok and cid:
+                    msg = "⚠️ *Alerta integridad pipeline*\n" + "\n".join(f"• {m}" for _, m in nuevas)
+                    requests.post(f"https://api.telegram.org/bot{tok}/sendMessage",
+                                  json={"chat_id": cid, "text": msg, "parse_mode": "Markdown"},
+                                  timeout=10)
+            except Exception as e:
+                print(f"  [aviso integridad] no se pudo notificar Telegram: {e}")
+        # Persiste el conjunto ACTUAL completo (no solo las nuevas): si una
+        # clave deja de aparecer (se resolvió) y una condición distinta
+        # reaparece luego con esa misma clave, debe volver a avisar.
+        try:
+            INTEGRIDAD_LATCH_PATH.write_text(json.dumps({"claves": sorted(claves_actuales)}, indent=1))
+        except Exception:
+            pass
+    elif INTEGRIDAD_LATCH_PATH.exists():
+        # Todas las condiciones se resolvieron -- limpia el latch para que,
+        # si algo vuelve a fallar más adelante, se trate como nuevo.
+        try:
+            INTEGRIDAD_LATCH_PATH.write_text(json.dumps({"claves": []}, indent=1))
+        except Exception:
+            pass
 
     resultados = cargar_results()
     if not resultados:
