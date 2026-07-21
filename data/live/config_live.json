@@ -45,9 +45,9 @@
     },
     {
       "inicio": "15:00",
-      "fin": "21:30",
+      "fin": "23:00",
       "nombre": "tarde_completa",
-      "_nota": "2026-07-01: fusiona mediotarde+tarde_1+tarde_2+cierre sin huecos (13:00-19:30 UTC). Seguro respecto a horas malas: 18h UTC ya bloqueada por GBM_BLACKLIST_HOURS_AUTO, 20h UTC queda fuera del rango (termina en 19:30 UTC)."
+      "_nota": "2026-07-01: fusiona mediotarde+tarde_1+tarde_2+cierre sin huecos (13:00-19:30 UTC). Seguro respecto a horas malas: 18h UTC ya bloqueada por GBM_BLACKLIST_HOURS_AUTO, 20h UTC quedaba fuera del rango original. 2026-07-21 (aprobado Javi): fin 21:30->23:00 Madrid (19:30->21:00 UTC) para cubrir entera la hora 20 UTC (22:00 Madrid), que salió GATE OK sobre las 8 tuplas live (n=95, hit=75.8%, pnl/trade=+0.375€, CI90% no cruza cero) y con fill-ability real 47.1% (libro_snapshots.csv, ratio_vs_stake>=5x, n=425) -- mejor de las 3 horas candidatas sin cubrir detectadas ese día (05:00 y 13:00 Madrid quedan anotadas, no abiertas). Ver idea correspondiente en memoria nativa (franja horaria sin cubrir 21-Jul)."
     },
     {
       "inicio": "01:00",
