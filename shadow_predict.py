@@ -4430,6 +4430,38 @@ def main():
                     if prob_y_raw < GBM_LATE_PYBAJO_LONGSHOT_MIN:
                         dec = "SKIP"
 
+                # BUY_NO#15min "evitar banda de ballenas" (21-Jul, aprobado
+                # Javi): idea_filtro_banda_ballenas_generalizado_19jul —
+                # replicado 9/9 en analisis_filtro_banda_ballenas_20jul.py
+                # (GBM_LATE_15M / _TARDIO / _ESPACIO_ATR x BTC/ETH/SOL): el
+                # agregado sin filtrar estaba mayormente NO CONCLUYENTE
+                # (IC 0.02-0.10), y el subconjunto FUERA de la banda donde
+                # concentran su apuesta las ballenas ganadoras pasa GATE OK
+                # en las 9 (IC 0.09-0.22, p_shuf=0.000, n 359-787, Kelly
+                # g>0 PASA). Mecanismo: apostar NO cuando el NO YA es
+                # favorito claro para las ballenas (precio_no en la banda)
+                # pelea contra un consenso ya maduro, sin edge real.
+                # Ninguna de estas 9 tuplas está en pares_permitidos_live
+                # hoy -- shadow puro, cero riesgo de dinero real. Reusa
+                # ballenas_banda_lo/hi ya calculados en pred_features (no
+                # repite la consulta a ballenas_timing_state.json) pero con
+                # el precio del LADO que apostamos (1-py para BUY_NO), NO
+                # el ballenas_dentro_banda ya logueado arriba (ese es
+                # siempre sobre py, direction-agnostic -- redefinirlo
+                # rompería la comparabilidad con lo ya logueado desde
+                # 20-Jul). Solo BTC/ETH/SOL (los 3 activos validados con
+                # este filtro concreto; XRP retirado en bloque desde
+                # 10-Jul, DOGE tiene banda propia [0.3,0.5) sin validar
+                # para este mecanismo).
+                if (nombre in GBM_LATE_FAMILIA and dec == "BUY_NO"
+                        and _activo_pred in ("BTC", "ETH", "SOL")):
+                    _bb_lo = pred_features.get("ballenas_banda_lo")
+                    _bb_hi = pred_features.get("ballenas_banda_hi")
+                    if _bb_lo is not None and _bb_hi is not None:
+                        _precio_no = 1.0 - py
+                        if _bb_lo <= _precio_no < _bb_hi:
+                            dec = "SKIP"
+
                 # 1. Filtros causales — direccionales (BUY_YES/BUY_NO), se
                 # evalúan aquí (ya se conoce `dec`) para exigir que el filtro
                 # coincida con la dirección real. Antes se evaluaban sin
