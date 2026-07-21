@@ -86,6 +86,15 @@ MARGEN_CONFIRMACION_SEGUNDOS = 90
 # deberían sobrevivir tanto — candidatas() ya descarta end_date >2h en el
 # futuro; esto es solo defensa contra crecimiento sin límite del fichero).
 CONFIRM_STATE_MAX_AGE_SEGUNDOS = 6 * 3600
+# code-review 21-Jul (2ª pasada): cuánto se espera a que la resolución normal
+# (evaluar(), con su margen de estabilidad propio) cierre un trade antes de
+# que Smart Exit retome la protección por su cuenta. Acota el hueco "ninguna
+# de las dos protege" a un máximo conocido (antes no tenía cota: si
+# evaluar() reseteaba su margen de 90s una y otra vez por fallos de fetch,
+# Smart Exit ya había dejado de proteger para siempre en cuanto pasó
+# end_date). 5min = ~3x el margen normal de 90s, margen generoso para
+# reintentos transitorios sin dejar la ventana sin cota.
+GRACIA_RESOLUCION_NORMAL_SEGUNDOS = 300
 
 
 def _clave_confirmacion(strategy: str, market_id: str) -> str:
@@ -94,6 +103,23 @@ def _clave_confirmacion(strategy: str, market_id: str) -> str:
     f-string cada uno por su cuenta (code-review 21-Jul: dos construcciones
     independientes podían divergir en silencio)."""
     return f"{strategy}|{market_id}"
+
+
+def _parsear_end_date(end_str: str) -> "datetime | None":
+    """Parsea un end_date de la API/predicción a datetime tz-aware, o None si
+    está vacío o es inválido. Única fuente de verdad para este parseo —
+    code-review 21-Jul (2ª pasada): estaba duplicado verbatim en evaluar() y
+    en _check_salidas_tempranas_bajo_lock, con el riesgo de que un fix futuro
+    solo tocara una de las dos copias."""
+    if not end_str:
+        return None
+    try:
+        end_dt = datetime.fromisoformat(end_str.replace("Z", "+00:00"))
+        if end_dt.tzinfo is None:
+            end_dt = end_dt.replace(tzinfo=timezone.utc)
+        return end_dt
+    except Exception:
+        return None
 
 
 def _cargar_estado_confirmacion() -> dict:
@@ -115,14 +141,30 @@ def _cargar_estado_confirmacion() -> dict:
     # entrada parcial/corrupta (p.ej. truncada a mitad de escritura) NO debe
     # tumbar evaluar() con un KeyError — se descarta esa entrada sola, como
     # si nunca se hubiera visto, en vez de perder el ciclo entero.
+    # code-review 21-Jul (2ª pasada): bool es subclase de int en Python
+    # (isinstance(True, int) → True) y json.loads acepta NaN/Infinity por
+    # defecto — ambos colaban como "primera_vista_ts" válido y hacían que
+    # `elapsed < MARGEN` diera False, saltándose la espera y aceptando de
+    # golpe. Se excluye bool explícitamente y se exige un valor finito.
     limpio = {}
+    huerfanas = False
     for k, v in estado.items():
-        if (isinstance(v, dict) and isinstance(v.get("outcome"), str)
-                and isinstance(v.get("primera_vista_ts"), (int, float))):
+        ts = v.get("primera_vista_ts") if isinstance(v, dict) else None
+        ts_valido = (isinstance(ts, (int, float)) and not isinstance(ts, bool)
+                     and math.isfinite(ts))
+        if (isinstance(v, dict) and v.get("outcome") in ("YES", "NO") and ts_valido):
             limpio[k] = v
         else:
+            huerfanas = True
             print(f"  ⚠️ entrada de confirmación ilegible para {k!r} — "
                   f"descartada, se trata como no vista todavía")
+    if huerfanas:
+        # code-review 21-Jul (2ª pasada): si no se persiste ya aquí, y este
+        # ciclo no cambia nada más, la comparación "solo escribir si cambió"
+        # de main() nunca detecta la limpieza (compara contra ESTE mismo
+        # dict ya limpio) y la entrada corrupta queda en disco para siempre,
+        # re-avisando cada ciclo. Autocurar de inmediato en cuanto se detecta.
+        _guardar_estado_confirmacion(limpio)
     return limpio
 
 
@@ -327,16 +369,9 @@ def evaluar(pred: dict, mercado: dict, ahora: datetime | None = None,
     # cacheado queda vacío para siempre y la resolución por precio nunca se
     # acepta (trade live queda OPEN indefinidamente).
     end_str = mercado.get("endDate") or pred.get("end_date", "")
-    end_pasado = False
-    if end_str:
-        try:
-            end_dt = datetime.fromisoformat(end_str.replace("Z", "+00:00"))
-            if end_dt.tzinfo is None:
-                end_dt = end_dt.replace(tzinfo=timezone.utc)
-            end_pasado = ahora_dt >= end_dt
-        except Exception:
-            pass
-    else:
+    end_dt = _parsear_end_date(end_str)
+    end_pasado = end_dt is not None and ahora_dt >= end_dt
+    if end_dt is None:
         # Sin end_date en NINGÚN sitio (ni la respuesta fresca de la API ni
         # la predicción cacheada) — code-review 21-Jul: esto puede dejar la
         # predicción sin resolver para siempre si además closed/resolved ya
@@ -611,7 +646,11 @@ def main():
     estado_confirmacion = _cargar_estado_confirmacion()
     # Copia para comparar al final y no escribir el fichero si no cambió nada
     # este ciclo (code-review 21-Jul: evitar I/O sin motivo cada ~20s).
-    estado_confirmacion_snapshot = json.loads(json.dumps(estado_confirmacion))
+    # code-review 21-Jul (2ª pasada): basta una copia superficial -- ninguna
+    # mutación de estado_confirmacion edita un dict interno in-place, siempre
+    # reemplaza la clave entera o la borra, así que dict(...) es suficiente
+    # para la comparación posterior y evita el round-trip JSON completo.
+    estado_confirmacion_snapshot = dict(estado_confirmacion)
 
     nuevos_resultados = []
     debug_no_resueltos = 0
@@ -823,6 +862,7 @@ def _check_salidas_tempranas_bajo_lock(LIVE_CSV: Path, ts: str, umbral: float, h
 
     cols = list(trades[0].keys())
     fees_recientes = None  # lazy: solo se pide a data-api si de verdad hay una venta que cerrar
+    ahora_local = datetime.now(timezone.utc)  # una sola vez, no por posición
     for t in abiertas:
         mid = t.get("market_id", "")
         direction = t.get("direction", "")
@@ -840,23 +880,36 @@ def _check_salidas_tempranas_bajo_lock(LIVE_CSV: Path, ts: str, umbral: float, h
         # code-review 21-Jul: closed/resolved/archived YA NO se usa como señal
         # de "la resolución normal está al caer" — evaluar() (este mismo
         # fichero) verificó que Polymarket puede marcar closed=True hasta
-        # 44min ANTES del end_date real. Si se siguiera confiando en el flag
-        # aquí, Smart Exit dejaría de proteger la posición justo en la
-        # ventana en la que evaluar() todavía se niega (correctamente) a
-        # resolverla -- las dos protecciones fallarían a la vez. Se exige el
-        # mismo criterio que evaluar(): end_date genuinamente pasado.
+        # 44min ANTES del end_date real. Se exige el mismo criterio que
+        # evaluar(): end_date genuinamente pasado.
+        #
+        # code-review 21-Jul (2ª pasada): end_pasado solo no basta — evaluar()
+        # además exige un margen de estabilidad (MARGEN_CONFIRMACION_SEGUNDOS)
+        # que puede reiniciarse sin cota ante fallos de fetch/parpadeos. Si
+        # aquí se dejara de proteger para siempre en cuanto pasa end_date (sin
+        # más), y evaluar() nunca llega a confirmar, la posición queda sin
+        # NINGUNA protección por tiempo indefinido. Se da un margen de gracia
+        # acotado (GRACIA_RESOLUCION_NORMAL_SEGUNDOS) a la resolución normal;
+        # si se agota y el trade sigue OPEN, Smart Exit retoma la protección.
         end_str = mercado.get("endDate") or t.get("end_date", "")
-        end_pasado = False
-        if end_str:
-            try:
-                end_dt = datetime.fromisoformat(end_str.replace("Z", "+00:00"))
-                if end_dt.tzinfo is None:
-                    end_dt = end_dt.replace(tzinfo=timezone.utc)
-                end_pasado = datetime.now(timezone.utc) >= end_dt
-            except Exception:
-                pass
-        if end_pasado:
-            continue  # ya en camino de resolución normal, no se toca aquí
+        end_dt = _parsear_end_date(end_str)
+        if end_dt is not None:
+            segundos_desde_cierre = (ahora_local - end_dt).total_seconds()
+            if 0 <= segundos_desde_cierre < GRACIA_RESOLUCION_NORMAL_SEGUNDOS:
+                continue  # end_date pasó hace poco -- se le da margen a la resolución normal
+            # si no: end_date aún no ha pasado (sigue vivo, se protege como
+            # siempre) o ya pasó de sobra y sigue OPEN (algo se atascó -- se
+            # retoma la protección en vez de dejarlo indefinidamente expuesto)
+        else:
+            # Sin end_date determinable -- no hay forma de saber si la
+            # resolución normal lo va a manejar pronto. Se prefiere seguir
+            # protegiendo (fail-closed hacia MÁS protección) en vez de
+            # saltarlo a ciegas como hacía el flag closed/resolved antiguo.
+            if mercado.get("closed") or mercado.get("resolved") or mercado.get("archived"):
+                print(f"  ⚠️ Smart Exit: market {mid} closed/resolved=True pero "
+                      f"sin end_date en ningún sitio -- se sigue protegiendo "
+                      f"(fail-closed) en vez de asumir que la resolución "
+                      f"normal lo maneja")
 
         op = parse_outcome_prices(mercado.get("outcomePrices"))
         if not op or len(op) < 2:
