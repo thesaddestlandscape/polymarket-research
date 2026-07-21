@@ -1,5 +1,5 @@
 # CLAUDE.md — Polymarket Research Bot
-**Actualizado: 2026-07-20** | Live REABIERTO 06-Jul 06:00 UTC (objetivo: recuperar 8.50€, suelo 1€) — switch OFF desde 17-Jul (circuit breaker bankroll<1€), recarga prevista 21-Jul
+**Actualizado: 2026-07-21** | Live REABIERTO 06-Jul 06:00 UTC (objetivo: recuperar 8.50€, suelo 1€) — circuit breaker disparado 17-Jul (bankroll<1€), segunda recarga completada y switch ON de nuevo desde 21-Jul ~13:57 UTC
 
 ## Reglas de comportamiento
 - **Fail Loud**: "completado"/"verificado" es INCORRECTO si algo se asumió sin confirmar explícitamente. Surfacear incertidumbre siempre.
@@ -101,20 +101,19 @@ Bot semi-autónomo para mercados cripto Polymarket.
 - **Capital**: 25.44€ operativo live (30€ depósito, 10€ reserva)
 - **Umbral live**: IC≥0.08, n≥40 resoluciones confirmadas (valor real en `data/live/config_live.json::riesgo.min_ic_para_live`) **+ desde 17-Jul, además**: `python3 analisis_log_growth.py <strategy> <subtype> <decision>` con g>0 a f=10% — gate de crecimiento logarítmico (Kelly), complementario al IC. Un IC/EV positivo puede convivir con crecimiento compuesto negativo ("payout inverso": hit-rate alto, pérdidas grandes y poco frecuentes se comen el compounding) — caso confirmado: `FAVORITO_CONFIRMADO#{BTC,SOL,ETH}#15min#BUY_NO`, EV/$ positivo en los 3, g negativo en los 3. Ninguna candidata nueva se promociona sin pasar ambos gates.
 - **VPS**: Hetzner Helsinki (IP finlandesa — Polymarket accesible desde FI)
-- **Estrategias live activas** (`pares_permitidos_live` real a 20-Jul — ojo, vive en el nivel TOP del JSON, no dentro de `riesgo`): **9 tuplas, 7 BUY_YES + 2 BUY_NO**:
+- **Estrategias live activas** (`pares_permitidos_live` real a 21-Jul — ojo, vive en el nivel TOP del JSON, no dentro de `riesgo`): **8 tuplas, 7 BUY_YES + 1 BUY_NO**:
   | Tupla | Dirección | Desde | Nota en config_live.json |
   |---|---|---|---|
   | FAVORITO_CONFIRMADO#SOL#15min | BUY_YES | 14-Jul | `_pares_sol_promocion_nota_2026-07-14` |
   | FAVORITO_CONFIRMADO#SOL#60min | BUY_YES | 14-Jul | `_pares_sol60min_promocion_nota_2026-07-14` |
   | FAVORITO_CONFIRMADO#BTC#60min | BUY_NO | 14-Jul | `_pares_btc60min_buyno_promocion_nota_2026-07-14` |
-  | FAVORITO_CONFIRMADO#ETH#60min | BUY_NO | 14-Jul | `_pares_ethbuyno_promocion_nota_2026-07-14` |
   | UPDOWN_GBM_15M_TARDIO#BTC#15min | BUY_YES | 15-Jul | `_pares_updowngbm_tardio_btc_promocion_nota_2026-07-15` |
   | FAVORITO_CONFIRMADO#ETH#15min | BUY_YES | 15-Jul | `_pares_favoritoeth15min_promocion_nota_2026-07-15` |
   | BALLENAS_TARDIAS#BTC#15min | BUY_YES | 17-Jul | `_pares_ballenas_tardias_btc15m_promocion_nota_2026-07-17` |
   | GBM_LATE_15M#ETH#15min | BUY_YES | 17-Jul (pausada 14→reactivada 17) | `_pares_gbm_eth15min_reactivacion_nota_2026-07-17` |
   | FAVORITO_CONFIRMADO#BTC#60min | BUY_YES | **20-Jul** | `_pares_btc60min_buyyes_promocion_nota_2026-07-20` |
 
-  **Pausadas/retiradas (no descartadas, siguen en `candidatos_evaluacion_live` acumulando fill-ability)**: `GBM_LATE_15M#SOL#15min#BUY_YES` (pausada 16-Jul, racha real negativa) | `GBM_LATE_15M_ESPACIO_ATR#SOL#15min#BUY_YES` y `#BTC#15min#BUY_YES` (pausadas **20-Jul**, selección adversa confirmada con shuffle p=0.000, gap -46pp/-41pp; cruce con ballenas descartó que el timing de ESPACIO_ATR explique/arregle el hueco — su entrada real no solapa con la ventana de ballenas en BTC#15m) — ver `_pares_espacioatr_sol_btc_pausa_nota_2026-07-20`.
+  **Pausadas/retiradas (no descartadas, siguen en `candidatos_evaluacion_live` acumulando fill-ability)**: `GBM_LATE_15M#SOL#15min#BUY_YES` (pausada 16-Jul, racha real negativa) | `GBM_LATE_15M_ESPACIO_ATR#SOL#15min#BUY_YES` y `#BTC#15min#BUY_YES` (pausadas **20-Jul**, selección adversa confirmada con shuffle p=0.000, gap -46pp/-41pp; cruce con ballenas descartó que el timing de ESPACIO_ATR explique/arregle el hueco — su entrada real no solapa con la ventana de ballenas en BTC#15m) — ver `_pares_espacioatr_sol_btc_pausa_nota_2026-07-20` | `FAVORITO_CONFIRMADO#ETH#60min#BUY_NO` (pausada **21-Jul**, IC seguía pasando pero gate de crecimiento logarítmico da g=-0.00237 con n=149 — payout inverso, mismo patrón que los `#15min#BUY_NO`) — ver `_pares_ethbuyno60min_pausa_nota_2026-07-21`.
 
   **Fuera de live, solo shadow**: XRP retirado 10-Jul (racha de pérdidas). Todos los BUY_NO #15min retirados 06-Jul por selección adversa direccional, vuelven vía filtro fill-ability con n≥30. `ORDER_FLOW_5M` y `GBM_LATE_60M` (refutada, ic_bayes negativo en los 3 activos) fuera de whitelist, acumulando shadow-only.
 
