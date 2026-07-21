@@ -103,7 +103,18 @@ def _proxima_ventana(ventanas: list, hora_actual, dia_semana: int) -> str:
         return f"hoy {min(candidatas)}"
     dias = ["lun","mar","mié","jue","vie","sáb","dom"]
     prox = dias[(dia_semana + 1) % 7]
-    return f"{prox} {ventanas[0]['inicio']}" if ventanas else "indefinida"
+    if not ventanas:
+        return "indefinida"
+    # 21-Jul: bug real cazado por Javi -- usaba ventanas[0]['inicio'] (el
+    # primer elemento del array, "08:30" hoy) en vez de la ventana con el
+    # inicio MÁS TEMPRANO. Todas las ventanas se repiten a diario, así que
+    # tras agotar las de hoy la próxima ocurrencia real es mañana + la más
+    # temprana de la lista (ej. "01:00" prueba_23h_utc), no la que casualmente
+    # esté primera en el JSON. Solo afecta al texto informativo/logging --
+    # en_ventana_horaria() (la comprobación real de si el bot puede operar)
+    # ya evaluaba cada ventana por separado sin depender de esta función.
+    mas_temprana = min(v["inicio"] for v in ventanas if "inicio" in v)
+    return f"{prox} {mas_temprana}"
 
 
 def estrategia_permitida(strategy: str, subtype: str, config: dict | None = None,
