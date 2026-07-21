@@ -68,6 +68,41 @@ DIR_SHADOW = Path("data/shadow")
 DIR_SHADOW.mkdir(parents=True, exist_ok=True)
 RESULTS_PATH = DIR_SHADOW / "results.csv"
 ACCURACY_PATH = DIR_SHADOW / "strategy_accuracy.csv"
+CONFIRM_STATE_PATH = DIR_SHADOW / "resolucion_confirmacion_state.json"
+# 21-Jul (code-review pendiente desde 15-Jul, idea_shadow_resolve_cierre_prematuro):
+# margen mínimo que un outcome cerca de 1.0/0.0 debe verse ESTABLE antes de
+# aceptarse como definitivo. Cubre el caso real de un mercado resuelto 1min
+# después de su end_date con asentamiento aún inestable.
+MARGEN_CONFIRMACION_SEGUNDOS = 90
+# Entradas de confirmación más viejas que esto se podan por seguridad (nunca
+# deberían sobrevivir tanto — candidatas() ya descarta end_date >2h en el
+# futuro; esto es solo defensa contra crecimiento sin límite del fichero).
+CONFIRM_STATE_MAX_AGE_SEGUNDOS = 6 * 3600
+
+
+def _cargar_estado_confirmacion() -> dict:
+    if not CONFIRM_STATE_PATH.exists():
+        return {}
+    try:
+        return json.loads(CONFIRM_STATE_PATH.read_text(encoding="utf-8"))
+    except Exception as e:
+        # Fail-closed: un estado ilegible se trata como "nada visto todavía",
+        # nunca como "ya confirmado" — en el peor caso se repite el margen de
+        # espera una vez más, nunca se acepta una resolución de golpe.
+        print(f"  ⚠️ estado de confirmación de resolución ilegible "
+              f"({type(e).__name__}: {e}) — se trata como vacío, cualquier "
+              f"outcome pendiente reinicia su margen de confirmación")
+        return {}
+
+
+def _guardar_estado_confirmacion(estado: dict) -> None:
+    try:
+        CONFIRM_STATE_PATH.write_text(
+            json.dumps(estado, separators=(",", ":")), encoding="utf-8")
+    except Exception as e:
+        print(f"  ⚠️ fallo al escribir estado de confirmación de resolución "
+              f"({type(e).__name__}: {e}) — la próxima resolución candidata "
+              f"reiniciará su margen de confirmación")
 
 
 def _normalizar_pred(row: dict) -> dict:
@@ -189,18 +224,30 @@ def parse_outcome_prices(raw):
     return None
 
 
-def evaluar(pred: dict, mercado: dict, ahora: datetime | None = None) -> dict | None:
+def evaluar(pred: dict, mercado: dict, ahora: datetime | None = None,
+            estado_confirmacion: dict | None = None) -> dict | None:
     """
     Señal primaria: outcomePrices — si alguno llega a 1.0 el mercado está
     resuelto, independientemente de los flags closed/archived/resolved.
     Esto evita falsos negativos cuando la API actualiza los precios antes
     de cambiar el campo closed (comportamiento habitual en Polymarket).
 
-    Salvaguarda: en ventanas cortas (15-60min) el precio puede tocar ~0.99
-    por pura volatilidad intraciclo y revertir antes del cierre real. Para
-    aceptar la resolución por precio exigimos ADEMÁS que el mercado ya haya
-    pasado su end_date o que la API confirme closed/resolved — si no,
-    reintentamos en el siguiente ciclo en vez de cerrar en falso.
+    Salvaguarda 1 (21-Jul, antes solo exigía closed O end_date): el flag
+    closed/archived/resolved NO basta por sí solo — verificado 15-Jul que
+    Polymarket puede marcar closed=True hasta 44min ANTES del end_date real
+    (precio tocó ~100% del lado incorrecto por volatilidad intraciclo, el
+    mercado revirtió después). Ahora SIEMPRE se exige que el end_date real
+    haya pasado, tenga o no el mercado ya el flag closed puesto.
+
+    Salvaguarda 2 (21-Jul): pasar el end_date tampoco basta en el instante
+    exacto — un caso real resolvió mal 1min DESPUÉS de end_date, con el
+    asentamiento aún inestable ("photo finish" sin terminar de asentar). Se
+    exige ver el MISMO outcome de forma estable durante
+    MARGEN_CONFIRMACION_SEGUNDOS antes de aceptarlo como definitivo.
+    estado_confirmacion debe persistir entre ciclos (main() lo carga/guarda
+    en CONFIRM_STATE_PATH) para que el margen se cumpla de verdad; si se
+    pasa None o un dict nuevo en cada llamada, el fail-closed por diseño es
+    que NUNCA se confirme (cada llamada ve la primera vez) — nunca al revés.
     """
     if not mercado:
         return None
@@ -222,31 +269,45 @@ def evaluar(pred: dict, mercado: dict, ahora: datetime | None = None) -> dict | 
     else:
         return None  # precios no liquidados — reintentar en el siguiente ciclo
 
-    # Confirmar que el mercado realmente cerró antes de aceptar el precio como definitivo
-    is_closed = (
-        mercado.get("closed")
-        or mercado.get("archived")
-        or mercado.get("resolved")
-        or not mercado.get("active", True)
-    )
-    if not is_closed:
-        # Prioriza el endDate fresco del mercado (recién descargado en esta
-        # misma función) sobre el cacheado en la predicción — si la predicción
-        # se hizo sin endDate (mercado aún sin ese campo poblado en su
-        # momento), el cacheado queda vacío para siempre y la resolución por
-        # precio nunca se acepta (trade live queda OPEN indefinidamente).
-        end_str = mercado.get("endDate") or pred.get("end_date", "")
-        end_pasado = False
-        if end_str:
-            try:
-                end_dt = datetime.fromisoformat(end_str.replace("Z", "+00:00"))
-                if end_dt.tzinfo is None:
-                    end_dt = end_dt.replace(tzinfo=timezone.utc)
-                end_pasado = (ahora or datetime.now(timezone.utc)) >= end_dt
-            except Exception:
-                pass
-        if not end_pasado:
-            return None  # precio cerca de certeza pero ventana aún no ha cerrado — reintentar
+    # Confirmar que el mercado realmente cerró antes de aceptar el precio como
+    # definitivo. 21-Jul: el flag closed/archived/resolved/active YA NO se usa
+    # para saltarse esta comprobación — se verificó que Polymarket puede
+    # marcar closed=True hasta 44min ANTES del end_date real (ver docstring).
+    # Prioriza el endDate fresco del mercado (recién descargado en esta misma
+    # función) sobre el cacheado en la predicción — si la predicción se hizo
+    # sin endDate (mercado aún sin ese campo poblado en su momento), el
+    # cacheado queda vacío para siempre y la resolución por precio nunca se
+    # acepta (trade live queda OPEN indefinidamente).
+    end_str = mercado.get("endDate") or pred.get("end_date", "")
+    end_pasado = False
+    if end_str:
+        try:
+            end_dt = datetime.fromisoformat(end_str.replace("Z", "+00:00"))
+            if end_dt.tzinfo is None:
+                end_dt = end_dt.replace(tzinfo=timezone.utc)
+            end_pasado = (ahora or datetime.now(timezone.utc)) >= end_dt
+        except Exception:
+            pass
+    if not end_pasado:
+        return None  # precio cerca de certeza pero el reloj real aún no ha llegado a end_date — reintentar
+
+    # Margen de reconfirmación: no aceptar en el primer ciclo que se ve el
+    # outcome como definitivo — exige verlo estable un rato antes de cerrarlo.
+    ahora_dt = ahora or datetime.now(timezone.utc)
+    estado = estado_confirmacion if estado_confirmacion is not None else {}
+    clave_conf = f"{pred.get('strategy', '')}|{pred.get('market_id', '')}"
+    previa = estado.get(clave_conf)
+    if previa is None or previa.get("outcome") != outcome_real:
+        # Primera vez que vemos este outcome (o cambió respecto al anterior
+        # visto para este mismo mercado) — fail-closed: reinicia el reloj de
+        # confirmación y reintenta, nunca acepta a la primera.
+        estado[clave_conf] = {"outcome": outcome_real, "primera_vista_ts": ahora_dt.timestamp()}
+        return None
+    if ahora_dt.timestamp() - previa["primera_vista_ts"] < MARGEN_CONFIRMACION_SEGUNDOS:
+        return None  # visto pero aún no ha pasado el margen mínimo de estabilidad
+    # Confirmado: mismo outcome estable >= MARGEN_CONFIRMACION_SEGUNDOS.
+    # El llamador (main()) debe borrar clave_conf de estado_confirmacion una
+    # vez aceptado aquí, para no crecer sin límite.
 
     decision = pred.get("decision", "")
     acierto = (decision == "BUY_YES" and outcome_real == "YES") or \
@@ -486,6 +547,7 @@ def main():
 
     pendientes = cargar_predicciones_pendientes()
     ya_resueltas = cargar_ya_resueltas()
+    estado_confirmacion = _cargar_estado_confirmacion()
 
     nuevos_resultados = []
     debug_no_resueltos = 0
@@ -523,7 +585,7 @@ def main():
             continue
         mid = pred.get("market_id", "")
         mercado = cache_mercados.get(mid)
-        res = evaluar(pred, mercado, ahora=ahora)
+        res = evaluar(pred, mercado, ahora=ahora, estado_confirmacion=estado_confirmacion)
         if res is None:
             if mercado and debug_no_resueltos < 3:
                 precios = mercado.get("outcomePrices", "?")
@@ -537,6 +599,9 @@ def main():
 
         # Marcar como resuelta en memoria para evitar duplicados dentro del mismo run
         ya_resueltas.add(clave)
+        # Ya confirmada de forma definitiva — no hace falta seguir rastreando
+        # su margen de confirmación.
+        estado_confirmacion.pop(f"{clave[0]}|{clave[1]}", None)
 
         nuevos_resultados.append({
             "resolution_timestamp": ts,
@@ -568,6 +633,16 @@ def main():
             maker_sim.simular(pred, mercado, res, ts)
         except Exception:
             pass
+
+    # Podar entradas de confirmación demasiado viejas (defensa contra
+    # crecimiento sin límite; ver CONFIRM_STATE_MAX_AGE_SEGUNDOS) y persistir
+    # el estado — debe guardarse SIEMPRE, haya o no resoluciones nuevas este
+    # ciclo, porque el margen de confirmación se cumple entre ciclos.
+    ahora_ts = ahora.timestamp()
+    for k in [k for k, v in estado_confirmacion.items()
+              if ahora_ts - v.get("primera_vista_ts", ahora_ts) > CONFIRM_STATE_MAX_AGE_SEGUNDOS]:
+        estado_confirmacion.pop(k, None)
+    _guardar_estado_confirmacion(estado_confirmacion)
 
     print(f"  Predicciones pendientes consultadas: {len(consultados_ids)} mercados")
     print(f"  Resoluciones nuevas: {len(nuevos_resultados)}")
