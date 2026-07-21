@@ -44,6 +44,7 @@
   "GBM_LATE_15M_ESPACIO_ATR#SOL#15min|patron|sigma_h|gt|BUY_YES",
   "GBM_LATE_15M_ESPACIO_ATR#SOL#15min|patron|sigma_h|lt|BUY_NO",
   "GBM_LATE_15M_ESPACIO_ATR#SOL#15min|patron|sigma_h|lt|BUY_YES",
+  "GBM_LATE_15M_ESPACIO_ATR#XRP#15min|patron|sigma_ewma_delta_pct|gt|BUY_NO",
   "GBM_LATE_15M_ESPACIO_ATR#XRP#15min|patron|sigma_ewma_delta_pct|gt|BUY_YES",
   "GBM_LATE_15M_ESPACIO_ATR#XRP#15min|patron|sigma_ewma_delta_pct|lt|BUY_NO",
   "GBM_LATE_15M_ESPACIO_ATR#XRP#15min|patron|sigma_h|gt|BUY_NO",
