@@ -4585,6 +4585,47 @@ def main():
                 if (dec == "BUY_YES" and subtype == "ETH#15min" and drift_15_val is not None
                         and float(drift_15_val) < -1.0):
                     apuesta = min(2.00, apuesta * 1.1)
+                # FAVORITO_CONFIRMADO#ETH#15min#BUY_YES "dentro de banda de
+                # ballenas" (21-Jul, aprobado Javi): idea_filtro_banda_
+                # ballenas_generalizado_19jul, refinamiento de una tupla ya
+                # en pares_permitidos_live desde 15-Jul. analisis_filtro_
+                # banda_ballenas_20jul.py: agregado sin filtrar n=471
+                # hit=72.8% IC=+0.227 NO CONCLUYENTE (PnL bootstrap cruza
+                # cero); filtrado DENTRO de banda n=180 hit=85.6%
+                # IC=+0.352 GATE OK, PnL/trade=+0.128€ (CI90%
+                # [+0.017,+0.239] NO cruza cero), Kelly g=+0.0057 PASA.
+                # Boost ×1.1 (mismo factor que el resto de confluencias de
+                # este fichero, ej. ETH15-REVERSION arriba) -- NO un gate
+                # binario, la tupla sigue operando fuera de banda igual que
+                # siempre, solo aumenta convicción cuando coincide con
+                # donde las ballenas ganadoras ya confirman el favorito.
+                # Explícitamente por NOMBRE (no solo subtype+decision, a
+                # diferencia del bloque de arriba): GBM_LATE_15M#ETH#15min
+                # #BUY_YES TAMBIÉN está live hoy y NUNCA se validó este
+                # boost para esa estrategia -- aplicarlo sin el guard de
+                # nombre lo habría afectado también, sin evidencia.
+                # ballenas_dentro_banda ya está en pred_features (universal
+                # desde 20-Jul) y para BUY_YES es exactamente el precio_lado
+                # correcto (py, el lado que apostamos) -- sin mismatch como
+                # sí lo hay para BUY_NO (ver filtro evitar-banda arriba).
+                # /code-review 21-Jul cazó que este boost, tal cual estaba
+                # aquí, NO tocaba dinero real pese a lo que decía el
+                # comentario original -- live_trade.py nunca lee esta
+                # `apuesta`, calcula el stake real de forma independiente
+                # vía calcular_stake(). Boost espejo añadido en
+                # live_trade.py::main() (busca boost_ic_ballenas_favorito_
+                # eth15) para que SÍ entre en el cálculo real -- ese es el
+                # que de verdad "toca dinero LIVE" (hoy inerte porque
+                # max_stake_eur está pineado a min_stake_eur, mismo patrón
+                # que boost_ic_coincidencia/smartmoney_sol). Este boost de
+                # aquí (shadow_predict.py) queda solo para que `apuesta`
+                # (columna shadow) refleje la misma convicción al leer
+                # results.csv -- OJO al releer PnL/trade de esta tupla:
+                # ya viene con el ×1.1 aplicado, no es comparable 1:1 con
+                # la baseline sin boost que motivó la promoción.
+                if (nombre == "FAVORITO_CONFIRMADO" and subtype == "ETH#15min"
+                        and dec == "BUY_YES" and pred_features.get("ballenas_dentro_banda") is True):
+                    apuesta = min(2.00, apuesta * 1.1)
                 ed = en if dec != "BUY_NO" else -en
                 if dec != "SKIP":
                     ops += 1

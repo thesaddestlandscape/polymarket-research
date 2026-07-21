@@ -2151,6 +2151,7 @@ def main():
         _wl_por_mercado[_p.get("market_id", "")][_p_dec].add(_key)
     boost_ic_coincidencia   = riesgo.get("boost_ic_coincidencia_tuplas", 1.0)
     boost_ic_smartmoney_sol = riesgo.get("boost_ic_smartmoney_favorito_sol", 1.0)
+    boost_ic_ballenas_favorito_eth15 = riesgo.get("boost_ic_ballenas_favorito_eth15", 1.0)
 
     ya_operados  = _ya_operados_hoy()
     # Mercados con orden maker viva (piloto): también se saltan la ruta
@@ -2390,6 +2391,37 @@ def main():
                         f"ic_para_stake {ic_prev:+.3f}→{ic_para_stake:+.3f} "
                         f"(boost×{boost_ic_smartmoney_sol:.2f})")
 
+        # Boost condicionado a banda de ballenas para FAVORITO_CONFIRMADO#ETH
+        # #15min#BUY_YES (21-Jul, aprobado Javi — ver
+        # idea_filtro_banda_ballenas_generalizado_19jul y
+        # analisis_filtro_banda_ballenas_20jul.py: agregado n=471 hit=72.8%
+        # IC=+0.227 NO CONCLUYENTE; filtrado dentro de la banda de ballenas
+        # n=180 hit=85.6% IC=+0.352 GATE OK, PnL/trade=+0.128€ CI90% no
+        # cruza cero, Kelly g=+0.0057 PASA). Mismo patrón exacto que el
+        # boost de smartmoney_sol de arriba: solo afecta ic_para_stake
+        # (tamaño), nunca la elegibilidad — ic_hist crudo ya pasó su propio
+        # gate arriba sin ayuda de este boost. boost=1.0 por defecto
+        # (ausente en config) = no-op explícito. Impacto en euros hoy
+        # GARANTIZADO 0: max_stake_eur está pineado igual que min_stake_eur
+        # (1.05€ ambos) → calcular_stake() devuelve 1.05€ pase lo que pase
+        # ic_para_stake (mismo patrón ya documentado para P15/coincidencia/
+        # smartmoney_sol) — el boost queda correctamente cableado y listo
+        # para el día que se despinee max_stake_eur, sin tocar código
+        # entonces. La feature ballenas_dentro_banda de shadow_predict.py
+        # (universal desde 20-Jul) es exactamente el precio_lado correcto
+        # para BUY_YES (py, el lado que apostamos) -- se relee aquí de
+        # feats_pred (mismo JSON ya parseado arriba), no se recalcula.
+        ballenas_boost_aplicado = False
+        if (strategy == "FAVORITO_CONFIRMADO" and subtype == "ETH#15min" and dec == "BUY_YES"
+                and boost_ic_ballenas_favorito_eth15 != 1.0
+                and feats_pred.get("ballenas_dentro_banda") is True):
+            ic_prev = ic_para_stake
+            ic_para_stake = ic_para_stake * boost_ic_ballenas_favorito_eth15
+            ballenas_boost_aplicado = True
+            log(f"  ✚ Ballenas dentro de banda: {strategy}#{subtype} {dec} mid={mid} — "
+                f"ic_para_stake {ic_prev:+.3f}→{ic_para_stake:+.3f} "
+                f"(boost×{boost_ic_ballenas_favorito_eth15:.2f})")
+
         # Techo al boost COMBINADO (code-review 14-Jul, sesión siguiente):
         # coincidencia y smartmoney son independientes y se aplican en
         # cascada sobre la misma ic_para_stake — si algún día ambas están
@@ -2536,6 +2568,7 @@ def main():
                                 else resultado.get("error", ""))
                                 + (f" coincide_tupla=1 ic_boost={ic_para_stake:+.3f}" if coincide else "")
                                 + (f" smartmoney_boost=1 ic_boost={ic_para_stake:+.3f}" if smartmoney_boost_aplicado else "")
+                                + (f" ballenas_boost=1 ic_boost={ic_para_stake:+.3f}" if ballenas_boost_aplicado else "")
                                 + (f" streak_cooldown=1 ic_cooldown={ic_para_stake:+.3f}" if cooldown_activo else "")),
         }
         _registrar_trade(trade)
