@@ -2718,6 +2718,26 @@ ACUMULAR_SHADOW_AUNQUE_DESACTIVADA = {"GBM_LATE_60M", "GBM_LATE_15M_TARDIO", "GB
 # tenga más resoluciones.
 GBM_LATE_DRIFT_VENT_MIN_PCT = 0.03  # % — distancia mínima |spot vs ref ventana| (antes 0.02)
 
+# H-CUSTOM-GBMLATE-PYBAJO-LONGSHOT (aprobado Javi 21-Jul): favorito-longshot
+# bias del lado BUY_YES de GBM_LATE_15M, mismo mecanismo que el sistema ya
+# filtra en otros sitios (H-CUSTOM-BUYNO-LONGSHOT-15MIN, PY_MKT_MAX_BUY_NO_
+# ETH15) pero nunca aplicado aquí. Gate cruzado 11-Jul (vigia_pybajo.py latch,
+# n=290 IC=-0.154) y reforzado desde entonces (21-Jul: n=520 IC=-0.190
+# PNL=-82.41€ shadow, empeorando con el tiempo, no diluyéndose). Umbral sobre
+# prob_yes_modelo (prob_y_raw, la misma columna que valida la hipótesis en
+# hipotesis_custom.json) — comprar YES barato que el propio modelo no cree es
+# apostar contra el favorito. Afecta a GBM_LATE_15M#ETH#15min#BUY_YES, live
+# hoy; sin restringir por activo porque el gate se validó agregado en los 4
+# pares (BTC/ETH/SOL/XRP).
+# /code-review (21-Jul) exigió el test de permutación que faltaba antes de
+# tocar un par live — corrido en analisis_shuffle_pybajo_longshot_21jul.py:
+# zona baja n=524 IC=-0.1920 shuffle p=0.0000/20000 (cola baja, sobrevive
+# BH-FDR K=2), split temporal negativo en ambas mitades. De paso resuelve el
+# caveat "live +14.03€ n=27": recalculado con la misma metodología sobre los
+# 21 trades reales en la zona, IC=-0.0217 shuffle p=0.4944 — era ruido de
+# muestra pequeña, no contradice el shadow.
+GBM_LATE_PYBAJO_LONGSHOT_MIN = 0.53
+
 # Propuesta #1 (artículo breakout trading, 09-Jul): el "espacio" debería
 # escalar con volatilidad propia del activo (ATR-multiplier), no ser un %
 # fijo igual para BTC que para XRP. `d` ya se calcula en _s_gbm_late como
@@ -4398,6 +4418,15 @@ def main():
                                 dec = "SKIP"
                         except (TypeError, ValueError):
                             pass
+
+                # GBM_LATE_15M BUY_YES con prob_yes_modelo bajo (21-Jul,
+                # aprobado Javi): ver GBM_LATE_PYBAJO_LONGSHOT_MIN arriba para
+                # el detalle del hallazgo y el gate cruzado. prob_y_raw (no el
+                # calibrado) porque es la misma columna que persiste
+                # prob_yes_modelo unas líneas más arriba.
+                if nombre == "GBM_LATE_15M" and dec == "BUY_YES":
+                    if prob_y_raw < GBM_LATE_PYBAJO_LONGSHOT_MIN:
+                        dec = "SKIP"
 
                 # 1. Filtros causales — direccionales (BUY_YES/BUY_NO), se
                 # evalúan aquí (ya se conoce `dec`) para exigir que el filtro
