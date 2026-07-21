@@ -1,17 +1,17 @@
 {
   "estrategias": {
     "BALLENAS_CONFIRMADAS_15M": {
-      "n": 567,
-      "log_loss_modelo": 0.6793,
-      "log_loss_mercado": 0.6285,
-      "gap": -0.0508,
+      "n": 571,
+      "log_loss_modelo": 0.6776,
+      "log_loss_mercado": 0.6287,
+      "gap": -0.0489,
       "peor_que_mercado": true
     },
     "FAVORITO_CONFIRMADO": {
-      "n": 4583,
-      "log_loss_modelo": 0.5994,
-      "log_loss_mercado": 0.5963,
-      "gap": -0.0031,
+      "n": 4588,
+      "log_loss_modelo": 0.5991,
+      "log_loss_mercado": 0.5961,
+      "gap": -0.003,
       "peor_que_mercado": true
     },
     "FAVORITO_CONFIRMADO_SOL_ALTACONVICCION": {
@@ -22,17 +22,17 @@
       "peor_que_mercado": true
     },
     "GBM_LATE_15M": {
-      "n": 6425,
-      "log_loss_modelo": 0.6588,
-      "log_loss_mercado": 0.6673,
-      "gap": 0.0085,
+      "n": 6429,
+      "log_loss_modelo": 0.6584,
+      "log_loss_mercado": 0.6674,
+      "gap": 0.009,
       "peor_que_mercado": false
     },
     "GBM_LATE_15M_ESPACIO_ATR": {
-      "n": 3621,
-      "log_loss_modelo": 0.6276,
-      "log_loss_mercado": 0.65,
-      "gap": 0.0224,
+      "n": 3625,
+      "log_loss_modelo": 0.627,
+      "log_loss_mercado": 0.6501,
+      "gap": 0.0232,
       "peor_que_mercado": false
     },
     "GBM_LATE_15M_PYCONFIRMADO": {
@@ -43,10 +43,10 @@
       "peor_que_mercado": true
     },
     "GBM_LATE_15M_TARDIO": {
-      "n": 3595,
-      "log_loss_modelo": 0.6607,
-      "log_loss_mercado": 0.6483,
-      "gap": -0.0123,
+      "n": 3599,
+      "log_loss_modelo": 0.66,
+      "log_loss_mercado": 0.6484,
+      "gap": -0.0115,
       "peor_que_mercado": true
     },
     "GBM_LATE_5M": {
@@ -64,10 +64,10 @@
       "peor_que_mercado": true
     },
     "LATE_WINDOW_5MIN": {
-      "n": 172,
-      "log_loss_modelo": 0.7015,
-      "log_loss_mercado": 0.6297,
-      "gap": -0.0718,
+      "n": 180,
+      "log_loss_modelo": 0.7097,
+      "log_loss_mercado": 0.6292,
+      "gap": -0.0805,
       "peor_que_mercado": true
     },
     "LEADLAG_BTC_XRP_15M": {
