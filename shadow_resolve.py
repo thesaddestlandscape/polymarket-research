@@ -73,6 +73,14 @@ CONFIRM_STATE_PATH = DIR_SHADOW / "resolucion_confirmacion_state.json"
 # margen mínimo que un outcome cerca de 1.0/0.0 debe verse ESTABLE antes de
 # aceptarse como definitivo. Cubre el caso real de un mercado resuelto 1min
 # después de su end_date con asentamiento aún inestable.
+# code-review 21-Jul: este margen es un heurístico de tiempo, sin medición
+# propia de cuánto dura un asentamiento inestable real — la fuente de
+# resolución OFICIAL (Chainlink, vía fetch_chainlink_prices.py) sería más
+# precisa que este margen fijo, pero a 21-Jul solo lleva ~1-2 días
+# acumulando y aún no está conectada a ninguna decisión en todo el proyecto
+# (ver memoria idea_nested_arb_garantia_causa_chainlink_20jul) — conectarla
+# aquí hoy sería una integración nueva sin datos suficientes para validarla,
+# no una mejora de este fix. Queda anotado como mejora futura, no construido.
 MARGEN_CONFIRMACION_SEGUNDOS = 90
 # Entradas de confirmación más viejas que esto se podan por seguridad (nunca
 # deberían sobrevivir tanto — candidatas() ya descarta end_date >2h en el
@@ -80,11 +88,19 @@ MARGEN_CONFIRMACION_SEGUNDOS = 90
 CONFIRM_STATE_MAX_AGE_SEGUNDOS = 6 * 3600
 
 
+def _clave_confirmacion(strategy: str, market_id: str) -> str:
+    """Única fuente de verdad para la clave de resolucion_confirmacion_state.json
+    — evaluar() y main() deben llamar a esta función en vez de construir el
+    f-string cada uno por su cuenta (code-review 21-Jul: dos construcciones
+    independientes podían divergir en silencio)."""
+    return f"{strategy}|{market_id}"
+
+
 def _cargar_estado_confirmacion() -> dict:
     if not CONFIRM_STATE_PATH.exists():
         return {}
     try:
-        return json.loads(CONFIRM_STATE_PATH.read_text(encoding="utf-8"))
+        estado = json.loads(CONFIRM_STATE_PATH.read_text(encoding="utf-8"))
     except Exception as e:
         # Fail-closed: un estado ilegible se trata como "nada visto todavía",
         # nunca como "ya confirmado" — en el peor caso se repite el margen de
@@ -93,12 +109,28 @@ def _cargar_estado_confirmacion() -> dict:
               f"({type(e).__name__}: {e}) — se trata como vacío, cualquier "
               f"outcome pendiente reinicia su margen de confirmación")
         return {}
+    if not isinstance(estado, dict):
+        return {}
+    # Fail-closed también por entrada individual (code-review 21-Jul): una
+    # entrada parcial/corrupta (p.ej. truncada a mitad de escritura) NO debe
+    # tumbar evaluar() con un KeyError — se descarta esa entrada sola, como
+    # si nunca se hubiera visto, en vez de perder el ciclo entero.
+    limpio = {}
+    for k, v in estado.items():
+        if (isinstance(v, dict) and isinstance(v.get("outcome"), str)
+                and isinstance(v.get("primera_vista_ts"), (int, float))):
+            limpio[k] = v
+        else:
+            print(f"  ⚠️ entrada de confirmación ilegible para {k!r} — "
+                  f"descartada, se trata como no vista todavía")
+    return limpio
 
 
 def _guardar_estado_confirmacion(estado: dict) -> None:
     try:
-        CONFIRM_STATE_PATH.write_text(
-            json.dumps(estado, separators=(",", ":")), encoding="utf-8")
+        tmp = CONFIRM_STATE_PATH.with_suffix(".json.tmp")
+        tmp.write_text(json.dumps(estado, separators=(",", ":")), encoding="utf-8")
+        tmp.replace(CONFIRM_STATE_PATH)
     except Exception as e:
         print(f"  ⚠️ fallo al escribir estado de confirmación de resolución "
               f"({type(e).__name__}: {e}) — la próxima resolución candidata "
@@ -248,18 +280,33 @@ def evaluar(pred: dict, mercado: dict, ahora: datetime | None = None,
     en CONFIRM_STATE_PATH) para que el margen se cumpla de verdad; si se
     pasa None o un dict nuevo en cada llamada, el fail-closed por diseño es
     que NUNCA se confirme (cada llamada ve la primera vez) — nunca al revés.
+
+    Nota (code-review 21-Jul): "estable" se exige de forma CONTINUA — un
+    ciclo intermedio que no repita el mismo outcome (precio no liquidado,
+    fetch fallido o end_date aún no pasado) BORRA el progreso de
+    confirmación en curso para este mercado, no solo lo deja congelado. Si
+    no fuera así, un asentamiento que parpadea (terminal→no-terminal→
+    terminal) podría acumular los 90s con huecos de inestabilidad en medio,
+    exactamente el escenario que este margen existe para descartar.
     """
+    ahora_dt = ahora or datetime.now(timezone.utc)
+    estado = estado_confirmacion if estado_confirmacion is not None else {}
+    clave_conf = _clave_confirmacion(pred.get("strategy", ""), pred.get("market_id", ""))
+
     if not mercado:
+        estado.pop(clave_conf, None)
         return None
 
     # --- Señal primaria: outcomePrices ---
     precios = parse_outcome_prices(mercado.get("outcomePrices"))
     if not precios or len(precios) < 2:
+        estado.pop(clave_conf, None)
         return None
     try:
         py_final = float(precios[0])
         pn_final = float(precios[1])
     except (ValueError, TypeError):
+        estado.pop(clave_conf, None)
         return None
 
     if abs(py_final - 1.0) < 0.01:
@@ -267,6 +314,7 @@ def evaluar(pred: dict, mercado: dict, ahora: datetime | None = None,
     elif abs(pn_final - 1.0) < 0.01:
         outcome_real = "NO"
     else:
+        estado.pop(clave_conf, None)
         return None  # precios no liquidados — reintentar en el siguiente ciclo
 
     # Confirmar que el mercado realmente cerró antes de aceptar el precio como
@@ -285,17 +333,30 @@ def evaluar(pred: dict, mercado: dict, ahora: datetime | None = None,
             end_dt = datetime.fromisoformat(end_str.replace("Z", "+00:00"))
             if end_dt.tzinfo is None:
                 end_dt = end_dt.replace(tzinfo=timezone.utc)
-            end_pasado = (ahora or datetime.now(timezone.utc)) >= end_dt
+            end_pasado = ahora_dt >= end_dt
         except Exception:
             pass
+    else:
+        # Sin end_date en NINGÚN sitio (ni la respuesta fresca de la API ni
+        # la predicción cacheada) — code-review 21-Jul: esto puede dejar la
+        # predicción sin resolver para siempre si además closed/resolved ya
+        # es True (el bypass que aceptaba esto de inmediato se quitó a
+        # propósito, ver Salvaguarda 1). No se reintroduce ningún bypass —
+        # se prefiere fail-closed (nunca resolver mal) a fail-open (resolver
+        # mal) — pero se deja constancia en el log para que sea detectable
+        # en vez de un None silencioso indistinguible de "aún no ha cerrado".
+        if mercado.get("closed") or mercado.get("resolved") or mercado.get("archived"):
+            print(f"  ⚠️ market {pred.get('market_id','')}: closed/resolved=True "
+                  f"pero SIN end_date en ningún sitio (ni API ni predicción) — "
+                  f"no se resuelve por precio hasta tener un end_date real; "
+                  f"si esto persiste, revisar manualmente (reconciliar_posiciones.py "
+                  f"avisa aparte para trades live >60min OPEN tras su end_date)")
     if not end_pasado:
+        estado.pop(clave_conf, None)
         return None  # precio cerca de certeza pero el reloj real aún no ha llegado a end_date — reintentar
 
     # Margen de reconfirmación: no aceptar en el primer ciclo que se ve el
     # outcome como definitivo — exige verlo estable un rato antes de cerrarlo.
-    ahora_dt = ahora or datetime.now(timezone.utc)
-    estado = estado_confirmacion if estado_confirmacion is not None else {}
-    clave_conf = f"{pred.get('strategy', '')}|{pred.get('market_id', '')}"
     previa = estado.get(clave_conf)
     if previa is None or previa.get("outcome") != outcome_real:
         # Primera vez que vemos este outcome (o cambió respecto al anterior
@@ -548,6 +609,9 @@ def main():
     pendientes = cargar_predicciones_pendientes()
     ya_resueltas = cargar_ya_resueltas()
     estado_confirmacion = _cargar_estado_confirmacion()
+    # Copia para comparar al final y no escribir el fichero si no cambió nada
+    # este ciclo (code-review 21-Jul: evitar I/O sin motivo cada ~20s).
+    estado_confirmacion_snapshot = json.loads(json.dumps(estado_confirmacion))
 
     nuevos_resultados = []
     debug_no_resueltos = 0
@@ -601,7 +665,7 @@ def main():
         ya_resueltas.add(clave)
         # Ya confirmada de forma definitiva — no hace falta seguir rastreando
         # su margen de confirmación.
-        estado_confirmacion.pop(f"{clave[0]}|{clave[1]}", None)
+        estado_confirmacion.pop(_clave_confirmacion(clave[0], clave[1]), None)
 
         nuevos_resultados.append({
             "resolution_timestamp": ts,
@@ -635,14 +699,18 @@ def main():
             pass
 
     # Podar entradas de confirmación demasiado viejas (defensa contra
-    # crecimiento sin límite; ver CONFIRM_STATE_MAX_AGE_SEGUNDOS) y persistir
-    # el estado — debe guardarse SIEMPRE, haya o no resoluciones nuevas este
-    # ciclo, porque el margen de confirmación se cumple entre ciclos.
+    # crecimiento sin límite; ver CONFIRM_STATE_MAX_AGE_SEGUNDOS). El margen
+    # de confirmación se cumple entre ciclos, así que esto debe evaluarse
+    # SIEMPRE, haya o no resoluciones nuevas — pero solo se escribe a disco
+    # si algo cambió de verdad respecto a lo cargado al inicio (code-review
+    # 21-Jul: escribir el fichero cada ~20s sin cambios era I/O sin motivo,
+    # y este proyecto solo escribe sus otros ficheros de estado on-change).
     ahora_ts = ahora.timestamp()
     for k in [k for k, v in estado_confirmacion.items()
               if ahora_ts - v.get("primera_vista_ts", ahora_ts) > CONFIRM_STATE_MAX_AGE_SEGUNDOS]:
         estado_confirmacion.pop(k, None)
-    _guardar_estado_confirmacion(estado_confirmacion)
+    if estado_confirmacion != estado_confirmacion_snapshot:
+        _guardar_estado_confirmacion(estado_confirmacion)
 
     print(f"  Predicciones pendientes consultadas: {len(consultados_ids)} mercados")
     print(f"  Resoluciones nuevas: {len(nuevos_resultados)}")
@@ -769,7 +837,25 @@ def _check_salidas_tempranas_bajo_lock(LIVE_CSV: Path, ts: str, umbral: float, h
         mercado = mercados.get(mid)
         if not mercado:
             continue  # fail-closed: sin dato de mercado, no se evalúa esta posición
-        if mercado.get("closed") or mercado.get("resolved") or mercado.get("archived"):
+        # code-review 21-Jul: closed/resolved/archived YA NO se usa como señal
+        # de "la resolución normal está al caer" — evaluar() (este mismo
+        # fichero) verificó que Polymarket puede marcar closed=True hasta
+        # 44min ANTES del end_date real. Si se siguiera confiando en el flag
+        # aquí, Smart Exit dejaría de proteger la posición justo en la
+        # ventana en la que evaluar() todavía se niega (correctamente) a
+        # resolverla -- las dos protecciones fallarían a la vez. Se exige el
+        # mismo criterio que evaluar(): end_date genuinamente pasado.
+        end_str = mercado.get("endDate") or t.get("end_date", "")
+        end_pasado = False
+        if end_str:
+            try:
+                end_dt = datetime.fromisoformat(end_str.replace("Z", "+00:00"))
+                if end_dt.tzinfo is None:
+                    end_dt = end_dt.replace(tzinfo=timezone.utc)
+                end_pasado = datetime.now(timezone.utc) >= end_dt
+            except Exception:
+                pass
+        if end_pasado:
             continue  # ya en camino de resolución normal, no se toca aquí
 
         op = parse_outcome_prices(mercado.get("outcomePrices"))
