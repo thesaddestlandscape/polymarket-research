@@ -303,9 +303,49 @@ def watch_window(activo: str, ts_end: int) -> bool:
             edge = cfg["prob_bucket"] - py
             log(f"[{ts_end}] CONFIRMADO concentracion={pct_yes:.2f} n={n} py={py:.3f} "
                 f"edge={edge:+.3f} restante={restante:.1f}s {_resumen_wallet_edge(wallets_yes)}", activo)
+            _registrar_tracker(activo, mercado, py, edge, pct_yes, n, restante)
             return disparar(activo, mercado, py, edge, restante)
 
         time.sleep(POLL_INTERVAL_S)
+
+
+TRACKER_PATH = DIR_SHADOW / "ballenas_5min_dry_run.csv"
+_tracker_lock = threading.Lock()
+
+
+def _registrar_tracker(activo: str, mercado: dict, py: float, edge: float,
+                        concentracion: float, n_ballenas: int, restante_s: float) -> None:
+    """21-Jul (petición Javi, gap detectado: 3 días de CONFIRMADO sin ningún
+    tracker de resultados). Persiste ANTES de disparar() a propósito -- una
+    confirmación es "la señal de ballenas dijo esto" independientemente de
+    si puede_operar_live() la deja pasar (switch OFF hoy bloquea el 100% de
+    los disparos, ver disparar()); el tracker debe medir la señal, no el
+    gate de dinero real que la envuelve. resuelve_ballenas_5min.py lee este
+    CSV y rellena outcome_real/acierto vía gamma-api (mismo mecanismo que
+    shadow_resolve.py) cuando el mercado ya haya cerrado."""
+    nuevo = not TRACKER_PATH.exists()
+    fila = {
+        "timestamp_utc": datetime.now(timezone.utc).isoformat(timespec="seconds"),
+        "activo": activo,
+        "market_id": mercado.get("market_id", ""),
+        "condition_id": mercado.get("condition_id", ""),
+        "end_date": mercado.get("end_date", ""),
+        "py": round(py, 4),
+        "edge": round(edge, 4),
+        "concentracion": round(concentracion, 4),
+        "n_ballenas": n_ballenas,
+        "restante_s": round(restante_s, 1),
+        "outcome_real": "",
+        "acierto": "",
+        "resolved_ts": "",
+    }
+    with _tracker_lock:
+        import csv as _csv
+        with open(TRACKER_PATH, "a", newline="", encoding="utf-8") as f:
+            w = _csv.DictWriter(f, fieldnames=list(fila.keys()))
+            if nuevo:
+                w.writeheader()
+            w.writerow(fila)
 
 
 def disparar(activo: str, mercado: dict, py: float, edge: float, restante_s: float) -> bool:
