@@ -10,17 +10,17 @@
     "precio_medio_frozen": 0.6091,
     "edge_pp_frozen": 4.171,
     "pnl_proxy_frozen": 139.38,
-    "forward_n": 485,
-    "forward_aciertos": 302,
-    "forward_suma_precio": 310.0308,
-    "forward_pnl_proxy": -8.031,
-    "forward_hit": 0.6227,
-    "forward_precio_medio": 0.6392,
-    "forward_edge_pp": -1.65,
-    "forward_p_shuffle": 0.455,
+    "forward_n": 489,
+    "forward_aciertos": 306,
+    "forward_suma_precio": 314.0129,
+    "forward_pnl_proxy": -8.013,
+    "forward_hit": 0.6258,
+    "forward_precio_medio": 0.6422,
+    "forward_edge_pp": -1.64,
+    "forward_p_shuffle": 0.4555,
     "forward_sig_bhfdr": false,
     "estado": "NO_CONFIRMADO",
-    "ultimo_chequeo": "2026-07-22T04:35:02+00:00"
+    "ultimo_chequeo": "2026-07-22T05:35:01+00:00"
   },
   "0x704ce68854b841ff8c5b694223ea8e7d0eacb197#60m": {
     "wallet": "0x704ce68854b841ff8c5b694223ea8e7d0eacb197",
@@ -33,17 +33,17 @@
     "precio_medio_frozen": 0.7702,
     "edge_pp_frozen": 10.723,
     "pnl_proxy_frozen": 238.919,
-    "forward_n": 576,
-    "forward_aciertos": 476,
-    "forward_suma_precio": 432.5711,
-    "forward_pnl_proxy": 43.429,
-    "forward_hit": 0.8264,
-    "forward_precio_medio": 0.751,
-    "forward_edge_pp": 7.54,
+    "forward_n": 578,
+    "forward_aciertos": 478,
+    "forward_suma_precio": 434.3611,
+    "forward_pnl_proxy": 43.639,
+    "forward_hit": 0.827,
+    "forward_precio_medio": 0.7515,
+    "forward_edge_pp": 7.55,
     "forward_p_shuffle": 0.0,
     "forward_sig_bhfdr": true,
     "estado": "CONFIRMADO",
-    "ultimo_chequeo": "2026-07-22T04:35:02+00:00"
+    "ultimo_chequeo": "2026-07-22T05:35:01+00:00"
   },
   "0x3de69fd6347a62a618656371e30a17b0c490e560#60m": {
     "wallet": "0x3de69fd6347a62a618656371e30a17b0c490e560",
@@ -63,10 +63,10 @@
     "forward_hit": 0.3878,
     "forward_precio_medio": 0.427,
     "forward_edge_pp": -3.92,
-    "forward_p_shuffle": 0.643,
+    "forward_p_shuffle": 0.669,
     "forward_sig_bhfdr": false,
     "estado": "NO_CONFIRMADO",
-    "ultimo_chequeo": "2026-07-22T04:35:02+00:00"
+    "ultimo_chequeo": "2026-07-22T05:35:01+00:00"
   },
   "0xd59d898484f9e3a8cf2f5f2cd7475fd99df865b3#60m": {
     "wallet": "0xd59d898484f9e3a8cf2f5f2cd7475fd99df865b3",
@@ -79,17 +79,17 @@
     "precio_medio_frozen": 0.3362,
     "edge_pp_frozen": 17.812,
     "pnl_proxy_frozen": 12.468,
-    "forward_n": 6,
-    "forward_aciertos": 2,
-    "forward_suma_precio": 1.81,
-    "forward_pnl_proxy": 0.19,
-    "forward_hit": 0.3333,
-    "forward_precio_medio": 0.3017,
-    "forward_edge_pp": 3.16,
+    "forward_n": 7,
+    "forward_aciertos": 3,
+    "forward_suma_precio": 2.74,
+    "forward_pnl_proxy": 0.26,
+    "forward_hit": 0.4286,
+    "forward_precio_medio": 0.3914,
+    "forward_edge_pp": 3.72,
     "forward_p_shuffle": null,
     "forward_sig_bhfdr": null,
     "estado": "ACUMULANDO",
-    "ultimo_chequeo": "2026-07-22T04:35:02+00:00"
+    "ultimo_chequeo": "2026-07-22T05:35:01+00:00"
   },
   "0x3a3749264a27ad3df99832f14dfa0789e06b3b1d#60m": {
     "wallet": "0x3a3749264a27ad3df99832f14dfa0789e06b3b1d",
@@ -102,17 +102,17 @@
     "precio_medio_frozen": 0.3772,
     "edge_pp_frozen": 20.905,
     "pnl_proxy_frozen": 12.125,
-    "forward_n": 19,
-    "forward_aciertos": 7,
-    "forward_suma_precio": 6.834,
-    "forward_pnl_proxy": 0.166,
-    "forward_hit": 0.3684,
-    "forward_precio_medio": 0.3597,
-    "forward_edge_pp": 0.87,
+    "forward_n": 20,
+    "forward_aciertos": 8,
+    "forward_suma_precio": 7.724,
+    "forward_pnl_proxy": 0.276,
+    "forward_hit": 0.4,
+    "forward_precio_medio": 0.3862,
+    "forward_edge_pp": 1.38,
     "forward_p_shuffle": 1.0,
     "forward_sig_bhfdr": false,
     "estado": "NO_CONFIRMADO",
-    "ultimo_chequeo": "2026-07-22T04:35:02+00:00"
+    "ultimo_chequeo": "2026-07-22T05:35:01+00:00"
   },
   "0xf31819f7f05eeb17ab40ff8e417447df339c68f0#60m": {
     "wallet": "0xf31819f7f05eeb17ab40ff8e417447df339c68f0",
@@ -135,7 +135,7 @@
     "forward_p_shuffle": null,
     "forward_sig_bhfdr": null,
     "estado": "ACUMULANDO",
-    "ultimo_chequeo": "2026-07-22T04:35:02+00:00"
+    "ultimo_chequeo": "2026-07-22T05:35:01+00:00"
   },
   "0x628ce07b7c1138aa627e20218aaa2861781f8692#60m": {
     "wallet": "0x628ce07b7c1138aa627e20218aaa2861781f8692",
@@ -158,7 +158,7 @@
     "forward_p_shuffle": null,
     "forward_sig_bhfdr": null,
     "estado": "ACUMULANDO",
-    "ultimo_chequeo": "2026-07-22T04:35:02+00:00"
+    "ultimo_chequeo": "2026-07-22T05:35:01+00:00"
   },
   "0x1879c12129a9e2d1b807add7a8f999eea66dd231#60m": {
     "wallet": "0x1879c12129a9e2d1b807add7a8f999eea66dd231",
@@ -181,7 +181,7 @@
     "forward_p_shuffle": null,
     "forward_sig_bhfdr": null,
     "estado": "ACUMULANDO",
-    "ultimo_chequeo": "2026-07-22T04:35:02+00:00"
+    "ultimo_chequeo": "2026-07-22T05:35:01+00:00"
   },
   "0xd938e7555677c08dd9cacfb20436f9ec10750481#60m": {
     "wallet": "0xd938e7555677c08dd9cacfb20436f9ec10750481",
@@ -194,17 +194,17 @@
     "precio_medio_frozen": 0.7975,
     "edge_pp_frozen": 8.529,
     "pnl_proxy_frozen": 21.833,
-    "forward_n": 79,
-    "forward_aciertos": 79,
-    "forward_suma_precio": 65.5621,
-    "forward_pnl_proxy": 13.438,
+    "forward_n": 86,
+    "forward_aciertos": 86,
+    "forward_suma_precio": 72.2021,
+    "forward_pnl_proxy": 13.798,
     "forward_hit": 1.0,
-    "forward_precio_medio": 0.8299,
-    "forward_edge_pp": 17.01,
-    "forward_p_shuffle": 0.001,
+    "forward_precio_medio": 0.8396,
+    "forward_edge_pp": 16.04,
+    "forward_p_shuffle": 0.0,
     "forward_sig_bhfdr": true,
     "estado": "CONFIRMADO",
-    "ultimo_chequeo": "2026-07-22T04:35:02+00:00"
+    "ultimo_chequeo": "2026-07-22T05:35:01+00:00"
   },
   "0xa588ed9269c7f4c8cb2ffe5d8c55ba8a64516b0e#60m": {
     "wallet": "0xa588ed9269c7f4c8cb2ffe5d8c55ba8a64516b0e",
@@ -227,7 +227,7 @@
     "forward_p_shuffle": null,
     "forward_sig_bhfdr": null,
     "estado": "ACUMULANDO",
-    "ultimo_chequeo": "2026-07-22T04:35:02+00:00"
+    "ultimo_chequeo": "2026-07-22T05:35:01+00:00"
   },
   "0x53fcceaab083de084e619052864f14b9b64888ef#60m": {
     "wallet": "0x53fcceaab083de084e619052864f14b9b64888ef",
@@ -250,7 +250,7 @@
     "forward_p_shuffle": null,
     "forward_sig_bhfdr": null,
     "estado": "ACUMULANDO",
-    "ultimo_chequeo": "2026-07-22T04:35:02+00:00"
+    "ultimo_chequeo": "2026-07-22T05:35:01+00:00"
   },
   "0x75b1f0d7aacd3f85227e9774960af3c8c9c42d21#60m": {
     "wallet": "0x75b1f0d7aacd3f85227e9774960af3c8c9c42d21",
@@ -273,7 +273,7 @@
     "forward_p_shuffle": null,
     "forward_sig_bhfdr": null,
     "estado": "ACUMULANDO",
-    "ultimo_chequeo": "2026-07-22T04:35:02+00:00"
+    "ultimo_chequeo": "2026-07-22T05:35:01+00:00"
   },
   "0x99012d12a47cb06e777cbacb156dbd82edfc6046#60m": {
     "wallet": "0x99012d12a47cb06e777cbacb156dbd82edfc6046",
@@ -296,7 +296,7 @@
     "forward_p_shuffle": null,
     "forward_sig_bhfdr": null,
     "estado": "ACUMULANDO",
-    "ultimo_chequeo": "2026-07-22T04:35:02+00:00"
+    "ultimo_chequeo": "2026-07-22T05:35:01+00:00"
   },
   "0x584173d0455fc628b854dbbcceeef6c24bd7898e#240m": {
     "wallet": "0x584173d0455fc628b854dbbcceeef6c24bd7898e",
@@ -319,7 +319,7 @@
     "forward_p_shuffle": 1.0,
     "forward_sig_bhfdr": false,
     "estado": "NO_CONFIRMADO",
-    "ultimo_chequeo": "2026-07-22T04:35:02+00:00"
+    "ultimo_chequeo": "2026-07-22T05:35:01+00:00"
   },
   "0x719d7859f4e8bbf3b6ecea4b11040c0fc79ca545#240m": {
     "wallet": "0x719d7859f4e8bbf3b6ecea4b11040c0fc79ca545",
@@ -342,7 +342,7 @@
     "forward_p_shuffle": null,
     "forward_sig_bhfdr": null,
     "estado": "ACUMULANDO",
-    "ultimo_chequeo": "2026-07-22T04:35:02+00:00"
+    "ultimo_chequeo": "2026-07-22T05:35:01+00:00"
   },
   "0x52855e36f6d4d17914bb9a7bce273e2c52721457#240m": {
     "wallet": "0x52855e36f6d4d17914bb9a7bce273e2c52721457",
@@ -365,7 +365,7 @@
     "forward_p_shuffle": null,
     "forward_sig_bhfdr": null,
     "estado": "ACUMULANDO",
-    "ultimo_chequeo": "2026-07-22T04:35:02+00:00"
+    "ultimo_chequeo": "2026-07-22T05:35:01+00:00"
   },
   "0x5371ce0149585dad85647e8f7a81cf162b09e4cf#240m": {
     "wallet": "0x5371ce0149585dad85647e8f7a81cf162b09e4cf",
@@ -388,7 +388,7 @@
     "forward_p_shuffle": null,
     "forward_sig_bhfdr": null,
     "estado": "ACUMULANDO",
-    "ultimo_chequeo": "2026-07-22T04:35:02+00:00"
+    "ultimo_chequeo": "2026-07-22T05:35:01+00:00"
   },
   "0x7d30c522e6b8b00733ec3d205819f71fbc05e133#240m": {
     "wallet": "0x7d30c522e6b8b00733ec3d205819f71fbc05e133",
@@ -411,7 +411,7 @@
     "forward_p_shuffle": null,
     "forward_sig_bhfdr": null,
     "estado": "ACUMULANDO",
-    "ultimo_chequeo": "2026-07-22T04:35:02+00:00"
+    "ultimo_chequeo": "2026-07-22T05:35:01+00:00"
   },
   "0xdf7930e89a2c47560165331863c31deca0733dcd#15m": {
     "wallet": "0xdf7930e89a2c47560165331863c31deca0733dcd",
@@ -424,17 +424,17 @@
     "precio_medio_frozen": 0.6094,
     "edge_pp_frozen": 3.15,
     "pnl_proxy_frozen": 107.539,
-    "forward_n": 884,
+    "forward_n": 885,
     "forward_aciertos": 627,
-    "forward_suma_precio": 596.5694,
-    "forward_pnl_proxy": 30.431,
-    "forward_hit": 0.7093,
-    "forward_precio_medio": 0.6749,
+    "forward_suma_precio": 596.5994,
+    "forward_pnl_proxy": 30.401,
+    "forward_hit": 0.7085,
+    "forward_precio_medio": 0.6741,
     "forward_edge_pp": 3.44,
-    "forward_p_shuffle": 0.035,
+    "forward_p_shuffle": 0.0295,
     "forward_sig_bhfdr": false,
     "estado": "NO_CONFIRMADO",
-    "ultimo_chequeo": "2026-07-22T04:35:02+00:00"
+    "ultimo_chequeo": "2026-07-22T05:35:01+00:00"
   },
   "0x27091ce48a08a3e21d63c42d33428cf1e55d20f5#15m": {
     "wallet": "0x27091ce48a08a3e21d63c42d33428cf1e55d20f5",
@@ -454,10 +454,10 @@
     "forward_hit": 0.4379,
     "forward_precio_medio": 0.4735,
     "forward_edge_pp": -3.56,
-    "forward_p_shuffle": 0.0045,
+    "forward_p_shuffle": 0.011,
     "forward_sig_bhfdr": true,
     "estado": "CONFIRMADO",
-    "ultimo_chequeo": "2026-07-22T04:35:02+00:00"
+    "ultimo_chequeo": "2026-07-22T05:35:01+00:00"
   },
   "0xce25e214d5cfe4f459cf67f08df581885aae7fdc#15m": {
     "wallet": "0xce25e214d5cfe4f459cf67f08df581885aae7fdc",
@@ -470,17 +470,17 @@
     "precio_medio_frozen": 0.5634,
     "edge_pp_frozen": 2.652,
     "pnl_proxy_frozen": 78.706,
-    "forward_n": 1174,
-    "forward_aciertos": 694,
-    "forward_suma_precio": 658.8301,
-    "forward_pnl_proxy": 35.17,
-    "forward_hit": 0.5911,
-    "forward_precio_medio": 0.5612,
-    "forward_edge_pp": 2.99,
-    "forward_p_shuffle": 0.04,
+    "forward_n": 1236,
+    "forward_aciertos": 729,
+    "forward_suma_precio": 699.5436,
+    "forward_pnl_proxy": 29.456,
+    "forward_hit": 0.5898,
+    "forward_precio_medio": 0.566,
+    "forward_edge_pp": 2.38,
+    "forward_p_shuffle": 0.1025,
     "forward_sig_bhfdr": false,
     "estado": "NO_CONFIRMADO",
-    "ultimo_chequeo": "2026-07-22T04:35:02+00:00"
+    "ultimo_chequeo": "2026-07-22T05:35:01+00:00"
   },
   "0x9fac44c2e42d4857d08bafd606a156dfbeb905cf#15m": {
     "wallet": "0x9fac44c2e42d4857d08bafd606a156dfbeb905cf",
@@ -493,17 +493,17 @@
     "precio_medio_frozen": 0.9771,
     "edge_pp_frozen": 1.801,
     "pnl_proxy_frozen": 14.604,
-    "forward_n": 165,
-    "forward_aciertos": 162,
-    "forward_suma_precio": 161.1906,
-    "forward_pnl_proxy": 0.809,
-    "forward_hit": 0.9818,
-    "forward_precio_medio": 0.9769,
-    "forward_edge_pp": 0.49,
-    "forward_p_shuffle": 0.7855,
+    "forward_n": 171,
+    "forward_aciertos": 168,
+    "forward_suma_precio": 167.1158,
+    "forward_pnl_proxy": 0.884,
+    "forward_hit": 0.9825,
+    "forward_precio_medio": 0.9773,
+    "forward_edge_pp": 0.52,
+    "forward_p_shuffle": 0.5975,
     "forward_sig_bhfdr": false,
     "estado": "NO_CONFIRMADO",
-    "ultimo_chequeo": "2026-07-22T04:35:02+00:00"
+    "ultimo_chequeo": "2026-07-22T05:35:01+00:00"
   },
   "0xd1bcd8847f9720964e845ce30c9b15acebd783bf#15m": {
     "wallet": "0xd1bcd8847f9720964e845ce30c9b15acebd783bf",
@@ -526,7 +526,7 @@
     "forward_p_shuffle": null,
     "forward_sig_bhfdr": null,
     "estado": "ACUMULANDO",
-    "ultimo_chequeo": "2026-07-22T04:35:02+00:00"
+    "ultimo_chequeo": "2026-07-22T05:35:01+00:00"
   },
   "0xcb5c1844d9a5b39d3747ca92af659491fb036b2b#15m": {
     "wallet": "0xcb5c1844d9a5b39d3747ca92af659491fb036b2b",
@@ -539,17 +539,17 @@
     "precio_medio_frozen": 0.8451,
     "edge_pp_frozen": 4.626,
     "pnl_proxy_frozen": 182.713,
-    "forward_n": 1626,
-    "forward_aciertos": 1467,
-    "forward_suma_precio": 1360.062,
-    "forward_pnl_proxy": 106.938,
-    "forward_hit": 0.9022,
-    "forward_precio_medio": 0.8364,
-    "forward_edge_pp": 6.58,
+    "forward_n": 1651,
+    "forward_aciertos": 1489,
+    "forward_suma_precio": 1382.1441,
+    "forward_pnl_proxy": 106.856,
+    "forward_hit": 0.9019,
+    "forward_precio_medio": 0.8372,
+    "forward_edge_pp": 6.47,
     "forward_p_shuffle": 0.0,
     "forward_sig_bhfdr": true,
     "estado": "CONFIRMADO",
-    "ultimo_chequeo": "2026-07-22T04:35:02+00:00"
+    "ultimo_chequeo": "2026-07-22T05:35:01+00:00"
   },
   "0x345ac74aa5d033cf3faa2d4c0d8a3efbd2259dc9#15m": {
     "wallet": "0x345ac74aa5d033cf3faa2d4c0d8a3efbd2259dc9",
@@ -569,10 +569,10 @@
     "forward_hit": 0.75,
     "forward_precio_medio": 0.779,
     "forward_edge_pp": -2.9,
-    "forward_p_shuffle": 0.692,
+    "forward_p_shuffle": 0.6915,
     "forward_sig_bhfdr": false,
     "estado": "NO_CONFIRMADO",
-    "ultimo_chequeo": "2026-07-22T04:35:02+00:00"
+    "ultimo_chequeo": "2026-07-22T05:35:01+00:00"
   },
   "0xb1a64983ca4eb99106b73e3d68726ff6506b53bc#15m": {
     "wallet": "0xb1a64983ca4eb99106b73e3d68726ff6506b53bc",
@@ -585,17 +585,17 @@
     "precio_medio_frozen": 0.7393,
     "edge_pp_frozen": 13.567,
     "pnl_proxy_frozen": 18.452,
-    "forward_n": 48,
-    "forward_aciertos": 41,
-    "forward_suma_precio": 40.488,
-    "forward_pnl_proxy": 0.512,
-    "forward_hit": 0.8542,
-    "forward_precio_medio": 0.8435,
-    "forward_edge_pp": 1.07,
-    "forward_p_shuffle": 0.6745,
+    "forward_n": 53,
+    "forward_aciertos": 42,
+    "forward_suma_precio": 44.6306,
+    "forward_pnl_proxy": -2.631,
+    "forward_hit": 0.7925,
+    "forward_precio_medio": 0.8421,
+    "forward_edge_pp": -4.96,
+    "forward_p_shuffle": 0.343,
     "forward_sig_bhfdr": false,
     "estado": "NO_CONFIRMADO",
-    "ultimo_chequeo": "2026-07-22T04:35:02+00:00"
+    "ultimo_chequeo": "2026-07-22T05:35:01+00:00"
   },
   "0x8dbeabb5961fd2fb28647b7bcadec1bef6d288f8#15m": {
     "wallet": "0x8dbeabb5961fd2fb28647b7bcadec1bef6d288f8",
@@ -615,10 +615,10 @@
     "forward_hit": 0.9226,
     "forward_precio_medio": 0.8937,
     "forward_edge_pp": 2.89,
-    "forward_p_shuffle": 0.0935,
+    "forward_p_shuffle": 0.0895,
     "forward_sig_bhfdr": false,
     "estado": "NO_CONFIRMADO",
-    "ultimo_chequeo": "2026-07-22T04:35:02+00:00"
+    "ultimo_chequeo": "2026-07-22T05:35:01+00:00"
   },
   "0x1e0cfb66640277bd908b246f6e4618d3ab6f2388#15m": {
     "wallet": "0x1e0cfb66640277bd908b246f6e4618d3ab6f2388",
@@ -631,17 +631,17 @@
     "precio_medio_frozen": 0.855,
     "edge_pp_frozen": 9.639,
     "pnl_proxy_frozen": 295.139,
-    "forward_n": 978,
-    "forward_aciertos": 859,
-    "forward_suma_precio": 814.7788,
-    "forward_pnl_proxy": 44.221,
-    "forward_hit": 0.8783,
-    "forward_precio_medio": 0.8331,
-    "forward_edge_pp": 4.52,
+    "forward_n": 1007,
+    "forward_aciertos": 888,
+    "forward_suma_precio": 839.0769,
+    "forward_pnl_proxy": 48.923,
+    "forward_hit": 0.8818,
+    "forward_precio_medio": 0.8332,
+    "forward_edge_pp": 4.86,
     "forward_p_shuffle": 0.0,
     "forward_sig_bhfdr": true,
     "estado": "CONFIRMADO",
-    "ultimo_chequeo": "2026-07-22T04:35:02+00:00"
+    "ultimo_chequeo": "2026-07-22T05:35:01+00:00"
   },
   "0x9919a655c2694462950d9ca5a0307202740a0a5d#15m": {
     "wallet": "0x9919a655c2694462950d9ca5a0307202740a0a5d",
@@ -664,7 +664,7 @@
     "forward_p_shuffle": 0.0,
     "forward_sig_bhfdr": true,
     "estado": "CONFIRMADO",
-    "ultimo_chequeo": "2026-07-22T04:35:02+00:00"
+    "ultimo_chequeo": "2026-07-22T05:35:01+00:00"
   },
   "0x8d1d5d1c6041b13fc708b5d9f668070e1724ed4a#15m": {
     "wallet": "0x8d1d5d1c6041b13fc708b5d9f668070e1724ed4a",
@@ -687,7 +687,7 @@
     "forward_p_shuffle": null,
     "forward_sig_bhfdr": null,
     "estado": "ACUMULANDO",
-    "ultimo_chequeo": "2026-07-22T04:35:02+00:00"
+    "ultimo_chequeo": "2026-07-22T05:35:01+00:00"
   },
   "0x089905577deadaa4008f453608676d5f7be6459e#15m": {
     "wallet": "0x089905577deadaa4008f453608676d5f7be6459e",
@@ -707,10 +707,10 @@
     "forward_hit": 0.9868,
     "forward_precio_medio": 0.959,
     "forward_edge_pp": 2.78,
-    "forward_p_shuffle": 0.0135,
+    "forward_p_shuffle": 0.0155,
     "forward_sig_bhfdr": true,
     "estado": "CONFIRMADO",
-    "ultimo_chequeo": "2026-07-22T04:35:02+00:00"
+    "ultimo_chequeo": "2026-07-22T05:35:01+00:00"
   },
   "0x4501241bbcfb329f5021cd31995c7f69e63c7342#15m": {
     "wallet": "0x4501241bbcfb329f5021cd31995c7f69e63c7342",
@@ -723,17 +723,17 @@
     "precio_medio_frozen": 0.9514,
     "edge_pp_frozen": 4.464,
     "pnl_proxy_frozen": 33.973,
-    "forward_n": 349,
-    "forward_aciertos": 341,
-    "forward_suma_precio": 327.5078,
-    "forward_pnl_proxy": 13.492,
-    "forward_hit": 0.9771,
-    "forward_precio_medio": 0.9384,
-    "forward_edge_pp": 3.87,
-    "forward_p_shuffle": 0.002,
+    "forward_n": 363,
+    "forward_aciertos": 355,
+    "forward_suma_precio": 340.813,
+    "forward_pnl_proxy": 14.187,
+    "forward_hit": 0.978,
+    "forward_precio_medio": 0.9389,
+    "forward_edge_pp": 3.91,
+    "forward_p_shuffle": 0.003,
     "forward_sig_bhfdr": true,
     "estado": "CONFIRMADO",
-    "ultimo_chequeo": "2026-07-22T04:35:02+00:00"
+    "ultimo_chequeo": "2026-07-22T05:35:01+00:00"
   },
   "0x5c55b689bdf8c031fab24bbe1b57c6e289ac4164#15m": {
     "wallet": "0x5c55b689bdf8c031fab24bbe1b57c6e289ac4164",
@@ -746,17 +746,17 @@
     "precio_medio_frozen": 0.958,
     "edge_pp_frozen": 3.37,
     "pnl_proxy_frozen": 12.167,
-    "forward_n": 148,
-    "forward_aciertos": 144,
-    "forward_suma_precio": 140.922,
-    "forward_pnl_proxy": 3.078,
-    "forward_hit": 0.973,
-    "forward_precio_medio": 0.9522,
-    "forward_edge_pp": 2.08,
-    "forward_p_shuffle": 0.162,
+    "forward_n": 155,
+    "forward_aciertos": 151,
+    "forward_suma_precio": 147.618,
+    "forward_pnl_proxy": 3.382,
+    "forward_hit": 0.9742,
+    "forward_precio_medio": 0.9524,
+    "forward_edge_pp": 2.18,
+    "forward_p_shuffle": 0.172,
     "forward_sig_bhfdr": false,
     "estado": "NO_CONFIRMADO",
-    "ultimo_chequeo": "2026-07-22T04:35:02+00:00"
+    "ultimo_chequeo": "2026-07-22T05:35:01+00:00"
   },
   "0x0156657a1d4ff0355e78f15e46acfbd64c3fc273#15m": {
     "wallet": "0x0156657a1d4ff0355e78f15e46acfbd64c3fc273",
@@ -776,10 +776,10 @@
     "forward_hit": 0.9608,
     "forward_precio_medio": 0.9342,
     "forward_edge_pp": 2.66,
-    "forward_p_shuffle": 0.225,
+    "forward_p_shuffle": 0.191,
     "forward_sig_bhfdr": false,
     "estado": "NO_CONFIRMADO",
-    "ultimo_chequeo": "2026-07-22T04:35:02+00:00"
+    "ultimo_chequeo": "2026-07-22T05:35:01+00:00"
   },
   "0x546a5166295433ddda571cde5d077fc46abd1988#15m": {
     "wallet": "0x546a5166295433ddda571cde5d077fc46abd1988",
@@ -792,17 +792,17 @@
     "precio_medio_frozen": 0.7454,
     "edge_pp_frozen": 13.942,
     "pnl_proxy_frozen": 26.63,
-    "forward_n": 93,
+    "forward_n": 94,
     "forward_aciertos": 74,
-    "forward_suma_precio": 67.888,
-    "forward_pnl_proxy": 6.112,
-    "forward_hit": 0.7957,
-    "forward_precio_medio": 0.73,
-    "forward_edge_pp": 6.57,
-    "forward_p_shuffle": 0.124,
+    "forward_suma_precio": 68.548,
+    "forward_pnl_proxy": 5.452,
+    "forward_hit": 0.7872,
+    "forward_precio_medio": 0.7292,
+    "forward_edge_pp": 5.8,
+    "forward_p_shuffle": 0.2465,
     "forward_sig_bhfdr": false,
     "estado": "NO_CONFIRMADO",
-    "ultimo_chequeo": "2026-07-22T04:35:02+00:00"
+    "ultimo_chequeo": "2026-07-22T05:35:01+00:00"
   },
   "0xcfa719fcd99731923b8cc60a27644c589efdf861#15m": {
     "wallet": "0xcfa719fcd99731923b8cc60a27644c589efdf861",
@@ -815,17 +815,17 @@
     "precio_medio_frozen": 0.929,
     "edge_pp_frozen": 5.342,
     "pnl_proxy_frozen": 12.18,
-    "forward_n": 109,
-    "forward_aciertos": 105,
-    "forward_suma_precio": 100.9406,
-    "forward_pnl_proxy": 4.059,
-    "forward_hit": 0.9633,
-    "forward_precio_medio": 0.9261,
-    "forward_edge_pp": 3.72,
-    "forward_p_shuffle": 0.1385,
+    "forward_n": 113,
+    "forward_aciertos": 109,
+    "forward_suma_precio": 104.6806,
+    "forward_pnl_proxy": 4.319,
+    "forward_hit": 0.9646,
+    "forward_precio_medio": 0.9264,
+    "forward_edge_pp": 3.82,
+    "forward_p_shuffle": 0.144,
     "forward_sig_bhfdr": false,
     "estado": "NO_CONFIRMADO",
-    "ultimo_chequeo": "2026-07-22T04:35:02+00:00"
+    "ultimo_chequeo": "2026-07-22T05:35:01+00:00"
   },
   "0x466807b8bceb2d4588f17d1b8f1e0ca61c1f2460#15m": {
     "wallet": "0x466807b8bceb2d4588f17d1b8f1e0ca61c1f2460",
@@ -838,17 +838,17 @@
     "precio_medio_frozen": 0.9766,
     "edge_pp_frozen": 2.22,
     "pnl_proxy_frozen": 18.717,
-    "forward_n": 723,
-    "forward_aciertos": 716,
-    "forward_suma_precio": 706.325,
-    "forward_pnl_proxy": 9.675,
-    "forward_hit": 0.9903,
-    "forward_precio_medio": 0.9769,
+    "forward_n": 732,
+    "forward_aciertos": 725,
+    "forward_suma_precio": 715.135,
+    "forward_pnl_proxy": 9.865,
+    "forward_hit": 0.9904,
+    "forward_precio_medio": 0.977,
     "forward_edge_pp": 1.34,
-    "forward_p_shuffle": 0.018,
+    "forward_p_shuffle": 0.0165,
     "forward_sig_bhfdr": true,
     "estado": "CONFIRMADO",
-    "ultimo_chequeo": "2026-07-22T04:35:02+00:00"
+    "ultimo_chequeo": "2026-07-22T05:35:01+00:00"
   },
   "0xb798fd5d803d52a15b2708d24b54c4216fe237ca#15m": {
     "wallet": "0xb798fd5d803d52a15b2708d24b54c4216fe237ca",
@@ -871,7 +871,7 @@
     "forward_p_shuffle": 0.0,
     "forward_sig_bhfdr": true,
     "estado": "CONFIRMADO",
-    "ultimo_chequeo": "2026-07-22T04:35:02+00:00"
+    "ultimo_chequeo": "2026-07-22T05:35:01+00:00"
   },
   "0xd02b6d910a38479c3125308fc4737a46509cd6df#15m": {
     "wallet": "0xd02b6d910a38479c3125308fc4737a46509cd6df",
@@ -894,7 +894,7 @@
     "forward_p_shuffle": 0.0,
     "forward_sig_bhfdr": true,
     "estado": "CONFIRMADO",
-    "ultimo_chequeo": "2026-07-22T04:35:02+00:00"
+    "ultimo_chequeo": "2026-07-22T05:35:01+00:00"
   },
   "0x8273db9b5b6f53ed30c332ed5649a980a7ae42b1#15m": {
     "wallet": "0x8273db9b5b6f53ed30c332ed5649a980a7ae42b1",
@@ -907,17 +907,17 @@
     "precio_medio_frozen": 0.987,
     "edge_pp_frozen": 1.215,
     "pnl_proxy_frozen": 14.115,
-    "forward_n": 369,
-    "forward_aciertos": 369,
-    "forward_suma_precio": 363.7985,
-    "forward_pnl_proxy": 5.201,
+    "forward_n": 388,
+    "forward_aciertos": 388,
+    "forward_suma_precio": 382.5685,
+    "forward_pnl_proxy": 5.431,
     "forward_hit": 1.0,
-    "forward_precio_medio": 0.9859,
-    "forward_edge_pp": 1.41,
-    "forward_p_shuffle": 0.022,
-    "forward_sig_bhfdr": true,
-    "estado": "CONFIRMADO",
-    "ultimo_chequeo": "2026-07-22T04:35:02+00:00"
+    "forward_precio_medio": 0.986,
+    "forward_edge_pp": 1.4,
+    "forward_p_shuffle": 0.0375,
+    "forward_sig_bhfdr": false,
+    "estado": "NO_CONFIRMADO",
+    "ultimo_chequeo": "2026-07-22T05:35:01+00:00"
   },
   "0x55f80465b5ad82f9633114f5590f3e31e8c3c2c9#15m": {
     "wallet": "0x55f80465b5ad82f9633114f5590f3e31e8c3c2c9",
@@ -930,17 +930,17 @@
     "precio_medio_frozen": 0.7594,
     "edge_pp_frozen": 15.865,
     "pnl_proxy_frozen": 9.678,
-    "forward_n": 27,
-    "forward_aciertos": 21,
-    "forward_suma_precio": 20.4335,
-    "forward_pnl_proxy": 0.566,
-    "forward_hit": 0.7778,
-    "forward_precio_medio": 0.7568,
-    "forward_edge_pp": 2.1,
-    "forward_p_shuffle": 0.6345,
+    "forward_n": 28,
+    "forward_aciertos": 22,
+    "forward_suma_precio": 21.2635,
+    "forward_pnl_proxy": 0.736,
+    "forward_hit": 0.7857,
+    "forward_precio_medio": 0.7594,
+    "forward_edge_pp": 2.63,
+    "forward_p_shuffle": 0.8455,
     "forward_sig_bhfdr": false,
     "estado": "NO_CONFIRMADO",
-    "ultimo_chequeo": "2026-07-22T04:35:02+00:00"
+    "ultimo_chequeo": "2026-07-22T05:35:01+00:00"
   },
   "0xb906e920503fe95e252da09c31d0633743349e82#15m": {
     "wallet": "0xb906e920503fe95e252da09c31d0633743349e82",
@@ -953,17 +953,17 @@
     "precio_medio_frozen": 0.6033,
     "edge_pp_frozen": 24.285,
     "pnl_proxy_frozen": 9.471,
-    "forward_n": 12,
+    "forward_n": 13,
     "forward_aciertos": 5,
-    "forward_suma_precio": 7.4603,
-    "forward_pnl_proxy": -2.46,
-    "forward_hit": 0.4167,
-    "forward_precio_medio": 0.6217,
-    "forward_edge_pp": -20.5,
+    "forward_suma_precio": 7.5084,
+    "forward_pnl_proxy": -2.508,
+    "forward_hit": 0.3846,
+    "forward_precio_medio": 0.5776,
+    "forward_edge_pp": -19.3,
     "forward_p_shuffle": null,
     "forward_sig_bhfdr": null,
     "estado": "ACUMULANDO",
-    "ultimo_chequeo": "2026-07-22T04:35:02+00:00"
+    "ultimo_chequeo": "2026-07-22T05:35:01+00:00"
   },
   "0x910f0ce12ad359a643cefddf6258bb22066694c1#15m": {
     "wallet": "0x910f0ce12ad359a643cefddf6258bb22066694c1",
@@ -976,17 +976,17 @@
     "precio_medio_frozen": 0.5952,
     "edge_pp_frozen": 34.922,
     "pnl_proxy_frozen": 6.286,
-    "forward_n": 10,
+    "forward_n": 11,
     "forward_aciertos": 5,
-    "forward_suma_precio": 6.4544,
-    "forward_pnl_proxy": -1.454,
-    "forward_hit": 0.5,
-    "forward_precio_medio": 0.6454,
-    "forward_edge_pp": -14.54,
+    "forward_suma_precio": 6.6763,
+    "forward_pnl_proxy": -1.676,
+    "forward_hit": 0.4545,
+    "forward_precio_medio": 0.6069,
+    "forward_edge_pp": -15.24,
     "forward_p_shuffle": null,
     "forward_sig_bhfdr": null,
     "estado": "ACUMULANDO",
-    "ultimo_chequeo": "2026-07-22T04:35:02+00:00"
+    "ultimo_chequeo": "2026-07-22T05:35:01+00:00"
   },
   "0xdafe003b0f00d6e0259f425c5df30557281852df#15m": {
     "wallet": "0xdafe003b0f00d6e0259f425c5df30557281852df",
@@ -1006,10 +1006,10 @@
     "forward_hit": 0.7317,
     "forward_precio_medio": 0.7466,
     "forward_edge_pp": -1.49,
-    "forward_p_shuffle": 0.719,
+    "forward_p_shuffle": 0.7345,
     "forward_sig_bhfdr": false,
     "estado": "NO_CONFIRMADO",
-    "ultimo_chequeo": "2026-07-22T04:35:02+00:00"
+    "ultimo_chequeo": "2026-07-22T05:35:01+00:00"
   },
   "0xf2dc04bf0dde95940b2ad85bfd32965611d267d0#15m": {
     "wallet": "0xf2dc04bf0dde95940b2ad85bfd32965611d267d0",
@@ -1032,7 +1032,7 @@
     "forward_p_shuffle": null,
     "forward_sig_bhfdr": null,
     "estado": "ACUMULANDO",
-    "ultimo_chequeo": "2026-07-22T04:35:02+00:00"
+    "ultimo_chequeo": "2026-07-22T05:35:01+00:00"
   },
   "0x19234b88d9ffc186f4fb33f90f3488eb55ffef8e#15m": {
     "wallet": "0x19234b88d9ffc186f4fb33f90f3488eb55ffef8e",
@@ -1045,17 +1045,17 @@
     "precio_medio_frozen": 0.8961,
     "edge_pp_frozen": 4.304,
     "pnl_proxy_frozen": 38.22,
-    "forward_n": 2600,
-    "forward_aciertos": 2438,
-    "forward_suma_precio": 2358.2545,
-    "forward_pnl_proxy": 79.746,
-    "forward_hit": 0.9377,
-    "forward_precio_medio": 0.907,
-    "forward_edge_pp": 3.07,
+    "forward_n": 2709,
+    "forward_aciertos": 2547,
+    "forward_suma_precio": 2458.4445,
+    "forward_pnl_proxy": 88.556,
+    "forward_hit": 0.9402,
+    "forward_precio_medio": 0.9075,
+    "forward_edge_pp": 3.27,
     "forward_p_shuffle": 0.0,
     "forward_sig_bhfdr": true,
     "estado": "CONFIRMADO",
-    "ultimo_chequeo": "2026-07-22T04:35:02+00:00"
+    "ultimo_chequeo": "2026-07-22T05:35:01+00:00"
   },
   "0x0c7c5204404e9d5402d258fedac59c7212bae4cb#5m": {
     "wallet": "0x0c7c5204404e9d5402d258fedac59c7212bae4cb",
@@ -1068,17 +1068,17 @@
     "precio_medio_frozen": 0.4109,
     "edge_pp_frozen": -5.198,
     "pnl_proxy_frozen": -91.544,
-    "forward_n": 571,
-    "forward_aciertos": 274,
-    "forward_suma_precio": 271.0547,
-    "forward_pnl_proxy": 2.945,
-    "forward_hit": 0.4799,
-    "forward_precio_medio": 0.4747,
-    "forward_edge_pp": 0.52,
-    "forward_p_shuffle": 0.8295,
+    "forward_n": 591,
+    "forward_aciertos": 283,
+    "forward_suma_precio": 279.2897,
+    "forward_pnl_proxy": 3.71,
+    "forward_hit": 0.4788,
+    "forward_precio_medio": 0.4726,
+    "forward_edge_pp": 0.62,
+    "forward_p_shuffle": 0.772,
     "forward_sig_bhfdr": false,
     "estado": "NO_CONFIRMADO",
-    "ultimo_chequeo": "2026-07-22T04:35:02+00:00"
+    "ultimo_chequeo": "2026-07-22T05:35:01+00:00"
   },
   "0x5e8bdc9bddc8935726c561b7466cf5df56a313e6#5m": {
     "wallet": "0x5e8bdc9bddc8935726c561b7466cf5df56a313e6",
@@ -1091,17 +1091,17 @@
     "precio_medio_frozen": 0.9641,
     "edge_pp_frozen": 2.851,
     "pnl_proxy_frozen": 11.603,
-    "forward_n": 61,
-    "forward_aciertos": 60,
-    "forward_suma_precio": 59.02,
-    "forward_pnl_proxy": 0.98,
-    "forward_hit": 0.9836,
-    "forward_precio_medio": 0.9675,
-    "forward_edge_pp": 1.61,
-    "forward_p_shuffle": 0.7225,
+    "forward_n": 62,
+    "forward_aciertos": 61,
+    "forward_suma_precio": 59.98,
+    "forward_pnl_proxy": 1.02,
+    "forward_hit": 0.9839,
+    "forward_precio_medio": 0.9674,
+    "forward_edge_pp": 1.65,
+    "forward_p_shuffle": 0.2735,
     "forward_sig_bhfdr": false,
     "estado": "NO_CONFIRMADO",
-    "ultimo_chequeo": "2026-07-22T04:35:02+00:00"
+    "ultimo_chequeo": "2026-07-22T05:35:01+00:00"
   },
   "0x674887d1ac838099a48b629dff53f25b7b87ee08#5m": {
     "wallet": "0x674887d1ac838099a48b629dff53f25b7b87ee08",
@@ -1114,17 +1114,17 @@
     "precio_medio_frozen": 0.7019,
     "edge_pp_frozen": 4.808,
     "pnl_proxy_frozen": 41.922,
-    "forward_n": 498,
-    "forward_aciertos": 347,
-    "forward_suma_precio": 331.6087,
-    "forward_pnl_proxy": 15.391,
-    "forward_hit": 0.6968,
-    "forward_precio_medio": 0.6659,
-    "forward_edge_pp": 3.09,
-    "forward_p_shuffle": 0.1445,
+    "forward_n": 520,
+    "forward_aciertos": 363,
+    "forward_suma_precio": 345.6966,
+    "forward_pnl_proxy": 17.303,
+    "forward_hit": 0.6981,
+    "forward_precio_medio": 0.6648,
+    "forward_edge_pp": 3.33,
+    "forward_p_shuffle": 0.1095,
     "forward_sig_bhfdr": false,
     "estado": "NO_CONFIRMADO",
-    "ultimo_chequeo": "2026-07-22T04:35:02+00:00"
+    "ultimo_chequeo": "2026-07-22T05:35:01+00:00"
   },
   "0xe463f3af69ec8bab4e9e3509b68777935abefb7b#5m": {
     "wallet": "0xe463f3af69ec8bab4e9e3509b68777935abefb7b",
@@ -1137,17 +1137,17 @@
     "precio_medio_frozen": 0.9161,
     "edge_pp_frozen": 7.112,
     "pnl_proxy_frozen": 16.643,
-    "forward_n": 75,
-    "forward_aciertos": 69,
-    "forward_suma_precio": 68.8936,
-    "forward_pnl_proxy": 0.106,
-    "forward_hit": 0.92,
-    "forward_precio_medio": 0.9186,
-    "forward_edge_pp": 0.14,
-    "forward_p_shuffle": 1.0,
+    "forward_n": 78,
+    "forward_aciertos": 72,
+    "forward_suma_precio": 71.5836,
+    "forward_pnl_proxy": 0.416,
+    "forward_hit": 0.9231,
+    "forward_precio_medio": 0.9177,
+    "forward_edge_pp": 0.54,
+    "forward_p_shuffle": 0.8385,
     "forward_sig_bhfdr": false,
     "estado": "NO_CONFIRMADO",
-    "ultimo_chequeo": "2026-07-22T04:35:02+00:00"
+    "ultimo_chequeo": "2026-07-22T05:35:01+00:00"
   },
   "0x3c58ef422754ff22c7e806336feba0064d8b776b#5m": {
     "wallet": "0x3c58ef422754ff22c7e806336feba0064d8b776b",
@@ -1160,17 +1160,17 @@
     "precio_medio_frozen": 0.5346,
     "edge_pp_frozen": 6.492,
     "pnl_proxy_frozen": 74.401,
-    "forward_n": 252,
-    "forward_aciertos": 136,
-    "forward_suma_precio": 128.857,
-    "forward_pnl_proxy": 7.143,
-    "forward_hit": 0.5397,
-    "forward_precio_medio": 0.5113,
-    "forward_edge_pp": 2.84,
+    "forward_n": 254,
+    "forward_aciertos": 137,
+    "forward_suma_precio": 129.2357,
+    "forward_pnl_proxy": 7.764,
+    "forward_hit": 0.5394,
+    "forward_precio_medio": 0.5088,
+    "forward_edge_pp": 3.06,
     "forward_p_shuffle": 0.3255,
     "forward_sig_bhfdr": false,
     "estado": "NO_CONFIRMADO",
-    "ultimo_chequeo": "2026-07-22T04:35:02+00:00"
+    "ultimo_chequeo": "2026-07-22T05:35:01+00:00"
   },
   "0xa517cc5a896c2c47379cb35d4c342748d0c5bf2d#5m": {
     "wallet": "0xa517cc5a896c2c47379cb35d4c342748d0c5bf2d",
@@ -1183,17 +1183,17 @@
     "precio_medio_frozen": 0.9173,
     "edge_pp_frozen": 6.63,
     "pnl_proxy_frozen": 36.264,
-    "forward_n": 155,
-    "forward_aciertos": 150,
-    "forward_suma_precio": 143.82,
-    "forward_pnl_proxy": 6.18,
-    "forward_hit": 0.9677,
-    "forward_precio_medio": 0.9279,
-    "forward_edge_pp": 3.98,
-    "forward_p_shuffle": 0.061,
+    "forward_n": 160,
+    "forward_aciertos": 155,
+    "forward_suma_precio": 148.39,
+    "forward_pnl_proxy": 6.61,
+    "forward_hit": 0.9688,
+    "forward_precio_medio": 0.9274,
+    "forward_edge_pp": 4.14,
+    "forward_p_shuffle": 0.028,
     "forward_sig_bhfdr": false,
     "estado": "NO_CONFIRMADO",
-    "ultimo_chequeo": "2026-07-22T04:35:02+00:00"
+    "ultimo_chequeo": "2026-07-22T05:35:01+00:00"
   },
   "0x8ac7a02ab2ca88ea27a1a237e34b1492a555f438#5m": {
     "wallet": "0x8ac7a02ab2ca88ea27a1a237e34b1492a555f438",
@@ -1216,7 +1216,7 @@
     "forward_p_shuffle": null,
     "forward_sig_bhfdr": null,
     "estado": "ACUMULANDO",
-    "ultimo_chequeo": "2026-07-22T04:35:02+00:00"
+    "ultimo_chequeo": "2026-07-22T05:35:01+00:00"
   },
   "0xdf7930e89a2c47560165331863c31deca0733dcd#5m": {
     "wallet": "0xdf7930e89a2c47560165331863c31deca0733dcd",
@@ -1229,17 +1229,17 @@
     "precio_medio_frozen": 0.7961,
     "edge_pp_frozen": 10.97,
     "pnl_proxy_frozen": 36.09,
-    "forward_n": 48,
-    "forward_aciertos": 37,
-    "forward_suma_precio": 31.0583,
-    "forward_pnl_proxy": 5.942,
-    "forward_hit": 0.7708,
-    "forward_precio_medio": 0.647,
-    "forward_edge_pp": 12.38,
-    "forward_p_shuffle": 0.0905,
+    "forward_n": 54,
+    "forward_aciertos": 39,
+    "forward_suma_precio": 33.1883,
+    "forward_pnl_proxy": 5.812,
+    "forward_hit": 0.7222,
+    "forward_precio_medio": 0.6146,
+    "forward_edge_pp": 10.76,
+    "forward_p_shuffle": 0.1345,
     "forward_sig_bhfdr": false,
     "estado": "NO_CONFIRMADO",
-    "ultimo_chequeo": "2026-07-22T04:35:02+00:00"
+    "ultimo_chequeo": "2026-07-22T05:35:01+00:00"
   },
   "0x9919a655c2694462950d9ca5a0307202740a0a5d#5m": {
     "wallet": "0x9919a655c2694462950d9ca5a0307202740a0a5d",
@@ -1252,17 +1252,17 @@
     "precio_medio_frozen": 0.9502,
     "edge_pp_frozen": 3.734,
     "pnl_proxy_frozen": 32.975,
-    "forward_n": 557,
-    "forward_aciertos": 541,
-    "forward_suma_precio": 532.0378,
-    "forward_pnl_proxy": 8.962,
-    "forward_hit": 0.9713,
-    "forward_precio_medio": 0.9552,
-    "forward_edge_pp": 1.61,
-    "forward_p_shuffle": 0.0665,
+    "forward_n": 571,
+    "forward_aciertos": 554,
+    "forward_suma_precio": 545.0976,
+    "forward_pnl_proxy": 8.902,
+    "forward_hit": 0.9702,
+    "forward_precio_medio": 0.9546,
+    "forward_edge_pp": 1.56,
+    "forward_p_shuffle": 0.089,
     "forward_sig_bhfdr": false,
     "estado": "NO_CONFIRMADO",
-    "ultimo_chequeo": "2026-07-22T04:35:02+00:00"
+    "ultimo_chequeo": "2026-07-22T05:35:01+00:00"
   },
   "0x8dbeabb5961fd2fb28647b7bcadec1bef6d288f8#5m": {
     "wallet": "0x8dbeabb5961fd2fb28647b7bcadec1bef6d288f8",
@@ -1275,17 +1275,17 @@
     "precio_medio_frozen": 0.8777,
     "edge_pp_frozen": 3.946,
     "pnl_proxy_frozen": 27.149,
-    "forward_n": 266,
-    "forward_aciertos": 239,
-    "forward_suma_precio": 228.9688,
-    "forward_pnl_proxy": 10.031,
-    "forward_hit": 0.8985,
-    "forward_precio_medio": 0.8608,
-    "forward_edge_pp": 3.77,
-    "forward_p_shuffle": 0.0635,
+    "forward_n": 270,
+    "forward_aciertos": 243,
+    "forward_suma_precio": 232.6488,
+    "forward_pnl_proxy": 10.351,
+    "forward_hit": 0.9,
+    "forward_precio_medio": 0.8617,
+    "forward_edge_pp": 3.83,
+    "forward_p_shuffle": 0.088,
     "forward_sig_bhfdr": false,
     "estado": "NO_CONFIRMADO",
-    "ultimo_chequeo": "2026-07-22T04:35:02+00:00"
+    "ultimo_chequeo": "2026-07-22T05:35:01+00:00"
   },
   "0x089905577deadaa4008f453608676d5f7be6459e#5m": {
     "wallet": "0x089905577deadaa4008f453608676d5f7be6459e",
@@ -1298,17 +1298,17 @@
     "precio_medio_frozen": 0.9548,
     "edge_pp_frozen": 3.216,
     "pnl_proxy_frozen": 17.304,
-    "forward_n": 172,
-    "forward_aciertos": 167,
-    "forward_suma_precio": 164.2466,
-    "forward_pnl_proxy": 2.753,
-    "forward_hit": 0.9709,
-    "forward_precio_medio": 0.9549,
-    "forward_edge_pp": 1.6,
-    "forward_p_shuffle": 0.3615,
+    "forward_n": 175,
+    "forward_aciertos": 170,
+    "forward_suma_precio": 167.0766,
+    "forward_pnl_proxy": 2.923,
+    "forward_hit": 0.9714,
+    "forward_precio_medio": 0.9547,
+    "forward_edge_pp": 1.67,
+    "forward_p_shuffle": 0.3545,
     "forward_sig_bhfdr": false,
     "estado": "NO_CONFIRMADO",
-    "ultimo_chequeo": "2026-07-22T04:35:02+00:00"
+    "ultimo_chequeo": "2026-07-22T05:35:01+00:00"
   },
   "0xbeb4400ab92eb72bb54086569c2dbc0ad22dda45#5m": {
     "wallet": "0xbeb4400ab92eb72bb54086569c2dbc0ad22dda45",
@@ -1321,17 +1321,17 @@
     "precio_medio_frozen": 0.8759,
     "edge_pp_frozen": 4.171,
     "pnl_proxy_frozen": 30.864,
-    "forward_n": 218,
-    "forward_aciertos": 197,
-    "forward_suma_precio": 192.791,
-    "forward_pnl_proxy": 4.209,
-    "forward_hit": 0.9037,
-    "forward_precio_medio": 0.8844,
-    "forward_edge_pp": 1.93,
-    "forward_p_shuffle": 0.3345,
+    "forward_n": 222,
+    "forward_aciertos": 201,
+    "forward_suma_precio": 196.571,
+    "forward_pnl_proxy": 4.429,
+    "forward_hit": 0.9054,
+    "forward_precio_medio": 0.8855,
+    "forward_edge_pp": 1.99,
+    "forward_p_shuffle": 0.3735,
     "forward_sig_bhfdr": false,
     "estado": "NO_CONFIRMADO",
-    "ultimo_chequeo": "2026-07-22T04:35:02+00:00"
+    "ultimo_chequeo": "2026-07-22T05:35:01+00:00"
   },
   "0xb47f30656638886d5dbf0bc8bcef8392ecce3d37#5m": {
     "wallet": "0xb47f30656638886d5dbf0bc8bcef8392ecce3d37",
@@ -1344,17 +1344,17 @@
     "precio_medio_frozen": 0.8079,
     "edge_pp_frozen": 13.55,
     "pnl_proxy_frozen": 14.363,
-    "forward_n": 41,
-    "forward_aciertos": 30,
-    "forward_suma_precio": 29.769,
-    "forward_pnl_proxy": 0.231,
-    "forward_hit": 0.7317,
-    "forward_precio_medio": 0.7261,
-    "forward_edge_pp": 0.56,
+    "forward_n": 43,
+    "forward_aciertos": 31,
+    "forward_suma_precio": 30.7402,
+    "forward_pnl_proxy": 0.26,
+    "forward_hit": 0.7209,
+    "forward_precio_medio": 0.7149,
+    "forward_edge_pp": 0.6,
     "forward_p_shuffle": 1.0,
     "forward_sig_bhfdr": false,
     "estado": "NO_CONFIRMADO",
-    "ultimo_chequeo": "2026-07-22T04:35:02+00:00"
+    "ultimo_chequeo": "2026-07-22T05:35:01+00:00"
   },
   "0xf6b0569029864d9fcd1cc544ce1ce3951b7b61d9#5m": {
     "wallet": "0xf6b0569029864d9fcd1cc544ce1ce3951b7b61d9",
@@ -1367,17 +1367,17 @@
     "precio_medio_frozen": 0.9207,
     "edge_pp_frozen": 5.554,
     "pnl_proxy_frozen": 13.996,
-    "forward_n": 61,
-    "forward_aciertos": 61,
-    "forward_suma_precio": 56.3152,
-    "forward_pnl_proxy": 4.685,
+    "forward_n": 65,
+    "forward_aciertos": 65,
+    "forward_suma_precio": 60.0952,
+    "forward_pnl_proxy": 4.905,
     "forward_hit": 1.0,
-    "forward_precio_medio": 0.9232,
-    "forward_edge_pp": 7.68,
-    "forward_p_shuffle": 0.024,
-    "forward_sig_bhfdr": true,
-    "estado": "CONFIRMADO",
-    "ultimo_chequeo": "2026-07-22T04:35:02+00:00"
+    "forward_precio_medio": 0.9245,
+    "forward_edge_pp": 7.55,
+    "forward_p_shuffle": 0.0315,
+    "forward_sig_bhfdr": false,
+    "estado": "NO_CONFIRMADO",
+    "ultimo_chequeo": "2026-07-22T05:35:01+00:00"
   },
   "0x35540517d4881be64dbcd065a45827d83ba6f433#5m": {
     "wallet": "0x35540517d4881be64dbcd065a45827d83ba6f433",
@@ -1400,7 +1400,7 @@
     "forward_p_shuffle": null,
     "forward_sig_bhfdr": null,
     "estado": "ACUMULANDO",
-    "ultimo_chequeo": "2026-07-22T04:35:02+00:00"
+    "ultimo_chequeo": "2026-07-22T05:35:01+00:00"
   },
   "0x0a6c99d88523d328f6a8edf7db851796dc7f7e41#5m": {
     "wallet": "0x0a6c99d88523d328f6a8edf7db851796dc7f7e41",
@@ -1423,7 +1423,7 @@
     "forward_p_shuffle": null,
     "forward_sig_bhfdr": null,
     "estado": "ACUMULANDO",
-    "ultimo_chequeo": "2026-07-22T04:35:02+00:00"
+    "ultimo_chequeo": "2026-07-22T05:35:01+00:00"
   },
   "0xe3eeb127d5763a6e4ad597f773f9d259c94d5176#5m": {
     "wallet": "0xe3eeb127d5763a6e4ad597f773f9d259c94d5176",
@@ -1446,7 +1446,7 @@
     "forward_p_shuffle": null,
     "forward_sig_bhfdr": null,
     "estado": "ACUMULANDO",
-    "ultimo_chequeo": "2026-07-22T04:35:02+00:00"
+    "ultimo_chequeo": "2026-07-22T05:35:01+00:00"
   },
   "0x12c2782b74d3b2a051b55be2e5167970ace01381#5m": {
     "wallet": "0x12c2782b74d3b2a051b55be2e5167970ace01381",
@@ -1469,7 +1469,7 @@
     "forward_p_shuffle": null,
     "forward_sig_bhfdr": null,
     "estado": "ACUMULANDO",
-    "ultimo_chequeo": "2026-07-22T04:35:02+00:00"
+    "ultimo_chequeo": "2026-07-22T05:35:01+00:00"
   },
   "0x39f9ba58866834a4db2eafe64feedb248504fcc3#5m": {
     "wallet": "0x39f9ba58866834a4db2eafe64feedb248504fcc3",
@@ -1482,17 +1482,17 @@
     "precio_medio_frozen": 0.8441,
     "edge_pp_frozen": 9.417,
     "pnl_proxy_frozen": 30.512,
-    "forward_n": 119,
-    "forward_aciertos": 110,
-    "forward_suma_precio": 99.9671,
-    "forward_pnl_proxy": 10.033,
-    "forward_hit": 0.9244,
-    "forward_precio_medio": 0.8401,
-    "forward_edge_pp": 8.43,
-    "forward_p_shuffle": 0.0105,
+    "forward_n": 126,
+    "forward_aciertos": 115,
+    "forward_suma_precio": 105.9773,
+    "forward_pnl_proxy": 9.023,
+    "forward_hit": 0.9127,
+    "forward_precio_medio": 0.8411,
+    "forward_edge_pp": 7.16,
+    "forward_p_shuffle": 0.019,
     "forward_sig_bhfdr": true,
     "estado": "CONFIRMADO",
-    "ultimo_chequeo": "2026-07-22T04:35:02+00:00"
+    "ultimo_chequeo": "2026-07-22T05:35:01+00:00"
   },
   "0x22a4827ca94ba6e9f77f5dd9f49e6512b8e163eb#5m": {
     "wallet": "0x22a4827ca94ba6e9f77f5dd9f49e6512b8e163eb",
@@ -1505,17 +1505,17 @@
     "precio_medio_frozen": 0.2945,
     "edge_pp_frozen": 14.992,
     "pnl_proxy_frozen": 14.842,
-    "forward_n": 1,
-    "forward_aciertos": 0,
-    "forward_suma_precio": 0.01,
-    "forward_pnl_proxy": -0.01,
-    "forward_hit": 0.0,
-    "forward_precio_medio": 0.01,
-    "forward_edge_pp": -1.0,
+    "forward_n": 2,
+    "forward_aciertos": 1,
+    "forward_suma_precio": 0.82,
+    "forward_pnl_proxy": 0.18,
+    "forward_hit": 0.5,
+    "forward_precio_medio": 0.41,
+    "forward_edge_pp": 9.0,
     "forward_p_shuffle": null,
     "forward_sig_bhfdr": null,
     "estado": "ACUMULANDO",
-    "ultimo_chequeo": "2026-07-22T04:35:02+00:00"
+    "ultimo_chequeo": "2026-07-22T05:35:01+00:00"
   },
   "0x98f5d88798331947dc2a0f9087308a17c41f754f#5m": {
     "wallet": "0x98f5d88798331947dc2a0f9087308a17c41f754f",
@@ -1538,7 +1538,7 @@
     "forward_p_shuffle": null,
     "forward_sig_bhfdr": null,
     "estado": "ACUMULANDO",
-    "ultimo_chequeo": "2026-07-22T04:35:02+00:00"
+    "ultimo_chequeo": "2026-07-22T05:35:01+00:00"
   },
   "0x979e4ea5e21b5105a3bd0fffec5e6a0936f5f65c#5m": {
     "wallet": "0x979e4ea5e21b5105a3bd0fffec5e6a0936f5f65c",
@@ -1561,7 +1561,7 @@
     "forward_p_shuffle": null,
     "forward_sig_bhfdr": null,
     "estado": "ACUMULANDO",
-    "ultimo_chequeo": "2026-07-22T04:35:02+00:00"
+    "ultimo_chequeo": "2026-07-22T05:35:01+00:00"
   },
   "0xcd242020f463bf48f3926153e35675308b46c0f3#5m": {
     "wallet": "0xcd242020f463bf48f3926153e35675308b46c0f3",
@@ -1584,7 +1584,7 @@
     "forward_p_shuffle": null,
     "forward_sig_bhfdr": null,
     "estado": "ACUMULANDO",
-    "ultimo_chequeo": "2026-07-22T04:35:02+00:00"
+    "ultimo_chequeo": "2026-07-22T05:35:01+00:00"
   },
   "0x079fe5415de439e127ac4bec6b38451123e8c95d#5m": {
     "wallet": "0x079fe5415de439e127ac4bec6b38451123e8c95d",
@@ -1607,7 +1607,7 @@
     "forward_p_shuffle": null,
     "forward_sig_bhfdr": null,
     "estado": "ACUMULANDO",
-    "ultimo_chequeo": "2026-07-22T04:35:02+00:00"
+    "ultimo_chequeo": "2026-07-22T05:35:01+00:00"
   },
   "0xfb8818d4ec778ccfe79fb560d3419b18cca65d8e#5m": {
     "wallet": "0xfb8818d4ec778ccfe79fb560d3419b18cca65d8e",
@@ -1630,7 +1630,7 @@
     "forward_p_shuffle": null,
     "forward_sig_bhfdr": null,
     "estado": "ACUMULANDO",
-    "ultimo_chequeo": "2026-07-22T04:35:02+00:00"
+    "ultimo_chequeo": "2026-07-22T05:35:01+00:00"
   },
   "0x23222038e8255625fff4fff060af8fff89833ede#weekly": {
     "wallet": "0x23222038e8255625fff4fff060af8fff89833ede",
@@ -1653,7 +1653,7 @@
     "forward_p_shuffle": null,
     "forward_sig_bhfdr": null,
     "estado": "ACUMULANDO",
-    "ultimo_chequeo": "2026-07-22T04:35:02+00:00"
+    "ultimo_chequeo": "2026-07-22T05:35:01+00:00"
   },
   "0xee65685de42f8de9a03b4c53ee77d56a20d2cfc9#60m": {
     "wallet": "0xee65685de42f8de9a03b4c53ee77d56a20d2cfc9",
@@ -1676,7 +1676,7 @@
     "forward_p_shuffle": 1.0,
     "forward_sig_bhfdr": false,
     "estado": "NO_CONFIRMADO",
-    "ultimo_chequeo": "2026-07-22T04:35:02+00:00"
+    "ultimo_chequeo": "2026-07-22T05:35:01+00:00"
   },
   "0xdf0d2ccfe3d7c2ef120395534e43afe283509f79#60m": {
     "wallet": "0xdf0d2ccfe3d7c2ef120395534e43afe283509f79",
@@ -1699,7 +1699,7 @@
     "forward_p_shuffle": null,
     "forward_sig_bhfdr": null,
     "estado": "ACUMULANDO",
-    "ultimo_chequeo": "2026-07-22T04:35:02+00:00"
+    "ultimo_chequeo": "2026-07-22T05:35:01+00:00"
   },
   "0x8d1d5d1c6041b13fc708b5d9f668070e1724ed4a#60m": {
     "wallet": "0x8d1d5d1c6041b13fc708b5d9f668070e1724ed4a",
@@ -1722,7 +1722,7 @@
     "forward_p_shuffle": null,
     "forward_sig_bhfdr": null,
     "estado": "ACUMULANDO",
-    "ultimo_chequeo": "2026-07-22T04:35:02+00:00"
+    "ultimo_chequeo": "2026-07-22T05:35:01+00:00"
   },
   "0xe9076a87c5ed90ef16e6fe6529c943baeca0cff6#60m": {
     "wallet": "0xe9076a87c5ed90ef16e6fe6529c943baeca0cff6",
@@ -1742,10 +1742,10 @@
     "forward_hit": 0.24,
     "forward_precio_medio": 0.2797,
     "forward_edge_pp": -3.97,
-    "forward_p_shuffle": 0.6415,
+    "forward_p_shuffle": 0.6515,
     "forward_sig_bhfdr": false,
     "estado": "NO_CONFIRMADO",
-    "ultimo_chequeo": "2026-07-22T04:35:02+00:00"
+    "ultimo_chequeo": "2026-07-22T05:35:01+00:00"
   },
   "0x9412cdfc1e3171e1aabb013d0f494986445d0cd0#60m": {
     "wallet": "0x9412cdfc1e3171e1aabb013d0f494986445d0cd0",
@@ -1765,10 +1765,10 @@
     "forward_hit": 0.8953,
     "forward_precio_medio": 0.8666,
     "forward_edge_pp": 2.87,
-    "forward_p_shuffle": 0.5235,
+    "forward_p_shuffle": 0.5195,
     "forward_sig_bhfdr": false,
     "estado": "NO_CONFIRMADO",
-    "ultimo_chequeo": "2026-07-22T04:35:02+00:00"
+    "ultimo_chequeo": "2026-07-22T05:35:01+00:00"
   },
   "0xb55fa1296e6ec55d0ce53d93b9237389f11764d4#240m": {
     "wallet": "0xb55fa1296e6ec55d0ce53d93b9237389f11764d4",
@@ -1788,10 +1788,10 @@
     "forward_hit": 0.8077,
     "forward_precio_medio": 0.7826,
     "forward_edge_pp": 2.51,
-    "forward_p_shuffle": 0.352,
+    "forward_p_shuffle": 0.365,
     "forward_sig_bhfdr": false,
     "estado": "NO_CONFIRMADO",
-    "ultimo_chequeo": "2026-07-22T04:35:02+00:00"
+    "ultimo_chequeo": "2026-07-22T05:35:01+00:00"
   },
   "0xee65685de42f8de9a03b4c53ee77d56a20d2cfc9#240m": {
     "wallet": "0xee65685de42f8de9a03b4c53ee77d56a20d2cfc9",
@@ -1814,7 +1814,7 @@
     "forward_p_shuffle": 1.0,
     "forward_sig_bhfdr": false,
     "estado": "NO_CONFIRMADO",
-    "ultimo_chequeo": "2026-07-22T04:35:02+00:00"
+    "ultimo_chequeo": "2026-07-22T05:35:01+00:00"
   },
   "0xe9076a87c5ed90ef16e6fe6529c943baeca0cff6#240m": {
     "wallet": "0xe9076a87c5ed90ef16e6fe6529c943baeca0cff6",
@@ -1834,10 +1834,10 @@
     "forward_hit": 0.1628,
     "forward_precio_medio": 0.2242,
     "forward_edge_pp": -6.14,
-    "forward_p_shuffle": 0.347,
+    "forward_p_shuffle": 0.3715,
     "forward_sig_bhfdr": false,
     "estado": "NO_CONFIRMADO",
-    "ultimo_chequeo": "2026-07-22T04:35:02+00:00"
+    "ultimo_chequeo": "2026-07-22T05:35:01+00:00"
   },
   "0xf705fa045201391d9632b7f3cde06a5e24453ca7#weekly": {
     "wallet": "0xf705fa045201391d9632b7f3cde06a5e24453ca7",
@@ -1860,7 +1860,7 @@
     "forward_p_shuffle": null,
     "forward_sig_bhfdr": null,
     "estado": "ACUMULANDO",
-    "ultimo_chequeo": "2026-07-22T04:35:02+00:00"
+    "ultimo_chequeo": "2026-07-22T05:35:01+00:00"
   },
   "0x946769f131a690e168efb9e26e6628f4152ed15f#240m": {
     "wallet": "0x946769f131a690e168efb9e26e6628f4152ed15f",
@@ -1883,7 +1883,7 @@
     "forward_p_shuffle": null,
     "forward_sig_bhfdr": null,
     "estado": "ACUMULANDO",
-    "ultimo_chequeo": "2026-07-22T04:35:02+00:00"
+    "ultimo_chequeo": "2026-07-22T05:35:01+00:00"
   },
   "0xe9076a87c5ed90ef16e6fe6529c943baeca0cff6#weekly": {
     "wallet": "0xe9076a87c5ed90ef16e6fe6529c943baeca0cff6",
@@ -1906,7 +1906,7 @@
     "forward_p_shuffle": null,
     "forward_sig_bhfdr": null,
     "estado": "ACUMULANDO",
-    "ultimo_chequeo": "2026-07-22T04:35:02+00:00"
+    "ultimo_chequeo": "2026-07-22T05:35:01+00:00"
   },
   "0x55be7aa03ecfbe37aa5460db791205f7ac9ddca3#weekly": {
     "wallet": "0x55be7aa03ecfbe37aa5460db791205f7ac9ddca3",
@@ -1929,7 +1929,7 @@
     "forward_p_shuffle": null,
     "forward_sig_bhfdr": null,
     "estado": "ACUMULANDO",
-    "ultimo_chequeo": "2026-07-22T04:35:02+00:00"
+    "ultimo_chequeo": "2026-07-22T05:35:01+00:00"
   },
   "0xa0e72d5575095199ae08ce0dce447f21b7249461#240m": {
     "wallet": "0xa0e72d5575095199ae08ce0dce447f21b7249461",
@@ -1952,7 +1952,7 @@
     "forward_p_shuffle": null,
     "forward_sig_bhfdr": null,
     "estado": "ACUMULANDO",
-    "ultimo_chequeo": "2026-07-22T04:35:02+00:00"
+    "ultimo_chequeo": "2026-07-22T05:35:01+00:00"
   },
   "0x751a2b86cab503496efd325c8344e10159349ea1#60m": {
     "wallet": "0x751a2b86cab503496efd325c8344e10159349ea1",
@@ -1975,7 +1975,7 @@
     "forward_p_shuffle": null,
     "forward_sig_bhfdr": null,
     "estado": "ACUMULANDO",
-    "ultimo_chequeo": "2026-07-22T04:35:02+00:00"
+    "ultimo_chequeo": "2026-07-22T05:35:01+00:00"
   },
   "0x5b6331e7ff0831a3fe2ed12004747db1a9c911a4#weekly": {
     "wallet": "0x5b6331e7ff0831a3fe2ed12004747db1a9c911a4",
@@ -1998,7 +1998,7 @@
     "forward_p_shuffle": null,
     "forward_sig_bhfdr": null,
     "estado": "ACUMULANDO",
-    "ultimo_chequeo": "2026-07-22T04:35:02+00:00"
+    "ultimo_chequeo": "2026-07-22T05:35:01+00:00"
   },
   "0xb5277836b1b1172bfbe842fe655652883e87c106#60m": {
     "wallet": "0xb5277836b1b1172bfbe842fe655652883e87c106",
@@ -2021,7 +2021,7 @@
     "forward_p_shuffle": null,
     "forward_sig_bhfdr": null,
     "estado": "ACUMULANDO",
-    "ultimo_chequeo": "2026-07-22T04:35:02+00:00"
+    "ultimo_chequeo": "2026-07-22T05:35:01+00:00"
   },
   "0xee65685de42f8de9a03b4c53ee77d56a20d2cfc9#15m": {
     "wallet": "0xee65685de42f8de9a03b4c53ee77d56a20d2cfc9",
@@ -2034,17 +2034,17 @@
     "precio_medio_frozen": 0.7537,
     "edge_pp_frozen": -0.441,
     "pnl_proxy_frozen": -2.937,
-    "forward_n": 253,
-    "forward_aciertos": 205,
-    "forward_suma_precio": 205.0594,
-    "forward_pnl_proxy": -0.059,
-    "forward_hit": 0.8103,
-    "forward_precio_medio": 0.8105,
-    "forward_edge_pp": -0.02,
-    "forward_p_shuffle": 1.0,
+    "forward_n": 262,
+    "forward_aciertos": 211,
+    "forward_suma_precio": 211.9844,
+    "forward_pnl_proxy": -0.984,
+    "forward_hit": 0.8053,
+    "forward_precio_medio": 0.8091,
+    "forward_edge_pp": -0.38,
+    "forward_p_shuffle": 0.8935,
     "forward_sig_bhfdr": false,
     "estado": "NO_CONFIRMADO",
-    "ultimo_chequeo": "2026-07-22T04:35:02+00:00"
+    "ultimo_chequeo": "2026-07-22T05:35:01+00:00"
   },
   "0x91aab8d0ae5c7dde7d9ea7ca49aeb985e09819b8#60m": {
     "wallet": "0x91aab8d0ae5c7dde7d9ea7ca49aeb985e09819b8",
@@ -2067,7 +2067,7 @@
     "forward_p_shuffle": null,
     "forward_sig_bhfdr": null,
     "estado": "ACUMULANDO",
-    "ultimo_chequeo": "2026-07-22T04:35:02+00:00"
+    "ultimo_chequeo": "2026-07-22T05:35:01+00:00"
   },
   "0xdf0d2ccfe3d7c2ef120395534e43afe283509f79#15m": {
     "wallet": "0xdf0d2ccfe3d7c2ef120395534e43afe283509f79",
@@ -2090,7 +2090,7 @@
     "forward_p_shuffle": null,
     "forward_sig_bhfdr": null,
     "estado": "ACUMULANDO",
-    "ultimo_chequeo": "2026-07-22T04:35:02+00:00"
+    "ultimo_chequeo": "2026-07-22T05:35:01+00:00"
   },
   "0xb55fa1296e6ec55d0ce53d93b9237389f11764d4#15m": {
     "wallet": "0xb55fa1296e6ec55d0ce53d93b9237389f11764d4",
@@ -2103,17 +2103,17 @@
     "precio_medio_frozen": 0.5644,
     "edge_pp_frozen": 1.252,
     "pnl_proxy_frozen": 36.319,
-    "forward_n": 1135,
-    "forward_aciertos": 683,
-    "forward_suma_precio": 655.4733,
-    "forward_pnl_proxy": 27.527,
-    "forward_hit": 0.6018,
-    "forward_precio_medio": 0.5775,
-    "forward_edge_pp": 2.43,
-    "forward_p_shuffle": 0.1,
+    "forward_n": 1181,
+    "forward_aciertos": 714,
+    "forward_suma_precio": 690.9821,
+    "forward_pnl_proxy": 23.018,
+    "forward_hit": 0.6046,
+    "forward_precio_medio": 0.5851,
+    "forward_edge_pp": 1.95,
+    "forward_p_shuffle": 0.1625,
     "forward_sig_bhfdr": false,
     "estado": "NO_CONFIRMADO",
-    "ultimo_chequeo": "2026-07-22T04:35:02+00:00"
+    "ultimo_chequeo": "2026-07-22T05:35:01+00:00"
   },
   "0x9412cdfc1e3171e1aabb013d0f494986445d0cd0#15m": {
     "wallet": "0x9412cdfc1e3171e1aabb013d0f494986445d0cd0",
@@ -2126,17 +2126,17 @@
     "precio_medio_frozen": 0.7175,
     "edge_pp_frozen": 0.88,
     "pnl_proxy_frozen": 2.508,
-    "forward_n": 91,
-    "forward_aciertos": 74,
-    "forward_suma_precio": 73.6216,
-    "forward_pnl_proxy": 0.378,
-    "forward_hit": 0.8132,
-    "forward_precio_medio": 0.809,
-    "forward_edge_pp": 0.42,
-    "forward_p_shuffle": 0.8995,
+    "forward_n": 95,
+    "forward_aciertos": 78,
+    "forward_suma_precio": 77.5516,
+    "forward_pnl_proxy": 0.448,
+    "forward_hit": 0.8211,
+    "forward_precio_medio": 0.8163,
+    "forward_edge_pp": 0.48,
+    "forward_p_shuffle": 0.888,
     "forward_sig_bhfdr": false,
     "estado": "NO_CONFIRMADO",
-    "ultimo_chequeo": "2026-07-22T04:35:02+00:00"
+    "ultimo_chequeo": "2026-07-22T05:35:01+00:00"
   },
   "0x5b6331e7ff0831a3fe2ed12004747db1a9c911a4#15m": {
     "wallet": "0x5b6331e7ff0831a3fe2ed12004747db1a9c911a4",
@@ -2149,17 +2149,17 @@
     "precio_medio_frozen": 0.4391,
     "edge_pp_frozen": -3.907,
     "pnl_proxy_frozen": -6.837,
-    "forward_n": 94,
-    "forward_aciertos": 46,
-    "forward_suma_precio": 48.1727,
-    "forward_pnl_proxy": -2.173,
-    "forward_hit": 0.4894,
-    "forward_precio_medio": 0.5125,
-    "forward_edge_pp": -2.31,
-    "forward_p_shuffle": 0.6685,
+    "forward_n": 107,
+    "forward_aciertos": 51,
+    "forward_suma_precio": 54.9551,
+    "forward_pnl_proxy": -3.955,
+    "forward_hit": 0.4766,
+    "forward_precio_medio": 0.5136,
+    "forward_edge_pp": -3.7,
+    "forward_p_shuffle": 0.427,
     "forward_sig_bhfdr": false,
     "estado": "NO_CONFIRMADO",
-    "ultimo_chequeo": "2026-07-22T04:35:02+00:00"
+    "ultimo_chequeo": "2026-07-22T05:35:01+00:00"
   },
   "0x946769f131a690e168efb9e26e6628f4152ed15f#60m": {
     "wallet": "0x946769f131a690e168efb9e26e6628f4152ed15f",
@@ -2182,7 +2182,7 @@
     "forward_p_shuffle": null,
     "forward_sig_bhfdr": null,
     "estado": "ACUMULANDO",
-    "ultimo_chequeo": "2026-07-22T04:35:02+00:00"
+    "ultimo_chequeo": "2026-07-22T05:35:01+00:00"
   },
   "0xe9076a87c5ed90ef16e6fe6529c943baeca0cff6#15m": {
     "wallet": "0xe9076a87c5ed90ef16e6fe6529c943baeca0cff6",
@@ -2202,10 +2202,10 @@
     "forward_hit": 0.2843,
     "forward_precio_medio": 0.3222,
     "forward_edge_pp": -3.79,
-    "forward_p_shuffle": 0.3925,
+    "forward_p_shuffle": 0.4025,
     "forward_sig_bhfdr": false,
     "estado": "NO_CONFIRMADO",
-    "ultimo_chequeo": "2026-07-22T04:35:02+00:00"
+    "ultimo_chequeo": "2026-07-22T05:35:01+00:00"
   },
   "0x98f5d88798331947dc2a0f9087308a17c41f754f#15m": {
     "wallet": "0x98f5d88798331947dc2a0f9087308a17c41f754f",
@@ -2228,7 +2228,7 @@
     "forward_p_shuffle": null,
     "forward_sig_bhfdr": null,
     "estado": "ACUMULANDO",
-    "ultimo_chequeo": "2026-07-22T04:35:02+00:00"
+    "ultimo_chequeo": "2026-07-22T05:35:01+00:00"
   },
   "0x5b6331e7ff0831a3fe2ed12004747db1a9c911a4#240m": {
     "wallet": "0x5b6331e7ff0831a3fe2ed12004747db1a9c911a4",
@@ -2251,7 +2251,7 @@
     "forward_p_shuffle": null,
     "forward_sig_bhfdr": null,
     "estado": "ACUMULANDO",
-    "ultimo_chequeo": "2026-07-22T04:35:02+00:00"
+    "ultimo_chequeo": "2026-07-22T05:35:01+00:00"
   },
   "0x0cb038487586d1119b165466072e9baf666f3a90#15m": {
     "wallet": "0x0cb038487586d1119b165466072e9baf666f3a90",
@@ -2271,10 +2271,10 @@
     "forward_hit": 0.4583,
     "forward_precio_medio": 0.3944,
     "forward_edge_pp": 6.39,
-    "forward_p_shuffle": 0.5635,
+    "forward_p_shuffle": 0.545,
     "forward_sig_bhfdr": false,
     "estado": "NO_CONFIRMADO",
-    "ultimo_chequeo": "2026-07-22T04:35:02+00:00"
+    "ultimo_chequeo": "2026-07-22T05:35:01+00:00"
   },
   "0x91aab8d0ae5c7dde7d9ea7ca49aeb985e09819b8#15m": {
     "wallet": "0x91aab8d0ae5c7dde7d9ea7ca49aeb985e09819b8",
@@ -2297,7 +2297,7 @@
     "forward_p_shuffle": null,
     "forward_sig_bhfdr": null,
     "estado": "ACUMULANDO",
-    "ultimo_chequeo": "2026-07-22T04:35:02+00:00"
+    "ultimo_chequeo": "2026-07-22T05:35:01+00:00"
   },
   "0x3a876edbdbc5ee435fe6ff154fe6be90f72f82bd#15m": {
     "wallet": "0x3a876edbdbc5ee435fe6ff154fe6be90f72f82bd",
@@ -2320,7 +2320,7 @@
     "forward_p_shuffle": null,
     "forward_sig_bhfdr": null,
     "estado": "ACUMULANDO",
-    "ultimo_chequeo": "2026-07-22T04:35:02+00:00"
+    "ultimo_chequeo": "2026-07-22T05:35:01+00:00"
   },
   "0x9412cdfc1e3171e1aabb013d0f494986445d0cd0#5m": {
     "wallet": "0x9412cdfc1e3171e1aabb013d0f494986445d0cd0",
@@ -2340,10 +2340,10 @@
     "forward_hit": 0.3191,
     "forward_precio_medio": 0.3254,
     "forward_edge_pp": -0.63,
-    "forward_p_shuffle": 0.878,
+    "forward_p_shuffle": 0.8815,
     "forward_sig_bhfdr": false,
     "estado": "NO_CONFIRMADO",
-    "ultimo_chequeo": "2026-07-22T04:35:02+00:00"
+    "ultimo_chequeo": "2026-07-22T05:35:01+00:00"
   },
   "0xb55fa1296e6ec55d0ce53d93b9237389f11764d4#5m": {
     "wallet": "0xb55fa1296e6ec55d0ce53d93b9237389f11764d4",
@@ -2356,17 +2356,17 @@
     "precio_medio_frozen": 0.494,
     "edge_pp_frozen": 3.761,
     "pnl_proxy_frozen": 14.857,
-    "forward_n": 309,
-    "forward_aciertos": 154,
-    "forward_suma_precio": 150.4347,
-    "forward_pnl_proxy": 3.565,
-    "forward_hit": 0.4984,
-    "forward_precio_medio": 0.4868,
-    "forward_edge_pp": 1.16,
-    "forward_p_shuffle": 0.6395,
+    "forward_n": 314,
+    "forward_aciertos": 156,
+    "forward_suma_precio": 152.7047,
+    "forward_pnl_proxy": 3.295,
+    "forward_hit": 0.4968,
+    "forward_precio_medio": 0.4863,
+    "forward_edge_pp": 1.05,
+    "forward_p_shuffle": 0.7485,
     "forward_sig_bhfdr": false,
     "estado": "NO_CONFIRMADO",
-    "ultimo_chequeo": "2026-07-22T04:35:02+00:00"
+    "ultimo_chequeo": "2026-07-22T05:35:01+00:00"
   },
   "0xce25e214d5cfe4f459cf67f08df581885aae7fdc#5m": {
     "wallet": "0xce25e214d5cfe4f459cf67f08df581885aae7fdc",
@@ -2379,17 +2379,17 @@
     "precio_medio_frozen": 0.5095,
     "edge_pp_frozen": 3.498,
     "pnl_proxy_frozen": 13.748,
-    "forward_n": 328,
-    "forward_aciertos": 180,
-    "forward_suma_precio": 167.6894,
-    "forward_pnl_proxy": 12.311,
-    "forward_hit": 0.5488,
-    "forward_precio_medio": 0.5112,
-    "forward_edge_pp": 3.76,
-    "forward_p_shuffle": 0.167,
+    "forward_n": 333,
+    "forward_aciertos": 184,
+    "forward_suma_precio": 171.7394,
+    "forward_pnl_proxy": 12.261,
+    "forward_hit": 0.5526,
+    "forward_precio_medio": 0.5157,
+    "forward_edge_pp": 3.69,
+    "forward_p_shuffle": 0.163,
     "forward_sig_bhfdr": false,
     "estado": "NO_CONFIRMADO",
-    "ultimo_chequeo": "2026-07-22T04:35:02+00:00"
+    "ultimo_chequeo": "2026-07-22T05:35:01+00:00"
   },
   "0x4228048ea2f8f571ff2777cc32baee584c5134cb#5m": {
     "wallet": "0x4228048ea2f8f571ff2777cc32baee584c5134cb",
@@ -2402,17 +2402,17 @@
     "precio_medio_frozen": 0.5878,
     "edge_pp_frozen": 8.882,
     "pnl_proxy_frozen": 23.893,
-    "forward_n": 105,
-    "forward_aciertos": 62,
-    "forward_suma_precio": 56.0326,
-    "forward_pnl_proxy": 5.967,
-    "forward_hit": 0.5905,
-    "forward_precio_medio": 0.5336,
-    "forward_edge_pp": 5.69,
-    "forward_p_shuffle": 0.2555,
+    "forward_n": 113,
+    "forward_aciertos": 65,
+    "forward_suma_precio": 59.6917,
+    "forward_pnl_proxy": 5.308,
+    "forward_hit": 0.5752,
+    "forward_precio_medio": 0.5282,
+    "forward_edge_pp": 4.7,
+    "forward_p_shuffle": 0.3445,
     "forward_sig_bhfdr": false,
     "estado": "NO_CONFIRMADO",
-    "ultimo_chequeo": "2026-07-22T04:35:02+00:00"
+    "ultimo_chequeo": "2026-07-22T05:35:01+00:00"
   },
   "0x5b6331e7ff0831a3fe2ed12004747db1a9c911a4#5m": {
     "wallet": "0x5b6331e7ff0831a3fe2ed12004747db1a9c911a4",
@@ -2425,17 +2425,17 @@
     "precio_medio_frozen": 0.4403,
     "edge_pp_frozen": -5.899,
     "pnl_proxy_frozen": -8.2,
-    "forward_n": 66,
-    "forward_aciertos": 29,
-    "forward_suma_precio": 29.5111,
-    "forward_pnl_proxy": -0.511,
-    "forward_hit": 0.4394,
-    "forward_precio_medio": 0.4471,
-    "forward_edge_pp": -0.77,
-    "forward_p_shuffle": 0.8985,
+    "forward_n": 68,
+    "forward_aciertos": 30,
+    "forward_suma_precio": 30.8968,
+    "forward_pnl_proxy": -0.897,
+    "forward_hit": 0.4412,
+    "forward_precio_medio": 0.4544,
+    "forward_edge_pp": -1.32,
+    "forward_p_shuffle": 0.9,
     "forward_sig_bhfdr": false,
     "estado": "NO_CONFIRMADO",
-    "ultimo_chequeo": "2026-07-22T04:35:02+00:00"
+    "ultimo_chequeo": "2026-07-22T05:35:01+00:00"
   },
   "0xe9076a87c5ed90ef16e6fe6529c943baeca0cff6#5m": {
     "wallet": "0xe9076a87c5ed90ef16e6fe6529c943baeca0cff6",
@@ -2448,17 +2448,17 @@
     "precio_medio_frozen": 0.5794,
     "edge_pp_frozen": -1.112,
     "pnl_proxy_frozen": -3.012,
-    "forward_n": 144,
-    "forward_aciertos": 66,
-    "forward_suma_precio": 69.511,
-    "forward_pnl_proxy": -3.511,
-    "forward_hit": 0.4583,
-    "forward_precio_medio": 0.4827,
-    "forward_edge_pp": -2.44,
-    "forward_p_shuffle": 0.5035,
+    "forward_n": 149,
+    "forward_aciertos": 69,
+    "forward_suma_precio": 71.668,
+    "forward_pnl_proxy": -2.668,
+    "forward_hit": 0.4631,
+    "forward_precio_medio": 0.481,
+    "forward_edge_pp": -1.79,
+    "forward_p_shuffle": 0.692,
     "forward_sig_bhfdr": false,
     "estado": "NO_CONFIRMADO",
-    "ultimo_chequeo": "2026-07-22T04:35:02+00:00"
+    "ultimo_chequeo": "2026-07-22T05:35:01+00:00"
   },
   "0xdf0d2ccfe3d7c2ef120395534e43afe283509f79#5m": {
     "wallet": "0xdf0d2ccfe3d7c2ef120395534e43afe283509f79",
@@ -2481,7 +2481,7 @@
     "forward_p_shuffle": null,
     "forward_sig_bhfdr": null,
     "estado": "ACUMULANDO",
-    "ultimo_chequeo": "2026-07-22T04:35:02+00:00"
+    "ultimo_chequeo": "2026-07-22T05:35:01+00:00"
   },
   "0x3a876edbdbc5ee435fe6ff154fe6be90f72f82bd#5m": {
     "wallet": "0x3a876edbdbc5ee435fe6ff154fe6be90f72f82bd",
@@ -2504,7 +2504,7 @@
     "forward_p_shuffle": null,
     "forward_sig_bhfdr": null,
     "estado": "ACUMULANDO",
-    "ultimo_chequeo": "2026-07-22T04:35:02+00:00"
+    "ultimo_chequeo": "2026-07-22T05:35:01+00:00"
   },
   "0xee65685de42f8de9a03b4c53ee77d56a20d2cfc9#5m": {
     "wallet": "0xee65685de42f8de9a03b4c53ee77d56a20d2cfc9",
@@ -2524,10 +2524,10 @@
     "forward_hit": 0.5,
     "forward_precio_medio": 0.4837,
     "forward_edge_pp": 1.63,
-    "forward_p_shuffle": 0.906,
+    "forward_p_shuffle": 0.8975,
     "forward_sig_bhfdr": false,
     "estado": "NO_CONFIRMADO",
-    "ultimo_chequeo": "2026-07-22T04:35:02+00:00"
+    "ultimo_chequeo": "2026-07-22T05:35:01+00:00"
   },
   "0xcb92e59eef071c7dfac33fbc64c60952d277e62f#5m": {
     "wallet": "0xcb92e59eef071c7dfac33fbc64c60952d277e62f",
@@ -2540,17 +2540,17 @@
     "precio_medio_frozen": 0.6841,
     "edge_pp_frozen": 1.962,
     "pnl_proxy_frozen": 0.53,
-    "forward_n": 13,
-    "forward_aciertos": 10,
-    "forward_suma_precio": 8.1813,
-    "forward_pnl_proxy": 1.819,
-    "forward_hit": 0.7692,
-    "forward_precio_medio": 0.6293,
-    "forward_edge_pp": 13.99,
-    "forward_p_shuffle": null,
-    "forward_sig_bhfdr": null,
-    "estado": "ACUMULANDO",
-    "ultimo_chequeo": "2026-07-22T04:35:02+00:00"
+    "forward_n": 15,
+    "forward_aciertos": 11,
+    "forward_suma_precio": 8.9961,
+    "forward_pnl_proxy": 2.004,
+    "forward_hit": 0.7333,
+    "forward_precio_medio": 0.5997,
+    "forward_edge_pp": 13.36,
+    "forward_p_shuffle": 0.326,
+    "forward_sig_bhfdr": false,
+    "estado": "NO_CONFIRMADO",
+    "ultimo_chequeo": "2026-07-22T05:35:01+00:00"
   },
   "0x91aab8d0ae5c7dde7d9ea7ca49aeb985e09819b8#5m": {
     "wallet": "0x91aab8d0ae5c7dde7d9ea7ca49aeb985e09819b8",
@@ -2573,7 +2573,7 @@
     "forward_p_shuffle": null,
     "forward_sig_bhfdr": null,
     "estado": "ACUMULANDO",
-    "ultimo_chequeo": "2026-07-22T04:35:02+00:00"
+    "ultimo_chequeo": "2026-07-22T05:35:01+00:00"
   },
   "0x751a2b86cab503496efd325c8344e10159349ea1#5m": {
     "wallet": "0x751a2b86cab503496efd325c8344e10159349ea1",
@@ -2596,7 +2596,7 @@
     "forward_p_shuffle": null,
     "forward_sig_bhfdr": null,
     "estado": "ACUMULANDO",
-    "ultimo_chequeo": "2026-07-22T04:35:02+00:00"
+    "ultimo_chequeo": "2026-07-22T05:35:01+00:00"
   },
   "0x8d1d5d1c6041b13fc708b5d9f668070e1724ed4a#5m": {
     "wallet": "0x8d1d5d1c6041b13fc708b5d9f668070e1724ed4a",
@@ -2619,7 +2619,7 @@
     "forward_p_shuffle": null,
     "forward_sig_bhfdr": null,
     "estado": "ACUMULANDO",
-    "ultimo_chequeo": "2026-07-22T04:35:02+00:00"
+    "ultimo_chequeo": "2026-07-22T05:35:01+00:00"
   },
   "0x3048d65321be3497164cdfc2996f94f98a2e7537#5m": {
     "wallet": "0x3048d65321be3497164cdfc2996f94f98a2e7537",
@@ -2642,7 +2642,7 @@
     "forward_p_shuffle": null,
     "forward_sig_bhfdr": null,
     "estado": "ACUMULANDO",
-    "ultimo_chequeo": "2026-07-22T04:35:02+00:00"
+    "ultimo_chequeo": "2026-07-22T05:35:01+00:00"
   },
   "0x723ddc068e53830c4431d490e7b0cbd5cdfc3a40#5m": {
     "wallet": "0x723ddc068e53830c4431d490e7b0cbd5cdfc3a40",
@@ -2665,7 +2665,7 @@
     "forward_p_shuffle": null,
     "forward_sig_bhfdr": null,
     "estado": "ACUMULANDO",
-    "ultimo_chequeo": "2026-07-22T04:35:02+00:00"
+    "ultimo_chequeo": "2026-07-22T05:35:01+00:00"
   },
   "0xd0364c0e1d6755b16123b60eea456f81e1ebe089#5m": {
     "wallet": "0xd0364c0e1d6755b16123b60eea456f81e1ebe089",
@@ -2688,7 +2688,7 @@
     "forward_p_shuffle": null,
     "forward_sig_bhfdr": null,
     "estado": "ACUMULANDO",
-    "ultimo_chequeo": "2026-07-22T04:35:02+00:00"
+    "ultimo_chequeo": "2026-07-22T05:35:01+00:00"
   },
   "0x45230b4fb12569efcc908b4d22c3cee4a19429e2#5m": {
     "wallet": "0x45230b4fb12569efcc908b4d22c3cee4a19429e2",
@@ -2711,7 +2711,7 @@
     "forward_p_shuffle": null,
     "forward_sig_bhfdr": null,
     "estado": "ACUMULANDO",
-    "ultimo_chequeo": "2026-07-22T04:35:02+00:00"
+    "ultimo_chequeo": "2026-07-22T05:35:01+00:00"
   },
   "0x208326efd5d051c59631ed626848b150b8d8259c#5m": {
     "wallet": "0x208326efd5d051c59631ed626848b150b8d8259c",
@@ -2734,7 +2734,7 @@
     "forward_p_shuffle": null,
     "forward_sig_bhfdr": null,
     "estado": "ACUMULANDO",
-    "ultimo_chequeo": "2026-07-22T04:35:02+00:00"
+    "ultimo_chequeo": "2026-07-22T05:35:01+00:00"
   },
   "0x1f12b590863c99883394a0dcba5a4c5b991894cd#5m": {
     "wallet": "0x1f12b590863c99883394a0dcba5a4c5b991894cd",
@@ -2757,7 +2757,7 @@
     "forward_p_shuffle": null,
     "forward_sig_bhfdr": null,
     "estado": "ACUMULANDO",
-    "ultimo_chequeo": "2026-07-22T04:35:02+00:00"
+    "ultimo_chequeo": "2026-07-22T05:35:01+00:00"
   },
   "0x2c02a009a60ea0e868f77fba65d6fcf73ff3b48d#5m": {
     "wallet": "0x2c02a009a60ea0e868f77fba65d6fcf73ff3b48d",
@@ -2780,7 +2780,7 @@
     "forward_p_shuffle": null,
     "forward_sig_bhfdr": null,
     "estado": "ACUMULANDO",
-    "ultimo_chequeo": "2026-07-22T04:35:02+00:00"
+    "ultimo_chequeo": "2026-07-22T05:35:01+00:00"
   },
   "0x98ad6e5ebaf33d5627294f521fe33d42fa005bd0#5m": {
     "wallet": "0x98ad6e5ebaf33d5627294f521fe33d42fa005bd0",
@@ -2803,7 +2803,7 @@
     "forward_p_shuffle": null,
     "forward_sig_bhfdr": null,
     "estado": "ACUMULANDO",
-    "ultimo_chequeo": "2026-07-22T04:35:02+00:00"
+    "ultimo_chequeo": "2026-07-22T05:35:01+00:00"
   },
   "0x301e286fd88abb7cda0a19a24e4dc4823c4db752#weekly": {
     "wallet": "0x301e286fd88abb7cda0a19a24e4dc4823c4db752",
@@ -2826,7 +2826,7 @@
     "forward_p_shuffle": null,
     "forward_sig_bhfdr": null,
     "estado": "ACUMULANDO",
-    "ultimo_chequeo": "2026-07-22T04:35:02+00:00"
+    "ultimo_chequeo": "2026-07-22T05:35:01+00:00"
   },
   "0x08e459e56e8cc0c3776a4d61c7c14c980e67ef71#5m": {
     "wallet": "0x08e459e56e8cc0c3776a4d61c7c14c980e67ef71",
@@ -2849,7 +2849,7 @@
     "forward_p_shuffle": null,
     "forward_sig_bhfdr": null,
     "estado": "ACUMULANDO",
-    "ultimo_chequeo": "2026-07-22T04:35:02+00:00"
+    "ultimo_chequeo": "2026-07-22T05:35:01+00:00"
   },
   "0x946769f131a690e168efb9e26e6628f4152ed15f#5m": {
     "wallet": "0x946769f131a690e168efb9e26e6628f4152ed15f",
@@ -2872,7 +2872,7 @@
     "forward_p_shuffle": null,
     "forward_sig_bhfdr": null,
     "estado": "ACUMULANDO",
-    "ultimo_chequeo": "2026-07-22T04:35:02+00:00"
+    "ultimo_chequeo": "2026-07-22T05:35:01+00:00"
   },
   "0x580845f990155aacc66eac14a3852a4fa38be67f#60m": {
     "wallet": "0x580845f990155aacc66eac14a3852a4fa38be67f",
@@ -2885,17 +2885,17 @@
     "precio_medio_frozen": 0.711,
     "edge_pp_frozen": 4.208,
     "pnl_proxy_frozen": 57.611,
-    "forward_n": 0,
-    "forward_aciertos": 0,
-    "forward_suma_precio": 0.0,
-    "forward_pnl_proxy": 0.0,
-    "forward_hit": null,
-    "forward_precio_medio": null,
-    "forward_edge_pp": null,
+    "forward_n": 1,
+    "forward_aciertos": 1,
+    "forward_suma_precio": 0.94,
+    "forward_pnl_proxy": 0.06,
+    "forward_hit": 1.0,
+    "forward_precio_medio": 0.94,
+    "forward_edge_pp": 6.0,
     "forward_p_shuffle": null,
     "forward_sig_bhfdr": null,
     "estado": "ACUMULANDO",
-    "ultimo_chequeo": "2026-07-22T04:35:02+00:00"
+    "ultimo_chequeo": "2026-07-22T05:35:01+00:00"
   },
   "0x0c7f0327ca81d86522fa893dbf6daa208c9eafca#60m": {
     "wallet": "0x0c7f0327ca81d86522fa893dbf6daa208c9eafca",
@@ -2918,7 +2918,7 @@
     "forward_p_shuffle": null,
     "forward_sig_bhfdr": null,
     "estado": "ACUMULANDO",
-    "ultimo_chequeo": "2026-07-22T04:35:02+00:00"
+    "ultimo_chequeo": "2026-07-22T05:35:01+00:00"
   },
   "0x19234b88d9ffc186f4fb33f90f3488eb55ffef8e#60m": {
     "wallet": "0x19234b88d9ffc186f4fb33f90f3488eb55ffef8e",
@@ -2931,17 +2931,17 @@
     "precio_medio_frozen": 0.871,
     "edge_pp_frozen": 4.009,
     "pnl_proxy_frozen": 57.729,
-    "forward_n": 0,
-    "forward_aciertos": 0,
-    "forward_suma_precio": 0.0,
-    "forward_pnl_proxy": 0.0,
-    "forward_hit": null,
-    "forward_precio_medio": null,
-    "forward_edge_pp": null,
-    "forward_p_shuffle": null,
-    "forward_sig_bhfdr": null,
-    "estado": "ACUMULANDO",
-    "ultimo_chequeo": "2026-07-22T04:35:02+00:00"
+    "forward_n": 30,
+    "forward_aciertos": 30,
+    "forward_suma_precio": 28.92,
+    "forward_pnl_proxy": 1.08,
+    "forward_hit": 1.0,
+    "forward_precio_medio": 0.964,
+    "forward_edge_pp": 3.6,
+    "forward_p_shuffle": 0.419,
+    "forward_sig_bhfdr": false,
+    "estado": "NO_CONFIRMADO",
+    "ultimo_chequeo": "2026-07-22T05:35:01+00:00"
   },
   "0xdba7e5222f9ccf4a44179839cd9faac5e12e3d84#240m": {
     "wallet": "0xdba7e5222f9ccf4a44179839cd9faac5e12e3d84",
@@ -2964,7 +2964,7 @@
     "forward_p_shuffle": null,
     "forward_sig_bhfdr": null,
     "estado": "ACUMULANDO",
-    "ultimo_chequeo": "2026-07-22T04:35:02+00:00"
+    "ultimo_chequeo": "2026-07-22T05:35:01+00:00"
   },
   "0x6239c6146935f5e5e3c08b88c25997997935c6b4#240m": {
     "wallet": "0x6239c6146935f5e5e3c08b88c25997997935c6b4",
@@ -2987,7 +2987,7 @@
     "forward_p_shuffle": null,
     "forward_sig_bhfdr": null,
     "estado": "ACUMULANDO",
-    "ultimo_chequeo": "2026-07-22T04:35:02+00:00"
+    "ultimo_chequeo": "2026-07-22T05:35:01+00:00"
   },
   "0xb39db121374f1525d31e6c33601d0b284cc70f05#240m": {
     "wallet": "0xb39db121374f1525d31e6c33601d0b284cc70f05",
@@ -3010,7 +3010,7 @@
     "forward_p_shuffle": null,
     "forward_sig_bhfdr": null,
     "estado": "ACUMULANDO",
-    "ultimo_chequeo": "2026-07-22T04:35:02+00:00"
+    "ultimo_chequeo": "2026-07-22T05:35:01+00:00"
   },
   "0x5e8bdc9bddc8935726c561b7466cf5df56a313e6#15m": {
     "wallet": "0x5e8bdc9bddc8935726c561b7466cf5df56a313e6",
@@ -3033,7 +3033,7 @@
     "forward_p_shuffle": null,
     "forward_sig_bhfdr": null,
     "estado": "ACUMULANDO",
-    "ultimo_chequeo": "2026-07-22T04:35:02+00:00"
+    "ultimo_chequeo": "2026-07-22T05:35:01+00:00"
   },
   "0x3c58ef422754ff22c7e806336feba0064d8b776b#15m": {
     "wallet": "0x3c58ef422754ff22c7e806336feba0064d8b776b",
@@ -3046,17 +3046,17 @@
     "precio_medio_frozen": 0.5268,
     "edge_pp_frozen": 5.09,
     "pnl_proxy_frozen": 47.488,
-    "forward_n": 0,
-    "forward_aciertos": 0,
-    "forward_suma_precio": 0.0,
-    "forward_pnl_proxy": 0.0,
-    "forward_hit": null,
-    "forward_precio_medio": null,
-    "forward_edge_pp": null,
+    "forward_n": 5,
+    "forward_aciertos": 2,
+    "forward_suma_precio": 2.7424,
+    "forward_pnl_proxy": -0.742,
+    "forward_hit": 0.4,
+    "forward_precio_medio": 0.5485,
+    "forward_edge_pp": -14.85,
     "forward_p_shuffle": null,
     "forward_sig_bhfdr": null,
     "estado": "ACUMULANDO",
-    "ultimo_chequeo": "2026-07-22T04:35:02+00:00"
+    "ultimo_chequeo": "2026-07-22T05:35:01+00:00"
   },
   "0xe0ba5e6b2df3b13c13b46f42d2413145755aba8a#15m": {
     "wallet": "0xe0ba5e6b2df3b13c13b46f42d2413145755aba8a",
@@ -3079,7 +3079,7 @@
     "forward_p_shuffle": null,
     "forward_sig_bhfdr": null,
     "estado": "ACUMULANDO",
-    "ultimo_chequeo": "2026-07-22T04:35:02+00:00"
+    "ultimo_chequeo": "2026-07-22T05:35:01+00:00"
   },
   "0x079fe5415de439e127ac4bec6b38451123e8c95d#15m": {
     "wallet": "0x079fe5415de439e127ac4bec6b38451123e8c95d",
@@ -3102,7 +3102,7 @@
     "forward_p_shuffle": null,
     "forward_sig_bhfdr": null,
     "estado": "ACUMULANDO",
-    "ultimo_chequeo": "2026-07-22T04:35:02+00:00"
+    "ultimo_chequeo": "2026-07-22T05:35:01+00:00"
   },
   "0xa3661faf61520c7df523931dd84a0fcfb717527b#15m": {
     "wallet": "0xa3661faf61520c7df523931dd84a0fcfb717527b",
@@ -3125,7 +3125,7 @@
     "forward_p_shuffle": null,
     "forward_sig_bhfdr": null,
     "estado": "ACUMULANDO",
-    "ultimo_chequeo": "2026-07-22T04:35:02+00:00"
+    "ultimo_chequeo": "2026-07-22T05:35:01+00:00"
   },
   "0xbeb4400ab92eb72bb54086569c2dbc0ad22dda45#15m": {
     "wallet": "0xbeb4400ab92eb72bb54086569c2dbc0ad22dda45",
@@ -3148,7 +3148,7 @@
     "forward_p_shuffle": null,
     "forward_sig_bhfdr": null,
     "estado": "ACUMULANDO",
-    "ultimo_chequeo": "2026-07-22T04:35:02+00:00"
+    "ultimo_chequeo": "2026-07-22T05:35:01+00:00"
   },
   "0xba1486522e84b3936e26a7c5d23c3254fdde1fd1#15m": {
     "wallet": "0xba1486522e84b3936e26a7c5d23c3254fdde1fd1",
@@ -3171,7 +3171,7 @@
     "forward_p_shuffle": null,
     "forward_sig_bhfdr": null,
     "estado": "ACUMULANDO",
-    "ultimo_chequeo": "2026-07-22T04:35:02+00:00"
+    "ultimo_chequeo": "2026-07-22T05:35:01+00:00"
   },
   "0x6ed4fb098ec3c86d74a6d18c6757fd3d1c99094c#15m": {
     "wallet": "0x6ed4fb098ec3c86d74a6d18c6757fd3d1c99094c",
@@ -3184,17 +3184,17 @@
     "precio_medio_frozen": 0.4319,
     "edge_pp_frozen": 31.0,
     "pnl_proxy_frozen": 9.61,
-    "forward_n": 0,
-    "forward_aciertos": 0,
-    "forward_suma_precio": 0.0,
-    "forward_pnl_proxy": 0.0,
-    "forward_hit": null,
-    "forward_precio_medio": null,
-    "forward_edge_pp": null,
+    "forward_n": 3,
+    "forward_aciertos": 3,
+    "forward_suma_precio": 1.29,
+    "forward_pnl_proxy": 1.71,
+    "forward_hit": 1.0,
+    "forward_precio_medio": 0.43,
+    "forward_edge_pp": 57.0,
     "forward_p_shuffle": null,
     "forward_sig_bhfdr": null,
     "estado": "ACUMULANDO",
-    "ultimo_chequeo": "2026-07-22T04:35:02+00:00"
+    "ultimo_chequeo": "2026-07-22T05:35:01+00:00"
   },
   "0x6ba5ed2d1b5905aed9b3cf423df2261508ffe557#5m": {
     "wallet": "0x6ba5ed2d1b5905aed9b3cf423df2261508ffe557",
@@ -3207,17 +3207,17 @@
     "precio_medio_frozen": 0.9171,
     "edge_pp_frozen": 5.494,
     "pnl_proxy_frozen": 13.736,
-    "forward_n": 0,
-    "forward_aciertos": 0,
-    "forward_suma_precio": 0.0,
-    "forward_pnl_proxy": 0.0,
-    "forward_hit": null,
-    "forward_precio_medio": null,
-    "forward_edge_pp": null,
+    "forward_n": 1,
+    "forward_aciertos": 1,
+    "forward_suma_precio": 0.95,
+    "forward_pnl_proxy": 0.05,
+    "forward_hit": 1.0,
+    "forward_precio_medio": 0.95,
+    "forward_edge_pp": 5.0,
     "forward_p_shuffle": null,
     "forward_sig_bhfdr": null,
     "estado": "ACUMULANDO",
-    "ultimo_chequeo": "2026-07-22T04:35:02+00:00"
+    "ultimo_chequeo": "2026-07-22T05:35:01+00:00"
   },
   "0x75cc3b63a2f2423085e10706c78b494017b93ce1#5m": {
     "wallet": "0x75cc3b63a2f2423085e10706c78b494017b93ce1",
@@ -3240,7 +3240,7 @@
     "forward_p_shuffle": null,
     "forward_sig_bhfdr": null,
     "estado": "ACUMULANDO",
-    "ultimo_chequeo": "2026-07-22T04:35:02+00:00"
+    "ultimo_chequeo": "2026-07-22T05:35:01+00:00"
   },
   "0x4501241bbcfb329f5021cd31995c7f69e63c7342#5m": {
     "wallet": "0x4501241bbcfb329f5021cd31995c7f69e63c7342",
@@ -3263,7 +3263,7 @@
     "forward_p_shuffle": null,
     "forward_sig_bhfdr": null,
     "estado": "ACUMULANDO",
-    "ultimo_chequeo": "2026-07-22T04:35:02+00:00"
+    "ultimo_chequeo": "2026-07-22T05:35:01+00:00"
   },
   "0x5bb44d0d51c6a04b8e292ed163936d491bda692a#5m": {
     "wallet": "0x5bb44d0d51c6a04b8e292ed163936d491bda692a",
@@ -3286,7 +3286,7 @@
     "forward_p_shuffle": null,
     "forward_sig_bhfdr": null,
     "estado": "ACUMULANDO",
-    "ultimo_chequeo": "2026-07-22T04:35:02+00:00"
+    "ultimo_chequeo": "2026-07-22T05:35:01+00:00"
   },
   "0x59277134cc2a099bf5667a33e40fa1d0daa5666b#5m": {
     "wallet": "0x59277134cc2a099bf5667a33e40fa1d0daa5666b",
@@ -3299,17 +3299,17 @@
     "precio_medio_frozen": 0.661,
     "edge_pp_frozen": 9.468,
     "pnl_proxy_frozen": 29.068,
-    "forward_n": 0,
-    "forward_aciertos": 0,
-    "forward_suma_precio": 0.0,
-    "forward_pnl_proxy": 0.0,
-    "forward_hit": null,
-    "forward_precio_medio": null,
-    "forward_edge_pp": null,
+    "forward_n": 1,
+    "forward_aciertos": 1,
+    "forward_suma_precio": 0.765,
+    "forward_pnl_proxy": 0.235,
+    "forward_hit": 1.0,
+    "forward_precio_medio": 0.765,
+    "forward_edge_pp": 23.5,
     "forward_p_shuffle": null,
     "forward_sig_bhfdr": null,
     "estado": "ACUMULANDO",
-    "ultimo_chequeo": "2026-07-22T04:35:02+00:00"
+    "ultimo_chequeo": "2026-07-22T05:35:01+00:00"
   },
   "0x4c8ed7ead1ac18338f816e964b1edde8a50eb38f#5m": {
     "wallet": "0x4c8ed7ead1ac18338f816e964b1edde8a50eb38f",
@@ -3322,17 +3322,17 @@
     "precio_medio_frozen": 0.2895,
     "edge_pp_frozen": 34.01,
     "pnl_proxy_frozen": 9.183,
-    "forward_n": 0,
+    "forward_n": 1,
     "forward_aciertos": 0,
-    "forward_suma_precio": 0.0,
-    "forward_pnl_proxy": 0.0,
-    "forward_hit": null,
-    "forward_precio_medio": null,
-    "forward_edge_pp": null,
+    "forward_suma_precio": 0.27,
+    "forward_pnl_proxy": -0.27,
+    "forward_hit": 0.0,
+    "forward_precio_medio": 0.27,
+    "forward_edge_pp": -27.0,
     "forward_p_shuffle": null,
     "forward_sig_bhfdr": null,
     "estado": "ACUMULANDO",
-    "ultimo_chequeo": "2026-07-22T04:35:02+00:00"
+    "ultimo_chequeo": "2026-07-22T05:35:01+00:00"
   },
   "0x6a4d09b3ea811936f34f61e9be5239dbd12588fb#5m": {
     "wallet": "0x6a4d09b3ea811936f34f61e9be5239dbd12588fb",
@@ -3355,7 +3355,7 @@
     "forward_p_shuffle": null,
     "forward_sig_bhfdr": null,
     "estado": "ACUMULANDO",
-    "ultimo_chequeo": "2026-07-22T04:35:02+00:00"
+    "ultimo_chequeo": "2026-07-22T05:35:01+00:00"
   },
   "0x8765c3958f197348d7eeaf4067ab586a0e699cdb#5m": {
     "wallet": "0x8765c3958f197348d7eeaf4067ab586a0e699cdb",
@@ -3368,17 +3368,17 @@
     "precio_medio_frozen": 0.9844,
     "edge_pp_frozen": 1.322,
     "pnl_proxy_frozen": 16.647,
-    "forward_n": 0,
-    "forward_aciertos": 0,
-    "forward_suma_precio": 0.0,
-    "forward_pnl_proxy": 0.0,
-    "forward_hit": null,
-    "forward_precio_medio": null,
-    "forward_edge_pp": null,
+    "forward_n": 3,
+    "forward_aciertos": 3,
+    "forward_suma_precio": 2.97,
+    "forward_pnl_proxy": 0.03,
+    "forward_hit": 1.0,
+    "forward_precio_medio": 0.99,
+    "forward_edge_pp": 1.0,
     "forward_p_shuffle": null,
     "forward_sig_bhfdr": null,
     "estado": "ACUMULANDO",
-    "ultimo_chequeo": "2026-07-22T04:35:02+00:00"
+    "ultimo_chequeo": "2026-07-22T05:35:01+00:00"
   },
   "0x7c81305d63a40e48bcc0c71b17183a8b0649394f#5m": {
     "wallet": "0x7c81305d63a40e48bcc0c71b17183a8b0649394f",
@@ -3391,17 +3391,17 @@
     "precio_medio_frozen": 0.8419,
     "edge_pp_frozen": 7.955,
     "pnl_proxy_frozen": 19.251,
-    "forward_n": 0,
-    "forward_aciertos": 0,
-    "forward_suma_precio": 0.0,
-    "forward_pnl_proxy": 0.0,
-    "forward_hit": null,
-    "forward_precio_medio": null,
-    "forward_edge_pp": null,
+    "forward_n": 1,
+    "forward_aciertos": 1,
+    "forward_suma_precio": 0.9098,
+    "forward_pnl_proxy": 0.09,
+    "forward_hit": 1.0,
+    "forward_precio_medio": 0.9098,
+    "forward_edge_pp": 9.02,
     "forward_p_shuffle": null,
     "forward_sig_bhfdr": null,
     "estado": "ACUMULANDO",
-    "ultimo_chequeo": "2026-07-22T04:35:02+00:00"
+    "ultimo_chequeo": "2026-07-22T05:35:01+00:00"
   },
   "0x355d54242b1fcbc20e6bb3f8d94a1ccaaf5d1c50#5m": {
     "wallet": "0x355d54242b1fcbc20e6bb3f8d94a1ccaaf5d1c50",
@@ -3424,7 +3424,7 @@
     "forward_p_shuffle": null,
     "forward_sig_bhfdr": null,
     "estado": "ACUMULANDO",
-    "ultimo_chequeo": "2026-07-22T04:35:02+00:00"
+    "ultimo_chequeo": "2026-07-22T05:35:01+00:00"
   },
   "0xe6f45ef61a4c09bdc037f1c5726e6636860e530c#5m": {
     "wallet": "0xe6f45ef61a4c09bdc037f1c5726e6636860e530c",
@@ -3447,7 +3447,7 @@
     "forward_p_shuffle": null,
     "forward_sig_bhfdr": null,
     "estado": "ACUMULANDO",
-    "ultimo_chequeo": "2026-07-22T04:35:02+00:00"
+    "ultimo_chequeo": "2026-07-22T05:35:01+00:00"
   },
   "0x32d5d0c7db600db842c03a71be0bc96aaed77d36#5m": {
     "wallet": "0x32d5d0c7db600db842c03a71be0bc96aaed77d36",
@@ -3470,7 +3470,7 @@
     "forward_p_shuffle": null,
     "forward_sig_bhfdr": null,
     "estado": "ACUMULANDO",
-    "ultimo_chequeo": "2026-07-22T04:35:02+00:00"
+    "ultimo_chequeo": "2026-07-22T05:35:01+00:00"
   },
   "0xfb1c3c1ab4fb2d0cbcbb9538c8d4d357dd95963e#60m": {
     "wallet": "0xfb1c3c1ab4fb2d0cbcbb9538c8d4d357dd95963e",
@@ -3493,7 +3493,7 @@
     "forward_p_shuffle": null,
     "forward_sig_bhfdr": null,
     "estado": "ACUMULANDO",
-    "ultimo_chequeo": "2026-07-22T04:35:02+00:00"
+    "ultimo_chequeo": "2026-07-22T05:35:01+00:00"
   },
   "0x48ac40fc545cf327edd5365435c3a9f385614a7e#15m": {
     "wallet": "0x48ac40fc545cf327edd5365435c3a9f385614a7e",
@@ -3506,17 +3506,17 @@
     "precio_medio_frozen": 0.6032,
     "edge_pp_frozen": 0.638,
     "pnl_proxy_frozen": 5.623,
-    "forward_n": 0,
-    "forward_aciertos": 0,
-    "forward_suma_precio": 0.0,
-    "forward_pnl_proxy": 0.0,
-    "forward_hit": null,
-    "forward_precio_medio": null,
-    "forward_edge_pp": null,
+    "forward_n": 4,
+    "forward_aciertos": 3,
+    "forward_suma_precio": 2.9885,
+    "forward_pnl_proxy": 0.012,
+    "forward_hit": 0.75,
+    "forward_precio_medio": 0.7471,
+    "forward_edge_pp": 0.29,
     "forward_p_shuffle": null,
     "forward_sig_bhfdr": null,
     "estado": "ACUMULANDO",
-    "ultimo_chequeo": "2026-07-22T04:35:02+00:00"
+    "ultimo_chequeo": "2026-07-22T05:35:01+00:00"
   },
   "0x7e5d2991c2647de2348287e2f499329fc6a6c4c3#15m": {
     "wallet": "0x7e5d2991c2647de2348287e2f499329fc6a6c4c3",
@@ -3539,7 +3539,7 @@
     "forward_p_shuffle": null,
     "forward_sig_bhfdr": null,
     "estado": "ACUMULANDO",
-    "ultimo_chequeo": "2026-07-22T04:35:02+00:00"
+    "ultimo_chequeo": "2026-07-22T05:35:01+00:00"
   },
   "0xfb1c3c1ab4fb2d0cbcbb9538c8d4d357dd95963e#15m": {
     "wallet": "0xfb1c3c1ab4fb2d0cbcbb9538c8d4d357dd95963e",
@@ -3562,7 +3562,7 @@
     "forward_p_shuffle": null,
     "forward_sig_bhfdr": null,
     "estado": "ACUMULANDO",
-    "ultimo_chequeo": "2026-07-22T04:35:02+00:00"
+    "ultimo_chequeo": "2026-07-22T05:35:01+00:00"
   },
   "0x48ac40fc545cf327edd5365435c3a9f385614a7e#5m": {
     "wallet": "0x48ac40fc545cf327edd5365435c3a9f385614a7e",
@@ -3575,17 +3575,17 @@
     "precio_medio_frozen": 0.7533,
     "edge_pp_frozen": 2.588,
     "pnl_proxy_frozen": 24.612,
-    "forward_n": 0,
-    "forward_aciertos": 0,
-    "forward_suma_precio": 0.0,
-    "forward_pnl_proxy": 0.0,
-    "forward_hit": null,
-    "forward_precio_medio": null,
-    "forward_edge_pp": null,
+    "forward_n": 1,
+    "forward_aciertos": 1,
+    "forward_suma_precio": 0.99,
+    "forward_pnl_proxy": 0.01,
+    "forward_hit": 1.0,
+    "forward_precio_medio": 0.99,
+    "forward_edge_pp": 1.0,
     "forward_p_shuffle": null,
     "forward_sig_bhfdr": null,
     "estado": "ACUMULANDO",
-    "ultimo_chequeo": "2026-07-22T04:35:02+00:00"
+    "ultimo_chequeo": "2026-07-22T05:35:01+00:00"
   },
   "0x48ac40fc545cf327edd5365435c3a9f385614a7e#60m": {
     "wallet": "0x48ac40fc545cf327edd5365435c3a9f385614a7e",
@@ -3608,7 +3608,7 @@
     "forward_p_shuffle": null,
     "forward_sig_bhfdr": null,
     "estado": "ACUMULANDO",
-    "ultimo_chequeo": "2026-07-22T04:35:02+00:00"
+    "ultimo_chequeo": "2026-07-22T05:35:01+00:00"
   },
   "0xfb1c3c1ab4fb2d0cbcbb9538c8d4d357dd95963e#5m": {
     "wallet": "0xfb1c3c1ab4fb2d0cbcbb9538c8d4d357dd95963e",
@@ -3631,7 +3631,7 @@
     "forward_p_shuffle": null,
     "forward_sig_bhfdr": null,
     "estado": "ACUMULANDO",
-    "ultimo_chequeo": "2026-07-22T04:35:02+00:00"
+    "ultimo_chequeo": "2026-07-22T05:35:01+00:00"
   },
   "0xa7614974faca5be9a1b809c978d0a8fc532a866b#5m": {
     "wallet": "0xa7614974faca5be9a1b809c978d0a8fc532a866b",
@@ -3654,7 +3654,7 @@
     "forward_p_shuffle": null,
     "forward_sig_bhfdr": null,
     "estado": "ACUMULANDO",
-    "ultimo_chequeo": "2026-07-22T04:35:02+00:00"
+    "ultimo_chequeo": "2026-07-22T05:35:01+00:00"
   },
   "0x946769f131a690e168efb9e26e6628f4152ed15f#15m": {
     "wallet": "0x946769f131a690e168efb9e26e6628f4152ed15f",
@@ -3677,7 +3677,7 @@
     "forward_p_shuffle": null,
     "forward_sig_bhfdr": null,
     "estado": "ACUMULANDO",
-    "ultimo_chequeo": "2026-07-22T04:35:02+00:00"
+    "ultimo_chequeo": "2026-07-22T05:35:01+00:00"
   },
   "0x0cb038487586d1119b165466072e9baf666f3a90#5m": {
     "wallet": "0x0cb038487586d1119b165466072e9baf666f3a90",
@@ -3700,6 +3700,167 @@
     "forward_p_shuffle": null,
     "forward_sig_bhfdr": null,
     "estado": "ACUMULANDO",
-    "ultimo_chequeo": "2026-07-22T04:35:02+00:00"
+    "ultimo_chequeo": "2026-07-22T05:35:01+00:00"
+  },
+  "0x6a2c31c11eb9d2a7b60f0615c490bb00f96680e5#15m": {
+    "wallet": "0x6a2c31c11eb9d2a7b60f0615c490bb00f96680e5",
+    "marco": "15m",
+    "origen": "significativa_proxy",
+    "pnl_real_acumulado": null,
+    "freeze_ts": "2026-07-22T05:35:01+00:00",
+    "n_frozen": 97,
+    "hit_frozen": 0.9278,
+    "precio_medio_frozen": 0.802,
+    "edge_pp_frozen": 12.584,
+    "pnl_proxy_frozen": 12.206,
+    "forward_n": 0,
+    "forward_aciertos": 0,
+    "forward_suma_precio": 0.0,
+    "forward_pnl_proxy": 0.0,
+    "forward_hit": null,
+    "forward_precio_medio": null,
+    "forward_edge_pp": null,
+    "forward_p_shuffle": null,
+    "forward_sig_bhfdr": null,
+    "estado": "ACUMULANDO",
+    "ultimo_chequeo": "2026-07-22T05:35:01+00:00"
+  },
+  "0xba5d4f546248e5ecfb491f2cb577a67ca80d60bd#15m": {
+    "wallet": "0xba5d4f546248e5ecfb491f2cb577a67ca80d60bd",
+    "marco": "15m",
+    "origen": "significativa_proxy",
+    "pnl_real_acumulado": null,
+    "freeze_ts": "2026-07-22T05:35:01+00:00",
+    "n_frozen": 32,
+    "hit_frozen": 0.9062,
+    "precio_medio_frozen": 0.5307,
+    "edge_pp_frozen": 37.552,
+    "pnl_proxy_frozen": 12.017,
+    "forward_n": 0,
+    "forward_aciertos": 0,
+    "forward_suma_precio": 0.0,
+    "forward_pnl_proxy": 0.0,
+    "forward_hit": null,
+    "forward_precio_medio": null,
+    "forward_edge_pp": null,
+    "forward_p_shuffle": null,
+    "forward_sig_bhfdr": null,
+    "estado": "ACUMULANDO",
+    "ultimo_chequeo": "2026-07-22T05:35:01+00:00"
+  },
+  "0xea36eed12ad3fa32b0e23de4c7b19b69dfaba752#5m": {
+    "wallet": "0xea36eed12ad3fa32b0e23de4c7b19b69dfaba752",
+    "marco": "5m",
+    "origen": "significativa_proxy",
+    "pnl_real_acumulado": null,
+    "freeze_ts": "2026-07-22T05:35:01+00:00",
+    "n_frozen": 102,
+    "hit_frozen": 0.9804,
+    "precio_medio_frozen": 0.8787,
+    "edge_pp_frozen": 10.172,
+    "pnl_proxy_frozen": 10.376,
+    "forward_n": 0,
+    "forward_aciertos": 0,
+    "forward_suma_precio": 0.0,
+    "forward_pnl_proxy": 0.0,
+    "forward_hit": null,
+    "forward_precio_medio": null,
+    "forward_edge_pp": null,
+    "forward_p_shuffle": null,
+    "forward_sig_bhfdr": null,
+    "estado": "ACUMULANDO",
+    "ultimo_chequeo": "2026-07-22T05:35:01+00:00"
+  },
+  "0xf15bd3bad3068dfdd297d5a8aa400fecf2bd4189#5m": {
+    "wallet": "0xf15bd3bad3068dfdd297d5a8aa400fecf2bd4189",
+    "marco": "5m",
+    "origen": "significativa_proxy",
+    "pnl_real_acumulado": null,
+    "freeze_ts": "2026-07-22T05:35:01+00:00",
+    "n_frozen": 94,
+    "hit_frozen": 0.9681,
+    "precio_medio_frozen": 0.8547,
+    "edge_pp_frozen": 11.34,
+    "pnl_proxy_frozen": 10.66,
+    "forward_n": 0,
+    "forward_aciertos": 0,
+    "forward_suma_precio": 0.0,
+    "forward_pnl_proxy": 0.0,
+    "forward_hit": null,
+    "forward_precio_medio": null,
+    "forward_edge_pp": null,
+    "forward_p_shuffle": null,
+    "forward_sig_bhfdr": null,
+    "estado": "ACUMULANDO",
+    "ultimo_chequeo": "2026-07-22T05:35:01+00:00"
+  },
+  "0x831728e467ff3df3d86baa6c73b358334c786caa#5m": {
+    "wallet": "0x831728e467ff3df3d86baa6c73b358334c786caa",
+    "marco": "5m",
+    "origen": "significativa_proxy",
+    "pnl_real_acumulado": null,
+    "freeze_ts": "2026-07-22T05:35:01+00:00",
+    "n_frozen": 135,
+    "hit_frozen": 0.8889,
+    "precio_medio_frozen": 0.7785,
+    "edge_pp_frozen": 11.039,
+    "pnl_proxy_frozen": 14.903,
+    "forward_n": 0,
+    "forward_aciertos": 0,
+    "forward_suma_precio": 0.0,
+    "forward_pnl_proxy": 0.0,
+    "forward_hit": null,
+    "forward_precio_medio": null,
+    "forward_edge_pp": null,
+    "forward_p_shuffle": null,
+    "forward_sig_bhfdr": null,
+    "estado": "ACUMULANDO",
+    "ultimo_chequeo": "2026-07-22T05:35:01+00:00"
+  },
+  "0x2b560ec206b35b03cb25e1f423a16ea233f5d1e1#5m": {
+    "wallet": "0x2b560ec206b35b03cb25e1f423a16ea233f5d1e1",
+    "marco": "5m",
+    "origen": "significativa_proxy",
+    "pnl_real_acumulado": null,
+    "freeze_ts": "2026-07-22T05:35:01+00:00",
+    "n_frozen": 313,
+    "hit_frozen": 0.8882,
+    "precio_medio_frozen": 0.9509,
+    "edge_pp_frozen": -6.273,
+    "pnl_proxy_frozen": -19.635,
+    "forward_n": 0,
+    "forward_aciertos": 0,
+    "forward_suma_precio": 0.0,
+    "forward_pnl_proxy": 0.0,
+    "forward_hit": null,
+    "forward_precio_medio": null,
+    "forward_edge_pp": null,
+    "forward_p_shuffle": null,
+    "forward_sig_bhfdr": null,
+    "estado": "ACUMULANDO",
+    "ultimo_chequeo": "2026-07-22T05:35:01+00:00"
+  },
+  "0x48b8c1b5ca5bdf4b26a63831b737648c53655908#5m": {
+    "wallet": "0x48b8c1b5ca5bdf4b26a63831b737648c53655908",
+    "marco": "5m",
+    "origen": "significativa_proxy",
+    "pnl_real_acumulado": null,
+    "freeze_ts": "2026-07-22T05:35:01+00:00",
+    "n_frozen": 32,
+    "hit_frozen": 0.0938,
+    "precio_medio_frozen": 0.3506,
+    "edge_pp_frozen": -25.688,
+    "pnl_proxy_frozen": -8.22,
+    "forward_n": 0,
+    "forward_aciertos": 0,
+    "forward_suma_precio": 0.0,
+    "forward_pnl_proxy": 0.0,
+    "forward_hit": null,
+    "forward_precio_medio": null,
+    "forward_edge_pp": null,
+    "forward_p_shuffle": null,
+    "forward_sig_bhfdr": null,
+    "estado": "ACUMULANDO",
+    "ultimo_chequeo": "2026-07-22T05:35:01+00:00"
   }
 }
