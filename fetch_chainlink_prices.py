@@ -82,8 +82,16 @@ def _escribir_tick(asset: str, price: float, ws_ts_ms: int) -> None:
     fichero de ninguna manera especial, open('a') ya crea el fichero correcto
     del día actual cada vez)."""
     archivo = _archivo_hoy()
-    nuevo = not archivo.exists()
     with open(archivo, "a", newline="", encoding="utf-8") as f:
+        # nuevo se decide por la posición REAL del fd ya abierto (f.tell()
+        # en modo append = tamaño del fichero), no por un archivo.exists()
+        # previo (22-Jul, code-review: ese check-then-open tenía una
+        # ventana TOCTOU real -- confirmado con strace que git usa
+        # unlink()+open(O_CREAT|O_EXCL), no rename atómico, así que
+        # .exists() podía ver False justo cuando run_slow.sh está
+        # reemplazando el fichero, escribiendo una cabecera duplicada en
+        # medio del CSV). Preguntarle al propio fd elimina la carrera.
+        nuevo = f.tell() == 0
         w = csv.writer(f)
         if nuevo:
             w.writerow(["timestamp_utc", "asset", "price_usd", "ws_timestamp_ms", "source"])
