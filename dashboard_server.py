@@ -139,6 +139,7 @@ def load_prices():
     """
     assets = ("BTC", "ETH", "SOL")
     prices = {a: [] for a in assets}
+    fallback_coingecko = {a: [] for a in assets}  # solo si no hay nada mejor para ese activo
     seen   = {a: set() for a in assets}
 
     for pf in sorted(PRICES_DIR.glob("*.csv"))[-7:]:
@@ -148,6 +149,7 @@ def load_prices():
 
             old_multi = "BTC" in header   # timestamp_utc,BTC,ETH,SOL,...
             new_single = "asset" in header  # timestamp_utc,asset,price_usd,...
+            source_col = header.index("source") if "source" in header else None
 
             if not old_multi and not new_single:
                 continue
@@ -174,17 +176,31 @@ def load_prices():
                     else:
                         # Formato nuevo: parts[1]=asset, parts[2]=price_usd
                         asset_col = parts[1].strip() if len(parts) > 1 else ""
+                        # coingecko solo como fallback -- MISMA razón que
+                        # shadow_predict.py::cargar_precios_recientes() (05-Jul):
+                        # capture_markets intercala filas coingecko (~72s) con
+                        # binance/consenso (~20-27s) en el MISMO CSV; graficarlas
+                        # todas juntas ordenadas por tiempo produce un zigzag
+                        # (dos series con cadencia y ruido distintos, no una
+                        # curva continua) -- "picos" reportados por Javi 22-Jul.
+                        # Antes solo se había arreglado para el input de las
+                        # estrategias (SPOT_PRECIOS), nunca para el gráfico.
+                        es_coingecko = (source_col is not None and len(parts) > source_col
+                                        and parts[source_col].strip() == "coingecko")
+                        destino = fallback_coingecko if es_coingecko else prices
                         if asset_col in assets:
                             # Fila nueva (asset = "BTC", "ETH", "SOL")
                             try:
                                 val = float(parts[2])
                                 if ts not in seen[asset_col]:
-                                    prices[asset_col].append({"time": ts, "value": round(val, 2)})
+                                    destino[asset_col].append({"time": ts, "value": round(val, 2)})
                                     seen[asset_col].add(ts)
                             except Exception:
                                 pass
                         else:
-                            # Fila vieja mezclada (parts[1] es el precio BTC)
+                            # Fila vieja mezclada (parts[1] es el precio BTC) --
+                            # formato ancho legacy, sin columna source -> nunca
+                            # es coingecko, va directa a `prices`.
                             for i, a in enumerate(assets, start=1):
                                 if i < len(parts) and parts[i] and ts not in seen[a]:
                                     try:
@@ -196,6 +212,10 @@ def load_prices():
             pass
 
     for a in assets:
+        if not prices[a] and fallback_coingecko[a]:
+            # Sin datos de ninguna otra fuente para este activo -- mejor una
+            # serie ruidosa de coingecko que ninguna serie.
+            prices[a] = fallback_coingecko[a]
         prices[a].sort(key=lambda x: x["time"])
         if len(prices[a]) > 600:
             step = len(prices[a]) // 600
