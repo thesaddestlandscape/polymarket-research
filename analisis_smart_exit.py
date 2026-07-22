@@ -165,6 +165,64 @@ def simular_longshot(ticks, cierres, condicion):
     return n, pnl_sim, pnl_real, n_salidas
 
 
+def simular_combinado(ticks, cierres, tp_umbral, sl_eur_umbral, filtro=None):
+    """TP y SL activos A LA VEZ (22-Jul, petición Javi: "simula el TP+SL
+    combinados, no aislados, antes de proponer umbrales finales") — gana el
+    que se cruce PRIMERO cronológicamente, igual que haría _check_early_exit
+    real con los 2 umbrales a la vez. Empate en el mismo tick: TP gana (más
+    favorable, y en la práctica no se ha observado ningún empate exacto).
+
+    filtro(f0)->bool restringe la población (ej. longshot BUY_YES
+    entry_price<0.53); None = toda la población evaluable.
+
+    Devuelve dict con n, pnl_sim, pnl_real, n_tp, n_sl, n_aguanta."""
+    n = pnl_sim = pnl_real = n_tp = n_sl = n_aguanta = 0
+    for mid, filas in ticks.items():
+        if mid not in cierres or not filas:
+            continue
+        f0 = filas[0]
+        if filtro is not None and not filtro(f0):
+            continue
+        n += 1
+        real = cierres[mid]
+        pnl_real += real
+        salida, tipo = None, None
+        for r in filas:
+            try:
+                p = float(r["precio_lado"])
+                stake = float(r["stake_eur"])
+                valor = float(r["valor_salida_eur"])
+            except (ValueError, KeyError):
+                continue
+            valor_ajustado = valor * (1.0 - HAIRCUT_VENTA)
+            pnl_ajustado = valor_ajustado - stake
+            if p >= tp_umbral:
+                salida, tipo = valor_ajustado - stake, "tp"
+                break
+            if pnl_ajustado <= -sl_eur_umbral:
+                salida, tipo = pnl_ajustado, "sl"
+                break
+        if salida is not None:
+            pnl_sim += salida
+            if tipo == "tp":
+                n_tp += 1
+            else:
+                n_sl += 1
+        else:
+            pnl_sim += real
+            n_aguanta += 1
+    return {"n": n, "pnl_sim": pnl_sim, "pnl_real": pnl_real,
+            "n_tp": n_tp, "n_sl": n_sl, "n_aguanta": n_aguanta}
+
+
+def _es_longshot(f0) -> bool:
+    try:
+        entry = float(f0.get("entry_price", 1))
+    except (ValueError, TypeError):
+        return False
+    return f0.get("direction") == "BUY_YES" and entry < LONGSHOT_ENTRY_MAX
+
+
 def main():
     ticks, cierres = cargar()
     evaluables = [m for m in ticks if m in cierres]
@@ -202,6 +260,29 @@ def main():
         if n:
             flag = "  ⚠️ n<30" if n < N_MIN_POSICIONES else ""
             print(f"{x:>6.2f} {n:>4} {ns:>8} {sim:>+9.2f} {real:>+9.2f} {sim-real:>+8.2f}{flag}")
+
+    print("\nCOMBINADO (TP y SL_eur a la vez, gana el que se cruce primero) — TODA la población:")
+    print(f"{'TP':>6} {'SL_eur':>7} {'n':>4} {'n_tp':>5} {'n_sl':>5} {'n_aguanta':>9} "
+          f"{'pnl_sim':>9} {'pnl_real':>9} {'delta':>8}")
+    for tp in (0.70, 0.75, 0.80, 0.85):
+        for sl in EUR_SL_GRID:
+            r = simular_combinado(ticks, cierres, tp, sl)
+            if r["n"]:
+                print(f"{tp:>6.2f} {-sl:>7.2f} {r['n']:>4} {r['n_tp']:>5} {r['n_sl']:>5} "
+                      f"{r['n_aguanta']:>9} {r['pnl_sim']:>+9.2f} {r['pnl_real']:>+9.2f} "
+                      f"{r['pnl_sim']-r['pnl_real']:>+8.2f}")
+
+    print(f"\nCOMBINADO — solo LONGSHOT (BUY_YES, entry_price<{LONGSHOT_ENTRY_MAX}):")
+    print(f"{'TP':>6} {'SL_eur':>7} {'n':>4} {'n_tp':>5} {'n_sl':>5} {'n_aguanta':>9} "
+          f"{'pnl_sim':>9} {'pnl_real':>9} {'delta':>8}")
+    for tp in TP_GRID_LONGSHOT[:4]:
+        for sl in EUR_SL_GRID:
+            r = simular_combinado(ticks, cierres, tp, sl, filtro=_es_longshot)
+            if r["n"]:
+                flag = "  ⚠️ n<30" if r["n"] < N_MIN_POSICIONES else ""
+                print(f"{tp:>6.2f} {-sl:>7.2f} {r['n']:>4} {r['n_tp']:>5} {r['n_sl']:>5} "
+                      f"{r['n_aguanta']:>9} {r['pnl_sim']:>+9.2f} {r['pnl_real']:>+9.2f} "
+                      f"{r['pnl_sim']-r['pnl_real']:>+8.2f}{flag}")
 
     print("\nDecisión: delta>0 sostenido con n>=30 → proponer umbral a Javi (toca dinero).")
 
