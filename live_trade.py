@@ -820,6 +820,12 @@ SNAPSHOT_LIBRO_CSV = DIR_LIVE / "libro_snapshots.csv"
 # causal×fillable ya construido antes de plantear cualquier veto.
 PROFUNDIDAD_TENDENCIA_JSON = DIR_LIVE / "profundidad_tendencia_state.json"
 PROFUNDIDAD_TENDENCIA_TTL_SEG = 1800  # 30min — más que suficiente para 15min de vida de mercado más margen
+# PROFUNDIDAD_TENDENCIA_LOCK_PATH (22-Jul, code-review tras
+# ballenas_executor_5min.py empezar a llamar esta función desde un SEGUNDO
+# proceso, screen ballenas_5m): read-modify-write no atómico sin lock
+# permitía que fast y ballenas_5m se pisaran la escritura (última gana,
+# actualización perdida silenciosa). Mismo patrón que TRADES_LOCK_PATH.
+PROFUNDIDAD_TENDENCIA_LOCK_PATH = DIR_LIVE / ".profundidad_tendencia_lock"
 
 
 def _tendencia_profundidad(market_id: str, strategy: str, direction: str,
@@ -827,34 +833,45 @@ def _tendencia_profundidad(market_id: str, strategy: str, direction: str,
     """Delta de profundidad_eur vs la última lectura de esta MISMA tupla
     (market_id+strategy+direction). None si es la primera lectura o si la
     anterior es demasiado vieja (mercado distinto reutilizando el id no
-    debería pasar, pero TTL protege igual). Nunca lanza — solo lectura."""
+    debería pasar, pero TTL protege igual). Nunca lanza — solo lectura.
+    flock (22-Jul): más de un proceso (fast + ballenas_5m) puede llamar
+    esto ahora; sin lock, un read-modify-write de dos procesos casi
+    simultáneo pierde en silencio la actualización de uno de los dos."""
     try:
-        estado = json.loads(PROFUNDIDAD_TENDENCIA_JSON.read_text()) \
-            if PROFUNDIDAD_TENDENCIA_JSON.exists() else {}
+        with open(PROFUNDIDAD_TENDENCIA_LOCK_PATH, "w") as lock_f:
+            fcntl.flock(lock_f, fcntl.LOCK_EX)
+            try:
+                try:
+                    estado = json.loads(PROFUNDIDAD_TENDENCIA_JSON.read_text()) \
+                        if PROFUNDIDAD_TENDENCIA_JSON.exists() else {}
+                except Exception:
+                    estado = {}
+                clave = f"{market_id}#{strategy}#{direction}"
+                ahora = datetime.now(timezone.utc)
+                delta = None
+                if profundidad_eur is not None and profundidad_eur != "":
+                    try:
+                        pf_actual = float(profundidad_eur)
+                        prev = estado.get(clave)
+                        if prev:
+                            prev_ts = datetime.fromisoformat(prev["ts"])
+                            if (ahora - prev_ts).total_seconds() <= PROFUNDIDAD_TENDENCIA_TTL_SEG:
+                                delta = round(pf_actual - float(prev["profundidad_eur"]), 4)
+                        estado[clave] = {"profundidad_eur": pf_actual, "ts": ahora.isoformat(timespec="seconds")}
+                    except Exception:
+                        pass
+                # poda: fuera del TTL, para no crecer sin límite durante el día
+                estado = {k: v for k, v in estado.items()
+                          if (ahora - datetime.fromisoformat(v["ts"])).total_seconds() <= PROFUNDIDAD_TENDENCIA_TTL_SEG}
+                try:
+                    PROFUNDIDAD_TENDENCIA_JSON.write_text(json.dumps(estado))
+                except Exception:
+                    pass
+                return delta
+            finally:
+                fcntl.flock(lock_f, fcntl.LOCK_UN)
     except Exception:
-        estado = {}
-    clave = f"{market_id}#{strategy}#{direction}"
-    ahora = datetime.now(timezone.utc)
-    delta = None
-    if profundidad_eur is not None and profundidad_eur != "":
-        try:
-            pf_actual = float(profundidad_eur)
-            prev = estado.get(clave)
-            if prev:
-                prev_ts = datetime.fromisoformat(prev["ts"])
-                if (ahora - prev_ts).total_seconds() <= PROFUNDIDAD_TENDENCIA_TTL_SEG:
-                    delta = round(pf_actual - float(prev["profundidad_eur"]), 4)
-            estado[clave] = {"profundidad_eur": pf_actual, "ts": ahora.isoformat(timespec="seconds")}
-        except Exception:
-            pass
-    # poda: fuera del TTL, para no crecer sin límite durante el día
-    estado = {k: v for k, v in estado.items()
-              if (ahora - datetime.fromisoformat(v["ts"])).total_seconds() <= PROFUNDIDAD_TENDENCIA_TTL_SEG}
-    try:
-        PROFUNDIDAD_TENDENCIA_JSON.write_text(json.dumps(estado))
-    except Exception:
-        pass
-    return delta
+        return None
 
 
 def _registrar_snapshot_libro(motivo: str, market_id: str, direction: str,
