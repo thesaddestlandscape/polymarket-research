@@ -860,10 +860,18 @@ def _check_salidas_tempranas(ts: str):
         # Take-profit (22-Jul, NO ACTIVO todavía -- ver take_profit_activo):
         # umbral general y umbral longshot (entry_price<longshot_entry_max),
         # calibrados en analisis_smart_exit.py::simular_combinado() sobre
-        # datos reales -- ver idea_smart_exit_combinado_tp_sl_22jul. Un
-        # segundo gate booleano separado (take_profit_activo) permite activar
-        # SOLO el stop-loss ya en producción sin arrastrar el take-profit
-        # nuevo, o viceversa una vez cada pieza tenga su propia aprobación.
+        # datos reales -- ver idea_smart_exit_combinado_tp_sl_22jul. CORREGIDO
+        # tras /code-review (22-Jul, hallazgo real): take_profit_activo NO es
+        # independiente de smart_exit_stop_loss.activo -- el gate maestro de
+        # arriba (`if sl_cfg.get("activo") is not True: return`) bloquea la
+        # función ENTERA, TP incluido, si está en false. Poner
+        # take_profit_activo=true con activo=false no hace nada (fail-closed,
+        # no peligroso, pero confuso -- el comentario anterior sugería que sí
+        # se podía activar solo el TP). Los umbrales de longshot/general
+        # coinciden hoy con LONGSHOT_ENTRY_MAX/TP_GRID_LONGSHOT de
+        # analisis_smart_exit.py -- si ese script recalibra, actualizar aquí
+        # a mano (config_live.json es la fuente de producción, no importa del
+        # script de análisis a propósito -- dirección de dependencia invertida).
         tp_activo   = sl_cfg.get("take_profit_activo") is True
         tp_umbral   = float(sl_cfg.get("take_profit_umbral_precio", 0.70))
         tp_umbral_longshot = float(sl_cfg.get("take_profit_umbral_precio_longshot", 0.45))
