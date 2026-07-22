@@ -2571,14 +2571,14 @@ GBM_LATE_15M_TARDIO_REST_MIN_HI = 10.5  # variante "entra más tarde" (reimpleme
 # para medir forward si ese sweet spot aguanta con n propio, no si "más tarde siempre es mejor".
 GBM_LATE_60M_REST_MIN_LO = 5.0    # 60min: suelo más alto — libros finos al final
 GBM_LATE_60M_REST_MIN_HI = 20.0   # 60min: último tercio de la ventana (T_h<0.33)
-GBM_LATE_15M_PARES = {"BTC", "ETH", "SOL", "XRP"}
+GBM_LATE_15M_PARES = {"BTC", "ETH", "SOL", "XRP", "DOGE"}  # DOGE añadido 22-Jul: cobertura shadow total, ver project_franja_horaria_bhfdr_fillability_22jul
 # 5min (14-Jul, sesión siguiente): rest_lo/rest_hi calibrados al timing real
 # de wallet-timing analysis (analisis_timing_wallets_por_activo.py) — restante
 # mediana 2.9-3.3min, p25 1.8-2.0min, p75 4.3-4.4min en BTC/ETH/SOL (las 3
 # monedas que pasaron z-test + reparto de wallets, ver s_gbm_late_5min).
 GBM_LATE_5M_REST_MIN_LO = 1.0
 GBM_LATE_5M_REST_MIN_HI = 4.5
-GBM_LATE_5M_PARES = {"BTC", "ETH", "SOL"}  # XRP excluido: z=+1.58 no concluyente (14-Jul)
+GBM_LATE_5M_PARES = {"BTC", "ETH", "SOL", "DOGE"}  # XRP excluido: z=+1.58 no concluyente (14-Jul). DOGE añadido 22-Jul (cobertura shadow, sin evidencia previa en contra)
 # Banda de precio_yes_mercado donde el z-test confirmó edge real y repartido
 # (no 1-2 wallets) — favorito moderado/fuerte ya formado, no un longshot
 # barato (esa banda <0.05 SÍ resultó ser 1-2 wallets, descartada). AJUSTADA
@@ -2595,7 +2595,7 @@ GBM_LATE_5M_PARES = {"BTC", "ETH", "SOL"}  # XRP excluido: z=+1.58 no concluyent
 # s_gbm_late_60min_py_confirmado y s_gbm_late_5min.
 GBM_LATE_PY_CONFIRMADO_LO = 0.70
 GBM_LATE_PY_CONFIRMADO_HI = 0.90
-GBM_LATE_60M_PYCONFIRMADO_PARES = {"BTC", "SOL"}  # ETH excluido: concentrado en 1 wallet (14-Jul)
+GBM_LATE_60M_PYCONFIRMADO_PARES = {"BTC", "SOL", "DOGE"}  # ETH excluido: concentrado en 1 wallet (14-Jul). DOGE añadido 22-Jul
 
 # ── Ballenas observer: "gasolina" viva para las 3 estrategias *_PYCONFIRMADO/
 # 5M (15-Jul, petición Javi) ──────────────────────────────────────────────
@@ -3570,7 +3570,7 @@ def s_struct_no_15m(market, ctx):
 # señal cruce EDGE_MINIMO y genere volumen medible — el veredicto real lo da
 # ic_bayes del bucket en shadow_postmortem con n>=40, no este número.
 # Shadow puro: NO está en pares_permitidos_live → jamás opera en vivo.
-FAVORITO_CONFIRMADO_PARES = {"BTC", "ETH", "SOL", "XRP"}
+FAVORITO_CONFIRMADO_PARES = {"BTC", "ETH", "SOL", "XRP", "DOGE"}  # DOGE añadido 22-Jul: cobertura shadow (DOGE#* no está en pares_permitidos_live, sin riesgo de ejecución real)
 FAVORITO_CONFIRMADO_UMBRAL = 0.55  # nivel de precio que "confirma" favorito
 FAVORITO_CONFIRMADO_UMBRAL_BAJO = round(1.0 - FAVORITO_CONFIRMADO_UMBRAL, 4)  # 0.45 exacto —
 # NO derivar como "1.0 - FAVORITO_CONFIRMADO_UMBRAL" inline en la comparación: sin el
@@ -3774,8 +3774,8 @@ def _racha_actual(activo, ventana_min, current_end_dt):
             break
     return k, d
 
-STREAK_MOM_5M_PARES = {"SOL", "ETH", "XRP"}    # BTC excluido (flojo, EV≈0)
-STREAK_FADE_15M_PARES = {"ETH", "SOL", "XRP"}  # BTC excluido (flojo, EV≈0)
+STREAK_MOM_5M_PARES = {"SOL", "ETH", "XRP", "DOGE"}    # BTC excluido (flojo, EV≈0). DOGE añadido 22-Jul
+STREAK_FADE_15M_PARES = {"ETH", "SOL", "XRP", "DOGE"}  # BTC excluido (flojo, EV≈0). DOGE añadido 22-Jul
 STREAK_PY_LO = 0.47   # entrada temprana / coinflip: fuera de esta banda el edge muere
 STREAK_PY_HI = 0.53
 
@@ -3821,7 +3821,7 @@ def s_streak_mom_5m(market, ctx):
         },
     }
 
-STREAK_FADE_5M_PARES = {"SOL", "ETH", "XRP"}  # mismo universo que STREAK_MOM_5M
+STREAK_FADE_5M_PARES = {"SOL", "ETH", "XRP", "DOGE"}  # mismo universo que STREAK_MOM_5M. DOGE añadido 22-Jul
 
 def s_streak_fade_5m(market, ctx):
     """
