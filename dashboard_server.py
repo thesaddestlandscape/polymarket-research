@@ -358,6 +358,14 @@ def compute_live_data():
     # header sean coherentes entre sí — real_pct_total/real_deposito acumulados
     # siguen intactos para el resto del dashboard (histórico diario, chart).
     deposito_actual = max(real_por_deposito, key=lambda d: d.get("fecha", "")) if real_por_deposito else None
+    # Fail-loud (22-Jul, code-review): si real_por_deposito viene vacío
+    # (config_live.json corrupto/leído a medias durante una escritura
+    # concurrente del fast loop — real_deposito/real_pnl SIEMPRE se
+    # calculan vía su propio fallback a DEPOSITO_INICIAL, así que este
+    # camino es alcanzable aunque no esté disparado hoy), el header cae al
+    # acumulado histórico bajo las mismas etiquetas "período actual" — sin
+    # esta bandera no había forma de distinguir los dos casos en el front.
+    header_es_fallback_acumulado = deposito_actual is None
     if deposito_actual:
         header_deposito_eur = deposito_actual.get("eur")
         header_pnl          = deposito_actual.get("pnl_ledger")
@@ -373,8 +381,25 @@ def compute_live_data():
 
     header_pct_hoy = (round(real_hoy / header_deposito_eur * 100, 2)
                        if real_hoy is not None and header_deposito_eur else None)
-    header_pct_7d = (round(real_7d / header_deposito_eur * 100, 2)
-                      if real_7d is not None and header_deposito_eur else None)
+    # 7 días del PERÍODO actual (22-Jul, code-review: real_7d es una ventana
+    # calendario sin acotar a periodo — con una recarga reciente mezclaba
+    # PnL de la base de capital VIEJA en el numerador contra el depósito
+    # NUEVO en el denominador, dando un % sin interpretación coherente).
+    # Reconstruido desde real_daily (mismo daily_real que ya trae fechas
+    # por día) sumando solo días dentro de los últimos 7 Y del período
+    # actual — mismo criterio de ventana que _daily_real_pnl en
+    # live_balance.py, solo que acotado también por header_fecha_deposito.
+    if header_fecha_deposito and real_daily:
+        d7_cutoff = max(header_fecha_deposito,
+                        (datetime.now(timezone.utc) - timedelta(days=7)).strftime("%Y-%m-%d"))
+        header_7d_periodo = round(sum(d.get("pnl", 0) for d in real_daily
+                                      if d.get("date", "") >= d7_cutoff), 2)
+        header_pct_7d = (round(header_7d_periodo / header_deposito_eur * 100, 2)
+                          if header_deposito_eur else None)
+    else:
+        header_7d_periodo = real_7d
+        header_pct_7d = (round(real_7d / header_deposito_eur * 100, 2)
+                          if real_7d is not None and header_deposito_eur else None)
 
     if real_daily and real_deposito:
         for d in real_daily:
@@ -423,6 +448,7 @@ def compute_live_data():
         "header_pct_total": header_pct_total,
         "header_fecha_deposito": header_fecha_deposito,
         "header_n_trades": header_n_trades,
+        "header_es_fallback_acumulado": header_es_fallback_acumulado,
         "real_stale": real_stale,
         "tracking_error": tracking_error,
         "pnl_total": round(pnl_total, 2),
@@ -1165,7 +1191,15 @@ function renderLive(live) {
   document.getElementById("live-deposito").textContent =
     live.header_deposito_eur != null ? `${live.header_deposito_eur.toFixed(2)}$` : "n/d";
   const depFechaEl = document.getElementById("live-deposito-fecha");
-  if (depFechaEl) depFechaEl.textContent = live.header_fecha_deposito || "—";
+  if (depFechaEl) {
+    // Fail-loud (22-Jul): si el backend cayó al fallback (real_por_deposito
+    // vacío), header_fecha_deposito llega null pese a mostrar cifras --
+    // sin esto el header parecería "período actual" siendo en realidad el
+    // acumulado histórico, sin ninguna señal de que son datos distintos.
+    depFechaEl.textContent = live.header_es_fallback_acumulado
+      ? "⚠️ acumulado histórico (sin datos de período)"
+      : (live.header_fecha_deposito || "—");
+  }
   // Dinero actual = balance real del wallet
   document.getElementById("live-bankroll").textContent =
     live.real_total != null ? `${live.real_total.toFixed(2)}$` : "n/d";
