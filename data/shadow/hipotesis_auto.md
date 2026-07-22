@@ -1,5 +1,5 @@
-# Hipótesis automáticas — 2026-07-22 05:27 UTC
-_Generado por shadow_postmortem.py sobre 28291 resoluciones (PNL=+6419.79€)_
+# Hipótesis automáticas — 2026-07-22 05:32 UTC
+_Generado por shadow_postmortem.py sobre 28294 resoluciones (PNL=+6420.18€)_
 
 ## Patrones causales activos
 
@@ -24,19 +24,19 @@ _Generado por shadow_postmortem.py sobre 28291 resoluciones (PNL=+6419.79€)_
   - _Por qué funciona_: hora tardía/noche → sesión US cerrada, menos participantes informados; señales más ruidosas
   - _Acción_: Kelly boost +0.86€ cuando `hora_utc` > 17.0 (IC base=+0.171)
 
-- **PATRÓN** `hora_utc` < `5.0` → IC=+0.210 (n=657)
+- **PATRÓN** `hora_utc` < `5.0` → IC=+0.211 (n=659)
   - _Por qué funciona_: hora temprana → mercados cripto menos líquidos, spreads más amplios; edge real menor
   - _Acción_: Kelly boost +1.00€ cuando `hora_utc` < 5.0 (IC base=+0.171)
 
-- **PATRÓN** `py_entrada` < `0.265` → IC=+0.333 (n=656)
+- **PATRÓN** `py_entrada` < `0.265` → IC=+0.333 (n=658)
 
   - _Acción_: Kelly boost +1.00€ cuando `py_entrada` < 0.265 (IC base=+0.171)
 
-- **PATRÓN** `libro_spread` < `0.01` → IC=+0.175 (n=2155)
+- **PATRÓN** `libro_spread` < `0.01` → IC=+0.176 (n=2156)
 
   - _Acción_: Kelly boost +0.88€ cuando `libro_spread` < 0.01 (IC base=+0.171)
 
-- **PATRÓN** `libro_liquidez` > `4244.5716` → IC=+0.172 (n=1295)
+- **PATRÓN** `libro_liquidez` > `4244.5716` → IC=+0.172 (n=1296)
 
   - _Acción_: Kelly boost +0.86€ cuando `libro_liquidez` > 4244.5716 (IC base=+0.171)
 
@@ -1229,25 +1229,25 @@ _Derivadas de los patrones aprendidos:_
 | ✅ BALLENAS_TARDIAS#15min | 13 | +0.152 | -1.30€ | 0 | 0 |
 | ✅ BALLENAS_TARDIAS#BTC | 13 | +0.152 | -1.30€ | 0 | 0 |
 | ✅ BALLENAS_TARDIAS#BTC#15min | 13 | +0.152 | -1.30€ | 0 | 0 |
-| ✅ FAVORITO_CONFIRMADO | 4894 | +0.185 | +69.41€ | 0 | 9 |
+| ✅ FAVORITO_CONFIRMADO | 4896 | +0.185 | +70.31€ | 0 | 9 |
 | ✅ FAVORITO_CONFIRMADO#15min | 3195 | +0.216 | +103.31€ | 0 | 0 |
 | ✅ FAVORITO_CONFIRMADO#240min | 211 | +0.068 | -5.09€ | 0 | 0 |
-| ✅ FAVORITO_CONFIRMADO#5min | 642 | +0.106 | -85.93€ | 0 | 0 |
+| ✅ FAVORITO_CONFIRMADO#5min | 644 | +0.107 | -85.04€ | 0 | 0 |
 | ✅ FAVORITO_CONFIRMADO#60min | 846 | +0.157 | +57.12€ | 0 | 0 |
 | ✅ FAVORITO_CONFIRMADO#BTC | 1427 | +0.198 | +58.53€ | 0 | 0 |
 | ✅ FAVORITO_CONFIRMADO#BTC#15min | 1065 | +0.213 | +8.98€ | 0 | 6 |
 | ✅ FAVORITO_CONFIRMADO#BTC#240min | 70 | +0.083 | +0.44€ | 0 | 0 |
 | 🚫 FAVORITO_CONFIRMADO#BTC#5min | 10 | -0.125 | -3.77€ | 0 | 0 |
 | ✅ FAVORITO_CONFIRMADO#BTC#60min | 282 | +0.187 | +52.88€ | 0 | 6 |
-| ✅ FAVORITO_CONFIRMADO#ETH | 1731 | +0.173 | -12.44€ | 0 | 0 |
+| ✅ FAVORITO_CONFIRMADO#ETH | 1732 | +0.173 | -11.90€ | 0 | 0 |
 | ✅ FAVORITO_CONFIRMADO#ETH#15min | 1052 | +0.212 | +31.48€ | 0 | 8 |
 | ✅ FAVORITO_CONFIRMADO#ETH#240min | 70 | -0.028 | -16.83€ | 0 | 0 |
-| ✅ FAVORITO_CONFIRMADO#ETH#5min | 327 | +0.111 | -39.80€ | 0 | 0 |
+| ✅ FAVORITO_CONFIRMADO#ETH#5min | 328 | +0.112 | -39.26€ | 0 | 0 |
 | ✅ FAVORITO_CONFIRMADO#ETH#60min | 282 | +0.144 | +12.71€ | 0 | 11 |
-| ✅ FAVORITO_CONFIRMADO#SOL | 1711 | +0.186 | +20.88€ | 0 | 0 |
+| ✅ FAVORITO_CONFIRMADO#SOL | 1712 | +0.187 | +21.24€ | 0 | 0 |
 | ✅ FAVORITO_CONFIRMADO#SOL#15min | 1057 | +0.224 | +64.76€ | 0 | 7 |
 | ✅ FAVORITO_CONFIRMADO#SOL#240min | 71 | +0.144 | +11.31€ | 0 | 0 |
-| ✅ FAVORITO_CONFIRMADO#SOL#5min | 301 | +0.107 | -46.72€ | 0 | 0 |
+| ✅ FAVORITO_CONFIRMADO#SOL#5min | 302 | +0.109 | -46.36€ | 0 | 0 |
 | ✅ FAVORITO_CONFIRMADO#SOL#60min | 282 | +0.137 | -8.47€ | 0 | 6 |
 | ✅ FAVORITO_CONFIRMADO#XRP | 25 | +0.167 | +2.44€ | 0 | 0 |
 | ✅ FAVORITO_CONFIRMADO#XRP#15min | 21 | +0.109 | -1.92€ | 0 | 0 |
@@ -1319,10 +1319,10 @@ _Derivadas de los patrones aprendidos:_
 | 🚫 GBM_LATE_60M_PYCONFIRMADO#60min | 9 | -0.143 | -2.77€ | 0 | 0 |
 | ✅ GBM_LATE_60M_PYCONFIRMADO#BTC | 5 | -0.054 | -0.73€ | 0 | 0 |
 | ✅ GBM_LATE_60M_PYCONFIRMADO#BTC#60min | 5 | -0.054 | -0.73€ | 0 | 0 |
-| ✅ LATE_WINDOW_5MIN | 291 | -0.046 | -2.87€ | 0 | 0 |
-| ✅ LATE_WINDOW_5MIN#5min | 291 | -0.046 | -2.87€ | 0 | 0 |
-| ✅ LATE_WINDOW_5MIN#BTC | 291 | -0.046 | -2.87€ | 0 | 0 |
-| ✅ LATE_WINDOW_5MIN#BTC#5min | 291 | -0.046 | -2.87€ | 0 | 0 |
+| ✅ LATE_WINDOW_5MIN | 292 | -0.048 | -3.38€ | 0 | 0 |
+| ✅ LATE_WINDOW_5MIN#5min | 292 | -0.048 | -3.38€ | 0 | 0 |
+| ✅ LATE_WINDOW_5MIN#BTC | 292 | -0.048 | -3.38€ | 0 | 0 |
+| ✅ LATE_WINDOW_5MIN#BTC#5min | 292 | -0.048 | -3.38€ | 0 | 0 |
 | ✅ LEADLAG_BTC_XRP_15M | 257 | +0.010 | +9.66€ | 2 | 0 |
 | ✅ LEADLAG_BTC_XRP_15M#15min | 257 | +0.010 | +9.66€ | 0 | 0 |
 | ✅ LEADLAG_BTC_XRP_15M#XRP | 257 | +0.010 | +9.66€ | 0 | 0 |
@@ -1503,7 +1503,7 @@ _Derivadas de los patrones aprendidos:_
 **🟡 H-STREAK-COOLDOWN** — Cooldown tras 2 derrotas consecutivas (mismo subtype)
   - _Umbral_: n≥40 tras 2 losses y gap(IC_tras_win - IC_tras_2loss)≥0.05
   - _Acción_: Reducir stake (no desactivar) 1-2h tras 2 derrotas consecutivas en el mismo subtype
-  - _Estado_: tras_win IC=+0.113 n=16900 | tras_1loss IC=+0.082 n=11187 | tras_2loss IC=+0.051 n=4634/40 | gap=+0.062 (umbral 0.05)
+  - _Estado_: tras_win IC=+0.113 n=16901 | tras_1loss IC=+0.082 n=11189 | tras_2loss IC=+0.051 n=4635/40 | gap=+0.062 (umbral 0.05)
 
 **🟡 H-KALMAN** — Kalman filter para drift adaptativo
   - _Umbral_: n≥200 por subtipo para calibrar parámetros Q/R del KF
@@ -1732,8 +1732,8 @@ _Derivadas de los patrones aprendidos:_
   - _Hipótesis_: Inspirado en VyvanseWithMarijuana (36.5% ROI, $42k vol). A T+160-270s dentro de una ventana BTC 5min, si BTC ya se movió >0.3%, Polymarket no ha actualizado precio → edge estructural. Estrategia LATE_WINDOW_5MIN en shadow hasta n≥30. FIX 2026-07-02: la estrategia llevaba 0 predicciones desde su creacion porque HORIZONTE_MIN_HORAS=0.05 (3min) descartaba todo mercado a <3min de expirar — y su zona de entrada (160-270s de una ventana de 5min) deja 30-140s restantes, siempre bajo el suelo. Corregido en shadow_predict (zona late-window marcada _solo_late, 30s-3min, solo evaluada por esta estrategia). El reloj de acumulacion empieza de verdad hoy. Contexto extra: el estudio de ballenas de hoy confirma que comprar el lado ganador a mitad/final de ventana es el playbook comun de los 3 mayores ganadores verificados de estos mercados (Bonereaper +$19.9k/mes, wowitsamazing +$10k/mes, zhangfan151 +$8.7k/mes).
   - _Umbral_: n≥30 y IC>+0.05
   - _Acción_: Si IC≥0.08 con n≥30 → proponer pasar a live con stake mínimo (0.50€). Si IC<0 con n≥30 → el lag de Polymarket en BTC es insuficiente.
-  - _Estado_: n=291 IC=-0.046 PNL=-2.87€ — sin señal clara aún (umbral IC: min=0.08 max=None)
-  - _Datos_: n=291 IC=-0.046 PNL=-2.87€
+  - _Estado_: n=292 IC=-0.048 PNL=-3.38€ — sin señal clara aún (umbral IC: min=0.08 max=None)
+  - _Datos_: n=292 IC=-0.048 PNL=-3.38€
 
 **〰️ H-DVOL-SPIKE-BUYNO** — DVOL spike (sigma_h alto) → BUY_NO tiene más edge (panic regime)
   - _Hipótesis_: Inspirado en 'The Volatility Edge' (Concretum Research, 2025): en equities, VIX spikes identifican regímenes de pánico donde los moves están sobreamplificados por feedback loops (deleveraging, hedgers, etc). En cripto el análogo es DVOL (Deribit BTC IV). Sin acceso a DVOL, usamos sigma_h como proxy (vol realizada 1h). Hipótesis: cuando sigma_h > 0.004/h (≈ vol diaria >9.6%), los mercados de predicción exageran la bajada en 15min → BUY_NO tiene IC superior porque el pánico se revierte intraday. Activar cuando n≥200 en BUY_NO #15min para tener potencia suficiente para subdividir por régimen.
@@ -1781,8 +1781,8 @@ _Derivadas de los patrones aprendidos:_
   - _Hipótesis_: Mismo origen que H-CUSTOM-MOON-LLENA (paper de Fornero, 43 Jornadas SADAF 2023). Qi, Wang & Zhang (2022, 48 mercados, 1973-2019): rendimientos 3.33%/año más bajos durante Mercurio retrógrado. Kou & Ma (2022) en China (99.8% cuentas retail): hasta -31% anualizado. Ambos estudios confirman que el mecanismo es la creencia/superstición de inversores retail (mayor efecto cuanto más retail y más supersticioso el mercado), no un efecto astral literal — Polymarket encaja en ese perfil. Ventanas 2026 (fuente pública, actualizar cada año): 26-feb a 20-mar, 29-jun a 23-jul, 24-oct a 13-nov.
   - _Umbral_: n≥100 PERO ADEMÁS necesita cubrir al menos 2-3 ventanas de retrogradación distintas (no solo la de jun-jul 2026) — esperar mínimo hasta después de la ventana de oct-nov 2026
   - _Acción_: Si IC en mercury_retrogrado=1 < IC en mercury_retrogrado=0 con margen ≥0.05 y ≥2 ventanas distintas cubiertas → considerar boost/filtro. No implementar tras una sola ventana (jun-jul 2026) por more que n sea alto — sería solo un evento, no un patrón.
-  - _Estado_: n=25820 IC=+0.112 PNL=+6496.97€ — sin señal clara aún (umbral IC: min=None max=-0.03)
-  - _Datos_: n=25820 IC=+0.112 PNL=+6496.97€
+  - _Estado_: n=25823 IC=+0.112 PNL=+6497.36€ — sin señal clara aún (umbral IC: min=None max=-0.03)
+  - _Datos_: n=25823 IC=+0.112 PNL=+6497.36€
 
 **〰️ H-CUSTOM-SMART-MONEY-CONSENSUS** — Consenso de wallets 'smart money' — ¿confirma nuestra dirección?
   - _Hipótesis_: Javi propuso estudiar bots/wallets que operan bien en nuestros mismos mercados. En vez de creer artículos (ya verificamos 2 veces esta semana que las narrativas no aguantan el cruce con datos reales), smart_money_tracker.py mide el track record REAL de wallets activas en BTC/ETH/SOL/XRP Up-or-Down 5/15/60min vía data-api.polymarket.com/positions, filtrado a posiciones 'Up or Down'. Clasifica como 'smart' las wallets con n>=10 posiciones, win_rate>=0.55 y pnl_total>0. smart_money_consensus es el sesgo direccional reciente (Up-Down)/(Up+Down) de esas wallets 'smart' por activo. Hipótesis: si nuestra decisión (BUY_YES/BUY_NO) coincide con el consenso smart money, mejor IC que cuando diverge. RESET METODOLOGICO 2026-07-02: la clasificacion 'smart' original via /positions estaba INVERTIDA para wallets de alta frecuencia (el endpoint solo retiene el residuo perdedor sin redimir; verificado: 'wowitsamazing' figuraba como -$478k y es +$10k/mes en el leaderboard oficial). Desde 2026-07-02T06:12Z el consenso se construye solo con wallets verificadas en el leaderboard oficial (pnl_mes>=$1000, 24 wallets). Los valores de smart_money_consensus capturados en features ANTES de esa fecha provienen de la clasificacion rota — descontar ese tramo al evaluar.
