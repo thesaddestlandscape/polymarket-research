@@ -211,7 +211,12 @@
     "smart_exit_stop_loss": {
       "activo": false,
       "umbral_perdida_eur": 0.3,
-      "fee_rate_taker_estimado": 0.07
+      "fee_rate_taker_estimado": 0.07,
+      "take_profit_activo": false,
+      "take_profit_umbral_precio": 0.7,
+      "take_profit_umbral_precio_longshot": 0.45,
+      "longshot_entry_price_max": 0.53,
+      "_take_profit_nota_2026-07-22": "Preparado por Claude (22-Jul), take_profit_activo=false hasta aprobacion explicita de Javi -- NO tocar a true sin decision suya, igual que smart_exit_stop_loss.activo. Umbrales de analisis_smart_exit.py::simular_combinado() (idea_smart_exit_combinado_tp_sl_22jul): el optimo CONJUNTO no coincide con los aislados -- SL=-0.70eur (peor aislado) bate a -0.30eur (mejor aislado) cuando se combina con TP. General TP=0.70/SL=-0.70 delta+10.16eur; longshot (entry_price<0.53) TP=0.45/SL=-0.70 delta+26.86eur (cambia de signo). OJO: umbral_perdida_eur sigue en 0.30 (el valor SL aislado ya aprobado) -- si Javi aprueba el combinado, subir umbral_perdida_eur a 0.70 A LA VEZ que take_profit_activo=true, no por separado (el 0.30 aislado y el 0.70 combinado son resultados de simulaciones DISTINTAS, mezclar mitad de cada una no esta validado). Pendiente /code-review de este diff + aprobacion explicita antes de activar cualquiera de las dos piezas."
     },
     "_smart_exit_9_hallazgos_arreglados_nota_2026-07-18": "18-Jul: arreglados los 9 hallazgos de /code-review que quedaron pendientes el 16-Jul (ver project_smart_exit_stoploss_implementado_16jul en memoria para la lista original) -- fee de apertura real (antes solo restaba el fee de venta, sobreestimaba PnL), mínimo notional $1 del CLOB (antes solo shares vs min_order_size), snapshot en libro_snapshots.csv (motivos smart_exit_ejecutado/veto_profundidad/sin_datos/fok_kill), activo con comprobación de tipo estricta (is True, no truthy), min_profundidad_ratio_bid eliminado de config (reusa MIN_SHARES_CLOB_LIMIT=5.0 ya existente, la clave de arriba ya no existe), fetch_mercados_paralelo en vez de estado_mercado secuencial, reintento ±shares en la venta (mismo patrón que el bug de redondeo del lado de compra), acierto_dir derivado del signo real del PnL (antes hardcodeado False). Sigue activo=false -- pendiente aprobación explícita de Javi para flip a true, y otra pasada de /code-review sobre este diff antes de activar (código que toca dinero real, CLAUDE.md lo exige sin excepción)."
   },

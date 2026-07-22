@@ -857,6 +857,17 @@ def _check_salidas_tempranas(ts: str):
     try:
         umbral  = float(sl_cfg.get("umbral_perdida_eur", 0.30))
         haircut = float(sl_cfg.get("fee_rate_taker_estimado", 0.07))
+        # Take-profit (22-Jul, NO ACTIVO todavía -- ver take_profit_activo):
+        # umbral general y umbral longshot (entry_price<longshot_entry_max),
+        # calibrados en analisis_smart_exit.py::simular_combinado() sobre
+        # datos reales -- ver idea_smart_exit_combinado_tp_sl_22jul. Un
+        # segundo gate booleano separado (take_profit_activo) permite activar
+        # SOLO el stop-loss ya en producción sin arrastrar el take-profit
+        # nuevo, o viceversa una vez cada pieza tenga su propia aprobación.
+        tp_activo   = sl_cfg.get("take_profit_activo") is True
+        tp_umbral   = float(sl_cfg.get("take_profit_umbral_precio", 0.70))
+        tp_umbral_longshot = float(sl_cfg.get("take_profit_umbral_precio_longshot", 0.45))
+        longshot_entry_max = float(sl_cfg.get("longshot_entry_price_max", 0.53))
     except (TypeError, ValueError):
         return
 
@@ -874,16 +885,32 @@ def _check_salidas_tempranas(ts: str):
     lock_f = open(live_trade.TRADES_LOCK_PATH, "w")
     fcntl.flock(lock_f, fcntl.LOCK_EX)
     try:
-        _check_salidas_tempranas_bajo_lock(LIVE_CSV, ts, umbral, haircut)
+        _check_salidas_tempranas_bajo_lock(
+            LIVE_CSV, ts, umbral, haircut,
+            tp_activo=tp_activo, tp_umbral=tp_umbral,
+            tp_umbral_longshot=tp_umbral_longshot, longshot_entry_max=longshot_entry_max)
     finally:
         fcntl.flock(lock_f, fcntl.LOCK_UN)
         lock_f.close()
 
 
-def _check_salidas_tempranas_bajo_lock(LIVE_CSV: Path, ts: str, umbral: float, haircut: float):
+def _check_salidas_tempranas_bajo_lock(LIVE_CSV: Path, ts: str, umbral: float, haircut: float,
+                                        tp_activo: bool = False, tp_umbral: float = 0.70,
+                                        tp_umbral_longshot: float = 0.45,
+                                        longshot_entry_max: float = 0.53):
     """Cuerpo real de _check_salidas_tempranas, ejecutado con el lock de
     trades.csv ya adquirido (ver ahí el motivo). Separado en función propia
-    para no anidar el bucle entero dentro de un try/finally."""
+    para no anidar el bucle entero dentro de un try/finally.
+
+    Take-profit (22-Jul, tp_activo=False por defecto -- inerte hasta
+    aprobación explícita de Javi, ver take_profit_activo en config): misma
+    semántica que analisis_smart_exit.py::simular_combinado() -- el TP
+    compara el precio CRUDO del lado (p_lado>=umbral), no ajustado por
+    haircut (el haircut solo afecta el PnL resultante, no el disparo), y se
+    comprueba ANTES que el stop-loss dentro del mismo ciclo -- un empate
+    exacto en el mismo chequeo lo gana el TP (más favorable), igual que en
+    la simulación validada. entry_price<longshot_entry_max usa el umbral
+    de TP más bajo (favoritos que arrancan baratos confirman antes)."""
     import live_trade
     trades = list(csv.DictReader(open(LIVE_CSV, encoding="utf-8")))
     abiertas = [t for t in trades if t.get("status") == "OPEN" and t.get("market_id")]
@@ -958,8 +985,28 @@ def _check_salidas_tempranas_bajo_lock(LIVE_CSV: Path, ts: str, umbral: float, h
         shares = stake / entry_p
         valor_ajustado = shares * p_lado * (1.0 - haircut)
         pnl_ajustado = valor_ajustado - stake
-        if pnl_ajustado > -umbral:
-            continue  # todavía no cruza el umbral
+
+        # TP comprobado ANTES que SL (empate = gana TP), misma semántica que
+        # simular_combinado(). tp_activo=False hoy -> esta rama nunca entra,
+        # comportamiento idéntico al de antes de este cambio.
+        motivo_salida = None
+        if tp_activo:
+            # es_longshot exige BUY_YES -- analisis_smart_exit.py::_es_longshot()
+            # (la función que produjo la calibración n=36/delta+26.86€) filtra
+            # por direction=="BUY_YES" ADEMÁS de entry_price<longshot_entry_max;
+            # un BUY_NO barato es un favorito YES caro, dinámica de mercado
+            # distinta, nunca se validó el umbral de TP ahí. Sin este filtro de
+            # dirección, un BUY_NO#0.40 habría heredado el umbral longshot
+            # (0.45) sin ninguna evidencia detrás.
+            es_longshot = direction == "BUY_YES" and entry_p < longshot_entry_max
+            umbral_tp_efectivo = tp_umbral_longshot if es_longshot else tp_umbral
+            if p_lado >= umbral_tp_efectivo:
+                motivo_salida = "take_profit"
+        if motivo_salida is None:
+            if pnl_ajustado <= -umbral:
+                motivo_salida = "stop_loss"
+            else:
+                continue  # ni TP ni SL cruzan su umbral todavía
 
         resultado = live_trade._ejecutar_venta_temprana(
             mid, direction, entry_p, stake,
@@ -1004,12 +1051,12 @@ def _check_salidas_tempranas_bajo_lock(LIVE_CSV: Path, ts: str, umbral: float, h
         t["status"]          = "CLOSED"
         t["close_timestamp"] = ts
         t["exit_price"]      = f"{resultado['exit_price']:.4f}"
-        t["outcome_real"]    = "STOP_LOSS_TEMPRANO"
+        t["outcome_real"]    = "TAKE_PROFIT_TEMPRANO" if motivo_salida == "take_profit" else "STOP_LOSS_TEMPRANO"
         t["fee_eur"]         = f"{fee_total:.4f}"
         t["pnl_bruto_eur"]   = f"{pnl_bruto:.4f}"
         t["pnl_neto_eur"]    = f"{pnl_neto:.4f}"
         nota_fee = "fee_apertura_confirmado=1" if fee_confirmado else "fee_apertura_confirmado=0"
-        t["notas"] = f"{t.get('notas','')} smart_exit_stop_loss {nota_fee}".strip()
+        t["notas"] = f"{t.get('notas','')} smart_exit_{motivo_salida} {nota_fee}".strip()
 
         # Persistir INMEDIATAMENTE tras esta venta real, antes de seguir
         # evaluando el resto de posiciones OPEN (16-Jul, code-review: 4
@@ -1038,7 +1085,8 @@ def _check_salidas_tempranas_bajo_lock(LIVE_CSV: Path, ts: str, umbral: float, h
             _notificar_cierre_live(t, pnl_neto, acierto_dir=(pnl_neto > 0))
         except Exception:
             pass
-        print(f"  🔴 Smart-exit stop-loss: {t['strategy']}#{t['subtype']} {direction} "
+        emoji = "🟢" if motivo_salida == "take_profit" else "🔴"
+        print(f"  {emoji} Smart-exit {motivo_salida}: {t['strategy']}#{t['subtype']} {direction} "
               f"market={mid} PNL={pnl_neto:+.4f}€ (fee_apertura={fee_apertura:.4f}€, "
               f"corte anticipado, no resolución)")
 
