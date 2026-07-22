@@ -12,7 +12,9 @@
       "top1_wallet_share": 0.124,
       "n_mercados": 14,
       "top1_mercado_pct": 24.6,
-      "solido_n40": true
+      "solido_n40": true,
+      "p_valor": 0.0,
+      "sobrevive_fdr": true
     },
     {
       "banda_lo": 0.85,
@@ -26,7 +28,9 @@
       "top1_wallet_share": 0.258,
       "n_mercados": 10,
       "top1_mercado_pct": 26.2,
-      "solido_n40": true
+      "solido_n40": true,
+      "p_valor": 0.0,
+      "sobrevive_fdr": true
     }
   ],
   "ETH#240m#h23": [
@@ -42,7 +46,9 @@
       "top1_wallet_share": 0.085,
       "n_mercados": 15,
       "top1_mercado_pct": 16.6,
-      "solido_n40": true
+      "solido_n40": true,
+      "p_valor": 0.0,
+      "sobrevive_fdr": true
     }
   ],
   "BTC#240m#h07": [
@@ -58,7 +64,9 @@
       "top1_wallet_share": 0.057,
       "n_mercados": 10,
       "top1_mercado_pct": 23.4,
-      "solido_n40": true
+      "solido_n40": true,
+      "p_valor": 0.0,
+      "sobrevive_fdr": true
     }
   ],
   "BTC#240m#h11": [
@@ -74,7 +82,9 @@
       "top1_wallet_share": 0.058,
       "n_mercados": 13,
       "top1_mercado_pct": 24.5,
-      "solido_n40": true
+      "solido_n40": true,
+      "p_valor": 0.0018,
+      "sobrevive_fdr": true
     }
   ],
   "ETH#240m#h11": [
@@ -90,7 +100,9 @@
       "top1_wallet_share": 0.026,
       "n_mercados": 13,
       "top1_mercado_pct": 18.5,
-      "solido_n40": true
+      "solido_n40": true,
+      "p_valor": 0.0,
+      "sobrevive_fdr": true
     }
   ],
   "BTC#240m#h03": [
@@ -106,7 +118,9 @@
       "top1_wallet_share": 0.037,
       "n_mercados": 10,
       "top1_mercado_pct": 26.5,
-      "solido_n40": true
+      "solido_n40": true,
+      "p_valor": 0.0,
+      "sobrevive_fdr": true
     }
   ],
   "SOL#240m#h15": [
@@ -122,7 +136,9 @@
       "top1_wallet_share": 0.033,
       "n_mercados": 14,
       "top1_mercado_pct": 19.1,
-      "solido_n40": true
+      "solido_n40": true,
+      "p_valor": 0.0002,
+      "sobrevive_fdr": true
     }
   ],
   "BTC#240m#h15": [
@@ -138,7 +154,9 @@
       "top1_wallet_share": 0.078,
       "n_mercados": 12,
       "top1_mercado_pct": 27.3,
-      "solido_n40": true
+      "solido_n40": true,
+      "p_valor": 0.0002,
+      "sobrevive_fdr": true
     }
   ],
   "SOL#240m#h23": [
@@ -154,7 +172,9 @@
       "top1_wallet_share": 0.02,
       "n_mercados": 15,
       "top1_mercado_pct": 21.7,
-      "solido_n40": true
+      "solido_n40": true,
+      "p_valor": 0.0,
+      "sobrevive_fdr": true
     }
   ],
   "ETH#240m#h19": [
@@ -170,7 +190,9 @@
       "top1_wallet_share": 0.039,
       "n_mercados": 16,
       "top1_mercado_pct": 14.1,
-      "solido_n40": true
+      "solido_n40": true,
+      "p_valor": 0.0,
+      "sobrevive_fdr": true
     }
   ],
   "XRP#15m#h09": [
@@ -186,7 +208,9 @@
       "top1_wallet_share": 0.322,
       "n_mercados": 11,
       "top1_mercado_pct": 16.7,
-      "solido_n40": true
+      "solido_n40": true,
+      "p_valor": 0.0,
+      "sobrevive_fdr": true
     },
     {
       "banda_lo": 0.9,
@@ -200,7 +224,9 @@
       "top1_wallet_share": 0.323,
       "n_mercados": 11,
       "top1_mercado_pct": 24.0,
-      "solido_n40": true
+      "solido_n40": true,
+      "p_valor": 0.004,
+      "sobrevive_fdr": true
     }
   ],
   "SOL#15m#h09": [
@@ -216,7 +242,9 @@
       "top1_wallet_share": 0.335,
       "n_mercados": 10,
       "top1_mercado_pct": 20.8,
-      "solido_n40": true
+      "solido_n40": true,
+      "p_valor": 0.0,
+      "sobrevive_fdr": true
     },
     {
       "banda_lo": 0.9,
@@ -230,7 +258,9 @@
       "top1_wallet_share": 0.225,
       "n_mercados": 10,
       "top1_mercado_pct": 24.0,
-      "solido_n40": true
+      "solido_n40": true,
+      "p_valor": 0.0,
+      "sobrevive_fdr": true
     },
     {
       "banda_lo": 0.8,
@@ -244,7 +274,9 @@
       "top1_wallet_share": 0.333,
       "n_mercados": 10,
       "top1_mercado_pct": 24.0,
-      "solido_n40": true
+      "solido_n40": true,
+      "p_valor": 0.005,
+      "sobrevive_fdr": true
     }
   ],
   "SOL#15m#h10": [
@@ -260,7 +292,9 @@
       "top1_wallet_share": 0.257,
       "n_mercados": 12,
       "top1_mercado_pct": 23.6,
-      "solido_n40": true
+      "solido_n40": true,
+      "p_valor": 0.0,
+      "sobrevive_fdr": true
     },
     {
       "banda_lo": 0.9,
@@ -274,7 +308,9 @@
       "top1_wallet_share": 0.207,
       "n_mercados": 11,
       "top1_mercado_pct": 18.8,
-      "solido_n40": true
+      "solido_n40": true,
+      "p_valor": 0.0,
+      "sobrevive_fdr": true
     }
   ],
   "ETH#15m#h09": [
@@ -290,7 +326,9 @@
       "top1_wallet_share": 0.102,
       "n_mercados": 11,
       "top1_mercado_pct": 24.9,
-      "solido_n40": true
+      "solido_n40": true,
+      "p_valor": 0.0,
+      "sobrevive_fdr": true
     }
   ],
   "SOL#15m#h11": [
@@ -306,7 +344,9 @@
       "top1_wallet_share": 0.266,
       "n_mercados": 16,
       "top1_mercado_pct": 18.7,
-      "solido_n40": true
+      "solido_n40": true,
+      "p_valor": 0.0002,
+      "sobrevive_fdr": true
     }
   ],
   "ETH#15m#h11": [
@@ -322,7 +362,9 @@
       "top1_wallet_share": 0.084,
       "n_mercados": 14,
       "top1_mercado_pct": 21.0,
-      "solido_n40": true
+      "solido_n40": true,
+      "p_valor": 0.0,
+      "sobrevive_fdr": true
     },
     {
       "banda_lo": 0.85,
@@ -336,7 +378,9 @@
       "top1_wallet_share": 0.079,
       "n_mercados": 11,
       "top1_mercado_pct": 24.7,
-      "solido_n40": true
+      "solido_n40": true,
+      "p_valor": 0.0,
+      "sobrevive_fdr": true
     }
   ],
   "BTC#15m#h12": [
@@ -352,7 +396,9 @@
       "top1_wallet_share": 0.041,
       "n_mercados": 11,
       "top1_mercado_pct": 24.9,
-      "solido_n40": true
+      "solido_n40": true,
+      "p_valor": 0.0,
+      "sobrevive_fdr": true
     }
   ],
   "SOL#15m#h12": [
@@ -368,7 +414,9 @@
       "top1_wallet_share": 0.221,
       "n_mercados": 11,
       "top1_mercado_pct": 19.3,
-      "solido_n40": true
+      "solido_n40": true,
+      "p_valor": 0.0,
+      "sobrevive_fdr": true
     },
     {
       "banda_lo": 0.85,
@@ -382,7 +430,9 @@
       "top1_wallet_share": 0.176,
       "n_mercados": 12,
       "top1_mercado_pct": 24.5,
-      "solido_n40": true
+      "solido_n40": true,
+      "p_valor": 0.0,
+      "sobrevive_fdr": true
     },
     {
       "banda_lo": 0.9,
@@ -396,7 +446,9 @@
       "top1_wallet_share": 0.112,
       "n_mercados": 16,
       "top1_mercado_pct": 16.2,
-      "solido_n40": true
+      "solido_n40": true,
+      "p_valor": 0.0,
+      "sobrevive_fdr": true
     },
     {
       "banda_lo": 0.8,
@@ -410,7 +462,9 @@
       "top1_wallet_share": 0.23,
       "n_mercados": 12,
       "top1_mercado_pct": 28.3,
-      "solido_n40": true
+      "solido_n40": true,
+      "p_valor": 0.0114,
+      "sobrevive_fdr": true
     }
   ],
   "XRP#15m#h10": [
@@ -426,7 +480,9 @@
       "top1_wallet_share": 0.251,
       "n_mercados": 11,
       "top1_mercado_pct": 22.8,
-      "solido_n40": true
+      "solido_n40": true,
+      "p_valor": 0.0,
+      "sobrevive_fdr": true
     },
     {
       "banda_lo": 0.9,
@@ -440,7 +496,9 @@
       "top1_wallet_share": 0.28,
       "n_mercados": 12,
       "top1_mercado_pct": 21.0,
-      "solido_n40": true
+      "solido_n40": true,
+      "p_valor": 0.0026,
+      "sobrevive_fdr": true
     }
   ],
   "XRP#15m#h12": [
@@ -456,7 +514,9 @@
       "top1_wallet_share": 0.289,
       "n_mercados": 12,
       "top1_mercado_pct": 24.6,
-      "solido_n40": true
+      "solido_n40": true,
+      "p_valor": 0.0,
+      "sobrevive_fdr": true
     },
     {
       "banda_lo": 0.85,
@@ -470,7 +530,9 @@
       "top1_wallet_share": 0.316,
       "n_mercados": 12,
       "top1_mercado_pct": 23.2,
-      "solido_n40": true
+      "solido_n40": true,
+      "p_valor": 0.0,
+      "sobrevive_fdr": true
     },
     {
       "banda_lo": 0.9,
@@ -484,7 +546,9 @@
       "top1_wallet_share": 0.221,
       "n_mercados": 15,
       "top1_mercado_pct": 24.6,
-      "solido_n40": true
+      "solido_n40": true,
+      "p_valor": 0.0,
+      "sobrevive_fdr": true
     }
   ],
   "SOL#15m#h13": [
@@ -500,7 +564,9 @@
       "top1_wallet_share": 0.25,
       "n_mercados": 12,
       "top1_mercado_pct": 18.2,
-      "solido_n40": true
+      "solido_n40": true,
+      "p_valor": 0.0,
+      "sobrevive_fdr": true
     },
     {
       "banda_lo": 0.8,
@@ -514,7 +580,9 @@
       "top1_wallet_share": 0.148,
       "n_mercados": 12,
       "top1_mercado_pct": 18.5,
-      "solido_n40": true
+      "solido_n40": true,
+      "p_valor": 0.001,
+      "sobrevive_fdr": true
     },
     {
       "banda_lo": 0.75,
@@ -528,7 +596,9 @@
       "top1_wallet_share": 0.253,
       "n_mercados": 12,
       "top1_mercado_pct": 25.4,
-      "solido_n40": true
+      "solido_n40": true,
+      "p_valor": 0.0024,
+      "sobrevive_fdr": true
     }
   ],
   "ETH#15m#h10": [
@@ -544,7 +614,9 @@
       "top1_wallet_share": 0.053,
       "n_mercados": 11,
       "top1_mercado_pct": 19.7,
-      "solido_n40": true
+      "solido_n40": true,
+      "p_valor": 0.0,
+      "sobrevive_fdr": true
     },
     {
       "banda_lo": 0.85,
@@ -558,7 +630,9 @@
       "top1_wallet_share": 0.065,
       "n_mercados": 10,
       "top1_mercado_pct": 20.7,
-      "solido_n40": true
+      "solido_n40": true,
+      "p_valor": 0.0,
+      "sobrevive_fdr": true
     }
   ],
   "ETH#15m#h13": [
@@ -574,7 +648,9 @@
       "top1_wallet_share": 0.123,
       "n_mercados": 11,
       "top1_mercado_pct": 24.7,
-      "solido_n40": true
+      "solido_n40": true,
+      "p_valor": 0.0,
+      "sobrevive_fdr": true
     }
   ],
   "XRP#15m#h13": [
@@ -590,7 +666,9 @@
       "top1_wallet_share": 0.154,
       "n_mercados": 15,
       "top1_mercado_pct": 16.7,
-      "solido_n40": true
+      "solido_n40": true,
+      "p_valor": 0.0,
+      "sobrevive_fdr": true
     },
     {
       "banda_lo": 0.9,
@@ -604,7 +682,9 @@
       "top1_wallet_share": 0.169,
       "n_mercados": 16,
       "top1_mercado_pct": 16.6,
-      "solido_n40": true
+      "solido_n40": true,
+      "p_valor": 0.0,
+      "sobrevive_fdr": true
     },
     {
       "banda_lo": 0.85,
@@ -618,7 +698,9 @@
       "top1_wallet_share": 0.253,
       "n_mercados": 14,
       "top1_mercado_pct": 15.5,
-      "solido_n40": true
+      "solido_n40": true,
+      "p_valor": 0.0,
+      "sobrevive_fdr": true
     }
   ],
   "SOL#15m#h14": [
@@ -634,7 +716,9 @@
       "top1_wallet_share": 0.206,
       "n_mercados": 14,
       "top1_mercado_pct": 22.6,
-      "solido_n40": true
+      "solido_n40": true,
+      "p_valor": 0.0,
+      "sobrevive_fdr": true
     },
     {
       "banda_lo": 0.8,
@@ -648,7 +732,9 @@
       "top1_wallet_share": 0.201,
       "n_mercados": 12,
       "top1_mercado_pct": 25.0,
-      "solido_n40": true
+      "solido_n40": true,
+      "p_valor": 0.0006,
+      "sobrevive_fdr": true
     }
   ],
   "ETH#15m#h12": [
@@ -664,7 +750,9 @@
       "top1_wallet_share": 0.139,
       "n_mercados": 10,
       "top1_mercado_pct": 28.0,
-      "solido_n40": true
+      "solido_n40": true,
+      "p_valor": 0.0,
+      "sobrevive_fdr": true
     },
     {
       "banda_lo": 0.9,
@@ -678,7 +766,9 @@
       "top1_wallet_share": 0.07,
       "n_mercados": 12,
       "top1_mercado_pct": 20.5,
-      "solido_n40": true
+      "solido_n40": true,
+      "p_valor": 0.0,
+      "sobrevive_fdr": true
     },
     {
       "banda_lo": 0.85,
@@ -692,7 +782,9 @@
       "top1_wallet_share": 0.113,
       "n_mercados": 10,
       "top1_mercado_pct": 23.7,
-      "solido_n40": true
+      "solido_n40": true,
+      "p_valor": 0.0,
+      "sobrevive_fdr": true
     }
   ],
   "ETH#15m#h14": [
@@ -708,7 +800,9 @@
       "top1_wallet_share": 0.049,
       "n_mercados": 14,
       "top1_mercado_pct": 11.9,
-      "solido_n40": true
+      "solido_n40": true,
+      "p_valor": 0.0,
+      "sobrevive_fdr": true
     },
     {
       "banda_lo": 0.8,
@@ -722,7 +816,9 @@
       "top1_wallet_share": 0.102,
       "n_mercados": 12,
       "top1_mercado_pct": 20.0,
-      "solido_n40": true
+      "solido_n40": true,
+      "p_valor": 0.0,
+      "sobrevive_fdr": true
     },
     {
       "banda_lo": 0.9,
@@ -736,7 +832,9 @@
       "top1_wallet_share": 0.051,
       "n_mercados": 14,
       "top1_mercado_pct": 18.0,
-      "solido_n40": true
+      "solido_n40": true,
+      "p_valor": 0.0,
+      "sobrevive_fdr": true
     }
   ],
   "SOL#15m#h15": [
@@ -752,7 +850,9 @@
       "top1_wallet_share": 0.18,
       "n_mercados": 14,
       "top1_mercado_pct": 14.0,
-      "solido_n40": true
+      "solido_n40": true,
+      "p_valor": 0.0,
+      "sobrevive_fdr": true
     },
     {
       "banda_lo": 0.8,
@@ -766,7 +866,9 @@
       "top1_wallet_share": 0.329,
       "n_mercados": 13,
       "top1_mercado_pct": 22.5,
-      "solido_n40": true
+      "solido_n40": true,
+      "p_valor": 0.0006,
+      "sobrevive_fdr": true
     },
     {
       "banda_lo": 0.75,
@@ -780,7 +882,9 @@
       "top1_wallet_share": 0.378,
       "n_mercados": 11,
       "top1_mercado_pct": 13.8,
-      "solido_n40": true
+      "solido_n40": true,
+      "p_valor": 0.0002,
+      "sobrevive_fdr": true
     },
     {
       "banda_lo": 0.9,
@@ -794,7 +898,9 @@
       "top1_wallet_share": 0.148,
       "n_mercados": 16,
       "top1_mercado_pct": 14.9,
-      "solido_n40": true
+      "solido_n40": true,
+      "p_valor": 0.0002,
+      "sobrevive_fdr": true
     }
   ],
   "BTC#15m#h15": [
@@ -810,7 +916,9 @@
       "top1_wallet_share": 0.048,
       "n_mercados": 10,
       "top1_mercado_pct": 21.2,
-      "solido_n40": true
+      "solido_n40": true,
+      "p_valor": 0.0002,
+      "sobrevive_fdr": true
     }
   ],
   "XRP#15m#h15": [
@@ -826,7 +934,9 @@
       "top1_wallet_share": 0.206,
       "n_mercados": 14,
       "top1_mercado_pct": 24.1,
-      "solido_n40": true
+      "solido_n40": true,
+      "p_valor": 0.0,
+      "sobrevive_fdr": true
     },
     {
       "banda_lo": 0.8,
@@ -840,7 +950,9 @@
       "top1_wallet_share": 0.181,
       "n_mercados": 15,
       "top1_mercado_pct": 13.6,
-      "solido_n40": true
+      "solido_n40": true,
+      "p_valor": 0.0002,
+      "sobrevive_fdr": true
     },
     {
       "banda_lo": 0.65,
@@ -854,7 +966,9 @@
       "top1_wallet_share": 0.206,
       "n_mercados": 10,
       "top1_mercado_pct": 25.0,
-      "solido_n40": true
+      "solido_n40": true,
+      "p_valor": 0.0002,
+      "sobrevive_fdr": true
     },
     {
       "banda_lo": 0.9,
@@ -868,7 +982,9 @@
       "top1_wallet_share": 0.233,
       "n_mercados": 16,
       "top1_mercado_pct": 18.9,
-      "solido_n40": true
+      "solido_n40": true,
+      "p_valor": 0.0004,
+      "sobrevive_fdr": true
     },
     {
       "banda_lo": 0.85,
@@ -882,7 +998,9 @@
       "top1_wallet_share": 0.282,
       "n_mercados": 16,
       "top1_mercado_pct": 18.1,
-      "solido_n40": true
+      "solido_n40": true,
+      "p_valor": 0.002,
+      "sobrevive_fdr": true
     },
     {
       "banda_lo": 0.7,
@@ -896,7 +1014,9 @@
       "top1_wallet_share": 0.19,
       "n_mercados": 13,
       "top1_mercado_pct": 20.0,
-      "solido_n40": true
+      "solido_n40": true,
+      "p_valor": 0.0222,
+      "sobrevive_fdr": true
     }
   ],
   "XRP#15m#h16": [
@@ -912,21 +1032,9 @@
       "top1_wallet_share": 0.194,
       "n_mercados": 14,
       "top1_mercado_pct": 17.8,
-      "solido_n40": true
-    },
-    {
-      "banda_lo": 0.65,
-      "banda_hi": 0.7,
-      "n": 64,
-      "hit": 0.7969,
-      "precio_medio": 0.6803,
-      "edge_pp": 11.66,
-      "z": 2.0,
-      "n_wallets": 17,
-      "top1_wallet_share": 0.391,
-      "n_mercados": 13,
-      "top1_mercado_pct": 26.6,
-      "solido_n40": true
+      "solido_n40": true,
+      "p_valor": 0.0,
+      "sobrevive_fdr": true
     }
   ],
   "ETH#15m#h15": [
@@ -942,7 +1050,9 @@
       "top1_wallet_share": 0.089,
       "n_mercados": 15,
       "top1_mercado_pct": 21.9,
-      "solido_n40": true
+      "solido_n40": true,
+      "p_valor": 0.0,
+      "sobrevive_fdr": true
     },
     {
       "banda_lo": 0.9,
@@ -956,7 +1066,9 @@
       "top1_wallet_share": 0.094,
       "n_mercados": 17,
       "top1_mercado_pct": 20.0,
-      "solido_n40": true
+      "solido_n40": true,
+      "p_valor": 0.0,
+      "sobrevive_fdr": true
     },
     {
       "banda_lo": 0.8,
@@ -970,7 +1082,9 @@
       "top1_wallet_share": 0.14,
       "n_mercados": 14,
       "top1_mercado_pct": 15.8,
-      "solido_n40": true
+      "solido_n40": true,
+      "p_valor": 0.0,
+      "sobrevive_fdr": true
     }
   ],
   "ETH#15m#h16": [
@@ -986,7 +1100,9 @@
       "top1_wallet_share": 0.056,
       "n_mercados": 13,
       "top1_mercado_pct": 23.4,
-      "solido_n40": true
+      "solido_n40": true,
+      "p_valor": 0.0,
+      "sobrevive_fdr": true
     },
     {
       "banda_lo": 0.85,
@@ -1000,7 +1116,9 @@
       "top1_wallet_share": 0.096,
       "n_mercados": 11,
       "top1_mercado_pct": 26.7,
-      "solido_n40": true
+      "solido_n40": true,
+      "p_valor": 0.0,
+      "sobrevive_fdr": true
     },
     {
       "banda_lo": 0.8,
@@ -1014,7 +1132,9 @@
       "top1_wallet_share": 0.104,
       "n_mercados": 11,
       "top1_mercado_pct": 23.3,
-      "solido_n40": true
+      "solido_n40": true,
+      "p_valor": 0.0014,
+      "sobrevive_fdr": true
     }
   ],
   "BTC#15m#h16": [
@@ -1030,7 +1150,9 @@
       "top1_wallet_share": 0.054,
       "n_mercados": 12,
       "top1_mercado_pct": 20.6,
-      "solido_n40": true
+      "solido_n40": true,
+      "p_valor": 0.0,
+      "sobrevive_fdr": true
     }
   ],
   "SOL#15m#h16": [
@@ -1046,7 +1168,9 @@
       "top1_wallet_share": 0.259,
       "n_mercados": 14,
       "top1_mercado_pct": 13.5,
-      "solido_n40": true
+      "solido_n40": true,
+      "p_valor": 0.0,
+      "sobrevive_fdr": true
     },
     {
       "banda_lo": 0.7,
@@ -1060,7 +1184,9 @@
       "top1_wallet_share": 0.21,
       "n_mercados": 12,
       "top1_mercado_pct": 16.7,
-      "solido_n40": true
+      "solido_n40": true,
+      "p_valor": 0.0,
+      "sobrevive_fdr": true
     },
     {
       "banda_lo": 0.85,
@@ -1074,7 +1200,9 @@
       "top1_wallet_share": 0.23,
       "n_mercados": 15,
       "top1_mercado_pct": 11.9,
-      "solido_n40": true
+      "solido_n40": true,
+      "p_valor": 0.0,
+      "sobrevive_fdr": true
     },
     {
       "banda_lo": 0.65,
@@ -1088,7 +1216,9 @@
       "top1_wallet_share": 0.159,
       "n_mercados": 10,
       "top1_mercado_pct": 20.0,
-      "solido_n40": true
+      "solido_n40": true,
+      "p_valor": 0.0002,
+      "sobrevive_fdr": true
     },
     {
       "banda_lo": 0.9,
@@ -1102,7 +1232,9 @@
       "top1_wallet_share": 0.133,
       "n_mercados": 16,
       "top1_mercado_pct": 15.6,
-      "solido_n40": true
+      "solido_n40": true,
+      "p_valor": 0.0,
+      "sobrevive_fdr": true
     }
   ],
   "ETH#15m#h17": [
@@ -1118,7 +1250,9 @@
       "top1_wallet_share": 0.071,
       "n_mercados": 15,
       "top1_mercado_pct": 14.4,
-      "solido_n40": true
+      "solido_n40": true,
+      "p_valor": 0.0,
+      "sobrevive_fdr": true
     },
     {
       "banda_lo": 0.85,
@@ -1132,7 +1266,9 @@
       "top1_wallet_share": 0.105,
       "n_mercados": 13,
       "top1_mercado_pct": 17.6,
-      "solido_n40": true
+      "solido_n40": true,
+      "p_valor": 0.0,
+      "sobrevive_fdr": true
     },
     {
       "banda_lo": 0.8,
@@ -1146,7 +1282,9 @@
       "top1_wallet_share": 0.087,
       "n_mercados": 12,
       "top1_mercado_pct": 20.4,
-      "solido_n40": true
+      "solido_n40": true,
+      "p_valor": 0.0,
+      "sobrevive_fdr": true
     }
   ],
   "SOL#15m#h17": [
@@ -1162,7 +1300,9 @@
       "top1_wallet_share": 0.173,
       "n_mercados": 14,
       "top1_mercado_pct": 25.6,
-      "solido_n40": true
+      "solido_n40": true,
+      "p_valor": 0.0,
+      "sobrevive_fdr": true
     },
     {
       "banda_lo": 0.65,
@@ -1176,7 +1316,9 @@
       "top1_wallet_share": 0.202,
       "n_mercados": 14,
       "top1_mercado_pct": 14.8,
-      "solido_n40": true
+      "solido_n40": true,
+      "p_valor": 0.0,
+      "sobrevive_fdr": true
     },
     {
       "banda_lo": 0.7,
@@ -1190,7 +1332,9 @@
       "top1_wallet_share": 0.312,
       "n_mercados": 15,
       "top1_mercado_pct": 15.9,
-      "solido_n40": true
+      "solido_n40": true,
+      "p_valor": 0.0,
+      "sobrevive_fdr": true
     },
     {
       "banda_lo": 0.75,
@@ -1204,7 +1348,9 @@
       "top1_wallet_share": 0.217,
       "n_mercados": 15,
       "top1_mercado_pct": 16.0,
-      "solido_n40": true
+      "solido_n40": true,
+      "p_valor": 0.0,
+      "sobrevive_fdr": true
     },
     {
       "banda_lo": 0.8,
@@ -1218,7 +1364,9 @@
       "top1_wallet_share": 0.221,
       "n_mercados": 16,
       "top1_mercado_pct": 23.3,
-      "solido_n40": true
+      "solido_n40": true,
+      "p_valor": 0.0,
+      "sobrevive_fdr": true
     },
     {
       "banda_lo": 0.85,
@@ -1232,7 +1380,9 @@
       "top1_wallet_share": 0.109,
       "n_mercados": 14,
       "top1_mercado_pct": 19.8,
-      "solido_n40": true
+      "solido_n40": true,
+      "p_valor": 0.0,
+      "sobrevive_fdr": true
     }
   ],
   "XRP#15m#h17": [
@@ -1248,7 +1398,9 @@
       "top1_wallet_share": 0.381,
       "n_mercados": 14,
       "top1_mercado_pct": 15.0,
-      "solido_n40": true
+      "solido_n40": true,
+      "p_valor": 0.0,
+      "sobrevive_fdr": true
     },
     {
       "banda_lo": 0.65,
@@ -1262,7 +1414,9 @@
       "top1_wallet_share": 0.302,
       "n_mercados": 10,
       "top1_mercado_pct": 26.8,
-      "solido_n40": true
+      "solido_n40": true,
+      "p_valor": 0.0,
+      "sobrevive_fdr": true
     },
     {
       "banda_lo": 0.7,
@@ -1276,7 +1430,9 @@
       "top1_wallet_share": 0.382,
       "n_mercados": 16,
       "top1_mercado_pct": 13.4,
-      "solido_n40": true
+      "solido_n40": true,
+      "p_valor": 0.0,
+      "sobrevive_fdr": true
     },
     {
       "banda_lo": 0.85,
@@ -1290,7 +1446,9 @@
       "top1_wallet_share": 0.392,
       "n_mercados": 11,
       "top1_mercado_pct": 17.1,
-      "solido_n40": true
+      "solido_n40": true,
+      "p_valor": 0.0,
+      "sobrevive_fdr": true
     },
     {
       "banda_lo": 0.9,
@@ -1304,7 +1462,9 @@
       "top1_wallet_share": 0.275,
       "n_mercados": 15,
       "top1_mercado_pct": 20.0,
-      "solido_n40": true
+      "solido_n40": true,
+      "p_valor": 0.0004,
+      "sobrevive_fdr": true
     }
   ],
   "XRP#15m#h18": [
@@ -1320,7 +1480,9 @@
       "top1_wallet_share": 0.197,
       "n_mercados": 13,
       "top1_mercado_pct": 23.4,
-      "solido_n40": true
+      "solido_n40": true,
+      "p_valor": 0.002,
+      "sobrevive_fdr": true
     }
   ],
   "SOL#15m#h18": [
@@ -1336,7 +1498,9 @@
       "top1_wallet_share": 0.306,
       "n_mercados": 10,
       "top1_mercado_pct": 20.7,
-      "solido_n40": true
+      "solido_n40": true,
+      "p_valor": 0.0,
+      "sobrevive_fdr": true
     },
     {
       "banda_lo": 0.9,
@@ -1350,7 +1514,9 @@
       "top1_wallet_share": 0.247,
       "n_mercados": 16,
       "top1_mercado_pct": 13.7,
-      "solido_n40": true
+      "solido_n40": true,
+      "p_valor": 0.0028,
+      "sobrevive_fdr": true
     }
   ],
   "ETH#15m#h18": [
@@ -1366,7 +1532,9 @@
       "top1_wallet_share": 0.081,
       "n_mercados": 13,
       "top1_mercado_pct": 20.0,
-      "solido_n40": true
+      "solido_n40": true,
+      "p_valor": 0.0,
+      "sobrevive_fdr": true
     },
     {
       "banda_lo": 0.9,
@@ -1380,7 +1548,9 @@
       "top1_wallet_share": 0.056,
       "n_mercados": 16,
       "top1_mercado_pct": 15.7,
-      "solido_n40": true
+      "solido_n40": true,
+      "p_valor": 0.0,
+      "sobrevive_fdr": true
     }
   ],
   "XRP#15m#h19": [
@@ -1396,7 +1566,9 @@
       "top1_wallet_share": 0.195,
       "n_mercados": 14,
       "top1_mercado_pct": 14.9,
-      "solido_n40": true
+      "solido_n40": true,
+      "p_valor": 0.0002,
+      "sobrevive_fdr": true
     }
   ],
   "ETH#15m#h19": [
@@ -1412,7 +1584,9 @@
       "top1_wallet_share": 0.061,
       "n_mercados": 14,
       "top1_mercado_pct": 16.9,
-      "solido_n40": true
+      "solido_n40": true,
+      "p_valor": 0.0002,
+      "sobrevive_fdr": true
     },
     {
       "banda_lo": 0.8,
@@ -1426,7 +1600,9 @@
       "top1_wallet_share": 0.16,
       "n_mercados": 14,
       "top1_mercado_pct": 18.7,
-      "solido_n40": true
+      "solido_n40": true,
+      "p_valor": 0.0082,
+      "sobrevive_fdr": true
     }
   ],
   "BTC#15m#h19": [
@@ -1442,7 +1618,9 @@
       "top1_wallet_share": 0.082,
       "n_mercados": 12,
       "top1_mercado_pct": 13.8,
-      "solido_n40": true
+      "solido_n40": true,
+      "p_valor": 0.0026,
+      "sobrevive_fdr": true
     }
   ],
   "SOL#15m#h19": [
@@ -1458,7 +1636,9 @@
       "top1_wallet_share": 0.2,
       "n_mercados": 15,
       "top1_mercado_pct": 21.2,
-      "solido_n40": true
+      "solido_n40": true,
+      "p_valor": 0.0,
+      "sobrevive_fdr": true
     },
     {
       "banda_lo": 0.8,
@@ -1472,7 +1652,9 @@
       "top1_wallet_share": 0.272,
       "n_mercados": 14,
       "top1_mercado_pct": 20.4,
-      "solido_n40": true
+      "solido_n40": true,
+      "p_valor": 0.0,
+      "sobrevive_fdr": true
     },
     {
       "banda_lo": 0.85,
@@ -1486,7 +1668,9 @@
       "top1_wallet_share": 0.164,
       "n_mercados": 13,
       "top1_mercado_pct": 17.1,
-      "solido_n40": true
+      "solido_n40": true,
+      "p_valor": 0.0,
+      "sobrevive_fdr": true
     },
     {
       "banda_lo": 0.75,
@@ -1500,7 +1684,9 @@
       "top1_wallet_share": 0.149,
       "n_mercados": 14,
       "top1_mercado_pct": 16.0,
-      "solido_n40": true
+      "solido_n40": true,
+      "p_valor": 0.0048,
+      "sobrevive_fdr": true
     }
   ],
   "XRP#15m#h20": [
@@ -1516,7 +1702,9 @@
       "top1_wallet_share": 0.204,
       "n_mercados": 13,
       "top1_mercado_pct": 21.1,
-      "solido_n40": false
+      "solido_n40": false,
+      "p_valor": 0.0,
+      "sobrevive_fdr": true
     }
   ],
   "ETH#15m#h20": [
@@ -1532,7 +1720,9 @@
       "top1_wallet_share": 0.064,
       "n_mercados": 14,
       "top1_mercado_pct": 18.2,
-      "solido_n40": true
+      "solido_n40": true,
+      "p_valor": 0.0,
+      "sobrevive_fdr": true
     },
     {
       "banda_lo": 0.9,
@@ -1546,7 +1736,9 @@
       "top1_wallet_share": 0.145,
       "n_mercados": 15,
       "top1_mercado_pct": 11.9,
-      "solido_n40": true
+      "solido_n40": true,
+      "p_valor": 0.0,
+      "sobrevive_fdr": true
     },
     {
       "banda_lo": 0.8,
@@ -1560,7 +1752,9 @@
       "top1_wallet_share": 0.124,
       "n_mercados": 10,
       "top1_mercado_pct": 16.7,
-      "solido_n40": true
+      "solido_n40": true,
+      "p_valor": 0.0022,
+      "sobrevive_fdr": true
     }
   ],
   "SOL#15m#h20": [
@@ -1576,7 +1770,9 @@
       "top1_wallet_share": 0.221,
       "n_mercados": 15,
       "top1_mercado_pct": 16.1,
-      "solido_n40": true
+      "solido_n40": true,
+      "p_valor": 0.0,
+      "sobrevive_fdr": true
     },
     {
       "banda_lo": 0.9,
@@ -1590,7 +1786,9 @@
       "top1_wallet_share": 0.174,
       "n_mercados": 15,
       "top1_mercado_pct": 18.2,
-      "solido_n40": true
+      "solido_n40": true,
+      "p_valor": 0.0,
+      "sobrevive_fdr": true
     },
     {
       "banda_lo": 0.85,
@@ -1604,7 +1802,9 @@
       "top1_wallet_share": 0.252,
       "n_mercados": 14,
       "top1_mercado_pct": 22.2,
-      "solido_n40": true
+      "solido_n40": true,
+      "p_valor": 0.0,
+      "sobrevive_fdr": true
     },
     {
       "banda_lo": 0.65,
@@ -1618,7 +1818,9 @@
       "top1_wallet_share": 0.249,
       "n_mercados": 10,
       "top1_mercado_pct": 20.7,
-      "solido_n40": true
+      "solido_n40": true,
+      "p_valor": 0.0022,
+      "sobrevive_fdr": true
     },
     {
       "banda_lo": 0.75,
@@ -1632,7 +1834,9 @@
       "top1_wallet_share": 0.149,
       "n_mercados": 14,
       "top1_mercado_pct": 13.2,
-      "solido_n40": true
+      "solido_n40": true,
+      "p_valor": 0.0074,
+      "sobrevive_fdr": true
     }
   ],
   "XRP#15m#h21": [
@@ -1648,7 +1852,9 @@
       "top1_wallet_share": 0.386,
       "n_mercados": 12,
       "top1_mercado_pct": 24.7,
-      "solido_n40": true
+      "solido_n40": true,
+      "p_valor": 0.0,
+      "sobrevive_fdr": true
     },
     {
       "banda_lo": 0.8,
@@ -1662,7 +1868,9 @@
       "top1_wallet_share": 0.358,
       "n_mercados": 14,
       "top1_mercado_pct": 17.4,
-      "solido_n40": true
+      "solido_n40": true,
+      "p_valor": 0.0,
+      "sobrevive_fdr": true
     },
     {
       "banda_lo": 0.85,
@@ -1676,7 +1884,9 @@
       "top1_wallet_share": 0.391,
       "n_mercados": 16,
       "top1_mercado_pct": 18.5,
-      "solido_n40": true
+      "solido_n40": true,
+      "p_valor": 0.0,
+      "sobrevive_fdr": true
     },
     {
       "banda_lo": 0.6,
@@ -1690,7 +1900,9 @@
       "top1_wallet_share": 0.132,
       "n_mercados": 11,
       "top1_mercado_pct": 20.8,
-      "solido_n40": true
+      "solido_n40": true,
+      "p_valor": 0.0,
+      "sobrevive_fdr": true
     }
   ],
   "XRP#15m#h22": [
@@ -1706,7 +1918,9 @@
       "top1_wallet_share": 0.244,
       "n_mercados": 15,
       "top1_mercado_pct": 18.4,
-      "solido_n40": true
+      "solido_n40": true,
+      "p_valor": 0.0,
+      "sobrevive_fdr": true
     },
     {
       "banda_lo": 0.85,
@@ -1720,7 +1934,9 @@
       "top1_wallet_share": 0.389,
       "n_mercados": 15,
       "top1_mercado_pct": 24.6,
-      "solido_n40": true
+      "solido_n40": true,
+      "p_valor": 0.0002,
+      "sobrevive_fdr": true
     }
   ],
   "ETH#15m#h22": [
@@ -1736,7 +1952,9 @@
       "top1_wallet_share": 0.102,
       "n_mercados": 15,
       "top1_mercado_pct": 13.0,
-      "solido_n40": true
+      "solido_n40": true,
+      "p_valor": 0.0,
+      "sobrevive_fdr": true
     },
     {
       "banda_lo": 0.8,
@@ -1750,7 +1968,9 @@
       "top1_wallet_share": 0.093,
       "n_mercados": 10,
       "top1_mercado_pct": 23.6,
-      "solido_n40": true
+      "solido_n40": true,
+      "p_valor": 0.0,
+      "sobrevive_fdr": true
     },
     {
       "banda_lo": 0.85,
@@ -1764,7 +1984,9 @@
       "top1_wallet_share": 0.086,
       "n_mercados": 12,
       "top1_mercado_pct": 20.3,
-      "solido_n40": true
+      "solido_n40": true,
+      "p_valor": 0.0002,
+      "sobrevive_fdr": true
     }
   ],
   "SOL#15m#h22": [
@@ -1780,7 +2002,9 @@
       "top1_wallet_share": 0.272,
       "n_mercados": 15,
       "top1_mercado_pct": 16.2,
-      "solido_n40": true
+      "solido_n40": true,
+      "p_valor": 0.0,
+      "sobrevive_fdr": true
     },
     {
       "banda_lo": 0.7,
@@ -1794,7 +2018,9 @@
       "top1_wallet_share": 0.045,
       "n_mercados": 14,
       "top1_mercado_pct": 17.6,
-      "solido_n40": true
+      "solido_n40": true,
+      "p_valor": 0.0,
+      "sobrevive_fdr": true
     },
     {
       "banda_lo": 0.85,
@@ -1808,7 +2034,9 @@
       "top1_wallet_share": 0.287,
       "n_mercados": 15,
       "top1_mercado_pct": 20.2,
-      "solido_n40": true
+      "solido_n40": true,
+      "p_valor": 0.0002,
+      "sobrevive_fdr": true
     },
     {
       "banda_lo": 0.9,
@@ -1822,7 +2050,9 @@
       "top1_wallet_share": 0.215,
       "n_mercados": 16,
       "top1_mercado_pct": 25.2,
-      "solido_n40": true
+      "solido_n40": true,
+      "p_valor": 0.0002,
+      "sobrevive_fdr": true
     },
     {
       "banda_lo": 0.3,
@@ -1836,7 +2066,9 @@
       "top1_wallet_share": 0.35,
       "n_mercados": 12,
       "top1_mercado_pct": 17.0,
-      "solido_n40": true
+      "solido_n40": true,
+      "p_valor": 0.0062,
+      "sobrevive_fdr": true
     },
     {
       "banda_lo": 0.6,
@@ -1850,7 +2082,9 @@
       "top1_wallet_share": 0.168,
       "n_mercados": 11,
       "top1_mercado_pct": 22.2,
-      "solido_n40": true
+      "solido_n40": true,
+      "p_valor": 0.0206,
+      "sobrevive_fdr": true
     }
   ],
   "ETH#15m#h23": [
@@ -1866,7 +2100,9 @@
       "top1_wallet_share": 0.066,
       "n_mercados": 16,
       "top1_mercado_pct": 16.7,
-      "solido_n40": true
+      "solido_n40": true,
+      "p_valor": 0.0,
+      "sobrevive_fdr": true
     },
     {
       "banda_lo": 0.85,
@@ -1880,7 +2116,9 @@
       "top1_wallet_share": 0.175,
       "n_mercados": 14,
       "top1_mercado_pct": 15.2,
-      "solido_n40": true
+      "solido_n40": true,
+      "p_valor": 0.0,
+      "sobrevive_fdr": true
     }
   ],
   "SOL#15m#h23": [
@@ -1896,7 +2134,9 @@
       "top1_wallet_share": 0.215,
       "n_mercados": 15,
       "top1_mercado_pct": 21.0,
-      "solido_n40": true
+      "solido_n40": true,
+      "p_valor": 0.004,
+      "sobrevive_fdr": true
     },
     {
       "banda_lo": 0.9,
@@ -1910,7 +2150,9 @@
       "top1_wallet_share": 0.239,
       "n_mercados": 15,
       "top1_mercado_pct": 13.9,
-      "solido_n40": true
+      "solido_n40": true,
+      "p_valor": 0.0108,
+      "sobrevive_fdr": true
     }
   ],
   "XRP#15m#h23": [
@@ -1926,7 +2168,9 @@
       "top1_wallet_share": 0.099,
       "n_mercados": 12,
       "top1_mercado_pct": 16.4,
-      "solido_n40": true
+      "solido_n40": true,
+      "p_valor": 0.0002,
+      "sobrevive_fdr": true
     },
     {
       "banda_lo": 0.1,
@@ -1940,7 +2184,9 @@
       "top1_wallet_share": 0.336,
       "n_mercados": 13,
       "top1_mercado_pct": 23.0,
-      "solido_n40": true
+      "solido_n40": true,
+      "p_valor": 0.0008,
+      "sobrevive_fdr": true
     }
   ],
   "SOL#15m#h00": [
@@ -1956,7 +2202,9 @@
       "top1_wallet_share": 0.341,
       "n_mercados": 11,
       "top1_mercado_pct": 20.9,
-      "solido_n40": true
+      "solido_n40": true,
+      "p_valor": 0.0,
+      "sobrevive_fdr": true
     },
     {
       "banda_lo": 0.8,
@@ -1970,7 +2218,9 @@
       "top1_wallet_share": 0.207,
       "n_mercados": 13,
       "top1_mercado_pct": 22.1,
-      "solido_n40": true
+      "solido_n40": true,
+      "p_valor": 0.0,
+      "sobrevive_fdr": true
     },
     {
       "banda_lo": 0.75,
@@ -1984,21 +2234,9 @@
       "top1_wallet_share": 0.348,
       "n_mercados": 11,
       "top1_mercado_pct": 19.4,
-      "solido_n40": true
-    },
-    {
-      "banda_lo": 0.9,
-      "banda_hi": 0.95,
-      "n": 150,
-      "hit": 0.9733,
-      "precio_medio": 0.9316,
-      "edge_pp": 4.17,
-      "z": 2.026,
-      "n_wallets": 72,
-      "top1_wallet_share": 0.2,
-      "n_mercados": 16,
-      "top1_mercado_pct": 13.3,
-      "solido_n40": true
+      "solido_n40": true,
+      "p_valor": 0.0,
+      "sobrevive_fdr": true
     }
   ],
   "XRP#15m#h00": [
@@ -2014,7 +2252,9 @@
       "top1_wallet_share": 0.33,
       "n_mercados": 11,
       "top1_mercado_pct": 21.9,
-      "solido_n40": false
+      "solido_n40": false,
+      "p_valor": 0.0084,
+      "sobrevive_fdr": true
     }
   ],
   "ETH#15m#h01": [
@@ -2030,7 +2270,9 @@
       "top1_wallet_share": 0.116,
       "n_mercados": 11,
       "top1_mercado_pct": 17.4,
-      "solido_n40": true
+      "solido_n40": true,
+      "p_valor": 0.0002,
+      "sobrevive_fdr": true
     },
     {
       "banda_lo": 0.85,
@@ -2044,7 +2286,9 @@
       "top1_wallet_share": 0.103,
       "n_mercados": 12,
       "top1_mercado_pct": 15.7,
-      "solido_n40": true
+      "solido_n40": true,
+      "p_valor": 0.0082,
+      "sobrevive_fdr": true
     }
   ],
   "SOL#15m#h01": [
@@ -2060,7 +2304,9 @@
       "top1_wallet_share": 0.133,
       "n_mercados": 12,
       "top1_mercado_pct": 18.3,
-      "solido_n40": true
+      "solido_n40": true,
+      "p_valor": 0.0,
+      "sobrevive_fdr": true
     },
     {
       "banda_lo": 0.7,
@@ -2074,7 +2320,9 @@
       "top1_wallet_share": 0.17,
       "n_mercados": 13,
       "top1_mercado_pct": 22.7,
-      "solido_n40": true
+      "solido_n40": true,
+      "p_valor": 0.0006,
+      "sobrevive_fdr": true
     }
   ],
   "XRP#15m#h02": [
@@ -2090,7 +2338,9 @@
       "top1_wallet_share": 0.259,
       "n_mercados": 14,
       "top1_mercado_pct": 18.5,
-      "solido_n40": true
+      "solido_n40": true,
+      "p_valor": 0.0,
+      "sobrevive_fdr": true
     },
     {
       "banda_lo": 0.9,
@@ -2104,7 +2354,9 @@
       "top1_wallet_share": 0.337,
       "n_mercados": 15,
       "top1_mercado_pct": 17.8,
-      "solido_n40": true
+      "solido_n40": true,
+      "p_valor": 0.0,
+      "sobrevive_fdr": true
     },
     {
       "banda_lo": 0.7,
@@ -2118,7 +2370,9 @@
       "top1_wallet_share": 0.23,
       "n_mercados": 15,
       "top1_mercado_pct": 14.6,
-      "solido_n40": true
+      "solido_n40": true,
+      "p_valor": 0.0218,
+      "sobrevive_fdr": true
     }
   ],
   "SOL#15m#h02": [
@@ -2134,7 +2388,9 @@
       "top1_wallet_share": 0.165,
       "n_mercados": 11,
       "top1_mercado_pct": 18.4,
-      "solido_n40": false
+      "solido_n40": false,
+      "p_valor": 0.0,
+      "sobrevive_fdr": true
     },
     {
       "banda_lo": 0.65,
@@ -2148,7 +2404,9 @@
       "top1_wallet_share": 0.226,
       "n_mercados": 11,
       "top1_mercado_pct": 23.8,
-      "solido_n40": true
+      "solido_n40": true,
+      "p_valor": 0.0,
+      "sobrevive_fdr": true
     },
     {
       "banda_lo": 0.4,
@@ -2162,7 +2420,9 @@
       "top1_wallet_share": 0.179,
       "n_mercados": 10,
       "top1_mercado_pct": 24.2,
-      "solido_n40": true
+      "solido_n40": true,
+      "p_valor": 0.0012,
+      "sobrevive_fdr": true
     },
     {
       "banda_lo": 0.55,
@@ -2176,7 +2436,9 @@
       "top1_wallet_share": 0.216,
       "n_mercados": 11,
       "top1_mercado_pct": 16.7,
-      "solido_n40": true
+      "solido_n40": true,
+      "p_valor": 0.0204,
+      "sobrevive_fdr": true
     }
   ],
   "XRP#15m#h03": [
@@ -2192,7 +2454,9 @@
       "top1_wallet_share": 0.234,
       "n_mercados": 12,
       "top1_mercado_pct": 28.3,
-      "solido_n40": true
+      "solido_n40": true,
+      "p_valor": 0.0006,
+      "sobrevive_fdr": true
     },
     {
       "banda_lo": 0.7,
@@ -2206,7 +2470,9 @@
       "top1_wallet_share": 0.394,
       "n_mercados": 14,
       "top1_mercado_pct": 13.7,
-      "solido_n40": true
+      "solido_n40": true,
+      "p_valor": 0.0054,
+      "sobrevive_fdr": true
     },
     {
       "banda_lo": 0.5,
@@ -2220,7 +2486,9 @@
       "top1_wallet_share": 0.258,
       "n_mercados": 12,
       "top1_mercado_pct": 24.4,
-      "solido_n40": true
+      "solido_n40": true,
+      "p_valor": 0.012,
+      "sobrevive_fdr": true
     },
     {
       "banda_lo": 0.3,
@@ -2234,21 +2502,9 @@
       "top1_wallet_share": 0.194,
       "n_mercados": 11,
       "top1_mercado_pct": 27.9,
-      "solido_n40": true
-    },
-    {
-      "banda_lo": 0.45,
-      "banda_hi": 0.5,
-      "n": 37,
-      "hit": 0.6486,
-      "precio_medio": 0.4822,
-      "edge_pp": 16.64,
-      "z": 2.026,
-      "n_wallets": 23,
-      "top1_wallet_share": 0.258,
-      "n_mercados": 13,
-      "top1_mercado_pct": 21.6,
-      "solido_n40": false
+      "solido_n40": true,
+      "p_valor": 0.019,
+      "sobrevive_fdr": true
     }
   ],
   "ETH#15m#h02": [
@@ -2264,7 +2520,9 @@
       "top1_wallet_share": 0.047,
       "n_mercados": 12,
       "top1_mercado_pct": 17.4,
-      "solido_n40": true
+      "solido_n40": true,
+      "p_valor": 0.0,
+      "sobrevive_fdr": true
     },
     {
       "banda_lo": 0.9,
@@ -2278,7 +2536,9 @@
       "top1_wallet_share": 0.099,
       "n_mercados": 16,
       "top1_mercado_pct": 19.4,
-      "solido_n40": true
+      "solido_n40": true,
+      "p_valor": 0.0006,
+      "sobrevive_fdr": true
     }
   ],
   "ETH#15m#h03": [
@@ -2294,7 +2554,9 @@
       "top1_wallet_share": 0.09,
       "n_mercados": 12,
       "top1_mercado_pct": 28.3,
-      "solido_n40": true
+      "solido_n40": true,
+      "p_valor": 0.0,
+      "sobrevive_fdr": true
     },
     {
       "banda_lo": 0.9,
@@ -2308,7 +2570,9 @@
       "top1_wallet_share": 0.082,
       "n_mercados": 16,
       "top1_mercado_pct": 16.3,
-      "solido_n40": true
+      "solido_n40": true,
+      "p_valor": 0.0,
+      "sobrevive_fdr": true
     },
     {
       "banda_lo": 0.85,
@@ -2322,23 +2586,9 @@
       "top1_wallet_share": 0.045,
       "n_mercados": 14,
       "top1_mercado_pct": 18.3,
-      "solido_n40": true
-    }
-  ],
-  "SOL#15m#h03": [
-    {
-      "banda_lo": 0.4,
-      "banda_hi": 0.45,
-      "n": 47,
-      "hit": 0.5745,
-      "precio_medio": 0.4224,
-      "edge_pp": 15.21,
-      "z": 2.11,
-      "n_wallets": 25,
-      "top1_wallet_share": 0.292,
-      "n_mercados": 10,
-      "top1_mercado_pct": 29.8,
-      "solido_n40": true
+      "solido_n40": true,
+      "p_valor": 0.0,
+      "sobrevive_fdr": true
     }
   ],
   "XRP#15m#h04": [
@@ -2354,7 +2604,9 @@
       "top1_wallet_share": 0.255,
       "n_mercados": 13,
       "top1_mercado_pct": 18.3,
-      "solido_n40": true
+      "solido_n40": true,
+      "p_valor": 0.0,
+      "sobrevive_fdr": true
     }
   ],
   "XRP#15m#h05": [
@@ -2370,7 +2622,9 @@
       "top1_wallet_share": 0.393,
       "n_mercados": 13,
       "top1_mercado_pct": 18.6,
-      "solido_n40": true
+      "solido_n40": true,
+      "p_valor": 0.0012,
+      "sobrevive_fdr": true
     },
     {
       "banda_lo": 0.9,
@@ -2384,7 +2638,9 @@
       "top1_wallet_share": 0.379,
       "n_mercados": 13,
       "top1_mercado_pct": 23.5,
-      "solido_n40": true
+      "solido_n40": true,
+      "p_valor": 0.0034,
+      "sobrevive_fdr": true
     }
   ],
   "SOL#15m#h06": [
@@ -2400,7 +2656,9 @@
       "top1_wallet_share": 0.202,
       "n_mercados": 15,
       "top1_mercado_pct": 23.2,
-      "solido_n40": true
+      "solido_n40": true,
+      "p_valor": 0.0,
+      "sobrevive_fdr": true
     },
     {
       "banda_lo": 0.6,
@@ -2414,7 +2672,9 @@
       "top1_wallet_share": 0.185,
       "n_mercados": 13,
       "top1_mercado_pct": 21.4,
-      "solido_n40": true
+      "solido_n40": true,
+      "p_valor": 0.0004,
+      "sobrevive_fdr": true
     },
     {
       "banda_lo": 0.85,
@@ -2428,7 +2688,9 @@
       "top1_wallet_share": 0.35,
       "n_mercados": 13,
       "top1_mercado_pct": 14.9,
-      "solido_n40": true
+      "solido_n40": true,
+      "p_valor": 0.0004,
+      "sobrevive_fdr": true
     },
     {
       "banda_lo": 0.7,
@@ -2442,7 +2704,9 @@
       "top1_wallet_share": 0.231,
       "n_mercados": 14,
       "top1_mercado_pct": 14.9,
-      "solido_n40": true
+      "solido_n40": true,
+      "p_valor": 0.001,
+      "sobrevive_fdr": true
     },
     {
       "banda_lo": 0.55,
@@ -2456,7 +2720,9 @@
       "top1_wallet_share": 0.351,
       "n_mercados": 11,
       "top1_mercado_pct": 29.1,
-      "solido_n40": true
+      "solido_n40": true,
+      "p_valor": 0.0104,
+      "sobrevive_fdr": true
     },
     {
       "banda_lo": 0.9,
@@ -2470,7 +2736,9 @@
       "top1_wallet_share": 0.198,
       "n_mercados": 16,
       "top1_mercado_pct": 13.0,
-      "solido_n40": true
+      "solido_n40": true,
+      "p_valor": 0.024,
+      "sobrevive_fdr": true
     }
   ],
   "SOL#15m#h05": [
@@ -2486,7 +2754,9 @@
       "top1_wallet_share": 0.376,
       "n_mercados": 14,
       "top1_mercado_pct": 16.0,
-      "solido_n40": true
+      "solido_n40": true,
+      "p_valor": 0.0004,
+      "sobrevive_fdr": true
     },
     {
       "banda_lo": 0.85,
@@ -2500,7 +2770,9 @@
       "top1_wallet_share": 0.159,
       "n_mercados": 15,
       "top1_mercado_pct": 21.5,
-      "solido_n40": true
+      "solido_n40": true,
+      "p_valor": 0.0,
+      "sobrevive_fdr": true
     },
     {
       "banda_lo": 0.8,
@@ -2514,7 +2786,9 @@
       "top1_wallet_share": 0.146,
       "n_mercados": 15,
       "top1_mercado_pct": 15.6,
-      "solido_n40": true
+      "solido_n40": true,
+      "p_valor": 0.0002,
+      "sobrevive_fdr": true
     },
     {
       "banda_lo": 0.9,
@@ -2528,7 +2802,9 @@
       "top1_wallet_share": 0.146,
       "n_mercados": 13,
       "top1_mercado_pct": 26.2,
-      "solido_n40": true
+      "solido_n40": true,
+      "p_valor": 0.0008,
+      "sobrevive_fdr": true
     },
     {
       "banda_lo": 0.65,
@@ -2542,7 +2818,9 @@
       "top1_wallet_share": 0.367,
       "n_mercados": 13,
       "top1_mercado_pct": 20.8,
-      "solido_n40": true
+      "solido_n40": true,
+      "p_valor": 0.005,
+      "sobrevive_fdr": true
     }
   ],
   "ETH#15m#h05": [
@@ -2558,7 +2836,9 @@
       "top1_wallet_share": 0.087,
       "n_mercados": 15,
       "top1_mercado_pct": 16.2,
-      "solido_n40": true
+      "solido_n40": true,
+      "p_valor": 0.0,
+      "sobrevive_fdr": true
     },
     {
       "banda_lo": 0.85,
@@ -2572,7 +2852,9 @@
       "top1_wallet_share": 0.087,
       "n_mercados": 12,
       "top1_mercado_pct": 29.9,
-      "solido_n40": true
+      "solido_n40": true,
+      "p_valor": 0.0,
+      "sobrevive_fdr": true
     },
     {
       "banda_lo": 0.8,
@@ -2586,21 +2868,9 @@
       "top1_wallet_share": 0.095,
       "n_mercados": 11,
       "top1_mercado_pct": 21.7,
-      "solido_n40": true
-    },
-    {
-      "banda_lo": 0.75,
-      "banda_hi": 0.8,
-      "n": 37,
-      "hit": 0.9189,
-      "precio_medio": 0.7784,
-      "edge_pp": 14.05,
-      "z": 2.058,
-      "n_wallets": 21,
-      "top1_wallet_share": 0.385,
-      "n_mercados": 11,
-      "top1_mercado_pct": 24.3,
-      "solido_n40": false
+      "solido_n40": true,
+      "p_valor": 0.001,
+      "sobrevive_fdr": true
     }
   ],
   "ETH#15m#h06": [
@@ -2616,7 +2886,9 @@
       "top1_wallet_share": 0.092,
       "n_mercados": 15,
       "top1_mercado_pct": 13.2,
-      "solido_n40": true
+      "solido_n40": true,
+      "p_valor": 0.0,
+      "sobrevive_fdr": true
     },
     {
       "banda_lo": 0.85,
@@ -2630,7 +2902,9 @@
       "top1_wallet_share": 0.095,
       "n_mercados": 10,
       "top1_mercado_pct": 27.3,
-      "solido_n40": true
+      "solido_n40": true,
+      "p_valor": 0.0016,
+      "sobrevive_fdr": true
     }
   ],
   "ETH#15m#h07": [
@@ -2646,7 +2920,9 @@
       "top1_wallet_share": 0.052,
       "n_mercados": 11,
       "top1_mercado_pct": 16.3,
-      "solido_n40": true
+      "solido_n40": true,
+      "p_valor": 0.0,
+      "sobrevive_fdr": true
     },
     {
       "banda_lo": 0.9,
@@ -2660,7 +2936,9 @@
       "top1_wallet_share": 0.065,
       "n_mercados": 12,
       "top1_mercado_pct": 21.6,
-      "solido_n40": true
+      "solido_n40": true,
+      "p_valor": 0.0002,
+      "sobrevive_fdr": true
     }
   ],
   "XRP#15m#h06": [
@@ -2676,7 +2954,9 @@
       "top1_wallet_share": 0.254,
       "n_mercados": 15,
       "top1_mercado_pct": 25.2,
-      "solido_n40": true
+      "solido_n40": true,
+      "p_valor": 0.0004,
+      "sobrevive_fdr": true
     }
   ],
   "XRP#15m#h07": [
@@ -2692,7 +2972,9 @@
       "top1_wallet_share": 0.356,
       "n_mercados": 14,
       "top1_mercado_pct": 19.1,
-      "solido_n40": true
+      "solido_n40": true,
+      "p_valor": 0.0,
+      "sobrevive_fdr": true
     }
   ],
   "SOL#5m#h10": [
@@ -2708,7 +2990,9 @@
       "top1_wallet_share": 0.208,
       "n_mercados": 14,
       "top1_mercado_pct": 18.5,
-      "solido_n40": true
+      "solido_n40": true,
+      "p_valor": 0.0,
+      "sobrevive_fdr": true
     },
     {
       "banda_lo": 0.7,
@@ -2722,7 +3006,9 @@
       "top1_wallet_share": 0.233,
       "n_mercados": 14,
       "top1_mercado_pct": 18.7,
-      "solido_n40": true
+      "solido_n40": true,
+      "p_valor": 0.0028,
+      "sobrevive_fdr": true
     }
   ],
   "SOL#5m#h11": [
@@ -2738,7 +3024,9 @@
       "top1_wallet_share": 0.09,
       "n_mercados": 16,
       "top1_mercado_pct": 14.7,
-      "solido_n40": true
+      "solido_n40": true,
+      "p_valor": 0.0,
+      "sobrevive_fdr": true
     },
     {
       "banda_lo": 0.75,
@@ -2752,7 +3040,9 @@
       "top1_wallet_share": 0.083,
       "n_mercados": 13,
       "top1_mercado_pct": 17.5,
-      "solido_n40": true
+      "solido_n40": true,
+      "p_valor": 0.0074,
+      "sobrevive_fdr": true
     }
   ],
   "ETH#5m#h11": [
@@ -2768,7 +3058,9 @@
       "top1_wallet_share": 0.12,
       "n_mercados": 18,
       "top1_mercado_pct": 13.2,
-      "solido_n40": true
+      "solido_n40": true,
+      "p_valor": 0.0,
+      "sobrevive_fdr": true
     },
     {
       "banda_lo": 0.8,
@@ -2782,7 +3074,9 @@
       "top1_wallet_share": 0.087,
       "n_mercados": 12,
       "top1_mercado_pct": 20.3,
-      "solido_n40": true
+      "solido_n40": true,
+      "p_valor": 0.0012,
+      "sobrevive_fdr": true
     },
     {
       "banda_lo": 0.85,
@@ -2796,7 +3090,9 @@
       "top1_wallet_share": 0.058,
       "n_mercados": 15,
       "top1_mercado_pct": 17.5,
-      "solido_n40": true
+      "solido_n40": true,
+      "p_valor": 0.003,
+      "sobrevive_fdr": true
     }
   ],
   "XRP#5m#h10": [
@@ -2812,7 +3108,9 @@
       "top1_wallet_share": 0.203,
       "n_mercados": 10,
       "top1_mercado_pct": 28.9,
-      "solido_n40": false
+      "solido_n40": false,
+      "p_valor": 0.022,
+      "sobrevive_fdr": true
     }
   ],
   "ETH#5m#h10": [
@@ -2828,7 +3126,9 @@
       "top1_wallet_share": 0.05,
       "n_mercados": 10,
       "top1_mercado_pct": 20.0,
-      "solido_n40": true
+      "solido_n40": true,
+      "p_valor": 0.0,
+      "sobrevive_fdr": true
     },
     {
       "banda_lo": 0.9,
@@ -2842,7 +3142,9 @@
       "top1_wallet_share": 0.074,
       "n_mercados": 15,
       "top1_mercado_pct": 15.9,
-      "solido_n40": true
+      "solido_n40": true,
+      "p_valor": 0.0,
+      "sobrevive_fdr": true
     },
     {
       "banda_lo": 0.85,
@@ -2856,7 +3158,9 @@
       "top1_wallet_share": 0.041,
       "n_mercados": 12,
       "top1_mercado_pct": 16.9,
-      "solido_n40": true
+      "solido_n40": true,
+      "p_valor": 0.0,
+      "sobrevive_fdr": true
     }
   ],
   "SOL#5m#h09": [
@@ -2872,7 +3176,9 @@
       "top1_wallet_share": 0.108,
       "n_mercados": 13,
       "top1_mercado_pct": 24.7,
-      "solido_n40": true
+      "solido_n40": true,
+      "p_valor": 0.0,
+      "sobrevive_fdr": true
     },
     {
       "banda_lo": 0.75,
@@ -2886,7 +3192,9 @@
       "top1_wallet_share": 0.14,
       "n_mercados": 13,
       "top1_mercado_pct": 20.6,
-      "solido_n40": true
+      "solido_n40": true,
+      "p_valor": 0.0,
+      "sobrevive_fdr": true
     },
     {
       "banda_lo": 0.7,
@@ -2900,7 +3208,9 @@
       "top1_wallet_share": 0.129,
       "n_mercados": 12,
       "top1_mercado_pct": 20.3,
-      "solido_n40": true
+      "solido_n40": true,
+      "p_valor": 0.0,
+      "sobrevive_fdr": true
     },
     {
       "banda_lo": 0.9,
@@ -2914,7 +3224,9 @@
       "top1_wallet_share": 0.081,
       "n_mercados": 15,
       "top1_mercado_pct": 12.9,
-      "solido_n40": true
+      "solido_n40": true,
+      "p_valor": 0.0,
+      "sobrevive_fdr": true
     },
     {
       "banda_lo": 0.85,
@@ -2928,7 +3240,9 @@
       "top1_wallet_share": 0.084,
       "n_mercados": 14,
       "top1_mercado_pct": 18.9,
-      "solido_n40": true
+      "solido_n40": true,
+      "p_valor": 0.0,
+      "sobrevive_fdr": true
     }
   ],
   "XRP#5m#h12": [
@@ -2944,7 +3258,9 @@
       "top1_wallet_share": 0.217,
       "n_mercados": 10,
       "top1_mercado_pct": 24.1,
-      "solido_n40": false
+      "solido_n40": false,
+      "p_valor": 0.0032,
+      "sobrevive_fdr": true
     }
   ],
   "SOL#5m#h14": [
@@ -2960,7 +3276,9 @@
       "top1_wallet_share": 0.067,
       "n_mercados": 15,
       "top1_mercado_pct": 16.0,
-      "solido_n40": true
+      "solido_n40": true,
+      "p_valor": 0.0,
+      "sobrevive_fdr": true
     },
     {
       "banda_lo": 0.85,
@@ -2974,7 +3292,9 @@
       "top1_wallet_share": 0.062,
       "n_mercados": 16,
       "top1_mercado_pct": 16.5,
-      "solido_n40": true
+      "solido_n40": true,
+      "p_valor": 0.0,
+      "sobrevive_fdr": true
     },
     {
       "banda_lo": 0.75,
@@ -2988,7 +3308,9 @@
       "top1_wallet_share": 0.067,
       "n_mercados": 11,
       "top1_mercado_pct": 18.2,
-      "solido_n40": true
+      "solido_n40": true,
+      "p_valor": 0.0,
+      "sobrevive_fdr": true
     },
     {
       "banda_lo": 0.9,
@@ -3002,7 +3324,9 @@
       "top1_wallet_share": 0.104,
       "n_mercados": 18,
       "top1_mercado_pct": 12.9,
-      "solido_n40": true
+      "solido_n40": true,
+      "p_valor": 0.0,
+      "sobrevive_fdr": true
     },
     {
       "banda_lo": 0.65,
@@ -3016,7 +3340,9 @@
       "top1_wallet_share": 0.1,
       "n_mercados": 14,
       "top1_mercado_pct": 14.0,
-      "solido_n40": true
+      "solido_n40": true,
+      "p_valor": 0.0,
+      "sobrevive_fdr": true
     },
     {
       "banda_lo": 0.7,
@@ -3030,7 +3356,9 @@
       "top1_wallet_share": 0.193,
       "n_mercados": 13,
       "top1_mercado_pct": 16.4,
-      "solido_n40": true
+      "solido_n40": true,
+      "p_valor": 0.0024,
+      "sobrevive_fdr": true
     }
   ],
   "SOL#5m#h12": [
@@ -3046,7 +3374,9 @@
       "top1_wallet_share": 0.059,
       "n_mercados": 15,
       "top1_mercado_pct": 20.0,
-      "solido_n40": true
+      "solido_n40": true,
+      "p_valor": 0.0,
+      "sobrevive_fdr": true
     },
     {
       "banda_lo": 0.85,
@@ -3060,7 +3390,9 @@
       "top1_wallet_share": 0.041,
       "n_mercados": 14,
       "top1_mercado_pct": 19.5,
-      "solido_n40": true
+      "solido_n40": true,
+      "p_valor": 0.0,
+      "sobrevive_fdr": true
     },
     {
       "banda_lo": 0.75,
@@ -3074,7 +3406,9 @@
       "top1_wallet_share": 0.065,
       "n_mercados": 12,
       "top1_mercado_pct": 17.8,
-      "solido_n40": true
+      "solido_n40": true,
+      "p_valor": 0.0,
+      "sobrevive_fdr": true
     },
     {
       "banda_lo": 0.9,
@@ -3088,7 +3422,9 @@
       "top1_wallet_share": 0.098,
       "n_mercados": 14,
       "top1_mercado_pct": 21.1,
-      "solido_n40": true
+      "solido_n40": true,
+      "p_valor": 0.0,
+      "sobrevive_fdr": true
     },
     {
       "banda_lo": 0.65,
@@ -3102,7 +3438,9 @@
       "top1_wallet_share": 0.148,
       "n_mercados": 10,
       "top1_mercado_pct": 27.8,
-      "solido_n40": false
+      "solido_n40": false,
+      "p_valor": 0.0116,
+      "sobrevive_fdr": true
     }
   ],
   "SOL#5m#h13": [
@@ -3118,7 +3456,9 @@
       "top1_wallet_share": 0.085,
       "n_mercados": 17,
       "top1_mercado_pct": 15.3,
-      "solido_n40": true
+      "solido_n40": true,
+      "p_valor": 0.0,
+      "sobrevive_fdr": true
     },
     {
       "banda_lo": 0.65,
@@ -3132,7 +3472,9 @@
       "top1_wallet_share": 0.164,
       "n_mercados": 12,
       "top1_mercado_pct": 29.5,
-      "solido_n40": true
+      "solido_n40": true,
+      "p_valor": 0.0,
+      "sobrevive_fdr": true
     },
     {
       "banda_lo": 0.9,
@@ -3146,7 +3488,9 @@
       "top1_wallet_share": 0.06,
       "n_mercados": 15,
       "top1_mercado_pct": 13.9,
-      "solido_n40": true
+      "solido_n40": true,
+      "p_valor": 0.0,
+      "sobrevive_fdr": true
     },
     {
       "banda_lo": 0.8,
@@ -3160,7 +3504,9 @@
       "top1_wallet_share": 0.102,
       "n_mercados": 16,
       "top1_mercado_pct": 26.1,
-      "solido_n40": true
+      "solido_n40": true,
+      "p_valor": 0.0016,
+      "sobrevive_fdr": true
     }
   ],
   "ETH#5m#h12": [
@@ -3176,7 +3522,9 @@
       "top1_wallet_share": 0.083,
       "n_mercados": 17,
       "top1_mercado_pct": 14.4,
-      "solido_n40": true
+      "solido_n40": true,
+      "p_valor": 0.0,
+      "sobrevive_fdr": true
     },
     {
       "banda_lo": 0.85,
@@ -3190,7 +3538,9 @@
       "top1_wallet_share": 0.056,
       "n_mercados": 17,
       "top1_mercado_pct": 11.2,
-      "solido_n40": true
+      "solido_n40": true,
+      "p_valor": 0.0,
+      "sobrevive_fdr": true
     },
     {
       "banda_lo": 0.9,
@@ -3204,7 +3554,9 @@
       "top1_wallet_share": 0.078,
       "n_mercados": 20,
       "top1_mercado_pct": 12.4,
-      "solido_n40": true
+      "solido_n40": true,
+      "p_valor": 0.0,
+      "sobrevive_fdr": true
     },
     {
       "banda_lo": 0.75,
@@ -3218,7 +3570,9 @@
       "top1_wallet_share": 0.045,
       "n_mercados": 15,
       "top1_mercado_pct": 15.9,
-      "solido_n40": true
+      "solido_n40": true,
+      "p_valor": 0.0,
+      "sobrevive_fdr": true
     }
   ],
   "XRP#5m#h15": [
@@ -3234,7 +3588,9 @@
       "top1_wallet_share": 0.095,
       "n_mercados": 16,
       "top1_mercado_pct": 10.1,
-      "solido_n40": true
+      "solido_n40": true,
+      "p_valor": 0.001,
+      "sobrevive_fdr": true
     },
     {
       "banda_lo": 0.7,
@@ -3248,7 +3604,9 @@
       "top1_wallet_share": 0.27,
       "n_mercados": 15,
       "top1_mercado_pct": 15.1,
-      "solido_n40": true
+      "solido_n40": true,
+      "p_valor": 0.0062,
+      "sobrevive_fdr": true
     },
     {
       "banda_lo": 0.85,
@@ -3262,7 +3620,9 @@
       "top1_wallet_share": 0.091,
       "n_mercados": 17,
       "top1_mercado_pct": 14.5,
-      "solido_n40": true
+      "solido_n40": true,
+      "p_valor": 0.0196,
+      "sobrevive_fdr": true
     }
   ],
   "ETH#5m#h14": [
@@ -3278,23 +3638,9 @@
       "top1_wallet_share": 0.042,
       "n_mercados": 17,
       "top1_mercado_pct": 12.7,
-      "solido_n40": true
-    }
-  ],
-  "XRP#5m#h11": [
-    {
-      "banda_lo": 0.1,
-      "banda_hi": 0.15,
-      "n": 24,
-      "hit": 0.2917,
-      "precio_medio": 0.127,
-      "edge_pp": 16.47,
-      "z": 2.422,
-      "n_wallets": 14,
-      "top1_wallet_share": 0.22,
-      "n_mercados": 13,
-      "top1_mercado_pct": 12.5,
-      "solido_n40": false
+      "solido_n40": true,
+      "p_valor": 0.0,
+      "sobrevive_fdr": true
     }
   ],
   "SOL#5m#h15": [
@@ -3310,7 +3656,9 @@
       "top1_wallet_share": 0.041,
       "n_mercados": 16,
       "top1_mercado_pct": 14.9,
-      "solido_n40": true
+      "solido_n40": true,
+      "p_valor": 0.0,
+      "sobrevive_fdr": true
     },
     {
       "banda_lo": 0.6,
@@ -3324,7 +3672,9 @@
       "top1_wallet_share": 0.08,
       "n_mercados": 14,
       "top1_mercado_pct": 23.4,
-      "solido_n40": true
+      "solido_n40": true,
+      "p_valor": 0.0,
+      "sobrevive_fdr": true
     },
     {
       "banda_lo": 0.8,
@@ -3338,7 +3688,9 @@
       "top1_wallet_share": 0.043,
       "n_mercados": 16,
       "top1_mercado_pct": 13.4,
-      "solido_n40": true
+      "solido_n40": true,
+      "p_valor": 0.0,
+      "sobrevive_fdr": true
     },
     {
       "banda_lo": 0.75,
@@ -3352,7 +3704,9 @@
       "top1_wallet_share": 0.062,
       "n_mercados": 14,
       "top1_mercado_pct": 15.2,
-      "solido_n40": true
+      "solido_n40": true,
+      "p_valor": 0.0,
+      "sobrevive_fdr": true
     },
     {
       "banda_lo": 0.9,
@@ -3366,7 +3720,9 @@
       "top1_wallet_share": 0.098,
       "n_mercados": 18,
       "top1_mercado_pct": 15.0,
-      "solido_n40": true
+      "solido_n40": true,
+      "p_valor": 0.0,
+      "sobrevive_fdr": true
     },
     {
       "banda_lo": 0.65,
@@ -3380,7 +3736,9 @@
       "top1_wallet_share": 0.107,
       "n_mercados": 15,
       "top1_mercado_pct": 14.9,
-      "solido_n40": true
+      "solido_n40": true,
+      "p_valor": 0.0,
+      "sobrevive_fdr": true
     },
     {
       "banda_lo": 0.55,
@@ -3394,7 +3752,9 @@
       "top1_wallet_share": 0.152,
       "n_mercados": 13,
       "top1_mercado_pct": 25.0,
-      "solido_n40": true
+      "solido_n40": true,
+      "p_valor": 0.0002,
+      "sobrevive_fdr": true
     }
   ],
   "XRP#5m#h16": [
@@ -3410,7 +3770,9 @@
       "top1_wallet_share": 0.067,
       "n_mercados": 12,
       "top1_mercado_pct": 23.8,
-      "solido_n40": true
+      "solido_n40": true,
+      "p_valor": 0.0002,
+      "sobrevive_fdr": true
     },
     {
       "banda_lo": 0.8,
@@ -3424,7 +3786,9 @@
       "top1_wallet_share": 0.122,
       "n_mercados": 12,
       "top1_mercado_pct": 18.4,
-      "solido_n40": true
+      "solido_n40": true,
+      "p_valor": 0.0166,
+      "sobrevive_fdr": true
     }
   ],
   "SOL#5m#h16": [
@@ -3440,7 +3804,9 @@
       "top1_wallet_share": 0.058,
       "n_mercados": 18,
       "top1_mercado_pct": 16.5,
-      "solido_n40": true
+      "solido_n40": true,
+      "p_valor": 0.0,
+      "sobrevive_fdr": true
     },
     {
       "banda_lo": 0.9,
@@ -3454,7 +3820,9 @@
       "top1_wallet_share": 0.097,
       "n_mercados": 20,
       "top1_mercado_pct": 13.5,
-      "solido_n40": true
+      "solido_n40": true,
+      "p_valor": 0.0,
+      "sobrevive_fdr": true
     },
     {
       "banda_lo": 0.8,
@@ -3468,7 +3836,9 @@
       "top1_wallet_share": 0.159,
       "n_mercados": 19,
       "top1_mercado_pct": 12.2,
-      "solido_n40": true
+      "solido_n40": true,
+      "p_valor": 0.0052,
+      "sobrevive_fdr": true
     }
   ],
   "XRP#5m#h13": [
@@ -3484,7 +3854,9 @@
       "top1_wallet_share": 0.124,
       "n_mercados": 20,
       "top1_mercado_pct": 12.8,
-      "solido_n40": true
+      "solido_n40": true,
+      "p_valor": 0.0,
+      "sobrevive_fdr": true
     },
     {
       "banda_lo": 0.75,
@@ -3498,7 +3870,9 @@
       "top1_wallet_share": 0.135,
       "n_mercados": 20,
       "top1_mercado_pct": 11.1,
-      "solido_n40": true
+      "solido_n40": true,
+      "p_valor": 0.0002,
+      "sobrevive_fdr": true
     },
     {
       "banda_lo": 0.65,
@@ -3512,7 +3886,9 @@
       "top1_wallet_share": 0.117,
       "n_mercados": 18,
       "top1_mercado_pct": 19.7,
-      "solido_n40": true
+      "solido_n40": true,
+      "p_valor": 0.0044,
+      "sobrevive_fdr": true
     },
     {
       "banda_lo": 0.8,
@@ -3526,7 +3902,9 @@
       "top1_wallet_share": 0.16,
       "n_mercados": 20,
       "top1_mercado_pct": 12.0,
-      "solido_n40": true
+      "solido_n40": true,
+      "p_valor": 0.0044,
+      "sobrevive_fdr": true
     },
     {
       "banda_lo": 0.55,
@@ -3540,7 +3918,9 @@
       "top1_wallet_share": 0.193,
       "n_mercados": 16,
       "top1_mercado_pct": 17.6,
-      "solido_n40": true
+      "solido_n40": true,
+      "p_valor": 0.019,
+      "sobrevive_fdr": true
     }
   ],
   "SOL#5m#h17": [
@@ -3556,7 +3936,9 @@
       "top1_wallet_share": 0.101,
       "n_mercados": 13,
       "top1_mercado_pct": 14.8,
-      "solido_n40": true
+      "solido_n40": true,
+      "p_valor": 0.0,
+      "sobrevive_fdr": true
     },
     {
       "banda_lo": 0.85,
@@ -3570,7 +3952,9 @@
       "top1_wallet_share": 0.059,
       "n_mercados": 13,
       "top1_mercado_pct": 21.4,
-      "solido_n40": true
+      "solido_n40": true,
+      "p_valor": 0.0,
+      "sobrevive_fdr": true
     },
     {
       "banda_lo": 0.75,
@@ -3584,7 +3968,9 @@
       "top1_wallet_share": 0.08,
       "n_mercados": 10,
       "top1_mercado_pct": 15.8,
-      "solido_n40": false
+      "solido_n40": false,
+      "p_valor": 0.0,
+      "sobrevive_fdr": true
     },
     {
       "banda_lo": 0.8,
@@ -3598,7 +3984,9 @@
       "top1_wallet_share": 0.067,
       "n_mercados": 12,
       "top1_mercado_pct": 29.4,
-      "solido_n40": true
+      "solido_n40": true,
+      "p_valor": 0.0002,
+      "sobrevive_fdr": true
     }
   ],
   "ETH#5m#h16": [
@@ -3614,7 +4002,9 @@
       "top1_wallet_share": 0.064,
       "n_mercados": 16,
       "top1_mercado_pct": 14.4,
-      "solido_n40": true
+      "solido_n40": true,
+      "p_valor": 0.0,
+      "sobrevive_fdr": true
     },
     {
       "banda_lo": 0.8,
@@ -3628,7 +4018,9 @@
       "top1_wallet_share": 0.031,
       "n_mercados": 11,
       "top1_mercado_pct": 15.0,
-      "solido_n40": true
+      "solido_n40": true,
+      "p_valor": 0.0,
+      "sobrevive_fdr": true
     },
     {
       "banda_lo": 0.85,
@@ -3642,7 +4034,9 @@
       "top1_wallet_share": 0.041,
       "n_mercados": 15,
       "top1_mercado_pct": 18.7,
-      "solido_n40": true
+      "solido_n40": true,
+      "p_valor": 0.0,
+      "sobrevive_fdr": true
     }
   ],
   "ETH#5m#h18": [
@@ -3658,7 +4052,9 @@
       "top1_wallet_share": 0.06,
       "n_mercados": 15,
       "top1_mercado_pct": 16.3,
-      "solido_n40": true
+      "solido_n40": true,
+      "p_valor": 0.0,
+      "sobrevive_fdr": true
     },
     {
       "banda_lo": 0.85,
@@ -3672,7 +4068,9 @@
       "top1_wallet_share": 0.043,
       "n_mercados": 12,
       "top1_mercado_pct": 13.1,
-      "solido_n40": true
+      "solido_n40": true,
+      "p_valor": 0.0,
+      "sobrevive_fdr": true
     }
   ],
   "ETH#5m#h13": [
@@ -3688,7 +4086,9 @@
       "top1_wallet_share": 0.065,
       "n_mercados": 11,
       "top1_mercado_pct": 26.4,
-      "solido_n40": true
+      "solido_n40": true,
+      "p_valor": 0.0,
+      "sobrevive_fdr": true
     },
     {
       "banda_lo": 0.9,
@@ -3702,7 +4102,9 @@
       "top1_wallet_share": 0.086,
       "n_mercados": 18,
       "top1_mercado_pct": 12.4,
-      "solido_n40": true
+      "solido_n40": true,
+      "p_valor": 0.0038,
+      "sobrevive_fdr": true
     },
     {
       "banda_lo": 0.85,
@@ -3716,7 +4118,9 @@
       "top1_wallet_share": 0.079,
       "n_mercados": 15,
       "top1_mercado_pct": 12.6,
-      "solido_n40": true
+      "solido_n40": true,
+      "p_valor": 0.0182,
+      "sobrevive_fdr": true
     }
   ],
   "XRP#5m#h19": [
@@ -3732,7 +4136,9 @@
       "top1_wallet_share": 0.111,
       "n_mercados": 14,
       "top1_mercado_pct": 15.2,
-      "solido_n40": true
+      "solido_n40": true,
+      "p_valor": 0.0002,
+      "sobrevive_fdr": true
     }
   ],
   "XRP#5m#h14": [
@@ -3748,7 +4154,9 @@
       "top1_wallet_share": 0.235,
       "n_mercados": 10,
       "top1_mercado_pct": 20.0,
-      "solido_n40": false
+      "solido_n40": false,
+      "p_valor": 0.0012,
+      "sobrevive_fdr": true
     },
     {
       "banda_lo": 0.2,
@@ -3762,7 +4170,9 @@
       "top1_wallet_share": 0.298,
       "n_mercados": 11,
       "top1_mercado_pct": 26.9,
-      "solido_n40": true
+      "solido_n40": true,
+      "p_valor": 0.0028,
+      "sobrevive_fdr": true
     }
   ],
   "ETH#5m#h15": [
@@ -3778,7 +4188,9 @@
       "top1_wallet_share": 0.049,
       "n_mercados": 17,
       "top1_mercado_pct": 12.9,
-      "solido_n40": true
+      "solido_n40": true,
+      "p_valor": 0.0,
+      "sobrevive_fdr": true
     },
     {
       "banda_lo": 0.8,
@@ -3792,7 +4204,9 @@
       "top1_wallet_share": 0.044,
       "n_mercados": 12,
       "top1_mercado_pct": 24.2,
-      "solido_n40": true
+      "solido_n40": true,
+      "p_valor": 0.0,
+      "sobrevive_fdr": true
     }
   ],
   "XRP#5m#h17": [
@@ -3808,7 +4222,9 @@
       "top1_wallet_share": 0.122,
       "n_mercados": 12,
       "top1_mercado_pct": 20.0,
-      "solido_n40": true
+      "solido_n40": true,
+      "p_valor": 0.0,
+      "sobrevive_fdr": true
     },
     {
       "banda_lo": 0.7,
@@ -3822,7 +4238,9 @@
       "top1_wallet_share": 0.167,
       "n_mercados": 13,
       "top1_mercado_pct": 15.8,
-      "solido_n40": true
+      "solido_n40": true,
+      "p_valor": 0.0,
+      "sobrevive_fdr": true
     },
     {
       "banda_lo": 0.8,
@@ -3836,7 +4254,9 @@
       "top1_wallet_share": 0.143,
       "n_mercados": 12,
       "top1_mercado_pct": 19.7,
-      "solido_n40": true
+      "solido_n40": true,
+      "p_valor": 0.0002,
+      "sobrevive_fdr": true
     },
     {
       "banda_lo": 0.5,
@@ -3850,7 +4270,9 @@
       "top1_wallet_share": 0.136,
       "n_mercados": 14,
       "top1_mercado_pct": 19.4,
-      "solido_n40": true
+      "solido_n40": true,
+      "p_valor": 0.005,
+      "sobrevive_fdr": true
     },
     {
       "banda_lo": 0.85,
@@ -3864,7 +4286,9 @@
       "top1_wallet_share": 0.215,
       "n_mercados": 17,
       "top1_mercado_pct": 22.0,
-      "solido_n40": true
+      "solido_n40": true,
+      "p_valor": 0.0044,
+      "sobrevive_fdr": true
     }
   ],
   "ETH#5m#h09": [
@@ -3880,7 +4304,9 @@
       "top1_wallet_share": 0.057,
       "n_mercados": 13,
       "top1_mercado_pct": 21.0,
-      "solido_n40": true
+      "solido_n40": true,
+      "p_valor": 0.0,
+      "sobrevive_fdr": true
     },
     {
       "banda_lo": 0.85,
@@ -3894,7 +4320,9 @@
       "top1_wallet_share": 0.089,
       "n_mercados": 10,
       "top1_mercado_pct": 26.2,
-      "solido_n40": true
+      "solido_n40": true,
+      "p_valor": 0.0,
+      "sobrevive_fdr": true
     }
   ],
   "ETH#5m#h17": [
@@ -3910,7 +4338,9 @@
       "top1_wallet_share": 0.065,
       "n_mercados": 12,
       "top1_mercado_pct": 19.6,
-      "solido_n40": true
+      "solido_n40": true,
+      "p_valor": 0.0,
+      "sobrevive_fdr": true
     },
     {
       "banda_lo": 0.9,
@@ -3924,7 +4354,9 @@
       "top1_wallet_share": 0.082,
       "n_mercados": 13,
       "top1_mercado_pct": 17.1,
-      "solido_n40": true
+      "solido_n40": true,
+      "p_valor": 0.0,
+      "sobrevive_fdr": true
     }
   ],
   "SOL#5m#h22": [
@@ -3940,7 +4372,9 @@
       "top1_wallet_share": 0.151,
       "n_mercados": 12,
       "top1_mercado_pct": 19.4,
-      "solido_n40": true
+      "solido_n40": true,
+      "p_valor": 0.024,
+      "sobrevive_fdr": true
     }
   ],
   "XRP#5m#h22": [
@@ -3956,7 +4390,9 @@
       "top1_wallet_share": 0.124,
       "n_mercados": 13,
       "top1_mercado_pct": 22.4,
-      "solido_n40": true
+      "solido_n40": true,
+      "p_valor": 0.0,
+      "sobrevive_fdr": true
     },
     {
       "banda_lo": 0.9,
@@ -3970,7 +4406,9 @@
       "top1_wallet_share": 0.116,
       "n_mercados": 13,
       "top1_mercado_pct": 19.0,
-      "solido_n40": true
+      "solido_n40": true,
+      "p_valor": 0.0044,
+      "sobrevive_fdr": true
     },
     {
       "banda_lo": 0.85,
@@ -3984,7 +4422,9 @@
       "top1_wallet_share": 0.22,
       "n_mercados": 11,
       "top1_mercado_pct": 24.4,
-      "solido_n40": true
+      "solido_n40": true,
+      "p_valor": 0.0056,
+      "sobrevive_fdr": true
     }
   ],
   "SOL#5m#h18": [
@@ -4000,7 +4440,9 @@
       "top1_wallet_share": 0.072,
       "n_mercados": 11,
       "top1_mercado_pct": 22.9,
-      "solido_n40": true
+      "solido_n40": true,
+      "p_valor": 0.0004,
+      "sobrevive_fdr": true
     },
     {
       "banda_lo": 0.9,
@@ -4014,7 +4456,9 @@
       "top1_wallet_share": 0.084,
       "n_mercados": 12,
       "top1_mercado_pct": 19.8,
-      "solido_n40": true
+      "solido_n40": true,
+      "p_valor": 0.0016,
+      "sobrevive_fdr": true
     },
     {
       "banda_lo": 0.8,
@@ -4028,7 +4472,9 @@
       "top1_wallet_share": 0.107,
       "n_mercados": 12,
       "top1_mercado_pct": 23.5,
-      "solido_n40": true
+      "solido_n40": true,
+      "p_valor": 0.0212,
+      "sobrevive_fdr": true
     }
   ],
   "SOL#5m#h19": [
@@ -4044,7 +4490,9 @@
       "top1_wallet_share": 0.16,
       "n_mercados": 16,
       "top1_mercado_pct": 15.3,
-      "solido_n40": true
+      "solido_n40": true,
+      "p_valor": 0.005,
+      "sobrevive_fdr": true
     }
   ],
   "XRP#5m#h00": [
@@ -4060,7 +4508,9 @@
       "top1_wallet_share": 0.124,
       "n_mercados": 13,
       "top1_mercado_pct": 20.9,
-      "solido_n40": true
+      "solido_n40": true,
+      "p_valor": 0.0004,
+      "sobrevive_fdr": true
     }
   ],
   "SOL#5m#h21": [
@@ -4076,7 +4526,9 @@
       "top1_wallet_share": 0.147,
       "n_mercados": 16,
       "top1_mercado_pct": 16.7,
-      "solido_n40": true
+      "solido_n40": true,
+      "p_valor": 0.0,
+      "sobrevive_fdr": true
     },
     {
       "banda_lo": 0.5,
@@ -4090,7 +4542,9 @@
       "top1_wallet_share": 0.347,
       "n_mercados": 11,
       "top1_mercado_pct": 19.3,
-      "solido_n40": true
+      "solido_n40": true,
+      "p_valor": 0.0206,
+      "sobrevive_fdr": true
     }
   ],
   "SOL#5m#h20": [
@@ -4106,7 +4560,9 @@
       "top1_wallet_share": 0.104,
       "n_mercados": 12,
       "top1_mercado_pct": 21.6,
-      "solido_n40": true
+      "solido_n40": true,
+      "p_valor": 0.0,
+      "sobrevive_fdr": true
     }
   ],
   "ETH#5m#h01": [
@@ -4122,7 +4578,9 @@
       "top1_wallet_share": 0.039,
       "n_mercados": 12,
       "top1_mercado_pct": 27.0,
-      "solido_n40": true
+      "solido_n40": true,
+      "p_valor": 0.0,
+      "sobrevive_fdr": true
     },
     {
       "banda_lo": 0.85,
@@ -4136,7 +4594,9 @@
       "top1_wallet_share": 0.069,
       "n_mercados": 12,
       "top1_mercado_pct": 20.4,
-      "solido_n40": true
+      "solido_n40": true,
+      "p_valor": 0.0,
+      "sobrevive_fdr": true
     },
     {
       "banda_lo": 0.9,
@@ -4150,7 +4610,9 @@
       "top1_wallet_share": 0.08,
       "n_mercados": 13,
       "top1_mercado_pct": 12.2,
-      "solido_n40": true
+      "solido_n40": true,
+      "p_valor": 0.0,
+      "sobrevive_fdr": true
     }
   ],
   "SOL#5m#h00": [
@@ -4166,7 +4628,9 @@
       "top1_wallet_share": 0.172,
       "n_mercados": 15,
       "top1_mercado_pct": 14.8,
-      "solido_n40": true
+      "solido_n40": true,
+      "p_valor": 0.012,
+      "sobrevive_fdr": true
     }
   ],
   "ETH#5m#h03": [
@@ -4182,7 +4646,9 @@
       "top1_wallet_share": 0.054,
       "n_mercados": 11,
       "top1_mercado_pct": 23.5,
-      "solido_n40": true
+      "solido_n40": true,
+      "p_valor": 0.0,
+      "sobrevive_fdr": true
     },
     {
       "banda_lo": 0.9,
@@ -4196,7 +4662,9 @@
       "top1_wallet_share": 0.074,
       "n_mercados": 11,
       "top1_mercado_pct": 15.3,
-      "solido_n40": true
+      "solido_n40": true,
+      "p_valor": 0.0002,
+      "sobrevive_fdr": true
     }
   ],
   "ETH#5m#h00": [
@@ -4212,7 +4680,9 @@
       "top1_wallet_share": 0.061,
       "n_mercados": 10,
       "top1_mercado_pct": 26.9,
-      "solido_n40": true
+      "solido_n40": true,
+      "p_valor": 0.0,
+      "sobrevive_fdr": true
     },
     {
       "banda_lo": 0.9,
@@ -4226,7 +4696,9 @@
       "top1_wallet_share": 0.108,
       "n_mercados": 14,
       "top1_mercado_pct": 14.9,
-      "solido_n40": true
+      "solido_n40": true,
+      "p_valor": 0.0,
+      "sobrevive_fdr": true
     },
     {
       "banda_lo": 0.85,
@@ -4240,7 +4712,9 @@
       "top1_wallet_share": 0.058,
       "n_mercados": 12,
       "top1_mercado_pct": 26.1,
-      "solido_n40": true
+      "solido_n40": true,
+      "p_valor": 0.0,
+      "sobrevive_fdr": true
     }
   ],
   "ETH#5m#h19": [
@@ -4256,7 +4730,9 @@
       "top1_wallet_share": 0.13,
       "n_mercados": 18,
       "top1_mercado_pct": 13.8,
-      "solido_n40": true
+      "solido_n40": true,
+      "p_valor": 0.0,
+      "sobrevive_fdr": true
     },
     {
       "banda_lo": 0.8,
@@ -4270,7 +4746,9 @@
       "top1_wallet_share": 0.049,
       "n_mercados": 16,
       "top1_mercado_pct": 20.6,
-      "solido_n40": true
+      "solido_n40": true,
+      "p_valor": 0.0,
+      "sobrevive_fdr": true
     },
     {
       "banda_lo": 0.75,
@@ -4284,7 +4762,9 @@
       "top1_wallet_share": 0.085,
       "n_mercados": 13,
       "top1_mercado_pct": 22.0,
-      "solido_n40": true
+      "solido_n40": true,
+      "p_valor": 0.0002,
+      "sobrevive_fdr": true
     },
     {
       "banda_lo": 0.85,
@@ -4298,7 +4778,9 @@
       "top1_wallet_share": 0.082,
       "n_mercados": 17,
       "top1_mercado_pct": 10.3,
-      "solido_n40": true
+      "solido_n40": true,
+      "p_valor": 0.0078,
+      "sobrevive_fdr": true
     }
   ],
   "XRP#5m#h01": [
@@ -4314,7 +4796,9 @@
       "top1_wallet_share": 0.236,
       "n_mercados": 15,
       "top1_mercado_pct": 20.6,
-      "solido_n40": true
+      "solido_n40": true,
+      "p_valor": 0.012,
+      "sobrevive_fdr": true
     },
     {
       "banda_lo": 0.75,
@@ -4328,7 +4812,9 @@
       "top1_wallet_share": 0.161,
       "n_mercados": 14,
       "top1_mercado_pct": 20.4,
-      "solido_n40": true
+      "solido_n40": true,
+      "p_valor": 0.023,
+      "sobrevive_fdr": true
     }
   ],
   "SOL#5m#h23": [
@@ -4344,7 +4830,9 @@
       "top1_wallet_share": 0.065,
       "n_mercados": 13,
       "top1_mercado_pct": 23.5,
-      "solido_n40": true
+      "solido_n40": true,
+      "p_valor": 0.0,
+      "sobrevive_fdr": true
     },
     {
       "banda_lo": 0.7,
@@ -4358,7 +4846,9 @@
       "top1_wallet_share": 0.112,
       "n_mercados": 11,
       "top1_mercado_pct": 19.4,
-      "solido_n40": false
+      "solido_n40": false,
+      "p_valor": 0.0006,
+      "sobrevive_fdr": true
     },
     {
       "banda_lo": 0.85,
@@ -4372,7 +4862,9 @@
       "top1_wallet_share": 0.251,
       "n_mercados": 14,
       "top1_mercado_pct": 21.6,
-      "solido_n40": true
+      "solido_n40": true,
+      "p_valor": 0.0046,
+      "sobrevive_fdr": true
     },
     {
       "banda_lo": 0.8,
@@ -4386,7 +4878,9 @@
       "top1_wallet_share": 0.175,
       "n_mercados": 13,
       "top1_mercado_pct": 17.9,
-      "solido_n40": true
+      "solido_n40": true,
+      "p_valor": 0.0112,
+      "sobrevive_fdr": true
     }
   ],
   "XRP#5m#h02": [
@@ -4402,7 +4896,9 @@
       "top1_wallet_share": 0.156,
       "n_mercados": 10,
       "top1_mercado_pct": 17.9,
-      "solido_n40": false
+      "solido_n40": false,
+      "p_valor": 0.0,
+      "sobrevive_fdr": true
     },
     {
       "banda_lo": 0.85,
@@ -4416,7 +4912,9 @@
       "top1_wallet_share": 0.169,
       "n_mercados": 10,
       "top1_mercado_pct": 24.4,
-      "solido_n40": true
+      "solido_n40": true,
+      "p_valor": 0.004,
+      "sobrevive_fdr": true
     }
   ],
   "SOL#5m#h05": [
@@ -4432,7 +4930,9 @@
       "top1_wallet_share": 0.109,
       "n_mercados": 10,
       "top1_mercado_pct": 15.6,
-      "solido_n40": true
+      "solido_n40": true,
+      "p_valor": 0.0,
+      "sobrevive_fdr": true
     },
     {
       "banda_lo": 0.9,
@@ -4446,7 +4946,9 @@
       "top1_wallet_share": 0.074,
       "n_mercados": 10,
       "top1_mercado_pct": 17.7,
-      "solido_n40": true
+      "solido_n40": true,
+      "p_valor": 0.0004,
+      "sobrevive_fdr": true
     }
   ],
   "ETH#5m#h20": [
@@ -4462,7 +4964,9 @@
       "top1_wallet_share": 0.124,
       "n_mercados": 15,
       "top1_mercado_pct": 13.0,
-      "solido_n40": true
+      "solido_n40": true,
+      "p_valor": 0.0,
+      "sobrevive_fdr": true
     }
   ],
   "ETH#5m#h04": [
@@ -4478,7 +4982,9 @@
       "top1_wallet_share": 0.041,
       "n_mercados": 10,
       "top1_mercado_pct": 14.3,
-      "solido_n40": true
+      "solido_n40": true,
+      "p_valor": 0.0002,
+      "sobrevive_fdr": true
     },
     {
       "banda_lo": 0.9,
@@ -4492,7 +4998,9 @@
       "top1_wallet_share": 0.08,
       "n_mercados": 10,
       "top1_mercado_pct": 18.1,
-      "solido_n40": true
+      "solido_n40": true,
+      "p_valor": 0.0,
+      "sobrevive_fdr": true
     }
   ],
   "SOL#5m#h06": [
@@ -4508,7 +5016,9 @@
       "top1_wallet_share": 0.081,
       "n_mercados": 13,
       "top1_mercado_pct": 17.2,
-      "solido_n40": true
+      "solido_n40": true,
+      "p_valor": 0.0,
+      "sobrevive_fdr": true
     },
     {
       "banda_lo": 0.9,
@@ -4522,7 +5032,9 @@
       "top1_wallet_share": 0.107,
       "n_mercados": 15,
       "top1_mercado_pct": 11.9,
-      "solido_n40": true
+      "solido_n40": true,
+      "p_valor": 0.0,
+      "sobrevive_fdr": true
     },
     {
       "banda_lo": 0.85,
@@ -4536,7 +5048,9 @@
       "top1_wallet_share": 0.091,
       "n_mercados": 14,
       "top1_mercado_pct": 15.6,
-      "solido_n40": true
+      "solido_n40": true,
+      "p_valor": 0.0,
+      "sobrevive_fdr": true
     }
   ],
   "XRP#5m#h03": [
@@ -4552,7 +5066,9 @@
       "top1_wallet_share": 0.159,
       "n_mercados": 10,
       "top1_mercado_pct": 22.0,
-      "solido_n40": true
+      "solido_n40": true,
+      "p_valor": 0.0,
+      "sobrevive_fdr": true
     },
     {
       "banda_lo": 0.3,
@@ -4566,7 +5082,9 @@
       "top1_wallet_share": 0.398,
       "n_mercados": 10,
       "top1_mercado_pct": 25.0,
-      "solido_n40": false
+      "solido_n40": false,
+      "p_valor": 0.0238,
+      "sobrevive_fdr": true
     }
   ],
   "XRP#5m#h06": [
@@ -4582,7 +5100,9 @@
       "top1_wallet_share": 0.125,
       "n_mercados": 11,
       "top1_mercado_pct": 20.7,
-      "solido_n40": false
+      "solido_n40": false,
+      "p_valor": 0.0008,
+      "sobrevive_fdr": true
     },
     {
       "banda_lo": 0.9,
@@ -4596,7 +5116,9 @@
       "top1_wallet_share": 0.1,
       "n_mercados": 10,
       "top1_mercado_pct": 23.0,
-      "solido_n40": true
+      "solido_n40": true,
+      "p_valor": 0.0166,
+      "sobrevive_fdr": true
     }
   ],
   "SOL#5m#h01": [
@@ -4612,7 +5134,9 @@
       "top1_wallet_share": 0.126,
       "n_mercados": 12,
       "top1_mercado_pct": 19.3,
-      "solido_n40": true
+      "solido_n40": true,
+      "p_valor": 0.0,
+      "sobrevive_fdr": true
     },
     {
       "banda_lo": 0.6,
@@ -4626,7 +5150,9 @@
       "top1_wallet_share": 0.162,
       "n_mercados": 10,
       "top1_mercado_pct": 22.7,
-      "solido_n40": true
+      "solido_n40": true,
+      "p_valor": 0.0,
+      "sobrevive_fdr": true
     },
     {
       "banda_lo": 0.9,
@@ -4640,7 +5166,9 @@
       "top1_wallet_share": 0.095,
       "n_mercados": 16,
       "top1_mercado_pct": 16.8,
-      "solido_n40": true
+      "solido_n40": true,
+      "p_valor": 0.0,
+      "sobrevive_fdr": true
     },
     {
       "banda_lo": 0.55,
@@ -4654,7 +5182,9 @@
       "top1_wallet_share": 0.13,
       "n_mercados": 10,
       "top1_mercado_pct": 18.0,
-      "solido_n40": true
+      "solido_n40": true,
+      "p_valor": 0.0096,
+      "sobrevive_fdr": true
     }
   ],
   "DOGE#5m#h06": [
@@ -4670,7 +5200,9 @@
       "top1_wallet_share": 0.147,
       "n_mercados": 10,
       "top1_mercado_pct": 28.0,
-      "solido_n40": false
+      "solido_n40": false,
+      "p_valor": 0.0178,
+      "sobrevive_fdr": true
     }
   ],
   "DOGE#5m#h20": [
@@ -4686,7 +5218,9 @@
       "top1_wallet_share": 0.213,
       "n_mercados": 14,
       "top1_mercado_pct": 12.1,
-      "solido_n40": false
+      "solido_n40": false,
+      "p_valor": 0.0112,
+      "sobrevive_fdr": true
     }
   ],
   "DOGE#15m#h14": [
@@ -4702,7 +5236,9 @@
       "top1_wallet_share": 0.383,
       "n_mercados": 12,
       "top1_mercado_pct": 18.5,
-      "solido_n40": false
+      "solido_n40": false,
+      "p_valor": 0.0016,
+      "sobrevive_fdr": true
     }
   ],
   "DOGE#15m#h22": [
@@ -4718,7 +5254,9 @@
       "top1_wallet_share": 0.38,
       "n_mercados": 10,
       "top1_mercado_pct": 28.0,
-      "solido_n40": true
+      "solido_n40": true,
+      "p_valor": 0.0022,
+      "sobrevive_fdr": true
     }
   ],
   "DOGE#15m#h05": [
@@ -4734,39 +5272,9 @@
       "top1_wallet_share": 0.154,
       "n_mercados": 12,
       "top1_mercado_pct": 24.1,
-      "solido_n40": false
-    }
-  ],
-  "DOGE#15m#h18": [
-    {
-      "banda_lo": 0.5,
-      "banda_hi": 0.55,
-      "n": 36,
-      "hit": 0.6944,
-      "precio_medio": 0.5259,
-      "edge_pp": 16.85,
-      "z": 2.026,
-      "n_wallets": 25,
-      "top1_wallet_share": 0.387,
-      "n_mercados": 14,
-      "top1_mercado_pct": 16.7,
-      "solido_n40": false
-    }
-  ],
-  "DOGE#15m#h10": [
-    {
-      "banda_lo": 0.2,
-      "banda_hi": 0.25,
-      "n": 28,
-      "hit": 0.3929,
-      "precio_medio": 0.2244,
-      "edge_pp": 16.85,
-      "z": 2.137,
-      "n_wallets": 10,
-      "top1_wallet_share": 0.29,
-      "n_mercados": 13,
-      "top1_mercado_pct": 21.4,
-      "solido_n40": false
+      "solido_n40": false,
+      "p_valor": 0.0012,
+      "sobrevive_fdr": true
     }
   ],
   "DOGE#15m#h09": [
@@ -4782,7 +5290,9 @@
       "top1_wallet_share": 0.391,
       "n_mercados": 16,
       "top1_mercado_pct": 21.1,
-      "solido_n40": false
+      "solido_n40": false,
+      "p_valor": 0.0008,
+      "sobrevive_fdr": true
     }
   ],
   "SOL#5m#h07": [
@@ -4798,7 +5308,9 @@
       "top1_wallet_share": 0.061,
       "n_mercados": 11,
       "top1_mercado_pct": 16.8,
-      "solido_n40": true
+      "solido_n40": true,
+      "p_valor": 0.009,
+      "sobrevive_fdr": true
     }
   ],
   "XRP#5m#h07": [
@@ -4814,7 +5326,9 @@
       "top1_wallet_share": 0.123,
       "n_mercados": 13,
       "top1_mercado_pct": 26.8,
-      "solido_n40": true
+      "solido_n40": true,
+      "p_valor": 0.0,
+      "sobrevive_fdr": true
     },
     {
       "banda_lo": 0.8,
@@ -4828,7 +5342,9 @@
       "top1_wallet_share": 0.211,
       "n_mercados": 17,
       "top1_mercado_pct": 20.9,
-      "solido_n40": true
+      "solido_n40": true,
+      "p_valor": 0.006,
+      "sobrevive_fdr": true
     },
     {
       "banda_lo": 0.35,
@@ -4842,7 +5358,9 @@
       "top1_wallet_share": 0.364,
       "n_mercados": 14,
       "top1_mercado_pct": 11.4,
-      "solido_n40": false
+      "solido_n40": false,
+      "p_valor": 0.0146,
+      "sobrevive_fdr": true
     }
   ],
   "DOGE#5m#h16": [
@@ -4858,7 +5376,9 @@
       "top1_wallet_share": 0.145,
       "n_mercados": 14,
       "top1_mercado_pct": 29.3,
-      "solido_n40": true
+      "solido_n40": true,
+      "p_valor": 0.0002,
+      "sobrevive_fdr": true
     },
     {
       "banda_lo": 0.5,
@@ -4872,7 +5392,9 @@
       "top1_wallet_share": 0.244,
       "n_mercados": 17,
       "top1_mercado_pct": 19.4,
-      "solido_n40": false
+      "solido_n40": false,
+      "p_valor": 0.0028,
+      "sobrevive_fdr": true
     },
     {
       "banda_lo": 0.85,
@@ -4886,7 +5408,9 @@
       "top1_wallet_share": 0.071,
       "n_mercados": 14,
       "top1_mercado_pct": 25.5,
-      "solido_n40": true
+      "solido_n40": true,
+      "p_valor": 0.0032,
+      "sobrevive_fdr": true
     },
     {
       "banda_lo": 0.75,
@@ -4900,7 +5424,9 @@
       "top1_wallet_share": 0.353,
       "n_mercados": 18,
       "top1_mercado_pct": 16.4,
-      "solido_n40": true
+      "solido_n40": true,
+      "p_valor": 0.012,
+      "sobrevive_fdr": true
     }
   ],
   "ETH#5m#h06": [
@@ -4916,7 +5442,9 @@
       "top1_wallet_share": 0.055,
       "n_mercados": 11,
       "top1_mercado_pct": 21.6,
-      "solido_n40": true
+      "solido_n40": true,
+      "p_valor": 0.0,
+      "sobrevive_fdr": true
     },
     {
       "banda_lo": 0.85,
@@ -4930,7 +5458,9 @@
       "top1_wallet_share": 0.085,
       "n_mercados": 11,
       "top1_mercado_pct": 20.7,
-      "solido_n40": true
+      "solido_n40": true,
+      "p_valor": 0.0,
+      "sobrevive_fdr": true
     }
   ],
   "DOGE#5m#h09": [
@@ -4946,7 +5476,9 @@
       "top1_wallet_share": 0.204,
       "n_mercados": 10,
       "top1_mercado_pct": 23.5,
-      "solido_n40": false
+      "solido_n40": false,
+      "p_valor": 0.0036,
+      "sobrevive_fdr": true
     }
   ],
   "DOGE#5m#h10": [
@@ -4962,7 +5494,9 @@
       "top1_wallet_share": 0.127,
       "n_mercados": 15,
       "top1_mercado_pct": 18.0,
-      "solido_n40": true
+      "solido_n40": true,
+      "p_valor": 0.0206,
+      "sobrevive_fdr": true
     }
   ],
   "SOL#5m#h08": [
@@ -4978,7 +5512,9 @@
       "top1_wallet_share": 0.047,
       "n_mercados": 11,
       "top1_mercado_pct": 16.9,
-      "solido_n40": true
+      "solido_n40": true,
+      "p_valor": 0.0,
+      "sobrevive_fdr": true
     }
   ],
   "DOGE#5m#h13": [
@@ -4994,7 +5530,9 @@
       "top1_wallet_share": 0.229,
       "n_mercados": 12,
       "top1_mercado_pct": 23.5,
-      "solido_n40": true
+      "solido_n40": true,
+      "p_valor": 0.0066,
+      "sobrevive_fdr": true
     },
     {
       "banda_lo": 0.8,
@@ -5008,7 +5546,9 @@
       "top1_wallet_share": 0.21,
       "n_mercados": 14,
       "top1_mercado_pct": 14.6,
-      "solido_n40": true
+      "solido_n40": true,
+      "p_valor": 0.008,
+      "sobrevive_fdr": true
     }
   ],
   "ETH#5m#h08": [
@@ -5024,7 +5564,9 @@
       "top1_wallet_share": 0.071,
       "n_mercados": 11,
       "top1_mercado_pct": 26.2,
-      "solido_n40": true
+      "solido_n40": true,
+      "p_valor": 0.0,
+      "sobrevive_fdr": true
     },
     {
       "banda_lo": 0.9,
@@ -5038,7 +5580,9 @@
       "top1_wallet_share": 0.056,
       "n_mercados": 13,
       "top1_mercado_pct": 26.8,
-      "solido_n40": true
+      "solido_n40": true,
+      "p_valor": 0.0,
+      "sobrevive_fdr": true
     },
     {
       "banda_lo": 0.8,
@@ -5052,7 +5596,9 @@
       "top1_wallet_share": 0.079,
       "n_mercados": 10,
       "top1_mercado_pct": 23.8,
-      "solido_n40": true
+      "solido_n40": true,
+      "p_valor": 0.0004,
+      "sobrevive_fdr": true
     }
   ],
   "DOGE#5m#h17": [
@@ -5068,7 +5614,9 @@
       "top1_wallet_share": 0.107,
       "n_mercados": 16,
       "top1_mercado_pct": 12.1,
-      "solido_n40": false
+      "solido_n40": false,
+      "p_valor": 0.0002,
+      "sobrevive_fdr": true
     },
     {
       "banda_lo": 0.75,
@@ -5082,7 +5630,9 @@
       "top1_wallet_share": 0.177,
       "n_mercados": 11,
       "top1_mercado_pct": 13.6,
-      "solido_n40": true
+      "solido_n40": true,
+      "p_valor": 0.0014,
+      "sobrevive_fdr": true
     },
     {
       "banda_lo": 0.5,
@@ -5096,7 +5646,9 @@
       "top1_wallet_share": 0.227,
       "n_mercados": 13,
       "top1_mercado_pct": 13.3,
-      "solido_n40": false
+      "solido_n40": false,
+      "p_valor": 0.0178,
+      "sobrevive_fdr": true
     }
   ]
 }
