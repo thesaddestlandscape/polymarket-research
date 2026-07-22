@@ -52,7 +52,7 @@ import numpy as np
 
 from shadow_postmortem import _benjamini_hochberg
 
-DIR_SHADOW = Path("data/shadow")
+DIR_SHADOW = Path(__file__).parent / "data/shadow"
 HIST = DIR_SHADOW / "ballenas_timing_history.csv"
 SCORE_POR_MARCO = DIR_SHADOW / "wallet_edge_score_por_marco.json"
 DIARIO = DIR_SHADOW / "ballenas_diario.csv"
