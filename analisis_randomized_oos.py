@@ -137,6 +137,23 @@ def reportar(titulo, claves, filas_por_clave, rng, n_random):
                       "estrategia con edge real podría estar siendo infravalorada por el corte actual.")
 
 
+def ejecutar_live(n_random=N_RANDOM, seed=SEED):
+    """Núcleo reutilizable para vigia_robustez_diaria.py -- solo las 8
+    tuplas de dinero real (pares_permitidos_live), no candidatos (245
+    tuplas es demasiado caro para un cron diario, ver docstring del
+    módulo). Devuelve lista de dicts, uno por tupla evaluable."""
+    rng = random.Random(seed)
+    claves_live = cargar_tuplas("pares_permitidos_live")
+    filas = cargar_filas_ordenadas(claves_live)
+    out = []
+    for tupla, strat, sub, dec in claves_live:
+        rows = filas.get((strat, sub, dec), [])
+        r = evaluar_tupla(tupla, rows, rng, n_random)
+        if r is not None:
+            out.append(r)
+    return out
+
+
 def main():
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument("--candidatos", action="store_true",

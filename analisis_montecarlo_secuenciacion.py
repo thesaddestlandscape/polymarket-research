@@ -139,6 +139,42 @@ def simular(pnls_en_orden, config, bankroll_inicial, slots_ts):
     }
 
 
+def ejecutar(bankroll_inicial=25.44, n_shuffles=N_SHUFFLES, seed=22072026):
+    """Núcleo reutilizable (CLI aquí abajo y vigia_robustez_diaria.py lo
+    llaman igual, no hay 2ª copia del bucle de shuffles). Devuelve None si
+    no hay base suficiente (n<15), si no un dict con baseline + resumen MC."""
+    config = cargar_config(REPO)
+    trades = cargar_trades_reales()
+    if len(trades) < 15:
+        return None
+    slots_ts = [t[0] for t in trades]
+    pnls_reales = [t[1] for t in trades]
+
+    baseline = simular(pnls_reales, config, bankroll_inicial, slots_ts)
+
+    rng = random.Random(seed)
+    resultados = []
+    for _ in range(n_shuffles):
+        pnls_shuf = pnls_reales[:]
+        rng.shuffle(pnls_shuf)
+        resultados.append(simular(pnls_shuf, config, bankroll_inicial, slots_ts))
+
+    n_bust = sum(1 for r in resultados if r["bust"])
+    finales = sorted(r["bankroll_final"] for r in resultados)
+    percentil_real = sum(1 for f in finales if f <= baseline["bankroll_final"]) / len(finales)
+
+    return {
+        "n_trades": len(trades),
+        "baseline": baseline,
+        "n_shuffles": n_shuffles,
+        "pct_bust": round(n_bust / len(resultados) * 100, 1),
+        "bankroll_final_p10": finales[int(0.10 * len(finales))],
+        "bankroll_final_p50": finales[int(0.50 * len(finales))],
+        "bankroll_final_p90": finales[int(0.90 * len(finales))],
+        "percentil_real": round(percentil_real * 100, 1),
+    }
+
+
 def main():
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument("--bankroll-inicial", type=float, default=25.44)

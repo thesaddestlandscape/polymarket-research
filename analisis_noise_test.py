@@ -155,16 +155,12 @@ def evaluar_filtro(pob, feature, condicion, umbral, rng):
     }
 
 
-def main():
-    ap = argparse.ArgumentParser(description=__doc__)
-    ap.add_argument("--top", type=int, default=40, help="cuántos filtros más frágiles mostrar")
-    args = ap.parse_args()
-
+def ejecutar(seed=SEED):
+    """Núcleo reutilizable (CLI aquí abajo y vigia_robustez_diaria.py lo
+    llaman igual). Devuelve (resultados, n_evaluados, n_sin_datos)."""
     filas = cargar_resultados()
-    print(f"Filas de results.csv cargadas (BUY_YES/BUY_NO con features): {len(filas)}")
-
     params = json.load(open(PARAMS_JSON, encoding="utf-8")).get("estrategias", {})
-    rng = np.random.default_rng(seed=SEED)
+    rng = np.random.default_rng(seed=seed)
 
     resultados = []
     n_evaluados = n_sin_datos = 0
@@ -192,6 +188,16 @@ def main():
                     "condicion": f.get("condicion"), "umbral": f.get("umbral"),
                     "direccion": f.get("direccion"), **r,
                 })
+    return resultados, n_evaluados, n_sin_datos
+
+
+def main():
+    ap = argparse.ArgumentParser(description=__doc__)
+    ap.add_argument("--top", type=int, default=40, help="cuántos filtros más frágiles mostrar")
+    args = ap.parse_args()
+
+    print(f"Filas de results.csv cargadas (BUY_YES/BUY_NO con features): {len(cargar_resultados())}")
+    resultados, n_evaluados, n_sin_datos = ejecutar()
 
     print(f"Filtros/patrones con n>=({N_MIN}) evaluables con ruido: {n_evaluados}  (sin datos suficientes hoy: {n_sin_datos})")
 
