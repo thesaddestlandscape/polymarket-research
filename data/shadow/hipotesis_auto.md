@@ -1,5 +1,5 @@
-# Hipótesis automáticas — 2026-07-22 21:57 UTC
-_Generado por shadow_postmortem.py sobre 29650 resoluciones (PNL=+6691.71€)_
+# Hipótesis automáticas — 2026-07-22 22:03 UTC
+_Generado por shadow_postmortem.py sobre 29651 resoluciones (PNL=+6692.98€)_
 
 ## Patrones causales activos
 
@@ -20,7 +20,7 @@ _Generado por shadow_postmortem.py sobre 29650 resoluciones (PNL=+6691.71€)_
 
   - _Acción_: Kelly boost +1.00€ cuando `libro_spread` < 0.01 (IC base=+0.201)
 
-- **PATRÓN** `hora_utc` > `17.0` → IC=+0.176 (n=774)
+- **PATRÓN** `hora_utc` > `17.0` → IC=+0.177 (n=775)
   - _Por qué funciona_: hora tardía/noche → sesión US cerrada, menos participantes informados; señales más ruidosas
   - _Acción_: Kelly boost +0.88€ cuando `hora_utc` > 17.0 (IC base=+0.175)
 
@@ -32,13 +32,13 @@ _Generado por shadow_postmortem.py sobre 29650 resoluciones (PNL=+6691.71€)_
 
   - _Acción_: Kelly boost +1.00€ cuando `py_entrada` < 0.265 (IC base=+0.175)
 
-- **PATRÓN** `libro_spread` < `0.01` → IC=+0.178 (n=2274)
+- **PATRÓN** `libro_spread` < `0.01` → IC=+0.178 (n=2275)
 
   - _Acción_: Kelly boost +0.89€ cuando `libro_spread` < 0.01 (IC base=+0.175)
 
-- **PATRÓN** `libro_liquidez` > `4260.628` → IC=+0.177 (n=1362)
+- **PATRÓN** `libro_liquidez` > `4258.4872` → IC=+0.177 (n=1363)
 
-  - _Acción_: Kelly boost +0.89€ cuando `libro_liquidez` > 4260.628 (IC base=+0.175)
+  - _Acción_: Kelly boost +0.88€ cuando `libro_liquidez` > 4258.4872 (IC base=+0.175)
 
 ### FAVORITO_CONFIRMADO#BTC#15min
 - **PATRÓN** `hora_utc` > `12.0` → IC=+0.220 (n=273)
@@ -1230,20 +1230,20 @@ _Derivadas de los patrones aprendidos:_
 | ✅ BALLENAS_TARDIAS#15min | 17 | +0.246 | -0.16€ | 0 | 0 |
 | ✅ BALLENAS_TARDIAS#BTC | 17 | +0.246 | -0.16€ | 0 | 0 |
 | ✅ BALLENAS_TARDIAS#BTC#15min | 17 | +0.246 | -0.16€ | 0 | 0 |
-| ✅ FAVORITO_CONFIRMADO | 5158 | +0.187 | +87.05€ | 0 | 9 |
+| ✅ FAVORITO_CONFIRMADO | 5159 | +0.187 | +88.31€ | 0 | 9 |
 | ✅ FAVORITO_CONFIRMADO#15min | 3378 | +0.216 | +96.54€ | 0 | 0 |
 | ✅ FAVORITO_CONFIRMADO#240min | 223 | +0.060 | -10.25€ | 0 | 0 |
-| ✅ FAVORITO_CONFIRMADO#5min | 663 | +0.114 | -75.60€ | 0 | 0 |
+| ✅ FAVORITO_CONFIRMADO#5min | 664 | +0.114 | -74.33€ | 0 | 0 |
 | ✅ FAVORITO_CONFIRMADO#60min | 894 | +0.164 | +76.36€ | 0 | 0 |
 | ✅ FAVORITO_CONFIRMADO#BTC | 1511 | +0.197 | +49.47€ | 0 | 0 |
 | ✅ FAVORITO_CONFIRMADO#BTC#15min | 1129 | +0.212 | +2.33€ | 0 | 6 |
 | ✅ FAVORITO_CONFIRMADO#BTC#240min | 74 | +0.066 | -3.80€ | 0 | 0 |
 | 🚫 FAVORITO_CONFIRMADO#BTC#5min | 10 | -0.125 | -3.77€ | 0 | 0 |
 | ✅ FAVORITO_CONFIRMADO#BTC#60min | 298 | +0.187 | +54.70€ | 0 | 6 |
-| ✅ FAVORITO_CONFIRMADO#ETH | 1823 | +0.177 | +10.40€ | 0 | 0 |
+| ✅ FAVORITO_CONFIRMADO#ETH | 1824 | +0.177 | +11.67€ | 0 | 0 |
 | ✅ FAVORITO_CONFIRMADO#ETH#15min | 1111 | +0.213 | +35.16€ | 0 | 8 |
 | ✅ FAVORITO_CONFIRMADO#ETH#240min | 74 | -0.026 | -16.67€ | 0 | 0 |
-| ✅ FAVORITO_CONFIRMADO#ETH#5min | 340 | +0.123 | -29.45€ | 0 | 0 |
+| ✅ FAVORITO_CONFIRMADO#ETH#5min | 341 | +0.124 | -28.18€ | 0 | 0 |
 | ✅ FAVORITO_CONFIRMADO#ETH#60min | 298 | +0.153 | +21.35€ | 0 | 10 |
 | ✅ FAVORITO_CONFIRMADO#SOL | 1797 | +0.189 | +21.89€ | 0 | 0 |
 | ✅ FAVORITO_CONFIRMADO#SOL#15min | 1115 | +0.223 | +58.10€ | 0 | 7 |
@@ -1504,7 +1504,7 @@ _Derivadas de los patrones aprendidos:_
 **🟡 H-STREAK-COOLDOWN** — Cooldown tras 2 derrotas consecutivas (mismo subtype)
   - _Umbral_: n≥40 tras 2 losses y gap(IC_tras_win - IC_tras_2loss)≥0.05
   - _Acción_: Reducir stake (no desactivar) 1-2h tras 2 derrotas consecutivas en el mismo subtype
-  - _Estado_: tras_win IC=+0.115 n=17744 | tras_1loss IC=+0.083 n=11708 | tras_2loss IC=+0.052 n=4846/40 | gap=+0.062 (umbral 0.05)
+  - _Estado_: tras_win IC=+0.115 n=17745 | tras_1loss IC=+0.083 n=11708 | tras_2loss IC=+0.052 n=4846/40 | gap=+0.062 (umbral 0.05)
 
 **🟡 H-KALMAN** — Kalman filter para drift adaptativo
   - _Umbral_: n≥200 por subtipo para calibrar parámetros Q/R del KF
@@ -1782,8 +1782,8 @@ _Derivadas de los patrones aprendidos:_
   - _Hipótesis_: Mismo origen que H-CUSTOM-MOON-LLENA (paper de Fornero, 43 Jornadas SADAF 2023). Qi, Wang & Zhang (2022, 48 mercados, 1973-2019): rendimientos 3.33%/año más bajos durante Mercurio retrógrado. Kou & Ma (2022) en China (99.8% cuentas retail): hasta -31% anualizado. Ambos estudios confirman que el mecanismo es la creencia/superstición de inversores retail (mayor efecto cuanto más retail y más supersticioso el mercado), no un efecto astral literal — Polymarket encaja en ese perfil. Ventanas 2026 (fuente pública, actualizar cada año): 26-feb a 20-mar, 29-jun a 23-jul, 24-oct a 13-nov.
   - _Umbral_: n≥100 PERO ADEMÁS necesita cubrir al menos 2-3 ventanas de retrogradación distintas (no solo la de jun-jul 2026) — esperar mínimo hasta después de la ventana de oct-nov 2026
   - _Acción_: Si IC en mercury_retrogrado=1 < IC en mercury_retrogrado=0 con margen ≥0.05 y ≥2 ventanas distintas cubiertas → considerar boost/filtro. No implementar tras una sola ventana (jun-jul 2026) por more que n sea alto — sería solo un evento, no un patrón.
-  - _Estado_: n=27175 IC=+0.112 PNL=+6767.75€ — sin señal clara aún (umbral IC: min=None max=-0.03)
-  - _Datos_: n=27175 IC=+0.112 PNL=+6767.75€
+  - _Estado_: n=27176 IC=+0.112 PNL=+6769.02€ — sin señal clara aún (umbral IC: min=None max=-0.03)
+  - _Datos_: n=27176 IC=+0.112 PNL=+6769.02€
 
 **〰️ H-CUSTOM-SMART-MONEY-CONSENSUS** — Consenso de wallets 'smart money' — ¿confirma nuestra dirección?
   - _Hipótesis_: Javi propuso estudiar bots/wallets que operan bien en nuestros mismos mercados. En vez de creer artículos (ya verificamos 2 veces esta semana que las narrativas no aguantan el cruce con datos reales), smart_money_tracker.py mide el track record REAL de wallets activas en BTC/ETH/SOL/XRP Up-or-Down 5/15/60min vía data-api.polymarket.com/positions, filtrado a posiciones 'Up or Down'. Clasifica como 'smart' las wallets con n>=10 posiciones, win_rate>=0.55 y pnl_total>0. smart_money_consensus es el sesgo direccional reciente (Up-Down)/(Up+Down) de esas wallets 'smart' por activo. Hipótesis: si nuestra decisión (BUY_YES/BUY_NO) coincide con el consenso smart money, mejor IC que cuando diverge. RESET METODOLOGICO 2026-07-02: la clasificacion 'smart' original via /positions estaba INVERTIDA para wallets de alta frecuencia (el endpoint solo retiene el residuo perdedor sin redimir; verificado: 'wowitsamazing' figuraba como -$478k y es +$10k/mes en el leaderboard oficial). Desde 2026-07-02T06:12Z el consenso se construye solo con wallets verificadas en el leaderboard oficial (pnl_mes>=$1000, 24 wallets). Los valores de smart_money_consensus capturados en features ANTES de esa fecha provienen de la clasificacion rota — descontar ese tramo al evaluar.
