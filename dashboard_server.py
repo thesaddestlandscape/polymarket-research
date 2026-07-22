@@ -343,12 +343,39 @@ def compute_live_data():
 
     # % de beneficio sobre el depósito inicial — pedido explícito 09-Jul: no
     # solo el $ absoluto, también el % relativo al depósito (por día y total).
+    # Sigue siendo el acumulado histórico (usado por el resto del dashboard,
+    # ej. d["pct"] del histórico diario más abajo) — el header usa header_pct_*.
     real_pct_total = (round(real_pnl / real_deposito * 100, 2)
                        if real_pnl is not None and real_deposito else None)
-    real_pct_hoy = (round(real_hoy / real_deposito * 100, 2)
-                     if real_hoy is not None and real_deposito else None)
-    real_pct_7d = (round(real_7d / real_deposito * 100, 2)
-                    if real_7d is not None and real_deposito else None)
+
+    # Header (petición Javi 21-Jul, [[project_dashboard_header_solo_nuevo_deposito_21jul]]):
+    # el header muestra solo el depósito/PnL/% del período de capital ACTUAL
+    # (la recarga más reciente), no el acumulado desde el primer depósito
+    # 29-Jun — esos trades ya quedan reflejados en la tabla "Recargas por
+    # depósito" (real_por_deposito, sin tocar) y en el histórico completo del
+    # chart (real_history, sin tocar). header_pct_hoy/7d usan el mismo
+    # denominador (depósito del período actual) para que las 4 cifras del
+    # header sean coherentes entre sí — real_pct_total/real_deposito acumulados
+    # siguen intactos para el resto del dashboard (histórico diario, chart).
+    deposito_actual = max(real_por_deposito, key=lambda d: d.get("fecha", "")) if real_por_deposito else None
+    if deposito_actual:
+        header_deposito_eur = deposito_actual.get("eur")
+        header_pnl          = deposito_actual.get("pnl_ledger")
+        header_pct_total    = deposito_actual.get("rendimiento_pct")
+        header_fecha_deposito = deposito_actual.get("fecha")
+        header_n_trades      = deposito_actual.get("n_trades")
+    else:
+        header_deposito_eur = real_deposito
+        header_pnl          = real_pnl
+        header_pct_total    = real_pct_total
+        header_fecha_deposito = None
+        header_n_trades      = None
+
+    header_pct_hoy = (round(real_hoy / header_deposito_eur * 100, 2)
+                       if real_hoy is not None and header_deposito_eur else None)
+    header_pct_7d = (round(real_7d / header_deposito_eur * 100, 2)
+                      if real_7d is not None and header_deposito_eur else None)
+
     if real_daily and real_deposito:
         for d in real_daily:
             d["pct"] = round(d.get("pnl", 0) / real_deposito * 100, 2)
@@ -389,8 +416,13 @@ def compute_live_data():
         "real_por_deposito": real_por_deposito,
         "real_history": real_history,
         "real_pct_total": real_pct_total,
-        "real_pct_hoy": real_pct_hoy,
-        "real_pct_7d": real_pct_7d,
+        "header_pct_hoy": header_pct_hoy,
+        "header_pct_7d": header_pct_7d,
+        "header_deposito_eur": header_deposito_eur,
+        "header_pnl": header_pnl,
+        "header_pct_total": header_pct_total,
+        "header_fecha_deposito": header_fecha_deposito,
+        "header_n_trades": header_n_trades,
         "real_stale": real_stale,
         "tracking_error": tracking_error,
         "pnl_total": round(pnl_total, 2),
@@ -780,25 +812,25 @@ footer { text-align: center; padding: 10px; font-size: 10px; color: var(--muted)
     <span id="live-real-freshness" style="font-size:10px;color:var(--muted);margin-left:auto">balance on-chain: —</span>
   </div>
   <div style="display:grid;grid-template-columns:repeat(10,1fr);gap:8px;margin-bottom:6px">
-    <div style="background:#ffffff08;border-radius:6px;padding:8px;text-align:center">
-      <div style="font-size:9px;color:var(--muted)">💰 Depósito inicial</div>
+    <div style="background:#ffffff08;border-radius:6px;padding:8px;text-align:center" title="Depósito del período de capital actual (última recarga) — el histórico completo desde el primer depósito vive en la tabla 'Recargas por depósito' de abajo">
+      <div style="font-size:9px;color:var(--muted)">💰 Depósito actual</div>
       <div id="live-deposito" style="font-size:20px;font-weight:700">—</div>
-      <div style="font-size:9px;color:var(--muted)">2026-06-29</div>
+      <div id="live-deposito-fecha" style="font-size:9px;color:var(--muted)">—</div>
     </div>
     <div style="background:#ffffff08;border-radius:6px;padding:8px;text-align:center">
       <div style="font-size:9px;color:var(--muted)">🏦 Dinero actual</div>
       <div id="live-bankroll" style="font-size:20px;font-weight:700">—</div>
       <div style="font-size:9px;color:var(--muted)">balance wallet</div>
     </div>
-    <div style="background:#ffffff08;border-radius:6px;padding:8px;text-align:center">
-      <div style="font-size:9px;color:var(--muted)">📈 PNL real total</div>
+    <div style="background:#ffffff08;border-radius:6px;padding:8px;text-align:center" title="PNL del período de capital actual (última recarga), no el acumulado desde el primer depósito">
+      <div style="font-size:9px;color:var(--muted)">📈 PNL real (período)</div>
       <div id="live-pnl" style="font-size:20px;font-weight:700">—</div>
-      <div style="font-size:9px;color:var(--muted)">desde el depósito</div>
+      <div style="font-size:9px;color:var(--muted)">desde el depósito actual</div>
     </div>
-    <div style="background:#ffffff08;border-radius:6px;padding:8px;text-align:center" title="PNL real total dividido entre el depósito inicial">
-      <div style="font-size:9px;color:var(--muted)">📊 % total</div>
+    <div style="background:#ffffff08;border-radius:6px;padding:8px;text-align:center" title="PNL del período actual dividido entre el depósito del período actual">
+      <div style="font-size:9px;color:var(--muted)">📊 % período</div>
       <div id="live-pct-total" style="font-size:20px;font-weight:700">—</div>
-      <div style="font-size:9px;color:var(--muted)">sobre depósito</div>
+      <div style="font-size:9px;color:var(--muted)">sobre depósito actual</div>
     </div>
     <div style="background:#ffffff08;border-radius:6px;padding:8px;text-align:center">
       <div style="font-size:9px;color:var(--muted)">🎯 PNL hoy</div>
@@ -1128,21 +1160,24 @@ function renderLive(live) {
   // dato real no está fresco, mostramos "n/d" en vez de la cifra de plan.
   const nd = `<span class="neu">n/d</span>`;
   const fmtOr = (v) => (v != null ? fmtPnl(v) : nd);
-  // Depósito inicial (constante conocida, viene del snapshot real)
+  // Depósito ACTUAL (última recarga, no el acumulado desde 29-Jun — el
+  // acumulado histórico sigue en la tabla "Recargas por depósito" de abajo)
   document.getElementById("live-deposito").textContent =
-    live.real_deposito != null ? `${live.real_deposito.toFixed(2)}$` : "25.44$";
+    live.header_deposito_eur != null ? `${live.header_deposito_eur.toFixed(2)}$` : "n/d";
+  const depFechaEl = document.getElementById("live-deposito-fecha");
+  if (depFechaEl) depFechaEl.textContent = live.header_fecha_deposito || "—";
   // Dinero actual = balance real del wallet
   document.getElementById("live-bankroll").textContent =
     live.real_total != null ? `${live.real_total.toFixed(2)}$` : "n/d";
-  // PNL real total / hoy / 7 días — todo del wallet on-chain
-  document.getElementById("live-pnl").innerHTML     = fmtOr(live.real_pnl);
+  // PNL real del PERÍODO ACTUAL (última recarga) / hoy / 7 días — todo del wallet on-chain
+  document.getElementById("live-pnl").innerHTML     = fmtOr(live.header_pnl);
   document.getElementById("live-pnl-hoy").innerHTML = fmtOr(live.real_hoy);
   document.getElementById("live-pnl-7d").innerHTML  = fmtOr(live.real_7d);
-  // % de beneficio sobre el depósito inicial (no sobre el balance del día)
+  // % de beneficio sobre el depósito del período actual (no el acumulado histórico)
   document.getElementById("live-pct-total").innerHTML =
-    live.real_pct_total != null ? fmtPct(live.real_pct_total) : nd;
+    live.header_pct_total != null ? fmtPct(live.header_pct_total) : nd;
   document.getElementById("live-pct-hoy").innerHTML =
-    live.real_pct_hoy != null ? fmtPct(live.real_pct_hoy) : nd;
+    live.header_pct_hoy != null ? fmtPct(live.header_pct_hoy) : nd;
   // Win rate y trades (trades ejecutados reales, de trades.csv)
   document.getElementById("live-wr").textContent = live.n_closed ? `${live.win_rate}%` : "—";
   document.getElementById("live-trades-count").textContent =
