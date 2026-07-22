@@ -357,41 +357,48 @@ def disparar(activo: str, mercado: dict, py: float, edge: float, restante_s: flo
     podrían pisarse ese fichero sin este lock."""
     subtype = f"{activo}#{VENTANA_MIN}min"
     cfg = ACTIVOS[activo]
+    config = lt._cargar_config()  # una sola lectura, reusada abajo para stake_ref y max_misma_dir
+
+    # Fill-ability real (roadmap Fase 2, punto 1, 21-Jul; BUG FIX 22-Jul,
+    # ver memoria idea_bug_disparar_5min_whitelist_mata_snapshot_22jul):
+    # esto tiene que capturarse SIEMPRE que llegue una confirmación DRY_RUN,
+    # ANTES del check puede_operar_live() de abajo -- ese check exige que la
+    # tupla esté en pares_permitidos_live, y una candidata por DEFINICIÓN
+    # nunca lo está (si lo estuviera ya no sería candidata). Antes este
+    # snapshot vivía DESPUÉS de puede_operar_live() y de calcular_stake(),
+    # así que moría siempre en el primer check: 79 confirmaciones en 4 días
+    # (18→22-Jul), CERO snapshots en libro_snapshots.csv, el vigía
+    # vigia_ballenas_5min_fillability.py atascado en n=0 permanentemente.
+    #
+    # Segundo fix 22-Jul (code-review): vive FUERA de with _orden_lock --
+    # ese lock serializa el tramo de EJECUCIÓN real entre los 3-4 hilos
+    # (ver su comentario de definición), y la consulta de red de este
+    # snapshot no forma parte de eso; ponerla bajo el lock bloqueaba a
+    # otros hilos/activos mientras esta consulta tardaba (antes de este fix
+    # el tramo bajo lock era casi instantáneo, porque puede_operar_live()
+    # cortaba de inmediato para estas tuplas nunca-whitelisted). Usa
+    # lt._snapshot_senal_bloqueada (dedup real por market_id+direction+
+    # motivo, mismo mecanismo que el resto del sistema) en vez de llamar a
+    # _consultar_profundidad_libro/_registrar_snapshot_libro a mano --
+    # evita duplicar filas si el proceso se reinicia a mitad de una ventana
+    # de confirmación (pipeline_watchdog.py reinicia ballenas_5m cada 5min
+    # si detecta stale). Solo lectura, nunca bloquea ni cambia ninguna
+    # decisión de abajo -- ver except.
+    if DRY_RUN:
+        try:
+            stake_ref = config.get("riesgo", {}).get("min_stake_eur", 1.05)
+            lt._snapshot_senal_bloqueada(mercado["market_id"], "BUY_YES", py, stake_ref,
+                                         {"strategy": STRATEGY, "subtype": subtype},
+                                         motivo="candidato_evaluacion")
+        except Exception as e:
+            log(f"fill-ability snapshot error (no bloquea): {e}", activo)
 
     with _orden_lock:
-        # Fill-ability real (roadmap Fase 2, punto 1, 21-Jul; BUG FIX 22-Jul,
-        # ver memoria idea_bug_disparar_5min_whitelist_mata_snapshot_22jul):
-        # esto tiene que capturarse SIEMPRE que llegue una confirmación
-        # DRY_RUN, ANTES del check puede_operar_live() de abajo -- ese check
-        # exige que la tupla esté en pares_permitidos_live, y una candidata
-        # por DEFINICIÓN nunca lo está (si lo estuviera ya no sería
-        # candidata). Antes este snapshot vivía DESPUÉS de puede_operar_live()
-        # y de calcular_stake(), así que moría siempre en el primer check:
-        # 79 confirmaciones en 4 días (18→22-Jul), CERO snapshots en
-        # libro_snapshots.csv, el vigía vigia_ballenas_5min_fillability.py
-        # atascado en n=0 permanentemente. Mismo patrón que
-        # live_trade.py::_snapshots_candidatos_evaluacion() (tampoco exige
-        # whitelist, por la misma razón) -- usa el stake NOMINAL de
-        # referencia (min_stake_eur), no el Kelly real, igual que el resto
-        # de snapshots candidato_evaluacion del sistema (comparables entre
-        # sí). Solo lectura, nunca bloquea ni cambia ninguna decisión de
-        # abajo -- ver except.
-        if DRY_RUN:
-            try:
-                stake_ref = lt._cargar_config().get("riesgo", {}).get("min_stake_eur", 1.05)
-                depth = lt._consultar_profundidad_libro(None, mercado["yes_token"], py, stake_ref)
-                lt._registrar_snapshot_libro("candidato_evaluacion", mercado["market_id"], "BUY_YES",
-                                              py, stake_ref, depth,
-                                              {"strategy": STRATEGY, "subtype": subtype})
-            except Exception as e:
-                log(f"fill-ability snapshot error (no bloquea): {e}", activo)
-
         ok_operar, motivo_operar = puede_operar_live(STRATEGY, subtype)
         if not ok_operar:
             log(f"{motivo_operar} -- {'[DRY-RUN] no ejecutaría' if DRY_RUN else 'no se ejecuta'}", activo)
             return False
 
-        config = lt._cargar_config()
         max_misma_dir = config.get("riesgo", {}).get("max_posiciones_abiertas_misma_direccion", 2)
         abiertas_dir = lt._posiciones_abiertas_misma_direccion("BUY_YES")
         if abiertas_dir >= max_misma_dir:
