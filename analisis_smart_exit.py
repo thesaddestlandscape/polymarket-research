@@ -33,6 +33,13 @@ TP_GRID = [0.70, 0.75, 0.80, 0.85, 0.90, 0.95]
 # Stop-loss (salir si precio del lado <= Y) — se simula por separado
 SL_GRID = [0.10, 0.15, 0.20, 0.25, 0.30]
 
+# Longshots (22-Jul, mejora #3 de idea_smart_exit_mejoras_longshot_20jul):
+# BUY_YES con entry_price<LONGSHOT_ENTRY_MAX nunca alcanza el TP_GRID de
+# arriba (picos reales vistos: 0.635/0.545/0.655/0.205/0.435) — grid propio
+# más bajo, calibrado con datos (no adivinado).
+LONGSHOT_ENTRY_MAX = 0.53
+TP_GRID_LONGSHOT = [0.45, 0.50, 0.55, 0.60, 0.65, 0.70]
+
 # Stop-loss en € de pérdida no realizada (16-Jul, petición Javi): dispara si
 # el pnl "de salir ahora" cae por debajo de -X€. La 1ª pasada (misma fecha)
 # usó pnl_salida_eur crudo = mid, SIN haircut ("optimista", ver idea_smart_exit.md)
@@ -121,6 +128,43 @@ def simular_perdidas_eur(ticks, cierres, umbral_eur):
     return n, pnl_sim, pnl_real, n_disparos
 
 
+def simular_longshot(ticks, cierres, condicion):
+    """Igual que simular(), pero restringido a BUY_YES con
+    entry_price<LONGSHOT_ENTRY_MAX — población de la mejora #3 (20-Jul):
+    los longshots no llegan al TP_GRID estándar antes de revertir."""
+    n = pnl_sim = pnl_real = n_salidas = 0
+    for mid, filas in ticks.items():
+        if mid not in cierres or not filas:
+            continue
+        f0 = filas[0]
+        try:
+            entry = float(f0.get("entry_price", 1))
+        except (ValueError, TypeError):
+            continue
+        if f0.get("direction") != "BUY_YES" or entry >= LONGSHOT_ENTRY_MAX:
+            continue
+        n += 1
+        real = cierres[mid]
+        pnl_real += real
+        salida = None
+        for r in filas:
+            try:
+                p = float(r["precio_lado"])
+                stake = float(r["stake_eur"])
+                valor = float(r["valor_salida_eur"])
+            except (ValueError, KeyError):
+                continue
+            if condicion(p):
+                salida = valor * (1.0 - HAIRCUT_VENTA) - stake
+                break
+        if salida is not None:
+            pnl_sim += salida
+            n_salidas += 1
+        else:
+            pnl_sim += real
+    return n, pnl_sim, pnl_real, n_salidas
+
+
 def main():
     ticks, cierres = cargar()
     evaluables = [m for m in ticks if m in cierres]
@@ -150,6 +194,14 @@ def main():
         n, sim, real, ns = simular_perdidas_eur(ticks, cierres, u)
         if n:
             print(f"{-u:>7.2f} {n:>10} {ns:>8} {sim:>+9.2f} {real:>+9.2f} {sim-real:>+8.2f}")
+
+    print(f"\nTAKE-PROFIT LONGSHOT (BUY_YES, entry_price<{LONGSHOT_ENTRY_MAX}, mejora #3 20-Jul):")
+    print(f"{'X':>6} {'n':>4} {'salidas':>8} {'pnl_sim':>9} {'pnl_real':>9} {'delta':>8}")
+    for x in TP_GRID_LONGSHOT:
+        n, sim, real, ns = simular_longshot(ticks, cierres, lambda p, x=x: p >= x)
+        if n:
+            flag = "  ⚠️ n<30" if n < N_MIN_POSICIONES else ""
+            print(f"{x:>6.2f} {n:>4} {ns:>8} {sim:>+9.2f} {real:>+9.2f} {sim-real:>+8.2f}{flag}")
 
     print("\nDecisión: delta>0 sostenido con n>=30 → proponer umbral a Javi (toca dinero).")
 
