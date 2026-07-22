@@ -35,7 +35,7 @@ crece n en cada bucket día a día antes de decidir cortar nada.
 """
 import csv
 import json
-from collections import defaultdict
+from collections import defaultdict, Counter
 from pathlib import Path
 
 from analisis_gate_riguroso import gate
@@ -60,8 +60,16 @@ def bucket(p):
 
 
 def cargar_ballenas():
-    """(activo,marco_ballenas) -> bucket -> [aciertos, n]."""
-    out = defaultdict(lambda: defaultdict(lambda: [0, 0]))
+    """(activo,marco_ballenas) -> bucket -> [aciertos, n, Counter(condition_id)].
+    El Counter de condition_id (22-Jul, bug real cazado) permite detectar
+    buckets donde el "n" está inflado por UN SOLO mercado con muchas
+    wallets apostando el mismo resultado -- no son n observaciones
+    independientes, es 1 evento amplificado. Hallazgo concreto: BTC#5min
+    [0.55,0.60) mostraba hit=90.5% (n=94) pero 76/94 filas (81%) venían de
+    un único condition_id -- 8 mercados reales, no 94. Mismo patrón que
+    atrapó analisis_wallet_quirurgico_precio_timing_22jul.py (fills≠
+    posiciones independientes), aquí a nivel de mercado en vez de wallet."""
+    out = defaultdict(lambda: defaultdict(lambda: [0, 0, Counter()]))
     with open(BALLENAS_HIST, encoding="utf-8") as f:
         for row in csv.DictReader(f):
             activo, marco = row.get("activo"), row.get("marco")
@@ -77,6 +85,7 @@ def cargar_ballenas():
             d = out[(activo, marco)][bucket(p)]
             d[0] += acierto
             d[1] += 1
+            d[2][row.get("condition_id", "")] += 1
     return out
 
 
@@ -175,15 +184,24 @@ def main():
             for k in estrategias:
                 todos_los_buckets |= set(shadow_buckets[k].keys())
             for b in sorted(todos_los_buckets):
-                ab, nb = ballenas_ab.get(b, [0, 0])
+                ab, nb, cids = ballenas_ab.get(b, [0, 0, Counter()])
                 if nb < 50:
                     continue
                 hit_b = ab / nb * 100
                 if hit_b < 70:
                     continue
+                # Filtro de concentración de mercado (22-Jul, bug real cazado:
+                # BTC#5min[0.55,0.60) mostraba hit=90.5% n=94 pero 76/94 filas
+                # (81%) venían de UN SOLO condition_id -- 8 mercados reales,
+                # no 94 observaciones independientes). Exigir diversidad
+                # mínima de mercados antes de reportar como hueco real.
+                n_mercados = len(cids)
+                top1_pct = (cids.most_common(1)[0][1] / nb * 100) if cids else 100.0
+                if n_mercados < 15 or top1_pct > 30:
+                    continue
                 n_shadow_total = sum(len(shadow_buckets[k].get(b, [])) for k in estrategias)
                 if n_shadow_total < N_MIN_BUCKET_INFORMATIVO:
-                    huecos_totales.append((activo, marco, b, hit_b, nb, n_shadow_total))
+                    huecos_totales.append((activo, marco, b, hit_b, nb, n_shadow_total, n_mercados, top1_pct))
 
             if not estrategias:
                 print("  (sin estrategia shadow con volumen suficiente aquí)")
@@ -208,7 +226,7 @@ def main():
                     pnl2 = v2["pnl_media"] if v2 else None
                     robusto = (pnl1 is not None and pnl2 is not None
                                and pnl1 > 0 and pnl2 > 0)
-                    ab, nb = ballenas_ab.get(b, [0, 0])
+                    ab, nb, _cids = ballenas_ab.get(b, [0, 0, Counter()])
                     fila = {
                         "bucket": f"[{b:.2f},{b+STEP:.2f})", "n": n,
                         "hit": round(v["hit"] * 100, 1), "pnl_media": round(v["pnl_media"], 3),
@@ -241,9 +259,11 @@ def main():
         print(f"  {strat}#{sub}#{dec} {fila['bucket']} n={fila['n']} pnl/trade={fila['pnl_media']:+.3f} split_half={fila['split_half_pnl']}")
 
     if huecos_totales:
-        print(f"\n🚨 HUECOS DE COBERTURA (ballenas n>=50 hit>=70%, shadow_n<{N_MIN_BUCKET_INFORMATIVO} sumando todas las estrategias):")
-        for activo, marco, b, hit_b, nb, n_sh in huecos_totales:
-            print(f"  {activo}#{marco} [{b:.2f},{b+STEP:.2f}) ballenas hit={hit_b:.1f}% (n={nb}) — shadow_n_total={n_sh}")
+        print(f"\n🚨 HUECOS DE COBERTURA (ballenas n>=50 hit>=70%, >=15 mercados distintos, ningún mercado >30% del bucket, "
+              f"shadow_n<{N_MIN_BUCKET_INFORMATIVO} sumando todas las estrategias):")
+        for activo, marco, b, hit_b, nb, n_sh, n_mercados, top1_pct in huecos_totales:
+            print(f"  {activo}#{marco} [{b:.2f},{b+STEP:.2f}) ballenas hit={hit_b:.1f}% (n={nb}, "
+                  f"{n_mercados} mercados, top1={top1_pct:.0f}%) — shadow_n_total={n_sh}")
 
     OUT.write_text(json.dumps(resultado, indent=2, ensure_ascii=False), encoding="utf-8")
     print(f"\nGuardado en {OUT}")
