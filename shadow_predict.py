@@ -1562,6 +1562,43 @@ def _gbm_p_up(spot, ref, sigma_h, T_h, mu_h=0.0):
     return _norm_cdf(d2)
 
 
+def _gap_sigma_implicita(d2_propio, sigma_h, py_mercado):
+    """Feature observacional (P19, 22-Jul): gap entre la volatilidad que el
+    PRECIO de Polymarket está precian do implícitamente y sigma_h REALIZADA
+    propia -- análogo directo de la prima de riesgo de varianza (VRP) de
+    opciones (paper SSRN 6712647, Ito 2025), posible porque _gbm_p_up ya es
+    matemáticamente un pricing de opción binaria. Invirtiendo la MISMA
+    fórmula con py_mercado en vez de sigma_h se obtiene sigma_implicita:
+
+        d2_propio = (log(spot/ref) + mu_h*T_h) / (sigma_h*sqrt(T_h))   [ya calculado]
+        d2_mercado = norm_ppf(py_mercado)
+        sigma_implicita = d2_propio * sigma_h / d2_mercado   (mismo numerador, sigma distinta)
+        gap = sigma_implicita - sigma_h
+
+    Validado 22-Jul (analisis_gap_sigma_implicita_realizada_22jul.py, ver
+    idea_gap_sigma_replicado_por_familia_activo_22jul en memoria): tercil
+    inferior de gap separa limpio hit=~30-45% vs resto hit=~65-80%,
+    replica con p=0.0000 en 8/8 familias GBM y 4/4 activos con n
+    suficiente. NO CONCLUYENTE para tocar prob_yes todavía (falta gate
+    riguroso n≥40/celda + code-review + aprobación explícita) -- esta
+    función SOLO loguea, nunca participa en p_up/edge/decisión, mismo
+    principio que ballenas_dentro_banda/dist_vwap_pct/sigma_b.
+
+    Devuelve None si el precio de mercado está en el borde (0/1, d2_mercado
+    indefinido/inestable) o si sigma_implicita sale fuera de rango físico
+    (0,1] -- mismo criterio de descarte que el análisis offline, para no
+    ensuciar la serie con outliers de borde."""
+    if py_mercado is None or not (0.001 < py_mercado < 0.999):
+        return None
+    d2_mercado = _norm_ppf(py_mercado)
+    if abs(d2_mercado) < 1e-6:
+        return None
+    sigma_implicita = d2_propio * sigma_h / d2_mercado
+    if not (0 < sigma_implicita <= 1.0):
+        return None
+    return round(sigma_implicita - sigma_h, 6)
+
+
 def _parse_updown_tipo(question):
     """
     Clasifica el mercado Up/Down y devuelve (tipo, ventana_min).
@@ -1732,6 +1769,13 @@ def s_updown_gbm(market, ctx):
     if p_up is None:
         return None
 
+    # d2_propio: mismo numerador/denominador que _gbm_p_up calcula internamente,
+    # recomputado aquí solo para loguear gap_sigma_implicita (P19) más abajo —
+    # aceptado a propósito en vez de que _gbm_p_up lo devuelva (cambiar su firma
+    # tocaría todos los call sites); es aritmética pura, sin coste real.
+    _sigma_T = sigma_h * math.sqrt(T_h)
+    _d2_propio = (math.log(spot / ref) + mu_h * T_h) / _sigma_T if _sigma_T > 1e-9 else None
+
     # Filtro mean-reversion 5min: sin datos suficientes para decidir, conservar.
     if tipo == 'slot' and ventana_min == 5 and abs(pct) > 0.05:
         return None
@@ -1832,6 +1876,11 @@ def s_updown_gbm(market, ctx):
         features["delta_ratio_macro"] = round(delta_macro, 4)
     if cross_window_spread is not None:
         features["cross_window_spread"] = cross_window_spread
+    # gap_sigma_implicita (P19, 22-Jul): ver _gap_sigma_implicita — solo logueo.
+    if _d2_propio is not None:
+        _gap = _gap_sigma_implicita(_d2_propio, sigma_h, _py_propio)
+        if _gap is not None:
+            features["gap_sigma_implicita"] = _gap
     # IBS-15: posición del precio dentro del rango high/low de las últimas 15 velas 1min.
     # IBS>0.7 = precio cerca del máximo (sobrecompra → señal BUY_NO).
     # IBS<0.3 = precio cerca del mínimo (sobreventa → señal BUY_YES).
@@ -3296,6 +3345,9 @@ def _s_gbm_late(market, ctx, ventana_min, rest_lo, rest_hi, espacio_k=None):
     # solo logueo, no cambia edge ni decisión — ver docstring del helper.
     retest_pct = _calcular_retest_pct(activo, window_start, now_utc, ref, spot, precios_data)
 
+    # gap_sigma_implicita (P19, 22-Jul): ver _gap_sigma_implicita — solo logueo.
+    gap_sigma_implicita = _gap_sigma_implicita(d, sigma_h, py)
+
     return {
         "prob_yes": round(p_up, 4),
         "razon":    (f"gbm_late_{ventana_min}min {activo} drift_vent={drift_ventana*100:+.3f}% "
@@ -3320,6 +3372,7 @@ def _s_gbm_late(market, ctx, ventana_min, rest_lo, rest_hi, espacio_k=None):
             "sigma_ewma_delta_pct": sigma_ewma_delta_pct,
             "dist_vwap_pct":       dist_vwap_pct,
             "retest_pct":          retest_pct,
+            "gap_sigma_implicita": gap_sigma_implicita,
             "meta_score_gbm_late": _meta_score_gbm_late(
                 d, sigma_h, drift_ventana * 100, now_utc.hour, restante_min, T_rem_h),
             **_libro_calidad(market),
