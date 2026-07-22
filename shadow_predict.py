@@ -2740,6 +2740,7 @@ def _banda_y_timing_ballenas(activo, marco, lo_default, hi_default, rest_lo_defa
 # necesita acumular n para medir si el edge tardío (probado en 15min, IC=+0.279)
 # transfiere a ventanas 60min más profundas. (2026-07-06)
 ACUMULAR_SHADOW_AUNQUE_DESACTIVADA = {"GBM_LATE_60M", "GBM_LATE_15M_TARDIO", "GBM_LATE_15M_ESPACIO_ATR",
+                                      "GBM_LATE_15M_MULTIHORIZONTE",  # recuperada 22-Jul, n=0 forward, mismo trato que sus hermanas GBM_LATE
                                       "STREAK_MOM_5M"}  # 2026-07-10: -0.052 IC n=306, no cruza umbral auto pero sin edge; desactivada manualmente en strategy_params.json (motivo "DESACTIVADA MANUALMENTE"), sigue midiendo sin ruido de atención
 # Photo finish (2026-07-05): entrar con el precio pegado al strike es moneda
 # al aire cobrada como favorito. |drift_ventana|<0.02% → IC=-0.145 n=181
@@ -2865,6 +2866,43 @@ def s_gbm_late_15min_tardio(market, ctx):
     return _s_gbm_late(market, ctx, ventana_min=15,
                        rest_lo=GBM_LATE_15M_REST_MIN_LO,
                        rest_hi=GBM_LATE_15M_TARDIO_REST_MIN_HI)
+
+
+def s_gbm_late_15min_multihorizonte(market, ctx):
+    """
+    Variante de GBM_LATE_15M que exige que el drift de ventana (15min) y el
+    drift de 60min tengan el MISMO signo antes de disparar. Idea de "151
+    Trading Strategies" (Kakushadze & Serur, §3.19 Market-Making): modular
+    la señal corta con una señal más larga mitiga la selección adversa —
+    solo entrar cuando ambas escalas apuntan igual.
+
+    RECUPERADA 22-Jul tras auditoría de git stash: escrita 08-Jul, se
+    perdió sin commitear en el mismo incidente que GBM_LATE_15M_TARDIO
+    (ver idea_gbm_late_tardio_08jul) pero, a diferencia de TARDIO, nadie
+    notó la pérdida — dejó 6 filas huérfanas en results.csv (08-Jul, antes
+    de desaparecer) y nunca se reimplementó hasta hoy. `drift_60min` (no
+    `drift_60min_pct` como en el borrador original — la clave real en
+    `_s_gbm_late` es `drift_60min`, ya se computaba ahí, no hace falta
+    tocar `_s_gbm_late`).
+
+    Estrategia SEPARADA de GBM_LATE_15M a propósito (mismo patrón que
+    GBM_LATE_60M/TARDIO): dedup por (strategy, market_id) exige nombre
+    propio; acumula su propio IC desde cero (empieza literalmente desde 0,
+    las 6 filas de 08-Jul no son forward limpio). NO está en
+    pares_permitidos_live → imposible que toque dinero real hasta decisión
+    explícita con n≥40.
+    """
+    base = _s_gbm_late(market, ctx, ventana_min=15,
+                       rest_lo=GBM_LATE_15M_REST_MIN_LO,
+                       rest_hi=GBM_LATE_15M_REST_MIN_HI)
+    if base is None:
+        return None
+    drift_60 = base["features"].get("drift_60min")
+    drift_vent = base["features"]["drift_ventana_pct"]
+    if drift_60 is None or (drift_vent > 0) != (drift_60 > 0):
+        return None  # sin dato de 60min, o desacuerdo entre escalas
+    base["razon"] += f" [multihorizonte: drift60={drift_60:+.3f}% de acuerdo]"
+    return base
 
 
 def s_gbm_late_15min_espacio_atr(market, ctx):
@@ -4074,6 +4112,7 @@ ESTRATEGIAS = [
     ("LATE_WINDOW_5MIN",    s_late_window_5min),
     ("GBM_LATE_15M",        s_gbm_late_15min),
     ("GBM_LATE_15M_TARDIO", s_gbm_late_15min_tardio),
+    ("GBM_LATE_15M_MULTIHORIZONTE", s_gbm_late_15min_multihorizonte),
     ("GBM_LATE_15M_ESPACIO_ATR", s_gbm_late_15min_espacio_atr),
     ("GBM_LATE_15M_PYCONFIRMADO", s_gbm_late_15min_py_confirmado),
     ("BALLENAS_CONFIRMADAS_15M", s_ballenas_confirmadas_15m),
