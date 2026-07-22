@@ -74,6 +74,17 @@ DIR_SHADOW = DIR / "data/shadow"
 HISTORY_CSV = DIR_SHADOW / "ballenas_timing_history.csv"
 STATE_JSON = DIR_SHADOW / "ballenas_timing_state.json"
 CACHE_PROCESADOS = DIR_SHADOW / "ballenas_timing_procesados.json"
+# STATE_JSON_FINO (22-Jul, petición Javi: explotar franjas milimétricas de
+# ballenas en cada moneda/marco, "hay que devorarlo, no diluirlo") -- fichero
+# SEPARADO de STATE_JSON a propósito. STATE_JSON ya lo leen live_trade.py
+# (veto/boost del ejecutor BTC#15min, dinero real) y shadow_predict.py
+# (veto_fuera_banda_ballenas, boost_ic_ballenas_favorito_eth15 -- estrategias
+# YA en pares_permitidos_live) en más de 10 puntos distintos. Escribir aquí
+# en vez de tocar STATE_JSON garantiza que este cambio no puede afectar a
+# NADA de lo que ya opera con dinero real -- es puramente aditivo. Pasar
+# alguna de estas bandas finas al mecanismo real (incluido BTC, que también
+# se beneficia) es una decisión aparte, explícita, pendiente de aprobación.
+STATE_JSON_FINO = DIR_SHADOW / "ballenas_timing_state_fino.json"
 
 # Cuánto mirar hacia atrás (horas) para MUESTREAR mercados nuevos, y hasta
 # dónde se retiene el histórico rolling antes de podarlo — mismo valor
@@ -458,6 +469,83 @@ def _calcular_estado(filas_historia, ahora):
     return estado
 
 
+def _bandas_finas(ancho=0.05):
+    lo = 0.0
+    bandas = []
+    while lo < 1.0 - 1e-9:
+        hi = round(lo + ancho, 4)
+        bandas.append((round(lo, 4), min(hi, 1.0)))
+        lo = hi
+    return bandas
+
+
+BANDAS_PRECIO_FINAS = _bandas_finas(0.05)
+# Techo de seguridad (22-Jul, code-review self-check ANTES de desplegar):
+# el "hi < 1.00" que excluye la zona de certeza en _calcular_estado()
+# funciona solo porque coincide con el borde de la banda ANCHA [0.90,1.00).
+# Con bandas finas, [0.90,0.95) tiene hi=0.95 y burlaría esa exclusión sin
+# querer -- se generaliza aquí a un techo explícito en vez de depender de
+# que el borde de banda coincida con 1.00. Verificado en simulación con
+# datos reales (22-Jul): sin este techo, BTC#15min/60min/weekly con
+# bandas finas eligen [0.90,0.95) -- exactamente la zona que el proyecto ya
+# tiene documentado que el fee real del CLOB se come. Con el techo, eligen
+# [0.85,0.90), coherente con el criterio original.
+TECHO_SEGURIDAD_BANDA = 0.90
+
+
+def _calcular_estado_fino(filas_historia, ahora, bandas=BANDAS_PRECIO_FINAS):
+    """Como _calcular_estado(), pero (a) usa bandas más finas y (b) guarda
+    TODAS las bandas que pasan el gate por (activo,marco), no solo la de
+    mayor z -- _calcular_estado() solo se queda con 1 banda "ganadora" por
+    combo, así que un edge real en una banda con z menor (pero aun así
+    significativo) queda invisible aunque exista. Petición explícita Javi
+    22-Jul: "hay que devorarlo, no diluirlo" -- explotar TODOS los
+    bolsillos de edge encontrados por la franja milimétrica, no solo el
+    más grande de cada moneda/marco.
+
+    Escribe a un fichero SEPARADO (STATE_JSON_FINO) -- ver nota junto a esa
+    constante: STATE_JSON ya lo consumen live_trade.py/shadow_predict.py en
+    >10 puntos, incluida la ejecución real de BTC#15min. Esta función NUNCA
+    escribe en STATE_JSON, es aditiva pura."""
+    por_combo = defaultdict(lambda: defaultdict(list))
+    for r in filas_historia:
+        clave = (r["activo"], r["marco"])
+        for lo, hi in bandas:
+            if lo <= r["precio"] < hi or (hi == 1.00 and r["precio"] == 1.00):
+                por_combo[clave][(lo, hi)].append(r)
+                break
+
+    estado = {}
+    for (activo, marco), bandas_filas in por_combo.items():
+        candidatas = []
+        for (lo, hi), filas in bandas_filas.items():
+            s = _stats_banda(filas)
+            if s is None or s["n"] < N_MIN_INFORMATIVO:
+                continue
+            pasa = (s["n"] >= N_MIN and s["z"] >= Z_MIN and s["top1_share"] < TOP1_MAX)
+            if not pasa or hi > TECHO_SEGURIDAD_BANDA:
+                continue
+            timing = _timing_ganadoras(filas)
+            if not timing:
+                continue  # mismo criterio que _calcular_estado: sin timing fiable, no usable
+            candidatas.append({
+                "banda_lo": lo, "banda_hi": hi, **s,
+                "rest_lo_min": timing["rest_p25"], "rest_hi_min": timing["rest_p75"],
+                "rest_mediana_min": timing["rest_mediana"], "n_ganadoras": timing["n_ganadoras"],
+            })
+        candidatas.sort(key=lambda e: -e["z"])
+        estado[f"{activo}#{marco}"] = {
+            "significativo": len(candidatas) > 0,
+            "n_bandas_significativas": len(candidatas),
+            "bandas_significativas": candidatas,
+        }
+    estado["_actualizado"] = ahora.isoformat(timespec="seconds")
+    estado["_nota"] = ("Multi-banda fina (paso 0.05), SEPARADO de ballenas_timing_state.json. "
+                        "No lo consume ningún ejecutor todavía -- puramente informativo hasta "
+                        "que se apruebe explícitamente conectar alguna banda a un ejecutor real.")
+    return estado
+
+
 def main():
     ahora = datetime.now(timezone.utc)
     print(f"[ballenas_observer] {ahora.isoformat(timespec='seconds')}")
@@ -497,6 +585,15 @@ def main():
 
     sig = sorted(k for k, v in estado.items() if isinstance(v, dict) and v.get("significativo"))
     print(f"  Combos significativos ({len(sig)}): {sig}")
+
+    # Bandas finas (22-Jul, petición Javi) -- fichero separado, puramente
+    # aditivo, ver nota junto a STATE_JSON_FINO. No sustituye ni modifica
+    # nada de lo anterior.
+    estado_fino = _calcular_estado_fino(historia, ahora)
+    STATE_JSON_FINO.write_text(json.dumps(estado_fino, indent=2, ensure_ascii=False), encoding="utf-8")
+    n_bandas_finas = sum(v.get("n_bandas_significativas", 0) for k, v in estado_fino.items()
+                         if isinstance(v, dict))
+    print(f"  [fino] {n_bandas_finas} bandas finas significativas en total (fichero separado, informativo)")
 
 
 if __name__ == "__main__":
