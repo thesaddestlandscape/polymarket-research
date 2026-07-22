@@ -1524,7 +1524,13 @@ def _inyectar_features_cruzadas(rows: list) -> list:
             feats = {}
         cambiado = False
 
-        if r[1] == "FAVORITO_CONFIRMADO" and r[11] != "SKIP":
+        # startswith (no ==) para cubrir también variantes hijas como
+        # FAVORITO_CONFIRMADO_SOL_ALTACONVICCION -- antes del 22-Jul (/code-review)
+        # solo "FAVORITO_CONFIRMADO" exacto recibía wang_gap, así que cualquier
+        # subconjunto de alta convicción acumulaba un dataset de features más
+        # pobre que la tupla madre mientras se decide su promoción. Puramente
+        # observacional (no toca prob_yes/decision), broadening seguro.
+        if r[1].startswith("FAVORITO_CONFIRMADO") and r[11] != "SKIP":
             try:
                 wang_p_implicito = _norm_cdf(_norm_ppf(float(r[6])) - WANG_LAMBDA)
                 feats["wang_p_implicito"] = round(wang_p_implicito, 4)

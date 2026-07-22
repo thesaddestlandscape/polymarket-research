@@ -919,7 +919,21 @@ def _snapshot_senal_bloqueada(market_id: str, direction: str, precio_yes,
     market#direction: el proceso es nuevo cada ciclo (~20s) y sin dedupe
     serían ~45 filas y consultas CLOB por señal de 15min. stake_ref es
     nominal (min_stake_eur) para que ratio_vs_stake sea comparable con los
-    snapshots de ejecución. Solo lee el libro — nunca ordena, nunca lanza."""
+    snapshots de ejecución. Solo lee el libro — nunca ordena, nunca lanza.
+
+    El dedupe es por (market_id, direction, strategy, grupo-de-motivo) —
+    ANTES no incluía `strategy` (/code-review 22-Jul, candidata
+    FAVORITO_CONFIRMADO_SOL_ALTACONVICCION): cuando 2+ tuplas de
+    candidatos_evaluacion_live disparan sobre el MISMO mercado+dirección el
+    mismo día (habitual: varias familias GBM_LATE/FAVORITO_CONFIRMADO/STREAK
+    coinciden en el mismo mercado), solo la primera en procesarse ese ciclo
+    se quedaba con la fila -- las demás perdían su propio dato de
+    fill-ability sin ningún aviso. Verificado con datos reales: de 263
+    mercados donde FAVORITO_CONFIRMADO_SOL_ALTACONVICCION disparó BUY_YES,
+    solo 111 (42%) tenían fila propia -- el resto se los "robaban"
+    GBM_LATE_15M_TARDIO/GBM_LATE_15M/STREAK_FADE_15M. Afecta a las 245
+    tuplas de candidatos_evaluacion_live por igual, no solo a esta."""
+    strategy = (contexto or {}).get("strategy", "")
     try:
         if SNAPSHOT_LIBRO_CSV.exists():
             with open(SNAPSHOT_LIBRO_CSV, newline="", encoding="utf-8") as f:
@@ -932,6 +946,7 @@ def _snapshot_senal_bloqueada(market_id: str, direction: str, precio_yes,
                     )
                     if (str(row.get("market_id")) == str(market_id)
                             and row.get("direction") == direction
+                            and row.get("strategy", "") == strategy
                             and mismo_grupo):
                         return
         yes_token, no_token, _ = _get_token_ids(market_id)
