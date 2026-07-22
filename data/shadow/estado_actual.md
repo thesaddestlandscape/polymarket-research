@@ -1,4 +1,4 @@
-# Estado del bot — 2026-07-22 16:17 UTC
+# Estado del bot — 2026-07-22 16:23 UTC
 
 ## Live — dinero real (on-chain)
 | | |
@@ -13,25 +13,25 @@
 ## Shadow — MODELO SIMULADO (no cobrable)
 | | |
 |---|---|
-| P&L fiel (stake fijo 1$) | +3460.39 $ |
-| P&L sim compuesto | 🟢 +6578.00 $ (ficción Kelly: +25857% s/ operativo) |
-| P&L sim hoy (2026-07-22) | 🟢 +214.49 $ |
-| Operaciones resueltas | 29182 (17533 WIN / 11649 LOSS) — 60.1% |
-| Señales abiertas | 147 |
+| P&L fiel (stake fijo 1$) | +3459.23 $ |
+| P&L sim compuesto | 🟢 +6578.31 $ (ficción Kelly: +25858% s/ operativo) |
+| P&L sim hoy (2026-07-22) | 🟢 +214.81 $ |
+| Operaciones resueltas | 29204 (17543 WIN / 11661 LOSS) — 60.1% |
+| Señales abiertas | 145 |
 
 ## Estrategias (visión global)
 
 | Estrategia | n | Win% | IC_efectivo | Tendencia | PNL | Apuesta | Estado |
 |---|---|---|---|---|---|---|---|
-| GBM_LATE_15M | 6868 | 59.6% | +0.096 | 📉 agota (-0.03) | +2152.66$ | 0.96$ | ✅ activa |
-| GBM_LATE_15M_ESPACIO_ATR | 4066 | 62.9% | +0.129 | 📉 agota (-0.04) | +2120.43$ | 1.29$ | ✅ activa |
-| GBM_LATE_15M_TARDIO | 4060 | 58.3% | +0.083 | ➡️ estable | +1256.23$ | 0.83$ | ✅ activa |
-| UPDOWN_GBM_15M_TARDIO | 1201 | 66.5% | +0.165 | 📉 agota (-0.04) | +552.87$ | 1.65$ | ✅ activa |
-| UPDOWN_GBM | 2194 | 53.0% | +0.030 | 📈 madura (+0.11) | +187.05$ | 0.50$ | ✅ activa |
+| GBM_LATE_15M | 6872 | 59.6% | +0.096 | 📉 agota (-0.03) | +2150.35$ | 0.96$ | ✅ activa |
+| GBM_LATE_15M_ESPACIO_ATR | 4069 | 62.9% | +0.129 | 📉 agota (-0.04) | +2123.75$ | 1.29$ | ✅ activa |
+| GBM_LATE_15M_TARDIO | 4064 | 58.3% | +0.083 | ➡️ estable | +1258.71$ | 0.83$ | ✅ activa |
+| UPDOWN_GBM_15M_TARDIO | 1204 | 66.5% | +0.165 | 📉 agota (-0.04) | +553.50$ | 1.65$ | ✅ activa |
+| UPDOWN_GBM | 2196 | 53.0% | +0.030 | 📈 madura (+0.11) | +187.19$ | 0.50$ | ✅ activa |
 | GBM_LATE_15M_PYCONFIRMADO | 229 | 61.6% | +0.115 | 📉 agota (-0.05) | +109.27$ | 1.15$ | ✅ activa |
-| FAVORITO_CONFIRMADO | 5077 | 68.7% | +0.187 | ➡️ estable | +93.39$ | 1.87$ | ✅ activa |
+| FAVORITO_CONFIRMADO | 5080 | 68.7% | +0.187 | ➡️ estable | +90.38$ | 1.87$ | ✅ activa |
 | WEEKLY_PRICE | 336 | 68.2% | +0.180 | 📈 madura (+0.21) | +67.16$ | 1.80$ | ✅ activa |
-| BALLENAS_CONFIRMADAS_15M | 757 | 62.5% | +0.125 | ➡️ estable | +33.39$ | 1.25$ | ✅ activa |
+| BALLENAS_CONFIRMADAS_15M | 760 | 62.4% | +0.123 | 📉 agota (-0.03) | +32.46$ | 1.23$ | ✅ activa |
 | STREAK_FADE_15M | 263 | 58.2% | +0.081 | 📉 agota (-0.07) | +30.04$ | 0.81$ | ✅ activa |
 | UPDOWN_GBM_15M_CROSS_WINDOW_SPREAD | 119 | 79.0% | +0.285 | ➡️ estable | +20.13$ | 2.00$ | ✅ activa |
 | FAVORITO_CONFIRMADO_SOL_ALTACONVICCION | 263 | 82.5% | +0.323 | ➡️ estable | +18.78$ | 2.00$ | ✅ activa |
@@ -56,15 +56,15 @@
 
 | Timestamp | Estrategia | Mercado | Resultado | PNL |
 |---|---|---|---|---|
-| 2026-07-22T16:16 | STREAK_MOM_5M#ETH#5min | Ethereum Up or Down - July 22, 12:05PM-12:10PM ET… | ❌ LOSS | -0.51$ |
-| 2026-07-22T16:13 | WEEKLY_PRICE#BTC | Will the price of Bitcoin be between $66,000 and $… | ❌ LOSS | -2.04$ |
-| 2026-07-22T16:13 | WEEKLY_PRICE#SOL | Will the price of Solana be between $80 and $90 on… | ✅ WIN | +0.48$ |
-| 2026-07-22T16:08 | BALLENAS_TARDIAS#BTC#15min | … | ✅ WIN | +0.31$ |
-| 2026-07-22T16:08 | GBM_LATE_15M_ESPACIO_ATR#BTC#15min | Bitcoin Up or Down - July 22, 11:45AM-12:00PM ET… | ✅ WIN | +2.56$ |
+| 2026-07-22T16:22 | BALLENAS_CONFIRMADAS_15M#SOL#15min | Solana Up or Down - July 22, 12:00PM-12:15PM ET… | ✅ WIN | +0.40$ |
+| 2026-07-22T16:22 | GBM_LATE_15M_TARDIO#SOL#15min | Solana Up or Down - July 22, 12:00PM-12:15PM ET… | ❌ LOSS | -1.87$ |
+| 2026-07-22T16:22 | GBM_LATE_15M_TARDIO#ETH#15min | Ethereum Up or Down - July 22, 12:00PM-12:15PM ET… | ✅ WIN | +3.82$ |
+| 2026-07-22T16:22 | GBM_LATE_15M_ESPACIO_ATR#BTC#15min | Bitcoin Up or Down - July 22, 12:00PM-12:15PM ET… | ✅ WIN | +3.29$ |
+| 2026-07-22T16:22 | GBM_LATE_15M_TARDIO#XRP#15min | XRP Up or Down - July 22, 12:00PM-12:15PM ET… | ❌ LOSS | -2.04$ |
 
 ## Calidad de datos
 
-✅ **OK** — última verificación 2026-07-22T16:16 UTC
+✅ **OK** — última verificación 2026-07-22T16:22 UTC
 
 | Asset | Precio | Age | Alertas |
 |---|---|---|---|
