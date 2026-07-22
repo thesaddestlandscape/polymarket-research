@@ -32,6 +32,7 @@ if not DASHBOARD_USER or not DASHBOARD_PASS:
 
 REPO             = Path(__file__).parent
 RESULTS_CSV      = REPO / "data/shadow/results.csv"
+PNL_FIEL_V2_JSON = REPO / "data/shadow/pnl_fiel_por_estrategia.json"
 STRATEGY_PARAMS  = REPO / "data/shadow/strategy_params.json"
 PRICES_DIR       = REPO / "data/prices"
 LIVE_TRADES_CSV  = REPO / "data/live/trades.csv"
@@ -207,6 +208,30 @@ def load_activas():
         return {k: v.get("activa", True) for k, v in sp.get("estrategias", {}).items()}
     except Exception:
         return {}
+
+def load_pnl_fiel_v2():
+    """shadow_pnl_fiel.py (22-Jul) -- PnL nocional por tupla con fill-ability
+    real (libro_snapshots.csv), stake Kelly y circuit breakers reales
+    reconstruidos, no solo stake fijo+slippage como _pnl_realista() de arriba.
+    Ver limitaciones documentadas dentro del propio JSON (no ocultarlas al
+    frontend -- se pasan tal cual para que el tooltip las muestre)."""
+    if not PNL_FIEL_V2_JSON.exists():
+        return None
+    try:
+        d = json.load(open(PNL_FIEL_V2_JSON, encoding="utf-8"))
+        estrategias = d.get("estrategias", {})
+        total = sum(v.get("pnl_fiel_eur", 0) for v in estrategias.values())
+        n_ejecutado = sum(v.get("n_ejecutado", 0) for v in estrategias.values())
+        n_total = sum(v.get("n_total", 0) for v in estrategias.values())
+        return {
+            "total": round(total, 2),
+            "n_ejecutado": n_ejecutado,
+            "n_total": n_total,
+            "generado_utc": d.get("generado_utc"),
+            "limitaciones": d.get("limitaciones", []),
+        }
+    except Exception:
+        return None
 
 def load_live_trades():
     if not LIVE_TRADES_CSV.exists():
@@ -711,6 +736,9 @@ def compute_data():
             "updated":   now.strftime("%H:%M:%S UTC"),
             # PnL fiel (stake fijo + slippage, sin compounding ni fill-ability)
             "pnl_realista": round(sum(v for v in (_pnl_realista(r) for r in rows) if v is not None), 2),
+            # PnL fiel v2 (22-Jul): fill-ability real + Kelly + frenos reales,
+            # ver load_pnl_fiel_v2() -- None si el cron aún no ha generado el JSON.
+            "pnl_fiel_v2": load_pnl_fiel_v2(),
         },
         "equity_curve":  equity,
         "daily_pnl":     daily_pnl,
@@ -945,6 +973,7 @@ footer { text-align: center; padding: 10px; font-size: 10px; color: var(--muted)
   <div class="stat-card"><div class="label">🧪 Capital simulado</div><div class="value neu" id="s-bankroll">—</div></div>
   <div class="stat-card"><div class="label">📈 Beneficio simulado <span style="opacity:.6">compuesto</span></div><div class="value" id="s-pnl">—</div></div>
   <div class="stat-card" title="Stake fijo 1$ + slippage real 0.02, sin compounding. NO modela fill-ability (~8% conversión) → sigue siendo cota superior."><div class="label">🧮 PnL fiel <span style="opacity:.6">stake fijo</span></div><div class="value" id="s-pnl-real">—</div></div>
+  <div class="stat-card" id="s-pnl-fiel-v2-card" title="Cargando…"><div class="label">🎯 PnL fiel v2 <span style="opacity:.6">fill-ability real</span></div><div class="value" id="s-pnl-fiel-v2">—</div></div>
   <div class="stat-card"><div class="label">🎯 Simulado hoy</div><div class="value" id="s-pnl-hoy">—</div></div>
   <div class="stat-card"><div class="label">📅 Últimos 7 días (sim)</div><div class="value" id="s-pnl-7d">—</div></div>
   <div class="stat-card"><div class="label">✅ Apuestas acertadas</div><div class="value neu" id="s-wr">—</div></div>
@@ -1344,6 +1373,16 @@ function renderAll() {
   document.getElementById("s-pnl").innerHTML      = fmt(stats.pnl_total);
   if (stats.pnl_realista != null)
     document.getElementById("s-pnl-real").innerHTML = fmt(stats.pnl_realista);
+  if (stats.pnl_fiel_v2 != null) {
+    const pf2 = stats.pnl_fiel_v2;
+    document.getElementById("s-pnl-fiel-v2").innerHTML = fmt(pf2.total);
+    const fillPct = pf2.n_total ? (pf2.n_ejecutado / pf2.n_total * 100).toFixed(1) : "0.0";
+    const limitaciones = (pf2.limitaciones || []).map(l => `• ${l}`).join("\n");
+    document.getElementById("s-pnl-fiel-v2-card").title =
+      `Fill-ability real (libro_snapshots.csv) + Kelly + frenos reales reconstruidos, ` +
+      `no solo stake fijo. Fill rate agregado: ${fillPct}% (${pf2.n_ejecutado}/${pf2.n_total}). ` +
+      `Generado: ${pf2.generado_utc || "?"}.\n\nLimitaciones:\n${limitaciones}`;
+  }
   document.getElementById("s-pnl-hoy").innerHTML  = fmt(stats.pnl_hoy);
   document.getElementById("s-pnl-7d").innerHTML   = fmt(stats.pnl_7d);
   document.getElementById("s-wr").textContent     = `${stats.win_rate}%`;
