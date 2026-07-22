@@ -142,7 +142,15 @@ def load_prices():
     fallback_coingecko = {a: [] for a in assets}  # solo si no hay nada mejor para ese activo
     seen   = {a: set() for a in assets}
 
-    for pf in sorted(PRICES_DIR.glob("*.csv"))[-7:]:
+    # Solo ficheros diarios (YYYY-MM-DD.csv) -- "chainlink_YYYY-MM-DD.csv"
+    # (feed websocket aparte, fetch_chainlink_prices.py) ordena alfabéticamente
+    # DESPUÉS de los diarios ("c" > "2"), así que el slice [-7:] sin este
+    # filtro colaba ficheros chainlink en vez de días reales, mezclando una
+    # tercera serie de cadencia distinta -- el gráfico salió AÚN más picudo
+    # tras el fix de coingecko (22-Jul, reportado por Javi: salto medio subió
+    # a $39.73 en vez de bajar).
+    diarios = [pf for pf in PRICES_DIR.glob("*.csv") if not pf.name.startswith("chainlink_")]
+    for pf in sorted(diarios)[-7:]:
         try:
             with open(pf, encoding="utf-8") as fh:
                 header = fh.readline().strip().split(",")
