@@ -106,7 +106,17 @@ N_MIN = 40
 N_MIN_INFORMATIVO = 15  # umbral más bajo solo para reportar la banda en el detalle, no para activarla
 
 HISTORY_COLS = ["condition_id", "activo", "marco", "ts_trade", "wallet",
-                 "precio", "restante_min", "acierto", "compro_yes"]
+                 "precio", "restante_min", "acierto", "compro_yes", "size_usd"]
+# size_usd (22-Jul, petición Javi: "necesitamos tamaño de apuesta y ROI de
+# la misma" tras encontrar que este CSV -- la única fuente con cobertura
+# COMPLETA del nicho Up/Down corto, 389k filas -- nunca capturó tamaño,
+# solo precio/timing/acierto. smart_money_tracker.py::trades_de_mercado ya
+# usa el mismo endpoint /trades y confirma que trae 'size' (en SHARES, no
+# USD -- verificado en vivo: size=2, price=0.51 en un trade BTC 5min real).
+# size_usd = size*precio, el importe real arriesgado en esa compra. Filas
+# viejas (antes de este cambio) no tienen esta columna -- mismo patrón ya
+# usado para compro_yes (16-Jul), DictReader/DictWriter lo manejan sin
+# fallar (restval='').
 # compro_yes (16-Jul, petición Javi tras corrección de
 # idea_vigia_ballenas_tiempo_real_no_viable_16jul): antes solo se guardaba
 # si el trade acertó, no de qué LADO apostó — sin el lado no se puede medir
@@ -265,6 +275,14 @@ def _procesar_mercados(seleccion):
                 precio = float(precio)
             except (ValueError, TypeError, OSError):
                 continue
+            # size_usd: tamaño real arriesgado (size en SHARES * precio). Si
+            # falta o es inválido, la fila se conserva igual (precio/timing/
+            # acierto siguen siendo válidos) pero size_usd queda vacío -- no
+            # descartar el trade entero por un campo opcional nuevo.
+            try:
+                size_usd = round(float(t.get("size")) * precio, 2)
+            except (TypeError, ValueError):
+                size_usd = ""
             restante_min = (end_dt - t_dt).total_seconds() / 60.0
             if restante_min < -2:  # trade posterior al cierre — dato corrupto
                 continue
@@ -277,7 +295,7 @@ def _procesar_mercados(seleccion):
                 "condition_id": cid, "activo": m["activo"], "marco": m["marco"],
                 "ts_trade": t_dt.isoformat(), "wallet": w, "precio": round(precio, 4),
                 "restante_min": round(restante_min, 2), "acierto": int(acierto),
-                "compro_yes": int(compro_yes),
+                "compro_yes": int(compro_yes), "size_usd": size_usd,
             })
         resultado_por_cid[cid] = "ok"
     return filas, resultado_por_cid
@@ -285,6 +303,20 @@ def _procesar_mercados(seleccion):
 
 def _append_history(filas):
     nuevo = not HISTORY_CSV.exists()
+    if not nuevo:
+        # Auto-heal de cabecera obsoleta (22-Jul, al añadir size_usd): si el
+        # fichero ya existe con una cabecera de un esquema anterior (menos
+        # columnas), un append directo desalinearía csv.DictReader para las
+        # filas NUEVAS de este ciclo hasta que _cargar_historia_podada
+        # corrigiera la cabecera más tarde en el mismo main() -- se cura
+        # aquí primero, reusando esa misma rutina de poda+reescritura ya
+        # probada (mismo patrón que la migración de compro_yes, 16-Jul).
+        # Tras la primera corrida post-deploy la cabecera ya coincide y
+        # este chequeo es un no-op barato en cada ciclo siguiente.
+        with open(HISTORY_CSV, encoding="utf-8") as f:
+            cabecera_actual = f.readline().strip().split(",")
+        if cabecera_actual != HISTORY_COLS:
+            _cargar_historia_podada(datetime.now(timezone.utc))
     with open(HISTORY_CSV, "a", newline="", encoding="utf-8") as f:
         w = csv.DictWriter(f, fieldnames=HISTORY_COLS)
         if nuevo:
