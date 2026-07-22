@@ -359,6 +359,33 @@ def disparar(activo: str, mercado: dict, py: float, edge: float, restante_s: flo
     cfg = ACTIVOS[activo]
 
     with _orden_lock:
+        # Fill-ability real (roadmap Fase 2, punto 1, 21-Jul; BUG FIX 22-Jul,
+        # ver memoria idea_bug_disparar_5min_whitelist_mata_snapshot_22jul):
+        # esto tiene que capturarse SIEMPRE que llegue una confirmación
+        # DRY_RUN, ANTES del check puede_operar_live() de abajo -- ese check
+        # exige que la tupla esté en pares_permitidos_live, y una candidata
+        # por DEFINICIÓN nunca lo está (si lo estuviera ya no sería
+        # candidata). Antes este snapshot vivía DESPUÉS de puede_operar_live()
+        # y de calcular_stake(), así que moría siempre en el primer check:
+        # 79 confirmaciones en 4 días (18→22-Jul), CERO snapshots en
+        # libro_snapshots.csv, el vigía vigia_ballenas_5min_fillability.py
+        # atascado en n=0 permanentemente. Mismo patrón que
+        # live_trade.py::_snapshots_candidatos_evaluacion() (tampoco exige
+        # whitelist, por la misma razón) -- usa el stake NOMINAL de
+        # referencia (min_stake_eur), no el Kelly real, igual que el resto
+        # de snapshots candidato_evaluacion del sistema (comparables entre
+        # sí). Solo lectura, nunca bloquea ni cambia ninguna decisión de
+        # abajo -- ver except.
+        if DRY_RUN:
+            try:
+                stake_ref = lt._cargar_config().get("riesgo", {}).get("min_stake_eur", 1.05)
+                depth = lt._consultar_profundidad_libro(None, mercado["yes_token"], py, stake_ref)
+                lt._registrar_snapshot_libro("candidato_evaluacion", mercado["market_id"], "BUY_YES",
+                                              py, stake_ref, depth,
+                                              {"strategy": STRATEGY, "subtype": subtype})
+            except Exception as e:
+                log(f"fill-ability snapshot error (no bloquea): {e}", activo)
+
         ok_operar, motivo_operar = puede_operar_live(STRATEGY, subtype)
         if not ok_operar:
             log(f"{motivo_operar} -- {'[DRY-RUN] no ejecutaría' if DRY_RUN else 'no se ejecuta'}", activo)
@@ -391,20 +418,6 @@ def disparar(activo: str, mercado: dict, py: float, edge: float, restante_s: flo
         if DRY_RUN:
             log(f"[DRY-RUN] habría ejecutado BUY_YES {mercado['market_id']} py={py:.3f} "
                 f"edge={edge:+.3f} stake={stake_info['stake_eur']:.2f}€ restante={restante_s:.1f}s", activo)
-            # Fill-ability real (roadmap Fase 2, punto 1, 21-Jul): sin esto no
-            # hay forma de saber si el libro aguantaría la orden que DRY_RUN
-            # dice que "habría ejecutado". Mismo patrón candidato_evaluacion
-            # que usa el resto del sistema para candidatas no-live. yes_token
-            # ya viene en `mercado` (resolver_mercado) -- no repite la llamada
-            # a gamma-api que hace _get_token_ids. Solo lectura, no cambia el
-            # `return True` de abajo ni ninguna decisión.
-            try:
-                depth = lt._consultar_profundidad_libro(None, mercado["yes_token"], py, stake_info["stake_eur"])
-                lt._registrar_snapshot_libro("candidato_evaluacion", mercado["market_id"], "BUY_YES",
-                                              py, stake_info["stake_eur"], depth,
-                                              {"strategy": STRATEGY, "subtype": subtype})
-            except Exception as e:
-                log(f"fill-ability snapshot error (no bloquea): {e}", activo)
             return True
 
         resultado = lt._ejecutar_orden_polymarket(
