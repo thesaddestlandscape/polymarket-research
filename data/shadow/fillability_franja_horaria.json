@@ -1,0 +1,1307 @@
+{
+  "SOL#15m#h22#[0.30,0.35)": {
+    "n": 3,
+    "n_con_ratio_libro": 3,
+    "fill_rate": 0.0,
+    "ratio_medio": 0.0,
+    "motivos": {
+      "fuera_ventana": 2,
+      "candidato_evaluacion": 1
+    },
+    "informativo_n15": false
+  },
+  "XRP#15m#h03#[0.50,0.55)": {
+    "n": 29,
+    "n_con_ratio_libro": 29,
+    "fill_rate": 0.2069,
+    "ratio_medio": 38.76,
+    "motivos": {
+      "fuera_ventana": 7,
+      "candidato_evaluacion": 22
+    },
+    "informativo_n15": true
+  },
+  "SOL#15m#h02#[0.50,0.55)": {
+    "n": 21,
+    "n_con_ratio_libro": 21,
+    "fill_rate": 0.2857,
+    "ratio_medio": 72.88,
+    "motivos": {
+      "fuera_ventana": 3,
+      "candidato_evaluacion": 18
+    },
+    "informativo_n15": true
+  },
+  "SOL#15m#h16#[0.65,0.70)": {
+    "n": 10,
+    "n_con_ratio_libro": 10,
+    "fill_rate": 0.2,
+    "ratio_medio": 101.01,
+    "motivos": {
+      "veto_profundidad": 4,
+      "abort_requote": 1,
+      "ejecutada": 1,
+      "no_viable_stake": 1,
+      "senal_caducada": 1,
+      "candidato_evaluacion": 2
+    },
+    "informativo_n15": false
+  },
+  "SOL#15m#h02#[0.40,0.45)": {
+    "n": 2,
+    "n_con_ratio_libro": 2,
+    "fill_rate": 0.5,
+    "ratio_medio": 56.15,
+    "motivos": {
+      "fuera_ventana": 1,
+      "candidato_evaluacion": 1
+    },
+    "informativo_n15": false
+  },
+  "SOL#15m#h16#[0.85,0.90)": {
+    "n": 8,
+    "n_con_ratio_libro": 8,
+    "fill_rate": 0.875,
+    "ratio_medio": 322.82,
+    "motivos": {
+      "candidato_evaluacion": 6,
+      "ejecutada": 2
+    },
+    "informativo_n15": false
+  },
+  "ETH#15m#h16#[0.80,0.85)": {
+    "n": 1,
+    "n_con_ratio_libro": 1,
+    "fill_rate": 1.0,
+    "ratio_medio": 800.7,
+    "motivos": {
+      "candidato_evaluacion": 1
+    },
+    "informativo_n15": false
+  },
+  "SOL#15m#h17#[0.70,0.75)": {
+    "n": 10,
+    "n_con_ratio_libro": 10,
+    "fill_rate": 0.6,
+    "ratio_medio": 144.67,
+    "motivos": {
+      "candidato_evaluacion": 8,
+      "fuera_ventana": 2
+    },
+    "informativo_n15": false
+  },
+  "SOL#15m#h17#[0.65,0.70)": {
+    "n": 6,
+    "n_con_ratio_libro": 6,
+    "fill_rate": 0.1667,
+    "ratio_medio": 105.92,
+    "motivos": {
+      "candidato_evaluacion": 6
+    },
+    "informativo_n15": false
+  },
+  "SOL#15m#h18#[0.90,0.95)": {
+    "n": 3,
+    "n_con_ratio_libro": 3,
+    "fill_rate": 1.0,
+    "ratio_medio": 5368.7,
+    "motivos": {
+      "candidato_evaluacion": 2,
+      "fuera_ventana": 1
+    },
+    "informativo_n15": false
+  },
+  "SOL#15m#h19#[0.75,0.80)": {
+    "n": 2,
+    "n_con_ratio_libro": 2,
+    "fill_rate": 1.0,
+    "ratio_medio": 397.8,
+    "motivos": {
+      "candidato_evaluacion": 2
+    },
+    "informativo_n15": false
+  },
+  "SOL#15m#h20#[0.65,0.70)": {
+    "n": 8,
+    "n_con_ratio_libro": 8,
+    "fill_rate": 0.875,
+    "ratio_medio": 311.93,
+    "motivos": {
+      "candidato_evaluacion": 6,
+      "fuera_ventana": 2
+    },
+    "informativo_n15": false
+  },
+  "SOL#15m#h22#[0.80,0.85)": {
+    "n": 5,
+    "n_con_ratio_libro": 5,
+    "fill_rate": 1.0,
+    "ratio_medio": 993.9,
+    "motivos": {
+      "candidato_evaluacion": 4,
+      "fuera_ventana": 1
+    },
+    "informativo_n15": false
+  },
+  "ETH#15m#h23#[0.85,0.90)": {
+    "n": 3,
+    "n_con_ratio_libro": 3,
+    "fill_rate": 0.6667,
+    "ratio_medio": 606.07,
+    "motivos": {
+      "candidato_evaluacion": 3
+    },
+    "informativo_n15": false
+  },
+  "SOL#15m#h23#[0.85,0.90)": {
+    "n": 3,
+    "n_con_ratio_libro": 3,
+    "fill_rate": 0.6667,
+    "ratio_medio": 457.9,
+    "motivos": {
+      "candidato_evaluacion": 3
+    },
+    "informativo_n15": false
+  },
+  "XRP#15m#h00#[0.25,0.30)": {
+    "n": 1,
+    "n_con_ratio_libro": 1,
+    "fill_rate": 1.0,
+    "ratio_medio": 138.3,
+    "motivos": {
+      "candidato_evaluacion": 1
+    },
+    "informativo_n15": false
+  },
+  "SOL#15m#h02#[0.65,0.70)": {
+    "n": 3,
+    "n_con_ratio_libro": 3,
+    "fill_rate": 1.0,
+    "ratio_medio": 175.13,
+    "motivos": {
+      "candidato_evaluacion": 2,
+      "fuera_ventana": 1
+    },
+    "informativo_n15": false
+  },
+  "SOL#15m#h02#[0.55,0.60)": {
+    "n": 5,
+    "n_con_ratio_libro": 5,
+    "fill_rate": 0.6,
+    "ratio_medio": 156.56,
+    "motivos": {
+      "candidato_evaluacion": 4,
+      "fuera_ventana": 1
+    },
+    "informativo_n15": false
+  },
+  "SOL#15m#h05#[0.70,0.75)": {
+    "n": 6,
+    "n_con_ratio_libro": 6,
+    "fill_rate": 0.6667,
+    "ratio_medio": 246.37,
+    "motivos": {
+      "candidato_evaluacion": 5,
+      "fuera_ventana": 1
+    },
+    "informativo_n15": false
+  },
+  "SOL#15m#h05#[0.85,0.90)": {
+    "n": 4,
+    "n_con_ratio_libro": 4,
+    "fill_rate": 0.25,
+    "ratio_medio": 39.0,
+    "motivos": {
+      "candidato_evaluacion": 4
+    },
+    "informativo_n15": false
+  },
+  "SOL#15m#h06#[0.70,0.75)": {
+    "n": 3,
+    "n_con_ratio_libro": 3,
+    "fill_rate": 0.3333,
+    "ratio_medio": 212.93,
+    "motivos": {
+      "candidato_evaluacion": 3
+    },
+    "informativo_n15": false
+  },
+  "SOL#15m#h09#[0.80,0.85)": {
+    "n": 3,
+    "n_con_ratio_libro": 3,
+    "fill_rate": 0.3333,
+    "ratio_medio": 175.1,
+    "motivos": {
+      "candidato_evaluacion": 2,
+      "fuera_ventana": 1
+    },
+    "informativo_n15": false
+  },
+  "SOL#15m#h10#[0.80,0.85)": {
+    "n": 4,
+    "n_con_ratio_libro": 4,
+    "fill_rate": 0.75,
+    "ratio_medio": 43.0,
+    "motivos": {
+      "candidato_evaluacion": 3,
+      "fuera_ventana": 1
+    },
+    "informativo_n15": false
+  },
+  "ETH#15m#h11#[0.85,0.90)": {
+    "n": 2,
+    "n_con_ratio_libro": 2,
+    "fill_rate": 0.5,
+    "ratio_medio": 1820.5,
+    "motivos": {
+      "candidato_evaluacion": 2
+    },
+    "informativo_n15": false
+  },
+  "SOL#15m#h12#[0.90,0.95)": {
+    "n": 3,
+    "n_con_ratio_libro": 3,
+    "fill_rate": 1.0,
+    "ratio_medio": 536.0,
+    "motivos": {
+      "candidato_evaluacion": 3
+    },
+    "informativo_n15": false
+  },
+  "SOL#15m#h12#[0.70,0.75)": {
+    "n": 5,
+    "n_con_ratio_libro": 5,
+    "fill_rate": 0.8,
+    "ratio_medio": 228.62,
+    "motivos": {
+      "candidato_evaluacion": 3,
+      "fuera_ventana": 2
+    },
+    "informativo_n15": false
+  },
+  "ETH#15m#h12#[0.90,0.95)": {
+    "n": 1,
+    "n_con_ratio_libro": 1,
+    "fill_rate": 1.0,
+    "ratio_medio": 1341.7,
+    "motivos": {
+      "candidato_evaluacion": 1
+    },
+    "informativo_n15": false
+  },
+  "SOL#15m#h14#[0.80,0.85)": {
+    "n": 2,
+    "n_con_ratio_libro": 2,
+    "fill_rate": 0.0,
+    "ratio_medio": 0.0,
+    "motivos": {
+      "candidato_evaluacion": 2
+    },
+    "informativo_n15": false
+  },
+  "SOL#15m#h16#[0.75,0.80)": {
+    "n": 7,
+    "n_con_ratio_libro": 7,
+    "fill_rate": 1.0,
+    "ratio_medio": 592.7,
+    "motivos": {
+      "candidato_evaluacion": 3,
+      "no_viable_stake": 1,
+      "senal_caducada": 1,
+      "fuera_ventana": 2
+    },
+    "informativo_n15": false
+  },
+  "ETH#15m#h16#[0.85,0.90)": {
+    "n": 2,
+    "n_con_ratio_libro": 2,
+    "fill_rate": 0.5,
+    "ratio_medio": 1192.0,
+    "motivos": {
+      "candidato_evaluacion": 2
+    },
+    "informativo_n15": false
+  },
+  "SOL#15m#h16#[0.70,0.75)": {
+    "n": 4,
+    "n_con_ratio_libro": 4,
+    "fill_rate": 0.5,
+    "ratio_medio": 388.45,
+    "motivos": {
+      "candidato_evaluacion": 4
+    },
+    "informativo_n15": false
+  },
+  "SOL#15m#h17#[0.60,0.65)": {
+    "n": 2,
+    "n_con_ratio_libro": 2,
+    "fill_rate": 0.5,
+    "ratio_medio": 135.6,
+    "motivos": {
+      "candidato_evaluacion": 2
+    },
+    "informativo_n15": false
+  },
+  "SOL#15m#h17#[0.80,0.85)": {
+    "n": 7,
+    "n_con_ratio_libro": 7,
+    "fill_rate": 0.7143,
+    "ratio_medio": 294.76,
+    "motivos": {
+      "candidato_evaluacion": 4,
+      "no_viable_stake": 1,
+      "senal_caducada": 1,
+      "fuera_ventana": 1
+    },
+    "informativo_n15": false
+  },
+  "SOL#15m#h20#[0.80,0.85)": {
+    "n": 3,
+    "n_con_ratio_libro": 3,
+    "fill_rate": 1.0,
+    "ratio_medio": 426.63,
+    "motivos": {
+      "candidato_evaluacion": 3
+    },
+    "informativo_n15": false
+  },
+  "ETH#15m#h20#[0.80,0.85)": {
+    "n": 2,
+    "n_con_ratio_libro": 2,
+    "fill_rate": 1.0,
+    "ratio_medio": 637.0,
+    "motivos": {
+      "candidato_evaluacion": 2
+    },
+    "informativo_n15": false
+  },
+  "SOL#15m#h22#[0.60,0.65)": {
+    "n": 11,
+    "n_con_ratio_libro": 11,
+    "fill_rate": 0.5455,
+    "ratio_medio": 129.39,
+    "motivos": {
+      "candidato_evaluacion": 6,
+      "fuera_ventana": 5
+    },
+    "informativo_n15": false
+  },
+  "ETH#15m#h22#[0.80,0.85)": {
+    "n": 3,
+    "n_con_ratio_libro": 3,
+    "fill_rate": 0.6667,
+    "ratio_medio": 827.8,
+    "motivos": {
+      "candidato_evaluacion": 1,
+      "fuera_ventana": 2
+    },
+    "informativo_n15": false
+  },
+  "ETH#15m#h22#[0.85,0.90)": {
+    "n": 3,
+    "n_con_ratio_libro": 3,
+    "fill_rate": 0.6667,
+    "ratio_medio": 804.7,
+    "motivos": {
+      "candidato_evaluacion": 2,
+      "fuera_ventana": 1
+    },
+    "informativo_n15": false
+  },
+  "ETH#15m#h23#[0.90,0.95)": {
+    "n": 3,
+    "n_con_ratio_libro": 3,
+    "fill_rate": 1.0,
+    "ratio_medio": 1647.1,
+    "motivos": {
+      "candidato_evaluacion": 1,
+      "fuera_ventana": 2
+    },
+    "informativo_n15": false
+  },
+  "SOL#15m#h01#[0.70,0.75)": {
+    "n": 4,
+    "n_con_ratio_libro": 4,
+    "fill_rate": 0.5,
+    "ratio_medio": 52.3,
+    "motivos": {
+      "candidato_evaluacion": 4
+    },
+    "informativo_n15": false
+  },
+  "ETH#15m#h02#[0.85,0.90)": {
+    "n": 3,
+    "n_con_ratio_libro": 3,
+    "fill_rate": 0.3333,
+    "ratio_medio": 217.73,
+    "motivos": {
+      "candidato_evaluacion": 2,
+      "fuera_ventana": 1
+    },
+    "informativo_n15": false
+  },
+  "SOL#15m#h06#[0.90,0.95)": {
+    "n": 1,
+    "n_con_ratio_libro": 1,
+    "fill_rate": 1.0,
+    "ratio_medio": 764.3,
+    "motivos": {
+      "candidato_evaluacion": 1
+    },
+    "informativo_n15": false
+  },
+  "SOL#15m#h11#[0.85,0.90)": {
+    "n": 2,
+    "n_con_ratio_libro": 2,
+    "fill_rate": 0.5,
+    "ratio_medio": 49.8,
+    "motivos": {
+      "candidato_evaluacion": 2
+    },
+    "informativo_n15": false
+  },
+  "SOL#15m#h12#[0.85,0.90)": {
+    "n": 3,
+    "n_con_ratio_libro": 3,
+    "fill_rate": 0.6667,
+    "ratio_medio": 236.6,
+    "motivos": {
+      "candidato_evaluacion": 2,
+      "fuera_ventana": 1
+    },
+    "informativo_n15": false
+  },
+  "ETH#15m#h12#[0.80,0.85)": {
+    "n": 3,
+    "n_con_ratio_libro": 3,
+    "fill_rate": 1.0,
+    "ratio_medio": 414.4,
+    "motivos": {
+      "candidato_evaluacion": 1,
+      "fuera_ventana": 2
+    },
+    "informativo_n15": false
+  },
+  "SOL#15m#h13#[0.70,0.75)": {
+    "n": 5,
+    "n_con_ratio_libro": 5,
+    "fill_rate": 0.8,
+    "ratio_medio": 117.12,
+    "motivos": {
+      "candidato_evaluacion": 3,
+      "ejecutada": 1,
+      "fuera_ventana": 1
+    },
+    "informativo_n15": false
+  },
+  "ETH#15m#h15#[0.90,0.95)": {
+    "n": 1,
+    "n_con_ratio_libro": 1,
+    "fill_rate": 1.0,
+    "ratio_medio": 1429.9,
+    "motivos": {
+      "candidato_evaluacion": 1
+    },
+    "informativo_n15": false
+  },
+  "SOL#15m#h15#[0.85,0.90)": {
+    "n": 2,
+    "n_con_ratio_libro": 2,
+    "fill_rate": 0.0,
+    "ratio_medio": 0.0,
+    "motivos": {
+      "candidato_evaluacion": 1,
+      "fuera_ventana": 1
+    },
+    "informativo_n15": false
+  },
+  "SOL#15m#h17#[0.85,0.90)": {
+    "n": 2,
+    "n_con_ratio_libro": 2,
+    "fill_rate": 0.5,
+    "ratio_medio": 120.0,
+    "motivos": {
+      "candidato_evaluacion": 2
+    },
+    "informativo_n15": false
+  },
+  "SOL#15m#h19#[0.90,0.95)": {
+    "n": 1,
+    "n_con_ratio_libro": 1,
+    "fill_rate": 1.0,
+    "ratio_medio": 647.8,
+    "motivos": {
+      "candidato_evaluacion": 1
+    },
+    "informativo_n15": false
+  },
+  "SOL#15m#h22#[0.85,0.90)": {
+    "n": 2,
+    "n_con_ratio_libro": 2,
+    "fill_rate": 0.5,
+    "ratio_medio": 118.45,
+    "motivos": {
+      "candidato_evaluacion": 2
+    },
+    "informativo_n15": false
+  },
+  "SOL#15m#h00#[0.70,0.75)": {
+    "n": 7,
+    "n_con_ratio_libro": 7,
+    "fill_rate": 0.2857,
+    "ratio_medio": 68.97,
+    "motivos": {
+      "candidato_evaluacion": 6,
+      "fuera_ventana": 1
+    },
+    "informativo_n15": false
+  },
+  "XRP#5m#h03#[0.45,0.50)": {
+    "n": 12,
+    "n_con_ratio_libro": 12,
+    "fill_rate": 0.1667,
+    "ratio_medio": 24.28,
+    "motivos": {
+      "candidato_evaluacion": 12
+    },
+    "informativo_n15": false
+  },
+  "SOL#15m#h05#[0.80,0.85)": {
+    "n": 1,
+    "n_con_ratio_libro": 1,
+    "fill_rate": 1.0,
+    "ratio_medio": 426.3,
+    "motivos": {
+      "candidato_evaluacion": 1
+    },
+    "informativo_n15": false
+  },
+  "SOL#15m#h06#[0.75,0.80)": {
+    "n": 2,
+    "n_con_ratio_libro": 2,
+    "fill_rate": 1.0,
+    "ratio_medio": 323.75,
+    "motivos": {
+      "candidato_evaluacion": 2
+    },
+    "informativo_n15": false
+  },
+  "SOL#15m#h06#[0.60,0.65)": {
+    "n": 8,
+    "n_con_ratio_libro": 8,
+    "fill_rate": 0.625,
+    "ratio_medio": 252.43,
+    "motivos": {
+      "candidato_evaluacion": 7,
+      "fuera_ventana": 1
+    },
+    "informativo_n15": false
+  },
+  "SOL#15m#h13#[0.75,0.80)": {
+    "n": 4,
+    "n_con_ratio_libro": 4,
+    "fill_rate": 0.75,
+    "ratio_medio": 264.35,
+    "motivos": {
+      "candidato_evaluacion": 2,
+      "fuera_ventana": 2
+    },
+    "informativo_n15": false
+  },
+  "SOL#15m#h15#[0.80,0.85)": {
+    "n": 2,
+    "n_con_ratio_libro": 2,
+    "fill_rate": 1.0,
+    "ratio_medio": 453.5,
+    "motivos": {
+      "candidato_evaluacion": 2
+    },
+    "informativo_n15": false
+  },
+  "SOL#15m#h22#[0.70,0.75)": {
+    "n": 2,
+    "n_con_ratio_libro": 2,
+    "fill_rate": 1.0,
+    "ratio_medio": 284.55,
+    "motivos": {
+      "candidato_evaluacion": 2
+    },
+    "informativo_n15": false
+  },
+  "SOL#15m#h00#[0.80,0.85)": {
+    "n": 4,
+    "n_con_ratio_libro": 4,
+    "fill_rate": 0.25,
+    "ratio_medio": 28.23,
+    "motivos": {
+      "candidato_evaluacion": 3,
+      "fuera_ventana": 1
+    },
+    "informativo_n15": false
+  },
+  "SOL#15m#h01#[0.65,0.70)": {
+    "n": 4,
+    "n_con_ratio_libro": 4,
+    "fill_rate": 0.5,
+    "ratio_medio": 212.18,
+    "motivos": {
+      "candidato_evaluacion": 3,
+      "fuera_ventana": 1
+    },
+    "informativo_n15": false
+  },
+  "SOL#15m#h05#[0.65,0.70)": {
+    "n": 11,
+    "n_con_ratio_libro": 11,
+    "fill_rate": 0.5455,
+    "ratio_medio": 123.3,
+    "motivos": {
+      "candidato_evaluacion": 8,
+      "fuera_ventana": 3
+    },
+    "informativo_n15": false
+  },
+  "SOL#15m#h06#[0.55,0.60)": {
+    "n": 19,
+    "n_con_ratio_libro": 19,
+    "fill_rate": 0.1579,
+    "ratio_medio": 40.69,
+    "motivos": {
+      "candidato_evaluacion": 6,
+      "fuera_ventana": 1,
+      "veto_profundidad": 11,
+      "senal_caducada": 1
+    },
+    "informativo_n15": true
+  },
+  "SOL#15m#h09#[0.85,0.90)": {
+    "n": 1,
+    "n_con_ratio_libro": 1,
+    "fill_rate": 0.0,
+    "ratio_medio": 0.0,
+    "motivos": {
+      "candidato_evaluacion": 1
+    },
+    "informativo_n15": false
+  },
+  "ETH#15m#h10#[0.85,0.90)": {
+    "n": 2,
+    "n_con_ratio_libro": 2,
+    "fill_rate": 1.0,
+    "ratio_medio": 1536.0,
+    "motivos": {
+      "candidato_evaluacion": 1,
+      "fuera_ventana": 1
+    },
+    "informativo_n15": false
+  },
+  "SOL#5m#h12#[0.65,0.70)": {
+    "n": 3,
+    "n_con_ratio_libro": 3,
+    "fill_rate": 0.6667,
+    "ratio_medio": 321.3,
+    "motivos": {
+      "candidato_evaluacion": 3
+    },
+    "informativo_n15": false
+  },
+  "ETH#5m#h12#[0.80,0.85)": {
+    "n": 1,
+    "n_con_ratio_libro": 1,
+    "fill_rate": 0.0,
+    "ratio_medio": 0.0,
+    "motivos": {
+      "candidato_evaluacion": 1
+    },
+    "informativo_n15": false
+  },
+  "SOL#5m#h13#[0.65,0.70)": {
+    "n": 1,
+    "n_con_ratio_libro": 1,
+    "fill_rate": 1.0,
+    "ratio_medio": 241.1,
+    "motivos": {
+      "candidato_evaluacion": 1
+    },
+    "informativo_n15": false
+  },
+  "SOL#5m#h14#[0.75,0.80)": {
+    "n": 1,
+    "n_con_ratio_libro": 1,
+    "fill_rate": 0.0,
+    "ratio_medio": 0.0,
+    "motivos": {
+      "candidato_evaluacion": 1
+    },
+    "informativo_n15": false
+  },
+  "ETH#15m#h14#[0.80,0.85)": {
+    "n": 1,
+    "n_con_ratio_libro": 1,
+    "fill_rate": 0.0,
+    "ratio_medio": 0.0,
+    "motivos": {
+      "candidato_evaluacion": 1
+    },
+    "informativo_n15": false
+  },
+  "SOL#15m#h20#[0.75,0.80)": {
+    "n": 7,
+    "n_con_ratio_libro": 7,
+    "fill_rate": 0.5714,
+    "ratio_medio": 189.26,
+    "motivos": {
+      "candidato_evaluacion": 4,
+      "fuera_ventana": 3
+    },
+    "informativo_n15": false
+  },
+  "SOL#5m#h23#[0.70,0.75)": {
+    "n": 4,
+    "n_con_ratio_libro": 4,
+    "fill_rate": 0.75,
+    "ratio_medio": 258.9,
+    "motivos": {
+      "candidato_evaluacion": 4
+    },
+    "informativo_n15": false
+  },
+  "SOL#5m#h00#[0.85,0.90)": {
+    "n": 1,
+    "n_con_ratio_libro": 1,
+    "fill_rate": 1.0,
+    "ratio_medio": 131.4,
+    "motivos": {
+      "candidato_evaluacion": 1
+    },
+    "informativo_n15": false
+  },
+  "SOL#15m#h00#[0.75,0.80)": {
+    "n": 4,
+    "n_con_ratio_libro": 4,
+    "fill_rate": 1.0,
+    "ratio_medio": 476.35,
+    "motivos": {
+      "fuera_ventana": 3,
+      "candidato_evaluacion": 1
+    },
+    "informativo_n15": false
+  },
+  "ETH#15m#h03#[0.80,0.85)": {
+    "n": 4,
+    "n_con_ratio_libro": 4,
+    "fill_rate": 0.25,
+    "ratio_medio": 333.68,
+    "motivos": {
+      "candidato_evaluacion": 3,
+      "fuera_ventana": 1
+    },
+    "informativo_n15": false
+  },
+  "ETH#15m#h05#[0.85,0.90)": {
+    "n": 1,
+    "n_con_ratio_libro": 1,
+    "fill_rate": 0.0,
+    "ratio_medio": 0.0,
+    "motivos": {
+      "candidato_evaluacion": 1
+    },
+    "informativo_n15": false
+  },
+  "SOL#5m#h05#[0.85,0.90)": {
+    "n": 1,
+    "n_con_ratio_libro": 1,
+    "fill_rate": 1.0,
+    "ratio_medio": 1220.7,
+    "motivos": {
+      "candidato_evaluacion": 1
+    },
+    "informativo_n15": false
+  },
+  "BTC#15m#h12#[0.90,0.95)": {
+    "n": 1,
+    "n_con_ratio_libro": 1,
+    "fill_rate": 1.0,
+    "ratio_medio": 1022.6,
+    "motivos": {
+      "candidato_evaluacion": 1
+    },
+    "informativo_n15": false
+  },
+  "ETH#5m#h13#[0.80,0.85)": {
+    "n": 1,
+    "n_con_ratio_libro": 1,
+    "fill_rate": 0.0,
+    "ratio_medio": 0.0,
+    "motivos": {
+      "candidato_evaluacion": 1
+    },
+    "informativo_n15": false
+  },
+  "SOL#5m#h13#[0.90,0.95)": {
+    "n": 1,
+    "n_con_ratio_libro": 1,
+    "fill_rate": 0.0,
+    "ratio_medio": 0.0,
+    "motivos": {
+      "candidato_evaluacion": 1
+    },
+    "informativo_n15": false
+  },
+  "SOL#5m#h14#[0.70,0.75)": {
+    "n": 3,
+    "n_con_ratio_libro": 3,
+    "fill_rate": 0.6667,
+    "ratio_medio": 69.27,
+    "motivos": {
+      "candidato_evaluacion": 3
+    },
+    "informativo_n15": false
+  },
+  "SOL#15m#h15#[0.75,0.80)": {
+    "n": 5,
+    "n_con_ratio_libro": 5,
+    "fill_rate": 0.4,
+    "ratio_medio": 125.96,
+    "motivos": {
+      "candidato_evaluacion": 3,
+      "ejecutada": 1,
+      "fuera_ventana": 1
+    },
+    "informativo_n15": false
+  },
+  "SOL#15m#h17#[0.75,0.80)": {
+    "n": 1,
+    "n_con_ratio_libro": 1,
+    "fill_rate": 0.0,
+    "ratio_medio": 0.0,
+    "motivos": {
+      "candidato_evaluacion": 1
+    },
+    "informativo_n15": false
+  },
+  "ETH#15m#h18#[0.85,0.90)": {
+    "n": 2,
+    "n_con_ratio_libro": 2,
+    "fill_rate": 1.0,
+    "ratio_medio": 1430.95,
+    "motivos": {
+      "candidato_evaluacion": 2
+    },
+    "informativo_n15": false
+  },
+  "ETH#5m#h19#[0.80,0.85)": {
+    "n": 1,
+    "n_con_ratio_libro": 1,
+    "fill_rate": 1.0,
+    "ratio_medio": 1086.9,
+    "motivos": {
+      "candidato_evaluacion": 1
+    },
+    "informativo_n15": false
+  },
+  "SOL#5m#h01#[0.70,0.75)": {
+    "n": 2,
+    "n_con_ratio_libro": 2,
+    "fill_rate": 1.0,
+    "ratio_medio": 821.65,
+    "motivos": {
+      "candidato_evaluacion": 2
+    },
+    "informativo_n15": false
+  },
+  "ETH#5m#h01#[0.85,0.90)": {
+    "n": 1,
+    "n_con_ratio_libro": 1,
+    "fill_rate": 1.0,
+    "ratio_medio": 4968.3,
+    "motivos": {
+      "candidato_evaluacion": 1
+    },
+    "informativo_n15": false
+  },
+  "ETH#15m#h03#[0.85,0.90)": {
+    "n": 1,
+    "n_con_ratio_libro": 1,
+    "fill_rate": 1.0,
+    "ratio_medio": 882.3,
+    "motivos": {
+      "candidato_evaluacion": 1
+    },
+    "informativo_n15": false
+  },
+  "ETH#5m#h08#[0.90,0.95)": {
+    "n": 1,
+    "n_con_ratio_libro": 1,
+    "fill_rate": 1.0,
+    "ratio_medio": 1063.4,
+    "motivos": {
+      "candidato_evaluacion": 1
+    },
+    "informativo_n15": false
+  },
+  "SOL#15m#h14#[0.90,0.95)": {
+    "n": 1,
+    "n_con_ratio_libro": 1,
+    "fill_rate": 0.0,
+    "ratio_medio": 0.0,
+    "motivos": {
+      "candidato_evaluacion": 1
+    },
+    "informativo_n15": false
+  },
+  "SOL#5m#h15#[0.60,0.65)": {
+    "n": 2,
+    "n_con_ratio_libro": 2,
+    "fill_rate": 0.0,
+    "ratio_medio": 0.0,
+    "motivos": {
+      "candidato_evaluacion": 2
+    },
+    "informativo_n15": false
+  },
+  "SOL#5m#h15#[0.85,0.90)": {
+    "n": 1,
+    "n_con_ratio_libro": 1,
+    "fill_rate": 1.0,
+    "ratio_medio": 192.6,
+    "motivos": {
+      "candidato_evaluacion": 1
+    },
+    "informativo_n15": false
+  },
+  "SOL#5m#h16#[0.80,0.85)": {
+    "n": 1,
+    "n_con_ratio_libro": 1,
+    "fill_rate": 1.0,
+    "ratio_medio": 2026.2,
+    "motivos": {
+      "candidato_evaluacion": 1
+    },
+    "informativo_n15": false
+  },
+  "ETH#5m#h16#[0.80,0.85)": {
+    "n": 2,
+    "n_con_ratio_libro": 2,
+    "fill_rate": 1.0,
+    "ratio_medio": 1957.15,
+    "motivos": {
+      "candidato_evaluacion": 2
+    },
+    "informativo_n15": false
+  },
+  "SOL#15m#h19#[0.80,0.85)": {
+    "n": 3,
+    "n_con_ratio_libro": 3,
+    "fill_rate": 1.0,
+    "ratio_medio": 496.8,
+    "motivos": {
+      "candidato_evaluacion": 2,
+      "fuera_ventana": 1
+    },
+    "informativo_n15": false
+  },
+  "SOL#5m#h01#[0.55,0.60)": {
+    "n": 2,
+    "n_con_ratio_libro": 2,
+    "fill_rate": 1.0,
+    "ratio_medio": 415.45,
+    "motivos": {
+      "candidato_evaluacion": 2
+    },
+    "informativo_n15": false
+  },
+  "ETH#15m#h03#[0.90,0.95)": {
+    "n": 1,
+    "n_con_ratio_libro": 1,
+    "fill_rate": 0.0,
+    "ratio_medio": 0.0,
+    "motivos": {
+      "fuera_ventana": 1
+    },
+    "informativo_n15": false
+  },
+  "ETH#15m#h06#[0.85,0.90)": {
+    "n": 1,
+    "n_con_ratio_libro": 1,
+    "fill_rate": 1.0,
+    "ratio_medio": 1831.2,
+    "motivos": {
+      "fuera_ventana": 1
+    },
+    "informativo_n15": false
+  },
+  "SOL#15m#h06#[0.85,0.90)": {
+    "n": 1,
+    "n_con_ratio_libro": 1,
+    "fill_rate": 0.0,
+    "ratio_medio": 0.0,
+    "motivos": {
+      "candidato_evaluacion": 1
+    },
+    "informativo_n15": false
+  },
+  "SOL#5m#h09#[0.80,0.85)": {
+    "n": 1,
+    "n_con_ratio_libro": 1,
+    "fill_rate": 0.0,
+    "ratio_medio": 0.0,
+    "motivos": {
+      "candidato_evaluacion": 1
+    },
+    "informativo_n15": false
+  },
+  "SOL#5m#h15#[0.55,0.60)": {
+    "n": 2,
+    "n_con_ratio_libro": 2,
+    "fill_rate": 0.5,
+    "ratio_medio": 279.05,
+    "motivos": {
+      "candidato_evaluacion": 2
+    },
+    "informativo_n15": false
+  },
+  "ETH#15m#h17#[0.85,0.90)": {
+    "n": 3,
+    "n_con_ratio_libro": 3,
+    "fill_rate": 1.0,
+    "ratio_medio": 301.97,
+    "motivos": {
+      "fuera_ventana": 3
+    },
+    "informativo_n15": false
+  },
+  "ETH#5m#h08#[0.80,0.85)": {
+    "n": 1,
+    "n_con_ratio_libro": 1,
+    "fill_rate": 1.0,
+    "ratio_medio": 837.4,
+    "motivos": {
+      "candidato_evaluacion": 1
+    },
+    "informativo_n15": false
+  },
+  "SOL#5m#h10#[0.70,0.75)": {
+    "n": 1,
+    "n_con_ratio_libro": 1,
+    "fill_rate": 0.0,
+    "ratio_medio": 0.0,
+    "motivos": {
+      "candidato_evaluacion": 1
+    },
+    "informativo_n15": false
+  },
+  "ETH#15m#h12#[0.85,0.90)": {
+    "n": 2,
+    "n_con_ratio_libro": 2,
+    "fill_rate": 0.0,
+    "ratio_medio": 0.0,
+    "motivos": {
+      "fuera_ventana": 1,
+      "candidato_evaluacion": 1
+    },
+    "informativo_n15": false
+  },
+  "ETH#15m#h13#[0.85,0.90)": {
+    "n": 1,
+    "n_con_ratio_libro": 1,
+    "fill_rate": 1.0,
+    "ratio_medio": 1747.5,
+    "motivos": {
+      "fuera_ventana": 1
+    },
+    "informativo_n15": false
+  },
+  "ETH#15m#h15#[0.85,0.90)": {
+    "n": 2,
+    "n_con_ratio_libro": 2,
+    "fill_rate": 0.5,
+    "ratio_medio": 107.65,
+    "motivos": {
+      "fuera_ventana": 2
+    },
+    "informativo_n15": false
+  },
+  "ETH#5m#h17#[0.85,0.90)": {
+    "n": 1,
+    "n_con_ratio_libro": 1,
+    "fill_rate": 0.0,
+    "ratio_medio": 0.0,
+    "motivos": {
+      "candidato_evaluacion": 1
+    },
+    "informativo_n15": false
+  },
+  "ETH#15m#h19#[0.80,0.85)": {
+    "n": 1,
+    "n_con_ratio_libro": 1,
+    "fill_rate": 1.0,
+    "ratio_medio": 1780.4,
+    "motivos": {
+      "fuera_ventana": 1
+    },
+    "informativo_n15": false
+  },
+  "SOL#15m#h22#[0.90,0.95)": {
+    "n": 1,
+    "n_con_ratio_libro": 1,
+    "fill_rate": 1.0,
+    "ratio_medio": 703.6,
+    "motivos": {
+      "fuera_ventana": 1
+    },
+    "informativo_n15": false
+  },
+  "ETH#15m#h02#[0.90,0.95)": {
+    "n": 1,
+    "n_con_ratio_libro": 1,
+    "fill_rate": 1.0,
+    "ratio_medio": 1089.2,
+    "motivos": {
+      "fuera_ventana": 1
+    },
+    "informativo_n15": false
+  },
+  "ETH#15m#h11#[0.90,0.95)": {
+    "n": 2,
+    "n_con_ratio_libro": 2,
+    "fill_rate": 1.0,
+    "ratio_medio": 225.05,
+    "motivos": {
+      "fuera_ventana": 2
+    },
+    "informativo_n15": false
+  },
+  "SOL#15m#h12#[0.80,0.85)": {
+    "n": 2,
+    "n_con_ratio_libro": 2,
+    "fill_rate": 0.0,
+    "ratio_medio": 0.0,
+    "motivos": {
+      "fuera_ventana": 2
+    },
+    "informativo_n15": false
+  },
+  "ETH#15m#h14#[0.85,0.90)": {
+    "n": 1,
+    "n_con_ratio_libro": 1,
+    "fill_rate": 1.0,
+    "ratio_medio": 861.3,
+    "motivos": {
+      "fuera_ventana": 1
+    },
+    "informativo_n15": false
+  },
+  "ETH#15m#h15#[0.80,0.85)": {
+    "n": 1,
+    "n_con_ratio_libro": 1,
+    "fill_rate": 0.0,
+    "ratio_medio": 0.0,
+    "motivos": {
+      "fuera_ventana": 1
+    },
+    "informativo_n15": false
+  },
+  "ETH#15m#h18#[0.90,0.95)": {
+    "n": 1,
+    "n_con_ratio_libro": 1,
+    "fill_rate": 1.0,
+    "ratio_medio": 84.0,
+    "motivos": {
+      "fuera_ventana": 1
+    },
+    "informativo_n15": false
+  },
+  "XRP#5m#h07#[0.45,0.50)": {
+    "n": 3,
+    "n_con_ratio_libro": 3,
+    "fill_rate": 0.3333,
+    "ratio_medio": 54.07,
+    "motivos": {
+      "candidato_evaluacion": 3
+    },
+    "informativo_n15": false
+  },
+  "ETH#5m#h11#[0.85,0.90)": {
+    "n": 1,
+    "n_con_ratio_libro": 1,
+    "fill_rate": 1.0,
+    "ratio_medio": 331.7,
+    "motivos": {
+      "candidato_evaluacion": 1
+    },
+    "informativo_n15": false
+  },
+  "SOL#15m#h15#[0.90,0.95)": {
+    "n": 2,
+    "n_con_ratio_libro": 2,
+    "fill_rate": 0.5,
+    "ratio_medio": 628.25,
+    "motivos": {
+      "fuera_ventana": 1,
+      "candidato_evaluacion": 1
+    },
+    "informativo_n15": false
+  },
+  "SOL#15m#h23#[0.90,0.95)": {
+    "n": 2,
+    "n_con_ratio_libro": 2,
+    "fill_rate": 1.0,
+    "ratio_medio": 357.0,
+    "motivos": {
+      "candidato_evaluacion": 1,
+      "fuera_ventana": 1
+    },
+    "informativo_n15": false
+  },
+  "ETH#5m#h00#[0.80,0.85)": {
+    "n": 1,
+    "n_con_ratio_libro": 1,
+    "fill_rate": 1.0,
+    "ratio_medio": 170.2,
+    "motivos": {
+      "candidato_evaluacion": 1
+    },
+    "informativo_n15": false
+  },
+  "SOL#15m#h20#[0.85,0.90)": {
+    "n": 1,
+    "n_con_ratio_libro": 1,
+    "fill_rate": 0.0,
+    "ratio_medio": 0.0,
+    "motivos": {
+      "fuera_ventana": 1
+    },
+    "informativo_n15": false
+  },
+  "SOL#15m#h05#[0.90,0.95)": {
+    "n": 1,
+    "n_con_ratio_libro": 1,
+    "fill_rate": 1.0,
+    "ratio_medio": 317.6,
+    "motivos": {
+      "candidato_evaluacion": 1
+    },
+    "informativo_n15": false
+  },
+  "ETH#5m#h08#[0.85,0.90)": {
+    "n": 1,
+    "n_con_ratio_libro": 1,
+    "fill_rate": 1.0,
+    "ratio_medio": 171.2,
+    "motivos": {
+      "candidato_evaluacion": 1
+    },
+    "informativo_n15": false
+  },
+  "SOL#5m#h09#[0.70,0.75)": {
+    "n": 1,
+    "n_con_ratio_libro": 1,
+    "fill_rate": 0.0,
+    "ratio_medio": 0.0,
+    "motivos": {
+      "candidato_evaluacion": 1
+    },
+    "informativo_n15": false
+  }
+}
