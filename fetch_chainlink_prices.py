@@ -65,21 +65,30 @@ def _archivo_hoy() -> Path:
     return DIR_PRICES / f"chainlink_{fecha}.csv"
 
 
-def _escribir_tick(writer_state: dict, asset: str, price: float, ws_ts_ms: int) -> None:
+def _escribir_tick(asset: str, price: float, ws_ts_ms: int) -> None:
+    """Abre-escribe-cierra en CADA tick (22-Jul, bug fix -- ver memoria
+    idea_bug_chainlink_fd_huerfano_git_22jul). Antes mantenía un file handle
+    abierto entre ticks (reabierto solo al detectar rotación de día por
+    nombre de fichero) -- pero run_slow.sh commitea/hace pull --rebase sobre
+    data/prices/*.csv cada ~11min, y esa operación de git puede REEMPLAZAR
+    el fichero en disco (nuevo inodo). El handle ya abierto sigue "escribiendo
+    con éxito" en el inodo viejo, ahora huérfano (sin entrada de directorio) --
+    cero errores en el log, pero el fichero visible en disco deja de crecer
+    para siempre. Confirmado 22-Jul: chainlink_2026-07-22.csv se congeló a
+    las 00:06:46Z, exactamente cuando 2 commits "ciclo slow" tocaron ese
+    fichero a las 00:06Z/00:17Z, pese a 14.500+ ticks recibidos después según
+    el log. A ~4 ticks/s el coste de abrir+cerrar por tick es insignificante
+    y elimina la clase de bug entera (no hace falta detectar la rotación de
+    fichero de ninguna manera especial, open('a') ya crea el fichero correcto
+    del día actual cada vez)."""
     archivo = _archivo_hoy()
-    if writer_state.get("path") != archivo:
-        # Rotación de día (o primer tick): (re)abre el fichero, cabecera si es nuevo.
-        if writer_state.get("f"):
-            writer_state["f"].close()
-        nuevo = not archivo.exists()
-        f = open(archivo, "a", newline="", encoding="utf-8")
+    nuevo = not archivo.exists()
+    with open(archivo, "a", newline="", encoding="utf-8") as f:
         w = csv.writer(f)
         if nuevo:
             w.writerow(["timestamp_utc", "asset", "price_usd", "ws_timestamp_ms", "source"])
-        writer_state.update(path=archivo, f=f, w=w)
-    ts = datetime.now(timezone.utc).isoformat(timespec="milliseconds")
-    writer_state["w"].writerow([ts, asset, price, ws_ts_ms, "chainlink"])
-    writer_state["f"].flush()
+        ts = datetime.now(timezone.utc).isoformat(timespec="milliseconds")
+        w.writerow([ts, asset, price, ws_ts_ms, "chainlink"])
 
 
 async def _mantener_ping(ws):
@@ -91,7 +100,7 @@ async def _mantener_ping(ws):
         pass
 
 
-async def _correr_una_conexion(writer_state: dict) -> None:
+async def _correr_una_conexion() -> None:
     async with websockets.connect(WS_URL, open_timeout=10, close_timeout=5) as ws:
         # El campo "filters" documentado no funciona en la práctica (probado
         # 20-Jul: con o sin él, con string u objeto, la suscripción se queda
@@ -125,7 +134,7 @@ async def _correr_una_conexion(writer_state: dict) -> None:
                 except (TypeError, ValueError):
                     continue
                 ws_ts_ms = payload.get("timestamp") or msg.get("timestamp")
-                _escribir_tick(writer_state, asset, price, ws_ts_ms)
+                _escribir_tick(asset, price, ws_ts_ms)
                 n_ticks += 1
                 if n_ticks % 500 == 0:
                     _log(f"{n_ticks} ticks recibidos en esta conexión")
@@ -135,10 +144,9 @@ async def _correr_una_conexion(writer_state: dict) -> None:
 
 async def main() -> None:
     DIR_PRICES.mkdir(parents=True, exist_ok=True)
-    writer_state: dict = {}
     while True:
         try:
-            await _correr_una_conexion(writer_state)
+            await _correr_una_conexion()
         except (websockets.exceptions.ConnectionClosed, OSError, asyncio.TimeoutError) as e:
             _log(f"Conexión perdida ({type(e).__name__}: {e}) — reintentando en {RECONNECT_ESPERA_S}s")
         except Exception as e:
