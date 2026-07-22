@@ -2345,5 +2345,7 @@
  "candidato_proxy#GBM_LATE_15M_ESPACIO_ATR#ETH#15min#ETH#BUY_YES#dist_vwap_pctgt0.1684": false,
  "candidato_proxy#UPDOWN_GBM#BTC#15min#BTC#BUY_YES#sigma_hlt0.0067": false,
  "candidato_proxy#UPDOWN_GBM#BTC#15min#BTC#BUY_YES#drift_60minabs_lt0.2269": false,
- "candidato_proxy#WEEKLY_PRICE#BTC#BTC#BUY_NO#T_hgt111.9936": false
+ "candidato_proxy#WEEKLY_PRICE#BTC#BTC#BUY_NO#T_hgt111.9936": false,
+ "candidato_proxy#GBM_LATE_15M#BTC#15min#BTC#BUY_YES#dist_vwap_pctlt0.1041": false,
+ "candidato_proxy#GBM_LATE_15M_TARDIO#SOL#BUY_YES#hora_utcgt8.0": false
 }
