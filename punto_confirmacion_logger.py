@@ -53,6 +53,7 @@ import csv
 import heapq
 import json
 import time
+import zoneinfo
 from datetime import datetime, timezone
 from pathlib import Path
 
@@ -97,8 +98,33 @@ def _csv_path(dt: datetime) -> Path:
     return DIR_SHADOW / f"punto_confirmacion_{dt.strftime('%Y-%m-%d')}.csv"
 
 
+# 23-Jul: bug real encontrado -- ETH#60min llevaba 0 capturas desde el
+# arranque del 21-Jul (3275 líneas de log, ninguna con "ETH#60min").
+# mercado_slot() construía el slug con el patrón compacto de 5/15min
+# (f"{asset}-updown-{ventana_min}m-{ts_start}") que SOLO existe para esos
+# 2 marcos -- los mercados de 60min (horarios) usan un slug completamente
+# distinto, verificado contra un mercado real ya operado en live
+# (market_id de FAVORITO_CONFIRMADO#BTC#60min): nombre completo de la
+# moneda + fecha+hora en ET, ej. "bitcoin-up-or-down-july-23-2026-12am-et".
+# snapshot_asset() fallaba en silencio (mercado_slot devuelve mkt=None,
+# sin log de error) -- el scheduler seguía reprogramando la siguiente
+# hora para siempre sin que nadie lo notara. Verificado en vivo antes de
+# aplicar: la construcción de abajo SÍ resuelve un ETH#60min real.
+NOMBRE_COMPLETO_MONEDA = {"btc": "bitcoin", "eth": "ethereum", "sol": "solana",
+                           "xrp": "xrp", "doge": "dogecoin"}
+ET = zoneinfo.ZoneInfo("America/New_York")
+
+
+def _slug_60min(asset: str, ts_start: int) -> str:
+    dt_et = datetime.fromtimestamp(ts_start, tz=timezone.utc).astimezone(ET)
+    hora12 = dt_et.strftime("%I").lstrip("0") or "12"
+    ampm = dt_et.strftime("%p").lower()
+    nombre = NOMBRE_COMPLETO_MONEDA.get(asset, asset)
+    return f"{nombre}-up-or-down-{dt_et.strftime('%B').lower()}-{dt_et.day}-{dt_et.year}-{hora12}{ampm}-et"
+
+
 def mercado_slot(asset: str, ventana_min: int, ts_start: int):
-    slug = f"{asset}-updown-{ventana_min}m-{ts_start}"
+    slug = _slug_60min(asset, ts_start) if ventana_min == 60 else f"{asset}-updown-{ventana_min}m-{ts_start}"
     try:
         r = requests.get(f"{GAMMA}/events", params={"slug": slug}, timeout=TIMEOUT)
         if r.status_code != 200:
