@@ -1830,3 +1830,14 @@ timestamp_utc,activo,nesting,combo,coste,profit_min_pct,gap_opens_pct,depth_usd,
 2026-07-23T13:41:41+00:00,XRP,5min15m,YESout+NOin,1.23,-23.0,0.0269,18.86,198,0.78,0.45,1.1144,1.1141,xrp-updown-5m-1784814000,xrp-updown-15m-1784813400
 2026-07-23T13:43:00+00:00,BTC,5min15m,YESout+NOin,0.98,2.0,0.2771,128.06,119,0.85,0.13,65135.19,64955.195,btc-updown-5m-1784814000,btc-updown-15m-1784813400
 2026-07-23T13:43:01+00:00,XRP,5min15m,YESout+NOin,1.24,-24.0,0.0269,7.19,118,0.88,0.36,1.1144,1.1141,xrp-updown-5m-1784814000,xrp-updown-15m-1784813400
+2026-07-23T13:46:45+00:00,BTC,15min60m,NOout+YESin,1.14,-14.0,-0.0925,6.72,794,0.84,0.3,65035.0,65095.225,btc-updown-15m-1784814300,bitcoin-up-or-down-july-23-2026-9am-et
+2026-07-23T13:46:45+00:00,ETH,15min60m,YESout+NOin,1.16,-16.0,0.1211,16.47,794,0.5,0.66,1905.4,1903.095,eth-updown-15m-1784814300,ethereum-up-or-down-july-23-2026-9am-et
+2026-07-23T13:46:46+00:00,SOL,15min60m,YESout+NOin,1.1,-10.0,0.0,8.73,793,0.44,0.66,76.92,76.92,sol-updown-15m-1784814300,solana-up-or-down-july-23-2026-9am-et
+2026-07-23T13:46:46+00:00,XRP,15min60m,NOout+YESin,1.398,-39.8,-0.9901,16.96,793,0.998,0.4,1.11,1.1211,xrp-updown-15m-1784814300,xrp-up-or-down-july-23-2026-9am-et
+2026-07-23T13:48:03+00:00,BTC,15min60m,NOout+YESin,1.12,-12.0,-0.0925,17.01,716,0.91,0.21,65035.0,65095.225,btc-updown-15m-1784814300,bitcoin-up-or-down-july-23-2026-9am-et
+2026-07-23T13:48:03+00:00,ETH,15min60m,YESout+NOin,1.18,-18.0,0.1211,15.48,716,0.45,0.73,1905.4,1903.095,eth-updown-15m-1784814300,ethereum-up-or-down-july-23-2026-9am-et
+2026-07-23T13:48:04+00:00,SOL,15min60m,YESout+NOin,1.11,-11.0,0.0,8.33,715,0.42,0.69,76.92,76.92,sol-updown-15m-1784814300,solana-up-or-down-july-23-2026-9am-et
+2026-07-23T13:48:04+00:00,XRP,15min60m,NOout+YESin,1.309,-30.9,-0.9901,14.82,715,0.999,0.31,1.11,1.1211,xrp-updown-15m-1784814300,xrp-up-or-down-july-23-2026-9am-et
+2026-07-23T13:49:38+00:00,BTC,15min60m,NOout+YESin,1.12,-12.0,-0.0925,5.44,621,0.95,0.17,65035.0,65095.225,btc-updown-15m-1784814300,bitcoin-up-or-down-july-23-2026-9am-et
+2026-07-23T13:49:38+00:00,ETH,15min60m,YESout+NOin,1.11,-11.0,0.1211,5.6,621,0.28,0.83,1905.4,1903.095,eth-updown-15m-1784814300,ethereum-up-or-down-july-23-2026-9am-et
+2026-07-23T13:49:39+00:00,SOL,15min60m,YESout+NOin,1.08,-8.0,0.0,9.76,620,0.28,0.8,76.92,76.92,sol-updown-15m-1784814300,solana-up-or-down-july-23-2026-9am-et
