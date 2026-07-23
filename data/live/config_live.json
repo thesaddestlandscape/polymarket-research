@@ -155,7 +155,16 @@
         "SOL#60m",
         "BTC#60m",
         "ETH#60m"
-      ]
+      ],
+      "espera_confirmacion": {
+        "_nota": "2026-07-23, ver plan /root/.claude/plans/ticklish-doodling-shannon.md: veto_ballenas de arriba solo mira banda de PRECIO, nunca el TIEMPO -- rest_lo_min/rest_hi_min de ballenas_timing_state.json ya existen pero no se leían. activo=false por defecto: comportamiento idéntico al actual mientras no se active explícitamente. Fase 0 (modo_observacion=true, combos_activos con datos) antes de cualquier euro en riesgo.",
+        "activo": false,
+        "modo_observacion": true,
+        "combos_activos": [],
+        "margen_superior_min": 0.3,
+        "margen_inferior_min": 0.3,
+        "floor_min": 0.25
+      }
     },
     "_veto_discrepancia_nota": "2026-07-11 (propuesta #8 backlog quant-desk, aprobado Javi): cuando 2+ tuplas de pares_permitidos_live predicen direcciones OPUESTAS sobre el MISMO market_id, en shadow ese subconjunto acierta 50.0% (n=30) — y ese n=30 es ÍNTEGRAMENTE un solo par estructural (FAVORITO_CONFIRMADO#BTC#15min#BUY_NO vs GBM_LATE_15M_ESPACIO_ATR#BTC#15min#BUY_YES, ambas whitelisted el mismo día en direcciones opuestas sobre BTC). n=30 está en el límite del umbral n>=15 del proyecto, no n>=40 — veto fail-closed conservador (no ejecuta ninguna de las dos) mientras se acumula más dato, no una decisión permanente de retirar ninguna tupla. Sin toggle en config: el veto vive directamente en live_trade.py (_wl_por_mercado), igual que el resto de vetoes de seguridad (CLV, fee, profundidad) — no son opcionales.",
     "circuit_breaker": {
