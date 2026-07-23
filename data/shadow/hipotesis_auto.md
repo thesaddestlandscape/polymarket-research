@@ -1,5 +1,5 @@
-# Hipótesis automáticas — 2026-07-23 12:23 UTC
-_Generado por shadow_postmortem.py sobre 30846 resoluciones (PNL=+6870.39€)_
+# Hipótesis automáticas — 2026-07-23 12:30 UTC
+_Generado por shadow_postmortem.py sobre 30848 resoluciones (PNL=+6871.73€)_
 
 ## Patrones causales activos
 
@@ -28,7 +28,7 @@ _Generado por shadow_postmortem.py sobre 30846 resoluciones (PNL=+6870.39€)_
   - _Por qué funciona_: hora temprana → mercados cripto menos líquidos, spreads más amplios; edge real menor
   - _Acción_: Kelly boost +1.00€ cuando `hora_utc` < 7.0 (IC base=+0.176)
 
-- **PATRÓN** `py_entrada` < `0.265` → IC=+0.343 (n=725)
+- **PATRÓN** `py_entrada` < `0.265` → IC=+0.343 (n=726)
 
   - _Acción_: Kelly boost +1.00€ cuando `py_entrada` < 0.265 (IC base=+0.176)
 
@@ -36,9 +36,9 @@ _Generado por shadow_postmortem.py sobre 30846 resoluciones (PNL=+6870.39€)_
 
   - _Acción_: Kelly boost +0.89€ cuando `libro_spread` < 0.01 (IC base=+0.176)
 
-- **PATRÓN** `libro_liquidez` > `6040.4209` → IC=+0.178 (n=965)
+- **PATRÓN** `libro_liquidez` > `6036.1503` → IC=+0.179 (n=966)
 
-  - _Acción_: Kelly boost +0.89€ cuando `libro_liquidez` > 6040.4209 (IC base=+0.176)
+  - _Acción_: Kelly boost +0.89€ cuando `libro_liquidez` > 6036.1503 (IC base=+0.176)
 
 ### FAVORITO_CONFIRMADO#BTC#15min
 - **PATRÓN** `hora_utc` > `11.0` → IC=+0.223 (n=308)
@@ -179,19 +179,19 @@ _Generado por shadow_postmortem.py sobre 30846 resoluciones (PNL=+6870.39€)_
 
 - **PATRÓN** `hora_utc` > `15.0` → IC=+0.212 (n=220)
   - _Por qué funciona_: hora tardía/noche → sesión US cerrada, menos participantes informados; señales más ruidosas
-  - _Acción_: Kelly boost +1.00€ cuando `hora_utc` > 15.0 (IC base=+0.208)
+  - _Acción_: Kelly boost +1.00€ cuando `hora_utc` > 15.0 (IC base=+0.209)
 
-- **PATRÓN** `hora_utc` < `17.0` → IC=+0.218 (n=463)
+- **PATRÓN** `hora_utc` < `17.0` → IC=+0.219 (n=464)
   - _Por qué funciona_: hora temprana → mercados cripto menos líquidos, spreads más amplios; edge real menor
-  - _Acción_: Kelly boost +1.00€ cuando `hora_utc` < 17.0 (IC base=+0.208)
+  - _Acción_: Kelly boost +1.00€ cuando `hora_utc` < 17.0 (IC base=+0.209)
 
-- **PATRÓN** `py_entrada` < `0.225` → IC=+0.349 (n=157)
+- **PATRÓN** `py_entrada` < `0.26` → IC=+0.336 (n=199)
 
-  - _Acción_: Kelly boost +1.00€ cuando `py_entrada` < 0.225 (IC base=+0.208)
+  - _Acción_: Kelly boost +1.00€ cuando `py_entrada` < 0.26 (IC base=+0.209)
 
-- **PATRÓN** `libro_liquidez` > `1613.1563` → IC=+0.213 (n=451)
+- **PATRÓN** `libro_liquidez` > `1611.1896` → IC=+0.214 (n=452)
 
-  - _Acción_: Kelly boost +1.00€ cuando `libro_liquidez` > 1613.1563 (IC base=+0.208)
+  - _Acción_: Kelly boost +1.00€ cuando `libro_liquidez` > 1611.1896 (IC base=+0.209)
 
 ### FAVORITO_CONFIRMADO#SOL#60min
 - **PATRÓN** `hora_utc` > `5.0` → IC=+0.231 (n=117)
@@ -1213,8 +1213,8 @@ _Derivadas de los patrones aprendidos:_
 | ✅ BALLENAS_TARDIAS#15min | 25 | +0.352 | +2.05€ | 0 | 0 |
 | ✅ BALLENAS_TARDIAS#BTC | 25 | +0.352 | +2.05€ | 0 | 0 |
 | ✅ BALLENAS_TARDIAS#BTC#15min | 25 | +0.352 | +2.05€ | 0 | 0 |
-| ✅ FAVORITO_CONFIRMADO | 5396 | +0.188 | +100.44€ | 0 | 9 |
-| ✅ FAVORITO_CONFIRMADO#15min | 3541 | +0.215 | +87.65€ | 0 | 0 |
+| ✅ FAVORITO_CONFIRMADO | 5397 | +0.188 | +101.10€ | 0 | 9 |
+| ✅ FAVORITO_CONFIRMADO#15min | 3542 | +0.215 | +88.31€ | 0 | 0 |
 | ✅ FAVORITO_CONFIRMADO#240min | 235 | +0.053 | -17.18€ | 0 | 0 |
 | ✅ FAVORITO_CONFIRMADO#5min | 681 | +0.119 | -65.17€ | 0 | 0 |
 | ✅ FAVORITO_CONFIRMADO#60min | 939 | +0.168 | +95.14€ | 0 | 0 |
@@ -1228,8 +1228,8 @@ _Derivadas de los patrones aprendidos:_
 | ✅ FAVORITO_CONFIRMADO#ETH#240min | 78 | -0.025 | -17.78€ | 0 | 0 |
 | ✅ FAVORITO_CONFIRMADO#ETH#5min | 348 | +0.126 | -28.13€ | 0 | 0 |
 | ✅ FAVORITO_CONFIRMADO#ETH#60min | 313 | +0.154 | +23.59€ | 0 | 9 |
-| ✅ FAVORITO_CONFIRMADO#SOL | 1879 | +0.191 | +39.27€ | 0 | 0 |
-| ✅ FAVORITO_CONFIRMADO#SOL#15min | 1168 | +0.223 | +59.35€ | 0 | 8 |
+| ✅ FAVORITO_CONFIRMADO#SOL | 1880 | +0.191 | +39.94€ | 0 | 0 |
+| ✅ FAVORITO_CONFIRMADO#SOL#15min | 1169 | +0.223 | +60.02€ | 0 | 8 |
 | ✅ FAVORITO_CONFIRMADO#SOL#240min | 79 | +0.130 | +8.85€ | 0 | 0 |
 | ✅ FAVORITO_CONFIRMADO#SOL#5min | 319 | +0.120 | -37.62€ | 0 | 0 |
 | ✅ FAVORITO_CONFIRMADO#SOL#60min | 313 | +0.157 | +8.69€ | 0 | 7 |
@@ -1281,16 +1281,16 @@ _Derivadas de los patrones aprendidos:_
 | ✅ GBM_LATE_15M_TARDIO#SOL#15min | 998 | +0.045 | +211.32€ | 1 | 3 |
 | ✅ GBM_LATE_15M_TARDIO#XRP | 1248 | +0.182 | +849.12€ | 0 | 0 |
 | ✅ GBM_LATE_15M_TARDIO#XRP#15min | 1248 | +0.182 | +849.12€ | 0 | 11 |
-| ✅ GBM_LATE_5M | 373 | -0.025 | +0.12€ | 0 | 0 |
-| ✅ GBM_LATE_5M#5min | 373 | -0.025 | +0.12€ | 0 | 0 |
+| ✅ GBM_LATE_5M | 374 | -0.024 | +0.79€ | 0 | 0 |
+| ✅ GBM_LATE_5M#5min | 374 | -0.024 | +0.79€ | 0 | 0 |
 | ✅ GBM_LATE_5M#BTC | 66 | -0.103 | -17.37€ | 0 | 0 |
 | ✅ GBM_LATE_5M#BTC#5min | 66 | -0.103 | -17.37€ | 0 | 0 |
 | ✅ GBM_LATE_5M#ETH | 50 | -0.096 | -1.82€ | 0 | 0 |
 | ✅ GBM_LATE_5M#ETH#5min | 50 | -0.096 | -1.82€ | 0 | 0 |
 | ✅ GBM_LATE_5M#SOL | 78 | -0.163 | -0.84€ | 0 | 0 |
 | ✅ GBM_LATE_5M#SOL#5min | 78 | -0.163 | -0.84€ | 0 | 0 |
-| ✅ GBM_LATE_5M#XRP | 179 | +0.086 | +20.15€ | 0 | 0 |
-| ✅ GBM_LATE_5M#XRP#5min | 179 | +0.086 | +20.15€ | 0 | 0 |
+| ✅ GBM_LATE_5M#XRP | 180 | +0.088 | +20.83€ | 0 | 0 |
+| ✅ GBM_LATE_5M#XRP#5min | 180 | +0.088 | +20.83€ | 0 | 0 |
 | ✅ GBM_LATE_60M | 336 | -0.112 | +4.40€ | 3 | 1 |
 | ✅ GBM_LATE_60M#60min | 336 | -0.112 | +4.40€ | 0 | 0 |
 | ✅ GBM_LATE_60M#BTC | 120 | -0.041 | +3.25€ | 0 | 0 |
@@ -1487,7 +1487,7 @@ _Derivadas de los patrones aprendidos:_
 **🟡 H-STREAK-COOLDOWN** — Cooldown tras 2 derrotas consecutivas (mismo subtype)
   - _Umbral_: n≥40 tras 2 losses y gap(IC_tras_win - IC_tras_2loss)≥0.05
   - _Acción_: Reducir stake (no desactivar) 1-2h tras 2 derrotas consecutivas en el mismo subtype
-  - _Estado_: tras_win IC=+0.115 n=18458 | tras_1loss IC=+0.082 n=12185 | tras_2loss IC=+0.050 n=5055/40 | gap=+0.064 (umbral 0.05)
+  - _Estado_: tras_win IC=+0.115 n=18459 | tras_1loss IC=+0.082 n=12186 | tras_2loss IC=+0.050 n=5055/40 | gap=+0.064 (umbral 0.05)
 
 **🟡 H-KALMAN** — Kalman filter para drift adaptativo
   - _Umbral_: n≥200 por subtipo para calibrar parámetros Q/R del KF
