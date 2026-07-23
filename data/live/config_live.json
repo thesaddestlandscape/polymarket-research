@@ -157,10 +157,11 @@
         "ETH#60m"
       ],
       "espera_confirmacion": {
-        "_nota": "2026-07-23, ver plan /root/.claude/plans/ticklish-doodling-shannon.md: veto_ballenas de arriba solo mira banda de PRECIO, nunca el TIEMPO -- rest_lo_min/rest_hi_min de ballenas_timing_state.json ya existen pero no se leían. activo=false por defecto: comportamiento idéntico al actual mientras no se active explícitamente. Fase 0 (modo_observacion=true, combos_activos con datos) antes de cualquier euro en riesgo.",
-        "activo": false,
+        "_nota": "2026-07-23, ver plan /root/.claude/plans/ticklish-doodling-shannon.md: veto_ballenas de arriba solo mira banda de PRECIO, nunca el TIEMPO -- rest_lo_min/rest_hi_min de ballenas_timing_state.json ya existen pero no se leían.",
+        "_fase0_nota": "2026-07-23 (aprobado Javi): Fase 0 activada -- activo=true, modo_observacion=true (0€ en riesgo, _procesar_pendientes_ballenas nunca llama a _ejecutar_orden_polymarket mientras modo_observacion sea true, verificado en /code-review). combos_activos = los 4 combos con banda significativa hoy (ETH#60m queda fuera, sin banda calibrada). Objetivo: acumular datos reales (ballenas_pendientes_eventos.jsonl) para decidir Fase 1 con evidencia, no suposición.",
+        "activo": true,
         "modo_observacion": true,
-        "combos_activos": [],
+        "combos_activos": ["SOL#15m", "ETH#15m", "SOL#60m", "BTC#60m"],
         "margen_superior_min": 0.3,
         "margen_inferior_min": 0.3,
         "floor_min": 0.25
