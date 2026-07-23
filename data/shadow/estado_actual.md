@@ -1,4 +1,4 @@
-# Estado del bot — 2026-07-23 08:43 UTC
+# Estado del bot — 2026-07-23 08:49 UTC
 
 ## Live — dinero real (on-chain)
 | | |
@@ -13,11 +13,11 @@
 ## Shadow — MODELO SIMULADO (no cobrable)
 | | |
 |---|---|
-| P&L fiel (stake fijo 1$) | +3633.07 $ |
-| P&L sim compuesto | 🟢 +6866.40 $ (ficción Kelly: +26991% s/ operativo) |
-| P&L sim hoy (2026-07-23) | 🟢 +154.54 $ |
-| Operaciones resueltas | 30579 (18395 WIN / 12184 LOSS) — 60.2% |
-| Señales abiertas | 149 |
+| P&L fiel (stake fijo 1$) | +3633.40 $ |
+| P&L sim compuesto | 🟢 +6867.08 $ (ficción Kelly: +26993% s/ operativo) |
+| P&L sim hoy (2026-07-23) | 🟢 +155.22 $ |
+| Operaciones resueltas | 30580 (18396 WIN / 12184 LOSS) — 60.2% |
+| Señales abiertas | 148 |
 
 ## Estrategias (visión global)
 
@@ -36,7 +36,7 @@
 | UPDOWN_GBM_15M_CROSS_WINDOW_SPREAD | 131 | 79.4% | +0.289 | ➡️ estable | +24.29$ | 2.00$ | ✅ activa |
 | FAVORITO_CONFIRMADO_SOL_ALTACONVICCION | 283 | 82.0% | +0.318 | ➡️ estable | +15.52$ | 2.00$ | ✅ activa |
 | ORDER_FLOW_5M | 1659 | 51.2% | +0.012 | ➡️ estable | +11.80$ | 0.50$ | ✅ activa |
-| GBM_LATE_5M | 339 | 48.7% | -0.013 | 📉 agota (-0.18) | +9.92$ | 0.50$ | ⚠️ IC negativo |
+| GBM_LATE_5M | 340 | 48.8% | -0.012 | 📉 agota (-0.19) | +10.60$ | 0.50$ | ⚠️ IC negativo |
 | LEADLAG_BTC_XRP_15M | 263 | 51.0% | +0.009 | 📉 agota (-0.17) | +9.67$ | 0.50$ | ✅ activa |
 | GBM_LATE_60M | 336 | 38.7% | -0.112 | ➡️ estable | +4.40$ | 0.50$ | ⚠️ IC negativo |
 | RESOLUTION_SNIPER | 11 | 90.9% | +0.190 | — | +3.49$ | 1.90$ | ✅ activa |
@@ -56,11 +56,11 @@
 
 | Timestamp | Estrategia | Mercado | Resultado | PNL |
 |---|---|---|---|---|
+| 2026-07-23T08:48 | GBM_LATE_5M#BTC#5min | Bitcoin Up or Down - July 23, 4:30AM-4:35AM ET… | ✅ WIN | +0.68$ |
 | 2026-07-23T08:41 | GBM_LATE_5M#XRP#5min | XRP Up or Down - July 23, 4:30AM-4:35AM ET… | ✅ WIN | +0.71$ |
 | 2026-07-23T08:41 | GBM_LATE_15M_ESPACIO_ATR#SOL#15min | Solana Up or Down - July 23, 4:15AM-4:30AM ET… | ❌ LOSS | -1.83$ |
 | 2026-07-23T08:41 | GBM_LATE_15M_TARDIO#SOL#15min | Solana Up or Down - July 23, 4:15AM-4:30AM ET… | ❌ LOSS | -1.15$ |
 | 2026-07-23T08:41 | FAVORITO_CONFIRMADO#SOL#15min | Solana Up or Down - July 23, 4:15AM-4:30AM ET… | ✅ WIN | +1.38$ |
-| 2026-07-23T08:41 | GBM_LATE_15M#SOL#15min | Solana Up or Down - July 23, 4:15AM-4:30AM ET… | ✅ WIN | +1.79$ |
 
 ## Calidad de datos
 
