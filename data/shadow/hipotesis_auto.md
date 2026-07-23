@@ -1,5 +1,5 @@
-# Hipótesis automáticas — 2026-07-23 05:56 UTC
-_Generado por shadow_postmortem.py sobre 30326 resoluciones (PNL=+6812.88€)_
+# Hipótesis automáticas — 2026-07-23 06:02 UTC
+_Generado por shadow_postmortem.py sobre 30327 resoluciones (PNL=+6812.20€)_
 
 ## Patrones causales activos
 
@@ -1273,16 +1273,16 @@ _Derivadas de los patrones aprendidos:_
 | ✅ GBM_LATE_15M_TARDIO#SOL#15min | 975 | +0.048 | +217.18€ | 1 | 3 |
 | ✅ GBM_LATE_15M_TARDIO#XRP | 1225 | +0.185 | +844.69€ | 0 | 0 |
 | ✅ GBM_LATE_15M_TARDIO#XRP#15min | 1225 | +0.185 | +844.69€ | 0 | 11 |
-| ✅ GBM_LATE_5M | 317 | -0.017 | +8.99€ | 0 | 0 |
-| ✅ GBM_LATE_5M#5min | 317 | -0.017 | +8.99€ | 0 | 0 |
+| ✅ GBM_LATE_5M | 318 | -0.019 | +8.30€ | 0 | 0 |
+| ✅ GBM_LATE_5M#5min | 318 | -0.019 | +8.30€ | 0 | 0 |
 | ✅ GBM_LATE_5M#BTC | 50 | -0.058 | -8.62€ | 0 | 0 |
 | ✅ GBM_LATE_5M#BTC#5min | 50 | -0.058 | -8.62€ | 0 | 0 |
 | ✅ GBM_LATE_5M#ETH | 47 | -0.071 | -0.29€ | 0 | 0 |
 | ✅ GBM_LATE_5M#ETH#5min | 47 | -0.071 | -0.29€ | 0 | 0 |
 | ✅ GBM_LATE_5M#SOL | 74 | -0.158 | -0.50€ | 0 | 0 |
 | ✅ GBM_LATE_5M#SOL#5min | 74 | -0.158 | -0.50€ | 0 | 0 |
-| ✅ GBM_LATE_5M#XRP | 146 | +0.088 | +18.40€ | 0 | 0 |
-| ✅ GBM_LATE_5M#XRP#5min | 146 | +0.088 | +18.40€ | 0 | 0 |
+| ✅ GBM_LATE_5M#XRP | 147 | +0.084 | +17.72€ | 0 | 0 |
+| ✅ GBM_LATE_5M#XRP#5min | 147 | +0.084 | +17.72€ | 0 | 0 |
 | ✅ GBM_LATE_60M | 336 | -0.112 | +4.40€ | 3 | 1 |
 | ✅ GBM_LATE_60M#60min | 336 | -0.112 | +4.40€ | 0 | 0 |
 | ✅ GBM_LATE_60M#BTC | 120 | -0.041 | +3.25€ | 0 | 0 |
@@ -1479,7 +1479,7 @@ _Derivadas de los patrones aprendidos:_
 **🟡 H-STREAK-COOLDOWN** — Cooldown tras 2 derrotas consecutivas (mismo subtype)
   - _Umbral_: n≥40 tras 2 losses y gap(IC_tras_win - IC_tras_2loss)≥0.05
   - _Acción_: Reducir stake (no desactivar) 1-2h tras 2 derrotas consecutivas en el mismo subtype
-  - _Estado_: tras_win IC=+0.115 n=18164 | tras_1loss IC=+0.083 n=11960 | tras_2loss IC=+0.052 n=4956/40 | gap=+0.062 (umbral 0.05)
+  - _Estado_: tras_win IC=+0.115 n=18164 | tras_1loss IC=+0.083 n=11961 | tras_2loss IC=+0.052 n=4957/40 | gap=+0.062 (umbral 0.05)
 
 **🟡 H-KALMAN** — Kalman filter para drift adaptativo
   - _Umbral_: n≥200 por subtipo para calibrar parámetros Q/R del KF
