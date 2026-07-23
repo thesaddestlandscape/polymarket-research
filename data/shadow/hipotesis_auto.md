@@ -1,5 +1,5 @@
-# Hipótesis automáticas — 2026-07-23 02:37 UTC
-_Generado por shadow_postmortem.py sobre 30050 resoluciones (PNL=+6737.93€)_
+# Hipótesis automáticas — 2026-07-23 02:43 UTC
+_Generado por shadow_postmortem.py sobre 30053 resoluciones (PNL=+6740.34€)_
 
 ## Patrones causales activos
 
@@ -8,7 +8,7 @@ _Generado por shadow_postmortem.py sobre 30050 resoluciones (PNL=+6737.93€)_
   - _Por qué funciona_: hora tardía/noche → sesión US cerrada, menos participantes informados; señales más ruidosas
   - _Acción_: Kelly boost +1.00€ cuando `hora_utc` > 5.0 (IC base=+0.200)
 
-- **PATRÓN** `hora_utc` < `15.0` → IC=+0.202 (n=1643)
+- **PATRÓN** `hora_utc` < `15.0` → IC=+0.203 (n=1645)
   - _Por qué funciona_: hora temprana → mercados cripto menos líquidos, spreads más amplios; edge real menor
   - _Acción_: Kelly boost +1.00€ cuando `hora_utc` < 15.0 (IC base=+0.200)
 
@@ -16,7 +16,7 @@ _Generado por shadow_postmortem.py sobre 30050 resoluciones (PNL=+6737.93€)_
 
   - _Acción_: Kelly boost +1.00€ cuando `py_entrada` > 0.735 (IC base=+0.200)
 
-- **PATRÓN** `libro_spread` < `0.01` → IC=+0.204 (n=2130)
+- **PATRÓN** `libro_spread` < `0.01` → IC=+0.204 (n=2132)
 
   - _Acción_: Kelly boost +1.00€ cuando `libro_spread` < 0.01 (IC base=+0.200)
 
@@ -1213,25 +1213,25 @@ _Derivadas de los patrones aprendidos:_
 | ✅ BALLENAS_TARDIAS#15min | 18 | +0.270 | +0.27€ | 0 | 0 |
 | ✅ BALLENAS_TARDIAS#BTC | 18 | +0.270 | +0.27€ | 0 | 0 |
 | ✅ BALLENAS_TARDIAS#BTC#15min | 18 | +0.270 | +0.27€ | 0 | 0 |
-| ✅ FAVORITO_CONFIRMADO | 5239 | +0.187 | +83.24€ | 0 | 8 |
+| ✅ FAVORITO_CONFIRMADO | 5241 | +0.187 | +84.84€ | 0 | 8 |
 | ✅ FAVORITO_CONFIRMADO#15min | 3434 | +0.215 | +84.23€ | 0 | 0 |
 | ✅ FAVORITO_CONFIRMADO#240min | 226 | +0.061 | -9.10€ | 0 | 0 |
-| ✅ FAVORITO_CONFIRMADO#5min | 670 | +0.118 | -67.18€ | 0 | 0 |
+| ✅ FAVORITO_CONFIRMADO#5min | 672 | +0.119 | -65.58€ | 0 | 0 |
 | ✅ FAVORITO_CONFIRMADO#60min | 909 | +0.163 | +75.29€ | 0 | 0 |
 | ✅ FAVORITO_CONFIRMADO#BTC | 1534 | +0.194 | +37.67€ | 0 | 0 |
 | ✅ FAVORITO_CONFIRMADO#BTC#15min | 1146 | +0.210 | -4.57€ | 0 | 6 |
 | ✅ FAVORITO_CONFIRMADO#BTC#240min | 75 | +0.058 | -5.23€ | 0 | 0 |
 | 🚫 FAVORITO_CONFIRMADO#BTC#5min | 10 | -0.125 | -3.77€ | 0 | 0 |
 | ✅ FAVORITO_CONFIRMADO#BTC#60min | 303 | +0.182 | +51.24€ | 0 | 6 |
-| ✅ FAVORITO_CONFIRMADO#ETH | 1851 | +0.178 | +15.66€ | 0 | 0 |
+| ✅ FAVORITO_CONFIRMADO#ETH | 1852 | +0.178 | +16.43€ | 0 | 0 |
 | ✅ FAVORITO_CONFIRMADO#ETH#15min | 1130 | +0.214 | +36.87€ | 0 | 8 |
 | ✅ FAVORITO_CONFIRMADO#ETH#240min | 75 | -0.019 | -15.59€ | 0 | 0 |
-| ✅ FAVORITO_CONFIRMADO#ETH#5min | 343 | +0.126 | -26.70€ | 0 | 0 |
+| ✅ FAVORITO_CONFIRMADO#ETH#5min | 344 | +0.127 | -25.93€ | 0 | 0 |
 | ✅ FAVORITO_CONFIRMADO#ETH#60min | 303 | +0.152 | +21.08€ | 0 | 10 |
-| ✅ FAVORITO_CONFIRMADO#SOL | 1825 | +0.190 | +25.45€ | 0 | 0 |
+| ✅ FAVORITO_CONFIRMADO#SOL | 1826 | +0.190 | +26.29€ | 0 | 0 |
 | ✅ FAVORITO_CONFIRMADO#SOL#15min | 1133 | +0.223 | +51.83€ | 0 | 7 |
 | ✅ FAVORITO_CONFIRMADO#SOL#240min | 76 | +0.141 | +11.72€ | 0 | 0 |
-| ✅ FAVORITO_CONFIRMADO#SOL#5min | 313 | +0.116 | -41.07€ | 0 | 0 |
+| ✅ FAVORITO_CONFIRMADO#SOL#5min | 314 | +0.117 | -40.23€ | 0 | 0 |
 | ✅ FAVORITO_CONFIRMADO#SOL#60min | 303 | +0.152 | +2.97€ | 0 | 6 |
 | ✅ FAVORITO_CONFIRMADO#XRP | 27 | +0.155 | +2.04€ | 0 | 0 |
 | ✅ FAVORITO_CONFIRMADO#XRP#15min | 23 | +0.100 | -2.31€ | 0 | 0 |
@@ -1281,12 +1281,12 @@ _Derivadas de los patrones aprendidos:_
 | ✅ GBM_LATE_15M_TARDIO#SOL#15min | 966 | +0.049 | +219.08€ | 1 | 3 |
 | ✅ GBM_LATE_15M_TARDIO#XRP | 1213 | +0.183 | +829.45€ | 0 | 0 |
 | ✅ GBM_LATE_15M_TARDIO#XRP#15min | 1213 | +0.183 | +829.45€ | 0 | 11 |
-| ✅ GBM_LATE_5M | 298 | -0.017 | +10.18€ | 0 | 0 |
-| ✅ GBM_LATE_5M#5min | 298 | -0.017 | +10.18€ | 0 | 0 |
+| ✅ GBM_LATE_5M | 299 | -0.015 | +10.98€ | 0 | 0 |
+| ✅ GBM_LATE_5M#5min | 299 | -0.015 | +10.98€ | 0 | 0 |
 | ✅ GBM_LATE_5M#BTC | 48 | -0.060 | -8.62€ | 0 | 0 |
 | ✅ GBM_LATE_5M#BTC#5min | 48 | -0.060 | -8.62€ | 0 | 0 |
-| ✅ GBM_LATE_5M#ETH | 46 | -0.083 | -1.09€ | 0 | 0 |
-| ✅ GBM_LATE_5M#ETH#5min | 46 | -0.083 | -1.09€ | 0 | 0 |
+| ✅ GBM_LATE_5M#ETH | 47 | -0.071 | -0.29€ | 0 | 0 |
+| ✅ GBM_LATE_5M#ETH#5min | 47 | -0.071 | -0.29€ | 0 | 0 |
 | ✅ GBM_LATE_5M#SOL | 73 | -0.153 | +0.01€ | 0 | 0 |
 | ✅ GBM_LATE_5M#SOL#5min | 73 | -0.153 | +0.01€ | 0 | 0 |
 | ✅ GBM_LATE_5M#XRP | 131 | +0.102 | +19.88€ | 0 | 0 |
@@ -1487,7 +1487,7 @@ _Derivadas de los patrones aprendidos:_
 **🟡 H-STREAK-COOLDOWN** — Cooldown tras 2 derrotas consecutivas (mismo subtype)
   - _Umbral_: n≥40 tras 2 losses y gap(IC_tras_win - IC_tras_2loss)≥0.05
   - _Acción_: Reducir stake (no desactivar) 1-2h tras 2 derrotas consecutivas en el mismo subtype
-  - _Estado_: tras_win IC=+0.115 n=17976 | tras_1loss IC=+0.083 n=11872 | tras_2loss IC=+0.051 n=4926/40 | gap=+0.063 (umbral 0.05)
+  - _Estado_: tras_win IC=+0.115 n=17979 | tras_1loss IC=+0.083 n=11872 | tras_2loss IC=+0.051 n=4926/40 | gap=+0.063 (umbral 0.05)
 
 **🟡 H-KALMAN** — Kalman filter para drift adaptativo
   - _Umbral_: n≥200 por subtipo para calibrar parámetros Q/R del KF
@@ -1959,8 +1959,8 @@ _Derivadas de los patrones aprendidos:_
   - _Hipótesis_: 12-Jul: auditoria de fill-ability de las 8 candidatas encontro las 8 negativas en agregado. Pero desagregando FAVORITO_CONFIRMADO por activo (mecanismo nuevo, no mirado hasta hoy): SOL#BUY_YES con py_entrada>=0.665-0.695 da pnl/trade POSITIVO en el subconjunto fillable real (+0.12 a +0.41 EUR/trade, n=6-17 segun el corte exacto) -- unico resultado positivo de toda la auditoria de candidatas. n todavia bajo, necesita mas dato antes de proponer nada.
   - _Umbral_: n>=40 y pnl/trade fillable > 0 sostenido
   - _Acción_: Seguir acumulando snapshots candidato_evaluacion para SOL#15min#BUY_YES en FAVORITO_CONFIRMADO; re-evaluar fill-ability con n>=40 antes de proponer whitelist
-  - _Estado_: SEÑAL POSITIVA confirmada: IC=+0.289 > 0.08 con n=391 PNL=+15.57€
-  - _Datos_: n=391 IC=+0.289 PNL=+15.57€
+  - _Estado_: SEÑAL POSITIVA confirmada: IC=+0.289 > 0.08 con n=392 PNL=+16.41€
+  - _Datos_: n=392 IC=+0.289 PNL=+16.41€
 
 **⏳ H-CUSTOM-GBM18H-XRP-EXCEPCION** — UPDOWN_GBM XRP a las 18h UTC -- puede estar mal incluida en el blacklist horario global
   - _Hipótesis_: 12-Jul: gbm_blacklist_hours_auto=[9,10,18] bloquea GBM en las 4 monedas a las 18h. Desagregando por activo (h9/h10 no tienen dato retrospectivo -- el propio blacklist impide que se genere): BTC ic=-0.140 (n=48), ETH ic=-0.136 (n=42), SOL ic=-0.167 (n=22) consistentes con el bloqueo, pero XRP ic=+0.100 (n=23) -- signo OPUESTO. El bloqueo agregado puede estar sobre-bloqueando XRP especificamente.
