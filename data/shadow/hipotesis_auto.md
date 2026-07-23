@@ -1,4 +1,4 @@
-# Hipótesis automáticas — 2026-07-23 10:39 UTC
+# Hipótesis automáticas — 2026-07-23 10:45 UTC
 _Generado por shadow_postmortem.py sobre 30714 resoluciones (PNL=+6900.82€)_
 
 ## Patrones causales activos
@@ -1482,9 +1482,9 @@ _Derivadas de los patrones aprendidos:_
   - _Acción_: Añadir DELTA_MIN/MAX por par dict en shadow_predict.py
   - _Estado_: BTC: 187 ops con delta_ratio | SOL: 226 ops con delta_ratio
 
-**🟡 H-KELLY-HORA** — Kelly boost ×1.2 en horas top (15/17/19h UTC)
-  - _Umbral_: n≥40 por hora con IC estable ≥+0.10 confirmado en forward
-  - _Acción_: Añadir HORA_BOOST = {13: 1.2, 15: 1.2, 17: 1.2, 19: 1.2} en shadow_predict.py
+**🟡 H-KELLY-HORA** — Kelly boost ×1.2 por celda (estrategia#subtype#dirección#hora)
+  - _Umbral_: n≥40 por celda + gate riguroso completo (Wilson+shuffle+PnL bootstrap)
+  - _Acción_: Añadir claves 'ESTRATEGIA#SUBTYPE#DIRECCION#HORA':1.2 a meta.hora_boost_factor, solo por celda confirmada
   - _Estado_: 2 celda(s) pasan gate riguroso completo de 13 evaluadas (n>=40) y 133 trackeadas (n>=15). Detalle: kelly_hora_segmentado.json
 
 **⚠️ H-SOL-15MIN** — SOL#15min → umbral live (IC≥0.08 n≥40)
