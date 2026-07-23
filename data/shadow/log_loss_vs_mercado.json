@@ -1,10 +1,10 @@
 {
   "estrategias": {
     "BALLENAS_CONFIRMADAS_15M": {
-      "n": 800,
-      "log_loss_modelo": 0.6679,
-      "log_loss_mercado": 0.6304,
-      "gap": -0.0375,
+      "n": 814,
+      "log_loss_modelo": 0.6723,
+      "log_loss_mercado": 0.6325,
+      "gap": -0.0398,
       "peor_que_mercado": true
     },
     "BALLENAS_TARDIAS": {
@@ -15,52 +15,52 @@
       "peor_que_mercado": true
     },
     "FAVORITO_CONFIRMADO": {
-      "n": 5201,
-      "log_loss_modelo": 0.5964,
-      "log_loss_mercado": 0.5939,
-      "gap": -0.0025,
+      "n": 5219,
+      "log_loss_modelo": 0.5974,
+      "log_loss_mercado": 0.5947,
+      "gap": -0.0028,
       "peor_que_mercado": true
     },
     "FAVORITO_CONFIRMADO_SOL_ALTACONVICCION": {
-      "n": 274,
-      "log_loss_modelo": 0.4552,
-      "log_loss_mercado": 0.4578,
-      "gap": 0.0026,
+      "n": 277,
+      "log_loss_modelo": 0.4626,
+      "log_loss_mercado": 0.4634,
+      "gap": 0.0008,
       "peor_que_mercado": false
     },
     "GBM_LATE_15M": {
-      "n": 6802,
-      "log_loss_modelo": 0.6868,
-      "log_loss_mercado": 0.6688,
-      "gap": -0.0179,
+      "n": 6814,
+      "log_loss_modelo": 0.6865,
+      "log_loss_mercado": 0.6692,
+      "gap": -0.0173,
       "peor_que_mercado": true
     },
     "GBM_LATE_15M_ESPACIO_ATR": {
-      "n": 3996,
-      "log_loss_modelo": 0.6776,
-      "log_loss_mercado": 0.6531,
-      "gap": -0.0245,
+      "n": 4006,
+      "log_loss_modelo": 0.6773,
+      "log_loss_mercado": 0.6538,
+      "gap": -0.0235,
       "peor_que_mercado": true
     },
     "GBM_LATE_15M_PYCONFIRMADO": {
-      "n": 222,
-      "log_loss_modelo": 0.6255,
-      "log_loss_mercado": 0.5768,
-      "gap": -0.0487,
+      "n": 224,
+      "log_loss_modelo": 0.6226,
+      "log_loss_mercado": 0.5787,
+      "gap": -0.0439,
       "peor_que_mercado": true
     },
     "GBM_LATE_15M_TARDIO": {
-      "n": 3989,
-      "log_loss_modelo": 0.6989,
-      "log_loss_mercado": 0.6495,
-      "gap": -0.0494,
+      "n": 4004,
+      "log_loss_modelo": 0.6984,
+      "log_loss_mercado": 0.6501,
+      "gap": -0.0482,
       "peor_que_mercado": true
     },
     "GBM_LATE_5M": {
-      "n": 251,
-      "log_loss_modelo": 0.8595,
-      "log_loss_mercado": 0.5835,
-      "gap": -0.2759,
+      "n": 254,
+      "log_loss_modelo": 0.8725,
+      "log_loss_mercado": 0.5882,
+      "gap": -0.2842,
       "peor_que_mercado": true
     },
     "GBM_LATE_60M": {
@@ -85,10 +85,10 @@
       "peor_que_mercado": false
     },
     "ORDER_FLOW_5M": {
-      "n": 1653,
-      "log_loss_modelo": 0.8072,
+      "n": 1654,
+      "log_loss_modelo": 0.8069,
       "log_loss_mercado": 0.6937,
-      "gap": -0.1135,
+      "gap": -0.1132,
       "peor_que_mercado": true
     },
     "PRICE_TARGET_GBM": {
@@ -106,10 +106,10 @@
       "peor_que_mercado": true
     },
     "STREAK_FADE_15M": {
-      "n": 264,
-      "log_loss_modelo": 0.7097,
+      "n": 267,
+      "log_loss_modelo": 0.7089,
       "log_loss_mercado": 0.6895,
-      "gap": -0.0202,
+      "gap": -0.0194,
       "peor_que_mercado": true
     },
     "STREAK_FADE_5M": {
@@ -134,24 +134,24 @@
       "peor_que_mercado": true
     },
     "UPDOWN_GBM": {
-      "n": 2249,
-      "log_loss_modelo": 0.6873,
-      "log_loss_mercado": 0.6744,
-      "gap": -0.0129,
+      "n": 2254,
+      "log_loss_modelo": 0.6875,
+      "log_loss_mercado": 0.6748,
+      "gap": -0.0127,
       "peor_que_mercado": true
     },
     "UPDOWN_GBM_15M_CROSS_WINDOW_SPREAD": {
-      "n": 125,
-      "log_loss_modelo": 0.4872,
-      "log_loss_mercado": 0.5102,
-      "gap": 0.023,
+      "n": 126,
+      "log_loss_modelo": 0.4837,
+      "log_loss_mercado": 0.5083,
+      "gap": 0.0246,
       "peor_que_mercado": false
     },
     "UPDOWN_GBM_15M_TARDIO": {
-      "n": 1275,
-      "log_loss_modelo": 0.599,
-      "log_loss_mercado": 0.658,
-      "gap": 0.059,
+      "n": 1284,
+      "log_loss_modelo": 0.6002,
+      "log_loss_mercado": 0.6588,
+      "gap": 0.0586,
       "peor_que_mercado": false
     },
     "UPDOWN_OU_5M": {
