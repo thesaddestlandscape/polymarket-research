@@ -1,5 +1,5 @@
-# Hipótesis automáticas — 2026-07-23 10:45 UTC
-_Generado por shadow_postmortem.py sobre 30714 resoluciones (PNL=+6900.82€)_
+# Hipótesis automáticas — 2026-07-23 10:51 UTC
+_Generado por shadow_postmortem.py sobre 30716 resoluciones (PNL=+6899.80€)_
 
 ## Patrones causales activos
 
@@ -1290,14 +1290,14 @@ _Derivadas de los patrones aprendidos:_
 | ✅ GBM_LATE_15M_TARDIO#SOL#15min | 992 | +0.045 | +212.58€ | 1 | 3 |
 | ✅ GBM_LATE_15M_TARDIO#XRP | 1243 | +0.184 | +855.44€ | 0 | 0 |
 | ✅ GBM_LATE_15M_TARDIO#XRP#15min | 1243 | +0.184 | +855.44€ | 0 | 11 |
-| ✅ GBM_LATE_5M | 350 | -0.014 | +9.60€ | 0 | 0 |
-| ✅ GBM_LATE_5M#5min | 350 | -0.014 | +9.60€ | 0 | 0 |
-| ✅ GBM_LATE_5M#BTC | 54 | -0.071 | -9.47€ | 0 | 0 |
-| ✅ GBM_LATE_5M#BTC#5min | 54 | -0.071 | -9.47€ | 0 | 0 |
+| ✅ GBM_LATE_5M | 352 | -0.017 | +8.58€ | 0 | 0 |
+| ✅ GBM_LATE_5M#5min | 352 | -0.017 | +8.58€ | 0 | 0 |
+| ✅ GBM_LATE_5M#BTC | 55 | -0.079 | -9.98€ | 0 | 0 |
+| ✅ GBM_LATE_5M#BTC#5min | 55 | -0.079 | -9.98€ | 0 | 0 |
 | ✅ GBM_LATE_5M#ETH | 49 | -0.088 | -1.31€ | 0 | 0 |
 | ✅ GBM_LATE_5M#ETH#5min | 49 | -0.088 | -1.31€ | 0 | 0 |
-| ✅ GBM_LATE_5M#SOL | 76 | -0.167 | -1.52€ | 0 | 0 |
-| ✅ GBM_LATE_5M#SOL#5min | 76 | -0.167 | -1.52€ | 0 | 0 |
+| ✅ GBM_LATE_5M#SOL | 77 | -0.171 | -2.03€ | 0 | 0 |
+| ✅ GBM_LATE_5M#SOL#5min | 77 | -0.171 | -2.03€ | 0 | 0 |
 | ✅ GBM_LATE_5M#XRP | 171 | +0.095 | +21.91€ | 0 | 0 |
 | ✅ GBM_LATE_5M#XRP#5min | 171 | +0.095 | +21.91€ | 0 | 0 |
 | ✅ GBM_LATE_60M | 336 | -0.112 | +4.40€ | 3 | 1 |
@@ -1482,11 +1482,6 @@ _Derivadas de los patrones aprendidos:_
   - _Acción_: Añadir DELTA_MIN/MAX por par dict en shadow_predict.py
   - _Estado_: BTC: 187 ops con delta_ratio | SOL: 226 ops con delta_ratio
 
-**🟡 H-KELLY-HORA** — Kelly boost ×1.2 por celda (estrategia#subtype#dirección#hora)
-  - _Umbral_: n≥40 por celda + gate riguroso completo (Wilson+shuffle+PnL bootstrap)
-  - _Acción_: Añadir claves 'ESTRATEGIA#SUBTYPE#DIRECCION#HORA':1.2 a meta.hora_boost_factor, solo por celda confirmada
-  - _Estado_: 2 celda(s) pasan gate riguroso completo de 13 evaluadas (n>=40) y 133 trackeadas (n>=15). Detalle: kelly_hora_segmentado.json
-
 **⚠️ H-SOL-15MIN** — SOL#15min → umbral live (IC≥0.08 n≥40)
   - _Umbral_: IC≥0.08 y n≥40
   - _Acción_: Activar live cuando haya credenciales Polymarket API
@@ -1501,7 +1496,7 @@ _Derivadas de los patrones aprendidos:_
 **🟡 H-STREAK-COOLDOWN** — Cooldown tras 2 derrotas consecutivas (mismo subtype)
   - _Umbral_: n≥40 tras 2 losses y gap(IC_tras_win - IC_tras_2loss)≥0.05
   - _Acción_: Reducir stake (no desactivar) 1-2h tras 2 derrotas consecutivas en el mismo subtype
-  - _Estado_: tras_win IC=+0.115 n=18397 | tras_1loss IC=+0.083 n=12114 | tras_2loss IC=+0.051 n=5014/40 | gap=+0.064 (umbral 0.05)
+  - _Estado_: tras_win IC=+0.115 n=18397 | tras_1loss IC=+0.083 n=12116 | tras_2loss IC=+0.051 n=5016/40 | gap=+0.064 (umbral 0.05)
 
 **🟡 H-KALMAN** — Kalman filter para drift adaptativo
   - _Umbral_: n≥200 por subtipo para calibrar parámetros Q/R del KF
@@ -1521,6 +1516,11 @@ _Derivadas de los patrones aprendidos:_
   - _Umbral_: n_overlaps≥20 y IC_overlap > IC_base + 0.05
   - _Acción_: Cambiar _aplicar_kelly_compuesto: match por activo, no market_id
   - _Estado_: n_overlaps=38, boost estimado=-0.042. Necesita 0 más y boost>0.05
+
+**⏳ H-KELLY-HORA** — Kelly boost ×1.2 en horas top (15/17/19h UTC)
+  - _Umbral_: n≥40 por hora con IC estable ≥+0.10 confirmado en forward
+  - _Acción_: Añadir HORA_BOOST = {13: 1.2, 15: 1.2, 17: 1.2, 19: 1.2} en shadow_predict.py
+  - _Estado_: H=13h UTC: IC=+0.093 n=1289/40 PNL=+277.22€ | H=15h UTC: IC=+0.160 n=1259/40 PNL=+510.06€ | H=17h UTC: IC=+0.106 n=1224/40 PNL=+264.87€ | H=19h UTC: IC=+0.126 n=1176/40 PNL=+309.76€
 
 **⏳ H-60MIN-LIVE** — Estrategias 60min → umbral live (IC≥0.08 n≥40)
   - _Umbral_: IC≥0.08 y n≥40 en cualquier subtipo 60min
