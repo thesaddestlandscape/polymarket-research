@@ -98,6 +98,53 @@ VETO_BALLENAS_MIN_TRADES_DEFAULT = 3
 VETO_BALLENAS_EVENTOS_PATH = DIR_LIVE / "veto_ballenas_eventos.jsonl"
 _MARCO_BALLENAS_MAP = {"5min": "5m", "15min": "15m", "60min": "60m", "240min": "240m"}
 
+# 23-Jul: ponderación por calidad de wallet en el voto de veto_ballenas --
+# mismo fix ya aplicado a ballenas_executor_5min.py/ballenas_executor_btc15m.py
+# (ver sus comentarios para el hallazgo completo: _ballenas_conviccion_mercado
+# de abajo cuenta VOTOS POR TRADE, no por calidad de wallet). Alcance
+# DELIBERADAMENTE acotado a 60min por petición explícita de Javi 23-Jul
+# (racha real de 3 pérdidas seguidas en 60min hoy, mezclando BTC/SOL) -- un
+# análisis del mismo día (ver veto_ballenas_eventos.jsonl cruzado con
+# results.csv) encontró que el "momento exacto de confirmación" (el otro fix,
+# ya aplicado a 5min/BTC15m) NO tiene evidencia de aplicar aquí -- un hallazgo
+# inicial prometedor (sin_datos peor que concentracion_ok) resultó ser un
+# confound de mezcla BUY_YES/BUY_NO al desagregar por dirección, no una señal
+# real de timing. La ponderación por wallet SÍ es segura de extender
+# (fail-safe: peso neutro 1.0 salvo wallet validada) sin depender de ese
+# hallazgo descartado. 15min NO incluido todavía -- pendiente su propia
+# validación antes de tocarlo.
+MARCOS_PONDERACION_WALLET_VETO = {"60m"}
+WALLET_EDGE_POR_ACTIVO_MARCO_PATH = DIR_SHADOW / "wallet_edge_score_por_activo_marco.json"
+PESO_WALLET_MIN, PESO_WALLET_MAX = 0.2, 3.0
+_wallet_edge_veto_cache = {"mtime": None, "data": {}}
+
+
+def _cargar_wallet_edge_activo_marco() -> dict:
+    try:
+        mtime = WALLET_EDGE_POR_ACTIVO_MARCO_PATH.stat().st_mtime
+    except OSError:
+        return {}
+    if _wallet_edge_veto_cache["mtime"] != mtime:
+        try:
+            todo = json.loads(WALLET_EDGE_POR_ACTIVO_MARCO_PATH.read_text(encoding="utf-8"))
+            _wallet_edge_veto_cache["data"] = {(v["wallet"], v["activo"], v["marco"]): v for v in todo.values()}
+        except Exception:
+            _wallet_edge_veto_cache["data"] = {}
+        _wallet_edge_veto_cache["mtime"] = mtime
+    return _wallet_edge_veto_cache["data"]
+
+
+def _peso_wallet_veto(wallet: str, activo: str, marco: str) -> float:
+    """1.0 (neutro) salvo wallet validada (n>=15, sig_bhfdr=True) en
+    (activo,marco) exacto -- mismo criterio que
+    ballenas_executor_5min._peso_wallet / ballenas_executor_btc15m._peso_wallet."""
+    db = _cargar_wallet_edge_activo_marco()
+    d = db.get((wallet, activo, marco))
+    if d is None or not d.get("sig_bhfdr"):
+        return 1.0
+    peso = 1.0 + d["edge_pp"] / 25.0
+    return max(PESO_WALLET_MIN, min(PESO_WALLET_MAX, peso))
+
 
 def _cargar_ballenas_timing_state() -> dict:
     """Estado de ballenas_observer.py (banda de precio + ventana de tiempo
@@ -127,17 +174,26 @@ def _marco_ballenas(subtype: str) -> str | None:
 
 
 def _ballenas_conviccion_mercado(condition_id: str, banda_lo: float, banda_hi: float,
-                                  lado_deseado: str) -> tuple[float | None, int]:
-    """% del flujo BUY de ballenas en ESTE mercado, dentro de la banda de
-    precio dada, que apostó por `lado_deseado` ('YES'/'NO' -- misma
-    dirección que nuestra señal). Devuelve (None, 0) si no hay trades
-    suficientes en banda -- fail-open, ver nota junto a las constantes."""
+                                  lado_deseado: str, activo: str | None = None,
+                                  marco: str | None = None) -> tuple[float | None, int, float | None]:
+    """(pct_crudo, n, pct_ponderado) del flujo BUY de ballenas en ESTE
+    mercado, dentro de la banda de precio dada, que apostó por
+    `lado_deseado` ('YES'/'NO' -- misma dirección que nuestra señal).
+    Devuelve (None, 0, None) si no hay trades suficientes en banda --
+    fail-open, ver nota junto a las constantes.
+
+    23-Jul: pct_ponderado pesa cada trade según _peso_wallet_veto() (activo,
+    marco) -- mismo fix que ballenas_executor_5min/btc15m. None si activo/
+    marco no se pasan (llamadas antiguas sin ese contexto siguen
+    funcionando igual, solo sin el tercer valor)."""
     try:
         trades = trades_de_mercado(condition_id)
     except Exception:
-        return None, 0
+        return None, 0, None
     n_total = 0
     n_nuestro = 0
+    peso_total = 0.0
+    peso_nuestro = 0.0
     for t in trades:
         if (t.get("side") or "").strip().upper() != "BUY":
             continue
@@ -154,11 +210,19 @@ def _ballenas_conviccion_mercado(condition_id: str, banda_lo: float, banda_hi: f
         n_total += 1
         compro_yes = outcome_t in ("up", "yes")
         lado_t = "YES" if compro_yes else "NO"
+        peso = 1.0
+        if activo and marco:
+            w = (t.get("proxyWallet") or "").lower()
+            if w:
+                peso = _peso_wallet_veto(w, activo, marco)
+        peso_total += peso
         if lado_t == lado_deseado:
             n_nuestro += 1
+            peso_nuestro += peso
     if n_total == 0:
-        return None, 0
-    return n_nuestro / n_total, n_total
+        return None, 0, None
+    pct_ponderado = peso_nuestro / peso_total if peso_total > 0 else None
+    return n_nuestro / n_total, n_total, pct_ponderado
 
 
 def _evaluar_veto_ballenas(condition_id: str | None, activo: str, marco: str | None,
@@ -193,17 +257,23 @@ def _evaluar_veto_ballenas(condition_id: str | None, activo: str, marco: str | N
                 "combo": combo, "pct": None, "n": 0}
 
     lado_deseado = "YES" if direction == "BUY_YES" else "NO"
-    pct, n = _ballenas_conviccion_mercado(condition_id, banda_lo, banda_hi, lado_deseado)
+    pct_crudo, n, pct_ponderado = _ballenas_conviccion_mercado(
+        condition_id, banda_lo, banda_hi, lado_deseado, activo=activo, marco=marco)
     min_trades = veto_cfg.get("min_trades", VETO_BALLENAS_MIN_TRADES_DEFAULT)
     umbral = veto_cfg.get("umbral_pct", VETO_BALLENAS_UMBRAL_PCT_DEFAULT)
+    # 23-Jul: en 60min la decisión usa el pct PONDERADO por calidad de wallet
+    # (ver MARCOS_PONDERACION_WALLET_VETO) -- el resto de marcos sigue con el
+    # crudo hasta que tengan su propia validación. pct_crudo se conserva
+    # siempre en el evento para poder auditar cuándo diverge.
+    pct = pct_ponderado if (marco in MARCOS_PONDERACION_WALLET_VETO and pct_ponderado is not None) else pct_crudo
     if pct is None or n < min_trades:
         return {"aplica": True, "veta": False, "motivo": "sin_datos",
-                "combo": combo, "pct": pct, "n": n}
+                "combo": combo, "pct": pct, "pct_crudo": pct_crudo, "n": n}
     if pct < umbral:
         return {"aplica": True, "veta": True, "motivo": "concentracion_debil",
-                "combo": combo, "pct": pct, "n": n, "umbral": umbral}
+                "combo": combo, "pct": pct, "pct_crudo": pct_crudo, "n": n, "umbral": umbral}
     return {"aplica": True, "veta": False, "motivo": "concentracion_ok",
-            "combo": combo, "pct": pct, "n": n, "umbral": umbral}
+            "combo": combo, "pct": pct, "pct_crudo": pct_crudo, "n": n, "umbral": umbral}
 
 
 # veto_fuera_banda_ballenas (21-Jul, petición explícita Javi): complementario
