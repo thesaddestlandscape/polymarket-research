@@ -1,5 +1,5 @@
-# Hipótesis automáticas — 2026-07-23 02:24 UTC
-_Generado por shadow_postmortem.py sobre 30028 resoluciones (PNL=+6716.49€)_
+# Hipótesis automáticas — 2026-07-23 02:31 UTC
+_Generado por shadow_postmortem.py sobre 30029 resoluciones (PNL=+6715.98€)_
 
 ## Patrones causales activos
 
@@ -922,7 +922,7 @@ _Generado por shadow_postmortem.py sobre 30028 resoluciones (PNL=+6716.49€)_
 - **FILTRO** `libro_spread` > `0.01` → IC=-0.154 (n=76)
 
   - _Acción_: SKIP cuando `libro_spread` > 0.01
-  - _Potencial_: sin este filtro IC_bueno=+0.048 (n=82)
+  - _Potencial_: sin este filtro IC_bueno=+0.041 (n=83)
 
 ### STREAK_MOM_5M#ETH#5min
 - **FILTRO** `libro_liquidez` < `8045.5084` → IC=-0.125 (n=30)
@@ -940,10 +940,6 @@ _Generado por shadow_postmortem.py sobre 30028 resoluciones (PNL=+6716.49€)_
 
   - _Acción_: SKIP cuando `libro_liquidez` < 3331.5444
   - _Potencial_: sin este filtro IC_bueno=+0.043 (n=33)
-
-- **PATRÓN** `libro_spread` < `0.01` → IC=+0.140 (n=23)
-
-  - _Acción_: Kelly boost +0.70€ cuando `libro_spread` < 0.01 (IC base=+0.038)
 
 ### STREAK_MOM_5M#XRP#5min
 - **FILTRO** `py_entrada` < `0.5` → IC=-0.147 (n=15)
@@ -1362,12 +1358,12 @@ _Derivadas de los patrones aprendidos:_
 | ✅ STREAK_FADE_5M#SOL#5min | 94 | -0.021 | -7.62€ | 0 | 0 |
 | ✅ STREAK_FADE_5M#XRP | 105 | -0.023 | -9.27€ | 0 | 0 |
 | ✅ STREAK_FADE_5M#XRP#5min | 105 | -0.023 | -9.27€ | 0 | 0 |
-| 🚫 STREAK_MOM_5M | 317 | -0.058 | -25.33€ | 4 | 0 |
-| ✅ STREAK_MOM_5M#5min | 317 | -0.058 | -25.33€ | 0 | 0 |
+| 🚫 STREAK_MOM_5M | 318 | -0.059 | -25.84€ | 4 | 0 |
+| ✅ STREAK_MOM_5M#5min | 318 | -0.059 | -25.84€ | 0 | 0 |
 | ✅ STREAK_MOM_5M#ETH | 107 | -0.060 | -7.33€ | 0 | 0 |
 | ✅ STREAK_MOM_5M#ETH#5min | 107 | -0.060 | -7.33€ | 1 | 0 |
-| ✅ STREAK_MOM_5M#SOL | 112 | -0.009 | -4.65€ | 0 | 0 |
-| ✅ STREAK_MOM_5M#SOL#5min | 112 | -0.009 | -4.65€ | 2 | 1 |
+| ✅ STREAK_MOM_5M#SOL | 113 | -0.013 | -5.16€ | 0 | 0 |
+| ✅ STREAK_MOM_5M#SOL#5min | 113 | -0.013 | -5.16€ | 2 | 0 |
 | ✅ STREAK_MOM_5M#XRP | 98 | -0.110 | -13.35€ | 0 | 0 |
 | ✅ STREAK_MOM_5M#XRP#5min | 98 | -0.110 | -13.35€ | 5 | 0 |
 | 🚫 STRUCT_NO_15M | 15 | -0.199 | -4.68€ | 0 | 0 |
@@ -1491,7 +1487,7 @@ _Derivadas de los patrones aprendidos:_
 **🟡 H-STREAK-COOLDOWN** — Cooldown tras 2 derrotas consecutivas (mismo subtype)
   - _Umbral_: n≥40 tras 2 losses y gap(IC_tras_win - IC_tras_2loss)≥0.05
   - _Acción_: Reducir stake (no desactivar) 1-2h tras 2 derrotas consecutivas en el mismo subtype
-  - _Estado_: tras_win IC=+0.115 n=17963 | tras_1loss IC=+0.082 n=11863 | tras_2loss IC=+0.051 n=4923/40 | gap=+0.063 (umbral 0.05)
+  - _Estado_: tras_win IC=+0.115 n=17964 | tras_1loss IC=+0.082 n=11863 | tras_2loss IC=+0.051 n=4923/40 | gap=+0.063 (umbral 0.05)
 
 **🟡 H-KALMAN** — Kalman filter para drift adaptativo
   - _Umbral_: n≥200 por subtipo para calibrar parámetros Q/R del KF
