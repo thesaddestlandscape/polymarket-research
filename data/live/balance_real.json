@@ -1,11 +1,11 @@
 {
- "ts": "2026-07-23T09:15:04+00:00",
+ "ts": "2026-07-23T09:27:44+00:00",
  "wallet": "0xB6eDe3A699f73cbe7f8A221c2cdAcEbFdf02028b",
- "free_usdc": 27.8785,
- "positions_value": 1.8481,
- "total": 29.7266,
+ "free_usdc": 28.6583,
+ "positions_value": 1.29,
+ "total": 29.9483,
  "deposito_inicial": 51.22,
- "pnl_real": -21.4934,
+ "pnl_real": -21.2717,
  "pnl_por_deposito": [
   {
    "fecha": "2026-06-29",
@@ -19,9 +19,9 @@
    "fecha": "2026-07-21",
    "eur": 25.78,
    "nota": "Segunda recarga tras circuit breaker 17-Jul. 25 USDC nuevos + 0.78 USDC remanente del per\u00edodo 1 = 25.78 USDC de capital disponible al inicio del per\u00edodo 2",
-   "pnl_ledger": 3.4211,
-   "n_trades": 45,
-   "rendimiento_pct": 13.3
+   "pnl_ledger": 3.7531,
+   "n_trades": 46,
+   "rendimiento_pct": 14.6
   }
  ],
  "daily_real": [
@@ -99,9 +99,9 @@
   },
   {
    "date": "2026-07-23",
-   "pnl": -1.35
+   "pnl": -0.57
   }
  ],
- "pnl_hoy_real": -1.35,
- "pnl_7d_real": -2.26
+ "pnl_hoy_real": -0.57,
+ "pnl_7d_real": -1.48
 }
