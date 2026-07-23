@@ -343,6 +343,272 @@ def _registrar_evento_ballenas(market_id: str, veto_vb: dict) -> None:
         pass
 
 
+# espera_confirmacion (23-Jul, ver plan /root/.claude/plans/ticklish-doodling-shannon.md):
+# veto_ballenas (arriba) solo mira la banda de PRECIO, nunca el TIEMPO --
+# ballenas_timing_state.json ya trae rest_lo_min/rest_hi_min (el rango de
+# minutos-antes-del-cierre en que la validación estadística que respalda
+# umbral_pct realmente se midió) pero live_trade.py nunca los leía. Las
+# predicciones son de un solo disparo por mercado y SENAL_MAX_LATENCIA_SEG=100s
+# las descarta como caducadas mucho antes de que la ventana de confirmación
+# real se abra (hasta 36min en SOL#60m) -- una señal que dispara pronto en
+# la vida del mercado se evalúa contra veto_ballenas con datos que
+# probablemente no existen todavía (sin_datos, fail-open) y nunca vuelve a
+# intentarse. Este mecanismo aparca esa señal en disco en vez de
+# descartarla, y la reintenta en ciclos posteriores hasta que la ventana se
+# abra de verdad o el mercado esté a punto de cerrar. Apagado por defecto
+# (riesgo.veto_ballenas.espera_confirmacion.activo=false) -- comportamiento
+# idéntico al actual mientras no se active explícitamente.
+BALLENAS_PENDIENTES_PATH = DIR_LIVE / "ballenas_pendientes.json"
+BALLENAS_PENDIENTES_LOCK_PATH = DIR_LIVE / ".ballenas_pendientes_lock"
+BALLENAS_PENDIENTES_EVENTOS_PATH = DIR_LIVE / "ballenas_pendientes_eventos.jsonl"
+BALLENAS_PENDIENTE_MARGEN_SUPERIOR_MIN_DEFAULT = 0.3
+BALLENAS_PENDIENTE_MARGEN_INFERIOR_MIN_DEFAULT = 0.3
+BALLENAS_PENDIENTE_FLOOR_MIN_DEFAULT = 0.25
+BALLENAS_PENDIENTES_PRUNE_DIAS = 3
+ESTADOS_TERMINALES_BALLENAS_PENDIENTE = {
+    "resuelto_normal", "vetado_concentracion", "vetado_discrepancia",
+    "expirado", "abortado_guardia",
+}
+
+
+def _espera_confirmacion_cfg(config: dict) -> dict:
+    cfg = config.get("riesgo", {}).get("veto_ballenas", {}).get("espera_confirmacion", {})
+    return {
+        "activo": bool(cfg.get("activo", False)),  # fail-closed: ausente = off
+        "combos_activos": set(cfg.get("combos_activos", [])),
+        "modo_observacion": bool(cfg.get("modo_observacion", True)),
+        "margen_superior_min": float(cfg.get("margen_superior_min", BALLENAS_PENDIENTE_MARGEN_SUPERIOR_MIN_DEFAULT)),
+        "margen_inferior_min": float(cfg.get("margen_inferior_min", BALLENAS_PENDIENTE_MARGEN_INFERIOR_MIN_DEFAULT)),
+        "floor_min": float(cfg.get("floor_min", BALLENAS_PENDIENTE_FLOOR_MIN_DEFAULT)),
+    }
+
+
+def _minutos_restantes(end_date_str: str) -> float | None:
+    """None si end_date falta o no parsea -- fail-closed, el caller debe
+    tratar None como 'no decidir todavía' nunca como 'ventana abierta'."""
+    try:
+        if not end_date_str:
+            return None
+        end_dt = datetime.fromisoformat(end_date_str.replace("Z", "+00:00"))
+        if end_dt.tzinfo is None:
+            end_dt = end_dt.replace(tzinfo=timezone.utc)
+        return (end_dt - datetime.now(timezone.utc)).total_seconds() / 60.0
+    except Exception:
+        return None
+
+
+def _ventana_ballenas_abierta(combo: str, minutos_restantes: float | None,
+                               margen_superior_min: float) -> bool:
+    """True si ya estamos dentro de rest_hi_min+margen minutos del cierre --
+    la ventana calibrada por ballenas_observer.py ya se considera abierta.
+    Fail-closed hacia "todavía no" (nunca hacia "ejecutar sin validar") si
+    minutos_restantes o la banda no están disponibles."""
+    if minutos_restantes is None:
+        return False
+    banda = _cargar_ballenas_timing_state().get(combo, {})
+    rest_hi = banda.get("rest_hi_min")
+    if not isinstance(rest_hi, (int, float)):
+        return False
+    return minutos_restantes <= (rest_hi + margen_superior_min)
+
+
+def _pendientes_ballenas_cargar() -> dict:
+    """dict vacío (nunca lanza) si el fichero no existe o está corrupto --
+    fail-closed hacia "no hay pendientes": una entrada real perdida por
+    corrupción simplemente no se reintenta más (se pierde la oportunidad,
+    nunca se inventa una ejecución de datos que no existen)."""
+    try:
+        if BALLENAS_PENDIENTES_PATH.exists():
+            data = json.loads(BALLENAS_PENDIENTES_PATH.read_text(encoding="utf-8"))
+            if isinstance(data, dict):
+                return data
+    except Exception as e:
+        log(f"  ⚠️ ballenas_pendientes.json ilegible: {e} -- se trata como vacío")
+    return {}
+
+
+def _pendientes_ballenas_transaccion(mutador):
+    """Lee + muta + escribe bajo UN solo flock -- evita perder una
+    actualización si dos puntos del código (el parking dentro de
+    _ejecutar_orden_polymarket y el cierre de estado en
+    _procesar_pendientes_ballenas) tocaran el fichero en el mismo ciclo:
+    sin esto, un "cargar()...mutar...guardar()" en dos sitios distintos
+    podría pisar la escritura del otro con una copia en memoria ya
+    obsoleta. `mutador(entradas: dict)` muta `entradas` in-place y puede
+    devolver cualquier valor, que se propaga como resultado de esta
+    función. Prune de estados terminales tras BALLENAS_PENDIENTES_PRUNE_DIAS
+    -- mismo patrón que _maker_estado_guardar (líneas ~1215-1225)."""
+    with open(BALLENAS_PENDIENTES_LOCK_PATH, "w") as lock_f:
+        fcntl.flock(lock_f, fcntl.LOCK_EX)
+        try:
+            try:
+                entradas = (json.loads(BALLENAS_PENDIENTES_PATH.read_text(encoding="utf-8"))
+                            if BALLENAS_PENDIENTES_PATH.exists() else {})
+                if not isinstance(entradas, dict):
+                    entradas = {}
+            except Exception as e:
+                log(f"  ⚠️ ballenas_pendientes.json ilegible: {e} -- se trata como vacío")
+                entradas = {}
+            resultado = mutador(entradas)
+            corte = (datetime.now(timezone.utc) - timedelta(days=BALLENAS_PENDIENTES_PRUNE_DIAS)).isoformat()
+            vivas = {k: v for k, v in entradas.items()
+                     if v.get("estado") not in ESTADOS_TERMINALES_BALLENAS_PENDIENTE
+                     or str(v.get("ultimo_intento_ts", "")) >= corte}
+            tmp = BALLENAS_PENDIENTES_PATH.with_suffix(".json.tmp")
+            tmp.write_text(json.dumps(vivas, indent=1, ensure_ascii=False), encoding="utf-8")
+            tmp.replace(BALLENAS_PENDIENTES_PATH)
+            return resultado
+        finally:
+            fcntl.flock(lock_f, fcntl.LOCK_UN)
+
+
+def _registrar_evento_pendiente_ballenas(evento: dict) -> None:
+    """Log JSONL de cada transición de estado de una entrada aparcada --
+    consumido por analisis_ballenas_espera_confirmacion.py y
+    vigia_ballenas_pendientes.py. Nunca lanza (best-effort, igual que
+    _registrar_evento_ballenas)."""
+    try:
+        fila = {"ts": datetime.now(timezone.utc).isoformat(timespec="seconds"), **evento}
+        with open(BALLENAS_PENDIENTES_EVENTOS_PATH, "a", encoding="utf-8") as f:
+            f.write(json.dumps(fila, ensure_ascii=False) + "\n")
+    except Exception:
+        pass
+
+
+def _clave_pendiente_ballenas(market_id: str, strategy: str, subtype: str, direction: str) -> str:
+    return f"{market_id}#{strategy}#{subtype}#{direction}"
+
+
+def _conflictos_discrepancia(mid: str, dec: str, strategy: str, subtype: str,
+                              wl_por_mercado: dict) -> list:
+    """Extraído de la lógica ya existente del veto de discrepancia entre
+    tuplas (ver bloque 'Veto discrepancia entre tuplas whitelisted' en
+    main()) para poder reutilizarla también en _procesar_pendientes_ballenas
+    -- una señal aparcada varios ciclos no debe perder esta protección solo
+    porque su fila de predicción original ya superó SENAL_MAX_LATENCIA_SEG."""
+    own_prefix = f"{strategy}#{subtype}#"
+    decs_en_mercado = wl_por_mercado.get(mid, {})
+    return sorted(k for d, ks in decs_en_mercado.items() if d != dec
+                  for k in ks if not k.startswith(own_prefix))
+
+
+def _aparcar_ballenas(clave: str, market_id: str, direction: str, ctx: dict,
+                       precio_plan: float, edge_dir: float | None, combo: str,
+                       activo: str, marco: str, motivo_vb: str,
+                       minutos_restantes: float | None, esp_cfg: dict) -> dict:
+    """Aparca (o actualiza, si ya existía -- upsert idempotente por `clave`,
+    necesario porque _ejecutar_orden_polymarket se llama ~4-5 veces para la
+    misma señal dentro de los primeros 100s) una señal que no puede
+    confirmarse con ballenas todavía porque la ventana calibrada
+    (rest_hi_min) no se ha abierto. Devuelve el resultado no_fill que
+    _ejecutar_orden_polymarket debe propagar al caller -- mismo *shape* que
+    un FOK kill o edge evaporado, para que main() no registre nada ni
+    marque el mercado como operado.
+
+    Si ya existe una entrada TERMINAL para esta clave (expirado/vetado_*/
+    abortado_guardia de un ciclo anterior) no se resucita -- oportunidad
+    perdida definitiva, se sigue devolviendo no_fill pero sin tocar el
+    fichero de nuevo."""
+    banda = _cargar_ballenas_timing_state().get(combo, {})
+    rest_lo, rest_hi = banda.get("rest_lo_min"), banda.get("rest_hi_min")
+    ts_now = datetime.now(timezone.utc).isoformat(timespec="seconds")
+    end_date = ctx.get("end_date") or ""
+
+    # Fail-closed (code-review 23-Jul): si no se puede calcular un deadline
+    # real, NO se aparca -- una entrada sin deadline nunca expiraría sola
+    # (el prune de _pendientes_ballenas_transaccion solo purga estados
+    # TERMINALES) y se reintentaría cada ciclo indefinidamente, incluso
+    # sobre un mercado que ya cerró hace días. Se trata igual que el resto
+    # de guardias fail-closed del proyecto: dato faltante → no operar (aquí:
+    # no esperar tampoco, directamente no_fill sin registrar nada).
+    deadline_ts = None
+    if isinstance(minutos_restantes, (int, float)) and end_date:
+        try:
+            end_dt = datetime.fromisoformat(end_date.replace("Z", "+00:00"))
+            if end_dt.tzinfo is None:
+                end_dt = end_dt.replace(tzinfo=timezone.utc)
+            deadline_minutos = max((rest_lo - esp_cfg["margen_inferior_min"]) if isinstance(rest_lo, (int, float))
+                                    else esp_cfg["floor_min"], esp_cfg["floor_min"])
+            deadline_ts = (end_dt - timedelta(minutes=deadline_minutos)).isoformat()
+        except Exception:
+            deadline_ts = None
+    if deadline_ts is None:
+        log(f"  🐋⚠️ Ballenas {combo}: end_date/minutos_restantes inválidos -- "
+            f"no se aparca (fail-closed), no_fill este intento")
+        return {
+            "ok": False, "no_fill": True, "ballenas_esperando": False,
+            "order_id": None, "entry_price": None, "fee_eur": 0.0,
+            "error": f"ballenas {combo}: end_date inválido, no se puede calcular deadline",
+        }
+
+    def _mutador(entradas: dict):
+        existente = entradas.get(clave)
+        if existente is not None and existente.get("estado") in ESTADOS_TERMINALES_BALLENAS_PENDIENTE:
+            return existente  # oportunidad perdida definitiva, no resucitar
+        if existente is None:
+            existente = {
+                "clave": clave, "market_id": market_id,
+                "strategy": ctx.get("strategy", ""), "subtype": ctx.get("subtype", ""),
+                "direction": direction, "activo": activo, "marco": marco, "combo": combo,
+                "end_date": end_date,
+                "precio_plan": precio_plan, "edge_dir": edge_dir,
+                "ic_para_stake": ctx.get("ic_para_stake"),
+                "ts_creacion": ts_now, "intentos": 0,
+                "rest_lo_min": rest_lo, "rest_hi_min": rest_hi,
+                "deadline_ts": deadline_ts, "estado": "esperando",
+            }
+            _registrar_evento_pendiente_ballenas({"clave": clave, "evento": "creado", "combo": combo,
+                                                   "motivo_vb": motivo_vb, "deadline_ts": deadline_ts})
+        existente["ultimo_intento_ts"] = ts_now
+        existente["intentos"] = existente.get("intentos", 0) + 1
+        existente["ultimo_motivo_veto"] = motivo_vb
+        entradas[clave] = existente
+        return existente
+
+    entrada = _pendientes_ballenas_transaccion(_mutador)
+    log(f"  🐋⏳ Ballenas {combo}: ventana de confirmación aún no abierta "
+        f"(restantes={minutos_restantes if minutos_restantes is not None else '?'}min, "
+        f"rest_hi_min={rest_hi}) -- aparcada (intento {entrada.get('intentos') if entrada else '?'}), "
+        f"deadline={entrada.get('deadline_ts') if entrada else '?'}")
+    return {
+        "ok": False, "no_fill": True, "ballenas_esperando": True,
+        "order_id": None, "entry_price": None, "fee_eur": 0.0,
+        "error": f"ballenas {combo}: ventana no abierta todavía, aparcada",
+    }
+
+
+def _cerrar_pendiente_ballenas(clave: str, estado: str, motivo: str) -> None:
+    """Cierra (marca estado terminal) una entrada de ballenas_pendientes.json
+    si existe -- no-op silencioso si no había ninguna (caso normal: la
+    inmensa mayoría de señales nunca pasan por el aparcado porque la
+    ventana ya está abierta desde el primer intento). Se llama tanto desde
+    el veto duro (concentracion_debil) como desde el camino normal (ventana
+    ya abierta) dentro de _ejecutar_orden_polymarket -- una vez resuelta por
+    la capa de ballenas, _procesar_pendientes_ballenas no debe volver a
+    tocarla, independientemente de si la ejecución real (requote/stake) que
+    sigue más abajo en la función termina en éxito o no."""
+    def _mutador(entradas: dict):
+        e = entradas.get(clave)
+        if e is None or e.get("estado") not in (None, "esperando"):
+            return None
+        e["estado"] = estado
+        ts_now = datetime.now(timezone.utc).isoformat(timespec="seconds")
+        e["ts_resolucion"] = ts_now
+        # refresca también ultimo_intento_ts -- el prune de
+        # _pendientes_ballenas_transaccion se basa en ese campo, no en
+        # ts_resolucion; sin esto una entrada cerrada aquí (en vez de vía
+        # _aparcar_ballenas, que sí lo actualiza) podría no cumplir la
+        # ventana de retención de días si su último intento real fue
+        # mucho antes.
+        e["ultimo_intento_ts"] = ts_now
+        e["ultimo_motivo_veto"] = motivo
+        entradas[clave] = e
+        return e
+    entrada = _pendientes_ballenas_transaccion(_mutador)
+    if entrada is not None:
+        _registrar_evento_pendiente_ballenas({"clave": clave, "evento": estado, "motivo": motivo})
+
+
 def _clv_tupla(strategy: str, subtype: str, decision: str) -> tuple[float, int]:
     """
     CLV medio y n de la tupla STRATEGY#SUBTYPE#DECISION en los últimos
@@ -1639,17 +1905,28 @@ def _ejecutar_orden_polymarket(market_id: str, direction: str,
         ctx = contexto or {}
         activo_vb = (ctx.get("subtype") or "").split("#")[0]
         marco_vb = _marco_ballenas(ctx.get("subtype") or "")
+        combo_vb = f"{activo_vb}#{marco_vb}" if marco_vb else None
+        config_vb = _cargar_config()
+        esp_cfg = _espera_confirmacion_cfg(config_vb)
+        clave_pendiente = _clave_pendiente_ballenas(market_id, ctx.get("strategy", ""),
+                                                     ctx.get("subtype", ""), direction)
         veto_vb = _evaluar_veto_ballenas(condition_id, activo_vb, marco_vb, precio_plan,
-                                         direction, _cargar_config())
+                                         direction, config_vb)
         if veto_vb.get("aplica"):
             _registrar_evento_ballenas(market_id, veto_vb)
             motivo_vb = veto_vb.get("motivo")
-            if motivo_vb in ("sin_datos", "sin_condition_id"):
-                log(f"  🐋 Ballenas {veto_vb.get('combo')}: SIN DATOS ({motivo_vb}, n={veto_vb.get('n', 0)}) "
-                    f"— fail-open vigilado (vigia_ballenas_cobertura.py), se sigue evaluando normal")
-            elif veto_vb.get("veta"):
+            if veto_vb.get("veta"):
                 log(f"  🐋 Ballenas {veto_vb['combo']}: {veto_vb['pct']*100:.1f}% a favor (n={veto_vb['n']}) "
                     f"< umbral {veto_vb['umbral']*100:.0f}% — VETO")
+                # espera_confirmacion (23-Jul): un veto activo (concentración
+                # medida y débil) es información real, no ausencia de datos
+                # -- se veta YA, independientemente de si la ventana estaba
+                # abierta o no (el veto solo puede reducir riesgo, nunca
+                # esperar a ver si mejora). Si esta clave estaba aparcada de
+                # un intento anterior, se cierra como vetada para que
+                # _procesar_pendientes_ballenas deje de reintentarla.
+                if esp_cfg["activo"] and combo_vb in esp_cfg["combos_activos"]:
+                    _cerrar_pendiente_ballenas(clave_pendiente, "vetado_concentracion", motivo_vb)
                 _registrar_snapshot_libro("veto_ballenas_debil", market_id, direction,
                                           precio_plan, stake_eur, depth, contexto)
                 return {
@@ -1659,9 +1936,30 @@ def _ejecutar_orden_polymarket(market_id: str, direction: str,
                     "error": f"ballenas {veto_vb['pct']*100:.1f}% (n={veto_vb['n']}) "
                              f"< umbral {veto_vb['umbral']*100:.0f}%",
                 }
+            # sin_datos / sin_condition_id / concentracion_ok: candidato a
+            # seguir su camino normal, salvo que espera_confirmacion esté
+            # activo para este combo y la ventana calibrada (rest_hi_min)
+            # todavía no se haya abierto -- entonces se aparca en vez de
+            # fail-open inmediato (ver plan /root/.claude/plans/ticklish-doodling-shannon.md).
+            if (esp_cfg["activo"] and combo_vb in esp_cfg["combos_activos"]
+                    and motivo_vb != "sin_condition_id"):
+                minutos_restantes = _minutos_restantes(ctx.get("end_date") or "")
+                if not _ventana_ballenas_abierta(combo_vb, minutos_restantes, esp_cfg["margen_superior_min"]):
+                    return _aparcar_ballenas(clave_pendiente, market_id, direction, ctx,
+                                              precio_plan, edge_dir, combo_vb, activo_vb, marco_vb,
+                                              motivo_vb, minutos_restantes, esp_cfg)
+            if motivo_vb in ("sin_datos", "sin_condition_id"):
+                log(f"  🐋 Ballenas {veto_vb.get('combo')}: SIN DATOS ({motivo_vb}, n={veto_vb.get('n', 0)}) "
+                    f"— fail-open vigilado (vigia_ballenas_cobertura.py), se sigue evaluando normal")
             else:
                 log(f"  🐋 Ballenas {veto_vb['combo']}: {veto_vb['pct']*100:.1f}% a favor (n={veto_vb['n']}) "
                     f">= umbral {veto_vb['umbral']*100:.0f}% — OK")
+            if esp_cfg["activo"] and combo_vb in esp_cfg["combos_activos"]:
+                # Ventana ya abierta (o combo sin banda) y se sigue adelante
+                # normal -- si esta clave estaba aparcada de un intento
+                # anterior, cerrarla como resuelta para que no quede huérfana
+                # en ballenas_pendientes.json.
+                _cerrar_pendiente_ballenas(clave_pendiente, "resuelto_normal", motivo_vb)
 
         # veto_fuera_banda_ballenas (21-Jul): complementario al de arriba,
         # ver docstring/constantes junto a _evaluar_veto_fuera_banda_ballenas.
@@ -1669,7 +1967,7 @@ def _ejecutar_orden_polymarket(market_id: str, direction: str,
         # `depth`, cero coste de red extra (ballenas_timing_state.json ya
         # se lee del disco, igual que veto_ballenas arriba).
         veto_fb = _evaluar_veto_fuera_banda_ballenas(ctx.get("strategy") or "", ctx.get("subtype") or "",
-                                                      direction, precio_plan, _cargar_config())
+                                                      direction, precio_plan, config_vb)
         if veto_fb.get("aplica") and veto_fb.get("veta"):
             log(f"  🐋 Fuera de banda ballenas {veto_fb.get('combo')} "
                 f"[{veto_fb.get('banda_lo')},{veto_fb.get('banda_hi')}) a precio={precio_plan:.4f} "
@@ -2194,6 +2492,202 @@ def _tupla_activa(strategy: str, subtype: str, params: dict, direccion: str = ""
     return True
 
 
+def _procesar_pendientes_ballenas(pendientes: dict, config: dict, params: dict,
+                                   pares_ok: set, riesgo: dict, ya_operados: set,
+                                   mids_maker: set, wl_por_mercado: dict,
+                                   predicciones: list, ejecutados: int) -> int:
+    """Reintenta cada ciclo las entradas 'esperando' de ballenas_pendientes.json
+    (ver plan /root/.claude/plans/ticklish-doodling-shannon.md). Reutiliza
+    _ejecutar_orden_polymarket (ya re-evalúa veto_ballenas fresco y
+    _decidir_requote) -- esta función solo decide SI llamarlo (guardias +
+    deadline, re-chequeados porque pueden haber cambiado durante la espera)
+    y qué hacer si no procede. Comparte el mismo presupuesto de 3
+    operaciones/ciclo que el bucle principal (parámetro `ejecutados`, se
+    devuelve actualizado)."""
+    esp_cfg = _espera_confirmacion_cfg(config)
+    if not esp_cfg["activo"]:
+        return ejecutados
+    ahora = datetime.now(timezone.utc)
+    for clave, entrada in list(pendientes.items()):
+        if ejecutados >= 3:
+            break
+        if entrada.get("estado") != "esperando":
+            continue
+        strategy, subtype = entrada.get("strategy", ""), entrada.get("subtype", "")
+        direction, mid = entrada.get("direction", ""), entrada.get("market_id", "")
+        combo = entrada.get("combo", "")
+
+        # 1. Guardias de portafolio re-chequeadas (pueden cambiar durante la espera).
+        if f"{strategy}#{subtype}#{direction}" not in pares_ok:
+            _cerrar_pendiente_ballenas(clave, "abortado_guardia", "fuera_whitelist")
+            continue
+        if not _tupla_activa(strategy, subtype, params, direction):
+            _cerrar_pendiente_ballenas(clave, "abortado_guardia", "estrategia_desactivada")
+            continue
+        if mid in ya_operados or mid in mids_maker:
+            _cerrar_pendiente_ballenas(clave, "abortado_guardia", "ya_operado")
+            continue
+        if not _cargar_ballenas_timing_state().get(combo, {}).get("significativo"):
+            _cerrar_pendiente_ballenas(clave, "abortado_guardia", "banda_dejo_de_ser_significativa")
+            continue
+
+        # 2. Veto de discrepancia (mismo mapa que el bucle principal, ya
+        # extendido para incluir las propias entradas pendientes).
+        if _conflictos_discrepancia(mid, direction, strategy, subtype, wl_por_mercado):
+            _cerrar_pendiente_ballenas(clave, "vetado_discrepancia", "conflicto_tupla")
+            continue
+
+        # 3. Auto-flip: la propia estrategia recalculó `dec` (sin histéresis,
+        # ver nota junto al veto de discrepancia) y cambió de opinión sobre
+        # este mismo mercado mientras la versión vieja seguía aparcada --
+        # ejecutarla ahora sería operar una decisión que la estrategia ya
+        # abandonó.
+        flip = False
+        for _p in predicciones:
+            if (_p.get("strategy") == strategy and _p.get("subtype") == subtype
+                    and _p.get("market_id") == mid and _p.get("decision") != direction):
+                _lat = _latencia_seg(_p)
+                if _lat is not None and _lat < SENAL_MAX_LATENCIA_SEG:
+                    flip = True
+                    break
+        if flip:
+            _cerrar_pendiente_ballenas(clave, "abortado_guardia", "flip_direccion")
+            continue
+
+        # 4. Techo de correlación direccional.
+        max_misma_dir = riesgo.get("max_posiciones_abiertas_misma_direccion", 2)
+        if _posiciones_abiertas_misma_direccion(direction) >= max_misma_dir:
+            _cerrar_pendiente_ballenas(clave, "abortado_guardia", "techo_correlacion")
+            continue
+
+        # 5. Deadline (rest_lo_min - margen, ver _aparcar_ballenas) -- vencido
+        # sin confirmar = oportunidad perdida, NUNCA se ejecuta tarde (eso
+        # repetiría el bug que este mecanismo corrige).
+        deadline_ts = entrada.get("deadline_ts")
+        if deadline_ts:
+            try:
+                deadline_dt = datetime.fromisoformat(deadline_ts)
+            except Exception:
+                deadline_dt = None
+            if deadline_dt is not None and ahora >= deadline_dt:
+                _cerrar_pendiente_ballenas(clave, "expirado", "deadline_vencido")
+                log(f"  🐋⌛ Ballenas {combo}: {strategy}#{subtype} {direction} mid={mid} "
+                    f"expiró sin confirmar (deadline {deadline_ts}) -- oportunidad perdida")
+                continue
+
+        # Fase 0 -- modo_observacion (0€ en riesgo): NUNCA se llama a
+        # _ejecutar_orden_polymarket aquí -- se simula con las mismas
+        # funciones de solo lectura (_evaluar_veto_ballenas,
+        # _ventana_ballenas_abierta) para medir qué habría pasado, sin
+        # ningún riesgo de ejecutar una orden real por un fallo de este
+        # gate. _get_token_ids es una consulta pública (Gamma API), no
+        # coloca ninguna orden.
+        if esp_cfg["modo_observacion"]:
+            condition_id_obs = None
+            try:
+                _, _, condition_id_obs = _get_token_ids(mid)
+            except Exception as e:
+                log(f"  ⚠️ [OBSERVACIÓN] _get_token_ids falló para mid={mid}: {e} -- se simula sin condition_id")
+            veto_sim = _evaluar_veto_ballenas(condition_id_obs, entrada.get("activo", ""),
+                                               entrada.get("marco", ""), entrada.get("precio_plan"),
+                                               direction, config)
+            minutos_restantes_obs = _minutos_restantes(entrada.get("end_date", ""))
+            abierta_obs = _ventana_ballenas_abierta(combo, minutos_restantes_obs, esp_cfg["margen_superior_min"])
+            if veto_sim.get("veta"):
+                _cerrar_pendiente_ballenas(clave, "vetado_concentracion", "observacion_habria_vetado")
+                _registrar_evento_pendiente_ballenas({"clave": clave, "evento": "observacion_habria_vetado", "combo": combo})
+            elif abierta_obs:
+                _cerrar_pendiente_ballenas(clave, "resuelto_normal", "observacion_habria_ejecutado")
+                _registrar_evento_pendiente_ballenas({
+                    "clave": clave, "evento": "observacion_habria_ejecutado", "combo": combo,
+                    "minutos_restantes": minutos_restantes_obs})
+                log(f"  🐋👁 Ballenas {combo} [OBSERVACIÓN]: {strategy}#{subtype} {direction} mid={mid} "
+                    f"-- habría ejecutado aquí (ventana abierta, restantes={minutos_restantes_obs}min)")
+            # si no está abierta y no vetó, sigue esperando -- no se toca nada.
+            continue
+
+        # 6. Reintentar de verdad: stake recalculado con bankroll/freno diario
+        # frescos (ic_para_stake, la convicción, quedó congelada al crear la
+        # entrada); _ejecutar_orden_polymarket vuelve a evaluar veto_ballenas
+        # y _decidir_requote frescos -- la misma protección de precio que el
+        # resto del sistema.
+        ic_para_stake = entrada.get("ic_para_stake")
+        if ic_para_stake is None:
+            _cerrar_pendiente_ballenas(clave, "abortado_guardia", "ic_para_stake_ausente")
+            continue
+        stake_info = calcular_stake(ic_para_stake, strategy, subtype, direction=direction)
+        if not stake_info.get("viable"):
+            log(f"  🐋 Ballenas {combo}: {strategy}#{subtype} {direction} mid={mid} -- "
+                f"stake no viable al reintentar ({stake_info.get('motivo')}), sigue esperando")
+            continue
+
+        resultado = _ejecutar_orden_polymarket(
+            mid, direction, stake_info["stake_eur"], entrada.get("precio_plan"),
+            edge_dir=entrada.get("edge_dir"),
+            contexto={"strategy": strategy, "subtype": subtype,
+                      "end_date": entrada.get("end_date", ""),
+                      "ic_para_stake": ic_para_stake})
+
+        if resultado.get("ballenas_esperando"):
+            continue  # sigue esperando -- ya actualizado en disco por _aparcar_ballenas
+        if resultado.get("no_fill"):
+            log(f"  🐋 Ballenas {combo}: {strategy}#{subtype} {direction} mid={mid} -- "
+                f"no_fill al reintentar ({str(resultado.get('error', ''))[:100]})")
+            continue
+
+        # Ejecutado (o error real de la API) -- registrar en trades.csv con
+        # el mismo esquema que el bucle principal. Tag `ballenas_espera_seg`
+        # en notas para poder medir el impacto real (analisis_ballenas_espera_confirmacion.py).
+        espera_seg = None
+        try:
+            espera_seg = (datetime.now(timezone.utc)
+                          - datetime.fromisoformat(entrada.get("ts_creacion", ""))).total_seconds()
+        except Exception:
+            pass
+        tag_espera = (f"ballenas_espera_seg={espera_seg:.0f} intentos={entrada.get('intentos', 0)}"
+                      if espera_seg is not None else f"intentos={entrada.get('intentos', 0)}")
+        trade = {
+            "timestamp_utc": datetime.now(timezone.utc).isoformat(timespec="seconds"),
+            "market_id": mid, "question": "", "end_date": entrada.get("end_date", ""),
+            "strategy": strategy, "subtype": subtype, "direction": direction,
+            "stake_eur": stake_info["stake_eur"] if resultado.get("ok") else 0.0,
+            "entry_price": resultado.get("entry_price"),
+            "ic_modelo": round(ic_para_stake, 4),
+            "edge_neto": round(entrada.get("edge_dir"), 4) if entrada.get("edge_dir") is not None else "",
+            "conviction_score": round(ic_para_stake, 4),
+            "kelly_recomendado": stake_info["stake_eur"],
+            "status": "OPEN" if resultado.get("ok") else "ERROR",
+            "close_timestamp": "", "exit_price": "", "outcome_real": "",
+            "fee_eur": resultado.get("fee_eur", 0),
+            "pnl_bruto_eur": "", "pnl_neto_eur": "",
+            "notas": tag_espera + ("" if resultado.get("ok") else f" {resultado.get('error', '')}"),
+        }
+        _registrar_trade(trade)
+        ya_operados.add(mid)
+        ejecutados += 1
+        log(f"  🐋✅ Ballenas {combo}: {strategy}#{subtype} {direction} mid={mid} -- "
+            f"{'EJECUTADO' if resultado.get('ok') else 'ERROR'} tras espera "
+            f"({espera_seg if espera_seg is not None else '?'}s, {entrada.get('intentos', 0)} intentos)")
+        if resultado.get("ok"):
+            enviar_telegram(
+                f"🎯🐋 *Orden live ejecutada (tras esperar confirmación de ballenas)*\n"
+                f"Estrategia: {strategy}#{subtype}\n"
+                f"Dirección: {direction}\n"
+                f"Precio fill: {resultado.get('entry_price', 0):.4f}\n"
+                f"Stake: {stake_info['stake_eur']:.2f}$\n"
+                f"Espera: {f'{espera_seg:.0f}' if espera_seg is not None else '?'}s "
+                f"({entrada.get('intentos', 0)} intentos)\n"
+                f"Bankroll operativo: {bankroll_actual():.2f}$"
+            )
+        else:
+            enviar_telegram(
+                f"❌🐋 *Orden live ERROR (tras esperar confirmación de ballenas)*\n"
+                f"{strategy}#{subtype} {direction}\n"
+                f"{str(resultado.get('error', ''))[:200]}"
+            )
+    return ejecutados
+
+
 def main():
     ts = datetime.now(timezone.utc).isoformat(timespec="seconds")
     log(f"=== live_trade ciclo {ts} ===")
@@ -2325,6 +2819,23 @@ def main():
         if not _tupla_activa(_p_strat, _p_sub, params, _p_dec):
             continue
         _wl_por_mercado[_p.get("market_id", "")][_p_dec].add(_key)
+    # 23-Jul (espera_confirmacion): las entradas aparcadas 'esperando'
+    # también deben participar en el mapa de discrepancia -- sin esto, una
+    # señal aparcada "desaparecería" del mapa en cuanto su fila de
+    # predicción original supera SENAL_MAX_LATENCIA_SEG, dejando pasar sin
+    # oposición a una señal opuesta que llegue después sobre el mismo
+    # mercado. Gateado por esp_cfg["activo"] (code-review 23-Jul): con el
+    # flag apagado, la reversión a "comportamiento actual íntegro" debe ser
+    # real incluso si quedan entradas 'esperando' huérfanas de una prueba
+    # anterior -- sin este gate, esas entradas seguirían influyendo el veto
+    # de discrepancia aunque el mecanismo esté "apagado".
+    pendientes_ballenas = _pendientes_ballenas_cargar()
+    if _espera_confirmacion_cfg(config)["activo"]:
+        for _e in pendientes_ballenas.values():
+            if _e.get("estado") != "esperando":
+                continue
+            _key = f"{_e.get('strategy', '')}#{_e.get('subtype', '')}#{_e.get('direction', '')}"
+            _wl_por_mercado[_e.get("market_id", "")][_e.get("direction", "")].add(_key)
     boost_ic_coincidencia   = riesgo.get("boost_ic_coincidencia_tuplas", 1.0)
     boost_ic_smartmoney_sol = riesgo.get("boost_ic_smartmoney_favorito_sol", 1.0)
     boost_ic_ballenas_favorito_eth15 = riesgo.get("boost_ic_ballenas_favorito_eth15", 1.0)
@@ -2349,6 +2860,10 @@ def main():
     log(f"  Predicciones hoy: {len(predicciones)} | Bankroll: {bkr:.2f}€ | Mercados ya operados (histórico): {len(ya_operados)}")
 
     ejecutados = 0
+    ejecutados = _procesar_pendientes_ballenas(pendientes_ballenas, config, params, pares_ok,
+                                                riesgo, ya_operados, mids_maker, _wl_por_mercado,
+                                                predicciones, ejecutados)
+
     for pred in predicciones:
         strategy = pred.get("strategy", "")
         subtype  = pred.get("subtype", "")
@@ -2503,10 +3018,7 @@ def main():
         # cambiar de dirección entre ciclos dentro de la vida del mismo
         # mercado — sin este filtro esa fila vieja (aunque ya filtrada por
         # latencia arriba, podría seguir dentro de los 100s) se auto-vetaría.
-        own_prefix = f"{strategy}#{subtype}#"
-        decs_en_mercado = _wl_por_mercado.get(mid, {})
-        conflictos = sorted(k for d, ks in decs_en_mercado.items() if d != dec
-                             for k in ks if not k.startswith(own_prefix))
+        conflictos = _conflictos_discrepancia(mid, dec, strategy, subtype, _wl_por_mercado)
         if conflictos:
             log(f"  ⛔ Veto discrepancia: {strategy}#{subtype} {dec} mid={mid} — "
                 f"otra tupla whitelist predice dirección opuesta en el mismo "
@@ -2710,7 +3222,13 @@ def main():
         resultado = _ejecutar_orden_polymarket(mid, dec, stake, entry_p,
                                                edge_dir=edge_dir,
                                                contexto={"strategy": strategy,
-                                                         "subtype": subtype})
+                                                         "subtype": subtype,
+                                                         # 23-Jul (espera_confirmacion): end_date/ic_para_stake
+                                                         # permiten aparcar esta señal fielmente si la ventana
+                                                         # de ballenas no está abierta todavía -- ver
+                                                         # _aparcar_ballenas. Sin efecto si el flag está apagado.
+                                                         "end_date": pred.get("end_date", ""),
+                                                         "ic_para_stake": ic_para_stake})
 
         # FOK kill o edge evaporado en re-quote = no registrar ni contar;
         # la señal puede reintentarse en ciclos siguientes si sigue viva.
