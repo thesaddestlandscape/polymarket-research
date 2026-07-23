@@ -2577,7 +2577,7 @@ GBM_LATE_15M_TARDIO_REST_MIN_HI = 10.5  # variante "entra más tarde" (reimpleme
 # para medir forward si ese sweet spot aguanta con n propio, no si "más tarde siempre es mejor".
 GBM_LATE_60M_REST_MIN_LO = 5.0    # 60min: suelo más alto — libros finos al final
 GBM_LATE_60M_REST_MIN_HI = 20.0   # 60min: último tercio de la ventana (T_h<0.33)
-GBM_LATE_15M_PARES = {"BTC", "ETH", "SOL", "XRP", "DOGE"}  # DOGE añadido 22-Jul: cobertura shadow total, ver project_franja_horaria_bhfdr_fillability_22jul
+GBM_LATE_15M_PARES = {"BTC", "ETH", "SOL", "XRP", "DOGE", "BNB"}  # DOGE añadido 22-Jul; BNB añadido 23-Jul: mercados reales con liquidez confirmados (data/markets + API), cobertura shadow total, BNB no está en pares_permitidos_live → sin riesgo de ejecución real
 # 5min (14-Jul, sesión siguiente): rest_lo/rest_hi calibrados al timing real
 # de wallet-timing analysis (analisis_timing_wallets_por_activo.py) — restante
 # mediana 2.9-3.3min, p25 1.8-2.0min, p75 4.3-4.4min en BTC/ETH/SOL (las 3
@@ -3614,7 +3614,7 @@ def s_struct_no_15m(market, ctx):
 # señal cruce EDGE_MINIMO y genere volumen medible — el veredicto real lo da
 # ic_bayes del bucket en shadow_postmortem con n>=40, no este número.
 # Shadow puro: NO está en pares_permitidos_live → jamás opera en vivo.
-FAVORITO_CONFIRMADO_PARES = {"BTC", "ETH", "SOL", "XRP", "DOGE"}  # DOGE añadido 22-Jul: cobertura shadow (DOGE#* no está en pares_permitidos_live, sin riesgo de ejecución real)
+FAVORITO_CONFIRMADO_PARES = {"BTC", "ETH", "SOL", "XRP", "DOGE", "BNB"}  # DOGE añadido 22-Jul; BNB añadido 23-Jul (mismo motivo: cobertura shadow, BNB#* no está en pares_permitidos_live, sin riesgo de ejecución real)
 FAVORITO_CONFIRMADO_UMBRAL = 0.55  # nivel de precio que "confirma" favorito
 FAVORITO_CONFIRMADO_UMBRAL_BAJO = round(1.0 - FAVORITO_CONFIRMADO_UMBRAL, 4)  # 0.45 exacto —
 # NO derivar como "1.0 - FAVORITO_CONFIRMADO_UMBRAL" inline en la comparación: sin el

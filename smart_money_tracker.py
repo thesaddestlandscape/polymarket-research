@@ -67,7 +67,17 @@ TAG_A_DURACION = {"5M": "5m", "15M": "15m", "1H": "60m", "4H": "240m"}
 # el nombre completo del activo en vez del ticker — ni en tags ni en la
 # pregunta aparece "BTC"/"ETH" literal.
 NOMBRE_A_TICKER = {"bitcoin": "BTC", "ethereum": "ETH", "solana": "SOL", "xrp": "XRP",
-                    "dogecoin": "DOGE"}
+                    "dogecoin": "DOGE", "bnb": "BNB"}
+# 23-Jul: BNB tiene el MISMO bug que ya se cazó para DOGE el 20-Jul —
+# mercados "BNB Up or Down..." reales con liquidez real (~$2000 en 5min,
+# verificado contra data/markets/*.csv y la API en vivo) pero "bnb" nunca
+# estaba en este dict, así que ballenas_observer.py (y la rama weekly de
+# este mismo fichero) los descartaba en silencio: 0 filas de BNB en
+# ballenas_timing_history.csv pese a llevar semanas de mercados reales.
+# "bnb" no es substring de ningún otro nombre de este dict (ni al revés)
+# — sin riesgo de colisión. Puramente aditivo: no cambia qué mercados
+# BTC/ETH/SOL/XRP/DOGE se reconocían antes, solo añade BNB al universo
+# muestreado desde ahora.
 # 20-Jul: DOGE llevaba excluido de TODO este pipeline desde su origen —
 # mismo bug ya cazado para BTC (ver comentario más abajo, 15-Jul): 0 filas
 # de DOGE en 325.913 acumuladas en ballenas_timing_history.csv, verificado
