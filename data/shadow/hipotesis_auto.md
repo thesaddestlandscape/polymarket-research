@@ -1,5 +1,5 @@
-# Hipótesis automáticas — 2026-07-23 13:30 UTC
-_Generado por shadow_postmortem.py sobre 30959 resoluciones (PNL=+6813.17€)_
+# Hipótesis automáticas — 2026-07-23 13:33 UTC
+_Generado por shadow_postmortem.py sobre 30961 resoluciones (PNL=+6815.17€)_
 
 ## Patrones causales activos
 
@@ -1283,10 +1283,10 @@ _Derivadas de los patrones aprendidos:_
 | ✅ GBM_LATE_15M_TARDIO#SOL#15min | 1002 | +0.044 | +210.69€ | 1 | 3 |
 | ✅ GBM_LATE_15M_TARDIO#XRP | 1252 | +0.180 | +840.96€ | 0 | 0 |
 | ✅ GBM_LATE_15M_TARDIO#XRP#15min | 1252 | +0.180 | +840.96€ | 0 | 12 |
-| ✅ GBM_LATE_5M | 392 | -0.035 | -9.29€ | 0 | 0 |
-| ✅ GBM_LATE_5M#5min | 392 | -0.035 | -9.29€ | 0 | 0 |
-| ✅ GBM_LATE_5M#BTC | 71 | -0.103 | -19.63€ | 0 | 0 |
-| ✅ GBM_LATE_5M#BTC#5min | 71 | -0.103 | -19.63€ | 0 | 0 |
+| ✅ GBM_LATE_5M | 393 | -0.034 | -7.77€ | 0 | 0 |
+| ✅ GBM_LATE_5M#5min | 393 | -0.034 | -7.77€ | 0 | 0 |
+| ✅ GBM_LATE_5M#BTC | 72 | -0.095 | -18.12€ | 0 | 0 |
+| ✅ GBM_LATE_5M#BTC#5min | 72 | -0.095 | -18.12€ | 0 | 0 |
 | ✅ GBM_LATE_5M#ETH | 53 | -0.118 | -7.94€ | 0 | 0 |
 | ✅ GBM_LATE_5M#ETH#5min | 53 | -0.118 | -7.94€ | 0 | 0 |
 | ✅ GBM_LATE_5M#SOL | 80 | -0.159 | +1.25€ | 0 | 0 |
@@ -1305,10 +1305,10 @@ _Derivadas de los patrones aprendidos:_
 | 🚫 GBM_LATE_60M_PYCONFIRMADO#60min | 9 | -0.143 | -2.77€ | 0 | 0 |
 | ✅ GBM_LATE_60M_PYCONFIRMADO#BTC | 5 | -0.054 | -0.73€ | 0 | 0 |
 | ✅ GBM_LATE_60M_PYCONFIRMADO#BTC#60min | 5 | -0.054 | -0.73€ | 0 | 0 |
-| ✅ LATE_WINDOW_5MIN | 340 | -0.056 | -5.24€ | 0 | 0 |
-| ✅ LATE_WINDOW_5MIN#5min | 340 | -0.056 | -5.24€ | 0 | 0 |
-| ✅ LATE_WINDOW_5MIN#BTC | 340 | -0.056 | -5.24€ | 0 | 0 |
-| ✅ LATE_WINDOW_5MIN#BTC#5min | 340 | -0.056 | -5.24€ | 0 | 0 |
+| ✅ LATE_WINDOW_5MIN | 341 | -0.054 | -4.76€ | 0 | 0 |
+| ✅ LATE_WINDOW_5MIN#5min | 341 | -0.054 | -4.76€ | 0 | 0 |
+| ✅ LATE_WINDOW_5MIN#BTC | 341 | -0.054 | -4.76€ | 0 | 0 |
+| ✅ LATE_WINDOW_5MIN#BTC#5min | 341 | -0.054 | -4.76€ | 0 | 0 |
 | ✅ LEADLAG_BTC_XRP_15M | 264 | +0.011 | +10.21€ | 2 | 0 |
 | ✅ LEADLAG_BTC_XRP_15M#15min | 264 | +0.011 | +10.21€ | 0 | 0 |
 | ✅ LEADLAG_BTC_XRP_15M#XRP | 264 | +0.011 | +10.21€ | 0 | 0 |
@@ -1489,7 +1489,7 @@ _Derivadas de los patrones aprendidos:_
 **🟡 H-STREAK-COOLDOWN** — Cooldown tras 2 derrotas consecutivas (mismo subtype)
   - _Umbral_: n≥40 tras 2 losses y gap(IC_tras_win - IC_tras_2loss)≥0.05
   - _Acción_: Reducir stake (no desactivar) 1-2h tras 2 derrotas consecutivas en el mismo subtype
-  - _Estado_: tras_win IC=+0.114 n=18510 | tras_1loss IC=+0.081 n=12254 | tras_2loss IC=+0.048 n=5097/40 | gap=+0.066 (umbral 0.05)
+  - _Estado_: tras_win IC=+0.114 n=18511 | tras_1loss IC=+0.081 n=12255 | tras_2loss IC=+0.048 n=5098/40 | gap=+0.066 (umbral 0.05)
 
 **🟡 H-KALMAN** — Kalman filter para drift adaptativo
   - _Umbral_: n≥200 por subtipo para calibrar parámetros Q/R del KF
@@ -1513,7 +1513,7 @@ _Derivadas de los patrones aprendidos:_
 **⏳ H-KELLY-HORA** — Kelly boost ×1.2 en horas top (15/17/19h UTC)
   - _Umbral_: n≥40 por hora con IC estable ≥+0.10 confirmado en forward
   - _Acción_: Añadir HORA_BOOST = {13: 1.2, 15: 1.2, 17: 1.2, 19: 1.2} en shadow_predict.py
-  - _Estado_: H=13h UTC: IC=+0.083 n=1354/40 PNL=+249.73€ | H=15h UTC: IC=+0.160 n=1259/40 PNL=+510.06€ | H=17h UTC: IC=+0.106 n=1224/40 PNL=+264.87€ | H=19h UTC: IC=+0.126 n=1176/40 PNL=+309.76€
+  - _Estado_: H=13h UTC: IC=+0.083 n=1356/40 PNL=+251.73€ | H=15h UTC: IC=+0.160 n=1259/40 PNL=+510.06€ | H=17h UTC: IC=+0.106 n=1224/40 PNL=+264.87€ | H=19h UTC: IC=+0.126 n=1176/40 PNL=+309.76€
 
 **⏳ H-60MIN-LIVE** — Estrategias 60min → umbral live (IC≥0.08 n≥40)
   - _Umbral_: IC≥0.08 y n≥40 en cualquier subtipo 60min
@@ -1718,8 +1718,8 @@ _Derivadas de los patrones aprendidos:_
   - _Hipótesis_: Inspirado en VyvanseWithMarijuana (36.5% ROI, $42k vol). A T+160-270s dentro de una ventana BTC 5min, si BTC ya se movió >0.3%, Polymarket no ha actualizado precio → edge estructural. Estrategia LATE_WINDOW_5MIN en shadow hasta n≥30. FIX 2026-07-02: la estrategia llevaba 0 predicciones desde su creacion porque HORIZONTE_MIN_HORAS=0.05 (3min) descartaba todo mercado a <3min de expirar — y su zona de entrada (160-270s de una ventana de 5min) deja 30-140s restantes, siempre bajo el suelo. Corregido en shadow_predict (zona late-window marcada _solo_late, 30s-3min, solo evaluada por esta estrategia). El reloj de acumulacion empieza de verdad hoy. Contexto extra: el estudio de ballenas de hoy confirma que comprar el lado ganador a mitad/final de ventana es el playbook comun de los 3 mayores ganadores verificados de estos mercados (Bonereaper +$19.9k/mes, wowitsamazing +$10k/mes, zhangfan151 +$8.7k/mes).
   - _Umbral_: n≥30 y IC>+0.05
   - _Acción_: Si IC≥0.08 con n≥30 → proponer pasar a live con stake mínimo (0.50€). Si IC<0 con n≥30 → el lag de Polymarket en BTC es insuficiente.
-  - _Estado_: n=340 IC=-0.056 PNL=-5.24€ — sin señal clara aún (umbral IC: min=0.08 max=None)
-  - _Datos_: n=340 IC=-0.056 PNL=-5.24€
+  - _Estado_: n=341 IC=-0.054 PNL=-4.76€ — sin señal clara aún (umbral IC: min=0.08 max=None)
+  - _Datos_: n=341 IC=-0.054 PNL=-4.76€
 
 **〰️ H-DVOL-SPIKE-BUYNO** — DVOL spike (sigma_h alto) → BUY_NO tiene más edge (panic regime)
   - _Hipótesis_: Inspirado en 'The Volatility Edge' (Concretum Research, 2025): en equities, VIX spikes identifican regímenes de pánico donde los moves están sobreamplificados por feedback loops (deleveraging, hedgers, etc). En cripto el análogo es DVOL (Deribit BTC IV). Sin acceso a DVOL, usamos sigma_h como proxy (vol realizada 1h). Hipótesis: cuando sigma_h > 0.004/h (≈ vol diaria >9.6%), los mercados de predicción exageran la bajada en 15min → BUY_NO tiene IC superior porque el pánico se revierte intraday. Activar cuando n≥200 en BUY_NO #15min para tener potencia suficiente para subdividir por régimen.
