@@ -42,11 +42,26 @@ trades -- normalizado a stake unitario porque el CSV no registra tamaño
 real; sirve para rankear "cuánta pasta genera" sin necesitar tamaño real)
 usando la misma fórmula que _stats_banda() en ballenas_observer.py.
 
+23-Jul (extensión, petición Javi -- hueco encontrado en la sesión de
+franja milimétrica de ballenas_executor_5min): el desglose por marco de
+arriba MEZCLA las 5 monedas dentro de, p.ej., "5m" -- una wallet activa en
+BTC+ETH+XRP#5min sale con un edge_pp que es una mezcla de las 3, no
+atribuible a ninguna en concreto. Se añade un TERCER desglose
+(wallet, activo, marco), con su propia corrección BH-FDR por (activo,marco)
+-- mismo principio de multiplicidad separada que ya se aplicaba por marco,
+ahora también por activo. Motivado por un hallazgo concreto: la wallet
+0x32d5d0c7... aparece con n=73 hit=82.2% edge_pp=+34.96 SOLO en XRP#5min
+(precio medio 0.46, zona temprana) -- validado con shuffle test propio,
+p=0.0000 -- que el desglose por-marco solo (sin activo) no podía aislar.
+
 Output: data/shadow/wallet_edge_score.json (agregado, todos los marcos)
   {wallet_lower: {n, hit, precio_medio, edge_pp, pnl_proxy, p_shuffle,
                    sig_bhfdr, actualizado}}
-Output: data/shadow/wallet_edge_score_por_marco.json (desagregado)
+Output: data/shadow/wallet_edge_score_por_marco.json (desagregado por marco)
   {"wallet_lower#marco": {..mismas columnas.., marco, wallet}}
+Output: data/shadow/wallet_edge_score_por_activo_marco.json (desagregado
+  por activo+marco, 23-Jul)
+  {"wallet_lower#activo#marco": {..mismas columnas.., activo, marco, wallet}}
 """
 import csv
 import json
@@ -62,6 +77,7 @@ DIR_SHADOW = Path(__file__).parent / "data/shadow"
 HIST = DIR_SHADOW / "ballenas_timing_history.csv"
 OUT = DIR_SHADOW / "wallet_edge_score.json"
 OUT_POR_MARCO = DIR_SHADOW / "wallet_edge_score_por_marco.json"
+OUT_POR_ACTIVO_MARCO = DIR_SHADOW / "wallet_edge_score_por_activo_marco.json"
 
 N_MIN = 15          # mismo suelo de rigor que el resto del proyecto
 N_SHUFFLE = 2000
@@ -80,15 +96,18 @@ def _acumular(d, precio, acierto):
 
 
 def _cargar_por_wallet_y_marco():
-    """Un solo paso por el CSV: acumula agregado (todos los marcos) y por
-    (wallet, marco) a la vez -- no relee el fichero dos veces."""
+    """Un solo paso por el CSV: acumula agregado (todos los marcos), por
+    (wallet, marco) y por (wallet, activo, marco) a la vez -- no relee el
+    fichero tres veces."""
     por_wallet = defaultdict(_stat_vacia)
     por_wallet_marco = defaultdict(_stat_vacia)
+    por_wallet_activo_marco = defaultdict(_stat_vacia)
     with open(HIST, encoding="utf-8") as f:
         for r in csv.DictReader(f):
             try:
                 w = r["wallet"].lower()
                 marco = r["marco"]
+                activo = r["activo"]
                 precio = float(r["precio"])
                 acierto = int(r["acierto"])
             except (ValueError, TypeError, KeyError, AttributeError):
@@ -97,7 +116,8 @@ def _cargar_por_wallet_y_marco():
                 continue  # precio_medio=0 o 1 rompe el shuffle (p fijo degenerado)
             _acumular(por_wallet[w], precio, acierto)
             _acumular(por_wallet_marco[(w, marco)], precio, acierto)
-    return por_wallet, por_wallet_marco
+            _acumular(por_wallet_activo_marco[(w, activo, marco)], precio, acierto)
+    return por_wallet, por_wallet_marco, por_wallet_activo_marco
 
 
 def _shuffle_pvalue_edge(n: int, precio_medio: float, hit_real: float, seed: int,
@@ -148,7 +168,7 @@ def _filas_con_significancia(grupos, ahora, etiqueta):
 def main():
     ahora = datetime.now(timezone.utc)
     print(f"[wallet_edge_tracker] {ahora.isoformat(timespec='seconds')}")
-    por_wallet, por_wallet_marco = _cargar_por_wallet_y_marco()
+    por_wallet, por_wallet_marco, por_wallet_activo_marco = _cargar_por_wallet_y_marco()
     print(f"  wallets distintas en histórico: {len(por_wallet)}")
 
     filas_agg = _filas_con_significancia(por_wallet, ahora, "agregado")
@@ -170,6 +190,22 @@ def main():
                                         **{k: v for k, v in f.items() if k != "clave"}}
     OUT_POR_MARCO.write_text(json.dumps(salida_marco, indent=2, ensure_ascii=False), encoding="utf-8")
     print(f"  escrito {OUT_POR_MARCO} ({len(salida_marco)} filas wallet#marco)")
+
+    # por activo+marco (23-Jul): multiplicidad separada por (activo,marco) --
+    # no mezclar XRP#5m con ETH#5m, mismo principio que separar marcos entre sí.
+    por_activo_marco_agrupado = defaultdict(dict)
+    for (w, activo, marco), d in por_wallet_activo_marco.items():
+        por_activo_marco_agrupado[(activo, marco)][(w, activo, marco)] = d
+    salida_activo_marco = {}
+    for (activo, marco), grupo in por_activo_marco_agrupado.items():
+        filas_am = _filas_con_significancia(grupo, ahora, f"activo={activo} marco={marco}")
+        for f in filas_am:
+            w, activo_k, marco_k = f["clave"]
+            clave_out = f"{w}#{activo_k}#{marco_k}"
+            salida_activo_marco[clave_out] = {"wallet": w, "activo": activo_k, "marco": marco_k,
+                                               **{k: v for k, v in f.items() if k != "clave"}}
+    OUT_POR_ACTIVO_MARCO.write_text(json.dumps(salida_activo_marco, indent=2, ensure_ascii=False), encoding="utf-8")
+    print(f"  escrito {OUT_POR_ACTIVO_MARCO} ({len(salida_activo_marco)} filas wallet#activo#marco)")
 
 
 if __name__ == "__main__":

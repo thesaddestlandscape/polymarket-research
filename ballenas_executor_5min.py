@@ -63,31 +63,52 @@ from smart_money_tracker import trades_de_mercado
 DIR = Path(__file__).resolve().parent
 DIR_SHADOW = DIR / "data" / "shadow"
 
-# Wallet edge score por marco (20-Jul, wallet_edge_tracker.py) -- PURAMENTE
-# INFORMATIVO en texto de log, no toca pct_yes/CONCENTRACION_MIN/decisión.
-# Mismo hallazgo que motivó el cableado gemelo en shadow_predict.py
-# (s_ballenas_confirmadas_15m): "smart" (leaderboard) no es lo mismo que
-# "informativo para Up/Down 5min" -- este campo deja constancia en el log
-# DRY_RUN de qué wallets concretas confirmaron cada señal, para poder
-# auditar después si las que más pasta generan de verdad (edge_pp alto,
-# marco=5m) son las que están detrás de las confirmaciones reales.
-WALLET_EDGE_POR_MARCO = DIR_SHADOW / "wallet_edge_score_por_marco.json"
+# Wallet edge score por (activo,marco) -- 23-Jul, sustituye al de solo-marco
+# (20-Jul). Hallazgo de la sesión de franja milimétrica: concentracion_
+# ballenas() cuenta VOTOS POR TRADE, no por calidad de wallet -- cualquier
+# día una wallet muy activa (buena o mediocre) puede dominar el consenso
+# (top1_share hasta 35% visto en XRP) sin que el sistema lo distinga. Ahora
+# SÍ se distingue: cada trade pesa según el edge_pp validado (shuffle+BH-FDR,
+# wallet_edge_tracker.py) de esa wallet en ESE (activo,marco) exacto -- no
+# el score mezclado de las 5 monedas que daba wallet_edge_score_por_marco.json
+# (ese archivo servía de único origen hasta hoy y por eso el peso solo podía
+# ser informativo, nunca decisión: mezclaba, p.ej., el comportamiento de una
+# wallet en BTC#5m con su comportamiento en XRP#5m bajo el mismo número).
+# Wallets desconocidas o sin significancia (sig_bhfdr=False) pesan 1.0 --
+# fail-safe idéntico al conteo plano de siempre. Solo wallets VALIDADAS
+# (n>=15, shuffle+BH-FDR) se alejan de 1.0, acotado [0.2, 3.0] para que
+# ninguna wallet sola pueda dominar el voto ponderado.
+WALLET_EDGE_POR_ACTIVO_MARCO = DIR_SHADOW / "wallet_edge_score_por_activo_marco.json"
+PESO_MIN, PESO_MAX = 0.2, 3.0
 _wallet_edge_cache = {"mtime": None, "data": {}}
 
 
-def _cargar_wallet_edge_5m():
+def _cargar_wallet_edge_activo_marco():
     try:
-        mtime = WALLET_EDGE_POR_MARCO.stat().st_mtime
+        mtime = WALLET_EDGE_POR_ACTIVO_MARCO.stat().st_mtime
     except OSError:
         return {}
     if _wallet_edge_cache["mtime"] != mtime:
         try:
-            todo = json.loads(WALLET_EDGE_POR_MARCO.read_text(encoding="utf-8"))
-            _wallet_edge_cache["data"] = {v["wallet"]: v for v in todo.values() if v.get("marco") == "5m"}
+            todo = json.loads(WALLET_EDGE_POR_ACTIVO_MARCO.read_text(encoding="utf-8"))
+            _wallet_edge_cache["data"] = {(v["wallet"], v["activo"], v["marco"]): v for v in todo.values()}
         except Exception:
             _wallet_edge_cache["data"] = {}
         _wallet_edge_cache["mtime"] = mtime
     return _wallet_edge_cache["data"]
+
+
+def _peso_wallet(wallet: str, activo: str) -> float:
+    """1.0 (neutro) salvo wallet validada (n>=15, sig_bhfdr=True) en este
+    (activo, 5m) exacto -- entonces escala con su edge_pp, acotado
+    [PESO_MIN, PESO_MAX]. +25pp de edge -> peso 2.0; -25pp -> peso 0.5;
+    nunca 0 (ninguna wallet se censura del todo con la n que tenemos hoy)."""
+    db = _cargar_wallet_edge_activo_marco()
+    d = db.get((wallet, activo, "5m"))
+    if d is None or not d.get("sig_bhfdr"):
+        return 1.0
+    peso = 1.0 + d["edge_pp"] / 25.0
+    return max(PESO_MIN, min(PESO_MAX, peso))
 
 GAMMA = "https://gamma-api.polymarket.com"
 CLOB = "https://clob.polymarket.com"
@@ -102,28 +123,25 @@ HARD_FLOOR_S = 3.0       # uniforme, mismo suelo de seguridad que BTC15m
 CONCENTRACION_MIN = 0.9  # bucket validado hoy para los 3 activos (dosis-respuesta n=195)
 MIN_TRADES_BALLENA = 3
 
-# Por activo: WATCH_LEAD_S = rest_hi_min calibrado (ballenas_timing_state.json,
-# sesión 18-Jul) + ~30s margen. PROB_BUCKET = Wilson 95% inferior del bucket
-# concentracion>=0.9 (no el punto estimado 100% -- mal calibrado, mismo
-# espíritu que la nota de ic_conviccion en ballenas_executor_btc15m.py).
-ACTIVOS = {
-    "ETH": {"watch_lead_s": 90,  "prob_bucket": 0.93},
-    "SOL": {"watch_lead_s": 160, "prob_bucket": 0.93},
-    "XRP": {"watch_lead_s": 220, "prob_bucket": 0.83},
-    # DOGE (20-Jul): NOMBRE_A_TICKER llevaba excluyendo DOGE de todo el
-    # pipeline de ballenas desde su origen (fix en smart_money_tracker.py,
-    # commit 6450288420) -- tras el fix, DOGE#5m salió "significativo" en
-    # el primer ciclo de ballenas_observer.py (banda [0.7,0.9), z=3.67,
-    # n=133, 58 wallets, top1_share=0.17 -- bien repartido). PERO la
-    # dosis-respuesta propia (analisis_ballenas_dosis_respuesta_16jul.py
-    # DOGE#5m) da n=9 en el bucket concentracion>=0.9 -- muy por debajo
-    # de ETH/SOL/XRP cuando se calibraron (n=48-57) y del propio umbral
-    # n>=15 del proyecto para concluir nada. prob_bucket aquí es el
-    # Wilson90 inferior de 9/9 (0.769), NO un número con la misma
-    # confianza que los otros 3 -- solo para que DRY_RUN loguee algo
-    # razonable mientras acumula. Recalibrar en cuanto n cruce ~40.
-    "DOGE": {"watch_lead_s": 170, "prob_bucket": 0.77},
-}
+ACTIVOS = ("ETH", "SOL", "XRP", "DOGE")
+
+# 23-Jul: MARGEN_WATCH_S/MARGEN_CONFIRM_S sustituyen a los watch_lead_s/
+# prob_bucket hardcodeados por activo del 18-Jul (ETH=90s/0.93, SOL=160s/
+# 0.93, XRP=220s/0.83, DOGE=170s/0.77). Bug de calibración estale
+# encontrado en la sesión de franja milimétrica: cargar_banda() releía la
+# banda de precio fresca cada ventana, pero prob_bucket/watch_lead_s se
+# quedaron congelados en su valor del día de calibración -- cuando el
+# observer recalibró la banda operativa de XRP de [0.70,0.90) (hit~94%,
+# 18-Jul) a [0.50,0.70) (hit=60.9%, 23-Jul), prob_bucket siguió en 0.83,
+# un 22pp de sobreconfianza silenciosa (sin dinero real en juego, DRY_RUN,
+# pero el log llevaba horas con un "edge" que no correspondía a nada).
+# Ahora cargar_calibracion() recalcula TODO fresco cada ventana desde
+# ballenas_timing_state.json (misma fuente que cargar_banda() usaba antes),
+# igual que el resto del sistema: banda_lo/hi, prob_bucket (Wilson 95%
+# inferior de n/n_ganadoras REAL de la banda operativa actual, no un
+# bucket congelado), y el techo de confirmación (ver MARGEN_CONFIRM_S).
+MARGEN_WATCH_S = 60      # cuánto antes del techo de confirmación empieza a vigilar (margen para no perderse el arranque de la ventana informativa)
+MARGEN_CONFIRM_S = 15    # margen sobre rest_hi_min real antes de permitir confirmar -- ver MARGEN_CONFIRM_S y el hallazgo de desalineación de timing (abajo)
 
 _session = requests.Session()
 _orden_lock = threading.Lock()  # serializa el tramo de ejecución real entre los 3 hilos
@@ -177,17 +195,24 @@ def libro_publico(token_id: str) -> dict | None:
         return None
 
 
-def concentracion_ballenas(condition_id: str, banda_lo: float, banda_hi: float) -> tuple[float | None, int, str, list]:
-    """(pct_yes, n, motivo, wallets_yes) -- idéntico a
-    ballenas_executor_btc15m.concentracion_ballenas, mide ambos lados porque
-    la dirección todavía no está fijada. wallets_yes (nuevo 20-Jul) son las
-    wallets del lado YES, guardadas SOLO para logging informativo del
-    wallet-edge-score -- no participan en pct_yes ni en ninguna decisión."""
+def concentracion_ballenas(condition_id: str, banda_lo: float, banda_hi: float,
+                            activo: str) -> tuple[float | None, float | None, int, str, list]:
+    """(pct_yes_crudo, pct_yes_ponderado, n, motivo, wallets_yes) -- mide
+    ambos lados porque la dirección todavía no está fijada.
+
+    23-Jul: se añade pct_yes_ponderado -- cada trade pesa según
+    _peso_wallet() (1.0 si la wallet es desconocida o no validada, fuera de
+    1.0 solo si tiene edge_pp significativo en ESTE activo#5m). n sigue
+    siendo el conteo CRUDO de trades (gate MIN_TRADES_BALLENA no cambia --
+    3 trades reales, ponderados o no, siguen siendo el suelo de datos
+    mínimo). pct_yes_crudo se conserva para compararlo en el log/tracker
+    con el ponderado y poder auditar cuándo divergen."""
     try:
         trades = trades_de_mercado(condition_id)
     except Exception:
-        return None, 0, "error_api", []
+        return None, None, 0, "error_api", []
     n_yes = n_no = 0
+    peso_yes = peso_no = 0.0
     wallets_yes = []
     for t in trades:
         if (t.get("side") or "").strip().upper() != "BUY":
@@ -202,38 +227,73 @@ def concentracion_ballenas(condition_id: str, banda_lo: float, banda_hi: float) 
             continue
         if not (banda_lo <= precio_t < banda_hi):
             continue
+        w = (t.get("proxyWallet") or "").lower()
+        peso = _peso_wallet(w, activo) if w else 1.0
         if outcome_t in ("up", "yes"):
             n_yes += 1
-            w = (t.get("proxyWallet") or "").lower()
+            peso_yes += peso
             if w:
                 wallets_yes.append(w)
         else:
             n_no += 1
+            peso_no += peso
     n = n_yes + n_no
     if n == 0:
-        return None, 0, "sin_trades_en_banda", []
-    return n_yes / n, n, "ok", wallets_yes
+        return None, None, 0, "sin_trades_en_banda", []
+    pct_crudo = n_yes / n
+    pct_ponderado = peso_yes / (peso_yes + peso_no) if (peso_yes + peso_no) > 0 else pct_crudo
+    return pct_crudo, pct_ponderado, n, "ok", wallets_yes
 
 
-def _resumen_wallet_edge(wallets: list) -> str:
+def _resumen_wallet_edge(wallets: list, activo: str) -> str:
     """Texto corto para el log: cuántas de las wallets confirmando tienen
     score conocido, su edge medio, y cuántas son negativas-significativas
-    (mismo criterio 20-Jul que shadow_predict.s_ballenas_confirmadas_15m).
-    Puramente informativo."""
-    db = _cargar_wallet_edge_5m()
-    edges = [db[w]["edge_pp"] for w in wallets if w in db]
-    n_sig_neg = sum(1 for w in wallets if w in db and db[w]["sig_bhfdr"] and db[w]["edge_pp"] < 0)
+    en este (activo,5m) -- ahora también informa si su peso ya afectó a la
+    decisión (antes de 23-Jul esto era solo informativo)."""
+    db = _cargar_wallet_edge_activo_marco()
+    filas = [db[(w, activo, "5m")] for w in wallets if (w, activo, "5m") in db]
+    edges = [f["edge_pp"] for f in filas]
+    n_sig_neg = sum(1 for f in filas if f["sig_bhfdr"] and f["edge_pp"] < 0)
+    n_sig_pos = sum(1 for f in filas if f["sig_bhfdr"] and f["edge_pp"] > 0)
     if not edges:
         return "wallet_edge=sin_dato"
     medio = sum(edges) / len(edges)
-    return f"wallet_edge_medio={medio:+.2f}pp(n_con_score={len(edges)},n_sig_neg={n_sig_neg})"
+    return f"wallet_edge_medio={medio:+.2f}pp(n_con_score={len(edges)},n_sig_pos={n_sig_pos},n_sig_neg={n_sig_neg})"
 
 
-def cargar_banda(activo: str) -> tuple[float, float] | None:
-    """Banda de precio calibrada por ballenas_observer.py -- leída fresca
-    cada ventana, nunca hardcodeada (puede moverse si el observer
-    recalibra). Igual que ballenas_executor_btc15m.cargar_banda_btc15m,
-    generalizada por activo."""
+def _wilson_lower(aciertos: int, n: int, z: float = 1.96) -> float:
+    """Límite inferior del IC de Wilson al 95% -- mismo criterio ("no el
+    punto estimado, el límite inferior") que ya usaba la nota original de
+    PROB_BUCKET, ahora calculado en vivo en vez de a mano una sola vez."""
+    if n <= 0:
+        return 0.0
+    phat = aciertos / n
+    denom = 1 + z * z / n
+    centro = phat + z * z / (2 * n)
+    ajuste = z * ((phat * (1 - phat) / n + z * z / (4 * n * n)) ** 0.5)
+    return (centro - ajuste) / denom
+
+
+def cargar_calibracion(activo: str) -> dict | None:
+    """Sustituye a cargar_banda() + los ACTIVOS[activo] hardcodeados del
+    18-Jul -- TODO releído fresco cada ventana desde
+    ballenas_timing_state.json (misma fuente que ballenas_observer.py
+    recalibra cada hora vía cron), nunca congelado. Devuelve None
+    (fail-closed, misma señal que antes) si el activo no es significativo
+    hoy o si falta cualquier dato necesario -- un JSON parcial o corrupto
+    no debe hacer que se dispare con una calibración a medias.
+
+    23-Jul: MARGEN_CONFIRM_S es la pieza nueva que ataca la desalineación
+    de timing encontrada en la sesión de franja milimétrica -- ETH
+    disparaba el 70% de sus señales a 60-90s del cierre (hit=83.0%,
+    n=47) mientras que firmar más cerca del cierre (15-30s) daba
+    hit=100.0% (n=8, muestra pequeña pero consistente en SOL también).
+    En vez de fijar un umbral a mano con esa n pequeña propia, se deriva
+    de rest_hi_min -- el techo REAL del timing de confirmación de la
+    banda operativa, con la n mucho mayor (cientos-miles) que ya tiene
+    el observer -- + un margen corto. watch_window() ya no dispara en
+    cuanto se cumple concentración; solo puede hacerlo dentro de esta
+    ventana más ajustada al momento real en que las ballenas confirman."""
     try:
         estado = json.loads((DIR_SHADOW / "ballenas_timing_state.json").read_text())
     except Exception:
@@ -242,25 +302,41 @@ def cargar_banda(activo: str) -> tuple[float, float] | None:
     if not e.get("significativo"):
         return None
     lo, hi = e.get("banda_lo"), e.get("banda_hi")
-    if not (isinstance(lo, (int, float)) and isinstance(hi, (int, float))):
+    n, n_gan, rest_hi = e.get("n"), e.get("n_ganadoras"), e.get("rest_hi_min")
+    if not (isinstance(lo, (int, float)) and isinstance(hi, (int, float))
+            and isinstance(n, (int, float)) and n > 0
+            and isinstance(n_gan, (int, float))
+            and isinstance(rest_hi, (int, float))):
         return None
-    return lo, hi
+    prob_bucket = _wilson_lower(int(n_gan), int(n))
+    confirm_ceiling_s = rest_hi * 60 + MARGEN_CONFIRM_S
+    watch_lead_s = confirm_ceiling_s + MARGEN_WATCH_S
+    return {"banda_lo": lo, "banda_hi": hi, "prob_bucket": prob_bucket,
+            "confirm_ceiling_s": confirm_ceiling_s, "watch_lead_s": watch_lead_s,
+            "n_banda": int(n)}
 
 
 def watch_window(activo: str, ts_end: int) -> bool:
     """Vigila un mercado {activo}#5min concreto desde watch_lead_s hasta
-    el cierre. True si ejecutó (o habría ejecutado en DRY_RUN)."""
-    cfg = ACTIVOS[activo]
-    watch_lead_s = cfg["watch_lead_s"]
-    ts_start = ts_end - VENTANA_MIN * 60
-    banda = cargar_banda(activo)
-    if banda is None:
-        log(f"[{ts_end}] {activo}#5m no significativo en ballenas_timing_state.json -- se salta", activo)
+    el cierre. True si ejecutó (o habría ejecutado en DRY_RUN).
+
+    23-Jul: calibración (banda, prob_bucket, watch_lead_s, confirm_ceiling_s)
+    releída fresca vía cargar_calibracion() -- ya no hay cfg estático por
+    activo. Además, no confirma en cuanto se cumple concentración: solo
+    puede hacerlo dentro de confirm_ceiling_s (ver cargar_calibracion),
+    y usa la concentración PONDERADA por calidad de wallet, no la cruda."""
+    calib = cargar_calibracion(activo)
+    if calib is None:
+        log(f"[{ts_end}] {activo}#5m no significativo o calibración incompleta en ballenas_timing_state.json -- se salta", activo)
         return False
-    banda_lo, banda_hi = banda
+    banda_lo, banda_hi = calib["banda_lo"], calib["banda_hi"]
+    watch_lead_s, confirm_ceiling_s = calib["watch_lead_s"], calib["confirm_ceiling_s"]
+    prob_bucket = calib["prob_bucket"]
+    ts_start = ts_end - VENTANA_MIN * 60
 
     mercado = None
     contadores = {"ok": 0, "sin_trades_en_banda": 0, "error_api": 0}
+    contador_prematuro = 0  # cumple condición pero aún fuera de confirm_ceiling_s -- solo para el log final
     while True:
         restante = ts_end - time.time()
         if restante > watch_lead_s:
@@ -270,7 +346,7 @@ def watch_window(activo: str, ts_end: int) -> bool:
             log(f"[{ts_end}] suelo de seguridad ({HARD_FLOOR_S}s) alcanzado sin confirmación -- se abandona "
                 f"(resumen vigilancia: {sum(contadores.values())} polls, "
                 f"ok={contadores['ok']} sin_trades_en_banda={contadores['sin_trades_en_banda']} "
-                f"error_api={contadores['error_api']})", activo)
+                f"error_api={contadores['error_api']} prematuros={contador_prematuro})", activo)
             return False
 
         if mercado is None:
@@ -283,28 +359,39 @@ def watch_window(activo: str, ts_end: int) -> bool:
                 return False
 
         with ThreadPoolExecutor(max_workers=2) as ex:
-            f_conc = ex.submit(concentracion_ballenas, mercado["condition_id"], banda_lo, banda_hi)
+            f_conc = ex.submit(concentracion_ballenas, mercado["condition_id"], banda_lo, banda_hi, activo)
             f_libro = ex.submit(libro_publico, mercado["yes_token"])
-            pct_yes, n, motivo_conc, wallets_yes = f_conc.result()
+            pct_crudo, pct_ponderado, n, motivo_conc, wallets_yes = f_conc.result()
             libro = f_libro.result()
 
         contadores[motivo_conc] = contadores.get(motivo_conc, 0) + 1
-        if pct_yes is not None:
-            log(f"[{ts_end}] restante={restante:.1f}s concentracion_yes={pct_yes:.2f} n={n} "
-                f"ask={libro.get('best_ask') if libro else None}", activo)
+        if pct_ponderado is not None:
+            log(f"[{ts_end}] restante={restante:.1f}s concentracion_yes_cruda={pct_crudo:.2f} "
+                f"ponderada={pct_ponderado:.2f} n={n} ask={libro.get('best_ask') if libro else None}", activo)
         elif motivo_conc == "error_api":
             log(f"[{ts_end}] restante={restante:.1f}s ⚠️ error_api consultando ballenas -- sin dato este ciclo", activo)
 
-        if (pct_yes is not None and n >= MIN_TRADES_BALLENA
-                and pct_yes >= CONCENTRACION_MIN
-                and libro and libro.get("best_ask") is not None
-                and banda_lo <= libro["best_ask"] < banda_hi):
+        cumple_concentracion = (pct_ponderado is not None and n >= MIN_TRADES_BALLENA
+                                 and pct_ponderado >= CONCENTRACION_MIN
+                                 and libro and libro.get("best_ask") is not None
+                                 and banda_lo <= libro["best_ask"] < banda_hi)
+        if cumple_concentracion and restante > confirm_ceiling_s:
+            # 23-Jul: cumple la condición pero todavía está fuera de la
+            # ventana real de confirmación (rest_hi_min de la banda operativa)
+            # -- se sigue vigilando en vez de disparar ya, es el fix directo
+            # al hallazgo de desalineación de timing (ver docstring arriba).
+            contador_prematuro += 1
+            time.sleep(POLL_INTERVAL_S)
+            continue
+
+        if cumple_concentracion:
             py = libro["best_ask"]
-            edge = cfg["prob_bucket"] - py
-            log(f"[{ts_end}] CONFIRMADO concentracion={pct_yes:.2f} n={n} py={py:.3f} "
-                f"edge={edge:+.3f} restante={restante:.1f}s {_resumen_wallet_edge(wallets_yes)}", activo)
-            _registrar_tracker(activo, mercado, py, edge, pct_yes, n, restante)
-            return disparar(activo, mercado, py, edge, restante)
+            edge = prob_bucket - py
+            log(f"[{ts_end}] CONFIRMADO concentracion_ponderada={pct_ponderado:.2f} (cruda={pct_crudo:.2f}) "
+                f"n={n} py={py:.3f} prob_bucket={prob_bucket:.3f} edge={edge:+.3f} restante={restante:.1f}s "
+                f"confirm_ceiling_s={confirm_ceiling_s:.1f} {_resumen_wallet_edge(wallets_yes, activo)}", activo)
+            _registrar_tracker(activo, mercado, py, edge, pct_ponderado, n, restante)
+            return disparar(activo, mercado, py, edge, restante, prob_bucket)
 
         time.sleep(POLL_INTERVAL_S)
 
@@ -348,15 +435,20 @@ def _registrar_tracker(activo: str, mercado: dict, py: float, edge: float,
             w.writerow(fila)
 
 
-def disparar(activo: str, mercado: dict, py: float, edge: float, restante_s: float) -> bool:
+def disparar(activo: str, mercado: dict, py: float, edge: float, restante_s: float,
+              prob_bucket: float) -> bool:
     """Decide y (si no es DRY_RUN) ejecuta. Reutiliza circuit breaker +
     stake de live_stake.py y _ejecutar_orden_polymarket de live_trade.py --
     mismo presupuesto de riesgo que el resto del sistema. Serializado con
     _orden_lock: ORDEN_EN_CURSO_PATH (live_trade.py) es un marcador global
     sin clave por activo -- con 3 hilos, dos confirmaciones casi simultáneas
-    podrían pisarse ese fichero sin este lock."""
+    podrían pisarse ese fichero sin este lock.
+
+    23-Jul: prob_bucket llega como parámetro (calculado fresco en
+    cargar_calibracion() para esta ventana concreta) en vez de leerse de
+    ACTIVOS[activo] hardcodeado -- ver el hallazgo de calibración estale
+    en el docstring de cargar_calibracion()."""
     subtype = f"{activo}#{VENTANA_MIN}min"
-    cfg = ACTIVOS[activo]
     config = lt._cargar_config()  # una sola lectura, reusada abajo para stake_ref y max_misma_dir
 
     # Fill-ability real (roadmap Fase 2, punto 1, 21-Jul; BUG FIX 22-Jul,
@@ -416,7 +508,7 @@ def disparar(activo: str, mercado: dict, py: float, edge: float, restante_s: flo
             log(f"circuit breaker activo ({motivo_breaker}) -- {'[DRY-RUN] no ejecutaría' if DRY_RUN else 'no se ejecuta'}", activo)
             return False
 
-        ic_conviccion = (cfg["prob_bucket"] - 0.5) * 2
+        ic_conviccion = (prob_bucket - 0.5) * 2
         stake_info = calcular_stake(ic_conviccion, STRATEGY, subtype, direction="BUY_YES")
         if not stake_info.get("viable"):
             log(f"stake no viable: {stake_info.get('motivo')} -- {'[DRY-RUN] no ejecutaría' if DRY_RUN else 'no se ejecuta'}", activo)
@@ -443,9 +535,9 @@ def disparar(activo: str, mercado: dict, py: float, edge: float, restante_s: flo
             "strategy": STRATEGY, "subtype": subtype, "direction": "BUY_YES",
             "stake_eur": stake_info["stake_eur"] if resultado["ok"] else 0.0,
             "entry_price": resultado["entry_price"],
-            "ic_modelo": round(cfg["prob_bucket"], 4),
+            "ic_modelo": round(prob_bucket, 4),
             "edge_neto": round(edge, 4),
-            "conviction_score": round(cfg["prob_bucket"], 4),
+            "conviction_score": round(prob_bucket, 4),
             "kelly_recomendado": stake_info["stake_eur"],
             "status": "OPEN" if resultado["ok"] else "ERROR",
             "close_timestamp": "", "exit_price": "", "outcome_real": "",
@@ -462,14 +554,24 @@ def disparar(activo: str, mercado: dict, py: float, edge: float, restante_s: flo
 def hilo_activo(activo: str):
     """Bucle de vida de un activo: calcula el próximo cierre de 5min y
     vigila, en bucle infinito. Un traceback aquí no debe tumbar el
-    proceso entero -- se captura y se reintenta tras un margen corto."""
-    log(f"hilo arrancado (watch_lead_s={ACTIVOS[activo]['watch_lead_s']}s "
-        f"prob_bucket={ACTIVOS[activo]['prob_bucket']})", activo)
+    proceso entero -- se captura y se reintenta tras un margen corto.
+
+    23-Jul: watch_lead_s ya no es estático -- se relee vía
+    cargar_calibracion() en cada vuelta del bucle (se puede recalibrar
+    entre ventanas, cada hora, vía el cron de ballenas_observer.py).
+    Si el activo no es significativo en este momento, duerme hasta la
+    siguiente ventana en vez de reintentar en bucle apretado."""
+    log("hilo arrancado (calibración dinámica, ver cargar_calibracion)", activo)
     while True:
         try:
             now = time.time()
             ts_end = (int(now) // (VENTANA_MIN * 60) + 1) * (VENTANA_MIN * 60)
-            dormir = ts_end - ACTIVOS[activo]["watch_lead_s"] - time.time()
+            calib = cargar_calibracion(activo)
+            if calib is None:
+                log("no significativo ahora mismo -- duerme hasta la siguiente ventana", activo)
+                time.sleep(max(5, ts_end + 2 - time.time()))
+                continue
+            dormir = ts_end - calib["watch_lead_s"] - time.time()
             if dormir > 0:
                 time.sleep(dormir)
             watch_window(activo, ts_end)
