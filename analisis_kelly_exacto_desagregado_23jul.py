@@ -92,9 +92,9 @@ def analizar_tupla(strategy, subtype, decision):
     for bloque in sorted(por_hora):
         _resumen(por_hora[bloque], f"[{bloque*4:02d}h-{bloque*4+4:02d}h)")
 
-    print("  --- timing (T_h, terciles) ---")
     import json
     th_rows = []
+    unidad = None
     for r in rows:
         try:
             feats = json.loads(r["features"] or "{}")
@@ -103,6 +103,13 @@ def analizar_tupla(strategy, subtype, decision):
         th = feats.get("T_h")
         if th is not None:
             th_rows.append((th, r))
+            unidad = "T_h (horas)"
+            continue
+        rm = feats.get("restante_min")
+        if rm is not None:
+            th_rows.append((rm, r))
+            unidad = "restante_min (minutos)"
+    print(f"  --- timing ({unidad or 'sin dato'}, terciles) ---")
     if len(th_rows) >= N_MIN:
         th_rows.sort(key=lambda x: x[0])
         n = len(th_rows)
@@ -110,11 +117,11 @@ def analizar_tupla(strategy, subtype, decision):
         bajo = [r for th, r in th_rows if th <= t1]
         medio = [r for th, r in th_rows if t1 < th < t2]
         alto = [r for th, r in th_rows if th >= t2]
-        _resumen(bajo, f"tercio bajo T_h<={t1:.2f}")
+        _resumen(bajo, f"tercio bajo (<={t1:.2f})")
         _resumen(medio, "tercio medio")
-        _resumen(alto, f"tercio alto T_h>={t2:.2f}")
+        _resumen(alto, f"tercio alto (>={t2:.2f})")
     else:
-        print(f"    T_h disponible en n={len(th_rows)} < {N_MIN}, sin concluir")
+        print(f"    timing disponible en n={len(th_rows)} < {N_MIN}, sin concluir")
 
     print("  --- bucket grande de precio (paso 0.20) ---")
     por_grande = defaultdict(list)
