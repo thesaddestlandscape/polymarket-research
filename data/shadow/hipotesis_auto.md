@@ -1,5 +1,5 @@
-# Hipótesis automáticas — 2026-07-23 11:37 UTC
-_Generado por shadow_postmortem.py sobre 30795 resoluciones (PNL=+6887.95€)_
+# Hipótesis automáticas — 2026-07-23 11:44 UTC
+_Generado por shadow_postmortem.py sobre 30799 resoluciones (PNL=+6885.73€)_
 
 ## Patrones causales activos
 
@@ -1281,16 +1281,16 @@ _Derivadas de los patrones aprendidos:_
 | ✅ GBM_LATE_15M_TARDIO#SOL#15min | 996 | +0.045 | +211.66€ | 1 | 3 |
 | ✅ GBM_LATE_15M_TARDIO#XRP | 1247 | +0.183 | +851.16€ | 0 | 0 |
 | ✅ GBM_LATE_15M_TARDIO#XRP#15min | 1247 | +0.183 | +851.16€ | 0 | 11 |
-| ✅ GBM_LATE_5M | 359 | -0.018 | +7.06€ | 0 | 0 |
-| ✅ GBM_LATE_5M#5min | 359 | -0.018 | +7.06€ | 0 | 0 |
-| ✅ GBM_LATE_5M#BTC | 60 | -0.097 | -13.05€ | 0 | 0 |
-| ✅ GBM_LATE_5M#BTC#5min | 60 | -0.097 | -13.05€ | 0 | 0 |
-| ✅ GBM_LATE_5M#ETH | 49 | -0.088 | -1.31€ | 0 | 0 |
-| ✅ GBM_LATE_5M#ETH#5min | 49 | -0.088 | -1.31€ | 0 | 0 |
-| ✅ GBM_LATE_5M#SOL | 77 | -0.171 | -2.03€ | 0 | 0 |
-| ✅ GBM_LATE_5M#SOL#5min | 77 | -0.171 | -2.03€ | 0 | 0 |
-| ✅ GBM_LATE_5M#XRP | 173 | +0.100 | +23.46€ | 0 | 0 |
-| ✅ GBM_LATE_5M#XRP#5min | 173 | +0.100 | +23.46€ | 0 | 0 |
+| ✅ GBM_LATE_5M | 363 | -0.021 | +4.84€ | 0 | 0 |
+| ✅ GBM_LATE_5M#5min | 363 | -0.021 | +4.84€ | 0 | 0 |
+| ✅ GBM_LATE_5M#BTC | 61 | -0.103 | -15.09€ | 0 | 0 |
+| ✅ GBM_LATE_5M#BTC#5min | 61 | -0.103 | -15.09€ | 0 | 0 |
+| ✅ GBM_LATE_5M#ETH | 50 | -0.096 | -1.82€ | 0 | 0 |
+| ✅ GBM_LATE_5M#ETH#5min | 50 | -0.096 | -1.82€ | 0 | 0 |
+| ✅ GBM_LATE_5M#SOL | 78 | -0.163 | -0.84€ | 0 | 0 |
+| ✅ GBM_LATE_5M#SOL#5min | 78 | -0.163 | -0.84€ | 0 | 0 |
+| ✅ GBM_LATE_5M#XRP | 174 | +0.097 | +22.60€ | 0 | 0 |
+| ✅ GBM_LATE_5M#XRP#5min | 174 | +0.097 | +22.60€ | 0 | 0 |
 | ✅ GBM_LATE_60M | 336 | -0.112 | +4.40€ | 3 | 1 |
 | ✅ GBM_LATE_60M#60min | 336 | -0.112 | +4.40€ | 0 | 0 |
 | ✅ GBM_LATE_60M#BTC | 120 | -0.041 | +3.25€ | 0 | 0 |
@@ -1487,7 +1487,7 @@ _Derivadas de los patrones aprendidos:_
 **🟡 H-STREAK-COOLDOWN** — Cooldown tras 2 derrotas consecutivas (mismo subtype)
   - _Umbral_: n≥40 tras 2 losses y gap(IC_tras_win - IC_tras_2loss)≥0.05
   - _Acción_: Reducir stake (no desactivar) 1-2h tras 2 derrotas consecutivas en el mismo subtype
-  - _Estado_: tras_win IC=+0.115 n=18432 | tras_1loss IC=+0.083 n=12160 | tras_2loss IC=+0.050 n=5040/40 | gap=+0.065 (umbral 0.05)
+  - _Estado_: tras_win IC=+0.115 n=18433 | tras_1loss IC=+0.083 n=12163 | tras_2loss IC=+0.050 n=5042/40 | gap=+0.065 (umbral 0.05)
 
 **🟡 H-KALMAN** — Kalman filter para drift adaptativo
   - _Umbral_: n≥200 por subtipo para calibrar parámetros Q/R del KF
