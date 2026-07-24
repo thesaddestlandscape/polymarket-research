@@ -14,3 +14,7 @@
 {"ts": "2026-07-24T18:51:36+00:00", "clave": "3069051#FAVORITO_CONFIRMADO#SOL#15min#BUY_YES", "evento": "resuelto_normal", "motivo": "observacion_habria_ejecutado"}
 {"ts": "2026-07-24T18:51:36+00:00", "clave": "3069051#FAVORITO_CONFIRMADO#SOL#15min#BUY_YES", "evento": "observacion_habria_ejecutado", "combo": "SOL#15m", "minutos_restantes": 8.386546733333335}
 {"ts": "2026-07-24T18:51:45+00:00", "clave": "3069052#FAVORITO_CONFIRMADO#ETH#15min#BUY_YES", "evento": "abortado_guardia", "motivo": "techo_correlacion"}
+{"ts": "2026-07-24T23:06:16+00:00", "clave": "3073350#FAVORITO_CONFIRMADO#SOL#15min#BUY_YES", "evento": "creado", "combo": "SOL#15m", "motivo_vb": "concentracion_ok", "deadline_ts": "2026-07-24T23:12:36+00:00"}
+{"ts": "2026-07-24T23:06:16+00:00", "clave": "3073352#FAVORITO_CONFIRMADO#ETH#15min#BUY_YES", "evento": "creado", "combo": "ETH#15m", "motivo_vb": "concentracion_ok", "deadline_ts": "2026-07-24T23:14:33+00:00"}
+{"ts": "2026-07-24T23:06:31+00:00", "clave": "3073350#FAVORITO_CONFIRMADO#SOL#15min#BUY_YES", "evento": "resuelto_normal", "motivo": "observacion_habria_ejecutado"}
+{"ts": "2026-07-24T23:06:31+00:00", "clave": "3073350#FAVORITO_CONFIRMADO#SOL#15min#BUY_YES", "evento": "observacion_habria_ejecutado", "combo": "SOL#15m", "minutos_restantes": 8.475092666666667}
