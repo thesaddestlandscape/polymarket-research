@@ -1,4 +1,4 @@
-# Estado del bot — 2026-07-24 04:16 UTC
+# Estado del bot — 2026-07-24 04:22 UTC
 
 ## Live — dinero real (on-chain)
 | | |
@@ -11,25 +11,25 @@
 ## Shadow — MODELO SIMULADO (no cobrable)
 | | |
 |---|---|
-| P&L fiel (stake fijo 1$) | +3700.94 $ |
-| P&L sim compuesto | 🟢 +7028.16 $ (ficción Kelly: +27626% s/ operativo) |
-| P&L sim hoy (2026-07-24) | 🟢 +53.79 $ |
-| Operaciones resueltas | 32238 (19360 WIN / 12878 LOSS) — 60.1% |
-| Señales abiertas | 118 |
+| P&L fiel (stake fijo 1$) | +3702.55 $ |
+| P&L sim compuesto | 🟢 +7030.71 $ (ficción Kelly: +27636% s/ operativo) |
+| P&L sim hoy (2026-07-24) | 🟢 +56.34 $ |
+| Operaciones resueltas | 32242 (19363 WIN / 12879 LOSS) — 60.1% |
+| Señales abiertas | 124 |
 
 ## Estrategias (visión global)
 
 | Estrategia | n | Win% | IC_efectivo | Tendencia | PNL | Apuesta | Estado |
 |---|---|---|---|---|---|---|---|
-| GBM_LATE_15M | 7311 | 59.6% | +0.096 | 📉 agota (-0.04) | +2264.29$ | 0.96$ | ✅ activa |
-| GBM_LATE_15M_ESPACIO_ATR | 4504 | 62.4% | +0.124 | 📉 agota (-0.05) | +2227.77$ | 1.24$ | ✅ activa |
+| GBM_LATE_15M | 7312 | 59.6% | +0.096 | 📉 agota (-0.04) | +2266.13$ | 0.96$ | ✅ activa |
+| GBM_LATE_15M_ESPACIO_ATR | 4505 | 62.4% | +0.124 | 📉 agota (-0.05) | +2229.61$ | 1.24$ | ✅ activa |
 | GBM_LATE_15M_TARDIO | 4544 | 57.5% | +0.075 | 📉 agota (-0.04) | +1288.50$ | 0.75$ | ✅ activa |
-| UPDOWN_GBM_15M_TARDIO | 1478 | 66.3% | +0.163 | ➡️ estable | +683.38$ | 1.63$ | ✅ activa |
+| UPDOWN_GBM_15M_TARDIO | 1479 | 66.3% | +0.162 | ➡️ estable | +681.51$ | 1.62$ | ✅ activa |
 | UPDOWN_GBM | 2418 | 53.3% | +0.033 | 📈 madura (+0.10) | +214.04$ | 0.50$ | ✅ activa |
 | GBM_LATE_15M_PYCONFIRMADO | 248 | 60.5% | +0.104 | 📉 agota (-0.08) | +111.73$ | 1.04$ | ✅ activa |
 | FAVORITO_CONFIRMADO | 5663 | 68.8% | +0.188 | ➡️ estable | +109.09$ | 1.88$ | ✅ activa |
 | WEEKLY_PRICE | 352 | 69.0% | +0.189 | 📈 madura (+0.23) | +69.51$ | 1.89$ | ✅ activa |
-| BALLENAS_CONFIRMADAS_15M | 925 | 63.0% | +0.130 | ➡️ estable | +48.26$ | 1.30$ | ✅ activa |
+| BALLENAS_CONFIRMADAS_15M | 926 | 63.1% | +0.130 | ➡️ estable | +49.00$ | 1.30$ | ✅ activa |
 | STREAK_FADE_15M | 277 | 58.1% | +0.081 | 📉 agota (-0.05) | +30.93$ | 0.81$ | ✅ activa |
 | UPDOWN_GBM_15M_CROSS_WINDOW_SPREAD | 140 | 80.7% | +0.303 | ➡️ estable | +29.55$ | 2.00$ | ✅ activa |
 | FAVORITO_CONFIRMADO_SOL_ALTACONVICCION | 310 | 81.9% | +0.317 | ➡️ estable | +17.53$ | 2.00$ | ✅ activa |
@@ -54,30 +54,30 @@
 
 | Timestamp | Estrategia | Mercado | Resultado | PNL |
 |---|---|---|---|---|
+| 2026-07-24T04:20 | GBM_LATE_15M_ESPACIO_ATR#XRP#15min | XRP Up or Down - July 24, 12:00AM-12:15AM ET… | ✅ WIN | +1.84$ |
+| 2026-07-24T04:20 | BALLENAS_CONFIRMADAS_15M#XRP#15min | XRP Up or Down - July 24, 12:00AM-12:15AM ET… | ✅ WIN | +0.74$ |
+| 2026-07-24T04:20 | GBM_LATE_15M#XRP#15min | XRP Up or Down - July 24, 12:00AM-12:15AM ET… | ✅ WIN | +1.84$ |
+| 2026-07-24T04:20 | UPDOWN_GBM_15M_TARDIO#XRP#15min | XRP Up or Down - July 24, 12:00AM-12:15AM ET… | ❌ LOSS | -1.88$ |
 | 2026-07-24T04:11 | RESOLUTION_SNIPER#SOL#sniper | Will Solana dip to $75 on July 23?… | ✅ WIN | +0.12$ |
-| 2026-07-24T04:08 | GBM_LATE_5M#BTC#5min | Bitcoin Up or Down - July 23, 11:55PM-12:00AM ET… | ✅ WIN | +0.88$ |
-| 2026-07-24T04:08 | FAVORITO_CONFIRMADO#ETH#15min | Ethereum Up or Down - July 23, 11:45PM-12:00AM ET… | ✅ WIN | +1.32$ |
-| 2026-07-24T04:08 | GBM_LATE_15M_TARDIO#XRP#15min | XRP Up or Down - July 23, 11:45PM-12:00AM ET… | ❌ LOSS | -2.04$ |
-| 2026-07-24T04:08 | GBM_LATE_15M_ESPACIO_ATR#ETH#15min | Ethereum Up or Down - July 23, 11:45PM-12:00AM ET… | ❌ LOSS | -2.02$ |
 
 ## Calidad de datos
 
-✅ **OK** — última verificación 2026-07-24T04:14 UTC
+✅ **OK** — última verificación 2026-07-24T04:20 UTC
 
 | Asset | Precio | Age | Alertas |
 |---|---|---|---|
-| ✅ BTC | $65,353.88 | 0.1min |  |
-| ✅ ETH | $1,878.04 | 0.1min |  |
-| ✅ SOL | $75.71 | 0.1min |  |
+| ✅ BTC | $65,320.43 | 0.1min |  |
+| ✅ ETH | $1,877.21 | 0.1min |  |
+| ✅ SOL | $75.70 | 0.1min |  |
 | ✅ XRP | $1.11 | 0.1min |  |
 
 **Cross-source** (binance, coinbase, kraken):
 
 | Asset | Consenso | Fuente | Estado |
 |---|---|---|---|
-| BTC | $65,355.60 | consenso |  |
-| ETH | $1,878.04 | consenso |  |
-| SOL | $75.67 | consenso |  |
+| BTC | $65,327.70 | consenso |  |
+| ETH | $1,877.28 | consenso |  |
+| SOL | $75.64 | consenso |  |
 | XRP | $1.11 | consenso |  |
 
 ---
