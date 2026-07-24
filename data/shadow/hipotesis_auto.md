@@ -1,10 +1,10 @@
-# Hipótesis automáticas — 2026-07-24 17:57 UTC
-_Generado por shadow_postmortem.py sobre 33317 resoluciones (PNL=+7339.43€)_
+# Hipótesis automáticas — 2026-07-24 18:01 UTC
+_Generado por shadow_postmortem.py sobre 33318 resoluciones (PNL=+7340.91€)_
 
 ## Patrones causales activos
 
 ### FAVORITO_CONFIRMADO
-- **PATRÓN** `hora_utc` > `6.0` → IC=+0.199 (n=2098)
+- **PATRÓN** `hora_utc` > `6.0` → IC=+0.199 (n=2099)
   - _Por qué funciona_: hora tardía/noche → sesión US cerrada, menos participantes informados; señales más ruidosas
   - _Acción_: Kelly boost +1.00€ cuando `hora_utc` > 6.0 (IC base=+0.195)
 
@@ -16,7 +16,7 @@ _Generado por shadow_postmortem.py sobre 33317 resoluciones (PNL=+7339.43€)_
 
   - _Acción_: Kelly boost +1.00€ cuando `py_entrada` > 0.735 (IC base=+0.195)
 
-- **PATRÓN** `libro_spread` < `0.01` → IC=+0.202 (n=2374)
+- **PATRÓN** `libro_spread` < `0.01` → IC=+0.202 (n=2375)
 
   - _Acción_: Kelly boost +1.00€ cuando `libro_spread` < 0.01 (IC base=+0.195)
 
@@ -1202,20 +1202,20 @@ _Derivadas de los patrones aprendidos:_
 | ✅ BALLENAS_TARDIAS#15min | 32 | +0.382 | +4.06€ | 0 | 0 |
 | ✅ BALLENAS_TARDIAS#BTC | 32 | +0.382 | +4.06€ | 0 | 0 |
 | ✅ BALLENAS_TARDIAS#BTC#15min | 32 | +0.382 | +4.06€ | 0 | 0 |
-| ✅ FAVORITO_CONFIRMADO | 5888 | +0.187 | +99.83€ | 0 | 9 |
+| ✅ FAVORITO_CONFIRMADO | 5889 | +0.187 | +101.31€ | 0 | 9 |
 | ✅ FAVORITO_CONFIRMADO#15min | 3869 | +0.212 | +77.25€ | 0 | 0 |
 | ✅ FAVORITO_CONFIRMADO#240min | 257 | +0.064 | -16.58€ | 0 | 0 |
-| ✅ FAVORITO_CONFIRMADO#5min | 736 | +0.130 | -46.49€ | 0 | 0 |
+| ✅ FAVORITO_CONFIRMADO#5min | 737 | +0.131 | -45.01€ | 0 | 0 |
 | ✅ FAVORITO_CONFIRMADO#60min | 1026 | +0.162 | +85.65€ | 0 | 0 |
 | ✅ FAVORITO_CONFIRMADO#BTC | 1726 | +0.196 | +45.97€ | 0 | 0 |
 | ✅ FAVORITO_CONFIRMADO#BTC#15min | 1289 | +0.209 | -9.42€ | 0 | 7 |
 | ✅ FAVORITO_CONFIRMADO#BTC#240min | 85 | +0.063 | -6.79€ | 0 | 0 |
 | 🚫 FAVORITO_CONFIRMADO#BTC#5min | 10 | -0.125 | -3.77€ | 0 | 0 |
 | ✅ FAVORITO_CONFIRMADO#BTC#60min | 342 | +0.189 | +65.95€ | 0 | 6 |
-| ✅ FAVORITO_CONFIRMADO#ETH | 2077 | +0.175 | -1.79€ | 0 | 0 |
+| ✅ FAVORITO_CONFIRMADO#ETH | 2078 | +0.175 | -0.31€ | 0 | 0 |
 | ✅ FAVORITO_CONFIRMADO#ETH#15min | 1274 | +0.208 | +23.59€ | 0 | 7 |
 | ✅ FAVORITO_CONFIRMADO#ETH#240min | 85 | -0.017 | -20.32€ | 0 | 0 |
-| ✅ FAVORITO_CONFIRMADO#ETH#5min | 376 | +0.132 | -23.23€ | 0 | 0 |
+| ✅ FAVORITO_CONFIRMADO#ETH#5min | 377 | +0.133 | -21.76€ | 0 | 0 |
 | ✅ FAVORITO_CONFIRMADO#ETH#60min | 342 | +0.145 | +18.18€ | 0 | 9 |
 | ✅ FAVORITO_CONFIRMADO#SOL | 2050 | +0.192 | +53.66€ | 0 | 0 |
 | ✅ FAVORITO_CONFIRMADO#SOL#15min | 1276 | +0.221 | +63.41€ | 0 | 7 |
@@ -1478,7 +1478,7 @@ _Derivadas de los patrones aprendidos:_
 **🟡 H-STREAK-COOLDOWN** — Cooldown tras 2 derrotas consecutivas (mismo subtype)
   - _Umbral_: n≥40 tras 2 losses y gap(IC_tras_win - IC_tras_2loss)≥0.05
   - _Acción_: Reducir stake (no desactivar) 1-2h tras 2 derrotas consecutivas en el mismo subtype
-  - _Estado_: tras_win IC=+0.115 n=19967 | tras_1loss IC=+0.083 n=13150 | tras_2loss IC=+0.053 n=5446/40 | gap=+0.062 (umbral 0.05)
+  - _Estado_: tras_win IC=+0.115 n=19968 | tras_1loss IC=+0.083 n=13150 | tras_2loss IC=+0.053 n=5446/40 | gap=+0.062 (umbral 0.05)
 
 **🟡 H-KALMAN** — Kalman filter para drift adaptativo
   - _Umbral_: n≥200 por subtipo para calibrar parámetros Q/R del KF
@@ -1502,7 +1502,7 @@ _Derivadas de los patrones aprendidos:_
 **⏳ H-KELLY-HORA** — Kelly boost ×1.2 en horas top (15/17/19h UTC)
   - _Umbral_: n≥40 por hora con IC estable ≥+0.10 confirmado en forward
   - _Acción_: Añadir HORA_BOOST = {13: 1.2, 15: 1.2, 17: 1.2, 19: 1.2} en shadow_predict.py
-  - _Estado_: H=13h UTC: IC=+0.091 n=1489/40 PNL=+299.73€ | H=15h UTC: IC=+0.145 n=1431/40 PNL=+537.39€ | H=17h UTC: IC=+0.095 n=1413/40 PNL=+269.75€ | H=19h UTC: IC=+0.133 n=1268/40 PNL=+353.23€
+  - _Estado_: H=13h UTC: IC=+0.091 n=1489/40 PNL=+299.73€ | H=15h UTC: IC=+0.145 n=1431/40 PNL=+537.39€ | H=17h UTC: IC=+0.095 n=1414/40 PNL=+271.23€ | H=19h UTC: IC=+0.133 n=1268/40 PNL=+353.23€
 
 **⏳ H-60MIN-LIVE** — Estrategias 60min → umbral live (IC≥0.08 n≥40)
   - _Umbral_: IC≥0.08 y n≥40 en cualquier subtipo 60min
