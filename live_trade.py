@@ -3043,6 +3043,11 @@ def main():
         # siempre, sea cual sea el IC de entrada. El boost queda correctamente
         # cableado y se activa solo el día que max_stake_eur se despinee
         # (mismo patrón ya documentado para P15 en CLAUDE.md).
+        # decs_en_mercado (23-Jul, fix): el refactor de _conflictos_discrepancia
+        # (commit 1c0ce05fdf) se llevó este cálculo a variable local de esa
+        # función y dejó esta referencia colgada -- NameError en TODO ciclo
+        # desde 2026-07-23T16:12 UTC, bloqueando cualquier ejecución real.
+        decs_en_mercado = _wl_por_mercado.get(mid, {})
         coincide = bool(decs_en_mercado.get(dec, set()) - {override_key})
         ic_para_stake = ic_hist
         if coincide and boost_ic_coincidencia != 1.0:
