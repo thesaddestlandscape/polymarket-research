@@ -1,5 +1,5 @@
-# Hipótesis automáticas — 2026-07-24 03:57 UTC
-_Generado por shadow_postmortem.py sobre 32211 resoluciones (PNL=+7025.12€)_
+# Hipótesis automáticas — 2026-07-24 04:03 UTC
+_Generado por shadow_postmortem.py sobre 32212 resoluciones (PNL=+7026.45€)_
 
 ## Patrones causales activos
 
@@ -20,7 +20,7 @@ _Generado por shadow_postmortem.py sobre 32211 resoluciones (PNL=+7025.12€)_
 
   - _Acción_: Kelly boost +1.00€ cuando `libro_spread` < 0.01 (IC base=+0.196)
 
-- **PATRÓN** `hora_utc` < `7.0` → IC=+0.208 (n=984)
+- **PATRÓN** `hora_utc` < `7.0` → IC=+0.208 (n=985)
   - _Por qué funciona_: hora temprana → mercados cripto menos líquidos, spreads más amplios; edge real menor
   - _Acción_: Kelly boost +1.00€ cuando `hora_utc` < 7.0 (IC base=+0.180)
 
@@ -28,7 +28,7 @@ _Generado por shadow_postmortem.py sobre 32211 resoluciones (PNL=+7025.12€)_
 
   - _Acción_: Kelly boost +1.00€ cuando `py_entrada` < 0.265 (IC base=+0.180)
 
-- **PATRÓN** `libro_spread` < `0.01` → IC=+0.182 (n=2462)
+- **PATRÓN** `libro_spread` < `0.01` → IC=+0.182 (n=2463)
 
   - _Acción_: Kelly boost +0.91€ cuando `libro_spread` < 0.01 (IC base=+0.180)
 
@@ -1186,10 +1186,10 @@ _Derivadas de los patrones aprendidos:_
 | ✅ BALLENAS_TARDIAS#15min | 27 | +0.362 | +2.63€ | 0 | 0 |
 | ✅ BALLENAS_TARDIAS#BTC | 27 | +0.362 | +2.63€ | 0 | 0 |
 | ✅ BALLENAS_TARDIAS#BTC#15min | 27 | +0.362 | +2.63€ | 0 | 0 |
-| ✅ FAVORITO_CONFIRMADO | 5652 | +0.188 | +102.07€ | 0 | 8 |
+| ✅ FAVORITO_CONFIRMADO | 5653 | +0.188 | +103.39€ | 0 | 8 |
 | ✅ FAVORITO_CONFIRMADO#15min | 3714 | +0.215 | +100.15€ | 0 | 0 |
 | ✅ FAVORITO_CONFIRMADO#240min | 244 | +0.065 | -12.35€ | 0 | 0 |
-| ✅ FAVORITO_CONFIRMADO#5min | 710 | +0.125 | -56.53€ | 0 | 0 |
+| ✅ FAVORITO_CONFIRMADO#5min | 711 | +0.126 | -55.21€ | 0 | 0 |
 | ✅ FAVORITO_CONFIRMADO#60min | 984 | +0.158 | +70.80€ | 0 | 0 |
 | ✅ FAVORITO_CONFIRMADO#BTC | 1655 | +0.195 | +45.45€ | 0 | 0 |
 | ✅ FAVORITO_CONFIRMADO#BTC#15min | 1236 | +0.209 | -8.25€ | 0 | 6 |
@@ -1201,10 +1201,10 @@ _Derivadas de los patrones aprendidos:_
 | ✅ FAVORITO_CONFIRMADO#ETH#240min | 81 | -0.018 | -18.02€ | 0 | 0 |
 | ✅ FAVORITO_CONFIRMADO#ETH#5min | 363 | +0.127 | -27.52€ | 0 | 0 |
 | ✅ FAVORITO_CONFIRMADO#ETH#60min | 328 | +0.142 | +12.26€ | 0 | 9 |
-| ✅ FAVORITO_CONFIRMADO#SOL | 1969 | +0.193 | +51.12€ | 0 | 0 |
+| ✅ FAVORITO_CONFIRMADO#SOL | 1970 | +0.193 | +52.44€ | 0 | 0 |
 | ✅ FAVORITO_CONFIRMADO#SOL#15min | 1226 | +0.226 | +73.97€ | 0 | 8 |
 | ✅ FAVORITO_CONFIRMADO#SOL#240min | 82 | +0.143 | +11.28€ | 0 | 0 |
-| ✅ FAVORITO_CONFIRMADO#SOL#5min | 333 | +0.130 | -29.59€ | 0 | 0 |
+| ✅ FAVORITO_CONFIRMADO#SOL#5min | 334 | +0.131 | -28.27€ | 0 | 0 |
 | ✅ FAVORITO_CONFIRMADO#SOL#60min | 328 | +0.142 | -4.54€ | 0 | 6 |
 | ✅ FAVORITO_CONFIRMADO#XRP | 29 | +0.145 | +0.91€ | 0 | 0 |
 | ✅ FAVORITO_CONFIRMADO#XRP#15min | 25 | +0.093 | -3.44€ | 0 | 0 |
@@ -1462,7 +1462,7 @@ _Derivadas de los patrones aprendidos:_
 **🟡 H-STREAK-COOLDOWN** — Cooldown tras 2 derrotas consecutivas (mismo subtype)
   - _Umbral_: n≥40 tras 2 losses y gap(IC_tras_win - IC_tras_2loss)≥0.05
   - _Acción_: Reducir stake (no desactivar) 1-2h tras 2 derrotas consecutivas en el mismo subtype
-  - _Estado_: tras_win IC=+0.114 n=19261 | tras_1loss IC=+0.082 n=12752 | tras_2loss IC=+0.052 n=5295/40 | gap=+0.062 (umbral 0.05)
+  - _Estado_: tras_win IC=+0.114 n=19262 | tras_1loss IC=+0.082 n=12752 | tras_2loss IC=+0.052 n=5295/40 | gap=+0.062 (umbral 0.05)
 
 **🟡 H-KALMAN** — Kalman filter para drift adaptativo
   - _Umbral_: n≥200 por subtipo para calibrar parámetros Q/R del KF
@@ -1481,7 +1481,7 @@ _Derivadas de los patrones aprendidos:_
 **⏳ H-CROSS-ASSET** — Cross-asset confirmation GBM+OF BUY_NO
   - _Umbral_: n_overlaps≥20 y IC_overlap > IC_base + 0.05
   - _Acción_: Cambiar _aplicar_kelly_compuesto: match por activo, no market_id
-  - _Estado_: n_overlaps=38, boost estimado=-0.043. Necesita 0 más y boost>0.05
+  - _Estado_: n_overlaps=38, boost estimado=-0.044. Necesita 0 más y boost>0.05
 
 **⏳ H-KELLY-HORA** — Kelly boost ×1.2 en horas top (15/17/19h UTC)
   - _Umbral_: n≥40 por hora con IC estable ≥+0.10 confirmado en forward
