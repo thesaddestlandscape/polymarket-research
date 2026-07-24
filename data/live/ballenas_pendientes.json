@@ -21,5 +21,28 @@
   "ultimo_intento_ts": "2026-07-24T13:00:44+00:00",
   "ultimo_motivo_veto": "deadline_vencido",
   "ts_resolucion": "2026-07-24T13:00:44+00:00"
+ },
+ "3054468#FAVORITO_CONFIRMADO#SOL#15min#BUY_YES": {
+  "clave": "3054468#FAVORITO_CONFIRMADO#SOL#15min#BUY_YES",
+  "market_id": "3054468",
+  "strategy": "FAVORITO_CONFIRMADO",
+  "subtype": "SOL#15min",
+  "direction": "BUY_YES",
+  "activo": "SOL",
+  "marco": "15m",
+  "combo": "SOL#15m",
+  "end_date": "2026-07-24T13:30:00",
+  "precio_plan": 0.855,
+  "edge_dir": 0.055,
+  "ic_para_stake": 0.2337,
+  "ts_creacion": "2026-07-24T13:19:38+00:00",
+  "intentos": 11,
+  "rest_lo_min": 2.7,
+  "rest_hi_min": 8.3,
+  "deadline_ts": "2026-07-24T13:27:36+00:00",
+  "estado": "resuelto_normal",
+  "ultimo_intento_ts": "2026-07-24T13:22:51+00:00",
+  "ultimo_motivo_veto": "observacion_habria_ejecutado",
+  "ts_resolucion": "2026-07-24T13:22:51+00:00"
  }
 }
