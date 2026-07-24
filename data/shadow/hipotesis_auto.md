@@ -1,5 +1,5 @@
-# Hipótesis automáticas — 2026-07-24 08:35 UTC
-_Generado por shadow_postmortem.py sobre 32578 resoluciones (PNL=+7142.92€)_
+# Hipótesis automáticas — 2026-07-24 08:38 UTC
+_Generado por shadow_postmortem.py sobre 32579 resoluciones (PNL=+7140.88€)_
 
 ## Patrones causales activos
 
@@ -32,11 +32,11 @@ _Generado por shadow_postmortem.py sobre 32578 resoluciones (PNL=+7142.92€)_
 
   - _Acción_: Kelly boost +1.00€ cuando `py_entrada` < 0.265 (IC base=+0.178)
 
-- **PATRÓN** `libro_spread` < `0.01` → IC=+0.182 (n=2500)
+- **PATRÓN** `libro_spread` < `0.01` → IC=+0.182 (n=2501)
 
   - _Acción_: Kelly boost +0.91€ cuando `libro_spread` < 0.01 (IC base=+0.178)
 
-- **PATRÓN** `libro_liquidez` > `4211.0402` → IC=+0.179 (n=1502)
+- **PATRÓN** `libro_liquidez` > `4211.0402` → IC=+0.179 (n=1503)
 
   - _Acción_: Kelly boost +0.90€ cuando `libro_liquidez` > 4211.0402 (IC base=+0.178)
 
@@ -1207,10 +1207,10 @@ _Derivadas de los patrones aprendidos:_
 | ✅ BALLENAS_TARDIAS#15min | 29 | +0.371 | +3.37€ | 0 | 0 |
 | ✅ BALLENAS_TARDIAS#BTC | 29 | +0.371 | +3.37€ | 0 | 0 |
 | ✅ BALLENAS_TARDIAS#BTC#15min | 29 | +0.371 | +3.37€ | 0 | 0 |
-| ✅ FAVORITO_CONFIRMADO | 5737 | +0.188 | +119.07€ | 0 | 9 |
+| ✅ FAVORITO_CONFIRMADO | 5738 | +0.188 | +117.03€ | 0 | 9 |
 | ✅ FAVORITO_CONFIRMADO#15min | 3768 | +0.215 | +110.06€ | 0 | 0 |
 | ✅ FAVORITO_CONFIRMADO#240min | 251 | +0.053 | -20.98€ | 0 | 0 |
-| ✅ FAVORITO_CONFIRMADO#5min | 719 | +0.128 | -48.48€ | 0 | 0 |
+| ✅ FAVORITO_CONFIRMADO#5min | 720 | +0.127 | -50.52€ | 0 | 0 |
 | ✅ FAVORITO_CONFIRMADO#60min | 999 | +0.160 | +78.47€ | 0 | 0 |
 | ✅ FAVORITO_CONFIRMADO#BTC | 1679 | +0.194 | +41.94€ | 0 | 0 |
 | ✅ FAVORITO_CONFIRMADO#BTC#15min | 1253 | +0.209 | -8.74€ | 0 | 6 |
@@ -1222,10 +1222,10 @@ _Derivadas de los patrones aprendidos:_
 | ✅ FAVORITO_CONFIRMADO#ETH#240min | 83 | -0.029 | -21.08€ | 0 | 0 |
 | ✅ FAVORITO_CONFIRMADO#ETH#5min | 368 | +0.130 | -24.53€ | 0 | 0 |
 | ✅ FAVORITO_CONFIRMADO#ETH#60min | 333 | +0.145 | +15.78€ | 0 | 8 |
-| ✅ FAVORITO_CONFIRMADO#SOL | 1997 | +0.195 | +67.00€ | 0 | 0 |
+| ✅ FAVORITO_CONFIRMADO#SOL | 1998 | +0.195 | +64.96€ | 0 | 0 |
 | ✅ FAVORITO_CONFIRMADO#SOL#15min | 1243 | +0.227 | +81.16€ | 0 | 8 |
 | ✅ FAVORITO_CONFIRMADO#SOL#240min | 84 | +0.140 | +10.81€ | 0 | 0 |
-| ✅ FAVORITO_CONFIRMADO#SOL#5min | 337 | +0.134 | -24.53€ | 0 | 0 |
+| ✅ FAVORITO_CONFIRMADO#SOL#5min | 338 | +0.132 | -26.57€ | 0 | 0 |
 | ✅ FAVORITO_CONFIRMADO#SOL#60min | 333 | +0.148 | -0.44€ | 0 | 8 |
 | ✅ FAVORITO_CONFIRMADO#XRP | 31 | +0.136 | +0.11€ | 0 | 0 |
 | ✅ FAVORITO_CONFIRMADO#XRP#15min | 26 | +0.107 | -2.20€ | 0 | 0 |
@@ -1483,7 +1483,7 @@ _Derivadas de los patrones aprendidos:_
 **🟡 H-STREAK-COOLDOWN** — Cooldown tras 2 derrotas consecutivas (mismo subtype)
   - _Umbral_: n≥40 tras 2 losses y gap(IC_tras_win - IC_tras_2loss)≥0.05
   - _Acción_: Reducir stake (no desactivar) 1-2h tras 2 derrotas consecutivas en el mismo subtype
-  - _Estado_: tras_win IC=+0.114 n=19492 | tras_1loss IC=+0.082 n=12886 | tras_2loss IC=+0.051 n=5351/40 | gap=+0.063 (umbral 0.05)
+  - _Estado_: tras_win IC=+0.114 n=19493 | tras_1loss IC=+0.082 n=12886 | tras_2loss IC=+0.051 n=5351/40 | gap=+0.063 (umbral 0.05)
 
 **🟡 H-KALMAN** — Kalman filter para drift adaptativo
   - _Umbral_: n≥200 por subtipo para calibrar parámetros Q/R del KF
@@ -1948,8 +1948,8 @@ _Derivadas de los patrones aprendidos:_
   - _Hipótesis_: 12-Jul: el cierre 08-Jul (n=2494, sin desagregar por estrategia/activo) encontro ruido puro. Desagregando por estrategia+activo (mecanismo nuevo): FAVORITO_CONFIRMADO#SOL alineado con smart_money_consensus (|consenso|>0.1, n_wallets>=3) hit=78.4% (n=37) vs contrario hit=52.4% (n=42), z=+2.41. GBM_LATE_15M tambien muestra el mismo signo en BTC/ETH/XRP (z=0.86-1.61, mas debil) pero SOL plano ahi -- inconsistencia entre estrategias que hay que entender antes de actuar.
   - _Umbral_: n>=40 por lado y z>=2
   - _Acción_: Si confirma con n>=40 y z>=2 -> considerar boost condicionado a alineacion con smart_money_consensus en FAVORITO_CONFIRMADO#SOL
-  - _Estado_: SEÑAL POSITIVA confirmada: IC=+0.218 > 0.08 con n=360 PNL=+31.61€
-  - _Datos_: n=360 IC=+0.218 PNL=+31.61€
+  - _Estado_: SEÑAL POSITIVA confirmada: IC=+0.216 > 0.08 con n=361 PNL=+29.57€
+  - _Datos_: n=361 IC=+0.216 PNL=+29.57€
 
 **🟡 H-CUSTOM-FAVORITO-SOL-ALTACONVICCION** — FAVORITO_CONFIRMADO SOL BUY_YES alta conviccion (py_entrada alto) — UNICO caso positivo en fill-ability de hoy
   - _Hipótesis_: 12-Jul: auditoria de fill-ability de las 8 candidatas encontro las 8 negativas en agregado. Pero desagregando FAVORITO_CONFIRMADO por activo (mecanismo nuevo, no mirado hasta hoy): SOL#BUY_YES con py_entrada>=0.665-0.695 da pnl/trade POSITIVO en el subconjunto fillable real (+0.12 a +0.41 EUR/trade, n=6-17 segun el corte exacto) -- unico resultado positivo de toda la auditoria de candidatas. n todavia bajo, necesita mas dato antes de proponer nada.
