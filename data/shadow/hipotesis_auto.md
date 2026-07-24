@@ -1,5 +1,5 @@
-# Hipótesis automáticas — 2026-07-24 22:03 UTC
-_Generado por shadow_postmortem.py sobre 33630 resoluciones (PNL=+7402.44€)_
+# Hipótesis automáticas — 2026-07-24 22:06 UTC
+_Generado por shadow_postmortem.py sobre 33631 resoluciones (PNL=+7403.35€)_
 
 ## Patrones causales activos
 
@@ -138,19 +138,19 @@ _Generado por shadow_postmortem.py sobre 33630 resoluciones (PNL=+7402.44€)_
 
 - **PATRÓN** `hora_utc` < `6.0` → IC=+0.192 (n=50)
   - _Por qué funciona_: hora temprana → mercados cripto menos líquidos, spreads más amplios; edge real menor
-  - _Acción_: Kelly boost +0.96€ cuando `hora_utc` < 6.0 (IC base=+0.142)
+  - _Acción_: Kelly boost +0.96€ cuando `hora_utc` < 6.0 (IC base=+0.144)
 
-- **PATRÓN** `py_entrada` < `0.405` → IC=+0.167 (n=112)
+- **PATRÓN** `py_entrada` < `0.405` → IC=+0.170 (n=113)
 
-  - _Acción_: Kelly boost +0.83€ cuando `py_entrada` < 0.405 (IC base=+0.142)
+  - _Acción_: Kelly boost +0.85€ cuando `py_entrada` < 0.405 (IC base=+0.144)
 
-- **PATRÓN** `py_entrada` > `0.365` → IC=+0.144 (n=147)
+- **PATRÓN** `py_entrada` > `0.425` → IC=+0.150 (n=58)
 
-  - _Acción_: Kelly boost +0.72€ cuando `py_entrada` > 0.365 (IC base=+0.142)
+  - _Acción_: Kelly boost +0.75€ cuando `py_entrada` > 0.425 (IC base=+0.144)
 
-- **PATRÓN** `libro_liquidez` > `4151.9377` → IC=+0.185 (n=128)
+- **PATRÓN** `libro_liquidez` > `4151.9377` → IC=+0.187 (n=129)
 
-  - _Acción_: Kelly boost +0.92€ cuando `libro_liquidez` > 4151.9377 (IC base=+0.142)
+  - _Acción_: Kelly boost +0.94€ cuando `libro_liquidez` > 4151.9377 (IC base=+0.144)
 
 ### FAVORITO_CONFIRMADO#SOL#15min
 - **PATRÓN** `hora_utc` > `18.0` → IC=+0.237 (n=173)
@@ -1184,21 +1184,21 @@ _Derivadas de los patrones aprendidos:_
 | ✅ BALLENAS_TARDIAS#15min | 34 | +0.389 | +4.31€ | 0 | 0 |
 | ✅ BALLENAS_TARDIAS#BTC | 34 | +0.389 | +4.31€ | 0 | 0 |
 | ✅ BALLENAS_TARDIAS#BTC#15min | 34 | +0.389 | +4.31€ | 0 | 0 |
-| ✅ FAVORITO_CONFIRMADO | 5960 | +0.184 | +54.78€ | 0 | 7 |
+| ✅ FAVORITO_CONFIRMADO | 5961 | +0.185 | +55.69€ | 0 | 7 |
 | ✅ FAVORITO_CONFIRMADO#15min | 3916 | +0.211 | +55.30€ | 0 | 0 |
 | ✅ FAVORITO_CONFIRMADO#240min | 260 | +0.065 | -16.33€ | 0 | 0 |
 | ✅ FAVORITO_CONFIRMADO#5min | 746 | +0.123 | -61.82€ | 0 | 0 |
-| ✅ FAVORITO_CONFIRMADO#60min | 1038 | +0.159 | +77.64€ | 0 | 0 |
+| ✅ FAVORITO_CONFIRMADO#60min | 1039 | +0.159 | +78.54€ | 0 | 0 |
 | ✅ FAVORITO_CONFIRMADO#BTC | 1746 | +0.195 | +39.81€ | 0 | 0 |
 | ✅ FAVORITO_CONFIRMADO#BTC#15min | 1304 | +0.208 | -14.87€ | 0 | 7 |
 | ✅ FAVORITO_CONFIRMADO#BTC#240min | 86 | +0.068 | -5.47€ | 0 | 0 |
 | 🚫 FAVORITO_CONFIRMADO#BTC#5min | 10 | -0.125 | -3.77€ | 0 | 0 |
 | ✅ FAVORITO_CONFIRMADO#BTC#60min | 346 | +0.187 | +63.91€ | 0 | 6 |
-| ✅ FAVORITO_CONFIRMADO#ETH | 2104 | +0.171 | -24.88€ | 0 | 0 |
+| ✅ FAVORITO_CONFIRMADO#ETH | 2105 | +0.172 | -23.98€ | 0 | 0 |
 | ✅ FAVORITO_CONFIRMADO#ETH#15min | 1290 | +0.205 | +12.53€ | 0 | 7 |
 | ✅ FAVORITO_CONFIRMADO#ETH#240min | 86 | -0.011 | -19.35€ | 0 | 0 |
 | ✅ FAVORITO_CONFIRMADO#ETH#5min | 382 | +0.125 | -31.30€ | 0 | 0 |
-| ✅ FAVORITO_CONFIRMADO#ETH#60min | 346 | +0.141 | +13.24€ | 0 | 9 |
+| ✅ FAVORITO_CONFIRMADO#ETH#60min | 347 | +0.142 | +14.14€ | 0 | 9 |
 | ✅ FAVORITO_CONFIRMADO#SOL | 2075 | +0.190 | +37.87€ | 0 | 0 |
 | ✅ FAVORITO_CONFIRMADO#SOL#15min | 1292 | +0.220 | +57.96€ | 0 | 8 |
 | ✅ FAVORITO_CONFIRMADO#SOL#240min | 87 | +0.140 | +10.53€ | 0 | 0 |
@@ -1460,7 +1460,7 @@ _Derivadas de los patrones aprendidos:_
 **🟡 H-STREAK-COOLDOWN** — Cooldown tras 2 derrotas consecutivas (mismo subtype)
   - _Umbral_: n≥40 tras 2 losses y gap(IC_tras_win - IC_tras_2loss)≥0.05
   - _Acción_: Reducir stake (no desactivar) 1-2h tras 2 derrotas consecutivas en el mismo subtype
-  - _Estado_: tras_win IC=+0.116 n=20163 | tras_1loss IC=+0.082 n=13267 | tras_2loss IC=+0.052 n=5498/40 | gap=+0.064 (umbral 0.05)
+  - _Estado_: tras_win IC=+0.116 n=20163 | tras_1loss IC=+0.082 n=13268 | tras_2loss IC=+0.052 n=5499/40 | gap=+0.064 (umbral 0.05)
 
 **🟡 H-KALMAN** — Kalman filter para drift adaptativo
   - _Umbral_: n≥200 por subtipo para calibrar parámetros Q/R del KF
