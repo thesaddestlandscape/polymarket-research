@@ -1,1 +1,24 @@
-{}
+{
+ "3027349#FAVORITO_CONFIRMADO#BTC#60min#BUY_NO": {
+  "clave": "3027349#FAVORITO_CONFIRMADO#BTC#60min#BUY_NO",
+  "market_id": "3027349",
+  "strategy": "FAVORITO_CONFIRMADO",
+  "subtype": "BTC#60min",
+  "direction": "BUY_NO",
+  "activo": "BTC",
+  "marco": "60m",
+  "combo": "BTC#60m",
+  "end_date": "2026-07-24T10:00:00",
+  "precio_plan": 0.79,
+  "edge_dir": 0.055,
+  "ic_para_stake": 0.1596,
+  "ts_creacion": "2026-07-24T09:08:39+00:00",
+  "intentos": 11,
+  "rest_lo_min": 1.03,
+  "rest_hi_min": 4.03,
+  "deadline_ts": "2026-07-24T09:59:16.200000+00:00",
+  "estado": "esperando",
+  "ultimo_intento_ts": "2026-07-24T09:10:03+00:00",
+  "ultimo_motivo_veto": "concentracion_ok"
+ }
+}
