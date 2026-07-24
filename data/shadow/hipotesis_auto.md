@@ -1,5 +1,5 @@
-# Hipótesis automáticas — 2026-07-24 10:06 UTC
-_Generado por shadow_postmortem.py sobre 32671 resoluciones (PNL=+7177.16€)_
+# Hipótesis automáticas — 2026-07-24 10:10 UTC
+_Generado por shadow_postmortem.py sobre 32672 resoluciones (PNL=+7175.12€)_
 
 ## Patrones causales activos
 
@@ -32,7 +32,7 @@ _Generado por shadow_postmortem.py sobre 32671 resoluciones (PNL=+7177.16€)_
 
   - _Acción_: Kelly boost +1.00€ cuando `py_entrada` < 0.265 (IC base=+0.178)
 
-- **PATRÓN** `libro_spread` < `0.01` → IC=+0.182 (n=2508)
+- **PATRÓN** `libro_spread` < `0.01` → IC=+0.182 (n=2509)
 
   - _Acción_: Kelly boost +0.91€ cuando `libro_spread` < 0.01 (IC base=+0.178)
 
@@ -146,19 +146,15 @@ _Generado por shadow_postmortem.py sobre 32671 resoluciones (PNL=+7177.16€)_
 
 - **PATRÓN** `hora_utc` < `6.0` → IC=+0.192 (n=50)
   - _Por qué funciona_: hora temprana → mercados cripto menos líquidos, spreads más amplios; edge real menor
-  - _Acción_: Kelly boost +0.96€ cuando `hora_utc` < 6.0 (IC base=+0.147)
+  - _Acción_: Kelly boost +0.96€ cuando `hora_utc` < 6.0 (IC base=+0.143)
 
-- **PATRÓN** `py_entrada` < `0.405` → IC=+0.176 (n=106)
+- **PATRÓN** `py_entrada` < `0.405` → IC=+0.170 (n=107)
 
-  - _Acción_: Kelly boost +0.88€ cuando `py_entrada` < 0.405 (IC base=+0.147)
+  - _Acción_: Kelly boost +0.85€ cuando `py_entrada` < 0.405 (IC base=+0.143)
 
-- **PATRÓN** `py_entrada` > `0.365` → IC=+0.145 (n=139)
+- **PATRÓN** `libro_liquidez` > `4204.8992` → IC=+0.204 (n=123)
 
-  - _Acción_: Kelly boost +0.73€ cuando `py_entrada` > 0.365 (IC base=+0.147)
-
-- **PATRÓN** `libro_liquidez` > `4207.6295` → IC=+0.202 (n=122)
-
-  - _Acción_: Kelly boost +1.00€ cuando `libro_liquidez` > 4207.6295 (IC base=+0.147)
+  - _Acción_: Kelly boost +1.00€ cuando `libro_liquidez` > 4204.8992 (IC base=+0.143)
 
 ### FAVORITO_CONFIRMADO#SOL#15min
 - **PATRÓN** `hora_utc` > `18.0` → IC=+0.248 (n=165)
@@ -1208,21 +1204,21 @@ _Derivadas de los patrones aprendidos:_
 | ✅ BALLENAS_TARDIAS#15min | 29 | +0.371 | +3.37€ | 0 | 0 |
 | ✅ BALLENAS_TARDIAS#BTC | 29 | +0.371 | +3.37€ | 0 | 0 |
 | ✅ BALLENAS_TARDIAS#BTC#15min | 29 | +0.371 | +3.37€ | 0 | 0 |
-| ✅ FAVORITO_CONFIRMADO | 5762 | +0.188 | +125.92€ | 0 | 9 |
+| ✅ FAVORITO_CONFIRMADO | 5763 | +0.188 | +123.88€ | 0 | 9 |
 | ✅ FAVORITO_CONFIRMADO#15min | 3785 | +0.216 | +114.52€ | 0 | 0 |
 | ✅ FAVORITO_CONFIRMADO#240min | 251 | +0.053 | -20.98€ | 0 | 0 |
 | ✅ FAVORITO_CONFIRMADO#5min | 722 | +0.129 | -48.83€ | 0 | 0 |
-| ✅ FAVORITO_CONFIRMADO#60min | 1004 | +0.161 | +81.22€ | 0 | 0 |
+| ✅ FAVORITO_CONFIRMADO#60min | 1005 | +0.160 | +79.18€ | 0 | 0 |
 | ✅ FAVORITO_CONFIRMADO#BTC | 1687 | +0.195 | +44.91€ | 0 | 0 |
 | ✅ FAVORITO_CONFIRMADO#BTC#15min | 1259 | +0.210 | -7.30€ | 0 | 6 |
 | ✅ FAVORITO_CONFIRMADO#BTC#240min | 83 | +0.053 | -8.67€ | 0 | 0 |
 | 🚫 FAVORITO_CONFIRMADO#BTC#5min | 10 | -0.125 | -3.77€ | 0 | 0 |
 | ✅ FAVORITO_CONFIRMADO#BTC#60min | 335 | +0.188 | +64.65€ | 0 | 7 |
-| ✅ FAVORITO_CONFIRMADO#ETH | 2033 | +0.177 | +12.22€ | 0 | 0 |
+| ✅ FAVORITO_CONFIRMADO#ETH | 2034 | +0.176 | +10.18€ | 0 | 0 |
 | ✅ FAVORITO_CONFIRMADO#ETH#15min | 1247 | +0.212 | +39.91€ | 0 | 7 |
 | ✅ FAVORITO_CONFIRMADO#ETH#240min | 83 | -0.029 | -21.08€ | 0 | 0 |
 | ✅ FAVORITO_CONFIRMADO#ETH#5min | 369 | +0.131 | -23.92€ | 0 | 0 |
-| ✅ FAVORITO_CONFIRMADO#ETH#60min | 334 | +0.146 | +17.32€ | 0 | 9 |
+| ✅ FAVORITO_CONFIRMADO#ETH#60min | 335 | +0.144 | +15.28€ | 0 | 8 |
 | ✅ FAVORITO_CONFIRMADO#SOL | 2007 | +0.194 | +66.81€ | 0 | 0 |
 | ✅ FAVORITO_CONFIRMADO#SOL#15min | 1249 | +0.227 | +82.24€ | 0 | 8 |
 | ✅ FAVORITO_CONFIRMADO#SOL#240min | 84 | +0.140 | +10.81€ | 0 | 0 |
@@ -1484,7 +1480,7 @@ _Derivadas de los patrones aprendidos:_
 **🟡 H-STREAK-COOLDOWN** — Cooldown tras 2 derrotas consecutivas (mismo subtype)
   - _Umbral_: n≥40 tras 2 losses y gap(IC_tras_win - IC_tras_2loss)≥0.05
   - _Acción_: Reducir stake (no desactivar) 1-2h tras 2 derrotas consecutivas en el mismo subtype
-  - _Estado_: tras_win IC=+0.115 n=19559 | tras_1loss IC=+0.083 n=12912 | tras_2loss IC=+0.052 n=5359/40 | gap=+0.063 (umbral 0.05)
+  - _Estado_: tras_win IC=+0.115 n=19560 | tras_1loss IC=+0.083 n=12912 | tras_2loss IC=+0.052 n=5359/40 | gap=+0.063 (umbral 0.05)
 
 **🟡 H-KALMAN** — Kalman filter para drift adaptativo
   - _Umbral_: n≥200 por subtipo para calibrar parámetros Q/R del KF
