@@ -1,5 +1,5 @@
-# Hipótesis automáticas — 2026-07-24 04:09 UTC
-_Generado por shadow_postmortem.py sobre 32235 resoluciones (PNL=+7027.33€)_
+# Hipótesis automáticas — 2026-07-24 04:16 UTC
+_Generado por shadow_postmortem.py sobre 32236 resoluciones (PNL=+7027.45€)_
 
 ## Patrones causales activos
 
@@ -1317,12 +1317,12 @@ _Derivadas de los patrones aprendidos:_
 | ✅ PRICE_TARGET_GBM#SOL#atexpiry | 28 | +0.033 | +13.27€ | 0 | 0 |
 | ✅ PRICE_TARGET_GBM#atexpiry | 136 | -0.188 | -7.61€ | 0 | 0 |
 | ✅ PRICE_TARGET_GBM#reach | 14 | +0.000 | +2.83€ | 0 | 0 |
-| ✅ RESOLUTION_SNIPER | 12 | +0.171 | +2.98€ | 0 | 0 |
+| ✅ RESOLUTION_SNIPER | 13 | +0.195 | +3.10€ | 0 | 0 |
 | ✅ RESOLUTION_SNIPER#ETH | 5 | +0.018 | +1.41€ | 0 | 0 |
 | ✅ RESOLUTION_SNIPER#ETH#sniper | 5 | +0.018 | +1.41€ | 0 | 0 |
-| ✅ RESOLUTION_SNIPER#SOL | 5 | +0.089 | +1.32€ | 0 | 0 |
-| ✅ RESOLUTION_SNIPER#SOL#sniper | 5 | +0.089 | +1.32€ | 0 | 0 |
-| ✅ RESOLUTION_SNIPER#sniper | 12 | +0.171 | +2.98€ | 0 | 0 |
+| ✅ RESOLUTION_SNIPER#SOL | 6 | +0.113 | +1.44€ | 0 | 0 |
+| ✅ RESOLUTION_SNIPER#SOL#sniper | 6 | +0.113 | +1.44€ | 0 | 0 |
+| ✅ RESOLUTION_SNIPER#sniper | 13 | +0.195 | +3.10€ | 0 | 0 |
 | 🚫 SMART_FLOW_1H | 29 | -0.274 | -13.82€ | 0 | 0 |
 | ✅ SMART_FLOW_1H#BTC | 12 | -0.086 | -3.30€ | 0 | 0 |
 | ✅ STREAK_FADE_15M | 277 | +0.081 | +30.93€ | 1 | 7 |
