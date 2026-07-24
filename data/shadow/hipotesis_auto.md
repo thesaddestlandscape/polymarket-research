@@ -1,5 +1,5 @@
-# Hipótesis automáticas — 2026-07-24 02:55 UTC
-_Generado por shadow_postmortem.py sobre 32124 resoluciones (PNL=+7002.22€)_
+# Hipótesis automáticas — 2026-07-24 02:59 UTC
+_Generado por shadow_postmortem.py sobre 32125 resoluciones (PNL=+7001.37€)_
 
 ## Patrones causales activos
 
@@ -1258,10 +1258,10 @@ _Derivadas de los patrones aprendidos:_
 | ✅ GBM_LATE_15M_TARDIO#SOL#15min | 1048 | +0.043 | +214.87€ | 1 | 3 |
 | ✅ GBM_LATE_15M_TARDIO#XRP | 1296 | +0.179 | +867.10€ | 0 | 0 |
 | ✅ GBM_LATE_15M_TARDIO#XRP#15min | 1296 | +0.179 | +867.10€ | 0 | 11 |
-| ✅ GBM_LATE_5M | 529 | -0.022 | -1.12€ | 0 | 0 |
-| ✅ GBM_LATE_5M#5min | 529 | -0.022 | -1.12€ | 0 | 0 |
-| ✅ GBM_LATE_5M#BTC | 146 | -0.020 | -11.95€ | 0 | 0 |
-| ✅ GBM_LATE_5M#BTC#5min | 146 | -0.020 | -11.95€ | 0 | 0 |
+| ✅ GBM_LATE_5M | 530 | -0.023 | -1.98€ | 0 | 0 |
+| ✅ GBM_LATE_5M#5min | 530 | -0.023 | -1.98€ | 0 | 0 |
+| ✅ GBM_LATE_5M#BTC | 147 | -0.024 | -12.81€ | 0 | 0 |
+| ✅ GBM_LATE_5M#BTC#5min | 147 | -0.024 | -12.81€ | 0 | 0 |
 | ✅ GBM_LATE_5M#ETH | 57 | -0.127 | -9.42€ | 0 | 0 |
 | ✅ GBM_LATE_5M#ETH#5min | 57 | -0.127 | -9.42€ | 0 | 0 |
 | ✅ GBM_LATE_5M#SOL | 89 | -0.148 | +4.34€ | 0 | 0 |
@@ -1466,7 +1466,7 @@ _Derivadas de los patrones aprendidos:_
 **🟡 H-STREAK-COOLDOWN** — Cooldown tras 2 derrotas consecutivas (mismo subtype)
   - _Umbral_: n≥40 tras 2 losses y gap(IC_tras_win - IC_tras_2loss)≥0.05
   - _Acción_: Reducir stake (no desactivar) 1-2h tras 2 derrotas consecutivas en el mismo subtype
-  - _Estado_: tras_win IC=+0.114 n=19207 | tras_1loss IC=+0.082 n=12719 | tras_2loss IC=+0.051 n=5285/40 | gap=+0.062 (umbral 0.05)
+  - _Estado_: tras_win IC=+0.114 n=19208 | tras_1loss IC=+0.082 n=12719 | tras_2loss IC=+0.051 n=5285/40 | gap=+0.062 (umbral 0.05)
 
 **🟡 H-KALMAN** — Kalman filter para drift adaptativo
   - _Umbral_: n≥200 por subtipo para calibrar parámetros Q/R del KF
