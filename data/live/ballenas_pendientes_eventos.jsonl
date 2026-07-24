@@ -7,3 +7,5 @@
 {"ts": "2026-07-24T17:24:04+00:00", "clave": "3068438#FAVORITO_CONFIRMADO#ETH#15min#BUY_YES", "evento": "creado", "combo": "ETH#15m", "motivo_vb": "concentracion_ok", "deadline_ts": "2026-07-24T17:29:30+00:00"}
 {"ts": "2026-07-24T17:25:02+00:00", "clave": "3068438#FAVORITO_CONFIRMADO#ETH#15min#BUY_YES", "evento": "resuelto_normal", "motivo": "observacion_habria_ejecutado"}
 {"ts": "2026-07-24T17:25:02+00:00", "clave": "3068438#FAVORITO_CONFIRMADO#ETH#15min#BUY_YES", "evento": "observacion_habria_ejecutado", "combo": "ETH#15m", "minutos_restantes": 4.961247516666666}
+{"ts": "2026-07-24T17:55:29+00:00", "clave": "3032090#FAVORITO_CONFIRMADO#BTC#60min#BUY_YES", "evento": "resuelto_normal", "motivo": "observacion_habria_ejecutado"}
+{"ts": "2026-07-24T17:55:29+00:00", "clave": "3032090#FAVORITO_CONFIRMADO#BTC#60min#BUY_YES", "evento": "observacion_habria_ejecutado", "combo": "BTC#60m", "minutos_restantes": 4.512761666666666}
