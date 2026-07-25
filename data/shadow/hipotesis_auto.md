@@ -1,24 +1,24 @@
-# Hipótesis automáticas — 2026-07-25 12:07 UTC
-_Generado por shadow_postmortem.py sobre 34719 resoluciones (PNL=+7580.36€)_
+# Hipótesis automáticas — 2026-07-25 12:10 UTC
+_Generado por shadow_postmortem.py sobre 34720 resoluciones (PNL=+7578.62€)_
 
 ## Patrones causales activos
 
 ### FAVORITO_CONFIRMADO
-- **PATRÓN** `hora_utc` > `5.0` → IC=+0.194 (n=2332)
+- **PATRÓN** `hora_utc` > `5.0` → IC=+0.194 (n=2333)
   - _Por qué funciona_: hora tardía/noche → sesión US cerrada, menos participantes informados; señales más ruidosas
-  - _Acción_: Kelly boost +0.97€ cuando `hora_utc` > 5.0 (IC base=+0.188)
+  - _Acción_: Kelly boost +0.97€ cuando `hora_utc` > 5.0 (IC base=+0.187)
 
-- **PATRÓN** `hora_utc` < `11.0` → IC=+0.197 (n=1501)
+- **PATRÓN** `hora_utc` < `11.0` → IC=+0.196 (n=1502)
   - _Por qué funciona_: hora temprana → mercados cripto menos líquidos, spreads más amplios; edge real menor
-  - _Acción_: Kelly boost +0.98€ cuando `hora_utc` < 11.0 (IC base=+0.188)
+  - _Acción_: Kelly boost +0.98€ cuando `hora_utc` < 11.0 (IC base=+0.187)
 
 - **PATRÓN** `py_entrada` > `0.735` → IC=+0.332 (n=743)
 
-  - _Acción_: Kelly boost +1.00€ cuando `py_entrada` > 0.735 (IC base=+0.188)
+  - _Acción_: Kelly boost +1.00€ cuando `py_entrada` > 0.735 (IC base=+0.187)
 
-- **PATRÓN** `libro_spread` < `0.01` → IC=+0.196 (n=2499)
+- **PATRÓN** `libro_spread` < `0.01` → IC=+0.195 (n=2500)
 
-  - _Acción_: Kelly boost +0.98€ cuando `libro_spread` < 0.01 (IC base=+0.188)
+  - _Acción_: Kelly boost +0.98€ cuando `libro_spread` < 0.01 (IC base=+0.187)
 
 - **PATRÓN** `hora_utc` < `5.0` → IC=+0.200 (n=837)
   - _Por qué funciona_: hora temprana → mercados cripto menos líquidos, spreads más amplios; edge real menor
@@ -182,21 +182,25 @@ _Generado por shadow_postmortem.py sobre 34719 resoluciones (PNL=+7580.36€)_
   - _Acción_: Kelly boost +1.00€ cuando `libro_liquidez` > 1576.3156 (IC base=+0.212)
 
 ### FAVORITO_CONFIRMADO#SOL#60min
-- **PATRÓN** `hora_utc` > `5.0` → IC=+0.188 (n=139)
+- **PATRÓN** `hora_utc` > `18.0` → IC=+0.198 (n=51)
   - _Por qué funciona_: hora tardía/noche → sesión US cerrada, menos participantes informados; señales más ruidosas
-  - _Acción_: Kelly boost +0.94€ cuando `hora_utc` > 5.0 (IC base=+0.167)
+  - _Acción_: Kelly boost +0.99€ cuando `hora_utc` > 18.0 (IC base=+0.163)
 
-- **PATRÓN** `py_entrada` < `0.64` → IC=+0.183 (n=118)
+- **PATRÓN** `hora_utc` < `8.0` → IC=+0.177 (n=63)
+  - _Por qué funciona_: hora temprana → mercados cripto menos líquidos, spreads más amplios; edge real menor
+  - _Acción_: Kelly boost +0.88€ cuando `hora_utc` < 8.0 (IC base=+0.163)
 
-  - _Acción_: Kelly boost +0.92€ cuando `py_entrada` < 0.64 (IC base=+0.167)
+- **PATRÓN** `py_entrada` < `0.64` → IC=+0.178 (n=119)
+
+  - _Acción_: Kelly boost +0.89€ cuando `py_entrada` < 0.64 (IC base=+0.163)
 
 - **PATRÓN** `py_entrada` > `0.575` → IC=+0.171 (n=138)
 
-  - _Acción_: Kelly boost +0.86€ cuando `py_entrada` > 0.575 (IC base=+0.167)
+  - _Acción_: Kelly boost +0.86€ cuando `py_entrada` > 0.575 (IC base=+0.163)
 
-- **PATRÓN** `libro_spread` < `0.02` → IC=+0.193 (n=125)
+- **PATRÓN** `libro_spread` < `0.02` → IC=+0.188 (n=126)
 
-  - _Acción_: Kelly boost +0.96€ cuando `libro_spread` < 0.02 (IC base=+0.167)
+  - _Acción_: Kelly boost +0.94€ cuando `libro_spread` < 0.02 (IC base=+0.163)
 
 - **PATRÓN** `hora_utc` > `6.0` → IC=+0.131 (n=139)
   - _Por qué funciona_: hora tardía/noche → sesión US cerrada, menos participantes informados; señales más ruidosas
@@ -1180,11 +1184,11 @@ _Derivadas de los patrones aprendidos:_
 | ✅ BALLENAS_TARDIAS#15min | 40 | +0.405 | +5.42€ | 0 | 0 |
 | ✅ BALLENAS_TARDIAS#BTC | 40 | +0.405 | +5.42€ | 0 | 0 |
 | ✅ BALLENAS_TARDIAS#BTC#15min | 40 | +0.405 | +5.42€ | 0 | 0 |
-| ✅ FAVORITO_CONFIRMADO | 6198 | +0.182 | +18.26€ | 0 | 7 |
+| ✅ FAVORITO_CONFIRMADO | 6199 | +0.182 | +16.52€ | 0 | 7 |
 | ✅ FAVORITO_CONFIRMADO#15min | 4077 | +0.208 | +35.45€ | 0 | 0 |
 | ✅ FAVORITO_CONFIRMADO#240min | 273 | +0.049 | -28.17€ | 0 | 0 |
 | ✅ FAVORITO_CONFIRMADO#5min | 768 | +0.123 | -64.76€ | 0 | 0 |
-| ✅ FAVORITO_CONFIRMADO#60min | 1080 | +0.157 | +75.74€ | 0 | 0 |
+| ✅ FAVORITO_CONFIRMADO#60min | 1081 | +0.157 | +73.99€ | 0 | 0 |
 | ✅ FAVORITO_CONFIRMADO#BTC | 1817 | +0.191 | +28.92€ | 0 | 0 |
 | ✅ FAVORITO_CONFIRMADO#BTC#15min | 1357 | +0.206 | -17.33€ | 0 | 7 |
 | ✅ FAVORITO_CONFIRMADO#BTC#240min | 90 | +0.043 | -11.94€ | 0 | 0 |
@@ -1197,11 +1201,11 @@ _Derivadas de los patrones aprendidos:_
 | ✅ FAVORITO_CONFIRMADO#ETH#240min | 90 | -0.022 | -22.53€ | 0 | 0 |
 | ✅ FAVORITO_CONFIRMADO#ETH#5min | 391 | +0.123 | -34.94€ | 0 | 0 |
 | ✅ FAVORITO_CONFIRMADO#ETH#60min | 360 | +0.141 | +14.35€ | 0 | 9 |
-| ✅ FAVORITO_CONFIRMADO#SOL | 2157 | +0.187 | +24.64€ | 0 | 0 |
+| ✅ FAVORITO_CONFIRMADO#SOL | 2158 | +0.187 | +22.89€ | 0 | 0 |
 | ✅ FAVORITO_CONFIRMADO#SOL#15min | 1344 | +0.218 | +49.34€ | 0 | 7 |
 | ✅ FAVORITO_CONFIRMADO#SOL#240min | 91 | +0.124 | +7.21€ | 0 | 0 |
 | ✅ FAVORITO_CONFIRMADO#SOL#5min | 362 | +0.129 | -31.33€ | 0 | 0 |
-| ✅ FAVORITO_CONFIRMADO#SOL#60min | 360 | +0.146 | -0.57€ | 0 | 9 |
+| ✅ FAVORITO_CONFIRMADO#SOL#60min | 361 | +0.145 | -2.32€ | 0 | 10 |
 | ✅ FAVORITO_CONFIRMADO#XRP | 33 | +0.157 | +2.06€ | 0 | 0 |
 | ✅ FAVORITO_CONFIRMADO#XRP#15min | 27 | +0.121 | -1.39€ | 0 | 0 |
 | ✅ FAVORITO_CONFIRMADO_SOL_ALTACONVICCION | 350 | +0.301 | +4.23€ | 0 | 0 |
@@ -1458,7 +1462,7 @@ _Derivadas de los patrones aprendidos:_
 **🟡 H-STREAK-COOLDOWN** — Cooldown tras 2 derrotas consecutivas (mismo subtype)
   - _Umbral_: n≥40 tras 2 losses y gap(IC_tras_win - IC_tras_2loss)≥0.05
   - _Acción_: Reducir stake (no desactivar) 1-2h tras 2 derrotas consecutivas en el mismo subtype
-  - _Estado_: tras_win IC=+0.115 n=20796 | tras_1loss IC=+0.082 n=13718 | tras_2loss IC=+0.053 n=5694/40 | gap=+0.061 (umbral 0.05)
+  - _Estado_: tras_win IC=+0.115 n=20796 | tras_1loss IC=+0.082 n=13719 | tras_2loss IC=+0.053 n=5694/40 | gap=+0.061 (umbral 0.05)
 
 **🟡 H-KALMAN** — Kalman filter para drift adaptativo
   - _Umbral_: n≥200 por subtipo para calibrar parámetros Q/R del KF
