@@ -29,3 +29,4 @@
 {"ts": "2026-07-25T04:06:35+00:00", "clave": "3076894#FAVORITO_CONFIRMADO#SOL#15min#BUY_YES", "evento": "observacion_habria_ejecutado", "combo": "SOL#15m", "minutos_restantes": 8.407305233333334}
 {"ts": "2026-07-25T04:09:56+00:00", "clave": "3076883#FAVORITO_CONFIRMADO#ETH#15min#BUY_YES", "evento": "resuelto_normal", "motivo": "observacion_habria_ejecutado"}
 {"ts": "2026-07-25T04:09:56+00:00", "clave": "3076883#FAVORITO_CONFIRMADO#ETH#15min#BUY_YES", "evento": "observacion_habria_ejecutado", "combo": "ETH#15m", "minutos_restantes": 5.0538152}
+{"ts": "2026-07-25T04:12:08+00:00", "clave": "3049995#FAVORITO_CONFIRMADO#BTC#60min#BUY_YES", "evento": "creado", "combo": "BTC#60m", "motivo_vb": "sin_datos", "deadline_ts": "2026-07-25T04:58:55.200000+00:00"}
