@@ -1,5 +1,5 @@
-# Hipótesis automáticas — 2026-07-25 21:15 UTC
-_Generado por shadow_postmortem.py sobre 35447 resoluciones (PNL=+7589.52€)_
+# Hipótesis automáticas — 2026-07-25 21:18 UTC
+_Generado por shadow_postmortem.py sobre 35448 resoluciones (PNL=+7588.26€)_
 
 ## Patrones causales activos
 
@@ -1233,14 +1233,14 @@ _Derivadas de los patrones aprendidos:_
 | ✅ GBM_LATE_15M_TARDIO#SOL#15min | 1181 | +0.037 | +242.96€ | 0 | 3 |
 | ✅ GBM_LATE_15M_TARDIO#XRP | 1428 | +0.173 | +920.46€ | 0 | 0 |
 | ✅ GBM_LATE_15M_TARDIO#XRP#15min | 1428 | +0.173 | +920.46€ | 0 | 11 |
-| ✅ GBM_LATE_5M | 663 | -0.037 | -4.63€ | 0 | 0 |
-| ✅ GBM_LATE_5M#5min | 663 | -0.037 | -4.63€ | 0 | 0 |
+| ✅ GBM_LATE_5M | 664 | -0.037 | -5.88€ | 0 | 0 |
+| ✅ GBM_LATE_5M#5min | 664 | -0.037 | -5.88€ | 0 | 0 |
 | ✅ GBM_LATE_5M#BTC | 163 | -0.027 | -10.89€ | 0 | 0 |
 | ✅ GBM_LATE_5M#BTC#5min | 163 | -0.027 | -10.89€ | 0 | 0 |
 | ✅ GBM_LATE_5M#ETH | 73 | -0.180 | -13.38€ | 0 | 0 |
 | ✅ GBM_LATE_5M#ETH#5min | 73 | -0.180 | -13.38€ | 0 | 0 |
-| ✅ GBM_LATE_5M#SOL | 164 | -0.115 | +4.02€ | 0 | 0 |
-| ✅ GBM_LATE_5M#SOL#5min | 164 | -0.115 | +4.02€ | 0 | 0 |
+| ✅ GBM_LATE_5M#SOL | 165 | -0.117 | +2.76€ | 0 | 0 |
+| ✅ GBM_LATE_5M#SOL#5min | 165 | -0.117 | +2.76€ | 0 | 0 |
 | ✅ GBM_LATE_5M#XRP | 263 | +0.047 | +15.63€ | 0 | 0 |
 | ✅ GBM_LATE_5M#XRP#5min | 263 | +0.047 | +15.63€ | 0 | 0 |
 | ✅ GBM_LATE_60M | 339 | -0.107 | +6.05€ | 3 | 1 |
@@ -1441,7 +1441,7 @@ _Derivadas de los patrones aprendidos:_
 **🟡 H-STREAK-COOLDOWN** — Cooldown tras 2 derrotas consecutivas (mismo subtype)
   - _Umbral_: n≥40 tras 2 losses y gap(IC_tras_win - IC_tras_2loss)≥0.05
   - _Acción_: Reducir stake (no desactivar) 1-2h tras 2 derrotas consecutivas en el mismo subtype
-  - _Estado_: tras_win IC=+0.113 n=21185 | tras_1loss IC=+0.082 n=14057 | tras_2loss IC=+0.053 n=5844/40 | gap=+0.060 (umbral 0.05)
+  - _Estado_: tras_win IC=+0.113 n=21185 | tras_1loss IC=+0.082 n=14058 | tras_2loss IC=+0.053 n=5844/40 | gap=+0.060 (umbral 0.05)
 
 **🟡 H-KALMAN** — Kalman filter para drift adaptativo
   - _Umbral_: n≥200 por subtipo para calibrar parámetros Q/R del KF
