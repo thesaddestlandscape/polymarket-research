@@ -1,5 +1,5 @@
-# Hipótesis automáticas — 2026-07-25 17:42 UTC
-_Generado por shadow_postmortem.py sobre 35185 resoluciones (PNL=+7559.97€)_
+# Hipótesis automáticas — 2026-07-25 17:49 UTC
+_Generado por shadow_postmortem.py sobre 35186 resoluciones (PNL=+7560.77€)_
 
 ## Patrones causales activos
 
@@ -20,7 +20,7 @@ _Generado por shadow_postmortem.py sobre 35185 resoluciones (PNL=+7559.97€)_
 
   - _Acción_: Kelly boost +0.98€ cuando `libro_spread` < 0.01 (IC base=+0.187)
 
-- **PATRÓN** `hora_utc` > `17.0` → IC=+0.175 (n=878)
+- **PATRÓN** `hora_utc` > `17.0` → IC=+0.175 (n=879)
   - _Por qué funciona_: hora tardía/noche → sesión US cerrada, menos participantes informados; señales más ruidosas
   - _Acción_: Kelly boost +0.88€ cuando `hora_utc` > 17.0 (IC base=+0.174)
 
@@ -32,7 +32,7 @@ _Generado por shadow_postmortem.py sobre 35185 resoluciones (PNL=+7559.97€)_
 
   - _Acción_: Kelly boost +1.00€ cuando `py_entrada` < 0.265 (IC base=+0.174)
 
-- **PATRÓN** `libro_spread` < `0.01` → IC=+0.175 (n=2697)
+- **PATRÓN** `libro_spread` < `0.01` → IC=+0.175 (n=2698)
 
   - _Acción_: Kelly boost +0.88€ cuando `libro_spread` < 0.01 (IC base=+0.174)
 
@@ -1160,10 +1160,10 @@ _Derivadas de los patrones aprendidos:_
 | ✅ BALLENAS_TARDIAS#15min | 40 | +0.405 | +5.42€ | 0 | 0 |
 | ✅ BALLENAS_TARDIAS#BTC | 40 | +0.405 | +5.42€ | 0 | 0 |
 | ✅ BALLENAS_TARDIAS#BTC#15min | 40 | +0.405 | +5.42€ | 0 | 0 |
-| ✅ FAVORITO_CONFIRMADO | 6268 | +0.180 | -8.48€ | 0 | 8 |
+| ✅ FAVORITO_CONFIRMADO | 6269 | +0.180 | -7.68€ | 0 | 8 |
 | ✅ FAVORITO_CONFIRMADO#15min | 4122 | +0.206 | +8.01€ | 0 | 0 |
 | ✅ FAVORITO_CONFIRMADO#240min | 276 | +0.047 | -27.62€ | 0 | 0 |
-| ✅ FAVORITO_CONFIRMADO#5min | 772 | +0.125 | -60.96€ | 0 | 0 |
+| ✅ FAVORITO_CONFIRMADO#5min | 773 | +0.126 | -60.16€ | 0 | 0 |
 | ✅ FAVORITO_CONFIRMADO#60min | 1098 | +0.155 | +72.09€ | 0 | 0 |
 | ✅ FAVORITO_CONFIRMADO#BTC | 1839 | +0.188 | +18.02€ | 0 | 0 |
 | ✅ FAVORITO_CONFIRMADO#BTC#15min | 1372 | +0.204 | -26.25€ | 0 | 7 |
@@ -1177,10 +1177,10 @@ _Derivadas de los patrones aprendidos:_
 | ✅ FAVORITO_CONFIRMADO#ETH#240min | 91 | -0.027 | -23.04€ | 0 | 0 |
 | ✅ FAVORITO_CONFIRMADO#ETH#5min | 393 | +0.125 | -33.09€ | 0 | 0 |
 | ✅ FAVORITO_CONFIRMADO#ETH#60min | 366 | +0.141 | +14.76€ | 0 | 9 |
-| ✅ FAVORITO_CONFIRMADO#SOL | 2179 | +0.186 | +18.02€ | 0 | 0 |
+| ✅ FAVORITO_CONFIRMADO#SOL | 2180 | +0.186 | +18.82€ | 0 | 0 |
 | ✅ FAVORITO_CONFIRMADO#SOL#15min | 1357 | +0.215 | +41.80€ | 0 | 9 |
 | ✅ FAVORITO_CONFIRMADO#SOL#240min | 92 | +0.128 | +8.77€ | 0 | 0 |
-| ✅ FAVORITO_CONFIRMADO#SOL#5min | 364 | +0.131 | -29.37€ | 0 | 0 |
+| ✅ FAVORITO_CONFIRMADO#SOL#5min | 365 | +0.132 | -28.58€ | 0 | 0 |
 | ✅ FAVORITO_CONFIRMADO#SOL#60min | 366 | +0.144 | -3.17€ | 0 | 9 |
 | ✅ FAVORITO_CONFIRMADO#XRP | 33 | +0.157 | +2.06€ | 0 | 0 |
 | ✅ FAVORITO_CONFIRMADO#XRP#15min | 27 | +0.121 | -1.39€ | 0 | 0 |
@@ -1438,7 +1438,7 @@ _Derivadas de los patrones aprendidos:_
 **🟡 H-STREAK-COOLDOWN** — Cooldown tras 2 derrotas consecutivas (mismo subtype)
   - _Umbral_: n≥40 tras 2 losses y gap(IC_tras_win - IC_tras_2loss)≥0.05
   - _Acción_: Reducir stake (no desactivar) 1-2h tras 2 derrotas consecutivas en el mismo subtype
-  - _Estado_: tras_win IC=+0.113 n=21036 | tras_1loss IC=+0.083 n=13944 | tras_2loss IC=+0.054 n=5784/40 | gap=+0.059 (umbral 0.05)
+  - _Estado_: tras_win IC=+0.113 n=21037 | tras_1loss IC=+0.083 n=13944 | tras_2loss IC=+0.054 n=5784/40 | gap=+0.059 (umbral 0.05)
 
 **🟡 H-KALMAN** — Kalman filter para drift adaptativo
   - _Umbral_: n≥200 por subtipo para calibrar parámetros Q/R del KF
@@ -1462,7 +1462,7 @@ _Derivadas de los patrones aprendidos:_
 **⏳ H-KELLY-HORA** — Kelly boost ×1.2 en horas top (15/17/19h UTC)
   - _Umbral_: n≥40 por hora con IC estable ≥+0.10 confirmado en forward
   - _Acción_: Añadir HORA_BOOST = {13: 1.2, 15: 1.2, 17: 1.2, 19: 1.2} en shadow_predict.py
-  - _Estado_: H=13h UTC: IC=+0.085 n=1570/40 PNL=+286.84€ | H=15h UTC: IC=+0.121 n=1513/40 PNL=+460.59€ | H=17h UTC: IC=+0.094 n=1467/40 PNL=+278.25€ | H=19h UTC: IC=+0.133 n=1345/40 PNL=+363.02€
+  - _Estado_: H=13h UTC: IC=+0.085 n=1570/40 PNL=+286.84€ | H=15h UTC: IC=+0.121 n=1513/40 PNL=+460.59€ | H=17h UTC: IC=+0.095 n=1468/40 PNL=+279.05€ | H=19h UTC: IC=+0.133 n=1345/40 PNL=+363.02€
 
 **⏳ H-60MIN-LIVE** — Estrategias 60min → umbral live (IC≥0.08 n≥40)
   - _Umbral_: IC≥0.08 y n≥40 en cualquier subtipo 60min
