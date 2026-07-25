@@ -270,8 +270,9 @@
   "rest_lo_min": 1.38,
   "rest_hi_min": 4.63,
   "deadline_ts": "2026-07-25T04:58:55.200000+00:00",
-  "estado": "esperando",
-  "ultimo_intento_ts": "2026-07-25T04:13:36+00:00",
-  "ultimo_motivo_veto": "sin_datos"
+  "estado": "resuelto_normal",
+  "ultimo_intento_ts": "2026-07-25T04:55:07+00:00",
+  "ultimo_motivo_veto": "observacion_habria_ejecutado",
+  "ts_resolucion": "2026-07-25T04:55:07+00:00"
  }
 }
