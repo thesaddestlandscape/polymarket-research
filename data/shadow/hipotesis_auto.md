@@ -1,5 +1,5 @@
-# Hipótesis automáticas — 2026-07-25 06:59 UTC
-_Generado por shadow_postmortem.py sobre 34314 resoluciones (PNL=+7468.31€)_
+# Hipótesis automáticas — 2026-07-25 07:02 UTC
+_Generado por shadow_postmortem.py sobre 34316 resoluciones (PNL=+7468.48€)_
 
 ## Patrones causales activos
 
@@ -28,7 +28,7 @@ _Generado por shadow_postmortem.py sobre 34314 resoluciones (PNL=+7468.31€)_
 
   - _Acción_: Kelly boost +1.00€ cuando `py_entrada` < 0.265 (IC base=+0.177)
 
-- **PATRÓN** `libro_spread` < `0.01` → IC=+0.178 (n=2649)
+- **PATRÓN** `libro_spread` < `0.01` → IC=+0.178 (n=2650)
 
   - _Acción_: Kelly boost +0.89€ cuando `libro_spread` < 0.01 (IC base=+0.177)
 
@@ -1172,10 +1172,10 @@ _Derivadas de los patrones aprendidos:_
 | ✅ BALLENAS_TARDIAS#15min | 38 | +0.400 | +5.08€ | 0 | 0 |
 | ✅ BALLENAS_TARDIAS#BTC | 38 | +0.400 | +5.08€ | 0 | 0 |
 | ✅ BALLENAS_TARDIAS#BTC#15min | 38 | +0.400 | +5.08€ | 0 | 0 |
-| ✅ FAVORITO_CONFIRMADO | 6112 | +0.182 | +15.16€ | 0 | 7 |
+| ✅ FAVORITO_CONFIRMADO | 6113 | +0.182 | +15.84€ | 0 | 7 |
 | ✅ FAVORITO_CONFIRMADO#15min | 4019 | +0.208 | +25.25€ | 0 | 0 |
 | ✅ FAVORITO_CONFIRMADO#240min | 267 | +0.061 | -20.42€ | 0 | 0 |
-| ✅ FAVORITO_CONFIRMADO#5min | 761 | +0.122 | -65.57€ | 0 | 0 |
+| ✅ FAVORITO_CONFIRMADO#5min | 762 | +0.123 | -64.90€ | 0 | 0 |
 | ✅ FAVORITO_CONFIRMADO#60min | 1065 | +0.158 | +75.90€ | 0 | 0 |
 | ✅ FAVORITO_CONFIRMADO#BTC | 1790 | +0.193 | +32.24€ | 0 | 0 |
 | ✅ FAVORITO_CONFIRMADO#BTC#15min | 1337 | +0.207 | -16.32€ | 0 | 7 |
@@ -1189,10 +1189,10 @@ _Derivadas de los patrones aprendidos:_
 | ✅ FAVORITO_CONFIRMADO#ETH#240min | 88 | -0.011 | -20.49€ | 0 | 0 |
 | ✅ FAVORITO_CONFIRMADO#ETH#5min | 388 | +0.123 | -34.97€ | 0 | 0 |
 | ✅ FAVORITO_CONFIRMADO#ETH#60min | 355 | +0.141 | +14.07€ | 0 | 9 |
-| ✅ FAVORITO_CONFIRMADO#SOL | 2128 | +0.187 | +25.35€ | 0 | 0 |
+| ✅ FAVORITO_CONFIRMADO#SOL | 2129 | +0.188 | +26.03€ | 0 | 0 |
 | ✅ FAVORITO_CONFIRMADO#SOL#15min | 1326 | +0.217 | +47.00€ | 0 | 8 |
 | ✅ FAVORITO_CONFIRMADO#SOL#240min | 89 | +0.137 | +10.52€ | 0 | 0 |
-| ✅ FAVORITO_CONFIRMADO#SOL#5min | 358 | +0.128 | -32.11€ | 0 | 0 |
+| ✅ FAVORITO_CONFIRMADO#SOL#5min | 359 | +0.129 | -31.44€ | 0 | 0 |
 | ✅ FAVORITO_CONFIRMADO#SOL#60min | 355 | +0.147 | -0.05€ | 0 | 9 |
 | ✅ FAVORITO_CONFIRMADO#XRP | 33 | +0.157 | +2.06€ | 0 | 0 |
 | ✅ FAVORITO_CONFIRMADO#XRP#15min | 27 | +0.121 | -1.39€ | 0 | 0 |
@@ -1242,14 +1242,14 @@ _Derivadas de los patrones aprendidos:_
 | ✅ GBM_LATE_15M_TARDIO#SOL#15min | 1131 | +0.041 | +248.58€ | 1 | 3 |
 | ✅ GBM_LATE_15M_TARDIO#XRP | 1378 | +0.178 | +917.71€ | 0 | 0 |
 | ✅ GBM_LATE_15M_TARDIO#XRP#15min | 1378 | +0.178 | +917.71€ | 0 | 9 |
-| ✅ GBM_LATE_5M | 603 | -0.029 | +0.53€ | 0 | 0 |
-| ✅ GBM_LATE_5M#5min | 603 | -0.029 | +0.53€ | 0 | 0 |
+| ✅ GBM_LATE_5M | 604 | -0.030 | +0.02€ | 0 | 0 |
+| ✅ GBM_LATE_5M#5min | 604 | -0.030 | +0.02€ | 0 | 0 |
 | ✅ GBM_LATE_5M#BTC | 157 | -0.016 | -9.79€ | 0 | 0 |
 | ✅ GBM_LATE_5M#BTC#5min | 157 | -0.016 | -9.79€ | 0 | 0 |
 | ✅ GBM_LATE_5M#ETH | 69 | -0.176 | -13.61€ | 0 | 0 |
 | ✅ GBM_LATE_5M#ETH#5min | 69 | -0.176 | -13.61€ | 0 | 0 |
-| ✅ GBM_LATE_5M#SOL | 120 | -0.139 | +6.25€ | 0 | 0 |
-| ✅ GBM_LATE_5M#SOL#5min | 120 | -0.139 | +6.25€ | 0 | 0 |
+| ✅ GBM_LATE_5M#SOL | 121 | -0.142 | +5.74€ | 0 | 0 |
+| ✅ GBM_LATE_5M#SOL#5min | 121 | -0.142 | +5.74€ | 0 | 0 |
 | ✅ GBM_LATE_5M#XRP | 257 | +0.056 | +17.69€ | 0 | 0 |
 | ✅ GBM_LATE_5M#XRP#5min | 257 | +0.056 | +17.69€ | 0 | 0 |
 | ✅ GBM_LATE_60M | 339 | -0.107 | +6.05€ | 3 | 1 |
@@ -1450,7 +1450,7 @@ _Derivadas de los patrones aprendidos:_
 **🟡 H-STREAK-COOLDOWN** — Cooldown tras 2 derrotas consecutivas (mismo subtype)
   - _Umbral_: n≥40 tras 2 losses y gap(IC_tras_win - IC_tras_2loss)≥0.05
   - _Acción_: Reducir stake (no desactivar) 1-2h tras 2 derrotas consecutivas en el mismo subtype
-  - _Estado_: tras_win IC=+0.115 n=20533 | tras_1loss IC=+0.082 n=13576 | tras_2loss IC=+0.053 n=5644/40 | gap=+0.062 (umbral 0.05)
+  - _Estado_: tras_win IC=+0.115 n=20533 | tras_1loss IC=+0.081 n=13578 | tras_2loss IC=+0.053 n=5644/40 | gap=+0.062 (umbral 0.05)
 
 **🟡 H-KALMAN** — Kalman filter para drift adaptativo
   - _Umbral_: n≥200 por subtipo para calibrar parámetros Q/R del KF
