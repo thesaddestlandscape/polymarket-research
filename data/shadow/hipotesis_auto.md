@@ -1,5 +1,5 @@
-# Hipótesis automáticas — 2026-07-25 13:40 UTC
-_Generado por shadow_postmortem.py sobre 34839 resoluciones (PNL=+7581.50€)_
+# Hipótesis automáticas — 2026-07-25 13:46 UTC
+_Generado por shadow_postmortem.py sobre 34840 resoluciones (PNL=+7583.26€)_
 
 ## Patrones causales activos
 
@@ -1254,12 +1254,12 @@ _Derivadas de los patrones aprendidos:_
 | ✅ GBM_LATE_15M_TARDIO#SOL#15min | 1153 | +0.038 | +244.08€ | 1 | 3 |
 | ✅ GBM_LATE_15M_TARDIO#XRP | 1404 | +0.175 | +917.12€ | 0 | 0 |
 | ✅ GBM_LATE_15M_TARDIO#XRP#15min | 1404 | +0.175 | +917.12€ | 0 | 10 |
-| ✅ GBM_LATE_5M | 626 | -0.032 | -1.59€ | 0 | 0 |
-| ✅ GBM_LATE_5M#5min | 626 | -0.032 | -1.59€ | 0 | 0 |
+| ✅ GBM_LATE_5M | 627 | -0.031 | +0.17€ | 0 | 0 |
+| ✅ GBM_LATE_5M#5min | 627 | -0.031 | +0.17€ | 0 | 0 |
 | ✅ GBM_LATE_5M#BTC | 160 | -0.018 | -9.36€ | 0 | 0 |
 | ✅ GBM_LATE_5M#BTC#5min | 160 | -0.018 | -9.36€ | 0 | 0 |
-| ✅ GBM_LATE_5M#ETH | 70 | -0.181 | -14.12€ | 0 | 0 |
-| ✅ GBM_LATE_5M#ETH#5min | 70 | -0.181 | -14.12€ | 0 | 0 |
+| ✅ GBM_LATE_5M#ETH | 71 | -0.171 | -12.36€ | 0 | 0 |
+| ✅ GBM_LATE_5M#ETH#5min | 71 | -0.171 | -12.36€ | 0 | 0 |
 | ✅ GBM_LATE_5M#SOL | 139 | -0.131 | +4.21€ | 0 | 0 |
 | ✅ GBM_LATE_5M#SOL#5min | 139 | -0.131 | +4.21€ | 0 | 0 |
 | ✅ GBM_LATE_5M#XRP | 257 | +0.056 | +17.69€ | 0 | 0 |
@@ -1462,7 +1462,7 @@ _Derivadas de los patrones aprendidos:_
 **🟡 H-STREAK-COOLDOWN** — Cooldown tras 2 derrotas consecutivas (mismo subtype)
   - _Umbral_: n≥40 tras 2 losses y gap(IC_tras_win - IC_tras_2loss)≥0.05
   - _Acción_: Reducir stake (no desactivar) 1-2h tras 2 derrotas consecutivas en el mismo subtype
-  - _Estado_: tras_win IC=+0.114 n=20863 | tras_1loss IC=+0.082 n=13771 | tras_2loss IC=+0.053 n=5712/40 | gap=+0.061 (umbral 0.05)
+  - _Estado_: tras_win IC=+0.114 n=20863 | tras_1loss IC=+0.082 n=13772 | tras_2loss IC=+0.053 n=5713/40 | gap=+0.061 (umbral 0.05)
 
 **🟡 H-KALMAN** — Kalman filter para drift adaptativo
   - _Umbral_: n≥200 por subtipo para calibrar parámetros Q/R del KF
@@ -1486,7 +1486,7 @@ _Derivadas de los patrones aprendidos:_
 **⏳ H-KELLY-HORA** — Kelly boost ×1.2 en horas top (15/17/19h UTC)
   - _Umbral_: n≥40 por hora con IC estable ≥+0.10 confirmado en forward
   - _Acción_: Añadir HORA_BOOST = {13: 1.2, 15: 1.2, 17: 1.2, 19: 1.2} en shadow_predict.py
-  - _Estado_: H=13h UTC: IC=+0.088 n=1553/40 PNL=+295.50€ | H=15h UTC: IC=+0.145 n=1431/40 PNL=+537.39€ | H=17h UTC: IC=+0.095 n=1414/40 PNL=+271.23€ | H=19h UTC: IC=+0.133 n=1345/40 PNL=+363.02€
+  - _Estado_: H=13h UTC: IC=+0.088 n=1554/40 PNL=+297.26€ | H=15h UTC: IC=+0.145 n=1431/40 PNL=+537.39€ | H=17h UTC: IC=+0.095 n=1414/40 PNL=+271.23€ | H=19h UTC: IC=+0.133 n=1345/40 PNL=+363.02€
 
 **⏳ H-60MIN-LIVE** — Estrategias 60min → umbral live (IC≥0.08 n≥40)
   - _Umbral_: IC≥0.08 y n≥40 en cualquier subtipo 60min
