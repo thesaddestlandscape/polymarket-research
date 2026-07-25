@@ -1,5 +1,5 @@
-# Hipótesis automáticas — 2026-07-25 12:22 UTC
-_Generado por shadow_postmortem.py sobre 34740 resoluciones (PNL=+7580.46€)_
+# Hipótesis automáticas — 2026-07-25 12:28 UTC
+_Generado por shadow_postmortem.py sobre 34742 resoluciones (PNL=+7582.12€)_
 
 ## Patrones causales activos
 
@@ -169,7 +169,7 @@ _Generado por shadow_postmortem.py sobre 34740 resoluciones (PNL=+7580.46€)_
 
   - _Acción_: Kelly boost +1.00€ cuando `libro_liquidez` > 2368.7348 (IC base=+0.224)
 
-- **PATRÓN** `hora_utc` < `17.0` → IC=+0.221 (n=543)
+- **PATRÓN** `hora_utc` < `17.0` → IC=+0.222 (n=544)
   - _Por qué funciona_: hora temprana → mercados cripto menos líquidos, spreads más amplios; edge real menor
   - _Acción_: Kelly boost +1.00€ cuando `hora_utc` < 17.0 (IC base=+0.212)
 
@@ -1170,22 +1170,22 @@ _Derivadas de los patrones aprendidos:_
 
 | Estrategia | n | IC | PNL | Filtros | Patrones |
 |---|---|---|---|---|---|
-| ✅ BALLENAS_CONFIRMADAS_15M | 1090 | +0.130 | +52.61€ | 0 | 0 |
-| ✅ BALLENAS_CONFIRMADAS_15M#15min | 1090 | +0.130 | +52.61€ | 0 | 0 |
+| ✅ BALLENAS_CONFIRMADAS_15M | 1091 | +0.130 | +53.06€ | 0 | 0 |
+| ✅ BALLENAS_CONFIRMADAS_15M#15min | 1091 | +0.130 | +53.06€ | 0 | 0 |
 | ✅ BALLENAS_CONFIRMADAS_15M#DOGE | 18 | +0.090 | +0.57€ | 0 | 0 |
 | ✅ BALLENAS_CONFIRMADAS_15M#DOGE#15min | 18 | +0.090 | +0.57€ | 0 | 0 |
 | ✅ BALLENAS_CONFIRMADAS_15M#ETH | 417 | +0.142 | +18.34€ | 0 | 0 |
 | ✅ BALLENAS_CONFIRMADAS_15M#ETH#15min | 417 | +0.142 | +18.34€ | 0 | 0 |
-| ✅ BALLENAS_CONFIRMADAS_15M#SOL | 411 | +0.142 | +13.10€ | 0 | 0 |
-| ✅ BALLENAS_CONFIRMADAS_15M#SOL#15min | 411 | +0.142 | +13.10€ | 0 | 0 |
+| ✅ BALLENAS_CONFIRMADAS_15M#SOL | 412 | +0.142 | +13.55€ | 0 | 0 |
+| ✅ BALLENAS_CONFIRMADAS_15M#SOL#15min | 412 | +0.142 | +13.55€ | 0 | 0 |
 | ✅ BALLENAS_CONFIRMADAS_15M#XRP | 244 | +0.089 | +20.60€ | 0 | 0 |
 | ✅ BALLENAS_CONFIRMADAS_15M#XRP#15min | 244 | +0.089 | +20.60€ | 0 | 0 |
 | ✅ BALLENAS_TARDIAS | 40 | +0.405 | +5.42€ | 0 | 0 |
 | ✅ BALLENAS_TARDIAS#15min | 40 | +0.405 | +5.42€ | 0 | 0 |
 | ✅ BALLENAS_TARDIAS#BTC | 40 | +0.405 | +5.42€ | 0 | 0 |
 | ✅ BALLENAS_TARDIAS#BTC#15min | 40 | +0.405 | +5.42€ | 0 | 0 |
-| ✅ FAVORITO_CONFIRMADO | 6203 | +0.182 | +15.35€ | 0 | 7 |
-| ✅ FAVORITO_CONFIRMADO#15min | 4079 | +0.209 | +38.33€ | 0 | 0 |
+| ✅ FAVORITO_CONFIRMADO | 6204 | +0.182 | +16.56€ | 0 | 7 |
+| ✅ FAVORITO_CONFIRMADO#15min | 4080 | +0.209 | +39.54€ | 0 | 0 |
 | ✅ FAVORITO_CONFIRMADO#240min | 273 | +0.049 | -28.17€ | 0 | 0 |
 | ✅ FAVORITO_CONFIRMADO#5min | 768 | +0.123 | -64.76€ | 0 | 0 |
 | ✅ FAVORITO_CONFIRMADO#60min | 1083 | +0.155 | +69.94€ | 0 | 0 |
@@ -1201,8 +1201,8 @@ _Derivadas de los patrones aprendidos:_
 | ✅ FAVORITO_CONFIRMADO#ETH#240min | 90 | -0.022 | -22.53€ | 0 | 0 |
 | ✅ FAVORITO_CONFIRMADO#ETH#5min | 391 | +0.123 | -34.94€ | 0 | 0 |
 | ✅ FAVORITO_CONFIRMADO#ETH#60min | 361 | +0.139 | +12.31€ | 0 | 10 |
-| ✅ FAVORITO_CONFIRMADO#SOL | 2158 | +0.187 | +22.89€ | 0 | 0 |
-| ✅ FAVORITO_CONFIRMADO#SOL#15min | 1344 | +0.218 | +49.34€ | 0 | 7 |
+| ✅ FAVORITO_CONFIRMADO#SOL | 2159 | +0.187 | +24.10€ | 0 | 0 |
+| ✅ FAVORITO_CONFIRMADO#SOL#15min | 1345 | +0.218 | +50.55€ | 0 | 7 |
 | ✅ FAVORITO_CONFIRMADO#SOL#240min | 91 | +0.124 | +7.21€ | 0 | 0 |
 | ✅ FAVORITO_CONFIRMADO#SOL#5min | 362 | +0.129 | -31.33€ | 0 | 0 |
 | ✅ FAVORITO_CONFIRMADO#SOL#60min | 361 | +0.145 | -2.32€ | 0 | 10 |
@@ -1462,7 +1462,7 @@ _Derivadas de los patrones aprendidos:_
 **🟡 H-STREAK-COOLDOWN** — Cooldown tras 2 derrotas consecutivas (mismo subtype)
   - _Umbral_: n≥40 tras 2 losses y gap(IC_tras_win - IC_tras_2loss)≥0.05
   - _Acción_: Reducir stake (no desactivar) 1-2h tras 2 derrotas consecutivas en el mismo subtype
-  - _Estado_: tras_win IC=+0.115 n=20807 | tras_1loss IC=+0.082 n=13728 | tras_2loss IC=+0.054 n=5698/40 | gap=+0.061 (umbral 0.05)
+  - _Estado_: tras_win IC=+0.115 n=20809 | tras_1loss IC=+0.082 n=13728 | tras_2loss IC=+0.054 n=5698/40 | gap=+0.061 (umbral 0.05)
 
 **🟡 H-KALMAN** — Kalman filter para drift adaptativo
   - _Umbral_: n≥200 por subtipo para calibrar parámetros Q/R del KF
@@ -1481,7 +1481,7 @@ _Derivadas de los patrones aprendidos:_
 **⏳ H-CROSS-ASSET** — Cross-asset confirmation GBM+OF BUY_NO
   - _Umbral_: n_overlaps≥20 y IC_overlap > IC_base + 0.05
   - _Acción_: Cambiar _aplicar_kelly_compuesto: match por activo, no market_id
-  - _Estado_: n_overlaps=39, boost estimado=-0.045. Necesita 0 más y boost>0.05
+  - _Estado_: n_overlaps=39, boost estimado=-0.046. Necesita 0 más y boost>0.05
 
 **⏳ H-KELLY-HORA** — Kelly boost ×1.2 en horas top (15/17/19h UTC)
   - _Umbral_: n≥40 por hora con IC estable ≥+0.10 confirmado en forward
