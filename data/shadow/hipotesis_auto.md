@@ -1,5 +1,5 @@
-# Hipótesis automáticas — 2026-07-26 01:47 UTC
-_Generado por shadow_postmortem.py sobre 35800 resoluciones (PNL=+7593.16€)_
+# Hipótesis automáticas — 2026-07-26 01:50 UTC
+_Generado por shadow_postmortem.py sobre 35801 resoluciones (PNL=+7593.64€)_
 
 ## Patrones causales activos
 
@@ -690,7 +690,7 @@ _Generado por shadow_postmortem.py sobre 35800 resoluciones (PNL=+7593.16€)_
 - **FILTRO** `hora_utc` > `4.0` → IC=-0.122 (n=35)
   - _Por qué funciona_: hora tardía/noche → sesión US cerrada, menos participantes informados; señales más ruidosas
   - _Acción_: SKIP cuando `hora_utc` > 4.0
-  - _Potencial_: sin este filtro IC_bueno=+0.031 (n=145)
+  - _Potencial_: sin este filtro IC_bueno=+0.034 (n=146)
 
 ### ORDER_FLOW_5M#BNB#5min
 - **PATRÓN** `total_vol_5m` < `197.886` → IC=+0.186 (n=33)
@@ -1244,16 +1244,16 @@ _Derivadas de los patrones aprendidos:_
 | ✅ LEADLAG_BTC_XRP_15M#15min | 288 | +0.010 | +9.63€ | 0 | 0 |
 | ✅ LEADLAG_BTC_XRP_15M#XRP | 288 | +0.010 | +9.63€ | 0 | 0 |
 | ✅ LEADLAG_BTC_XRP_15M#XRP#15min | 288 | +0.010 | +9.63€ | 1 | 0 |
-| ✅ ORDER_FLOW_5M | 1676 | +0.010 | +8.93€ | 1 | 0 |
-| ✅ ORDER_FLOW_5M#5min | 1540 | +0.006 | -3.66€ | 0 | 0 |
+| ✅ ORDER_FLOW_5M | 1677 | +0.010 | +9.41€ | 1 | 0 |
+| ✅ ORDER_FLOW_5M#5min | 1541 | +0.006 | -3.18€ | 0 | 0 |
 | ✅ ORDER_FLOW_5M#BNB | 215 | +0.030 | +3.61€ | 0 | 0 |
 | ✅ ORDER_FLOW_5M#BNB#5min | 215 | +0.030 | +3.61€ | 0 | 1 |
 | ✅ ORDER_FLOW_5M#BTC | 291 | -0.019 | -5.24€ | 0 | 0 |
 | ✅ ORDER_FLOW_5M#BTC#5min | 291 | -0.019 | -5.24€ | 1 | 0 |
 | ✅ ORDER_FLOW_5M#DOGE | 226 | +0.000 | -2.22€ | 0 | 0 |
 | ✅ ORDER_FLOW_5M#DOGE#5min | 226 | +0.000 | -2.22€ | 1 | 0 |
-| ✅ ORDER_FLOW_5M#ETH | 267 | -0.017 | -8.05€ | 0 | 0 |
-| ✅ ORDER_FLOW_5M#ETH#5min | 267 | -0.017 | -8.05€ | 0 | 0 |
+| ✅ ORDER_FLOW_5M#ETH | 268 | -0.015 | -7.57€ | 0 | 0 |
+| ✅ ORDER_FLOW_5M#ETH#5min | 268 | -0.015 | -7.57€ | 0 | 0 |
 | ✅ ORDER_FLOW_5M#SOL | 330 | +0.042 | +13.71€ | 0 | 0 |
 | ✅ ORDER_FLOW_5M#SOL#5min | 330 | +0.042 | +13.71€ | 0 | 0 |
 | ✅ ORDER_FLOW_5M#XRP | 211 | -0.007 | -5.47€ | 0 | 0 |
@@ -1422,7 +1422,7 @@ _Derivadas de los patrones aprendidos:_
 **🟡 H-STREAK-COOLDOWN** — Cooldown tras 2 derrotas consecutivas (mismo subtype)
   - _Umbral_: n≥40 tras 2 losses y gap(IC_tras_win - IC_tras_2loss)≥0.05
   - _Acción_: Reducir stake (no desactivar) 1-2h tras 2 derrotas consecutivas en el mismo subtype
-  - _Estado_: tras_win IC=+0.113 n=21380 | tras_1loss IC=+0.081 n=14213 | tras_2loss IC=+0.053 n=5916/40 | gap=+0.060 (umbral 0.05)
+  - _Estado_: tras_win IC=+0.113 n=21380 | tras_1loss IC=+0.081 n=14214 | tras_2loss IC=+0.053 n=5917/40 | gap=+0.060 (umbral 0.05)
 
 **🟡 H-KALMAN** — Kalman filter para drift adaptativo
   - _Umbral_: n≥200 por subtipo para calibrar parámetros Q/R del KF
