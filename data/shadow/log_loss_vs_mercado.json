@@ -1,10 +1,10 @@
 {
   "estrategias": {
     "BALLENAS_CONFIRMADAS_15M": {
-      "n": 1233,
-      "log_loss_modelo": 0.6723,
-      "log_loss_mercado": 0.6342,
-      "gap": -0.038,
+      "n": 1238,
+      "log_loss_modelo": 0.6717,
+      "log_loss_mercado": 0.6344,
+      "gap": -0.0372,
       "peor_que_mercado": true
     },
     "BALLENAS_TARDIAS": {
@@ -15,31 +15,31 @@
       "peor_que_mercado": true
     },
     "FAVORITO_CONFIRMADO": {
-      "n": 6454,
-      "log_loss_modelo": 0.6051,
-      "log_loss_mercado": 0.6004,
-      "gap": -0.0048,
+      "n": 6469,
+      "log_loss_modelo": 0.6049,
+      "log_loss_mercado": 0.6002,
+      "gap": -0.0047,
       "peor_que_mercado": true
     },
     "FAVORITO_CONFIRMADO_SOL_ALTACONVICCION": {
-      "n": 379,
-      "log_loss_modelo": 0.4858,
-      "log_loss_mercado": 0.4807,
-      "gap": -0.0051,
+      "n": 381,
+      "log_loss_modelo": 0.4845,
+      "log_loss_mercado": 0.4798,
+      "gap": -0.0046,
       "peor_que_mercado": true
     },
     "GBM_LATE_15M": {
-      "n": 7769,
-      "log_loss_modelo": 0.6952,
+      "n": 7785,
+      "log_loss_modelo": 0.6969,
       "log_loss_mercado": 0.672,
-      "gap": -0.0233,
+      "gap": -0.0249,
       "peor_que_mercado": true
     },
     "GBM_LATE_15M_ESPACIO_ATR": {
-      "n": 4981,
-      "log_loss_modelo": 0.6901,
-      "log_loss_mercado": 0.6569,
-      "gap": -0.0332,
+      "n": 4997,
+      "log_loss_modelo": 0.6928,
+      "log_loss_mercado": 0.6571,
+      "gap": -0.0357,
       "peor_que_mercado": true
     },
     "GBM_LATE_15M_PYCONFIRMADO": {
@@ -50,17 +50,17 @@
       "peor_que_mercado": true
     },
     "GBM_LATE_15M_TARDIO": {
-      "n": 4984,
-      "log_loss_modelo": 0.7068,
+      "n": 4999,
+      "log_loss_modelo": 0.7094,
       "log_loss_mercado": 0.65,
-      "gap": -0.0568,
+      "gap": -0.0594,
       "peor_que_mercado": true
     },
     "GBM_LATE_5M": {
-      "n": 667,
-      "log_loss_modelo": 0.9384,
-      "log_loss_mercado": 0.6248,
-      "gap": -0.3136,
+      "n": 670,
+      "log_loss_modelo": 0.9342,
+      "log_loss_mercado": 0.6262,
+      "gap": -0.308,
       "peor_que_mercado": true
     },
     "GBM_LATE_60M": {
