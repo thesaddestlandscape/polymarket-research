@@ -1,5 +1,5 @@
-# Hipótesis automáticas — 2026-07-26 16:11 UTC
-_Generado por shadow_postmortem.py sobre 36865 resoluciones (PNL=+7735.70€)_
+# Hipótesis automáticas — 2026-07-26 16:19 UTC
+_Generado por shadow_postmortem.py sobre 36867 resoluciones (PNL=+7734.07€)_
 
 ## Patrones causales activos
 
@@ -1104,7 +1104,7 @@ _Generado por shadow_postmortem.py sobre 36865 resoluciones (PNL=+7735.70€)_
 
 - **PATRÓN** `T_h` > `146.1132` → IC=+0.428 (n=81)
 
-  - _Acción_: Kelly boost +1.00€ cuando `T_h` > 146.1132 (IC base=+0.336)
+  - _Acción_: Kelly boost +1.00€ cuando `T_h` > 146.1132 (IC base=+0.333)
 
 ### WEEKLY_PRICE#BTC
 - **PATRÓN** `T_h` > `144.8515` → IC=+0.318 (n=20)
@@ -1116,9 +1116,9 @@ _Generado por shadow_postmortem.py sobre 36865 resoluciones (PNL=+7735.70€)_
   - _Acción_: Kelly boost +1.00€ cuando `pct_dist` |x|≤ 0.836 (IC base=+0.263)
 
 ### WEEKLY_PRICE#ETH
-- **PATRÓN** `T_h` > `111.9965` → IC=+0.333 (n=52)
+- **PATRÓN** `T_h` > `111.9965` → IC=+0.318 (n=53)
 
-  - _Acción_: Kelly boost +1.00€ cuando `T_h` > 111.9965 (IC base=+0.272)
+  - _Acción_: Kelly boost +1.00€ cuando `T_h` > 111.9965 (IC base=+0.263)
 
 ### WEEKLY_PRICE#SOL
 - **PATRÓN** `T_h` < `146.1426` → IC=+0.398 (n=96)
@@ -1142,12 +1142,12 @@ _Derivadas de los patrones aprendidos:_
 
 | Estrategia | n | IC | PNL | Filtros | Patrones |
 |---|---|---|---|---|---|
-| ✅ BALLENAS_CONFIRMADAS_15M | 1282 | +0.113 | +47.96€ | 0 | 0 |
-| ✅ BALLENAS_CONFIRMADAS_15M#15min | 1282 | +0.113 | +47.96€ | 0 | 0 |
+| ✅ BALLENAS_CONFIRMADAS_15M | 1283 | +0.113 | +48.37€ | 0 | 0 |
+| ✅ BALLENAS_CONFIRMADAS_15M#15min | 1283 | +0.113 | +48.37€ | 0 | 0 |
 | ✅ BALLENAS_CONFIRMADAS_15M#DOGE | 18 | +0.090 | +0.57€ | 0 | 0 |
 | ✅ BALLENAS_CONFIRMADAS_15M#DOGE#15min | 18 | +0.090 | +0.57€ | 0 | 0 |
-| ✅ BALLENAS_CONFIRMADAS_15M#ETH | 497 | +0.111 | +7.62€ | 0 | 0 |
-| ✅ BALLENAS_CONFIRMADAS_15M#ETH#15min | 497 | +0.111 | +7.62€ | 0 | 0 |
+| ✅ BALLENAS_CONFIRMADAS_15M#ETH | 498 | +0.112 | +8.03€ | 0 | 0 |
+| ✅ BALLENAS_CONFIRMADAS_15M#ETH#15min | 498 | +0.112 | +8.03€ | 0 | 0 |
 | ✅ BALLENAS_CONFIRMADAS_15M#SOL | 475 | +0.135 | +19.82€ | 0 | 0 |
 | ✅ BALLENAS_CONFIRMADAS_15M#SOL#15min | 475 | +0.135 | +19.82€ | 0 | 0 |
 | ✅ BALLENAS_CONFIRMADAS_15M#XRP | 292 | +0.078 | +19.96€ | 0 | 0 |
@@ -1386,9 +1386,9 @@ _Derivadas de los patrones aprendidos:_
 | ✅ UPDOWN_OU_5M#SOL#5min | 13 | -0.065 | -1.58€ | 0 | 0 |
 | ✅ UPDOWN_OU_5M#XRP | 13 | -0.108 | -2.67€ | 0 | 0 |
 | ✅ UPDOWN_OU_5M#XRP#5min | 13 | -0.108 | -2.67€ | 0 | 0 |
-| ✅ WEEKLY_PRICE | 406 | +0.218 | +94.20€ | 1 | 1 |
+| ✅ WEEKLY_PRICE | 407 | +0.216 | +92.16€ | 1 | 1 |
 | ✅ WEEKLY_PRICE#BTC | 116 | +0.144 | -10.31€ | 0 | 2 |
-| ✅ WEEKLY_PRICE#ETH | 115 | +0.167 | -3.63€ | 0 | 1 |
+| ✅ WEEKLY_PRICE#ETH | 116 | +0.161 | -5.67€ | 0 | 1 |
 | ✅ WEEKLY_PRICE#SOL | 175 | +0.297 | +108.13€ | 0 | 2 |
 ## Hipótesis pendientes — tracking automático
 
@@ -1429,12 +1429,12 @@ _Derivadas de los patrones aprendidos:_
 **🟡 H-WEEKLY** — Predicciones semanales de precio por par
   - _Umbral_: n≥15 por par con IC≥+0.05
   - _Acción_: Si confirma IC≥+0.10 n≥15 en SOL → considerar live semanal
-  - _Estado_: ETH: n=115/15 IC=+0.167 PNL=-3.63€ | BTC: n=116/15 IC=+0.144 PNL=-10.31€ | SOL: n=175/15 IC=+0.297 PNL=+108.13€
+  - _Estado_: ETH: n=116/15 IC=+0.161 PNL=-5.67€ | BTC: n=116/15 IC=+0.144 PNL=-10.31€ | SOL: n=175/15 IC=+0.297 PNL=+108.13€
 
 **🟡 H-STREAK-COOLDOWN** — Cooldown tras 2 derrotas consecutivas (mismo subtype)
   - _Umbral_: n≥40 tras 2 losses y gap(IC_tras_win - IC_tras_2loss)≥0.05
   - _Acción_: Reducir stake (no desactivar) 1-2h tras 2 derrotas consecutivas en el mismo subtype
-  - _Estado_: tras_win IC=+0.113 n=21991 | tras_1loss IC=+0.079 n=14667 | tras_2loss IC=+0.051 n=6137/40 | gap=+0.062 (umbral 0.05)
+  - _Estado_: tras_win IC=+0.113 n=21991 | tras_1loss IC=+0.079 n=14669 | tras_2loss IC=+0.051 n=6138/40 | gap=+0.062 (umbral 0.05)
 
 **🟡 H-KALMAN** — Kalman filter para drift adaptativo
   - _Umbral_: n≥200 por subtipo para calibrar parámetros Q/R del KF
@@ -1525,8 +1525,8 @@ _Derivadas de los patrones aprendidos:_
   - _Hipótesis_: Split por dirección en WEEKLY_PRICE: BUY_NO n=38 WR=66% IC=+0.316 vs BUY_YES n=19 WR=21% IC=-0.579. El mercado semanal de precios tiende a NO cumplir el target → BUY_NO tiene edge estructural fuerte. PNL negativo por apuestas pequeñas y slippage, no por dirección. Candidata live si se confirma con n≥50.
   - _Umbral_: n≥50 y IC>+0.10
   - _Acción_: Si IC>+0.10 con n≥50 → activar WEEKLY_PRICE BUY_NO en live (filtrar BUY_YES). Si IC cae <+0.05 con n≥50 → el edge se ha erosionado.
-  - _Estado_: SEÑAL POSITIVA confirmada: IC=+0.308 > 0.1 con n=336 PNL=+108.73€
-  - _Datos_: n=336 IC=+0.308 PNL=+108.73€
+  - _Estado_: SEÑAL POSITIVA confirmada: IC=+0.305 > 0.1 con n=337 PNL=+106.69€
+  - _Datos_: n=337 IC=+0.305 PNL=+106.69€
 
 **🔶 H-CUSTOM-GBM-17H-BTC** — GBM BTC a las 17h UTC — ¿edge real?
   - _Hipótesis_: La hora 17h UTC aparece como la mejor en historial. ¿Se confirma solo en BTC?
@@ -1705,15 +1705,15 @@ _Derivadas de los patrones aprendidos:_
   - _Hipótesis_: Inspirado en el paper de Fornero (2023, 43 Jornadas SADAF) sobre astrología financiera: 5 estudios peer-review (Dichev & Janes 2003, Yuan et al. 2006, Keef & Khaled 2011, Floros & Tan 2013, Liu & Tseng 2009) en 25-62 mercados bursátiles encuentran rendimientos 5-10%/año más bajos cerca de luna llena que de luna nueva. El propio paper es escéptico de la astrología como tal, pero el mecanismo que documenta no es místico: sesgo de humor de inversores minoristas (más fuerte en acciones con dominancia retail, casi nulo en institucional). Polymarket es un mercado muy retail/cripto — hipótesis: si el mecanismo transfiere, debería verse peor IC cerca de luna llena (moon_phase≈0.5) que en el resto del ciclo.
   - _Umbral_: n≥200 PERO ADEMÁS necesita cubrir al menos 3 ciclos lunares completos (~90 días de calendario) — no evaluar solo por n, aunque el volumen diario ya lo cruce en horas
   - _Acción_: Si IC cerca de luna llena < IC resto del ciclo con margen ≥0.05 y ≥3 ciclos lunares cubiertos → considerar boost/filtro por moon_phase. No implementar con menos de 3 ciclos aunque n sea alto — el efecto es de calendario lento, no de volumen.
-  - _Estado_: n=607 IC=+0.055 PNL=+94.23€ — sin señal clara aún (umbral IC: min=None max=-0.03)
-  - _Datos_: n=607 IC=+0.055 PNL=+94.23€
+  - _Estado_: n=608 IC=+0.056 PNL=+94.64€ — sin señal clara aún (umbral IC: min=None max=-0.03)
+  - _Datos_: n=608 IC=+0.056 PNL=+94.64€
 
 **〰️ H-CUSTOM-MERCURY-RETROGRADO** — Mercurio retrógrado: ¿rendimiento peor durante la ventana?
   - _Hipótesis_: Mismo origen que H-CUSTOM-MOON-LLENA (paper de Fornero, 43 Jornadas SADAF 2023). Qi, Wang & Zhang (2022, 48 mercados, 1973-2019): rendimientos 3.33%/año más bajos durante Mercurio retrógrado. Kou & Ma (2022) en China (99.8% cuentas retail): hasta -31% anualizado. Ambos estudios confirman que el mecanismo es la creencia/superstición de inversores retail (mayor efecto cuanto más retail y más supersticioso el mercado), no un efecto astral literal — Polymarket encaja en ese perfil. Ventanas 2026 (fuente pública, actualizar cada año): 26-feb a 20-mar, 29-jun a 23-jul, 24-oct a 13-nov.
   - _Umbral_: n≥100 PERO ADEMÁS necesita cubrir al menos 2-3 ventanas de retrogradación distintas (no solo la de jun-jul 2026) — esperar mínimo hasta después de la ventana de oct-nov 2026
   - _Acción_: Si IC en mercury_retrogrado=1 < IC en mercury_retrogrado=0 con margen ≥0.05 y ≥2 ventanas distintas cubiertas → considerar boost/filtro. No implementar tras una sola ventana (jun-jul 2026) por more que n sea alto — sería solo un evento, no un patrón.
-  - _Estado_: n=27443 IC=+0.113 PNL=+6820.53€ — sin señal clara aún (umbral IC: min=None max=-0.03)
-  - _Datos_: n=27443 IC=+0.113 PNL=+6820.53€
+  - _Estado_: n=27444 IC=+0.113 PNL=+6818.49€ — sin señal clara aún (umbral IC: min=None max=-0.03)
+  - _Datos_: n=27444 IC=+0.113 PNL=+6818.49€
 
 **〰️ H-CUSTOM-SMART-MONEY-CONSENSUS** — Consenso de wallets 'smart money' — ¿confirma nuestra dirección?
   - _Hipótesis_: Javi propuso estudiar bots/wallets que operan bien en nuestros mismos mercados. En vez de creer artículos (ya verificamos 2 veces esta semana que las narrativas no aguantan el cruce con datos reales), smart_money_tracker.py mide el track record REAL de wallets activas en BTC/ETH/SOL/XRP Up-or-Down 5/15/60min vía data-api.polymarket.com/positions, filtrado a posiciones 'Up or Down'. Clasifica como 'smart' las wallets con n>=10 posiciones, win_rate>=0.55 y pnl_total>0. smart_money_consensus es el sesgo direccional reciente (Up-Down)/(Up+Down) de esas wallets 'smart' por activo. Hipótesis: si nuestra decisión (BUY_YES/BUY_NO) coincide con el consenso smart money, mejor IC que cuando diverge. RESET METODOLOGICO 2026-07-02: la clasificacion 'smart' original via /positions estaba INVERTIDA para wallets de alta frecuencia (el endpoint solo retiene el residuo perdedor sin redimir; verificado: 'wowitsamazing' figuraba como -$478k y es +$10k/mes en el leaderboard oficial). Desde 2026-07-02T06:12Z el consenso se construye solo con wallets verificadas en el leaderboard oficial (pnl_mes>=$1000, 24 wallets). Los valores de smart_money_consensus capturados en features ANTES de esa fecha provienen de la clasificacion rota — descontar ese tramo al evaluar.
@@ -1747,8 +1747,8 @@ _Derivadas de los patrones aprendidos:_
   - _Hipótesis_: Analizado 2026-07-01, n=10 (evidencia mínima): BUY_NO con pct_dist>=2.09% fue 4/4 victorias (rango 2.09%-23.4%); BUY_NO con pct_dist<8% (pero fuera del corte anterior) tuvo derrotas. Patrón: cuanto más lejos está el spot del rango objetivo al momento de la predicción, más fiable el BUY_NO. Complementa H-CUSTOM-WEEKLY-INRANGE-BUYYES.
   - _Umbral_: n≥25 y IC>+0.10 para confirmar
   - _Acción_: Si se confirma con n≥25 → boost ×1.2 en WEEKLY_PRICE BUY_NO cuando pct_dist≥2
-  - _Estado_: SEÑAL POSITIVA confirmada: IC=+0.410 > 0.1 con n=221 PNL=+128.35€
-  - _Datos_: n=221 IC=+0.410 PNL=+128.35€
+  - _Estado_: SEÑAL POSITIVA confirmada: IC=+0.406 > 0.1 con n=222 PNL=+126.31€
+  - _Datos_: n=222 IC=+0.406 PNL=+126.31€
 
 **〰️ H-CUSTOM-GBM-BUYYES-GLOBAL-MALO** — UPDOWN_GBM BUY_YES global — ¿estructuralmente peor que BUY_NO en todas las estrategias activas?
   - _Hipótesis_: Analizado 2026-07-01: patrón cross-estrategia consistente en las 4 estrategias activas — BUY_NO gana a BUY_YES sin excepción (UPDOWN_GBM IC=+0.058 n=154 vs -0.046 n=412; ORDER_FLOW_5M +0.053 n=439 vs -0.043 n=355; PRICE_TARGET_GBM +0.011 n=45 vs -0.267 n=28; WEEKLY_PRICE +0.115 n=50 vs -0.315 n=25). Mecanismo propuesto: sesgo retail comprando 'Up'/'YES' en cripto infla el precio de YES por encima de su valor justo en Polymarket — consistente con la sobreconfianza del modelo en probabilidades altas de YES detectada en la calibración Platt (ver idea_calibracion_platt). ORDER_FLOW_5M (solo genera BUY_NO desde 2026-06-25) y WEEKLY_PRICE (H-WEEKLY-BUYNO) ya actúan sobre este mismo patrón; UPDOWN_GBM y PRICE_TARGET_GBM (ver H-CUSTOM-PRICETARGET-BUYYES-MALO) todavía no tienen un tratamiento sistemático equivalente, solo filtros puntuales por hora/subtipo.
