@@ -1,5 +1,5 @@
-# Hipótesis automáticas — 2026-07-26 04:26 UTC
-_Generado por shadow_postmortem.py sobre 35996 resoluciones (PNL=+7601.21€)_
+# Hipótesis automáticas — 2026-07-26 04:29 UTC
+_Generado por shadow_postmortem.py sobre 35997 resoluciones (PNL=+7601.69€)_
 
 ## Patrones causales activos
 
@@ -685,7 +685,7 @@ _Generado por shadow_postmortem.py sobre 35996 resoluciones (PNL=+7601.21€)_
 - **FILTRO** `hora_utc` > `4.0` → IC=-0.122 (n=35)
   - _Por qué funciona_: hora tardía/noche → sesión US cerrada, menos participantes informados; señales más ruidosas
   - _Acción_: SKIP cuando `hora_utc` > 4.0
-  - _Potencial_: sin este filtro IC_bueno=+0.034 (n=146)
+  - _Potencial_: sin este filtro IC_bueno=+0.037 (n=147)
 
 ### ORDER_FLOW_5M#BNB#5min
 - **PATRÓN** `total_vol_5m` < `197.886` → IC=+0.186 (n=33)
@@ -1234,8 +1234,8 @@ _Derivadas de los patrones aprendidos:_
 | ✅ LEADLAG_BTC_XRP_15M#15min | 288 | +0.010 | +9.63€ | 0 | 0 |
 | ✅ LEADLAG_BTC_XRP_15M#XRP | 288 | +0.010 | +9.63€ | 0 | 0 |
 | ✅ LEADLAG_BTC_XRP_15M#XRP#15min | 288 | +0.010 | +9.63€ | 1 | 0 |
-| ✅ ORDER_FLOW_5M | 1677 | +0.010 | +9.41€ | 1 | 0 |
-| ✅ ORDER_FLOW_5M#5min | 1541 | +0.006 | -3.18€ | 0 | 0 |
+| ✅ ORDER_FLOW_5M | 1678 | +0.011 | +9.89€ | 1 | 0 |
+| ✅ ORDER_FLOW_5M#5min | 1542 | +0.006 | -2.70€ | 0 | 0 |
 | ✅ ORDER_FLOW_5M#BNB | 215 | +0.030 | +3.61€ | 0 | 0 |
 | ✅ ORDER_FLOW_5M#BNB#5min | 215 | +0.030 | +3.61€ | 0 | 1 |
 | ✅ ORDER_FLOW_5M#BTC | 291 | -0.019 | -5.24€ | 0 | 0 |
@@ -1246,8 +1246,8 @@ _Derivadas de los patrones aprendidos:_
 | ✅ ORDER_FLOW_5M#ETH#5min | 268 | -0.015 | -7.57€ | 0 | 0 |
 | ✅ ORDER_FLOW_5M#SOL | 330 | +0.042 | +13.71€ | 0 | 0 |
 | ✅ ORDER_FLOW_5M#SOL#5min | 330 | +0.042 | +13.71€ | 0 | 0 |
-| ✅ ORDER_FLOW_5M#XRP | 211 | -0.007 | -5.47€ | 0 | 0 |
-| ✅ ORDER_FLOW_5M#XRP#5min | 211 | -0.007 | -5.47€ | 1 | 0 |
+| ✅ ORDER_FLOW_5M#XRP | 212 | -0.005 | -4.99€ | 0 | 0 |
+| ✅ ORDER_FLOW_5M#XRP#5min | 212 | -0.005 | -4.99€ | 1 | 0 |
 | ✅ PRICE_TARGET_GBM | 150 | -0.171 | -4.78€ | 4 | 0 |
 | 🚫 PRICE_TARGET_GBM#BTC | 62 | -0.250 | -18.09€ | 0 | 0 |
 | 🚫 PRICE_TARGET_GBM#BTC#atexpiry | 56 | -0.276 | -17.35€ | 0 | 0 |
@@ -1412,7 +1412,7 @@ _Derivadas de los patrones aprendidos:_
 **🟡 H-STREAK-COOLDOWN** — Cooldown tras 2 derrotas consecutivas (mismo subtype)
   - _Umbral_: n≥40 tras 2 losses y gap(IC_tras_win - IC_tras_2loss)≥0.05
   - _Acción_: Reducir stake (no desactivar) 1-2h tras 2 derrotas consecutivas en el mismo subtype
-  - _Estado_: tras_win IC=+0.113 n=21497 | tras_1loss IC=+0.081 n=14292 | tras_2loss IC=+0.052 n=5946/40 | gap=+0.060 (umbral 0.05)
+  - _Estado_: tras_win IC=+0.113 n=21497 | tras_1loss IC=+0.081 n=14293 | tras_2loss IC=+0.052 n=5947/40 | gap=+0.060 (umbral 0.05)
 
 **🟡 H-KALMAN** — Kalman filter para drift adaptativo
   - _Umbral_: n≥200 por subtipo para calibrar parámetros Q/R del KF
