@@ -293,8 +293,9 @@
   "rest_lo_min": 3.65,
   "rest_hi_min": 8.9,
   "deadline_ts": "2026-07-26T23:26:39+00:00",
-  "estado": "esperando",
-  "ultimo_intento_ts": "2026-07-26T23:19:16+00:00",
-  "ultimo_motivo_veto": "concentracion_ok"
+  "estado": "resuelto_normal",
+  "ultimo_intento_ts": "2026-07-26T23:22:30+00:00",
+  "ultimo_motivo_veto": "observacion_habria_ejecutado",
+  "ts_resolucion": "2026-07-26T23:22:30+00:00"
  }
 }
