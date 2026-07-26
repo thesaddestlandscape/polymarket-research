@@ -999,7 +999,7 @@
  "candidato_proxy#FAVORITO_CONFIRMADO#BTC#60min#BTC#BUY_YES#hora_utcgt6.0": false,
  "candidato_proxy#FAVORITO_CONFIRMADO#BTC#60min#BTC#BUY_YES#libro_liquidezgt8344.6122": false,
  "candidato_proxy#FAVORITO_CONFIRMADO#SOL#15min#SOL#BUY_YES#libro_liquidezgt1857.0424": false,
- "candidato_proxy#FAVORITO_CONFIRMADO#SOL#60min#SOL#BUY_YES#py_entradagt0.575": true,
+ "candidato_proxy#FAVORITO_CONFIRMADO#SOL#60min#SOL#BUY_YES#py_entradagt0.575": false,
  "candidato_proxy#GBM_LATE_15M#BTC#15min#BTC#BUY_NO#dist_vwap_pctlt0.5143": false,
  "candidato_proxy#GBM_LATE_15M#SOL#BUY_NO#sigma_hgt0.0118": false,
  "candidato_proxy#GBM_LATE_15M#XRP#BUY_NO#sigma_hgt0.0118": false,
@@ -1813,7 +1813,7 @@
  "candidato_proxy#GBM_LATE_15M_TARDIO#ETH#15min#ETH#BUY_YES#dist_vwap_pctlt0.2213": false,
  "candidato_proxy#FAVORITO_CONFIRMADO#BTC#BUY_NO#libro_liquidezgt4182.9672": false,
  "candidato_proxy#FAVORITO_CONFIRMADO#ETH#BUY_NO#libro_liquidezgt4182.9672": false,
- "candidato_proxy#GBM_LATE_15M#BTC#BUY_YES#dist_vwap_pctlt0.122": true,
+ "candidato_proxy#GBM_LATE_15M#BTC#BUY_YES#dist_vwap_pctlt0.122": false,
  "candidato_proxy#GBM_LATE_15M#BTC#BUY_NO#dist_vwap_pctgt0.136": false,
  "candidato_proxy#GBM_LATE_15M#BTC#BUY_NO#dist_vwap_pctlt0.8052": false,
  "candidato_proxy#GBM_LATE_15M#ETH#BUY_NO#dist_vwap_pctgt0.136": false,
@@ -3372,5 +3372,8 @@
  "candidato_proxy#UPDOWN_GBM#BTC#15min#BTC#BUY_YES#hora_utcgt19.0": false,
  "candidato_proxy#GBM_LATE_15M#XRP#15min#XRP#BUY_NO#sigma_ewma_delta_pctlt3.553": false,
  "candidato_proxy#GBM_LATE_15M_ESPACIO_ATR#ETH#BUY_YES#sigma_ewma_delta_pctgt6.571": false,
- "candidato_proxy#GBM_LATE_15M_ESPACIO_ATR#ETH#15min#ETH#BUY_YES#dist_vwap_pctgt0.1126": false
+ "candidato_proxy#GBM_LATE_15M_ESPACIO_ATR#ETH#15min#ETH#BUY_YES#dist_vwap_pctgt0.1126": false,
+ "candidato_proxy#FAVORITO_CONFIRMADO#BTC#60min#BTC#BUY_NO#libro_liquidezgt6003.2568": false,
+ "candidato_proxy#GBM_LATE_15M#ETH#BUY_YES#dist_vwap_pctlt0.122": false,
+ "candidato_proxy#GBM_LATE_15M_ESPACIO_ATR#ETH#BUY_YES#sigma_ewma_delta_pctgt9.097": false
 }
