@@ -1,5 +1,5 @@
-# Hipótesis automáticas — 2026-07-26 04:08 UTC
-_Generado por shadow_postmortem.py sobre 35985 resoluciones (PNL=+7612.07€)_
+# Hipótesis automáticas — 2026-07-26 04:12 UTC
+_Generado por shadow_postmortem.py sobre 35986 resoluciones (PNL=+7612.63€)_
 
 ## Patrones causales activos
 
@@ -1116,12 +1116,12 @@ _Derivadas de los patrones aprendidos:_
 
 | Estrategia | n | IC | PNL | Filtros | Patrones |
 |---|---|---|---|---|---|
-| ✅ BALLENAS_CONFIRMADAS_15M | 1206 | +0.121 | +52.81€ | 0 | 0 |
-| ✅ BALLENAS_CONFIRMADAS_15M#15min | 1206 | +0.121 | +52.81€ | 0 | 0 |
+| ✅ BALLENAS_CONFIRMADAS_15M | 1207 | +0.121 | +53.38€ | 0 | 0 |
+| ✅ BALLENAS_CONFIRMADAS_15M#15min | 1207 | +0.121 | +53.38€ | 0 | 0 |
 | ✅ BALLENAS_CONFIRMADAS_15M#DOGE | 18 | +0.090 | +0.57€ | 0 | 0 |
 | ✅ BALLENAS_CONFIRMADAS_15M#DOGE#15min | 18 | +0.090 | +0.57€ | 0 | 0 |
-| ✅ BALLENAS_CONFIRMADAS_15M#ETH | 467 | +0.127 | +15.82€ | 0 | 0 |
-| ✅ BALLENAS_CONFIRMADAS_15M#ETH#15min | 467 | +0.127 | +15.82€ | 0 | 0 |
+| ✅ BALLENAS_CONFIRMADAS_15M#ETH | 468 | +0.128 | +16.39€ | 0 | 0 |
+| ✅ BALLENAS_CONFIRMADAS_15M#ETH#15min | 468 | +0.128 | +16.39€ | 0 | 0 |
 | ✅ BALLENAS_CONFIRMADAS_15M#SOL | 450 | +0.139 | +17.85€ | 0 | 0 |
 | ✅ BALLENAS_CONFIRMADAS_15M#SOL#15min | 450 | +0.139 | +17.85€ | 0 | 0 |
 | ✅ BALLENAS_CONFIRMADAS_15M#XRP | 271 | +0.079 | +18.57€ | 0 | 0 |
@@ -1408,7 +1408,7 @@ _Derivadas de los patrones aprendidos:_
 **🟡 H-STREAK-COOLDOWN** — Cooldown tras 2 derrotas consecutivas (mismo subtype)
   - _Umbral_: n≥40 tras 2 losses y gap(IC_tras_win - IC_tras_2loss)≥0.05
   - _Acción_: Reducir stake (no desactivar) 1-2h tras 2 derrotas consecutivas en el mismo subtype
-  - _Estado_: tras_win IC=+0.113 n=21491 | tras_1loss IC=+0.081 n=14287 | tras_2loss IC=+0.053 n=5943/40 | gap=+0.060 (umbral 0.05)
+  - _Estado_: tras_win IC=+0.113 n=21492 | tras_1loss IC=+0.081 n=14287 | tras_2loss IC=+0.053 n=5943/40 | gap=+0.060 (umbral 0.05)
 
 **🟡 H-KALMAN** — Kalman filter para drift adaptativo
   - _Umbral_: n≥200 por subtipo para calibrar parámetros Q/R del KF
