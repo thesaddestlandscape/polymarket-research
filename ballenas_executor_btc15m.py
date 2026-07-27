@@ -50,7 +50,7 @@ import requests
 
 import live_trade as lt
 from live_guard import puede_operar_live
-from live_stake import calcular_stake, verificar_circuit_breaker
+from live_stake import bloquear_por_circuit_breaker, calcular_stake
 from smart_money_tracker import MAX_TRADES_POR_MERCADO, trades_de_mercado
 
 DIR = Path(__file__).resolve().parent
@@ -561,15 +561,16 @@ def disparar(mercado: dict, py: float, edge: float, restante_s: float, prob_buck
             f"{'[DRY-RUN] no ejecutaría' if DRY_RUN else 'no se ejecuta'}")
         return False
 
-    # 27-Jul: BUG CRÍTICO CORREGIDO -- verificar_circuit_breaker() devuelve
-    # (disparado, motivo) con disparado=True significando "freno activo,
-    # PARAR" (mismo contrato que live_trade.py). La versión anterior
-    # comprobaba "if not ok_breaker" -- invertida: con el freno REALMENTE
-    # disparado no bloqueaba nada. Detectado en vivo 27-Jul (mismo bug en
-    # ballenas_executor_5min.py, encontrado primero ahí).
-    disparado, motivo_breaker = verificar_circuit_breaker()
-    if disparado:
-        log(f"  circuit breaker activo ({motivo_breaker}) -- {'[DRY-RUN] no ejecutaría' if DRY_RUN else 'no se ejecuta'}")
+    # 27-Jul (/code-review): usa el helper único bloquear_por_circuit_breaker
+    # en vez de reimplementar el chequeo aquí -- este mismo chequeo,
+    # reimplementado por separado en este fichero y en
+    # ballenas_executor_5min.py, se invirtió de forma IDÉNTICA en ambos
+    # (bug crítico corregido el mismo día: esta tupla estuvo 10 días en
+    # live con cero trades reales). Centralizado en live_stake.py para
+    # que no pueda repetirse.
+    if bloquear_por_circuit_breaker(
+            lambda motivo: log(f"  circuit breaker activo ({motivo}) -- "
+                                f"{'[DRY-RUN] no ejecutaría' if DRY_RUN else 'no se ejecuta'}")):
         return False
 
     # ic_conviccion: /code-review 17-Jul encontró que se pasaba `edge` crudo
