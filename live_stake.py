@@ -773,6 +773,27 @@ def verificar_circuit_breaker() -> tuple[bool, str]:
     return False, f"✅ OK  (bkr={bkr:.2f}€  pnl_día={pnl_live_hoy():+.2f}€)"
 
 
+def bloquear_por_circuit_breaker(log_fn) -> bool:
+    """Punto ÚNICO de verdad para "¿debo bloquear esta señal por circuit
+    breaker?" -- llama a log_fn(motivo) y devuelve True si HAY que
+    bloquear (el caller debe cortar de inmediato, ej. 'return False').
+
+    27-Jul, incidente crítico: ballenas_executor_5min.py y
+    ballenas_executor_btc15m.py reimplementaron el chequeo de
+    verificar_circuit_breaker() cada uno por su cuenta con una variable
+    mal nombrada (ok_breaker, sugiriendo "True=ok para operar" cuando el
+    contrato real es "True=disparado/parar") y ambos invirtieron la
+    condición de forma IDÉNTICA -- con el freno realmente disparado (ej.
+    racha=4 pérdidas consecutivas) no bloqueaban, y con todo normal
+    bloqueaban sin motivo. BALLENAS_TARDIAS#BTC#15min estuvo así 10 días
+    en pares_permitidos_live con CERO trades reales. Centralizar aquí
+    evita que un futuro caller repita el mismo error de nombrado/inversión."""
+    disparado, motivo = verificar_circuit_breaker()
+    if disparado:
+        log_fn(motivo)
+    return disparado
+
+
 def _leer_latch_ventana() -> dict:
     if not LATCH_VENTANA_PATH.exists():
         return {}
