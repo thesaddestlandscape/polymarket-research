@@ -3088,6 +3088,42 @@ BALLENAS_CONFIRMADAS_MIN_TRADES = 3     # mismo mínimo que veto_ballenas
 # filtrar por banda.
 BALLENAS_CONFIRMADAS_UMBRAL_VOLUMEN = 35
 
+# 27-Jul: instrumentación de diagnóstico -- por qué se descarta cada intento
+# de s_ballenas_confirmadas_15m() una vez que el precio ya cayó en una banda
+# válida. Motivado por el hallazgo XRP#15min#BUY_YES: la banda agregada
+# [0.7,0.9) pasa el gate del observer (z=11.1, n=10196) pero solo disparó
+# UNA vez en resultados reales desde el 19-Jul -- sin esto no se puede saber
+# si el cuello de botella real es la validación agregada (banda_no_confirmada,
+# que es una ventana ROLLING con poda, puede no haber pasado la mayor parte
+# de esos días aunque pase AHORA) o el volumen en tiempo real (volumen_bajo).
+# Solo lectura+escritura de un fichero de contadores, NUNCA cambia prob_yes
+# ni ninguna decisión. Sin lock (mismo criterio de riesgo que
+# KALMAN_DRIFT_STATE_PATH -- estado puramente diagnóstico, perder un
+# contador ocasional por carrera de escritura no afecta nada real).
+BALLENAS_CONFIRMADAS_DIAG_PATH = DIR_SHADOW / "ballenas_confirmadas_15m_diagnostico.json"
+
+
+def _log_diagnostico_ballenas_confirmadas(activo: str, direccion: str, motivo: str,
+                                           condition_id: str = "", **detalle):
+    try:
+        estado = (json.loads(BALLENAS_CONFIRMADAS_DIAG_PATH.read_text())
+                  if BALLENAS_CONFIRMADAS_DIAG_PATH.exists() else {})
+    except Exception:
+        estado = {}
+    clave = f"{activo}#{direccion}"
+    entry = estado.setdefault(clave, {"motivos": {}})
+    m = entry["motivos"].setdefault(motivo, {"conteo": 0, "mercados": {}})
+    m["conteo"] += 1
+    if condition_id:
+        m["mercados"][condition_id] = m["mercados"].get(condition_id, 0) + 1
+    if detalle:
+        entry["ultimo_detalle"] = {**detalle, "motivo": motivo, "condition_id": condition_id,
+                                    "ts": datetime.now(timezone.utc).isoformat(timespec="seconds")}
+    try:
+        BALLENAS_CONFIRMADAS_DIAG_PATH.write_text(json.dumps(estado, indent=2))
+    except Exception:
+        pass
+
 # 27-Jul: gate de volumen genérico para estrategias LIVE que NO consultan
 # trades_de_mercado() en su lógica normal (FAVORITO_CONFIRMADO, GBM_LATE_15M,
 # UPDOWN_GBM_15M_TARDIO) -- a diferencia de BALLENAS_CONFIRMADAS_15M/
@@ -3205,16 +3241,20 @@ def s_ballenas_confirmadas_15m(market, ctx):
     else:
         return None  # fuera de ambas bandas -- ninguna dirección aplica
 
+    condition_id = market.get("condition_id", "") or ""
+
     banda_info = _banda_confirmada_ballenas(activo, "15m", banda_lo, banda_hi)
     if banda_info is None:
+        _log_diagnostico_ballenas_confirmadas(activo, direccion, "banda_no_confirmada", condition_id)
         return None  # el observer no confirma esta banda concreta para este activo ahora
 
-    condition_id = market.get("condition_id")
     if not condition_id:
+        _log_diagnostico_ballenas_confirmadas(activo, direccion, "sin_condition_id")
         return None
     try:
         trades = trades_de_mercado(condition_id)
     except Exception:
+        _log_diagnostico_ballenas_confirmadas(activo, direccion, "error_api", condition_id)
         return None  # fail-closed: sin datos de ballenas, no hay señal (a diferencia
                       # del veto_ballenas de live_trade.py, que es fail-OPEN porque
                       # ahí solo puede reducir riesgo de una señal que ya existe por
@@ -3252,14 +3292,25 @@ def s_ballenas_confirmadas_15m(market, ctx):
                 lado_yes_wallets.append(w)
     n = n_no + n_yes
     if n < BALLENAS_CONFIRMADAS_MIN_TRADES:
+        _log_diagnostico_ballenas_confirmadas(activo, direccion, "pocos_trades_en_banda",
+                                               condition_id, n=n)
         return None
     n_lado = n_yes if direccion == "BUY_YES" else n_no
     pct_lado = n_lado / n
-    if pct_lado < BALLENAS_CONFIRMADAS_UMBRAL_PCT:
-        return None
     n_total_lado = n_yes_total if direccion == "BUY_YES" else n_no_total
+    if pct_lado < BALLENAS_CONFIRMADAS_UMBRAL_PCT:
+        _log_diagnostico_ballenas_confirmadas(activo, direccion, "concentracion_baja",
+                                               condition_id, pct_lado=round(pct_lado, 3), n=n,
+                                               n_total_lado=n_total_lado)
+        return None
     if n_total_lado < BALLENAS_CONFIRMADAS_UMBRAL_VOLUMEN:
+        _log_diagnostico_ballenas_confirmadas(activo, direccion, "volumen_bajo",
+                                               condition_id, n_total_lado=n_total_lado,
+                                               umbral=BALLENAS_CONFIRMADAS_UMBRAL_VOLUMEN,
+                                               pct_lado=round(pct_lado, 3))
         return None  # gate de volumen 27-Jul -- ver nota junto a la constante
+    _log_diagnostico_ballenas_confirmadas(activo, direccion, "disparada", condition_id,
+                                           n_total_lado=n_total_lado, pct_lado=round(pct_lado, 3))
     wallets_lado = lado_yes_wallets if direccion == "BUY_YES" else lado_no_wallets
 
     hit_lado = banda_info["hit"]   # probabilidad empírica calibrada del bucket (lado confirmado)
