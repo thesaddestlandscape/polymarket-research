@@ -123,6 +123,18 @@ HARD_FLOOR_S = 3.0       # uniforme, mismo suelo de seguridad que BTC15m
 CONCENTRACION_MIN = 0.9  # bucket validado hoy para los 3 activos (dosis-respuesta n=195)
 MIN_TRADES_BALLENA = 3
 
+# 27-Jul: gate real (no solo observacional) sobre n_yes_total -- ver
+# idea_ballenas5min_volumen_wallets_yes_todas_monedas_27jul en memoria.
+# Umbral por activo, default 0 (sin filtro) para no cambiar el
+# comportamiento de nadie que no esté validado con gate riguroso completo
+# todavía (Wilson+shuffle+bootstrap, n>=40). Solo ETH lo tiene hoy
+# (n=110, hit=96.4%, PnL/trade=+0.159€, GATE OK, sin confusión con
+# py/timing, split-half estable). DOGE también salió GATE OK pero con
+# corr(n_yes_total,py)=0.338 -- posible confusión con precio, NO
+# activado hasta desconfundir. SOL/XRP misma dirección, n corto (<40)
+# todavía.
+UMBRAL_N_WALLETS_YES = {"ETH": 35}  # resto: 0 (sin filtro) por defecto vía .get()
+
 ACTIVOS = ("ETH", "SOL", "XRP", "DOGE", "BNB")
 # BNB añadido 27-Jul (petición Javi): calibración ya existía en
 # ballenas_timing_state.json (significativo=True, banda=[0.3,0.5),
@@ -391,10 +403,16 @@ def watch_window(activo: str, ts_end: int) -> bool:
         elif motivo_conc == "error_api":
             log(f"[{ts_end}] restante={restante:.1f}s ⚠️ error_api consultando ballenas -- sin dato este ciclo", activo)
 
+        umbral_vol = UMBRAL_N_WALLETS_YES.get(activo, 0)
         cumple_concentracion = (pct_ponderado is not None and n >= MIN_TRADES_BALLENA
                                  and pct_ponderado >= CONCENTRACION_MIN
+                                 and n_yes_total >= umbral_vol
                                  and libro and libro.get("best_ask") is not None
                                  and banda_lo <= libro["best_ask"] < banda_hi)
+        if pct_ponderado is not None and n >= MIN_TRADES_BALLENA and pct_ponderado >= CONCENTRACION_MIN \
+                and n_yes_total < umbral_vol:
+            log(f"[{ts_end}] concentración OK pero n_yes_total={n_yes_total}<{umbral_vol} -- "
+                f"vetado por volumen bajo (gate 27-Jul)", activo)
         if cumple_concentracion and restante > confirm_ceiling_s:
             # 23-Jul: cumple la condición pero todavía está fuera de la
             # ventana real de confirmación (rest_hi_min de la banda operativa)
