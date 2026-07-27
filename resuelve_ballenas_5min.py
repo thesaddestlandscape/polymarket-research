@@ -92,30 +92,36 @@ def main():
 
     resueltas_ahora = 0
     if outcomes_por_market_id:
+        # 27-Jul (/code-review, 3ª pasada): lock_f.close() en su propio
+        # finally exterior -- si fcntl.flock() en sí lanza, el fd no debe
+        # quedar huérfano (mismo fix que ballenas_executor_5min.py).
         lock_f = open(TRACKER_LOCK, "w")
-        fcntl.flock(lock_f, fcntl.LOCK_EX)
         try:
-            # Releer fresco bajo el lock -- el executor puede haber añadido
-            # filas nuevas mientras hacíamos las llamadas de red de arriba.
-            with open(TRACKER, newline="", encoding="utf-8") as f:
-                filas = list(csv.DictReader(f))
-            from datetime import datetime, timezone
-            for r in filas:
-                mid = r.get("market_id")
-                outcome = outcomes_por_market_id.get(mid)
-                if outcome is None or r.get("outcome_real"):
-                    continue
-                r["outcome_real"] = outcome
-                r["acierto"] = "1" if outcome == "YES" else "0"  # siempre BUY_YES
-                r["resolved_ts"] = datetime.now(timezone.utc).isoformat(timespec="seconds")
-                resueltas_ahora += 1
-            if resueltas_ahora:
-                with open(TRACKER, "w", newline="", encoding="utf-8") as f:
-                    w = csv.DictWriter(f, fieldnames=list(filas[0].keys()))
-                    w.writeheader()
-                    w.writerows(filas)
+            fcntl.flock(lock_f, fcntl.LOCK_EX)
+            try:
+                # Releer fresco bajo el lock -- el executor puede haber
+                # añadido filas nuevas mientras hacíamos las llamadas de
+                # red de arriba.
+                with open(TRACKER, newline="", encoding="utf-8") as f:
+                    filas = list(csv.DictReader(f))
+                from datetime import datetime, timezone
+                for r in filas:
+                    mid = r.get("market_id")
+                    outcome = outcomes_por_market_id.get(mid)
+                    if outcome is None or r.get("outcome_real"):
+                        continue
+                    r["outcome_real"] = outcome
+                    r["acierto"] = "1" if outcome == "YES" else "0"  # siempre BUY_YES
+                    r["resolved_ts"] = datetime.now(timezone.utc).isoformat(timespec="seconds")
+                    resueltas_ahora += 1
+                if resueltas_ahora:
+                    with open(TRACKER, "w", newline="", encoding="utf-8") as f:
+                        w = csv.DictWriter(f, fieldnames=list(filas[0].keys()))
+                        w.writeheader()
+                        w.writerows(filas)
+            finally:
+                fcntl.flock(lock_f, fcntl.LOCK_UN)
         finally:
-            fcntl.flock(lock_f, fcntl.LOCK_UN)
             lock_f.close()
     print(f"Resueltas en este ciclo: {resueltas_ahora}")
 

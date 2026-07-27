@@ -505,35 +505,40 @@ def _registrar_tracker(activo: str, mercado: dict, py: float, edge: float,
     filtrar por banda), ver nota en concentracion_ballenas. Solo
     observacional, no decide nada todavía."""
     with _tracker_lock:
+        # 27-Jul (/code-review, 3ª pasada): lock_f.close() en su propio
+        # finally exterior -- si fcntl.flock() en sí lanza (ej. OSError),
+        # el fd no debe quedar huérfano.
         lock_f = open(TRACKER_LOCK_PATH, "w")
-        fcntl.flock(lock_f, fcntl.LOCK_EX)
         try:
-            _migrar_tracker_n_wallets_yes()
-            nuevo = not TRACKER_PATH.exists()
-            fila = {
-                "timestamp_utc": datetime.now(timezone.utc).isoformat(timespec="seconds"),
-                "activo": activo,
-                "market_id": mercado.get("market_id", ""),
-                "condition_id": mercado.get("condition_id", ""),
-                "end_date": mercado.get("end_date", ""),
-                "py": round(py, 4),
-                "edge": round(edge, 4),
-                "concentracion": round(concentracion, 4),
-                "n_ballenas": n_ballenas,
-                "restante_s": round(restante_s, 1),
-                "outcome_real": "",
-                "acierto": "",
-                "resolved_ts": "",
-                "n_wallets_yes": n_wallets_yes,
-            }
-            import csv as _csv
-            with open(TRACKER_PATH, "a", newline="", encoding="utf-8") as f:
-                w = _csv.DictWriter(f, fieldnames=list(fila.keys()))
-                if nuevo:
-                    w.writeheader()
-                w.writerow(fila)
+            fcntl.flock(lock_f, fcntl.LOCK_EX)
+            try:
+                _migrar_tracker_n_wallets_yes()
+                nuevo = not TRACKER_PATH.exists()
+                fila = {
+                    "timestamp_utc": datetime.now(timezone.utc).isoformat(timespec="seconds"),
+                    "activo": activo,
+                    "market_id": mercado.get("market_id", ""),
+                    "condition_id": mercado.get("condition_id", ""),
+                    "end_date": mercado.get("end_date", ""),
+                    "py": round(py, 4),
+                    "edge": round(edge, 4),
+                    "concentracion": round(concentracion, 4),
+                    "n_ballenas": n_ballenas,
+                    "restante_s": round(restante_s, 1),
+                    "outcome_real": "",
+                    "acierto": "",
+                    "resolved_ts": "",
+                    "n_wallets_yes": n_wallets_yes,
+                }
+                import csv as _csv
+                with open(TRACKER_PATH, "a", newline="", encoding="utf-8") as f:
+                    w = _csv.DictWriter(f, fieldnames=list(fila.keys()))
+                    if nuevo:
+                        w.writeheader()
+                    w.writerow(fila)
+            finally:
+                fcntl.flock(lock_f, fcntl.LOCK_UN)
         finally:
-            fcntl.flock(lock_f, fcntl.LOCK_UN)
             lock_f.close()
 
 
