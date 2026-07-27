@@ -2862,6 +2862,11 @@ def s_gbm_late_15min(market, ctx):
     núcleo pero NO están validados con este gate. Solo GBM_LATE_15M#ETH
     #15min#BUY_YES tiene umbral en GATE_VOLUMEN_VALIDADO -- el resto pasa
     sin filtro (fail-open, ver _gate_volumen_ballenas).
+
+    27-Jul: mismo tratamiento para el filtro de anchura de mercado (gate
+    riguroso completo 23-Jul, ver GATE_ANCHURA_VALIDADO) -- separa la mitad
+    buena (n=104 hit=77.9% +0.540€ GATE OK) de la mitad ruidosa (n=164
+    hit=49.4%, PnL CI90% cruza 0) dentro de esta MISMA tupla ya live.
     """
     resultado = _s_gbm_late(market, ctx, ventana_min=15,
                             rest_lo=GBM_LATE_15M_REST_MIN_LO,
@@ -2883,6 +2888,10 @@ def s_gbm_late_15min(market, ctx):
         return None  # gate de volumen 27-Jul -- ver GATE_VOLUMEN_VALIDADO
     if n_total_lado is not None:
         resultado["features"]["n_total_lado"] = n_total_lado
+    mercado_anchura_pct = resultado["features"].get("mercado_anchura_pct")
+    if not _gate_anchura_mercado("GBM_LATE_15M", activo, "15min", direccion,
+                                  mercado_anchura_pct):
+        return None  # filtro anchura 23-Jul -- ver GATE_ANCHURA_VALIDADO
     return resultado
 
 
@@ -3188,6 +3197,31 @@ def _gate_volumen_ballenas(strategy: str, activo: str, marco_str: str, direccion
     n_total_lado = sum(1 for t in trades if (t.get("side") or "").strip().upper() == "BUY"
                        and (t.get("outcome") or "").strip().lower() in lado_check)
     return n_total_lado >= umbral, n_total_lado
+
+
+# Filtro de anchura de mercado (gate riguroso 23-Jul, ver
+# idea_dos_candidatas_gate_riguroso_confirmado_23jul en memoria): dentro de
+# GBM_LATE_15M#ETH#15min#BUY_YES (YA LIVE), mercado_anchura_pct>=0.056 separa
+# n=104 hit=77.9% +0.540€ GATE OK (split-half 78.8%/76.9%, estable) de
+# n=164 hit=49.4%, PnL CI90% cruza 0 (NO CONCLUYENTE, puro ruido). Solo este
+# combo validado -- mismo espíritu fail-open que GATE_VOLUMEN_VALIDADO: un
+# afinamiento sobre una tupla ya aprobada, no un gate de elegibilidad nuevo.
+GATE_ANCHURA_VALIDADO = {
+    ("GBM_LATE_15M", "ETH", "15min", "BUY_YES"): 0.056,
+}
+
+
+def _gate_anchura_mercado(strategy: str, activo: str, marco_str: str, direccion: str,
+                          mercado_anchura_pct: float | None) -> bool:
+    """True = deja pasar (sin gate validado para este combo, o anchura
+    suficiente). False = vetar (combo validado Y anchura por debajo del
+    umbral). Fail-open si falta el dato (mercado_anchura_pct=None cuando no
+    se pudo leer el spot de los 3 majors restantes) -- este filtro solo
+    puede REDUCIR una señal ya aprobada, nunca vetar por falta de dato."""
+    umbral = GATE_ANCHURA_VALIDADO.get((strategy, activo, marco_str, direccion))
+    if umbral is None or mercado_anchura_pct is None:
+        return True
+    return mercado_anchura_pct >= umbral
 
 
 def _banda_confirmada_ballenas(activo: str, marco: str, lo: float, hi: float) -> dict | None:
