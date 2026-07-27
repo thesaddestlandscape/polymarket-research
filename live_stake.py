@@ -33,10 +33,12 @@ from datetime import datetime, timezone, timedelta
 from pathlib import Path
 
 DIR_LIVE              = Path("data/live")
+DIR_SHADOW            = Path("data/shadow")
 CONFIG_PATH           = DIR_LIVE / "config_live.json"
 TRADES_CSV            = DIR_LIVE / "trades.csv"
 SWITCH_PATH           = DIR_LIVE / "LIVE_MODE_ON"
 LATCH_VENTANA_PATH    = DIR_LIVE / "freno_ventana_latch.json"
+HRP_EXPOSICION_PATH   = DIR_SHADOW / "hrp_exposicion_diaria.json"
 
 CAPITAL_OPERATIVO_INICIAL = 25.44  # primer depósito 2026-06-29 (fallback; fuente de verdad: config_live.json::depositos)
 
@@ -872,6 +874,129 @@ def _inventory_penalty(direction: str, inv: dict) -> float:
     return max(0.50, 1.0 - exceso * 0.20)
 
 
+# ── Techo de exposición por tupla (HRP portfolio) ─────────────────────────────
+#
+# 27-Jul (P28.5, ver idea_propuesta_hrp_portfolio_23jul en memoria):
+# _inventory_penalty (arriba) ya penaliza acumular en la misma DIRECCIÓN
+# (YES/NO); esto es el mismo principio pero a nivel de TUPLA concreta
+# (STRATEGY#SUBTYPE#DIRECCION) usando pesos de Hierarchical Risk Parity en
+# vez de un conteo plano — dos tuplas pueden ir en direcciones distintas y
+# aun así compartir el mismo riesgo de mercado correlacionado (hallazgo real
+# 24-Jul: SOL#15min y SOL#60min BUY_YES perdieron el mismo día, mercado
+# moviéndose en bloque). Los pesos HRP + la exposición reciente por tupla
+# los calcula analisis_hrp_exposicion_diaria.py (read-only, cron aparte) y
+# se persisten en HRP_EXPOSICION_PATH — este módulo solo LEE ese fichero,
+# nunca recalcula la matriz de correlación en el hot path de una señal.
+#
+# Fail-open deliberado (a diferencia del resto de guardias de este fichero,
+# que son fail-closed ante dato faltante): esto es un afinamiento de
+# portfolio sobre guardias ya existentes (Kelly, inventario, frenos), no
+# una protección de último recorte — si el fichero falta/está corrupto o la
+# tupla es inmadura (ver puerta de madurez del script), _hrp_exposure_factor
+# devuelve 1.0 (no-op) y el resto de la cascada sigue intacta. Inerte por
+# defecto: riesgo.hrp_exposicion.activo=false hasta aprobación explícita.
+
+_hrp_cache = {"mtime": None, "data": None}
+
+
+def _cargar_hrp_pesos() -> dict:
+    try:
+        mtime = HRP_EXPOSICION_PATH.stat().st_mtime
+    except OSError:
+        return {}
+    if _hrp_cache["mtime"] != mtime:
+        try:
+            data = json.loads(HRP_EXPOSICION_PATH.read_text(encoding="utf-8"))
+            _hrp_cache["data"] = {m["tupla"]: m["peso_hrp"] for m in data.get("tuplas_maduras", [])}
+        except Exception:
+            _hrp_cache["data"] = {}
+        _hrp_cache["mtime"] = mtime
+    return _hrp_cache["data"] or {}
+
+
+def exposicion_reciente_tupla(strategy: str, subtype: str, direction: str, dias: int = 7) -> float:
+    """Suma de stake_eur (trades.csv) de ESTA tupla exacta en los últimos
+    `dias` días — recalculado fresco en cada llamada (barato: ~un filtrado
+    de trades.csv, no la matriz de correlación completa)."""
+    if not TRADES_CSV.exists():
+        return 0.0
+    corte = datetime.now(timezone.utc) - timedelta(days=dias)
+    total = 0.0
+    with open(TRADES_CSV, encoding="utf-8") as f:
+        for row in csv.DictReader(f):
+            if (row.get("strategy") != strategy or row.get("subtype") != subtype
+                    or row.get("direction") != direction):
+                continue
+            ts = _parse_ts(row.get("timestamp_utc") or "")
+            if ts is None or ts < corte:
+                continue
+            try:
+                total += float(row.get("stake_eur") or 0)
+            except ValueError:
+                pass
+    return total
+
+
+def exposicion_reciente_total(dias: int = 7) -> float:
+    """Suma de stake_eur (trades.csv) de TODAS las tuplas (maduras e
+    inmaduras) en los últimos `dias` días -- denominador real de la
+    exposición agregada del portfolio. /code-review 27-Jul: una versión
+    anterior sumaba solo las tuplas maduras (las que tienen peso_hrp),
+    excluyendo la exposición real de tuplas recién promocionadas (ej.
+    BALLENAS_TARDIAS#ETH#5min, con 0 días de historial) -- eso infla
+    artificialmente el share calculado para las maduras cada vez que
+    conviven con una promoción reciente. Un solo escaneo de trades.csv
+    (más barato además que sumar tupla por tupla)."""
+    if not TRADES_CSV.exists():
+        return 0.0
+    corte = datetime.now(timezone.utc) - timedelta(days=dias)
+    total = 0.0
+    with open(TRADES_CSV, encoding="utf-8") as f:
+        for row in csv.DictReader(f):
+            ts = _parse_ts(row.get("timestamp_utc") or "")
+            if ts is None or ts < corte:
+                continue
+            try:
+                total += float(row.get("stake_eur") or 0)
+            except ValueError:
+                pass
+    return total
+
+
+def _hrp_exposure_factor(strategy: str, subtype: str, direction: str, config: dict) -> tuple[float, str]:
+    """1.0 (no-op) salvo que riesgo.hrp_exposicion.activo=true Y la tupla
+    sea madura (presente en el fichero) Y su exposición reciente supere
+    margen_tolerancia × su techo HRP -- entonces reduce el stake
+    proporcionalmente hacia el techo, con suelo factor_min (mismo espíritu
+    que _inventory_penalty)."""
+    cfg = config.get("riesgo", {}).get("hrp_exposicion", {})
+    if not cfg.get("activo", False):
+        return 1.0, ""
+
+    pesos = _cargar_hrp_pesos()
+    tupla = f"{strategy}#{subtype}#{direction}"
+    peso_hrp = pesos.get(tupla)
+    if peso_hrp is None:
+        return 1.0, ""  # inmadura o no encontrada — Kelly normal, sin techo
+
+    margen = cfg.get("margen_tolerancia", 1.5)
+    factor_min = cfg.get("factor_min", 0.5)
+    dias = cfg.get("dias_exposicion", 7)
+
+    exp_tupla = exposicion_reciente_tupla(strategy, subtype, direction, dias)
+    exp_total = exposicion_reciente_total(dias) or 1e-9
+    share = exp_tupla / exp_total
+
+    techo = peso_hrp * margen
+    if share <= techo:
+        return 1.0, ""
+
+    factor = max(factor_min, techo / share)
+    info = (f" | hrp_penalty×{factor:.2f} (share={share:.1%} vs techo={techo:.1%}, "
+            f"peso_hrp={peso_hrp:.1%})")
+    return factor, info
+
+
 # ── Calcular stake ────────────────────────────────────────────────────────────
 
 def calcular_stake(ic: float, strategy: str = "", subtype: str = "",
@@ -923,6 +1048,14 @@ def calcular_stake(ic: float, strategy: str = "", subtype: str = "",
             inv_str = (f" | inv_penalty×{inv_factor:.2f} "
                        f"(q_net={inv['q_net']:+d} YES={inv['BUY_YES']} NO={inv['BUY_NO']})")
 
+    # Techo de exposición por tupla (HRP portfolio, ver _hrp_exposure_factor
+    # arriba) — inerte salvo riesgo.hrp_exposicion.activo=true.
+    hrp_str = ""
+    if strategy and subtype and direction:
+        hrp_factor, hrp_str = _hrp_exposure_factor(strategy, subtype, direction, config)
+        if hrp_factor < 1.0:
+            stake = max(min_stake, stake * hrp_factor)
+
     # Freno diario prospectivo: el freno 2 del circuit breaker
     # (verificar_circuit_breaker) solo mira PnL realizado, así que con stakes
     # de ~8% del bankroll un solo trade puede cruzar el límite diario de largo
@@ -957,7 +1090,7 @@ def calcular_stake(ic: float, strategy: str = "", subtype: str = "",
     motivo = (
         f"bankroll={bkr:.2f}€ | "
         f"Kelly={techo_kelly:.2f}€  max10%={techo_pct:.2f}€  máx={techo_config:.2f}€"
-        f"{inv_str}{freno_str} → stake={stake:.2f}€"
+        f"{inv_str}{hrp_str}{freno_str} → stake={stake:.2f}€"
     )
 
     return {
