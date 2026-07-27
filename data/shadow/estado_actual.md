@@ -1,4 +1,4 @@
-# Estado del bot — 2026-07-27 21:52 UTC
+# Estado del bot — 2026-07-27 22:00 UTC
 
 ## Live — dinero real (on-chain)
 | | |
@@ -13,21 +13,21 @@
 ## Shadow — MODELO SIMULADO (no cobrable)
 | | |
 |---|---|
-| P&L fiel (stake fijo 1$) | +4146.35 $ |
-| P&L sim compuesto | 🟢 +7916.95 $ (ficción Kelly: +31120% s/ operativo) |
-| P&L sim hoy (2026-07-27) | 🟢 +156.68 $ |
-| Operaciones resueltas | 38980 (23238 WIN / 15742 LOSS) — 59.6% |
-| Señales abiertas | 145 |
+| P&L fiel (stake fijo 1$) | +4145.03 $ |
+| P&L sim compuesto | 🟢 +7915.49 $ (ficción Kelly: +31114% s/ operativo) |
+| P&L sim hoy (2026-07-27) | 🟢 +155.22 $ |
+| Operaciones resueltas | 38991 (23243 WIN / 15748 LOSS) — 59.6% |
+| Señales abiertas | 135 |
 
 ## Estrategias (visión global)
 
 | Estrategia | n | Win% | IC_efectivo | Tendencia | PNL | Apuesta | Estado |
 |---|---|---|---|---|---|---|---|
-| GBM_LATE_15M_ESPACIO_ATR | 5617 | 61.4% | +0.114 | 📉 agota (-0.07) | +2562.29$ | 1.14$ | ✅ activa |
-| GBM_LATE_15M | 8386 | 59.3% | +0.093 | ➡️ estable | +2509.29$ | 0.94$ | ✅ activa |
-| GBM_LATE_15M_TARDIO | 5607 | 56.5% | +0.065 | 📉 agota (-0.07) | +1459.22$ | 0.65$ | ✅ activa |
-| UPDOWN_GBM_15M_TARDIO | 2137 | 64.9% | +0.149 | 📉 agota (-0.03) | +925.89$ | 1.49$ | ✅ activa |
-| UPDOWN_GBM | 2874 | 53.3% | +0.033 | 📈 madura (+0.06) | +249.86$ | 0.50$ | ✅ activa |
+| GBM_LATE_15M_ESPACIO_ATR | 5619 | 61.4% | +0.114 | 📉 agota (-0.07) | +2561.87$ | 1.14$ | ✅ activa |
+| GBM_LATE_15M | 8388 | 59.3% | +0.093 | ➡️ estable | +2508.78$ | 0.93$ | ✅ activa |
+| GBM_LATE_15M_TARDIO | 5609 | 56.4% | +0.064 | 📉 agota (-0.07) | +1456.67$ | 0.64$ | ✅ activa |
+| UPDOWN_GBM_15M_TARDIO | 2139 | 64.9% | +0.149 | 📉 agota (-0.03) | +927.16$ | 1.49$ | ✅ activa |
+| UPDOWN_GBM | 2875 | 53.4% | +0.034 | 📈 madura (+0.06) | +250.62$ | 0.50$ | ✅ activa |
 | WEEKLY_PRICE | 425 | 72.5% | +0.224 | 📈 madura (+0.29) | +109.63$ | 2.00$ | ✅ activa |
 | GBM_LATE_15M_PYCONFIRMADO | 284 | 56.7% | +0.066 | 📉 agota (-0.17) | +100.76$ | 0.66$ | ✅ activa |
 | UPDOWN_GBM_15M_CROSS_WINDOW_SPREAD | 194 | 80.4% | +0.301 | ➡️ estable | +37.06$ | 2.00$ | ✅ activa |
@@ -45,7 +45,7 @@
 | STRUCT_NO_15M | 15 | 20.0% | -0.199 | — | -4.68$ | 0.00$ | 🚫 desactivada |
 | PRICE_TARGET_GBM | 150 | 32.7% | -0.171 | 📉 agota (-0.14) | -4.78$ | 0.50$ | ⚠️ IC negativo |
 | LATE_WINDOW_5MIN | 370 | 44.1% | -0.059 | 📉 agota (-0.17) | -5.45$ | 0.50$ | ⚠️ IC negativo |
-| GBM_LATE_5M | 852 | 46.2% | -0.037 | ➡️ estable | -8.06$ | 0.50$ | ⚠️ IC negativo |
+| GBM_LATE_5M | 854 | 46.3% | -0.037 | ➡️ estable | -8.09$ | 0.50$ | ⚠️ IC negativo |
 | SMART_FLOW_1H | 29 | 20.7% | -0.274 | — | -13.82$ | 0.00$ | 🚫 desactivada |
 | UPDOWN_OU_5M | 84 | 28.6% | -0.209 | 📉 agota (-0.14) | -18.89$ | 0.00$ | 🚫 desactivada |
 | STREAK_FADE_5M | 247 | 44.9% | -0.050 | 📉 agota (-0.06) | -25.47$ | 0.50$ | ⚠️ IC negativo |
@@ -56,11 +56,11 @@
 
 | Timestamp | Estrategia | Mercado | Resultado | PNL |
 |---|---|---|---|---|
-| 2026-07-27T21:34 | GBM_LATE_15M_ESPACIO_ATR#DOGE#15min | Dogecoin Up or Down - July 27, 5:15PM-5:30PM ET… | ✅ WIN | +1.16$ |
-| 2026-07-27T21:34 | GBM_LATE_15M_ESPACIO_ATR#BTC#15min | Bitcoin Up or Down - July 27, 5:15PM-5:30PM ET… | ❌ LOSS | -1.80$ |
-| 2026-07-27T21:34 | GBM_LATE_15M_TARDIO#BTC#15min | Bitcoin Up or Down - July 27, 5:15PM-5:30PM ET… | ❌ LOSS | -1.20$ |
-| 2026-07-27T21:34 | UPDOWN_GBM_15M_TARDIO#DOGE#15min | Dogecoin Up or Down - July 27, 5:15PM-5:30PM ET… | ✅ WIN | +1.54$ |
-| 2026-07-27T21:34 | UPDOWN_GBM#DOGE#15min | Dogecoin Up or Down - July 27, 5:15PM-5:30PM ET… | ✅ WIN | +0.46$ |
+| 2026-07-27T21:58 | GBM_LATE_5M#XRP#5min | XRP Up or Down - July 27, 5:40PM-5:45PM ET… | ✅ WIN | +0.48$ |
+| 2026-07-27T21:58 | GBM_LATE_15M_TARDIO#XRP#15min | XRP Up or Down - July 27, 5:30PM-5:45PM ET… | ❌ LOSS | -2.04$ |
+| 2026-07-27T21:58 | GBM_LATE_5M#XRP#5min | XRP Up or Down - July 27, 5:35PM-5:40PM ET… | ❌ LOSS | -0.51$ |
+| 2026-07-27T21:58 | UPDOWN_GBM_15M_TARDIO#XRP#15min | XRP Up or Down - July 27, 5:30PM-5:45PM ET… | ✅ WIN | +1.96$ |
+| 2026-07-27T21:58 | UPDOWN_GBM#XRP#15min | XRP Up or Down - July 27, 5:30PM-5:45PM ET… | ✅ WIN | +0.76$ |
 
 ## Calidad de datos
 
