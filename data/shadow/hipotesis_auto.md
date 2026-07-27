@@ -1,5 +1,5 @@
-# Hipótesis automáticas — 2026-07-27 02:30 UTC
-_Generado por shadow_postmortem.py sobre 37595 resoluciones (PNL=+7784.78€)_
+# Hipótesis automáticas — 2026-07-27 02:37 UTC
+_Generado por shadow_postmortem.py sobre 37598 resoluciones (PNL=+7781.46€)_
 
 ## Patrones causales activos
 
@@ -24,15 +24,15 @@ _Generado por shadow_postmortem.py sobre 37595 resoluciones (PNL=+7784.78€)_
   - _Por qué funciona_: hora tardía/noche → sesión US cerrada, menos participantes informados; señales más ruidosas
   - _Acción_: Kelly boost +0.88€ cuando `hora_utc` > 17.0 (IC base=+0.170)
 
-- **PATRÓN** `hora_utc` < `7.0` → IC=+0.188 (n=1162)
+- **PATRÓN** `hora_utc` < `7.0` → IC=+0.187 (n=1164)
   - _Por qué funciona_: hora temprana → mercados cripto menos líquidos, spreads más amplios; edge real menor
-  - _Acción_: Kelly boost +0.94€ cuando `hora_utc` < 7.0 (IC base=+0.170)
+  - _Acción_: Kelly boost +0.93€ cuando `hora_utc` < 7.0 (IC base=+0.170)
 
 - **PATRÓN** `py_entrada` < `0.265` → IC=+0.336 (n=877)
 
   - _Acción_: Kelly boost +1.00€ cuando `py_entrada` < 0.265 (IC base=+0.170)
 
-- **PATRÓN** `libro_spread` < `0.01` → IC=+0.173 (n=2844)
+- **PATRÓN** `libro_spread` < `0.01` → IC=+0.173 (n=2845)
 
   - _Acción_: Kelly boost +0.86€ cuando `libro_spread` < 0.01 (IC base=+0.170)
 
@@ -175,19 +175,19 @@ _Generado por shadow_postmortem.py sobre 37595 resoluciones (PNL=+7784.78€)_
 
 - **PATRÓN** `hora_utc` > `17.0` → IC=+0.208 (n=207)
   - _Por qué funciona_: hora tardía/noche → sesión US cerrada, menos participantes informados; señales más ruidosas
-  - _Acción_: Kelly boost +1.00€ cuando `hora_utc` > 17.0 (IC base=+0.205)
+  - _Acción_: Kelly boost +1.00€ cuando `hora_utc` > 17.0 (IC base=+0.204)
 
-- **PATRÓN** `hora_utc` < `5.0` → IC=+0.230 (n=198)
+- **PATRÓN** `hora_utc` < `17.0` → IC=+0.211 (n=573)
   - _Por qué funciona_: hora temprana → mercados cripto menos líquidos, spreads más amplios; edge real menor
-  - _Acción_: Kelly boost +1.00€ cuando `hora_utc` < 5.0 (IC base=+0.205)
+  - _Acción_: Kelly boost +1.00€ cuando `hora_utc` < 17.0 (IC base=+0.204)
 
 - **PATRÓN** `py_entrada` < `0.37` → IC=+0.267 (n=495)
 
-  - _Acción_: Kelly boost +1.00€ cuando `py_entrada` < 0.37 (IC base=+0.205)
+  - _Acción_: Kelly boost +1.00€ cuando `py_entrada` < 0.37 (IC base=+0.204)
 
-- **PATRÓN** `libro_liquidez` > `1581.0777` → IC=+0.209 (n=561)
+- **PATRÓN** `libro_liquidez` > `1585.2799` → IC=+0.209 (n=561)
 
-  - _Acción_: Kelly boost +1.00€ cuando `libro_liquidez` > 1581.0777 (IC base=+0.205)
+  - _Acción_: Kelly boost +1.00€ cuando `libro_liquidez` > 1585.2799 (IC base=+0.204)
 
 ### FAVORITO_CONFIRMADO#SOL#60min
 - **PATRÓN** `hora_utc` > `18.0` → IC=+0.224 (n=56)
@@ -1129,10 +1129,10 @@ _Derivadas de los patrones aprendidos:_
 | ✅ BALLENAS_TARDIAS#15min | 45 | +0.394 | +5.38€ | 0 | 0 |
 | ✅ BALLENAS_TARDIAS#BTC | 45 | +0.394 | +5.38€ | 0 | 0 |
 | ✅ BALLENAS_TARDIAS#BTC#15min | 45 | +0.394 | +5.38€ | 0 | 0 |
-| ✅ FAVORITO_CONFIRMADO | 6650 | +0.179 | -24.31€ | 0 | 8 |
-| ✅ FAVORITO_CONFIRMADO#15min | 4384 | +0.203 | -28.88€ | 0 | 0 |
+| ✅ FAVORITO_CONFIRMADO | 6652 | +0.179 | -28.39€ | 0 | 8 |
+| ✅ FAVORITO_CONFIRMADO#15min | 4385 | +0.203 | -30.92€ | 0 | 0 |
 | ✅ FAVORITO_CONFIRMADO#240min | 294 | +0.057 | -17.39€ | 0 | 0 |
-| ✅ FAVORITO_CONFIRMADO#5min | 801 | +0.124 | -65.03€ | 0 | 0 |
+| ✅ FAVORITO_CONFIRMADO#5min | 802 | +0.123 | -67.07€ | 0 | 0 |
 | ✅ FAVORITO_CONFIRMADO#60min | 1171 | +0.158 | +86.99€ | 0 | 0 |
 | ✅ FAVORITO_CONFIRMADO#BTC | 1955 | +0.186 | +4.85€ | 0 | 0 |
 | ✅ FAVORITO_CONFIRMADO#BTC#15min | 1457 | +0.199 | -46.22€ | 0 | 7 |
@@ -1141,22 +1141,22 @@ _Derivadas de los patrones aprendidos:_
 | ✅ FAVORITO_CONFIRMADO#BTC#60min | 391 | +0.182 | +65.72€ | 0 | 7 |
 | ✅ FAVORITO_CONFIRMADO#DOGE | 8 | +0.120 | +5.71€ | 0 | 0 |
 | ✅ FAVORITO_CONFIRMADO#DOGE#15min | 7 | +0.097 | +4.78€ | 0 | 0 |
-| ✅ FAVORITO_CONFIRMADO#ETH | 2336 | +0.168 | -46.05€ | 0 | 0 |
+| ✅ FAVORITO_CONFIRMADO#ETH | 2337 | +0.168 | -48.09€ | 0 | 0 |
 | ✅ FAVORITO_CONFIRMADO#ETH#15min | 1443 | +0.199 | -12.28€ | 0 | 5 |
 | ✅ FAVORITO_CONFIRMADO#ETH#240min | 97 | -0.025 | -22.44€ | 0 | 0 |
-| ✅ FAVORITO_CONFIRMADO#ETH#5min | 405 | +0.127 | -30.86€ | 0 | 0 |
+| ✅ FAVORITO_CONFIRMADO#ETH#5min | 406 | +0.125 | -32.90€ | 0 | 0 |
 | ✅ FAVORITO_CONFIRMADO#ETH#60min | 391 | +0.144 | +19.53€ | 0 | 9 |
-| ✅ FAVORITO_CONFIRMADO#SOL | 2312 | +0.185 | +9.12€ | 0 | 0 |
-| ✅ FAVORITO_CONFIRMADO#SOL#15min | 1444 | +0.212 | +26.22€ | 0 | 9 |
+| ✅ FAVORITO_CONFIRMADO#SOL | 2313 | +0.185 | +7.08€ | 0 | 0 |
+| ✅ FAVORITO_CONFIRMADO#SOL#15min | 1445 | +0.212 | +24.18€ | 0 | 9 |
 | ✅ FAVORITO_CONFIRMADO#SOL#240min | 98 | +0.150 | +16.84€ | 0 | 0 |
 | ✅ FAVORITO_CONFIRMADO#SOL#5min | 381 | +0.127 | -35.68€ | 0 | 0 |
 | ✅ FAVORITO_CONFIRMADO#SOL#60min | 389 | +0.147 | +1.74€ | 0 | 8 |
 | ✅ FAVORITO_CONFIRMADO#XRP | 35 | +0.149 | +1.45€ | 0 | 0 |
 | ✅ FAVORITO_CONFIRMADO#XRP#15min | 29 | +0.113 | -2.00€ | 0 | 0 |
-| ✅ FAVORITO_CONFIRMADO_SOL_ALTACONVICCION | 410 | +0.306 | +10.75€ | 0 | 0 |
-| ✅ FAVORITO_CONFIRMADO_SOL_ALTACONVICCION#15min | 410 | +0.306 | +10.75€ | 0 | 0 |
-| ✅ FAVORITO_CONFIRMADO_SOL_ALTACONVICCION#SOL | 410 | +0.306 | +10.75€ | 0 | 0 |
-| ✅ FAVORITO_CONFIRMADO_SOL_ALTACONVICCION#SOL#15min | 410 | +0.306 | +10.75€ | 0 | 0 |
+| ✅ FAVORITO_CONFIRMADO_SOL_ALTACONVICCION | 411 | +0.306 | +11.51€ | 0 | 0 |
+| ✅ FAVORITO_CONFIRMADO_SOL_ALTACONVICCION#15min | 411 | +0.306 | +11.51€ | 0 | 0 |
+| ✅ FAVORITO_CONFIRMADO_SOL_ALTACONVICCION#SOL | 411 | +0.306 | +11.51€ | 0 | 0 |
+| ✅ FAVORITO_CONFIRMADO_SOL_ALTACONVICCION#SOL#15min | 411 | +0.306 | +11.51€ | 0 | 0 |
 | ✅ GBM_LATE_15M | 8151 | +0.094 | +2457.20€ | 0 | 4 |
 | ✅ GBM_LATE_15M#15min | 8151 | +0.094 | +2457.20€ | 0 | 0 |
 | ✅ GBM_LATE_15M#BTC | 1972 | +0.072 | +346.15€ | 0 | 0 |
@@ -1407,7 +1407,7 @@ _Derivadas de los patrones aprendidos:_
 **🟡 H-STREAK-COOLDOWN** — Cooldown tras 2 derrotas consecutivas (mismo subtype)
   - _Umbral_: n≥40 tras 2 losses y gap(IC_tras_win - IC_tras_2loss)≥0.05
   - _Acción_: Reducir stake (no desactivar) 1-2h tras 2 derrotas consecutivas en el mismo subtype
-  - _Estado_: tras_win IC=+0.112 n=22390 | tras_1loss IC=+0.079 n=14996 | tras_2loss IC=+0.051 n=6286/40 | gap=+0.061 (umbral 0.05)
+  - _Estado_: tras_win IC=+0.112 n=22392 | tras_1loss IC=+0.079 n=14997 | tras_2loss IC=+0.051 n=6286/40 | gap=+0.061 (umbral 0.05)
 
 **🟡 H-KALMAN** — Kalman filter para drift adaptativo
   - _Umbral_: n≥200 por subtipo para calibrar parámetros Q/R del KF
@@ -1678,8 +1678,8 @@ _Derivadas de los patrones aprendidos:_
   - _Hipótesis_: Inspirado en el paper de Fornero (2023, 43 Jornadas SADAF) sobre astrología financiera: 5 estudios peer-review (Dichev & Janes 2003, Yuan et al. 2006, Keef & Khaled 2011, Floros & Tan 2013, Liu & Tseng 2009) en 25-62 mercados bursátiles encuentran rendimientos 5-10%/año más bajos cerca de luna llena que de luna nueva. El propio paper es escéptico de la astrología como tal, pero el mecanismo que documenta no es místico: sesgo de humor de inversores minoristas (más fuerte en acciones con dominancia retail, casi nulo en institucional). Polymarket es un mercado muy retail/cripto — hipótesis: si el mecanismo transfiere, debería verse peor IC cerca de luna llena (moon_phase≈0.5) que en el resto del ciclo.
   - _Umbral_: n≥200 PERO ADEMÁS necesita cubrir al menos 3 ciclos lunares completos (~90 días de calendario) — no evaluar solo por n, aunque el volumen diario ya lo cruce en horas
   - _Acción_: Si IC cerca de luna llena < IC resto del ciclo con margen ≥0.05 y ≥3 ciclos lunares cubiertos → considerar boost/filtro por moon_phase. No implementar con menos de 3 ciclos aunque n sea alto — el efecto es de calendario lento, no de volumen.
-  - _Estado_: n=1333 IC=+0.054 PNL=+144.68€ — sin señal clara aún (umbral IC: min=None max=-0.03)
-  - _Datos_: n=1333 IC=+0.054 PNL=+144.68€
+  - _Estado_: n=1336 IC=+0.053 PNL=+141.35€ — sin señal clara aún (umbral IC: min=None max=-0.03)
+  - _Datos_: n=1336 IC=+0.053 PNL=+141.35€
 
 **〰️ H-CUSTOM-MERCURY-RETROGRADO** — Mercurio retrógrado: ¿rendimiento peor durante la ventana?
   - _Hipótesis_: Mismo origen que H-CUSTOM-MOON-LLENA (paper de Fornero, 43 Jornadas SADAF 2023). Qi, Wang & Zhang (2022, 48 mercados, 1973-2019): rendimientos 3.33%/año más bajos durante Mercurio retrógrado. Kou & Ma (2022) en China (99.8% cuentas retail): hasta -31% anualizado. Ambos estudios confirman que el mecanismo es la creencia/superstición de inversores retail (mayor efecto cuanto más retail y más supersticioso el mercado), no un efecto astral literal — Polymarket encaja en ese perfil. Ventanas 2026 (fuente pública, actualizar cada año): 26-feb a 20-mar, 29-jun a 23-jul, 24-oct a 13-nov.
@@ -1872,8 +1872,8 @@ _Derivadas de los patrones aprendidos:_
   - _Hipótesis_: 12-Jul: el cierre 08-Jul (n=2494, sin desagregar por estrategia/activo) encontro ruido puro. Desagregando por estrategia+activo (mecanismo nuevo): FAVORITO_CONFIRMADO#SOL alineado con smart_money_consensus (|consenso|>0.1, n_wallets>=3) hit=78.4% (n=37) vs contrario hit=52.4% (n=42), z=+2.41. GBM_LATE_15M tambien muestra el mismo signo en BTC/ETH/XRP (z=0.86-1.61, mas debil) pero SOL plano ahi -- inconsistencia entre estrategias que hay que entender antes de actuar.
   - _Umbral_: n>=40 por lado y z>=2
   - _Acción_: Si confirma con n>=40 y z>=2 -> considerar boost condicionado a alineacion con smart_money_consensus en FAVORITO_CONFIRMADO#SOL
-  - _Estado_: SEÑAL POSITIVA confirmada: IC=+0.207 > 0.08 con n=418 PNL=+25.54€
-  - _Datos_: n=418 IC=+0.207 PNL=+25.54€
+  - _Estado_: SEÑAL POSITIVA confirmada: IC=+0.205 > 0.08 con n=419 PNL=+23.50€
+  - _Datos_: n=419 IC=+0.205 PNL=+23.50€
 
 **🟡 H-CUSTOM-FAVORITO-SOL-ALTACONVICCION** — FAVORITO_CONFIRMADO SOL BUY_YES alta conviccion (py_entrada alto) — UNICO caso positivo en fill-ability de hoy
   - _Hipótesis_: 12-Jul: auditoria de fill-ability de las 8 candidatas encontro las 8 negativas en agregado. Pero desagregando FAVORITO_CONFIRMADO por activo (mecanismo nuevo, no mirado hasta hoy): SOL#BUY_YES con py_entrada>=0.665-0.695 da pnl/trade POSITIVO en el subconjunto fillable real (+0.12 a +0.41 EUR/trade, n=6-17 segun el corte exacto) -- unico resultado positivo de toda la auditoria de candidatas. n todavia bajo, necesita mas dato antes de proponer nada.
