@@ -1,24 +1,24 @@
 {
-  "timestamp_utc": "2026-07-27T20:40:52+00:00",
+  "timestamp_utc": "2026-07-27T20:49:00+00:00",
   "estado_global": "OK",
   "alertas": [
-    "BTC:gap 11min (20:00)",
-    "ETH:gap 11min (20:00)",
-    "SOL:gap 11min (20:00)",
-    "XRP:gap 11min (20:00)"
+    "BTC:gap 12min (20:35)",
+    "ETH:gap 12min (20:35)",
+    "SOL:gap 12min (20:35)",
+    "XRP:gap 12min (20:35)"
   ],
   "rechazos_1h": {
     "rango": 0,
     "spike": 0,
     "total": 0,
-    "cambio_fuente": 40,
+    "cambio_fuente": 36,
     "por_sym": {}
   },
   "assets": {
     "BTC": {
       "estado": "OK",
-      "n": 4290,
-      "age_seconds": 6.2,
+      "n": 4285,
+      "age_seconds": 4.1,
       "ultimo_precio": 64959.445,
       "gaps": [
         {
@@ -30,16 +30,21 @@
           "inicio": "2026-07-27T20:00:18",
           "fin": "2026-07-27T20:11:39",
           "duracion_min": 11.3
+        },
+        {
+          "inicio": "2026-07-27T20:35:24",
+          "fin": "2026-07-27T20:47:44",
+          "duracion_min": 12.3
         }
       ],
       "alertas": [
-        "gap 11min (20:00)"
+        "gap 12min (20:35)"
       ]
     },
     "ETH": {
       "estado": "OK",
-      "n": 4290,
-      "age_seconds": 6.2,
+      "n": 4285,
+      "age_seconds": 4.1,
       "ultimo_precio": 1945.975,
       "gaps": [
         {
@@ -51,17 +56,22 @@
           "inicio": "2026-07-27T20:00:18",
           "fin": "2026-07-27T20:11:39",
           "duracion_min": 11.3
+        },
+        {
+          "inicio": "2026-07-27T20:35:24",
+          "fin": "2026-07-27T20:47:44",
+          "duracion_min": 12.3
         }
       ],
       "alertas": [
-        "gap 11min (20:00)"
+        "gap 12min (20:35)"
       ]
     },
     "SOL": {
       "estado": "OK",
-      "n": 4290,
-      "age_seconds": 6.2,
-      "ultimo_precio": 75.94,
+      "n": 4285,
+      "age_seconds": 4.1,
+      "ultimo_precio": 75.84,
       "gaps": [
         {
           "inicio": "2026-07-27T14:06:39",
@@ -72,17 +82,22 @@
           "inicio": "2026-07-27T20:00:18",
           "fin": "2026-07-27T20:11:39",
           "duracion_min": 11.3
+        },
+        {
+          "inicio": "2026-07-27T20:35:24",
+          "fin": "2026-07-27T20:47:44",
+          "duracion_min": 12.3
         }
       ],
       "alertas": [
-        "gap 11min (20:00)"
+        "gap 12min (20:35)"
       ]
     },
     "XRP": {
       "estado": "OK",
-      "n": 4290,
-      "age_seconds": 6.2,
-      "ultimo_precio": 1.0905,
+      "n": 4285,
+      "age_seconds": 4.1,
+      "ultimo_precio": 1.0903,
       "gaps": [
         {
           "inicio": "2026-07-27T14:06:39",
@@ -93,10 +108,15 @@
           "inicio": "2026-07-27T20:00:18",
           "fin": "2026-07-27T20:11:39",
           "duracion_min": 11.3
+        },
+        {
+          "inicio": "2026-07-27T20:35:24",
+          "fin": "2026-07-27T20:47:44",
+          "duracion_min": 12.3
         }
       ],
       "alertas": [
-        "gap 11min (20:00)"
+        "gap 12min (20:35)"
       ]
     }
   },
