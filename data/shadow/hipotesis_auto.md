@@ -1,4 +1,4 @@
-# Hipótesis automáticas — 2026-07-27 19:59 UTC
+# Hipótesis automáticas — 2026-07-27 20:03 UTC
 _Generado por shadow_postmortem.py sobre 38876 resoluciones (PNL=+7920.95€)_
 
 ## Patrones causales activos
@@ -1437,7 +1437,7 @@ _Derivadas de los patrones aprendidos:_
 **⏳ H-KELLY-HORA** — Kelly boost ×1.2 en horas top (15/17/19h UTC)
   - _Umbral_: n≥40 por hora con IC estable ≥+0.10 confirmado en forward
   - _Acción_: Añadir HORA_BOOST = {13: 1.2, 15: 1.2, 17: 1.2, 19: 1.2} en shadow_predict.py
-  - _Estado_: H=13h UTC: IC=+0.090 n=1711/40 PNL=+332.83€ | H=15h UTC: IC=+0.116 n=1664/40 PNL=+517.02€ | H=17h UTC: IC=+0.086 n=1613/40 PNL=+272.07€ | H=19h UTC: IC=+0.142 n=1553/40 PNL=+463.74€
+  - _Estado_: H=13h UTC: IC=+0.090 n=1711/40 PNL=+332.83€ | H=15h UTC: IC=+0.116 n=1664/40 PNL=+517.02€ | H=17h UTC: IC=+0.086 n=1613/40 PNL=+272.07€ | H=19h UTC: IC=+0.143 n=1549/40 PNL=+471.21€
 
 **⏳ H-60MIN-LIVE** — Estrategias 60min → umbral live (IC≥0.08 n≥40)
   - _Umbral_: IC≥0.08 y n≥40 en cualquier subtipo 60min
