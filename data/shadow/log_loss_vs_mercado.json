@@ -1,10 +1,10 @@
 {
   "estrategias": {
     "BALLENAS_CONFIRMADAS_15M": {
-      "n": 1363,
-      "log_loss_modelo": 0.6831,
-      "log_loss_mercado": 0.6361,
-      "gap": -0.047,
+      "n": 1371,
+      "log_loss_modelo": 0.6832,
+      "log_loss_mercado": 0.6364,
+      "gap": -0.0468,
       "peor_que_mercado": true
     },
     "BALLENAS_TARDIAS": {
@@ -15,8 +15,8 @@
       "peor_que_mercado": true
     },
     "FAVORITO_CONFIRMADO": {
-      "n": 6687,
-      "log_loss_modelo": 0.6052,
+      "n": 6689,
+      "log_loss_modelo": 0.6051,
       "log_loss_mercado": 0.6004,
       "gap": -0.0047,
       "peor_que_mercado": true
@@ -29,17 +29,17 @@
       "peor_que_mercado": true
     },
     "GBM_LATE_15M": {
-      "n": 8011,
-      "log_loss_modelo": 0.6982,
+      "n": 8022,
+      "log_loss_modelo": 0.698,
       "log_loss_mercado": 0.672,
-      "gap": -0.0262,
+      "gap": -0.026,
       "peor_que_mercado": true
     },
     "GBM_LATE_15M_ESPACIO_ATR": {
-      "n": 5236,
-      "log_loss_modelo": 0.6936,
-      "log_loss_mercado": 0.6572,
-      "gap": -0.0365,
+      "n": 5249,
+      "log_loss_modelo": 0.6931,
+      "log_loss_mercado": 0.6571,
+      "gap": -0.036,
       "peor_que_mercado": true
     },
     "GBM_LATE_15M_PYCONFIRMADO": {
@@ -50,10 +50,10 @@
       "peor_que_mercado": true
     },
     "GBM_LATE_15M_TARDIO": {
-      "n": 5220,
-      "log_loss_modelo": 0.7093,
-      "log_loss_mercado": 0.6505,
-      "gap": -0.0588,
+      "n": 5234,
+      "log_loss_modelo": 0.7086,
+      "log_loss_mercado": 0.6502,
+      "gap": -0.0584,
       "peor_que_mercado": true
     },
     "GBM_LATE_5M": {
@@ -134,10 +134,10 @@
       "peor_que_mercado": true
     },
     "UPDOWN_GBM": {
-      "n": 2777,
+      "n": 2780,
       "log_loss_modelo": 0.6867,
       "log_loss_mercado": 0.6749,
-      "gap": -0.0119,
+      "gap": -0.0118,
       "peor_que_mercado": true
     },
     "UPDOWN_GBM_15M_CROSS_WINDOW_SPREAD": {
@@ -148,10 +148,10 @@
       "peor_que_mercado": false
     },
     "UPDOWN_GBM_15M_TARDIO": {
-      "n": 2016,
-      "log_loss_modelo": 0.6145,
-      "log_loss_mercado": 0.6612,
-      "gap": 0.0467,
+      "n": 2025,
+      "log_loss_modelo": 0.6146,
+      "log_loss_mercado": 0.6614,
+      "gap": 0.0468,
       "peor_que_mercado": false
     },
     "UPDOWN_GBM_ETH_15M_HORA7": {
