@@ -57,11 +57,31 @@ while true; do
         if [ $((NOW - LAST_GIT)) -ge $GIT_BATCH_S ]; then
             LAST_GIT=$NOW
             cd "$REPO_DIR"
+            # rebase huérfano (ej. `timeout 60s` matando un rebase a medias) --
+            # limpiar ANTES de intentar uno nuevo, si no el pull de abajo lo
+            # hereda arrastrado indefinidamente (encontrado 27-Jul, cruft de
+            # semanas acumulado en .git/rebase-merge + git stash list).
+            if [ -d .git/rebase-merge ] || [ -d .git/rebase-apply ]; then
+                log "  ⚠️ rebase huérfano en .git -- limpiando antes de continuar"
+                git rebase --abort >> "$LOG" 2>&1 || rm -rf .git/rebase-merge .git/rebase-apply
+            fi
             git add data/shadow/ data/live/ >> "$LOG" 2>&1 || true
             if ! git diff --cached --quiet 2>/dev/null; then
                 timeout 30s git commit -m "shadow: ciclo $CICLO $(date -u +%Y-%m-%dT%H:%MZ)" >> "$LOG" 2>&1 || true
-                timeout 60s git pull --rebase --autostash -X ours origin main >> "$LOG" 2>&1 || true
-                timeout 60s git push origin main >> "$LOG" 2>&1 || true
+                # 23-Jul (feedback_run_fast_git_rebase_pierde_trabajo_23jul):
+                # -X ours bajo `rebase` favorece origin/main en conflictos --
+                # correcto para datos (mismo criterio que "siempre --theirs"
+                # de CLAUDE.md), pero CATASTRÓFICO si este directorio queda
+                # checked out en una rama de feature (commits propios
+                # descartados en silencio). Saltar pull/rebase/push si no
+                # estamos en main -- el commit de datos de arriba se queda
+                # igual en cualquier rama.
+                if [ "$(git branch --show-current)" = "main" ]; then
+                    timeout 60s git pull --rebase --autostash -X ours origin main >> "$LOG" 2>&1 || true
+                    timeout 60s git push origin main >> "$LOG" 2>&1 || true
+                else
+                    log "  ⚠️ rama actual != main -- se salta pull/rebase/push (solo commit local de datos)"
+                fi
             fi
         fi
     fi

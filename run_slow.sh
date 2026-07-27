@@ -38,12 +38,26 @@ while true; do
 
     # Git: precios, leaderboard e hipótesis LLM
     cd "$REPO_DIR"
+    # rebase huérfano -- mismo guard que run_fast.sh, ver comentario ahí.
+    if [ -d .git/rebase-merge ] || [ -d .git/rebase-apply ]; then
+        log "  ⚠️ rebase huérfano en .git -- limpiando antes de continuar"
+        git rebase --abort >> "$LOG" 2>&1 || rm -rf .git/rebase-merge .git/rebase-apply
+    fi
     git add data/prices/ data/wallets/leaderboard_*.csv data/shadow/hipotesis_*.md data/shadow/hipotesis_pendientes.json data/shadow/arb_scan_*.csv data/shadow/cross_arb_*.csv data/shadow/combi_arb_*.csv data/shadow/combi_candidates.json >> "$LOG" 2>&1 || true
     if ! git diff --cached --quiet 2>/dev/null; then
         timeout 30s git commit -m "data: ciclo slow $CICLO $(date -u +%Y-%m-%dT%H:%MZ)" >> "$LOG" 2>&1 || true
-        timeout 60s git pull --rebase --autostash -X ours origin main >> "$LOG" 2>&1 || true
-        timeout 60s git push origin main >> "$LOG" 2>&1 || true
-        log "  Push OK"
+        # 23-Jul (feedback_run_fast_git_rebase_pierde_trabajo_23jul): -X ours
+        # bajo rebase favorece origin/main -- correcto para datos, pero
+        # catastrófico si el directorio queda checked out en una rama de
+        # feature (commits propios descartados en silencio). Saltar
+        # pull/rebase/push fuera de main -- el commit de datos ya quedó hecho.
+        if [ "$(git branch --show-current)" = "main" ]; then
+            timeout 60s git pull --rebase --autostash -X ours origin main >> "$LOG" 2>&1 || true
+            timeout 60s git push origin main >> "$LOG" 2>&1 || true
+            log "  Push OK"
+        else
+            log "  ⚠️ rama actual != main -- se salta pull/rebase/push (solo commit local de datos)"
+        fi
     fi
 
     log "--- Ciclo slow $CICLO completado ---"
