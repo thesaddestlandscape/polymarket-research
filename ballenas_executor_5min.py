@@ -216,9 +216,10 @@ def libro_publico(token_id: str) -> dict | None:
 
 
 def concentracion_ballenas(condition_id: str, banda_lo: float, banda_hi: float,
-                            activo: str) -> tuple[float | None, float | None, int, str, list, int]:
-    """(pct_yes_crudo, pct_yes_ponderado, n, motivo, wallets_yes, n_yes_total)
-    -- mide ambos lados porque la dirección todavía no está fijada.
+                            activo: str) -> tuple[float | None, float | None, int, str, list, int, int]:
+    """(pct_yes_crudo, pct_yes_ponderado, n, motivo, wallets_yes, n_yes_total,
+    n_trades_crudo) -- mide ambos lados porque la dirección todavía no está
+    fijada.
 
     23-Jul: se añade pct_yes_ponderado -- cada trade pesa según
     _peso_wallet() (1.0 si la wallet es desconocida o no validada, fuera de
@@ -237,20 +238,23 @@ def concentracion_ballenas(condition_id: str, banda_lo: float, banda_hi: float,
     completo en ETH (n=110, hit=96.4%%, PnL/trade=+0.159€) y es un gate
     REAL para ETH (ver UMBRAL_N_WALLETS_YES).
 
-    ⚠️ NO es un conteo ilimitado (/code-review 27-Jul): trades_de_mercado()
-    pide como mucho MAX_TRADES_POR_MERCADO=100 trades (smart_money_tracker.py,
-    sin paginación) -- en un mercado con más de 100 compras BUY antes de la
-    confirmación, n_yes_total queda truncado a como venga ordenada esa
-    página de la API, no es "todas". Máximo observado hasta hoy: 87 (por
-    debajo del cap) -- el gate de ETH (umbral 35) se validó y opera bajo
-    esta MISMA truncación, así que no hay descalibración entre backtest y
-    producción. Si algún día n_yes_total empieza a tocar 100 con
-    frecuencia, revisar paginación antes de confiar en el número o de subir
-    el umbral de cualquier moneda."""
+    ⚠️ NO es un conteo ilimitado (/code-review 27-Jul, 2 pasadas): trades_de_mercado()
+    pide como mucho MAX_TRADES_POR_MERCADO=100 trades TOTALES (BUY+SELL,
+    YES+NO), sin paginación -- eso es lo que puede truncarse, no
+    directamente n_yes_total (que es un subconjunto siempre menor, filtrado
+    a BUY+yes/up). El aviso de truncación (ver call site) compara
+    n_trades_crudo=len(trades) -- la respuesta cruda ANTES de filtrar --
+    contra el cap; comparar n_yes_total contra el cap (1ª versión de este
+    fix) era código muerto, nunca dispararía porque un subconjunto casi
+    nunca llega al tamaño del conjunto entero. Máximo n_yes_total observado
+    hasta hoy: 87 (el gate de ETH, umbral 35, se validó bajo la misma
+    fuente de datos, no hay descalibración backtest/producción) -- pero eso
+    no dice nada sobre si trades_de_mercado() ya viene truncada de origen."""
     try:
         trades = trades_de_mercado(condition_id)
     except Exception:
-        return None, None, 0, "error_api", [], 0
+        return None, None, 0, "error_api", [], 0, 0
+    n_trades_crudo = len(trades)  # respuesta cruda de la API, antes de filtrar por side/outcome/banda -- esto es lo que realmente toca el cap MAX_TRADES_POR_MERCADO, no n_yes_total (que es un subconjunto siempre menor)
     n_yes = n_no = 0
     n_yes_total = 0
     peso_yes = peso_no = 0.0
@@ -282,10 +286,10 @@ def concentracion_ballenas(condition_id: str, banda_lo: float, banda_hi: float,
             peso_no += peso
     n = n_yes + n_no
     if n == 0:
-        return None, None, 0, "sin_trades_en_banda", [], n_yes_total
+        return None, None, 0, "sin_trades_en_banda", [], n_yes_total, n_trades_crudo
     pct_crudo = n_yes / n
     pct_ponderado = peso_yes / (peso_yes + peso_no) if (peso_yes + peso_no) > 0 else pct_crudo
-    return pct_crudo, pct_ponderado, n, "ok", wallets_yes, n_yes_total
+    return pct_crudo, pct_ponderado, n, "ok", wallets_yes, n_yes_total, n_trades_crudo
 
 
 def _resumen_wallet_edge(wallets: list, activo: str) -> str:
@@ -404,12 +408,13 @@ def watch_window(activo: str, ts_end: int) -> bool:
         with ThreadPoolExecutor(max_workers=2) as ex:
             f_conc = ex.submit(concentracion_ballenas, mercado["condition_id"], banda_lo, banda_hi, activo)
             f_libro = ex.submit(libro_publico, mercado["yes_token"])
-            pct_crudo, pct_ponderado, n, motivo_conc, wallets_yes, n_yes_total = f_conc.result()
+            pct_crudo, pct_ponderado, n, motivo_conc, wallets_yes, n_yes_total, n_trades_crudo = f_conc.result()
             libro = f_libro.result()
 
-        if n_yes_total >= MAX_TRADES_POR_MERCADO:
-            log(f"[{ts_end}] ⚠️ n_yes_total={n_yes_total} toca el cap de la API "
-                f"({MAX_TRADES_POR_MERCADO}) -- posible truncación, revisar paginación "
+        if n_trades_crudo >= MAX_TRADES_POR_MERCADO:
+            log(f"[{ts_end}] ⚠️ respuesta de trades_de_mercado con {n_trades_crudo} filas "
+                f"toca el cap de la API ({MAX_TRADES_POR_MERCADO}) -- posible truncación "
+                f"(n_yes_total={n_yes_total} puede estar incompleto), revisar paginación "
                 f"si esto se vuelve frecuente", activo)
 
         contadores[motivo_conc] = contadores.get(motivo_conc, 0) + 1
