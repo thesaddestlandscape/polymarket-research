@@ -3713,5 +3713,6 @@
  "candidato_proxy#GBM_LATE_15M_ESPACIO_ATR#XRP#15min#XRP#BUY_NO#sigma_ewma_delta_pctlt5.494": false,
  "candidato_proxy#GBM_LATE_15M#BTC#15min#BTC#BUY_YES#sigma_hlt0.0057": false,
  "candidato_proxy#GBM_LATE_15M#XRP#15min#XRP#BUY_NO#dist_vwap_pctgt0.3339": false,
- "candidato_proxy#GBM_LATE_15M_TARDIO#XRP#15min#XRP#BUY_NO#sigma_ewma_delta_pctlt9.487": false
+ "candidato_proxy#GBM_LATE_15M_TARDIO#XRP#15min#XRP#BUY_NO#sigma_ewma_delta_pctlt9.487": false,
+ "candidato_proxy#GBM_LATE_15M#XRP#15min#XRP#BUY_NO#sigma_ewma_delta_pctgt7.483": false
 }
