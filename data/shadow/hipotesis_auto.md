@@ -1,5 +1,5 @@
-# Hipótesis automáticas — 2026-07-27 12:21 UTC
-_Generado por shadow_postmortem.py sobre 38307 resoluciones (PNL=+7848.19€)_
+# Hipótesis automáticas — 2026-07-27 12:25 UTC
+_Generado por shadow_postmortem.py sobre 38308 resoluciones (PNL=+7848.80€)_
 
 ## Patrones causales activos
 
@@ -28,11 +28,11 @@ _Generado por shadow_postmortem.py sobre 38307 resoluciones (PNL=+7848.19€)_
   - _Por qué funciona_: hora temprana → mercados cripto menos líquidos, spreads más amplios; edge real menor
   - _Acción_: Kelly boost +0.94€ cuando `hora_utc` < 7.0 (IC base=+0.172)
 
-- **PATRÓN** `py_entrada` < `0.265` → IC=+0.335 (n=884)
+- **PATRÓN** `py_entrada` < `0.265` → IC=+0.335 (n=885)
 
   - _Acción_: Kelly boost +1.00€ cuando `py_entrada` < 0.265 (IC base=+0.172)
 
-- **PATRÓN** `libro_spread` < `0.01` → IC=+0.174 (n=2876)
+- **PATRÓN** `libro_spread` < `0.01` → IC=+0.174 (n=2877)
 
   - _Acción_: Kelly boost +0.87€ cuando `libro_spread` < 0.01 (IC base=+0.172)
 
@@ -1138,10 +1138,10 @@ _Derivadas de los patrones aprendidos:_
 | ✅ BALLENAS_TARDIAS#15min | 45 | +0.394 | +5.38€ | 0 | 0 |
 | ✅ BALLENAS_TARDIAS#BTC | 45 | +0.394 | +5.38€ | 0 | 0 |
 | ✅ BALLENAS_TARDIAS#BTC#15min | 45 | +0.394 | +5.38€ | 0 | 0 |
-| ✅ FAVORITO_CONFIRMADO | 6760 | +0.180 | -0.16€ | 0 | 8 |
+| ✅ FAVORITO_CONFIRMADO | 6761 | +0.180 | +0.44€ | 0 | 8 |
 | ✅ FAVORITO_CONFIRMADO#15min | 4455 | +0.204 | -8.56€ | 0 | 0 |
 | ✅ FAVORITO_CONFIRMADO#240min | 303 | +0.057 | -18.58€ | 0 | 0 |
-| ✅ FAVORITO_CONFIRMADO#5min | 810 | +0.126 | -62.36€ | 0 | 0 |
+| ✅ FAVORITO_CONFIRMADO#5min | 811 | +0.126 | -61.75€ | 0 | 0 |
 | ✅ FAVORITO_CONFIRMADO#60min | 1192 | +0.158 | +89.33€ | 0 | 0 |
 | ✅ FAVORITO_CONFIRMADO#BTC | 1987 | +0.187 | +11.93€ | 0 | 0 |
 | ✅ FAVORITO_CONFIRMADO#BTC#15min | 1480 | +0.201 | -36.47€ | 0 | 7 |
@@ -1155,10 +1155,10 @@ _Derivadas de los patrones aprendidos:_
 | ✅ FAVORITO_CONFIRMADO#ETH#240min | 100 | -0.020 | -21.98€ | 0 | 0 |
 | ✅ FAVORITO_CONFIRMADO#ETH#5min | 411 | +0.127 | -30.97€ | 0 | 0 |
 | ✅ FAVORITO_CONFIRMADO#ETH#60min | 398 | +0.145 | +20.62€ | 0 | 9 |
-| ✅ FAVORITO_CONFIRMADO#SOL | 2349 | +0.185 | +13.45€ | 0 | 0 |
+| ✅ FAVORITO_CONFIRMADO#SOL | 2350 | +0.185 | +14.06€ | 0 | 0 |
 | ✅ FAVORITO_CONFIRMADO#SOL#15min | 1467 | +0.212 | +25.50€ | 0 | 8 |
 | ✅ FAVORITO_CONFIRMADO#SOL#240min | 101 | +0.150 | +18.37€ | 0 | 0 |
-| ✅ FAVORITO_CONFIRMADO#SOL#5min | 384 | +0.130 | -32.90€ | 0 | 0 |
+| ✅ FAVORITO_CONFIRMADO#SOL#5min | 385 | +0.131 | -32.29€ | 0 | 0 |
 | ✅ FAVORITO_CONFIRMADO#SOL#60min | 397 | +0.147 | +2.48€ | 0 | 6 |
 | ✅ FAVORITO_CONFIRMADO#XRP | 35 | +0.149 | +1.45€ | 0 | 0 |
 | ✅ FAVORITO_CONFIRMADO#XRP#15min | 29 | +0.113 | -2.00€ | 0 | 0 |
@@ -1416,7 +1416,7 @@ _Derivadas de los patrones aprendidos:_
 **🟡 H-STREAK-COOLDOWN** — Cooldown tras 2 derrotas consecutivas (mismo subtype)
   - _Umbral_: n≥40 tras 2 losses y gap(IC_tras_win - IC_tras_2loss)≥0.05
   - _Acción_: Reducir stake (no desactivar) 1-2h tras 2 derrotas consecutivas en el mismo subtype
-  - _Estado_: tras_win IC=+0.111 n=22792 | tras_1loss IC=+0.078 n=15306 | tras_2loss IC=+0.051 n=6423/40 | gap=+0.060 (umbral 0.05)
+  - _Estado_: tras_win IC=+0.111 n=22793 | tras_1loss IC=+0.078 n=15306 | tras_2loss IC=+0.051 n=6423/40 | gap=+0.060 (umbral 0.05)
 
 **🟡 H-KALMAN** — Kalman filter para drift adaptativo
   - _Umbral_: n≥200 por subtipo para calibrar parámetros Q/R del KF
@@ -1687,8 +1687,8 @@ _Derivadas de los patrones aprendidos:_
   - _Hipótesis_: Inspirado en el paper de Fornero (2023, 43 Jornadas SADAF) sobre astrología financiera: 5 estudios peer-review (Dichev & Janes 2003, Yuan et al. 2006, Keef & Khaled 2011, Floros & Tan 2013, Liu & Tseng 2009) en 25-62 mercados bursátiles encuentran rendimientos 5-10%/año más bajos cerca de luna llena que de luna nueva. El propio paper es escéptico de la astrología como tal, pero el mecanismo que documenta no es místico: sesgo de humor de inversores minoristas (más fuerte en acciones con dominancia retail, casi nulo en institucional). Polymarket es un mercado muy retail/cripto — hipótesis: si el mecanismo transfiere, debería verse peor IC cerca de luna llena (moon_phase≈0.5) que en el resto del ciclo.
   - _Umbral_: n≥200 PERO ADEMÁS necesita cubrir al menos 3 ciclos lunares completos (~90 días de calendario) — no evaluar solo por n, aunque el volumen diario ya lo cruce en horas
   - _Acción_: Si IC cerca de luna llena < IC resto del ciclo con margen ≥0.05 y ≥3 ciclos lunares cubiertos → considerar boost/filtro por moon_phase. No implementar con menos de 3 ciclos aunque n sea alto — el efecto es de calendario lento, no de volumen.
-  - _Estado_: n=2045 IC=+0.055 PNL=+208.08€ — sin señal clara aún (umbral IC: min=None max=-0.03)
-  - _Datos_: n=2045 IC=+0.055 PNL=+208.08€
+  - _Estado_: n=2046 IC=+0.056 PNL=+208.69€ — sin señal clara aún (umbral IC: min=None max=-0.03)
+  - _Datos_: n=2046 IC=+0.056 PNL=+208.69€
 
 **〰️ H-CUSTOM-MERCURY-RETROGRADO** — Mercurio retrógrado: ¿rendimiento peor durante la ventana?
   - _Hipótesis_: Mismo origen que H-CUSTOM-MOON-LLENA (paper de Fornero, 43 Jornadas SADAF 2023). Qi, Wang & Zhang (2022, 48 mercados, 1973-2019): rendimientos 3.33%/año más bajos durante Mercurio retrógrado. Kou & Ma (2022) en China (99.8% cuentas retail): hasta -31% anualizado. Ambos estudios confirman que el mecanismo es la creencia/superstición de inversores retail (mayor efecto cuanto más retail y más supersticioso el mercado), no un efecto astral literal — Polymarket encaja en ese perfil. Ventanas 2026 (fuente pública, actualizar cada año): 26-feb a 20-mar, 29-jun a 23-jul, 24-oct a 13-nov.
@@ -1881,8 +1881,8 @@ _Derivadas de los patrones aprendidos:_
   - _Hipótesis_: 12-Jul: el cierre 08-Jul (n=2494, sin desagregar por estrategia/activo) encontro ruido puro. Desagregando por estrategia+activo (mecanismo nuevo): FAVORITO_CONFIRMADO#SOL alineado con smart_money_consensus (|consenso|>0.1, n_wallets>=3) hit=78.4% (n=37) vs contrario hit=52.4% (n=42), z=+2.41. GBM_LATE_15M tambien muestra el mismo signo en BTC/ETH/XRP (z=0.86-1.61, mas debil) pero SOL plano ahi -- inconsistencia entre estrategias que hay que entender antes de actuar.
   - _Umbral_: n>=40 por lado y z>=2
   - _Acción_: Si confirma con n>=40 y z>=2 -> considerar boost condicionado a alineacion con smart_money_consensus en FAVORITO_CONFIRMADO#SOL
-  - _Estado_: SEÑAL POSITIVA confirmada: IC=+0.207 > 0.08 con n=428 PNL=+26.13€
-  - _Datos_: n=428 IC=+0.207 PNL=+26.13€
+  - _Estado_: SEÑAL POSITIVA confirmada: IC=+0.208 > 0.08 con n=429 PNL=+26.74€
+  - _Datos_: n=429 IC=+0.208 PNL=+26.74€
 
 **🟡 H-CUSTOM-FAVORITO-SOL-ALTACONVICCION** — FAVORITO_CONFIRMADO SOL BUY_YES alta conviccion (py_entrada alto) — UNICO caso positivo en fill-ability de hoy
   - _Hipótesis_: 12-Jul: auditoria de fill-ability de las 8 candidatas encontro las 8 negativas en agregado. Pero desagregando FAVORITO_CONFIRMADO por activo (mecanismo nuevo, no mirado hasta hoy): SOL#BUY_YES con py_entrada>=0.665-0.695 da pnl/trade POSITIVO en el subconjunto fillable real (+0.12 a +0.41 EUR/trade, n=6-17 segun el corte exacto) -- unico resultado positivo de toda la auditoria de candidatas. n todavia bajo, necesita mas dato antes de proponer nada.
