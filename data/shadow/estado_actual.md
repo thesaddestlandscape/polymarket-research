@@ -1,4 +1,4 @@
-# Estado del bot — 2026-07-27 21:20 UTC
+# Estado del bot — 2026-07-27 21:28 UTC
 
 ## Live — dinero real (on-chain)
 | | |
@@ -13,20 +13,20 @@
 ## Shadow — MODELO SIMULADO (no cobrable)
 | | |
 |---|---|
-| P&L fiel (stake fijo 1$) | +4143.66 $ |
-| P&L sim compuesto | 🟢 +7916.29 $ (ficción Kelly: +31117% s/ operativo) |
-| P&L sim hoy (2026-07-27) | 🟢 +156.02 $ |
-| Operaciones resueltas | 38958 (23225 WIN / 15733 LOSS) — 59.6% |
-| Señales abiertas | 139 |
+| P&L fiel (stake fijo 1$) | +4146.42 $ |
+| P&L sim compuesto | 🟢 +7918.16 $ (ficción Kelly: +31125% s/ operativo) |
+| P&L sim hoy (2026-07-27) | 🟢 +157.90 $ |
+| Operaciones resueltas | 38963 (23229 WIN / 15734 LOSS) — 59.6% |
+| Señales abiertas | 141 |
 
 ## Estrategias (visión global)
 
 | Estrategia | n | Win% | IC_efectivo | Tendencia | PNL | Apuesta | Estado |
 |---|---|---|---|---|---|---|---|
-| GBM_LATE_15M_ESPACIO_ATR | 5613 | 61.4% | +0.114 | 📉 agota (-0.07) | +2559.97$ | 1.14$ | ✅ activa |
-| GBM_LATE_15M | 8380 | 59.3% | +0.093 | ➡️ estable | +2508.26$ | 0.93$ | ✅ activa |
-| GBM_LATE_15M_TARDIO | 5602 | 56.5% | +0.065 | 📉 agota (-0.08) | +1459.60$ | 0.65$ | ✅ activa |
-| UPDOWN_GBM_15M_TARDIO | 2133 | 64.9% | +0.149 | 📉 agota (-0.03) | +927.62$ | 1.49$ | ✅ activa |
+| GBM_LATE_15M_ESPACIO_ATR | 5614 | 61.4% | +0.114 | 📉 agota (-0.07) | +2561.47$ | 1.14$ | ✅ activa |
+| GBM_LATE_15M | 8382 | 59.3% | +0.093 | ➡️ estable | +2507.64$ | 0.93$ | ✅ activa |
+| GBM_LATE_15M_TARDIO | 5603 | 56.5% | +0.065 | 📉 agota (-0.08) | +1460.10$ | 0.65$ | ✅ activa |
+| UPDOWN_GBM_15M_TARDIO | 2134 | 64.9% | +0.149 | 📉 agota (-0.03) | +928.12$ | 1.49$ | ✅ activa |
 | UPDOWN_GBM | 2873 | 53.3% | +0.033 | 📈 madura (+0.06) | +249.39$ | 0.50$ | ✅ activa |
 | WEEKLY_PRICE | 425 | 72.5% | +0.224 | 📈 madura (+0.29) | +109.63$ | 2.00$ | ✅ activa |
 | GBM_LATE_15M_PYCONFIRMADO | 284 | 56.7% | +0.066 | 📉 agota (-0.17) | +100.76$ | 0.66$ | ✅ activa |
@@ -56,30 +56,30 @@
 
 | Timestamp | Estrategia | Mercado | Resultado | PNL |
 |---|---|---|---|---|
-| 2026-07-27T21:18 | GBM_LATE_5M#XRP#5min | XRP Up or Down - July 27, 5:00PM-5:05PM ET… | ❌ LOSS | -0.51$ |
-| 2026-07-27T21:14 | UPDOWN_GBM_15M_TARDIO#ETH#15min | Ethereum Up or Down - July 27, 4:45PM-5:00PM ET… | ❌ LOSS | -2.04$ |
-| 2026-07-27T21:14 | UPDOWN_GBM_15M_TARDIO#SOL#15min | Solana Up or Down - July 27, 4:45PM-5:00PM ET… | ❌ LOSS | -0.82$ |
-| 2026-07-27T21:14 | UPDOWN_GBM#XRP#15min | XRP Up or Down - July 27, 4:45PM-5:00PM ET… | ❌ LOSS | -0.77$ |
-| 2026-07-27T21:14 | UPDOWN_GBM#ETH#15min | Ethereum Up or Down - July 27, 4:45PM-5:00PM ET… | ❌ LOSS | -1.41$ |
+| 2026-07-27T21:26 | GBM_LATE_15M_ESPACIO_ATR#BTC#15min | Bitcoin Up or Down - July 27, 5:00PM-5:15PM ET… | ✅ WIN | +1.50$ |
+| 2026-07-27T21:26 | GBM_LATE_15M_TARDIO#BTC#15min | Bitcoin Up or Down - July 27, 5:00PM-5:15PM ET… | ✅ WIN | +0.50$ |
+| 2026-07-27T21:26 | GBM_LATE_15M#BTC#15min | Bitcoin Up or Down - July 27, 5:00PM-5:15PM ET… | ✅ WIN | +0.56$ |
+| 2026-07-27T21:26 | GBM_LATE_15M#DOGE#15min | Dogecoin Up or Down - July 27, 5:00PM-5:15PM ET… | ❌ LOSS | -1.18$ |
+| 2026-07-27T21:26 | UPDOWN_GBM_15M_TARDIO#BTC#15min | Bitcoin Up or Down - July 27, 5:00PM-5:15PM ET… | ✅ WIN | +0.50$ |
 
 ## Calidad de datos
 
-✅ **OK** — última verificación 2026-07-27T21:17 UTC
+✅ **OK** — última verificación 2026-07-27T21:25 UTC
 
 | Asset | Precio | Age | Alertas |
 |---|---|---|---|
-| ✅ BTC | $64,797.44 | 0.1min | gap 12min (20:35) |
-| ✅ ETH | $1,944.20 | 0.1min | gap 12min (20:35) |
-| ✅ SOL | $75.75 | 0.1min | gap 12min (20:35) |
+| ✅ BTC | $64,825.89 | 0.1min | gap 12min (20:35) |
+| ✅ ETH | $1,945.65 | 0.1min | gap 12min (20:35) |
+| ✅ SOL | $75.71 | 0.1min | gap 12min (20:35) |
 | ✅ XRP | $1.09 | 0.1min | gap 12min (20:35) |
 
 **Cross-source** (binance, coinbase, kraken):
 
 | Asset | Consenso | Fuente | Estado |
 |---|---|---|---|
-| BTC | $64,800.10 | consenso |  |
-| ETH | $1,944.20 | consenso |  |
-| SOL | $75.75 | consenso |  |
+| BTC | $64,825.89 | consenso |  |
+| ETH | $1,945.65 | consenso |  |
+| SOL | $75.74 | consenso |  |
 | XRP | $1.09 | consenso |  |
 
 **Alertas activas:**
