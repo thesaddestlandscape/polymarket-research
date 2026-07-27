@@ -299,6 +299,67 @@ def parse_outcome_prices(raw):
     return None
 
 
+def _confirmar_outcome_por_precio(mercado: dict, end_date_fallback: str, market_id: str,
+                                   clave_conf: str, ahora_dt: datetime,
+                                   estado_confirmacion: dict) -> str | None:
+    """Punto único de verdad: ¿tiene este mercado un outcome definitivo y
+    confirmado ("YES"/"NO"), o None si aún no se puede aceptar? Extraído de
+    evaluar() el 27-Jul para reutilizarlo también desde
+    _cerrar_trades_live() al resolver trades live SIN predicción propia en
+    shadow_predict.py (ver ahí el motivo -- ballenas_executor_5min.py nunca
+    escribe a predictions.csv, a diferencia de ballenas_executor_btc15m.py).
+    Mismas 2 salvaguardas que documentaba evaluar() (ver su docstring):
+    (1) end_date real debe haber pasado, closed/resolved no basta solo; (2)
+    el mismo outcome debe verse estable >= MARGEN_CONFIRMACION_SEGUNDOS
+    (estado_confirmacion persiste entre ciclos, mutado in-place aquí -- fail-
+    closed: pasar un dict nuevo cada vez nunca confirma nada, nunca al
+    revés)."""
+    if not mercado:
+        estado_confirmacion.pop(clave_conf, None)
+        return None
+
+    precios = parse_outcome_prices(mercado.get("outcomePrices"))
+    if not precios or len(precios) < 2:
+        estado_confirmacion.pop(clave_conf, None)
+        return None
+    try:
+        py_final = float(precios[0])
+        pn_final = float(precios[1])
+    except (ValueError, TypeError):
+        estado_confirmacion.pop(clave_conf, None)
+        return None
+
+    if abs(py_final - 1.0) < 0.01:
+        outcome_real = "YES"
+    elif abs(pn_final - 1.0) < 0.01:
+        outcome_real = "NO"
+    else:
+        estado_confirmacion.pop(clave_conf, None)
+        return None  # precios no liquidados — reintentar en el siguiente ciclo
+
+    end_str = mercado.get("endDate") or end_date_fallback
+    end_dt = _parsear_end_date(end_str)
+    end_pasado = end_dt is not None and ahora_dt >= end_dt
+    if end_dt is None:
+        if mercado.get("closed") or mercado.get("resolved") or mercado.get("archived"):
+            print(f"  ⚠️ market {market_id}: closed/resolved=True "
+                  f"pero SIN end_date en ningún sitio (ni API ni predicción) — "
+                  f"no se resuelve por precio hasta tener un end_date real; "
+                  f"si esto persiste, revisar manualmente (reconciliar_posiciones.py "
+                  f"avisa aparte para trades live >60min OPEN tras su end_date)")
+    if not end_pasado:
+        estado_confirmacion.pop(clave_conf, None)
+        return None  # precio cerca de certeza pero el reloj real aún no ha llegado a end_date — reintentar
+
+    previa = estado_confirmacion.get(clave_conf)
+    if previa is None or previa.get("outcome") != outcome_real:
+        estado_confirmacion[clave_conf] = {"outcome": outcome_real, "primera_vista_ts": ahora_dt.timestamp()}
+        return None
+    if ahora_dt.timestamp() - previa["primera_vista_ts"] < MARGEN_CONFIRMACION_SEGUNDOS:
+        return None  # visto pero aún no ha pasado el margen mínimo de estabilidad
+    return outcome_real
+
+
 def evaluar(pred: dict, mercado: dict, ahora: datetime | None = None,
             estado_confirmacion: dict | None = None) -> dict | None:
     """
@@ -336,75 +397,10 @@ def evaluar(pred: dict, mercado: dict, ahora: datetime | None = None,
     estado = estado_confirmacion if estado_confirmacion is not None else {}
     clave_conf = _clave_confirmacion(pred.get("strategy", ""), pred.get("market_id", ""))
 
-    if not mercado:
-        estado.pop(clave_conf, None)
+    outcome_real = _confirmar_outcome_por_precio(
+        mercado, pred.get("end_date", ""), pred.get("market_id", ""), clave_conf, ahora_dt, estado)
+    if outcome_real is None:
         return None
-
-    # --- Señal primaria: outcomePrices ---
-    precios = parse_outcome_prices(mercado.get("outcomePrices"))
-    if not precios or len(precios) < 2:
-        estado.pop(clave_conf, None)
-        return None
-    try:
-        py_final = float(precios[0])
-        pn_final = float(precios[1])
-    except (ValueError, TypeError):
-        estado.pop(clave_conf, None)
-        return None
-
-    if abs(py_final - 1.0) < 0.01:
-        outcome_real = "YES"
-    elif abs(pn_final - 1.0) < 0.01:
-        outcome_real = "NO"
-    else:
-        estado.pop(clave_conf, None)
-        return None  # precios no liquidados — reintentar en el siguiente ciclo
-
-    # Confirmar que el mercado realmente cerró antes de aceptar el precio como
-    # definitivo. 21-Jul: el flag closed/archived/resolved/active YA NO se usa
-    # para saltarse esta comprobación — se verificó que Polymarket puede
-    # marcar closed=True hasta 44min ANTES del end_date real (ver docstring).
-    # Prioriza el endDate fresco del mercado (recién descargado en esta misma
-    # función) sobre el cacheado en la predicción — si la predicción se hizo
-    # sin endDate (mercado aún sin ese campo poblado en su momento), el
-    # cacheado queda vacío para siempre y la resolución por precio nunca se
-    # acepta (trade live queda OPEN indefinidamente).
-    end_str = mercado.get("endDate") or pred.get("end_date", "")
-    end_dt = _parsear_end_date(end_str)
-    end_pasado = end_dt is not None and ahora_dt >= end_dt
-    if end_dt is None:
-        # Sin end_date en NINGÚN sitio (ni la respuesta fresca de la API ni
-        # la predicción cacheada) — code-review 21-Jul: esto puede dejar la
-        # predicción sin resolver para siempre si además closed/resolved ya
-        # es True (el bypass que aceptaba esto de inmediato se quitó a
-        # propósito, ver Salvaguarda 1). No se reintroduce ningún bypass —
-        # se prefiere fail-closed (nunca resolver mal) a fail-open (resolver
-        # mal) — pero se deja constancia en el log para que sea detectable
-        # en vez de un None silencioso indistinguible de "aún no ha cerrado".
-        if mercado.get("closed") or mercado.get("resolved") or mercado.get("archived"):
-            print(f"  ⚠️ market {pred.get('market_id','')}: closed/resolved=True "
-                  f"pero SIN end_date en ningún sitio (ni API ni predicción) — "
-                  f"no se resuelve por precio hasta tener un end_date real; "
-                  f"si esto persiste, revisar manualmente (reconciliar_posiciones.py "
-                  f"avisa aparte para trades live >60min OPEN tras su end_date)")
-    if not end_pasado:
-        estado.pop(clave_conf, None)
-        return None  # precio cerca de certeza pero el reloj real aún no ha llegado a end_date — reintentar
-
-    # Margen de reconfirmación: no aceptar en el primer ciclo que se ve el
-    # outcome como definitivo — exige verlo estable un rato antes de cerrarlo.
-    previa = estado.get(clave_conf)
-    if previa is None or previa.get("outcome") != outcome_real:
-        # Primera vez que vemos este outcome (o cambió respecto al anterior
-        # visto para este mismo mercado) — fail-closed: reinicia el reloj de
-        # confirmación y reintenta, nunca acepta a la primera.
-        estado[clave_conf] = {"outcome": outcome_real, "primera_vista_ts": ahora_dt.timestamp()}
-        return None
-    if ahora_dt.timestamp() - previa["primera_vista_ts"] < MARGEN_CONFIRMACION_SEGUNDOS:
-        return None  # visto pero aún no ha pasado el margen mínimo de estabilidad
-    # Confirmado: mismo outcome estable >= MARGEN_CONFIRMACION_SEGUNDOS.
-    # El llamador (main()) debe borrar clave_conf de estado_confirmacion una
-    # vez aceptado aquí, para no crecer sin límite.
 
     decision = pred.get("decision", "")
     acierto = (decision == "BUY_YES" and outcome_real == "YES") or \
@@ -796,35 +792,39 @@ def _resolver_bajo_lock(ts: str) -> None:
     except Exception:
         pass
 
-    if not nuevos_resultados:
-        print(f"[{ts}] === Fin shadow resolve (nada nuevo) ===")
-        return
+    if nuevos_resultados:
+        nuevo_archivo = not RESULTS_PATH.exists()
+        columnas = list(nuevos_resultados[0].keys())
+        with open(RESULTS_PATH, "a", newline="", encoding="utf-8") as f:
+            w = csv.DictWriter(f, fieldnames=columnas)
+            if nuevo_archivo:
+                w.writeheader()
+            for r in nuevos_resultados:
+                w.writerow(r)
 
-    nuevo_archivo = not RESULTS_PATH.exists()
-    columnas = list(nuevos_resultados[0].keys())
-    with open(RESULTS_PATH, "a", newline="", encoding="utf-8") as f:
-        w = csv.DictWriter(f, fieldnames=columnas)
-        if nuevo_archivo:
-            w.writeheader()
+        # Resumen rápido por estrategia
+        resumen = {}
         for r in nuevos_resultados:
-            w.writerow(r)
+            s = r["strategy"]
+            resumen.setdefault(s, {"n": 0, "aciertos": 0, "pnl": 0.0})
+            resumen[s]["n"] += 1
+            resumen[s]["aciertos"] += r["acierto"]
+            resumen[s]["pnl"] += float(r["pnl_neto"])
+        print("  Resumen de nuevas resoluciones por estrategia:")
+        for s, d in resumen.items():
+            tasa = d["aciertos"] / d["n"] * 100 if d["n"] else 0
+            print(f"    {s:30s}  n={d['n']:>4}  acierto={tasa:5.1f}%  "
+                  f"pnl_neto={d['pnl']:+.2f}€")
+    else:
+        print(f"[{ts}] Sin resoluciones nuevas vía predicciones -- "
+              f"comprobando igualmente trades live huérfanos")
 
-    # Resumen rápido por estrategia
-    resumen = {}
-    for r in nuevos_resultados:
-        s = r["strategy"]
-        resumen.setdefault(s, {"n": 0, "aciertos": 0, "pnl": 0.0})
-        resumen[s]["n"] += 1
-        resumen[s]["aciertos"] += r["acierto"]
-        resumen[s]["pnl"] += float(r["pnl_neto"])
-    print("  Resumen de nuevas resoluciones por estrategia:")
-    for s, d in resumen.items():
-        tasa = d["aciertos"] / d["n"] * 100 if d["n"] else 0
-        print(f"    {s:30s}  n={d['n']:>4}  acierto={tasa:5.1f}%  "
-              f"pnl_neto={d['pnl']:+.2f}€")
-
-    # Cerrar trades live que hayan resuelto
-    _cerrar_trades_live(nuevos_resultados, ts)
+    # Cerrar trades live que hayan resuelto (vía predicciones + vía huérfanas,
+    # ver _cerrar_trades_live) -- se llama SIEMPRE, con o sin nuevos_resultados,
+    # para que la vía huérfana (27-Jul) no dependa de que otra estrategia
+    # resuelva justo este mismo ciclo.
+    if _cerrar_trades_live(nuevos_resultados, ts, estado_confirmacion):
+        _guardar_estado_confirmacion(estado_confirmacion)
 
 
 def _check_salidas_tempranas(ts: str):
@@ -1288,19 +1288,63 @@ def _fee_real_para_trade(t: dict, fees_recientes: dict, tolerancia_s: int = 90) 
     return round(max(0.0, min(fee, stake * FEE_MAX_FRACCION_STAKE)), 4)
 
 
-def _cerrar_trades_live(nuevos_resultados: list, ts: str):
-    """Actualiza data/live/trades.csv: cierra trades OPEN cuyo mercado ya resolvió."""
+def _cerrar_trades_live(nuevos_resultados: list, ts: str, estado_confirmacion: dict) -> bool:
+    """Actualiza data/live/trades.csv: cierra trades OPEN cuyo mercado ya
+    resolvió. Devuelve True si estado_confirmacion cambió (el llamador debe
+    persistirlo).
+
+    Dos vías (27-Jul, la 2ª es nueva):
+    (1) vía outcomes ya resueltos por el pipeline de predicciones
+        (nuevos_resultados) -- la de siempre.
+    (2) huérfanas: trades OPEN cuyo market_id NUNCA tuvo una predicción en
+        shadow_predict.py -- caso real encontrado 27-Jul:
+        ballenas_executor_5min.py escribe directo a data/live/trades.csv
+        pero nunca llama a nada equivalente a _registrar_prediccion() (a
+        diferencia de ballenas_executor_btc15m.py, que sí la llama, y por
+        eso sus trades SÍ se cerraban por la vía (1)). Sin esta 2ª vía,
+        BALLENAS_TARDIAS#ETH#5min se queda OPEN para siempre -- encontrado
+        con el market 3114631, resuelto oficialmente (gamma-api) 3h antes
+        y todavía OPEN en trades.csv."""
     LIVE_CSV = Path("data/live/trades.csv")
     if not LIVE_CSV.exists():
-        return
+        return False
 
-    # Índice de outcomes por market_id
+    # Índice de outcomes por market_id (vía 1)
     outcomes = {}
     for r in nuevos_resultados:
         outcomes[str(r["market_id"])] = {
             "outcome_real": r["outcome_real"],
             "acierto":      int(r["acierto"]),
         }
+
+    # Vía 2 -- huérfanas. Lectura + llamadas de red SIN lock a propósito
+    # (mismo motivo que ballenas_executor_5min.py/resuelve_ballenas_5min.py:
+    # el lock de trades.csv no debe envolver I/O de red lento). Se relee
+    # fresco bajo lock dentro de _cerrar_trades_live_bajo_lock.
+    estado_cambio = False
+    try:
+        trades_actuales = list(csv.DictReader(open(LIVE_CSV, encoding="utf-8")))
+    except Exception:
+        trades_actuales = []
+    huerfanas = [t for t in trades_actuales
+                 if t.get("status") == "OPEN" and t.get("market_id")
+                 and str(t["market_id"]) not in outcomes]
+    if huerfanas:
+        mercados_huerfanas = fetch_mercados_paralelo([t["market_id"] for t in huerfanas])
+        ahora_dt = datetime.now(timezone.utc)
+        for t in huerfanas:
+            mid = str(t["market_id"])
+            mercado = mercados_huerfanas.get(mid)
+            clave_conf = _clave_confirmacion(t.get("strategy", ""), mid)
+            antes = estado_confirmacion.get(clave_conf)
+            outcome = _confirmar_outcome_por_precio(
+                mercado, t.get("end_date", ""), mid, clave_conf, ahora_dt, estado_confirmacion)
+            if estado_confirmacion.get(clave_conf) != antes:
+                estado_cambio = True
+            if outcome is not None:
+                estado_confirmacion.pop(clave_conf, None)
+                estado_cambio = True
+                outcomes[mid] = {"outcome_real": outcome, "acierto": int(outcome == "YES")}
 
     import live_trade
     # flock (17-Jul, mismo motivo que _check_salidas_tempranas arriba):
@@ -1318,6 +1362,7 @@ def _cerrar_trades_live(nuevos_resultados: list, ts: str):
     # retener el lock más de lo necesario.
     actualizar_strategy_accuracy(nuevos_resultados, ts)
     print(f"[{ts}] === Fin shadow resolve ===")
+    return estado_cambio
 
 
 def _cerrar_trades_live_bajo_lock(LIVE_CSV: Path, outcomes: dict, ts: str):
