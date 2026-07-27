@@ -616,8 +616,17 @@ def disparar(activo: str, mercado: dict, py: float, edge: float, restante_s: flo
                 f"{'[DRY-RUN] no ejecutaría' if DRY_RUN else 'no se ejecuta'}", activo)
             return False
 
-        ok_breaker, motivo_breaker = verificar_circuit_breaker()
-        if not ok_breaker:
+        # 27-Jul: BUG CRÍTICO CORREGIDO -- verificar_circuit_breaker() devuelve
+        # (disparado, motivo) con disparado=True significando "freno activo,
+        # PARAR" (mismo contrato que usa live_trade.py: "if disparado:
+        # parar"). La versión anterior comprobaba "if not ok_breaker" --
+        # exactamente invertida: con el freno REALMENTE disparado (p.ej.
+        # racha=4 pérdidas consecutivas), no bloqueaba nada y ejecutaba la
+        # orden igualmente. Detectado en vivo 27-Jul tras un trade real que
+        # se ejecutó con la racha de pérdidas ya en 4 -- confirmado
+        # empíricamente antes de corregir.
+        disparado, motivo_breaker = verificar_circuit_breaker()
+        if disparado:
             log(f"circuit breaker activo ({motivo_breaker}) -- {'[DRY-RUN] no ejecutaría' if DRY_RUN else 'no se ejecuta'}", activo)
             return False
 
