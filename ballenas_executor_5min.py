@@ -36,12 +36,18 @@ Screen propia `ballenas_5m` (NO reutiliza `ballenas_fast`, que ya opera
 BTC15m con dinero real — un bug en este código nuevo no debe poder
 tumbar ese proceso).
 
-DRY_RUN=True fijo en esta fase: loguea qué habría hecho, nunca llama a
-_ejecutar_orden_polymarket. Las 3 tuplas NO están en pares_permitidos_live
-todavía -- puede_operar_live() reportará honestamente "no está en
-whitelist", visibilidad completa sin tocar el gate de dinero real. Pasar
-a DRY_RUN=False requiere: código en pares_permitidos_live, /code-review y
-aprobación explícita de Javi (mismo patrón en dos fases que BTC15m).
+DRY_RUN=False desde 27-Jul (petición explícita Javi: "vamos a live" con
+ETH#5min, ver _pares_ballenas_tardias_eth5m_promocion_nota_2026-07-27 en
+config_live.json para la evidencia completa -- gate riguroso n_wallets_yes
+>=35 GATE OK n=110, fill-ability 95.5%/100%, sin confusión con precio/
+timing, split-half estable). Solo BALLENAS_TARDIAS#ETH#5min#BUY_YES está
+en pares_permitidos_live -- SOL/XRP/DOGE/BNB siguen en DRY_RUN de facto:
+puede_operar_live() los bloquea por whitelist (estrategia_permitida exige
+STRATEGY#SUBTYPE#DIRECCION exacto, ninguna de esas 4 tuplas está en la
+lista) antes de llegar a calcular_stake/_ejecutar_orden_polymarket. Pasar
+cualquier otra moneda a dinero real requiere su propio gate riguroso +
+código en pares_permitidos_live + /code-review + aprobación explícita
+(mismo patrón en dos fases que BTC15m/ETH5min).
 
 Corre en screen propia:
   screen -dmS ballenas_5m bash -c "cd /root/polymarket-research && .venv/bin/python ballenas_executor_5min.py >> logs/ballenas_5m.log 2>&1"
@@ -117,7 +123,7 @@ CLOB = "https://clob.polymarket.com"
 STRATEGY = "BALLENAS_TARDIAS"
 VENTANA_MIN = 5
 
-DRY_RUN = True  # Fase 1 (18-Jul) -- ver docstring, no cambiar sin aprobación Javi + /code-review
+DRY_RUN = False  # 27-Jul, aprobado Javi -- ver docstring y nota en config_live.json. Solo ETH está en whitelist.
 
 POLL_INTERVAL_S = 1.5    # más conservador que BTC15m (1.0) -- 3 hilos concurrentes
 HARD_FLOOR_S = 3.0       # uniforme, mismo suelo de seguridad que BTC15m
