@@ -865,7 +865,17 @@ SPOT_PRECIOS = {}
 def _cargar_spot():
     if SPOT_PRECIOS:
         return SPOT_PRECIOS
-    archivos = sorted(glob.glob(str(DIR_DATA / "prices" / "*.csv")))
+    # 27-Jul: BUG REAL encontrado -- glob("*.csv") también matchea
+    # chainlink_YYYY-MM-DD.csv (screen 'chainlink', activo desde 20-Jul).
+    # "chainlink_..." ordena alfabéticamente DESPUÉS de "YYYY-...", así que
+    # sorted(...)[-1] cogía SIEMPRE el fichero de chainlink en vez del
+    # consolidado -- ese fichero solo tiene BTC/ETH/SOL/XRP (los únicos con
+    # feed oficial Chainlink), dejando _cargar_spot().get('DOGE'/'BNB')
+    # en None SIEMPRE desde el 20-Jul. Impacto verificado: GBM_LATE_15M#
+    # {DOGE,BNB}#15min llevaban 0 predicciones desde que se añadieron
+    # (22/23-Jul) -- una semana de "dejar acumular n" sin producir nada.
+    archivos = sorted(p for p in glob.glob(str(DIR_DATA / "prices" / "*.csv"))
+                       if not Path(p).name.startswith("chainlink_"))
     if not archivos:
         return {}
     try:
