@@ -47,7 +47,11 @@ TRADES = REPO / "data" / "live" / "trades.csv"
 OUT = REPO / "data" / "shadow" / "franja_milimetrica_ballenas.json"
 
 STEP = 0.05
-ACTIVOS = ("BTC", "ETH", "SOL", "XRP", "DOGE")
+ACTIVOS = ("BTC", "ETH", "SOL", "XRP", "DOGE", "BNB")  # BNB añadido 27-Jul --
+# ballenas_timing_history.csv ya lo cubre (18.3k filas, ballenas_observer.py
+# no distinguía monedas al capturar), pero esta herramienta lo dejaba fuera
+# del barrido -- punto ciego real, nunca se había cruzado BNB contra el
+# histórico fino de ballenas pese a tener datos de sobra.
 MARCOS = ("5min", "15min", "60min")           # nomenclatura results/trades
 MARCO_BALLENAS_MAP = {"5min": "5m", "15min": "15m", "60min": "60m"}
 N_MIN_AGREGADO_ESTRATEGIA = 100   # mínimo para que una (strategy,subtype) entre al barrido
