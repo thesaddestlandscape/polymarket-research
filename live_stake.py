@@ -937,6 +937,32 @@ def exposicion_reciente_tupla(strategy: str, subtype: str, direction: str, dias:
     return total
 
 
+def exposicion_reciente_total(dias: int = 7) -> float:
+    """Suma de stake_eur (trades.csv) de TODAS las tuplas (maduras e
+    inmaduras) en los últimos `dias` días -- denominador real de la
+    exposición agregada del portfolio. /code-review 27-Jul: una versión
+    anterior sumaba solo las tuplas maduras (las que tienen peso_hrp),
+    excluyendo la exposición real de tuplas recién promocionadas (ej.
+    BALLENAS_TARDIAS#ETH#5min, con 0 días de historial) -- eso infla
+    artificialmente el share calculado para las maduras cada vez que
+    conviven con una promoción reciente. Un solo escaneo de trades.csv
+    (más barato además que sumar tupla por tupla)."""
+    if not TRADES_CSV.exists():
+        return 0.0
+    corte = datetime.now(timezone.utc) - timedelta(days=dias)
+    total = 0.0
+    with open(TRADES_CSV, encoding="utf-8") as f:
+        for row in csv.DictReader(f):
+            ts = _parse_ts(row.get("timestamp_utc") or "")
+            if ts is None or ts < corte:
+                continue
+            try:
+                total += float(row.get("stake_eur") or 0)
+            except ValueError:
+                pass
+    return total
+
+
 def _hrp_exposure_factor(strategy: str, subtype: str, direction: str, config: dict) -> tuple[float, str]:
     """1.0 (no-op) salvo que riesgo.hrp_exposicion.activo=true Y la tupla
     sea madura (presente en el fichero) Y su exposición reciente supere
@@ -958,11 +984,7 @@ def _hrp_exposure_factor(strategy: str, subtype: str, direction: str, config: di
     dias = cfg.get("dias_exposicion", 7)
 
     exp_tupla = exposicion_reciente_tupla(strategy, subtype, direction, dias)
-    exp_total = 0.0
-    for t in pesos:
-        partes = t.split("#")
-        exp_total += exposicion_reciente_tupla(partes[0], "#".join(partes[1:-1]), partes[-1], dias)
-    exp_total = exp_total or 1e-9
+    exp_total = exposicion_reciente_total(dias) or 1e-9
     share = exp_tupla / exp_total
 
     techo = peso_hrp * margen
