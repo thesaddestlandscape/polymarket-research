@@ -382,11 +382,16 @@ def _eval_kelly_hora(rows):
             {"actualizado": datetime.now(timezone.utc).isoformat(timespec="seconds"),
              "aviso_fillability": (
                  "Gate riguroso = shadow puro (results.csv), NO verifica fill-ability. "
-                 "27-Jul: cruzar SIEMPRE contra data/live/libro_snapshots.csv (motivo="
-                 "ejecutada vs veto_profundidad) antes de aplicar cualquier celda a "
-                 "meta.hora_boost_factor -- la familia GBM_LATE (arquetipo A) ya mostró "
-                 "fill-ability real de 1-20% pese a pasar este mismo gate con GATE OK, "
-                 "ver idea_fillability_gbmlate_bucket_precio_23jul."),
+                 "27-Jul: VERIFICADO con datos reales -- uniendo libro_snapshots.csv "
+                 "(23 dias de chequeo de profundidad REAL contra la API del CLOB, no "
+                 "simulacion) con results.csv, el subconjunto GBM_LATE_15M realmente "
+                 "ejecutable en las horas 13/15/17/19h da n=45 hit=48.9% (coinflip) "
+                 "IC=-0.011 NO CONCLUYENTE en TODOS los criterios (Wilson cruza 0.5, "
+                 "no bate shuffle p=0.616, PnL bootstrap CI cruza 0) -- el edge que "
+                 "el gate shadow ve (GATE OK en 9 celdas) se evapora por completo al "
+                 "restringir a lo fillable de verdad. NO aplicar ninguna celda de "
+                 "esta familia a meta.hora_boost_factor sin repetir esta verificacion "
+                 "con n fresco. Ver idea_fillability_gbmlate_bucket_precio_23jul."),
              "celdas": celdas}, indent=2, ensure_ascii=False))
     except Exception as e:
         print(f"  [WARN] no se pudo escribir {KELLY_HORA_STATE}: {e}")
