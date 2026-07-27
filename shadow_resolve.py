@@ -1336,7 +1336,7 @@ def _cerrar_trades_live(nuevos_resultados: list, ts: str, estado_confirmacion: d
             mid = str(t["market_id"])
             mercado = mercados_huerfanas.get(mid)
             clave_conf = _clave_confirmacion(t.get("strategy", ""), mid)
-            antes = dict(estado_confirmacion.get(clave_conf, {}))
+            antes = estado_confirmacion.get(clave_conf)
             outcome = _confirmar_outcome_por_precio(
                 mercado, t.get("end_date", ""), mid, clave_conf, ahora_dt, estado_confirmacion)
             if estado_confirmacion.get(clave_conf) != antes:
