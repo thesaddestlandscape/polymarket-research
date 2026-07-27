@@ -1,5 +1,5 @@
-# Hipótesis automáticas — 2026-07-27 01:57 UTC
-_Generado por shadow_postmortem.py sobre 37556 resoluciones (PNL=+7778.76€)_
+# Hipótesis automáticas — 2026-07-27 02:01 UTC
+_Generado por shadow_postmortem.py sobre 37557 resoluciones (PNL=+7778.25€)_
 
 ## Patrones causales activos
 
@@ -670,7 +670,7 @@ _Generado por shadow_postmortem.py sobre 37556 resoluciones (PNL=+7778.76€)_
 - **FILTRO** `hora_utc` > `4.0` → IC=-0.122 (n=35)
   - _Por qué funciona_: hora tardía/noche → sesión US cerrada, menos participantes informados; señales más ruidosas
   - _Acción_: SKIP cuando `hora_utc` > 4.0
-  - _Potencial_: sin este filtro IC_bueno=+0.036 (n=151)
+  - _Potencial_: sin este filtro IC_bueno=+0.033 (n=152)
 
 ### ORDER_FLOW_5M#BNB#5min
 - **PATRÓN** `total_vol_5m` < `197.886` → IC=+0.186 (n=33)
@@ -1217,8 +1217,8 @@ _Derivadas de los patrones aprendidos:_
 | ✅ LEADLAG_BTC_XRP_15M#15min | 293 | +0.012 | +10.08€ | 0 | 0 |
 | ✅ LEADLAG_BTC_XRP_15M#XRP | 293 | +0.012 | +10.08€ | 0 | 0 |
 | ✅ LEADLAG_BTC_XRP_15M#XRP#15min | 293 | +0.012 | +10.08€ | 1 | 0 |
-| ✅ ORDER_FLOW_5M | 1682 | +0.011 | +10.01€ | 1 | 0 |
-| ✅ ORDER_FLOW_5M#5min | 1546 | +0.006 | -2.58€ | 0 | 0 |
+| ✅ ORDER_FLOW_5M | 1683 | +0.010 | +9.50€ | 1 | 0 |
+| ✅ ORDER_FLOW_5M#5min | 1547 | +0.006 | -3.09€ | 0 | 0 |
 | ✅ ORDER_FLOW_5M#BNB | 216 | +0.032 | +4.10€ | 0 | 0 |
 | ✅ ORDER_FLOW_5M#BNB#5min | 216 | +0.032 | +4.10€ | 0 | 1 |
 | ✅ ORDER_FLOW_5M#BTC | 291 | -0.019 | -5.24€ | 0 | 0 |
@@ -1229,8 +1229,8 @@ _Derivadas de los patrones aprendidos:_
 | ✅ ORDER_FLOW_5M#ETH#5min | 269 | -0.017 | -8.08€ | 0 | 0 |
 | ✅ ORDER_FLOW_5M#SOL | 331 | +0.043 | +14.36€ | 0 | 0 |
 | ✅ ORDER_FLOW_5M#SOL#5min | 331 | +0.043 | +14.36€ | 0 | 1 |
-| ✅ ORDER_FLOW_5M#XRP | 213 | -0.007 | -5.50€ | 0 | 0 |
-| ✅ ORDER_FLOW_5M#XRP#5min | 213 | -0.007 | -5.50€ | 1 | 0 |
+| ✅ ORDER_FLOW_5M#XRP | 214 | -0.009 | -6.01€ | 0 | 0 |
+| ✅ ORDER_FLOW_5M#XRP#5min | 214 | -0.009 | -6.01€ | 1 | 0 |
 | ✅ PRICE_TARGET_GBM | 150 | -0.171 | -4.78€ | 4 | 0 |
 | 🚫 PRICE_TARGET_GBM#BTC | 62 | -0.250 | -18.09€ | 0 | 0 |
 | 🚫 PRICE_TARGET_GBM#BTC#atexpiry | 56 | -0.276 | -17.35€ | 0 | 0 |
@@ -1395,7 +1395,7 @@ _Derivadas de los patrones aprendidos:_
 **🟡 H-STREAK-COOLDOWN** — Cooldown tras 2 derrotas consecutivas (mismo subtype)
   - _Umbral_: n≥40 tras 2 losses y gap(IC_tras_win - IC_tras_2loss)≥0.05
   - _Acción_: Reducir stake (no desactivar) 1-2h tras 2 derrotas consecutivas en el mismo subtype
-  - _Estado_: tras_win IC=+0.112 n=22366 | tras_1loss IC=+0.078 n=14981 | tras_2loss IC=+0.050 n=6283/40 | gap=+0.061 (umbral 0.05)
+  - _Estado_: tras_win IC=+0.112 n=22366 | tras_1loss IC=+0.078 n=14982 | tras_2loss IC=+0.050 n=6283/40 | gap=+0.061 (umbral 0.05)
 
 **🟡 H-KALMAN** — Kalman filter para drift adaptativo
   - _Umbral_: n≥200 por subtipo para calibrar parámetros Q/R del KF
@@ -1645,8 +1645,8 @@ _Derivadas de los patrones aprendidos:_
   - _Hipótesis_: Inspirado en un artículo sobre 'volume trading strategy' (mean-reversion en SPY): la idea es que un mismo movimiento de precio con volumen inusualmente alto refleja pánico/liquidación forzada y tiene más probabilidad de revertir que el mismo movimiento con volumen normal. No es transplantable tal cual (esa estrategia opera en barras diarias de SPY, nosotros en ventanas de 15-60min de cripto), pero el feature total_vol_5m ya se captura en cada predicción de ORDER_FLOW_5M (shadow_predict.py) y nunca se ha usado como filtro independiente — solo sirve de denominador para calcular delta_ratio. Hipótesis: dentro de las señales que ya pasan el filtro de delta_ratio, un total_vol_5m alto (volumen real, no solo desequilibrio) mejora el IC. Distribución real en predictions_*.csv (n=843): mediana=1696, p75=108522 (muy asimétrica) — se usa p75 como umbral de 'volumen alto'.
   - _Umbral_: n≥40 y IC>+0.08
   - _Acción_: Si IC_volumen_alto > IC_baseline + 0.05 con n≥40 → boost ×1.1 en ORDER_FLOW_5M cuando total_vol_5m>100000
-  - _Estado_: n=380 IC=-0.013 PNL=-10.63€ — sin señal clara aún (umbral IC: min=0.08 max=None)
-  - _Datos_: n=380 IC=-0.013 PNL=-10.63€
+  - _Estado_: n=381 IC=-0.014 PNL=-11.14€ — sin señal clara aún (umbral IC: min=0.08 max=None)
+  - _Datos_: n=381 IC=-0.014 PNL=-11.14€
 
 **🟡 H-CUSTOM-CROSS-WINDOW-SPREAD-POS** — GBM 15min/60min: spread positivo alto de precio_yes contra la ventana relacionada
   - _Hipótesis_: Inspirado en un artículo sobre bots de Polymarket: mercados de distinta duración del mismo activo (ej. BTC#15min vs BTC#60min) no repriciician a la misma velocidad — uno puede quedarse rezagado tras un movimiento. Si el spread entre ambos se sale de lo normal, puede indicar que uno de los dos aún no ha incorporado la información que el otro ya tiene. No es transplantable tal cual (el artículo lo usa para arbitraje comprando ambos lados a la vez, algo que no hacemos — ver idea_bidirectional_accumulation aparcada), pero el feature cross_window_spread (precio_yes propio menos precio_yes de la ventana relacionada, sin normalizar aún por z-score) ya se captura para GBM#15min (contra 60min) y GBM#60min (contra 15min) desde el 2026-07-01, sin cambiar ninguna decisión. Esta hipótesis cubre el lado positivo (mercado propio más caro que el relacionado); ver H-CUSTOM-CROSS-WINDOW-SPREAD-NEG para el lado negativo.
@@ -1666,8 +1666,8 @@ _Derivadas de los patrones aprendidos:_
   - _Hipótesis_: Inspirado en el paper de Fornero (2023, 43 Jornadas SADAF) sobre astrología financiera: 5 estudios peer-review (Dichev & Janes 2003, Yuan et al. 2006, Keef & Khaled 2011, Floros & Tan 2013, Liu & Tseng 2009) en 25-62 mercados bursátiles encuentran rendimientos 5-10%/año más bajos cerca de luna llena que de luna nueva. El propio paper es escéptico de la astrología como tal, pero el mecanismo que documenta no es místico: sesgo de humor de inversores minoristas (más fuerte en acciones con dominancia retail, casi nulo en institucional). Polymarket es un mercado muy retail/cripto — hipótesis: si el mecanismo transfiere, debería verse peor IC cerca de luna llena (moon_phase≈0.5) que en el resto del ciclo.
   - _Umbral_: n≥200 PERO ADEMÁS necesita cubrir al menos 3 ciclos lunares completos (~90 días de calendario) — no evaluar solo por n, aunque el volumen diario ya lo cruce en horas
   - _Acción_: Si IC cerca de luna llena < IC resto del ciclo con margen ≥0.05 y ≥3 ciclos lunares cubiertos → considerar boost/filtro por moon_phase. No implementar con menos de 3 ciclos aunque n sea alto — el efecto es de calendario lento, no de volumen.
-  - _Estado_: n=1295 IC=+0.053 PNL=+138.98€ — sin señal clara aún (umbral IC: min=None max=-0.03)
-  - _Datos_: n=1295 IC=+0.053 PNL=+138.98€
+  - _Estado_: n=1296 IC=+0.052 PNL=+138.47€ — sin señal clara aún (umbral IC: min=None max=-0.03)
+  - _Datos_: n=1296 IC=+0.052 PNL=+138.47€
 
 **〰️ H-CUSTOM-MERCURY-RETROGRADO** — Mercurio retrógrado: ¿rendimiento peor durante la ventana?
   - _Hipótesis_: Mismo origen que H-CUSTOM-MOON-LLENA (paper de Fornero, 43 Jornadas SADAF 2023). Qi, Wang & Zhang (2022, 48 mercados, 1973-2019): rendimientos 3.33%/año más bajos durante Mercurio retrógrado. Kou & Ma (2022) en China (99.8% cuentas retail): hasta -31% anualizado. Ambos estudios confirman que el mecanismo es la creencia/superstición de inversores retail (mayor efecto cuanto más retail y más supersticioso el mercado), no un efecto astral literal — Polymarket encaja en ese perfil. Ventanas 2026 (fuente pública, actualizar cada año): 26-feb a 20-mar, 29-jun a 23-jul, 24-oct a 13-nov.
