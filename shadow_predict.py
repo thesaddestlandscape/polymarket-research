@@ -2019,14 +2019,30 @@ def s_updown_gbm_15min_tardio(market, ctx):
     activo = identificar_activo(question)
     lo, hi, rl, rh = _banda_y_timing_ballenas(activo, "15m", None, None, None, None)
     resultado["features"]["ballenas_significativo"] = lo is not None
+    py_edge = market.get("_precio_yes")
     if lo is not None:
-        py = market.get("_precio_yes")
         resultado["features"]["ballenas_banda_lo"] = lo
         resultado["features"]["ballenas_banda_hi"] = hi
         resultado["features"]["ballenas_rest_lo_min"] = rl
         resultado["features"]["ballenas_rest_hi_min"] = rh
-        if py is not None:
-            resultado["features"]["ballenas_dentro_banda"] = bool(lo <= py < hi)
+        if py_edge is not None:
+            resultado["features"]["ballenas_dentro_banda"] = bool(lo <= py_edge < hi)
+    # dirección real = signo del edge (prob_yes vs precio de mercado), NO
+    # prob_yes>=0.5 -- prob_yes es la probabilidad cruda del modelo, la
+    # decisión BUY_YES/BUY_NO la fija el edge (ver _s_gbm_late edge=p_up-py).
+    # /code-review 27-Jul: el umbral 0.5 producía dirección equivocada
+    # siempre que prob_yes y py_entrada caen del mismo lado de 0.5.
+    prob_yes_dir = resultado.get("prob_yes", 0.5)
+    if py_edge is not None:
+        direccion = "BUY_YES" if prob_yes_dir >= py_edge else "BUY_NO"
+    else:
+        direccion = "BUY_YES" if prob_yes_dir >= 0.5 else "BUY_NO"
+    deja_pasar, n_total_lado = _gate_volumen_ballenas("UPDOWN_GBM_15M_TARDIO", activo, "15min",
+                                                       direccion, market.get("condition_id"))
+    if not deja_pasar:
+        return None  # gate de volumen 27-Jul -- ver GATE_VOLUMEN_VALIDADO
+    if n_total_lado is not None:
+        resultado["features"]["n_total_lado"] = n_total_lado
     return resultado
 
 
@@ -2829,10 +2845,35 @@ def s_gbm_late_15min(market, ctx):
     (2) acumula su propio IC desde cero; (3) no está en
     estrategias_permitidas_live → imposible que toque dinero real hasta
     decisión explícita.
+
+    27-Jul: gate de volumen aplicado AQUÍ (en el wrapper específico, no
+    dentro de _s_gbm_late compartido) para no afectar a los hermanos
+    GBM_LATE_15M_TARDIO/ESPACIO_ATR/PYCONFIRMADO, que comparten el mismo
+    núcleo pero NO están validados con este gate. Solo GBM_LATE_15M#ETH
+    #15min#BUY_YES tiene umbral en GATE_VOLUMEN_VALIDADO -- el resto pasa
+    sin filtro (fail-open, ver _gate_volumen_ballenas).
     """
-    return _s_gbm_late(market, ctx, ventana_min=15,
-                       rest_lo=GBM_LATE_15M_REST_MIN_LO,
-                       rest_hi=GBM_LATE_15M_REST_MIN_HI)
+    resultado = _s_gbm_late(market, ctx, ventana_min=15,
+                            rest_lo=GBM_LATE_15M_REST_MIN_LO,
+                            rest_hi=GBM_LATE_15M_REST_MIN_HI)
+    if resultado is None:
+        return None
+    activo = identificar_activo(market.get("question", ""))
+    # dirección real = signo del edge (prob_yes vs py_entrada), NO prob_yes
+    # >=0.5 -- ver misma corrección en s_updown_gbm_15min_tardio /code-review 27-Jul.
+    py_edge = resultado.get("features", {}).get("py_entrada")
+    prob_yes_dir = resultado.get("prob_yes", 0.5)
+    if py_edge is not None:
+        direccion = "BUY_YES" if prob_yes_dir >= py_edge else "BUY_NO"
+    else:
+        direccion = "BUY_YES" if prob_yes_dir >= 0.5 else "BUY_NO"
+    deja_pasar, n_total_lado = _gate_volumen_ballenas("GBM_LATE_15M", activo, "15min",
+                                                       direccion, market.get("condition_id"))
+    if not deja_pasar:
+        return None  # gate de volumen 27-Jul -- ver GATE_VOLUMEN_VALIDADO
+    if n_total_lado is not None:
+        resultado["features"]["n_total_lado"] = n_total_lado
+    return resultado
 
 
 def s_gbm_late_60min(market, ctx):
@@ -3046,6 +3087,61 @@ BALLENAS_CONFIRMADAS_MIN_TRADES = 3     # mismo mínimo que veto_ballenas
 # ya obtenido para calcular pct_lado, solo cuenta también el total sin
 # filtrar por banda.
 BALLENAS_CONFIRMADAS_UMBRAL_VOLUMEN = 35
+
+# 27-Jul: gate de volumen genérico para estrategias LIVE que NO consultan
+# trades_de_mercado() en su lógica normal (FAVORITO_CONFIRMADO, GBM_LATE_15M,
+# UPDOWN_GBM_15M_TARDIO) -- a diferencia de BALLENAS_CONFIRMADAS_15M/
+# BALLENAS_TARDIAS, aquí SÍ hay una llamada de red nueva por señal
+# (~0.45s medido: resolver condition_id ya viene en el market dict, así
+# que es solo la llamada a trades_de_mercado). Solo se llama en el momento
+# de CONFIRMAR una señal real (return final de la función), nunca en el
+# escaneo general de mercados -- coste acotado a las pocas señales/ciclo
+# que de verdad se disparan. Ver project_volumen_ballenas_patron_universal_27jul
+# en memoria para la evidencia completa por combo.
+#
+# Umbral SOLO para las 7 combinaciones (activo,marco,dirección) validadas
+# con las señales REALES de cada estrategia -- cualquier combo no listado
+# aquí NO se toca (pasa igual que antes, fail-open deliberado: es un
+# afinamiento sobre una estrategia ya aprobada, no un gate de elegibilidad
+# nuevo, mismo espíritu que _hrp_exposure_factor en live_stake.py).
+GATE_VOLUMEN_VALIDADO = {
+    ("FAVORITO_CONFIRMADO", "ETH", "15min", "BUY_YES"): 35,   # n=727 alto=538 hit=94.4% +0.715€ GATE OK
+    ("FAVORITO_CONFIRMADO", "SOL", "15min", "BUY_YES"): 35,   # n=714 alto=580 hit=87.8% +0.496€ GATE OK
+    ("FAVORITO_CONFIRMADO", "SOL", "60min", "BUY_YES"): 35,   # n=195 alto=145 hit=88.3% +0.667€ GATE OK
+    ("FAVORITO_CONFIRMADO", "BTC", "60min", "BUY_YES"): 35,   # n=185 alto=133 hit=92.5% +0.950€ GATE OK
+    ("FAVORITO_CONFIRMADO", "BTC", "60min", "BUY_NO"):  35,   # n=215 alto=147 hit=97.3% +0.916€ GATE OK
+    ("GBM_LATE_15M", "ETH", "15min", "BUY_YES"): 35,          # n=649 alto=405 hit=95.3% +1.008€ GATE OK, fillable n=61 hit=83.6% +1.03€
+    ("UPDOWN_GBM_15M_TARDIO", "BTC", "15min", "BUY_YES"): 35, # n=173 alto=115 hit=95.7% +0.838€ GATE OK
+}
+
+
+def _gate_volumen_ballenas(strategy: str, activo: str, marco_str: str, direccion: str,
+                           condition_id: str | None) -> tuple[bool, int | None]:
+    """(deja_pasar, n_total_lado). deja_pasar=True = sin gate validado para
+    este combo, o volumen suficiente. False = vetar (combo validado Y
+    volumen bajo). n_total_lado=None si no se llegó a consultar (combo no
+    validado o sin condition_id) -- el llamador debe loguearlo cuando no
+    sea None, para poder auditar/retunear el umbral 35 con datos reales
+    (/code-review 27-Jul: antes no se guardaba el conteo real, solo la
+    decisión binaria). Fail-open ante cualquier fallo (sin condition_id,
+    error de red, combo no validado) -- este gate solo puede REDUCIR una
+    señal ya aprobada por el resto de la lógica de la estrategia, nunca
+    inventar una nueva."""
+    umbral = GATE_VOLUMEN_VALIDADO.get((strategy, activo, marco_str, direccion))
+    if umbral is None or not condition_id:
+        return True, None
+    try:
+        # timeout corto (3s, no los 20s por defecto de _get): esto corre
+        # en el momento de CONFIRMAR una señal dentro del fast loop
+        # (~20s/ciclo) -- /code-review 27-Jul, un solo request lento no
+        # puede permitirse bloquear el ciclo entero. Fail-open si se agota.
+        trades = trades_de_mercado(condition_id, timeout=3)
+    except Exception:
+        return True, None
+    lado_check = ("up", "yes") if direccion == "BUY_YES" else ("down", "no")
+    n_total_lado = sum(1 for t in trades if (t.get("side") or "").strip().upper() == "BUY"
+                       and (t.get("outcome") or "").strip().lower() in lado_check)
+    return n_total_lado >= umbral, n_total_lado
 
 
 def _banda_confirmada_ballenas(activo: str, marco: str, lo: float, hi: float) -> dict | None:
@@ -3672,6 +3768,13 @@ def s_favorito_confirmado(market, ctx):
     else:
         return None  # zona coinflip — no es la hipótesis que medimos aquí
 
+    direccion = "BUY_YES" if lado == "YES" else "BUY_NO"
+    marco_str = f"{vent}min" if vent else ""
+    deja_pasar, n_total_lado = _gate_volumen_ballenas("FAVORITO_CONFIRMADO", activo, marco_str,
+                                                       direccion, market.get("condition_id"))
+    if not deja_pasar:
+        return None  # gate de volumen 27-Jul -- ver GATE_VOLUMEN_VALIDADO
+
     restante_min = None
     try:
         end_dt = datetime.fromisoformat(market.get("end_date", "").replace("Z", "+00:00"))
@@ -3689,6 +3792,7 @@ def s_favorito_confirmado(market, ctx):
             "py_entrada":   round(py, 3),
             "restante_min": restante_min,
             "hora_utc":     datetime.now(timezone.utc).hour,
+            "n_total_lado": n_total_lado,
             **_libro_calidad(market),
         },
     }
