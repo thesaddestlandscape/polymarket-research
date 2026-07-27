@@ -28,7 +28,7 @@ LIBRO = REPO / "data/live/libro_snapshots.csv"
 LATCH = REPO / "data/live/vigia_ballenas_5min_fillability_latch.json"
 
 STRATEGY = "BALLENAS_TARDIAS"
-ACTIVOS = ("ETH", "SOL", "XRP")
+ACTIVOS = ("ETH", "SOL", "XRP", "BNB")  # BNB añadido 27-Jul junto con su ejecutor
 UMBRAL_N = 30
 
 

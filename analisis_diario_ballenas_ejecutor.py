@@ -54,7 +54,7 @@ OUT = DIR_SHADOW / "analisis_diario_ballenas_ejecutor.json"
 
 STAKE_REF = 1.05
 FEE_RATE = 0.07
-ACTIVOS_5MIN = ("ETH", "SOL", "XRP", "DOGE")  # BTC#5m no tiene ejecutor propio (excluido 18-Jul, n insuficiente)
+ACTIVOS_5MIN = ("ETH", "SOL", "XRP", "DOGE", "BNB")  # BTC#5m sigue sin ejecutor (excluido 18-Jul/confirmado 27-Jul: rest_lo_min=-0.05, ventana degenerada). BNB añadido 27-Jul.
 
 
 def _pnl(py: float, acierto: int) -> float:

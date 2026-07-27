@@ -123,7 +123,14 @@ HARD_FLOOR_S = 3.0       # uniforme, mismo suelo de seguridad que BTC15m
 CONCENTRACION_MIN = 0.9  # bucket validado hoy para los 3 activos (dosis-respuesta n=195)
 MIN_TRADES_BALLENA = 3
 
-ACTIVOS = ("ETH", "SOL", "XRP", "DOGE")
+ACTIVOS = ("ETH", "SOL", "XRP", "DOGE", "BNB")
+# BNB añadido 27-Jul (petición Javi): calibración ya existía en
+# ballenas_timing_state.json (significativo=True, banda=[0.3,0.5),
+# rest_lo_min=1.33/rest_hi_min=3.75 -- ventana operable, nada degenerada).
+# BTC#5m SIGUE FUERA a propósito: rest_lo_min=-0.05 (la "confirmación"
+# solo ocurriría DESPUÉS del cierre del mercado, ventana inexistente en la
+# práctica) -- mismo motivo documentado el 18-Jul arriba, reconfirmado hoy
+# con datos frescos, no un olvido.
 
 # 23-Jul: MARGEN_WATCH_S/MARGEN_CONFIRM_S sustituyen a los watch_lead_s/
 # prob_bucket hardcodeados por activo del 18-Jul (ETH=90s/0.93, SOL=160s/
@@ -196,9 +203,9 @@ def libro_publico(token_id: str) -> dict | None:
 
 
 def concentracion_ballenas(condition_id: str, banda_lo: float, banda_hi: float,
-                            activo: str) -> tuple[float | None, float | None, int, str, list]:
-    """(pct_yes_crudo, pct_yes_ponderado, n, motivo, wallets_yes) -- mide
-    ambos lados porque la dirección todavía no está fijada.
+                            activo: str) -> tuple[float | None, float | None, int, str, list, int]:
+    """(pct_yes_crudo, pct_yes_ponderado, n, motivo, wallets_yes, n_yes_total)
+    -- mide ambos lados porque la dirección todavía no está fijada.
 
     23-Jul: se añade pct_yes_ponderado -- cada trade pesa según
     _peso_wallet() (1.0 si la wallet es desconocida o no validada, fuera de
@@ -206,12 +213,23 @@ def concentracion_ballenas(condition_id: str, banda_lo: float, banda_hi: float,
     siendo el conteo CRUDO de trades (gate MIN_TRADES_BALLENA no cambia --
     3 trades reales, ponderados o no, siguen siendo el suelo de datos
     mínimo). pct_yes_crudo se conserva para compararlo en el log/tracker
-    con el ponderado y poder auditar cuándo divergen."""
+    con el ponderado y poder auditar cuándo divergen.
+
+    27-Jul: n_yes_total -- conteo de TODAS las compras YES del mercado
+    completo (sin filtrar por banda_lo/banda_hi), reutilizando la misma
+    respuesta de la API sin llamada extra. Hallazgo de la sesión (ver
+    idea_ballenas5min_volumen_wallets_yes_todas_monedas_27jul en memoria):
+    el volumen TOTAL de participación (no la concentración dentro de la
+    banda) predice el hit-rate -- n_yes_total>=35 ya pasa el gate riguroso
+    completo en ETH (n=110, hit=96.4%%, PnL/trade=+0.159€) y apunta en la
+    misma dirección en SOL/XRP. Solo observacional por ahora, no filtra ni
+    decide nada -- se persiste en el tracker para dejarlo madurar."""
     try:
         trades = trades_de_mercado(condition_id)
     except Exception:
-        return None, None, 0, "error_api", []
+        return None, None, 0, "error_api", [], 0
     n_yes = n_no = 0
+    n_yes_total = 0
     peso_yes = peso_no = 0.0
     wallets_yes = []
     for t in trades:
@@ -225,6 +243,8 @@ def concentracion_ballenas(condition_id: str, banda_lo: float, banda_hi: float,
             precio_t = float(precio_t)
         except (ValueError, TypeError):
             continue
+        if outcome_t in ("up", "yes"):
+            n_yes_total += 1
         if not (banda_lo <= precio_t < banda_hi):
             continue
         w = (t.get("proxyWallet") or "").lower()
@@ -239,10 +259,10 @@ def concentracion_ballenas(condition_id: str, banda_lo: float, banda_hi: float,
             peso_no += peso
     n = n_yes + n_no
     if n == 0:
-        return None, None, 0, "sin_trades_en_banda", []
+        return None, None, 0, "sin_trades_en_banda", [], n_yes_total
     pct_crudo = n_yes / n
     pct_ponderado = peso_yes / (peso_yes + peso_no) if (peso_yes + peso_no) > 0 else pct_crudo
-    return pct_crudo, pct_ponderado, n, "ok", wallets_yes
+    return pct_crudo, pct_ponderado, n, "ok", wallets_yes, n_yes_total
 
 
 def _resumen_wallet_edge(wallets: list, activo: str) -> str:
@@ -361,7 +381,7 @@ def watch_window(activo: str, ts_end: int) -> bool:
         with ThreadPoolExecutor(max_workers=2) as ex:
             f_conc = ex.submit(concentracion_ballenas, mercado["condition_id"], banda_lo, banda_hi, activo)
             f_libro = ex.submit(libro_publico, mercado["yes_token"])
-            pct_crudo, pct_ponderado, n, motivo_conc, wallets_yes = f_conc.result()
+            pct_crudo, pct_ponderado, n, motivo_conc, wallets_yes, n_yes_total = f_conc.result()
             libro = f_libro.result()
 
         contadores[motivo_conc] = contadores.get(motivo_conc, 0) + 1
@@ -390,7 +410,7 @@ def watch_window(activo: str, ts_end: int) -> bool:
             log(f"[{ts_end}] CONFIRMADO concentracion_ponderada={pct_ponderado:.2f} (cruda={pct_crudo:.2f}) "
                 f"n={n} py={py:.3f} prob_bucket={prob_bucket:.3f} edge={edge:+.3f} restante={restante:.1f}s "
                 f"confirm_ceiling_s={confirm_ceiling_s:.1f} {_resumen_wallet_edge(wallets_yes, activo)}", activo)
-            _registrar_tracker(activo, mercado, py, edge, pct_ponderado, n, restante)
+            _registrar_tracker(activo, mercado, py, edge, pct_ponderado, n, restante, n_yes_total)
             return disparar(activo, mercado, py, edge, restante, prob_bucket)
 
         time.sleep(POLL_INTERVAL_S)
@@ -400,8 +420,30 @@ TRACKER_PATH = DIR_SHADOW / "ballenas_5min_dry_run.csv"
 _tracker_lock = threading.Lock()
 
 
+def _migrar_tracker_n_wallets_yes() -> None:
+    """27-Jul: añade la columna n_wallets_yes a un tracker ya existente sin
+    ella -- lee todas las filas, rellena vacío para las antiguas y reescribe
+    con el header nuevo. Se hace UNA vez (comprueba el header actual antes
+    de tocar nada); si ya tiene la columna, no-op."""
+    import csv as _csv
+    if not TRACKER_PATH.exists():
+        return
+    with open(TRACKER_PATH, encoding="utf-8") as f:
+        filas = list(_csv.DictReader(f))
+    if not filas or "n_wallets_yes" in filas[0]:
+        return
+    for fila in filas:
+        fila["n_wallets_yes"] = ""
+    campos = list(filas[0].keys())
+    with open(TRACKER_PATH, "w", newline="", encoding="utf-8") as f:
+        w = _csv.DictWriter(f, fieldnames=campos)
+        w.writeheader()
+        w.writerows(filas)
+
+
 def _registrar_tracker(activo: str, mercado: dict, py: float, edge: float,
-                        concentracion: float, n_ballenas: int, restante_s: float) -> None:
+                        concentracion: float, n_ballenas: int, restante_s: float,
+                        n_wallets_yes: int = 0) -> None:
     """21-Jul (petición Javi, gap detectado: 3 días de CONFIRMADO sin ningún
     tracker de resultados). Persiste ANTES de disparar() a propósito -- una
     confirmación es "la señal de ballenas dijo esto" independientemente de
@@ -409,24 +451,30 @@ def _registrar_tracker(activo: str, mercado: dict, py: float, edge: float,
     los disparos, ver disparar()); el tracker debe medir la señal, no el
     gate de dinero real que la envuelve. resuelve_ballenas_5min.py lee este
     CSV y rellena outcome_real/acierto vía gamma-api (mismo mecanismo que
-    shadow_resolve.py) cuando el mercado ya haya cerrado."""
-    nuevo = not TRACKER_PATH.exists()
-    fila = {
-        "timestamp_utc": datetime.now(timezone.utc).isoformat(timespec="seconds"),
-        "activo": activo,
-        "market_id": mercado.get("market_id", ""),
-        "condition_id": mercado.get("condition_id", ""),
-        "end_date": mercado.get("end_date", ""),
-        "py": round(py, 4),
-        "edge": round(edge, 4),
-        "concentracion": round(concentracion, 4),
-        "n_ballenas": n_ballenas,
-        "restante_s": round(restante_s, 1),
-        "outcome_real": "",
-        "acierto": "",
-        "resolved_ts": "",
-    }
+    shadow_resolve.py) cuando el mercado ya haya cerrado.
+
+    27-Jul: n_wallets_yes -- volumen TOTAL de compras YES del mercado (sin
+    filtrar por banda), ver nota en concentracion_ballenas. Solo
+    observacional, no decide nada todavía."""
     with _tracker_lock:
+        _migrar_tracker_n_wallets_yes()
+        nuevo = not TRACKER_PATH.exists()
+        fila = {
+            "timestamp_utc": datetime.now(timezone.utc).isoformat(timespec="seconds"),
+            "activo": activo,
+            "market_id": mercado.get("market_id", ""),
+            "condition_id": mercado.get("condition_id", ""),
+            "end_date": mercado.get("end_date", ""),
+            "py": round(py, 4),
+            "edge": round(edge, 4),
+            "concentracion": round(concentracion, 4),
+            "n_ballenas": n_ballenas,
+            "restante_s": round(restante_s, 1),
+            "outcome_real": "",
+            "acierto": "",
+            "resolved_ts": "",
+            "n_wallets_yes": n_wallets_yes,
+        }
         import csv as _csv
         with open(TRACKER_PATH, "a", newline="", encoding="utf-8") as f:
             w = _csv.DictWriter(f, fieldnames=list(fila.keys()))
