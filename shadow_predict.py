@@ -3031,6 +3031,22 @@ BALLENAS_CONFIRMADAS_BANDA_YES_HI = 0.9
 BALLENAS_CONFIRMADAS_UMBRAL_PCT = 0.6   # mismo umbral que veto_ballenas (live_trade.py)
 BALLENAS_CONFIRMADAS_MIN_TRADES = 3     # mismo mínimo que veto_ballenas
 
+# 27-Jul: gate de volumen (n_total_lado = compras del lado confirmado en
+# TODO el mercado, sin filtrar por banda) -- ver
+# project_volumen_ballenas_patron_universal_27jul en memoria. Validado con
+# las señales reales de las 4 (activo,dirección): XRP#BUY_NO n=220
+# hit=79.1% PnL=+0.421€ GATE OK (vs n=86 hit=1.2% PnL=-0.861€ bajo el
+# umbral); SOL#BUY_NO n=254 hit=81.1% GATE OK; SOL#BUY_YES n=124 hit=91.9%
+# GATE OK; ETH#BUY_NO n=225 hit=95.6% GATE OK; ETH#BUY_YES n=105 hit=97.1%
+# GATE OK -- las 5 combinaciones con datos suficientes, sin excepción.
+# Estrategia SHADOW pura (nunca en pares_permitidos_live) -- aplicar el
+# filtro directamente como gate real (no solo observacional) acelera la
+# validación forward exacta de la señal que se promocionaría, sin ningún
+# riesgo de dinero real. Coste de red CERO: reutiliza el mismo `trades`
+# ya obtenido para calcular pct_lado, solo cuenta también el total sin
+# filtrar por banda.
+BALLENAS_CONFIRMADAS_UMBRAL_VOLUMEN = 35
+
 
 def _banda_confirmada_ballenas(activo: str, marco: str, lo: float, hi: float) -> dict | None:
     """Busca en ballenas_timing_state.json una banda CONCRETA (no
@@ -3110,6 +3126,7 @@ def s_ballenas_confirmadas_15m(market, ctx):
                       # no hay nada que decidir)
 
     n_no = n_yes = 0
+    n_no_total = n_yes_total = 0
     lado_yes_wallets, lado_no_wallets = [], []
     for t in trades:
         if (t.get("side") or "").strip().upper() != "BUY":
@@ -3122,6 +3139,10 @@ def s_ballenas_confirmadas_15m(market, ctx):
             precio_t = float(precio_t)
         except (ValueError, TypeError):
             continue
+        if outcome_t in ("down", "no"):
+            n_no_total += 1
+        else:
+            n_yes_total += 1
         if not (banda_lo <= precio_t < banda_hi):
             continue
         w = (t.get("proxyWallet") or "").lower()
@@ -3140,6 +3161,9 @@ def s_ballenas_confirmadas_15m(market, ctx):
     pct_lado = n_lado / n
     if pct_lado < BALLENAS_CONFIRMADAS_UMBRAL_PCT:
         return None
+    n_total_lado = n_yes_total if direccion == "BUY_YES" else n_no_total
+    if n_total_lado < BALLENAS_CONFIRMADAS_UMBRAL_VOLUMEN:
+        return None  # gate de volumen 27-Jul -- ver nota junto a la constante
     wallets_lado = lado_yes_wallets if direccion == "BUY_YES" else lado_no_wallets
 
     hit_lado = banda_info["hit"]   # probabilidad empírica calibrada del bucket (lado confirmado)
@@ -3168,6 +3192,7 @@ def s_ballenas_confirmadas_15m(market, ctx):
             "direccion_confirmada": direccion,
             "concentracion_lado": round(pct_lado, 4),
             "n_ballena_banda": n,
+            "n_total_lado": n_total_lado,
             "banda_hit_calibrado": hit_lado,
             "banda_z": banda_info.get("z"),
             "banda_n_historico": banda_info.get("n"),

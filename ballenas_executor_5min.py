@@ -64,7 +64,7 @@ import requests
 
 import live_trade as lt
 from live_guard import puede_operar_live
-from live_stake import calcular_stake, verificar_circuit_breaker
+from live_stake import bloquear_por_circuit_breaker, calcular_stake
 from smart_money_tracker import MAX_TRADES_POR_MERCADO, trades_de_mercado
 
 DIR = Path(__file__).resolve().parent
@@ -616,18 +616,16 @@ def disparar(activo: str, mercado: dict, py: float, edge: float, restante_s: flo
                 f"{'[DRY-RUN] no ejecutaría' if DRY_RUN else 'no se ejecuta'}", activo)
             return False
 
-        # 27-Jul: BUG CRÍTICO CORREGIDO -- verificar_circuit_breaker() devuelve
-        # (disparado, motivo) con disparado=True significando "freno activo,
-        # PARAR" (mismo contrato que usa live_trade.py: "if disparado:
-        # parar"). La versión anterior comprobaba "if not ok_breaker" --
-        # exactamente invertida: con el freno REALMENTE disparado (p.ej.
-        # racha=4 pérdidas consecutivas), no bloqueaba nada y ejecutaba la
-        # orden igualmente. Detectado en vivo 27-Jul tras un trade real que
-        # se ejecutó con la racha de pérdidas ya en 4 -- confirmado
-        # empíricamente antes de corregir.
-        disparado, motivo_breaker = verificar_circuit_breaker()
-        if disparado:
-            log(f"circuit breaker activo ({motivo_breaker}) -- {'[DRY-RUN] no ejecutaría' if DRY_RUN else 'no se ejecuta'}", activo)
+        # 27-Jul (/code-review): usa el helper único bloquear_por_circuit_breaker
+        # en vez de reimplementar el chequeo aquí -- este mismo chequeo,
+        # reimplementado por separado en este fichero y en
+        # ballenas_executor_btc15m.py, se invirtió de forma IDÉNTICA en
+        # ambos (bug crítico corregido el mismo día: BALLENAS_TARDIAS#BTC#15min
+        # estuvo 10 días en live con cero trades reales). Centralizado en
+        # live_stake.py para que no pueda repetirse.
+        if bloquear_por_circuit_breaker(
+                lambda motivo: log(f"circuit breaker activo ({motivo}) -- "
+                                    f"{'[DRY-RUN] no ejecutaría' if DRY_RUN else 'no se ejecuta'}", activo)):
             return False
 
         ic_conviccion = (prob_bucket - 0.5) * 2
