@@ -2028,9 +2028,12 @@ def s_updown_gbm_15min_tardio(market, ctx):
         if py is not None:
             resultado["features"]["ballenas_dentro_banda"] = bool(lo <= py < hi)
     direccion = "BUY_YES" if resultado.get("prob_yes", 0.5) >= 0.5 else "BUY_NO"
-    if not _gate_volumen_ballenas("UPDOWN_GBM_15M_TARDIO", activo, "15min", direccion,
-                                   market.get("condition_id")):
+    deja_pasar, n_total_lado = _gate_volumen_ballenas("UPDOWN_GBM_15M_TARDIO", activo, "15min",
+                                                       direccion, market.get("condition_id"))
+    if not deja_pasar:
         return None  # gate de volumen 27-Jul -- ver GATE_VOLUMEN_VALIDADO
+    if n_total_lado is not None:
+        resultado["features"]["n_total_lado"] = n_total_lado
     return resultado
 
 
@@ -2848,9 +2851,12 @@ def s_gbm_late_15min(market, ctx):
         return None
     activo = identificar_activo(market.get("question", ""))
     direccion = "BUY_YES" if resultado.get("prob_yes", 0.5) >= 0.5 else "BUY_NO"
-    if not _gate_volumen_ballenas("GBM_LATE_15M", activo, "15min", direccion,
-                                   market.get("condition_id")):
+    deja_pasar, n_total_lado = _gate_volumen_ballenas("GBM_LATE_15M", activo, "15min",
+                                                       direccion, market.get("condition_id"))
+    if not deja_pasar:
         return None  # gate de volumen 27-Jul -- ver GATE_VOLUMEN_VALIDADO
+    if n_total_lado is not None:
+        resultado["features"]["n_total_lado"] = n_total_lado
     return resultado
 
 
@@ -3094,23 +3100,28 @@ GATE_VOLUMEN_VALIDADO = {
 
 
 def _gate_volumen_ballenas(strategy: str, activo: str, marco_str: str, direccion: str,
-                           condition_id: str | None) -> bool:
-    """True = deja pasar la señal (sin gate validado para este combo, o
-    volumen suficiente). False = vetar (combo validado Y volumen bajo).
-    Fail-open ante cualquier fallo (sin condition_id, error de red, combo
-    no validado) -- este gate solo puede REDUCIR una señal ya aprobada por
-    el resto de la lógica de la estrategia, nunca inventar una nueva."""
+                           condition_id: str | None) -> tuple[bool, int | None]:
+    """(deja_pasar, n_total_lado). deja_pasar=True = sin gate validado para
+    este combo, o volumen suficiente. False = vetar (combo validado Y
+    volumen bajo). n_total_lado=None si no se llegó a consultar (combo no
+    validado o sin condition_id) -- el llamador debe loguearlo cuando no
+    sea None, para poder auditar/retunear el umbral 35 con datos reales
+    (/code-review 27-Jul: antes no se guardaba el conteo real, solo la
+    decisión binaria). Fail-open ante cualquier fallo (sin condition_id,
+    error de red, combo no validado) -- este gate solo puede REDUCIR una
+    señal ya aprobada por el resto de la lógica de la estrategia, nunca
+    inventar una nueva."""
     umbral = GATE_VOLUMEN_VALIDADO.get((strategy, activo, marco_str, direccion))
     if umbral is None or not condition_id:
-        return True
+        return True, None
     try:
         trades = trades_de_mercado(condition_id)
     except Exception:
-        return True
+        return True, None
     lado_check = ("up", "yes") if direccion == "BUY_YES" else ("down", "no")
     n_total_lado = sum(1 for t in trades if (t.get("side") or "").strip().upper() == "BUY"
                        and (t.get("outcome") or "").strip().lower() in lado_check)
-    return n_total_lado >= umbral
+    return n_total_lado >= umbral, n_total_lado
 
 
 def _banda_confirmada_ballenas(activo: str, marco: str, lo: float, hi: float) -> dict | None:
@@ -3738,8 +3749,9 @@ def s_favorito_confirmado(market, ctx):
 
     direccion = "BUY_YES" if lado == "YES" else "BUY_NO"
     marco_str = f"{vent}min" if vent else ""
-    if not _gate_volumen_ballenas("FAVORITO_CONFIRMADO", activo, marco_str, direccion,
-                                   market.get("condition_id")):
+    deja_pasar, n_total_lado = _gate_volumen_ballenas("FAVORITO_CONFIRMADO", activo, marco_str,
+                                                       direccion, market.get("condition_id"))
+    if not deja_pasar:
         return None  # gate de volumen 27-Jul -- ver GATE_VOLUMEN_VALIDADO
 
     restante_min = None
@@ -3759,6 +3771,7 @@ def s_favorito_confirmado(market, ctx):
             "py_entrada":   round(py, 3),
             "restante_min": restante_min,
             "hora_utc":     datetime.now(timezone.utc).hour,
+            "n_total_lado": n_total_lado,
             **_libro_calidad(market),
         },
     }
