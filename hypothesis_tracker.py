@@ -12,7 +12,8 @@ Hipótesis pendientes conectadas al sistema:
   H-HORA-GBM     hora_utc causal automático en GBM (n≥20 forward)
   H-CROSS-ASSET  GBM+OF BUY_NO mismo activo → boost (n_overlaps≥20)
   H-OF-PAR       ORDER_FLOW per-pair delta ranges (n≥200 BTC+SOL)
-  H-KELLY-HORA   Boost ×1.2 en horas top 15/17/19h (n≥40 por hora)
+  H-KELLY-HORA   Boost ×1.2 por celda estrategia#subtype#dirección#hora (13/15/17/19h),
+                 gate riguroso completo por celda -- rediseño 23-Jul, ver _eval_kelly_hora
   H-60MIN-LIVE   BTC/ETH#60min → live cuando IC≥0.08 n≥40
   H-WEEKLY       Predicciones semanales por par (n≥15 por par)
   H-SOL-15MIN    SOL#15min → live cuando IC≥0.08 n≥40
@@ -34,6 +35,7 @@ STRATEGY_PARAMS  = REPO / "data/shadow/strategy_params.json"
 HIPOTESIS_JSON   = REPO / "data/shadow/hipotesis_pendientes.json"
 HIPOTESIS_CUSTOM = REPO / "data/shadow/hipotesis_custom.json"
 JON_BECKER_DIR   = REPO / "data/jon_becker"
+KELLY_HORA_AVISADAS = REPO / "data/shadow/kelly_hora_avisadas_latch.json"
 
 # ── Utilidades ────────────────────────────────────────────────────────────────
 
@@ -318,31 +320,87 @@ def _eval_of_rangos_par(rows):
     return {"by_pair": by_pair, "status": overall, "rec": recs}
 
 
-def _eval_kelly_hora(rows):
-    """Boost ×1.2 en horas top (UTC 13/15/17/19). Trigger: n≥40 por hora con IC≥+0.10."""
-    TARGET_HOURS = [13, 15, 17, 19]  # UTC → Madrid CEST +2 = 15/17/19/21h
+KELLY_HORA_TARGET_HOURS = [13, 15, 17, 19]  # UTC → Madrid CEST +2 = 15/17/19/21h
+KELLY_HORA_N_INFORMATIVO = 15
+KELLY_HORA_N_GATE = 40
+KELLY_HORA_STATE = REPO / "data/shadow/kelly_hora_segmentado.json"
 
-    hourly = defaultdict(list)
+
+def _eval_kelly_hora(rows):
+    """Boost de stake por hora, SEGMENTADO por (estrategia, subtype, dirección)
+    -- 23-Jul, rediseño completo tras encontrar que la versión agregada (un
+    solo IC por hora, mezclando TODAS las estrategias/activos/direcciones)
+    escondía celdas peligrosas: GBM_LATE_60M es NEGATIVA en las 3 horas
+    candidatas (IC=-0.15/-0.15/-0.09 en 15h/17h/19h) y FAVORITO_CONFIRMADO a
+    las 19h tiene IC=+0.152 pero PnL real=-15.20€ (payout asimétrico, mismo
+    patrón que FAVORITO_CONFIRMADO#*#BUY_NO ya pausado antes). El mecanismo
+    de aplicación (_hora_stake_factor, shadow_predict.py) subía el stake para
+    CUALQUIER estrategia/activo en la hora "buena" sin distinguir -- con el
+    agregado habría sido exactamente el tipo de desastre que ya motivó
+    desactivar el auto-apply el 15-Jul. Ver memoria
+    idea_kelly_hora_segmentado_23jul.
+
+    Cada celda (STRATEGY#SUBTYPE#DIRECCION#HORA, mismo formato que
+    pares_permitidos_live) se evalúa por separado con el MISMO rigor que una
+    promoción a live -- Wilson+shuffle+bootstrap de PnL real
+    (analisis_gate_riguroso.gate, NO reimplementado aquí) para las celdas con
+    n>=40; las celdas con 15<=n<40 se registran solo como informativas
+    (ACUMULANDO). El detalle completo (todas las celdas trackeadas, no solo
+    las que ya pasan) se persiste en kelly_hora_segmentado.json para poder
+    ver cómo evoluciona cada una con el tiempo."""
+    from analisis_gate_riguroso import gate as _gate_riguroso  # noqa: PLC0415
+
+    por_celda = defaultdict(list)
     for r in rows:
         h = _hour_from_ts(r)
-        if h is not None:
-            hourly[h].append(r)
+        if h not in KELLY_HORA_TARGET_HOURS:
+            continue
+        dec = r.get("decision", "")
+        if dec not in ("BUY_YES", "BUY_NO"):
+            continue
+        key = f"{r.get('strategy', '')}#{r.get('subtype', '')}#{dec}#{h}"
+        por_celda[key].append(r)
 
-    by_hour = {}
-    for h in TARGET_HOURS:
-        s = _stats(hourly[h])
-        ready = s["n"] >= 40 and s["ic"] >= 0.10
-        by_hour[str(h)] = {
-            **s,
-            "status": "LISTA_EVALUAR" if ready else "ACUMULANDO",
-            "rec": f"H={h:02d}h UTC: IC={s['ic']:+.3f} n={s['n']}/40 PNL={s['pnl']:+.2f}€",
-        }
+    celdas = {}
+    gate_ok = []
+    for key, filas in por_celda.items():
+        n = len(filas)
+        if n < KELLY_HORA_N_INFORMATIVO:
+            continue
+        if n >= KELLY_HORA_N_GATE:
+            g = _gate_riguroso(filas)
+            celdas[key] = g
+            if g["veredicto"] == "GATE OK":
+                gate_ok.append(key)
+        else:
+            wins = sum(1 for r in filas if r.get("acierto") == "1")
+            celdas[key] = {"n": n, "hit": round(wins / n, 4), "ic": _ic(wins, n),
+                           "veredicto": f"ACUMULANDO (n<{KELLY_HORA_N_GATE})"}
 
-    all_ready = all(v["status"] == "LISTA_EVALUAR" for v in by_hour.values())
+    try:
+        KELLY_HORA_STATE.write_text(json.dumps(
+            {"actualizado": datetime.now(timezone.utc).isoformat(timespec="seconds"),
+             "aviso_fillability": (
+                 "Gate riguroso = shadow puro (results.csv), NO verifica fill-ability. "
+                 "27-Jul: cruzar SIEMPRE contra data/live/libro_snapshots.csv (motivo="
+                 "ejecutada vs veto_profundidad) antes de aplicar cualquier celda a "
+                 "meta.hora_boost_factor -- la familia GBM_LATE (arquetipo A) ya mostró "
+                 "fill-ability real de 1-20% pese a pasar este mismo gate con GATE OK, "
+                 "ver idea_fillability_gbmlate_bucket_precio_23jul."),
+             "celdas": celdas}, indent=2, ensure_ascii=False))
+    except Exception as e:
+        print(f"  [WARN] no se pudo escribir {KELLY_HORA_STATE}: {e}")
 
-    return {"by_hour": by_hour,
-            "status": "LISTA_EVALUAR" if all_ready else "ACUMULANDO",
-            "rec": " | ".join(v["rec"] for v in by_hour.values())}
+    n_evaluadas_gate = sum(1 for c in celdas.values() if c.get("n", 0) >= KELLY_HORA_N_GATE)
+    return {
+        "status": "LISTA_EVALUAR" if gate_ok else "ACUMULANDO",
+        "gate_ok": gate_ok,
+        "n_celdas_trackeadas": len(celdas),
+        "n_celdas_con_gate_completo": n_evaluadas_gate,
+        "rec": (f"{len(gate_ok)} celda(s) pasan gate riguroso completo de "
+                f"{n_evaluadas_gate} evaluadas (n>=40) y {len(celdas)} trackeadas "
+                f"(n>=15). Detalle: {KELLY_HORA_STATE.name}"),
+    }
 
 
 def _eval_streak_cooldown(rows):
@@ -884,11 +942,14 @@ HIPOTESIS = [
     },
     {
         "id":          "H-KELLY-HORA",
-        "nombre":      "Kelly boost ×1.2 en horas top (15/17/19h UTC)",
-        "descripcion": "Horas 15/17/19h UTC históricamente IC>+0.10. Boost en esas horas.",
+        "nombre":      "Kelly boost ×1.2 por celda (estrategia#subtype#dirección#hora)",
+        "descripcion": ("23-Jul: rediseñado tras encontrar que el agregado por hora "
+                         "escondía celdas negativas (GBM_LATE_60M negativa en las 3 "
+                         "horas, FAVORITO_CONFIRMADO 19h con IC+ pero PnL real negativo). "
+                         "Cada celda pasa el mismo gate riguroso que una promoción live."),
         "tipo":        "kelly_boost",
-        "umbral":      "n≥40 por hora con IC estable ≥+0.10 confirmado en forward",
-        "accion":      "Añadir HORA_BOOST = {13: 1.2, 15: 1.2, 17: 1.2, 19: 1.2} en shadow_predict.py",
+        "umbral":      "n≥40 por celda + gate riguroso completo (Wilson+shuffle+PnL bootstrap)",
+        "accion":      "Añadir claves 'ESTRATEGIA#SUBTYPE#DIRECCION#HORA':1.2 a meta.hora_boost_factor, solo por celda confirmada",
         "eval_fn":     _eval_kelly_hora,
     },
     {
@@ -1053,18 +1114,42 @@ def _auto_apply(resultados):
                 f"(meta.gbm_blacklist_hours_auto). NO aplicado — pendiente "
                 f"de confirmación manual.")
 
-    # H-KELLY-HORA: boost por hora cuando IC≥0.15 y n≥40 confirmado
+    # H-KELLY-HORA: boost por CELDA (estrategia#subtype#dirección#hora) cuando
+    # pasa el gate riguroso completo (Wilson+shuffle+PnL bootstrap, no solo
+    # IC/n crudos) -- 23-Jul, reemplaza el mecanismo agregado por hora que
+    # escondía celdas negativas (GBM_LATE_60M, FAVORITO_CONFIRMADO payout
+    # asimétrico a las 19h). Ver _eval_kelly_hora e idea_kelly_hora_
+    # segmentado_23jul. Latch propio (kelly_hora_avisadas_latch.json, NO
+    # strategy_params.json -- evita un segundo escritor concurrente sobre un
+    # fichero que shadow_postmortem.py ya escribe en el mismo ciclo) para no
+    # re-avisar la misma celda cada ~23min si Javi decide no aplicarla.
     h = resultados.get("H-KELLY-HORA", {})
-    if h.get("status") == "LISTA_EVALUAR":
+    gate_ok = h.get("gate_ok", [])
+    if gate_ok:
         boost_actual = meta.get("hora_boost_factor", {})
-        candidatas = {hora_str: 1.2 for hora_str, d in h.get("by_hour", {}).items()
-                      if d.get("n", 0) >= 40 and d.get("ic", 0) >= 0.15}
-        sin_aplicar = {hr: v for hr, v in candidatas.items() if boost_actual.get(hr) != v}
-        if sin_aplicar:
+        try:
+            avisadas = set(json.loads(KELLY_HORA_AVISADAS.read_text())) if KELLY_HORA_AVISADAS.exists() else set()
+        except Exception:
+            avisadas = set()
+        nuevas = [k for k in gate_ok if k not in boost_actual and k not in avisadas]
+        if nuevas:
+            listado = ", ".join(nuevas[:8]) + (f" (+{len(nuevas) - 8} más)" if len(nuevas) > 8 else "")
             pendientes.append(
-                f"🔔 H-KELLY-HORA lista para aplicar: boost ×1.2 en horas "
-                f"{list(sin_aplicar.keys())} (meta.hora_boost_factor). "
-                f"NO aplicado — pendiente de confirmación manual.")
+                f"🔔 H-KELLY-HORA: {len(nuevas)} celda(s) estrategia#subtype#dirección#hora "
+                f"pasan el gate riguroso completo (Wilson+shuffle+PnL bootstrap): "
+                f"{listado}. Detalle en data/shadow/kelly_hora_segmentado.json. "
+                f"⚠️ Gate riguroso = shadow puro (results.csv), NO verifica fill-ability -- "
+                f"27-Jul: las celdas encontradas hasta ahora son 100% familia GBM_LATE "
+                f"(arquetipo A, históricamente mal fillable 1-20% en libro_snapshots.csv, "
+                f"ver idea_fillability_gbmlate_bucket_precio_23jul) -- cruzar fill-ability "
+                f"real ANTES de aplicar, mismo rigor que cualquier promoción a live. "
+                f"NO aplicado — pendiente de confirmación manual "
+                f"(añadir a meta.hora_boost_factor con la clave exacta).")
+            try:
+                KELLY_HORA_AVISADAS.write_text(
+                    json.dumps(sorted(avisadas | set(nuevas)), indent=2, ensure_ascii=False))
+            except Exception as e:
+                print(f"  [WARN] no se pudo persistir {KELLY_HORA_AVISADAS}: {e}")
 
     if pendientes:
         for msg in pendientes:

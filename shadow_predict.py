@@ -4336,17 +4336,30 @@ ESTRATEGIAS = [
 HORA_BOOST_15M_BUYYES = frozenset({5, 6, 7, 15, 16, 17, 19})
 
 
-def _hora_stake_factor(dec: str, subtype: str, meta: dict) -> float:
-    """Multiplicador de stake por hora, aplicado UNA sola vez. meta.hora_boost_factor
-    (dato aprendido) manda si define la hora actual; si no, fallback estático ×1.1
-    para BUY_YES#15min en las horas históricamente buenas."""
+def _hora_stake_factor(dec: str, strategy: str, subtype: str, meta: dict) -> float:
+    """Multiplicador de stake por hora, SEGMENTADO por (estrategia, subtype,
+    dirección, hora) -- 23-Jul, corrige el mecanismo agregado anterior que
+    aplicaba el mismo boost a CUALQUIER estrategia/activo/dirección en una
+    hora "buena" sin comprobar si ahí funcionaba. Encontrado al diseñar esto
+    (ver idea_kelly_hora_segmentado_23jul): GBM_LATE_60M es NEGATIVA en las 3
+    horas candidatas (13/15/17/19h UTC) y FAVORITO_CONFIRMADO a las 19h tiene
+    IC positivo pero PnL real negativo (payout asimétrico) -- el mecanismo
+    agregado los habría boosteado igual que a las estrategias que sí
+    funcionan ahí. meta.hora_boost_factor ahora se indexa por
+    "ESTRATEGIA#SUBTYPE#DIRECCION#HORA" (mismo formato que
+    pares_permitidos_live) -- cada celda solo se puebla a mano tras pasar el
+    gate riguroso completo (hypothesis_tracker._eval_kelly_hora +
+    analisis_gate_riguroso.gate), nunca automático. Si no hay celda exacta,
+    fallback estático ×1.1 para BUY_YES#15min en las horas históricamente
+    buenas (sin cambios, no segmentado — desde antes de este rediseño)."""
     if dec not in ("BUY_YES", "BUY_NO"):
         return 1.0
     h = datetime.now(timezone.utc).hour
     meta_map = (meta or {}).get("hora_boost_factor", {}) or {}
-    if str(h) in meta_map:
+    key = f"{strategy}#{subtype}#{dec}#{h}"
+    if key in meta_map:
         try:
-            return float(meta_map[str(h)])
+            return float(meta_map[key])
         except (TypeError, ValueError):
             return 1.0
     if dec == "BUY_YES" and subtype.endswith("15min") and h in HORA_BOOST_15M_BUYYES:
@@ -4848,7 +4861,7 @@ def main():
                 # antes el set 24H hardcoded ×1.1 (abajo, ya eliminado) y
                 # meta.hora_boost_factor se aplicaban por separado y se apilaban
                 # multiplicativamente. Ahora un único factor, meta con prioridad.
-                apuesta = min(2.00, apuesta * _hora_stake_factor(dec, subtype, meta_params))
+                apuesta = min(2.00, apuesta * _hora_stake_factor(dec, nombre, subtype, meta_params))
                 # Longshot bias (Jon-Becker, 2026-06-27): mercados con py_mkt<0.20 tienen
                 # win_rate<precio_implícito para compradores de YES (EV negativo en longshots).
                 # BUY_NO en estos mercados tiene edge estructural adicional → boost ×1.1.
