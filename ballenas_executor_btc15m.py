@@ -561,8 +561,14 @@ def disparar(mercado: dict, py: float, edge: float, restante_s: float, prob_buck
             f"{'[DRY-RUN] no ejecutaría' if DRY_RUN else 'no se ejecuta'}")
         return False
 
-    ok_breaker, motivo_breaker = verificar_circuit_breaker()
-    if not ok_breaker:
+    # 27-Jul: BUG CRÍTICO CORREGIDO -- verificar_circuit_breaker() devuelve
+    # (disparado, motivo) con disparado=True significando "freno activo,
+    # PARAR" (mismo contrato que live_trade.py). La versión anterior
+    # comprobaba "if not ok_breaker" -- invertida: con el freno REALMENTE
+    # disparado no bloqueaba nada. Detectado en vivo 27-Jul (mismo bug en
+    # ballenas_executor_5min.py, encontrado primero ahí).
+    disparado, motivo_breaker = verificar_circuit_breaker()
+    if disparado:
         log(f"  circuit breaker activo ({motivo_breaker}) -- {'[DRY-RUN] no ejecutaría' if DRY_RUN else 'no se ejecuta'}")
         return False
 
