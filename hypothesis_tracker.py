@@ -380,6 +380,13 @@ def _eval_kelly_hora(rows):
     try:
         KELLY_HORA_STATE.write_text(json.dumps(
             {"actualizado": datetime.now(timezone.utc).isoformat(timespec="seconds"),
+             "aviso_fillability": (
+                 "Gate riguroso = shadow puro (results.csv), NO verifica fill-ability. "
+                 "27-Jul: cruzar SIEMPRE contra data/live/libro_snapshots.csv (motivo="
+                 "ejecutada vs veto_profundidad) antes de aplicar cualquier celda a "
+                 "meta.hora_boost_factor -- la familia GBM_LATE (arquetipo A) ya mostró "
+                 "fill-ability real de 1-20% pese a pasar este mismo gate con GATE OK, "
+                 "ver idea_fillability_gbmlate_bucket_precio_23jul."),
              "celdas": celdas}, indent=2, ensure_ascii=False))
     except Exception as e:
         print(f"  [WARN] no se pudo escribir {KELLY_HORA_STATE}: {e}")
@@ -1131,6 +1138,11 @@ def _auto_apply(resultados):
                 f"🔔 H-KELLY-HORA: {len(nuevas)} celda(s) estrategia#subtype#dirección#hora "
                 f"pasan el gate riguroso completo (Wilson+shuffle+PnL bootstrap): "
                 f"{listado}. Detalle en data/shadow/kelly_hora_segmentado.json. "
+                f"⚠️ Gate riguroso = shadow puro (results.csv), NO verifica fill-ability -- "
+                f"27-Jul: las celdas encontradas hasta ahora son 100% familia GBM_LATE "
+                f"(arquetipo A, históricamente mal fillable 1-20% en libro_snapshots.csv, "
+                f"ver idea_fillability_gbmlate_bucket_precio_23jul) -- cruzar fill-ability "
+                f"real ANTES de aplicar, mismo rigor que cualquier promoción a live. "
                 f"NO aplicado — pendiente de confirmación manual "
                 f"(añadir a meta.hora_boost_factor con la clave exacta).")
             try:
