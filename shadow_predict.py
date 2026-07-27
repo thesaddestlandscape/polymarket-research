@@ -3268,6 +3268,7 @@ def s_ballenas_confirmadas_15m(market, ctx):
             "direccion_confirmada": direccion,
             "concentracion_lado": round(pct_lado, 4),
             "n_ballena_banda": n,
+            "n_total_lado": n_total_lado,
             "banda_hit_calibrado": hit_lado,
             "banda_z": banda_info.get("z"),
             "banda_n_historico": banda_info.get("n"),
