@@ -3131,7 +3131,11 @@ def _gate_volumen_ballenas(strategy: str, activo: str, marco_str: str, direccion
     if umbral is None or not condition_id:
         return True, None
     try:
-        trades = trades_de_mercado(condition_id)
+        # timeout corto (3s, no los 20s por defecto de _get): esto corre
+        # en el momento de CONFIRMAR una señal dentro del fast loop
+        # (~20s/ciclo) -- /code-review 27-Jul, un solo request lento no
+        # puede permitirse bloquear el ciclo entero. Fail-open si se agota.
+        trades = trades_de_mercado(condition_id, timeout=3)
     except Exception:
         return True, None
     lado_check = ("up", "yes") if direccion == "BUY_YES" else ("down", "no")

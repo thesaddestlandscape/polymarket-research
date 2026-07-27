@@ -167,9 +167,9 @@ def _cargar_json(path, default):
         return default
 
 
-def _get(url, params=None):
+def _get(url, params=None, timeout=None):
     try:
-        r = requests.get(url, params=params, headers=HEADERS, timeout=TIMEOUT)
+        r = requests.get(url, params=params, headers=HEADERS, timeout=timeout or TIMEOUT)
         if r.status_code != 200:
             return None
         return r.json()
@@ -238,8 +238,9 @@ def mercados_recientes() -> dict:
     return vistos
 
 
-def trades_de_mercado(condition_id: str) -> list:
-    data = _get(f"{DATA_API}/trades", {"market": condition_id, "limit": MAX_TRADES_POR_MERCADO})
+def trades_de_mercado(condition_id: str, timeout: float | None = None) -> list:
+    data = _get(f"{DATA_API}/trades", {"market": condition_id, "limit": MAX_TRADES_POR_MERCADO},
+                timeout=timeout)
     time.sleep(SLEEP_ENTRE_LLAMADAS)
     return data or []
 
