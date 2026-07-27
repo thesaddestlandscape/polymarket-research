@@ -154,8 +154,13 @@ def _daily_real_pnl(wallet: str) -> tuple[list, float, float]:
     devuelve vacío (el balance sigue siendo la métrica crítica).
     """
     from collections import defaultdict
+    # limit=500 (23-Jul): Polymarket empezó a rechazar >500 con 400 "max
+    # activity limit of 500 exceeded" (~22:19-22:32 UTC 23-Jul, cambio de
+    # la API, sin tocar este código) -- el 400 se tragaba en el except de
+    # abajo y dejaba pnl_hoy_real/pnl_7d_real/daily_real en None/[] en
+    # silencio durante horas.
     r = requests.get(f"{DATA_API}/activity",
-                     params={"user": wallet, "limit": 1000}, timeout=25)
+                     params={"user": wallet, "limit": 500}, timeout=25)
     r.raise_for_status()
     evs = r.json()
     if not isinstance(evs, list):

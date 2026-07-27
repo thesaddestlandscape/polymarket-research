@@ -305,7 +305,7 @@ def cargar_calibracion(activo: str) -> dict | None:
     n, n_gan, rest_hi = e.get("n"), e.get("n_ganadoras"), e.get("rest_hi_min")
     if not (isinstance(lo, (int, float)) and isinstance(hi, (int, float))
             and isinstance(n, (int, float)) and n > 0
-            and isinstance(n_gan, (int, float))
+            and isinstance(n_gan, (int, float)) and 0 <= n_gan <= n
             and isinstance(rest_hi, (int, float))):
         return None
     prob_bucket = _wilson_lower(int(n_gan), int(n))
