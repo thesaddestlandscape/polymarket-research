@@ -99,8 +99,41 @@ def cargar_dry_run():
             row["_restante_s"] = restante_s
             row["_pnl"] = _pnl(py, acierto)
             row["_bucket"] = bucket(py)
+            try:
+                row["_n_wallets_yes"] = int(row["n_wallets_yes"]) if row.get("n_wallets_yes") not in (None, "") else None
+            except (TypeError, ValueError):
+                row["_n_wallets_yes"] = None
             filas[row["activo"]].append(row)
     return filas
+
+
+# 27-Jul: umbral de volumen (n_wallets_yes) por activo -- ver
+# idea_ballenas5min_volumen_wallets_yes_todas_monedas_27jul en memoria.
+# ETH ya GATE OK con 35 (activado como filtro real en
+# ballenas_executor_5min.py). DOGE GATE OK tras limpiar (n_banda>=3) con
+# 20, más débil que ETH (corr con py=0.185 tras limpiar, no 0 limpio) --
+# solo vigilancia diaria, NO activado como filtro todavía. SOL/XRP/BNB
+# mismo signo, n corto -- vigilar con 35 hasta que decidan su propio
+# umbral óptimo.
+UMBRAL_VOLUMEN_POR_ACTIVO = {"ETH": 35, "DOGE": 20, "SOL": 35, "XRP": 35, "BNB": 35}
+
+
+def volumen_por_activo(dry_run_filas_activo, umbral):
+    """Bucket >=umbral vs <umbral de n_wallets_yes -- seguimiento diario
+    del hallazgo de volumen de participación (27-Jul). Filas sin dato
+    (n_wallets_yes vacío, instrumentado desde 27-Jul) se ignoran."""
+    con_dato = [r for r in dry_run_filas_activo if r["_n_wallets_yes"] is not None]
+    alto = [r for r in con_dato if r["_n_wallets_yes"] >= umbral]
+    bajo = [r for r in con_dato if r["_n_wallets_yes"] < umbral]
+    out = {}
+    for grupo, nombre in [(alto, "alto"), (bajo, "bajo")]:
+        n = len(grupo)
+        out[nombre] = {
+            "umbral": umbral, "n": n,
+            "hit": round(sum(r["_acierto"] for r in grupo) / n, 4) if n else None,
+            "pnl_trade": round(sum(r["_pnl"] for r in grupo) / n, 4) if n else None,
+        }
+    return out
 
 
 def franja_fina_por_activo(activo, ballenas_hist, state_fino, dry_run_filas):
@@ -204,6 +237,7 @@ def main():
         timing = timing_por_activo(dry_run_filas.get(activo, []))
         top_wallets = top_wallets_por_activo(activo, wallet_edge_db)
         calib = calibracion_actual(activo)
+        volumen = volumen_por_activo(dry_run_filas.get(activo, []), UMBRAL_VOLUMEN_POR_ACTIVO.get(activo, 35))
 
         n_propio_total = sum(f["propio_n"] for f in franja)
         hit_propio_total = None
@@ -218,6 +252,7 @@ def main():
             "calibracion_actual": calib,
             "n_propio_total": n_propio_total,
             "hit_propio_total": hit_propio_total,
+            "volumen_n_wallets_yes": volumen,
         }
 
         print(f"\n=== {activo}#5min ===")
@@ -233,6 +268,10 @@ def main():
         else:
             print("  banda operativa: NO significativa hoy")
         print(f"  nuestro ejecutor: n_total={n_propio_total} hit_total={hit_propio_total}")
+        v_alto, v_bajo = volumen["alto"], volumen["bajo"]
+        print(f"  volumen (n_wallets_yes, umbral={v_alto['umbral']}): "
+              f"alto n={v_alto['n']} hit={v_alto['hit']} pnl/trade={v_alto['pnl_trade']}  |  "
+              f"bajo n={v_bajo['n']} hit={v_bajo['hit']} pnl/trade={v_bajo['pnl_trade']}")
         for t in timing:
             if t["n"]:
                 hi_txt = t['restante_s_hi'] if t['restante_s_hi'] is not None else '+'
