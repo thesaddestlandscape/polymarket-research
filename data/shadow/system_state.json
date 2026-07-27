@@ -1,8 +1,8 @@
 {
-  "timestamp_utc": "2026-07-27T22:08:12+00:00",
-  "bankroll_sim": 7932.74,
-  "pnl_total": 7912.74,
-  "n_ops": 38995,
+  "timestamp_utc": "2026-07-27T22:17:15+00:00",
+  "bankroll_sim": 7937.65,
+  "pnl_total": 7917.65,
+  "n_ops": 39002,
   "win_rate": 0.5961,
   "estrategias_activas": 255,
   "desactivadas": [
@@ -41,18 +41,18 @@
   "top3_ic": [
     {
       "k": "BALLENAS_TARDIAS",
-      "ic": 0.375,
-      "n": 46
+      "ic": 0.3571,
+      "n": 47
     },
     {
       "k": "BALLENAS_TARDIAS#BTC#15min",
-      "ic": 0.375,
-      "n": 46
+      "ic": 0.3571,
+      "n": 47
     },
     {
       "k": "BALLENAS_TARDIAS#BTC",
-      "ic": 0.375,
-      "n": 46
+      "ic": 0.3571,
+      "n": 47
     }
   ],
   "brier_medio": 0.2369,
