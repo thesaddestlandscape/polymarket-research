@@ -20,6 +20,7 @@ análisis. Solo lectura de gamma-api + escritura de este CSV -- no toca
 config_live.json, no ejecuta nada, no toca dinero.
 """
 import csv
+import fcntl
 import sys
 from pathlib import Path
 
@@ -29,6 +30,13 @@ sys.path.insert(0, str(REPO))
 from shadow_resolve import estado_mercado, parse_outcome_prices  # noqa: E402
 
 TRACKER = REPO / "data/shadow/ballenas_5min_dry_run.csv"
+# 27-Jul (/code-review): mismo fichero de lock que ballenas_executor_5min.py
+# -- ese proceso (screen ballenas_5m, persistente) también reescribe
+# TRACKER entero (migración de columna + backfill), y este script corre
+# como cron aparte. Sin flock compartido, una reescritura completa de
+# cualquiera de los dos procesos puede solapar con la del otro y perder
+# outcome_real/acierto ya resueltos.
+TRACKER_LOCK = REPO / "data/shadow/ballenas_5min_dry_run.csv.lock"
 UMBRAL_RESUELTO = 0.98  # mismo espíritu que shadow_resolve (cerca de 1.0/0.0)
 
 
@@ -52,35 +60,45 @@ def main():
         print("Sin tracker todavía -- ballenas_executor_5min.py no ha confirmado nada aún.")
         return 0
 
-    with open(TRACKER, newline="", encoding="utf-8") as f:
-        filas = list(csv.DictReader(f))
+    # 27-Jul (/code-review): lock compartido con ballenas_executor_5min.py
+    # (ver TRACKER_LOCK arriba) -- todo el tramo lectura+decisión+escritura
+    # tiene que ser atómico frente a ese otro proceso, mismo patrón que
+    # shadow_resolve.py con RESOLVE_LOCK_PATH.
+    lock_f = open(TRACKER_LOCK, "w")
+    fcntl.flock(lock_f, fcntl.LOCK_EX)
+    try:
+        with open(TRACKER, newline="", encoding="utf-8") as f:
+            filas = list(csv.DictReader(f))
 
-    pendientes = [r for r in filas if not r.get("outcome_real")]
-    print(f"Filas totales: {len(filas)} | pendientes de resolver: {len(pendientes)}")
+        pendientes = [r for r in filas if not r.get("outcome_real")]
+        print(f"Filas totales: {len(filas)} | pendientes de resolver: {len(pendientes)}")
 
-    resueltas_ahora = 0
-    for r in pendientes:
-        mid = r.get("market_id")
-        if not mid:
-            continue
-        mercado = estado_mercado(mid)
-        if mercado is None:
-            continue
-        outcome = _outcome(mercado)
-        if outcome is None:
-            continue
-        r["outcome_real"] = outcome
-        r["acierto"] = "1" if outcome == "YES" else "0"  # siempre BUY_YES
-        from datetime import datetime, timezone
-        r["resolved_ts"] = datetime.now(timezone.utc).isoformat(timespec="seconds")
-        resueltas_ahora += 1
+        resueltas_ahora = 0
+        for r in pendientes:
+            mid = r.get("market_id")
+            if not mid:
+                continue
+            mercado = estado_mercado(mid)
+            if mercado is None:
+                continue
+            outcome = _outcome(mercado)
+            if outcome is None:
+                continue
+            r["outcome_real"] = outcome
+            r["acierto"] = "1" if outcome == "YES" else "0"  # siempre BUY_YES
+            from datetime import datetime, timezone
+            r["resolved_ts"] = datetime.now(timezone.utc).isoformat(timespec="seconds")
+            resueltas_ahora += 1
 
-    if resueltas_ahora:
-        with open(TRACKER, "w", newline="", encoding="utf-8") as f:
-            w = csv.DictWriter(f, fieldnames=list(filas[0].keys()))
-            w.writeheader()
-            w.writerows(filas)
-    print(f"Resueltas en este ciclo: {resueltas_ahora}")
+        if resueltas_ahora:
+            with open(TRACKER, "w", newline="", encoding="utf-8") as f:
+                w = csv.DictWriter(f, fieldnames=list(filas[0].keys()))
+                w.writeheader()
+                w.writerows(filas)
+        print(f"Resueltas en este ciclo: {resueltas_ahora}")
+    finally:
+        fcntl.flock(lock_f, fcntl.LOCK_UN)
+        lock_f.close()
 
     resueltas = [r for r in filas if r.get("outcome_real")]
     if resueltas:
