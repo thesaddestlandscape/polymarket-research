@@ -1,14 +1,14 @@
-# Hipótesis automáticas — 2026-07-27 07:53 UTC
-_Generado por shadow_postmortem.py sobre 37984 resoluciones (PNL=+7891.82€)_
+# Hipótesis automáticas — 2026-07-27 08:01 UTC
+_Generado por shadow_postmortem.py sobre 37985 resoluciones (PNL=+7893.16€)_
 
 ## Patrones causales activos
 
 ### FAVORITO_CONFIRMADO
-- **PATRÓN** `hora_utc` > `5.0` → IC=+0.197 (n=2538)
+- **PATRÓN** `hora_utc` > `5.0` → IC=+0.197 (n=2539)
   - _Por qué funciona_: hora tardía/noche → sesión US cerrada, menos participantes informados; señales más ruidosas
   - _Acción_: Kelly boost +0.98€ cuando `hora_utc` > 5.0 (IC base=+0.190)
 
-- **PATRÓN** `hora_utc` < `8.0` → IC=+0.194 (n=1195)
+- **PATRÓN** `hora_utc` < `8.0` → IC=+0.195 (n=1196)
   - _Por qué funciona_: hora temprana → mercados cripto menos líquidos, spreads más amplios; edge real menor
   - _Acción_: Kelly boost +0.97€ cuando `hora_utc` < 8.0 (IC base=+0.190)
 
@@ -16,7 +16,7 @@ _Generado por shadow_postmortem.py sobre 37984 resoluciones (PNL=+7891.82€)_
 
   - _Acción_: Kelly boost +1.00€ cuando `py_entrada` > 0.725 (IC base=+0.190)
 
-- **PATRÓN** `libro_spread` < `0.01` → IC=+0.195 (n=2691)
+- **PATRÓN** `libro_spread` < `0.01` → IC=+0.195 (n=2692)
 
   - _Acción_: Kelly boost +0.98€ cuando `libro_spread` < 0.01 (IC base=+0.190)
 
@@ -1154,10 +1154,10 @@ _Derivadas de los patrones aprendidos:_
 | ✅ BALLENAS_TARDIAS#15min | 45 | +0.394 | +5.38€ | 0 | 0 |
 | ✅ BALLENAS_TARDIAS#BTC | 45 | +0.394 | +5.38€ | 0 | 0 |
 | ✅ BALLENAS_TARDIAS#BTC#15min | 45 | +0.394 | +5.38€ | 0 | 0 |
-| ✅ FAVORITO_CONFIRMADO | 6690 | +0.180 | -14.38€ | 0 | 8 |
+| ✅ FAVORITO_CONFIRMADO | 6691 | +0.180 | -13.04€ | 0 | 8 |
 | ✅ FAVORITO_CONFIRMADO#15min | 4406 | +0.203 | -25.00€ | 0 | 0 |
 | ✅ FAVORITO_CONFIRMADO#240min | 297 | +0.062 | -14.24€ | 0 | 0 |
-| ✅ FAVORITO_CONFIRMADO#5min | 804 | +0.123 | -67.53€ | 0 | 0 |
+| ✅ FAVORITO_CONFIRMADO#5min | 805 | +0.123 | -66.19€ | 0 | 0 |
 | ✅ FAVORITO_CONFIRMADO#60min | 1183 | +0.159 | +92.39€ | 0 | 0 |
 | ✅ FAVORITO_CONFIRMADO#BTC | 1967 | +0.186 | +9.48€ | 0 | 0 |
 | ✅ FAVORITO_CONFIRMADO#BTC#15min | 1465 | +0.199 | -43.13€ | 0 | 7 |
@@ -1166,10 +1166,10 @@ _Derivadas de los patrones aprendidos:_
 | ✅ FAVORITO_CONFIRMADO#BTC#60min | 394 | +0.182 | +66.43€ | 0 | 8 |
 | ✅ FAVORITO_CONFIRMADO#DOGE | 8 | +0.120 | +5.71€ | 0 | 0 |
 | ✅ FAVORITO_CONFIRMADO#DOGE#15min | 7 | +0.097 | +4.78€ | 0 | 0 |
-| ✅ FAVORITO_CONFIRMADO#ETH | 2351 | +0.169 | -41.16€ | 0 | 0 |
+| ✅ FAVORITO_CONFIRMADO#ETH | 2352 | +0.169 | -39.81€ | 0 | 0 |
 | ✅ FAVORITO_CONFIRMADO#ETH#15min | 1451 | +0.199 | -8.66€ | 0 | 5 |
 | ✅ FAVORITO_CONFIRMADO#ETH#240min | 98 | -0.020 | -21.42€ | 0 | 0 |
-| ✅ FAVORITO_CONFIRMADO#ETH#5min | 407 | +0.123 | -34.83€ | 0 | 0 |
+| ✅ FAVORITO_CONFIRMADO#ETH#5min | 408 | +0.124 | -33.48€ | 0 | 0 |
 | ✅ FAVORITO_CONFIRMADO#ETH#60min | 395 | +0.147 | +23.75€ | 0 | 9 |
 | ✅ FAVORITO_CONFIRMADO#SOL | 2325 | +0.185 | +9.52€ | 0 | 0 |
 | ✅ FAVORITO_CONFIRMADO#SOL#15min | 1450 | +0.211 | +23.40€ | 0 | 9 |
@@ -1432,7 +1432,7 @@ _Derivadas de los patrones aprendidos:_
 **🟡 H-STREAK-COOLDOWN** — Cooldown tras 2 derrotas consecutivas (mismo subtype)
   - _Umbral_: n≥40 tras 2 losses y gap(IC_tras_win - IC_tras_2loss)≥0.05
   - _Acción_: Reducir stake (no desactivar) 1-2h tras 2 derrotas consecutivas en el mismo subtype
-  - _Estado_: tras_win IC=+0.112 n=22624 | tras_1loss IC=+0.079 n=15151 | tras_2loss IC=+0.051 n=6338/40 | gap=+0.060 (umbral 0.05)
+  - _Estado_: tras_win IC=+0.112 n=22624 | tras_1loss IC=+0.079 n=15152 | tras_2loss IC=+0.051 n=6339/40 | gap=+0.060 (umbral 0.05)
 
 **🟡 H-KALMAN** — Kalman filter para drift adaptativo
   - _Umbral_: n≥200 por subtipo para calibrar parámetros Q/R del KF
@@ -1703,8 +1703,8 @@ _Derivadas de los patrones aprendidos:_
   - _Hipótesis_: Inspirado en el paper de Fornero (2023, 43 Jornadas SADAF) sobre astrología financiera: 5 estudios peer-review (Dichev & Janes 2003, Yuan et al. 2006, Keef & Khaled 2011, Floros & Tan 2013, Liu & Tseng 2009) en 25-62 mercados bursátiles encuentran rendimientos 5-10%/año más bajos cerca de luna llena que de luna nueva. El propio paper es escéptico de la astrología como tal, pero el mecanismo que documenta no es místico: sesgo de humor de inversores minoristas (más fuerte en acciones con dominancia retail, casi nulo en institucional). Polymarket es un mercado muy retail/cripto — hipótesis: si el mecanismo transfiere, debería verse peor IC cerca de luna llena (moon_phase≈0.5) que en el resto del ciclo.
   - _Umbral_: n≥200 PERO ADEMÁS necesita cubrir al menos 3 ciclos lunares completos (~90 días de calendario) — no evaluar solo por n, aunque el volumen diario ya lo cruce en horas
   - _Acción_: Si IC cerca de luna llena < IC resto del ciclo con margen ≥0.05 y ≥3 ciclos lunares cubiertos → considerar boost/filtro por moon_phase. No implementar con menos de 3 ciclos aunque n sea alto — el efecto es de calendario lento, no de volumen.
-  - _Estado_: n=1722 IC=+0.066 PNL=+251.71€ — sin señal clara aún (umbral IC: min=None max=-0.03)
-  - _Datos_: n=1722 IC=+0.066 PNL=+251.71€
+  - _Estado_: n=1723 IC=+0.066 PNL=+253.06€ — sin señal clara aún (umbral IC: min=None max=-0.03)
+  - _Datos_: n=1723 IC=+0.066 PNL=+253.06€
 
 **〰️ H-CUSTOM-MERCURY-RETROGRADO** — Mercurio retrógrado: ¿rendimiento peor durante la ventana?
   - _Hipótesis_: Mismo origen que H-CUSTOM-MOON-LLENA (paper de Fornero, 43 Jornadas SADAF 2023). Qi, Wang & Zhang (2022, 48 mercados, 1973-2019): rendimientos 3.33%/año más bajos durante Mercurio retrógrado. Kou & Ma (2022) en China (99.8% cuentas retail): hasta -31% anualizado. Ambos estudios confirman que el mecanismo es la creencia/superstición de inversores retail (mayor efecto cuanto más retail y más supersticioso el mercado), no un efecto astral literal — Polymarket encaja en ese perfil. Ventanas 2026 (fuente pública, actualizar cada año): 26-feb a 20-mar, 29-jun a 23-jul, 24-oct a 13-nov.
