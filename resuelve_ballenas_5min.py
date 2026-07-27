@@ -20,6 +20,7 @@ análisis. Solo lectura de gamma-api + escritura de este CSV -- no toca
 config_live.json, no ejecuta nada, no toca dinero.
 """
 import csv
+import fcntl
 import sys
 from pathlib import Path
 
@@ -29,6 +30,13 @@ sys.path.insert(0, str(REPO))
 from shadow_resolve import estado_mercado, parse_outcome_prices  # noqa: E402
 
 TRACKER = REPO / "data/shadow/ballenas_5min_dry_run.csv"
+# 27-Jul (/code-review): mismo fichero de lock que ballenas_executor_5min.py
+# -- ese proceso (screen ballenas_5m, persistente) también reescribe
+# TRACKER entero (migración de columna + backfill), y este script corre
+# como cron aparte. Sin flock compartido, una reescritura completa de
+# cualquiera de los dos procesos puede solapar con la del otro y perder
+# outcome_real/acierto ya resueltos.
+TRACKER_LOCK = REPO / "data/shadow/ballenas_5min_dry_run.csv.lock"
 UMBRAL_RESUELTO = 0.98  # mismo espíritu que shadow_resolve (cerca de 1.0/0.0)
 
 
@@ -52,34 +60,69 @@ def main():
         print("Sin tracker todavía -- ballenas_executor_5min.py no ha confirmado nada aún.")
         return 0
 
+    # 27-Jul (/code-review, 2ª pasada): el lock NO puede envolver las
+    # llamadas de red a gamma-api (estado_mercado, con reintentos/backoff
+    # en 429 -- puede tardar varios segundos) -- ballenas_executor_5min.py
+    # llama a _registrar_tracker() de forma SÍNCRONA en el hot path de una
+    # confirmación real (antes de disparar()), y si ese proceso se queda
+    # esperando este flock mientras aquí se hacen llamadas de red lentas,
+    # se retrasa la decisión de una señal con dinero real en juego --
+    # exactamente la sensibilidad de timing que el proyecto vigila siempre.
+    # Diseño: 1) leer sin lock, 2) resolver TODAS las llamadas de red sin
+    # lock, 3) adquirir el lock solo para el tramo final (releer fresco por
+    # si el executor añadió filas mientras tanto, fusionar, escribir).
     with open(TRACKER, newline="", encoding="utf-8") as f:
         filas = list(csv.DictReader(f))
 
     pendientes = [r for r in filas if not r.get("outcome_real")]
     print(f"Filas totales: {len(filas)} | pendientes de resolver: {len(pendientes)}")
 
-    resueltas_ahora = 0
+    outcomes_por_market_id = {}
     for r in pendientes:
         mid = r.get("market_id")
         if not mid:
             continue
-        mercado = estado_mercado(mid)
+        mercado = estado_mercado(mid)  # red, sin lock
         if mercado is None:
             continue
         outcome = _outcome(mercado)
         if outcome is None:
             continue
-        r["outcome_real"] = outcome
-        r["acierto"] = "1" if outcome == "YES" else "0"  # siempre BUY_YES
-        from datetime import datetime, timezone
-        r["resolved_ts"] = datetime.now(timezone.utc).isoformat(timespec="seconds")
-        resueltas_ahora += 1
+        outcomes_por_market_id[mid] = outcome
 
-    if resueltas_ahora:
-        with open(TRACKER, "w", newline="", encoding="utf-8") as f:
-            w = csv.DictWriter(f, fieldnames=list(filas[0].keys()))
-            w.writeheader()
-            w.writerows(filas)
+    resueltas_ahora = 0
+    if outcomes_por_market_id:
+        # 27-Jul (/code-review, 3ª pasada): lock_f.close() en su propio
+        # finally exterior -- si fcntl.flock() en sí lanza, el fd no debe
+        # quedar huérfano (mismo fix que ballenas_executor_5min.py).
+        lock_f = open(TRACKER_LOCK, "w")
+        try:
+            fcntl.flock(lock_f, fcntl.LOCK_EX)
+            try:
+                # Releer fresco bajo el lock -- el executor puede haber
+                # añadido filas nuevas mientras hacíamos las llamadas de
+                # red de arriba.
+                with open(TRACKER, newline="", encoding="utf-8") as f:
+                    filas = list(csv.DictReader(f))
+                from datetime import datetime, timezone
+                for r in filas:
+                    mid = r.get("market_id")
+                    outcome = outcomes_por_market_id.get(mid)
+                    if outcome is None or r.get("outcome_real"):
+                        continue
+                    r["outcome_real"] = outcome
+                    r["acierto"] = "1" if outcome == "YES" else "0"  # siempre BUY_YES
+                    r["resolved_ts"] = datetime.now(timezone.utc).isoformat(timespec="seconds")
+                    resueltas_ahora += 1
+                if resueltas_ahora:
+                    with open(TRACKER, "w", newline="", encoding="utf-8") as f:
+                        w = csv.DictWriter(f, fieldnames=list(filas[0].keys()))
+                        w.writeheader()
+                        w.writerows(filas)
+            finally:
+                fcntl.flock(lock_f, fcntl.LOCK_UN)
+        finally:
+            lock_f.close()
     print(f"Resueltas en este ciclo: {resueltas_ahora}")
 
     resueltas = [r for r in filas if r.get("outcome_real")]
