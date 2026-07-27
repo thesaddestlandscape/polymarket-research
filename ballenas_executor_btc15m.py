@@ -26,6 +26,15 @@ DRY_RUN=True por defecto: loguea qué habría hecho, nunca llama a
 _ejecutar_orden_polymarket. Cambiar a False solo tras /code-review y
 aprobación explícita de Javi (código que toca dinero real).
 
+27-Jul: gate real de volumen (UMBRAL_N_YES_TOTAL=35, n_yes_total =
+compras YES en TODO el mercado sin filtrar por banda) — ver
+project_volumen_ballenas_patron_universal_27jul en memoria. Validado con
+las 173 señales reales de esta tupla: n_yes_total>=35 → n=115 hit=95.7%
+PnL/trade=+0.838€ GATE OK; <35 → n=58 hit=1.7% PnL/trade=-1.19€. Mismo
+mecanismo que BALLENAS_TARDIAS#ETH#5min (ballenas_executor_5min.py).
+Coste de red cero: reutiliza la misma llamada a trades_de_mercado() que
+concentracion_ballenas() ya hacía.
+
 Corre en screen propia:
   screen -dmS ballenas_fast bash -c "cd /root/polymarket-research && .venv/bin/python ballenas_executor_btc15m.py >> logs/ballenas_fast.log 2>&1"
 """
@@ -41,8 +50,8 @@ import requests
 
 import live_trade as lt
 from live_guard import puede_operar_live
-from live_stake import calcular_stake, verificar_circuit_breaker
-from smart_money_tracker import trades_de_mercado
+from live_stake import bloquear_por_circuit_breaker, calcular_stake
+from smart_money_tracker import MAX_TRADES_POR_MERCADO, trades_de_mercado
 
 DIR = Path(__file__).resolve().parent
 DIR_SHADOW = DIR / "data" / "shadow"
@@ -127,6 +136,13 @@ HARD_FLOOR_S = 3.0       # por debajo de esto, se abandona -- fail-closed por ti
 CONCENTRACION_MIN = 0.9  # bucket con 98.5% acierto + profundidad confirmada 16-Jul
 MIN_TRADES_BALLENA = 3
 
+# 27-Jul: gate de volumen (n_yes_total, compras YES en TODO el mercado sin
+# filtrar por banda) -- ver project_volumen_ballenas_patron_universal_27jul
+# en memoria. Validado con las 173 señales reales de esta tupla:
+# n_yes_total>=35 -> n=115 hit=95.7% PnL/trade=+0.838€ GATE OK; <35 -> n=58
+# hit=1.7% PnL/trade=-1.19€. Mismo umbral que BALLENAS_TARDIAS#ETH#5min.
+UMBRAL_N_YES_TOTAL = 35
+
 # 23-Jul: MARGEN_WATCH_S/MARGEN_CONFIRM_S sustituyen a WATCH_LEAD_S/PROB_BUCKET
 # fijos -- mismo patrón que ballenas_executor_5min.py (ver comentario junto a
 # WALLET_EDGE_POR_ACTIVO_MARCO arriba). cargar_calibracion() ahora deriva todo
@@ -198,19 +214,28 @@ def libro_publico(token_id: str) -> dict | None:
         return None
 
 
-def concentracion_ballenas(condition_id: str, banda_lo: float, banda_hi: float) -> tuple[float | None, float | None, int, str, list]:
-    """(pct_yes_crudo, pct_yes_ponderado, n, motivo, wallets_yes) del flujo
-    BUY de ballenas en `condition_id`, dentro de la banda de precio, que
-    compró YES -- mide AMBOS lados (a diferencia de
-    live_trade._ballenas_conviccion_mercado, que solo mide el lado que ya
-    decidimos nosotros) porque aquí la dirección todavía no está fijada: la
-    decide el lado mayoritario de las ballenas.
+def concentracion_ballenas(condition_id: str, banda_lo: float, banda_hi: float) -> tuple[float | None, float | None, int, str, list, int, int]:
+    """(pct_yes_crudo, pct_yes_ponderado, n, motivo, wallets_yes,
+    n_yes_total, n_trades_crudo) del flujo BUY de ballenas en
+    `condition_id`, dentro de la banda de precio, que compró YES -- mide
+    AMBOS lados (a diferencia de live_trade._ballenas_conviccion_mercado,
+    que solo mide el lado que ya decidimos nosotros) porque aquí la
+    dirección todavía no está fijada: la decide el lado mayoritario de
+    las ballenas.
 
     23-Jul: pct_yes_ponderado pesa cada trade según _peso_wallet() -- mismo
     fix que ballenas_executor_5min.py (ver comentario junto a
     WALLET_EDGE_POR_ACTIVO_MARCO). n sigue siendo el conteo CRUDO (el gate
     MIN_TRADES_BALLENA no cambia). pct_yes_crudo se conserva para auditar
     en el log cuándo diverge del ponderado.
+
+    27-Jul: n_yes_total -- compras YES en TODO el mercado, sin filtrar por
+    banda (ver UMBRAL_N_YES_TOTAL). n_trades_crudo=len(trades), respuesta
+    cruda ANTES de filtrar -- lo que realmente toca el cap
+    MAX_TRADES_POR_MERCADO=100 (mismo fix que ballenas_executor_5min.py
+    27-Jul, /code-review: comparar n_yes_total contra el cap sería código
+    muerto, un subconjunto casi nunca alcanza el tamaño del conjunto
+    completo).
 
     `motivo` distingue 'error_api' (trades_de_mercado lanzó excepción) de
     'sin_trades_en_banda' (la API respondió bien pero 0 trades BUY caen en
@@ -222,8 +247,10 @@ def concentracion_ballenas(condition_id: str, banda_lo: float, banda_hi: float) 
     try:
         trades = trades_de_mercado(condition_id)
     except Exception:
-        return None, None, 0, "error_api", []
+        return None, None, 0, "error_api", [], 0, 0
+    n_trades_crudo = len(trades)
     n_yes = n_no = 0
+    n_yes_total = 0
     peso_yes = peso_no = 0.0
     wallets_yes = []
     for t in trades:
@@ -237,6 +264,8 @@ def concentracion_ballenas(condition_id: str, banda_lo: float, banda_hi: float) 
             precio_t = float(precio_t)
         except (ValueError, TypeError):
             continue
+        if outcome_t in ("up", "yes"):
+            n_yes_total += 1
         if not (banda_lo <= precio_t < banda_hi):
             continue
         w = (t.get("proxyWallet") or "").lower()
@@ -251,10 +280,10 @@ def concentracion_ballenas(condition_id: str, banda_lo: float, banda_hi: float) 
             peso_no += peso
     n = n_yes + n_no
     if n == 0:
-        return None, None, 0, "sin_trades_en_banda", []
+        return None, None, 0, "sin_trades_en_banda", [], n_yes_total, n_trades_crudo
     pct_crudo = n_yes / n
     pct_ponderado = peso_yes / (peso_yes + peso_no) if (peso_yes + peso_no) > 0 else pct_crudo
-    return pct_crudo, pct_ponderado, n, "ok", wallets_yes
+    return pct_crudo, pct_ponderado, n, "ok", wallets_yes, n_yes_total, n_trades_crudo
 
 
 def _resumen_wallet_edge(wallets: list) -> str:
@@ -426,13 +455,19 @@ def watch_window(ts_end: int) -> bool:
         with ThreadPoolExecutor(max_workers=2) as ex:
             f_conc = ex.submit(concentracion_ballenas, mercado["condition_id"], banda_lo, banda_hi)
             f_libro = ex.submit(libro_publico, mercado["yes_token"])
-            pct_crudo, pct_ponderado, n, motivo_conc, wallets_yes = f_conc.result()
+            pct_crudo, pct_ponderado, n, motivo_conc, wallets_yes, n_yes_total, n_trades_crudo = f_conc.result()
             libro = f_libro.result()
+
+        if n_trades_crudo >= MAX_TRADES_POR_MERCADO:
+            log(f"[{ts_end}] ⚠️ respuesta de trades_de_mercado con {n_trades_crudo} filas "
+                f"toca el cap de la API ({MAX_TRADES_POR_MERCADO}) -- posible truncación "
+                f"(n_yes_total={n_yes_total} puede estar incompleto)")
 
         contadores[motivo_conc] = contadores.get(motivo_conc, 0) + 1
         if pct_ponderado is not None:
             log(f"[{ts_end}] restante={restante:.1f}s concentracion_yes_cruda={pct_crudo:.2f} "
-                f"ponderada={pct_ponderado:.2f} n={n} ask={libro.get('best_ask') if libro else None}")
+                f"ponderada={pct_ponderado:.2f} n={n} n_yes_total={n_yes_total} "
+                f"ask={libro.get('best_ask') if libro else None}")
         elif motivo_conc == "error_api":
             # A diferencia de sin_trades_en_banda (silencioso, esperable y
             # frecuente), un fallo de API sí se loguea cada vez que ocurre
@@ -440,7 +475,13 @@ def watch_window(ts_end: int) -> bool:
             # de log indistinguible de "no hay actividad".
             log(f"[{ts_end}] restante={restante:.1f}s ⚠️ error_api consultando ballenas -- sin dato este ciclo")
 
+        if (pct_ponderado is not None and n >= MIN_TRADES_BALLENA
+                and pct_ponderado >= CONCENTRACION_MIN and n_yes_total < UMBRAL_N_YES_TOTAL):
+            log(f"[{ts_end}] concentración OK pero n_yes_total={n_yes_total}<{UMBRAL_N_YES_TOTAL} -- "
+                f"vetado por volumen bajo (gate 27-Jul)")
+
         cumple_concentracion = (pct_ponderado is not None and n >= MIN_TRADES_BALLENA
+                                 and n_yes_total >= UMBRAL_N_YES_TOTAL
                                  and pct_ponderado >= CONCENTRACION_MIN
                                  and libro and libro.get("best_ask") is not None
                                  and banda_lo <= libro["best_ask"] < banda_hi)
@@ -520,15 +561,16 @@ def disparar(mercado: dict, py: float, edge: float, restante_s: float, prob_buck
             f"{'[DRY-RUN] no ejecutaría' if DRY_RUN else 'no se ejecuta'}")
         return False
 
-    # 27-Jul: BUG CRÍTICO CORREGIDO -- verificar_circuit_breaker() devuelve
-    # (disparado, motivo) con disparado=True significando "freno activo,
-    # PARAR" (mismo contrato que live_trade.py). La versión anterior
-    # comprobaba "if not ok_breaker" -- invertida: con el freno REALMENTE
-    # disparado no bloqueaba nada. Detectado en vivo 27-Jul (mismo bug en
-    # ballenas_executor_5min.py, encontrado primero ahí).
-    disparado, motivo_breaker = verificar_circuit_breaker()
-    if disparado:
-        log(f"  circuit breaker activo ({motivo_breaker}) -- {'[DRY-RUN] no ejecutaría' if DRY_RUN else 'no se ejecuta'}")
+    # 27-Jul (/code-review): usa el helper único bloquear_por_circuit_breaker
+    # en vez de reimplementar el chequeo aquí -- este mismo chequeo,
+    # reimplementado por separado en este fichero y en
+    # ballenas_executor_5min.py, se invirtió de forma IDÉNTICA en ambos
+    # (bug crítico corregido el mismo día: esta tupla estuvo 10 días en
+    # live con cero trades reales). Centralizado en live_stake.py para
+    # que no pueda repetirse.
+    if bloquear_por_circuit_breaker(
+            lambda motivo: log(f"  circuit breaker activo ({motivo}) -- "
+                                f"{'[DRY-RUN] no ejecutaría' if DRY_RUN else 'no se ejecuta'}")):
         return False
 
     # ic_conviccion: /code-review 17-Jul encontró que se pasaba `edge` crudo
