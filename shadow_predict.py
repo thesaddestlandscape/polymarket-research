@@ -2019,15 +2019,24 @@ def s_updown_gbm_15min_tardio(market, ctx):
     activo = identificar_activo(question)
     lo, hi, rl, rh = _banda_y_timing_ballenas(activo, "15m", None, None, None, None)
     resultado["features"]["ballenas_significativo"] = lo is not None
+    py_edge = market.get("_precio_yes")
     if lo is not None:
-        py = market.get("_precio_yes")
         resultado["features"]["ballenas_banda_lo"] = lo
         resultado["features"]["ballenas_banda_hi"] = hi
         resultado["features"]["ballenas_rest_lo_min"] = rl
         resultado["features"]["ballenas_rest_hi_min"] = rh
-        if py is not None:
-            resultado["features"]["ballenas_dentro_banda"] = bool(lo <= py < hi)
-    direccion = "BUY_YES" if resultado.get("prob_yes", 0.5) >= 0.5 else "BUY_NO"
+        if py_edge is not None:
+            resultado["features"]["ballenas_dentro_banda"] = bool(lo <= py_edge < hi)
+    # dirección real = signo del edge (prob_yes vs precio de mercado), NO
+    # prob_yes>=0.5 -- prob_yes es la probabilidad cruda del modelo, la
+    # decisión BUY_YES/BUY_NO la fija el edge (ver _s_gbm_late edge=p_up-py).
+    # /code-review 27-Jul: el umbral 0.5 producía dirección equivocada
+    # siempre que prob_yes y py_entrada caen del mismo lado de 0.5.
+    prob_yes_dir = resultado.get("prob_yes", 0.5)
+    if py_edge is not None:
+        direccion = "BUY_YES" if prob_yes_dir >= py_edge else "BUY_NO"
+    else:
+        direccion = "BUY_YES" if prob_yes_dir >= 0.5 else "BUY_NO"
     deja_pasar, n_total_lado = _gate_volumen_ballenas("UPDOWN_GBM_15M_TARDIO", activo, "15min",
                                                        direccion, market.get("condition_id"))
     if not deja_pasar:
@@ -2850,7 +2859,14 @@ def s_gbm_late_15min(market, ctx):
     if resultado is None:
         return None
     activo = identificar_activo(market.get("question", ""))
-    direccion = "BUY_YES" if resultado.get("prob_yes", 0.5) >= 0.5 else "BUY_NO"
+    # dirección real = signo del edge (prob_yes vs py_entrada), NO prob_yes
+    # >=0.5 -- ver misma corrección en s_updown_gbm_15min_tardio /code-review 27-Jul.
+    py_edge = resultado.get("features", {}).get("py_entrada")
+    prob_yes_dir = resultado.get("prob_yes", 0.5)
+    if py_edge is not None:
+        direccion = "BUY_YES" if prob_yes_dir >= py_edge else "BUY_NO"
+    else:
+        direccion = "BUY_YES" if prob_yes_dir >= 0.5 else "BUY_NO"
     deja_pasar, n_total_lado = _gate_volumen_ballenas("GBM_LATE_15M", activo, "15min",
                                                        direccion, market.get("condition_id"))
     if not deja_pasar:
