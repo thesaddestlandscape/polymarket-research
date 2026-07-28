@@ -32,12 +32,14 @@ import csv
 import json
 import math
 from collections import defaultdict
+from pathlib import Path
 
 import numpy as np
 
-RESULTS = "data/shadow/results.csv"
-CONFIG_LIVE = "data/live/config_live.json"
-OUT = "data/shadow/gate_bucket_propio.json"
+REPO = Path(__file__).resolve().parent
+RESULTS = str(REPO / "data/shadow/results.csv")
+CONFIG_LIVE = str(REPO / "data/live/config_live.json")
+OUT = str(REPO / "data/shadow/gate_bucket_propio.json")
 
 STEP = 0.05
 N_MIN = 15
