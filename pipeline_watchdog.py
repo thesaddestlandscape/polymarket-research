@@ -323,6 +323,34 @@ def check_strategy_params() -> bool:
 # ──────────────────────────────────────────────────────────────────────────────
 # CHECK: results.csv recibiendo resoluciones
 # ──────────────────────────────────────────────────────────────────────────────
+CHAINLINK_STALE_SECS = 120  # ~4 ticks/s agregados en horario normal -- 120s sin
+# escritura ya es anómalo. Real 28-Jul: fetch_chainlink_prices.py colgó en
+# silencio 30+min (websocket muerto sin cierre limpio, `async for raw in ws`
+# bloqueado para siempre, sin excepción que el bucle de reconexión pudiera
+# capturar) -- el proceso seguía "vivo" (screen listada, PID activo), así que
+# check_screens() nunca lo detectó. Fix de raíz aplicado (timeout en el recv,
+# ver RECV_TIMEOUT_S en fetch_chainlink_prices.py) + esta red de seguridad
+# aparte, por si el proceso se cuelga de otra forma en el futuro. Solo lectura
+# (no toca dinero, no hay orden_en_curso que proteger) -- kill+restart directo
+# es seguro, a diferencia de 'fast'.
+def check_chainlink_fresh(screens_up: dict) -> None:
+    if not screens_up.get("chainlink"):
+        return  # check_screens ya se encarga de relanzarla si está caída
+    hoy = time.strftime("%Y-%m-%d", time.gmtime())
+    p = REPO / "data" / "prices" / f"chainlink_{hoy}.csv"
+    if not p.exists():
+        return
+    age = time.time() - p.stat().st_mtime
+    if age > CHAINLINK_STALE_SECS:
+        log(f"  ⚠ chainlink: sin ticks nuevos hace {age:.0f}s (screen viva pero colgada) — reiniciando")
+        try:
+            subprocess.run(["screen", "-S", "chainlink", "-X", "quit"], timeout=10)
+            time.sleep(1)
+        except Exception as e:
+            log(f"  [CHAINLINK] error al matar screen vieja: {e}")
+        restart_screen("chainlink")
+
+
 def check_results_growing():
     p = DIR_SHADOW / "results.csv"
     if not p.exists():
@@ -619,6 +647,9 @@ def main():
                     if name in SCREEN_RESTART:
                         log(f"  → Reiniciando screen '{name}'")
                         restart_screen(name)
+
+            # ── 2a. Chainlink vivo pero colgado (screen OK, sin ticks nuevos) ──
+            check_chainlink_fresh(screens)
 
             # ── 2b. Deploy obsoleto (fix commiteado pero screen sin reiniciar) ─
             stale = check_stale_deploys(screens)

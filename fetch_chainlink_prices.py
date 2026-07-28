@@ -48,9 +48,22 @@ REPO = Path(__file__).resolve().parent
 DIR_PRICES = REPO / "data" / "prices"
 
 WS_URL = "wss://ws-live-data.polymarket.com"
-SIMBOLOS = ["btc/usd", "eth/usd", "sol/usd", "xrp/usd"]
+SIMBOLOS = ["btc/usd", "eth/usd", "sol/usd", "xrp/usd", "doge/usd", "bnb/usd"]
+# doge/bnb añadidos 28-Jul (diseño resolution_sniper_observer.py, P29/idea
+# wallet_0bba): el topic bruto YA los trae (comentario en _correr_una_conexion),
+# solo faltaba suscribirlos aquí -- coste marginal cero, mismo websocket.
 PING_INTERVAL_S = 5
 RECONNECT_ESPERA_S = 5
+RECV_TIMEOUT_S = 30  # 28-Jul: bug real encontrado -- sin timeout, una conexión
+# que muere en silencio (sin frame de cierre, TCP colgado) deja `async for raw
+# in ws` bloqueado para siempre: el proceso sigue "vivo" pero no escribe nada,
+# sin lanzar ninguna excepción que el bucle de reconexión de main() pudiera
+# capturar. Confirmado en vivo: chainlink_2026-07-28.csv se congeló a las
+# 16:08:37Z, el log se quedó sin ninguna línea nueva (ni ticks ni error), y
+# nada del pipeline lo detectó hasta que resolution_sniper_observer.py (nuevo)
+# encontró chainlink_price vacío. A ~4 ticks/s agregados, 30s sin ningún
+# mensaje ya es anómalo -- fuerza un TimeoutError que main() ya captura y
+# reconecta.
 
 _SYMBOL_A_ASSET = {s: s.split("/")[0].upper() for s in SIMBOLOS}
 
@@ -125,7 +138,8 @@ async def _correr_una_conexion() -> None:
         ping_task = asyncio.create_task(_mantener_ping(ws))
         n_ticks = 0
         try:
-            async for raw in ws:
+            while True:
+                raw = await asyncio.wait_for(ws.recv(), timeout=RECV_TIMEOUT_S)
                 try:
                     msg = json.loads(raw)
                 except (json.JSONDecodeError, TypeError):
