@@ -1,5 +1,5 @@
-# Hipótesis automáticas — 2026-07-28 16:18 UTC
-_Generado por shadow_postmortem.py sobre 40394 resoluciones (PNL=+8406.93€)_
+# Hipótesis automáticas — 2026-07-28 16:23 UTC
+_Generado por shadow_postmortem.py sobre 40398 resoluciones (PNL=+8411.08€)_
 
 ## Patrones causales activos
 
@@ -357,11 +357,11 @@ _Generado por shadow_postmortem.py sobre 40394 resoluciones (PNL=+8406.93€)_
   - _Acción_: Kelly boost +0.62€ cuando `libro_spread` < 0.01 (IC base=+0.137)
 
 ### GBM_LATE_15M_ESPACIO_ATR
-- **PATRÓN** `sigma_h` > `0.0076` → IC=+0.197 (n=1262)
+- **PATRÓN** `sigma_h` > `0.0076` → IC=+0.197 (n=1263)
   - _Por qué funciona_: alta volatilidad → el modelo GBM sobreestima la señal; el mercado es más aleatorio
-  - _Acción_: Kelly boost +0.98€ cuando `sigma_h` > 0.0076 (IC base=+0.146)
+  - _Acción_: Kelly boost +0.99€ cuando `sigma_h` > 0.0076 (IC base=+0.146)
 
-- **PATRÓN** `hora_utc` > `7.0` → IC=+0.167 (n=1779)
+- **PATRÓN** `hora_utc` > `7.0` → IC=+0.167 (n=1780)
   - _Por qué funciona_: hora tardía/noche → sesión US cerrada, menos participantes informados; señales más ruidosas
   - _Acción_: Kelly boost +0.83€ cuando `hora_utc` > 7.0 (IC base=+0.146)
 
@@ -369,9 +369,9 @@ _Generado por shadow_postmortem.py sobre 40394 resoluciones (PNL=+8406.93€)_
 
   - _Acción_: Kelly boost +1.00€ cuando `dist_vwap_pct` > 0.6748 (IC base=+0.146)
 
-- **PATRÓN** `sigma_ewma_delta_pct` > `6.398` → IC=+0.238 (n=613)
+- **PATRÓN** `sigma_ewma_delta_pct` > `6.406` → IC=+0.238 (n=613)
 
-  - _Acción_: Kelly boost +1.00€ cuando `sigma_ewma_delta_pct` > 6.398 (IC base=+0.146)
+  - _Acción_: Kelly boost +1.00€ cuando `sigma_ewma_delta_pct` > 6.406 (IC base=+0.146)
 
 - **PATRÓN** `sigma_h` > `0.0068` → IC=+0.155 (n=1443)
   - _Por qué funciona_: alta volatilidad → el modelo GBM sobreestima la señal; el mercado es más aleatorio
@@ -502,13 +502,13 @@ _Generado por shadow_postmortem.py sobre 40394 resoluciones (PNL=+8406.93€)_
   - _Acción_: Kelly boost +1.00€ cuando `libro_spread` < 0.01 (IC base=+0.204)
 
 ### GBM_LATE_15M_TARDIO
-- **PATRÓN** `sigma_h` > `0.0083` → IC=+0.128 (n=1252)
+- **PATRÓN** `sigma_h` > `0.0083` → IC=+0.128 (n=1249)
   - _Por qué funciona_: alta volatilidad → el modelo GBM sobreestima la señal; el mercado es más aleatorio
   - _Acción_: Kelly boost +0.64€ cuando `sigma_h` > 0.0083 (IC base=+0.099)
 
-- **PATRÓN** `dist_vwap_pct` > `0.4559` → IC=+0.155 (n=337)
+- **PATRÓN** `dist_vwap_pct` > `0.4559` → IC=+0.153 (n=338)
 
-  - _Acción_: Kelly boost +0.77€ cuando `dist_vwap_pct` > 0.4559 (IC base=+0.099)
+  - _Acción_: Kelly boost +0.76€ cuando `dist_vwap_pct` > 0.4559 (IC base=+0.099)
 
 - **PATRÓN** `sigma_ewma_delta_pct` > `10.997` → IC=+0.236 (n=305)
 
@@ -536,9 +536,9 @@ _Generado por shadow_postmortem.py sobre 40394 resoluciones (PNL=+8406.93€)_
 
   - _Acción_: Kelly boost +0.83€ cuando `sigma_ewma_delta_pct` > 12.232 (IC base=+0.057)
 
-- **PATRÓN** `libro_liquidez` > `6814.1335` → IC=+0.127 (n=226)
+- **PATRÓN** `libro_liquidez` > `6662.3921` → IC=+0.124 (n=227)
 
-  - _Acción_: Kelly boost +0.64€ cuando `libro_liquidez` > 6814.1335 (IC base=+0.057)
+  - _Acción_: Kelly boost +0.62€ cuando `libro_liquidez` > 6662.3921 (IC base=+0.057)
 
 ### GBM_LATE_15M_TARDIO#SOL#15min
 - **PATRÓN** `sigma_ewma_delta_pct` > `9.012` → IC=+0.279 (n=93)
@@ -1207,28 +1207,28 @@ _Derivadas de los patrones aprendidos:_
 | ✅ FAVORITO_CONFIRMADO_SOL_ALTACONVICCION#15min | 445 | +0.303 | +7.76€ | 0 | 0 |
 | ✅ FAVORITO_CONFIRMADO_SOL_ALTACONVICCION#SOL | 445 | +0.303 | +7.76€ | 0 | 0 |
 | ✅ FAVORITO_CONFIRMADO_SOL_ALTACONVICCION#SOL#15min | 445 | +0.303 | +7.76€ | 0 | 0 |
-| ✅ GBM_LATE_15M | 8695 | +0.093 | +2589.51€ | 0 | 5 |
-| ✅ GBM_LATE_15M#15min | 8695 | +0.093 | +2589.51€ | 0 | 0 |
+| ✅ GBM_LATE_15M | 8696 | +0.093 | +2591.17€ | 0 | 5 |
+| ✅ GBM_LATE_15M#15min | 8696 | +0.093 | +2591.17€ | 0 | 0 |
 | ✅ GBM_LATE_15M#BNB | 67 | +0.167 | +27.98€ | 0 | 0 |
 | ✅ GBM_LATE_15M#BNB#15min | 67 | +0.167 | +27.98€ | 0 | 0 |
 | ✅ GBM_LATE_15M#BTC | 2071 | +0.071 | +350.38€ | 0 | 0 |
 | ✅ GBM_LATE_15M#BTC#15min | 2071 | +0.071 | +350.38€ | 0 | 6 |
-| ✅ GBM_LATE_15M#DOGE | 67 | +0.080 | +9.02€ | 0 | 0 |
-| ✅ GBM_LATE_15M#DOGE#15min | 67 | +0.080 | +9.02€ | 0 | 0 |
+| ✅ GBM_LATE_15M#DOGE | 68 | +0.086 | +10.67€ | 0 | 0 |
+| ✅ GBM_LATE_15M#DOGE#15min | 68 | +0.086 | +10.67€ | 0 | 0 |
 | ✅ GBM_LATE_15M#ETH | 1861 | +0.072 | +309.57€ | 0 | 0 |
 | ✅ GBM_LATE_15M#ETH#15min | 1861 | +0.072 | +309.57€ | 0 | 7 |
 | ✅ GBM_LATE_15M#SOL | 2306 | +0.083 | +782.75€ | 0 | 0 |
 | ✅ GBM_LATE_15M#SOL#15min | 2306 | +0.083 | +782.75€ | 1 | 3 |
 | ✅ GBM_LATE_15M#XRP | 2323 | +0.139 | +1109.82€ | 0 | 0 |
 | ✅ GBM_LATE_15M#XRP#15min | 2323 | +0.139 | +1109.82€ | 0 | 11 |
-| ✅ GBM_LATE_15M_ESPACIO_ATR | 5918 | +0.118 | +2811.26€ | 0 | 8 |
-| ✅ GBM_LATE_15M_ESPACIO_ATR#15min | 5918 | +0.118 | +2811.26€ | 0 | 0 |
+| ✅ GBM_LATE_15M_ESPACIO_ATR | 5919 | +0.118 | +2813.22€ | 0 | 8 |
+| ✅ GBM_LATE_15M_ESPACIO_ATR#15min | 5919 | +0.118 | +2813.22€ | 0 | 0 |
 | ✅ GBM_LATE_15M_ESPACIO_ATR#BNB | 49 | +0.324 | +57.22€ | 0 | 0 |
 | ✅ GBM_LATE_15M_ESPACIO_ATR#BNB#15min | 49 | +0.324 | +57.22€ | 0 | 0 |
 | ✅ GBM_LATE_15M_ESPACIO_ATR#BTC | 1518 | +0.084 | +510.88€ | 0 | 0 |
 | ✅ GBM_LATE_15M_ESPACIO_ATR#BTC#15min | 1518 | +0.084 | +510.88€ | 0 | 4 |
-| ✅ GBM_LATE_15M_ESPACIO_ATR#DOGE | 63 | +0.192 | +40.51€ | 0 | 0 |
-| ✅ GBM_LATE_15M_ESPACIO_ATR#DOGE#15min | 63 | +0.192 | +40.51€ | 0 | 0 |
+| ✅ GBM_LATE_15M_ESPACIO_ATR#DOGE | 64 | +0.197 | +42.47€ | 0 | 0 |
+| ✅ GBM_LATE_15M_ESPACIO_ATR#DOGE#15min | 64 | +0.197 | +42.47€ | 0 | 0 |
 | ✅ GBM_LATE_15M_ESPACIO_ATR#ETH | 1510 | +0.089 | +543.83€ | 0 | 0 |
 | ✅ GBM_LATE_15M_ESPACIO_ATR#ETH#15min | 1510 | +0.089 | +543.83€ | 0 | 6 |
 | ✅ GBM_LATE_15M_ESPACIO_ATR#SOL | 1457 | +0.085 | +577.60€ | 0 | 0 |
@@ -1247,16 +1247,16 @@ _Derivadas de los patrones aprendidos:_
 | 🚫 GBM_LATE_15M_PYCONFIRMADO#SOL#15min | 8 | -0.120 | -1.91€ | 0 | 0 |
 | ✅ GBM_LATE_15M_PYCONFIRMADO#XRP | 147 | +0.218 | +102.22€ | 0 | 0 |
 | ✅ GBM_LATE_15M_PYCONFIRMADO#XRP#15min | 147 | +0.218 | +102.22€ | 0 | 0 |
-| ✅ GBM_LATE_15M_TARDIO | 5917 | +0.066 | +1575.38€ | 0 | 3 |
-| ✅ GBM_LATE_15M_TARDIO#15min | 5917 | +0.066 | +1575.38€ | 0 | 0 |
+| ✅ GBM_LATE_15M_TARDIO | 5919 | +0.066 | +1575.91€ | 0 | 3 |
+| ✅ GBM_LATE_15M_TARDIO#15min | 5919 | +0.066 | +1575.91€ | 0 | 0 |
 | ✅ GBM_LATE_15M_TARDIO#BNB | 58 | +0.283 | +47.23€ | 0 | 0 |
 | ✅ GBM_LATE_15M_TARDIO#BNB#15min | 58 | +0.283 | +47.23€ | 0 | 0 |
 | ✅ GBM_LATE_15M_TARDIO#BTC | 1385 | +0.026 | +157.66€ | 0 | 0 |
 | ✅ GBM_LATE_15M_TARDIO#BTC#15min | 1385 | +0.026 | +157.66€ | 0 | 4 |
-| ✅ GBM_LATE_15M_TARDIO#DOGE | 62 | +0.172 | +23.25€ | 0 | 0 |
-| ✅ GBM_LATE_15M_TARDIO#DOGE#15min | 62 | +0.172 | +23.25€ | 0 | 0 |
-| ✅ GBM_LATE_15M_TARDIO#ETH | 1412 | +0.022 | +119.91€ | 0 | 0 |
-| ✅ GBM_LATE_15M_TARDIO#ETH#15min | 1412 | +0.022 | +119.91€ | 0 | 2 |
+| ✅ GBM_LATE_15M_TARDIO#DOGE | 63 | +0.177 | +25.21€ | 0 | 0 |
+| ✅ GBM_LATE_15M_TARDIO#DOGE#15min | 63 | +0.177 | +25.21€ | 0 | 0 |
+| ✅ GBM_LATE_15M_TARDIO#ETH | 1413 | +0.022 | +118.48€ | 0 | 0 |
+| ✅ GBM_LATE_15M_TARDIO#ETH#15min | 1413 | +0.022 | +118.48€ | 0 | 2 |
 | ✅ GBM_LATE_15M_TARDIO#SOL | 1374 | +0.025 | +256.58€ | 0 | 0 |
 | ✅ GBM_LATE_15M_TARDIO#SOL#15min | 1374 | +0.025 | +256.58€ | 0 | 1 |
 | ✅ GBM_LATE_15M_TARDIO#XRP | 1626 | +0.160 | +970.76€ | 0 | 0 |
@@ -1474,7 +1474,7 @@ _Derivadas de los patrones aprendidos:_
 **🟡 H-STREAK-COOLDOWN** — Cooldown tras 2 derrotas consecutivas (mismo subtype)
   - _Umbral_: n≥40 tras 2 losses y gap(IC_tras_win - IC_tras_2loss)≥0.05
   - _Acción_: Reducir stake (no desactivar) 1-2h tras 2 derrotas consecutivas en el mismo subtype
-  - _Estado_: tras_win IC=+0.110 n=23990 | tras_1loss IC=+0.078 n=16153 | tras_2loss IC=+0.054 n=6774/40 | gap=+0.056 (umbral 0.05)
+  - _Estado_: tras_win IC=+0.110 n=23992 | tras_1loss IC=+0.078 n=16155 | tras_2loss IC=+0.054 n=6775/40 | gap=+0.056 (umbral 0.05)
 
 **🟡 H-KALMAN** — Kalman filter para drift adaptativo
   - _Umbral_: n≥200 por subtipo para calibrar parámetros Q/R del KF
@@ -1740,8 +1740,8 @@ _Derivadas de los patrones aprendidos:_
   - _Hipótesis_: Inspirado en el paper de Fornero (2023, 43 Jornadas SADAF) sobre astrología financiera: 5 estudios peer-review (Dichev & Janes 2003, Yuan et al. 2006, Keef & Khaled 2011, Floros & Tan 2013, Liu & Tseng 2009) en 25-62 mercados bursátiles encuentran rendimientos 5-10%/año más bajos cerca de luna llena que de luna nueva. El propio paper es escéptico de la astrología como tal, pero el mecanismo que documenta no es místico: sesgo de humor de inversores minoristas (más fuerte en acciones con dominancia retail, casi nulo en institucional). Polymarket es un mercado muy retail/cripto — hipótesis: si el mecanismo transfiere, debería verse peor IC cerca de luna llena (moon_phase≈0.5) que en el resto del ciclo.
   - _Umbral_: n≥200 PERO ADEMÁS necesita cubrir al menos 3 ciclos lunares completos (~90 días de calendario) — no evaluar solo por n, aunque el volumen diario ya lo cruce en horas
   - _Acción_: Si IC cerca de luna llena < IC resto del ciclo con margen ≥0.05 y ≥3 ciclos lunares cubiertos → considerar boost/filtro por moon_phase. No implementar con menos de 3 ciclos aunque n sea alto — el efecto es de calendario lento, no de volumen.
-  - _Estado_: n=4096 IC=+0.070 PNL=+740.55€ — sin señal clara aún (umbral IC: min=None max=-0.03)
-  - _Datos_: n=4096 IC=+0.070 PNL=+740.55€
+  - _Estado_: n=4100 IC=+0.070 PNL=+744.69€ — sin señal clara aún (umbral IC: min=None max=-0.03)
+  - _Datos_: n=4100 IC=+0.070 PNL=+744.69€
 
 **〰️ H-CUSTOM-MERCURY-RETROGRADO** — Mercurio retrógrado: ¿rendimiento peor durante la ventana?
   - _Hipótesis_: Mismo origen que H-CUSTOM-MOON-LLENA (paper de Fornero, 43 Jornadas SADAF 2023). Qi, Wang & Zhang (2022, 48 mercados, 1973-2019): rendimientos 3.33%/año más bajos durante Mercurio retrógrado. Kou & Ma (2022) en China (99.8% cuentas retail): hasta -31% anualizado. Ambos estudios confirman que el mecanismo es la creencia/superstición de inversores retail (mayor efecto cuanto más retail y más supersticioso el mercado), no un efecto astral literal — Polymarket encaja en ese perfil. Ventanas 2026 (fuente pública, actualizar cada año): 26-feb a 20-mar, 29-jun a 23-jul, 24-oct a 13-nov.
