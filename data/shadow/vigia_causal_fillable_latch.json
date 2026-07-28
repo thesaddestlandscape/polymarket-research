@@ -3912,5 +3912,10 @@
  "candidato_proxy#GBM_LATE_15M_ESPACIO_ATR#BTC#BUY_YES#sigma_ewma_delta_pctgt6.415": false,
  "candidato_proxy#GBM_LATE_15M_ESPACIO_ATR#ETH#BUY_YES#sigma_ewma_delta_pctgt6.415": false,
  "candidato_proxy#GBM_LATE_15M_ESPACIO_ATR#ETH#15min#ETH#BUY_YES#sigma_ewma_delta_pctgt7.246": false,
- "candidato_proxy#GBM_LATE_15M_TARDIO#ETH#BUY_YES#sigma_ewma_delta_pctgt11.141": true
+ "candidato_proxy#GBM_LATE_15M_TARDIO#ETH#BUY_YES#sigma_ewma_delta_pctgt11.141": true,
+ "candidato_proxy#GBM_LATE_15M_ESPACIO_ATR#BTC#BUY_YES#sigma_ewma_delta_pctgt6.424": false,
+ "candidato_proxy#GBM_LATE_15M_ESPACIO_ATR#ETH#BUY_YES#sigma_ewma_delta_pctgt6.424": false,
+ "candidato_proxy#GBM_LATE_15M_TARDIO#ETH#BUY_YES#sigma_ewma_delta_pctgt11.126": true,
+ "candidato_proxy#GBM_LATE_15M_TARDIO#XRP#15min#XRP#BUY_YES#sigma_hlt0.0092": false,
+ "candidato_proxy#UPDOWN_GBM#BTC#15min#BTC#BUY_YES#sigma_hlt0.0071": false
 }
