@@ -1,59 +1,31 @@
 {
-  "timestamp_utc": "2026-07-27T14:07:55+00:00",
+  "timestamp_utc": "2026-07-28T19:04:52+00:00",
   "tuplas_maduras": [
     {
       "tupla": "FAVORITO_CONFIRMADO#BTC#60min#BUY_NO",
-      "peso_hrp": 0.4808,
-      "exposicion_reciente_eur": 13.65,
-      "share_exposicion_reciente": 0.1637,
+      "peso_hrp": 0.71,
+      "exposicion_reciente_eur": 14.7,
+      "share_exposicion_reciente": 0.875,
       "excede_techo_hrp_x1_5": false
-    },
-    {
-      "tupla": "FAVORITO_CONFIRMADO#ETH#15min#BUY_YES",
-      "peso_hrp": 0.1919,
-      "exposicion_reciente_eur": 9.9,
-      "share_exposicion_reciente": 0.1187,
-      "excede_techo_hrp_x1_5": false
-    },
-    {
-      "tupla": "FAVORITO_CONFIRMADO#BTC#60min#BUY_YES",
-      "peso_hrp": 0.1336,
-      "exposicion_reciente_eur": 15.75,
-      "share_exposicion_reciente": 0.1888,
-      "excede_techo_hrp_x1_5": false
-    },
-    {
-      "tupla": "FAVORITO_CONFIRMADO#SOL#15min#BUY_YES",
-      "peso_hrp": 0.0753,
-      "exposicion_reciente_eur": 28.35,
-      "share_exposicion_reciente": 0.3399,
-      "excede_techo_hrp_x1_5": true
-    },
-    {
-      "tupla": "FAVORITO_CONFIRMADO#SOL#60min#BUY_YES",
-      "peso_hrp": 0.0724,
-      "exposicion_reciente_eur": 13.65,
-      "share_exposicion_reciente": 0.1637,
-      "excede_techo_hrp_x1_5": true
     },
     {
       "tupla": "GBM_LATE_15M#ETH#15min#BUY_YES",
-      "peso_hrp": 0.0459,
+      "peso_hrp": 0.29,
       "exposicion_reciente_eur": 2.1,
-      "share_exposicion_reciente": 0.0252,
+      "share_exposicion_reciente": 0.125,
       "excede_techo_hrp_x1_5": false
     }
   ],
   "tuplas_inmaduras": [
     {
-      "tupla": "UPDOWN_GBM_15M_TARDIO#BTC#15min#BUY_YES",
-      "dias_historial": 12,
-      "n": 173
+      "tupla": "BALLENAS_TARDIAS#BTC#15min#BUY_YES",
+      "dias_historial": 8,
+      "n": 47
     },
     {
-      "tupla": "BALLENAS_TARDIAS#BTC#15min#BUY_YES",
-      "dias_historial": 7,
-      "n": 45
+      "tupla": "BALLENAS_TARDIAS#ETH#5min#BUY_YES",
+      "dias_historial": 0,
+      "n": 0
     }
   ]
 }
