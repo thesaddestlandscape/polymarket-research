@@ -915,6 +915,13 @@ _BASE_STREAK_FADE = [
     ("streak_len",        "gt", "lt"),
     ("regimen_ma_toques", "lt", "gt"),
     ("volumen_racha",     "gt", "lt"),
+    # streak_estiramiento (28-Jul, idea_moondev_10_hallazgos_priorizados_28jul):
+    # ratio |movimiento acumulado en la racha| / volatilidad esperada en ese
+    # lapso -- fuente externa (streak_snapper) dice que fadear SIN exigir
+    # estiramiento da coinflip, CON el filtro sube a 54.3% robusto. No se
+    # hardcodea su múltiplo; el pipeline causal descubre el corte con
+    # datos propios (N_BUCKET_MIN=15).
+    ("streak_estiramiento", "gt", "lt"),
     ("libro_spread",      "gt", "lt"),
     ("libro_liquidez",    "lt", "gt"),
 ]
@@ -1033,6 +1040,15 @@ FEATURE_RULES = {
     "STREAK_FADE_15M#ETH#15min": _BASE_STREAK_FADE,
     "STREAK_FADE_15M#SOL#15min": _BASE_STREAK_FADE,
     "STREAK_FADE_15M#XRP#15min": _BASE_STREAK_FADE,
+
+    # STREAK_FADE_60M (28-Jul, nueva -- ver STREAK_FADE_60M_PARES en
+    # shadow_predict.py, mismo esquema de features que STREAK_FADE_15M).
+    "STREAK_FADE_60M":           _BASE_STREAK_FADE,
+    "STREAK_FADE_60M#ETH#60min": _BASE_STREAK_FADE,
+    "STREAK_FADE_60M#SOL#60min": _BASE_STREAK_FADE,
+    "STREAK_FADE_60M#XRP#60min": _BASE_STREAK_FADE,
+    "STREAK_FADE_60M#DOGE#60min": _BASE_STREAK_FADE,
+    "STREAK_FADE_60M#BNB#60min": _BASE_STREAK_FADE,
 
     # STREAK_MOM_5M / STREAK_FADE_5M (12-Jul): 465+145 predicciones en 3 días,
     # 0 aprendizaje causal por activo hasta ahora. Mismo esquema de features

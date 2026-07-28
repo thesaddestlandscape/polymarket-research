@@ -4156,7 +4156,17 @@ _STREAK_SEQ = None
 
 def _cargar_outcomes_recientes():
     """Lee results.csv → {(activo, ventana_min): [(end_dt, outcome), ...] ordenado}.
-    Un outcome por ventana (mayoría). Cache por proceso (predict corre fresco c/ciclo)."""
+    Un outcome por ventana (mayoría). Cache por proceso (predict corre fresco c/ciclo).
+
+    28-Jul (fix, ver idea_moondev_10_hallazgos_priorizados_28jul): el filtro
+    de activo estaba clavado a ("BTC","ETH","SOL","XRP") desde el origen de
+    la función, pero STREAK_FADE_15M_PARES/STREAK_MOM_5M_PARES incluyen DOGE
+    desde 22-Jul -- confirmado con datos reales que STREAK_FADE_15M#DOGE#15min
+    lleva 0 filas en results.csv SIEMPRE (bug silencioso: _racha_actual()
+    nunca podía calcular racha para DOGE porque esta función la filtraba
+    antes). Añadidos DOGE/BNB (mismo universo que FAVORITO_CONFIRMADO_PARES)
+    y soporte de ventana 60min (antes solo 5/15min, necesario para
+    STREAK_FADE_60M nueva)."""
     global _STREAK_SEQ
     if _STREAK_SEQ is not None:
         return _STREAK_SEQ
@@ -4168,9 +4178,11 @@ def _cargar_outcomes_recientes():
                 if "#" not in sub:
                     continue
                 activo, resto = sub.split("#", 1)
-                if activo not in ("BTC", "ETH", "SOL", "XRP"):
+                if activo not in ("BTC", "ETH", "SOL", "XRP", "DOGE", "BNB"):
                     continue
-                vent = 5 if resto == "5min" else (15 if resto == "15min" else None)
+                vent = (5 if resto == "5min" else
+                        (15 if resto == "15min" else
+                         (60 if resto == "60min" else None)))
                 if vent is None:
                     continue
                 out = r.get("outcome_real")
@@ -4254,6 +4266,43 @@ def _streak_end_dt(market):
         return edt.replace(tzinfo=timezone.utc) if edt.tzinfo is None else edt
     except Exception:
         return None
+
+
+def _streak_estiramiento(activo, ventana_min, k, current_end_dt, ctx):
+    """Ratio |movimiento acumulado durante la racha| / volatilidad ESPERADA
+    en ese mismo lapso (sigma_h escalado por sqrt(tiempo)) -- 28-Jul,
+    idea_moondev_10_hallazgos_priorizados_28jul (fuente externa,
+    streak_snapper): fadear cualquier racha de 4+ ventanas da 50.7%
+    (coinflip) en su dataset; exigir que el movimiento acumulado supere un
+    múltiplo del ATR horario sube a 54.3% robusto (5/5 trimestres). Aquí NO
+    se hardcodea el múltiplo de la fuente externa (tampoco su ventana de 4+)
+    -- se loguea el ratio observacional y es el pipeline causal propio
+    (shadow_postmortem.FEATURE_RULES, N_BUCKET_MIN=15) el que descubre el
+    corte con datos reales, mismo criterio que cualquier otra feature del
+    proyecto. Puramente observacional: nunca toca prob_yes/decision.
+    None si falta cualquier dato (fail-open, igual que el resto de features
+    opcionales del proyecto)."""
+    precios_data = ctx.get("precios_intraday", [])
+    spot_now = _cargar_spot().get(activo)
+    if not spot_now or spot_now <= 0:
+        return None
+    window_start = current_end_dt - timedelta(minutes=ventana_min)
+    streak_start = window_start - timedelta(minutes=ventana_min * k)
+    spot_streak_start = _precio_en(activo, streak_start, precios_data,
+                                    tol_min=max(3, ventana_min // 3))
+    if not spot_streak_start or spot_streak_start <= 0:
+        return None
+    pct_move = (spot_now / spot_streak_start) - 1.0
+    sigma_h = _estimar_vol_h(activo, precios_data, n_min=120)
+    if not sigma_h or sigma_h <= 0:
+        return None
+    horas = (ventana_min * k) / 60.0
+    if horas <= 0:
+        return None
+    vol_esperada = sigma_h * math.sqrt(horas)
+    if vol_esperada <= 0:
+        return None
+    return round(abs(pct_move) / vol_esperada, 4)
 
 def s_streak_mom_5m(market, ctx):
     q = market.get("question", "")
@@ -4340,6 +4389,7 @@ def s_streak_fade_5m(market, ctx):
             "py_entrada":    round(py, 3),
             "hora_utc":      datetime.now(timezone.utc).hour,
             "es_ntm_5min":   _es_ntm_5min(market),
+            "streak_estiramiento": _streak_estiramiento(activo, 5, k, edt, ctx),
             **_libro_calidad(market),
         },
     }
@@ -4429,6 +4479,69 @@ def s_streak_fade_15m(market, ctx):
             # la de 15min, puramente observacional, para comparar signo
             # cuando acumule n. No sustituye volumen_racha, no toca dec.
             "volumen_racha_corto": _volumen_racha(activo, ctx, n_velas=3),
+            "streak_estiramiento": _streak_estiramiento(activo, 15, k, edt, ctx),
+            **_libro_calidad(market),
+        },
+    }
+
+
+STREAK_FADE_60M_PARES = {"ETH", "SOL", "XRP", "DOGE", "BNB"}  # BTC excluido, mismo
+# criterio que STREAK_FADE_5M/15M ("flojo, EV≈0") -- sin dato propio a 60min
+# todavía, se hereda la exclusión por consistencia hasta tener n propio.
+
+
+def s_streak_fade_60m(market, ctx):
+    """
+    28-Jul (idea_moondev_10_hallazgos_priorizados_28jul, ítem A del backlog
+    "aplicación directa a 15min/60min"): mismo mecanismo que STREAK_FADE_15M
+    (racha≥4 en ventanas up/down, fadear la dirección) pero a 60min -- hueco
+    de cobertura real, no existía ninguna estrategia de streak-fade en este
+    marco. Requirió arreglar `_cargar_outcomes_recientes()` (mismo commit):
+    no soportaba ventana 60min y excluía DOGE/BNB pese a que
+    STREAK_FADE_15M_PARES ya los incluye desde 22-Jul (bug confirmado con
+    datos reales: STREAK_FADE_15M#DOGE#15min llevaba 0 filas SIEMPRE).
+
+    Incluye `streak_estiramiento` desde el nacimiento (a diferencia de las
+    versiones 5min/15min, que lo añadieron después) -- ratio movimiento
+    acumulado en la racha / volatilidad esperada en ese lapso, puramente
+    observacional, el pipeline causal (FEATURE_RULES, N_BUCKET_MIN=15)
+    decide si hay corte útil con datos reales, no se hardcodea ningún
+    múltiplo de ATR de una fuente externa.
+
+    NO está en pares_permitidos_live -- shadow puro, cero riesgo real,
+    n=0 al desplegar.
+    """
+    q = market.get("question", "")
+    if "up or down" not in q.lower():
+        return None
+    tipo, vent = _parse_updown_tipo(q)
+    if tipo not in ("slot", "hourly") or vent != 60:
+        return None
+    activo = identificar_activo(q)
+    if activo not in STREAK_FADE_60M_PARES:
+        return None
+    py = market.get("_precio_yes")
+    if py is None or not (STREAK_PY_LO <= py <= STREAK_PY_HI):
+        return None
+    edt = _streak_end_dt(market)
+    if edt is None:
+        return None
+    k, d = _racha_actual(activo, 60, edt)
+    if k < 4 or d is None:
+        return None
+    prob_yes = 0.30 if d == "YES" else 0.70
+    return {
+        "prob_yes": prob_yes,
+        "razon":    f"streak_fade_60m {activo} racha={k}x{d} py={py:.3f} (reversión)",
+        "subtype":  f"{activo}#60min",
+        "features": {
+            "streak_len":    k,
+            "streak_dir_up": 1 if d == "YES" else 0,
+            "py_entrada":    round(py, 3),
+            "hora_utc":      datetime.now(timezone.utc).hour,
+            "regimen_ma_toques": _regimen_ma_toques(activo, ctx),
+            "volumen_racha":     _volumen_racha(activo, ctx),
+            "streak_estiramiento": _streak_estiramiento(activo, 60, k, edt, ctx),
             **_libro_calidad(market),
         },
     }
@@ -4559,6 +4672,7 @@ ESTRATEGIAS = [
     ("STREAK_MOM_5M",       s_streak_mom_5m),
     ("STREAK_FADE_5M",      s_streak_fade_5m),
     ("STREAK_FADE_15M",     s_streak_fade_15m),
+    ("STREAK_FADE_60M",     s_streak_fade_60m),
     ("LEADLAG_BTC_XRP_15M", s_leadlag_btc_xrp),
     # ("BINANCE_UPDOWN", s_binance_updown),  # retirada — IC -0.50
 ]
