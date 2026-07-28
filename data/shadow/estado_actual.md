@@ -1,4 +1,4 @@
-# Estado del bot — 2026-07-28 20:16 UTC
+# Estado del bot — 2026-07-28 20:21 UTC
 
 ## Live — dinero real (on-chain)
 | | |
@@ -23,7 +23,7 @@
 
 | Estrategia | n | Win% | IC_efectivo | Tendencia | PNL | Apuesta | Estado |
 |---|---|---|---|---|---|---|---|
-| GBM_LATE_15M_ESPACIO_ATR | 5994 | 61.8% | +0.118 | 📉 agota (-0.07) | +2847.99$ | 1.18$ | ✅ activa |
+| GBM_LATE_15M_ESPACIO_ATR | 5994 | 61.8% | +0.118 | 📉 agota (-0.07) | +2847.99$ | 1.19$ | ✅ activa |
 | GBM_LATE_15M | 8772 | 59.4% | +0.094 | ➡️ estable | +2617.61$ | 0.94$ | ✅ activa |
 | GBM_LATE_15M_TARDIO | 5987 | 56.6% | +0.066 | 📉 agota (-0.07) | +1600.04$ | 0.66$ | ✅ activa |
 | UPDOWN_GBM_15M_TARDIO | 2293 | 64.8% | +0.148 | ➡️ estable | +989.40$ | 1.48$ | ✅ activa |
@@ -32,7 +32,7 @@
 | GBM_LATE_15M_PYCONFIRMADO | 294 | 56.1% | +0.061 | 📉 agota (-0.19) | +99.66$ | 0.61$ | ✅ activa |
 | UPDOWN_GBM_15M_CROSS_WINDOW_SPREAD | 201 | 80.6% | +0.303 | 📈 madura (+0.03) | +40.79$ | 2.00$ | ✅ activa |
 | BALLENAS_CONFIRMADAS_15M | 1428 | 59.8% | +0.098 | 📉 agota (-0.05) | +35.78$ | 0.98$ | ✅ activa |
-| STREAK_FADE_15M | 303 | 56.4% | +0.064 | 📉 agota (-0.10) | +22.21$ | 0.64$ | ✅ activa |
+| STREAK_FADE_15M | 303 | 56.4% | +0.064 | 📉 agota (-0.10) | +22.21$ | 0.62$ | ✅ activa |
 | ORDER_FLOW_5M | 1687 | 51.1% | +0.011 | ➡️ estable | +10.51$ | 0.50$ | ✅ activa |
 | LEADLAG_BTC_XRP_15M | 305 | 50.2% | +0.002 | 📉 agota (-0.13) | +6.94$ | 0.50$ | ✅ activa |
 | FAVORITO_CONFIRMADO_SOL_ALTACONVICCION | 447 | 80.3% | +0.302 | ➡️ estable | +6.48$ | 2.00$ | ✅ activa |
