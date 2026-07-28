@@ -52,10 +52,11 @@
         }
       },
       "banda_no_confirmada": {
-        "conteo": 2,
+        "conteo": 8,
         "mercados": {
-          "0x6f4fb57b0bd0e87ccb66c70d20636035e8e5ca4b5590908e9c8cbc81f6c14207": 1,
-          "0x44f3cef4951a8eda8c9b45df8b69bf128b53879f117dbf4b5fc345e4a1fb78fa": 1
+          "0x6f4fb57b0bd0e87ccb66c70d20636035e8e5ca4b5590908e9c8cbc81f6c14207": 3,
+          "0x44f3cef4951a8eda8c9b45df8b69bf128b53879f117dbf4b5fc345e4a1fb78fa": 3,
+          "0x8d401879dab4300a39d5475a238b17f65b80b452f605451cc3f96235c977a37c": 2
         }
       }
     },
@@ -114,11 +115,12 @@
         }
       },
       "banda_no_confirmada": {
-        "conteo": 3,
+        "conteo": 9,
         "mercados": {
-          "0xf6ad48a0d23cd91b9a9368d070dd43eb4db884165273398e9838c628c8690747": 1,
+          "0xf6ad48a0d23cd91b9a9368d070dd43eb4db884165273398e9838c628c8690747": 3,
           "0x5822d9be8248fc11c5b09a2533e0a6e1c4a76c841dcf85e810dfe74ff456056e": 1,
-          "0xb12cd1dc34ea25ba8fbc582e45b209964173f9ad93722436c41d6125537d617a": 1
+          "0xb12cd1dc34ea25ba8fbc582e45b209964173f9ad93722436c41d6125537d617a": 3,
+          "0xdf272e8a63d54bf7151784459a01d719a4d038cc2b0892543116d6d6e738375b": 2
         }
       }
     },
@@ -132,7 +134,7 @@
   "DOGE#BUY_NO": {
     "motivos": {
       "banda_no_confirmada": {
-        "conteo": 546,
+        "conteo": 550,
         "mercados": {
           "0xc132ec92b406eb13da1cb814396e60b66f819f1be1c0d8394317d53e5b2c08b1": 6,
           "0xd0672cde7ddef0a3136bf4e9209e193940596ab831742079687f92fea3d8ca1b": 10,
@@ -157,7 +159,8 @@
           "0xef2e1393a2054e2da40d9b134bd6976ec353a35eec07d25527383b12964acdcd": 34,
           "0xa64019b63a341cc551eaf2030d227869b186865eb69410d0ec6db1bee7ed5814": 22,
           "0xb37ff9eb99c1cfe2a2b0d404263e8be468178d161f71dfbfe5130231b5b27e43": 16,
-          "0x52e72cb6a32c7415f9142573efa88c16e37a4e0a4208efa1c455d3ea6c127d55": 12
+          "0x52e72cb6a32c7415f9142573efa88c16e37a4e0a4208efa1c455d3ea6c127d55": 14,
+          "0x314932d0e1f5bc0db98d8b4dbdcf7b508673cd9c861d12cdc40fb41c23fd0920": 2
         }
       }
     }
