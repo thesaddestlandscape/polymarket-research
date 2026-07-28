@@ -956,6 +956,27 @@ _BASE_ORDER_FLOW = [
     ("total_vol_5m", "gt",     "lt"),
 ]
 
+# Features de LIQUIDACIONES_15M/60M (28-Jul, idea_moondev_10_hallazgos_
+# priorizados_28jul, ítem B): señal de order-flow real (liquidaciones
+# Binance Futures, no volumen normal). liq_imbalance es la señal principal
+# (misma ventana de lookback que decide prob_yes); las variantes _2min/
+# _15min/_60min son observacionales, para comparar qué lookback generaliza
+# mejor sin comprometerse a un umbral prestado de la fuente externa.
+_BASE_LIQUIDACIONES = [
+    ("liq_imbalance",       "abs_lt", "abs_gt"),
+    ("liq_n",               "lt", "gt"),
+    ("liq_usd_total",       "lt", "gt"),
+    ("liq_imbalance_2min",  "abs_lt", "abs_gt"),
+    ("liq_imbalance_15min", "abs_lt", "abs_gt"),
+    ("liq_imbalance_60min", "abs_lt", "abs_gt"),
+    ("hora_utc",            "lt", "gt"),
+    ("hora_utc",            "gt", "lt"),
+    ("py_entrada",          "gt", "lt"),
+    ("py_entrada",          "lt", "gt"),
+    ("libro_spread",        "gt", "lt"),
+    ("libro_liquidez",      "lt", "gt"),
+]
+
 # Features de LEADLAG_BTC_XRP_15M (single-asset por diseño: solo opera XRP
 # siguiendo el momentum de BTC, no hay "por activo" que desagregar aquí).
 _BASE_LEADLAG = [
@@ -1049,6 +1070,23 @@ FEATURE_RULES = {
     "STREAK_FADE_60M#XRP#60min": _BASE_STREAK_FADE,
     "STREAK_FADE_60M#DOGE#60min": _BASE_STREAK_FADE,
     "STREAK_FADE_60M#BNB#60min": _BASE_STREAK_FADE,
+
+    # LIQUIDACIONES_15M/60M (28-Jul, nuevas -- ver LIQUIDACIONES_PARES en
+    # shadow_predict.py, 6 activos).
+    "LIQUIDACIONES_15M":           _BASE_LIQUIDACIONES,
+    "LIQUIDACIONES_15M#BTC#15min": _BASE_LIQUIDACIONES,
+    "LIQUIDACIONES_15M#ETH#15min": _BASE_LIQUIDACIONES,
+    "LIQUIDACIONES_15M#SOL#15min": _BASE_LIQUIDACIONES,
+    "LIQUIDACIONES_15M#XRP#15min": _BASE_LIQUIDACIONES,
+    "LIQUIDACIONES_15M#DOGE#15min": _BASE_LIQUIDACIONES,
+    "LIQUIDACIONES_15M#BNB#15min": _BASE_LIQUIDACIONES,
+    "LIQUIDACIONES_60M":           _BASE_LIQUIDACIONES,
+    "LIQUIDACIONES_60M#BTC#60min": _BASE_LIQUIDACIONES,
+    "LIQUIDACIONES_60M#ETH#60min": _BASE_LIQUIDACIONES,
+    "LIQUIDACIONES_60M#SOL#60min": _BASE_LIQUIDACIONES,
+    "LIQUIDACIONES_60M#XRP#60min": _BASE_LIQUIDACIONES,
+    "LIQUIDACIONES_60M#DOGE#60min": _BASE_LIQUIDACIONES,
+    "LIQUIDACIONES_60M#BNB#60min": _BASE_LIQUIDACIONES,
 
     # STREAK_MOM_5M / STREAK_FADE_5M (12-Jul): 465+145 predicciones en 3 días,
     # 0 aprendizaje causal por activo hasta ahora. Mismo esquema de features

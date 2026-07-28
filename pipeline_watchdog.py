@@ -95,6 +95,10 @@ SCREEN_RESTART = {
     # "Polymarket Whales API") -- ver idea_rtds_activity_trades_gratis_28jul.
     # Solo lectura, no toca dinero. Mismo patrón que chainlink/pfinish.
     "polyactivity": f"cd {REPO} && .venv/bin/python fetch_polymarket_activity_ws.py >> logs/polymarket_activity.log 2>&1",
+    # liqs (28-Jul): liquidaciones reales de Binance Futures, feed público
+    # gratis -- alimenta s_liquidaciones_15m/60m (backlog ítem B). Solo
+    # lectura, no toca dinero. Mismo patrón que chainlink/polyactivity.
+    "liqs": f"cd {REPO} && .venv/bin/python fetch_binance_liquidations.py >> logs/binance_liquidations.log 2>&1",
 }
 
 # Cuando stdout está redirigido (screen >> watchdog.log), print() ya escribe al fichero
@@ -155,7 +159,7 @@ def check_screens() -> dict[str, bool]:
         r = subprocess.run(["screen", "-ls"], capture_output=True, text=True, timeout=5)
         output = r.stdout + r.stderr
         return {name: (f".{name}\t" in output or f".{name} " in output)
-                for name in ["fast", "slow", "control", "dash", "pfinish", "ballenas_fast", "ballenas_5m", "chainlink", "favultsec", "polyactivity"]}
+                for name in ["fast", "slow", "control", "dash", "pfinish", "ballenas_fast", "ballenas_5m", "chainlink", "favultsec", "polyactivity", "liqs"]}
     except Exception:
         return {}
 

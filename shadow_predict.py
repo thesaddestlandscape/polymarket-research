@@ -2534,6 +2534,92 @@ def s_order_flow_5m(market, ctx):
     }
 
 
+LIQUIDACIONES_PARES = {"BTC", "ETH", "SOL", "XRP", "DOGE", "BNB"}
+LIQUIDACIONES_LAG_MAX = 0.12  # mismo umbral que ORDER_FLOW_5M: si py ya se
+# movió más de esto desde 0.5, la señal ya está priceada, tarde para entrar.
+
+
+def _s_liquidaciones(market, ctx, ventana_min, ventana_lookback="5min", minutos_min_abierto=1.5):
+    """
+    28-Jul (backlog ítem B, idea_moondev_10_hallazgos_priorizados_28jul):
+    señal de order-flow basada en LIQUIDACIONES reales de Binance Futures
+    (fetch_binance_liquidations.py, screen liqs) en vez de volumen normal de
+    trading -- ORDER_FLOW_5M ya usa taker buy/sell de klines (básicamente
+    CVD), que una fuente externa midió como coinflip (51-52% direccional) en
+    su propio dataset; liquidaciones fue la única señal de order-flow que
+    esa fuente encontró con consistencia direccional (58.8%). Hueco de
+    cobertura real: HOY no existe ninguna estrategia de order-flow a
+    15min/60min, solo ORDER_FLOW_5M cubre 5min.
+
+    No se hardcodea ningún umbral de imbalance de la fuente externa -- se
+    convierte el imbalance en un nudge proporcional (mismo patrón que
+    ORDER_FLOW_5M: p_yes = 0.5 + delta*0.5) y se deja que el pipeline
+    causal (FEATURE_RULES, N_BUCKET_MIN=15) descubra con datos propios si
+    hace falta un umbral mínimo. Función compartida por 15min/60min
+    (parametrizada por ventana_min) para no duplicar lógica -- mismo
+    espíritu que _s_gbm_late.
+    """
+    question = market.get("question", "")
+    if "up or down" not in question.lower():
+        return None
+    tipo, vent = _parse_updown_tipo(question)
+    if vent != ventana_min or tipo not in ("slot", "hourly"):
+        return None
+    activo = identificar_activo(question)
+    if activo not in LIQUIDACIONES_PARES:
+        return None
+
+    estado = _cargar_liquidaciones_binance().get(activo, {})
+    datos = estado.get(ventana_lookback)
+    if not datos or datos.get("imbalance") is None or datos.get("n", 0) < 1:
+        return None
+    imbalance = datos["imbalance"]
+
+    h_restantes_min = market.get("_horas", 0) * 60
+    minutos_vividos = ventana_min - h_restantes_min
+    if minutos_vividos < minutos_min_abierto:
+        return None
+
+    py = market.get("_precio_yes", 0.5)
+    if abs(py - 0.5) > LIQUIDACIONES_LAG_MAX:
+        return None
+
+    p_yes = max(0.10, min(0.90, 0.5 + imbalance * 0.5))
+
+    return {
+        "prob_yes": p_yes,
+        "razon": (f"liquidaciones_{ventana_min}m {activo} "
+                  f"imbalance={imbalance:+.3f} n={datos['n']} "
+                  f"usd_long={datos['usd_long']:.0f} usd_short={datos['usd_short']:.0f} "
+                  f"py_mkt={py:.3f}"),
+        "subtype": f"{activo}#{ventana_min}min",
+        "features": {
+            "liq_imbalance":  round(imbalance, 4),
+            "liq_n":          datos["n"],
+            "liq_usd_long":   datos["usd_long"],
+            "liq_usd_short":  datos["usd_short"],
+            "liq_usd_total":  round(datos["usd_long"] + datos["usd_short"], 2),
+            # ventanas alternativas, solo observacionales -- para que el
+            # análisis futuro compare qué lookback (2/5/15/60min) generaliza
+            # mejor por marco, sin comprometerse hoy a ninguna.
+            "liq_imbalance_2min":  (estado.get("2min") or {}).get("imbalance"),
+            "liq_imbalance_15min": (estado.get("15min") or {}).get("imbalance"),
+            "liq_imbalance_60min": (estado.get("60min") or {}).get("imbalance"),
+            "py_entrada": round(py, 3),
+            "hora_utc": datetime.now(timezone.utc).hour,
+            **_libro_calidad(market),
+        },
+    }
+
+
+def s_liquidaciones_15min(market, ctx):
+    return _s_liquidaciones(market, ctx, ventana_min=15, ventana_lookback="5min", minutos_min_abierto=1.5)
+
+
+def s_liquidaciones_60min(market, ctx):
+    return _s_liquidaciones(market, ctx, ventana_min=60, ventana_lookback="15min", minutos_min_abierto=5.0)
+
+
 def s_resolution_sniper(market, ctx):
     """
     Sniper de vencimiento: mercados NO Up/Down en su última 1.5h.
@@ -2751,6 +2837,28 @@ def _cargar_ballenas_timing_state():
             _ballenas_timing_cache["data"] = {}
         _ballenas_timing_cache["mtime"] = mtime
     return _ballenas_timing_cache["data"]
+
+
+# LIQUIDACIONES_BINANCE_STATE (28-Jul, backlog ítem B -- idea_moondev_10_
+# hallazgos_priorizados_28jul): estado agregado escrito por
+# fetch_binance_liquidations.py (screen liqs, feed público gratis de
+# Binance Futures). Mismo patrón de caché por mtime que ballenas_timing_state.
+LIQUIDACIONES_BINANCE_STATE = Path("data/shadow/liquidaciones_binance_state.json")
+_liquidaciones_cache = {"mtime": None, "data": {}}
+
+
+def _cargar_liquidaciones_binance():
+    try:
+        mtime = LIQUIDACIONES_BINANCE_STATE.stat().st_mtime
+    except OSError:
+        return {}
+    if _liquidaciones_cache["mtime"] != mtime:
+        try:
+            _liquidaciones_cache["data"] = json.loads(LIQUIDACIONES_BINANCE_STATE.read_text(encoding="utf-8"))
+        except Exception:
+            _liquidaciones_cache["data"] = {}
+        _liquidaciones_cache["mtime"] = mtime
+    return _liquidaciones_cache["data"]
 
 
 # Wallet edge score (20-Jul, wallet_edge_tracker.py, cron propio): "smart"
@@ -4653,6 +4761,8 @@ ESTRATEGIAS = [
     ("UPDOWN_OU_5M",        s_updown_ou_5m),
     ("PRICE_TARGET_GBM",    s_price_target_gbm),
     ("ORDER_FLOW_5M",       s_order_flow_5m),
+    ("LIQUIDACIONES_15M",   s_liquidaciones_15min),
+    ("LIQUIDACIONES_60M",   s_liquidaciones_60min),
     ("RESOLUTION_SNIPER",   s_resolution_sniper),
     ("LATE_WINDOW_5MIN",    s_late_window_5min),
     ("GBM_LATE_15M",        s_gbm_late_15min),
