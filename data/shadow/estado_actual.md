@@ -1,4 +1,4 @@
-# Estado del bot — 2026-07-28 11:55 UTC
+# Estado del bot — 2026-07-28 12:03 UTC
 
 ## Live — dinero real (on-chain)
 | | |
@@ -39,7 +39,7 @@
 | FAVORITO_CONFIRMADO_SOL_ALTACONVICCION | 442 | 80.3% | +0.302 | ➡️ estable | +6.23$ | 2.00$ | ✅ activa |
 | BALLENAS_TARDIAS | 47 | 87.2% | +0.357 | ➡️ estable | +3.24$ | 2.00$ | ✅ activa |
 | RESOLUTION_SNIPER | 13 | 84.6% | +0.195 | — | +3.10$ | 1.95$ | ✅ activa |
-| FAVORITO_CONFIRMADO_15MIN_ALTACONVICCION | 4 | 100.0% | +0.067 | — | +0.27$ | 0.50$ | ⏳ acumulando |
+| FAVORITO_CONFIRMADO_15MIN_ALTACONVICCION | 4 | 100.0% | +0.067 | — | +0.27$ | 0.97$ | ⏳ acumulando |
 | FAVORITO_CONFIRMADO_60MIN_ALTACONVICCION | 7 | 85.7% | +0.097 | — | +0.01$ | 0.97$ | ⏳ acumulando |
 | GBM_LATE_15M_MULTIHORIZONTE | 6 | 50.0% | +0.000 | — | -0.08$ | 0.50$ | ⏳ acumulando |
 | UPDOWN_GBM_ETH_15M_HORA7 | 24 | 50.0% | +0.000 | — | -0.74$ | 0.50$ | ✅ activa |
