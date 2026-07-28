@@ -37,6 +37,7 @@ SCREENS = {
     "chainlink": {"entry": "fetch_chainlink_prices.py", "probe": None},
     "polyactivity": {"entry": "fetch_polymarket_activity_ws.py", "probe": None},
     "liqs": {"entry": "fetch_binance_liquidations.py", "probe": None},
+    "libroambos": {"entry": "fetch_libro_ambos_lados.py", "probe": None},
     "ballenas_fast": {"entry": "ballenas_executor_btc15m.py",
                        "probe": "log:logs/ballenas_fast.log:arrancado"},
     "ballenas_5m": {"entry": "ballenas_executor_5min.py",

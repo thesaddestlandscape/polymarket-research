@@ -99,6 +99,11 @@ SCREEN_RESTART = {
     # gratis -- alimenta s_liquidaciones_15m/60m (backlog ítem B). Solo
     # lectura, no toca dinero. Mismo patrón que chainlink/polyactivity.
     "liqs": f"cd {REPO} && .venv/bin/python fetch_binance_liquidations.py >> logs/binance_liquidations.log 2>&1",
+    # libroambos (28-Jul): libro de AMBOS lados (YES+NO) para nuestro universo
+    # 5/15/60min -- desbloquea Box Builder/Corridor Collector/Spread-Harvest
+    # Maker (Stage 3/4). Importa live_trade.py de solo lectura, nunca lo
+    # modifica ni ordena nada. Solo lectura, no toca dinero.
+    "libroambos": f"cd {REPO} && .venv/bin/python fetch_libro_ambos_lados.py >> logs/libro_ambos_lados.log 2>&1",
 }
 
 # Cuando stdout está redirigido (screen >> watchdog.log), print() ya escribe al fichero
@@ -159,7 +164,7 @@ def check_screens() -> dict[str, bool]:
         r = subprocess.run(["screen", "-ls"], capture_output=True, text=True, timeout=5)
         output = r.stdout + r.stderr
         return {name: (f".{name}\t" in output or f".{name} " in output)
-                for name in ["fast", "slow", "control", "dash", "pfinish", "ballenas_fast", "ballenas_5m", "chainlink", "favultsec", "polyactivity", "liqs"]}
+                for name in ["fast", "slow", "control", "dash", "pfinish", "ballenas_fast", "ballenas_5m", "chainlink", "favultsec", "polyactivity", "liqs", "libroambos"]}
     except Exception:
         return {}
 
