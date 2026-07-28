@@ -1,5 +1,5 @@
-# Hipótesis automáticas — 2026-07-28 22:51 UTC
-_Generado por shadow_postmortem.py sobre 40901 resoluciones (PNL=+8592.06€)_
+# Hipótesis automáticas — 2026-07-28 22:58 UTC
+_Generado por shadow_postmortem.py sobre 40902 resoluciones (PNL=+8591.55€)_
 
 ## Patrones causales activos
 
@@ -1255,10 +1255,10 @@ _Derivadas de los patrones aprendidos:_
 | ✅ GBM_LATE_15M_TARDIO#SOL#15min | 1389 | +0.025 | +258.07€ | 0 | 2 |
 | ✅ GBM_LATE_15M_TARDIO#XRP | 1647 | +0.162 | +996.19€ | 0 | 0 |
 | ✅ GBM_LATE_15M_TARDIO#XRP#15min | 1647 | +0.162 | +996.19€ | 0 | 13 |
-| ✅ GBM_LATE_5M | 897 | -0.040 | -10.66€ | 0 | 0 |
-| ✅ GBM_LATE_5M#5min | 897 | -0.040 | -10.66€ | 0 | 0 |
-| ✅ GBM_LATE_5M#BTC | 182 | -0.049 | -13.71€ | 0 | 0 |
-| ✅ GBM_LATE_5M#BTC#5min | 182 | -0.049 | -13.71€ | 0 | 0 |
+| ✅ GBM_LATE_5M | 898 | -0.040 | -11.17€ | 0 | 0 |
+| ✅ GBM_LATE_5M#5min | 898 | -0.040 | -11.17€ | 0 | 0 |
+| ✅ GBM_LATE_5M#BTC | 183 | -0.051 | -14.22€ | 0 | 0 |
+| ✅ GBM_LATE_5M#BTC#5min | 183 | -0.051 | -14.22€ | 0 | 0 |
 | 🚫 GBM_LATE_5M#ETH | 82 | -0.202 | -15.93€ | 0 | 0 |
 | 🚫 GBM_LATE_5M#ETH#5min | 82 | -0.202 | -15.93€ | 0 | 0 |
 | ✅ GBM_LATE_5M#SOL | 302 | -0.059 | +8.33€ | 0 | 0 |
@@ -1470,7 +1470,7 @@ _Derivadas de los patrones aprendidos:_
 **🟡 H-STREAK-COOLDOWN** — Cooldown tras 2 derrotas consecutivas (mismo subtype)
   - _Umbral_: n≥40 tras 2 losses y gap(IC_tras_win - IC_tras_2loss)≥0.05
   - _Acción_: Reducir stake (no desactivar) 1-2h tras 2 derrotas consecutivas en el mismo subtype
-  - _Estado_: tras_win IC=+0.111 n=24291 | tras_1loss IC=+0.077 n=16360 | tras_2loss IC=+0.052 n=6882/40 | gap=+0.059 (umbral 0.05)
+  - _Estado_: tras_win IC=+0.111 n=24291 | tras_1loss IC=+0.077 n=16361 | tras_2loss IC=+0.052 n=6883/40 | gap=+0.059 (umbral 0.05)
 
 **🟡 H-KALMAN** — Kalman filter para drift adaptativo
   - _Umbral_: n≥200 por subtipo para calibrar parámetros Q/R del KF
@@ -1736,8 +1736,8 @@ _Derivadas de los patrones aprendidos:_
   - _Hipótesis_: Inspirado en el paper de Fornero (2023, 43 Jornadas SADAF) sobre astrología financiera: 5 estudios peer-review (Dichev & Janes 2003, Yuan et al. 2006, Keef & Khaled 2011, Floros & Tan 2013, Liu & Tseng 2009) en 25-62 mercados bursátiles encuentran rendimientos 5-10%/año más bajos cerca de luna llena que de luna nueva. El propio paper es escéptico de la astrología como tal, pero el mecanismo que documenta no es místico: sesgo de humor de inversores minoristas (más fuerte en acciones con dominancia retail, casi nulo en institucional). Polymarket es un mercado muy retail/cripto — hipótesis: si el mecanismo transfiere, debería verse peor IC cerca de luna llena (moon_phase≈0.5) que en el resto del ciclo.
   - _Umbral_: n≥200 PERO ADEMÁS necesita cubrir al menos 3 ciclos lunares completos (~90 días de calendario) — no evaluar solo por n, aunque el volumen diario ya lo cruce en horas
   - _Acción_: Si IC cerca de luna llena < IC resto del ciclo con margen ≥0.05 y ≥3 ciclos lunares cubiertos → considerar boost/filtro por moon_phase. No implementar con menos de 3 ciclos aunque n sea alto — el efecto es de calendario lento, no de volumen.
-  - _Estado_: n=4600 IC=+0.074 PNL=+926.28€ — sin señal clara aún (umbral IC: min=None max=-0.03)
-  - _Datos_: n=4600 IC=+0.074 PNL=+926.28€
+  - _Estado_: n=4601 IC=+0.074 PNL=+925.77€ — sin señal clara aún (umbral IC: min=None max=-0.03)
+  - _Datos_: n=4601 IC=+0.074 PNL=+925.77€
 
 **〰️ H-CUSTOM-MERCURY-RETROGRADO** — Mercurio retrógrado: ¿rendimiento peor durante la ventana?
   - _Hipótesis_: Mismo origen que H-CUSTOM-MOON-LLENA (paper de Fornero, 43 Jornadas SADAF 2023). Qi, Wang & Zhang (2022, 48 mercados, 1973-2019): rendimientos 3.33%/año más bajos durante Mercurio retrógrado. Kou & Ma (2022) en China (99.8% cuentas retail): hasta -31% anualizado. Ambos estudios confirman que el mecanismo es la creencia/superstición de inversores retail (mayor efecto cuanto más retail y más supersticioso el mercado), no un efecto astral literal — Polymarket encaja en ese perfil. Ventanas 2026 (fuente pública, actualizar cada año): 26-feb a 20-mar, 29-jun a 23-jul, 24-oct a 13-nov.
