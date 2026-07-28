@@ -354,7 +354,7 @@
   "DOGE#BUY_NO": {
     "motivos": {
       "banda_no_confirmada": {
-        "conteo": 2927,
+        "conteo": 2936,
         "mercados": {
           "0xc132ec92b406eb13da1cb814396e60b66f819f1be1c0d8394317d53e5b2c08b1": 6,
           "0xd0672cde7ddef0a3136bf4e9209e193940596ab831742079687f92fea3d8ca1b": 10,
@@ -456,9 +456,9 @@
           "0x52b6a884a8db5409421a3c7e1e14f3ee4c1f24f0b0e61547d80d024c82d48004": 18,
           "0xc20dee168f2d8e398ccddd72cdc6e5c271b35047fd17e5813e0b7bacea6169d2": 22,
           "0x461d68dda971e9659400a02cf26eb1b79fa21009f85344952b562fc3503b2f5b": 24,
-          "0x62c55ee84f584a55970449ee6b9802deabfab5152a239c8b07030832a088e54c": 21,
-          "0x8fc7a2732ce4ec0005ff2892028be31e1ef231524913eaa1fc6721a5004d10aa": 12,
-          "0xb92aaab30d4eaf3d8718d8fe6074d96f9fb82f1b2c80110fe1104acb631a2df9": 6
+          "0x62c55ee84f584a55970449ee6b9802deabfab5152a239c8b07030832a088e54c": 24,
+          "0x8fc7a2732ce4ec0005ff2892028be31e1ef231524913eaa1fc6721a5004d10aa": 15,
+          "0xb92aaab30d4eaf3d8718d8fe6074d96f9fb82f1b2c80110fe1104acb631a2df9": 9
         }
       }
     }
@@ -498,7 +498,7 @@
         }
       },
       "banda_no_confirmada": {
-        "conteo": 1042,
+        "conteo": 1048,
         "mercados": {
           "0x56401c8ec5ff84c021d4d27a719d3040826e0d7fdf6f69dd4bda1282142a846e": 7,
           "0x0723882704c5a268fa6ef74c36a8dec35216039cf327027205d497a3613c7b57": 6,
@@ -560,8 +560,8 @@
           "0xaba0dc4f7ae19ae217d296da6257f8c34394f6edf1aed169e7d7965e8182c8ee": 18,
           "0xc38477bdb3037a2942e3f18cc1ecf630ebc0883f261b2e5d3ef501ce13d1641b": 5,
           "0x73e63992a37c4a16d5d8b54bf3bcc338763f958abeaf07fdc5a3374a77eae551": 21,
-          "0x1a21de25d12fddb777bfb3b08d247edb65b5732b25fcc729a8047255cce87822": 21,
-          "0x4ab12aab1622b6fe67ea2a963c69ceb7e5327b77746919c1a4da32470533fe15": 3
+          "0x1a21de25d12fddb777bfb3b08d247edb65b5732b25fcc729a8047255cce87822": 24,
+          "0x4ab12aab1622b6fe67ea2a963c69ceb7e5327b77746919c1a4da32470533fe15": 6
         }
       }
     },
