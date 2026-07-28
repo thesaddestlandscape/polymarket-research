@@ -1,5 +1,5 @@
-# Hipótesis automáticas — 2026-07-28 02:54 UTC
-_Generado por shadow_postmortem.py sobre 39418 resoluciones (PNL=+7991.90€)_
+# Hipótesis automáticas — 2026-07-28 02:58 UTC
+_Generado por shadow_postmortem.py sobre 39421 resoluciones (PNL=+7994.90€)_
 
 ## Patrones causales activos
 
@@ -341,21 +341,21 @@ _Generado por shadow_postmortem.py sobre 39418 resoluciones (PNL=+7991.90€)_
   - _Acción_: Kelly boost +0.68€ cuando `sigma_ewma_delta_pct` > 7.46 (IC base=+0.137)
 
 ### GBM_LATE_15M_ESPACIO_ATR
-- **PATRÓN** `sigma_h` > `0.0075` → IC=+0.184 (n=1194)
+- **PATRÓN** `sigma_h` > `0.0075` → IC=+0.184 (n=1195)
   - _Por qué funciona_: alta volatilidad → el modelo GBM sobreestima la señal; el mercado es más aleatorio
   - _Acción_: Kelly boost +0.92€ cuando `sigma_h` > 0.0075 (IC base=+0.139)
 
-- **PATRÓN** `hora_utc` > `8.0` → IC=+0.163 (n=1599)
+- **PATRÓN** `hora_utc` > `7.0` → IC=+0.159 (n=1687)
   - _Por qué funciona_: hora tardía/noche → sesión US cerrada, menos participantes informados; señales más ruidosas
-  - _Acción_: Kelly boost +0.82€ cuando `hora_utc` > 8.0 (IC base=+0.139)
+  - _Acción_: Kelly boost +0.79€ cuando `hora_utc` > 7.0 (IC base=+0.139)
 
 - **PATRÓN** `dist_vwap_pct` > `0.2782` → IC=+0.190 (n=494)
 
   - _Acción_: Kelly boost +0.95€ cuando `dist_vwap_pct` > 0.2782 (IC base=+0.139)
 
-- **PATRÓN** `sigma_ewma_delta_pct` > `6.489` → IC=+0.229 (n=563)
+- **PATRÓN** `sigma_ewma_delta_pct` > `6.491` → IC=+0.229 (n=563)
 
-  - _Acción_: Kelly boost +1.00€ cuando `sigma_ewma_delta_pct` > 6.489 (IC base=+0.139)
+  - _Acción_: Kelly boost +1.00€ cuando `sigma_ewma_delta_pct` > 6.491 (IC base=+0.139)
 
 - **PATRÓN** `sigma_h` > `0.0067` → IC=+0.152 (n=1408)
   - _Por qué funciona_: alta volatilidad → el modelo GBM sobreestima la señal; el mercado es más aleatorio
@@ -470,9 +470,9 @@ _Generado por shadow_postmortem.py sobre 39418 resoluciones (PNL=+7991.90€)_
   - _Acción_: Kelly boost +0.98€ cuando `sigma_ewma_delta_pct` < 5.43 (IC base=+0.204)
 
 ### GBM_LATE_15M_TARDIO
-- **PATRÓN** `sigma_h` > `0.0104` → IC=+0.127 (n=799)
+- **PATRÓN** `sigma_h` > `0.0104` → IC=+0.127 (n=797)
   - _Por qué funciona_: alta volatilidad → el modelo GBM sobreestima la señal; el mercado es más aleatorio
-  - _Acción_: Kelly boost +0.63€ cuando `sigma_h` > 0.0104 (IC base=+0.094)
+  - _Acción_: Kelly boost +0.64€ cuando `sigma_h` > 0.0104 (IC base=+0.094)
 
 - **PATRÓN** `dist_vwap_pct` > `0.4741` → IC=+0.155 (n=323)
 
@@ -1133,28 +1133,28 @@ _Derivadas de los patrones aprendidos:_
 | ✅ FAVORITO_CONFIRMADO_SOL_ALTACONVICCION#15min | 438 | +0.302 | +7.57€ | 0 | 0 |
 | ✅ FAVORITO_CONFIRMADO_SOL_ALTACONVICCION#SOL | 438 | +0.302 | +7.57€ | 0 | 0 |
 | ✅ FAVORITO_CONFIRMADO_SOL_ALTACONVICCION#SOL#15min | 438 | +0.302 | +7.57€ | 0 | 0 |
-| ✅ GBM_LATE_15M | 8471 | +0.093 | +2525.49€ | 0 | 4 |
-| ✅ GBM_LATE_15M#15min | 8471 | +0.093 | +2525.49€ | 0 | 0 |
+| ✅ GBM_LATE_15M | 8472 | +0.093 | +2525.97€ | 0 | 4 |
+| ✅ GBM_LATE_15M#15min | 8472 | +0.093 | +2525.97€ | 0 | 0 |
 | ✅ GBM_LATE_15M#BNB | 20 | +0.136 | +2.28€ | 0 | 0 |
 | ✅ GBM_LATE_15M#BNB#15min | 20 | +0.136 | +2.28€ | 0 | 0 |
 | ✅ GBM_LATE_15M#BTC | 2044 | +0.072 | +350.56€ | 0 | 0 |
 | ✅ GBM_LATE_15M#BTC#15min | 2044 | +0.072 | +350.56€ | 0 | 5 |
-| ✅ GBM_LATE_15M#DOGE | 20 | +0.000 | +0.27€ | 0 | 0 |
-| ✅ GBM_LATE_15M#DOGE#15min | 20 | +0.000 | +0.27€ | 0 | 0 |
+| ✅ GBM_LATE_15M#DOGE | 21 | +0.022 | +0.75€ | 0 | 0 |
+| ✅ GBM_LATE_15M#DOGE#15min | 21 | +0.022 | +0.75€ | 0 | 0 |
 | ✅ GBM_LATE_15M#ETH | 1846 | +0.074 | +312.72€ | 0 | 0 |
 | ✅ GBM_LATE_15M#ETH#15min | 1846 | +0.074 | +312.72€ | 0 | 6 |
 | ✅ GBM_LATE_15M#SOL | 2267 | +0.083 | +770.05€ | 0 | 0 |
 | ✅ GBM_LATE_15M#SOL#15min | 2267 | +0.083 | +770.05€ | 1 | 3 |
 | ✅ GBM_LATE_15M#XRP | 2274 | +0.139 | +1089.61€ | 0 | 0 |
 | ✅ GBM_LATE_15M#XRP#15min | 2274 | +0.139 | +1089.61€ | 0 | 10 |
-| ✅ GBM_LATE_15M_ESPACIO_ATR | 5705 | +0.113 | +2592.32€ | 0 | 8 |
-| ✅ GBM_LATE_15M_ESPACIO_ATR#15min | 5705 | +0.113 | +2592.32€ | 0 | 0 |
+| ✅ GBM_LATE_15M_ESPACIO_ATR | 5706 | +0.113 | +2593.76€ | 0 | 8 |
+| ✅ GBM_LATE_15M_ESPACIO_ATR#15min | 5706 | +0.113 | +2593.76€ | 0 | 0 |
 | ✅ GBM_LATE_15M_ESPACIO_ATR#BNB | 16 | +0.133 | +7.92€ | 0 | 0 |
 | ✅ GBM_LATE_15M_ESPACIO_ATR#BNB#15min | 16 | +0.133 | +7.92€ | 0 | 0 |
 | ✅ GBM_LATE_15M_ESPACIO_ATR#BTC | 1486 | +0.082 | +497.29€ | 0 | 0 |
 | ✅ GBM_LATE_15M_ESPACIO_ATR#BTC#15min | 1486 | +0.082 | +497.29€ | 0 | 4 |
-| ✅ GBM_LATE_15M_ESPACIO_ATR#DOGE | 21 | +0.109 | +4.90€ | 0 | 0 |
-| ✅ GBM_LATE_15M_ESPACIO_ATR#DOGE#15min | 21 | +0.109 | +4.90€ | 0 | 0 |
+| ✅ GBM_LATE_15M_ESPACIO_ATR#DOGE | 22 | +0.125 | +6.34€ | 0 | 0 |
+| ✅ GBM_LATE_15M_ESPACIO_ATR#DOGE#15min | 22 | +0.125 | +6.34€ | 0 | 0 |
 | ✅ GBM_LATE_15M_ESPACIO_ATR#ETH | 1483 | +0.088 | +507.58€ | 0 | 0 |
 | ✅ GBM_LATE_15M_ESPACIO_ATR#ETH#15min | 1483 | +0.088 | +507.58€ | 0 | 5 |
 | ✅ GBM_LATE_15M_ESPACIO_ATR#SOL | 1419 | +0.081 | +532.02€ | 0 | 0 |
@@ -1173,14 +1173,14 @@ _Derivadas de los patrones aprendidos:_
 | 🚫 GBM_LATE_15M_PYCONFIRMADO#SOL#15min | 8 | -0.120 | -1.91€ | 0 | 0 |
 | ✅ GBM_LATE_15M_PYCONFIRMADO#XRP | 144 | +0.219 | +100.42€ | 0 | 0 |
 | ✅ GBM_LATE_15M_PYCONFIRMADO#XRP#15min | 144 | +0.219 | +100.42€ | 0 | 0 |
-| ✅ GBM_LATE_15M_TARDIO | 5698 | +0.064 | +1462.08€ | 0 | 3 |
-| ✅ GBM_LATE_15M_TARDIO#15min | 5698 | +0.064 | +1462.08€ | 0 | 0 |
+| ✅ GBM_LATE_15M_TARDIO | 5699 | +0.064 | +1463.17€ | 0 | 3 |
+| ✅ GBM_LATE_15M_TARDIO#15min | 5699 | +0.064 | +1463.17€ | 0 | 0 |
 | ✅ GBM_LATE_15M_TARDIO#BNB | 19 | +0.204 | +8.15€ | 0 | 0 |
 | ✅ GBM_LATE_15M_TARDIO#BNB#15min | 19 | +0.204 | +8.15€ | 0 | 0 |
 | ✅ GBM_LATE_15M_TARDIO#BTC | 1356 | +0.028 | +149.95€ | 0 | 0 |
 | ✅ GBM_LATE_15M_TARDIO#BTC#15min | 1356 | +0.028 | +149.95€ | 0 | 3 |
-| ✅ GBM_LATE_15M_TARDIO#DOGE | 20 | +0.136 | +3.08€ | 0 | 0 |
-| ✅ GBM_LATE_15M_TARDIO#DOGE#15min | 20 | +0.136 | +3.08€ | 0 | 0 |
+| ✅ GBM_LATE_15M_TARDIO#DOGE | 21 | +0.152 | +4.17€ | 0 | 0 |
+| ✅ GBM_LATE_15M_TARDIO#DOGE#15min | 21 | +0.152 | +4.17€ | 0 | 0 |
 | ✅ GBM_LATE_15M_TARDIO#ETH | 1383 | +0.023 | +108.75€ | 0 | 0 |
 | ✅ GBM_LATE_15M_TARDIO#ETH#15min | 1383 | +0.023 | +108.75€ | 0 | 1 |
 | ✅ GBM_LATE_15M_TARDIO#SOL | 1334 | +0.024 | +242.50€ | 0 | 0 |
@@ -1400,7 +1400,7 @@ _Derivadas de los patrones aprendidos:_
 **🟡 H-STREAK-COOLDOWN** — Cooldown tras 2 derrotas consecutivas (mismo subtype)
   - _Umbral_: n≥40 tras 2 losses y gap(IC_tras_win - IC_tras_2loss)≥0.05
   - _Acción_: Reducir stake (no desactivar) 1-2h tras 2 derrotas consecutivas en el mismo subtype
-  - _Estado_: tras_win IC=+0.110 n=23400 | tras_1loss IC=+0.077 n=15803 | tras_2loss IC=+0.052 n=6649/40 | gap=+0.058 (umbral 0.05)
+  - _Estado_: tras_win IC=+0.110 n=23403 | tras_1loss IC=+0.077 n=15803 | tras_2loss IC=+0.052 n=6649/40 | gap=+0.058 (umbral 0.05)
 
 **🟡 H-KALMAN** — Kalman filter para drift adaptativo
   - _Umbral_: n≥200 por subtipo para calibrar parámetros Q/R del KF
@@ -1666,8 +1666,8 @@ _Derivadas de los patrones aprendidos:_
   - _Hipótesis_: Inspirado en el paper de Fornero (2023, 43 Jornadas SADAF) sobre astrología financiera: 5 estudios peer-review (Dichev & Janes 2003, Yuan et al. 2006, Keef & Khaled 2011, Floros & Tan 2013, Liu & Tseng 2009) en 25-62 mercados bursátiles encuentran rendimientos 5-10%/año más bajos cerca de luna llena que de luna nueva. El propio paper es escéptico de la astrología como tal, pero el mecanismo que documenta no es místico: sesgo de humor de inversores minoristas (más fuerte en acciones con dominancia retail, casi nulo en institucional). Polymarket es un mercado muy retail/cripto — hipótesis: si el mecanismo transfiere, debería verse peor IC cerca de luna llena (moon_phase≈0.5) que en el resto del ciclo.
   - _Umbral_: n≥200 PERO ADEMÁS necesita cubrir al menos 3 ciclos lunares completos (~90 días de calendario) — no evaluar solo por n, aunque el volumen diario ya lo cruce en horas
   - _Acción_: Si IC cerca de luna llena < IC resto del ciclo con margen ≥0.05 y ≥3 ciclos lunares cubiertos → considerar boost/filtro por moon_phase. No implementar con menos de 3 ciclos aunque n sea alto — el efecto es de calendario lento, no de volumen.
-  - _Estado_: n=3136 IC=+0.052 PNL=+336.46€ — sin señal clara aún (umbral IC: min=None max=-0.03)
-  - _Datos_: n=3136 IC=+0.052 PNL=+336.46€
+  - _Estado_: n=3139 IC=+0.052 PNL=+339.47€ — sin señal clara aún (umbral IC: min=None max=-0.03)
+  - _Datos_: n=3139 IC=+0.052 PNL=+339.47€
 
 **〰️ H-CUSTOM-MERCURY-RETROGRADO** — Mercurio retrógrado: ¿rendimiento peor durante la ventana?
   - _Hipótesis_: Mismo origen que H-CUSTOM-MOON-LLENA (paper de Fornero, 43 Jornadas SADAF 2023). Qi, Wang & Zhang (2022, 48 mercados, 1973-2019): rendimientos 3.33%/año más bajos durante Mercurio retrógrado. Kou & Ma (2022) en China (99.8% cuentas retail): hasta -31% anualizado. Ambos estudios confirman que el mecanismo es la creencia/superstición de inversores retail (mayor efecto cuanto más retail y más supersticioso el mercado), no un efecto astral literal — Polymarket encaja en ese perfil. Ventanas 2026 (fuente pública, actualizar cada año): 26-feb a 20-mar, 29-jun a 23-jul, 24-oct a 13-nov.
