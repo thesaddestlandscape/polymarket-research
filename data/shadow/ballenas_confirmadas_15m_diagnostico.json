@@ -229,7 +229,7 @@
   "DOGE#BUY_NO": {
     "motivos": {
       "banda_no_confirmada": {
-        "conteo": 1746,
+        "conteo": 1761,
         "mercados": {
           "0xc132ec92b406eb13da1cb814396e60b66f819f1be1c0d8394317d53e5b2c08b1": 6,
           "0xd0672cde7ddef0a3136bf4e9209e193940596ab831742079687f92fea3d8ca1b": 10,
@@ -289,8 +289,9 @@
           "0x13559c5880baedf1efe0db91c4d8f5b0c0e2a039a8beebfee7f91694e46c9768": 45,
           "0x7cdc800d89f38f3474de1a61eaa744a86cdb11b12996135b2852665856ea2262": 27,
           "0xef86d8e130f6b54801563f8be8b1bf26cb4ab9a398985456f3679c66f31ccfbb": 27,
-          "0xe03139ac798faabb61380e9c6f9e7fdc13319b263d1fc8c8b7daa079008410dd": 24,
-          "0xce35dc729fe108d7965186ac0bb69b63ace0bfd91c70526b31bc89b05c84aa8c": 12
+          "0xe03139ac798faabb61380e9c6f9e7fdc13319b263d1fc8c8b7daa079008410dd": 27,
+          "0xce35dc729fe108d7965186ac0bb69b63ace0bfd91c70526b31bc89b05c84aa8c": 18,
+          "0x8aa042d9d614187468abac87a08a5560ed9cdd114aafe67b5562116841c4e8dc": 6
         }
       }
     }
@@ -330,7 +331,7 @@
         }
       },
       "banda_no_confirmada": {
-        "conteo": 575,
+        "conteo": 578,
         "mercados": {
           "0x56401c8ec5ff84c021d4d27a719d3040826e0d7fdf6f69dd4bda1282142a846e": 7,
           "0x0723882704c5a268fa6ef74c36a8dec35216039cf327027205d497a3613c7b57": 6,
@@ -360,7 +361,8 @@
           "0xaeb118e78091209188658aee0e866c32ddbf0f71f3b71d6395800e88fa191906": 11,
           "0x7a5a5b1eaf6547cbd2f299eed8d44801cbadbdf62f25a0e2b4c5b60e36d519db": 33,
           "0x53308fa03039dd6c0a6935a88144d5a210408697629b46b7258f4f5437e05439": 45,
-          "0x886a4a22e1aa4cdbb6aeabde375258b493da1d9dfa2aedf9088cc00093b97c3f": 45
+          "0x886a4a22e1aa4cdbb6aeabde375258b493da1d9dfa2aedf9088cc00093b97c3f": 45,
+          "0xe5d4bad0378ee86a572212e8f2fd028050d1a72c275386e0c224177afa1f19a5": 3
         }
       }
     },
@@ -401,11 +403,12 @@
         }
       },
       "banda_no_confirmada": {
-        "conteo": 14,
+        "conteo": 17,
         "mercados": {
           "0x6c27ec0ad01e903fbeca7661ba3753c0cf48ab544919532e39f57b6458c6cac3": 5,
           "0x4ff5bacb2dd1971f9b9b43b438a97a3bed1e93e7ced237848e96f6f3b8481bce": 3,
-          "0x9deaa9e78510064bbfacfddaab2c4be2fb04c0e9f930cac69bf7adb08de6ab60": 6
+          "0x9deaa9e78510064bbfacfddaab2c4be2fb04c0e9f930cac69bf7adb08de6ab60": 6,
+          "0x6f9d69603fb6e237179beefbd7c35cd3e2adcbfb21df8cfe454367112fc7ffc4": 3
         }
       }
     },
