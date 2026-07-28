@@ -4175,5 +4175,12 @@
  "candidato_proxy#UPDOWN_GBM#ETH#15min#ETH#BUY_YES#sigma_ewma_delta_pctgt": false,
  "candidato_proxy#UPDOWN_GBM#ETH#15min#ETH#BUY_NO#sigma_hlt": false,
  "candidato_proxy#WEEKLY_PRICE#BTC#BTC#BUY_NO#T_hgt": false,
- "candidato_proxy#WEEKLY_PRICE#ETH#ETH#BUY_NO#T_hgt": false
+ "candidato_proxy#WEEKLY_PRICE#ETH#ETH#BUY_NO#T_hgt": false,
+ "candidato_proxy#GBM_LATE_15M#SOL#BUY_YES#dist_vwap_pctgt": false,
+ "candidato_proxy#GBM_LATE_15M_ESPACIO_ATR#ETH#BUY_YES#dist_vwap_pctgt": false,
+ "candidato_proxy#GBM_LATE_15M_ESPACIO_ATR#XRP#15min#XRP#BUY_YES#hora_utclt": false,
+ "candidato_proxy#GBM_LATE_15M_TARDIO#XRP#15min#XRP#BUY_YES#sigma_hgt": false,
+ "candidato_proxy#WEEKLY_PRICE#BTC#BUY_NO#T_hgt": false,
+ "candidato_proxy#WEEKLY_PRICE#BTC#BTC#BUY_NO#pct_distabs_lt": false,
+ "candidato_proxy#WEEKLY_PRICE#ETH#BUY_NO#T_hgt": false
 }
