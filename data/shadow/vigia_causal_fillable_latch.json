@@ -3854,5 +3854,6 @@
  "candidato_proxy#GBM_LATE_15M_ESPACIO_ATR#ETH#BUY_YES#sigma_ewma_delta_pctgt6.488": false,
  "candidato_proxy#GBM_LATE_15M_TARDIO#ETH#BUY_YES#sigma_ewma_delta_pctgt11.213": true,
  "candidato_proxy#GBM_LATE_15M_TARDIO#ETH#BUY_YES#dist_vwap_pctgt0.4756": false,
- "candidato_proxy#UPDOWN_GBM#XRP#15min#XRP#BUY_NO#ibs_15lt0.0357": true
+ "candidato_proxy#UPDOWN_GBM#XRP#15min#XRP#BUY_NO#ibs_15lt0.0357": true,
+ "candidato_proxy#GBM_LATE_15M_TARDIO#ETH#BUY_YES#sigma_ewma_delta_pctgt11.21": true
 }
