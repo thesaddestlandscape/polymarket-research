@@ -16,6 +16,29 @@ from data_quality import (
 )
 from smart_money_tracker import ACTIVOS as ACTIVOS_TICKERS, trades_de_mercado
 from ballenas_banda_fina_gate import evaluar as _gate_banda_fina_ballenas
+from gate_bucket_propio import evaluar as _gate_bucket_propio
+
+_pares_live_cache = {"mtime": None, "set": set()}
+
+
+def _pares_live_hoy_set() -> set:
+    """Lectura fresca de pares_permitidos_live (fail-closed: si falla la
+    lectura, se queda con la última copia conocida -- nunca vacío por un
+    error transitorio, que abriría el veto de bucket a tuplas que en
+    realidad SÍ están live)."""
+    path = Path("data/live/config_live.json")
+    try:
+        mtime = path.stat().st_mtime
+    except OSError:
+        return _pares_live_cache["set"]
+    if _pares_live_cache["mtime"] != mtime:
+        try:
+            data = json.loads(path.read_text(encoding="utf-8"))
+            _pares_live_cache["set"] = set(data.get("pares_permitidos_live", []))
+            _pares_live_cache["mtime"] = mtime
+        except Exception:
+            pass
+    return _pares_live_cache["set"]
 
 _HAS_PANDAS: bool | None = None   # None = not yet checked; True/False after first use
 _pd = None                         # populated lazily on first cache miss
@@ -2893,6 +2916,15 @@ def s_gbm_late_15min(market, ctx):
         gate_bf = _gate_banda_fina_ballenas(activo, "15min", py_edge, restante_min)
         resultado["features"]["banda_fina_vetaria_fase1"] = gate_bf["vetaria_fase1"]
         resultado["features"]["banda_fina_motivo"] = gate_bf["motivo"]
+        # 28-Jul: gate por micro-bucket de nuestro propio histórico (ver
+        # nota completa en s_favorito_confirmado) -- veta ejecución real
+        # solo si "malo_confirmado" Y la tupla exacta está hoy en
+        # pares_permitidos_live.
+        tupla_str = f"GBM_LATE_15M#{activo}#15min#{direccion}"
+        gate_bp = _gate_bucket_propio(tupla_str, py_edge)
+        resultado["features"]["gate_bucket_propio_veredicto"] = gate_bp["veredicto"]
+        if gate_bp["veredicto"] == "malo_confirmado" and tupla_str in _pares_live_hoy_set():
+            return None  # gate bucket propio 28-Jul -- ver gate_bucket_propio.json
     return resultado
 
 
@@ -3857,6 +3889,19 @@ def s_favorito_confirmado(market, ctx):
 
     gate_bf = _gate_banda_fina_ballenas(activo, marco_str, py, restante_min)
 
+    # 28-Jul: gate por micro-bucket de NUESTRO PROPIO histórico de PnL
+    # (analisis_gate_bucket_propio_28jul.py, shuffle+split-half, n>=15) --
+    # a diferencia de banda_fina_ballenas (arriba, refutado en validación
+    # retrospectiva: mezclar el timing de ballenas con esta estrategia no
+    # transfiere), esto SÍ pasó rigor completo sobre datos propios.
+    # Activo solo para los buckets "malo_confirmado" -- veta ejecución real
+    # únicamente si la tupla exacta está HOY en pares_permitidos_live
+    # (dinero real); en shadow/candidatos solo se loguea, nunca se bloquea.
+    tupla_str = f"FAVORITO_CONFIRMADO#{activo}#{vent}min#{direccion}" if vent else None
+    gate_bp = _gate_bucket_propio(tupla_str, py) if tupla_str else {"veredicto": "sin_concluir", "detalle": None}
+    if gate_bp["veredicto"] == "malo_confirmado" and tupla_str in _pares_live_hoy_set():
+        return None  # gate bucket propio 28-Jul -- ver gate_bucket_propio.json
+
     return {
         "prob_yes": prob_yes,
         "razon":    f"favorito_confirmado {activo} py={py:.3f} lado={lado} (momentum-consenso, model-free)",
@@ -3868,6 +3913,7 @@ def s_favorito_confirmado(market, ctx):
             "n_total_lado": n_total_lado,
             "banda_fina_vetaria_fase1": gate_bf["vetaria_fase1"],
             "banda_fina_motivo": gate_bf["motivo"],
+            "gate_bucket_propio_veredicto": gate_bp["veredicto"],
             **_libro_calidad(market),
         },
     }

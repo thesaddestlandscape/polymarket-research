@@ -25,11 +25,20 @@ Diseño del veredicto:
 - Sin fichero / sin combo (activo,marco) / combo no significativo (menos de
   N_MIN_INFORMATIVO trades de ballenas en alguna banda con z suficiente):
   "sin_banda_calibrada" -- sin evidencia, no se vetaría.
-- py cae DENTRO de una banda_significativa: si restante_min actual >=
-  rest_lo_min de esa banda (percentil 25 del timing de las ganadoras
-  históricas), "banda_ok" -- llegamos con tiempo real, no solo comprando
-  la confirmación después de que ya pasó. Si no, "banda_tardia" -- se
-  vetaría en fase 1.
+- py cae DENTRO de una banda_significativa: se compara restante_min contra
+  la VENTANA observada de las ganadoras históricas [rest_lo_min,
+  rest_hi_min] (percentiles 25-75), no solo el extremo tardío. Si
+  restante_min < rest_lo_min -> "banda_tardia" (comprando la confirmación
+  después de que la ventana útil ya pasó). Si restante_min > rest_hi_min ->
+  "banda_prematura" (comprando ANTES de que exista evidencia de que el
+  edge de esa banda esté activo -- 28-Jul, corregido tras validación
+  retrospectiva: para activos como BTC/ETH donde el edge real es casi
+  todo confirmación de última hora [rest_hi_min de pocos minutos], el
+  chequeo original -- solo "demasiado tarde" -- era casi un no-op, porque
+  nuestras señales entran casi siempre con MÁS margen del mínimo
+  observado, no menos; el problema real es entrar demasiado PRONTO
+  respecto a la ventana donde el edge está de verdad validado). Dentro de
+  la ventana -> "banda_ok".
 - py fuera de TODAS las bandas significativas: "fuera_de_bandas" -- sin
   evidencia en ese precio exacto, no se vetaría (mismo fail-open que
   veto_ballenas: este gate solo puede reducir una señal ya aprobada por el
@@ -71,16 +80,21 @@ def evaluar(activo: str, marco: str, py: float, restante_min: float | None) -> d
 
     for b in info.get("bandas_significativas") or []:
         if b["banda_lo"] <= py < b["banda_hi"]:
-            rest_min_req = b.get("rest_lo_min")
-            if rest_min_req is None:
+            rest_lo = b.get("rest_lo_min")
+            rest_hi = b.get("rest_hi_min")
+            if rest_lo is None or rest_hi is None:
                 return {"permitido": True, "vetaria_fase1": False, "motivo": "banda_sin_timing", "banda": b}
             if restante_min is None:
                 return {"permitido": True, "vetaria_fase1": False, "motivo": "sin_restante_min", "banda": b}
-            if restante_min < rest_min_req:
+            if restante_min < rest_lo:
                 return {"permitido": True, "vetaria_fase1": True,
-                        "motivo": f"banda_tardia py={py:.3f} restante={restante_min:.2f}<{rest_min_req:.2f}",
+                        "motivo": f"banda_tardia py={py:.3f} restante={restante_min:.2f}<{rest_lo:.2f}",
+                        "banda": b}
+            if restante_min > rest_hi:
+                return {"permitido": True, "vetaria_fase1": True,
+                        "motivo": f"banda_prematura py={py:.3f} restante={restante_min:.2f}>{rest_hi:.2f}",
                         "banda": b}
             return {"permitido": True, "vetaria_fase1": False,
-                    "motivo": f"banda_ok py={py:.3f} rest_lo={rest_min_req:.2f}", "banda": b}
+                    "motivo": f"banda_ok py={py:.3f} rest_lo={rest_lo:.2f} rest_hi={rest_hi:.2f}", "banda": b}
 
     return {"permitido": True, "vetaria_fase1": False, "motivo": "fuera_de_bandas_significativas", "banda": None}
