@@ -1,4 +1,4 @@
-# Estado del bot — 2026-07-28 07:21 UTC
+# Estado del bot — 2026-07-28 07:25 UTC
 
 ## Live — dinero real (on-chain)
 | | |
@@ -17,7 +17,7 @@
 | P&L sim compuesto | 🟢 +8058.26 $ (ficción Kelly: +31676% s/ operativo) |
 | P&L sim hoy (2026-07-28) | 🟢 +88.99 $ |
 | Operaciones resueltas | 39733 (23673 WIN / 16060 LOSS) — 59.6% |
-| Señales abiertas | 97 |
+| Señales abiertas | 107 |
 
 ## Estrategias (visión global)
 
@@ -29,7 +29,7 @@
 | UPDOWN_GBM_15M_TARDIO | 2232 | 65.0% | +0.150 | ➡️ estable | +972.66$ | 1.50$ | ✅ activa |
 | UPDOWN_GBM | 2950 | 53.6% | +0.036 | 📈 madura (+0.06) | +270.98$ | 0.50$ | ✅ activa |
 | WEEKLY_PRICE | 425 | 72.5% | +0.224 | 📈 madura (+0.29) | +109.63$ | 2.00$ | ✅ activa |
-| GBM_LATE_15M_PYCONFIRMADO | 291 | 56.4% | +0.063 | 📉 agota (-0.19) | +100.14$ | 0.62$ | ✅ activa |
+| GBM_LATE_15M_PYCONFIRMADO | 291 | 56.4% | +0.063 | 📉 agota (-0.19) | +100.14$ | 0.63$ | ✅ activa |
 | UPDOWN_GBM_15M_CROSS_WINDOW_SPREAD | 197 | 80.7% | +0.304 | ➡️ estable | +39.57$ | 2.00$ | ✅ activa |
 | BALLENAS_CONFIRMADAS_15M | 1415 | 59.6% | +0.096 | 📉 agota (-0.05) | +27.47$ | 0.96$ | ✅ activa |
 | STREAK_FADE_15M | 301 | 56.8% | +0.068 | 📉 agota (-0.09) | +23.79$ | 0.68$ | ✅ activa |
@@ -65,22 +65,22 @@
 
 ## Calidad de datos
 
-✅ **OK** — última verificación 2026-07-28T07:18 UTC
+✅ **OK** — última verificación 2026-07-28T07:23 UTC
 
 | Asset | Precio | Age | Alertas |
 |---|---|---|---|
-| ✅ BTC | $63,491.04 | 0.1min |  |
-| ✅ ETH | $1,884.98 | 0.1min |  |
-| ✅ SOL | $73.46 | 0.1min |  |
+| ✅ BTC | $63,474.03 | 0.1min |  |
+| ✅ ETH | $1,885.64 | 0.1min |  |
+| ✅ SOL | $73.37 | 0.1min |  |
 | ✅ XRP | $1.06 | 0.1min |  |
 
 **Cross-source** (binance, coinbase, kraken):
 
 | Asset | Consenso | Fuente | Estado |
 |---|---|---|---|
-| BTC | $63,491.30 | consenso |  |
-| ETH | $1,885.00 | consenso |  |
-| SOL | $73.36 | consenso |  |
+| BTC | $63,476.10 | consenso |  |
+| ETH | $1,885.64 | consenso |  |
+| SOL | $73.37 | consenso |  |
 | XRP | $1.06 | consenso |  |
 
 ---
