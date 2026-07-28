@@ -34,6 +34,13 @@ MAKER_SIM = REPO / "data/shadow/maker_sim.csv"
 LATCH = REPO / "data/live/vigia_xrp_10h_maker_latch.json"
 HORA_OBJETIVO = 10
 GATE_N = 25
+# 28-Jul (decisión Javi): el aviso original a n=25 (17-Jul, z=2.11) se
+# diluyó con más n (hoy n=35, z=1.45 -- regresión a la media, firma clásica
+# de hallazgo al límite). En vez de cerrar la puerta del todo, se decidió
+# dejarlo madurar más y re-evaluar a un umbral más alto antes de decidir en
+# firme -- GATE_N_DECISION es el segundo corte, con su propio latch
+# independiente para poder avisar dos veces (una por gate).
+GATE_N_DECISION = 70
 
 
 def _bucket_10h_xrp():
@@ -66,48 +73,71 @@ def _bucket_10h_xrp():
     return filas
 
 
-def main() -> int:
-    from shadow_digest import enviar_telegram
-
-    filas = _bucket_10h_xrp()
+def _stats(filas: list) -> dict:
     n = len(filas)
-    print(f"[vigia_xrp_10h_maker] n={n}/{GATE_N}")
-
-    if n < GATE_N:
-        return 0  # aún acumulando, nada que avisar
-
-    if LATCH.exists():
-        try:
-            if json.loads(LATCH.read_text()).get("avisado"):
-                return 0
-        except Exception:
-            pass
-
     pnls = [float(r["pnl1_maker"]) for r in filas]
     aciertos = sum(1 for r in filas if r.get("acierto") == "1")
     ev = sum(pnls) / n
     sd = st.stdev(pnls) if n > 1 else 0.0
     se = sd / (n ** 0.5) if n > 1 else 0.0
     z = ev / se if se > 0 else 0.0
-    hit = aciertos / n
-    fill = sum(1 for r in filas if r.get("filled") == "1") / n
+    return {"n": n, "hit": aciertos / n, "ev": ev, "z": z,
+            "fill": sum(1 for r in filas if r.get("filled") == "1") / n}
 
-    msg = (
-        f"🔔 VIGÍA XRP 10h UTC cruzó n≥{GATE_N}\n"
-        f"n={n} hit={hit:.1%} fill_maker={fill:.1%} EV_maker={ev:+.3f} z={z:+.2f}\n"
-        f"Franja 09:30-13:00 UTC nunca probada en vivo (hueco entre ventanas). "
-        f"Indicio original (11-Jul, n=14): EV+0.32 z=1.83, específico de XRP "
-        f"(SOL/ETH/BTC planos a la misma hora). Con n>={GATE_N} toca releer el "
-        f"análisis completo (analisis_maker_xrp_tardio.py + desglose horario) "
-        f"y decidir con Javi si vale la pena probar — sigue sin ser suficiente "
-        f"para abrir ventana live sin más revisión. Solo informativo, no toca dinero."
-    )
-    ok = enviar_telegram(msg)
-    LATCH.write_text(json.dumps({
-        "avisado": True, "n": n, "ev_maker": ev, "z": z, "hit": hit,
-        "telegram_ok": ok,
-    }, ensure_ascii=False, indent=1))
-    print(f"[vigia_xrp_10h_maker] aviso enviado (telegram={ok}), latch escrito")
+
+def main() -> int:
+    from shadow_digest import enviar_telegram
+
+    filas = _bucket_10h_xrp()
+    n = len(filas)
+    print(f"[vigia_xrp_10h_maker] n={n}/{GATE_N} (gate decisión: {GATE_N_DECISION})")
+
+    try:
+        latch = json.loads(LATCH.read_text()) if LATCH.exists() else {}
+    except Exception:
+        latch = {}
+
+    if n >= GATE_N and not latch.get("gate1_avisado"):
+        s = _stats(filas)
+        msg = (
+            f"🔔 VIGÍA XRP 10h UTC cruzó n≥{GATE_N}\n"
+            f"n={s['n']} hit={s['hit']:.1%} fill_maker={s['fill']:.1%} EV_maker={s['ev']:+.3f} z={s['z']:+.2f}\n"
+            f"Franja 09:30-13:00 UTC nunca probada en vivo (hueco entre ventanas). "
+            f"Indicio original (11-Jul, n=14): EV+0.32 z=1.83, específico de XRP "
+            f"(SOL/ETH/BTC planos a la misma hora). Con n>={GATE_N} toca releer el "
+            f"análisis completo (analisis_maker_xrp_tardio.py + desglose horario) "
+            f"y decidir con Javi si vale la pena probar — sigue sin ser suficiente "
+            f"para abrir ventana live sin más revisión. Solo informativo, no toca dinero."
+        )
+        ok = enviar_telegram(msg)
+        latch["gate1_avisado"] = True
+        latch["gate1"] = {"n": s["n"], "ev_maker": s["ev"], "z": s["z"], "hit": s["hit"], "telegram_ok": ok}
+        LATCH.write_text(json.dumps(latch, ensure_ascii=False, indent=1))
+        print(f"[vigia_xrp_10h_maker] gate1 aviso enviado (telegram={ok})")
+
+    # 28-Jul: gate2 -- decisión Javi de dejarlo madurar en vez de cerrarlo
+    # tras ver z bajar de 2.11 (n=26) a 1.45 (n=35). Avisa UNA vez más al
+    # llegar a GATE_N_DECISION, con el resultado explícito de si sobrevivió
+    # o se diluyó -- para que la decisión de probarlo en real (o cerrarlo
+    # definitivamente) se tome con el n que el propio Javi pidió esperar,
+    # no otra vez con un n límite.
+    if n >= GATE_N_DECISION and not latch.get("gate2_avisado"):
+        s = _stats(filas)
+        veredicto = ("sobrevive (z≥1.65)" if s["z"] >= 1.65
+                      else "se diluyó -- ya no se distingue de ruido (z<1.65)")
+        msg = (
+            f"🔔 VIGÍA XRP 10h UTC cruzó el gate de DECISIÓN n≥{GATE_N_DECISION}\n"
+            f"n={s['n']} hit={s['hit']:.1%} fill_maker={s['fill']:.1%} EV_maker={s['ev']:+.3f} z={s['z']:+.2f}\n"
+            f"Veredicto: {veredicto}. Este es el momento de decidir en firme "
+            f"(probar en real con stake mínimo, o cerrar formalmente) -- no dejarlo "
+            f"acumulando indefinidamente otra vez. Solo informativo, no toca dinero."
+        )
+        ok = enviar_telegram(msg)
+        latch["gate2_avisado"] = True
+        latch["gate2"] = {"n": s["n"], "ev_maker": s["ev"], "z": s["z"], "hit": s["hit"], "telegram_ok": ok}
+        LATCH.write_text(json.dumps(latch, ensure_ascii=False, indent=1))
+        print(f"[vigia_xrp_10h_maker] gate2 (decisión) aviso enviado (telegram={ok})")
+
     return 0
 
 

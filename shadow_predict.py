@@ -2123,6 +2123,67 @@ def s_updown_gbm_eth_15min_hora7(market, ctx):
     return s_updown_gbm(market, ctx)
 
 
+# 28-Jul (decisión Javi, "acelerar candidatos sin bajar el rigor"):
+# UPDOWN_GBM#{BTC,ETH}#15min#BUY_YES + ibs_15>umbral es el hallazgo del
+# 21-Jul (idea_ibs_updowngbm_hallazgo_21jul) que vigia_ibs_updowngbm_
+# fillable.py sigue vigilando -- canal fillable (candidato_evaluacion+
+# ratio>=5x) con ic_efectivo POSITIVO (BTC +0.081 n=29, ETH +0.065 n=13)
+# dentro de una tupla que en bruto es adversa (ic -0.083). El cuello de
+# botella real: s_updown_gbm() calcula ibs_15 en vivo cada ciclo, pero el
+# dedup por (strategy, market_id) de la estrategia base congela para
+# siempre el valor del PRIMER ciclo en que UPDOWN_GBM dispara para ese
+# mercado -- si el ibs sube DESPUÉS dentro de la misma ventana de 15min,
+# nunca se captura (mismo mecanismo exacto que
+# FAVORITO_CONFIRMADO_60MIN_ALTACONVICCION, mismo día). Estrategia SEPARADA
+# con su propio dedup: puede generar una fila EXTRA para el mismo mercado
+# en cuanto el ibs cruce el umbral, acelerando la acumulación sin relajar
+# ningún criterio (mismo ratio_vs_stake>=5x, mismo n>=40 antes de proponer
+# nada).
+UPDOWN_GBM_IBS_ALTO_TH = {"BTC": 0.7019, "ETH": 0.7738}
+
+
+def s_updown_gbm_ibs_alto(market, ctx):
+    """
+    UPDOWN_GBM#{BTC,ETH}#15min#BUY_YES con ibs_15 por encima del umbral
+    específico de cada activo (ver UPDOWN_GBM_IBS_ALTO_TH, hallazgo 21-Jul).
+    Envuelve s_updown_gbm() sin duplicar lógica -- mismo patrón que
+    UPDOWN_GBM_ETH_15M_HORA7 arriba. Dedup propio para poder capturar el
+    momento en que ibs cruza el umbral aunque sea DESPUÉS del primer disparo
+    de la estrategia madre en el mismo mercado (ver comentario arriba).
+
+    SOLO en candidatos_evaluacion_live -- UPDOWN_GBM no está en
+    pares_permitidos_live, cero riesgo de dinero real. Objetivo: que
+    libro_snapshots.csv (motivo=candidato_evaluacion) acumule más rápido
+    para este subconjunto exacto, vigilado por vigia_ibs_updowngbm_fillable.py
+    (cron horario, avisa solo por Telegram al cruzar n>=40).
+    """
+    question = market.get("question", "")
+    if "up or down" not in question.lower():
+        return None
+    tipo, ventana_min = _parse_updown_tipo(question)
+    if tipo != "slot" or ventana_min != 15:
+        return None
+    activo = identificar_activo(question)
+    th = UPDOWN_GBM_IBS_ALTO_TH.get(activo)
+    if th is None:
+        return None
+    resultado = s_updown_gbm(market, ctx)
+    if resultado is None:
+        return None
+    ibs = resultado.get("features", {}).get("ibs_15")
+    if ibs is None or ibs <= th:
+        return None
+    # dirección real = signo del edge (mismo fix /code-review 27-Jul que
+    # s_updown_gbm_15min_tardio) -- el hallazgo original es específico de
+    # BUY_YES (confirmación de momentum), no BUY_NO.
+    py_edge = market.get("_precio_yes")
+    prob_yes_dir = resultado.get("prob_yes", 0.5)
+    direccion = "BUY_YES" if (py_edge is None or prob_yes_dir >= py_edge) else "BUY_NO"
+    if direccion != "BUY_YES":
+        return None
+    return resultado
+
+
 CROSS_WINDOW_SPREAD_MIN = 0.05  # ver H-CUSTOM-CROSS-WINDOW-SPREAD-POS
 CROSS_WINDOW_SPREAD_PARES = {"BTC", "ETH"}  # SOL n=4 insuficiente, XRP sin dato — 15-Jul
 
@@ -4431,6 +4492,7 @@ ESTRATEGIAS = [
     ("UPDOWN_GBM",          s_updown_gbm),
     ("UPDOWN_GBM_15M_TARDIO", s_updown_gbm_15min_tardio),
     ("UPDOWN_GBM_ETH_15M_HORA7", s_updown_gbm_eth_15min_hora7),
+    ("UPDOWN_GBM_IBS_ALTO", s_updown_gbm_ibs_alto),
     ("UPDOWN_GBM_15M_CROSS_WINDOW_SPREAD", s_updown_gbm_15min_cross_window_spread),
     ("UPDOWN_OU_5M",        s_updown_ou_5m),
     ("PRICE_TARGET_GBM",    s_price_target_gbm),
