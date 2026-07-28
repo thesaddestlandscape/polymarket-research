@@ -893,6 +893,15 @@ _BASE_GBM = [
     # feature entra aquí en vez de en un umbral global hardcoded.
     ("sigma_ewma_delta_pct", "lt", "gt"),
     ("sigma_ewma_delta_pct", "gt", "lt"),
+    # ── Libro (28-Jul, backlog ítem 7 -- idea_moondev_10_hallazgos_
+    # priorizados_28jul): _libro_calidad(market) YA se loguea en todas las
+    # variantes de esta familia (vía _s_gbm_late/s_gbm_late_5min, sin
+    # llamada de red extra -- reusa spread/liquidity ya capturados por
+    # capture_markets.py) pero nunca estuvo en FEATURE_RULES -- el pipeline
+    # causal tenía el dato desde hace semanas y nunca lo miró. Mismo
+    # espíritu que la corrección de dist_vwap_pct (arriba, 07-Jul).
+    ("libro_spread",    "gt", "lt"),
+    ("libro_liquidez",  "lt", "gt"),
 ]
 
 # Features de FAVORITO_CONFIRMADO (momentum-consenso, model-free — NO usa el
@@ -954,6 +963,9 @@ _BASE_ORDER_FLOW = [
     ("hora_utc",     "lt",     "gt"),
     ("hora_utc",     "gt",     "lt"),
     ("total_vol_5m", "gt",     "lt"),
+    # 28-Jul, mismo fix que _BASE_GBM: ya logueado, nunca analizado.
+    ("libro_spread",    "gt", "lt"),
+    ("libro_liquidez",  "lt", "gt"),
 ]
 
 # Features de LIQUIDACIONES_15M/60M (28-Jul, idea_moondev_10_hallazgos_
