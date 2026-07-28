@@ -16,6 +16,7 @@ data/live/orden_en_curso.json
 data/live/.trades_lock
 data/shadow/shadow_resolve.lock
 data/shadow/restart_fast_seguro.lock
+data/shadow/git_ops.lock
 data/live/freno_ventana_latch.json
 data/live/overrides_notificados.json
 data/live/vigia_pybajo_latch.json

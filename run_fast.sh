@@ -57,6 +57,30 @@ while true; do
         if [ $((NOW - LAST_GIT)) -ge $GIT_BATCH_S ]; then
             LAST_GIT=$NOW
             cd "$REPO_DIR"
+          (
+            # GIT_LOCK (28-Jul, causa raíz de los stashes huérfanos que se
+            # repitieron 3 veces en una sola sesión pese al fix del mismo día):
+            # run_fast.sh (aquí, cada ~5min) y run_slow.sh (cada ~23min) hacían
+            # CADA UNO su propio add→commit→pull --rebase --autostash→push
+            # sobre el MISMO repo, sin ninguna exclusión mutua entre ellos. Si
+            # ambos caían casi a la vez, sus rebases se entrelazaban: el pop
+            # del autostash de uno podía acabar en un commit de merge que el
+            # OTRO, avanzando la rama por su cuenta en paralelo, dejaba fuera
+            # de la historia de HEAD -- huérfano para siempre, exactamente el
+            # patrón ya diagnosticado (feedback_incidente_autostash_trade_
+            # perdido_28jul) pero nunca cerrado de raíz hasta ahora. Un lock
+            # compartido serializa TODA mutación de git entre los dos loops:
+            # ya no puede haber dos rebases en vuelo a la vez, así que un
+            # stash de cualquiera de los dos siempre hace pop limpio antes de
+            # que el otro toque nada. flock BLOQUEANTE (no -n): preferimos que
+            # este ciclo espere un poco a que el otro loop termine, antes que
+            # saltarse la sincronización -- con tope de 120s para no colgar
+            # el ciclo rápido indefinidamente si algo va realmente mal.
+            exec 200>"$REPO_DIR/data/shadow/git_ops.lock"
+            if ! flock -w 120 200; then
+                log "  ⚠️ git_ops.lock ocupado >120s (run_slow.sh probablemente sincronizando) -- se salta este ciclo de sync, se reintenta el siguiente"
+                exit 0
+            fi
             # rebase huérfano (ej. `timeout 60s` matando un rebase a medias) --
             # limpiar ANTES de intentar uno nuevo, si no el pull de abajo lo
             # hereda arrastrado indefinidamente (encontrado 27-Jul, cruft de
@@ -108,6 +132,7 @@ while true; do
                     log "  ⚠️ rama actual != main -- se salta pull/rebase/push (solo commit local de datos)"
                 fi
             fi
+          )
         fi
     fi
 

@@ -38,6 +38,19 @@ while true; do
 
     # Git: precios, leaderboard e hipótesis LLM
     cd "$REPO_DIR"
+  (
+    # GIT_LOCK (28-Jul): mismo candado compartido que run_fast.sh -- ver el
+    # comentario extenso ahí. run_fast (~5min) y run_slow (aquí, cada ciclo)
+    # hacían cada uno su propio add→commit→pull --rebase --autostash→push
+    # sin exclusión mutua; si coincidían, sus rebases se entrelazaban y el
+    # autostash de uno podía quedar huérfano cuando el otro avanzaba la rama
+    # en paralelo. flock BLOQUEANTE con tope 120s -- preferible esperar un
+    # poco a arriesgar otro huérfano.
+    exec 200>"$REPO_DIR/data/shadow/git_ops.lock"
+    if ! flock -w 120 200; then
+        log "  ⚠️ git_ops.lock ocupado >120s (run_fast.sh probablemente sincronizando) -- se salta este ciclo de sync"
+        exit 0
+    fi
     # rebase huérfano -- mismo guard que run_fast.sh, ver comentario ahí.
     if [ -d .git/rebase-merge ] || [ -d .git/rebase-apply ]; then
         log "  ⚠️ rebase huérfano en .git -- limpiando antes de continuar"
@@ -70,6 +83,7 @@ while true; do
             log "  ⚠️ rama actual != main -- se salta pull/rebase/push (solo commit local de datos)"
         fi
     fi
+  )
 
     log "--- Ciclo slow $CICLO completado ---"
 done
