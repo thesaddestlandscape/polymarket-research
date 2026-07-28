@@ -1619,3 +1619,5 @@ timestamp_utc,activo,nesting,combo,coste,profit_min_pct,gap_opens_pct,depth_usd,
 2026-07-28T15:52:46+00:00,BTC,15min60m,YESout+NOin,1.559,-55.9,0.6991,281.85,433,0.999,0.56,63811.0,63368.0,btc-updown-15m-1785253500,bitcoin-up-or-down-july-28-2026-11am-et
 2026-07-28T15:53:52+00:00,BTC,15min60m,YESout+NOin,1.409,-40.9,0.6991,1.99,367,0.999,0.41,63811.0,63368.0,btc-updown-15m-1785253500,bitcoin-up-or-down-july-28-2026-11am-et
 2026-07-28T15:54:42+00:00,BTC,15min60m,YESout+NOin,1.559,-55.9,0.6991,246.14,317,0.999,0.56,63811.0,63368.0,btc-updown-15m-1785253500,bitcoin-up-or-down-july-28-2026-11am-et
+2026-07-28T15:59:22+00:00,BTC,5min15m,NOout+YESin,1.04,-4.0,-0.0266,1.09,37,0.07,0.97,63794.035,63811.0,btc-updown-5m-1785254100,btc-updown-15m-1785253500
+2026-07-28T15:59:23+00:00,XRP,5min15m,NOout+YESin,1.7,-70.0,-0.094,7.2,36,0.72,0.98,1.063,1.064,xrp-updown-5m-1785254100,xrp-updown-15m-1785253500
