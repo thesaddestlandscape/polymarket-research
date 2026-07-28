@@ -64,8 +64,33 @@ while true; do
             if [ -d .git/rebase-merge ] || [ -d .git/rebase-apply ]; then
                 log "  ⚠️ rebase huérfano en .git -- limpiando antes de continuar"
                 git rebase --abort >> "$LOG" 2>&1 || rm -rf .git/rebase-merge .git/rebase-apply
+                # 28-Jul: --abort no siempre repone el autostash asociado si
+                # el proceso murió a medias (visto: 82 stashes acumulados,
+                # uno con un trade real perdido). Red de seguridad: si el
+                # árbol quedó limpio tras el abort y hay un stash esperando,
+                # intentar recuperarlo -- si aplica limpio, genial; si no,
+                # se deja en el stash (nunca se descarta) para revisión
+                # manual en vez de perderse en silencio.
+                if git diff --quiet && git diff --cached --quiet \
+                        && [ -n "$(git stash list 2>/dev/null | head -1)" ]; then
+                    log "  ⚠️ árbol limpio tras abort con stash pendiente -- intentando recuperarlo"
+                    git stash pop >> "$LOG" 2>&1 \
+                        && log "  ✅ stash recuperado" \
+                        || log "  ⚠️ stash no aplica limpio -- se deja en git stash list para revisión manual"
+                fi
             fi
-            git add data/shadow/ data/live/ >> "$LOG" 2>&1 || true
+            # 28-Jul: data/prices/ faltaba aquí -- fetch_binance_klines.py lo
+            # escribe cada ciclo rápido (~20s) pero solo run_slow.sh lo
+            # añadía (cadencia ~23min), así que quedaba sucio entre medias.
+            # git pull --rebase --autostash de abajo SIEMPRE tenía algo real
+            # que stashear (no un no-op); si `timeout 60s` mataba el pull a
+            # mitad de rebase, ese autostash quedaba huérfano para siempre
+            # -- encontrado 28-Jul: 82 stashes acumulados, uno de ellos con
+            # un trade real (BALLENAS_TARDIAS#ETH#5min, ganador +0.26€) que
+            # nunca llegó a trades.csv ni al dashboard. Añadirlo aquí deja
+            # el árbol de trabajo limpio tras el commit, así que el
+            # autostash no tiene nada que perder aunque el pull muera.
+            git add data/shadow/ data/live/ data/prices/ >> "$LOG" 2>&1 || true
             if ! git diff --cached --quiet 2>/dev/null; then
                 timeout 30s git commit -m "shadow: ciclo $CICLO $(date -u +%Y-%m-%dT%H:%MZ)" >> "$LOG" 2>&1 || true
                 # 23-Jul (feedback_run_fast_git_rebase_pierde_trabajo_23jul):

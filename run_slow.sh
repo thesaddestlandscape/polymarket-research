@@ -42,6 +42,17 @@ while true; do
     if [ -d .git/rebase-merge ] || [ -d .git/rebase-apply ]; then
         log "  ⚠️ rebase huérfano en .git -- limpiando antes de continuar"
         git rebase --abort >> "$LOG" 2>&1 || rm -rf .git/rebase-merge .git/rebase-apply
+        # 28-Jul: mismo fix que run_fast.sh -- recuperar el autostash huérfano
+        # si el árbol quedó limpio y hay uno esperando, en vez de dejarlo
+        # atrapado para siempre (82 stashes acumulados encontrados, uno con
+        # un trade real perdido).
+        if git diff --quiet && git diff --cached --quiet \
+                && [ -n "$(git stash list 2>/dev/null | head -1)" ]; then
+            log "  ⚠️ árbol limpio tras abort con stash pendiente -- intentando recuperarlo"
+            git stash pop >> "$LOG" 2>&1 \
+                && log "  ✅ stash recuperado" \
+                || log "  ⚠️ stash no aplica limpio -- se deja en git stash list para revisión manual"
+        fi
     fi
     git add data/prices/ data/wallets/leaderboard_*.csv data/shadow/hipotesis_*.md data/shadow/hipotesis_pendientes.json data/shadow/arb_scan_*.csv data/shadow/cross_arb_*.csv data/shadow/combi_arb_*.csv data/shadow/combi_candidates.json >> "$LOG" 2>&1 || true
     if ! git diff --cached --quiet 2>/dev/null; then
