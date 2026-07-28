@@ -627,6 +627,29 @@ def disparar(mercado: dict, py: float, edge: float, restante_s: float, prob_buck
     }
     lt._registrar_trade(trade)
     log(f"  {'EJECUTADO' if resultado['ok'] else 'ERROR'}: {resultado}")
+    # 28-Jul: mismo fix que ballenas_executor_5min.py -- este executor
+    # reusaba lt._ejecutar_orden_polymarket() pero nunca el aviso de
+    # Telegram (vive en el bucle de live_trade.py main(), no en el helper
+    # compartido). BALLENAS_TARDIAS#BTC#15min es tupla live desde 17-Jul y
+    # no avisaba NUNCA de sus fills/errores reales. Mismo criterio anti-spam
+    # que live_trade.py: solo fills/errores reales, nunca el no_fill
+    # silencioso (ya cortado arriba).
+    if resultado["ok"]:
+        lt.enviar_telegram(
+            f"🎯 *Orden live ejecutada (BALLENAS_TARDIAS)*\n"
+            f"Estrategia: {STRATEGY}#{subtype}\n"
+            f"Dirección: BUY_YES\n"
+            f"Precio fill: {resultado['entry_price']:.4f} "
+            f"(slip {resultado.get('slip_real', 0):+.4f})\n"
+            f"Stake: {stake_info['stake_eur']:.2f}$  |  restante={restante_s:.1f}s\n"
+            f"Bankroll operativo: {lt.bankroll_actual():.2f}$ (real al cierre de ciclo)"
+        )
+    else:
+        lt.enviar_telegram(
+            f"❌ *Orden live ERROR (BALLENAS_TARDIAS)*\n"
+            f"{STRATEGY}#{subtype} BUY_YES\n"
+            f"{resultado.get('error', '')[:200]}"
+        )
     return True
 
 
