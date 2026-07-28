@@ -3907,6 +3907,48 @@ def s_favorito_confirmado_sol_altaconviccion(market, ctx):
     return s_favorito_confirmado(market, ctx)
 
 
+FAVORITO_60MIN_ALTACONVICCION_TH = 0.70
+FAVORITO_60MIN_ALTACONVICCION_PARES = {"BTC", "ETH", "SOL"}
+
+
+def s_favorito_confirmado_60min_altaconviccion(market, ctx):
+    """
+    28-Jul: hueco de cobertura encontrado por `analisis_franja_milimetrica_
+    ballenas.py` -- en BTC/ETH/SOL#60min, py∈[0.70,1.00) tiene hit-rate de
+    mercado (ballenas) 90-99.9% con n grande (97-4670, 16-96 mercados
+    distintos), pero nuestro propio shadow_n ahí es 0-13 en TODOS los
+    buckets. No es azar: FAVORITO_CONFIRMADO hace dedup por (strategy,
+    market_id) -- una sola fila por mercado, tomada en el PRIMER ciclo
+    que cruza py>=0.55 (FAVORITO_CONFIRMADO_UMBRAL), así que por
+    construcción casi nunca queda registrada la cola alta (0.70-1.00):
+    para cuando el precio llega ahí, ese mercado ya gastó su única fila.
+    Mismo patrón exacto que FAVORITO_CONFIRMADO_SOL_ALTACONVICCION
+    (12-Jul): estrategia SEPARADA con su propio dedup, así el
+    market_id puede generar una fila EXTRA cuando (y si) cruza este
+    umbral más alto, sin tocar ni duplicar la fila de la estrategia
+    madre. Restringida a BTC/ETH/SOL (los 3 activos donde el hueco
+    apareció) y a BUY_YES (el lado alto de FAVORITO_CONFIRMADO -- el
+    hueco de ballenas es sobre py alto, no sobre py bajo/BUY_NO).
+
+    Puramente shadow: NO en pares_permitidos_live, cero dinero real.
+    Objetivo: dejar madurar shadow_n en la zona 0.70-1.00 antes de poder
+    concluir nada con rigor (n<15 hoy, ver
+    project_hueco_favorito_60min_altaconviccion_28jul en memoria).
+    """
+    question = market.get("question", "")
+    if "up or down" not in question.lower():
+        return None
+    tipo, vent = _parse_updown_tipo(question)
+    if tipo != "hourly" or vent != 60:
+        return None
+    if identificar_activo(question) not in FAVORITO_60MIN_ALTACONVICCION_PARES:
+        return None
+    py = market.get("_precio_yes")
+    if py is None or py < FAVORITO_60MIN_ALTACONVICCION_TH:
+        return None
+    return s_favorito_confirmado(market, ctx)
+
+
 # ── STREAK — momentum (5min) / reversión (15min) en la SECUENCIA de resoluciones ──
 # Hallazgo 2026-07-05: nadie miraba la secuencia de ventanas (todas las estrategias
 # las tratan como independientes). El signo se INVIERTE por escala:
@@ -4318,6 +4360,7 @@ ESTRATEGIAS = [
     ("STRUCT_NO_15M",       s_struct_no_15m),
     ("FAVORITO_CONFIRMADO", s_favorito_confirmado),
     ("FAVORITO_CONFIRMADO_SOL_ALTACONVICCION", s_favorito_confirmado_sol_altaconviccion),
+    ("FAVORITO_CONFIRMADO_60MIN_ALTACONVICCION", s_favorito_confirmado_60min_altaconviccion),
     ("STREAK_MOM_5M",       s_streak_mom_5m),
     ("STREAK_FADE_5M",      s_streak_fade_5m),
     ("STREAK_FADE_15M",     s_streak_fade_15m),
