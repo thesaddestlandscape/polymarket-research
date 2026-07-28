@@ -86,6 +86,10 @@ SCREEN_RESTART = {
     # mercados Up/Down, distinta de Binance/Kraken. Solo lectura, no toca
     # dinero. Mismo patrón de proceso único que pfinish.
     "chainlink": f"cd {REPO} && .venv/bin/python fetch_chainlink_prices.py >> logs/chainlink.log 2>&1",
+    # favultsec (28-Jul): captura FAVORITO_CONFIRMADO en el instante decisivo
+    # (T-10s) de XRP/DOGE/BNB#5min -- ver idea_xrp_doge_bnb_5min_confirmacion_
+    # ultimo_segundo_28jul. Solo lectura, no toca dinero. Mismo patrón que pfinish.
+    "favultsec": f"cd {REPO} && .venv/bin/python favorito_ultimosegundo_5min.py >> logs/favorito_ultimosegundo.log 2>&1",
 }
 
 # Cuando stdout está redirigido (screen >> watchdog.log), print() ya escribe al fichero
@@ -146,7 +150,7 @@ def check_screens() -> dict[str, bool]:
         r = subprocess.run(["screen", "-ls"], capture_output=True, text=True, timeout=5)
         output = r.stdout + r.stderr
         return {name: (f".{name}\t" in output or f".{name} " in output)
-                for name in ["fast", "slow", "control", "dash", "pfinish", "ballenas_fast", "ballenas_5m", "chainlink"]}
+                for name in ["fast", "slow", "control", "dash", "pfinish", "ballenas_fast", "ballenas_5m", "chainlink", "favultsec"]}
     except Exception:
         return {}
 

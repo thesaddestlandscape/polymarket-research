@@ -31,6 +31,7 @@ SCREENS = {
     "dash":    {"entry": "dashboard_server.py",    "probe": "http:8888"},
     "control": {"entry": "live_control.py",        "probe": "log:logs/live_control.log:escuchando comandos"},
     "pfinish": {"entry": "photo_finish_logger.py", "probe": None},
+    "favultsec": {"entry": "favorito_ultimosegundo_5min.py", "probe": None},
     "puntoconf": {"entry": "punto_confirmacion_logger.py",
                   "probe": "log:logs/punto_confirmacion.log:arrancado"},
     "chainlink": {"entry": "fetch_chainlink_prices.py", "probe": None},
