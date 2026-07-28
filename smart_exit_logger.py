@@ -82,17 +82,94 @@ def fetch(mid):
     return None
 
 
+def _market_ids_con_cierre_logueado() -> set:
+    if not OUT.exists():
+        return set()
+    ids = set()
+    with open(OUT, encoding="utf-8") as f:
+        for r in csv.DictReader(f):
+            if r.get("mkt_closed") == "1" and r.get("market_id"):
+                ids.add(r["market_id"])
+    return ids
+
+
+def _filas_cierre_desde_trades(cerradas: list, ya_logueados: set) -> list:
+    """28-Jul (fix bug real, ver feedback_capturas_sin_conectar_riesgo_
+    olvido_28jul / analisis_touch_vs_win_smartexit_28jul.py): antes el
+    ÚNICO tick con mkt_closed=1 dependía de re-consultar gamma-api MIENTRAS
+    el trade seguía en trades.csv con status=OPEN -- pero shadow_resolve.py
+    cierra el trade (status->CLOSED) normalmente ANTES de que la propia API
+    de Polymarket marque el mercado como closed/resolved/archived, así que
+    el bucle de arriba (filtra status=='OPEN') dejaba de mirar ese
+    market_id justo antes de que mkt_closed pudiera llegar a ser True.
+    Confirmado con datos reales: 63/87 mercados de FAVORITO_CONFIRMADO sin
+    NINGÚN tick de cierre.
+
+    Fix: en vez de perseguir el flag de la API (no fiable, llega tarde),
+    usar el resultado YA AUTORITATIVO que trades.csv registra al cerrar
+    (`exit_price`, `pnl_neto_eur`, `close_timestamp`) -- no hace falta
+    ninguna llamada de red. Genera UN tick sintético de cierre por
+    market_id CLOSED que todavía no tenga uno (dedup vía
+    _market_ids_con_cierre_logueado), así que una sola corrida de este
+    fix hace backfill retroactivo de TODO el histórico ya cerrado, no solo
+    de los cierres futuros."""
+    filas = []
+    for t in cerradas:
+        mid = t.get("market_id")
+        if not mid or mid in ya_logueados:
+            continue
+        try:
+            entry = float(t.get("entry_price") or 0)
+            exit_price = float(t.get("exit_price") or "")
+            stake = float(t.get("stake_eur") or 0)
+            pnl = float(t.get("pnl_neto_eur") or 0)
+        except (ValueError, TypeError):
+            continue
+        dir_ = t.get("direction", "")
+        if dir_ == "BUY_YES":
+            pyes, pno = exit_price, round(1.0 - exit_price, 4)
+        else:
+            pyes, pno = round(1.0 - exit_price, 4), exit_price
+        t0 = parse_dt(t.get("timestamp_utc"))
+        tc = parse_dt(t.get("close_timestamp"))
+        te = parse_dt(t.get("end_date"))
+        shares = stake / entry if entry > 0 else 0.0
+        valor_salida = shares * exit_price
+        filas.append({
+            "ts_utc": (tc or datetime.now(timezone.utc)).strftime("%Y-%m-%dT%H:%M:%SZ"),
+            "market_id": mid,
+            "strategy": t.get("strategy", ""),
+            "direction": dir_,
+            "entry_price": entry,
+            "stake_eur": stake,
+            "precio_lado": round(exit_price, 4),
+            "precio_yes": round(pyes, 4),
+            "precio_no": round(pno, 4),
+            "seg_desde_entrada": round((tc - t0).total_seconds()) if (tc and t0) else "",
+            "seg_hasta_fin": round((te - tc).total_seconds()) if (tc and te) else "",
+            "valor_salida_eur": round(valor_salida, 4),
+            "pnl_salida_eur": round(pnl, 4),
+            "mkt_closed": 1,
+        })
+        ya_logueados.add(mid)
+    return filas
+
+
 def main():
     if not TRADES.exists():
         return
     with open(TRADES, encoding="utf-8") as f:
-        abiertas = [r for r in csv.DictReader(f)
-                    if r.get("status") == "OPEN" and r.get("market_id")]
-    if not abiertas:
+        todas = list(csv.DictReader(f))
+    abiertas = [r for r in todas if r.get("status") == "OPEN" and r.get("market_id")]
+    cerradas = [r for r in todas if r.get("status") == "CLOSED" and r.get("market_id")]
+
+    filas_cierre = _filas_cierre_desde_trades(cerradas, _market_ids_con_cierre_logueado())
+
+    if not abiertas and not filas_cierre:
         return
 
     ahora = datetime.now(timezone.utc)
-    filas = []
+    filas = list(filas_cierre)
     for t in abiertas:
         mkt = fetch(t["market_id"])
         if not mkt:
