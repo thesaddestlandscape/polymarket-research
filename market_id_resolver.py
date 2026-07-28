@@ -32,6 +32,7 @@ import requests
 
 BASE = os.path.dirname(os.path.abspath(__file__))
 MARKETS_GLOB = os.path.join(BASE, "data", "markets", "*.csv")
+MARKETS_GLOB_GZ = os.path.join(BASE, "data", "markets", "*.csv.gz")
 INDEX_PATH = os.path.join(BASE, "data", "shadow", "market_id_condition_id_map.json")
 GAMMA_API = "https://gamma-api.polymarket.com"
 TIMEOUT = 8
@@ -42,7 +43,9 @@ def construir_indice_desde_csv() -> dict:
     Tolerante a archivos con esquema viejo sin columna condition_id (16/17-jun,
     antes de que el scanner la incluyera)."""
     mapa = {}
-    for path in sorted(glob.glob(MARKETS_GLOB)):
+    archivos = sorted(glob.glob(MARKETS_GLOB) + glob.glob(MARKETS_GLOB_GZ),
+                       key=lambda p: p.replace(".gz", ""))
+    for path in archivos:
         try:
             df = pd.read_csv(path, usecols=["market_id", "condition_id"], dtype=str)
         except ValueError:

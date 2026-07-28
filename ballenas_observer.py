@@ -57,6 +57,7 @@ smart_money_tracker.py (P16, propósito distinto: consenso direccional
 poblacional, no timing de entrada por banda de precio).
 """
 import csv
+import gzip
 import json
 import math
 import random
@@ -169,9 +170,11 @@ def _universo_mercados_resueltos(ahora):
     su propia ventana — weekly tarda semanas en acumular n."""
     margen = timedelta(minutes=MARGEN_RESOLUCION_MIN)
     por_marco = defaultdict(dict)  # marco -> {condition_id: info}
-    for archivo in sorted(DIR_MARKETS.glob("*.csv")):
+    archivos_markets = sorted(DIR_MARKETS.glob("*.csv")) + sorted(DIR_MARKETS.glob("*.csv.gz"))
+    for archivo in sorted(archivos_markets, key=lambda p: p.name.replace(".gz", "")):
         try:
-            with open(archivo, encoding="utf-8") as f:
+            _abrir = gzip.open if archivo.suffix == ".gz" else open
+            with _abrir(archivo, "rt", encoding="utf-8") as f:
                 for row in csv.DictReader(f):
                     cid = row.get("condition_id", "")
                     mid = row.get("market_id", "")

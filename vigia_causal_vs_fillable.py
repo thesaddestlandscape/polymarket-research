@@ -282,7 +282,12 @@ def _evaluar_estrategia(strategy, fuente_rows, est, latch, avisos, fuente_label)
                 }
                 entry["activos"][clave_activo]["patrones"].append(reg)
 
-                latch_key = f"{fuente_label}#{clave}#{clave_activo}#{p['feature']}{p['condicion']}{p['umbral']}"
+                # umbral fuera de la clave a propósito (bug real 28-Jul: el umbral
+                # se recalcula cada ciclo del postmortem y cambia aunque sea el
+                # mismo patrón -- con umbral en la clave el latch casi nunca
+                # deduplicaba y reenviaba el mismo aviso por Telegram cada 30min,
+                # mismo patrón que el bug ya documentado en vigia_sigma_patrones)
+                latch_key = f"{fuente_label}#{clave}#{clave_activo}#{p['feature']}{p['condicion']}"
                 if contrario and p_shuffle is not None and p_shuffle < P_SHUFFLE_ALERTA:
                     if not latch.get(latch_key):
                         etiqueta = "🔴 LIVE" if fuente_label == "live_real" else "candidata"
@@ -325,7 +330,8 @@ def _evaluar_estrategia(strategy, fuente_rows, est, latch, avisos, fuente_label)
                 }
                 entry["activos"][clave_activo]["filtros"].append(reg_f)
 
-                latch_key = f"FILTRO#{fuente_label}#{clave}#{clave_activo}#{f['feature']}{f['condicion']}{f['umbral']}"
+                # umbral fuera de la clave, mismo motivo que arriba
+                latch_key = f"FILTRO#{fuente_label}#{clave}#{clave_activo}#{f['feature']}{f['condicion']}"
                 if injustificado and p_shuffle is not None and p_shuffle < P_SHUFFLE_ALERTA:
                     if not latch.get(latch_key):
                         etiqueta = "🔴 LIVE" if fuente_label == "live_real" else "candidata"
