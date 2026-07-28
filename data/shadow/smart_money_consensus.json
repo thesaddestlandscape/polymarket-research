@@ -1,45 +1,38 @@
 {
   "BTC": {
-    "smart_money_consensus": -0.1618,
-    "n_trades_smart": 136,
-    "n_wallets_smart": 3,
-    "smart_money_consensus_ponderado": -0.3078,
-    "n_wallets_smart_ponderado": 3
+    "smart_money_consensus": -0.0802,
+    "n_trades_smart": 698,
+    "n_wallets_smart": 5,
+    "smart_money_consensus_ponderado": -0.1603,
+    "n_wallets_smart_ponderado": 5
   },
   "ETH": {
-    "smart_money_consensus": -0.1163,
-    "n_trades_smart": 43,
-    "n_wallets_smart": 2,
-    "smart_money_consensus_ponderado": -0.3355,
-    "n_wallets_smart_ponderado": 2
-  },
-  "SOL": {
-    "smart_money_consensus": 0.4545,
-    "n_trades_smart": 11,
-    "n_wallets_smart": 2,
-    "smart_money_consensus_ponderado": 0.5026,
-    "n_wallets_smart_ponderado": 2
+    "smart_money_consensus": 0.1367,
+    "n_trades_smart": 139,
+    "n_wallets_smart": 3,
+    "smart_money_consensus_ponderado": 0.3913,
+    "n_wallets_smart_ponderado": 3
   },
   "XRP": {
-    "smart_money_consensus": -0.1,
-    "n_trades_smart": 20,
+    "smart_money_consensus": -0.1915,
+    "n_trades_smart": 47,
     "n_wallets_smart": 1,
-    "smart_money_consensus_ponderado": -0.3895,
+    "smart_money_consensus_ponderado": -0.3422,
+    "n_wallets_smart_ponderado": 1
+  },
+  "SOL": {
+    "smart_money_consensus": 0.0,
+    "n_trades_smart": 10,
+    "n_wallets_smart": 1,
+    "smart_money_consensus_ponderado": -0.1194,
     "n_wallets_smart_ponderado": 1
   },
   "DOGE": {
-    "smart_money_consensus": -0.1429,
-    "n_trades_smart": 7,
+    "smart_money_consensus": -1.0,
+    "n_trades_smart": 1,
     "n_wallets_smart": 1,
-    "smart_money_consensus_ponderado": -0.6782,
+    "smart_money_consensus_ponderado": -1.0,
     "n_wallets_smart_ponderado": 1
   },
-  "BNB": {
-    "smart_money_consensus": 0.6,
-    "n_trades_smart": 5,
-    "n_wallets_smart": 1,
-    "smart_money_consensus_ponderado": 0.6849,
-    "n_wallets_smart_ponderado": 1
-  },
-  "_actualizado": "2026-07-28T21:01:24+00:00"
+  "_actualizado": "2026-07-28T22:01:26+00:00"
 }
