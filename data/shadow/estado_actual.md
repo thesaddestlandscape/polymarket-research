@@ -1,22 +1,22 @@
-# Estado del bot — 2026-07-28 00:11 UTC
+# Estado del bot — 2026-07-28 00:18 UTC
 
 ## Live — dinero real (on-chain)
 | | |
 |---|---|
 | Total depositado | 51.22 $ |
-| Balance on-chain | **22.78 $** |
-| P&L real total | 🔴 **-28.44 $** |
+| Balance on-chain | **22.27 $** |
+| P&L real total | 🔴 **-28.95 $** |
 | P&L real hoy | +0.00 $ |
 | P&L real 7 días | -3.51 $ |
-| Fees pagados (real) | 10.89 $ |
+| Fees pagados (real) | 10.92 $ |
 
 ## Shadow — MODELO SIMULADO (no cobrable)
 | | |
 |---|---|
-| P&L fiel (stake fijo 1$) | +4196.21 $ |
-| P&L sim compuesto | 🟢 +7985.55 $ (ficción Kelly: +31390% s/ operativo) |
-| P&L sim hoy (2026-07-28) | 🟢 +16.28 $ |
-| Operaciones resueltas | 39173 (23362 WIN / 15811 LOSS) — 59.6% |
+| P&L fiel (stake fijo 1$) | +4195.21 $ |
+| P&L sim compuesto | 🟢 +7983.67 $ (ficción Kelly: +31382% s/ operativo) |
+| P&L sim hoy (2026-07-28) | 🟢 +14.40 $ |
+| Operaciones resueltas | 39174 (23362 WIN / 15812 LOSS) — 59.6% |
 | Señales abiertas | 111 |
 
 ## Estrategias (visión global)
@@ -50,28 +50,28 @@
 | UPDOWN_OU_5M | 84 | 28.6% | -0.209 | 📉 agota (-0.14) | -18.89$ | 0.00$ | 🚫 desactivada |
 | STREAK_FADE_5M | 247 | 44.9% | -0.050 | 📉 agota (-0.06) | -25.47$ | 0.50$ | ⚠️ IC negativo |
 | STREAK_MOM_5M | 320 | 44.1% | -0.059 | 📉 agota (-0.08) | -26.41$ | 0.50$ | 🚫 desactivada |
-| FAVORITO_CONFIRMADO | 6843 | 67.9% | +0.179 | ➡️ estable | -28.98$ | 1.79$ | ✅ activa |
+| FAVORITO_CONFIRMADO | 6844 | 67.9% | +0.178 | ➡️ estable | -30.86$ | 1.78$ | ✅ activa |
 
 ## Últimas 5 resoluciones
 
 | Timestamp | Estrategia | Mercado | Resultado | PNL |
 |---|---|---|---|---|
+| 2026-07-28T00:16 | FAVORITO_CONFIRMADO#BTC#60min | Bitcoin Up or Down - July 27, 7PM ET… | ❌ LOSS | -1.88$ |
 | 2026-07-28T00:09 | GBM_LATE_5M#XRP#5min | XRP Up or Down - July 27, 8:00PM-8:05PM ET… | ❌ LOSS | -0.51$ |
 | 2026-07-28T00:09 | UPDOWN_GBM_15M_TARDIO#DOGE#15min | Dogecoin Up or Down - July 27, 7:45PM-8:00PM ET… | ✅ WIN | +1.87$ |
 | 2026-07-28T00:09 | UPDOWN_GBM#DOGE#15min | Dogecoin Up or Down - July 27, 7:45PM-8:00PM ET… | ✅ WIN | +0.54$ |
 | 2026-07-28T00:05 | GBM_LATE_5M#XRP#5min | XRP Up or Down - July 27, 7:55PM-8:00PM ET… | ✅ WIN | +0.47$ |
-| 2026-07-28T00:05 | FAVORITO_CONFIRMADO_SOL_ALTACONVICCION#SOL#15min | Solana Up or Down - July 27, 7:45PM-8:00PM ET… | ✅ WIN | +0.08$ |
 
 ## Calidad de datos
 
-✅ **OK** — última verificación 2026-07-28T00:08 UTC
+✅ **OK** — última verificación 2026-07-28T00:16 UTC
 
 | Asset | Precio | Age | Alertas |
 |---|---|---|---|
 | ✅ BTC | $63,590.00 | 0.1min | gap 12min (20:35) |
 | ✅ ETH | $1,886.19 | 0.1min | gap 12min (20:35) |
-| ✅ SOL | $74.12 | 0.1min | gap 12min (20:35) |
-| ✅ XRP | $1.07 | 0.1min | gap 12min (20:35) |
+| ✅ SOL | $74.10 | 0.1min | gap 12min (20:35) |
+| ✅ XRP | $1.06 | 0.1min | gap 12min (20:35) |
 
 **Cross-source** (binance, coinbase, kraken):
 
