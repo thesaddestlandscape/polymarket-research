@@ -2612,6 +2612,26 @@ def _s_liquidaciones(market, ctx, ventana_min, ventana_lookback="5min", minutos_
     }
 
 
+def s_liquidaciones_5min(market, ctx):
+    """
+    28-Jul (backlog Moon Dev, tema 5min): LIQUIDACIONES_15M/60M (ítem B)
+    se construyeron para los marcos donde ORDER_FLOW_5M no llega, pero
+    nunca se cerró el círculo en el marco donde la fuente externa MIDIÓ
+    originalmente el hallazgo (liq_cascade_chaser: liquidaciones 58.8%
+    direccional vs 51-52% coinflip de CVD/MACD, medido en BTC 5min).
+    Nuestro `ORDER_FLOW_5M` usa taker buy/sell de klines -- básicamente el
+    mismo CVD que la fuente externa ya midió como coinflip. Esta es la
+    señal DISTINTA, en el mismo marco donde se originó el hallazgo.
+
+    `ventana_lookback="2min"` replica su "trailing 2 minutes" (la
+    granularidad más fina que captura `fetch_binance_liquidations.py`,
+    coherente con que una ventana de 5min necesita una señal más reciente
+    que una de 15/60min). Sin umbral de imbalance hardcodeado, mismo
+    criterio que el resto de la familia: el pipeline causal decide.
+    """
+    return _s_liquidaciones(market, ctx, ventana_min=5, ventana_lookback="2min", minutos_min_abierto=1.0)
+
+
 def s_liquidaciones_15min(market, ctx):
     return _s_liquidaciones(market, ctx, ventana_min=15, ventana_lookback="5min", minutos_min_abierto=1.5)
 
@@ -4761,6 +4781,7 @@ ESTRATEGIAS = [
     ("UPDOWN_OU_5M",        s_updown_ou_5m),
     ("PRICE_TARGET_GBM",    s_price_target_gbm),
     ("ORDER_FLOW_5M",       s_order_flow_5m),
+    ("LIQUIDACIONES_5M",    s_liquidaciones_5min),
     ("LIQUIDACIONES_15M",   s_liquidaciones_15min),
     ("LIQUIDACIONES_60M",   s_liquidaciones_60min),
     ("RESOLUTION_SNIPER",   s_resolution_sniper),
