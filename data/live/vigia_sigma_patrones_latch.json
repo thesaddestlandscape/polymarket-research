@@ -94,6 +94,7 @@
   "GBM_LATE_60M#BTC#60min|filtro|sigma_h|lt|BUY_NO",
   "GBM_LATE_60M#BTC#60min|patron|sigma_h|lt|BUY_YES",
   "GBM_LATE_60M#ETH#60min|filtro|sigma_h|gt|BUY_NO",
+  "GBM_LATE_60M#ETH#60min|filtro|sigma_h|gt|BUY_YES",
   "GBM_LATE_60M#ETH#60min|filtro|sigma_h|lt|BUY_NO",
   "GBM_LATE_60M#SOL#60min|filtro|sigma_h|gt|BUY_NO",
   "GBM_LATE_60M#SOL#60min|filtro|sigma_h|lt|BUY_YES",
