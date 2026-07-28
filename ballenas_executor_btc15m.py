@@ -156,6 +156,26 @@ UMBRAL_N_YES_TOTAL = 35
 MARGEN_WATCH_S = 60
 MARGEN_CONFIRM_S = 15
 
+# 28-Jul: "adelantar la escucha" -- diagnóstico completo en memoria
+# idea_desajuste_banda_precio_vs_consenso_ballenas_btc15m_28jul: en 11 días
+# de dinero real esta tupla nunca ejecutó un trade (n=0) porque el consenso
+# de ballenas casi siempre se forma MUCHO antes de confirm_ceiling_s (~40s
+# antes del cierre) -- para cuando restante cae dentro de esa ventana, el
+# propio volumen que generó el consenso ya movió el precio fuera de banda.
+# Reconstruido el histórico completo (47 mercados, trades reales vía la
+# API ya corregida del bug de truncación del mismo día): 37/47 mercados
+# tuvieron algún instante con concentración>=0.9+n>=3+precio en banda, pero
+# solo 2/37 cayeron dentro de la ventana tardía actual. El otro grupo
+# (restante>=150s, n=35) da hit=91.4% (Wilson90% lo=0.804) y PnL/trade
+# bootstrap CI90%=[+0.118,+0.328] -- tan bueno como el tardío, sin cruzar
+# cero. FASE 0 (esta constante): solo observacional -- amplía cuánto
+# ANTES empieza a vigilar el bucle (más polls, más log), pero NO toca el
+# disparo real todavía (sigue exigiendo restante<=confirm_ceiling_s, ver
+# watch_window). El disparo temprano de verdad es un cambio aparte,
+# pendiente de n>=40 fresco acumulado con esta observación + /code-review
+# + aprobación explícita antes de tocar el trigger real.
+WATCH_LEAD_TEMPRANO_S = VENTANA_MIN * 60 - 30  # casi toda la ventana, deja 30s de margen tras la apertura
+
 # requests.Session persistente (keep-alive) -- evita repetir handshake
 # TCP/TLS en cada llamada del bucle rápido, ver presupuesto de latencia
 # en el plan.
@@ -326,7 +346,12 @@ def cargar_calibracion() -> dict | None:
         return None
     prob_bucket = _wilson_lower(int(n_gan), int(n))
     confirm_ceiling_s = rest_hi * 60 + MARGEN_CONFIRM_S
-    watch_lead_s = confirm_ceiling_s + MARGEN_WATCH_S
+    # 28-Jul: watch_lead_s se amplía a WATCH_LEAD_TEMPRANO_S (ver constante,
+    # "adelantar la escucha") -- el disparo real SIGUE exigiendo
+    # restante<=confirm_ceiling_s (sin cambios abajo en watch_window), esto
+    # solo hace que el bucle empiece a vigilar/loguear mucho antes para
+    # poder registrar observacionalmente la confirmación temprana.
+    watch_lead_s = max(confirm_ceiling_s + MARGEN_WATCH_S, WATCH_LEAD_TEMPRANO_S)
     return {"banda_lo": lo, "banda_hi": hi, "prob_bucket": prob_bucket,
             "confirm_ceiling_s": confirm_ceiling_s, "watch_lead_s": watch_lead_s,
             "n_banda": int(n)}
@@ -358,6 +383,56 @@ def _activa_permite_disparo() -> tuple[bool, str]:
         if not e.get(campo, True):
             return False, f"postmortem desactivó {k} ({campo}=False)"
     return True, "activa"
+
+
+ADELANTADO_DRY_CSV = DIR_SHADOW / "ballenas_btc15m_adelantado_dry.csv"
+ADELANTADO_DRY_COLS = ["timestamp_utc", "market_id", "condition_id", "end_date",
+                        "restante_s", "py", "concentracion_ponderada", "n_ballenas",
+                        "n_yes_total", "profundidad_eur", "ratio_vs_stake", "n_niveles_libro",
+                        "outcome_real", "acierto"]
+STAKE_REF_EUR = 1.05  # mismo suelo/techo pineado que live_stake.py hoy -- referencia realista
+
+
+def _registrar_confirmacion_temprana_dry(mercado: dict, py: float, restante_s: float,
+                                          pct_ponderado: float, n_ballenas: int,
+                                          n_yes_total: int) -> None:
+    """28-Jul, "adelantar la escucha" (FASE 0, solo observación -- ver
+    WATCH_LEAD_TEMPRANO_S y memoria idea_desajuste_banda_precio_vs_
+    consenso_ballenas_btc15m_28jul): registra la 1ª vez por ventana que se
+    habría cumplido la condición de disparo si no exigiéramos esperar a
+    confirm_ceiling_s -- incluye profundidad REAL del libro en ese instante
+    (nunca medida antes tan pronto en la ventana) para poder evaluar
+    fill-ability antes de tocar el trigger real. NO llama a disparar() ni
+    a ninguna función de live_trade que coloque órdenes -- solo lee el
+    libro público (mismo _consultar_profundidad_libro ya auditado que usa
+    live_trade.py, client=None -> endpoint público, sin credenciales)."""
+    try:
+        prof = lt._consultar_profundidad_libro(None, mercado["yes_token"], py, STAKE_REF_EUR)
+    except Exception as e:
+        prof = {"ok": False, "error": str(e)}
+    fila = {
+        "timestamp_utc": datetime.now(timezone.utc).isoformat(timespec="seconds"),
+        "market_id": mercado.get("market_id", ""),
+        "condition_id": mercado.get("condition_id", ""),
+        "end_date": mercado.get("end_date", ""),
+        "restante_s": round(restante_s, 1),
+        "py": py,
+        "concentracion_ponderada": pct_ponderado,
+        "n_ballenas": n_ballenas,
+        "n_yes_total": n_yes_total,
+        "profundidad_eur": prof.get("profundidad_eur", "") if prof.get("ok") else "",
+        "ratio_vs_stake": prof.get("ratio_vs_stake", "") if prof.get("ok") else "",
+        "n_niveles_libro": prof.get("n_niveles", "") if prof.get("ok") else "",
+        "outcome_real": "", "acierto": "",
+    }
+    nuevo = not ADELANTADO_DRY_CSV.exists()
+    with open(ADELANTADO_DRY_CSV, "a", newline="", encoding="utf-8") as f:
+        w = csv.DictWriter(f, fieldnames=ADELANTADO_DRY_COLS)
+        if nuevo:
+            w.writeheader()
+        w.writerow(fila)
+    log(f"[{mercado.get('market_id')}] 🔬 adelantado-dry registrado: restante={restante_s:.1f}s "
+        f"py={py:.3f} ratio_vs_stake={fila['ratio_vs_stake']}")
 
 
 def _registrar_prediccion(mercado: dict, py: float, edge: float, restante_s: float,
@@ -428,6 +503,7 @@ def watch_window(ts_end: int) -> bool:
     mercado = None
     contadores = {"ok": 0, "sin_trades_en_banda": 0, "error_api": 0}
     contador_prematuro = 0  # cumple condición pero aún fuera de confirm_ceiling_s -- solo para el log final
+    registrado_temprano = False  # 28-Jul "adelantar la escucha": solo la 1ª vez por ventana
     while True:
         restante = ts_end - time.time()
         if restante > watch_lead_s:
@@ -493,6 +569,10 @@ def watch_window(ts_end: int) -> bool:
             # real de confirmación (rest_hi_min de la banda operativa) --
             # se sigue vigilando en vez de disparar ya.
             contador_prematuro += 1
+            if not registrado_temprano:
+                registrado_temprano = True
+                _registrar_confirmacion_temprana_dry(mercado, libro["best_ask"], restante,
+                                                       pct_ponderado, n, n_yes_total)
             time.sleep(POLL_INTERVAL_S)
             continue
 
