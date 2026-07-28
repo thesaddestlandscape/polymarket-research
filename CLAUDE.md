@@ -147,6 +147,7 @@ screen control → live_control.py (Telegram: /on /off /status /help)
 screen pfinish → photo_finish_logger.py (captura photo finish c/frontera 5min)
 screen chainlink → fetch_chainlink_prices.py (precios Chainlink en vivo, fuente de resolución oficial)
 screen polyactivity → fetch_polymarket_activity_ws.py (28-Jul: firehose de trades reales Polymarket vía RTDS, topic activity/trades, gratis sin auth — replica lo que moondevonyt cobra en su "Polymarket Whales API")
+screen liqs → fetch_binance_liquidations.py (28-Jul: liquidaciones reales Binance Futures, feed público gratis, alimenta LIQUIDACIONES_15M/60M en shadow_predict.py — backlog ítem B)
 cron */5       → watchdog_fast.sh (9 checks, restart screens, alerta disco)
 ```
 
