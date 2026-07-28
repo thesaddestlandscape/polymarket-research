@@ -9,7 +9,7 @@ Auth: HTTP Basic, credenciales en data/live/.env (DASHBOARD_USER/DASHBOARD_PASS,
 gitignored). Añadido 2026-07-01 — antes exponía bankroll/trades/IC en la IP
 pública del VPS sin ningún control de acceso.
 """
-import base64, csv, hmac, json, sys, time, threading, socket
+import base64, csv, fcntl, hmac, json, sys, time, threading, socket
 from http.server import HTTPServer, BaseHTTPRequestHandler
 from socketserver import ThreadingMixIn
 from pathlib import Path
@@ -38,6 +38,7 @@ PRICES_DIR       = REPO / "data/prices"
 LIVE_TRADES_CSV  = REPO / "data/live/trades.csv"
 LIVE_BALANCE_HISTORY_CSV = REPO / "data/live/balance_history.csv"
 LIVE_SWITCH_PATH = REPO / "data/live/LIVE_MODE_ON"
+GIT_OPS_LOCK     = REPO / "data/shadow/git_ops.lock"
 LIVE_BANKROLL_INICIAL = 25.44  # depósito real 2026-06-29
 BANKROLL_INICIAL = 20.0
 PORT = int(sys.argv[1]) if len(sys.argv) > 1 else 8888
@@ -56,6 +57,46 @@ try:
     from live_balance import cargar_balance_real
 except Exception:
     cargar_balance_real = lambda **_: None  # fail-closed: sin módulo → sin real
+
+# ─── Lectura consistente (28-Jul) ─────────────────────────────────────────────
+def _leer_snapshot_consistente(fn):
+    """Ejecuta fn() (compute_data(), que lee todos los CSV/JSON de data/) bajo
+    un flock COMPARTIDO no bloqueante sobre data/shadow/git_ops.lock.
+
+    run_fast.sh (cada ~5min) y run_slow.sh (cada ~23min) toman LOCK_EX
+    exclusivo sobre ese mismo fichero mientras hacen
+    `git add`+`commit`+`pull --rebase --autostash`+`push` sobre
+    data/shadow/, data/live/, data/prices/ (ver nota junto a GIT_LOCK en
+    run_fast.sh) -- durante esa ventana de varios segundos el working tree
+    puede reflejar momentáneamente el HEAD remoto sin los últimos appends
+    locales (autostash fuera), o quedar a medio aplicar el stash (autostash
+    reentrando). Sin este lock, get_data() podía leer un CSV incompleto o
+    revertido justo en ese instante y servirlo como bueno SIN lanzar ninguna
+    excepción -- síntoma real reportado por Javi 28-Jul: posiciones que
+    "aparecen y desaparecen" en el dashboard y PnL que no cuadra entre
+    fuentes.
+
+    Reintenta unas pocas veces con espera corta (el sync real dura segundos,
+    no minutos); si el lock sigue ocupado, lanza TimeoutError para que el
+    llamante sirva el último snapshot bueno cacheado -- preferible
+    stale-pero-correcto a fresco-pero-roto.
+    """
+    if not GIT_OPS_LOCK.exists():
+        return fn()  # aún no ha corrido ningún ciclo fast/slow -- nada que sincronizar
+    intentos, espera_s = 5, 0.3
+    for i in range(intentos):
+        with open(GIT_OPS_LOCK, "a") as lock_f:
+            try:
+                fcntl.flock(lock_f, fcntl.LOCK_SH | fcntl.LOCK_NB)
+            except OSError:
+                if i == intentos - 1:
+                    raise TimeoutError("git_ops.lock ocupado (sync fast/slow en curso)")
+                time.sleep(espera_s)
+                continue
+            try:
+                return fn()
+            finally:
+                fcntl.flock(lock_f, fcntl.LOCK_UN)
 
 # ─── Cache ───────────────────────────────────────────────────────────────────
 _cache_lock = threading.Lock()
@@ -787,10 +828,10 @@ def get_data():
         if time.monotonic() - _cache_ts < CACHE_TTL and _cache_data is not None:
             return _cache_data
         try:
-            _cache_data = compute_data()
+            _cache_data = _leer_snapshot_consistente(compute_data)
         except Exception as e:
             if _cache_data is not None:
-                return _cache_data   # sirve el último bueno si falla
+                return _cache_data   # sirve el último bueno si falla (incl. lock ocupado)
             raise
         _cache_ts = time.monotonic()
         return _cache_data
