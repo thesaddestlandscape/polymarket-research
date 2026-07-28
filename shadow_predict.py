@@ -3909,6 +3909,22 @@ def s_favorito_confirmado_sol_altaconviccion(market, ctx):
 
 FAVORITO_60MIN_ALTACONVICCION_TH = 0.70
 FAVORITO_60MIN_ALTACONVICCION_PARES = {"BTC", "ETH", "SOL"}
+# 28-Jul: filtro de restante_min por activo, tras diseccionar ballenas_timing_
+# history.csv (últimos 30d) bucket a bucket para BTC/ETH/SOL#60min BUY_YES.
+# BTC: hit ballenas "100%" en TODOS los buckets py>=0.70, pero restante_min
+# mediano es 2-6min SIEMPRE (nunca sube) -- no es edge anticipable, es la
+# confirmación de última hora ya documentada (protocolo CLAUDE.md pt.10,
+# "BTC solo se confirma al final"). Confirmado en shadow real: [0.80,0.85)
+# pnl/trade=-0.803€, [0.85,0.90)=-0.462€ -- perdemos comprando la
+# confirmación tarde y cara. Umbral 15min es deliberadamente alto: si BTC
+# no tiene edge anticipable, mejor que la estrategia apenas dispare aquí a
+# que acumule ruido que parezca señal.
+# ETH: el edge real no empieza hasta [0.80,0.95) (hit 97-99%, restante_min
+# mediano 10-16min) -- [0.55,0.75) es ruido/negativo (hit ballenas 22-59%,
+# shadow pnl/trade -0.02 a -0.20). Umbral 10min corta esa cola ruidosa.
+# SOL: restante_min mediano ya es 20-57min en TODA la banda relevante
+# (0.55-0.90) de forma natural -- sin filtro, no hace falta.
+FAVORITO_60MIN_ALTACONVICCION_RESTANTE_MIN = {"BTC": 15.0, "ETH": 10.0}
 
 
 def s_favorito_confirmado_60min_altaconviccion(market, ctx):
@@ -3930,6 +3946,10 @@ def s_favorito_confirmado_60min_altaconviccion(market, ctx):
     apareció) y a BUY_YES (el lado alto de FAVORITO_CONFIRMADO -- el
     hueco de ballenas es sobre py alto, no sobre py bajo/BUY_NO).
 
+    28-Jul (mismo día): añadido filtro FAVORITO_60MIN_ALTACONVICCION_
+    RESTANTE_MIN por activo -- ver comentario arriba de la constante.
+    Sin filtro para SOL (ya tiene tiempo real de forma natural).
+
     Puramente shadow: NO en pares_permitidos_live, cero dinero real.
     Objetivo: dejar madurar shadow_n en la zona 0.70-1.00 antes de poder
     concluir nada con rigor (n<15 hoy, ver
@@ -3941,12 +3961,21 @@ def s_favorito_confirmado_60min_altaconviccion(market, ctx):
     tipo, vent = _parse_updown_tipo(question)
     if tipo != "hourly" or vent != 60:
         return None
-    if identificar_activo(question) not in FAVORITO_60MIN_ALTACONVICCION_PARES:
+    activo = identificar_activo(question)
+    if activo not in FAVORITO_60MIN_ALTACONVICCION_PARES:
         return None
     py = market.get("_precio_yes")
     if py is None or py < FAVORITO_60MIN_ALTACONVICCION_TH:
         return None
-    return s_favorito_confirmado(market, ctx)
+    resultado = s_favorito_confirmado(market, ctx)
+    if resultado is None:
+        return None
+    rm_min = FAVORITO_60MIN_ALTACONVICCION_RESTANTE_MIN.get(activo)
+    if rm_min is not None:
+        restante_min = resultado.get("features", {}).get("restante_min")
+        if restante_min is None or restante_min < rm_min:
+            return None  # filtro restante_min 28-Jul -- ver constante arriba
+    return resultado
 
 
 # ── STREAK — momentum (5min) / reversión (15min) en la SECUENCIA de resoluciones ──
