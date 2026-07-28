@@ -92,7 +92,19 @@ _RE_WEEKLY_TITLE = re.compile(r"the price of .* be (above|below|less than|greate
 
 VENTANA_MERCADOS_HORAS = 30      # cuántas horas hacia atrás muestrear mercados
 MAX_MERCADOS_MUESTRA = 150       # tope de mercados a consultar por ciclo
-MAX_TRADES_POR_MERCADO = 100
+MAX_TRADES_POR_MERCADO = 2000  # 28-Jul: era 100 -- bug real encontrado investigando
+# por qué BALLENAS_TARDIAS#XRP#5min#BUY_YES dejó de crecer en el grupo de alto
+# volumen (n_wallets_yes>=35): data-api /trades devuelve las MÁS RECIENTES
+# primero, así que con limit=100 en un mercado activo solo se ve una franja de
+# ~30s de los ~300s de la ventana -- verificado en vivo con un mercado ETH#5min
+# real: limit=100 -> 100 filas (rango 32s, 17 compras YES) vs limit=2000 -> 595
+# filas reales (rango 260s, 131 compras YES), infracálculo ~7.7x. Sin coste de
+# latencia real medido (40-85ms para cualquier limit entre 100 y 2000, la API
+# no penaliza por tamaño de respuesta). Afecta a un gate REAL de dinero real
+# (UMBRAL_N_WALLETS_YES en ballenas_executor_5min.py, ETH#5min live desde
+# 27-Jul) -- no desplegar sin avisar explícitamente antes de reiniciar los
+# ejecutores en vivo (ballenas_fast, ballenas_5m), el gate puede empezar a
+# dejar pasar señales que antes vetaba por dato incompleto.
 MIN_TRADES_PARA_CANDIDATO = 5    # nº mínimo de trades en la muestra para mirar su PNL
 MAX_CANDIDATOS_POR_CICLO = 300   # tope de llamadas a /positions por ciclo, por si acaso
 REFRESH_POSICIONES_HORAS = 6     # no re-pedir /positions si se evaluó hace menos de esto
