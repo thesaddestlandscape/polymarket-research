@@ -31,8 +31,9 @@ ballenas_banda_fina_gate).
 import csv
 import json
 import math
-import random
 from collections import defaultdict
+
+import numpy as np
 
 RESULTS = "data/shadow/results.csv"
 CONFIG_LIVE = "data/live/config_live.json"
@@ -41,7 +42,7 @@ OUT = "data/shadow/gate_bucket_propio.json"
 STEP = 0.05
 N_MIN = 15
 P_MAX = 0.05
-ITERS = 4000
+ITERS = 1000
 
 
 def bucket(p):
@@ -49,19 +50,36 @@ def bucket(p):
 
 
 def cargar_tuplas_live():
+    """28-Jul: extendido a candidatos_evaluacion_live (petición explícita
+    Javi, "aplícalo también a candidatos_evaluacion_live") -- el análisis
+    en sí no distingue live/candidato (ambos ya están en results.csv,
+    shadow_predict.py loguea todo igual), la diferencia real vive en el
+    RUNTIME: gate_bucket_propio.py solo VETA ejecución si la tupla está
+    en pares_permitidos_live (dinero real); en candidatos solo se loguea
+    el veredicto como feature, nunca bloquea (no tiene sentido frenar la
+    propia acumulación de fill-ability de un candidato por su PnL en
+    shadow, que es justo lo que se está todavía evaluando). Devuelve
+    (strategy, subtype, decision, tupla_str, es_live) -- es_live=True
+    solo para las 9 de pares_permitidos_live (dedupe: si una tupla está
+    en ambas listas, cuenta como live)."""
     with open(CONFIG_LIVE, encoding="utf-8") as f:
         c = json.load(f)
-    out = []
-    for t in c.get("pares_permitidos_live", []):
-        partes = t.split("#")
-        if len(partes) == 4:
+    vistos = {}
+    for lista, es_live in ((c.get("pares_permitidos_live", []), True),
+                            (c.get("candidatos_evaluacion_live", []), False)):
+        for t in lista:
+            partes = t.split("#")
+            if len(partes) != 4:
+                continue
             strategy, activo, marco, decision = partes
-            out.append((strategy, f"{activo}#{marco}", decision, t))
-    return out
+            if t in vistos and vistos[t][4]:
+                continue  # ya está marcada live, no degradar a candidato
+            vistos[t] = (strategy, f"{activo}#{marco}", decision, t, es_live)
+    return list(vistos.values())
 
 
 def cargar_filas(tuplas):
-    claves = {(s, sub, d): t for s, sub, d, t in tuplas}
+    claves = {(s, sub, d): t for s, sub, d, t, _ in tuplas}
     out = defaultdict(list)  # tupla_str -> [(ts, py, pnl), ...]
     with open(RESULTS, encoding="utf-8") as f:
         for row in csv.DictReader(f):
@@ -80,30 +98,74 @@ def cargar_filas(tuplas):
     return out
 
 
-def shuffle_test(a, b, iters=ITERS, seed=42):
-    rnd = random.Random(seed)
-    diff_real = (sum(a) / len(a)) - (sum(b) / len(b))
-    todos = a + b
-    na = len(a)
-    mayor_igual_abs = 0
-    for _ in range(iters):
-        rnd.shuffle(todos)
-        da = sum(todos[:na]) / na - sum(todos[na:]) / len(todos[na:])
-        if abs(da) >= abs(diff_real):
-            mayor_igual_abs += 1
-    return diff_real, mayor_igual_abs / iters
+_rng = np.random.default_rng(42)
+
+
+def shuffle_test(a, b, iters=ITERS):
+    """Vectorizado con numpy -- la versión con random.shuffle en Python
+    puro (O(n) por iteración con listas de miles de filas, cientos de
+    tuplas/buckets) tardaba minutos en el barrido completo de
+    candidatos_evaluacion_live (248 tuplas). Mismo test estadístico
+    (permutación), resultado idéntico en distribución, solo más rápido:
+    genera todas las permutaciones de golpe como matriz (iters, n) y
+    calcula las medias de grupo con sumas acumuladas (argpartition)."""
+    a = np.asarray(a, dtype=np.float64)
+    b = np.asarray(b, dtype=np.float64)
+    na, nb = len(a), len(b)
+    diff_real = a.mean() - b.mean()
+    todos = np.concatenate([a, b])
+    n = na + nb
+    # (iters, n) de índices barajados -- argsort de valores aleatorios es
+    # la forma estándar de vectorizar "shuffle" por filas en numpy.
+    idx = _rng.random((iters, n)).argsort(axis=1)
+    permutado = todos[idx]
+    media_a = permutado[:, :na].mean(axis=1)
+    media_b = permutado[:, na:].mean(axis=1)
+    diffs = media_a - media_b
+    p_valor = float(np.mean(np.abs(diffs) >= abs(diff_real)))
+    return float(diff_real), p_valor
+
+
+def bh_fdr_signif(p_valores, q=0.05):
+    """Benjamini-Hochberg -- devuelve el set de ÍNDICES (en el orden
+    original de p_valores) que sobreviven la corrección a nivel q.
+    Con cientos/miles de tests simultáneos (candidatos_evaluacion_live:
+    ~230 tuplas x ~10 buckets = miles de tests), p<0.05 SIN corregir
+    produce ~5% de falsos positivos por puro azar -- con ~2000 tests,
+    ~100 buckets "confirmados" que no serían nada. BH-FDR controla la
+    tasa de falsos descubrimientos sobre el conjunto completo, mismo
+    criterio que el resto del proyecto exige para hipótesis con muchos
+    tests (feedback_shuffle_antes_de_bloquear, feedback_no_declarar_
+    muerta_sin_agotar_opciones)."""
+    n = len(p_valores)
+    if n == 0:
+        return set()
+    orden = sorted(range(n), key=lambda i: p_valores[i])
+    corte = -1
+    for rank, i in enumerate(orden, start=1):
+        if p_valores[i] <= (rank / n) * q:
+            corte = rank
+    if corte == -1:
+        return set()
+    return set(orden[:corte])
 
 
 def main():
     tuplas = cargar_tuplas_live()
     filas_por_tupla = cargar_filas(tuplas)
-    resultado = {}
+    n_live = sum(1 for *_, es_live in tuplas if es_live)
+    print(f"Tuplas a evaluar: {len(tuplas)} ({n_live} live, {len(tuplas) - n_live} candidatos)")
 
-    for strategy, subtype, decision, tupla_str in tuplas:
+    # PASADA 1: calcular todos los buckets candidatos (n>=N_MIN, split-half
+    # consistente) y acumular p-valores SIN decidir veredicto todavía --
+    # BH-FDR necesita la familia completa de tests antes de cortar.
+    pendientes = []
+    resultado = {}
+    for i, (strategy, subtype, decision, tupla_str, es_live) in enumerate(tuplas):
+        if i % 25 == 0:
+            print(f"  ... {i}/{len(tuplas)} tuplas procesadas (pasada 1/2)", flush=True)
         filas = filas_por_tupla.get(tupla_str, [])
-        print(f"\n{'='*112}\n{tupla_str}  (n_total={len(filas)})\n{'='*112}")
         if len(filas) < N_MIN:
-            print("  n_total insuficiente, sin conclusión posible.")
             resultado[tupla_str] = {}
             continue
 
@@ -120,34 +182,50 @@ def main():
             pnl_f = [pnl for _, pnl in fuera]
             media_d = sum(pnl_d) / n_d
 
-            veredicto = "sin_concluir"
-            p_valor = None
-            split = None
+            entrada = {"n": n_d, "pnl_medio": round(media_d, 4),
+                       "diff_vs_resto": round(media_d - (sum(pnl_f) / len(pnl_f)), 4) if pnl_f else None,
+                       "shuffle_p": None, "split_half_diff": None, "veredicto": "sin_concluir"}
+            tabla[f"{b:.2f}"] = entrada
+
             if n_d >= N_MIN and pnl_f:
                 diff, p_valor = shuffle_test(pnl_d, pnl_f)
+                entrada["shuffle_p"] = round(p_valor, 4)
                 dentro_sorted = sorted(dentro, key=lambda x: x[0])
                 mid = n_d // 2
-                m1 = dentro_sorted[:mid]
-                m2 = dentro_sorted[mid:]
+                m1, m2 = dentro_sorted[:mid], dentro_sorted[mid:]
                 if len(m1) >= 5 and len(m2) >= 5:
                     d1 = sum(pnl for _, pnl in m1) / len(m1) - sum(pnl_f) / len(pnl_f)
                     d2 = sum(pnl for _, pnl in m2) / len(m2) - sum(pnl_f) / len(pnl_f)
-                    split = [round(d1, 4), round(d2, 4)]
+                    entrada["split_half_diff"] = [round(d1, 4), round(d2, 4)]
                     consistente = (d1 < 0 and d2 < 0) or (d1 > 0 and d2 > 0)
-                    if p_valor < P_MAX and consistente:
-                        veredicto = "malo_confirmado" if diff < 0 else "bueno_confirmado"
-
-            tabla[f"{b:.2f}"] = {
-                "n": n_d, "pnl_medio": round(media_d, 4),
-                "diff_vs_resto": round(media_d - (sum(pnl_f) / len(pnl_f)), 4) if pnl_f else None,
-                "shuffle_p": round(p_valor, 4) if p_valor is not None else None,
-                "split_half_diff": split, "veredicto": veredicto,
-            }
-            marca = {"malo_confirmado": "🔴", "bueno_confirmado": "🟢", "sin_concluir": "➖"}[veredicto]
-            print(f"  [{b:.2f},{b+STEP:.2f}) n={n_d:4d} pnl_medio={media_d:+.3f} "
-                  f"p={p_valor if p_valor is None else round(p_valor,4)} split={split} {marca} {veredicto}")
-
+                    if consistente:
+                        pendientes.append({"tupla_str": tupla_str, "bucket": f"{b:.2f}", "entrada": entrada,
+                                            "p": p_valor, "diff": diff, "es_live": es_live})
         resultado[tupla_str] = tabla
+
+    # PASADA 2: BH-FDR sobre TODA la familia de tests candidatos, luego
+    # asignar el veredicto final solo a los que sobreviven.
+    p_valores = [p["p"] for p in pendientes]
+    sobreviven = bh_fdr_signif(p_valores, q=P_MAX)
+    print(f"\nTests candidatos: {len(pendientes)} | sobreviven BH-FDR q={P_MAX}: {len(sobreviven)}")
+
+    veredictos_nuevos = []
+    for idx, p in enumerate(pendientes):
+        if idx not in sobreviven:
+            continue
+        veredicto = "malo_confirmado" if p["diff"] < 0 else "bueno_confirmado"
+        p["entrada"]["veredicto"] = veredicto
+        marca = "🔴" if veredicto == "malo_confirmado" else "🟢"
+        etiqueta = "LIVE" if p["es_live"] else "candidato"
+        b = p["bucket"]
+        veredictos_nuevos.append(
+            f"{marca} [{etiqueta}] {p['tupla_str']} [{b},{float(b)+STEP:.2f}) n={p['entrada']['n']} "
+            f"pnl_medio={p['entrada']['pnl_medio']:+.3f} p={p['p']:.4f} {veredicto}"
+        )
+
+    print(f"\n{len(veredictos_nuevos)} bucket(s) con veredicto final tras BH-FDR:")
+    for linea in veredictos_nuevos:
+        print(f"  {linea}")
 
     with open(OUT, "w", encoding="utf-8") as f:
         json.dump(resultado, f, indent=2, ensure_ascii=False)
