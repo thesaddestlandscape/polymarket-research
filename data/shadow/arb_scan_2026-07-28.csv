@@ -1,0 +1,9 @@
+timestamp_utc,tipo,accionable,event,end_date,n_brackets,suma_yes,suma_ask,suma_bid,gap_pct,profit_pct,roi_no_pct,liq_min,liq_total,rango_min,rango_max
+2026-07-28T00:04:35+00:00,OVERROUND,False,Solana price on July 31?,2026-07-31,9,2.995,5.938,0.052,-493.8,-495.8,-12.38,1.0,226.0,110,120
+2026-07-28T00:04:35+00:00,OVERROUND,False,Solana price on August 1?,2026-08-01,9,2.97,5.891,0.049,-489.1,-491.1,-12.41,1.0,246.0,110,120
+2026-07-28T00:04:35+00:00,OVERROUND,False,Solana price on July 30?,2026-07-30,9,2.9035,5.708,0.099,-470.8,-472.8,-11.92,6.0,258.0,110,120
+2026-07-28T00:04:35+00:00,OVERROUND,False,Solana price on July 29?,2026-07-29,9,1.482,2.879,0.085,-187.9,-189.9,-12.06,19.0,29268.0,110,120
+2026-07-28T00:04:35+00:00,OVERROUND,False,Ethereum price on July 31?,2026-07-31,9,1.117,1.314,0.92,-31.4,-33.4,-2.97,2907.0,26685.0,1400,2300
+2026-07-28T00:04:35+00:00,OVERROUND,False,Ethereum price on July 30?,2026-07-30,9,1.1165,1.305,0.928,-30.5,-32.5,-2.87,2974.0,27327.0,1400,2300
+2026-07-28T00:04:35+00:00,OVERROUND,False,Ethereum price on August 1?,2026-08-01,9,1.103,1.305,0.901,-30.5,-32.5,-3.2,2920.0,27194.0,1400,2300
+2026-07-28T00:04:35+00:00,OVERROUND,False,Ethereum price on July 29?,2026-07-29,9,1.048,1.205,0.891,-20.5,-22.5,-3.32,3275.0,35808.0,1500,2400
