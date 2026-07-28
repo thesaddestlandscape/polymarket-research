@@ -172,7 +172,8 @@ def main() -> int:
             pnl_ult = sum(pnls_ult) / n_ult if n_ult else None
             var_ult = st.variance(pnls_ult) if n_ult > 1 else None
 
-            print(f"[vigia_degradacion_live] {clave}: shadow n={n_shadow} ic={ic_shadow:+.3f} | "
+            ic_shadow_str = f"{ic_shadow:+.3f}" if ic_shadow is not None else "n/a"
+            print(f"[vigia_degradacion_live] {clave}: shadow n={n_shadow} ic={ic_shadow_str} | "
                   f"ejecutado n={n_tot} hit={hit_tot:.1f}% pnl/trade={pnl_tot:+.3f} var={var_tot} | "
                   f"ult{n_ult} hit={hit_ult:.1f}% pnl/trade={pnl_ult:+.3f} var={var_ult}" if hit_ult is not None
                   else f"[vigia_degradacion_live] {clave}: sin datos suficientes")
@@ -197,7 +198,7 @@ def main() -> int:
                 avisos.append(
                     f"{clave}: últimos {n_ult} ejecutados hit={hit_ult:.1f}% "
                     f"pnl/trade={pnl_ult:+.3f}€ (shadow de papel: {n_shadow} señales, "
-                    f"ic={ic_shadow:+.3f})"
+                    f"ic={ic_shadow_str})"
                 )
                 latch.setdefault(clave, {})["negativo"] = True
             elif pnl_ult > UMBRAL_RECUPERACION and ya_alertado:
