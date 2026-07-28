@@ -15,6 +15,7 @@ from data_quality import (
     validar_features_gbm, simbolo_bloqueado, generar_reporte, obtener_consensus_spot,
 )
 from smart_money_tracker import ACTIVOS as ACTIVOS_TICKERS, trades_de_mercado
+from ballenas_banda_fina_gate import evaluar as _gate_banda_fina_ballenas
 
 _HAS_PANDAS: bool | None = None   # None = not yet checked; True/False after first use
 _pd = None                         # populated lazily on first cache miss
@@ -2053,6 +2054,10 @@ def s_updown_gbm_15min_tardio(market, ctx):
         return None  # gate de volumen 27-Jul -- ver GATE_VOLUMEN_VALIDADO
     if n_total_lado is not None:
         resultado["features"]["n_total_lado"] = n_total_lado
+    if py_edge is not None:
+        gate_bf = _gate_banda_fina_ballenas(activo, "15min", py_edge, T_h * 60.0)
+        resultado["features"]["banda_fina_vetaria_fase1"] = gate_bf["vetaria_fase1"]
+        resultado["features"]["banda_fina_motivo"] = gate_bf["motivo"]
     return resultado
 
 
@@ -2883,6 +2888,11 @@ def s_gbm_late_15min(market, ctx):
         return None  # gate de volumen 27-Jul -- ver GATE_VOLUMEN_VALIDADO
     if n_total_lado is not None:
         resultado["features"]["n_total_lado"] = n_total_lado
+    if py_edge is not None:
+        restante_min = resultado.get("features", {}).get("restante_min")
+        gate_bf = _gate_banda_fina_ballenas(activo, "15min", py_edge, restante_min)
+        resultado["features"]["banda_fina_vetaria_fase1"] = gate_bf["vetaria_fase1"]
+        resultado["features"]["banda_fina_motivo"] = gate_bf["motivo"]
     return resultado
 
 
@@ -3845,6 +3855,8 @@ def s_favorito_confirmado(market, ctx):
     except Exception:
         pass
 
+    gate_bf = _gate_banda_fina_ballenas(activo, marco_str, py, restante_min)
+
     return {
         "prob_yes": prob_yes,
         "razon":    f"favorito_confirmado {activo} py={py:.3f} lado={lado} (momentum-consenso, model-free)",
@@ -3854,6 +3866,8 @@ def s_favorito_confirmado(market, ctx):
             "restante_min": restante_min,
             "hora_utc":     datetime.now(timezone.utc).hour,
             "n_total_lado": n_total_lado,
+            "banda_fina_vetaria_fase1": gate_bf["vetaria_fase1"],
+            "banda_fina_motivo": gate_bf["motivo"],
             **_libro_calidad(market),
         },
     }

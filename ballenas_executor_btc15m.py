@@ -52,6 +52,7 @@ import live_trade as lt
 from live_guard import puede_operar_live
 from live_stake import bloquear_por_circuit_breaker, calcular_stake
 from smart_money_tracker import MAX_TRADES_POR_MERCADO, trades_de_mercado
+from ballenas_banda_fina_gate import evaluar as _gate_banda_fina_ballenas
 
 DIR = Path(__file__).resolve().parent
 DIR_SHADOW = DIR / "data" / "shadow"
@@ -372,10 +373,12 @@ def _registrar_prediccion(mercado: dict, py: float, edge: float, restante_s: flo
     ts = datetime.now(timezone.utc).isoformat(timespec="seconds")
     archivo = DIR_SHADOW / f"predictions_{ts[:10]}.csv"
     subtype = f"{ASSET}#{VENTANA_MIN}min"
+    gate_bf = _gate_banda_fina_ballenas(ASSET, f"{VENTANA_MIN}min", py, restante_s / 60.0)
     features = json.dumps({
         "concentracion_yes": round(pct_yes, 4), "n_ballenas": n_ballenas,
         "restante_s_al_confirmar": round(restante_s, 2),
         "banda_lo": banda_lo, "banda_hi": banda_hi,
+        "banda_fina_vetaria_fase1": gate_bf["vetaria_fase1"], "banda_fina_motivo": gate_bf["motivo"],
     }, separators=(",", ":"))
     try:
         with open(PREDICTIONS_LOCK_PATH, "w") as lock_f:

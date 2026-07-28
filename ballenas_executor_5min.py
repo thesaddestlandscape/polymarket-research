@@ -66,6 +66,7 @@ import live_trade as lt
 from live_guard import puede_operar_live
 from live_stake import bloquear_por_circuit_breaker, calcular_stake
 from smart_money_tracker import MAX_TRADES_POR_MERCADO, trades_de_mercado
+from ballenas_banda_fina_gate import evaluar as _gate_banda_fina_ballenas
 
 DIR = Path(__file__).resolve().parent
 DIR_SHADOW = DIR / "data" / "shadow"
@@ -478,16 +479,21 @@ def _migrar_tracker_n_wallets_yes() -> None:
     """27-Jul: añade la columna n_wallets_yes a un tracker ya existente sin
     ella -- lee todas las filas, rellena vacío para las antiguas y reescribe
     con el header nuevo. Se hace UNA vez (comprueba el header actual antes
-    de tocar nada); si ya tiene la columna, no-op."""
+    de tocar nada); si ya tiene la columna, no-op.
+    28-Jul: extendida al mismo patrón para banda_fina_vetaria_fase1/
+    banda_fina_motivo -- mismo problema (DictWriter con fieldnames nuevos
+    sobre un CSV con header viejo desalinea columnas), mismo fix."""
     import csv as _csv
     if not TRACKER_PATH.exists():
         return
     with open(TRACKER_PATH, encoding="utf-8") as f:
         filas = list(_csv.DictReader(f))
-    if not filas or "n_wallets_yes" in filas[0]:
+    columnas_nuevas = ["n_wallets_yes", "banda_fina_vetaria_fase1", "banda_fina_motivo"]
+    if not filas or all(c in filas[0] for c in columnas_nuevas):
         return
     for fila in filas:
-        fila["n_wallets_yes"] = ""
+        for c in columnas_nuevas:
+            fila.setdefault(c, "")
     campos = list(filas[0].keys())
     with open(TRACKER_PATH, "w", newline="", encoding="utf-8") as f:
         w = _csv.DictWriter(f, fieldnames=campos)
@@ -520,6 +526,7 @@ def _registrar_tracker(activo: str, mercado: dict, py: float, edge: float,
             try:
                 _migrar_tracker_n_wallets_yes()
                 nuevo = not TRACKER_PATH.exists()
+                gate_bf = _gate_banda_fina_ballenas(activo, f"{VENTANA_MIN}min", py, restante_s / 60.0)
                 fila = {
                     "timestamp_utc": datetime.now(timezone.utc).isoformat(timespec="seconds"),
                     "activo": activo,
@@ -535,6 +542,8 @@ def _registrar_tracker(activo: str, mercado: dict, py: float, edge: float,
                     "acierto": "",
                     "resolved_ts": "",
                     "n_wallets_yes": n_wallets_yes,
+                    "banda_fina_vetaria_fase1": gate_bf["vetaria_fase1"],
+                    "banda_fina_motivo": gate_bf["motivo"],
                 }
                 import csv as _csv
                 with open(TRACKER_PATH, "a", newline="", encoding="utf-8") as f:
