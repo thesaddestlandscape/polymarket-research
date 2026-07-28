@@ -49,7 +49,7 @@ def main() -> int:
 
     # 1. Regenerar con datos de hoy
     r = subprocess.run([sys.executable, str(REPO / "analisis_gate_bucket_propio_28jul.py")],
-                        capture_output=True, text=True, timeout=120)
+                        capture_output=True, text=True, timeout=120, cwd=str(REPO))
     if r.returncode != 0:
         print(f"ERROR ejecutando analisis_gate_bucket_propio_28jul.py: {r.stderr[-2000:]}")
         return 1
