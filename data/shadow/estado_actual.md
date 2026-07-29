@@ -1,4 +1,4 @@
-# Estado del bot — 2026-07-29 15:45 UTC
+# Estado del bot — 2026-07-29 15:51 UTC
 
 ## Live — dinero real (on-chain)
 | | |
@@ -17,7 +17,7 @@
 | P&L sim compuesto | 🟢 +9062.32 $ (ficción Kelly: +35622% s/ operativo) |
 | P&L sim hoy (2026-07-29) | 🟢 +425.78 $ |
 | Operaciones resueltas | 41928 (25086 WIN / 16842 LOSS) — 59.8% |
-| Señales abiertas | 108 |
+| Señales abiertas | 109 |
 
 ## Estrategias (visión global)
 
