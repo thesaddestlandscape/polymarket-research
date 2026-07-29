@@ -58,17 +58,28 @@ def _cargar() -> dict:
     return _cache["data"]
 
 
-def evaluar(strategy: str, precio_decision: float) -> dict | None:
+def evaluar(strategy: str, precio_decision: float, subtype: str | None = None) -> dict | None:
     """precio_decision = precio en la perspectiva de la DECISIÓN (ya
     flipado a 1-precio_yes si es BUY_NO -- el caller es responsable de
     resolver esto, igual que gate_bucket_propio.evaluar()).
+
+    29-Jul (petición Javi, "desagregar por moneda y marco es la clave"):
+    el gate ahora está indexado por (familia, activo#marco, bucket), no
+    solo (familia, bucket) -- un bucket confirmado en ETH#15min ya NO se
+    aplica a SOL#15min o XRP#15min de la misma familia sin evidencia
+    propia. `subtype` es obligatorio en la práctica (sin él, fail-open
+    igual que sin evidencia) -- se deja opcional solo por compatibilidad
+    de firma, todo caller real de este proyecto pasa subtype.
 
     Devuelve None si no hay evidencia (fail-open, factor=1.0 para el
     caller), o {"veredicto", "ratio_correccion", "bucket", "familia", "n"}
     si el bucket está en el gate (confirmado o no)."""
     familias = _cargar().get("familias", {})
     familia = _familia(strategy)
-    tabla = familias.get(familia)
+    por_subtype = familias.get(familia)
+    if not por_subtype or not subtype:
+        return None
+    tabla = por_subtype.get(subtype)
     if not tabla:
         return None
     b = round(math.floor(precio_decision / STEP) * STEP, 4)
@@ -80,5 +91,6 @@ def evaluar(strategy: str, precio_decision: float) -> dict | None:
         "ratio_correccion": entrada.get("ratio_correccion"),
         "bucket": f"{b:.2f}",
         "familia": familia,
+        "subtype": subtype,
         "n": entrada.get("n"),
     }

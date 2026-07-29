@@ -83,7 +83,16 @@ def cargar_universo():
 
 
 def cargar_filas(tuplas):
-    out = defaultdict(list)  # familia -> [(ts, py, pnl, ic_bucket_key)]
+    """29-Jul (petición Javi, "desagregar por moneda y marco es la clave"):
+    ANTES agrupaba solo por familia (arquetipo), mezclando BTC/ETH/SOL/XRP
+    de GBM_LATE_15M bajo el mismo bucket de precio -- un ratio_correccion
+    "confirmado" podía estar dominado por las monedas con más n (ETH/SOL)
+    y aplicarse igual a una moneda con comportamiento real distinto (ej.
+    XRP, selección adversa documentada en el fill, no en el precio). Ahora
+    agrupa por (familia, activo, marco) -- el "resto" de cada bucket para
+    el shuffle test es el resto de LA MISMA moneda/marco, no de toda la
+    familia."""
+    out = defaultdict(list)  # (familia, activo#marco) -> [(ts, py, pnl, acierto)]
     with open(RESULTS, encoding="utf-8") as f:
         for row in csv.DictReader(f):
             if row.get("acierto") not in ("0", "1"):
@@ -101,7 +110,7 @@ def cargar_filas(tuplas):
             py = min(0.999, max(0.001, py))
             acierto = int(row["acierto"])
             fam = _familia(row["strategy"])
-            out[fam].append((row.get("prediction_timestamp", ""), py, pnl, acierto))
+            out[(fam, row["subtype"])].append((row.get("prediction_timestamp", ""), py, pnl, acierto))
     return out
 
 
@@ -147,13 +156,13 @@ def wilson_ci(k, n, z=1.645):
 
 def main():
     universo = cargar_universo()
-    filas_por_familia = cargar_filas(universo)
-    print(f"Familias: {list(filas_por_familia.keys())}")
+    filas_por_grupo = cargar_filas(universo)
+    print(f"Grupos (familia, activo#marco): {list(filas_por_grupo.keys())}")
 
-    resultado = {}
+    resultado = defaultdict(dict)  # familia -> activo#marco -> bucket -> entrada
     pendientes = []
-    for fam, filas in filas_por_familia.items():
-        print(f"\n=== {fam} (n_total={len(filas)}) ===")
+    for (fam, subtype), filas in filas_por_grupo.items():
+        print(f"\n=== {fam} #{subtype} (n_total={len(filas)}) ===")
         por_bucket = defaultdict(list)
         for ts, py, pnl, acierto in filas:
             por_bucket[bucket(py)].append((ts, py, pnl, acierto))
@@ -161,6 +170,7 @@ def main():
         tabla = {}
         for b in sorted(por_bucket):
             dentro = por_bucket[b]
+            # "fuera" = resto de la MISMA moneda/marco, no de toda la familia
             fuera = [(ts, py, pnl, ac) for bb, fs in por_bucket.items() if bb != b for ts, py, pnl, ac in fs]
             n_d = len(dentro)
             pnl_d = [pnl for _, _, pnl, _ in dentro]
@@ -197,9 +207,9 @@ def main():
                     entrada["split_half_diff"] = [round(d1, 4), round(d2, 4)]
                     consistente = (d1 < 0 and d2 < 0) or (d1 > 0 and d2 > 0)
                     if consistente:
-                        pendientes.append({"fam": fam, "bucket": f"{b:.2f}", "entrada": entrada,
-                                            "p": p_valor, "diff": diff})
-        resultado[fam] = tabla
+                        pendientes.append({"fam": fam, "subtype": subtype, "bucket": f"{b:.2f}",
+                                            "entrada": entrada, "p": p_valor, "diff": diff})
+        resultado[fam][subtype] = tabla
 
     p_valores = [p["p"] for p in pendientes]
     sobreviven = bh_fdr_signif(p_valores, q=P_MAX)
@@ -210,12 +220,13 @@ def main():
         p["entrada"]["veredicto"] = veredicto
 
     print("\n" + "=" * 100)
-    print(f"{'Familia':32s} {'bucket':>7s} {'n':>5s} {'hit':>6s} {'pi':>6s} {'pnl/tr':>8s} {'f_act':>7s} {'f_exac':>7s} {'ratio':>6s} {'shuf_p':>7s} {'vered':>12s}")
-    for fam, tabla in resultado.items():
+    print(f"{'Familia':24s} {'activo#marco':14s} {'bucket':>7s} {'n':>5s} {'hit':>6s} {'pi':>6s} {'pnl/tr':>8s} {'f_act':>7s} {'f_exac':>7s} {'ratio':>6s} {'shuf_p':>7s} {'vered':>12s}")
+    for fam, por_subtype in resultado.items():
+      for subtype, tabla in por_subtype.items():
         for b, e in sorted(tabla.items()):
             if e["n"] < N_MIN:
                 continue
-            print(f"{fam:32s} {b:>7s} {e['n']:>5d} {e['hit']*100:>5.1f}% {e['pi_medio']:>6.3f} "
+            print(f"{fam:24s} {subtype:14s} {b:>7s} {e['n']:>5d} {e['hit']*100:>5.1f}% {e['pi_medio']:>6.3f} "
                   f"{e['pnl_medio']:>+8.3f} {e['f_actual']:>7.4f} {e['f_exacto']:>7.4f} "
                   f"{(str(e['ratio_correccion'])+'x') if e['ratio_correccion'] is not None else '-':>7s} "
                   f"{str(e['shuffle_p']):>7s} {e['veredicto']:>12s}")

@@ -965,14 +965,25 @@ def exposicion_reciente_total(dias: int = 7) -> float:
     return total
 
 
-def _kelly_precio_factor(strategy: str, precio_entrada: float | None, config: dict) -> tuple[float, str]:
+def _kelly_precio_factor(strategy: str, subtype: str, precio_entrada: float | None, config: dict) -> tuple[float, str]:
     """1.0 (no-op) salvo que riesgo.kelly_precio_correccion.activo=true Y
     haya un bucket "confirmado" en kelly_precio_gate.json para esta familia
-    de estrategia y el precio de entrada (perspectiva de la decisión, ya
-    resuelto por el caller -- BUY_NO usa 1-precio_yes). El factor multiplica
-    el stake YA calculado (Kelly+cascada), como _hrp_exposure_factor, pero
-    puede ser >1.0 (aumentar) además de <1.0 (reducir) -- el caller re-aplica
-    el techo absoluto tras esto para que un factor alto nunca lo salte.
+    de estrategia + MONEDA/MARCO (`subtype`, ej. "ETH#15min") y el precio
+    de entrada (perspectiva de la decisión, ya resuelto por el caller --
+    BUY_NO usa 1-precio_yes). El factor multiplica el stake YA calculado
+    (Kelly+cascada), como _hrp_exposure_factor, pero puede ser >1.0
+    (aumentar) además de <1.0 (reducir) -- el caller re-aplica el techo
+    absoluto tras esto para que un factor alto nunca lo salte.
+
+    29-Jul (petición Javi, "desagregar por moneda y marco es la clave"):
+    el gate original agrupaba por familia entera (GBM_LATE_15M_FAMILIA
+    mezclaba BTC/ETH/SOL/XRP) -- un bucket "confirmado" dominado por las
+    monedas con más n (ETH/SOL, que funcionan bien) se habría aplicado
+    igual a una moneda con comportamiento real distinto (ej. XRP, con
+    selección adversa documentada en el momento del fill, no relacionada
+    con el precio de entrada -- ver idea_gbmlate15m_xrp_no_es_hora_29jul).
+    Ahora el gate exige evidencia propia por (familia, activo#marco,
+    bucket) -- kelly_precio_gate.evaluar() ya no promedia entre monedas.
 
     familias_permitidas restringe el rollout a las familias con evidencia
     más sólida primero (petición Javi 29-Jul: "primero vamos a atacar" solo
@@ -985,7 +996,7 @@ def _kelly_precio_factor(strategy: str, precio_entrada: float | None, config: di
     if not cfg.get("activo", False) or precio_entrada is None or not strategy:
         return 1.0, ""
 
-    resultado = kelly_precio_gate.evaluar(strategy, precio_entrada)
+    resultado = kelly_precio_gate.evaluar(strategy, precio_entrada, subtype)
     if resultado is None or resultado["veredicto"] != "confirmado":
         return 1.0, ""
 
@@ -1115,7 +1126,7 @@ def calcular_stake(ic: float, strategy: str = "", subtype: str = "",
     # sigue aplicando después sin cambios.
     kelly_precio_str = ""
     if strategy:
-        kp_factor, kelly_precio_str = _kelly_precio_factor(strategy, precio_entrada, config)
+        kp_factor, kelly_precio_str = _kelly_precio_factor(strategy, subtype, precio_entrada, config)
         if kp_factor != 1.0:
             stake = min(stake * kp_factor, techo_config)
             stake = max(stake, min_stake) if bkr >= min_stake else 0.0
