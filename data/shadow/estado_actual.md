@@ -1,4 +1,4 @@
-# Estado del bot — 2026-07-29 07:15 UTC
+# Estado del bot — 2026-07-29 07:21 UTC
 
 ## Live — dinero real (on-chain)
 | | |
@@ -31,7 +31,7 @@
 | WEEKLY_PRICE | 441 | 73.0% | +0.229 | 📈 madura (+0.27) | +120.58$ | 2.00$ | ✅ activa |
 | GBM_LATE_15M_PYCONFIRMADO | 311 | 55.6% | +0.056 | 📉 agota (-0.23) | +99.50$ | 0.56$ | ✅ activa |
 | UPDOWN_GBM_15M_CROSS_WINDOW_SPREAD | 204 | 80.9% | +0.306 | ➡️ estable | +44.43$ | 2.00$ | ✅ activa |
-| BALLENAS_CONFIRMADAS_15M | 1442 | 59.6% | +0.096 | 📉 agota (-0.05) | +29.81$ | 0.96$ | ✅ activa |
+| BALLENAS_CONFIRMADAS_15M | 1442 | 59.6% | +0.096 | 📉 agota (-0.05) | +29.81$ | 0.95$ | ✅ activa |
 | STREAK_FADE_15M | 304 | 56.2% | +0.062 | 📉 agota (-0.11) | +20.40$ | 0.62$ | ✅ activa |
 | ORDER_FLOW_5M | 1688 | 51.1% | +0.011 | ➡️ estable | +11.00$ | 0.50$ | ✅ activa |
 | LEADLAG_BTC_XRP_15M | 306 | 50.3% | +0.003 | 📉 agota (-0.13) | +7.48$ | 0.50$ | ✅ activa |
