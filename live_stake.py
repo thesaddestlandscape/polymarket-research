@@ -32,6 +32,8 @@ import time
 from datetime import datetime, timezone, timedelta
 from pathlib import Path
 
+import kelly_precio_gate
+
 DIR_LIVE              = Path("data/live")
 DIR_SHADOW            = Path("data/shadow")
 CONFIG_PATH           = DIR_LIVE / "config_live.json"
@@ -963,6 +965,48 @@ def exposicion_reciente_total(dias: int = 7) -> float:
     return total
 
 
+def _kelly_precio_factor(strategy: str, precio_entrada: float | None, config: dict) -> tuple[float, str]:
+    """1.0 (no-op) salvo que riesgo.kelly_precio_correccion.activo=true Y
+    haya un bucket "confirmado" en kelly_precio_gate.json para esta familia
+    de estrategia y el precio de entrada (perspectiva de la decisión, ya
+    resuelto por el caller -- BUY_NO usa 1-precio_yes). El factor multiplica
+    el stake YA calculado (Kelly+cascada), como _hrp_exposure_factor, pero
+    puede ser >1.0 (aumentar) además de <1.0 (reducir) -- el caller re-aplica
+    el techo absoluto tras esto para que un factor alto nunca lo salte.
+
+    familias_permitidas restringe el rollout a las familias con evidencia
+    más sólida primero (petición Javi 29-Jul: "primero vamos a atacar" solo
+    GBM_LATE_15M#[0.30,0.40) -- n=1840-7234, el bucket con más n de todo el
+    barrido) -- lista vacía/ausente = todas las familias confirmadas.
+    Ver analisis_kelly_precio_gate_29jul.py para la metodología (Wilson+
+    shuffle+split-half+BH-FDR) y project_kelly_precio_gate_riguroso_29jul
+    en memoria para el hallazgo completo."""
+    cfg = config.get("riesgo", {}).get("kelly_precio_correccion", {})
+    if not cfg.get("activo", False) or precio_entrada is None or not strategy:
+        return 1.0, ""
+
+    resultado = kelly_precio_gate.evaluar(strategy, precio_entrada)
+    if resultado is None or resultado["veredicto"] != "confirmado":
+        return 1.0, ""
+
+    familias_permitidas = cfg.get("familias_permitidas") or []
+    if familias_permitidas and resultado["familia"] not in familias_permitidas:
+        return 1.0, ""
+
+    ratio = resultado.get("ratio_correccion")
+    if ratio is None:
+        return 1.0, ""
+
+    factor_min = cfg.get("factor_min", 0.0)
+    factor_max = cfg.get("factor_max", 2.5)
+    factor = min(factor_max, max(factor_min, ratio))
+    if factor == 1.0:
+        return 1.0, ""
+    info = (f" | kelly_precio×{factor:.2f} (familia={resultado['familia']} "
+            f"bucket={resultado['bucket']} n={resultado['n']} ratio_bruto={ratio:.2f}x)")
+    return factor, info
+
+
 def _hrp_exposure_factor(strategy: str, subtype: str, direction: str, config: dict) -> tuple[float, str]:
     """1.0 (no-op) salvo que riesgo.hrp_exposicion.activo=true Y la tupla
     sea madura (presente en el fichero) Y su exposición reciente supere
@@ -1000,7 +1044,8 @@ def _hrp_exposure_factor(strategy: str, subtype: str, direction: str, config: di
 # ── Calcular stake ────────────────────────────────────────────────────────────
 
 def calcular_stake(ic: float, strategy: str = "", subtype: str = "",
-                   direction: str = "", techo_override: float | None = None) -> dict:
+                   direction: str = "", techo_override: float | None = None,
+                   precio_entrada: float | None = None) -> dict:
     """
     Stake para una señal con IC dado.
     Opera con el bankroll completo en cada ventana (compounding natural).
@@ -1020,6 +1065,11 @@ def calcular_stake(ic: float, strategy: str = "", subtype: str = "",
     no sabe nada de bandas de ballenas ni de qué tupla es "especial", solo
     aplica el número que le llega. Sigue pasando por TODOS los demás
     techos (Kelly, 10% bankroll, freno diario, inventario) sin excepción.
+
+    precio_entrada (29-Jul, ver _kelly_precio_factor arriba): precio de
+    entrada en perspectiva de la DECISIÓN (el caller resuelve 1-precio_yes
+    si es BUY_NO), opcional -- None desactiva la corrección para esa
+    llamada (fail-open, comportamiento idéntico a antes de este parámetro).
     """
     config     = _cargar_config()
     riesgo     = config.get("riesgo", {})
@@ -1056,6 +1106,20 @@ def calcular_stake(ic: float, strategy: str = "", subtype: str = "",
         if hrp_factor < 1.0:
             stake = max(min_stake, stake * hrp_factor)
 
+    # Corrección Kelly por precio de entrada (29-Jul, ver
+    # _kelly_precio_factor arriba) -- a diferencia de hrp/inventory, este
+    # factor puede ser >1.0 (aumentar stake en buckets infra-dimensionados
+    # confirmados, ej. GBM_LATE_15M#[0.30,0.40)), así que tras aplicarlo
+    # se re-impone el techo absoluto (techo_config) para que un factor alto
+    # nunca lo salte -- el resto de la cascada (10% bankroll, freno diario)
+    # sigue aplicando después sin cambios.
+    kelly_precio_str = ""
+    if strategy:
+        kp_factor, kelly_precio_str = _kelly_precio_factor(strategy, precio_entrada, config)
+        if kp_factor != 1.0:
+            stake = min(stake * kp_factor, techo_config)
+            stake = max(stake, min_stake) if bkr >= min_stake else 0.0
+
     # Freno diario prospectivo: el freno 2 del circuit breaker
     # (verificar_circuit_breaker) solo mira PnL realizado, así que con stakes
     # de ~8% del bankroll un solo trade puede cruzar el límite diario de largo
@@ -1090,7 +1154,7 @@ def calcular_stake(ic: float, strategy: str = "", subtype: str = "",
     motivo = (
         f"bankroll={bkr:.2f}€ | "
         f"Kelly={techo_kelly:.2f}€  max10%={techo_pct:.2f}€  máx={techo_config:.2f}€"
-        f"{inv_str}{hrp_str}{freno_str} → stake={stake:.2f}€"
+        f"{inv_str}{hrp_str}{kelly_precio_str}{freno_str} → stake={stake:.2f}€"
     )
 
     return {

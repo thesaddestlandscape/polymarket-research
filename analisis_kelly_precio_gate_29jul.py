@@ -37,9 +37,10 @@ Un bucket se marca "confirmado" solo si:
   4. sobrevive BH-FDR q=0.05 sobre la familia completa de tests
 
 Solo lectura -- no toca live_stake.py, prob_yes ni ningún stake real.
-Genera data/shadow/kelly_precio_gate_29jul.json (diagnóstico, NO
-consumido todavía por ningún proceso en producción -- decisión de
-implementación pendiente de la próxima sesión, ver conversación 29-Jul).
+Genera data/shadow/kelly_precio_gate.json, consumido por
+kelly_precio_gate.py (mismo patrón fail-open que gate_bucket_propio.py).
+Re-ejecutar periódicamente (n crece cada día) para refrescar el gate --
+no hay cron todavía, correr a mano antes de confiar en un factor viejo.
 """
 import csv
 import json
@@ -52,7 +53,7 @@ import numpy as np
 REPO = Path(__file__).resolve().parent
 RESULTS = str(REPO / "data/shadow/results.csv")
 CONFIG_LIVE = str(REPO / "data/live/config_live.json")
-OUT = str(REPO / "data/shadow/kelly_precio_gate_29jul.json")
+OUT = str(REPO / "data/shadow/kelly_precio_gate.json")
 
 STEP = 0.10
 N_MIN = 15

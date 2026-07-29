@@ -2615,7 +2615,8 @@ def _procesar_pendientes_ballenas(pendientes: dict, config: dict, params: dict,
         if ic_para_stake is None:
             _cerrar_pendiente_ballenas(clave, "abortado_guardia", "ic_para_stake_ausente")
             continue
-        stake_info = calcular_stake(ic_para_stake, strategy, subtype, direction=direction)
+        stake_info = calcular_stake(ic_para_stake, strategy, subtype, direction=direction,
+                                    precio_entrada=entrada.get("precio_plan"))
         if not stake_info.get("viable"):
             log(f"  🐋 Ballenas {combo}: {strategy}#{subtype} {direction} mid={mid} -- "
                 f"stake no viable al reintentar ({stake_info.get('motivo')}), sigue esperando")
@@ -3186,8 +3187,10 @@ def main():
         # siguen exactamente igual que antes.
         techo_ballenas = (riesgo.get("max_stake_eur_ballenas_eth15_dentro_banda")
                            if ballenas_boost_aplicado else None)
+        precio_decision = precio if dec == "BUY_YES" else round(1.0 - precio, 6)
         stake_info = calcular_stake(ic_para_stake, strategy, subtype, direction=dec,
-                                    techo_override=techo_ballenas)
+                                    techo_override=techo_ballenas,
+                                    precio_entrada=precio_decision)
         if not stake_info["viable"]:
             log(f"  SKIP {strategy}#{subtype}: stake no viable — {stake_info['motivo']}")
             _snapshot_senal_bloqueada(mid, dec, precio,
