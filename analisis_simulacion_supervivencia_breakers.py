@@ -30,7 +30,12 @@ from collections import defaultdict
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
-TRADES_CSV = Path("data/live/trades.csv")
+REPO = Path(__file__).resolve().parent
+TRADES_CSV = REPO / "data/live/trades.csv"  # 29-Jul: era relativo -- crasheaba
+# bajo cron (vigia_supervivencia_diaria.py, cron 22:00 UTC) porque el cron no
+# hace `cd` al repo antes de invocar el script, mismo bug ya visto en
+# vigia_gate_bucket_propio.py (28-Jul) y wallet_edge_tracker.py (DIR_SHADOW
+# relativo, commit 547d1e0120).
 UTC_OFFSET_VERANO = 2  # Madrid CEST
 
 
