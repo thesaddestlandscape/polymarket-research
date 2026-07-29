@@ -1,4 +1,4 @@
-# Hipótesis automáticas — 2026-07-29 11:29 UTC
+# Hipótesis automáticas — 2026-07-29 11:34 UTC
 _Generado por shadow_postmortem.py sobre 41692 resoluciones (PNL=+8964.91€)_
 
 ## Patrones causales activos
@@ -1481,7 +1481,7 @@ _Derivadas de los patrones aprendidos:_
 **🟡 H-KELLY-HORA** — Kelly boost ×1.2 por celda (estrategia#subtype#dirección#hora)
   - _Umbral_: n≥40 por celda + gate riguroso completo (Wilson+shuffle+PnL bootstrap)
   - _Acción_: Añadir claves 'ESTRATEGIA#SUBTYPE#DIRECCION#HORA':1.2 a meta.hora_boost_factor, solo por celda confirmada
-  - _Estado_: 13 celda(s) pasan gate riguroso completo de 39 evaluadas (n>=40) y 157 trackeadas (n>=15). Detalle: kelly_hora_segmentado.json
+  - _Estado_: 14 celda(s) pasan gate riguroso completo de 39 evaluadas (n>=40) y 157 trackeadas (n>=15). Detalle: kelly_hora_segmentado.json
 
 **⚠️ H-SOL-15MIN** — SOL#15min → umbral live (IC≥0.08 n≥40)
   - _Umbral_: IC≥0.08 y n≥40
