@@ -4231,6 +4231,15 @@ FAVORITO_15MIN_ALTACONVICCION_TH = 0.70  # mismo umbral que el equivalente 60min
 # sin calibrar todavía por activo (a diferencia de FAVORITO_SOL_ALTACONVICCION_TH=0.665,
 # que sí viene de una auditoría de fill-ability específica de 12-Jul) -- dejar madurar n
 # antes de ajustar por moneda.
+# 29-Jul: primer ajuste por activo, ya calibrado -- cruce fino (bucket 0.05)
+# contra ballenas_timing_history.csv (n=222-8847 por bucket, no las 15-18
+# propias) usando EV real con la fórmula de fee del proyecto
+# (FEE_RATE_TAKER_CRYPTO*py*(1-py)): BTC da EV positivo en TODO [0.65,1.00]
+# (mejor en [0.70,0.80)), pero ETH se vuelve NEGATIVO en [0.95,1.00)
+# (EV=-0.0039, n=3345, py_medio=0.981 -- el precio ya no deja margen pese
+# al 97.9% de acierto). Techo por activo, None = sin techo (BTC y el resto
+# de FAVORITO_CONFIRMADO_PARES, todavía sin este cruce específico).
+FAVORITO_15MIN_ALTACONVICCION_TH_MAX = {"ETH": 0.95}
 
 
 def s_favorito_confirmado_15min_altaconviccion(market, ctx):
@@ -4267,6 +4276,9 @@ def s_favorito_confirmado_15min_altaconviccion(market, ctx):
     py = market.get("_precio_yes")
     if py is None or py < FAVORITO_15MIN_ALTACONVICCION_TH:
         return None
+    techo = FAVORITO_15MIN_ALTACONVICCION_TH_MAX.get(activo)
+    if techo is not None and py >= techo:
+        return None  # 29-Jul: ETH [0.95,1.00) EV negativo, ver constante arriba
     return s_favorito_confirmado(market, ctx)
 
 
