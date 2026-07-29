@@ -123,7 +123,7 @@
     "_min_stake_nota": "2026-07-03: el CLOB rechaza órdenes marketable BUY < $1 ('invalid amount for a marketable BUY order, min size: 1') — 2 señales perdidas hoy con stake 0.94€/0.98€ (Kelly con bankroll 16.33€). El suelo se sube a 1.05 (buffer 0.05 para que el reintento stake±0.01 de live_trade nunca baje de $1). Efecto: señales con Kelly < 1.05€ se ejecutan a 1.05€ (leve sobre-apuesta vs half-Kelly, sigue < full-Kelly y < max10%).",
     "min_stake_eur": 1.05,
     "_max_stake_nota": "2026-07-28 (aprobado Javi, reapertura del gate de despineo pendiente desde el 07-Jul): min_stake_eur=max_stake_eur=1.05€ colapsaba TODA la cascada de calcular_stake() a una constante — verificado en vivo el mismo día (live_stake.py CLI: IC=0.08 y IC=0.22 daban ambos stake=1.05€) — Kelly, _inventory_penalty, _hrp_exposure_factor y los boosts de IC (boost_ic_coincidencia_tuplas, boost_ic_ballenas_favorito_eth15) quedaban neutralizados sin excepción por el suelo `stake = max(stake, min_stake)`. Mecanismo exacto detrás del patrón reportado por Javi ('ganar mucho pero poca cantidad, y que las pérdidas nos drenen'): FAVORITO_CONFIRMADO en su zona de payout adverso (favorito muy confirmado, Kelly exacto pide 0.07-0.19x del stake actual, ver idea_kelly_exacto_cuantificado_23jul) apostaba EXACTAMENTE lo mismo que GBM_LATE_15M en su zona de mejor edge (Kelly exacto pide 2-7.7x). Subido a 2.00€ — el 'máximo absoluto' ya documentado en el propio docstring de calcular_stake(), el mismo valor citado en max_stake_eur_ballenas_eth15_dentro_banda como techo de referencia, y por debajo del techo de 10% bankroll (2.18€ con bankroll=21.77€) así que sigue siendo el techo vinculante. min_stake_eur se mantiene en 1.05€ (suelo real del CLOB, no se toca). Reactiva simultáneamente boost_ic_coincidencia_tuplas y boost_ic_ballenas_favorito_eth15 (decisiones YA aprobadas en su momento, 11-Jul y 21-Jul respectivamente, solo bloqueadas por este mismo pin) y _hrp_exposure_factor (ver hrp_exposicion.activo abajo) — boost_ic_smartmoney_favorito_sol se deja intencionalmente en 1.0, esa es una decisión distinta no tomada en esta sesión. Gate de reapertura heredado del 07-Jul (nunca se llegó a cumplir entonces): vigilar correlación stake↔acierto en los próximos n≥15 trades reales cerrados desde esta fecha — la vez anterior salió corr=-0.32 y se re-pineó el mismo día.",
-    "max_stake_eur": 2.00,
+    "max_stake_eur": 2.0,
     "_min_profundidad_nota": "2026-07-03: veto por profundidad de libro — XRP/SOL#15min ejecutaron contra libros con profundidad 0.00€ (ratio 0.0x stake) y slippage real +0.04/+0.085 que se comió el edge (-3.19€). La profundidad ya se consultaba y logueaba pero no vetaba. Si ratio_vs_stake < este valor (o la consulta del libro falla), la orden se aborta. Fail-closed.",
     "min_profundidad_ratio_libro": 5.0,
     "_max_posiciones_nota": "2026-07-03: techo de correlación — los pares cripto se mueven al unísono intradía; N posiciones misma dirección abiertas a la vez = 1 apuesta con stake ×N (cluster shadow 02-Jul 01h UTC: -24.4€ en 17 BUY_NO simultáneos).",
@@ -155,7 +155,9 @@
     "_kelly_precio_correccion_nota": "2026-07-29 (petición explícita Javi: 'ganamos más veces de las que perdemos, pero cuando perdemos perdemos mucho y cuando ganamos ganamos poco -- soluciónalo'). Diagnóstico con dinero real (trades.csv, 4 tuplas live): la única rentable (GBM_LATE_15M#ETH#15min#BUY_YES, entry medio 0.393, +7.67€, ratio ganancia/pérdida 1.51) entra barata; las 3 que sangran entran caras (0.60-0.81, ratio 0.16-0.73). Causa raíz: calcular_stake() usa IC como proxy de edge SIN dividir por (1-precio) -- Kelly exacto para binarias es f*=(p_hat-pi)/(1-pi), ciego al precio hoy. Cuantificado con rigor completo (Wilson+shuffle+split-half+BH-FDR, ver analisis_kelly_precio_gate_29jul.py / project_kelly_precio_gate_riguroso_29jul en memoria) sobre TODO el universo live+candidatos agrupado por familia de arquetipo x bucket de precio 0.10: 10/33 buckets confirmados. El de más peso: GBM_LATE_15M en [0.30,0.40) infra-dimensionada 1.09x-2.33x con n=1840-7234 (el n más grande de todo el barrido) -- justo donde entra la tupla rentable. Javi pidió atacar ESTE primero (no FAVORITO, que no confirma ningún bucket individual -- su problema es de familia entera, ya resuelto con las pausas del 28-Jul). familias_permitidas restringe el rollout a GBM_LATE_15M_FAMILIA únicamente por ahora -- ampliar a UPDOWN_GBM_FAMILIA (también confirmada, [0.40,0.50) ratio 1.85x-2.93x) en una sesión futura, una vez este primer paso se valide con trades reales. activo=false hasta pasar /code-review + aprobación explícita de Javi para encenderlo -- 0 efecto en euros mientras tanto (mismo patrón fail-open que hrp_exposicion antes de activarse).",
     "kelly_precio_correccion": {
       "activo": true,
-      "familias_permitidas": ["GBM_LATE_15M_FAMILIA"],
+      "familias_permitidas": [
+        "GBM_LATE_15M_FAMILIA"
+      ],
       "factor_min": 0.0,
       "factor_max": 2.5,
       "_activado_nota": "2026-07-29 ~06:35 UTC, aprobado Javi explícitamente ('activar con el ratio completo, hasta 2.5x') tras el diagnóstico + franja milimétrica de ballenas confirmando independientemente la misma zona en BTC/ETH/SOL/XRP. Gate de vigilancia: mismo criterio que el despineo del 28-Jul -- ver analisis_gate_despineo_stake_28jul.py/vigia_gate_despineo_stake.py, el stake final ya incluye este factor así que ese vigía general debería capturar cualquier corr(stake,acierto) negativa sin cambios. Revisar los primeros n>=15 trades reales de GBM_LATE_15M#ETH#15min#BUY_YES en [0.30,0.40) antes de confiar del todo -- ver project_kelly_precio_gate_riguroso_29jul en memoria.",
@@ -371,10 +373,25 @@
     "FAVORITO_CONFIRMADO#XRP#15min#BUY_YES",
     "FAVORITO_CONFIRMADO#XRP#5min#BUY_NO",
     "FAVORITO_CONFIRMADO#XRP#5min#BUY_YES",
-    "FAVORITO_CONFIRMADO_SOL_ALTACONVICCION#SOL#15min#BUY_YES",
+    "FAVORITO_CONFIRMADO_15MIN_ALTACONVICCION#BNB#15min#BUY_YES",
+    "FAVORITO_CONFIRMADO_15MIN_ALTACONVICCION#BTC#15min#BUY_YES",
+    "FAVORITO_CONFIRMADO_15MIN_ALTACONVICCION#DOGE#15min#BUY_YES",
+    "FAVORITO_CONFIRMADO_15MIN_ALTACONVICCION#ETH#15min#BUY_YES",
+    "FAVORITO_CONFIRMADO_15MIN_ALTACONVICCION#SOL#15min#BUY_YES",
+    "FAVORITO_CONFIRMADO_15MIN_ALTACONVICCION#XRP#15min#BUY_YES",
+    "FAVORITO_CONFIRMADO_15MIN_EXTREMO#BNB#15min#BUY_YES",
+    "FAVORITO_CONFIRMADO_15MIN_EXTREMO#BTC#15min#BUY_YES",
+    "FAVORITO_CONFIRMADO_15MIN_EXTREMO#DOGE#15min#BUY_YES",
+    "FAVORITO_CONFIRMADO_15MIN_EXTREMO#ETH#15min#BUY_YES",
+    "FAVORITO_CONFIRMADO_15MIN_EXTREMO#SOL#15min#BUY_YES",
+    "FAVORITO_CONFIRMADO_15MIN_EXTREMO#XRP#15min#BUY_YES",
     "FAVORITO_CONFIRMADO_60MIN_ALTACONVICCION#BTC#60min#BUY_YES",
     "FAVORITO_CONFIRMADO_60MIN_ALTACONVICCION#ETH#60min#BUY_YES",
     "FAVORITO_CONFIRMADO_60MIN_ALTACONVICCION#SOL#60min#BUY_YES",
+    "FAVORITO_CONFIRMADO_60MIN_EXTREMO#BTC#60min#BUY_YES",
+    "FAVORITO_CONFIRMADO_60MIN_EXTREMO#ETH#60min#BUY_YES",
+    "FAVORITO_CONFIRMADO_60MIN_EXTREMO#SOL#60min#BUY_YES",
+    "FAVORITO_CONFIRMADO_SOL_ALTACONVICCION#SOL#15min#BUY_YES",
     "GBM_LATE_15M#BTC#15min#BUY_NO",
     "GBM_LATE_15M#BTC#15min#BUY_YES",
     "GBM_LATE_15M#DOGE#15min#BUY_NO",
@@ -575,13 +592,7 @@
     "WEEKLY_PRICE#ETH#BUY_NO",
     "WEEKLY_PRICE#ETH#BUY_YES",
     "WEEKLY_PRICE#SOL#BUY_NO",
-    "WEEKLY_PRICE#SOL#BUY_YES",
-    "FAVORITO_CONFIRMADO_15MIN_ALTACONVICCION#BTC#15min#BUY_YES",
-    "FAVORITO_CONFIRMADO_15MIN_ALTACONVICCION#ETH#15min#BUY_YES",
-    "FAVORITO_CONFIRMADO_15MIN_ALTACONVICCION#SOL#15min#BUY_YES",
-    "FAVORITO_CONFIRMADO_15MIN_ALTACONVICCION#XRP#15min#BUY_YES",
-    "FAVORITO_CONFIRMADO_15MIN_ALTACONVICCION#DOGE#15min#BUY_YES",
-    "FAVORITO_CONFIRMADO_15MIN_ALTACONVICCION#BNB#15min#BUY_YES"
+    "WEEKLY_PRICE#SOL#BUY_YES"
   ],
   "_candidatos_gbmlate5m_xrp_y_fix_solo_late_nota_2026-07-18": "18-Jul: AÑADIDO XRP a GBM_LATE_5M en candidatos_evaluacion_live (BTC/ETH/SOL ya estaban desde 14-Jul, ver nota siguiente) — completa cobertura de los 4 activos. Motivo real de fondo: GBM_LATE_5M llevaba desde su nacimiento (14-Jul) bloqueada por un gate en shadow_predict.py (_solo_late<3min, creado 02-Jul solo para LATE_WINDOW_5MIN, nadie lo revisó al crear esta estrategia) que excluía TODA estrategia salvo LATE_WINDOW_5MIN de mercados con restante<3min — exactamente la zona donde ballenas_observer.py calibra la señal de esta familia (SOL [0.58,2.12]min, XRP [0.93,3.08]min, ETH [0.08,0.93]min, BTC [-0.03,2.07]min). 0/182 predicciones 5min de todo el 18-Jul tenían restante<3.25min, para NINGUNA estrategia. Fix commit 820422edff (shadow-only, GBM_LATE_5M añadida a la excepción). Consecuencia directa para esta lista: las tuplas BTC/ETH/SOL llevaban semanas en candidatos_evaluacion_live sin acumular NI UN snapshot real de fill-ability, porque la estrategia nunca llegaba a generar predicciones en esa franja. Con el gate corregido debería empezar a fluir dato de verdad. Gate formal de dosis-respuesta+fillability corrido con datos reales el mismo día (n=195 mercados vía API): concentracion>=0.9 -- ETH n=57 hit=100% Wilson=[93.7,100]%, SOL n=52 hit=100% Wilson=[93.1,100]%, XRP n=49 hit=93.9% Wilson=[83.5,97.9]%, BTC n=14 (insuficiente). Ver memoria idea_gbmlate5m_solo_late_gate_18jul y project_ballenas_executor_5min_18jul (ejecutor de baja latencia dedicado construido el mismo día, DRY_RUN, proceso separado -- esto de aquí es la vía shadow/candidata estándar, complementaria, no redundante).",
   "_candidatos_gbmlate_pyconfirmado_5m_nota_2026-07-14": "14-Jul noche (sesión siguiente, petición Javi tras construir las 2 estrategias nuevas basadas en wallet-timing analysis, commit a276209fbc): AÑADIDAS GBM_LATE_15M_PYCONFIRMADO#BTC#15min (ambas direcciones) y GBM_LATE_5M#BTC/ETH/SOL#5min (ambas direcciones) a candidatos_evaluacion_live desde el primer ciclo — evita el error ya cazado el 12-Jul con LATE_WINDOW_5MIN (estrategia con gate de IC cumplido sin un solo snapshot de fill-ability acumulado). Ambas estrategias son 100% shadow (no en pares_permitidos_live), n=0 al arrancar. Objetivo: cuando crucen el gate n≥40 IC≥0.08 (con el rigor extra de la familia GBM_LATE, probablemente n≥289 dado el precedente), ya haya fill-ability real acumulada para decidir con datos, no solo con IC. Ver memoria idea_timing_wallets_smart_vs_sistema_14jul para la metodología completa (z-test + verificación de concentración por wallet) que motivó estas 2 estrategias.",
@@ -601,5 +612,6 @@
       "eur": 25.78,
       "nota": "Segunda recarga tras circuit breaker 17-Jul. 25 USDC nuevos + 0.78 USDC remanente del período 1 = 25.78 USDC de capital disponible al inicio del período 2"
     }
-  ]
+  ],
+  "_candidatos_extremo_090_29jul_nota": "29-Jul: FAVORITO_CONFIRMADO_60MIN_EXTREMO (BTC/ETH/SOL) y FAVORITO_CONFIRMADO_15MIN_EXTREMO (6 activos) -- umbral py>=0.90, cola extrema que ni FAVORITO_CONFIRMADO ni las variantes ALTACONVICCION (umbral 0.70) llegan a registrar por el mismo motivo (dedup por (strategy,market_id), una sola fila por mercado). Hueco medido en analisis_franja_milimetrica_ballenas.py: [0.90,1.00) con ballenas hit 90-99.9% (miles de eventos) y shadow_n=0-14 en TODOS los buckets pese al fix de ALTACONVICCION del 28-Jul. Puramente shadow, NO en pares_permitidos_live, cero dinero real. Añadidas a candidatos_evaluacion_live para que también acumulen fill-ability real desde cero (mismo patrón que las 2 ALTACONVICCION anteriores)."
 }

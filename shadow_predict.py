@@ -4294,6 +4294,58 @@ def s_favorito_confirmado_15min_altaconviccion(market, ctx):
     return s_favorito_confirmado(market, ctx)
 
 
+FAVORITO_EXTREMO_TH = 0.90
+# 29-Jul: aun con ALTACONVICCION (60min/15min, arriba), analisis_franja_
+# milimetrica_ballenas.py sigue mostrando shadow_n=0-14 en [0.90,1.00)
+# mientras ballenas confirma hit 90-99.9% con miles de eventos -- el hueco
+# NO estaba resuelto, solo desplazado. Causa: el dedup es por (strategy,
+# market_id) -- ALTACONVICCION también gasta su ÚNICA fila en el primer
+# ciclo que cruza SU umbral (0.70), así que un mercado que cruza 0.70 y
+# sigue subiendo hasta 0.95 nunca deja una fila ahí. Mismo parche de
+# siempre (SOL_ALTACONVICCION 12-Jul, 60MIN/15MIN_ALTACONVICCION 28-Jul):
+# una estrategia MÁS, nombre propio, dedup propio, umbral más alto --
+# apunta específicamente a la cola 0.90-1.00 que ninguna de las anteriores
+# alcanza a registrar. Puramente shadow, cero dinero real.
+
+
+def s_favorito_confirmado_60min_extremo(market, ctx):
+    """Cola extrema (py>=0.90) de FAVORITO_CONFIRMADO#60min -- ver
+    FAVORITO_EXTREMO_TH arriba. Mismos 3 activos que ALTACONVICCION
+    60min (BTC/ETH/SOL, únicos con hueco medido en ese marco); sin el
+    filtro de restante_min (a 0.90 el precio ya está tan extremo que no
+    hace falta, y queremos maximizar n en vez de recortarlo más)."""
+    question = market.get("question", "")
+    if "up or down" not in question.lower():
+        return None
+    tipo, vent = _parse_updown_tipo(question)
+    if tipo != "hourly" or vent != 60:
+        return None
+    if identificar_activo(question) not in FAVORITO_60MIN_ALTACONVICCION_PARES:
+        return None
+    py = market.get("_precio_yes")
+    if py is None or py < FAVORITO_EXTREMO_TH:
+        return None
+    return s_favorito_confirmado(market, ctx)
+
+
+def s_favorito_confirmado_15min_extremo(market, ctx):
+    """Cola extrema (py>=0.90) de FAVORITO_CONFIRMADO#15min -- ver
+    FAVORITO_EXTREMO_TH arriba. Los 6 activos de FAVORITO_CONFIRMADO_PARES,
+    igual que ALTACONVICCION 15min (el hueco [0.95,1.00) apareció en los 6)."""
+    question = market.get("question", "")
+    if "up or down" not in question.lower():
+        return None
+    tipo, vent = _parse_updown_tipo(question)
+    if tipo != "slot" or vent != 15:
+        return None
+    if identificar_activo(question) not in FAVORITO_CONFIRMADO_PARES:
+        return None
+    py = market.get("_precio_yes")
+    if py is None or py < FAVORITO_EXTREMO_TH:
+        return None
+    return s_favorito_confirmado(market, ctx)
+
+
 # ── STREAK — momentum (5min) / reversión (15min) en la SECUENCIA de resoluciones ──
 # Hallazgo 2026-07-05: nadie miraba la secuencia de ventanas (todas las estrategias
 # las tratan como independientes). El signo se INVIERTE por escala:
@@ -4824,6 +4876,8 @@ ESTRATEGIAS = [
     ("FAVORITO_CONFIRMADO_SOL_ALTACONVICCION", s_favorito_confirmado_sol_altaconviccion),
     ("FAVORITO_CONFIRMADO_60MIN_ALTACONVICCION", s_favorito_confirmado_60min_altaconviccion),
     ("FAVORITO_CONFIRMADO_15MIN_ALTACONVICCION", s_favorito_confirmado_15min_altaconviccion),
+    ("FAVORITO_CONFIRMADO_60MIN_EXTREMO", s_favorito_confirmado_60min_extremo),
+    ("FAVORITO_CONFIRMADO_15MIN_EXTREMO", s_favorito_confirmado_15min_extremo),
     ("STREAK_MOM_5M",       s_streak_mom_5m),
     ("STREAK_FADE_5M",      s_streak_fade_5m),
     ("STREAK_FADE_15M",     s_streak_fade_15m),
