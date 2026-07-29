@@ -58,14 +58,33 @@ N_MIN_AGREGADO_ESTRATEGIA = 100   # mínimo para que una (strategy,subtype) entr
 N_MIN_BUCKET_INFORMATIVO = 15
 N_MIN_BUCKET_MADURO = 40          # umbral de gate riguroso + split-half
 FAMILIAS_BALLENA_DEPENDIENTES_SIN_UMBRAL = {
-    "FAVORITO_CONFIRMADO_15MIN_ALTACONVICCION",
-}  # 29-Jul: familias recién promocionadas cuyo edge depende de precio de
-# confirmación de ballenas -- se excluían del barrido porque su n agregado
-# en results.csv (16-18/moneda a 29-Jul) no cruza N_MIN_AGREGADO_ESTRATEGIA
-# (100), pensado para filtrar RUIDO en el reporte, no para bloquear
-# familias ballena-dependientes de acumular aquí desde el principio. El
-# gate por bucket (n>=N_MIN_BUCKET_MADURO=40) sigue exigiéndose igual, esto
-# solo permite que la familia aparezca en el barrido mientras madura.
+    # 29-Jul: TODAS las estrategias de shadow_predict.py cuya función usa
+    # ballenas_timing_state.json/_banda_y_timing_ballenas/_gate_volumen_
+    # ballenas/_gate_banda_fina_ballenas/_banda_confirmada_ballenas/wallet_
+    # edge_score (verificado por grep de línea de código real, no de
+    # nombre) -- petición explícita Javi: "conéctalo a todas las
+    # estrategias que usan datos de ballenas... tanto en live, como
+    # shadow, como en el cementerio". Antes solo estaba la recién
+    # promocionada FAVORITO_CONFIRMADO_15MIN_ALTACONVICCION; el resto
+    # llevaba fuera del barrido sin que nadie lo hubiera auditado.
+    # Bypasea SOLO el filtro agregado N_MIN_AGREGADO_ESTRATEGIA (pensado
+    # para reducir ruido de reporte, no para excluir familias ballena-
+    # dependientes de acumular desde el principio) -- el gate por bucket
+    # (n>=N_MIN_BUCKET_MADURO=40) se exige igual para todas.
+    "GBM_LATE_15M",                              # LIVE
+    "FAVORITO_CONFIRMADO",                        # LIVE (varios pares)
+    "FAVORITO_CONFIRMADO_15MIN_ALTACONVICCION",   # LIVE (BTC/ETH, 29-Jul)
+    "BALLENAS_TARDIAS",                           # LIVE (BTC15m ejecutor, ETH5m ejecutor)
+    "UPDOWN_GBM_15M_TARDIO",                      # retirada de live 28-Jul, sigue en candidatos_evaluacion_live
+    "BALLENAS_CONFIRMADAS_15M",                   # shadow, feed de ballenas_executor_15min.py DRY_RUN
+    "GBM_LATE_5M",                                # shadow
+    "GBM_LATE_15M_PYCONFIRMADO",                  # shadow
+    "GBM_LATE_60M_PYCONFIRMADO",                  # shadow, n aún muy bajo
+    "LATE_WINDOW_5MIN",                           # shadow (wallet_edge_score + ballenas_timing_state)
+    "LEADLAG_BTC_XRP_15M",                        # shadow/tracking, expectativa baja
+    "FAVORITO_CONFIRMADO_60MIN_ALTACONVICCION",   # shadow, no promocionada
+    "FAVORITO_CONFIRMADO_SOL_ALTACONVICCION",     # 🪦 cementerio (payout asimétrico ya confirmado), se deja acumular por si un ángulo nuevo la revive
+}
 
 
 def bucket(p):
