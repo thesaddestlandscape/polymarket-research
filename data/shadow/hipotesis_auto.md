@@ -1,5 +1,5 @@
-# Hipótesis automáticas — 2026-07-29 12:25 UTC
-_Generado por shadow_postmortem.py sobre 41747 resoluciones (PNL=+8986.22€)_
+# Hipótesis automáticas — 2026-07-29 12:30 UTC
+_Generado por shadow_postmortem.py sobre 41748 resoluciones (PNL=+8992.64€)_
 
 ## Patrones causales activos
 
@@ -1179,7 +1179,7 @@ _Derivadas de los patrones aprendidos:_
 | ✅ BALLENAS_CONFIRMADAS_15M#SOL#15min | 539 | +0.110 | +4.11€ | 0 | 0 |
 | ✅ BALLENAS_CONFIRMADAS_15M#XRP | 307 | +0.073 | +18.69€ | 0 | 0 |
 | ✅ BALLENAS_CONFIRMADAS_15M#XRP#15min | 307 | +0.073 | +18.69€ | 0 | 0 |
-| ✅ BALLENAS_TARDIAS | 63 | +0.331 | +2.17€ | 0 | 0 |
+| ✅ BALLENAS_TARDIAS | 64 | +0.333 | +8.60€ | 0 | 0 |
 | ✅ BALLENAS_TARDIAS#15min | 61 | +0.341 | +3.08€ | 0 | 0 |
 | ✅ BALLENAS_TARDIAS#BTC | 61 | +0.341 | +3.08€ | 0 | 0 |
 | ✅ BALLENAS_TARDIAS#BTC#15min | 61 | +0.341 | +3.08€ | 0 | 0 |
