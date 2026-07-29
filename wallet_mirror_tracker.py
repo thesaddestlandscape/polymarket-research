@@ -172,6 +172,7 @@ def detectar_matches(wallets: dict, vistos: set) -> tuple[list[dict], set]:
                 lado_wallet = row.get("outcome", "")  # "Up"/"Down"
                 mirror_lado = lado_wallet if info["tipo"] == "SEGUIR" else _opuesto(lado_wallet)
                 th = row.get("transaction_hash", "")
+                fill = _fillability_mirror(row.get("market_slug", ""), mirror_lado, row.get("price", ""))
                 nuevos.append({
                     "timestamp_utc": datetime.now(timezone.utc).isoformat(timespec="seconds"),
                     "trade_timestamp": row.get("timestamp_utc", ""),
@@ -190,6 +191,8 @@ def detectar_matches(wallets: dict, vistos: set) -> tuple[list[dict], set]:
                     "outcome_real": "",
                     "acierto": "",
                     "resolved_ts": "",
+                    "ratio_vs_stake_deteccion": fill.get("ratio_vs_stake", "") if fill.get("ok") else "",
+                    "mejor_ask_deteccion": fill.get("mejor_ask", "") if fill.get("ok") else "",
                 })
     return nuevos, vistos_nuevo
 
@@ -203,10 +206,64 @@ def _opuesto(lado: str) -> str:
     return ""
 
 
+STAKE_REF_EUR = 1.05  # mismo suelo que min_stake_eur en config_live.json
+RATIO_OBJETIVO = 5.0  # mismo umbral que veto_profundidad/analisis_fills.py/P22
+
+
+def _token_para_lado(market_slug: str, lado: str) -> str | None:
+    """29-Jul: fill-ability -- ninguna señal de wallet_mirror medía si
+    el libro real habría dejado ejecutar el mirror. wallet_mirror_dry_run.csv
+    solo trae market_slug/condition_id (no market_id numérico de Gamma), así
+    que en vez de _get_token_ids(market_id) (live_trade.py) se resuelve por
+    slug vía /events -- mismo endpoint que ya usa outcome_por_slug() en este
+    fichero. Valida el orden real contra `outcomes` en vez de asumir
+    clobTokenIds[0]=primer outcome (mismo criterio que _get_token_ids)."""
+    try:
+        r = requests.get(f"{GAMMA}/events", params={"slug": market_slug}, timeout=8)
+        if r.status_code != 200:
+            return None
+        ev = r.json()
+        if not ev or not ev[0].get("markets"):
+            return None
+        mkt = ev[0]["markets"][0]
+        outcomes = mkt.get("outcomes")
+        outcomes = json.loads(outcomes) if isinstance(outcomes, str) else outcomes
+        tokens = mkt.get("clobTokenIds")
+        tokens = json.loads(tokens) if isinstance(tokens, str) else tokens
+        if not outcomes or not tokens or len(outcomes) != len(tokens):
+            return None
+        lado_l = (lado or "").strip().lower()
+        for o, t in zip(outcomes, tokens):
+            if (o or "").strip().lower() == lado_l:
+                return t
+        return None
+    except Exception:
+        return None
+
+
+def _fillability_mirror(market_slug: str, mirror_lado: str, precio_wallet: str) -> dict:
+    """Consulta el libro PÚBLICO (solo lectura, nunca ordena) para el token
+    del lado que Wallet Mirror habría comprado, en el instante de detección
+    (no en el instante original del trade de la wallet -- mismo desfase que
+    ya acepta P22/candidato_evaluacion, aceptable dado el cron de 10min).
+    precio de referencia: si mirror_lado==lado_wallet (SEGUIR), el mismo
+    precio que pagó la wallet; si es el lado contrario (FADE), 1-precio."""
+    try:
+        precio_w = float(precio_wallet)
+    except (TypeError, ValueError):
+        return {"ok": False}
+    token_id = _token_para_lado(market_slug, mirror_lado)
+    if token_id is None:
+        return {"ok": False}
+    precio_entrada = precio_w  # aproximación -- ver docstring
+    return lt._consultar_profundidad_libro(None, token_id, precio_entrada, STAKE_REF_EUR)
+
+
 COLUMNS = ["timestamp_utc", "trade_timestamp", "wallet", "tipo", "edge_pp_validado",
            "n_validado", "activo", "marco", "condition_id", "market_slug",
            "lado_wallet", "precio_wallet", "mirror_lado", "transaction_hash",
-           "outcome_real", "acierto", "resolved_ts"]
+           "outcome_real", "acierto", "resolved_ts",
+           "ratio_vs_stake_deteccion", "mejor_ask_deteccion"]
 
 
 def guardar(filas: list) -> None:
