@@ -20,7 +20,15 @@ live_trade.py):
   1. Vigila data/live/libro_snapshots.csv por nuevas filas motivo=
      veto_profundidad (señal real que YA pasó todos los gates y solo
      murió por profundidad de libro — la población exacta que P22
-     querría rescatar).
+     querría rescatar) Y TAMBIÉN motivo=candidato_evaluacion con
+     ratio_vs_stake<RATIO_OBJETIVO (29-Jul, petición Javi de probar P22
+     sobre GBM_LATE_15M_TARDIO#XRP#15min: esa tupla nunca está en
+     pares_permitidos_live, así que jamás genera veto_profundidad -- sin
+     esta rama, P22 sería estructuralmente ciego a cualquier candidato,
+     no solo a XRP. Cada señal de candidato solo deja UN snapshot puntual
+     -- dedup por mercado+dirección+estrategia en live_trade.py --, así
+     que "¿la profundidad se recupera después?" no es reconstruible con
+     el histórico, hay que seguirla en vivo igual que a los vetos reales).
   2. Para cada veto nuevo, sigue consultando el libro público
      (_consultar_profundidad_libro, misma función de solo lectura que ya
      usa live_trade.py/ballenas_executor_btc15m.py) cada POLL_INTERVAL_S
@@ -57,10 +65,27 @@ MAX_HILOS_CONCURRENTES = 8
 
 COLUMNS = [
     "veto_timestamp_utc", "market_id", "strategy", "subtype", "direction",
+    "motivo_origen",  # veto_profundidad (live) o candidato_evaluacion (29-Jul)
     "precio_plan", "stake_eur", "ratio_inicial",
     "muestras_json",  # [[t_offset_s, ratio, mejor_ask], ...]
     "mejora_detectada", "t_mejora_s", "ratio_max",
 ]
+
+
+def _es_evento_relevante(fila: dict) -> bool:
+    """veto_profundidad: señal real ya vetada. candidato_evaluacion: NO
+    todas las filas de esta categoría sirven (la mayoría tiene libro
+    normal) -- solo las de profundidad pobre son la misma población que
+    veto_profundidad, sólo que en una tupla que aún no está en live."""
+    motivo = fila.get("motivo")
+    if motivo == "veto_profundidad":
+        return True
+    if motivo == "candidato_evaluacion":
+        try:
+            return float(fila.get("ratio_vs_stake") or 0.0) < RATIO_OBJETIVO
+        except (TypeError, ValueError):
+            return False
+    return False
 
 _lock_out = threading.Lock()
 _vistos = set()
@@ -134,7 +159,8 @@ def _seguir_veto(fila_veto: dict) -> None:
         _escribir_fila({
             "veto_timestamp_utc": fila_veto["timestamp_utc"],
             "market_id": market_id, "strategy": strategy, "subtype": subtype,
-            "direction": direction, "precio_plan": precio_plan, "stake_eur": stake_eur,
+            "direction": direction, "motivo_origen": fila_veto.get("motivo", ""),
+            "precio_plan": precio_plan, "stake_eur": stake_eur,
             "ratio_inicial": ratio_inicial,
             "muestras_json": _json.dumps(muestras, separators=(",", ":")),
             "mejora_detectada": int(mejora_detectada),
@@ -160,7 +186,7 @@ def _marcar_backlog_como_visto() -> set:
     if LIBRO_SNAPSHOTS.exists():
         with open(LIBRO_SNAPSHOTS, encoding="utf-8") as f:
             for fila in csv.DictReader(f):
-                if fila.get("motivo") == "veto_profundidad":
+                if _es_evento_relevante(fila):
                     vistos.add((fila["timestamp_utc"], fila["market_id"]))
     return vistos
 
@@ -182,7 +208,7 @@ def main() -> None:
                 with open(LIBRO_SNAPSHOTS, encoding="utf-8") as f:
                     filas = list(csv.DictReader(f))
                 for fila in filas:
-                    if fila.get("motivo") != "veto_profundidad":
+                    if not _es_evento_relevante(fila):
                         continue
                     clave = (fila["timestamp_utc"], fila["market_id"])
                     if clave in _vistos:
