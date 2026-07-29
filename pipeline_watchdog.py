@@ -365,6 +365,35 @@ def check_chainlink_fresh(screens_up: dict) -> None:
         restart_screen("chainlink")
 
 
+POLYACTIVITY_STALE_SECS = 60  # 29-Jul: MISMO patrón que chainlink -- el
+# firehose de polyactivity mueve cientos/miles de trades/min en horario
+# normal, así que 60s sin ninguna fila nueva ya es anómalo. Encontrado el
+# mismo bug de raíz (async for raw in ws sin timeout, conexión muerta en
+# silencio) al comparar fidelidad contra ballenas_timing_history.csv --
+# 71% de mercados sin cobertura por 3 huecos de ~2h sin ningún error en
+# el log. Fix de raíz ya aplicado (RECV_TIMEOUT_S=30), esta es la MISMA
+# red de seguridad de refuerzo que ya protege a chainlink, por si se
+# repite de otra forma en el futuro.
+
+
+def check_polyactivity_fresh(screens_up: dict) -> None:
+    if not screens_up.get("polyactivity"):
+        return  # check_screens ya se encarga de relanzarla si está caída
+    hoy = time.strftime("%Y-%m-%d", time.gmtime())
+    p = DIR_SHADOW / f"polymarket_activity_{hoy}.csv"
+    if not p.exists():
+        return
+    age = time.time() - p.stat().st_mtime
+    if age > POLYACTIVITY_STALE_SECS:
+        log(f"  ⚠ polyactivity: sin filas nuevas hace {age:.0f}s (screen viva pero colgada) — reiniciando")
+        try:
+            subprocess.run(["screen", "-S", "polyactivity", "-X", "quit"], timeout=10)
+            time.sleep(1)
+        except Exception as e:
+            log(f"  [POLYACTIVITY] error al matar screen vieja: {e}")
+        restart_screen("polyactivity")
+
+
 def check_results_growing():
     p = DIR_SHADOW / "results.csv"
     if not p.exists():
@@ -664,6 +693,7 @@ def main():
 
             # ── 2a. Chainlink vivo pero colgado (screen OK, sin ticks nuevos) ──
             check_chainlink_fresh(screens)
+            check_polyactivity_fresh(screens)
 
             # ── 2b. Deploy obsoleto (fix commiteado pero screen sin reiniciar) ─
             stale = check_stale_deploys(screens)
