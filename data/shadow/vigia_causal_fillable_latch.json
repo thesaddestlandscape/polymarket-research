@@ -4183,7 +4183,7 @@
  "candidato_proxy#WEEKLY_PRICE#BTC#BUY_NO#T_hgt": false,
  "candidato_proxy#WEEKLY_PRICE#BTC#BTC#BUY_NO#pct_distabs_lt": false,
  "candidato_proxy#WEEKLY_PRICE#ETH#BUY_NO#T_hgt": false,
- "candidato_proxy#GBM_LATE_15M_ESPACIO_ATR#ETH#15min#ETH#BUY_YES#dist_vwap_pctgt": true,
+ "candidato_proxy#GBM_LATE_15M_ESPACIO_ATR#ETH#15min#ETH#BUY_YES#dist_vwap_pctgt": false,
  "candidato_proxy#GBM_LATE_15M_ESPACIO_ATR#BTC#BUY_NO#sigma_ewma_delta_pctgt": false,
  "candidato_proxy#GBM_LATE_15M_TARDIO#SOL#15min#SOL#BUY_YES#sigma_ewma_delta_pctgt": false,
  "candidato_proxy#GBM_LATE_15M_ESPACIO_ATR#SOL#BUY_YES#sigma_ewma_delta_pctgt": false,
