@@ -686,6 +686,16 @@ TRADES_COLS = [
     "conviction_score", "kelly_recomendado",
     "status", "close_timestamp", "exit_price",
     "outcome_real", "fee_eur", "pnl_bruto_eur", "pnl_neto_eur", "notas",
+    # 29-Jul (Stage 0, P29 ítem 6 -- logging estructurado de slippage):
+    # antes solo vivían como texto libre dentro de `notas`
+    # ("slip_real=+0.0050 ..."), sin poder consultarse sin regex. Añadidas
+    # como columnas propias -- `signal_ask` es el precio planeado en el
+    # momento de la señal (antes de la orden real), `slip_real` es
+    # `entry_price - signal_ask` (ya calculado en _ejecutar_orden_polymarket).
+    # `notas` se mantiene sin cambios (redundante pero no se retira, cero
+    # riesgo de romper nada que ya la parsee). Migración de filas
+    # históricas en migrar_trades_columnas_slippage_29jul.py.
+    "signal_ask", "slip_real",
 ]
 
 
@@ -2653,6 +2663,8 @@ def _procesar_pendientes_ballenas(pendientes: dict, config: dict, params: dict,
             "strategy": strategy, "subtype": subtype, "direction": direction,
             "stake_eur": stake_info["stake_eur"] if resultado.get("ok") else 0.0,
             "entry_price": resultado.get("entry_price"),
+            "signal_ask": entrada.get("precio_plan", ""),
+            "slip_real": resultado.get("slip_real", ""),
             "ic_modelo": round(ic_para_stake, 4),
             "edge_neto": round(entrada.get("edge_dir"), 4) if entrada.get("edge_dir") is not None else "",
             "conviction_score": round(ic_para_stake, 4),
@@ -3275,6 +3287,8 @@ def main():
             "fee_eur":         resultado.get("fee_eur", 0),
             "pnl_bruto_eur":   "",
             "pnl_neto_eur":    "",
+            "signal_ask":      round(precio_decision, 4),
+            "slip_real":       resultado.get("slip_real", ""),
             "notas":           ((f"slip_real={resultado['slip_real']:+.4f}"
                                 + (f" slip_est_kyle={resultado['slip_estimado_kyle']:.4f}"
                                    if resultado.get("slip_estimado_kyle") is not None else "")

@@ -689,6 +689,8 @@ def disparar(activo: str, mercado: dict, py: float, edge: float, restante_s: flo
             "strategy": STRATEGY, "subtype": subtype, "direction": "BUY_YES",
             "stake_eur": stake_info["stake_eur"] if resultado["ok"] else 0.0,
             "entry_price": resultado["entry_price"],
+            "signal_ask": round(py, 4),
+            "slip_real": resultado.get("slip_real", ""),
             "ic_modelo": round(prob_bucket, 4),
             "edge_neto": round(edge, 4),
             "conviction_score": round(prob_bucket, 4),
