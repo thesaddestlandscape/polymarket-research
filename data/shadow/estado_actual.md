@@ -1,4 +1,4 @@
-# Estado del bot — 2026-07-29 22:37 UTC
+# Estado del bot — 2026-07-29 22:43 UTC
 
 ## Live — dinero real (on-chain)
 | | |
@@ -25,7 +25,7 @@
 |---|---|---|---|---|---|---|---|
 | GBM_LATE_15M_ESPACIO_ATR | 6355 | 62.1% | +0.121 | 📉 agota (-0.06) | +3134.64$ | 1.21$ | ✅ activa |
 | GBM_LATE_15M | 9167 | 59.5% | +0.095 | ➡️ estable | +2788.63$ | 0.95$ | ✅ activa |
-| GBM_LATE_15M_TARDIO | 6350 | 56.8% | +0.068 | 📉 agota (-0.07) | +1793.71$ | 0.68$ | ✅ activa |
+| GBM_LATE_15M_TARDIO | 6350 | 56.8% | +0.068 | 📉 agota (-0.07) | +1793.71$ | 0.67$ | ✅ activa |
 | UPDOWN_GBM_15M_TARDIO | 2420 | 65.3% | +0.153 | ➡️ estable | +1084.99$ | 1.53$ | ✅ activa |
 | UPDOWN_GBM | 3124 | 54.0% | +0.040 | 📈 madura (+0.06) | +309.25$ | 0.50$ | ✅ activa |
 | WEEKLY_PRICE | 457 | 73.5% | +0.234 | 📈 madura (+0.27) | +132.04$ | 2.00$ | ✅ activa |
