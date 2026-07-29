@@ -155,6 +155,10 @@ screen ressniper → resolution_sniper_observer.py (28-Jul: mide sniping de reso
 screen polyactivity → fetch_polymarket_activity_ws.py (28-Jul: firehose de trades reales Polymarket vía RTDS, topic activity/trades, gratis sin auth — replica lo que moondevonyt cobra en su "Polymarket Whales API")
 screen liqs → fetch_binance_liquidations.py (28-Jul: liquidaciones reales Binance Futures, feed público gratis, alimenta LIQUIDACIONES_5M/15M/60M en shadow_predict.py — backlog ítem B/5min)
 screen libroambos → fetch_libro_ambos_lados.py (28-Jul: libro YES+NO de ambos lados para todo el universo 5/15/60min, sin tocar live_trade.py — desbloquea Box Builder/Corridor Collector/Spread-Harvest Maker)
+screen puntoconf → punto_confirmacion_logger.py (23-Jul: punto de confirmación 95% por moneda/marco, ver protocolo pt.10)
+screen ballenas_fast → ballenas_executor_btc15m.py (17-Jul: ejecutor de baja latencia BTC#15min, LIVE — BALLENAS_TARDIAS#BTC#15min#BUY_YES)
+screen ballenas_5m → ballenas_executor_5min.py (18-27-Jul: ejecutor de baja latencia {ETH,SOL,XRP,DOGE,BNB}#5min — solo ETH live, resto DRY_RUN por whitelist)
+screen ballenas_15m → ballenas_executor_15min.py (29-Jul: generaliza el mismo mecanismo a {ETH,SOL,XRP,DOGE}#15min#BUY_YES, DRY_RUN=True — ataca la selección adversa del fast loop en los micro-buckets ya confirmados por Kelly-precio/ballenas_timing_state_fino. Guarda fail-closed: descarta activos cuya banda "operativa" favorezca NO en vez de YES, ver commit `8b67272c1a`)
 cron */5       → watchdog_fast.sh (9 checks, restart screens, alerta disco)
 ```
 
