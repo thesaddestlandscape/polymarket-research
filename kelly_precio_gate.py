@@ -23,8 +23,16 @@ _cache = {"mtime": None, "data": {}}
 
 
 def _familia(strategy: str) -> str:
-    """Debe coincidir EXACTO con _familia() de analisis_kelly_precio_gate_29jul.py
-    -- si se cambia el agrupamiento ahí, cambiar aquí también."""
+    """Única fuente de verdad del agrupamiento por arquetipo (29-Jul:
+    extraída aquí, antes duplicada también en
+    analisis_kelly_precio_gate_29jul.py -- ese script ahora importa esta
+    función en vez de tener su propia copia, para que el gate que se
+    genera y el que se consume en live_stake.py nunca puedan divergir).
+    Agrupa subfamilias del mismo arquetipo (ej. GBM_LATE_15M_TARDIO,
+    _ESPACIO_ATR, _PYCONFIRMADO cuentan como GBM_LATE_15M) -- el patrón de
+    precio es del ARQUETIPO, no de la variante exacta, y agrupar da más n
+    por bucket sin mezclar arquetipos distintos (A vs B, ver
+    project_dos_patrones_edge_bandera_21jul)."""
     if strategy.startswith("GBM_LATE"):
         return "GBM_LATE_15M_FAMILIA"
     if strategy.startswith("FAVORITO_CONFIRMADO"):

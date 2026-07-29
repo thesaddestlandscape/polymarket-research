@@ -50,6 +50,8 @@ from pathlib import Path
 
 import numpy as np
 
+from kelly_precio_gate import _familia
+
 REPO = Path(__file__).resolve().parent
 RESULTS = str(REPO / "data/shadow/results.csv")
 CONFIG_LIVE = str(REPO / "data/live/config_live.json")
@@ -65,23 +67,6 @@ _rng = np.random.default_rng(29)
 
 def bucket(p):
     return round(math.floor(p / STEP) * STEP, 4)
-
-
-def _familia(strategy):
-    """Agrupa subfamilias del mismo arquetipo (ej. GBM_LATE_15M_TARDIO,
-    _ESPACIO_ATR, _PYCONFIRMADO cuentan como GBM_LATE_15M) -- el patrón de
-    precio es del ARQUETIPO, no de la variante exacta, y agrupar da más n
-    por bucket sin mezclar arquetipos distintos (A vs B, ver
-    project_dos_patrones_edge_bandera_21jul)."""
-    if strategy.startswith("GBM_LATE"):
-        return "GBM_LATE_15M_FAMILIA"
-    if strategy.startswith("FAVORITO_CONFIRMADO"):
-        return "FAVORITO_CONFIRMADO_FAMILIA"
-    if strategy.startswith("BALLENAS"):
-        return "BALLENAS_FAMILIA"
-    if strategy.startswith("UPDOWN_GBM"):
-        return "UPDOWN_GBM_FAMILIA"
-    return strategy
 
 
 def cargar_universo():
