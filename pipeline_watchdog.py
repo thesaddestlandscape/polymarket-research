@@ -112,6 +112,12 @@ SCREEN_RESTART = {
     # visibilidad. Solo lectura, no tocan dinero.
     "puntoconf": f"cd {REPO} && .venv/bin/python punto_confirmacion_logger.py >> logs/punto_confirmacion.log 2>&1",
     "ressniper": f"cd {REPO} && .venv/bin/python resolution_sniper_observer.py >> logs/resolution_sniper_observer.log 2>&1",
+    # ballenas_15m (29-Jul): ejecutor de baja latencia BALLENAS_CONFIRMADAS_15M
+    # #{ETH,SOL,XRP,DOGE}#15min#BUY_YES, DRY_RUN=True -- generaliza a 15min el
+    # patron ya probado en ballenas_fast (BTC15m, live)/ballenas_5m (5min).
+    # Registrado en SCREEN_RESTART/check_screens() desde su creacion (no
+    # repetir el gap encontrado hoy mismo con ressniper/puntoconf).
+    "ballenas_15m": f"cd {REPO} && .venv/bin/python ballenas_executor_15min.py >> logs/ballenas_15m.log 2>&1",
 }
 
 # Cuando stdout está redirigido (screen >> watchdog.log), print() ya escribe al fichero
@@ -172,7 +178,7 @@ def check_screens() -> dict[str, bool]:
         r = subprocess.run(["screen", "-ls"], capture_output=True, text=True, timeout=5)
         output = r.stdout + r.stderr
         return {name: (f".{name}\t" in output or f".{name} " in output)
-                for name in ["fast", "slow", "control", "dash", "pfinish", "ballenas_fast", "ballenas_5m", "chainlink", "favultsec", "polyactivity", "liqs", "libroambos", "puntoconf", "ressniper"]}
+                for name in ["fast", "slow", "control", "dash", "pfinish", "ballenas_fast", "ballenas_5m", "chainlink", "favultsec", "polyactivity", "liqs", "libroambos", "puntoconf", "ressniper", "ballenas_15m"]}
     except Exception:
         return {}
 
