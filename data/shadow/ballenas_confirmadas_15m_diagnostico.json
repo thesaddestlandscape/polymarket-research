@@ -279,7 +279,7 @@
         }
       },
       "volumen_bajo": {
-        "conteo": 246,
+        "conteo": 249,
         "mercados": {
           "0x392f0e3560600308f946c9fc14e3c261a1dd3b4133db9025ce09d9a352a371c8": 3,
           "0x057398db1e6fbb9e400cb83a25851e0e5ee80058cb94904df5aaa9ca8a53689b": 3,
@@ -304,7 +304,7 @@
           "0x8d1c27de1dfe378e2865ccf5904adaeee4a92f9c81a817bb232d8a0c2ce6208d": 3,
           "0x78f4163e46eb409e83304ac673c44d1e5de634d0a1aecd4acbaa0bd615d74921": 43,
           "0x55cb7ecb164167196daa9a445d85a1a8ad885c9d432907b7dfc5f4f8615990c9": 3,
-          "0x7b3bae384e452d1e8f1d5700493708fcbc11071dfa8d58504e52379c64ce9acc": 12
+          "0x7b3bae384e452d1e8f1d5700493708fcbc11071dfa8d58504e52379c64ce9acc": 15
         }
       },
       "concentracion_baja": {
@@ -397,13 +397,13 @@
       "pct_lado": 1.0,
       "motivo": "volumen_bajo",
       "condition_id": "0x7b3bae384e452d1e8f1d5700493708fcbc11071dfa8d58504e52379c64ce9acc",
-      "ts": "2026-07-29T02:09:05+00:00"
+      "ts": "2026-07-29T02:15:40+00:00"
     }
   },
   "DOGE#BUY_NO": {
     "motivos": {
       "banda_no_confirmada": {
-        "conteo": 3224,
+        "conteo": 3233,
         "mercados": {
           "0xc132ec92b406eb13da1cb814396e60b66f819f1be1c0d8394317d53e5b2c08b1": 6,
           "0xd0672cde7ddef0a3136bf4e9209e193940596ab831742079687f92fea3d8ca1b": 10,
@@ -525,9 +525,9 @@
           "0x68aae2bf37bcbbda5e171b1e7055f5e5750ab390da86c29f9e3133795f36bb42": 16,
           "0x926aa40f748f5ad59ddee32a9f5e17863ff6eac5677618038da278e7f6a53883": 13,
           "0xdd07197e0992254b12aa02061ff9efc45195f7ff4289ff42a0cab65931c8c7df": 12,
-          "0x4829dab6430ec5824de98f91ffed978117394d9e28020e24129ee008d248b5f3": 6,
-          "0x021dcb3cc49b00ca15954037b0f62c42da7c0a6ffbb16ff07d5e7f95eec0435c": 7,
-          "0x0954fd43287c87ff46e982a8709e5af6a600f24a11146f37791d31764bba4bea": 4
+          "0x4829dab6430ec5824de98f91ffed978117394d9e28020e24129ee008d248b5f3": 9,
+          "0x021dcb3cc49b00ca15954037b0f62c42da7c0a6ffbb16ff07d5e7f95eec0435c": 10,
+          "0x0954fd43287c87ff46e982a8709e5af6a600f24a11146f37791d31764bba4bea": 7
         }
       }
     }
