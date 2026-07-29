@@ -903,3 +903,14 @@ timestamp_utc,activo,nesting,combo,coste,profit_min_pct,gap_opens_pct,depth_usd,
 2026-07-29T13:42:49+00:00,XRP,5min15m,NOout+YESin,1.42,-42.0,-0.186,6.6,130,0.66,0.76,1.073,1.075,xrp-updown-5m-1785332400,xrp-updown-15m-1785331800
 2026-07-29T13:44:01+00:00,SOL,5min15m,YESout+NOin,1.2,-20.0,0.0136,7.33,58,0.96,0.24,73.51,73.5,sol-updown-5m-1785332400,sol-updown-15m-1785331800
 2026-07-29T13:44:01+00:00,XRP,5min15m,NOout+YESin,1.67,-67.0,-0.186,6.7,58,0.8,0.87,1.073,1.075,xrp-updown-5m-1785332400,xrp-updown-15m-1785331800
+2026-07-29T13:46:48+00:00,BTC,15min60m,YESout+NOin,1.47,-47.0,0.2224,33.39,791,0.89,0.58,64394.615,64251.715,btc-updown-15m-1785332700,bitcoin-up-or-down-july-29-2026-9am-et
+2026-07-29T13:46:49+00:00,ETH,15min60m,YESout+NOin,1.26,-26.0,0.2028,6.89,790,0.57,0.69,1907.135,1903.275,eth-updown-15m-1785332700,ethereum-up-or-down-july-29-2026-9am-et
+2026-07-29T13:46:49+00:00,SOL,15min60m,YESout+NOin,1.38,-38.0,0.2857,4.94,790,0.63,0.75,73.72,73.51,sol-updown-15m-1785332700,solana-up-or-down-july-29-2026-9am-et
+2026-07-29T13:46:49+00:00,XRP,15min60m,NOout+YESin,1.26,-26.0,-0.1948,18.05,790,0.96,0.3,1.0758,1.0779,xrp-updown-15m-1785332700,xrp-up-or-down-july-29-2026-9am-et
+2026-07-29T13:47:38+00:00,BTC,15min60m,YESout+NOin,1.39,-39.0,0.2224,2.64,741,0.95,0.44,64394.615,64251.715,btc-updown-15m-1785332700,bitcoin-up-or-down-july-29-2026-9am-et
+2026-07-29T13:47:38+00:00,ETH,15min60m,YESout+NOin,1.29,-29.0,0.2028,20.58,741,0.58,0.71,1907.135,1903.275,eth-updown-15m-1785332700,ethereum-up-or-down-july-29-2026-9am-et
+2026-07-29T13:47:39+00:00,SOL,15min60m,YESout+NOin,1.41,-41.0,0.2857,5.68,740,0.7,0.71,73.72,73.51,sol-updown-15m-1785332700,solana-up-or-down-july-29-2026-9am-et
+2026-07-29T13:47:39+00:00,XRP,15min60m,NOout+YESin,1.19,-19.0,-0.1948,6.94,740,0.96,0.23,1.0758,1.0779,xrp-updown-15m-1785332700,xrp-up-or-down-july-29-2026-9am-et
+2026-07-29T13:49:08+00:00,ETH,15min60m,YESout+NOin,1.32,-32.0,0.2028,29.15,651,0.79,0.53,1907.135,1903.275,eth-updown-15m-1785332700,ethereum-up-or-down-july-29-2026-9am-et
+2026-07-29T13:49:08+00:00,SOL,15min60m,YESout+NOin,1.42,-42.0,0.2857,14.84,651,0.89,0.53,73.72,73.51,sol-updown-15m-1785332700,solana-up-or-down-july-29-2026-9am-et
+2026-07-29T13:49:09+00:00,XRP,15min60m,NOout+YESin,1.36,-36.0,-0.1948,7.66,650,0.98,0.38,1.0758,1.0779,xrp-updown-15m-1785332700,xrp-up-or-down-july-29-2026-9am-et
