@@ -2791,6 +2791,15 @@ def s_late_window_5min(market: dict, ctx: dict):
 
 GBM_LATE_15M_REST_MIN_LO = 3.0    # min restantes mínimos (suelo operables = 3min)
 GBM_LATE_15M_REST_MIN_HI = 12.0   # min restantes máximos (salta los 3 primeros min)
+GBM_LATE_15M_SOL_HORAS_BUENAS_UTC = {16, 17, 19, 23}  # 29-Jul: reactivación
+# de GBM_LATE_15M#SOL#15min#BUY_YES (pausada 16-Jul, real -1.58€ n=76)
+# restringida a estas 4 horas -- gate riguroso (Wilson+shuffle+bootstrap+
+# split-half) confirma GATE OK (n=178, IC=+0.161, pnl_medio=+0.573,
+# CI90%=[+0.363,+0.784]) frente a NO CONCLUYENTE en el resto de horas y
+# NEGATIVO específicamente en hora 13 (real -6.53€ de los -1.58€ totales).
+# Fill-ability real (ratio_vs_stake>=5x, colapsado por market_id) en estas
+# 4 horas: 41.3% (52/126) -- sana, comparable a las mejores tuplas live.
+# Ver memoria idea_gate_riguroso_sol15min_excluir_hora13_29jul.
 GBM_LATE_15M_TARDIO_REST_MIN_HI = 10.5  # variante "entra más tarde" (reimplementada 09-Jul,
 # la primera vez se perdió sin commitear — ver idea_gbm_late_tardio_08jul). Bucketing 08-Jul
 # (n=645+71+24+16+5) sugería un sweet spot en [9,10.5)min IC+0.199, no una mejora monótona al
@@ -3094,6 +3103,9 @@ def s_gbm_late_15min(market, ctx):
         direccion = "BUY_YES" if prob_yes_dir >= py_edge else "BUY_NO"
     else:
         direccion = "BUY_YES" if prob_yes_dir >= 0.5 else "BUY_NO"
+    if activo == "SOL" and direccion == "BUY_YES" \
+            and datetime.now(timezone.utc).hour not in GBM_LATE_15M_SOL_HORAS_BUENAS_UTC:
+        return None  # 29-Jul: reactivación restringida por hora -- ver constante arriba
     deja_pasar, n_total_lado = _gate_volumen_ballenas("GBM_LATE_15M", activo, "15min",
                                                        direccion, market.get("condition_id"))
     if not deja_pasar:
