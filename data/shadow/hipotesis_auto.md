@@ -1,5 +1,5 @@
-# Hipótesis automáticas — 2026-07-29 10:27 UTC
-_Generado por shadow_postmortem.py sobre 41639 resoluciones (PNL=+8929.92€)_
+# Hipótesis automáticas — 2026-07-29 10:36 UTC
+_Generado por shadow_postmortem.py sobre 41640 resoluciones (PNL=+8930.40€)_
 
 ## Patrones causales activos
 
@@ -1304,10 +1304,10 @@ _Derivadas de los patrones aprendidos:_
 | 🚫 GBM_LATE_60M_PYCONFIRMADO#60min | 9 | -0.143 | -2.77€ | 0 | 0 |
 | ✅ GBM_LATE_60M_PYCONFIRMADO#BTC | 5 | -0.054 | -0.73€ | 0 | 0 |
 | ✅ GBM_LATE_60M_PYCONFIRMADO#BTC#60min | 5 | -0.054 | -0.73€ | 0 | 0 |
-| ✅ LATE_WINDOW_5MIN | 381 | -0.067 | -8.19€ | 0 | 0 |
-| ✅ LATE_WINDOW_5MIN#5min | 381 | -0.067 | -8.19€ | 0 | 0 |
-| ✅ LATE_WINDOW_5MIN#BTC | 381 | -0.067 | -8.19€ | 0 | 0 |
-| ✅ LATE_WINDOW_5MIN#BTC#5min | 381 | -0.067 | -8.19€ | 0 | 0 |
+| ✅ LATE_WINDOW_5MIN | 382 | -0.065 | -7.71€ | 0 | 0 |
+| ✅ LATE_WINDOW_5MIN#5min | 382 | -0.065 | -7.71€ | 0 | 0 |
+| ✅ LATE_WINDOW_5MIN#BTC | 382 | -0.065 | -7.71€ | 0 | 0 |
+| ✅ LATE_WINDOW_5MIN#BTC#5min | 382 | -0.065 | -7.71€ | 0 | 0 |
 | ✅ LEADLAG_BTC_XRP_15M | 306 | +0.003 | +7.48€ | 1 | 0 |
 | ✅ LEADLAG_BTC_XRP_15M#15min | 306 | +0.003 | +7.48€ | 0 | 0 |
 | ✅ LEADLAG_BTC_XRP_15M#XRP | 306 | +0.003 | +7.48€ | 0 | 0 |
@@ -1497,7 +1497,7 @@ _Derivadas de los patrones aprendidos:_
 **🟡 H-STREAK-COOLDOWN** — Cooldown tras 2 derrotas consecutivas (mismo subtype)
   - _Umbral_: n≥40 tras 2 losses y gap(IC_tras_win - IC_tras_2loss)≥0.05
   - _Acción_: Reducir stake (no desactivar) 1-2h tras 2 derrotas consecutivas en el mismo subtype
-  - _Estado_: tras_win IC=+0.112 n=24775 | tras_1loss IC=+0.077 n=16628 | tras_2loss IC=+0.052 n=6986/40 | gap=+0.060 (umbral 0.05)
+  - _Estado_: tras_win IC=+0.112 n=24775 | tras_1loss IC=+0.077 n=16629 | tras_2loss IC=+0.052 n=6987/40 | gap=+0.059 (umbral 0.05)
 
 **🟡 H-KALMAN** — Kalman filter para drift adaptativo
   - _Umbral_: n≥200 por subtipo para calibrar parámetros Q/R del KF
@@ -1721,8 +1721,8 @@ _Derivadas de los patrones aprendidos:_
   - _Hipótesis_: Inspirado en VyvanseWithMarijuana (36.5% ROI, $42k vol). A T+160-270s dentro de una ventana BTC 5min, si BTC ya se movió >0.3%, Polymarket no ha actualizado precio → edge estructural. Estrategia LATE_WINDOW_5MIN en shadow hasta n≥30. FIX 2026-07-02: la estrategia llevaba 0 predicciones desde su creacion porque HORIZONTE_MIN_HORAS=0.05 (3min) descartaba todo mercado a <3min de expirar — y su zona de entrada (160-270s de una ventana de 5min) deja 30-140s restantes, siempre bajo el suelo. Corregido en shadow_predict (zona late-window marcada _solo_late, 30s-3min, solo evaluada por esta estrategia). El reloj de acumulacion empieza de verdad hoy. Contexto extra: el estudio de ballenas de hoy confirma que comprar el lado ganador a mitad/final de ventana es el playbook comun de los 3 mayores ganadores verificados de estos mercados (Bonereaper +$19.9k/mes, wowitsamazing +$10k/mes, zhangfan151 +$8.7k/mes).
   - _Umbral_: n≥30 y IC>+0.05
   - _Acción_: Si IC≥0.08 con n≥30 → proponer pasar a live con stake mínimo (0.50€). Si IC<0 con n≥30 → el lag de Polymarket en BTC es insuficiente.
-  - _Estado_: n=381 IC=-0.067 PNL=-8.19€ — sin señal clara aún (umbral IC: min=0.08 max=None)
-  - _Datos_: n=381 IC=-0.067 PNL=-8.19€
+  - _Estado_: n=382 IC=-0.065 PNL=-7.71€ — sin señal clara aún (umbral IC: min=0.08 max=None)
+  - _Datos_: n=382 IC=-0.065 PNL=-7.71€
 
 **〰️ H-DVOL-SPIKE-BUYNO** — DVOL spike (sigma_h alto) → BUY_NO tiene más edge (panic regime)
   - _Hipótesis_: Inspirado en 'The Volatility Edge' (Concretum Research, 2025): en equities, VIX spikes identifican regímenes de pánico donde los moves están sobreamplificados por feedback loops (deleveraging, hedgers, etc). En cripto el análogo es DVOL (Deribit BTC IV). Sin acceso a DVOL, usamos sigma_h como proxy (vol realizada 1h). Hipótesis: cuando sigma_h > 0.004/h (≈ vol diaria >9.6%), los mercados de predicción exageran la bajada en 15min → BUY_NO tiene IC superior porque el pánico se revierte intraday. Activar cuando n≥200 en BUY_NO #15min para tener potencia suficiente para subdividir por régimen.
@@ -1763,8 +1763,8 @@ _Derivadas de los patrones aprendidos:_
   - _Hipótesis_: Inspirado en el paper de Fornero (2023, 43 Jornadas SADAF) sobre astrología financiera: 5 estudios peer-review (Dichev & Janes 2003, Yuan et al. 2006, Keef & Khaled 2011, Floros & Tan 2013, Liu & Tseng 2009) en 25-62 mercados bursátiles encuentran rendimientos 5-10%/año más bajos cerca de luna llena que de luna nueva. El propio paper es escéptico de la astrología como tal, pero el mecanismo que documenta no es místico: sesgo de humor de inversores minoristas (más fuerte en acciones con dominancia retail, casi nulo en institucional). Polymarket es un mercado muy retail/cripto — hipótesis: si el mecanismo transfiere, debería verse peor IC cerca de luna llena (moon_phase≈0.5) que en el resto del ciclo.
   - _Umbral_: n≥200 PERO ADEMÁS necesita cubrir al menos 3 ciclos lunares completos (~90 días de calendario) — no evaluar solo por n, aunque el volumen diario ya lo cruce en horas
   - _Acción_: Si IC cerca de luna llena < IC resto del ciclo con margen ≥0.05 y ≥3 ciclos lunares cubiertos → considerar boost/filtro por moon_phase. No implementar con menos de 3 ciclos aunque n sea alto — el efecto es de calendario lento, no de volumen.
-  - _Estado_: n=5328 IC=+0.083 PNL=+1264.12€ — sin señal clara aún (umbral IC: min=None max=-0.03)
-  - _Datos_: n=5328 IC=+0.083 PNL=+1264.12€
+  - _Estado_: n=5329 IC=+0.083 PNL=+1264.60€ — sin señal clara aún (umbral IC: min=None max=-0.03)
+  - _Datos_: n=5329 IC=+0.083 PNL=+1264.60€
 
 **〰️ H-CUSTOM-MERCURY-RETROGRADO** — Mercurio retrógrado: ¿rendimiento peor durante la ventana?
   - _Hipótesis_: Mismo origen que H-CUSTOM-MOON-LLENA (paper de Fornero, 43 Jornadas SADAF 2023). Qi, Wang & Zhang (2022, 48 mercados, 1973-2019): rendimientos 3.33%/año más bajos durante Mercurio retrógrado. Kou & Ma (2022) en China (99.8% cuentas retail): hasta -31% anualizado. Ambos estudios confirman que el mecanismo es la creencia/superstición de inversores retail (mayor efecto cuanto más retail y más supersticioso el mercado), no un efecto astral literal — Polymarket encaja en ese perfil. Ventanas 2026 (fuente pública, actualizar cada año): 26-feb a 20-mar, 29-jun a 23-jul, 24-oct a 13-nov.
