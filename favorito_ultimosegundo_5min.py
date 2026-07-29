@@ -62,7 +62,7 @@ RESOLVE_DELAY_S = 90
 COLUMNS = [
     "timestamp_utc", "slug", "market_id", "condition_id", "activo",
     "end_date", "restante_s", "py_yes", "lado", "direccion",
-    "best_bid", "best_ask", "spread",
+    "best_bid", "best_ask", "spread", "profundidad_usd", "n_niveles",
     "outcome_real", "acierto",
 ]
 
@@ -90,16 +90,23 @@ def mercado_slot(asset: str, ts_start: int):
 
 
 def libro_bid_ask(token_id: str):
+    """(best_ask, best_bid, profundidad_usd_total_ask, n_niveles_ask).
+
+    29-Jul: añadida profundidad (antes solo precio, sin poder medir
+    fill-ability -- ver project_analisis_4_piezas_observacionales_29jul
+    en memoria). Mismo patrón que punto_confirmacion_logger.py::libro()."""
     try:
         r = requests.get(f"{CLOB}/book", params={"token_id": token_id}, timeout=TIMEOUT)
         if r.status_code != 200:
-            return None, None
+            return None, None, None, None
         b = r.json()
-        asks = [float(a["price"]) for a in (b.get("asks") or [])]
+        asks = [(float(a["price"]), float(a["size"])) for a in (b.get("asks") or [])]
         bids = [float(a["price"]) for a in (b.get("bids") or [])]
-        return (min(asks) if asks else None), (max(bids) if bids else None)
+        best_ask = min((p for p, _ in asks), default=None)
+        profundidad = round(sum(p * s for p, s in asks), 2) if asks else None
+        return best_ask, (max(bids) if bids else None), profundidad, len(asks)
     except Exception:
-        return None, None
+        return None, None, None, None
 
 
 def outcome_oficial(market_id: str):
@@ -147,10 +154,20 @@ def snapshot_asset(asset: str, ts_end: int):
     except Exception:
         tokens = []
     best_bid = best_ask = spread = ""
+    profundidad_usd = n_niveles = ""
     if len(tokens) >= 2:
-        token_yes = tokens[0]
-        ask, bid = libro_bid_ask(token_yes)
+        # 29-Jul (bug real encontrado y corregido, ver
+        # project_analisis_4_piezas_observacionales_29jul en memoria):
+        # antes SIEMPRE consultaba el token YES (tokens[0]), aun cuando
+        # direccion=="BUY_NO" -- para esas filas (lado="Down") el libro
+        # relevante es el del token NO (tokens[1]), no el de YES. Con la
+        # mitad de las señales siendo BUY_NO, la mitad de best_bid/
+        # best_ask/spread históricos correspondía al lado equivocado del
+        # libro.
+        token_lado = tokens[0] if direccion == "BUY_YES" else tokens[1]
+        ask, bid, prof, n_niv = libro_bid_ask(token_lado)
         best_bid, best_ask = bid, ask
+        profundidad_usd, n_niveles = prof, n_niv
         if bid is not None and ask is not None:
             spread = round(ask - bid, 4)
 
@@ -169,6 +186,8 @@ def snapshot_asset(asset: str, ts_end: int):
         "best_bid": best_bid if best_bid is not None else "",
         "best_ask": best_ask if best_ask is not None else "",
         "spread": spread,
+        "profundidad_usd": profundidad_usd if profundidad_usd is not None else "",
+        "n_niveles": n_niveles if n_niveles is not None else "",
         "outcome_real": "",
         "acierto": "",
     }
