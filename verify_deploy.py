@@ -43,6 +43,7 @@ SCREENS = {
     "ballenas_5m": {"entry": "ballenas_executor_5min.py",
                      "probe": "log:logs/ballenas_5m.log:arrancado"},
     "ressniper": {"entry": "resolution_sniper_observer.py", "probe": None},
+    "p22fase0": {"entry": "p22_cola_posicion_fase0.py", "probe": None},
     "ballenas_15m": {"entry": "ballenas_executor_15min.py", "probe": None},
     # Solo se vigila el .sh (sus hijos python son proceso fresco cada ciclo).
     "fast":    {"entry": "run_fast.sh", "shallow": True, "no_restart": True},

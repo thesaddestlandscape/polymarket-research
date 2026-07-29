@@ -118,6 +118,9 @@ SCREEN_RESTART = {
     # Registrado en SCREEN_RESTART/check_screens() desde su creacion (no
     # repetir el gap encontrado hoy mismo con ressniper/puntoconf).
     "ballenas_15m": f"cd {REPO} && .venv/bin/python ballenas_executor_15min.py >> logs/ballenas_15m.log 2>&1",
+    # p22fase0 (29-Jul): P22 FASE 0, solo observación -- registrado desde su
+    # creación (mismo gap de ressniper/puntoconf, no repetirlo).
+    "p22fase0": f"cd {REPO} && .venv/bin/python p22_cola_posicion_fase0.py >> logs/p22_cola_posicion_fase0.log 2>&1",
 }
 
 # Cuando stdout está redirigido (screen >> watchdog.log), print() ya escribe al fichero
@@ -178,7 +181,7 @@ def check_screens() -> dict[str, bool]:
         r = subprocess.run(["screen", "-ls"], capture_output=True, text=True, timeout=5)
         output = r.stdout + r.stderr
         return {name: (f".{name}\t" in output or f".{name} " in output)
-                for name in ["fast", "slow", "control", "dash", "pfinish", "ballenas_fast", "ballenas_5m", "chainlink", "favultsec", "polyactivity", "liqs", "libroambos", "puntoconf", "ressniper", "ballenas_15m"]}
+                for name in ["fast", "slow", "control", "dash", "pfinish", "ballenas_fast", "ballenas_5m", "chainlink", "favultsec", "polyactivity", "liqs", "libroambos", "puntoconf", "ressniper", "ballenas_15m", "p22fase0"]}
     except Exception:
         return {}
 
