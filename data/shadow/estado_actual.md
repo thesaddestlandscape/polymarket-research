@@ -1,13 +1,13 @@
-# Estado del bot — 2026-07-29 14:54 UTC
+# Estado del bot — 2026-07-29 15:01 UTC
 
 ## Live — dinero real (on-chain)
 | | |
 |---|---|
 | Total depositado | 51.22 $ |
-| Balance on-chain | **22.36 $** |
-| P&L real total | 🔴 **-28.86 $** |
-| P&L real hoy | +2.83 $ |
-| P&L real 7 días | -0.15 $ |
+| Balance on-chain | **21.67 $** |
+| P&L real total | 🔴 **-29.55 $** |
+| P&L real hoy | +0.79 $ |
+| P&L real 7 días | -2.19 $ |
 | Fees pagados (real) | 11.26 $ |
 
 ## Shadow — MODELO SIMULADO (no cobrable)
@@ -29,7 +29,7 @@
 | UPDOWN_GBM_15M_TARDIO | 2380 | 65.1% | +0.151 | ➡️ estable | +1046.38$ | 1.51$ | ✅ activa |
 | UPDOWN_GBM | 3091 | 53.8% | +0.038 | 📈 madura (+0.06) | +291.51$ | 0.50$ | ✅ activa |
 | WEEKLY_PRICE | 441 | 73.0% | +0.229 | 📈 madura (+0.27) | +120.58$ | 2.00$ | ✅ activa |
-| GBM_LATE_15M_PYCONFIRMADO | 316 | 55.4% | +0.053 | 📉 agota (-0.22) | +100.02$ | 0.54$ | ✅ activa |
+| GBM_LATE_15M_PYCONFIRMADO | 316 | 55.4% | +0.053 | 📉 agota (-0.22) | +100.02$ | 0.52$ | ✅ activa |
 | UPDOWN_GBM_15M_CROSS_WINDOW_SPREAD | 205 | 81.0% | +0.307 | 📈 madura (+0.03) | +45.01$ | 2.00$ | ✅ activa |
 | BALLENAS_CONFIRMADAS_15M | 1449 | 59.5% | +0.095 | 📉 agota (-0.05) | +30.84$ | 0.95$ | ✅ activa |
 | STREAK_FADE_15M | 304 | 56.2% | +0.062 | 📉 agota (-0.11) | +20.40$ | 0.62$ | ✅ activa |
