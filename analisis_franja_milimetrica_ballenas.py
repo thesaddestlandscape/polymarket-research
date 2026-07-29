@@ -57,6 +57,15 @@ MARCO_BALLENAS_MAP = {"5min": "5m", "15min": "15m", "60min": "60m"}
 N_MIN_AGREGADO_ESTRATEGIA = 100   # mínimo para que una (strategy,subtype) entre al barrido
 N_MIN_BUCKET_INFORMATIVO = 15
 N_MIN_BUCKET_MADURO = 40          # umbral de gate riguroso + split-half
+FAMILIAS_BALLENA_DEPENDIENTES_SIN_UMBRAL = {
+    "FAVORITO_CONFIRMADO_15MIN_ALTACONVICCION",
+}  # 29-Jul: familias recién promocionadas cuyo edge depende de precio de
+# confirmación de ballenas -- se excluían del barrido porque su n agregado
+# en results.csv (16-18/moneda a 29-Jul) no cruza N_MIN_AGREGADO_ESTRATEGIA
+# (100), pensado para filtrar RUIDO en el reporte, no para bloquear
+# familias ballena-dependientes de acumular aquí desde el principio. El
+# gate por bucket (n>=N_MIN_BUCKET_MADURO=40) sigue exigiéndose igual, esto
+# solo permite que la familia aparezca en el barrido mientras madura.
 
 
 def bucket(p):
@@ -174,7 +183,8 @@ def main():
         marco_b = MARCO_BALLENAS_MAP[marco]
         for activo in ACTIVOS:
             estrategias = [k for k in shadow_buckets if k[1] == f"{activo}#{marco}"
-                           and sum(len(v) for v in shadow_buckets[k].values()) >= N_MIN_AGREGADO_ESTRATEGIA]
+                           and (k[0] in FAMILIAS_BALLENA_DEPENDIENTES_SIN_UMBRAL
+                                or sum(len(v) for v in shadow_buckets[k].values()) >= N_MIN_AGREGADO_ESTRATEGIA)]
             ballenas_ab = ballenas.get((activo, marco_b), {})
             real_ab = real.get((activo, marco), {})
             if not estrategias and not ballenas_ab:
