@@ -1,5 +1,5 @@
-# Hipótesis automáticas — 2026-07-29 23:14 UTC
-_Generado por shadow_postmortem.py sobre 42503 resoluciones (PNL=+9330.34€)_
+# Hipótesis automáticas — 2026-07-29 23:22 UTC
+_Generado por shadow_postmortem.py sobre 42508 resoluciones (PNL=+9333.21€)_
 
 ## Patrones causales activos
 
@@ -1194,11 +1194,11 @@ _Derivadas de los patrones aprendidos:_
 | ✅ BALLENAS_TARDIAS#BTC#15min | 74 | +0.316 | +1.33€ | 0 | 0 |
 | ✅ BALLENAS_TARDIAS#SOL | 6 | +0.075 | +0.57€ | 0 | 0 |
 | ✅ BALLENAS_TARDIAS#SOL#5min | 6 | +0.075 | +0.57€ | 0 | 0 |
-| ✅ FAVORITO_CONFIRMADO | 7013 | +0.176 | -60.59€ | 0 | 8 |
+| ✅ FAVORITO_CONFIRMADO | 7014 | +0.176 | -59.27€ | 0 | 8 |
 | ✅ FAVORITO_CONFIRMADO#15min | 4610 | +0.199 | -61.34€ | 0 | 0 |
 | ✅ FAVORITO_CONFIRMADO#240min | 324 | +0.052 | -28.38€ | 0 | 0 |
 | ✅ FAVORITO_CONFIRMADO#5min | 821 | +0.128 | -56.98€ | 0 | 0 |
-| ✅ FAVORITO_CONFIRMADO#60min | 1258 | +0.154 | +86.11€ | 0 | 0 |
+| ✅ FAVORITO_CONFIRMADO#60min | 1259 | +0.154 | +87.43€ | 0 | 0 |
 | ✅ FAVORITO_CONFIRMADO#BTC | 2095 | +0.181 | -5.46€ | 0 | 0 |
 | ✅ FAVORITO_CONFIRMADO#BTC#15min | 1549 | +0.196 | -50.49€ | 0 | 7 |
 | ✅ FAVORITO_CONFIRMADO#BTC#240min | 108 | +0.036 | -16.85€ | 0 | 0 |
@@ -1206,11 +1206,11 @@ _Derivadas de los patrones aprendidos:_
 | ✅ FAVORITO_CONFIRMADO#BTC#60min | 428 | +0.174 | +65.65€ | 0 | 8 |
 | ✅ FAVORITO_CONFIRMADO#DOGE | 8 | +0.120 | +5.71€ | 0 | 0 |
 | ✅ FAVORITO_CONFIRMADO#DOGE#15min | 7 | +0.097 | +4.78€ | 0 | 0 |
-| ✅ FAVORITO_CONFIRMADO#ETH | 2458 | +0.166 | -47.40€ | 0 | 0 |
+| ✅ FAVORITO_CONFIRMADO#ETH | 2459 | +0.166 | -46.08€ | 0 | 0 |
 | ✅ FAVORITO_CONFIRMADO#ETH#15min | 1511 | +0.197 | -11.74€ | 0 | 5 |
 | ✅ FAVORITO_CONFIRMADO#ETH#240min | 107 | -0.014 | -23.18€ | 0 | 0 |
 | ✅ FAVORITO_CONFIRMADO#ETH#5min | 416 | +0.127 | -31.30€ | 0 | 0 |
-| ✅ FAVORITO_CONFIRMADO#ETH#60min | 424 | +0.141 | +18.83€ | 0 | 10 |
+| ✅ FAVORITO_CONFIRMADO#ETH#60min | 425 | +0.142 | +20.15€ | 0 | 10 |
 | ✅ FAVORITO_CONFIRMADO#SOL | 2413 | +0.180 | -15.51€ | 0 | 0 |
 | ✅ FAVORITO_CONFIRMADO#SOL#15min | 1510 | +0.204 | -2.50€ | 0 | 7 |
 | ✅ FAVORITO_CONFIRMADO#SOL#240min | 107 | +0.133 | +12.54€ | 0 | 0 |
@@ -1228,12 +1228,12 @@ _Derivadas de los patrones aprendidos:_
 | ✅ FAVORITO_CONFIRMADO_15MIN_ALTACONVICCION#SOL#15min | 18 | +0.270 | -0.77€ | 0 | 0 |
 | ✅ FAVORITO_CONFIRMADO_15MIN_EXTREMO | 6 | +0.113 | +0.19€ | 0 | 0 |
 | ✅ FAVORITO_CONFIRMADO_15MIN_EXTREMO#15min | 6 | +0.113 | +0.19€ | 0 | 0 |
-| ✅ FAVORITO_CONFIRMADO_60MIN_ALTACONVICCION | 40 | +0.381 | +7.30€ | 0 | 0 |
-| ✅ FAVORITO_CONFIRMADO_60MIN_ALTACONVICCION#60min | 40 | +0.381 | +7.30€ | 0 | 0 |
-| ✅ FAVORITO_CONFIRMADO_60MIN_ALTACONVICCION#BTC | 16 | +0.267 | +3.29€ | 0 | 0 |
-| ✅ FAVORITO_CONFIRMADO_60MIN_ALTACONVICCION#BTC#60min | 16 | +0.267 | +3.29€ | 0 | 0 |
-| ✅ FAVORITO_CONFIRMADO_60MIN_ALTACONVICCION#ETH | 18 | +0.360 | +4.35€ | 0 | 0 |
-| ✅ FAVORITO_CONFIRMADO_60MIN_ALTACONVICCION#ETH#60min | 18 | +0.360 | +4.35€ | 0 | 0 |
+| ✅ FAVORITO_CONFIRMADO_60MIN_ALTACONVICCION | 42 | +0.386 | +7.77€ | 0 | 0 |
+| ✅ FAVORITO_CONFIRMADO_60MIN_ALTACONVICCION#60min | 42 | +0.386 | +7.77€ | 0 | 0 |
+| ✅ FAVORITO_CONFIRMADO_60MIN_ALTACONVICCION#BTC | 17 | +0.291 | +3.62€ | 0 | 0 |
+| ✅ FAVORITO_CONFIRMADO_60MIN_ALTACONVICCION#BTC#60min | 17 | +0.291 | +3.62€ | 0 | 0 |
+| ✅ FAVORITO_CONFIRMADO_60MIN_ALTACONVICCION#ETH | 19 | +0.385 | +4.49€ | 0 | 0 |
+| ✅ FAVORITO_CONFIRMADO_60MIN_ALTACONVICCION#ETH#60min | 19 | +0.385 | +4.49€ | 0 | 0 |
 | ✅ FAVORITO_CONFIRMADO_60MIN_ALTACONVICCION#SOL | 6 | +0.075 | -0.34€ | 0 | 0 |
 | ✅ FAVORITO_CONFIRMADO_60MIN_ALTACONVICCION#SOL#60min | 6 | +0.075 | -0.34€ | 0 | 0 |
 | ✅ FAVORITO_CONFIRMADO_SOL_ALTACONVICCION | 459 | +0.303 | +6.19€ | 0 | 0 |
@@ -1294,10 +1294,10 @@ _Derivadas de los patrones aprendidos:_
 | ✅ GBM_LATE_15M_TARDIO#SOL#15min | 1433 | +0.027 | +285.24€ | 1 | 1 |
 | ✅ GBM_LATE_15M_TARDIO#XRP | 1709 | +0.163 | +1042.25€ | 0 | 0 |
 | ✅ GBM_LATE_15M_TARDIO#XRP#15min | 1709 | +0.163 | +1042.25€ | 0 | 13 |
-| ✅ GBM_LATE_5M | 1004 | -0.032 | -2.46€ | 0 | 0 |
-| ✅ GBM_LATE_5M#5min | 1004 | -0.032 | -2.46€ | 0 | 0 |
-| ✅ GBM_LATE_5M#BTC | 232 | -0.017 | -4.30€ | 0 | 0 |
-| ✅ GBM_LATE_5M#BTC#5min | 232 | -0.017 | -4.30€ | 0 | 0 |
+| ✅ GBM_LATE_5M | 1005 | -0.031 | -1.42€ | 0 | 0 |
+| ✅ GBM_LATE_5M#5min | 1005 | -0.031 | -1.42€ | 0 | 0 |
+| ✅ GBM_LATE_5M#BTC | 233 | -0.015 | -3.26€ | 0 | 0 |
+| ✅ GBM_LATE_5M#BTC#5min | 233 | -0.015 | -3.26€ | 0 | 0 |
 | 🚫 GBM_LATE_5M#ETH | 82 | -0.202 | -15.93€ | 0 | 0 |
 | 🚫 GBM_LATE_5M#ETH#5min | 82 | -0.202 | -15.93€ | 0 | 0 |
 | ✅ GBM_LATE_5M#SOL | 310 | -0.058 | +9.32€ | 0 | 0 |
@@ -1497,7 +1497,7 @@ _Derivadas de los patrones aprendidos:_
 **🟡 H-KELLY-HORA** — Kelly boost ×1.2 por celda (estrategia#subtype#dirección#hora)
   - _Umbral_: n≥40 por celda + gate riguroso completo (Wilson+shuffle+PnL bootstrap)
   - _Acción_: Añadir claves 'ESTRATEGIA#SUBTYPE#DIRECCION#HORA':1.2 a meta.hora_boost_factor, solo por celda confirmada
-  - _Estado_: 15 celda(s) pasan gate riguroso completo de 41 evaluadas (n>=40) y 160 trackeadas (n>=15). Detalle: kelly_hora_segmentado.json
+  - _Estado_: 16 celda(s) pasan gate riguroso completo de 41 evaluadas (n>=40) y 160 trackeadas (n>=15). Detalle: kelly_hora_segmentado.json
 
 **⚠️ H-SOL-15MIN** — SOL#15min → umbral live (IC≥0.08 n≥40)
   - _Umbral_: IC≥0.08 y n≥40
@@ -1513,7 +1513,7 @@ _Derivadas de los patrones aprendidos:_
 **🟡 H-STREAK-COOLDOWN** — Cooldown tras 2 derrotas consecutivas (mismo subtype)
   - _Umbral_: n≥40 tras 2 losses y gap(IC_tras_win - IC_tras_2loss)≥0.05
   - _Acción_: Reducir stake (no desactivar) 1-2h tras 2 derrotas consecutivas en el mismo subtype
-  - _Estado_: tras_win IC=+0.113 n=25320 | tras_1loss IC=+0.079 n=16921 | tras_2loss IC=+0.052 n=7084/40 | gap=+0.060 (umbral 0.05)
+  - _Estado_: tras_win IC=+0.113 n=25323 | tras_1loss IC=+0.079 n=16922 | tras_2loss IC=+0.052 n=7085/40 | gap=+0.060 (umbral 0.05)
 
 **🟡 H-KALMAN** — Kalman filter para drift adaptativo
   - _Umbral_: n≥200 por subtipo para calibrar parámetros Q/R del KF
@@ -1779,8 +1779,8 @@ _Derivadas de los patrones aprendidos:_
   - _Hipótesis_: Inspirado en el paper de Fornero (2023, 43 Jornadas SADAF) sobre astrología financiera: 5 estudios peer-review (Dichev & Janes 2003, Yuan et al. 2006, Keef & Khaled 2011, Floros & Tan 2013, Liu & Tseng 2009) en 25-62 mercados bursátiles encuentran rendimientos 5-10%/año más bajos cerca de luna llena que de luna nueva. El propio paper es escéptico de la astrología como tal, pero el mecanismo que documenta no es místico: sesgo de humor de inversores minoristas (más fuerte en acciones con dominancia retail, casi nulo en institucional). Polymarket es un mercado muy retail/cripto — hipótesis: si el mecanismo transfiere, debería verse peor IC cerca de luna llena (moon_phase≈0.5) que en el resto del ciclo.
   - _Umbral_: n≥200 PERO ADEMÁS necesita cubrir al menos 3 ciclos lunares completos (~90 días de calendario) — no evaluar solo por n, aunque el volumen diario ya lo cruce en horas
   - _Acción_: Si IC cerca de luna llena < IC resto del ciclo con margen ≥0.05 y ≥3 ciclos lunares cubiertos → considerar boost/filtro por moon_phase. No implementar con menos de 3 ciclos aunque n sea alto — el efecto es de calendario lento, no de volumen.
-  - _Estado_: n=6153 IC=+0.091 PNL=+1649.48€ — sin señal clara aún (umbral IC: min=None max=-0.03)
-  - _Datos_: n=6153 IC=+0.091 PNL=+1649.48€
+  - _Estado_: n=6158 IC=+0.091 PNL=+1652.34€ — sin señal clara aún (umbral IC: min=None max=-0.03)
+  - _Datos_: n=6158 IC=+0.091 PNL=+1652.34€
 
 **〰️ H-CUSTOM-MERCURY-RETROGRADO** — Mercurio retrógrado: ¿rendimiento peor durante la ventana?
   - _Hipótesis_: Mismo origen que H-CUSTOM-MOON-LLENA (paper de Fornero, 43 Jornadas SADAF 2023). Qi, Wang & Zhang (2022, 48 mercados, 1973-2019): rendimientos 3.33%/año más bajos durante Mercurio retrógrado. Kou & Ma (2022) en China (99.8% cuentas retail): hasta -31% anualizado. Ambos estudios confirman que el mecanismo es la creencia/superstición de inversores retail (mayor efecto cuanto más retail y más supersticioso el mercado), no un efecto astral literal — Polymarket encaja en ese perfil. Ventanas 2026 (fuente pública, actualizar cada año): 26-feb a 20-mar, 29-jun a 23-jul, 24-oct a 13-nov.
