@@ -48,6 +48,7 @@ STATE_PATH = DIR_SHADOW / "liquidaciones_binance_state.json"
 
 WS_URL = "wss://fstream.binance.com/ws/!forceOrder@arr"
 RECONNECT_ESPERA_S = 5
+RECV_TIMEOUT_S = 30  # ver nota en _correr_una_conexion -- mismo fix que chainlink/polyactivity
 ESCRITURA_INTERVALO_S = 10
 LOOKBACK_MAX_MIN = 65  # cubre la ventana más larga (60min) con margen
 
@@ -170,7 +171,18 @@ async def _correr_una_conexion() -> None:
         ping_task = asyncio.create_task(_mantener_ping(ws))
         n_total = 0
         try:
-            async for raw in ws:
+            while True:
+                # 29-Jul: MISMO bug ya encontrado y arreglado en
+                # fetch_chainlink_prices.py (28-Jul) y fetch_polymarket_
+                # activity_ws.py (29-Jul), nunca aplicado aquí -- `async for
+                # raw in ws` sin timeout deja el bucle bloqueado para
+                # siempre si la conexión muere en silencio (sin frame de
+                # cierre). Encontrado en la auditoría observacional de hoy:
+                # 0 liquidaciones capturadas en 28h pese a estar "conectado"
+                # -- liquidaciones_binance_state.json con n=0 en todos los
+                # buckets, LIQUIDACIONES_5M/15M/60M sin una sola fila en
+                # results.csv desde que se construyeron.
+                raw = await asyncio.wait_for(ws.recv(), timeout=RECV_TIMEOUT_S)
                 try:
                     msg = json.loads(raw)
                 except (json.JSONDecodeError, TypeError):
