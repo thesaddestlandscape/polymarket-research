@@ -1,4 +1,4 @@
-# Estado del bot — 2026-07-29 04:09 UTC
+# Estado del bot — 2026-07-29 04:18 UTC
 
 ## Live — dinero real (on-chain)
 | | |
@@ -24,7 +24,7 @@
 | Estrategia | n | Win% | IC_efectivo | Tendencia | PNL | Apuesta | Estado |
 |---|---|---|---|---|---|---|---|
 | GBM_LATE_15M_ESPACIO_ATR | 6098 | 61.9% | +0.119 | 📉 agota (-0.07) | +2919.47$ | 1.19$ | ✅ activa |
-| GBM_LATE_15M | 8891 | 59.5% | +0.095 | ➡️ estable | +2681.98$ | 0.95$ | ✅ activa |
+| GBM_LATE_15M | 8891 | 59.5% | +0.095 | ➡️ estable | +2681.98$ | 0.94$ | ✅ activa |
 | GBM_LATE_15M_TARDIO | 6094 | 56.6% | +0.066 | 📉 agota (-0.07) | +1654.61$ | 0.66$ | ✅ activa |
 | UPDOWN_GBM_15M_TARDIO | 2341 | 65.0% | +0.150 | ➡️ estable | +1022.51$ | 1.50$ | ✅ activa |
 | UPDOWN_GBM | 3052 | 53.5% | +0.035 | 📈 madura (+0.05) | +276.94$ | 0.50$ | ✅ activa |
@@ -38,7 +38,7 @@
 | FAVORITO_CONFIRMADO_SOL_ALTACONVICCION | 448 | 80.4% | +0.302 | ➡️ estable | +6.97$ | 2.00$ | ✅ activa |
 | GBM_LATE_60M | 343 | 39.1% | -0.109 | 📈 madura (+0.03) | +4.07$ | 0.50$ | ⚠️ IC negativo |
 | FAVORITO_CONFIRMADO_15MIN_ALTACONVICCION | 39 | 89.7% | +0.378 | 📉 agota (-0.09) | +3.34$ | 2.00$ | ✅ activa |
-| RESOLUTION_SNIPER | 13 | 84.6% | +0.195 | — | +3.10$ | 1.95$ | ✅ activa |
+| RESOLUTION_SNIPER | 13 | 84.6% | +0.195 | — | +3.10$ | 2.00$ | ✅ activa |
 | BALLENAS_TARDIAS | 54 | 85.2% | +0.339 | 📉 agota (-0.07) | +2.08$ | 2.00$ | ✅ activa |
 | UPDOWN_GBM_IBS_ALTO | 5 | 80.0% | +0.054 | — | +1.28$ | 0.54$ | ⏳ acumulando |
 | FAVORITO_CONFIRMADO_60MIN_ALTACONVICCION | 25 | 88.0% | +0.352 | — | +0.91$ | 2.00$ | ✅ activa |
