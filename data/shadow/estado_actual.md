@@ -1,11 +1,11 @@
-# Estado del bot — 2026-07-29 21:06 UTC
+# Estado del bot — 2026-07-29 21:18 UTC
 
 ## Live — dinero real (on-chain)
 | | |
 |---|---|
 | Total depositado | 51.22 $ |
-| Balance on-chain | **22.94 $** |
-| P&L real total | 🔴 **-28.28 $** |
+| Balance on-chain | **23.11 $** |
+| P&L real total | 🔴 **-28.11 $** |
 | P&L real hoy | +1.97 $ |
 | P&L real 7 días | -1.01 $ |
 | Fees pagados (real) | 11.55 $ |
