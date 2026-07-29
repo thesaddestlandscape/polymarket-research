@@ -1,11 +1,11 @@
-# Estado del bot — 2026-07-29 23:39 UTC
+# Estado del bot — 2026-07-29 23:46 UTC
 
 ## Live — dinero real (on-chain)
 | | |
 |---|---|
 | Total depositado | 51.22 $ |
-| Balance on-chain | **27.88 $** |
-| P&L real total | 🔴 **-23.34 $** |
+| Balance on-chain | **27.66 $** |
+| P&L real total | 🔴 **-23.56 $** |
 | P&L real hoy | +0.86 $ |
 | P&L real 7 días | -2.13 $ |
 | Fees pagados (real) | 11.62 $ |
@@ -41,7 +41,7 @@
 | GBM_LATE_60M | 343 | 39.1% | -0.109 | 📈 madura (+0.03) | +4.07$ | 0.50$ | ⚠️ IC negativo |
 | RESOLUTION_SNIPER | 17 | 88.2% | +0.291 | — | +3.97$ | 2.00$ | ✅ activa |
 | UPDOWN_GBM_IBS_ALTO | 10 | 90.0% | +0.167 | — | +2.83$ | 1.67$ | ✅ activa |
-| FAVORITO_CONFIRMADO_15MIN_EXTREMO | 6 | 100.0% | +0.112 | — | +0.19$ | 1.12$ | ⏳ acumulando |
+| FAVORITO_CONFIRMADO_15MIN_EXTREMO | 6 | 100.0% | +0.112 | — | +0.19$ | 1.36$ | ⏳ acumulando |
 | GBM_LATE_15M_MULTIHORIZONTE | 6 | 50.0% | +0.000 | — | -0.08$ | 0.50$ | ⏳ acumulando |
 | FAVORITO_CONFIRMADO_60MIN_EXTREMO | 2 | 50.0% | +0.000 | — | -0.47$ | 0.50$ | ⏳ acumulando |
 | UPDOWN_GBM_ETH_15M_HORA7 | 25 | 48.0% | -0.019 | — | -1.25$ | 0.50$ | ⚠️ IC negativo |
