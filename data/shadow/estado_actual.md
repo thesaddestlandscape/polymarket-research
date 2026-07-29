@@ -1,4 +1,4 @@
-# Estado del bot — 2026-07-29 16:20 UTC
+# Estado del bot — 2026-07-29 16:29 UTC
 
 ## Live — dinero real (on-chain)
 | | |
@@ -13,21 +13,21 @@
 ## Shadow — MODELO SIMULADO (no cobrable)
 | | |
 |---|---|
-| P&L fiel (stake fijo 1$) | +4774.96 $ |
-| P&L sim compuesto | 🟢 +9098.61 $ (ficción Kelly: +35765% s/ operativo) |
-| P&L sim hoy (2026-07-29) | 🟢 +462.07 $ |
-| Operaciones resueltas | 42012 (25144 WIN / 16868 LOSS) — 59.8% |
-| Señales abiertas | 82 |
+| P&L fiel (stake fijo 1$) | +4770.63 $ |
+| P&L sim compuesto | 🟢 +9091.69 $ (ficción Kelly: +35738% s/ operativo) |
+| P&L sim hoy (2026-07-29) | 🟢 +455.15 $ |
+| Operaciones resueltas | 42028 (25150 WIN / 16878 LOSS) — 59.8% |
+| Señales abiertas | 89 |
 
 ## Estrategias (visión global)
 
 | Estrategia | n | Win% | IC_efectivo | Tendencia | PNL | Apuesta | Estado |
 |---|---|---|---|---|---|---|---|
-| GBM_LATE_15M_ESPACIO_ATR | 6261 | 62.1% | +0.121 | 📉 agota (-0.06) | +3046.29$ | 1.21$ | ✅ activa |
-| GBM_LATE_15M | 9064 | 59.5% | +0.095 | ➡️ estable | +2752.56$ | 0.95$ | ✅ activa |
-| GBM_LATE_15M_TARDIO | 6256 | 56.8% | +0.068 | 📉 agota (-0.07) | +1741.75$ | 0.68$ | ✅ activa |
+| GBM_LATE_15M_ESPACIO_ATR | 6266 | 62.1% | +0.121 | 📉 agota (-0.06) | +3043.61$ | 1.21$ | ✅ activa |
+| GBM_LATE_15M | 9069 | 59.5% | +0.095 | ➡️ estable | +2751.28$ | 0.95$ | ✅ activa |
+| GBM_LATE_15M_TARDIO | 6261 | 56.8% | +0.068 | 📉 agota (-0.07) | +1740.33$ | 0.68$ | ✅ activa |
 | UPDOWN_GBM_15M_TARDIO | 2389 | 65.1% | +0.151 | ➡️ estable | +1054.72$ | 1.51$ | ✅ activa |
-| UPDOWN_GBM | 3101 | 53.9% | +0.039 | 📈 madura (+0.06) | +299.56$ | 0.50$ | ✅ activa |
+| UPDOWN_GBM | 3102 | 53.9% | +0.039 | 📈 madura (+0.06) | +298.02$ | 0.50$ | ✅ activa |
 | WEEKLY_PRICE | 457 | 73.5% | +0.234 | 📈 madura (+0.27) | +132.04$ | 2.00$ | ✅ activa |
 | GBM_LATE_15M_PYCONFIRMADO | 317 | 55.2% | +0.052 | 📉 agota (-0.22) | +97.98$ | 0.52$ | ✅ activa |
 | UPDOWN_GBM_15M_CROSS_WINDOW_SPREAD | 205 | 81.0% | +0.307 | 📈 madura (+0.03) | +45.01$ | 2.00$ | ✅ activa |
@@ -59,30 +59,30 @@
 
 | Timestamp | Estrategia | Mercado | Resultado | PNL |
 |---|---|---|---|---|
-| 2026-07-29T16:17 | GBM_LATE_5M#BTC#5min | Bitcoin Up or Down - July 29, 11:55AM-12:00PM ET… | ✅ WIN | +1.07$ |
-| 2026-07-29T16:17 | GBM_LATE_5M#XRP#5min | XRP Up or Down - July 29, 11:55AM-12:00PM ET… | ✅ WIN | +0.48$ |
-| 2026-07-29T16:17 | GBM_LATE_15M_ESPACIO_ATR#BTC#15min | Bitcoin Up or Down - July 29, 11:45AM-12:00PM ET… | ✅ WIN | +0.64$ |
-| 2026-07-29T16:17 | GBM_LATE_15M_TARDIO#BTC#15min | Bitcoin Up or Down - July 29, 11:45AM-12:00PM ET… | ✅ WIN | +0.23$ |
-| 2026-07-29T16:17 | GBM_LATE_15M#BTC#15min | Bitcoin Up or Down - July 29, 11:45AM-12:00PM ET… | ✅ WIN | +0.23$ |
+| 2026-07-29T16:26 | GBM_LATE_15M_ESPACIO_ATR#BTC#15min | Bitcoin Up or Down - July 29, 12:00PM-12:15PM ET… | ✅ WIN | +1.00$ |
+| 2026-07-29T16:26 | GBM_LATE_15M_TARDIO#BTC#15min | Bitcoin Up or Down - July 29, 12:00PM-12:15PM ET… | ❌ LOSS | -0.56$ |
+| 2026-07-29T16:26 | GBM_LATE_15M#BTC#15min | Bitcoin Up or Down - July 29, 12:00PM-12:15PM ET… | ✅ WIN | +0.36$ |
+| 2026-07-29T16:26 | GBM_LATE_15M_ESPACIO_ATR#XRP#15min | XRP Up or Down - July 29, 12:00PM-12:15PM ET… | ✅ WIN | +1.92$ |
+| 2026-07-29T16:26 | GBM_LATE_15M_TARDIO#XRP#15min | XRP Up or Down - July 29, 12:00PM-12:15PM ET… | ✅ WIN | +1.92$ |
 
 ## Calidad de datos
 
-✅ **OK** — última verificación 2026-07-29T16:16 UTC
+✅ **OK** — última verificación 2026-07-29T16:26 UTC
 
 | Asset | Precio | Age | Alertas |
 |---|---|---|---|
-| ✅ BTC | $63,871.93 | 0.1min |  |
-| ✅ ETH | $1,890.02 | 0.1min |  |
-| ✅ SOL | $73.11 | 0.1min |  |
+| ✅ BTC | $63,996.68 | 0.1min |  |
+| ✅ ETH | $1,895.12 | 0.1min |  |
+| ✅ SOL | $73.30 | 0.1min |  |
 | ✅ XRP | $1.07 | 0.1min |  |
 
 **Cross-source** (binance, coinbase, kraken):
 
 | Asset | Consenso | Fuente | Estado |
 |---|---|---|---|
-| BTC | $63,876.00 | consenso |  |
-| ETH | $1,890.02 | consenso |  |
-| SOL | $73.01 | consenso |  |
+| BTC | $63,996.68 | consenso |  |
+| ETH | $1,895.12 | consenso |  |
+| SOL | $73.19 | consenso |  |
 | XRP | $1.07 | consenso |  |
 
 ---
