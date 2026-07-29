@@ -1,4 +1,4 @@
-# Estado del bot — 2026-07-29 03:05 UTC
+# Estado del bot — 2026-07-29 03:16 UTC
 
 ## Live — dinero real (on-chain)
 | | |
@@ -29,7 +29,7 @@
 | UPDOWN_GBM_15M_TARDIO | 2334 | 64.9% | +0.149 | ➡️ estable | +1014.23$ | 1.49$ | ✅ activa |
 | UPDOWN_GBM | 3044 | 53.5% | +0.035 | 📈 madura (+0.05) | +274.24$ | 0.50$ | ✅ activa |
 | WEEKLY_PRICE | 441 | 73.0% | +0.229 | 📈 madura (+0.27) | +120.58$ | 2.00$ | ✅ activa |
-| GBM_LATE_15M_PYCONFIRMADO | 308 | 55.8% | +0.058 | 📉 agota (-0.23) | +102.09$ | 0.58$ | ✅ activa |
+| GBM_LATE_15M_PYCONFIRMADO | 308 | 55.8% | +0.058 | 📉 agota (-0.23) | +102.09$ | 0.56$ | ✅ activa |
 | UPDOWN_GBM_15M_CROSS_WINDOW_SPREAD | 202 | 80.7% | +0.304 | ➡️ estable | +42.29$ | 2.00$ | ✅ activa |
 | BALLENAS_CONFIRMADAS_15M | 1439 | 59.6% | +0.096 | 📉 agota (-0.05) | +29.91$ | 0.96$ | ✅ activa |
 | STREAK_FADE_15M | 304 | 56.2% | +0.062 | 📉 agota (-0.11) | +20.40$ | 0.62$ | ✅ activa |
@@ -53,7 +53,7 @@
 | UPDOWN_OU_5M | 84 | 28.6% | -0.209 | 📉 agota (-0.14) | -18.89$ | 0.00$ | 🚫 desactivada |
 | STREAK_FADE_5M | 247 | 44.9% | -0.050 | 📉 agota (-0.06) | -25.47$ | 0.50$ | ⚠️ IC negativo |
 | STREAK_MOM_5M | 320 | 44.1% | -0.059 | 📉 agota (-0.08) | -26.41$ | 0.50$ | 🚫 desactivada |
-| FAVORITO_CONFIRMADO | 6955 | 67.7% | +0.177 | ➡️ estable | -55.89$ | 1.76$ | ✅ activa |
+| FAVORITO_CONFIRMADO | 6955 | 67.7% | +0.177 | ➡️ estable | -55.89$ | 1.77$ | ✅ activa |
 
 ## Últimas 5 resoluciones
 
