@@ -50,6 +50,15 @@ import websockets
 
 REPO = Path(__file__).resolve().parent
 DIR_SHADOW = REPO / "data" / "shadow"
+# 29-Jul: fichero movido FUERA del repo (DIR_DATALOGS, no versionado) --
+# crece varias decenas de MB/día y cada commit de run_fast.sh lo re-subía
+# entero, inflando .git (8.7GB) y provocando rebases lentos/con conflicto
+# que bloqueaban el loop síncrono >10min, disparando el vigía de calidad
+# de datos (fail-open de simbolo_bloqueado() en GBM_LATE_15M live SOL/ETH
+# mientras dura). Ver feedback_fix_datalogs_fuera_repo_29jul. Puramente
+# shadow/observacional, no afecta a ningún path de trading.
+DIR_DATALOGS = Path("/root/polymarket-research-datalogs")
+DIR_DATALOGS.mkdir(parents=True, exist_ok=True)
 
 WS_URL = "wss://ws-live-data.polymarket.com"
 PING_INTERVAL_S = 5
@@ -87,7 +96,7 @@ def _log(msg: str) -> None:
 
 def _archivo_hoy() -> Path:
     fecha = datetime.now(timezone.utc).strftime("%Y-%m-%d")
-    return DIR_SHADOW / f"polymarket_activity_{fecha}.csv"
+    return DIR_DATALOGS / f"polymarket_activity_{fecha}.csv"
 
 
 def _parse_updown(event_slug: str):

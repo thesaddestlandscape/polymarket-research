@@ -51,6 +51,13 @@ from shadow_predict import _parse_updown_tipo, identificar_activo
 REPO = Path(__file__).resolve().parent
 DIR_MARKETS = REPO / "data" / "markets"
 DIR_SHADOW = REPO / "data" / "shadow"
+# 29-Jul: fichero movido FUERA del repo (DIR_DATALOGS, no versionado) --
+# mismo motivo que fetch_polymarket_activity_ws.py (ver comentario ahí):
+# crecía ~20MB/día dentro de git, inflando .git y provocando rebases
+# lentos que bloqueaban el loop síncrono de run_fast.sh >10min, disparando
+# el vigía de calidad de datos. Puramente shadow, no toca trading.
+DIR_DATALOGS = Path("/root/polymarket-research-datalogs")
+DIR_DATALOGS.mkdir(parents=True, exist_ok=True)
 
 ACTIVOS = {"BTC", "ETH", "SOL", "XRP", "DOGE", "BNB"}
 MARCOS_TRACKEADOS = {5, 15, 60}  # minutos -- nuestro universo real de trading
@@ -70,7 +77,7 @@ def _log(msg: str) -> None:
 
 def _archivo_hoy() -> Path:
     fecha = datetime.now(timezone.utc).strftime("%Y-%m-%d")
-    return DIR_SHADOW / f"libro_ambos_lados_{fecha}.csv"
+    return DIR_DATALOGS / f"libro_ambos_lados_{fecha}.csv"
 
 
 def _universo_activo() -> dict:
