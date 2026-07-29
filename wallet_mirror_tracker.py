@@ -94,7 +94,29 @@ def cargar_wallets_validadas() -> dict:
         marco_activity = MARCO_A_ACTIVITY.get(v["marco"])
         if marco_activity is None:
             continue  # "weekly" -- sin equivalente en el feed de activity
-        tipo = "SEGUIR" if v["edge_pp"] > 0 else "FADE"
+        # 29-Jul: gate riguroso sobre wallet_mirror_dry_run.csv encontró
+        # BTC#5min#FADE (n=271) invertido -- hit=33.2% (Wilson90_lo=28.7%),
+        # consistente en ~20 wallets distintas, no un caso aislado. Causa
+        # diagnosticada: edge_pp=(hit-precio_medio)*100 es EV/calibración,
+        # no dirección -- una wallet puede tener edge_pp<0 (mal EV) con
+        # hit>50% si sistemáticamente sobrepaga por el favorito (mismo
+        # patrón payout-asimétrico que FAVORITO_CONFIRMADO). Fadear a esa
+        # wallet significa apostar por el lado underdog de SU apuesta, que
+        # tiene hit-rate BAJO por definición (ella gana la mayoría) --
+        # invertir dirección de una wallet con hit>50% garantiza que el
+        # mirror pierda la mayoría de las veces, aunque el EV en teoría
+        # compense. Confirmado: 29-Jul, 52 wallets FADE validadas
+        # globalmente, 15 (29%) tenían hit>50% -- exactamente el patrón.
+        # FADE ahora exige TAMBIÉN hit<50% (wallet que se equivoca de
+        # lado más de la mitad de las veces, no solo mal EV) -- las
+        # excluidas (edge_pp<0 pero hit>=50%) se descartan por ahora, sin
+        # estrategia validada para ese caso todavía.
+        if v["edge_pp"] > 0:
+            tipo = "SEGUIR"
+        elif v["hit"] < 0.5:
+            tipo = "FADE"
+        else:
+            continue  # edge_pp<0 pero hit>=50% -- payout asimétrico, no dirección; sin mirror validado
         out[(w, v["activo"], marco_activity)] = {"tipo": tipo, "edge_pp": v["edge_pp"], "n": v["n"]}
     return out
 
