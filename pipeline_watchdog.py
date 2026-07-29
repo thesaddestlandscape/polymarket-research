@@ -104,6 +104,14 @@ SCREEN_RESTART = {
     # Maker (Stage 3/4). Importa live_trade.py de solo lectura, nunca lo
     # modifica ni ordena nada. Solo lectura, no toca dinero.
     "libroambos": f"cd {REPO} && .venv/bin/python fetch_libro_ambos_lados.py >> logs/libro_ambos_lados.log 2>&1",
+    # puntoconf y ressniper (29-Jul: encontrados FALTANDO de este dict y de la
+    # lista de check_screens() al construir inventario_sistema.py -- petición
+    # explícita Javi de revisar TODOS los .py/loggers/observers cada sesión.
+    # Llevaban corriendo desde 23-Jul/28-Jul respectivamente sin que el
+    # watchdog los reiniciara si caían -- gap real de cobertura, no solo de
+    # visibilidad. Solo lectura, no tocan dinero.
+    "puntoconf": f"cd {REPO} && .venv/bin/python punto_confirmacion_logger.py >> logs/punto_confirmacion.log 2>&1",
+    "ressniper": f"cd {REPO} && .venv/bin/python resolution_sniper_observer.py >> logs/resolution_sniper_observer.log 2>&1",
 }
 
 # Cuando stdout está redirigido (screen >> watchdog.log), print() ya escribe al fichero
@@ -164,7 +172,7 @@ def check_screens() -> dict[str, bool]:
         r = subprocess.run(["screen", "-ls"], capture_output=True, text=True, timeout=5)
         output = r.stdout + r.stderr
         return {name: (f".{name}\t" in output or f".{name} " in output)
-                for name in ["fast", "slow", "control", "dash", "pfinish", "ballenas_fast", "ballenas_5m", "chainlink", "favultsec", "polyactivity", "liqs", "libroambos"]}
+                for name in ["fast", "slow", "control", "dash", "pfinish", "ballenas_fast", "ballenas_5m", "chainlink", "favultsec", "polyactivity", "liqs", "libroambos", "puntoconf", "ressniper"]}
     except Exception:
         return {}
 
