@@ -365,20 +365,16 @@ def cargar_calibracion(activo: str) -> dict | None:
             and isinstance(rest_hi, (int, float))):
         return None
     prob_bucket = _wilson_lower(int(n_gan), int(n))
-    # 29-Jul (encontrado ANTES de desplegar, smoke test manual): la banda
-    # "mejor" que ballenas_observer.py::_calcular_estado() selecciona es la
-    # de MAYOR z, sin importar si favorece YES o NO -- para XRP/DOGE#15m
-    # hoy esa banda es [0.05,0.30) con hit real ~24-29% (una señal de NO
-    # genuina y fuerte, no ruido). Este ejecutor SOLO dispara BUY_YES
-    # (docstring), así que una banda con prob_bucket<0.5 significaría
-    # comprar YES justo donde las ballenas confirman lo contrario --
-    # fail-closed explícito, ETH/SOL no lo disparan nunca hoy (sus bandas
-    # ya favorecen YES con margen, 0.84-0.86) pero cualquier activo nuevo
-    # que se añada queda protegido igual sin tener que auditarlo a mano.
-    if prob_bucket < 0.5:
-        log(f"banda operativa favorece NO, no YES (prob_bucket={prob_bucket:.3f} "
-            f"banda=[{lo},{hi})) -- este ejecutor solo dispara BUY_YES, se salta", activo)
-        return None
+    # 29-Jul: NO hay guarda de "prob_bucket<0.5" aquí -- se probó y era
+    # incorrecta (ver corrección en memoria). El z-score de
+    # ballenas_observer.py mide hit-rate vs PRECIO MEDIO de la banda
+    # (z=(hit-precio_medio)/se), no vs 0.5 -- Z_MIN=2.0 ya garantiza que
+    # "significativo" solo ocurre cuando hit SUPERA lo que el precio medio
+    # implica, sea el hit-rate absoluto alto o bajo (ej. DOGE#5m:
+    # precio_medio=0.1995, hit=0.2495 -- edge real de +5pp, z=2.70, n=465).
+    # No existe hoy ninguna banda con z negativo significativo en ningún
+    # (activo,marco) -- comprobado 29-Jul, ver
+    # project_ballenas_executor_15min_construido_29jul en memoria.
     confirm_ceiling_s = rest_hi * 60 + MARGEN_CONFIRM_S
     watch_lead_s = confirm_ceiling_s + MARGEN_WATCH_S
     return {"banda_lo": lo, "banda_hi": hi, "prob_bucket": prob_bucket,
