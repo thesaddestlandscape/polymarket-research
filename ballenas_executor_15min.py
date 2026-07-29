@@ -649,7 +649,22 @@ def disparar(activo: str, mercado: dict, py: float, edge: float, restante_s: flo
                                     f"{'[DRY-RUN] no ejecutaría' if DRY_RUN else 'no se ejecuta'}", activo)):
             return False
 
-        ic_conviccion = (prob_bucket - 0.5) * 2
+        # 29-Jul: reemplaza (prob_bucket-0.5)*2 -- esa fórmula asume que el
+        # precio de referencia es ~0.5, y se rompe en bandas baratas (DOGE/BNB
+        # ~0.20): daba magnitudes de conviccion enormes (~0.55-0.58) para un
+        # edge real de solo 5-9pp, saturando el stake al techo absoluto sin
+        # relacion con el edge verdadero. Kelly-exacto real para binarias,
+        # f*=(p-pi)/(1-pi) (misma formula ya validada hoy en
+        # analisis_kelly_precio_gate_29jul.py/kelly_precio_gate.py): usa el
+        # PRECIO REAL pagado (py, el ask del libro en el momento de confirmar),
+        # no un 0.5 generico. Verificado antes de desplegar (ver memoria
+        # project_ballenas_executor_15min_construido_29jul): para BTC#15min y
+        # ETH#5min (las 2 tuplas con dinero real de esta familia) el stake
+        # FINAL no cambia -- ambas formulas superan el techo absoluto de 2€,
+        # asi que el cambio es inerte para dinero real hoy. Para DOGE/BNB pasa
+        # de una magnitud inflada (satura el techo) a una realista y pequeña
+        # (cerca del suelo), acorde a su edge real.
+        ic_conviccion = max(0.0, (prob_bucket - py) / (1 - py)) if py < 1 else 0.0
         stake_info = calcular_stake(ic_conviccion, STRATEGY, subtype, direction="BUY_YES")
         if not stake_info.get("viable"):
             log(f"stake no viable: {stake_info.get('motivo')} -- {'[DRY-RUN] no ejecutaría' if DRY_RUN else 'no se ejecuta'}", activo)
