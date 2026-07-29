@@ -1,4 +1,4 @@
-# Estado del bot — 2026-07-29 12:41 UTC
+# Estado del bot — 2026-07-29 12:47 UTC
 
 ## Live — dinero real (on-chain)
 | | |
@@ -23,7 +23,7 @@
 
 | Estrategia | n | Win% | IC_efectivo | Tendencia | PNL | Apuesta | Estado |
 |---|---|---|---|---|---|---|---|
-| GBM_LATE_15M_ESPACIO_ATR | 6217 | 62.0% | +0.120 | 📉 agota (-0.06) | +3017.95$ | 1.20$ | ✅ activa |
+| GBM_LATE_15M_ESPACIO_ATR | 6217 | 62.0% | +0.120 | 📉 agota (-0.06) | +3017.95$ | 1.21$ | ✅ activa |
 | GBM_LATE_15M | 9018 | 59.5% | +0.095 | ➡️ estable | +2726.10$ | 0.95$ | ✅ activa |
 | GBM_LATE_15M_TARDIO | 6207 | 56.7% | +0.067 | 📉 agota (-0.07) | +1718.08$ | 0.67$ | ✅ activa |
 | UPDOWN_GBM_15M_TARDIO | 2368 | 65.0% | +0.150 | ➡️ estable | +1034.51$ | 1.50$ | ✅ activa |

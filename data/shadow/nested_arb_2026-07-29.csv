@@ -813,3 +813,12 @@ timestamp_utc,activo,nesting,combo,coste,profit_min_pct,gap_opens_pct,depth_usd,
 2026-07-29T12:40:53+00:00,ETH,5min15m,NOout+YESin,1.01,-1.0,-0.0283,18.14,246,0.47,0.54,1904.55,1905.09,eth-updown-5m-1785328800,eth-updown-15m-1785328200
 2026-07-29T12:40:53+00:00,SOL,5min15m,NOout+YESin,1.05,-5.0,-0.0544,2.95,246,0.46,0.59,73.46,73.5,sol-updown-5m-1785328800,sol-updown-15m-1785328200
 2026-07-29T12:40:53+00:00,XRP,5min15m,YESout+NOin,1.44,-44.0,0.0,0.65,246,0.94,0.5,1.077,1.077,xrp-updown-5m-1785328800,xrp-updown-15m-1785328200
+2026-07-29T12:45:55+00:00,BTC,15min60m,NOout+YESin,1.487,-48.7,-0.2654,16.5,844,0.987,0.5,64267.0,64438.0,btc-updown-15m-1785329100,bitcoin-up-or-down-july-29-2026-8am-et
+2026-07-29T12:45:56+00:00,ETH,15min60m,NOout+YESin,1.52,-52.0,-0.4265,75.26,843,0.99,0.53,1904.92,1913.08,eth-updown-15m-1785329100,ethereum-up-or-down-july-29-2026-8am-et
+2026-07-29T12:45:56+00:00,SOL,15min60m,NOout+YESin,1.547,-54.7,-0.5414,6.05,843,0.997,0.55,73.48,73.88,sol-updown-15m-1785329100,solana-up-or-down-july-29-2026-8am-et
+2026-07-29T12:46:39+00:00,BTC,15min60m,NOout+YESin,1.508,-50.8,-0.2654,150.82,800,0.988,0.52,64267.0,64438.0,btc-updown-15m-1785329100,bitcoin-up-or-down-july-29-2026-8am-et
+2026-07-29T12:46:39+00:00,ETH,15min60m,NOout+YESin,1.52,-52.0,-0.4265,88.77,800,0.99,0.53,1904.92,1913.08,eth-updown-15m-1785329100,ethereum-up-or-down-july-29-2026-8am-et
+2026-07-29T12:46:40+00:00,SOL,15min60m,NOout+YESin,1.537,-53.7,-0.5414,10.97,799,0.997,0.54,73.48,73.88,sol-updown-15m-1785329100,solana-up-or-down-july-29-2026-8am-et
+2026-07-29T12:47:59+00:00,BTC,15min60m,NOout+YESin,1.5,-50.0,-0.2654,161.64,720,0.99,0.51,64267.0,64438.0,btc-updown-15m-1785329100,bitcoin-up-or-down-july-29-2026-8am-et
+2026-07-29T12:47:59+00:00,ETH,15min60m,NOout+YESin,1.54,-54.0,-0.4265,6.05,720,0.99,0.55,1904.92,1913.08,eth-updown-15m-1785329100,ethereum-up-or-down-july-29-2026-8am-et
+2026-07-29T12:48:00+00:00,SOL,15min60m,NOout+YESin,1.517,-51.7,-0.5414,10.97,719,0.997,0.52,73.48,73.88,sol-updown-15m-1785329100,solana-up-or-down-july-29-2026-8am-et
