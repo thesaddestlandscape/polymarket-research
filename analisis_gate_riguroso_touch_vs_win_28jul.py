@@ -28,7 +28,11 @@ import random
 from collections import defaultdict
 from pathlib import Path
 
-PRICES_CSV = Path("data/live/smart_exit_prices.csv")
+REPO = Path(__file__).resolve().parent
+PRICES_CSV = REPO / "data/live/smart_exit_prices.csv"  # 29-Jul: era relativo --
+# crasheaba bajo cron (vigia_touch_vs_win_p18.py, 06:58 UTC) porque el cron
+# no hace cd al repo. Mismo patrón que vigia_supervivencia_diaria.py (mismo
+# día) y vigia_gate_bucket_propio.py (28-Jul).
 UMBRALES = [0.55, 0.60, 0.65, 0.70, 0.75, 0.80, 0.85]
 N_MIN_GATE = 40
 N_SHUFFLE = 5000

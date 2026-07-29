@@ -22,7 +22,7 @@ import csv
 from collections import defaultdict
 from pathlib import Path
 
-PRICES_CSV = Path("data/live/smart_exit_prices.csv")
+PRICES_CSV = Path(__file__).resolve().parent / "data/live/smart_exit_prices.csv"
 TRADES_CSV = Path("data/live/trades.csv")
 
 HAIRCUT_VENTA = 0.06     # fracción del valor de salida: ~2-3c de spread + fee venta ~3.78%

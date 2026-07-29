@@ -15,7 +15,7 @@ import csv
 from collections import defaultdict
 from pathlib import Path
 
-PRICES_CSV = Path("data/live/smart_exit_prices.csv")
+PRICES_CSV = Path(__file__).resolve().parent / "data/live/smart_exit_prices.csv"
 UMBRALES = [0.55, 0.60, 0.65, 0.70, 0.75, 0.80, 0.85]
 N_MIN_GATE = 40
 
