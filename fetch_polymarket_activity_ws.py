@@ -42,11 +42,23 @@ Corre en screen propio (mismo patrón que chainlink/pfinish):
 import csv
 import json
 import re
+import sys
 from datetime import datetime, timezone
 from pathlib import Path
 
 import asyncio
 import websockets
+
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+# 29-Jul (petición Javi: ampliar wallet_mirror a TODAS las monedas/marcos):
+# el regex de slug _RE_UPDOWN_SLUG solo reconoce 5m/15m -- los mercados
+# "hourly" (60min) NO tienen slug updown-1h resoluble (mismo hallazgo ya
+# documentado en fetch_libro_ambos_lados.py 28-Jul, nunca aplicado aquí),
+# y "weekly" no es un mercado Up/Down en absoluto (rango de precio, otro
+# formato de pregunta). Fallback por TEXTO del título (mismas funciones
+# que ya usa shadow_predict.py/fetch_libro_ambos_lados.py) para no perder
+# ninguna moneda/marco por depender solo del slug.
+from shadow_predict import _parse_updown_tipo, identificar_activo  # noqa: E402
 
 REPO = Path(__file__).resolve().parent
 DIR_SHADOW = REPO / "data" / "shadow"
@@ -99,17 +111,34 @@ def _archivo_hoy() -> Path:
     return DIR_DATALOGS / f"polymarket_activity_{fecha}.csv"
 
 
-def _parse_updown(event_slug: str):
-    """('BTC','5min') a partir de 'btc-updown-5m-1785237000', o (None,None)."""
+def _parse_updown(event_slug: str, title: str = ""):
+    """('BTC','5min') a partir de 'btc-updown-5m-1785237000' (camino rápido,
+    cubre 5m/15m, la mayoría del volumen) -- o, si el slug no resuelve
+    (mercados 'hourly'/60min, que no tienen slug updown-1h; o 'weekly',
+    que no es Up/Down), fallback por TEXTO del título. Ver nota en el
+    import de shadow_predict arriba."""
     m = _RE_UPDOWN_SLUG.match(event_slug or "")
-    if not m:
+    if m:
+        activo = m.group(1).upper()
+        if activo in ACTIVOS_TRACKEADOS:
+            n, unidad = m.group(2), m.group(3)
+            marco = f"{n}min" if unidad == "m" else f"{int(n)*60}min"
+            return activo, marco
+
+    if not title:
         return None, None
-    activo = m.group(1).upper()
+    activo = identificar_activo(title)
     if activo not in ACTIVOS_TRACKEADOS:
         return None, None
-    n, unidad = m.group(2), m.group(3)
-    marco = f"{n}min" if unidad == "m" else f"{int(n)*60}min"
-    return activo, marco
+
+    tipo, vent = _parse_updown_tipo(title)
+    if tipo in ("slot", "hourly") and vent in (5, 15, 60):
+        return activo, f"{vent}min"
+
+    if "week" in title.lower():
+        return activo, "weekly"
+
+    return None, None
 
 
 def _escribir_fila(fila: dict) -> None:
@@ -160,7 +189,7 @@ async def _correr_una_conexion() -> None:
                     continue
                 usd_value = round(price * size, 4)
                 event_slug = payload.get("eventSlug", "")
-                activo, marco = _parse_updown(event_slug)
+                activo, marco = _parse_updown(event_slug, payload.get("title", ""))
                 es_tracked = activo is not None
                 es_whale = usd_value >= WHALE_USD_MIN
                 if not es_tracked and not es_whale:

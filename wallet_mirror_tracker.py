@@ -66,11 +66,13 @@ UMBRAL_RESUELTO = 0.98
 # 29-Jul (bug real encontrado en el primer smoke test, 0 matches pese a
 # haber decenas en los datos crudos): wallet_edge_score_por_activo_marco.json
 # usa "5m"/"15m"/"60m"/"240m"/"weekly", polymarket_activity_*.csv usa
-# "5min"/"15min"/"60min"/"240min" -- sin normalizar, el join nunca cruzaba
-# nada. "weekly" no tiene equivalente en el feed de activity (no se
-# trackea ese marco ahí) -- esas wallets quedan fuera, no es un bug, es
-# que la fuente no cubre ese marco.
-MARCO_A_ACTIVITY = {"5m": "5min", "15m": "15min", "60m": "60min", "240m": "240min"}
+# "5min"/"15min"/"60min"/"240min"/"weekly" -- sin normalizar, el join nunca
+# cruzaba nada. "weekly" AÑADIDO 29-Jul (petición Javi: cubrir todas las
+# monedas/marcos) -- fetch_polymarket_activity_ws.py ahora clasifica
+# hourly/weekly por TEXTO del título (fallback cuando el slug no resuelve,
+# mismo mecanismo ya usado en fetch_libro_ambos_lados.py), así que el feed
+# de activity ya produce marco="weekly" para mercados WEEKLY_PRICE.
+MARCO_A_ACTIVITY = {"5m": "5min", "15m": "15min", "60m": "60min", "240m": "240min", "weekly": "weekly"}
 
 
 def _log(msg: str) -> None:
@@ -221,11 +223,20 @@ def detectar_matches(wallets: dict, vistos: set) -> tuple[list[dict], set]:
 
 
 def _opuesto(lado: str) -> str:
+    """29-Jul: antes mezclaba las dos parejas de etiquetas (Up/Down de
+    mercados Up/Down, Yes/No de WEEKLY_PRICE y otros) -- _opuesto("Yes")
+    devolvía "Down" en vez de "No", así que nunca habría coincidido con el
+    outcome_real real de un mercado weekly. Ahora respeta la pareja de
+    entrada."""
     l = (lado or "").strip().lower()
-    if l in ("up", "yes"):
+    if l == "up":
         return "Down"
-    if l in ("down", "no"):
+    if l == "down":
         return "Up"
+    if l == "yes":
+        return "No"
+    if l == "no":
+        return "Yes"
     return ""
 
 
@@ -311,6 +322,13 @@ def guardar(filas: list) -> None:
 
 
 def outcome_por_slug(market_slug: str) -> str | None:
+    """29-Jul: devolvía "Up"/"Down" a pelo, asumiendo que outcomes[0]="Up" y
+    outcomes[1]="Down" -- correcto para mercados Up/Down, pero WEEKLY_PRICE
+    (añadido esta sesión, mercados de rango de precio) usa otras etiquetas
+    (p.ej. "Yes"/"No") y esto lo habría resuelto siempre mal (comparación
+    contra mirror_lado="Yes"/"No" nunca habría coincidido con "Up"/"Down").
+    Ahora lee las etiquetas reales de `outcomes` en vez de asumirlas -- mismo
+    criterio de validar-no-asumir que _get_token_ids en live_trade.py."""
     try:
         r = requests.get(f"{GAMMA}/events", params={"slug": market_slug}, timeout=8)
         if r.status_code != 200:
@@ -321,12 +339,13 @@ def outcome_por_slug(market_slug: str) -> str | None:
         mkt = ev[0]["markets"][0]
         pr = mkt.get("outcomePrices")
         pr = json.loads(pr) if isinstance(pr, str) else pr
-        if not pr or len(pr) < 2:
+        outcomes = mkt.get("outcomes")
+        outcomes = json.loads(outcomes) if isinstance(outcomes, str) else outcomes
+        if not pr or not outcomes or len(pr) != len(outcomes):
             return None
-        if float(pr[0]) >= UMBRAL_RESUELTO:
-            return "Up"
-        if float(pr[1]) >= UMBRAL_RESUELTO:
-            return "Down"
+        for o, p in zip(outcomes, pr):
+            if float(p) >= UMBRAL_RESUELTO:
+                return o
     except Exception:
         pass
     return None
