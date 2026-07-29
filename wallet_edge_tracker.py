@@ -85,14 +85,16 @@ FDR = 0.10           # mismo FDR que shadow_postmortem/analisis_shuffle_patrones
 
 
 def _stat_vacia():
-    return {"n": 0, "aciertos": 0, "suma_precio": 0.0, "pnl_proxy": 0.0}
+    return {"n": 0, "aciertos": 0, "suma_precio": 0.0, "pnl_proxy": 0.0, "sizes": []}
 
 
-def _acumular(d, precio, acierto):
+def _acumular(d, precio, acierto, size=None):
     d["n"] += 1
     d["aciertos"] += acierto
     d["suma_precio"] += precio
     d["pnl_proxy"] += (1.0 - precio) if acierto else -precio
+    if size is not None and size > 0:
+        d["sizes"].append(size)
 
 
 def _cargar_por_wallet_y_marco():
@@ -114,9 +116,13 @@ def _cargar_por_wallet_y_marco():
                 continue
             if not (0.0 < precio < 1.0):
                 continue  # precio_medio=0 o 1 rompe el shuffle (p fijo degenerado)
-            _acumular(por_wallet[w], precio, acierto)
-            _acumular(por_wallet_marco[(w, marco)], precio, acierto)
-            _acumular(por_wallet_activo_marco[(w, activo, marco)], precio, acierto)
+            try:
+                size = float(r.get("size_usd") or 0) or None
+            except (ValueError, TypeError):
+                size = None
+            _acumular(por_wallet[w], precio, acierto, size)
+            _acumular(por_wallet_marco[(w, marco)], precio, acierto, size)
+            _acumular(por_wallet_activo_marco[(w, activo, marco)], precio, acierto, size)
     return por_wallet, por_wallet_marco, por_wallet_activo_marco
 
 
@@ -148,11 +154,22 @@ def _filas_con_significancia(grupos, ahora, etiqueta):
         precio_medio = d["suma_precio"] / n
         seed = (hash(k) ^ n) & 0xFFFFFFFF
         p = _shuffle_pvalue_edge(n, precio_medio, hit, seed)
+        sizes = sorted(d["sizes"])
+        # 29-Jul (idea_grandes_jugadas_wallets_validadas_29jul): mediana propia
+        # de apuesta de ESTA wallet en esta clave -- confirmado con gate
+        # riguroso (shuffle+split-half) sobre las 70 wallets ya validadas del
+        # universo propio: apuesta>=2x su mediana propia hit=79.2% (n=1200)
+        # vs <=0.5x hit=48.7% (n=1537), gap+30.5pp, p_shuffle=0.0000. Tamaño
+        # RELATIVO a la propia wallet, no absoluto en USD (eso solo refleja
+        # capital disponible, no convicción).
+        size_mediana = sizes[len(sizes) // 2] if sizes else None
         filas.append({"clave": k, "n": n, "hit": round(hit, 4),
                        "precio_medio": round(precio_medio, 4),
                        "edge_pp": round((hit - precio_medio) * 100, 3),
                        "pnl_proxy": round(d["pnl_proxy"], 3),
-                       "p_shuffle": p})
+                       "p_shuffle": p,
+                       "size_mediana": round(size_mediana, 2) if size_mediana else None,
+                       "n_con_size": len(sizes)})
     pvals = [f["p_shuffle"] for f in filas]
     keep = _benjamini_hochberg(pvals, fdr=FDR)
     n_sig = 0

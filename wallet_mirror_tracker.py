@@ -117,7 +117,10 @@ def cargar_wallets_validadas() -> dict:
             tipo = "FADE"
         else:
             continue  # edge_pp<0 pero hit>=50% -- payout asimétrico, no dirección; sin mirror validado
-        out[(w, v["activo"], marco_activity)] = {"tipo": tipo, "edge_pp": v["edge_pp"], "n": v["n"]}
+        out[(w, v["activo"], marco_activity)] = {
+            "tipo": tipo, "edge_pp": v["edge_pp"], "n": v["n"],
+            "size_mediana": v.get("size_mediana"),
+        }
     return out
 
 
@@ -173,6 +176,22 @@ def detectar_matches(wallets: dict, vistos: set) -> tuple[list[dict], set]:
                 mirror_lado = lado_wallet if info["tipo"] == "SEGUIR" else _opuesto(lado_wallet)
                 th = row.get("transaction_hash", "")
                 fill = _fillability_mirror(row.get("market_slug", ""), mirror_lado, row.get("price", ""))
+                # 29-Jul (idea_grandes_jugadas_wallets_validadas_29jul, petición
+                # Javi): tamaño de ESTA apuesta relativo a la mediana propia de
+                # la wallet en esta (activo,marco) -- confirmado con gate
+                # riguroso (shuffle p=0.0000, split-half estable) sobre las 70
+                # wallets ya validadas: >=2x mediana propia hit=79.2% (n=1200)
+                # vs <=0.5x hit=48.7% (n=1537). Tamaño RELATIVO, no USD absoluto
+                # (eso solo refleja capital disponible). size_mediana viene de
+                # wallet_edge_score_por_activo_marco.json (wallet_edge_tracker.py).
+                ratio_size = None
+                size_mediana = info.get("size_mediana")
+                try:
+                    usd_trade = float(row.get("usd_value") or 0)
+                except (TypeError, ValueError):
+                    usd_trade = 0.0
+                if size_mediana and usd_trade > 0:
+                    ratio_size = round(usd_trade / size_mediana, 2)
                 nuevos.append({
                     "timestamp_utc": datetime.now(timezone.utc).isoformat(timespec="seconds"),
                     "trade_timestamp": row.get("timestamp_utc", ""),
@@ -193,6 +212,10 @@ def detectar_matches(wallets: dict, vistos: set) -> tuple[list[dict], set]:
                     "resolved_ts": "",
                     "ratio_vs_stake_deteccion": fill.get("ratio_vs_stake", "") if fill.get("ok") else "",
                     "mejor_ask_deteccion": fill.get("mejor_ask", "") if fill.get("ok") else "",
+                    "usd_trade": usd_trade if usd_trade > 0 else "",
+                    "size_mediana_wallet": size_mediana if size_mediana else "",
+                    "ratio_vs_mediana_propia": ratio_size if ratio_size is not None else "",
+                    "es_jugada_grande": int(ratio_size >= 2.0) if ratio_size is not None else "",
                 })
     return nuevos, vistos_nuevo
 
@@ -263,7 +286,8 @@ COLUMNS = ["timestamp_utc", "trade_timestamp", "wallet", "tipo", "edge_pp_valida
            "n_validado", "activo", "marco", "condition_id", "market_slug",
            "lado_wallet", "precio_wallet", "mirror_lado", "transaction_hash",
            "outcome_real", "acierto", "resolved_ts",
-           "ratio_vs_stake_deteccion", "mejor_ask_deteccion"]
+           "ratio_vs_stake_deteccion", "mejor_ask_deteccion",
+           "usd_trade", "size_mediana_wallet", "ratio_vs_mediana_propia", "es_jugada_grande"]
 
 
 def guardar(filas: list) -> None:
