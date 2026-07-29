@@ -383,7 +383,7 @@ def check_polyactivity_fresh(screens_up: dict) -> None:
     if not screens_up.get("polyactivity"):
         return  # check_screens ya se encarga de relanzarla si está caída
     hoy = time.strftime("%Y-%m-%d", time.gmtime())
-    p = DIR_SHADOW / f"polymarket_activity_{hoy}.csv"
+    p = Path("/root/polymarket-research-datalogs") / f"polymarket_activity_{hoy}.csv"  # 29-Jul: fuera del repo
     if not p.exists():
         return
     age = time.time() - p.stat().st_mtime

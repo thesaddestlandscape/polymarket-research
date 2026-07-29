@@ -52,6 +52,8 @@ sys.path.insert(0, str(REPO))
 import requests  # noqa: E402
 
 DIR_SHADOW = REPO / "data" / "shadow"
+# 29-Jul: polymarket_activity_*.csv vive fuera del repo (fix fetch_polymarket_activity_ws.py).
+DIR_DATALOGS = Path("/root/polymarket-research-datalogs")
 WALLET_SCORES = DIR_SHADOW / "wallet_edge_score_por_activo_marco.json"
 OUT = DIR_SHADOW / "wallet_mirror_dry_run.csv"
 OUT_LOCK = DIR_SHADOW / "wallet_mirror_dry_run.csv.lock"
@@ -102,7 +104,7 @@ def _archivos_activity(dias: int = 2) -> list[Path]:
     out = []
     for d in range(dias):
         fecha = (hoy - timedelta(days=d)).strftime("%Y-%m-%d")
-        p = DIR_SHADOW / f"polymarket_activity_{fecha}.csv"
+        p = DIR_DATALOGS / f"polymarket_activity_{fecha}.csv"
         if p.exists():
             out.append(p)
     return out
