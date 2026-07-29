@@ -385,6 +385,12 @@
     "FAVORITO_CONFIRMADO_15MIN_EXTREMO#ETH#15min#BUY_YES",
     "FAVORITO_CONFIRMADO_15MIN_EXTREMO#SOL#15min#BUY_YES",
     "FAVORITO_CONFIRMADO_15MIN_EXTREMO#XRP#15min#BUY_YES",
+    "FAVORITO_CONFIRMADO_5MIN_ALTACONVICCION#BNB#5min#BUY_YES",
+    "FAVORITO_CONFIRMADO_5MIN_ALTACONVICCION#BTC#5min#BUY_YES",
+    "FAVORITO_CONFIRMADO_5MIN_ALTACONVICCION#DOGE#5min#BUY_YES",
+    "FAVORITO_CONFIRMADO_5MIN_ALTACONVICCION#ETH#5min#BUY_YES",
+    "FAVORITO_CONFIRMADO_5MIN_ALTACONVICCION#SOL#5min#BUY_YES",
+    "FAVORITO_CONFIRMADO_5MIN_ALTACONVICCION#XRP#5min#BUY_YES",
     "FAVORITO_CONFIRMADO_60MIN_ALTACONVICCION#BTC#60min#BUY_YES",
     "FAVORITO_CONFIRMADO_60MIN_ALTACONVICCION#ETH#60min#BUY_YES",
     "FAVORITO_CONFIRMADO_60MIN_ALTACONVICCION#SOL#60min#BUY_YES",
@@ -613,5 +619,6 @@
       "nota": "Segunda recarga tras circuit breaker 17-Jul. 25 USDC nuevos + 0.78 USDC remanente del período 1 = 25.78 USDC de capital disponible al inicio del período 2"
     }
   ],
-  "_candidatos_extremo_090_29jul_nota": "29-Jul: FAVORITO_CONFIRMADO_60MIN_EXTREMO (BTC/ETH/SOL) y FAVORITO_CONFIRMADO_15MIN_EXTREMO (6 activos) -- umbral py>=0.90, cola extrema que ni FAVORITO_CONFIRMADO ni las variantes ALTACONVICCION (umbral 0.70) llegan a registrar por el mismo motivo (dedup por (strategy,market_id), una sola fila por mercado). Hueco medido en analisis_franja_milimetrica_ballenas.py: [0.90,1.00) con ballenas hit 90-99.9% (miles de eventos) y shadow_n=0-14 en TODOS los buckets pese al fix de ALTACONVICCION del 28-Jul. Puramente shadow, NO en pares_permitidos_live, cero dinero real. Añadidas a candidatos_evaluacion_live para que también acumulen fill-ability real desde cero (mismo patrón que las 2 ALTACONVICCION anteriores)."
+  "_candidatos_extremo_090_29jul_nota": "29-Jul: FAVORITO_CONFIRMADO_60MIN_EXTREMO (BTC/ETH/SOL) y FAVORITO_CONFIRMADO_15MIN_EXTREMO (6 activos) -- umbral py>=0.90, cola extrema que ni FAVORITO_CONFIRMADO ni las variantes ALTACONVICCION (umbral 0.70) llegan a registrar por el mismo motivo (dedup por (strategy,market_id), una sola fila por mercado). Hueco medido en analisis_franja_milimetrica_ballenas.py: [0.90,1.00) con ballenas hit 90-99.9% (miles de eventos) y shadow_n=0-14 en TODOS los buckets pese al fix de ALTACONVICCION del 28-Jul. Puramente shadow, NO en pares_permitidos_live, cero dinero real. Añadidas a candidatos_evaluacion_live para que también acumulen fill-ability real desde cero (mismo patrón que las 2 ALTACONVICCION anteriores).",
+  "_candidatos_5min_altaconviccion_29jul_nota": "29-Jul: FAVORITO_CONFIRMADO_5MIN_ALTACONVICCION (6 activos, umbral py>=0.70) -- misma familia que las variantes 60min/15min ya existentes (28-Jul), pero para #5min, que nunca había tenido su propia variante. Hueco medido en analisis_franja_milimetrica_ballenas.py: SOL/XRP/DOGE/BNB#5min con shadow_n=0-4 en TODOS los buckets desde 0.60 mientras ballenas confirma hit 71-99% con cientos/miles de eventos. Puramente shadow, NO en pares_permitidos_live, cero dinero real. Añadidas a candidatos_evaluacion_live para medir fill-ability real desde cero."
 }

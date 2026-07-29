@@ -4346,6 +4346,37 @@ def s_favorito_confirmado_15min_extremo(market, ctx):
     return s_favorito_confirmado(market, ctx)
 
 
+FAVORITO_5MIN_ALTACONVICCION_TH = 0.70
+# 29-Jul: mismo hueco de cobertura que 60min/15min pero en #5min -- nunca
+# se había construido esta variante (a diferencia de 15min, que ya cubre
+# los 6 activos desde 28-Jul). analisis_franja_milimetrica_ballenas.py
+# muestra SOL/XRP/DOGE/BNB#5min con shadow_n=0-4 en TODOS los buckets
+# desde 0.60 mientras ballenas confirma hit 71-99% con cientos/miles de
+# eventos. Mismo mecanismo, mismo dedup por nombre propio.
+
+
+def s_favorito_confirmado_5min_altaconviccion(market, ctx):
+    """ALTACONVICCION para #5min (umbral 0.70) -- ver FAVORITO_5MIN_
+    ALTACONVICCION_TH arriba. Los 6 activos de FAVORITO_CONFIRMADO_PARES,
+    sin filtro de restante_min (a diferencia de la variante 60min de BTC/
+    ETH): en 5min la ventana entera dura 5min, no hay margen real para
+    distinguir "confirmación anticipable" de "confirmación de última
+    hora" con el mismo criterio -- dejar acumular sin recortar y revisar
+    con datos frescos antes de añadir cualquier filtro."""
+    question = market.get("question", "")
+    if "up or down" not in question.lower():
+        return None
+    tipo, vent = _parse_updown_tipo(question)
+    if tipo != "slot" or vent != 5:
+        return None
+    if identificar_activo(question) not in FAVORITO_CONFIRMADO_PARES:
+        return None
+    py = market.get("_precio_yes")
+    if py is None or py < FAVORITO_5MIN_ALTACONVICCION_TH:
+        return None
+    return s_favorito_confirmado(market, ctx)
+
+
 # ── STREAK — momentum (5min) / reversión (15min) en la SECUENCIA de resoluciones ──
 # Hallazgo 2026-07-05: nadie miraba la secuencia de ventanas (todas las estrategias
 # las tratan como independientes). El signo se INVIERTE por escala:
@@ -4878,6 +4909,7 @@ ESTRATEGIAS = [
     ("FAVORITO_CONFIRMADO_15MIN_ALTACONVICCION", s_favorito_confirmado_15min_altaconviccion),
     ("FAVORITO_CONFIRMADO_60MIN_EXTREMO", s_favorito_confirmado_60min_extremo),
     ("FAVORITO_CONFIRMADO_15MIN_EXTREMO", s_favorito_confirmado_15min_extremo),
+    ("FAVORITO_CONFIRMADO_5MIN_ALTACONVICCION", s_favorito_confirmado_5min_altaconviccion),
     ("STREAK_MOM_5M",       s_streak_mom_5m),
     ("STREAK_FADE_5M",      s_streak_fade_5m),
     ("STREAK_FADE_15M",     s_streak_fade_15m),
