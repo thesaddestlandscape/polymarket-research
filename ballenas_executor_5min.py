@@ -52,6 +52,7 @@ código en pares_permitidos_live + /code-review + aprobación explícita
 Corre en screen propia:
   screen -dmS ballenas_5m bash -c "cd /root/polymarket-research && .venv/bin/python ballenas_executor_5min.py >> logs/ballenas_5m.log 2>&1"
 """
+import csv
 import fcntl
 import json
 import threading
@@ -125,6 +126,9 @@ STRATEGY = "BALLENAS_TARDIAS"
 VENTANA_MIN = 5
 
 DRY_RUN = False  # 27-Jul, aprobado Javi -- ver docstring y nota en config_live.json. Solo ETH está en whitelist.
+
+PREDICTIONS_LOCK_PATH = DIR_SHADOW / ".predictions_lock"  # mismo fichero que
+# ballenas_executor_btc15m.py -- serializa escrituras entre ambos ejecutores.
 
 POLL_INTERVAL_S = 1.5    # más conservador que BTC15m (1.0) -- 3 hilos concurrentes
 HARD_FLOOR_S = 3.0       # uniforme, mismo suelo de seguridad que BTC15m
@@ -467,6 +471,8 @@ def watch_window(activo: str, ts_end: int) -> bool:
                 f"n={n} py={py:.3f} prob_bucket={prob_bucket:.3f} edge={edge:+.3f} restante={restante:.1f}s "
                 f"confirm_ceiling_s={confirm_ceiling_s:.1f} {_resumen_wallet_edge(wallets_yes, activo)}", activo)
             _registrar_tracker(activo, mercado, py, edge, pct_ponderado, n, restante, n_yes_total)
+            _registrar_prediccion(activo, mercado, py, edge, restante, pct_ponderado, n,
+                                   banda_lo, banda_hi, prob_bucket)
             return disparar(activo, mercado, py, edge, restante, prob_bucket)
 
         time.sleep(POLL_INTERVAL_S)
@@ -565,6 +571,55 @@ def _registrar_tracker(activo: str, mercado: dict, py: float, edge: float,
                 fcntl.flock(lock_f, fcntl.LOCK_UN)
         finally:
             lock_f.close()
+
+
+def _registrar_prediccion(activo: str, mercado: dict, py: float, edge: float,
+                           restante_s: float, pct_yes: float, n_ballenas: int,
+                           banda_lo: float, banda_hi: float, prob_bucket: float) -> None:
+    """29-Jul: mismo mecanismo que ballenas_executor_btc15m.py::_registrar_
+    prediccion() -- gap real encontrado en el barrido "conectar todos los
+    loggers a las estrategias" (petición Javi): este ejecutor solo escribía
+    a su propio tracker (ballenas_5min_dry_run.csv, sin pnl_neto), nunca a
+    predictions_YYYY-MM-DD.csv -- invisible para shadow_resolve.py/
+    shadow_postmortem.py/results.csv y por tanto para CUALQUIER análisis
+    que lea results.csv (franja milimétrica, gate_bucket_propio, etc.),
+    pese a que BALLENAS_TARDIAS#ETH#5min ya opera con dinero real. Deja
+    rastro en el MISMO formato que shadow_predict.py -- shadow_resolve.py
+    lo resuelve sin duplicar esa lógica aquí, igual que ya hace btc15m."""
+    ts = datetime.now(timezone.utc).isoformat(timespec="seconds")
+    archivo = DIR_SHADOW / f"predictions_{ts[:10]}.csv"
+    subtype = f"{activo}#{VENTANA_MIN}min"
+    gate_bf = _gate_banda_fina_ballenas(activo, f"{VENTANA_MIN}min", py, restante_s / 60.0)
+    features = json.dumps({
+        "concentracion_yes": round(pct_yes, 4), "n_ballenas": n_ballenas,
+        "restante_s_al_confirmar": round(restante_s, 2),
+        "banda_lo": banda_lo, "banda_hi": banda_hi,
+        "banda_fina_vetaria_fase1": gate_bf["vetaria_fase1"], "banda_fina_motivo": gate_bf["motivo"],
+    }, separators=(",", ":"))
+    try:
+        with open(PREDICTIONS_LOCK_PATH, "w") as lock_f:
+            fcntl.flock(lock_f, fcntl.LOCK_EX)
+            try:
+                nuevo = not archivo.exists()  # re-comprobar bajo el lock
+                with open(archivo, "a", newline="", encoding="utf-8") as f:
+                    w = csv.writer(f)
+                    if nuevo:
+                        w.writerow([
+                            "timestamp_utc", "strategy", "market_id", "question", "end_date",
+                            "horas_a_vencimiento", "precio_yes_mercado", "prob_yes_modelo",
+                            "edge_bruto", "edge_neto", "edge_direccional", "decision", "razon",
+                            "subtype", "apuesta", "features",
+                        ])
+                    w.writerow([
+                        ts, STRATEGY, mercado["market_id"], "", mercado.get("end_date", ""),
+                        f"{restante_s / 3600:.4f}", f"{py:.4f}", f"{prob_bucket:.4f}",
+                        f"{edge:.4f}", f"{edge:.4f}", f"{edge:.4f}", "BUY_YES",
+                        "ballenas_confirmado", subtype, "1.05", features,
+                    ])
+            finally:
+                fcntl.flock(lock_f, fcntl.LOCK_UN)
+    except Exception as e:
+        log(f"aviso: no se pudo registrar predicción para postmortem: {e}", activo)
 
 
 def disparar(activo: str, mercado: dict, py: float, edge: float, restante_s: float,
