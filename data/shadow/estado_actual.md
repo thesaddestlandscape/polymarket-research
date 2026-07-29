@@ -1,4 +1,4 @@
-# Estado del bot — 2026-07-29 06:36 UTC
+# Estado del bot — 2026-07-29 06:42 UTC
 
 ## Live — dinero real (on-chain)
 | | |
@@ -23,9 +23,9 @@
 
 | Estrategia | n | Win% | IC_efectivo | Tendencia | PNL | Apuesta | Estado |
 |---|---|---|---|---|---|---|---|
-| GBM_LATE_15M_ESPACIO_ATR | 6126 | 61.9% | +0.119 | 📉 agota (-0.06) | +2934.41$ | 1.19$ | ✅ activa |
-| GBM_LATE_15M | 8925 | 59.4% | +0.094 | ➡️ estable | +2694.40$ | 0.94$ | ✅ activa |
-| GBM_LATE_15M_TARDIO | 6126 | 56.6% | +0.066 | 📉 agota (-0.07) | +1666.39$ | 0.66$ | ✅ activa |
+| GBM_LATE_15M_ESPACIO_ATR | 6126 | 61.9% | +0.119 | 📉 agota (-0.06) | +2934.41$ | 1.20$ | ✅ activa |
+| GBM_LATE_15M | 8925 | 59.4% | +0.094 | ➡️ estable | +2694.40$ | 0.95$ | ✅ activa |
+| GBM_LATE_15M_TARDIO | 6126 | 56.6% | +0.066 | 📉 agota (-0.07) | +1666.39$ | 0.67$ | ✅ activa |
 | UPDOWN_GBM_15M_TARDIO | 2352 | 65.0% | +0.150 | ➡️ estable | +1023.68$ | 1.49$ | ✅ activa |
 | UPDOWN_GBM | 3063 | 53.6% | +0.036 | 📈 madura (+0.06) | +281.60$ | 0.50$ | ✅ activa |
 | WEEKLY_PRICE | 441 | 73.0% | +0.229 | 📈 madura (+0.27) | +120.58$ | 2.00$ | ✅ activa |
