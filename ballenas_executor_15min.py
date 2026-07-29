@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 ballenas_executor_15min.py — Ejecutor de baja latencia multi-activo para
-BALLENAS_CONFIRMADAS_15M#{ETH,SOL,XRP,DOGE}#15min#BUY_YES.
+BALLENAS_CONFIRMADAS_15M#{ETH,SOL,XRP,DOGE,BNB}#15min#BUY_YES.
 
 Origen (29-Jul, petición explícita Javi tras el hallazgo del mismo día
 sobre GBM_LATE_15M#ETH#15min: "tenemos un mecanismo de baja latencia para
@@ -145,14 +145,11 @@ MIN_TRADES_BALLENA = 3
 # o un analisis dedicado confirme un umbral por activo.
 UMBRAL_N_WALLETS_YES = {}  # 29-Jul: ningun combo tiene gate riguroso propio todavia (ver docstring), 0 = sin filtro para todos
 
-ACTIVOS = ("ETH", "SOL", "XRP", "DOGE")
-# BNB añadido 27-Jul (petición Javi): calibración ya existía en
-# ballenas_timing_state.json (significativo=True, banda=[0.3,0.5),
-# rest_lo_min=1.33/rest_hi_min=3.75 -- ventana operable, nada degenerada).
-# BTC#5m SIGUE FUERA a propósito: rest_lo_min=-0.05 (la "confirmación"
-# solo ocurriría DESPUÉS del cierre del mercado, ventana inexistente en la
-# práctica) -- mismo motivo documentado el 18-Jul arriba, reconfirmado hoy
-# con datos frescos, no un olvido.
+ACTIVOS = ("ETH", "SOL", "XRP", "DOGE", "BNB")
+# BNB añadido 29-Jul -- ver nota completa en el docstring del fichero
+# (hoy no significativo, cargar_calibracion() lo mantiene inerte solo).
+# BTC#15m SIGUE FUERA a propósito: ya tiene su propio ejecutor dedicado
+# (ballenas_executor_btc15m.py, screen ballenas_fast, live desde 17-Jul).
 
 # 23-Jul: MARGEN_WATCH_S/MARGEN_CONFIRM_S sustituyen a los watch_lead_s/
 # prob_bucket hardcodeados por activo del 18-Jul (ETH=90s/0.93, SOL=160s/
