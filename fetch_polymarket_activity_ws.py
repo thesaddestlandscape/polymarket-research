@@ -54,6 +54,19 @@ DIR_SHADOW = REPO / "data" / "shadow"
 WS_URL = "wss://ws-live-data.polymarket.com"
 PING_INTERVAL_S = 5
 RECONNECT_ESPERA_S = 5
+RECV_TIMEOUT_S = 30  # 29-Jul: MISMO bug ya encontrado y arreglado en
+# fetch_chainlink_prices.py el 28-Jul, nunca aplicado aquí -- `async for
+# raw in ws` sin timeout deja el bucle bloqueado para siempre si la
+# conexión muere en silencio (sin frame de cierre), sin lanzar ninguna
+# excepción que main() pudiera capturar y reconectar. Encontrado
+# comparando fidelidad contra ballenas_timing_history.csv (petición Javi
+# de revisar las 3 conexiones pendientes de polyactivity): 17 de 24
+# mercados ETH#15min de HOY (71%) tenían CERO trades capturados pese a
+# 135-387 trades reales cada uno -- 3 huecos silenciosos de ~2h en el log
+# (01:49, 03:49, 05:50 UTC), sin ningún "Conexión perdida"/"Error
+# inesperado" previo, exactamente la firma de este bug. A cientos/miles
+# de trades por minuto en este firehose, 30s sin ningún mensaje ya es
+# anómalo -- fuerza un TimeoutError que main() ya captura y reconecta.
 WHALE_USD_MIN = 1000.0
 
 ACTIVOS_TRACKEADOS = {"BTC", "ETH", "SOL", "XRP", "DOGE", "BNB"}
@@ -119,7 +132,8 @@ async def _correr_una_conexion() -> None:
         ping_task = asyncio.create_task(_mantener_ping(ws))
         n_total = n_guardados = 0
         try:
-            async for raw in ws:
+            while True:
+                raw = await asyncio.wait_for(ws.recv(), timeout=RECV_TIMEOUT_S)
                 if not raw:
                     continue
                 try:
