@@ -1,4 +1,4 @@
-# Estado del bot — 2026-07-30 00:16 UTC
+# Estado del bot — 2026-07-30 00:22 UTC
 
 ## Live — dinero real (on-chain)
 | | |
@@ -26,7 +26,7 @@
 | GBM_LATE_15M_ESPACIO_ATR | 6370 | 62.1% | +0.121 | 📉 agota (-0.07) | +3135.63$ | 1.21$ | ✅ activa |
 | GBM_LATE_15M | 9187 | 59.5% | +0.095 | ➡️ estable | +2790.23$ | 0.95$ | ✅ activa |
 | GBM_LATE_15M_TARDIO | 6372 | 56.7% | +0.067 | 📉 agota (-0.07) | +1798.26$ | 0.67$ | ✅ activa |
-| UPDOWN_GBM_15M_TARDIO | 2424 | 65.3% | +0.153 | ➡️ estable | +1086.40$ | 1.53$ | ✅ activa |
+| UPDOWN_GBM_15M_TARDIO | 2424 | 65.3% | +0.153 | ➡️ estable | +1086.40$ | 1.52$ | ✅ activa |
 | UPDOWN_GBM | 3128 | 54.0% | +0.040 | 📈 madura (+0.06) | +311.91$ | 0.50$ | ✅ activa |
 | WEEKLY_PRICE | 457 | 73.5% | +0.234 | 📈 madura (+0.27) | +132.04$ | 2.00$ | ✅ activa |
 | GBM_LATE_15M_PYCONFIRMADO | 320 | 55.0% | +0.050 | 📉 agota (-0.23) | +97.50$ | 0.50$ | ✅ activa |
@@ -40,7 +40,7 @@
 | BALLENAS_TARDIAS | 85 | 80.0% | +0.293 | 📉 agota (-0.20) | +5.28$ | 2.00$ | ✅ activa |
 | GBM_LATE_60M | 343 | 39.1% | -0.109 | 📈 madura (+0.03) | +4.07$ | 0.50$ | ⚠️ IC negativo |
 | RESOLUTION_SNIPER | 17 | 88.2% | +0.291 | — | +3.97$ | 2.00$ | ✅ activa |
-| UPDOWN_GBM_IBS_ALTO | 10 | 90.0% | +0.167 | — | +2.83$ | 1.67$ | ✅ activa |
+| UPDOWN_GBM_IBS_ALTO | 10 | 90.0% | +0.167 | — | +2.83$ | 1.48$ | ✅ activa |
 | FAVORITO_CONFIRMADO_15MIN_EXTREMO | 7 | 100.0% | +0.136 | — | +0.23$ | 1.36$ | ⏳ acumulando |
 | GBM_LATE_15M_MULTIHORIZONTE | 6 | 50.0% | +0.000 | — | -0.08$ | 0.50$ | ⏳ acumulando |
 | GBM_LATE_5M | 1006 | 46.9% | -0.031 | ➡️ estable | -0.36$ | 0.50$ | ⚠️ IC negativo |
