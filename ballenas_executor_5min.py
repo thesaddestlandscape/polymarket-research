@@ -189,6 +189,22 @@ MIN_TRADES_BALLENA = 3
 # todavía.
 UMBRAL_N_WALLETS_YES = {"ETH": 35}  # resto: 0 (sin filtro) por defecto vía .get()
 
+# Veto de micro-bucket de precio, ETH#5min#BUY_YES (05-Ago, petición explícita
+# Javi tras 3 pérdidas reales seguidas -6.91€ a py=0.05/0.14/0.05: "vamos a
+# desangrar" -- gate riguroso completo (Wilson+shuffle+bootstrap+split-half,
+# fee real 7% sobre el payout, formula exacta gross_win=(1-p)/p verificada
+# byte a byte contra trades.csv reales) sobre TODO ballenas_timing_history.csv
+# ETH#5min (n=79859), bucket 0.05 en TODO el rango [0,1), no solo la banda
+# hoy activa [0.05,0.30) -- así protege también si ballenas_observer.py
+# recalibra hacia otra banda (ej. la historica [0.70,0.90), que hoy tampoco
+# pasa el gate: [0.75,0.80)/[0.80,0.85) GATE_OK_MALO). SOLO 3 buckets
+# confirman GATE_OK_BUENO -- el resto (incluidos 0.05 y 0.14, donde
+# perdieron los 3 trades reales) está SIN CONFIRMAR (estimacion puntual
+# atractiva pero split-half inestable, +alta varianza payout longshot
+# ~19x a p=0.05), no "confirmado malo" -- fail-closed igual de estricto.
+# Fail-open (n<15) no aplica aqui: las 3 franjas activas ya tienen n>=1740.
+ETH_5MIN_BUY_YES_ZONAS_BUENAS = [(0.15, 0.20), (0.25, 0.30), (0.40, 0.45)]
+
 ACTIVOS = ("ETH", "SOL", "XRP", "DOGE", "BNB")
 # BNB añadido 27-Jul (petición Javi): calibración ya existía en
 # ballenas_timing_state.json (significativo=True, banda=[0.3,0.5),
@@ -777,6 +793,20 @@ def disparar(activo: str, mercado: dict, py: float, edge: float, restante_s: flo
             log(f"⛔ Veto gate_bucket_propio (malo_confirmado) py={py:.3f} -- "
                 f"{'[DRY-RUN] no ejecutaría' if DRY_RUN else 'no se ejecuta'}", activo)
             return False
+
+        # Veto de micro-bucket de precio ETH#5min (05-Ago, ver
+        # ETH_5MIN_BUY_YES_ZONAS_BUENAS arriba) -- gate riguroso sobre TODO
+        # el histórico de ballenas (n=79859), no solo el propio (que
+        # gate_bucket_propio arriba todavía no tiene, n=1-2). Solo 3 buckets
+        # confirmados buenos; fail-closed en el resto (incluida la zona
+        # 0.05-0.15 donde perdieron los 3 trades reales de hoy).
+        if activo == "ETH":
+            en_zona_buena = any(lo <= py < hi for lo, hi in ETH_5MIN_BUY_YES_ZONAS_BUENAS)
+            if not en_zona_buena:
+                log(f"⛔ Veto micro-bucket ETH#5min: py={py:.3f} fuera de zonas confirmadas "
+                    f"{ETH_5MIN_BUY_YES_ZONAS_BUENAS} -- "
+                    f"{'[DRY-RUN] no ejecutaría' if DRY_RUN else 'no se ejecuta'}", activo)
+                return False
 
         # 29-Jul: reemplaza (prob_bucket-0.5)*2 -- esa fórmula asume que el
         # precio de referencia es ~0.5, y se rompe en bandas baratas (DOGE/BNB
