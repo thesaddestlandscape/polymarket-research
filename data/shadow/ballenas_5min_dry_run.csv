@@ -904,3 +904,4 @@ timestamp_utc,activo,market_id,condition_id,end_date,py,edge,concentracion,n_bal
 2026-08-05T15:56:28+00:00,DOGE,3340185,0xcd2a72b208e1fbcea13cba5557a4b59666e7402c44a2ea2f72d27afdc842ce6b,2026-08-05T16:00:00Z,0.27,-0.0377,1.0,3,211.7,,,,11,False,fuera_de_bandas_significativas
 2026-08-05T15:56:38+00:00,ETH,3340187,0x4a3ce50f16bc432d2c8df1e2625977090632dd2103515c7ca658fb8b4fd269ff,2026-08-05T16:00:00Z,0.26,-0.0428,1.0,5,202.0,,,,59,False,banda_ok py=0.260 rest_lo=1.07 rest_hi=3.42
 2026-08-05T15:57:22+00:00,BNB,3340189,0xbdc74fdede7d28f6599e64ea25458d5b0509f0e77d3cf57d27dd04c220e4a1ce,2026-08-05T16:00:00Z,0.16,0.0756,1.0,4,158.1,,,,16,False,fuera_de_bandas_significativas
+2026-08-05T16:05:17+00:00,XRP,3340271,0x63d457f47c622ba2856eb3f1ad7c9ab1bf02eae86bae7965bef7b03a53348524,2026-08-05T16:10:00Z,0.55,0.0559,1.0,5,282.2,,,,5,True,banda_prematura py=0.550 restante=4.70>4.45
