@@ -122,6 +122,13 @@ UMBRAL_TH = 0.70
 TH_MAX = {"ETH": 0.95}
 NUDGE = 0.06
 
+# Zonas de micro-bucket confirmadas (05-Ago), ver comentario junto al veto
+# más abajo. Gate riguroso (Wilson+shuffle+bootstrap+split-half, fee 7%
+# real, formula gross_win=(1-p)/p) sobre 3253 mercados BTC#15min históricos
+# reales (data/markets/*.csv + outcome de results.csv, todas las
+# estrategias combinadas).
+BTC_15MIN_ALTACONVICCION_ZONAS_BUENAS = [(0.95, 1.00)]
+
 # Mismo gate real que _gate_volumen_ballenas en shadow_predict.py
 # (GATE_VOLUMEN_VALIDADO) -- solo ETH#15min#BUY_YES tiene umbral validado
 # hoy (n=727, alto=538, hit=94.4%, GATE OK). BTC sin entrada = fail-open,
@@ -377,6 +384,22 @@ def watch_window(activo: str, ts_end: int) -> bool:
             if gate_bp["veredicto"] == "malo_confirmado" and tupla_str in _pares_live_hoy_set():
                 log(f"[{ts_end}] py={py:.3f} vetado por gate_bucket_propio (malo_confirmado)", activo)
                 return False
+
+            # Veto de micro-bucket de precio BTC#15min (05-Ago, mismo proceso
+            # que ETH#5min de ballenas_executor_5min.py -- ver BTC_15MIN_
+            # ALTACONVICCION_ZONAS_BUENAS arriba). Gate riguroso sobre 3253
+            # mercados históricos BTC#15min reales (data/markets + outcome de
+            # results.csv, TODAS las estrategias) -- UMBRAL_TH=0.70 dispara en
+            # todo [0.70,1.00), pero solo [0.95,1.00) confirma GATE_OK_BUENO;
+            # [0.00,0.05) (lado equivocado, fuera del umbral real) confirma
+            # GATE_OK_MALO como control de cordura. El resto de [0.70,0.95),
+            # que es donde ha operado esta tupla hasta hoy, está SIN CONFIRMAR.
+            if activo == "BTC":
+                en_zona_buena = any(lo <= py <= hi for lo, hi in BTC_15MIN_ALTACONVICCION_ZONAS_BUENAS)
+                if not en_zona_buena:
+                    log(f"[{ts_end}] ⛔ Veto micro-bucket BTC#15min: py={py:.3f} fuera de zonas "
+                        f"confirmadas {BTC_15MIN_ALTACONVICCION_ZONAS_BUENAS}", activo)
+                    return False
 
             prob_yes = min(0.97, py + NUDGE)
             log(f"[{ts_end}] CONFIRMADO py={py:.3f} prob_yes={prob_yes:.3f} restante={restante:.1f}s "

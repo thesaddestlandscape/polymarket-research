@@ -105,6 +105,17 @@ REFRESCO_UNIVERSO_S = 30.0  # cadencia para volver a leer data/markets/HOY.csv
 UMBRAL_BAJO = 0.45
 NUDGE = 0.06
 
+# Zonas de micro-bucket confirmadas (05-Ago, mismo proceso que ETH#5min
+# ballenas y ALTACONVICCION#BTC#15min). Gate riguroso (Wilson+shuffle+
+# bootstrap+split-half, fee 7% real, gross_win=(1-p)/p) sobre 705 mercados
+# BTC#60min históricos reales (data/markets/*.csv + outcome de results.csv,
+# todas las estrategias). UMBRAL_BAJO=0.45 dispara en todo [0.00,0.45), pero
+# solo [0.00,0.05) confirma GATE_OK_BUENO; [0.95,1.00) (lado equivocado,
+# fuera del umbral real) confirma GATE_OK_MALO como control de cordura. El
+# resto de [0.05,0.45), que es donde ha operado esta tupla hasta hoy
+# (entry_price real 0.55-0.71 = py real 0.29-0.45), está SIN CONFIRMAR.
+BTC_60MIN_BUYNO_ZONAS_BUENAS = [(0.00, 0.05)]
+
 # Mismo gate real que _gate_volumen_ballenas en shadow_predict.py
 # (GATE_VOLUMEN_VALIDADO) -- validado 27-Jul para BTC: n=215 alto=147
 # hit=97.3% +0.916€ GATE OK. ETH sin entrada todavía -- None = fail-open
@@ -347,6 +358,17 @@ def watch_window(activo: str, mercado: dict) -> bool:
             if gate_bp["veredicto"] == "malo_confirmado" and tupla_str in _pares_live_hoy_set():
                 log(f"[{mercado['market_id']}] py={py:.3f} vetado por gate_bucket_propio (malo_confirmado)", activo)
                 return False
+
+            # Veto de micro-bucket de precio BTC#60min (05-Ago, ver
+            # BTC_60MIN_BUYNO_ZONAS_BUENAS arriba, mismo proceso que ETH#5min
+            # ballenas y ALTACONVICCION#BTC#15min). Solo [0.00,0.05) confirma
+            # GATE_OK_BUENO con datos históricos reales (n=705 mercados).
+            if activo == "BTC":
+                en_zona_buena = any(lo <= py <= hi for lo, hi in BTC_60MIN_BUYNO_ZONAS_BUENAS)
+                if not en_zona_buena:
+                    log(f"[{mercado['market_id']}] ⛔ Veto micro-bucket BTC#60min: py={py:.3f} fuera de "
+                        f"zonas confirmadas {BTC_60MIN_BUYNO_ZONAS_BUENAS}", activo)
+                    return False
 
             prob_yes = max(0.03, py - NUDGE)
             log(f"[{mercado['market_id']}] CONFIRMADO py={py:.3f} prob_yes={prob_yes:.3f} "
