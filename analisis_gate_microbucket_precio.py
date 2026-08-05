@@ -41,9 +41,12 @@ Qué hace:
 Uso:
   python3 analisis_gate_microbucket_precio.py --strategy FAVORITO_CONFIRMADO \\
       --subtype BTC#60min --decision BUY_NO
-  python3 analisis_gate_microbucket_precio.py --strategy BALLENAS_TARDIAS \\
-      --subtype ETH#5min --decision BUY_YES \\
-      --activo-markets BTC --duracion-min 60   # si hace falta la fuente (b)
+  python3 analisis_gate_microbucket_precio.py --strategy FAVORITO_CONFIRMADO \\
+      --subtype BTC#60min --decision BUY_NO \\
+      --activo-markets BTC --duracion-min 60 --umbral 0.45 --umbral-direccion le
+      # ^ fuente (b): extrae el precio en el PRIMER cruce de UMBRAL_BAJO=0.45
+      #   (py<=0.45), NUNCA el precio final del mercado -- ver docstring de
+      #   _extraer_desde_markets más abajo
 
 Solo lectura, no toca dinero ni config -- imprime la tabla, no decide
 nada solo. Cablear el veto resultante en el ejecutor correspondiente
@@ -94,10 +97,23 @@ def _outcomes_todas_estrategias() -> dict:
     return outcomes
 
 
-def _extraer_desde_markets(activo: str, duracion_min: int) -> dict:
-    """market_id -> (py_cerca_del_cierre, timestamp_iso). Precio de la
-    última captura ANTES del cierre de cada mercado 'activo Up or Down'
-    de la duración pedida, en TODO el histórico de data/markets/."""
+def _extraer_desde_markets(activo: str, duracion_min: int, umbral: float, umbral_direccion: str) -> dict:
+    """market_id -> (py_en_el_cruce, timestamp_iso).
+
+    ⚠️ NUNCA usar "la última captura antes del cierre" -- ese precio mide
+    la convergencia matemática OBLIGATORIA de cualquier opción binaria
+    cerca de T=0 (varianza restante -> 0, precio -> 0/1 exista o no
+    exista edge real), no una señal operable. Error real cometido el
+    05-Ago (ver feedback_lookahead_bias_precio_final_no_es_edge_05ago en
+    memoria): dio zonas "confirmadas" en los extremos [0.00,0.05)/
+    [0.95,1.00) que Javi identificó como imposibles cruzándolas contra
+    franja_milimetrica_ballenas.json/punto_confirmacion (las dos fuentes
+    ya validadas apuntaban a zonas intermedias, [0.40,0.45) y [0.85,0.90)).
+
+    En su lugar: se extrae el precio en el momento del PRIMER CRUCE del
+    umbral real de la estrategia (umbral/umbral_direccion), preservando
+    tiempo restante significativo -- igual que dispara el ejecutor de
+    verdad (mediana ~7-50min de margen real, no segundos)."""
     mercados = {}
     archivos = sorted(glob.glob(str(REPO / "data/markets/*.csv")) +
                        glob.glob(str(REPO / "data/markets/*.csv.gz")))
@@ -121,6 +137,10 @@ def _extraer_desde_markets(activo: str, duracion_min: int) -> dict:
                         if not py_raw:
                             continue
                         py = float(py_raw)
+                        if umbral_direccion == 'le' and py > umbral:
+                            continue
+                        if umbral_direccion == 'ge' and py < umbral:
+                            continue
                         ed_dt = datetime.fromisoformat(ed.replace('Z', '+00:00')) if 'T' in ed else None
                         if ed_dt is None:
                             continue
@@ -130,7 +150,7 @@ def _extraer_desde_markets(activo: str, duracion_min: int) -> dict:
                         if ts_dt > ed_dt:
                             continue
                         prev = mercados.get(mid)
-                        if prev is None or ts_dt > prev[1]:
+                        if prev is None or ts_dt < prev[1]:  # PRIMER cruce, no el último
                             mercados[mid] = (py, ts_dt)
                     except Exception:
                         continue
@@ -223,14 +243,28 @@ def main():
                           "el results.csv propio de la tupla")
     ap.add_argument("--duracion-min", type=int, default=None,
                      help="Duración en minutos del marco (60, 15, 5...) -- obligatorio con --activo-markets")
+    ap.add_argument("--umbral", type=float, default=None,
+                     help="Umbral REAL de disparo del ejecutor (ej. UMBRAL_BAJO/UMBRAL_TH del código) -- "
+                          "obligatorio con --activo-markets. Se extrae el precio en el PRIMER cruce de "
+                          "este umbral, NUNCA el precio final del mercado (look-ahead bias, ver "
+                          "feedback_lookahead_bias_precio_final_no_es_edge_05ago)")
+    ap.add_argument("--umbral-direccion", choices=["le", "ge"], default=None,
+                     help="'le' si el umbral dispara con py<=umbral (ej. UMBRAL_BAJO), "
+                          "'ge' si dispara con py>=umbral (ej. UMBRAL_TH) -- obligatorio con --activo-markets")
     args = ap.parse_args()
 
     if args.activo_markets:
         if not args.duracion_min:
             raise SystemExit("--duracion-min es obligatorio junto a --activo-markets")
+        if args.umbral is None or args.umbral_direccion is None:
+            raise SystemExit("--umbral y --umbral-direccion son obligatorios junto a --activo-markets "
+                              "(nunca extraer el precio final del mercado -- ver docstring de "
+                              "_extraer_desde_markets)")
         print(f"Extrayendo histórico de data/markets/ para {args.activo_markets} "
-              f"({args.duracion_min}min)... (puede tardar varios minutos)")
-        mercados = _extraer_desde_markets(args.activo_markets, args.duracion_min)
+              f"({args.duracion_min}min, cruce de umbral {args.umbral_direccion} {args.umbral})... "
+              f"(puede tardar varios minutos)")
+        mercados = _extraer_desde_markets(args.activo_markets, args.duracion_min,
+                                           args.umbral, args.umbral_direccion)
         print(f"  {len(mercados)} mercados encontrados")
         outcomes = _outcomes_todas_estrategias()
         rows = _pnl_desde_markets(mercados, outcomes, args.decision)
