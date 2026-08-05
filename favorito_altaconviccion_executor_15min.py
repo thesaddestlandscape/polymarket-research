@@ -122,12 +122,20 @@ UMBRAL_TH = 0.70
 TH_MAX = {"ETH": 0.95}
 NUDGE = 0.06
 
-# Zonas de micro-bucket confirmadas (05-Ago), ver comentario junto al veto
-# más abajo. Gate riguroso (Wilson+shuffle+bootstrap+split-half, fee 7%
-# real, formula gross_win=(1-p)/p) sobre 3253 mercados BTC#15min históricos
-# reales (data/markets/*.csv + outcome de results.csv, todas las
-# estrategias combinadas).
-BTC_15MIN_ALTACONVICCION_ZONAS_BUENAS = [(0.95, 1.00)]
+# Zonas de micro-bucket confirmadas (05-Ago, CORREGIDO el mismo día --
+# ver feedback_lookahead_bias_precio_final_no_es_edge_05ago en memoria).
+# Primer intento: precio de la ÚLTIMA captura antes del cierre (20-65s de
+# margen real) -- mide convergencia matemática obligatoria de la binaria
+# cerca de T=0, no edge real. Daba [0.95,1.00) -- FALSO POSITIVO,
+# descartado (Javi: "es imposible", contrastado contra ballenas).
+# Rehecho con precio en el CRUCE real del umbral (mediana 7.3min de
+# margen real, igual que dispara el ejecutor): n=1517 mercados reales,
+# [0.85,0.90) confirma GATE_OK_BUENO (n=215, hit=92.6%, pnl+0.0495/trade,
+# CI90% no cruza cero, p_shuffle=0.043, split-half consistente) --
+# coincide EXACTO con punto_confirmacion (Wilson 95% ya validado 21-Jul,
+# independiente): BTC#15min confirma a ~1min del cierre, precio≈0.875.
+# Doble validación cruzada, no una fuente sola.
+BTC_15MIN_ALTACONVICCION_ZONAS_BUENAS = [(0.85, 0.90)]
 
 # Mismo gate real que _gate_volumen_ballenas en shadow_predict.py
 # (GATE_VOLUMEN_VALIDADO) -- solo ETH#15min#BUY_YES tiene umbral validado
@@ -385,15 +393,10 @@ def watch_window(activo: str, ts_end: int) -> bool:
                 log(f"[{ts_end}] py={py:.3f} vetado por gate_bucket_propio (malo_confirmado)", activo)
                 return False
 
-            # Veto de micro-bucket de precio BTC#15min (05-Ago, mismo proceso
-            # que ETH#5min de ballenas_executor_5min.py -- ver BTC_15MIN_
-            # ALTACONVICCION_ZONAS_BUENAS arriba). Gate riguroso sobre 3253
-            # mercados históricos BTC#15min reales (data/markets + outcome de
-            # results.csv, TODAS las estrategias) -- UMBRAL_TH=0.70 dispara en
-            # todo [0.70,1.00), pero solo [0.95,1.00) confirma GATE_OK_BUENO;
-            # [0.00,0.05) (lado equivocado, fuera del umbral real) confirma
-            # GATE_OK_MALO como control de cordura. El resto de [0.70,0.95),
-            # que es donde ha operado esta tupla hasta hoy, está SIN CONFIRMAR.
+            # Veto de micro-bucket de precio BTC#15min (05-Ago, corregido el
+            # mismo día -- ver BTC_15MIN_ALTACONVICCION_ZONAS_BUENAS arriba
+            # para el detalle completo, incluida la corrección de metodología
+            # y la doble validación cruzada contra punto_confirmacion).
             if activo == "BTC":
                 en_zona_buena = any(lo <= py <= hi for lo, hi in BTC_15MIN_ALTACONVICCION_ZONAS_BUENAS)
                 if not en_zona_buena:

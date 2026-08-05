@@ -105,16 +105,23 @@ REFRESCO_UNIVERSO_S = 30.0  # cadencia para volver a leer data/markets/HOY.csv
 UMBRAL_BAJO = 0.45
 NUDGE = 0.06
 
-# Zonas de micro-bucket confirmadas (05-Ago, mismo proceso que ETH#5min
-# ballenas y ALTACONVICCION#BTC#15min). Gate riguroso (Wilson+shuffle+
-# bootstrap+split-half, fee 7% real, gross_win=(1-p)/p) sobre 705 mercados
-# BTC#60min históricos reales (data/markets/*.csv + outcome de results.csv,
-# todas las estrategias). UMBRAL_BAJO=0.45 dispara en todo [0.00,0.45), pero
-# solo [0.00,0.05) confirma GATE_OK_BUENO; [0.95,1.00) (lado equivocado,
-# fuera del umbral real) confirma GATE_OK_MALO como control de cordura. El
-# resto de [0.05,0.45), que es donde ha operado esta tupla hasta hoy
-# (entry_price real 0.55-0.71 = py real 0.29-0.45), está SIN CONFIRMAR.
-BTC_60MIN_BUYNO_ZONAS_BUENAS = [(0.00, 0.05)]
+# Zonas de micro-bucket confirmadas (05-Ago, CORREGIDO el mismo día --
+# ver feedback_lookahead_bias_precio_final_no_es_edge_05ago en memoria).
+# El primer intento bucketeaba por el precio de la ÚLTIMA captura antes
+# del cierre (20-65s de margen real) -- eso mide la convergencia
+# matemática obligatoria de cualquier binaria cerca de T=0, no edge real,
+# y daba [0.00,0.05) como "confirmado" -- FALSO POSITIVO, detectado por
+# Javi ("es imposible") y descartado. Rehecho con el precio en el momento
+# del CRUCE real del umbral (mediana 51min de margen real, igual que
+# dispara el ejecutor de verdad): con esa metodología, NINGÚN bucket
+# propio confirma con n=534 -- se usa en su lugar el hallazgo YA
+# VALIDADO de franja_milimetrica_ballenas.json (FAVORITO_CONFIRMADO#BTC
+# #60min#BUY_YES, bucket [0.55,0.60), n=154, CI90% no cruza cero,
+# split-half robusto) -- por simetría [0.40,0.45) en BUY_NO, que además
+# NO queda contradicho por el gate propio corregido (sin_concluir, no
+# confirmado malo). UMBRAL_BAJO=0.45 sigue disparando en todo [0.00,0.45)
+# -- esta zona es la única con evidencia real detrás.
+BTC_60MIN_BUYNO_ZONAS_BUENAS = [(0.40, 0.45)]
 
 # Mismo gate real que _gate_volumen_ballenas en shadow_predict.py
 # (GATE_VOLUMEN_VALIDADO) -- validado 27-Jul para BTC: n=215 alto=147
@@ -359,10 +366,9 @@ def watch_window(activo: str, mercado: dict) -> bool:
                 log(f"[{mercado['market_id']}] py={py:.3f} vetado por gate_bucket_propio (malo_confirmado)", activo)
                 return False
 
-            # Veto de micro-bucket de precio BTC#60min (05-Ago, ver
-            # BTC_60MIN_BUYNO_ZONAS_BUENAS arriba, mismo proceso que ETH#5min
-            # ballenas y ALTACONVICCION#BTC#15min). Solo [0.00,0.05) confirma
-            # GATE_OK_BUENO con datos históricos reales (n=705 mercados).
+            # Veto de micro-bucket de precio BTC#60min (05-Ago, corregido el
+            # mismo día -- ver BTC_60MIN_BUYNO_ZONAS_BUENAS arriba para el
+            # detalle completo de la corrección).
             if activo == "BTC":
                 en_zona_buena = any(lo <= py <= hi for lo, hi in BTC_60MIN_BUYNO_ZONAS_BUENAS)
                 if not en_zona_buena:
