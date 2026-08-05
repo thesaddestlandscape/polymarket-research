@@ -35,8 +35,10 @@ real, no llama a ninguna función de ejecución de live_trade.py):
      libro aguarda de verdad una entrada al lado minoritario, o el precio
      barato esconde profundidad vacía?
 
-Corre en screen propia:
-  screen -dmS xrpcontrario15m bash -c "cd /root/polymarket-research && .venv/bin/python xrp15min_contrario_fase0.py >> logs/xrp15min_contrario_fase0.log 2>&1"
+⚠️ 05-Ago: fusionado dentro de observadores_fase0.py (screen "observadores"),
+NO tiene screen propia -- corre como hilo. NUNCA lanzar `screen -dmS
+xrpcontrario15m ...` suelto: duplica el proceso. Ver observadores_fase0.py
+y pipeline_watchdog.py::SCREENS_RETIRADAS.
 """
 import csv
 import threading

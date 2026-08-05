@@ -45,8 +45,11 @@ sin necesitar un loop por marco.
 
 Puramente observacional: no toca prob_yes, no ejecuta, no decide nada.
 
-Corre en screen propio:
-  screen -dmS puntoconf bash -c "cd /root/polymarket-research && .venv/bin/python punto_confirmacion_logger.py >> logs/punto_confirmacion.log 2>&1"
+⚠️ 05-Ago: fusionado dentro de observadores_fase0.py (screen "observadores"),
+NO tiene screen propia -- corre como hilo. NUNCA lanzar `screen -dmS
+puntoconf ...` suelto: duplica el proceso y corrompe
+punto_confirmacion_YYYY-MM-DD.csv con filas repetidas. Ver
+observadores_fase0.py y pipeline_watchdog.py::SCREENS_RETIRADAS.
 """
 
 import csv

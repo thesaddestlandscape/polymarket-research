@@ -27,7 +27,24 @@ al arranque de sesión baste sin tener que recordar de memoria qué existe.
      históricos, no infraestructura viva que revisar cada sesión).
 
 Solo lectura. No reinicia nada (para eso, verify_deploy.py --restart).
+
+05-Ago (hallazgo real el mismo día que motivó esto): la fusión de 10
+scripts en observadores_fase0.py dejó 2 screens viejas (pfinish,
+favultsec) SIN matar -- corrieron 12h duplicadas junto al proceso
+fusionado, escribiendo filas repetidas en sus CSV (356/2560 y 201/929
+filas sobrantes). Este script no lo detectó porque A) solo miraba
+`verify_deploy.SCREENS` (que ya tenía las 2 retiradas, correctamente) sin
+comprobar si `screen -ls` tenía procesos vivos NO declarados ahí, y B)
+marcaba los 10 scripts fusionados como "huérfanos de infra" (falso
+positivo) porque solo buscaba su nombre como script de screen/cron
+propio, no como import estático dentro de otro. Dos fixes permanentes:
+  - _screens_fantasma(): cruza `screen -ls` real contra verify_deploy.SCREENS
+    -- cualquier screen viva no declarada sale marcada de inmediato.
+  - _modulos_fusionados(): parsea con ast los imports de nivel superior
+    de cada entry de verify_deploy.SCREENS -- si ese módulo es un .py del
+    repo, cuenta como cubierto (igual que si tuviera su propia screen).
 """
+import ast
 import re
 import subprocess
 import sys
@@ -53,6 +70,13 @@ SUFIJOS_INFRA = ("_logger.py", "_observer.py", "_executor.py", "_executor_btc15m
 # confirmar con `grep <script> run_fast.sh/run_slow.sh`, nunca a ciegas.
 EXCEPCIONES_C = {
     "fetch_binance_klines.py",  # invocado en run_fast.sh:43 cada ciclo
+}
+
+# Screens vivas conocidas y legítimas que a propósito NO están en
+# verify_deploy.SCREENS -- no son fantasmas, solo casos donde declararla
+# no aporta (el propio guardián no se vigila a sí mismo).
+EXCEPCIONES_FANTASMA = {
+    "watchdog",  # pipeline_watchdog.py -- ver docstring del propio script
 }
 
 
@@ -123,6 +147,44 @@ def _es_infra_recurrente(nombre: str) -> bool:
     return False
 
 
+def _modulos_fusionados(en_screen: dict[str, str]) -> set[str]:
+    """Para cada entry de verify_deploy.SCREENS (ej. observadores_fase0.py),
+    parsea sus imports de nivel superior con ast y devuelve el conjunto de
+    <modulo>.py que existen en el repo -- esos scripts están corriendo
+    DENTRO de esa screen (patrón de fusión del 05-Ago), no huérfanos."""
+    fusionados = set()
+    for entry in set(en_screen.values()):
+        ruta = REPO / entry
+        if not ruta.exists():
+            continue
+        try:
+            arbol = ast.parse(ruta.read_text(), filename=str(ruta))
+        except SyntaxError:
+            continue
+        for nodo in ast.iter_child_nodes(arbol):  # solo nivel superior
+            if isinstance(nodo, ast.Import):
+                for alias in nodo.names:
+                    candidato = f"{alias.name}.py"
+                    if candidato != entry and (REPO / candidato).exists():
+                        fusionados.add(candidato)
+    return fusionados
+
+
+def _screens_fantasma(en_screen: dict[str, str]) -> list[str]:
+    """Cruza `screen -ls` real contra verify_deploy.SCREENS -- cualquier
+    screen VIVA que no esté declarada ahí es un fantasma: o se olvidó
+    declarar (screen nueva legítima) o es un resto de una fusión/retirada
+    que no se mató de verdad (el bug real del 05-Ago: pfinish/favultsec
+    siguieron 12h corriendo duplicadas tras fusionarse en observadores)."""
+    try:
+        salida = subprocess.run(["screen", "-ls"], capture_output=True, text=True, timeout=10).stdout
+    except Exception:
+        return []
+    vivas = set(re.findall(r"^\s*\d+\.(\S+)\s", salida, re.MULTILINE))
+    declaradas = set(en_screen.keys())
+    return sorted(vivas - declaradas - EXCEPCIONES_FANTASMA)
+
+
 def main() -> int:
     todos = sorted(p.name for p in REPO.glob("*.py"))
     en_screen = _screens_scripts()
@@ -134,6 +196,25 @@ def main() -> int:
     print(f"A) En screen persistente ({len(scripts_en_screen)}): "
           f"{', '.join(sorted(f'{s} ({n})' for n, s in en_screen.items()))}")
     print("   → estado FRESH/STALE real: correr `python3 verify_deploy.py`\n")
+
+    fantasma = _screens_fantasma(en_screen)
+    print(f"A2) Screens VIVAS ahora mismo pero NO declaradas en verify_deploy.SCREENS "
+          f"({len(fantasma)}) — o falta declararlas, o es un resto de una fusión/retirada "
+          f"que no se mató de verdad (bug real 05-Ago: pfinish/favultsec corrieron 12h "
+          f"duplicadas junto a observadores):")
+    if fantasma:
+        for n in fantasma:
+            print(f"   🚨 {n}  →  screen -S {n} -X quit   (si es resto muerto)  "
+                  f"o añadir a verify_deploy.SCREENS  (si es legítima)")
+    else:
+        print("   (ninguna — todo lo que corre está declarado)")
+    print()
+
+    fusionados = _modulos_fusionados(en_screen)
+    if fusionados:
+        print(f"   (info: {len(fusionados)} script(s) corren FUSIONADOS dentro de otra "
+              f"screen vía import estático, contados como cubiertos en B/C: "
+              f"{', '.join(sorted(fusionados))})\n")
 
     print(f"B) En crontab ({len(cron_map)}) — umbral de alarma = 3x el intervalo "
           f"esperado del propio cron (nunca un número fijo, evita falsos positivos "
@@ -161,7 +242,7 @@ def main() -> int:
             marca = f"✅ hace {edad:.1f}h (umbral {umbral_h:.0f}h)"
         print(f"   {nombre:45s} {marca}")
 
-    cubiertos = scripts_en_screen | set(cron_map.keys())
+    cubiertos = scripts_en_screen | set(cron_map.keys()) | fusionados
     huerfanos_infra = [n for n in todos if n not in cubiertos and n not in EXCEPCIONES_C
                        and _es_infra_recurrente(n)]
     print(f"\nC) Infraestructura recurrente SIN screen ni cron ({len(huerfanos_infra)}) "

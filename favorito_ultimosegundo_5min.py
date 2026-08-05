@@ -30,7 +30,14 @@ en el instante correcto, FAVORITO_CONFIRMADO SÍ tiene edge real en estos 3
 activos (arquetipo B, coin-específico) antes de proponer integrarlo en el
 pipeline de predicciones normal.
 
-Corre en screen propio:  screen -dmS favultsec bash -c "cd /root/polymarket-research && .venv/bin/python favorito_ultimosegundo_5min.py >> logs/favorito_ultimosegundo.log 2>&1"
+⚠️ 05-Ago: fusionado dentro de observadores_fase0.py (screen "observadores"),
+NO tiene screen propia -- corre como hilo (import estático + main() en su
+propio threading.Thread daemon). NUNCA lanzar `screen -dmS favultsec ...`
+suelto: duplica el proceso y corrompe favorito_ultimosegundo_YYYY-MM-DD.csv
+con filas repetidas (pasó de verdad el 05-Ago, 201 filas duplicadas antes
+de detectarlo). Ver observadores_fase0.py y
+pipeline_watchdog.py::SCREENS_RETIRADAS (mata activamente cualquier
+screen "favultsec" que reaparezca).
 """
 
 import csv

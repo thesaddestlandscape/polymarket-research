@@ -28,8 +28,10 @@ ejecución de live_trade.py):
      al lado minoritario, o el precio barato esconde profundidad vacía
      (mismo patrón de selección adversa ya visto en otras familias)?
 
-Corre en screen propia:
-  screen -dmS solcontrario5m bash -c "cd /root/polymarket-research && .venv/bin/python sol5min_contrario_fase0.py >> logs/sol5min_contrario_fase0.log 2>&1"
+⚠️ 05-Ago: fusionado dentro de observadores_fase0.py (screen "observadores"),
+NO tiene screen propia -- corre como hilo. NUNCA lanzar `screen -dmS
+solcontrario5m ...` suelto: duplica el proceso. Ver observadores_fase0.py
+y pipeline_watchdog.py::SCREENS_RETIRADAS.
 """
 import csv
 import threading

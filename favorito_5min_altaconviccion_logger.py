@@ -45,8 +45,10 @@ no tenga entradas para 5min hoy.
 Mercados 5min SÍ tienen slug determinista resoluble (a diferencia de
 60min/hourly).
 
-Corre en screen propia:
-  screen -dmS fav5malt bash -c "cd /root/polymarket-research && .venv/bin/python favorito_5min_altaconviccion_logger.py >> logs/favorito_5min_altaconviccion.log 2>&1"
+⚠️ 05-Ago: fusionado dentro de observadores_fase0.py (screen "observadores"),
+NO tiene screen propia -- corre como hilo. NUNCA lanzar `screen -dmS
+fav5malt ...` suelto: duplica el proceso. Ver observadores_fase0.py y
+pipeline_watchdog.py::SCREENS_RETIRADAS.
 """
 import csv
 import fcntl

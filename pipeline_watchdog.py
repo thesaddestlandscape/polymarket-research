@@ -211,6 +211,41 @@ def extraer_traceback(texto: str) -> str:
 # ──────────────────────────────────────────────────────────────────────────────
 # CHECK: screens activas
 # ──────────────────────────────────────────────────────────────────────────────
+# Screens retiradas por fusión en observadores_fase0.py (05-Ago) -- NINGUNA
+# de estas debe existir nunca. Si aparece, es un duplicado escribiendo las
+# mismas filas que su hilo dentro de "observadores" (pasó de verdad el
+# 05-Ago: pfinish/favultsec revivieron solas ~12h después de matarlas a
+# mano, origen exacto sin confirmar -- posible rutina cloud/agente leyendo
+# el `screen -dmS <nombre> ...` que estos 10 scripts tenían documentado en
+# su propio docstring, ya corregido). Defensa activa: matarlas en cuanto
+# aparezcan, cada ciclo, venga de donde venga.
+SCREENS_RETIRADAS = {
+    "pfinish", "favultsec", "puntoconf", "ressniper", "p22fase0",
+    "boxbuilder", "solcontrario5m", "xrpcontrario15m", "favcontraria",
+    "fav5malt",
+}
+
+
+def kill_screens_retiradas() -> list[str]:
+    """Mata cualquier screen de SCREENS_RETIRADAS que esté viva. Devuelve
+    los nombres matados (vacío si no había ninguna) -- llamar cada ciclo,
+    es barato (un solo `screen -ls`)."""
+    try:
+        r = subprocess.run(["screen", "-ls"], capture_output=True, text=True, timeout=5)
+        output = r.stdout + r.stderr
+    except Exception:
+        return []
+    matadas = []
+    for nombre in SCREENS_RETIRADAS:
+        if f".{nombre}\t" in output or f".{nombre} " in output:
+            try:
+                subprocess.run(["screen", "-S", nombre, "-X", "quit"], timeout=5)
+                matadas.append(nombre)
+            except Exception as e:
+                log(f"  [SCREENS_RETIRADAS] error matando '{nombre}': {e}")
+    return matadas
+
+
 def check_screens() -> dict[str, bool]:
     try:
         r = subprocess.run(["screen", "-ls"], capture_output=True, text=True, timeout=5)
@@ -715,6 +750,18 @@ def main():
                 if consecutivos_silencio > 0:
                     log(f"✅ fast loop activo de nuevo (silencio={consecutivos_silencio} ciclos)")
                 consecutivos_silencio = 0
+
+            # ── 1c. Screens retiradas (fusión 05-Ago) reviviendo por error ────
+            matadas = kill_screens_retiradas()
+            if matadas:
+                log(f"🚨 Screen(s) retirada(s) revivida(s) y matada(s) de nuevo: {matadas} "
+                    f"-- duplicaban observadores_fase0.py, filas corrompidas mientras vivieron")
+                from shadow_digest import enviar_telegram
+                enviar_telegram(
+                    f"🚨 Screen(s) retirada(s) revivida(s): {matadas}\n"
+                    f"Duplicaban observadores_fase0.py -- ya vueltas a matar. "
+                    f"Revisar quién las relanza (no hay cron ni watchdog que lo haga)."
+                )
 
             # ── 2. Screens health ─────────────────────────────────────────────
             screens = check_screens()

@@ -38,8 +38,10 @@ NO coloca, cancela ni modifica ninguna orden real, no llama a ninguna
 función de ejecución de live_trade.py -- solo lectura del libro público,
 mismo criterio de riesgo que P22/sol5min_contrario/xrp15min_contrario.
 
-Corre en screen propia:
-  screen -dmS favcontraria bash -c "cd /root/polymarket-research && .venv/bin/python favorito_confirmado_senal_contraria_fase0.py >> logs/favorito_confirmado_senal_contraria_fase0.log 2>&1"
+⚠️ 05-Ago: fusionado dentro de observadores_fase0.py (screen "observadores"),
+NO tiene screen propia -- corre como hilo. NUNCA lanzar `screen -dmS
+favcontraria ...` suelto: duplica el proceso. Ver observadores_fase0.py y
+pipeline_watchdog.py::SCREENS_RETIRADAS.
 """
 import csv
 import json

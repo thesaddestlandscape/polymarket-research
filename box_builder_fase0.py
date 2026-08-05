@@ -38,8 +38,10 @@ carga acotada. Los tokens de cada mercado se cachean (no hay razón para
 repetir la llamada a gamma-api cada 3s, no cambian en la vida del mercado).
 
 NO coloca ni cancela ninguna orden real -- solo lee libros públicos y
-registra. Corre en screen propia:
-  screen -dmS boxbuilder bash -c "cd /root/polymarket-research && .venv/bin/python box_builder_fase0.py >> logs/box_builder_fase0.log 2>&1"
+registra. ⚠️ 05-Ago: fusionado dentro de observadores_fase0.py (screen
+"observadores"), NO tiene screen propia -- corre como hilo. NUNCA lanzar
+`screen -dmS boxbuilder ...` suelto: duplica el proceso. Ver
+observadores_fase0.py y pipeline_watchdog.py::SCREENS_RETIRADAS.
 """
 
 import csv

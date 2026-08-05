@@ -41,8 +41,10 @@ live_trade.py):
      esperado pacientemente, ¿nos habrían llenado a tiempo de ganar, o
      tarde y ya perdiendo?"
 
-Corre en screen propia:
-  screen -dmS p22fase0 bash -c "cd /root/polymarket-research && .venv/bin/python p22_cola_posicion_fase0.py >> logs/p22_cola_posicion_fase0.log 2>&1"
+⚠️ 05-Ago: fusionado dentro de observadores_fase0.py (screen "observadores"),
+NO tiene screen propia -- corre como hilo. NUNCA lanzar `screen -dmS
+p22fase0 ...` suelto: duplica el proceso. Ver observadores_fase0.py y
+pipeline_watchdog.py::SCREENS_RETIRADAS.
 """
 import csv
 import threading

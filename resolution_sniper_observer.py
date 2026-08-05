@@ -59,8 +59,10 @@ con el pipeline de predicciones. Escribe su propio CSV, se resuelve con
 el outcome oficial de Polymarket (mismo patrón que
 favorito_ultimosegundo_5min.py/photo_finish_logger.py).
 
-Corre en screen propia:
-  screen -dmS ressniper bash -c "cd /root/polymarket-research && .venv/bin/python resolution_sniper_observer.py >> logs/resolution_sniper_observer.log 2>&1"
+⚠️ 05-Ago: fusionado dentro de observadores_fase0.py (screen "observadores"),
+NO tiene screen propia -- corre como hilo. NUNCA lanzar `screen -dmS
+ressniper ...` suelto: duplica el proceso. Ver observadores_fase0.py y
+pipeline_watchdog.py::SCREENS_RETIRADAS.
 """
 
 import csv

@@ -17,7 +17,13 @@ Criterio de avance (definido a priori, ver H-CUSTOM-PHOTO-FINISH-SNIPER):
 n≥200 snapshots con ask≤0.05 y profundidad>0 → medir win rate real del lado
 rezagado vs precio del ask. Si EV>2x sostenido → proponer watcher de ejecución.
 
-Corre en screen propio:  screen -dmS pfinish bash -c "cd /root/polymarket-research && .venv/bin/python photo_finish_logger.py >> logs/photo_finish.log 2>&1"
+⚠️ 05-Ago: fusionado dentro de observadores_fase0.py (screen "observadores"),
+NO tiene screen propia -- corre como hilo (import estático + main() en su
+propio threading.Thread daemon). NUNCA lanzar `screen -dmS pfinish ...`
+suelto: duplica el proceso y corrompe photo_finish_YYYY-MM-DD.csv con
+filas repetidas (pasó de verdad el 05-Ago, 356 filas duplicadas antes de
+detectarlo). Ver observadores_fase0.py y pipeline_watchdog.py::SCREENS_RETIRADAS
+(mata activamente cualquier screen "pfinish" que reaparezca).
 """
 
 import csv
