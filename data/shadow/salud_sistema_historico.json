@@ -192,5 +192,53 @@
       "📡 git push atascado: 1665 commits locales sin llegar a GitHub (umbral 15) -- riesgo de pérdida si el VPS cae"
     ],
     "estado": "ANOMALIA"
+  },
+  {
+    "timestamp_utc": "2026-08-05T17:05:14+00:00",
+    "pipeline": {
+      "n_ciclos_resolve_postmortem": 218,
+      "resolve_postmortem_p50_s": 6.0,
+      "resolve_postmortem_p95_s": 11.0,
+      "resolve_postmortem_max_s": 217.0,
+      "n_ciclos_live_trade": 2622,
+      "hueco_live_trade_max_s": 364.0
+    },
+    "procesos_colgados": [],
+    "deploy": {
+      "n_screens": 20,
+      "stale": []
+    },
+    "disco": {
+      "pct_usado": 54.0,
+      "gb_libres": 33.38,
+      "git_gb": 0.0,
+      "data_gb": 20.29,
+      "datalogs_gb": 3.35
+    },
+    "ram": {
+      "ram_total_gb": 3.72,
+      "ram_disponible_gb": 1.9,
+      "ram_pct_libre": 51.1
+    },
+    "integridad_datos": {
+      "trades_abiertos_atascados": [],
+      "n_trades_total": 394,
+      "n_results_total": 75071
+    },
+    "carga_sistema": {
+      "load1": 5.44,
+      "load5": 6.01,
+      "load15": 5.75,
+      "nproc": 2,
+      "ratio5": 3.0,
+      "n_procesos_total": 231
+    },
+    "git_push": {
+      "commits_sin_pushear": 0
+    },
+    "anomalias": [
+      "⏱️ ciclo resolve+postmortem tardó 217s (umbral 120s)"
+    ],
+    "estado": "ANOMALIA"
   }
 ]
