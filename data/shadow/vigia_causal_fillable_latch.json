@@ -4407,5 +4407,6 @@
  "candidato_proxy#GBM_LATE_15M_ESPACIO_ATR#SOL#15min#SOL#BUY_NO#hora_utclt": false,
  "candidato_proxy#UPDOWN_GBM_15M_TARDIO#BTC#BUY_NO#sigma_hlt": true,
  "candidato_proxy#UPDOWN_GBM_15M_TARDIO#BTC#15min#BTC#BUY_NO#libro_liquidezgt": false,
- "candidato_proxy#GBM_LATE_5M#BTC#5min#BTC#BUY_YES#hora_utcgt": false
+ "candidato_proxy#GBM_LATE_5M#BTC#5min#BTC#BUY_YES#hora_utcgt": false,
+ "candidato_proxy#UPDOWN_GBM_15M_TARDIO#BTC#15min#BTC#BUY_NO#drift_15minabs_lt": false
 }
