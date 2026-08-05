@@ -17,10 +17,12 @@ from pathlib import Path
 
 DATA_PATH = Path("data/shadow/gate_bucket_propio.json")
 CONFIG_LIVE = Path("data/live/config_live.json")
+OVERRIDE_PATH = Path("data/live/gate_bucket_propio_override.json")
 STEP = 0.05
 
 _cache = {"mtime": None, "data": {}}
 _cache_cfg = {"mtime": None, "activo": False}
+_cache_override = {"mtime": None, "data": {}}
 
 # 04-Ago: extensión validada con wallets EXPERTAS (sig_bhfdr=True en
 # wallet_edge_score_por_activo_marco.json, no todo el ruido de ballenas) --
@@ -106,6 +108,32 @@ def _extension_activa() -> bool:
     return _cache_cfg["activo"]
 
 
+def _cargar_override() -> dict:
+    """Cortacircuitos de emergencia (05-Ago, petición explícita Javi:
+    "asegúrate que el mecanismo autoaprendiente tenga un backup que lo
+    proteja siempre y no nos haga perder pasta"). data/live/gate_bucket_
+    propio_override.json -- {"TUPLA#bucket": {"motivo":..., "desde":...}}
+    o {"TUPLA": {...}} para vetar toda la tupla. Escribible a mano
+    (Javi/sesión) o automáticamente por vigia_micro_bucket_kill_switch.py
+    cuando el dinero real en un bucket "bueno_confirmado" empieza a
+    sangrar de verdad. SIEMPRE gana sobre cualquier otro veredicto,
+    incluido bueno_confirmado -- es la última palabra, fail-closed. Un
+    fichero corrupto/inaccesible se trata como override VACÍO (no bloquea
+    nada por error de lectura, pero tampoco dice "bueno" -- evaluar()
+    sigue cayendo al resto de la lógica normal)."""
+    try:
+        mtime = OVERRIDE_PATH.stat().st_mtime
+    except OSError:
+        return {}
+    if _cache_override["mtime"] != mtime:
+        try:
+            _cache_override["data"] = json.loads(OVERRIDE_PATH.read_text(encoding="utf-8"))
+            _cache_override["mtime"] = mtime
+        except Exception:
+            pass
+    return _cache_override["data"]
+
+
 def _cargar() -> dict:
     try:
         mtime = DATA_PATH.stat().st_mtime
@@ -139,8 +167,21 @@ def evaluar(tupla_str: str, py: float) -> dict:
     caller (fase 0: solo loguea; fase 1: veta si malo_confirmado)."""
     import math
     b = round(math.floor(py / STEP) * STEP, 4)
+    b_str = f"{b:.2f}"
+
+    # Cortacircuitos de emergencia -- SIEMPRE se comprueba primero, gana
+    # sobre cualquier otro veredicto (incluido bueno_confirmado propio).
+    override = _cargar_override()
+    ov = override.get(f"{tupla_str}#{b_str}") or override.get(tupla_str)
+    if ov is not None:
+        return {
+            "veredicto": "malo_confirmado",
+            "detalle": {"origen": "override_emergencia", "motivo": ov.get("motivo", "sin motivo registrado"),
+                        "desde": ov.get("desde")},
+        }
+
     tabla = _cargar().get(tupla_str, {})
-    detalle = tabla.get(f"{b:.2f}")
+    detalle = tabla.get(b_str)
 
     # La extensión solo puede ENDURECER un "sin_concluir" propio a
     # "malo_confirmado" -- nunca pisa un veredicto propio ya confirmado
