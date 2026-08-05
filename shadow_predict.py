@@ -3121,6 +3121,7 @@ def _banda_y_timing_ballenas(activo, marco, lo_default, hi_default, rest_lo_defa
 # transfiere a ventanas 60min más profundas. (2026-07-06)
 ACUMULAR_SHADOW_AUNQUE_DESACTIVADA = {"GBM_LATE_60M", "GBM_LATE_15M_TARDIO", "GBM_LATE_15M_ESPACIO_ATR",
                                       "GBM_LATE_15M_MULTIHORIZONTE",  # recuperada 22-Jul, n=0 forward, mismo trato que sus hermanas GBM_LATE
+                                      "GBM_LATE_60M_PYCONFIRMADO",  # 05-Ago (fix): auto-desactivada por postmortem con n=9 (IC=-0.318, muy por debajo de cualquier umbral fiable) y sin esta excepción quedaba en estado absorbente -- 0 predicciones desde entonces, imposible reevaluarla con más n. Nunca en pares_permitidos_live. Ver project_candidatas_estancadas_diagnostico_05ago
                                       "STREAK_MOM_5M"}  # 2026-07-10: -0.052 IC n=306, no cruza umbral auto pero sin edge; desactivada manualmente en strategy_params.json (motivo "DESACTIVADA MANUALMENTE"), sigue midiendo sin ruido de atención
 # Photo finish (2026-07-05): entrar con el precio pegado al strike es moneda
 # al aire cobrada como favorito. |drift_ventana|<0.02% → IC=-0.145 n=181
@@ -3337,9 +3338,15 @@ def s_gbm_late_15min_multihorizonte(market, ctx):
     (ver idea_gbm_late_tardio_08jul) pero, a diferencia de TARDIO, nadie
     notó la pérdida — dejó 6 filas huérfanas en results.csv (08-Jul, antes
     de desaparecer) y nunca se reimplementó hasta hoy. `drift_60min` (no
-    `drift_60min_pct` como en el borrador original — la clave real en
-    `_s_gbm_late` es `drift_60min`, ya se computaba ahí, no hace falta
-    tocar `_s_gbm_late`).
+    `drift_60min_pct` como en el borrador original).
+
+    ⚠️ 05-Ago (fix real): la afirmación de arriba de que `_s_gbm_late` "ya
+    computaba" `drift_60min` era FALSA — esa clave nunca existió en su
+    diccionario de features, por lo que esta función devolvía `None`
+    siempre desde su "recuperación" del 22-Jul (0 predicciones confirmadas
+    día a día, 29-Jul→05-Ago). Corregido añadiendo `drift_60min` al
+    `return` de `_s_gbm_late` (ver ese docstring). Ver
+    project_candidatas_estancadas_diagnostico_05ago en memoria.
 
     Estrategia SEPARADA de GBM_LATE_15M a propósito (mismo patrón que
     GBM_LATE_60M/TARDIO): dedup por (strategy, market_id) exige nombre
@@ -3990,6 +3997,17 @@ def _s_gbm_late(market, ctx, ventana_min, rest_lo, rest_hi, espacio_k=None):
     dist_ancla_estructural_pct = _dist_ancla_estructural_pct(activo, precios_data, horas_lookback=3)
     volumen_regimen = ctx.get("volumen_regimen", {}).get(activo)
 
+    # drift_60min (05-Ago, fix): s_gbm_late_15min_multihorizonte() lee esta
+    # clave desde el 22-Jul asumiendo que ya se computaba aquí -- NUNCA
+    # existió, la función llevaba muerta (return None siempre) desde su
+    # "recuperación". Puro logging aditivo, mismo patrón que
+    # drift_20min_pct/mercado_anchura_pct de arriba -- no cambia p_up/edge/
+    # decision de NINGUNA estrategia que ya usa _s_gbm_late (incluidas
+    # GBM_LATE_15M#{ETH,SOL}#15min, live). Ver project_candidatas_
+    # estancadas_diagnostico_05ago.
+    _drift_60 = _calcular_drift_h(activo, precios_data, 60)
+    drift_60min = round(_drift_60 * 100, 4) if _drift_60 is not None else None
+
     # dist_vwap_pct (11-Jul, paper Zarattini/Aziz "VWAP the Holy Grail"): ya
     # existía en UPDOWN_GBM desde 07-Jul pero nunca se extendió aquí. Chequeo
     # manual sobre UPDOWN_GBM (ver FEATURE_RULES en shadow_postmortem.py):
@@ -4069,6 +4087,7 @@ def _s_gbm_late(market, ctx, ventana_min, rest_lo, rest_hi, espacio_k=None):
             "ibs_20min":           ibs_20min,
             "dist_ancla_estructural_pct": dist_ancla_estructural_pct,
             "volumen_regimen":     volumen_regimen,
+            "drift_60min":         drift_60min,
             "n_obs_vol_h":         n_obs_vol,
             "se_d_gbm_aprox":      se_d_gbm_aprox,
             "sigma_h_ewma10":      round(sigma_h_ewma10, 5) if sigma_h_ewma10 is not None else None,
