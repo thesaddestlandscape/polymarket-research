@@ -4409,5 +4409,6 @@
  "candidato_proxy#UPDOWN_GBM_15M_TARDIO#BTC#15min#BTC#BUY_NO#libro_liquidezgt": false,
  "candidato_proxy#GBM_LATE_5M#BTC#5min#BTC#BUY_YES#hora_utcgt": false,
  "candidato_proxy#UPDOWN_GBM_15M_TARDIO#BTC#15min#BTC#BUY_NO#drift_15minabs_lt": false,
- "candidato_proxy#UPDOWN_GBM_15M_TARDIO#BTC#BUY_NO#drift_60minabs_lt": false
+ "candidato_proxy#UPDOWN_GBM_15M_TARDIO#BTC#BUY_NO#drift_60minabs_lt": false,
+ "candidato_proxy#UPDOWN_GBM_15M_TARDIO#SOL#15min#SOL#BUY_YES#sigma_hlt": false
 }
