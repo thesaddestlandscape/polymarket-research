@@ -19,7 +19,7 @@ import math
 import random
 import re
 from collections import Counter
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
 from functools import lru_cache
 from pathlib import Path
 
@@ -1370,6 +1370,31 @@ FEATURE_RULES = {
 IC_FILTRO_MIN   = -0.12   # IC para activar filtro (evitar)
 IC_PATRON_MIN   = +0.12   # IC para activar patrón ganador (amplificar)
 N_BUCKET_MIN    = 15      # mínimo de observaciones en cualquier bucket (subido de 8: n<15 → demasiado ruidoso para kelly_boost)
+_POSTMORTEM_CACHE_BUCKET = [0]  # invalidación manual del lru_cache de
+# _cargar_predicciones_recientes_por_estrategia DENTRO de una misma corrida
+# (shadow_postmortem.py es un subproceso de un solo ciclo, relanzado por
+# run_fast.sh -- el proceso no vive entre ciclos, así que este cache NO
+# persiste entre corridas de por sí; el bucket solo evita releer las
+# predictions_*.csv una vez POR CADA candidato de filtro dentro de la MISMA
+# llamada a aprender_patrones_causales, que evalúa docenas de percentiles).
+COBERTURA_RECIENTE_MAX  = 0.80  # 05-Ago (fix, ver idea_bug_filtros_causales_cobertura_total_05ago):
+COBERTURA_RECIENTE_DIAS = 7     # el umbral de un filtro se elige por percentil sobre el
+COBERTURA_RECIENTE_MIN_N = 15   # HISTÓRICO COMPLETO -- si la feature deriva con el tiempo
+# (05-Ago, /code-review): subido de 10 a 15 -- el manual exige explícitamente
+# "ninguna conclusión de estrategia con n<15" (CLAUDE.md, Errores de datos #2)
+# y esta función SÍ concluye algo (que el filtro ha degenerado) con esos datos,
+# así que tiene que cumplir la misma barra que cualquier otra conclusión.
+# (ej. compresión de volatilidad), un filtro que en su día recortaba ~25-33% del
+# histórico puede degenerar en silencio hasta cubrir el 100% de las observaciones
+# ACTUALES sin que nada lo detecte (el sistema solo mide el IC en el momento del
+# descubrimiento, nunca la cobertura después). Confirmado real 05-Ago: 17/104
+# filtros_causales cubrían >=85% de los datos de un día real (6 al 100%),
+# incluido UPDOWN_GBM#BTC#60min (sigma_h<0.012 cubría el 100% de 57 observaciones
+# reales -- veto total, no filtro). Este gate exige que el bucket "malo" NO cubra
+# más de COBERTURA_RECIENTE_MAX de los últimos COBERTURA_RECIENTE_DIAS días
+# (si hay suficiente dato reciente, COBERTURA_RECIENTE_MIN_N) -- si lo cubre, el
+# filtro ya no discrimina, es un veto de facto, y no se promociona ni se
+# mantiene activo aunque su IC histórico siga pareciendo válido.
 PERCENTILES_MIN_ESTABLES = 2  # 20-Jul (code-review, hallazgo de altitud): exigir que
 # al menos 2 de los 5 percentiles candidatos califiquen de forma independiente,
 # no solo el que gana el argmax por `dif` — evita un pico aislado de un único
@@ -1534,6 +1559,110 @@ def _evaluar_bucket(vals, umbral, condicion_mala):
     return malo, bueno, cond_buena
 
 
+@lru_cache(maxsize=1)
+def _cargar_predicciones_recientes_por_estrategia(dias: int = COBERTURA_RECIENTE_DIAS,
+                                                     cache_bucket: int = 0):
+    """Índice strat_key -> [(direccion_efectiva, features_dict), ...] de los
+    últimos `dias` días de predictions_YYYY-MM-DD.csv -- a diferencia de
+    results.csv (que solo tiene BUY_YES/BUY_NO ya RESUELTOS), esta fuente
+    incluye también las filas SKIP, con la dirección que el modelo habría
+    tomado inferida del signo de edge_neto. Es la única fuente que no está
+    contaminada por el propio filtro que se quiere auditar: un filtro que
+    hoy bloquea el 100% de BUY_YES para una tupla deja resultados.csv sin
+    NINGÚN BUY_YES reciente que resolver (ciego por construcción -- el
+    filtro tan eficaz que se autoprotege de ser detectado), pero
+    predictions.csv sigue registrando la señal con decision=SKIP y el
+    edge_neto que habría tenido.
+
+    cache_bucket solo existe para poder invalidar el lru_cache manualmente
+    entre ciclos del postmortem (se llama con un valor distinto cada vez,
+    ver aprender_patrones_causales) -- sin esto el cache viviría para
+    siempre en el proceso y nunca vería predictions.csv del día nuevo.
+    """
+    corte = datetime.now(timezone.utc) - timedelta(days=dias)
+    idx: dict[str, list] = {}
+    archivos = sorted(DIR_SHADOW.glob("predictions_*.csv"))[-(dias + 2):]
+    for arch in archivos:
+        try:
+            with open(arch, encoding="utf-8") as f:
+                for row in csv.DictReader(f):
+                    ts = row.get("timestamp_utc", "")
+                    try:
+                        tsd = datetime.fromisoformat(ts.replace("Z", "+00:00"))
+                        if tsd.tzinfo is None:
+                            tsd = tsd.replace(tzinfo=timezone.utc)
+                    except Exception:
+                        continue
+                    if tsd < corte:
+                        continue
+                    dec = row.get("decision", "")
+                    if dec not in ("BUY_YES", "BUY_NO", "SKIP"):
+                        continue
+                    if dec == "SKIP":
+                        try:
+                            en = float(row.get("edge_neto", 0) or 0)
+                        except (ValueError, TypeError):
+                            continue
+                        if en == 0:
+                            continue
+                        dec_efectiva = "BUY_YES" if en > 0 else "BUY_NO"
+                    else:
+                        dec_efectiva = dec
+                    try:
+                        feats = json.loads(row.get("features", "{}") or "{}")
+                    except Exception:
+                        continue
+                    s = row.get("strategy", "")
+                    sub = row.get("subtype", "")
+                    posibles = {s}
+                    if "#" in sub:
+                        a_part, d_part = sub.split("#", 1)
+                        posibles |= {f"{s}#{sub}", f"{s}#{a_part}", f"{s}#{d_part}"}
+                    elif sub:
+                        posibles.add(f"{s}#{sub}")
+                    for clave in posibles:
+                        idx.setdefault(clave, []).append((dec_efectiva, feats))
+        except Exception:
+            continue
+    return idx
+
+
+def _filtro_degenerado_en_veto_total(strat_key, feature, direccion, condicion, umbral,
+                                       min_n=COBERTURA_RECIENTE_MIN_N,
+                                       cobertura_max=COBERTURA_RECIENTE_MAX):
+    """True si `condicion` (la condición "mala" de un filtro, o la condición
+    "buena" de un patrón ganador -- misma función para ambos, ver las 2
+    llamadas) cubre >=cobertura_max de las observaciones REALES recientes
+    (predictions.csv, incluye SKIP -- ver
+    _cargar_predicciones_recientes_por_estrategia) -- señal de que el
+    umbral (elegido por percentil sobre el histórico COMPLETO de
+    results.csv) ha derivado hasta convertirse en un veto/boost total en
+    vez de un filtro/patrón parcial que de verdad discrimina. Si no hay
+    suficiente dato reciente (< min_n),
+    devuelve False -- no bloquear un filtro por falta de datos recientes,
+    solo por evidencia real de sobre-cobertura."""
+    idx = _cargar_predicciones_recientes_por_estrategia(cache_bucket=_POSTMORTEM_CACHE_BUCKET[0])
+    candidatos = [feats.get(feature) for dec, feats in idx.get(strat_key, [])
+                  if dec == direccion and feats.get(feature) is not None]
+    if len(candidatos) < min_n:
+        return False
+    cubiertos = 0
+    for v in candidatos:
+        if condicion == "abs_gt":
+            match = abs(v) > umbral
+        elif condicion == "abs_lt":
+            match = abs(v) < umbral
+        elif condicion == "gt":
+            match = v > umbral
+        elif condicion == "lt":
+            match = v < umbral
+        else:
+            match = False
+        if match:
+            cubiertos += 1
+    return (cubiertos / len(candidatos)) >= cobertura_max
+
+
 def aprender_patrones_causales(resultados: list, pred_index: dict) -> dict:
     """
     Aprende TANTO por qué el modelo pierde COMO por qué gana.
@@ -1560,6 +1689,7 @@ def aprender_patrones_causales(resultados: list, pred_index: dict) -> dict:
     reevaluándose cada ciclo, solo deja de aplicarse mientras no sea estable.
     """
     ts_ahora = datetime.now(timezone.utc).isoformat(timespec="seconds")
+    _POSTMORTEM_CACHE_BUCKET[0] += 1  # invalida el cache de predicciones recientes de este ciclo
     resultado_final = {}
     candidatos_shuffle = []  # [(strat_key, "FILTRO"|"PATRON", dict), ...] — gate al final
 
@@ -1640,7 +1770,15 @@ def aprender_patrones_causales(resultados: list, pred_index: dict) -> dict:
                     dif        = ic_bueno - ic_malo
 
                     # ── Filtro: el bucket malo es suficientemente malo ──
-                    if ic_malo < IC_FILTRO_MIN:
+                    # 05-Ago (fix): además de IC_FILTRO_MIN, exigir que el
+                    # umbral NO haya degenerado en veto total sobre los datos
+                    # RECIENTES (ver COBERTURA_RECIENTE_MAX/_filtro_degenerado_
+                    # en_veto_total arriba) -- un filtro con IC histórico
+                    # válido pero que hoy cubre >=80% de las observaciones
+                    # reales ya no discrimina, es un veto disfrazado.
+                    if (ic_malo < IC_FILTRO_MIN
+                            and not _filtro_degenerado_en_veto_total(
+                                strat_key, feature, direccion, cond_mala, umbral)):
                         n_percentiles_filtro_ok += 1
                         if dif > mejor_dif_filtro:
                             mejor_dif_filtro = dif
@@ -1659,7 +1797,15 @@ def aprender_patrones_causales(resultados: list, pred_index: dict) -> dict:
                     # ── Patrón ganador: el bucket bueno es suficientemente bueno ──
                     if ((strat_key, feature, direccion) in PATRONES_BLOQUEADOS):
                         continue  # ver PATRONES_BLOQUEADOS: contradicho por ejecución real
-                    if ic_bueno > IC_PATRON_MIN and len(bueno) >= N_BUCKET_MIN:
+                    # 05-Ago (/code-review): mismo chequeo de degeneración que el
+                    # filtro, aplicado al lado simétrico -- un patrón ganador cuyo
+                    # bucket "bueno" ha derivado hasta cubrir casi el 100% de las
+                    # observaciones recientes dejaría de discriminar nada y
+                    # aplicaría kelly_boost (hasta x1.00, dinero real) a casi
+                    # todas las operaciones sin criterio real.
+                    if (ic_bueno > IC_PATRON_MIN and len(bueno) >= N_BUCKET_MIN
+                            and not _filtro_degenerado_en_veto_total(
+                                strat_key, feature, direccion, cond_buena, umbral)):
                         n_percentiles_patron_ok += 1
                         if dif > mejor_dif_patron:
                             # Kelly boost: cuánto apostar extra cuando esta condición se cumple
