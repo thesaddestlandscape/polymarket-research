@@ -180,61 +180,141 @@ def _parse_dt(s):
         return None
 
 
+UNIVERSO_CACHE_DIR = DIR_SHADOW / "ballenas_universo_cache"
+
+
+def _parsear_archivo_markets(archivo: Path) -> list:
+    """Extrae TODOS los mercados Up-or-Down/weekly de UN fichero de
+    data/markets/ (misma lógica de detección exacta que antes, sin
+    cambios) -- SIN filtrar por "ya resuelto" todavía, ese filtro depende
+    de `ahora` (el instante de la llamada) y por tanto NO se puede
+    cachear aquí; se aplica después en _universo_mercados_resueltos sobre
+    el resultado ya fusionado. Devuelve tuplas compactas (no dicts) --
+    más ligero en memoria/JSON que repetir 5 claves de string por fila
+    (05-Ago: la primera versión de este cache OOM-killó el proceso, ver
+    docstring de _universo_mercados_resueltos)."""
+    entradas = []
+    _abrir = gzip.open if archivo.suffix == ".gz" else open
+    with _abrir(archivo, "rt", encoding="utf-8") as f:
+        for row in csv.DictReader(f):
+            cid = row.get("condition_id", "")
+            mid = row.get("market_id", "")
+            if not cid or not mid:
+                continue
+            end_dt = _parse_dt(row.get("end_date", ""))
+            if end_dt is None:
+                continue
+            tags = (row.get("event_tags") or "").split("|")
+            question = row.get("question") or ""
+            duracion = next((TAG_A_DURACION[t] for t in tags if t in TAG_A_DURACION), None)
+            if duracion is not None and "Up or Down" not in question:
+                continue
+            elif duracion is None and "Up or Down" not in question and (
+                "weekly" in [t.lower() for t in tags] or "week" in question.lower()
+            ):
+                duracion = "weekly"
+            # Detección de activo por NOMBRE COMPLETO en la pregunta
+            # (bitcoin/ethereum/solana/xrp), NUNCA por ticker/tag —
+            # Polymarket etiqueta estos mercados con el nombre
+            # completo ("Bitcoin", no "BTC"), y "btc" no es substring
+            # de "bitcoin". Bug real encontrado en producción: la
+            # primera versión de este filtro (copiada de
+            # smart_money_tracker.mercados_recientes(), que tiene el
+            # mismo bug) solo detectaba ETH/SOL (ticker=substring
+            # casual del nombre) y XRP (ticker=nombre) — BTC quedaba
+            # silenciosamente fuera de TODO el universo, 0 filas en
+            # 30k+ trades acumulados hasta que Javi lo notó. Mismo
+            # mapeo NOMBRE_A_TICKER que ya usa la rama weekly (que
+            # sí detectaba BTC bien) — unificado para las dos ramas.
+            activo = next((tk for nombre, tk in NOMBRE_A_TICKER.items()
+                           if nombre in question.lower()), None)
+            if duracion is None or not activo:
+                continue
+            entradas.append((cid, mid, activo, duracion, end_dt.isoformat()))
+    return entradas
+
+
+def _entradas_de_archivo(archivo: Path) -> list:
+    """Cache EN DISCO, un fichero pequeño por cada día de data/markets/
+    (no un JSON gigante con todo junto -- eso fue justo lo que hizo OOM-
+    killar el proceso la primera vez: mantener TODO el histórico
+    duplicado en memoria a la vez, además de lo ya fusionado en
+    por_marco). Invalidado por (mtime,size) -- un día ya cerrado no
+    cambia nunca, solo el de HOY se re-parsea."""
+    UNIVERSO_CACHE_DIR.mkdir(parents=True, exist_ok=True)
+    cache_path = UNIVERSO_CACHE_DIR / f"{archivo.name}.json"
+    stat = archivo.stat()
+    firma = f"{stat.st_mtime_ns}:{stat.st_size}"
+    if cache_path.exists():
+        try:
+            cached = json.loads(cache_path.read_text(encoding="utf-8"))
+            if cached.get("firma") == firma:
+                return cached["entradas"]
+        except Exception:
+            pass
+    entradas = _parsear_archivo_markets(archivo)
+    try:
+        cache_path.write_text(json.dumps({"firma": firma, "entradas": entradas},
+                                          ensure_ascii=False, separators=(",", ":")),
+                               encoding="utf-8")
+    except Exception as e:
+        print(f"  [warn] no se pudo cachear {archivo.name}: {e}")
+    return entradas
+
+
 def _universo_mercados_resueltos(ahora):
     """Todos los mercados Up-or-Down (5/15/60/240min) + WEEKLY_PRICE ya
     resueltos (end_date pasado, con margen) vistos en TODO
     data/markets/*.csv disponible. A diferencia de
     smart_money_tracker.mercados_recientes() (ventana fija 30h, pensada
     para su propio propósito de consenso reciente), aquí cada marco tiene
-    su propia ventana — weekly tarda semanas en acumular n."""
+    su propia ventana — weekly tarda semanas en acumular n.
+
+    05-Ago: cacheado por fichero (incidente real -- py-spy confirmó que
+    esta función, releyendo los ~7.7GB completos de data/markets/ CADA
+    CICLO HORARIO para encontrar solo ~50-72 mercados nuevos, era el
+    100% del tiempo de ejecución de ballenas_observer.py, 13-29min/74%CPU
+    -- mismo patrón que el incidente de shadow_postmortem.py del 04-Ago).
+    ⚠️ La PRIMERA versión de este cache (un único JSON con todos los
+    ficheros, mantenido íntegro en memoria Y fusionado en por_marco a la
+    vez) OOM-killó el proceso en producción (RSS 1.7GB, sistema con solo
+    ~250MB libres) -- corregido a cache EN DISCO por fichero
+    (UNIVERSO_CACHE_DIR, un JSON pequeño por día) para que solo el
+    resultado YA FUSIONADO (por_marco, mismo tamaño que la versión
+    original sin cache) viva en memoria a la vez; las entradas de cada
+    fichero se liberan tras fusionarse, nunca se acumulan todas juntas.
+    El filtro de "ya resuelto" (depende de `ahora`) se aplica DESPUÉS de
+    fusionar cada fichero, nunca dentro del cache (no es cacheable, varía
+    con el instante de la llamada)."""
     margen = timedelta(minutes=MARGEN_RESOLUCION_MIN)
-    por_marco = defaultdict(dict)  # marco -> {condition_id: info}
+    corte = ahora - margen
     archivos_markets = sorted(DIR_MARKETS.glob("*.csv")) + sorted(DIR_MARKETS.glob("*.csv.gz"))
+
+    por_marco = defaultdict(dict)  # marco -> {condition_id: info}
     for archivo in sorted(archivos_markets, key=lambda p: p.name.replace(".gz", "")):
         try:
-            _abrir = gzip.open if archivo.suffix == ".gz" else open
-            with _abrir(archivo, "rt", encoding="utf-8") as f:
-                for row in csv.DictReader(f):
-                    cid = row.get("condition_id", "")
-                    mid = row.get("market_id", "")
-                    if not cid or not mid:
-                        continue
-                    end_dt = _parse_dt(row.get("end_date", ""))
-                    if end_dt is None or end_dt > ahora - margen:
-                        continue
-                    tags = (row.get("event_tags") or "").split("|")
-                    question = row.get("question") or ""
-                    duracion = next((TAG_A_DURACION[t] for t in tags if t in TAG_A_DURACION), None)
-                    if duracion is not None and "Up or Down" not in question:
-                        continue
-                    elif duracion is None and "Up or Down" not in question and (
-                        "weekly" in [t.lower() for t in tags] or "week" in question.lower()
-                    ):
-                        duracion = "weekly"
-                    # Detección de activo por NOMBRE COMPLETO en la pregunta
-                    # (bitcoin/ethereum/solana/xrp), NUNCA por ticker/tag —
-                    # Polymarket etiqueta estos mercados con el nombre
-                    # completo ("Bitcoin", no "BTC"), y "btc" no es substring
-                    # de "bitcoin". Bug real encontrado en producción: la
-                    # primera versión de este filtro (copiada de
-                    # smart_money_tracker.mercados_recientes(), que tiene el
-                    # mismo bug) solo detectaba ETH/SOL (ticker=substring
-                    # casual del nombre) y XRP (ticker=nombre) — BTC quedaba
-                    # silenciosamente fuera de TODO el universo, 0 filas en
-                    # 30k+ trades acumulados hasta que Javi lo notó. Mismo
-                    # mapeo NOMBRE_A_TICKER que ya usa la rama weekly (que
-                    # sí detectaba BTC bien) — unificado para las dos ramas.
-                    activo = next((tk for nombre, tk in NOMBRE_A_TICKER.items()
-                                   if nombre in question.lower()), None)
-                    if duracion is None or not activo:
-                        continue
-                    por_marco[duracion][cid] = {
-                        "condition_id": cid, "market_id": mid,
-                        "activo": activo, "marco": duracion,
-                        "end_date": end_dt.isoformat(),
-                    }
+            entradas = _entradas_de_archivo(archivo)
         except Exception as e:
             print(f"  [warn] leyendo {archivo}: {e}")
+            continue
+        for cid, mid, activo, marco_e, end_date_iso in entradas:
+            end_dt = _parse_dt(end_date_iso)
+            if end_dt is None or end_dt > corte:
+                continue
+            por_marco[marco_e][cid] = {"condition_id": cid, "market_id": mid,
+                                        "activo": activo, "marco": marco_e,
+                                        "end_date": end_date_iso}
+        entradas = None  # liberar explícitamente antes del siguiente fichero
+
+    # poda cache en disco de ficheros que ya no existen -- no crecer sin límite
+    try:
+        nombres_actuales = {a.name for a in archivos_markets}
+        for cache_file in UNIVERSO_CACHE_DIR.glob("*.json"):
+            if cache_file.name[:-len(".json")] not in nombres_actuales:
+                cache_file.unlink(missing_ok=True)
+    except Exception as e:
+        print(f"  [warn] no se pudo podar {UNIVERSO_CACHE_DIR}: {e}")
+
     return {marco: list(d.values()) for marco, d in por_marco.items()}
 
 
