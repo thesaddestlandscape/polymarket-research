@@ -82,22 +82,28 @@ while true; do
                 exit 0
             fi
             # rebase huérfano (ej. `timeout 60s` matando un rebase a medias) --
-            # limpiar ANTES de intentar uno nuevo, si no el pull de abajo lo
-            # hereda arrastrado indefinidamente (encontrado 27-Jul, cruft de
-            # semanas acumulado en .git/rebase-merge + git stash list).
+            # limpiar ANTES de intentar uno nuevo, si no el rebase de emergencia
+            # de abajo lo hereda arrastrado indefinidamente (encontrado 27-Jul,
+            # cruft de semanas acumulado en .git/rebase-merge + git stash list).
             if [ -d .git/rebase-merge ] || [ -d .git/rebase-apply ]; then
                 log "  ⚠️ rebase huérfano en .git -- limpiando antes de continuar"
                 git rebase --abort >> "$LOG" 2>&1 || rm -rf .git/rebase-merge .git/rebase-apply
                 # 28-Jul: --abort no siempre repone el autostash asociado si
-                # el proceso murió a medias (visto: 82 stashes acumulados,
-                # uno con un trade real perdido). Red de seguridad: si el
-                # árbol quedó limpio tras el abort y hay un stash esperando,
-                # intentar recuperarlo -- si aplica limpio, genial; si no,
-                # se deja en el stash (nunca se descarta) para revisión
-                # manual en vez de perderse en silencio.
-                if git diff --quiet && git diff --cached --quiet \
-                        && [ -n "$(git stash list 2>/dev/null | head -1)" ]; then
-                    log "  ⚠️ árbol limpio tras abort con stash pendiente -- intentando recuperarlo"
+                # el proceso murió a medias. 30-Jul (Javi: "aquí está pasando
+                # algo", trades desapareciendo del dashboard): encontrados 299
+                # stashes huérfanos acumulados EN VIVO -- la condición "árbol
+                # limpio" de abajo casi NUNCA se cumple en este sistema (hay
+                # ~10 procesos persistentes escribiendo data/shadow y
+                # data/live continuamente, así que siempre hay algo
+                # modificado), así que la recuperación NUNCA se intentaba en
+                # la práctica pese a decir "nunca se pierde en silencio".
+                # `git stash pop` en sí ya es seguro con ruido de fondo (solo
+                # falla si hay conflicto de HUNK en el mismo fichero/líneas,
+                # y si falla deja el stash intacto para revisión manual) --
+                # se quita la precondición de árbol limpio, se intenta
+                # SIEMPRE que haya un stash pendiente tras el abort.
+                if [ -n "$(git stash list 2>/dev/null | head -1)" ]; then
+                    log "  ⚠️ rebase huérfano con stash pendiente -- intentando recuperarlo"
                     git stash pop >> "$LOG" 2>&1 \
                         && log "  ✅ stash recuperado" \
                         || log "  ⚠️ stash no aplica limpio -- se deja en git stash list para revisión manual"
@@ -106,17 +112,12 @@ while true; do
             # 28-Jul: data/prices/ faltaba aquí -- fetch_binance_klines.py lo
             # escribe cada ciclo rápido (~20s) pero solo run_slow.sh lo
             # añadía (cadencia ~23min), así que quedaba sucio entre medias.
-            # git pull --rebase --autostash de abajo SIEMPRE tenía algo real
-            # que stashear (no un no-op); si `timeout 60s` mataba el pull a
-            # mitad de rebase, ese autostash quedaba huérfano para siempre
-            # -- encontrado 28-Jul: 82 stashes acumulados, uno de ellos con
-            # un trade real (BALLENAS_TARDIAS#ETH#5min, ganador +0.26€) que
-            # nunca llegó a trades.csv ni al dashboard. Añadirlo aquí deja
-            # el árbol de trabajo limpio tras el commit, así que el
-            # autostash no tiene nada que perder aunque el pull muera.
+            # Se mantiene incluido aunque el 30-Jul se quitó el pull/rebase de
+            # la ruta común (ver más abajo) -- sigue haciendo falta para que
+            # el commit local capture también los precios, no solo shadow/live.
             git add data/shadow/ data/live/ data/prices/ >> "$LOG" 2>&1 || true
             if ! git diff --cached --quiet 2>/dev/null; then
-                timeout 30s git commit -m "shadow: ciclo $CICLO $(date -u +%Y-%m-%dT%H:%MZ)" >> "$LOG" 2>&1 || true
+                timeout -k 10 30s git commit -m "shadow: ciclo $CICLO $(date -u +%Y-%m-%dT%H:%MZ)" >> "$LOG" 2>&1 || true
                 # 23-Jul (feedback_run_fast_git_rebase_pierde_trabajo_23jul):
                 # -X ours bajo `rebase` favorece origin/main en conflictos --
                 # correcto para datos (mismo criterio que "siempre --theirs"
@@ -126,10 +127,76 @@ while true; do
                 # estamos en main -- el commit de datos de arriba se queda
                 # igual en cualquier rama.
                 if [ "$(git branch --show-current)" = "main" ]; then
-                    timeout 60s git pull --rebase --autostash -X ours origin main >> "$LOG" 2>&1 || true
-                    timeout 60s git push origin main >> "$LOG" 2>&1 || true
+                    # 30-Jul: eliminado el pull/rebase/autostash de la ruta común.
+                    # Causa raíz investigada a fondo el mismo día: fast/slow NO son
+                    # clones separados, comparten este MISMO working directory, y en
+                    # operación normal NADIE MÁS pushea a origin/main (verificado:
+                    # únicos autores de los commits recientes = este loop; los otros
+                    # 2 clones del repo están dormidos). El pull era un round-trip de
+                    # red innecesario en ~99% de los ciclos, y la ventana stash->pop
+                    # que abría era la causa real de dos problemas: (a) conflictos
+                    # con los ~10 procesos sin candado que escriben data/shadow|live|
+                    # prices sin parar, y (b) el autostash barría CUALQUIER edición
+                    # manual sin commitear que hubiera en el árbol -- perdió código
+                    # real el mismo 30-Jul (ver idea_git_autostash_trades_perdidos_30jul,
+                    # recuperado en el commit 03bc454443). Ahora: push directo
+                    # (fast-forward, no toca el árbol de trabajo -- nada que estashear
+                    # en el caso común). Solo si el push es rechazado (raro: origin
+                    # avanzó desde otro sitio) se entra en recuperación de emergencia,
+                    # con stash de ÁMBITO EXPLÍCITO (solo data/shadow|live|prices,
+                    # nunca el árbol entero) -- si hay algo sucio FUERA de esas rutas
+                    # (ej. una edición de código a medias), el rebase de abajo se
+                    # niega a correr (git rebase exige árbol limpio) y falla alto en
+                    # vez de tragárselo, coherente con fail-loud.
+                    if ! timeout -k 10 60s git push origin main >> "$LOG" 2>&1; then
+                        # 30-Jul (encontrado en vivo minutos después de desplegar
+                        # este mecanismo): el push también falla por motivos que NO
+                        # son divergencia -- el .git de 12GB hace que `git push`
+                        # muera por OOM (ya diagnosticado, 129 commits sin subir
+                        # antes de este fix). Entrar en la recuperación de
+                        # emergencia (fetch+stash+rebase) SIN comprobar primero si
+                        # origin realmente avanzó recreaba el mismo problema que
+                        # esto vino a resolver -- 2 stashes en 6 minutos. Ahora se
+                        # comprueba con `git fetch` + `rev-list` si origin tiene
+                        # commits que local no tiene ANTES de tocar el árbol; si no
+                        # los tiene, el push falló por otra causa (tamaño/red/OOM)
+                        # y no hay nada que reconciliar -- se deja para el siguiente
+                        # ciclo, sin stash.
+                        timeout -k 10 30s git fetch origin main >> "$LOG" 2>&1 || true
+                        DIVERGIO=$(git rev-list HEAD..origin/main --count 2>/dev/null || echo 0)
+                        if [ "$DIVERGIO" -gt 0 ] 2>/dev/null; then
+                            log "  ⚠️ push rechazado y origin SÍ avanzó ($DIVERGIO commits) -- recuperación de emergencia"
+                            STASH_EMERG=0
+                            if ! git diff --quiet -- data/shadow data/live data/prices 2>/dev/null \
+                               || ! git diff --cached --quiet -- data/shadow data/live data/prices 2>/dev/null; then
+                                git stash push -m "git_ops_emergencia_fast" -- data/shadow data/live data/prices >> "$LOG" 2>&1 \
+                                    && STASH_EMERG=1
+                            fi
+                            if timeout -k 10 60s git rebase -X ours origin/main >> "$LOG" 2>&1; then
+                                log "  ✅ rebase de emergencia OK"
+                                if [ "$STASH_EMERG" = "1" ]; then
+                                    git stash pop >> "$LOG" 2>&1 \
+                                        && log "  ✅ stash de emergencia recuperado" \
+                                        || log "  ⚠️ stash de emergencia no aplica limpio -- revisión manual (git stash list)"
+                                fi
+                                timeout -k 10 60s git push origin main >> "$LOG" 2>&1 \
+                                    && log "  ✅ push tras recuperación OK" \
+                                    || log "  ⚠️ push tras recuperación sigue fallando -- revisar manualmente"
+                            else
+                                log "  ⚠️ rebase de emergencia falló (probable: cambios sin commitear fuera de data/shadow|live|prices) -- abortando sin forzar, revisar manualmente"
+                                git rebase --abort >> "$LOG" 2>&1 || true
+                                if [ "$STASH_EMERG" = "1" ]; then
+                                    git stash pop >> "$LOG" 2>&1 \
+                                        && log "  ✅ stash de emergencia recuperado tras abort" \
+                                        || log "  ⚠️ stash de emergencia no aplica limpio -- revisión manual (git stash list)"
+                                fi
+                            fi
+                        else
+                            log "  ⚠️ push falló pero origin NO avanzó -- no es divergencia (probable OOM/red/tamaño de .git), se reintenta el siguiente ciclo sin tocar el árbol"
+                        fi
+                    fi
                 else
-                    log "  ⚠️ rama actual != main -- se salta pull/rebase/push (solo commit local de datos)"
+                    log "  ⚠️ rama actual != main -- se salta push (solo commit local de datos)"
                 fi
             fi
           )

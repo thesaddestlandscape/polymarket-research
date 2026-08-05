@@ -1,10 +1,10 @@
 {
-  "timestamp_utc": "2026-07-30T03:09:26+00:00",
-  "bankroll_sim": 9352.82,
-  "pnl_total": 9332.82,
-  "n_ops": 42770,
-  "win_rate": 0.5982,
-  "estrategias_activas": 310,
+  "timestamp_utc": "2026-08-05T08:58:39+00:00",
+  "bankroll_sim": 12606.45,
+  "pnl_total": 12586.45,
+  "n_ops": 73134,
+  "win_rate": 0.6134,
+  "estrategias_activas": 374,
   "desactivadas": [
     "UPDOWN_GBM#SOL#5min",
     "UPDOWN_GBM#5min",
@@ -13,7 +13,6 @@
     "SMART_FLOW_1H",
     "UPDOWN_GBM#XRP#5min",
     "UPDOWN_GBM#240min",
-    "PRICE_TARGET_GBM#ETH#atexpiry",
     "UPDOWN_GBM#daily",
     "PRICE_TARGET_GBM#BTC#atexpiry",
     "PRICE_TARGET_GBM#BTC",
@@ -28,7 +27,6 @@
     "STRUCT_NO_15M",
     "STRUCT_NO_15M#15min",
     "STREAK_MOM_5M",
-    "FAVORITO_CONFIRMADO#BTC#5min",
     "GBM_LATE_5M#ETH#5min",
     "GBM_LATE_5M#ETH",
     "GBM_LATE_15M_PYCONFIRMADO#BTC#15min",
@@ -36,27 +34,41 @@
     "GBM_LATE_60M_PYCONFIRMADO",
     "GBM_LATE_60M_PYCONFIRMADO#60min",
     "GBM_LATE_15M_PYCONFIRMADO#SOL#15min",
-    "GBM_LATE_15M_PYCONFIRMADO#SOL"
+    "GBM_LATE_15M_PYCONFIRMADO#SOL",
+    "LIQUIDACIONES_15M",
+    "LIQUIDACIONES_15M#15min",
+    "LIQUIDACIONES_60M",
+    "LIQUIDACIONES_60M#60min",
+    "LIQUIDACIONES_5M",
+    "LIQUIDACIONES_5M#5min",
+    "LIQUIDACIONES_5M#ETH#5min",
+    "LIQUIDACIONES_5M#ETH",
+    "LIQUIDACIONES_5M#SOL#5min",
+    "LIQUIDACIONES_5M#SOL",
+    "GBM_LATE_60M_FADE",
+    "GBM_LATE_60M_FADE#60min",
+    "BALLENAS_TARDIAS#BNB#5min",
+    "BALLENAS_TARDIAS#BNB"
   ],
   "top3_ic": [
     {
-      "k": "FAVORITO_CONFIRMADO_60MIN_ALTACONVICCION",
-      "ic": 0.3889,
-      "n": 43
+      "k": "FAVORITO_CONFIRMADO_15MIN_EXTREMO#ETH#15min",
+      "ic": 0.42,
+      "n": 23
     },
     {
-      "k": "FAVORITO_CONFIRMADO_60MIN_ALTACONVICCION#60min",
-      "ic": 0.3889,
-      "n": 43
+      "k": "FAVORITO_CONFIRMADO_15MIN_EXTREMO#ETH",
+      "ic": 0.42,
+      "n": 23
     },
     {
-      "k": "FAVORITO_CONFIRMADO_60MIN_ALTACONVICCION#ETH#60min",
-      "ic": 0.3845,
-      "n": 19
+      "k": "FAVORITO_CONFIRMADO_15MIN_EXTREMO",
+      "ic": 0.3971,
+      "n": 66
     }
   ],
-  "brier_medio": 0.2352,
-  "clv_medio": 0.0815,
+  "brier_medio": 0.2311,
+  "clv_medio": 0.0615,
   "monitor_5min": {
     "ou_5m": {
       "n": 84,
@@ -64,19 +76,17 @@
       "clv_ult30": -0.199
     },
     "of_buy_yes": {
-      "n": 605,
-      "clv": -0.0272,
+      "n": 608,
+      "clv": -0.0295,
       "umbral_accion": -0.03,
       "n_umbral": 400,
-      "alerta_proxima": "n=605/400, CLV=-0.027/−0.030"
+      "alerta_proxima": "n=608/400, CLV=-0.030/−0.030"
     },
     "of_decay": {
-      "clv_historico": 0.0076,
-      "clv_ult30": -0.0262,
-      "decay_ratio": -3.43
+      "clv_historico": 0.0091,
+      "clv_ult30": 0.1,
+      "decay_ratio": 10.98
     },
-    "alertas": [
-      "⚠️ ORDER_FLOW alpha decay: CLV histórico=+0.008 → últimas30=-0.026 (ratio=-3.4x, 7 días)"
-    ]
+    "alertas": []
   }
 }

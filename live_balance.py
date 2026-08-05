@@ -145,6 +145,79 @@ def _positions_value(wallet: str) -> float:
     return 0.0
 
 
+def _daily_real_pnl_balance(depositos: list, total_actual: float,
+                            ts_actual: str) -> tuple[list, float, float]:
+    """PnL real por día desde balance_history.csv (delta de `total` on-chain
+    por día MADRID) -- reemplaza a _daily_real_pnl() (31-Jul, bug diagnosticado
+    en sesión: comparado día a día contra balance_history.csv, el método viejo
+    de actividad on-chain (buy/redeem) desviaba hasta -9.31$/+7.42$ en un solo
+    día, ej. 29-Jul real=+8.13 vs activity=-1.18, 30-Jul real=-10.90 vs
+    activity=-3.48 -- una posición que ABRE un día y REDIME al siguiente
+    (habitual cerca de medianoche UTC) atribuye el cash-flow al día del
+    evento, no al día real del resultado, desplazando PnL entre días
+    contiguos. Además el método viejo tenía `limit=500` sin paginación
+    (riesgo de truncar actividad antigua en silencio) y asumía que TODO
+    evento TRADE es una compra (frágil si algún día hay ventas reales, ej.
+    Smart Exit). Esta versión usa la MISMA fuente que ya es "verdad de
+    suelo" para real_total/real_pnl -- el delta de balance total incluye
+    de forma natural el mark-to-market de posiciones abiertas, así que no
+    depende de que compra y redención caigan el mismo día.
+
+    Día MADRID (no UTC) a propósito: es el mismo criterio que usa
+    dashboard_server.py para 'pnl_hoy' (el lado modelo/trades.csv) -- antes
+    los dos lados del dashboard usaban fronteras de día distintas (UTC aquí,
+    Madrid allá), comparando cifras de "hoy" que en realidad correspondían
+    a ventanas de tiempo distintas.
+    """
+    from collections import defaultdict
+    from zoneinfo import ZoneInfo
+
+    filas = []
+    if HIST_PATH.exists():
+        with open(HIST_PATH, encoding="utf-8") as f:
+            for r in csv.DictReader(f):
+                try:
+                    dt = datetime.fromisoformat(r["ts"].replace("Z", "+00:00"))
+                    total = float(r["total"])
+                except (ValueError, KeyError):
+                    continue
+                filas.append((dt, total))
+    # snapshot actual (aún no escrito en el CSV -- se añade tras esta llamada)
+    try:
+        filas.append((datetime.fromisoformat(ts_actual), total_actual))
+    except ValueError:
+        pass
+    if not filas:
+        return [], None, None
+    filas.sort()
+
+    madrid = ZoneInfo("Europe/Madrid")
+    dep_por_dia = defaultdict(float)
+    for d in depositos:
+        dep_por_dia[d.get("fecha", "")] += float(d.get("eur") or 0)
+
+    # último snapshot de cada día Madrid = "cierre" de ese día
+    cierre_por_dia = {}
+    for dt, total in filas:
+        dia = dt.astimezone(madrid).strftime("%Y-%m-%d")
+        cierre_por_dia[dia] = total
+
+    dias = sorted(cierre_por_dia.keys())
+    daily_list = []
+    prev = None
+    for dia in dias:
+        if prev is not None:
+            delta = cierre_por_dia[dia] - prev - dep_por_dia.get(dia, 0.0)
+            daily_list.append({"date": dia, "pnl": round(delta, 2)})
+        prev = cierre_por_dia[dia]
+
+    hoy = datetime.now(madrid).strftime("%Y-%m-%d")
+    pnl_hoy = next((d["pnl"] for d in daily_list if d["date"] == hoy), 0.0)
+    hace_7d = (datetime.now(madrid) - timedelta(days=7)).strftime("%Y-%m-%d")
+    pnl_7d = round(sum(d["pnl"] for d in daily_list if d["date"] >= hace_7d), 2)
+    return daily_list, pnl_hoy, pnl_7d
+
+
 def _daily_real_pnl(wallet: str) -> tuple[list, float, float]:
     """PnL real por día desde la actividad on-chain (redeems − buys por fecha).
 
@@ -202,22 +275,26 @@ def fetch_balance_real() -> dict:
         wallet = os.getenv("POLY_DEPOSIT_WALLET")
     free = _free_usdc(client)
     pos = _positions_value(wallet)
-    total = free + pos
-    # PnL real por día — best-effort (no debe tumbar el balance si la API falla)
+    total = round(free + pos, 4)
+    ts = datetime.now(timezone.utc).isoformat(timespec="seconds")
+    depositos = _cargar_depositos_config()
+    # PnL real por día — best-effort (no debe tumbar el balance si algo falla).
+    # 31-Jul: usa balance_history.csv (ground truth), NO el feed de actividad
+    # (buy/redeem) -- ver docstring de _daily_real_pnl_balance, bug real
+    # diagnosticado con Javi (desviaciones de hasta 9$/día).
     try:
-        daily_real, pnl_hoy_real, pnl_7d_real = _daily_real_pnl(wallet)
+        daily_real, pnl_hoy_real, pnl_7d_real = _daily_real_pnl_balance(depositos, total, ts)
     except Exception:
         daily_real, pnl_hoy_real, pnl_7d_real = [], None, None
-    depositos = _cargar_depositos_config()
     deposito_total = (sum(float(d["eur"]) for d in depositos)
                       if depositos else DEPOSITO_INICIAL)
     pnl_desglose = _pnl_por_deposito(depositos)
     return {
-        "ts": datetime.now(timezone.utc).isoformat(timespec="seconds"),
+        "ts": ts,
         "wallet": wallet,
         "free_usdc": round(free, 4),
         "positions_value": round(pos, 4),
-        "total": round(total, 4),
+        "total": total,
         "deposito_inicial": round(deposito_total, 4),  # total acumulado (sum de todos los depósitos)
         "pnl_real": round(total - deposito_total, 4),
         "pnl_por_deposito": pnl_desglose,              # nuevo: desglose por período

@@ -210,10 +210,23 @@ def cargar_predicciones_pendientes() -> list:
 
 def cargar_ya_resueltas() -> set:
     """
-    Devuelve set de (strategy, market_id) ya resueltos.
-    Sin timestamp: cada (strategy, market_id) se resuelve UNA sola vez aunque
-    se haya predicho en varios días distintos (evita duplicar el IC).
-    """
+    Devuelve set de (strategy, market_id, decision) ya resueltos.
+    Sin timestamp: cada (strategy, market_id, decision) se resuelve UNA sola
+    vez aunque se haya predicho en varios días distintos (evita duplicar el
+    IC).
+
+    04-Ago: `decision` añadida a la clave (antes solo (strategy, market_id)
+    -- bug real encontrado investigando los ejecutores de baja latencia de
+    GBM_LATE_15M/FAVORITO_CONFIRMADO#BTC#60min: comparten el MISMO nombre de
+    strategy que el ciclo lento (diseño intencional), así que cuando ambos
+    predicen sobre el mismo mercado con DIRECCIONES OPUESTAS (confirmado:
+    19 pares strategy+market_id con ambas fuentes presentes solo en 4 días),
+    la clave de 2 componentes trataba ambas predicciones como "la misma" --
+    la que se procesara primero se resolvía y quedaba en results.csv, la
+    otra se descartaba en silencio sin dejar rastro. Con `decision` en la
+    clave, BUY_YES y BUY_NO sobre el mismo mercado se resuelven cada una
+    por su cuenta -- si ambas coinciden en dirección siguen deduplicando
+    igual que antes (mismo comportamiento, sin doble conteo)."""
     if not RESULTS_PATH.exists():
         return set()
     ya = set()
@@ -221,7 +234,8 @@ def cargar_ya_resueltas() -> set:
         reader = csv.DictReader(f)
         for row in reader:
             ya.add((row.get("strategy", ""),
-                    row.get("market_id", "")))
+                    row.get("market_id", ""),
+                    row.get("decision", "")))
     return ya
 
 
@@ -692,7 +706,7 @@ def _resolver_bajo_lock(ts: str) -> None:
     for pred in pendientes:
         if pred.get("decision", "") == "SKIP":
             continue  # SKIP no necesitan resolución
-        clave = (pred.get("strategy", ""), pred.get("market_id", ""))
+        clave = (pred.get("strategy", ""), pred.get("market_id", ""), pred.get("decision", ""))
         if clave in ya_resueltas:
             continue
         end_str = pred.get("end_date", "")
@@ -714,7 +728,7 @@ def _resolver_bajo_lock(ts: str) -> None:
     consultados_ids = set(mids_unicos)
 
     for pred in candidatas:
-        clave = (pred.get("strategy", ""), pred.get("market_id", ""))
+        clave = (pred.get("strategy", ""), pred.get("market_id", ""), pred.get("decision", ""))
         if clave in ya_resueltas:
             continue
         mid = pred.get("market_id", "")

@@ -71,12 +71,22 @@ SCREEN_RESTART = {
     "fast":    f"cd {REPO} && bash run_fast.sh >> logs/fast.log 2>&1",
     "slow":    f"cd {REPO} && bash run_slow.sh >> logs/slow.log 2>&1",
     "control": f"cd {REPO} && .venv/bin/python live_control.py >> logs/live_control.log 2>&1",
-    "dash":    f"cd {REPO} && python3 dashboard_server.py >> logs/dashboard.log 2>&1",
-    "pfinish": f"cd {REPO} && .venv/bin/python photo_finish_logger.py >> logs/photo_finish.log 2>&1",
+    "dash":    f"cd {REPO} && nice -n 10 python3 dashboard_server.py >> logs/dashboard.log 2>&1",
+    # observadores (05-Ago): fusión de 10 procesos observacionales/FASE0
+    # (pfinish, favultsec, puntoconf, ressniper, p22fase0, boxbuilder,
+    # solcontrario5m, xrpcontrario15m, favcontraria, fav5malt) en UNO solo,
+    # cada uno en su propio hilo -- ver observadores_fase0.py. Decisión
+    # explícita Javi: el bankroll no permite subir el VPS, así que se
+    # reduce el número de procesos en vez del coste. Ninguno de los 10
+    # ejecuta dinero real ni cambia de lógica (cero cambios en los 10
+    # ficheros originales, solo cambia el proceso que los corre). Ver
+    # project_push_roto_carga_cpu_resuelto_05ago / project_consolidacion_
+    # observadores_fase0_05ago en memoria.
+    "observadores": f"cd {REPO} && nice -n 10 .venv/bin/python observadores_fase0.py >> logs/observadores_fase0.log 2>&1",
     # ballenas_fast (17-Jul, fusionado desde feat/ballenas-fast-btc15m):
     # ejecutor dedicado de baja latencia BALLENAS_TARDIAS#BTC#15min, DRY_RUN=True
     # (no toca dinero). Screen de proceso único, mismo patrón que pfinish.
-    "ballenas_fast": f"cd {REPO} && .venv/bin/python ballenas_executor_btc15m.py >> logs/ballenas_fast.log 2>&1",
+    "ballenas_fast": f"cd {REPO} && nice -n 10 .venv/bin/python ballenas_executor_btc15m.py >> logs/ballenas_fast.log 2>&1",
     # ballenas_5m (18-Jul): ejecutor de baja latencia BALLENAS_TARDIAS#{ETH,SOL,XRP}#5min,
     # DRY_RUN=True, proceso separado de ballenas_fast (BTC15m, live) para no
     # mezclar blast radius. Ver /root/.claude/plans/ethereal-dazzling-thacker.md
@@ -85,42 +95,67 @@ SCREEN_RESTART = {
     # público de Polymarket (RTDS) -- fuente de resolución oficial de los
     # mercados Up/Down, distinta de Binance/Kraken. Solo lectura, no toca
     # dinero. Mismo patrón de proceso único que pfinish.
-    "chainlink": f"cd {REPO} && .venv/bin/python fetch_chainlink_prices.py >> logs/chainlink.log 2>&1",
-    # favultsec (28-Jul): captura FAVORITO_CONFIRMADO en el instante decisivo
-    # (T-10s) de XRP/DOGE/BNB#5min -- ver idea_xrp_doge_bnb_5min_confirmacion_
-    # ultimo_segundo_28jul. Solo lectura, no toca dinero. Mismo patrón que pfinish.
-    "favultsec": f"cd {REPO} && .venv/bin/python favorito_ultimosegundo_5min.py >> logs/favorito_ultimosegundo.log 2>&1",
+    "chainlink": f"cd {REPO} && nice -n 10 .venv/bin/python fetch_chainlink_prices.py >> logs/chainlink.log 2>&1",
     # polyactivity (28-Jul): firehose de trades reales de Polymarket vía RTDS
     # (topic activity/trades, replica gratis lo que moondevonyt cobra en su
     # "Polymarket Whales API") -- ver idea_rtds_activity_trades_gratis_28jul.
     # Solo lectura, no toca dinero. Mismo patrón que chainlink/pfinish.
-    "polyactivity": f"cd {REPO} && .venv/bin/python fetch_polymarket_activity_ws.py >> logs/polymarket_activity.log 2>&1",
+    "polyactivity": f"cd {REPO} && nice -n 10 .venv/bin/python fetch_polymarket_activity_ws.py >> logs/polymarket_activity.log 2>&1",
     # liqs (28-Jul): liquidaciones reales de Binance Futures, feed público
     # gratis -- alimenta s_liquidaciones_15m/60m (backlog ítem B). Solo
     # lectura, no toca dinero. Mismo patrón que chainlink/polyactivity.
-    "liqs": f"cd {REPO} && .venv/bin/python fetch_binance_liquidations.py >> logs/binance_liquidations.log 2>&1",
+    # 30-Jul: sustituye a fetch_binance_liquidations.py -- Binance bloquea
+    # wss://fstream.binance.com para esta IP de datacenter (ver memoria
+    # idea_binance_liquidaciones_bloqueadas_ip_29jul), Bybit da la misma
+    # señal sin bloqueo, gratis, verificado en vivo.
+    "liqs": f"cd {REPO} && nice -n 10 .venv/bin/python fetch_bybit_liquidations.py >> logs/bybit_liquidations.log 2>&1",
     # libroambos (28-Jul): libro de AMBOS lados (YES+NO) para nuestro universo
     # 5/15/60min -- desbloquea Box Builder/Corridor Collector/Spread-Harvest
     # Maker (Stage 3/4). Importa live_trade.py de solo lectura, nunca lo
     # modifica ni ordena nada. Solo lectura, no toca dinero.
-    "libroambos": f"cd {REPO} && .venv/bin/python fetch_libro_ambos_lados.py >> logs/libro_ambos_lados.log 2>&1",
-    # puntoconf y ressniper (29-Jul: encontrados FALTANDO de este dict y de la
-    # lista de check_screens() al construir inventario_sistema.py -- petición
-    # explícita Javi de revisar TODOS los .py/loggers/observers cada sesión.
-    # Llevaban corriendo desde 23-Jul/28-Jul respectivamente sin que el
-    # watchdog los reiniciara si caían -- gap real de cobertura, no solo de
-    # visibilidad. Solo lectura, no tocan dinero.
-    "puntoconf": f"cd {REPO} && .venv/bin/python punto_confirmacion_logger.py >> logs/punto_confirmacion.log 2>&1",
-    "ressniper": f"cd {REPO} && .venv/bin/python resolution_sniper_observer.py >> logs/resolution_sniper_observer.log 2>&1",
+    "libroambos": f"cd {REPO} && nice -n 10 .venv/bin/python fetch_libro_ambos_lados.py >> logs/libro_ambos_lados.log 2>&1",
     # ballenas_15m (29-Jul): ejecutor de baja latencia BALLENAS_CONFIRMADAS_15M
     # #{ETH,SOL,XRP,DOGE}#15min#BUY_YES, DRY_RUN=True -- generaliza a 15min el
     # patron ya probado en ballenas_fast (BTC15m, live)/ballenas_5m (5min).
     # Registrado en SCREEN_RESTART/check_screens() desde su creacion (no
     # repetir el gap encontrado hoy mismo con ressniper/puntoconf).
-    "ballenas_15m": f"cd {REPO} && .venv/bin/python ballenas_executor_15min.py >> logs/ballenas_15m.log 2>&1",
-    # p22fase0 (29-Jul): P22 FASE 0, solo observación -- registrado desde su
-    # creación (mismo gap de ressniper/puntoconf, no repetirlo).
-    "p22fase0": f"cd {REPO} && .venv/bin/python p22_cola_posicion_fase0.py >> logs/p22_cola_posicion_fase0.log 2>&1",
+    "ballenas_15m": f"cd {REPO} && nice -n 10 .venv/bin/python ballenas_executor_15min.py >> logs/ballenas_15m.log 2>&1",
+    # favaltaconv (30-Jul): ejecutor de baja latencia FAVORITO_CONFIRMADO_
+    # 15MIN_ALTACONVICCION#{BTC,ETH}#15min#BUY_YES, DRY_RUN=True -- ataca la
+    # causa raiz diagnosticada de 0/64 trades reales (latencia del ciclo
+    # normal, ver docstring del propio script). Registrado desde su creacion.
+    "favaltaconv": f"cd {REPO} && .venv/bin/python favorito_altaconviccion_executor_15min.py >> logs/favorito_altaconviccion_15min.log 2>&1",
+    # fav15mexec/fav60mexec (04-Ago): ejecutores DRY_RUN de baja latencia para
+    # las 4 tuplas FAVORITO_CONFIRMADO#BUY_YES pausadas 28-Jul por payout
+    # inverso -- prueba si la selección adversa por latencia (barrido 03-Ago)
+    # explica parte del problema. Ninguna de las 4 está en pares_permitidos_
+    # live -- puede_operar_live() bloquea siempre, doble protección sobre
+    # DRY_RUN. Registrados desde su creación (mismo gap de ressniper/
+    # puntoconf, no repetirlo).
+    "fav15mexec": f"cd {REPO} && nice -n 10 .venv/bin/python favorito_confirmado_15min_executor.py >> logs/favorito_confirmado_15min_executor.log 2>&1",
+    "fav60mexec": f"cd {REPO} && nice -n 10 .venv/bin/python favorito_confirmado_60min_executor.py >> logs/favorito_confirmado_60min_executor.log 2>&1",
+    # favbtc60mno (30-Jul): ejecutor de baja latencia FAVORITO_CONFIRMADO#BTC
+    # #60min#BUY_NO, DRY_RUN=True -- misma causa raiz que favaltaconv (senal
+    # caducada, 9/9 perdidas en el pipeline normal). Registrado desde su
+    # creacion (mismo gap de ressniper/puntoconf, no repetirlo).
+    "favbtc60mno": f"cd {REPO} && .venv/bin/python favorito_confirmado_btc60min_buyno_executor.py >> logs/favorito_confirmado_btc60min_buyno.log 2>&1",
+    # gbmlate15m (04-Ago): ejecutor de baja latencia GBM_LATE_15M#{ETH,SOL}
+    # #15min, DRY_RUN=True -- ataca el gap de latencia diagnosticado 03-Ago
+    # (68.9%/56.8% de señales perdidas por veto_profundidad/senal_caducada,
+    # ver project_barrido_definitivo_latencia_17_combos_03ago). Registrado
+    # desde su creación (mismo gap de ressniper/puntoconf, no repetirlo).
+    "gbmlate15m": f"cd {REPO} && nice -n 10 .venv/bin/python gbm_late_15min_executor.py >> logs/gbm_late_15min_executor.log 2>&1",
+    "updowngbmtardio": f"cd {REPO} && nice -n 10 .venv/bin/python updown_gbm_15min_tardio_btc_executor.py >> logs/updown_gbm_15min_tardio_btc_executor.log 2>&1",
+    # walletmirror (30-Jul): P24 Wallet Mirror en tiempo real -- detecta
+    # trades de wallets validadas via WS RTDS y mide fill-ability real al
+    # instante (lag~1s, vs 10min del cron wallet_mirror_tracker.py). Solo
+    # observacion, NO ejecuta ordenes. Registrado desde su creacion.
+    "walletmirror": f"cd {REPO} && nice -n 10 .venv/bin/python wallet_mirror_sniper.py >> logs/wallet_mirror_sniper.log 2>&1",
+    # wmexec (03-Ago, P24 FASE 1): mismo detector en tiempo real que walletmirror
+    # pero con tramo de decisión añadido (segunda consulta de libro, milisegundos
+    # después) -- DRY_RUN puro, nunca envía ninguna orden real (ver docstring del
+    # script). Screen propia para que un bug aquí no pueda tumbar walletmirror.
+    "wmexec": f"cd {REPO} && nice -n 10 .venv/bin/python wallet_mirror_executor_dryrun.py >> logs/wallet_mirror_executor.log 2>&1",
 }
 
 # Cuando stdout está redirigido (screen >> watchdog.log), print() ya escribe al fichero
@@ -181,7 +216,7 @@ def check_screens() -> dict[str, bool]:
         r = subprocess.run(["screen", "-ls"], capture_output=True, text=True, timeout=5)
         output = r.stdout + r.stderr
         return {name: (f".{name}\t" in output or f".{name} " in output)
-                for name in ["fast", "slow", "control", "dash", "pfinish", "ballenas_fast", "ballenas_5m", "chainlink", "favultsec", "polyactivity", "liqs", "libroambos", "puntoconf", "ressniper", "ballenas_15m", "p22fase0"]}
+                for name in ["fast", "slow", "control", "dash", "observadores", "ballenas_fast", "ballenas_5m", "chainlink", "polyactivity", "liqs", "libroambos", "ballenas_15m", "favaltaconv", "favbtc60mno", "walletmirror", "wmexec", "gbmlate15m", "updowngbmtardio", "fav15mexec", "fav60mexec"]}
     except Exception:
         return {}
 

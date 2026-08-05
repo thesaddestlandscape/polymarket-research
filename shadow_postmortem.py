@@ -437,13 +437,61 @@ def _negloglik(a, b, zs, ys):
         s += -(y * math.log(p) + (1 - y) * math.log(1 - p))
     return s / len(zs)
 
+
+def _norm_cdf_np(x: np.ndarray) -> np.ndarray:
+    """04-Ago: versión vectorizada de _norm_cdf, MISMA fórmula (Zelen&Severo/
+    Abramowitz-Stegun) término a término -- no sustituida por erf de scipy
+    para no introducir ninguna diferencia numérica, por pequeña que sea,
+    frente a los (a,b) ya ajustados/persistidos en producción."""
+    x = np.asarray(x, dtype=np.float64)
+    out = np.empty_like(x)
+    lo = x < -8.0
+    hi = x > 8.0
+    mid = ~(lo | hi)
+    out[lo] = 0.0
+    out[hi] = 1.0
+    xm = x[mid]
+    sign = np.where(xm >= 0, 1.0, -1.0)
+    xa = np.abs(xm)
+    t = 1.0 / (1.0 + 0.2316419 * xa)
+    d = 0.3989422804014327 * np.exp(-0.5 * xa * xa)
+    p = d * t * (0.3193815302
+        + t * (-0.3565637813
+        + t * (1.7814779372
+        + t * (-1.8212559978
+        + t * 1.3302744929))))
+    out[mid] = np.where(sign > 0, 1.0 - p, p)
+    return out
+
+
 def _fit_ab(zs, ys, a_grid=CALIB_A_GRID, b_grid=CALIB_B_GRID):
+    """04-Ago: vectorizado con numpy -- MISMA búsqueda de grid exhaustiva
+    (a,b) que minimiza negloglik, mismo resultado (dentro de precisión de
+    coma flotante), pero sin el bucle Python anidado a×b×n que se volvió
+    O(n²)-ish dentro del walk-forward de _fit_calibracion_prob() a medida
+    que crecía el histórico (results.csv ya con estrategias de n>16.000) --
+    diagnosticado 04-Ago con py-spy: shadow_postmortem.py atascado >10min
+    en _negloglik, bloqueando todo el pipeline (resolve/nuevas señales)
+    detrás. Verificado antes de desplegar: mismo (a,b) que la versión
+    Python en un dataset de prueba (ver memoria del hallazgo). Empates
+    exactos en negloglik (extremadamente raros en la práctica, función
+    continua sobre floats) pueden resolverse a un (a,b) ligeramente
+    distinto en el grid por el orden de iteración -- no afecta al
+    resultado real, solo al desempate teórico."""
+    if not zs:
+        return a_grid[0], b_grid[0]
+    zs_arr = np.asarray(zs, dtype=np.float64)
+    ys_arr = np.asarray(ys, dtype=np.float64)
+    a_arr = np.asarray(a_grid, dtype=np.float64)
     best = None
-    for a in a_grid:
-        for b in b_grid:
-            nl = _negloglik(a, b, zs, ys)
-            if best is None or nl < best[2]:
-                best = (a, b, nl)
+    for b in b_grid:
+        x = a_arr[:, None] + b * zs_arr[None, :]
+        p = np.clip(_norm_cdf_np(x), 1e-6, 1 - 1e-6)
+        nl = -(ys_arr[None, :] * np.log(p) + (1 - ys_arr[None, :]) * np.log(1 - p))
+        nl_mean = nl.mean(axis=1)
+        idx = int(np.argmin(nl_mean))
+        if best is None or nl_mean[idx] < best[2]:
+            best = (float(a_arr[idx]), float(b), float(nl_mean[idx]))
     return best[0], best[1]
 
 def _fit_calibracion_prob(triples):
@@ -508,12 +556,20 @@ def _fit_calibracion_prob(triples):
     if mu <= 0:
         return None
 
-    rng = random.Random(42)
-    boots = sorted(
-        sum(diffs[rng.randrange(n_oos)] for _ in range(n_oos)) / n_oos
-        for _ in range(1500)
-    )
-    ci_lo = boots[int(0.025 * len(boots))]
+    # 04-Ago: vectorizado con numpy -- mismo bootstrap (1500 remuestreos con
+    # reemplazo de tamaño n_oos, misma semilla fija 42 para reproducibilidad
+    # dentro de esta llamada), pero el bucle Python puro (1500 × n_oos
+    # llamadas a randrange) era el segundo cuello de botella real detrás
+    # de _fit_ab -- para n_oos grande (estrategias con >10k resoluciones)
+    # esto por sí solo tardaba varios minutos. La semilla es de numpy, no
+    # la misma secuencia exacta que random.Random(42) -- el resultado
+    # estadístico (mismo procedimiento, mismos datos) es equivalente, solo
+    # cambia el generador; no afecta a la interpretación de ci_lo<=0."""
+    diffs_arr = np.asarray(diffs, dtype=np.float64)
+    rng_np = np.random.default_rng(42)
+    idx = rng_np.integers(0, n_oos, size=(1500, n_oos))
+    boots = np.sort(diffs_arr[idx].mean(axis=1))
+    ci_lo = float(boots[int(0.025 * len(boots))])
     if ci_lo <= 0:
         return None  # condición 1: no significativo out-of-sample todavía
 
@@ -535,6 +591,23 @@ def _fit_calibracion_prob(triples):
     }
 
 
+CALIB_POR_ACTIVO_ESTRATEGIAS = {"FAVORITO_CONFIRMADO"}
+# 30-Jul (Javi, tras confirmar que la recalibración Platt agregada de
+# FAVORITO_CONFIRMADO -- b=0.8 -- "pasaba" el rigor walk-forward+bootstrap
+# SOLO en el pool de las 3 monedas, NO en NINGUNA individualmente pese a
+# 2000+ resoluciones cada una -- mismo patrón de falso positivo por
+# agregado ya cazado en Kelly-precio-gate 29-Jul): allowlist de estrategias
+# que además ajustan su propia calibración a nivel de ACTIVO (no
+# activo+marco -- fragmenta n de sobra, ver memoria idea_calibracion_
+# platt_desagregada_por_activo_30jul). Restringido a esta lista (no todas
+# las ~34 estrategias) por rendimiento: probado sin restricción, el fit
+# extra para las 42 combinaciones (estrategia,activo) con n>=200 en todo
+# el sistema tardó >100s -- esto corre DENTRO del fast loop cada ~20-25s,
+# habría bloqueado el trading en vivo. Ampliar la lista exige repetir la
+# misma verificación (agregado vs por moneda con datos reales) antes de
+# añadir una estrategia, no es una decisión genérica.
+
+
 def calcular_params(resultados: list) -> dict:
     por_estrategia = {}
     calib_pairs = {}
@@ -553,6 +626,10 @@ def calcular_params(resultados: list) -> dict:
                 f"{s}#{a_part}",    # UPDOWN_GBM#BTC         (nivel asset)
                 f"{s}#{d_part}",    # UPDOWN_GBM#15min       (nivel duración)
             ]
+            if s in CALIB_POR_ACTIVO_ESTRATEGIAS:
+                calib_pairs.setdefault(f"{s}#{a_part}", []).append(
+                    (r.get("prediction_timestamp", ""), r.get("prob_yes_modelo"), r.get("outcome_real"))
+                )
         elif subtype:
             claves.append(f"{s}#{subtype}")   # WEEKLY_PRICE#BTC
         decision = r.get("decision", "")
@@ -644,9 +721,13 @@ def calcular_params(resultados: list) -> dict:
             entry[f"apuesta_kelly_{dec_name}"]   = d_ap
             entry[f"activa_{dec_name}"]          = d_activa
 
-        # Recalibración Platt: solo a nivel agregado de estrategia (sin '#'),
-        # que es el único nivel validado con walk-forward (ver docstring arriba)
-        if "#" not in s:
+        # Recalibración Platt: nivel agregado de estrategia (sin '#') Y,
+        # para las estrategias en CALIB_POR_ACTIVO_ESTRATEGIAS, también a
+        # nivel de activo (BASE#ACTIVO) -- ver constante arriba.
+        es_clave_activo = (s.count("#") == 1
+                            and not re.match(r"^\d+min$", s.rsplit("#", 1)[1])
+                            and s.split("#", 1)[0] in CALIB_POR_ACTIVO_ESTRATEGIAS)
+        if "#" not in s or es_clave_activo:
             calib = _fit_calibracion_prob(calib_pairs.get(s, []))
             if calib:
                 entry["calibracion_prob"] = calib
@@ -1001,6 +1082,40 @@ _BASE_LEADLAG = [
     ("libro_liquidez", "lt", "gt"),
 ]
 
+# Features de BALLENAS_CONFIRMADAS_15M (31-Jul, gap detectado por
+# vigia_cobertura_feature_rules.py -- 1483 predicciones desde 27-Jul sin
+# NINGÚN aprendizaje causal. Propias de s_ballenas_confirmadas_15m:
+# concentración/volumen de ballenas en la banda confirmada, no un
+# estadístico GBM ni el momentum-consenso de FAVORITO_CONFIRMADO).
+_BASE_BALLENAS_CONFIRMADAS = [
+    ("py_entrada",                 "gt", "lt"),
+    ("py_entrada",                 "lt", "gt"),
+    ("concentracion_lado",         "gt", "lt"),
+    ("n_ballena_banda",            "lt", "gt"),
+    ("n_total_lado",               "lt", "gt"),
+    ("banda_hit_calibrado",        "lt", "gt"),
+    ("banda_z",                    "lt", "gt"),
+    ("ballenas_wallet_edge_medio", "lt", "gt"),
+    ("hora_utc",                   "lt", "gt"),
+    ("hora_utc",                   "gt", "lt"),
+    ("libro_spread",               "gt", "lt"),
+    ("libro_liquidez",             "lt", "gt"),
+]
+
+# Features de BALLENAS_TARDIAS (31-Jul, mismo gap -- toca dinero real HOY
+# en BTC#15min y ETH#5min). Los ejecutores de baja latencia
+# (ballenas_executor_btc15m.py/ballenas_executor_5min.py) escriben directo
+# a predictions.csv fuera del loop de shadow_predict.py, con un set de
+# features propio y más reducido (sin libro_spread/libro_liquidez -- esos
+# ejecutores no llaman a _libro_calidad).
+_BASE_BALLENAS_TARDIAS = [
+    ("concentracion_yes",       "gt", "lt"),
+    ("concentracion_yes",       "lt", "gt"),
+    ("n_ballenas",              "lt", "gt"),
+    ("restante_s_al_confirmar", "gt", "lt"),
+    ("restante_s_al_confirmar", "lt", "gt"),
+]
+
 FEATURE_RULES = {
     # 5min: desactivadas manualmente, pero seguimos aprendiendo por si acaso se reactivan
     "UPDOWN_GBM#5min":     _BASE_GBM,
@@ -1135,6 +1250,19 @@ FEATURE_RULES = {
     "PRICE_TARGET_GBM#ETH#reach":    _BASE_PRICE_TARGET,
     "PRICE_TARGET_GBM#SOL#reach":    _BASE_PRICE_TARGET,
 
+    # PRICE_TARGET_GBM_FADE (03-Ago): espejo invertido shadow-only de
+    # PRICE_TARGET_GBM (idea_price_target_gbm_fade_construido_03ago) --
+    # reusa s_price_target_gbm completo, mismas features, solo invierte
+    # prob_yes. Gap detectado por vigia_cobertura_feature_rules.py el
+    # mismo día en que se construyó (n aún bajo pero ya cruzó el umbral).
+    "PRICE_TARGET_GBM_FADE":            _BASE_PRICE_TARGET,
+    "PRICE_TARGET_GBM_FADE#BTC#atexpiry": _BASE_PRICE_TARGET,
+    "PRICE_TARGET_GBM_FADE#ETH#atexpiry": _BASE_PRICE_TARGET,
+    "PRICE_TARGET_GBM_FADE#SOL#atexpiry": _BASE_PRICE_TARGET,
+    "PRICE_TARGET_GBM_FADE#BTC#reach":    _BASE_PRICE_TARGET,
+    "PRICE_TARGET_GBM_FADE#ETH#reach":    _BASE_PRICE_TARGET,
+    "PRICE_TARGET_GBM_FADE#SOL#reach":    _BASE_PRICE_TARGET,
+
     # LEADLAG_BTC_XRP_15M (12-Jul): 223 predicciones en 3 días, single-asset
     # por diseño (solo XRP) -- no hay "por activo" que desagregar, pero
     # tampoco tenía NINGÚN aprendizaje causal (ni siquiera agregado).
@@ -1158,6 +1286,85 @@ FEATURE_RULES = {
     "ORDER_FLOW_5M#XRP#5min": _BASE_ORDER_FLOW,
     "ORDER_FLOW_5M#DOGE#5min": _BASE_ORDER_FLOW,
     "ORDER_FLOW_5M#BNB#5min": _BASE_ORDER_FLOW,
+
+    # 31-Jul: 7 gaps detectados por vigia_cobertura_feature_rules.py (n>=50
+    # en 3 días, cero aprendizaje causal desde su creación) -- incluye 2
+    # familias con dinero real hoy (FAVORITO_CONFIRMADO_15MIN_ALTACONVICCION,
+    # BALLENAS_TARDIAS). Ver memoria idea_gate_calibracion_log_loss_31jul.
+
+    # UPDOWN_GBM_15M_TARDIO (wrapper de s_updown_gbm, mismas features GBM).
+    "UPDOWN_GBM_15M_TARDIO":         _BASE_GBM,
+    "UPDOWN_GBM_15M_TARDIO#BTC#15min": _BASE_GBM,
+    "UPDOWN_GBM_15M_TARDIO#ETH#15min": _BASE_GBM,
+    "UPDOWN_GBM_15M_TARDIO#SOL#15min": _BASE_GBM,
+    "UPDOWN_GBM_15M_TARDIO#XRP#15min": _BASE_GBM,
+
+    # GBM_LATE_5M (llama a _s_gbm_late, mismas features que el resto de la
+    # familia GBM_LATE_15M/_TARDIO/_ESPACIO_ATR). Activos: GBM_LATE_5M_PARES.
+    "GBM_LATE_5M":         _BASE_GBM,
+    "GBM_LATE_5M#BTC#5min": _BASE_GBM,
+    "GBM_LATE_5M#ETH#5min": _BASE_GBM,
+    "GBM_LATE_5M#SOL#5min": _BASE_GBM,
+    "GBM_LATE_5M#DOGE#5min": _BASE_GBM,
+
+    # FAVORITO_CONFIRMADO_*_ALTACONVICCION (wrappers de s_favorito_confirmado
+    # con strategy_name propio -- el lookup de calibración/FEATURE_RULES es
+    # por nombre exacto, NO heredan la cobertura de FAVORITO_CONFIRMADO base).
+    "FAVORITO_CONFIRMADO_15MIN_ALTACONVICCION":         _BASE_FAVORITO,
+    "FAVORITO_CONFIRMADO_15MIN_ALTACONVICCION#BTC#15min": _BASE_FAVORITO,
+    "FAVORITO_CONFIRMADO_15MIN_ALTACONVICCION#ETH#15min": _BASE_FAVORITO,
+    "FAVORITO_CONFIRMADO_15MIN_ALTACONVICCION#SOL#15min": _BASE_FAVORITO,
+    "FAVORITO_CONFIRMADO_15MIN_ALTACONVICCION#XRP#15min": _BASE_FAVORITO,
+    "FAVORITO_CONFIRMADO_15MIN_ALTACONVICCION#DOGE#15min": _BASE_FAVORITO,
+    "FAVORITO_CONFIRMADO_15MIN_ALTACONVICCION#BNB#15min": _BASE_FAVORITO,
+
+    "FAVORITO_CONFIRMADO_60MIN_ALTACONVICCION":         _BASE_FAVORITO,
+    "FAVORITO_CONFIRMADO_60MIN_ALTACONVICCION#BTC#60min": _BASE_FAVORITO,
+    "FAVORITO_CONFIRMADO_60MIN_ALTACONVICCION#ETH#60min": _BASE_FAVORITO,
+    "FAVORITO_CONFIRMADO_60MIN_ALTACONVICCION#SOL#60min": _BASE_FAVORITO,
+
+    "FAVORITO_CONFIRMADO_5MIN_ALTACONVICCION":         _BASE_FAVORITO,
+    "FAVORITO_CONFIRMADO_5MIN_ALTACONVICCION#BTC#5min": _BASE_FAVORITO,
+    "FAVORITO_CONFIRMADO_5MIN_ALTACONVICCION#ETH#5min": _BASE_FAVORITO,
+    "FAVORITO_CONFIRMADO_5MIN_ALTACONVICCION#SOL#5min": _BASE_FAVORITO,
+    "FAVORITO_CONFIRMADO_5MIN_ALTACONVICCION#XRP#5min": _BASE_FAVORITO,
+    "FAVORITO_CONFIRMADO_5MIN_ALTACONVICCION#DOGE#5min": _BASE_FAVORITO,
+    "FAVORITO_CONFIRMADO_5MIN_ALTACONVICCION#BNB#5min": _BASE_FAVORITO,
+
+    # FAVORITO_CONFIRMADO_*_EXTREMO (cola py>=0.90 de FAVORITO_CONFIRMADO,
+    # ver s_favorito_confirmado_15min_extremo/_60min_extremo en
+    # shadow_predict.py) -- llaman a s_favorito_confirmado, mismas
+    # features que ALTACONVICCION -> _BASE_FAVORITO. Gap detectado por
+    # vigia_cobertura_feature_rules.py 03-Ago (n>=50/3d, 0 cobertura).
+    "FAVORITO_CONFIRMADO_15MIN_EXTREMO":         _BASE_FAVORITO,
+    "FAVORITO_CONFIRMADO_15MIN_EXTREMO#BTC#15min": _BASE_FAVORITO,
+    "FAVORITO_CONFIRMADO_15MIN_EXTREMO#ETH#15min": _BASE_FAVORITO,
+    "FAVORITO_CONFIRMADO_15MIN_EXTREMO#SOL#15min": _BASE_FAVORITO,
+    "FAVORITO_CONFIRMADO_15MIN_EXTREMO#XRP#15min": _BASE_FAVORITO,
+    "FAVORITO_CONFIRMADO_15MIN_EXTREMO#DOGE#15min": _BASE_FAVORITO,
+    "FAVORITO_CONFIRMADO_15MIN_EXTREMO#BNB#15min": _BASE_FAVORITO,
+
+    "FAVORITO_CONFIRMADO_60MIN_EXTREMO":         _BASE_FAVORITO,
+    "FAVORITO_CONFIRMADO_60MIN_EXTREMO#BTC#60min": _BASE_FAVORITO,
+    "FAVORITO_CONFIRMADO_60MIN_EXTREMO#ETH#60min": _BASE_FAVORITO,
+    "FAVORITO_CONFIRMADO_60MIN_EXTREMO#SOL#60min": _BASE_FAVORITO,
+
+    # BALLENAS_CONFIRMADAS_15M (s_ballenas_confirmadas_15m, shadow puro).
+    "BALLENAS_CONFIRMADAS_15M":         _BASE_BALLENAS_CONFIRMADAS,
+    "BALLENAS_CONFIRMADAS_15M#SOL#15min": _BASE_BALLENAS_CONFIRMADAS,
+    "BALLENAS_CONFIRMADAS_15M#ETH#15min": _BASE_BALLENAS_CONFIRMADAS,
+    "BALLENAS_CONFIRMADAS_15M#XRP#15min": _BASE_BALLENAS_CONFIRMADAS,
+    "BALLENAS_CONFIRMADAS_15M#DOGE#15min": _BASE_BALLENAS_CONFIRMADAS,
+
+    # BALLENAS_TARDIAS (ejecutores de baja latencia, dinero real en
+    # BTC#15min y ETH#5min desde 17/27-Jul -- el resto acumula shadow).
+    "BALLENAS_TARDIAS":          _BASE_BALLENAS_TARDIAS,
+    "BALLENAS_TARDIAS#BTC#15min": _BASE_BALLENAS_TARDIAS,
+    "BALLENAS_TARDIAS#ETH#5min":  _BASE_BALLENAS_TARDIAS,
+    "BALLENAS_TARDIAS#SOL#5min":  _BASE_BALLENAS_TARDIAS,
+    "BALLENAS_TARDIAS#XRP#5min":  _BASE_BALLENAS_TARDIAS,
+    "BALLENAS_TARDIAS#DOGE#5min": _BASE_BALLENAS_TARDIAS,
+    "BALLENAS_TARDIAS#BNB#5min":  _BASE_BALLENAS_TARDIAS,
 }
 
 IC_FILTRO_MIN   = -0.12   # IC para activar filtro (evitar)

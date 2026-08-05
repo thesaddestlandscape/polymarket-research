@@ -109,6 +109,107 @@
       "n_objetivo": 15,
       "accion": "si edge se mantiene positivo con n>=15, quitar 22 de ORDER_FLOW_BLACKLIST_HOURS (aprobar con Javi por tocar código de filtro horario)",
       "avisado": false
+    },
+    {
+      "id": "FAVCONF_ALTACONVICCION_BTC_PAYOUT_INVERSO",
+      "descripcion": "30-Jul: FAVORITO_CONFIRMADO_15MIN_ALTACONVICCION#BTC#15min#BUY_YES (live desde 29-Jul) muestra degradacion real en split-half (2a mitad n=16 hit=75.0% PnL=-3.74 vs 1a mitad n=15 hit=86.7% PnL=+1.52), gate log-growth ya NO pasa (EV/$=-0.034 g=-0.00467). kelly_precio_correccion extendido a FAVORITO_CONFIRMADO_FAMILIA (30-Jul) pero su zona de precio real (0.70-0.95) sigue sin bucket confirmado -- no hay proteccion de sizing activa hoy.",
+      "strategy": "FAVORITO_CONFIRMADO_15MIN_ALTACONVICCION",
+      "par": "BTC",
+      "decision": "BUY_YES",
+      "fecha_desde": "2026-07-28",
+      "n_objetivo": 50,
+      "accion": "Recalcular vigia_log_growth + split-half + revisar si kelly_precio_gate.json ya confirma un bucket en [0.70,0.95) para BTC#15min. Si degradacion persiste (EV/$ o g siguen negativos) o no hay bucket confirmado, proponer pausa a Javi (mover a candidatos_evaluacion_live) -- mismo patron que FAVORITO_CONFIRMADO#{SOL,ETH}#15min base pausadas 28-Jul.",
+      "avisado": true,
+      "avisado_en": "2026-07-30T13:57:02+00:00",
+      "resultado_al_avisar": {
+        "n": 51,
+        "hit": 0.7843137254901961,
+        "ic_bayes": 0.2735849056603774,
+        "pnl": -2.8032999999999997
+      }
+    },
+    {
+      "id": "FAVCONF_ALTACONVICCION_ETH_PAYOUT_INVERSO",
+      "descripcion": "30-Jul: FAVORITO_CONFIRMADO_15MIN_ALTACONVICCION#ETH#15min#BUY_YES (live desde 29-Jul) tambien degrada en split-half (2a mitad n=16 hit=75.0% PnL=-2.48 vs 1a mitad n=15 hit=93.3% PnL=+1.74), aunque el gate log-growth agregado (n=31) recupero a PASA (EV/$=+0.018 g=+0.00062, muy justo). kelly_precio_correccion extendido a FAVORITO_CONFIRMADO_FAMILIA (30-Jul) pero su zona de precio real (0.70-0.95) sigue sin bucket confirmado para ETH#15min -- sin proteccion de sizing activa hoy.",
+      "strategy": "FAVORITO_CONFIRMADO_15MIN_ALTACONVICCION",
+      "par": "ETH",
+      "decision": "BUY_YES",
+      "fecha_desde": "2026-07-28",
+      "n_objetivo": 50,
+      "accion": "Recalcular vigia_log_growth + split-half + revisar si kelly_precio_gate.json ya confirma un bucket en [0.70,0.95) para ETH#15min. Si el gate vuelve a caer en payout inverso o no hay bucket confirmado con n>=50, proponer pausa a Javi -- no confiar en la recuperacion a PASA de n=31 sin mas datos.",
+      "avisado": true,
+      "avisado_en": "2026-07-30T14:57:02+00:00",
+      "resultado_al_avisar": {
+        "n": 50,
+        "hit": 0.86,
+        "ic_bayes": 0.34615384615384615,
+        "pnl": 2.5781
+      }
+    },
+    {
+      "id": "BALLENAS_TARDIAS_BTC15M_PRECIO_BAJO_DEBIL",
+      "descripcion": "30-Jul: BALLENAS_TARDIAS#BTC#15min#BUY_YES (live desde 17-Jul) real (trades.csv) n=15 PnL=-2.46 hit=66.7% -- las 5 perdidas reales entraron TODAS en precio 0.70-0.74 (unica excepcion 0.84). gate_bucket_propio.json (shadow, results.csv) confirma que ese mismo tramo [0.65,0.70) es el mas debil (pnl_medio ~0/negativo) vs [0.75,0.90) consistentemente positivo (+0.08 a +0.15) -- coherente con la perdida real, no ruido aislado. Split-half real: primeras 7 operaciones +2.36 EUR, ultimas 8 operaciones -4.82 EUR. n insuficiente para gate riguroso propio (shuffle+split-half+BH-FDR no corrido sobre este bucket especifico). BALLENAS_TARDIAS_FAMILIA NO esta en familias_permitidas de kelly_precio_correccion (solo GBM_LATE_15M_FAMILIA y FAVORITO_CONFIRMADO_FAMILIA) -- sin proteccion de sizing por precio activa para esta tupla.",
+      "strategy": "BALLENAS_TARDIAS",
+      "par": "BTC",
+      "decision": "BUY_YES",
+      "fecha_desde": "2026-07-17",
+      "n_objetivo": 120,
+      "accion": "Con mas n en results.csv, correr gate riguroso completo (Wilson+shuffle+split-half+BH-FDR) especificamente sobre el bucket [0.65,0.75) de BALLENAS_TARDIAS#BTC#15min. Si confirma malo_confirmado, evaluar extender kelly_precio_correccion a BALLENAS_TARDIAS_FAMILIA (aprobacion Javi, mismo criterio que las otras 2 familias) en vez de pausar la tupla entera (el resto del rango de precio va bien).",
+      "avisado": true,
+      "avisado_en": "2026-07-31T13:57:02+00:00",
+      "resultado_al_avisar": {
+        "n": 121,
+        "hit": 0.7933884297520661,
+        "ic_bayes": 0.28861788617886175,
+        "pnl": -1.7303999999999993
+      }
+    },
+    {
+      "id": "BALLENAS_TARDIAS_ETH5M_GAP_SIN_GATE_PROPIO",
+      "descripcion": "30-Jul CORRECCION del mismo dia: el gap de arquitectura que describia esta entrada NO existe -- verificado en el codigo (ballenas_executor_5min.py::_registrar_prediccion, commit 4b3d304c2e58, 29-Jul 10:09 UTC) que YA escribe a predictions_YYYY-MM-DD.csv y por tanto SI llega a results.csv via shadow_resolve.py (confirmado: la unica confirmacion ETH#5min desde el fix, 29-Jul 14:16 UTC, aparece en results.csv con pnl_neto=0.164). El limitante real es frecuencia de senal (1 confirmacion en la ultima sesion), NO conectividad. gate_bucket_propio.py y kelly_precio_gate.py YA pueden ver esta tupla en cuanto acumule n suficiente -- nada que arreglar en el pipeline, solo dejar madurar n.",
+      "strategy": "BALLENAS_TARDIAS",
+      "par": "ETH",
+      "decision": "BUY_YES",
+      "fecha_desde": "2026-07-27",
+      "n_objetivo": 15,
+      "accion": "Ninguna -- solo dejar acumular n en results.csv (via el pipeline ya conectado) y revisar cada sesion como el resto de tuplas.",
+      "avisado": true,
+      "avisado_en": "2026-08-04T13:57:02+00:00",
+      "resultado_al_avisar": {
+        "n": 15,
+        "hit": 0.8666666666666667,
+        "ic_bayes": 0.32352941176470584,
+        "pnl": 5.6813
+      }
+    },
+    {
+      "id": "GBM_LATE_15M_SOL15M_ZONA_SUBPRECIO_PROPUESTA_FLOOR",
+      "descripcion": "30-Jul: GBM_LATE_15M#SOL#15min#BUY_YES entro con dinero real a py=0.07 la noche del 29-30-Jul (pnl=-1.12, edge_neto modelado=+0.50 -- arquetipo A clasico, edge teorico enorme sin fill-ability real). Historico COMPLETO de esta tupla con entry<0.15: 3/3 trades reales perdidos (03-Jul py=0.14, 08-Jul py=0.04, 29-Jul py=0.07), 0% hit. gate_bucket_propio.json confirma vecindario consistentemente malo: [0.20,0.25) ya es malo_confirmado (n=20, pnl_medio=-0.87, rigor completo); [0.10,0.15) sin_concluir pero muy negativo (n=8, pnl_medio=-1.41, justo por debajo del n_min=15); NO HAY NINGUN BUCKET por debajo de 0.10 en el JSON (cero cobertura observacional ahi). kelly_precio_gate.py calcula ratio_correccion=0.0 para [0.10,0.20) pero veredicto=sin_concluir -- el mecanismo de sizing NO actua ahi todavia (fail-open correcto, pero tambien sin proteccion). Consistente con el patron ya documentado del proyecto (arquetipo A, GBM_LATE con edge teorico y fill-ability ~0-36% en precio bajo, ver project_dos_patrones_edge_bandera_21jul).",
+      "strategy": "GBM_LATE_15M",
+      "par": "SOL",
+      "decision": "BUY_YES",
+      "fecha_desde": "2026-07-01",
+      "n_objetivo": 15,
+      "accion": "PROPUESTA pendiente de aprobacion EXPLICITA de Javi (toca shadow_predict.py/logica de entrada, no solo config -- requiere /code-review): anadir un piso de precio py>=0.20 (o 0.25, alineado con el bucket ya malo_confirmado) para GBM_LATE_15M#SOL#15min#BUY_YES especificamente -- NO tocar el resto de la familia/monedas sin evidencia propia (regla CLAUDE.md pt.17). Mientras no se apruebe: vigilar si [0.10,0.15) cruza n>=15 con vigia_gate_bucket_propio.py (cron 06:55 UTC) -- si confirma malo tambien, refuerza el caso.",
+      "avisado": true,
+      "avisado_en": "2026-07-30T06:57:02+00:00",
+      "resultado_al_avisar": {
+        "n": 1126,
+        "hit": 0.5861456483126111,
+        "ic_bayes": 0.08599290780141844,
+        "pnl": 354.5044
+      }
+    },
+    {
+      "id": "ALTACONVICCION_15MIN_NUNCA_EJECUTA_LATENCIA",
+      "descripcion": "30-Jul: FAVORITO_CONFIRMADO_15MIN_ALTACONVICCION#{BTC,ETH}#15min#BUY_YES (live desde 29-Jul) tiene 0 trades reales en 64 señales shadow generadas (32+32). Verificado que NO es bug de conectividad: whitelist matchea correctamente (pares_ok check pasa), la señal SI llega al camino de ejecucion real. Verificado que NO es falta de runway: restante_min mediana=7.2min (rango 3-12), de sobra. Verificado que la mayoria de las 64 señales SI caen dentro de alguna ventana horaria de trading (distribucion por hora UTC no concentrada en horas muertas). La causa que SI se confirmo con evidencia directa: de los ~10 intentos reales que llegaron al chequeo de latencia (unicos visibles en fast.log via 'Señal caducada'), TODOS murieron por latencia>=100s (SENAL_MAX_LATENCIA_SEG) -- ejemplo medido: primer intento a 125.25s ya caducada, comparado con un trade real EXITOSO de GBM_LATE_15M#ETH#15min (mismo pipeline, misma ts-al-inicio-de-ciclo) que se ejecuto con solo 40s de latencia en su primer intento. shadow_predict.py fija 'ts' UNA VEZ al inicio de main() (linea 4980) para TODAS las filas del ciclo -- un ciclo lento (documentado 100-130s, con picos de varios minutos observados en fast.log, ej. gap de 3min entre 23:25:33 y 23:28:30) deja las señales de ese ciclo ya cerca o por encima del techo de 100s desde que nacen. NO se toco SENAL_MAX_LATENCIA_SEG ni el mecanismo de caducidad -- es DELIBERADAMENTE protector (ver nota grande en CLAUDE.md 'NO arreglar el timestamp de predictions.csv', confirmado que tocarlo costo -96.46€ en su momento). Con solo n=10 intentos reales visibles, no se puede confirmar con rigor que esta tupla sea PEOR que el resto del sistema en este aspecto (podria ser mala suerte de muestra pequeña) -- pero 0/10 es sugestivo.",
+      "strategy": "FAVORITO_CONFIRMADO_15MIN_ALTACONVICCION",
+      "par": "BTC,ETH",
+      "decision": "BUY_YES",
+      "fecha_desde": "2026-07-29",
+      "n_objetivo": 25,
+      "accion": "Vigilar tasa de señales que sobreviven al chequeo de latencia (no solo trades ejecutados) segun crezca n. Si se confirma con mas n que esta tupla sufre latencia sistematicamente peor que el resto (ej. porque su condicion de disparo requiere features mas caras de calcular, o coincide con mercados evaluados tarde en el ciclo), la solucion correcta NO es aflojar SENAL_MAX_LATENCIA_SEG (protector, project-wide) sino construir un ejecutor de baja latencia dedicado para esta tupla, mismo patron que ballenas_executor_btc15m.py/ballenas_executor_5min.py -- infraestructura nueva, requiere aprobacion explicita de Javi antes de construir (mismo alcance que P22).",
+      "avisado": false
     }
   ]
 }

@@ -14,9 +14,14 @@ from data_quality import (
     SIGMA_H_MAX, DRIFT_MAX, ASSETS_GBM,
     validar_features_gbm, simbolo_bloqueado, generar_reporte, obtener_consensus_spot,
 )
-from smart_money_tracker import ACTIVOS as ACTIVOS_TICKERS, trades_de_mercado
+from smart_money_tracker import ACTIVOS as ACTIVOS_TICKERS
 from ballenas_banda_fina_gate import evaluar as _gate_banda_fina_ballenas
 from gate_bucket_propio import evaluar as _gate_bucket_propio
+# 30-Jul: allowlist de estrategias con calibración Platt por activo -- misma
+# fuente de verdad que la genera (shadow_postmortem.py), ver nota junto a su
+# definición y junto al uso más abajo (evita que CUALQUIER estrategia con
+# activo pierda su calibración agregada existente).
+from shadow_postmortem import CALIB_POR_ACTIVO_ESTRATEGIAS
 
 _pares_live_cache = {"mtime": None, "set": set()}
 
@@ -1671,11 +1676,23 @@ def _parse_updown_tipo(question):
     return None, None
 
 
-def s_updown_gbm(market, ctx):
+def s_updown_gbm(market, ctx, strategy_name: str = "UPDOWN_GBM"):
     """
     Black-Scholes digital para mercados Up/Down.
     Calcula P(S_T > S_ref | spot, sigma, T) y compara con price_yes del mercado.
     Cubre: daily ($42k liq), hourly (1h), slots de 5/15min.
+
+    strategy_name (30-Jul, petición explícita Javi: cablear la familia
+    UPDOWN_GBM completa a los mismos gates observacionales que ya tiene
+    FAVORITO_CONFIRMADO/GBM_LATE_15M -- gate_volumen_ballenas, banda_fina_
+    ballenas, gate_bucket_propio, NINGUNO de los tres estaba conectado
+    aquí). Los wrappers que envuelven esta función sin duplicar su lógica
+    (s_updown_gbm_eth_15min_hora7, _ibs_alto, _15min_cross_window_spread)
+    pasan su propio nombre para que gate_bucket_propio identifique la
+    tupla exacta -- mismo bug ya cazado y corregido en s_favorito_
+    confirmado el mismo día (hardcodeado a la estrategia madre dejaba el
+    veto inerte para los wrappers). Default "UPDOWN_GBM" preserva el
+    comportamiento de siempre para la entrada base en ESTRATEGIAS.
     """
     question = market.get("question", "")
     if "up or down" not in question.lower():
@@ -1974,6 +1991,31 @@ def s_updown_gbm(market, ctx):
             sigma_b = (sum(d**2 for d in diffs) / len(diffs)) ** 0.5
             features["sigma_b"] = round(sigma_b, 4)
     features.update(_libro_calidad(market))
+
+    # 30-Jul: mismos 3 gates observacionales que FAVORITO_CONFIRMADO/
+    # GBM_LATE_15M -- ninguno estaba cableado aquí pese a que UPDOWN_GBM es
+    # la familia con más volumen de todo el sistema (petición explícita
+    # Javi tras barrido de candidatos). Puramente aditivo hoy: UPDOWN_GBM
+    # no tiene entradas en GATE_VOLUMEN_VALIDADO (fail-open, sin llamada de
+    # red) y ninguna tupla de esta familia está en pares_permitidos_live
+    # (el veto de gate_bucket_propio nunca puede dispararse) -- cero cambio
+    # de comportamiento para dinero real, solo empieza a acumular datos.
+    direccion = "BUY_YES" if p_up >= py_mkt_le else "BUY_NO"
+    deja_pasar, n_total_lado = _gate_volumen_ballenas(strategy_name, activo, slot_type,
+                                                       direccion, market.get("condition_id"))
+    if not deja_pasar:
+        return None  # gate de volumen -- ver GATE_VOLUMEN_VALIDADO
+    if n_total_lado is not None:
+        features["n_total_lado"] = n_total_lado
+    gate_bf = _gate_banda_fina_ballenas(activo, slot_type, py_mkt_le, T_h * 60.0)
+    features["banda_fina_vetaria_fase1"] = gate_bf["vetaria_fase1"]
+    features["banda_fina_motivo"] = gate_bf["motivo"]
+    tupla_str = f"{strategy_name}#{activo}#{slot_type}#{direccion}"
+    gate_bp = _gate_bucket_propio(tupla_str, py_mkt_le)
+    features["gate_bucket_propio_veredicto"] = gate_bp["veredicto"]
+    if gate_bp["veredicto"] == "malo_confirmado" and tupla_str in _pares_live_hoy_set():
+        return None  # gate bucket propio -- ver gate_bucket_propio.json
+
     return {
         "prob_yes": max(0.05, min(0.95, p_up)),
         "razon":   razon,
@@ -2047,7 +2089,11 @@ def s_updown_gbm_15min_tardio(market, ctx):
     T_h = market.get("_horas")
     if T_h is None or T_h >= BUY_YES_15M_TH_MAX:
         return None
-    resultado = s_updown_gbm(market, ctx)
+    # 30-Jul: strategy_name propio -- ahora s_updown_gbm() computa también
+    # gate_bucket_propio internamente (antes ausente en esta variante, ver
+    # comentario en s_updown_gbm), identificado con el nombre correcto de
+    # ESTA tupla, no el de la madre.
+    resultado = s_updown_gbm(market, ctx, strategy_name="UPDOWN_GBM_15M_TARDIO")
     if resultado is None:
         return None
     activo = identificar_activo(question)
@@ -2120,7 +2166,7 @@ def s_updown_gbm_eth_15min_hora7(market, ctx):
         return None
     if datetime.now(timezone.utc).hour != 7:
         return None
-    return s_updown_gbm(market, ctx)
+    return s_updown_gbm(market, ctx, strategy_name="UPDOWN_GBM_ETH_15M_HORA7")
 
 
 # 28-Jul (decisión Javi, "acelerar candidatos sin bajar el rigor"):
@@ -2167,7 +2213,7 @@ def s_updown_gbm_ibs_alto(market, ctx):
     th = UPDOWN_GBM_IBS_ALTO_TH.get(activo)
     if th is None:
         return None
-    resultado = s_updown_gbm(market, ctx)
+    resultado = s_updown_gbm(market, ctx, strategy_name="UPDOWN_GBM_IBS_ALTO")
     if resultado is None:
         return None
     ibs = resultado.get("features", {}).get("ibs_15")
@@ -2223,7 +2269,7 @@ def s_updown_gbm_15min_cross_window_spread(market, ctx):
         return None
     if identificar_activo(question) not in CROSS_WINDOW_SPREAD_PARES:
         return None
-    resultado = s_updown_gbm(market, ctx)
+    resultado = s_updown_gbm(market, ctx, strategy_name="UPDOWN_GBM_15M_CROSS_WINDOW_SPREAD")
     if resultado is None:
         return None
     cws = resultado["features"].get("cross_window_spread")
@@ -2364,6 +2410,43 @@ def s_price_target_gbm(market, ctx):
         "subtype": subtype,
         "features": {"pct_vs_K": round(pct_vs_K, 4), "sigma_h": round(sigma_h, 6),
                      "T_h": round(T_h, 4), "log_ratio": round(log_ratio, 6)},
+    }
+
+
+def s_price_target_gbm_fade(market, ctx):
+    """
+    Espejo invertido de PRICE_TARGET_GBM (03-Ago, cementerio -- petición Javi
+    "sigue con el cementerio"). PRICE_TARGET_GBM lleva IC_bayes=-0.171 n=165
+    (hit=32.7%, todo el histórico del proyecto 24-Jun->03-Ago, split-half
+    consistente 37.8%/27.7%, ambas mitades mal, mezcla BUY_YES/BUY_NO y los
+    6 subtypes atexpiry/reach -- gate riguroso completo: Wilson90%=[27%,39%]
+    no cruza 50%, shuffle p=0.0000). Un IC negativo fuerte en un modelo
+    direccional es evidencia matemática a favor de invertirlo (mismo
+    razonamiento que motivó STREAK_FADE_5M<-STREAK_MOM_5M, 11-Jul).
+
+    Hipótesis de mecanismo (no un bug de signo -- fórmulas Black-Scholes
+    revisadas, correctas): PRICE_TARGET_GBM asume deriva CERO y solo
+    volatilidad simple; estos mercados de precio objetivo a horas/días son
+    más líquidos que los Up/Down rápidos de 5/15min, así que cuando el
+    modelo discrepa del precio de mercado aquí, el mercado suele tener
+    razón, no el modelo simplista.
+
+    Reusa el cálculo COMPLETO de s_price_target_gbm (parsing, spot, sigma,
+    Black-Scholes) sin duplicar nada -- solo invierte prob_yes. Mide su
+    propio n desde cero (misma razón que STREAK_FADE_5M: no es validación
+    forward independiente reusar las 165 filas que generaron el hallazgo).
+    NO está en pares_permitidos_live -- shadow puro, cero riesgo real.
+    """
+    base = s_price_target_gbm(market, ctx)
+    if base is None:
+        return None
+    p_yes_original = base["prob_yes"]
+    p_yes_fade = max(0.05, min(0.95, 1.0 - p_yes_original))
+    return {
+        "prob_yes": p_yes_fade,
+        "razon": f"price_target_gbm_fade (invierte {p_yes_original:.3f}) {base['razon']}",
+        "subtype": base["subtype"],
+        "features": {**base["features"], "prob_yes_original": round(p_yes_original, 4)},
     }
 
 
@@ -2799,6 +2882,18 @@ GBM_LATE_15M_SOL_HORAS_BUENAS_UTC = {16, 17, 19, 23}  # 29-Jul: reactivación
 # NEGATIVO específicamente en hora 13 (real -6.53€ de los -1.58€ totales).
 # Fill-ability real (ratio_vs_stake>=5x, colapsado por market_id) en estas
 # 4 horas: 41.3% (52/126) -- sana, comparable a las mejores tuplas live.
+GBM_LATE_15M_SOL_PY_MIN = 0.20  # 30-Jul, petición explícita Javi (aprobado
+# tras revisar evidencia): piso de precio SOLO para GBM_LATE_15M#SOL#15min
+# #BUY_YES (arquetipo A, edge modelado grande pero fill-ability real ~0% en
+# precio bajo). Histórico COMPLETO de esta tupla con entry<0.15: 3/3 trades
+# reales perdidos (03-Jul py=0.14 -1.11€, 08-Jul py=0.04 -1.12€, 29-Jul
+# py=0.07 -1.12€). gate_bucket_propio.json confirma el vecindario: [0.20,
+# 0.25) ya malo_confirmado (n=20, pnl_medio=-0.87, rigor completo Wilson+
+# shuffle+split-half+BH-FDR); [0.10,0.15) muy negativo pero n=8<15 (sin_
+# concluir, insuficiente); CERO cobertura observacional por debajo de 0.10.
+# No se generaliza a otras monedas/familia sin evidencia propia (CLAUDE.md
+# pt.17) -- solo esta tupla exacta. Ver memoria idea_gate_riguroso_sol15min_*
+# / gates_pendientes.json::GBM_LATE_15M_SOL15M_ZONA_SUBPRECIO_PROPUESTA_FLOOR.
 # Ver memoria idea_gate_riguroso_sol15min_excluir_hora13_29jul.
 GBM_LATE_15M_TARDIO_REST_MIN_HI = 10.5  # variante "entra más tarde" (reimplementada 09-Jul,
 # la primera vez se perdió sin commitear — ver idea_gbm_late_tardio_08jul). Bucketing 08-Jul
@@ -2808,6 +2903,29 @@ GBM_LATE_15M_TARDIO_REST_MIN_HI = 10.5  # variante "entra más tarde" (reimpleme
 GBM_LATE_60M_REST_MIN_LO = 5.0    # 60min: suelo más alto — libros finos al final
 GBM_LATE_60M_REST_MIN_HI = 20.0   # 60min: último tercio de la ventana (T_h<0.33)
 GBM_LATE_15M_PARES = {"BTC", "ETH", "SOL", "XRP", "DOGE", "BNB"}  # DOGE añadido 22-Jul; BNB añadido 23-Jul: mercados reales con liquidez confirmados (data/markets + API), cobertura shadow total, BNB no está en pares_permitidos_live → sin riesgo de ejecución real
+
+# Zonas de sigma_ewma_delta_pct CONFIRMADAS con gate riguroso (05-Ago, petición
+# explícita Javi tras racha real ETH/SOL#15min#BUY_YES: n=6 0% hit hoy, n=13
+# 23.1% hit 7d — mucho peor que el 44% de 30d). Gate: n>=40, bootstrap CI90%
+# del PnL NO cruza cero, p_shuffle<0.05 (test de permutación bucket-vs-resto),
+# split-half consistente en ambas mitades cronológicas (analisis ad-hoc sobre
+# results.csv, ver conversación 05-Ago). Corrige/reemplaza la nota del 12-Jul
+# de arriba (n=66-86, "XRP signo opuesto/SOL sin efecto") — con 4-13x más
+# datos el patrón es CONSISTENTE en las 6 monedas: el edge de BUY_YES vive
+# SOLO cuando la volatilidad acelera (sigma_ewma_delta_pct alto), nunca
+# confirmado cuando decelera. Solo #15min BUY_YES — sin evidencia propia en
+# 60min/5min ni en BUY_NO, NO extender sin repetir el gate ahí.
+# ETH: NINGUNA zona pasó las 4 condiciones a la vez (mejor candidata [12,+)
+# n=115 CI90%=[+0.164,+0.553] no cruza cero, pero p_shuffle=0.16 no
+# significativo) -> vetada ENTERA hasta que haya zona confirmada con más n.
+GBM_LATE_15M_SIGMA_EWMA_ZONAS_BUENAS_BUY_YES = {
+    "BTC": [(12.0, None)],
+    "ETH": [],
+    "SOL": [(6.0, 9.0), (12.0, None)],
+    "XRP": [(9.0, None)],
+    "DOGE": [(6.0, 9.0), (12.0, None)],
+    "BNB": [(6.0, 9.0)],
+}
 # 5min (14-Jul, sesión siguiente): rest_lo/rest_hi calibrados al timing real
 # de wallet-timing analysis (analisis_timing_wallets_por_activo.py) — restante
 # mediana 2.9-3.3min, p25 1.8-2.0min, p75 4.3-4.4min en BTC/ETH/SOL (las 3
@@ -2870,9 +2988,13 @@ def _cargar_ballenas_timing_state():
 
 # LIQUIDACIONES_BINANCE_STATE (28-Jul, backlog ítem B -- idea_moondev_10_
 # hallazgos_priorizados_28jul): estado agregado escrito por
-# fetch_binance_liquidations.py (screen liqs, feed público gratis de
-# Binance Futures). Mismo patrón de caché por mtime que ballenas_timing_state.
-LIQUIDACIONES_BINANCE_STATE = Path("data/shadow/liquidaciones_binance_state.json")
+# fetch_bybit_liquidations.py (screen liqs, feed público gratis de Bybit
+# Futures). 30-Jul: sustituye a fetch_binance_liquidations.py -- Binance
+# bloquea wss://fstream.binance.com específicamente para esta IP de
+# datacenter (ver memoria idea_binance_liquidaciones_bloqueadas_ip_29jul),
+# Bybit da el mismo tipo de señal (2º/3er mercado de futuros por volumen)
+# sin bloqueo y gratis. Mismo patrón de caché por mtime que ballenas_timing_state.
+LIQUIDACIONES_BINANCE_STATE = Path("data/shadow/liquidaciones_bybit_state.json")
 _liquidaciones_cache = {"mtime": None, "data": {}}
 
 
@@ -3106,6 +3228,9 @@ def s_gbm_late_15min(market, ctx):
     if activo == "SOL" and direccion == "BUY_YES" \
             and datetime.now(timezone.utc).hour not in GBM_LATE_15M_SOL_HORAS_BUENAS_UTC:
         return None  # 29-Jul: reactivación restringida por hora -- ver constante arriba
+    if activo == "SOL" and direccion == "BUY_YES" \
+            and py_edge is not None and py_edge < GBM_LATE_15M_SOL_PY_MIN:
+        return None  # 30-Jul: piso de precio -- ver constante arriba (3/3 reales perdidos <0.15)
     deja_pasar, n_total_lado = _gate_volumen_ballenas("GBM_LATE_15M", activo, "15min",
                                                        direccion, market.get("condition_id"))
     if not deja_pasar:
@@ -3142,6 +3267,37 @@ def s_gbm_late_60min(market, ctx):
     return _s_gbm_late(market, ctx, ventana_min=60,
                        rest_lo=GBM_LATE_60M_REST_MIN_LO,
                        rest_hi=GBM_LATE_60M_REST_MIN_HI)
+
+
+def s_gbm_late_60min_fade(market, ctx):
+    """
+    Espejo invertido de GBM_LATE_60M (03-Ago, cementerio -- petición Javi
+    "sigue con el cementerio"). GBM_LATE_60M lleva ic_bayes=-0.0955, n=354,
+    hit=40.4% -- gate riguroso completo sobre el histórico real (03-Jul a
+    02-Ago, activa=True, sigue generando predicciones hoy): Wilson90%=
+    [36.2%,44.7%] no cruza 50%, shuffle p=0.00046, split-half consistente
+    en dirección (36.2%/44.7%, ambas mitades por debajo de 50%), mezcla
+    equilibrada de BUY_YES(198)/BUY_NO(156) y las 3 monedas BTC/ETH/SOL#60min
+    (110-128 cada una). Mismo razonamiento que STREAK_FADE_5M/PRICE_TARGET_
+    GBM_FADE: un IC negativo fuerte y estable en un modelo direccional es
+    evidencia matemática a favor de invertirlo.
+
+    Reusa el cálculo COMPLETO de s_gbm_late_60min sin duplicar nada -- solo
+    invierte prob_yes. Mide su propio n desde cero (no es validación
+    forward independiente reusar el histórico que generó el hallazgo).
+    NO está en pares_permitidos_live -- shadow puro, cero riesgo real.
+    """
+    base = s_gbm_late_60min(market, ctx)
+    if base is None:
+        return None
+    p_yes_original = base["prob_yes"]
+    p_yes_fade = max(0.05, min(0.95, 1.0 - p_yes_original))
+    return {
+        "prob_yes": p_yes_fade,
+        "razon": f"gbm_late_60m_fade (invierte {p_yes_original:.3f}) {base['razon']}",
+        "subtype": base["subtype"],
+        "features": {**base.get("features", {}), "prob_yes_original": round(p_yes_original, 4)},
+    }
 
 
 def s_gbm_late_15min_tardio(market, ctx):
@@ -3403,33 +3559,88 @@ GATE_VOLUMEN_VALIDADO = {
     ("UPDOWN_GBM_15M_TARDIO", "BTC", "15min", "BUY_YES"): 35, # n=173 alto=115 hit=95.7% +0.838€ GATE OK
 }
 
+# 31-Jul: GBM_LATE_15M#SOL#15min#BUY_YES es la otra mitad de la familia GBM
+# live (junto a ETH#15min, ya validada arriba) y hoy está COMPLETAMENTE a
+# ciegas de este gate -- no está en GATE_VOLUMEN_VALIDADO, así que
+# _gate_volumen_ballenas ni siquiera hace la consulta (fail-open temprano,
+# línea "if umbral is None... return True, None"), y n_total_lado nunca se
+# ha logueado para este combo ni una vez. Sin ese histórico no se puede
+# derivar un umbral con el mismo rigor que el resto de la tabla (n=173-727
+# arriba). Se añade aquí como "solo observar" -- fuerza la consulta y el
+# logueo de n_total_lado en cada señal real, SIN vetar nada todavía
+# (deja_pasar siempre True) -- mismo patrón que otras piezas del proyecto
+# (ej. UPDOWN_GBM cableado a gates observacionales el 30-Jul). Revisar en
+# 1-2 semanas si hay n suficiente para calcular un umbral real.
+GATE_VOLUMEN_OBSERVAR = {
+    ("GBM_LATE_15M", "SOL", "15min", "BUY_YES"),
+}
+
+
+# 04-Ago: import DIFERIDO hasta aquí a propósito (mismo motivo que en
+# fetch_polymarket_activity_ws.py) -- ballenas_firehose_cache.py hace
+# `from fetch_polymarket_activity_ws import WS_URL, _parse_updown`, y
+# fetch_polymarket_activity_ws.py a su vez hace `from shadow_predict
+# import _parse_updown_tipo, identificar_activo` -- import circular real
+# si se pusiera junto al resto de imports arriba de este fichero, ANTES de
+# que _parse_updown_tipo/identificar_activo existan todavía en este
+# módulo a medio cargar. Aquí ambas ya están definidas (líneas 275/1647),
+# así que el círculo se resuelve sin problema.
+import ballenas_firehose_cache as _fc
+
 
 def _gate_volumen_ballenas(strategy: str, activo: str, marco_str: str, direccion: str,
                            condition_id: str | None) -> tuple[bool, int | None]:
     """(deja_pasar, n_total_lado). deja_pasar=True = sin gate validado para
     este combo, o volumen suficiente. False = vetar (combo validado Y
     volumen bajo). n_total_lado=None si no se llegó a consultar (combo no
-    validado o sin condition_id) -- el llamador debe loguearlo cuando no
-    sea None, para poder auditar/retunear el umbral 35 con datos reales
-    (/code-review 27-Jul: antes no se guardaba el conteo real, solo la
-    decisión binaria). Fail-open ante cualquier fallo (sin condition_id,
+    validado/observado o sin condition_id) -- el llamador debe loguearlo
+    cuando no sea None, para poder auditar/retunear el umbral 35 con datos
+    reales (/code-review 27-Jul: antes no se guardaba el conteo real, solo
+    la decisión binaria). Fail-open ante cualquier fallo (sin condition_id,
     error de red, combo no validado) -- este gate solo puede REDUCIR una
     señal ya aprobada por el resto de la lógica de la estrategia, nunca
-    inventar una nueva."""
-    umbral = GATE_VOLUMEN_VALIDADO.get((strategy, activo, marco_str, direccion))
-    if umbral is None or not condition_id:
+    inventar una nueva. Los combos en GATE_VOLUMEN_OBSERVAR fuerzan la
+    consulta para acumular n_total_lado pero NUNCA vetan (deja_pasar=True
+    siempre) -- ver comentario junto a la constante."""
+    clave = (strategy, activo, marco_str, direccion)
+    umbral = GATE_VOLUMEN_VALIDADO.get(clave)
+    solo_observar = umbral is None and clave in GATE_VOLUMEN_OBSERVAR
+    if (umbral is None and not solo_observar) or not condition_id:
         return True, None
-    try:
-        # timeout corto (3s, no los 20s por defecto de _get): esto corre
-        # en el momento de CONFIRMAR una señal dentro del fast loop
-        # (~20s/ciclo) -- /code-review 27-Jul, un solo request lento no
-        # puede permitirse bloquear el ciclo entero. Fail-open si se agota.
-        trades = trades_de_mercado(condition_id, timeout=3)
-    except Exception:
+    # 04-Ago: fuente cambiada de smart_money_tracker.trades_de_mercado()
+    # (data-api.polymarket.com/trades -- lag de indexación de minutos/
+    # horas + tope duro de 250, diagnosticado y arreglado esta noche en
+    # TODOS los ejecutores de baja latencia + veto_ballenas de live_trade.py)
+    # a ballenas_firehose_cache -- este era el último consumidor pendiente
+    # del inventario (feedback_verificar_api_trades_correcta_no_rota_04ago),
+    # y el de mayor radio de impacto: corre en el ciclo LENTO para las 3
+    # familias con tuplas live (FAVORITO_CONFIRMADO, GBM_LATE_15M,
+    # UPDOWN_GBM_15M_TARDIO).
+    #
+    # ⚠️ leer_snapshot_reciente(), NO trades_de_mercado_firehose(): a
+    # diferencia de los ejecutores (procesos PERSISTENTES que mantienen su
+    # propia conexión websocket vía _fc.iniciar()), shadow_predict.py es
+    # un proceso EFÍMERO -- run_fast.sh lo invoca fresco cada ~20s, igual
+    # que live_trade.py. Usar trades_de_mercado_firehose()/esta_sano() aquí
+    # habría sido el mismo error que ese patrón está pensado para evitar:
+    # esta_sano() siempre daría False (nunca se llamó iniciar() en este
+    # proceso, y aunque se llamara, ~20s no alcanza para conectar+recibir
+    # el primer mensaje), dejando el gate permanentemente inerte sin que
+    # nadie lo notara -- gracias al code-review antes de desplegar, no en
+    # producción. leer_snapshot_reciente() lee el snapshot JSON que
+    # `polyactivity` (proceso persistente aparte) escribe cada 10s, exacto
+    # mismo patrón ya usado en live_trade.py::_ballenas_conviccion_mercado().
+    # Mismo fail-open que antes (snapshot viejo/inexistente == antes
+    # "error_api"): este gate solo puede REDUCIR una señal ya aprobada,
+    # nunca inventar una nueva.
+    trades = _fc.leer_snapshot_reciente(condition_id)
+    if not trades:
         return True, None
     lado_check = ("up", "yes") if direccion == "BUY_YES" else ("down", "no")
     n_total_lado = sum(1 for t in trades if (t.get("side") or "").strip().upper() == "BUY"
                        and (t.get("outcome") or "").strip().lower() in lado_check)
+    if solo_observar:
+        return True, n_total_lado
     return n_total_lado >= umbral, n_total_lado
 
 
@@ -3504,9 +3715,14 @@ def s_ballenas_confirmadas_15m(market, ctx):
     if not condition_id:
         _log_diagnostico_ballenas_confirmadas(activo, direccion, "sin_condition_id")
         return None
-    try:
-        trades = trades_de_mercado(condition_id)
-    except Exception:
+    # 04-Ago: misma migración que _gate_volumen_ballenas -- leer_snapshot_
+    # reciente() (proceso efímero, mismo motivo documentado ahí), NO
+    # trades_de_mercado_firehose(). Motivo de diagnóstico se conserva como
+    # "error_api" (aunque ahora cubre snapshot ausente/viejo/vacío para
+    # este mercado, no solo un fallo de red) para no romper el esquema ya
+    # consumido por ballenas_confirmadas_15m_diagnostico.json.
+    trades = _fc.leer_snapshot_reciente(condition_id)
+    if not trades:
         _log_diagnostico_ballenas_confirmadas(activo, direccion, "error_api", condition_id)
         return None  # fail-closed: sin datos de ballenas, no hay señal (a diferencia
                       # del veto_ballenas de live_trade.py, que es fail-OPEN porque
@@ -3810,6 +4026,24 @@ def _s_gbm_late(market, ctx, ventana_min, rest_lo, rest_hi, espacio_k=None):
         if sigma_h_ewma10 is not None and sigma_h > 0 else None
     )
 
+    # Veto por zona de sigma_ewma_delta_pct (05-Ago, ver
+    # GBM_LATE_15M_SIGMA_EWMA_ZONAS_BUENAS_BUY_YES arriba): solo #15min
+    # BUY_YES, solo zonas con gate riguroso confirmado — el resto (incluida
+    # cualquier moneda sin dato) se descarta, fail-closed. La dirección se
+    # infiere aquí (p_up vs py) porque esta función todavía no conoce la
+    # decisión final del caller, mismo patrón que el filtro BUY_YES#15min
+    # de s_updown_gbm (línea ~1853).
+    if ventana_min == 15 and p_up > py:
+        _zonas_buy_yes = GBM_LATE_15M_SIGMA_EWMA_ZONAS_BUENAS_BUY_YES.get(activo, [])
+        if sigma_ewma_delta_pct is None:
+            return None  # sin dato -> no se puede confirmar zona buena, no apostar
+        _en_zona_buena = any(
+            lo <= sigma_ewma_delta_pct and (hi is None or sigma_ewma_delta_pct < hi)
+            for lo, hi in _zonas_buy_yes
+        )
+        if not _en_zona_buena:
+            return None
+
     # retest_pct (13-Jul, ver analisis_retest_gbm_late.py / _calcular_retest_pct):
     # solo logueo, no cambia edge ni decisión — ver docstring del helper.
     retest_pct = _calcular_retest_pct(activo, window_start, now_utc, ref, spot, precios_data)
@@ -4049,7 +4283,26 @@ FAVORITO_CONFIRMADO_UMBRAL_BAJO = round(1.0 - FAVORITO_CONFIRMADO_UMBRAL, 4)  # 
 FAVORITO_CONFIRMADO_NUDGE = 0.06   # empuje de la hipótesis, sin calibrar
 
 
-def s_favorito_confirmado(market, ctx):
+def s_favorito_confirmado(market, ctx, strategy_name: str = "FAVORITO_CONFIRMADO"):
+    """30-Jul: parámetro `strategy_name` añadido -- bug encontrado durante
+    la auto-revisión del ejecutor de baja latencia de ALTACONVICCION
+    (favorito_altaconviccion_executor_15min.py). El gate_bucket_propio de
+    más abajo tenía "FAVORITO_CONFIRMADO" HARDCODEADO, así que para los 6
+    wrappers (SOL/60MIN/15MIN/5MIN_ALTACONVICCION, 60MIN/15MIN_EXTREMO)
+    comprobaba el bucket y el whitelist de la estrategia MADRE, no el suyo
+    propio -- como "FAVORITO_CONFIRMADO#{activo}#{marco}#{direccion}"
+    (sin sufijo) casi nunca está en pares_permitidos_live (solo las
+    variantes ALTACONVICCION/EXTREMO lo están), el veto quedaba INERTE
+    para todos los wrappers pese a que gate_bucket_propio.json SÍ tiene
+    datos propios y correctos para cada uno (verificado: 8 buckets propios
+    para FAVORITO_CONFIRMADO_15MIN_ALTACONVICCION#{BTC,ETH}#15min#BUY_YES).
+    Cada wrapper ahora pasa su propio nombre (el mismo registrado en
+    ESTRATEGIAS) -- la llamada base (sin wrapper) sigue usando el default
+    "FAVORITO_CONFIRMADO", sin cambio de comportamiento ahí. Solo afecta
+    al veto de gate_bucket_propio; _gate_volumen_ballenas sigue usando el
+    nombre base a propósito (gate de liquidez de mercado compartido entre
+    variantes de la misma familia, no específico de precio -- ver
+    GATE_VOLUMEN_VALIDADO, diseño intencional, no bug)."""
     question = market.get("question", "")
     if "up or down" not in question.lower():
         return None
@@ -4098,7 +4351,7 @@ def s_favorito_confirmado(market, ctx):
     # Activo solo para los buckets "malo_confirmado" -- veta ejecución real
     # únicamente si la tupla exacta está HOY en pares_permitidos_live
     # (dinero real); en shadow/candidatos solo se loguea, nunca se bloquea.
-    tupla_str = f"FAVORITO_CONFIRMADO#{activo}#{vent}min#{direccion}" if vent else None
+    tupla_str = f"{strategy_name}#{activo}#{vent}min#{direccion}" if vent else None
     gate_bp = _gate_bucket_propio(tupla_str, py) if tupla_str else {"veredicto": "sin_concluir", "detalle": None}
     if gate_bp["veredicto"] == "malo_confirmado" and tupla_str in _pares_live_hoy_set():
         return None  # gate bucket propio 28-Jul -- ver gate_bucket_propio.json
@@ -4165,7 +4418,7 @@ def s_favorito_confirmado_sol_altaconviccion(market, ctx):
     py = market.get("_precio_yes")
     if py is None or py < FAVORITO_SOL_ALTACONVICCION_TH:
         return None
-    return s_favorito_confirmado(market, ctx)
+    return s_favorito_confirmado(market, ctx, strategy_name="FAVORITO_CONFIRMADO_SOL_ALTACONVICCION")
 
 
 FAVORITO_60MIN_ALTACONVICCION_TH = 0.70
@@ -4228,7 +4481,7 @@ def s_favorito_confirmado_60min_altaconviccion(market, ctx):
     py = market.get("_precio_yes")
     if py is None or py < FAVORITO_60MIN_ALTACONVICCION_TH:
         return None
-    resultado = s_favorito_confirmado(market, ctx)
+    resultado = s_favorito_confirmado(market, ctx, strategy_name="FAVORITO_CONFIRMADO_60MIN_ALTACONVICCION")
     if resultado is None:
         return None
     rm_min = FAVORITO_60MIN_ALTACONVICCION_RESTANTE_MIN.get(activo)
@@ -4291,7 +4544,7 @@ def s_favorito_confirmado_15min_altaconviccion(market, ctx):
     techo = FAVORITO_15MIN_ALTACONVICCION_TH_MAX.get(activo)
     if techo is not None and py >= techo:
         return None  # 29-Jul: ETH [0.95,1.00) EV negativo, ver constante arriba
-    return s_favorito_confirmado(market, ctx)
+    return s_favorito_confirmado(market, ctx, strategy_name="FAVORITO_CONFIRMADO_15MIN_ALTACONVICCION")
 
 
 FAVORITO_EXTREMO_TH = 0.90
@@ -4325,7 +4578,7 @@ def s_favorito_confirmado_60min_extremo(market, ctx):
     py = market.get("_precio_yes")
     if py is None or py < FAVORITO_EXTREMO_TH:
         return None
-    return s_favorito_confirmado(market, ctx)
+    return s_favorito_confirmado(market, ctx, strategy_name="FAVORITO_CONFIRMADO_60MIN_EXTREMO")
 
 
 def s_favorito_confirmado_15min_extremo(market, ctx):
@@ -4343,7 +4596,7 @@ def s_favorito_confirmado_15min_extremo(market, ctx):
     py = market.get("_precio_yes")
     if py is None or py < FAVORITO_EXTREMO_TH:
         return None
-    return s_favorito_confirmado(market, ctx)
+    return s_favorito_confirmado(market, ctx, strategy_name="FAVORITO_CONFIRMADO_15MIN_EXTREMO")
 
 
 FAVORITO_5MIN_ALTACONVICCION_TH = 0.70
@@ -4374,7 +4627,7 @@ def s_favorito_confirmado_5min_altaconviccion(market, ctx):
     py = market.get("_precio_yes")
     if py is None or py < FAVORITO_5MIN_ALTACONVICCION_TH:
         return None
-    return s_favorito_confirmado(market, ctx)
+    return s_favorito_confirmado(market, ctx, strategy_name="FAVORITO_CONFIRMADO_5MIN_ALTACONVICCION")
 
 
 # ── STREAK — momentum (5min) / reversión (15min) en la SECUENCIA de resoluciones ──
@@ -4887,6 +5140,7 @@ ESTRATEGIAS = [
     ("UPDOWN_GBM_15M_CROSS_WINDOW_SPREAD", s_updown_gbm_15min_cross_window_spread),
     ("UPDOWN_OU_5M",        s_updown_ou_5m),
     ("PRICE_TARGET_GBM",    s_price_target_gbm),
+    ("PRICE_TARGET_GBM_FADE", s_price_target_gbm_fade),
     ("ORDER_FLOW_5M",       s_order_flow_5m),
     ("LIQUIDACIONES_5M",    s_liquidaciones_5min),
     ("LIQUIDACIONES_15M",   s_liquidaciones_15min),
@@ -4902,6 +5156,7 @@ ESTRATEGIAS = [
     ("GBM_LATE_60M_PYCONFIRMADO", s_gbm_late_60min_py_confirmado),
     ("GBM_LATE_5M",         s_gbm_late_5min),
     ("GBM_LATE_60M",        s_gbm_late_60min),
+    ("GBM_LATE_60M_FADE",   s_gbm_late_60min_fade),
     ("STRUCT_NO_15M",       s_struct_no_15m),
     ("FAVORITO_CONFIRMADO", s_favorito_confirmado),
     ("FAVORITO_CONFIRMADO_SOL_ALTACONVICCION", s_favorito_confirmado_sol_altaconviccion),
@@ -5257,7 +5512,28 @@ def main():
                 # si se guardara ya calibrada, cada reentreno calibraría sobre
                 # su propia calibración anterior en vez de sobre la señal
                 # original (deriva compuesta, detectado 2026-07-01).
-                calib = params_din.get(nombre, {}).get("calibracion_prob")
+                # 30-Jul: calibración a nivel de ACTIVO (BASE#BTC), NO cae al
+                # agregado multi-moneda -- la agregada de FAVORITO_CONFIRMADO
+                # (b=0.8) "pasaba" el rigor SOLO en el pool de 3 monedas, NO
+                # en NINGUNA individualmente pese a 2000+ resoluciones cada
+                # una (mismo patrón de falso positivo por agregado ya cazado
+                # en Kelly-precio-gate 29-Jul). Si cayera al agregado como
+                # respaldo, las 3 monedas seguirían heredando una corrección
+                # que ninguna sostiene por separado. Restringido EXPLÍCITAMENTE
+                # a CALIB_POR_ACTIVO_ESTRATEGIAS (importado de shadow_
+                # postmortem.py, misma allowlist que genera el dato) -- hay 8
+                # estrategias más con calibracion_prob a nivel base activo hoy
+                # (ORDER_FLOW_5M, LATE_WINDOW_5MIN, STREAK_MOM_5M, GBM_LATE_
+                # 15M_TARDIO, STREAK_FADE_5M, GBM_LATE_5M, UPDOWN_GBM_15M_
+                # TARDIO, BALLENAS_CONFIRMADAS_15M) -- sin este chequeo
+                # explícito, CUALQUIER estrategia con activo perdería su
+                # calibración agregada en cuanto tuviera _activo_pred (casi
+                # siempre), rompiendo 8 estrategias que no tienen evidencia
+                # de sufrir el mismo problema.
+                if _activo_pred and nombre in CALIB_POR_ACTIVO_ESTRATEGIAS:
+                    calib = params_din.get(f"{nombre}#{_activo_pred}", {}).get("calibracion_prob")
+                else:
+                    calib = params_din.get(nombre, {}).get("calibracion_prob")
                 if calib:
                     prob_y = _norm_cdf(calib["a"] + calib["b"] * _norm_ppf(prob_y_raw))
                 eb = prob_y - py

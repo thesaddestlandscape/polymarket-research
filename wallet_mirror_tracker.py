@@ -50,6 +50,7 @@ REPO = Path(__file__).resolve().parent
 sys.path.insert(0, str(REPO))
 
 import requests  # noqa: E402
+import live_trade as lt  # noqa: E402
 
 DIR_SHADOW = REPO / "data" / "shadow"
 # 29-Jul: polymarket_activity_*.csv vive fuera del repo (fix fetch_polymarket_activity_ws.py).

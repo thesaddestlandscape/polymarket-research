@@ -28,7 +28,7 @@ from smart_money_tracker import trades_de_mercado
 DIR = Path(__file__).parent
 SNAPSHOTS = DIR / "data/live/libro_snapshots.csv"
 DIR_MARKETS = DIR / "data/markets"
-ARCHIVOS_MARKETS_RECIENTES = 5
+ARCHIVOS_MARKETS_RECIENTES = 8
 
 
 def mapear_condition_a_market():

@@ -55,6 +55,25 @@ ni pares_permitidos_live — ninguna de las 3 estrategias que consume esto
 está en whitelist live. Cron propio (hourly), no comparte cadencia con
 smart_money_tracker.py (P16, propósito distinto: consenso direccional
 poblacional, no timing de entrada por banda de precio).
+
+⚠️ 04-Ago: investigado y decidido NO migrar a ballenas_firehose_cache.py
+(a diferencia de todos los demás consumidores de trades_de_mercado()
+arreglados esa noche) -- este script necesita reconstruir el histórico de
+mercados resueltos hace DÍAS o SEMANAS (VENTANA_LOOKBACK_HORAS hasta
+240h+), y el firehose solo retiene 65min en memoria -- arquitectónicamente
+incompatible, no es una migración posible con esa pieza. El problema real
+de lag de indexación (minutos/horas) queda mitigado en gran parte por
+construcción: al muestrear aleatoriamente de una ventana de días
+(_seleccionar_nuevos), la mayoría de mercados llevan horas/días resueltos
+cuando se procesan. El tope duro de 250 resultados de data-api.polymarket.
+com/trades SÍ persiste sin importar el tiempo transcurrido -- mercados muy
+activos (vistos esta noche: 2000-3000+ trades reales en <1h) se truncan
+igual una semana después, sesgando potencialmente el z-test/top1_share
+hacia lo que sea que la API devuelva primero. Limitación conocida y
+aceptada, no arreglada aquí -- arreglarla exigiría una captura+archivo
+histórico propio (paginación confirmada inexistente en el endpoint), un
+proyecto separado. Ver idea_ballenas_observer_no_migrar_investigado_04ago
+(memoria) para el análisis completo.
 """
 import csv
 import gzip

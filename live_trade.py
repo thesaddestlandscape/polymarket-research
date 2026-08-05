@@ -29,7 +29,7 @@ from live_stake import (calcular_stake, bankroll_actual, verificar_circuit_break
                         bankroll_minimo_eur_hoy)
 from shadow_digest import enviar_telegram
 from live_balance import actualizar_balance_real, cargar_balance_real
-from smart_money_tracker import trades_de_mercado
+import ballenas_firehose_cache
 
 DIR_LIVE    = Path("data/live")
 DIR_SHADOW  = Path("data/shadow")
@@ -185,9 +185,24 @@ def _ballenas_conviccion_mercado(condition_id: str, banda_lo: float, banda_hi: f
     23-Jul: pct_ponderado pesa cada trade según _peso_wallet_veto() (activo,
     marco) -- mismo fix que ballenas_executor_5min/btc15m. None si activo/
     marco no se pasan (llamadas antiguas sin ese contexto siguen
-    funcionando igual, solo sin el tercer valor)."""
+    funcionando igual, solo sin el tercer valor).
+
+    04-Ago: fuente cambiada de smart_money_tracker.trades_de_mercado()
+    (data-api.polymarket.com/trades -- lag de indexación de minutos/horas +
+    tope duro de 250 resultados, diagnosticado y sustituido ya en los 3
+    ejecutores de baja latencia esta misma noche) a
+    ballenas_firehose_cache.leer_snapshot_reciente(), que lee el snapshot
+    JSON escrito cada 10s por el proceso persistente `polyactivity`
+    (`fetch_polymarket_activity_ws.py`) -- pensado específicamente para
+    procesos EFÍMEROS como live_trade.py, que no pueden mantener su propia
+    conexión websocket. Mismo shape (side/price/outcome/proxyWallet), MISMA
+    política fail-open ya aprobada por Javi (16-Jul): sin datos (fichero
+    ausente, corrupto, o `generado_en` con más de 60s -- escritor caído) ->
+    [] -> n=0 -> _evaluar_veto_ballenas ya trata n<min_trades como
+    'sin_datos', no veta. No se cambia esa política aquí, solo la fuente.
+    Ver idea_veto_ballenas_firehose_snapshot_diseno_04ago (diseño completo)."""
     try:
-        trades = trades_de_mercado(condition_id)
+        trades = ballenas_firehose_cache.leer_snapshot_reciente(condition_id)
     except Exception:
         return None, 0, None
     n_total = 0

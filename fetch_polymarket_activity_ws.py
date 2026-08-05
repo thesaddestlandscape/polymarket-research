@@ -43,6 +43,7 @@ import csv
 import json
 import re
 import sys
+import time
 from datetime import datetime, timezone
 from pathlib import Path
 
@@ -141,6 +142,24 @@ def _parse_updown(event_slug: str, title: str = ""):
     return None, None
 
 
+# 04-Ago (paso 2 de idea_veto_ballenas_firehose_snapshot_diseno_04ago):
+# import DIFERIDO hasta aquí a propósito -- ballenas_firehose_cache.py
+# hace `from fetch_polymarket_activity_ws import WS_URL, _parse_updown` a
+# nivel de módulo; importarlo ANTES de que WS_URL/_parse_updown existan en
+# este fichero (p.ej. junto al resto de imports, arriba) crearía un
+# import circular real (ImportError, WS_URL no definido todavía en el
+# momento en que ballenas_firehose_cache intenta leerlo). Aquí ambos ya
+# existen, así que la importación circular se resuelve sin problema.
+import ballenas_firehose_cache as _bfc  # noqa: E402
+
+# 04-Ago: medido en aislado antes de desplegar -- el snapshot completo (65min
+# de retención) ronda ~5MB; a 3s de cadencia eso es ~1.6MB/s de I/O sostenido
+# 24/7, más presión de disco de la necesaria dado que nada lee este fichero
+# todavía más rápido que el ciclo de live_trade.py (4-20s). 10s de sobra de
+# fresco para ese caso de uso, ~0.5MB/s.
+SNAPSHOT_ESCRITURA_INTERVALO_S = 10.0
+
+
 def _escribir_fila(fila: dict) -> None:
     archivo = _archivo_hoy()
     with open(archivo, "a", newline="", encoding="utf-8") as f:
@@ -168,7 +187,8 @@ async def _correr_una_conexion() -> None:
         await ws.send(json.dumps(sub))
         _log(f"Conectado a {WS_URL}, suscrito a activity/trades")
         ping_task = asyncio.create_task(_mantener_ping(ws))
-        n_total = n_guardados = 0
+        n_total = n_guardados = n_snapshots = 0
+        ultimo_snapshot = 0.0
         try:
             while True:
                 raw = await asyncio.wait_for(ws.recv(), timeout=RECV_TIMEOUT_S)
@@ -216,6 +236,25 @@ async def _correr_una_conexion() -> None:
                 }
                 _escribir_fila(fila)
                 n_guardados += 1
+                if es_tracked:
+                    _bfc.ingerir_trade(activo, marco or "", fila["condition_id"], {
+                        "side": fila["side"],
+                        "price": fila["price"],
+                        "outcome": fila["outcome"],
+                        "proxyWallet": fila["wallet"],
+                        "transaction_hash": fila["transaction_hash"],
+                        "_recibido_ts": time.time(),
+                    })
+                ahora = time.time()
+                if ahora - ultimo_snapshot >= SNAPSHOT_ESCRITURA_INTERVALO_S:
+                    try:
+                        n_merc, n_tr, n_bytes = _bfc.escribir_snapshot()
+                        n_snapshots += 1
+                        if n_snapshots % 12 == 0:  # loguea el tamaño ~cada 2min (12 volcados x 10s), no cada volcado
+                            _log(f"snapshot ballenas_recientes.json: {n_merc} mercados, {n_tr} trades, {n_bytes/1024:.0f}KB")
+                    except Exception as e:
+                        _log(f"error escribiendo snapshot ballenas ({type(e).__name__}: {e})")
+                    ultimo_snapshot = ahora
                 if n_total % 1000 == 0:
                     _log(f"{n_total} trades vistos, {n_guardados} guardados (tracked o whale) en esta conexión")
         finally:

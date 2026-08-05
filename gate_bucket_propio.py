@@ -16,9 +16,56 @@ import json
 from pathlib import Path
 
 DATA_PATH = Path("data/shadow/gate_bucket_propio.json")
+CONFIG_LIVE = Path("data/live/config_live.json")
 STEP = 0.05
 
 _cache = {"mtime": None, "data": {}}
+_cache_cfg = {"mtime": None, "activo": False}
+
+# 04-Ago: extensión validada con wallets EXPERTAS (sig_bhfdr=True en
+# wallet_edge_score_por_activo_marco.json, no todo el ruido de ballenas) --
+# dos colas simétricas donde el mercado ya está calibrado con la propia
+# moneda (hit_expertas ~= precio, sin margen de edge real) Y nuestro pnl
+# propio coincide en signo:
+#   - py<0.20: BTC (n=14-22, aún sin confirmar solo con n propio), ETH
+#     (n=11-20, [0.15,0.20) YA malo_confirmado con datos propios), SOL
+#     (n=9-20, [0.20,0.25) YA malo_confirmado propio).
+#   - py>=0.80: BTC (n=11,7,6, pnl=-0.060,-0.079,-0.562) y ETH (n=4,5,
+#     pnl=-0.079,-0.167) -- misma firma que la cola baja, simétrica. SOL
+#     SIN incluir aquí: n=1-2 en esa cola, evidencia insuficiente incluso
+#     como corroboración.
+# NO es lo mismo que el timing de ballenas ya refutado 28-Jul
+# (ballenas_banda_fina_gate.py, ver docstring del módulo) -- esto usa
+# calibración de PRECIO de wallets validadas, no minutos restantes, y NO
+# se generalizó al resto del rango 0.20-0.80 donde la evidencia es más
+# débil/mixta -- ver project_micro_bucket_gbmlate_ballenas_04ago.
+# activo=false hasta /code-review + aprobación explícita de Javi.
+_FAMILIAS_GBM_LATE = ("GBM_LATE_15M", "GBM_LATE_15M_TARDIO",
+                      "GBM_LATE_15M_ESPACIO_ATR", "GBM_LATE_15M_PYCONFIRMADO")
+
+_REGLAS_EXTENSION = (
+    {"activos": ("BTC", "ETH", "SOL"), "py_min": 0.0, "py_max": 0.20},
+    {"activos": ("BTC", "ETH"), "py_min": 0.80, "py_max": 1.01},
+)
+
+
+def _extension_activa() -> bool:
+    try:
+        mtime = CONFIG_LIVE.stat().st_mtime
+    except OSError:
+        return False
+    if _cache_cfg["mtime"] != mtime:
+        try:
+            cfg = json.loads(CONFIG_LIVE.read_text(encoding="utf-8"))
+            _cache_cfg["activo"] = bool(
+                cfg.get("riesgo", {})
+                .get("gate_bucket_extension_calibracion_ballenas", {})
+                .get("activo", False)
+            )
+            _cache_cfg["mtime"] = mtime
+        except Exception:
+            _cache_cfg["activo"] = False
+    return _cache_cfg["activo"]
 
 
 def _cargar() -> dict:
@@ -35,6 +82,19 @@ def _cargar() -> dict:
     return _cache["data"]
 
 
+def _regla_aplica(tupla_str: str, py: float):
+    partes = tupla_str.split("#")
+    if len(partes) != 4:
+        return None
+    familia, activo, marco, direccion = partes
+    if familia not in _FAMILIAS_GBM_LATE or marco != "15min" or direccion != "BUY_YES":
+        return None
+    for regla in _REGLAS_EXTENSION:
+        if activo in regla["activos"] and regla["py_min"] <= py < regla["py_max"]:
+            return regla
+    return None
+
+
 def evaluar(tupla_str: str, py: float) -> dict:
     """{"veredicto": "malo_confirmado"|"bueno_confirmado"|"sin_concluir",
     "detalle": {...}|None}. No decide permitido/vetado -- eso lo hace el
@@ -43,6 +103,24 @@ def evaluar(tupla_str: str, py: float) -> dict:
     b = round(math.floor(py / STEP) * STEP, 4)
     tabla = _cargar().get(tupla_str, {})
     detalle = tabla.get(f"{b:.2f}")
-    if detalle is None:
-        return {"veredicto": "sin_concluir", "detalle": None}
-    return {"veredicto": detalle.get("veredicto", "sin_concluir"), "detalle": detalle}
+
+    # La extensión solo puede ENDURECER un "sin_concluir" propio a
+    # "malo_confirmado" -- nunca pisa un veredicto propio ya confirmado
+    # (malo_confirmado/bueno_confirmado), ese sigue mandando siempre.
+    veredicto_propio = detalle.get("veredicto", "sin_concluir") if detalle else "sin_concluir"
+    if veredicto_propio == "sin_concluir" and _extension_activa():
+        regla = _regla_aplica(tupla_str, py)
+        if regla is not None:
+            return {
+                "veredicto": "malo_confirmado",
+                "detalle": {
+                    "origen": "extension_calibracion_expertas_04ago",
+                    "motivo": f"py en [{regla['py_min']:.2f},{regla['py_max']:.2f}), "
+                              "calibracion wallets expertas confirma precio ya eficiente",
+                    "detalle_propio": detalle,
+                },
+            }
+
+    if detalle is not None:
+        return {"veredicto": veredicto_propio, "detalle": detalle}
+    return {"veredicto": "sin_concluir", "detalle": None}

@@ -1,0 +1,247 @@
+{
+ "BTC#-999,-9": {
+  "veredicto": "sin_concluir",
+  "n": 97,
+  "pnl_trade": 0.191
+ },
+ "BTC#-9,-6": {
+  "veredicto": "sin_concluir",
+  "n": 48,
+  "pnl_trade": 0.4026
+ },
+ "BTC#-6,-3": {
+  "veredicto": "sin_concluir",
+  "n": 69,
+  "pnl_trade": 0.0349
+ },
+ "BTC#-3,0": {
+  "veredicto": "sin_concluir",
+  "n": 68,
+  "pnl_trade": 0.2838
+ },
+ "BTC#0,3": {
+  "veredicto": "sin_concluir",
+  "n": 77,
+  "pnl_trade": 0.1851
+ },
+ "BTC#3,6": {
+  "veredicto": "sin_concluir",
+  "n": 67,
+  "pnl_trade": 0.4986
+ },
+ "BTC#6,9": {
+  "veredicto": "sin_concluir",
+  "n": 64,
+  "pnl_trade": 0.3418
+ },
+ "BTC#9,12": {
+  "veredicto": "sin_concluir",
+  "n": 47,
+  "pnl_trade": 0.4615
+ },
+ "BTC#12,999": {
+  "veredicto": "GATE_OK_BUENO",
+  "n": 122,
+  "pnl_trade": 0.9895
+ },
+ "ETH#3,6": {
+  "veredicto": "sin_concluir",
+  "n": 22,
+  "pnl_trade": 0.5648
+ },
+ "ETH#6,9": {
+  "veredicto": "sin_concluir",
+  "n": 62,
+  "pnl_trade": 0.3378
+ },
+ "ETH#9,12": {
+  "veredicto": "sin_concluir",
+  "n": 57,
+  "pnl_trade": 0.138
+ },
+ "ETH#12,999": {
+  "veredicto": "sin_concluir",
+  "n": 115,
+  "pnl_trade": 0.3559
+ },
+ "SOL#-999,-9": {
+  "veredicto": "sin_concluir",
+  "n": 78,
+  "pnl_trade": -0.2752
+ },
+ "SOL#-9,-6": {
+  "veredicto": "sin_concluir",
+  "n": 59,
+  "pnl_trade": -0.1303
+ },
+ "SOL#-6,-3": {
+  "veredicto": "sin_concluir",
+  "n": 83,
+  "pnl_trade": 0.3812
+ },
+ "SOL#-3,0": {
+  "veredicto": "sin_concluir",
+  "n": 99,
+  "pnl_trade": 0.2298
+ },
+ "SOL#0,3": {
+  "veredicto": "sin_concluir",
+  "n": 129,
+  "pnl_trade": -0.0428
+ },
+ "SOL#3,6": {
+  "veredicto": "sin_concluir",
+  "n": 87,
+  "pnl_trade": 0.3645
+ },
+ "SOL#6,9": {
+  "veredicto": "GATE_OK_BUENO",
+  "n": 80,
+  "pnl_trade": 0.5618
+ },
+ "SOL#9,12": {
+  "veredicto": "sin_concluir",
+  "n": 39,
+  "pnl_trade": 1.2421
+ },
+ "SOL#12,999": {
+  "veredicto": "GATE_OK_BUENO",
+  "n": 53,
+  "pnl_trade": 0.7121
+ },
+ "XRP#-999,-9": {
+  "veredicto": "sin_concluir",
+  "n": 113,
+  "pnl_trade": 0.4449
+ },
+ "XRP#-9,-6": {
+  "veredicto": "sin_concluir",
+  "n": 99,
+  "pnl_trade": 0.2588
+ },
+ "XRP#-6,-3": {
+  "veredicto": "sin_concluir",
+  "n": 136,
+  "pnl_trade": 0.0355
+ },
+ "XRP#-3,0": {
+  "veredicto": "sin_concluir",
+  "n": 167,
+  "pnl_trade": 0.4267
+ },
+ "XRP#0,3": {
+  "veredicto": "sin_concluir",
+  "n": 181,
+  "pnl_trade": 0.2903
+ },
+ "XRP#3,6": {
+  "veredicto": "sin_concluir",
+  "n": 151,
+  "pnl_trade": 0.4833
+ },
+ "XRP#6,9": {
+  "veredicto": "sin_concluir",
+  "n": 97,
+  "pnl_trade": 0.5565
+ },
+ "XRP#9,12": {
+  "veredicto": "GATE_OK_BUENO",
+  "n": 68,
+  "pnl_trade": 0.9542
+ },
+ "XRP#12,999": {
+  "veredicto": "GATE_OK_BUENO",
+  "n": 73,
+  "pnl_trade": 1.0503
+ },
+ "DOGE#-999,-9": {
+  "veredicto": "sin_concluir",
+  "n": 42,
+  "pnl_trade": 0.1695
+ },
+ "DOGE#-9,-6": {
+  "veredicto": "sin_concluir",
+  "n": 36,
+  "pnl_trade": -0.427
+ },
+ "DOGE#-6,-3": {
+  "veredicto": "sin_concluir",
+  "n": 65,
+  "pnl_trade": 0.0673
+ },
+ "DOGE#-3,0": {
+  "veredicto": "sin_concluir",
+  "n": 75,
+  "pnl_trade": 0.0592
+ },
+ "DOGE#0,3": {
+  "veredicto": "sin_concluir",
+  "n": 99,
+  "pnl_trade": 0.1574
+ },
+ "DOGE#3,6": {
+  "veredicto": "sin_concluir",
+  "n": 72,
+  "pnl_trade": 0.4743
+ },
+ "DOGE#6,9": {
+  "veredicto": "GATE_OK_BUENO",
+  "n": 55,
+  "pnl_trade": 0.8343
+ },
+ "DOGE#9,12": {
+  "veredicto": "sin_concluir",
+  "n": 28,
+  "pnl_trade": 0.4853
+ },
+ "DOGE#12,999": {
+  "veredicto": "GATE_OK_BUENO",
+  "n": 48,
+  "pnl_trade": 1.0052
+ },
+ "BNB#-999,-9": {
+  "veredicto": "sin_concluir",
+  "n": 42,
+  "pnl_trade": -0.1471
+ },
+ "BNB#-9,-6": {
+  "veredicto": "sin_concluir",
+  "n": 56,
+  "pnl_trade": -0.0098
+ },
+ "BNB#-6,-3": {
+  "veredicto": "sin_concluir",
+  "n": 62,
+  "pnl_trade": 0.069
+ },
+ "BNB#-3,0": {
+  "veredicto": "sin_concluir",
+  "n": 95,
+  "pnl_trade": 0.008
+ },
+ "BNB#0,3": {
+  "veredicto": "sin_concluir",
+  "n": 100,
+  "pnl_trade": 0.3076
+ },
+ "BNB#3,6": {
+  "veredicto": "sin_concluir",
+  "n": 79,
+  "pnl_trade": 0.5901
+ },
+ "BNB#6,9": {
+  "veredicto": "GATE_OK_BUENO",
+  "n": 55,
+  "pnl_trade": 1.0525
+ },
+ "BNB#9,12": {
+  "veredicto": "sin_concluir",
+  "n": 39,
+  "pnl_trade": 0.735
+ },
+ "BNB#12,999": {
+  "veredicto": "sin_concluir",
+  "n": 30,
+  "pnl_trade": 0.4898
+ }
+}

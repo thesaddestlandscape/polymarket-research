@@ -30,21 +30,29 @@ BASE = Path(__file__).parent
 SCREENS = {
     "dash":    {"entry": "dashboard_server.py",    "probe": "http:8888"},
     "control": {"entry": "live_control.py",        "probe": "log:logs/live_control.log:escuchando comandos"},
-    "pfinish": {"entry": "photo_finish_logger.py", "probe": None},
-    "favultsec": {"entry": "favorito_ultimosegundo_5min.py", "probe": None},
-    "puntoconf": {"entry": "punto_confirmacion_logger.py",
-                  "probe": "log:logs/punto_confirmacion.log:arrancado"},
+    # pfinish/favultsec/puntoconf/ressniper/p22fase0/boxbuilder/solcontrario5m/
+    # xrpcontrario15m/favcontraria/fav5malt fusionados en "observadores" el
+    # 05-Ago (ver observadores_fase0.py) -- 10 procesos -> 1, mitigación de
+    # sobresuscripción de CPU (project_push_roto_carga_cpu_resuelto_05ago).
+    "observadores": {"entry": "observadores_fase0.py",
+                      "probe": "log:logs/observadores_fase0.log:hilos arrancados"},
     "chainlink": {"entry": "fetch_chainlink_prices.py", "probe": None},
     "polyactivity": {"entry": "fetch_polymarket_activity_ws.py", "probe": None},
-    "liqs": {"entry": "fetch_binance_liquidations.py", "probe": None},
+    "liqs": {"entry": "fetch_bybit_liquidations.py", "probe": None},  # 30-Jul: sustituye a Binance (bloqueado)
     "libroambos": {"entry": "fetch_libro_ambos_lados.py", "probe": None},
     "ballenas_fast": {"entry": "ballenas_executor_btc15m.py",
                        "probe": "log:logs/ballenas_fast.log:arrancado"},
     "ballenas_5m": {"entry": "ballenas_executor_5min.py",
                      "probe": "log:logs/ballenas_5m.log:arrancado"},
-    "ressniper": {"entry": "resolution_sniper_observer.py", "probe": None},
-    "p22fase0": {"entry": "p22_cola_posicion_fase0.py", "probe": None},
     "ballenas_15m": {"entry": "ballenas_executor_15min.py", "probe": None},
+    "favaltaconv": {"entry": "favorito_altaconviccion_executor_15min.py", "probe": None},
+    "fav15mexec": {"entry": "favorito_confirmado_15min_executor.py", "probe": None},
+    "fav60mexec": {"entry": "favorito_confirmado_60min_executor.py", "probe": None},
+    "favbtc60mno": {"entry": "favorito_confirmado_btc60min_buyno_executor.py", "probe": None},
+    "walletmirror": {"entry": "wallet_mirror_sniper.py", "probe": None},
+    "wmexec": {"entry": "wallet_mirror_executor_dryrun.py", "probe": None},
+    "gbmlate15m": {"entry": "gbm_late_15min_executor.py", "probe": None},
+    "updowngbmtardio": {"entry": "updown_gbm_15min_tardio_btc_executor.py", "probe": None},
     # Solo se vigila el .sh (sus hijos python son proceso fresco cada ciclo).
     "fast":    {"entry": "run_fast.sh", "shallow": True, "no_restart": True},
     "slow":    {"entry": "run_slow.sh", "shallow": True, "no_restart": True},

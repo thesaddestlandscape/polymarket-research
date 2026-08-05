@@ -280,29 +280,52 @@ def main() -> int:
     aciertos = sum(1 for r in resueltos if r.get("acierto_dir") == "1")
     pnl_total = sum(float(r.get("pnl_neto_hipotetico_eur") or 0) for r in resueltos)
     print(f"[vigia_ballenas_bypass] n_resuelto={n} hit={aciertos}/{n} ({100*aciertos/n:.1f}%) "
-          f"pnl_hipotetico_total={pnl_total:+.2f}€")
+          f"pnl_hipotetico_total={pnl_total:+.2f}€ (AGREGADO de todas las tuplas -- ver desglose por tupla abajo)")
 
-    if n < N_ALERTA:
-        return 0
+    # 03-Ago (bug real cazado en sesión: el aviso agregaba TODAS las tuplas
+    # mezcladas -- n=17 "listo para decidir" resultó ser 5 tuplas distintas,
+    # la que de verdad importaba seguía en n=11. Fix: agrupar por tupla
+    # exacta (strategy,subtype,decision) y avisar SOLO cuando una tupla
+    # individual cruce N_ALERTA, con latch propio por tupla -- mismo patrón
+    # que vigia_log_growth_latch.json).
+    from collections import defaultdict
+    por_tupla = defaultdict(list)
+    for r in resueltos:
+        clave = f"{r.get('strategy','')}#{r.get('subtype','')}#{r.get('decision','')}"
+        por_tupla[clave].append(r)
+
     try:
         latch = json.loads(LATCH_PATH.read_text()) if LATCH_PATH.exists() else {}
     except Exception:
         latch = {}
-    if latch.get("n_en_ultimo_aviso") == n:
-        return 0  # ya avisado para este n exacto, no repetir cada ciclo
+    if not isinstance(latch, dict) or "n_en_ultimo_aviso" in latch:
+        latch = {}  # formato viejo (agregado, un solo entero) -- empezar limpio por tupla
 
-    try:
-        from shadow_digest import enviar_telegram
-        msg = (f"🐋 vigia_ballenas_bypass: n={n} señales bloqueadas por veto_ballenas ya "
-               f"resueltas (umbral n≥{N_ALERTA} alcanzado)\n"
-               f"hit={aciertos}/{n} ({100*aciertos/n:.1f}%)  pnl_hipotético_total={pnl_total:+.2f}€\n"
-               f"Suficiente para empezar a mirar si un bypass por conviction/edge propio "
-               f"tendría sentido — ver data/shadow/ballenas_veto_bypass.csv")
-        ok = enviar_telegram(msg)
-        print(f"[vigia_ballenas_bypass] aviso n>={N_ALERTA} enviado (telegram={ok})")
-    except Exception as e:
-        print(f"[vigia_ballenas_bypass] no se pudo avisar: {type(e).__name__}: {e}")
-    latch["n_en_ultimo_aviso"] = n
+    for clave, filas in sorted(por_tupla.items(), key=lambda kv: -len(kv[1])):
+        n_t = len(filas)
+        aciertos_t = sum(1 for r in filas if r.get("acierto_dir") == "1")
+        pnl_t = sum(float(r.get("pnl_neto_hipotetico_eur") or 0) for r in filas)
+        print(f"[vigia_ballenas_bypass]   {clave}: n={n_t} hit={aciertos_t}/{n_t} "
+              f"({100*aciertos_t/n_t:.1f}%) pnl={pnl_t:+.2f}€")
+        if n_t < N_ALERTA:
+            continue
+        if latch.get(clave) == n_t:
+            continue  # ya avisado para este n exacto de esta tupla
+
+        try:
+            from shadow_digest import enviar_telegram
+            msg = (f"🐋 vigia_ballenas_bypass: {clave} n={n_t} señales bloqueadas por "
+                   f"veto_ballenas ya resueltas (umbral n≥{N_ALERTA} alcanzado, POR TUPLA)\n"
+                   f"hit={aciertos_t}/{n_t} ({100*aciertos_t/n_t:.1f}%)  "
+                   f"pnl_hipotético_total={pnl_t:+.2f}€\n"
+                   f"Suficiente para empezar a mirar si un bypass por conviction/edge propio "
+                   f"tendría sentido para ESTA tupla — ver data/shadow/ballenas_veto_bypass.csv")
+            ok = enviar_telegram(msg)
+            print(f"[vigia_ballenas_bypass] aviso {clave} n>={N_ALERTA} enviado (telegram={ok})")
+        except Exception as e:
+            print(f"[vigia_ballenas_bypass] no se pudo avisar ({clave}): {type(e).__name__}: {e}")
+        latch[clave] = n_t
+
     LATCH_PATH.write_text(json.dumps(latch, ensure_ascii=False, indent=1))
     return 0
 

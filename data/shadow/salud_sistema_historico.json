@@ -1,0 +1,196 @@
+[
+  {
+    "timestamp_utc": "2026-08-04T08:27:59+00:00",
+    "pipeline": {
+      "n_ciclos_resolve_postmortem": 111,
+      "resolve_postmortem_p50_s": 7.0,
+      "resolve_postmortem_p95_s": 43.0,
+      "resolve_postmortem_max_s": 2728.0,
+      "n_ciclos_live_trade": 1371,
+      "hueco_live_trade_max_s": 1909.0
+    },
+    "procesos_colgados": [],
+    "deploy": {
+      "n_screens": 24,
+      "stale": [
+        "ballenas_5m",
+        "favaltaconv"
+      ]
+    },
+    "disco": {
+      "pct_usado": 96.0,
+      "gb_libres": 3.08,
+      "git_gb": 33.17,
+      "data_gb": 15.81,
+      "datalogs_gb": 2.04
+    },
+    "ram": {
+      "ram_total_gb": 3.72,
+      "ram_disponible_gb": 1.8,
+      "ram_pct_libre": 48.4
+    },
+    "integridad_datos": {
+      "trades_abiertos_atascados": [],
+      "n_trades_total": 383,
+      "n_results_total": 66993
+    },
+    "anomalias": [
+      "⏱️ ciclo resolve+postmortem tardó 2728s (umbral 120s)",
+      "⚠️ screens STALE (código en disco != código cargado): ballenas_5m, favaltaconv",
+      "💾 disco al 96% (3.08GB libres)"
+    ],
+    "estado": "ANOMALIA"
+  },
+  {
+    "timestamp_utc": "2026-08-04T14:38:34+00:00",
+    "pipeline": {
+      "n_ciclos_resolve_postmortem": 143,
+      "resolve_postmortem_p50_s": 7.0,
+      "resolve_postmortem_p95_s": 19.0,
+      "resolve_postmortem_max_s": 2728.0,
+      "n_ciclos_live_trade": 1729,
+      "hueco_live_trade_max_s": 1192.0
+    },
+    "procesos_colgados": [],
+    "deploy": {
+      "n_screens": 25,
+      "stale": [
+        "dash",
+        "control",
+        "favultsec",
+        "polyactivity",
+        "libroambos",
+        "ballenas_5m",
+        "favaltaconv",
+        "boxbuilder",
+        "solcontrario5m",
+        "favbtc60mno",
+        "walletmirror",
+        "wmexec",
+        "fav5malt"
+      ]
+    },
+    "disco": {
+      "pct_usado": 46.0,
+      "gb_libres": 38.87,
+      "git_gb": 0.0,
+      "data_gb": 16.04,
+      "datalogs_gb": 2.31
+    },
+    "ram": {
+      "ram_total_gb": 3.72,
+      "ram_disponible_gb": 1.88,
+      "ram_pct_libre": 50.6
+    },
+    "integridad_datos": {
+      "trades_abiertos_atascados": [],
+      "n_trades_total": 385,
+      "n_results_total": 68594
+    },
+    "anomalias": [
+      "⏱️ ciclo resolve+postmortem tardó 2728s (umbral 120s)",
+      "⚠️ screens STALE (código en disco != código cargado): dash, control, favultsec, polyactivity, libroambos, ballenas_5m, favaltaconv, boxbuilder, solcontrario5m, favbtc60mno, walletmirror, wmexec, fav5malt"
+    ],
+    "estado": "ANOMALIA"
+  },
+  {
+    "timestamp_utc": "2026-08-05T07:02:44+00:00",
+    "pipeline": {
+      "n_ciclos_resolve_postmortem": 210,
+      "resolve_postmortem_p50_s": 6.0,
+      "resolve_postmortem_p95_s": 11.0,
+      "resolve_postmortem_max_s": 2728.0,
+      "n_ciclos_live_trade": 2520,
+      "hueco_live_trade_max_s": 1130.0
+    },
+    "procesos_colgados": [],
+    "deploy": {
+      "n_screens": 29,
+      "stale": []
+    },
+    "disco": {
+      "pct_usado": 48.0,
+      "gb_libres": 37.91,
+      "git_gb": 0.0,
+      "data_gb": 16.01,
+      "datalogs_gb": 2.93
+    },
+    "ram": {
+      "ram_total_gb": 3.72,
+      "ram_disponible_gb": 1.46,
+      "ram_pct_libre": 39.3
+    },
+    "integridad_datos": {
+      "trades_abiertos_atascados": [],
+      "n_trades_total": 391,
+      "n_results_total": 72704
+    },
+    "carga_sistema": {
+      "load1": 9.41,
+      "load5": 10.04,
+      "load15": 10.0,
+      "nproc": 2,
+      "ratio5": 5.02,
+      "n_procesos_total": 254
+    },
+    "git_push": {
+      "commits_sin_pushear": 1665
+    },
+    "anomalias": [
+      "⏱️ ciclo resolve+postmortem tardó 2728s (umbral 120s)",
+      "🔥 CPU sobresuscrita: load5=10.04 en 2 cores (ratio=5.02x, umbral 3.0x) -- 254 procesos vivos",
+      "📡 git push atascado: 1665 commits locales sin llegar a GitHub (umbral 15) -- riesgo de pérdida si el VPS cae"
+    ],
+    "estado": "ANOMALIA"
+  },
+  {
+    "timestamp_utc": "2026-08-05T07:08:01+00:00",
+    "pipeline": {
+      "n_ciclos_resolve_postmortem": 210,
+      "resolve_postmortem_p50_s": 6.0,
+      "resolve_postmortem_p95_s": 11.0,
+      "resolve_postmortem_max_s": 2728.0,
+      "n_ciclos_live_trade": 2527,
+      "hueco_live_trade_max_s": 1130.0
+    },
+    "procesos_colgados": [],
+    "deploy": {
+      "n_screens": 29,
+      "stale": []
+    },
+    "disco": {
+      "pct_usado": 48.0,
+      "gb_libres": 37.9,
+      "git_gb": 0.0,
+      "data_gb": 16.01,
+      "datalogs_gb": 2.93
+    },
+    "ram": {
+      "ram_total_gb": 3.72,
+      "ram_disponible_gb": 1.29,
+      "ram_pct_libre": 34.8
+    },
+    "integridad_datos": {
+      "trades_abiertos_atascados": [],
+      "n_trades_total": 391,
+      "n_results_total": 72704
+    },
+    "carga_sistema": {
+      "load1": 11.63,
+      "load5": 10.36,
+      "load15": 10.08,
+      "nproc": 2,
+      "ratio5": 5.18,
+      "n_procesos_total": 261
+    },
+    "git_push": {
+      "commits_sin_pushear": 1665
+    },
+    "anomalias": [
+      "⏱️ ciclo resolve+postmortem tardó 2728s (umbral 120s)",
+      "🔥 CPU sobresuscrita: load5=10.36 en 2 cores (ratio=5.18x, umbral 3.0x) -- 261 procesos vivos",
+      "📡 git push atascado: 1665 commits locales sin llegar a GitHub (umbral 15) -- riesgo de pérdida si el VPS cae"
+    ],
+    "estado": "ANOMALIA"
+  }
+]

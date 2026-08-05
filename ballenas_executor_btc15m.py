@@ -32,8 +32,11 @@ project_volumen_ballenas_patron_universal_27jul en memoria. Validado con
 las 173 señales reales de esta tupla: n_yes_total>=35 → n=115 hit=95.7%
 PnL/trade=+0.838€ GATE OK; <35 → n=58 hit=1.7% PnL/trade=-1.19€. Mismo
 mecanismo que BALLENAS_TARDIAS#ETH#5min (ballenas_executor_5min.py).
-Coste de red cero: reutiliza la misma llamada a trades_de_mercado() que
-concentracion_ballenas() ya hacía.
+04-Ago: fuente de trades cambiada de smart_money_tracker.trades_de_mercado()
+(tope duro de 250 + lag de indexación de minutos/horas, mismo bug
+diagnosticado y arreglado esa noche en los demás ejecutores de ballenas)
+a ballenas_firehose_cache (websocket propio a RTDS, en memoria, sin tope
+ni lag) -- ver project_fix_trades_de_mercado_firehose_04ago.
 
 Corre en screen propia:
   screen -dmS ballenas_fast bash -c "cd /root/polymarket-research && .venv/bin/python ballenas_executor_btc15m.py >> logs/ballenas_fast.log 2>&1"
@@ -51,7 +54,7 @@ import requests
 import live_trade as lt
 from live_guard import puede_operar_live
 from live_stake import bloquear_por_circuit_breaker, calcular_stake
-from smart_money_tracker import MAX_TRADES_POR_MERCADO, trades_de_mercado
+import ballenas_firehose_cache as _fc
 from ballenas_banda_fina_gate import evaluar as _gate_banda_fina_ballenas
 
 DIR = Path(__file__).resolve().parent
@@ -258,17 +261,17 @@ def concentracion_ballenas(condition_id: str, banda_lo: float, banda_hi: float) 
     muerto, un subconjunto casi nunca alcanza el tamaño del conjunto
     completo).
 
-    `motivo` distingue 'error_api' (trades_de_mercado lanzó excepción) de
-    'sin_trades_en_banda' (la API respondió bien pero 0 trades BUY caen en
-    la banda ahora mismo) -- antes ambos devolvían (None,0) indistinguibles.
-    17-Jul: un hueco de log de 87s sin una sola línea obligó a reconstruir
-    a mano si era un fallo silencioso o solo ausencia de actividad (resultó
-    ser lo segundo, el mercado ya cotizaba en extremos a T-90s) -- no debe
-    hacer falta esa arqueología cada vez."""
-    try:
-        trades = trades_de_mercado(condition_id)
-    except Exception:
-        return None, None, 0, "error_api", [], 0, 0
+    `motivo` distingue 'error_api' (trades_de_mercado lanzó excepción, ya
+    no aplica tras el 04-Ago), 'firehose_no_sano' (cache sin mensajes
+    recientes, fail-closed) de 'sin_trades_en_banda' (datos sanos pero 0
+    trades BUY caen en la banda ahora mismo) -- antes ambos devolvían
+    (None,0) indistinguibles. 17-Jul: un hueco de log de 87s sin una sola
+    línea obligó a reconstruir a mano si era un fallo silencioso o solo
+    ausencia de actividad (resultó ser lo segundo, el mercado ya cotizaba
+    en extremos a T-90s) -- no debe hacer falta esa arqueología cada vez."""
+    if not _fc.esta_sano():
+        return None, None, 0, "firehose_no_sano", [], 0, 0
+    trades = _fc.trades_de_mercado_firehose(condition_id)
     n_trades_crudo = len(trades)
     n_yes = n_no = 0
     n_yes_total = 0
@@ -501,7 +504,7 @@ def watch_window(ts_end: int) -> bool:
     prob_bucket = calib["prob_bucket"]
 
     mercado = None
-    contadores = {"ok": 0, "sin_trades_en_banda": 0, "error_api": 0}
+    contadores = {"ok": 0, "sin_trades_en_banda": 0, "error_api": 0, "firehose_no_sano": 0}
     contador_prematuro = 0  # cumple condición pero aún fuera de confirm_ceiling_s -- solo para el log final
     registrado_temprano = False  # 28-Jul "adelantar la escucha": solo la 1ª vez por ventana
     while True:
@@ -513,7 +516,8 @@ def watch_window(ts_end: int) -> bool:
             log(f"[{ts_end}] suelo de seguridad ({HARD_FLOOR_S}s) alcanzado sin confirmación -- se abandona "
                 f"(resumen vigilancia: {sum(contadores.values())} polls, "
                 f"ok={contadores['ok']} sin_trades_en_banda={contadores['sin_trades_en_banda']} "
-                f"error_api={contadores['error_api']} prematuros={contador_prematuro})")
+                f"error_api={contadores['error_api']} firehose_no_sano={contadores['firehose_no_sano']} "
+                f"prematuros={contador_prematuro})")
             return False
 
         if mercado is None:
@@ -537,11 +541,6 @@ def watch_window(ts_end: int) -> bool:
             pct_crudo, pct_ponderado, n, motivo_conc, wallets_yes, n_yes_total, n_trades_crudo = f_conc.result()
             libro = f_libro.result()
 
-        if n_trades_crudo >= MAX_TRADES_POR_MERCADO:
-            log(f"[{ts_end}] ⚠️ respuesta de trades_de_mercado con {n_trades_crudo} filas "
-                f"toca el cap de la API ({MAX_TRADES_POR_MERCADO}) -- posible truncación "
-                f"(n_yes_total={n_yes_total} puede estar incompleto)")
-
         contadores[motivo_conc] = contadores.get(motivo_conc, 0) + 1
         if pct_ponderado is not None:
             log(f"[{ts_end}] restante={restante:.1f}s concentracion_yes_cruda={pct_crudo:.2f} "
@@ -553,6 +552,8 @@ def watch_window(ts_end: int) -> bool:
             # -- es la señal que antes quedaba escondida dentro de un hueco
             # de log indistinguible de "no hay actividad".
             log(f"[{ts_end}] restante={restante:.1f}s ⚠️ error_api consultando ballenas -- sin dato este ciclo")
+        elif motivo_conc == "firehose_no_sano":
+            log(f"[{ts_end}] restante={restante:.1f}s ⚠️ firehose_no_sano -- cache de ballenas sin datos recientes, sin dato este ciclo")
 
         if (pct_ponderado is not None and n >= MIN_TRADES_BALLENA
                 and pct_ponderado >= CONCENTRACION_MIN and n_yes_total < UMBRAL_N_YES_TOTAL):
@@ -656,6 +657,20 @@ def disparar(mercado: dict, py: float, edge: float, restante_s: float, prob_buck
                                 f"{'[DRY-RUN] no ejecutaría' if DRY_RUN else 'no se ejecuta'}")):
         return False
 
+    # 30-Jul: veto CLV (mismo mecanismo que live_trade.py::main(), nunca
+    # replicado en NINGÚN ejecutor de baja latencia -- hallazgo del barrido
+    # de "cableado" de esta sesión, afecta a los 5 ejecutores existentes por
+    # igual). _clv_tupla cachea a nivel de módulo (pensado para un proceso
+    # fresco por ciclo); este ejecutor es persistente, se fuerza relectura
+    # fresca de results.csv cada vez -- barato, solo en el momento raro de
+    # confirmar una señal.
+    lt._CLV_CACHE = None
+    clv_medio, n_clv = lt._clv_tupla(STRATEGY, subtype, "BUY_YES")
+    if n_clv >= lt.CLV_VETO_MIN_N and clv_medio < 0:
+        log(f"  ⛔ Veto CLV: clv_medio={clv_medio:+.4f} (n={n_clv}) < 0 -- "
+            f"{'[DRY-RUN] no ejecutaría' if DRY_RUN else 'no se ejecuta'}")
+        return False
+
     # ic_conviccion: /code-review 17-Jul encontró que se pasaba `edge` crudo
     # (PROB_BUCKET - py, ~0.02-0.08) donde calcular_stake espera un IC
     # histórico validado (ic_bayes, lo que usa cualquier otra tupla live).
@@ -752,6 +767,11 @@ def disparar(mercado: dict, py: float, edge: float, restante_s: float, prob_buck
 
 def main():
     log(f"ballenas_executor_btc15m arrancado (DRY_RUN={DRY_RUN})")
+    _fc.iniciar()
+    # Deja el cache calentar un momento antes de empezar a vigilar --
+    # esta_sano() exige un mensaje reciente, y con miles de trades/min en
+    # el firehose esto tarda segundos, no minutos.
+    time.sleep(3)
     if not DRY_RUN:
         # Precalienta el import pesado de py_clob_client_v2 (~270ms, ver
         # live_trade.py:642-652) UNA vez al arrancar -- no en cada intento,

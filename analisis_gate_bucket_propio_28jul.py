@@ -18,6 +18,22 @@ hacer los robustos"):
      aparece en una mitad es la firma de un artefacto puntual, no un
      patrón estable (mismo criterio que analisis_gate_riguroso.py usa en
      el resto del proyecto).
+  4. BH-FDR POR (FAMILIA, MONEDA) (04-Ago, corregido dos veces el mismo
+     día -- primero de global a por familia, luego Javi señaló que hay
+     que desagregar TAMBIÉN por moneda, mismo principio que CLAUDE.md
+     pt.17/feedback_desagregar_por_activo_siempre exige en todo el
+     proyecto: antes se aplicaba GLOBAL sobre las ~264 tuplas×bucket del
+     sistema a la vez, diluyendo el presupuesto de significancia de
+     familias/monedas con menos tests candidatos. Hallazgo real: SOL#15min
+     tenía 3 buckets con shuffle p<0.05 Y split-half consistente en ambas
+     mitades -- exactamente el mismo rigor que sí confirmaba otros
+     buckets -- pero se quedaban en "sin_concluir" solo por competir con
+     miles de tests de otras familias/monedas en el mismo corte BH-FDR.
+     Usa `_familia()` de kelly_precio_gate.py -- misma fuente de verdad de
+     agrupamiento por arquetipo que el resto del sistema, GBM_LATE_15M{,
+     _TARDIO,_ESPACIO_ATR,_PYCONFIRMADO} cuentan como una familia -- pero
+     BTC/ETH/SOL/XRP/DOGE/BNB dentro de esa familia corrigen cada uno por
+     su cuenta, no mezclados).
 
 Un bucket se marca "malo_confirmado" (candidato a stake=0 en el filtro) o
 "bueno_confirmado" solo si pasa las 3 barras. Todo lo demás queda
@@ -35,6 +51,8 @@ from collections import defaultdict
 from pathlib import Path
 
 import numpy as np
+
+from kelly_precio_gate import _familia
 
 REPO = Path(__file__).resolve().parent
 RESULTS = str(REPO / "data/shadow/results.csv")
@@ -205,11 +223,30 @@ def main():
                                             "p": p_valor, "diff": diff, "es_live": es_live})
         resultado[tupla_str] = tabla
 
-    # PASADA 2: BH-FDR sobre TODA la familia de tests candidatos, luego
-    # asignar el veredicto final solo a los que sobreviven.
-    p_valores = [p["p"] for p in pendientes]
-    sobreviven = bh_fdr_signif(p_valores, q=P_MAX)
-    print(f"\nTests candidatos: {len(pendientes)} | sobreviven BH-FDR q={P_MAX}: {len(sobreviven)}")
+    # PASADA 2: BH-FDR POR (FAMILIA, MONEDA) -- cada (arquetipo, activo)
+    # corrige solo contra sus propios tests candidatos, no contra los de
+    # las ~264 tuplas×bucket del sistema entero NI contra las otras 5
+    # monedas de la misma familia (CLAUDE.md pt.17, desagregar siempre por
+    # activo). Estrategias sin agrupar en kelly_precio_gate._familia()
+    # (devuelve el nombre tal cual) quedan igual, solo se añade la moneda
+    # a la clave.
+    por_familia_moneda = defaultdict(list)
+    for idx, p in enumerate(pendientes):
+        partes = p["tupla_str"].split("#")
+        strategy = partes[0]
+        activo = partes[1] if len(partes) > 1 else "?"
+        clave = (_familia(strategy), activo)
+        por_familia_moneda[clave].append(idx)
+
+    sobreviven = set()
+    for (familia, activo), indices in por_familia_moneda.items():
+        p_valores_grupo = [pendientes[i]["p"] for i in indices]
+        sobreviven_grupo = bh_fdr_signif(p_valores_grupo, q=P_MAX)
+        sobreviven |= {indices[j] for j in sobreviven_grupo}
+        print(f"  familia={familia} activo={activo}: {len(indices)} tests candidatos, "
+              f"{len(sobreviven_grupo)} sobreviven BH-FDR q={P_MAX}")
+
+    print(f"\nTests candidatos: {len(pendientes)} | sobreviven BH-FDR (por familia+moneda): {len(sobreviven)}")
 
     veredictos_nuevos = []
     for idx, p in enumerate(pendientes):

@@ -49,6 +49,24 @@ cualquier otra moneda a dinero real requiere su propio gate riguroso +
 código en pares_permitidos_live + /code-review + aprobación explícita
 (mismo patrón en dos fases que BTC15m/ETH5min).
 
+04-Ago: la fuente de volumen/concentración YA NO es data-api.polymarket.com/
+trades (smart_money_tracker.trades_de_mercado()) — diagnóstico confirmado
+con pruebas en vivo: ese endpoint tiene lag de indexación de minutos/horas
+y un tope duro de 250 resultados (ignora `limit`), lo que dejaba el gate
+de volumen (n_yes_total>=35) prácticamente ciego cuando se consulta tarde
+en la ventana (que es precisamente cuándo dispara este ejecutor, por
+diseño). BALLENAS_TARDIAS#ETH#5min#BUY_YES llevaba desde el 29-Jul sin
+generar señales confirmadas por esto — ver
+idea_bug_trades_de_mercado_ballenas_tardias_eth5min_muda_03ago (memoria).
+Ahora usa ballenas_firehose_cache.py: conexión websocket PROPIA a RTDS
+(mismo topic activity/trades que fetch_polymarket_activity_ws.py, pero
+independiente de ese proceso), en memoria, sin lag de indexación ni tope
+de resultados — verificado 2773 trades reales capturados en el mismo
+instante donde la API vieja devolvía 4. Fail-closed: si el cache no ha
+recibido ningún mensaje en 15s (hilo no arrancado, conexión caída), se
+trata como "sin datos" (motivo firehose_no_sano), nunca se dispara con
+datos parados. Ver project_fix_trades_de_mercado_firehose_04ago (memoria).
+
 Corre en screen propia:
   screen -dmS ballenas_5m bash -c "cd /root/polymarket-research && .venv/bin/python ballenas_executor_5min.py >> logs/ballenas_5m.log 2>&1"
 """
@@ -66,8 +84,9 @@ import requests
 import live_trade as lt
 from live_guard import puede_operar_live
 from live_stake import bloquear_por_circuit_breaker, calcular_stake
-from smart_money_tracker import MAX_TRADES_POR_MERCADO, trades_de_mercado
 from ballenas_banda_fina_gate import evaluar as _gate_banda_fina_ballenas
+from gate_bucket_propio import evaluar as _gate_bucket_propio
+import ballenas_firehose_cache as _fc
 
 DIR = Path(__file__).resolve().parent
 DIR_SHADOW = DIR / "data" / "shadow"
@@ -126,6 +145,29 @@ STRATEGY = "BALLENAS_TARDIAS"
 VENTANA_MIN = 5
 
 DRY_RUN = False  # 27-Jul, aprobado Javi -- ver docstring y nota en config_live.json. Solo ETH está en whitelist.
+
+CONFIG_LIVE_PATH = DIR / "data" / "live" / "config_live.json"
+_pares_live_cache = {"mtime": None, "set": set()}
+
+
+def _pares_live_hoy_set() -> set:
+    """Mismo patrón fail-closed que shadow_predict.py/favorito_altaconviccion_
+    executor_15min.py::_pares_live_hoy_set (última copia conocida si falla
+    la lectura, nunca vacío por error transitorio). 04-Ago: necesario para
+    el veto de gate_bucket_propio -- ver docstring de concentracion_ballenas."""
+    try:
+        mtime = CONFIG_LIVE_PATH.stat().st_mtime
+    except OSError:
+        return _pares_live_cache["set"]
+    if _pares_live_cache["mtime"] != mtime:
+        try:
+            data = json.loads(CONFIG_LIVE_PATH.read_text(encoding="utf-8"))
+            _pares_live_cache["set"] = set(data.get("pares_permitidos_live", []))
+            _pares_live_cache["mtime"] = mtime
+        except Exception:
+            pass
+    return _pares_live_cache["set"]
+
 
 PREDICTIONS_LOCK_PATH = DIR_SHADOW / ".predictions_lock"  # mismo fichero que
 # ballenas_executor_btc15m.py -- serializa escrituras entre ambos ejecutores.
@@ -249,23 +291,21 @@ def concentracion_ballenas(condition_id: str, banda_lo: float, banda_hi: float,
     completo en ETH (n=110, hit=96.4%%, PnL/trade=+0.159€) y es un gate
     REAL para ETH (ver UMBRAL_N_WALLETS_YES).
 
-    ⚠️ NO es un conteo ilimitado (/code-review 27-Jul, 2 pasadas): trades_de_mercado()
-    pide como mucho MAX_TRADES_POR_MERCADO=100 trades TOTALES (BUY+SELL,
-    YES+NO), sin paginación -- eso es lo que puede truncarse, no
-    directamente n_yes_total (que es un subconjunto siempre menor, filtrado
-    a BUY+yes/up). El aviso de truncación (ver call site) compara
-    n_trades_crudo=len(trades) -- la respuesta cruda ANTES de filtrar --
-    contra el cap; comparar n_yes_total contra el cap (1ª versión de este
-    fix) era código muerto, nunca dispararía porque un subconjunto casi
-    nunca llega al tamaño del conjunto entero. Máximo n_yes_total observado
-    hasta hoy: 87 (el gate de ETH, umbral 35, se validó bajo la misma
-    fuente de datos, no hay descalibración backtest/producción) -- pero eso
-    no dice nada sobre si trades_de_mercado() ya viene truncada de origen."""
-    try:
-        trades = trades_de_mercado(condition_id)
-    except Exception:
-        return None, None, 0, "error_api", [], 0, 0
-    n_trades_crudo = len(trades)  # respuesta cruda de la API, antes de filtrar por side/outcome/banda -- esto es lo que realmente toca el cap MAX_TRADES_POR_MERCADO, no n_yes_total (que es un subconjunto siempre menor)
+    04-Ago: la fuente ya NO es data-api.polymarket.com/trades (tope duro de
+    250 + lag de indexación de minutos/horas, confirmado con pruebas en
+    vivo -- ver docstring del módulo). Ahora lee ballenas_firehose_cache
+    (websocket propio a RTDS, en memoria, sin tope ni lag). Si el cache no
+    está sano (hilo no arrancado o sin mensajes recientes, fail-closed) se
+    devuelve motivo "firehose_no_sano" -- nunca se dispara con datos que
+    podrían estar parados sin avisar, mismo principio que "error_api"
+    antes. Máximo n_yes_total observado con la fuente vieja: 87 (el gate
+    de ETH, umbral 35, se validó bajo esa fuente truncada -- con la fuente
+    nueva, sin tope, n_yes_total real puede ser bastante mayor; vigilar si
+    eso cambia el hit-rate del bucket una vez acumule n propio)."""
+    if not _fc.esta_sano():
+        return None, None, 0, "firehose_no_sano", [], 0, 0
+    trades = _fc.trades_de_mercado_firehose(condition_id)
+    n_trades_crudo = len(trades)  # respuesta cruda del cache, antes de filtrar por side/outcome/banda
     n_yes = n_no = 0
     n_yes_total = 0
     peso_yes = peso_no = 0.0
@@ -403,7 +443,7 @@ def watch_window(activo: str, ts_end: int) -> bool:
     ts_start = ts_end - VENTANA_MIN * 60
 
     mercado = None
-    contadores = {"ok": 0, "sin_trades_en_banda": 0, "error_api": 0}
+    contadores = {"ok": 0, "sin_trades_en_banda": 0, "error_api": 0, "firehose_no_sano": 0}
     contador_prematuro = 0  # cumple condición pero aún fuera de confirm_ceiling_s -- solo para el log final
     while True:
         restante = ts_end - time.time()
@@ -414,7 +454,8 @@ def watch_window(activo: str, ts_end: int) -> bool:
             log(f"[{ts_end}] suelo de seguridad ({HARD_FLOOR_S}s) alcanzado sin confirmación -- se abandona "
                 f"(resumen vigilancia: {sum(contadores.values())} polls, "
                 f"ok={contadores['ok']} sin_trades_en_banda={contadores['sin_trades_en_banda']} "
-                f"error_api={contadores['error_api']} prematuros={contador_prematuro})", activo)
+                f"error_api={contadores['error_api']} firehose_no_sano={contadores['firehose_no_sano']} "
+                f"prematuros={contador_prematuro})", activo)
             return False
 
         if mercado is None:
@@ -432,11 +473,9 @@ def watch_window(activo: str, ts_end: int) -> bool:
             pct_crudo, pct_ponderado, n, motivo_conc, wallets_yes, n_yes_total, n_trades_crudo = f_conc.result()
             libro = f_libro.result()
 
-        if n_trades_crudo >= MAX_TRADES_POR_MERCADO:
-            log(f"[{ts_end}] ⚠️ respuesta de trades_de_mercado con {n_trades_crudo} filas "
-                f"toca el cap de la API ({MAX_TRADES_POR_MERCADO}) -- posible truncación "
-                f"(n_yes_total={n_yes_total} puede estar incompleto), revisar paginación "
-                f"si esto se vuelve frecuente", activo)
+        if motivo_conc == "firehose_no_sano":
+            log(f"[{ts_end}] ⚠️ cache de firehose no sano (sin mensajes recientes) -- "
+                f"sin dato este ciclo, no se dispara con datos parados", activo)
 
         contadores[motivo_conc] = contadores.get(motivo_conc, 0) + 1
         if pct_ponderado is not None:
@@ -702,6 +741,43 @@ def disparar(activo: str, mercado: dict, py: float, edge: float, restante_s: flo
                                     f"{'[DRY-RUN] no ejecutaría' if DRY_RUN else 'no se ejecuta'}", activo)):
             return False
 
+        # 30-Jul: veto CLV (mismo mecanismo que live_trade.py::main(), nunca
+        # replicado en NINGÚN ejecutor de baja latencia -- hallazgo del
+        # barrido de "cableado" de esta sesión, afecta a los 5 ejecutores
+        # existentes por igual). _clv_tupla cachea a nivel de módulo (pensado
+        # para un proceso fresco por ciclo); este ejecutor es persistente,
+        # se fuerza relectura fresca de results.csv cada vez -- barato, solo
+        # en el momento raro de confirmar una señal.
+        lt._CLV_CACHE = None
+        clv_medio, n_clv = lt._clv_tupla(STRATEGY, subtype, "BUY_YES")
+        if n_clv >= lt.CLV_VETO_MIN_N and clv_medio < 0:
+            log(f"⛔ Veto CLV: clv_medio={clv_medio:+.4f} (n={n_clv}) < 0 -- "
+                f"{'[DRY-RUN] no ejecutaría' if DRY_RUN else 'no se ejecuta'}", activo)
+            return False
+
+        # 04-Ago: gate_bucket_propio -- mismo mecanismo ya activo en
+        # favorito_altaconviccion_executor_15min.py/favorito_confirmado_
+        # btc60min_buyno_executor.py, hallazgo del barrido de conexión de
+        # esta sesión: gate_bucket_propio.json YA calculaba datos para
+        # BALLENAS_TARDIAS (agrupa por family BALLENAS_FAMILIA, ver
+        # kelly_precio_gate.py::_familia) pero NINGÚN ejecutor de la
+        # familia ballenas lo consultaba nunca para vetar -- el cálculo
+        # existía, el veto no estaba conectado. Solo veta si
+        # malo_confirmado (n>=15, shuffle+split-half, ver gate_bucket_propio.py)
+        # Y la tupla ya está en pares_permitidos_live (mismo criterio que
+        # los otros ejecutores: no vetar candidatas que todavía no operan
+        # con dinero real, dejarlas acumular n sin filtrar). Fail-open si
+        # no hay evidencia (sin_concluir) -- no bloquea nada nuevo hoy
+        # (BALLENAS_TARDIAS#ETH#5min#BUY_YES lleva n=1-2 en el gate por la
+        # propia caducidad del bug que se acaba de arreglar), pero deja
+        # el veto ya cableado para en cuanto acumule n con el fix puesto.
+        tupla_str = f"{STRATEGY}#{activo}#{VENTANA_MIN}min#BUY_YES"
+        gate_bp = _gate_bucket_propio(tupla_str, py)
+        if gate_bp["veredicto"] == "malo_confirmado" and tupla_str in _pares_live_hoy_set():
+            log(f"⛔ Veto gate_bucket_propio (malo_confirmado) py={py:.3f} -- "
+                f"{'[DRY-RUN] no ejecutaría' if DRY_RUN else 'no se ejecuta'}", activo)
+            return False
+
         # 29-Jul: reemplaza (prob_bucket-0.5)*2 -- esa fórmula asume que el
         # precio de referencia es ~0.5, y se rompe en bandas baratas (DOGE/BNB
         # ~0.20): daba magnitudes de conviccion enormes (~0.55-0.58) para un
@@ -818,6 +894,11 @@ def hilo_activo(activo: str):
 
 def main():
     log(f"ballenas_executor_5min arrancado (DRY_RUN={DRY_RUN}, activos={list(ACTIVOS)})")
+    _fc.iniciar()
+    # Deja el cache calentar un momento antes de empezar a vigilar --
+    # esta_sano() exige un mensaje reciente, y con miles de trades/min en
+    # el firehose esto tarda segundos, no minutos.
+    time.sleep(3)
     if not DRY_RUN:
         # Precalienta el import pesado UNA vez desde el hilo principal, antes
         # de lanzar los 3 hilos -- evita que dos hilos llamen
@@ -834,6 +915,13 @@ def main():
 
     # Hilo principal: supervivencia -- si un hilo muere (no debería, hilo_activo
     # captura sus propias excepciones), lo reinicia sin tumbar el proceso.
+    # 04-Ago: además vigila la salud del cache de firehose de forma
+    # PERIÓDICA, no solo cuando watch_window() está vigilando un mercado --
+    # si el hilo de captura muriera o la reconexión se atascara fuera de
+    # una ventana activa, el único síntoma antes habría sido silencio total
+    # (ningún log hasta la siguiente ventana) -- exactamente la clase de
+    # fallo silencioso que motivó este fix (ver docstring del módulo).
+    ciclos_firehose_no_sano = 0
     while True:
         time.sleep(30)
         for i, h in enumerate(hilos):
@@ -843,6 +931,14 @@ def main():
                 nuevo = threading.Thread(target=hilo_activo, args=(activo,), daemon=True, name=activo)
                 nuevo.start()
                 hilos[i] = nuevo
+
+        if _fc.esta_sano():
+            ciclos_firehose_no_sano = 0
+        else:
+            ciclos_firehose_no_sano += 1
+            if ciclos_firehose_no_sano >= 4:  # ~2min seguidos no sano
+                log(f"⚠️ cache de firehose lleva ~{ciclos_firehose_no_sano * 30}s no sano -- "
+                    f"revisar conexión RTDS/logs, el ejecutor no puede confirmar señales así")
 
 
 if __name__ == "__main__":

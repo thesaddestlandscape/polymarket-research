@@ -102,7 +102,10 @@ def _leer_snapshot_consistente(fn):
 _cache_lock = threading.Lock()
 _cache_data  = None
 _cache_ts    = 0.0
-CACHE_TTL    = 1.0   # segundos — recalcula máximo 1×/s
+CACHE_TTL    = 3.0   # segundos — 30-Jul: subido de 1.0 (compute_data() mide
+# 8s+ bajo la carga actual del VPS, ver get_data()) -- con la refactorización
+# a refresco no bloqueante en background esto ya no bloquea peticiones, pero
+# subir el TTL igual reduce cuántas veces se dispara el hilo de recálculo.
 
 # ─── Utilidades ──────────────────────────────────────────────────────────────
 
@@ -116,6 +119,19 @@ def _ts(s):
         return int(datetime.fromisoformat(s).timestamp())
     except Exception:
         return 0
+
+def _dia_madrid(s):
+    """Fecha (YYYY-MM-DD) en huso Madrid de un timestamp ISO UTC -- 31-Jul,
+    alinea el bucketing del gráfico 'PnL diario' (antes día UTC) al mismo
+    criterio que el resto del dashboard."""
+    ts = _ts(s)
+    if not ts:
+        return ""
+    try:
+        from zoneinfo import ZoneInfo
+        return datetime.fromtimestamp(ts, tz=ZoneInfo("Europe/Madrid")).strftime("%Y-%m-%d")
+    except Exception:
+        return str(s)[:10]
 
 def _ic(wins, n):
     if n == 0:
@@ -426,8 +442,15 @@ def compute_live_data():
         real_daily   = real.get("daily_real") or []
         real_por_deposito = real.get("pnl_por_deposito") or []
         real_stale   = False
-        # tracking error de ejecución: modelo(trades.csv) − real. >0 = optimista.
-        tracking_error = round(pnl_total - real_pnl, 2) if real_pnl is not None else None
+        # tracking error de ejecución: real − modelo(trades.csv). 31-Jul:
+        # unificado con el signo de reconciliar.py::te (mismo cálculo, dos
+        # sitios distintos) -- antes este lado usaba modelo−real (signo
+        # opuesto), confuso al comparar la alerta de Telegram con el
+        # dashboard. Ahora ambos: >0 = el wallet real va MEJOR que el
+        # modelo (aparece dinero que el modelo no explica); <0 = los fills
+        # dejan MENOS dinero del que el modelo cree (selección adversa/
+        # slippage).
+        tracking_error = round(real_pnl - pnl_total, 2) if real_pnl is not None else None
     else:
         real_total = real_pnl = real_ts = tracking_error = None
         real_deposito = real_hoy = real_7d = None
@@ -484,8 +507,7 @@ def compute_live_data():
     # actual — mismo criterio de ventana que _daily_real_pnl en
     # live_balance.py, solo que acotado también por header_fecha_deposito.
     if header_fecha_deposito and real_daily:
-        d7_cutoff = max(header_fecha_deposito,
-                        (datetime.now(timezone.utc) - timedelta(days=7)).strftime("%Y-%m-%d"))
+        d7_cutoff = max(header_fecha_deposito, _frontera_madrid(7)[:10])
         header_7d_periodo = round(sum(d.get("pnl", 0) for d in real_daily
                                       if d.get("date", "") >= d7_cutoff), 2)
         header_pct_7d = (round(header_7d_periodo / header_deposito_eur * 100, 2)
@@ -510,7 +532,15 @@ def compute_live_data():
         corte = real_history_fine[0]["time"] if real_history_fine else None
         acc = real_deposito
         t0 = _ts(real_daily[0]["date"])
-        backbone = [{"time": t0 - 1, "value": round(real_deposito, 4)}] if t0 else []
+        # 31-Jul: el punto sintético de arranque (t0-1) tiene que respetar el
+        # mismo corte que el resto del backbone -- si real_daily[0] ya cae
+        # dentro del rango cubierto por los snapshots finos (ej. tras el fix
+        # de _daily_real_pnl_balance, que solo tiene datos desde que existe
+        # balance_history.csv, 07-Jul), t0-1 podía caer POR DELANTE del
+        # primer punto fino, rompiendo el orden estrictamente creciente que
+        # exige LightweightCharts -- el gráfico entero dejaba de renderizar.
+        backbone = ([{"time": t0 - 1, "value": round(real_deposito, 4)}]
+                    if t0 and (corte is None or t0 - 1 < corte) else [])
         for d in real_daily:
             acc += d.get("pnl", 0)
             t = _ts(d["date"])
@@ -562,6 +592,23 @@ def compute_live_data():
 
 # ─── Procesamiento ───────────────────────────────────────────────────────────
 
+def _frontera_madrid(dias_atras: int = 0) -> str:
+    """Timestamp UTC (ISO, comparable por string contra resolution_timestamp)
+    del inicio del día MADRID hace `dias_atras` días. 31-Jul: alinea el lado
+    shadow del dashboard al mismo criterio que ya usa compute_live_data()
+    (Madrid, no UTC) -- antes "hoy"/"7d"/"30d" del shadow usaban frontera UTC
+    mientras el lado live usaba Madrid, comparando "hoy" de dos husos
+    distintos sin avisar."""
+    try:
+        from zoneinfo import ZoneInfo
+        base = datetime.now(ZoneInfo("Europe/Madrid")) - timedelta(days=dias_atras)
+        base = base.replace(hour=0, minute=0, second=0, microsecond=0)
+        return base.astimezone(timezone.utc).isoformat(timespec="seconds")
+    except Exception:
+        base = datetime.now(timezone.utc) - timedelta(days=dias_atras)
+        return base.strftime("%Y-%m-%dT00:00:00")
+
+
 def compute_data():
     rows    = load_results()
     prices  = load_prices()
@@ -588,7 +635,7 @@ def compute_data():
     # ── PnL diario ────────────────────────────────────────────────────────────
     daily = defaultdict(lambda: {"pnl": 0.0, "n": 0, "wins": 0})
     for r in rows:
-        d = r.get("resolution_timestamp", "")[:10]
+        d = _dia_madrid(r.get("resolution_timestamp", ""))
         if d:
             daily[d]["pnl"]  += _pnl(r)
             daily[d]["n"]    += 1
@@ -674,12 +721,25 @@ def compute_data():
     ], key=lambda x: x["pnl"], reverse=True)
 
     # ── Rolling IC por estrategia principal ───────────────────────────────────
+    # 30-Jul: fix de rendimiento -- esto re-escaneaba TODO `rows` y recalculaba
+    # _strat_key(r) por cada fila, UNA VEZ POR CADA estrategia distinta (O(n×k),
+    # ~3.97M llamadas a _strat_key medidas con cProfile, 8-9s de los ~8.6s
+    # totales de compute_data() -- causa real de "el dashboard está crasheado"
+    # reportado por Javi: con CACHE_TTL=1.0s y compute_data() tardando 8s, casi
+    # cada petición del polling de 1s disparaba un recálculo completo y las
+    # peticiones concurrentes se apilaban esperando el lock). Agrupar por clave
+    # en UNA sola pasada (igual que el bucle de `strat` unas líneas arriba) en
+    # vez de refiltrar `rows` entero por cada k.
+    rows_por_key = defaultdict(list)
+    for r in rows:
+        rows_por_key[_strat_key(r)].append(r)
+
     WINDOW = 20
     rolling_ic = {}
     for k, d in strat.items():
         if d["n"] < WINDOW:
             continue
-        k_rows = [r for r in rows if _strat_key(r) == k]
+        k_rows = rows_por_key[k]
         pts = []
         step = max(1, len(k_rows) // 80)
         for i in range(WINDOW, len(k_rows) + 1, step):
@@ -770,10 +830,10 @@ def compute_data():
     pnl_total  = sum(_pnl(r) for r in rows)
     wins_total = sum(_win(r) for r in rows)
     n_total    = len(rows)
-    hoy        = now.strftime("%Y-%m-%d")
-    rows_hoy   = [r for r in rows if r.get("resolution_timestamp", "").startswith(hoy)]
-    rows_7d    = [r for r in rows if r.get("resolution_timestamp", "") >= (now - timedelta(days=7)).strftime("%Y-%m-%d")]
-    rows_30d   = [r for r in rows if r.get("resolution_timestamp", "") >= (now - timedelta(days=30)).strftime("%Y-%m-%d")]
+    hoy_ini    = _frontera_madrid(0)
+    rows_hoy   = [r for r in rows if r.get("resolution_timestamp", "") >= hoy_ini]
+    rows_7d    = [r for r in rows if r.get("resolution_timestamp", "") >= _frontera_madrid(7)]
+    rows_30d   = [r for r in rows if r.get("resolution_timestamp", "") >= _frontera_madrid(30)]
 
     # Trade markers para BTC (gana/pierde en precios)
     btc_markers = []
@@ -822,19 +882,77 @@ def compute_data():
         "live":          compute_live_data(),
     }
 
-def get_data():
+def _refrescar_cache():
+    """Escribe _cache_data/_cache_ts directamente, SIN tomar _cache_lock --
+    el llamante (_refrescar_cache_y_liberar) ya lo tiene adquirido durante
+    toda la duración del cálculo (si no, deadlock: threading.Lock no es
+    reentrante). La escritura de un atributo simple es atómica bajo el GIL,
+    no hace falta más protección para un caché de solo lectura como este."""
     global _cache_data, _cache_ts
-    with _cache_lock:
-        if time.monotonic() - _cache_ts < CACHE_TTL and _cache_data is not None:
-            return _cache_data
-        try:
-            _cache_data = _leer_snapshot_consistente(compute_data)
-        except Exception as e:
-            if _cache_data is not None:
-                return _cache_data   # sirve el último bueno si falla (incl. lock ocupado)
-            raise
-        _cache_ts = time.monotonic()
+    try:
+        nuevo = _leer_snapshot_consistente(compute_data)
+    except Exception:
+        return  # se queda el último bueno -- ver get_data()
+    _cache_data = nuevo
+    _cache_ts = time.monotonic()
+
+
+def get_data():
+    """30-Jul (Javi: "el dashboard está crasheado"): compute_data() puede
+    tardar 8s+ bajo la carga actual del VPS (~30 procesos persistentes
+    compitiendo por CPU/disco). Con CACHE_TTL=1s y el bloqueo SÍNCRONO que
+    había aquí antes (`with _cache_lock: ... compute_data()`), CADA
+    petición del polling de 1s del frontend que llegaba con el caché
+    caducado se quedaba esperando ese cálculo entero -- con varias
+    peticiones en vuelo a la vez (ver fix del frontend, _reqId), todas se
+    apilaban detrás del mismo lock durante hasta 8s, indistinguible de
+    "colgado"/"crasheado" para quien mira la página.
+
+    Ahora: si hay un dato cacheado (aunque esté caducado), se sirve AL
+    INSTANTE y el recálculo se dispara en un hilo aparte SOLO si no hay
+    uno ya en marcha (lock no bloqueante) -- ninguna petición espera nunca
+    más que el tiempo de leer una variable. Solo la primera petición tras
+    arrancar el proceso (sin caché todavía) espera el cálculo completo,
+    inevitable una vez."""
+    global _cache_data, _cache_ts
+    if time.monotonic() - _cache_ts < CACHE_TTL and _cache_data is not None:
         return _cache_data
+    if _cache_data is not None:
+        if _cache_lock.acquire(blocking=False):
+            try:
+                threading.Thread(target=_refrescar_cache_y_liberar, daemon=True).start()
+            except Exception:
+                _cache_lock.release()
+        return _cache_data  # sirve el último bueno mientras se recalcula en background
+    # arranque en frío -- no hay nada que servir, hay que esperar sí o sí.
+    # 30-Jul (encontrado al reiniciar con este mismo fix): si el proceso
+    # acaba de arrancar Y git_ops.lock está ocupado en ese instante exacto
+    # (fast/slow sincronizando), _leer_snapshot_consistente ya reintenta
+    # 5x0.3s internamente pero puede seguir ocupado -- antes esto tumbaba
+    # la conexión del cliente (excepción sin capturar hasta do_GET,
+    # "empty reply from server"). Reintenta unas pocas veces más aquí
+    # (la sync real dura segundos, no minutos) en vez de rendirse a la
+    # primera.
+    with _cache_lock:
+        if _cache_data is not None:
+            return _cache_data
+        ultimo_error = None
+        for intento in range(4):
+            try:
+                _cache_data = _leer_snapshot_consistente(compute_data)
+                _cache_ts = time.monotonic()
+                return _cache_data
+            except Exception as e:
+                ultimo_error = e
+                time.sleep(1.0)
+        raise ultimo_error
+
+
+def _refrescar_cache_y_liberar():
+    try:
+        _refrescar_cache()
+    finally:
+        _cache_lock.release()
 
 # ─── HTML ────────────────────────────────────────────────────────────────────
 
@@ -1325,7 +1443,7 @@ function renderLive(live) {
   if (notaEl) {
     if (live.tracking_error != null) {
       const cls = Math.abs(live.tracking_error) < 0.5 ? "neu" : "neg";
-      notaEl.innerHTML = `ℹ️ Referencia — estimación del modelo (trades.csv, precio de plan): PNL total ${live.pnl_total > 0 ? "+" : ""}${live.pnl_total.toFixed(2)}$ · desvío vs real <span class="${cls}">Δ ${live.tracking_error > 0 ? "+" : ""}${live.tracking_error.toFixed(2)}$</span> (el modelo no descuenta slippage/liquidación; vale el real).`;
+      notaEl.innerHTML = `ℹ️ Referencia — estimación del modelo (trades.csv, precio de plan): PNL total ${live.pnl_total > 0 ? "+" : ""}${live.pnl_total.toFixed(2)}$ · TE (real−modelo, mismo signo que la alerta de Telegram de reconciliar.py) <span class="${cls}">${live.tracking_error > 0 ? "+" : ""}${live.tracking_error.toFixed(2)}$</span> (el modelo no descuenta slippage/liquidación; vale el real).`;
     } else { notaEl.innerHTML = "&nbsp;"; }
   }
   // Recargas — desglose por depósito (fecha, aportado, nota, PnL y % de ese período)
@@ -1654,11 +1772,29 @@ function simpleName(k) {
 }
 
 // ─── Boot ────────────────────────────────────────────────────────────────────
+// 30-Jul: fix condición de carrera (Javi reportó "trades que desaparecen del
+// dashboard"). setInterval dispara fetchData() cada 1s SIN esperar a que la
+// petición anterior termine ni cancelarla -- si /api/data tarda >1s en
+// responder (visto en logs/dashboard.log: ráfagas de 6 peticiones en el mismo
+// segundo + BrokenPipeError, probable contención de disco con los commits
+// git del fast loop leyendo/escribiendo los mismos CSV), varias peticiones
+// quedan en vuelo a la vez y pueden resolverse FUERA DE ORDEN. El chequeo
+// `newTs !== _lastUpdated` solo comprobaba "es distinto al último que
+// pinté", no "es más reciente" -- una respuesta VIEJA que llega DESPUÉS de
+// una nueva pasaba el chequeo igual (timestamp distinto al último pintado)
+// y pisaba la tabla con datos desactualizados, borrando visualmente los
+// trades recién ejecutados hasta el siguiente tick correcto. Fix: id de
+// petición monotónico, se descarta cualquier respuesta que no sea la de la
+// ÚLTIMA petición lanzada (mismo patrón que AbortController, sin depender
+// de comparar timestamps de servidor).
 let _lastUpdated = "";
+let _reqId = 0;
 async function fetchData() {
+  const myReqId = ++_reqId;
   try {
     const r = await fetch("/api/data");
     const d = await r.json();
+    if (myReqId !== _reqId) return;  // ya salió una petición más nueva -- descartar esta respuesta
     const newTs = d?.stats?.updated || "";
     if (newTs !== _lastUpdated) {
       DATA = d;
@@ -1667,6 +1803,7 @@ async function fetchData() {
     }
     document.getElementById("update-badge").textContent = newTs ? `🟢 ${newTs}` : "";
   } catch(e) {
+    if (myReqId !== _reqId) return;
     document.getElementById("update-badge").textContent = "⚠️ sin conexión";
   }
 }

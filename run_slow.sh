@@ -51,17 +51,18 @@ while true; do
         log "  ⚠️ git_ops.lock ocupado >120s (run_fast.sh probablemente sincronizando) -- se salta este ciclo de sync"
         exit 0
     fi
-    # rebase huérfano -- mismo guard que run_fast.sh, ver comentario ahí.
+    # rebase huérfano (ej. `timeout 60s` matando el rebase de emergencia a
+    # medias) -- mismo guard que run_fast.sh, ver comentario extenso ahí.
     if [ -d .git/rebase-merge ] || [ -d .git/rebase-apply ]; then
         log "  ⚠️ rebase huérfano en .git -- limpiando antes de continuar"
         git rebase --abort >> "$LOG" 2>&1 || rm -rf .git/rebase-merge .git/rebase-apply
-        # 28-Jul: mismo fix que run_fast.sh -- recuperar el autostash huérfano
-        # si el árbol quedó limpio y hay uno esperando, en vez de dejarlo
-        # atrapado para siempre (82 stashes acumulados encontrados, uno con
-        # un trade real perdido).
-        if git diff --quiet && git diff --cached --quiet \
-                && [ -n "$(git stash list 2>/dev/null | head -1)" ]; then
-            log "  ⚠️ árbol limpio tras abort con stash pendiente -- intentando recuperarlo"
+        # 30-Jul: mismo fix que run_fast.sh -- quitada la precondición de
+        # "árbol limpio" (299 stashes huérfanos encontrados en vivo, la
+        # precondición casi nunca se cumplía con ~10 procesos persistentes
+        # escribiendo continuamente). git stash pop ya es seguro con ruido
+        # de fondo -- se intenta siempre que haya un stash pendiente.
+        if [ -n "$(git stash list 2>/dev/null | head -1)" ]; then
+            log "  ⚠️ rebase huérfano con stash pendiente -- intentando recuperarlo"
             git stash pop >> "$LOG" 2>&1 \
                 && log "  ✅ stash recuperado" \
                 || log "  ⚠️ stash no aplica limpio -- se deja en git stash list para revisión manual"
@@ -76,11 +77,59 @@ while true; do
         # feature (commits propios descartados en silencio). Saltar
         # pull/rebase/push fuera de main -- el commit de datos ya quedó hecho.
         if [ "$(git branch --show-current)" = "main" ]; then
-            timeout 60s git pull --rebase --autostash -X ours origin main >> "$LOG" 2>&1 || true
-            timeout 60s git push origin main >> "$LOG" 2>&1 || true
-            log "  Push OK"
+            # 30-Jul: eliminado el pull/rebase/autostash de la ruta común --
+            # mismo cambio y mismo razonamiento que run_fast.sh (ver comentario
+            # extenso ahí). fast/slow comparten este working directory y nadie
+            # más pushea a origin/main en operación normal, así que el pull era
+            # innecesario en ~99% de los ciclos y la fuente real de los stashes
+            # huérfanos (conflictos con los ~10 procesos sin candado) y de la
+            # pérdida de código real del 30-Jul (autostash barría el árbol
+            # entero, incluyendo ediciones manuales sin commitear). Ahora: push
+            # directo; solo si lo rechazan se entra en recuperación de
+            # emergencia con stash de ámbito explícito.
+            if ! timeout 60s git push origin main >> "$LOG" 2>&1; then
+                # 30-Jul (mismo hallazgo que run_fast.sh, encontrado minutos tras
+                # desplegar esto): el push también falla por motivos que NO son
+                # divergencia (.git de 12GB, OOM) -- comprobar con rev-list si
+                # origin realmente tiene commits nuevos antes de tocar el árbol,
+                # si no los tiene no hay nada que reconciliar.
+                timeout 30s git fetch origin main >> "$LOG" 2>&1 || true
+                DIVERGIO=$(git rev-list HEAD..origin/main --count 2>/dev/null || echo 0)
+                if [ "$DIVERGIO" -gt 0 ] 2>/dev/null; then
+                    log "  ⚠️ push rechazado y origin SÍ avanzó ($DIVERGIO commits) -- recuperación de emergencia"
+                    STASH_EMERG=0
+                    if ! git diff --quiet -- data/shadow data/live data/prices data/wallets 2>/dev/null \
+                       || ! git diff --cached --quiet -- data/shadow data/live data/prices data/wallets 2>/dev/null; then
+                        git stash push -m "git_ops_emergencia_slow" -- data/shadow data/live data/prices data/wallets >> "$LOG" 2>&1 \
+                            && STASH_EMERG=1
+                    fi
+                    if timeout 60s git rebase -X ours origin/main >> "$LOG" 2>&1; then
+                        log "  ✅ rebase de emergencia OK"
+                        if [ "$STASH_EMERG" = "1" ]; then
+                            git stash pop >> "$LOG" 2>&1 \
+                                && log "  ✅ stash de emergencia recuperado" \
+                                || log "  ⚠️ stash de emergencia no aplica limpio -- revisión manual (git stash list)"
+                        fi
+                        timeout 60s git push origin main >> "$LOG" 2>&1 \
+                            && log "  ✅ push tras recuperación OK" \
+                            || log "  ⚠️ push tras recuperación sigue fallando -- revisar manualmente"
+                    else
+                        log "  ⚠️ rebase de emergencia falló (probable: cambios sin commitear fuera de data/shadow|live|prices|wallets) -- abortando sin forzar, revisar manualmente"
+                        git rebase --abort >> "$LOG" 2>&1 || true
+                        if [ "$STASH_EMERG" = "1" ]; then
+                            git stash pop >> "$LOG" 2>&1 \
+                                && log "  ✅ stash de emergencia recuperado tras abort" \
+                                || log "  ⚠️ stash de emergencia no aplica limpio -- revisión manual (git stash list)"
+                        fi
+                    fi
+                else
+                    log "  ⚠️ push falló pero origin NO avanzó -- no es divergencia (probable OOM/red/tamaño de .git), se reintenta el siguiente ciclo sin tocar el árbol"
+                fi
+            else
+                log "  Push OK"
+            fi
         else
-            log "  ⚠️ rama actual != main -- se salta pull/rebase/push (solo commit local de datos)"
+            log "  ⚠️ rama actual != main -- se salta push (solo commit local de datos)"
         fi
     fi
   )

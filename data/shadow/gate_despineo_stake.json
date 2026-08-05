@@ -1,7 +1,10 @@
 {
-  "generado_utc": "2026-07-29T07:00:03+00:00",
+  "generado_utc": "2026-07-30T07:00:03+00:00",
   "fecha_despineo": "2026-07-28T18:55:00+00:00",
-  "n": 7,
+  "n": 20,
   "n_min": 15,
-  "veredicto": "sin_concluir (n=7/15)"
+  "corr": 0.41937542754590523,
+  "p_shuffle": 0.0734,
+  "stake_medio": 1.826,
+  "veredicto": "OK -- correlación no negativa (corr=+0.419, p=0.0734), gate pasado"
 }
