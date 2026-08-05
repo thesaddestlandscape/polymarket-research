@@ -105,23 +105,12 @@ REFRESCO_UNIVERSO_S = 30.0  # cadencia para volver a leer data/markets/HOY.csv
 UMBRAL_BAJO = 0.45
 NUDGE = 0.06
 
-# Zonas de micro-bucket confirmadas (05-Ago, CORREGIDO el mismo día --
-# ver feedback_lookahead_bias_precio_final_no_es_edge_05ago en memoria).
-# El primer intento bucketeaba por el precio de la ÚLTIMA captura antes
-# del cierre (20-65s de margen real) -- eso mide la convergencia
-# matemática obligatoria de cualquier binaria cerca de T=0, no edge real,
-# y daba [0.00,0.05) como "confirmado" -- FALSO POSITIVO, detectado por
-# Javi ("es imposible") y descartado. Rehecho con el precio en el momento
-# del CRUCE real del umbral (mediana 51min de margen real, igual que
-# dispara el ejecutor de verdad): con esa metodología, NINGÚN bucket
-# propio confirma con n=534 -- se usa en su lugar el hallazgo YA
-# VALIDADO de franja_milimetrica_ballenas.json (FAVORITO_CONFIRMADO#BTC
-# #60min#BUY_YES, bucket [0.55,0.60), n=154, CI90% no cruza cero,
-# split-half robusto) -- por simetría [0.40,0.45) en BUY_NO, que además
-# NO queda contradicho por el gate propio corregido (sin_concluir, no
-# confirmado malo). UMBRAL_BAJO=0.45 sigue disparando en todo [0.00,0.45)
-# -- esta zona es la única con evidencia real detrás.
-BTC_60MIN_BUYNO_ZONAS_BUENAS = [(0.40, 0.45)]
+# Veto de micro-bucket de precio: ver gate_bucket_propio.py::
+# _ZONAS_VALIDADAS_EXTERNAMENTE (05-Ago) para la franja confirmada hoy
+# con datos externos (franja_milimetrica_ballenas.json) -- el veto en sí
+# vive en watch_window() más abajo, delegado por completo a
+# gate_bucket_propio.evaluar() (única fuente de verdad, autoaprende con
+# el cron diario de vigia_gate_bucket_propio.py).
 
 # Mismo gate real que _gate_volumen_ballenas en shadow_predict.py
 # (GATE_VOLUMEN_VALIDADO) -- validado 27-Jul para BTC: n=215 alto=147
@@ -360,21 +349,19 @@ def watch_window(activo: str, mercado: dict) -> bool:
                 time.sleep(POLL_INTERVAL_S)
                 continue
 
+            # 05-Ago (petición explícita Javi): gate_bucket_propio es la
+            # ÚNICA fuente de verdad de micro-bucket -- ya NO se veta solo
+            # si malo_confirmado (fail-open), se EXIGE bueno_confirmado
+            # para operar (fail-closed). Autoaprende solo con el cron
+            # diario de vigia_gate_bucket_propio.py (dato propio) +
+            # gate_bucket_propio.py::_ZONAS_VALIDADAS_EXTERNAMENTE
+            # (validación externa mientras el dato propio madura).
             tupla_str = f"{STRATEGY}#{activo}#{MARCO}#{DIRECTION}"
             gate_bp = _gate_bucket_propio(tupla_str, py)
-            if gate_bp["veredicto"] == "malo_confirmado" and tupla_str in _pares_live_hoy_set():
-                log(f"[{mercado['market_id']}] py={py:.3f} vetado por gate_bucket_propio (malo_confirmado)", activo)
+            if tupla_str in _pares_live_hoy_set() and gate_bp["veredicto"] != "bueno_confirmado":
+                log(f"[{mercado['market_id']}] ⛔ Veto micro-bucket (solo opera en bueno_confirmado): "
+                    f"py={py:.3f} veredicto={gate_bp['veredicto']}", activo)
                 return False
-
-            # Veto de micro-bucket de precio BTC#60min (05-Ago, corregido el
-            # mismo día -- ver BTC_60MIN_BUYNO_ZONAS_BUENAS arriba para el
-            # detalle completo de la corrección).
-            if activo == "BTC":
-                en_zona_buena = any(lo <= py <= hi for lo, hi in BTC_60MIN_BUYNO_ZONAS_BUENAS)
-                if not en_zona_buena:
-                    log(f"[{mercado['market_id']}] ⛔ Veto micro-bucket BTC#60min: py={py:.3f} fuera de "
-                        f"zonas confirmadas {BTC_60MIN_BUYNO_ZONAS_BUENAS}", activo)
-                    return False
 
             prob_yes = max(0.03, py - NUDGE)
             log(f"[{mercado['market_id']}] CONFIRMADO py={py:.3f} prob_yes={prob_yes:.3f} "

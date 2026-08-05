@@ -189,21 +189,12 @@ MIN_TRADES_BALLENA = 3
 # todavía.
 UMBRAL_N_WALLETS_YES = {"ETH": 35}  # resto: 0 (sin filtro) por defecto vía .get()
 
-# Veto de micro-bucket de precio, ETH#5min#BUY_YES (05-Ago, petición explícita
-# Javi tras 3 pérdidas reales seguidas -6.91€ a py=0.05/0.14/0.05: "vamos a
-# desangrar" -- gate riguroso completo (Wilson+shuffle+bootstrap+split-half,
-# fee real 7% sobre el payout, formula exacta gross_win=(1-p)/p verificada
-# byte a byte contra trades.csv reales) sobre TODO ballenas_timing_history.csv
-# ETH#5min (n=79859), bucket 0.05 en TODO el rango [0,1), no solo la banda
-# hoy activa [0.05,0.30) -- así protege también si ballenas_observer.py
-# recalibra hacia otra banda (ej. la historica [0.70,0.90), que hoy tampoco
-# pasa el gate: [0.75,0.80)/[0.80,0.85) GATE_OK_MALO). SOLO 3 buckets
-# confirman GATE_OK_BUENO -- el resto (incluidos 0.05 y 0.14, donde
-# perdieron los 3 trades reales) está SIN CONFIRMAR (estimacion puntual
-# atractiva pero split-half inestable, +alta varianza payout longshot
-# ~19x a p=0.05), no "confirmado malo" -- fail-closed igual de estricto.
-# Fail-open (n<15) no aplica aqui: las 3 franjas activas ya tienen n>=1740.
-ETH_5MIN_BUY_YES_ZONAS_BUENAS = [(0.15, 0.20), (0.25, 0.30), (0.40, 0.45)]
+# Veto de micro-bucket de precio ETH#5min#BUY_YES: ver
+# gate_bucket_propio.py::_ZONAS_VALIDADAS_EXTERNAMENTE (05-Ago) para las
+# 3 franjas confirmadas hoy con datos externos (ballenas_timing_history.csv,
+# n=79859) -- el veto en sí vive en disparar() más abajo, delegado por
+# completo a gate_bucket_propio.evaluar() (única fuente de verdad,
+# autoaprende con el cron diario de vigia_gate_bucket_propio.py).
 
 ACTIVOS = ("ETH", "SOL", "XRP", "DOGE", "BNB")
 # BNB añadido 27-Jul (petición Javi): calibración ya existía en
@@ -783,30 +774,25 @@ def disparar(activo: str, mercado: dict, py: float, edge: float, restante_s: flo
         # Y la tupla ya está en pares_permitidos_live (mismo criterio que
         # los otros ejecutores: no vetar candidatas que todavía no operan
         # con dinero real, dejarlas acumular n sin filtrar). Fail-open si
-        # no hay evidencia (sin_concluir) -- no bloquea nada nuevo hoy
-        # (BALLENAS_TARDIAS#ETH#5min#BUY_YES lleva n=1-2 en el gate por la
-        # propia caducidad del bug que se acaba de arreglar), pero deja
-        # el veto ya cableado para en cuanto acumule n con el fix puesto.
+        # 05-Ago (petición explícita Javi, corrige el diseño del mismo día):
+        # gate_bucket_propio es la ÚNICA fuente de verdad de micro-bucket
+        # para tuplas live -- ya NO se veta solo si malo_confirmado
+        # (fail-open), se EXIGE bueno_confirmado para operar (fail-closed).
+        # "Bueno_confirmado" puede venir del dato propio (results.csv,
+        # regenerado a diario por vigia_gate_bucket_propio.py -- autoaprende
+        # solo, activa franjas nuevas conforme crece n) o de la extensión de
+        # validación externa (_ZONAS_VALIDADAS_EXTERNAMENTE en
+        # gate_bucket_propio.py, mientras el dato propio siga sin concluir).
+        # Solo aplica a la tupla que YA está en pares_permitidos_live --
+        # los candidatos (DRY_RUN) siguen observando sin restricción para
+        # poder acumular la evidencia que algún día los confirme.
         tupla_str = f"{STRATEGY}#{activo}#{VENTANA_MIN}min#BUY_YES"
         gate_bp = _gate_bucket_propio(tupla_str, py)
-        if gate_bp["veredicto"] == "malo_confirmado" and tupla_str in _pares_live_hoy_set():
-            log(f"⛔ Veto gate_bucket_propio (malo_confirmado) py={py:.3f} -- "
+        if tupla_str in _pares_live_hoy_set() and gate_bp["veredicto"] != "bueno_confirmado":
+            log(f"⛔ Veto micro-bucket (solo opera en bueno_confirmado): py={py:.3f} "
+                f"veredicto={gate_bp['veredicto']} -- "
                 f"{'[DRY-RUN] no ejecutaría' if DRY_RUN else 'no se ejecuta'}", activo)
             return False
-
-        # Veto de micro-bucket de precio ETH#5min (05-Ago, ver
-        # ETH_5MIN_BUY_YES_ZONAS_BUENAS arriba) -- gate riguroso sobre TODO
-        # el histórico de ballenas (n=79859), no solo el propio (que
-        # gate_bucket_propio arriba todavía no tiene, n=1-2). Solo 3 buckets
-        # confirmados buenos; fail-closed en el resto (incluida la zona
-        # 0.05-0.15 donde perdieron los 3 trades reales de hoy).
-        if activo == "ETH":
-            en_zona_buena = any(lo <= py < hi for lo, hi in ETH_5MIN_BUY_YES_ZONAS_BUENAS)
-            if not en_zona_buena:
-                log(f"⛔ Veto micro-bucket ETH#5min: py={py:.3f} fuera de zonas confirmadas "
-                    f"{ETH_5MIN_BUY_YES_ZONAS_BUENAS} -- "
-                    f"{'[DRY-RUN] no ejecutaría' if DRY_RUN else 'no se ejecuta'}", activo)
-                return False
 
         # 29-Jul: reemplaza (prob_bucket-0.5)*2 -- esa fórmula asume que el
         # precio de referencia es ~0.5, y se rompe en bandas baratas (DOGE/BNB

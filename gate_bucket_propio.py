@@ -48,6 +48,44 @@ _REGLAS_EXTENSION = (
     {"activos": ("BTC", "ETH"), "py_min": 0.80, "py_max": 1.01},
 )
 
+# 05-Ago: extensión que PROMUEVE a bueno_confirmado (no solo endurece a
+# malo_confirmado como la extensión de arriba) para tuplas cuyo propio n
+# en results.csv todavía es insuficiente para confirmar nada solas --
+# petición explícita Javi: "las estrategias que estén en live tengan el
+# filtro de micro-buckets para operar solo en la franja conocida que da
+# dinero", usando SIEMPRE el mismo mecanismo único (este fichero), no
+# tablas paralelas hardcodeadas en cada ejecutor (error corregido el
+# mismo día, ver feedback_lookahead_bias_precio_final_no_es_edge_05ago).
+#
+# Validado con fuentes EXTERNAS (no resultscsv propio, insuficiente hoy):
+#   - BALLENAS_TARDIAS#ETH#5min#BUY_YES: ballenas_timing_history.csv
+#     (n=79859, individual por whale trade -- restante_min real 2.0-3.4min
+#     sobre ventana de 5min, sin sesgo de convergencia T->0), gate
+#     Wilson+shuffle+bootstrap+split-half con fee 7% real.
+#   - FAVORITO_CONFIRMADO#BTC#60min#BUY_NO: cruzado con
+#     franja_milimetrica_ballenas.json (ya validado, [0.55,0.60) en
+#     BUY_YES = [0.40,0.45) en BUY_NO por simetría).
+#   - FAVORITO_CONFIRMADO_15MIN_ALTACONVICCION#BTC#15min#BUY_YES:
+#     coincide EXACTO con punto_confirmacion (Wilson 95% ya validado
+#     21-Jul, independiente): precio~0.875.
+# Ver idea_veto_microbucket_ballenas_eth5min_05ago /
+# idea_veto_microbucket_favorito_confirmado_btc_05ago en memoria para el
+# detalle completo, incluida la corrección de metodología del mismo día
+# (look-ahead bias: NUNCA usar precio final del mercado, solo precio en
+# el cruce real del umbral con tiempo restante significativo).
+#
+# Igual que _REGLAS_EXTENSION: NUNCA pisa un veredicto propio ya
+# confirmado (malo_confirmado o bueno_confirmado) -- en cuanto
+# results.csv acumule n>=15 propio en un bucket y el cron diario
+# (vigia_gate_bucket_propio.py) lo confirme (en cualquier sentido), el
+# dato propio manda siempre. Esto es solo el arranque -- autoaprendizaje
+# real, no un parche permanente.
+_ZONAS_VALIDADAS_EXTERNAMENTE = {
+    "BALLENAS_TARDIAS#ETH#5min#BUY_YES": [(0.15, 0.20), (0.25, 0.30), (0.40, 0.45)],
+    "FAVORITO_CONFIRMADO#BTC#60min#BUY_NO": [(0.40, 0.45)],
+    "FAVORITO_CONFIRMADO_15MIN_ALTACONVICCION#BTC#15min#BUY_YES": [(0.85, 0.90)],
+}
+
 
 def _extension_activa() -> bool:
     try:
@@ -120,6 +158,25 @@ def evaluar(tupla_str: str, py: float) -> dict:
                     "detalle_propio": detalle,
                 },
             }
+
+    # 05-Ago: extensión de PROMOCIÓN a bueno_confirmado (ver
+    # _ZONAS_VALIDADAS_EXTERNAMENTE arriba) -- solo cuando el propio dato
+    # sigue sin concluir. Sin flag de activación separado (a diferencia de
+    # la extensión de arriba): son solo 3 tuplas, ya vivas hoy con dinero
+    # real, aprobadas explícitamente por Javi el mismo día que se creó.
+    if veredicto_propio == "sin_concluir":
+        for lo, hi in _ZONAS_VALIDADAS_EXTERNAMENTE.get(tupla_str, []):
+            if lo <= py < hi:
+                return {
+                    "veredicto": "bueno_confirmado",
+                    "detalle": {
+                        "origen": "validacion_externa_05ago",
+                        "motivo": f"py en [{lo:.2f},{hi:.2f}), validado con fuente externa "
+                                  "(ballenas_timing_history/franja_milimetrica_ballenas/"
+                                  "punto_confirmacion) mientras el dato propio madura",
+                        "detalle_propio": detalle,
+                    },
+                }
 
     if detalle is not None:
         return {"veredicto": veredicto_propio, "detalle": detalle}
