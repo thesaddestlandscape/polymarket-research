@@ -370,16 +370,16 @@
     },
     {
       "id": "H-FUNDING-HIGH-BUYNO",
-      "nombre": "Funding rate alto (>0.03%/8h) → BUY_NO tiene más edge",
-      "descripcion": "Cuando funding perps Binance > 0.03%/8h, los longs están sobrecargados y pagan por mantener. El mercado es structuralmente vulnerable a corrección. Hipótesis: BUY_NO GBM tiene IC superior en este régimen vs funding neutral.",
+      "nombre": "Funding rate alto (>p90 real ≈0.009%/8h) → BUY_NO tiene más edge",
+      "descripcion": "Cuando funding perps Binance está en el decil superior real (>0.009%/8h, ver recalibración 06-Ago), los longs están sobrecargados y pagan por mantener. Hipótesis: BUY_NO GBM tiene IC superior en este régimen vs funding neutral. RECALIBRADO 06-Ago: el umbral original (0.03) era FÍSICAMENTE IMPOSIBLE -- el máximo real observado en 5428 filas de UPDOWN_GBM (feature funding_rate_8h = round(fr*100,5), fr=lastFundingRate crudo de Binance) es 0.01, y nunca lo cruzaba -- n=0 desde que se creó, atrapada sin poder acumular ni una fila. Recalibrado a p90 real (percentiles: p50=0.00368, p75=0.00651, p90=0.00943, p95=p99=p100=0.01 -- el feature satura en 0.01 en el 8.4% de las filas, sin evidencia de que sea un bug de captura, no de que sea funding genuinamente extremo). n=332 BUY_NO ya disponibles con el umbral nuevo (>>umbral_n=40), frente a n=0 con el original.",
       "tipo": "boost",
       "umbral": "n≥40 y IC>+0.05 diferencial vs baseline",
-      "accion": "Si IC_funding_alto > IC_baseline + 0.05 con n≥40 → boost ×1.1 en BUY_NO cuando funding_rate_8h > 0.03",
+      "accion": "Si IC_funding_alto > IC_baseline + 0.05 con n≥40 → boost ×1.1 en BUY_NO cuando funding_rate_8h > 0.009",
       "filtro": {
         "strategy_prefix": "UPDOWN_GBM",
         "decision": "BUY_NO",
         "feature": "funding_rate_8h",
-        "feature_lo": 0.03
+        "feature_lo": 0.009
       },
       "umbral_n": 40,
       "umbral_ic_min": 0.08
