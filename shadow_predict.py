@@ -45,6 +45,76 @@ def _pares_live_hoy_set() -> set:
             pass
     return _pares_live_cache["set"]
 
+# 06-Ago: fix estructural del "cementerio" (project_candidatas_estancadas_
+# diagnostico_05ago, Parte 3) -- ver ACUMULAR_SHADOW_AUNQUE_DESACTIVADA más
+# abajo para el porqué y el uso real. Persiste (y auto-actualiza, sin volver
+# a escanear git) el conjunto de nombres base de estrategia que ALGUNA VEZ
+# han estado en pares_permitidos_live -- bootstrap histórico completo
+# (154 commits de config_live.json, ver bootstrap_alguna_vez_live.py)
+# guardado en data/live/estrategias_alguna_vez_live.json.
+_ALGUNA_VEZ_LIVE_PATH = Path("data/live/estrategias_alguna_vez_live.json")
+# None = todavía no se ha conseguido cargar el bootstrap con éxito en este
+# proceso (ni una vez) -- distinto de "cargado y vacío". Un set() válido
+# SIEMPRE viene de una lectura de disco que funcionó al menos una vez.
+_alguna_vez_live_cache: set | None = None
+
+
+def _estrategias_alguna_vez_live():
+    """Devuelve el set persistido, o None si el bootstrap nunca se ha podido
+    leer con éxito en este proceso -- None es la señal de fallo que
+    _nunca_estuvo_live() usa para el fail-closed real.
+
+    ⚠️ BUG real encontrado por /code-review (06-Ago, antes de commitear):
+    una versión anterior, si la lectura fallaba, arrancaba la caché en
+    set() vacío y ACTO SEGUIDO la rellenaba con las tuplas live de HOY --
+    eso hacía que cualquier estrategia que fue live en el PASADO pero ya no
+    está en pares_permitidos_live hoy (GBM_LATE_15M, GBM_LATE_15M_ESPACIO_ATR,
+    UPDOWN_GBM, UPDOWN_GBM_15M_TARDIO -- las 4 pausadas/retiradas) quedaba
+    mal clasificada como "nunca live" y se colaba por la exención automática
+    -- exactamente al revés de lo que el mecanismo debía proteger. Corregido:
+    si la carga inicial falla, se devuelve None SIEMPRE (nunca un set
+    parcial), sin tocar la caché -- se reintenta la lectura en cada llamada
+    hasta que funcione, en vez de fijar un vacío erróneo para todo el ciclo
+    de vida del proceso."""
+    global _alguna_vez_live_cache
+    if _alguna_vez_live_cache is None:
+        try:
+            _alguna_vez_live_cache = set(json.loads(_ALGUNA_VEZ_LIVE_PATH.read_text(encoding="utf-8")))
+        except Exception:
+            return None  # fallo real -- no cachear nada, reintentar la próxima llamada
+
+    nombres_hoy = {t.split("#", 1)[0] for t in _pares_live_hoy_set() if isinstance(t, str)}
+    nuevos = nombres_hoy - _alguna_vez_live_cache
+    if nuevos:
+        _alguna_vez_live_cache |= nuevos
+        try:
+            # Escritura atómica (tmp + rename) -- el fichero anterior sin
+            # esto podía quedar truncado/corrupto si el proceso muere a
+            # mitad de write_text (ciclo del fast loop cada ~20s, trigger
+            # realista según /code-review), lo que habría forzado este
+            # mismo fallo en el siguiente arranque.
+            tmp = _ALGUNA_VEZ_LIVE_PATH.with_suffix(".tmp")
+            tmp.write_text(json.dumps(sorted(_alguna_vez_live_cache), indent=2, ensure_ascii=False))
+            tmp.replace(_ALGUNA_VEZ_LIVE_PATH)
+        except Exception:
+            pass  # no persistir no es grave -- se reintentará el próximo ciclo, el proceso ya tiene el nombre en memoria
+    return _alguna_vez_live_cache
+
+
+def _nunca_estuvo_live(nombre_base: str) -> bool:
+    """True solo si esa estrategia NUNCA ha estado en pares_permitidos_live
+    (histórico completo, no solo hoy) -- la exención automática del
+    cementerio SOLO aplica a estas. Cualquier estrategia que alguna vez
+    arriesgó dinero real sigue exigiendo la whitelist manual explícita para
+    volver a generar tras una auto-desactivación. Fail-closed real: si el
+    bootstrap no se pudo cargar (None), NADIE es "nunca live" -- el gate se
+    comporta exactamente como antes de este fix (solo exime lo que ya
+    estaba en ACUMULAR_SHADOW_AUNQUE_DESACTIVADA)."""
+    s = _estrategias_alguna_vez_live()
+    if s is None:
+        return False
+    return nombre_base not in s
+
 _HAS_PANDAS: bool | None = None   # None = not yet checked; True/False after first use
 _pd = None                         # populated lazily on first cache miss
 
@@ -5439,8 +5509,23 @@ def main():
                     if _cd and _cd in e:
                         return not e[_cd]
                     return not e.get("activa", True)
+                # 06-Ago: fix estructural del cementerio -- antes la única
+                # forma de romper el estado absorbente (activa=False sin
+                # poder generar más filas para corregirse) era añadir el
+                # nombre a mano a ACUMULAR_SHADOW_AUNQUE_DESACTIVADA, una
+                # excepción a la vez cada vez que alguien tropezaba con un
+                # caso (38/43 estrategias desactivadas atrapadas, 19 con
+                # n<15, ver project_candidatas_estancadas_diagnostico_05ago).
+                # Ahora la exención es AUTOMÁTICA para cualquier estrategia
+                # que NUNCA ha estado en pares_permitidos_live (histórico
+                # completo vía _nunca_estuvo_live) -- no puede estar
+                # "refutada con dinero real" si nunca arriesgó nada. La
+                # whitelist manual se mantiene como red de seguridad
+                # explícita (nunca se retira), por si el bootstrap histórico
+                # tuviera algún hueco.
                 if (any(_nivel_bloqueado(k) for k in lookup_keys if k in params_din)
-                        and nombre not in ACUMULAR_SHADOW_AUNQUE_DESACTIVADA):
+                        and nombre not in ACUMULAR_SHADOW_AUNQUE_DESACTIVADA
+                        and not _nunca_estuvo_live(nombre)):
                     continue
                 edge_min = sp.get("edge_minimo") or EDGE_MINIMO
                 # Apuesta Kelly: escala con IC confirmado, mínimo 0.50€ si activa
