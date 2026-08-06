@@ -291,12 +291,33 @@ async def _correr_una_conexion(wallets: dict, vistos: set) -> set:
                                  "(outcomes inesperados o Gamma sin datos) -- fail-closed, no se ejecuta")
                         else:
                             market_id, direction = resuelto
-                            precio_orden = ask_2 if ask_2 not in (None, "") else ask_d
-                            if precio_orden in (None, "") or stake_dryrun in (None, ""):
+                            ask_lado = ask_2 if ask_2 not in (None, "") else ask_d
+                            if ask_lado in (None, "") or stake_dryrun in (None, ""):
                                 _log("  ⛔ precio/stake sin resolver -- fail-closed, no se ejecuta")
                             else:
+                                # /code-review 06-Ago: `ask_lado` es el ask del
+                                # token del propio `mirror_lado` (consultado
+                                # directamente vía _token_para_lado), pero
+                                # _ejecutar_orden_polymarket espera SIEMPRE
+                                # entry_price en perspectiva YES (hace
+                                # 1-entry_price internamente para BUY_NO) --
+                                # pasar el ask del lado NO tal cual lo invertía
+                                # DOS veces. Convertir aquí antes de llamar.
+                                ask_lado_f = float(ask_lado)
+                                precio_orden_yes = ask_lado_f if direction == "BUY_YES" else round(1.0 - ask_lado_f, 6)
+                                # /code-review 06-Ago: sin edge_dir,
+                                # _ejecutar_orden_polymarket se salta el
+                                # re-quote/abort si el edge se evaporó entre
+                                # detección y decisión (_decidir_requote) --
+                                # el mismo guardián que exige el resto de
+                                # ejecutores live (CLAUDE.md: "aborta si
+                                # edge<0.02"). info["edge_pp"] ya es el edge
+                                # validado A FAVOR de esta dirección (solo
+                                # SEGUIR llega aquí, edge_pp>0 por construcción).
+                                edge_dir = info["edge_pp"] / 100.0
                                 resultado = lt._ejecutar_orden_polymarket(
-                                    market_id, direction, float(stake_dryrun), float(precio_orden),
+                                    market_id, direction, float(stake_dryrun), precio_orden_yes,
+                                    edge_dir=edge_dir,
                                     contexto={"strategy": "WALLET_MIRROR", "subtype": f"{activo}#{marco}"})
                                 _log(f"  🚨 ORDEN REAL enviada ({tupla_sintetica}): {resultado}")
                 if n_matches % 20 == 0:
