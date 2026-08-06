@@ -1,0 +1,233 @@
+{
+  "generado": "2026-08-06T06:45:07.514056+00:00",
+  "cementerio": [
+    {
+      "clave": "GBM_LATE_15M_PYCONFIRMADO#SOL#15min",
+      "n": 8,
+      "ic_bayes": -0.12,
+      "motivo": "IC_bayes=-0.300 n=8 conf=0.40 → DESACTIVADA",
+      "viola_n_minimo": true
+    },
+    {
+      "clave": "LIQUIDACIONES_5M#ETH#5min",
+      "n": 8,
+      "ic_bayes": -0.12,
+      "motivo": "IC_bayes=-0.300 n=8 conf=0.40 → DESACTIVADA",
+      "viola_n_minimo": true
+    },
+    {
+      "clave": "LIQUIDACIONES_5M#SOL#5min",
+      "n": 8,
+      "ic_bayes": -0.12,
+      "motivo": "IC_bayes=-0.300 n=8 conf=0.40 → DESACTIVADA",
+      "viola_n_minimo": true
+    },
+    {
+      "clave": "GBM_LATE_60M_FADE#60min",
+      "n": 8,
+      "ic_bayes": -0.16,
+      "motivo": "IC_bayes=-0.400 n=8 conf=0.40 → DESACTIVADA",
+      "viola_n_minimo": true
+    },
+    {
+      "clave": "GBM_LATE_15M_PYCONFIRMADO#BTC#15min",
+      "n": 9,
+      "ic_bayes": -0.1023,
+      "motivo": "IC_bayes=-0.227 n=9 conf=0.45 → DESACTIVADA",
+      "viola_n_minimo": true
+    },
+    {
+      "clave": "LIQUIDACIONES_15M#15min",
+      "n": 9,
+      "ic_bayes": -0.1432,
+      "motivo": "IC_bayes=-0.318 n=9 conf=0.45 → DESACTIVADA",
+      "viola_n_minimo": true
+    },
+    {
+      "clave": "UPDOWN_GBM#XRP#5min",
+      "n": 11,
+      "ic_bayes": -0.1058,
+      "motivo": "IC_bayes=-0.192 n=11 conf=0.55 → edge_minimo=0.04 | IC_bayes=-0.061 n=9 → DESACTIVADA MANUALMENTE 2026-06-27 (GBM#5min IC<-0.05 consistente)",
+      "viola_n_minimo": true
+    },
+    {
+      "clave": "UPDOWN_GBM#240min",
+      "n": 11,
+      "ic_bayes": -0.1481,
+      "motivo": "IC_bayes=-0.269 n=11 conf=0.55 → DESACTIVADA",
+      "viola_n_minimo": true
+    },
+    {
+      "clave": "UPDOWN_GBM#SOL#daily",
+      "n": 12,
+      "ic_bayes": -0.1286,
+      "motivo": "IC_bayes=-0.214 n=12 conf=0.60 → DESACTIVADA",
+      "viola_n_minimo": true
+    },
+    {
+      "clave": "LIQUIDACIONES_60M#60min",
+      "n": 12,
+      "ic_bayes": -0.1714,
+      "motivo": "IC_bayes=-0.286 n=12 conf=0.60 → DESACTIVADA",
+      "viola_n_minimo": true
+    },
+    {
+      "clave": "UPDOWN_OU_5M#XRP#5min",
+      "n": 13,
+      "ic_bayes": -0.1083,
+      "motivo": "IC_bayes=-0.167 n=13 conf=0.65 → edge_minimo=0.04",
+      "viola_n_minimo": true
+    },
+    {
+      "clave": "UPDOWN_OU_5M#BNB#5min",
+      "n": 13,
+      "ic_bayes": -0.195,
+      "motivo": "IC_bayes=-0.300 n=13 conf=0.65 → DESACTIVADA",
+      "viola_n_minimo": true
+    },
+    {
+      "clave": "UPDOWN_GBM#ETH#daily",
+      "n": 15,
+      "ic_bayes": -0.1544,
+      "motivo": "IC_bayes=-0.206 n=15 conf=0.75 → DESACTIVADA",
+      "viola_n_minimo": false
+    },
+    {
+      "clave": "STRUCT_NO_15M#15min",
+      "n": 15,
+      "ic_bayes": -0.1985,
+      "motivo": "IC_bayes=-0.265 n=15 conf=0.75 → DESACTIVADA",
+      "viola_n_minimo": false
+    },
+    {
+      "clave": "UPDOWN_OU_5M#ETH#5min",
+      "n": 18,
+      "ic_bayes": -0.225,
+      "motivo": "IC_bayes=-0.250 n=18 conf=0.90 → DESACTIVADA",
+      "viola_n_minimo": false
+    },
+    {
+      "clave": "UPDOWN_GBM#ETH#5min",
+      "n": 19,
+      "ic_bayes": -0.2036,
+      "motivo": "IC_bayes=-0.214 n=19 conf=0.95 → DESACTIVADA",
+      "viola_n_minimo": false
+    },
+    {
+      "clave": "UPDOWN_GBM#BTC#5min",
+      "n": 19,
+      "ic_bayes": -0.1583,
+      "motivo": "IC_bayes=-0.167 n=19 conf=0.95 → edge_minimo=0.04 | IC_bayes=-0.133 n=16 → DESACTIVADA MANUALMENTE 2026-06-27 (GBM#5min IC<-0.05 consistente)",
+      "viola_n_minimo": false
+    },
+    {
+      "clave": "UPDOWN_GBM#SOL#5min",
+      "n": 23,
+      "ic_bayes": -0.06,
+      "motivo": "IC_bayes=-0.060 n=23 conf=1.00 | IC_bayes=-0.112 n=17 → DESACTIVADA MANUALMENTE 2026-06-27 (GBM#5min IC<-0.05 consistente)",
+      "viola_n_minimo": false
+    },
+    {
+      "clave": "SMART_FLOW_1H",
+      "n": 29,
+      "ic_bayes": -0.2742,
+      "motivo": "IC_bayes=-0.274 n=29 conf=1.00 → DESACTIVADA",
+      "viola_n_minimo": false
+    },
+    {
+      "clave": "LIQUIDACIONES_5M#5min",
+      "n": 33,
+      "ic_bayes": -0.2143,
+      "motivo": "IC_bayes=-0.214 n=33 conf=1.00 → DESACTIVADA",
+      "viola_n_minimo": false
+    },
+    {
+      "clave": "UPDOWN_GBM#SOL#60min",
+      "n": 35,
+      "ic_bayes": -0.0946,
+      "motivo": "IC_bayes=-0.095 n=35 conf=1.00",
+      "viola_n_minimo": false
+    },
+    {
+      "clave": "UPDOWN_GBM#daily",
+      "n": 45,
+      "ic_bayes": -0.2021,
+      "motivo": "IC_bayes=-0.202 n=45 conf=1.00 → DESACTIVADA",
+      "viola_n_minimo": false
+    },
+    {
+      "clave": "PRICE_TARGET_GBM#BTC#atexpiry",
+      "n": 63,
+      "ic_bayes": -0.2538,
+      "motivo": "IC_bayes=-0.254 n=63 conf=1.00 → DESACTIVADA",
+      "viola_n_minimo": false
+    },
+    {
+      "clave": "PRICE_TARGET_GBM#ETH#atexpiry",
+      "n": 64,
+      "ic_bayes": -0.197,
+      "motivo": "IC_bayes=-0.197 n=64 conf=1.00 → edge_minimo=0.04",
+      "viola_n_minimo": false
+    },
+    {
+      "clave": "UPDOWN_GBM#5min",
+      "n": 75,
+      "ic_bayes": -0.1623,
+      "motivo": "IC_bayes=-0.162 n=75 conf=1.00 → edge_minimo=0.04 | IC_bayes=-0.155 n=56 → DESACTIVADA MANUALMENTE 2026-06-27 (GBM#5min IC<-0.05 consistente)",
+      "viola_n_minimo": false
+    },
+    {
+      "clave": "GBM_LATE_5M#ETH#5min",
+      "n": 82,
+      "ic_bayes": -0.2024,
+      "motivo": "IC_bayes=-0.202 n=82 conf=1.00 → DESACTIVADA",
+      "viola_n_minimo": false
+    },
+    {
+      "clave": "UPDOWN_OU_5M#5min",
+      "n": 84,
+      "ic_bayes": -0.2093,
+      "motivo": "IC_bayes=-0.209 n=84 conf=1.00 → DESACTIVADA",
+      "viola_n_minimo": false
+    },
+    {
+      "clave": "PRICE_TARGET_GBM#atexpiry",
+      "n": 164,
+      "ic_bayes": -0.1747,
+      "motivo": "IC_bayes=-0.175 n=164 conf=1.00 → edge_minimo=0.04",
+      "viola_n_minimo": false
+    },
+    {
+      "clave": "GBM_LATE_15M_PYCONFIRMADO#ETH#15min",
+      "n": 233,
+      "ic_bayes": -0.0319,
+      "motivo": "IC_bayes=-0.032 n=233 conf=1.00",
+      "viola_n_minimo": false
+    },
+    {
+      "clave": "GBM_LATE_5M#BTC#5min",
+      "n": 315,
+      "ic_bayes": 0.03,
+      "motivo": "IC_bayes=+0.030 n=315 conf=1.00",
+      "viola_n_minimo": false
+    },
+    {
+      "clave": "GBM_LATE_5M#SOL#5min",
+      "n": 568,
+      "ic_bayes": -0.0421,
+      "motivo": "IC_bayes=-0.042 n=568 conf=1.00",
+      "viola_n_minimo": false
+    },
+    {
+      "clave": "GBM_LATE_5M#5min",
+      "n": 1431,
+      "ic_bayes": -0.0178,
+      "motivo": "IC_bayes=-0.018 n=1431 conf=1.00",
+      "viola_n_minimo": false
+    }
+  ],
+  "candidatos_estancados": [],
+  "candidatos_nunca_genero": [],
+  "hipotesis_estancadas": [],
+  "hipotesis_nunca_genero": []
+}
