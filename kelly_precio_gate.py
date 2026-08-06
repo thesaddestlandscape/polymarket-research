@@ -82,7 +82,11 @@ def evaluar(strategy: str, precio_decision: float, subtype: str | None = None) -
     tabla = por_subtype.get(subtype)
     if not tabla:
         return None
-    b = round(math.floor(precio_decision / STEP) * STEP, 4)
+    # 06-Ago fix: +1e-9 evita que un precio EXACTO en un múltiplo de STEP
+    # (ej. 0.70) caiga en el bucket inferior por precisión de coma flotante
+    # -- ver idea_bug_bucketing_float_precision_micro_buckets_06ago (mismo
+    # bug en gate_bucket_propio.py, 5.08% de las filas afectadas).
+    b = round(math.floor(precio_decision / STEP + 1e-9) * STEP, 4)
     entrada = tabla.get(f"{b:.2f}")
     if entrada is None:
         return None

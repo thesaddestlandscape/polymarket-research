@@ -166,7 +166,17 @@ def evaluar(tupla_str: str, py: float) -> dict:
     "detalle": {...}|None}. No decide permitido/vetado -- eso lo hace el
     caller (fase 0: solo loguea; fase 1: veta si malo_confirmado)."""
     import math
-    b = round(math.floor(py / STEP) * STEP, 4)
+    # 06-Ago (fix real, hallazgo al responder una pregunta de Javi sobre
+    # cobertura de buckets): sin el +1e-9, un precio EXACTO en un múltiplo
+    # de STEP (ej. 0.70) puede dar 13.999999999999998 en la división por
+    # coma flotante -- math.floor lo trunca al bucket INFERIOR (0.65 en vez
+    # de 0.70). Verificado real: el bucket "0.65" de FAVORITO_CONFIRMADO_
+    # 15MIN_ALTACONVICCION#BTC#15min#BUY_YES (n=189, el de más datos) no
+    # tenía NINGÚN precio real 0.65-0.699 -- eran todos 0.70 exactos mal
+    # etiquetados. 5.08% de las filas de results.csv afectadas (3998/78659).
+    # Mismo bug duplicado en 6 ficheros más, ver idea_bug_bucketing_float_
+    # precision_micro_buckets_06ago en memoria.
+    b = round(math.floor(py / STEP + 1e-9) * STEP, 4)
     b_str = f"{b:.2f}"
 
     # Cortacircuitos de emergencia -- SIEMPRE se comprueba primero, gana

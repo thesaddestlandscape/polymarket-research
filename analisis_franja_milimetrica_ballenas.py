@@ -88,7 +88,12 @@ FAMILIAS_BALLENA_DEPENDIENTES_SIN_UMBRAL = {
 
 
 def bucket(p):
-    return round((p // STEP) * STEP, 3)
+    # 06-Ago fix: +1e-9 evita mal-clasificar precios EXACTOS en un múltiplo
+    # de STEP al bucket inferior (coma flotante, "//" tiene el mismo
+    # problema que math.floor(p/STEP)) -- ver idea_bug_bucketing_float_
+    # precision_micro_buckets_06ago (encontrado por /code-review, hallado
+    # tras el fix hermano en gate_bucket_propio.py/kelly_precio_gate.py).
+    return round(((p + 1e-9) // STEP) * STEP, 3)
 
 
 def cargar_ballenas():

@@ -66,7 +66,11 @@ ITERS = 1000
 
 
 def bucket(p):
-    return round(math.floor(p / STEP) * STEP, 4)
+    # 06-Ago fix: +1e-9 evita mal-clasificar precios EXACTOS en un múltiplo
+    # de STEP al bucket inferior (coma flotante) -- ver idea_bug_bucketing_
+    # float_precision_micro_buckets_06ago. Regenera gate_bucket_propio.json,
+    # que consume gate_bucket_propio.py::evaluar() (mismo fix aplicado ahí).
+    return round(math.floor(p / STEP + 1e-9) * STEP, 4)
 
 
 def cargar_tuplas_live():

@@ -41,7 +41,10 @@ N_MIN_INFORMATIVO = 15
 
 
 def bucket(p):
-    return round((p // STEP) * STEP, 3)
+    # 06-Ago fix: +1e-9 evita mal-clasificar precios EXACTOS en un múltiplo
+    # de STEP al bucket inferior (coma flotante) -- ver idea_bug_bucketing_
+    # float_precision_micro_buckets_06ago.
+    return round(((p + 1e-9) // STEP) * STEP, 3)
 
 
 def cargar_carne():
