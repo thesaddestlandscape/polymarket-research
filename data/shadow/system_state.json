@@ -1,10 +1,10 @@
 {
-  "timestamp_utc": "2026-08-06T16:08:40+00:00",
-  "bankroll_sim": 13270.74,
-  "pnl_total": 13250.74,
-  "n_ops": 81006,
-  "win_rate": 0.612,
-  "estrategias_activas": 397,
+  "timestamp_utc": "2026-08-06T16:14:19+00:00",
+  "bankroll_sim": 13389.63,
+  "pnl_total": 13369.63,
+  "n_ops": 81074,
+  "win_rate": 0.6119,
+  "estrategias_activas": 393,
   "desactivadas": [
     "UPDOWN_GBM#SOL#5min",
     "UPDOWN_GBM#5min",
@@ -18,6 +18,8 @@
     "PRICE_TARGET_GBM#BTC",
     "UPDOWN_GBM#ETH#daily",
     "UPDOWN_GBM#SOL#daily",
+    "UPDOWN_OU_5M#ETH#5min",
+    "UPDOWN_OU_5M#ETH",
     "STREAK_MOM_5M",
     "GBM_LATE_15M_PYCONFIRMADO#BTC#15min",
     "GBM_LATE_15M_PYCONFIRMADO#BTC",
@@ -30,13 +32,15 @@
     "LIQUIDACIONES_5M#SOL#5min",
     "LIQUIDACIONES_5M#SOL",
     "GBM_LATE_60M_FADE",
+    "GBM_LATE_60M_FADE#SOL#60min",
+    "GBM_LATE_60M_FADE#SOL",
     "GBM_LATE_60M_FADE#60min",
-    "GBM_LATE_60M_FADE#BTC#60min",
-    "GBM_LATE_60M_FADE#BTC",
     "GBM_LATE_60M_FADE#ETH#60min",
     "GBM_LATE_60M_FADE#ETH",
     "BALLENAS_TARDIAS#BNB#5min",
-    "BALLENAS_TARDIAS#BNB"
+    "BALLENAS_TARDIAS#BNB",
+    "PRICE_TARGET_GBM_FADE",
+    "PRICE_TARGET_GBM_FADE#atexpiry"
   ],
   "top3_ic": [
     {
@@ -55,13 +59,13 @@
       "n": 84
     }
   ],
-  "brier_medio": 0.2309,
+  "brier_medio": 0.231,
   "clv_medio": 0.0582,
   "monitor_5min": {
     "ou_5m": {
-      "n": 171,
-      "clv": -0.1533,
-      "clv_ult30": -0.0118
+      "n": 175,
+      "clv": -0.1611,
+      "clv_ult30": -0.0535
     },
     "of_buy_yes": {
       "n": 608,
