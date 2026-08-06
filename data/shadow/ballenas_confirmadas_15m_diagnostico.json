@@ -3942,7 +3942,7 @@
         }
       },
       "volumen_bajo": {
-        "conteo": 321,
+        "conteo": 324,
         "mercados": {
           "0x6a90da3865e13755b9ab4a931209194616830264ac9dba3e125a7ed6e2bb8b3e": 1,
           "0x5aecfdf15aab9c757a807a690cc58969facef65e4343485f533deb8ea7f9c703": 1,
@@ -4019,11 +4019,12 @@
           "0x5253c492648dd009512beece94c0b0586781abee3924b44bb55e58a8f4ad2f87": 6,
           "0x53fbf330d884c48ea740d2c58315397d00bfab27e5bf29629c43300d9936e1ca": 5,
           "0xdd67d523873c7dd629cbc6ee79ea9345ba499faddc35b1bf7c3d6de02eab6ee5": 2,
-          "0xf6c52112ec744b196174012be8e2775a2cfb62a2ce8b20f28fe3d1904c832d14": 7
+          "0xf6c52112ec744b196174012be8e2775a2cfb62a2ce8b20f28fe3d1904c832d14": 7,
+          "0x912d24219309a4507f5025dd4b7970ccb83f5dc9cba72d172387341f06fcf605": 3
         }
       },
       "error_api": {
-        "conteo": 3386,
+        "conteo": 3395,
         "mercados": {
           "0x9c8ec58c09836f579f15731a2a1997ef45bfe77d6f0e4513bb2351223a389f18": 6,
           "0x508a7030258446a09165b0713e36a07e63dce4d100e6f60681d1764f5a39f0d0": 7,
@@ -4203,16 +4204,19 @@
           "0x8bc6708e1432922ed94a640528a0af1d906e1793489ea2ac62aca7616b116fc5": 12,
           "0xff26b7ad1aba242013d340ef0761df0b267bd7bbe67a93595bb3030e027eb39b": 24,
           "0x912d24219309a4507f5025dd4b7970ccb83f5dc9cba72d172387341f06fcf605": 24,
-          "0x452715c53efb99e0b990155ad6e66bbfcb8c42ad58da93854b011015520d4b53": 16,
-          "0x058b1ad7f618d62c650736481a129410ec7d87d046b0ae9063064deb717ec75d": 9
+          "0x452715c53efb99e0b990155ad6e66bbfcb8c42ad58da93854b011015520d4b53": 19,
+          "0x058b1ad7f618d62c650736481a129410ec7d87d046b0ae9063064deb717ec75d": 12,
+          "0x59512fda4d6ecd9eed49d230aa809d04218da428cac5d140c92f5146aec1572c": 3
         }
       }
     },
     "ultimo_detalle": {
-      "n": 0,
-      "motivo": "pocos_trades_en_banda",
+      "n_total_lado": 11,
+      "umbral": 35,
+      "pct_lado": 1.0,
+      "motivo": "volumen_bajo",
       "condition_id": "0x912d24219309a4507f5025dd4b7970ccb83f5dc9cba72d172387341f06fcf605",
-      "ts": "2026-08-06T13:28:37+00:00"
+      "ts": "2026-08-06T13:33:52+00:00"
     }
   },
   "XRP#BUY_NO": {
