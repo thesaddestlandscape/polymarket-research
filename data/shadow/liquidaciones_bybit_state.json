@@ -1,5 +1,5 @@
 {
- "generado_utc": "2026-08-06T10:13:37+00:00",
+ "generado_utc": "2026-08-06T10:19:28+00:00",
  "fuente": "bybit",
  "BNB": {
   "2min": {
@@ -36,20 +36,20 @@
   },
   "5min": {
    "usd_long": 0.0,
-   "usd_short": 9571.76,
+   "usd_short": 64.23,
    "n": 1,
    "imbalance": 1.0
   },
   "15min": {
    "usd_long": 0.0,
-   "usd_short": 16000.89,
-   "n": 2,
+   "usd_short": 16065.12,
+   "n": 3,
    "imbalance": 1.0
   },
   "60min": {
    "usd_long": 0.0,
-   "usd_short": 26609.29,
-   "n": 8,
+   "usd_short": 26673.52,
+   "n": 9,
    "imbalance": 1.0
   }
  },
@@ -62,20 +62,20 @@
   },
   "5min": {
    "usd_long": 0.0,
-   "usd_short": 1025.1,
-   "n": 1,
+   "usd_short": 2553.93,
+   "n": 3,
    "imbalance": 1.0
   },
   "15min": {
    "usd_long": 0.0,
-   "usd_short": 6753.03,
-   "n": 3,
+   "usd_short": 9233.57,
+   "n": 5,
    "imbalance": 1.0
   },
   "60min": {
    "usd_long": 0.0,
-   "usd_short": 91243.41,
-   "n": 19,
+   "usd_short": 92640.86,
+   "n": 21,
    "imbalance": 1.0
   }
  },
@@ -88,21 +88,21 @@
   },
   "5min": {
    "usd_long": 0.0,
-   "usd_short": 0.0,
-   "n": 0,
-   "imbalance": null
+   "usd_short": 264.84,
+   "n": 1,
+   "imbalance": 1.0
   },
   "15min": {
    "usd_long": 0.0,
-   "usd_short": 1798.85,
-   "n": 3,
+   "usd_short": 2063.68,
+   "n": 4,
    "imbalance": 1.0
   },
   "60min": {
    "usd_long": 1130.85,
-   "usd_short": 480317.75,
-   "n": 11,
-   "imbalance": 0.9953
+   "usd_short": 450090.54,
+   "n": 9,
+   "imbalance": 0.995
   }
  },
  "SOL": {
@@ -114,14 +114,14 @@
   },
   "5min": {
    "usd_long": 0.0,
-   "usd_short": 3121.82,
-   "n": 3,
-   "imbalance": 1.0
+   "usd_short": 0.0,
+   "n": 0,
+   "imbalance": null
   },
   "15min": {
    "usd_long": 0.0,
-   "usd_short": 3318.36,
-   "n": 4,
+   "usd_short": 3121.82,
+   "n": 3,
    "imbalance": 1.0
   },
   "60min": {
@@ -146,9 +146,9 @@
   },
   "15min": {
    "usd_long": 0.0,
-   "usd_short": 97.69,
-   "n": 1,
-   "imbalance": 1.0
+   "usd_short": 0.0,
+   "n": 0,
+   "imbalance": null
   },
   "60min": {
    "usd_long": 0.0,
