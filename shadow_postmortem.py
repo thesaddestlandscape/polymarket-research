@@ -1164,6 +1164,25 @@ FEATURE_RULES = {
     "GBM_LATE_15M_ESPACIO_ATR#ETH#15min": _BASE_GBM,
     "GBM_LATE_15M_ESPACIO_ATR#SOL#15min": _BASE_GBM,
     "GBM_LATE_15M_ESPACIO_ATR#XRP#15min": _BASE_GBM,
+
+    # GBM_LATE_15M_MULTIHORIZONTE / GBM_LATE_15M_PYCONFIRMADO (06-Ago,
+    # vigia_cobertura_feature_rules.py): mismas variantes de _s_gbm_late que
+    # las de arriba, mismo dict de features -- _BASE_GBM aplica directo.
+    # MULTIHORIZONTE llevaba desde el 22-Jul sin ninguna entrada (0 aprendizaje
+    # causal) porque nadie la añadió al recuperarla del stash; PYCONFIRMADO
+    # nunca la tuvo tampoco pese a llevar acumulando desde antes. Ver
+    # idea_bug_filtros_causales_cobertura_total_05ago para el contexto del
+    # bug hermano (filtros degenerados) encontrado la misma noche.
+    "GBM_LATE_15M_MULTIHORIZONTE":         _BASE_GBM,
+    "GBM_LATE_15M_MULTIHORIZONTE#BTC#15min": _BASE_GBM,
+    "GBM_LATE_15M_MULTIHORIZONTE#ETH#15min": _BASE_GBM,
+    "GBM_LATE_15M_MULTIHORIZONTE#SOL#15min": _BASE_GBM,
+    "GBM_LATE_15M_MULTIHORIZONTE#XRP#15min": _BASE_GBM,
+    "GBM_LATE_15M_PYCONFIRMADO":         _BASE_GBM,
+    "GBM_LATE_15M_PYCONFIRMADO#BTC#15min": _BASE_GBM,
+    "GBM_LATE_15M_PYCONFIRMADO#ETH#15min": _BASE_GBM,
+    "GBM_LATE_15M_PYCONFIRMADO#SOL#15min": _BASE_GBM,
+    "GBM_LATE_15M_PYCONFIRMADO#XRP#15min": _BASE_GBM,
     "GBM_LATE_60M":         _BASE_GBM,
     "GBM_LATE_60M#BTC#60min": _BASE_GBM,
     "GBM_LATE_60M#ETH#60min": _BASE_GBM,
