@@ -2996,6 +2996,31 @@ GBM_LATE_15M_SIGMA_EWMA_ZONAS_BUENAS_BUY_YES = {
     "DOGE": [(6.0, 9.0), (12.0, None)],
     "BNB": [(6.0, 9.0)],
 }
+
+# 06-Ago (petición explícita Javi, "combina y extiende" -- lección de fondo:
+# dos filtros independientes débiles por separado pueden ser fuertes juntos,
+# ver feedback_combinar_filtros_independientes_rescata_estrategias_06ago):
+# cruce de precio_yes_mercado (micro-bucket 0.05, mismo criterio que
+# gate_bucket_propio.py) CON la zona de sigma_ewma_delta_pct de arriba, sobre
+# el subconjunto que YA pasa esa zona. Gate riguroso (shuffle+split-half,
+# n>=15) por activo, barrido hoy mismo sobre las 5 monedas con zona no vacía
+# (ETH excluida, zona ya vacía arriba):
+#   BTC: [0.50,0.55) n=32 diff=+0.399 p_shuffle=0.125 -- NO significativo, sin filtro extra
+#   SOL: [0.50,0.55) n=63 diff=+0.671 p_shuffle=0.0007 split=[+0.846,+0.501] -- CONFIRMADO
+#   XRP: [0.50,0.55) n=100 diff=+0.760 p_shuffle=0.0000 split=[+0.883,+0.637] -- CONFIRMADO
+#   DOGE: [0.50,0.55) n=90 diff=+0.504 p_shuffle=0.0020 split=[+0.434,+0.574] -- CONFIRMADO
+#   BNB: [0.50,0.55) n=48 diff=+0.410 p_shuffle=0.0587 split=[+1.085,-0.265] -- falla split-half, sin filtro extra
+# Solo SOL/XRP/DOGE tienen entrada aquí -- BTC/BNB se quedan solo con el veto
+# de sigma_ewma de arriba (insuficiente rigor todavía para restringir más).
+# Ninguna tupla de esta familia #15min#BUY_YES está en pares_permitidos_live
+# hoy (verificado antes de este cambio) -- cero impacto en dinero real,
+# mejora la calidad de lo que se acumula en shadow para una futura
+# reactivación con datos ya filtrados por ambas dimensiones.
+GBM_LATE_15M_PRECIO_ZONAS_BUENAS_BUY_YES = {
+    "SOL": [(0.50, 0.55)],
+    "XRP": [(0.50, 0.55)],
+    "DOGE": [(0.50, 0.55)],
+}
 # 5min (14-Jul, sesión siguiente): rest_lo/rest_hi calibrados al timing real
 # de wallet-timing analysis (analisis_timing_wallets_por_activo.py) — restante
 # mediana 2.9-3.3min, p25 1.8-2.0min, p75 4.3-4.4min en BTC/ETH/SOL (las 3
@@ -4131,6 +4156,24 @@ def _s_gbm_late(market, ctx, ventana_min, rest_lo, rest_hi, espacio_k=None):
         )
         if not _en_zona_buena:
             return None
+
+        # 06-Ago: veto ADICIONAL de precio (AND, no sustituye al de arriba)
+        # -- ver GBM_LATE_15M_PRECIO_ZONAS_BUENAS_BUY_YES, confirmado con
+        # rigor completo solo para SOL/XRP/DOGE. Fail-open para el resto de
+        # monedas (BTC/ETH/BNB, sin entrada en la tabla): el veto de
+        # sigma_ewma de arriba ya decidió, no se les exige nada más todavía.
+        _zonas_precio = GBM_LATE_15M_PRECIO_ZONAS_BUENAS_BUY_YES.get(activo, [])
+        if _zonas_precio:
+            # Mismo soporte de rango abierto que el veto de sigma_ewma de
+            # arriba (hi=None) -- /code-review 06-Ago: sin esto, añadir una
+            # zona abierta en el futuro (mismo estilo que "BTC": [(12.0,
+            # None)] en la tabla de sigma_ewma) rompería con TypeError en
+            # cada ciclo en vez de fallar cerrado.
+            _en_zona_precio_buena = any(
+                lo <= py and (hi is None or py < hi) for lo, hi in _zonas_precio
+            )
+            if not _en_zona_precio_buena:
+                return None
 
     # retest_pct (13-Jul, ver analisis_retest_gbm_late.py / _calcular_retest_pct):
     # solo logueo, no cambia edge ni decisión — ver docstring del helper.
