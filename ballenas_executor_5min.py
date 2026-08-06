@@ -786,6 +786,23 @@ def disparar(activo: str, mercado: dict, py: float, edge: float, restante_s: flo
         # Solo aplica a la tupla que YA está en pares_permitidos_live --
         # los candidatos (DRY_RUN) siguen observando sin restricción para
         # poder acumular la evidencia que algún día los confirme.
+        #
+        # 06-Ago (revertido tras discusión con Javi el mismo día): se probó
+        # añadir un guardián agregado (_activa_permite_disparo, IC bayes de
+        # TODA la dirección mezclando buckets) por delante de este veto,
+        # copiado de los ejecutores hermanos (FAVORITO_CONFIRMADO) sin
+        # comprobar que encajara aquí. No encajaba: el IC agregado de esta
+        # tupla (-0.20) resultó ser textura mezclada, no "todo malo" (zonas
+        # ya bueno_confirmado dan +0.054€/trade n=64, el resto -0.012€/trade
+        # n=146) -- exactamente lo que CLAUDE.md pt.17 pide evitar: decidir
+        # por el agregado cuando hay desagregado disponible. Y este veto de
+        # abajo YA implementaba la semántica correcta de tres vías sin
+        # necesidad de nada más: malo_confirmado -> veta, bueno_confirmado
+        # -> opera, sin_concluir -> se salta (no opera, pero tampoco es un
+        # veredicto negativo) mientras `_registrar_prediccion` (línea previa
+        # a disparar(), SIEMPRE se ejecuta pase lo que pase aquí) sigue
+        # alimentando results.csv para que vigia_gate_bucket_propio.py
+        # (cron diario) madure el bucket solo, en cualquier sentido.
         tupla_str = f"{STRATEGY}#{activo}#{VENTANA_MIN}min#BUY_YES"
         gate_bp = _gate_bucket_propio(tupla_str, py)
         if tupla_str in _pares_live_hoy_set() and gate_bp["veredicto"] != "bueno_confirmado":
