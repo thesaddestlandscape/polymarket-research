@@ -143,6 +143,41 @@ def _detectar_cementerio():
     return sorted(hojas, key=lambda x: x["n"])
 
 
+_CLAVES_N = ("n", "n_overlaps", "n_total", "n_celdas_trackeadas")
+
+
+def _extraer_n(entry):
+    """Suma todos los valores bajo claves tipo n/n_overlaps/n_total/etc.,
+    buscando en anidados de 1 nivel (by_pair.BTC.n, after_win.n, etc.) --
+    BUG REAL encontrado 06-Ago: 13/79 hipótesis builtin NUNCA tuvieron un
+    campo 'n' plano (n_overlaps/by_subtype/aligned_btc/... en su lugar,
+    ver H-WINDOW-MOMENTUM/H-CROSS-ASSET/H-60MIN-LIVE/H-BTC-LEADS-ETH/etc.)
+    -- un primer borrador de este vigía usaba entry.get('n', 0), que las
+    habría marcado 'nunca_genero' (falsa alarma) pese a estar sanas y
+    acumulando miles de filas. Devuelve None (no trackeable) si no se
+    encuentra ningún valor bajo esas claves en ningún nivel -- eso excluye
+    correctamente a las bloqueadas por dataset/API (H-OBI, H-KALMAN, etc.)
+    en vez de mentir con un 0."""
+    total = 0
+    encontrado = False
+
+    def _walk(obj):
+        nonlocal total, encontrado
+        if isinstance(obj, dict):
+            for k, v in obj.items():
+                if k in _CLAVES_N and isinstance(v, (int, float)):
+                    total += v
+                    encontrado = True
+                elif isinstance(v, dict):
+                    _walk(v)
+        # listas (ej. gate_ok, subtypes_listos) no son conteos, se ignoran
+
+    if isinstance(entry.get("n"), (int, float)):
+        return entry["n"]
+    _walk(entry)
+    return total if encontrado else None
+
+
 def _cargar_historial():
     h = _cargar_json(HISTORIAL, {"candidatos": {}, "hipotesis": {}})
     h.setdefault("candidatos", {})
@@ -212,7 +247,15 @@ def main() -> int:
 
     # --- Parte 3: hipotesis_pendientes.json (n ya calculado por hypothesis_tracker) ---
     hipotesis = _cargar_json(HIPOTESIS_PENDIENTES, {})
-    n_hipotesis_hoy = {k: v.get("n", 0) for k, v in hipotesis.items() if isinstance(v, dict)}
+    n_hipotesis_hoy = {}
+    for k, v in hipotesis.items():
+        if not isinstance(v, dict):
+            continue
+        if v.get("bloqueante") or str(v.get("status", "")).startswith("BLOQUEADA"):
+            continue  # bloqueada por dataset/API a propósito, no es estancamiento
+        n = _extraer_n(v)
+        if n is not None:
+            n_hipotesis_hoy[k] = n
 
     historial = _cargar_historial()
     _actualizar_historial(historial, "candidatos", n_candidatos_hoy, hoy_iso)
