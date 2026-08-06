@@ -1,4 +1,4 @@
-# Estado del bot — 2026-08-06 08:01 UTC
+# Estado del bot — 2026-08-06 08:05 UTC
 
 ## Live — dinero real (on-chain)
 | | |
@@ -13,11 +13,11 @@
 ## Shadow — MODELO SIMULADO (no cobrable)
 | | |
 |---|---|
-| P&L fiel (stake fijo 1$) | +5974.56 $ |
-| P&L sim compuesto | 🟢 +13075.93 $ (ficción Kelly: +51399% s/ operativo) |
-| P&L sim hoy (2026-08-06) | 🟢 +45.01 $ |
-| Operaciones resueltas | 78735 (48243 WIN / 30492 LOSS) — 61.3% |
-| Señales abiertas | 364 |
+| P&L fiel (stake fijo 1$) | +5989.03 $ |
+| P&L sim compuesto | 🟢 +13094.93 $ (ficción Kelly: +51474% s/ operativo) |
+| P&L sim hoy (2026-08-06) | 🟢 +64.01 $ |
+| Operaciones resueltas | 78755 (48258 WIN / 30497 LOSS) — 61.3% |
+| Señales abiertas | 382 |
 
 ## Estrategias (visión global)
 
@@ -51,7 +51,7 @@
 | STRUCT_NO_15M | 22 | 31.8% | -0.167 | — | -4.29$ | 0.50$ | ⚠️ IC negativo |
 | PRICE_TARGET_GBM | 193 | 33.7% | -0.162 | 📉 agota (-0.09) | -5.71$ | 0.50$ | ⚠️ IC negativo |
 | LATE_WINDOW_5MIN | 393 | 43.8% | -0.062 | 📉 agota (-0.14) | -6.72$ | 0.50$ | ⚠️ IC negativo |
-| LIQUIDACIONES_5M | 34 | 29.4% | -0.194 | 📉 agota (-0.11) | -7.35$ | 0.50$ | ⚠️ IC negativo |
+| LIQUIDACIONES_5M | 35 | 31.4% | -0.176 | 📉 agota (-0.07) | -6.86$ | 0.50$ | ⚠️ IC negativo |
 | FAVORITO_CONFIRMADO_60MIN_ALTACONVICCION | 241 | 78.8% | +0.286 | ➡️ estable | -8.01$ | 2.00$ | ✅ activa |
 | SMART_FLOW_1H | 29 | 20.7% | -0.274 | — | -13.82$ | 0.00$ | 🚫 desactivada |
 | FAVORITO_CONFIRMADO_60MIN_EXTREMO | 90 | 84.4% | +0.337 | 📈 madura (+0.04) | -14.88$ | 2.00$ | ✅ activa |
@@ -60,37 +60,37 @@
 | STREAK_MOM_5M | 320 | 44.1% | -0.059 | 📉 agota (-0.08) | -26.41$ | 0.50$ | 🚫 desactivada |
 | BALLENAS_CONFIRMADAS_15M | 1675 | 55.2% | +0.052 | 📉 agota (-0.15) | -30.48$ | 0.52$ | ✅ activa |
 | FAVORITO_CONFIRMADO_15MIN_ALTACONVICCION | 1546 | 70.9% | +0.209 | 📉 agota (-0.07) | -101.28$ | 2.00$ | ✅ activa |
-| BALLENAS_TARDIAS | 1283 | 45.0% | -0.050 | 📉 agota (-0.20) | -138.19$ | 0.50$ | ⚠️ IC negativo |
-| FAVORITO_CONFIRMADO | 20164 | 62.2% | +0.122 | 📉 agota (-0.06) | -470.06$ | 1.22$ | ✅ activa |
-| FAVORITO_CONFIRMADO_5MIN_ALTACONVICCION | 8056 | 70.0% | +0.200 | ➡️ estable | -548.72$ | 2.00$ | ✅ activa |
+| BALLENAS_TARDIAS | 1286 | 44.9% | -0.050 | 📉 agota (-0.20) | -123.90$ | 0.50$ | ⚠️ IC negativo |
+| FAVORITO_CONFIRMADO | 20175 | 62.2% | +0.122 | 📉 agota (-0.06) | -466.03$ | 1.22$ | ✅ activa |
+| FAVORITO_CONFIRMADO_5MIN_ALTACONVICCION | 8061 | 70.0% | +0.200 | ➡️ estable | -548.53$ | 2.00$ | ✅ activa |
 
 ## Últimas 5 resoluciones
 
 | Timestamp | Estrategia | Mercado | Resultado | PNL |
 |---|---|---|---|---|
-| 2026-08-06T07:59 | BALLENAS_TARDIAS#XRP#5min | … | ✅ WIN | +0.14$ |
-| 2026-08-06T07:59 | FAVORITO_CONFIRMADO_5MIN_ALTACONVICCION#XRP#5min | … | ✅ WIN | +0.19$ |
-| 2026-08-06T07:59 | FAVORITO_CONFIRMADO#XRP#5min | … | ✅ WIN | +0.80$ |
-| 2026-08-06T07:59 | BALLENAS_TARDIAS#BNB#5min | … | ❌ LOSS | -1.07$ |
-| 2026-08-06T07:59 | BALLENAS_TARDIAS#DOGE#5min | … | ❌ LOSS | -1.07$ |
+| 2026-08-06T08:05 | BALLENAS_TARDIAS#DOGE#5min | … | ✅ WIN | +16.43$ |
+| 2026-08-06T08:05 | BALLENAS_TARDIAS#BNB#5min | … | ❌ LOSS | -1.07$ |
+| 2026-08-06T08:05 | FAVORITO_CONFIRMADO#BNB#5min | … | ✅ WIN | +0.71$ |
+| 2026-08-06T08:05 | BALLENAS_TARDIAS#SOL#5min | … | ❌ LOSS | -1.07$ |
+| 2026-08-06T08:05 | FAVORITO_CONFIRMADO#BTC#5min | … | ✅ WIN | +0.71$ |
 
 ## Calidad de datos
 
-✅ **OK** — última verificación 2026-08-06T07:58 UTC
+✅ **OK** — última verificación 2026-08-06T08:04 UTC
 
 | Asset | Precio | Age | Alertas |
 |---|---|---|---|
-| ✅ BTC | $64,741.71 | 0.1min |  |
-| ✅ ETH | $1,907.62 | 0.1min |  |
-| ✅ SOL | $73.78 | 0.1min |  |
+| ✅ BTC | $64,759.00 | 0.1min |  |
+| ✅ ETH | $1,908.09 | 0.1min |  |
+| ✅ SOL | $73.80 | 0.1min |  |
 | ✅ XRP | $1.05 | 0.1min |  |
 
 **Cross-source** (binance, coinbase, kraken):
 
 | Asset | Consenso | Fuente | Estado |
 |---|---|---|---|
-| BTC | $64,756.50 | consenso |  |
-| ETH | $1,907.62 | consenso |  |
+| BTC | $64,775.00 | consenso |  |
+| ETH | $1,907.50 | consenso |  |
 | SOL | $73.78 | consenso |  |
 | XRP | $1.05 | consenso |  |
 
