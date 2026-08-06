@@ -26,6 +26,7 @@ from pathlib import Path
 REPO = Path(__file__).resolve().parent
 CONFIG_LIVE = REPO / "data/live/config_live.json"
 SALIDA = REPO / "data/live/estrategias_alguna_vez_live.json"
+SALIDA_TUPLAS = REPO / "data/live/tuplas_alguna_vez_live.json"
 
 
 def _commits_que_tocan(path):
@@ -79,6 +80,16 @@ def main() -> int:
     SALIDA.parent.mkdir(parents=True, exist_ok=True)
     SALIDA.write_text(json.dumps(sorted(nombres), indent=2, ensure_ascii=False))
     print(f"[bootstrap] escrito {SALIDA}")
+
+    # 06-Ago (hallazgo /code-review): `nombres` es a propósito granularidad
+    # FAMILIA (ver docstring, mismo criterio que ACUMULAR_SHADOW_AUNQUE_
+    # DESACTIVADA) -- correcto para esa exención, pero analisis_gate_
+    # microbucket_nunca_live.py necesita saber si la TUPLA EXACTA estuvo
+    # viva, no la familia (si no, excluye de golpe el 37% de las tuplas
+    # nunca-vivas de cualquier familia que tenga otras tuplas ya activas).
+    # `tuplas_vistas` ya se calculaba, solo faltaba persistirlo.
+    SALIDA_TUPLAS.write_text(json.dumps(sorted(tuplas_vistas), indent=2, ensure_ascii=False))
+    print(f"[bootstrap] escrito {SALIDA_TUPLAS} ({len(tuplas_vistas)} tuplas exactas)")
     return 0
 
 
