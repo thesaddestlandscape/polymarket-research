@@ -3495,7 +3495,7 @@
         }
       },
       "pocos_trades_en_banda": {
-        "conteo": 1694,
+        "conteo": 1695,
         "mercados": {
           "0x6a90da3865e13755b9ab4a931209194616830264ac9dba3e125a7ed6e2bb8b3e": 5,
           "0x796b86aa901ca5a1c2614bb62b3d5ca9ecbbc98b93d6958f72f13daba5da4c3b": 11,
@@ -3684,7 +3684,8 @@
           "0x351369ee561bd07c5732e9d5fea0bba7183fb0553a7bf2432544ecabb34f1d87": 3,
           "0x24b28e4efcd1e1ba806a864256ccacccbbfeb530ad54a62c8169bf82da6cf01b": 2,
           "0xbee3f1ceca84d48a589ebf837e3a70440d40f197e1e7593ae99fa02693abbe71": 1,
-          "0x4b42b9020e7852b28aeaea1f4d6cb7462bc9afc13232d14cca4ac29717e9c972": 1
+          "0x4b42b9020e7852b28aeaea1f4d6cb7462bc9afc13232d14cca4ac29717e9c972": 1,
+          "0xc1b77a35b0f8e58c95638bba33d6b2ce65a0b9ce86645ef80e80d9fec55e650f": 1
         }
       },
       "concentracion_baja": {
@@ -3828,7 +3829,7 @@
         }
       },
       "error_api": {
-        "conteo": 2418,
+        "conteo": 2424,
         "mercados": {
           "0x9c8ec58c09836f579f15731a2a1997ef45bfe77d6f0e4513bb2351223a389f18": 6,
           "0x508a7030258446a09165b0713e36a07e63dce4d100e6f60681d1764f5a39f0d0": 7,
@@ -3965,16 +3966,16 @@
           "0x4705a69f4df93c4eb459a02f24431dcf3a7e5ef4d64f876afa2bee7ec6e40523": 10,
           "0x4b42b9020e7852b28aeaea1f4d6cb7462bc9afc13232d14cca4ac29717e9c972": 20,
           "0xc1b77a35b0f8e58c95638bba33d6b2ce65a0b9ce86645ef80e80d9fec55e650f": 21,
-          "0x9bf7cc24f2b4a64fdb0291be97f79702b401898acb98d507e7e4db0bc440d1d1": 15,
-          "0xfea78934e59d8b4f03916346963aa21843ac5ad4c6d677c7541ac0e1cc10e062": 6
+          "0x9bf7cc24f2b4a64fdb0291be97f79702b401898acb98d507e7e4db0bc440d1d1": 18,
+          "0xfea78934e59d8b4f03916346963aa21843ac5ad4c6d677c7541ac0e1cc10e062": 9
         }
       }
     },
     "ultimo_detalle": {
       "n": 1,
       "motivo": "pocos_trades_en_banda",
-      "condition_id": "0x4b42b9020e7852b28aeaea1f4d6cb7462bc9afc13232d14cca4ac29717e9c972",
-      "ts": "2026-08-06T01:48:46+00:00"
+      "condition_id": "0xc1b77a35b0f8e58c95638bba33d6b2ce65a0b9ce86645ef80e80d9fec55e650f",
+      "ts": "2026-08-06T02:15:17+00:00"
     }
   },
   "XRP#BUY_NO": {
