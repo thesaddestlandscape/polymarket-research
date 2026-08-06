@@ -12,17 +12,34 @@ milisegundos reales, cuánto se degrada la oportunidad entre "la detectamos"
 y "la hubiéramos podido ejecutar" -- la pregunta exacta de Javi, no una
 aproximación.
 
-Seguridad -- por qué esto es DRY_RUN real, no solo una promesa:
-  1. Nunca importa ni llama ninguna función de ENVÍO de orden de
-     live_trade.py -- solo `lt._consultar_profundidad_libro`, documentada
-     "solo lectura, nunca ordena" (mismo criterio que P22 FASE 0).
-  2. Aunque se calcula un stake DRY_RUN vía calcular_stake(), la tupla
-     sintética "WALLET_MIRROR#{activo}#{marco}#BUY_{lado}" NUNCA puede
-     estar en pares_permitidos_live (no es una estrategia que
+06-Ago, P24 FASE 2 (DISEÑO, petición explícita Javi: "para seguir todas
+las monedas, no solo BTC, de ahí ya vamos viendo, de ahí vamos minando N
+y en unos días pego un análisis extensivo"): se añade el TRAMO de envío
+de orden real (`lt._ejecutar_orden_polymarket`), pero **DRY_RUN sigue
+en True** -- el propósito de este cambio es dejar el código listo y
+revisado, no activarlo hoy. Cubre TODAS las monedas de `wallets`
+(no hay ningún filtro por activo, igual que el resto del script) --
+la decisión de qué monedas promocionar primero se toma más adelante,
+con el análisis del gate riguroso por (tipo,activo,es_jugada_grande)
+que ya distingue SEGUIR de FADE y detecta selección adversa por moneda
+(ver `idea_wallet_mirror_edge_masivo_seguir_btc_06ago`).
+
+Seguridad -- por qué esto sigue siendo DRY_RUN real, no solo una promesa:
+  1. `DRY_RUN=True` (abajo) es el primer guardián -- con DRY_RUN=True el
+     tramo de envío real ni se evalúa.
+  2. Aunque alguien cambiara DRY_RUN a mano, el SEGUNDO guardián
+     (fail-closed independiente) sigue en pie: la tupla sintética
+     "WALLET_MIRROR#{activo}#{marco}#BUY_{lado}" NUNCA puede estar en
+     `pares_permitidos_live` (no es una estrategia que
      shadow_predict.py/live_trade.py reconozcan) -- verificado
-     explícitamente y logueado, no asumido. Pasar a P24 FASE 2 (dinero
-     real) exige código nuevo en live_trade.py + /code-review + aprobación
-     explícita, igual que cualquier otro ejecutor de este proyecto.
+     explícitamente (`en_wl`) y logueado, no asumido. Sin la tupla en la
+     whitelist, el tramo de envío real se salta igual.
+  3. Activar esto de verdad (P24 FASE 2 real) exige: (a) `/code-review`
+     adversarial de este mismo diff -- toca el camino de envío de orden,
+     mismo criterio que cualquier cambio en live_trade.py; (b) añadir la
+     tupla exacta a `pares_permitidos_live` -- decisión explícita de
+     Javi, nunca autónoma; (c) flip manual de `DRY_RUN` a False. Ninguno
+     de los tres ha pasado todavía.
 
 Salida: data/shadow/wallet_mirror_executor_dryrun.csv -- una fila por
 MATCH de tipo SEGUIR con fill-ability OK en la detección, con las DOS
@@ -44,7 +61,9 @@ import websockets
 REPO = Path(__file__).resolve().parent
 sys.path.insert(0, str(REPO))
 
-from wallet_mirror_tracker import cargar_wallets_validadas, _opuesto, _fillability_mirror  # noqa: E402
+from wallet_mirror_tracker import (  # noqa: E402
+    cargar_wallets_validadas, _opuesto, _fillability_mirror, _market_id_y_direccion,
+)
 from fetch_polymarket_activity_ws import _parse_updown  # noqa: E402
 import live_trade as lt  # noqa: E402
 from live_guard import puede_operar_live  # noqa: E402
@@ -251,6 +270,35 @@ async def _correr_una_conexion(wallets: dict, vistos: set) -> set:
                 _log(f"🎯 DRY_RUN {activo}#{marco} lag_ws={lag_ws_ms}ms lag_dec={lag_dec_ms}ms "
                      f"degrad_ask={degradacion_pct}% sigue_fillable={sigue_fillable} "
                      f"stake_sim={stake_dryrun} en_whitelist_real={en_wl}")
+
+                # --- P24 FASE 2 (diseño 06-Ago) -- tramo de envío real.
+                # Inalcanzable con DRY_RUN=True (guardián #1). Si algún día
+                # se pone DRY_RUN=False, el guardián #2 (en_wl) sigue
+                # fail-closed: WALLET_MIRROR nunca está en
+                # pares_permitidos_live hasta que Javi lo decida a mano. ---
+                if not DRY_RUN:
+                    if not en_wl:
+                        _log(f"  ⛔ {tupla_sintetica} no está en pares_permitidos_live -- "
+                             f"fail-closed, no se ejecuta pese a DRY_RUN=False")
+                    elif not sigue_fillable:
+                        _log("  no sigue fillable en decisión -- no se ejecuta")
+                    elif puede_ventana is False:
+                        _log("  fuera de ventana horaria live -- no se ejecuta")
+                    else:
+                        resuelto = _market_id_y_direccion(market_slug, mirror_lado)
+                        if resuelto is None:
+                            _log("  ⛔ no se pudo resolver market_id/dirección con seguridad "
+                                 "(outcomes inesperados o Gamma sin datos) -- fail-closed, no se ejecuta")
+                        else:
+                            market_id, direction = resuelto
+                            precio_orden = ask_2 if ask_2 not in (None, "") else ask_d
+                            if precio_orden in (None, "") or stake_dryrun in (None, ""):
+                                _log("  ⛔ precio/stake sin resolver -- fail-closed, no se ejecuta")
+                            else:
+                                resultado = lt._ejecutar_orden_polymarket(
+                                    market_id, direction, float(stake_dryrun), float(precio_orden),
+                                    contexto={"strategy": "WALLET_MIRROR", "subtype": f"{activo}#{marco}"})
+                                _log(f"  🚨 ORDEN REAL enviada ({tupla_sintetica}): {resultado}")
                 if n_matches % 20 == 0:
                     _vistos_guardar(vistos)
                     _log(f"resumen: {n_matches} matches SEGUIR-fillable, "

@@ -245,14 +245,12 @@ STAKE_REF_EUR = 1.05  # mismo suelo que min_stake_eur en config_live.json
 RATIO_OBJETIVO = 5.0  # mismo umbral que veto_profundidad/analisis_fills.py/P22
 
 
-def _token_para_lado(market_slug: str, lado: str) -> str | None:
-    """29-Jul: fill-ability -- ninguna señal de wallet_mirror medía si
-    el libro real habría dejado ejecutar el mirror. wallet_mirror_dry_run.csv
-    solo trae market_slug/condition_id (no market_id numérico de Gamma), así
-    que en vez de _get_token_ids(market_id) (live_trade.py) se resuelve por
-    slug vía /events -- mismo endpoint que ya usa outcome_por_slug() en este
-    fichero. Valida el orden real contra `outcomes` en vez de asumir
-    clobTokenIds[0]=primer outcome (mismo criterio que _get_token_ids)."""
+def _mercado_para_slug(market_slug: str) -> dict | None:
+    """06-Ago, P24 FASE 2 (diseño): único punto que llama a /events por slug,
+    reusado tanto por `_token_para_lado` (ya existía) como por
+    `_market_id_y_direccion` (nuevo, para _ejecutar_orden_polymarket, que
+    exige el `id` numérico de Gamma -- wallet_mirror solo traía slug/
+    condition_id hasta hoy). Devuelve {"id","outcomes","tokens"} o None."""
     try:
         r = requests.get(f"{GAMMA}/events", params={"slug": market_slug}, timeout=8)
         if r.status_code != 200:
@@ -267,13 +265,54 @@ def _token_para_lado(market_slug: str, lado: str) -> str | None:
         tokens = json.loads(tokens) if isinstance(tokens, str) else tokens
         if not outcomes or not tokens or len(outcomes) != len(tokens):
             return None
-        lado_l = (lado or "").strip().lower()
-        for o, t in zip(outcomes, tokens):
-            if (o or "").strip().lower() == lado_l:
-                return t
-        return None
+        return {"id": mkt.get("id"), "outcomes": outcomes, "tokens": tokens}
     except Exception:
         return None
+
+
+def _token_para_lado(market_slug: str, lado: str) -> str | None:
+    """29-Jul: fill-ability -- ninguna señal de wallet_mirror medía si
+    el libro real habría dejado ejecutar el mirror. wallet_mirror_dry_run.csv
+    solo trae market_slug/condition_id (no market_id numérico de Gamma), así
+    que en vez de _get_token_ids(market_id) (live_trade.py) se resuelve por
+    slug vía /events -- mismo endpoint que ya usa outcome_por_slug() en este
+    fichero. Valida el orden real contra `outcomes` en vez de asumir
+    clobTokenIds[0]=primer outcome (mismo criterio que _get_token_ids)."""
+    info = _mercado_para_slug(market_slug)
+    if info is None:
+        return None
+    lado_l = (lado or "").strip().lower()
+    for o, t in zip(info["outcomes"], info["tokens"]):
+        if (o or "").strip().lower() == lado_l:
+            return t
+    return None
+
+
+def _market_id_y_direccion(market_slug: str, mirror_lado: str) -> tuple[str, str] | None:
+    """06-Ago, P24 FASE 2 (diseño): resuelve (market_id numérico de Gamma,
+    direction BUY_YES/BUY_NO) para poder llamar a
+    live_trade._ejecutar_orden_polymarket -- ese endpoint exige market_id,
+    no slug/token_id directo. Mismo criterio de mapeo AFIRMATIVOS/NEGATIVOS
+    que `live_trade._get_token_ids` (up/yes=YES, down/no=NO) -- si el orden
+    de `outcomes` no encaja con ninguno de los dos patrones esperados,
+    devuelve None (fail-closed: nunca adivinar dirección con dinero real)."""
+    info = _mercado_para_slug(market_slug)
+    if info is None or info.get("id") is None:
+        return None
+    outcomes = info["outcomes"]
+    if len(outcomes) != 2:
+        return None
+    AFIRMATIVOS = {"yes", "up"}
+    NEGATIVOS = {"no", "down"}
+    o0 = str(outcomes[0]).strip().lower()
+    o1 = str(outcomes[1]).strip().lower()
+    if not ((o0 in AFIRMATIVOS and o1 in NEGATIVOS) or (o0 in NEGATIVOS and o1 in AFIRMATIVOS)):
+        return None  # outcomes inesperados, no arriesgar dirección
+    lado_l = (mirror_lado or "").strip().lower()
+    if lado_l not in AFIRMATIVOS and lado_l not in NEGATIVOS:
+        return None
+    direction = "BUY_YES" if lado_l in AFIRMATIVOS else "BUY_NO"
+    return str(info["id"]), direction
 
 
 def _fillability_mirror(market_slug: str, mirror_lado: str, precio_wallet: str) -> dict:
