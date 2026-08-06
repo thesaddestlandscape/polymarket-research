@@ -44,15 +44,15 @@ SCREENS = {
                        "probe": "log:logs/ballenas_fast.log:arrancado"},
     "ballenas_5m": {"entry": "ballenas_executor_5min.py",
                      "probe": "log:logs/ballenas_5m.log:arrancado"},
-    "ballenas_15m": {"entry": "ballenas_executor_15min.py", "probe": None},
     "favaltaconv": {"entry": "favorito_altaconviccion_executor_15min.py", "probe": None},
-    "fav15mexec": {"entry": "favorito_confirmado_15min_executor.py", "probe": None},
-    "fav60mexec": {"entry": "favorito_confirmado_60min_executor.py", "probe": None},
     "favbtc60mno": {"entry": "favorito_confirmado_btc60min_buyno_executor.py", "probe": None},
-    "walletmirror": {"entry": "wallet_mirror_sniper.py", "probe": None},
-    "wmexec": {"entry": "wallet_mirror_executor_dryrun.py", "probe": None},
-    "gbmlate15m": {"entry": "gbm_late_15min_executor.py", "probe": None},
-    "updowngbmtardio": {"entry": "updown_gbm_15min_tardio_btc_executor.py", "probe": None},
+    # ballenas_15m/fav15mexec/fav60mexec/gbmlate15m/updowngbmtardio/
+    # walletmirror/wmexec fusionados en "ejecdryrun" el 06-Ago (ver
+    # ejecutores_dryrun_fase0.py) -- 7 procesos -> 1, mismo patrón que la
+    # fusión de "observadores" (05-Ago). Los 4 ejecutores con dinero real
+    # (favaltaconv/favbtc60mno/ballenas_fast/ballenas_5m) NO se tocan.
+    "ejecdryrun": {"entry": "ejecutores_dryrun_fase0.py",
+                    "probe": "log:logs/ejecutores_dryrun_fase0.log:hilos arrancados"},
     # Solo se vigila el .sh (sus hijos python son proceso fresco cada ciclo).
     "fast":    {"entry": "run_fast.sh", "shallow": True, "no_restart": True},
     "slow":    {"entry": "run_slow.sh", "shallow": True, "no_restart": True},

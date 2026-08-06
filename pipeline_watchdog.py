@@ -114,48 +114,26 @@ SCREEN_RESTART = {
     # Maker (Stage 3/4). Importa live_trade.py de solo lectura, nunca lo
     # modifica ni ordena nada. Solo lectura, no toca dinero.
     "libroambos": f"cd {REPO} && nice -n 10 .venv/bin/python fetch_libro_ambos_lados.py >> logs/libro_ambos_lados.log 2>&1",
-    # ballenas_15m (29-Jul): ejecutor de baja latencia BALLENAS_CONFIRMADAS_15M
-    # #{ETH,SOL,XRP,DOGE}#15min#BUY_YES, DRY_RUN=True -- generaliza a 15min el
-    # patron ya probado en ballenas_fast (BTC15m, live)/ballenas_5m (5min).
-    # Registrado en SCREEN_RESTART/check_screens() desde su creacion (no
-    # repetir el gap encontrado hoy mismo con ressniper/puntoconf).
-    "ballenas_15m": f"cd {REPO} && nice -n 10 .venv/bin/python ballenas_executor_15min.py >> logs/ballenas_15m.log 2>&1",
     # favaltaconv (30-Jul): ejecutor de baja latencia FAVORITO_CONFIRMADO_
     # 15MIN_ALTACONVICCION#{BTC,ETH}#15min#BUY_YES, DRY_RUN=True -- ataca la
     # causa raiz diagnosticada de 0/64 trades reales (latencia del ciclo
     # normal, ver docstring del propio script). Registrado desde su creacion.
     "favaltaconv": f"cd {REPO} && .venv/bin/python favorito_altaconviccion_executor_15min.py >> logs/favorito_altaconviccion_15min.log 2>&1",
-    # fav15mexec/fav60mexec (04-Ago): ejecutores DRY_RUN de baja latencia para
-    # las 4 tuplas FAVORITO_CONFIRMADO#BUY_YES pausadas 28-Jul por payout
-    # inverso -- prueba si la selección adversa por latencia (barrido 03-Ago)
-    # explica parte del problema. Ninguna de las 4 está en pares_permitidos_
-    # live -- puede_operar_live() bloquea siempre, doble protección sobre
-    # DRY_RUN. Registrados desde su creación (mismo gap de ressniper/
-    # puntoconf, no repetirlo).
-    "fav15mexec": f"cd {REPO} && nice -n 10 .venv/bin/python favorito_confirmado_15min_executor.py >> logs/favorito_confirmado_15min_executor.log 2>&1",
-    "fav60mexec": f"cd {REPO} && nice -n 10 .venv/bin/python favorito_confirmado_60min_executor.py >> logs/favorito_confirmado_60min_executor.log 2>&1",
     # favbtc60mno (30-Jul): ejecutor de baja latencia FAVORITO_CONFIRMADO#BTC
     # #60min#BUY_NO, DRY_RUN=True -- misma causa raiz que favaltaconv (senal
     # caducada, 9/9 perdidas en el pipeline normal). Registrado desde su
     # creacion (mismo gap de ressniper/puntoconf, no repetirlo).
     "favbtc60mno": f"cd {REPO} && .venv/bin/python favorito_confirmado_btc60min_buyno_executor.py >> logs/favorito_confirmado_btc60min_buyno.log 2>&1",
-    # gbmlate15m (04-Ago): ejecutor de baja latencia GBM_LATE_15M#{ETH,SOL}
-    # #15min, DRY_RUN=True -- ataca el gap de latencia diagnosticado 03-Ago
-    # (68.9%/56.8% de señales perdidas por veto_profundidad/senal_caducada,
-    # ver project_barrido_definitivo_latencia_17_combos_03ago). Registrado
-    # desde su creación (mismo gap de ressniper/puntoconf, no repetirlo).
-    "gbmlate15m": f"cd {REPO} && nice -n 10 .venv/bin/python gbm_late_15min_executor.py >> logs/gbm_late_15min_executor.log 2>&1",
-    "updowngbmtardio": f"cd {REPO} && nice -n 10 .venv/bin/python updown_gbm_15min_tardio_btc_executor.py >> logs/updown_gbm_15min_tardio_btc_executor.log 2>&1",
-    # walletmirror (30-Jul): P24 Wallet Mirror en tiempo real -- detecta
-    # trades de wallets validadas via WS RTDS y mide fill-ability real al
-    # instante (lag~1s, vs 10min del cron wallet_mirror_tracker.py). Solo
-    # observacion, NO ejecuta ordenes. Registrado desde su creacion.
-    "walletmirror": f"cd {REPO} && nice -n 10 .venv/bin/python wallet_mirror_sniper.py >> logs/wallet_mirror_sniper.log 2>&1",
-    # wmexec (03-Ago, P24 FASE 1): mismo detector en tiempo real que walletmirror
-    # pero con tramo de decisión añadido (segunda consulta de libro, milisegundos
-    # después) -- DRY_RUN puro, nunca envía ninguna orden real (ver docstring del
-    # script). Screen propia para que un bug aquí no pueda tumbar walletmirror.
-    "wmexec": f"cd {REPO} && nice -n 10 .venv/bin/python wallet_mirror_executor_dryrun.py >> logs/wallet_mirror_executor.log 2>&1",
+    # ejecdryrun (06-Ago): consolida 7 ejecutores DRY_RUN de baja latencia
+    # (ballenas_15m, fav15mexec, fav60mexec, gbmlate15m, updowngbmtardio,
+    # walletmirror, wmexec -- historial completo de cada uno en sus propios
+    # commits de creación) en UN SOLO proceso con un hilo cada uno, mismo
+    # patrón que observadores_fase0.py (05-Ago). Alivia la sobresuscripción
+    # de CPU (load5 6-8 en 2 cores) sin tocar los 4 ejecutores con dinero
+    # real (favbtc60mno/favaltaconv/ballenas_fast/ballenas_5m, cada uno
+    # sigue en su propia screen). Ver ejecutores_dryrun_fase0.py y
+    # project_cpu_consolidacion_pendiente_05ago en memoria.
+    "ejecdryrun": f"cd {REPO} && nice -n 10 .venv/bin/python ejecutores_dryrun_fase0.py >> logs/ejecutores_dryrun_fase0.log 2>&1",
 }
 
 # Cuando stdout está redirigido (screen >> watchdog.log), print() ya escribe al fichero
@@ -251,7 +229,7 @@ def check_screens() -> dict[str, bool]:
         r = subprocess.run(["screen", "-ls"], capture_output=True, text=True, timeout=5)
         output = r.stdout + r.stderr
         return {name: (f".{name}\t" in output or f".{name} " in output)
-                for name in ["fast", "slow", "control", "dash", "observadores", "ballenas_fast", "ballenas_5m", "chainlink", "polyactivity", "liqs", "libroambos", "ballenas_15m", "favaltaconv", "favbtc60mno", "walletmirror", "wmexec", "gbmlate15m", "updowngbmtardio", "fav15mexec", "fav60mexec"]}
+                for name in ["fast", "slow", "control", "dash", "observadores", "ballenas_fast", "ballenas_5m", "chainlink", "polyactivity", "liqs", "libroambos", "favaltaconv", "favbtc60mno", "ejecdryrun"]}
     except Exception:
         return {}
 
