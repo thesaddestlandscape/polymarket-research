@@ -1,48 +1,67 @@
 {
-  "timestamp_utc": "2026-08-05T17:05:14+00:00",
+  "timestamp_utc": "2026-08-06T07:08:01+00:00",
   "pipeline": {
-    "n_ciclos_resolve_postmortem": 218,
+    "n_ciclos_resolve_postmortem": 245,
     "resolve_postmortem_p50_s": 6.0,
-    "resolve_postmortem_p95_s": 11.0,
+    "resolve_postmortem_p95_s": 106.0,
     "resolve_postmortem_max_s": 217.0,
-    "n_ciclos_live_trade": 2622,
+    "n_ciclos_live_trade": 3002,
     "hueco_live_trade_max_s": 364.0
   },
   "procesos_colgados": [],
   "deploy": {
     "n_screens": 20,
-    "stale": []
+    "stale": [
+      "dash",
+      "control",
+      "observadores",
+      "polyactivity",
+      "libroambos",
+      "ballenas_fast",
+      "ballenas_5m",
+      "ballenas_15m",
+      "favaltaconv",
+      "fav15mexec",
+      "fav60mexec",
+      "favbtc60mno",
+      "walletmirror",
+      "wmexec",
+      "gbmlate15m",
+      "updowngbmtardio"
+    ]
   },
   "disco": {
-    "pct_usado": 54.0,
-    "gb_libres": 33.38,
+    "pct_usado": 55.0,
+    "gb_libres": 32.61,
     "git_gb": 0.0,
-    "data_gb": 20.29,
-    "datalogs_gb": 3.35
+    "data_gb": 20.13,
+    "datalogs_gb": 3.91
   },
   "ram": {
     "ram_total_gb": 3.72,
-    "ram_disponible_gb": 1.9,
-    "ram_pct_libre": 51.1
+    "ram_disponible_gb": 1.68,
+    "ram_pct_libre": 45.1
   },
   "integridad_datos": {
     "trades_abiertos_atascados": [],
-    "n_trades_total": 394,
-    "n_results_total": 75071
+    "n_trades_total": 397,
+    "n_results_total": 78519
   },
   "carga_sistema": {
-    "load1": 5.44,
-    "load5": 6.01,
-    "load15": 5.75,
+    "load1": 9.66,
+    "load5": 8.46,
+    "load15": 7.78,
     "nproc": 2,
-    "ratio5": 3.0,
-    "n_procesos_total": 231
+    "ratio5": 4.23,
+    "n_procesos_total": 225
   },
   "git_push": {
     "commits_sin_pushear": 0
   },
   "anomalias": [
-    "⏱️ ciclo resolve+postmortem tardó 217s (umbral 120s)"
+    "⏱️ ciclo resolve+postmortem tardó 217s (umbral 120s)",
+    "⚠️ screens STALE (código en disco != código cargado): dash, control, observadores, polyactivity, libroambos, ballenas_fast, ballenas_5m, ballenas_15m, favaltaconv, fav15mexec, fav60mexec, favbtc60mno, walletmirror, wmexec, gbmlate15m, updowngbmtardio",
+    "🔥 CPU sobresuscrita: load5=8.46 en 2 cores (ratio=4.23x, umbral 3.0x) -- 225 procesos vivos"
   ],
   "estado": "ANOMALIA"
 }
