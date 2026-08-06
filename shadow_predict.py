@@ -17,13 +17,53 @@ from data_quality import (
 from smart_money_tracker import ACTIVOS as ACTIVOS_TICKERS
 from ballenas_banda_fina_gate import evaluar as _gate_banda_fina_ballenas
 from gate_bucket_propio import evaluar as _gate_bucket_propio
-# 30-Jul: allowlist de estrategias con calibración Platt por activo -- misma
-# fuente de verdad que la genera (shadow_postmortem.py), ver nota junto a su
-# definición y junto al uso más abajo (evita que CUALQUIER estrategia con
-# activo pierda su calibración agregada existente).
-from shadow_postmortem import CALIB_POR_ACTIVO_ESTRATEGIAS
-
 _pares_live_cache = {"mtime": None, "set": set()}
+# 06-Ago: calibración Platt granular (estrategia,activo)/(estrategia,activo,
+# marco) para TODAS las estrategias -- calculada fuera del hot path por
+# analisis_calibracion_platt_granular.py (cron), ver ese fichero para el
+# porqué (30-Jul: sin restricción, el fit tardaba >100s dentro del ciclo
+# rápido). Mismo patrón de caché por mtime que _pares_live_hoy_set().
+_calib_granular_cache = {"mtime": None, "datos": {}}
+_CALIB_GRANULAR_PATH = Path("data/shadow/calibracion_platt_granular.json")
+
+
+def _calibracion_granular() -> dict:
+    try:
+        mtime = _CALIB_GRANULAR_PATH.stat().st_mtime
+    except OSError:
+        return _calib_granular_cache["datos"]
+    if _calib_granular_cache["mtime"] != mtime:
+        try:
+            _calib_granular_cache["datos"] = json.loads(
+                _CALIB_GRANULAR_PATH.read_text(encoding="utf-8"))
+            _calib_granular_cache["mtime"] = mtime
+        except Exception:
+            pass
+    return _calib_granular_cache["datos"]
+
+
+def _buscar_calibracion(nombre: str, activo, subtype: str, params_din: dict):
+    """Busca la corrección Platt más granular DISPONIBLE, con la misma
+    protección que ya existía para FAVORITO_CONFIRMADO (30-Jul, ver
+    project_calibracion_platt_desagregada_por_activo_30jul): si un nivel
+    más granular YA fue evaluado (existe en el fichero, con n>=200) pero
+    NO pasó rigor, se usa null ahí mismo -- NUNCA se cae a un nivel más
+    grueso, porque eso reintroduciría exactamente el falso positivo ya
+    cazado (una corrección que "pasa" en el agregado pero que el propio
+    subconjunto específico ya demostró que no sostiene). Solo se cae a un
+    nivel más grueso cuando el más fino NUNCA se ha evaluado (n<200,
+    ausente del fichero -- "no lo sabemos todavía", no "lo comprobamos y
+    no aplica")."""
+    granular = _calibracion_granular()
+    if "#" in subtype:
+        clave_fina = f"{nombre}#{subtype}"
+        if clave_fina in granular:
+            return granular[clave_fina].get("calibracion_prob")
+    if activo:
+        clave_activo = f"{nombre}#{activo}"
+        if clave_activo in granular:
+            return granular[clave_activo].get("calibracion_prob")
+    return params_din.get(nombre, {}).get("calibracion_prob")
 
 
 def _pares_live_hoy_set() -> set:
@@ -5659,28 +5699,23 @@ def main():
                 # si se guardara ya calibrada, cada reentreno calibraría sobre
                 # su propia calibración anterior en vez de sobre la señal
                 # original (deriva compuesta, detectado 2026-07-01).
-                # 30-Jul: calibración a nivel de ACTIVO (BASE#BTC), NO cae al
-                # agregado multi-moneda -- la agregada de FAVORITO_CONFIRMADO
-                # (b=0.8) "pasaba" el rigor SOLO en el pool de 3 monedas, NO
-                # en NINGUNA individualmente pese a 2000+ resoluciones cada
-                # una (mismo patrón de falso positivo por agregado ya cazado
-                # en Kelly-precio-gate 29-Jul). Si cayera al agregado como
-                # respaldo, las 3 monedas seguirían heredando una corrección
-                # que ninguna sostiene por separado. Restringido EXPLÍCITAMENTE
-                # a CALIB_POR_ACTIVO_ESTRATEGIAS (importado de shadow_
-                # postmortem.py, misma allowlist que genera el dato) -- hay 8
-                # estrategias más con calibracion_prob a nivel base activo hoy
-                # (ORDER_FLOW_5M, LATE_WINDOW_5MIN, STREAK_MOM_5M, GBM_LATE_
-                # 15M_TARDIO, STREAK_FADE_5M, GBM_LATE_5M, UPDOWN_GBM_15M_
-                # TARDIO, BALLENAS_CONFIRMADAS_15M) -- sin este chequeo
-                # explícito, CUALQUIER estrategia con activo perdería su
-                # calibración agregada en cuanto tuviera _activo_pred (casi
-                # siempre), rompiendo 8 estrategias que no tienen evidencia
-                # de sufrir el mismo problema.
-                if _activo_pred and nombre in CALIB_POR_ACTIVO_ESTRATEGIAS:
-                    calib = params_din.get(f"{nombre}#{_activo_pred}", {}).get("calibracion_prob")
-                else:
-                    calib = params_din.get(nombre, {}).get("calibracion_prob")
+                # 06-Ago: granularidad extrema para TODAS las estrategias
+                # (antes restringido a una allowlist manual, CALIB_POR_
+                # ACTIVO_ESTRATEGIAS -- retirada el mismo día). Mismo
+                # principio de seguridad que la protegía desde el 30-Jul
+                # (FAVORITO_CONFIRMADO: la corrección agregada -b=0.8-
+                # "pasaba" el rigor SOLO en el pool de 3 monedas, NINGUNA
+                # por separado la sostenía) generalizado vía
+                # _buscar_calibracion(): usa el nivel MÁS GRANULAR ya
+                # evaluado (activo+marco > activo > base), y si un nivel
+                # más fino fue evaluado y NO pasó rigor, se queda sin
+                # corrección ahí -- NUNCA cae a un nivel más grueso que no
+                # lo comprobó para ese subconjunto exacto. Ver
+                # analisis_calibracion_platt_granular.py (cron, fuera del
+                # hot path -- el 30-Jul ya se probó sin restricción DENTRO
+                # de este loop y tardaba >100s, habría bloqueado el
+                # trading en vivo).
+                calib = _buscar_calibracion(nombre, _activo_pred, subtype, params_din)
                 if calib:
                     prob_y = _norm_cdf(calib["a"] + calib["b"] * _norm_ppf(prob_y_raw))
                 eb = prob_y - py

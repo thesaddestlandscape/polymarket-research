@@ -591,21 +591,21 @@ def _fit_calibracion_prob(triples):
     }
 
 
-CALIB_POR_ACTIVO_ESTRATEGIAS = {"FAVORITO_CONFIRMADO"}
-# 30-Jul (Javi, tras confirmar que la recalibración Platt agregada de
-# FAVORITO_CONFIRMADO -- b=0.8 -- "pasaba" el rigor walk-forward+bootstrap
-# SOLO en el pool de las 3 monedas, NO en NINGUNA individualmente pese a
-# 2000+ resoluciones cada una -- mismo patrón de falso positivo por
-# agregado ya cazado en Kelly-precio-gate 29-Jul): allowlist de estrategias
-# que además ajustan su propia calibración a nivel de ACTIVO (no
-# activo+marco -- fragmenta n de sobra, ver memoria idea_calibracion_
-# platt_desagregada_por_activo_30jul). Restringido a esta lista (no todas
-# las ~34 estrategias) por rendimiento: probado sin restricción, el fit
-# extra para las 42 combinaciones (estrategia,activo) con n>=200 en todo
-# el sistema tardó >100s -- esto corre DENTRO del fast loop cada ~20-25s,
-# habría bloqueado el trading en vivo. Ampliar la lista exige repetir la
-# misma verificación (agregado vs por moneda con datos reales) antes de
-# añadir una estrategia, no es una decisión genérica.
+# 06-Ago: el ajuste de calibración Platt por (estrategia,activo,marco) --
+# granularidad extrema, petición explícita Javi -- se movió FUERA de este
+# módulo a analisis_calibracion_platt_granular.py (script aparte + cron
+# diario), exactamente el mismo patrón que gate_bucket_propio.py/
+# kelly_precio_gate.py. Motivo documentado el 30-Jul (ver git blame): un
+# whitelist manual (CALIB_POR_ACTIVO_ESTRATEGIAS, aquí antes) probó sin
+# restricción y el fit extra para solo 42 combinaciones (estrategia,activo)
+# con n>=200 tardó >100s -- esto corre DENTRO del fast loop cada ~20-25s,
+# habría bloqueado el trading en vivo (mismo tipo de incidente que el
+# postmortem atascado del 04-Ago). Sacarlo del hot path permite CUALQUIER
+# granularidad (activo Y marco, todas las estrategias) sin ese límite,
+# porque ya no compite por el presupuesto de tiempo del ciclo rápido.
+# Este módulo sigue calculando SOLO la calibración de nivel base (sin '#',
+# ~34 fits, ya validado dentro de presupuesto desde antes del 30-Jul) --
+# ver el bloque de fit más abajo.
 
 
 def calcular_params(resultados: list) -> dict:
@@ -626,10 +626,9 @@ def calcular_params(resultados: list) -> dict:
                 f"{s}#{a_part}",    # UPDOWN_GBM#BTC         (nivel asset)
                 f"{s}#{d_part}",    # UPDOWN_GBM#15min       (nivel duración)
             ]
-            if s in CALIB_POR_ACTIVO_ESTRATEGIAS:
-                calib_pairs.setdefault(f"{s}#{a_part}", []).append(
-                    (r.get("prediction_timestamp", ""), r.get("prob_yes_modelo"), r.get("outcome_real"))
-                )
+            # calib_pairs por (activo)/(activo,marco) YA NO se recolecta
+            # aquí -- ver analisis_calibracion_platt_granular.py (fuera del
+            # hot path, sin límite de granularidad).
         elif subtype:
             claves.append(f"{s}#{subtype}")   # WEEKLY_PRICE#BTC
         decision = r.get("decision", "")
@@ -721,13 +720,12 @@ def calcular_params(resultados: list) -> dict:
             entry[f"apuesta_kelly_{dec_name}"]   = d_ap
             entry[f"activa_{dec_name}"]          = d_activa
 
-        # Recalibración Platt: nivel agregado de estrategia (sin '#') Y,
-        # para las estrategias en CALIB_POR_ACTIVO_ESTRATEGIAS, también a
-        # nivel de activo (BASE#ACTIVO) -- ver constante arriba.
-        es_clave_activo = (s.count("#") == 1
-                            and not re.match(r"^\d+min$", s.rsplit("#", 1)[1])
-                            and s.split("#", 1)[0] in CALIB_POR_ACTIVO_ESTRATEGIAS)
-        if "#" not in s or es_clave_activo:
+        # Recalibración Platt: SOLO nivel agregado de estrategia (sin '#'),
+        # barato (~34 fits), dentro de presupuesto del fast loop desde
+        # antes del 30-Jul. La granularidad por (activo)/(activo,marco) se
+        # calcula aparte, fuera del hot path -- ver
+        # analisis_calibracion_platt_granular.py.
+        if "#" not in s:
             calib = _fit_calibracion_prob(calib_pairs.get(s, []))
             if calib:
                 entry["calibracion_prob"] = calib
