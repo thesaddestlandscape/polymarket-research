@@ -3716,7 +3716,7 @@
         }
       },
       "pocos_trades_en_banda": {
-        "conteo": 1825,
+        "conteo": 1826,
         "mercados": {
           "0x6a90da3865e13755b9ab4a931209194616830264ac9dba3e125a7ed6e2bb8b3e": 5,
           "0x796b86aa901ca5a1c2614bb62b3d5ca9ecbbc98b93d6958f72f13daba5da4c3b": 11,
@@ -3939,7 +3939,8 @@
           "0xa0845fa7c93ae2173bf66f134158d49bfd8a9e4842135f90a3951185ed8d2445": 1,
           "0x5d2cdbc40bb1c73b743a196b3bb59dba48d6246d440b4675a37f1886da7f93e9": 1,
           "0x1ed6f5fe68642ae083b2acfdd7f7ebdd6622f6ebc0a99ea67b18df3e1f69edbf": 3,
-          "0x900fe8e7ecf9e7f53bcb9086b1a707f66ca0e1417a9171ad61b61717921b44c5": 1
+          "0x900fe8e7ecf9e7f53bcb9086b1a707f66ca0e1417a9171ad61b61717921b44c5": 1,
+          "0x8f5c0f6ff9d8e061831865b40d00cc1f38536231d83fa1fd4dff78f34581f0d5": 1
         }
       },
       "concentracion_baja": {
@@ -4128,7 +4129,7 @@
         }
       },
       "error_api": {
-        "conteo": 3774,
+        "conteo": 3782,
         "mercados": {
           "0x9c8ec58c09836f579f15731a2a1997ef45bfe77d6f0e4513bb2351223a389f18": 6,
           "0x508a7030258446a09165b0713e36a07e63dce4d100e6f60681d1764f5a39f0d0": 7,
@@ -4328,18 +4329,17 @@
           "0x85b7c76b66615325bdfa9713b85615797b4d3249cdf304975695f8bf46f13dd4": 17,
           "0xdc81b255c99d7c45a8303b21bc25718d829099faa2291525723ccd47c3190e2d": 18,
           "0x5a1208f4a62593042cb70cb02d04876f2583eb43fc2bfab5ac138dbcd0ffd758": 13,
-          "0x8f5c0f6ff9d8e061831865b40d00cc1f38536231d83fa1fd4dff78f34581f0d5": 15,
-          "0xe7e419091cb6fcae6c1dfe3b254530b05287b6b76003d2978f4a754a8cfeaa17": 9
+          "0x8f5c0f6ff9d8e061831865b40d00cc1f38536231d83fa1fd4dff78f34581f0d5": 17,
+          "0xe7e419091cb6fcae6c1dfe3b254530b05287b6b76003d2978f4a754a8cfeaa17": 12,
+          "0xcd077eac5b8a7df79199b4093d08224449d867ef84e98f53d6d207fdb46bac35": 3
         }
       }
     },
     "ultimo_detalle": {
-      "pct_lado": 0.167,
-      "n": 6,
-      "n_total_lado": 17,
-      "motivo": "concentracion_baja",
-      "condition_id": "0xdc81b255c99d7c45a8303b21bc25718d829099faa2291525723ccd47c3190e2d",
-      "ts": "2026-08-06T18:26:44+00:00"
+      "n": 1,
+      "motivo": "pocos_trades_en_banda",
+      "condition_id": "0x8f5c0f6ff9d8e061831865b40d00cc1f38536231d83fa1fd4dff78f34581f0d5",
+      "ts": "2026-08-06T18:40:29+00:00"
     }
   },
   "XRP#BUY_NO": {
