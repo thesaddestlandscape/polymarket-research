@@ -84,8 +84,26 @@ def cargar_tuplas_live():
     propia acumulación de fill-ability de un candidato por su PnL en
     shadow, que es justo lo que se está todavía evaluando). Devuelve
     (strategy, subtype, decision, tupla_str, es_live) -- es_live=True
-    solo para las 9 de pares_permitidos_live (dedupe: si una tupla está
-    en ambas listas, cuenta como live)."""
+    solo para las de pares_permitidos_live (dedupe: si una tupla está
+    en ambas listas, cuenta como live).
+
+    06-Ago (petición explícita Javi, "hay que recogerlo todo y hacerlo
+    bien" -- mismo espíritu que el fix del cementerio del mismo día):
+    ADEMÁS de las dos listas de config_live.json, escanea results.csv
+    directamente y añade CUALQUIER (strategy,subtype,decision) que no
+    esté ya cubierto -- es_live=False (candidato "descubierto", nunca
+    puede vetar dinero real por construcción, ver runtime en
+    gate_bucket_propio.py::evaluar()). Antes de este cambio, una
+    estrategia nueva que empezara a generar en shadow se quedaba SIN
+    micro-buckets hasta que alguien se acordara de añadirla a mano a
+    candidatos_evaluacion_live -- confirmado real el mismo día: 24
+    combos activos en results.csv (LIQUIDACIONES aparte, ya añadidas
+    antes) llevaban tiempo sin cobertura, y el formato de 3 segmentos de
+    WEEKLY_PRICE (activo sin marco, ej. "WEEKLY_PRICE#SOL#BUY_YES") ni
+    siquiera lo soportaba el parseo de arriba (exigía exactamente 4
+    segmentos). Con esto, la cobertura ya no depende de que nadie
+    recuerde mantener una lista -- se auto-mantiene sola cada vez que
+    este script corre (cron diario 06:55 UTC)."""
     with open(CONFIG_LIVE, encoding="utf-8") as f:
         c = json.load(f)
     vistos = {}
@@ -99,6 +117,27 @@ def cargar_tuplas_live():
             if t in vistos and vistos[t][4]:
                 continue  # ya está marcada live, no degradar a candidato
             vistos[t] = (strategy, f"{activo}#{marco}", decision, t, es_live)
+
+    claves_cubiertas = {(s, sub, d) for s, sub, d, _, _ in vistos.values()}
+    descubiertos = 0
+    with open(RESULTS, encoding="utf-8") as f:
+        for row in csv.DictReader(f):
+            s = row.get("strategy", "")
+            sub = row.get("subtype", "")
+            d = row.get("decision", "")
+            if not s or not sub or not d:
+                continue
+            if (s, sub, d) in claves_cubiertas:
+                continue
+            t = f"{s}#{sub}#{d}"
+            if t in vistos:
+                continue
+            claves_cubiertas.add((s, sub, d))
+            vistos[t] = (s, sub, d, t, False)
+            descubiertos += 1
+    if descubiertos:
+        print(f"[cargar_tuplas_live] {descubiertos} tuplas descubiertas directamente "
+              f"en results.csv (no estaban en config_live.json)")
     return list(vistos.values())
 
 
