@@ -1,840 +1,2542 @@
 {
+  "ETH#15m#h21#[0.45,0.50)": {
+    "n": 54,
+    "n_con_ratio_libro": 54,
+    "fill_rate": 0.3889,
+    "ratio_medio": 173.86,
+    "motivos": {
+      "fuera_ventana": 5,
+      "no_viable_stake": 1,
+      "senal_caducada": 3,
+      "candidato_evaluacion": 40,
+      "veto_profundidad": 5
+    },
+    "informativo_n15": true
+  },
+  "SOL#15m#h21#[0.45,0.50)": {
+    "n": 64,
+    "n_con_ratio_libro": 64,
+    "fill_rate": 0.4062,
+    "ratio_medio": 56.28,
+    "motivos": {
+      "fuera_ventana": 10,
+      "ejecutada": 1,
+      "veto_profundidad": 1,
+      "maker_colocada": 1,
+      "candidato_evaluacion": 51
+    },
+    "informativo_n15": true
+  },
+  "ETH#15m#h00#[0.45,0.50)": {
+    "n": 61,
+    "n_con_ratio_libro": 61,
+    "fill_rate": 0.4754,
+    "ratio_medio": 146.0,
+    "motivos": {
+      "fuera_ventana": 7,
+      "candidato_evaluacion": 54
+    },
+    "informativo_n15": true
+  },
+  "SOL#15m#h00#[0.45,0.50)": {
+    "n": 59,
+    "n_con_ratio_libro": 59,
+    "fill_rate": 0.2373,
+    "ratio_medio": 34.11,
+    "motivos": {
+      "fuera_ventana": 8,
+      "candidato_evaluacion": 51
+    },
+    "informativo_n15": true
+  },
+  "SOL#15m#h03#[0.50,0.55)": {
+    "n": 63,
+    "n_con_ratio_libro": 63,
+    "fill_rate": 0.2857,
+    "ratio_medio": 46.93,
+    "motivos": {
+      "fuera_ventana": 10,
+      "candidato_evaluacion": 53
+    },
+    "informativo_n15": true
+  },
+  "SOL#15m#h04#[0.40,0.45)": {
+    "n": 23,
+    "n_con_ratio_libro": 23,
+    "fill_rate": 0.1304,
+    "ratio_medio": 17.2,
+    "motivos": {
+      "fuera_ventana": 1,
+      "veto_profundidad": 12,
+      "senal_caducada": 1,
+      "candidato_evaluacion": 9
+    },
+    "informativo_n15": true
+  },
+  "SOL#15m#h06#[0.45,0.50)": {
+    "n": 65,
+    "n_con_ratio_libro": 65,
+    "fill_rate": 0.3846,
+    "ratio_medio": 126.87,
+    "motivos": {
+      "veto_profundidad": 1,
+      "abort_requote": 7,
+      "fok_kill": 1,
+      "ejecutada": 1,
+      "fuera_ventana": 6,
+      "no_viable_stake": 2,
+      "candidato_evaluacion": 46,
+      "senal_caducada": 1
+    },
+    "informativo_n15": true
+  },
+  "ETH#15m#h07#[0.50,0.55)": {
+    "n": 77,
+    "n_con_ratio_libro": 77,
+    "fill_rate": 0.4805,
+    "ratio_medio": 267.51,
+    "motivos": {
+      "ejecutada": 2,
+      "fuera_ventana": 5,
+      "candidato_evaluacion": 61,
+      "abort_requote": 9
+    },
+    "informativo_n15": true
+  },
+  "SOL#15m#h10#[0.45,0.50)": {
+    "n": 51,
+    "n_con_ratio_libro": 51,
+    "fill_rate": 0.3529,
+    "ratio_medio": 86.85,
+    "motivos": {
+      "fuera_ventana": 9,
+      "candidato_evaluacion": 42
+    },
+    "informativo_n15": true
+  },
+  "SOL#15m#h12#[0.30,0.35)": {
+    "n": 16,
+    "n_con_ratio_libro": 16,
+    "fill_rate": 0.75,
+    "ratio_medio": 108.35,
+    "motivos": {
+      "fuera_ventana": 3,
+      "candidato_evaluacion": 13
+    },
+    "informativo_n15": true
+  },
+  "SOL#15m#h13#[0.40,0.45)": {
+    "n": 40,
+    "n_con_ratio_libro": 40,
+    "fill_rate": 0.25,
+    "ratio_medio": 57.9,
+    "motivos": {
+      "veto_profundidad": 25,
+      "candidato_evaluacion": 15
+    },
+    "informativo_n15": true
+  },
+  "ETH#15m#h13#[0.45,0.50)": {
+    "n": 104,
+    "n_con_ratio_libro": 104,
+    "fill_rate": 0.1538,
+    "ratio_medio": 86.38,
+    "motivos": {
+      "veto_profundidad": 37,
+      "abort_requote": 2,
+      "no_viable_stake": 1,
+      "senal_caducada": 2,
+      "candidato_evaluacion": 60,
+      "maker_colocada": 2
+    },
+    "informativo_n15": true
+  },
+  "XRP#15m#h15#[0.50,0.55)": {
+    "n": 270,
+    "n_con_ratio_libro": 270,
+    "fill_rate": 0.2667,
+    "ratio_medio": 44.33,
+    "motivos": {
+      "veto_profundidad": 115,
+      "ejecutada": 2,
+      "abort_requote": 25,
+      "fok_kill": 1,
+      "candidato_evaluacion": 127
+    },
+    "informativo_n15": true
+  },
+  "SOL#15m#h15#[0.60,0.65)": {
+    "n": 47,
+    "n_con_ratio_libro": 47,
+    "fill_rate": 0.1702,
+    "ratio_medio": 32.51,
+    "motivos": {
+      "veto_profundidad": 33,
+      "candidato_evaluacion": 11,
+      "ejecutada": 1,
+      "fuera_ventana": 1,
+      "senal_caducada": 1
+    },
+    "informativo_n15": true
+  },
+  "ETH#15m#h17#[0.45,0.50)": {
+    "n": 111,
+    "n_con_ratio_libro": 111,
+    "fill_rate": 0.3694,
+    "ratio_medio": 522.3,
+    "motivos": {
+      "veto_profundidad": 34,
+      "abort_requote": 6,
+      "ejecutada": 1,
+      "candidato_evaluacion": 66,
+      "senal_caducada": 3,
+      "fuera_ventana": 1
+    },
+    "informativo_n15": true
+  },
+  "SOL#15m#h18#[0.45,0.50)": {
+    "n": 66,
+    "n_con_ratio_libro": 66,
+    "fill_rate": 0.2879,
+    "ratio_medio": 58.44,
+    "motivos": {
+      "veto_profundidad": 16,
+      "ejecutada": 4,
+      "fuera_ventana": 1,
+      "candidato_evaluacion": 43,
+      "no_viable_stake": 1,
+      "senal_caducada": 1
+    },
+    "informativo_n15": true
+  },
+  "XRP#15m#h18#[0.50,0.55)": {
+    "n": 178,
+    "n_con_ratio_libro": 178,
+    "fill_rate": 0.3034,
+    "ratio_medio": 58.38,
+    "motivos": {
+      "veto_profundidad": 37,
+      "abort_requote": 18,
+      "ejecutada": 1,
+      "candidato_evaluacion": 122
+    },
+    "informativo_n15": true
+  },
   "SOL#15m#h22#[0.30,0.35)": {
-    "n": 3,
-    "n_con_ratio_libro": 3,
-    "fill_rate": 0.0,
-    "ratio_medio": 0.0,
+    "n": 12,
+    "n_con_ratio_libro": 12,
+    "fill_rate": 0.3333,
+    "ratio_medio": 81.79,
     "motivos": {
       "fuera_ventana": 2,
-      "candidato_evaluacion": 1
+      "candidato_evaluacion": 10
     },
     "informativo_n15": false
   },
-  "XRP#15m#h03#[0.50,0.55)": {
-    "n": 29,
-    "n_con_ratio_libro": 29,
-    "fill_rate": 0.2069,
-    "ratio_medio": 38.76,
+  "ETH#15m#h03#[0.55,0.60)": {
+    "n": 41,
+    "n_con_ratio_libro": 41,
+    "fill_rate": 0.561,
+    "ratio_medio": 267.43,
+    "motivos": {
+      "fuera_ventana": 6,
+      "candidato_evaluacion": 35
+    },
+    "informativo_n15": true
+  },
+  "ETH#15m#h04#[0.55,0.60)": {
+    "n": 64,
+    "n_con_ratio_libro": 40,
+    "fill_rate": 0.45,
+    "ratio_medio": 263.57,
+    "motivos": {
+      "fuera_ventana": 2,
+      "veto_profundidad": 1,
+      "ejecutada": 1,
+      "candidato_evaluacion": 33,
+      "veto_fuera_banda_ballenas": 24,
+      "senal_caducada": 3
+    },
+    "informativo_n15": true
+  },
+  "ETH#15m#h08#[0.50,0.55)": {
+    "n": 56,
+    "n_con_ratio_libro": 56,
+    "fill_rate": 0.4286,
+    "ratio_medio": 242.1,
+    "motivos": {
+      "fuera_ventana": 4,
+      "candidato_evaluacion": 47,
+      "veto_profundidad": 4,
+      "senal_caducada": 1
+    },
+    "informativo_n15": true
+  },
+  "SOL#15m#h09#[0.45,0.50)": {
+    "n": 62,
+    "n_con_ratio_libro": 62,
+    "fill_rate": 0.129,
+    "ratio_medio": 22.67,
+    "motivos": {
+      "veto_profundidad": 33,
+      "fuera_ventana": 2,
+      "senal_caducada": 1,
+      "candidato_evaluacion": 26
+    },
+    "informativo_n15": true
+  },
+  "SOL#15m#h11#[0.50,0.55)": {
+    "n": 55,
+    "n_con_ratio_libro": 55,
+    "fill_rate": 0.4182,
+    "ratio_medio": 101.49,
     "motivos": {
       "fuera_ventana": 7,
+      "candidato_evaluacion": 48
+    },
+    "informativo_n15": true
+  },
+  "SOL#15m#h11#[0.40,0.45)": {
+    "n": 15,
+    "n_con_ratio_libro": 15,
+    "fill_rate": 0.4667,
+    "ratio_medio": 88.0,
+    "motivos": {
+      "fuera_ventana": 3,
+      "candidato_evaluacion": 12
+    },
+    "informativo_n15": true
+  },
+  "ETH#15m#h18#[0.45,0.50)": {
+    "n": 49,
+    "n_con_ratio_libro": 49,
+    "fill_rate": 0.4286,
+    "ratio_medio": 456.27,
+    "motivos": {
+      "ejecutada": 2,
+      "veto_profundidad": 5,
+      "abort_requote": 13,
+      "candidato_evaluacion": 28,
+      "senal_caducada": 1
+    },
+    "informativo_n15": true
+  },
+  "ETH#15m#h20#[0.50,0.55)": {
+    "n": 65,
+    "n_con_ratio_libro": 65,
+    "fill_rate": 0.3538,
+    "ratio_medio": 146.45,
+    "motivos": {
+      "fuera_ventana": 5,
+      "candidato_evaluacion": 60
+    },
+    "informativo_n15": true
+  },
+  "ETH#15m#h23#[0.50,0.55)": {
+    "n": 90,
+    "n_con_ratio_libro": 90,
+    "fill_rate": 0.5111,
+    "ratio_medio": 224.33,
+    "motivos": {
+      "veto_profundidad": 20,
+      "ejecutada": 2,
+      "abort_requote": 24,
+      "candidato_evaluacion": 41,
+      "maker_colocada": 1,
+      "senal_caducada": 1,
+      "fuera_ventana": 1
+    },
+    "informativo_n15": true
+  },
+  "ETH#15m#h00#[0.40,0.45)": {
+    "n": 10,
+    "n_con_ratio_libro": 10,
+    "fill_rate": 0.3,
+    "ratio_medio": 94.39,
+    "motivos": {
+      "fuera_ventana": 2,
+      "candidato_evaluacion": 8
+    },
+    "informativo_n15": false
+  },
+  "SOL#15m#h02#[0.50,0.55)": {
+    "n": 58,
+    "n_con_ratio_libro": 58,
+    "fill_rate": 0.3793,
+    "ratio_medio": 96.66,
+    "motivos": {
+      "fuera_ventana": 3,
+      "candidato_evaluacion": 55
+    },
+    "informativo_n15": true
+  },
+  "ETH#15m#h09#[0.50,0.55)": {
+    "n": 55,
+    "n_con_ratio_libro": 55,
+    "fill_rate": 0.3636,
+    "ratio_medio": 181.17,
+    "motivos": {
+      "fuera_ventana": 7,
+      "no_viable_stake": 1,
+      "candidato_evaluacion": 47
+    },
+    "informativo_n15": true
+  },
+  "ETH#15m#h14#[0.10,0.15)": {
+    "n": 12,
+    "n_con_ratio_libro": 12,
+    "fill_rate": 0.1667,
+    "ratio_medio": 10.51,
+    "motivos": {
+      "veto_profundidad": 8,
+      "abort_requote": 1,
+      "candidato_evaluacion": 3
+    },
+    "informativo_n15": false
+  },
+  "SOL#15m#h14#[0.30,0.35)": {
+    "n": 15,
+    "n_con_ratio_libro": 15,
+    "fill_rate": 0.4667,
+    "ratio_medio": 77.75,
+    "motivos": {
+      "ejecutada": 1,
+      "fuera_ventana": 1,
+      "candidato_evaluacion": 13
+    },
+    "informativo_n15": true
+  },
+  "ETH#15m#h16#[0.50,0.55)": {
+    "n": 87,
+    "n_con_ratio_libro": 87,
+    "fill_rate": 0.3448,
+    "ratio_medio": 250.98,
+    "motivos": {
+      "veto_profundidad": 19,
+      "candidato_evaluacion": 66,
+      "fuera_ventana": 2
+    },
+    "informativo_n15": true
+  },
+  "ETH#15m#h18#[0.25,0.30)": {
+    "n": 9,
+    "n_con_ratio_libro": 9,
+    "fill_rate": 0.8889,
+    "ratio_medio": 547.82,
+    "motivos": {
+      "ejecutada": 1,
+      "candidato_evaluacion": 8
+    },
+    "informativo_n15": false
+  },
+  "SOL#15m#h22#[0.55,0.60)": {
+    "n": 27,
+    "n_con_ratio_libro": 27,
+    "fill_rate": 0.4444,
+    "ratio_medio": 88.46,
+    "motivos": {
+      "fuera_ventana": 5,
       "candidato_evaluacion": 22
     },
     "informativo_n15": true
   },
-  "SOL#15m#h02#[0.50,0.55)": {
-    "n": 21,
-    "n_con_ratio_libro": 21,
-    "fill_rate": 0.2857,
-    "ratio_medio": 72.88,
+  "SOL#15m#h23#[0.45,0.50)": {
+    "n": 82,
+    "n_con_ratio_libro": 82,
+    "fill_rate": 0.3659,
+    "ratio_medio": 76.69,
     "motivos": {
-      "fuera_ventana": 3,
-      "candidato_evaluacion": 18
+      "ejecutada": 6,
+      "veto_profundidad": 17,
+      "abort_requote": 7,
+      "candidato_evaluacion": 44,
+      "no_viable_stake": 2,
+      "senal_caducada": 3,
+      "fuera_ventana": 3
     },
     "informativo_n15": true
   },
-  "SOL#15m#h16#[0.65,0.70)": {
-    "n": 10,
-    "n_con_ratio_libro": 10,
-    "fill_rate": 0.2,
-    "ratio_medio": 101.01,
+  "SOL#15m#h01#[0.40,0.45)": {
+    "n": 20,
+    "n_con_ratio_libro": 20,
+    "fill_rate": 0.6,
+    "ratio_medio": 193.7,
     "motivos": {
-      "veto_profundidad": 4,
-      "abort_requote": 1,
+      "fuera_ventana": 5,
+      "candidato_evaluacion": 15
+    },
+    "informativo_n15": true
+  },
+  "ETH#15m#h18#[0.50,0.55)": {
+    "n": 51,
+    "n_con_ratio_libro": 51,
+    "fill_rate": 0.4706,
+    "ratio_medio": 476.05,
+    "motivos": {
+      "veto_profundidad": 1,
       "ejecutada": 1,
-      "no_viable_stake": 1,
-      "senal_caducada": 1,
-      "candidato_evaluacion": 2
+      "candidato_evaluacion": 47,
+      "fuera_ventana": 2
+    },
+    "informativo_n15": true
+  },
+  "ETH#15m#h22#[0.55,0.60)": {
+    "n": 33,
+    "n_con_ratio_libro": 33,
+    "fill_rate": 0.5758,
+    "ratio_medio": 307.65,
+    "motivos": {
+      "fuera_ventana": 8,
+      "candidato_evaluacion": 25
+    },
+    "informativo_n15": true
+  },
+  "ETH#15m#h23#[0.30,0.35)": {
+    "n": 14,
+    "n_con_ratio_libro": 14,
+    "fill_rate": 0.1429,
+    "ratio_medio": 47.32,
+    "motivos": {
+      "veto_profundidad": 8,
+      "ejecutada": 1,
+      "candidato_evaluacion": 5
     },
     "informativo_n15": false
   },
-  "SOL#15m#h02#[0.40,0.45)": {
-    "n": 2,
-    "n_con_ratio_libro": 2,
-    "fill_rate": 0.5,
-    "ratio_medio": 56.15,
+  "ETH#15m#h00#[0.60,0.65)": {
+    "n": 41,
+    "n_con_ratio_libro": 41,
+    "fill_rate": 0.439,
+    "ratio_medio": 382.46,
+    "motivos": {
+      "fuera_ventana": 7,
+      "candidato_evaluacion": 34
+    },
+    "informativo_n15": true
+  },
+  "SOL#15m#h02#[0.35,0.40)": {
+    "n": 16,
+    "n_con_ratio_libro": 16,
+    "fill_rate": 0.3125,
+    "ratio_medio": 43.34,
+    "motivos": {
+      "fuera_ventana": 3,
+      "candidato_evaluacion": 13
+    },
+    "informativo_n15": true
+  },
+  "ETH#15m#h11#[0.20,0.25)": {
+    "n": 6,
+    "n_con_ratio_libro": 6,
+    "fill_rate": 0.6667,
+    "ratio_medio": 106.28,
     "motivos": {
       "fuera_ventana": 1,
-      "candidato_evaluacion": 1
+      "candidato_evaluacion": 5
     },
     "informativo_n15": false
   },
+  "ETH#15m#h13#[0.60,0.65)": {
+    "n": 23,
+    "n_con_ratio_libro": 23,
+    "fill_rate": 0.3913,
+    "ratio_medio": 817.48,
+    "motivos": {
+      "no_viable_stake": 3,
+      "senal_caducada": 5,
+      "candidato_evaluacion": 15
+    },
+    "informativo_n15": true
+  },
+  "BTC#15m#h15#[0.70,0.75)": {
+    "n": 30,
+    "n_con_ratio_libro": 30,
+    "fill_rate": 0.5333,
+    "ratio_medio": 1854.78,
+    "motivos": {
+      "candidato_evaluacion": 17,
+      "ejecutada": 3,
+      "fok_kill": 1,
+      "senal_caducada": 9
+    },
+    "informativo_n15": true
+  },
+  "ETH#15m#h15#[0.70,0.75)": {
+    "n": 45,
+    "n_con_ratio_libro": 45,
+    "fill_rate": 0.4,
+    "ratio_medio": 413.87,
+    "motivos": {
+      "candidato_evaluacion": 35,
+      "ejecutada": 2,
+      "senal_caducada": 4,
+      "veto_profundidad": 4
+    },
+    "informativo_n15": true
+  },
   "SOL#15m#h16#[0.85,0.90)": {
+    "n": 21,
+    "n_con_ratio_libro": 21,
+    "fill_rate": 0.9048,
+    "ratio_medio": 379.17,
+    "motivos": {
+      "candidato_evaluacion": 18,
+      "ejecutada": 3
+    },
+    "informativo_n15": true
+  },
+  "ETH#15m#h16#[0.75,0.80)": {
+    "n": 28,
+    "n_con_ratio_libro": 28,
+    "fill_rate": 0.8214,
+    "ratio_medio": 1572.71,
+    "motivos": {
+      "candidato_evaluacion": 16,
+      "abort_requote": 9,
+      "senal_caducada": 2,
+      "no_viable_stake": 1
+    },
+    "informativo_n15": true
+  },
+  "ETH#15m#h16#[0.80,0.85)": {
+    "n": 13,
+    "n_con_ratio_libro": 13,
+    "fill_rate": 0.6154,
+    "ratio_medio": 794.67,
+    "motivos": {
+      "candidato_evaluacion": 10,
+      "senal_caducada": 3
+    },
+    "informativo_n15": false
+  },
+  "BTC#15m#h17#[0.60,0.65)": {
+    "n": 20,
+    "n_con_ratio_libro": 20,
+    "fill_rate": 0.25,
+    "ratio_medio": 271.06,
+    "motivos": {
+      "candidato_evaluacion": 19,
+      "senal_caducada": 1
+    },
+    "informativo_n15": true
+  },
+  "BTC#15m#h17#[0.75,0.80)": {
+    "n": 7,
+    "n_con_ratio_libro": 7,
+    "fill_rate": 0.7143,
+    "ratio_medio": 3762.56,
+    "motivos": {
+      "candidato_evaluacion": 4,
+      "senal_caducada": 3
+    },
+    "informativo_n15": false
+  },
+  "BTC#15m#h18#[0.40,0.45)": {
+    "n": 22,
+    "n_con_ratio_libro": 22,
+    "fill_rate": 0.4545,
+    "ratio_medio": 559.82,
+    "motivos": {
+      "candidato_evaluacion": 22
+    },
+    "informativo_n15": true
+  },
+  "SOL#15m#h18#[0.55,0.60)": {
+    "n": 45,
+    "n_con_ratio_libro": 45,
+    "fill_rate": 0.4222,
+    "ratio_medio": 154.76,
+    "motivos": {
+      "candidato_evaluacion": 27,
+      "fuera_ventana": 4,
+      "veto_profundidad": 11,
+      "senal_caducada": 3
+    },
+    "informativo_n15": true
+  },
+  "BTC#15m#h19#[0.80,0.85)": {
+    "n": 14,
+    "n_con_ratio_libro": 14,
+    "fill_rate": 0.8571,
+    "ratio_medio": 1364.24,
+    "motivos": {
+      "candidato_evaluacion": 13,
+      "ejecutada": 1
+    },
+    "informativo_n15": false
+  },
+  "BTC#15m#h19#[0.45,0.50)": {
+    "n": 40,
+    "n_con_ratio_libro": 40,
+    "fill_rate": 0.175,
+    "ratio_medio": 166.8,
+    "motivos": {
+      "candidato_evaluacion": 36,
+      "fuera_ventana": 2,
+      "senal_caducada": 2
+    },
+    "informativo_n15": true
+  },
+  "BTC#15m#h20#[0.70,0.75)": {
+    "n": 40,
+    "n_con_ratio_libro": 40,
+    "fill_rate": 0.625,
+    "ratio_medio": 1235.96,
+    "motivos": {
+      "candidato_evaluacion": 25,
+      "fuera_ventana": 7,
+      "ejecutada": 2,
+      "senal_caducada": 6
+    },
+    "informativo_n15": true
+  },
+  "ETH#15m#h20#[0.60,0.65)": {
+    "n": 34,
+    "n_con_ratio_libro": 22,
+    "fill_rate": 0.3182,
+    "ratio_medio": 300.59,
+    "motivos": {
+      "candidato_evaluacion": 17,
+      "fuera_ventana": 3,
+      "veto_fuera_banda_ballenas": 12,
+      "senal_caducada": 2
+    },
+    "informativo_n15": true
+  },
+  "BTC#15m#h21#[0.50,0.55)": {
+    "n": 43,
+    "n_con_ratio_libro": 43,
+    "fill_rate": 0.3953,
+    "ratio_medio": 435.46,
+    "motivos": {
+      "candidato_evaluacion": 42,
+      "fuera_ventana": 1
+    },
+    "informativo_n15": true
+  },
+  "BTC#15m#h21#[0.45,0.50)": {
+    "n": 44,
+    "n_con_ratio_libro": 44,
+    "fill_rate": 0.4773,
+    "ratio_medio": 530.26,
+    "motivos": {
+      "candidato_evaluacion": 40,
+      "fuera_ventana": 3,
+      "senal_caducada": 1
+    },
+    "informativo_n15": true
+  },
+  "BTC#15m#h21#[0.60,0.65)": {
+    "n": 28,
+    "n_con_ratio_libro": 28,
+    "fill_rate": 0.5,
+    "ratio_medio": 727.38,
+    "motivos": {
+      "candidato_evaluacion": 27,
+      "fuera_ventana": 1
+    },
+    "informativo_n15": true
+  },
+  "ETH#15m#h21#[0.30,0.35)": {
     "n": 8,
     "n_con_ratio_libro": 8,
     "fill_rate": 0.875,
-    "ratio_medio": 322.82,
+    "ratio_medio": 400.34,
     "motivos": {
-      "candidato_evaluacion": 6,
-      "ejecutada": 2
+      "candidato_evaluacion": 8
     },
     "informativo_n15": false
   },
-  "ETH#15m#h16#[0.80,0.85)": {
-    "n": 1,
-    "n_con_ratio_libro": 1,
-    "fill_rate": 1.0,
-    "ratio_medio": 800.7,
+  "BTC#15m#h21#[0.55,0.60)": {
+    "n": 24,
+    "n_con_ratio_libro": 24,
+    "fill_rate": 0.4583,
+    "ratio_medio": 632.42,
     "motivos": {
-      "candidato_evaluacion": 1
+      "candidato_evaluacion": 23,
+      "fuera_ventana": 1
     },
-    "informativo_n15": false
+    "informativo_n15": true
   },
-  "SOL#15m#h17#[0.70,0.75)": {
+  "BTC#15m#h21#[0.75,0.80)": {
+    "n": 18,
+    "n_con_ratio_libro": 18,
+    "fill_rate": 0.7222,
+    "ratio_medio": 1294.35,
+    "motivos": {
+      "candidato_evaluacion": 14,
+      "fuera_ventana": 4
+    },
+    "informativo_n15": true
+  },
+  "BTC#15m#h23#[0.85,0.90)": {
+    "n": 21,
+    "n_con_ratio_libro": 21,
+    "fill_rate": 0.4286,
+    "ratio_medio": 370.15,
+    "motivos": {
+      "candidato_evaluacion": 15,
+      "abort_requote": 1,
+      "senal_caducada": 5
+    },
+    "informativo_n15": true
+  },
+  "BTC#15m#h23#[0.80,0.85)": {
     "n": 10,
     "n_con_ratio_libro": 10,
-    "fill_rate": 0.6,
-    "ratio_medio": 144.67,
+    "fill_rate": 0.4,
+    "ratio_medio": 805.74,
     "motivos": {
-      "candidato_evaluacion": 8,
-      "fuera_ventana": 2
+      "candidato_evaluacion": 9,
+      "senal_caducada": 1
     },
     "informativo_n15": false
   },
-  "SOL#15m#h17#[0.65,0.70)": {
+  "BTC#15m#h00#[0.15,0.20)": {
+    "n": 7,
+    "n_con_ratio_libro": 7,
+    "fill_rate": 0.5714,
+    "ratio_medio": 98.09,
+    "motivos": {
+      "candidato_evaluacion": 6,
+      "fuera_ventana": 1
+    },
+    "informativo_n15": false
+  },
+  "BTC#15m#h01#[0.60,0.65)": {
+    "n": 16,
+    "n_con_ratio_libro": 16,
+    "fill_rate": 0.625,
+    "ratio_medio": 745.54,
+    "motivos": {
+      "candidato_evaluacion": 15,
+      "fuera_ventana": 1
+    },
+    "informativo_n15": true
+  },
+  "BTC#15m#h01#[0.70,0.75)": {
+    "n": 48,
+    "n_con_ratio_libro": 48,
+    "fill_rate": 0.5833,
+    "ratio_medio": 591.88,
+    "motivos": {
+      "candidato_evaluacion": 29,
+      "fuera_ventana": 19
+    },
+    "informativo_n15": true
+  },
+  "SOL#15m#h01#[0.85,0.90)": {
+    "n": 19,
+    "n_con_ratio_libro": 19,
+    "fill_rate": 0.3158,
+    "ratio_medio": 160.62,
+    "motivos": {
+      "candidato_evaluacion": 19
+    },
+    "informativo_n15": true
+  },
+  "ETH#15m#h01#[0.90,0.95)": {
+    "n": 13,
+    "n_con_ratio_libro": 13,
+    "fill_rate": 1.0,
+    "ratio_medio": 1538.22,
+    "motivos": {
+      "candidato_evaluacion": 12,
+      "fuera_ventana": 1
+    },
+    "informativo_n15": false
+  },
+  "BTC#15m#h01#[0.75,0.80)": {
+    "n": 11,
+    "n_con_ratio_libro": 11,
+    "fill_rate": 0.8182,
+    "ratio_medio": 1566.05,
+    "motivos": {
+      "candidato_evaluacion": 8,
+      "fuera_ventana": 3
+    },
+    "informativo_n15": false
+  },
+  "BTC#15m#h02#[0.70,0.75)": {
+    "n": 46,
+    "n_con_ratio_libro": 46,
+    "fill_rate": 0.7174,
+    "ratio_medio": 778.38,
+    "motivos": {
+      "candidato_evaluacion": 26,
+      "fuera_ventana": 20
+    },
+    "informativo_n15": true
+  },
+  "SOL#15m#h02#[0.70,0.75)": {
+    "n": 28,
+    "n_con_ratio_libro": 28,
+    "fill_rate": 0.5714,
+    "ratio_medio": 198.07,
+    "motivos": {
+      "candidato_evaluacion": 25,
+      "fuera_ventana": 3
+    },
+    "informativo_n15": true
+  },
+  "ETH#15m#h02#[0.65,0.70)": {
+    "n": 24,
+    "n_con_ratio_libro": 24,
+    "fill_rate": 0.375,
+    "ratio_medio": 197.99,
+    "motivos": {
+      "candidato_evaluacion": 20,
+      "fuera_ventana": 4
+    },
+    "informativo_n15": true
+  },
+  "ETH#15m#h03#[0.65,0.70)": {
+    "n": 23,
+    "n_con_ratio_libro": 23,
+    "fill_rate": 0.3043,
+    "ratio_medio": 147.43,
+    "motivos": {
+      "candidato_evaluacion": 18,
+      "fuera_ventana": 5
+    },
+    "informativo_n15": true
+  },
+  "BTC#15m#h03#[0.60,0.65)": {
+    "n": 23,
+    "n_con_ratio_libro": 23,
+    "fill_rate": 0.3043,
+    "ratio_medio": 390.28,
+    "motivos": {
+      "candidato_evaluacion": 22,
+      "fuera_ventana": 1
+    },
+    "informativo_n15": true
+  },
+  "ETH#15m#h03#[0.75,0.80)": {
+    "n": 25,
+    "n_con_ratio_libro": 25,
+    "fill_rate": 0.56,
+    "ratio_medio": 241.33,
+    "motivos": {
+      "candidato_evaluacion": 21,
+      "fuera_ventana": 4
+    },
+    "informativo_n15": true
+  },
+  "BTC#15m#h03#[0.55,0.60)": {
+    "n": 18,
+    "n_con_ratio_libro": 18,
+    "fill_rate": 0.6667,
+    "ratio_medio": 658.2,
+    "motivos": {
+      "candidato_evaluacion": 17,
+      "fuera_ventana": 1
+    },
+    "informativo_n15": true
+  },
+  "BTC#15m#h03#[0.45,0.50)": {
+    "n": 34,
+    "n_con_ratio_libro": 34,
+    "fill_rate": 0.1471,
+    "ratio_medio": 126.12,
+    "motivos": {
+      "candidato_evaluacion": 32,
+      "fuera_ventana": 2
+    },
+    "informativo_n15": true
+  },
+  "BTC#15m#h04#[0.35,0.40)": {
+    "n": 11,
+    "n_con_ratio_libro": 11,
+    "fill_rate": 0.3636,
+    "ratio_medio": 258.7,
+    "motivos": {
+      "candidato_evaluacion": 10,
+      "fuera_ventana": 1
+    },
+    "informativo_n15": false
+  },
+  "BTC#15m#h05#[0.25,0.30)": {
     "n": 6,
     "n_con_ratio_libro": 6,
-    "fill_rate": 0.1667,
-    "ratio_medio": 105.92,
+    "fill_rate": 0.5,
+    "ratio_medio": 156.13,
     "motivos": {
       "candidato_evaluacion": 6
     },
     "informativo_n15": false
   },
-  "SOL#15m#h18#[0.90,0.95)": {
-    "n": 3,
-    "n_con_ratio_libro": 3,
-    "fill_rate": 1.0,
-    "ratio_medio": 5368.7,
+  "ETH#15m#h05#[0.60,0.65)": {
+    "n": 19,
+    "n_con_ratio_libro": 19,
+    "fill_rate": 0.4211,
+    "ratio_medio": 266.13,
     "motivos": {
-      "candidato_evaluacion": 2,
+      "candidato_evaluacion": 16,
+      "fuera_ventana": 3
+    },
+    "informativo_n15": true
+  },
+  "SOL#15m#h05#[0.85,0.90)": {
+    "n": 10,
+    "n_con_ratio_libro": 10,
+    "fill_rate": 0.4,
+    "ratio_medio": 63.39,
+    "motivos": {
+      "candidato_evaluacion": 10
+    },
+    "informativo_n15": false
+  },
+  "BTC#15m#h05#[0.60,0.65)": {
+    "n": 40,
+    "n_con_ratio_libro": 40,
+    "fill_rate": 0.275,
+    "ratio_medio": 406.85,
+    "motivos": {
+      "candidato_evaluacion": 39,
+      "fuera_ventana": 1
+    },
+    "informativo_n15": true
+  },
+  "BTC#15m#h05#[0.15,0.20)": {
+    "n": 11,
+    "n_con_ratio_libro": 11,
+    "fill_rate": 0.3636,
+    "ratio_medio": 108.62,
+    "motivos": {
+      "candidato_evaluacion": 10,
       "fuera_ventana": 1
     },
     "informativo_n15": false
   },
-  "SOL#15m#h19#[0.75,0.80)": {
-    "n": 2,
-    "n_con_ratio_libro": 2,
-    "fill_rate": 1.0,
-    "ratio_medio": 397.8,
+  "BTC#15m#h06#[0.35,0.40)": {
+    "n": 7,
+    "n_con_ratio_libro": 7,
+    "fill_rate": 0.1429,
+    "ratio_medio": 157.87,
     "motivos": {
-      "candidato_evaluacion": 2
+      "candidato_evaluacion": 7
     },
     "informativo_n15": false
   },
-  "SOL#15m#h20#[0.65,0.70)": {
-    "n": 8,
-    "n_con_ratio_libro": 8,
-    "fill_rate": 0.875,
-    "ratio_medio": 311.93,
+  "BTC#15m#h06#[0.45,0.50)": {
+    "n": 53,
+    "n_con_ratio_libro": 53,
+    "fill_rate": 0.0755,
+    "ratio_medio": 68.98,
     "motivos": {
-      "candidato_evaluacion": 6,
+      "candidato_evaluacion": 51,
+      "senal_caducada": 2
+    },
+    "informativo_n15": true
+  },
+  "BTC#15m#h06#[0.25,0.30)": {
+    "n": 14,
+    "n_con_ratio_libro": 14,
+    "fill_rate": 0.6429,
+    "ratio_medio": 181.9,
+    "motivos": {
+      "candidato_evaluacion": 12,
       "fuera_ventana": 2
     },
     "informativo_n15": false
   },
-  "SOL#15m#h22#[0.80,0.85)": {
-    "n": 5,
-    "n_con_ratio_libro": 5,
-    "fill_rate": 1.0,
-    "ratio_medio": 993.9,
+  "BTC#15m#h07#[0.55,0.60)": {
+    "n": 32,
+    "n_con_ratio_libro": 32,
+    "fill_rate": 0.2188,
+    "ratio_medio": 255.16,
     "motivos": {
-      "candidato_evaluacion": 4,
+      "candidato_evaluacion": 31,
       "fuera_ventana": 1
+    },
+    "informativo_n15": true
+  },
+  "ETH#15m#h07#[0.55,0.60)": {
+    "n": 54,
+    "n_con_ratio_libro": 43,
+    "fill_rate": 0.6279,
+    "ratio_medio": 415.66,
+    "motivos": {
+      "candidato_evaluacion": 34,
+      "senal_caducada": 3,
+      "veto_fuera_banda_ballenas": 11,
+      "fuera_ventana": 6
+    },
+    "informativo_n15": true
+  },
+  "BTC#15m#h08#[0.70,0.75)": {
+    "n": 48,
+    "n_con_ratio_libro": 48,
+    "fill_rate": 0.5208,
+    "ratio_medio": 800.62,
+    "motivos": {
+      "fuera_ventana": 9,
+      "candidato_evaluacion": 32,
+      "ejecutada": 2,
+      "fok_kill": 1,
+      "senal_caducada": 4
+    },
+    "informativo_n15": true
+  },
+  "BTC#15m#h09#[0.55,0.60)": {
+    "n": 48,
+    "n_con_ratio_libro": 48,
+    "fill_rate": 0.375,
+    "ratio_medio": 368.61,
+    "motivos": {
+      "candidato_evaluacion": 31,
+      "fuera_ventana": 2,
+      "veto_profundidad": 12,
+      "senal_caducada": 2,
+      "no_viable_stake": 1
+    },
+    "informativo_n15": true
+  },
+  "BTC#15m#h09#[0.70,0.75)": {
+    "n": 43,
+    "n_con_ratio_libro": 43,
+    "fill_rate": 0.6047,
+    "ratio_medio": 347.12,
+    "motivos": {
+      "candidato_evaluacion": 29,
+      "ejecutada": 2,
+      "fuera_ventana": 10,
+      "senal_caducada": 2
+    },
+    "informativo_n15": true
+  },
+  "ETH#15m#h09#[0.70,0.75)": {
+    "n": 30,
+    "n_con_ratio_libro": 30,
+    "fill_rate": 0.6333,
+    "ratio_medio": 135.08,
+    "motivos": {
+      "fuera_ventana": 7,
+      "candidato_evaluacion": 20,
+      "senal_caducada": 3
+    },
+    "informativo_n15": true
+  },
+  "BTC#15m#h09#[0.50,0.55)": {
+    "n": 36,
+    "n_con_ratio_libro": 36,
+    "fill_rate": 0.4444,
+    "ratio_medio": 550.74,
+    "motivos": {
+      "fuera_ventana": 1,
+      "candidato_evaluacion": 35
+    },
+    "informativo_n15": true
+  },
+  "ETH#15m#h09#[0.75,0.80)": {
+    "n": 15,
+    "n_con_ratio_libro": 15,
+    "fill_rate": 0.6667,
+    "ratio_medio": 417.16,
+    "motivos": {
+      "candidato_evaluacion": 11,
+      "fuera_ventana": 1,
+      "veto_profundidad": 2,
+      "ejecutada": 1
+    },
+    "informativo_n15": true
+  },
+  "BTC#15m#h09#[0.60,0.65)": {
+    "n": 25,
+    "n_con_ratio_libro": 25,
+    "fill_rate": 0.52,
+    "ratio_medio": 198.5,
+    "motivos": {
+      "fuera_ventana": 1,
+      "candidato_evaluacion": 24
+    },
+    "informativo_n15": true
+  },
+  "ETH#15m#h09#[0.60,0.65)": {
+    "n": 37,
+    "n_con_ratio_libro": 21,
+    "fill_rate": 0.5238,
+    "ratio_medio": 381.02,
+    "motivos": {
+      "candidato_evaluacion": 13,
+      "fuera_ventana": 4,
+      "no_viable_stake": 1,
+      "senal_caducada": 3,
+      "veto_fuera_banda_ballenas": 16
+    },
+    "informativo_n15": true
+  },
+  "BTC#15m#h09#[0.75,0.80)": {
+    "n": 16,
+    "n_con_ratio_libro": 16,
+    "fill_rate": 0.5,
+    "ratio_medio": 498.07,
+    "motivos": {
+      "fuera_ventana": 3,
+      "candidato_evaluacion": 11,
+      "senal_caducada": 2
+    },
+    "informativo_n15": true
+  },
+  "BTC#15m#h11#[0.60,0.65)": {
+    "n": 17,
+    "n_con_ratio_libro": 17,
+    "fill_rate": 0.5294,
+    "ratio_medio": 828.86,
+    "motivos": {
+      "candidato_evaluacion": 17
+    },
+    "informativo_n15": true
+  },
+  "BTC#15m#h12#[0.65,0.70)": {
+    "n": 29,
+    "n_con_ratio_libro": 29,
+    "fill_rate": 0.3448,
+    "ratio_medio": 738.72,
+    "motivos": {
+      "candidato_evaluacion": 29
+    },
+    "informativo_n15": true
+  },
+  "ETH#15m#h12#[0.90,0.95)": {
+    "n": 22,
+    "n_con_ratio_libro": 22,
+    "fill_rate": 0.3636,
+    "ratio_medio": 310.65,
+    "motivos": {
+      "candidato_evaluacion": 19,
+      "fuera_ventana": 3
+    },
+    "informativo_n15": true
+  },
+  "BTC#15m#h12#[0.85,0.90)": {
+    "n": 17,
+    "n_con_ratio_libro": 17,
+    "fill_rate": 0.1765,
+    "ratio_medio": 377.04,
+    "motivos": {
+      "candidato_evaluacion": 12,
+      "fuera_ventana": 5
+    },
+    "informativo_n15": true
+  },
+  "ETH#15m#h12#[0.50,0.55)": {
+    "n": 59,
+    "n_con_ratio_libro": 59,
+    "fill_rate": 0.322,
+    "ratio_medio": 171.79,
+    "motivos": {
+      "candidato_evaluacion": 53,
+      "fuera_ventana": 6
+    },
+    "informativo_n15": true
+  },
+  "ETH#15m#h12#[0.65,0.70)": {
+    "n": 24,
+    "n_con_ratio_libro": 24,
+    "fill_rate": 0.5,
+    "ratio_medio": 797.52,
+    "motivos": {
+      "candidato_evaluacion": 17,
+      "fuera_ventana": 7
+    },
+    "informativo_n15": true
+  },
+  "BTC#15m#h12#[0.50,0.55)": {
+    "n": 42,
+    "n_con_ratio_libro": 42,
+    "fill_rate": 0.2857,
+    "ratio_medio": 770.27,
+    "motivos": {
+      "candidato_evaluacion": 39,
+      "fuera_ventana": 3
+    },
+    "informativo_n15": true
+  },
+  "ETH#15m#h14#[0.60,0.65)": {
+    "n": 27,
+    "n_con_ratio_libro": 27,
+    "fill_rate": 0.6296,
+    "ratio_medio": 2254.0,
+    "motivos": {
+      "candidato_evaluacion": 15,
+      "abort_requote": 11,
+      "senal_caducada": 1
+    },
+    "informativo_n15": true
+  },
+  "BTC#15m#h14#[0.45,0.50)": {
+    "n": 34,
+    "n_con_ratio_libro": 34,
+    "fill_rate": 0.1471,
+    "ratio_medio": 183.37,
+    "motivos": {
+      "candidato_evaluacion": 33,
+      "fuera_ventana": 1
+    },
+    "informativo_n15": true
+  },
+  "SOL#15m#h14#[0.85,0.90)": {
+    "n": 8,
+    "n_con_ratio_libro": 8,
+    "fill_rate": 0.5,
+    "ratio_medio": 162.46,
+    "motivos": {
+      "candidato_evaluacion": 7,
+      "ejecutada": 1
     },
     "informativo_n15": false
   },
-  "ETH#15m#h23#[0.85,0.90)": {
+  "SOL#15m#h15#[0.65,0.70)": {
+    "n": 13,
+    "n_con_ratio_libro": 13,
+    "fill_rate": 0.4615,
+    "ratio_medio": 296.37,
+    "motivos": {
+      "candidato_evaluacion": 13
+    },
+    "informativo_n15": false
+  },
+  "BTC#15m#h15#[0.75,0.80)": {
+    "n": 16,
+    "n_con_ratio_libro": 16,
+    "fill_rate": 0.5625,
+    "ratio_medio": 3298.81,
+    "motivos": {
+      "candidato_evaluacion": 14,
+      "senal_caducada": 2
+    },
+    "informativo_n15": true
+  },
+  "BTC#15m#h15#[0.85,0.90)": {
     "n": 3,
     "n_con_ratio_libro": 3,
-    "fill_rate": 0.6667,
-    "ratio_medio": 606.07,
+    "fill_rate": 0.3333,
+    "ratio_medio": 3555.97,
     "motivos": {
       "candidato_evaluacion": 3
     },
     "informativo_n15": false
   },
-  "SOL#15m#h23#[0.85,0.90)": {
+  "BTC#15m#h16#[0.70,0.75)": {
+    "n": 54,
+    "n_con_ratio_libro": 54,
+    "fill_rate": 0.5,
+    "ratio_medio": 1280.42,
+    "motivos": {
+      "candidato_evaluacion": 37,
+      "ejecutada": 4,
+      "senal_caducada": 8,
+      "fuera_ventana": 5
+    },
+    "informativo_n15": true
+  },
+  "BTC#15m#h16#[0.85,0.90)": {
+    "n": 13,
+    "n_con_ratio_libro": 13,
+    "fill_rate": 0.6923,
+    "ratio_medio": 1614.2,
+    "motivos": {
+      "candidato_evaluacion": 11,
+      "senal_caducada": 2
+    },
+    "informativo_n15": false
+  },
+  "ETH#15m#h17#[0.75,0.80)": {
+    "n": 16,
+    "n_con_ratio_libro": 16,
+    "fill_rate": 0.4375,
+    "ratio_medio": 522.79,
+    "motivos": {
+      "candidato_evaluacion": 15,
+      "senal_caducada": 1
+    },
+    "informativo_n15": true
+  },
+  "BTC#15m#h19#[0.60,0.65)": {
+    "n": 20,
+    "n_con_ratio_libro": 20,
+    "fill_rate": 0.35,
+    "ratio_medio": 585.86,
+    "motivos": {
+      "candidato_evaluacion": 19,
+      "fuera_ventana": 1
+    },
+    "informativo_n15": true
+  },
+  "BTC#15m#h19#[0.75,0.80)": {
+    "n": 13,
+    "n_con_ratio_libro": 13,
+    "fill_rate": 0.7692,
+    "ratio_medio": 905.05,
+    "motivos": {
+      "candidato_evaluacion": 11,
+      "senal_caducada": 1,
+      "ejecutada": 1
+    },
+    "informativo_n15": false
+  },
+  "ETH#15m#h19#[0.75,0.80)": {
+    "n": 22,
+    "n_con_ratio_libro": 22,
+    "fill_rate": 0.6818,
+    "ratio_medio": 326.88,
+    "motivos": {
+      "candidato_evaluacion": 18,
+      "fuera_ventana": 2,
+      "senal_caducada": 1,
+      "ejecutada": 1
+    },
+    "informativo_n15": true
+  },
+  "BTC#15m#h20#[0.55,0.60)": {
+    "n": 28,
+    "n_con_ratio_libro": 28,
+    "fill_rate": 0.3214,
+    "ratio_medio": 386.5,
+    "motivos": {
+      "candidato_evaluacion": 28
+    },
+    "informativo_n15": true
+  },
+  "ETH#15m#h20#[0.80,0.85)": {
+    "n": 17,
+    "n_con_ratio_libro": 17,
+    "fill_rate": 0.5882,
+    "ratio_medio": 404.91,
+    "motivos": {
+      "candidato_evaluacion": 15,
+      "fuera_ventana": 2
+    },
+    "informativo_n15": true
+  },
+  "BTC#15m#h21#[0.70,0.75)": {
+    "n": 36,
+    "n_con_ratio_libro": 36,
+    "fill_rate": 0.6111,
+    "ratio_medio": 762.22,
+    "motivos": {
+      "candidato_evaluacion": 24,
+      "fuera_ventana": 6,
+      "senal_caducada": 6
+    },
+    "informativo_n15": true
+  },
+  "ETH#15m#h21#[0.60,0.65)": {
+    "n": 19,
+    "n_con_ratio_libro": 19,
+    "fill_rate": 0.3684,
+    "ratio_medio": 140.85,
+    "motivos": {
+      "candidato_evaluacion": 16,
+      "fuera_ventana": 3
+    },
+    "informativo_n15": true
+  },
+  "BTC#15m#h22#[0.90,0.95)": {
     "n": 3,
     "n_con_ratio_libro": 3,
     "fill_rate": 0.6667,
-    "ratio_medio": 457.9,
+    "ratio_medio": 2187.4,
     "motivos": {
       "candidato_evaluacion": 3
     },
     "informativo_n15": false
   },
-  "XRP#15m#h00#[0.25,0.30)": {
-    "n": 1,
-    "n_con_ratio_libro": 1,
-    "fill_rate": 1.0,
-    "ratio_medio": 138.3,
-    "motivos": {
-      "candidato_evaluacion": 1
-    },
-    "informativo_n15": false
-  },
-  "SOL#15m#h02#[0.65,0.70)": {
-    "n": 3,
-    "n_con_ratio_libro": 3,
-    "fill_rate": 1.0,
-    "ratio_medio": 175.13,
-    "motivos": {
-      "candidato_evaluacion": 2,
-      "fuera_ventana": 1
-    },
-    "informativo_n15": false
-  },
-  "SOL#15m#h02#[0.55,0.60)": {
-    "n": 5,
-    "n_con_ratio_libro": 5,
+  "ETH#15m#h23#[0.90,0.95)": {
+    "n": 20,
+    "n_con_ratio_libro": 20,
     "fill_rate": 0.6,
-    "ratio_medio": 156.56,
+    "ratio_medio": 817.03,
     "motivos": {
-      "candidato_evaluacion": 4,
-      "fuera_ventana": 1
+      "candidato_evaluacion": 14,
+      "fuera_ventana": 2,
+      "senal_caducada": 3,
+      "ejecutada": 1
+    },
+    "informativo_n15": true
+  },
+  "BTC#15m#h23#[0.20,0.25)": {
+    "n": 8,
+    "n_con_ratio_libro": 8,
+    "fill_rate": 0.375,
+    "ratio_medio": 193.1,
+    "motivos": {
+      "candidato_evaluacion": 8
     },
     "informativo_n15": false
   },
-  "SOL#15m#h05#[0.70,0.75)": {
+  "SOL#15m#h00#[0.60,0.65)": {
+    "n": 23,
+    "n_con_ratio_libro": 23,
+    "fill_rate": 0.4348,
+    "ratio_medio": 247.52,
+    "motivos": {
+      "candidato_evaluacion": 18,
+      "fuera_ventana": 5
+    },
+    "informativo_n15": true
+  },
+  "BTC#15m#h01#[0.45,0.50)": {
+    "n": 35,
+    "n_con_ratio_libro": 35,
+    "fill_rate": 0.4857,
+    "ratio_medio": 552.44,
+    "motivos": {
+      "candidato_evaluacion": 34,
+      "fuera_ventana": 1
+    },
+    "informativo_n15": true
+  },
+  "ETH#15m#h02#[0.60,0.65)": {
+    "n": 23,
+    "n_con_ratio_libro": 23,
+    "fill_rate": 0.6522,
+    "ratio_medio": 419.23,
+    "motivos": {
+      "candidato_evaluacion": 18,
+      "fuera_ventana": 5
+    },
+    "informativo_n15": true
+  },
+  "SOL#15m#h02#[0.75,0.80)": {
+    "n": 15,
+    "n_con_ratio_libro": 15,
+    "fill_rate": 0.4,
+    "ratio_medio": 147.7,
+    "motivos": {
+      "candidato_evaluacion": 14,
+      "fuera_ventana": 1
+    },
+    "informativo_n15": true
+  },
+  "ETH#15m#h05#[0.55,0.60)": {
+    "n": 39,
+    "n_con_ratio_libro": 39,
+    "fill_rate": 0.1538,
+    "ratio_medio": 53.28,
+    "motivos": {
+      "candidato_evaluacion": 34,
+      "fuera_ventana": 5
+    },
+    "informativo_n15": true
+  },
+  "BTC#15m#h07#[0.40,0.45)": {
+    "n": 9,
+    "n_con_ratio_libro": 9,
+    "fill_rate": 0.6667,
+    "ratio_medio": 547.28,
+    "motivos": {
+      "candidato_evaluacion": 9
+    },
+    "informativo_n15": false
+  },
+  "SOL#15m#h08#[0.80,0.85)": {
+    "n": 7,
+    "n_con_ratio_libro": 7,
+    "fill_rate": 0.5714,
+    "ratio_medio": 72.01,
+    "motivos": {
+      "candidato_evaluacion": 5,
+      "fuera_ventana": 2
+    },
+    "informativo_n15": false
+  },
+  "BTC#15m#h08#[0.75,0.80)": {
+    "n": 15,
+    "n_con_ratio_libro": 15,
+    "fill_rate": 0.4667,
+    "ratio_medio": 381.45,
+    "motivos": {
+      "candidato_evaluacion": 11,
+      "senal_caducada": 1,
+      "fuera_ventana": 3
+    },
+    "informativo_n15": true
+  },
+  "SOL#15m#h08#[0.65,0.70)": {
+    "n": 19,
+    "n_con_ratio_libro": 19,
+    "fill_rate": 0.4211,
+    "ratio_medio": 89.43,
+    "motivos": {
+      "candidato_evaluacion": 14,
+      "fuera_ventana": 2,
+      "no_viable_stake": 1,
+      "senal_caducada": 2
+    },
+    "informativo_n15": true
+  },
+  "ETH#15m#h08#[0.75,0.80)": {
+    "n": 16,
+    "n_con_ratio_libro": 16,
+    "fill_rate": 0.5625,
+    "ratio_medio": 546.63,
+    "motivos": {
+      "candidato_evaluacion": 13,
+      "fuera_ventana": 2,
+      "senal_caducada": 1
+    },
+    "informativo_n15": true
+  },
+  "ETH#15m#h10#[0.55,0.60)": {
+    "n": 35,
+    "n_con_ratio_libro": 35,
+    "fill_rate": 0.5429,
+    "ratio_medio": 383.51,
+    "motivos": {
+      "candidato_evaluacion": 28,
+      "fuera_ventana": 7
+    },
+    "informativo_n15": true
+  },
+  "BTC#15m#h10#[0.55,0.60)": {
+    "n": 30,
+    "n_con_ratio_libro": 30,
+    "fill_rate": 0.4,
+    "ratio_medio": 542.98,
+    "motivos": {
+      "candidato_evaluacion": 28,
+      "fuera_ventana": 2
+    },
+    "informativo_n15": true
+  },
+  "SOL#15m#h10#[0.35,0.40)": {
+    "n": 14,
+    "n_con_ratio_libro": 14,
+    "fill_rate": 0.2857,
+    "ratio_medio": 15.51,
+    "motivos": {
+      "fuera_ventana": 2,
+      "candidato_evaluacion": 12
+    },
+    "informativo_n15": false
+  },
+  "BTC#15m#h10#[0.20,0.25)": {
     "n": 6,
     "n_con_ratio_libro": 6,
-    "fill_rate": 0.6667,
-    "ratio_medio": 246.37,
+    "fill_rate": 0.8333,
+    "ratio_medio": 188.2,
     "motivos": {
       "candidato_evaluacion": 5,
       "fuera_ventana": 1
     },
     "informativo_n15": false
   },
-  "SOL#15m#h05#[0.85,0.90)": {
-    "n": 4,
-    "n_con_ratio_libro": 4,
-    "fill_rate": 0.25,
-    "ratio_medio": 39.0,
-    "motivos": {
-      "candidato_evaluacion": 4
-    },
-    "informativo_n15": false
-  },
-  "SOL#15m#h06#[0.70,0.75)": {
-    "n": 3,
-    "n_con_ratio_libro": 3,
-    "fill_rate": 0.3333,
-    "ratio_medio": 212.93,
-    "motivos": {
-      "candidato_evaluacion": 3
-    },
-    "informativo_n15": false
-  },
-  "SOL#15m#h09#[0.80,0.85)": {
-    "n": 3,
-    "n_con_ratio_libro": 3,
-    "fill_rate": 0.3333,
-    "ratio_medio": 175.1,
-    "motivos": {
-      "candidato_evaluacion": 2,
-      "fuera_ventana": 1
-    },
-    "informativo_n15": false
-  },
-  "SOL#15m#h10#[0.80,0.85)": {
-    "n": 4,
-    "n_con_ratio_libro": 4,
-    "fill_rate": 0.75,
-    "ratio_medio": 43.0,
-    "motivos": {
-      "candidato_evaluacion": 3,
-      "fuera_ventana": 1
-    },
-    "informativo_n15": false
-  },
-  "ETH#15m#h11#[0.85,0.90)": {
-    "n": 2,
-    "n_con_ratio_libro": 2,
-    "fill_rate": 0.5,
-    "ratio_medio": 1820.5,
-    "motivos": {
-      "candidato_evaluacion": 2
-    },
-    "informativo_n15": false
-  },
-  "SOL#15m#h12#[0.90,0.95)": {
-    "n": 3,
-    "n_con_ratio_libro": 3,
-    "fill_rate": 1.0,
-    "ratio_medio": 536.0,
-    "motivos": {
-      "candidato_evaluacion": 3
-    },
-    "informativo_n15": false
-  },
-  "SOL#15m#h12#[0.70,0.75)": {
-    "n": 5,
-    "n_con_ratio_libro": 5,
-    "fill_rate": 0.8,
-    "ratio_medio": 228.62,
-    "motivos": {
-      "candidato_evaluacion": 3,
-      "fuera_ventana": 2
-    },
-    "informativo_n15": false
-  },
-  "ETH#15m#h12#[0.90,0.95)": {
-    "n": 1,
-    "n_con_ratio_libro": 1,
-    "fill_rate": 1.0,
-    "ratio_medio": 1341.7,
-    "motivos": {
-      "candidato_evaluacion": 1
-    },
-    "informativo_n15": false
-  },
-  "SOL#15m#h14#[0.80,0.85)": {
-    "n": 2,
-    "n_con_ratio_libro": 2,
-    "fill_rate": 0.0,
-    "ratio_medio": 0.0,
-    "motivos": {
-      "candidato_evaluacion": 2
-    },
-    "informativo_n15": false
-  },
-  "SOL#15m#h16#[0.75,0.80)": {
-    "n": 7,
-    "n_con_ratio_libro": 7,
-    "fill_rate": 1.0,
-    "ratio_medio": 592.7,
-    "motivos": {
-      "candidato_evaluacion": 3,
-      "no_viable_stake": 1,
-      "senal_caducada": 1,
-      "fuera_ventana": 2
-    },
-    "informativo_n15": false
-  },
-  "ETH#15m#h16#[0.85,0.90)": {
-    "n": 2,
-    "n_con_ratio_libro": 2,
-    "fill_rate": 0.5,
-    "ratio_medio": 1192.0,
-    "motivos": {
-      "candidato_evaluacion": 2
-    },
-    "informativo_n15": false
-  },
-  "SOL#15m#h16#[0.70,0.75)": {
-    "n": 4,
-    "n_con_ratio_libro": 4,
-    "fill_rate": 0.5,
-    "ratio_medio": 388.45,
-    "motivos": {
-      "candidato_evaluacion": 4
-    },
-    "informativo_n15": false
-  },
-  "SOL#15m#h17#[0.60,0.65)": {
-    "n": 2,
-    "n_con_ratio_libro": 2,
-    "fill_rate": 0.5,
-    "ratio_medio": 135.6,
-    "motivos": {
-      "candidato_evaluacion": 2
-    },
-    "informativo_n15": false
-  },
-  "SOL#15m#h17#[0.80,0.85)": {
-    "n": 7,
-    "n_con_ratio_libro": 7,
-    "fill_rate": 0.7143,
-    "ratio_medio": 294.76,
-    "motivos": {
-      "candidato_evaluacion": 4,
-      "no_viable_stake": 1,
-      "senal_caducada": 1,
-      "fuera_ventana": 1
-    },
-    "informativo_n15": false
-  },
-  "SOL#15m#h20#[0.80,0.85)": {
-    "n": 3,
-    "n_con_ratio_libro": 3,
-    "fill_rate": 1.0,
-    "ratio_medio": 426.63,
-    "motivos": {
-      "candidato_evaluacion": 3
-    },
-    "informativo_n15": false
-  },
-  "ETH#15m#h20#[0.80,0.85)": {
-    "n": 2,
-    "n_con_ratio_libro": 2,
-    "fill_rate": 1.0,
-    "ratio_medio": 637.0,
-    "motivos": {
-      "candidato_evaluacion": 2
-    },
-    "informativo_n15": false
-  },
-  "SOL#15m#h22#[0.60,0.65)": {
-    "n": 11,
-    "n_con_ratio_libro": 11,
-    "fill_rate": 0.5455,
-    "ratio_medio": 129.39,
-    "motivos": {
-      "candidato_evaluacion": 6,
-      "fuera_ventana": 5
-    },
-    "informativo_n15": false
-  },
-  "ETH#15m#h22#[0.80,0.85)": {
-    "n": 3,
-    "n_con_ratio_libro": 3,
-    "fill_rate": 0.6667,
-    "ratio_medio": 827.8,
-    "motivos": {
-      "candidato_evaluacion": 1,
-      "fuera_ventana": 2
-    },
-    "informativo_n15": false
-  },
-  "ETH#15m#h22#[0.85,0.90)": {
-    "n": 3,
-    "n_con_ratio_libro": 3,
-    "fill_rate": 0.6667,
-    "ratio_medio": 804.7,
-    "motivos": {
-      "candidato_evaluacion": 2,
-      "fuera_ventana": 1
-    },
-    "informativo_n15": false
-  },
-  "ETH#15m#h23#[0.90,0.95)": {
-    "n": 3,
-    "n_con_ratio_libro": 3,
-    "fill_rate": 1.0,
-    "ratio_medio": 1647.1,
-    "motivos": {
-      "candidato_evaluacion": 1,
-      "fuera_ventana": 2
-    },
-    "informativo_n15": false
-  },
-  "SOL#15m#h01#[0.70,0.75)": {
-    "n": 4,
-    "n_con_ratio_libro": 4,
-    "fill_rate": 0.5,
-    "ratio_medio": 52.3,
-    "motivos": {
-      "candidato_evaluacion": 4
-    },
-    "informativo_n15": false
-  },
-  "ETH#15m#h02#[0.85,0.90)": {
-    "n": 3,
-    "n_con_ratio_libro": 3,
-    "fill_rate": 0.3333,
-    "ratio_medio": 217.73,
-    "motivos": {
-      "candidato_evaluacion": 2,
-      "fuera_ventana": 1
-    },
-    "informativo_n15": false
-  },
-  "SOL#15m#h06#[0.90,0.95)": {
-    "n": 1,
-    "n_con_ratio_libro": 1,
-    "fill_rate": 1.0,
-    "ratio_medio": 764.3,
-    "motivos": {
-      "candidato_evaluacion": 1
-    },
-    "informativo_n15": false
-  },
   "SOL#15m#h11#[0.85,0.90)": {
-    "n": 2,
-    "n_con_ratio_libro": 2,
-    "fill_rate": 0.5,
-    "ratio_medio": 49.8,
-    "motivos": {
-      "candidato_evaluacion": 2
-    },
-    "informativo_n15": false
-  },
-  "SOL#15m#h12#[0.85,0.90)": {
-    "n": 3,
-    "n_con_ratio_libro": 3,
-    "fill_rate": 0.6667,
-    "ratio_medio": 236.6,
-    "motivos": {
-      "candidato_evaluacion": 2,
-      "fuera_ventana": 1
-    },
-    "informativo_n15": false
-  },
-  "ETH#15m#h12#[0.80,0.85)": {
-    "n": 3,
-    "n_con_ratio_libro": 3,
-    "fill_rate": 1.0,
-    "ratio_medio": 414.4,
-    "motivos": {
-      "candidato_evaluacion": 1,
-      "fuera_ventana": 2
-    },
-    "informativo_n15": false
-  },
-  "SOL#15m#h13#[0.70,0.75)": {
-    "n": 5,
-    "n_con_ratio_libro": 5,
-    "fill_rate": 0.8,
-    "ratio_medio": 117.12,
-    "motivos": {
-      "candidato_evaluacion": 3,
-      "ejecutada": 1,
-      "fuera_ventana": 1
-    },
-    "informativo_n15": false
-  },
-  "ETH#15m#h15#[0.90,0.95)": {
-    "n": 1,
-    "n_con_ratio_libro": 1,
-    "fill_rate": 1.0,
-    "ratio_medio": 1429.9,
-    "motivos": {
-      "candidato_evaluacion": 1
-    },
-    "informativo_n15": false
-  },
-  "SOL#15m#h15#[0.85,0.90)": {
-    "n": 2,
-    "n_con_ratio_libro": 2,
-    "fill_rate": 0.0,
-    "ratio_medio": 0.0,
-    "motivos": {
-      "candidato_evaluacion": 1,
-      "fuera_ventana": 1
-    },
-    "informativo_n15": false
-  },
-  "SOL#15m#h17#[0.85,0.90)": {
-    "n": 2,
-    "n_con_ratio_libro": 2,
-    "fill_rate": 0.5,
-    "ratio_medio": 120.0,
-    "motivos": {
-      "candidato_evaluacion": 2
-    },
-    "informativo_n15": false
-  },
-  "SOL#15m#h19#[0.90,0.95)": {
-    "n": 1,
-    "n_con_ratio_libro": 1,
-    "fill_rate": 1.0,
-    "ratio_medio": 647.8,
-    "motivos": {
-      "candidato_evaluacion": 1
-    },
-    "informativo_n15": false
-  },
-  "SOL#15m#h22#[0.85,0.90)": {
-    "n": 2,
-    "n_con_ratio_libro": 2,
-    "fill_rate": 0.5,
-    "ratio_medio": 118.45,
-    "motivos": {
-      "candidato_evaluacion": 2
-    },
-    "informativo_n15": false
-  },
-  "SOL#15m#h00#[0.70,0.75)": {
-    "n": 7,
-    "n_con_ratio_libro": 7,
-    "fill_rate": 0.2857,
-    "ratio_medio": 68.97,
-    "motivos": {
-      "candidato_evaluacion": 6,
-      "fuera_ventana": 1
-    },
-    "informativo_n15": false
-  },
-  "XRP#5m#h03#[0.45,0.50)": {
-    "n": 12,
-    "n_con_ratio_libro": 12,
-    "fill_rate": 0.1667,
-    "ratio_medio": 24.28,
-    "motivos": {
-      "candidato_evaluacion": 12
-    },
-    "informativo_n15": false
-  },
-  "SOL#15m#h05#[0.80,0.85)": {
-    "n": 1,
-    "n_con_ratio_libro": 1,
-    "fill_rate": 1.0,
-    "ratio_medio": 426.3,
-    "motivos": {
-      "candidato_evaluacion": 1
-    },
-    "informativo_n15": false
-  },
-  "SOL#15m#h06#[0.75,0.80)": {
-    "n": 2,
-    "n_con_ratio_libro": 2,
-    "fill_rate": 1.0,
-    "ratio_medio": 323.75,
-    "motivos": {
-      "candidato_evaluacion": 2
-    },
-    "informativo_n15": false
-  },
-  "SOL#15m#h06#[0.60,0.65)": {
     "n": 8,
     "n_con_ratio_libro": 8,
     "fill_rate": 0.625,
-    "ratio_medio": 252.43,
+    "ratio_medio": 170.14,
     "motivos": {
       "candidato_evaluacion": 7,
       "fuera_ventana": 1
     },
     "informativo_n15": false
   },
-  "SOL#15m#h13#[0.75,0.80)": {
-    "n": 4,
-    "n_con_ratio_libro": 4,
-    "fill_rate": 0.75,
-    "ratio_medio": 264.35,
+  "ETH#15m#h12#[0.55,0.60)": {
+    "n": 50,
+    "n_con_ratio_libro": 50,
+    "fill_rate": 0.52,
+    "ratio_medio": 391.87,
     "motivos": {
-      "candidato_evaluacion": 2,
+      "candidato_evaluacion": 45,
+      "fuera_ventana": 5
+    },
+    "informativo_n15": true
+  },
+  "SOL#15m#h12#[0.85,0.90)": {
+    "n": 10,
+    "n_con_ratio_libro": 10,
+    "fill_rate": 0.4,
+    "ratio_medio": 123.92,
+    "motivos": {
+      "candidato_evaluacion": 8,
       "fuera_ventana": 2
     },
     "informativo_n15": false
   },
-  "SOL#15m#h15#[0.80,0.85)": {
-    "n": 2,
-    "n_con_ratio_libro": 2,
-    "fill_rate": 1.0,
-    "ratio_medio": 453.5,
-    "motivos": {
-      "candidato_evaluacion": 2
-    },
-    "informativo_n15": false
-  },
-  "SOL#15m#h22#[0.70,0.75)": {
-    "n": 2,
-    "n_con_ratio_libro": 2,
-    "fill_rate": 1.0,
-    "ratio_medio": 284.55,
-    "motivos": {
-      "candidato_evaluacion": 2
-    },
-    "informativo_n15": false
-  },
-  "SOL#15m#h00#[0.80,0.85)": {
-    "n": 4,
-    "n_con_ratio_libro": 4,
-    "fill_rate": 0.25,
-    "ratio_medio": 28.23,
-    "motivos": {
-      "candidato_evaluacion": 3,
-      "fuera_ventana": 1
-    },
-    "informativo_n15": false
-  },
-  "SOL#15m#h01#[0.65,0.70)": {
-    "n": 4,
-    "n_con_ratio_libro": 4,
+  "ETH#15m#h12#[0.70,0.75)": {
+    "n": 20,
+    "n_con_ratio_libro": 20,
     "fill_rate": 0.5,
-    "ratio_medio": 212.18,
+    "ratio_medio": 313.76,
+    "motivos": {
+      "candidato_evaluacion": 15,
+      "fuera_ventana": 5
+    },
+    "informativo_n15": true
+  },
+  "BTC#15m#h12#[0.70,0.75)": {
+    "n": 46,
+    "n_con_ratio_libro": 46,
+    "fill_rate": 0.6957,
+    "ratio_medio": 1087.83,
+    "motivos": {
+      "candidato_evaluacion": 27,
+      "fuera_ventana": 19
+    },
+    "informativo_n15": true
+  },
+  "ETH#15m#h12#[0.80,0.85)": {
+    "n": 4,
+    "n_con_ratio_libro": 4,
+    "fill_rate": 1.0,
+    "ratio_medio": 765.5,
     "motivos": {
       "candidato_evaluacion": 3,
       "fuera_ventana": 1
     },
     "informativo_n15": false
   },
-  "SOL#15m#h05#[0.65,0.70)": {
-    "n": 11,
-    "n_con_ratio_libro": 11,
-    "fill_rate": 0.5455,
-    "ratio_medio": 123.3,
+  "SOL#15m#h13#[0.70,0.75)": {
+    "n": 10,
+    "n_con_ratio_libro": 10,
+    "fill_rate": 0.4,
+    "ratio_medio": 58.56,
     "motivos": {
       "candidato_evaluacion": 8,
-      "fuera_ventana": 3
+      "ejecutada": 1,
+      "fuera_ventana": 1
     },
     "informativo_n15": false
   },
-  "SOL#15m#h06#[0.55,0.60)": {
-    "n": 19,
-    "n_con_ratio_libro": 19,
-    "fill_rate": 0.1579,
-    "ratio_medio": 40.69,
+  "BTC#15m#h14#[0.40,0.45)": {
+    "n": 21,
+    "n_con_ratio_libro": 21,
+    "fill_rate": 0.1905,
+    "ratio_medio": 497.94,
+    "motivos": {
+      "candidato_evaluacion": 10,
+      "no_viable_stake": 1,
+      "senal_caducada": 2,
+      "veto_profundidad": 8
+    },
+    "informativo_n15": true
+  },
+  "BTC#15m#h15#[0.65,0.70)": {
+    "n": 27,
+    "n_con_ratio_libro": 27,
+    "fill_rate": 0.4815,
+    "ratio_medio": 3045.29,
+    "motivos": {
+      "candidato_evaluacion": 26,
+      "fuera_ventana": 1
+    },
+    "informativo_n15": true
+  },
+  "ETH#15m#h15#[0.90,0.95)": {
+    "n": 25,
+    "n_con_ratio_libro": 14,
+    "fill_rate": 0.0714,
+    "ratio_medio": 102.14,
     "motivos": {
       "candidato_evaluacion": 6,
-      "fuera_ventana": 1,
-      "veto_profundidad": 11,
+      "veto_fuera_banda_ballenas": 11,
+      "senal_caducada": 3,
+      "veto_profundidad": 5
+    },
+    "informativo_n15": false
+  },
+  "SOL#15m#h15#[0.85,0.90)": {
+    "n": 3,
+    "n_con_ratio_libro": 3,
+    "fill_rate": 0.3333,
+    "ratio_medio": 49.97,
+    "motivos": {
+      "candidato_evaluacion": 2,
+      "fuera_ventana": 1
+    },
+    "informativo_n15": false
+  },
+  "BTC#60m#h16#[0.55,0.60)": {
+    "n": 23,
+    "n_con_ratio_libro": 23,
+    "fill_rate": 0.4348,
+    "ratio_medio": 661.07,
+    "motivos": {
+      "candidato_evaluacion": 8,
+      "fuera_ventana": 4,
+      "ejecutada": 1,
+      "veto_profundidad": 9,
       "senal_caducada": 1
     },
     "informativo_n15": true
   },
-  "SOL#15m#h09#[0.85,0.90)": {
-    "n": 1,
-    "n_con_ratio_libro": 1,
-    "fill_rate": 0.0,
-    "ratio_medio": 0.0,
+  "BTC#15m#h16#[0.60,0.65)": {
+    "n": 20,
+    "n_con_ratio_libro": 20,
+    "fill_rate": 0.65,
+    "ratio_medio": 2062.95,
     "motivos": {
-      "candidato_evaluacion": 1
+      "candidato_evaluacion": 19,
+      "fuera_ventana": 1
+    },
+    "informativo_n15": true
+  },
+  "ETH#15m#h19#[0.45,0.50)": {
+    "n": 48,
+    "n_con_ratio_libro": 48,
+    "fill_rate": 0.3958,
+    "ratio_medio": 289.16,
+    "motivos": {
+      "candidato_evaluacion": 42,
+      "fuera_ventana": 1,
+      "veto_profundidad": 4,
+      "senal_caducada": 1
+    },
+    "informativo_n15": true
+  },
+  "ETH#15m#h20#[0.65,0.70)": {
+    "n": 18,
+    "n_con_ratio_libro": 18,
+    "fill_rate": 0.5,
+    "ratio_medio": 934.31,
+    "motivos": {
+      "candidato_evaluacion": 17,
+      "senal_caducada": 1
+    },
+    "informativo_n15": true
+  },
+  "BTC#15m#h21#[0.65,0.70)": {
+    "n": 18,
+    "n_con_ratio_libro": 18,
+    "fill_rate": 0.1111,
+    "ratio_medio": 132.14,
+    "motivos": {
+      "candidato_evaluacion": 16,
+      "fuera_ventana": 2
+    },
+    "informativo_n15": true
+  },
+  "SOL#15m#h22#[0.85,0.90)": {
+    "n": 6,
+    "n_con_ratio_libro": 6,
+    "fill_rate": 0.5,
+    "ratio_medio": 357.52,
+    "motivos": {
+      "candidato_evaluacion": 6
     },
     "informativo_n15": false
   },
-  "ETH#15m#h10#[0.85,0.90)": {
+  "BTC#15m#h22#[0.80,0.85)": {
+    "n": 7,
+    "n_con_ratio_libro": 7,
+    "fill_rate": 0.2857,
+    "ratio_medio": 684.07,
+    "motivos": {
+      "candidato_evaluacion": 7
+    },
+    "informativo_n15": false
+  },
+  "BTC#15m#h22#[0.55,0.60)": {
+    "n": 39,
+    "n_con_ratio_libro": 39,
+    "fill_rate": 0.2564,
+    "ratio_medio": 280.03,
+    "motivos": {
+      "candidato_evaluacion": 39
+    },
+    "informativo_n15": true
+  },
+  "BTC#15m#h23#[0.45,0.50)": {
+    "n": 39,
+    "n_con_ratio_libro": 39,
+    "fill_rate": 0.3077,
+    "ratio_medio": 208.58,
+    "motivos": {
+      "candidato_evaluacion": 37,
+      "senal_caducada": 2
+    },
+    "informativo_n15": true
+  },
+  "BTC#15m#h00#[0.45,0.50)": {
+    "n": 27,
+    "n_con_ratio_libro": 27,
+    "fill_rate": 0.2593,
+    "ratio_medio": 292.02,
+    "motivos": {
+      "candidato_evaluacion": 26,
+      "fuera_ventana": 1
+    },
+    "informativo_n15": true
+  },
+  "ETH#15m#h00#[0.25,0.30)": {
+    "n": 18,
+    "n_con_ratio_libro": 18,
+    "fill_rate": 0.3889,
+    "ratio_medio": 163.06,
+    "motivos": {
+      "candidato_evaluacion": 15,
+      "fuera_ventana": 3
+    },
+    "informativo_n15": true
+  },
+  "SOL#15m#h01#[0.25,0.30)": {
+    "n": 18,
+    "n_con_ratio_libro": 18,
+    "fill_rate": 0.7778,
+    "ratio_medio": 65.22,
+    "motivos": {
+      "candidato_evaluacion": 16,
+      "fuera_ventana": 2
+    },
+    "informativo_n15": true
+  },
+  "BTC#15m#h02#[0.60,0.65)": {
+    "n": 25,
+    "n_con_ratio_libro": 25,
+    "fill_rate": 0.4,
+    "ratio_medio": 615.92,
+    "motivos": {
+      "candidato_evaluacion": 24,
+      "fuera_ventana": 1
+    },
+    "informativo_n15": true
+  },
+  "BTC#15m#h04#[0.30,0.35)": {
+    "n": 13,
+    "n_con_ratio_libro": 13,
+    "fill_rate": 0.3077,
+    "ratio_medio": 358.09,
+    "motivos": {
+      "candidato_evaluacion": 11,
+      "no_viable_stake": 1,
+      "senal_caducada": 1
+    },
+    "informativo_n15": false
+  },
+  "SOL#15m#h04#[0.85,0.90)": {
+    "n": 20,
+    "n_con_ratio_libro": 20,
+    "fill_rate": 0.5,
+    "ratio_medio": 72.57,
+    "motivos": {
+      "candidato_evaluacion": 16,
+      "veto_profundidad": 3,
+      "senal_caducada": 1
+    },
+    "informativo_n15": true
+  },
+  "BTC#15m#h04#[0.20,0.25)": {
     "n": 2,
     "n_con_ratio_libro": 2,
-    "fill_rate": 1.0,
-    "ratio_medio": 1536.0,
+    "fill_rate": 0.5,
+    "ratio_medio": 22.8,
     "motivos": {
-      "candidato_evaluacion": 1,
+      "candidato_evaluacion": 2
+    },
+    "informativo_n15": false
+  },
+  "SOL#15m#h05#[0.80,0.85)": {
+    "n": 8,
+    "n_con_ratio_libro": 8,
+    "fill_rate": 0.375,
+    "ratio_medio": 100.43,
+    "motivos": {
+      "candidato_evaluacion": 8
+    },
+    "informativo_n15": false
+  },
+  "BTC#15m#h05#[0.30,0.35)": {
+    "n": 8,
+    "n_con_ratio_libro": 8,
+    "fill_rate": 0.375,
+    "ratio_medio": 116.76,
+    "motivos": {
+      "candidato_evaluacion": 7,
       "fuera_ventana": 1
     },
     "informativo_n15": false
   },
-  "SOL#5m#h12#[0.65,0.70)": {
-    "n": 3,
-    "n_con_ratio_libro": 3,
-    "fill_rate": 0.6667,
-    "ratio_medio": 321.3,
+  "ETH#15m#h06#[0.15,0.20)": {
+    "n": 17,
+    "n_con_ratio_libro": 17,
+    "fill_rate": 0.7647,
+    "ratio_medio": 165.43,
     "motivos": {
-      "candidato_evaluacion": 3
+      "abort_requote": 12,
+      "senal_caducada": 1,
+      "candidato_evaluacion": 4
+    },
+    "informativo_n15": true
+  },
+  "SOL#15m#h07#[0.25,0.30)": {
+    "n": 11,
+    "n_con_ratio_libro": 11,
+    "fill_rate": 0.0909,
+    "ratio_medio": 24.87,
+    "motivos": {
+      "candidato_evaluacion": 11
     },
     "informativo_n15": false
   },
-  "ETH#5m#h12#[0.80,0.85)": {
-    "n": 1,
-    "n_con_ratio_libro": 1,
-    "fill_rate": 0.0,
-    "ratio_medio": 0.0,
+  "BTC#15m#h07#[0.65,0.70)": {
+    "n": 20,
+    "n_con_ratio_libro": 20,
+    "fill_rate": 0.4,
+    "ratio_medio": 455.92,
     "motivos": {
-      "candidato_evaluacion": 1
+      "candidato_evaluacion": 19,
+      "fuera_ventana": 1
     },
-    "informativo_n15": false
+    "informativo_n15": true
   },
-  "SOL#5m#h13#[0.65,0.70)": {
-    "n": 1,
-    "n_con_ratio_libro": 1,
-    "fill_rate": 1.0,
-    "ratio_medio": 241.1,
+  "BTC#15m#h08#[0.50,0.55)": {
+    "n": 31,
+    "n_con_ratio_libro": 31,
+    "fill_rate": 0.2903,
+    "ratio_medio": 361.04,
     "motivos": {
-      "candidato_evaluacion": 1
-    },
-    "informativo_n15": false
-  },
-  "SOL#5m#h14#[0.75,0.80)": {
-    "n": 1,
-    "n_con_ratio_libro": 1,
-    "fill_rate": 0.0,
-    "ratio_medio": 0.0,
-    "motivos": {
-      "candidato_evaluacion": 1
-    },
-    "informativo_n15": false
-  },
-  "ETH#15m#h14#[0.80,0.85)": {
-    "n": 1,
-    "n_con_ratio_libro": 1,
-    "fill_rate": 0.0,
-    "ratio_medio": 0.0,
-    "motivos": {
-      "candidato_evaluacion": 1
-    },
-    "informativo_n15": false
-  },
-  "SOL#15m#h20#[0.75,0.80)": {
-    "n": 7,
-    "n_con_ratio_libro": 7,
-    "fill_rate": 0.5714,
-    "ratio_medio": 189.26,
-    "motivos": {
-      "candidato_evaluacion": 4,
+      "candidato_evaluacion": 27,
+      "senal_caducada": 1,
       "fuera_ventana": 3
     },
+    "informativo_n15": true
+  },
+  "BTC#15m#h08#[0.40,0.45)": {
+    "n": 6,
+    "n_con_ratio_libro": 6,
+    "fill_rate": 0.5,
+    "ratio_medio": 591.13,
+    "motivos": {
+      "candidato_evaluacion": 6
+    },
     "informativo_n15": false
   },
-  "SOL#5m#h23#[0.70,0.75)": {
+  "BTC#15m#h08#[0.65,0.70)": {
+    "n": 17,
+    "n_con_ratio_libro": 17,
+    "fill_rate": 0.4118,
+    "ratio_medio": 173.99,
+    "motivos": {
+      "candidato_evaluacion": 15,
+      "no_viable_stake": 1,
+      "senal_caducada": 1
+    },
+    "informativo_n15": true
+  },
+  "BTC#15m#h09#[0.65,0.70)": {
+    "n": 16,
+    "n_con_ratio_libro": 16,
+    "fill_rate": 0.5625,
+    "ratio_medio": 948.7,
+    "motivos": {
+      "candidato_evaluacion": 16
+    },
+    "informativo_n15": true
+  },
+  "BTC#15m#h10#[0.30,0.35)": {
+    "n": 2,
+    "n_con_ratio_libro": 2,
+    "fill_rate": 0.0,
+    "ratio_medio": 0.0,
+    "motivos": {
+      "candidato_evaluacion": 2
+    },
+    "informativo_n15": false
+  },
+  "ETH#15m#h12#[0.60,0.65)": {
+    "n": 17,
+    "n_con_ratio_libro": 17,
+    "fill_rate": 0.4118,
+    "ratio_medio": 452.11,
+    "motivos": {
+      "candidato_evaluacion": 13,
+      "fuera_ventana": 4
+    },
+    "informativo_n15": true
+  },
+  "BTC#15m#h12#[0.40,0.45)": {
+    "n": 11,
+    "n_con_ratio_libro": 11,
+    "fill_rate": 0.1818,
+    "ratio_medio": 452.34,
+    "motivos": {
+      "candidato_evaluacion": 11
+    },
+    "informativo_n15": false
+  },
+  "BTC#15m#h13#[0.40,0.45)": {
+    "n": 26,
+    "n_con_ratio_libro": 26,
+    "fill_rate": 0.1923,
+    "ratio_medio": 321.63,
+    "motivos": {
+      "candidato_evaluacion": 12,
+      "veto_profundidad": 12,
+      "senal_caducada": 2
+    },
+    "informativo_n15": true
+  },
+  "ETH#15m#h14#[0.70,0.75)": {
+    "n": 52,
+    "n_con_ratio_libro": 51,
+    "fill_rate": 0.3529,
+    "ratio_medio": 356.41,
+    "motivos": {
+      "candidato_evaluacion": 22,
+      "fuera_ventana": 3,
+      "veto_profundidad": 18,
+      "ejecutada": 2,
+      "senal_caducada": 6,
+      "veto_ballenas_debil": 1
+    },
+    "informativo_n15": true
+  },
+  "ETH#15m#h18#[0.60,0.65)": {
+    "n": 22,
+    "n_con_ratio_libro": 22,
+    "fill_rate": 0.4545,
+    "ratio_medio": 503.35,
+    "motivos": {
+      "candidato_evaluacion": 17,
+      "fuera_ventana": 3,
+      "senal_caducada": 2
+    },
+    "informativo_n15": true
+  },
+  "ETH#15m#h19#[0.25,0.30)": {
+    "n": 13,
+    "n_con_ratio_libro": 13,
+    "fill_rate": 0.5385,
+    "ratio_medio": 153.35,
+    "motivos": {
+      "candidato_evaluacion": 10,
+      "veto_profundidad": 2,
+      "ejecutada": 1
+    },
+    "informativo_n15": false
+  },
+  "BTC#15m#h00#[0.65,0.70)": {
+    "n": 26,
+    "n_con_ratio_libro": 26,
+    "fill_rate": 0.2692,
+    "ratio_medio": 170.96,
+    "motivos": {
+      "candidato_evaluacion": 26
+    },
+    "informativo_n15": true
+  },
+  "BTC#15m#h02#[0.80,0.85)": {
+    "n": 6,
+    "n_con_ratio_libro": 6,
+    "fill_rate": 0.3333,
+    "ratio_medio": 39.98,
+    "motivos": {
+      "candidato_evaluacion": 6
+    },
+    "informativo_n15": false
+  },
+  "ETH#15m#h02#[0.70,0.75)": {
+    "n": 39,
+    "n_con_ratio_libro": 39,
+    "fill_rate": 0.359,
+    "ratio_medio": 625.69,
+    "motivos": {
+      "candidato_evaluacion": 30,
+      "fuera_ventana": 9
+    },
+    "informativo_n15": true
+  },
+  "BTC#15m#h03#[0.65,0.70)": {
+    "n": 25,
+    "n_con_ratio_libro": 25,
+    "fill_rate": 0.32,
+    "ratio_medio": 337.32,
+    "motivos": {
+      "candidato_evaluacion": 24,
+      "fuera_ventana": 1
+    },
+    "informativo_n15": true
+  },
+  "SOL#15m#h03#[0.20,0.25)": {
+    "n": 20,
+    "n_con_ratio_libro": 20,
+    "fill_rate": 0.5,
+    "ratio_medio": 38.83,
+    "motivos": {
+      "candidato_evaluacion": 18,
+      "fuera_ventana": 2
+    },
+    "informativo_n15": true
+  },
+  "BTC#15m#h06#[0.40,0.45)": {
+    "n": 17,
+    "n_con_ratio_libro": 17,
+    "fill_rate": 0.4118,
+    "ratio_medio": 141.56,
+    "motivos": {
+      "candidato_evaluacion": 15,
+      "fuera_ventana": 2
+    },
+    "informativo_n15": true
+  },
+  "SOL#15m#h08#[0.85,0.90)": {
+    "n": 5,
+    "n_con_ratio_libro": 5,
+    "fill_rate": 0.8,
+    "ratio_medio": 294.42,
+    "motivos": {
+      "candidato_evaluacion": 5
+    },
+    "informativo_n15": false
+  },
+  "SOL#15m#h09#[0.85,0.90)": {
     "n": 4,
     "n_con_ratio_libro": 4,
     "fill_rate": 0.75,
-    "ratio_medio": 258.9,
+    "ratio_medio": 143.22,
     "motivos": {
       "candidato_evaluacion": 4
     },
     "informativo_n15": false
   },
-  "SOL#5m#h00#[0.85,0.90)": {
+  "BTC#15m#h10#[0.10,0.15)": {
+    "n": 2,
+    "n_con_ratio_libro": 2,
+    "fill_rate": 0.0,
+    "ratio_medio": 0.0,
+    "motivos": {
+      "candidato_evaluacion": 2
+    },
+    "informativo_n15": false
+  },
+  "ETH#15m#h10#[0.85,0.90)": {
+    "n": 16,
+    "n_con_ratio_libro": 16,
+    "fill_rate": 0.8125,
+    "ratio_medio": 499.01,
+    "motivos": {
+      "candidato_evaluacion": 13,
+      "fuera_ventana": 3
+    },
+    "informativo_n15": true
+  },
+  "BTC#15m#h11#[0.40,0.45)": {
+    "n": 18,
+    "n_con_ratio_libro": 18,
+    "fill_rate": 0.2778,
+    "ratio_medio": 233.77,
+    "motivos": {
+      "candidato_evaluacion": 18
+    },
+    "informativo_n15": true
+  },
+  "BTC#15m#h13#[0.10,0.15)": {
+    "n": 9,
+    "n_con_ratio_libro": 9,
+    "fill_rate": 0.1111,
+    "ratio_medio": 7.84,
+    "motivos": {
+      "candidato_evaluacion": 8,
+      "ejecutada": 1
+    },
+    "informativo_n15": false
+  },
+  "ETH#5m#h13#[0.55,0.60)": {
+    "n": 59,
+    "n_con_ratio_libro": 59,
+    "fill_rate": 0.5085,
+    "ratio_medio": 502.93,
+    "motivos": {
+      "candidato_evaluacion": 59
+    },
+    "informativo_n15": true
+  },
+  "XRP#15m#h13#[0.40,0.45)": {
+    "n": 2,
+    "n_con_ratio_libro": 2,
+    "fill_rate": 0.5,
+    "ratio_medio": 24.1,
+    "motivos": {
+      "candidato_evaluacion": 2
+    },
+    "informativo_n15": false
+  },
+  "SOL#15m#h13#[0.85,0.90)": {
+    "n": 20,
+    "n_con_ratio_libro": 20,
+    "fill_rate": 0.55,
+    "ratio_medio": 226.6,
+    "motivos": {
+      "candidato_evaluacion": 18,
+      "senal_caducada": 2
+    },
+    "informativo_n15": true
+  },
+  "ETH#5m#h13#[0.70,0.75)": {
+    "n": 34,
+    "n_con_ratio_libro": 34,
+    "fill_rate": 0.5,
+    "ratio_medio": 577.52,
+    "motivos": {
+      "candidato_evaluacion": 34
+    },
+    "informativo_n15": true
+  },
+  "BTC#15m#h14#[0.35,0.40)": {
+    "n": 25,
+    "n_con_ratio_libro": 25,
+    "fill_rate": 0.48,
+    "ratio_medio": 1154.13,
+    "motivos": {
+      "candidato_evaluacion": 25
+    },
+    "informativo_n15": true
+  },
+  "SOL#15m#h14#[0.40,0.45)": {
+    "n": 27,
+    "n_con_ratio_libro": 27,
+    "fill_rate": 0.3333,
+    "ratio_medio": 160.79,
+    "motivos": {
+      "candidato_evaluacion": 27
+    },
+    "informativo_n15": true
+  },
+  "SOL#15m#h15#[0.55,0.60)": {
+    "n": 61,
+    "n_con_ratio_libro": 61,
+    "fill_rate": 0.4426,
+    "ratio_medio": 212.87,
+    "motivos": {
+      "candidato_evaluacion": 20,
+      "no_viable_stake": 1,
+      "senal_caducada": 5,
+      "fuera_ventana": 3,
+      "veto_profundidad": 21,
+      "ejecutada": 2,
+      "abort_requote": 8,
+      "fok_kill": 1
+    },
+    "informativo_n15": true
+  },
+  "ETH#15m#h17#[0.40,0.45)": {
+    "n": 6,
+    "n_con_ratio_libro": 6,
+    "fill_rate": 0.5,
+    "ratio_medio": 735.77,
+    "motivos": {
+      "candidato_evaluacion": 6
+    },
+    "informativo_n15": false
+  },
+  "ETH#5m#h19#[0.65,0.70)": {
+    "n": 8,
+    "n_con_ratio_libro": 8,
+    "fill_rate": 0.75,
+    "ratio_medio": 1061.92,
+    "motivos": {
+      "candidato_evaluacion": 8
+    },
+    "informativo_n15": false
+  },
+  "ETH#15m#h20#[0.70,0.75)": {
+    "n": 32,
+    "n_con_ratio_libro": 32,
+    "fill_rate": 0.5312,
+    "ratio_medio": 387.51,
+    "motivos": {
+      "candidato_evaluacion": 26,
+      "fuera_ventana": 4,
+      "senal_caducada": 2
+    },
+    "informativo_n15": true
+  },
+  "ETH#5m#h20#[0.50,0.55)": {
     "n": 1,
     "n_con_ratio_libro": 1,
     "fill_rate": 1.0,
-    "ratio_medio": 131.4,
+    "ratio_medio": 340.6,
     "motivos": {
       "candidato_evaluacion": 1
     },
     "informativo_n15": false
   },
-  "SOL#15m#h00#[0.75,0.80)": {
+  "BTC#5m#h20#[0.50,0.55)": {
+    "n": 21,
+    "n_con_ratio_libro": 21,
+    "fill_rate": 0.619,
+    "ratio_medio": 1044.3,
+    "motivos": {
+      "candidato_evaluacion": 21
+    },
+    "informativo_n15": true
+  },
+  "ETH#5m#h22#[0.55,0.60)": {
+    "n": 53,
+    "n_con_ratio_libro": 53,
+    "fill_rate": 0.5283,
+    "ratio_medio": 535.65,
+    "motivos": {
+      "candidato_evaluacion": 53
+    },
+    "informativo_n15": true
+  },
+  "SOL#5m#h23#[0.70,0.75)": {
+    "n": 33,
+    "n_con_ratio_libro": 33,
+    "fill_rate": 0.5758,
+    "ratio_medio": 158.8,
+    "motivos": {
+      "candidato_evaluacion": 33
+    },
+    "informativo_n15": true
+  },
+  "XRP#15m#h00#[0.60,0.65)": {
     "n": 4,
     "n_con_ratio_libro": 4,
-    "fill_rate": 1.0,
-    "ratio_medio": 476.35,
+    "fill_rate": 0.75,
+    "ratio_medio": 258.43,
     "motivos": {
-      "fuera_ventana": 3,
-      "candidato_evaluacion": 1
+      "candidato_evaluacion": 4
     },
     "informativo_n15": false
+  },
+  "BTC#15m#h01#[0.65,0.70)": {
+    "n": 15,
+    "n_con_ratio_libro": 15,
+    "fill_rate": 0.6667,
+    "ratio_medio": 652.27,
+    "motivos": {
+      "candidato_evaluacion": 15
+    },
+    "informativo_n15": true
+  },
+  "BTC#15m#h02#[0.10,0.15)": {
+    "n": 13,
+    "n_con_ratio_libro": 13,
+    "fill_rate": 0.4615,
+    "ratio_medio": 114.92,
+    "motivos": {
+      "candidato_evaluacion": 11,
+      "fuera_ventana": 2
+    },
+    "informativo_n15": false
+  },
+  "BTC#15m#h02#[0.55,0.60)": {
+    "n": 25,
+    "n_con_ratio_libro": 25,
+    "fill_rate": 0.64,
+    "ratio_medio": 854.64,
+    "motivos": {
+      "candidato_evaluacion": 25
+    },
+    "informativo_n15": true
   },
   "ETH#15m#h03#[0.80,0.85)": {
-    "n": 4,
-    "n_con_ratio_libro": 4,
-    "fill_rate": 0.25,
-    "ratio_medio": 333.68,
+    "n": 15,
+    "n_con_ratio_libro": 15,
+    "fill_rate": 0.6667,
+    "ratio_medio": 559.21,
     "motivos": {
-      "candidato_evaluacion": 3,
+      "candidato_evaluacion": 13,
+      "fuera_ventana": 2
+    },
+    "informativo_n15": true
+  },
+  "BTC#15m#h03#[0.85,0.90)": {
+    "n": 6,
+    "n_con_ratio_libro": 6,
+    "fill_rate": 0.8333,
+    "ratio_medio": 1065.85,
+    "motivos": {
+      "candidato_evaluacion": 5,
       "fuera_ventana": 1
     },
     "informativo_n15": false
   },
-  "ETH#15m#h05#[0.85,0.90)": {
-    "n": 1,
-    "n_con_ratio_libro": 1,
-    "fill_rate": 0.0,
-    "ratio_medio": 0.0,
+  "BTC#15m#h04#[0.40,0.45)": {
+    "n": 6,
+    "n_con_ratio_libro": 6,
+    "fill_rate": 0.1667,
+    "ratio_medio": 213.77,
     "motivos": {
-      "candidato_evaluacion": 1
+      "candidato_evaluacion": 6
     },
     "informativo_n15": false
   },
-  "SOL#5m#h05#[0.85,0.90)": {
-    "n": 1,
-    "n_con_ratio_libro": 1,
-    "fill_rate": 1.0,
-    "ratio_medio": 1220.7,
+  "BTC#15m#h05#[0.20,0.25)": {
+    "n": 10,
+    "n_con_ratio_libro": 10,
+    "fill_rate": 0.6,
+    "ratio_medio": 112.86,
     "motivos": {
-      "candidato_evaluacion": 1
+      "candidato_evaluacion": 10
+    },
+    "informativo_n15": false
+  },
+  "BTC#15m#h05#[0.10,0.15)": {
+    "n": 7,
+    "n_con_ratio_libro": 7,
+    "fill_rate": 1.0,
+    "ratio_medio": 147.06,
+    "motivos": {
+      "candidato_evaluacion": 7
+    },
+    "informativo_n15": false
+  },
+  "ETH#5m#h05#[0.60,0.65)": {
+    "n": 22,
+    "n_con_ratio_libro": 22,
+    "fill_rate": 0.6818,
+    "ratio_medio": 375.9,
+    "motivos": {
+      "candidato_evaluacion": 22
+    },
+    "informativo_n15": true
+  },
+  "BTC#15m#h06#[0.20,0.25)": {
+    "n": 7,
+    "n_con_ratio_libro": 7,
+    "fill_rate": 0.4286,
+    "ratio_medio": 212.77,
+    "motivos": {
+      "candidato_evaluacion": 6,
+      "fuera_ventana": 1
+    },
+    "informativo_n15": false
+  },
+  "BTC#15m#h10#[0.15,0.20)": {
+    "n": 4,
+    "n_con_ratio_libro": 4,
+    "fill_rate": 1.0,
+    "ratio_medio": 410.52,
+    "motivos": {
+      "candidato_evaluacion": 4
     },
     "informativo_n15": false
   },
   "BTC#15m#h12#[0.90,0.95)": {
-    "n": 1,
-    "n_con_ratio_libro": 1,
+    "n": 2,
+    "n_con_ratio_libro": 2,
     "fill_rate": 1.0,
-    "ratio_medio": 1022.6,
+    "ratio_medio": 2823.45,
     "motivos": {
-      "candidato_evaluacion": 1
+      "candidato_evaluacion": 2
     },
     "informativo_n15": false
   },
-  "ETH#5m#h13#[0.80,0.85)": {
-    "n": 1,
-    "n_con_ratio_libro": 1,
-    "fill_rate": 0.0,
-    "ratio_medio": 0.0,
+  "BTC#15m#h13#[0.15,0.20)": {
+    "n": 4,
+    "n_con_ratio_libro": 4,
+    "fill_rate": 0.5,
+    "ratio_medio": 224.9,
     "motivos": {
-      "candidato_evaluacion": 1
+      "candidato_evaluacion": 4
+    },
+    "informativo_n15": false
+  },
+  "BTC#15m#h13#[0.80,0.85)": {
+    "n": 10,
+    "n_con_ratio_libro": 10,
+    "fill_rate": 0.3,
+    "ratio_medio": 1978.2,
+    "motivos": {
+      "candidato_evaluacion": 9,
+      "senal_caducada": 1
     },
     "informativo_n15": false
   },
@@ -848,85 +2550,226 @@
     },
     "informativo_n15": false
   },
-  "SOL#5m#h14#[0.70,0.75)": {
+  "BTC#15m#h13#[0.35,0.40)": {
+    "n": 5,
+    "n_con_ratio_libro": 5,
+    "fill_rate": 0.2,
+    "ratio_medio": 509.96,
+    "motivos": {
+      "candidato_evaluacion": 5
+    },
+    "informativo_n15": false
+  },
+  "BTC#5m#h13#[0.45,0.50)": {
+    "n": 4,
+    "n_con_ratio_libro": 4,
+    "fill_rate": 0.25,
+    "ratio_medio": 633.73,
+    "motivos": {
+      "candidato_evaluacion": 4
+    },
+    "informativo_n15": false
+  },
+  "BTC#15m#h14#[0.25,0.30)": {
+    "n": 12,
+    "n_con_ratio_libro": 12,
+    "fill_rate": 0.5833,
+    "ratio_medio": 625.43,
+    "motivos": {
+      "candidato_evaluacion": 9,
+      "no_viable_stake": 1,
+      "senal_caducada": 1,
+      "fuera_ventana": 1
+    },
+    "informativo_n15": false
+  },
+  "SOL#15m#h17#[0.20,0.25)": {
+    "n": 7,
+    "n_con_ratio_libro": 7,
+    "fill_rate": 0.5714,
+    "ratio_medio": 44.71,
+    "motivos": {
+      "candidato_evaluacion": 7
+    },
+    "informativo_n15": false
+  },
+  "ETH#5m#h19#[0.80,0.85)": {
+    "n": 4,
+    "n_con_ratio_libro": 4,
+    "fill_rate": 1.0,
+    "ratio_medio": 1038.33,
+    "motivos": {
+      "candidato_evaluacion": 4
+    },
+    "informativo_n15": false
+  },
+  "BTC#15m#h20#[0.80,0.85)": {
+    "n": 16,
+    "n_con_ratio_libro": 16,
+    "fill_rate": 0.3125,
+    "ratio_medio": 611.12,
+    "motivos": {
+      "candidato_evaluacion": 13,
+      "senal_caducada": 2,
+      "fuera_ventana": 1
+    },
+    "informativo_n15": true
+  },
+  "ETH#5m#h22#[0.65,0.70)": {
+    "n": 5,
+    "n_con_ratio_libro": 5,
+    "fill_rate": 0.6,
+    "ratio_medio": 166.4,
+    "motivos": {
+      "candidato_evaluacion": 5
+    },
+    "informativo_n15": false
+  },
+  "SOL#15m#h23#[0.80,0.85)": {
+    "n": 22,
+    "n_con_ratio_libro": 22,
+    "fill_rate": 0.3182,
+    "ratio_medio": 76.81,
+    "motivos": {
+      "no_viable_stake": 1,
+      "candidato_evaluacion": 11,
+      "veto_profundidad": 9,
+      "senal_caducada": 1
+    },
+    "informativo_n15": true
+  },
+  "SOL#5m#h23#[0.65,0.70)": {
+    "n": 12,
+    "n_con_ratio_libro": 12,
+    "fill_rate": 0.75,
+    "ratio_medio": 128.52,
+    "motivos": {
+      "candidato_evaluacion": 12
+    },
+    "informativo_n15": false
+  },
+  "SOL#5m#h23#[0.60,0.65)": {
+    "n": 16,
+    "n_con_ratio_libro": 16,
+    "fill_rate": 0.5,
+    "ratio_medio": 89.95,
+    "motivos": {
+      "candidato_evaluacion": 16
+    },
+    "informativo_n15": true
+  },
+  "ETH#15m#h00#[0.10,0.15)": {
+    "n": 8,
+    "n_con_ratio_libro": 8,
+    "fill_rate": 0.125,
+    "ratio_medio": 1.62,
+    "motivos": {
+      "candidato_evaluacion": 8
+    },
+    "informativo_n15": false
+  },
+  "BTC#60m#h01#[0.55,0.60)": {
+    "n": 18,
+    "n_con_ratio_libro": 18,
+    "fill_rate": 0.8889,
+    "ratio_medio": 802.88,
+    "motivos": {
+      "candidato_evaluacion": 11,
+      "fuera_ventana": 7
+    },
+    "informativo_n15": true
+  },
+  "ETH#5m#h01#[0.70,0.75)": {
+    "n": 33,
+    "n_con_ratio_libro": 33,
+    "fill_rate": 0.4242,
+    "ratio_medio": 314.93,
+    "motivos": {
+      "candidato_evaluacion": 33
+    },
+    "informativo_n15": true
+  },
+  "ETH#5m#h01#[0.85,0.90)": {
     "n": 3,
     "n_con_ratio_libro": 3,
-    "fill_rate": 0.6667,
-    "ratio_medio": 69.27,
+    "fill_rate": 1.0,
+    "ratio_medio": 2031.23,
     "motivos": {
       "candidato_evaluacion": 3
     },
     "informativo_n15": false
   },
-  "SOL#15m#h15#[0.75,0.80)": {
-    "n": 5,
-    "n_con_ratio_libro": 5,
-    "fill_rate": 0.4,
-    "ratio_medio": 125.96,
+  "BTC#15m#h03#[0.70,0.75)": {
+    "n": 41,
+    "n_con_ratio_libro": 41,
+    "fill_rate": 0.6098,
+    "ratio_medio": 504.29,
     "motivos": {
-      "candidato_evaluacion": 3,
-      "ejecutada": 1,
+      "candidato_evaluacion": 27,
+      "fuera_ventana": 14
+    },
+    "informativo_n15": true
+  },
+  "ETH#15m#h03#[0.85,0.90)": {
+    "n": 6,
+    "n_con_ratio_libro": 6,
+    "fill_rate": 0.5,
+    "ratio_medio": 300.93,
+    "motivos": {
+      "candidato_evaluacion": 5,
       "fuera_ventana": 1
     },
     "informativo_n15": false
   },
-  "SOL#15m#h17#[0.75,0.80)": {
-    "n": 1,
-    "n_con_ratio_libro": 1,
-    "fill_rate": 0.0,
-    "ratio_medio": 0.0,
+  "ETH#15m#h04#[0.15,0.20)": {
+    "n": 6,
+    "n_con_ratio_libro": 6,
+    "fill_rate": 0.8333,
+    "ratio_medio": 120.52,
     "motivos": {
-      "candidato_evaluacion": 1
+      "candidato_evaluacion": 6
     },
     "informativo_n15": false
   },
-  "ETH#15m#h18#[0.85,0.90)": {
+  "BTC#15m#h04#[0.15,0.20)": {
+    "n": 11,
+    "n_con_ratio_libro": 11,
+    "fill_rate": 0.7273,
+    "ratio_medio": 125.62,
+    "motivos": {
+      "candidato_evaluacion": 9,
+      "no_viable_stake": 1,
+      "senal_caducada": 1
+    },
+    "informativo_n15": false
+  },
+  "SOL#15m#h05#[0.35,0.40)": {
+    "n": 16,
+    "n_con_ratio_libro": 16,
+    "fill_rate": 0.3125,
+    "ratio_medio": 65.29,
+    "motivos": {
+      "candidato_evaluacion": 16
+    },
+    "informativo_n15": true
+  },
+  "ETH#5m#h07#[0.75,0.80)": {
+    "n": 9,
+    "n_con_ratio_libro": 9,
+    "fill_rate": 0.4444,
+    "ratio_medio": 416.84,
+    "motivos": {
+      "candidato_evaluacion": 9
+    },
+    "informativo_n15": false
+  },
+  "ETH#5m#h07#[0.45,0.50)": {
     "n": 2,
     "n_con_ratio_libro": 2,
-    "fill_rate": 1.0,
-    "ratio_medio": 1430.95,
+    "fill_rate": 0.5,
+    "ratio_medio": 101.9,
     "motivos": {
       "candidato_evaluacion": 2
-    },
-    "informativo_n15": false
-  },
-  "ETH#5m#h19#[0.80,0.85)": {
-    "n": 1,
-    "n_con_ratio_libro": 1,
-    "fill_rate": 1.0,
-    "ratio_medio": 1086.9,
-    "motivos": {
-      "candidato_evaluacion": 1
-    },
-    "informativo_n15": false
-  },
-  "SOL#5m#h01#[0.70,0.75)": {
-    "n": 2,
-    "n_con_ratio_libro": 2,
-    "fill_rate": 1.0,
-    "ratio_medio": 821.65,
-    "motivos": {
-      "candidato_evaluacion": 2
-    },
-    "informativo_n15": false
-  },
-  "ETH#5m#h01#[0.85,0.90)": {
-    "n": 1,
-    "n_con_ratio_libro": 1,
-    "fill_rate": 1.0,
-    "ratio_medio": 4968.3,
-    "motivos": {
-      "candidato_evaluacion": 1
-    },
-    "informativo_n15": false
-  },
-  "ETH#15m#h03#[0.85,0.90)": {
-    "n": 1,
-    "n_con_ratio_libro": 1,
-    "fill_rate": 1.0,
-    "ratio_medio": 882.3,
-    "motivos": {
-      "candidato_evaluacion": 1
     },
     "informativo_n15": false
   },
@@ -940,23 +2783,47 @@
     },
     "informativo_n15": false
   },
-  "SOL#15m#h14#[0.90,0.95)": {
+  "ETH#5m#h12#[0.45,0.50)": {
     "n": 1,
     "n_con_ratio_libro": 1,
-    "fill_rate": 0.0,
-    "ratio_medio": 0.0,
+    "fill_rate": 1.0,
+    "ratio_medio": 547.7,
     "motivos": {
       "candidato_evaluacion": 1
     },
     "informativo_n15": false
   },
-  "SOL#5m#h15#[0.60,0.65)": {
-    "n": 2,
-    "n_con_ratio_libro": 2,
-    "fill_rate": 0.0,
-    "ratio_medio": 0.0,
+  "SOL#15m#h13#[0.90,0.95)": {
+    "n": 10,
+    "n_con_ratio_libro": 10,
+    "fill_rate": 0.8,
+    "ratio_medio": 534.95,
     "motivos": {
-      "candidato_evaluacion": 2
+      "candidato_evaluacion": 9,
+      "senal_caducada": 1
+    },
+    "informativo_n15": false
+  },
+  "BTC#5m#h14#[0.45,0.50)": {
+    "n": 3,
+    "n_con_ratio_libro": 3,
+    "fill_rate": 0.3333,
+    "ratio_medio": 2781.4,
+    "motivos": {
+      "candidato_evaluacion": 3
+    },
+    "informativo_n15": false
+  },
+  "BTC#15m#h14#[0.30,0.35)": {
+    "n": 9,
+    "n_con_ratio_libro": 9,
+    "fill_rate": 0.4444,
+    "ratio_medio": 359.97,
+    "motivos": {
+      "candidato_evaluacion": 6,
+      "no_viable_stake": 1,
+      "senal_caducada": 1,
+      "fuera_ventana": 1
     },
     "informativo_n15": false
   },
@@ -971,306 +2838,1121 @@
     "informativo_n15": false
   },
   "SOL#5m#h16#[0.80,0.85)": {
-    "n": 1,
-    "n_con_ratio_libro": 1,
+    "n": 2,
+    "n_con_ratio_libro": 2,
     "fill_rate": 1.0,
-    "ratio_medio": 2026.2,
+    "ratio_medio": 1399.4,
     "motivos": {
-      "candidato_evaluacion": 1
+      "candidato_evaluacion": 2
     },
     "informativo_n15": false
   },
   "ETH#5m#h16#[0.80,0.85)": {
-    "n": 2,
-    "n_con_ratio_libro": 2,
-    "fill_rate": 1.0,
-    "ratio_medio": 1957.15,
+    "n": 5,
+    "n_con_ratio_libro": 5,
+    "fill_rate": 0.8,
+    "ratio_medio": 1525.34,
     "motivos": {
-      "candidato_evaluacion": 2
+      "candidato_evaluacion": 4,
+      "ejecutada": 1
     },
     "informativo_n15": false
   },
-  "SOL#15m#h19#[0.80,0.85)": {
-    "n": 3,
-    "n_con_ratio_libro": 3,
-    "fill_rate": 1.0,
-    "ratio_medio": 496.8,
+  "ETH#15m#h21#[0.85,0.90)": {
+    "n": 5,
+    "n_con_ratio_libro": 5,
+    "fill_rate": 0.8,
+    "ratio_medio": 1019.98,
     "motivos": {
-      "candidato_evaluacion": 2,
+      "candidato_evaluacion": 4,
       "fuera_ventana": 1
     },
     "informativo_n15": false
   },
-  "SOL#5m#h01#[0.55,0.60)": {
-    "n": 2,
-    "n_con_ratio_libro": 2,
-    "fill_rate": 1.0,
-    "ratio_medio": 415.45,
+  "ETH#15m#h21#[0.40,0.45)": {
+    "n": 10,
+    "n_con_ratio_libro": 10,
+    "fill_rate": 0.4,
+    "ratio_medio": 391.37,
     "motivos": {
-      "candidato_evaluacion": 2
+      "candidato_evaluacion": 10
     },
     "informativo_n15": false
   },
-  "ETH#15m#h03#[0.90,0.95)": {
-    "n": 1,
-    "n_con_ratio_libro": 1,
-    "fill_rate": 0.0,
-    "ratio_medio": 0.0,
+  "SOL#15m#h22#[0.25,0.30)": {
+    "n": 16,
+    "n_con_ratio_libro": 16,
+    "fill_rate": 0.5625,
+    "ratio_medio": 54.2,
     "motivos": {
-      "fuera_ventana": 1
+      "fuera_ventana": 2,
+      "candidato_evaluacion": 14
+    },
+    "informativo_n15": true
+  },
+  "BTC#15m#h23#[0.30,0.35)": {
+    "n": 10,
+    "n_con_ratio_libro": 10,
+    "fill_rate": 0.1,
+    "ratio_medio": 7.54,
+    "motivos": {
+      "candidato_evaluacion": 10
     },
     "informativo_n15": false
   },
-  "ETH#15m#h06#[0.85,0.90)": {
-    "n": 1,
-    "n_con_ratio_libro": 1,
-    "fill_rate": 1.0,
-    "ratio_medio": 1831.2,
+  "BTC#15m#h01#[0.80,0.85)": {
+    "n": 17,
+    "n_con_ratio_libro": 17,
+    "fill_rate": 0.2941,
+    "ratio_medio": 370.93,
     "motivos": {
-      "fuera_ventana": 1
-    },
-    "informativo_n15": false
-  },
-  "SOL#15m#h06#[0.85,0.90)": {
-    "n": 1,
-    "n_con_ratio_libro": 1,
-    "fill_rate": 0.0,
-    "ratio_medio": 0.0,
-    "motivos": {
-      "candidato_evaluacion": 1
-    },
-    "informativo_n15": false
-  },
-  "SOL#5m#h09#[0.80,0.85)": {
-    "n": 1,
-    "n_con_ratio_libro": 1,
-    "fill_rate": 0.0,
-    "ratio_medio": 0.0,
-    "motivos": {
-      "candidato_evaluacion": 1
-    },
-    "informativo_n15": false
-  },
-  "SOL#5m#h15#[0.55,0.60)": {
-    "n": 2,
-    "n_con_ratio_libro": 2,
-    "fill_rate": 0.5,
-    "ratio_medio": 279.05,
-    "motivos": {
-      "candidato_evaluacion": 2
-    },
-    "informativo_n15": false
-  },
-  "ETH#15m#h17#[0.85,0.90)": {
-    "n": 3,
-    "n_con_ratio_libro": 3,
-    "fill_rate": 1.0,
-    "ratio_medio": 301.97,
-    "motivos": {
+      "candidato_evaluacion": 14,
       "fuera_ventana": 3
     },
-    "informativo_n15": false
+    "informativo_n15": true
   },
-  "ETH#5m#h08#[0.80,0.85)": {
-    "n": 1,
-    "n_con_ratio_libro": 1,
-    "fill_rate": 1.0,
-    "ratio_medio": 837.4,
+  "ETH#15m#h03#[0.90,0.95)": {
+    "n": 14,
+    "n_con_ratio_libro": 14,
+    "fill_rate": 0.2857,
+    "ratio_medio": 367.85,
     "motivos": {
-      "candidato_evaluacion": 1
+      "fuera_ventana": 4,
+      "candidato_evaluacion": 10
     },
     "informativo_n15": false
   },
-  "SOL#5m#h10#[0.70,0.75)": {
-    "n": 1,
-    "n_con_ratio_libro": 1,
-    "fill_rate": 0.0,
-    "ratio_medio": 0.0,
+  "XRP#5m#h03#[0.50,0.55)": {
+    "n": 27,
+    "n_con_ratio_libro": 27,
+    "fill_rate": 0.2963,
+    "ratio_medio": 44.31,
     "motivos": {
-      "candidato_evaluacion": 1
+      "candidato_evaluacion": 27
     },
-    "informativo_n15": false
+    "informativo_n15": true
   },
-  "ETH#15m#h12#[0.85,0.90)": {
-    "n": 2,
-    "n_con_ratio_libro": 2,
-    "fill_rate": 0.0,
-    "ratio_medio": 0.0,
+  "ETH#5m#h03#[0.60,0.65)": {
+    "n": 19,
+    "n_con_ratio_libro": 19,
+    "fill_rate": 0.6842,
+    "ratio_medio": 350.44,
+    "motivos": {
+      "candidato_evaluacion": 19
+    },
+    "informativo_n15": true
+  },
+  "ETH#15m#h04#[0.85,0.90)": {
+    "n": 15,
+    "n_con_ratio_libro": 15,
+    "fill_rate": 0.7333,
+    "ratio_medio": 239.99,
     "motivos": {
       "fuera_ventana": 1,
-      "candidato_evaluacion": 1
+      "candidato_evaluacion": 13,
+      "senal_caducada": 1
     },
-    "informativo_n15": false
+    "informativo_n15": true
   },
-  "ETH#15m#h13#[0.85,0.90)": {
-    "n": 1,
-    "n_con_ratio_libro": 1,
-    "fill_rate": 1.0,
-    "ratio_medio": 1747.5,
+  "BTC#15m#h07#[0.20,0.25)": {
+    "n": 10,
+    "n_con_ratio_libro": 10,
+    "fill_rate": 0.6,
+    "ratio_medio": 130.8,
     "motivos": {
-      "fuera_ventana": 1
+      "candidato_evaluacion": 10
     },
     "informativo_n15": false
   },
-  "ETH#15m#h15#[0.85,0.90)": {
-    "n": 2,
-    "n_con_ratio_libro": 2,
-    "fill_rate": 0.5,
-    "ratio_medio": 107.65,
-    "motivos": {
-      "fuera_ventana": 2
-    },
-    "informativo_n15": false
-  },
-  "ETH#5m#h17#[0.85,0.90)": {
-    "n": 1,
-    "n_con_ratio_libro": 1,
-    "fill_rate": 0.0,
-    "ratio_medio": 0.0,
-    "motivos": {
-      "candidato_evaluacion": 1
-    },
-    "informativo_n15": false
-  },
-  "ETH#15m#h19#[0.80,0.85)": {
-    "n": 1,
-    "n_con_ratio_libro": 1,
-    "fill_rate": 1.0,
-    "ratio_medio": 1780.4,
-    "motivos": {
-      "fuera_ventana": 1
-    },
-    "informativo_n15": false
-  },
-  "SOL#15m#h22#[0.90,0.95)": {
-    "n": 1,
-    "n_con_ratio_libro": 1,
-    "fill_rate": 1.0,
-    "ratio_medio": 703.6,
-    "motivos": {
-      "fuera_ventana": 1
-    },
-    "informativo_n15": false
-  },
-  "ETH#15m#h02#[0.90,0.95)": {
-    "n": 1,
-    "n_con_ratio_libro": 1,
-    "fill_rate": 1.0,
-    "ratio_medio": 1089.2,
-    "motivos": {
-      "fuera_ventana": 1
-    },
-    "informativo_n15": false
-  },
-  "ETH#15m#h11#[0.90,0.95)": {
+  "ETH#15m#h08#[0.90,0.95)": {
     "n": 2,
     "n_con_ratio_libro": 2,
     "fill_rate": 1.0,
-    "ratio_medio": 225.05,
+    "ratio_medio": 569.1,
     "motivos": {
-      "fuera_ventana": 2
+      "candidato_evaluacion": 2
     },
     "informativo_n15": false
   },
-  "SOL#15m#h12#[0.80,0.85)": {
+  "BTC#15m#h08#[0.90,0.95)": {
+    "n": 2,
+    "n_con_ratio_libro": 2,
+    "fill_rate": 1.0,
+    "ratio_medio": 2405.25,
+    "motivos": {
+      "candidato_evaluacion": 2
+    },
+    "informativo_n15": false
+  },
+  "ETH#5m#h08#[0.70,0.75)": {
+    "n": 37,
+    "n_con_ratio_libro": 37,
+    "fill_rate": 0.5135,
+    "ratio_medio": 343.89,
+    "motivos": {
+      "candidato_evaluacion": 37
+    },
+    "informativo_n15": true
+  },
+  "SOL#5m#h09#[0.80,0.85)": {
     "n": 2,
     "n_con_ratio_libro": 2,
     "fill_rate": 0.0,
     "ratio_medio": 0.0,
     "motivos": {
-      "fuera_ventana": 2
+      "candidato_evaluacion": 2
     },
     "informativo_n15": false
   },
-  "ETH#15m#h14#[0.85,0.90)": {
-    "n": 1,
-    "n_con_ratio_libro": 1,
-    "fill_rate": 1.0,
-    "ratio_medio": 861.3,
+  "DOGE#15m#h11#[0.50,0.55)": {
+    "n": 37,
+    "n_con_ratio_libro": 37,
+    "fill_rate": 0.2432,
+    "ratio_medio": 16.91,
     "motivos": {
-      "fuera_ventana": 1
+      "candidato_evaluacion": 37
     },
-    "informativo_n15": false
+    "informativo_n15": true
   },
-  "ETH#15m#h15#[0.80,0.85)": {
-    "n": 1,
-    "n_con_ratio_libro": 1,
-    "fill_rate": 0.0,
-    "ratio_medio": 0.0,
+  "ETH#15m#h15#[0.65,0.70)": {
+    "n": 17,
+    "n_con_ratio_libro": 17,
+    "fill_rate": 0.3529,
+    "ratio_medio": 480.02,
     "motivos": {
-      "fuera_ventana": 1
+      "candidato_evaluacion": 7,
+      "veto_profundidad": 9,
+      "ejecutada": 1
     },
-    "informativo_n15": false
+    "informativo_n15": true
   },
-  "ETH#15m#h18#[0.90,0.95)": {
-    "n": 1,
-    "n_con_ratio_libro": 1,
-    "fill_rate": 1.0,
-    "ratio_medio": 84.0,
+  "BTC#15m#h16#[0.80,0.85)": {
+    "n": 11,
+    "n_con_ratio_libro": 11,
+    "fill_rate": 0.6364,
+    "ratio_medio": 1980.79,
     "motivos": {
-      "fuera_ventana": 1
+      "candidato_evaluacion": 8,
+      "fuera_ventana": 2,
+      "senal_caducada": 1
     },
     "informativo_n15": false
   },
-  "XRP#5m#h07#[0.45,0.50)": {
+  "ETH#5m#h16#[0.70,0.75)": {
+    "n": 33,
+    "n_con_ratio_libro": 33,
+    "fill_rate": 0.5758,
+    "ratio_medio": 723.62,
+    "motivos": {
+      "candidato_evaluacion": 33
+    },
+    "informativo_n15": true
+  },
+  "BTC#15m#h17#[0.10,0.15)": {
     "n": 3,
     "n_con_ratio_libro": 3,
     "fill_rate": 0.3333,
-    "ratio_medio": 54.07,
+    "ratio_medio": 124.27,
     "motivos": {
       "candidato_evaluacion": 3
     },
     "informativo_n15": false
   },
-  "ETH#5m#h11#[0.85,0.90)": {
+  "SOL#15m#h18#[0.15,0.20)": {
+    "n": 7,
+    "n_con_ratio_libro": 7,
+    "fill_rate": 1.0,
+    "ratio_medio": 77.1,
+    "motivos": {
+      "fuera_ventana": 1,
+      "candidato_evaluacion": 6
+    },
+    "informativo_n15": false
+  },
+  "ETH#5m#h19#[0.55,0.60)": {
+    "n": 52,
+    "n_con_ratio_libro": 52,
+    "fill_rate": 0.5962,
+    "ratio_medio": 689.15,
+    "motivos": {
+      "candidato_evaluacion": 52
+    },
+    "informativo_n15": true
+  },
+  "BTC#15m#h20#[0.85,0.90)": {
+    "n": 17,
+    "n_con_ratio_libro": 17,
+    "fill_rate": 0.4706,
+    "ratio_medio": 801.32,
+    "motivos": {
+      "candidato_evaluacion": 13,
+      "abort_requote": 1,
+      "senal_caducada": 1,
+      "fuera_ventana": 2
+    },
+    "informativo_n15": true
+  },
+  "ETH#5m#h22#[0.60,0.65)": {
+    "n": 21,
+    "n_con_ratio_libro": 21,
+    "fill_rate": 0.5238,
+    "ratio_medio": 248.13,
+    "motivos": {
+      "candidato_evaluacion": 21
+    },
+    "informativo_n15": true
+  },
+  "BTC#15m#h22#[0.85,0.90)": {
+    "n": 12,
+    "n_con_ratio_libro": 12,
+    "fill_rate": 0.4167,
+    "ratio_medio": 388.01,
+    "motivos": {
+      "fuera_ventana": 4,
+      "candidato_evaluacion": 8
+    },
+    "informativo_n15": false
+  },
+  "SOL#5m#h23#[0.55,0.60)": {
+    "n": 46,
+    "n_con_ratio_libro": 46,
+    "fill_rate": 0.3478,
+    "ratio_medio": 71.45,
+    "motivos": {
+      "candidato_evaluacion": 46
+    },
+    "informativo_n15": true
+  },
+  "BTC#15m#h00#[0.40,0.45)": {
+    "n": 6,
+    "n_con_ratio_libro": 6,
+    "fill_rate": 0.0,
+    "ratio_medio": 0.0,
+    "motivos": {
+      "candidato_evaluacion": 6
+    },
+    "informativo_n15": false
+  },
+  "BTC#15m#h01#[0.90,0.95)": {
+    "n": 9,
+    "n_con_ratio_libro": 9,
+    "fill_rate": 0.5556,
+    "ratio_medio": 1181.14,
+    "motivos": {
+      "candidato_evaluacion": 9
+    },
+    "informativo_n15": false
+  },
+  "ETH#5m#h03#[0.65,0.70)": {
+    "n": 6,
+    "n_con_ratio_libro": 6,
+    "fill_rate": 0.6667,
+    "ratio_medio": 222.72,
+    "motivos": {
+      "candidato_evaluacion": 6
+    },
+    "informativo_n15": false
+  },
+  "BTC#15m#h04#[0.25,0.30)": {
+    "n": 6,
+    "n_con_ratio_libro": 6,
+    "fill_rate": 0.6667,
+    "ratio_medio": 222.18,
+    "motivos": {
+      "candidato_evaluacion": 5,
+      "fuera_ventana": 1
+    },
+    "informativo_n15": false
+  },
+  "SOL#15m#h04#[0.80,0.85)": {
+    "n": 3,
+    "n_con_ratio_libro": 3,
+    "fill_rate": 0.0,
+    "ratio_medio": 0.0,
+    "motivos": {
+      "candidato_evaluacion": 3
+    },
+    "informativo_n15": false
+  },
+  "BTC#15m#h06#[0.15,0.20)": {
+    "n": 3,
+    "n_con_ratio_libro": 3,
+    "fill_rate": 1.0,
+    "ratio_medio": 202.43,
+    "motivos": {
+      "candidato_evaluacion": 3
+    },
+    "informativo_n15": false
+  },
+  "BTC#15m#h06#[0.10,0.15)": {
+    "n": 6,
+    "n_con_ratio_libro": 6,
+    "fill_rate": 0.3333,
+    "ratio_medio": 6.7,
+    "motivos": {
+      "candidato_evaluacion": 5,
+      "fuera_ventana": 1
+    },
+    "informativo_n15": false
+  },
+  "ETH#15m#h08#[0.80,0.85)": {
+    "n": 22,
+    "n_con_ratio_libro": 22,
+    "fill_rate": 0.7727,
+    "ratio_medio": 1687.81,
+    "motivos": {
+      "candidato_evaluacion": 16,
+      "fuera_ventana": 5,
+      "ejecutada": 1
+    },
+    "informativo_n15": true
+  },
+  "BTC#15m#h09#[0.80,0.85)": {
+    "n": 8,
+    "n_con_ratio_libro": 8,
+    "fill_rate": 0.25,
+    "ratio_medio": 65.96,
+    "motivos": {
+      "candidato_evaluacion": 7,
+      "senal_caducada": 1
+    },
+    "informativo_n15": false
+  },
+  "SOL#5m#h11#[0.70,0.75)": {
+    "n": 27,
+    "n_con_ratio_libro": 27,
+    "fill_rate": 0.6296,
+    "ratio_medio": 185.72,
+    "motivos": {
+      "candidato_evaluacion": 27
+    },
+    "informativo_n15": true
+  },
+  "BTC#15m#h12#[0.80,0.85)": {
+    "n": 16,
+    "n_con_ratio_libro": 16,
+    "fill_rate": 0.375,
+    "ratio_medio": 467.56,
+    "motivos": {
+      "candidato_evaluacion": 14,
+      "fuera_ventana": 2
+    },
+    "informativo_n15": true
+  },
+  "ETH#15m#h12#[0.85,0.90)": {
+    "n": 18,
+    "n_con_ratio_libro": 18,
+    "fill_rate": 0.6111,
+    "ratio_medio": 312.33,
+    "motivos": {
+      "fuera_ventana": 5,
+      "candidato_evaluacion": 13
+    },
+    "informativo_n15": true
+  },
+  "SOL#5m#h14#[0.25,0.30)": {
     "n": 1,
     "n_con_ratio_libro": 1,
-    "fill_rate": 1.0,
-    "ratio_medio": 331.7,
+    "fill_rate": 0.0,
+    "ratio_medio": 0.0,
     "motivos": {
       "candidato_evaluacion": 1
     },
     "informativo_n15": false
   },
-  "SOL#15m#h15#[0.90,0.95)": {
+  "ETH#15m#h15#[0.85,0.90)": {
+    "n": 4,
+    "n_con_ratio_libro": 4,
+    "fill_rate": 0.75,
+    "ratio_medio": 219.33,
+    "motivos": {
+      "fuera_ventana": 2,
+      "ejecutada": 1,
+      "candidato_evaluacion": 1
+    },
+    "informativo_n15": false
+  },
+  "ETH#15m#h19#[0.80,0.85)": {
+    "n": 12,
+    "n_con_ratio_libro": 12,
+    "fill_rate": 0.9167,
+    "ratio_medio": 2441.48,
+    "motivos": {
+      "fuera_ventana": 1,
+      "candidato_evaluacion": 8,
+      "fok_kill": 1,
+      "ejecutada": 1,
+      "senal_caducada": 1
+    },
+    "informativo_n15": false
+  },
+  "ETH#5m#h19#[0.60,0.65)": {
+    "n": 19,
+    "n_con_ratio_libro": 19,
+    "fill_rate": 0.6842,
+    "ratio_medio": 794.84,
+    "motivos": {
+      "candidato_evaluacion": 19
+    },
+    "informativo_n15": true
+  },
+  "SOL#15m#h22#[0.90,0.95)": {
+    "n": 11,
+    "n_con_ratio_libro": 11,
+    "fill_rate": 0.6364,
+    "ratio_medio": 96.82,
+    "motivos": {
+      "fuera_ventana": 4,
+      "candidato_evaluacion": 7
+    },
+    "informativo_n15": false
+  },
+  "BTC#15m#h23#[0.35,0.40)": {
+    "n": 8,
+    "n_con_ratio_libro": 8,
+    "fill_rate": 0.375,
+    "ratio_medio": 285.85,
+    "motivos": {
+      "candidato_evaluacion": 8
+    },
+    "informativo_n15": false
+  },
+  "ETH#5m#h03#[0.70,0.75)": {
+    "n": 44,
+    "n_con_ratio_libro": 44,
+    "fill_rate": 0.6591,
+    "ratio_medio": 864.84,
+    "motivos": {
+      "candidato_evaluacion": 44
+    },
+    "informativo_n15": true
+  },
+  "ETH#15m#h09#[0.15,0.20)": {
+    "n": 10,
+    "n_con_ratio_libro": 10,
+    "fill_rate": 1.0,
+    "ratio_medio": 128.49,
+    "motivos": {
+      "candidato_evaluacion": 9,
+      "fuera_ventana": 1
+    },
+    "informativo_n15": false
+  },
+  "BTC#15m#h11#[0.15,0.20)": {
+    "n": 5,
+    "n_con_ratio_libro": 5,
+    "fill_rate": 0.4,
+    "ratio_medio": 130.84,
+    "motivos": {
+      "candidato_evaluacion": 5
+    },
+    "informativo_n15": false
+  },
+  "BTC#5m#h11#[0.75,0.80)": {
+    "n": 3,
+    "n_con_ratio_libro": 3,
+    "fill_rate": 1.0,
+    "ratio_medio": 1702.3,
+    "motivos": {
+      "candidato_evaluacion": 3
+    },
+    "informativo_n15": false
+  },
+  "SOL#5m#h13#[0.75,0.80)": {
+    "n": 8,
+    "n_con_ratio_libro": 8,
+    "fill_rate": 0.75,
+    "ratio_medio": 483.9,
+    "motivos": {
+      "candidato_evaluacion": 8
+    },
+    "informativo_n15": false
+  },
+  "BTC#5m#h13#[0.80,0.85)": {
+    "n": 3,
+    "n_con_ratio_libro": 3,
+    "fill_rate": 0.0,
+    "ratio_medio": 0.0,
+    "motivos": {
+      "candidato_evaluacion": 3
+    },
+    "informativo_n15": false
+  },
+  "ETH#15m#h15#[0.80,0.85)": {
+    "n": 8,
+    "n_con_ratio_libro": 8,
+    "fill_rate": 0.25,
+    "ratio_medio": 17.79,
+    "motivos": {
+      "fuera_ventana": 1,
+      "candidato_evaluacion": 6,
+      "senal_caducada": 1
+    },
+    "informativo_n15": false
+  },
+  "BTC#15m#h16#[0.75,0.80)": {
+    "n": 11,
+    "n_con_ratio_libro": 11,
+    "fill_rate": 0.4545,
+    "ratio_medio": 980.91,
+    "motivos": {
+      "candidato_evaluacion": 10,
+      "fuera_ventana": 1
+    },
+    "informativo_n15": false
+  },
+  "BTC#15m#h18#[0.90,0.95)": {
+    "n": 5,
+    "n_con_ratio_libro": 5,
+    "fill_rate": 0.8,
+    "ratio_medio": 1688.1,
+    "motivos": {
+      "candidato_evaluacion": 5
+    },
+    "informativo_n15": false
+  },
+  "ETH#15m#h20#[0.75,0.80)": {
+    "n": 18,
+    "n_con_ratio_libro": 18,
+    "fill_rate": 0.3889,
+    "ratio_medio": 376.08,
+    "motivos": {
+      "fuera_ventana": 2,
+      "candidato_evaluacion": 14,
+      "senal_caducada": 2
+    },
+    "informativo_n15": true
+  },
+  "ETH#5m#h20#[0.85,0.90)": {
+    "n": 5,
+    "n_con_ratio_libro": 5,
+    "fill_rate": 1.0,
+    "ratio_medio": 542.26,
+    "motivos": {
+      "candidato_evaluacion": 4,
+      "ejecutada": 1
+    },
+    "informativo_n15": false
+  },
+  "BTC#15m#h23#[0.25,0.30)": {
+    "n": 9,
+    "n_con_ratio_libro": 9,
+    "fill_rate": 0.5556,
+    "ratio_medio": 472.32,
+    "motivos": {
+      "candidato_evaluacion": 8,
+      "fuera_ventana": 1
+    },
+    "informativo_n15": false
+  },
+  "ETH#5m#h02#[0.70,0.75)": {
+    "n": 39,
+    "n_con_ratio_libro": 39,
+    "fill_rate": 0.4103,
+    "ratio_medio": 856.78,
+    "motivos": {
+      "candidato_evaluacion": 39
+    },
+    "informativo_n15": true
+  },
+  "SOL#5m#h02#[0.65,0.70)": {
+    "n": 9,
+    "n_con_ratio_libro": 9,
+    "fill_rate": 0.5556,
+    "ratio_medio": 323.97,
+    "motivos": {
+      "candidato_evaluacion": 9
+    },
+    "informativo_n15": false
+  },
+  "SOL#15m#h08#[0.75,0.80)": {
+    "n": 18,
+    "n_con_ratio_libro": 18,
+    "fill_rate": 0.6667,
+    "ratio_medio": 517.05,
+    "motivos": {
+      "candidato_evaluacion": 12,
+      "fuera_ventana": 1,
+      "abort_requote": 4,
+      "ejecutada": 1
+    },
+    "informativo_n15": true
+  },
+  "ETH#5m#h11#[0.85,0.90)": {
+    "n": 3,
+    "n_con_ratio_libro": 3,
+    "fill_rate": 1.0,
+    "ratio_medio": 555.03,
+    "motivos": {
+      "candidato_evaluacion": 3
+    },
+    "informativo_n15": false
+  },
+  "SOL#15m#h11#[0.90,0.95)": {
+    "n": 2,
+    "n_con_ratio_libro": 2,
+    "fill_rate": 1.0,
+    "ratio_medio": 656.05,
+    "motivos": {
+      "fuera_ventana": 2
+    },
+    "informativo_n15": false
+  },
+  "XRP#15m#h11#[0.40,0.45)": {
+    "n": 1,
+    "n_con_ratio_libro": 1,
+    "fill_rate": 0.0,
+    "ratio_medio": 0.0,
+    "motivos": {
+      "candidato_evaluacion": 1
+    },
+    "informativo_n15": false
+  },
+  "BTC#15m#h12#[0.75,0.80)": {
+    "n": 7,
+    "n_con_ratio_libro": 7,
+    "fill_rate": 0.5714,
+    "ratio_medio": 1213.24,
+    "motivos": {
+      "candidato_evaluacion": 7
+    },
+    "informativo_n15": false
+  },
+  "ETH#5m#h12#[0.15,0.20)": {
+    "n": 1,
+    "n_con_ratio_libro": 1,
+    "fill_rate": 0.0,
+    "ratio_medio": 0.0,
+    "motivos": {
+      "candidato_evaluacion": 1
+    },
+    "informativo_n15": false
+  },
+  "SOL#15m#h12#[0.80,0.85)": {
+    "n": 10,
+    "n_con_ratio_libro": 10,
+    "fill_rate": 0.9,
+    "ratio_medio": 638.95,
+    "motivos": {
+      "fuera_ventana": 2,
+      "candidato_evaluacion": 8
+    },
+    "informativo_n15": false
+  },
+  "ETH#5m#h19#[0.70,0.75)": {
+    "n": 36,
+    "n_con_ratio_libro": 36,
+    "fill_rate": 0.3333,
+    "ratio_medio": 231.91,
+    "motivos": {
+      "candidato_evaluacion": 36
+    },
+    "informativo_n15": true
+  },
+  "BTC#5m#h20#[0.55,0.60)": {
+    "n": 47,
+    "n_con_ratio_libro": 47,
+    "fill_rate": 0.4043,
+    "ratio_medio": 523.93,
+    "motivos": {
+      "candidato_evaluacion": 47
+    },
+    "informativo_n15": true
+  },
+  "BTC#5m#h21#[0.50,0.55)": {
+    "n": 16,
+    "n_con_ratio_libro": 16,
+    "fill_rate": 0.6875,
+    "ratio_medio": 964.11,
+    "motivos": {
+      "candidato_evaluacion": 16
+    },
+    "informativo_n15": true
+  },
+  "BTC#5m#h21#[0.60,0.65)": {
+    "n": 13,
+    "n_con_ratio_libro": 13,
+    "fill_rate": 0.3846,
+    "ratio_medio": 391.45,
+    "motivos": {
+      "candidato_evaluacion": 13
+    },
+    "informativo_n15": false
+  },
+  "BTC#5m#h21#[0.65,0.70)": {
+    "n": 6,
+    "n_con_ratio_libro": 6,
+    "fill_rate": 0.3333,
+    "ratio_medio": 941.28,
+    "motivos": {
+      "candidato_evaluacion": 6
+    },
+    "informativo_n15": false
+  },
+  "BTC#5m#h21#[0.45,0.50)": {
+    "n": 3,
+    "n_con_ratio_libro": 3,
+    "fill_rate": 0.3333,
+    "ratio_medio": 1123.33,
+    "motivos": {
+      "candidato_evaluacion": 3
+    },
+    "informativo_n15": false
+  },
+  "BTC#5m#h22#[0.25,0.30)": {
+    "n": 4,
+    "n_con_ratio_libro": 4,
+    "fill_rate": 0.25,
+    "ratio_medio": 88.28,
+    "motivos": {
+      "candidato_evaluacion": 4
+    },
+    "informativo_n15": false
+  },
+  "SOL#15m#h00#[0.65,0.70)": {
+    "n": 9,
+    "n_con_ratio_libro": 9,
+    "fill_rate": 0.5556,
+    "ratio_medio": 169.44,
+    "motivos": {
+      "candidato_evaluacion": 9
+    },
+    "informativo_n15": false
+  },
+  "ETH#15m#h01#[0.75,0.80)": {
+    "n": 25,
+    "n_con_ratio_libro": 25,
+    "fill_rate": 0.48,
+    "ratio_medio": 293.79,
+    "motivos": {
+      "fuera_ventana": 5,
+      "candidato_evaluacion": 20
+    },
+    "informativo_n15": true
+  },
+  "ETH#5m#h02#[0.90,0.95)": {
+    "n": 1,
+    "n_con_ratio_libro": 1,
+    "fill_rate": 1.0,
+    "ratio_medio": 1986.4,
+    "motivos": {
+      "candidato_evaluacion": 1
+    },
+    "informativo_n15": false
+  },
+  "SOL#15m#h02#[0.85,0.90)": {
     "n": 2,
     "n_con_ratio_libro": 2,
     "fill_rate": 0.5,
-    "ratio_medio": 628.25,
+    "ratio_medio": 231.9,
     "motivos": {
       "fuera_ventana": 1,
       "candidato_evaluacion": 1
     },
     "informativo_n15": false
   },
-  "SOL#15m#h23#[0.90,0.95)": {
-    "n": 2,
-    "n_con_ratio_libro": 2,
-    "fill_rate": 1.0,
-    "ratio_medio": 357.0,
+  "BTC#5m#h03#[0.50,0.55)": {
+    "n": 20,
+    "n_con_ratio_libro": 20,
+    "fill_rate": 0.7,
+    "ratio_medio": 1116.74,
     "motivos": {
-      "candidato_evaluacion": 1,
-      "fuera_ventana": 1
+      "candidato_evaluacion": 20
+    },
+    "informativo_n15": true
+  },
+  "BTC#15m#h03#[0.75,0.80)": {
+    "n": 19,
+    "n_con_ratio_libro": 19,
+    "fill_rate": 0.5263,
+    "ratio_medio": 421.66,
+    "motivos": {
+      "candidato_evaluacion": 15,
+      "fuera_ventana": 4
+    },
+    "informativo_n15": true
+  },
+  "BTC#5m#h04#[0.45,0.50)": {
+    "n": 12,
+    "n_con_ratio_libro": 12,
+    "fill_rate": 0.8333,
+    "ratio_medio": 820.43,
+    "motivos": {
+      "candidato_evaluacion": 12
     },
     "informativo_n15": false
   },
-  "ETH#5m#h00#[0.80,0.85)": {
+  "SOL#15m#h04#[0.90,0.95)": {
+    "n": 8,
+    "n_con_ratio_libro": 8,
+    "fill_rate": 0.875,
+    "ratio_medio": 576.16,
+    "motivos": {
+      "candidato_evaluacion": 8
+    },
+    "informativo_n15": false
+  },
+  "BTC#5m#h07#[0.20,0.25)": {
     "n": 1,
     "n_con_ratio_libro": 1,
     "fill_rate": 1.0,
-    "ratio_medio": 170.2,
+    "ratio_medio": 511.0,
     "motivos": {
       "candidato_evaluacion": 1
     },
     "informativo_n15": false
   },
-  "SOL#15m#h20#[0.85,0.90)": {
+  "BTC#5m#h08#[0.50,0.55)": {
+    "n": 11,
+    "n_con_ratio_libro": 11,
+    "fill_rate": 0.4545,
+    "ratio_medio": 880.92,
+    "motivos": {
+      "candidato_evaluacion": 11
+    },
+    "informativo_n15": false
+  },
+  "BTC#5m#h08#[0.60,0.65)": {
+    "n": 13,
+    "n_con_ratio_libro": 13,
+    "fill_rate": 0.3846,
+    "ratio_medio": 450.45,
+    "motivos": {
+      "candidato_evaluacion": 13
+    },
+    "informativo_n15": false
+  },
+  "BTC#5m#h09#[0.40,0.45)": {
+    "n": 1,
+    "n_con_ratio_libro": 1,
+    "fill_rate": 1.0,
+    "ratio_medio": 1199.4,
+    "motivos": {
+      "candidato_evaluacion": 1
+    },
+    "informativo_n15": false
+  },
+  "BTC#5m#h09#[0.55,0.60)": {
+    "n": 30,
+    "n_con_ratio_libro": 30,
+    "fill_rate": 0.5,
+    "ratio_medio": 606.07,
+    "motivos": {
+      "candidato_evaluacion": 30
+    },
+    "informativo_n15": true
+  },
+  "BTC#5m#h09#[0.15,0.20)": {
+    "n": 1,
+    "n_con_ratio_libro": 1,
+    "fill_rate": 1.0,
+    "ratio_medio": 141.1,
+    "motivos": {
+      "candidato_evaluacion": 1
+    },
+    "informativo_n15": false
+  },
+  "BTC#5m#h10#[0.55,0.60)": {
+    "n": 39,
+    "n_con_ratio_libro": 39,
+    "fill_rate": 0.4103,
+    "ratio_medio": 511.23,
+    "motivos": {
+      "candidato_evaluacion": 39
+    },
+    "informativo_n15": true
+  },
+  "BTC#5m#h11#[0.50,0.55)": {
+    "n": 13,
+    "n_con_ratio_libro": 13,
+    "fill_rate": 0.6923,
+    "ratio_medio": 978.94,
+    "motivos": {
+      "candidato_evaluacion": 13
+    },
+    "informativo_n15": false
+  },
+  "BTC#5m#h12#[0.45,0.50)": {
+    "n": 8,
+    "n_con_ratio_libro": 8,
+    "fill_rate": 0.625,
+    "ratio_medio": 2013.38,
+    "motivos": {
+      "candidato_evaluacion": 8
+    },
+    "informativo_n15": false
+  },
+  "BTC#5m#h12#[0.60,0.65)": {
+    "n": 11,
+    "n_con_ratio_libro": 11,
+    "fill_rate": 0.4545,
+    "ratio_medio": 1252.15,
+    "motivos": {
+      "candidato_evaluacion": 11
+    },
+    "informativo_n15": false
+  },
+  "ETH#5m#h14#[0.25,0.30)": {
+    "n": 2,
+    "n_con_ratio_libro": 2,
+    "fill_rate": 0.5,
+    "ratio_medio": 688.5,
+    "motivos": {
+      "candidato_evaluacion": 1,
+      "senal_caducada": 1
+    },
+    "informativo_n15": false
+  },
+  "ETH#5m#h14#[0.20,0.25)": {
+    "n": 2,
+    "n_con_ratio_libro": 2,
+    "fill_rate": 0.5,
+    "ratio_medio": 158.45,
+    "motivos": {
+      "candidato_evaluacion": 1,
+      "senal_caducada": 1
+    },
+    "informativo_n15": false
+  },
+  "BTC#15m#h14#[0.20,0.25)": {
+    "n": 13,
+    "n_con_ratio_libro": 13,
+    "fill_rate": 0.5385,
+    "ratio_medio": 317.56,
+    "motivos": {
+      "candidato_evaluacion": 13
+    },
+    "informativo_n15": false
+  },
+  "BTC#15m#h15#[0.80,0.85)": {
+    "n": 16,
+    "n_con_ratio_libro": 16,
+    "fill_rate": 0.375,
+    "ratio_medio": 1396.67,
+    "motivos": {
+      "candidato_evaluacion": 14,
+      "senal_caducada": 2
+    },
+    "informativo_n15": true
+  },
+  "BTC#5m#h17#[0.40,0.45)": {
+    "n": 2,
+    "n_con_ratio_libro": 2,
+    "fill_rate": 1.0,
+    "ratio_medio": 4885.15,
+    "motivos": {
+      "candidato_evaluacion": 2
+    },
+    "informativo_n15": false
+  },
+  "BTC#5m#h17#[0.35,0.40)": {
     "n": 1,
     "n_con_ratio_libro": 1,
     "fill_rate": 0.0,
     "ratio_medio": 0.0,
     "motivos": {
-      "fuera_ventana": 1
+      "candidato_evaluacion": 1
+    },
+    "informativo_n15": false
+  },
+  "BTC#5m#h17#[0.30,0.35)": {
+    "n": 2,
+    "n_con_ratio_libro": 2,
+    "fill_rate": 0.5,
+    "ratio_medio": 1544.5,
+    "motivos": {
+      "candidato_evaluacion": 2
+    },
+    "informativo_n15": false
+  },
+  "BTC#15m#h21#[0.80,0.85)": {
+    "n": 8,
+    "n_con_ratio_libro": 8,
+    "fill_rate": 0.75,
+    "ratio_medio": 1238.24,
+    "motivos": {
+      "candidato_evaluacion": 7,
+      "senal_caducada": 1
+    },
+    "informativo_n15": false
+  },
+  "ETH#5m#h22#[0.80,0.85)": {
+    "n": 4,
+    "n_con_ratio_libro": 4,
+    "fill_rate": 0.5,
+    "ratio_medio": 380.8,
+    "motivos": {
+      "candidato_evaluacion": 4
+    },
+    "informativo_n15": false
+  },
+  "BTC#5m#h22#[0.20,0.25)": {
+    "n": 2,
+    "n_con_ratio_libro": 2,
+    "fill_rate": 1.0,
+    "ratio_medio": 861.2,
+    "motivos": {
+      "candidato_evaluacion": 2
+    },
+    "informativo_n15": false
+  },
+  "BTC#5m#h23#[0.45,0.50)": {
+    "n": 1,
+    "n_con_ratio_libro": 1,
+    "fill_rate": 0.0,
+    "ratio_medio": 0.0,
+    "motivos": {
+      "candidato_evaluacion": 1
+    },
+    "informativo_n15": false
+  },
+  "SOL#5m#h02#[0.60,0.65)": {
+    "n": 28,
+    "n_con_ratio_libro": 28,
+    "fill_rate": 0.6071,
+    "ratio_medio": 137.1,
+    "motivos": {
+      "candidato_evaluacion": 28
+    },
+    "informativo_n15": true
+  },
+  "BTC#5m#h02#[0.65,0.70)": {
+    "n": 5,
+    "n_con_ratio_libro": 5,
+    "fill_rate": 0.6,
+    "ratio_medio": 755.74,
+    "motivos": {
+      "candidato_evaluacion": 5
+    },
+    "informativo_n15": false
+  },
+  "BTC#5m#h04#[0.25,0.30)": {
+    "n": 1,
+    "n_con_ratio_libro": 1,
+    "fill_rate": 0.0,
+    "ratio_medio": 0.0,
+    "motivos": {
+      "candidato_evaluacion": 1
+    },
+    "informativo_n15": false
+  },
+  "BTC#5m#h04#[0.35,0.40)": {
+    "n": 1,
+    "n_con_ratio_libro": 1,
+    "fill_rate": 0.0,
+    "ratio_medio": 0.0,
+    "motivos": {
+      "candidato_evaluacion": 1
+    },
+    "informativo_n15": false
+  },
+  "BTC#5m#h04#[0.10,0.15)": {
+    "n": 1,
+    "n_con_ratio_libro": 1,
+    "fill_rate": 1.0,
+    "ratio_medio": 355.9,
+    "motivos": {
+      "candidato_evaluacion": 1
     },
     "informativo_n15": false
   },
@@ -1284,23 +3966,2054 @@
     },
     "informativo_n15": false
   },
-  "ETH#5m#h08#[0.85,0.90)": {
+  "ETH#5m#h07#[0.80,0.85)": {
     "n": 1,
     "n_con_ratio_libro": 1,
     "fill_rate": 1.0,
-    "ratio_medio": 171.2,
+    "ratio_medio": 264.6,
     "motivos": {
       "candidato_evaluacion": 1
     },
     "informativo_n15": false
   },
-  "SOL#5m#h09#[0.70,0.75)": {
+  "BTC#5m#h07#[0.60,0.65)": {
+    "n": 18,
+    "n_con_ratio_libro": 18,
+    "fill_rate": 0.7778,
+    "ratio_medio": 986.57,
+    "motivos": {
+      "candidato_evaluacion": 18
+    },
+    "informativo_n15": true
+  },
+  "BTC#5m#h07#[0.45,0.50)": {
     "n": 1,
     "n_con_ratio_libro": 1,
     "fill_rate": 0.0,
     "ratio_medio": 0.0,
     "motivos": {
       "candidato_evaluacion": 1
+    },
+    "informativo_n15": false
+  },
+  "BTC#15m#h08#[0.85,0.90)": {
+    "n": 2,
+    "n_con_ratio_libro": 2,
+    "fill_rate": 0.0,
+    "ratio_medio": 0.0,
+    "motivos": {
+      "candidato_evaluacion": 1,
+      "fuera_ventana": 1
+    },
+    "informativo_n15": false
+  },
+  "ETH#5m#h08#[0.85,0.90)": {
+    "n": 2,
+    "n_con_ratio_libro": 2,
+    "fill_rate": 1.0,
+    "ratio_medio": 324.1,
+    "motivos": {
+      "candidato_evaluacion": 2
+    },
+    "informativo_n15": false
+  },
+  "SOL#5m#h09#[0.70,0.75)": {
+    "n": 31,
+    "n_con_ratio_libro": 31,
+    "fill_rate": 0.5484,
+    "ratio_medio": 189.26,
+    "motivos": {
+      "candidato_evaluacion": 31
+    },
+    "informativo_n15": true
+  },
+  "BTC#5m#h12#[0.70,0.75)": {
+    "n": 38,
+    "n_con_ratio_libro": 38,
+    "fill_rate": 0.3421,
+    "ratio_medio": 1364.18,
+    "motivos": {
+      "candidato_evaluacion": 38
+    },
+    "informativo_n15": true
+  },
+  "BTC#5m#h14#[0.55,0.60)": {
+    "n": 57,
+    "n_con_ratio_libro": 57,
+    "fill_rate": 0.4211,
+    "ratio_medio": 1438.14,
+    "motivos": {
+      "candidato_evaluacion": 57
+    },
+    "informativo_n15": true
+  },
+  "BTC#15m#h14#[0.15,0.20)": {
+    "n": 3,
+    "n_con_ratio_libro": 3,
+    "fill_rate": 0.3333,
+    "ratio_medio": 232.73,
+    "motivos": {
+      "candidato_evaluacion": 3
+    },
+    "informativo_n15": false
+  },
+  "BTC#15m#h16#[0.90,0.95)": {
+    "n": 10,
+    "n_con_ratio_libro": 10,
+    "fill_rate": 0.8,
+    "ratio_medio": 1378.29,
+    "motivos": {
+      "candidato_evaluacion": 9,
+      "senal_caducada": 1
+    },
+    "informativo_n15": false
+  },
+  "BTC#5m#h16#[0.60,0.65)": {
+    "n": 15,
+    "n_con_ratio_libro": 15,
+    "fill_rate": 0.5333,
+    "ratio_medio": 1713.09,
+    "motivos": {
+      "candidato_evaluacion": 15
+    },
+    "informativo_n15": true
+  },
+  "ETH#5m#h16#[0.75,0.80)": {
+    "n": 10,
+    "n_con_ratio_libro": 10,
+    "fill_rate": 0.3,
+    "ratio_medio": 147.68,
+    "motivos": {
+      "candidato_evaluacion": 10
+    },
+    "informativo_n15": false
+  },
+  "SOL#5m#h17#[0.20,0.25)": {
+    "n": 1,
+    "n_con_ratio_libro": 1,
+    "fill_rate": 0.0,
+    "ratio_medio": 0.0,
+    "motivos": {
+      "candidato_evaluacion": 1
+    },
+    "informativo_n15": false
+  },
+  "ETH#15m#h17#[0.80,0.85)": {
+    "n": 13,
+    "n_con_ratio_libro": 13,
+    "fill_rate": 0.6154,
+    "ratio_medio": 760.18,
+    "motivos": {
+      "candidato_evaluacion": 9,
+      "ejecutada": 1,
+      "senal_caducada": 3
+    },
+    "informativo_n15": false
+  },
+  "ETH#5m#h18#[0.85,0.90)": {
+    "n": 3,
+    "n_con_ratio_libro": 3,
+    "fill_rate": 0.6667,
+    "ratio_medio": 731.37,
+    "motivos": {
+      "candidato_evaluacion": 3
+    },
+    "informativo_n15": false
+  },
+  "ETH#15m#h18#[0.20,0.25)": {
+    "n": 11,
+    "n_con_ratio_libro": 11,
+    "fill_rate": 0.1818,
+    "ratio_medio": 106.5,
+    "motivos": {
+      "candidato_evaluacion": 11
+    },
+    "informativo_n15": false
+  },
+  "BTC#15m#h18#[0.85,0.90)": {
+    "n": 6,
+    "n_con_ratio_libro": 6,
+    "fill_rate": 0.1667,
+    "ratio_medio": 162.38,
+    "motivos": {
+      "candidato_evaluacion": 5,
+      "fuera_ventana": 1
+    },
+    "informativo_n15": false
+  },
+  "ETH#15m#h19#[0.85,0.90)": {
+    "n": 10,
+    "n_con_ratio_libro": 10,
+    "fill_rate": 0.4,
+    "ratio_medio": 266.74,
+    "motivos": {
+      "candidato_evaluacion": 9,
+      "senal_caducada": 1
+    },
+    "informativo_n15": false
+  },
+  "BTC#15m#h19#[0.85,0.90)": {
+    "n": 16,
+    "n_con_ratio_libro": 16,
+    "fill_rate": 0.5,
+    "ratio_medio": 1941.77,
+    "motivos": {
+      "candidato_evaluacion": 9,
+      "senal_caducada": 3,
+      "abort_requote": 1,
+      "veto_profundidad": 3
+    },
+    "informativo_n15": true
+  },
+  "ETH#5m#h19#[0.85,0.90)": {
+    "n": 3,
+    "n_con_ratio_libro": 3,
+    "fill_rate": 0.6667,
+    "ratio_medio": 494.9,
+    "motivos": {
+      "candidato_evaluacion": 2,
+      "ejecutada": 1
+    },
+    "informativo_n15": false
+  },
+  "ETH#5m#h22#[0.75,0.80)": {
+    "n": 10,
+    "n_con_ratio_libro": 10,
+    "fill_rate": 0.5,
+    "ratio_medio": 275.63,
+    "motivos": {
+      "candidato_evaluacion": 10
+    },
+    "informativo_n15": false
+  },
+  "XRP#15m#h00#[0.70,0.75)": {
+    "n": 9,
+    "n_con_ratio_libro": 9,
+    "fill_rate": 0.8889,
+    "ratio_medio": 244.84,
+    "motivos": {
+      "candidato_evaluacion": 9
+    },
+    "informativo_n15": false
+  },
+  "ETH#5m#h00#[0.20,0.25)": {
+    "n": 1,
+    "n_con_ratio_libro": 1,
+    "fill_rate": 0.0,
+    "ratio_medio": 0.0,
+    "motivos": {
+      "candidato_evaluacion": 1
+    },
+    "informativo_n15": false
+  },
+  "ETH#15m#h01#[0.85,0.90)": {
+    "n": 4,
+    "n_con_ratio_libro": 4,
+    "fill_rate": 1.0,
+    "ratio_medio": 1829.92,
+    "motivos": {
+      "candidato_evaluacion": 3,
+      "fuera_ventana": 1
+    },
+    "informativo_n15": false
+  },
+  "SOL#5m#h02#[0.45,0.50)": {
+    "n": 17,
+    "n_con_ratio_libro": 17,
+    "fill_rate": 0.5882,
+    "ratio_medio": 101.74,
+    "motivos": {
+      "candidato_evaluacion": 17
+    },
+    "informativo_n15": true
+  },
+  "ETH#5m#h03#[0.50,0.55)": {
+    "n": 2,
+    "n_con_ratio_libro": 2,
+    "fill_rate": 0.0,
+    "ratio_medio": 0.0,
+    "motivos": {
+      "candidato_evaluacion": 2
+    },
+    "informativo_n15": false
+  },
+  "ETH#15m#h04#[0.35,0.40)": {
+    "n": 14,
+    "n_con_ratio_libro": 14,
+    "fill_rate": 0.5,
+    "ratio_medio": 206.0,
+    "motivos": {
+      "candidato_evaluacion": 13,
+      "senal_caducada": 1
+    },
+    "informativo_n15": false
+  },
+  "ETH#15m#h07#[0.85,0.90)": {
+    "n": 8,
+    "n_con_ratio_libro": 8,
+    "fill_rate": 0.5,
+    "ratio_medio": 353.3,
+    "motivos": {
+      "candidato_evaluacion": 7,
+      "fuera_ventana": 1
+    },
+    "informativo_n15": false
+  },
+  "BTC#5m#h08#[0.70,0.75)": {
+    "n": 33,
+    "n_con_ratio_libro": 33,
+    "fill_rate": 0.4242,
+    "ratio_medio": 608.76,
+    "motivos": {
+      "candidato_evaluacion": 33
+    },
+    "informativo_n15": true
+  },
+  "BTC#15m#h09#[0.85,0.90)": {
+    "n": 6,
+    "n_con_ratio_libro": 6,
+    "fill_rate": 0.6667,
+    "ratio_medio": 1256.78,
+    "motivos": {
+      "candidato_evaluacion": 4,
+      "fuera_ventana": 2
+    },
+    "informativo_n15": false
+  },
+  "ETH#5m#h10#[0.85,0.90)": {
+    "n": 2,
+    "n_con_ratio_libro": 2,
+    "fill_rate": 1.0,
+    "ratio_medio": 191.35,
+    "motivos": {
+      "candidato_evaluacion": 2
+    },
+    "informativo_n15": false
+  },
+  "SOL#5m#h10#[0.25,0.30)": {
+    "n": 1,
+    "n_con_ratio_libro": 1,
+    "fill_rate": 1.0,
+    "ratio_medio": 270.1,
+    "motivos": {
+      "candidato_evaluacion": 1
+    },
+    "informativo_n15": false
+  },
+  "ETH#15m#h10#[0.25,0.30)": {
+    "n": 5,
+    "n_con_ratio_libro": 5,
+    "fill_rate": 0.8,
+    "ratio_medio": 172.66,
+    "motivos": {
+      "candidato_evaluacion": 5
+    },
+    "informativo_n15": false
+  },
+  "SOL#5m#h14#[0.15,0.20)": {
+    "n": 1,
+    "n_con_ratio_libro": 1,
+    "fill_rate": 0.0,
+    "ratio_medio": 0.0,
+    "motivos": {
+      "candidato_evaluacion": 1
+    },
+    "informativo_n15": false
+  },
+  "BTC#60m#h16#[0.65,0.70)": {
+    "n": 9,
+    "n_con_ratio_libro": 9,
+    "fill_rate": 0.8889,
+    "ratio_medio": 890.47,
+    "motivos": {
+      "candidato_evaluacion": 4,
+      "senal_caducada": 2,
+      "ejecutada": 1,
+      "fuera_ventana": 1,
+      "no_viable_stake": 1
+    },
+    "informativo_n15": false
+  },
+  "BTC#5m#h17#[0.50,0.55)": {
+    "n": 12,
+    "n_con_ratio_libro": 12,
+    "fill_rate": 0.75,
+    "ratio_medio": 1761.94,
+    "motivos": {
+      "candidato_evaluacion": 12
+    },
+    "informativo_n15": false
+  },
+  "ETH#15m#h20#[0.90,0.95)": {
+    "n": 9,
+    "n_con_ratio_libro": 9,
+    "fill_rate": 0.6667,
+    "ratio_medio": 1400.39,
+    "motivos": {
+      "candidato_evaluacion": 6,
+      "senal_caducada": 2,
+      "no_viable_stake": 1
+    },
+    "informativo_n15": false
+  },
+  "BTC#5m#h23#[0.50,0.55)": {
+    "n": 9,
+    "n_con_ratio_libro": 9,
+    "fill_rate": 0.4444,
+    "ratio_medio": 576.47,
+    "motivos": {
+      "candidato_evaluacion": 9
+    },
+    "informativo_n15": false
+  },
+  "ETH#15m#h02#[0.75,0.80)": {
+    "n": 8,
+    "n_con_ratio_libro": 8,
+    "fill_rate": 0.5,
+    "ratio_medio": 154.62,
+    "motivos": {
+      "candidato_evaluacion": 8
+    },
+    "informativo_n15": false
+  },
+  "ETH#5m#h05#[0.80,0.85)": {
+    "n": 2,
+    "n_con_ratio_libro": 2,
+    "fill_rate": 0.5,
+    "ratio_medio": 89.35,
+    "motivos": {
+      "candidato_evaluacion": 2
+    },
+    "informativo_n15": false
+  },
+  "SOL#5m#h06#[0.65,0.70)": {
+    "n": 11,
+    "n_con_ratio_libro": 11,
+    "fill_rate": 0.1818,
+    "ratio_medio": 37.8,
+    "motivos": {
+      "candidato_evaluacion": 11
+    },
+    "informativo_n15": false
+  },
+  "BTC#15m#h09#[0.90,0.95)": {
+    "n": 5,
+    "n_con_ratio_libro": 5,
+    "fill_rate": 1.0,
+    "ratio_medio": 3717.08,
+    "motivos": {
+      "candidato_evaluacion": 5
+    },
+    "informativo_n15": false
+  },
+  "SOL#15m#h14#[0.20,0.25)": {
+    "n": 8,
+    "n_con_ratio_libro": 8,
+    "fill_rate": 0.125,
+    "ratio_medio": 4.96,
+    "motivos": {
+      "candidato_evaluacion": 8
+    },
+    "informativo_n15": false
+  },
+  "ETH#5m#h14#[0.10,0.15)": {
+    "n": 2,
+    "n_con_ratio_libro": 2,
+    "fill_rate": 1.0,
+    "ratio_medio": 210.15,
+    "motivos": {
+      "candidato_evaluacion": 1,
+      "senal_caducada": 1
+    },
+    "informativo_n15": false
+  },
+  "BTC#5m#h17#[0.15,0.20)": {
+    "n": 1,
+    "n_con_ratio_libro": 1,
+    "fill_rate": 1.0,
+    "ratio_medio": 922.6,
+    "motivos": {
+      "candidato_evaluacion": 1
+    },
+    "informativo_n15": false
+  },
+  "BTC#15m#h21#[0.85,0.90)": {
+    "n": 8,
+    "n_con_ratio_libro": 8,
+    "fill_rate": 0.5,
+    "ratio_medio": 1131.28,
+    "motivos": {
+      "candidato_evaluacion": 6,
+      "fuera_ventana": 1,
+      "senal_caducada": 1
+    },
+    "informativo_n15": false
+  },
+  "XRP#5m#h23#[0.60,0.65)": {
+    "n": 21,
+    "n_con_ratio_libro": 21,
+    "fill_rate": 0.3333,
+    "ratio_medio": 15.97,
+    "motivos": {
+      "candidato_evaluacion": 21
+    },
+    "informativo_n15": true
+  },
+  "ETH#15m#h01#[0.80,0.85)": {
+    "n": 28,
+    "n_con_ratio_libro": 28,
+    "fill_rate": 0.2857,
+    "ratio_medio": 113.51,
+    "motivos": {
+      "candidato_evaluacion": 24,
+      "fuera_ventana": 4
+    },
+    "informativo_n15": true
+  },
+  "BTC#15m#h01#[0.85,0.90)": {
+    "n": 7,
+    "n_con_ratio_libro": 7,
+    "fill_rate": 0.4286,
+    "ratio_medio": 806.64,
+    "motivos": {
+      "candidato_evaluacion": 7
+    },
+    "informativo_n15": false
+  },
+  "SOL#5m#h02#[0.75,0.80)": {
+    "n": 13,
+    "n_con_ratio_libro": 13,
+    "fill_rate": 0.2308,
+    "ratio_medio": 44.58,
+    "motivos": {
+      "candidato_evaluacion": 13
+    },
+    "informativo_n15": false
+  },
+  "XRP#5m#h07#[0.80,0.85)": {
+    "n": 3,
+    "n_con_ratio_libro": 3,
+    "fill_rate": 1.0,
+    "ratio_medio": 114.83,
+    "motivos": {
+      "candidato_evaluacion": 3
+    },
+    "informativo_n15": false
+  },
+  "SOL#5m#h15#[0.45,0.50)": {
+    "n": 10,
+    "n_con_ratio_libro": 10,
+    "fill_rate": 0.5,
+    "ratio_medio": 231.77,
+    "motivos": {
+      "candidato_evaluacion": 10
+    },
+    "informativo_n15": false
+  },
+  "SOL#5m#h17#[0.30,0.35)": {
+    "n": 1,
+    "n_con_ratio_libro": 1,
+    "fill_rate": 1.0,
+    "ratio_medio": 6.0,
+    "motivos": {
+      "candidato_evaluacion": 1
+    },
+    "informativo_n15": false
+  },
+  "ETH#5m#h17#[0.15,0.20)": {
+    "n": 1,
+    "n_con_ratio_libro": 1,
+    "fill_rate": 1.0,
+    "ratio_medio": 208.0,
+    "motivos": {
+      "candidato_evaluacion": 1
+    },
+    "informativo_n15": false
+  },
+  "XRP#5m#h21#[0.75,0.80)": {
+    "n": 14,
+    "n_con_ratio_libro": 14,
+    "fill_rate": 0.5,
+    "ratio_medio": 24.38,
+    "motivos": {
+      "candidato_evaluacion": 14
+    },
+    "informativo_n15": false
+  },
+  "SOL#5m#h22#[0.50,0.55)": {
+    "n": 6,
+    "n_con_ratio_libro": 6,
+    "fill_rate": 0.3333,
+    "ratio_medio": 125.17,
+    "motivos": {
+      "candidato_evaluacion": 6
+    },
+    "informativo_n15": false
+  },
+  "SOL#5m#h10#[0.40,0.45)": {
+    "n": 1,
+    "n_con_ratio_libro": 1,
+    "fill_rate": 1.0,
+    "ratio_medio": 56.4,
+    "motivos": {
+      "candidato_evaluacion": 1
+    },
+    "informativo_n15": false
+  },
+  "ETH#15m#h12#[0.75,0.80)": {
+    "n": 21,
+    "n_con_ratio_libro": 21,
+    "fill_rate": 0.381,
+    "ratio_medio": 177.75,
+    "motivos": {
+      "candidato_evaluacion": 15,
+      "fuera_ventana": 6
+    },
+    "informativo_n15": true
+  },
+  "ETH#15m#h13#[0.10,0.15)": {
+    "n": 6,
+    "n_con_ratio_libro": 6,
+    "fill_rate": 1.0,
+    "ratio_medio": 93.22,
+    "motivos": {
+      "candidato_evaluacion": 6
+    },
+    "informativo_n15": false
+  },
+  "ETH#5m#h16#[0.85,0.90)": {
+    "n": 3,
+    "n_con_ratio_libro": 3,
+    "fill_rate": 0.6667,
+    "ratio_medio": 251.2,
+    "motivos": {
+      "candidato_evaluacion": 3
+    },
+    "informativo_n15": false
+  },
+  "BTC#5m#h16#[0.80,0.85)": {
+    "n": 3,
+    "n_con_ratio_libro": 3,
+    "fill_rate": 0.3333,
+    "ratio_medio": 445.63,
+    "motivos": {
+      "candidato_evaluacion": 3
+    },
+    "informativo_n15": false
+  },
+  "BTC#15m#h21#[0.90,0.95)": {
+    "n": 8,
+    "n_con_ratio_libro": 8,
+    "fill_rate": 0.0,
+    "ratio_medio": 0.0,
+    "motivos": {
+      "candidato_evaluacion": 7,
+      "senal_caducada": 1
+    },
+    "informativo_n15": false
+  },
+  "XRP#5m#h23#[0.70,0.75)": {
+    "n": 30,
+    "n_con_ratio_libro": 30,
+    "fill_rate": 0.4333,
+    "ratio_medio": 37.68,
+    "motivos": {
+      "candidato_evaluacion": 30
+    },
+    "informativo_n15": true
+  },
+  "XRP#5m#h10#[0.70,0.75)": {
+    "n": 27,
+    "n_con_ratio_libro": 27,
+    "fill_rate": 0.5185,
+    "ratio_medio": 51.03,
+    "motivos": {
+      "candidato_evaluacion": 27
+    },
+    "informativo_n15": true
+  },
+  "SOL#5m#h11#[0.85,0.90)": {
+    "n": 1,
+    "n_con_ratio_libro": 1,
+    "fill_rate": 1.0,
+    "ratio_medio": 264.6,
+    "motivos": {
+      "candidato_evaluacion": 1
+    },
+    "informativo_n15": false
+  },
+  "BTC#5m#h11#[0.70,0.75)": {
+    "n": 27,
+    "n_con_ratio_libro": 27,
+    "fill_rate": 0.4815,
+    "ratio_medio": 750.23,
+    "motivos": {
+      "candidato_evaluacion": 27
+    },
+    "informativo_n15": true
+  },
+  "ETH#5m#h13#[0.65,0.70)": {
+    "n": 6,
+    "n_con_ratio_libro": 6,
+    "fill_rate": 0.3333,
+    "ratio_medio": 55.95,
+    "motivos": {
+      "candidato_evaluacion": 5,
+      "senal_caducada": 1
+    },
+    "informativo_n15": false
+  },
+  "SOL#15m#h16#[0.90,0.95)": {
+    "n": 4,
+    "n_con_ratio_libro": 4,
+    "fill_rate": 0.75,
+    "ratio_medio": 978.63,
+    "motivos": {
+      "candidato_evaluacion": 4
+    },
+    "informativo_n15": false
+  },
+  "SOL#5m#h17#[0.15,0.20)": {
+    "n": 2,
+    "n_con_ratio_libro": 2,
+    "fill_rate": 0.5,
+    "ratio_medio": 86.4,
+    "motivos": {
+      "candidato_evaluacion": 2
+    },
+    "informativo_n15": false
+  },
+  "ETH#15m#h19#[0.35,0.40)": {
+    "n": 6,
+    "n_con_ratio_libro": 6,
+    "fill_rate": 0.0,
+    "ratio_medio": 0.0,
+    "motivos": {
+      "candidato_evaluacion": 6
+    },
+    "informativo_n15": false
+  },
+  "BTC#15m#h00#[0.10,0.15)": {
+    "n": 7,
+    "n_con_ratio_libro": 7,
+    "fill_rate": 0.4286,
+    "ratio_medio": 54.31,
+    "motivos": {
+      "candidato_evaluacion": 7
+    },
+    "informativo_n15": false
+  },
+  "BTC#15m#h00#[0.20,0.25)": {
+    "n": 7,
+    "n_con_ratio_libro": 7,
+    "fill_rate": 0.8571,
+    "ratio_medio": 358.54,
+    "motivos": {
+      "candidato_evaluacion": 7
+    },
+    "informativo_n15": false
+  },
+  "BTC#5m#h04#[0.15,0.20)": {
+    "n": 1,
+    "n_con_ratio_libro": 1,
+    "fill_rate": 0.0,
+    "ratio_medio": 0.0,
+    "motivos": {
+      "candidato_evaluacion": 1
+    },
+    "informativo_n15": false
+  },
+  "ETH#15m#h10#[0.90,0.95)": {
+    "n": 1,
+    "n_con_ratio_libro": 1,
+    "fill_rate": 1.0,
+    "ratio_medio": 3722.0,
+    "motivos": {
+      "candidato_evaluacion": 1
+    },
+    "informativo_n15": false
+  },
+  "SOL#5m#h14#[0.20,0.25)": {
+    "n": 1,
+    "n_con_ratio_libro": 1,
+    "fill_rate": 1.0,
+    "ratio_medio": 53.4,
+    "motivos": {
+      "candidato_evaluacion": 1
+    },
+    "informativo_n15": false
+  },
+  "ETH#15m#h14#[0.90,0.95)": {
+    "n": 2,
+    "n_con_ratio_libro": 2,
+    "fill_rate": 1.0,
+    "ratio_medio": 6371.2,
+    "motivos": {
+      "candidato_evaluacion": 2
+    },
+    "informativo_n15": false
+  },
+  "SOL#15m#h19#[0.85,0.90)": {
+    "n": 5,
+    "n_con_ratio_libro": 5,
+    "fill_rate": 0.6,
+    "ratio_medio": 476.58,
+    "motivos": {
+      "candidato_evaluacion": 5
+    },
+    "informativo_n15": false
+  },
+  "BTC#15m#h23#[0.90,0.95)": {
+    "n": 4,
+    "n_con_ratio_libro": 4,
+    "fill_rate": 0.5,
+    "ratio_medio": 1694.22,
+    "motivos": {
+      "candidato_evaluacion": 4
+    },
+    "informativo_n15": false
+  },
+  "BTC#5m#h04#[0.30,0.35)": {
+    "n": 1,
+    "n_con_ratio_libro": 1,
+    "fill_rate": 0.0,
+    "ratio_medio": 0.0,
+    "motivos": {
+      "candidato_evaluacion": 1
+    },
+    "informativo_n15": false
+  },
+  "XRP#15m#h07#[0.15,0.20)": {
+    "n": 3,
+    "n_con_ratio_libro": 3,
+    "fill_rate": 0.6667,
+    "ratio_medio": 12.77,
+    "motivos": {
+      "candidato_evaluacion": 3
+    },
+    "informativo_n15": false
+  },
+  "XRP#15m#h15#[0.20,0.25)": {
+    "n": 2,
+    "n_con_ratio_libro": 2,
+    "fill_rate": 1.0,
+    "ratio_medio": 13.55,
+    "motivos": {
+      "candidato_evaluacion": 2
+    },
+    "informativo_n15": false
+  },
+  "SOL#15m#h18#[0.10,0.15)": {
+    "n": 6,
+    "n_con_ratio_libro": 6,
+    "fill_rate": 0.3333,
+    "ratio_medio": 28.03,
+    "motivos": {
+      "candidato_evaluacion": 6
+    },
+    "informativo_n15": false
+  },
+  "ETH#15m#h05#[0.90,0.95)": {
+    "n": 11,
+    "n_con_ratio_libro": 11,
+    "fill_rate": 0.3636,
+    "ratio_medio": 248.29,
+    "motivos": {
+      "candidato_evaluacion": 9,
+      "fuera_ventana": 2
+    },
+    "informativo_n15": false
+  },
+  "BTC#60m#h11#[0.90,0.95)": {
+    "n": 1,
+    "n_con_ratio_libro": 1,
+    "fill_rate": 0.0,
+    "ratio_medio": 0.0,
+    "motivos": {
+      "candidato_evaluacion": 1
+    },
+    "informativo_n15": false
+  },
+  "BTC#5m#h13#[0.60,0.65)": {
+    "n": 15,
+    "n_con_ratio_libro": 15,
+    "fill_rate": 0.4,
+    "ratio_medio": 1057.4,
+    "motivos": {
+      "candidato_evaluacion": 15
+    },
+    "informativo_n15": true
+  },
+  "BTC#5m#h13#[0.70,0.75)": {
+    "n": 43,
+    "n_con_ratio_libro": 43,
+    "fill_rate": 0.4884,
+    "ratio_medio": 1071.5,
+    "motivos": {
+      "candidato_evaluacion": 43
+    },
+    "informativo_n15": true
+  },
+  "BTC#5m#h13#[0.75,0.80)": {
+    "n": 3,
+    "n_con_ratio_libro": 3,
+    "fill_rate": 0.3333,
+    "ratio_medio": 1232.6,
+    "motivos": {
+      "candidato_evaluacion": 3
+    },
+    "informativo_n15": false
+  },
+  "XRP#5m#h14#[0.55,0.60)": {
+    "n": 51,
+    "n_con_ratio_libro": 51,
+    "fill_rate": 0.5294,
+    "ratio_medio": 56.42,
+    "motivos": {
+      "candidato_evaluacion": 51
+    },
+    "informativo_n15": true
+  },
+  "BTC#5m#h14#[0.70,0.75)": {
+    "n": 41,
+    "n_con_ratio_libro": 41,
+    "fill_rate": 0.6585,
+    "ratio_medio": 2912.38,
+    "motivos": {
+      "candidato_evaluacion": 41
+    },
+    "informativo_n15": true
+  },
+  "BTC#5m#h14#[0.75,0.80)": {
+    "n": 6,
+    "n_con_ratio_libro": 6,
+    "fill_rate": 0.5,
+    "ratio_medio": 2351.57,
+    "motivos": {
+      "candidato_evaluacion": 6
+    },
+    "informativo_n15": false
+  },
+  "BTC#5m#h16#[0.70,0.75)": {
+    "n": 39,
+    "n_con_ratio_libro": 39,
+    "fill_rate": 0.5385,
+    "ratio_medio": 1674.82,
+    "motivos": {
+      "candidato_evaluacion": 39
+    },
+    "informativo_n15": true
+  },
+  "XRP#5m#h16#[0.70,0.75)": {
+    "n": 28,
+    "n_con_ratio_libro": 28,
+    "fill_rate": 0.6429,
+    "ratio_medio": 55.4,
+    "motivos": {
+      "candidato_evaluacion": 28
+    },
+    "informativo_n15": true
+  },
+  "BTC#5m#h16#[0.65,0.70)": {
+    "n": 6,
+    "n_con_ratio_libro": 6,
+    "fill_rate": 0.6667,
+    "ratio_medio": 725.7,
+    "motivos": {
+      "candidato_evaluacion": 6
+    },
+    "informativo_n15": false
+  },
+  "SOL#5m#h17#[0.45,0.50)": {
+    "n": 11,
+    "n_con_ratio_libro": 11,
+    "fill_rate": 0.6364,
+    "ratio_medio": 157.66,
+    "motivos": {
+      "candidato_evaluacion": 11
+    },
+    "informativo_n15": false
+  },
+  "BTC#5m#h18#[0.70,0.75)": {
+    "n": 30,
+    "n_con_ratio_libro": 30,
+    "fill_rate": 0.4,
+    "ratio_medio": 1390.63,
+    "motivos": {
+      "candidato_evaluacion": 30
+    },
+    "informativo_n15": true
+  },
+  "XRP#5m#h18#[0.60,0.65)": {
+    "n": 19,
+    "n_con_ratio_libro": 19,
+    "fill_rate": 0.6316,
+    "ratio_medio": 57.97,
+    "motivos": {
+      "candidato_evaluacion": 19
+    },
+    "informativo_n15": true
+  },
+  "BTC#15m#h19#[0.90,0.95)": {
+    "n": 4,
+    "n_con_ratio_libro": 4,
+    "fill_rate": 0.75,
+    "ratio_medio": 2221.78,
+    "motivos": {
+      "candidato_evaluacion": 4
+    },
+    "informativo_n15": false
+  },
+  "BTC#5m#h20#[0.70,0.75)": {
+    "n": 31,
+    "n_con_ratio_libro": 31,
+    "fill_rate": 0.3548,
+    "ratio_medio": 691.91,
+    "motivos": {
+      "candidato_evaluacion": 31
+    },
+    "informativo_n15": true
+  },
+  "BTC#5m#h20#[0.65,0.70)": {
+    "n": 8,
+    "n_con_ratio_libro": 8,
+    "fill_rate": 0.375,
+    "ratio_medio": 792.94,
+    "motivos": {
+      "candidato_evaluacion": 8
+    },
+    "informativo_n15": false
+  },
+  "BTC#5m#h20#[0.80,0.85)": {
+    "n": 1,
+    "n_con_ratio_libro": 1,
+    "fill_rate": 0.0,
+    "ratio_medio": 0.0,
+    "motivos": {
+      "candidato_evaluacion": 1
+    },
+    "informativo_n15": false
+  },
+  "BTC#5m#h21#[0.70,0.75)": {
+    "n": 28,
+    "n_con_ratio_libro": 28,
+    "fill_rate": 0.4643,
+    "ratio_medio": 720.89,
+    "motivos": {
+      "candidato_evaluacion": 28
+    },
+    "informativo_n15": true
+  },
+  "XRP#5m#h21#[0.65,0.70)": {
+    "n": 3,
+    "n_con_ratio_libro": 3,
+    "fill_rate": 0.3333,
+    "ratio_medio": 4.7,
+    "motivos": {
+      "candidato_evaluacion": 3
+    },
+    "informativo_n15": false
+  },
+  "BTC#5m#h22#[0.60,0.65)": {
+    "n": 15,
+    "n_con_ratio_libro": 15,
+    "fill_rate": 0.6667,
+    "ratio_medio": 974.47,
+    "motivos": {
+      "candidato_evaluacion": 15
+    },
+    "informativo_n15": true
+  },
+  "XRP#5m#h22#[0.70,0.75)": {
+    "n": 30,
+    "n_con_ratio_libro": 30,
+    "fill_rate": 0.4333,
+    "ratio_medio": 23.93,
+    "motivos": {
+      "candidato_evaluacion": 30
+    },
+    "informativo_n15": true
+  },
+  "BTC#5m#h22#[0.65,0.70)": {
+    "n": 2,
+    "n_con_ratio_libro": 2,
+    "fill_rate": 0.5,
+    "ratio_medio": 975.9,
+    "motivos": {
+      "candidato_evaluacion": 2
+    },
+    "informativo_n15": false
+  },
+  "BTC#5m#h23#[0.55,0.60)": {
+    "n": 44,
+    "n_con_ratio_libro": 44,
+    "fill_rate": 0.5,
+    "ratio_medio": 654.61,
+    "motivos": {
+      "candidato_evaluacion": 44
+    },
+    "informativo_n15": true
+  },
+  "BTC#5m#h23#[0.75,0.80)": {
+    "n": 7,
+    "n_con_ratio_libro": 7,
+    "fill_rate": 0.5714,
+    "ratio_medio": 1643.77,
+    "motivos": {
+      "candidato_evaluacion": 7
+    },
+    "informativo_n15": false
+  },
+  "BTC#5m#h23#[0.60,0.65)": {
+    "n": 17,
+    "n_con_ratio_libro": 17,
+    "fill_rate": 0.2941,
+    "ratio_medio": 620.5,
+    "motivos": {
+      "candidato_evaluacion": 17
+    },
+    "informativo_n15": true
+  },
+  "XRP#5m#h00#[0.70,0.75)": {
+    "n": 24,
+    "n_con_ratio_libro": 24,
+    "fill_rate": 0.7083,
+    "ratio_medio": 44.23,
+    "motivos": {
+      "candidato_evaluacion": 24
+    },
+    "informativo_n15": true
+  },
+  "BTC#5m#h02#[0.55,0.60)": {
+    "n": 63,
+    "n_con_ratio_libro": 63,
+    "fill_rate": 0.5397,
+    "ratio_medio": 698.91,
+    "motivos": {
+      "candidato_evaluacion": 63
+    },
+    "informativo_n15": true
+  },
+  "XRP#15m#h04#[0.25,0.30)": {
+    "n": 5,
+    "n_con_ratio_libro": 5,
+    "fill_rate": 0.8,
+    "ratio_medio": 15.26,
+    "motivos": {
+      "candidato_evaluacion": 5
+    },
+    "informativo_n15": false
+  },
+  "XRP#15m#h04#[0.20,0.25)": {
+    "n": 4,
+    "n_con_ratio_libro": 4,
+    "fill_rate": 1.0,
+    "ratio_medio": 10.75,
+    "motivos": {
+      "candidato_evaluacion": 4
+    },
+    "informativo_n15": false
+  },
+  "ETH#5m#h05#[0.70,0.75)": {
+    "n": 36,
+    "n_con_ratio_libro": 36,
+    "fill_rate": 0.5556,
+    "ratio_medio": 375.76,
+    "motivos": {
+      "candidato_evaluacion": 36
+    },
+    "informativo_n15": true
+  },
+  "XRP#5m#h07#[0.60,0.65)": {
+    "n": 24,
+    "n_con_ratio_libro": 24,
+    "fill_rate": 0.6667,
+    "ratio_medio": 54.82,
+    "motivos": {
+      "candidato_evaluacion": 24
+    },
+    "informativo_n15": true
+  },
+  "XRP#15m#h07#[0.25,0.30)": {
+    "n": 9,
+    "n_con_ratio_libro": 9,
+    "fill_rate": 0.5556,
+    "ratio_medio": 9.18,
+    "motivos": {
+      "candidato_evaluacion": 9
+    },
+    "informativo_n15": false
+  },
+  "XRP#5m#h07#[0.65,0.70)": {
+    "n": 7,
+    "n_con_ratio_libro": 7,
+    "fill_rate": 0.4286,
+    "ratio_medio": 34.86,
+    "motivos": {
+      "candidato_evaluacion": 7
+    },
+    "informativo_n15": false
+  },
+  "BTC#5m#h08#[0.55,0.60)": {
+    "n": 43,
+    "n_con_ratio_libro": 43,
+    "fill_rate": 0.5814,
+    "ratio_medio": 658.79,
+    "motivos": {
+      "candidato_evaluacion": 43
+    },
+    "informativo_n15": true
+  },
+  "BTC#5m#h08#[0.75,0.80)": {
+    "n": 6,
+    "n_con_ratio_libro": 6,
+    "fill_rate": 0.3333,
+    "ratio_medio": 678.88,
+    "motivos": {
+      "candidato_evaluacion": 6
+    },
+    "informativo_n15": false
+  },
+  "BTC#5m#h09#[0.60,0.65)": {
+    "n": 19,
+    "n_con_ratio_libro": 19,
+    "fill_rate": 0.5263,
+    "ratio_medio": 759.99,
+    "motivos": {
+      "candidato_evaluacion": 19
+    },
+    "informativo_n15": true
+  },
+  "BTC#5m#h09#[0.70,0.75)": {
+    "n": 39,
+    "n_con_ratio_libro": 39,
+    "fill_rate": 0.4615,
+    "ratio_medio": 785.88,
+    "motivos": {
+      "candidato_evaluacion": 39
+    },
+    "informativo_n15": true
+  },
+  "BTC#15m#h10#[0.25,0.30)": {
+    "n": 1,
+    "n_con_ratio_libro": 1,
+    "fill_rate": 1.0,
+    "ratio_medio": 458.6,
+    "motivos": {
+      "candidato_evaluacion": 1
+    },
+    "informativo_n15": false
+  },
+  "BTC#5m#h10#[0.70,0.75)": {
+    "n": 34,
+    "n_con_ratio_libro": 34,
+    "fill_rate": 0.4706,
+    "ratio_medio": 540.18,
+    "motivos": {
+      "candidato_evaluacion": 34
+    },
+    "informativo_n15": true
+  },
+  "DOGE#5m#h10#[0.70,0.75)": {
+    "n": 20,
+    "n_con_ratio_libro": 20,
+    "fill_rate": 0.5,
+    "ratio_medio": 37.48,
+    "motivos": {
+      "candidato_evaluacion": 20
+    },
+    "informativo_n15": true
+  },
+  "BTC#5m#h10#[0.75,0.80)": {
+    "n": 3,
+    "n_con_ratio_libro": 3,
+    "fill_rate": 0.3333,
+    "ratio_medio": 464.67,
+    "motivos": {
+      "candidato_evaluacion": 3
+    },
+    "informativo_n15": false
+  },
+  "BTC#5m#h11#[0.60,0.65)": {
+    "n": 13,
+    "n_con_ratio_libro": 13,
+    "fill_rate": 0.3846,
+    "ratio_medio": 925.16,
+    "motivos": {
+      "candidato_evaluacion": 13
+    },
+    "informativo_n15": false
+  },
+  "BTC#5m#h11#[0.55,0.60)": {
+    "n": 40,
+    "n_con_ratio_libro": 40,
+    "fill_rate": 0.525,
+    "ratio_medio": 638.72,
+    "motivos": {
+      "candidato_evaluacion": 40
+    },
+    "informativo_n15": true
+  },
+  "DOGE#5m#h11#[0.75,0.80)": {
+    "n": 5,
+    "n_con_ratio_libro": 5,
+    "fill_rate": 0.6,
+    "ratio_medio": 39.66,
+    "motivos": {
+      "candidato_evaluacion": 5
+    },
+    "informativo_n15": false
+  },
+  "XRP#15m#h11#[0.25,0.30)": {
+    "n": 2,
+    "n_con_ratio_libro": 2,
+    "fill_rate": 1.0,
+    "ratio_medio": 10.15,
+    "motivos": {
+      "candidato_evaluacion": 2
+    },
+    "informativo_n15": false
+  },
+  "XRP#5m#h11#[0.60,0.65)": {
+    "n": 15,
+    "n_con_ratio_libro": 15,
+    "fill_rate": 0.6667,
+    "ratio_medio": 52.69,
+    "motivos": {
+      "candidato_evaluacion": 15
+    },
+    "informativo_n15": true
+  },
+  "BTC#5m#h11#[0.65,0.70)": {
+    "n": 1,
+    "n_con_ratio_libro": 1,
+    "fill_rate": 0.0,
+    "ratio_medio": 0.0,
+    "motivos": {
+      "candidato_evaluacion": 1
+    },
+    "informativo_n15": false
+  },
+  "BTC#5m#h14#[0.60,0.65)": {
+    "n": 8,
+    "n_con_ratio_libro": 8,
+    "fill_rate": 0.75,
+    "ratio_medio": 1978.22,
+    "motivos": {
+      "candidato_evaluacion": 8
+    },
+    "informativo_n15": false
+  },
+  "BTC#5m#h16#[0.75,0.80)": {
+    "n": 4,
+    "n_con_ratio_libro": 4,
+    "fill_rate": 0.25,
+    "ratio_medio": 274.65,
+    "motivos": {
+      "candidato_evaluacion": 4
+    },
+    "informativo_n15": false
+  },
+  "XRP#5m#h16#[0.75,0.80)": {
+    "n": 12,
+    "n_con_ratio_libro": 12,
+    "fill_rate": 0.5833,
+    "ratio_medio": 39.18,
+    "motivos": {
+      "candidato_evaluacion": 12
+    },
+    "informativo_n15": false
+  },
+  "BTC#5m#h20#[0.75,0.80)": {
+    "n": 7,
+    "n_con_ratio_libro": 7,
+    "fill_rate": 0.2857,
+    "ratio_medio": 1090.37,
+    "motivos": {
+      "candidato_evaluacion": 7
+    },
+    "informativo_n15": false
+  },
+  "BTC#5m#h21#[0.75,0.80)": {
+    "n": 4,
+    "n_con_ratio_libro": 4,
+    "fill_rate": 0.25,
+    "ratio_medio": 296.0,
+    "motivos": {
+      "candidato_evaluacion": 4
+    },
+    "informativo_n15": false
+  },
+  "SOL#5m#h23#[0.80,0.85)": {
+    "n": 3,
+    "n_con_ratio_libro": 3,
+    "fill_rate": 0.6667,
+    "ratio_medio": 86.6,
+    "motivos": {
+      "candidato_evaluacion": 3
+    },
+    "informativo_n15": false
+  },
+  "ETH#5m#h06#[0.80,0.85)": {
+    "n": 3,
+    "n_con_ratio_libro": 3,
+    "fill_rate": 0.6667,
+    "ratio_medio": 1111.03,
+    "motivos": {
+      "candidato_evaluacion": 3
+    },
+    "informativo_n15": false
+  },
+  "BTC#5m#h08#[0.65,0.70)": {
+    "n": 3,
+    "n_con_ratio_libro": 3,
+    "fill_rate": 0.0,
+    "ratio_medio": 0.0,
+    "motivos": {
+      "candidato_evaluacion": 3
+    },
+    "informativo_n15": false
+  },
+  "SOL#15m#h08#[0.90,0.95)": {
+    "n": 2,
+    "n_con_ratio_libro": 2,
+    "fill_rate": 1.0,
+    "ratio_medio": 711.65,
+    "motivos": {
+      "candidato_evaluacion": 2
+    },
+    "informativo_n15": false
+  },
+  "BTC#5m#h09#[0.65,0.70)": {
+    "n": 9,
+    "n_con_ratio_libro": 9,
+    "fill_rate": 0.5556,
+    "ratio_medio": 682.18,
+    "motivos": {
+      "candidato_evaluacion": 9
+    },
+    "informativo_n15": false
+  },
+  "XRP#5m#h09#[0.80,0.85)": {
+    "n": 3,
+    "n_con_ratio_libro": 3,
+    "fill_rate": 1.0,
+    "ratio_medio": 136.03,
+    "motivos": {
+      "candidato_evaluacion": 3
+    },
+    "informativo_n15": false
+  },
+  "BTC#5m#h10#[0.60,0.65)": {
+    "n": 13,
+    "n_con_ratio_libro": 13,
+    "fill_rate": 0.4615,
+    "ratio_medio": 781.1,
+    "motivos": {
+      "candidato_evaluacion": 13
+    },
+    "informativo_n15": false
+  },
+  "SOL#5m#h10#[0.35,0.40)": {
+    "n": 1,
+    "n_con_ratio_libro": 1,
+    "fill_rate": 1.0,
+    "ratio_medio": 203.0,
+    "motivos": {
+      "candidato_evaluacion": 1
+    },
+    "informativo_n15": false
+  },
+  "BTC#5m#h13#[0.65,0.70)": {
+    "n": 5,
+    "n_con_ratio_libro": 5,
+    "fill_rate": 0.2,
+    "ratio_medio": 503.4,
+    "motivos": {
+      "candidato_evaluacion": 5
+    },
+    "informativo_n15": false
+  },
+  "BTC#5m#h14#[0.65,0.70)": {
+    "n": 4,
+    "n_con_ratio_libro": 4,
+    "fill_rate": 0.25,
+    "ratio_medio": 405.45,
+    "motivos": {
+      "candidato_evaluacion": 4
+    },
+    "informativo_n15": false
+  },
+  "ETH#15m#h19#[0.90,0.95)": {
+    "n": 3,
+    "n_con_ratio_libro": 3,
+    "fill_rate": 1.0,
+    "ratio_medio": 649.8,
+    "motivos": {
+      "fok_kill": 1,
+      "ejecutada": 1,
+      "candidato_evaluacion": 1
+    },
+    "informativo_n15": false
+  },
+  "ETH#5m#h19#[0.75,0.80)": {
+    "n": 3,
+    "n_con_ratio_libro": 3,
+    "fill_rate": 0.6667,
+    "ratio_medio": 638.5,
+    "motivos": {
+      "candidato_evaluacion": 3
+    },
+    "informativo_n15": false
+  },
+  "BTC#5m#h23#[0.90,0.95)": {
+    "n": 1,
+    "n_con_ratio_libro": 1,
+    "fill_rate": 0.0,
+    "ratio_medio": 0.0,
+    "motivos": {
+      "candidato_evaluacion": 1
+    },
+    "informativo_n15": false
+  },
+  "XRP#15m#h23#[0.15,0.20)": {
+    "n": 3,
+    "n_con_ratio_libro": 3,
+    "fill_rate": 0.3333,
+    "ratio_medio": 3.5,
+    "motivos": {
+      "candidato_evaluacion": 3
+    },
+    "informativo_n15": false
+  },
+  "ETH#15m#h07#[0.90,0.95)": {
+    "n": 5,
+    "n_con_ratio_libro": 5,
+    "fill_rate": 0.8,
+    "ratio_medio": 1772.34,
+    "motivos": {
+      "candidato_evaluacion": 4,
+      "fuera_ventana": 1
+    },
+    "informativo_n15": false
+  },
+  "BTC#5m#h09#[0.75,0.80)": {
+    "n": 2,
+    "n_con_ratio_libro": 2,
+    "fill_rate": 1.0,
+    "ratio_medio": 4489.95,
+    "motivos": {
+      "candidato_evaluacion": 2
+    },
+    "informativo_n15": false
+  },
+  "XRP#5m#h09#[0.75,0.80)": {
+    "n": 4,
+    "n_con_ratio_libro": 4,
+    "fill_rate": 1.0,
+    "ratio_medio": 67.75,
+    "motivos": {
+      "candidato_evaluacion": 4
+    },
+    "informativo_n15": false
+  },
+  "XRP#15m#h11#[0.20,0.25)": {
+    "n": 2,
+    "n_con_ratio_libro": 2,
+    "fill_rate": 0.5,
+    "ratio_medio": 9.1,
+    "motivos": {
+      "candidato_evaluacion": 2
+    },
+    "informativo_n15": false
+  },
+  "XRP#5m#h16#[0.80,0.85)": {
+    "n": 2,
+    "n_con_ratio_libro": 2,
+    "fill_rate": 0.0,
+    "ratio_medio": 0.0,
+    "motivos": {
+      "candidato_evaluacion": 2
+    },
+    "informativo_n15": false
+  },
+  "BTC#5m#h23#[0.80,0.85)": {
+    "n": 1,
+    "n_con_ratio_libro": 1,
+    "fill_rate": 0.0,
+    "ratio_medio": 0.0,
+    "motivos": {
+      "candidato_evaluacion": 1
+    },
+    "informativo_n15": false
+  },
+  "SOL#5m#h23#[0.85,0.90)": {
+    "n": 1,
+    "n_con_ratio_libro": 1,
+    "fill_rate": 1.0,
+    "ratio_medio": 18982.4,
+    "motivos": {
+      "candidato_evaluacion": 1
+    },
+    "informativo_n15": false
+  },
+  "XRP#15m#h01#[0.20,0.25)": {
+    "n": 4,
+    "n_con_ratio_libro": 4,
+    "fill_rate": 0.75,
+    "ratio_medio": 18.22,
+    "motivos": {
+      "candidato_evaluacion": 4
+    },
+    "informativo_n15": false
+  },
+  "BTC#5m#h21#[0.80,0.85)": {
+    "n": 1,
+    "n_con_ratio_libro": 1,
+    "fill_rate": 1.0,
+    "ratio_medio": 3101.4,
+    "motivos": {
+      "candidato_evaluacion": 1
+    },
+    "informativo_n15": false
+  },
+  "XRP#15m#h22#[0.70,0.75)": {
+    "n": 6,
+    "n_con_ratio_libro": 6,
+    "fill_rate": 0.3333,
+    "ratio_medio": 85.53,
+    "motivos": {
+      "candidato_evaluacion": 6
+    },
+    "informativo_n15": false
+  },
+  "XRP#15m#h22#[0.75,0.80)": {
+    "n": 1,
+    "n_con_ratio_libro": 1,
+    "fill_rate": 0.0,
+    "ratio_medio": 0.0,
+    "motivos": {
+      "candidato_evaluacion": 1
+    },
+    "informativo_n15": false
+  },
+  "XRP#15m#h01#[0.70,0.75)": {
+    "n": 7,
+    "n_con_ratio_libro": 7,
+    "fill_rate": 0.8571,
+    "ratio_medio": 141.56,
+    "motivos": {
+      "candidato_evaluacion": 7
+    },
+    "informativo_n15": false
+  },
+  "XRP#15m#h02#[0.70,0.75)": {
+    "n": 7,
+    "n_con_ratio_libro": 7,
+    "fill_rate": 0.7143,
+    "ratio_medio": 121.69,
+    "motivos": {
+      "candidato_evaluacion": 7
+    },
+    "informativo_n15": false
+  },
+  "ETH#5m#h05#[0.65,0.70)": {
+    "n": 3,
+    "n_con_ratio_libro": 3,
+    "fill_rate": 0.6667,
+    "ratio_medio": 356.5,
+    "motivos": {
+      "candidato_evaluacion": 3
+    },
+    "informativo_n15": false
+  },
+  "DOGE#15m#h08#[0.75,0.80)": {
+    "n": 2,
+    "n_con_ratio_libro": 2,
+    "fill_rate": 0.5,
+    "ratio_medio": 110.8,
+    "motivos": {
+      "candidato_evaluacion": 2
+    },
+    "informativo_n15": false
+  },
+  "XRP#15m#h12#[0.75,0.80)": {
+    "n": 1,
+    "n_con_ratio_libro": 1,
+    "fill_rate": 0.0,
+    "ratio_medio": 0.0,
+    "motivos": {
+      "candidato_evaluacion": 1
+    },
+    "informativo_n15": false
+  },
+  "SOL#5m#h13#[0.85,0.90)": {
+    "n": 1,
+    "n_con_ratio_libro": 1,
+    "fill_rate": 0.0,
+    "ratio_medio": 0.0,
+    "motivos": {
+      "candidato_evaluacion": 1
+    },
+    "informativo_n15": false
+  },
+  "BTC#15m#h13#[0.00,0.05)": {
+    "n": 1,
+    "n_con_ratio_libro": 1,
+    "fill_rate": 1.0,
+    "ratio_medio": 71.5,
+    "motivos": {
+      "candidato_evaluacion": 1
+    },
+    "informativo_n15": false
+  },
+  "XRP#15m#h14#[0.40,0.45)": {
+    "n": 1,
+    "n_con_ratio_libro": 1,
+    "fill_rate": 0.0,
+    "ratio_medio": 0.0,
+    "motivos": {
+      "candidato_evaluacion": 1
+    },
+    "informativo_n15": false
+  },
+  "BTC#5m#h14#[0.80,0.85)": {
+    "n": 1,
+    "n_con_ratio_libro": 1,
+    "fill_rate": 1.0,
+    "ratio_medio": 11327.0,
+    "motivos": {
+      "candidato_evaluacion": 1
+    },
+    "informativo_n15": false
+  },
+  "XRP#15m#h16#[0.70,0.75)": {
+    "n": 5,
+    "n_con_ratio_libro": 5,
+    "fill_rate": 0.6,
+    "ratio_medio": 76.86,
+    "motivos": {
+      "candidato_evaluacion": 5
+    },
+    "informativo_n15": false
+  },
+  "XRP#15m#h17#[0.10,0.15)": {
+    "n": 2,
+    "n_con_ratio_libro": 2,
+    "fill_rate": 0.5,
+    "ratio_medio": 5.75,
+    "motivos": {
+      "candidato_evaluacion": 2
+    },
+    "informativo_n15": false
+  },
+  "XRP#15m#h17#[0.35,0.40)": {
+    "n": 1,
+    "n_con_ratio_libro": 1,
+    "fill_rate": 1.0,
+    "ratio_medio": 10.5,
+    "motivos": {
+      "candidato_evaluacion": 1
+    },
+    "informativo_n15": false
+  },
+  "DOGE#5m#h18#[0.20,0.25)": {
+    "n": 4,
+    "n_con_ratio_libro": 4,
+    "fill_rate": 0.75,
+    "ratio_medio": 52.3,
+    "motivos": {
+      "candidato_evaluacion": 4
+    },
+    "informativo_n15": false
+  },
+  "DOGE#5m#h18#[0.25,0.30)": {
+    "n": 3,
+    "n_con_ratio_libro": 3,
+    "fill_rate": 0.6667,
+    "ratio_medio": 1067.17,
+    "motivos": {
+      "candidato_evaluacion": 3
+    },
+    "informativo_n15": false
+  },
+  "XRP#5m#h19#[0.45,0.50)": {
+    "n": 3,
+    "n_con_ratio_libro": 3,
+    "fill_rate": 0.3333,
+    "ratio_medio": 20.97,
+    "motivos": {
+      "candidato_evaluacion": 3
+    },
+    "informativo_n15": false
+  },
+  "XRP#15m#h21#[0.80,0.85)": {
+    "n": 1,
+    "n_con_ratio_libro": 1,
+    "fill_rate": 1.0,
+    "ratio_medio": 51.5,
+    "motivos": {
+      "candidato_evaluacion": 1
+    },
+    "informativo_n15": false
+  },
+  "BTC#5m#h22#[0.90,0.95)": {
+    "n": 1,
+    "n_con_ratio_libro": 1,
+    "fill_rate": 1.0,
+    "ratio_medio": 1284.5,
+    "motivos": {
+      "candidato_evaluacion": 1
+    },
+    "informativo_n15": false
+  },
+  "ETH#5m#h22#[0.85,0.90)": {
+    "n": 1,
+    "n_con_ratio_libro": 1,
+    "fill_rate": 1.0,
+    "ratio_medio": 504.5,
+    "motivos": {
+      "candidato_evaluacion": 1
+    },
+    "informativo_n15": false
+  },
+  "XRP#15m#h01#[0.60,0.65)": {
+    "n": 1,
+    "n_con_ratio_libro": 1,
+    "fill_rate": 1.0,
+    "ratio_medio": 44.0,
+    "motivos": {
+      "candidato_evaluacion": 1
+    },
+    "informativo_n15": false
+  },
+  "XRP#15m#h04#[0.40,0.45)": {
+    "n": 1,
+    "n_con_ratio_libro": 1,
+    "fill_rate": 1.0,
+    "ratio_medio": 24.9,
+    "motivos": {
+      "candidato_evaluacion": 1
+    },
+    "informativo_n15": false
+  },
+  "BTC#15m#h05#[0.05,0.10)": {
+    "n": 1,
+    "n_con_ratio_libro": 1,
+    "fill_rate": 0.0,
+    "ratio_medio": 0.0,
+    "motivos": {
+      "candidato_evaluacion": 1
+    },
+    "informativo_n15": false
+  },
+  "XRP#15m#h06#[0.20,0.25)": {
+    "n": 3,
+    "n_con_ratio_libro": 3,
+    "fill_rate": 1.0,
+    "ratio_medio": 7.77,
+    "motivos": {
+      "candidato_evaluacion": 3
+    },
+    "informativo_n15": false
+  },
+  "BTC#15m#h07#[0.00,0.05)": {
+    "n": 4,
+    "n_con_ratio_libro": 4,
+    "fill_rate": 0.75,
+    "ratio_medio": 1140.7,
+    "motivos": {
+      "candidato_evaluacion": 4
+    },
+    "informativo_n15": false
+  },
+  "ETH#5m#h08#[0.25,0.30)": {
+    "n": 1,
+    "n_con_ratio_libro": 1,
+    "fill_rate": 1.0,
+    "ratio_medio": 18.0,
+    "motivos": {
+      "senal_caducada": 1
+    },
+    "informativo_n15": false
+  },
+  "BTC#5m#h09#[0.80,0.85)": {
+    "n": 1,
+    "n_con_ratio_libro": 1,
+    "fill_rate": 1.0,
+    "ratio_medio": 1557.7,
+    "motivos": {
+      "candidato_evaluacion": 1
+    },
+    "informativo_n15": false
+  },
+  "BTC#5m#h11#[0.80,0.85)": {
+    "n": 1,
+    "n_con_ratio_libro": 1,
+    "fill_rate": 1.0,
+    "ratio_medio": 6652.3,
+    "motivos": {
+      "candidato_evaluacion": 1
+    },
+    "informativo_n15": false
+  },
+  "XRP#15m#h12#[0.70,0.75)": {
+    "n": 2,
+    "n_con_ratio_libro": 2,
+    "fill_rate": 0.5,
+    "ratio_medio": 157.35,
+    "motivos": {
+      "candidato_evaluacion": 2
+    },
+    "informativo_n15": false
+  },
+  "XRP#5m#h12#[0.65,0.70)": {
+    "n": 1,
+    "n_con_ratio_libro": 1,
+    "fill_rate": 1.0,
+    "ratio_medio": 40.6,
+    "motivos": {
+      "candidato_evaluacion": 1
+    },
+    "informativo_n15": false
+  },
+  "XRP#15m#h13#[0.90,0.95)": {
+    "n": 1,
+    "n_con_ratio_libro": 1,
+    "fill_rate": 1.0,
+    "ratio_medio": 622.1,
+    "motivos": {
+      "candidato_evaluacion": 1
+    },
+    "informativo_n15": false
+  },
+  "BTC#15m#h13#[0.05,0.10)": {
+    "n": 1,
+    "n_con_ratio_libro": 1,
+    "fill_rate": 1.0,
+    "ratio_medio": 77.0,
+    "motivos": {
+      "candidato_evaluacion": 1
+    },
+    "informativo_n15": false
+  },
+  "ETH#5m#h15#[0.20,0.25)": {
+    "n": 1,
+    "n_con_ratio_libro": 1,
+    "fill_rate": 1.0,
+    "ratio_medio": 657.6,
+    "motivos": {
+      "senal_caducada": 1
+    },
+    "informativo_n15": false
+  },
+  "ETH#5m#h15#[0.25,0.30)": {
+    "n": 2,
+    "n_con_ratio_libro": 2,
+    "fill_rate": 0.5,
+    "ratio_medio": 389.55,
+    "motivos": {
+      "senal_caducada": 2
+    },
+    "informativo_n15": false
+  },
+  "ETH#5m#h17#[0.20,0.25)": {
+    "n": 2,
+    "n_con_ratio_libro": 2,
+    "fill_rate": 1.0,
+    "ratio_medio": 289.15,
+    "motivos": {
+      "senal_caducada": 2
+    },
+    "informativo_n15": false
+  },
+  "ETH#5m#h17#[0.25,0.30)": {
+    "n": 1,
+    "n_con_ratio_libro": 1,
+    "fill_rate": 0.0,
+    "ratio_medio": 0.0,
+    "motivos": {
+      "senal_caducada": 1
+    },
+    "informativo_n15": false
+  },
+  "BTC#15m#h17#[0.05,0.10)": {
+    "n": 1,
+    "n_con_ratio_libro": 1,
+    "fill_rate": 1.0,
+    "ratio_medio": 56.9,
+    "motivos": {
+      "candidato_evaluacion": 1
+    },
+    "informativo_n15": false
+  },
+  "BTC#5m#h18#[0.85,0.90)": {
+    "n": 1,
+    "n_con_ratio_libro": 1,
+    "fill_rate": 1.0,
+    "ratio_medio": 578.3,
+    "motivos": {
+      "candidato_evaluacion": 1
+    },
+    "informativo_n15": false
+  },
+  "XRP#15m#h19#[0.30,0.35)": {
+    "n": 1,
+    "n_con_ratio_libro": 1,
+    "fill_rate": 0.0,
+    "ratio_medio": 0.0,
+    "motivos": {
+      "candidato_evaluacion": 1
+    },
+    "informativo_n15": false
+  },
+  "XRP#15m#h22#[0.80,0.85)": {
+    "n": 1,
+    "n_con_ratio_libro": 1,
+    "fill_rate": 1.0,
+    "ratio_medio": 61.3,
+    "motivos": {
+      "candidato_evaluacion": 1
+    },
+    "informativo_n15": false
+  },
+  "XRP#15m#h23#[0.20,0.25)": {
+    "n": 1,
+    "n_con_ratio_libro": 1,
+    "fill_rate": 1.0,
+    "ratio_medio": 19.8,
+    "motivos": {
+      "candidato_evaluacion": 1
+    },
+    "informativo_n15": false
+  },
+  "BTC#60m#h03#[0.50,0.55)": {
+    "n": 1,
+    "n_con_ratio_libro": 1,
+    "fill_rate": 0.0,
+    "ratio_medio": 0.0,
+    "motivos": {
+      "candidato_evaluacion": 1
+    },
+    "informativo_n15": false
+  },
+  "ETH#5m#h07#[0.35,0.40)": {
+    "n": 1,
+    "n_con_ratio_libro": 1,
+    "fill_rate": 1.0,
+    "ratio_medio": 343.7,
+    "motivos": {
+      "senal_caducada": 1
+    },
+    "informativo_n15": false
+  },
+  "ETH#5m#h07#[0.30,0.35)": {
+    "n": 1,
+    "n_con_ratio_libro": 1,
+    "fill_rate": 0.0,
+    "ratio_medio": 0.0,
+    "motivos": {
+      "senal_caducada": 1
     },
     "informativo_n15": false
   }
