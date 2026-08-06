@@ -1,32 +1,11 @@
 {
-  "generado": "2026-08-06T07:03:03.324251+00:00",
+  "generado": "2026-08-06T09:03:29.937703+00:00",
   "cementerio": [
     {
-      "clave": "GBM_LATE_15M_PYCONFIRMADO#SOL#15min",
-      "n": 8,
-      "ic_bayes": -0.12,
-      "motivo": "IC_bayes=-0.300 n=8 conf=0.40 → DESACTIVADA",
-      "viola_n_minimo": true
-    },
-    {
-      "clave": "LIQUIDACIONES_5M#ETH#5min",
-      "n": 8,
-      "ic_bayes": -0.12,
-      "motivo": "IC_bayes=-0.300 n=8 conf=0.40 → DESACTIVADA",
-      "viola_n_minimo": true
-    },
-    {
-      "clave": "LIQUIDACIONES_5M#SOL#5min",
-      "n": 8,
-      "ic_bayes": -0.12,
-      "motivo": "IC_bayes=-0.300 n=8 conf=0.40 → DESACTIVADA",
-      "viola_n_minimo": true
-    },
-    {
-      "clave": "GBM_LATE_60M_FADE#60min",
-      "n": 8,
-      "ic_bayes": -0.16,
-      "motivo": "IC_bayes=-0.400 n=8 conf=0.40 → DESACTIVADA",
+      "clave": "STRUCT_NO_15M#SOL#15min",
+      "n": 9,
+      "ic_bayes": -0.1023,
+      "motivo": "IC_bayes=-0.227 n=9 conf=0.45 → DESACTIVADA",
       "viola_n_minimo": true
     },
     {
@@ -37,7 +16,7 @@
       "viola_n_minimo": true
     },
     {
-      "clave": "LIQUIDACIONES_15M#15min",
+      "clave": "LIQUIDACIONES_5M#ETH#5min",
       "n": 9,
       "ic_bayes": -0.1432,
       "motivo": "IC_bayes=-0.318 n=9 conf=0.45 → DESACTIVADA",
@@ -58,6 +37,20 @@
       "viola_n_minimo": true
     },
     {
+      "clave": "GBM_LATE_15M_PYCONFIRMADO#SOL#15min",
+      "n": 11,
+      "ic_bayes": -0.1058,
+      "motivo": "IC_bayes=-0.192 n=11 conf=0.55 → edge_minimo=0.04",
+      "viola_n_minimo": true
+    },
+    {
+      "clave": "GBM_LATE_60M_FADE#60min",
+      "n": 11,
+      "ic_bayes": -0.1904,
+      "motivo": "IC_bayes=-0.346 n=11 conf=0.55 → DESACTIVADA",
+      "viola_n_minimo": true
+    },
+    {
       "clave": "UPDOWN_GBM#SOL#daily",
       "n": 12,
       "ic_bayes": -0.1286,
@@ -66,23 +59,9 @@
     },
     {
       "clave": "LIQUIDACIONES_60M#60min",
-      "n": 12,
-      "ic_bayes": -0.1714,
-      "motivo": "IC_bayes=-0.286 n=12 conf=0.60 → DESACTIVADA",
-      "viola_n_minimo": true
-    },
-    {
-      "clave": "UPDOWN_OU_5M#XRP#5min",
-      "n": 13,
-      "ic_bayes": -0.1083,
-      "motivo": "IC_bayes=-0.167 n=13 conf=0.65 → edge_minimo=0.04",
-      "viola_n_minimo": true
-    },
-    {
-      "clave": "UPDOWN_OU_5M#BNB#5min",
-      "n": 13,
-      "ic_bayes": -0.195,
-      "motivo": "IC_bayes=-0.300 n=13 conf=0.65 → DESACTIVADA",
+      "n": 14,
+      "ic_bayes": -0.175,
+      "motivo": "IC_bayes=-0.250 n=14 conf=0.70 → DESACTIVADA",
       "viola_n_minimo": true
     },
     {
@@ -93,10 +72,10 @@
       "viola_n_minimo": false
     },
     {
-      "clave": "STRUCT_NO_15M#15min",
-      "n": 15,
-      "ic_bayes": -0.1985,
-      "motivo": "IC_bayes=-0.265 n=15 conf=0.75 → DESACTIVADA",
+      "clave": "UPDOWN_OU_5M#XRP#5min",
+      "n": 17,
+      "ic_bayes": -0.1118,
+      "motivo": "IC_bayes=-0.132 n=17 conf=0.85 → edge_minimo=0.04",
       "viola_n_minimo": false
     },
     {
@@ -121,6 +100,20 @@
       "viola_n_minimo": false
     },
     {
+      "clave": "UPDOWN_OU_5M#DOGE#5min",
+      "n": 19,
+      "ic_bayes": -0.2036,
+      "motivo": "IC_bayes=-0.214 n=19 conf=0.95 → DESACTIVADA",
+      "viola_n_minimo": false
+    },
+    {
+      "clave": "UPDOWN_OU_5M#BNB#5min",
+      "n": 21,
+      "ic_bayes": -0.2391,
+      "motivo": "IC_bayes=-0.239 n=21 conf=1.00 → DESACTIVADA",
+      "viola_n_minimo": false
+    },
+    {
       "clave": "UPDOWN_GBM#SOL#5min",
       "n": 23,
       "ic_bayes": -0.06,
@@ -135,17 +128,17 @@
       "viola_n_minimo": false
     },
     {
-      "clave": "LIQUIDACIONES_5M#5min",
-      "n": 33,
-      "ic_bayes": -0.2143,
-      "motivo": "IC_bayes=-0.214 n=33 conf=1.00 → DESACTIVADA",
-      "viola_n_minimo": false
-    },
-    {
       "clave": "UPDOWN_GBM#SOL#60min",
       "n": 35,
       "ic_bayes": -0.0946,
       "motivo": "IC_bayes=-0.095 n=35 conf=1.00",
+      "viola_n_minimo": false
+    },
+    {
+      "clave": "LIQUIDACIONES_5M#5min",
+      "n": 39,
+      "ic_bayes": -0.1829,
+      "motivo": "IC_bayes=-0.183 n=39 conf=1.00 → edge_minimo=0.04",
       "viola_n_minimo": false
     },
     {
@@ -178,16 +171,16 @@
     },
     {
       "clave": "GBM_LATE_5M#ETH#5min",
-      "n": 82,
-      "ic_bayes": -0.2024,
-      "motivo": "IC_bayes=-0.202 n=82 conf=1.00 → DESACTIVADA",
+      "n": 83,
+      "ic_bayes": -0.1941,
+      "motivo": "IC_bayes=-0.194 n=83 conf=1.00 → edge_minimo=0.04",
       "viola_n_minimo": false
     },
     {
       "clave": "UPDOWN_OU_5M#5min",
-      "n": 84,
-      "ic_bayes": -0.2093,
-      "motivo": "IC_bayes=-0.209 n=84 conf=1.00 → DESACTIVADA",
+      "n": 108,
+      "ic_bayes": -0.2091,
+      "motivo": "IC_bayes=-0.209 n=108 conf=1.00 → DESACTIVADA",
       "viola_n_minimo": false
     },
     {
@@ -213,16 +206,16 @@
     },
     {
       "clave": "GBM_LATE_5M#SOL#5min",
-      "n": 568,
-      "ic_bayes": -0.0421,
-      "motivo": "IC_bayes=-0.042 n=568 conf=1.00",
+      "n": 570,
+      "ic_bayes": -0.042,
+      "motivo": "IC_bayes=-0.042 n=570 conf=1.00",
       "viola_n_minimo": false
     },
     {
       "clave": "GBM_LATE_5M#5min",
-      "n": 1431,
-      "ic_bayes": -0.0178,
-      "motivo": "IC_bayes=-0.018 n=1431 conf=1.00",
+      "n": 1434,
+      "ic_bayes": -0.0174,
+      "motivo": "IC_bayes=-0.017 n=1434 conf=1.00",
       "viola_n_minimo": false
     }
   ],

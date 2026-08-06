@@ -94,5 +94,11 @@
   },
   "cementerio:GBM_LATE_5M#5min": {
     "avisado": true
+  },
+  "cementerio:STRUCT_NO_15M#SOL#15min": {
+    "avisado": true
+  },
+  "cementerio:UPDOWN_OU_5M#DOGE#5min": {
+    "avisado": true
   }
 }
