@@ -245,15 +245,15 @@
     },
     {
       "id": "H-CUSTOM-GBM-SIGMA-BAJO",
-      "nombre": "GBM con sigma_h muy bajo (<0.0008/h) — ¿mercado dormido = más predecible?",
-      "descripcion": "Hipótesis opuesta a sigma_alto: cuando el mercado está muy quieto, ¿el GBM captura mejor la señal porque hay menos ruido? sigma_h<0.0008 equivale a volatilidad diaria <0.8%.",
+      "nombre": "GBM con sigma_h muy bajo (<0.0018/h, p1 real) — ¿mercado dormido = más predecible?",
+      "descripcion": "Hipótesis opuesta a sigma_alto: cuando el mercado está muy quieto, ¿el GBM captura mejor la señal porque hay menos ruido? RECALIBRADO 06-Ago (checkpoint 05-Ago, 'sin verificar todavía'): el umbral original (<0.0008) no era imposible (mínimo real 0.000046) pero SÍ prácticamente congelado -- solo 2/7438 filas de UPDOWN_GBM lo cruzan (p0.1 real ya es 0.001068), a ese ritmo n≥30 tardaría ~100+ días. Recalibrado a p1 real (0.0018, n=68 ya disponibles, >>umbral_n=30) -- mismo espíritu 'sigma muy bajo' pero anclado a un percentil real en vez de un número arbitrario.",
       "tipo": "boost",
       "umbral": "n≥30 y IC>+0.10",
-      "accion": "Si IC>0.10 con n≥30 → boost ×1.2 en señales GBM con sigma_h<0.0008",
+      "accion": "Si IC>0.10 con n≥30 → boost ×1.2 en señales GBM con sigma_h<0.0018",
       "filtro": {
         "strategy_prefix": "UPDOWN_GBM",
         "feature": "sigma_h",
-        "feature_hi": 0.0008
+        "feature_hi": 0.0018
       },
       "umbral_n": 30,
       "umbral_ic_min": 0.1
