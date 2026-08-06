@@ -1,5 +1,5 @@
 {
- "generado_utc": "2026-08-06T15:20:42+00:00",
+ "generado_utc": "2026-08-06T15:27:52+00:00",
  "fuente": "bybit",
  "BNB": {
   "2min": {
@@ -36,21 +36,21 @@
   },
   "5min": {
    "usd_long": 0.0,
-   "usd_short": 645.25,
-   "n": 1,
-   "imbalance": 1.0
+   "usd_short": 0.0,
+   "n": 0,
+   "imbalance": null
   },
   "15min": {
-   "usd_long": 36503.65,
-   "usd_short": 645.25,
-   "n": 21,
-   "imbalance": -0.9653
+   "usd_long": 0.0,
+   "usd_short": 709.66,
+   "n": 2,
+   "imbalance": 1.0
   },
   "60min": {
-   "usd_long": 387282.51,
-   "usd_short": 645.25,
-   "n": 55,
-   "imbalance": -0.9967
+   "usd_long": 376515.34,
+   "usd_short": 709.66,
+   "n": 52,
+   "imbalance": -0.9962
   }
  },
  "DOGE": {
@@ -67,16 +67,16 @@
    "imbalance": null
   },
   "15min": {
-   "usd_long": 117.52,
+   "usd_long": 0.0,
    "usd_short": 0.0,
-   "n": 1,
-   "imbalance": -1.0
+   "n": 0,
+   "imbalance": null
   },
   "60min": {
    "usd_long": 145.37,
-   "usd_short": 81.99,
-   "n": 4,
-   "imbalance": -0.2788
+   "usd_short": 81.58,
+   "n": 3,
+   "imbalance": -0.2811
   }
  },
  "ETH": {
@@ -93,15 +93,15 @@
    "imbalance": null
   },
   "15min": {
-   "usd_long": 2429.47,
+   "usd_long": 0.0,
    "usd_short": 0.0,
-   "n": 8,
-   "imbalance": -1.0
+   "n": 0,
+   "imbalance": null
   },
   "60min": {
-   "usd_long": 55232.92,
+   "usd_long": 53811.99,
    "usd_short": 0.0,
-   "n": 25,
+   "n": 24,
    "imbalance": -1.0
   }
  },
@@ -119,16 +119,16 @@
    "imbalance": null
   },
   "15min": {
-   "usd_long": 36.98,
+   "usd_long": 0.0,
    "usd_short": 0.0,
-   "n": 1,
-   "imbalance": -1.0
+   "n": 0,
+   "imbalance": null
   },
   "60min": {
-   "usd_long": 5033.96,
+   "usd_long": 3516.31,
    "usd_short": 51.13,
-   "n": 9,
-   "imbalance": -0.9799
+   "n": 6,
+   "imbalance": -0.9713
   }
  },
  "XRP": {
@@ -151,10 +151,10 @@
    "imbalance": null
   },
   "60min": {
-   "usd_long": 134.98,
-   "usd_short": 0.21,
-   "n": 4,
-   "imbalance": -0.9969
+   "usd_long": 58.8,
+   "usd_short": 0.0,
+   "n": 2,
+   "imbalance": -1.0
   }
  }
 }
