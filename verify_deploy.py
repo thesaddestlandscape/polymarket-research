@@ -36,10 +36,11 @@ SCREENS = {
     # sobresuscripción de CPU (project_push_roto_carga_cpu_resuelto_05ago).
     "observadores": {"entry": "observadores_fase0.py",
                       "probe": "log:logs/observadores_fase0.log:hilos arrancados"},
-    "chainlink": {"entry": "fetch_chainlink_prices.py", "probe": None},
-    "polyactivity": {"entry": "fetch_polymarket_activity_ws.py", "probe": None},
-    "liqs": {"entry": "fetch_bybit_liquidations.py", "probe": None},  # 30-Jul: sustituye a Binance (bloqueado)
-    "libroambos": {"entry": "fetch_libro_ambos_lados.py", "probe": None},
+    # chainlink/polyactivity/liqs/libroambos fusionados en "fetchers" el
+    # 07-Ago (ver fetchers_fase0.py) -- 4 procesos -> 1, misma mitigación
+    # de sobresuscripción de CPU que "observadores"/"ejecdryrun".
+    "fetchers": {"entry": "fetchers_fase0.py",
+                 "probe": "log:logs/fetchers_fase0.log:hilos arrancados"},
     "ballenas_fast": {"entry": "ballenas_executor_btc15m.py",
                        "probe": "log:logs/ballenas_fast.log:arrancado"},
     "ballenas_5m": {"entry": "ballenas_executor_5min.py",

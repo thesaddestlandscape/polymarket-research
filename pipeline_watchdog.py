@@ -91,29 +91,15 @@ SCREEN_RESTART = {
     # DRY_RUN=True, proceso separado de ballenas_fast (BTC15m, live) para no
     # mezclar blast radius. Ver /root/.claude/plans/ethereal-dazzling-thacker.md
     "ballenas_5m": f"cd {REPO} && .venv/bin/python ballenas_executor_5min.py >> logs/ballenas_5m.log 2>&1",
-    # chainlink (20-Jul): captura continua de precios Chainlink vía el websocket
-    # público de Polymarket (RTDS) -- fuente de resolución oficial de los
-    # mercados Up/Down, distinta de Binance/Kraken. Solo lectura, no toca
-    # dinero. Mismo patrón de proceso único que pfinish.
-    "chainlink": f"cd {REPO} && nice -n 10 .venv/bin/python fetch_chainlink_prices.py >> logs/chainlink.log 2>&1",
-    # polyactivity (28-Jul): firehose de trades reales de Polymarket vía RTDS
-    # (topic activity/trades, replica gratis lo que moondevonyt cobra en su
-    # "Polymarket Whales API") -- ver idea_rtds_activity_trades_gratis_28jul.
-    # Solo lectura, no toca dinero. Mismo patrón que chainlink/pfinish.
-    "polyactivity": f"cd {REPO} && nice -n 10 .venv/bin/python fetch_polymarket_activity_ws.py >> logs/polymarket_activity.log 2>&1",
-    # liqs (28-Jul): liquidaciones reales de Binance Futures, feed público
-    # gratis -- alimenta s_liquidaciones_15m/60m (backlog ítem B). Solo
-    # lectura, no toca dinero. Mismo patrón que chainlink/polyactivity.
-    # 30-Jul: sustituye a fetch_binance_liquidations.py -- Binance bloquea
-    # wss://fstream.binance.com para esta IP de datacenter (ver memoria
-    # idea_binance_liquidaciones_bloqueadas_ip_29jul), Bybit da la misma
-    # señal sin bloqueo, gratis, verificado en vivo.
-    "liqs": f"cd {REPO} && nice -n 10 .venv/bin/python fetch_bybit_liquidations.py >> logs/bybit_liquidations.log 2>&1",
-    # libroambos (28-Jul): libro de AMBOS lados (YES+NO) para nuestro universo
-    # 5/15/60min -- desbloquea Box Builder/Corridor Collector/Spread-Harvest
-    # Maker (Stage 3/4). Importa live_trade.py de solo lectura, nunca lo
-    # modifica ni ordena nada. Solo lectura, no toca dinero.
-    "libroambos": f"cd {REPO} && nice -n 10 .venv/bin/python fetch_libro_ambos_lados.py >> logs/libro_ambos_lados.log 2>&1",
+    # fetchers (07-Ago): fusión de 4 fetchers de datos externos (chainlink,
+    # liqs, libroambos, polyactivity -- historial de cada uno en los
+    # comentarios de fetchers_fase0.py::FETCHERS) en UN SOLO proceso, cada
+    # uno en su propio hilo -- mismo patrón que observadores_fase0.py
+    # (05-Ago) y ejecutores_dryrun_fase0.py (06-Ago). Decisión explícita
+    # Javi: seguir reduciendo procesos persistentes en vez de subir el VPS.
+    # Ninguno de los 4 ejecuta dinero real ni cambia de lógica (cero cambios
+    # en los 4 ficheros originales, solo cambia el proceso que los corre).
+    "fetchers": f"cd {REPO} && nice -n 10 .venv/bin/python fetchers_fase0.py >> logs/fetchers_fase0.log 2>&1",
     # favaltaconv (30-Jul): ejecutor de baja latencia FAVORITO_CONFIRMADO_
     # 15MIN_ALTACONVICCION#{BTC,ETH}#15min#BUY_YES, DRY_RUN=True -- ataca la
     # causa raiz diagnosticada de 0/64 trades reales (latencia del ciclo
@@ -201,6 +187,8 @@ SCREENS_RETIRADAS = {
     "pfinish", "favultsec", "puntoconf", "ressniper", "p22fase0",
     "boxbuilder", "solcontrario5m", "xrpcontrario15m", "favcontraria",
     "fav5malt",
+    # 07-Ago: fusionadas en "fetchers" (fetchers_fase0.py) -- ver SCREEN_RESTART.
+    "chainlink", "polyactivity", "liqs", "libroambos",
 }
 
 
@@ -229,7 +217,7 @@ def check_screens() -> dict[str, bool]:
         r = subprocess.run(["screen", "-ls"], capture_output=True, text=True, timeout=5)
         output = r.stdout + r.stderr
         return {name: (f".{name}\t" in output or f".{name} " in output)
-                for name in ["fast", "slow", "control", "dash", "observadores", "ballenas_fast", "ballenas_5m", "chainlink", "polyactivity", "liqs", "libroambos", "favaltaconv", "favbtc60mno", "ejecdryrun"]}
+                for name in ["fast", "slow", "control", "dash", "observadores", "ballenas_fast", "ballenas_5m", "fetchers", "favaltaconv", "favbtc60mno", "ejecdryrun"]}
     except Exception:
         return {}
 
@@ -398,8 +386,12 @@ CHAINLINK_STALE_SECS = 120  # ~4 ticks/s agregados en horario normal -- 120s sin
 # aparte, por si el proceso se cuelga de otra forma en el futuro. Solo lectura
 # (no toca dinero, no hay orden_en_curso que proteger) -- kill+restart directo
 # es seguro, a diferencia de 'fast'.
+# 07-Ago: chainlink vive ahora dentro de la screen fusionada "fetchers"
+# (fetchers_fase0.py) -- un hilo colgado fuerza reiniciar el proceso entero
+# (mata también liqs/libroambos/polyactivity, que se re-arrancan solos vía
+# el supervisor de hilos), mismo trade-off ya aceptado en observadores_fase0.py.
 def check_chainlink_fresh(screens_up: dict) -> None:
-    if not screens_up.get("chainlink"):
+    if not screens_up.get("fetchers"):
         return  # check_screens ya se encarga de relanzarla si está caída
     hoy = time.strftime("%Y-%m-%d", time.gmtime())
     p = REPO / "data" / "prices" / f"chainlink_{hoy}.csv"
@@ -407,13 +399,13 @@ def check_chainlink_fresh(screens_up: dict) -> None:
         return
     age = time.time() - p.stat().st_mtime
     if age > CHAINLINK_STALE_SECS:
-        log(f"  ⚠ chainlink: sin ticks nuevos hace {age:.0f}s (screen viva pero colgada) — reiniciando")
+        log(f"  ⚠ chainlink: sin ticks nuevos hace {age:.0f}s (screen 'fetchers' viva pero colgada) — reiniciando")
         try:
-            subprocess.run(["screen", "-S", "chainlink", "-X", "quit"], timeout=10)
+            subprocess.run(["screen", "-S", "fetchers", "-X", "quit"], timeout=10)
             time.sleep(1)
         except Exception as e:
             log(f"  [CHAINLINK] error al matar screen vieja: {e}")
-        restart_screen("chainlink")
+        restart_screen("fetchers")
 
 
 POLYACTIVITY_STALE_SECS = 60  # 29-Jul: MISMO patrón que chainlink -- el
@@ -425,10 +417,12 @@ POLYACTIVITY_STALE_SECS = 60  # 29-Jul: MISMO patrón que chainlink -- el
 # el log. Fix de raíz ya aplicado (RECV_TIMEOUT_S=30), esta es la MISMA
 # red de seguridad de refuerzo que ya protege a chainlink, por si se
 # repite de otra forma en el futuro.
+# 07-Ago: polyactivity vive ahora dentro de la screen fusionada "fetchers"
+# (fetchers_fase0.py) -- mismo trade-off que check_chainlink_fresh arriba.
 
 
 def check_polyactivity_fresh(screens_up: dict) -> None:
-    if not screens_up.get("polyactivity"):
+    if not screens_up.get("fetchers"):
         return  # check_screens ya se encarga de relanzarla si está caída
     hoy = time.strftime("%Y-%m-%d", time.gmtime())
     p = Path("/root/polymarket-research-datalogs") / f"polymarket_activity_{hoy}.csv"  # 29-Jul: fuera del repo
@@ -436,13 +430,13 @@ def check_polyactivity_fresh(screens_up: dict) -> None:
         return
     age = time.time() - p.stat().st_mtime
     if age > POLYACTIVITY_STALE_SECS:
-        log(f"  ⚠ polyactivity: sin filas nuevas hace {age:.0f}s (screen viva pero colgada) — reiniciando")
+        log(f"  ⚠ polyactivity: sin filas nuevas hace {age:.0f}s (screen 'fetchers' viva pero colgada) — reiniciando")
         try:
-            subprocess.run(["screen", "-S", "polyactivity", "-X", "quit"], timeout=10)
+            subprocess.run(["screen", "-S", "fetchers", "-X", "quit"], timeout=10)
             time.sleep(1)
         except Exception as e:
             log(f"  [POLYACTIVITY] error al matar screen vieja: {e}")
-        restart_screen("polyactivity")
+        restart_screen("fetchers")
 
 
 def check_results_growing():
