@@ -1446,3 +1446,12 @@ timestamp_utc,activo,nesting,combo,coste,profit_min_pct,gap_opens_pct,depth_usd,
 2026-08-07T17:55:25+00:00,ETH,15min60m,YESout+NOin,1.45,-45.0,0.0372,24.6,274,0.82,0.63,1910.51,1909.8,eth-updown-15m-1786124700,ethereum-up-or-down-august-7-2026-1pm-et
 2026-08-07T17:55:26+00:00,SOL,15min60m,NOout+YESin,1.389,-38.9,-0.3804,3.12,273,0.999,0.39,73.32,73.6,sol-updown-15m-1786124700,solana-up-or-down-august-7-2026-1pm-et
 2026-08-07T17:55:26+00:00,XRP,15min60m,NOout+YESin,1.06,-6.0,-0.0983,2.7,273,0.3,0.76,1.016,1.017,xrp-updown-15m-1786124700,xrp-up-or-down-august-7-2026-1pm-et
+2026-08-07T17:57:15+00:00,BTC,15min60m,NOout+YESin,1.969,-96.9,-0.2546,156.64,164,0.979,0.99,64633.0,64798.0,btc-updown-15m-1786124700,bitcoin-up-or-down-august-7-2026-1pm-et
+2026-08-07T17:57:15+00:00,ETH,15min60m,YESout+NOin,1.61,-61.0,0.0372,4.31,164,0.8,0.81,1910.51,1909.8,eth-updown-15m-1786124700,ethereum-up-or-down-august-7-2026-1pm-et
+2026-08-07T17:57:16+00:00,SOL,15min60m,NOout+YESin,1.359,-35.9,-0.3804,6.73,163,0.999,0.36,73.32,73.6,sol-updown-15m-1786124700,solana-up-or-down-august-7-2026-1pm-et
+2026-08-07T17:57:16+00:00,XRP,15min60m,NOout+YESin,1.08,-8.0,-0.0983,6.55,163,0.3,0.78,1.016,1.017,xrp-updown-15m-1786124700,xrp-up-or-down-august-7-2026-1pm-et
+2026-08-07T17:57:16+00:00,BTC,5min15m,YESout+NOin,1.25,-25.0,0.0818,369.39,163,0.99,0.26,64685.855,64633.0,btc-updown-5m-1786125300,btc-updown-15m-1786124700
+2026-08-07T17:57:17+00:00,ETH,5min15m,NOout+YESin,1.68,-68.0,-0.0824,24.1,162,0.81,0.87,1908.935,1910.51,eth-updown-5m-1786125300,eth-updown-15m-1786124700
+2026-08-07T17:57:17+00:00,SOL,5min15m,NOout+YESin,1.54,-54.0,-0.0546,5.45,162,0.65,0.89,73.28,73.32,sol-updown-5m-1786125300,sol-updown-15m-1786124700
+2026-08-07T17:57:17+00:00,XRP,5min15m,NOout+YESin,0.9,10.0,-0.0669,15.19,162,0.23,0.67,1.01532,1.016,xrp-updown-5m-1786125300,xrp-updown-15m-1786124700
+2026-08-07T17:59:04+00:00,XRP,5min15m,NOout+YESin,0.99,1.0,-0.0669,13.41,55,0.01,0.98,1.01532,1.016,xrp-updown-5m-1786125300,xrp-updown-15m-1786124700

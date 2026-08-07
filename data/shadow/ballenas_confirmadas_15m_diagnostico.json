@@ -1713,7 +1713,7 @@
         }
       },
       "error_api": {
-        "conteo": 2326,
+        "conteo": 2332,
         "mercados": {
           "0xed88f70265795c86c515fe960e284493271a340d3ba74f3a1adad4a7c3db8e1a": 6,
           "0x7a17f8c622ac283b4bd5b3f79becb24e19ba2036326c9157bc0f9f583a2ea6a0": 18,
@@ -1932,9 +1932,9 @@
           "0x6a9f2069c4550e5fb3b2cd234c3138b4ebbb6cdc2b94125e8e8e1a6eb653026d": 25,
           "0x3fccee028364a25ab14a2a9ac0bb3f1b31384bb4b4df94532e2f4c61456aa811": 4,
           "0xfe01283e2db4b7f6fc89a02a9877b16eb431abab6ca1c05e9367911e856bc24b": 4,
-          "0x1502eb00e93a21d45f0abfe72da782b22706a472c7ec4c0a5086b9657ca6af71": 21,
+          "0x1502eb00e93a21d45f0abfe72da782b22706a472c7ec4c0a5086b9657ca6af71": 24,
           "0x93ae034a415450612cf4346983de95f1ed796dd297c8f07c47859bc837039efe": 5,
-          "0x0aa511f8318da5312d5ec8c4eee74dcc336873e63a8caa76ae13c293681e0ffd": 3,
+          "0x0aa511f8318da5312d5ec8c4eee74dcc336873e63a8caa76ae13c293681e0ffd": 6,
           "0xc689bf02147fb861d6ed24c2280b2e885966073679fc22e1776e82b4dc70e64e": 1
         }
       }
@@ -4563,7 +4563,7 @@
         }
       },
       "error_api": {
-        "conteo": 5588,
+        "conteo": 5597,
         "mercados": {
           "0x9c8ec58c09836f579f15731a2a1997ef45bfe77d6f0e4513bb2351223a389f18": 6,
           "0x508a7030258446a09165b0713e36a07e63dce4d100e6f60681d1764f5a39f0d0": 7,
@@ -4849,9 +4849,9 @@
           "0x56d869eec88fc712632f8798345f4a573b2151368f9caf60f42060c629734d3e": 12,
           "0x983b28aeb2aafc7265eb18f210eb03869c9afda9d189eb4870b932ff70e1aa59": 14,
           "0xc93674520129a566c22ea0bf30a472a8ea29abf62a1cc67ef608c8d4734ab0dc": 12,
-          "0x4dece17750d56048dd3fce246c2c2430a488a92a3351877dbca670e7b4b13a14": 12,
-          "0xc34d6673e9756b3aced7b967acf8e49cbd2c4f3f74dc863745485aa398d74d9a": 7,
-          "0x4fac2ce502d832bc4ea5f43bc229b944382135fae434908685e405e5c5832e9e": 3
+          "0x4dece17750d56048dd3fce246c2c2430a488a92a3351877dbca670e7b4b13a14": 15,
+          "0xc34d6673e9756b3aced7b967acf8e49cbd2c4f3f74dc863745485aa398d74d9a": 10,
+          "0x4fac2ce502d832bc4ea5f43bc229b944382135fae434908685e405e5c5832e9e": 6
         }
       },
       "disparada": {
