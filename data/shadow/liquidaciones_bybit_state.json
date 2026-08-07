@@ -1,5 +1,5 @@
 {
- "generado_utc": "2026-08-07T12:47:41+00:00",
+ "generado_utc": "2026-08-07T13:02:26+00:00",
  "fuente": "bybit",
  "BNB": {
   "2min": {
@@ -41,42 +41,42 @@
    "imbalance": null
   },
   "15min": {
-   "usd_long": 0.0,
+   "usd_long": 825194.69,
    "usd_short": 0.0,
-   "n": 0,
-   "imbalance": null
+   "n": 75,
+   "imbalance": -1.0
   },
   "60min": {
-   "usd_long": 1775639.82,
+   "usd_long": 2600834.51,
    "usd_short": 11856.11,
-   "n": 136,
-   "imbalance": -0.9867
+   "n": 211,
+   "imbalance": -0.9909
   }
  },
  "DOGE": {
   "2min": {
    "usd_long": 0.0,
-   "usd_short": 0.0,
-   "n": 0,
-   "imbalance": null
+   "usd_short": 13.9,
+   "n": 1,
+   "imbalance": 1.0
   },
   "5min": {
    "usd_long": 0.0,
-   "usd_short": 0.0,
-   "n": 0,
-   "imbalance": null
+   "usd_short": 13.9,
+   "n": 1,
+   "imbalance": 1.0
   },
   "15min": {
    "usd_long": 0.0,
-   "usd_short": 0.0,
-   "n": 0,
-   "imbalance": null
+   "usd_short": 13909.9,
+   "n": 2,
+   "imbalance": 1.0
   },
   "60min": {
    "usd_long": 2336.77,
-   "usd_short": 0.0,
-   "n": 4,
-   "imbalance": -1.0
+   "usd_short": 13909.9,
+   "n": 6,
+   "imbalance": 0.7123
   }
  },
  "ETH": {
@@ -93,16 +93,16 @@
    "imbalance": null
   },
   "15min": {
-   "usd_long": 0.0,
-   "usd_short": 0.0,
-   "n": 0,
-   "imbalance": null
+   "usd_long": 3228.13,
+   "usd_short": 9623.25,
+   "n": 6,
+   "imbalance": 0.4976
   },
   "60min": {
-   "usd_long": 2293045.43,
-   "usd_short": 0.0,
-   "n": 184,
-   "imbalance": -1.0
+   "usd_long": 2296273.56,
+   "usd_short": 9623.25,
+   "n": 190,
+   "imbalance": -0.9917
   }
  },
  "SOL": {
@@ -119,16 +119,16 @@
    "imbalance": null
   },
   "15min": {
-   "usd_long": 0.0,
-   "usd_short": 0.0,
-   "n": 0,
-   "imbalance": null
+   "usd_long": 371.05,
+   "usd_short": 3875.75,
+   "n": 3,
+   "imbalance": 0.8253
   },
   "60min": {
-   "usd_long": 57407.19,
-   "usd_short": 0.0,
-   "n": 34,
-   "imbalance": -1.0
+   "usd_long": 57778.24,
+   "usd_short": 3875.75,
+   "n": 37,
+   "imbalance": -0.8743
   }
  },
  "XRP": {
