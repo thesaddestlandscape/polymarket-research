@@ -101,19 +101,29 @@ def shuffle_percentile(rows, ic_real, n_shuffle=N_SHUFFLE):
     return sp._shuffle_pvalue(len(rows), ic_real, cola="alta", n_shuffle=n_shuffle)
 
 
-def pnl_bootstrap(rows, n_boot=N_SHUFFLE):
+def pnl_bootstrap(rows, n_boot=N_SHUFFLE, seed=42):
     """Bootstrap (remuestreo con reemplazo) sobre pnl_neto real por trade.
     Devuelve (media, ci90_lo, ci90_hi, p_boot) donde p_boot = fracción de
     remuestreos con media≤0 (mismo rol que p_shuffle para IC, pero sobre
-    dinero real en vez de hit-rate)."""
+    dinero real en vez de hit-rate).
+
+    07-Ago: seed fijo -- antes usaba random.randrange sin sembrar, así que
+    el veredicto GATE OK/NO CONCLUYENTE en casos límite (CI del PnL muy
+    pegado a cero) podía cambiar entre ejecuciones sobre los MISMOS datos
+    (encontrado al re-correr esto para la actualización de candidatas
+    pedida por Javi: FAVORITO_CONFIRMADO#{BTC#60min,DOGE#5min,XRP#5min}
+    pasaban GATE OK en una pasada y no en la siguiente). Mismo patrón que
+    shuffle_percentile, que ya delega en una versión determinista de
+    shadow_postmortem desde el 20-Jul por el mismo motivo."""
     pnls = [float(r["pnl_neto"]) for r in rows if r.get("pnl_neto") not in (None, "")]
     n = len(pnls)
     if n == 0:
         return None
     media = sum(pnls) / n
+    rnd = random.Random(seed)
     medias_boot = []
     for _ in range(n_boot):
-        muestra = [pnls[random.randrange(n)] for _ in range(n)]
+        muestra = [pnls[rnd.randrange(n)] for _ in range(n)]
         medias_boot.append(sum(muestra) / n)
     medias_boot.sort()
     lo = medias_boot[int(0.05 * n_boot)]
