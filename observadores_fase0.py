@@ -79,6 +79,7 @@ import sol5min_contrario_fase0
 import xrp15min_contrario_fase0
 import favorito_confirmado_senal_contraria_fase0
 import favorito_5min_altaconviccion_logger
+import favorito5min_bajalatencia_fase0
 
 # (modulo, fichero_log_propio -- EXACTO el que ya usaba pipeline_watchdog.SCREEN_RESTART, nombre_funcion_log_a_reemplazar)
 OBSERVADORES = [
@@ -92,6 +93,7 @@ OBSERVADORES = [
     (xrp15min_contrario_fase0, "xrp15min_contrario_fase0.log", "log"),
     (favorito_confirmado_senal_contraria_fase0, "favorito_confirmado_senal_contraria_fase0.log", "_log"),
     (favorito_5min_altaconviccion_logger, "favorito_5min_altaconviccion.log", "log"),
+    (favorito5min_bajalatencia_fase0, "favorito5min_bajalatencia_fase0.log", "log"),
 ]
 
 

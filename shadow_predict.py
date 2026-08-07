@@ -1092,15 +1092,34 @@ def s_weekly_price(market, ctx):
             prob_yes = max(0.06, py - 0.20) if pct_dist > 0.20 else max(0.10, py - 0.10)
         T_h = round(market.get("_horas", 0), 4)
         pct_d = round(min(abs(spot-lo), abs(spot-hi))/spot*100, 4) if not in_range else 0.0
+        prob_yes = max(0.05, min(0.95, prob_yes))
+
+        # 07-Ago: veto de micro-bucket de precio -- hueco real, WEEKLY_PRICE
+        # nunca lo tuvo pese a tener el IC agregado más fuerte de todas las
+        # candidatas sin ejecutor (n=634, ic_bayes=+0.259). Mismo patrón que
+        # s_gbm_late_15min/s_updown_gbm/s_favorito_confirmado: se infiere la
+        # dirección igual que el caller genérico (prob_yes vs py) porque esta
+        # función todavía no la conoce, y solo veta si la tupla exacta ya
+        # está en pares_permitidos_live (hoy WEEKLY_PRICE no está en
+        # ninguna -- puramente preparatorio mientras acumula fill-ability en
+        # candidatos_evaluacion_live, ver idea_weekly_price_sol_buyno_precio_
+        # alto_06ago).
+        direccion = "BUY_YES" if prob_yes >= py else "BUY_NO"
+        tupla_str = f"WEEKLY_PRICE#{activo}#{direccion}"
+        gate_bp = _gate_bucket_propio(tupla_str, py)
+        if gate_bp["veredicto"] == "malo_confirmado" and tupla_str in _pares_live_hoy_set():
+            return None
+
         return {
-            "prob_yes": max(0.05, min(0.95, prob_yes)),
+            "prob_yes": prob_yes,
             "razon": f"weekly_between {activo} spot={spot:.0f} [{lo:.0f},{hi:.0f}] in={in_range}",
             "subtype": activo,
-            "features": {"spot": round(spot,2), "in_range": int(in_range), "pct_dist": pct_d, "T_h": T_h},
+            "features": {"spot": round(spot,2), "in_range": int(in_range), "pct_dist": pct_d, "T_h": T_h,
+                         "gate_bucket_propio_veredicto": gate_bp["veredicto"]},
         }
 
     # Formato: above/below X
-    rm = _re2.search(r"([0-9]{4,}(?:\.[0-9]+)?)", question.replace(",","").replace("$",""))
+    rm = _re2.search(r"([0-9]{4,}(?:\.[0-9]+)?)", question.replace(",","").replace("$",""))
     if not rm:
         return None
     precio_obj = float(rm.group(1))
@@ -1113,11 +1132,23 @@ def s_weekly_price(market, ctx):
         prob_yes = min(0.90, py + 0.12) if ratio < 1.0 else max(0.08, py - 0.10)
     else:
         prob_yes = min(0.90, py + 0.12) if ratio > 1.0 else max(0.08, py - 0.10)
+    prob_yes = max(0.05, min(0.95, prob_yes))
+
+    # 07-Ago: mismo veto de micro-bucket que la rama "between X and Y" de
+    # arriba -- ver ese comentario para el porqué completo.
+    direccion = "BUY_YES" if prob_yes >= py else "BUY_NO"
+    tupla_str = f"WEEKLY_PRICE#{activo}#{direccion}"
+    gate_bp = _gate_bucket_propio(tupla_str, py)
+    if gate_bp["veredicto"] == "malo_confirmado" and tupla_str in _pares_live_hoy_set():
+        return None
+
     return {
-        "prob_yes": max(0.05, min(0.95, prob_yes)),
+        "prob_yes": prob_yes,
         "razon": f"weekly_price {activo} spot={spot:.0f} obj={precio_obj:.0f} ratio={ratio:.3f}",
         "subtype": activo,
-        "features": {"spot": round(spot,2), "ratio": round(ratio,4), "is_above": int(is_above), "T_h": round(market.get("_horas",0),4)},
+        "features": {"spot": round(spot,2), "ratio": round(ratio,4), "is_above": int(is_above),
+                     "T_h": round(market.get("_horas",0),4),
+                     "gate_bucket_propio_veredicto": gate_bp["veredicto"]},
     }
 
 
