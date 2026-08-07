@@ -2965,7 +2965,7 @@
         }
       },
       "banda_no_confirmada": {
-        "conteo": 1756,
+        "conteo": 1762,
         "mercados": {
           "0xf6ad48a0d23cd91b9a9368d070dd43eb4db884165273398e9838c628c8690747": 3,
           "0x5822d9be8248fc11c5b09a2533e0a6e1c4a76c841dcf85e810dfe74ff456056e": 1,
@@ -3085,9 +3085,9 @@
           "0x125467422ce826588fa5e6fb791e3be3fad8f8727dfed16fd4ceaf7b883f4cdb": 10,
           "0x0d9078e12fba0ee46c66a64e5c76882eb5712d23bdee50192130833549b6c5f4": 9,
           "0x8f1da7b9ba8c851b16b67c2792c56a472dc2b1c9ee17d6c42cbd516bed513fbb": 1,
-          "0xaf17a3ad73293eb4dacfb7dd78452769e8bb3293860b1e4a8861a92b7ad226dc": 36,
+          "0xaf17a3ad73293eb4dacfb7dd78452769e8bb3293860b1e4a8861a92b7ad226dc": 39,
           "0x9723f56b810e28a5a7a0ab202836ab19c254cb607d8800e428d747e8035d95d8": 14,
-          "0x33e418de5a5190b188c71cfb26d8b81a82bbd730b84743734aac6afb09e0c8f2": 31,
+          "0x33e418de5a5190b188c71cfb26d8b81a82bbd730b84743734aac6afb09e0c8f2": 34,
           "0xa4d3a164d8e694c9cdea14f4be3bb9563c26a21d93bbae81af34f706e77acb7d": 6,
           "0x912120dc625b3141e253351f45debc171fae06af6f6031a5362c1d0c21892cc0": 5,
           "0xb020be43aac543f0977aab411695c2562f5027af145b2f3237d07f225a737fad": 3
@@ -4309,7 +4309,7 @@
         }
       },
       "error_api": {
-        "conteo": 4730,
+        "conteo": 4739,
         "mercados": {
           "0x9c8ec58c09836f579f15731a2a1997ef45bfe77d6f0e4513bb2351223a389f18": 6,
           "0x508a7030258446a09165b0713e36a07e63dce4d100e6f60681d1764f5a39f0d0": 7,
@@ -4548,9 +4548,9 @@
           "0x6b6d7cde7ffd600475cc2c3566aaf0b5b7a6241709de0623a165da93f18c1a56": 23,
           "0xdfad295c9373a765d4feca51e79221413ecf2789172f72a0cb9a4d4efdec6b34": 29,
           "0xa23e07562ea5095f0e5ec5d65c3285748cbca8f6d831aa1dfb1f1a4c91d67a34": 26,
-          "0x7abf993de089cec5c25f7e115907b1a38d304a5cbc3b62f7b11d0d0efb2ee54b": 24,
-          "0x539078800e0c6cf6ad1e0de5dea03964804e474d33ce9089e2a8fe0c7f014a87": 15,
-          "0x8577a90beaa24b003a6a46bec1cc18ae8e2aa39ba6039b24033b999a7686d4cc": 6
+          "0x7abf993de089cec5c25f7e115907b1a38d304a5cbc3b62f7b11d0d0efb2ee54b": 27,
+          "0x539078800e0c6cf6ad1e0de5dea03964804e474d33ce9089e2a8fe0c7f014a87": 18,
+          "0x8577a90beaa24b003a6a46bec1cc18ae8e2aa39ba6039b24033b999a7686d4cc": 9
         }
       }
     },
