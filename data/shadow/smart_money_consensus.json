@@ -1,38 +1,45 @@
 {
-  "SOL": {
-    "smart_money_consensus": -0.1129,
-    "n_trades_smart": 124,
-    "n_wallets_smart": 2,
-    "smart_money_consensus_ponderado": -0.3579,
-    "n_wallets_smart_ponderado": 2
+  "ETH": {
+    "smart_money_consensus": -0.0376,
+    "n_trades_smart": 505,
+    "n_wallets_smart": 7,
+    "smart_money_consensus_ponderado": -0.2395,
+    "n_wallets_smart_ponderado": 7
   },
   "BTC": {
-    "smart_money_consensus": -0.0411,
-    "n_trades_smart": 657,
-    "n_wallets_smart": 6,
-    "smart_money_consensus_ponderado": -0.1327,
-    "n_wallets_smart_ponderado": 6
+    "smart_money_consensus": 0.1073,
+    "n_trades_smart": 941,
+    "n_wallets_smart": 11,
+    "smart_money_consensus_ponderado": 0.1161,
+    "n_wallets_smart_ponderado": 11
   },
-  "XRP": {
-    "smart_money_consensus": 0.0417,
-    "n_trades_smart": 144,
-    "n_wallets_smart": 3,
-    "smart_money_consensus_ponderado": 0.2322,
-    "n_wallets_smart_ponderado": 3
-  },
-  "ETH": {
-    "smart_money_consensus": 0.0355,
-    "n_trades_smart": 423,
-    "n_wallets_smart": 4,
-    "smart_money_consensus_ponderado": 0.021,
-    "n_wallets_smart_ponderado": 4
-  },
-  "DOGE": {
+  "BNB": {
     "smart_money_consensus": -1.0,
     "n_trades_smart": 1,
     "n_wallets_smart": 1,
     "smart_money_consensus_ponderado": -1.0,
     "n_wallets_smart_ponderado": 1
   },
-  "_actualizado": "2026-08-07T02:01:31+00:00"
+  "SOL": {
+    "smart_money_consensus": -0.2336,
+    "n_trades_smart": 107,
+    "n_wallets_smart": 5,
+    "smart_money_consensus_ponderado": -0.2016,
+    "n_wallets_smart_ponderado": 5
+  },
+  "DOGE": {
+    "smart_money_consensus": 0.2727,
+    "n_trades_smart": 11,
+    "n_wallets_smart": 1,
+    "smart_money_consensus_ponderado": 0.4065,
+    "n_wallets_smart_ponderado": 1
+  },
+  "XRP": {
+    "smart_money_consensus": -0.0864,
+    "n_trades_smart": 162,
+    "n_wallets_smart": 2,
+    "smart_money_consensus_ponderado": -0.1128,
+    "n_wallets_smart_ponderado": 2
+  },
+  "_actualizado": "2026-08-07T02:21:21+00:00"
 }
