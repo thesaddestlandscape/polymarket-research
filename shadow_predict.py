@@ -1345,9 +1345,13 @@ def _max_min_dia_anterior(activo, now_utc):
 
     07-Ago (petición Javi, revisando artículos de day-trading — idea 3,
     "máximo/mínimo del día anterior"): solo LOGUEA (features
-    dist_max_dia_anterior_pct/dist_min_dia_anterior_pct en _s_gbm_late),
-    no cambia prob_yes/edge/decisión de nada — mismo patrón que
-    dist_vwap_pct/retest_pct/gap_sigma_implicita. El pipeline causal
+    dist_max_dia_anterior_pct/dist_min_dia_anterior_pct), no cambia
+    prob_yes/edge/decisión de nada — mismo patrón que dist_vwap_pct/
+    retest_pct/gap_sigma_implicita. Inyectado de forma UNIVERSAL para
+    TODAS las estrategias en el loop principal de main() (no solo
+    GBM_LATE, donde nació) — solo necesita `activo` (derivable del
+    `subtype` que cualquier estrategia ya devuelve) y el spot cacheado
+    de _cargar_spot(), ambos disponibles siempre. El pipeline causal
     decide con datos forward si merece convertirse en filtro."""
     fecha_ayer = (now_utc - timedelta(days=1)).strftime("%Y-%m-%d")
     if _CACHE_MAXMIN_DIA_ANTERIOR["fecha"] != fecha_ayer:
@@ -2124,6 +2128,16 @@ def s_updown_gbm(market, ctx, strategy_name: str = "UPDOWN_GBM"):
     fr = ctx.get("funding_rates", {}).get(activo)
     if fr is not None:
         features["funding_rate_8h"] = round(fr * 100, 5)
+    # retest_pct (07-Ago, extendido desde _s_gbm_late tras pregunta de
+    # Javi "¿por qué solo GBM_LATE, no aplica al resto?"): UPDOWN_GBM
+    # comparte EXACTAMENTE la misma anatomía (ref_time=ancla de ventana,
+    # ref=precio en esa ancla, spot, precios_data) que _s_gbm_late, así
+    # que reutiliza el mismo helper sin reimplementar nada. Es la familia
+    # con más volumen del sistema (ver comentario 30-Jul más abajo) —
+    # el hallazgo del 07-Ago (retest_pct==0 gana en 22/37 combos GBM_LATE)
+    # podría replicar aquí con muchísimo más n. Solo LOGUEA.
+    features["retest_pct"] = _calcular_retest_pct(
+        activo, ref_time, datetime.now(timezone.utc), ref, spot, precios_data)
     # logit_edge (Shaw & Dalen 2025 — BS-P): edge en espacio logit.
     # logit(p_modelo) - logit(p_mercado) es más estable que la diferencia en probabilidad
     # cerca de los extremos (p→0 o p→1) y captura el edge multiplicativo real.
@@ -4266,13 +4280,10 @@ def _s_gbm_late(market, ctx, ventana_min, rest_lo, rest_hi, espacio_k=None):
     # gap_sigma_implicita (P19, 22-Jul): ver _gap_sigma_implicita — solo logueo.
     gap_sigma_implicita = _gap_sigma_implicita(d, sigma_h, py)
 
-    # dist_max/min_dia_anterior_pct (07-Ago, ver _max_min_dia_anterior):
-    # solo logueo, no cambia edge ni decisión — ver docstring del helper.
-    _mm_ayer = _max_min_dia_anterior(activo, now_utc)
-    dist_max_dia_anterior_pct = (round((spot - _mm_ayer[1]) / _mm_ayer[1] * 100, 4)
-                                  if _mm_ayer and spot else None)
-    dist_min_dia_anterior_pct = (round((spot - _mm_ayer[0]) / _mm_ayer[0] * 100, 4)
-                                  if _mm_ayer and spot else None)
+    # dist_max/min_dia_anterior_pct: inyectado de forma UNIVERSAL para
+    # todas las estrategias en el loop principal de main() (07-Ago,
+    # corrección tras pregunta de Javi) — no se calcula aquí para evitar
+    # una segunda fuente de verdad; ver el bloque `_activo_um` en main().
 
     return {
         "prob_yes": round(p_up, 4),
@@ -4300,8 +4311,6 @@ def _s_gbm_late(market, ctx, ventana_min, rest_lo, rest_hi, espacio_k=None):
             "dist_vwap_pct":       dist_vwap_pct,
             "retest_pct":          retest_pct,
             "gap_sigma_implicita": gap_sigma_implicita,
-            "dist_max_dia_anterior_pct": dist_max_dia_anterior_pct,
-            "dist_min_dia_anterior_pct": dist_min_dia_anterior_pct,
             "meta_score_gbm_late": _meta_score_gbm_late(
                 d, sigma_h, drift_ventana * 100, now_utc.hour, restante_min, T_rem_h),
             **_libro_calidad(market),
@@ -4373,6 +4382,10 @@ def s_updown_ou_5m(market, ctx):
         "sigma_h":          round(sigma_h, 6),
         "theta_ou":         THETA_OU,
         "es_ntm_5min":      _es_ntm_5min(market),
+        # retest_pct (07-Ago, extendido desde GBM_LATE/UPDOWN_GBM): mismos
+        # ref_time/ref/spot/precios_data que las hermanas GBM. Solo LOGUEA.
+        "retest_pct": _calcular_retest_pct(
+            activo, ref_time, datetime.now(timezone.utc), ref, spot, precios_data),
     }
     if drift_15 is not None: features["drift_15min"] = round(drift_15 * 100, 4)
     if drift_60 is not None: features["drift_60min"] = round(drift_60 * 100, 4)
@@ -5614,6 +5627,28 @@ def main():
                     continue
                 if pred is None:
                     continue
+                # dist_max/min_dia_anterior_pct (07-Ago, petición Javi):
+                # inyectado aquí para TODAS las estrategias por igual, no
+                # solo GBM_LATE (donde nació) -- corrección tras pregunta
+                # explícita de Javi ("¿por qué solo GBM_LATE, no aplica al
+                # resto?"). Única fuente de verdad (antes _s_gbm_late lo
+                # calculaba dentro, duplicado quitado) -- `_activo_um` se
+                # deriva del `subtype` ya devuelto por CUALQUIER estrategia
+                # (siempre "ACTIVO" o "ACTIVO#marco", verificado en las ~35
+                # funciones s_*), así que no hace falta tocar cada función
+                # una a una. Solo LOGUEA, no cambia prob_yes/edge/decisión.
+                _activo_um = (pred.get("subtype") or "").split("#", 1)[0]
+                if _activo_um:
+                    _spot_um = _cargar_spot().get(_activo_um)
+                    _mm_ayer_um = _max_min_dia_anterior(_activo_um, datetime.now(timezone.utc))
+                    if _spot_um and _mm_ayer_um:
+                        _feat_um = pred.setdefault("features", {})
+                        _feat_um.setdefault(
+                            "dist_max_dia_anterior_pct",
+                            round((_spot_um - _mm_ayer_um[1]) / _mm_ayer_um[1] * 100, 4))
+                        _feat_um.setdefault(
+                            "dist_min_dia_anterior_pct",
+                            round((_spot_um - _mm_ayer_um[0]) / _mm_ayer_um[0] * 100, 4))
                 # Edge mínimo y activa: lookup de más específico a más general
                 subtype = pred.get("subtype", "")
                 if "#" in subtype:
