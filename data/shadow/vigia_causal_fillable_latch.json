@@ -4437,5 +4437,6 @@
  "candidato_proxy#GBM_LATE_15M_MULTIHORIZONTE#ETH#BUY_NO#drift_60minabs_lt": false,
  "candidato_proxy#GBM_LATE_15M_MULTIHORIZONTE#ETH#BUY_NO#libro_liquidezgt": false,
  "candidato_proxy#UPDOWN_GBM_15M_TARDIO#ETH#BUY_NO#ibs_15lt": false,
- "candidato_proxy#UPDOWN_GBM_15M_TARDIO#SOL#BUY_NO#sigma_hlt": false
+ "candidato_proxy#UPDOWN_GBM_15M_TARDIO#SOL#BUY_NO#sigma_hlt": false,
+ "candidato_proxy#GBM_LATE_15M_MULTIHORIZONTE#BTC#BUY_NO#libro_liquidezgt": false
 }
