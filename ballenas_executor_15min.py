@@ -73,9 +73,32 @@ from live_guard import puede_operar_live
 from live_stake import bloquear_por_circuit_breaker, calcular_stake
 import ballenas_firehose_cache as _fc
 from ballenas_banda_fina_gate import evaluar as _gate_banda_fina_ballenas
+from gate_bucket_propio import evaluar as _gate_bucket_propio
 
 DIR = Path(__file__).resolve().parent
 DIR_SHADOW = DIR / "data" / "shadow"
+CONFIG_LIVE_PATH = DIR / "data" / "live" / "config_live.json"
+_pares_live_cache = {"mtime": None, "set": set()}
+
+
+def _pares_live_hoy_set() -> set:
+    """Mismo patrón fail-closed que el resto de ejecutores de baja latencia
+    -- 07-Ago, añadido junto con el veto de gate_bucket_propio de abajo
+    (hueco real: este ejecutor nunca lo tuvo pese a llevar corriendo desde
+    29-Jul, ver idea de la sesión sobre cobertura completa del sistema)."""
+    try:
+        mtime = CONFIG_LIVE_PATH.stat().st_mtime
+    except OSError:
+        return _pares_live_cache["set"]
+    if _pares_live_cache["mtime"] != mtime:
+        try:
+            data = json.loads(CONFIG_LIVE_PATH.read_text(encoding="utf-8"))
+            _pares_live_cache["set"] = set(data.get("pares_permitidos_live", []))
+            _pares_live_cache["mtime"] = mtime
+        except Exception:
+            pass
+    return _pares_live_cache["set"]
+
 
 # Wallet edge score por (activo,marco) -- 23-Jul, sustituye al de solo-marco
 # (20-Jul). Hallazgo de la sesión de franja milimétrica: concentracion_
@@ -469,9 +492,25 @@ def watch_window(activo: str, ts_end: int) -> bool:
         if cumple_concentracion:
             py = libro["best_ask"]
             edge = prob_bucket - py
+
+            # 07-Ago: veto de micro-bucket de precio -- hueco real, este
+            # ejecutor nunca lo tuvo pese a llevar corriendo desde 29-Jul
+            # (los otros 5 ejecutores de baja latencia del proyecto sí lo
+            # tienen). Mismo criterio que el resto: solo VETA (fail-closed)
+            # si la tupla exacta ya está en pares_permitidos_live -- hoy
+            # BALLENAS_CONFIRMADAS_15M no está en ninguna, así que es
+            # puramente informativo/preparatorio mientras siga en shadow.
+            tupla_str = f"{STRATEGY}#{activo}#{VENTANA_MIN}min#BUY_YES"
+            gate_bp = _gate_bucket_propio(tupla_str, py)
+            if gate_bp["veredicto"] == "malo_confirmado" and tupla_str in _pares_live_hoy_set():
+                log(f"[{ts_end}] ⛔ Veto micro-bucket (malo_confirmado): py={py:.3f} "
+                    f"-- {'[DRY-RUN] no ejecutaría' if DRY_RUN else 'no se ejecuta'}", activo)
+                return False
+
             log(f"[{ts_end}] CONFIRMADO concentracion_ponderada={pct_ponderado:.2f} (cruda={pct_crudo:.2f}) "
                 f"n={n} py={py:.3f} prob_bucket={prob_bucket:.3f} edge={edge:+.3f} restante={restante:.1f}s "
-                f"confirm_ceiling_s={confirm_ceiling_s:.1f} {_resumen_wallet_edge(wallets_yes, activo)}", activo)
+                f"confirm_ceiling_s={confirm_ceiling_s:.1f} gate_bucket_propio={gate_bp['veredicto']} "
+                f"{_resumen_wallet_edge(wallets_yes, activo)}", activo)
             _registrar_tracker(activo, mercado, py, edge, pct_ponderado, n, restante, n_yes_total)
             return disparar(activo, mercado, py, edge, restante, prob_bucket)
 

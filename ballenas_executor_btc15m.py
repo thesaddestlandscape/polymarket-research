@@ -56,9 +56,31 @@ from live_guard import puede_operar_live
 from live_stake import bloquear_por_circuit_breaker, calcular_stake
 import ballenas_firehose_cache as _fc
 from ballenas_banda_fina_gate import evaluar as _gate_banda_fina_ballenas
+from gate_bucket_propio import evaluar as _gate_bucket_propio
 
 DIR = Path(__file__).resolve().parent
 DIR_SHADOW = DIR / "data" / "shadow"
+CONFIG_LIVE_PATH = DIR / "data" / "live" / "config_live.json"
+_pares_live_cache = {"mtime": None, "set": set()}
+
+
+def _pares_live_hoy_set() -> set:
+    """Mismo patrón fail-closed que el resto de ejecutores -- 07-Ago,
+    añadido junto con el veto de gate_bucket_propio de abajo (hueco real:
+    este ejecutor, pese a ser LIVE, nunca tuvo el veto de micro-bucket que
+    sí tienen los otros 5)."""
+    try:
+        mtime = CONFIG_LIVE_PATH.stat().st_mtime
+    except OSError:
+        return _pares_live_cache["set"]
+    if _pares_live_cache["mtime"] != mtime:
+        try:
+            data = json.loads(CONFIG_LIVE_PATH.read_text(encoding="utf-8"))
+            _pares_live_cache["set"] = set(data.get("pares_permitidos_live", []))
+            _pares_live_cache["mtime"] = mtime
+        except Exception:
+            pass
+    return _pares_live_cache["set"]
 LOG_PATH = DIR / "logs" / "ballenas_fast.log"
 STRATEGY_PARAMS_PATH = DIR_SHADOW / "strategy_params.json"
 
@@ -580,9 +602,24 @@ def watch_window(ts_end: int) -> bool:
         if cumple_concentracion:
             py = libro["best_ask"]
             edge = prob_bucket - py
+
+            # 07-Ago: veto de micro-bucket de precio -- hueco real, este
+            # ejecutor (LIVE) nunca lo tuvo pese a que los otros 5
+            # ejecutores de baja latencia del proyecto sí lo tienen.
+            # Fail-closed: BALLENAS_TARDIAS#BTC#15min#BUY_YES está PAUSADA
+            # desde 03-Ago (retirada de pares_permitidos_live), así que hoy
+            # es puramente preparatorio -- si se reactivara algún día sin
+            # recordar añadir esto, ya estaría protegido.
+            tupla_str = f"{STRATEGY}#BTC#{VENTANA_MIN}min#BUY_YES"
+            gate_bp = _gate_bucket_propio(tupla_str, py)
+            if gate_bp["veredicto"] == "malo_confirmado" and tupla_str in _pares_live_hoy_set():
+                log(f"[{ts_end}] ⛔ Veto micro-bucket (malo_confirmado): py={py:.3f} -- no se ejecuta")
+                return False
+
             log(f"[{ts_end}] CONFIRMADO concentracion_ponderada={pct_ponderado:.2f} (cruda={pct_crudo:.2f}) "
                 f"n={n} py={py:.3f} prob_bucket={prob_bucket:.3f} edge={edge:+.3f} restante={restante:.1f}s "
-                f"confirm_ceiling_s={confirm_ceiling_s:.1f} {_resumen_wallet_edge(wallets_yes)}")
+                f"confirm_ceiling_s={confirm_ceiling_s:.1f} gate_bucket_propio={gate_bp['veredicto']} "
+                f"{_resumen_wallet_edge(wallets_yes)}")
             _registrar_prediccion(mercado, py, edge, restante, pct_ponderado, n, banda_lo, banda_hi, prob_bucket)
             return disparar(mercado, py, edge, restante, prob_bucket)
 
