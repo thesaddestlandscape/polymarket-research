@@ -1,7 +1,24 @@
 #!/usr/bin/env python3
 """
 updown_gbm_15min_tardio_btc_executor.py — Ejecutor de baja latencia para
-UPDOWN_GBM_15M_TARDIO#BTC#15min (BUY_YES o BUY_NO, según el signo del edge).
+UPDOWN_GBM_15M_TARDIO#{BTC,XRP,BNB,SOL}#15min (BUY_YES o BUY_NO, según el
+signo del edge).
+
+07-Ago: generalizado de BTC-only a XRP/BNB/SOL -- petición explícita Javi
+tras encontrar que `gate_bucket_propio.json` tiene 4 micro-buckets
+`bueno_confirmado` en esta familia para esas 3 monedas (nunca antes
+instrumentados con baja latencia): XRP#15min#BUY_YES [0.50,0.55) n=235
+pnl_shadow=+0.808€, BNB#15min#BUY_YES [0.50,0.55) n=96 pnl=+0.741€,
+BNB#15min#BUY_NO [0.45,0.50) n=67 pnl=+1.417€, SOL#15min#BUY_YES
+[0.50,0.55) n=94 pnl=+0.708€ -- todos con evidencia SOLO vía el polling
+lento (`libro_snapshots.csv`, ~20-40s de latencia real), nunca medidos con
+un ejecutor dedicado. Mismo patrón ya confirmado hoy mismo con
+FAVORITO_CONFIRMADO#ETH#15min#BUY_YES: el polling lento subestima
+fill-ability real (pnl -0.30€ vía snapshot lento vs +0.10€ vía señales
+capturadas por el propio ejecutor de baja latencia). Nada de esto
+promueve nada todavía -- solo añade la instrumentación que faltaba para
+poder medirlo bien. ETH deliberadamente NO incluido (sin bucket
+`bueno_confirmado` propio en esta familia hoy).
 
 Origen (04-Ago, paso 5 del plan de acción de
 project_barrido_definitivo_latencia_17_combos_03ago): candidata del
@@ -76,7 +93,7 @@ CLOB = "https://clob.polymarket.com"
 
 STRATEGY = "UPDOWN_GBM_15M_TARDIO"
 VENTANA_MIN = 15
-ACTIVOS = ("BTC",)  # única candidata confirmada en el barrido de ayer para esta familia
+ACTIVOS = ("BTC", "XRP", "BNB", "SOL")  # 07-Ago: XRP/BNB/SOL añadidas -- ver docstring
 
 DRY_RUN = True  # 04-Ago v1 -- ver docstring, NO cambiar sin revisión + aprobación explícita + /code-review.
 
