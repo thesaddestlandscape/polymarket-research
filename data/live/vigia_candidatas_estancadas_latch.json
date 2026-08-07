@@ -100,5 +100,29 @@
   },
   "cementerio:UPDOWN_OU_5M#DOGE#5min": {
     "avisado": true
+  },
+  "cementerio:LIQUIDACIONES_15M#DOGE#15min": {
+    "avisado": true
+  },
+  "cementerio:LIQUIDACIONES_15M#XRP#15min": {
+    "avisado": true
+  },
+  "cementerio:PRICE_TARGET_GBM_FADE#atexpiry": {
+    "avisado": true
+  },
+  "cementerio:GBM_LATE_60M_FADE#SOL#60min": {
+    "avisado": true
+  },
+  "cementerio:GBM_LATE_60M_FADE#BTC#60min": {
+    "avisado": true
+  },
+  "cementerio:GBM_LATE_60M_FADE#ETH#60min": {
+    "avisado": true
+  },
+  "cementerio:UPDOWN_GBM#BTC#60min": {
+    "avisado": true
+  },
+  "cementerio:UPDOWN_OU_5M#SOL#5min": {
+    "avisado": true
   }
 }
