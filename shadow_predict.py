@@ -1329,6 +1329,50 @@ def _precio_en(activo, ref_time, precios_data, tol_min=10):
     return None
 
 
+_CACHE_MAXMIN_DIA_ANTERIOR = {"fecha": None, "datos": {}}
+
+
+def _max_min_dia_anterior(activo, now_utc):
+    """Máximo/mínimo del día UTC anterior para `activo`, cacheado por
+    fecha (no cambia intra-día, evita releer el CSV entero cada ciclo del
+    fast loop). Fuente: data/prices/YYYY-MM-DD.csv (mismo fichero que
+    _cargar_spot, formato largo timestamp,asset,price_usd,...,source) —
+    usa TODAS las fuentes (consenso/binance/coingecko) sin priorizar
+    ninguna, a diferencia de _cargar_spot (que sí prioriza no-coingecko
+    para el ÚLTIMO precio): aquí el objetivo es el rango del día, no el
+    dato más fresco, y la divergencia entre exchanges (~0.1-0.2%) es
+    irrelevante para un máximo/mínimo diario.
+
+    07-Ago (petición Javi, revisando artículos de day-trading — idea 3,
+    "máximo/mínimo del día anterior"): solo LOGUEA (features
+    dist_max_dia_anterior_pct/dist_min_dia_anterior_pct en _s_gbm_late),
+    no cambia prob_yes/edge/decisión de nada — mismo patrón que
+    dist_vwap_pct/retest_pct/gap_sigma_implicita. El pipeline causal
+    decide con datos forward si merece convertirse en filtro."""
+    fecha_ayer = (now_utc - timedelta(days=1)).strftime("%Y-%m-%d")
+    if _CACHE_MAXMIN_DIA_ANTERIOR["fecha"] != fecha_ayer:
+        datos = {}
+        path = DIR_DATA / "prices" / f"{fecha_ayer}.csv"
+        if path.exists():
+            try:
+                with open(path, encoding="utf-8") as f:
+                    for row in csv.DictReader(f):
+                        try:
+                            act = (row.get("asset") or "").upper()
+                            precio = float(row["price_usd"])
+                        except (KeyError, ValueError, TypeError):
+                            continue
+                        if not act or precio <= 0:
+                            continue
+                        lo, hi = datos.get(act, (precio, precio))
+                        datos[act] = (min(lo, precio), max(hi, precio))
+            except Exception:
+                datos = {}
+        _CACHE_MAXMIN_DIA_ANTERIOR["fecha"] = fecha_ayer
+        _CACHE_MAXMIN_DIA_ANTERIOR["datos"] = datos
+    return _CACHE_MAXMIN_DIA_ANTERIOR["datos"].get(activo)
+
+
 def _calcular_retest_pct(activo, window_start, now_utc, ref, spot, precios_data):
     """% de retroceso desde el máximo alejamiento (en la dirección del
     movimiento final) antes del instante actual — ver
@@ -4222,6 +4266,14 @@ def _s_gbm_late(market, ctx, ventana_min, rest_lo, rest_hi, espacio_k=None):
     # gap_sigma_implicita (P19, 22-Jul): ver _gap_sigma_implicita — solo logueo.
     gap_sigma_implicita = _gap_sigma_implicita(d, sigma_h, py)
 
+    # dist_max/min_dia_anterior_pct (07-Ago, ver _max_min_dia_anterior):
+    # solo logueo, no cambia edge ni decisión — ver docstring del helper.
+    _mm_ayer = _max_min_dia_anterior(activo, now_utc)
+    dist_max_dia_anterior_pct = (round((spot - _mm_ayer[1]) / _mm_ayer[1] * 100, 4)
+                                  if _mm_ayer and spot else None)
+    dist_min_dia_anterior_pct = (round((spot - _mm_ayer[0]) / _mm_ayer[0] * 100, 4)
+                                  if _mm_ayer and spot else None)
+
     return {
         "prob_yes": round(p_up, 4),
         "razon":    (f"gbm_late_{ventana_min}min {activo} drift_vent={drift_ventana*100:+.3f}% "
@@ -4248,6 +4300,8 @@ def _s_gbm_late(market, ctx, ventana_min, rest_lo, rest_hi, espacio_k=None):
             "dist_vwap_pct":       dist_vwap_pct,
             "retest_pct":          retest_pct,
             "gap_sigma_implicita": gap_sigma_implicita,
+            "dist_max_dia_anterior_pct": dist_max_dia_anterior_pct,
+            "dist_min_dia_anterior_pct": dist_min_dia_anterior_pct,
             "meta_score_gbm_late": _meta_score_gbm_late(
                 d, sigma_h, drift_ventana * 100, now_utc.hour, restante_min, T_rem_h),
             **_libro_calidad(market),
