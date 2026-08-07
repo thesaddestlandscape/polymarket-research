@@ -18,11 +18,28 @@ modela prioridad de cola FIFO; un print estrictamente por debajo del límite
 implica que el nivel se atravesó. Con limit 500 trades por mercado puede
 infraestimar fills en mercados muy activos (aceptable: sesgo conservador).
 
-Se invoca desde shadow_resolve al resolver predicciones UPDOWN_GBM/GBM_LATE_15M
-de 15min. NUNCA lanza excepciones hacia arriba (resolve cierra trades live).
-Salida: data/shadow/maker_sim.csv
+07-Ago (petición explícita Javi, tras re-confirmar con 5 semanas más de
+datos que taker sigue ganando en UPDOWN_GBM/GBM_LATE_15M -- ver
+project_reevaluacion_maker_taker_confirmado_07ago -- "extiéndelo y
+terminamos de comprobar todas las estrategias"): generalizado a TODAS las
+estrategias/marcos, no solo UPDOWN_GBM/GBM_LATE_15M#15min. La metodología
+no depende de nada específico de una estrategia (solo precio_yes_mercado/
+decision/timestamps, ya universales, mismo principio que dist_max_dia_
+anterior_pct/retest_pct generalizados hoy en shadow_predict.py) -- no hay
+razón técnica para restringir la cobertura. CANCEL_MIN se deja FIJO en 4
+min para todos los marcos (no escala con la duración de la ventana) para
+no romper la comparabilidad del histórico ya acumulado bajo ese mismo
+valor -- en ventanas de 5min esto consume el 80% del tiempo de cotización
+(4 de 5 min), así que el fill-rate en marcos cortos es estructuralmente
+más bajo por diseño, no por rechazo del mercado; al analizar, derivar el
+marco de `subtype` (formato "ACTIVO#Nmin") para segmentar por esto.
+
+Se invoca desde shadow_resolve al resolver CUALQUIER predicción con
+precio_yes_mercado/decision/timestamps válidos. NUNCA lanza excepciones
+hacia arriba (resolve cierra trades live). Salida: data/shadow/maker_sim.csv
 """
 import csv
+import random
 import time
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
@@ -36,11 +53,25 @@ H = {"User-Agent": "Mozilla/5.0 (compatible; polymarket-research/1.0)"}
 
 MEJORA = 0.02             # limit 2 céntimos mejor que el precio taker
 CANCEL_MIN = 4            # cancelar la limit N min antes del cierre (fase sniper)
-ESTRATEGIAS_SIM = {"UPDOWN_GBM", "GBM_LATE_15M"}
+# SAMPLE_RATE (07-Ago, salvaguarda al generalizar a todas las estrategias):
+# resolve puede resolver ráfagas de hasta 60 predicciones en el mismo minuto
+# (medido 07-Ago); simular() hace una llamada HTTP bloqueante por predicción
+# (data-api/trades) -- sin muestreo, una ráfaga añadiría ~20-30s+ al ciclo
+# de resolve que también cierra trades reales (mismo tipo de incidente que
+# CLAUDE.md pt.18, postmortem atascado >10min). Muestrear antes de la
+# llamada de red acota el peor caso sin perder validez estadística -- solo
+# reduce n, no sesga qué se acumula (random.random() no mira strategy/
+# resultado). Con las ~2000 resoluciones/día actuales, 30% sigue dando
+# cientos de filas/día por familia.
+SAMPLE_RATE = 0.30
 
 _CAMPOS = ["resolution_ts", "strategy", "subtype", "market_id", "decision",
            "taker_price", "limit_price", "filled", "n_trades_vistos",
            "acierto", "pnl1_taker", "pnl1_maker"]
+# ventana_min NO se añade como columna nueva (07-Ago) -- el fichero ya
+# tiene 15k+ filas con el header viejo (`nuevo = not CSV_PATH.exists()`
+# no lo reescribiría, desalineando columnas). Se deriva de `subtype`
+# (formato universal "ACTIVO#Nmin", ver shadow_predict.py) al analizar.
 
 
 def _parse_ts(s):
@@ -57,7 +88,7 @@ def simular(pred: dict, mercado: dict, res: dict, resolution_ts: str) -> None:
         strategy = pred.get("strategy", "")
         subtype = pred.get("subtype") or ""
         decision = pred.get("decision", "")
-        if strategy not in ESTRATEGIAS_SIM or "15min" not in subtype:
+        if not strategy or not subtype:
             return
         if decision not in ("BUY_YES", "BUY_NO"):
             return
@@ -81,11 +112,13 @@ def simular(pred: dict, mercado: dict, res: dict, resolution_ts: str) -> None:
         cond_id = (mercado or {}).get("conditionId") or ""
         if not cond_id:
             return
+        if random.random() >= SAMPLE_RATE:
+            return  # muestreo -- ver docstring de SAMPLE_RATE
         r = requests.get(f"{DATA_API}/trades",
                          params={"market": cond_id, "limit": 500},
-                         headers=H, timeout=10)
+                         headers=H, timeout=5)
         trades = r.json() or []
-        time.sleep(0.15)
+        time.sleep(0.05)
 
         lado = "Up" if decision == "BUY_YES" else "Down"
         filled = 0
