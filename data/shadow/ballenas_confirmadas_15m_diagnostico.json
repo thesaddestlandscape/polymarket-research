@@ -1990,7 +1990,7 @@
   "SOL#BUY_NO": {
     "motivos": {
       "pocos_trades_en_banda": {
-        "conteo": 11223,
+        "conteo": 11226,
         "mercados": {
           "0x392f0e3560600308f946c9fc14e3c261a1dd3b4133db9025ce09d9a352a371c8": 3,
           "0x2150361f3f63b480171eb71ddd255b2ad153f36a21f09b28ae7adc82bb4e3069": 9,
@@ -2609,7 +2609,7 @@
           "0xf219323f553a68d92fa0bf379e7aec22817e21d319b84b1f1e117bf4e860253f": 1,
           "0x3b67494d39bdfc3280e2e62219507cbc8a45cc2f58fdf0bad1b86b98abe78bfd": 2,
           "0xd8c8650d1881091e4122c03023fd029601411d4a1f9c40dd712d8d1ce234d443": 1,
-          "0x02b447aacd575db26579eecdfc2f41fda1e2bcdd2a47a8dbe820358bafa52f2b": 4
+          "0x02b447aacd575db26579eecdfc2f41fda1e2bcdd2a47a8dbe820358bafa52f2b": 7
         }
       },
       "volumen_bajo": {
@@ -3411,7 +3411,7 @@
       "n": 0,
       "motivo": "pocos_trades_en_banda",
       "condition_id": "0x02b447aacd575db26579eecdfc2f41fda1e2bcdd2a47a8dbe820358bafa52f2b",
-      "ts": "2026-08-07T22:56:07+00:00"
+      "ts": "2026-08-07T23:04:45+00:00"
     }
   },
   "DOGE#BUY_NO": {
@@ -4644,7 +4644,7 @@
         }
       },
       "error_api": {
-        "conteo": 5765,
+        "conteo": 5774,
         "mercados": {
           "0x9c8ec58c09836f579f15731a2a1997ef45bfe77d6f0e4513bb2351223a389f18": 6,
           "0x508a7030258446a09165b0713e36a07e63dce4d100e6f60681d1764f5a39f0d0": 7,
@@ -4945,8 +4945,9 @@
           "0x7a33a3941c61f5146f6273d5b0c50a778db2d1b2a84fb8a8846b33e7676f23a9": 6,
           "0xa7b09e9ebe10e1a476dea3adb99e0f7c0412b79025d1ffa1f70dea0323022001": 9,
           "0x097f0a8cb48c75b7e0ff525bc8f62e5ae17e8cbd472dada97706bf78aa1f3066": 10,
-          "0xf619c9ff7650cf3f69b69c5a54b009100292af177281e89a6f91928d9fd6cf80": 9,
-          "0x1a6655a00d90ae73374ddee489ec93814905e39c8e7160f8dcf69c1b6a37d475": 4
+          "0xf619c9ff7650cf3f69b69c5a54b009100292af177281e89a6f91928d9fd6cf80": 12,
+          "0x1a6655a00d90ae73374ddee489ec93814905e39c8e7160f8dcf69c1b6a37d475": 7,
+          "0xa8b618f6cba7efcd8517efd455802fbeee6f98e0eb5227fce710575ee55f23d7": 3
         }
       },
       "disparada": {
