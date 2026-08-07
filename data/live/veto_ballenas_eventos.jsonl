@@ -516,3 +516,6 @@
 {"ts": "2026-08-05T23:52:03+00:00", "market_id": "3350243", "aplica": true, "veta": false, "motivo": "sin_datos", "combo": "ETH#5m", "pct": null, "pct_crudo": null, "n": 0}
 {"ts": "2026-08-06T04:46:48+00:00", "market_id": "3353000", "aplica": true, "veta": false, "motivo": "concentracion_ok", "combo": "ETH#5m", "pct": 1.0, "pct_crudo": 1.0, "n": 24, "umbral": 0.6}
 {"ts": "2026-08-06T13:50:50+00:00", "market_id": "3359731", "aplica": true, "veta": false, "motivo": "concentracion_ok", "combo": "ETH#5m", "pct": 1.0, "pct_crudo": 1.0, "n": 25, "umbral": 0.6}
+{"ts": "2026-08-07T16:31:35+00:00", "market_id": "3361237", "aplica": true, "veta": true, "motivo": "concentracion_debil", "combo": "BTC#60m", "pct": 0.4911935047669943, "pct_crudo": 0.49109217660728116, "n": 1291, "umbral": 0.6}
+{"ts": "2026-08-07T16:31:45+00:00", "market_id": "3361237", "aplica": true, "veta": true, "motivo": "concentracion_debil", "combo": "BTC#60m", "pct": 0.4908274475779282, "pct_crudo": 0.490726429675425, "n": 1294, "umbral": 0.6}
+{"ts": "2026-08-07T16:32:13+00:00", "market_id": "3361237", "aplica": true, "veta": true, "motivo": "concentracion_debil", "combo": "BTC#60m", "pct": 0.4935675994797029, "pct_crudo": 0.49346656418139895, "n": 1301, "umbral": 0.6}
