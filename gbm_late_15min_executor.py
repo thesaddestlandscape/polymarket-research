@@ -104,7 +104,7 @@ CLOB = "https://clob.polymarket.com"
 
 STRATEGY = "GBM_LATE_15M"
 VENTANA_MIN = 15
-ACTIVOS = ("ETH", "SOL", "XRP", "BTC")
+ACTIVOS = ("ETH", "SOL", "XRP", "BTC", "BNB")  # 07-Ago: BNB añadida -- solo para ESPACIO_ATR, ver docstring
 # XRP añadido 04-Ago (petición Javi, paso 4 del plan de acción de
 # project_barrido_definitivo_latencia_17_combos_03ago): candidata NUNCA
 # promovida, con el gap de latencia MÁS EXTREMO de todo el sistema
@@ -134,8 +134,19 @@ UMBRAL_VOL_ETH = 35  # mismo umbral validado que GATE_VOLUMEN_VALIDADO[("GBM_LAT
 # validadas solo para GBM_LATE_15M#SOL#15min#BUY_YES base, no transfieren
 # sin evidencia propia a esta variante distinta) ni el veto de volumen de
 # ETH (ETH no está en el alcance de esta variante).
+#
+# 07-Ago: ETH/BNB añadidas -- gate_bucket_propio.json tiene micro-buckets
+# bueno_confirmado nunca instrumentados con baja latencia:
+# ETH#15min#BUY_NO [0.60,0.65) n=46 pnl=+1.150€, [0.80,0.85) n=36
+# pnl=+1.281€; BNB#15min#BUY_NO [0.50,0.55) n=100 pnl=+1.781€ -- todos
+# medidos solo con el polling lento de candidato_evaluacion. BNB no
+# estaba en absoluto en ACTIVOS (ningún hilo la vigilaba); ETH ya tenía
+# hilo por la variante base pero no evaluaba ESPACIO_ATR. Mismo criterio
+# que la generalización de UPDOWN_GBM_15M_TARDIO a XRP/BNB/SOL esta misma
+# sesión: instrumentación, no promoción -- DRY_RUN sigue en True, ninguna
+# de las 4 monedas está en pares_permitidos_live para esta variante.
 STRATEGY_ESPACIO_ATR = "GBM_LATE_15M_ESPACIO_ATR"
-ACTIVOS_ESPACIO_ATR = ("BTC", "SOL")
+ACTIVOS_ESPACIO_ATR = ("BTC", "SOL", "ETH", "BNB")
 
 _session = requests.Session()
 _orden_lock = threading.Lock()
