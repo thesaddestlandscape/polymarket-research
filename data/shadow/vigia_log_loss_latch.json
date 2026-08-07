@@ -15,7 +15,7 @@
  "STREAK_FADE_15M": true,
  "STREAK_FADE_5M": true,
  "STREAK_MOM_5M": true,
- "STRUCT_NO_15M": false,
+ "STRUCT_NO_15M": true,
  "UPDOWN_GBM": true,
  "UPDOWN_GBM_15M_CROSS_WINDOW_SPREAD": false,
  "UPDOWN_GBM_15M_TARDIO": false,
