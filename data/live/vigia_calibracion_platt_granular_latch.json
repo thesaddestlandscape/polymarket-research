@@ -530,5 +530,53 @@
   "WEEKLY_PRICE#SOL": {
     "n": 256,
     "confirmado": true
+  },
+  "BALLENAS_TARDIAS#ETH": {
+    "n": 249,
+    "confirmado": false
+  },
+  "BALLENAS_TARDIAS#ETH#5min": {
+    "n": 249,
+    "confirmado": false
+  },
+  "BALLENAS_TARDIAS#SOL": {
+    "n": 238,
+    "confirmado": false
+  },
+  "BALLENAS_TARDIAS#SOL#5min": {
+    "n": 238,
+    "confirmado": false
+  },
+  "BALLENAS_TARDIAS#XRP": {
+    "n": 209,
+    "confirmado": false
+  },
+  "BALLENAS_TARDIAS#XRP#5min": {
+    "n": 209,
+    "confirmado": false
+  },
+  "FAVORITO_CONFIRMADO_15MIN_ALTACONVICCION#BNB": {
+    "n": 251,
+    "confirmado": false
+  },
+  "FAVORITO_CONFIRMADO_15MIN_ALTACONVICCION#BNB#15min": {
+    "n": 251,
+    "confirmado": false
+  },
+  "FAVORITO_CONFIRMADO_15MIN_ALTACONVICCION#DOGE": {
+    "n": 262,
+    "confirmado": false
+  },
+  "FAVORITO_CONFIRMADO_15MIN_ALTACONVICCION#DOGE#15min": {
+    "n": 262,
+    "confirmado": false
+  },
+  "FAVORITO_CONFIRMADO_15MIN_ALTACONVICCION#XRP": {
+    "n": 246,
+    "confirmado": false
+  },
+  "FAVORITO_CONFIRMADO_15MIN_ALTACONVICCION#XRP#15min": {
+    "n": 246,
+    "confirmado": false
   }
 }
