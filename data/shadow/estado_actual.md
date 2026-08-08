@@ -1,4 +1,4 @@
-# Estado del bot — 2026-08-08 11:47 UTC
+# Estado del bot — 2026-08-08 11:55 UTC
 
 ## Live — dinero real (on-chain)
 | | |
@@ -13,17 +13,17 @@
 ## Shadow — MODELO SIMULADO (no cobrable)
 | | |
 |---|---|
-| P&L fiel (stake fijo 1$) | +5916.31 $ |
-| P&L sim compuesto | 🟢 +13882.19 $ (ficción Kelly: +54568% s/ operativo) |
-| P&L sim hoy (2026-08-08) | 🟢 +151.90 $ |
-| Operaciones resueltas | 92153 (56373 WIN / 35780 LOSS) — 61.2% |
-| Señales abiertas | 387 |
+| P&L fiel (stake fijo 1$) | +5916.49 $ |
+| P&L sim compuesto | 🟢 +13881.54 $ (ficción Kelly: +54566% s/ operativo) |
+| P&L sim hoy (2026-08-08) | 🟢 +151.25 $ |
+| Operaciones resueltas | 92173 (56386 WIN / 35787 LOSS) — 61.2% |
+| Señales abiertas | 408 |
 
 ## Estrategias (visión global)
 
 | Estrategia | n | Win% | IC_efectivo | Tendencia | PNL | Apuesta | Estado |
 |---|---|---|---|---|---|---|---|
-| GBM_LATE_15M_ESPACIO_ATR | 10154 | 62.6% | +0.126 | ➡️ estable | +5065.91$ | 1.26$ | ✅ activa |
+| GBM_LATE_15M_ESPACIO_ATR | 10155 | 62.6% | +0.126 | ➡️ estable | +5064.84$ | 1.26$ | ✅ activa |
 | GBM_LATE_15M | 12733 | 60.2% | +0.102 | ➡️ estable | +4263.37$ | 1.02$ | ✅ activa |
 | GBM_LATE_15M_TARDIO | 9807 | 58.7% | +0.087 | ➡️ estable | +3401.34$ | 0.87$ | ✅ activa |
 | UPDOWN_GBM_15M_TARDIO | 3508 | 66.3% | +0.163 | ➡️ estable | +1805.08$ | 1.63$ | ✅ activa |
@@ -38,7 +38,7 @@
 | ORDER_FLOW_5M | 1723 | 51.4% | +0.014 | ➡️ estable | +15.45$ | 0.50$ | ✅ activa |
 | LEADLAG_BTC_XRP_15M | 327 | 51.7% | +0.017 | 📉 agota (-0.07) | +13.04$ | 0.50$ | ✅ activa |
 | STREAK_FADE_15M | 323 | 55.4% | +0.054 | 📉 agota (-0.14) | +12.10$ | 0.54$ | ✅ activa |
-| FAVORITO_CONFIRMADO_5MIN_BAJALATENCIA | 489 | 62.8% | +0.127 | ➡️ estable | +9.64$ | 1.27$ | ✅ activa |
+| FAVORITO_CONFIRMADO_5MIN_BAJALATENCIA | 491 | 62.9% | +0.129 | 📈 madura (+0.03) | +10.65$ | 1.29$ | ✅ activa |
 | GBM_LATE_60M_PYCONFIRMADO | 84 | 52.4% | +0.023 | 📈 madura (+0.23) | +4.65$ | 0.50$ | ✅ activa |
 | RESOLUTION_SNIPER | 28 | 78.6% | +0.267 | — | +4.53$ | 2.00$ | ✅ activa |
 | STRUCT_NO_15M | 408 | 52.2% | +0.022 | ➡️ estable | +0.76$ | 0.50$ | ✅ activa |
@@ -60,39 +60,39 @@
 | STREAK_MOM_5M | 324 | 43.8% | -0.061 | 📉 agota (-0.10) | -27.40$ | 0.50$ | 🚫 desactivada |
 | BALLENAS_CONFIRMADAS_15M | 1770 | 54.6% | +0.046 | 📉 agota (-0.16) | -37.41$ | 0.50$ | ✅ activa |
 | UPDOWN_OU_5M | 335 | 32.5% | -0.174 | ➡️ estable | -57.63$ | 0.50$ | ⚠️ IC negativo |
-| FAVORITO_CONFIRMADO_15MIN_ALTACONVICCION | 2249 | 70.1% | +0.201 | 📉 agota (-0.06) | -158.00$ | 2.00$ | ✅ activa |
-| BALLENAS_TARDIAS | 2053 | 41.6% | -0.083 | 📉 agota (-0.13) | -414.45$ | 0.50$ | ⚠️ IC negativo |
-| FAVORITO_CONFIRMADO | 24673 | 61.9% | +0.119 | 📉 agota (-0.05) | -584.44$ | 1.19$ | ✅ activa |
-| FAVORITO_CONFIRMADO_5MIN_ALTACONVICCION | 10790 | 69.6% | +0.196 | ➡️ estable | -820.68$ | 1.96$ | ✅ activa |
+| FAVORITO_CONFIRMADO_15MIN_ALTACONVICCION | 2250 | 70.1% | +0.201 | 📉 agota (-0.06) | -157.67$ | 2.00$ | ✅ activa |
+| BALLENAS_TARDIAS | 2056 | 41.6% | -0.084 | 📉 agota (-0.13) | -416.34$ | 0.50$ | ⚠️ IC negativo |
+| FAVORITO_CONFIRMADO | 24682 | 61.9% | +0.119 | 📉 agota (-0.05) | -583.47$ | 1.19$ | ✅ activa |
+| FAVORITO_CONFIRMADO_5MIN_ALTACONVICCION | 10794 | 69.6% | +0.196 | ➡️ estable | -820.67$ | 1.96$ | ✅ activa |
 
 ## Últimas 5 resoluciones
 
 | Timestamp | Estrategia | Mercado | Resultado | PNL |
 |---|---|---|---|---|
-| 2026-08-08T11:46 | FAVORITO_CONFIRMADO_5MIN_ALTACONVICCION#BTC#5min | … | ✅ WIN | +0.26$ |
-| 2026-08-08T11:46 | FAVORITO_CONFIRMADO_5MIN_ALTACONVICCION#BNB#5min | … | ✅ WIN | +0.23$ |
-| 2026-08-08T11:46 | FAVORITO_CONFIRMADO#BTC#5min | … | ❌ LOSS | -1.07$ |
-| 2026-08-08T11:46 | FAVORITO_CONFIRMADO#BNB#5min | … | ✅ WIN | +0.54$ |
-| 2026-08-08T11:46 | FAVORITO_CONFIRMADO_5MIN_BAJALATENCIA#DOGE#5min | … | ✅ WIN | +0.80$ |
+| 2026-08-08T11:53 | BALLENAS_TARDIAS#XRP#5min | … | ❌ LOSS | -1.07$ |
+| 2026-08-08T11:53 | BALLENAS_TARDIAS#SOL#5min | … | ❌ LOSS | -1.07$ |
+| 2026-08-08T11:53 | FAVORITO_CONFIRMADO_5MIN_ALTACONVICCION#BNB#5min | … | ❌ LOSS | -1.07$ |
+| 2026-08-08T11:53 | FAVORITO_CONFIRMADO#SOL#5min | … | ✅ WIN | +0.74$ |
+| 2026-08-08T11:53 | FAVORITO_CONFIRMADO#ETH#5min | … | ✅ WIN | +0.80$ |
 
 ## Calidad de datos
 
-✅ **OK** — última verificación 2026-08-08T11:43 UTC
+✅ **OK** — última verificación 2026-08-08T11:51 UTC
 
 | Asset | Precio | Age | Alertas |
 |---|---|---|---|
-| ✅ BTC | $64,930.93 | 0.1min |  |
-| ✅ ETH | $1,918.39 | 0.1min |  |
-| ✅ SOL | $75.22 | 0.1min |  |
+| ✅ BTC | $64,920.00 | 0.1min |  |
+| ✅ ETH | $1,918.68 | 0.1min |  |
+| ✅ SOL | $75.33 | 0.1min |  |
 | ✅ XRP | $1.04 | 0.1min |  |
 
 **Cross-source** (binance, coinbase, kraken):
 
 | Asset | Consenso | Fuente | Estado |
 |---|---|---|---|
-| BTC | $64,951.10 | consenso |  |
-| ETH | $1,918.73 | consenso |  |
-| SOL | $75.20 | consenso |  |
+| BTC | $64,925.90 | consenso |  |
+| ETH | $1,918.35 | consenso |  |
+| SOL | $75.18 | consenso |  |
 | XRP | $1.04 | consenso |  |
 
 ---
