@@ -1,38 +1,45 @@
 {
   "BTC": {
-    "smart_money_consensus": -0.0397,
-    "n_trades_smart": 1033,
-    "n_wallets_smart": 7,
-    "smart_money_consensus_ponderado": 0.0854,
-    "n_wallets_smart_ponderado": 7
-  },
-  "SOL": {
-    "smart_money_consensus": 0.0549,
-    "n_trades_smart": 182,
-    "n_wallets_smart": 4,
-    "smart_money_consensus_ponderado": -0.1359,
-    "n_wallets_smart_ponderado": 4
-  },
-  "XRP": {
-    "smart_money_consensus": -0.2063,
-    "n_trades_smart": 63,
-    "n_wallets_smart": 3,
-    "smart_money_consensus_ponderado": -0.0344,
-    "n_wallets_smart_ponderado": 3
-  },
-  "ETH": {
-    "smart_money_consensus": 0.0573,
-    "n_trades_smart": 524,
+    "smart_money_consensus": 0.0114,
+    "n_trades_smart": 967,
     "n_wallets_smart": 5,
-    "smart_money_consensus_ponderado": 0.1125,
+    "smart_money_consensus_ponderado": -0.0116,
     "n_wallets_smart_ponderado": 5
   },
-  "DOGE": {
-    "smart_money_consensus": 0.3333,
-    "n_trades_smart": 6,
+  "ETH": {
+    "smart_money_consensus": -0.0201,
+    "n_trades_smart": 149,
+    "n_wallets_smart": 2,
+    "smart_money_consensus_ponderado": -0.0172,
+    "n_wallets_smart_ponderado": 2
+  },
+  "XRP": {
+    "smart_money_consensus": -0.0968,
+    "n_trades_smart": 31,
     "n_wallets_smart": 1,
-    "smart_money_consensus_ponderado": 0.5596,
+    "smart_money_consensus_ponderado": -0.2295,
     "n_wallets_smart_ponderado": 1
   },
-  "_actualizado": "2026-08-08T04:21:22+00:00"
+  "DOGE": {
+    "smart_money_consensus": -0.1429,
+    "n_trades_smart": 7,
+    "n_wallets_smart": 1,
+    "smart_money_consensus_ponderado": -0.3126,
+    "n_wallets_smart_ponderado": 1
+  },
+  "BNB": {
+    "smart_money_consensus": -0.1429,
+    "n_trades_smart": 7,
+    "n_wallets_smart": 1,
+    "smart_money_consensus_ponderado": -0.3926,
+    "n_wallets_smart_ponderado": 1
+  },
+  "SOL": {
+    "smart_money_consensus": 0.0,
+    "n_trades_smart": 10,
+    "n_wallets_smart": 1,
+    "smart_money_consensus_ponderado": -0.038,
+    "n_wallets_smart_ponderado": 1
+  },
+  "_actualizado": "2026-08-08T04:41:23+00:00"
 }
