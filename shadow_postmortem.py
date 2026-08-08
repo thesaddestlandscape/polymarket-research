@@ -1114,6 +1114,22 @@ _BASE_BALLENAS_TARDIAS = [
     ("restante_s_al_confirmar", "lt", "gt"),
 ]
 
+# Features de FAVORITO_CONFIRMADO_5MIN_BAJALATENCIA (08-Ago, vigia_
+# cobertura_feature_rules.py). Ejecutor fase0 de baja latencia -- features
+# reducidas propias (favorito5min_bajalatencia_fase0.py::_registrar_
+# prediccion), no llama a _libro_calidad -- _BASE_FAVORITO no encaja
+# porque sus claves libro_spread/libro_liquidez faltarían siempre.
+_BASE_FAVORITO_BAJALATENCIA = [
+    ("py_entrada",           "gt", "lt"),
+    ("py_entrada",           "lt", "gt"),
+    ("restante_min",         "gt", "lt"),
+    ("restante_min",         "lt", "gt"),
+    ("hora_utc",             "lt", "gt"),
+    ("hora_utc",             "gt", "lt"),
+    ("lag_apertura_s",       "gt", "lt"),
+    ("profundidad_ratio_no", "lt", "gt"),
+]
+
 FEATURE_RULES = {
     # 5min: desactivadas manualmente, pero seguimos aprendiendo por si acaso se reactivan
     "UPDOWN_GBM#5min":     _BASE_GBM,
@@ -1382,6 +1398,56 @@ FEATURE_RULES = {
     "BALLENAS_TARDIAS#XRP#5min":  _BASE_BALLENAS_TARDIAS,
     "BALLENAS_TARDIAS#DOGE#5min": _BASE_BALLENAS_TARDIAS,
     "BALLENAS_TARDIAS#BNB#5min":  _BASE_BALLENAS_TARDIAS,
+
+    # STRUCT_NO_15M (08-Ago, vigia_cobertura_feature_rules.py: n=400/3d,
+    # 0 aprendizaje causal). Model-free -- mismas features propias que
+    # s_struct_no_15m (py_entrada/restante_min/hora_utc/libro_calidad),
+    # subconjunto de _BASE_FAVORITO -- lo reusa directo.
+    "STRUCT_NO_15M":         _BASE_FAVORITO,
+    "STRUCT_NO_15M#BTC#15min": _BASE_FAVORITO,
+    "STRUCT_NO_15M#ETH#15min": _BASE_FAVORITO,
+    "STRUCT_NO_15M#SOL#15min": _BASE_FAVORITO,
+
+    # UPDOWN_OU_5M (08-Ago, mismo vigía: n=894/3d, 0 aprendizaje causal).
+    # s_updown_ou_5m loguea pct_spot_vs_ref/sigma_h/drift_15min/drift_60min/
+    # delta_ratio_macro -- mismas claves que _BASE_GBM, sin libro_spread/
+    # libro_liquidez (esta función no llama a _libro_calidad) ni hora_utc/
+    # ibs_15/dist_vwap_pct/sigma_ewma_delta_pct (no los calcula) -- las
+    # reglas de esas claves simplemente no aplican a ninguna fila suya
+    # (mismo patrón que WEEKLY_PRICE con sus dos variantes de features).
+    "UPDOWN_OU_5M":         _BASE_GBM,
+    "UPDOWN_OU_5M#BTC#5min": _BASE_GBM,
+    "UPDOWN_OU_5M#ETH#5min": _BASE_GBM,
+    "UPDOWN_OU_5M#SOL#5min": _BASE_GBM,
+    "UPDOWN_OU_5M#XRP#5min": _BASE_GBM,
+    "UPDOWN_OU_5M#DOGE#5min": _BASE_GBM,
+    "UPDOWN_OU_5M#BNB#5min": _BASE_GBM,
+
+    # GBM_LATE_60M_PYCONFIRMADO / GBM_LATE_60M_FADE (08-Ago, mismo vigía:
+    # n=77 y n=135/3d, 0 aprendizaje causal). Ambas reusan el motor
+    # s_gbm_late_60min (_FADE invierte prob_yes sobre su resultado sin
+    # tocar el dict de features, _PYCONFIRMADO comparte _s_gbm_late) --
+    # mismo dict de features que el resto de la familia GBM_LATE ->
+    # _BASE_GBM aplica directo, igual que TARDIO/ESPACIO_ATR/MULTIHORIZONTE
+    # arriba.
+    "GBM_LATE_60M_PYCONFIRMADO":         _BASE_GBM,
+    "GBM_LATE_60M_PYCONFIRMADO#BTC#60min": _BASE_GBM,
+    "GBM_LATE_60M_PYCONFIRMADO#ETH#60min": _BASE_GBM,
+    "GBM_LATE_60M_PYCONFIRMADO#SOL#60min": _BASE_GBM,
+    "GBM_LATE_60M_FADE":         _BASE_GBM,
+    "GBM_LATE_60M_FADE#BTC#60min": _BASE_GBM,
+    "GBM_LATE_60M_FADE#ETH#60min": _BASE_GBM,
+    "GBM_LATE_60M_FADE#SOL#60min": _BASE_GBM,
+
+    # FAVORITO_CONFIRMADO_5MIN_BAJALATENCIA (08-Ago, mismo vigía: n=456/3d,
+    # 0 aprendizaje causal). Ejecutor de baja latencia fase0 (favorito5min_
+    # bajalatencia_fase0.py, sintética, nunca en pares_permitidos_live) --
+    # features propias reducidas (py_entrada/restante_min/hora_utc/
+    # lag_apertura_s/profundidad_ratio_no), mismo patrón que BALLENAS_
+    # TARDIAS (ejecutores de baja latencia no llaman a _libro_calidad).
+    "FAVORITO_CONFIRMADO_5MIN_BAJALATENCIA":           _BASE_FAVORITO_BAJALATENCIA,
+    "FAVORITO_CONFIRMADO_5MIN_BAJALATENCIA#XRP#5min":  _BASE_FAVORITO_BAJALATENCIA,
+    "FAVORITO_CONFIRMADO_5MIN_BAJALATENCIA#DOGE#5min": _BASE_FAVORITO_BAJALATENCIA,
 }
 
 IC_FILTRO_MIN   = -0.12   # IC para activar filtro (evitar)
