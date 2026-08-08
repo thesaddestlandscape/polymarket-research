@@ -36,8 +36,12 @@ hacer los robustos"):
      su cuenta, no mezclados).
 
 Un bucket se marca "malo_confirmado" (candidato a stake=0 en el filtro) o
-"bueno_confirmado" solo si pasa las 3 barras. Todo lo demás queda
-"sin_concluir" -- fail-open, no se toca.
+"bueno_confirmado" solo si pasa las 3 barras. "bueno_confirmado" exige
+ADEMÁS un piso absoluto (08-Ago): pnl_medio del bucket >= 0 -- "diff" es
+relativo al resto de buckets de la misma tupla, así que un bucket puede
+ser "el menos malo" de una tupla que pierde dinero en todos sus buckets
+sin este piso. Todo lo demás queda "sin_concluir" -- fail-open, no se
+toca.
 
 Solo lectura -- no cambia prob_yes/stake/pares_permitidos_live. Genera
 `data/shadow/gate_bucket_propio.json`, consumido por
@@ -295,7 +299,23 @@ def main():
     for idx, p in enumerate(pendientes):
         if idx not in sobreviven:
             continue
-        veredicto = "malo_confirmado" if p["diff"] < 0 else "bueno_confirmado"
+        if p["diff"] < 0:
+            veredicto = "malo_confirmado"
+        elif p["entrada"]["pnl_medio"] >= 0:
+            veredicto = "bueno_confirmado"
+        else:
+            # Piso absoluto (08-Ago, petición explícita Javi): "diff" es
+            # relativo al RESTO de buckets de la misma tupla -- un bucket
+            # puede ser significativamente mejor que el resto y aun así
+            # perder dinero en términos absolutos (ej. tupla entera con
+            # pnl negativo en todos sus buckets, este es "el menos malo").
+            # Los ejecutores live exigen veredicto=="bueno_confirmado" para
+            # operar (fail-closed) -- sin este piso, "bueno_confirmado"
+            # podía dejar operar en una zona que sigue perdiendo dinero.
+            # Queda "sin_concluir" (default), nunca "malo_confirmado" --
+            # no hay evidencia de que sea PEOR que el resto, solo de que no
+            # basta para confirmar "bueno" en términos absolutos.
+            continue
         p["entrada"]["veredicto"] = veredicto
         marca = "🔴" if veredicto == "malo_confirmado" else "🟢"
         etiqueta = "LIVE" if p["es_live"] else "candidato"
