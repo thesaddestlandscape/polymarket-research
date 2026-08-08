@@ -80,13 +80,35 @@ def _archivo_hoy() -> Path:
     return DIR_DATALOGS / f"libro_ambos_lados_{fecha}.csv"
 
 
+# Caché de _universo_activo() (08-Ago): el CSV de hoy lo va apendizando
+# capture_markets.py sin parar (557k filas / 253MB a media mañana) y esta
+# función lo releía ENTERO en cada llamada -- box_builder_fase0.py la
+# invoca cada 3s, lo que convertía un simple "qué mercados hay vivos" en
+# el consumidor de CPU dominante del proceso observadores_fase0.py (load5
+# flapping >3x nproc todo el día, ver vigia_carga_sistema). El propio
+# executor de dinero real (favorito_confirmado_btc60min_buyno_executor.py)
+# ya se protegía solo -- solo llama a esta función cada REFRESCO_UNIVERSO_S=
+# 30s, nunca en su loop rápido de 1.5s -- así que un TTL por debajo de eso
+# no introduce ninguna staleness nueva para el dinero real, solo evita que
+# los consumidores de solo lectura (Box Builder FASE 0, etc.) fuercen un
+# rescan completo cada pocos segundos. Solo lectura, misma firma/salida.
+_UNIVERSO_CACHE: dict = {"ts": 0.0, "fecha": "", "data": {}}
+_UNIVERSO_CACHE_TTL_S = 15.0
+
+
 def _universo_activo() -> dict:
     """{market_id: (activo, marco_str, condition_id, end_date)} desde el CSV
     de hoy de capture_markets.py, solo mercados Up/Down aún no vencidos.
     Clasificación por TEXTO de la pregunta (_parse_updown_tipo/
     identificar_activo, mismas funciones que usa shadow_predict.py) -- no
     por slug, ver nota arriba sobre por qué el slug no sirve para 60min."""
-    archivo = DIR_MARKETS / f"{datetime.now(timezone.utc).strftime('%Y-%m-%d')}.csv"
+    fecha = datetime.now(timezone.utc).strftime("%Y-%m-%d")
+    ahora_ts = time.time()
+    if (_UNIVERSO_CACHE["fecha"] == fecha
+            and ahora_ts - _UNIVERSO_CACHE["ts"] < _UNIVERSO_CACHE_TTL_S):
+        return _UNIVERSO_CACHE["data"]
+
+    archivo = DIR_MARKETS / f"{fecha}.csv"
     if not archivo.exists():
         return {}
     ahora = datetime.now(timezone.utc)
@@ -110,6 +132,9 @@ def _universo_activo() -> dict:
             if edt <= ahora:
                 continue
             universo[r.get("market_id", "")] = (activo, f"{vent}min", r.get("condition_id", ""), edt)
+    _UNIVERSO_CACHE["ts"] = ahora_ts
+    _UNIVERSO_CACHE["fecha"] = fecha
+    _UNIVERSO_CACHE["data"] = universo
     return universo
 
 
