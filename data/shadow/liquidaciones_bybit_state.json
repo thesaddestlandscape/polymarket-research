@@ -1,5 +1,5 @@
 {
- "generado_utc": "2026-08-08T18:21:07+00:00",
+ "generado_utc": "2026-08-08T18:28:37+00:00",
  "fuente": "bybit",
  "BNB": {
   "2min": {
@@ -56,15 +56,15 @@
  "DOGE": {
   "2min": {
    "usd_long": 0.0,
-   "usd_short": 50.78,
-   "n": 1,
-   "imbalance": 1.0
+   "usd_short": 0.0,
+   "n": 0,
+   "imbalance": null
   },
   "5min": {
    "usd_long": 0.0,
-   "usd_short": 50.78,
-   "n": 1,
-   "imbalance": 1.0
+   "usd_short": 0.0,
+   "n": 0,
+   "imbalance": null
   },
   "15min": {
    "usd_long": 0.0,
@@ -88,9 +88,9 @@
   },
   "5min": {
    "usd_long": 0.0,
-   "usd_short": 4706.3,
-   "n": 1,
-   "imbalance": 1.0
+   "usd_short": 0.0,
+   "n": 0,
+   "imbalance": null
   },
   "15min": {
    "usd_long": 0.0,
@@ -108,53 +108,53 @@
  "SOL": {
   "2min": {
    "usd_long": 0.0,
+   "usd_short": 764.87,
+   "n": 1,
+   "imbalance": 1.0
+  },
+  "5min": {
+   "usd_long": 0.0,
+   "usd_short": 764.87,
+   "n": 1,
+   "imbalance": 1.0
+  },
+  "15min": {
+   "usd_long": 0.0,
+   "usd_short": 5994.38,
+   "n": 2,
+   "imbalance": 1.0
+  },
+  "60min": {
+   "usd_long": 2050.83,
+   "usd_short": 5994.38,
+   "n": 4,
+   "imbalance": 0.4902
+  }
+ },
+ "XRP": {
+  "2min": {
+   "usd_long": 0.0,
    "usd_short": 0.0,
    "n": 0,
    "imbalance": null
   },
   "5min": {
    "usd_long": 0.0,
-   "usd_short": 5229.51,
+   "usd_short": 956.03,
    "n": 1,
    "imbalance": 1.0
   },
   "15min": {
    "usd_long": 0.0,
-   "usd_short": 5229.51,
-   "n": 1,
-   "imbalance": 1.0
-  },
-  "60min": {
-   "usd_long": 2050.83,
-   "usd_short": 5229.51,
-   "n": 3,
-   "imbalance": 0.4366
-  }
- },
- "XRP": {
-  "2min": {
-   "usd_long": 0.0,
-   "usd_short": 104.6,
-   "n": 2,
-   "imbalance": 1.0
-  },
-  "5min": {
-   "usd_long": 0.0,
-   "usd_short": 104.6,
-   "n": 2,
-   "imbalance": 1.0
-  },
-  "15min": {
-   "usd_long": 0.0,
-   "usd_short": 104.6,
-   "n": 2,
+   "usd_short": 1319.93,
+   "n": 4,
    "imbalance": 1.0
   },
   "60min": {
    "usd_long": 9.36,
-   "usd_short": 344.96,
-   "n": 4,
-   "imbalance": 0.9471
+   "usd_short": 1560.3,
+   "n": 6,
+   "imbalance": 0.9881
   }
  }
 }
