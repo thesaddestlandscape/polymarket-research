@@ -1,5 +1,5 @@
 {
- "generado_utc": "2026-08-08T19:15:36+00:00",
+ "generado_utc": "2026-08-08T19:22:12+00:00",
  "fuente": "bybit",
  "BNB": {
   "2min": {
@@ -74,9 +74,9 @@
   },
   "60min": {
    "usd_long": 0.0,
-   "usd_short": 50.78,
-   "n": 1,
-   "imbalance": 1.0
+   "usd_short": 0.0,
+   "n": 0,
+   "imbalance": null
   }
  },
  "ETH": {
@@ -100,9 +100,9 @@
   },
   "60min": {
    "usd_long": 0.0,
-   "usd_short": 4706.3,
-   "n": 1,
-   "imbalance": 1.0
+   "usd_short": 0.0,
+   "n": 0,
+   "imbalance": null
   }
  },
  "SOL": {
@@ -120,13 +120,13 @@
   },
   "15min": {
    "usd_long": 0.0,
-   "usd_short": 0.0,
-   "n": 0,
-   "imbalance": null
+   "usd_short": 75.6,
+   "n": 1,
+   "imbalance": 1.0
   },
   "60min": {
    "usd_long": 0.0,
-   "usd_short": 5994.38,
+   "usd_short": 840.47,
    "n": 2,
    "imbalance": 1.0
   }
@@ -152,8 +152,8 @@
   },
   "60min": {
    "usd_long": 0.0,
-   "usd_short": 1319.93,
-   "n": 4,
+   "usd_short": 1215.33,
+   "n": 2,
    "imbalance": 1.0
   }
  }
