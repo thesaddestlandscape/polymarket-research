@@ -578,5 +578,13 @@
   "FAVORITO_CONFIRMADO_15MIN_ALTACONVICCION#XRP#15min": {
     "n": 246,
     "confirmado": false
+  },
+  "FAVORITO_CONFIRMADO_5MIN_BAJALATENCIA#XRP": {
+    "n": 200,
+    "confirmado": false
+  },
+  "FAVORITO_CONFIRMADO_5MIN_BAJALATENCIA#XRP#5min": {
+    "n": 200,
+    "confirmado": false
   }
 }
