@@ -124,5 +124,11 @@
   },
   "cementerio:UPDOWN_OU_5M#SOL#5min": {
     "avisado": true
+  },
+  "cementerio:PRICE_TARGET_GBM_FADE#ETH#atexpiry": {
+    "avisado": true
+  },
+  "cementerio:LIQUIDACIONES_5M#BTC#5min": {
+    "avisado": true
   }
 }
