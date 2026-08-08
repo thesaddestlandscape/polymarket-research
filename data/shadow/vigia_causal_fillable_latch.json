@@ -4460,5 +4460,15 @@
  "candidato_proxy#GBM_LATE_15M_ESPACIO_ATR#SOL#BUY_NO#drift_60minabs_lt": false,
  "candidato_proxy#GBM_LATE_15M_MULTIHORIZONTE#SOL#BUY_NO#sigma_ewma_delta_pctlt": false,
  "candidato_proxy#GBM_LATE_15M_MULTIHORIZONTE#SOL#15min#SOL#BUY_NO#drift_60minabs_lt": false,
- "candidato_proxy#GBM_LATE_15M_ESPACIO_ATR#BTC#BUY_YES#drift_60minabs_lt": false
+ "candidato_proxy#GBM_LATE_15M_ESPACIO_ATR#BTC#BUY_YES#drift_60minabs_lt": false,
+ "candidato_proxy#GBM_LATE_15M_TARDIO#SOL#BUY_NO#drift_60minabs_lt": false,
+ "FILTRO#candidato_proxy#STRUCT_NO_15M#SOL#15min#SOL#BUY_NO#py_entradalt": false,
+ "FILTRO#candidato_proxy#UPDOWN_OU_5M#DOGE#BUY_NO#delta_ratio_macroabs_lt": false,
+ "FILTRO#candidato_proxy#UPDOWN_OU_5M#DOGE#5min#DOGE#BUY_NO#drift_15minabs_gt": false,
+ "FILTRO#candidato_proxy#UPDOWN_OU_5M#SOL#BUY_NO#delta_ratio_macroabs_lt": false,
+ "FILTRO#candidato_proxy#UPDOWN_OU_5M#XRP#BUY_NO#pct_spot_vs_refabs_gt": false,
+ "FILTRO#candidato_proxy#UPDOWN_OU_5M#XRP#BUY_NO#drift_15minabs_gt": false,
+ "FILTRO#candidato_proxy#UPDOWN_OU_5M#XRP#BUY_NO#delta_ratio_macroabs_lt": false,
+ "FILTRO#candidato_proxy#UPDOWN_OU_5M#XRP#5min#XRP#BUY_NO#drift_15minabs_gt": false,
+ "FILTRO#candidato_proxy#UPDOWN_OU_5M#XRP#5min#XRP#BUY_NO#delta_ratio_macroabs_lt": false
 }
