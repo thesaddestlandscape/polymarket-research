@@ -4126,7 +4126,7 @@
  "candidato_proxy#GBM_LATE_15M_ESPACIO_ATR#ETH#15min#ETH#BUY_YES#hora_utcgt": false,
  "candidato_proxy#GBM_LATE_15M_ESPACIO_ATR#ETH#15min#ETH#BUY_YES#sigma_ewma_delta_pctgt": false,
  "candidato_proxy#GBM_LATE_15M_ESPACIO_ATR#ETH#15min#ETH#BUY_YES#libro_liquidezgt": false,
- "candidato_proxy#GBM_LATE_15M_ESPACIO_ATR#ETH#BUY_NO#sigma_hgt": true,
+ "candidato_proxy#GBM_LATE_15M_ESPACIO_ATR#ETH#BUY_NO#sigma_hgt": false,
  "candidato_proxy#GBM_LATE_15M_ESPACIO_ATR#ETH#BUY_NO#hora_utcgt": false,
  "candidato_proxy#GBM_LATE_15M_ESPACIO_ATR#SOL#BUY_YES#sigma_hgt": false,
  "candidato_proxy#GBM_LATE_15M_ESPACIO_ATR#SOL#BUY_YES#hora_utcgt": false,
@@ -4225,7 +4225,7 @@
  "candidato_proxy#GBM_LATE_15M_ESPACIO_ATR#BTC#BUY_NO#sigma_ewma_delta_pctlt": false,
  "candidato_proxy#GBM_LATE_15M_ESPACIO_ATR#ETH#BUY_NO#sigma_ewma_delta_pctlt": false,
  "candidato_proxy#GBM_LATE_15M_ESPACIO_ATR#SOL#BUY_NO#sigma_ewma_delta_pctlt": false,
- "candidato_proxy#GBM_LATE_15M_ESPACIO_ATR#XRP#BUY_NO#sigma_ewma_delta_pctlt": false,
+ "candidato_proxy#GBM_LATE_15M_ESPACIO_ATR#XRP#BUY_NO#sigma_ewma_delta_pctlt": true,
  "candidato_proxy#FAVORITO_CONFIRMADO#XRP#BUY_YES#hora_utcgt": false,
  "candidato_proxy#GBM_LATE_15M_ESPACIO_ATR#XRP#15min#XRP#BUY_YES#dist_vwap_pctlt": false,
  "candidato_proxy#FAVORITO_CONFIRMADO#DOGE#BUY_YES#hora_utcgt": false,
@@ -4454,5 +4454,10 @@
  "candidato_proxy#GBM_LATE_15M_ESPACIO_ATR#BTC#BUY_NO#drift_60minabs_lt": false,
  "candidato_proxy#GBM_LATE_15M_MULTIHORIZONTE#BTC#BUY_NO#drift_60minabs_lt": false,
  "candidato_proxy#GBM_LATE_15M_PYCONFIRMADO#ETH#BUY_YES#libro_liquidezgt": false,
- "candidato_proxy#GBM_LATE_15M_MULTIHORIZONTE#SOL#BUY_NO#drift_60minabs_lt": false
+ "candidato_proxy#GBM_LATE_15M_MULTIHORIZONTE#SOL#BUY_NO#drift_60minabs_lt": false,
+ "candidato_proxy#GBM_LATE_15M_ESPACIO_ATR#BNB#BUY_NO#drift_60minabs_lt": false,
+ "candidato_proxy#GBM_LATE_15M_ESPACIO_ATR#ETH#BUY_NO#drift_60minabs_lt": false,
+ "candidato_proxy#GBM_LATE_15M_ESPACIO_ATR#SOL#BUY_NO#drift_60minabs_lt": false,
+ "candidato_proxy#GBM_LATE_15M_MULTIHORIZONTE#SOL#BUY_NO#sigma_ewma_delta_pctlt": false,
+ "candidato_proxy#GBM_LATE_15M_MULTIHORIZONTE#SOL#15min#SOL#BUY_NO#drift_60minabs_lt": false
 }
