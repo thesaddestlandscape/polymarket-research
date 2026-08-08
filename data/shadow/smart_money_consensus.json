@@ -1,45 +1,38 @@
 {
   "BTC": {
-    "smart_money_consensus": 0.0033,
-    "n_trades_smart": 1206,
-    "n_wallets_smart": 14,
-    "smart_money_consensus_ponderado": 0.0781,
-    "n_wallets_smart_ponderado": 14
-  },
-  "ETH": {
-    "smart_money_consensus": 0.0179,
-    "n_trades_smart": 613,
-    "n_wallets_smart": 8,
-    "smart_money_consensus_ponderado": -0.1114,
-    "n_wallets_smart_ponderado": 8
+    "smart_money_consensus": -0.0397,
+    "n_trades_smart": 1033,
+    "n_wallets_smart": 7,
+    "smart_money_consensus_ponderado": 0.0854,
+    "n_wallets_smart_ponderado": 7
   },
   "SOL": {
-    "smart_money_consensus": -0.2081,
-    "n_trades_smart": 149,
-    "n_wallets_smart": 5,
-    "smart_money_consensus_ponderado": -0.3359,
-    "n_wallets_smart_ponderado": 5
-  },
-  "XRP": {
-    "smart_money_consensus": 0.12,
-    "n_trades_smart": 75,
+    "smart_money_consensus": 0.0549,
+    "n_trades_smart": 182,
     "n_wallets_smart": 4,
-    "smart_money_consensus_ponderado": 0.0219,
+    "smart_money_consensus_ponderado": -0.1359,
     "n_wallets_smart_ponderado": 4
   },
+  "XRP": {
+    "smart_money_consensus": -0.2063,
+    "n_trades_smart": 63,
+    "n_wallets_smart": 3,
+    "smart_money_consensus_ponderado": -0.0344,
+    "n_wallets_smart_ponderado": 3
+  },
+  "ETH": {
+    "smart_money_consensus": 0.0573,
+    "n_trades_smart": 524,
+    "n_wallets_smart": 5,
+    "smart_money_consensus_ponderado": 0.1125,
+    "n_wallets_smart_ponderado": 5
+  },
   "DOGE": {
-    "smart_money_consensus": -0.3333,
-    "n_trades_smart": 9,
-    "n_wallets_smart": 2,
-    "smart_money_consensus_ponderado": -0.5452,
-    "n_wallets_smart_ponderado": 2
+    "smart_money_consensus": 0.3333,
+    "n_trades_smart": 6,
+    "n_wallets_smart": 1,
+    "smart_money_consensus_ponderado": 0.5596,
+    "n_wallets_smart_ponderado": 1
   },
-  "BNB": {
-    "smart_money_consensus": -0.0149,
-    "n_trades_smart": 67,
-    "n_wallets_smart": 2,
-    "smart_money_consensus_ponderado": 0.1603,
-    "n_wallets_smart_ponderado": 2
-  },
-  "_actualizado": "2026-08-08T04:01:35+00:00"
+  "_actualizado": "2026-08-08T04:21:22+00:00"
 }
