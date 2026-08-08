@@ -4103,7 +4103,7 @@
  "candidato_proxy#GBM_LATE_15M#XRP#15min#XRP#BUY_YES#sigma_hgt": false,
  "candidato_proxy#GBM_LATE_15M#XRP#15min#XRP#BUY_YES#hora_utcgt": false,
  "candidato_proxy#GBM_LATE_15M#XRP#15min#XRP#BUY_YES#dist_vwap_pctgt": false,
- "candidato_proxy#GBM_LATE_15M#XRP#BUY_NO#sigma_hgt": false,
+ "candidato_proxy#GBM_LATE_15M#XRP#BUY_NO#sigma_hgt": true,
  "candidato_proxy#GBM_LATE_15M#XRP#15min#XRP#BUY_NO#sigma_hgt": false,
  "candidato_proxy#GBM_LATE_15M#XRP#15min#XRP#BUY_NO#hora_utcgt": false,
  "candidato_proxy#GBM_LATE_15M#XRP#15min#XRP#BUY_NO#hora_utclt": false,
