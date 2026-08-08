@@ -641,7 +641,19 @@ def check_switch_ventana() -> None:
 # senal_caducada en fast.log sin ninguna alerta — el circuit breaker real
 # (Freno 1, bankroll_minimo_eur) solo avisa al cruzar el suelo absoluto, no
 # esta zona intermedia. Ver project_bankroll_deadlock_stake_17jul (memoria).
-_deadlock_alerta_ts: float = 0.0  # timestamp del último alerta enviado
+# 08-Ago (petición explícita Javi, "no paran de llegar avisos... no puede
+# ser"): el techo_freno_diario puede quedarse pegado a ~0€ durante horas en
+# un día con pnl negativo (no se resetea hasta medianoche UTC) — con el
+# cooldown de 30min esto mandaba el MISMO aviso 15-20 veces en una sola
+# tarde (ver logs/watchdog.log 05/06-Ago), puro ruido una vez que Javi ya
+# lo ha visto la primera vez. Cambiado de cooldown-por-tiempo a
+# latch-por-entrada (mismo patrón que vigia_sigma_patrones/vigia_log_growth,
+# CLAUDE.md pt.5): un solo aviso al ENTRAR en deadlock, silencio mientras
+# se mantenga, nuevo aviso solo si sale y vuelve a entrar (p.ej. un nuevo
+# día, o tras operar y volver a bloquearse). No toca el circuit breaker en
+# sí (freno_diario/bankroll_minimo siguen exactamente igual) — solo cuántas
+# veces se notifica el mismo estado ya conocido.
+_deadlock_avisado: bool = False
 
 
 def check_bankroll_deadlock() -> None:
@@ -649,7 +661,7 @@ def check_bankroll_deadlock() -> None:
     pase el IC (probado con IC=1.0, el máximo posible) pese a que el switch
     está ON y el circuit breaker real todavía no ha saltado. Reutiliza
     calcular_stake() tal cual (no duplica su lógica de frenos/margen)."""
-    global _deadlock_alerta_ts
+    global _deadlock_avisado
     try:
         from live_stake import calcular_stake, bankroll_minimo_eur_hoy
         from live_guard import switch_activo
@@ -659,8 +671,8 @@ def check_bankroll_deadlock() -> None:
         en_deadlock = switch_activo() and not r["viable"] and r["bankroll"] > bankroll_minimo_eur_hoy()
 
         if en_deadlock:
-            if time.time() - _deadlock_alerta_ts > DEADLOCK_ALERTA_COOLDOWN:
-                _deadlock_alerta_ts = time.time()
+            if not _deadlock_avisado:
+                _deadlock_avisado = True
                 log(f"⚠ Bankroll en zona muerta de sizing — alerta Telegram enviada. {r['motivo']}")
                 enviar_telegram(
                     "⚠️ *Bankroll en zona muerta (deadlock de sizing)*\n"
@@ -670,10 +682,13 @@ def check_bankroll_deadlock() -> None:
                     "el sistema queda parado en silencio (`no_viable_stake`/`senal_caducada` "
                     "repetidos en fast.log).\n"
                     "Necesita recarga de capital o un override puntual "
-                    "(`bankroll_minimo_eur_override` / `freno_diario_pct_override` en config_live.json)."
+                    "(`bankroll_minimo_eur_override` / `freno_diario_pct_override` en config_live.json).\n"
+                    "_(este aviso no se repite hasta salir y volver a entrar en zona muerta)_"
                 )
+            else:
+                log(f"  [check-deadlock] sigue en zona muerta (ya avisado) — {r['motivo']}")
         else:
-            _deadlock_alerta_ts = 0.0  # reset al salir de la zona muerta
+            _deadlock_avisado = False  # reset al salir de la zona muerta
     except Exception as e:
         log(f"  [check-deadlock] Error: {e}")
 

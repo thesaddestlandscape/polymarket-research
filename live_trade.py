@@ -2071,6 +2071,33 @@ def _ejecutar_orden_polymarket(market_id: str, direction: str,
         # una vez conocido más abajo.
         slip_estimado_kyle = _estimar_slip_kyle(depth.get("ratio_vs_stake") if depth.get("ok") else None)
 
+        # Cierre de la race de doble-ejecución (08-Ago, hallazgo real: mismo
+        # market_id FAVORITO_CONFIRMADO#BTC#60min#BUY_NO ejecutado DOS veces,
+        # 2s de diferencia, por live_trade.py::main() y por el ejecutor
+        # dedicado favorito_confirmado_btc60min_buyno_executor.py -- ambos
+        # procesos comprobaron _ya_operados_hoy() (lee trades.csv) casi al
+        # mismo instante, ninguno había escrito todavía su fila, TOCTOU
+        # cross-proceso puro. El lock de _registrar_trade (TRADES_LOCK_PATH,
+        # 16-Jul) solo protegía el append en sí, no esta ventana de decisión.
+        # Se reusa el mismo fichero de lock: se adquiere aquí, en el punto de
+        # no retorno (vetos/requote ya pasados), se re-chequea ya_operados_hoy
+        # en caliente bajo el lock, y se libera solo tras colocar la orden --
+        # serializa la ejecución real entre TODOS los procesos del sistema
+        # (barato: unas pocas órdenes reales por hora, nunca contended en la
+        # práctica) sin rediseñar el resto del pipeline. Código de seguridad
+        # live -- no minimizar/quitar este bloque.
+        _lock_f = open(TRADES_LOCK_PATH, "w")
+        fcntl.flock(_lock_f, fcntl.LOCK_EX)
+        if market_id in _ya_operados_hoy():
+            fcntl.flock(_lock_f, fcntl.LOCK_UN)
+            _lock_f.close()
+            log(f"  ⛔ {market_id} ya operado por otro proceso (dedup bajo lock) — no se ejecuta")
+            return {
+                "ok": False, "no_fill": True, "ya_operado_race": True,
+                "order_id": None, "entry_price": entry_price,
+                "fee_eur": 0.0,
+                "error": "market_id ya operado por otro proceso (race cerrada bajo lock)",
+            }
         client = _get_clob_client()  # recién aquí: vetos/requote ya pasaron, orden real inminente
         _marcar_orden_en_curso(market_id, direction)
         try:
@@ -2132,6 +2159,8 @@ def _ejecutar_orden_polymarket(market_id: str, direction: str,
                 raise RuntimeError("no se pudo construir una orden con amounts válidos")
         finally:
             _limpiar_orden_en_curso()
+            fcntl.flock(_lock_f, fcntl.LOCK_UN)
+            _lock_f.close()
 
         order_id = resp.get("orderID") or resp.get("id") or str(resp)
         filled_price = float(resp.get("price", precio))
