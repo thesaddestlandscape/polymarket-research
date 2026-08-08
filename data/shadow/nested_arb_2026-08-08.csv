@@ -955,3 +955,15 @@ timestamp_utc,activo,nesting,combo,coste,profit_min_pct,gap_opens_pct,depth_usd,
 2026-08-08T08:43:11+00:00,ETH,5min15m,YESout+NOin,1.268,-26.8,0.064,8.88,108,0.998,0.27,1916.005,1914.78,eth-updown-5m-1786178400,eth-updown-15m-1786177800
 2026-08-08T08:43:12+00:00,SOL,5min15m,YESout+NOin,1.52,-52.0,0.0802,8.06,107,0.62,0.9,74.84,74.78,sol-updown-5m-1786178400,sol-updown-15m-1786177800
 2026-08-08T08:43:12+00:00,XRP,5min15m,NOout+YESin,1.05,-5.0,-0.029,0.3,107,0.99,0.06,1.0337,1.034,xrp-updown-5m-1786178400,xrp-updown-15m-1786177800
+2026-08-08T08:46:53+00:00,BTC,15min60m,YESout+NOin,1.76,-76.0,0.0764,121.74,786,0.91,0.85,64975.635,64926.0,btc-updown-15m-1786178700,bitcoin-up-or-down-august-8-2026-4am-et
+2026-08-08T08:46:54+00:00,ETH,15min60m,YESout+NOin,1.83,-83.0,0.1189,3.23,785,0.99,0.84,1916.085,1913.81,eth-updown-15m-1786178700,ethereum-up-or-down-august-8-2026-4am-et
+2026-08-08T08:46:54+00:00,SOL,15min60m,YESout+NOin,0.96,4.0,0.0401,6.18,785,0.12,0.84,74.78,74.75,sol-updown-15m-1786178700,solana-up-or-down-august-8-2026-4am-et
+2026-08-08T08:46:54+00:00,XRP,15min60m,YESout+NOin,0.95,5.0,0.0,1.19,785,0.17,0.78,1.034,1.034,xrp-updown-15m-1786178700,xrp-up-or-down-august-8-2026-4am-et
+2026-08-08T08:47:45+00:00,BTC,15min60m,YESout+NOin,1.76,-76.0,0.0764,17.1,734,0.9,0.86,64975.635,64926.0,btc-updown-15m-1786178700,bitcoin-up-or-down-august-8-2026-4am-et
+2026-08-08T08:47:45+00:00,ETH,15min60m,YESout+NOin,1.87,-87.0,0.1189,29.92,734,0.99,0.88,1916.085,1913.81,eth-updown-15m-1786178700,ethereum-up-or-down-august-8-2026-4am-et
+2026-08-08T08:47:45+00:00,SOL,15min60m,YESout+NOin,0.95,5.0,0.0401,0.7,734,0.1,0.85,74.78,74.75,sol-updown-15m-1786178700,solana-up-or-down-august-8-2026-4am-et
+2026-08-08T08:47:46+00:00,XRP,15min60m,YESout+NOin,0.95,5.0,0.0,1.05,733,0.15,0.8,1.034,1.034,xrp-updown-15m-1786178700,xrp-up-or-down-august-8-2026-4am-et
+2026-08-08T08:49:09+00:00,BTC,15min60m,YESout+NOin,1.78,-78.0,0.0764,95.45,650,0.95,0.83,64975.635,64926.0,btc-updown-15m-1786178700,bitcoin-up-or-down-august-8-2026-4am-et
+2026-08-08T08:49:10+00:00,ETH,15min60m,YESout+NOin,1.709,-70.9,0.1189,49.45,649,0.989,0.72,1916.085,1913.81,eth-updown-15m-1786178700,ethereum-up-or-down-august-8-2026-4am-et
+2026-08-08T08:49:10+00:00,SOL,15min60m,YESout+NOin,0.9,10.0,0.0401,1.75,649,0.25,0.65,74.78,74.75,sol-updown-15m-1786178700,solana-up-or-down-august-8-2026-4am-et
+2026-08-08T08:49:11+00:00,XRP,15min60m,YESout+NOin,0.9,10.0,0.0,2.35,648,0.28,0.62,1.034,1.034,xrp-updown-15m-1786178700,xrp-up-or-down-august-8-2026-4am-et
