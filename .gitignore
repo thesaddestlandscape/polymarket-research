@@ -32,3 +32,7 @@ data/live/ledger_fiscal_*.csv
 data/shadow/ballenas_timing_history.csv
 data/shadow/wallet_mirror_dry_run.csv
 data/shadow/ballenas_universo_cache/
+# 09-Ago: mismo motivo que ballenas_timing_history.csv arriba -- 77.5MB,
+# ~3.2MB/día, a ~1 semana del bloqueo duro de GitHub. Backup diario propio
+# vía scripts/backup_results_csv.sh (volumen dedicado, fuera de git).
+data/shadow/results.csv
