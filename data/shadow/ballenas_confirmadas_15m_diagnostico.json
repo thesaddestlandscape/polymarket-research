@@ -4025,7 +4025,7 @@
         }
       },
       "error_api": {
-        "conteo": 2123,
+        "conteo": 2126,
         "mercados": {
           "0xc7332b863bfd2c637fd50c6a5e93d01b8dbaf8bdbe442d07cb66fd1bdc1a1199": 7,
           "0xee07c9f085353ff5d5bcc72a1cc08b0a512d4654618efd5c0a28239549ad4c1e": 15,
@@ -4210,7 +4210,7 @@
           "0x9bfb0be271f57bbf6a730f3bef23a9bfbd742b46c90d7275c72ac2896d96150f": 2,
           "0x344b8273da07b60ca6b9e255e49c8e510f7f12923e091e1b48786b2623975baa": 1,
           "0xb3fd06c039651a8b77b42cd4b96e54faf5a7d3377eba04f656810f4847f3eb2e": 3,
-          "0x0b813c8ccf47de938dc0a2334e564962dbf0b53b8ce04478d8f005b23f8ece7e": 28,
+          "0x0b813c8ccf47de938dc0a2334e564962dbf0b53b8ce04478d8f005b23f8ece7e": 31,
           "0xf87a69414a0492c130356c774c0dc55bf28d7c667d01854b4a6875f1f68215b7": 1,
           "0x86a854dff43f0cb81a8f1de33c977fe1b7d20357f88144c221de7c488f95fcb6": 8,
           "0x4c9bd09f89a18aa92077a5c0d9e5326404454adf484afa27e0572a33d8ae0737": 2
@@ -4228,7 +4228,7 @@
   "DOGE#BUY_NO": {
     "motivos": {
       "banda_no_confirmada": {
-        "conteo": 15698,
+        "conteo": 15705,
         "mercados": {
           "0xc132ec92b406eb13da1cb814396e60b66f819f1be1c0d8394317d53e5b2c08b1": 6,
           "0xd0672cde7ddef0a3136bf4e9209e193940596ab831742079687f92fea3d8ca1b": 10,
@@ -5068,8 +5068,9 @@
           "0x50dad1165df2325f4f78071ded5f02e49602ecbca11692573805370fe2d3212e": 19,
           "0x6846424da7c9dbc8718a7426941865c2305bc82108efd2f64653dfe93c8743fb": 18,
           "0x4bbaabb96aacc951d098f526372cbf1c148f71513022c9df9dd144227ababd61": 12,
-          "0x78265a706bb45932cbf8680faffe3af3f539adcc71fbbf7362ef03cabe39c32f": 9,
-          "0xd558e138dbfd7784cf3b0fafa7d5e66468bc449521ea29de08bc28fdda321688": 3
+          "0x78265a706bb45932cbf8680faffe3af3f539adcc71fbbf7362ef03cabe39c32f": 12,
+          "0xd558e138dbfd7784cf3b0fafa7d5e66468bc449521ea29de08bc28fdda321688": 6,
+          "0xc9f1ba4a1360b5dc3178d286a6c1bd15d1ddab2276e4298fba45b4a8a8bbe83a": 1
         }
       },
       "pocos_trades_en_banda": {
