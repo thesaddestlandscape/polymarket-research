@@ -1,5 +1,5 @@
 {
-  "actualizado": "2026-08-09T15:02:15+00:00",
+  "actualizado": "2026-08-09T15:11:27+00:00",
   "aviso_fillability": "Gate riguroso = shadow puro (results.csv), NO verifica fill-ability. 27-Jul: VERIFICADO con datos reales -- uniendo libro_snapshots.csv (23 dias de chequeo de profundidad REAL contra la API del CLOB, no simulacion) con results.csv, el subconjunto GBM_LATE_15M realmente ejecutable en las horas 13/15/17/19h da n=45 hit=48.9% (coinflip) IC=-0.011 NO CONCLUYENTE en TODOS los criterios (Wilson cruza 0.5, no bate shuffle p=0.616, PnL bootstrap CI cruza 0) -- el edge que el gate shadow ve (GATE OK en 9 celdas) se evapora por completo al restringir a lo fillable de verdad. NO aplicar ninguna celda de esta familia a meta.hora_boost_factor sin repetir esta verificacion con n fresco. Ver idea_fillability_gbmlate_bucket_precio_23jul.",
   "celdas": {
     "ORDER_FLOW_5M##BUY_NO#13": {
@@ -1607,43 +1607,43 @@
       "veredicto": "ACUMULANDO (n<40)"
     },
     "FAVORITO_CONFIRMADO#ETH#5min#BUY_NO#15": {
-      "n": 61,
-      "hit": 0.6557377049180327,
-      "ic": 0.1507936507936508,
-      "lo": 0.550976112122169,
-      "hi": 0.7472688340975958,
-      "p_shuf": 0.009,
-      "veredicto": "NO CONCLUYENTE: PnL no bate bootstrap (CI90%=[-0.0717,+0.2873] cruza 0)",
-      "pnl_media": 0.1124737704918033,
-      "pnl_lo": -0.07172131147540982,
-      "pnl_hi": 0.2872622950819672,
-      "pnl_pboot": 0.1534
+      "n": 62,
+      "hit": 0.6451612903225806,
+      "ic": 0.140625,
+      "lo": 0.5410564354052837,
+      "hi": 0.7371247695134236,
+      "p_shuf": 0.0166,
+      "veredicto": "NO CONCLUYENTE: PnL no bate bootstrap (CI90%=[-0.0875,+0.2654] cruza 0)",
+      "pnl_media": 0.09338548387096776,
+      "pnl_lo": -0.08754032258064513,
+      "pnl_hi": 0.26538870967741934,
+      "pnl_pboot": 0.1996
     },
     "FAVORITO_CONFIRMADO#SOL#5min#BUY_YES#15": {
-      "n": 73,
-      "hit": 0.5616438356164384,
-      "ic": 0.06000000000000005,
-      "lo": 0.46560552443373987,
-      "hi": 0.6532753704488009,
-      "p_shuf": 0.1818,
-      "veredicto": "NO CONCLUYENTE: IC<0.08, Wilson cruza 0.5, no bate shuffle (p=0.182), PnL medio≤0 (-0.0597/trade)",
-      "pnl_media": -0.05971095890410958,
-      "pnl_lo": -0.24342191780821917,
-      "pnl_hi": 0.12697945205479452,
-      "pnl_pboot": 0.6976
+      "n": 75,
+      "hit": 0.5733333333333334,
+      "ic": 0.0714285714285714,
+      "lo": 0.4784474880775275,
+      "hi": 0.6631116767362691,
+      "p_shuf": 0.1314,
+      "veredicto": "NO CONCLUYENTE: IC<0.08, Wilson cruza 0.5, no bate shuffle (p=0.131), PnL medio≤0 (-0.0371/trade)",
+      "pnl_media": -0.03708666666666665,
+      "pnl_lo": -0.22505599999999995,
+      "pnl_hi": 0.1439146666666667,
+      "pnl_pboot": 0.6266
     },
     "FAVORITO_CONFIRMADO#ETH#5min#BUY_YES#15": {
-      "n": 75,
-      "hit": 0.6266666666666667,
-      "ic": 0.12337662337662336,
-      "lo": 0.5318858661147089,
-      "hi": 0.7126254185636672,
-      "p_shuf": 0.0196,
-      "veredicto": "NO CONCLUYENTE: PnL no bate bootstrap (CI90%=[-0.0656,+0.2739] cruza 0)",
-      "pnl_media": 0.10736400000000001,
-      "pnl_lo": -0.06561599999999998,
-      "pnl_hi": 0.273876,
-      "pnl_pboot": 0.1502
+      "n": 77,
+      "hit": 0.6233766233766234,
+      "ic": 0.120253164556962,
+      "lo": 0.5298107947353278,
+      "hi": 0.708565162414712,
+      "p_shuf": 0.019,
+      "veredicto": "NO CONCLUYENTE: PnL no bate bootstrap (CI90%=[-0.0663,+0.2661] cruza 0)",
+      "pnl_media": 0.10155064935064936,
+      "pnl_lo": -0.06633246753246752,
+      "pnl_hi": 0.26613766233766234,
+      "pnl_pboot": 0.1586
     },
     "FAVORITO_CONFIRMADO#ETH#5min#BUY_NO#17": {
       "n": 61,
@@ -1730,17 +1730,17 @@
       "pnl_pboot": 0.3954
     },
     "FAVORITO_CONFIRMADO#SOL#5min#BUY_NO#15": {
-      "n": 61,
-      "hit": 0.6229508196721312,
-      "ic": 0.11904761904761907,
-      "lo": 0.5177065407691578,
-      "hi": 0.7177499957201303,
-      "p_shuf": 0.0378,
-      "veredicto": "NO CONCLUYENTE: PnL no bate bootstrap (CI90%=[-0.1571,+0.2074] cruza 0)",
-      "pnl_media": 0.027088524590163948,
-      "pnl_lo": -0.15706229508196717,
-      "pnl_hi": 0.20741967213114754,
-      "pnl_pboot": 0.3938
+      "n": 62,
+      "hit": 0.6290322580645161,
+      "ic": 0.125,
+      "lo": 0.5247022113933963,
+      "hi": 0.7225699707565657,
+      "p_shuf": 0.0302,
+      "veredicto": "NO CONCLUYENTE: PnL no bate bootstrap (CI90%=[-0.1373,+0.2216] cruza 0)",
+      "pnl_media": 0.04016935483870969,
+      "pnl_lo": -0.13733709677419353,
+      "pnl_hi": 0.22157903225806452,
+      "pnl_pboot": 0.3566
     },
     "GBM_LATE_15M_ESPACIO_ATR#XRP#15min#BUY_NO#17": {
       "n": 45,
@@ -1987,17 +1987,17 @@
       "veredicto": "ACUMULANDO (n<40)"
     },
     "FAVORITO_CONFIRMADO#XRP#5min#BUY_YES#15": {
-      "n": 77,
-      "hit": 0.5454545454545454,
-      "ic": 0.044303797468354444,
-      "lo": 0.452152144378525,
-      "hi": 0.6356705766767528,
-      "p_shuf": 0.2522,
-      "veredicto": "NO CONCLUYENTE: IC<0.08, Wilson cruza 0.5, no bate shuffle (p=0.252), PnL medio≤0 (-0.0800/trade)",
-      "pnl_media": -0.08000389610389609,
-      "pnl_lo": -0.2549350649350649,
-      "pnl_hi": 0.08871168831168834,
-      "pnl_pboot": 0.775
+      "n": 79,
+      "hit": 0.5569620253164557,
+      "ic": 0.05555555555555558,
+      "lo": 0.464655045352038,
+      "hi": 0.6454959502446758,
+      "p_shuf": 0.1756,
+      "veredicto": "NO CONCLUYENTE: IC<0.08, Wilson cruza 0.5, no bate shuffle (p=0.176), PnL medio≤0 (-0.0589/trade)",
+      "pnl_media": -0.05885949367088605,
+      "pnl_lo": -0.22556962025316452,
+      "pnl_hi": 0.10418354430379748,
+      "pnl_pboot": 0.7182
     },
     "UPDOWN_GBM_15M_TARDIO#XRP#15min#BUY_YES#17": {
       "n": 15,
@@ -2457,56 +2457,56 @@
       "pnl_pboot": 0.8214
     },
     "FAVORITO_CONFIRMADO#BTC#5min#BUY_YES#15": {
-      "n": 62,
-      "hit": 0.5161290322580645,
-      "ic": 0.015625,
-      "lo": 0.4132554450887221,
-      "hi": 0.617653577680023,
-      "p_shuf": 0.4652,
-      "veredicto": "NO CONCLUYENTE: IC<0.08, Wilson cruza 0.5, no bate shuffle (p=0.465), PnL medio≤0 (-0.1449/trade)",
-      "pnl_media": -0.14490645161290322,
-      "pnl_lo": -0.33378870967741936,
-      "pnl_hi": 0.036616129032258075,
-      "pnl_pboot": 0.9032
+      "n": 65,
+      "hit": 0.5384615384615384,
+      "ic": 0.03731343283582089,
+      "lo": 0.43724957777837975,
+      "hi": 0.6365990937394062,
+      "p_shuf": 0.3202,
+      "veredicto": "NO CONCLUYENTE: IC<0.08, Wilson cruza 0.5, no bate shuffle (p=0.320), PnL medio≤0 (-0.1058/trade)",
+      "pnl_media": -0.10582615384615382,
+      "pnl_lo": -0.29070461538461534,
+      "pnl_hi": 0.07613538461538463,
+      "pnl_pboot": 0.8316
     },
     "FAVORITO_CONFIRMADO_5MIN_ALTACONVICCION#XRP#5min#BUY_YES#15": {
-      "n": 88,
-      "hit": 0.6818181818181818,
-      "ic": 0.1777777777777778,
-      "lo": 0.5957625209972361,
-      "hi": 0.7570255104483045,
+      "n": 90,
+      "hit": 0.6888888888888889,
+      "ic": 0.18478260869565222,
+      "lo": 0.6040892813330733,
+      "hi": 0.7626614233811025,
       "p_shuf": 0.0002,
-      "veredicto": "NO CONCLUYENTE: PnL medio≤0 (-0.1015/trade)",
-      "pnl_media": -0.10146022727272727,
-      "pnl_lo": -0.21816136363636363,
-      "pnl_hi": 0.013535227272727279,
-      "pnl_pboot": 0.9282
+      "veredicto": "NO CONCLUYENTE: PnL medio≤0 (-0.0933/trade)",
+      "pnl_media": -0.09331555555555554,
+      "pnl_lo": -0.21063111111111107,
+      "pnl_hi": 0.021710000000000007,
+      "pnl_pboot": 0.9106
     },
     "FAVORITO_CONFIRMADO_5MIN_ALTACONVICCION#SOL#5min#BUY_YES#15": {
-      "n": 83,
-      "hit": 0.7108433734939759,
-      "ic": 0.20588235294117652,
-      "lo": 0.6233528165328026,
-      "hi": 0.7850198737185536,
-      "p_shuf": 0.0004,
-      "veredicto": "NO CONCLUYENTE: PnL medio≤0 (-0.0416/trade)",
-      "pnl_media": -0.04159036144578312,
-      "pnl_lo": -0.1601036144578313,
-      "pnl_hi": 0.0722433734939759,
-      "pnl_pboot": 0.7228
+      "n": 85,
+      "hit": 0.7176470588235294,
+      "ic": 0.21264367816091956,
+      "lo": 0.6315789040549615,
+      "hi": 0.7902849302711296,
+      "p_shuf": 0.0002,
+      "veredicto": "NO CONCLUYENTE: PnL medio≤0 (-0.0340/trade)",
+      "pnl_media": -0.03400588235294117,
+      "pnl_lo": -0.15019764705882352,
+      "pnl_hi": 0.07963882352941176,
+      "pnl_pboot": 0.6894
     },
     "FAVORITO_CONFIRMADO_5MIN_ALTACONVICCION#ETH#5min#BUY_YES#15": {
-      "n": 86,
-      "hit": 0.6976744186046512,
-      "ic": 0.19318181818181823,
-      "lo": 0.6112033560672915,
-      "hi": 0.772085152238655,
+      "n": 89,
+      "hit": 0.6966292134831461,
+      "ic": 0.1923076923076923,
+      "lo": 0.611645651226517,
+      "hi": 0.7700086621078578,
       "p_shuf": 0.0002,
-      "veredicto": "NO CONCLUYENTE: PnL medio≤0 (-0.0573/trade)",
-      "pnl_media": -0.05734999999999999,
-      "pnl_lo": -0.18079069767441858,
-      "pnl_hi": 0.060838372093023264,
-      "pnl_pboot": 0.7842
+      "veredicto": "NO CONCLUYENTE: PnL medio≤0 (-0.0583/trade)",
+      "pnl_media": -0.05828426966292134,
+      "pnl_lo": -0.17741573033707864,
+      "pnl_hi": 0.058061797752808994,
+      "pnl_pboot": 0.7888
     },
     "FAVORITO_CONFIRMADO#DOGE#5min#BUY_NO#15": {
       "n": 31,
@@ -2541,23 +2541,23 @@
       "pnl_pboot": 0.4148
     },
     "FAVORITO_CONFIRMADO#BNB#5min#BUY_NO#15": {
-      "n": 37,
-      "hit": 0.5946,
-      "ic": 0.08974358974358976,
+      "n": 38,
+      "hit": 0.5789,
+      "ic": 0.07499999999999996,
       "veredicto": "ACUMULANDO (n<40)"
     },
     "FAVORITO_CONFIRMADO_5MIN_ALTACONVICCION#BNB#5min#BUY_YES#15": {
-      "n": 95,
-      "hit": 0.6526315789473685,
-      "ic": 0.14948453608247425,
-      "lo": 0.5690535111571152,
-      "hi": 0.7277552066266654,
-      "p_shuf": 0.0012,
-      "veredicto": "NO CONCLUYENTE: PnL medio≤0 (-0.1425/trade)",
-      "pnl_media": -0.1425,
-      "pnl_lo": -0.2633357894736842,
-      "pnl_hi": -0.03259894736842105,
-      "pnl_pboot": 0.9824
+      "n": 96,
+      "hit": 0.65625,
+      "ic": 0.15306122448979587,
+      "lo": 0.5732086388178703,
+      "hi": 0.7307241758203444,
+      "p_shuf": 0.0014,
+      "veredicto": "NO CONCLUYENTE: PnL medio≤0 (-0.1370/trade)",
+      "pnl_media": -0.13698124999999997,
+      "pnl_lo": -0.25633541666666665,
+      "pnl_hi": -0.027530208333333323,
+      "pnl_pboot": 0.9786
     },
     "FAVORITO_CONFIRMADO#DOGE#5min#BUY_YES#15": {
       "n": 89,
@@ -2599,17 +2599,17 @@
       "pnl_pboot": 0.727
     },
     "FAVORITO_CONFIRMADO_5MIN_ALTACONVICCION#BTC#5min#BUY_YES#15": {
-      "n": 74,
-      "hit": 0.6621621621621622,
-      "ic": 0.1578947368421053,
-      "lo": 0.5674217272094448,
-      "hi": 0.7454611265168434,
-      "p_shuf": 0.0038,
-      "veredicto": "NO CONCLUYENTE: PnL medio≤0 (-0.1051/trade)",
-      "pnl_media": -0.10511081081081079,
-      "pnl_lo": -0.2407405405405405,
-      "pnl_hi": 0.029193243243243253,
-      "pnl_pboot": 0.9016
+      "n": 77,
+      "hit": 0.6753246753246753,
+      "ic": 0.1708860759493671,
+      "lo": 0.5828890719508362,
+      "hi": 0.7558557092623782,
+      "p_shuf": 0.0014,
+      "veredicto": "NO CONCLUYENTE: PnL medio≤0 (-0.0859/trade)",
+      "pnl_media": -0.0859025974025974,
+      "pnl_lo": -0.2165116883116883,
+      "pnl_hi": 0.04432467532467533,
+      "pnl_pboot": 0.864
     },
     "FAVORITO_CONFIRMADO#BTC#5min#BUY_NO#17": {
       "n": 57,
@@ -3050,9 +3050,9 @@
       "veredicto": "ACUMULANDO (n<40)"
     },
     "BALLENAS_TARDIAS#SOL#5min#BUY_YES#15": {
-      "n": 24,
-      "hit": 0.5,
-      "ic": 0.0,
+      "n": 25,
+      "hit": 0.48,
+      "ic": -0.018518518518518545,
       "veredicto": "ACUMULANDO (n<40)"
     },
     "BALLENAS_TARDIAS#XRP#5min#BUY_YES#15": {
@@ -3134,9 +3134,9 @@
       "veredicto": "ACUMULANDO (n<40)"
     },
     "FAVORITO_CONFIRMADO_5MIN_BAJALATENCIA#XRP#5min#BUY_NO#15": {
-      "n": 22,
-      "hit": 0.7727,
-      "ic": 0.25,
+      "n": 23,
+      "hit": 0.7391,
+      "ic": 0.21999999999999997,
       "veredicto": "ACUMULANDO (n<40)"
     },
     "FAVORITO_CONFIRMADO_5MIN_BAJALATENCIA#XRP#5min#BUY_NO#17": {
