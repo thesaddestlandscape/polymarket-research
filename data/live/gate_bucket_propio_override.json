@@ -1,0 +1,10 @@
+{
+  "BALLENAS_TARDIAS#ETH#5min#BUY_YES": {
+    "motivo": "TWAP Chainlink 30s desde 07-Ago (confirmado vía gamma-api + verificación empírica propia, ver memoria project_twap_chainlink_confirmado_09ago). Solo 220/441 resoluciones propias son post-cambio -- cualquier bucket que el cron diario (vigia_gate_bucket_propio.py, 06:55 UTC) confirme mañana podría seguir dominado por datos pre-TWAP. Cortacircuito manual mientras se diseña el split de régimen en el generador (analisis_gate_bucket_propio_28jul.py). Levantar solo tras diseño + /code-review, o cuando n post-07Ago por bucket sea por sí solo suficiente (>=15) para confirmar de forma limpia.",
+    "desde": "2026-08-09"
+  },
+  "FAVORITO_CONFIRMADO_15MIN_ALTACONVICCION#BTC#15min#BUY_YES": {
+    "motivo": "TWAP Chainlink 60s desde 07-Ago (confirmado vía gamma-api + verificación empírica propia, ver memoria project_twap_chainlink_confirmado_09ago). Solo 73/516 resoluciones propias son post-cambio (14%) -- riesgo de confirmación contaminada mayor que la tupla hermana. Cortacircuito manual mientras se diseña el split de régimen en el generador (analisis_gate_bucket_propio_28jul.py). Levantar solo tras diseño + /code-review, o cuando n post-07Ago por bucket sea por sí solo suficiente (>=15) para confirmar de forma limpia.",
+    "desde": "2026-08-09"
+  }
+}
