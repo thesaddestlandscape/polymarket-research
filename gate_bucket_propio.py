@@ -82,10 +82,23 @@ _REGLAS_EXTENSION = (
 # (vigia_gate_bucket_propio.py) lo confirme (en cualquier sentido), el
 # dato propio manda siempre. Esto es solo el arranque -- autoaprendizaje
 # real, no un parche permanente.
+#
+# 09-Ago noche: Polymarket cambió la resolución de los mercados 5min/15min
+# de snapshot a TWAP Chainlink (30s/60s) el 07-Ago (confirmado vía API +
+# verificación empírica propia, ver memoria project_twap_chainlink_
+# confirmado_09ago). Las 2 entradas de abajo se sembraron el 05-Ago desde
+# fuentes 100% pre-cambio (ballenas_timing_history/franja_milimetrica_
+# ballenas/punto_confirmacion) -- la relación precio↔resultado que
+# codifican puede haberse roto por el cambio de mecanismo, y su única
+# condición de salida ("hasta que el dato propio confirme algo") podía
+# tardar semanas (ALTACONVICCION#BTC#15min solo tenía 14% de datos
+# post-cambio en ese momento). Decisión explícita de Javi (09-Ago):
+# pausarlas -- fail-closed hasta que cada tupla confirme un bucket propio
+# con datos ya generados bajo el régimen TWAP. FAVORITO_CONFIRMADO#BTC#
+# 60min#BUY_NO NO se toca -- resuelve por vela de Binance, no Chainlink,
+# ajeno al cambio (verificado vía gamma-api el mismo día).
 _ZONAS_VALIDADAS_EXTERNAMENTE = {
-    "BALLENAS_TARDIAS#ETH#5min#BUY_YES": [(0.15, 0.20), (0.25, 0.30), (0.40, 0.45)],
     "FAVORITO_CONFIRMADO#BTC#60min#BUY_NO": [(0.40, 0.45)],
-    "FAVORITO_CONFIRMADO_15MIN_ALTACONVICCION#BTC#15min#BUY_YES": [(0.85, 0.90)],
 }
 
 
