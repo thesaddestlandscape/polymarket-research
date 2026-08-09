@@ -9,8 +9,8 @@
         "takerOnly": true,
         "rebateRate": 0.2
       },
-      "rewardsMinSize": 50,
-      "rewardsMaxSpread": 4.5,
+      "rewardsMinSize": 0,
+      "rewardsMaxSpread": 0,
       "negRisk": false,
       "enableOrderBook": true
     },
@@ -113,5 +113,5 @@
       "enableOrderBook": true
     }
   },
-  "actualizado": "2026-08-09T08:39:44+00:00"
+  "actualizado": "2026-08-09T08:46:46+00:00"
 }
