@@ -369,7 +369,7 @@ trades.csv:        pnl_neto_eur | stake_eur | entry_price | status (OPEN/CLOSED/
 ## Ficheros clave
 ```
 data/shadow/predictions_YYYY-MM-DD.csv  — features JSON por predicción
-data/shadow/results.csv                  — historial completo (17 cols + features)
+data/shadow/results.csv                  — historial completo (17 cols + features). ⚠️ 09-Ago: desvinculado de git (gitignored, 77.5MB/~3.2MB día, a ~1 semana del bloqueo 100MB GitHub, mismo patrón que el incidente 05-Ago) — sigue en disco sin cambios, backup diario propio vía `scripts/backup_results_csv.sh` (cron 03:05 UTC → volumen dedicado, retención 14d, verificado por integridad)
 data/shadow/strategy_params.json         — IC, Kelly, filtros_causales, activa/desactivada
 data/shadow/estado_actual.md             — estado bot (actualizado c/60s) ← leer en /inicio
 data/shadow/hipotesis_auto.md            — hipótesis + patrones causales activos (c/23min)
