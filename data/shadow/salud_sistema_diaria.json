@@ -1,46 +1,59 @@
 {
-  "timestamp_utc": "2026-08-08T07:08:01+00:00",
+  "timestamp_utc": "2026-08-09T07:08:01+00:00",
   "pipeline": {
-    "n_ciclos_resolve_postmortem": 211,
+    "n_ciclos_resolve_postmortem": 192,
     "resolve_postmortem_p50_s": 6.0,
     "resolve_postmortem_p95_s": 12.0,
-    "resolve_postmortem_max_s": 17.0,
-    "n_ciclos_live_trade": 2530,
-    "hueco_live_trade_max_s": 249.0
+    "resolve_postmortem_max_s": 24.0,
+    "n_ciclos_live_trade": 2299,
+    "hueco_live_trade_max_s": 244.0
   },
   "procesos_colgados": [],
   "deploy": {
     "n_screens": 11,
-    "stale": []
+    "stale": [
+      "dash",
+      "control",
+      "observadores",
+      "fetchers",
+      "ballenas_fast",
+      "ballenas_5m",
+      "favaltaconv",
+      "favbtc60mno",
+      "ejecdryrun"
+    ]
   },
   "disco": {
     "pct_usado": 59.0,
-    "gb_libres": 29.8,
+    "gb_libres": 29.5,
     "git_gb": 0.0,
-    "data_gb": 21.03,
-    "datalogs_gb": 5.66
+    "data_gb": 21.46,
+    "datalogs_gb": 5.52
   },
   "ram": {
     "ram_total_gb": 3.72,
-    "ram_disponible_gb": 2.1,
-    "ram_pct_libre": 56.4
+    "ram_disponible_gb": 0.89,
+    "ram_pct_libre": 24.0
   },
   "integridad_datos": {
     "trades_abiertos_atascados": [],
-    "n_trades_total": 407,
-    "n_results_total": 90971
+    "n_trades_total": 412,
+    "n_results_total": 97070
   },
   "carga_sistema": {
-    "load1": 5.24,
-    "load5": 5.0,
-    "load15": 5.57,
+    "load1": 6.9,
+    "load5": 6.97,
+    "load15": 7.14,
     "nproc": 2,
-    "ratio5": 2.5,
-    "n_procesos_total": 195
+    "ratio5": 3.48,
+    "n_procesos_total": 201
   },
   "git_push": {
     "commits_sin_pushear": 0
   },
-  "anomalias": [],
-  "estado": "OK"
+  "anomalias": [
+    "⚠️ screens STALE (código en disco != código cargado): dash, control, observadores, fetchers, ballenas_fast, ballenas_5m, favaltaconv, favbtc60mno, ejecdryrun",
+    "🔥 CPU sobresuscrita: load5=6.97 en 2 cores (ratio=3.48x, umbral 3.0x) -- 201 procesos vivos"
+  ],
+  "estado": "ANOMALIA"
 }
