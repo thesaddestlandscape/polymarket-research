@@ -1,10 +1,10 @@
 {
-  "timestamp_utc": "2026-08-09T22:25:02+00:00",
-  "bankroll_sim": 14322.67,
-  "pnl_total": 14302.67,
-  "n_ops": 100930,
-  "win_rate": 0.6133,
-  "estrategias_activas": 401,
+  "timestamp_utc": "2026-08-09T22:42:58+00:00",
+  "bankroll_sim": 14309.82,
+  "pnl_total": 14289.82,
+  "n_ops": 101007,
+  "win_rate": 0.6132,
+  "estrategias_activas": 403,
   "desactivadas": [
     "UPDOWN_GBM#SOL#5min",
     "UPDOWN_GBM#5min",
@@ -21,8 +21,6 @@
     "STREAK_MOM_5M",
     "BALLENAS_TARDIAS#XRP#5min",
     "BALLENAS_TARDIAS#XRP",
-    "LIQUIDACIONES_15M#DOGE#15min",
-    "LIQUIDACIONES_15M#DOGE",
     "LIQUIDACIONES_5M#SOL#5min",
     "LIQUIDACIONES_5M#SOL",
     "GBM_LATE_60M_FADE",
@@ -58,12 +56,12 @@
     }
   ],
   "brier_medio": 0.2313,
-  "clv_medio": 0.0499,
+  "clv_medio": 0.0498,
   "monitor_5min": {
     "ou_5m": {
-      "n": 342,
-      "clv": -0.1604,
-      "clv_ult30": -0.1958
+      "n": 343,
+      "clv": -0.1608,
+      "clv_ult30": -0.19
     },
     "of_buy_yes": {
       "n": 608,
