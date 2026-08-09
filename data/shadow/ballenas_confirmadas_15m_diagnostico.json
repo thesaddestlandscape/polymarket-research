@@ -2,7 +2,7 @@
   "ETH#BUY_NO": {
     "motivos": {
       "volumen_bajo": {
-        "conteo": 1929,
+        "conteo": 1930,
         "mercados": {
           "0x2cd60207cf3a9d1b7a17df7ff026b9354351bb35ee5aafec3cad741286724c4d": 6,
           "0xabd05a47b798c276d93c3672478faa92876bff182fca2330ccaec1ac4bafafa8": 3,
@@ -415,7 +415,8 @@
           "0xd31a388c7b8bb3dc57457a9c2056f35f1ff2f8f0b661ed2cfc6b6faf90dbde42": 2,
           "0x35eb2b5a8a22c59e922e523b3272b82b1452c610f46519a3abeef7547f22ca9d": 3,
           "0x8699e68242a2cf3ce6b44c10b63e791ea7a30adb773516cdfb4cb89fdebc088f": 1,
-          "0xafa6786aa172881b81807230a08d0df0b0510ef8748dfd4f58cdb42a572662f5": 5
+          "0xafa6786aa172881b81807230a08d0df0b0510ef8748dfd4f58cdb42a572662f5": 5,
+          "0xe0e1e3f1f7f28f9d5fb47a62df13cbacab08871af152af41d8107bb1d9239fa9": 1
         }
       },
       "pocos_trades_en_banda": {
@@ -1541,7 +1542,7 @@
         }
       },
       "concentracion_baja": {
-        "conteo": 1238,
+        "conteo": 1245,
         "mercados": {
           "0x93ebd5ef85ea958ff82f2692c4f2a3ff0810fe13e4f033f224e21658a74e7163": 3,
           "0x347909d902d0cfded4892c386488660098aff0e64aff784f90b180521f1cafec": 3,
@@ -1929,7 +1930,8 @@
           "0x657bcb6e2e525a4875324b9f3c1e3a7ccf73804bb693602ff65e28bebf919efb": 1,
           "0xdfd2cbe84d9348b93172e8bb49b1ae4c58ae4ac04d4234d117d60f724a6b8932": 4,
           "0x63f9bb4d38747aba71daa6c7266cfe609c2bedb2c7e455b0930acc04320e0af7": 3,
-          "0xafa6786aa172881b81807230a08d0df0b0510ef8748dfd4f58cdb42a572662f5": 6
+          "0xafa6786aa172881b81807230a08d0df0b0510ef8748dfd4f58cdb42a572662f5": 12,
+          "0x621b6f3d0688faf785cb811998030a5c3e2d0dd057c60fbdc87890ab6cac14e4": 1
         }
       },
       "banda_no_confirmada": {
@@ -2411,7 +2413,7 @@
       "n_total_lado": 2,
       "motivo": "concentracion_baja",
       "condition_id": "0xafa6786aa172881b81807230a08d0df0b0510ef8748dfd4f58cdb42a572662f5",
-      "ts": "2026-08-09T20:31:38+00:00"
+      "ts": "2026-08-09T20:47:45+00:00"
     }
   },
   "SOL#BUY_NO": {
@@ -3131,7 +3133,7 @@
         }
       },
       "volumen_bajo": {
-        "conteo": 1629,
+        "conteo": 1630,
         "mercados": {
           "0x392f0e3560600308f946c9fc14e3c261a1dd3b4133db9025ce09d9a352a371c8": 3,
           "0x057398db1e6fbb9e400cb83a25851e0e5ee80058cb94904df5aaa9ca8a53689b": 3,
@@ -3437,7 +3439,8 @@
           "0x7f60c15d476423f1217f9cbdb2750810b7d8cf63835e45a38eb9e3da4616d1ee": 3,
           "0x1c6bec30bf4f67e61c487400dbed1abff2770d90072f720dd670bf6d3975cbda": 1,
           "0x98af28776ca665f0c6bb7c8f887acd98cb0fbb50a0acfad0e9f41d96c12bf5a3": 1,
-          "0x11086fdab12bd9ea058cec26b9f3376a033e30c2e6f0cd54ed0d21e741964a7b": 1
+          "0x11086fdab12bd9ea058cec26b9f3376a033e30c2e6f0cd54ed0d21e741964a7b": 1,
+          "0x59aad4c6b6cc63c66db632bf79be594d3fb6353f972893929c2136dd516854b8": 1
         }
       },
       "concentracion_baja": {
@@ -4176,16 +4179,18 @@
       }
     },
     "ultimo_detalle": {
-      "n": 1,
-      "motivo": "pocos_trades_en_banda",
-      "condition_id": "0xa2621a223923674f68c5fed34c35da72922aa9097a5e5f37fea2775940db65a5",
-      "ts": "2026-08-09T20:13:56+00:00"
+      "n_total_lado": 24,
+      "umbral": 35,
+      "pct_lado": 1.0,
+      "motivo": "volumen_bajo",
+      "condition_id": "0x59aad4c6b6cc63c66db632bf79be594d3fb6353f972893929c2136dd516854b8",
+      "ts": "2026-08-09T20:47:45+00:00"
     }
   },
   "DOGE#BUY_NO": {
     "motivos": {
       "banda_no_confirmada": {
-        "conteo": 15505,
+        "conteo": 15518,
         "mercados": {
           "0xc132ec92b406eb13da1cb814396e60b66f819f1be1c0d8394317d53e5b2c08b1": 6,
           "0xd0672cde7ddef0a3136bf4e9209e193940596ab831742079687f92fea3d8ca1b": 10,
@@ -5015,7 +5020,9 @@
           "0x7008d5ce549dbddf077c5f444cf30531f32d06344f948fd5ba051dc37275d0cf": 22,
           "0x573a91d2fd95c52e8a26fa3ec32eeab3c8b99f73a2240695d05763ced38f92a1": 12,
           "0x40605a1fcd15034c5dc9069ba0678af05d06f240e53488ad9940e863afa927ef": 12,
-          "0x75bbc8c59baac51cb2a8cc8f7fdcf9cb88909bac738c4eacb590f75bb2b9157d": 6
+          "0x75bbc8c59baac51cb2a8cc8f7fdcf9cb88909bac738c4eacb590f75bb2b9157d": 12,
+          "0x3594044685cf519c151d02608184651b31b3c4db81897ca4c392a06efaa01a58": 6,
+          "0x1a8a3c022615a18ded6b10b7de24ee66ce924c8fb30c1deb103b83ecceaa0ea5": 1
         }
       },
       "pocos_trades_en_banda": {
