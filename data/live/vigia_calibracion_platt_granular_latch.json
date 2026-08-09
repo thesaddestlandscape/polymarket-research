@@ -586,5 +586,21 @@
   "FAVORITO_CONFIRMADO_5MIN_BAJALATENCIA#XRP#5min": {
     "n": 200,
     "confirmado": false
+  },
+  "FAVORITO_CONFIRMADO_5MIN_BAJALATENCIA#DOGE": {
+    "n": 426,
+    "confirmado": false
+  },
+  "FAVORITO_CONFIRMADO_5MIN_BAJALATENCIA#DOGE#5min": {
+    "n": 426,
+    "confirmado": false
+  },
+  "WEEKLY_PRICE#BTC": {
+    "n": 203,
+    "confirmado": false
+  },
+  "WEEKLY_PRICE#ETH": {
+    "n": 201,
+    "confirmado": false
   }
 }
