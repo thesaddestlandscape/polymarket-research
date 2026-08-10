@@ -36,3 +36,9 @@ data/shadow/ballenas_universo_cache/
 # ~3.2MB/día, a ~1 semana del bloqueo duro de GitHub. Backup diario propio
 # vía scripts/backup_results_csv.sh (volumen dedicado, fuera de git).
 data/shadow/results.csv
+# 10-Ago: mismo motivo, detectado en barrido de vigías (vigia_tamano_ficheros_git.py) --
+# 82MB y creciendo ~2MB/30min (run_fast.sh hace `git add data/live/` genérico cada
+# ciclo), a horas del bloqueo duro de GitHub, no ~1 semana como results.csv. Es un
+# cache rolling regenerado por ballenas_firehose_cache.py/fetch_polymarket_activity_ws.py,
+# no un dataset histórico -- no necesita backup dedicado como results.csv.
+data/live/ballenas_recientes.json
