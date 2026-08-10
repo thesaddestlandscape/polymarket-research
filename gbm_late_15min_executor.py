@@ -398,7 +398,8 @@ def watch_window(activo: str, mercado: dict) -> bool:
             tupla_str = f"{strategy}#{activo}#{VENTANA_MIN}min#{direccion}"
             gate_bp = _gate_bucket_propio(tupla_str, py_edge)
             resultado["features"]["gate_bucket_propio_veredicto"] = gate_bp["veredicto"]
-            if gate_bp["veredicto"] == "malo_confirmado" and tupla_str in _pares_live_hoy_set():
+            # 10-Ago: fail-open corregido a fail-closed (exige bueno_confirmado).
+            if tupla_str in _pares_live_hoy_set() and gate_bp["veredicto"] != "bueno_confirmado":
                 contadores["vetado_gate_bucket"] += 1
                 log(f"[{mercado['market_id']}] {strategy} py={py_edge:.3f} vetado por "
                     f"gate_bucket_propio (malo_confirmado)", activo)

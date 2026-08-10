@@ -606,14 +606,23 @@ def watch_window(ts_end: int) -> bool:
             # 07-Ago: veto de micro-bucket de precio -- hueco real, este
             # ejecutor (LIVE) nunca lo tuvo pese a que los otros 5
             # ejecutores de baja latencia del proyecto sí lo tienen.
-            # Fail-closed: BALLENAS_TARDIAS#BTC#15min#BUY_YES está PAUSADA
-            # desde 03-Ago (retirada de pares_permitidos_live), así que hoy
-            # es puramente preparatorio -- si se reactivara algún día sin
-            # recordar añadir esto, ya estaría protegido.
+            # BALLENAS_TARDIAS#BTC#15min#BUY_YES está PAUSADA desde 03-Ago
+            # (retirada de pares_permitidos_live), así que hoy es puramente
+            # preparatorio -- si se reactivara algún día sin recordar
+            # añadir esto, ya estaría protegido.
+            #
+            # 10-Ago: corregido de fail-open ("solo malo_confirmado", deja
+            # pasar sin_concluir) a fail-closed (exige bueno_confirmado) --
+            # mismo bug real cazado hoy en shadow_predict.py (6 sitios) y
+            # aquí, el único de los ejecutores de baja latencia que se
+            # había quedado con el patrón viejo. Sin efecto en dinero real
+            # hoy (tupla pausada), pero deja la protección correcta puesta
+            # para cuando se reactive.
             tupla_str = f"{STRATEGY}#BTC#{VENTANA_MIN}min#BUY_YES"
             gate_bp = _gate_bucket_propio(tupla_str, py)
-            if gate_bp["veredicto"] == "malo_confirmado" and tupla_str in _pares_live_hoy_set():
-                log(f"[{ts_end}] ⛔ Veto micro-bucket (malo_confirmado): py={py:.3f} -- no se ejecuta")
+            if tupla_str in _pares_live_hoy_set() and gate_bp["veredicto"] != "bueno_confirmado":
+                log(f"[{ts_end}] ⛔ Veto micro-bucket (solo opera en bueno_confirmado): py={py:.3f} "
+                    f"veredicto={gate_bp['veredicto']} -- no se ejecuta")
                 return False
 
             log(f"[{ts_end}] CONFIRMADO concentracion_ponderada={pct_ponderado:.2f} (cruda={pct_crudo:.2f}) "

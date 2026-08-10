@@ -599,8 +599,9 @@ def watch_window(activo: str, ts_end: int) -> bool:
                 # preparatorio mientras siga en shadow.
                 tupla_str = f"{STRATEGY}#{activo}#{VENTANA_MIN}min#BUY_YES"
                 gate_bp = _gate_bucket_propio(tupla_str, py)
-                if gate_bp["veredicto"] == "malo_confirmado" and tupla_str in _pares_live_hoy_set():
-                    log(f"[{ts_end}] ⛔ Veto micro-bucket (malo_confirmado): banda[{banda_lo:.2f},{banda_hi:.2f}) "
+                # 10-Ago: fail-open corregido a fail-closed (exige bueno_confirmado).
+                if tupla_str in _pares_live_hoy_set() and gate_bp["veredicto"] != "bueno_confirmado":
+                    log(f"[{ts_end}] ⛔ Veto micro-bucket (solo opera en bueno_confirmado, veredicto={gate_bp['veredicto']}): banda[{banda_lo:.2f},{banda_hi:.2f}) "
                         f"py={py:.3f} -- {'[DRY-RUN] no ejecutaría' if DRY_RUN else 'no se ejecuta'}", activo)
                     return False
 

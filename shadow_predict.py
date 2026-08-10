@@ -1107,7 +1107,14 @@ def s_weekly_price(market, ctx):
         direccion = "BUY_YES" if prob_yes >= py else "BUY_NO"
         tupla_str = f"WEEKLY_PRICE#{activo}#{direccion}"
         gate_bp = _gate_bucket_propio(tupla_str, py)
-        if gate_bp["veredicto"] == "malo_confirmado" and tupla_str in _pares_live_hoy_set():
+        # 10-Ago (hallazgo real, dinero real ejecutado en zona sin_concluir):
+        # "malo_confirmado" es fail-OPEN -- deja pasar sin_concluir. El
+        # diseño obligatorio (CLAUDE.md, aplicado ya a los 4 ejecutores de
+        # baja latencia el 05-Ago) es fail-CLOSED: exige bueno_confirmado
+        # para tuplas ya en pares_permitidos_live. Este pipeline principal
+        # (shadow_predict.py, usado por el fast loop normal) nunca se
+        # migró -- 6 sitios con el mismo patrón viejo, todos corregidos hoy.
+        if tupla_str in _pares_live_hoy_set() and gate_bp["veredicto"] != "bueno_confirmado":
             return None
 
         return {
@@ -1139,7 +1146,8 @@ def s_weekly_price(market, ctx):
     direccion = "BUY_YES" if prob_yes >= py else "BUY_NO"
     tupla_str = f"WEEKLY_PRICE#{activo}#{direccion}"
     gate_bp = _gate_bucket_propio(tupla_str, py)
-    if gate_bp["veredicto"] == "malo_confirmado" and tupla_str in _pares_live_hoy_set():
+    # 10-Ago: fail-open corregido a fail-closed, ver comentario equivalente arriba.
+    if tupla_str in _pares_live_hoy_set() and gate_bp["veredicto"] != "bueno_confirmado":
         return None
 
     return {
@@ -2212,7 +2220,9 @@ def s_updown_gbm(market, ctx, strategy_name: str = "UPDOWN_GBM"):
     tupla_str = f"{strategy_name}#{activo}#{slot_type}#{direccion}"
     gate_bp = _gate_bucket_propio(tupla_str, py_mkt_le)
     features["gate_bucket_propio_veredicto"] = gate_bp["veredicto"]
-    if gate_bp["veredicto"] == "malo_confirmado" and tupla_str in _pares_live_hoy_set():
+    # 10-Ago: fail-open corregido a fail-closed (exige bueno_confirmado) --
+    # ver comentario completo en s_favorito_confirmado más abajo.
+    if tupla_str in _pares_live_hoy_set() and gate_bp["veredicto"] != "bueno_confirmado":
         return None  # gate bucket propio -- ver gate_bucket_propio.json
 
     return {
@@ -3434,7 +3444,8 @@ def _aplicar_gate_bucket_propio_gbm_late(resultado, strategy_name):
     tupla_str = f"{strategy_name}#{resultado['subtype']}#{direccion}"
     gate_bp = _gate_bucket_propio(tupla_str, py_edge)
     resultado["features"]["gate_bucket_propio_veredicto"] = gate_bp["veredicto"]
-    if gate_bp["veredicto"] == "malo_confirmado" and tupla_str in _pares_live_hoy_set():
+    # 10-Ago: fail-open corregido a fail-closed, ver s_favorito_confirmado.
+    if tupla_str in _pares_live_hoy_set() and gate_bp["veredicto"] != "bueno_confirmado":
         return None  # gate bucket propio -- ver gate_bucket_propio.json
     return resultado
 
@@ -3498,12 +3509,13 @@ def s_gbm_late_15min(market, ctx):
         resultado["features"]["banda_fina_motivo"] = gate_bf["motivo"]
         # 28-Jul: gate por micro-bucket de nuestro propio histórico (ver
         # nota completa en s_favorito_confirmado) -- veta ejecución real
-        # solo si "malo_confirmado" Y la tupla exacta está hoy en
-        # pares_permitidos_live.
+        # solo si la tupla exacta está hoy en pares_permitidos_live.
+        # 10-Ago: fail-open ("solo malo_confirmado") corregido a fail-closed
+        # (exige bueno_confirmado) -- ver nota completa en s_favorito_confirmado.
         tupla_str = f"GBM_LATE_15M#{activo}#15min#{direccion}"
         gate_bp = _gate_bucket_propio(tupla_str, py_edge)
         resultado["features"]["gate_bucket_propio_veredicto"] = gate_bp["veredicto"]
-        if gate_bp["veredicto"] == "malo_confirmado" and tupla_str in _pares_live_hoy_set():
+        if tupla_str in _pares_live_hoy_set() and gate_bp["veredicto"] != "bueno_confirmado":
             return None  # gate bucket propio 28-Jul -- ver gate_bucket_propio.json
     return resultado
 
@@ -4658,12 +4670,26 @@ def s_favorito_confirmado(market, ctx, strategy_name: str = "FAVORITO_CONFIRMADO
     # a diferencia de banda_fina_ballenas (arriba, refutado en validación
     # retrospectiva: mezclar el timing de ballenas con esta estrategia no
     # transfiere), esto SÍ pasó rigor completo sobre datos propios.
-    # Activo solo para los buckets "malo_confirmado" -- veta ejecución real
-    # únicamente si la tupla exacta está HOY en pares_permitidos_live
-    # (dinero real); en shadow/candidatos solo se loguea, nunca se bloquea.
+    # Veta ejecución real únicamente si la tupla exacta está HOY en
+    # pares_permitidos_live (dinero real); en shadow/candidatos solo se
+    # loguea, nunca se bloquea.
+    #
+    # 10-Ago (hallazgo real, /code-review tras auditar un trade en vivo):
+    # este check comparaba solo contra "malo_confirmado" -- fail-OPEN,
+    # deja pasar "sin_concluir" sin vetar. CLAUDE.md exige fail-CLOSED
+    # (exigir bueno_confirmado) desde el 05-Ago, pero esa migración solo
+    # se aplicó a los 4 ejecutores de baja latencia -- este pipeline
+    # principal (shadow_predict.py, el que usa el fast loop normal cada
+    # ~20s) nunca se tocó. Consecuencia real: FAVORITO_CONFIRMADO_15MIN_
+    # ALTACONVICCION#BTC#15min#BUY_YES ejecutó un trade real a py=0.77
+    # (zona "sin_concluir", fuera de [0.80,0.85)/[0.85,0.90) confirmadas
+    # hoy) porque sin_concluir != malo_confirmado no vetaba. Corregido
+    # aquí y en los otros 5 sitios de shadow_predict.py con el mismo
+    # patrón (WEEKLY_PRICE x2, GBM_LATE_15M_PYCONFIRMADO, GBM_LATE_15M,
+    # y este mismo s_favorito_confirmado).
     tupla_str = f"{strategy_name}#{activo}#{vent}min#{direccion}" if vent else None
     gate_bp = _gate_bucket_propio(tupla_str, py) if tupla_str else {"veredicto": "sin_concluir", "detalle": None}
-    if gate_bp["veredicto"] == "malo_confirmado" and tupla_str in _pares_live_hoy_set():
+    if tupla_str in _pares_live_hoy_set() and gate_bp["veredicto"] != "bueno_confirmado":
         return None  # gate bucket propio 28-Jul -- ver gate_bucket_propio.json
 
     return {
