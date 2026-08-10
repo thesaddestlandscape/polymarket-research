@@ -87,19 +87,48 @@ _REGLAS_EXTENSION = (
 # de snapshot a TWAP Chainlink (30s/60s) el 07-Ago (confirmado vía API +
 # verificación empírica propia, ver memoria project_twap_chainlink_
 # confirmado_09ago). Las 2 entradas de abajo se sembraron el 05-Ago desde
-# fuentes 100% pre-cambio (ballenas_timing_history/franja_milimetrica_
-# ballenas/punto_confirmacion) -- la relación precio↔resultado que
-# codifican puede haberse roto por el cambio de mecanismo, y su única
-# condición de salida ("hasta que el dato propio confirme algo") podía
-# tardar semanas (ALTACONVICCION#BTC#15min solo tenía 14% de datos
-# post-cambio en ese momento). Decisión explícita de Javi (09-Ago):
-# pausarlas -- fail-closed hasta que cada tupla confirme un bucket propio
-# con datos ya generados bajo el régimen TWAP. FAVORITO_CONFIRMADO#BTC#
-# 60min#BUY_NO NO se toca -- resuelve por vela de Binance, no Chainlink,
-# ajeno al cambio (verificado vía gamma-api el mismo día).
-_ZONAS_VALIDADAS_EXTERNAMENTE = {
+# fuentes 100% pre-cambio -- pausadas el 09-Ago (fail-closed) hasta
+# reconfirmar con datos TWAP-safe.
+#
+# 10-Ago: reconfirmadas -- `analisis_zonas_validadas_externas_post_twap_
+# 10ago.py` recalcula estas 2 tuplas SOLO con datos post-07-Ago de
+# ballenas_timing_history.csv (n=2500-14700/zona, Wilson90lo vs breakeven
+# real con fee 7%, concentración de mercado <=30%, split-half consistente
+# en ambas mitades del periodo) -- ver memoria project_zonas_externas_
+# reconfirmadas_post_twap_10ago. Se carga DINÁMICO (no hardcodeado) desde
+# data/shadow/zonas_validadas_externas.json, regenerado a diario (cron
+# vigia_zonas_validadas_externas.py) para que crezca solo con el n nuevo.
+_ZONAS_VALIDADAS_EXTERNAMENTE_ESTATICAS = {
     "FAVORITO_CONFIRMADO#BTC#60min#BUY_NO": [(0.40, 0.45)],
 }
+_ZONAS_DINAMICAS_PATH = Path("data/shadow/zonas_validadas_externas.json")
+_cache_zonas_dinamicas = {"mtime": None, "data": {}}
+
+
+def _zonas_validadas_externamente() -> dict:
+    """Combina las zonas estáticas (familias no afectadas por TWAP) con las
+    dinámicas (regeneradas a diario desde ballenas_timing_history.csv
+    post-TWAP). Fail-open a solo estáticas si el JSON dinámico falta o está
+    corrupto -- nunca bloquea el arranque por un fichero de refuerzo."""
+    combinado = dict(_ZONAS_VALIDADAS_EXTERNAMENTE_ESTATICAS)
+    try:
+        mtime = _ZONAS_DINAMICAS_PATH.stat().st_mtime
+    except OSError:
+        return combinado
+    if _cache_zonas_dinamicas["mtime"] != mtime:
+        try:
+            bruto = json.loads(_ZONAS_DINAMICAS_PATH.read_text(encoding="utf-8"))
+            _cache_zonas_dinamicas["data"] = {
+                tupla: [tuple(z) for z in info.get("zonas_bueno_confirmado", [])]
+                for tupla, info in bruto.items()
+            }
+            _cache_zonas_dinamicas["mtime"] = mtime
+        except Exception:
+            pass
+    for tupla, zonas in _cache_zonas_dinamicas["data"].items():
+        if zonas:
+            combinado[tupla] = zonas
+    return combinado
 
 
 def _extension_activa() -> bool:
@@ -229,7 +258,7 @@ def evaluar(tupla_str: str, py: float) -> dict:
     # la extensión de arriba): son solo 3 tuplas, ya vivas hoy con dinero
     # real, aprobadas explícitamente por Javi el mismo día que se creó.
     if veredicto_propio == "sin_concluir":
-        for lo, hi in _ZONAS_VALIDADAS_EXTERNAMENTE.get(tupla_str, []):
+        for lo, hi in _zonas_validadas_externamente().get(tupla_str, []):
             if lo <= py < hi:
                 return {
                     "veredicto": "bueno_confirmado",
