@@ -1746,6 +1746,61 @@ def _filtro_degenerado_en_veto_total(strat_key, feature, direccion, condicion, u
     return (cubiertos / len(candidatos)) >= cobertura_max
 
 
+def _podar_filtros_por_cobertura_union(strat_key, filtros_dir,
+                                        cobertura_max=COBERTURA_RECIENTE_MAX,
+                                        min_n=COBERTURA_RECIENTE_MIN_N):
+    """Poda un grupo de filtros_causales de la MISMA (strat_key, dirección)
+    cuando su UNIÓN (en shadow_predict.py basta con que UNO cualquiera
+    matchee para hacer skip_causal=True, ver bucle "for f in ... break")
+    cubre >=cobertura_max de las observaciones REALES recientes --
+    `_filtro_degenerado_en_veto_total` (05-Ago) solo comprueba cada filtro
+    POR SEPARADO, así que varios filtros al 20-75% cada uno pueden
+    combinarse (OR) en un veto de facto cercano al 100% sin que ninguno
+    individual lo detecte. Hallazgo real 10-Ago: UPDOWN_OU_5M#BUY_NO, 5
+    filtros causales al 25-75% cada uno por separado, unión=97.2% de 716
+    observaciones recientes -- la estrategia cayó de ~90 resoluciones/día
+    a 0 en dos días sin que ningún filtro individual disparara el gate
+    existente. Mantiene los filtros de mayor ic_malo (más discriminativos,
+    orden ascendente = más negativo primero) mientras la cobertura unión
+    acumulada quepa bajo el cap; descarta el resto (por construcción cada
+    filtro individual ya está <cobertura_max, así que el primero siempre
+    se mantiene)."""
+    if len(filtros_dir) <= 1:
+        return filtros_dir
+    idx = _cargar_predicciones_recientes_por_estrategia(cache_bucket=_POSTMORTEM_CACHE_BUCKET[0])
+    direccion = filtros_dir[0]["direccion"]
+    obs = [feats for dec, feats in idx.get(strat_key, []) if dec == direccion]
+    if len(obs) < min_n:
+        return filtros_dir  # sin dato reciente suficiente, no podar (mismo criterio que el gate individual)
+
+    def _match(v, cond, umbral):
+        if v is None:
+            return False
+        if cond == "abs_gt": return abs(v) > umbral
+        if cond == "abs_lt": return abs(v) < umbral
+        if cond == "gt": return v > umbral
+        if cond == "lt": return v < umbral
+        return False
+
+    ordenados = sorted(filtros_dir, key=lambda f: f["ic_malo"])
+    mantenidos: list = []
+    cubiertos_idx: set = set()
+    for f in ordenados:
+        candidato_idx = set(cubiertos_idx)
+        for i, feats in enumerate(obs):
+            if i in candidato_idx:
+                continue
+            if _match(feats.get(f["feature"]), f["condicion"], f["umbral"]):
+                candidato_idx.add(i)
+        if mantenidos and len(candidato_idx) / len(obs) >= cobertura_max:
+            continue  # añadirlo ya cruzaría el cap -- descartado
+        mantenidos.append(f)
+        cubiertos_idx = candidato_idx
+        if len(cubiertos_idx) / len(obs) >= cobertura_max:
+            break
+    return mantenidos
+
+
 def aprender_patrones_causales(resultados: list, pred_index: dict) -> dict:
     """
     Aprende TANTO por qué el modelo pierde COMO por qué gana.
@@ -1933,6 +1988,26 @@ def aprender_patrones_causales(resultados: list, pred_index: dict) -> dict:
                 resultado_final[strat_key] = {"filtros_causales": [], "patrones_ganadores": []}
             clave = "patrones_ganadores" if tipo == "PATRON" else "filtros_causales"
             resultado_final[strat_key][clave].append(cand)
+
+    # Poda de cobertura UNIÓN (10-Ago) -- cada filtro individual ya pasó el
+    # chequeo de 05-Ago (_filtro_degenerado_en_veto_total), pero varios
+    # filtros de la MISMA (estrategia, dirección) se combinan con OR en
+    # shadow_predict.py y pueden vetar mucho más juntos que cualquiera por
+    # separado. Ver docstring de _podar_filtros_por_cobertura_union.
+    for strat_key, info in resultado_final.items():
+        for direccion in ("BUY_YES", "BUY_NO"):
+            grupo = [f for f in info["filtros_causales"] if f["direccion"] == direccion]
+            if len(grupo) <= 1:
+                continue
+            podados = _podar_filtros_por_cobertura_union(strat_key, grupo)
+            if len(podados) < len(grupo):
+                descartados = [f["feature"] for f in grupo if f not in podados]
+                print(f"  ⚠️ {strat_key}#{direccion}: unión de filtros_causales "
+                      f"excedía cobertura_max, podados por baja discriminación: {descartados}")
+                info["filtros_causales"] = [
+                    f for f in info["filtros_causales"]
+                    if f["direccion"] != direccion or f in podados
+                ]
 
     return resultado_final
 
