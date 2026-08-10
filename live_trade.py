@@ -36,6 +36,16 @@ DIR_SHADOW  = Path("data/shadow")
 
 CLV_VETO_MIN_N = 20   # resoluciones con clv en ventana para poder vetar
 CLV_VETO_DIAS  = 7    # ventana móvil del CLV medio por tupla
+# 10-Ago: Polymarket cambió la resolución de mercados 5min/15min/240min de
+# snapshot a TWAP Chainlink el 07-Ago (ver project_twap_chainlink_confirmado_09ago).
+# CLV_VETO_DIAS=7 hace que la ventana móvil de _clv_tupla() mezcle régimen
+# pre/post-TWAP en cualquier fecha entre el 07 y el 14-Ago -- mismo bug ya
+# corregido en gate_bucket_propio.py/kelly_precio_gate.py (commit 76aa549dae),
+# nunca replicado aquí porque el veto CLV no formó parte de aquel barrido.
+# Mismas constantes exactas que esos dos ficheros, para régimen consistente
+# en todo el proyecto.
+CLV_FECHA_CAMBIO_TWAP = datetime(2026, 8, 7, tzinfo=timezone.utc)
+CLV_MARCOS_TWAP_AFECTADOS = {"5min", "15min", "240min"}
 # Fee real taker Polymarket (validado 10-Jul contra fees on-chain al céntimo,
 # ver project_fee_real_no_contabilizado): fee = FEE_RATE_TAKER_CRYPTO * p * (1-p).
 # Solo se paga en taker (nuestras órdenes son FOK); shadow_predict.py neta
@@ -629,6 +639,20 @@ def _clv_tupla(strategy: str, subtype: str, decision: str) -> tuple[float, int]:
     CLV medio y n de la tupla STRATEGY#SUBTYPE#DECISION en los últimos
     CLV_VETO_DIAS días de results.csv. (0.0, 0) si no hay datos o error —
     el veto solo actúa con n suficiente, nunca por ausencia de datos.
+
+    10-Ago: en marcos afectados por el cambio TWAP (5min/15min/240min,
+    ver CLV_FECHA_CAMBIO_TWAP arriba) se excluyen además las filas
+    anteriores al cambio -- sin esto, la ventana móvil de 7 días mezcla
+    dos regímenes de resolución distintos y el CLV agregado puede quedar
+    contaminado por el régimen viejo. Verificado con datos reales (/code-
+    review): rescata FAVORITO_CONFIRMADO_15MIN_ALTACONVICCION#BTC#15min
+    #BUY_YES (vetada por CLV tan reciente como el 08-Ago, clv=-0.0146 ->
+    clv=+0.0011 tras el filtro). NO rescata BALLENAS_TARDIAS#ETH#5min
+    #BUY_YES (sigue negativo, -0.0327 n=348 post-filtro) -- ese veto sigue
+    siendo un agregado sobre TODAS las zonas de precio, no solo las
+    confirmadas por gate_bucket_propio; desbloquearlo de verdad exige
+    segmentar este CLV por micro-bucket de precio, cambio mayor pendiente
+    de diseño (ver project_clv_veto_no_segmentado_zona_precio_10ago).
     """
     global _CLV_CACHE
     if _CLV_CACHE is None:
@@ -639,6 +663,14 @@ def _clv_tupla(strategy: str, subtype: str, decision: str) -> tuple[float, int]:
                 for row in csv.DictReader(f):
                     if (row.get("resolution_timestamp") or "") < corte:
                         continue
+                    marco = (row.get("subtype") or "").rsplit("#", 1)[-1]
+                    if marco in CLV_MARCOS_TWAP_AFECTADOS:
+                        try:
+                            ts_pred = datetime.fromisoformat(row.get("prediction_timestamp", ""))
+                        except (TypeError, ValueError):
+                            continue  # fail-closed: timestamp ilegible en marco afectado, se descarta
+                        if ts_pred < CLV_FECHA_CAMBIO_TWAP:
+                            continue
                     try:
                         clv = float(row.get("clv"))
                     except (TypeError, ValueError):

@@ -748,20 +748,6 @@ def disparar(activo: str, mercado: dict, py: float, edge: float, restante_s: flo
                                     f"{'[DRY-RUN] no ejecutaría' if DRY_RUN else 'no se ejecuta'}", activo)):
             return False
 
-        # 30-Jul: veto CLV (mismo mecanismo que live_trade.py::main(), nunca
-        # replicado en NINGÚN ejecutor de baja latencia -- hallazgo del
-        # barrido de "cableado" de esta sesión, afecta a los 5 ejecutores
-        # existentes por igual). _clv_tupla cachea a nivel de módulo (pensado
-        # para un proceso fresco por ciclo); este ejecutor es persistente,
-        # se fuerza relectura fresca de results.csv cada vez -- barato, solo
-        # en el momento raro de confirmar una señal.
-        lt._CLV_CACHE = None
-        clv_medio, n_clv = lt._clv_tupla(STRATEGY, subtype, "BUY_YES")
-        if n_clv >= lt.CLV_VETO_MIN_N and clv_medio < 0:
-            log(f"⛔ Veto CLV: clv_medio={clv_medio:+.4f} (n={n_clv}) < 0 -- "
-                f"{'[DRY-RUN] no ejecutaría' if DRY_RUN else 'no se ejecuta'}", activo)
-            return False
-
         # 04-Ago: gate_bucket_propio -- mismo mecanismo ya activo en
         # favorito_altaconviccion_executor_15min.py/favorito_confirmado_
         # btc60min_buyno_executor.py, hallazgo del barrido de conexión de
@@ -808,6 +794,30 @@ def disparar(activo: str, mercado: dict, py: float, edge: float, restante_s: flo
         if tupla_str in _pares_live_hoy_set() and gate_bp["veredicto"] != "bueno_confirmado":
             log(f"⛔ Veto micro-bucket (solo opera en bueno_confirmado): py={py:.3f} "
                 f"veredicto={gate_bp['veredicto']} -- "
+                f"{'[DRY-RUN] no ejecutaría' if DRY_RUN else 'no se ejecuta'}", activo)
+            return False
+
+        # 30-Jul: veto CLV (mismo mecanismo que live_trade.py::main(), nunca
+        # replicado en NINGÚN ejecutor de baja latencia -- hallazgo del
+        # barrido de "cableado" de esta sesión, afecta a los 5 ejecutores
+        # existentes por igual). _clv_tupla cachea a nivel de módulo (pensado
+        # para un proceso fresco por ciclo); este ejecutor es persistente,
+        # se fuerza relectura fresca de results.csv cada vez -- barato, solo
+        # en el momento raro de confirmar una señal.
+        #
+        # 10-Ago (/code-review, hallazgo real): este veto vivía ANTES del
+        # micro-bucket de arriba -- al revés que en los otros 3 ejecutores
+        # de baja latencia (favaltaconv/favbtc60mno/ballenas_btc15m), donde
+        # el micro-bucket va primero. Con el agregado de 7 días contaminado
+        # (mezclaba régimen pre/post-TWAP y TODAS las zonas de precio, no
+        # solo las confirmadas), este veto bloqueaba la tupla entera sin
+        # llegar nunca a comprobar si el precio caía en una zona ya buena.
+        # Reordenado para que el micro-bucket (que SÍ conoce la zona de
+        # precio) decida primero -- mismo orden que los ejecutores hermanos.
+        lt._CLV_CACHE = None
+        clv_medio, n_clv = lt._clv_tupla(STRATEGY, subtype, "BUY_YES")
+        if n_clv >= lt.CLV_VETO_MIN_N and clv_medio < 0:
+            log(f"⛔ Veto CLV: clv_medio={clv_medio:+.4f} (n={n_clv}) < 0 -- "
                 f"{'[DRY-RUN] no ejecutaría' if DRY_RUN else 'no se ejecuta'}", activo)
             return False
 
