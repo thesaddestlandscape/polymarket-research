@@ -52,6 +52,7 @@ import csv
 import json
 import math
 from collections import defaultdict
+from datetime import datetime, timezone
 from pathlib import Path
 
 import numpy as np
@@ -67,6 +68,23 @@ STEP = 0.05
 N_MIN = 15
 P_MAX = 0.05
 ITERS = 1000
+
+# 10-Ago: Polymarket cambió la resolución de mercados 5min/15min/240min de
+# snapshot a TWAP Chainlink el 07-Ago (confirmado 09-Ago, ver memoria
+# project_twap_chainlink_confirmado_09ago -- misma FECHA_CAMBIO que usa
+# analisis_regimen_twap_chainlink_09ago.py, medianoche UTC como corte).
+# 60min/weekly/daily resuelven por vela Binance u otra fuente, AJENOS al
+# cambio (verificado vía gamma-api). Sin este filtro, un bucket de un marco
+# afectado podía "confirmarse" (n>=15, shuffle p<0.05, split-half) con datos
+# dominados por el mecanismo VIEJO, dando una falsa sensación de evidencia
+# sobre el régimen ACTUAL -- exactamente el riesgo que motivó pausar a mano
+# (override de emergencia) las 2 tuplas live afectadas el 09-Ago. Esto NO
+# reabre esas 2 tuplas (el override sigue mandando siempre, ver
+# gate_bucket_propio.py::_cargar_override) -- corrige el generador para las
+# 246 candidatas DRY_RUN restantes, que dependían de la misma mezcla de
+# régimen sin que nadie lo hubiera pausado.
+FECHA_CAMBIO_TWAP = datetime(2026, 8, 7, tzinfo=timezone.utc)
+MARCOS_TWAP_AFECTADOS = {"5min", "15min", "240min"}
 
 
 def bucket(p):
@@ -145,9 +163,18 @@ def cargar_tuplas_live():
     return list(vistos.values())
 
 
+def _marco_de_subtype(subtype):
+    # subtype = "activo#marco" en el caso general (ej. "BTC#15min");
+    # excepciones sin marco (ej. WEEKLY_PRICE#SOL, 2 segmentos) tratadas
+    # como no-afectadas por construcción (no están en MARCOS_TWAP_AFECTADOS).
+    return subtype.split("#")[-1] if "#" in subtype else ""
+
+
 def cargar_filas(tuplas):
     claves = {(s, sub, d): t for s, sub, d, t, _ in tuplas}
+    marco_por_tupla = {t: _marco_de_subtype(sub) for _, sub, _, t, _ in tuplas}
     out = defaultdict(list)  # tupla_str -> [(ts, py, pnl), ...]
+    n_excluidas_pre_twap = 0
     with open(RESULTS, encoding="utf-8") as f:
         for row in csv.DictReader(f):
             if row.get("acierto") not in ("0", "1"):
@@ -156,12 +183,24 @@ def cargar_filas(tuplas):
             t = claves.get(clave)
             if t is None:
                 continue
+            if marco_por_tupla.get(t) in MARCOS_TWAP_AFECTADOS:
+                try:
+                    ts_dt = datetime.fromisoformat(row.get("prediction_timestamp", ""))
+                except Exception:
+                    continue  # timestamp ilegible en un marco afectado: fail-closed, se descarta
+                if ts_dt < FECHA_CAMBIO_TWAP:
+                    n_excluidas_pre_twap += 1
+                    continue
             try:
                 py = float(row["precio_yes_mercado"])
                 pnl = float(row["pnl_neto"])
             except Exception:
                 continue
             out[t].append((row.get("prediction_timestamp", ""), py, pnl))
+    if n_excluidas_pre_twap:
+        print(f"[cargar_filas] {n_excluidas_pre_twap} filas pre-TWAP (antes de "
+              f"{FECHA_CAMBIO_TWAP.date()}) excluidas en marcos afectados "
+              f"({sorted(MARCOS_TWAP_AFECTADOS)}) -- régimen de resolución distinto")
     return out
 
 

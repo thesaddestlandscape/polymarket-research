@@ -46,6 +46,7 @@ import csv
 import json
 import math
 from collections import defaultdict
+from datetime import datetime, timezone
 from pathlib import Path
 
 import numpy as np
@@ -61,6 +62,21 @@ STEP = 0.10
 N_MIN = 15
 P_MAX = 0.05
 ITERS = 1000
+
+# 10-Ago: mismo fix que analisis_gate_bucket_propio_28jul.py -- Polymarket
+# cambió la resolución de mercados 5min/15min/240min de snapshot a TWAP
+# Chainlink el 07-Ago (ver memoria project_twap_chainlink_confirmado_09ago).
+# Este gate MULTIPLICA el stake real (ratio_correccion), no solo veta -- más
+# urgente que el de gate_bucket_propio: no tiene mecanismo de override de
+# emergencia propio, y BALLENAS_FAMILIA/FAVORITO_CONFIRMADO_FAMILIA (ambas en
+# familias_permitidas de config_live.json) cubren las 2 tuplas live afectadas
+# por TWAP (BALLENAS_TARDIAS#ETH#5min, FAVORITO_CONFIRMADO_15MIN_ALTACONVICCION
+# #BTC#15min). Sin este filtro, un "confirmado" podía basarse en datos
+# dominados por el mecanismo de resolución VIEJO y seguir multiplicando el
+# stake real de hoy bajo el régimen NUEVO. 60min/weekly/daily no afectados
+# (vela Binance u otra fuente), sin cambio ahí.
+FECHA_CAMBIO_TWAP = datetime(2026, 8, 7, tzinfo=timezone.utc)
+MARCOS_TWAP_AFECTADOS = {"5min", "15min", "240min"}
 
 _rng = np.random.default_rng(29)
 
@@ -97,6 +113,7 @@ def cargar_filas(tuplas):
     el shuffle test es el resto de LA MISMA moneda/marco, no de toda la
     familia."""
     out = defaultdict(list)  # (familia, activo#marco) -> [(ts, py, pnl, acierto)]
+    n_excluidas_pre_twap = 0
     with open(RESULTS, encoding="utf-8") as f:
         for row in csv.DictReader(f):
             if row.get("acierto") not in ("0", "1"):
@@ -104,6 +121,15 @@ def cargar_filas(tuplas):
             clave = (row["strategy"], row["subtype"], row["decision"])
             if clave not in tuplas:
                 continue
+            marco = row["subtype"].split("#")[-1] if "#" in row["subtype"] else ""
+            if marco in MARCOS_TWAP_AFECTADOS:
+                try:
+                    ts_dt = datetime.fromisoformat(row.get("prediction_timestamp", ""))
+                except Exception:
+                    continue  # timestamp ilegible en un marco afectado: fail-closed, se descarta
+                if ts_dt < FECHA_CAMBIO_TWAP:
+                    n_excluidas_pre_twap += 1
+                    continue
             try:
                 py = float(row["precio_yes_mercado"])
                 pnl = float(row["pnl_neto"])
@@ -115,6 +141,10 @@ def cargar_filas(tuplas):
             acierto = int(row["acierto"])
             fam = _familia(row["strategy"])
             out[(fam, row["subtype"])].append((row.get("prediction_timestamp", ""), py, pnl, acierto))
+    if n_excluidas_pre_twap:
+        print(f"[cargar_filas] {n_excluidas_pre_twap} filas pre-TWAP (antes de "
+              f"{FECHA_CAMBIO_TWAP.date()}) excluidas en marcos afectados "
+              f"({sorted(MARCOS_TWAP_AFECTADOS)}) -- régimen de resolución distinto")
     return out
 
 
