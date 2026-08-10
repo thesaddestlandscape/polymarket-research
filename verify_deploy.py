@@ -41,17 +41,19 @@ SCREENS = {
     # de sobresuscripción de CPU que "observadores"/"ejecdryrun".
     "fetchers": {"entry": "fetchers_fase0.py",
                  "probe": "log:logs/fetchers_fase0.log:hilos arrancados"},
-    "ballenas_fast": {"entry": "ballenas_executor_btc15m.py",
-                       "probe": "log:logs/ballenas_fast.log:arrancado"},
-    "ballenas_5m": {"entry": "ballenas_executor_5min.py",
-                     "probe": "log:logs/ballenas_5m.log:arrancado"},
-    "favaltaconv": {"entry": "favorito_altaconviccion_executor_15min.py", "probe": None},
-    "favbtc60mno": {"entry": "favorito_confirmado_btc60min_buyno_executor.py", "probe": None},
+    # ejeclive (10-Ago): ballenas_fast/ballenas_5m/favaltaconv/favbtc60mno
+    # (4 screens, dinero real) fusionados en UN proceso -- ver
+    # executores_live_consolidado.py y pipeline_watchdog.py::SCREEN_RESTART
+    # para el motivo completo (eliminar 3 de 4 conexiones websocket
+    # redundantes al firehose RTDS). El "entry" importa los 4 módulos
+    # originales, así que el cierre de imports los cubre igual que antes.
+    "ejeclive": {"entry": "executores_live_consolidado.py",
+                 "probe": "log:logs/ejecutores_live_consolidado.log:arrancando 4 ejecutores"},
     # ballenas_15m/fav15mexec/fav60mexec/gbmlate15m/updowngbmtardio/
     # walletmirror/wmexec fusionados en "ejecdryrun" el 06-Ago (ver
     # ejecutores_dryrun_fase0.py) -- 7 procesos -> 1, mismo patrón que la
-    # fusión de "observadores" (05-Ago). Los 4 ejecutores con dinero real
-    # (favaltaconv/favbtc60mno/ballenas_fast/ballenas_5m) NO se tocan.
+    # fusión de "observadores" (05-Ago). El proceso "ejeclive" (dinero
+    # real) NO se toca.
     "ejecdryrun": {"entry": "ejecutores_dryrun_fase0.py",
                     "probe": "log:logs/ejecutores_dryrun_fase0.log:hilos arrancados"},
     # Solo se vigila el .sh (sus hijos python son proceso fresco cada ciclo).

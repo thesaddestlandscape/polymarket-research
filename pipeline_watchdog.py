@@ -83,14 +83,6 @@ SCREEN_RESTART = {
     # project_push_roto_carga_cpu_resuelto_05ago / project_consolidacion_
     # observadores_fase0_05ago en memoria.
     "observadores": f"cd {REPO} && nice -n 10 .venv/bin/python observadores_fase0.py >> logs/observadores_fase0.log 2>&1",
-    # ballenas_fast (17-Jul, fusionado desde feat/ballenas-fast-btc15m):
-    # ejecutor dedicado de baja latencia BALLENAS_TARDIAS#BTC#15min, DRY_RUN=True
-    # (no toca dinero). Screen de proceso único, mismo patrón que pfinish.
-    "ballenas_fast": f"cd {REPO} && nice -n 10 .venv/bin/python ballenas_executor_btc15m.py >> logs/ballenas_fast.log 2>&1",
-    # ballenas_5m (18-Jul): ejecutor de baja latencia BALLENAS_TARDIAS#{ETH,SOL,XRP}#5min,
-    # DRY_RUN=True, proceso separado de ballenas_fast (BTC15m, live) para no
-    # mezclar blast radius. Ver /root/.claude/plans/ethereal-dazzling-thacker.md
-    "ballenas_5m": f"cd {REPO} && .venv/bin/python ballenas_executor_5min.py >> logs/ballenas_5m.log 2>&1",
     # fetchers (07-Ago): fusión de 4 fetchers de datos externos (chainlink,
     # liqs, libroambos, polyactivity -- historial de cada uno en los
     # comentarios de fetchers_fase0.py::FETCHERS) en UN SOLO proceso, cada
@@ -100,25 +92,36 @@ SCREEN_RESTART = {
     # Ninguno de los 4 ejecuta dinero real ni cambia de lógica (cero cambios
     # en los 4 ficheros originales, solo cambia el proceso que los corre).
     "fetchers": f"cd {REPO} && nice -n 10 .venv/bin/python fetchers_fase0.py >> logs/fetchers_fase0.log 2>&1",
-    # favaltaconv (30-Jul): ejecutor de baja latencia FAVORITO_CONFIRMADO_
-    # 15MIN_ALTACONVICCION#{BTC,ETH}#15min#BUY_YES, DRY_RUN=True -- ataca la
-    # causa raiz diagnosticada de 0/64 trades reales (latencia del ciclo
-    # normal, ver docstring del propio script). Registrado desde su creacion.
-    "favaltaconv": f"cd {REPO} && .venv/bin/python favorito_altaconviccion_executor_15min.py >> logs/favorito_altaconviccion_15min.log 2>&1",
-    # favbtc60mno (30-Jul): ejecutor de baja latencia FAVORITO_CONFIRMADO#BTC
-    # #60min#BUY_NO, DRY_RUN=True -- misma causa raiz que favaltaconv (senal
-    # caducada, 9/9 perdidas en el pipeline normal). Registrado desde su
-    # creacion (mismo gap de ressniper/puntoconf, no repetirlo).
-    "favbtc60mno": f"cd {REPO} && .venv/bin/python favorito_confirmado_btc60min_buyno_executor.py >> logs/favorito_confirmado_btc60min_buyno.log 2>&1",
+    # ejeclive (10-Ago): consolida los 4 ejecutores de baja latencia con
+    # dinero real (ballenas_fast=ballenas_executor_btc15m.py, ballenas_5m=
+    # ballenas_executor_5min.py, favaltaconv=favorito_altaconviccion_
+    # executor_15min.py, favbtc60mno=favorito_confirmado_btc60min_buyno_
+    # executor.py -- las 4 screens de antes) en UN SOLO proceso
+    # (executores_live_consolidado.py). Motivo: los 4 abrían su propia
+    # conexión websocket independiente a ballenas_firehose_cache (RTDS),
+    # cada una parseando el stream completo por separado -- 4 conexiones/
+    # 4x parseo para el mismo dato exacto. Como iniciar() ya es idempotente
+    # por proceso, compartir uno colapsa 3 de las 4 conexiones a no-ops
+    # automáticos, sin tocar ninguna línea de lógica de los 4 ejecutores
+    # (el runner solo parchea log() para prefijar el origen y lanza cada
+    # main() en su propio hilo). Si CUALQUIERA de los 4 muere, el proceso
+    # entero se cierra (os._exit) para forzar un restart limpio -- evita
+    # duplicar hilos internos de un módulo reiniciado a medias (riesgo de
+    # doble-ejecución con dinero real). Contrapartida explícita: un bug en
+    # cualquiera de los 4 ahora tumba a los 4 durante el reinicio (antes
+    # solo tumbaba al suyo) -- a cambio de ~75% menos conexiones/CPU. Ver
+    # executores_live_consolidado.py y project_consolidacion_4_ejecutores_
+    # pendiente_corte_10ago en memoria.
+    "ejeclive": f"cd {REPO} && .venv/bin/python executores_live_consolidado.py >> logs/ejecutores_live_consolidado.log 2>&1",
     # ejecdryrun (06-Ago): consolida 7 ejecutores DRY_RUN de baja latencia
     # (ballenas_15m, fav15mexec, fav60mexec, gbmlate15m, updowngbmtardio,
     # walletmirror, wmexec -- historial completo de cada uno en sus propios
     # commits de creación) en UN SOLO proceso con un hilo cada uno, mismo
     # patrón que observadores_fase0.py (05-Ago). Alivia la sobresuscripción
-    # de CPU (load5 6-8 en 2 cores) sin tocar los 4 ejecutores con dinero
-    # real (favbtc60mno/favaltaconv/ballenas_fast/ballenas_5m, cada uno
-    # sigue en su propia screen). Ver ejecutores_dryrun_fase0.py y
-    # project_cpu_consolidacion_pendiente_05ago en memoria.
+    # de CPU sin tocar dinero real -- los 4 ejecutores de dinero real viven
+    # ahora en "ejeclive" (10-Ago, ver arriba), ya no en 4 screens propias.
+    # Ver ejecutores_dryrun_fase0.py y project_cpu_consolidacion_pendiente_
+    # 05ago en memoria.
     "ejecdryrun": f"cd {REPO} && nice -n 10 .venv/bin/python ejecutores_dryrun_fase0.py >> logs/ejecutores_dryrun_fase0.log 2>&1",
 }
 
@@ -217,7 +220,7 @@ def check_screens() -> dict[str, bool]:
         r = subprocess.run(["screen", "-ls"], capture_output=True, text=True, timeout=5)
         output = r.stdout + r.stderr
         return {name: (f".{name}\t" in output or f".{name} " in output)
-                for name in ["fast", "slow", "control", "dash", "observadores", "ballenas_fast", "ballenas_5m", "fetchers", "favaltaconv", "favbtc60mno", "ejecdryrun"]}
+                for name in ["fast", "slow", "control", "dash", "observadores", "ejeclive", "fetchers", "ejecdryrun"]}
     except Exception:
         return {}
 
@@ -741,18 +744,18 @@ def main():
             #      punto de verdad) Y los 4 ejecutores de baja latencia que SÍ
             #      operan con DRY_RUN=False (10-Ago, corrección de un
             #      comentario que afirmaba lo contrario, cazada por
-            #      /code-review antes de commitear: ballenas_fast/ballenas_5m/
-            #      favaltaconv/favbtc60mno). Sin esta exclusión, cualquier
-            #      commit que tocara un módulo en su cierre de imports habría
-            #      hecho que este loop las reiniciara solo, sin revisión
-            #      humana, en mitad de un ciclo con posiciones reales
-            #      abiertas -- contradice la regla del manual de diagnosticar
-            #      antes de reiniciar dinero real. Siguen apareciendo en el
-            #      aviso de Telegram como "NO reiniciadas (dinero real,
-            #      reinicia a mano si procede)", igual que antes de este
-            #      cambio.
+            #      /code-review antes de commitear: los 4 ejecutores ahora
+            #      viven consolidados en la screen "ejeclive", ver arriba).
+            #      Sin esta exclusión, cualquier commit que tocara un módulo
+            #      en su cierre de imports habría hecho que este loop la
+            #      reiniciara sola, sin revisión humana, en mitad de un
+            #      ciclo con posiciones reales abiertas -- contradice la
+            #      regla del manual de diagnosticar antes de reiniciar
+            #      dinero real. Sigue apareciendo en el aviso de Telegram
+            #      como "NO reiniciada (dinero real, reinicia a mano si
+            #      procede)", igual que antes de este cambio.
             NO_AUTO_RESTART_DINERO_REAL = {
-                "fast", "slow", "ballenas_fast", "ballenas_5m", "favaltaconv", "favbtc60mno",
+                "fast", "slow", "ejeclive",
             }
             try:
                 r = subprocess.run(
