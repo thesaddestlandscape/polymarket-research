@@ -57,11 +57,28 @@ FEE = 0.07
 Z_90 = 1.645
 TOP1_MAX_PCT = 30.0
 
-# Tuplas objetivo: (tupla_str exacta de pares_permitidos_live, activo
-# ballenas, marco ballenas -- MARCO_BALLENAS_MAP: "5min"->"5m", "15min"->"15m")
+# Tuplas objetivo: (tupla_str exacta, activo ballenas, marco ballenas --
+# MARCO_BALLENAS_MAP: "5min"->"5m", "15min"->"15m"). 10-Ago: extendido de
+# las 2 tuplas ya live a la FAMILIA COMPLETA (petición explícita Javi,
+# "repite esto para el resto de la familia") -- BALLENAS_TARDIAS opera en
+# 6 monedas (5 en 5min + BTC en 15min), FAVORITO_CONFIRMADO_15MIN_
+# ALTACONVICCION en 6 monedas #15min. Solo ETH#5min y BTC#15min
+# respectivamente estaban en pares_permitidos_live antes de hoy -- el
+# resto son candidatas en candidatos_evaluacion_live, mismo mecanismo,
+# mismo rigor, para ver si tienen la misma zona externa rescatable.
 OBJETIVO = [
+    ("BALLENAS_TARDIAS#BNB#5min#BUY_YES", "BNB", "5m"),
+    ("BALLENAS_TARDIAS#BTC#15min#BUY_YES", "BTC", "15m"),
+    ("BALLENAS_TARDIAS#DOGE#5min#BUY_YES", "DOGE", "5m"),
     ("BALLENAS_TARDIAS#ETH#5min#BUY_YES", "ETH", "5m"),
+    ("BALLENAS_TARDIAS#SOL#5min#BUY_YES", "SOL", "5m"),
+    ("BALLENAS_TARDIAS#XRP#5min#BUY_YES", "XRP", "5m"),
+    ("FAVORITO_CONFIRMADO_15MIN_ALTACONVICCION#BNB#15min#BUY_YES", "BNB", "15m"),
     ("FAVORITO_CONFIRMADO_15MIN_ALTACONVICCION#BTC#15min#BUY_YES", "BTC", "15m"),
+    ("FAVORITO_CONFIRMADO_15MIN_ALTACONVICCION#DOGE#15min#BUY_YES", "DOGE", "15m"),
+    ("FAVORITO_CONFIRMADO_15MIN_ALTACONVICCION#ETH#15min#BUY_YES", "ETH", "15m"),
+    ("FAVORITO_CONFIRMADO_15MIN_ALTACONVICCION#SOL#15min#BUY_YES", "SOL", "15m"),
+    ("FAVORITO_CONFIRMADO_15MIN_ALTACONVICCION#XRP#15min#BUY_YES", "XRP", "15m"),
 ]
 
 
