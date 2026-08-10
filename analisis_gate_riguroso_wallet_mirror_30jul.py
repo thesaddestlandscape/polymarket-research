@@ -27,8 +27,16 @@ def wilson_lower(hits: int, n: int, z: float = Z_90) -> float:
 
 
 def cargar():
+    # 10-Ago: wallet_mirror_dry_run.csv (wallet_mirror_tracker.py) dejó de
+    # crecer el 04-Ago -- su cron llevaba días crasheando en silencio
+    # (ModuleNotFoundError: websockets, invocado con /usr/bin/python3 en vez
+    # del venv). wallet_mirror_sniper.py lo sustituye por completo (misma
+    # lógica, detección en tiempo real vía WS en vez de cron 10min) y escribe
+    # a wallet_mirror_sniper_dry_run.csv, que sigue creciendo -- ese es el
+    # fichero correcto a leer hoy. Cron roto eliminado la misma sesión (ver
+    # memoria project_wallet_mirror_cron_roto_reconectado_10ago).
     filas = []
-    with open("data/shadow/wallet_mirror_dry_run.csv", encoding="utf-8") as f:
+    with open("data/shadow/wallet_mirror_sniper_dry_run.csv", encoding="utf-8") as f:
         for r in csv.DictReader(f):
             if r.get("acierto") not in ("0", "1"):
                 continue
