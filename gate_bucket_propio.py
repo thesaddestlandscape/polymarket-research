@@ -64,9 +64,12 @@ _REGLAS_EXTENSION = (
 #     (n=79859, individual por whale trade -- restante_min real 2.0-3.4min
 #     sobre ventana de 5min, sin sesgo de convergencia T->0), gate
 #     Wilson+shuffle+bootstrap+split-half con fee 7% real.
-#   - FAVORITO_CONFIRMADO#BTC#60min#BUY_NO: cruzado con
-#     franja_milimetrica_ballenas.json (ya validado, [0.55,0.60) en
-#     BUY_YES = [0.40,0.45) en BUY_NO por simetría).
+#   - FAVORITO_CONFIRMADO#BTC#60min#BUY_NO: la validación por simetría
+#     con franja_milimetrica_ballenas.json citada aquí originalmente
+#     (05-Ago) quedó OBSOLETA -- ver nota 10-Ago más abajo, contradice
+#     este mismo bullet: con datos post-TWAP el bucket [0.40,0.45) YA NO
+#     pasa el rigor. Este bullet se deja como registro histórico de lo
+#     que se creía entonces, no como validación vigente.
 #   - FAVORITO_CONFIRMADO_15MIN_ALTACONVICCION#BTC#15min#BUY_YES:
 #     coincide EXACTO con punto_confirmacion (Wilson 95% ya validado
 #     21-Jul, independiente): precio~0.875.
@@ -98,9 +101,17 @@ _REGLAS_EXTENSION = (
 # reconfirmadas_post_twap_10ago. Se carga DINÁMICO (no hardcodeado) desde
 # data/shadow/zonas_validadas_externas.json, regenerado a diario (cron
 # vigia_zonas_validadas_externas.py) para que crezca solo con el n nuevo.
-_ZONAS_VALIDADAS_EXTERNAMENTE_ESTATICAS = {
-    "FAVORITO_CONFIRMADO#BTC#60min#BUY_NO": [(0.40, 0.45)],
-}
+# 10-Ago: FAVORITO_CONFIRMADO#BTC#60min#BUY_NO tenía aquí una entrada
+# ESTÁTICA [(0.40,0.45)] desde el 05-Ago -- anterior al cambio TWAP
+# (07-Ago) y NUNCA revalidada, hallazgo real al añadir esta tupla al
+# análisis dinámico: con solo datos post-TWAP ese bucket ya NO pasa el
+# rigor (margen +0.0pp). La tupla lleva desde entonces operando en ese
+# rango usando validación pre-TWAP obsoleta -- corregido moviendo la
+# tupla al mecanismo DINÁMICO (analisis_zonas_validadas_externas_post_
+# twap_10ago.py, zonas reales hoy: [0.10,0.15)/[0.35,0.40)/[0.90,0.95)),
+# que sustituye (no sólo complementa) cualquier entrada estática con la
+# misma clave -- ver _zonas_validadas_externamente() abajo.
+_ZONAS_VALIDADAS_EXTERNAMENTE_ESTATICAS = {}
 _ZONAS_DINAMICAS_PATH = Path("data/shadow/zonas_validadas_externas.json")
 _cache_zonas_dinamicas = {"mtime": None, "data": {}}
 
@@ -109,7 +120,17 @@ def _zonas_validadas_externamente() -> dict:
     """Combina las zonas estáticas (familias no afectadas por TWAP) con las
     dinámicas (regeneradas a diario desde ballenas_timing_history.csv
     post-TWAP). Fail-open a solo estáticas si el JSON dinámico falta o está
-    corrupto -- nunca bloquea el arranque por un fichero de refuerzo."""
+    corrupto -- nunca bloquea el arranque por un fichero de refuerzo.
+
+    10-Ago (/code-review, hallazgo real): el merge anterior solo
+    sobreescribía la entrada estática cuando la dinámica para esa misma
+    clave era una lista NO vacía (`if zonas:`) -- si en el futuro se
+    reintrodujera una entrada estática para una tupla cuya dinámica
+    recalculara a "sin zonas" ([]), la estática sobreviviría intacta sin
+    que nadie lo notara, exactamente el fallo que este mecanismo existe
+    para evitar. Ahora sobreescribe siempre que la clave EXISTE en el
+    dinámico, sea la lista vacía o no -- "sin zonas confirmadas hoy" debe
+    poder anular una zona estática vieja, no solo una lista con contenido."""
     combinado = dict(_ZONAS_VALIDADAS_EXTERNAMENTE_ESTATICAS)
     try:
         mtime = _ZONAS_DINAMICAS_PATH.stat().st_mtime
@@ -126,8 +147,7 @@ def _zonas_validadas_externamente() -> dict:
         except Exception:
             pass
     for tupla, zonas in _cache_zonas_dinamicas["data"].items():
-        if zonas:
-            combinado[tupla] = zonas
+        combinado[tupla] = zonas
     return combinado
 
 

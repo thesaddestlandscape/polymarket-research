@@ -43,12 +43,13 @@ import csv
 import json
 import math
 from collections import defaultdict
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
 REPO = Path(__file__).resolve().parent
 BALLENAS_HIST = REPO / "data/shadow/ballenas_timing_history.csv"
 OUT = REPO / "data/shadow/zonas_validadas_externas.json"
+HISTORIAL = REPO / "data/shadow/zonas_validadas_externas_historial.json"
 
 FECHA_CAMBIO_TWAP = datetime(2026, 8, 7, tzinfo=timezone.utc)
 STEP = 0.05
@@ -56,6 +57,30 @@ N_MIN = 15
 FEE = 0.07
 Z_90 = 1.645
 TOP1_MAX_PCT = 30.0
+# 10-Ago (petición explícita Javi, tras ver zonas cambiar por completo en
+# horas -- SOL#5min pasó de [0.60,0.65) a [0.85,0.90), rango distinto, no
+# expansión, solo por acumular más horas de datos): "pasa" el gate
+# estadístico no basta, hace falta que se SOSTENGA en el tiempo antes de
+# confiar en una zona con dinero real. ESTABILIDAD_MIN_HORAS exige que
+# haya al menos una regeneración de hace >= ese margen que YA diera
+# "pasa" para esa zona exacta, Y que NINGUNA regeneración desde entonces
+# haya fallado -- un solo fallo intermedio reinicia el contador (fail-
+# closed, no basta con "pasó alguna vez hace tiempo").
+# 10-Ago, decisión explícita de Javi: arrancar bajo (cubierto por el
+# historial real ya disponible desde que se construyó este mecanismo hoy,
+# ~16:21 UTC) para no dejar sin zona confirmada a las 2 tuplas YA LIVE
+# mientras se acumula historial de verdad -- subir gradualmente (6h, 12h,
+# 18h) en las próximas sesiones conforme crezca el historial real. Ver
+# project_extension_buyno_zonas_externas_10ago (memoria) para el porqué.
+ESTABILIDAD_MIN_HORAS = 4
+# 10-Ago (/code-review, hallazgo real): el corte FECHA_CAMBIO_TWAP se
+# aplicaba sin condición a TODOS los marcos, incluido 60m -- pero el
+# cambio de resolución (snapshot->TWAP Chainlink) solo afectó a 5min/
+# 15min/240min (mismo criterio ya usado en live_trade.py::CLV_MARCOS_
+# TWAP_AFECTADOS/gate_bucket_propio.py -- 60min queda fuera). Aplicar el
+# corte a 60m descartaba datos pre-07-Ago perfectamente válidos sin
+# ninguna razón (menos n, split-half más débil, sin motivo real).
+MARCOS_TWAP_AFECTADOS = {"5m", "15m", "240m"}
 
 # Tuplas objetivo: (tupla_str exacta, activo ballenas, marco ballenas --
 # MARCO_BALLENAS_MAP: "5min"->"5m", "15min"->"15m"). 10-Ago: extendido de
@@ -79,6 +104,13 @@ OBJETIVO = [
     ("FAVORITO_CONFIRMADO_15MIN_ALTACONVICCION#ETH#15min#BUY_YES", "ETH", "15m"),
     ("FAVORITO_CONFIRMADO_15MIN_ALTACONVICCION#SOL#15min#BUY_YES", "SOL", "15m"),
     ("FAVORITO_CONFIRMADO_15MIN_ALTACONVICCION#XRP#15min#BUY_YES", "XRP", "15m"),
+    # 10-Ago: primera tupla BUY_NO -- LIVE, dinero real, prioridad #1 del
+    # criterio de orden (gate_bucket_propio propio: 0/7 buckets
+    # confirmados hoy pese a n=250 en un bucket, ver idea_criterio_orden_
+    # extension_twap_10ago). Requiere el fix de conversión de precio en
+    # cargar()/breakeven() de arriba -- verificado ANTES de añadir esta
+    # línea, no se puede simplemente copiar el patrón BUY_YES.
+    ("FAVORITO_CONFIRMADO#BTC#60min#BUY_NO", "BTC", "60m"),
 ]
 
 
@@ -96,22 +128,48 @@ def wilson_lower(hits, n, z=Z_90):
     return (centro - margen) / denom
 
 
-def breakeven(py_medio):
-    gross_win = (1 - py_medio) / py_medio
+def breakeven(py_medio, decision="BUY_YES"):
+    """py_medio SIEMPRE en convención "precio YES crudo" -- misma que usa
+    gate_bucket_propio.evaluar()/shadow_predict.py en runtime para tuplas
+    BUY_NO (bucket_bp = _gate_bucket_propio(tupla_str, py) con py =
+    market["_precio_yes"] SIN convertir, ver s_favorito_confirmado y
+    s_weekly_price -- confirmado leyendo el código real, no asumido).
+
+    10-Ago: `decision` nuevo -- para BUY_NO, el lado que de verdad
+    mantenemos es NO al precio (1-py_medio), así que el breakeven real
+    hay que calcularlo sobre ESE precio, no sobre py_medio directo (que
+    daría el breakeven de la posición YES equivocada).
+
+    10-Ago (/code-review): valida `decision` explícitamente -- antes
+    cualquier valor que no fuera exactamente "BUY_NO" caía silenciosamente
+    en la rama BUY_YES (typo, mayúscula distinta, dirección nueva sin
+    actualizar aquí), produciendo una zona confirmada equivocada sin que
+    nada avisara. Mejor fallar fuerte que servir un breakeven erróneo
+    para dinero real."""
+    if decision not in ("BUY_YES", "BUY_NO"):
+        raise ValueError(f"decision desconocida: {decision!r} (solo BUY_YES/BUY_NO)")
+    p_held = (1 - py_medio) if decision == "BUY_NO" else py_medio
+    gross_win = (1 - p_held) / p_held
     return 1 / (1 + gross_win * (1 - FEE))
 
 
 def cargar(activo, marco, compro_yes="1"):
-    """compro_yes filtra el LADO comprado -- 10-Ago, fix real cazado por
+    """marco en convención ballenas ("5m"/"15m"/"60m"/"240m"). compro_yes
+    filtra el LADO comprado -- 10-Ago, fix real cazado por
     /code-review: `precio` en ballenas_timing_history.csv es el precio SIN
     CONVERTIR del lado que compró esa wallet (ballenas_observer.py::precio
     = t["price"] crudo de la API). Un compro_yes=0 a precio=0.55 significa
     "pagó 0.55 por NO" (probabilidad YES implícita ~0.45), NO es el mismo
-    bucket de precio que un compro_yes=1 a precio=0.55. Mezclar ambos
-    lados sin convertir contaminaba el bucket con dos series de precio
-    distintas. Las 2 tuplas OBJETIVO son BUY_YES -- exige compro_yes="1"
-    (precio YES directo, comparable 1:1 con lo que paga nuestro
-    ejecutador BUY_YES) por defecto."""
+    bucket de precio que un compro_yes=1 a precio=0.55.
+
+    10-Ago (extensión a BUY_NO, FAVORITO_CONFIRMADO#BTC#60min): cuando
+    compro_yes="0" se CONVIERTE aquí mismo a precio YES equivalente
+    (p = 1 - precio_NO) antes de bucketear -- así el bucket queda en la
+    MISMA convención que usa gate_bucket_propio.evaluar() en runtime
+    (py crudo, sin convertir, incluso para tuplas BUY_NO -- ver
+    breakeven() arriba). Sin esta conversión, una tupla BUY_NO quedaría
+    bucketeada por precio NO mientras el ejecutor real consulta por
+    precio YES -- las zonas no emparejarían nunca, bug silencioso."""
     por_bucket = defaultdict(list)
     with open(BALLENAS_HIST, encoding="utf-8") as f:
         for row in csv.DictReader(f):
@@ -124,20 +182,22 @@ def cargar(activo, marco, compro_yes="1"):
                 ac = int(row["acierto"])
             except (TypeError, ValueError):
                 continue
+            if compro_yes == "0":
+                p = 1 - p
             try:
                 ts = datetime.fromisoformat(row["ts_trade"])
                 if ts.tzinfo is None:
                     ts = ts.replace(tzinfo=timezone.utc)
             except Exception:
                 continue
-            if ts < FECHA_CAMBIO_TWAP:
+            if marco in MARCOS_TWAP_AFECTADOS and ts < FECHA_CAMBIO_TWAP:
                 continue
             b = bucket(p)
             por_bucket[b].append((ts, p, ac, row.get("condition_id", "")))
     return por_bucket
 
 
-def evaluar_zona(filas):
+def evaluar_zona(filas, decision="BUY_YES"):
     n = len(filas)
     if n < N_MIN:
         return None
@@ -145,7 +205,7 @@ def evaluar_zona(filas):
     hits = sum(ac for _, _, ac, _ in filas)
     hit = hits / n
     wlo = wilson_lower(hits, n)
-    be = breakeven(py_medio)
+    be = breakeven(py_medio, decision)
 
     from collections import Counter
     c_mkt = Counter(cid for _, _, _, cid in filas)
@@ -164,7 +224,7 @@ def evaluar_zona(filas):
         py2 = sum(p for _, p, _, _ in m2) / len(m2)
         wlo1 = wilson_lower(hits1, len(m1))
         wlo2 = wilson_lower(hits2, len(m2))
-        be1, be2 = breakeven(py1), breakeven(py2)
+        be1, be2 = breakeven(py1, decision), breakeven(py2, decision)
         split_ok = (wlo1 > be1) and (wlo2 > be2)
 
     return {
@@ -177,7 +237,50 @@ def evaluar_zona(filas):
     }
 
 
+def _cargar_historial() -> dict:
+    try:
+        return json.loads(HISTORIAL.read_text(encoding="utf-8"))
+    except Exception:
+        return {}
+
+
+def _actualizar_historial(historial: dict, tupla_str: str, bucket_key: str, pasa: bool, ahora: datetime,
+                           max_entradas: int = 60) -> list:
+    """Añade la observación de HOY al historial de esa (tupla,bucket) y
+    devuelve la lista actualizada (recortada a max_entradas, ~2 meses a
+    cadencia diaria -- de sobra para juzgar estabilidad sin crecer sin
+    límite)."""
+    clave = f"{tupla_str}#{bucket_key}"
+    entradas = historial.get(clave, [])
+    entradas.append({"ts": ahora.isoformat(timespec="seconds"), "pasa": pasa})
+    entradas = entradas[-max_entradas:]
+    historial[clave] = entradas
+    return entradas
+
+
+def _es_estable(entradas: list, ahora: datetime) -> bool:
+    """True solo si HOY pasa Y hay al menos una observación de hace
+    >=ESTABILIDAD_MIN_HORAS que TAMBIÉN pasó, sin ningún fallo intermedio
+    entre esa observación antigua y ahora -- un solo fallo reinicia el
+    contador (fail-closed). Con una sola observación (primera vez que se
+    corre para esa zona) nunca es estable, por diseño: hace falta ver la
+    zona sobrevivir al menos una regeneración futura antes de confiar en
+    ella con dinero real."""
+    if not entradas or not entradas[-1]["pasa"]:
+        return False
+    corte = ahora - timedelta(hours=ESTABILIDAD_MIN_HORAS)
+    anteriores_validas = [i for i, e in enumerate(entradas)
+                           if datetime.fromisoformat(e["ts"]) <= corte]
+    if not anteriores_validas:
+        return False
+    idx = anteriores_validas[-1]
+    ventana = entradas[idx:]
+    return all(e["pasa"] for e in ventana)
+
+
 def main():
+    ahora = datetime.now(timezone.utc)
+    historial = _cargar_historial()
     resultado = {}
     for tupla_str, activo, marco in OBJETIVO:
         direccion = tupla_str.rsplit("#", 1)[-1]
@@ -186,30 +289,42 @@ def main():
         zonas_confirmadas = []
         detalle = {}
         for b in sorted(por_bucket):
-            info = evaluar_zona(por_bucket[b])
+            info = evaluar_zona(por_bucket[b], decision=direccion)
             if info is None:
                 continue
-            detalle[f"{b:.2f}"] = info
-            if info["pasa"]:
+            b_key = f"{b:.2f}"
+            entradas = _actualizar_historial(historial, tupla_str, b_key, info["pasa"], ahora)
+            estable = _es_estable(entradas, ahora)
+            info["estable"] = estable
+            info["n_observaciones_historial"] = len(entradas)
+            detalle[b_key] = info
+            if estable:
                 zonas_confirmadas.append([b, round(b + STEP, 2)])
         resultado[tupla_str] = {
             "zonas_bueno_confirmado": zonas_confirmadas,
             "detalle_por_bucket": detalle,
             "fuente": "ballenas_timing_history.csv post-07-Ago (TWAP-safe)",
-            "regenerado_utc": datetime.now(timezone.utc).isoformat(timespec="seconds"),
+            "regenerado_utc": ahora.isoformat(timespec="seconds"),
         }
         print(f"\n=== {tupla_str} ===")
         for b, hi in zonas_confirmadas:
             info = detalle[f"{b:.2f}"]
             print(f"  🟢 [{b:.2f},{hi:.2f}) n={info['n']} hit={info['hit']*100:.1f}% "
                   f"wilson90lo={info['wilson90lo']*100:.1f}% breakeven={info['breakeven']*100:.1f}% "
-                  f"margen={info['margen_pp']:+.1f}pp mercados={info['n_mercados']} top1={info['top1_pct']:.1f}%")
+                  f"margen={info['margen_pp']:+.1f}pp mercados={info['n_mercados']} top1={info['top1_pct']:.1f}% "
+                  f"estable=True (n_hist={info['n_observaciones_historial']})")
+        pasa_pero_no_estable = [b for b, info in detalle.items() if info["pasa"] and not info["estable"]]
+        if pasa_pero_no_estable:
+            print(f"  ⏳ pasa el gate pero AÚN no estable (esperando >= {ESTABILIDAD_MIN_HORAS}h sin fallar): "
+                  f"{pasa_pero_no_estable}")
         if not zonas_confirmadas:
-            print("  (ninguna zona confirmada)")
+            print("  (ninguna zona estable confirmada)")
 
     with open(OUT, "w", encoding="utf-8") as f:
         json.dump(resultado, f, indent=2, ensure_ascii=False)
+    HISTORIAL.write_text(json.dumps(historial, indent=2, ensure_ascii=False), encoding="utf-8")
     print(f"\nGuardado en {OUT}")
+    print(f"Historial actualizado en {HISTORIAL}")
 
 
 if __name__ == "__main__":
