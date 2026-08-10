@@ -602,5 +602,21 @@
   "WEEKLY_PRICE#ETH": {
     "n": 201,
     "confirmado": false
+  },
+  "STRUCT_NO_15M#BTC": {
+    "n": 257,
+    "confirmado": false
+  },
+  "STRUCT_NO_15M#BTC#15min": {
+    "n": 257,
+    "confirmado": false
+  },
+  "STRUCT_NO_15M#ETH": {
+    "n": 263,
+    "confirmado": false
+  },
+  "STRUCT_NO_15M#ETH#15min": {
+    "n": 263,
+    "confirmado": false
   }
 }
