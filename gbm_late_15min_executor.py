@@ -402,7 +402,7 @@ def watch_window(activo: str, mercado: dict) -> bool:
             if tupla_str in _pares_live_hoy_set() and gate_bp["veredicto"] != "bueno_confirmado":
                 contadores["vetado_gate_bucket"] += 1
                 log(f"[{mercado['market_id']}] {strategy} py={py_edge:.3f} vetado por "
-                    f"gate_bucket_propio (malo_confirmado)", activo)
+                    f"gate_bucket_propio (veredicto={gate_bp['veredicto']})", activo)
                 continue
 
             log(f"[{mercado['market_id']}] {strategy} CONFIRMADO {direccion} py={py_edge:.3f} "
