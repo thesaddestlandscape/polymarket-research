@@ -3040,5 +3040,265 @@
     },
     "fuente": "ballenas_timing_history.csv post-07-Ago (TWAP-safe)",
     "regenerado_utc": "2026-08-10T16:32:33+00:00"
+  },
+  "FAVORITO_CONFIRMADO#BTC#60min#BUY_NO": {
+    "zonas_bueno_confirmado": [
+      [
+        0.1,
+        0.15
+      ],
+      [
+        0.35,
+        0.4
+      ],
+      [
+        0.9,
+        0.95
+      ]
+    ],
+    "detalle_por_bucket": {
+      "0.00": {
+        "n": 2285,
+        "py_medio": 0.0184,
+        "hit": 0.9265,
+        "wilson90lo": 0.917,
+        "breakeven": 0.9829,
+        "margen_pp": -6.59,
+        "n_mercados": 47,
+        "top1_pct": 8.4,
+        "split_half_ok": false,
+        "pasa": false
+      },
+      "0.05": {
+        "n": 1059,
+        "py_medio": 0.0685,
+        "hit": 0.9443,
+        "wilson90lo": 0.9315,
+        "breakeven": 0.936,
+        "margen_pp": -0.45,
+        "n_mercados": 47,
+        "top1_pct": 13.2,
+        "split_half_ok": false,
+        "pasa": false
+      },
+      "0.10": {
+        "n": 1190,
+        "py_medio": 0.1186,
+        "hit": 0.9782,
+        "wilson90lo": 0.97,
+        "breakeven": 0.8888,
+        "margen_pp": 8.12,
+        "n_mercados": 47,
+        "top1_pct": 7.7,
+        "split_half_ok": true,
+        "pasa": true
+      },
+      "0.15": {
+        "n": 1196,
+        "py_medio": 0.1696,
+        "hit": 0.8829,
+        "wilson90lo": 0.8668,
+        "breakeven": 0.8404,
+        "margen_pp": 2.64,
+        "n_mercados": 51,
+        "top1_pct": 7.4,
+        "split_half_ok": false,
+        "pasa": false
+      },
+      "0.20": {
+        "n": 1475,
+        "py_medio": 0.2199,
+        "hit": 0.8075,
+        "wilson90lo": 0.79,
+        "breakeven": 0.7923,
+        "margen_pp": -0.22,
+        "n_mercados": 56,
+        "top1_pct": 6.4,
+        "split_half_ok": false,
+        "pasa": false
+      },
+      "0.25": {
+        "n": 1336,
+        "py_medio": 0.2667,
+        "hit": 0.8099,
+        "wilson90lo": 0.7916,
+        "breakeven": 0.7473,
+        "margen_pp": 4.43,
+        "n_mercados": 60,
+        "top1_pct": 7.7,
+        "split_half_ok": false,
+        "pasa": false
+      },
+      "0.30": {
+        "n": 1472,
+        "py_medio": 0.322,
+        "hit": 0.7561,
+        "wilson90lo": 0.7372,
+        "breakeven": 0.6936,
+        "margen_pp": 4.36,
+        "n_mercados": 67,
+        "top1_pct": 7.0,
+        "split_half_ok": false,
+        "pasa": false
+      },
+      "0.35": {
+        "n": 2210,
+        "py_medio": 0.3717,
+        "hit": 0.7407,
+        "wilson90lo": 0.7251,
+        "breakeven": 0.6451,
+        "margen_pp": 8.0,
+        "n_mercados": 74,
+        "top1_pct": 10.7,
+        "split_half_ok": true,
+        "pasa": true
+      },
+      "0.40": {
+        "n": 2275,
+        "py_medio": 0.4189,
+        "hit": 0.6158,
+        "wilson90lo": 0.5989,
+        "breakeven": 0.5987,
+        "margen_pp": 0.02,
+        "n_mercados": 83,
+        "top1_pct": 4.2,
+        "split_half_ok": false,
+        "pasa": false
+      },
+      "0.45": {
+        "n": 2552,
+        "py_medio": 0.4715,
+        "hit": 0.5486,
+        "wilson90lo": 0.5323,
+        "breakeven": 0.5465,
+        "margen_pp": -1.42,
+        "n_mercados": 87,
+        "top1_pct": 4.8,
+        "split_half_ok": false,
+        "pasa": false
+      },
+      "0.50": {
+        "n": 2517,
+        "py_medio": 0.518,
+        "hit": 0.4919,
+        "wilson90lo": 0.4755,
+        "breakeven": 0.5002,
+        "margen_pp": -2.47,
+        "n_mercados": 89,
+        "top1_pct": 4.4,
+        "split_half_ok": false,
+        "pasa": false
+      },
+      "0.55": {
+        "n": 1736,
+        "py_medio": 0.5693,
+        "hit": 0.4038,
+        "wilson90lo": 0.3846,
+        "breakeven": 0.4486,
+        "margen_pp": -6.4,
+        "n_mercados": 77,
+        "top1_pct": 5.4,
+        "split_half_ok": false,
+        "pasa": false
+      },
+      "0.60": {
+        "n": 1496,
+        "py_medio": 0.62,
+        "hit": 0.4639,
+        "wilson90lo": 0.4428,
+        "breakeven": 0.3973,
+        "margen_pp": 4.55,
+        "n_mercados": 74,
+        "top1_pct": 6.2,
+        "split_half_ok": false,
+        "pasa": false
+      },
+      "0.65": {
+        "n": 1374,
+        "py_medio": 0.6708,
+        "hit": 0.3755,
+        "wilson90lo": 0.3543,
+        "breakeven": 0.3454,
+        "margen_pp": 0.89,
+        "n_mercados": 71,
+        "top1_pct": 7.2,
+        "split_half_ok": false,
+        "pasa": false
+      },
+      "0.70": {
+        "n": 1375,
+        "py_medio": 0.7214,
+        "hit": 0.256,
+        "wilson90lo": 0.2371,
+        "breakeven": 0.2934,
+        "margen_pp": -5.62,
+        "n_mercados": 64,
+        "top1_pct": 10.5,
+        "split_half_ok": false,
+        "pasa": false
+      },
+      "0.75": {
+        "n": 984,
+        "py_medio": 0.7692,
+        "hit": 0.3283,
+        "wilson90lo": 0.3041,
+        "breakeven": 0.2439,
+        "margen_pp": 6.02,
+        "n_mercados": 59,
+        "top1_pct": 8.7,
+        "split_half_ok": false,
+        "pasa": false
+      },
+      "0.80": {
+        "n": 922,
+        "py_medio": 0.8195,
+        "hit": 0.1692,
+        "wilson90lo": 0.1499,
+        "breakeven": 0.1915,
+        "margen_pp": -4.16,
+        "n_mercados": 53,
+        "top1_pct": 12.1,
+        "split_half_ok": false,
+        "pasa": false
+      },
+      "0.85": {
+        "n": 725,
+        "py_medio": 0.8713,
+        "hit": 0.1697,
+        "wilson90lo": 0.148,
+        "breakeven": 0.1371,
+        "margen_pp": 1.09,
+        "n_mercados": 48,
+        "top1_pct": 5.8,
+        "split_half_ok": false,
+        "pasa": false
+      },
+      "0.90": {
+        "n": 787,
+        "py_medio": 0.9191,
+        "hit": 0.2071,
+        "wilson90lo": 0.1844,
+        "breakeven": 0.0865,
+        "margen_pp": 9.79,
+        "n_mercados": 51,
+        "top1_pct": 9.9,
+        "split_half_ok": true,
+        "pasa": true
+      },
+      "0.95": {
+        "n": 386,
+        "py_medio": 0.9721,
+        "hit": 0.0518,
+        "wilson90lo": 0.0362,
+        "breakeven": 0.0299,
+        "margen_pp": 0.63,
+        "n_mercados": 42,
+        "top1_pct": 10.4,
+        "split_half_ok": false,
+        "pasa": false
+      }
+    },
+    "fuente": "ballenas_timing_history.csv post-07-Ago (TWAP-safe)",
+    "regenerado_utc": "2026-08-10T20:02:58+00:00"
   }
 }
