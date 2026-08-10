@@ -75,7 +75,6 @@ import fcntl
 import json
 import threading
 import time
-from concurrent.futures import ThreadPoolExecutor
 from datetime import datetime, timezone
 from pathlib import Path
 
@@ -276,10 +275,22 @@ def libro_publico(token_id: str) -> dict | None:
 
 
 def concentracion_ballenas(condition_id: str, banda_lo: float, banda_hi: float,
-                            activo: str) -> tuple[float | None, float | None, int, str, list, int, int]:
+                            activo: str, trades: list | None = None
+                            ) -> tuple[float | None, float | None, int, str, list, int, int]:
     """(pct_yes_crudo, pct_yes_ponderado, n, motivo, wallets_yes, n_yes_total,
     n_trades_crudo) -- mide ambos lados porque la dirección todavía no está
     fijada.
+
+    10-Ago (/code-review, hallazgo real): `trades` opcional -- desde que
+    watch_window() evalúa VARIAS bandas por poll (cargar_bandas_multi),
+    llamar aquí sin pasar `trades` reharía `_fc.trades_de_mercado_firehose()`
+    (adquiere el lock + copia la lista completa) una vez POR BANDA en vez
+    de una vez por poll, multiplicando el coste justo en el momento de más
+    volumen (final de la ventana). El caller ahora consulta el cache UNA
+    vez por poll y pasa la misma lista a cada banda -- el filtrado por
+    banda que sigue abajo es barato (recorre una lista ya en memoria, sin
+    lock). Si `trades` es None (uso suelto/tests), se comporta igual que
+    antes.
 
     23-Jul: se añade pct_yes_ponderado -- cada trade pesa según
     _peso_wallet() (1.0 si la wallet es desconocida o no validada, fuera de
@@ -309,9 +320,10 @@ def concentracion_ballenas(condition_id: str, banda_lo: float, banda_hi: float,
     de ETH, umbral 35, se validó bajo esa fuente truncada -- con la fuente
     nueva, sin tope, n_yes_total real puede ser bastante mayor; vigilar si
     eso cambia el hit-rate del bucket una vez acumule n propio)."""
-    if not _fc.esta_sano():
-        return None, None, 0, "firehose_no_sano", [], 0, 0
-    trades = _fc.trades_de_mercado_firehose(condition_id)
+    if trades is None:
+        if not _fc.esta_sano():
+            return None, None, 0, "firehose_no_sano", [], 0, 0
+        trades = _fc.trades_de_mercado_firehose(condition_id)
     n_trades_crudo = len(trades)  # respuesta cruda del cache, antes de filtrar por side/outcome/banda
     n_yes = n_no = 0
     n_yes_total = 0
@@ -379,7 +391,7 @@ def _wilson_lower(aciertos: int, n: int, z: float = 1.96) -> float:
     return (centro - ajuste) / denom
 
 
-def cargar_calibracion(activo: str) -> dict | None:
+def cargar_calibracion(activo: str, estado: dict | None = None) -> dict | None:
     """Sustituye a cargar_banda() + los ACTIVOS[activo] hardcodeados del
     18-Jul -- TODO releído fresco cada ventana desde
     ballenas_timing_state.json (misma fuente que ballenas_observer.py
@@ -398,11 +410,20 @@ def cargar_calibracion(activo: str) -> dict | None:
     banda operativa, con la n mucho mayor (cientos-miles) que ya tiene
     el observer -- + un margen corto. watch_window() ya no dispara en
     cuanto se cumple concentración; solo puede hacerlo dentro de esta
-    ventana más ajustada al momento real en que las ballenas confirman."""
-    try:
-        estado = json.loads((DIR_SHADOW / "ballenas_timing_state.json").read_text())
-    except Exception:
-        return None
+    ventana más ajustada al momento real en que las ballenas confirman.
+
+    10-Ago (/code-review): `estado` opcional -- cargar_bandas_multi() ya
+    lee ballenas_timing_state.json para sacar el `z` de la banda coarse;
+    sin este parámetro, esta función lo releería una segunda vez, con
+    riesgo de que el cron horario reescriba el fichero justo entre ambas
+    lecturas y devuelva un `z` de un snapshot distinto al de banda_lo/hi/
+    prob_bucket (mismo fichero, pero momento distinto). Si no se pasa, se
+    comporta igual que antes (lectura propia)."""
+    if estado is None:
+        try:
+            estado = json.loads((DIR_SHADOW / "ballenas_timing_state.json").read_text())
+        except Exception:
+            return None
     e = estado.get(f"{activo}#{VENTANA_MIN}m", {})
     if not e.get("significativo"):
         return None
@@ -431,22 +452,122 @@ def cargar_calibracion(activo: str) -> dict | None:
             "n_banda": int(n)}
 
 
+ESTADO_FINO_PATH = DIR_SHADOW / "ballenas_timing_state_fino.json"
+
+
+def cargar_bandas_multi(activo: str) -> list[dict]:
+    """10-Ago (petición explícita Javi: "tenemos en el sistema la
+    solución"): conecta ballenas_timing_state_fino.json a un ejecutor real
+    por primera vez desde que se construyó (22-Jul) -- hasta hoy era
+    puramente informativo (ver docstring de
+    ballenas_observer.py::_calcular_estado_fino: "No lo consume ningún
+    ejecutor todavía"). cargar_calibracion() (arriba) solo usa la banda
+    de MAYOR z de ballenas_timing_state.json (banda ancha, 0.2) -- pero
+    varios activos tienen una banda fina (0.05) real y significativa que
+    la banda ancha diluye o directamente no cubre. Verificado 10-Ago con
+    datos reales: BNB#5m (banda ancha NO significativa, ninguna banda
+    pasa el gate) SÍ tiene 2 bandas finas significativas, incluida
+    [0.40,0.45) que además coincide con la zona confirmada externamente
+    (zonas_validadas_externas.json vía ballenas_timing_history.csv
+    post-TWAP); SOL#5m tiene 6 bandas finas significativas, incluida
+    [0.60,0.65) -- la banda ancha operativa hoy es [0.70,0.90), esa zona
+    fina queda fuera y nunca se evalúa.
+
+    UNIÓN, nunca solo fino: incluye SIEMPRE la banda ancha coarse si es
+    significativa (mismo criterio que cargar_calibracion(), reutilizado
+    tal cual) -- así ningún activo/marco que hoy solo tiene evidencia en
+    la banda ancha (y no en ninguna fina) pierde su cobertura ya
+    validada. Añade además todas las bandas finas que pasan gate (mismo
+    rigor que ballenas_observer.py: n>=N_MIN, z>=Z_MIN, top1_share<
+    TOP1_MAX, timing fiable) que no coincidan exactamente con la coarse.
+    Fail-closed: [] si ni la coarse ni ninguna fina son usables.
+
+    10-Ago (/code-review, hallazgo real): la coarse (ancha, 0.2) y varias
+    finas (0.05) pueden solaparse en precio -- ej. ETH#5m coarse
+    [0.70,0.90) contiene las finas [0.70,0.75)/[0.75,0.80)/[0.80,0.85)/
+    [0.85,0.90). watch_window() dispara con la PRIMERA banda de la lista
+    cuyo rango de precio cumple -- ordenar solo por z (como antes) hacía
+    que cuál banda "ganaba" en una zona solapada dependiera de qué z
+    fuera mayor ESE ciclo del cron horario, sin ninguna razón de diseño.
+    Ahora se ordena por ANCHURA ascendente primero (la fina, más
+    específica, siempre gana sobre la coarse que la contiene) y por z
+    descendente como criterio secundario (entre finas del mismo ancho, o
+    si alguna vez hay dos coarse) -- determinista, no depende de qué
+    banda tenga más n esta hora."""
+    bandas = []
+    vistos = set()
+
+    try:
+        estado_coarse = json.loads((DIR_SHADOW / "ballenas_timing_state.json").read_text())
+    except Exception:
+        estado_coarse = {}
+    e_coarse = estado_coarse.get(f"{activo}#{VENTANA_MIN}m", {})
+    calib_coarse = cargar_calibracion(activo, estado=estado_coarse)
+    if calib_coarse is not None:
+        clave = (calib_coarse["banda_lo"], calib_coarse["banda_hi"])
+        z_coarse = e_coarse.get("z")
+        bandas.append({**calib_coarse, "z": z_coarse if isinstance(z_coarse, (int, float)) else 0.0,
+                       "origen": "coarse"})
+        vistos.add(clave)
+
+    try:
+        estado_fino = json.loads(ESTADO_FINO_PATH.read_text())
+    except Exception:
+        estado_fino = {}
+    e_fino = estado_fino.get(f"{activo}#{VENTANA_MIN}m", {})
+    if e_fino.get("significativo"):
+        for b in e_fino.get("bandas_significativas", []):
+            lo, hi = b.get("banda_lo"), b.get("banda_hi")
+            n, n_gan, rest_hi = b.get("n"), b.get("n_ganadoras"), b.get("rest_hi_min")
+            z = b.get("z")
+            if not (isinstance(lo, (int, float)) and isinstance(hi, (int, float))
+                    and isinstance(n, (int, float)) and n > 0
+                    and isinstance(n_gan, (int, float)) and 0 <= n_gan <= n
+                    and isinstance(rest_hi, (int, float)) and isinstance(z, (int, float))):
+                continue
+            if (lo, hi) in vistos:
+                continue
+            prob_bucket = _wilson_lower(int(n_gan), int(n))
+            confirm_ceiling_s = rest_hi * 60 + MARGEN_CONFIRM_S
+            watch_lead_s = confirm_ceiling_s + MARGEN_WATCH_S
+            bandas.append({"banda_lo": lo, "banda_hi": hi, "prob_bucket": prob_bucket,
+                            "confirm_ceiling_s": confirm_ceiling_s, "watch_lead_s": watch_lead_s,
+                            "n_banda": int(n), "z": z, "origen": "fino"})
+            vistos.add((lo, hi))
+
+    bandas.sort(key=lambda b: (b["banda_hi"] - b["banda_lo"], -b["z"]))
+    return bandas
+
+
 def watch_window(activo: str, ts_end: int) -> bool:
     """Vigila un mercado {activo}#5min concreto desde watch_lead_s hasta
     el cierre. True si ejecutó (o habría ejecutado en DRY_RUN).
 
-    23-Jul: calibración (banda, prob_bucket, watch_lead_s, confirm_ceiling_s)
-    releída fresca vía cargar_calibracion() -- ya no hay cfg estático por
-    activo. Además, no confirma en cuanto se cumple concentración: solo
-    puede hacerlo dentro de confirm_ceiling_s (ver cargar_calibracion),
-    y usa la concentración PONDERADA por calidad de wallet, no la cruda."""
-    calib = cargar_calibracion(activo)
-    if calib is None:
-        log(f"[{ts_end}] {activo}#5m no significativo o calibración incompleta en ballenas_timing_state.json -- se salta", activo)
+    10-Ago (petición explícita Javi: "tenemos en el sistema la solución"):
+    generaliza de UNA banda operativa (cargar_calibracion, banda ancha de
+    mayor z) a TODAS las bandas finas significativas de
+    ballenas_timing_state_fino.json (cargar_bandas_multi) -- cada poll
+    comprueba concentración por separado para cada banda (filtra el mismo
+    cache de trades en memoria, sin coste de red adicional: concentracion_
+    ballenas() no hace ninguna llamada de red, solo libro_publico() la
+    hace, y esa se sigue pidiendo UNA vez por poll, no por banda). Se
+    dispara con la PRIMERA banda que cumpla concentración+precio+timing en
+    este poll -- recorridas en orden de anchura ascendente (fina antes
+    que ancha) y z descendente como criterio secundario (ver
+    cargar_bandas_multi para el porqué: la coarse puede solapar varias
+    finas en precio, y sin este orden determinista cuál "gana" dependería
+    de qué z fuera mayor esa hora).
+
+    23-Jul: no confirma en cuanto se cumple concentración: solo puede
+    hacerlo dentro de confirm_ceiling_s de SU PROPIA banda (cada banda
+    fina tiene su propio timing, derivado de sus propias wallets
+    ganadoras -- no se reutiliza el timing de otra banda), y usa la
+    concentración PONDERADA por calidad de wallet, no la cruda."""
+    bandas = cargar_bandas_multi(activo)
+    if not bandas:
+        log(f"[{ts_end}] {activo}#5m sin ninguna banda significativa en ballenas_timing_state_fino.json -- se salta", activo)
         return False
-    banda_lo, banda_hi = calib["banda_lo"], calib["banda_hi"]
-    watch_lead_s, confirm_ceiling_s = calib["watch_lead_s"], calib["confirm_ceiling_s"]
-    prob_bucket = calib["prob_bucket"]
+    watch_lead_s = max(b["watch_lead_s"] for b in bandas)
     ts_start = ts_end - VENTANA_MIN * 60
 
     mercado = None
@@ -459,10 +580,10 @@ def watch_window(activo: str, ts_end: int) -> bool:
             continue
         if restante < HARD_FLOOR_S:
             log(f"[{ts_end}] suelo de seguridad ({HARD_FLOOR_S}s) alcanzado sin confirmación -- se abandona "
-                f"(resumen vigilancia: {sum(contadores.values())} polls, "
+                f"(resumen vigilancia: {sum(contadores.values())} intentos de banda, "
                 f"ok={contadores['ok']} sin_trades_en_banda={contadores['sin_trades_en_banda']} "
                 f"error_api={contadores['error_api']} firehose_no_sano={contadores['firehose_no_sano']} "
-                f"prematuros={contador_prematuro})", activo)
+                f"prematuros={contador_prematuro}, bandas_vigiladas={len(bandas)})", activo)
             return False
 
         if mercado is None:
@@ -474,53 +595,75 @@ def watch_window(activo: str, ts_end: int) -> bool:
                 log(f"[{ts_end}] {mercado['market_id']} ya operado -- se salta", activo)
                 return False
 
-        with ThreadPoolExecutor(max_workers=2) as ex:
-            f_conc = ex.submit(concentracion_ballenas, mercado["condition_id"], banda_lo, banda_hi, activo)
-            f_libro = ex.submit(libro_publico, mercado["yes_token"])
-            pct_crudo, pct_ponderado, n, motivo_conc, wallets_yes, n_yes_total, n_trades_crudo = f_conc.result()
-            libro = f_libro.result()
-
-        if motivo_conc == "firehose_no_sano":
-            log(f"[{ts_end}] ⚠️ cache de firehose no sano (sin mensajes recientes) -- "
-                f"sin dato este ciclo, no se dispara con datos parados", activo)
-
-        contadores[motivo_conc] = contadores.get(motivo_conc, 0) + 1
-        if pct_ponderado is not None:
-            log(f"[{ts_end}] restante={restante:.1f}s concentracion_yes_cruda={pct_crudo:.2f} "
-                f"ponderada={pct_ponderado:.2f} n={n} ask={libro.get('best_ask') if libro else None}", activo)
-        elif motivo_conc == "error_api":
-            log(f"[{ts_end}] restante={restante:.1f}s ⚠️ error_api consultando ballenas -- sin dato este ciclo", activo)
-
-        umbral_vol = UMBRAL_N_WALLETS_YES.get(activo, 0)
-        cumple_concentracion = (pct_ponderado is not None and n >= MIN_TRADES_BALLENA
-                                 and pct_ponderado >= CONCENTRACION_MIN
-                                 and n_yes_total >= umbral_vol
-                                 and libro and libro.get("best_ask") is not None
-                                 and banda_lo <= libro["best_ask"] < banda_hi)
-        if pct_ponderado is not None and n >= MIN_TRADES_BALLENA and pct_ponderado >= CONCENTRACION_MIN \
-                and n_yes_total < umbral_vol:
-            log(f"[{ts_end}] concentración OK pero n_yes_total={n_yes_total}<{umbral_vol} -- "
-                f"vetado por volumen bajo (gate 27-Jul)", activo)
-        if cumple_concentracion and restante > confirm_ceiling_s:
-            # 23-Jul: cumple la condición pero todavía está fuera de la
-            # ventana real de confirmación (rest_hi_min de la banda operativa)
-            # -- se sigue vigilando en vez de disparar ya, es el fix directo
-            # al hallazgo de desalineación de timing (ver docstring arriba).
-            contador_prematuro += 1
+        libro = libro_publico(mercado["yes_token"])
+        if not libro or libro.get("best_ask") is None:
+            contadores["error_api"] = contadores.get("error_api", 0) + 1
+            log(f"[{ts_end}] restante={restante:.1f}s ⚠️ error_api consultando libro -- sin dato este ciclo", activo)
             time.sleep(POLL_INTERVAL_S)
             continue
 
-        if cumple_concentracion:
-            py = libro["best_ask"]
-            edge = prob_bucket - py
-            log(f"[{ts_end}] CONFIRMADO concentracion_ponderada={pct_ponderado:.2f} (cruda={pct_crudo:.2f}) "
-                f"n={n} py={py:.3f} prob_bucket={prob_bucket:.3f} edge={edge:+.3f} restante={restante:.1f}s "
-                f"confirm_ceiling_s={confirm_ceiling_s:.1f} {_resumen_wallet_edge(wallets_yes, activo)}", activo)
-            _registrar_tracker(activo, mercado, py, edge, pct_ponderado, n, restante, n_yes_total)
-            _registrar_prediccion(activo, mercado, py, edge, restante, pct_ponderado, n,
-                                   banda_lo, banda_hi, prob_bucket)
-            return disparar(activo, mercado, py, edge, restante, prob_bucket)
+        # 10-Ago (/code-review): trades del firehose leídos UNA vez por poll
+        # (no por banda) -- ver docstring de concentracion_ballenas.
+        if _fc.esta_sano():
+            trades_poll = _fc.trades_de_mercado_firehose(mercado["condition_id"])
+        else:
+            trades_poll = None
 
+        n_firehose_no_sano_este_poll = 0
+        for banda in bandas:
+            banda_lo, banda_hi = banda["banda_lo"], banda["banda_hi"]
+            confirm_ceiling_s, prob_bucket = banda["confirm_ceiling_s"], banda["prob_bucket"]
+            if trades_poll is None:
+                pct_crudo = pct_ponderado = None
+                n = n_yes_total = n_trades_crudo = 0
+                wallets_yes = []
+                motivo_conc = "firehose_no_sano"
+            else:
+                pct_crudo, pct_ponderado, n, motivo_conc, wallets_yes, n_yes_total, n_trades_crudo = \
+                    concentracion_ballenas(mercado["condition_id"], banda_lo, banda_hi, activo, trades=trades_poll)
+            contadores[motivo_conc] = contadores.get(motivo_conc, 0) + 1
+
+            if motivo_conc == "firehose_no_sano":
+                n_firehose_no_sano_este_poll += 1
+                continue
+
+            if pct_ponderado is not None:
+                log(f"[{ts_end}] banda[{banda_lo:.2f},{banda_hi:.2f}) restante={restante:.1f}s "
+                    f"concentracion_yes_cruda={pct_crudo:.2f} ponderada={pct_ponderado:.2f} n={n} "
+                    f"ask={libro['best_ask']}", activo)
+
+            umbral_vol = UMBRAL_N_WALLETS_YES.get(activo, 0)
+            cumple_concentracion = (pct_ponderado is not None and n >= MIN_TRADES_BALLENA
+                                     and pct_ponderado >= CONCENTRACION_MIN
+                                     and n_yes_total >= umbral_vol
+                                     and banda_lo <= libro["best_ask"] < banda_hi)
+            if pct_ponderado is not None and n >= MIN_TRADES_BALLENA and pct_ponderado >= CONCENTRACION_MIN \
+                    and n_yes_total < umbral_vol:
+                log(f"[{ts_end}] banda[{banda_lo:.2f},{banda_hi:.2f}) concentración OK pero "
+                    f"n_yes_total={n_yes_total}<{umbral_vol} -- vetado por volumen bajo (gate 27-Jul)", activo)
+            if cumple_concentracion and restante > confirm_ceiling_s:
+                # 23-Jul: cumple la condición pero todavía está fuera de la
+                # ventana real de confirmación (rest_hi_min de ESTA banda)
+                # -- se sigue vigilando en vez de disparar ya, es el fix
+                # directo al hallazgo de desalineación de timing.
+                contador_prematuro += 1
+                continue  # sigue comprobando el resto de bandas este mismo poll
+
+            if cumple_concentracion:
+                py = libro["best_ask"]
+                edge = prob_bucket - py
+                log(f"[{ts_end}] CONFIRMADO banda[{banda_lo:.2f},{banda_hi:.2f}) origen={banda.get('origen', 'coarse')} "
+                    f"concentracion_ponderada={pct_ponderado:.2f} (cruda={pct_crudo:.2f}) "
+                    f"n={n} py={py:.3f} prob_bucket={prob_bucket:.3f} edge={edge:+.3f} restante={restante:.1f}s "
+                    f"confirm_ceiling_s={confirm_ceiling_s:.1f} {_resumen_wallet_edge(wallets_yes, activo)}", activo)
+                _registrar_tracker(activo, mercado, py, edge, pct_ponderado, n, restante, n_yes_total)
+                _registrar_prediccion(activo, mercado, py, edge, restante, pct_ponderado, n,
+                                       banda_lo, banda_hi, prob_bucket)
+                return disparar(activo, mercado, py, edge, restante, prob_bucket)
+
+        if n_firehose_no_sano_este_poll == len(bandas):
+            log(f"[{ts_end}] ⚠️ cache de firehose no sano (sin mensajes recientes) -- "
+                f"sin dato este ciclo, no se dispara con datos parados", activo)
         time.sleep(POLL_INTERVAL_S)
 
 
@@ -911,21 +1054,26 @@ def hilo_activo(activo: str):
     proceso entero -- se captura y se reintenta tras un margen corto.
 
     23-Jul: watch_lead_s ya no es estático -- se relee vía
-    cargar_calibracion() en cada vuelta del bucle (se puede recalibrar
+    cargar_bandas_multi() en cada vuelta del bucle (se puede recalibrar
     entre ventanas, cada hora, vía el cron de ballenas_observer.py).
-    Si el activo no es significativo en este momento, duerme hasta la
-    siguiente ventana en vez de reintentar en bucle apretado."""
-    log("hilo arrancado (calibración dinámica, ver cargar_calibracion)", activo)
+    Si el activo no tiene ninguna banda significativa en este momento,
+    duerme hasta la siguiente ventana en vez de reintentar en bucle
+    apretado.
+
+    10-Ago: cambiado de cargar_calibracion() (banda única) a
+    cargar_bandas_multi() (todas las bandas finas significativas) -- ver
+    docstring de watch_window()."""
+    log("hilo arrancado (calibración dinámica multi-banda, ver cargar_bandas_multi)", activo)
     while True:
         try:
             now = time.time()
             ts_end = (int(now) // (VENTANA_MIN * 60) + 1) * (VENTANA_MIN * 60)
-            calib = cargar_calibracion(activo)
-            if calib is None:
-                log("no significativo ahora mismo -- duerme hasta la siguiente ventana", activo)
+            bandas = cargar_bandas_multi(activo)
+            if not bandas:
+                log("sin ninguna banda significativa ahora mismo -- duerme hasta la siguiente ventana", activo)
                 time.sleep(max(5, ts_end + 2 - time.time()))
                 continue
-            dormir = ts_end - calib["watch_lead_s"] - time.time()
+            dormir = ts_end - max(b["watch_lead_s"] for b in bandas) - time.time()
             if dormir > 0:
                 time.sleep(dormir)
             watch_window(activo, ts_end)
