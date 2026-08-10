@@ -199,7 +199,20 @@ def reiniciar(nombre: str) -> int:
     if proc is None:
         print(f"🚨 {nombre}: el proceso NO está vivo tras el restart")
         return 1
+    # 10-Ago (hallazgo /code-review, auto-restart de pipeline_watchdog.py):
+    # un solo intento de probe a los 3s daba falsos "reinicio fallido" en
+    # scripts que tardan un poco más en escribir su línea de arranque
+    # (varios hilos, ej. observadores_fase0.py/ejecutores_dryrun_fase0.py) --
+    # el proceso YA estaba vivo con el código nuevo, solo el probe llegaba
+    # pronto. Reintenta el probe (no el restart) un par de veces antes de
+    # declarar fallo real -- evita alertar "revisar a mano" cuando en
+    # realidad ya está en FRESH.
     ok, detalle = probe_ok(cfg.get("probe"), t0)
+    for _ in range(2):
+        if ok:
+            break
+        time.sleep(2)
+        ok, detalle = probe_ok(cfg.get("probe"), t0)
     print(f"{'✅' if ok else '🚨'} {nombre}: reiniciado pid={proc[0]} — probe: {detalle}")
     return 0 if ok else 1
 

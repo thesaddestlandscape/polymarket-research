@@ -276,51 +276,6 @@ def restart_screen(name: str) -> bool:
 # decisión deliberada. Los .py que los loops invocan cada ciclo como subproceso
 # (live_trade.py, shadow_predict.py…) SÍ se recargan → no aplican aquí.
 # ──────────────────────────────────────────────────────────────────────────────
-def _entrypoint_script(cmd: str) -> str | None:
-    """Fichero de entrada de un comando de screen: 'bash run_fast.sh …' → run_fast.sh."""
-    m = re.search(r"(\S+\.(?:sh|py))", cmd)
-    return m.group(1) if m else None
-
-
-def check_stale_deploys(screens_up: dict) -> list[str]:
-    """Nombres de screen cuyo fichero de entrada en disco es más nuevo que el
-    proceso en marcha (deploy no aplicado). Margen 120s para no marcar el propio
-    arranque como stale."""
-    stale = []
-    now = time.time()
-    for name, cmd in SCREEN_RESTART.items():
-        if not screens_up.get(name):
-            continue
-        script = _entrypoint_script(cmd)
-        if not script:
-            continue
-        p = REPO / script
-        if not p.exists():
-            continue
-        try:
-            r = subprocess.run(["pgrep", "-f", script], capture_output=True,
-                               text=True, timeout=5)
-            pids = [x for x in r.stdout.split() if x]
-            edades = []
-            for pid in pids:
-                e = subprocess.run(["ps", "-o", "etimes=", "-p", pid],
-                                   capture_output=True, text=True, timeout=5)
-                try:
-                    edades.append(int(e.stdout.strip()))
-                except ValueError:
-                    pass
-            if not edades:
-                continue
-            proc_start = now - max(edades)          # arranque del proceso más antiguo
-            if p.stat().st_mtime > proc_start + 120:
-                dm = (p.stat().st_mtime - proc_start) / 60
-                stale.append(f"{name} ({script}): disco {dm:.0f} min más nuevo que "
-                             f"el proceso — deploy NO aplicado, reinicia la screen")
-        except Exception:
-            continue
-    return stale
-
-
 # ──────────────────────────────────────────────────────────────────────────────
 # CHECK: sintaxis de todos los scripts del pipeline
 # ──────────────────────────────────────────────────────────────────────────────
@@ -767,23 +722,90 @@ def main():
             check_chainlink_fresh(screens)
             check_polyactivity_fresh(screens)
 
-            # ── 2b. Deploy obsoleto (fix commiteado pero screen sin reiniciar) ─
-            stale = check_stale_deploys(screens)
-            stale_ahora = {s.split()[0] for s in stale}
-            for msg in stale:
-                log(f"⚠ DEPLOY OBSOLETO: {msg}")
-            nuevos = stale_ahora - stale_deploy_alertado
+            # ── 2b. Deploy obsoleto -- auto-reinicio (09-Ago, petición explícita
+            #      Javi: "que no se quede colgado nunca, el mejor pipeline que
+            #      existe"). check_stale_deploys() de arriba solo miraba el
+            #      mtime del ENTRYPOINT (ej. observadores_fase0.py), no de los
+            #      módulos que importa -- no habría detectado el caso real de
+            #      esa misma noche (9 screens STALE por cambios en
+            #      gate_bucket_propio.py, importado, no el entrypoint). Se
+            #      sustituye por verify_deploy.py::estado() (cierre transitivo
+            #      de imports, mismo mecanismo ya usado a mano dos veces esa
+            #      noche) vía subprocess -- evita el import circular
+            #      (verify_deploy ya importa pipeline_watchdog para
+            #      SCREEN_RESTART). Auto-reinicia solo screens de riesgo BAJO
+            #      (control/dash/observadores/fetchers/ejecdryrun -- infra o
+            #      DRY_RUN=True, verificado en sus propios docstrings).
+            #      NO_AUTO_RESTART_DINERO_REAL cubre fast/slow (no_restart=True
+            #      en verify_deploy.SCREENS, restart_fast_seguro.sh es el único
+            #      punto de verdad) Y los 4 ejecutores de baja latencia que SÍ
+            #      operan con DRY_RUN=False (10-Ago, corrección de un
+            #      comentario que afirmaba lo contrario, cazada por
+            #      /code-review antes de commitear: ballenas_fast/ballenas_5m/
+            #      favaltaconv/favbtc60mno). Sin esta exclusión, cualquier
+            #      commit que tocara un módulo en su cierre de imports habría
+            #      hecho que este loop las reiniciara solo, sin revisión
+            #      humana, en mitad de un ciclo con posiciones reales
+            #      abiertas -- contradice la regla del manual de diagnosticar
+            #      antes de reiniciar dinero real. Siguen apareciendo en el
+            #      aviso de Telegram como "NO reiniciadas (dinero real,
+            #      reinicia a mano si procede)", igual que antes de este
+            #      cambio.
+            NO_AUTO_RESTART_DINERO_REAL = {
+                "fast", "slow", "ballenas_fast", "ballenas_5m", "favaltaconv", "favbtc60mno",
+            }
+            try:
+                r = subprocess.run(
+                    [sys.executable, "-c",
+                     "import json, verify_deploy as v; "
+                     "print(json.dumps({k: d['veredicto'] for k, d in v.estado().items()}))"],
+                    capture_output=True, text=True, timeout=30, cwd=str(REPO))
+                if r.returncode == 0:
+                    estado_deploy = json.loads(r.stdout.strip())
+                else:
+                    log(f"⚠ verify_deploy.estado() salió con código {r.returncode}: {r.stderr.strip()[:300]}")
+                    estado_deploy = {}
+            except Exception as e:
+                log(f"⚠ verify_deploy.estado() falló: {e}")
+                estado_deploy = {}
+
+            stale_todas = {n for n, v in estado_deploy.items() if v == "STALE"}
+            stale_dinero_real = stale_todas & NO_AUTO_RESTART_DINERO_REAL
+            stale_ahora = stale_todas - NO_AUTO_RESTART_DINERO_REAL
+            reiniciadas, fallidas = [], []
+            for name in stale_ahora:
+                log(f"⚠ DEPLOY OBSOLETO: {name} — auto-reiniciando")
+                try:
+                    rr = subprocess.run(
+                        [sys.executable, "verify_deploy.py", "--restart", name],
+                        capture_output=True, text=True, timeout=30, cwd=str(REPO))
+                    (reiniciadas if rr.returncode == 0 else fallidas).append(name)
+                    log(f"  {'✅' if rr.returncode == 0 else '🚨'} {rr.stdout.strip()}")
+                except Exception as e:
+                    fallidas.append(name)
+                    log(f"  🚨 error reiniciando {name}: {e}")
+
+            nuevos = (stale_ahora | stale_dinero_real) - stale_deploy_alertado
             if nuevos:
                 try:
                     from shadow_digest import enviar_telegram
-                    enviar_telegram(
-                        "⚠️ *Deploy obsoleto*\n"
-                        + "\n".join(m for m in stale if m.split()[0] in nuevos)
-                        + "\n\nReinicia la screen para aplicar el cambio."
-                    )
+                    partes = []
+                    if reiniciadas:
+                        partes.append("✅ reiniciadas automáticamente: " + ", ".join(reiniciadas))
+                    if fallidas:
+                        partes.append("🚨 NO se pudieron reiniciar (revisar a mano): " + ", ".join(fallidas))
+                    if stale_dinero_real:
+                        partes.append("💰 dinero real, auto-restart deshabilitado a propósito — "
+                                       "reinicia a mano si procede: " + ", ".join(sorted(stale_dinero_real)))
+                    enviar_telegram("⚠️ *Deploy obsoleto detectado*\n" + "\n".join(partes))
                 except Exception:
                     pass
-            stale_deploy_alertado = stale_ahora
+            # las reiniciadas OK vuelven a FRESH solas; dinero-real queda
+            # latcheada (un solo aviso por episodio STALE, mismo patrón que
+            # el resto de vigías del proyecto) hasta que alguien la reinicie
+            # a mano y vuelva a FRESH -- entonces sale de estado_deploy con
+            # veredicto STALE y el próximo episodio vuelve a avisar.
+            stale_deploy_alertado = (stale_ahora - set(reiniciadas)) | stale_dinero_real
 
             # ── 3. Si hay silencio, buscar errores en fast.log ────────────────
             if consecutivos_silencio >= 2:

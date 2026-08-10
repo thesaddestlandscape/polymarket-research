@@ -3410,6 +3410,35 @@ GBM_LATE_PYBAJO_LONGSHOT_MIN = 0.53
 GBM_LATE_ESPACIO_K = 0.3
 
 
+def _aplicar_gate_bucket_propio_gbm_late(resultado, strategy_name):
+    """Veto de micro-bucket (gate_bucket_propio, 28-Jul) factorizado
+    08-Ago (petición explícita Javi: conectar TODA la infraestructura ya
+    construida a TODAS las tuplas, no dejar candidatas acumulando n
+    desconectadas de las protecciones que ya existen). Antes solo
+    s_gbm_late_15min (la base) lo comprobaba inline -- los 7 hermanos
+    (60min, 60min_fade, 15min_tardio, multihorizonte, espacio_atr,
+    15min_py_confirmado, 60min_py_confirmado) generaban predicciones
+    shadow sin consultar nunca su propio veredicto, pese a que
+    gate_bucket_propio.json YA lo calcula para las 8 variantes. Mismo
+    criterio fail-open que el resto del proyecto: solo veta ejecución
+    real si la tupla exacta YA está en pares_permitidos_live -- para
+    shadow puro (ninguno de los 7 hermanos lo está hoy) solo añade el
+    feature de instrumentación, sin cambiar ninguna predicción."""
+    if resultado is None:
+        return None
+    py_edge = resultado.get("features", {}).get("py_entrada")
+    if py_edge is None:
+        return resultado
+    prob_yes_dir = resultado.get("prob_yes", 0.5)
+    direccion = "BUY_YES" if prob_yes_dir >= py_edge else "BUY_NO"
+    tupla_str = f"{strategy_name}#{resultado['subtype']}#{direccion}"
+    gate_bp = _gate_bucket_propio(tupla_str, py_edge)
+    resultado["features"]["gate_bucket_propio_veredicto"] = gate_bp["veredicto"]
+    if gate_bp["veredicto"] == "malo_confirmado" and tupla_str in _pares_live_hoy_set():
+        return None  # gate bucket propio -- ver gate_bucket_propio.json
+    return resultado
+
+
 def s_gbm_late_15min(market, ctx):
     """
     GBM de entrada tardía en ventanas 15min — estrategia propia (2026-07-02).
@@ -3489,9 +3518,11 @@ def s_gbm_late_60min(market, ctx):
     hipótesis: la tardía lo mejora igual que en 15min. Shadow puro: no está
     en pares_permitidos_live (whitelist fail-closed por tupla).
     """
-    return _s_gbm_late(market, ctx, ventana_min=60,
-                       rest_lo=GBM_LATE_60M_REST_MIN_LO,
-                       rest_hi=GBM_LATE_60M_REST_MIN_HI)
+    return _aplicar_gate_bucket_propio_gbm_late(
+        _s_gbm_late(market, ctx, ventana_min=60,
+                   rest_lo=GBM_LATE_60M_REST_MIN_LO,
+                   rest_hi=GBM_LATE_60M_REST_MIN_HI),
+        "GBM_LATE_60M")
 
 
 def s_gbm_late_60min_fade(market, ctx):
@@ -3517,12 +3548,13 @@ def s_gbm_late_60min_fade(market, ctx):
         return None
     p_yes_original = base["prob_yes"]
     p_yes_fade = max(0.05, min(0.95, 1.0 - p_yes_original))
-    return {
+    resultado = {
         "prob_yes": p_yes_fade,
         "razon": f"gbm_late_60m_fade (invierte {p_yes_original:.3f}) {base['razon']}",
         "subtype": base["subtype"],
         "features": {**base.get("features", {}), "prob_yes_original": round(p_yes_original, 4)},
     }
+    return _aplicar_gate_bucket_propio_gbm_late(resultado, "GBM_LATE_60M_FADE")
 
 
 def s_gbm_late_15min_tardio(market, ctx):
@@ -3544,9 +3576,11 @@ def s_gbm_late_15min_tardio(market, ctx):
     acumula su propio IC desde cero. NO está en pares_permitidos_live →
     imposible que toque dinero real hasta decisión explícita con n≥40.
     """
-    return _s_gbm_late(market, ctx, ventana_min=15,
-                       rest_lo=GBM_LATE_15M_REST_MIN_LO,
-                       rest_hi=GBM_LATE_15M_TARDIO_REST_MIN_HI)
+    return _aplicar_gate_bucket_propio_gbm_late(
+        _s_gbm_late(market, ctx, ventana_min=15,
+                   rest_lo=GBM_LATE_15M_REST_MIN_LO,
+                   rest_hi=GBM_LATE_15M_TARDIO_REST_MIN_HI),
+        "GBM_LATE_15M_TARDIO")
 
 
 def s_gbm_late_15min_multihorizonte(market, ctx):
@@ -3589,7 +3623,7 @@ def s_gbm_late_15min_multihorizonte(market, ctx):
     if drift_60 is None or (drift_vent > 0) != (drift_60 > 0):
         return None  # sin dato de 60min, o desacuerdo entre escalas
     base["razon"] += f" [multihorizonte: drift60={drift_60:+.3f}% de acuerdo]"
-    return base
+    return _aplicar_gate_bucket_propio_gbm_late(base, "GBM_LATE_15M_MULTIHORIZONTE")
 
 
 def s_gbm_late_15min_espacio_atr(market, ctx):
@@ -3600,10 +3634,12 @@ def s_gbm_late_15min_espacio_atr(market, ctx):
     forward si sustituir GBM_LATE_DRIFT_VENT_MIN_PCT por |d|>=k mejora el
     edge sin perder demasiado volumen, con n propio (n=0 al arrancar).
     """
-    return _s_gbm_late(market, ctx, ventana_min=15,
-                       rest_lo=GBM_LATE_15M_REST_MIN_LO,
-                       rest_hi=GBM_LATE_15M_REST_MIN_HI,
-                       espacio_k=GBM_LATE_ESPACIO_K)
+    return _aplicar_gate_bucket_propio_gbm_late(
+        _s_gbm_late(market, ctx, ventana_min=15,
+                   rest_lo=GBM_LATE_15M_REST_MIN_LO,
+                   rest_hi=GBM_LATE_15M_REST_MIN_HI,
+                   espacio_k=GBM_LATE_ESPACIO_K),
+        "GBM_LATE_15M_ESPACIO_ATR")
 
 
 def s_gbm_late_15min_py_confirmado(market, ctx):
@@ -3652,7 +3688,9 @@ def s_gbm_late_15min_py_confirmado(market, ctx):
         GBM_LATE_15M_REST_MIN_LO, GBM_LATE_15M_REST_MIN_HI)
     if py is None or not (lo <= py < hi):
         return None
-    return _s_gbm_late(market, ctx, ventana_min=15, rest_lo=rest_lo, rest_hi=rest_hi)
+    return _aplicar_gate_bucket_propio_gbm_late(
+        _s_gbm_late(market, ctx, ventana_min=15, rest_lo=rest_lo, rest_hi=rest_hi),
+        "GBM_LATE_15M_PYCONFIRMADO")
 
 
 # BALLENAS_CONFIRMADAS_15M (17-Jul, extendida a BUY_YES el mismo día):
@@ -4081,7 +4119,9 @@ def s_gbm_late_60min_py_confirmado(market, ctx):
         GBM_LATE_60M_REST_MIN_LO, GBM_LATE_60M_REST_MIN_HI)
     if py is None or not (lo <= py < hi):
         return None
-    return _s_gbm_late(market, ctx, ventana_min=60, rest_lo=rest_lo, rest_hi=rest_hi)
+    return _aplicar_gate_bucket_propio_gbm_late(
+        _s_gbm_late(market, ctx, ventana_min=60, rest_lo=rest_lo, rest_hi=rest_hi),
+        "GBM_LATE_60M_PYCONFIRMADO")
 
 
 def s_gbm_late_5min(market, ctx):
