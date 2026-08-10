@@ -133,5 +133,8 @@
   },
   "cementerio:PRICE_TARGET_GBM_FADE#BTC#atexpiry": {
     "avisado": true
+  },
+  "cementerio:UPDOWN_OU_5M#BTC#5min": {
+    "avisado": true
   }
 }
