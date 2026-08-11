@@ -44,7 +44,8 @@ from pathlib import Path
 REPO = Path(__file__).resolve().parent
 sys.path.insert(0, str(REPO))
 
-import shadow_postmortem as sp  # noqa: E402 -- reusa _fit_calibracion_prob, CALIB_MIN_N
+import shadow_postmortem as sp  # noqa: E402 -- reusa _fit_calibracion_prob, CALIB_MIN_N,
+                                 # TWAP_MARCOS_AFECTADOS/TWAP_FECHA_CAMBIO
 
 RESULTS = REPO / "data/shadow/results.csv"
 OUT = REPO / "data/shadow/calibracion_platt_granular.json"
@@ -53,11 +54,23 @@ OUT = REPO / "data/shadow/calibracion_platt_granular.json"
 def _cargar_calib_pairs_granular():
     """calib_pairs a nivel (estrategia,activo) y (estrategia,activo,marco)
     -- el nivel base (sin '#') ya lo calcula shadow_postmortem.py, no se
-    duplica aquí."""
+    duplica aquí.
+
+    11-Ago: excluye filas pre-TWAP (07-Ago) de marcos afectados (5min/
+    15min/240min) reusando shadow_postmortem.py::_excluir_pre_twap
+    directamente (11-Ago, /code-review: antes reimplementaba la misma
+    lógica fail-closed en línea, dos copias que podían divergir) -- hallazgo
+    real que motivó el fix: BALLENAS_TARDIAS#ETH#5min (la propia tupla live
+    que motivó este script el 06-Ago) recalibraba su corrección Platt
+    mezclando régimen pre/post TWAP sin que nadie lo hubiera revisado."""
     import csv
     pairs = defaultdict(list)
+    # 11-Ago (/code-review): _excluir_pre_twap() solo itera (no indexa ni
+    # pide len()), así que se le pasa el DictReader directo -- evita
+    # materializar el CSV completo en una lista antes de filtrar (doblaba
+    # el pico de memoria en un fichero que ya pesa ~86MB y crece ~3.2MB/día).
     with open(RESULTS, encoding="utf-8") as f:
-        for r in csv.DictReader(f):
+        for r in sp._excluir_pre_twap(csv.DictReader(f)):
             s = r.get("strategy", "")
             subtype = r.get("subtype", "")
             if not s:

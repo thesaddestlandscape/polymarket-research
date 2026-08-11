@@ -609,6 +609,10 @@ def _fit_calibracion_prob(triples):
 
 
 def calcular_params(resultados: list) -> dict:
+    """11-Ago: espera recibir `resultados` ya filtrado por
+    _excluir_pre_twap() (filtrado una vez en main(), ver
+    resultados_twap_safe) -- no vuelve a filtrar aquí para no re-escanear
+    el histórico completo varias veces por ciclo."""
     por_estrategia = {}
     calib_pairs = {}
     for r in resultados:
@@ -1450,6 +1454,52 @@ FEATURE_RULES = {
     "FAVORITO_CONFIRMADO_5MIN_BAJALATENCIA#DOGE#5min": _BASE_FAVORITO_BAJALATENCIA,
 }
 
+TWAP_MARCOS_AFECTADOS = {"5min", "15min", "240min"}
+TWAP_FECHA_CAMBIO = datetime(2026, 8, 7, tzinfo=timezone.utc)  # mismo valor
+# que live_trade.py::CLV_FECHA_CAMBIO_TWAP / gate_bucket_propio.py --
+# cambio real de TWAP en la resolución Chainlink, confirmado con datos
+# propios (idea_manipulacion_twap_confirmada_datos_propios_10ago).
+
+
+def _excluir_pre_twap(resultados: list) -> list:
+    """Descarta filas de marcos afectados por el cambio TWAP (07-Ago) con
+    prediction_timestamp anterior al cambio -- mismo fix ya aplicado en
+    gate_bucket_propio.py/kelly_precio_gate.py/live_trade.py::_clv_tupla
+    el 10/11-Ago, NUNCA aplicado aquí hasta ahora (11-Ago).
+
+    Hallazgo real que motiva esto: cargar_results() no filtraba nada --
+    ic_bayes/filtros_causales/patrones_ganadores para 5min/15min/240min
+    se calculaban mezclando régimen pre-TWAP (85.1% de las filas de
+    15min, 62.9% de 5min, 94.1% de 240min en results.csv) con post-TWAP,
+    exactamente el mismo problema que ya se corrigió en el resto del
+    pipeline -- pero shadow_postmortem.py es EL motor de aprendizaje
+    causal que escribe strategy_params.json cada ~23min, así que la
+    contaminación llegaba a filtros_causales/patrones_ganadores activos
+    HOY en 55 tuplas (53 filtros + 233 patrones) sin que nadie lo hubiera
+    revisado. Comparación real (BALLENAS_TARDIAS#ETH#5min): ic_bayes
+    full-history 0.1225 (n=659) vs solo post-TWAP 0.3850 (n=437) --
+    diferencia de más del doble, la contaminación no es cosmética.
+
+    Marcos NO afectados (60min/daily/weekly) pasan sin tocar -- el
+    cambio de TWAP en la resolución Chainlink solo se confirmó en esos
+    3 marcos (ver TWAP_MARCOS_AFECTADOS)."""
+    out = []
+    for r in resultados:
+        sub = r.get("subtype", "")
+        marco = sub.rsplit("#", 1)[-1] if "#" in sub else sub
+        if marco in TWAP_MARCOS_AFECTADOS:
+            try:
+                ts_dt = datetime.fromisoformat(r.get("prediction_timestamp", ""))
+            except (TypeError, ValueError):
+                continue  # fail-closed: timestamp ilegible en marco afectado, se descarta
+            if ts_dt.tzinfo is None:
+                ts_dt = ts_dt.replace(tzinfo=timezone.utc)
+            if ts_dt < TWAP_FECHA_CAMBIO:
+                continue
+        out.append(r)
+    return out
+
+
 IC_FILTRO_MIN   = -0.12   # IC para activar filtro (evitar)
 IC_PATRON_MIN   = +0.12   # IC para activar patrón ganador (amplificar)
 N_BUCKET_MIN    = 15      # mínimo de observaciones en cualquier bucket (subido de 8: n<15 → demasiado ruidoso para kelly_boost)
@@ -1825,6 +1875,10 @@ def aprender_patrones_causales(resultados: list, pred_index: dict) -> dict:
     pasar una señal que un filtro no distinguible de ruido bloqueaba sin
     motivo real (decisión Javi 20-Jul) — el filtro sigue aprendiéndose y
     reevaluándose cada ciclo, solo deja de aplicarse mientras no sea estable.
+
+    11-Ago: espera recibir `resultados` ya filtrado por _excluir_pre_twap()
+    (filtrado una vez en main(), ver resultados_twap_safe) -- no vuelve a
+    filtrar aquí.
     """
     ts_ahora = datetime.now(timezone.utc).isoformat(timespec="seconds")
     _POSTMORTEM_CACHE_BUCKET[0] += 1  # invalida el cache de predicciones recientes de este ciclo
@@ -2328,6 +2382,15 @@ def main():
         print("  Sin resultados aún — nada que analizar.")
         print(f"[{ts}] === Fin postmortem ===")
         return
+    # 11-Ago (/code-review, hallazgo real): filtrar UNA vez aquí y reusar,
+    # en vez de que calcular_params/aprender_patrones_causales/
+    # _generar_hipotesis_auto llamen cada una a _excluir_pre_twap sobre el
+    # results.csv completo (~110k filas y creciendo ~3.2MB/día) -- ese
+    # patrón de re-escanear el histórico completo varias veces por ciclo
+    # es la MISMA clase de riesgo de escalado que ya causó un incidente
+    # real (CLAUDE.md pt.18, 04-Ago: postmortem colgado >10min bloqueando
+    # resolve/señales nuevas con dinero real abierto).
+    resultados_twap_safe = _excluir_pre_twap(resultados)
 
     pred_index    = cargar_predicciones_index()
     ya_procesadas = cargar_ya_postmortem()
@@ -2368,20 +2431,32 @@ def main():
         for c, n in sorted(causas.items(), key=lambda x: -x[1]):
             print(f"    {c:25s}: {n}")
 
-    # Params con todos los resultados
-    todos_con_causa = []
-    for r in resultados:
-        if int(r.get("acierto", 1)) == 0:
-            clave_pred = (r["strategy"], r["market_id"], r.get("decision", ""))
-            pred  = pred_index.get(clave_pred)
-            todos_con_causa.append({**r, "causa_perdida": clasificar_causa(r, pred)})
-        else:
-            todos_con_causa.append({**r, "causa_perdida": ""})
+    # Params con todos los resultados (histórico COMPLETO -- generar_
+    # performance()/performance.csv deben reflejar la verdad de suelo
+    # completa, no la vista TWAP-safe usada para IC/filtros/patrones)
+    def _con_causa(filas):
+        out = []
+        for r in filas:
+            if int(r.get("acierto", 1)) == 0:
+                clave_pred = (r["strategy"], r["market_id"], r.get("decision", ""))
+                pred  = pred_index.get(clave_pred)
+                out.append({**r, "causa_perdida": clasificar_causa(r, pred)})
+            else:
+                out.append({**r, "causa_perdida": ""})
+        return out
 
-    params = calcular_params(todos_con_causa)
+    todos_con_causa = _con_causa(resultados)
+    # 11-Ago (/code-review, hallazgo real): calcular_params (IC/filtros/
+    # patrones -> strategy_params.json) filtra la lista YA anotada
+    # (todos_con_causa) en vez de volver a llamar a _con_causa() sobre
+    # resultados_twap_safe -- la versión anterior recalculaba
+    # clasificar_causa() dos veces para el mismo subconjunto de filas
+    # (una vez aquí, otra dentro del _con_causa duplicado), justo el tipo
+    # de trabajo repetido por ciclo que este fix pretendía evitar.
+    params = calcular_params(_excluir_pre_twap(todos_con_causa))
 
     # Aprendizaje causal completo: aprende POR QUÉ pierde Y POR QUÉ gana
-    patrones = aprender_patrones_causales(resultados, pred_index)
+    patrones = aprender_patrones_causales(resultados_twap_safe, pred_index)
 
     n_filtros  = sum(len(v["filtros_causales"])  for v in patrones.values())
     n_patrones = sum(len(v["patrones_ganadores"]) for v in patrones.values())
@@ -2413,7 +2488,22 @@ def main():
             old_data = json.load(open(PARAMS_PATH, encoding="utf-8"))
             old = old_data.get("estrategias", {})
             for k, v in old.items():
-                if not v.get("activa", True) and k in params["estrategias"]:
+                # 11-Ago (/code-review, hallazgo real): _excluir_pre_twap
+                # puede dejar una clave sin NINGUNA fila (toda su evidencia
+                # era pre-TWAP) -- antes esa clave desaparecía entera de
+                # params["estrategias"], y como live_trade.py/shadow_
+                # predict.py tratan una clave ausente como "sin opinión"
+                # (caen a una clave de nivel superior que sí está activa),
+                # una desactivación manual quedaba silenciosamente
+                # revertida -- mismo fallo fail-open ya cazado esta semana
+                # (project_bug_critico_fallopen_gatebucketpropio_10ago).
+                # Fix: si la clave no sobrevivió al ciclo nuevo, se
+                # preserva el estado anterior completo (no solo el flag
+                # activa) en vez de perderla.
+                if k not in params["estrategias"]:
+                    params["estrategias"][k] = v
+                    continue
+                if not v.get("activa", True):
                     motivo_old = v.get("motivo", "")
                     if "MANUALMENTE" in motivo_old or ("DESACTIVADA 202" in motivo_old and "DESACTIVADA" in motivo_old):
                         params["estrategias"][k]["activa"] = False
@@ -2491,14 +2581,22 @@ def main():
     _escribir_state(params, resultados)  # Gap 2: state file
 
     # Generador de hipótesis automáticas — aprende POR QUÉ y propone QUÉ hacer
+    # 11-Ago (/code-review): usa la misma vista TWAP-safe que calcular_params/
+    # aprender_patrones_causales -- hipotesis_auto.md (CLAUDE.md protocolo
+    # pt.6, revisado cada sesión) citaba hit-rate/pnl/IC de 5min/15min/240min
+    # con régimen mezclado si no se filtraba aquí también.
     try:
-        _generar_hipotesis_auto(params, patrones, resultados)
+        _generar_hipotesis_auto(params, patrones, resultados_twap_safe)
     except Exception as e:
         print(f"  [WARN] hipotesis_auto.md: {e}")
 
     try:
         import hypothesis_tracker as ht
-        h_resultados = ht.run(resultados)
+        # 11-Ago (/code-review, hallazgo real): usaba `resultados` sin
+        # filtrar -- hypothesis_tracker.py evalúa marcos afectados por TWAP
+        # (ej. _eval_sol_15min_live) y su IC/n mezclaba régimen, igual que
+        # calcular_params/aprender_patrones_causales antes del fix de hoy.
+        h_resultados = ht.run(resultados_twap_safe)
         h_md = ht.generate_markdown_section(h_resultados)
         hip_path = DIR_SHADOW / "hipotesis_auto.md"
         hip_path.write_text(hip_path.read_text(encoding="utf-8") + h_md, encoding="utf-8")

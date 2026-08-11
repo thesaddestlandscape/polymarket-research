@@ -111,6 +111,18 @@ OBJETIVO = [
     # cargar()/breakeven() de arriba -- verificado ANTES de añadir esta
     # línea, no se puede simplemente copiar el patrón BUY_YES.
     ("FAVORITO_CONFIRMADO#BTC#60min#BUY_NO", "BTC", "60m"),
+    # 11-Ago: la validación externa depende SOLO de (activo,marco,lado
+    # comprado) -- ballenas_timing_history.csv no sabe ni le importa qué
+    # estrategia nuestra generó la señal (cargar() filtra por activo/
+    # marco/compro_yes, nunca por strategy). Las zonas de SOL/ETH#15min
+    # BUY_YES ya confirmadas arriba bajo el label ALTACONVICCION aplican
+    # IGUAL a cualquier otra estrategia que compre YES ahí -- lo que
+    # faltaba comprobar de verdad eran los combos NUNCA evaluados por
+    # NINGÚN label: 60min#BUY_YES (petición explícita Javi, "lo tienes
+    # todo ya para sacar las zonas buenas post twap, hay millones de
+    # datos" -- tenía razón, solo faltaba correr el mismo mecanismo aquí).
+    ("FAVORITO_CONFIRMADO#BTC#60min#BUY_YES", "BTC", "60m"),
+    ("FAVORITO_CONFIRMADO#SOL#60min#BUY_YES", "SOL", "60m"),
 ]
 
 
