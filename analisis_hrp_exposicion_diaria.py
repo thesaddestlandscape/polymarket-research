@@ -40,6 +40,9 @@ from pathlib import Path
 import numpy as np
 from scipy.cluster.hierarchy import linkage, dendrogram
 
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from shadow_postmortem import es_pre_twap  # noqa: E402 -- 11-Ago, régimen pre-TWAP
+
 REPO = Path(__file__).resolve().parent
 RESULTS = REPO / "data/shadow/results.csv"
 TRADES = REPO / "data/live/trades.csv"
@@ -83,6 +86,10 @@ def cargar_pnl_diario(tuplas):
                 continue
             ts = r.get("resolution_timestamp") or r.get("prediction_timestamp")
             if not ts:
+                continue
+            sub = r.get("subtype") or ""
+            marco = sub.rsplit("#", 1)[-1] if "#" in sub else sub
+            if es_pre_twap(marco, r.get("prediction_timestamp", "")):
                 continue
             fecha = ts[:10]
             pnl = float(r.get("pnl_neto") or 0)

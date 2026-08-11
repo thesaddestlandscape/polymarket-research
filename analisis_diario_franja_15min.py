@@ -36,6 +36,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
+from shadow_postmortem import es_pre_twap  # noqa: E402 -- 11-Ago, régimen pre-TWAP
 from analisis_franja_milimetrica_ballenas import cargar_ballenas, bucket, STEP  # noqa: E402
 
 DIR = Path(__file__).resolve().parent
@@ -64,6 +65,8 @@ def cargar_propio():
             if activo not in ACTIVOS or marco != MARCO_R:
                 continue
             if row.get("acierto") not in ("0", "1"):
+                continue
+            if es_pre_twap(marco, row.get("prediction_timestamp", "")):
                 continue
             try:
                 p = float(row["precio_yes_mercado"])

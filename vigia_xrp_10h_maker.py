@@ -28,6 +28,7 @@ from pathlib import Path
 
 REPO = Path(__file__).resolve().parent
 sys.path.insert(0, str(REPO))
+from shadow_postmortem import es_pre_twap  # noqa: E402 -- 11-Ago, régimen pre-TWAP
 
 RESULTS = REPO / "data/shadow/results.csv"
 MAKER_SIM = REPO / "data/shadow/maker_sim.csv"
@@ -68,6 +69,10 @@ def _bucket_10h_xrp():
             except Exception:
                 continue
             if dt.hour != HORA_OBJETIVO:
+                continue
+            sub = row.get("subtype", "")
+            marco = sub.rsplit("#", 1)[-1] if "#" in sub else sub
+            if es_pre_twap(marco, ts):
                 continue
             filas.append(row)
     return filas

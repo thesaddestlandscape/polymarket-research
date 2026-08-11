@@ -45,6 +45,7 @@ REPO = Path(__file__).resolve().parent
 sys.path.insert(0, str(REPO))
 
 from resultados_dedup import cargar_results_dedup  # noqa: E402
+from shadow_postmortem import es_pre_twap  # noqa: E402 -- 11-Ago, régimen pre-TWAP
 
 CONFIG_LIVE = REPO / "data/live/config_live.json"
 HIPOTESIS_PENDIENTES = REPO / "data/shadow/hipotesis_pendientes.json"
@@ -78,6 +79,10 @@ def _n_por_tupla_candidatos(rows, tuplas):
         subtype = "#".join(partes[1:-1])
         indice.setdefault((strategy, subtype, decision), []).append(t)
     for r in rows:
+        sub = r.get("subtype", "")
+        marco = sub.rsplit("#", 1)[-1] if "#" in sub else sub
+        if es_pre_twap(marco, r.get("prediction_timestamp", "")):
+            continue
         clave = (r.get("strategy", ""), r.get("subtype", ""), r.get("decision", ""))
         for t in indice.get(clave, []):
             contador[t] += 1

@@ -23,6 +23,9 @@ import math
 import sys
 from pathlib import Path
 
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from shadow_postmortem import es_pre_twap  # noqa: E402 -- 11-Ago, régimen pre-TWAP
+
 REPO = Path(__file__).resolve().parent
 RESULTS = REPO / "data" / "shadow" / "results.csv"
 OUT = REPO / "data" / "shadow" / "log_loss_vs_mercado.json"
@@ -51,6 +54,10 @@ def cargar_pares() -> dict:
             except ValueError:
                 continue
             if not (0.0 < p_modelo < 1.0) or not (0.0 < p_mercado < 1.0):
+                continue
+            sub = r.get("subtype", "")
+            marco = sub.rsplit("#", 1)[-1] if "#" in sub else sub
+            if es_pre_twap(marco, r.get("prediction_timestamp", "")):
                 continue
             outcome_yes = r["outcome_real"] == "YES"
             ll_m = _log_loss(p_modelo, outcome_yes)

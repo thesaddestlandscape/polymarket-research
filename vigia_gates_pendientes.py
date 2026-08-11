@@ -18,6 +18,8 @@ from pathlib import Path
 REPO = Path(__file__).resolve().parent
 sys.path.insert(0, str(REPO))
 
+from shadow_postmortem import es_pre_twap  # noqa: E402 -- 11-Ago, régimen pre-TWAP
+
 REGISTRO = REPO / "data/shadow/gates_pendientes.json"
 RESULTS = REPO / "data/shadow/results.csv"
 
@@ -33,6 +35,9 @@ def _cumple(row, gate):
     if row.get("strategy") != gate.get("strategy"):
         return False
     sub = row.get("subtype", "")
+    marco = sub.rsplit("#", 1)[-1] if "#" in sub else sub
+    if es_pre_twap(marco, row.get("prediction_timestamp", "")):
+        return False
     if "par" in gate and gate["par"] not in sub:
         return False
     if "par_in" in gate and not any(p in sub for p in gate["par_in"]):

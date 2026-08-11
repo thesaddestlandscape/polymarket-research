@@ -52,6 +52,9 @@ import sys
 from pathlib import Path
 from datetime import datetime, timezone
 
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from shadow_postmortem import es_pre_twap  # noqa: E402 -- 11-Ago, régimen pre-TWAP
+
 random.seed(12)  # determinista: mismo resultado en corridas repetidas con los mismos datos
 N_SHUFFLE = 2000
 P_SHUFFLE_ALERTA = 0.10  # umbral para avisar/latchear; más laxo que el 0.05 clásico
@@ -76,6 +79,10 @@ def cargar_results_idx(strategy):
     with open(RESULTS, encoding="utf-8") as f:
         for r in csv.DictReader(f):
             if r["strategy"] != strategy:
+                continue
+            sub = r.get("subtype", "")
+            marco = sub.rsplit("#", 1)[-1] if "#" in sub else sub
+            if es_pre_twap(marco, r.get("prediction_timestamp", "")):
                 continue
             try:
                 feats = json.loads(r.get("features") or "{}")
