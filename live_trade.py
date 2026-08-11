@@ -1331,7 +1331,8 @@ def _registrar_snapshot_libro(motivo: str, market_id: str, direction: str,
 
 def _snapshot_senal_bloqueada(market_id: str, direction: str, precio_yes,
                               stake_ref: float, contexto: dict,
-                              motivo: str = "no_viable_stake") -> None:
+                              motivo: str = "no_viable_stake",
+                              end_dt: "datetime | None" = None) -> None:
     """Snapshot del libro para señales que NO llegan a ejecución porque el
     stake no es viable (suelo bankroll_minimo / freno diario). Sin esto el
     dataset del análisis maker (libro_snapshots.csv) deja de acumular justo
@@ -1353,7 +1354,20 @@ def _snapshot_senal_bloqueada(market_id: str, direction: str, precio_yes,
     mercados donde FAVORITO_CONFIRMADO_SOL_ALTACONVICCION disparó BUY_YES,
     solo 111 (42%) tenían fila propia -- el resto se los "robaban"
     GBM_LATE_15M_TARDIO/GBM_LATE_15M/STREAK_FADE_15M. Afecta a las 245
-    tuplas de candidatos_evaluacion_live por igual, no solo a esta."""
+    tuplas de candidatos_evaluacion_live por igual, no solo a esta.
+
+    11-Ago (bug real encontrado por Javi, análisis de fill-ability):
+    `_snapshots_por_lista` comprueba `end_date > ahora` ANTES de llamar
+    aquí, pero entre esa comprobación y el registro real pasan 2
+    llamadas de red (`_get_token_ids` + `_consultar_profundidad_libro`)
+    -- si el mercado cierra durante esa ventana (frecuente en 5min con
+    señales tardías), el libro consultado ya es POST-resolución: el
+    token perdedor se desploma a ~0 con profundidad enorme, inflando
+    `ratio_vs_stake` a miles y contaminando cualquier análisis de
+    fill-ability que confíe en él sin filtrar por timing. `end_dt`
+    (mismo valor ya validado por el llamador) se re-comprueba aquí,
+    justo antes de escribir, para descartar la fila si el reloj ya
+    cruzó el cierre durante las llamadas de red."""
     strategy = (contexto or {}).get("strategy", "")
     try:
         if SNAPSHOT_LIBRO_CSV.exists():
@@ -1380,6 +1394,8 @@ def _snapshot_senal_bloqueada(market_id: str, direction: str, precio_yes,
         # candidato_evaluacion) — construir el ClobClient autenticado aquí
         # pagaba ~270ms de import por nada en cada una de estas llamadas.
         depth = _consultar_profundidad_libro(None, token_id, precio, stake_ref)
+        if end_dt is not None and datetime.now(timezone.utc) >= end_dt:
+            return  # mercado cerró durante las llamadas de red -- libro ya post-resolución, descartar
         _registrar_snapshot_libro(motivo, market_id, direction,
                                   precio, stake_ref, depth, contexto)
     except Exception:
@@ -1439,7 +1455,7 @@ def _snapshots_por_lista(tuplas: set, motivo: str, aplicar_gate_ic: bool) -> Non
                                   pred.get("precio_yes_mercado", 0.5),
                                   stake_ref,
                                   {"strategy": strategy, "subtype": subtype},
-                                  motivo=motivo)
+                                  motivo=motivo, end_dt=end_dt)
 
 
 def _snapshots_fuera_ventana() -> None:
@@ -3044,7 +3060,7 @@ def main():
             _snapshot_senal_bloqueada(mid, dec, precio_yes_caduca,
                                       riesgo.get("min_stake_eur", 1.05),
                                       {"strategy": strategy, "subtype": subtype},
-                                      motivo="senal_caducada")
+                                      motivo="senal_caducada", end_dt=end_dt)
             continue
 
         # IC mínimo confirmado en histórico (n_hist siempre corresponde a la
@@ -3150,7 +3166,7 @@ def main():
             _snapshot_senal_bloqueada(mid, dec, precio,
                                       riesgo.get("min_stake_eur", 1.05),
                                       {"strategy": strategy, "subtype": subtype},
-                                      motivo="veto_discrepancia_tuplas")
+                                      motivo="veto_discrepancia_tuplas", end_dt=end_dt)
             continue
 
         # Boost por coincidencia: otra tupla whitelisted distinta predice HOY
@@ -3318,7 +3334,8 @@ def main():
             log(f"  SKIP {strategy}#{subtype}: stake no viable — {stake_info['motivo']}")
             _snapshot_senal_bloqueada(mid, dec, precio,
                                       riesgo.get("min_stake_eur", 1.05),
-                                      {"strategy": strategy, "subtype": subtype})
+                                      {"strategy": strategy, "subtype": subtype},
+                                      end_dt=end_dt)
             continue
 
         stake    = stake_info["stake_eur"]
