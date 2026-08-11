@@ -30,6 +30,7 @@ from live_stake import (calcular_stake, bankroll_actual, verificar_circuit_break
 from shadow_digest import enviar_telegram
 from live_balance import actualizar_balance_real, cargar_balance_real
 import ballenas_firehose_cache
+import gate_bucket_propio as _gbp
 
 DIR_LIVE    = Path("data/live")
 DIR_SHADOW  = Path("data/shadow")
@@ -51,7 +52,7 @@ CLV_MARCOS_TWAP_AFECTADOS = {"5min", "15min", "240min"}
 # Solo se paga en taker (nuestras órdenes son FOK); shadow_predict.py neta
 # slippage en edge_neto pero NUNCA este fee — se veta aquí, alcance live only.
 FEE_RATE_TAKER_CRYPTO = 0.07
-_CLV_CACHE: dict | None = None  # tupla → [clv,...]; una lectura por ciclo
+_CLV_CACHE: dict | None = None  # tupla → [(precio, clv),...]; una lectura por ciclo
 
 # H-CUSTOM-SMARTMONEY-FAVORITO-SOL (confirmada 12-Jul, re-verificada 14-Jul
 # 3 veces con n creciente, última: alineado n=95 hit=73.7% pnl=+10.03€ vs
@@ -634,7 +635,19 @@ def _cerrar_pendiente_ballenas(clave: str, estado: str, motivo: str) -> None:
         _registrar_evento_pendiente_ballenas({"clave": clave, "evento": estado, "motivo": motivo})
 
 
-def _clv_tupla(strategy: str, subtype: str, decision: str) -> tuple[float, int]:
+def _clv_bucket(py: float) -> float:
+    """Mismo floor+epsilon que gate_bucket_propio.py::evaluar() -- sin el
+    +1e-9, un precio EXACTO en un múltiplo de STEP (ej. 0.70) puede caer en
+    el bucket inferior por error de coma flotante (ver idea_bug_bucketing_
+    float_precision_micro_buckets_06ago). Importa STEP de gate_bucket_
+    propio.py (en vez de duplicar la constante) para que ambos mecanismos
+    troceen el precio de forma idéntica sin depender de mantenerlos en
+    sync a mano."""
+    return round(math.floor(py / _gbp.STEP + 1e-9) * _gbp.STEP, 4)
+
+
+def _clv_tupla(strategy: str, subtype: str, decision: str,
+               py: float | None = None) -> tuple[float, int]:
     """
     CLV medio y n de la tupla STRATEGY#SUBTYPE#DECISION en los últimos
     CLV_VETO_DIAS días de results.csv. (0.0, 0) si no hay datos o error —
@@ -644,15 +657,21 @@ def _clv_tupla(strategy: str, subtype: str, decision: str) -> tuple[float, int]:
     ver CLV_FECHA_CAMBIO_TWAP arriba) se excluyen además las filas
     anteriores al cambio -- sin esto, la ventana móvil de 7 días mezcla
     dos regímenes de resolución distintos y el CLV agregado puede quedar
-    contaminado por el régimen viejo. Verificado con datos reales (/code-
-    review): rescata FAVORITO_CONFIRMADO_15MIN_ALTACONVICCION#BTC#15min
-    #BUY_YES (vetada por CLV tan reciente como el 08-Ago, clv=-0.0146 ->
-    clv=+0.0011 tras el filtro). NO rescata BALLENAS_TARDIAS#ETH#5min
-    #BUY_YES (sigue negativo, -0.0327 n=348 post-filtro) -- ese veto sigue
-    siendo un agregado sobre TODAS las zonas de precio, no solo las
-    confirmadas por gate_bucket_propio; desbloquearlo de verdad exige
-    segmentar este CLV por micro-bucket de precio, cambio mayor pendiente
-    de diseño (ver project_clv_veto_no_segmentado_zona_precio_10ago).
+    contaminado por el régimen viejo.
+
+    11-Ago: `py` opcional -- si se pasa, el CLV se calcula SOLO sobre las
+    filas cuyo precio cae en el mismo micro-bucket (STEP=0.05, misma
+    convención que gate_bucket_propio.py) que `py`, en vez de agregar
+    TODAS las zonas de precio de la tupla. Hallazgo real que motiva esto
+    (11-Ago): BALLENAS_TARDIAS#ETH#5min#BUY_YES llevaba desde el 06-Ago
+    sin operar dinero real -- gate_bucket_propio confirmaba la zona
+    [0.55,0.60) como bueno_confirmado (n=1502, margen+3.6pp, estable),
+    pero este veto seguía bloqueando TODAS las señales con el CLV agregado
+    de las 432 resoluciones de TODAS las zonas (clv=-0.0301), incluidas
+    zonas malas que nadie confirmó. Sin `py` (llamadas viejas), se
+    mantiene el comportamiento agregado anterior -- todos los call sites
+    de este proyecto pasan `py` ahora, ver project_clv_veto_segmentado_
+    zona_precio_11ago.
     """
     global _CLV_CACHE
     if _CLV_CACHE is None:
@@ -675,11 +694,20 @@ def _clv_tupla(strategy: str, subtype: str, decision: str) -> tuple[float, int]:
                         clv = float(row.get("clv"))
                     except (TypeError, ValueError):
                         continue
+                    try:
+                        precio = float(row.get("precio_yes_mercado"))
+                    except (TypeError, ValueError):
+                        precio = None  # fail-closed: sin precio, la fila no cuenta en ningún bucket
                     k = f"{row.get('strategy')}#{row.get('subtype')}#{row.get('decision')}"
-                    _CLV_CACHE.setdefault(k, []).append(clv)
+                    _CLV_CACHE.setdefault(k, []).append((precio, clv))
         except Exception:
             pass
-    vals = _CLV_CACHE.get(f"{strategy}#{subtype}#{decision}", [])
+    filas = _CLV_CACHE.get(f"{strategy}#{subtype}#{decision}", [])
+    if py is not None:
+        b = _clv_bucket(py)
+        vals = [clv for precio, clv in filas if precio is not None and _clv_bucket(precio) == b]
+    else:
+        vals = [clv for _, clv in filas]
     if not vals:
         return 0.0, 0
     return sum(vals) / len(vals), len(vals)
@@ -3061,7 +3089,14 @@ def main():
         # contra la línea de cierre sistemáticamente — el IC/PnL tarda más
         # en reflejarlo (binario, n~40) que el CLV (continuo, n~20). Guardia
         # adicional sobre el IC, no sustituto; sin datos CLV no veta.
-        clv_medio, n_clv = _clv_tupla(strategy, subtype, dec)
+        # 11-Ago: segmentado por micro-bucket de precio (ver docstring de
+        # _clv_tupla) -- sin precio de esta señal concreta, cae al agregado
+        # viejo (más conservador, nunca deja pasar por error de extracción).
+        try:
+            _py_veto = float(pred.get("precio_yes_mercado"))
+        except (TypeError, ValueError):
+            _py_veto = None
+        clv_medio, n_clv = _clv_tupla(strategy, subtype, dec, py=_py_veto)
         if n_clv >= CLV_VETO_MIN_N and clv_medio < 0:
             log(f"  ⛔ Veto CLV: {strategy}#{subtype}#{dec} clv_medio={clv_medio:+.4f}"
                 f" (n={n_clv}, ventana {CLV_VETO_DIAS}d) < 0 — no se ejecuta")

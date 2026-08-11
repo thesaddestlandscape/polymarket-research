@@ -419,7 +419,7 @@ def disparar(activo: str, mercado: dict, py: float, prob_yes: float, restante_s:
         # barato, solo ocurre en el momento raro de confirmar una señal,
         # nunca en cada poll de 1.5s.
         lt._CLV_CACHE = None
-        clv_medio, n_clv = lt._clv_tupla(STRATEGY, subtype, DIRECTION)
+        clv_medio, n_clv = lt._clv_tupla(STRATEGY, subtype, DIRECTION, py=py)
         if n_clv >= lt.CLV_VETO_MIN_N and clv_medio < 0:
             log(f"  ⛔ Veto CLV: clv_medio={clv_medio:+.4f} (n={n_clv}) < 0 -- "
                 f"{'[DRY-RUN] no ejecutaría' if DRY_RUN else 'no se ejecuta'}", activo)
