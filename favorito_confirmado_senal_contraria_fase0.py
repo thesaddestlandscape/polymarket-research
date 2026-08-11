@@ -93,11 +93,48 @@ def _es_evento_relevante(fila: dict) -> bool:
 _lock_out = threading.Lock()
 _vistos = set()
 _sem = threading.Semaphore(MAX_HILOS_CONCURRENTES)
+_libro_pos = 0
+_libro_header: list[str] | None = None
 
 
 def _log(msg: str) -> None:
     ts = datetime.now(timezone.utc).isoformat(timespec="seconds")
     print(f"[{ts}] {msg}", flush=True)
+
+
+def _iniciar_tail_libro() -> None:
+    """Igual que p22_cola_posicion_fase0.py -- ver ese fichero para el
+    razonamiento completo (bug real 11-Ago: full re-read de
+    libro_snapshots.csv, ya >11MB, cada 3s)."""
+    global _libro_pos, _libro_header
+    if not LIBRO_SNAPSHOTS.exists():
+        return
+    with open(LIBRO_SNAPSHOTS, encoding="utf-8") as f:
+        primera = f.readline()
+        if primera:
+            _libro_header = next(csv.reader([primera]))
+    _libro_pos = LIBRO_SNAPSHOTS.stat().st_size
+
+
+def _leer_filas_nuevas() -> list:
+    """Tail incremental -- solo los bytes escritos desde la última lectura."""
+    global _libro_pos, _libro_header
+    if not LIBRO_SNAPSHOTS.exists() or _libro_header is None:
+        return []
+    tam = LIBRO_SNAPSHOTS.stat().st_size
+    if tam < _libro_pos:
+        _libro_pos = 0
+        _libro_header = None
+        return []
+    if tam == _libro_pos:
+        return []
+    with open(LIBRO_SNAPSHOTS, encoding="utf-8") as f:
+        f.seek(_libro_pos)
+        nuevas = f.readlines()
+        _libro_pos = f.tell()
+    if not nuevas:
+        return []
+    return list(csv.DictReader(nuevas, fieldnames=_libro_header))
 
 
 def _cargar_vistos_previos() -> set:
@@ -228,26 +265,24 @@ def main() -> None:
     ya_procesados = _cargar_vistos_previos()
     backlog = _marcar_backlog_como_visto()
     _vistos = ya_procesados | backlog
+    _iniciar_tail_libro()
     _log(f"arrancado -- {len(ya_procesados)} vetos ya en {OUT.name}, "
          f"{len(backlog)} en el backlog histórico marcados como vistos (no se procesan) -- "
-         f"solo se sigue lo que ocurra desde ahora")
+         f"solo se sigue lo que ocurra desde ahora (tail incremental desde byte {_libro_pos})")
 
     while True:
         try:
-            if LIBRO_SNAPSHOTS.exists():
-                with open(LIBRO_SNAPSHOTS, encoding="utf-8") as f:
-                    filas = list(csv.DictReader(f))
-                for fila in filas:
-                    if not _es_evento_relevante(fila):
-                        continue
-                    clave = (fila["timestamp_utc"], fila["market_id"])
-                    if clave in _vistos:
-                        continue
-                    _vistos.add(clave)
-                    if _sem.acquire(blocking=False):
-                        threading.Thread(target=_seguir_veto, args=(fila,), daemon=True).start()
-                    else:
-                        _log(f"[{fila['market_id']}] descartado -- {MAX_HILOS_CONCURRENTES} hilos ya en curso")
+            for fila in _leer_filas_nuevas():
+                if not _es_evento_relevante(fila):
+                    continue
+                clave = (fila["timestamp_utc"], fila["market_id"])
+                if clave in _vistos:
+                    continue
+                _vistos.add(clave)
+                if _sem.acquire(blocking=False):
+                    threading.Thread(target=_seguir_veto, args=(fila,), daemon=True).start()
+                else:
+                    _log(f"[{fila['market_id']}] descartado -- {MAX_HILOS_CONCURRENTES} hilos ya en curso")
         except Exception as e:
             _log(f"error en ciclo principal: {e}")
         time.sleep(CICLO_TAIL_S)
