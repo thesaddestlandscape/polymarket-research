@@ -82,15 +82,65 @@ ESTABILIDAD_MIN_HORAS = 4
 # ninguna razón (menos n, split-half más débil, sin motivo real).
 MARCOS_TWAP_AFECTADOS = {"5m", "15m", "240m"}
 
-# Tuplas objetivo: (tupla_str exacta, activo ballenas, marco ballenas --
-# MARCO_BALLENAS_MAP: "5min"->"5m", "15min"->"15m"). 10-Ago: extendido de
-# las 2 tuplas ya live a la FAMILIA COMPLETA (petición explícita Javi,
-# "repite esto para el resto de la familia") -- BALLENAS_TARDIAS opera en
-# 6 monedas (5 en 5min + BTC en 15min), FAVORITO_CONFIRMADO_15MIN_
-# ALTACONVICCION en 6 monedas #15min. Solo ETH#5min y BTC#15min
-# respectivamente estaban en pares_permitidos_live antes de hoy -- el
-# resto son candidatas en candidatos_evaluacion_live, mismo mecanismo,
-# mismo rigor, para ver si tienen la misma zona externa rescatable.
+# 11-Ago (petición explícita Javi, "vamos con la extensión del twap a
+# más candidatos_evaluacion_live"): en vez de mantener una lista estática
+# de tuplas objetivo, se generan TODAS las de config_live.json
+# (pares_permitidos_live + candidatos_evaluacion_live, ~335) agrupadas
+# por (activo, marco ballenas, dirección) -- la validación externa NUNCA
+# depende de qué estrategia nuestra generó la señal (cargar() filtra por
+# activo/marco/compro_yes, nunca por strategy, hallazgo ya confirmado
+# hoy: BALLENAS_TARDIAS#BTC#15min y FAVORITO_CONFIRMADO_15MIN_
+# ALTACONVICCION#BTC#15min comparten EXACTAMENTE el mismo detalle_por_
+# bucket). Agrupar evita recalcular el mismo (activo,marco,dirección)
+# decenas de veces (GBM_LATE_15M/_TARDIO/_ESPACIO_ATR/_PYCONFIRMADO/
+# _MULTIHORIZONTE#BTC#15min#BUY_YES son 5 tuplas, 1 solo grupo real) y
+# hace que el historial de estabilidad sea compartido entre todas las
+# estrategias del mismo grupo en vez de fragmentado por tupla (lo que
+# ya venía pasando de facto en los 10-Ago, solo que duplicado). Marcos
+# fuera de MARCO_BALLENAS_MAP (daily/atexpiry/reach/sniper/weekly) no
+# tienen ballenas_timing_history.csv en esa convención -- se excluyen,
+# no hay dato con que validarlos por esta vía.
+# 11-Ago (/code-review): copia local, NO import de live_trade.py -- ese
+# módulo trae credenciales/cliente CLOB al importarlo (ya lo hacen los
+# ejecutores, que sí lo necesitan; este script es análisis puro, acoplarlo
+# a live_trade.py solo por este dict es peor que la duplicación). Debe
+# coincidir SIEMPRE con live_trade.py::_MARCO_BALLENAS_MAP (fuente
+# canónica, incluye 240min) -- shadow_predict.py tiene una 3ª copia con
+# "weekly" añadido, no aplica aquí (esta fuente no cubre weekly).
+MARCO_BALLENAS_MAP = {"5min": "5m", "15min": "15m", "60min": "60m", "240min": "240m"}
+CONFIG_LIVE = REPO / "data/live/config_live.json"
+
+
+def _grupos_desde_config() -> dict:
+    """{(activo, marco_ballenas, direccion): [tupla_str, ...]} a partir de
+    pares_permitidos_live + candidatos_evaluacion_live. Tuplas con formato
+    inesperado (no STRATEGY#ACTIVO#MARCO#DIRECCION) o marco/dirección no
+    reconocidos se ignoran silenciosamente (p.ej. SMART_FLOW_1H#BTC#BUY_YES,
+    3 partes, o WEEKLY_PRICE#BTC#BUY_NO, sin marco -- no hay ballenas_
+    timing_history en esa convención para validarlas por esta vía)."""
+    cfg = json.loads(CONFIG_LIVE.read_text(encoding="utf-8"))
+    # 11-Ago (/code-review, hallazgo real): dict.fromkeys en vez de
+    # list()+concat -- una tupla presente en AMBAS listas (ya pasó con
+    # FAVORITO_CONFIRMADO#BTC#60min#BUY_NO y FAVORITO_CONFIRMADO_15MIN_
+    # ALTACONVICCION#BTC#15min#BUY_YES, promocionadas a pares_permitidos_
+    # live sin retirarlas de candidatos_evaluacion_live) se colaba 2 veces
+    # en tuplas_grupo, corrompiendo cualquier conteo de tuplas por grupo.
+    todas = dict.fromkeys(cfg.get("pares_permitidos_live", []) + cfg.get("candidatos_evaluacion_live", []))
+    grupos: dict = {}
+    for tupla_str in todas:
+        partes = tupla_str.split("#")
+        if len(partes) != 4:
+            continue
+        _strategy, activo, marco, direccion = partes
+        marco_b = MARCO_BALLENAS_MAP.get(marco)
+        if marco_b is None or direccion not in ("BUY_YES", "BUY_NO"):
+            continue
+        grupos.setdefault((activo, marco_b, direccion), []).append(tupla_str)
+    return grupos
+
+
+# Lista estática histórica (10-Ago) -- ya no se usa en main(), se deja
+# solo como referencia de las tuplas live/prioritarias originales.
 OBJETIVO = [
     ("BALLENAS_TARDIAS#BNB#5min#BUY_YES", "BNB", "5m"),
     ("BALLENAS_TARDIAS#BTC#15min#BUY_YES", "BTC", "15m"),
@@ -303,8 +353,13 @@ def main():
     ahora = datetime.now(timezone.utc)
     historial = _cargar_historial()
     resultado = {}
-    for tupla_str, activo, marco in OBJETIVO:
-        direccion = tupla_str.rsplit("#", 1)[-1]
+    grupos = _grupos_desde_config()
+    print(f"{len(grupos)} grupos (activo,marco,dirección) únicos, cubriendo "
+          f"{sum(len(v) for v in grupos.values())} tuplas de config_live.json")
+
+    n_grupos_con_zona = 0
+    for (activo, marco, direccion), tuplas_del_grupo in sorted(grupos.items()):
+        grupo_key = f"{activo}|{marco}|{direccion}"
         compro_yes = "1" if direccion == "BUY_YES" else "0"
         por_bucket = cargar(activo, marco, compro_yes=compro_yes)
         zonas_confirmadas = []
@@ -314,32 +369,46 @@ def main():
             if info is None:
                 continue
             b_key = f"{b:.2f}"
-            entradas = _actualizar_historial(historial, tupla_str, b_key, info["pasa"], ahora)
+            entradas = _actualizar_historial(historial, grupo_key, b_key, info["pasa"], ahora)
             estable = _es_estable(entradas, ahora)
             info["estable"] = estable
             info["n_observaciones_historial"] = len(entradas)
             detalle[b_key] = info
             if estable:
                 zonas_confirmadas.append([b, round(b + STEP, 2)])
-        resultado[tupla_str] = {
+        salida_grupo = {
             "zonas_bueno_confirmado": zonas_confirmadas,
             "detalle_por_bucket": detalle,
             "fuente": "ballenas_timing_history.csv post-07-Ago (TWAP-safe)",
             "regenerado_utc": ahora.isoformat(timespec="seconds"),
+            "tuplas_grupo": sorted(tuplas_del_grupo),
         }
-        print(f"\n=== {tupla_str} ===")
-        for b, hi in zonas_confirmadas:
-            info = detalle[f"{b:.2f}"]
-            print(f"  🟢 [{b:.2f},{hi:.2f}) n={info['n']} hit={info['hit']*100:.1f}% "
-                  f"wilson90lo={info['wilson90lo']*100:.1f}% breakeven={info['breakeven']*100:.1f}% "
-                  f"margen={info['margen_pp']:+.1f}pp mercados={info['n_mercados']} top1={info['top1_pct']:.1f}% "
-                  f"estable=True (n_hist={info['n_observaciones_historial']})")
-        pasa_pero_no_estable = [b for b, info in detalle.items() if info["pasa"] and not info["estable"]]
+        for tupla_str in tuplas_del_grupo:
+            resultado[tupla_str] = salida_grupo
+        print(f"\n=== {activo}#{marco}#{direccion} ({len(tuplas_del_grupo)} tuplas) ===")
+        if zonas_confirmadas:
+            n_grupos_con_zona += 1
+            for b, hi in zonas_confirmadas:
+                info = detalle[f"{b:.2f}"]
+                print(f"  🟢 [{b:.2f},{hi:.2f}) n={info['n']} hit={info['hit']*100:.1f}% "
+                      f"wilson90lo={info['wilson90lo']*100:.1f}% breakeven={info['breakeven']*100:.1f}% "
+                      f"margen={info['margen_pp']:+.1f}pp mercados={info['n_mercados']} top1={info['top1_pct']:.1f}% "
+                      f"estable=True (n_hist={info['n_observaciones_historial']})")
+        # 11-Ago (/code-review, hallazgo real): el print por grupo se
+        # había quedado silencioso cuando no había zona confirmada -- un
+        # operador leyendo logs/vigia_zonas_validadas_externas.log ya no
+        # podía distinguir "grupo evaluado, sin zona todavía" de "grupo
+        # sin datos suficientes" ni ver qué buckets pasan el gate crudo
+        # pero siguen esperando la ventana de estabilidad (visibilidad
+        # que sí tenía la versión por-tupla original).
+        pasa_pero_no_estable = [b for b, i in detalle.items() if i["pasa"] and not i["estable"]]
         if pasa_pero_no_estable:
             print(f"  ⏳ pasa el gate pero AÚN no estable (esperando >= {ESTABILIDAD_MIN_HORAS}h sin fallar): "
-                  f"{pasa_pero_no_estable}")
-        if not zonas_confirmadas:
-            print("  (ninguna zona estable confirmada)")
+                  f"{sorted(pasa_pero_no_estable)}")
+        if not zonas_confirmadas and not pasa_pero_no_estable:
+            print("  (ninguna zona con margen positivo hoy)" if detalle else "  (sin datos -- n<15 en todos los buckets)")
+
+    print(f"\n{n_grupos_con_zona}/{len(grupos)} grupos con al menos una zona estable confirmada")
 
     with open(OUT, "w", encoding="utf-8") as f:
         json.dump(resultado, f, indent=2, ensure_ascii=False)
