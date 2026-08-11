@@ -71,7 +71,7 @@ from pathlib import Path
 
 import numpy as np
 
-from shadow_postmortem import _benjamini_hochberg  # reutiliza el método ya
+from shadow_postmortem import _benjamini_hochberg, es_pre_twap  # reutiliza el método ya
 
 DIR_SHADOW = Path(__file__).parent / "data/shadow"
 HIST = DIR_SHADOW / "ballenas_timing_history.csv"
@@ -82,6 +82,19 @@ OUT_POR_ACTIVO_MARCO = DIR_SHADOW / "wallet_edge_score_por_activo_marco.json"
 N_MIN = 15          # mismo suelo de rigor que el resto del proyecto
 N_SHUFFLE = 2000
 FDR = 0.10           # mismo FDR que shadow_postmortem/analisis_shuffle_patrones_causales
+
+# 11-Ago: ballenas_timing_history.csv arranca 12-Jun, muy anterior al cambio
+# de resolución Chainlink snapshot->TWAP (07-Ago). Este script NUNCA recibió
+# el filtro de régimen ya aplicado en shadow_postmortem.py/gate_bucket_propio.py/
+# kelly_precio_gate.py/live_trade.py::_clv_tupla el 10/11-Ago -- mismo hueco,
+# aquí contaminando el edge por wallet en vez de ic_bayes. marco en este CSV
+# usa sufijo corto ("5m","15m","240m") -- es_pre_twap() espera "5min"/"15min"
+# /"240min", de ahí el mapeo.
+_MARCO_LARGO = {"5m": "5min", "15m": "15min", "60m": "60min", "240m": "240min"}
+
+
+def _es_pre_twap_hist(marco: str, ts_iso: str) -> bool:
+    return es_pre_twap(_MARCO_LARGO.get(marco, marco), ts_iso)
 
 
 def _stat_vacia():
@@ -116,6 +129,8 @@ def _cargar_por_wallet_y_marco():
                 continue
             if not (0.0 < precio < 1.0):
                 continue  # precio_medio=0 o 1 rompe el shuffle (p fijo degenerado)
+            if _es_pre_twap_hist(marco, r.get("ts_trade", "")):
+                continue  # excluye régimen pre-TWAP en marcos afectados (11-Ago)
             try:
                 size = float(r.get("size_usd") or 0) or None
             except (ValueError, TypeError):
