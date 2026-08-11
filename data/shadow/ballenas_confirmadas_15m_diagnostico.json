@@ -2171,7 +2171,7 @@
         }
       },
       "error_api": {
-        "conteo": 3657,
+        "conteo": 3660,
         "mercados": {
           "0xed88f70265795c86c515fe960e284493271a340d3ba74f3a1adad4a7c3db8e1a": 6,
           "0x7a17f8c622ac283b4bd5b3f79becb24e19ba2036326c9157bc0f9f583a2ea6a0": 18,
@@ -2575,7 +2575,8 @@
           "0x49dcf30e258ff9c45d1cf63a2f785cddd9cf540d39776d6ba567b404f9a83468": 10,
           "0x2bf486b6ccb582740eb982c3ccc9c4bc5ca60149614a121676bddc2e5c275051": 26,
           "0x7183c40424441f4240c00c2193ed15dfb295f48fbe369f73d817165fa46f797a": 5,
-          "0x115cd6a8ab503508c0176147c555e1c35e66fb261b695cb3d4bf82de96b74ea5": 4
+          "0x115cd6a8ab503508c0176147c555e1c35e66fb261b695cb3d4bf82de96b74ea5": 4,
+          "0xb8da4fa0fe066ad3d69e9187f570a92cd197588ab05e9917872adb23f77ef225": 3
         }
       }
     },
@@ -4506,7 +4507,7 @@
   "DOGE#BUY_NO": {
     "motivos": {
       "banda_no_confirmada": {
-        "conteo": 17356,
+        "conteo": 17367,
         "mercados": {
           "0xc132ec92b406eb13da1cb814396e60b66f819f1be1c0d8394317d53e5b2c08b1": 6,
           "0xd0672cde7ddef0a3136bf4e9209e193940596ab831742079687f92fea3d8ca1b": 10,
@@ -5438,9 +5439,10 @@
           "0xab614c1aa6b3a9e907a2b66c57801792a9d28d24f628268d27f765243a1d9824": 16,
           "0x1c4511be186c33928281fdfed2c26de5c8384ff6a16859492ae8b802842804ef": 15,
           "0xafd00ba8dcfb0b74a755b7f65d0088a8bbdf84035fc557cf6f35cd78cf4ca693": 15,
-          "0xa10899f093bca0ead9f609de1a42b7cf9e9c70a5244cf18d14702310f31d0d40": 11,
-          "0x6fda8d4a639d760cce4bd679e530edebf1d42c90e56e38f7aa120c97b09c4fe0": 8,
-          "0xc8f0a119d6c2d4ad136056297a9edc4d0b11c4e52f1c6658ffdbcb9feac88509": 3
+          "0xa10899f093bca0ead9f609de1a42b7cf9e9c70a5244cf18d14702310f31d0d40": 13,
+          "0x6fda8d4a639d760cce4bd679e530edebf1d42c90e56e38f7aa120c97b09c4fe0": 11,
+          "0xc8f0a119d6c2d4ad136056297a9edc4d0b11c4e52f1c6658ffdbcb9feac88509": 6,
+          "0x9541fc1d632613ea3033f6dc4eb0d06cc6626d3483fb3496da3070f476712414": 3
         }
       },
       "pocos_trades_en_banda": {
