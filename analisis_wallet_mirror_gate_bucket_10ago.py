@@ -40,12 +40,16 @@ pares_permitidos_live (tupla sintética, ver wallet_mirror_executor_dryrun.py).
 import csv
 import json
 import math
+import sys
 from collections import defaultdict
 from pathlib import Path
 
 import numpy as np
 
 REPO = Path(__file__).resolve().parent
+sys.path.insert(0, str(REPO))
+import shadow_postmortem as sp  # noqa: E402 -- reusa TWAP_MARCOS_AFECTADOS/TWAP_FECHA_CAMBIO
+
 EXECUTOR = REPO / "data/shadow/wallet_mirror_executor_dryrun.csv"
 SNIPER = REPO / "data/shadow/wallet_mirror_sniper_dry_run.csv"
 OUT = REPO / "data/shadow/wallet_mirror_gate_bucket.json"
@@ -79,6 +83,15 @@ def cargar_outcomes():
 
 
 def cargar_filas():
+    """11-Ago (petición explícita Javi, auditoría de huecos TWAP):
+    excluye filas pre-07-Ago de marcos afectados (5min/15min/240min,
+    reusa shadow_postmortem.TWAP_MARCOS_AFECTADOS/TWAP_FECHA_CAMBIO) --
+    hallazgo real: este script no tenía NINGÚN filtro de régimen, mismo
+    hueco ya cerrado hoy en shadow_postmortem.py/gate_bucket_propio.py/
+    kelly_precio_gate.py/live_trade.py::_clv_tupla. Los 3 candidatos de
+    Wallet Mirror viven en marcos afectados (5min/15min) y toda su
+    ventana de datos (03->10-Ago) cruza el cambio TWAP (07-Ago) -- su
+    veredicto podía estar contaminado igual que los demás mecanismos."""
     outcomes = cargar_outcomes()
     # clave de grupo: (tipo, activo, marco, jugada_grande) -> [(ts, ask, pnl), ...]
     grupos = defaultdict(list)
@@ -96,10 +109,12 @@ def cargar_filas():
                 continue
             if not (0.0 < ask < 1.0):
                 continue
+            marco = r.get("marco", "?")
+            if sp.es_pre_twap(marco, r.get("timestamp_utc", "")):
+                continue
             pnl = pnl_neto(ask, ac)
             tipo = r.get("tipo", "?")
             activo = r.get("activo", "?")
-            marco = r.get("marco", "?")
             grande = "1" if r.get("es_jugada_grande") == "1" else "0"
             grupos[(tipo, activo, marco, grande)].append((r["timestamp_utc"], ask, pnl))
     return grupos

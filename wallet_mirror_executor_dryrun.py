@@ -67,7 +67,8 @@ from wallet_mirror_tracker import (  # noqa: E402
 from fetch_polymarket_activity_ws import _parse_updown  # noqa: E402
 import live_trade as lt  # noqa: E402
 from live_guard import puede_operar_live  # noqa: E402
-from live_stake import calcular_stake  # noqa: E402
+from live_stake import calcular_stake, bloquear_por_circuit_breaker  # noqa: E402
+import wallet_mirror_gate_bucket as wmgb  # noqa: E402
 
 DIR_SHADOW = REPO / "data" / "shadow"
 CONFIG_LIVE = REPO / "data" / "live" / "config_live.json"
@@ -289,10 +290,61 @@ async def _correr_una_conexion(wallets: dict, vistos: set) -> set:
                         if resuelto is None:
                             _log("  ⛔ no se pudo resolver market_id/dirección con seguridad "
                                  "(outcomes inesperados o Gamma sin datos) -- fail-closed, no se ejecuta")
+                        market_id, direction, end_date_real = resuelto if resuelto else (None, None, "")
+                        # 11-Ago: precio de referencia (fallback decisión->
+                        # detección) calculado UNA vez y reusado tanto para
+                        # el veto de micro-bucket como para la orden -- antes
+                        # se recalculaba la misma expresión dos veces
+                        # (/code-review).
+                        ask_ref = ask_2 if ask_2 not in (None, "") else ask_d
+                        # 11-Ago (P24 FASE 2, ingeniería completada -- DRY_RUN
+                        # sigue en True, este bloque sigue inalcanzable):
+                        # gates que faltaban comparados con el precedente ya
+                        # en producción (ballenas_executor_5min.py) --
+                        # techo de correlación, circuit breaker y el veto de
+                        # micro-bucket (gate_bucket_propio-style, CLAUDE.md
+                        # pt.12: TODO ejecutor live exige bueno_confirmado,
+                        # fail-closed). _ejecutar_orden_polymarket() NO
+                        # comprueba ninguno de los tres internamente (viven
+                        # en el bucle externo de live_trade.py::main() o son
+                        # específicos de cada ejecutor), así que cualquier
+                        # ejecutor fuera de ese bucle tiene que replicarlos
+                        # a mano. Sin el veto de micro-bucket, la edge de
+                        # Wallet Mirror (concentrada en 1-2 buckets estrechos
+                        # confirmados, ver wallet_mirror_gate_bucket.json)
+                        # se destruiría en cuanto DRY_RUN=False, disparando
+                        # en CUALQUIER bucket de cualquier match SEGUIR.
+                        # 11-Ago (/code-review): NO se replica el veto CLV
+                        # (`lt._clv_tupla`) que sí usan los ejecutores
+                        # hermanos -- ese veto lee results.csv por
+                        # strategy="WALLET_MIRROR", pero Wallet Mirror es un
+                        # pipeline paralelo que NUNCA escribe en results.csv
+                        # (ver docstring del módulo), así que siempre
+                        # devolvería n=0 y sería un no-op silencioso; se deja
+                        # fuera explícitamente en vez de simular protección
+                        # que no protege nada.
+                        # `direction` YA resuelto (arriba), no el
+                        # mirror_lado crudo -- el correlation cap y el veto
+                        # de micro-bucket son sobre BUY_YES/BUY_NO reales.
+                        gate_bp = wmgb.evaluar(
+                            info["tipo"], activo, marco, ask_ref,
+                            bool(ratio_size is not None and ratio_size >= 2.0),
+                        ) if resuelto is not None and ask_ref not in (None, "") else {"veredicto": "sin_concluir"}
+                        if resuelto is None:
+                            pass
+                        elif gate_bp["veredicto"] != "bueno_confirmado":
+                            _log(f"  ⛔ veto micro-bucket (solo opera en bueno_confirmado): "
+                                 f"veredicto={gate_bp['veredicto']} -- no se ejecuta")
+                        elif (lt._posiciones_abiertas_misma_direccion(direction)
+                              >= lt._cargar_config().get("riesgo", {})
+                                  .get("max_posiciones_abiertas_misma_direccion", 2)):
+                            _log(f"  ⛔ techo de correlación ({direction}) alcanzado -- no se ejecuta")
+                        elif bloquear_por_circuit_breaker(
+                                lambda motivo: _log(f"  ⛔ circuit breaker activo ({motivo}) -- no se ejecuta")):
+                            pass
                         else:
-                            market_id, direction = resuelto
-                            ask_lado = ask_2 if ask_2 not in (None, "") else ask_d
-                            if ask_lado in (None, "") or stake_dryrun in (None, ""):
+                            ask_lado = ask_ref
+                            if ask_lado in (None, "") or stake_dryrun in (None, "") or not (float(stake_dryrun or 0) > 0):
                                 _log("  ⛔ precio/stake sin resolver -- fail-closed, no se ejecuta")
                             else:
                                 # /code-review 06-Ago: `ask_lado` es el ask del
@@ -320,6 +372,50 @@ async def _correr_una_conexion(wallets: dict, vistos: set) -> set:
                                     edge_dir=edge_dir,
                                     contexto={"strategy": "WALLET_MIRROR", "subtype": f"{activo}#{marco}"})
                                 _log(f"  🚨 ORDEN REAL enviada ({tupla_sintetica}): {resultado}")
+                                # 11-Ago: cablear ledger+Telegram en el
+                                # camino de éxito -- ANTES de este fix, un
+                                # fill real no habría quedado registrado en
+                                # trades.csv ni habría avisado por Telegram
+                                # (mismo hallazgo/hueco que ballenas_executor_
+                                # 5min.py tuvo hasta el 28-Jul).
+                                if not resultado.get("no_fill"):
+                                    trade = {
+                                        "timestamp_utc": datetime.now(timezone.utc).isoformat(timespec="seconds"),
+                                        "market_id": market_id, "question": "", "end_date": end_date_real,
+                                        "strategy": "WALLET_MIRROR", "subtype": f"{activo}#{marco}",
+                                        "direction": direction,
+                                        "stake_eur": float(stake_dryrun) if resultado.get("ok") else 0.0,
+                                        "entry_price": resultado.get("entry_price", ""),
+                                        "signal_ask": round(ask_lado_f, 4),
+                                        "slip_real": resultado.get("slip_real", ""),
+                                        "ic_modelo": round(ic_proxy, 4) if "ic_proxy" in locals() else "",
+                                        "edge_neto": round(edge_dir, 4),
+                                        "conviction_score": round(info["edge_pp"] / 100.0, 4),
+                                        "kelly_recomendado": stake_dryrun,
+                                        "status": "OPEN" if resultado.get("ok") else "ERROR",
+                                        "close_timestamp": "", "exit_price": "", "outcome_real": "",
+                                        "fee_eur": resultado.get("fee_eur", 0),
+                                        "pnl_bruto_eur": "", "pnl_neto_eur": "",
+                                        "notas": (f"wallet_mirror wallet={w} tipo={info['tipo']}"
+                                                  if resultado.get("ok") else resultado.get("error", "")),
+                                    }
+                                    lt._registrar_trade(trade)
+                                    if resultado.get("ok"):
+                                        lt.enviar_telegram(
+                                            f"🎯 *Orden live ejecutada (WALLET_MIRROR)*\n"
+                                            f"Tupla: {tupla_sintetica}\n"
+                                            f"Wallet copiada: {w} (tipo {info['tipo']})\n"
+                                            f"Precio fill: {resultado['entry_price']:.4f} "
+                                            f"(slip {resultado.get('slip_real', 0):+.4f})\n"
+                                            f"Stake: {float(stake_dryrun):.2f}€\n"
+                                            f"Bankroll operativo: {lt.bankroll_actual():.2f}$ (real al cierre de ciclo)"
+                                        )
+                                    else:
+                                        lt.enviar_telegram(
+                                            f"❌ *Orden live ERROR (WALLET_MIRROR)*\n"
+                                            f"{tupla_sintetica}\n"
+                                            f"{str(resultado.get('error', ''))[:200]}"
+                                        )
                 if n_matches % 20 == 0:
                     _vistos_guardar(vistos)
                     _log(f"resumen: {n_matches} matches SEGUIR-fillable, "

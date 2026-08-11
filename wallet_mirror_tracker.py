@@ -265,7 +265,8 @@ def _mercado_para_slug(market_slug: str) -> dict | None:
         tokens = json.loads(tokens) if isinstance(tokens, str) else tokens
         if not outcomes or not tokens or len(outcomes) != len(tokens):
             return None
-        return {"id": mkt.get("id"), "outcomes": outcomes, "tokens": tokens}
+        return {"id": mkt.get("id"), "outcomes": outcomes, "tokens": tokens,
+                "end_date": mkt.get("endDate") or ""}
     except Exception:
         return None
 
@@ -288,14 +289,21 @@ def _token_para_lado(market_slug: str, lado: str) -> str | None:
     return None
 
 
-def _market_id_y_direccion(market_slug: str, mirror_lado: str) -> tuple[str, str] | None:
+def _market_id_y_direccion(market_slug: str, mirror_lado: str) -> tuple[str, str, str] | None:
     """06-Ago, P24 FASE 2 (diseño): resuelve (market_id numérico de Gamma,
-    direction BUY_YES/BUY_NO) para poder llamar a
+    direction BUY_YES/BUY_NO, end_date) para poder llamar a
     live_trade._ejecutar_orden_polymarket -- ese endpoint exige market_id,
     no slug/token_id directo. Mismo criterio de mapeo AFIRMATIVOS/NEGATIVOS
     que `live_trade._get_token_ids` (up/yes=YES, down/no=NO) -- si el orden
     de `outcomes` no encaja con ninguno de los dos patrones esperados,
-    devuelve None (fail-closed: nunca adivinar dirección con dinero real)."""
+    devuelve None (fail-closed: nunca adivinar dirección con dinero real).
+
+    11-Ago (/code-review): añadido end_date al retorno -- sin él, un trade
+    real registrado por wallet_mirror_executor_dryrun.py escribía
+    end_date="" en trades.csv, lo que hace que analisis_diario_salud_
+    sistema.py::medir_integridad_datos() (CLAUDE.md pt.18, el monitor que
+    detecta trades OPEN atascados con end_date ya pasado) nunca pueda
+    parsear la fecha y salte esa fila en silencio para siempre."""
     info = _mercado_para_slug(market_slug)
     if info is None or info.get("id") is None:
         return None
@@ -312,7 +320,7 @@ def _market_id_y_direccion(market_slug: str, mirror_lado: str) -> tuple[str, str
     if lado_l not in AFIRMATIVOS and lado_l not in NEGATIVOS:
         return None
     direction = "BUY_YES" if lado_l in AFIRMATIVOS else "BUY_NO"
-    return str(info["id"]), direction
+    return str(info["id"]), direction, info.get("end_date", "")
 
 
 def _fillability_mirror(market_slug: str, mirror_lado: str, precio_wallet: str) -> dict:

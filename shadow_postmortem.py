@@ -1487,17 +1487,30 @@ def _excluir_pre_twap(resultados: list) -> list:
     for r in resultados:
         sub = r.get("subtype", "")
         marco = sub.rsplit("#", 1)[-1] if "#" in sub else sub
-        if marco in TWAP_MARCOS_AFECTADOS:
-            try:
-                ts_dt = datetime.fromisoformat(r.get("prediction_timestamp", ""))
-            except (TypeError, ValueError):
-                continue  # fail-closed: timestamp ilegible en marco afectado, se descarta
-            if ts_dt.tzinfo is None:
-                ts_dt = ts_dt.replace(tzinfo=timezone.utc)
-            if ts_dt < TWAP_FECHA_CAMBIO:
-                continue
+        if es_pre_twap(marco, r.get("prediction_timestamp", "")):
+            continue
         out.append(r)
     return out
+
+
+def es_pre_twap(marco: str, ts_iso: str) -> bool:
+    """True si `marco` está afectado por el cambio TWAP (07-Ago) Y `ts_iso`
+    es anterior al cambio (o ilegible -- fail-closed, se trata como
+    pre-TWAP/descartable). Extraído de _excluir_pre_twap() el 11-Ago
+    (/code-review: analisis_wallet_mirror_gate_bucket_10ago.py reimplementaba
+    la misma comparación a mano con su propio esquema de filas -- timestamp_
+    utc+marco en vez de prediction_timestamp+subtype -- ahora ambos llaman
+    a esta única función con el marco/timestamp ya extraídos por el
+    llamador, sin duplicar la lógica de comparación en sí."""
+    if marco not in TWAP_MARCOS_AFECTADOS:
+        return False
+    try:
+        ts_dt = datetime.fromisoformat(ts_iso)
+    except (TypeError, ValueError):
+        return True  # fail-closed: timestamp ilegible en marco afectado, se descarta
+    if ts_dt.tzinfo is None:
+        ts_dt = ts_dt.replace(tzinfo=timezone.utc)
+    return ts_dt < TWAP_FECHA_CAMBIO
 
 
 IC_FILTRO_MIN   = -0.12   # IC para activar filtro (evitar)
