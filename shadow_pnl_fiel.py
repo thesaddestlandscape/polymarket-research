@@ -337,7 +337,11 @@ def simular_tupla(rows: list, config: dict, params: dict, indice_libro: dict,
 
 def main():
     ap = argparse.ArgumentParser(description=__doc__)
-    ap.add_argument("--root", default=".", help="raíz del repo (contiene data/)")
+    ap.add_argument("--root", default=str(Path(__file__).resolve().parent),
+                     help="raíz del repo (contiene data/) -- absoluta por defecto, "
+                          "el default anterior ('.') fallaba bajo cron (cwd=/root, "
+                          "no el repo) con FileNotFoundError en config_live.json cada "
+                          "30min desde su creación, sin afectar a live_trade.py")
     ap.add_argument("--out", default=None, help="ruta de salida JSON")
     ap.add_argument("--bankroll-inicial", type=float, default=25.44)
     ap.add_argument("--min-n", type=int, default=1, help="omitir tuplas con menos de n señales totales")
