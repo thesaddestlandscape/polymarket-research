@@ -27,7 +27,20 @@ shadow_predict.py, aplicado a klines PERP en vez de spot), open_interest.
 Puramente captura -- NO calcula divergencia todavía (paso 3 del plan
 original, requiere unos días de historia primero) ni toca ninguna
 decisión. Cron cada 5min (OI/CVD son señales de minutos-horas según AMT,
-no necesitan cadencia de segundos como el fast loop)."""
+no necesitan cadencia de segundos como el fast loop).
+
+⚠️ TWAP -- pendiente de diseño para el paso 3 (NO aplica a este script,
+que solo captura en vivo hacia adelante sin comparar contra histórico):
+cuando se construya la comparación perp_delta_ratio vs outcome_real,
+(a) excluir régimen pre-TWAP igual que el resto del pipeline
+(shadow_postmortem.es_pre_twap(), marcos 5min/15min/240min), y (b) más
+específico -- el payoff de esos marcos ya es TWAP de 30s/60s antes del
+cierre (opción asiática, no snapshot puntual, ver project_twap_chainlink_
+confirmado_09ago), así que el CVD perp a comparar debe alinearse con ESA
+ventana concreta, no con "las últimas N velas" arbitrarias que captura
+este script hoy -- la captura cruda (timestamp por fila) permite recortar
+después, pero el análisis debe diseñarse con esto en mente desde el
+principio, no como parche posterior."""
 import csv
 import sys
 from datetime import datetime, timezone
