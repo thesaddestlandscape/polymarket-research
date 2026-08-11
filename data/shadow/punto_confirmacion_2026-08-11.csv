@@ -1,0 +1,4 @@
+timestamp_utc,slug,market_id,condition_id,activo,marco,end_date,restante_s_objetivo,restante_s_real,precio_yes,lado_favorito,best_ask_favorito,ask_usd_le5c,best_bid_favorito,profundidad_favorito_usd,n_niveles_favorito,outcome_real,favorito_gano
+2026-08-11T00:01:00+00:00,sol-updown-5m-1786406400,3472331,0x00d3403cc0c084960cbc3c6dac99a75b02d009a635d3165979ccc058a10cb0a6,SOL,5min,2026-08-11T00:05:00+00:00,240,239.9,0.505,Up,0.29,27.57,0.27,4614.25,68,,
+2026-08-11T00:02:00+00:00,eth-updown-5m-1786406400,3472328,0xdaf2074cc8f3988c4afe6a22302d71261c8b7eabda833158e339f7c48eedf6b6,ETH,5min,2026-08-11T00:05:00+00:00,180,179.1,0.465,Down,0.84,258.09,0.83,4722.04,16,,
+2026-08-11T00:02:00+00:00,xrp-updown-15m-1786406400,3472319,0xdd51e5035cb89d68001ac08b1fd4b9dba905c5586a9420875de5e52e9926d625,XRP,15min,2026-08-11T00:15:00+00:00,780,779.0,0.505,Up,0.23,114.83,0.22,1494.42,44,,
