@@ -5,7 +5,7 @@
  "GBM_LATE_15M": true,
  "GBM_LATE_15M_ESPACIO_ATR": true,
  "GBM_LATE_15M_PYCONFIRMADO": true,
- "GBM_LATE_15M_TARDIO": true,
+ "GBM_LATE_15M_TARDIO": false,
  "GBM_LATE_60M": true,
  "LATE_WINDOW_5MIN": true,
  "LEADLAG_BTC_XRP_15M": false,
