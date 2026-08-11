@@ -165,7 +165,7 @@ def breakeven(py_medio, decision="BUY_YES"):
     return 1 / (1 + gross_win * (1 - FEE))
 
 
-def cargar(activo, marco, compro_yes="1"):
+def cargar(activo, marco, compro_yes="1", hasta: datetime | None = None):
     """marco en convención ballenas ("5m"/"15m"/"60m"/"240m"). compro_yes
     filtra el LADO comprado -- 10-Ago, fix real cazado por
     /code-review: `precio` en ballenas_timing_history.csv es el precio SIN
@@ -181,7 +181,14 @@ def cargar(activo, marco, compro_yes="1"):
     (py crudo, sin convertir, incluso para tuplas BUY_NO -- ver
     breakeven() arriba). Sin esta conversión, una tupla BUY_NO quedaría
     bucketeada por precio NO mientras el ejecutor real consulta por
-    precio YES -- las zonas no emparejarían nunca, bug silencioso."""
+    precio YES -- las zonas no emparejarían nunca, bug silencioso.
+
+    11-Ago: `hasta` (opcional) filtra `ts_trade <= hasta` -- permite
+    reconstruir qué habría visto una regeneración en un instante pasado,
+    usando SOLO datos que ya existían entonces (backfill del historial
+    de estabilidad con datos reales, no fabricados -- ver
+    backfill_historial_zonas_externas_11ago.py). None = sin corte,
+    comportamiento idéntico al de antes de este parámetro."""
     por_bucket = defaultdict(list)
     with open(BALLENAS_HIST, encoding="utf-8") as f:
         for row in csv.DictReader(f):
@@ -203,6 +210,8 @@ def cargar(activo, marco, compro_yes="1"):
             except Exception:
                 continue
             if marco in MARCOS_TWAP_AFECTADOS and ts < FECHA_CAMBIO_TWAP:
+                continue
+            if hasta is not None and ts > hasta:
                 continue
             b = bucket(p)
             por_bucket[b].append((ts, p, ac, row.get("condition_id", "")))
