@@ -29,6 +29,21 @@ REPO_DIR="$(cd "$(dirname "$0")" && pwd)"
 PYTHON="$REPO_DIR/.venv/bin/python"
 LOG="$REPO_DIR/logs/fast.log"
 
+# 11-Ago: bug real encontrado en vivo -- este script se lanza vía `screen
+# -dmS fast bash "$REPO_DIR/run_fast.sh"` (restart_fast_seguro.sh) sin
+# ningún `cd` explícito antes, así que el proceso hereda el cwd de quien
+# lo invocó (pipeline_watchdog.py / watchdog_fast.sh vía cron, que por
+# defecto usa $HOME=/root, NO el repo). Todas las llamadas a Python de
+# aquí usan rutas absolutas ($REPO_DIR/...) así que funcionan igual, pero
+# ALGUNOS scripts (live_guard.py::CONFIG_PATH/SWITCH_PATH, shadow_resumen.
+# py::trades_csv) usan rutas RELATIVAS internamente -- con cwd=/root
+# resuelven a la nada, y `estado_live()` reporta falsamente "switch OFF /
+# config_live.json no encontrado" y "0 trades" por Telegram sobre dinero
+# real, aunque el bot esté sano. Antes este script solo corregía el cwd
+# dentro del bloque de git batch (hasta 5min después de arrancar) -- con
+# el cd aquí, arriba de todo, el cwd es correcto desde el primer ciclo.
+cd "$REPO_DIR"
+
 log() { echo "[$(date -u +%Y-%m-%dT%H:%M:%SZ)] $*" | tee -a "$LOG"; }
 
 log "=== Proceso FAST arrancado (ciclo rápido ~20s / lento cada 3 / live_trade 4x micro-reintento) ==="

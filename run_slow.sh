@@ -6,6 +6,10 @@ REPO_DIR="$(cd "$(dirname "$0")" && pwd)"
 PYTHON="$REPO_DIR/.venv/bin/python"
 LOG="$REPO_DIR/logs/slow.log"
 
+# 11-Ago: mismo fix que run_fast.sh -- garantiza cwd correcto desde el
+# primer ciclo, sin depender de con qué cwd se lanzó este proceso.
+cd "$REPO_DIR"
+
 log() { echo "[$(date -u +%Y-%m-%dT%H:%M:%SZ)] $*" | tee -a "$LOG"; }
 
 log "=== Proceso SLOW arrancado ==="
