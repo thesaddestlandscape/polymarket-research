@@ -37,6 +37,12 @@ from pathlib import Path
 REPO = Path(__file__).resolve().parent
 sys.path.insert(0, str(REPO))
 csv.field_size_limit(10_000_000)
+from shadow_postmortem import es_pre_twap  # noqa: E402 -- 11-Ago, 6º script con el mismo
+# hueco (shadow_postmortem/gate_bucket_propio/kelly_precio_gate/analisis_gate_calibracion/
+# analisis_franja_milimetrica_ballenas ya arreglados hoy): este gate se calcula solo sobre
+# GBM_LATE_15M#*#15min#BUY_YES, EXACTAMENTE la familia/marco donde se confirmó hoy que el
+# modelo casi no generó señal post-TWAP (ETH n=0, SOL n=3) -- sin este filtro, cualquier
+# zona que confirme aquí estaría mezclando régimen viejo con el poco dato nuevo real.
 
 RESULTS_CSV = REPO / "data/shadow/results.csv"
 LATCH = REPO / "data/live/vigia_gate_sigma_ewma_gbmlate_latch.json"
@@ -115,6 +121,8 @@ def _cargar_datos():
             sub = r.get("subtype", "")
             activo = sub.split("#")[0] if "#" in sub else None
             if activo not in buckets or not sub.endswith("#15min"):
+                continue
+            if es_pre_twap("15min", r.get("prediction_timestamp", "")):
                 continue
             feats_raw = r.get("features")
             if not feats_raw:
