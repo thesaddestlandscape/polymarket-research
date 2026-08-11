@@ -147,13 +147,19 @@ def _es_infra_recurrente(nombre: str) -> bool:
     return False
 
 
-def _modulos_fusionados(en_screen: dict[str, str]) -> set[str]:
-    """Para cada entry de verify_deploy.SCREENS (ej. observadores_fase0.py),
-    parsea sus imports de nivel superior con ast y devuelve el conjunto de
-    <modulo>.py que existen en el repo -- esos scripts están corriendo
-    DENTRO de esa screen (patrón de fusión del 05-Ago), no huérfanos."""
+def _modulos_fusionados(en_screen: dict[str, str], cron_map: dict[str, str] | None = None) -> set[str]:
+    """Para cada entry de verify_deploy.SCREENS (ej. observadores_fase0.py)
+    Y para cada consolidador invocado por cron (ej. vigias_horarios_fase0.py,
+    11-Ago -- mismo patrón de fusión pero disparado una vez/hora en vez de
+    screen persistente), parsea sus imports de nivel superior con ast y
+    devuelve el conjunto de <modulo>.py que existen en el repo -- esos
+    scripts están corriendo DENTRO de ese proceso consolidado, no huérfanos.
+    Sin esto, cada fusión nueva (screen o cron) genera falsos positivos en
+    C) hasta que alguien lo recuerde a mano -- el mismo bug de fondo que
+    motivó _modulos_fusionados() el 05-Ago, ahora también para cron."""
+    entries = set(en_screen.values()) | set((cron_map or {}).keys())
     fusionados = set()
-    for entry in set(en_screen.values()):
+    for entry in entries:
         ruta = REPO / entry
         if not ruta.exists():
             continue
@@ -210,7 +216,7 @@ def main() -> int:
         print("   (ninguna — todo lo que corre está declarado)")
     print()
 
-    fusionados = _modulos_fusionados(en_screen)
+    fusionados = _modulos_fusionados(en_screen, cron_map)
     if fusionados:
         print(f"   (info: {len(fusionados)} script(s) corren FUSIONADOS dentro de otra "
               f"screen vía import estático, contados como cubiertos en B/C: "
