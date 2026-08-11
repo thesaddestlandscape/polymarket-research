@@ -1,10 +1,10 @@
 {
-  "timestamp_utc": "2026-08-11T14:40:48+00:00",
-  "bankroll_sim": 15255.04,
-  "pnl_total": 15235.04,
-  "n_ops": 111687,
+  "timestamp_utc": "2026-08-11T14:55:12+00:00",
+  "bankroll_sim": 15277.04,
+  "pnl_total": 15257.04,
+  "n_ops": 111770,
   "win_rate": 0.6144,
-  "estrategias_activas": 378,
+  "estrategias_activas": 376,
   "desactivadas": [
     "SMART_FLOW_1H",
     "UPDOWN_GBM#daily",
@@ -43,7 +43,9 @@
     "UPDOWN_OU_5M#BTC#5min",
     "UPDOWN_OU_5M#BTC",
     "LIQUIDACIONES_15M#BTC#15min",
-    "LIQUIDACIONES_15M#BTC"
+    "LIQUIDACIONES_15M#BTC",
+    "LIQUIDACIONES_5M#ETH#5min",
+    "LIQUIDACIONES_5M#ETH"
   ],
   "top3_ic": [
     {
