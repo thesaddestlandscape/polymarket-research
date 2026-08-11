@@ -82,7 +82,12 @@ RECV_TIMEOUT_S = 30
 REFRESCO_WALLETS_S = 1800
 STAKE_REF_EUR = 1.05  # mismo suelo que el resto del sistema
 
-DRY_RUN = True  # NO CAMBIAR sin /code-review + aprobación explícita Javi
+DRY_RUN = False  # 11-Ago: activado con aprobación explícita de Javi tras checklist
+# de conexión completo (ballenas cross-check + gates B/C N/A arquitectónicamente,
+# documentado + D/E/F verificados wireados). Restringido a SEGUIR#BTC#5min#grande
+# [0.50,0.55) n=234 p=0.004 y [0.70,0.75) n=219 p=0.006 (wallet_mirror_gate_bucket.json)
+# vía el guardián #2 (whitelist real, pares_permitidos_live) + guardián #3
+# (gate_bucket_propio-style, fail-closed a esas 2 zonas exactas).
                 # (P24 FASE 2). Aunque se cambiara, el fail-closed de la
                 # whitelist (ver docstring) impide ejecución real igualmente.
 

@@ -56,6 +56,12 @@ SCREENS = {
     # real) NO se toca.
     "ejecdryrun": {"entry": "ejecutores_dryrun_fase0.py",
                     "probe": "log:logs/ejecutores_dryrun_fase0.log:hilos arrancados"},
+    # walletmirror (11-Ago): wallet_mirror_executor_dryrun.py pasó a
+    # DRY_RUN=False (SEGUIR#BTC#5min#grande, aprobado Javi) -- sacado de
+    # "ejecdryrun" (exige DRY_RUN=True en todos sus módulos, se negaba a
+    # arrancar) a su propia screen, dinero real.
+    "walletmirror": {"entry": "wallet_mirror_executor_dryrun.py",
+                      "probe": "log:logs/wallet_mirror_executor.log:arrancado"},
     # Solo se vigila el .sh (sus hijos python son proceso fresco cada ciclo).
     "fast":    {"entry": "run_fast.sh", "shallow": True, "no_restart": True},
     "slow":    {"entry": "run_slow.sh", "shallow": True, "no_restart": True},

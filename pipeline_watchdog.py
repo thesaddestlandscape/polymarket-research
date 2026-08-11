@@ -123,6 +123,11 @@ SCREEN_RESTART = {
     # Ver ejecutores_dryrun_fase0.py y project_cpu_consolidacion_pendiente_
     # 05ago en memoria.
     "ejecdryrun": f"cd {REPO} && nice -n 10 .venv/bin/python ejecutores_dryrun_fase0.py >> logs/ejecutores_dryrun_fase0.log 2>&1",
+    # walletmirror (11-Ago): wallet_mirror_executor_dryrun.py pasó a
+    # DRY_RUN=False (SEGUIR#BTC#5min#grande, aprobado Javi) -- sacado de
+    # "ejecdryrun" (exige DRY_RUN=True en todos sus módulos) a su propia
+    # screen, dinero real, sin nice (mismo trato que ejeclive).
+    "walletmirror": f"cd {REPO} && .venv/bin/python wallet_mirror_executor_dryrun.py >> logs/wallet_mirror_executor.log 2>&1",
 }
 
 # Cuando stdout está redirigido (screen >> watchdog.log), print() ya escribe al fichero
@@ -220,7 +225,7 @@ def check_screens() -> dict[str, bool]:
         r = subprocess.run(["screen", "-ls"], capture_output=True, text=True, timeout=5)
         output = r.stdout + r.stderr
         return {name: (f".{name}\t" in output or f".{name} " in output)
-                for name in ["fast", "slow", "control", "dash", "observadores", "ejeclive", "fetchers", "ejecdryrun"]}
+                for name in ["fast", "slow", "control", "dash", "observadores", "ejeclive", "fetchers", "ejecdryrun", "walletmirror"]}
     except Exception:
         return {}
 

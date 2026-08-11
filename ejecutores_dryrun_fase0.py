@@ -58,15 +58,22 @@ import favorito_confirmado_60min_executor
 import ballenas_executor_15min
 import gbm_late_15min_executor
 import updown_gbm_15min_tardio_btc_executor
-import wallet_mirror_executor_dryrun
 import wallet_mirror_sniper
+
+# 11-Ago: wallet_mirror_executor_dryrun.py sacado de aquí -- pasó a
+# DRY_RUN=False (activación real aprobada por Javi, SEGUIR#BTC#5min#grande,
+# ver config_live.json nota _pares_walletmirror_btc5min_grande_promocion).
+# Este proceso consolidado exige DRY_RUN=True en todos sus módulos (guardia
+# de abajo) -- correcto que se negara a arrancar con el módulo dentro,
+# ahora vive en su propia screen (walletmirror), ver wallet_mirror_
+# executor_dryrun.py docstring.
 
 # Verificación de seguridad al import -- si algún día alguien cambia
 # DRY_RUN=False en disco sin retirarlo de esta lista, el proceso se niega
 # a arrancar en vez de fusionar por error algo que mueve dinero real.
 for _mod in (favorito_confirmado_15min_executor, favorito_confirmado_60min_executor,
              ballenas_executor_15min, gbm_late_15min_executor,
-             updown_gbm_15min_tardio_btc_executor, wallet_mirror_executor_dryrun):
+             updown_gbm_15min_tardio_btc_executor):
     if getattr(_mod, "DRY_RUN", None) is not True:
         raise RuntimeError(
             f"🚨 {_mod.__name__} tiene DRY_RUN={getattr(_mod, 'DRY_RUN', None)!r} -- "
@@ -81,7 +88,6 @@ EJECUTORES = [
     (ballenas_executor_15min, "ballenas_15m.log", "log", False),
     (gbm_late_15min_executor, "gbm_late_15min_executor.log", "log", False),
     (updown_gbm_15min_tardio_btc_executor, "updown_gbm_15min_tardio_btc_executor.log", "log", False),
-    (wallet_mirror_executor_dryrun, "wallet_mirror_executor.log", "_log", True),
     (wallet_mirror_sniper, "wallet_mirror_sniper.log", "_log", True),
 ]
 
