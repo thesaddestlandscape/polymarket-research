@@ -130,19 +130,63 @@ def _free_usdc(client) -> float:
     return int(raw) / USDC_DECIMALS
 
 
+_POSITIONS_VALUE_TOLERANCIA_ABS = 1.0    # € — margen antes de desconfiar de /value
+_POSITIONS_VALUE_TOLERANCIA_PCT = 0.15   # 15% del propio /value, lo que sea mayor
+
+
+def _positions_value_sumada(wallet: str) -> float | None:
+    """Suma currentValue de data-api /positions -- fuente independiente de
+    /value, usada solo como cross-check (08-11). Devuelve None si la llamada
+    falla (best-effort, no debe tumbar _positions_value)."""
+    try:
+        r = requests.get(f"{DATA_API}/positions", params={"user": wallet}, timeout=20)
+        r.raise_for_status()
+        d = r.json()
+        if not isinstance(d, list):
+            return None
+        return sum(float(p.get("currentValue") or 0.0) for p in d)
+    except Exception:
+        return None
+
+
 def _positions_value(wallet: str) -> float:
-    """Valor mark-to-market de las posiciones abiertas (data-api /value).
+    """Valor mark-to-market de las posiciones abiertas (data-api /value),
+    con cross-check contra la suma de currentValue de /positions.
 
     Devuelve 0.0 si no hay posiciones vivas (todo resuelto/redimido).
+
+    2026-08-11 (hallazgo real, ver bankroll_inicio_dia_override en
+    live_stake.py): /value devolvió un valor fantasma (0→27€→33€→0 en
+    ~75min) sin ninguna posición real que lo justificara -- /positions
+    mostraba currentValue=0 en TODAS las filas al mismo tiempo. El pico
+    falso cayó justo en el cierre de día Madrid y disparó el freno diario
+    por una "pérdida" del 76% que nunca ocurrió. Cross-check: si /value y
+    la suma de /positions discrepan más de la tolerancia, /value es el
+    sospechoso (una sola cifra agregada de un endpoint que ya demostró
+    fallar así) -- se usa la suma de /positions en su lugar y se deja
+    rastro en el log del caller. Si /positions falla (best-effort), se
+    confía en /value solo (comportamiento previo, sin cross-check).
     """
     r = requests.get(f"{DATA_API}/value", params={"user": wallet}, timeout=20)
     r.raise_for_status()
     d = r.json()
     if isinstance(d, list) and d:
-        return float(d[0].get("value") or 0.0)
-    if isinstance(d, dict):
-        return float(d.get("value") or 0.0)
-    return 0.0
+        val = float(d[0].get("value") or 0.0)
+    elif isinstance(d, dict):
+        val = float(d.get("value") or 0.0)
+    else:
+        val = 0.0
+
+    suma = _positions_value_sumada(wallet)
+    if suma is not None:
+        tolerancia = max(_POSITIONS_VALUE_TOLERANCIA_ABS,
+                          _POSITIONS_VALUE_TOLERANCIA_PCT * val)
+        if abs(val - suma) > tolerancia:
+            print(f"⚠️  /value ({val:.4f}€) discrepa de suma /positions "
+                  f"({suma:.4f}€) más de la tolerancia ({tolerancia:.2f}€) "
+                  f"-- usando suma /positions", file=sys.stderr)
+            return suma
+    return val
 
 
 def _daily_real_pnl_balance(depositos: list, total_actual: float,

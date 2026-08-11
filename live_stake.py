@@ -553,7 +553,31 @@ def freno_ventana_pct_hoy(config: dict | None = None) -> float:
 
 
 def bankroll_inicio_dia() -> float:
-    """Bankroll al inicio del día de hoy (antes de cualquier trade de hoy)."""
+    """Bankroll al inicio del día de hoy (antes de cualquier trade de hoy).
+
+    Override puntual con fecha (riesgo.circuit_breaker.bankroll_inicio_dia_override
+    = {fecha, valor, motivo, aprobado_por}), mismo patrón que
+    freno_diario_pct_hoy/bankroll_minimo_eur_hoy — solo aplica si fecha == hoy
+    (Madrid), autoexpira mañana sin depender de que nadie revierta el config.
+
+    2026-08-11 (decisión explícita Javi tras diagnóstico): el endpoint /value
+    de data-api devolvió positions_value fantasma (0→27€→33€→0 en ~75min,
+    sin ninguna posición real que lo justificara — free_usdc estable 8-10€
+    todo el rato, /positions mostraba currentValue=0 en todas las filas al
+    mismo tiempo) y el pico falso cayó justo en el snapshot de cierre del día
+    Madrid 08-10 en balance_history.csv, contaminando pnl_live_hoy() de hoy
+    con una "caída" del 76% que nunca ocurrió (disparó el freno 2 sin pérdida
+    real). Este override usa el bankroll real de hoy como base en vez del
+    cierre contaminado, para no perder las ventanas de trading del día.
+    """
+    config = _cargar_config()
+    cb  = config.get("riesgo", {}).get("circuit_breaker", {})
+    ov  = cb.get("bankroll_inicio_dia_override") or {}
+    try:
+        if ov.get("fecha") == _ahora_madrid(config).date().isoformat():
+            return float(ov["valor"])
+    except (KeyError, TypeError, ValueError):
+        pass
     bkr_ahora = bankroll_actual()
     pnl_hoy   = pnl_live_hoy()
     return bkr_ahora - pnl_hoy
