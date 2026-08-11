@@ -35,12 +35,21 @@ crece n en cada bucket día a día antes de decidir cortar nada.
 """
 import csv
 import json
+import sys
 from collections import defaultdict, Counter
 from pathlib import Path
 
 from analisis_gate_riguroso import gate
 
 REPO = Path(__file__).resolve().parent
+sys.path.insert(0, str(REPO))
+from shadow_postmortem import es_pre_twap  # noqa: E402 -- 11-Ago, mismo hueco ya cerrado en
+# shadow_postmortem/gate_bucket_propio/kelly_precio_gate/analisis_gate_calibracion: esta
+# herramienta mezclaba régimen pre/post-TWAP (07-Ago) en las 3 fuentes (ballenas/shadow/
+# real) sin excluir nada -- confirmado con dinero real: hallazgo "GBM_LATE_15M#ETH/SOL
+# #15min#BUY_YES robusto en [0.45,0.55)" resultó ser 100% pre-TWAP (n post-TWAP=0/3),
+# el modelo casi no genera BUY_YES post-TWAP para esos activos. es_pre_twap() espera
+# marco en convención "15min" (no "15m") -- convertir donde haga falta antes de llamarla.
 BALLENAS_HIST = REPO / "data" / "shadow" / "ballenas_timing_history.csv"
 RESULTS = REPO / "data" / "shadow" / "results.csv"
 TRADES = REPO / "data" / "live" / "trades.csv"
@@ -54,6 +63,7 @@ ACTIVOS = ("BTC", "ETH", "SOL", "XRP", "DOGE", "BNB")  # BNB añadido 27-Jul --
 # histórico fino de ballenas pese a tener datos de sobra.
 MARCOS = ("5min", "15min", "60min")           # nomenclatura results/trades
 MARCO_BALLENAS_MAP = {"5min": "5m", "15min": "15m", "60min": "60m"}
+MARCO_BALLENAS_MAP_INV = {v: k for k, v in MARCO_BALLENAS_MAP.items()}  # "5m"->"5min", para es_pre_twap
 N_MIN_AGREGADO_ESTRATEGIA = 100   # mínimo para que una (strategy,subtype) entre al barrido
 N_MIN_BUCKET_INFORMATIVO = 15
 N_MIN_BUCKET_MADURO = 40          # umbral de gate riguroso + split-half
@@ -114,6 +124,8 @@ def cargar_ballenas():
                 continue
             if row.get("compro_yes") not in ("0", "1"):
                 continue
+            if es_pre_twap(MARCO_BALLENAS_MAP_INV.get(marco, marco), row.get("ts_trade", "")):
+                continue
             try:
                 p = float(row["precio"])
                 acierto = int(row["acierto"])
@@ -142,6 +154,8 @@ def cargar_shadow_filas():
                 continue
             if row.get("acierto") not in ("0", "1"):
                 continue
+            if es_pre_twap(marco, row.get("prediction_timestamp", "")):
+                continue
             try:
                 float(row["precio_yes_mercado"])
             except (TypeError, ValueError):
@@ -164,6 +178,8 @@ def cargar_real():
                 continue
             activo, marco = sub.split("#", 1)
             if activo not in ACTIVOS or marco not in MARCOS:
+                continue
+            if es_pre_twap(marco, row.get("timestamp_utc", "")):
                 continue
             try:
                 p = float(row["entry_price"])
