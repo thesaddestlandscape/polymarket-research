@@ -1,38 +1,21 @@
 {
   "FAVORITO_CONFIRMADO#BTC#5min#BUY_YES": [
     {
-      "bucket": "[0.60,0.65)",
-      "n": 132,
-      "hit": 70.5,
-      "pnl_media": 0.133,
-      "pnl_ci90": [
-        0.017,
-        0.24
-      ],
-      "split_half_pnl": [
-        0.151,
-        0.114
-      ],
-      "robusto_split_half": true,
-      "ballenas_hit": 63.4,
-      "ballenas_n": 16930
-    },
-    {
       "bucket": "[0.65,0.70)",
-      "n": 82,
-      "hit": 80.5,
-      "pnl_media": 0.199,
+      "n": 84,
+      "hit": 81.0,
+      "pnl_media": 0.206,
       "pnl_ci90": [
-        0.084,
-        0.31
+        0.093,
+        0.316
       ],
       "split_half_pnl": [
-        0.281,
-        0.117
+        0.285,
+        0.126
       ],
       "robusto_split_half": true,
-      "ballenas_hit": 69.8,
-      "ballenas_n": 18963
+      "ballenas_hit": 68.4,
+      "ballenas_n": 19575
     }
   ],
   "GBM_LATE_15M#DOGE#15min#BUY_YES": [
@@ -50,46 +33,27 @@
         1.155
       ],
       "robusto_split_half": true,
-      "ballenas_hit": 51.2,
-      "ballenas_n": 816
+      "ballenas_hit": 51.9,
+      "ballenas_n": 864
     }
   ],
   "GBM_LATE_15M#BNB#15min#BUY_YES": [
     {
       "bucket": "[0.50,0.55)",
-      "n": 59,
-      "hit": 86.4,
-      "pnl_media": 1.237,
+      "n": 62,
+      "hit": 87.1,
+      "pnl_media": 1.272,
       "pnl_ci90": [
-        0.97,
-        1.473
+        1.01,
+        1.494
       ],
       "split_half_pnl": [
-        1.19,
-        1.282
+        1.226,
+        1.317
       ],
       "robusto_split_half": true,
-      "ballenas_hit": 56.7,
-      "ballenas_n": 893
-    }
-  ],
-  "FAVORITO_CONFIRMADO#BTC#60min#BUY_YES": [
-    {
-      "bucket": "[0.55,0.60)",
-      "n": 236,
-      "hit": 63.1,
-      "pnl_media": 0.171,
-      "pnl_ci90": [
-        0.016,
-        0.321
-      ],
-      "split_half_pnl": [
-        0.343,
-        -0.001
-      ],
-      "robusto_split_half": false,
-      "ballenas_hit": 58.0,
-      "ballenas_n": 11425
+      "ballenas_hit": 55.8,
+      "ballenas_n": 941
     }
   ]
 }
