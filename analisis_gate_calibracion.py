@@ -29,6 +29,9 @@ import sys
 from pathlib import Path
 
 REPO = Path(__file__).resolve().parent
+sys.path.insert(0, str(REPO))
+from shadow_postmortem import es_pre_twap  # noqa: E402 -- 11-Ago, mismo filtro que gate_bucket_propio/kelly_precio_gate/CLV
+
 RESULTS = REPO / "data" / "shadow" / "results.csv"
 PARAMS = REPO / "data" / "shadow" / "strategy_params.json"
 OUT = REPO / "data" / "shadow" / "gate_calibracion.json"
@@ -46,7 +49,15 @@ def _log_loss(p: float, outcome_yes: bool) -> float:
 
 def _cargar_diffs() -> dict:
     """clave (strategy) -> lista de diff = ll_modelo - ll_mercado por fila
-    resuelta (positivo = modelo peor que el mercado en esa fila)."""
+    resuelta (positivo = modelo peor que el mercado en esa fila).
+
+    11-Ago: excluye filas pre-TWAP (07-Ago) en marcos afectados
+    (5min/15min/240min) -- mismo hueco ya cerrado en shadow_postmortem.py/
+    gate_bucket_propio.py/kelly_precio_gate.py/live_trade.py::_clv_tupla.
+    Este gate compara el modelo contra el precio de mercado; el cambio de
+    régimen de resolución (snapshot->TWAP) también cambia qué precio de
+    mercado es "correcto" cerca del cierre, así que mezclar regímenes
+    contamina la comparación igual que contaminaba ic_bayes."""
     diffs = {}
     with open(RESULTS, encoding="utf-8") as f:
         for r in csv.DictReader(f):
@@ -58,6 +69,10 @@ def _cargar_diffs() -> dict:
             except ValueError:
                 continue
             if not (0.0 < p_modelo < 1.0) or not (0.0 < p_mercado < 1.0):
+                continue
+            sub = r.get("subtype", "")
+            marco = sub.rsplit("#", 1)[-1] if "#" in sub else sub
+            if es_pre_twap(marco, r.get("prediction_timestamp", "")):
                 continue
             outcome_yes = r["outcome_real"] == "YES"
             d = _log_loss(p_modelo, outcome_yes) - _log_loss(p_mercado, outcome_yes)
