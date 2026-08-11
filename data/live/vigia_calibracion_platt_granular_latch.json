@@ -618,5 +618,21 @@
   "STRUCT_NO_15M#ETH#15min": {
     "n": 263,
     "confirmado": false
+  },
+  "GBM_LATE_15M_MULTIHORIZONTE#XRP": {
+    "n": 203,
+    "confirmado": false
+  },
+  "GBM_LATE_15M_MULTIHORIZONTE#XRP#15min": {
+    "n": 203,
+    "confirmado": false
+  },
+  "STRUCT_NO_15M#SOL": {
+    "n": 207,
+    "confirmado": false
+  },
+  "STRUCT_NO_15M#SOL#15min": {
+    "n": 207,
+    "confirmado": false
   }
 }
