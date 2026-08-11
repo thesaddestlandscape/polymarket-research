@@ -1,10 +1,10 @@
 {
-  "timestamp_utc": "2026-08-11T23:10:35+00:00",
-  "bankroll_sim": 15285.45,
-  "pnl_total": 15265.45,
-  "n_ops": 114188,
-  "win_rate": 0.614,
-  "estrategias_activas": 384,
+  "timestamp_utc": "2026-08-11T23:22:27+00:00",
+  "bankroll_sim": 15276.58,
+  "pnl_total": 15256.58,
+  "n_ops": 114258,
+  "win_rate": 0.6139,
+  "estrategias_activas": 386,
   "desactivadas": [
     "SMART_FLOW_1H",
     "UPDOWN_GBM#daily",
@@ -12,8 +12,6 @@
     "PRICE_TARGET_GBM#BTC",
     "UPDOWN_GBM#ETH#daily",
     "UPDOWN_GBM#SOL#daily",
-    "STREAK_FADE_60M",
-    "STREAK_FADE_60M#60min",
     "GBM_LATE_60M_FADE",
     "GBM_LATE_60M_FADE#SOL#60min",
     "GBM_LATE_60M_FADE#SOL",
@@ -62,8 +60,8 @@
       "n": 27
     }
   ],
-  "brier_medio": 0.2314,
-  "clv_medio": 0.0458,
+  "brier_medio": 0.2315,
+  "clv_medio": 0.0457,
   "monitor_5min": {
     "ou_5m": {
       "n": 357,
