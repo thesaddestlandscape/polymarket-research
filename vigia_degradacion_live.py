@@ -29,6 +29,7 @@ from pathlib import Path
 
 REPO = Path(__file__).resolve().parent
 sys.path.insert(0, str(REPO))
+from shadow_postmortem import es_pre_twap  # noqa: E402 -- 11-Ago, régimen pre-TWAP
 
 RESULTS = REPO / "data/shadow/results.csv"
 TRADES = REPO / "data/live/trades.csv"
@@ -78,11 +79,13 @@ def _tuplas_live() -> list:
 
 
 def _shadow_ic(strategy: str, subtype: str, direccion: str):
+    marco = subtype.rsplit("#", 1)[-1] if "#" in subtype else subtype
     n, hits = 0, 0
     with open(RESULTS, encoding="utf-8") as f:
         for r in csv.DictReader(f):
             if (r.get("strategy") == strategy and r.get("subtype") == subtype
-                    and r.get("decision") == direccion):
+                    and r.get("decision") == direccion
+                    and not es_pre_twap(marco, r.get("prediction_timestamp", ""))):
                 n += 1
                 hits += int(r.get("acierto") or 0)
     if n == 0:
@@ -106,11 +109,13 @@ def _tuplas_candidatas() -> list:
 
 
 def _pnls_shadow(strategy: str, subtype: str, direccion: str):
+    marco = subtype.rsplit("#", 1)[-1] if "#" in subtype else subtype
     pnls = []
     with open(RESULTS, encoding="utf-8") as f:
         for r in csv.DictReader(f):
             if (r.get("strategy") == strategy and r.get("subtype") == subtype
-                    and r.get("decision") == direccion and r.get("pnl_neto") not in ("", None)):
+                    and r.get("decision") == direccion and r.get("pnl_neto") not in ("", None)
+                    and not es_pre_twap(marco, r.get("prediction_timestamp", ""))):
                 pnls.append((r.get("resolution_timestamp", ""), float(r["pnl_neto"])))
     pnls.sort(key=lambda x: x[0])
     return [p for _, p in pnls]

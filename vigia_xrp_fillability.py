@@ -39,6 +39,7 @@ REPO = Path(__file__).resolve().parent
 sys.path.insert(0, str(REPO))
 
 from analisis_gate_riguroso import wilson_ci
+from shadow_postmortem import es_pre_twap  # noqa: E402 -- 11-Ago, régimen pre-TWAP
 
 LIBRO = REPO / "data/live/libro_snapshots.csv"
 LATCH = REPO / "data/live/vigia_xrp_fillability_latch.json"
@@ -88,6 +89,10 @@ def _outcomes_index():
             if not r.get("subtype", "").startswith("XRP"):
                 continue
             if r.get("acierto") not in ("0", "1"):
+                continue
+            sub = r.get("subtype", "")
+            marco = sub.rsplit("#", 1)[-1] if "#" in sub else sub
+            if es_pre_twap(marco, r.get("prediction_timestamp", "")):
                 continue
             idx[(r["market_id"], r["strategy"], r["decision"])] = r
     return idx

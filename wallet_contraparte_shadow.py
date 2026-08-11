@@ -32,6 +32,9 @@ import time
 from datetime import datetime, timezone
 from pathlib import Path
 
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from shadow_postmortem import es_pre_twap  # noqa: E402 -- 11-Ago, régimen pre-TWAP
+
 import requests
 
 REPO = Path(__file__).resolve().parent
@@ -82,7 +85,8 @@ def main() -> int:
         rows = [r for r in csv.DictReader(f)
                 if r.get("strategy") == "GBM_LATE_15M" and r.get("decision") == "BUY_YES"
                 and r.get("subtype") in ("SOL#15min", "ETH#15min")
-                and str(r.get("market_id")) not in ya]
+                and str(r.get("market_id")) not in ya
+                and not es_pre_twap("15min", r.get("prediction_timestamp", ""))]
 
     # más recientes primero: si hay backlog, prioriza acumular n forward ya
     rows.sort(key=lambda r: r.get("prediction_timestamp", ""), reverse=True)

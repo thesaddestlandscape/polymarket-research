@@ -29,6 +29,7 @@ REPO = Path(__file__).resolve().parent
 sys.path.insert(0, str(REPO))
 
 from analisis_gate_riguroso import gate
+from shadow_postmortem import es_pre_twap  # noqa: E402 -- 11-Ago, régimen pre-TWAP
 
 RESULTS = REPO / "data/shadow/results.csv"
 BALLENAS_STATE = REPO / "data/shadow/ballenas_timing_state.json"
@@ -64,6 +65,8 @@ def _filas_ventana(lo, hi):
             if r.get("acierto") not in ("0", "1"):
                 continue
             if (r.get("resolution_timestamp") or "") < corte:
+                continue
+            if es_pre_twap("15min", r.get("prediction_timestamp", "")):
                 continue
             try:
                 p = float(r["precio_yes_mercado"])

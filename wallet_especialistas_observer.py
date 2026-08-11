@@ -36,6 +36,9 @@ from datetime import datetime, timezone
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
+from shadow_postmortem import es_pre_twap  # noqa: E402 -- 11-Ago, régimen pre-TWAP
+
+sys.path.insert(0, str(Path(__file__).resolve().parent))
 from shadow_postmortem import _ic_bayes  # noqa: E402 -- fuente única, no reimplementar
 
 DIR = Path(__file__).resolve().parent
@@ -98,6 +101,8 @@ def cargar_cobertura_propia():
                     continue
                 clave = (activo, marco_r)
             else:
+                continue
+            if es_pre_twap(clave[1], row.get("prediction_timestamp", "")):
                 continue
             d = acumulado[clave]
             d["n"] += 1

@@ -33,6 +33,7 @@ from pathlib import Path
 
 REPO = Path(__file__).resolve().parent
 sys.path.insert(0, str(REPO))
+from shadow_postmortem import es_pre_twap  # noqa: E402 -- 11-Ago, régimen pre-TWAP
 
 EVENTOS_PATH = REPO / "data/live/veto_ballenas_eventos.jsonl"
 PREDICTIONS_DIR = REPO / "data/shadow"
@@ -130,11 +131,13 @@ def _match_prediccion(market_id: str, combo: str, ts_bloqueo: datetime, filas_pr
 def _buscar_resultado(strategy: str, subtype: str, decision: str, ts_pred: str) -> dict | None:
     if not RESULTS_CSV.exists():
         return None
+    marco = subtype.rsplit("#", 1)[-1] if "#" in subtype else subtype
     with open(RESULTS_CSV, encoding="utf-8") as f:
         for row in csv.DictReader(f):
             if (row.get("strategy") == strategy and row.get("subtype") == subtype
                     and row.get("decision") == decision
-                    and row.get("prediction_timestamp") == ts_pred):
+                    and row.get("prediction_timestamp") == ts_pred
+                    and not es_pre_twap(marco, ts_pred)):
                 return row
     return None
 

@@ -23,6 +23,10 @@ from pathlib import Path
 
 import requests
 
+import sys
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from shadow_postmortem import es_pre_twap  # noqa: E402 -- 11-Ago, régimen pre-TWAP
+
 REPO = Path(__file__).resolve().parent
 LIBRO = REPO / "data/live/libro_snapshots.csv"
 RESULTS = REPO / "data/shadow/results.csv"
@@ -80,6 +84,10 @@ def _resultados_idx():
     idx = {}
     with open(RESULTS, encoding="utf-8") as f:
         for row in csv.DictReader(f):
+            sub = row.get("subtype", "")
+            marco = sub.rsplit("#", 1)[-1] if "#" in sub else sub
+            if es_pre_twap(marco, row.get("prediction_timestamp", "")):
+                continue
             idx[(row["market_id"], row["decision"])] = row
     return idx
 
