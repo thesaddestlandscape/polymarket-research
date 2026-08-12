@@ -202,6 +202,7 @@
   "UPDOWN_GBM#15min|patron|sigma_ewma_delta_pct|lt|BUY_NO",
   "UPDOWN_GBM#15min|patron|sigma_ewma_delta_pct|lt|BUY_YES",
   "UPDOWN_GBM#15min|patron|sigma_h|gt|BUY_NO",
+  "UPDOWN_GBM#15min|patron|sigma_h|gt|BUY_YES",
   "UPDOWN_GBM#15min|patron|sigma_h|lt|BUY_NO",
   "UPDOWN_GBM#5min|filtro|sigma_h|gt|BUY_NO",
   "UPDOWN_GBM#5min|filtro|sigma_h|gt|BUY_YES",
