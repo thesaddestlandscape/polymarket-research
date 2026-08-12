@@ -1336,6 +1336,23 @@ FEATURE_RULES = {
     "UPDOWN_GBM_15M_TARDIO#SOL#15min": _BASE_GBM,
     "UPDOWN_GBM_15M_TARDIO#XRP#15min": _BASE_GBM,
 
+    # 12-Ago (vigia_cobertura_feature_rules.py + auditoría manual, sesión de
+    # arranque): 3 wrappers más de s_updown_gbm() sin NINGÚN aprendizaje
+    # causal desde su creación (15/28-Jul) -- mismo patrón exacto que
+    # UPDOWN_GBM_15M_TARDIO arriba (llaman a s_updown_gbm() y devuelven su
+    # resultado tal cual, mismo dict "features"), _BASE_GBM aplica directo.
+    # UPDOWN_GBM_IBS_ALTO y CROSS_WINDOW_SPREAD ya tenían n=260/220 en
+    # candidatos_evaluacion_live -- volumen real acumulando sin que ningún
+    # filtro_causal/patron_ganador pudiera formarse.
+    "UPDOWN_GBM_ETH_15M_HORA7":            _BASE_GBM,
+    "UPDOWN_GBM_ETH_15M_HORA7#ETH#15min":  _BASE_GBM,
+    "UPDOWN_GBM_IBS_ALTO":                 _BASE_GBM,
+    "UPDOWN_GBM_IBS_ALTO#BTC#15min":       _BASE_GBM,
+    "UPDOWN_GBM_IBS_ALTO#ETH#15min":       _BASE_GBM,
+    "UPDOWN_GBM_15M_CROSS_WINDOW_SPREAD":           _BASE_GBM,
+    "UPDOWN_GBM_15M_CROSS_WINDOW_SPREAD#BTC#15min":  _BASE_GBM,
+    "UPDOWN_GBM_15M_CROSS_WINDOW_SPREAD#ETH#15min":  _BASE_GBM,
+
     # GBM_LATE_5M (llama a _s_gbm_late, mismas features que el resto de la
     # familia GBM_LATE_15M/_TARDIO/_ESPACIO_ATR). Activos: GBM_LATE_5M_PARES.
     "GBM_LATE_5M":         _BASE_GBM,
@@ -1359,6 +1376,14 @@ FEATURE_RULES = {
     "FAVORITO_CONFIRMADO_60MIN_ALTACONVICCION#BTC#60min": _BASE_FAVORITO,
     "FAVORITO_CONFIRMADO_60MIN_ALTACONVICCION#ETH#60min": _BASE_FAVORITO,
     "FAVORITO_CONFIRMADO_60MIN_ALTACONVICCION#SOL#60min": _BASE_FAVORITO,
+
+    # FAVORITO_CONFIRMADO_SOL_ALTACONVICCION (12-Jul, wrapper de
+    # s_favorito_confirmado igual que las de arriba, single-asset por
+    # diseño) -- gap detectado por vigia_cobertura_feature_rules.py (12-Ago,
+    # n=384 histórico acumulado, n=53/3d en el momento del aviso) sin
+    # ninguna entrada desde su creación, más de un mes sin aprendizaje causal.
+    "FAVORITO_CONFIRMADO_SOL_ALTACONVICCION":            _BASE_FAVORITO,
+    "FAVORITO_CONFIRMADO_SOL_ALTACONVICCION#SOL#15min":  _BASE_FAVORITO,
 
     "FAVORITO_CONFIRMADO_5MIN_ALTACONVICCION":         _BASE_FAVORITO,
     "FAVORITO_CONFIRMADO_5MIN_ALTACONVICCION#BTC#5min": _BASE_FAVORITO,
