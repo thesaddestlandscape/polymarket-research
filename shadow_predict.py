@@ -4349,41 +4349,48 @@ def _s_gbm_late(market, ctx, ventana_min, rest_lo, rest_hi, espacio_k=None):
         if sigma_h_ewma10 is not None and sigma_h > 0 else None
     )
 
-    # Veto por zona de sigma_ewma_delta_pct (05-Ago, ver
-    # GBM_LATE_15M_SIGMA_EWMA_ZONAS_BUENAS_BUY_YES arriba): solo #15min
-    # BUY_YES, solo zonas con gate riguroso confirmado — el resto (incluida
-    # cualquier moneda sin dato) se descarta, fail-closed. La dirección se
-    # infiere aquí (p_up vs py) porque esta función todavía no conoce la
-    # decisión final del caller, mismo patrón que el filtro BUY_YES#15min
-    # de s_updown_gbm (línea ~1853).
+    # Zona de sigma_ewma_delta_pct (05-Ago, ver
+    # GBM_LATE_15M_SIGMA_EWMA_ZONAS_BUENAS_BUY_YES arriba) + zona de precio
+    # (06-Ago, GBM_LATE_15M_PRECIO_ZONAS_BUENAS_BUY_YES): solo #15min
+    # BUY_YES. La dirección se infiere aquí (p_up vs py) porque esta función
+    # todavía no conoce la decisión final del caller, mismo patrón que el
+    # filtro BUY_YES#15min de s_updown_gbm (línea ~1853).
+    #
+    # 12-Ago (petición explícita Javi, "vamos a solucionarlo" -- hallazgo
+    # sesión de arranque): esto ERA un veto duro (`return None`) cuando la
+    # zona no confirmaba -- para ETH (zona vacía por diseño desde 05-Ago,
+    # "vetada ENTERA hasta que haya zona confirmada con más n") eso creaba
+    # un estado absorbente real: al no generar NUNCA una señal, ETH no
+    # podía acumular el n que necesitaría para confirmar una zona algún
+    # día. Convertido en FLAG observacional (mismo espíritu que el resto
+    # del proyecto: "candidatos_evaluacion_live observan sin restricción
+    # para no romper su propia acumulación de evidencia", ver CLAUDE.md
+    # "Veto de micro-bucket de precio"). Ninguna tupla GBM_LATE_15M#*#BUY_
+    # YES está en pares_permitidos_live hoy -- cero riesgo de dinero real.
+    # Cualquier análisis de promoción DEBE seguir filtrando por estos 2
+    # flags antes de concluir nada (no se cambia el criterio de calidad,
+    # solo se deja de silenciar la acumulación de datos).
+    en_zona_sigma_ewma_buyyes = None
+    en_zona_precio_buyyes = None
     if ventana_min == 15 and p_up > py:
-        _zonas_buy_yes = GBM_LATE_15M_SIGMA_EWMA_ZONAS_BUENAS_BUY_YES.get(activo, [])
         if sigma_ewma_delta_pct is None:
-            return None  # sin dato -> no se puede confirmar zona buena, no apostar
-        _en_zona_buena = any(
+            return None  # sin dato -> no se puede evaluar la zona, no apostar
+        _zonas_buy_yes = GBM_LATE_15M_SIGMA_EWMA_ZONAS_BUENAS_BUY_YES.get(activo, [])
+        en_zona_sigma_ewma_buyyes = any(
             lo <= sigma_ewma_delta_pct and (hi is None or sigma_ewma_delta_pct < hi)
             for lo, hi in _zonas_buy_yes
         )
-        if not _en_zona_buena:
-            return None
 
-        # 06-Ago: veto ADICIONAL de precio (AND, no sustituye al de arriba)
-        # -- ver GBM_LATE_15M_PRECIO_ZONAS_BUENAS_BUY_YES, confirmado con
-        # rigor completo solo para SOL/XRP/DOGE. Fail-open para el resto de
-        # monedas (BTC/ETH/BNB, sin entrada en la tabla): el veto de
-        # sigma_ewma de arriba ya decidió, no se les exige nada más todavía.
+        # Zona de precio (AND lógico con la de arriba en la decisión de
+        # promoción, no aquí): fail-open (None, "no aplica") para monedas
+        # sin entrada en la tabla (BTC/ETH/BNB) -- el análisis de promoción
+        # exige en_zona_sigma_ewma_buyyes=True Y (en_zona_precio_buyyes en
+        # (True, None)) antes de contar una fila como "confirmada".
         _zonas_precio = GBM_LATE_15M_PRECIO_ZONAS_BUENAS_BUY_YES.get(activo, [])
         if _zonas_precio:
-            # Mismo soporte de rango abierto que el veto de sigma_ewma de
-            # arriba (hi=None) -- /code-review 06-Ago: sin esto, añadir una
-            # zona abierta en el futuro (mismo estilo que "BTC": [(12.0,
-            # None)] en la tabla de sigma_ewma) rompería con TypeError en
-            # cada ciclo en vez de fallar cerrado.
-            _en_zona_precio_buena = any(
+            en_zona_precio_buyyes = any(
                 lo <= py and (hi is None or py < hi) for lo, hi in _zonas_precio
             )
-            if not _en_zona_precio_buena:
-                return None
 
     # retest_pct (13-Jul, ver analisis_retest_gbm_late.py / _calcular_retest_pct):
     # solo logueo, no cambia edge ni decisión — ver docstring del helper.
@@ -4425,6 +4432,8 @@ def _s_gbm_late(market, ctx, ventana_min, rest_lo, rest_hi, espacio_k=None):
             "gap_sigma_implicita": gap_sigma_implicita,
             "meta_score_gbm_late": _meta_score_gbm_late(
                 d, sigma_h, drift_ventana * 100, now_utc.hour, restante_min, T_rem_h),
+            "en_zona_sigma_ewma_buyyes": en_zona_sigma_ewma_buyyes,
+            "en_zona_precio_buyyes":     en_zona_precio_buyyes,
             **_libro_calidad(market),
         },
     }
