@@ -958,6 +958,23 @@ _BASE_GBM = [
     # El postmortem descubrirá automáticamente qué umbral separa ganadores de perdedores
     ("ibs_15",           "gt",     "lt"),
     ("ibs_15",           "lt",     "gt"),
+    # ── IBS_20min (12-Ago) ──────────────────────────────────────────────────────
+    # Clave DISTINTA de ibs_15 -- _s_gbm_late() (motor de toda la familia
+    # GBM_LATE_15M/TARDIO/ESPACIO_ATR/MULTIHORIZONTE/PYCONFIRMADO) calcula y
+    # loguea "ibs_20min", nunca "ibs_15" (esa es de s_updown_gbm, función
+    # distinta). _BASE_GBM solo tenía reglas para "ibs_15" -- clave de
+    # features fantasma real, la familia GBM_LATE llevaba desde su creación
+    # sin que el pipeline causal pudiera ver esta feature. Verificado con
+    # results.csv antes de commitear: GBM_LATE_15M#BUY_YES monótono y
+    # limpio (hit 37.9%->73.2%, pnl/tr -0.227->+0.734 según ibs_20min sube
+    # de 0 a 1), shuffle p=0.0000 (n=2179 en bucket alto vs n=2302 resto),
+    # split-half estable en ambas mitades (+0.601/+0.696). Señal real de
+    # continuación de tendencia (precio cerca del máximo reciente ->
+    # sigue subiendo), coherente con literatura de breakout/momentum en
+    # timeframes cortos -- contrario a la intuición de sobrecompra de
+    # ibs_15 arriba, pero es una feature y un mecanismo distintos.
+    ("ibs_20min",        "gt",     "lt"),
+    ("ibs_20min",        "lt",     "gt"),
     # ── VWAP relativo (11-Jul, paper Zarattini/Aziz "VWAP the Holy Grail") ─────
     # spot>VWAP = tendencia alcista de sesión; spot<VWAP = bajista. Chequeo manual
     # UPDOWN_GBM BUY_NO n=114: contra-tendencia (spot>=VWAP) ic=-0.105 n=36 vs
