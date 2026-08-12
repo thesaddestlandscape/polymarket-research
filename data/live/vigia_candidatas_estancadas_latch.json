@@ -136,5 +136,11 @@
   },
   "cementerio:UPDOWN_OU_5M#BTC#5min": {
     "avisado": true
+  },
+  "cementerio:STREAK_FADE_15M#15min": {
+    "avisado": true
+  },
+  "cementerio:LIQUIDACIONES_15M#BTC#15min": {
+    "avisado": true
   }
 }
