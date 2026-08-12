@@ -993,6 +993,20 @@ _BASE_GBM = [
     # feature entra aquí en vez de en un umbral global hardcoded.
     ("sigma_ewma_delta_pct", "lt", "gt"),
     ("sigma_ewma_delta_pct", "gt", "lt"),
+    # ── volumen_regimen (12-Ago) ────────────────────────────────────────────────
+    # Ratio de volumen reciente del spot (Binance) vs línea base propia del
+    # activo (fetch_binance_klines.py::fetch_volume_regimen, >1 = actividad
+    # elevada). Logueado desde el 10-Jul en toda la familia GBM_LATE_15M
+    # (_s_gbm_late) pero NUNCA estuvo en FEATURE_RULES -- mismo tipo de clave
+    # de features fantasma que ibs_20min (ver arriba, mismo día). Chequeo
+    # agregado antes de commitear (GBM_LATE_15M#BUY_YES, n=3056): sin efecto
+    # fuerte en agregado (creciente>1.2x vs resto: diff=+0.055, shuffle
+    # p=0.46, NO significativo) -- a diferencia de ibs_20min, no es un
+    # hallazgo grande ya destapado, pero es el mismo bug real y el pipeline
+    # causal puede encontrar algo desagregado por activo que el agregado
+    # diluye (mismo principio CLAUDE.md pt.17).
+    ("volumen_regimen",  "gt",     "lt"),
+    ("volumen_regimen",  "lt",     "gt"),
     # ── Libro (28-Jul, backlog ítem 7 -- idea_moondev_10_hallazgos_
     # priorizados_28jul): _libro_calidad(market) YA se loguea en todas las
     # variantes de esta familia (vía _s_gbm_late/s_gbm_late_5min, sin
