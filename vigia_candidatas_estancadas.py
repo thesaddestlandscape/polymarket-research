@@ -18,6 +18,17 @@ Dos clases de estancamiento que se detectan por separado:
    tiene n<15 (viola la regla dura del manual: "ninguna conclusión con
    n<15" -- fue silenciada antes de poder defenderse).
 
+   12-Ago (fix, falso positivo real encontrado en sesión): esta vigía solo
+   comprobaba la lista manual ACUMULAR_SHADOW_AUNQUE_DESACTIVADA, pero
+   06-Ago se añadió a shadow_predict.py una excepción AUTOMÁTICA
+   (_nunca_estuvo_live(), vía estrategias_alguna_vez_live.json) que exime
+   a CUALQUIER estrategia que nunca arriesgó dinero real -- sin repetirla
+   a mano en la lista manual. La vigía no la consultaba, así que seguía
+   avisando "cementerio" de estrategias que el generador real YA dejaba
+   generar sin restricción (verificado: STREAK_FADE_15M/LIQUIDACIONES_15M
+   con filas nuevas en results.csv el mismo día del aviso). Corregido para
+   usar el mismo criterio que el generador real.
+
 2. ESTANCADO / NUNCA_GENERO: tuplas de candidatos_evaluacion_live e
    hipótesis de hipotesis_pendientes.json cuyo `n` no ha crecido nada en los
    últimos 7 días de historial propio (persistido aquí día a día -- no hace
@@ -103,9 +114,11 @@ def _detectar_cementerio():
     try:
         import shadow_predict as sp
         exentas = sp.ACUMULAR_SHADOW_AUNQUE_DESACTIVADA
+        nunca_estuvo_live = sp._nunca_estuvo_live
     except Exception as e:
         print(f"[vigia_candidatas_estancadas] no se pudo importar ACUMULAR_SHADOW_AUNQUE_DESACTIVADA: {e}")
         exentas = set()
+        nunca_estuvo_live = None
 
     params = _cargar_json(STRATEGY_PARAMS, {})
     estrategias = params.get("estrategias", params)
@@ -125,6 +138,8 @@ def _detectar_cementerio():
             continue
         if _es_exenta_cementerio(nombre_base, exentas):
             continue
+        if nunca_estuvo_live is not None and nunca_estuvo_live(nombre_base):
+            continue  # 12-Ago: mismo criterio automático que el generador real
         if _vive_en_pares_permitidos(nombre_base, clave, pares_permitidos):
             continue  # tupla live pausada por decisión explícita -- no es cementerio, es pausa deliberada
         n = datos.get("n", 0)
