@@ -4664,5 +4664,6 @@
  "candidato_proxy#GBM_LATE_15M_ESPACIO_ATR#BNB#BUY_YES#sigma_hgt": false,
  "candidato_proxy#GBM_LATE_15M_ESPACIO_ATR#DOGE#BUY_YES#sigma_hlt": false,
  "candidato_proxy#GBM_LATE_15M_TARDIO#SOL#15min#SOL#BUY_NO#ibs_20minlt": false,
- "FILTRO#candidato_proxy#GBM_LATE_15M_TARDIO#SOL#15min#SOL#BUY_NO#ibs_20mingt": false
+ "FILTRO#candidato_proxy#GBM_LATE_15M_TARDIO#SOL#15min#SOL#BUY_NO#ibs_20mingt": false,
+ "candidato_proxy#GBM_LATE_5M#SOL#5min#SOL#BUY_YES#volumen_regimenlt": false
 }
