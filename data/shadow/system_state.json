@@ -1,10 +1,10 @@
 {
-  "timestamp_utc": "2026-08-12T07:06:28+00:00",
-  "bankroll_sim": 15359.46,
-  "pnl_total": 15339.46,
-  "n_ops": 116622,
+  "timestamp_utc": "2026-08-12T07:16:55+00:00",
+  "bankroll_sim": 15367.27,
+  "pnl_total": 15347.27,
+  "n_ops": 116668,
   "win_rate": 0.6133,
-  "estrategias_activas": 388,
+  "estrategias_activas": 390,
   "desactivadas": [
     "SMART_FLOW_1H",
     "UPDOWN_GBM#daily",
@@ -41,9 +41,7 @@
     "LIQUIDACIONES_15M#XRP#15min",
     "LIQUIDACIONES_15M#XRP",
     "BALLENAS_TARDIAS#DOGE#5min",
-    "BALLENAS_TARDIAS#DOGE",
-    "GBM_LATE_15M_PYCONFIRMADO#SOL#15min",
-    "GBM_LATE_15M_PYCONFIRMADO#SOL"
+    "BALLENAS_TARDIAS#DOGE"
   ],
   "top3_ic": [
     {
