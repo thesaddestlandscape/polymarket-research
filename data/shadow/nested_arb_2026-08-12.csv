@@ -495,3 +495,13 @@ timestamp_utc,activo,nesting,combo,coste,profit_min_pct,gap_opens_pct,depth_usd,
 2026-08-12T06:43:07+00:00,BTC,5min15m,YESout+NOin,1.32,-32.0,0.022,22.96,112,0.41,0.91,63599.0,63585.0,btc-updown-5m-1786516800,btc-updown-15m-1786516200
 2026-08-12T06:43:08+00:00,ETH,5min15m,NOout+YESin,0.9,10.0,-0.009,11.98,111,0.72,0.18,1884.67,1884.84,eth-updown-5m-1786516800,eth-updown-15m-1786516200
 2026-08-12T06:43:08+00:00,SOL,5min15m,NOout+YESin,1.61,-61.0,-0.0788,6.82,111,0.99,0.62,76.06,76.12,sol-updown-5m-1786516800,sol-updown-15m-1786516200
+2026-08-12T06:49:16+00:00,BTC,15min60m,NOout+YESin,1.728,-72.8,-0.3136,726.71,643,0.998,0.73,63585.0,63785.0,btc-updown-15m-1786517100,bitcoin-up-or-down-august-12-2026-2am-et
+2026-08-12T06:49:16+00:00,ETH,15min60m,NOout+YESin,1.809,-80.9,-0.3011,15.38,643,0.999,0.81,1884.35,1890.04,eth-updown-15m-1786517100,ethereum-up-or-down-august-12-2026-2am-et
+2026-08-12T06:49:17+00:00,SOL,15min60m,NOout+YESin,1.339,-33.9,-0.2753,1.7,642,0.999,0.34,76.06,76.27,sol-updown-15m-1786517100,solana-up-or-down-august-12-2026-2am-et
+2026-08-12T06:49:17+00:00,XRP,15min60m,NOout+YESin,1.54,-54.0,-0.1959,13.09,642,0.97,0.57,1.019,1.021,xrp-updown-15m-1786517100,xrp-up-or-down-august-12-2026-2am-et
+2026-08-12T06:51:28+00:00,BTC,15min60m,NOout+YESin,1.659,-65.9,-0.3136,168.96,511,0.999,0.66,63585.0,63785.0,btc-updown-15m-1786517100,bitcoin-up-or-down-august-12-2026-2am-et
+2026-08-12T06:51:28+00:00,ETH,15min60m,NOout+YESin,1.879,-87.9,-0.3011,254.58,511,0.999,0.88,1884.35,1890.04,eth-updown-15m-1786517100,ethereum-up-or-down-august-12-2026-2am-et
+2026-08-12T06:51:28+00:00,SOL,15min60m,NOout+YESin,1.299,-29.9,-0.2753,14.98,511,0.999,0.3,76.06,76.27,sol-updown-15m-1786517100,solana-up-or-down-august-12-2026-2am-et
+2026-08-12T06:51:29+00:00,XRP,15min60m,NOout+YESin,1.57,-57.0,-0.1959,3.6,510,0.97,0.6,1.019,1.021,xrp-updown-15m-1786517100,xrp-up-or-down-august-12-2026-2am-et
+2026-08-12T06:53:21+00:00,XRP,15min60m,NOout+YESin,1.119,-11.9,-0.1959,0.72,398,0.999,0.12,1.019,1.021,xrp-updown-15m-1786517100,xrp-up-or-down-august-12-2026-2am-et
+2026-08-12T06:55:14+00:00,XRP,15min60m,NOout+YESin,1.069,-6.9,-0.1959,0.35,285,0.999,0.07,1.019,1.021,xrp-updown-15m-1786517100,xrp-up-or-down-august-12-2026-2am-et
