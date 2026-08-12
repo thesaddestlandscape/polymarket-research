@@ -2,58 +2,58 @@
   "FAVORITO_CONFIRMADO#BTC#5min#BUY_YES": [
     {
       "bucket": "[0.65,0.70)",
-      "n": 84,
-      "hit": 81.0,
-      "pnl_media": 0.206,
+      "n": 96,
+      "hit": 77.1,
+      "pnl_media": 0.145,
       "pnl_ci90": [
-        0.093,
-        0.316
+        0.029,
+        0.254
       ],
       "split_half_pnl": [
-        0.285,
-        0.126
+        0.278,
+        0.011
       ],
       "robusto_split_half": true,
-      "ballenas_hit": 68.4,
-      "ballenas_n": 19575
+      "ballenas_hit": 72.9,
+      "ballenas_n": 18726
     }
   ],
   "GBM_LATE_15M#DOGE#15min#BUY_YES": [
     {
       "bucket": "[0.50,0.55)",
-      "n": 69,
-      "hit": 78.3,
-      "pnl_media": 0.916,
+      "n": 82,
+      "hit": 80.5,
+      "pnl_media": 1.024,
       "pnl_ci90": [
-        0.614,
-        1.201
+        0.746,
+        1.281
       ],
       "split_half_pnl": [
-        0.67,
-        1.155
+        0.682,
+        1.366
       ],
       "robusto_split_half": true,
-      "ballenas_hit": 51.9,
-      "ballenas_n": 864
+      "ballenas_hit": 50.5,
+      "ballenas_n": 959
     }
   ],
   "GBM_LATE_15M#BNB#15min#BUY_YES": [
     {
       "bucket": "[0.50,0.55)",
-      "n": 62,
-      "hit": 87.1,
-      "pnl_media": 1.272,
+      "n": 66,
+      "hit": 87.9,
+      "pnl_media": 1.31,
       "pnl_ci90": [
-        1.01,
-        1.494
+        1.077,
+        1.534
       ],
       "split_half_pnl": [
-        1.226,
-        1.317
+        1.257,
+        1.364
       ],
       "robusto_split_half": true,
-      "ballenas_hit": 55.8,
-      "ballenas_n": 941
+      "ballenas_hit": 57.4,
+      "ballenas_n": 1073
     }
   ]
 }
