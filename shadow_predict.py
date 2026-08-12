@@ -881,6 +881,17 @@ def s_price_momentum(market, ctx):
         "razon": (f"price_momentum drift={drift:+.4f} "
                   f"consistency={consistency:.0%} obs={len(obs)} spread={spread:.3f}"),
         "subtype": identificar_activo(market.get("question", "")) or "",
+        # 12-Ago (vigia_cobertura_feature_rules.py): esta estrategia nunca
+        # había logueado "features" -- el aprendizaje causal no podía
+        # bucketizar nada pese a llevar corriendo desde antes. Puramente
+        # aditivo, no toca prob_yes.
+        "features": {
+            "drift_abs":   round(abs(drift), 4),
+            "consistency": round(consistency, 4),
+            "spread":      round(spread, 4),
+            "n_obs":       len(obs),
+            "hora_utc":    datetime.now(timezone.utc).hour,
+        },
     }
 
 def s_smart_flow_1h(market, ctx):
@@ -931,6 +942,14 @@ def s_smart_flow_1h(market, ctx):
         "prob_yes": prob_yes,
         "razon": razon,
         "subtype": identificar_activo(market.get("question", "")) or "",
+        # 12-Ago (vigia_cobertura_feature_rules.py): mismo fix que
+        # s_price_momentum -- nunca había logueado "features". Aditivo.
+        "features": {
+            "dom_count": dom_count,
+            "imbalance": round(imbalance, 4),
+            "n_top":     n_top,
+            "hora_utc":  datetime.now(timezone.utc).hour,
+        },
     }
 
 def s_binance_updown(market, ctx):
@@ -2997,6 +3016,16 @@ def s_resolution_sniper(market, ctx):
         "prob_yes": max(0.05, min(0.95, prob_yes)),
         "razon":    f"resolution_sniper {activo} {detalle} T={T_h:.2f}h σ={sigma_h:.4f}",
         "subtype":  f"{activo}#sniper",
+        # 12-Ago (vigia_cobertura_feature_rules.py): mismo fix que
+        # s_price_momentum/s_smart_flow_1h -- nunca había logueado
+        # "features". Aditivo, no toca prob_yes.
+        "features": {
+            "edge":      round(edge, 4),
+            "sigma_h":   round(sigma_h, 6),
+            "T_h":       round(T_h, 4),
+            "dist_50":   round(abs(prob_yes - 0.5), 4),
+            "hora_utc":  datetime.now(timezone.utc).hour,
+        },
     }
 
 

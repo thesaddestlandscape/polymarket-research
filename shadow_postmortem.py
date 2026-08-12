@@ -1084,6 +1084,48 @@ _BASE_LEADLAG = [
     ("libro_liquidez", "lt", "gt"),
 ]
 
+# 12-Ago: 4 estrategias detectadas SIN dict "features" en absoluto (auditoría
+# manual tras vigia_cobertura_feature_rules.py) -- shadow_predict.py
+# corregido el mismo día para que las 3 primeras logueen features (aditivo,
+# no toca prob_yes); LATE_WINDOW_5MIN ya las tenía, solo le faltaba esta
+# entrada.
+_BASE_PRICE_MOMENTUM = [
+    ("drift_abs",   "lt", "gt"),
+    ("consistency", "lt", "gt"),
+    ("spread",      "gt", "lt"),
+    ("n_obs",       "lt", "gt"),
+    ("hora_utc",    "lt", "gt"),
+    ("hora_utc",    "gt", "lt"),
+]
+
+_BASE_SMART_FLOW = [
+    ("dom_count",  "lt", "gt"),
+    ("imbalance",  "lt", "gt"),
+    ("n_top",      "lt", "gt"),
+    ("hora_utc",   "lt", "gt"),
+    ("hora_utc",   "gt", "lt"),
+]
+
+_BASE_RESOLUTION_SNIPER = [
+    ("edge",     "lt", "gt"),
+    ("sigma_h",  "gt", "lt"),
+    ("sigma_h",  "lt", "gt"),
+    ("T_h",      "gt", "lt"),
+    ("T_h",      "lt", "gt"),
+    ("dist_50",  "lt", "gt"),
+    ("hora_utc", "lt", "gt"),
+    ("hora_utc", "gt", "lt"),
+]
+
+_BASE_LATE_WINDOW = [
+    ("drift_ventana_pct", "abs_lt", "abs_gt"),
+    ("elapsed_s",         "lt", "gt"),
+    ("elapsed_s",         "gt", "lt"),
+    ("drift_15min",       "abs_gt", "abs_lt"),
+    ("drift_60min",       "abs_gt", "abs_lt"),
+    ("es_ntm_5min",       "lt", "gt"),
+]
+
 # Features de BALLENAS_CONFIRMADAS_15M (31-Jul, gap detectado por
 # vigia_cobertura_feature_rules.py -- 1483 predicciones desde 27-Jul sin
 # NINGÚN aprendizaje causal. Propias de s_ballenas_confirmadas_15m:
@@ -1477,6 +1519,24 @@ FEATURE_RULES = {
     "FAVORITO_CONFIRMADO_5MIN_BAJALATENCIA":           _BASE_FAVORITO_BAJALATENCIA,
     "FAVORITO_CONFIRMADO_5MIN_BAJALATENCIA#XRP#5min":  _BASE_FAVORITO_BAJALATENCIA,
     "FAVORITO_CONFIRMADO_5MIN_BAJALATENCIA#DOGE#5min": _BASE_FAVORITO_BAJALATENCIA,
+
+    # 12-Ago: las 4 estrategias que no tenían NINGÚN dict "features" (ver
+    # project_gaps_feature_rules_cerrados_12ago) -- shadow_predict.py
+    # corregido el mismo día. PRICE_MOMENTUM n=0 hoy (prácticamente sin uso,
+    # solo agregado por si vuelve a activarse); SMART_FLOW_1H/
+    # RESOLUTION_SNIPER con volumen real, desagregadas por activo.
+    "PRICE_MOMENTUM":       _BASE_PRICE_MOMENTUM,
+    "SMART_FLOW_1H":        _BASE_SMART_FLOW,
+    "SMART_FLOW_1H#BTC":    _BASE_SMART_FLOW,
+    "SMART_FLOW_1H#ETH":    _BASE_SMART_FLOW,
+    "SMART_FLOW_1H#SOL":    _BASE_SMART_FLOW,
+    "SMART_FLOW_1H#XRP":    _BASE_SMART_FLOW,
+    "RESOLUTION_SNIPER":         _BASE_RESOLUTION_SNIPER,
+    "RESOLUTION_SNIPER#BTC#sniper": _BASE_RESOLUTION_SNIPER,
+    "RESOLUTION_SNIPER#ETH#sniper": _BASE_RESOLUTION_SNIPER,
+    "RESOLUTION_SNIPER#SOL#sniper": _BASE_RESOLUTION_SNIPER,
+    "LATE_WINDOW_5MIN":          _BASE_LATE_WINDOW,
+    "LATE_WINDOW_5MIN#BTC#5min": _BASE_LATE_WINDOW,
 }
 
 TWAP_MARCOS_AFECTADOS = {"5min", "15min", "240min"}
