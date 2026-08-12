@@ -4660,5 +4660,6 @@
  "candidato_proxy#GBM_LATE_5M#SOL#BUY_YES#ibs_20mingt": false,
  "candidato_proxy#GBM_LATE_15M_ESPACIO_ATR#XRP#15min#XRP#BUY_NO#volumen_regimenlt": false,
  "candidato_proxy#GBM_LATE_15M_MULTIHORIZONTE#XRP#15min#XRP#BUY_NO#volumen_regimenlt": false,
- "candidato_proxy#GBM_LATE_15M_ESPACIO_ATR#BNB#BUY_YES#sigma_ewma_delta_pctlt": false
+ "candidato_proxy#GBM_LATE_15M_ESPACIO_ATR#BNB#BUY_YES#sigma_ewma_delta_pctlt": false,
+ "candidato_proxy#GBM_LATE_15M_ESPACIO_ATR#BNB#BUY_YES#sigma_hgt": false
 }
