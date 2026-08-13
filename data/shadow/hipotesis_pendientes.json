@@ -2,17 +2,17 @@
   "H-GBM-18H": {
     "nombre": "Bloquear hora 18h UTC en GBM",
     "tipo": "filtro",
-    "umbral": 15,
+    "umbral": "n≥15 y IC<-0.05",
     "accion": "Añadir 18 a GBM_BLACKLIST_HOURS en shadow_predict.py",
     "bloqueante": null,
     "fuente": "builtin",
     "actualizado": "2026-08-13T10:46+00:00",
-    "n": 4,
-    "wins": 0,
-    "ic": -0.0667,
-    "pnl": -3.02,
-    "status": "ACUMULANDO",
-    "rec": "Falta 11 ops más en GBM@18h (IC actual=-0.067)"
+    "n": 119,
+    "wins": 40,
+    "ic": -0.1612,
+    "pnl": -29.87,
+    "status": "LISTA_IMPLEMENTAR",
+    "rec": "Confirma: IC=-0.161 n=119 PNL=-29.87€ → añadir 18 a GBM_BLACKLIST_HOURS"
   },
   "H-IBS-15": {
     "nombre": "IBS-15 como señal de mean-reversion",
@@ -22,30 +22,30 @@
     "bloqueante": null,
     "fuente": "builtin",
     "actualizado": "2026-08-13T10:46+00:00",
-    "n": 1002,
-    "wins": 542,
-    "ic": 0.0408,
-    "pnl": 58.27,
+    "n": 8206,
+    "wins": 5116,
+    "ic": 0.1234,
+    "pnl": 2590.0,
     "status": "LISTA_EVALUAR",
-    "rec": "Spread=0.172: overbought→boost, neutral→filtro | oversold(IBS<0.3): IC=+0.037 n=307 | neutral: IC=-0.053 n=269 | overbought(IBS>0.7): IC=+0.118 n=378",
+    "rec": "Spread=0.161: overbought→boost, neutral→filtro | oversold(IBS<0.3): IC=+0.110 n=2762 | neutral: IC=+0.036 n=2175 | overbought(IBS>0.7): IC=+0.197 n=2763",
     "buckets": {
       "oversold": {
-        "n": 307,
-        "wins": 165,
-        "ic": 0.0372,
-        "pnl": 44.92
+        "n": 2762,
+        "wins": 1685,
+        "ic": 0.11,
+        "pnl": 935.4
       },
       "neutral": {
-        "n": 269,
-        "wins": 120,
-        "ic": -0.0535,
-        "pnl": -41.24
+        "n": 2175,
+        "wins": 1165,
+        "ic": 0.0356,
+        "pnl": 202.06
       },
       "overbought": {
-        "n": 378,
-        "wins": 234,
-        "ic": 0.1184,
-        "pnl": 53.96
+        "n": 2763,
+        "wins": 1926,
+        "ic": 0.1969,
+        "pnl": 1205.32
       }
     }
   },
@@ -57,143 +57,143 @@
     "bloqueante": null,
     "fuente": "builtin",
     "actualizado": "2026-08-13T10:46+00:00",
-    "n": 740,
+    "n": 4170,
     "status": "LISTA_EVALUAR",
     "by_hour": {
       "10": {
-        "n": 5,
-        "wins": 0,
-        "ic": -0.0893,
-        "pnl": -3.76
+        "n": 15,
+        "wins": 4,
+        "ic": -0.1544,
+        "pnl": -6.77
       },
       "11": {
-        "n": 40,
-        "wins": 25,
-        "ic": 0.119,
-        "pnl": 10.24
+        "n": 209,
+        "wins": 118,
+        "ic": 0.064,
+        "pnl": 27.85
       },
       "13": {
-        "n": 42,
-        "wins": 19,
-        "ic": -0.0455,
-        "pnl": 1.1
+        "n": 223,
+        "wins": 127,
+        "ic": 0.0689,
+        "pnl": 39.71
       },
       "14": {
-        "n": 39,
-        "wins": 28,
-        "ic": 0.2073,
-        "pnl": 20.45
+        "n": 214,
+        "wins": 140,
+        "ic": 0.1528,
+        "pnl": 79.34
       },
       "15": {
-        "n": 24,
-        "wins": 10,
-        "ic": -0.0769,
-        "pnl": -3.72
+        "n": 177,
+        "wins": 91,
+        "ic": 0.014,
+        "pnl": 1.14
       },
       "16": {
-        "n": 17,
-        "wins": 9,
-        "ic": 0.0224,
-        "pnl": 7.26
+        "n": 180,
+        "wins": 108,
+        "ic": 0.0989,
+        "pnl": 47.33
       },
       "17": {
-        "n": 24,
-        "wins": 13,
-        "ic": 0.0385,
-        "pnl": 0.28
+        "n": 188,
+        "wins": 104,
+        "ic": 0.0526,
+        "pnl": 9.19
       },
       "19": {
-        "n": 38,
-        "wins": 27,
-        "ic": 0.2,
-        "pnl": 10.15
+        "n": 232,
+        "wins": 138,
+        "ic": 0.094,
+        "pnl": 38.75
       },
       "20": {
-        "n": 41,
-        "wins": 26,
-        "ic": 0.1279,
-        "pnl": 8.0
+        "n": 230,
+        "wins": 134,
+        "ic": 0.0819,
+        "pnl": 25.78
       },
       "21": {
-        "n": 46,
-        "wins": 20,
-        "ic": -0.0625,
-        "pnl": -10.29
+        "n": 195,
+        "wins": 113,
+        "ic": 0.0787,
+        "pnl": 24.85
       },
       "22": {
-        "n": 44,
-        "wins": 18,
-        "ic": -0.087,
-        "pnl": -5.07
+        "n": 230,
+        "wins": 143,
+        "ic": 0.1207,
+        "pnl": 56.97
       },
       "23": {
-        "n": 58,
-        "wins": 16,
-        "ic": -0.2167,
-        "pnl": -13.22
+        "n": 251,
+        "wins": 124,
+        "ic": -0.0059,
+        "pnl": 13.16
       },
       "0": {
-        "n": 46,
-        "wins": 22,
-        "ic": -0.0208,
-        "pnl": -6.24
-      },
-      "2": {
-        "n": 43,
-        "wins": 15,
-        "ic": -0.1444,
-        "pnl": -14.43
+        "n": 207,
+        "wins": 115,
+        "ic": 0.055,
+        "pnl": 25.22
       },
       "1": {
-        "n": 45,
-        "wins": 21,
-        "ic": -0.0319,
-        "pnl": -4.55
+        "n": 230,
+        "wins": 125,
+        "ic": 0.0431,
+        "pnl": 8.02
+      },
+      "2": {
+        "n": 181,
+        "wins": 82,
+        "ic": -0.0464,
+        "pnl": -21.41
       },
       "3": {
-        "n": 25,
-        "wins": 12,
-        "ic": -0.0185,
-        "pnl": -4.12
+        "n": 167,
+        "wins": 91,
+        "ic": 0.0444,
+        "pnl": 23.68
       },
       "4": {
-        "n": 22,
-        "wins": 11,
-        "ic": 0.0,
-        "pnl": -1.52
+        "n": 164,
+        "wins": 91,
+        "ic": 0.0542,
+        "pnl": 11.77
       },
       "5": {
-        "n": 21,
-        "wins": 13,
-        "ic": 0.1087,
-        "pnl": 8.43
+        "n": 148,
+        "wins": 97,
+        "ic": 0.1533,
+        "pnl": 67.38
       },
       "6": {
-        "n": 22,
-        "wins": 13,
-        "ic": 0.0833,
-        "pnl": 8.45
-      },
-      "8": {
-        "n": 31,
-        "wins": 10,
-        "ic": -0.1667,
-        "pnl": -6.7
+        "n": 154,
+        "wins": 88,
+        "ic": 0.0705,
+        "pnl": 44.63
       },
       "7": {
-        "n": 32,
-        "wins": 14,
-        "ic": -0.0588,
-        "pnl": -5.95
+        "n": 198,
+        "wins": 106,
+        "ic": 0.035,
+        "pnl": 23.32
+      },
+      "8": {
+        "n": 172,
+        "wins": 82,
+        "ic": -0.023,
+        "pnl": 7.04
       },
       "12": {
-        "n": 35,
-        "wins": 23,
-        "ic": 0.1486,
-        "pnl": 7.84
+        "n": 202,
+        "wins": 131,
+        "ic": 0.1471,
+        "pnl": 60.84
       }
     },
-    "rec": "H=02h: IC=-0.144 n=43 PNL=-14.43€ → FILTRAR | H=05h: IC=+0.109 n=21 PNL=+8.43€ → BOOST | H=08h: IC=-0.167 n=31 PNL=-6.70€ → FILTRAR | H=11h: IC=+0.119 n=40 PNL=+10.24€ → BOOST | H=12h: IC=+0.149 n=35 PNL=+7.84€ → BOOST | H=14h: IC=+0.207 n=39 PNL=+20.45€ → BOOST | H=19h: IC=+0.200 n=38 PNL=+10.15€ → BOOST | H=20h: IC=+0.128 n=41 PNL=+8.00€ → BOOST | H=23h: IC=-0.217 n=58 PNL=-13.22€ → FILTRAR"
+    "rec": "H=05h: IC=+0.153 n=148 PNL=+67.38€ → BOOST | H=10h: IC=-0.154 n=15 PNL=-6.77€ → FILTRAR | H=12h: IC=+0.147 n=202 PNL=+60.84€ → BOOST | H=14h: IC=+0.153 n=214 PNL=+79.34€ → BOOST | H=22h: IC=+0.121 n=230 PNL=+56.97€ → BOOST"
   },
   "H-WINDOW-MOMENTUM": {
     "nombre": "Momentum de outcome entre ventanas 15min contiguas",
@@ -204,32 +204,35 @@
     "fuente": "builtin",
     "actualizado": "2026-08-13T10:46+00:00",
     "aligned_prev_outcome": {
-      "n": 2,
-      "wins": 2,
-      "ic": 0.025,
-      "pnl": 2.82
+      "n": 183,
+      "wins": 97,
+      "ic": 0.0297,
+      "pnl": 19.01
     },
     "contrary_prev_outcome": {
-      "n": 0,
-      "wins": 0,
-      "ic": 0.0,
-      "pnl": 0
+      "n": 68,
+      "wins": 42,
+      "ic": 0.1143,
+      "pnl": 15.25
     },
-    "gap": 0.025,
+    "gap": -0.0846,
     "status": "ACUMULANDO",
-    "rec": "alineada_con_outcome_prev IC=+0.025 n=2/60 | contraria IC=+0.000 n=0 | gap=+0.025 (umbral 0.08) — verificar independencia de drift_15min/60min antes de actuar"
+    "rec": "alineada_con_outcome_prev IC=+0.030 n=183/60 | contraria IC=+0.114 n=68 | gap=-0.085 (umbral 0.08) — verificar independencia de drift_15min/60min antes de actuar"
   },
   "H-CROSS-ASSET": {
     "nombre": "Cross-asset confirmation GBM+OF BUY_NO",
     "tipo": "kelly_compuesto",
-    "umbral": 20,
+    "umbral": "n_overlaps≥20 y IC_overlap > IC_base + 0.05",
     "accion": "Cambiar _aplicar_kelly_compuesto: match por activo, no market_id",
     "bloqueante": null,
     "fuente": "builtin",
     "actualizado": "2026-08-13T10:46+00:00",
-    "n_overlaps": 5,
+    "n_overlaps": 53,
+    "ic_overlap": 0.044,
+    "ic_base": 0.1023,
+    "boost_estimado": -0.0583,
     "status": "ACUMULANDO",
-    "rec": "Solo 5 ventanas con GBM+OF BUY_NO mismo activo. Necesita n≥20."
+    "rec": "n_overlaps=53, boost estimado=-0.058. Necesita 0 más y boost>0.05"
   },
   "H-OF-PAR": {
     "nombre": "ORDER_FLOW per-pair delta_ratio ranges",
@@ -241,26 +244,72 @@
     "actualizado": "2026-08-13T10:46+00:00",
     "by_pair": {
       "BTC": {
-        "n": 0,
-        "wins": 0,
+        "n": 188,
+        "wins": 94,
         "ic": 0.0,
-        "pnl": 0,
-        "n_with_delta": 0,
-        "status": "ACUMULANDO",
-        "rec": "BTC: 0/50 ops con delta_ratio feature"
+        "pnl": 1.74,
+        "n_with_delta": 187,
+        "ranges": [
+          {
+            "n": 70,
+            "wins": 38,
+            "ic": 0.0417,
+            "pnl": 3.64,
+            "rango": "[0.38,0.41)"
+          },
+          {
+            "n": 62,
+            "wins": 26,
+            "ic": -0.0781,
+            "pnl": -4.87,
+            "rango": "[0.41,0.44)"
+          },
+          {
+            "n": 18,
+            "wins": 9,
+            "ic": 0.0,
+            "pnl": 1.12,
+            "rango": "[0.44,0.46)"
+          }
+        ],
+        "status": "LISTA_EVALUAR",
+        "rec": "BTC: 187 ops con delta_ratio"
       },
       "SOL": {
-        "n": 4,
-        "wins": 2,
-        "ic": 0.0,
-        "pnl": -0.76,
-        "n_with_delta": 4,
-        "status": "ACUMULANDO",
-        "rec": "SOL: 4/50 ops con delta_ratio feature"
+        "n": 248,
+        "wins": 141,
+        "ic": 0.068,
+        "pnl": 17.67,
+        "n_with_delta": 240,
+        "ranges": [
+          {
+            "n": 70,
+            "wins": 40,
+            "ic": 0.0694,
+            "pnl": 4.95,
+            "rango": "[0.38,0.41)"
+          },
+          {
+            "n": 68,
+            "wins": 43,
+            "ic": 0.1286,
+            "pnl": 9.88,
+            "rango": "[0.41,0.44)"
+          },
+          {
+            "n": 26,
+            "wins": 17,
+            "ic": 0.1429,
+            "pnl": 4.27,
+            "rango": "[0.44,0.46)"
+          }
+        ],
+        "status": "LISTA_EVALUAR",
+        "rec": "SOL: 240 ops con delta_ratio"
       }
     },
-    "status": "ACUMULANDO",
-    "rec": "BTC: 0/50 ops con delta_ratio feature | SOL: 4/50 ops con delta_ratio feature"
+    "status": "LISTA_EVALUAR",
+    "rec": "BTC: 187 ops con delta_ratio | SOL: 240 ops con delta_ratio"
   },
   "H-KELLY-HORA": {
     "nombre": "Kelly boost ×1.2 por celda (estrategia#subtype#dirección#hora)",
@@ -272,12 +321,44 @@
     "actualizado": "2026-08-13T10:46+00:00",
     "status": "LISTA_EVALUAR",
     "gate_ok": [
-      "FAVORITO_CONFIRMADO_5MIN_ALTACONVICCION#ETH#5min#BUY_YES#19",
-      "FAVORITO_CONFIRMADO#ETH#5min#BUY_YES#19"
+      "GBM_LATE_15M#BTC#15min#BUY_YES#13",
+      "GBM_LATE_15M#BTC#15min#BUY_YES#15",
+      "GBM_LATE_15M#XRP#15min#BUY_NO#15",
+      "GBM_LATE_15M#XRP#15min#BUY_YES#15",
+      "GBM_LATE_15M#SOL#15min#BUY_YES#17",
+      "GBM_LATE_15M#XRP#15min#BUY_YES#17",
+      "GBM_LATE_15M#XRP#15min#BUY_YES#19",
+      "GBM_LATE_15M#SOL#15min#BUY_YES#19",
+      "GBM_LATE_15M#XRP#15min#BUY_NO#19",
+      "GBM_LATE_15M#BTC#15min#BUY_YES#19",
+      "GBM_LATE_15M#XRP#15min#BUY_NO#13",
+      "GBM_LATE_15M#SOL#15min#BUY_YES#15",
+      "GBM_LATE_15M#XRP#15min#BUY_NO#17",
+      "GBM_LATE_15M_TARDIO#XRP#15min#BUY_YES#15",
+      "GBM_LATE_15M_TARDIO#SOL#15min#BUY_YES#15",
+      "GBM_LATE_15M_TARDIO#XRP#15min#BUY_NO#15",
+      "GBM_LATE_15M_TARDIO#BTC#15min#BUY_NO#15",
+      "GBM_LATE_15M_TARDIO#XRP#15min#BUY_NO#13",
+      "GBM_LATE_15M_TARDIO#XRP#15min#BUY_YES#13",
+      "GBM_LATE_15M_ESPACIO_ATR#BTC#15min#BUY_YES#13",
+      "GBM_LATE_15M_ESPACIO_ATR#XRP#15min#BUY_NO#13",
+      "GBM_LATE_15M_ESPACIO_ATR#BTC#15min#BUY_NO#15",
+      "GBM_LATE_15M_ESPACIO_ATR#SOL#15min#BUY_YES#15",
+      "GBM_LATE_15M_ESPACIO_ATR#ETH#15min#BUY_NO#15",
+      "GBM_LATE_15M_ESPACIO_ATR#XRP#15min#BUY_NO#15",
+      "GBM_LATE_15M_ESPACIO_ATR#ETH#15min#BUY_YES#15",
+      "GBM_LATE_15M_ESPACIO_ATR#XRP#15min#BUY_YES#15",
+      "GBM_LATE_15M_TARDIO#XRP#15min#BUY_NO#17",
+      "GBM_LATE_15M_TARDIO#XRP#15min#BUY_NO#19",
+      "GBM_LATE_15M_TARDIO#XRP#15min#BUY_YES#19",
+      "GBM_LATE_15M_ESPACIO_ATR#XRP#15min#BUY_YES#19",
+      "GBM_LATE_15M_ESPACIO_ATR#BTC#15min#BUY_YES#19",
+      "GBM_LATE_15M_ESPACIO_ATR#XRP#15min#BUY_NO#17",
+      "FAVORITO_CONFIRMADO#BTC#5min#BUY_NO#15"
     ],
-    "n_celdas_trackeadas": 153,
-    "n_celdas_con_gate_completo": 56,
-    "rec": "2 celda(s) pasan gate riguroso completo de 56 evaluadas (n>=40) y 153 trackeadas (n>=15). Detalle: kelly_hora_segmentado.json"
+    "n_celdas_trackeadas": 378,
+    "n_celdas_con_gate_completo": 193,
+    "rec": "34 celda(s) pasan gate riguroso completo de 193 evaluadas (n>=40) y 378 trackeadas (n>=15). Detalle: kelly_hora_segmentado.json"
   },
   "H-60MIN-LIVE": {
     "nombre": "Estrategias 60min → umbral live (IC≥0.08 n≥40)",
@@ -328,12 +409,12 @@
     "bloqueante": null,
     "fuente": "builtin",
     "actualizado": "2026-08-13T10:46+00:00",
-    "n": 31,
-    "wins": 14,
-    "ic": -0.0455,
-    "pnl": -3.23,
-    "status": "ACUMULANDO",
-    "rec": "SOL#15min: n=31/40 IC=-0.045 PNL=-3.23€ (ETA: 9 ops)"
+    "n": 451,
+    "wins": 244,
+    "ic": 0.0408,
+    "pnl": 52.59,
+    "status": "N_ALCANZADO_IC_BAJO",
+    "rec": "SOL#15min: n≥40 pero IC=+0.041 < 0.08 — monitorear"
   },
   "H-WEEKLY": {
     "nombre": "Predicciones semanales de precio por par",
@@ -382,26 +463,26 @@
     "fuente": "builtin",
     "actualizado": "2026-08-13T10:46+00:00",
     "after_win": {
-      "n": 28378,
-      "wins": 18000,
-      "ic": 0.1343,
-      "pnl": 2400.97
+      "n": 76849,
+      "wins": 48349,
+      "ic": 0.1291,
+      "pnl": 11339.34
     },
     "after_1loss": {
-      "n": 17794,
-      "wins": 10370,
-      "ic": 0.0828,
-      "pnl": 361.65
+      "n": 48566,
+      "wins": 28476,
+      "ic": 0.0863,
+      "pnl": 4665.53
     },
     "after_2loss": {
-      "n": 7389,
-      "wins": 3943,
-      "ic": 0.0336,
-      "pnl": -126.7
+      "n": 20048,
+      "wins": 11036,
+      "ic": 0.0505,
+      "pnl": 1140.42
     },
-    "gap": 0.1007,
+    "gap": 0.0786,
     "status": "LISTA_EVALUAR",
-    "rec": "tras_win IC=+0.134 n=28378 | tras_1loss IC=+0.083 n=17794 | tras_2loss IC=+0.034 n=7389/40 | gap=+0.101 (umbral 0.05)"
+    "rec": "tras_win IC=+0.129 n=76849 | tras_1loss IC=+0.086 n=48566 | tras_2loss IC=+0.051 n=20048/40 | gap=+0.079 (umbral 0.05)"
   },
   "H-BTC-LEADS-ETH": {
     "nombre": "ETH/SOL GBM contrario al drift_15min de BTC del mismo ciclo",
@@ -412,20 +493,20 @@
     "fuente": "builtin",
     "actualizado": "2026-08-13T10:46+00:00",
     "aligned_btc": {
-      "n": 76,
-      "wins": 41,
-      "ic": 0.0385,
-      "pnl": 0.34
+      "n": 246,
+      "wins": 130,
+      "ic": 0.0282,
+      "pnl": 6.89
     },
     "contrary_btc": {
-      "n": 35,
-      "wins": 14,
-      "ic": -0.0946,
-      "pnl": -4.89
+      "n": 107,
+      "wins": 50,
+      "ic": -0.0321,
+      "pnl": -5.67
     },
-    "gap": -0.1331,
+    "gap": -0.0603,
     "status": "ACUMULANDO",
-    "rec": "alineado_BTC IC=+0.038 n=76 | contrario_BTC IC=-0.095 n=35/40 | gap=-0.133 (umbral 0.08) — SIN CONFIRMAR independencia de filtros propios de ETH"
+    "rec": "alineado_BTC IC=+0.028 n=246 | contrario_BTC IC=-0.032 n=107/40 | gap=-0.060 (umbral 0.08) — SIN CONFIRMAR independencia de filtros propios de ETH"
   },
   "H-OBI": {
     "nombre": "Orderbook Imbalance como señal",
@@ -491,50 +572,50 @@
   "H-24H-GBM-BUYYES-MADRUGADA": {
     "nombre": "GBM BUY_YES en madrugada europea (05-07h UTC) — señal alcista",
     "tipo": "boost",
-    "umbral": 40,
+    "umbral": "n≥40 en franja 05-07h y IC>+0.08",
     "accion": "Si IC>+0.08 con n≥40 → añadir GBM BUY_YES a subtypes_permitidos_live para horas 05-07h UTC",
     "descripcion": "Patrón detectado 2026-06-30: GBM BUY_YES funciona en horas 05-07h UTC (7-9h Madrid). IC=+0.087 n=14 a las 06h, +0.063 n=11 a las 05h, +0.067 n=17 a las 07h. Hipótesis: apertura europea genera momentum alcista que el GBM captura. La dirección dominante cambia de BUY_NO (madrugada americana 13h) a BUY_YES (apertura europea). Objetivo: cubrir franja horaria 05-07h UTC en el camino hacia operación 24h.",
     "bloqueante": null,
     "fuente": "custom",
     "actualizado": "2026-08-13T10:46+00:00",
-    "n": 27,
-    "wins": 17,
-    "ic": 0.1207,
-    "pnl": 10.56,
-    "status": "ACUMULANDO",
-    "rec": "27/40 ops en el filtro definido (IC actual=+0.121 PNL=+10.56€)"
+    "n": 210,
+    "wins": 125,
+    "ic": 0.0943,
+    "pnl": 68.88,
+    "status": "LISTA_EVALUAR",
+    "rec": "SEÑAL POSITIVA confirmada: IC=+0.094 > 0.08 con n=210 PNL=+68.88€"
   },
   "H-24H-GBM-BUYYES-TARDE": {
     "nombre": "GBM BUY_YES en tarde europea (15-19h UTC) — señal alcista sostenida",
     "tipo": "boost",
-    "umbral": 40,
+    "umbral": "n≥40 en franja 15-19h y IC>+0.08",
     "accion": "Si IC>+0.08 con n≥40 → habilitar GBM BUY_YES en live para horas 15-19h UTC (además del BUY_NO actual)",
     "descripcion": "Patrón detectado 2026-06-30: GBM BUY_YES funciona consistentemente en 15-19h UTC (17-21h Madrid). IC=+0.136 n=7 a las 17h, +0.097 n=7 a las 19h, +0.080 n=8 a las 15h. Franja de sesión americana donde el mercado tiende a subir. Complementa BUY_NO de las 13-14h. Objetivo: cubrir tarde completa 15-19h UTC.",
     "bloqueante": null,
     "fuente": "custom",
     "actualizado": "2026-08-13T10:46+00:00",
-    "n": 16,
-    "wins": 13,
-    "ic": 0.2222,
-    "pnl": 9.72,
-    "status": "ACUMULANDO",
-    "rec": "16/40 ops en el filtro definido (IC actual=+0.222 PNL=+9.72€)"
+    "n": 394,
+    "wins": 211,
+    "ic": 0.0354,
+    "pnl": 25.4,
+    "status": "SEÑAL_DEBIL",
+    "rec": "n=394 IC=+0.035 PNL=+25.40€ — sin señal clara aún (umbral IC: min=0.08 max=None)"
   },
   "H-24H-OF-18H": {
     "nombre": "ORDER_FLOW BUY_NO a las 18h UTC — GBM bloqueado pero OF funciona",
     "tipo": "boost",
-    "umbral": 25,
+    "umbral": "n≥25 y IC>+0.08",
     "accion": "Si IC>+0.08 con n≥25 → eliminar 18h del blacklist ORDER_FLOW (no del GBM) para recuperar esa hora",
     "descripcion": "GBM está en blacklist a las 18h UTC (IC muy negativo). Pero ORDER_FLOW BUY_NO BTC+SOL a las 18h: IC=+0.106 n=11. El blacklist de GBM no debería afectar a OF. Hipótesis: son señales independientes — OF captura flujo real de órdenes mientras GBM falla con el modelo de precios en esa hora. Objetivo: activar OF BUY_NO específicamente a las 18h sin tocar blacklist GBM.",
     "bloqueante": null,
     "fuente": "custom",
     "actualizado": "2026-08-13T10:46+00:00",
-    "n": 0,
-    "wins": 0,
-    "ic": 0.0,
-    "pnl": 0,
-    "status": "ACUMULANDO",
-    "rec": "0/25 ops en el filtro definido (IC actual=+0.000 PNL=+0.00€)"
+    "n": 433,
+    "wins": 233,
+    "ic": 0.0379,
+    "pnl": 13.82,
+    "status": "SEÑAL_DEBIL",
+    "rec": "n=433 IC=+0.038 PNL=+13.82€ — sin señal clara aún (umbral IC: min=0.08 max=None)"
   },
   "H-WEEKLY-BUYNO": {
     "nombre": "WEEKLY_PRICE BUY_NO — dirección dominante con IC muy alto",
@@ -555,34 +636,34 @@
   "H-CUSTOM-GBM-17H-BTC": {
     "nombre": "GBM BTC a las 17h UTC — ¿edge real?",
     "tipo": "boost",
-    "umbral": 15,
+    "umbral": "n≥15 y IC>+0.08",
     "accion": "Boost ×1.2 en GBM BTC a las 17h si se confirma",
     "descripcion": "La hora 17h UTC aparece como la mejor en historial. ¿Se confirma solo en BTC?",
     "bloqueante": null,
     "fuente": "custom",
     "actualizado": "2026-08-13T10:46+00:00",
-    "n": 5,
-    "wins": 2,
-    "ic": -0.0179,
-    "pnl": 0.45,
-    "status": "ACUMULANDO",
-    "rec": "5/15 ops en el filtro definido (IC actual=-0.018 PNL=+0.45€)"
+    "n": 39,
+    "wins": 23,
+    "ic": 0.0854,
+    "pnl": 5.43,
+    "status": "LISTA_EVALUAR",
+    "rec": "SEÑAL POSITIVA confirmada: IC=+0.085 > 0.08 con n=39 PNL=+5.43€"
   },
   "H-CUSTOM-OF-MADRUGADA": {
     "nombre": "ORDER_FLOW de madrugada (0h-6h UTC) BTC+SOL — ¿neutralizar?",
     "tipo": "filtro",
-    "umbral": 30,
+    "umbral": "n≥30 y IC<-0.05",
     "accion": "Mantener bloqueo si IC<-0.05; desbloquear si IC>0 con n≥30",
     "descripcion": "Las horas 0-6h UTC en ORDER_FLOW. El blacklist fue calculado con todos los pares incluyendo los negativos (ETH/XRP/DOGE). ¿Con BTC+SOL sigue siendo negativo?",
     "bloqueante": null,
     "fuente": "custom",
     "actualizado": "2026-08-13T10:46+00:00",
-    "n": 2,
-    "wins": 1,
-    "ic": 0.0,
-    "pnl": -0.73,
-    "status": "ACUMULANDO",
-    "rec": "2/30 ops en el filtro definido (IC actual=+0.000 PNL=-0.73€)"
+    "n": 114,
+    "wins": 67,
+    "ic": 0.0862,
+    "pnl": 14.35,
+    "status": "SEÑAL_DEBIL",
+    "rec": "n=114 IC=+0.086 PNL=+14.35€ — sin señal clara aún (umbral IC: min=None max=-0.05)"
   },
   "H-CUSTOM-GBM-SIGMA-ALTO": {
     "nombre": "GBM con sigma_h alto (>0.002/h) — ¿destruye edge?",
@@ -593,12 +674,12 @@
     "bloqueante": null,
     "fuente": "custom",
     "actualizado": "2026-08-13T10:46+00:00",
-    "n": 749,
-    "wins": 375,
-    "ic": 0.0007,
-    "pnl": 16.88,
+    "n": 4349,
+    "wins": 2431,
+    "ic": 0.059,
+    "pnl": 590.75,
     "status": "SEÑAL_DEBIL",
-    "rec": "n=749 IC=+0.001 PNL=+16.88€ — sin señal clara aún (umbral IC: min=None max=-0.05)"
+    "rec": "n=4349 IC=+0.059 PNL=+590.75€ — sin señal clara aún (umbral IC: min=None max=-0.05)"
   },
   "H-CUSTOM-OF-02H-BTCSOL": {
     "nombre": "ORDER_FLOW H=02h UTC — BTC+SOL solamente (revisar blacklist)",
@@ -609,12 +690,12 @@
     "bloqueante": null,
     "fuente": "custom",
     "actualizado": "2026-08-13T10:46+00:00",
-    "n": 0,
-    "wins": 0,
-    "ic": 0.0,
-    "pnl": 0,
+    "n": 6,
+    "wins": 5,
+    "ic": 0.075,
+    "pnl": 2.93,
     "status": "ACUMULANDO",
-    "rec": "0/15 ops en el filtro definido (IC actual=+0.000 PNL=+0.00€)"
+    "rec": "6/15 ops en el filtro definido (IC actual=+0.075 PNL=+2.93€)"
   },
   "H-CUSTOM-OF-07H-BTCSOL": {
     "nombre": "ORDER_FLOW H=07h UTC — BTC+SOL solamente (revisar blacklist)",
@@ -625,12 +706,12 @@
     "bloqueante": null,
     "fuente": "custom",
     "actualizado": "2026-08-13T10:46+00:00",
-    "n": 0,
-    "wins": 0,
-    "ic": 0.0,
-    "pnl": 0,
+    "n": 12,
+    "wins": 7,
+    "ic": 0.0429,
+    "pnl": 0.95,
     "status": "ACUMULANDO",
-    "rec": "0/20 ops en el filtro definido (IC actual=+0.000 PNL=+0.00€)"
+    "rec": "12/20 ops en el filtro definido (IC actual=+0.043 PNL=+0.95€)"
   },
   "H-CUSTOM-GBM-60MIN-BUYYES": {
     "nombre": "GBM 60min BUY_YES — ¿edge superior al BUY_NO?",
@@ -673,12 +754,12 @@
     "bloqueante": null,
     "fuente": "custom",
     "actualizado": "2026-08-13T10:46+00:00",
-    "n": 20,
-    "wins": 9,
-    "ic": -0.0455,
-    "pnl": -3.84,
-    "status": "SEÑAL_DEBIL",
-    "rec": "n=20 IC=-0.045 PNL=-3.84€ — sin señal clara aún (umbral IC: min=None max=-0.08)"
+    "n": 238,
+    "wins": 94,
+    "ic": -0.1042,
+    "pnl": -46.11,
+    "status": "LISTA_IMPLEMENTAR",
+    "rec": "SEÑAL NEGATIVA confirmada: IC=-0.104 < -0.08 con n=238 PNL=-46.11€"
   },
   "H-CUSTOM-BUYYES-15MIN-POSTFILTRO": {
     "nombre": "BUY_YES #15min con filtro drift_60min activo — ¿funciona en forward?",
@@ -689,12 +770,12 @@
     "bloqueante": null,
     "fuente": "custom",
     "actualizado": "2026-08-13T10:46+00:00",
-    "n": 152,
-    "wins": 91,
-    "ic": 0.0974,
-    "pnl": 9.75,
+    "n": 1628,
+    "wins": 921,
+    "ic": 0.0656,
+    "pnl": 226.52,
     "status": "SEÑAL_DEBIL",
-    "rec": "n=152 IC=+0.097 PNL=+9.75€ — sin señal clara aún (umbral IC: min=0.1 max=None)"
+    "rec": "n=1628 IC=+0.066 PNL=+226.52€ — sin señal clara aún (umbral IC: min=0.1 max=None)"
   },
   "H-CUSTOM-GBM-SIGMA-BAJO": {
     "nombre": "GBM con sigma_h muy bajo (<0.0018/h, p1 real) — ¿mercado dormido = más predecible?",
@@ -705,12 +786,12 @@
     "bloqueante": null,
     "fuente": "custom",
     "actualizado": "2026-08-13T10:46+00:00",
-    "n": 31,
-    "wins": 13,
-    "ic": -0.0758,
-    "pnl": -5.69,
+    "n": 60,
+    "wins": 33,
+    "ic": 0.0484,
+    "pnl": 10.77,
     "status": "SEÑAL_DEBIL",
-    "rec": "n=31 IC=-0.076 PNL=-5.69€ — sin señal clara aún (umbral IC: min=0.1 max=None)"
+    "rec": "n=60 IC=+0.048 PNL=+10.77€ — sin señal clara aún (umbral IC: min=0.1 max=None)"
   },
   "H-CUSTOM-BTC15-TENDENCIA": {
     "nombre": "BTC#15min — ¿el edge está decayendo?",
@@ -721,28 +802,28 @@
     "bloqueante": null,
     "fuente": "custom",
     "actualizado": "2026-08-13T10:46+00:00",
-    "n": 76,
-    "wins": 40,
-    "ic": 0.0256,
-    "pnl": -8.53,
+    "n": 676,
+    "wins": 393,
+    "ic": 0.0811,
+    "pnl": 89.61,
     "status": "SEÑAL_DEBIL",
-    "rec": "n=76 IC=+0.026 PNL=-8.53€ — sin señal clara aún (umbral IC: min=None max=0.02)"
+    "rec": "n=676 IC=+0.081 PNL=+89.61€ — sin señal clara aún (umbral IC: min=None max=0.02)"
   },
   "H-CUSTOM-DRIFT15-ZONA-MUERTA": {
     "nombre": "GBM#15min drift_15min ∈ [-0.3,+0.3] — zona muerta de señal",
     "tipo": "filtro",
-    "umbral": 50,
+    "umbral": "n≥50 en zona muerta y IC<-0.03",
     "accion": "Filtrar señales GBM#15min cuando drift_15min ∈ [-0.3, +0.3] — validar con n≥50 antes de implementar",
     "descripcion": "Análisis n=127 GBM#15min: cuando drift_15min está entre -0.3 y +0.3 (mercado sin dirección clara) el IC es negativo (-0.043). Cuando drift>0.3 IC=+0.100 (n=28). Cuando drift<-1 IC=+0.048 (reversión). La señal requiere mercado con dirección clara.",
     "bloqueante": null,
     "fuente": "custom",
     "actualizado": "2026-08-13T10:46+00:00",
-    "n": 0,
-    "wins": 0,
-    "ic": 0.0,
-    "pnl": 0,
-    "status": "ACUMULANDO",
-    "rec": "0/50 ops en el filtro definido (IC actual=+0.000 PNL=+0.00€)"
+    "n": 80,
+    "wins": 38,
+    "ic": -0.0244,
+    "pnl": -1.28,
+    "status": "SEÑAL_DEBIL",
+    "rec": "n=80 IC=-0.024 PNL=-1.28€ — sin señal clara aún (umbral IC: min=None max=-0.03)"
   },
   "H-CUSTOM-DRIFT15-MOMENTUM": {
     "nombre": "GBM#15min drift_15min > 0.3 — zona de momentum (señal fuerte)",
@@ -753,76 +834,76 @@
     "bloqueante": null,
     "fuente": "custom",
     "actualizado": "2026-08-13T10:46+00:00",
-    "n": 191,
-    "wins": 111,
-    "ic": 0.0803,
-    "pnl": 15.39,
+    "n": 2126,
+    "wins": 1257,
+    "ic": 0.0912,
+    "pnl": 373.63,
     "status": "LISTA_EVALUAR",
-    "rec": "SEÑAL POSITIVA confirmada: IC=+0.080 > 0.08 con n=191 PNL=+15.39€"
+    "rec": "SEÑAL POSITIVA confirmada: IC=+0.091 > 0.08 con n=2126 PNL=+373.63€"
   },
   "H-CUSTOM-LONGSHOT-BIAS": {
     "nombre": "Longshot bias — ¿mejor IC cuando py_mkt < 0.20 o > 0.80?",
     "tipo": "boost",
-    "umbral": 30,
+    "umbral": "n≥30 y IC>+0.10",
     "accion": "Si IC>0.10 con n≥30 en mercados extremos → boost ×1.2 en BUY_NO cuando py_mkt<0.20",
     "descripcion": "Jon-Becker repo documenta formalmente: contratos a 1-20 cents tienen win_rate < precio implícito (compradores pierden sistemáticamente en longshots). En nuestro sistema: cuando py_mkt<0.20 el GBM predice BUY_NO con edge estructural adicional al del modelo. ¿Se confirma en nuestros datos? Buscar en feature pct_spot_vs_ref si los mercados extremos tienen mejor IC en BUY_NO.",
     "bloqueante": null,
     "fuente": "custom",
     "actualizado": "2026-08-13T10:46+00:00",
-    "n": 14,
-    "wins": 4,
-    "ic": -0.1312,
-    "pnl": -1.33,
-    "status": "ACUMULANDO",
-    "rec": "14/30 ops en el filtro definido (IC actual=-0.131 PNL=-1.33€)"
+    "n": 33,
+    "wins": 9,
+    "ic": -0.2143,
+    "pnl": -4.65,
+    "status": "SEÑAL_DEBIL",
+    "rec": "n=33 IC=-0.214 PNL=-4.65€ — sin señal clara aún (umbral IC: min=0.1 max=None)"
   },
   "H-CUSTOM-ETH15-REVERSION": {
     "nombre": "ETH#15min con drift_15min < -1 — ¿mean reversion?",
     "tipo": "boost",
-    "umbral": 20,
+    "umbral": "n≥20 y IC>+0.08",
     "accion": "Si ETH drift<-1 confirma IC>0.08 con n≥20 → boost ×1.1 en ETH#15min cuando drift_15min<-1",
     "descripcion": "ETH y BTC tienen patrones opuestos: BTC funciona con momentum (drift>0.3). ETH funciona con reversión (drift<-1): 9/14 (64%) IC=+0.087. La hipótesis es que ETH tiene más mean-reversion que BTC en 15min.",
     "bloqueante": null,
     "fuente": "custom",
     "actualizado": "2026-08-13T10:46+00:00",
-    "n": 8,
-    "wins": 5,
-    "ic": 0.04,
-    "pnl": 3.5,
-    "status": "ACUMULANDO",
-    "rec": "8/20 ops en el filtro definido (IC actual=+0.040 PNL=+3.50€)"
+    "n": 142,
+    "wins": 77,
+    "ic": 0.0417,
+    "pnl": 13.9,
+    "status": "SEÑAL_DEBIL",
+    "rec": "n=142 IC=+0.042 PNL=+13.90€ — sin señal clara aún (umbral IC: min=0.08 max=None)"
   },
   "H-CUSTOM-GBM-09H": {
     "nombre": "GBM a las 09h UTC — bloqueada 2026-06-29",
     "tipo": "filtro",
-    "umbral": 25,
+    "umbral": "n≥25 para confirmar el bloqueo es necesario",
     "accion": "Si IC sube a >-0.05 con n≥30 → evaluar desbloquear. Si se mantiene <-0.10 → confirmar bloqueo permanente.",
     "descripcion": "IC=-0.158 n=19 PNL=-11.62€. Bloqueada manualmente el 2026-06-29 añadiendo hora 9 a meta.gbm_blacklist_hours_auto. Esta hipótesis monitorea que el IC siga siendo negativo para justificar el bloqueo.",
     "bloqueante": null,
     "fuente": "custom",
     "actualizado": "2026-08-13T10:46+00:00",
-    "n": 13,
-    "wins": 4,
-    "ic": -0.1083,
-    "pnl": -3.98,
-    "status": "ACUMULANDO",
-    "rec": "13/25 ops en el filtro definido (IC actual=-0.108 PNL=-3.98€)"
+    "n": 63,
+    "wins": 27,
+    "ic": -0.0692,
+    "pnl": -6.85,
+    "status": "SEÑAL_DEBIL",
+    "rec": "n=63 IC=-0.069 PNL=-6.85€ — sin señal clara aún (umbral IC: min=None max=-0.1)"
   },
   "H-CUSTOM-GBM-10H": {
     "nombre": "GBM a las 10h UTC — ¿blacklist necesario?",
     "tipo": "filtro",
-    "umbral": 15,
+    "umbral": "n≥15 y IC<-0.08",
     "accion": "Si IC<-0.08 con n≥15 → añadir 10h a meta.gbm_blacklist_hours_auto en strategy_params.json",
     "descripcion": "IC=-0.175 n=14 PNL=-7.70€. Muy cercano al umbral n≥15 para bloquear. Si IC<-0.08 con n≥15, considerar añadir al blacklist (igual que se hizo con 09h).",
     "bloqueante": null,
     "fuente": "custom",
     "actualizado": "2026-08-13T10:46+00:00",
-    "n": 2,
-    "wins": 2,
-    "ic": 0.025,
-    "pnl": 0.97,
-    "status": "ACUMULANDO",
-    "rec": "2/15 ops en el filtro definido (IC actual=+0.025 PNL=+0.97€)"
+    "n": 27,
+    "wins": 9,
+    "ic": -0.1552,
+    "pnl": -10.44,
+    "status": "LISTA_IMPLEMENTAR",
+    "rec": "SEÑAL NEGATIVA confirmada: IC=-0.155 < -0.08 con n=27 PNL=-10.44€"
   },
   "H-FUNDING-HIGH-BUYNO": {
     "nombre": "Funding rate alto (>p90 real ≈0.009%/8h) → BUY_NO tiene más edge",
@@ -833,12 +914,12 @@
     "bloqueante": null,
     "fuente": "custom",
     "actualizado": "2026-08-13T10:46+00:00",
-    "n": 43,
-    "wins": 20,
-    "ic": -0.0333,
-    "pnl": 2.1,
-    "status": "SEÑAL_DEBIL",
-    "rec": "n=43 IC=-0.033 PNL=+2.10€ — sin señal clara aún (umbral IC: min=0.08 max=None)"
+    "n": 210,
+    "wins": 126,
+    "ic": 0.0991,
+    "pnl": 51.61,
+    "status": "LISTA_EVALUAR",
+    "rec": "SEÑAL POSITIVA confirmada: IC=+0.099 > 0.08 con n=210 PNL=+51.61€"
   },
   "H-FUNDING-NEGATIVE-BUYYES": {
     "nombre": "Funding rate negativo (<-0.01%/8h) → BUY_YES tiene más edge (short squeeze)",
@@ -859,18 +940,18 @@
   "H-LATE-WINDOW-5MIN": {
     "nombre": "Late-window BTC 5min — arbitraje timing vs Polymarket",
     "tipo": "nueva_estrategia",
-    "umbral": 30,
+    "umbral": "n≥30 y IC>+0.05",
     "accion": "Si IC≥0.08 con n≥30 → proponer pasar a live con stake mínimo (0.50€). Si IC<0 con n≥30 → el lag de Polymarket en BTC es insuficiente.",
     "descripcion": "Inspirado en VyvanseWithMarijuana (36.5% ROI, $42k vol). A T+160-270s dentro de una ventana BTC 5min, si BTC ya se movió >0.3%, Polymarket no ha actualizado precio → edge estructural. Estrategia LATE_WINDOW_5MIN en shadow hasta n≥30. FIX 2026-07-02: la estrategia llevaba 0 predicciones desde su creacion porque HORIZONTE_MIN_HORAS=0.05 (3min) descartaba todo mercado a <3min de expirar — y su zona de entrada (160-270s de una ventana de 5min) deja 30-140s restantes, siempre bajo el suelo. Corregido en shadow_predict (zona late-window marcada _solo_late, 30s-3min, solo evaluada por esta estrategia). El reloj de acumulacion empieza de verdad hoy. Contexto extra: el estudio de ballenas de hoy confirma que comprar el lado ganador a mitad/final de ventana es el playbook comun de los 3 mayores ganadores verificados de estos mercados (Bonereaper +$19.9k/mes, wowitsamazing +$10k/mes, zhangfan151 +$8.7k/mes).",
     "bloqueante": null,
     "fuente": "custom",
     "actualizado": "2026-08-13T10:46+00:00",
-    "n": 2,
-    "wins": 1,
-    "ic": 0.0,
-    "pnl": -0.22,
-    "status": "ACUMULANDO",
-    "rec": "2/30 ops en el filtro definido (IC actual=+0.000 PNL=-0.22€)"
+    "n": 395,
+    "wins": 173,
+    "ic": -0.0617,
+    "pnl": -6.9,
+    "status": "SEÑAL_DEBIL",
+    "rec": "n=395 IC=-0.062 PNL=-6.90€ — sin señal clara aún (umbral IC: min=0.08 max=None)"
   },
   "H-DVOL-SPIKE-BUYNO": {
     "nombre": "DVOL spike (sigma_h alto) → BUY_NO tiene más edge (panic regime)",
@@ -881,12 +962,12 @@
     "bloqueante": null,
     "fuente": "custom",
     "actualizado": "2026-08-13T10:46+00:00",
-    "n": 114,
-    "wins": 71,
-    "ic": 0.1207,
-    "pnl": 35.39,
-    "status": "LISTA_EVALUAR",
-    "rec": "SEÑAL POSITIVA confirmada: IC=+0.121 > 0.1 con n=114 PNL=+35.39€"
+    "n": 2199,
+    "wins": 1262,
+    "ic": 0.0738,
+    "pnl": 350.95,
+    "status": "SEÑAL_DEBIL",
+    "rec": "n=2199 IC=+0.074 PNL=+350.95€ — sin señal clara aún (umbral IC: min=0.1 max=None)"
   },
   "H-CUSTOM-POLY-DRIFT-CONFIRM": {
     "nombre": "poly_drift_5obs: ¿el precio YES interno de Polymarket confirma nuestra señal?",
@@ -897,28 +978,28 @@
     "bloqueante": null,
     "fuente": "custom",
     "actualizado": "2026-08-13T10:46+00:00",
-    "n": 106,
-    "wins": 55,
-    "ic": 0.0185,
-    "pnl": -2.8,
+    "n": 777,
+    "wins": 441,
+    "ic": 0.0674,
+    "pnl": 84.24,
     "status": "SEÑAL_DEBIL",
-    "rec": "n=106 IC=+0.018 PNL=-2.80€ — sin señal clara aún (umbral IC: min=0.08 max=None)"
+    "rec": "n=777 IC=+0.067 PNL=+84.24€ — sin señal clara aún (umbral IC: min=0.08 max=None)"
   },
   "H-CUSTOM-OF-VOLUMEN-ALTO": {
     "nombre": "ORDER_FLOW_5M con total_vol_5m alto — ¿volumen extremo mejora el IC?",
     "tipo": "boost",
-    "umbral": 40,
+    "umbral": "n≥40 y IC>+0.08",
     "accion": "Si IC_volumen_alto > IC_baseline + 0.05 con n≥40 → boost ×1.1 en ORDER_FLOW_5M cuando total_vol_5m>100000",
     "descripcion": "Inspirado en un artículo sobre 'volume trading strategy' (mean-reversion en SPY): la idea es que un mismo movimiento de precio con volumen inusualmente alto refleja pánico/liquidación forzada y tiene más probabilidad de revertir que el mismo movimiento con volumen normal. No es transplantable tal cual (esa estrategia opera en barras diarias de SPY, nosotros en ventanas de 15-60min de cripto), pero el feature total_vol_5m ya se captura en cada predicción de ORDER_FLOW_5M (shadow_predict.py) y nunca se ha usado como filtro independiente — solo sirve de denominador para calcular delta_ratio. Hipótesis: dentro de las señales que ya pasan el filtro de delta_ratio, un total_vol_5m alto (volumen real, no solo desequilibrio) mejora el IC. Distribución real en predictions_*.csv (n=843): mediana=1696, p75=108522 (muy asimétrica) — se usa p75 como umbral de 'volumen alto'.",
     "bloqueante": null,
     "fuente": "custom",
     "actualizado": "2026-08-13T10:46+00:00",
-    "n": 6,
-    "wins": 3,
-    "ic": 0.0,
-    "pnl": -0.13,
-    "status": "ACUMULANDO",
-    "rec": "6/40 ops en el filtro definido (IC actual=+0.000 PNL=-0.13€)"
+    "n": 399,
+    "wins": 196,
+    "ic": -0.0087,
+    "pnl": -9.39,
+    "status": "SEÑAL_DEBIL",
+    "rec": "n=399 IC=-0.009 PNL=-9.39€ — sin señal clara aún (umbral IC: min=0.08 max=None)"
   },
   "H-CUSTOM-CROSS-WINDOW-SPREAD-POS": {
     "nombre": "GBM 15min/60min: spread positivo alto de precio_yes contra la ventana relacionada",
@@ -929,12 +1010,12 @@
     "bloqueante": null,
     "fuente": "custom",
     "actualizado": "2026-08-13T10:46+00:00",
-    "n": 54,
-    "wins": 31,
-    "ic": 0.0714,
-    "pnl": -3.0,
-    "status": "SEÑAL_DEBIL",
-    "rec": "n=54 IC=+0.071 PNL=-3.00€ — sin señal clara aún (umbral IC: min=0.08 max=None)"
+    "n": 343,
+    "wins": 244,
+    "ic": 0.2101,
+    "pnl": 59.85,
+    "status": "LISTA_EVALUAR",
+    "rec": "SEÑAL POSITIVA confirmada: IC=+0.210 > 0.08 con n=343 PNL=+59.85€"
   },
   "H-CUSTOM-CROSS-WINDOW-SPREAD-NEG": {
     "nombre": "GBM 15min/60min: spread negativo alto de precio_yes contra la ventana relacionada",
@@ -945,12 +1026,12 @@
     "bloqueante": null,
     "fuente": "custom",
     "actualizado": "2026-08-13T10:46+00:00",
-    "n": 43,
-    "wins": 26,
-    "ic": 0.1,
-    "pnl": 11.37,
-    "status": "LISTA_EVALUAR",
-    "rec": "SEÑAL POSITIVA confirmada: IC=+0.100 > 0.08 con n=43 PNL=+11.37€"
+    "n": 309,
+    "wins": 166,
+    "ic": 0.037,
+    "pnl": 69.08,
+    "status": "SEÑAL_DEBIL",
+    "rec": "n=309 IC=+0.037 PNL=+69.08€ — sin señal clara aún (umbral IC: min=0.08 max=None)"
   },
   "H-CUSTOM-MOON-LLENA": {
     "nombre": "Fase lunar: ¿rendimiento peor cerca de luna llena?",
@@ -961,12 +1042,12 @@
     "bloqueante": null,
     "fuente": "custom",
     "actualizado": "2026-08-13T10:46+00:00",
-    "n": 571,
-    "wins": 368,
-    "ic": 0.144,
-    "pnl": 1.44,
+    "n": 11007,
+    "wins": 6681,
+    "ic": 0.107,
+    "pnl": 3126.54,
     "status": "SEÑAL_DEBIL",
-    "rec": "n=571 IC=+0.144 PNL=+1.44€ — sin señal clara aún (umbral IC: min=None max=-0.03)"
+    "rec": "n=11007 IC=+0.107 PNL=+3126.54€ — sin señal clara aún (umbral IC: min=None max=-0.03)"
   },
   "H-CUSTOM-MERCURY-RETROGRADO": {
     "nombre": "Mercurio retrógrado: ¿rendimiento peor durante la ventana?",
@@ -977,12 +1058,12 @@
     "bloqueante": null,
     "fuente": "custom",
     "actualizado": "2026-08-13T10:46+00:00",
-    "n": 1792,
-    "wins": 1091,
-    "ic": 0.1087,
-    "pnl": 195.82,
+    "n": 27547,
+    "wins": 16894,
+    "ic": 0.1133,
+    "pnl": 6842.82,
     "status": "SEÑAL_DEBIL",
-    "rec": "n=1792 IC=+0.109 PNL=+195.82€ — sin señal clara aún (umbral IC: min=None max=-0.03)"
+    "rec": "n=27547 IC=+0.113 PNL=+6842.82€ — sin señal clara aún (umbral IC: min=None max=-0.03)"
   },
   "H-CUSTOM-SMART-MONEY-CONSENSUS": {
     "nombre": "Consenso de wallets 'smart money' — ¿confirma nuestra dirección?",
@@ -993,28 +1074,28 @@
     "bloqueante": null,
     "fuente": "custom",
     "actualizado": "2026-08-13T10:46+00:00",
-    "n": 110,
-    "wins": 46,
-    "ic": -0.0804,
-    "pnl": -15.93,
+    "n": 666,
+    "wins": 360,
+    "ic": 0.0404,
+    "pnl": 54.47,
     "status": "SEÑAL_DEBIL",
-    "rec": "n=110 IC=-0.080 PNL=-15.93€ — sin señal clara aún (umbral IC: min=0.08 max=None)"
+    "rec": "n=666 IC=+0.040 PNL=+54.47€ — sin señal clara aún (umbral IC: min=0.08 max=None)"
   },
   "H-CUSTOM-OF-EDGE-ALTO": {
     "nombre": "ORDER_FLOW_5M: edge alto (>0.20) rinde mejor que edge cerca del suelo",
     "tipo": "filtro",
-    "umbral": 80,
+    "umbral": "n≥80 en cada mitad (bajo/alto) para confirmar con más margen que el análisis inicial",
     "accion": "Si se confirma con n≥80 y el gap se mantiene ≥0.03 → subir EDGE_MINIMO solo para ORDER_FLOW_5M a ~0.20 (o escalar Kelly con la magnitud del edge)",
     "descripcion": "Analizado 2026-07-01 sobre 794 resoluciones de ORDER_FLOW_5M: edge_neto en [0.025,0.198) -> IC=-0.009 (n=397, PNL=-10.49€) vs edge_neto en [0.198,0.385] -> IC=+0.029 (n=397, PNL=+16.43€). Comprobado que NO es un efecto general: en UPDOWN_GBM el patrón se invierte (edge bajo IC=-0.002 vs edge alto IC=-0.033), así que este filtro debe quedar scoped solo a ORDER_FLOW_5M, no aplicarse a otras estrategias. CORREGIDO 2026-07-01 (mismo día, encontrado por auditoría): el filtro original usaba 'edge_neto' con solo feature_lo, pero edge_neto está firmado por dirección (negativo en BUY_NO, positivo en BUY_YES) y ORDER_FLOW_5M solo genera BUY_NO desde 2026-06-25 — el filtro nunca podía matchear ningún BUY_NO real, solo el remanente BUY_YES histórico de antes del 25-jun (n=151, datos muertos, no crecen hacia adelante). Cambiado a 'edge_direccional' (siempre positivo, = abs(edge_neto)) + decision=BUY_NO explícito. Con el fix: n=227, IC=+0.0502, PNL=+19.15€ — señal real y viva.",
     "bloqueante": null,
     "fuente": "custom",
     "actualizado": "2026-08-13T10:46+00:00",
-    "n": 72,
-    "wins": 48,
-    "ic": 0.1622,
-    "pnl": 20.45,
-    "status": "ACUMULANDO",
-    "rec": "72/80 ops en el filtro definido (IC actual=+0.162 PNL=+20.45€)"
+    "n": 464,
+    "wins": 249,
+    "ic": 0.0365,
+    "pnl": 23.02,
+    "status": "LISTA_EVALUAR",
+    "rec": "SEÑAL POSITIVA confirmada: IC=+0.036 > 0.02 con n=464 PNL=+23.02€"
   },
   "H-CUSTOM-PRICETARGET-BUYYES-MALO": {
     "nombre": "PRICE_TARGET_GBM BUY_YES estructuralmente roto (BUY_NO no)",
@@ -1073,12 +1154,12 @@
     "bloqueante": null,
     "fuente": "custom",
     "actualizado": "2026-08-13T10:46+00:00",
-    "n": 487,
-    "wins": 242,
-    "ic": -0.0031,
-    "pnl": -8.89,
+    "n": 2007,
+    "wins": 1081,
+    "ic": 0.0386,
+    "pnl": 188.44,
     "status": "SEÑAL_DEBIL",
-    "rec": "n=487 IC=-0.003 PNL=-8.89€ — sin señal clara aún (umbral IC: min=None max=-0.05)"
+    "rec": "n=2007 IC=+0.039 PNL=+188.44€ — sin señal clara aún (umbral IC: min=None max=-0.05)"
   },
   "H-CUSTOM-LATE-ENTRY-15MIN": {
     "nombre": "Entrada tardía en ventanas 15min (T_h<0.2) — el edge vive al final de la ventana",
@@ -1089,44 +1170,44 @@
     "bloqueante": null,
     "fuente": "custom",
     "actualizado": "2026-08-13T10:46+00:00",
-    "n": 205,
-    "wins": 132,
-    "ic": 0.1425,
-    "pnl": 43.94,
+    "n": 1797,
+    "wins": 1192,
+    "ic": 0.1631,
+    "pnl": 602.69,
     "status": "LISTA_EVALUAR",
-    "rec": "SEÑAL POSITIVA confirmada: IC=+0.142 > 0.1 con n=205 PNL=+43.94€"
+    "rec": "SEÑAL POSITIVA confirmada: IC=+0.163 > 0.1 con n=1797 PNL=+602.69€"
   },
   "H-CUSTOM-BUYNO-LONGSHOT-15MIN": {
     "nombre": "BUY_NO longshot en 15min (py_mkt≥0.55) — comprar NO barato pierde",
     "tipo": "filtro",
-    "umbral": 40,
+    "umbral": "n≥40 y IC<-0.10",
     "accion": "Si confirma → filtro causal en shadow_predict: skip BUY_NO en #15min cuando py_mkt≥0.55 (equivale a exigir que NO sea favorito o moneda justa)",
     "descripcion": "Detectado 2026-07-02: GBM#15min BUY_NO con precio_yes_mercado≥0.55 (NO cotiza <0.45, es underdog) IC=-0.333 n=21 PNL=-9.03€, mientras BUY_NO en zona moneda py∈[0.45,0.55) IC=+0.162 n=167 PNL=+31.94€. Es el mismo favorite-longshot bias que documenta Jon-Becker, pero aplicado a nuestro lado NO: cuando el mercado ya cree que sube, comprar NO barato es apostar contra el favorito y pierde sistemáticamente. Complementa H-CUSTOM-LONGSHOT-BIAS (que mide el lado py<0.20 y va mal: IC=-0.133 n=16 — coherente con esta).",
     "bloqueante": null,
     "fuente": "custom",
     "actualizado": "2026-08-13T10:46+00:00",
-    "n": 10,
-    "wins": 1,
-    "ic": -0.1667,
-    "pnl": -3.87,
-    "status": "ACUMULANDO",
-    "rec": "10/40 ops en el filtro definido (IC actual=-0.167 PNL=-3.87€)"
+    "n": 93,
+    "wins": 41,
+    "ic": -0.0579,
+    "pnl": 16.27,
+    "status": "SEÑAL_DEBIL",
+    "rec": "n=93 IC=-0.058 PNL=+16.27€ — sin señal clara aún (umbral IC: min=None max=-0.1)"
   },
   "H-CUSTOM-XRP15-BUYNO-LIVE": {
     "nombre": "XRP#15min BUY_NO — candidato live nº2 (detrás de ETH#15min)",
     "tipo": "boost",
-    "umbral": 50,
+    "umbral": "n≥50 y IC>+0.10 (barra live es n≥40 IC≥0.08; se exige margen porque el n=35 del descubrimiento está incluido)",
     "accion": "Si confirma con n≥50 → proponer añadir XRP#15min a la operativa live (ya cumple estrategias_permitidas_live=UPDOWN_GBM; revisar liquidez del libro XRP antes)",
     "descripcion": "Detectado 2026-07-02: XRP#15min BUY_NO IC=+0.257 n=35 PNL=+8.53€ (vs BUY_YES IC=-0.143 n=21 — mismo patrón direccional que ETH). Además el postmortem ya le descubrió patrón ganador propio: sigma_h<0.0125 → IC=+0.200 n=18. XRP es el único par además de ETH con IC positivo sostenido en 15min. Objetivo: segundo subtype live para diversificar — ETH#15min es hoy la única señal con dinero real y un solo subtype es fragilidad estructural (si su edge decae como pasó con BTC#15min, live se queda a cero).",
     "bloqueante": null,
     "fuente": "custom",
     "actualizado": "2026-08-13T10:46+00:00",
-    "n": 39,
-    "wins": 25,
-    "ic": 0.1341,
-    "pnl": 10.97,
-    "status": "ACUMULANDO",
-    "rec": "39/50 ops en el filtro definido (IC actual=+0.134 PNL=+10.97€)"
+    "n": 518,
+    "wins": 320,
+    "ic": 0.1173,
+    "pnl": 165.0,
+    "status": "LISTA_EVALUAR",
+    "rec": "SEÑAL POSITIVA confirmada: IC=+0.117 > 0.1 con n=518 PNL=+165.00€"
   },
   "H-CUSTOM-DAILY-BUYNO": {
     "nombre": "UPDOWN_GBM#daily BUY_NO — el sesgo anti-YES amplificado en ventanas diarias",
@@ -1147,18 +1228,18 @@
   "H-CUSTOM-BTC15-TARDE": {
     "nombre": "BTC#15min en tarde UTC (hora>=16) — el bolsillo rentable dentro de un subtipo mediocre",
     "tipo": "boost",
-    "umbral": 50,
+    "umbral": "n>=50 y IC>+0.10 en forward",
     "accion": "Si confirma con n>=50 → candidato live acotado a horas 16-23 UTC (la ventana 15:00-21:30 Madrid ya cubre 14-19:30 UTC, encaja); si ademas H-KELLY-HORA confirma → boost conjunto",
     "descripcion": "Detectado 2026-07-02 al analizar si BTC#15min es rescatable en vez de desactivarla: sobre los supervivientes a los filtros causales actuales, hora_utc>=16 da IC=+0.385 n=26 PNL=+4.16€, mientras el agregado del subtipo es IC=-0.044 n=159. Convergen 3 señales independientes: el patron ganador del postmortem (BUY_YES hora>17 IC=+0.125 n=22), H-KELLY-HORA (17h IC=+0.221 n=41 global) y este split. Ademas el tercio temporal reciente (30-jun a 2-jul, ya con filtros activos) esta en IC=+0.057 — el 'declive' de H-CUSTOM-BTC15-TENDENCIA mezclaba historia pre-filtros. CAVEAT: n=26 y encontrado explorando varios splits (riesgo de comparaciones multiples) — la convergencia con las otras 2 señales mitiga pero no elimina; exigir confirmacion forward.",
     "bloqueante": null,
     "fuente": "custom",
     "actualizado": "2026-08-13T10:46+00:00",
-    "n": 12,
-    "wins": 9,
-    "ic": 0.1286,
-    "pnl": 3.19,
-    "status": "ACUMULANDO",
-    "rec": "12/50 ops en el filtro definido (IC actual=+0.129 PNL=+3.19€)"
+    "n": 292,
+    "wins": 167,
+    "ic": 0.0714,
+    "pnl": 12.64,
+    "status": "SEÑAL_DEBIL",
+    "rec": "n=292 IC=+0.071 PNL=+12.64€ — sin señal clara aún (umbral IC: min=0.1 max=None)"
   },
   "H-CUSTOM-ETH15-BUYNO-PRECIO-ALTO": {
     "nombre": "ETH#15min BUY_NO con precio_yes>0.55 pierde (NO longshot contra favorito)",
@@ -1169,12 +1250,12 @@
     "bloqueante": null,
     "fuente": "custom",
     "actualizado": "2026-08-13T10:46+00:00",
-    "n": 0,
-    "wins": 0,
-    "ic": 0.0,
-    "pnl": 0,
+    "n": 10,
+    "wins": 4,
+    "ic": -0.0417,
+    "pnl": -4.06,
     "status": "ACUMULANDO",
-    "rec": "0/20 ops en el filtro definido (IC actual=+0.000 PNL=+0.00€)"
+    "rec": "10/20 ops en el filtro definido (IC actual=-0.042 PNL=-4.06€)"
   },
   "H-PRECIO-YES-BARATO": {
     "nombre": "BUY_YES con precio de mercado 0.30-0.40 — mercado infravalora YES",
@@ -1185,12 +1266,12 @@
     "bloqueante": null,
     "fuente": "custom",
     "actualizado": "2026-08-13T10:46+00:00",
-    "n": 584,
-    "wins": 222,
-    "ic": -0.1195,
-    "pnl": 80.23,
+    "n": 2119,
+    "wins": 860,
+    "ic": -0.0941,
+    "pnl": 424.93,
     "status": "SEÑAL_DEBIL",
-    "rec": "n=584 IC=-0.119 PNL=+80.23€ — sin señal clara aún (umbral IC: min=0.08 max=None)"
+    "rec": "n=2119 IC=-0.094 PNL=+424.93€ — sin señal clara aún (umbral IC: min=0.08 max=None)"
   },
   "H-CUSTOM-LATE15-PHOTO-FINISH": {
     "nombre": "GBM_LATE_15M photo finish — entrar pegado al strike es moneda al aire cobrada como favorito",
@@ -1201,12 +1282,12 @@
     "bloqueante": null,
     "fuente": "custom",
     "actualizado": "2026-08-13T10:46+00:00",
-    "n": 0,
-    "wins": 0,
-    "ic": 0.0,
-    "pnl": 0,
+    "n": 183,
+    "wins": 65,
+    "ic": -0.1432,
+    "pnl": -10.06,
     "status": "ACUMULANDO",
-    "rec": "0/200 ops en el filtro definido (IC actual=+0.000 PNL=+0.00€)"
+    "rec": "183/200 ops en el filtro definido (IC actual=-0.143 PNL=-10.06€)"
   },
   "H-CUSTOM-PHOTO-FINISH-SNIPER": {
     "nombre": "Photo finish sniper — comprar el lado rezagado a 1-3c en los últimos segundos (estilo egig)",
@@ -1214,7 +1295,7 @@
     "umbral": 200,
     "accion": "Si EV>2x sostenido con n≥200 → proponer watcher de ejecución dedicado (decisión de Javi: toca dinero real y requiere loop sub-5s). Si win rate ≈ ask (mercado calibrado también aquí) → archivar.",
     "descripcion": "2026-07-05: wallet 'egig' verificada on-chain (leaderboard oficial +$41k all-time; flujo 23h: -$729 compras / +$2,140 redeems). Forense de 497 trades: compra a 1-3c (mediana 2c) el lado rezagado a mediana 2s del cierre, exclusivamente en photo finishes (dist spot-strike mediana 0.027%). Mecanismo: el mercado cobra los finales de foto como decididos cuando son ~moneda al aire — es el espejo del filtro photo finish que aplicamos a GBM_LATE el mismo día. Win rate implícito ~6% con breakeven 2% (~3x por ticket). photo_finish_logger.py (screen pfinish) acumula dataset en data/shadow/photo_finish_YYYY-MM-DD.csv: libro del lado rezagado a T-10s + outcome oficial vía outcomePrices. CAVEATS a medir: profundidad real del ask a 1-3c (egig compite por asks rancios), frecuencia del setup, y que nuestro T-10s no es su T-2s.",
-    "bloqueante": null,
+    "bloqueante": "REFUTADA_28JUL_TRACKING_SEPARADO: ya evaluada a mano 28-Jul con data/shadow/photo_finish_YYYY-MM-DD.csv directo (ver CLAUDE.md punto 13 protocolo arranque / memoria hipotesis_auto.md) -- este filtro genérico busca strategy='PHOTO_FINISH_SNIPER' en results.csv, pero photo_finish_logger.py escribe a un CSV propio con schema distinto y JAMÁS escribe ahí, así que n=0 estructuralmente para siempre por este motor. No repetir la evaluación por aquí; si se reabre, hacerlo contra el CSV propio como el 28-Jul.",
     "fuente": "custom",
     "actualizado": "2026-08-13T10:46+00:00",
     "n": 0,
@@ -1233,12 +1314,12 @@
     "bloqueante": null,
     "fuente": "custom",
     "actualizado": "2026-08-13T10:46+00:00",
-    "n": 151,
-    "wins": 85,
-    "ic": 0.0621,
-    "pnl": 25.6,
+    "n": 1596,
+    "wins": 902,
+    "ic": 0.0651,
+    "pnl": 183.66,
     "status": "SEÑAL_DEBIL",
-    "rec": "n=151 IC=+0.062 PNL=+25.60€ — sin señal clara aún (umbral IC: min=None max=0.03)"
+    "rec": "n=1596 IC=+0.065 PNL=+183.66€ — sin señal clara aún (umbral IC: min=None max=0.03)"
   },
   "H-CUSTOM-BUYYES15-SOLO-TARDIO": {
     "nombre": "UPDOWN_GBM BUY_YES #15min solo tardío (T_h<0.2) — gate forward hacia live",
@@ -1249,28 +1330,28 @@
     "bloqueante": null,
     "fuente": "custom",
     "actualizado": "2026-08-13T10:46+00:00",
-    "n": 152,
-    "wins": 91,
-    "ic": 0.0974,
-    "pnl": 9.75,
+    "n": 1224,
+    "wins": 744,
+    "ic": 0.1077,
+    "pnl": 272.77,
     "status": "LISTA_EVALUAR",
-    "rec": "SEÑAL POSITIVA confirmada: IC=+0.097 > 0.08 con n=152 PNL=+9.75€"
+    "rec": "SEÑAL POSITIVA confirmada: IC=+0.108 > 0.08 con n=1224 PNL=+272.77€"
   },
   "H-CUSTOM-GBM-04H-ASIA": {
     "nombre": "UPDOWN_GBM 04h-05h UTC — media sesión asiática, ¿mejor franja nocturna?",
     "tipo": "boost",
-    "umbral": 102,
+    "umbral": "n≥102 (baseline 62 + 40 forward) y IC>+0.08",
     "accion": "Si confirma IC≥0.08 n≥40 forward Y la profundidad de libro a 04-05h es viable → proponer a Javi ventana live 06:00-07:00 Madrid (decisión suya, dinero real). Si IC<0 con n≥40 → archivar y no volver a mirar horas sueltas sin mecanismo.",
     "descripcion": "Detectado 2026-07-06 al evaluar si la apertura china (01:30 UTC) merece ventana: la apertura en sí es NEGATIVA (01h IC=0.000, 02h IC=-0.066 — mismo mecanismo que los opens US 9/10/18h: flujo informado rompe el GBM), pero la media sesión asiática 04h-05h UTC es la mejor franja nocturna sin ventana: UPDOWN_GBM+GBM_LATE 04h IC=+0.112 n=96, 05h IC=+0.067 n=125, +63€. Mecanismo: mercado tranquilo, sigma baja — coherente con el patrón causal sigma_h<0.0084→IC=+0.125 confirmado el mismo día. CAVEATS: (1) mejor-de-9-horas mirado a posteriori — sesgo de selección, por eso barra n≥40 forward; (2) el shadow no mide fill-ability y a las 04h UTC los libros pueden estar vacíos — medir profundidad con libro_snapshots (motivo fuera_ventana, 24/7) antes de proponer ventana live 06:00-07:00 Madrid. Ver gemela H-CUSTOM-LATE-04H-ASIA. BASELINE 2026-07-06: n=62 IC=-0.016 — en UPDOWN_GBM la franja es PLANA (el edge agregado que motivó la hipótesis era de GBM_LATE); umbral_n=102 para que la evaluación sea forward (+40 sobre baseline).",
     "bloqueante": null,
     "fuente": "custom",
     "actualizado": "2026-08-13T10:46+00:00",
-    "n": 68,
-    "wins": 34,
-    "ic": 0.0,
-    "pnl": -0.87,
-    "status": "ACUMULANDO",
-    "rec": "68/102 ops en el filtro definido (IC actual=+0.000 PNL=-0.87€)"
+    "n": 364,
+    "wins": 209,
+    "ic": 0.0738,
+    "pnl": 59.29,
+    "status": "SEÑAL_DEBIL",
+    "rec": "n=364 IC=+0.074 PNL=+59.29€ — sin señal clara aún (umbral IC: min=0.08 max=None)"
   },
   "H-CUSTOM-LATE-04H-ASIA": {
     "nombre": "GBM_LATE_15M 04h-05h UTC — media sesión asiática (gemela de GBM-04H-ASIA)",
@@ -1281,44 +1362,44 @@
     "bloqueante": null,
     "fuente": "custom",
     "actualizado": "2026-08-13T10:46+00:00",
-    "n": 197,
-    "wins": 129,
-    "ic": 0.1533,
-    "pnl": 129.72,
+    "n": 1189,
+    "wins": 725,
+    "ic": 0.1096,
+    "pnl": 437.58,
     "status": "LISTA_EVALUAR",
-    "rec": "SEÑAL POSITIVA confirmada: IC=+0.153 > 0.08 con n=197 PNL=+129.72€"
+    "rec": "SEÑAL POSITIVA confirmada: IC=+0.110 > 0.08 con n=1189 PNL=+437.58€"
   },
   "H-CUSTOM-UPDOWNGBM-BTC15-TARDIO": {
     "nombre": "UPDOWN_GBM BTC#15min BUY_YES tardío (T_h<0.2) — lane nueva, no cubierta por GBM_LATE_15M",
     "tipo": "boost",
-    "umbral": 80,
+    "umbral": "n≥80 (elevado desde el estándar 40, por ser recorte post-hoc) y IC>+0.08 en BTC específicamente",
     "accion": "Si confirma con n≥80 IC≥0.08 Y hay datos de fill-ability viables (pendiente instrumentar) → proponer a Javi añadir UPDOWN_GBM#BTC#15min#BUY_YES a pares_permitidos_live con stake mínimo (dinero real, decisión suya). Si IC cae <0.05 con n≥80 → archivar, era ruido del recorte por-par.",
     "descripcion": "Detectado 2026-07-09 al recalcular el checklist del item 13 (el análisis previo de esa misma sesión, n=510 IC=-0.0195, estaba mal filtrado — mezclaba entrada temprana+tardía; el filtro T_h<0.2 real da n=120 IC=+0.164 agregado, coincidiendo con H-CUSTOM-BUYYES15-SOLO-TARDIO). Aislando BTC: n=49 IC=+0.225 hit 73.5% PNL=+16.68€. BTC no está en pares_permitidos_live en ninguna tupla hoy (GBM_LATE_15M live es solo SOL/XRP/ETH BUY_YES), así que no hay riesgo de duplicar posición real. Comprobado solapamiento con GBM_LATE_15M (misma ventana/mercado): de los 49, 23 son mercados donde GBM_LATE_15M no dispara nada (IC=+0.260 ahí, el edge no depende de colarse en mercados ya cubiertos) y 26 solapan con un BTC BUY_YES de GBM_LATE_15M que existe en shadow pero no está whitelisted (IC=+0.179 en ese subconjunto). CAVEAT: n=49 es un recorte por-par posterior al hallazgo agregado (multiple comparisons) — por eso el umbral aquí es más exigente que el estándar (n≥80, no 40). CAVEAT 2: cero datos de fill-ability — libro_snapshots solo captura tuplas ya en pares_permitidos_live, y esta nunca lo estuvo (12 filas UPDOWN_GBM en todo el histórico, ninguna BTC#15min#BUY_YES). No proponer whitelist sin eso, ver tarea de instrumentación en dev.",
     "bloqueante": null,
     "fuente": "custom",
     "actualizado": "2026-08-13T10:46+00:00",
-    "n": 58,
-    "wins": 34,
-    "ic": 0.0833,
-    "pnl": -5.36,
-    "status": "ACUMULANDO",
-    "rec": "58/80 ops en el filtro definido (IC actual=+0.083 PNL=-5.36€)"
+    "n": 437,
+    "wins": 284,
+    "ic": 0.1492,
+    "pnl": 111.35,
+    "status": "LISTA_EVALUAR",
+    "rec": "SEÑAL POSITIVA confirmada: IC=+0.149 > 0.08 con n=437 PNL=+111.35€"
   },
   "H-CUSTOM-GBMLATE-PYBAJO-LONGSHOT": {
     "nombre": "GBM_LATE_15M BUY_YES con prob_yes_modelo<0.53 — mismo sesgo favorito-longshot que el resto del sistema. IMPLEMENTADO 21-Jul",
     "tipo": "filtro",
-    "umbral": 289,
+    "umbral": "n≥289 (baseline 249 + 40 forward) e IC<-0.10 en las 4 monedas conjuntas para confirmar — CUMPLIDO, ver ACTUALIZACIÓN 21-Jul",
     "accion": "IMPLEMENTADO 21-Jul: filtro causal decision==BUY_YES + prob_yes_modelo<0.53 → skip en GBM_LATE_15M, activo en shadow_predict.py (afecta a GBM_LATE_15M#ETH#15min#BUY_YES, live hoy). Validado con shuffle test (p=0.0000, n=524) tras el gap de rigor detectado en /code-review — ya no queda ninguna condición pendiente para archivar.",
     "descripcion": "Detectado 2026-07-09 buscando por qué correlacionan las pérdidas en la misma ventana (no se encontró causa cruzada limpia — ver H-CUSTOM-GBMLATE-ANCHURA-MERCADO — pero apareció esto por otra vía). Deciles de prob_yes_modelo en GBM_LATE_15M BUY_YES (n=1257, 4 pares): relación MONÓTONA fuerte (decil1 hit 28.8% IC=-0.209 → decil10 hit 81.0% IC=+0.305), el modelo SÍ está bien calibrado en general. Pero por debajo de ≈0.53 el signo es negativo y consistente en los 4 pares (BTC IC=-0.185, ETH -0.171, SOL -0.153, XRP -0.015), n=249, PNL=-32.89€, y EMPEORANDO con el tiempo (1ª mitad IC=-0.095, 2ª mitad IC=-0.209) — no es un efecto que se esté corrigiendo solo. Comprobado el mecanismo: precio_yes_mercado medio en esta zona es 0.35 (min 0.105), el 76% por debajo de 0.45 — es comprar un YES que el propio mercado ya trata de longshot, y GBM_LATE dispara solo porque su estimación (aun siendo <0.53) queda por encima del precio aún más barato del mercado (edge técnico +0.10 de media). Es el MISMO sesgo favorito-longshot que el sistema ya filtra en otros sitios (H-CUSTOM-BUYNO-LONGSHOT-15MIN, PY_MKT_MAX_BUY_NO_ETH15). CAVEAT histórico (ya resuelto, ver ACTUALIZACIÓN 21-Jul): en LIVE (dinero real) la misma zona daba +14.03€ en n=27 — no confirmaba el signo negativo. Cruzado con H-CUSTOM-GBMLATE-ANCHURA-MERCADO (n=802, 05-09jul): esta señal (prob_yes_modelo) es la DOMINANTE — con conviccion sana (>=0.53) la anchura baja no hunde el resultado (sigue en +41.81€); con conviccion baja Y anchura baja juntas es la peor celda (n=86, hit 24.4%, IC=-0.250, PNL=-29.63€); con solo conviccion baja (anchura ok) ya es negativo por sí solo (n=37, IC=-0.090). Tratar como filtro PRIMARIO, la anchura como agravante secundario. ACTUALIZACIÓN 21-Jul (gate cruzado 11-Jul por vigia_pybajo.py, n=290 IC=-0.154; refrescado hoy n=520 IC=-0.190 PNL=-82.41€, reforzado no diluido): filtro IMPLEMENTADO en shadow_predict.py::main() (GBM_LATE_PYBAJO_LONGSHOT_MIN=0.53, aprobado Javi), tras /code-review que exigió el test de permutación que faltaba. Test corrido (analisis_shuffle_pybajo_longshot_21jul.py, reusa sp._shuffle_pvalue): zona baja n=524 hit=30.7% IC=-0.1920 PNL=-87.63€, shuffle p=0.0000/20000 (cola baja) — sobrevive holgadamente, NO es ruido de partición. Split temporal 1ª/2ª mitad ambas negativas y empeorando (-0.159→-0.223), consistente. El caveat live QUEDA RESUELTO: recalculado con metodología del shuffle sobre n=21 trades reales en la zona (join trades.csv↔predictions por market_id), IC=-0.0217, shuffle p=0.4944 — el antiguo +14.03€/n=27 era ruido de muestra pequeña, no una señal real contraria; no hay contradicción entre shadow y live, solo falta de potencia estadística en live. Vigilar forward n del bucket filtrado (ahora congelado, no seguirá creciendo salvo que se reactive) por si el mecanismo cambia.",
     "bloqueante": null,
     "fuente": "custom",
     "actualizado": "2026-08-13T10:46+00:00",
-    "n": 1,
-    "wins": 1,
-    "ic": 0.0083,
-    "pnl": 4.76,
-    "status": "ACUMULANDO",
-    "rec": "1/289 ops en el filtro definido (IC actual=+0.008 PNL=+4.76€)"
+    "n": 533,
+    "wins": 165,
+    "ic": -0.1897,
+    "pnl": -81.62,
+    "status": "LISTA_IMPLEMENTAR",
+    "rec": "SEÑAL NEGATIVA confirmada: IC=-0.190 < -0.1 con n=533 PNL=-81.62€"
   },
   "H-CUSTOM-GBMLATE-ANCHURA-MERCADO": {
     "nombre": "GBM_LATE_15M BUY_YES — anchura de mercado (retorno concurrente de los otros 3 majors) como modificador secundario",
@@ -1329,12 +1410,12 @@
     "bloqueante": null,
     "fuente": "custom",
     "actualizado": "2026-08-13T10:46+00:00",
-    "n": 303,
-    "wins": 220,
-    "ic": 0.2246,
-    "pnl": 219.55,
-    "status": "LISTA_EVALUAR",
-    "rec": "SEÑAL POSITIVA confirmada: IC=+0.225 > 0.2 con n=303 PNL=+219.55€"
+    "n": 1984,
+    "wins": 1377,
+    "ic": 0.1939,
+    "pnl": 1178.94,
+    "status": "SEÑAL_DEBIL",
+    "rec": "n=1984 IC=+0.194 PNL=+1178.94€ — sin señal clara aún (umbral IC: min=0.2 max=None)"
   },
   "H-CUSTOM-OF5M-SMARTMONEY-CONTRARIO": {
     "nombre": "ORDER_FLOW_5M SOL BUY_NO — smart money EN CONTRA del flujo CEX, no a favor, predice mejor",
@@ -1345,12 +1426,12 @@
     "bloqueante": null,
     "fuente": "custom",
     "actualizado": "2026-08-13T10:46+00:00",
-    "n": 2,
-    "wins": 2,
-    "ic": 0.025,
-    "pnl": 2.03,
+    "n": 26,
+    "wins": 18,
+    "ic": 0.1786,
+    "pnl": 8.28,
     "status": "ACUMULANDO",
-    "rec": "2/40 ops en el filtro definido (IC actual=+0.025 PNL=+2.03€)"
+    "rec": "26/40 ops en el filtro definido (IC actual=+0.179 PNL=+8.28€)"
   },
   "H-CUSTOM-ETH15-SIGMA-ACCEL": {
     "nombre": "GBM_LATE_15M ETH — vol acelerando (EWMA10>flat) mejora la señal",
@@ -1361,12 +1442,12 @@
     "bloqueante": null,
     "fuente": "custom",
     "actualizado": "2026-08-13T10:46+00:00",
-    "n": 171,
-    "wins": 90,
-    "ic": 0.026,
-    "pnl": 9.1,
+    "n": 1010,
+    "wins": 580,
+    "ic": 0.0741,
+    "pnl": 169.9,
     "status": "SEÑAL_DEBIL",
-    "rec": "n=171 IC=+0.026 PNL=+9.10€ — sin señal clara aún (umbral IC: min=0.08 max=None)"
+    "rec": "n=1010 IC=+0.074 PNL=+169.90€ — sin señal clara aún (umbral IC: min=0.08 max=None)"
   },
   "H-CUSTOM-BTC15-SIGMA-ACCEL": {
     "nombre": "GBM_LATE_15M BTC — vol acelerando (EWMA10>flat) mejora la señal",
@@ -1377,12 +1458,12 @@
     "bloqueante": null,
     "fuente": "custom",
     "actualizado": "2026-08-13T10:46+00:00",
-    "n": 132,
-    "wins": 87,
-    "ic": 0.1567,
-    "pnl": 56.88,
+    "n": 1042,
+    "wins": 647,
+    "ic": 0.1207,
+    "pnl": 347.11,
     "status": "LISTA_EVALUAR",
-    "rec": "SEÑAL POSITIVA confirmada: IC=+0.157 > 0.08 con n=132 PNL=+56.88€"
+    "rec": "SEÑAL POSITIVA confirmada: IC=+0.121 > 0.08 con n=1042 PNL=+347.11€"
   },
   "H-CUSTOM-XRP15-SIGMA-DECEL": {
     "nombre": "GBM_LATE_15M XRP — vol DESacelerando (EWMA10<=flat) mejora la señal (signo opuesto a ETH/BTC)",
@@ -1393,12 +1474,12 @@
     "bloqueante": null,
     "fuente": "custom",
     "actualizado": "2026-08-13T10:46+00:00",
-    "n": 285,
-    "wins": 156,
-    "ic": 0.047,
-    "pnl": 69.43,
-    "status": "SEÑAL_DEBIL",
-    "rec": "n=285 IC=+0.047 PNL=+69.43€ — sin señal clara aún (umbral IC: min=0.08 max=None)"
+    "n": 1511,
+    "wins": 925,
+    "ic": 0.112,
+    "pnl": 681.03,
+    "status": "LISTA_EVALUAR",
+    "rec": "SEÑAL POSITIVA confirmada: IC=+0.112 > 0.08 con n=1511 PNL=+681.03€"
   },
   "H-CUSTOM-SMARTMONEY-FAVORITO-SOL": {
     "nombre": "FAVORITO_CONFIRMADO SOL — alineado con smart_money_consensus bate ir en contra (REABRE hallazgo cerrado 08-Jul)",
@@ -1409,12 +1490,12 @@
     "bloqueante": null,
     "fuente": "custom",
     "actualizado": "2026-08-13T10:46+00:00",
-    "n": 123,
-    "wins": 75,
-    "ic": 0.108,
-    "pnl": -12.7,
+    "n": 506,
+    "wins": 350,
+    "ic": 0.1909,
+    "pnl": 11.01,
     "status": "LISTA_EVALUAR",
-    "rec": "SEÑAL POSITIVA confirmada: IC=+0.108 > 0.08 con n=123 PNL=-12.70€"
+    "rec": "SEÑAL POSITIVA confirmada: IC=+0.191 > 0.08 con n=506 PNL=+11.01€"
   },
   "H-CUSTOM-FAVORITO-SOL-ALTACONVICCION": {
     "nombre": "FAVORITO_CONFIRMADO SOL BUY_YES alta conviccion (py_entrada alto) — UNICO caso positivo en fill-ability de hoy",
@@ -1425,12 +1506,12 @@
     "bloqueante": null,
     "fuente": "custom",
     "actualizado": "2026-08-13T10:46+00:00",
-    "n": 413,
-    "wins": 304,
-    "ic": 0.2349,
-    "pnl": -52.68,
+    "n": 1066,
+    "wins": 807,
+    "ic": 0.2566,
+    "pnl": -64.16,
     "status": "LISTA_EVALUAR",
-    "rec": "SEÑAL POSITIVA confirmada: IC=+0.235 > 0.08 con n=413 PNL=-52.68€"
+    "rec": "SEÑAL POSITIVA confirmada: IC=+0.257 > 0.08 con n=1066 PNL=-64.16€"
   },
   "H-CUSTOM-GBM18H-XRP-EXCEPCION": {
     "nombre": "UPDOWN_GBM XRP a las 18h UTC -- puede estar mal incluida en el blacklist horario global",
@@ -1441,44 +1522,44 @@
     "bloqueante": null,
     "fuente": "custom",
     "actualizado": "2026-08-13T10:46+00:00",
-    "n": 2,
-    "wins": 0,
-    "ic": -0.025,
-    "pnl": -2.17,
+    "n": 37,
+    "wins": 21,
+    "ic": 0.0641,
+    "pnl": 5.53,
     "status": "ACUMULANDO",
-    "rec": "2/40 ops en el filtro definido (IC actual=-0.025 PNL=-2.17€)"
+    "rec": "37/40 ops en el filtro definido (IC actual=+0.064 PNL=+5.53€)"
   },
   "H-CUSTOM-LEADLAG-XRP-BUYNO": {
     "nombre": "LEADLAG_BTC_XRP_15M -- la señal se concentra en BUY_NO, BUY_YES está plano",
     "tipo": "boost",
-    "umbral": 40,
+    "umbral": "n>=40 y IC>0.08 (en BUY_NO especificamente, no agregado)",
     "accion": "Si BUY_NO confirma n>=40 IC>=0.08 sostenido -> considerar instrumentar fill-ability (candidatos_evaluacion_live) antes de cualquier propuesta de whitelist, dado el patron ya conocido de selección adversa en BUY_NO",
     "descripcion": "12-Jul: revisando dead/tracking ideas por petición Javi. El tracker agregado (activa=True, ic_bayes=+0.1154 n=63) ya cruza el umbral histórico de gate n>=40 IC>=0.08, pero mezclaba direcciones. Desagregado: BUY_NO hit=71.9% n=32 z=+2.47 (fuerte); BUY_YES hit=51.6% n=31 z=+0.18 (plano, sin señal). Coherente con el hallazgo offline previo (idea_leadlag_btc_xrp_revive_parcial: BTC-momentum-fills predice BTC->XRP estable en split-half, mecanismo distinto del spot-drift ya refutado). No confirmado a nivel BH-FDR (K=223, z individual no llega a 2.677), pero es la única sub-hipotesis de LEADLAG con dirección consistente con el hallazgo offline. Shadow puro, LEADLAG no esta en pares_permitidos_live ni candidatos_evaluacion_live -- cero riesgo, cero dato de fill-ability todavia.",
     "bloqueante": null,
     "fuente": "custom",
     "actualizado": "2026-08-13T10:46+00:00",
-    "n": 0,
-    "wins": 0,
-    "ic": 0.0,
-    "pnl": 0,
-    "status": "ACUMULANDO",
-    "rec": "0/40 ops en el filtro definido (IC actual=+0.000 PNL=+0.00€)"
+    "n": 142,
+    "wins": 79,
+    "ic": 0.0556,
+    "pnl": 15.75,
+    "status": "SEÑAL_DEBIL",
+    "rec": "n=142 IC=+0.056 PNL=+15.75€ — sin señal clara aún (umbral IC: min=0.08 max=None)"
   },
   "H-CUSTOM-ETH15-BUYNO-TARDIO": {
     "nombre": "UPDOWN_GBM ETH#15min BUY_NO tardío (T_h<0.2) -- edge fuerte no capturado por el aprendizaje causal automático",
     "tipo": "boost",
-    "umbral": 40,
+    "umbral": "n>=40 y IC>=0.08",
     "accion": "Si confirma con n>=40 (2 resoluciones más) -> vigilar si el postmortem automático lo descubre solo vía FEATURE_RULES; si no, considerar patrón manual. Dado que BUY_NO ya tiene selección adversa conocida en otras estrategias (GBM_LATE_15M), NO proponer para whitelist sin antes medir fill-ability (candidatos_evaluacion_live) -- mismo patrón de cautela que el resto de hallazgos BUY_NO de esta sesión.",
     "descripcion": "12-Jul: desagregando por (activo, dirección) la hipótesis agregada H-CUSTOM-LATE-ENTRY-15MIN (T_h<0.2, sin filtro de dirección, n=261 ic+0.173 agregado). Split por dirección: BTC BUY_YES n=81 ic=+0.235 z=+4.33 (fuerte, coincide con el mecanismo ya conocido/implementado en GBM_LATE_15M#BTC BUY_YES); BTC BUY_NO n=12 z=+0.58 (débil, n insuficiente). ETH BUY_YES n=102 ic=+0.144 z=+2.97 (fuerte); **ETH BUY_NO n=38 ic=+0.250 z=+3.24 -- tan fuerte como el BUY_YES, y NUNCA se había mirado por separado**. Verificado contra strategy_params.json: UPDOWN_GBM#ETH#15min tiene ic_BUY_NO agregado=+0.038 (n=249, sin filtro T_h) -- el aprendizaje causal automático (FEATURE_RULES) no ha encontrado todavía este corte T_h<0.2 específico pese a tener la feature T_h en su base. UPDOWN_GBM no está en pares_permitidos_live en ninguna tupla BUY_NO -- shadow puro, cero riesgo. Casi cruza el gate estándar (n=38 de 40).",
     "bloqueante": null,
     "fuente": "custom",
     "actualizado": "2026-08-13T10:46+00:00",
-    "n": 19,
-    "wins": 17,
-    "ic": 0.3393,
-    "pnl": 13.65,
-    "status": "ACUMULANDO",
-    "rec": "19/40 ops en el filtro definido (IC actual=+0.339 PNL=+13.65€)"
+    "n": 177,
+    "wins": 147,
+    "ic": 0.3268,
+    "pnl": 103.18,
+    "status": "LISTA_EVALUAR",
+    "rec": "SEÑAL POSITIVA confirmada: IC=+0.327 > 0.08 con n=177 PNL=+103.18€"
   },
   "H-CUSTOM-WEEKLY-SOL-BUYNO-PRECIO-ALTO": {
     "nombre": "WEEKLY_PRICE SOL BUY_NO -- edge fuerte concentrado en precio alto (py>=0.45), posible pero sin fill-ability medida",
@@ -1505,27 +1586,27 @@
     "bloqueante": null,
     "fuente": "custom",
     "actualizado": "2026-08-13T10:46+00:00",
-    "n": 1469,
-    "wins": 969,
-    "ic": 0.1594,
-    "pnl": -245.46,
+    "n": 3067,
+    "wins": 2012,
+    "ic": 0.1559,
+    "pnl": -465.26,
     "status": "SEÑAL_DEBIL",
-    "rec": "n=1469 IC=+0.159 PNL=-245.46€ — sin señal clara aún (umbral IC: min=999 max=None)"
+    "rec": "n=3067 IC=+0.156 PNL=-465.26€ — sin señal clara aún (umbral IC: min=999 max=None)"
   },
   "H-CUSTOM-GBMLATE15M-SOL-RESCATE-PRECIO": {
     "nombre": "GBM_LATE_15M#SOL#15min#BUY_YES (pausada 05-Ago) -- posible rescate con filtro py en [0.45,0.55)",
     "tipo": "filtro",
-    "umbral": 40,
+    "umbral": "YA CONFIRMADO con rigor (shuffle p=0.0014, split-half OK, n=92) -- falta fill-ability real antes de proponer reactivacion",
     "accion": "Investigacion pendiente: cruzar bucket de precio con el estado de sigma_ewma_delta_pct en las mismas filas. Si son independientes, un filtro combinado (precio Y sigma_ewma) podria ser mas preciso que cualquiera de los dos solo.",
     "descripcion": "06-Ago: hallazgo al barrer gate_bucket_propio.json. GBM_LATE_15M#SOL#15min#BUY_YES fue PAUSADA el 05-Ago por veto sigma_ewma_delta_pct (ver project_veto_sigma_ewma_gbmlate_05ago). Desagregando por precio: bucket [0.50,0.55) tiene n=411, pnl/trade +0.498, gate riguroso COMPLETO (bueno_confirmado, split-half consistente ambas mitades [0.305,0.273]). El bucket vecino [0.45,0.50) (n=356, sin_concluir todavia) tambien da pnl positivo +0.323. Juntos (0.45-0.55) suman n=767, la mayoria del volumen de la tupla. En cambio [0.20,0.25) (n=20) da pnl=-0.866, malo_confirmado -- el problema parece concentrado en precio bajo, no en toda la tupla. HIPOTESIS: restringir la reactivacion a un filtro de precio py en [0.45,0.55) en vez de mantener la pausa total podria rescatar la mayor parte del edge sin el drenaje que motivo la pausa -- pero el veto sigma_ewma que causo la pausa es una dimension DISTINTA (volatilidad reciente, no precio), asi que ambos filtros podrian ser complementarios, no sustitutos. NO proponer reactivacion sin cruzar este hallazgo con el analisis original de sigma_ewma que motivo la pausa. ACTUALIZADO 06-Ago mismo dia, cruce con sigma_ewma pedido por Javi: filtros COMPLEMENTARIOS confirmado, no redundantes. 4 grupos (n con sigma_ewma disponible, n=1169 total, 767 filtrado a py[0.45,0.55)): solo_precio n=348 hit=59.8% pnl=+0.266; solo_sigma n=41 hit=63.4% pnl=+0.322; AMBOS n=92 hit=75.0% pnl=+0.755 (shuffle p=0.0014, split-half CONSISTENTE ambas mitades +0.511/+0.632); ninguno n=226 hit=42.5% pnl=+0.033 (casi breakeven). El filtro combinado casi TRIPLICA el pnl/trade del filtro de precio solo y confirma con rigor completo -- el edge real de esta tupla esta concentrado en la interseccion de ambos filtros, no en cualquiera de los dos por separado. Sigue pendiente medir fill-ability real antes de proponer reactivacion (mismo caveat que siempre).",
     "bloqueante": null,
     "fuente": "custom",
     "actualizado": "2026-08-13T10:46+00:00",
-    "n": 7,
-    "wins": 5,
-    "ic": 0.0583,
-    "pnl": 3.39,
-    "status": "ACUMULANDO",
-    "rec": "7/40 ops en el filtro definido (IC actual=+0.058 PNL=+3.39€)"
+    "n": 775,
+    "wins": 506,
+    "ic": 0.1525,
+    "pnl": 321.95,
+    "status": "LISTA_EVALUAR",
+    "rec": "SEÑAL POSITIVA confirmada: IC=+0.152 > 0.1 con n=775 PNL=+321.95€"
   }
 }
