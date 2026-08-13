@@ -1,0 +1,131 @@
+{
+ "generado_utc": "2026-08-13T04:13:00+00:00",
+ "tuplas": {
+  "BTC#15min": {
+   "n_senales": 14931,
+   "n_wallets_distintas": 141,
+   "n_mercados_distintos": 610,
+   "top5_wallets": [
+    {
+     "wallet": "0x0cb038487586d1119b165466072e9baf666f3a90",
+     "n": 939,
+     "pct": 6.3
+    },
+    {
+     "wallet": "0xce25e214d5cfe4f459cf67f08df581885aae7fdc",
+     "n": 793,
+     "pct": 5.3
+    },
+    {
+     "wallet": "0xecf45e7576846cb73ee5fa187f816ffe840ce68c",
+     "n": 774,
+     "pct": 5.2
+    },
+    {
+     "wallet": "0x9412cdfc1e3171e1aabb013d0f494986445d0cd0",
+     "n": 702,
+     "pct": 4.7
+    },
+    {
+     "wallet": "0xe4f7f7950210228a32c9ebbfb633c004a6d230f6",
+     "n": 616,
+     "pct": 4.1
+    }
+   ],
+   "top5_mercados": [
+    {
+     "market_slug": "btc-updown-15m-1785555900",
+     "n": 105,
+     "pct": 0.7
+    },
+    {
+     "market_slug": "btc-updown-15m-1785556800",
+     "n": 103,
+     "pct": 0.7
+    },
+    {
+     "market_slug": "btc-updown-15m-1785580200",
+     "n": 93,
+     "pct": 0.6
+    },
+    {
+     "market_slug": "btc-updown-15m-1785657600",
+     "n": 90,
+     "pct": 0.6
+    },
+    {
+     "market_slug": "btc-updown-15m-1785377700",
+     "n": 80,
+     "pct": 0.5
+    }
+   ],
+   "top1_wallet_pct": 6.3,
+   "top1_mercado_pct": 0.7,
+   "alerta_wallet": false,
+   "alerta_mercado": false
+  },
+  "BTC#5min": {
+   "n_senales": 88027,
+   "n_wallets_distintas": 415,
+   "n_mercados_distintos": 1818,
+   "top5_wallets": [
+    {
+     "wallet": "0x0c7c5204404e9d5402d258fedac59c7212bae4cb",
+     "n": 2530,
+     "pct": 2.9
+    },
+    {
+     "wallet": "0x75cc3b63a2f2423085e10706c78b494017b93ce1",
+     "n": 2003,
+     "pct": 2.3
+    },
+    {
+     "wallet": "0x8856e15c9bbdd939cb98e2776f725f502aaef6ad",
+     "n": 1828,
+     "pct": 2.1
+    },
+    {
+     "wallet": "0x5e2b9261b0c4f697b55bf921ff2bc227183d9101",
+     "n": 1543,
+     "pct": 1.8
+    },
+    {
+     "wallet": "0x0cb038487586d1119b165466072e9baf666f3a90",
+     "n": 1526,
+     "pct": 1.7
+    }
+   ],
+   "top5_mercados": [
+    {
+     "market_slug": "btc-updown-5m-1785740700",
+     "n": 161,
+     "pct": 0.2
+    },
+    {
+     "market_slug": "btc-updown-5m-1785741300",
+     "n": 155,
+     "pct": 0.2
+    },
+    {
+     "market_slug": "btc-updown-5m-1785637200",
+     "n": 153,
+     "pct": 0.2
+    },
+    {
+     "market_slug": "btc-updown-5m-1785747900",
+     "n": 140,
+     "pct": 0.2
+    },
+    {
+     "market_slug": "btc-updown-5m-1785726600",
+     "n": 135,
+     "pct": 0.2
+    }
+   ],
+   "top1_wallet_pct": 2.9,
+   "top1_mercado_pct": 0.2,
+   "alerta_wallet": false,
+   "alerta_mercado": false
+  }
+ }
+}
