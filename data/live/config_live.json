@@ -700,6 +700,11 @@
    "fecha": "2026-07-21",
    "eur": 25.78,
    "nota": "Segunda recarga tras circuit breaker 17-Jul. 25 USDC nuevos + 0.78 USDC remanente del período 1 = 25.78 USDC de capital disponible al inicio del período 2"
+  },
+  {
+   "fecha": "2026-08-13",
+   "eur": 10.0,
+   "nota": "Tercera recarga (petición explícita Javi). 10 USDC nuevos + 5.97 USDC remanente del período 2 = 15.97 USDC de capital disponible al inicio del período 3"
   }
  ],
  "_candidatos_extremo_090_29jul_nota": "29-Jul: FAVORITO_CONFIRMADO_60MIN_EXTREMO (BTC/ETH/SOL) y FAVORITO_CONFIRMADO_15MIN_EXTREMO (6 activos) -- umbral py>=0.90, cola extrema que ni FAVORITO_CONFIRMADO ni las variantes ALTACONVICCION (umbral 0.70) llegan a registrar por el mismo motivo (dedup por (strategy,market_id), una sola fila por mercado). Hueco medido en analisis_franja_milimetrica_ballenas.py: [0.90,1.00) con ballenas hit 90-99.9% (miles de eventos) y shadow_n=0-14 en TODOS los buckets pese al fix de ALTACONVICCION del 28-Jul. Puramente shadow, NO en pares_permitidos_live, cero dinero real. Añadidas a candidatos_evaluacion_live para que también acumulen fill-ability real desde cero (mismo patrón que las 2 ALTACONVICCION anteriores).",
