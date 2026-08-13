@@ -4401,7 +4401,7 @@
  "candidato_proxy#UPDOWN_GBM#SOL#15min#SOL#BUY_NO#sigma_hlt": false,
  "candidato_proxy#UPDOWN_GBM_15M_TARDIO#XRP#BUY_NO#sigma_hlt": false,
  "candidato_proxy#GBM_LATE_15M_TARDIO#BTC#BUY_NO#hora_utclt": false,
- "candidato_proxy#GBM_LATE_15M_TARDIO#ETH#BUY_NO#hora_utclt": false,
+ "candidato_proxy#GBM_LATE_15M_TARDIO#ETH#BUY_NO#hora_utclt": true,
  "candidato_proxy#GBM_LATE_15M_TARDIO#SOL#BUY_NO#hora_utclt": false,
  "candidato_proxy#GBM_LATE_15M_TARDIO#XRP#BUY_NO#hora_utclt": false,
  "candidato_proxy#GBM_LATE_15M_ESPACIO_ATR#SOL#15min#SOL#BUY_NO#hora_utclt": false,
