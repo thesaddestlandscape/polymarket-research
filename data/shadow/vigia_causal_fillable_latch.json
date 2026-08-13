@@ -4714,5 +4714,7 @@
  "candidato_proxy#UPDOWN_GBM_15M_CROSS_WINDOW_SPREAD#BTC#BUY_YES#sigma_hlt": false,
  "candidato_proxy#UPDOWN_GBM_IBS_ALTO#BTC#BUY_YES#sigma_hlt": false,
  "candidato_proxy#GBM_LATE_15M_TARDIO#SOL#BUY_YES#drift_60minabs_lt": false,
- "FILTRO#candidato_proxy#UPDOWN_GBM_15M_TARDIO#BTC#BUY_NO#sigma_hlt": false
+ "FILTRO#candidato_proxy#UPDOWN_GBM_15M_TARDIO#BTC#BUY_NO#sigma_hlt": false,
+ "candidato_proxy#GBM_LATE_15M_ESPACIO_ATR#XRP#BUY_YES#ibs_20mingt": false,
+ "candidato_proxy#GBM_LATE_15M_MULTIHORIZONTE#XRP#BUY_YES#hora_utcgt": false
 }
