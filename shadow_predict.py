@@ -3355,6 +3355,64 @@ def _meta_score_gbm_late(d_gbm, sigma_h, drift_ventana_pct, hora_utc, restante_m
         return None
 
 
+# P2 del plan de profundidad de libro (13-Ago, entrenar_prob_fillable_gbm_
+# late_p2.py): clasificador de fill-ability EX-ANTE para la familia
+# GBM_LATE_15M/5M, mismo mecanismo aritmético que meta_score_gbm_late (P17)
+# pero prediciendo una pregunta distinta -- no "el modelo tiene razón"
+# (P17/acierto), sino "el libro va a tener profundidad ejecutable"
+# (ratio_vs_stake>=5x). AUC walk-forward=0.669 (n=26.670, 13-Ago). El
+# coeficiente dominante es la distancia del precio a 0.50 -- confirma con
+# n=27k el mecanismo ya visto en GBM_LATE_15M_ESPACIO_ATR#XRP#15min con
+# n=18 (idea_gbmlate15m_espacioatr_xrp_arquetipo_a_confirmado_12ago): el
+# libro tiene fondo donde el precio está más indeciso, se vacía cuando se
+# confirma. PURAMENTE INFORMATIVO -- logueado como feature
+# prob_fillable_gbm_late, NUNCA decide si se dispara la señal ni toca
+# prob_yes/edge/stake. Mismo criterio de barrera que P17: forward logging
+# primero, cualquier uso operativo requiere aprobación explícita de Javi +
+# /code-review si toca el camino de decisión real.
+PROB_FILLABLE_GBM_LATE_MODEL = Path("data/shadow/prob_fillable_gbm_late_model.json")
+_prob_fillable_gbm_late_cache = {"mtime": None, "modelo": None}
+
+
+def _cargar_prob_fillable_gbm_late_modelo():
+    try:
+        mtime = PROB_FILLABLE_GBM_LATE_MODEL.stat().st_mtime
+    except OSError:
+        return None
+    if _prob_fillable_gbm_late_cache["mtime"] != mtime:
+        try:
+            _prob_fillable_gbm_late_cache["modelo"] = json.loads(
+                PROB_FILLABLE_GBM_LATE_MODEL.read_text(encoding="utf-8"))
+        except Exception:
+            _prob_fillable_gbm_late_cache["modelo"] = None
+        _prob_fillable_gbm_late_cache["mtime"] = mtime
+    return _prob_fillable_gbm_late_cache["modelo"]
+
+
+def _prob_fillable_gbm_late(libro_spread, libro_liquidez, py, hora_utc):
+    """Aplica el modelo entrenado offline (regresión logística L2
+    estandarizada) con aritmética pura -- sin sklearn en el camino
+    caliente, solo un producto escalar + sigmoide. None si el modelo no
+    existe todavía o falta algún insumo (nunca bloquea la predicción real)."""
+    modelo = _cargar_prob_fillable_gbm_late_modelo()
+    if not modelo or libro_spread is None or libro_liquidez is None or py is None:
+        return None
+    try:
+        dist_050 = abs(float(py) - 0.5)
+        hora_sin = math.sin(2 * math.pi * float(hora_utc) / 24)
+        hora_cos = math.cos(2 * math.pi * float(hora_utc) / 24)
+        valores = {"libro_spread": float(libro_spread), "libro_liquidez": float(libro_liquidez),
+                   "dist_050": dist_050, "hora_sin": hora_sin, "hora_cos": hora_cos}
+        z = modelo["intercept"]
+        for nombre, coef, mean, std in zip(modelo["feature_order"], modelo["coef"],
+                                            modelo["mean"], modelo["std"]):
+            x = valores[nombre]
+            z += coef * ((x - mean) / std if std else 0.0)
+        return round(1.0 / (1.0 + math.exp(-z)), 4)
+    except Exception:
+        return None
+
+
 # Mapeo subtype ("BTC#15min") -> clave de marco en ballenas_timing_state.json
 # ("15m") -- mismo mapeo que _MARCO_BALLENAS_MAP en live_trade.py, duplicado
 # a propósito (ligero, un dict de 4 entradas) para no crear un import cruzado
@@ -4412,6 +4470,13 @@ def _s_gbm_late(market, ctx, ventana_min, rest_lo, rest_hi, espacio_k=None):
     # corrección tras pregunta de Javi) — no se calcula aquí para evitar
     # una segunda fuente de verdad; ver el bloque `_activo_um` en main().
 
+    # prob_fillable_gbm_late (P2 plan profundidad de libro, 13-Ago): ver
+    # docstring de _prob_fillable_gbm_late — solo logueo, nunca decide.
+    libro_calidad = _libro_calidad(market)
+    prob_fillable_gbm_late = _prob_fillable_gbm_late(
+        libro_calidad.get("libro_spread"), libro_calidad.get("libro_liquidez"),
+        py, now_utc.hour)
+
     return {
         "prob_yes": round(p_up, 4),
         "razon":    (f"gbm_late_{ventana_min}min {activo} drift_vent={drift_ventana*100:+.3f}% "
@@ -4442,9 +4507,10 @@ def _s_gbm_late(market, ctx, ventana_min, rest_lo, rest_hi, espacio_k=None):
             "gap_sigma_implicita": gap_sigma_implicita,
             "meta_score_gbm_late": _meta_score_gbm_late(
                 d, sigma_h, drift_ventana * 100, now_utc.hour, restante_min, T_rem_h),
+            "prob_fillable_gbm_late": prob_fillable_gbm_late,
             "en_zona_sigma_ewma_buyyes": en_zona_sigma_ewma_buyyes,
             "en_zona_precio_buyyes":     en_zona_precio_buyyes,
-            **_libro_calidad(market),
+            **libro_calidad,
         },
     }
 
