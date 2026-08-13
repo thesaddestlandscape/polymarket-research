@@ -13,7 +13,7 @@
  "PRICE_TARGET_GBM": true,
  "SMART_FLOW_1H": true,
  "STREAK_FADE_15M": true,
- "STREAK_FADE_5M": true,
+ "STREAK_FADE_5M": false,
  "STREAK_MOM_5M": true,
  "STRUCT_NO_15M": true,
  "UPDOWN_GBM": true,
