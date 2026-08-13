@@ -2526,7 +2526,7 @@
         }
       },
       "error_api": {
-        "conteo": 4633,
+        "conteo": 4634,
         "mercados": {
           "0xed88f70265795c86c515fe960e284493271a340d3ba74f3a1adad4a7c3db8e1a": 6,
           "0x7a17f8c622ac283b4bd5b3f79becb24e19ba2036326c9157bc0f9f583a2ea6a0": 18,
@@ -3103,7 +3103,8 @@
           "0xe8671a3803a07348c8534b8f1849ac7845c4ad95573db521c2cecdd1ce8608a5": 3,
           "0xda76282eb326ab8d6f7b2b712c2e6fd263865be22a2f6793c09fbaa1a428e135": 2,
           "0x16da73941f529041164d1643547f3410b4354ebf5531c2986fdcde0d0c48bfd0": 3,
-          "0xa8a17fb352f680fab499919dc8f0e5c4842117866d600cf94bdae3e81e624ae2": 2
+          "0xa8a17fb352f680fab499919dc8f0e5c4842117866d600cf94bdae3e81e624ae2": 2,
+          "0x1e3236d3d458cd73c305e10df9d73eaf5138234be02eba3f4886e6247bd1c4f3": 1
         }
       }
     },
@@ -5415,7 +5416,7 @@
   "DOGE#BUY_NO": {
     "motivos": {
       "banda_no_confirmada": {
-        "conteo": 20801,
+        "conteo": 20813,
         "mercados": {
           "0xc132ec92b406eb13da1cb814396e60b66f819f1be1c0d8394317d53e5b2c08b1": 6,
           "0xd0672cde7ddef0a3136bf4e9209e193940596ab831742079687f92fea3d8ca1b": 10,
@@ -6572,10 +6573,10 @@
           "0x4bd432642d20ca36f1904e0717795d2897164ec35e2a4699c3a0c59107ae07d6": 12,
           "0x58826da2968dfa365a14a04c5f8c0566ad658961dd76a92513625317eadc1625": 10,
           "0x946512ef7efe699cc7f71a2f9396b7355024092666d403de5d07a7bfe9ae0ca8": 19,
-          "0xf023e77ee5bb743eb7b81bbffabd04c15ddc5f38728fb445fcf92ec812548d71": 18,
-          "0xe9e00843948bbe2dccda8f727f4a8886632c41fdadcbe8d276074ff8e01fb661": 12,
-          "0xcf770a91cebf953e99857fe80aba04937bbd3c2aeef4977584e23e2cf389a53e": 7,
-          "0x6189c2c7eb1e5a24503d8319331765e76c76b0feb6a5ff0d41d49e1774e47978": 2
+          "0xf023e77ee5bb743eb7b81bbffabd04c15ddc5f38728fb445fcf92ec812548d71": 21,
+          "0xe9e00843948bbe2dccda8f727f4a8886632c41fdadcbe8d276074ff8e01fb661": 15,
+          "0xcf770a91cebf953e99857fe80aba04937bbd3c2aeef4977584e23e2cf389a53e": 10,
+          "0x6189c2c7eb1e5a24503d8319331765e76c76b0feb6a5ff0d41d49e1774e47978": 5
         }
       },
       "pocos_trades_en_banda": {
