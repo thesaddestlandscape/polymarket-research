@@ -5,5 +5,19 @@
   "hit_reciente": 40.0,
   "n_reciente": 20,
   "telegram_ok": true
+ },
+ "0x9866f9b70a4953c49d812e8a3f8041c06cba7155#SOL#15min": {
+  "avisado": true,
+  "hit_hist": 54.3,
+  "hit_reciente": 15.0,
+  "n_reciente": 20,
+  "telegram_ok": true
+ },
+ "0x89b8c9d606afd50174767e1c4bb443d66ac50e67#BTC#5min": {
+  "avisado": true,
+  "hit_hist": 81.4,
+  "hit_reciente": 40.0,
+  "n_reciente": 20,
+  "telegram_ok": true
  }
 }
