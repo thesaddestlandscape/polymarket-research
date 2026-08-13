@@ -142,5 +142,65 @@
   },
   "cementerio:LIQUIDACIONES_15M#BTC#15min": {
     "avisado": true
+  },
+  "cementerio:PRICE_TARGET_GBM_FADE#SOL#atexpiry": {
+    "avisado": true
+  },
+  "cand_nunca:FAVORITO_CONFIRMADO#DOGE#240min#BUY_YES": {
+    "avisado": true
+  },
+  "cand_nunca:FAVORITO_CONFIRMADO#DOGE#60min#BUY_NO": {
+    "avisado": true
+  },
+  "cand_nunca:FAVORITO_CONFIRMADO#DOGE#60min#BUY_YES": {
+    "avisado": true
+  },
+  "cand_nunca:GBM_LATE_5M#DOGE#5min#BUY_NO": {
+    "avisado": true
+  },
+  "cand_nunca:GBM_LATE_5M#DOGE#5min#BUY_YES": {
+    "avisado": true
+  },
+  "cand_nunca:GBM_LATE_60M_PYCONFIRMADO#DOGE#60min#BUY_NO": {
+    "avisado": true
+  },
+  "cand_nunca:GBM_LATE_60M_PYCONFIRMADO#DOGE#60min#BUY_YES": {
+    "avisado": true
+  },
+  "cand_nunca:STREAK_FADE_5M#DOGE#5min#BUY_NO": {
+    "avisado": true
+  },
+  "cand_nunca:STREAK_FADE_5M#DOGE#5min#BUY_YES": {
+    "avisado": true
+  },
+  "cand_nunca:STREAK_MOM_5M#DOGE#5min#BUY_NO": {
+    "avisado": true
+  },
+  "cand_nunca:STREAK_MOM_5M#DOGE#5min#BUY_YES": {
+    "avisado": true
+  },
+  "cand_nunca:LIQUIDACIONES_60M#XRP#60min#BUY_YES": {
+    "avisado": true
+  },
+  "cand_nunca:LIQUIDACIONES_60M#XRP#60min#BUY_NO": {
+    "avisado": true
+  },
+  "cand_nunca:LIQUIDACIONES_60M#DOGE#60min#BUY_YES": {
+    "avisado": true
+  },
+  "cand_nunca:LIQUIDACIONES_60M#DOGE#60min#BUY_NO": {
+    "avisado": true
+  },
+  "cand_nunca:LIQUIDACIONES_60M#BNB#60min#BUY_YES": {
+    "avisado": true
+  },
+  "cand_nunca:LIQUIDACIONES_60M#BNB#60min#BUY_NO": {
+    "avisado": true
+  },
+  "hip_nunca:H-FUNDING-NEGATIVE-BUYYES": {
+    "avisado": true
+  },
+  "hip_nunca:H-CUSTOM-PHOTO-FINISH-SNIPER": {
+    "avisado": true
   }
 }
