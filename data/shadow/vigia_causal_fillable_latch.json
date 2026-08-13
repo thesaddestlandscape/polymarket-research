@@ -4703,5 +4703,7 @@
  "FILTRO#candidato_proxy#UPDOWN_GBM#SOL#5min#SOL#BUY_YES#sigma_hgt": false,
  "candidato_proxy#GBM_LATE_15M_TARDIO#BNB#BUY_YES#hora_utclt": false,
  "candidato_proxy#GBM_LATE_15M_TARDIO#SOL#BUY_YES#ibs_20mingt": false,
- "candidato_proxy#GBM_LATE_15M_TARDIO#XRP#BUY_YES#ibs_20mingt": false
+ "candidato_proxy#GBM_LATE_15M_TARDIO#XRP#BUY_YES#ibs_20mingt": false,
+ "candidato_proxy#GBM_LATE_15M_MULTIHORIZONTE#BNB#BUY_YES#hora_utcgt": false,
+ "candidato_proxy#GBM_LATE_15M_MULTIHORIZONTE#DOGE#BUY_YES#sigma_ewma_delta_pctlt": false
 }
