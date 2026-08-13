@@ -323,22 +323,41 @@ def _market_id_y_direccion(market_slug: str, mirror_lado: str) -> tuple[str, str
     return str(info["id"]), direction, info.get("end_date", "")
 
 
-def _fillability_mirror(market_slug: str, mirror_lado: str, precio_wallet: str) -> dict:
+def _fillability_mirror(market_slug: str, mirror_lado: str, precio_wallet: str,
+                        token_id_precargado: str | None = None) -> dict:
     """Consulta el libro PÚBLICO (solo lectura, nunca ordena) para el token
     del lado que Wallet Mirror habría comprado, en el instante de detección
     (no en el instante original del trade de la wallet -- mismo desfase que
     ya acepta P22/candidato_evaluacion, aceptable dado el cron de 10min).
     precio de referencia: si mirror_lado==lado_wallet (SEGUIR), el mismo
-    precio que pagó la wallet; si es el lado contrario (FADE), 1-precio."""
+    precio que pagó la wallet; si es el lado contrario (FADE), 1-precio.
+
+    token_id_precargado (12-Ago, perfilado de latencia real con py-spy +
+    medición directa a petición de Javi): `wallet_mirror_executor_dryrun.py`
+    llama a esta función DOS veces por trade (detección y decisión) sobre
+    el MISMO market_slug -- sin este parámetro, ambas resuelven
+    `_token_para_lado`→`_mercado_para_slug` (gamma-api /events) por
+    separado, medido en 90-300ms por llamada, hasta 2/3 de los
+    lag_deteccion_a_decision_ms=463ms medianos que motivaron el perfilado.
+    El token_id de un mercado no cambia durante su vida -- pasar el de la
+    1ª llamada a la 2ª elimina una consulta de red completamente
+    redundante sin cambiar qué se mide (la 2ª consulta al LIBRO, que sí
+    puede haber cambiado, se sigue haciendo igual). None (default)
+    preserva el comportamiento exacto de antes para el resto de
+    llamadores (wallet_mirror_sniper.py, wallet_mirror_tracker.py, cada
+    uno llama una sola vez por evento)."""
     try:
         precio_w = float(precio_wallet)
     except (TypeError, ValueError):
         return {"ok": False}
-    token_id = _token_para_lado(market_slug, mirror_lado)
+    token_id = token_id_precargado if token_id_precargado is not None \
+        else _token_para_lado(market_slug, mirror_lado)
     if token_id is None:
         return {"ok": False}
     precio_entrada = precio_w  # aproximación -- ver docstring
-    return lt._consultar_profundidad_libro(None, token_id, precio_entrada, STAKE_REF_EUR)
+    resultado = lt._consultar_profundidad_libro(None, token_id, precio_entrada, STAKE_REF_EUR)
+    resultado["token_id"] = token_id
+    return resultado
 
 
 COLUMNS = ["timestamp_utc", "trade_timestamp", "wallet", "tipo", "edge_pp_validado",

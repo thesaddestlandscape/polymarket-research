@@ -1007,6 +1007,24 @@ _BASE_GBM = [
     # diluye (mismo principio CLAUDE.md pt.17).
     ("volumen_regimen",  "gt",     "lt"),
     ("volumen_regimen",  "lt",     "gt"),
+    # ── volumen_pendiente_norm / volumen_spike_ratio (12-Ago) ──────────────────
+    # Forma del volumen reciente, no solo su nivel (fetch_binance_klines.py::
+    # fetch_volume_patron, cableado como feature de solo-logging por petición
+    # explícita Javi tras el prototipo retrospectivo). pendiente_norm>0 =
+    # volumen creciente sostenido en los últimos 20min (4 bloques de 5min);
+    # spike_ratio alto = un solo bloque domina (actividad puntual/agotamiento).
+    # Prototipo (analisis_taxonomia_volumen_12ago.py, n=318 post-TWAP
+    # GBM_LATE_15M#BUY_YES): agrupando {creciente,plano} vs {decreciente,spike}
+    # -- hit=79.1% vs 70.0%, gap 9.1pp, p_shuffle=0.072 -- prometedor, NO
+    # confirmado (no cruza 0.05). Se loguean los valores CRUDOS (no la
+    # clasificación categórica ya decidida) para que el bucketing automático
+    # de abajo (N_BUCKET_MIN=15) descubra el umbral real con más n, en vez de
+    # precocinar la respuesta -- mismo criterio que sigma_ewma_delta_pct.
+    # Revisar cuando n>=40 y algún bucket cruce shuffle p<0.05 de verdad.
+    ("volumen_pendiente_norm", "gt", "lt"),
+    ("volumen_pendiente_norm", "lt", "gt"),
+    ("volumen_spike_ratio",    "gt", "lt"),
+    ("volumen_spike_ratio",    "lt", "gt"),
     # ── Libro (28-Jul, backlog ítem 7 -- idea_moondev_10_hallazgos_
     # priorizados_28jul): _libro_calidad(market) YA se loguea en todas las
     # variantes de esta familia (vía _s_gbm_late/s_gbm_late_5min, sin

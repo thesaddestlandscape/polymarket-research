@@ -230,7 +230,14 @@ async def _correr_una_conexion(wallets: dict, vistos: set) -> set:
                 except Exception:
                     puede_ventana = None
 
-                fill_decision = _fillability_mirror(market_slug, mirror_lado, precio)
+                # 12-Ago (perfilado latencia, petición Javi): reusar el
+                # token_id ya resuelto en fill_deteccion -- eliminar la
+                # 2ª resolución gamma-api redundante (mismo mercado
+                # inmutable), medida 90-300ms. Ver docstring de
+                # _fillability_mirror en wallet_mirror_tracker.py.
+                fill_decision = _fillability_mirror(
+                    market_slug, mirror_lado, precio,
+                    token_id_precargado=fill_deteccion.get("token_id"))
                 t_decision = time.monotonic()
                 lag_dec_ms = round((t_decision - t_deteccion) * 1000, 2)
 

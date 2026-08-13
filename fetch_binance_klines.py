@@ -261,6 +261,76 @@ def fetch_volume_regimen(asset: str, horas_lookback: int = 3, minutos_ventana: i
         return None
 
 
+def fetch_volume_patron(asset: str, minutos_ventana: int = 20, n_bloques: int = 4) -> dict | None:
+    """Forma del volumen reciente, no solo su nivel (12-Ago, pendiente
+    project_pendiente_detectar_spikes_volumen_12ago -- petición Javi: el
+    ratio simple de fetch_volume_regimen no separó señal en agregado sobre
+    GBM_LATE_15M#BUY_YES, hipótesis de que mezcla patrones cualitativamente
+    distintos -- creciente sostenido vs plano vs spike puntual -- que un
+    solo número no distingue). Reparte `minutos_ventana` en `n_bloques`
+    bloques iguales y calcula:
+      - pendiente_norm: pendiente de regresión lineal de los bloques (0..
+        n_bloques-1) normalizada por su media -- positivo=creciente,
+        negativo=decreciente, cerca de 0=plano.
+      - spike_ratio: volumen del bloque máximo / mediana de los demás --
+        alto = un solo bloque domina (actividad climática puntual).
+
+    Prototipo verificado 12-Ago (analisis_taxonomia_volumen_12ago.py, n=318
+    post-TWAP GBM_LATE_15M#BUY_YES): agrupando creciente+plano vs
+    decreciente+spike, hit=79.1% vs 70.0% (gap 9.1pp, p_shuffle=0.072 --
+    prometedor, NO confirmado todavía, dejar crecer n). Se loguean los 2
+    valores CRUDOS (no la clasificación categórica ya decidida) para que
+    el pipeline causal (FEATURE_RULES, shadow_postmortem.py) descubra el
+    umbral real con más datos, mismo criterio que el resto del proyecto
+    (sigma_ewma_delta_pct, volumen_regimen) -- no precocinar la respuesta.
+
+    Llamada dedicada (no reusa fetch_volume_regimen, que solo cubre 4
+    activos) -- cubre los 6 activos de GBM_LATE_15M. Fail-closed: None en
+    cualquier fallo, la feature simplemente no se loguea ese ciclo."""
+    symbol = BINANCE_SYMBOLS.get(asset)
+    if not symbol:
+        return None
+    try:
+        now = datetime.now(timezone.utc)
+        inicio_ms = int((now.timestamp() - minutos_ventana * 60) * 1000)
+        r = requests.get(
+            "https://api.binance.com/api/v3/klines",
+            params={"symbol": symbol, "interval": "1m",
+                    "startTime": inicio_ms, "limit": minutos_ventana + 2},
+            timeout=TIMEOUT,
+        )
+        r.raise_for_status()
+        velas = r.json()
+        if len(velas) < minutos_ventana - 2:
+            return None
+        vols = [float(k[5]) for k in velas[-minutos_ventana:]]
+        if len(vols) < minutos_ventana:
+            return None
+        min_por_bloque = minutos_ventana // n_bloques
+        bloques = [sum(vols[i:i + min_por_bloque]) for i in range(0, minutos_ventana, min_por_bloque)]
+        bloques = bloques[:n_bloques]
+        if len(bloques) != n_bloques or any(b <= 0 for b in bloques):
+            return None
+
+        import numpy as np
+        x = np.arange(n_bloques)
+        y = np.array(bloques, dtype=np.float64)
+        media = y.mean()
+        pendiente = np.polyfit(x, y, 1)[0]
+        pendiente_norm = pendiente / media if media > 0 else 0.0
+
+        idx_max = int(np.argmax(y))
+        otros = np.delete(y, idx_max)
+        mediana_otros = float(np.median(otros)) if len(otros) else 0.0
+        spike_ratio = (y[idx_max] / mediana_otros) if mediana_otros > 0 else 10.0
+
+        return {"pendiente_norm": round(float(pendiente_norm), 4),
+                "spike_ratio": round(float(spike_ratio), 4)}
+    except Exception as e:
+        print(f"  [WARN] volume patron {asset}: {type(e).__name__}: {e}", file=sys.stderr)
+        return None
+
+
 def _log_evento_fuente(sym: str, fuente_prev: str, fuente_nueva: str, salto_pct: float) -> None:
     """Deja constancia en dq_events.jsonl (mismo log que L1) de un cambio de
     fuente de precio para un activo, con el salto de precio asociado — antes
@@ -334,6 +404,22 @@ def main():
     if vol_regimen:
         data["volumen_regimen"] = vol_regimen
         print(f"  Volumen régimen: {{{', '.join(f'{k}={v:.2f}x' for k, v in vol_regimen.items())}}}")
+
+    # Forma del volumen (12-Ago) — mismo patrón fail-closed, 6 activos
+    # (GBM_LATE_15M cubre los 6, a diferencia de volumen_regimen arriba
+    # que solo cubre 4).
+    vol_patron = {}
+    for _asset in ("BTC", "ETH", "SOL", "XRP", "DOGE", "BNB"):
+        _vp = fetch_volume_patron(_asset)
+        if _vp is not None:
+            vol_patron[_asset] = _vp
+    if vol_patron:
+        data["volumen_patron"] = vol_patron
+        _resumen_vp = ", ".join(
+            f"{k}=pend{v['pendiente_norm']:+.2f}/spike{v['spike_ratio']:.1f}x"
+            for k, v in vol_patron.items()
+        )
+        print(f"  Volumen patrón: {{{_resumen_vp}}}")
 
     out_path = DIR_BINANCE / f"klines_{fecha}.json"
     with open(out_path, "w", encoding="utf-8") as f:

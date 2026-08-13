@@ -806,6 +806,11 @@ def construir_contexto():
             _vr = kd.get("volumen_regimen")
             if isinstance(_vr, dict):
                 ctx["volumen_regimen"] = _vr
+            # Forma del volumen (12-Ago): clave "volumen_patron" del mismo
+            # JSON, {activo: {"pendiente_norm":..., "spike_ratio":...}}.
+            _vp = kd.get("volumen_patron")
+            if isinstance(_vp, dict):
+                ctx["volumen_patron"] = _vp
     except Exception:
         pass
     ctx["spot_prices"] = spot_prices
@@ -4301,6 +4306,9 @@ def _s_gbm_late(market, ctx, ventana_min, rest_lo, rest_hi, espacio_k=None):
     drift_20min_pct, ibs_20min = _drift_e_ibs_ventana(activo, precios_data, 20)
     dist_ancla_estructural_pct = _dist_ancla_estructural_pct(activo, precios_data, horas_lookback=3)
     volumen_regimen = ctx.get("volumen_regimen", {}).get(activo)
+    _vol_patron_activo = ctx.get("volumen_patron", {}).get(activo) or {}
+    volumen_pendiente_norm = _vol_patron_activo.get("pendiente_norm")
+    volumen_spike_ratio = _vol_patron_activo.get("spike_ratio")
 
     # drift_60min (05-Ago, fix): s_gbm_late_15min_multihorizonte() lee esta
     # clave desde el 22-Jul asumiendo que ya se computaba aquí -- NUNCA
@@ -4422,6 +4430,8 @@ def _s_gbm_late(market, ctx, ventana_min, rest_lo, rest_hi, espacio_k=None):
             "ibs_20min":           ibs_20min,
             "dist_ancla_estructural_pct": dist_ancla_estructural_pct,
             "volumen_regimen":     volumen_regimen,
+            "volumen_pendiente_norm": volumen_pendiente_norm,
+            "volumen_spike_ratio": volumen_spike_ratio,
             "drift_60min":         drift_60min,
             "n_obs_vol_h":         n_obs_vol,
             "se_d_gbm_aprox":      se_d_gbm_aprox,
