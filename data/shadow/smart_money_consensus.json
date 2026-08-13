@@ -1,38 +1,45 @@
 {
-  "ETH": {
-    "smart_money_consensus": 0.1724,
-    "n_trades_smart": 377,
+  "BTC": {
+    "smart_money_consensus": -0.0113,
+    "n_trades_smart": 1066,
     "n_wallets_smart": 7,
-    "smart_money_consensus_ponderado": 0.1208,
+    "smart_money_consensus_ponderado": -0.0235,
     "n_wallets_smart_ponderado": 7
   },
-  "BTC": {
-    "smart_money_consensus": -0.1245,
-    "n_trades_smart": 233,
-    "n_wallets_smart": 8,
-    "smart_money_consensus_ponderado": -0.0491,
-    "n_wallets_smart_ponderado": 8
+  "ETH": {
+    "smart_money_consensus": 0.0307,
+    "n_trades_smart": 522,
+    "n_wallets_smart": 4,
+    "smart_money_consensus_ponderado": 0.1134,
+    "n_wallets_smart_ponderado": 4
   },
   "SOL": {
-    "smart_money_consensus": 0.1453,
-    "n_trades_smart": 117,
-    "n_wallets_smart": 5,
-    "smart_money_consensus_ponderado": -0.0099,
-    "n_wallets_smart_ponderado": 5
-  },
-  "DOGE": {
-    "smart_money_consensus": -0.8,
-    "n_trades_smart": 10,
+    "smart_money_consensus": -0.0971,
+    "n_trades_smart": 175,
     "n_wallets_smart": 3,
-    "smart_money_consensus_ponderado": -0.4623,
+    "smart_money_consensus_ponderado": -0.1737,
     "n_wallets_smart_ponderado": 3
   },
   "XRP": {
-    "smart_money_consensus": 0.2537,
-    "n_trades_smart": 67,
-    "n_wallets_smart": 4,
-    "smart_money_consensus_ponderado": 0.5332,
-    "n_wallets_smart_ponderado": 4
+    "smart_money_consensus": -0.1148,
+    "n_trades_smart": 61,
+    "n_wallets_smart": 3,
+    "smart_money_consensus_ponderado": 0.0265,
+    "n_wallets_smart_ponderado": 3
   },
-  "_actualizado": "2026-08-13T21:41:48+00:00"
+  "BNB": {
+    "smart_money_consensus": 0.5,
+    "n_trades_smart": 4,
+    "n_wallets_smart": 1,
+    "smart_money_consensus_ponderado": 0.3391,
+    "n_wallets_smart_ponderado": 1
+  },
+  "DOGE": {
+    "smart_money_consensus": -1.0,
+    "n_trades_smart": 5,
+    "n_wallets_smart": 1,
+    "smart_money_consensus_ponderado": -1.0,
+    "n_wallets_smart_ponderado": 1
+  },
+  "_actualizado": "2026-08-13T22:02:34+00:00"
 }
