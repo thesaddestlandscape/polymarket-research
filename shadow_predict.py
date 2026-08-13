@@ -5150,7 +5150,7 @@ def _cargar_outcomes_recientes():
     except Exception:
         kl = {}
     for activo, outs in kl.items():
-        if activo not in ("BTC", "ETH", "SOL", "XRP") or not isinstance(outs, dict):
+        if activo not in ("BTC", "ETH", "SOL", "XRP", "DOGE", "BNB") or not isinstance(outs, dict):
             continue
         d5 = dict(seqs.get((activo, 5), []))
         for iso, out in outs.items():

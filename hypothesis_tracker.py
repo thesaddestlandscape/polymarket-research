@@ -1209,6 +1209,11 @@ def run(rows=None):
             "umbral":     h_def.get("umbral", ""),
             "accion":     h_def.get("accion", ""),
             "descripcion": h_def.get("descripcion", ""),
+            "bloqueante": h_def.get("bloqueante"),  # 13-Ago: pass-through, antes solo
+            # existía para builtin -- custom nunca podía marcarse exenta del vigía de
+            # estancamiento (vigia_candidatas_estancadas.py) aunque el propio filtro
+            # fuera estructuralmente inalcanzable (ver H-CUSTOM-PHOTO-FINISH-SNIPER,
+            # filtra por strategy_prefix que nunca escribe en results.csv).
             "fuente":     "custom",
             "actualizado": now,
             **result,

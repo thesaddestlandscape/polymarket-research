@@ -57,7 +57,14 @@ DIR_BINANCE.mkdir(parents=True, exist_ok=True)
 
 OUTCOMES_5M_PATH = Path("data") / "shadow" / "outcomes_5m_klines.json"
 OUTCOMES_5M_RETENCION_H = 48
-OUTCOMES_5M_ASSETS = ("BTC", "ETH", "SOL", "XRP")
+OUTCOMES_5M_ASSETS = ("BTC", "ETH", "SOL", "XRP", "DOGE", "BNB")  # 13-Ago: DOGE/BNB añadidos —
+# klines ya se fetchean para los 6 (SPOT_SYMBOLS/KRAKEN_PAIRS), pero esta lista se quedó
+# clavada a 4 desde el origen (08-Jul) y dejaba STREAK_MOM_5M/STREAK_FADE_5M#DOGE en estado
+# absorbente permanente: _cargar_outcomes_recientes() solo tiene ventanas 5min adyacentes vía
+# este store (results.csv por sí solo nunca tiene ventanas consecutivas), así que sin DOGE aquí
+# _racha_actual() nunca podía calcular racha y k=0 siempre. Mismo bug ya corregido para 60min en
+# _cargar_outcomes_recientes (28-Jul), pendiente en este punto de entrada. Ver
+# vigia_candidatas_estancadas.py / candidatas_estancadas.json::candidatos_nunca_genero.
 
 
 def actualizar_outcomes_5m(data: dict) -> None:
