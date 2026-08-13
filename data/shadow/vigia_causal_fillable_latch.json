@@ -4693,5 +4693,8 @@
  "candidato_proxy#GBM_LATE_15M_MULTIHORIZONTE#BNB#BUY_YES#sigma_ewma_delta_pctlt": false,
  "candidato_proxy#GBM_LATE_15M_MULTIHORIZONTE#BNB#BUY_YES#libro_liquidezgt": false,
  "candidato_proxy#UPDOWN_GBM_15M_CROSS_WINDOW_SPREAD#BTC#BUY_YES#pct_spot_vs_refabs_lt": false,
- "candidato_proxy#UPDOWN_GBM_IBS_ALTO#BTC#15min#BTC#BUY_YES#pct_spot_vs_refabs_lt": false
+ "candidato_proxy#UPDOWN_GBM_IBS_ALTO#BTC#15min#BTC#BUY_YES#pct_spot_vs_refabs_lt": false,
+ "candidato_proxy#GBM_LATE_15M_TARDIO#DOGE#BUY_YES#ibs_20mingt": false,
+ "candidato_proxy#GBM_LATE_15M_TARDIO#DOGE#BUY_YES#sigma_ewma_delta_pctlt": false,
+ "FILTRO#candidato_proxy#UPDOWN_GBM#SOL#5min#SOL#BUY_YES#sigma_hlt": false
 }
