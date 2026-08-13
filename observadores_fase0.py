@@ -81,6 +81,7 @@ import favorito_confirmado_senal_contraria_fase0
 import favorito_5min_altaconviccion_logger
 import favorito5min_bajalatencia_fase0
 import gbmlate_fade_depth_fase0
+import weeklyprice_fade_depth_fase0
 import cluster_wallets_fillability_fase0
 import smart_exit_logger_persistente
 import p33_maker_fillability_fase0
@@ -99,6 +100,7 @@ OBSERVADORES = [
     (favorito_5min_altaconviccion_logger, "favorito_5min_altaconviccion.log", "log"),
     (favorito5min_bajalatencia_fase0, "favorito5min_bajalatencia_fase0.log", "log"),
     (gbmlate_fade_depth_fase0, "gbmlate_fade_depth_fase0.log", "_log"),
+    (weeklyprice_fade_depth_fase0, "weeklyprice_fade_depth_fase0.log", "_log"),
     (cluster_wallets_fillability_fase0, "cluster_wallets_fillability_fase0.log", "_log"),
     (smart_exit_logger_persistente, "smart_exit_logger.log", "_log"),
     (p33_maker_fillability_fase0, "p33_maker_fillability_fase0.log", "_log"),
