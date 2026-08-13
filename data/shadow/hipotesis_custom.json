@@ -766,7 +766,8 @@
         "strategy_prefix": "PHOTO_FINISH_SNIPER"
       },
       "umbral_n": 200,
-      "umbral_ic_min": 0.08
+      "umbral_ic_min": 0.08,
+      "bloqueante": "REFUTADA_28JUL_TRACKING_SEPARADO: ya evaluada a mano 28-Jul con data/shadow/photo_finish_YYYY-MM-DD.csv directo (ver CLAUDE.md punto 13 protocolo arranque / memoria hipotesis_auto.md) -- este filtro genérico busca strategy='PHOTO_FINISH_SNIPER' en results.csv, pero photo_finish_logger.py escribe a un CSV propio con schema distinto y JAMÁS escribe ahí, así que n=0 estructuralmente para siempre por este motor. No repetir la evaluación por aquí; si se reabre, hacerlo contra el CSV propio como el 28-Jul."
     },
     {
       "id": "H-CUSTOM-LATE15-BTC-BUYNO-COINFLIP",
