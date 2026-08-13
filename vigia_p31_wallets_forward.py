@@ -111,21 +111,74 @@ def cargar_forward(watchlist: dict) -> dict:
     return filas_por_combo
 
 
-def evaluar_combo(lado: str, rows: list) -> dict:
-    n = len(rows)
-    if n == 0:
-        return {"n": 0, "veredicto": "sin_datos"}
+def _hit_y_precio(lado: str, rows: list) -> tuple[int, float]:
+    """hits y suma de precio (en la perspectiva de `lado`) para un subconjunto
+    de filas -- misma definición que evaluar_combo, factorizada para poder
+    recalcularla sobre 'todas las filas' y sobre 'todas menos la wallet
+    dominante' sin duplicar la lógica de signo fade/follow."""
     if lado == "fade":
         hits = sum(1 for r in rows if r.get("acierto") not in ("1", "True", "true"))
         p_sum = sum(1 - float(r["precio"]) for r in rows)
     else:
         hits = sum(1 for r in rows if r.get("acierto") in ("1", "True", "true"))
         p_sum = sum(float(r["precio"]) for r in rows)
+    return hits, p_sum
+
+
+def _concentracion_wallet(lado: str, rows: list, n_total: int) -> dict:
+    """13-Ago (idea_p31_xrp15min_fade_follow_concentracion_13ago): un
+    veredicto confirmado_forward/refutado_forward con n grande puede seguir
+    siendo, en la práctica, el resultado de 1-2 wallets sobre-representadas
+    (XRP#15m#fade: 95% del n en 2/6 wallets; XRP#15m#follow: 30% del n en
+    1/6 wallets con 80% hit) -- ni el margen ni el p_shuffle agregados lo
+    revelan. Este cálculo hace explícita esa fragilidad en el propio JSON,
+    para no tener que recontar a mano cada vez que un veredicto se revisa."""
+    por_wallet = {}
+    for r in rows:
+        w = r.get("wallet", "")
+        por_wallet.setdefault(w, []).append(r)
+    if not por_wallet:
+        return {}
+    wallet_top, rows_top = max(por_wallet.items(), key=lambda kv: len(kv[1]))
+    n_top = len(rows_top)
+    hits_top, p_sum_top = _hit_y_precio(lado, rows_top)
+
+    resultado = {
+        "n_wallets_con_datos": len(por_wallet),
+        "wallet_top": wallet_top,
+        "n_top": n_top,
+        "pct_n_top": round(n_top / n_total, 4) if n_total else None,
+        "hit_top": round(hits_top / n_top, 4) if n_top else None,
+    }
+
+    rows_sin_top = [r for r in rows if r.get("wallet", "") != wallet_top]
+    n_sin_top = len(rows_sin_top)
+    resultado["n_sin_top"] = n_sin_top
+    if n_sin_top >= N_MIN:
+        hits_st, p_sum_st = _hit_y_precio(lado, rows_sin_top)
+        hit_st = hits_st / n_sin_top
+        p_medio_st = p_sum_st / n_sin_top
+        be_st = breakeven(p_medio_st)
+        wl_st = wilson_lower(hits_st, n_sin_top)
+        resultado["margen_sin_top_pp"] = round((wl_st - be_st) * 100, 2)
+        resultado["sobrevive_sin_top"] = resultado["margen_sin_top_pp"] > 0
+    else:
+        resultado["margen_sin_top_pp"] = None
+        resultado["sobrevive_sin_top"] = None  # n insuficiente sin la wallet top, no se puede saber
+    return resultado
+
+
+def evaluar_combo(lado: str, rows: list) -> dict:
+    n = len(rows)
+    if n == 0:
+        return {"n": 0, "veredicto": "sin_datos"}
+    hits, p_sum = _hit_y_precio(lado, rows)
     hit = hits / n
     p_medio = p_sum / n
     resultado = {
         "n": n, "hit": round(hit, 4), "precio_medio": round(p_medio, 4),
     }
+    resultado["concentracion"] = _concentracion_wallet(lado, rows, n)
     if n < N_MIN:
         resultado["veredicto"] = "sin_concluir"
         return resultado
@@ -178,10 +231,18 @@ def main() -> int:
         veredicto_ahora = r["veredicto"]
         if veredicto_ahora in ("confirmado_forward", "refutado_forward") and veredicto_ahora != veredicto_antes:
             emoji = "✅🟢" if veredicto_ahora == "confirmado_forward" else "❌🔴"
+            conc = r.get("concentracion", {})
+            frag = ""
+            if conc.get("pct_n_top") is not None and conc["pct_n_top"] >= 0.30:
+                sobrevive = conc.get("sobrevive_sin_top")
+                estado = ("sobrevive" if sobrevive else "NO sobrevive" if sobrevive is False
+                          else "n insuficiente sin ella")
+                frag = (f" ⚠️ frágil: {conc['pct_n_top']:.0%} del n en 1 wallet "
+                        f"(hit={conc.get('hit_top', 0):.2f}), sin ella {estado}")
             avisos.append(
                 f"{emoji} P31 {combo_id}: {veredicto_ahora} forward "
                 f"(n={r['n']} hit={r['hit']:.3f} margen={r.get('margen_pp', 0):+.2f}pp "
-                f"p={r.get('p_shuffle', 1):.4f})"
+                f"p={r.get('p_shuffle', 1):.4f}){frag}"
             )
 
     OUT.write_text(json.dumps(nuevo, indent=1))
