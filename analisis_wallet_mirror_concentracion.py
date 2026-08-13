@@ -22,7 +22,10 @@ from datetime import datetime, timezone
 from pathlib import Path
 
 REPO = Path(__file__).resolve().parent
-DRY_RUN = REPO / "data/shadow/wallet_mirror_dry_run.csv"
+# 13-Ago (fix, mismo bug de wallet_mirror_tracker.py/vigia_wallet_mirror_
+# degradacion.py): wallet_mirror_dry_run.csv lleva muerto desde el 04-Ago --
+# el proceso real que graba hoy es wallet_mirror_sniper.py, a su propio CSV.
+DRY_RUN = REPO / "data/shadow/wallet_mirror_sniper_dry_run.csv"
 CONFIG_LIVE = REPO / "data/live/config_live.json"
 OUT_JSON = REPO / "data/shadow/wallet_mirror_concentracion.json"
 

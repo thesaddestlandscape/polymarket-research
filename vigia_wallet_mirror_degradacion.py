@@ -15,17 +15,21 @@ verdad por wallet_mirror_executor_dryrun.py (dinero real).
 
 Método: para cada wallet SEGUIR ya validada, compara su hit-rate
 histórico (`v['hit']`, del JSON) contra el hit-rate de sus últimos
-N_RECIENTE trades resueltos en wallet_mirror_dry_run.csv (fuente con
-resolución de outcome completa, 99%+ de sus ~183k filas ya resueltas).
+N_RECIENTE trades resueltos en wallet_mirror_sniper_dry_run.csv (fuente
+con resolución de outcome completa, el CSV que de verdad escribe
+wallet_mirror_sniper.py hoy -- wallet_mirror_dry_run.csv lleva muerto
+desde el 04-Ago, ver fix 13-Ago).
 Alerta si el límite SUPERIOR del Wilson90% reciente ya no alcanza el
 hit histórico menos un margen -- es decir, incluso en el escenario más
 favorable dentro del intervalo, el rendimiento reciente es peor.
 
 Solo alerta -- no toca wallet_edge_score_por_activo_marco.json ni la
-lista que consulta cargar_wallets_validadas(). La decisión de excluir
-una wallet manualmente (si algún día se implementa una exclusión) sigue
-siendo de Javi, mismo patrón que vigia_log_growth.py/
-vigia_slippage_kill_switch.py.
+lista que consulta cargar_wallets_validadas(). 13-Ago: el filtro real
+para dinero real vive ahora en wallet_mirror_tracker.py::
+wallets_operativas_recientes() (mismo criterio, convertido de alerta a
+exclusión fail-closed para wallet_mirror_executor_dryrun.py) -- esta
+vigía sigue avisando por Telegram en paralelo, mismo patrón que
+vigia_log_growth.py/vigia_slippage_kill_switch.py.
 
 Cron sugerido: diario, mismo bloque que el resto de vigías de análisis.
 """
@@ -42,7 +46,13 @@ from analisis_gate_riguroso import wilson_ci  # noqa: E402
 from wallet_mirror_tracker import MARCO_A_ACTIVITY  # noqa: E402
 
 WALLET_SCORES = REPO / "data/shadow/wallet_edge_score_por_activo_marco.json"
-DRY_RUN = REPO / "data/shadow/wallet_mirror_dry_run.csv"
+# 13-Ago (fix, mismo bug encontrado diseñando wallets_operativas_recientes()
+# en wallet_mirror_tracker.py): wallet_mirror_dry_run.csv lleva muerto desde
+# el 04-Ago -- wallet_mirror_tracker.py::main() dejó de ser el proceso real,
+# sustituido por wallet_mirror_sniper.py, que escribe a su propio CSV. Esta
+# vigía llevaba desde su creación (13-Ago) leyendo un histórico "reciente"
+# en realidad congelado hace 9+ días.
+DRY_RUN = REPO / "data/shadow/wallet_mirror_sniper_dry_run.csv"
 LATCH = REPO / "data/live/vigia_wallet_mirror_degradacion_latch.json"
 
 N_MIN_VALIDACION = 30   # mismo umbral que cargar_wallets_validadas()

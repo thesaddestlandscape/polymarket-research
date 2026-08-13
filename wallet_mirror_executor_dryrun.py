@@ -62,7 +62,7 @@ REPO = Path(__file__).resolve().parent
 sys.path.insert(0, str(REPO))
 
 from wallet_mirror_tracker import (  # noqa: E402
-    cargar_wallets_validadas, _opuesto, _fillability_mirror, _market_id_y_direccion,
+    wallets_operativas_recientes, _opuesto, _fillability_mirror, _market_id_y_direccion,
 )
 from fetch_polymarket_activity_ws import _parse_updown  # noqa: E402
 import live_trade as lt  # noqa: E402
@@ -440,7 +440,10 @@ async def _correr_una_conexion(wallets: dict, vistos: set) -> set:
 
 async def main() -> None:
     DIR_SHADOW.mkdir(parents=True, exist_ok=True)
-    wallets = cargar_wallets_validadas()
+    # 13-Ago: wallets_operativas_recientes(), NO cargar_wallets_validadas() --
+    # este proceso toca dinero real (DRY_RUN=False), exige además rendimiento
+    # reciente no degradado, ver wallet_mirror_tracker.py.
+    wallets = wallets_operativas_recientes()
     ultimo_refresco = datetime.now(timezone.utc).timestamp()
     vistos = _vistos_cargar()
     _log(f"wallet_mirror_executor_dryrun arrancado -- {len(wallets)} wallets validadas, DRY_RUN={DRY_RUN}")
@@ -448,7 +451,7 @@ async def main() -> None:
         try:
             ahora_ts = datetime.now(timezone.utc).timestamp()
             if ahora_ts - ultimo_refresco > REFRESCO_WALLETS_S:
-                wallets = cargar_wallets_validadas()
+                wallets = wallets_operativas_recientes()
                 ultimo_refresco = ahora_ts
             vistos = await _correr_una_conexion(wallets, vistos)
         except (websockets.exceptions.ConnectionClosed, OSError, asyncio.TimeoutError) as e:

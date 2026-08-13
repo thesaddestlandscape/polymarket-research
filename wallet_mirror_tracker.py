@@ -43,6 +43,7 @@ import csv
 import fcntl
 import json
 import sys
+from collections import defaultdict
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
@@ -51,6 +52,7 @@ sys.path.insert(0, str(REPO))
 
 import requests  # noqa: E402
 import live_trade as lt  # noqa: E402
+from analisis_gate_riguroso import wilson_ci  # noqa: E402
 
 DIR_SHADOW = REPO / "data" / "shadow"
 # 29-Jul: polymarket_activity_*.csv vive fuera del repo (fix fetch_polymarket_activity_ws.py).
@@ -59,10 +61,108 @@ WALLET_SCORES = DIR_SHADOW / "wallet_edge_score_por_activo_marco.json"
 OUT = DIR_SHADOW / "wallet_mirror_dry_run.csv"
 OUT_LOCK = DIR_SHADOW / "wallet_mirror_dry_run.csv.lock"
 VISTOS_PATH = DIR_SHADOW / "wallet_mirror_vistos.json"  # transaction_hash ya procesados
+# 13-Ago (fix, encontrado escribiendo el gate de rendimiento reciente de
+# abajo): OUT (wallet_mirror_dry_run.csv) lleva MUERTO desde el 04-Ago --
+# wallet_mirror_tracker.py::main() dejó de ser el proceso que corre de
+# verdad, sustituido por wallet_mirror_sniper.py, que escribe a su PROPIO
+# CSV. Cualquier gate que necesite el histórico de mirror REAL y vivo tiene
+# que leer este otro fichero, no OUT.
+DRY_RUN_VIVO = DIR_SHADOW / "wallet_mirror_sniper_dry_run.csv"
 
 N_MIN_WALLET = 30
 GAMMA = "https://gamma-api.polymarket.com"
 UMBRAL_RESUELTO = 0.98
+
+# 13-Ago (petición explícita Javi, dinero real): "el histórico me vale para
+# que entren en la muestra, pero no para que sirva como criterio para
+# operar -- si una wallet se degrada y la seguimos, perdemos pasta". Hasta
+# hoy la wallet que operaba con dinero real (wallet_mirror_executor_dryrun.py,
+# DRY_RUN=False desde 11-Ago) solo se filtraba por histórico completo
+# (sig_bhfdr, n>=N_MIN_WALLET) -- vigia_wallet_mirror_degradacion.py (13-Ago,
+# cron diario) ya detectaba degradación reciente pero SOLO avisaba por
+# Telegram, nunca excluía -- confirmado con datos reales de HOY mismo: 3
+# wallets marcadas DEGRADADA en el latch (0xfcefc196...#BTC#15min
+# hist=76.7% reciente=40.0%, 0x9866f9b7...#SOL#15min hist=54.3%
+# reciente=15.0%, 0x89b8c9d6...#BTC#5min hist=81.4% reciente=40.0%) seguían
+# operando con dinero real porque nada las excluía.
+#
+# `wallets_operativas_recientes()` de abajo convierte ese chequeo de alerta
+# en filtro real, fail-closed -- pero A PROPÓSITO NO se mete dentro de
+# cargar_wallets_validadas(): esa función también alimenta la detección/
+# grabación continua de wallet_mirror_sniper.py (escribe cada match nuevo a
+# DRY_RUN_VIVO). Filtrar ahí habría dejado a cualquier wallet excluida sin
+# poder grabar NUNCA más trades bajo su clave -- estado absorbente real
+# (/code-review 13-Ago: con el primer intento, 242/283 tuplas -85.5%-
+# quedaban excluidas ya en el primer ciclo, incluidas wallets nuevas que
+# nunca tuvieron oportunidad de acumular historial). cargar_wallets_validadas()
+# se queda TAL CUAL (solo histórico) para que la detección nunca se pare;
+# solo el ejecutor de dinero real llama al wrapper filtrado.
+N_RECIENTE_OPERAR = 20          # mismo valor que vigia_wallet_mirror_degradacion.py
+MARGEN_DEGRADACION_PP_OPERAR = 15
+
+
+def _historial_reciente_wallet_mirror() -> dict:
+    """(wallet, activo, marco_activity, tipo) -> [(trade_timestamp, acierto), ...] ordenado.
+    Fuente: DRY_RUN_VIVO (wallet_mirror_sniper_dry_run.csv), el CSV que de verdad se
+    sigue escribiendo hoy -- ver nota arriba sobre OUT/wallet_mirror_dry_run.csv muerto."""
+    hist = defaultdict(list)
+    if not DRY_RUN_VIVO.exists():
+        return hist
+    with open(DRY_RUN_VIVO, encoding="utf-8") as f:
+        for row in csv.DictReader(f):
+            if row.get("acierto") not in ("0", "1"):
+                continue
+            clave = (row.get("wallet", "").lower(), row.get("activo", ""),
+                     row.get("marco", ""), row.get("tipo", ""))
+            hist[clave].append((row.get("trade_timestamp", ""), int(row["acierto"])))
+    for clave in hist:
+        hist[clave].sort(key=lambda x: x[0])
+    return hist
+
+
+def wallets_operativas_recientes() -> dict:
+    """Wrapper de cargar_wallets_validadas() SOLO para lo que toca dinero real
+    (wallet_mirror_executor_dryrun.py) -- exige rendimiento RECIENTE (últimos
+    N_RECIENTE_OPERAR trades resueltos, fuente DRY_RUN_VIVO) no degradado frente
+    al histórico Y con borde estadístico propio sobre el 50%. Fail-closed:
+    candidata sin suficiente historial reciente propio se EXCLUYE, no hay
+    fallback silencioso al histórico agregado. NO usar para detección/logging
+    (eso sigue siendo cargar_wallets_validadas() sin filtrar, ver nota arriba)."""
+    candidatas = cargar_wallets_validadas()
+    if not candidatas:
+        return candidatas
+    hist = _historial_reciente_wallet_mirror()
+    out = {}
+    for clave, info in candidatas.items():
+        w, activo, marco = clave
+        aciertos = hist.get((w, activo, marco, info["tipo"]), [])
+        if len(aciertos) < N_RECIENTE_OPERAR:
+            continue  # sin evidencia reciente suficiente -> no se opera
+        if info.get("hit") is None:
+            continue  # sin hit histórico (dato inesperado) -> fail-closed, no se opera
+        recientes = [a for _, a in aciertos[-N_RECIENTE_OPERAR:]]
+        k, n = sum(recientes), len(recientes)
+        ci_lo, ci_hi = wilson_ci(k, n)
+        hit_hist = info["hit"] * 100
+        if ci_hi * 100 < (hit_hist - MARGEN_DEGRADACION_PP_OPERAR):
+            continue  # degradada frente a SU histórico -- mismo criterio que vigia_wallet_mirror_degradacion.py
+        # 13-Ago (fix del mismo día, gap real encontrado probando el filtro
+        # de arriba en vivo): comparar solo contra el histórico no basta --
+        # si la wallet lleva un tiempo mal, sus propios trades recientes YA
+        # están dentro de ese histórico y lo arrastran hacia abajo con ella,
+        # así que "reciente no mucho peor que el histórico" deja de disparar
+        # aunque el reciente siga siendo malo en términos absolutos (caso
+        # real: 0xfcefc196...#BTC#15min, hist bajó de 76.7%->59.3% en unas
+        # horas arrastrado por sus propias 8/20 recientes, dejando de
+        # marcarse degradada pese a que 40% reciente sigue sin edge). Exigir
+        # ADEMÁS que el propio reciente muestre borde estadístico real sobre
+        # 50% (Wilson90 INFERIOR, no el superior de arriba) -- "hit rate
+        # alto validado reciente" tiene que sostenerse por sí mismo, no solo
+        # relativo a una línea base que puede estar degradándose con él.
+        if ci_lo <= 0.50:
+            continue  # sin edge reciente confirmado por sí mismo -> no se opera
+        out[clave] = info
+    return out
 
 # 29-Jul (bug real encontrado en el primer smoke test, 0 matches pese a
 # haber decenas en los datos crudos): wallet_edge_score_por_activo_marco.json
@@ -82,7 +182,9 @@ def _log(msg: str) -> None:
 
 
 def cargar_wallets_validadas() -> dict:
-    """(wallet_lower, activo, marco) -> {"tipo": "SEGUIR"|"FADE", "edge_pp": float, "n": int}"""
+    """(wallet_lower, activo, marco) -> {"tipo": "SEGUIR"|"FADE", "edge_pp": float, "n": int}.
+    Solo histórico completo (sig_bhfdr, n>=N_MIN_WALLET) -- para dinero real usar
+    wallets_operativas_recientes(), que además exige rendimiento reciente."""
     try:
         datos = json.loads(WALLET_SCORES.read_text(encoding="utf-8"))
     except Exception:
@@ -122,8 +224,14 @@ def cargar_wallets_validadas() -> dict:
             continue  # edge_pp<0 pero hit>=50% -- payout asimétrico, no dirección; sin mirror validado
         out[(w, v["activo"], marco_activity)] = {
             "tipo": tipo, "edge_pp": v["edge_pp"], "n": v["n"],
-            "size_mediana": v.get("size_mediana"),
+            "size_mediana": v.get("size_mediana"), "hit": v.get("hit"),
         }
+    # NO filtrar por rendimiento reciente aquí -- esta función también
+    # alimenta la detección/grabación continua (wallet_mirror_sniper.py),
+    # que tiene que seguir viendo TODAS las wallets históricamente válidas
+    # para no dejar de acumular evidencia sobre ellas (ver nota grande
+    # arriba de N_RECIENTE_OPERAR). El filtro de dinero real vive en
+    # wallets_operativas_recientes().
     return out
 
 
