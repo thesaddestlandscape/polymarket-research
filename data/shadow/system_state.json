@@ -1,10 +1,10 @@
 {
-  "timestamp_utc": "2026-08-14T08:16:34+00:00",
-  "bankroll_sim": 16233.54,
-  "pnl_total": 16213.54,
-  "n_ops": 132871,
+  "timestamp_utc": "2026-08-14T08:24:55+00:00",
+  "bankroll_sim": 16229.08,
+  "pnl_total": 16209.08,
+  "n_ops": 132911,
   "win_rate": 0.6108,
-  "estrategias_activas": 404,
+  "estrategias_activas": 406,
   "desactivadas": [
     "SMART_FLOW_1H",
     "UPDOWN_GBM#daily",
@@ -34,9 +34,7 @@
     "BALLENAS_TARDIAS#ETH#5min",
     "BALLENAS_TARDIAS#ETH",
     "STREAK_FADE_5M#SOL#5min",
-    "STREAK_FADE_5M#SOL",
-    "LIQUIDACIONES_5M#BTC#5min",
-    "LIQUIDACIONES_5M#BTC"
+    "STREAK_FADE_5M#SOL"
   ],
   "top3_ic": [
     {
