@@ -108,6 +108,22 @@ def _log(msg: str):
     print(f"[{datetime.now(timezone.utc).isoformat(timespec='seconds')}] {msg}", flush=True)
 
 
+# 14-Ago: hallazgo real -- resolution_sniper_obs_2026-08-{12,13}.csv aparecieron
+# SIN cabecera (primera fila ya es un dato), causando que resolver_pendientes()
+# (csv.DictReader sin fieldnames) leyera esa primera fila de datos como si
+# fueran los nombres de columna -- todas las filas siguientes quedan mal
+# indexadas y r["outcome_real"] lanza KeyError. Causa raíz: `guardar()` corre
+# desde 12 hilos concurrentes (uno por activo#marco); el patrón
+# "nuevo = not path.exists()" + "open(path,'a')" + "writeheader()" no es
+# atómico -- dos hilos pueden ver el fichero como inexistente casi a la vez
+# (típico en el rollover de medianoche, cuando TODOS despiertan a escribir el
+# primer dato del día nuevo), y uno de ellos gana la carrera de creación sin
+# llegar a escribir la cabecera antes de que el otro ya esté anotando datos.
+# GUARDAR_LOCK serializa todo el bloque (comprobar+abrir+cabecera) para que
+# sea imposible que dos hilos decidan "nuevo" a la vez.
+GUARDAR_LOCK = threading.Lock()
+
+
 # ─────────────────────────────────────────────────────────────────────────
 # Tail en memoria de data/prices/chainlink_YYYY-MM-DD.csv -- evita abrir un
 # 2º websocket, reusa lo que fetch_chainlink_prices.py (screen `chainlink`)
@@ -274,13 +290,14 @@ def guardar(filas: list):
     if not filas:
         return
     path = _csv_path(datetime.now(timezone.utc))
-    nuevo = not path.exists()
-    with open(path, "a", newline="", encoding="utf-8") as f:
-        w = csv.DictWriter(f, fieldnames=COLUMNS)
-        if nuevo:
-            w.writeheader()
-        for fila in filas:
-            w.writerow(fila)
+    with GUARDAR_LOCK:
+        nuevo = not path.exists()
+        with open(path, "a", newline="", encoding="utf-8") as f:
+            w = csv.DictWriter(f, fieldnames=COLUMNS)
+            if nuevo:
+                w.writeheader()
+            for fila in filas:
+                w.writerow(fila)
 
 
 def resolver_pendientes():
@@ -291,11 +308,22 @@ def resolver_pendientes():
         if not path.exists():
             continue
         with open(path, encoding="utf-8") as f:
-            rows = list(csv.DictReader(f))
+            reader = csv.DictReader(f)
+            if reader.fieldnames != COLUMNS:
+                # 14-Ago: fichero sin cabecera (carrera de escritura ya
+                # corregida en guardar(), esto es la red de seguridad de
+                # lectura) -- la primera fila de datos se coló como
+                # fieldnames. Fail-closed: no adivinar el mapeo, solo avisar
+                # una vez y saltar este fichero hasta que se repare a mano.
+                _log(f"⚠️ {path.name} sin cabecera esperada (fieldnames="
+                     f"{reader.fieldnames}) -- saltado, reparar a mano "
+                     f"anteponiendo la fila de COLUMNS")
+                continue
+            rows = list(reader)
         cambiado = False
         pendientes_por_mkt = {}
         for r in rows:
-            if r["outcome_real"] or not r["market_id"]:
+            if r.get("outcome_real") or not r.get("market_id"):
                 continue
             pendientes_por_mkt.setdefault(r["market_id"], []).append(r)
         for market_id, filas in pendientes_por_mkt.items():
@@ -322,7 +350,7 @@ def resolver_pendientes():
                 w.writeheader()
                 w.writerows(rows)
             tmp.replace(path)
-            n_res = sum(1 for r in rows if r["outcome_real"])
+            n_res = sum(1 for r in rows if r.get("outcome_real"))
             _log(f"resolver: {path.name} {n_res}/{len(rows)} resueltas")
 
 
