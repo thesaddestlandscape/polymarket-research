@@ -1830,8 +1830,8 @@
   },
   "SEGUIR#BNB#15min#0": {
     "0.25": {
-      "n": 2,
-      "pnl_medio": -1.0,
+      "n": 3,
+      "pnl_medio": 0.0923,
       "shuffle_p": null,
       "split_half": null,
       "veredicto": "sin_concluir"
@@ -2272,22 +2272,22 @@
       "veredicto": "sin_concluir"
     },
     "0.90": {
-      "n": 54,
-      "pnl_medio": -0.0265,
-      "shuffle_p": 0.8165,
+      "n": 56,
+      "pnl_medio": -0.0231,
+      "shuffle_p": 0.942,
       "split_half": [
-        -0.0006,
-        -0.0451
+        0.0134,
+        -0.0288
       ],
       "veredicto": "sin_concluir"
     },
     "0.95": {
-      "n": 68,
-      "pnl_medio": -0.0279,
-      "shuffle_p": 0.756,
+      "n": 79,
+      "pnl_medio": -0.0457,
+      "shuffle_p": 0.562,
       "split_half": [
-        -0.062,
-        0.0064
+        -0.0502,
+        -0.0433
       ],
       "veredicto": "sin_concluir"
     }
@@ -2379,5 +2379,6 @@
     }
   },
   "SEGUIR#SOL#5min#1": {},
-  "SEGUIR#SOL#5min#0": {}
+  "SEGUIR#SOL#5min#0": {},
+  "SEGUIR#ETH#5min#0": {}
 }
