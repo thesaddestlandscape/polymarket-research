@@ -1,5 +1,5 @@
-# Hipótesis automáticas — 2026-08-14 03:01 UTC
-_Generado por shadow_postmortem.py sobre 51982 resoluciones (PNL=+3084.91€)_
+# Hipótesis automáticas — 2026-08-14 03:09 UTC
+_Generado por shadow_postmortem.py sobre 52002 resoluciones (PNL=+3081.09€)_
 
 ## Patrones causales activos
 
@@ -1217,49 +1217,49 @@ _Derivadas de los patrones aprendidos:_
 | ✅ BALLENAS_CONFIRMADAS_15M#SOL#15min | 118 | +0.008 | -2.30€ | 0 | 0 |
 | ✅ BALLENAS_CONFIRMADAS_15M#XRP | 9 | +0.021 | +0.14€ | 0 | 0 |
 | ✅ BALLENAS_CONFIRMADAS_15M#XRP#15min | 9 | +0.021 | +0.14€ | 0 | 0 |
-| ✅ BALLENAS_TARDIAS | 3910 | -0.014 | -567.97€ | 0 | 0 |
+| ✅ BALLENAS_TARDIAS | 3913 | -0.014 | -569.27€ | 0 | 0 |
 | ✅ BALLENAS_TARDIAS#15min | 249 | +0.201 | +5.29€ | 0 | 0 |
-| ✅ BALLENAS_TARDIAS#5min | 3661 | -0.029 | -573.26€ | 0 | 0 |
-| ✅ BALLENAS_TARDIAS#BNB | 404 | +0.101 | -28.49€ | 0 | 0 |
-| ✅ BALLENAS_TARDIAS#BNB#5min | 404 | +0.101 | -28.49€ | 0 | 0 |
+| ✅ BALLENAS_TARDIAS#5min | 3664 | -0.029 | -574.56€ | 0 | 0 |
+| ✅ BALLENAS_TARDIAS#BNB | 405 | +0.100 | -29.56€ | 0 | 0 |
+| ✅ BALLENAS_TARDIAS#BNB#5min | 405 | +0.100 | -29.56€ | 0 | 0 |
 | ✅ BALLENAS_TARDIAS#BTC | 249 | +0.201 | +5.29€ | 0 | 0 |
 | ✅ BALLENAS_TARDIAS#BTC#15min | 249 | +0.201 | +5.29€ | 0 | 0 |
-| ✅ BALLENAS_TARDIAS#DOGE | 507 | -0.113 | -4.41€ | 0 | 0 |
-| ✅ BALLENAS_TARDIAS#DOGE#5min | 507 | -0.113 | -4.41€ | 0 | 0 |
-| ✅ BALLENAS_TARDIAS#ETH | 902 | -0.001 | -91.94€ | 0 | 0 |
-| ✅ BALLENAS_TARDIAS#ETH#5min | 902 | -0.001 | -91.94€ | 0 | 0 |
+| ✅ BALLENAS_TARDIAS#DOGE | 508 | -0.112 | -3.58€ | 0 | 0 |
+| ✅ BALLENAS_TARDIAS#DOGE#5min | 508 | -0.112 | -3.58€ | 0 | 0 |
+| ✅ BALLENAS_TARDIAS#ETH | 903 | -0.002 | -93.01€ | 0 | 0 |
+| ✅ BALLENAS_TARDIAS#ETH#5min | 903 | -0.002 | -93.01€ | 0 | 0 |
 | ✅ BALLENAS_TARDIAS#SOL | 1068 | +0.016 | -136.17€ | 0 | 0 |
 | ✅ BALLENAS_TARDIAS#SOL#5min | 1068 | +0.016 | -136.17€ | 0 | 0 |
 | ✅ BALLENAS_TARDIAS#XRP | 780 | -0.134 | -312.25€ | 0 | 0 |
 | ✅ BALLENAS_TARDIAS#XRP#5min | 780 | -0.134 | -312.25€ | 0 | 0 |
-| ✅ FAVORITO_CONFIRMADO | 16713 | +0.105 | -781.84€ | 0 | 9 |
+| ✅ FAVORITO_CONFIRMADO | 16721 | +0.105 | -781.62€ | 0 | 9 |
 | ✅ FAVORITO_CONFIRMADO#15min | 2009 | +0.185 | -76.24€ | 0 | 0 |
 | ✅ FAVORITO_CONFIRMADO#240min | 57 | -0.059 | -18.92€ | 0 | 0 |
-| ✅ FAVORITO_CONFIRMADO#5min | 12353 | +0.088 | -710.84€ | 0 | 0 |
-| ✅ FAVORITO_CONFIRMADO#60min | 2294 | +0.132 | +24.16€ | 0 | 0 |
-| ✅ FAVORITO_CONFIRMADO#BNB | 2081 | +0.064 | -273.09€ | 0 | 0 |
+| ✅ FAVORITO_CONFIRMADO#5min | 12360 | +0.088 | -709.54€ | 0 | 0 |
+| ✅ FAVORITO_CONFIRMADO#60min | 2295 | +0.132 | +23.09€ | 0 | 0 |
+| ✅ FAVORITO_CONFIRMADO#BNB | 2083 | +0.064 | -275.23€ | 0 | 0 |
 | ✅ FAVORITO_CONFIRMADO#BNB#15min | 8 | -0.040 | -1.01€ | 0 | 0 |
-| ✅ FAVORITO_CONFIRMADO#BNB#5min | 2070 | +0.066 | -267.74€ | 0 | 0 |
-| ✅ FAVORITO_CONFIRMADO#BTC | 3481 | +0.127 | -11.48€ | 0 | 0 |
+| ✅ FAVORITO_CONFIRMADO#BNB#5min | 2072 | +0.065 | -269.88€ | 0 | 0 |
+| ✅ FAVORITO_CONFIRMADO#BTC | 3484 | +0.127 | -11.15€ | 0 | 0 |
 | ✅ FAVORITO_CONFIRMADO#BTC#15min | 550 | +0.181 | -46.54€ | 0 | 0 |
 | ✅ FAVORITO_CONFIRMADO#BTC#240min | 22 | +0.000 | -5.75€ | 0 | 0 |
-| ✅ FAVORITO_CONFIRMADO#BTC#5min | 2056 | +0.106 | -31.49€ | 0 | 0 |
-| ✅ FAVORITO_CONFIRMADO#BTC#60min | 853 | +0.144 | +72.29€ | 0 | 8 |
-| ✅ FAVORITO_CONFIRMADO#DOGE | 2064 | +0.072 | -214.67€ | 0 | 0 |
-| ✅ FAVORITO_CONFIRMADO#DOGE#5min | 2061 | +0.073 | -209.79€ | 0 | 0 |
-| ✅ FAVORITO_CONFIRMADO#ETH | 3591 | +0.111 | -79.04€ | 0 | 0 |
+| ✅ FAVORITO_CONFIRMADO#BTC#5min | 2058 | +0.107 | -30.08€ | 0 | 0 |
+| ✅ FAVORITO_CONFIRMADO#BTC#60min | 854 | +0.144 | +71.22€ | 0 | 8 |
+| ✅ FAVORITO_CONFIRMADO#DOGE | 2065 | +0.072 | -214.22€ | 0 | 0 |
+| ✅ FAVORITO_CONFIRMADO#DOGE#5min | 2062 | +0.073 | -209.34€ | 0 | 0 |
+| ✅ FAVORITO_CONFIRMADO#ETH | 3592 | +0.111 | -78.20€ | 0 | 0 |
 | ✅ FAVORITO_CONFIRMADO#ETH#15min | 754 | +0.176 | +8.05€ | 0 | 0 |
 | ✅ FAVORITO_CONFIRMADO#ETH#240min | 11 | -0.106 | -7.13€ | 0 | 0 |
-| ✅ FAVORITO_CONFIRMADO#ETH#5min | 2055 | +0.086 | -79.43€ | 0 | 0 |
+| ✅ FAVORITO_CONFIRMADO#ETH#5min | 2056 | +0.086 | -78.59€ | 0 | 0 |
 | ✅ FAVORITO_CONFIRMADO#ETH#60min | 771 | +0.117 | -0.54€ | 0 | 9 |
 | ✅ FAVORITO_CONFIRMADO#SOL | 3432 | +0.129 | -112.94€ | 0 | 0 |
 | ✅ FAVORITO_CONFIRMADO#SOL#15min | 686 | +0.205 | -32.33€ | 0 | 0 |
 | ✅ FAVORITO_CONFIRMADO#SOL#240min | 20 | +0.045 | -0.25€ | 0 | 0 |
 | ✅ FAVORITO_CONFIRMADO#SOL#5min | 2056 | +0.102 | -32.78€ | 0 | 0 |
 | ✅ FAVORITO_CONFIRMADO#SOL#60min | 670 | +0.132 | -47.59€ | 0 | 7 |
-| ✅ FAVORITO_CONFIRMADO#XRP | 2064 | +0.095 | -90.62€ | 0 | 0 |
+| ✅ FAVORITO_CONFIRMADO#XRP | 2065 | +0.095 | -89.88€ | 0 | 0 |
 | ✅ FAVORITO_CONFIRMADO#XRP#15min | 8 | +0.040 | +0.45€ | 0 | 0 |
-| ✅ FAVORITO_CONFIRMADO#XRP#5min | 2055 | +0.095 | -89.60€ | 0 | 0 |
+| ✅ FAVORITO_CONFIRMADO#XRP#5min | 2056 | +0.095 | -88.87€ | 0 | 0 |
 | ✅ FAVORITO_CONFIRMADO_15MIN_ALTACONVICCION | 2149 | +0.193 | -113.77€ | 0 | 0 |
 | ✅ FAVORITO_CONFIRMADO_15MIN_ALTACONVICCION#15min | 2149 | +0.193 | -113.77€ | 0 | 0 |
 | ✅ FAVORITO_CONFIRMADO_15MIN_ALTACONVICCION#BNB | 531 | +0.187 | -43.92€ | 0 | 0 |
@@ -1282,20 +1282,20 @@ _Derivadas de los patrones aprendidos:_
 | ✅ FAVORITO_CONFIRMADO_15MIN_EXTREMO#ETH#15min | 36 | +0.342 | -6.17€ | 0 | 0 |
 | ✅ FAVORITO_CONFIRMADO_15MIN_EXTREMO#SOL | 21 | +0.370 | -1.79€ | 0 | 0 |
 | ✅ FAVORITO_CONFIRMADO_15MIN_EXTREMO#SOL#15min | 21 | +0.370 | -1.79€ | 0 | 0 |
-| ✅ FAVORITO_CONFIRMADO_5MIN_ALTACONVICCION | 8868 | +0.197 | -765.69€ | 0 | 0 |
-| ✅ FAVORITO_CONFIRMADO_5MIN_ALTACONVICCION#5min | 8868 | +0.197 | -765.69€ | 0 | 0 |
-| ✅ FAVORITO_CONFIRMADO_5MIN_ALTACONVICCION#BNB | 1634 | +0.158 | -271.40€ | 0 | 0 |
-| ✅ FAVORITO_CONFIRMADO_5MIN_ALTACONVICCION#BNB#5min | 1634 | +0.158 | -271.40€ | 0 | 0 |
-| ✅ FAVORITO_CONFIRMADO_5MIN_ALTACONVICCION#BTC | 1412 | +0.230 | -33.21€ | 0 | 0 |
-| ✅ FAVORITO_CONFIRMADO_5MIN_ALTACONVICCION#BTC#5min | 1412 | +0.230 | -33.21€ | 0 | 0 |
-| ✅ FAVORITO_CONFIRMADO_5MIN_ALTACONVICCION#DOGE | 1531 | +0.181 | -182.73€ | 0 | 0 |
-| ✅ FAVORITO_CONFIRMADO_5MIN_ALTACONVICCION#DOGE#5min | 1531 | +0.181 | -182.73€ | 0 | 0 |
-| ✅ FAVORITO_CONFIRMADO_5MIN_ALTACONVICCION#ETH | 1423 | +0.213 | -74.18€ | 0 | 0 |
-| ✅ FAVORITO_CONFIRMADO_5MIN_ALTACONVICCION#ETH#5min | 1423 | +0.213 | -74.18€ | 0 | 0 |
+| ✅ FAVORITO_CONFIRMADO_5MIN_ALTACONVICCION | 8875 | +0.197 | -767.40€ | 0 | 0 |
+| ✅ FAVORITO_CONFIRMADO_5MIN_ALTACONVICCION#5min | 8875 | +0.197 | -767.40€ | 0 | 0 |
+| ✅ FAVORITO_CONFIRMADO_5MIN_ALTACONVICCION#BNB | 1636 | +0.157 | -273.54€ | 0 | 0 |
+| ✅ FAVORITO_CONFIRMADO_5MIN_ALTACONVICCION#BNB#5min | 1636 | +0.157 | -273.54€ | 0 | 0 |
+| ✅ FAVORITO_CONFIRMADO_5MIN_ALTACONVICCION#BTC | 1414 | +0.230 | -32.38€ | 0 | 0 |
+| ✅ FAVORITO_CONFIRMADO_5MIN_ALTACONVICCION#BTC#5min | 1414 | +0.230 | -32.38€ | 0 | 0 |
+| ✅ FAVORITO_CONFIRMADO_5MIN_ALTACONVICCION#DOGE | 1532 | +0.181 | -182.44€ | 0 | 0 |
+| ✅ FAVORITO_CONFIRMADO_5MIN_ALTACONVICCION#DOGE#5min | 1532 | +0.181 | -182.44€ | 0 | 0 |
+| ✅ FAVORITO_CONFIRMADO_5MIN_ALTACONVICCION#ETH | 1424 | +0.212 | -75.25€ | 0 | 0 |
+| ✅ FAVORITO_CONFIRMADO_5MIN_ALTACONVICCION#ETH#5min | 1424 | +0.212 | -75.25€ | 0 | 0 |
 | ✅ FAVORITO_CONFIRMADO_5MIN_ALTACONVICCION#SOL | 1405 | +0.226 | -49.52€ | 0 | 0 |
 | ✅ FAVORITO_CONFIRMADO_5MIN_ALTACONVICCION#SOL#5min | 1405 | +0.226 | -49.52€ | 0 | 0 |
-| ✅ FAVORITO_CONFIRMADO_5MIN_ALTACONVICCION#XRP | 1463 | +0.182 | -154.64€ | 0 | 0 |
-| ✅ FAVORITO_CONFIRMADO_5MIN_ALTACONVICCION#XRP#5min | 1463 | +0.182 | -154.64€ | 0 | 0 |
+| ✅ FAVORITO_CONFIRMADO_5MIN_ALTACONVICCION#XRP | 1464 | +0.182 | -154.27€ | 0 | 0 |
+| ✅ FAVORITO_CONFIRMADO_5MIN_ALTACONVICCION#XRP#5min | 1464 | +0.182 | -154.27€ | 0 | 0 |
 | ✅ FAVORITO_CONFIRMADO_5MIN_BAJALATENCIA | 3104 | +0.120 | +12.38€ | 0 | 5 |
 | ✅ FAVORITO_CONFIRMADO_5MIN_BAJALATENCIA#5min | 3104 | +0.120 | +12.38€ | 0 | 0 |
 | ✅ FAVORITO_CONFIRMADO_5MIN_BAJALATENCIA#DOGE | 1539 | +0.113 | -12.02€ | 0 | 0 |
@@ -1406,18 +1406,18 @@ _Derivadas de los patrones aprendidos:_
 | ✅ GBM_LATE_60M#ETH#60min | 159 | -0.040 | +32.48€ | 3 | 2 |
 | ✅ GBM_LATE_60M#SOL | 129 | -0.134 | +11.68€ | 0 | 0 |
 | ✅ GBM_LATE_60M#SOL#60min | 129 | -0.134 | +11.68€ | 3 | 1 |
-| 🚫 GBM_LATE_60M_FADE | 165 | -0.296 | -30.15€ | 5 | 0 |
-| 🚫 GBM_LATE_60M_FADE#60min | 165 | -0.296 | -30.15€ | 0 | 0 |
-| 🚫 GBM_LATE_60M_FADE#BTC | 63 | -0.254 | -7.46€ | 0 | 0 |
-| 🚫 GBM_LATE_60M_FADE#BTC#60min | 63 | -0.254 | -7.46€ | 0 | 0 |
+| 🚫 GBM_LATE_60M_FADE | 166 | -0.298 | -30.66€ | 5 | 0 |
+| 🚫 GBM_LATE_60M_FADE#60min | 166 | -0.298 | -30.66€ | 0 | 0 |
+| 🚫 GBM_LATE_60M_FADE#BTC | 64 | -0.258 | -7.97€ | 0 | 0 |
+| 🚫 GBM_LATE_60M_FADE#BTC#60min | 64 | -0.258 | -7.97€ | 0 | 0 |
 | 🚫 GBM_LATE_60M_FADE#ETH | 57 | -0.331 | -14.97€ | 0 | 0 |
 | 🚫 GBM_LATE_60M_FADE#ETH#60min | 57 | -0.331 | -14.97€ | 2 | 0 |
 | 🚫 GBM_LATE_60M_FADE#SOL | 45 | -0.287 | -7.72€ | 0 | 0 |
 | 🚫 GBM_LATE_60M_FADE#SOL#60min | 45 | -0.287 | -7.72€ | 1 | 0 |
-| ✅ GBM_LATE_60M_PYCONFIRMADO | 243 | +0.047 | +4.99€ | 1 | 1 |
-| ✅ GBM_LATE_60M_PYCONFIRMADO#60min | 243 | +0.047 | +4.99€ | 0 | 0 |
-| ✅ GBM_LATE_60M_PYCONFIRMADO#BTC | 78 | +0.013 | +1.86€ | 0 | 0 |
-| ✅ GBM_LATE_60M_PYCONFIRMADO#BTC#60min | 78 | +0.013 | +1.86€ | 0 | 1 |
+| ✅ GBM_LATE_60M_PYCONFIRMADO | 244 | +0.045 | +4.48€ | 1 | 1 |
+| ✅ GBM_LATE_60M_PYCONFIRMADO#60min | 244 | +0.045 | +4.48€ | 0 | 0 |
+| ✅ GBM_LATE_60M_PYCONFIRMADO#BTC | 79 | +0.006 | +1.35€ | 0 | 0 |
+| ✅ GBM_LATE_60M_PYCONFIRMADO#BTC#60min | 79 | +0.006 | +1.35€ | 0 | 1 |
 | ✅ GBM_LATE_60M_PYCONFIRMADO#ETH | 53 | +0.118 | +5.55€ | 0 | 0 |
 | ✅ GBM_LATE_60M_PYCONFIRMADO#ETH#60min | 53 | +0.118 | +5.55€ | 0 | 0 |
 | ✅ GBM_LATE_60M_PYCONFIRMADO#SOL | 112 | +0.035 | -2.42€ | 0 | 0 |
@@ -1650,7 +1650,7 @@ _Derivadas de los patrones aprendidos:_
 **🟡 H-STREAK-COOLDOWN** — Cooldown tras 2 derrotas consecutivas (mismo subtype)
   - _Umbral_: n≥40 tras 2 losses y gap(IC_tras_win - IC_tras_2loss)≥0.05
   - _Acción_: Reducir stake (no desactivar) 1-2h tras 2 derrotas consecutivas en el mismo subtype
-  - _Estado_: tras_win IC=+0.130 n=31608 | tras_1loss IC=+0.083 n=20045 | tras_2loss IC=+0.037 n=8319/40 | gap=+0.094 (umbral 0.05)
+  - _Estado_: tras_win IC=+0.130 n=31621 | tras_1loss IC=+0.083 n=20052 | tras_2loss IC=+0.037 n=8322/40 | gap=+0.094 (umbral 0.05)
 
 **🟡 H-KALMAN** — Kalman filter para drift adaptativo
   - _Umbral_: n≥200 por subtipo para calibrar parámetros Q/R del KF
@@ -2023,8 +2023,8 @@ _Derivadas de los patrones aprendidos:_
   - _Hipótesis_: Detectado 2026-07-03 en benchmark de calibración del mercado (7d, estrategias GBM): en el bucket precio_yes_mercado [0.3-0.4) la frecuencia real de YES fue 0.45 vs 0.35 implícito (+0.10, n=38). Posible sesgo favorito-longshot suave en binarios de 15min (complemento del LONGSHOT ya activo para BUY_NO con py<0.20). Si se confirma, BUY_YES comprado en esa banda lleva viento de cola estructural del propio mercado, independiente del modelo.
   - _Umbral_: n≥40 y IC>+0.08
   - _Acción_: Si IC>+0.08 con n≥40 → kelly_boost ×1.1 para BUY_YES con precio_yes_mercado en [0.30,0.40), simétrico al longshot BUY_NO existente
-  - _Estado_: n=641 IC=-0.124 PNL=+69.32€ — sin señal clara aún (umbral IC: min=0.08 max=None)
-  - _Datos_: n=641 IC=-0.124 PNL=+69.32€
+  - _Estado_: n=643 IC=-0.125 PNL=+67.74€ — sin señal clara aún (umbral IC: min=0.08 max=None)
+  - _Datos_: n=643 IC=-0.125 PNL=+67.74€
 
 **⏳ H-CUSTOM-LATE15-PHOTO-FINISH** — GBM_LATE_15M photo finish — entrar pegado al strike es moneda al aire cobrada como favorito
   - _Hipótesis_: Detectado 2026-07-05 validando contra nuestros datos la única idea aprovechable de un artículo-anuncio de copy-bot: GBM_LATE_15M con |drift_ventana_pct|<0.02 tenía IC=-0.145 n=181 (win 35%, -9.70€), estable en ambas mitades temporales (-0.163/-0.127), monótono con la distancia (0.02-0.05: IC=+0.061; ≥0.05: IC=+0.14..0.19) y consistente en crudo y normalizado por sigma (|d_gbm|<0.1 IC=-0.081 n=244). BTC (IC=-0.163 n=90) y ETH (-0.130 n=79) concentraban el daño; SOL/XRP apenas entran en esa zona. Mecanismo: sin distancia real al strike el resultado es ~50/50 pero py_entrada ya cobra favorito. Filtro GBM_LATE_DRIFT_VENT_MIN_PCT=0.02 aplicado en shadow_predict el 2026-07-05. Esta hipótesis trackea la zona filtrada: si vuelven a aparecer ops aquí, el filtro se ha roto.
@@ -2161,8 +2161,8 @@ _Derivadas de los patrones aprendidos:_
   - _Hipótesis_: 06-Ago: hallazgo al barrer gate_bucket_propio.json completo tras la extension de hoy. strategy_params.json muestra ic_bayes=+0.158 (n=1448, activa=True) -- a primera vista parece una candidata razonable. Desagregado por precio (gate_bucket_propio.json): pnl/trade NEGATIVO en 5 de 6 buckets (0.70:-0.071 bueno_confirmado[relativo, sigue siendo negativo]/0.75:-0.212 malo_confirmado/0.80:-0.263/0.85:-0.506 malo_confirmado/0.90:-0.090), solo 0.95 (n=6, ruido) da +0.025. pnl/trade ponderado por n en TODO el rango = -0.132EUR/trade sobre n=1447. Mismo patron payout-asimetrico ya conocido en el proyecto (hit-rate alto, breakeven=precio de entrada, entra caro 0.70-0.95 -> paga poco cuando gana, pierde el stake completo cuando falla). IC positivo mide correlacion/direccion, NO mide si el payout deja margen -- exactamente el gap que motivo kelly_precio_gate.py en su dia. Esta hipotesis es una ALERTA, no una oportunidad: documentar para que nadie proponga esta tupla a whitelist guiandose solo por el ic_bayes agregado.
   - _Umbral_: NO promocionar sin resolver el payout asimetrico -- ningun n adicional lo arregla si el mecanismo de precio de entrada no cambia
   - _Acción_: Bloqueo informativo -- si alguna sesion futura propone FAVORITO_CONFIRMADO_5MIN_ALTACONVICCION#BNB#5min#BUY_YES para pares_permitidos_live, releer esta nota antes de aprobar. No requiere accion de codigo, es memoria del hallazgo.
-  - _Estado_: n=1634 IC=+0.158 PNL=-271.40€ — sin señal clara aún (umbral IC: min=999 max=None)
-  - _Datos_: n=1634 IC=+0.158 PNL=-271.40€
+  - _Estado_: n=1636 IC=+0.157 PNL=-273.54€ — sin señal clara aún (umbral IC: min=999 max=None)
+  - _Datos_: n=1636 IC=+0.157 PNL=-273.54€
 
 **⏳ H-CUSTOM-GBMLATE15M-SOL-RESCATE-PRECIO** — GBM_LATE_15M#SOL#15min#BUY_YES (pausada 05-Ago) -- posible rescate con filtro py en [0.45,0.55)
   - _Hipótesis_: 06-Ago: hallazgo al barrer gate_bucket_propio.json. GBM_LATE_15M#SOL#15min#BUY_YES fue PAUSADA el 05-Ago por veto sigma_ewma_delta_pct (ver project_veto_sigma_ewma_gbmlate_05ago). Desagregando por precio: bucket [0.50,0.55) tiene n=411, pnl/trade +0.498, gate riguroso COMPLETO (bueno_confirmado, split-half consistente ambas mitades [0.305,0.273]). El bucket vecino [0.45,0.50) (n=356, sin_concluir todavia) tambien da pnl positivo +0.323. Juntos (0.45-0.55) suman n=767, la mayoria del volumen de la tupla. En cambio [0.20,0.25) (n=20) da pnl=-0.866, malo_confirmado -- el problema parece concentrado en precio bajo, no en toda la tupla. HIPOTESIS: restringir la reactivacion a un filtro de precio py en [0.45,0.55) en vez de mantener la pausa total podria rescatar la mayor parte del edge sin el drenaje que motivo la pausa -- pero el veto sigma_ewma que causo la pausa es una dimension DISTINTA (volatilidad reciente, no precio), asi que ambos filtros podrian ser complementarios, no sustitutos. NO proponer reactivacion sin cruzar este hallazgo con el analisis original de sigma_ewma que motivo la pausa. ACTUALIZADO 06-Ago mismo dia, cruce con sigma_ewma pedido por Javi: filtros COMPLEMENTARIOS confirmado, no redundantes. 4 grupos (n con sigma_ewma disponible, n=1169 total, 767 filtrado a py[0.45,0.55)): solo_precio n=348 hit=59.8% pnl=+0.266; solo_sigma n=41 hit=63.4% pnl=+0.322; AMBOS n=92 hit=75.0% pnl=+0.755 (shuffle p=0.0014, split-half CONSISTENTE ambas mitades +0.511/+0.632); ninguno n=226 hit=42.5% pnl=+0.033 (casi breakeven). El filtro combinado casi TRIPLICA el pnl/trade del filtro de precio solo y confirma con rigor completo -- el edge real de esta tupla esta concentrado en la interseccion de ambos filtros, no en cualquiera de los dos por separado. Sigue pendiente medir fill-ability real antes de proponer reactivacion (mismo caveat que siempre).
