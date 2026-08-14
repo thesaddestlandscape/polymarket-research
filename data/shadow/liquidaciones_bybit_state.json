@@ -1,5 +1,5 @@
 {
- "generado_utc": "2026-08-14T14:26:42+00:00",
+ "generado_utc": "2026-08-14T14:36:25+00:00",
  "fuente": "bybit",
  "BNB": {
   "2min": {
@@ -156,5 +156,13 @@
    "n": 0,
    "imbalance": null
   }
+ },
+ "lag_bybit_ws": {
+  "ventana_min": 5,
+  "n_muestras": 0,
+  "ultimo_lag_s": null,
+  "max_lag_s": null,
+  "media_lag_s": null,
+  "umbral_alerta_s": 5.0
  }
 }
