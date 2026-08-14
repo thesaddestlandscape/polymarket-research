@@ -66,8 +66,38 @@ directamente.
 Corre en screen propia (reemplaza a la screen `liqs` que corría
 fetch_binance_liquidations.py):
   screen -dmS liqs bash -c "cd /root/polymarket-research && .venv/bin/python fetch_bybit_liquidations.py >> logs/bybit_liquidations.log 2>&1"
+
+Lagcheck (14-Ago, hallazgo Moon Dev en su propio near_liq_trigger: perdió
+una liquidación de $715k porque su feed llegó 150s tarde y nunca lo
+detectaron -- tenían un flag --lagcheck para esto). Antes de este cambio,
+`_procesar_evento` solo estampaba `time.time()` al procesar cada evento,
+sin comparar contra el timestamp real del propio mensaje de Bybit ("T",
+ms epoch) -- si el feed se retrasaba (reconexión, cola del exchange), no
+había forma de saberlo. Ahora cada evento calcula
+`lag_s = ahora - T/1000` y lo persiste en el JSON de salida
+(`lag_bybit_ws`) + avisa por log si supera LAG_ALERTA_S. Puramente
+observacional, no toca ninguna decisión ni filtro.
+
+Log de eventos individuales (14-Ago, bloqueo real encontrado al diseñar
+`near_liq_trigger`, ver idea_moondev_near_liq_trigger_y_lagcheck_pendiente_
+14ago): hasta ahora este script SOLO mantenía una ventana rodante en
+memoria y sobrescribía `liquidaciones_bybit_state.json` cada 10s -- no
+existía ningún histórico persistente de liquidaciones INDIVIDUALES
+(precio, tamaño, lado, momento exacto). Sin eso no hay ground truth contra
+la que validar ninguna hipótesis de "proximidad a liquidación forzosa" --
+exactamente el mismo principio de rigor que el resto del proyecto (nunca
+construir un estimador sin poder contrastarlo con datos reales). Ahora
+cada evento se apila también en
+`data/shadow/liquidaciones_bybit_eventos_YYYY-MM-DD.csv` (append,
+histórico creciente, mismo patrón que `binance_perp_cvd_oi_YYYY-MM-DD.csv`):
+timestamp_utc, activo, lado, usd, precio, cantidad, lag_s. Deja acumular
+unos días antes de poder cruzar esto contra el perfil de Open Interest por
+precio (`binance_perp_cvd_oi_*.csv`, ya con ~4 días de historia) y
+comprobar si el OI acumulado cerca de un nivel predice de verdad una
+cascada real, antes de escribir ningún estimador o estrategia.
 """
 
+import csv
 import json
 import time
 from collections import deque
@@ -81,6 +111,32 @@ REPO = Path(__file__).resolve().parent
 DIR_SHADOW = REPO / "data" / "shadow"
 STATE_PATH = DIR_SHADOW / "liquidaciones_bybit_state.json"
 
+CAMPOS_EVENTOS = ["timestamp_utc", "activo", "lado", "usd", "precio", "cantidad", "lag_s"]
+
+
+def _eventos_csv_path(ahora_dt: datetime) -> Path:
+    return DIR_SHADOW / f"liquidaciones_bybit_eventos_{ahora_dt.date().isoformat()}.csv"
+
+
+def _append_evento_csv(activo: str, lado: str, usd: float, precio: float,
+                        cantidad: float, lag_s: float | None) -> None:
+    ahora_dt = datetime.now(timezone.utc)
+    path = _eventos_csv_path(ahora_dt)
+    nuevo = not path.exists()
+    with path.open("a", newline="", encoding="utf-8") as f:
+        w = csv.DictWriter(f, fieldnames=CAMPOS_EVENTOS)
+        if nuevo:
+            w.writeheader()
+        w.writerow({
+            "timestamp_utc": ahora_dt.isoformat(timespec="seconds"),
+            "activo": activo,
+            "lado": lado,
+            "usd": round(usd, 2),
+            "precio": precio,
+            "cantidad": cantidad,
+            "lag_s": round(lag_s, 2) if lag_s is not None else "",
+        })
+
 WS_URL = "wss://stream.bybit.com/v5/public/linear"
 RECONNECT_ESPERA_S = 5
 RECV_TIMEOUT_S = 30  # mismo fix de timeout ya aplicado a chainlink/polyactivity/binance
@@ -91,6 +147,9 @@ LOOKBACK_MAX_MIN = 65  # cubre la ventana más larga (60min) con margen
 ACTIVOS_TRACKEADOS = {"BTC", "ETH", "SOL", "XRP", "DOGE", "BNB"}
 VENTANAS_MIN = [2, 5, 15, 60]
 
+LAG_ALERTA_S = 5.0  # gap evento->recepción por encima de esto se loguea
+LAG_VENTANA_MIN = 5  # ventana rodante para el resumen persistido en el JSON
+
 
 def _log(msg: str) -> None:
     ts = datetime.now(timezone.utc).isoformat(timespec="seconds")
@@ -99,6 +158,10 @@ def _log(msg: str) -> None:
 
 # {activo: deque[(epoch_s, lado, usd)]}  lado: "long" (se liquidó un long -> venta forzada) / "short"
 _eventos: dict[str, deque] = {a: deque() for a in ACTIVOS_TRACKEADOS}
+
+# deque[(epoch_s_recepcion, lag_s)] -- gap entre el timestamp "T" del propio
+# evento de Bybit y el momento en que lo procesamos aquí.
+_lag_muestras: deque = deque()
 
 
 def _symbol_a_activo(symbol: str) -> str | None:
@@ -133,6 +196,30 @@ def _procesar_evento(ev: dict) -> None:
     ahora = time.time()
     _eventos[activo].append((ahora, lado, usd))
     _purgar(activo, ahora)
+    lag_s = _registrar_lag(ev, ahora)
+    try:
+        _append_evento_csv(activo, lado, usd, precio, cantidad, lag_s)
+    except Exception as e:
+        _log(f"Error escribiendo evento en CSV: {type(e).__name__}: {e}")
+
+
+def _registrar_lag(ev: dict, ahora: float) -> float | None:
+    """Compara el timestamp "T" (ms epoch) que trae el propio evento de
+    Bybit contra el momento de recepción -- ver docstring del fichero."""
+    try:
+        evento_ts_s = float(ev.get("T") or 0) / 1000.0
+    except (TypeError, ValueError):
+        return None
+    if evento_ts_s <= 0:
+        return None
+    lag_s = ahora - evento_ts_s
+    _lag_muestras.append((ahora, lag_s))
+    limite = ahora - LAG_VENTANA_MIN * 60
+    while _lag_muestras and _lag_muestras[0][0] < limite:
+        _lag_muestras.popleft()
+    if lag_s > LAG_ALERTA_S:
+        _log(f"⚠️ lag alto: evento Bybit llegó con {lag_s:.1f}s de retraso (umbral {LAG_ALERTA_S}s)")
+    return lag_s
 
 
 def _purgar(activo: str, ahora: float) -> None:
@@ -173,6 +260,18 @@ def _agregar_estado() -> dict:
                 "imbalance": imbalance,
             }
         estado[activo] = por_ventana
+
+    while _lag_muestras and _lag_muestras[0][0] < ahora - LAG_VENTANA_MIN * 60:
+        _lag_muestras.popleft()
+    lags = [l for _, l in _lag_muestras]
+    estado["lag_bybit_ws"] = {
+        "ventana_min": LAG_VENTANA_MIN,
+        "n_muestras": len(lags),
+        "ultimo_lag_s": round(lags[-1], 2) if lags else None,
+        "max_lag_s": round(max(lags), 2) if lags else None,
+        "media_lag_s": round(sum(lags) / len(lags), 2) if lags else None,
+        "umbral_alerta_s": LAG_ALERTA_S,
+    }
     return estado
 
 
