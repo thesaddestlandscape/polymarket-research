@@ -195,7 +195,10 @@ def evaluar_combo(lado: str, rows: list) -> dict:
         "margen_pp": round(margen, 2), "p_shuffle": p_shuffle,
     })
     if margen > 0 and p_shuffle < 0.05:
-        resultado["veredicto"] = "confirmado_forward"
+        if resultado["concentracion"].get("sobrevive_sin_top") is False:
+            resultado["veredicto"] = "confirmado_forward_fragil"
+        else:
+            resultado["veredicto"] = "confirmado_forward"
     elif margen < 0 and p_shuffle < 0.05:
         resultado["veredicto"] = "refutado_forward"
     else:
@@ -229,8 +232,8 @@ def main() -> int:
 
         veredicto_antes = previo.get(combo_id, {}).get("veredicto", "sin_concluir")
         veredicto_ahora = r["veredicto"]
-        if veredicto_ahora in ("confirmado_forward", "refutado_forward") and veredicto_ahora != veredicto_antes:
-            emoji = "✅🟢" if veredicto_ahora == "confirmado_forward" else "❌🔴"
+        if veredicto_ahora in ("confirmado_forward", "confirmado_forward_fragil", "refutado_forward") and veredicto_ahora != veredicto_antes:
+            emoji = "✅🟢" if veredicto_ahora == "confirmado_forward" else "⚠️🟡" if veredicto_ahora == "confirmado_forward_fragil" else "❌🔴"
             conc = r.get("concentracion", {})
             frag = ""
             if conc.get("pct_n_top") is not None and conc["pct_n_top"] >= 0.30:
@@ -248,7 +251,7 @@ def main() -> int:
     OUT.write_text(json.dumps(nuevo, indent=1))
 
     n_con_datos = sum(1 for r in nuevo.values() if r["n"] > 0)
-    n_concluidos = sum(1 for r in nuevo.values() if r["veredicto"] in ("confirmado_forward", "refutado_forward"))
+    n_concluidos = sum(1 for r in nuevo.values() if r["veredicto"] in ("confirmado_forward", "confirmado_forward_fragil", "refutado_forward"))
     print(f"[vigia_p31] {n_con_datos}/{len(nuevo)} combos con datos forward, "
           f"{n_concluidos} concluidos (confirmado/refutado)")
     for combo_id, r in sorted(nuevo.items(), key=lambda kv: -kv[1]["n"]):
@@ -263,7 +266,7 @@ def main() -> int:
         ok = enviar_telegram(texto)
         latch.update({combo_id: nuevo[combo_id]["veredicto"]
                       for combo_id in watchlist["combos"]
-                      if nuevo[combo_id]["veredicto"] in ("confirmado_forward", "refutado_forward")})
+                      if nuevo[combo_id]["veredicto"] in ("confirmado_forward", "confirmado_forward_fragil", "refutado_forward")})
         latch["_telegram_ok"] = ok
         LATCH.write_text(json.dumps(latch, indent=1))
 
