@@ -1,5 +1,5 @@
 {
-  "actualizado": "2026-08-14T15:46:48+00:00",
+  "actualizado": "2026-08-14T15:56:48+00:00",
   "aviso_fillability": "Gate riguroso = shadow puro (results.csv), NO verifica fill-ability. 27-Jul: VERIFICADO con datos reales -- uniendo libro_snapshots.csv (23 dias de chequeo de profundidad REAL contra la API del CLOB, no simulacion) con results.csv, el subconjunto GBM_LATE_15M realmente ejecutable en las horas 13/15/17/19h da n=45 hit=48.9% (coinflip) IC=-0.011 NO CONCLUYENTE en TODOS los criterios (Wilson cruza 0.5, no bate shuffle p=0.616, PnL bootstrap CI cruza 0) -- el edge que el gate shadow ve (GATE OK en 9 celdas) se evapora por completo al restringir a lo fillable de verdad. NO aplicar ninguna celda de esta familia a meta.hora_boost_factor sin repetir esta verificacion con n fresco. Ver idea_fillability_gbmlate_bucket_precio_23jul.",
   "celdas": {
     "ORDER_FLOW_5M##BUY_NO#13": {
@@ -274,9 +274,9 @@
       "veredicto": "ACUMULANDO (n<40)"
     },
     "FAVORITO_CONFIRMADO#ETH#15min#BUY_YES#15": {
-      "n": 27,
-      "hit": 0.5556,
-      "ic": 0.051724137931034475,
+      "n": 28,
+      "hit": 0.5714,
+      "ic": 0.06666666666666665,
       "veredicto": "ACUMULANDO (n<40)"
     },
     "GBM_LATE_15M#XRP#15min#BUY_NO#15": {
@@ -286,15 +286,15 @@
       "veredicto": "ACUMULANDO (n<40)"
     },
     "FAVORITO_CONFIRMADO_15MIN_ALTACONVICCION#ETH#15min#BUY_YES#15": {
-      "n": 20,
-      "hit": 0.75,
-      "ic": 0.2272727272727273,
+      "n": 21,
+      "hit": 0.7619,
+      "ic": 0.23913043478260865,
       "veredicto": "ACUMULANDO (n<40)"
     },
     "FAVORITO_CONFIRMADO#SOL#15min#BUY_YES#15": {
-      "n": 24,
-      "hit": 0.3333,
-      "ic": -0.15384615384615385,
+      "n": 26,
+      "hit": 0.3846,
+      "ic": -0.10714285714285715,
       "veredicto": "ACUMULANDO (n<40)"
     },
     "GBM_LATE_15M_ESPACIO_ATR#BTC#15min#BUY_NO#15": {
@@ -303,10 +303,16 @@
       "ic": 0.20833333333333337,
       "veredicto": "ACUMULANDO (n<40)"
     },
+    "STRUCT_NO_15M#ETH#15min#BUY_NO#15": {
+      "n": 15,
+      "hit": 0.5333,
+      "ic": 0.02205882352941177,
+      "veredicto": "ACUMULANDO (n<40)"
+    },
     "STRUCT_NO_15M#BTC#15min#BUY_NO#15": {
-      "n": 21,
-      "hit": 0.7619,
-      "ic": 0.23913043478260865,
+      "n": 22,
+      "hit": 0.7273,
+      "ic": 0.20833333333333337,
       "veredicto": "ACUMULANDO (n<40)"
     },
     "FAVORITO_CONFIRMADO#BTC#15min#BUY_YES#15": {
@@ -316,9 +322,9 @@
       "veredicto": "ACUMULANDO (n<40)"
     },
     "FAVORITO_CONFIRMADO_15MIN_ALTACONVICCION#BNB#15min#BUY_YES#15": {
-      "n": 27,
-      "hit": 0.6667,
-      "ic": 0.15517241379310343,
+      "n": 28,
+      "hit": 0.6786,
+      "ic": 0.16666666666666663,
       "veredicto": "ACUMULANDO (n<40)"
     },
     "FAVORITO_CONFIRMADO_15MIN_ALTACONVICCION#DOGE#15min#BUY_YES#15": {
