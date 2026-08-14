@@ -1,0 +1,2 @@
+evento_timestamp_utc,market_id,strategy,subtype,direction,precio_original,stake_eur,ratio_original,precio_contrario,muestras_json,ratio_contrario_inicial,ratio_contrario_max,ratio_contrario_min
+2026-08-14T10:11:42+00:00,3562507,FAVORITO_CONFIRMADO_5MIN_ALTACONVICCION,XRP#5min,BUY_YES,0.75,1.05,31.4,0.25,"[[0.0,0.0,0.31],[5.1,1.4,0.26],[10.2,3.5,0.26],[15.2,32.5,0.23],[20.3,44.3,0.22],[25.5,43.9,0.21]]",0.0,44.3,0.0
