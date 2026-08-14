@@ -85,6 +85,7 @@ import weeklyprice_fade_depth_fase0
 import cluster_wallets_fillability_fase0
 import smart_exit_logger_persistente
 import p33_maker_fillability_fase0
+import resolution_sniper_fade_depth_fase0
 
 # (modulo, fichero_log_propio -- EXACTO el que ya usaba pipeline_watchdog.SCREEN_RESTART, nombre_funcion_log_a_reemplazar)
 OBSERVADORES = [
@@ -104,6 +105,7 @@ OBSERVADORES = [
     (cluster_wallets_fillability_fase0, "cluster_wallets_fillability_fase0.log", "_log"),
     (smart_exit_logger_persistente, "smart_exit_logger.log", "_log"),
     (p33_maker_fillability_fase0, "p33_maker_fillability_fase0.log", "_log"),
+    (resolution_sniper_fade_depth_fase0, "resolution_sniper_fade_depth_fase0.log", "_log"),
 ]
 
 
