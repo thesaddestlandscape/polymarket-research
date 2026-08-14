@@ -666,5 +666,21 @@
   "GBM_LATE_15M_MULTIHORIZONTE#SOL#15min": {
     "n": 238,
     "confirmado": false
+  },
+  "FAVORITO_CONFIRMADO_60MIN_ALTACONVICCION#ETH": {
+    "n": 205,
+    "confirmado": false
+  },
+  "FAVORITO_CONFIRMADO_60MIN_ALTACONVICCION#ETH#60min": {
+    "n": 205,
+    "confirmado": false
+  },
+  "GBM_LATE_15M_MULTIHORIZONTE#ETH": {
+    "n": 212,
+    "confirmado": false
+  },
+  "GBM_LATE_15M_MULTIHORIZONTE#ETH#15min": {
+    "n": 212,
+    "confirmado": false
   }
 }
