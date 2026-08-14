@@ -1594,6 +1594,16 @@ TWAP_FECHA_CAMBIO = datetime(2026, 8, 7, tzinfo=timezone.utc)  # mismo valor
 # cambio real de TWAP en la resolución Chainlink, confirmado con datos
 # propios (idea_manipulacion_twap_confirmada_datos_propios_10ago).
 
+# 14-Ago: SEGUNDO cambio de régimen, esta vez SOLO en 5min -- Polymarket
+# pasó la ventana TWAP de 5min de 30s a 60s a las 00:00 UTC del 14-Ago
+# (confirmado al minuto con datos propios vía gamma-api: ventana "7:55PM-
+# 8:00PM ET, 13-Ago" resolutionSource=twap-30s-streams, ventana "8:00PM-
+# 8:05PM ET, 13-Ago" [=00:00 UTC 14-Ago] ya twap-60s-streams). 15min/240min
+# NO afectados por este segundo cambio -- siguen usando solo TWAP_FECHA_CAMBIO.
+TWAP_5MIN_FECHA_CAMBIO_60S = datetime(2026, 8, 14, tzinfo=timezone.utc)  # mismo
+# valor que live_trade.py::CLV_5MIN_FECHA_CAMBIO_60S / gate_bucket_propio /
+# kelly_precio_gate.
+
 
 def _excluir_pre_twap(resultados: list) -> list:
     """Descarta filas de marcos afectados por el cambio TWAP (07-Ago) con
@@ -1644,7 +1654,8 @@ def es_pre_twap(marco: str, ts_iso: str) -> bool:
         return True  # fail-closed: timestamp ilegible en marco afectado, se descarta
     if ts_dt.tzinfo is None:
         ts_dt = ts_dt.replace(tzinfo=timezone.utc)
-    return ts_dt < TWAP_FECHA_CAMBIO
+    corte = TWAP_5MIN_FECHA_CAMBIO_60S if marco == "5min" else TWAP_FECHA_CAMBIO
+    return ts_dt < corte
 
 
 IC_FILTRO_MIN   = -0.12   # IC para activar filtro (evitar)

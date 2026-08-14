@@ -47,6 +47,10 @@ CLV_VETO_DIAS  = 7    # ventana móvil del CLV medio por tupla
 # en todo el proyecto.
 CLV_FECHA_CAMBIO_TWAP = datetime(2026, 8, 7, tzinfo=timezone.utc)
 CLV_MARCOS_TWAP_AFECTADOS = {"5min", "15min", "240min"}
+# 14-Ago: segundo cambio de régimen, solo 5min, 30s->60s a las 00:00 UTC
+# (ver shadow_postmortem.py::TWAP_5MIN_FECHA_CAMBIO_60S para la confirmación
+# con datos propios). 15min/240min siguen usando solo CLV_FECHA_CAMBIO_TWAP.
+CLV_5MIN_FECHA_CAMBIO_60S = datetime(2026, 8, 14, tzinfo=timezone.utc)
 # Fee real taker Polymarket (validado 10-Jul contra fees on-chain al céntimo,
 # ver project_fee_real_no_contabilizado): fee = FEE_RATE_TAKER_CRYPTO * p * (1-p).
 # Solo se paga en taker (nuestras órdenes son FOK); shadow_predict.py neta
@@ -688,7 +692,8 @@ def _clv_tupla(strategy: str, subtype: str, decision: str,
                             ts_pred = datetime.fromisoformat(row.get("prediction_timestamp", ""))
                         except (TypeError, ValueError):
                             continue  # fail-closed: timestamp ilegible en marco afectado, se descarta
-                        if ts_pred < CLV_FECHA_CAMBIO_TWAP:
+                        corte_twap = CLV_5MIN_FECHA_CAMBIO_60S if marco == "5min" else CLV_FECHA_CAMBIO_TWAP
+                        if ts_pred < corte_twap:
                             continue
                     try:
                         clv = float(row.get("clv"))

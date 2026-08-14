@@ -85,6 +85,11 @@ ITERS = 1000
 # régimen sin que nadie lo hubiera pausado.
 FECHA_CAMBIO_TWAP = datetime(2026, 8, 7, tzinfo=timezone.utc)
 MARCOS_TWAP_AFECTADOS = {"5min", "15min", "240min"}
+# 14-Ago: segundo cambio de régimen, solo 5min, 30s->60s a las 00:00 UTC
+# (confirmado al minuto con datos propios vía gamma-api, ver
+# shadow_postmortem.py::TWAP_5MIN_FECHA_CAMBIO_60S). 15min/240min siguen
+# usando solo FECHA_CAMBIO_TWAP (07-Ago).
+FECHA_CAMBIO_TWAP_5MIN_60S = datetime(2026, 8, 14, tzinfo=timezone.utc)
 
 
 def bucket(p):
@@ -183,12 +188,14 @@ def cargar_filas(tuplas):
             t = claves.get(clave)
             if t is None:
                 continue
-            if marco_por_tupla.get(t) in MARCOS_TWAP_AFECTADOS:
+            marco_t = marco_por_tupla.get(t)
+            if marco_t in MARCOS_TWAP_AFECTADOS:
                 try:
                     ts_dt = datetime.fromisoformat(row.get("prediction_timestamp", ""))
                 except Exception:
                     continue  # timestamp ilegible en un marco afectado: fail-closed, se descarta
-                if ts_dt < FECHA_CAMBIO_TWAP:
+                corte = FECHA_CAMBIO_TWAP_5MIN_60S if marco_t == "5min" else FECHA_CAMBIO_TWAP
+                if ts_dt < corte:
                     n_excluidas_pre_twap += 1
                     continue
             try:
