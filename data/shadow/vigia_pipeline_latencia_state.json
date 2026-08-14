@@ -1,14 +1,15 @@
 {
-  "ultimo_check": "2026-08-14T04:02:13.530742+00:00",
+  "ultimo_check": "2026-08-14T05:02:15.687867+00:00",
   "ultimo_resultado": {
-    "n_ciclos": 6,
+    "n_ciclos": 7,
     "duraciones_s": [
+      6.0,
       7.0,
-      9.0,
+      8.0,
+      6.0,
+      6.0,
       7.0,
-      7.0,
-      7.0,
-      7.0
+      8.0
     ],
     "outliers_s": [],
     "n_outliers": 0
