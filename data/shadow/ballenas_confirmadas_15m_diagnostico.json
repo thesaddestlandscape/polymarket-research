@@ -2631,7 +2631,7 @@
         }
       },
       "error_api": {
-        "conteo": 5053,
+        "conteo": 5060,
         "mercados": {
           "0xed88f70265795c86c515fe960e284493271a340d3ba74f3a1adad4a7c3db8e1a": 6,
           "0x7a17f8c622ac283b4bd5b3f79becb24e19ba2036326c9157bc0f9f583a2ea6a0": 18,
@@ -3269,12 +3269,13 @@
           "0xdbfed2cbd90ddd6f365f4f211f0a554b2ca2d6279369d924808c6014d4a2e527": 4,
           "0xe91b5c066f1700c0321f567ac0d67fb29cab265eb186c6971daf05a42f48f2ef": 3,
           "0x648c003762a358be903bc491f6b29680d0339e5e406f753715ca99f464c054a4": 5,
-          "0x543035b83bc85eb8c6171a81dd79ac660045b47420d529f63590ac56428f5d6d": 24,
+          "0x543035b83bc85eb8c6171a81dd79ac660045b47420d529f63590ac56428f5d6d": 27,
           "0xdf4b4a13bcfdb3af44c4b8c9b17c866fae7f38d5e903ae4214283458a5c83792": 2,
           "0xa09d034899999ede8523203b32e13dd3d8997897744bfef88176de2eb38b016b": 4,
           "0xdd2a017b7848b07586a08f06aec51c73bbdc3a4f0df5d9983e6415607a7e65e5": 4,
           "0x83960e5e58c63a0fa7b0db81455a87ad62182134510f79f421e7dce0b8b15040": 4,
-          "0x473990bf2f9d1311016f2d9e547ca48e89dd7f9fdb7d941689aea2311d4ac6bb": 5
+          "0x473990bf2f9d1311016f2d9e547ca48e89dd7f9fdb7d941689aea2311d4ac6bb": 8,
+          "0x0ad3a40c4b63b0dc134e6351ddf56c98487e975dfef9bae5318ce0b7d6fdf53a": 1
         }
       }
     },
@@ -5697,7 +5698,7 @@
   "DOGE#BUY_NO": {
     "motivos": {
       "banda_no_confirmada": {
-        "conteo": 21833,
+        "conteo": 21841,
         "mercados": {
           "0xc132ec92b406eb13da1cb814396e60b66f819f1be1c0d8394317d53e5b2c08b1": 6,
           "0xd0672cde7ddef0a3136bf4e9209e193940596ab831742079687f92fea3d8ca1b": 10,
@@ -6925,8 +6926,9 @@
           "0x49cb9545639fe35f1eb135b5e9f2c8b62dbd1f6a0b734186fa3c0c88d7c07beb": 19,
           "0x67c534c41538576d9a7e44c6a96af21e26c950b52b91c1b8b597d14d081a3a07": 12,
           "0xe6801f76f86faa4277415fa47d605a337b195bca5755e034490f3d06bb30f44d": 10,
-          "0xf219ff9f95c69892832674988be23416c7657435c04fa7ca8a85bdd6d8cc44fb": 11,
-          "0xb3b07a966026340ca63731018031ff5128d53f790f90a9e25b72f6ac93fa7f3e": 6
+          "0xf219ff9f95c69892832674988be23416c7657435c04fa7ca8a85bdd6d8cc44fb": 13,
+          "0xb3b07a966026340ca63731018031ff5128d53f790f90a9e25b72f6ac93fa7f3e": 9,
+          "0xc584e30cd04792b60776856305c521c84b0784044c5183f38dc67b38d01ee29a": 3
         }
       },
       "pocos_trades_en_banda": {
@@ -8236,7 +8238,7 @@
         }
       },
       "banda_no_confirmada": {
-        "conteo": 10976,
+        "conteo": 10978,
         "mercados": {
           "0x56401c8ec5ff84c021d4d27a719d3040826e0d7fdf6f69dd4bda1282142a846e": 7,
           "0x0723882704c5a268fa6ef74c36a8dec35216039cf327027205d497a3613c7b57": 6,
@@ -9238,7 +9240,7 @@
           "0x0ccd02eed4a338facb0baffab4e527cdaf50566da67dfb7b91008c046bf8de8c": 6,
           "0x57b04c5a5aeb5714af841e411832ea1770a3dc071a6003b46020fe79d1f34668": 6,
           "0x5ef2eaa1910eec4ea8c95d321b8fdec326e7dee50923c6eafe84cfc5f1cd82ca": 2,
-          "0xe6f8ff3598d2f39d4c21b2f513883ab91438a51751f021e6b8eaa706c5886964": 6
+          "0xe6f8ff3598d2f39d4c21b2f513883ab91438a51751f021e6b8eaa706c5886964": 8
         }
       },
       "error_api": {
@@ -10316,7 +10318,7 @@
         }
       },
       "banda_no_confirmada": {
-        "conteo": 31,
+        "conteo": 32,
         "mercados": {
           "0x950a377e9d87f76d70caa4751a99c9f9e97a4ca04d35d2fdcb7c2c509b15db47": 2,
           "0x8608afe9481e6d8053aa7d5ff8062d6ffd2545698274502515c09fd5fedd73c4": 1,
@@ -10332,7 +10334,8 @@
           "0x39d3bec565340066a8ef5265f5371fc6c4a04d2737d1cd5da06edfe22a3a6f36": 3,
           "0xb4f753693ebadfa8bc2855d762daaf625fbe47c4606e6a8296dfd31c1d5bf7d0": 2,
           "0xe91b5c066f1700c0321f567ac0d67fb29cab265eb186c6971daf05a42f48f2ef": 2,
-          "0x648c003762a358be903bc491f6b29680d0339e5e406f753715ca99f464c054a4": 1
+          "0x648c003762a358be903bc491f6b29680d0339e5e406f753715ca99f464c054a4": 1,
+          "0xdd2a017b7848b07586a08f06aec51c73bbdc3a4f0df5d9983e6415607a7e65e5": 1
         }
       }
     },
