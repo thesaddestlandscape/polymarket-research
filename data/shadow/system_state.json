@@ -1,10 +1,10 @@
 {
-  "timestamp_utc": "2026-08-14T07:34:45+00:00",
-  "bankroll_sim": 16221.8,
-  "pnl_total": 16201.8,
-  "n_ops": 132637,
+  "timestamp_utc": "2026-08-14T07:44:11+00:00",
+  "bankroll_sim": 16238.69,
+  "pnl_total": 16218.69,
+  "n_ops": 132688,
   "win_rate": 0.6109,
-  "estrategias_activas": 404,
+  "estrategias_activas": 402,
   "desactivadas": [
     "SMART_FLOW_1H",
     "UPDOWN_GBM#daily",
@@ -27,16 +27,18 @@
     "PRICE_TARGET_GBM_FADE#BTC",
     "PRICE_TARGET_GBM_FADE#SOL#atexpiry",
     "PRICE_TARGET_GBM_FADE#SOL",
-    "UPDOWN_OU_5M#BNB#5min",
-    "UPDOWN_OU_5M#BNB",
-    "LIQUIDACIONES_5M#BTC#5min",
-    "LIQUIDACIONES_5M#BTC",
-    "UPDOWN_OU_5M#BTC#5min",
-    "UPDOWN_OU_5M#BTC",
     "FAVORITO_CONFIRMADO_15MIN_ALTACONVICCION#SOL#15min",
     "FAVORITO_CONFIRMADO_15MIN_ALTACONVICCION#SOL",
     "LIQUIDACIONES_15M#DOGE#15min",
-    "LIQUIDACIONES_15M#DOGE"
+    "LIQUIDACIONES_15M#DOGE",
+    "BALLENAS_TARDIAS#ETH#5min",
+    "BALLENAS_TARDIAS#ETH",
+    "BALLENAS_TARDIAS#XRP#5min",
+    "BALLENAS_TARDIAS#XRP",
+    "STREAK_FADE_5M#SOL#5min",
+    "STREAK_FADE_5M#SOL",
+    "LIQUIDACIONES_5M#BTC#5min",
+    "LIQUIDACIONES_5M#BTC"
   ],
   "top3_ic": [
     {
