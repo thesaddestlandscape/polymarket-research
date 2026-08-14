@@ -2630,7 +2630,7 @@
         }
       },
       "error_api": {
-        "conteo": 5018,
+        "conteo": 5021,
         "mercados": {
           "0xed88f70265795c86c515fe960e284493271a340d3ba74f3a1adad4a7c3db8e1a": 6,
           "0x7a17f8c622ac283b4bd5b3f79becb24e19ba2036326c9157bc0f9f583a2ea6a0": 18,
@@ -3268,7 +3268,7 @@
           "0xdbfed2cbd90ddd6f365f4f211f0a554b2ca2d6279369d924808c6014d4a2e527": 4,
           "0xe91b5c066f1700c0321f567ac0d67fb29cab265eb186c6971daf05a42f48f2ef": 3,
           "0x648c003762a358be903bc491f6b29680d0339e5e406f753715ca99f464c054a4": 5,
-          "0x543035b83bc85eb8c6171a81dd79ac660045b47420d529f63590ac56428f5d6d": 6,
+          "0x543035b83bc85eb8c6171a81dd79ac660045b47420d529f63590ac56428f5d6d": 9,
           "0xdf4b4a13bcfdb3af44c4b8c9b17c866fae7f38d5e903ae4214283458a5c83792": 2
         }
       }
@@ -5692,7 +5692,7 @@
   "DOGE#BUY_NO": {
     "motivos": {
       "banda_no_confirmada": {
-        "conteo": 21779,
+        "conteo": 21789,
         "mercados": {
           "0xc132ec92b406eb13da1cb814396e60b66f819f1be1c0d8394317d53e5b2c08b1": 6,
           "0xd0672cde7ddef0a3136bf4e9209e193940596ab831742079687f92fea3d8ca1b": 10,
@@ -6914,11 +6914,11 @@
           "0x58f1c49b9c593b3ff040e5a1638e94622746c6533a7f56724e0f705009722336": 22,
           "0xe0e1a71a87fc63538dc639ea9ffa5ecdce74e14f31cbb2fe32cc254c2a42d4ec": 21,
           "0xeb44264e46c0153b64b69089dff89c58be819bbb84ef142d2025f9b2895b6011": 20,
-          "0x10d2eb8d16c97053495f70ced10fda6dbba23520a4b91ff65323c9f2d278f5f4": 19,
+          "0x10d2eb8d16c97053495f70ced10fda6dbba23520a4b91ff65323c9f2d278f5f4": 20,
           "0xf9b31aa44ceb6b26257cebdce3f7d9f1d545ee3e264ad4425d6fa0fc064a908b": 9,
-          "0x5e4a322cba1a47c2f2ac575abcf0d842524b04bbff87768f7c167a94e8579132": 13,
-          "0x49cb9545639fe35f1eb135b5e9f2c8b62dbd1f6a0b734186fa3c0c88d7c07beb": 8,
-          "0x67c534c41538576d9a7e44c6a96af21e26c950b52b91c1b8b597d14d081a3a07": 3
+          "0x5e4a322cba1a47c2f2ac575abcf0d842524b04bbff87768f7c167a94e8579132": 16,
+          "0x49cb9545639fe35f1eb135b5e9f2c8b62dbd1f6a0b734186fa3c0c88d7c07beb": 11,
+          "0x67c534c41538576d9a7e44c6a96af21e26c950b52b91c1b8b597d14d081a3a07": 6
         }
       },
       "pocos_trades_en_banda": {
