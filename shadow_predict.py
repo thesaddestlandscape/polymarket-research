@@ -5501,7 +5501,12 @@ def s_streak_fade_60m(market, ctx):
 # pares_permitidos_live → jamás opera en vivo. Ver idea_leadlag_btc_xrp_revive_parcial.
 LEADLAG_STATE_PATH = DIR_SHADOW / "leadlag_btc_state.json"
 LEADLAG_MIN_MUESTRAS = 3
-LEADLAG_VENTANA_MIN = 3.0  # minutos desde apertura de la ventana BTC a muestrear
+LEADLAG_VENTANA_MIN = 6.0  # 14-Ago: 3.0->6.0, estado absorbente real (0
+# predicciones 09->14-Ago, leadlag_btc_state.json nunca superaba 1-2
+# muestras/ventana con el ciclo actual, más lento que cuando se instrumentó
+# el 09-Jul -- ver idea_leadlag_starvation_ciclo_lento_corregido_14ago).
+# Solo amplía la ventana de captura del momentum TEMPRANO (shadow puro,
+# nunca toca dinero); no cambia MIN_MUESTRAS ni la fórmula.
 
 
 def _actualizar_leadlag_btc_state(operables):
