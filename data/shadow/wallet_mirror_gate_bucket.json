@@ -1830,8 +1830,8 @@
   },
   "SEGUIR#BNB#15min#0": {
     "0.25": {
-      "n": 3,
-      "pnl_medio": 0.0923,
+      "n": 4,
+      "pnl_medio": -0.1808,
       "shuffle_p": null,
       "split_half": null,
       "veredicto": "sin_concluir"
@@ -1839,6 +1839,13 @@
     "0.30": {
       "n": 1,
       "pnl_medio": -1.0,
+      "shuffle_p": null,
+      "split_half": null,
+      "veredicto": "sin_concluir"
+    },
+    "0.35": {
+      "n": 1,
+      "pnl_medio": 1.5174,
       "shuffle_p": null,
       "split_half": null,
       "veredicto": "sin_concluir"
@@ -2272,22 +2279,22 @@
       "veredicto": "sin_concluir"
     },
     "0.90": {
-      "n": 56,
-      "pnl_medio": -0.0231,
-      "shuffle_p": 0.942,
+      "n": 66,
+      "pnl_medio": -0.009,
+      "shuffle_p": 0.946,
       "split_half": [
-        0.0134,
-        -0.0288
+        0.0235,
+        -0.0122
       ],
       "veredicto": "sin_concluir"
     },
     "0.95": {
-      "n": 79,
-      "pnl_medio": -0.0457,
-      "shuffle_p": 0.562,
+      "n": 81,
+      "pnl_medio": -0.0436,
+      "shuffle_p": 0.52,
       "split_half": [
-        -0.0502,
-        -0.0433
+        -0.0533,
+        -0.0467
       ],
       "veredicto": "sin_concluir"
     }
