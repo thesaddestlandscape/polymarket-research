@@ -851,6 +851,12 @@ def compute_data():
             "shape": "arrowDown" if won else "arrowUp",
             "size": 0.6,
         })
+    # 14-Ago: el frontend solo usa los últimos 200 (dashboard_server.py:1600,
+    # `.filter(...).slice(-200)`) -- enviar la lista completa (24000+ filas,
+    # crece cada día con results.csv) hinchaba /api/data a ~3.6MB por
+    # petición, con fetchData() sondeando cada 1s -- causa real de la RAM
+    # alta del proceso, swap y ConnectionResetError en logs/dashboard.log.
+    btc_markers = btc_markers[-200:]
 
     return {
         "stats": {
