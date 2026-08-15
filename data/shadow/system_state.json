@@ -1,10 +1,10 @@
 {
-  "timestamp_utc": "2026-08-15T12:06:07+00:00",
-  "bankroll_sim": 16508.07,
-  "pnl_total": 16488.07,
-  "n_ops": 141973,
+  "timestamp_utc": "2026-08-15T12:15:51+00:00",
+  "bankroll_sim": 16495.89,
+  "pnl_total": 16475.89,
+  "n_ops": 142022,
   "win_rate": 0.609,
-  "estrategias_activas": 408,
+  "estrategias_activas": 407,
   "desactivadas": [
     "SMART_FLOW_1H",
     "UPDOWN_GBM#daily",
@@ -27,6 +27,7 @@
     "PRICE_TARGET_GBM_FADE#SOL",
     "FAVORITO_CONFIRMADO_15MIN_ALTACONVICCION#SOL#15min",
     "FAVORITO_CONFIRMADO_15MIN_ALTACONVICCION#SOL",
+    "FAVORITO_CONFIRMADO#ETH#240min",
     "LIQUIDACIONES_15M#DOGE#15min",
     "LIQUIDACIONES_15M#DOGE",
     "UPDOWN_OU_5M#SOL#5min",
