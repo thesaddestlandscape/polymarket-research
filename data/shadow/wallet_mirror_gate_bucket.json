@@ -2209,8 +2209,8 @@
       "veredicto": "sin_concluir"
     },
     "0.40": {
-      "n": 8,
-      "pnl_medio": -0.1283,
+      "n": 9,
+      "pnl_medio": -0.2252,
       "shuffle_p": null,
       "split_half": null,
       "veredicto": "sin_concluir"
@@ -2218,20 +2218,20 @@
     "0.45": {
       "n": 16,
       "pnl_medio": -0.3618,
-      "shuffle_p": 0.016,
+      "shuffle_p": 0.0205,
       "split_half": [
-        -0.2342,
-        -0.5167
+        -0.2252,
+        -0.5078
       ],
-      "veredicto": "malo_confirmado"
+      "veredicto": "sin_concluir"
     },
     "0.50": {
       "n": 23,
       "pnl_medio": 0.2111,
-      "shuffle_p": 0.08,
+      "shuffle_p": 0.068,
       "split_half": [
-        0.0293,
-        0.4246
+        0.0379,
+        0.4332
       ],
       "veredicto": "sin_concluir"
     },
@@ -2250,8 +2250,8 @@
       "veredicto": "sin_concluir"
     },
     "0.65": {
-      "n": 8,
-      "pnl_medio": -0.0831,
+      "n": 10,
+      "pnl_medio": -0.1185,
       "shuffle_p": null,
       "split_half": null,
       "veredicto": "sin_concluir"
@@ -2264,8 +2264,8 @@
       "veredicto": "sin_concluir"
     },
     "0.75": {
-      "n": 6,
-      "pnl_medio": -0.14,
+      "n": 7,
+      "pnl_medio": -0.2628,
       "shuffle_p": null,
       "split_half": null,
       "veredicto": "sin_concluir"
@@ -2280,30 +2280,30 @@
     "0.85": {
       "n": 15,
       "pnl_medio": -0.0249,
-      "shuffle_p": 0.898,
+      "shuffle_p": 0.9435,
       "split_half": [
-        0.1341,
-        -0.1538
+        0.1428,
+        -0.1452
       ],
       "veredicto": "sin_concluir"
     },
     "0.90": {
       "n": 86,
       "pnl_medio": 0.0111,
-      "shuffle_p": 0.744,
+      "shuffle_p": 0.6555,
       "split_half": [
-        -0.0127,
-        0.0617
+        -0.0014,
+        0.073
       ],
       "veredicto": "sin_concluir"
     },
     "0.95": {
       "n": 96,
       "pnl_medio": -0.0426,
-      "shuffle_p": 0.475,
+      "shuffle_p": 0.592,
       "split_half": [
-        -0.0435,
-        -0.0629
+        -0.0312,
+        -0.0506
       ],
       "veredicto": "sin_concluir"
     }
