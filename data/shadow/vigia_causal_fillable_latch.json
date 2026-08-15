@@ -4710,7 +4710,7 @@
  "candidato_proxy#GBM_LATE_15M_ESPACIO_ATR#SOL#BUY_YES#ibs_20mingt": false,
  "candidato_proxy#GBM_LATE_5M#SOL#5min#SOL#BUY_YES#libro_liquidezgt": false,
  "candidato_proxy#LIQUIDACIONES_60M#SOL#60min#SOL#BUY_YES#hora_utclt": false,
- "candidato_proxy#GBM_LATE_15M_TARDIO#DOGE#BUY_YES#drift_60minabs_lt": false,
+ "candidato_proxy#GBM_LATE_15M_TARDIO#DOGE#BUY_YES#drift_60minabs_lt": true,
  "candidato_proxy#UPDOWN_GBM_15M_CROSS_WINDOW_SPREAD#BTC#BUY_YES#sigma_hlt": false,
  "candidato_proxy#UPDOWN_GBM_IBS_ALTO#BTC#BUY_YES#sigma_hlt": false,
  "candidato_proxy#GBM_LATE_15M_TARDIO#SOL#BUY_YES#drift_60minabs_lt": false,
