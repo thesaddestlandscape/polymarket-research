@@ -74,3 +74,6 @@ timestamp_utc,activo,nesting,combo,coste,profit_min_pct,gap_opens_pct,depth_usd,
 2026-08-15T03:43:21+00:00,ETH,5min15m,NOout+YESin,1.239,-23.9,-0.0759,1.2,98,0.999,0.24,1881.58,1883.01,eth-updown-5m-1786765200,eth-updown-15m-1786764600
 2026-08-15T03:43:22+00:00,SOL,5min15m,NOout+YESin,1.399,-39.9,-0.1456,4.64,97,0.999,0.4,75.44,75.55,sol-updown-5m-1786765200,sol-updown-15m-1786764600
 2026-08-15T03:43:22+00:00,XRP,5min15m,NOout+YESin,1.96,-96.0,-0.0995,27.12,97,0.99,0.97,1.004,1.005,xrp-updown-5m-1786765200,xrp-updown-15m-1786764600
+2026-08-15T03:51:00+00:00,BTC,15min60m,NOout+YESin,1.508,-50.8,-0.1189,10.2,539,0.998,0.51,62999.995,63075.0,btc-updown-15m-1786765500,bitcoin-up-or-down-august-14-2026-11pm-et
+2026-08-15T03:51:01+00:00,ETH,15min60m,NOout+YESin,1.596,-59.6,-0.0746,71.23,538,0.996,0.6,1881.405,1882.81,eth-updown-15m-1786765500,ethereum-up-or-down-august-14-2026-11pm-et
+2026-08-15T03:51:03+00:00,XRP,15min60m,NOout+YESin,1.6,-60.0,-0.1512,6.82,536,0.98,0.62,1.00348,1.005,xrp-updown-15m-1786765500,xrp-up-or-down-august-14-2026-11pm-et
