@@ -15,9 +15,18 @@ suficiente; todo lo demás es "sin_concluir" y no se toca (fail-open).
 import json
 from pathlib import Path
 
-DATA_PATH = Path("data/shadow/gate_bucket_propio.json")
-CONFIG_LIVE = Path("data/live/config_live.json")
-OVERRIDE_PATH = Path("data/live/gate_bucket_propio_override.json")
+# 15-Ago (/code-review, hallazgo real): estas rutas eran relativas al cwd
+# del proceso que importa este módulo -- funcionaba mientras solo lo
+# importaban procesos ya arrancados con cwd=repo (run_fast.sh/run_slow.sh
+# hacen cd primero). vigia_degradacion_live.py corre por cron SIN cd previo
+# (cwd=$HOME=/root), así que cargar_pares_live_fail_closed() fallaba
+# SIEMPRE ahí (mismo patrón de bug ya documentado en el proyecto para
+# run_fast.sh, ver project_fix_cpu_ram_consolidacion_11ago). Ancladas al
+# fichero del módulo para que funcionen sin importar el cwd del caller.
+_REPO = Path(__file__).resolve().parent
+DATA_PATH = _REPO / "data/shadow/gate_bucket_propio.json"
+CONFIG_LIVE = _REPO / "data/live/config_live.json"
+OVERRIDE_PATH = _REPO / "data/live/gate_bucket_propio_override.json"
 STEP = 0.05
 
 _cache = {"mtime": None, "data": {}}
@@ -294,3 +303,77 @@ def evaluar(tupla_str: str, py: float) -> dict:
     if detalle is not None:
         return {"veredicto": veredicto_propio, "detalle": detalle}
     return {"veredicto": "sin_concluir", "detalle": None}
+
+
+def cargar_pares_live_fail_closed() -> tuple[set, bool]:
+    """Lee pares_permitidos_live de config_live.json para los helpers de
+    abajo. Devuelve (pares, ok) -- ok=False si config_live.json no se pudo
+    leer/parsear: el caller NUNCA debe interpretar un set() vacío en ese
+    caso como "no hay tuplas live" (fail-open), sino decidir explícitamente
+    qué hacer sin datos (15-Ago, /code-review: filtro nuevo de zona
+    confirmada era fail-open en exactamente este punto)."""
+    try:
+        pares = set(json.loads(CONFIG_LIVE.read_text()).get("pares_permitidos_live", []))
+        return pares, True
+    except Exception:
+        return set(), False
+
+
+def parsear_features(raw) -> dict:
+    """json.loads() seguro para la columna `features` (results.csv/
+    predictions.csv): degrada a {} tanto si el JSON no parsea como si
+    parsea a algo que NO es un dict (null, número, string -- una fila de
+    CSV corrupta por una carrera de escritura concurrente, ya vista una vez
+    en este proyecto el 14-Ago, puede producir cualquiera de los dos).
+    15-Ago (/code-review): antes cada caller solo envolvía el json.loads()
+    en try/except y llamaba .get() directo sobre el resultado -- un JSON
+    válido pero no-dict (ej. "null") pasaba el try/except y reventaba con
+    AttributeError en el primer .get()."""
+    try:
+        feats = json.loads(raw or "{}")
+    except Exception:
+        return {}
+    return feats if isinstance(feats, dict) else {}
+
+
+def veredicto_bloquea_ejecucion(feats: dict) -> bool:
+    """True si el veredicto de gate_bucket_propio en `feats` (ya parseado
+    con parsear_features) debe bloquear la ejecución real de una tupla ya
+    en pares_permitidos_live -- fail-closed: exige 'bueno_confirmado'
+    explícito, cualquier otra cosa (malo_confirmado/sin_concluir) o
+    ausencia total del feature en una tupla que SÍ lo consulta bloquea.
+    Si la predicción nunca trae esta clave (estrategias que no consultan
+    este gate) el caller debe decidir aparte -- esta función solo mira lo
+    que ya está presente, no decide si debía estarlo."""
+    veredicto = feats.get("gate_bucket_propio_veredicto")
+    return veredicto is not None and veredicto != "bueno_confirmado"
+
+
+def filtrar_filas_zona_confirmada(filas: list, pares_live: set) -> list:
+    """Filtra filas de results.csv (dicts con strategy/subtype/decision/
+    features) excluyendo, SOLO para tuplas ya en pares_permitidos_live, las
+    que caigan en una zona de precio no confirmada (gate_bucket_propio_
+    veredicto presente y != 'bueno_confirmado'). Filas de tuplas que no
+    están live, o sin ese feature (estrategias que nunca consultan este
+    gate), pasan sin filtrar.
+
+    15-Ago: extraído como helper único tras el fix del estado absorbente
+    de shadow_predict.py (las tuplas live ya no suprimen su predicción
+    entera en zonas no confirmadas, así que cualquier consumidor de
+    results.csv que calcule una métrica AGREGADA para una tupla live tiene
+    que aplicar este mismo filtro o mezcla evidencia de zonas que nunca
+    fueron -- ni serán -- candidatas reales de ejecución. /code-review
+    encontró la misma falta de filtro, tras aplicarlo ya en
+    shadow_postmortem.py, en analisis_log_growth.py (gate de crecimiento
+    logarítmico, CLAUDE.md pt.12/14) y vigia_degradacion_live.py (monitor
+    shadow-vs-real) -- los 3 ahora comparten esta única función en vez de
+    reimplementar el mismo criterio por separado."""
+    if not pares_live:
+        return filas
+    out = []
+    for r in filas:
+        tupla = f"{r.get('strategy', '')}#{r.get('subtype', '')}#{r.get('decision', '')}"
+        if tupla in pares_live and veredicto_bloquea_ejecucion(parsear_features(r.get("features"))):
+            continue
+        out.append(r)
+    return out

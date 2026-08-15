@@ -1131,16 +1131,17 @@ def s_weekly_price(market, ctx):
         direccion = "BUY_YES" if prob_yes >= py else "BUY_NO"
         tupla_str = f"WEEKLY_PRICE#{activo}#{direccion}"
         gate_bp = _gate_bucket_propio(tupla_str, py)
-        # 10-Ago (hallazgo real, dinero real ejecutado en zona sin_concluir):
-        # "malo_confirmado" es fail-OPEN -- deja pasar sin_concluir. El
-        # diseño obligatorio (CLAUDE.md, aplicado ya a los 4 ejecutores de
-        # baja latencia el 05-Ago) es fail-CLOSED: exige bueno_confirmado
-        # para tuplas ya en pares_permitidos_live. Este pipeline principal
-        # (shadow_predict.py, usado por el fast loop normal) nunca se
-        # migró -- 6 sitios con el mismo patrón viejo, todos corregidos hoy.
-        if tupla_str in _pares_live_hoy_set() and gate_bp["veredicto"] != "bueno_confirmado":
-            return None
-
+        # 15-Ago (estado absorbente encontrado en vivo): el `return None`
+        # que vivía aquí para tuplas ya en pares_permitidos_live suprimía
+        # la predicción ENTERA, no solo la ejecución -- sin predicción no
+        # hay fila en results.csv, así que gate_bucket_propio.json nunca
+        # podía acumular n fuera de la zona ya confirmada y esa zona quedaba
+        # atrapada en sin_concluir para siempre (confirmado real: BTC#60min
+        # #BUY_NO solo generó predicciones en [0.35,0.40) el 14-Ago; BTC
+        # #15min ALTACONVICCION, 0 predicciones 3 días seguidos). El veto de
+        # EJECUCIÓN real para dinero vivo se mueve a live_trade.py (mismo
+        # sitio que el resto de guardias: CLV, IC, fee) -- aquí solo se
+        # loguea el veredicto, igual que ya hacían los candidatos.
         return {
             "prob_yes": prob_yes,
             "razon": f"weekly_between {activo} spot={spot:.0f} [{lo:.0f},{hi:.0f}] in={in_range}",
@@ -1170,10 +1171,8 @@ def s_weekly_price(market, ctx):
     direccion = "BUY_YES" if prob_yes >= py else "BUY_NO"
     tupla_str = f"WEEKLY_PRICE#{activo}#{direccion}"
     gate_bp = _gate_bucket_propio(tupla_str, py)
-    # 10-Ago: fail-open corregido a fail-closed, ver comentario equivalente arriba.
-    if tupla_str in _pares_live_hoy_set() and gate_bp["veredicto"] != "bueno_confirmado":
-        return None
-
+    # 15-Ago: veto de ejecución movido a live_trade.py -- ver nota completa
+    # en la rama "between X and Y" de arriba (estado absorbente).
     return {
         "prob_yes": prob_yes,
         "razon": f"weekly_price {activo} spot={spot:.0f} obj={precio_obj:.0f} ratio={ratio:.3f}",
@@ -2244,11 +2243,8 @@ def s_updown_gbm(market, ctx, strategy_name: str = "UPDOWN_GBM"):
     tupla_str = f"{strategy_name}#{activo}#{slot_type}#{direccion}"
     gate_bp = _gate_bucket_propio(tupla_str, py_mkt_le)
     features["gate_bucket_propio_veredicto"] = gate_bp["veredicto"]
-    # 10-Ago: fail-open corregido a fail-closed (exige bueno_confirmado) --
-    # ver comentario completo en s_favorito_confirmado más abajo.
-    if tupla_str in _pares_live_hoy_set() and gate_bp["veredicto"] != "bueno_confirmado":
-        return None  # gate bucket propio -- ver gate_bucket_propio.json
-
+    # 15-Ago: veto de ejecución movido a live_trade.py -- ver nota completa
+    # en s_favorito_confirmado (estado absorbente).
     return {
         "prob_yes": max(0.05, min(0.95, p_up)),
         "razon":   razon,
@@ -3536,9 +3532,7 @@ def _aplicar_gate_bucket_propio_gbm_late(resultado, strategy_name):
     tupla_str = f"{strategy_name}#{resultado['subtype']}#{direccion}"
     gate_bp = _gate_bucket_propio(tupla_str, py_edge)
     resultado["features"]["gate_bucket_propio_veredicto"] = gate_bp["veredicto"]
-    # 10-Ago: fail-open corregido a fail-closed, ver s_favorito_confirmado.
-    if tupla_str in _pares_live_hoy_set() and gate_bp["veredicto"] != "bueno_confirmado":
-        return None  # gate bucket propio -- ver gate_bucket_propio.json
+    # 15-Ago: veto de ejecución movido a live_trade.py, ver s_favorito_confirmado.
     return resultado
 
 
@@ -3607,8 +3601,7 @@ def s_gbm_late_15min(market, ctx):
         tupla_str = f"GBM_LATE_15M#{activo}#15min#{direccion}"
         gate_bp = _gate_bucket_propio(tupla_str, py_edge)
         resultado["features"]["gate_bucket_propio_veredicto"] = gate_bp["veredicto"]
-        if tupla_str in _pares_live_hoy_set() and gate_bp["veredicto"] != "bueno_confirmado":
-            return None  # gate bucket propio 28-Jul -- ver gate_bucket_propio.json
+        # 15-Ago: veto de ejecución movido a live_trade.py, ver s_favorito_confirmado.
     return resultado
 
 
@@ -4784,27 +4777,34 @@ def s_favorito_confirmado(market, ctx, strategy_name: str = "FAVORITO_CONFIRMADO
     # a diferencia de banda_fina_ballenas (arriba, refutado en validación
     # retrospectiva: mezclar el timing de ballenas con esta estrategia no
     # transfiere), esto SÍ pasó rigor completo sobre datos propios.
-    # Veta ejecución real únicamente si la tupla exacta está HOY en
-    # pares_permitidos_live (dinero real); en shadow/candidatos solo se
-    # loguea, nunca se bloquea.
-    #
     # 10-Ago (hallazgo real, /code-review tras auditar un trade en vivo):
-    # este check comparaba solo contra "malo_confirmado" -- fail-OPEN,
-    # deja pasar "sin_concluir" sin vetar. CLAUDE.md exige fail-CLOSED
-    # (exigir bueno_confirmado) desde el 05-Ago, pero esa migración solo
-    # se aplicó a los 4 ejecutores de baja latencia -- este pipeline
-    # principal (shadow_predict.py, el que usa el fast loop normal cada
-    # ~20s) nunca se tocó. Consecuencia real: FAVORITO_CONFIRMADO_15MIN_
-    # ALTACONVICCION#BTC#15min#BUY_YES ejecutó un trade real a py=0.77
-    # (zona "sin_concluir", fuera de [0.80,0.85)/[0.85,0.90) confirmadas
-    # hoy) porque sin_concluir != malo_confirmado no vetaba. Corregido
-    # aquí y en los otros 5 sitios de shadow_predict.py con el mismo
-    # patrón (WEEKLY_PRICE x2, GBM_LATE_15M_PYCONFIRMADO, GBM_LATE_15M,
-    # y este mismo s_favorito_confirmado).
+    # el check aquí comparaba solo contra "malo_confirmado" -- fail-OPEN,
+    # dejaba pasar "sin_concluir" sin vetar. Corregido ese día a fail-closed
+    # (exigir bueno_confirmado) en los 6 sitios de shadow_predict.py con
+    # este patrón (WEEKLY_PRICE x2, GBM_LATE_15M_PYCONFIRMADO, GBM_LATE_15M,
+    # UPDOWN_GBM, este mismo s_favorito_confirmado).
+    #
+    # 15-Ago (segundo bug encontrado en el mismo mecanismo, "médico del
+    # proyecto" -- barrido de por qué solo hubo 2 trades reales el 14-Ago):
+    # el `return None` de abajo (ya quitado) suprimía la predicción ENTERA
+    # para tuplas ya en pares_permitidos_live, no solo la ejecución -- sin
+    # predicción no hay fila en predictions.csv/results.csv, así que
+    # gate_bucket_propio.json (que se reentrena a diario DESDE results.csv)
+    # nunca podía acumular n fuera de la zona ya confirmada: la zona
+    # quedaba atrapada en "sin_concluir" para siempre, estado absorbente
+    # autoperpetuado. Confirmado con datos reales: FAVORITO_CONFIRMADO#BTC
+    # #60min#BUY_NO solo generó predicciones con py∈[0.35,0.40) (la única
+    # zona confirmada) durante todo el 14-Ago -- ni una fuera de ahí pese a
+    # que el ejecutor de baja latencia vio señales en py 0.00-0.45 todo el
+    # día; FAVORITO_CONFIRMADO_15MIN_ALTACONVICCION#BTC#15min#BUY_YES pasó
+    # 3 días seguidos (12/13/14-Ago) con CERO predicciones. El veto de
+    # EJECUCIÓN real para dinero vivo se mueve a live_trade.py (mismo sitio
+    # que el resto de guardias: CLV, IC, fee) -- aquí solo se loguea el
+    # veredicto en features, igual que ya hacían los candidatos, para que
+    # results.csv (y por tanto gate_bucket_propio.json) siga aprendiendo
+    # de TODA la banda de precio, no solo de la zona ya confirmada.
     tupla_str = f"{strategy_name}#{activo}#{vent}min#{direccion}" if vent else None
     gate_bp = _gate_bucket_propio(tupla_str, py) if tupla_str else {"veredicto": "sin_concluir", "detalle": None}
-    if tupla_str in _pares_live_hoy_set() and gate_bp["veredicto"] != "bueno_confirmado":
-        return None  # gate bucket propio 28-Jul -- ver gate_bucket_propio.json
 
     return {
         "prob_yes": prob_yes,

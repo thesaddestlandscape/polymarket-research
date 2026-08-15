@@ -1448,8 +1448,22 @@ def _snapshots_por_lista(tuplas: set, motivo: str, aplicar_gate_ic: bool) -> Non
             min_ic_efectivo = min_ic_asim.get(f"{strategy}#{dec}", min_ic)
             try:
                 feats = json.loads(pred.get("features", "{}") or "{}")
+                if not isinstance(feats, dict):
+                    raise ValueError("features no es un dict")
             except Exception:
-                feats = {}
+                # 15-Ago (/code-review): mismo criterio fail-closed que
+                # main() -- features ilegibles no debe degradar a {} en
+                # silencio (dejaría pasar el veto de más abajo sin querer).
+                continue
+            # 15-Ago: mismo veto de micro-bucket que main() (ver nota junto
+            # al veto equivalente ahí) -- sin esto, desde el fix del estado
+            # absorbente de gate_bucket_propio, esta función snapshotea
+            # profundidad de libro para señales que main() nunca ejecutaría
+            # (zona no confirmada), contaminando libro_snapshots.csv -- el
+            # dataset canónico de fill-ability (CLAUDE.md punto 3b) -- con
+            # señales que nunca fueron candidatas reales de ejecución.
+            if _gbp.veredicto_bloquea_ejecucion(feats):
+                continue
             ic_h, n_h = _ic_n_para_subtype(strategy, subtype, params,
                                            decision=dec, min_n=min_n,
                                            min_ic=min_ic_efectivo,
@@ -3077,8 +3091,45 @@ def main():
         min_ic_efectivo = min_ic_asimetrico.get(f"{strategy}#{dec}", min_ic)
         try:
             feats_pred = json.loads(pred.get("features", "{}") or "{}")
+            if not isinstance(feats_pred, dict):
+                raise ValueError("features no es un dict")
         except Exception:
-            feats_pred = {}
+            # 15-Ago (/code-review, hallazgo real): antes esto degradaba a
+            # feats_pred={} y el veto de más abajo se saltaba en silencio
+            # (fail-OPEN) -- exactamente la clase de bug que este mismo
+            # mecanismo corrigió el 10-Ago (sin_concluir dejado pasar por
+            # accidente). Un JSON de features corrupto o no-dict (null,
+            # número) en predictions.csv ya pasó antes en este proyecto
+            # (carrera de escritura, ver idea_bug_resolver_pendientes_
+            # keyerror_14ago) -- fail-closed: sin poder leer el veredicto
+            # de gate_bucket_propio, no se ejecuta esta señal, punto.
+            log(f"  ⛔ {strategy}#{subtype} {dec}: features ilegibles en "
+                f"predictions.csv -- fail-closed, no se ejecuta")
+            continue
+
+        # Veto micro-bucket gate_bucket_propio (15-Ago, fix estado
+        # absorbente): shadow_predict.py YA NO bloquea la predicción en sí
+        # para las 6 familias que consultan este gate (WEEKLY_PRICE,
+        # UPDOWN_GBM, GBM_LATE_15M/PYCONFIRMADO, FAVORITO_CONFIRMADO) --
+        # antes lo hacía, y como resultado la zona no confirmada nunca
+        # acumulaba n propio en results.csv y quedaba atrapada en
+        # "sin_concluir" para siempre (ver nota completa en
+        # s_favorito_confirmado). El único punto de veto de EJECUCIÓN real
+        # para estas tuplas pasa a ser aquí, mismo sitio que el resto de
+        # guardias de esta sección (CLV, IC, fee). Solo veta si la
+        # predicción trae el veredicto (estrategias que nunca consultan
+        # gate_bucket_propio no llevan esta clave en features y no cambian
+        # de comportamiento -- fail-closed solo donde el gate ya aplicaba,
+        # no una veto nueva para tuplas que nunca lo tuvieron). Comparte
+        # el mismo criterio que _snapshots_por_lista() y shadow_postmortem.py
+        # vía gate_bucket_propio.veredicto_bloquea_ejecucion() -- una sola
+        # fuente de verdad para la semántica del veredicto.
+        if _gbp.veredicto_bloquea_ejecucion(feats_pred):
+            log(f"  ⛔ Veto micro-bucket: {strategy}#{subtype} {dec} "
+                f"gate_bucket_propio veredicto={feats_pred.get('gate_bucket_propio_veredicto')!r} "
+                f"(exige bueno_confirmado) — no se ejecuta")
+            continue
+
         ic_hist, n_hist = _ic_n_para_subtype(strategy, subtype, params, decision=dec,
                                               min_n=min_n, min_ic=min_ic_efectivo, features=feats_pred)
         pasa = not (ic_hist < min_ic_efectivo or n_hist < min_n)

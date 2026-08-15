@@ -31,6 +31,9 @@ import sys
 from pathlib import Path
 
 REPO = Path(__file__).resolve().parent
+sys.path.insert(0, str(REPO))
+import gate_bucket_propio as _gbp  # noqa: E402 -- 15-Ago, ver nota en gate()
+
 RESULTS = REPO / "data" / "shadow" / "results.csv"
 CONFIG_LIVE = REPO / "data" / "live" / "config_live.json"
 SLIPPAGE = 0.02  # misma constante que shadow_resolve.py:64
@@ -53,6 +56,22 @@ def gate(strategy: str, subtype: str, decision: str, f: float = 0.10) -> dict:
         if r["strategy"] == strategy and r["subtype"] == subtype
         and r["decision"] == decision and r.get("acierto") in ("0", "1")
     ]
+    # 15-Ago (/code-review, tras el fix del estado absorbente de
+    # gate_bucket_propio en shadow_predict.py): si esta tupla YA está en
+    # pares_permitidos_live, results.csv ahora también trae filas de zonas
+    # de precio no confirmadas (antes suprimidas del todo) -- sin filtrarlas
+    # aquí, este gate de payout inverso (el que detectó el sangrado real de
+    # 28-Jul, CLAUDE.md pt.14) mezclaría esas zonas nunca-ejecutables con la
+    # zona que sí opera dinero real, pudiendo enmascarar un payout inverso
+    # de verdad o disparar uno falso. pares_live=set() si config_live.json
+    # no se pudo leer -- filtrar_filas_zona_confirmada no filtra nada en ese
+    # caso (mismo criterio que antes de este fix, ver cargar_pares_live_
+    # fail_closed para el porqué es aceptable aquí: un config ilegible ya
+    # deja el propio live_trade.py fail-closed sin operar).
+    pares_live, pares_live_ok = _gbp.cargar_pares_live_fail_closed()
+    if not pares_live_ok:
+        print("[analisis_log_growth] \u26a0\ufe0f config_live.json ilegible -- filtro de zona confirmada NO se aplica este ciclo")
+    filas = _gbp.filtrar_filas_zona_confirmada(filas, pares_live)
     n = len(filas)
     if n == 0:
         return {"n": 0}

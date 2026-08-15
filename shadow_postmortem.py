@@ -25,6 +25,8 @@ from pathlib import Path
 
 import numpy as np
 
+import gate_bucket_propio as _gbp
+
 DIR_SHADOW      = Path("data/shadow")
 RESULTS_PATH    = DIR_SHADOW / "results.csv"
 POSTMORTEM_PATH = DIR_SHADOW / "postmortem.csv"
@@ -2611,7 +2613,41 @@ def main():
     # clasificar_causa() dos veces para el mismo subconjunto de filas
     # (una vez aquí, otra dentro del _con_causa duplicado), justo el tipo
     # de trabajo repetido por ciclo que este fix pretendía evitar.
-    params = calcular_params(_excluir_pre_twap(todos_con_causa))
+    #
+    # 15-Ago (/code-review sobre el fix de estado absorbente de
+    # gate_bucket_propio en shadow_predict.py): desde hoy, las tuplas ya
+    # en pares_permitidos_live vuelven a generar predicciones en TODA la
+    # banda de precio (antes solo en la zona ya confirmada) para que
+    # gate_bucket_propio.json pueda aprender de las zonas no confirmadas
+    # -- gate_bucket_propio.py lee results.csv DIRECTAMENTE del disco
+    # (script propio, fuera de este proceso), así que esa parte del
+    # aprendizaje ya funciona sin tocar nada más aquí. Pero el ic_bayes/n
+    # AGREGADO que este mismo calcular_params() escribe en
+    # strategy_params.json (leído por _ic_n_para_subtype()/
+    # UMBRAL_DESACTIVAR en live_trade.py, el gate PRINCIPAL de ejecución y
+    # de desactivación automática de la tupla entera) mezclaría de golpe
+    # esas zonas todavía no confirmadas -- diluyendo o incluso tumbando el
+    # ic_bayes de una tupla que hoy solo opera, y solo debe seguir
+    # midiéndose, en su zona ya confirmada. gate_bucket_propio.filtrar_
+    # filas_zona_confirmada() excluye aquí (solo para ESTE cálculo
+    # agregado, results.csv en disco no se toca) las filas de una tupla
+    # live cuyo propio gate_bucket_propio_veredicto diga que esa fila cae
+    # fuera de la zona confirmada -- mismo criterio fail-closed que ya
+    # aplica live_trade.py para decidir si ejecuta. Si config_live.json no
+    # se puede leer este ciclo (pares_live_ok=False), se avisa fuerte en
+    # vez de fallar en silencio -- el propio live_trade.py ya queda
+    # fail-closed sin operar en ese mismo escenario (su propia lectura de
+    # config_live.json), así que el peor caso real aquí es un ciclo de
+    # postmortem con el agregado sin filtrar hasta que config vuelva a ser
+    # legible (próximo ciclo, ~20-25min), no dinero real desprotegido.
+    pares_live, pares_live_ok = _gbp.cargar_pares_live_fail_closed()
+    if not pares_live_ok:
+        print("[shadow_postmortem] ⚠️ config_live.json ilegible este ciclo -- "
+              "el filtro de zona confirmada para tuplas live NO se aplica "
+              "(agregado ic_bayes puede incluir zonas no confirmadas hasta "
+              "el próximo ciclo)")
+    params = calcular_params(
+        _gbp.filtrar_filas_zona_confirmada(_excluir_pre_twap(todos_con_causa), pares_live))
 
     # Aprendizaje causal completo: aprende POR QUÉ pierde Y POR QUÉ gana
     patrones = aprender_patrones_causales(resultados_twap_safe, pred_index)

@@ -30,6 +30,7 @@ from pathlib import Path
 REPO = Path(__file__).resolve().parent
 sys.path.insert(0, str(REPO))
 from shadow_postmortem import es_pre_twap  # noqa: E402 -- 11-Ago, régimen pre-TWAP
+import gate_bucket_propio as _gbp  # noqa: E402 -- 15-Ago, ver nota en _shadow_ic
 
 RESULTS = REPO / "data/shadow/results.csv"
 TRADES = REPO / "data/live/trades.csv"
@@ -79,13 +80,26 @@ def _tuplas_live() -> list:
 
 
 def _shadow_ic(strategy: str, subtype: str, direccion: str):
+    # 15-Ago (/code-review, tras el fix del estado absorbente de
+    # gate_bucket_propio en shadow_predict.py): este vigía siempre se llama
+    # con una tupla YA en pares_permitidos_live (ver _tuplas_live()) -- desde
+    # el fix, results.csv trae también sus zonas de precio no confirmadas
+    # (antes suprimidas del todo), que nunca fueron ni serán candidatas de
+    # ejecución real. Sin filtrarlas, el "shadow_ic" de este vigía (la
+    # comparación base contra el hit real ejecutado) dejaría de reflejar lo
+    # que la tupla realmente opera -- justo la métrica que este vigía existe
+    # para vigilar.
+    pares_live, pares_live_ok = _gbp.cargar_pares_live_fail_closed()
+    if not pares_live_ok:
+        print("[vigia_degradacion_live] \u26a0\ufe0f config_live.json ilegible -- filtro de zona confirmada NO se aplica este ciclo")
     marco = subtype.rsplit("#", 1)[-1] if "#" in subtype else subtype
     n, hits = 0, 0
     with open(RESULTS, encoding="utf-8") as f:
         for r in csv.DictReader(f):
             if (r.get("strategy") == strategy and r.get("subtype") == subtype
                     and r.get("decision") == direccion
-                    and not es_pre_twap(marco, r.get("prediction_timestamp", ""))):
+                    and not es_pre_twap(marco, r.get("prediction_timestamp", ""))
+                    and _gbp.filtrar_filas_zona_confirmada([r], pares_live)):
                 n += 1
                 hits += int(r.get("acierto") or 0)
     if n == 0:
@@ -109,13 +123,22 @@ def _tuplas_candidatas() -> list:
 
 
 def _pnls_shadow(strategy: str, subtype: str, direccion: str):
+    # 15-Ago: mismo filtro de zona confirmada que _shadow_ic, ver esa nota.
+    # Esta función también se llama para candidatas (_tuplas_candidatas(),
+    # nunca en pares_permitidos_live) -- pasar el set REAL de tuplas live
+    # (no la propia tupla) para que el filtro solo actúe cuando de verdad
+    # aplica, dejando a las candidatas acumular evidencia sin restringir.
+    pares_live, pares_live_ok = _gbp.cargar_pares_live_fail_closed()
+    if not pares_live_ok:
+        print("[vigia_degradacion_live] \u26a0\ufe0f config_live.json ilegible -- filtro de zona confirmada NO se aplica este ciclo")
     marco = subtype.rsplit("#", 1)[-1] if "#" in subtype else subtype
     pnls = []
     with open(RESULTS, encoding="utf-8") as f:
         for r in csv.DictReader(f):
             if (r.get("strategy") == strategy and r.get("subtype") == subtype
                     and r.get("decision") == direccion and r.get("pnl_neto") not in ("", None)
-                    and not es_pre_twap(marco, r.get("prediction_timestamp", ""))):
+                    and not es_pre_twap(marco, r.get("prediction_timestamp", ""))
+                    and _gbp.filtrar_filas_zona_confirmada([r], pares_live)):
                 pnls.append((r.get("resolution_timestamp", ""), float(r["pnl_neto"])))
     pnls.sort(key=lambda x: x[0])
     return [p for _, p in pnls]
