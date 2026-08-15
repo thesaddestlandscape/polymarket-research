@@ -60,6 +60,12 @@
       "fin": "07:00",
       "nombre": "asia_04h_utc",
       "_nota": "2026-07-08: abierta a petición explícita de Javi para generar dato real de fill-ability en GBM_LATE_15M (hoy 0 dato, libro_snapshots solo tenía fuera_ventana en esta franja). Shadow: H-CUSTOM-LATE-04H-ASIA confirmada IC=+0.131 n=177 +68.47€ forward (umbral 152 cumplido). Su gemela UPDOWN_GBM en la misma franja NO confirma (plana) -- el edge es específico de GBM_LATE_15M. Ningún otro parámetro tocado: mismo stake/frenos/whitelist que el resto de ventanas."
+    },
+    {
+      "inicio": "02:00",
+      "fin": "06:00",
+      "nombre": "madrugada_favorito_btc60m",
+      "_nota": "2026-08-15 (decisión explícita Javi, tras barrido de cierre de Stage 0): hit-rate por hora UTC de FAVORITO_CONFIRMADO#BTC#60min#BUY_NO en shadow (results.csv, breakeven~59%) muestra 00h-03h UTC (=02:00-06:00 Madrid verano) consistentemente por encima del breakeven y contiguo con asia_04h_utc (04h UTC): 00h=68.4%(n=19) 01h=75.0%(n=16) 02h=86.7%(n=15) 03h=73.7%(n=19). n por hora todavía bajo (14-19, no cumple n>=40 individualmente) -- se abre para generar dato real de fill-ability y acelerar el gate de Stage 0 de esta misma tupla (única con n útil hoy: n=62 real, Wilson90lo margen -3.2pp del breakeven, ritmo real ~1-2 trades/día por ventana estrecha). Mismo criterio que asia_04h_utc/prueba_23h_utc al abrirse: exploratorio, no gate riguroso todavía. Ningún otro parámetro tocado: mismo stake/frenos/whitelist/gate_bucket_propio que el resto de ventanas -- esta tupla sigue restringida a su zona de precio confirmada [0.35,0.40) por gate_bucket_propio, esta ventana solo permite que el ejecutor la evalúe en más horas del día."
     }
   ],
   "_mediodia_eliminada": "12:30-13:30 eliminada: GBM IC=-0.154 PNL=-7.96€, OF IC=-0.033 PNL=-5.43€ — peor ventana en ambas estrategias (n≥30)",
