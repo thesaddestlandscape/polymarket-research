@@ -211,3 +211,12 @@ timestamp_utc,activo,nesting,combo,coste,profit_min_pct,gap_opens_pct,depth_usd,
 2026-08-15T09:51:36+00:00,ETH,15min60m,YESout+NOin,1.152,-15.2,0.1109,8.19,503,0.992,0.16,1877.51,1875.43,eth-updown-15m-1786787100,ethereum-up-or-down-august-15-2026-5am-et
 2026-08-15T09:51:36+00:00,SOL,15min60m,YESout+NOin,1.32,-32.0,0.12,4.95,503,0.99,0.33,75.12,75.03,sol-updown-15m-1786787100,solana-up-or-down-august-15-2026-5am-et
 2026-08-15T09:51:37+00:00,XRP,15min60m,YESout+NOin,1.23,-23.0,0.0,22.2,502,0.83,0.4,1.001,1.001,xrp-updown-15m-1786787100,xrp-up-or-down-august-15-2026-5am-et
+2026-08-15T09:54:45+00:00,ETH,15min60m,YESout+NOin,1.012,-1.2,0.1109,2.12,314,0.992,0.02,1877.51,1875.43,eth-updown-15m-1786787100,ethereum-up-or-down-august-15-2026-5am-et
+2026-08-15T09:54:45+00:00,SOL,15min60m,YESout+NOin,1.059,-5.9,0.12,0.72,314,0.999,0.06,75.12,75.03,sol-updown-15m-1786787100,solana-up-or-down-august-15-2026-5am-et
+2026-08-15T09:54:46+00:00,XRP,15min60m,YESout+NOin,1.02,-2.0,0.0,0.27,313,0.99,0.03,1.001,1.001,xrp-updown-15m-1786787100,xrp-up-or-down-august-15-2026-5am-et
+2026-08-15T09:57:44+00:00,ETH,15min60m,YESout+NOin,1.022,-2.2,0.1109,0.13,135,0.999,0.023,1877.51,1875.43,eth-updown-15m-1786787100,ethereum-up-or-down-august-15-2026-5am-et
+2026-08-15T09:57:45+00:00,XRP,15min60m,YESout+NOin,1.002,-0.2,0.0,0.06,134,0.99,0.012,1.001,1.001,xrp-updown-15m-1786787100,xrp-up-or-down-august-15-2026-5am-et
+2026-08-15T09:57:45+00:00,BTC,5min15m,YESout+NOin,1.67,-67.0,0.0254,4.8,134,0.96,0.71,62976.0,62960.0,btc-updown-5m-1786787700,btc-updown-15m-1786787100
+2026-08-15T09:57:46+00:00,ETH,5min15m,YESout+NOin,1.937,-93.7,0.0698,19.0,133,0.987,0.95,1878.82,1877.51,eth-updown-5m-1786787700,eth-updown-15m-1786787100
+2026-08-15T09:57:47+00:00,SOL,5min15m,YESout+NOin,1.44,-44.0,0.0666,10.43,132,0.98,0.46,75.17,75.12,sol-updown-5m-1786787700,sol-updown-15m-1786787100
+2026-08-15T09:57:48+00:00,XRP,5min15m,YESout+NOin,1.59,-59.0,0.0999,7.8,131,0.99,0.6,1.002,1.001,xrp-updown-5m-1786787700,xrp-updown-15m-1786787100
