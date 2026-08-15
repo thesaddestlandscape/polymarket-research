@@ -2209,42 +2209,42 @@
    "veredicto": "sin_concluir"
   },
   "0.40": {
-   "n": 7,
-   "pnl_medio": -0.0038,
+   "n": 8,
+   "pnl_medio": -0.1283,
    "shuffle_p": null,
    "split_half": null,
    "veredicto": "sin_concluir"
   },
   "0.45": {
-   "n": 15,
-   "pnl_medio": -0.3192,
-   "shuffle_p": 0.03,
+   "n": 16,
+   "pnl_medio": -0.3618,
+   "shuffle_p": 0.0175,
    "split_half": [
-    -0.4371,
-    -0.2587
+    -0.2312,
+    -0.5137
    ],
    "veredicto": "sin_concluir"
   },
   "0.50": {
-   "n": 21,
-   "pnl_medio": 0.2379,
-   "shuffle_p": 0.0585,
+   "n": 22,
+   "pnl_medio": 0.1817,
+   "shuffle_p": 0.1265,
    "split_half": [
-    -0.0713,
-    0.5434
+    0.0293,
+    0.3829
    ],
    "veredicto": "sin_concluir"
   },
   "0.55": {
-   "n": 12,
-   "pnl_medio": 0.1445,
+   "n": 13,
+   "pnl_medio": 0.1874,
    "shuffle_p": null,
    "split_half": null,
    "veredicto": "sin_concluir"
   },
   "0.60": {
-   "n": 7,
-   "pnl_medio": 0.3429,
+   "n": 9,
+   "pnl_medio": 0.0445,
    "shuffle_p": null,
    "split_half": null,
    "veredicto": "sin_concluir"
@@ -2280,30 +2280,30 @@
   "0.85": {
    "n": 15,
    "pnl_medio": -0.0249,
-   "shuffle_p": 0.833,
+   "shuffle_p": 0.918,
    "split_half": [
-    0.1219,
-    -0.1661
+    0.1372,
+    -0.1508
    ],
    "veredicto": "sin_concluir"
   },
   "0.90": {
    "n": 86,
    "pnl_medio": 0.0111,
-   "shuffle_p": 0.9075,
+   "shuffle_p": 0.7065,
    "split_half": [
-    -0.0289,
-    0.0455
+    -0.0086,
+    0.0658
    ],
    "veredicto": "sin_concluir"
   },
   "0.95": {
    "n": 96,
    "pnl_medio": -0.0426,
-   "shuffle_p": 0.3335,
+   "shuffle_p": 0.5035,
    "split_half": [
-    -0.0614,
-    -0.0808
+    -0.0394,
+    -0.0588
    ],
    "veredicto": "sin_concluir"
   }
@@ -2439,8 +2439,8 @@
    "veredicto": "sin_concluir"
   },
   "0.50": {
-   "n": 3,
-   "pnl_medio": -0.3567,
+   "n": 4,
+   "pnl_medio": -0.0529,
    "shuffle_p": null,
    "split_half": null,
    "veredicto": "sin_concluir"
@@ -2467,8 +2467,8 @@
    "veredicto": "sin_concluir"
   },
   "0.70": {
-   "n": 1,
-   "pnl_medio": 0.3617,
+   "n": 2,
+   "pnl_medio": 0.3442,
    "shuffle_p": null,
    "split_half": null,
    "veredicto": "sin_concluir"
@@ -2538,5 +2538,6 @@
    "split_half": null,
    "veredicto": "sin_concluir"
   }
- }
+ },
+ "SEGUIR#BNB#5min#0": {}
 }
