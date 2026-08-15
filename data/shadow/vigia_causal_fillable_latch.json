@@ -4761,5 +4761,6 @@
  "FILTRO#candidato_proxy#UPDOWN_GBM_15M_TARDIO#SOL#BUY_NO#sigma_hlt": false,
  "candidato_proxy#GBM_LATE_15M_MULTIHORIZONTE#BNB#BUY_YES#hora_utclt": false,
  "candidato_proxy#GBM_LATE_15M_MULTIHORIZONTE#SOL#BUY_YES#sigma_ewma_delta_pctlt": false,
- "candidato_proxy#GBM_LATE_15M_MULTIHORIZONTE#XRP#BUY_YES#hora_utclt": false
+ "candidato_proxy#GBM_LATE_15M_MULTIHORIZONTE#XRP#BUY_YES#hora_utclt": false,
+ "candidato_proxy#GBM_LATE_15M_TARDIO#BTC#BUY_YES#ibs_20mingt": false
 }
