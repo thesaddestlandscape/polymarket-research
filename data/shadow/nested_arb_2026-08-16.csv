@@ -223,3 +223,12 @@ timestamp_utc,activo,nesting,combo,coste,profit_min_pct,gap_opens_pct,depth_usd,
 2026-08-16T04:42:11+00:00,ETH,5min15m,NOout+YESin,1.36,-36.0,-0.0481,4.55,168,0.99,0.37,1880.905,1881.81,eth-updown-5m-1786855200,eth-updown-15m-1786854600
 2026-08-16T04:42:11+00:00,SOL,5min15m,NOout+YESin,1.448,-44.8,-0.1786,3.81,168,0.998,0.45,75.455,75.59,sol-updown-5m-1786855200,sol-updown-15m-1786854600
 2026-08-16T04:42:12+00:00,XRP,5min15m,NOout+YESin,1.36,-36.0,-0.0978,3.87,167,0.93,0.43,1.00062,1.0016,xrp-updown-5m-1786855200,xrp-updown-15m-1786854600
+2026-08-16T04:44:24+00:00,ETH,5min15m,NOout+YESin,1.139,-13.9,-0.0481,2.8,35,0.999,0.14,1880.905,1881.81,eth-updown-5m-1786855200,eth-updown-15m-1786854600
+2026-08-16T04:48:35+00:00,BTC,15min60m,NOout+YESin,1.17,-17.0,-0.027,37.12,684,0.64,0.53,63052.985,63070.0,btc-updown-15m-1786855500,bitcoin-up-or-down-august-16-2026-12am-et
+2026-08-16T04:48:36+00:00,ETH,15min60m,NOout+YESin,1.42,-42.0,-0.0284,11.6,683,0.84,0.58,1880.905,1881.44,eth-updown-15m-1786855500,ethereum-up-or-down-august-16-2026-12am-et
+2026-08-16T04:48:36+00:00,SOL,15min60m,YESout+NOin,0.71,29.0,0.0265,6.48,683,0.17,0.54,75.53,75.51,sol-updown-15m-1786855500,solana-up-or-down-august-16-2026-12am-et
+2026-08-16T04:48:36+00:00,XRP,15min60m,NOout+YESin,1.39,-39.0,-0.0499,7.5,683,0.89,0.5,1.0015,1.002,xrp-updown-15m-1786855500,xrp-up-or-down-august-16-2026-12am-et
+2026-08-16T04:50:41+00:00,BTC,15min60m,NOout+YESin,1.39,-39.0,-0.027,43.07,558,0.66,0.73,63052.985,63070.0,btc-updown-15m-1786855500,bitcoin-up-or-down-august-16-2026-12am-et
+2026-08-16T04:50:41+00:00,ETH,15min60m,NOout+YESin,1.55,-55.0,-0.0284,8.16,558,0.87,0.68,1880.905,1881.44,eth-updown-15m-1786855500,ethereum-up-or-down-august-16-2026-12am-et
+2026-08-16T04:50:42+00:00,SOL,15min60m,YESout+NOin,0.54,46.0,0.0265,1.82,557,0.14,0.4,75.53,75.51,sol-updown-15m-1786855500,solana-up-or-down-august-16-2026-12am-et
+2026-08-16T04:50:42+00:00,XRP,15min60m,NOout+YESin,1.47,-47.0,-0.0499,6.2,557,0.93,0.54,1.0015,1.002,xrp-updown-15m-1786855500,xrp-up-or-down-august-16-2026-12am-et
