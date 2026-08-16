@@ -102,10 +102,17 @@ def _leer_snapshot_consistente(fn):
 _cache_lock = threading.Lock()
 _cache_data  = None
 _cache_ts    = 0.0
-CACHE_TTL    = 3.0   # segundos — 30-Jul: subido de 1.0 (compute_data() mide
-# 8s+ bajo la carga actual del VPS, ver get_data()) -- con la refactorización
-# a refresco no bloqueante en background esto ya no bloquea peticiones, pero
-# subir el TTL igual reduce cuántas veces se dispara el hilo de recálculo.
+CACHE_TTL    = 20.0   # segundos — 30-Jul: subido de 1.0 a 3.0 (compute_data()
+# medía 8s+ bajo la carga del VPS). 16-Ago: compute_data() ha vuelto a subir
+# (4.5s medido, results.csv sigue creciendo cada día) y con TTL=3.0s < tiempo
+# de cómputo el hilo de refresco en background se relanzaba casi sin parar
+# (cada ~4.5s, sin descanso), quemando un core entero de forma casi continua
+# -- contribuía directamente al load average alto del VPS (5.6-7 en 2 cores)
+# reportado como "el dashboard no carga". Con la refactorización a refresco
+# no bloqueante en background esto ya no bloquea peticiones, pero subir el
+# TTL bien por encima del tiempo de cómputo actual reduce cuántas veces se
+# dispara el hilo de recálculo. Los datos no necesitan frescura sub-20s: el
+# fast loop tarda ~20s/ciclo y el postmortem ~23min.
 
 # ─── Utilidades ──────────────────────────────────────────────────────────────
 
@@ -751,6 +758,10 @@ def compute_data():
                 pts.append({"time": ts, "value": round(ic, 4)})
         if pts:
             rolling_ic[k] = pts
+    # 16-Ago: el frontend solo pinta las primeras 6 series (`.slice(0, 6)` en
+    # el JS) pero hasta ahora se mandaban las ~169 -- 477KB de payload por
+    # petición para 6 líneas de gráfico. Recortar aquí, no en el cliente.
+    rolling_ic = dict(list(rolling_ic.items())[:6])
 
     # ── Ventanas del bot (Madrid CEST = UTC+2) ────────────────────────────────
     # Ventana → rango UTC (h0:m0 → h1:m1)
@@ -1815,7 +1826,7 @@ async function fetchData() {
 }
 initCharts();
 fetchData();
-setInterval(fetchData, 1_000);
+setInterval(fetchData, 5_000);  // 16-Ago: 1s → 5s, ver CACHE_TTL/rolling_ic fix (payload ~1.3MB/req)
 </script>
 </body>
 </html>"""
