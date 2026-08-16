@@ -676,3 +676,12 @@ timestamp_utc,activo,nesting,combo,coste,profit_min_pct,gap_opens_pct,depth_usd,
 2026-08-16T23:28:09+00:00,BTC,5min15m,NOout+YESin,0.99,1.0,-0.0275,39.24,110,0.98,0.01,62833.0,62850.305,btc-updown-5m-1786922700,btc-updown-15m-1786922100
 2026-08-16T23:28:09+00:00,ETH,5min15m,NOout+YESin,1.0,0.0,-0.0173,4.27,110,0.97,0.03,1873.61,1873.935,eth-updown-5m-1786922700,eth-updown-15m-1786922100
 2026-08-16T23:28:09+00:00,SOL,5min15m,YESout+NOin,1.6,-60.0,0.0537,3.45,110,0.69,0.91,74.49,74.45,sol-updown-5m-1786922700,sol-updown-15m-1786922100
+2026-08-16T23:44:34+00:00,XRP,5min15m,NOout+YESin,0.02,98.0,-0.0059,1.78,25,0.01,0.01,0.991641,0.9917,xrp-updown-5m-1786923600,xrp-updown-15m-1786923000
+2026-08-16T23:47:53+00:00,BTC,15min60m,YESout+NOin,0.95,5.0,0.0572,32.2,726,0.46,0.49,62827.935,62792.0,btc-updown-15m-1786923900,bitcoin-up-or-down-august-16-2026-7pm-et
+2026-08-16T23:47:54+00:00,ETH,15min60m,YESout+NOin,0.97,3.0,0.0633,7.65,725,0.51,0.46,1873.865,1872.68,eth-updown-15m-1786923900,ethereum-up-or-down-august-16-2026-7pm-et
+2026-08-16T23:47:54+00:00,SOL,15min60m,YESout+NOin,1.25,-25.0,0.2017,1.6,725,0.93,0.32,74.51,74.36,sol-updown-15m-1786923900,solana-up-or-down-august-16-2026-7pm-et
+2026-08-16T23:47:54+00:00,XRP,15min60m,NOout+YESin,1.67,-67.0,-0.0719,6.73,725,0.91,0.76,0.9914,0.992113,xrp-updown-15m-1786923900,xrp-up-or-down-august-16-2026-7pm-et
+2026-08-16T23:51:17+00:00,BTC,15min60m,YESout+NOin,0.95,5.0,0.0572,60.78,522,0.59,0.36,62827.935,62792.0,btc-updown-15m-1786923900,bitcoin-up-or-down-august-16-2026-7pm-et
+2026-08-16T23:51:18+00:00,ETH,15min60m,YESout+NOin,0.99,1.0,0.0633,14.74,521,0.77,0.22,1873.865,1872.68,eth-updown-15m-1786923900,ethereum-up-or-down-august-16-2026-7pm-et
+2026-08-16T23:51:19+00:00,SOL,15min60m,YESout+NOin,1.18,-18.0,0.2017,2.54,520,0.99,0.19,74.51,74.36,sol-updown-15m-1786923900,solana-up-or-down-august-16-2026-7pm-et
+2026-08-16T23:51:20+00:00,XRP,15min60m,NOout+YESin,1.8,-80.0,-0.0719,5.46,519,0.89,0.91,0.9914,0.992113,xrp-updown-15m-1786923900,xrp-up-or-down-august-16-2026-7pm-et
