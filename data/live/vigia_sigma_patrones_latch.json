@@ -219,6 +219,7 @@
   "UPDOWN_GBM#BTC#15min|patron|sigma_h|gt|BUY_YES",
   "UPDOWN_GBM#BTC#15min|patron|sigma_h|lt|BUY_NO",
   "UPDOWN_GBM#BTC#15min|patron|sigma_h|lt|BUY_YES",
+  "UPDOWN_GBM#BTC#5min|filtro|sigma_h|lt|BUY_YES",
   "UPDOWN_GBM#BTC#60min|filtro|sigma_h|lt|BUY_YES",
   "UPDOWN_GBM#ETH#15min|filtro|sigma_ewma_delta_pct|gt|BUY_NO",
   "UPDOWN_GBM#ETH#15min|filtro|sigma_ewma_delta_pct|lt|BUY_YES",
