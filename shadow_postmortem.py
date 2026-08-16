@@ -1259,6 +1259,14 @@ FEATURE_RULES = {
     "GBM_LATE_15M#ETH#15min": _BASE_GBM,
     "GBM_LATE_15M#SOL#15min": _BASE_GBM,
     "GBM_LATE_15M#XRP#15min": _BASE_GBM,
+    # 16-Ago: BNB/DOGE llevaban operando (results.csv, n en cientos por
+    # variante) sin entrada propia -- vigia_cobertura_feature_rules.py no lo
+    # cazaba porque su check de "por activo" pasa si AL MENOS una moneda
+    # tiene entrada, no si TODAS las que operan la tienen. Encontrado
+    # aplicando el checklist de conexión a un candidato BNB#15min#BUY_NO
+    # (ver idea_gbm_bnb15min_buyno_checklist_conexion_16ago).
+    "GBM_LATE_15M#BNB#15min": _BASE_GBM,
+    "GBM_LATE_15M#DOGE#15min": _BASE_GBM,
 
     # Variantes de GBM_LATE_15M (12-Jul, petición Javi "desagregar todo por
     # activo"): TARDIO/ESPACIO_ATR/60M reusan el mismo motor _s_gbm_late, así
@@ -1270,11 +1278,15 @@ FEATURE_RULES = {
     "GBM_LATE_15M_TARDIO#ETH#15min": _BASE_GBM,
     "GBM_LATE_15M_TARDIO#SOL#15min": _BASE_GBM,
     "GBM_LATE_15M_TARDIO#XRP#15min": _BASE_GBM,
+    "GBM_LATE_15M_TARDIO#BNB#15min": _BASE_GBM,   # 16-Ago, mismo hallazgo que arriba
+    "GBM_LATE_15M_TARDIO#DOGE#15min": _BASE_GBM,
     "GBM_LATE_15M_ESPACIO_ATR":         _BASE_GBM,
     "GBM_LATE_15M_ESPACIO_ATR#BTC#15min": _BASE_GBM,
     "GBM_LATE_15M_ESPACIO_ATR#ETH#15min": _BASE_GBM,
     "GBM_LATE_15M_ESPACIO_ATR#SOL#15min": _BASE_GBM,
     "GBM_LATE_15M_ESPACIO_ATR#XRP#15min": _BASE_GBM,
+    "GBM_LATE_15M_ESPACIO_ATR#BNB#15min": _BASE_GBM,   # 16-Ago, mismo hallazgo que arriba
+    "GBM_LATE_15M_ESPACIO_ATR#DOGE#15min": _BASE_GBM,
 
     # GBM_LATE_15M_MULTIHORIZONTE / GBM_LATE_15M_PYCONFIRMADO (06-Ago,
     # vigia_cobertura_feature_rules.py): mismas variantes de _s_gbm_late que
@@ -1289,6 +1301,8 @@ FEATURE_RULES = {
     "GBM_LATE_15M_MULTIHORIZONTE#ETH#15min": _BASE_GBM,
     "GBM_LATE_15M_MULTIHORIZONTE#SOL#15min": _BASE_GBM,
     "GBM_LATE_15M_MULTIHORIZONTE#XRP#15min": _BASE_GBM,
+    "GBM_LATE_15M_MULTIHORIZONTE#BNB#15min": _BASE_GBM,   # 16-Ago, mismo hallazgo que arriba
+    "GBM_LATE_15M_MULTIHORIZONTE#DOGE#15min": _BASE_GBM,
     "GBM_LATE_15M_PYCONFIRMADO":         _BASE_GBM,
     "GBM_LATE_15M_PYCONFIRMADO#BTC#15min": _BASE_GBM,
     "GBM_LATE_15M_PYCONFIRMADO#ETH#15min": _BASE_GBM,
