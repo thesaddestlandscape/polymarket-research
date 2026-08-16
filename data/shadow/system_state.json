@@ -1,8 +1,8 @@
 {
-  "timestamp_utc": "2026-08-16T00:33:39+00:00",
-  "bankroll_sim": 16471.17,
-  "pnl_total": 16451.17,
-  "n_ops": 145895,
+  "timestamp_utc": "2026-08-16T00:41:13+00:00",
+  "bankroll_sim": 16477.55,
+  "pnl_total": 16457.55,
+  "n_ops": 145942,
   "win_rate": 0.6082,
   "estrategias_activas": 410,
   "desactivadas": [
@@ -53,9 +53,9 @@
   "clv_medio": 0.0373,
   "monitor_5min": {
     "ou_5m": {
-      "n": 584,
-      "clv": -0.1278,
-      "clv_ult30": 0.0015
+      "n": 585,
+      "clv": -0.1268,
+      "clv_ult30": 0.0348
     },
     "of_buy_yes": {
       "n": 608,
