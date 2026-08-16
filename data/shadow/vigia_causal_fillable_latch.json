@@ -4611,7 +4611,7 @@
  "candidato_proxy#GBM_LATE_15M_TARDIO#SOL#BUY_NO#sigma_hlt": false,
  "candidato_proxy#GBM_LATE_15M_TARDIO#SOL#BUY_NO#hora_utcgt": false,
  "candidato_proxy#GBM_LATE_15M_TARDIO#SOL#BUY_NO#sigma_ewma_delta_pctgt": false,
- "candidato_proxy#GBM_LATE_15M_TARDIO#XRP#BUY_YES#hora_utcgt": false,
+ "candidato_proxy#GBM_LATE_15M_TARDIO#XRP#BUY_YES#hora_utcgt": true,
  "candidato_proxy#GBM_LATE_15M_TARDIO#XRP#BUY_YES#hora_utclt": false,
  "candidato_proxy#GBM_LATE_15M_TARDIO#XRP#BUY_YES#sigma_ewma_delta_pctlt": false,
  "candidato_proxy#GBM_LATE_15M_TARDIO#XRP#BUY_NO#sigma_hlt": false,
@@ -4767,5 +4767,6 @@
  "candidato_proxy#GBM_LATE_15M_MULTIHORIZONTE#XRP#BUY_YES#ibs_20mingt": false,
  "candidato_proxy#GBM_LATE_15M_ESPACIO_ATR#BNB#BUY_YES#hora_utclt": false,
  "FILTRO#candidato_proxy#UPDOWN_OU_5M#BNB#BUY_NO#pct_spot_vs_refabs_gt": false,
- "candidato_proxy#GBM_LATE_15M_ESPACIO_ATR#DOGE#BUY_YES#hora_utclt": false
+ "candidato_proxy#GBM_LATE_15M_ESPACIO_ATR#DOGE#BUY_YES#hora_utclt": false,
+ "candidato_proxy#GBM_LATE_15M_MULTIHORIZONTE#BNB#BUY_YES#ibs_20mingt": false
 }
