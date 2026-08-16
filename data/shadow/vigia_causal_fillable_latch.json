@@ -4769,5 +4769,6 @@
  "FILTRO#candidato_proxy#UPDOWN_OU_5M#BNB#BUY_NO#pct_spot_vs_refabs_gt": false,
  "candidato_proxy#GBM_LATE_15M_ESPACIO_ATR#DOGE#BUY_YES#hora_utclt": false,
  "candidato_proxy#GBM_LATE_15M_MULTIHORIZONTE#BNB#BUY_YES#ibs_20mingt": false,
- "candidato_proxy#GBM_LATE_15M_MULTIHORIZONTE#XRP#15min#XRP#BUY_NO#drift_60minabs_lt": false
+ "candidato_proxy#GBM_LATE_15M_MULTIHORIZONTE#XRP#15min#XRP#BUY_NO#drift_60minabs_lt": false,
+ "candidato_proxy#GBM_LATE_15M_TARDIO#XRP#15min#XRP#BUY_NO#volumen_regimenlt": false
 }
