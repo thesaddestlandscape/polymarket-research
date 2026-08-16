@@ -512,3 +512,5 @@ timestamp_utc,activo,nesting,combo,coste,profit_min_pct,gap_opens_pct,depth_usd,
 2026-08-16T15:56:55+00:00,ETH,15min60m,NOout+YESin,1.13,-13.0,-0.0136,0.9,184,0.18,0.95,1881.345,1881.6,eth-updown-15m-1786895100,ethereum-up-or-down-august-16-2026-11am-et
 2026-08-16T15:56:55+00:00,SOL,15min60m,YESout+NOin,1.398,-39.8,0.2124,9.98,184,0.998,0.4,75.49,75.33,sol-updown-15m-1786895100,solana-up-or-down-august-16-2026-11am-et
 2026-08-16T15:56:56+00:00,XRP,15min60m,YESout+NOin,1.17,-17.0,0.085,0.9,183,0.99,0.18,1.00085,1.0,xrp-updown-15m-1786895100,xrp-up-or-down-august-16-2026-11am-et
+2026-08-16T16:28:48+00:00,ETH,5min15m,YESout+NOin,1.109,-10.9,0.1147,0.66,71,0.999,0.11,1885.76,1883.6,eth-updown-5m-1786897500,eth-updown-15m-1786896900
+2026-08-16T16:28:49+00:00,XRP,5min15m,YESout+NOin,1.26,-26.0,0.0999,1.4,70,0.98,0.28,1.002,1.001,xrp-updown-5m-1786897500,xrp-updown-15m-1786896900
