@@ -8,691 +8,823 @@
     "calibracion_prob": null
   },
   "BALLENAS_TARDIAS#BTC": {
-    "n": 296,
+    "n": 340,
     "calibracion_prob": null
   },
   "BALLENAS_TARDIAS#BTC#15min": {
-    "n": 296,
+    "n": 340,
     "calibracion_prob": null
   },
-  "BALLENAS_TARDIAS#ETH": {
+  "BALLENAS_TARDIAS#DOGE": {
     "n": 216,
+    "calibracion_prob": {
+      "a": -0.4,
+      "b": 1.55,
+      "n": 216,
+      "n_oos_validado": 116,
+      "n_requerido": 26.6,
+      "mejora_media_oos": 0.0397,
+      "actualizado": "2026-08-16T06:40:11+00:00"
+    }
+  },
+  "BALLENAS_TARDIAS#DOGE#5min": {
+    "n": 216,
+    "calibracion_prob": {
+      "a": -0.4,
+      "b": 1.55,
+      "n": 216,
+      "n_oos_validado": 116,
+      "n_requerido": 26.6,
+      "mejora_media_oos": 0.0397,
+      "actualizado": "2026-08-16T06:40:11+00:00"
+    }
+  },
+  "BALLENAS_TARDIAS#ETH": {
+    "n": 358,
     "calibracion_prob": null
   },
   "BALLENAS_TARDIAS#ETH#5min": {
-    "n": 216,
+    "n": 358,
     "calibracion_prob": null
   },
   "BALLENAS_TARDIAS#SOL": {
-    "n": 256,
+    "n": 425,
     "calibracion_prob": null
   },
   "BALLENAS_TARDIAS#SOL#5min": {
-    "n": 256,
+    "n": 425,
+    "calibracion_prob": null
+  },
+  "BALLENAS_TARDIAS#XRP": {
+    "n": 314,
+    "calibracion_prob": null
+  },
+  "BALLENAS_TARDIAS#XRP#5min": {
+    "n": 314,
     "calibracion_prob": null
   },
   "FAVORITO_CONFIRMADO#BNB": {
-    "n": 378,
-    "calibracion_prob": null
-  },
-  "FAVORITO_CONFIRMADO#BNB#5min": {
-    "n": 366,
-    "calibracion_prob": null
-  },
-  "FAVORITO_CONFIRMADO#BTC": {
-    "n": 1919,
+    "n": 672,
     "calibracion_prob": {
-      "a": -0.05,
-      "b": 0.75,
-      "n": 1919,
-      "n_oos_validado": 1280,
-      "n_requerido": 1102.3,
-      "mejora_media_oos": 0.0098,
-      "actualizado": "2026-08-15T06:40:17+00:00"
+      "a": -0.2,
+      "b": 0.3,
+      "n": 672,
+      "n_oos_validado": 448,
+      "n_requerido": 117.6,
+      "mejora_media_oos": 0.1546,
+      "actualizado": "2026-08-16T06:40:12+00:00"
     }
   },
+  "FAVORITO_CONFIRMADO#BNB#5min": {
+    "n": 656,
+    "calibracion_prob": {
+      "a": -0.15,
+      "b": 0.25,
+      "n": 656,
+      "n_oos_validado": 438,
+      "n_requerido": 118.6,
+      "mejora_media_oos": 0.1582,
+      "actualizado": "2026-08-16T06:40:12+00:00"
+    }
+  },
+  "FAVORITO_CONFIRMADO#BTC": {
+    "n": 2330,
+    "calibracion_prob": null
+  },
   "FAVORITO_CONFIRMADO#BTC#15min": {
-    "n": 645,
+    "n": 726,
     "calibracion_prob": null
   },
   "FAVORITO_CONFIRMADO#BTC#5min": {
-    "n": 365,
+    "n": 656,
     "calibracion_prob": null
   },
   "FAVORITO_CONFIRMADO#BTC#60min": {
-    "n": 884,
+    "n": 918,
     "calibracion_prob": null
   },
   "FAVORITO_CONFIRMADO#DOGE": {
-    "n": 372,
-    "calibracion_prob": null
+    "n": 664,
+    "calibracion_prob": {
+      "a": -0.25,
+      "b": 0.65,
+      "n": 664,
+      "n_oos_validado": 443,
+      "n_requerido": 266.2,
+      "mejora_media_oos": 0.0553,
+      "actualizado": "2026-08-16T06:40:16+00:00"
+    }
   },
   "FAVORITO_CONFIRMADO#DOGE#5min": {
-    "n": 368,
-    "calibracion_prob": null
+    "n": 658,
+    "calibracion_prob": {
+      "a": -0.25,
+      "b": 0.65,
+      "n": 658,
+      "n_oos_validado": 439,
+      "n_requerido": 257.8,
+      "mejora_media_oos": 0.0577,
+      "actualizado": "2026-08-16T06:40:16+00:00"
+    }
   },
   "FAVORITO_CONFIRMADO#ETH": {
-    "n": 2052,
+    "n": 2473,
     "calibracion_prob": null
   },
   "FAVORITO_CONFIRMADO#ETH#15min": {
-    "n": 872,
+    "n": 973,
     "calibracion_prob": null
   },
   "FAVORITO_CONFIRMADO#ETH#5min": {
-    "n": 367,
+    "n": 657,
     "calibracion_prob": null
   },
   "FAVORITO_CONFIRMADO#ETH#60min": {
-    "n": 802,
+    "n": 831,
     "calibracion_prob": null
   },
   "FAVORITO_CONFIRMADO#SOL": {
-    "n": 1893,
+    "n": 2321,
     "calibracion_prob": null
   },
   "FAVORITO_CONFIRMADO#SOL#15min": {
-    "n": 806,
+    "n": 910,
     "calibracion_prob": null
   },
   "FAVORITO_CONFIRMADO#SOL#5min": {
-    "n": 366,
+    "n": 657,
     "calibracion_prob": null
   },
   "FAVORITO_CONFIRMADO#SOL#60min": {
-    "n": 696,
+    "n": 723,
     "calibracion_prob": null
   },
   "FAVORITO_CONFIRMADO#XRP": {
-    "n": 375,
+    "n": 666,
     "calibracion_prob": null
   },
   "FAVORITO_CONFIRMADO#XRP#5min": {
-    "n": 365,
+    "n": 655,
     "calibracion_prob": null
   },
   "FAVORITO_CONFIRMADO_15MIN_ALTACONVICCION#BNB": {
-    "n": 618,
-    "calibracion_prob": null
-  },
-  "FAVORITO_CONFIRMADO_15MIN_ALTACONVICCION#BNB#15min": {
-    "n": 618,
-    "calibracion_prob": null
-  },
-  "FAVORITO_CONFIRMADO_15MIN_ALTACONVICCION#DOGE": {
-    "n": 599,
+    "n": 688,
     "calibracion_prob": {
       "a": 0.45,
       "b": 0.0,
-      "n": 599,
-      "n_oos_validado": 400,
-      "n_requerido": 296.9,
-      "mejora_media_oos": 0.0642,
-      "actualizado": "2026-08-15T06:40:30+00:00"
+      "n": 688,
+      "n_oos_validado": 459,
+      "n_requerido": 361.9,
+      "mejora_media_oos": 0.0565,
+      "actualizado": "2026-08-16T06:40:24+00:00"
+    }
+  },
+  "FAVORITO_CONFIRMADO_15MIN_ALTACONVICCION#BNB#15min": {
+    "n": 688,
+    "calibracion_prob": {
+      "a": 0.45,
+      "b": 0.0,
+      "n": 688,
+      "n_oos_validado": 459,
+      "n_requerido": 361.9,
+      "mejora_media_oos": 0.0565,
+      "actualizado": "2026-08-16T06:40:24+00:00"
+    }
+  },
+  "FAVORITO_CONFIRMADO_15MIN_ALTACONVICCION#DOGE": {
+    "n": 672,
+    "calibracion_prob": {
+      "a": 0.45,
+      "b": 0.0,
+      "n": 672,
+      "n_oos_validado": 448,
+      "n_requerido": 179.4,
+      "mejora_media_oos": 0.0866,
+      "actualizado": "2026-08-16T06:40:24+00:00"
     }
   },
   "FAVORITO_CONFIRMADO_15MIN_ALTACONVICCION#DOGE#15min": {
-    "n": 599,
+    "n": 672,
     "calibracion_prob": {
       "a": 0.45,
       "b": 0.0,
-      "n": 599,
-      "n_oos_validado": 400,
-      "n_requerido": 296.9,
-      "mejora_media_oos": 0.0642,
-      "actualizado": "2026-08-15T06:40:31+00:00"
+      "n": 672,
+      "n_oos_validado": 448,
+      "n_requerido": 179.4,
+      "mejora_media_oos": 0.0866,
+      "actualizado": "2026-08-16T06:40:24+00:00"
     }
   },
   "FAVORITO_CONFIRMADO_15MIN_ALTACONVICCION#ETH": {
-    "n": 532,
+    "n": 596,
     "calibracion_prob": null
   },
   "FAVORITO_CONFIRMADO_15MIN_ALTACONVICCION#ETH#15min": {
-    "n": 532,
+    "n": 596,
     "calibracion_prob": null
   },
   "FAVORITO_CONFIRMADO_15MIN_ALTACONVICCION#XRP": {
-    "n": 568,
+    "n": 637,
     "calibracion_prob": {
       "a": 0.45,
       "b": 0.0,
-      "n": 568,
-      "n_oos_validado": 379,
-      "n_requerido": 335.6,
-      "mejora_media_oos": 0.0395,
-      "actualizado": "2026-08-15T06:40:31+00:00"
+      "n": 637,
+      "n_oos_validado": 425,
+      "n_requerido": 282.9,
+      "mejora_media_oos": 0.0456,
+      "actualizado": "2026-08-16T06:40:25+00:00"
     }
   },
   "FAVORITO_CONFIRMADO_15MIN_ALTACONVICCION#XRP#15min": {
-    "n": 568,
+    "n": 637,
     "calibracion_prob": {
       "a": 0.45,
       "b": 0.0,
-      "n": 568,
-      "n_oos_validado": 379,
-      "n_requerido": 335.6,
-      "mejora_media_oos": 0.0395,
-      "actualizado": "2026-08-15T06:40:31+00:00"
+      "n": 637,
+      "n_oos_validado": 425,
+      "n_requerido": 282.9,
+      "mejora_media_oos": 0.0456,
+      "actualizado": "2026-08-16T06:40:25+00:00"
     }
   },
   "FAVORITO_CONFIRMADO_5MIN_ALTACONVICCION#BNB": {
-    "n": 291,
-    "calibracion_prob": null
+    "n": 545,
+    "calibracion_prob": {
+      "a": 0.2,
+      "b": 0.0,
+      "n": 545,
+      "n_oos_validado": 364,
+      "n_requerido": 99.2,
+      "mejora_media_oos": 0.2167,
+      "actualizado": "2026-08-16T06:40:25+00:00"
+    }
   },
   "FAVORITO_CONFIRMADO_5MIN_ALTACONVICCION#BNB#5min": {
-    "n": 291,
-    "calibracion_prob": null
+    "n": 545,
+    "calibracion_prob": {
+      "a": 0.2,
+      "b": 0.0,
+      "n": 545,
+      "n_oos_validado": 364,
+      "n_requerido": 99.2,
+      "mejora_media_oos": 0.2167,
+      "actualizado": "2026-08-16T06:40:25+00:00"
+    }
   },
   "FAVORITO_CONFIRMADO_5MIN_ALTACONVICCION#BTC": {
-    "n": 248,
+    "n": 431,
     "calibracion_prob": null
   },
   "FAVORITO_CONFIRMADO_5MIN_ALTACONVICCION#BTC#5min": {
-    "n": 248,
+    "n": 431,
     "calibracion_prob": null
   },
   "FAVORITO_CONFIRMADO_5MIN_ALTACONVICCION#DOGE": {
-    "n": 282,
-    "calibracion_prob": null
+    "n": 509,
+    "calibracion_prob": {
+      "a": 0.15,
+      "b": 0.25,
+      "n": 509,
+      "n_oos_validado": 340,
+      "n_requerido": 225.0,
+      "mejora_media_oos": 0.0831,
+      "actualizado": "2026-08-16T06:40:26+00:00"
+    }
   },
   "FAVORITO_CONFIRMADO_5MIN_ALTACONVICCION#DOGE#5min": {
-    "n": 282,
-    "calibracion_prob": null
+    "n": 509,
+    "calibracion_prob": {
+      "a": 0.15,
+      "b": 0.25,
+      "n": 509,
+      "n_oos_validado": 340,
+      "n_requerido": 225.0,
+      "mejora_media_oos": 0.0831,
+      "actualizado": "2026-08-16T06:40:26+00:00"
+    }
   },
   "FAVORITO_CONFIRMADO_5MIN_ALTACONVICCION#ETH": {
-    "n": 269,
+    "n": 465,
     "calibracion_prob": null
   },
   "FAVORITO_CONFIRMADO_5MIN_ALTACONVICCION#ETH#5min": {
-    "n": 269,
+    "n": 465,
     "calibracion_prob": null
   },
   "FAVORITO_CONFIRMADO_5MIN_ALTACONVICCION#SOL": {
-    "n": 244,
+    "n": 444,
     "calibracion_prob": null
   },
   "FAVORITO_CONFIRMADO_5MIN_ALTACONVICCION#SOL#5min": {
-    "n": 244,
+    "n": 444,
     "calibracion_prob": null
   },
   "FAVORITO_CONFIRMADO_5MIN_ALTACONVICCION#XRP": {
-    "n": 251,
+    "n": 464,
     "calibracion_prob": null
   },
   "FAVORITO_CONFIRMADO_5MIN_ALTACONVICCION#XRP#5min": {
-    "n": 251,
+    "n": 464,
     "calibracion_prob": null
   },
   "FAVORITO_CONFIRMADO_5MIN_BAJALATENCIA#DOGE": {
-    "n": 289,
+    "n": 515,
     "calibracion_prob": null
   },
   "FAVORITO_CONFIRMADO_5MIN_BAJALATENCIA#DOGE#5min": {
-    "n": 289,
+    "n": 515,
     "calibracion_prob": null
   },
   "FAVORITO_CONFIRMADO_5MIN_BAJALATENCIA#XRP": {
-    "n": 273,
+    "n": 505,
     "calibracion_prob": null
   },
   "FAVORITO_CONFIRMADO_5MIN_BAJALATENCIA#XRP#5min": {
-    "n": 273,
+    "n": 505,
     "calibracion_prob": null
   },
-  "FAVORITO_CONFIRMADO_60MIN_ALTACONVICCION#ETH": {
-    "n": 217,
-    "calibracion_prob": null
-  },
-  "FAVORITO_CONFIRMADO_60MIN_ALTACONVICCION#ETH#60min": {
-    "n": 217,
-    "calibracion_prob": null
-  },
-  "GBM_LATE_15M#BNB": {
-    "n": 479,
-    "calibracion_prob": null
-  },
-  "GBM_LATE_15M#BNB#15min": {
-    "n": 479,
-    "calibracion_prob": null
-  },
-  "GBM_LATE_15M#BTC": {
-    "n": 272,
-    "calibracion_prob": null
-  },
-  "GBM_LATE_15M#BTC#15min": {
-    "n": 272,
-    "calibracion_prob": null
-  },
-  "GBM_LATE_15M#DOGE": {
-    "n": 496,
-    "calibracion_prob": null
-  },
-  "GBM_LATE_15M#DOGE#15min": {
-    "n": 496,
-    "calibracion_prob": null
-  },
-  "GBM_LATE_15M#ETH": {
-    "n": 420,
-    "calibracion_prob": {
-      "a": 0.2,
-      "b": 0.25,
-      "n": 300,
-      "n_oos_validado": 200,
-      "n_requerido": 64.0,
-      "mejora_media_oos": 0.4217,
-      "actualizado": "2026-08-15T06:40:36+00:00"
-    }
-  },
-  "GBM_LATE_15M#ETH#15min": {
-    "n": 420,
-    "calibracion_prob": {
-      "a": 0.2,
-      "b": 0.25,
-      "n": 300,
-      "n_oos_validado": 200,
-      "n_requerido": 64.0,
-      "mejora_media_oos": 0.4217,
-      "actualizado": "2026-08-15T06:40:36+00:00"
-    }
-  },
-  "GBM_LATE_15M#SOL": {
-    "n": 617,
-    "calibracion_prob": {
-      "a": 0.3,
-      "b": 0.25,
-      "n": 438,
-      "n_oos_validado": 292,
-      "n_requerido": 76.9,
-      "mejora_media_oos": 0.4615,
-      "actualizado": "2026-08-15T06:40:36+00:00"
-    }
-  },
-  "GBM_LATE_15M#SOL#15min": {
-    "n": 617,
-    "calibracion_prob": {
-      "a": 0.3,
-      "b": 0.25,
-      "n": 438,
-      "n_oos_validado": 292,
-      "n_requerido": 76.9,
-      "mejora_media_oos": 0.4615,
-      "actualizado": "2026-08-15T06:40:36+00:00"
-    }
-  },
-  "GBM_LATE_15M#XRP": {
-    "n": 719,
-    "calibracion_prob": {
-      "a": -0.05,
-      "b": 0.15,
-      "n": 660,
-      "n_oos_validado": 440,
-      "n_requerido": 86.1,
-      "mejora_media_oos": 0.3161,
-      "actualizado": "2026-08-15T06:40:37+00:00"
-    }
-  },
-  "GBM_LATE_15M#XRP#15min": {
-    "n": 719,
-    "calibracion_prob": {
-      "a": -0.05,
-      "b": 0.15,
-      "n": 660,
-      "n_oos_validado": 440,
-      "n_requerido": 86.1,
-      "mejora_media_oos": 0.3161,
-      "actualizado": "2026-08-15T06:40:37+00:00"
-    }
-  },
-  "GBM_LATE_15M_ESPACIO_ATR#BNB": {
-    "n": 734,
-    "calibracion_prob": {
-      "a": 0.25,
-      "b": 0.25,
-      "n": 633,
-      "n_oos_validado": 422,
-      "n_requerido": 115.2,
-      "mejora_media_oos": 0.2081,
-      "actualizado": "2026-08-15T06:40:38+00:00"
-    }
-  },
-  "GBM_LATE_15M_ESPACIO_ATR#BNB#15min": {
-    "n": 734,
-    "calibracion_prob": {
-      "a": 0.25,
-      "b": 0.25,
-      "n": 633,
-      "n_oos_validado": 422,
-      "n_requerido": 115.2,
-      "mejora_media_oos": 0.2081,
-      "actualizado": "2026-08-15T06:40:38+00:00"
-    }
-  },
-  "GBM_LATE_15M_ESPACIO_ATR#BTC": {
-    "n": 724,
-    "calibracion_prob": {
-      "a": 0.1,
-      "b": 0.1,
-      "n": 510,
-      "n_oos_validado": 340,
-      "n_requerido": 50.2,
-      "mejora_media_oos": 0.5698,
-      "actualizado": "2026-08-15T06:40:39+00:00"
-    }
-  },
-  "GBM_LATE_15M_ESPACIO_ATR#BTC#15min": {
-    "n": 724,
-    "calibracion_prob": {
-      "a": 0.1,
-      "b": 0.1,
-      "n": 510,
-      "n_oos_validado": 340,
-      "n_requerido": 50.2,
-      "mejora_media_oos": 0.5698,
-      "actualizado": "2026-08-15T06:40:39+00:00"
-    }
-  },
-  "GBM_LATE_15M_ESPACIO_ATR#DOGE": {
-    "n": 421,
-    "calibracion_prob": null
-  },
-  "GBM_LATE_15M_ESPACIO_ATR#DOGE#15min": {
-    "n": 421,
-    "calibracion_prob": null
-  },
-  "GBM_LATE_15M_ESPACIO_ATR#ETH": {
-    "n": 645,
-    "calibracion_prob": {
-      "a": 0.1,
-      "b": 0.2,
-      "n": 444,
-      "n_oos_validado": 296,
-      "n_requerido": 50.4,
-      "mejora_media_oos": 0.5348,
-      "actualizado": "2026-08-15T06:40:39+00:00"
-    }
-  },
-  "GBM_LATE_15M_ESPACIO_ATR#ETH#15min": {
-    "n": 645,
-    "calibracion_prob": {
-      "a": 0.1,
-      "b": 0.2,
-      "n": 444,
-      "n_oos_validado": 296,
-      "n_requerido": 50.4,
-      "mejora_media_oos": 0.5348,
-      "actualizado": "2026-08-15T06:40:40+00:00"
-    }
-  },
-  "GBM_LATE_15M_ESPACIO_ATR#SOL": {
-    "n": 676,
-    "calibracion_prob": {
-      "a": 0.1,
-      "b": 0.1,
-      "n": 485,
-      "n_oos_validado": 324,
-      "n_requerido": 67.5,
-      "mejora_media_oos": 0.5003,
-      "actualizado": "2026-08-15T06:40:40+00:00"
-    }
-  },
-  "GBM_LATE_15M_ESPACIO_ATR#SOL#15min": {
-    "n": 676,
-    "calibracion_prob": {
-      "a": 0.1,
-      "b": 0.1,
-      "n": 485,
-      "n_oos_validado": 324,
-      "n_requerido": 67.5,
-      "mejora_media_oos": 0.5003,
-      "actualizado": "2026-08-15T06:40:40+00:00"
-    }
-  },
-  "GBM_LATE_15M_ESPACIO_ATR#XRP": {
-    "n": 495,
-    "calibracion_prob": null
-  },
-  "GBM_LATE_15M_ESPACIO_ATR#XRP#15min": {
-    "n": 495,
-    "calibracion_prob": null
-  },
-  "GBM_LATE_15M_MULTIHORIZONTE#BNB": {
-    "n": 358,
-    "calibracion_prob": null
-  },
-  "GBM_LATE_15M_MULTIHORIZONTE#BNB#15min": {
-    "n": 358,
-    "calibracion_prob": null
-  },
-  "GBM_LATE_15M_MULTIHORIZONTE#BTC": {
-    "n": 291,
-    "calibracion_prob": null
-  },
-  "GBM_LATE_15M_MULTIHORIZONTE#BTC#15min": {
-    "n": 291,
-    "calibracion_prob": null
-  },
-  "GBM_LATE_15M_MULTIHORIZONTE#DOGE": {
-    "n": 347,
-    "calibracion_prob": null
-  },
-  "GBM_LATE_15M_MULTIHORIZONTE#DOGE#15min": {
-    "n": 347,
-    "calibracion_prob": null
-  },
-  "GBM_LATE_15M_MULTIHORIZONTE#ETH": {
-    "n": 260,
-    "calibracion_prob": null
-  },
-  "GBM_LATE_15M_MULTIHORIZONTE#ETH#15min": {
-    "n": 260,
-    "calibracion_prob": null
-  },
-  "GBM_LATE_15M_MULTIHORIZONTE#SOL": {
-    "n": 370,
-    "calibracion_prob": null
-  },
-  "GBM_LATE_15M_MULTIHORIZONTE#SOL#15min": {
-    "n": 370,
-    "calibracion_prob": null
-  },
-  "GBM_LATE_15M_MULTIHORIZONTE#XRP": {
-    "n": 386,
-    "calibracion_prob": null
-  },
-  "GBM_LATE_15M_MULTIHORIZONTE#XRP#15min": {
-    "n": 386,
-    "calibracion_prob": null
-  },
-  "GBM_LATE_15M_TARDIO#BNB": {
-    "n": 457,
-    "calibracion_prob": null
-  },
-  "GBM_LATE_15M_TARDIO#BNB#15min": {
-    "n": 457,
-    "calibracion_prob": null
-  },
-  "GBM_LATE_15M_TARDIO#BTC": {
-    "n": 338,
-    "calibracion_prob": null
-  },
-  "GBM_LATE_15M_TARDIO#BTC#15min": {
-    "n": 338,
-    "calibracion_prob": null
-  },
-  "GBM_LATE_15M_TARDIO#DOGE": {
-    "n": 477,
-    "calibracion_prob": {
-      "a": -0.35,
-      "b": 1.6,
-      "n": 477,
-      "n_oos_validado": 318,
-      "n_requerido": 198.5,
-      "mejora_media_oos": 0.0385,
-      "actualizado": "2026-08-15T06:40:43+00:00"
-    }
-  },
-  "GBM_LATE_15M_TARDIO#DOGE#15min": {
-    "n": 477,
-    "calibracion_prob": {
-      "a": -0.35,
-      "b": 1.6,
-      "n": 477,
-      "n_oos_validado": 318,
-      "n_requerido": 198.5,
-      "mejora_media_oos": 0.0385,
-      "actualizado": "2026-08-15T06:40:43+00:00"
-    }
-  },
-  "GBM_LATE_15M_TARDIO#ETH": {
-    "n": 209,
-    "calibracion_prob": null
-  },
-  "GBM_LATE_15M_TARDIO#ETH#15min": {
-    "n": 209,
-    "calibracion_prob": null
-  },
-  "GBM_LATE_15M_TARDIO#SOL": {
-    "n": 388,
-    "calibracion_prob": null
-  },
-  "GBM_LATE_15M_TARDIO#SOL#15min": {
-    "n": 388,
-    "calibracion_prob": null
-  },
-  "GBM_LATE_15M_TARDIO#XRP": {
-    "n": 526,
-    "calibracion_prob": null
-  },
-  "GBM_LATE_15M_TARDIO#XRP#15min": {
-    "n": 526,
-    "calibracion_prob": null
-  },
-  "STRUCT_NO_15M#BTC": {
-    "n": 497,
-    "calibracion_prob": null
-  },
-  "STRUCT_NO_15M#BTC#15min": {
-    "n": 497,
-    "calibracion_prob": null
-  },
-  "STRUCT_NO_15M#ETH": {
-    "n": 527,
-    "calibracion_prob": null
-  },
-  "STRUCT_NO_15M#ETH#15min": {
-    "n": 527,
-    "calibracion_prob": null
-  },
-  "STRUCT_NO_15M#SOL": {
-    "n": 282,
-    "calibracion_prob": null
-  },
-  "STRUCT_NO_15M#SOL#15min": {
-    "n": 282,
-    "calibracion_prob": null
-  },
-  "UPDOWN_GBM#BTC": {
-    "n": 222,
-    "calibracion_prob": null
-  },
-  "UPDOWN_GBM#ETH": {
-    "n": 280,
-    "calibracion_prob": null
-  },
-  "UPDOWN_GBM#XRP": {
+  "FAVORITO_CONFIRMADO_60MIN_ALTACONVICCION#BTC": {
     "n": 201,
     "calibracion_prob": null
   },
-  "UPDOWN_GBM_15M_TARDIO#BTC": {
-    "n": 238,
+  "FAVORITO_CONFIRMADO_60MIN_ALTACONVICCION#BTC#60min": {
+    "n": 201,
+    "calibracion_prob": null
+  },
+  "FAVORITO_CONFIRMADO_60MIN_ALTACONVICCION#ETH": {
+    "n": 223,
+    "calibracion_prob": null
+  },
+  "FAVORITO_CONFIRMADO_60MIN_ALTACONVICCION#ETH#60min": {
+    "n": 223,
+    "calibracion_prob": null
+  },
+  "GBM_LATE_15M#BNB": {
+    "n": 570,
+    "calibracion_prob": null
+  },
+  "GBM_LATE_15M#BNB#15min": {
+    "n": 570,
+    "calibracion_prob": null
+  },
+  "GBM_LATE_15M#BTC": {
+    "n": 292,
+    "calibracion_prob": null
+  },
+  "GBM_LATE_15M#BTC#15min": {
+    "n": 292,
+    "calibracion_prob": null
+  },
+  "GBM_LATE_15M#DOGE": {
+    "n": 583,
     "calibracion_prob": {
-      "a": 0.4,
+      "a": -0.4,
+      "b": 1.55,
+      "n": 583,
+      "n_oos_validado": 389,
+      "n_requerido": 284.6,
+      "mejora_media_oos": 0.0316,
+      "actualizado": "2026-08-16T06:40:28+00:00"
+    }
+  },
+  "GBM_LATE_15M#DOGE#15min": {
+    "n": 583,
+    "calibracion_prob": {
+      "a": -0.4,
+      "b": 1.55,
+      "n": 583,
+      "n_oos_validado": 389,
+      "n_requerido": 284.6,
+      "mejora_media_oos": 0.0316,
+      "actualizado": "2026-08-16T06:40:28+00:00"
+    }
+  },
+  "GBM_LATE_15M#ETH": {
+    "n": 476,
+    "calibracion_prob": {
+      "a": 0.15,
+      "b": 0.2,
+      "n": 332,
+      "n_oos_validado": 222,
+      "n_requerido": 56.4,
+      "mejora_media_oos": 0.4921,
+      "actualizado": "2026-08-16T06:40:28+00:00"
+    }
+  },
+  "GBM_LATE_15M#ETH#15min": {
+    "n": 476,
+    "calibracion_prob": {
+      "a": 0.15,
+      "b": 0.2,
+      "n": 332,
+      "n_oos_validado": 222,
+      "n_requerido": 56.4,
+      "mejora_media_oos": 0.4921,
+      "actualizado": "2026-08-16T06:40:28+00:00"
+    }
+  },
+  "GBM_LATE_15M#SOL": {
+    "n": 695,
+    "calibracion_prob": {
+      "a": 0.3,
+      "b": 0.25,
+      "n": 515,
+      "n_oos_validado": 344,
+      "n_requerido": 70.1,
+      "mejora_media_oos": 0.4867,
+      "actualizado": "2026-08-16T06:40:28+00:00"
+    }
+  },
+  "GBM_LATE_15M#SOL#15min": {
+    "n": 695,
+    "calibracion_prob": {
+      "a": 0.3,
+      "b": 0.25,
+      "n": 515,
+      "n_oos_validado": 344,
+      "n_requerido": 70.1,
+      "mejora_media_oos": 0.4867,
+      "actualizado": "2026-08-16T06:40:28+00:00"
+    }
+  },
+  "GBM_LATE_15M#XRP": {
+    "n": 817,
+    "calibracion_prob": {
+      "a": -0.05,
+      "b": 0.15,
+      "n": 758,
+      "n_oos_validado": 506,
+      "n_requerido": 91.7,
+      "mejora_media_oos": 0.287,
+      "actualizado": "2026-08-16T06:40:29+00:00"
+    }
+  },
+  "GBM_LATE_15M#XRP#15min": {
+    "n": 817,
+    "calibracion_prob": {
+      "a": -0.05,
+      "b": 0.15,
+      "n": 758,
+      "n_oos_validado": 506,
+      "n_requerido": 91.7,
+      "mejora_media_oos": 0.287,
+      "actualizado": "2026-08-16T06:40:29+00:00"
+    }
+  },
+  "GBM_LATE_15M_ESPACIO_ATR#BNB": {
+    "n": 833,
+    "calibracion_prob": {
+      "a": 0.1,
+      "b": 0.15,
+      "n": 719,
+      "n_oos_validado": 480,
+      "n_requerido": 82.2,
+      "mejora_media_oos": 0.2909,
+      "actualizado": "2026-08-16T06:40:30+00:00"
+    }
+  },
+  "GBM_LATE_15M_ESPACIO_ATR#BNB#15min": {
+    "n": 833,
+    "calibracion_prob": {
+      "a": 0.1,
+      "b": 0.15,
+      "n": 719,
+      "n_oos_validado": 480,
+      "n_requerido": 82.2,
+      "mejora_media_oos": 0.2909,
+      "actualizado": "2026-08-16T06:40:30+00:00"
+    }
+  },
+  "GBM_LATE_15M_ESPACIO_ATR#BTC": {
+    "n": 814,
+    "calibracion_prob": {
+      "a": 0.1,
+      "b": 0.15,
+      "n": 591,
+      "n_oos_validado": 394,
+      "n_requerido": 64.3,
+      "mejora_media_oos": 0.4717,
+      "actualizado": "2026-08-16T06:40:30+00:00"
+    }
+  },
+  "GBM_LATE_15M_ESPACIO_ATR#BTC#15min": {
+    "n": 814,
+    "calibracion_prob": {
+      "a": 0.1,
+      "b": 0.15,
+      "n": 591,
+      "n_oos_validado": 394,
+      "n_requerido": 64.3,
+      "mejora_media_oos": 0.4717,
+      "actualizado": "2026-08-16T06:40:31+00:00"
+    }
+  },
+  "GBM_LATE_15M_ESPACIO_ATR#DOGE": {
+    "n": 494,
+    "calibracion_prob": null
+  },
+  "GBM_LATE_15M_ESPACIO_ATR#DOGE#15min": {
+    "n": 494,
+    "calibracion_prob": null
+  },
+  "GBM_LATE_15M_ESPACIO_ATR#ETH": {
+    "n": 739,
+    "calibracion_prob": {
+      "a": 0.05,
+      "b": 0.15,
+      "n": 502,
+      "n_oos_validado": 335,
+      "n_requerido": 44.2,
+      "mejora_media_oos": 0.6033,
+      "actualizado": "2026-08-16T06:40:31+00:00"
+    }
+  },
+  "GBM_LATE_15M_ESPACIO_ATR#ETH#15min": {
+    "n": 739,
+    "calibracion_prob": {
+      "a": 0.05,
+      "b": 0.15,
+      "n": 502,
+      "n_oos_validado": 335,
+      "n_requerido": 44.2,
+      "mejora_media_oos": 0.6033,
+      "actualizado": "2026-08-16T06:40:32+00:00"
+    }
+  },
+  "GBM_LATE_15M_ESPACIO_ATR#SOL": {
+    "n": 774,
+    "calibracion_prob": {
+      "a": 0.1,
       "b": 0.1,
-      "n": 238,
-      "n_oos_validado": 138,
-      "n_requerido": 39.8,
-      "mejora_media_oos": 0.5306,
-      "actualizado": "2026-08-15T06:40:45+00:00"
+      "n": 582,
+      "n_oos_validado": 388,
+      "n_requerido": 57.1,
+      "mejora_media_oos": 0.5624,
+      "actualizado": "2026-08-16T06:40:32+00:00"
+    }
+  },
+  "GBM_LATE_15M_ESPACIO_ATR#SOL#15min": {
+    "n": 774,
+    "calibracion_prob": {
+      "a": 0.1,
+      "b": 0.1,
+      "n": 582,
+      "n_oos_validado": 388,
+      "n_requerido": 57.1,
+      "mejora_media_oos": 0.5624,
+      "actualizado": "2026-08-16T06:40:32+00:00"
+    }
+  },
+  "GBM_LATE_15M_ESPACIO_ATR#XRP": {
+    "n": 590,
+    "calibracion_prob": null
+  },
+  "GBM_LATE_15M_ESPACIO_ATR#XRP#15min": {
+    "n": 590,
+    "calibracion_prob": null
+  },
+  "GBM_LATE_15M_MULTIHORIZONTE#BNB": {
+    "n": 425,
+    "calibracion_prob": null
+  },
+  "GBM_LATE_15M_MULTIHORIZONTE#BNB#15min": {
+    "n": 425,
+    "calibracion_prob": null
+  },
+  "GBM_LATE_15M_MULTIHORIZONTE#BTC": {
+    "n": 308,
+    "calibracion_prob": null
+  },
+  "GBM_LATE_15M_MULTIHORIZONTE#BTC#15min": {
+    "n": 308,
+    "calibracion_prob": null
+  },
+  "GBM_LATE_15M_MULTIHORIZONTE#DOGE": {
+    "n": 408,
+    "calibracion_prob": null
+  },
+  "GBM_LATE_15M_MULTIHORIZONTE#DOGE#15min": {
+    "n": 408,
+    "calibracion_prob": null
+  },
+  "GBM_LATE_15M_MULTIHORIZONTE#ETH": {
+    "n": 286,
+    "calibracion_prob": null
+  },
+  "GBM_LATE_15M_MULTIHORIZONTE#ETH#15min": {
+    "n": 286,
+    "calibracion_prob": null
+  },
+  "GBM_LATE_15M_MULTIHORIZONTE#SOL": {
+    "n": 439,
+    "calibracion_prob": null
+  },
+  "GBM_LATE_15M_MULTIHORIZONTE#SOL#15min": {
+    "n": 439,
+    "calibracion_prob": null
+  },
+  "GBM_LATE_15M_MULTIHORIZONTE#XRP": {
+    "n": 470,
+    "calibracion_prob": null
+  },
+  "GBM_LATE_15M_MULTIHORIZONTE#XRP#15min": {
+    "n": 470,
+    "calibracion_prob": null
+  },
+  "GBM_LATE_15M_TARDIO#BNB": {
+    "n": 548,
+    "calibracion_prob": null
+  },
+  "GBM_LATE_15M_TARDIO#BNB#15min": {
+    "n": 548,
+    "calibracion_prob": null
+  },
+  "GBM_LATE_15M_TARDIO#BTC": {
+    "n": 360,
+    "calibracion_prob": null
+  },
+  "GBM_LATE_15M_TARDIO#BTC#15min": {
+    "n": 360,
+    "calibracion_prob": null
+  },
+  "GBM_LATE_15M_TARDIO#DOGE": {
+    "n": 554,
+    "calibracion_prob": {
+      "a": -0.4,
+      "b": 1.6,
+      "n": 554,
+      "n_oos_validado": 370,
+      "n_requerido": 132.1,
+      "mejora_media_oos": 0.0446,
+      "actualizado": "2026-08-16T06:40:36+00:00"
+    }
+  },
+  "GBM_LATE_15M_TARDIO#DOGE#15min": {
+    "n": 554,
+    "calibracion_prob": {
+      "a": -0.4,
+      "b": 1.6,
+      "n": 554,
+      "n_oos_validado": 370,
+      "n_requerido": 132.1,
+      "mejora_media_oos": 0.0446,
+      "actualizado": "2026-08-16T06:40:36+00:00"
+    }
+  },
+  "GBM_LATE_15M_TARDIO#ETH": {
+    "n": 231,
+    "calibracion_prob": null
+  },
+  "GBM_LATE_15M_TARDIO#ETH#15min": {
+    "n": 231,
+    "calibracion_prob": null
+  },
+  "GBM_LATE_15M_TARDIO#SOL": {
+    "n": 468,
+    "calibracion_prob": null
+  },
+  "GBM_LATE_15M_TARDIO#SOL#15min": {
+    "n": 468,
+    "calibracion_prob": null
+  },
+  "GBM_LATE_15M_TARDIO#XRP": {
+    "n": 620,
+    "calibracion_prob": null
+  },
+  "GBM_LATE_15M_TARDIO#XRP#15min": {
+    "n": 620,
+    "calibracion_prob": null
+  },
+  "STRUCT_NO_15M#BTC": {
+    "n": 555,
+    "calibracion_prob": null
+  },
+  "STRUCT_NO_15M#BTC#15min": {
+    "n": 555,
+    "calibracion_prob": null
+  },
+  "STRUCT_NO_15M#ETH": {
+    "n": 583,
+    "calibracion_prob": null
+  },
+  "STRUCT_NO_15M#ETH#15min": {
+    "n": 583,
+    "calibracion_prob": null
+  },
+  "STRUCT_NO_15M#SOL": {
+    "n": 314,
+    "calibracion_prob": null
+  },
+  "STRUCT_NO_15M#SOL#15min": {
+    "n": 314,
+    "calibracion_prob": null
+  },
+  "UPDOWN_GBM#BTC": {
+    "n": 241,
+    "calibracion_prob": null
+  },
+  "UPDOWN_GBM#ETH": {
+    "n": 304,
+    "calibracion_prob": null
+  },
+  "UPDOWN_GBM#SOL": {
+    "n": 216,
+    "calibracion_prob": null
+  },
+  "UPDOWN_GBM#XRP": {
+    "n": 275,
+    "calibracion_prob": null
+  },
+  "UPDOWN_GBM_15M_TARDIO#BTC": {
+    "n": 248,
+    "calibracion_prob": {
+      "a": 0.45,
+      "b": 0.1,
+      "n": 248,
+      "n_oos_validado": 148,
+      "n_requerido": 38.2,
+      "mejora_media_oos": 0.5433,
+      "actualizado": "2026-08-16T06:40:39+00:00"
     }
   },
   "UPDOWN_GBM_15M_TARDIO#BTC#15min": {
-    "n": 238,
+    "n": 248,
     "calibracion_prob": {
-      "a": 0.4,
+      "a": 0.45,
       "b": 0.1,
-      "n": 238,
-      "n_oos_validado": 138,
-      "n_requerido": 39.8,
-      "mejora_media_oos": 0.5306,
-      "actualizado": "2026-08-15T06:40:45+00:00"
+      "n": 248,
+      "n_oos_validado": 148,
+      "n_requerido": 38.2,
+      "mejora_media_oos": 0.5433,
+      "actualizado": "2026-08-16T06:40:39+00:00"
     }
   },
   "UPDOWN_GBM_15M_TARDIO#SOL": {
-    "n": 263,
+    "n": 346,
     "calibracion_prob": {
       "a": 0.2,
       "b": 0.25,
-      "n": 263,
-      "n_oos_validado": 163,
-      "n_requerido": 87.3,
-      "mejora_media_oos": 0.2796,
-      "actualizado": "2026-08-15T06:40:45+00:00"
+      "n": 346,
+      "n_oos_validado": 231,
+      "n_requerido": 77.3,
+      "mejora_media_oos": 0.3137,
+      "actualizado": "2026-08-16T06:40:39+00:00"
     }
   },
   "UPDOWN_GBM_15M_TARDIO#SOL#15min": {
-    "n": 263,
+    "n": 346,
     "calibracion_prob": {
       "a": 0.2,
       "b": 0.25,
-      "n": 263,
-      "n_oos_validado": 163,
-      "n_requerido": 87.3,
-      "mejora_media_oos": 0.2796,
-      "actualizado": "2026-08-15T06:40:45+00:00"
+      "n": 346,
+      "n_oos_validado": 231,
+      "n_requerido": 77.3,
+      "mejora_media_oos": 0.3137,
+      "actualizado": "2026-08-16T06:40:39+00:00"
     }
   },
   "UPDOWN_GBM_15M_TARDIO#XRP": {
-    "n": 275,
+    "n": 347,
     "calibracion_prob": {
-      "a": 0.1,
+      "a": 0.05,
       "b": 0.15,
-      "n": 275,
-      "n_oos_validado": 175,
-      "n_requerido": 83.7,
-      "mejora_media_oos": 0.2817,
-      "actualizado": "2026-08-15T06:40:45+00:00"
+      "n": 347,
+      "n_oos_validado": 232,
+      "n_requerido": 80.6,
+      "mejora_media_oos": 0.2558,
+      "actualizado": "2026-08-16T06:40:39+00:00"
     }
   },
   "UPDOWN_GBM_15M_TARDIO#XRP#15min": {
-    "n": 275,
+    "n": 347,
     "calibracion_prob": {
-      "a": 0.1,
+      "a": 0.05,
       "b": 0.15,
-      "n": 275,
-      "n_oos_validado": 175,
-      "n_requerido": 83.7,
-      "mejora_media_oos": 0.2817,
-      "actualizado": "2026-08-15T06:40:46+00:00"
+      "n": 347,
+      "n_oos_validado": 232,
+      "n_requerido": 80.6,
+      "mejora_media_oos": 0.2558,
+      "actualizado": "2026-08-16T06:40:39+00:00"
     }
   },
   "WEEKLY_PRICE#BTC": {
-    "n": 246,
-    "calibracion_prob": null
-  },
-  "WEEKLY_PRICE#ETH": {
     "n": 254,
     "calibracion_prob": null
   },
+  "WEEKLY_PRICE#ETH": {
+    "n": 268,
+    "calibracion_prob": null
+  },
   "WEEKLY_PRICE#SOL": {
-    "n": 324,
+    "n": 333,
     "calibracion_prob": {
       "a": -0.75,
-      "b": 1.2,
-      "n": 324,
-      "n_oos_validado": 216,
-      "n_requerido": 9.1,
-      "mejora_media_oos": 0.1498,
-      "actualizado": "2026-08-15T06:40:46+00:00"
+      "b": 1.25,
+      "n": 333,
+      "n_oos_validado": 222,
+      "n_requerido": 9.3,
+      "mejora_media_oos": 0.1518,
+      "actualizado": "2026-08-16T06:40:40+00:00"
     }
   }
 }
