@@ -50,21 +50,39 @@ def cargar_wallets_leaderboard():
     return wallets
 
 
+MAX_REINTENTOS_429 = 3
+BACKOFF_BASE_S = 2.0  # 16-Ago: data-api empezó a devolver 429 en ráfagas (límites
+# de tasa por volumen activados en prod, changelog Polymarket semana 10-Ago) --
+# 73 errores reales medidos en slow.log, 43 wallets afectadas, sin ningún retry
+# hasta ahora (esa consulta se perdía el ciclo entero). Backoff exponencial
+# acotado (2s/4s/8s), respeta Retry-After si el servidor lo manda; tras
+# MAX_REINTENTOS_429 se rinde y devuelve [] como antes (no bloquea el ciclo).
+
+
 def fetch_actividad(wallet_addr):
-    try:
-        r = requests.get(
-            DATA_API,
-            params={"user": wallet_addr, "limit": 500},
-            headers=HEADERS_HTTP,
-            timeout=TIMEOUT,
-        )
-        if r.status_code == 404:
+    intento = 0
+    while True:
+        try:
+            r = requests.get(
+                DATA_API,
+                params={"user": wallet_addr, "limit": 500},
+                headers=HEADERS_HTTP,
+                timeout=TIMEOUT,
+            )
+            if r.status_code == 404:
+                return []
+            if r.status_code == 429 and intento < MAX_REINTENTOS_429:
+                espera = float(r.headers.get("Retry-After", 0)) or BACKOFF_BASE_S * (2 ** intento)
+                print(f"    429 data-api para {wallet_addr[:10]}... -- reintento "
+                      f"{intento + 1}/{MAX_REINTENTOS_429} en {espera:.1f}s")
+                time.sleep(espera)
+                intento += 1
+                continue
+            r.raise_for_status()
+            return r.json() or []
+        except Exception as e:
+            print(f"    Error data-api para {wallet_addr[:10]}...: {type(e).__name__}: {e}")
             return []
-        r.raise_for_status()
-        return r.json() or []
-    except Exception as e:
-        print(f"    Error data-api para {wallet_addr[:10]}...: {type(e).__name__}: {e}")
-        return []
 
 
 def normalizar_trade(item, wallet_addr):

@@ -98,18 +98,36 @@ def wallets_del_leaderboard_hoy() -> dict:
     return out
 
 
+MAX_REINTENTOS_429 = 3
+BACKOFF_BASE_S = 2.0  # 16-Ago: mismo fix que capture_trades.py -- data-api
+# empezó a devolver 429 en ráfagas (límites de tasa por volumen activados en
+# prod, changelog Polymarket semana 10-Ago). Sin retry aquí, una wallet que
+# choca con el límite pierde su historial entero ese ciclo, sin más aviso
+# que un print a stderr.
+
+
 def fetch_activity(wallet: str, max_events: int = MAX_EVENTOS_POR_WALLET) -> list:
     evs = []
     offset = 0
     while len(evs) < max_events:
-        try:
-            r = requests.get(f"{DATA_API}/activity",
-                             params={"user": wallet, "limit": 500, "offset": offset},
-                             timeout=TIMEOUT)
-            r.raise_for_status()
-        except Exception as e:
-            print(f"  [error] {wallet[:12]} offset={offset}: {e}", file=sys.stderr)
-            break
+        intento = 0
+        while True:
+            try:
+                r = requests.get(f"{DATA_API}/activity",
+                                 params={"user": wallet, "limit": 500, "offset": offset},
+                                 timeout=TIMEOUT)
+                if r.status_code == 429 and intento < MAX_REINTENTOS_429:
+                    espera = float(r.headers.get("Retry-After", 0)) or BACKOFF_BASE_S * (2 ** intento)
+                    print(f"  [429] {wallet[:12]} offset={offset} -- reintento "
+                          f"{intento + 1}/{MAX_REINTENTOS_429} en {espera:.1f}s", file=sys.stderr)
+                    time.sleep(espera)
+                    intento += 1
+                    continue
+                r.raise_for_status()
+                break
+            except Exception as e:
+                print(f"  [error] {wallet[:12]} offset={offset}: {e}", file=sys.stderr)
+                return evs
         chunk = r.json()
         if not chunk:
             break
