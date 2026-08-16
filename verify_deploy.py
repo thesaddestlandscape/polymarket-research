@@ -215,11 +215,20 @@ def reiniciar(nombre: str) -> int:
     # pronto. Reintenta el probe (no el restart) un par de veces antes de
     # declarar fallo real -- evita alertar "revisar a mano" cuando en
     # realidad ya está en FRESH.
+    # 16-Ago: el retry de 2×2s (7s totales con el sleep inicial) seguía
+    # dando falsos "no se pudo reiniciar" en observadores_fase0.py -- tiene
+    # 17 hilos con arranque escalonado (time.sleep(1.0) entre cada uno,
+    # observadores_fase0.py:166), así que el mínimo garantizado antes de
+    # imprimir "hilos arrancados" ya son 17s, más import de 17 módulos
+    # (pandas/requests/etc en cada uno). Medido en logs/observadores_fase0.log
+    # (13-Ago): ~85s reales entre "arrancando N observadores" y "N hilos
+    # arrancados". Sube el presupuesto a ~120s (24×5s) -- no penaliza a los
+    # probes rápidos (dash/control/etc.) porque el loop corta en cuanto ok=True.
     ok, detalle = probe_ok(cfg.get("probe"), t0)
-    for _ in range(2):
+    for _ in range(24):
         if ok:
             break
-        time.sleep(2)
+        time.sleep(5)
         ok, detalle = probe_ok(cfg.get("probe"), t0)
     print(f"{'✅' if ok else '🚨'} {nombre}: reiniciado pid={proc[0]} — probe: {detalle}")
     return 0 if ok else 1

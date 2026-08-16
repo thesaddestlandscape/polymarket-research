@@ -784,9 +784,15 @@ def main():
             for name in stale_ahora:
                 log(f"⚠ DEPLOY OBSOLETO: {name} — auto-reiniciando")
                 try:
+                    # 16-Ago: 30s no basta para el nuevo presupuesto de probe de
+                    # verify_deploy.py (~120s, ver ahí) -- observadores_fase0.py
+                    # (17 hilos, arranque escalonado 1s/hilo) tardaba más que el
+                    # timeout y este subprocess lo mataba antes de que el probe
+                    # pudiera confirmar éxito, generando falsos "NO se pudieron
+                    # reiniciar" por Telegram con el proceso ya sano.
                     rr = subprocess.run(
                         [sys.executable, "verify_deploy.py", "--restart", name],
-                        capture_output=True, text=True, timeout=30, cwd=str(REPO))
+                        capture_output=True, text=True, timeout=150, cwd=str(REPO))
                     (reiniciadas if rr.returncode == 0 else fallidas).append(name)
                     log(f"  {'✅' if rr.returncode == 0 else '🚨'} {rr.stdout.strip()}")
                 except Exception as e:
