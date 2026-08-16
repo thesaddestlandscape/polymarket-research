@@ -792,5 +792,55 @@
       "🔥 CPU sobresuscrita: load5=10.25 en 2 cores (ratio=5.12x, umbral 3.0x) -- 186 procesos vivos"
     ],
     "estado": "ANOMALIA"
+  },
+  {
+    "timestamp_utc": "2026-08-16T07:08:01+00:00",
+    "pipeline": {
+      "n_ciclos_resolve_postmortem": 165,
+      "resolve_postmortem_p50_s": 8.0,
+      "resolve_postmortem_p95_s": 14.0,
+      "resolve_postmortem_max_s": 40.0,
+      "n_ciclos_live_trade": 1973,
+      "hueco_live_trade_max_s": 196.0
+    },
+    "procesos_colgados": [],
+    "deploy": {
+      "n_screens": 9,
+      "stale": [
+        "ejeclive"
+      ]
+    },
+    "disco": {
+      "pct_usado": 64.0,
+      "gb_libres": 25.85,
+      "git_gb": 0.0,
+      "data_gb": 23.7,
+      "datalogs_gb": 5.91
+    },
+    "ram": {
+      "ram_total_gb": 3.72,
+      "ram_disponible_gb": 1.66,
+      "ram_pct_libre": 44.8
+    },
+    "integridad_datos": {
+      "trades_abiertos_atascados": [],
+      "n_trades_total": 435,
+      "n_results_total": 147886
+    },
+    "carga_sistema": {
+      "load1": 4.28,
+      "load5": 5.79,
+      "load15": 6.52,
+      "nproc": 2,
+      "ratio5": 2.9,
+      "n_procesos_total": 186
+    },
+    "git_push": {
+      "commits_sin_pushear": 0
+    },
+    "anomalias": [
+      "⚠️ screens STALE (código en disco != código cargado): ejeclive"
+    ],
+    "estado": "ANOMALIA"
   }
 ]
