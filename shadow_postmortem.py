@@ -1058,6 +1058,7 @@ _BASE_MOMENTUM_IBS_5M = [
     ("drift_7min_pct", "abs_gt", "abs_lt"),
     ("ibs_7min",       "gt", "lt"),
     ("ibs_7min",       "lt", "gt"),
+    ("ballena_activa_n", "gt", "lt"),  # 17-Ago, hallazgo central: momentum solo funciona con ballena activa
     ("libro_spread",   "gt", "lt"),
     ("libro_liquidez", "lt", "gt"),
 ]
@@ -1070,6 +1071,7 @@ _BASE_MOMENTUM_IBS_15M = [
     ("drift_20min_pct", "abs_gt", "abs_lt"),
     ("ibs_20min",       "gt", "lt"),
     ("ibs_20min",       "lt", "gt"),
+    ("ballena_activa_n", "gt", "lt"),  # 17-Ago, hallazgo central
     ("libro_spread",    "gt", "lt"),
     ("libro_liquidez",  "lt", "gt"),
 ]
@@ -1439,6 +1441,21 @@ FEATURE_RULES = {
     "MOMENTUM_IBS_15M_FADE#XRP#15min": _BASE_MOMENTUM_IBS_15M,
     "MOMENTUM_IBS_15M_FADE#DOGE#15min": _BASE_MOMENTUM_IBS_15M,
     "MOMENTUM_IBS_15M_FADE#BNB#15min": _BASE_MOMENTUM_IBS_15M,
+
+    "MOMENTUM_IBS_5M_BALLENA":          _BASE_MOMENTUM_IBS_5M,
+    "MOMENTUM_IBS_5M_BALLENA#BTC#5min": _BASE_MOMENTUM_IBS_5M,
+    "MOMENTUM_IBS_5M_BALLENA#ETH#5min": _BASE_MOMENTUM_IBS_5M,
+    "MOMENTUM_IBS_5M_BALLENA#SOL#5min": _BASE_MOMENTUM_IBS_5M,
+    "MOMENTUM_IBS_5M_BALLENA#XRP#5min": _BASE_MOMENTUM_IBS_5M,
+    "MOMENTUM_IBS_5M_BALLENA#DOGE#5min": _BASE_MOMENTUM_IBS_5M,
+    "MOMENTUM_IBS_5M_BALLENA#BNB#5min": _BASE_MOMENTUM_IBS_5M,
+    "MOMENTUM_IBS_15M_BALLENA":          _BASE_MOMENTUM_IBS_15M,
+    "MOMENTUM_IBS_15M_BALLENA#BTC#15min": _BASE_MOMENTUM_IBS_15M,
+    "MOMENTUM_IBS_15M_BALLENA#ETH#15min": _BASE_MOMENTUM_IBS_15M,
+    "MOMENTUM_IBS_15M_BALLENA#SOL#15min": _BASE_MOMENTUM_IBS_15M,
+    "MOMENTUM_IBS_15M_BALLENA#XRP#15min": _BASE_MOMENTUM_IBS_15M,
+    "MOMENTUM_IBS_15M_BALLENA#DOGE#15min": _BASE_MOMENTUM_IBS_15M,
+    "MOMENTUM_IBS_15M_BALLENA#BNB#15min": _BASE_MOMENTUM_IBS_15M,
 
     # WEEKLY_PRICE (12-Jul): 404 predicciones en 3 días, 0 aprendizaje causal
     # por activo. subtype=activo (sin sufijo de duración).

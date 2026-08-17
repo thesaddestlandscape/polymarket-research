@@ -3447,7 +3447,8 @@ ACUMULAR_SHADOW_AUNQUE_DESACTIVADA = {"GBM_LATE_60M", "GBM_LATE_15M_TARDIO", "GB
                                       "STREAK_MOM_5M",  # 2026-07-10: -0.052 IC n=306, no cruza umbral auto pero sin edge; desactivada manualmente en strategy_params.json (motivo "DESACTIVADA MANUALMENTE"), sigue midiendo sin ruido de atención
                                       "MOMENTUM_IBS_5M",  # 2026-08-17: recién nacida (n=0), misma protección desde el día 1 para no caer en estado absorbente si los primeros trades salen mal por azar
                                       "MOMENTUM_IBS_5M_FADE",  # 2026-08-17: ídem, nace con prior fuerte del backtest histórico (n=6275, Wilson90lo=53.5%) pero n propio=0
-                                      "MOMENTUM_IBS_15M", "MOMENTUM_IBS_15M_FADE"}  # 2026-08-17: familia 15min, mismo día -- FADE nace con el prior más fuerte de toda la familia (6/6 monedas significativas en backtest)
+                                      "MOMENTUM_IBS_15M", "MOMENTUM_IBS_15M_FADE",  # 2026-08-17: familia 15min, mismo día -- FADE nace con el prior más fuerte de toda la familia (6/6 monedas significativas en backtest)
+                                      "MOMENTUM_IBS_5M_BALLENA", "MOMENTUM_IBS_15M_BALLENA"}  # 2026-08-17: variantes gateadas por actividad de ballena real -- hallazgo central de la sesión (60.6%/55.2% hit con outcome real de Polymarket, verificado aislando la variable)
 # Photo finish (2026-07-05): entrar con el precio pegado al strike es moneda
 # al aire cobrada como favorito. |drift_ventana|<0.02% → IC=-0.145 n=181
 # (win 35%), estable en ambas mitades temporales (-0.163/-0.127) y monótono
@@ -4630,6 +4631,36 @@ def _libro_calidad(market: dict) -> dict:
     return {"libro_spread": spread, "libro_liquidez": liquidez}
 
 
+def _ballena_activa_reciente(condition_id: str, ventana_min: float) -> int:
+    """17-Ago (hallazgo momentum-gateado-por-ballenas): cuenta trades REALES
+    de ballenas en `condition_id` dentro de los últimos `ventana_min`
+    minutos -- mismo lookback que la señal drift+ibs (7min para 5min,
+    20min para 15min), no los 60s por defecto de `leer_snapshot_reciente`
+    (ese parámetro es solo el margen de frescura del FICHERO escritor, no
+    una ventana de trades -- el cache retiene 65min, VENTANA_RETENCION_S
+    en ballenas_firehose_cache.py). Milisegundos: lee snapshot ya en
+    memoria/disco cacheado (mtime-cacheado desde 04-Ago), CERO llamadas de
+    red -- mismo patrón de baja latencia que _gate_volumen_ballenas() ya
+    usa en producción para las tuplas live. Fail-closed silencioso (0 si
+    condition_id vacío, snapshot inexistente/viejo, o excepción) -- nunca
+    bloquea la generación de la señal base, solo aporta el feature."""
+    if not condition_id:
+        return 0
+    try:
+        trades = _fc.leer_snapshot_reciente(condition_id)
+    except Exception:
+        return 0
+    if not trades:
+        return 0
+    corte = datetime.now(timezone.utc).timestamp() - ventana_min * 60
+    n = 0
+    for t in trades:
+        ts = t.get("_recibido_ts")
+        if ts is None or ts >= corte:
+            n += 1  # sin timestamp -> se cuenta (fail-open solo para el conteo, nunca inventa un veto)
+    return n
+
+
 def _es_ntm_5min(market: dict, ancho: float = 0.05) -> int:
     """Flag near-the-money (propuesta #14, 13-jul, paper Dai/Jia/Yu
     "Settlement Manipulation in Prediction Markets"): precio YES a menos de
@@ -5366,6 +5397,7 @@ def s_momentum_ibs_5m(market, ctx):
             "py_entrada":     round(py, 3),
             "hora_utc":       datetime.now(timezone.utc).hour,
             "es_ntm_5min":    _es_ntm_5min(market),
+            "ballena_activa_n": _ballena_activa_reciente(market.get("condition_id", ""), MOMENTUM_IBS_5M_LOOKBACK_MIN),
             **_libro_calidad(market),
         },
     }
@@ -5423,6 +5455,7 @@ def s_momentum_ibs_5m_fade(market, ctx):
             "py_entrada":     round(py, 3),
             "hora_utc":       datetime.now(timezone.utc).hour,
             "es_ntm_5min":    _es_ntm_5min(market),
+            "ballena_activa_n": _ballena_activa_reciente(market.get("condition_id", ""), MOMENTUM_IBS_5M_LOOKBACK_MIN),
             **_libro_calidad(market),
         },
     }
@@ -5478,6 +5511,7 @@ def s_momentum_ibs_15m(market, ctx):
             "ibs_20min":       ibs,
             "py_entrada":      round(py, 3),
             "hora_utc":        datetime.now(timezone.utc).hour,
+            "ballena_activa_n": _ballena_activa_reciente(market.get("condition_id", ""), MOMENTUM_IBS_15M_LOOKBACK_MIN),
             **_libro_calidad(market),
         },
     }
@@ -5526,6 +5560,123 @@ def s_momentum_ibs_15m_fade(market, ctx):
             "ibs_20min":       ibs,
             "py_entrada":      round(py, 3),
             "hora_utc":        datetime.now(timezone.utc).hour,
+            "ballena_activa_n": _ballena_activa_reciente(market.get("condition_id", ""), MOMENTUM_IBS_15M_LOOKBACK_MIN),
+            **_libro_calidad(market),
+        },
+    }
+
+def s_momentum_ibs_5m_ballena(market, ctx):
+    """
+    17-Ago, misma tarde -- HALLAZGO CENTRAL de la sesión (petición
+    explícita Javi: "construye el filtro ballena activa en tiempo real").
+    Momentum PURO (misma señal drift+ibs que s_momentum_ibs_5m, refutada
+    en población completa) pero gateado: solo dispara si hay al menos 1
+    trade real de ballena en este condition_id dentro del lookback
+    (7min), vía `_ballena_activa_reciente()` (snapshot en memoria,
+    milisegundos, cero red).
+
+    Verificado con datos reales de Polymarket (no solo klines Binance):
+    cruzando `ballenas_timing_history.csv` (outcome real, 100% consistente
+    internamente en 8877/8877 mercados) contra `data/markets/2026-08-12→17`,
+    el momentum puro en el subconjunto CON actividad de ballena da
+    n=1139 hit=60.6% Wilson90lo=58.2% p_shuffle=0.0000 (5min) -- MUY por
+    encima de lo que da la población completa (~50%, refutada en el
+    backtest de 35 días con klines). Aislado el efecto: usando outcome
+    Binance en el MISMO subconjunto da el resultado idéntico (60.6%) --
+    confirma que la variable es la POBLACIÓN (con/sin ballena), no un
+    artefacto del método de resolución de outcome.
+
+    Caveat explícito: la verificación usa "cualquier wallet con trade
+    registrado en ballenas_timing_history" dentro de la ventana de vida
+    del mercado (más laxo que este filtro en vivo, que exige actividad
+    DENTRO del lookback de 7min exacto) y cubre solo ~5-6 días
+    (12-17-Ago) -- n menor que el backtest de 35 días. Shadow puro,
+    dejar acumular n propio antes de cualquier promoción.
+    """
+    q = market.get("question", "")
+    if "up or down" not in q.lower():
+        return None
+    tipo, vent = _parse_updown_tipo(q)
+    if tipo != "slot" or vent != 5:
+        return None
+    activo = identificar_activo(q)
+    if activo not in MOMENTUM_IBS_5M_PARES:
+        return None
+    py = market.get("_precio_yes")
+    if py is None:
+        return None
+    condition_id = market.get("condition_id", "")
+    n_ballena = _ballena_activa_reciente(condition_id, MOMENTUM_IBS_5M_LOOKBACK_MIN)
+    if n_ballena < 1:
+        return None  # sin actividad de ballena -- el hallazgo dice que sin esto el momentum es ruido
+    precios_data = ctx.get("precios_intraday", [])
+    drift_pct, ibs = _drift_e_ibs_ventana(activo, precios_data, MOMENTUM_IBS_5M_LOOKBACK_MIN)
+    if drift_pct is None or ibs is None:
+        return None
+    if drift_pct > 0 and ibs >= MOMENTUM_IBS_5M_UMBRAL:
+        prob_yes, detalle = 0.60, "alineado_arriba_extremo_ballena"
+    elif drift_pct < 0 and ibs <= (1 - MOMENTUM_IBS_5M_UMBRAL):
+        prob_yes, detalle = 0.40, "alineado_abajo_extremo_ballena"
+    else:
+        return None
+    return {
+        "prob_yes": prob_yes,
+        "razon":    f"momentum_ibs_5m_ballena {activo} drift{MOMENTUM_IBS_5M_LOOKBACK_MIN}m={drift_pct:.3f}% ibs={ibs:.2f} py={py:.3f} n_ballena={n_ballena} ({detalle})",
+        "subtype":  f"{activo}#5min",
+        "features": {
+            "drift_7min_pct": drift_pct,
+            "ibs_7min":       ibs,
+            "py_entrada":     round(py, 3),
+            "hora_utc":       datetime.now(timezone.utc).hour,
+            "es_ntm_5min":    _es_ntm_5min(market),
+            "ballena_activa_n": n_ballena,
+            **_libro_calidad(market),
+        },
+    }
+
+def s_momentum_ibs_15m_ballena(market, ctx):
+    """17-Ago: versión 15min de s_momentum_ibs_5m_ballena, mismo día,
+    mismo hallazgo. Backtest con outcome real de Polymarket: n=1854
+    hit=55.2% Wilson90lo=53.3% p_shuffle=0.0000 en el subconjunto con
+    actividad de ballena (población completa refutada, ~46%). Ver
+    docstring de la versión 5min para la metodología completa de
+    verificación (aislamiento de variable outcome-real vs Binance)."""
+    q = market.get("question", "")
+    if "up or down" not in q.lower():
+        return None
+    tipo, vent = _parse_updown_tipo(q)
+    if tipo != "slot" or vent != 15:
+        return None
+    activo = identificar_activo(q)
+    if activo not in MOMENTUM_IBS_15M_PARES:
+        return None
+    py = market.get("_precio_yes")
+    if py is None:
+        return None
+    condition_id = market.get("condition_id", "")
+    n_ballena = _ballena_activa_reciente(condition_id, MOMENTUM_IBS_15M_LOOKBACK_MIN)
+    if n_ballena < 1:
+        return None
+    precios_data = ctx.get("precios_intraday", [])
+    drift_pct, ibs = _drift_e_ibs_ventana(activo, precios_data, MOMENTUM_IBS_15M_LOOKBACK_MIN)
+    if drift_pct is None or ibs is None:
+        return None
+    if drift_pct > 0 and ibs >= MOMENTUM_IBS_15M_UMBRAL:
+        prob_yes, detalle = 0.60, "alineado_arriba_extremo_ballena"
+    elif drift_pct < 0 and ibs <= (1 - MOMENTUM_IBS_15M_UMBRAL):
+        prob_yes, detalle = 0.40, "alineado_abajo_extremo_ballena"
+    else:
+        return None
+    return {
+        "prob_yes": prob_yes,
+        "razon":    f"momentum_ibs_15m_ballena {activo} drift{MOMENTUM_IBS_15M_LOOKBACK_MIN}m={drift_pct:.3f}% ibs={ibs:.2f} py={py:.3f} n_ballena={n_ballena} ({detalle})",
+        "subtype":  f"{activo}#15min",
+        "features": {
+            "drift_20min_pct": drift_pct,
+            "ibs_20min":       ibs,
+            "py_entrada":      round(py, 3),
+            "hora_utc":        datetime.now(timezone.utc).hour,
+            "ballena_activa_n": n_ballena,
             **_libro_calidad(market),
         },
     }
@@ -5878,6 +6029,8 @@ ESTRATEGIAS = [
     ("MOMENTUM_IBS_5M_FADE", s_momentum_ibs_5m_fade),
     ("MOMENTUM_IBS_15M",     s_momentum_ibs_15m),
     ("MOMENTUM_IBS_15M_FADE", s_momentum_ibs_15m_fade),
+    ("MOMENTUM_IBS_5M_BALLENA", s_momentum_ibs_5m_ballena),
+    ("MOMENTUM_IBS_15M_BALLENA", s_momentum_ibs_15m_ballena),
     ("STREAK_FADE_5M",      s_streak_fade_5m),
     ("STREAK_FADE_15M",     s_streak_fade_15m),
     ("STREAK_FADE_60M",     s_streak_fade_60m),
