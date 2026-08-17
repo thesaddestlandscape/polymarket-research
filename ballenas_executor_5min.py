@@ -85,6 +85,7 @@ from live_guard import puede_operar_live
 from live_stake import bloquear_por_circuit_breaker, calcular_stake
 from ballenas_banda_fina_gate import evaluar as _gate_banda_fina_ballenas
 from gate_bucket_propio import evaluar as _gate_bucket_propio
+from calibracion_platt_lookup import entrada as _calib_platt_entrada, aplicar as _aplicar_platt
 import ballenas_firehose_cache as _fc
 
 DIR = Path(__file__).resolve().parent
@@ -567,6 +568,10 @@ def watch_window(activo: str, ts_end: int) -> bool:
     if not bandas:
         log(f"[{ts_end}] {activo}#5m sin ninguna banda significativa en ballenas_timing_state_fino.json -- se salta", activo)
         return False
+    # 17-Ago: (a,b) depende solo de (activo,marco), no de la banda de precio
+    # -- se busca UNA vez por ventana, no una vez por banda por poll
+    # (/code-review: evitar trabajo repetido en el hot path de baja latencia).
+    _calib_bt = _calib_platt_entrada(STRATEGY, activo, f"{VENTANA_MIN}min")
     watch_lead_s = max(b["watch_lead_s"] for b in bandas)
     ts_start = ts_end - VENTANA_MIN * 60
 
@@ -612,7 +617,21 @@ def watch_window(activo: str, ts_end: int) -> bool:
         n_firehose_no_sano_este_poll = 0
         for banda in bandas:
             banda_lo, banda_hi = banda["banda_lo"], banda["banda_hi"]
-            confirm_ceiling_s, prob_bucket = banda["confirm_ceiling_s"], banda["prob_bucket"]
+            confirm_ceiling_s, prob_bucket_raw = banda["confirm_ceiling_s"], banda["prob_bucket"]
+            # 17-Ago: corrección Platt granular ya validada (analisis_calibracion_
+            # platt_granular.py) pero nunca consultada desde este ejecutor -- ver
+            # calibracion_platt_lookup.py. Fail-closed: sin clave o sin corrección
+            # que pase rigor, prob_bucket queda EXACTAMENTE como antes. Cubre tanto
+            # la banda coarse como cada banda fina (misma clave activo#marco para
+            # todas -- la calibración granular hoy no está segmentada por banda).
+            # /code-review 17-Ago: prob_bucket_raw (SIN calibrar) es lo que se
+            # persiste en prob_yes_modelo -- shadow_postmortem.py/analisis_
+            # calibracion_platt_granular.py reentrenan (a,b) asumiendo que esa
+            # columna es la señal cruda del modelo (mismo bug de deriva
+            # compuesta ya cazado 01-Jul, ver shadow_predict.py:6437-6442). El
+            # valor CALIBRADO (prob_bucket) solo se usa para decidir/dimensionar
+            # esta ejecución, nunca para lo que se guarda en el CSV.
+            prob_bucket = _aplicar_platt(_calib_bt, prob_bucket_raw)
             if trades_poll is None:
                 pct_crudo = pct_ponderado = None
                 n = n_yes_total = n_trades_crudo = 0
@@ -658,7 +677,7 @@ def watch_window(activo: str, ts_end: int) -> bool:
                     f"confirm_ceiling_s={confirm_ceiling_s:.1f} {_resumen_wallet_edge(wallets_yes, activo)}", activo)
                 _registrar_tracker(activo, mercado, py, edge, pct_ponderado, n, restante, n_yes_total)
                 _registrar_prediccion(activo, mercado, py, edge, restante, pct_ponderado, n,
-                                       banda_lo, banda_hi, prob_bucket)
+                                       banda_lo, banda_hi, prob_bucket_raw)
                 return disparar(activo, mercado, py, edge, restante, prob_bucket)
 
         if n_firehose_no_sano_este_poll == len(bandas):

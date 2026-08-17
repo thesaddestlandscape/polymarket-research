@@ -57,6 +57,7 @@ from live_stake import bloquear_por_circuit_breaker, calcular_stake
 import ballenas_firehose_cache as _fc
 from ballenas_banda_fina_gate import evaluar as _gate_banda_fina_ballenas
 from gate_bucket_propio import evaluar as _gate_bucket_propio
+from calibracion_platt_lookup import calibrar as _calibrar_platt
 
 DIR = Path(__file__).resolve().parent
 DIR_SHADOW = DIR / "data" / "shadow"
@@ -523,7 +524,19 @@ def watch_window(ts_end: int) -> bool:
         return False
     banda_lo, banda_hi = calib["banda_lo"], calib["banda_hi"]
     watch_lead_s, confirm_ceiling_s = calib["watch_lead_s"], calib["confirm_ceiling_s"]
-    prob_bucket = calib["prob_bucket"]
+    prob_bucket_raw = calib["prob_bucket"]
+    # 17-Ago: corrección Platt granular ya validada (analisis_calibracion_
+    # platt_granular.py) pero nunca consultada desde este ejecutor -- ver
+    # calibracion_platt_lookup.py. Fail-closed: sin clave o sin corrección
+    # que pase rigor, prob_bucket queda EXACTAMENTE como antes.
+    # /code-review 17-Ago: prob_bucket_raw (SIN calibrar) es lo que se
+    # persiste en prob_yes_modelo -- shadow_postmortem.py/analisis_
+    # calibracion_platt_granular.py reentrenan (a,b) asumiendo que esa
+    # columna es la señal cruda del modelo (mismo bug de deriva compuesta ya
+    # cazado 01-Jul, ver shadow_predict.py:6437-6442). El valor CALIBRADO
+    # (prob_bucket) solo se usa para decidir/dimensionar esta ejecución,
+    # nunca para lo que se guarda en el CSV.
+    prob_bucket = _calibrar_platt(STRATEGY, "BTC", f"{VENTANA_MIN}min", prob_bucket_raw)
 
     mercado = None
     contadores = {"ok": 0, "sin_trades_en_banda": 0, "error_api": 0, "firehose_no_sano": 0}
@@ -629,7 +642,7 @@ def watch_window(ts_end: int) -> bool:
                 f"n={n} py={py:.3f} prob_bucket={prob_bucket:.3f} edge={edge:+.3f} restante={restante:.1f}s "
                 f"confirm_ceiling_s={confirm_ceiling_s:.1f} gate_bucket_propio={gate_bp['veredicto']} "
                 f"{_resumen_wallet_edge(wallets_yes)}")
-            _registrar_prediccion(mercado, py, edge, restante, pct_ponderado, n, banda_lo, banda_hi, prob_bucket)
+            _registrar_prediccion(mercado, py, edge, restante, pct_ponderado, n, banda_lo, banda_hi, prob_bucket_raw)
             return disparar(mercado, py, edge, restante, prob_bucket)
 
         time.sleep(POLL_INTERVAL_S)
