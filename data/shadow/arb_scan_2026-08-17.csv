@@ -1,0 +1,10 @@
+timestamp_utc,tipo,accionable,event,end_date,n_brackets,suma_yes,suma_ask,suma_bid,gap_pct,profit_pct,roi_no_pct,liq_min,liq_total,rango_min,rango_max
+2026-08-17T00:01:16+00:00,OVERROUND,False,Solana price on August 18?,2026-08-18,9,1.6615,2.751,0.572,-175.1,-177.1,-6.98,5.0,19346.0,110,120
+2026-08-17T00:01:16+00:00,OVERROUND,False,Solana price on August 19?,2026-08-19,9,1.4605,2.346,0.575,-134.6,-136.6,-6.94,4.0,1167.0,110,120
+2026-08-17T00:01:16+00:00,OVERROUND,False,Solana price on August 20?,2026-08-20,9,1.2765,1.978,0.575,-97.8,-99.8,-6.94,3.0,972.0,110,120
+2026-08-17T00:01:16+00:00,OVERROUND,False,Ethereum price on August 20?,2026-08-20,9,1.082,1.288,0.876,-28.8,-30.8,-3.5,3121.0,31788.0,1400,2300
+2026-08-17T00:01:16+00:00,OVERROUND,False,Ethereum price on August 19?,2026-08-19,9,1.081,1.278,0.884,-27.8,-29.8,-3.4,3223.0,30499.0,1400,2300
+2026-08-17T00:01:16+00:00,OVERROUND,False,Bitcoin price on August 20?,2026-08-20,9,1.087,1.235,0.939,-23.5,-25.5,-2.74,5033.0,48620.0,54000,72000
+2026-08-17T00:01:16+00:00,OVERROUND,False,Ethereum price on August 18?,2026-08-18,9,1.0575,1.196,0.919,-19.6,-21.6,-2.98,3454.0,37738.0,1400,2300
+2026-08-17T00:01:16+00:00,OVERROUND,False,Bitcoin price on August 19?,2026-08-19,9,1.069,1.189,0.949,-18.9,-20.9,-2.62,399.0,32699.0,54000,72000
+2026-08-17T00:01:16+00:00,OVERROUND,False,Ethereum price on August 17?,2026-08-17,9,1.022,1.051,0.993,-5.1,-7.1,-2.09,3983.0,75395.0,1400,2300
