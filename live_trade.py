@@ -1230,6 +1230,48 @@ def _estimar_slip_kyle(ratio_vs_stake: float | None) -> float | None:
 
 SNAPSHOT_LIBRO_CSV = DIR_LIVE / "libro_snapshots.csv"
 
+# 17-Ago: bug de rendimiento real encontrado en barrido de salud (py-spy dump
+# durante un ciclo colgado 2+min) -- _snapshot_senal_bloqueada() releía y
+# escaneaba LINEALMENTE el CSV ENTERO (130.827 filas, 16.5MB) en CADA
+# llamada, una vez por cada tupla de candidatos_evaluacion_live que dispara
+# en el ciclo (245 antes de hoy, 387 después de añadir la familia
+# MOMENTUM_IBS) -- O(n_llamadas x tamaño_fichero), catastrófico con el
+# fichero ya grande y el volumen de señales de hoy. El bug ya existía (245
+# candidatos ya lo sufrían, solo que por debajo del umbral visible); añadir
+# 48 tuplas más lo hizo explotar. Fix: cachear las claves de dedupe UNA VEZ
+# por proceso (proceso efímero, ~20s de vida -- el cache no puede quedar
+# obsoleto dentro del mismo ciclo) y actualizar el cache in-memory tras cada
+# escritura nueva, en vez de releer el fichero. Solo afecta el DEDUPE de
+# instrumentación de solo lectura (nunca toca la decisión de comprar/vender).
+_dedupe_snapshot_cache: set | None = None
+
+
+def _grupo_motivo(motivo: str) -> str:
+    if motivo in ("no_viable_stake", "fuera_ventana"):
+        return "no_viable_fuera_ventana"
+    return motivo
+
+
+def _dedupe_snapshot_keys() -> set:
+    """Set de (market_id, direction, strategy, grupo) ya vistas -- se
+    construye UNA vez leyendo el CSV entero, luego vive en memoria el resto
+    del proceso (mismo principio que _klines_mem/_cache_lectura en otros
+    módulos: proceso efímero, no hace falta invalidar por tiempo)."""
+    global _dedupe_snapshot_cache
+    if _dedupe_snapshot_cache is not None:
+        return _dedupe_snapshot_cache
+    claves = set()
+    try:
+        if SNAPSHOT_LIBRO_CSV.exists():
+            with open(SNAPSHOT_LIBRO_CSV, newline="", encoding="utf-8") as f:
+                for row in csv.DictReader(f):
+                    claves.add((str(row.get("market_id")), row.get("direction", ""),
+                                row.get("strategy", ""), _grupo_motivo(row.get("motivo", ""))))
+    except Exception:
+        pass  # fail-open: si no se puede leer, el dedupe no bloquea (mismo comportamiento que antes ante error)
+    _dedupe_snapshot_cache = claves
+    return claves
+
 # ── Tendencia de profundidad (12-Jul, idea VPIN/order-book-imbalance) ──────
 # Javi compartió técnicas de detección de toxic flow de market making
 # (canarios, pull-quotes-and-fade, VPIN). Los canarios no aplican (CLOB
@@ -1375,20 +1417,9 @@ def _snapshot_senal_bloqueada(market_id: str, direction: str, precio_yes,
     cruzó el cierre durante las llamadas de red."""
     strategy = (contexto or {}).get("strategy", "")
     try:
-        if SNAPSHOT_LIBRO_CSV.exists():
-            with open(SNAPSHOT_LIBRO_CSV, newline="", encoding="utf-8") as f:
-                for row in csv.DictReader(f):
-                    fila_motivo = row.get("motivo")
-                    mismo_grupo = (
-                        fila_motivo == motivo
-                        or (fila_motivo in ("no_viable_stake", "fuera_ventana")
-                            and motivo in ("no_viable_stake", "fuera_ventana"))
-                    )
-                    if (str(row.get("market_id")) == str(market_id)
-                            and row.get("direction") == direction
-                            and row.get("strategy", "") == strategy
-                            and mismo_grupo):
-                        return
+        clave = (str(market_id), direction, strategy, _grupo_motivo(motivo))
+        if clave in _dedupe_snapshot_keys():
+            return
         yes_token, no_token, _ = _get_token_ids(market_id)
         if direction == "BUY_YES":
             token_id, precio = yes_token, float(precio_yes)
@@ -1403,6 +1434,7 @@ def _snapshot_senal_bloqueada(market_id: str, direction: str, precio_yes,
             return  # mercado cerró durante las llamadas de red -- libro ya post-resolución, descartar
         _registrar_snapshot_libro(motivo, market_id, direction,
                                   precio, stake_ref, depth, contexto)
+        _dedupe_snapshot_keys().add(clave)  # in-memory, para que las siguientes llamadas del MISMO ciclo deduplíquen sin releer el fichero
     except Exception:
         pass
 
