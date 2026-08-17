@@ -1,10 +1,10 @@
 {
-  "timestamp_utc": "2026-08-17T14:53:09+00:00",
-  "bankroll_sim": 16895.23,
-  "pnl_total": 16875.23,
-  "n_ops": 158130,
+  "timestamp_utc": "2026-08-17T15:06:48+00:00",
+  "bankroll_sim": 16926.2,
+  "pnl_total": 16906.2,
+  "n_ops": 158285,
   "win_rate": 0.6063,
-  "estrategias_activas": 428,
+  "estrategias_activas": 466,
   "desactivadas": [
     "SMART_FLOW_1H",
     "UPDOWN_GBM#daily",
@@ -32,6 +32,8 @@
     "LIQUIDACIONES_15M#DOGE",
     "BALLENAS_TARDIAS#DOGE#5min",
     "BALLENAS_TARDIAS#DOGE",
+    "BALLENAS_TARDIAS#XRP#5min",
+    "BALLENAS_TARDIAS#XRP",
     "LIQUIDACIONES_5M#SOL#5min",
     "LIQUIDACIONES_5M#SOL"
   ],
@@ -53,7 +55,7 @@
     }
   ],
   "brier_medio": 0.2345,
-  "clv_medio": 0.0347,
+  "clv_medio": 0.0348,
   "monitor_5min": {
     "ou_5m": {
       "n": 683,
