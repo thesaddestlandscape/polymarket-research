@@ -1,0 +1,211 @@
+{
+  "generado_utc": "2026-08-17T19:44:30+00:00",
+  "n_total_cruzado": 11545,
+  "resumen_global_por_bucket_h": {
+    "medio_paseo_aleatorio": {
+      "n": 7023,
+      "hit": 0.5987,
+      "pnl_medio": -0.0166
+    },
+    "bajo_reversion": {
+      "n": 4404,
+      "hit": 0.5936,
+      "pnl_medio": -0.0107
+    },
+    "alto_tendencial": {
+      "n": 118,
+      "hit": 0.5932,
+      "pnl_medio": -0.0728
+    }
+  },
+  "p_shuffle_pnl_bajo_vs_medio_global": 0.737,
+  "split_half_mejor_bucket": {
+    "bucket": "bajo_reversion",
+    "1a_mitad": {
+      "n": 2202,
+      "hit": 0.579,
+      "pnl_medio": -0.0076
+    },
+    "2a_mitad": {
+      "n": 2202,
+      "hit": 0.6081,
+      "pnl_medio": -0.0137
+    }
+  },
+  "resumen_por_activo_marco_bucket_h": {
+    "BTC#60min": {
+      "medio_paseo_aleatorio": {
+        "n": 515,
+        "hit": 0.4971,
+        "pnl_medio": -0.1249
+      },
+      "bajo_reversion": {
+        "n": 234,
+        "hit": 0.5684,
+        "pnl_medio": -0.0312
+      },
+      "alto_tendencial": {
+        "n": 11,
+        "hit": 0.3636,
+        "pnl_medio": -0.2492
+      }
+    },
+    "ETH#60min": {
+      "bajo_reversion": {
+        "n": 15,
+        "hit": 0.4667,
+        "pnl_medio": 0.013
+      },
+      "alto_tendencial": {
+        "n": 3,
+        "hit": 1.0,
+        "pnl_medio": 0.2915
+      },
+      "medio_paseo_aleatorio": {
+        "n": 38,
+        "hit": 0.5263,
+        "pnl_medio": -0.1198
+      }
+    },
+    "SOL#60min": {
+      "bajo_reversion": {
+        "n": 48,
+        "hit": 0.3958,
+        "pnl_medio": -0.2928
+      },
+      "medio_paseo_aleatorio": {
+        "n": 23,
+        "hit": 0.5652,
+        "pnl_medio": 0.1328
+      }
+    },
+    "SOL#15min": {
+      "medio_paseo_aleatorio": {
+        "n": 609,
+        "hit": 0.5402,
+        "pnl_medio": -0.0998
+      },
+      "bajo_reversion": {
+        "n": 1012,
+        "hit": 0.5692,
+        "pnl_medio": 0.0078
+      },
+      "alto_tendencial": {
+        "n": 5,
+        "hit": 0.4,
+        "pnl_medio": -0.3182
+      }
+    },
+    "BTC#15min": {
+      "medio_paseo_aleatorio": {
+        "n": 3568,
+        "hit": 0.611,
+        "pnl_medio": 0.0159
+      },
+      "bajo_reversion": {
+        "n": 1465,
+        "hit": 0.585,
+        "pnl_medio": -0.0498
+      },
+      "alto_tendencial": {
+        "n": 89,
+        "hit": 0.6292,
+        "pnl_medio": -0.0361
+      }
+    },
+    "DOGE#15min": {
+      "bajo_reversion": {
+        "n": 208,
+        "hit": 0.4904,
+        "pnl_medio": -0.0365
+      },
+      "medio_paseo_aleatorio": {
+        "n": 56,
+        "hit": 0.6071,
+        "pnl_medio": -0.0518
+      }
+    },
+    "XRP#15min": {
+      "medio_paseo_aleatorio": {
+        "n": 155,
+        "hit": 0.5548,
+        "pnl_medio": -0.0334
+      },
+      "bajo_reversion": {
+        "n": 306,
+        "hit": 0.5425,
+        "pnl_medio": 0.0278
+      },
+      "alto_tendencial": {
+        "n": 4,
+        "hit": 0.5,
+        "pnl_medio": -0.2239
+      }
+    },
+    "ETH#15min": {
+      "medio_paseo_aleatorio": {
+        "n": 1338,
+        "hit": 0.5717,
+        "pnl_medio": 0.0002
+      },
+      "bajo_reversion": {
+        "n": 401,
+        "hit": 0.5436,
+        "pnl_medio": 0.0387
+      },
+      "alto_tendencial": {
+        "n": 6,
+        "hit": 0.5,
+        "pnl_medio": -0.17
+      }
+    },
+    "BNB#15min": {
+      "medio_paseo_aleatorio": {
+        "n": 4,
+        "hit": 0.75,
+        "pnl_medio": 0.2183
+      },
+      "bajo_reversion": {
+        "n": 22,
+        "hit": 0.5,
+        "pnl_medio": -0.0612
+      }
+    },
+    "BTC#5min": {
+      "bajo_reversion": {
+        "n": 588,
+        "hit": 0.7721,
+        "pnl_medio": 0.0349
+      },
+      "medio_paseo_aleatorio": {
+        "n": 657,
+        "hit": 0.7428,
+        "pnl_medio": -0.0546
+      }
+    },
+    "SOL#5min": {
+      "bajo_reversion": {
+        "n": 44,
+        "hit": 0.7955,
+        "pnl_medio": 0.1168
+      },
+      "medio_paseo_aleatorio": {
+        "n": 14,
+        "hit": 0.4286,
+        "pnl_medio": -0.371
+      }
+    },
+    "ETH#5min": {
+      "medio_paseo_aleatorio": {
+        "n": 32,
+        "hit": 0.5938,
+        "pnl_medio": 0.1236
+      },
+      "bajo_reversion": {
+        "n": 38,
+        "hit": 0.7105,
+        "pnl_medio": 0.1214
+      }
+    }
+  }
+}
