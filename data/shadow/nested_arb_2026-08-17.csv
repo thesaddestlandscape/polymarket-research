@@ -268,3 +268,12 @@ timestamp_utc,activo,nesting,combo,coste,profit_min_pct,gap_opens_pct,depth_usd,
 2026-08-17T06:28:01+00:00,ETH,5min15m,NOout+YESin,1.41,-41.0,-0.02,15.75,118,0.78,0.63,1898.83,1899.21,eth-updown-5m-1786947900,eth-updown-15m-1786947300
 2026-08-17T06:28:01+00:00,SOL,5min15m,YESout+NOin,1.22,-22.0,0.0398,1.8,118,0.36,0.86,75.43,75.4,sol-updown-5m-1786947900,sol-updown-15m-1786947300
 2026-08-17T06:28:02+00:00,XRP,5min15m,YESout+NOin,1.507,-50.7,0.0998,3.12,117,0.997,0.51,1.003,1.002,xrp-updown-5m-1786947900,xrp-updown-15m-1786947300
+2026-08-17T06:49:49+00:00,BTC,15min60m,YESout+NOin,1.138,-13.8,0.1543,49.59,610,0.998,0.14,63551.0,63453.115,btc-updown-15m-1786949100,bitcoin-up-or-down-august-17-2026-2am-et
+2026-08-17T06:49:49+00:00,ETH,15min60m,YESout+NOin,1.036,-3.6,0.1939,7.76,610,0.996,0.04,1901.45,1897.77,eth-updown-15m-1786949100,ethereum-up-or-down-august-17-2026-2am-et
+2026-08-17T06:49:50+00:00,XRP,15min60m,YESout+NOin,1.18,-18.0,0.3448,1.9,609,0.99,0.19,1.004,1.00055,xrp-updown-15m-1786949100,xrp-up-or-down-august-17-2026-2am-et
+2026-08-17T06:51:47+00:00,BTC,15min60m,YESout+NOin,1.187,-18.7,0.1543,1.9,492,0.997,0.19,63551.0,63453.115,btc-updown-15m-1786949100,bitcoin-up-or-down-august-17-2026-2am-et
+2026-08-17T06:51:47+00:00,ETH,15min60m,YESout+NOin,1.039,-3.9,0.1939,2.5,492,0.999,0.04,1901.45,1897.77,eth-updown-15m-1786949100,ethereum-up-or-down-august-17-2026-2am-et
+2026-08-17T06:51:48+00:00,XRP,15min60m,YESout+NOin,1.269,-26.9,0.3448,2.99,491,0.999,0.27,1.004,1.00055,xrp-updown-15m-1786949100,xrp-up-or-down-august-17-2026-2am-et
+2026-08-17T06:53:30+00:00,BTC,15min60m,YESout+NOin,1.177,-17.7,0.1543,0.9,389,0.997,0.18,63551.0,63453.115,btc-updown-15m-1786949100,bitcoin-up-or-down-august-17-2026-2am-et
+2026-08-17T06:53:30+00:00,ETH,15min60m,YESout+NOin,1.049,-4.9,0.1939,9.2,389,0.999,0.05,1901.45,1897.77,eth-updown-15m-1786949100,ethereum-up-or-down-august-17-2026-2am-et
+2026-08-17T06:53:32+00:00,XRP,15min60m,YESout+NOin,1.299,-29.9,0.3448,2.99,387,0.999,0.3,1.004,1.00055,xrp-updown-15m-1786949100,xrp-up-or-down-august-17-2026-2am-et
