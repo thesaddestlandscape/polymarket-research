@@ -3471,3 +3471,4 @@ timestamp_utc,activo,market_id,condition_id,end_date,py,edge,concentracion,n_bal
 2026-08-17T04:31:26+00:00,SOL,3623191,0xf9a4baa035a3f2e5c5d398e7766c7a0eb494db51abda6bd31caf47cd6e957ecc,2026-08-17T04:45:00Z,0.39,-0.0104,1.0,5,814.0,,,,15,True,banda_prematura py=0.390 restante=13.57>13.43
 2026-08-17T04:31:27+00:00,ETH,3623201,0x5b4ebc79e65363cd051ac142dd97c74014c04889f2c90ddd6df515fe342569a2,2026-08-17T04:45:00Z,0.31,0.0974,1.0,10,812.9,,,,31,False,fuera_de_bandas_significativas
 2026-08-17T04:40:01+00:00,XRP,3623187,0x9dea15200a951eadc0d00363329edaf1b0473f876de4d2ba030b1bca7138308f,2026-08-17T04:45:00Z,0.12,0.1065,1.0,3,298.9,,,,18,False,fuera_de_bandas_significativas
+2026-08-17T04:47:45+00:00,SOL,3623983,0xe0e65c61a96b5a7c695ce11d4ead5904e27537ccec19e21b71933efe2ccec8cd,2026-08-17T05:00:00Z,0.6,0.0251,1.0,3,734.5,,,,15,False,banda_ok py=0.600 rest_lo=6.60 rest_hi=12.95
