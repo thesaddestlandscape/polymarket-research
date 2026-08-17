@@ -3444,7 +3444,8 @@ def _banda_y_timing_ballenas(activo, marco, lo_default, hi_default, rest_lo_defa
 ACUMULAR_SHADOW_AUNQUE_DESACTIVADA = {"GBM_LATE_60M", "GBM_LATE_15M_TARDIO", "GBM_LATE_15M_ESPACIO_ATR",
                                       "GBM_LATE_15M_MULTIHORIZONTE",  # recuperada 22-Jul, n=0 forward, mismo trato que sus hermanas GBM_LATE
                                       "GBM_LATE_60M_PYCONFIRMADO",  # 05-Ago (fix): auto-desactivada por postmortem con n=9 (IC=-0.318, muy por debajo de cualquier umbral fiable) y sin esta excepción quedaba en estado absorbente -- 0 predicciones desde entonces, imposible reevaluarla con más n. Nunca en pares_permitidos_live. Ver project_candidatas_estancadas_diagnostico_05ago
-                                      "STREAK_MOM_5M"}  # 2026-07-10: -0.052 IC n=306, no cruza umbral auto pero sin edge; desactivada manualmente en strategy_params.json (motivo "DESACTIVADA MANUALMENTE"), sigue midiendo sin ruido de atención
+                                      "STREAK_MOM_5M",  # 2026-07-10: -0.052 IC n=306, no cruza umbral auto pero sin edge; desactivada manualmente en strategy_params.json (motivo "DESACTIVADA MANUALMENTE"), sigue midiendo sin ruido de atención
+                                      "MOMENTUM_IBS_5M"}  # 2026-08-17: recién nacida (n=0), misma protección desde el día 1 para no caer en estado absorbente si los primeros trades salen mal por azar
 # Photo finish (2026-07-05): entrar con el precio pegado al strike es moneda
 # al aire cobrada como favorito. |drift_ventana|<0.02% → IC=-0.145 n=181
 # (win 35%), estable en ambas mitades temporales (-0.163/-0.127) y monótono
@@ -5291,6 +5292,82 @@ def s_streak_mom_5m(market, ctx):
         },
     }
 
+MOMENTUM_IBS_5M_PARES = {"BTC", "ETH", "SOL", "XRP", "DOGE", "BNB"}  # 17-Ago (petición Javi: "¿para todas las monedas?"):
+# TODAS, a diferencia de STREAK_MOM_5M (que excluye BTC/BNB) -- esa exclusión
+# era específica del mecanismo de racha DISCRETA de esa hermana, no hay
+# evidencia de que transfiera a esta señal CONTINUA (drift+ibs), mecanismo
+# distinto. Shadow puro, coste cero -- dejar que el causal learning decida
+# por moneda con datos propios, no heredar una exclusión sin justificar.
+MOMENTUM_IBS_5M_LOOKBACK_MIN = 7  # 1.4x de 5min, mismo ratio que 20/15 ya validado
+MOMENTUM_IBS_5M_UMBRAL = 0.7  # ibs>=umbral (extremo alto) / <=1-umbral (extremo bajo)
+
+def s_momentum_ibs_5m(market, ctx):
+    """
+    17-Ago: momentum GENUINO a 5min -- primera vez que se construye. Hasta
+    hoy _drift_e_ibs_ventana() (10-Jul) solo se usaba como FEATURE de
+    logging dentro de GBM_LATE_15M (n_min=20, ratio 20/15≈1.33 sobre la
+    ventana propia) -- nunca como estrategia independiente, y nunca a 5min.
+    Distinto de STREAK_MOM_5M (cuenta velas discretas consecutivas): esta
+    usa señal CONTINUA (drift %/h + posición dentro del rango reciente,
+    "ibs") en vez de un conteo de racha -- inspirado en el mecanismo real
+    de "Time Series Momentum" (Moskowitz/Ooi/Pedersen, JFE 2012): signo del
+    retorno pasado predice el retorno futuro, aquí escalado a nuestra
+    ventana de 5min con lookback=7min (mismo ratio 1.33-1.4x que ya
+    validó 20/15 con datos propios: alineado 65% hit EV+0.34 vs no-alineado
+    59% hit EV+0.27, n=1133/508; entrar en el extremo fresco a favor da
+    70% hit EV+0.42 n=398, entrar contra el extremo cae a 19% hit n=16).
+
+    Regla: solo dispara si el drift reciente (7min) está alineado con la
+    dirección Y el precio está en (o cerca de) el extremo fresco de esa
+    misma ventana a favor de la apuesta -- exactamente la combinación que
+    dio la señal más fuerte a 15min. Puro shadow, sin filtro de precio de
+    entrada todavía (a diferencia de STREAK_*, que exige banda
+    coinflip [0.47,0.53] -- aquí se deja abierto a propósito para que el
+    causal learning (postmortem IC_bucket) encuentre solo la zona de
+    precio que funciona, sin asumir que es la misma que STREAK).
+
+    Universo: las 6 monedas (BTC/ETH/SOL/XRP/DOGE/BNB) -- a diferencia de
+    STREAK_MOM_5M (excluye BTC/BNB, "flojo aquí"), esa exclusión era del
+    mecanismo de racha discreta y no se hereda sin evidencia propia para
+    esta señal continua (shadow puro, coste cero medir las 6 desde el
+    día 1 y dejar que el causal learning decida por moneda).
+    """
+    q = market.get("question", "")
+    if "up or down" not in q.lower():
+        return None
+    tipo, vent = _parse_updown_tipo(q)
+    if tipo != "slot" or vent != 5:
+        return None
+    activo = identificar_activo(q)
+    if activo not in MOMENTUM_IBS_5M_PARES:
+        return None
+    py = market.get("_precio_yes")
+    if py is None:
+        return None
+    precios_data = ctx.get("precios_intraday", [])
+    drift_pct, ibs = _drift_e_ibs_ventana(activo, precios_data, MOMENTUM_IBS_5M_LOOKBACK_MIN)
+    if drift_pct is None or ibs is None:
+        return None
+    if drift_pct > 0 and ibs >= MOMENTUM_IBS_5M_UMBRAL:
+        prob_yes, detalle = 0.60, "alineado_arriba_extremo"
+    elif drift_pct < 0 and ibs <= (1 - MOMENTUM_IBS_5M_UMBRAL):
+        prob_yes, detalle = 0.40, "alineado_abajo_extremo"
+    else:
+        return None  # sin alineación clara drift+ibs -- no apostar (misma disciplina que el sweeper: omitir es la estrategia)
+    return {
+        "prob_yes": prob_yes,
+        "razon":    f"momentum_ibs_5m {activo} drift{MOMENTUM_IBS_5M_LOOKBACK_MIN}m={drift_pct:.3f}% ibs={ibs:.2f} py={py:.3f} ({detalle})",
+        "subtype":  f"{activo}#5min",
+        "features": {
+            "drift_7min_pct": drift_pct,
+            "ibs_7min":       ibs,
+            "py_entrada":     round(py, 3),
+            "hora_utc":       datetime.now(timezone.utc).hour,
+            "es_ntm_5min":    _es_ntm_5min(market),
+            **_libro_calidad(market),
+        },
+    }
+
 STREAK_FADE_5M_PARES = {"SOL", "ETH", "XRP", "DOGE"}  # mismo universo que STREAK_MOM_5M. DOGE añadido 22-Jul
 
 def s_streak_fade_5m(market, ctx):
@@ -5635,6 +5712,7 @@ ESTRATEGIAS = [
     ("FAVORITO_CONFIRMADO_15MIN_EXTREMO", s_favorito_confirmado_15min_extremo),
     ("FAVORITO_CONFIRMADO_5MIN_ALTACONVICCION", s_favorito_confirmado_5min_altaconviccion),
     ("STREAK_MOM_5M",       s_streak_mom_5m),
+    ("MOMENTUM_IBS_5M",     s_momentum_ibs_5m),
     ("STREAK_FADE_5M",      s_streak_fade_5m),
     ("STREAK_FADE_15M",     s_streak_fade_15m),
     ("STREAK_FADE_60M",     s_streak_fade_60m),

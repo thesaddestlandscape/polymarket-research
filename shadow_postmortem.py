@@ -1050,6 +1050,18 @@ _BASE_FAVORITO = [
 ]
 
 # Features de STREAK_FADE_15M (reversión de racha, features propias).
+_BASE_MOMENTUM_IBS_5M = [
+    ("hora_utc",       "lt", "gt"),
+    ("hora_utc",       "gt", "lt"),
+    ("py_entrada",     "gt", "lt"),
+    ("py_entrada",     "lt", "gt"),
+    ("drift_7min_pct", "abs_gt", "abs_lt"),
+    ("ibs_7min",       "gt", "lt"),
+    ("ibs_7min",       "lt", "gt"),
+    ("libro_spread",   "gt", "lt"),
+    ("libro_liquidez", "lt", "gt"),
+]
+
 _BASE_STREAK_FADE = [
     ("hora_utc",          "lt", "gt"),
     ("hora_utc",          "gt", "lt"),
@@ -1378,6 +1390,21 @@ FEATURE_RULES = {
     "STREAK_FADE_5M#SOL#5min": _BASE_STREAK_FADE,
     "STREAK_FADE_5M#ETH#5min": _BASE_STREAK_FADE,
     "STREAK_FADE_5M#XRP#5min": _BASE_STREAK_FADE,
+
+    # MOMENTUM_IBS_5M (17-Ago): momentum genuino continuo (drift+ibs a 7min),
+    # no streak discreta -- ver s_momentum_ibs_5m. Mismo universo que
+    # STREAK_MOM_5M (SOL/ETH/XRP/DOGE, BTC excluido). Las 4 entradas por
+    # activo puestas desde el día 1 -- error real ya cazado en STREAK_MOM_5M
+    # (le faltaba DOGE#5min pese a operarlo desde el 22-Jul, vigia_cobertura_
+    # feature_rules.py no lo cazó porque su check pasa con "al menos una
+    # moneda"), no repetirlo aquí.
+    "MOMENTUM_IBS_5M":          _BASE_MOMENTUM_IBS_5M,
+    "MOMENTUM_IBS_5M#BTC#5min": _BASE_MOMENTUM_IBS_5M,
+    "MOMENTUM_IBS_5M#ETH#5min": _BASE_MOMENTUM_IBS_5M,
+    "MOMENTUM_IBS_5M#SOL#5min": _BASE_MOMENTUM_IBS_5M,
+    "MOMENTUM_IBS_5M#XRP#5min": _BASE_MOMENTUM_IBS_5M,
+    "MOMENTUM_IBS_5M#DOGE#5min": _BASE_MOMENTUM_IBS_5M,
+    "MOMENTUM_IBS_5M#BNB#5min": _BASE_MOMENTUM_IBS_5M,
 
     # WEEKLY_PRICE (12-Jul): 404 predicciones en 3 días, 0 aprendizaje causal
     # por activo. subtype=activo (sin sufijo de duración).
