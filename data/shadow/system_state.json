@@ -1,9 +1,9 @@
 {
-  "timestamp_utc": "2026-08-17T16:33:38+00:00",
-  "bankroll_sim": 16946.54,
-  "pnl_total": 16926.54,
-  "n_ops": 159290,
-  "win_rate": 0.606,
+  "timestamp_utc": "2026-08-17T16:39:12+00:00",
+  "bankroll_sim": 16950.02,
+  "pnl_total": 16930.02,
+  "n_ops": 159395,
+  "win_rate": 0.6059,
   "estrategias_activas": 488,
   "desactivadas": [
     "SMART_FLOW_1H",
@@ -36,8 +36,8 @@
     "BALLENAS_TARDIAS#XRP",
     "LIQUIDACIONES_5M#SOL#5min",
     "LIQUIDACIONES_5M#SOL",
-    "MOMENTUM_IBS_15M_FADE",
-    "MOMENTUM_IBS_15M_FADE#15min"
+    "MOMENTUM_IBS_15M_FADE#BTC#15min",
+    "MOMENTUM_IBS_15M_FADE#BTC"
   ],
   "top3_ic": [
     {
