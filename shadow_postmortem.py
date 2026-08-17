@@ -1062,6 +1062,18 @@ _BASE_MOMENTUM_IBS_5M = [
     ("libro_liquidez", "lt", "gt"),
 ]
 
+_BASE_MOMENTUM_IBS_15M = [
+    ("hora_utc",        "lt", "gt"),
+    ("hora_utc",        "gt", "lt"),
+    ("py_entrada",      "gt", "lt"),
+    ("py_entrada",      "lt", "gt"),
+    ("drift_20min_pct", "abs_gt", "abs_lt"),
+    ("ibs_20min",       "gt", "lt"),
+    ("ibs_20min",       "lt", "gt"),
+    ("libro_spread",    "gt", "lt"),
+    ("libro_liquidez",  "lt", "gt"),
+]
+
 _BASE_STREAK_FADE = [
     ("hora_utc",          "lt", "gt"),
     ("hora_utc",          "gt", "lt"),
@@ -1412,6 +1424,21 @@ FEATURE_RULES = {
     "MOMENTUM_IBS_5M_FADE#XRP#5min": _BASE_MOMENTUM_IBS_5M,
     "MOMENTUM_IBS_5M_FADE#DOGE#5min": _BASE_MOMENTUM_IBS_5M,
     "MOMENTUM_IBS_5M_FADE#BNB#5min": _BASE_MOMENTUM_IBS_5M,
+
+    "MOMENTUM_IBS_15M":          _BASE_MOMENTUM_IBS_15M,
+    "MOMENTUM_IBS_15M#BTC#15min": _BASE_MOMENTUM_IBS_15M,
+    "MOMENTUM_IBS_15M#ETH#15min": _BASE_MOMENTUM_IBS_15M,
+    "MOMENTUM_IBS_15M#SOL#15min": _BASE_MOMENTUM_IBS_15M,
+    "MOMENTUM_IBS_15M#XRP#15min": _BASE_MOMENTUM_IBS_15M,
+    "MOMENTUM_IBS_15M#DOGE#15min": _BASE_MOMENTUM_IBS_15M,
+    "MOMENTUM_IBS_15M#BNB#15min": _BASE_MOMENTUM_IBS_15M,
+    "MOMENTUM_IBS_15M_FADE":          _BASE_MOMENTUM_IBS_15M,
+    "MOMENTUM_IBS_15M_FADE#BTC#15min": _BASE_MOMENTUM_IBS_15M,
+    "MOMENTUM_IBS_15M_FADE#ETH#15min": _BASE_MOMENTUM_IBS_15M,
+    "MOMENTUM_IBS_15M_FADE#SOL#15min": _BASE_MOMENTUM_IBS_15M,
+    "MOMENTUM_IBS_15M_FADE#XRP#15min": _BASE_MOMENTUM_IBS_15M,
+    "MOMENTUM_IBS_15M_FADE#DOGE#15min": _BASE_MOMENTUM_IBS_15M,
+    "MOMENTUM_IBS_15M_FADE#BNB#15min": _BASE_MOMENTUM_IBS_15M,
 
     # WEEKLY_PRICE (12-Jul): 404 predicciones en 3 días, 0 aprendizaje causal
     # por activo. subtype=activo (sin sufijo de duración).
