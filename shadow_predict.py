@@ -5243,6 +5243,19 @@ def _streak_estiramiento(activo, ventana_min, k, current_end_dt, ctx):
     return round(abs(pct_move) / vol_esperada, 4)
 
 def s_streak_mom_5m(market, ctx):
+    """
+    17-Ago: bug real encontrado (paper Moskowitz/Ooi/Pedersen "Time Series
+    Momentum" JFE 2012, cotejado con nuestros propios datos) -- de las 4
+    variantes streak (mom_5m/fade_5m/fade_15m/fade_60m), esta era la ÚNICA
+    sin loguear `streak_estiramiento` (magnitud de la racha vs ATR, ya
+    presente en las 3 hermanas desde el hallazgo P29 28-Jul: sin filtro
+    coinflip 50.7%, con estiramiento>=3xATR 54.3% robusto) -- el causal
+    learning nunca pudo descubrir el filtro de magnitud para MOM porque
+    el feature ni existía. Fix aditivo (solo logging, no toca prob_yes).
+    IC hoy (strategy_params.json) ya es positivo agregado y en las 4
+    monedas (n=398, +0.03 a +0.05 por moneda, todas n>40) -- invertido
+    respecto al -0.0548 del 10-Jul que la desactivó entonces.
+    """
     q = market.get("question", "")
     if "up or down" not in q.lower():
         return None
@@ -5273,6 +5286,7 @@ def s_streak_mom_5m(market, ctx):
             "py_entrada":    round(py, 3),
             "hora_utc":      datetime.now(timezone.utc).hour,
             "es_ntm_5min":   _es_ntm_5min(market),
+            "streak_estiramiento": _streak_estiramiento(activo, 5, k, edt, ctx),
             **_libro_calidad(market),
         },
     }
