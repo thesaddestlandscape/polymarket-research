@@ -4793,5 +4793,7 @@
  "candidato_proxy#STREAK_MOM_5M#ETH#5min#ETH#BUY_YES#libro_liquidezgt": false,
  "FILTRO#candidato_proxy#MOMENTUM_IBS_5M_FADE#SOL#5min#SOL#BUY_NO#libro_liquidezlt": false,
  "candidato_proxy#MOMENTUM_IBS_5M_FADE#BNB#5min#BNB#BUY_NO#ibs_7mingt": false,
- "FILTRO#candidato_proxy#MOMENTUM_IBS_5M_FADE#BTC#5min#BTC#BUY_NO#ibs_7minlt": false
+ "FILTRO#candidato_proxy#MOMENTUM_IBS_5M_FADE#BTC#5min#BTC#BUY_NO#ibs_7minlt": false,
+ "FILTRO#candidato_proxy#GBM_LATE_15M_ESPACIO_ATR#ETH#15min#ETH#BUY_NO#ibs_20minlt": false,
+ "candidato_proxy#MOMENTUM_IBS_5M_FADE#BNB#5min#BNB#BUY_NO#hora_utcgt": false
 }
