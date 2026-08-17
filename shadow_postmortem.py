@@ -1036,6 +1036,7 @@ _BASE_GBM = [
     # espíritu que la corrección de dist_vwap_pct (arriba, 07-Jul).
     ("libro_spread",    "gt", "lt"),
     ("libro_liquidez",  "lt", "gt"),
+    ("ballena_activa_n", "gt", "lt"),  # 17-Ago, punto 2 calibracion vs mercado (project_calibracion_vs_mercado_5puntos_17ago)
 ]
 
 # Features de FAVORITO_CONFIRMADO (momentum-consenso, model-free — NO usa el
@@ -1105,6 +1106,7 @@ _BASE_WEEKLY = [
     ("in_range",   "lt", "gt"),
     ("ratio",      "gt", "lt"),
     ("ratio",      "lt", "gt"),
+    ("ballena_activa_n", "gt", "lt"),  # 17-Ago, punto 2 calibracion vs mercado (project_calibracion_vs_mercado_5puntos_17ago)
 ]
 
 # Features de PRICE_TARGET_GBM (motor GBM propio, distinto de _s_gbm_late).
@@ -1114,6 +1116,7 @@ _BASE_PRICE_TARGET = [
     ("T_h",        "gt", "lt"),
     ("T_h",        "lt", "gt"),
     ("pct_vs_K",   "abs_gt", "abs_lt"),
+    ("ballena_activa_n", "gt", "lt"),  # 17-Ago, punto 2 calibracion vs mercado (project_calibracion_vs_mercado_5puntos_17ago)
 ]
 
 # Features de ORDER_FLOW_5M (delta_ratio es la señal principal + hora +
@@ -1127,6 +1130,7 @@ _BASE_ORDER_FLOW = [
     # 28-Jul, mismo fix que _BASE_GBM: ya logueado, nunca analizado.
     ("libro_spread",    "gt", "lt"),
     ("libro_liquidez",  "lt", "gt"),
+    ("ballena_activa_n", "gt", "lt"),  # 17-Ago, punto 2 calibracion vs mercado (project_calibracion_vs_mercado_5puntos_17ago)
 ]
 
 # Features de LIQUIDACIONES_15M/60M (28-Jul, idea_moondev_10_hallazgos_
@@ -1148,6 +1152,7 @@ _BASE_LIQUIDACIONES = [
     ("py_entrada",          "lt", "gt"),
     ("libro_spread",        "gt", "lt"),
     ("libro_liquidez",      "lt", "gt"),
+    ("ballena_activa_n", "gt", "lt"),  # 17-Ago, punto 2 calibracion vs mercado (project_calibracion_vs_mercado_5puntos_17ago)
 ]
 
 # Features de LEADLAG_BTC_XRP_15M (single-asset por diseño: solo opera XRP
@@ -1160,6 +1165,7 @@ _BASE_LEADLAG = [
     ("btc_momentum",   "abs_gt", "abs_lt"),
     ("libro_spread",   "gt", "lt"),
     ("libro_liquidez", "lt", "gt"),
+    ("ballena_activa_n", "gt", "lt"),  # 17-Ago, punto 2 calibracion vs mercado (project_calibracion_vs_mercado_5puntos_17ago)
 ]
 
 # 12-Ago: 4 estrategias detectadas SIN dict "features" en absoluto (auditoría
@@ -1174,6 +1180,7 @@ _BASE_PRICE_MOMENTUM = [
     ("n_obs",       "lt", "gt"),
     ("hora_utc",    "lt", "gt"),
     ("hora_utc",    "gt", "lt"),
+    ("ballena_activa_n", "gt", "lt"),  # 17-Ago, punto 2 calibracion vs mercado (project_calibracion_vs_mercado_5puntos_17ago)
 ]
 
 _BASE_SMART_FLOW = [
@@ -1182,6 +1189,7 @@ _BASE_SMART_FLOW = [
     ("n_top",      "lt", "gt"),
     ("hora_utc",   "lt", "gt"),
     ("hora_utc",   "gt", "lt"),
+    ("ballena_activa_n", "gt", "lt"),  # 17-Ago, punto 2 calibracion vs mercado (project_calibracion_vs_mercado_5puntos_17ago)
 ]
 
 _BASE_RESOLUTION_SNIPER = [
@@ -1193,6 +1201,7 @@ _BASE_RESOLUTION_SNIPER = [
     ("dist_50",  "lt", "gt"),
     ("hora_utc", "lt", "gt"),
     ("hora_utc", "gt", "lt"),
+    ("ballena_activa_n", "gt", "lt"),  # 17-Ago, punto 2 calibracion vs mercado (project_calibracion_vs_mercado_5puntos_17ago)
 ]
 
 _BASE_LATE_WINDOW = [
@@ -1202,6 +1211,7 @@ _BASE_LATE_WINDOW = [
     ("drift_15min",       "abs_gt", "abs_lt"),
     ("drift_60min",       "abs_gt", "abs_lt"),
     ("es_ntm_5min",       "lt", "gt"),
+    ("ballena_activa_n", "gt", "lt"),  # 17-Ago, punto 2 calibracion vs mercado (project_calibracion_vs_mercado_5puntos_17ago)
 ]
 
 # Features de BALLENAS_CONFIRMADAS_15M (31-Jul, gap detectado por
@@ -1222,6 +1232,7 @@ _BASE_BALLENAS_CONFIRMADAS = [
     ("hora_utc",                   "gt", "lt"),
     ("libro_spread",               "gt", "lt"),
     ("libro_liquidez",             "lt", "gt"),
+    ("ballena_activa_n", "gt", "lt"),  # 17-Ago, punto 2 calibracion vs mercado (project_calibracion_vs_mercado_5puntos_17ago)
 ]
 
 # Features de BALLENAS_TARDIAS (31-Jul, mismo gap -- toca dinero real HOY
@@ -1252,6 +1263,7 @@ _BASE_FAVORITO_BAJALATENCIA = [
     ("hora_utc",             "gt", "lt"),
     ("lag_apertura_s",       "gt", "lt"),
     ("profundidad_ratio_no", "lt", "gt"),
+    ("ballena_activa_n", "gt", "lt"),  # 17-Ago, punto 2 calibracion vs mercado (project_calibracion_vs_mercado_5puntos_17ago)
 ]
 
 FEATURE_RULES = {

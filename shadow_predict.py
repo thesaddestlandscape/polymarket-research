@@ -6386,6 +6386,27 @@ def main():
                     pred_features["qhe_delta_apertura"] = _qhe[0]
                     pred_features["qhe_marca_minuto"] = _qhe[1]
                     pred_features["qhe_minutos_desde_marca"] = _qhe[2]
+                # Ballena activa — UNIVERSAL para TODAS las estrategias/direcciones
+                # (17-Ago, punto 2 del plan de calibración vs mercado,
+                # project_calibracion_vs_mercado_5puntos_17ago): hallazgo del mismo
+                # día con MOMENTUM_IBS -- el momentum genuino solo funciona cuando
+                # hay actividad de ballena real confirmando la ventana (verificado
+                # con outcome REAL de Polymarket, no solo backtest). Generalizado
+                # aquí igual que ballenas_dentro_banda arriba: mismo bucle
+                # universal, cubre automáticamente live/candidatas/cementerio (toda
+                # estrategia que siga generando, incluidas las exentas vía
+                # ACUMULAR_SHADOW_AUNQUE_DESACTIVADA/_nunca_estuvo_live) sin tocar
+                # cada una a mano. Puro logging -- NO cambia prob_yes/decisión de
+                # ninguna estrategia existente (incluidas las live). Lookback
+                # solo para 5min/15min (únicos ratios validados hoy; 60min+
+                # excede la ventana de retención del cache de 65min, no se
+                # extrapola sin evidencia propia). Milisegundos, cero red
+                # (_ballena_activa_reciente ya verificado <1ms).
+                _lookback_ballena = {"5min": 7, "15min": 20}.get(
+                    subtype.split("#", 1)[1] if "#" in subtype else "")
+                if _lookback_ballena:
+                    pred_features["ballena_activa_n"] = _ballena_activa_reciente(
+                        m.get("condition_id", ""), _lookback_ballena)
                 pred["features"] = pred_features
 
                 def _feature_match(feat_val, cond, umbral):
