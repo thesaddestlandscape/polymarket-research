@@ -291,6 +291,7 @@
   "UPDOWN_GBM_15M_TARDIO|patron|sigma_h|lt|BUY_YES",
   "UPDOWN_GBM_IBS_ALTO#BTC#15min|patron|sigma_h|gt|BUY_YES",
   "UPDOWN_GBM_IBS_ALTO#BTC#15min|patron|sigma_h|lt|BUY_YES",
+  "UPDOWN_GBM_IBS_ALTO#ETH#15min|patron|sigma_h|gt|BUY_YES",
   "UPDOWN_GBM_IBS_ALTO|patron|sigma_h|gt|BUY_YES",
   "UPDOWN_GBM_IBS_ALTO|patron|sigma_h|lt|BUY_YES",
   "UPDOWN_OU_5M#BNB#5min|filtro|sigma_h|gt|BUY_NO",
