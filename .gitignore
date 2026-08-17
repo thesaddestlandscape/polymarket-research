@@ -42,3 +42,10 @@ data/shadow/results.csv
 # cache rolling regenerado por ballenas_firehose_cache.py/fetch_polymarket_activity_ws.py,
 # no un dataset histórico -- no necesita backup dedicado como results.csv.
 data/live/ballenas_recientes.json
+# 17-Ago: mismo motivo que results.csv -- 53.7MB, ~2.7MB/día (34.9MB 10-Ago
+# -> 53.7MB 17-Ago), a ~2.5 semanas del bloqueo duro de GitHub. Dataset
+# histórico de análisis (wallet_mirror_tracker.py y los analisis_wallet_
+# mirror_*.py lo leen), no un cache rolling -- SÍ necesita backup dedicado,
+# ver scripts/backup_wallet_mirror_sniper_dry_run.sh (mismo patrón que
+# backup_results_csv.sh).
+data/shadow/wallet_mirror_sniper_dry_run.csv
