@@ -1,10 +1,10 @@
 {
-  "timestamp_utc": "2026-08-17T15:54:06+00:00",
-  "bankroll_sim": 16937.06,
-  "pnl_total": 16917.06,
-  "n_ops": 158881,
+  "timestamp_utc": "2026-08-17T15:59:18+00:00",
+  "bankroll_sim": 16936.42,
+  "pnl_total": 16916.42,
+  "n_ops": 158923,
   "win_rate": 0.6061,
-  "estrategias_activas": 486,
+  "estrategias_activas": 488,
   "desactivadas": [
     "SMART_FLOW_1H",
     "UPDOWN_GBM#daily",
@@ -37,9 +37,7 @@
     "LIQUIDACIONES_5M#SOL#5min",
     "LIQUIDACIONES_5M#SOL",
     "MOMENTUM_IBS_15M_FADE",
-    "MOMENTUM_IBS_15M_FADE#15min",
-    "MOMENTUM_IBS_5M_BALLENA#ETH#5min",
-    "MOMENTUM_IBS_5M_BALLENA#ETH"
+    "MOMENTUM_IBS_15M_FADE#15min"
   ],
   "top3_ic": [
     {
