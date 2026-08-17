@@ -128,6 +128,25 @@ SCREEN_RESTART = {
     # "ejecdryrun" (exige DRY_RUN=True en todos sus módulos) a su propia
     # screen, dinero real, sin nice (mismo trato que ejeclive).
     "walletmirror": f"cd {REPO} && .venv/bin/python wallet_mirror_executor_dryrun.py >> logs/wallet_mirror_executor.log 2>&1",
+    # vigiasfreq (17-Ago): consolida 17 scripts de un solo disparo que
+    # corrían vía cron cada 5-60min (~130 arranques de intérprete/hora
+    # dispersos: vigia_calidad_datos, vigia_ballenas_snapshot_freshness,
+    # vigia_nested_arb_gate, resuelve_ballenas_5min/15min, wallet_mirror_
+    # sniper --resolver, live_balance, vigia_carga_sistema, vigia_wallet_
+    # mirror_postfix, fetch_binance_perp_cvd_oi, vigia_ballenas_5min_
+    # fillability, vigia_ballenas_bypass, vigia_causal_vs_fillable,
+    # vigia_ballenas_cobertura, shadow_pnl_fiel, vigia_micro_bucket_kill_
+    # switch, vigia_gate_bucket_wallet_mirror) en UN SOLO proceso con
+    # scheduler interno (tick 20s, cada tarea con su propio intervalo
+    # exacto al de su cron retirado) -- mismo patrón que observadores_
+    # fase0.py (05-Ago) / vigias_horarios_fase0.py (11-Ago). Origen:
+    # vigia_carga_sistema.py llevaba todo el día oscilando anomalo=True
+    # por sobresuscripción de CPU en 2 cores. Ninguno de los 17 ejecuta
+    # dinero real ni cambia de lógica -- cero cambios en los 17 ficheros
+    # originales, solo cambia el proceso/cadencia que los dispara.
+    # nested_arb_scanner.py (cadencia 1min, la más fina) se deja fuera a
+    # propósito, sigue en su cron propio. Ver vigias_frecuentes_fase0.py.
+    "vigiasfreq": f"cd {REPO} && nice -n 10 .venv/bin/python vigias_frecuentes_fase0.py >> logs/vigias_frecuentes_fase0.log 2>&1",
 }
 
 # Cuando stdout está redirigido (screen >> watchdog.log), print() ya escribe al fichero
@@ -225,7 +244,7 @@ def check_screens() -> dict[str, bool]:
         r = subprocess.run(["screen", "-ls"], capture_output=True, text=True, timeout=5)
         output = r.stdout + r.stderr
         return {name: (f".{name}\t" in output or f".{name} " in output)
-                for name in ["fast", "slow", "control", "dash", "observadores", "ejeclive", "fetchers", "ejecdryrun", "walletmirror"]}
+                for name in ["fast", "slow", "control", "dash", "observadores", "ejeclive", "fetchers", "ejecdryrun", "walletmirror", "vigiasfreq"]}
     except Exception:
         return {}
 

@@ -62,6 +62,11 @@ SCREENS = {
     # arrancar) a su propia screen, dinero real.
     "walletmirror": {"entry": "wallet_mirror_executor_dryrun.py",
                       "probe": "log:logs/wallet_mirror_executor.log:arrancado"},
+    # vigiasfreq (17-Ago): 17 scripts de un solo disparo (cron cada
+    # 5-60min) fusionados en UN proceso con scheduler interno -- ver
+    # vigias_frecuentes_fase0.py y pipeline_watchdog.py::SCREEN_RESTART.
+    "vigiasfreq": {"entry": "vigias_frecuentes_fase0.py",
+                   "probe": "log:logs/vigias_frecuentes_fase0.log:arrancando scheduler"},
     # Solo se vigila el .sh (sus hijos python son proceso fresco cada ciclo).
     "fast":    {"entry": "run_fast.sh", "shallow": True, "no_restart": True},
     "slow":    {"entry": "run_slow.sh", "shallow": True, "no_restart": True},
