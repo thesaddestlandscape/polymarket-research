@@ -1,0 +1,33 @@
+{
+  "generado_utc": "2026-08-17T19:29:39+00:00",
+  "n_eventos_totales_gbm_late": 1575,
+  "n_fade_fillable": 500,
+  "resumen_fade_fillable_por_bucket_h": {
+    "bajo_reversion": {
+      "n": 310,
+      "hit_fade": 0.4806,
+      "pnl_fade_medio": -0.1262
+    },
+    "medio_paseo_aleatorio": {
+      "n": 189,
+      "hit_fade": 0.5079,
+      "pnl_fade_medio": -0.1302
+    },
+    "alto_tendencial": {
+      "n": 1,
+      "hit_fade": 0.0,
+      "pnl_fade_medio": -1.0
+    }
+  },
+  "p_shuffle_hit_fade_bajo_vs_medio": 0.5886666666666667,
+  "split_half_bajo_reversion": {
+    "1a_mitad": {
+      "n": 155,
+      "hit_fade": 0.4903
+    },
+    "2a_mitad": {
+      "n": 155,
+      "hit_fade": 0.471
+    }
+  }
+}
