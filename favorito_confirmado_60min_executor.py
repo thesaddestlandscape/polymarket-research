@@ -63,6 +63,8 @@ from live_guard import puede_operar_live
 from live_stake import bloquear_por_circuit_breaker, calcular_stake
 from fetch_libro_ambos_lados import _universo_activo
 from ballenas_banda_fina_gate import evaluar as _gate_banda_fina_ballenas
+# 17-Ago: mismo gap de Platt cazado en BALLENAS_TARDIAS (commit 62cca664ac).
+from calibracion_platt_lookup import calibrar as _calibrar_platt
 from gate_bucket_propio import evaluar as _gate_bucket_propio
 import ballenas_firehose_cache as _fc
 
@@ -323,12 +325,13 @@ def watch_window(activo: str, mercado: dict) -> bool:
                 log(f"[{mercado['market_id']}] py={py:.3f} vetado por gate_bucket_propio (veredicto={gate_bp['veredicto']})", activo)
                 return False
 
-            prob_yes = min(0.97, py + NUDGE)
+            prob_yes_raw = min(0.97, py + NUDGE)
+            prob_yes = _calibrar_platt(STRATEGY, activo, MARCO, prob_yes_raw)
             log(f"[{mercado['market_id']}] CONFIRMADO py={py:.3f} prob_yes={prob_yes:.3f} "
                 f"restante={restante:.1f}s n_yes_total={n_yes_total} "
                 f"wallet_edge_medio={resumen_edge.get('wallet_edge_medio') if resumen_edge else None} "
                 f"({n_polls} polls)", activo)
-            _registrar_prediccion(activo, mercado, py, prob_yes, restante, n_yes_total, resumen_edge)
+            _registrar_prediccion(activo, mercado, py, prob_yes_raw, restante, n_yes_total, resumen_edge)
             return disparar(activo, mercado, py, prob_yes, restante)
 
         time.sleep(POLL_INTERVAL_S)
