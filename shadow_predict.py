@@ -5321,6 +5321,11 @@ def s_streak_mom_5m(market, ctx):
             "hora_utc":      datetime.now(timezone.utc).hour,
             "es_ntm_5min":   _es_ntm_5min(market),
             "streak_estiramiento": _streak_estiramiento(activo, 5, k, edt, ctx),
+            # 17-Ago, extensión del hallazgo central (momentum genuino solo
+            # funciona con ballena activa, verificado con outcome real de
+            # Polymarket): ¿el momentum discreto por racha también depende
+            # de esto? Puro logging, ventana = duración real de la racha.
+            "ballena_activa_n": _ballena_activa_reciente(market.get("condition_id", ""), max(k * 5, 5)),
             **_libro_calidad(market),
         },
     }

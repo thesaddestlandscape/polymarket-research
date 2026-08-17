@@ -1091,6 +1091,7 @@ _BASE_STREAK_FADE = [
     # hardcodea su múltiplo; el pipeline causal descubre el corte con
     # datos propios (N_BUCKET_MIN=15).
     ("streak_estiramiento", "gt", "lt"),
+    ("ballena_activa_n",  "gt", "lt"),  # 17-Ago, extensión del hallazgo central -- solo lo loguea STREAK_MOM_5M hoy, se salta sola en las hermanas FADE
     ("libro_spread",      "gt", "lt"),
     ("libro_liquidez",    "lt", "gt"),
 ]
