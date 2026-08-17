@@ -510,6 +510,12 @@ def fix_unbound_local(tb: str) -> bool:
 # FIX B: postmortem.csv bloat
 # ──────────────────────────────────────────────────────────────────────────────
 def fix_postmortem_bloat() -> bool:
+    """Borra postmortem.csv si excede el umbral. 17-Ago: antes esto disparaba
+    un bucle infinito (65 borrados en 2h) porque shadow_postmortem.py
+    derivaba su dedup del propio CSV -- borrarlo hacía que el siguiente
+    ciclo reprocesara los 63k+ pérdidas históricas y reescribiera otro
+    CSV >50MB en ~70s. Arreglado en shadow_postmortem.py (índice JSON
+    independiente, POSTMORTEM_KEYS_PATH) -- este borrado ya es seguro."""
     pm = DIR_SHADOW / "postmortem.csv"
     if not pm.exists():
         return False

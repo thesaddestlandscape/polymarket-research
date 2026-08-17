@@ -30,6 +30,7 @@ import gate_bucket_propio as _gbp
 DIR_SHADOW      = Path("data/shadow")
 RESULTS_PATH    = DIR_SHADOW / "results.csv"
 POSTMORTEM_PATH = DIR_SHADOW / "postmortem.csv"
+POSTMORTEM_KEYS_PATH = DIR_SHADOW / "postmortem_procesadas.json"
 PARAMS_PATH     = DIR_SHADOW / "strategy_params.json"
 PERFORMANCE_PATH = DIR_SHADOW / "performance.csv"
 EV_KELLY_HIST_PATH = DIR_SHADOW / "ev_kelly_historico.csv"
@@ -332,11 +333,38 @@ def cargar_predicciones_index() -> dict:
 
 
 def cargar_ya_postmortem() -> set:
+    """Claves ya diagnosticadas. 17-Ago: fuente de verdad movida de
+    postmortem.csv a POSTMORTEM_KEYS_PATH (índice JSON ligero) -- antes,
+    cuando pipeline_watchdog.py borraba postmortem.csv por bloat (>50MB),
+    este loader volvía a ver el fichero vacío y reclasificaba TODO el
+    histórico de pérdidas (63k+) como "nuevo" en el siguiente ciclo,
+    reescribiendo otro CSV >50MB en ~70s -- bucle infinito con el propio
+    fix del watchdog (65 borrados en 2h, 17-Ago). El índice JSON persiste
+    independiente del CSV: watchdog puede seguir truncando/borrando
+    postmortem.csv (es solo un log de diagnóstico, nada más lo lee) sin
+    volver a disparar el reproceso completo.
+    """
+    if POSTMORTEM_KEYS_PATH.exists():
+        try:
+            claves = json.loads(POSTMORTEM_KEYS_PATH.read_text(encoding="utf-8"))
+            return {tuple(k) for k in claves}
+        except Exception:
+            pass
+    # Fallback de compatibilidad (primer arranque tras el fix, o índice
+    # corrupto): reconstruir desde el CSV si todavía existe.
     if not POSTMORTEM_PATH.exists():
         return set()
     with open(POSTMORTEM_PATH, encoding="utf-8") as f:
         return {(r["strategy"], r["market_id"], r["prediction_timestamp"])
                 for r in csv.DictReader(f)}
+
+
+def guardar_ya_postmortem(claves: set) -> None:
+    try:
+        POSTMORTEM_KEYS_PATH.write_text(
+            json.dumps(sorted(list(k) for k in claves)), encoding="utf-8")
+    except Exception as e:
+        print(f"  [aviso] no se pudo persistir {POSTMORTEM_KEYS_PATH.name}: {e}")
 
 
 def clasificar_causa(resultado: dict, pred: dict | None) -> str:
@@ -2687,6 +2715,12 @@ def main():
                 w.writeheader()
             for p in perdidas_nuevas:
                 w.writerow(p)
+
+        ya_procesadas |= {
+            (p["strategy"], p["market_id"], p.get("prediction_timestamp", ""))
+            for p in perdidas_nuevas
+        }
+        guardar_ya_postmortem(ya_procesadas)
 
         causas = {}
         for p in perdidas_nuevas:
