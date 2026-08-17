@@ -70,6 +70,12 @@ from live_stake import bloquear_por_circuit_breaker, calcular_stake
 from ballenas_banda_fina_gate import evaluar as _gate_banda_fina_ballenas
 from gate_bucket_propio import evaluar as _gate_bucket_propio
 import ballenas_firehose_cache as _fc
+# 17-Ago: mismo gap que tenía BALLENAS_TARDIAS (commit 62cca664ac) -- este
+# ejecutor calcula prob_yes fuera del loop genérico de shadow_predict.py y
+# nunca consultaba la corrección Platt granular ya validada por otras
+# estrategias. Fail-closed: sin clave o sin corrección que pase rigor,
+# prob_yes queda EXACTAMENTE como antes (ver calibracion_platt_lookup.py).
+from calibracion_platt_lookup import calibrar as _calibrar_platt
 
 DIR = Path(__file__).resolve().parent
 DIR_SHADOW = DIR / "data" / "shadow"
@@ -393,7 +399,13 @@ def watch_window(activo: str, ts_end: int) -> bool:
                     f"py={py:.3f} veredicto={gate_bp['veredicto']}", activo)
                 return False
 
-            prob_yes = min(0.97, py + NUDGE)
+            prob_yes_raw = min(0.97, py + NUDGE)
+            # calibracion_platt_lookup.py: prob_yes_raw (SIN calibrar) es lo
+            # que se persiste en predictions.csv (evita contaminar el
+            # reentreno diario de Platt, mismo bug que cazó el /code-review
+            # de BALLENAS_TARDIAS hoy) -- prob_yes (calibrado) solo se usa
+            # para decidir/dimensionar esta ejecución.
+            prob_yes = _calibrar_platt(STRATEGY, activo, f"{VENTANA_MIN}min", prob_yes_raw)
             log(f"[{ts_end}] CONFIRMADO py={py:.3f} prob_yes={prob_yes:.3f} restante={restante:.1f}s "
                 f"n_yes_total={n_yes_total} "
                 f"wallet_edge_medio={resumen_edge.get('wallet_edge_medio') if resumen_edge else None} "

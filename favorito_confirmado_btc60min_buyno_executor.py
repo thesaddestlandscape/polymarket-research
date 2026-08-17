@@ -69,6 +69,12 @@ from fetch_libro_ambos_lados import _universo_activo
 from ballenas_banda_fina_gate import evaluar as _gate_banda_fina_ballenas
 from gate_bucket_propio import evaluar as _gate_bucket_propio
 import ballenas_firehose_cache as _fc
+# 17-Ago: mismo gap que tenía BALLENAS_TARDIAS (commit 62cca664ac) -- este
+# ejecutor calcula prob_yes fuera del loop genérico de shadow_predict.py y
+# nunca consultaba la corrección Platt granular ya validada por otras
+# estrategias. Fail-closed: sin clave o sin corrección que pase rigor,
+# prob_yes queda EXACTAMENTE como antes (ver calibracion_platt_lookup.py).
+from calibracion_platt_lookup import calibrar as _calibrar_platt
 
 DIR = Path(__file__).resolve().parent
 DIR_SHADOW = DIR / "data" / "shadow"
@@ -363,12 +369,18 @@ def watch_window(activo: str, mercado: dict) -> bool:
                     f"py={py:.3f} veredicto={gate_bp['veredicto']}", activo)
                 return False
 
-            prob_yes = max(0.03, py - NUDGE)
+            prob_yes_raw = max(0.03, py - NUDGE)
+            # calibracion_platt_lookup.py: prob_yes_raw (SIN calibrar) es lo
+            # que se persiste en predictions.csv (evita contaminar el
+            # reentreno diario de Platt, mismo bug que cazó el /code-review
+            # de BALLENAS_TARDIAS hoy) -- prob_yes (calibrado) solo se usa
+            # para decidir/dimensionar esta ejecución.
+            prob_yes = _calibrar_platt(STRATEGY, activo, MARCO, prob_yes_raw)
             log(f"[{mercado['market_id']}] CONFIRMADO py={py:.3f} prob_yes={prob_yes:.3f} "
                 f"restante={restante:.1f}s n_no_total={n_no_total} "
                 f"wallet_edge_medio={resumen_edge.get('wallet_edge_medio') if resumen_edge else None} "
                 f"({n_polls} polls)", activo)
-            _registrar_prediccion(activo, mercado, py, prob_yes, restante, n_no_total, resumen_edge)
+            _registrar_prediccion(activo, mercado, py, prob_yes_raw, restante, n_no_total, resumen_edge)
             return disparar(activo, mercado, py, prob_yes, restante)
 
         time.sleep(POLL_INTERVAL_S)
