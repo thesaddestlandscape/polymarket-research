@@ -1,7 +1,7 @@
 {
  "BTC#15m#follow": "refutado_forward",
  "SOL#15m#fade": "refutado_forward",
- "SOL#15m#follow": "refutado_forward",
+ "SOL#15m#follow": "confirmado_forward_fragil",
  "_telegram_ok": true,
  "BTC#5m#follow": "refutado_forward",
  "BTC#60m#follow": "refutado_forward",
@@ -16,5 +16,6 @@
  "DOGE#15m#follow": "confirmado_forward",
  "SOL#60m#fade": "refutado_forward",
  "SOL#60m#follow": "refutado_forward",
- "ETH#weekly#follow": "confirmado_forward_fragil"
+ "ETH#weekly#follow": "confirmado_forward_fragil",
+ "BTC#weekly#follow": "refutado_forward"
 }
