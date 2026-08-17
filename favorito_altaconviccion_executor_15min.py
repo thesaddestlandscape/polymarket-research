@@ -410,7 +410,7 @@ def watch_window(activo: str, ts_end: int) -> bool:
                 f"n_yes_total={n_yes_total} "
                 f"wallet_edge_medio={resumen_edge.get('wallet_edge_medio') if resumen_edge else None} "
                 f"({n_polls} polls)", activo)
-            _registrar_prediccion(activo, mercado, py, prob_yes, restante, n_yes_total, resumen_edge)
+            _registrar_prediccion(activo, mercado, py, prob_yes_raw, restante, n_yes_total, resumen_edge)
             return disparar(activo, mercado, py, prob_yes, restante)
 
         time.sleep(POLL_INTERVAL_S)
