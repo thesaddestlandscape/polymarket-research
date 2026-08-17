@@ -6805,7 +6805,7 @@
   "DOGE#BUY_NO": {
     "motivos": {
       "banda_no_confirmada": {
-        "conteo": 28031,
+        "conteo": 28043,
         "mercados": {
           "0xc132ec92b406eb13da1cb814396e60b66f819f1be1c0d8394317d53e5b2c08b1": 6,
           "0xd0672cde7ddef0a3136bf4e9209e193940596ab831742079687f92fea3d8ca1b": 10,
@@ -8373,9 +8373,10 @@
           "0x9b8de20c9be9bde250cac41ca224ec878df410aacd0567eb165ecde34f79a1f4": 51,
           "0x69b7cbfbb8df12964ef9bb7b5d5c0f7da0f13c57dd44aaab3b8bb1aca1e92157": 53,
           "0x172931ced9aa4298f2c5564ec20c43073777c8bb18577510490b807e87604457": 51,
-          "0x4a900620d7fb34aecc188315296d9a33b09b199abab92bac3c177832045e0f1e": 45,
-          "0xf535a13fcdd5d1136f0cbb7598e46a479d9ff2b573969920f0e5d012973a0ec3": 30,
-          "0x7f6059dd21293fd59cca94a0450cf860e3cdcdae976fea1912d0cd9ecb7e3fe3": 15
+          "0x4a900620d7fb34aecc188315296d9a33b09b199abab92bac3c177832045e0f1e": 48,
+          "0xf535a13fcdd5d1136f0cbb7598e46a479d9ff2b573969920f0e5d012973a0ec3": 33,
+          "0x7f6059dd21293fd59cca94a0450cf860e3cdcdae976fea1912d0cd9ecb7e3fe3": 18,
+          "0xa3bc526b96248282163315b79638a9e2413ef12d53ea911bcfd08886fc5617de": 3
         }
       },
       "pocos_trades_en_banda": {
