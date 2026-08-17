@@ -252,6 +252,20 @@ def _n_no_total(condition_id: str, activo: str) -> tuple[int | None, dict | None
         "wallet_n_con_score": len(edges),
         "wallet_n_sig_pos": sum(1 for f in filas if f["sig_bhfdr"] and f["edge_pp"] > 0),
         "wallet_n_sig_neg": sum(1 for f in filas if f["sig_bhfdr"] and f["edge_pp"] < 0),
+        # 17-Ago (punto 2 del plan de calibración vs mercado, petición
+        # explícita Javi -- hueco encontrado hoy: esta tupla LIVE solo
+        # tenía ballena_activa_n logueado en el hueco del loop genérico
+        # que además no cubre 60min, ver docstring de _lookback_ballena
+        # en shadow_predict.py). Reusa `trades` (ya descargado arriba
+        # para n_no_total, sin llamada extra) -- cuenta TODOS los trades
+        # reales en el cache (65min de retención, cubre casi toda la vida
+        # de un mercado de 60min). Puro logging, NO vetea ni cambia
+        # decisión/stake -- lookback de 60min sin ratio validado (los
+        # únicos ratios probados son 7min/5min y 20min/15min, ver
+        # idea_momentum_gateado_por_ballenas_hallazgo_central_17ago),
+        # exploratorio a propósito: el causal learning decide si importa
+        # aquí con datos propios, igual que el resto de features nuevas.
+        "ballena_activa_n": len(trades),
     }
     return n_no_total, resumen_edge
 

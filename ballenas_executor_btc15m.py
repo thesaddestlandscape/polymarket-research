@@ -463,7 +463,7 @@ def _registrar_confirmacion_temprana_dry(mercado: dict, py: float, restante_s: f
 
 def _registrar_prediccion(mercado: dict, py: float, edge: float, restante_s: float,
                            pct_yes: float, n_ballenas: int, banda_lo: float, banda_hi: float,
-                           prob_bucket: float):
+                           prob_bucket: float, ballena_activa_n: int | None = None):
     """Deja rastro en predictions_YYYY-MM-DD.csv con el MISMO formato que
     escribe shadow_predict.py -- así shadow_resolve.py lo resuelve y
     shadow_postmortem.py aprende de él exactamente igual que de cualquier
@@ -480,6 +480,7 @@ def _registrar_prediccion(mercado: dict, py: float, edge: float, restante_s: flo
         "restante_s_al_confirmar": round(restante_s, 2),
         "banda_lo": banda_lo, "banda_hi": banda_hi,
         "banda_fina_vetaria_fase1": gate_bf["vetaria_fase1"], "banda_fina_motivo": gate_bf["motivo"],
+        "ballena_activa_n": ballena_activa_n,
     }, separators=(",", ":"))
     try:
         with open(PREDICTIONS_LOCK_PATH, "w") as lock_f:
@@ -642,7 +643,22 @@ def watch_window(ts_end: int) -> bool:
                 f"n={n} py={py:.3f} prob_bucket={prob_bucket:.3f} edge={edge:+.3f} restante={restante:.1f}s "
                 f"confirm_ceiling_s={confirm_ceiling_s:.1f} gate_bucket_propio={gate_bp['veredicto']} "
                 f"{_resumen_wallet_edge(wallets_yes)}")
-            _registrar_prediccion(mercado, py, edge, restante, pct_ponderado, n, banda_lo, banda_hi, prob_bucket_raw)
+            # 17-Ago (punto 2 calibración vs mercado, petición Javi):
+            # ballena_activa_n -- mismo lookback (20min) validado en
+            # MOMENTUM_IBS_15M_LOOKBACK_MIN/_ballena_activa_reciente()
+            # para marcos de 15min. Lectura extra a trades_de_mercado_
+            # firehose (en memoria, sin red) -- puro logging, no vetea.
+            ballena_activa_n = None
+            if _fc.esta_sano():
+                _trades_ba = _fc.trades_de_mercado_firehose(mercado["condition_id"])
+                _corte_ba = time.time() - 20 * 60
+                # fail-open en timestamp ausente (mismo criterio que
+                # _ballena_activa_reciente() en shadow_predict.py, /code-review
+                # 17-Ago: comparabilidad real entre las dos rutas de logging).
+                ballena_activa_n = sum(1 for t in _trades_ba
+                                        if t.get("_recibido_ts") is None or t.get("_recibido_ts") >= _corte_ba)
+            _registrar_prediccion(mercado, py, edge, restante, pct_ponderado, n, banda_lo, banda_hi,
+                                   prob_bucket_raw, ballena_activa_n)
             return disparar(mercado, py, edge, restante, prob_bucket)
 
         time.sleep(POLL_INTERVAL_S)

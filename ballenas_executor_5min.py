@@ -676,8 +676,25 @@ def watch_window(activo: str, ts_end: int) -> bool:
                     f"n={n} py={py:.3f} prob_bucket={prob_bucket:.3f} edge={edge:+.3f} restante={restante:.1f}s "
                     f"confirm_ceiling_s={confirm_ceiling_s:.1f} {_resumen_wallet_edge(wallets_yes, activo)}", activo)
                 _registrar_tracker(activo, mercado, py, edge, pct_ponderado, n, restante, n_yes_total)
+                # 17-Ago (punto 2 calibración vs mercado, petición Javi):
+                # ballena_activa_n -- mismo lookback (7min) validado en
+                # MOMENTUM_IBS_5M_LOOKBACK_MIN/_ballena_activa_reciente()
+                # para marcos de 5min. Distinto de `n` (concentración
+                # ponderada por wallet_edge, decide la banda) -- este es
+                # el conteo crudo de actividad reciente, puro logging,
+                # reusa trades_poll ya descargado (sin llamada extra).
+                if trades_poll is not None:
+                    _corte_ba = time.time() - 7 * 60
+                    # fail-open en timestamp ausente (mismo criterio que
+                    # _ballena_activa_reciente() en shadow_predict.py,
+                    # /code-review 17-Ago: comparabilidad real entre las
+                    # dos rutas de logging, no solo el mismo nombre).
+                    ballena_activa_n = sum(1 for t in trades_poll
+                                            if t.get("_recibido_ts") is None or t.get("_recibido_ts") >= _corte_ba)
+                else:
+                    ballena_activa_n = None
                 _registrar_prediccion(activo, mercado, py, edge, restante, pct_ponderado, n,
-                                       banda_lo, banda_hi, prob_bucket_raw)
+                                       banda_lo, banda_hi, prob_bucket_raw, ballena_activa_n)
                 return disparar(activo, mercado, py, edge, restante, prob_bucket)
 
         if n_firehose_no_sano_este_poll == len(bandas):
@@ -783,7 +800,8 @@ def _registrar_tracker(activo: str, mercado: dict, py: float, edge: float,
 
 def _registrar_prediccion(activo: str, mercado: dict, py: float, edge: float,
                            restante_s: float, pct_yes: float, n_ballenas: int,
-                           banda_lo: float, banda_hi: float, prob_bucket: float) -> None:
+                           banda_lo: float, banda_hi: float, prob_bucket: float,
+                           ballena_activa_n: int | None = None) -> None:
     """29-Jul: mismo mecanismo que ballenas_executor_btc15m.py::_registrar_
     prediccion() -- gap real encontrado en el barrido "conectar todos los
     loggers a las estrategias" (petición Javi): este ejecutor solo escribía
@@ -803,6 +821,7 @@ def _registrar_prediccion(activo: str, mercado: dict, py: float, edge: float,
         "restante_s_al_confirmar": round(restante_s, 2),
         "banda_lo": banda_lo, "banda_hi": banda_hi,
         "banda_fina_vetaria_fase1": gate_bf["vetaria_fase1"], "banda_fina_motivo": gate_bf["motivo"],
+        "ballena_activa_n": ballena_activa_n,
     }, separators=(",", ":"))
     try:
         with open(PREDICTIONS_LOCK_PATH, "w") as lock_f:

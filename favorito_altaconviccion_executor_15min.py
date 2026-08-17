@@ -262,11 +262,27 @@ def _n_yes_total(condition_id: str, activo: str) -> tuple[int | None, dict | Non
                    and (t.get("outcome") or "").strip().lower() in ("up", "yes")}
     filas = [db[(w, activo, "15m")] for w in wallets_yes if (w, activo, "15m") in db]
     edges = [f["edge_pp"] for f in filas]
+    # 17-Ago (punto 2 del plan de calibración vs mercado, petición
+    # explícita Javi -- hueco encontrado hoy: esta tupla LIVE solo tenía
+    # ballena_activa_n logueado en el 2.5% de predicciones que pasan por
+    # el loop genérico de shadow_predict.py, 0% las que salen de este
+    # ejecutor). Reusa `trades` (ya descargado arriba, sin llamada extra)
+    # -- mismo lookback (20min) que la ratio YA validada en
+    # MOMENTUM_IBS_15M_LOOKBACK_MIN/_ballena_activa_reciente() para
+    # marcos de 15min. Puro logging, NO vetea ni cambia decisión/stake.
+    corte_ballena = time.time() - 20 * 60
+    # fail-open en timestamp ausente (mismo criterio que
+    # _ballena_activa_reciente() en shadow_predict.py, /code-review 17-Ago:
+    # comparabilidad real entre las dos rutas de logging exige la MISMA
+    # semántica, no solo el mismo nombre de feature).
+    n_ballena = sum(1 for t in trades
+                    if t.get("_recibido_ts") is None or t.get("_recibido_ts") >= corte_ballena)
     resumen_edge = {
         "wallet_edge_medio": round(sum(edges) / len(edges), 3) if edges else None,
         "wallet_n_con_score": len(edges),
         "wallet_n_sig_pos": sum(1 for f in filas if f["sig_bhfdr"] and f["edge_pp"] > 0),
         "wallet_n_sig_neg": sum(1 for f in filas if f["sig_bhfdr"] and f["edge_pp"] < 0),
+        "ballena_activa_n": n_ballena,
     }
     return n_yes_total, resumen_edge
 
