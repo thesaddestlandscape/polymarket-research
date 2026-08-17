@@ -3445,7 +3445,8 @@ ACUMULAR_SHADOW_AUNQUE_DESACTIVADA = {"GBM_LATE_60M", "GBM_LATE_15M_TARDIO", "GB
                                       "GBM_LATE_15M_MULTIHORIZONTE",  # recuperada 22-Jul, n=0 forward, mismo trato que sus hermanas GBM_LATE
                                       "GBM_LATE_60M_PYCONFIRMADO",  # 05-Ago (fix): auto-desactivada por postmortem con n=9 (IC=-0.318, muy por debajo de cualquier umbral fiable) y sin esta excepción quedaba en estado absorbente -- 0 predicciones desde entonces, imposible reevaluarla con más n. Nunca en pares_permitidos_live. Ver project_candidatas_estancadas_diagnostico_05ago
                                       "STREAK_MOM_5M",  # 2026-07-10: -0.052 IC n=306, no cruza umbral auto pero sin edge; desactivada manualmente en strategy_params.json (motivo "DESACTIVADA MANUALMENTE"), sigue midiendo sin ruido de atención
-                                      "MOMENTUM_IBS_5M"}  # 2026-08-17: recién nacida (n=0), misma protección desde el día 1 para no caer en estado absorbente si los primeros trades salen mal por azar
+                                      "MOMENTUM_IBS_5M",  # 2026-08-17: recién nacida (n=0), misma protección desde el día 1 para no caer en estado absorbente si los primeros trades salen mal por azar
+                                      "MOMENTUM_IBS_5M_FADE"}  # 2026-08-17: ídem, nace con prior fuerte del backtest histórico (n=6275, Wilson90lo=53.5%) pero n propio=0
 # Photo finish (2026-07-05): entrar con el precio pegado al strike es moneda
 # al aire cobrada como favorito. |drift_ventana|<0.02% → IC=-0.145 n=181
 # (win 35%), estable en ambas mitades temporales (-0.163/-0.127) y monótono
@@ -5368,6 +5369,63 @@ def s_momentum_ibs_5m(market, ctx):
         },
     }
 
+def s_momentum_ibs_5m_fade(market, ctx):
+    """
+    17-Ago, misma tarde: espejo de s_momentum_ibs_5m, construido tras
+    backtest histórico real (backtest_momentum_ibs_5m_17ago.py, klines
+    Binance, n=2049-2173/moneda post-TWAP, 35 días) que refutó el
+    momentum puro (todas las monedas <=50% hit) pero encontró un fade
+    asimétrico real: cuando la señal original decía BUY_NO (momentum
+    bajista alineado+extremo), invertir a BUY_YES da hit=54.6%
+    Wilson90lo=53.5% n=6275 -- por encima de breakeven (~51.8% a precio
+    0.50 con fee 7%). Significativo en 4/6 monedas individualmente
+    (ETH/SOL/DOGE/BNB, p_shuffle<0.013); BTC sin edge, XRP al límite.
+    El espejo (fade del momentum ALCISTA, invertir BUY_YES->BUY_NO) NO
+    tiene edge (hit=49.7%, coinflip) -- asimetría real, no capricho: se
+    implementa el fade completo (mismas 6 monedas, mismo universo,
+    mismo criterio disparo) y se deja que el causal learning (postmortem
+    IC_bucket) confirme/pode por moneda con datos propios, igual que
+    CUALQUIER otra estrategia del proyecto -- el backtest es evidencia
+    fuerte de PRIOR, no sustituye el gate real live (n>=40, IC>=0.08,
+    Wilson+shuffle+fill-ability).
+    """
+    q = market.get("question", "")
+    if "up or down" not in q.lower():
+        return None
+    tipo, vent = _parse_updown_tipo(q)
+    if tipo != "slot" or vent != 5:
+        return None
+    activo = identificar_activo(q)
+    if activo not in MOMENTUM_IBS_5M_PARES:
+        return None
+    py = market.get("_precio_yes")
+    if py is None:
+        return None
+    precios_data = ctx.get("precios_intraday", [])
+    drift_pct, ibs = _drift_e_ibs_ventana(activo, precios_data, MOMENTUM_IBS_5M_LOOKBACK_MIN)
+    if drift_pct is None or ibs is None:
+        return None
+    # FADE: invertir la decisión de s_momentum_ibs_5m
+    if drift_pct > 0 and ibs >= MOMENTUM_IBS_5M_UMBRAL:
+        prob_yes, detalle = 0.40, "fade_alineado_arriba_extremo"  # original BUY_YES -> aquí BUY_NO
+    elif drift_pct < 0 and ibs <= (1 - MOMENTUM_IBS_5M_UMBRAL):
+        prob_yes, detalle = 0.60, "fade_alineado_abajo_extremo"  # original BUY_NO -> aquí BUY_YES (el lado con edge real en el backtest)
+    else:
+        return None
+    return {
+        "prob_yes": prob_yes,
+        "razon":    f"momentum_ibs_5m_fade {activo} drift{MOMENTUM_IBS_5M_LOOKBACK_MIN}m={drift_pct:.3f}% ibs={ibs:.2f} py={py:.3f} ({detalle})",
+        "subtype":  f"{activo}#5min",
+        "features": {
+            "drift_7min_pct": drift_pct,
+            "ibs_7min":       ibs,
+            "py_entrada":     round(py, 3),
+            "hora_utc":       datetime.now(timezone.utc).hour,
+            "es_ntm_5min":    _es_ntm_5min(market),
+            **_libro_calidad(market),
+        },
+    }
+
 STREAK_FADE_5M_PARES = {"SOL", "ETH", "XRP", "DOGE"}  # mismo universo que STREAK_MOM_5M. DOGE añadido 22-Jul
 
 def s_streak_fade_5m(market, ctx):
@@ -5713,6 +5771,7 @@ ESTRATEGIAS = [
     ("FAVORITO_CONFIRMADO_5MIN_ALTACONVICCION", s_favorito_confirmado_5min_altaconviccion),
     ("STREAK_MOM_5M",       s_streak_mom_5m),
     ("MOMENTUM_IBS_5M",     s_momentum_ibs_5m),
+    ("MOMENTUM_IBS_5M_FADE", s_momentum_ibs_5m_fade),
     ("STREAK_FADE_5M",      s_streak_fade_5m),
     ("STREAK_FADE_15M",     s_streak_fade_15m),
     ("STREAK_FADE_60M",     s_streak_fade_60m),
