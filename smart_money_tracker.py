@@ -57,7 +57,14 @@ HEADERS = {
 TIMEOUT = 20
 SLEEP_ENTRE_LLAMADAS = 0.2
 
-ACTIVOS = ("BTC", "ETH", "SOL", "XRP")
+ACTIVOS = ("BTC", "ETH", "SOL", "XRP", "DOGE", "BNB")
+# 18-Ago: DOGE/BNB llevaban excluidos de este fichero desde siempre --
+# mismo bug de lista desactualizada ya cazado y arreglado en
+# ballenas_observer.py (20/23-Jul) y wallet_especialistas_observer.py/
+# analisis_franja_milimetrica_ballenas.py (que sí incluyen ambos), nunca
+# propagado aquí. NOMBRE_A_TICKER ya traducía "dogecoin"/"bnb" desde
+# 20/23-Jul -- el cuello de botella real era este tuple. Puramente
+# aditivo: no cambia qué mercados BTC/ETH/SOL/XRP se muestreaban antes.
 # Duración real por tag de evento (más fiable que el slug: 5min/15min/4h usan
 # slug "activo-updown-Xm-..." pero 60min ("hourly") usa un slug sin duración
 # fija, ej. "bitcoin-up-or-down-july-2-2026-7am-et" — solo el tag lo distingue.
