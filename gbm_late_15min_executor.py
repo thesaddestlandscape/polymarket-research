@@ -88,6 +88,7 @@ from shadow_predict import (
     _s_gbm_late,
     cargar_precios_intraday,
     _cargar_spot,
+    _cargar_ticks_chainlink_recientes,
     GBM_LATE_15M_REST_MIN_LO,
     GBM_LATE_15M_REST_MIN_HI,
     GBM_LATE_15M_SOL_HORAS_BUENAS_UTC,
@@ -269,6 +270,142 @@ def variantes_para(activo: str) -> list[tuple[str, dict]]:
     return variantes
 
 
+# P2 enriquecido (18-Ago, idea_p2_enriquecido_momentum_liquidaciones_18ago
+# / idea_p2_enriquecido_confirmado_18ago): AUC walk-forward 0.595->0.623
+# añadiendo momentum_reciente_2min + log_usd_liquidado_3min al P2 original
+# (libro_spread/libro_liquidez/dist_050/hora_sin/hora_cos). PURAMENTE
+# INFORMATIVO -- se loguea como feature `prob_fillable_gbm_late_
+# enriquecido`, NUNCA decide si se dispara la señal ni cambia prob_yes/
+# edge/stake, mismo criterio de barrera que P2 original/P17 (forward
+# logging primero, cualquier uso operativo requiere aprobación explícita
+# de Javi + /code-review sobre el camino de decisión real). Vive aquí (no
+# en shadow_predict.py) porque las ventanas de 2-3min de sus features se
+# desactualizan en el ciclo lento (~20-100s/ciclo, pero con más cola en la
+# práctica) -- necesita el poll de 2s de este ejecutor, igual que
+# _cargar_ticks_chainlink_recientes (TWAP) ya reutiliza aquí.
+_MODELO_P2_ENRIQUECIDO_PATH = DIR_SHADOW / "prob_fillable_gbm_late_enriquecido_model.json"
+_cache_modelo_p2e = {"mtime": None, "modelo": None}
+_LIQ_BYBIT_CACHE = {"dia": None, "ts_leido": 0.0, "por_activo": {}}
+_LIQ_BYBIT_TTL_S = 10.0
+_LIQ_VENTANA_S = 180.0
+_MOMENTUM_VENTANA_S = 120.0
+
+
+def _cargar_modelo_p2_enriquecido() -> dict | None:
+    try:
+        mtime = _MODELO_P2_ENRIQUECIDO_PATH.stat().st_mtime
+    except OSError:
+        return None
+    if _cache_modelo_p2e["mtime"] != mtime:
+        try:
+            _cache_modelo_p2e["modelo"] = json.loads(_MODELO_P2_ENRIQUECIDO_PATH.read_text(encoding="utf-8"))
+            _cache_modelo_p2e["mtime"] = mtime
+        except Exception:
+            pass
+    return _cache_modelo_p2e["modelo"]
+
+
+def _momentum_reciente_2min(activo: str) -> float | None:
+    """Magnitud (no dirección) del cambio de precio Chainlink en los
+    últimos _MOMENTUM_VENTANA_S segundos -- mismo cálculo que
+    entrenar_prob_fillable_gbm_late_p2_enriquecido.py, reutilizando el
+    cache de ticks ya cargado para TWAP (_cargar_ticks_chainlink_
+    recientes, TTL 10s) en vez de leer el fichero de nuevo."""
+    import bisect
+    ticks = _cargar_ticks_chainlink_recientes(_LIQ_VENTANA_S).get(activo)
+    if not ticks or len(ticks) < 2:
+        return None
+    ticks = sorted(ticks)
+    tss = [t for t, _ in ticks]
+    t_now, p_now = ticks[-1]
+    idx_prev = bisect.bisect_left(tss, t_now - _MOMENTUM_VENTANA_S)
+    if idx_prev >= len(ticks) or idx_prev < 0:
+        return None
+    t_prev, p_prev = ticks[idx_prev]
+    if t_now - t_prev < _MOMENTUM_VENTANA_S * 0.5 or p_prev <= 0:
+        return None
+    return abs((p_now - p_prev) / p_prev) * 100.0
+
+
+def _usd_liquidado_bybit_reciente(activo: str) -> float:
+    """Tail-read (últimos ~128KB, nunca el fichero completo -- mismo
+    criterio anti-incidente que _cargar_ticks_chainlink_recientes/
+    CLAUDE.md pt.18) de data/shadow/liquidaciones_bybit_eventos_HOY.csv,
+    cacheado con TTL corto. 0.0 si no hay eventos o el fichero no existe
+    (fail-open: sin dato de liquidaciones no bloquea nada, la feature
+    solo se loguea)."""
+    import bisect
+    fecha = datetime.now(timezone.utc).strftime("%Y-%m-%d")
+    ahora = time.time()
+    if _LIQ_BYBIT_CACHE["dia"] == fecha and ahora - _LIQ_BYBIT_CACHE["ts_leido"] < _LIQ_BYBIT_TTL_S:
+        por_activo = _LIQ_BYBIT_CACHE["por_activo"]
+    else:
+        path = DIR_SHADOW / f"liquidaciones_bybit_eventos_{fecha}.csv"
+        por_activo = {}
+        try:
+            tam = path.stat().st_size
+            with open(path, "rb") as f:
+                f.seek(max(0, tam - 131072))
+                raw = f.read().decode("utf-8", errors="ignore")
+            lineas = raw.splitlines()
+            if lineas and "," in lineas[0] and not lineas[0][0].isdigit():
+                lineas = lineas[1:]
+            for linea in lineas:
+                partes = linea.split(",")
+                if len(partes) < 3:
+                    continue
+                try:
+                    ts = datetime.fromisoformat(partes[0].replace("Z", "+00:00")).timestamp()
+                    act = partes[1]
+                    usd = float(partes[2])
+                except (ValueError, IndexError):
+                    continue
+                por_activo.setdefault(act, []).append((ts, usd))
+            for a in por_activo:
+                por_activo[a].sort()
+        except (OSError, FileNotFoundError):
+            pass
+        _LIQ_BYBIT_CACHE["dia"] = fecha
+        _LIQ_BYBIT_CACHE["ts_leido"] = ahora
+        _LIQ_BYBIT_CACHE["por_activo"] = por_activo
+
+    serie = por_activo.get(activo)
+    if not serie:
+        return 0.0
+    tss = [t for t, _ in serie]
+    lo = bisect.bisect_left(tss, ahora - _LIQ_VENTANA_S)
+    hi = bisect.bisect_right(tss, ahora)
+    return sum(usd for _, usd in serie[lo:hi])
+
+
+def _prob_fillable_gbm_late_enriquecido(features: dict, activo: str) -> float | None:
+    """None si falta el modelo o cualquier feature -- fail-open, nunca
+    bloquea el logueo del resto de features por esto."""
+    modelo = _cargar_modelo_p2_enriquecido()
+    if modelo is None:
+        return None
+    libro_spread = features.get("libro_spread")
+    libro_liquidez = features.get("libro_liquidez")
+    py = features.get("py_entrada")
+    hora_utc = features.get("hora_utc")
+    if any(v is None for v in (libro_spread, libro_liquidez, py, hora_utc)):
+        return None
+    mom = _momentum_reciente_2min(activo)
+    if mom is None:
+        return None
+    import math
+    liq = _usd_liquidado_bybit_reciente(activo)
+    dist_050 = abs(float(py) - 0.5)
+    hora_sin = math.sin(2 * math.pi * float(hora_utc) / 24)
+    hora_cos = math.cos(2 * math.pi * float(hora_utc) / 24)
+    x = [float(libro_spread), float(libro_liquidez), dist_050, hora_sin, hora_cos,
+         mom, math.log1p(liq)]
+    mean, std = modelo["mean"], modelo["std"]
+    z = sum((x[i] - mean[i]) / (std[i] if std[i] else 1.0) * modelo["coef"][i] for i in range(len(x)))
+    z += modelo["intercept"]
+    return round(1.0 / (1.0 + math.exp(-z)), 4)
+
+
 def _registrar_prediccion(mercado: dict, activo: str, resultado: dict, direccion: str,
                            n_total_lado: int | None, restante_s: float,
                            strategy: str = STRATEGY) -> None:
@@ -286,6 +423,9 @@ def _registrar_prediccion(mercado: dict, activo: str, resultado: dict, direccion
     features = dict(resultado["features"])
     features["n_total_lado"] = n_total_lado
     features["ejecutor_baja_latencia"] = True
+    prob_fillable_enr = _prob_fillable_gbm_late_enriquecido(features, activo)
+    if prob_fillable_enr is not None:
+        features["prob_fillable_gbm_late_enriquecido"] = prob_fillable_enr
     features_json = json.dumps(features, separators=(",", ":"))
     lock_path = DIR_SHADOW / ".predictions_lock"
     try:
