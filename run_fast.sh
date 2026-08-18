@@ -29,6 +29,24 @@ REPO_DIR="$(cd "$(dirname "$0")" && pwd)"
 PYTHON="$REPO_DIR/.venv/bin/python"
 LOG="$REPO_DIR/logs/fast.log"
 
+# 18-Ago: instrumentación de timing del git batch (petición explícita Javi,
+# tras medir un hueco de 55-114s entre "Fin postmortem" y el siguiente
+# fetch que ningún log explicaba). Solo mide -- no cambia ningún timeout,
+# reintento ni condición existente.
+# ⚠️ `date +%s%3N` en este sistema NO trunca a milisegundos pese al "3"
+# (imprime nanosegundos completos, 9 dígitos) -- verificado en vivo el
+# mismo 18-Ago tras desplegar la v1 con esa fórmula, que dio timings
+# absurdos (miles de millones de "ms"). $EPOCHREALTIME (builtin bash
+# 5.x, sin subproceso) da segundos.microsegundos de forma fiable; el
+# prefijo 10# fuerza base-10 para no interpretar un 0 inicial como octal.
+now_ms() {
+    local t=$EPOCHREALTIME
+    local sec=${t%.*}
+    local usec=${t#*.}
+    usec=${usec:0:3}
+    echo $(( 10#$sec * 1000 + 10#$usec ))
+}
+
 # 11-Ago: bug real encontrado en vivo -- este script se lanza vía `screen
 # -dmS fast bash "$REPO_DIR/run_fast.sh"` (restart_fast_seguro.sh) sin
 # ningún `cd` explícito antes, así que el proceso hereda el cwd de quien
@@ -64,9 +82,9 @@ while true; do
 
     # ── CICLO LENTO: cada 3 ciclos (~60s) ───────────────────────────────
     if [ $((CICLO % 3)) -eq 0 ]; then
-        $PYTHON "$REPO_DIR/shadow_resolve.py"     >> "$LOG" 2>&1 || true
-        $PYTHON "$REPO_DIR/shadow_postmortem.py"  >> "$LOG" 2>&1 || true
-        $PYTHON "$REPO_DIR/shadow_resumen.py"     >> "$LOG" 2>&1 || true
+        _t0=$(now_ms); $PYTHON "$REPO_DIR/shadow_resolve.py"     >> "$LOG" 2>&1 || true; log "  ⏱ shadow_resolve.py: $(($(now_ms) - _t0))ms"
+        _t0=$(now_ms); $PYTHON "$REPO_DIR/shadow_postmortem.py"  >> "$LOG" 2>&1 || true; log "  ⏱ shadow_postmortem.py: $(($(now_ms) - _t0))ms"
+        _t0=$(now_ms); $PYTHON "$REPO_DIR/shadow_resumen.py"     >> "$LOG" 2>&1 || true; log "  ⏱ shadow_resumen.py: $(($(now_ms) - _t0))ms"
 
         NOW=$(date +%s)
         if [ $((NOW - LAST_GIT)) -ge $GIT_BATCH_S ]; then
@@ -91,11 +109,14 @@ while true; do
             # este ciclo espere un poco a que el otro loop termine, antes que
             # saltarse la sincronización -- con tope de 120s para no colgar
             # el ciclo rápido indefinidamente si algo va realmente mal.
+            _t_lock0=$(now_ms)
             exec 200>"$REPO_DIR/data/shadow/git_ops.lock"
             if ! flock -w 120 200; then
                 log "  ⚠️ git_ops.lock ocupado >120s (run_slow.sh probablemente sincronizando) -- se salta este ciclo de sync, se reintenta el siguiente"
                 exit 0
             fi
+            _t_lock1=$(now_ms)
+            log "  ⏱ git_ops.lock adquirido en $((_t_lock1 - _t_lock0))ms"
             # rebase huérfano (ej. `timeout 60s` matando un rebase a medias) --
             # limpiar ANTES de intentar uno nuevo, si no el rebase de emergencia
             # de abajo lo hereda arrastrado indefinidamente (encontrado 27-Jul,
@@ -130,9 +151,16 @@ while true; do
             # Se mantiene incluido aunque el 30-Jul se quitó el pull/rebase de
             # la ruta común (ver más abajo) -- sigue haciendo falta para que
             # el commit local capture también los precios, no solo shadow/live.
+            _t_add0=$(now_ms)
             git add data/shadow/ data/live/ data/prices/ >> "$LOG" 2>&1 || true
+            _t_add1=$(now_ms)
+            log "  ⏱ git add: $((_t_add1 - _t_add0))ms"
             if ! git diff --cached --quiet 2>/dev/null; then
+                N_STAGED=$(git diff --cached --name-only 2>/dev/null | wc -l)
+                _t_commit0=$(now_ms)
                 timeout -k 10 30s git commit -m "shadow: ciclo $CICLO $(date -u +%Y-%m-%dT%H:%MZ)" >> "$LOG" 2>&1 || true
+                _t_commit1=$(now_ms)
+                log "  ⏱ git commit ($N_STAGED ficheros): $((_t_commit1 - _t_commit0))ms"
                 # 23-Jul (feedback_run_fast_git_rebase_pierde_trabajo_23jul):
                 # -X ours bajo `rebase` favorece origin/main en conflictos --
                 # correcto para datos (mismo criterio que "siempre --theirs"
@@ -163,7 +191,10 @@ while true; do
                     # (ej. una edición de código a medias), el rebase de abajo se
                     # niega a correr (git rebase exige árbol limpio) y falla alto en
                     # vez de tragárselo, coherente con fail-loud.
+                    _t_push0=$(now_ms)
                     if ! timeout -k 10 60s git push origin main >> "$LOG" 2>&1; then
+                        _t_push1=$(now_ms)
+                        log "  ⏱ git push (fallido): $((_t_push1 - _t_push0))ms"
                         # 30-Jul (encontrado en vivo minutos después de desplegar
                         # este mecanismo): el push también falla por motivos que NO
                         # son divergencia -- el .git de 12GB hace que `git push`
@@ -209,11 +240,15 @@ while true; do
                         else
                             log "  ⚠️ push falló pero origin NO avanzó -- no es divergencia (probable OOM/red/tamaño de .git), se reintenta el siguiente ciclo sin tocar el árbol"
                         fi
+                    else
+                        _t_push1=$(now_ms)
+                        log "  ⏱ git push (OK): $((_t_push1 - _t_push0))ms"
                     fi
                 else
                     log "  ⚠️ rama actual != main -- se salta push (solo commit local de datos)"
                 fi
             fi
+            log "  ⏱ git batch TOTAL (lock+add+commit+push): $(($(now_ms) - _t_lock0))ms"
           )
         fi
     fi

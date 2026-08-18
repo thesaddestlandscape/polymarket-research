@@ -2070,6 +2070,27 @@ def _cargar_predicciones_recientes_por_estrategia(dias: int = COBERTURA_RECIENTE
     return idx
 
 
+@lru_cache(maxsize=None)
+def _candidatos_recientes_feature(strat_key, feature, direccion, cache_bucket):
+    """Valores de `feature` en las predicciones recientes de (strat_key,
+    direccion) -- extraído de _filtro_degenerado_en_veto_total el 18-Ago
+    (perfilado con py-spy, ver hallazgo del hueco de latencia del pipeline):
+    esta construcción de lista NO depende de `condicion`/`umbral`, pero
+    aprender_patrones_causales() llama a _filtro_degenerado_en_veto_total
+    hasta 10 veces por (strat_key,feature,direccion) -- 5 percentiles x 2
+    chequeos (FILTRO/PATRON) -- reconstruyéndola idéntica cada vez desde
+    cero sobre `idx` (que ya está cacheado, pero el filtrado posterior no
+    lo estaba). Cacheado aquí por (strat_key,feature,direccion,cache_bucket)
+    -- invalidación idéntica a _cargar_predicciones_recientes_por_estrategia
+    (mismo cache_bucket, incrementado una vez por ciclo de postmortem).
+    Verificado (500 pruebas + casos límite) que el resultado es idéntico al
+    de la reconstrucción inline que sustituye; ~7x más rápido en el caso
+    típico (10 llamadas por combo)."""
+    idx = _cargar_predicciones_recientes_por_estrategia(cache_bucket=cache_bucket)
+    return tuple(feats.get(feature) for dec, feats in idx.get(strat_key, [])
+                 if dec == direccion and feats.get(feature) is not None)
+
+
 def _filtro_degenerado_en_veto_total(strat_key, feature, direccion, condicion, umbral,
                                        min_n=COBERTURA_RECIENTE_MIN_N,
                                        cobertura_max=COBERTURA_RECIENTE_MAX):
@@ -2084,9 +2105,8 @@ def _filtro_degenerado_en_veto_total(strat_key, feature, direccion, condicion, u
     suficiente dato reciente (< min_n),
     devuelve False -- no bloquear un filtro por falta de datos recientes,
     solo por evidencia real de sobre-cobertura."""
-    idx = _cargar_predicciones_recientes_por_estrategia(cache_bucket=_POSTMORTEM_CACHE_BUCKET[0])
-    candidatos = [feats.get(feature) for dec, feats in idx.get(strat_key, [])
-                  if dec == direccion and feats.get(feature) is not None]
+    candidatos = _candidatos_recientes_feature(strat_key, feature, direccion,
+                                                _POSTMORTEM_CACHE_BUCKET[0])
     if len(candidatos) < min_n:
         return False
     cubiertos = 0

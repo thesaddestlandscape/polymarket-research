@@ -12,6 +12,17 @@ cd "$REPO_DIR"
 
 log() { echo "[$(date -u +%Y-%m-%dT%H:%M:%SZ)] $*" | tee -a "$LOG"; }
 
+# 18-Ago: mismo timing que run_fast.sh -- ver comentario ahí (bug real:
+# `date +%s%3N` no trunca a ms en este sistema, daba timings absurdos;
+# fijo con $EPOCHREALTIME + prefijo 10# para evitar octal).
+now_ms() {
+    local t=$EPOCHREALTIME
+    local sec=${t%.*}
+    local usec=${t#*.}
+    usec=${usec:0:3}
+    echo $(( 10#$sec * 1000 + 10#$usec ))
+}
+
 log "=== Proceso SLOW arrancado ==="
 
 CICLO=0
@@ -50,11 +61,14 @@ while true; do
     # autostash de uno podía quedar huérfano cuando el otro avanzaba la rama
     # en paralelo. flock BLOQUEANTE con tope 120s -- preferible esperar un
     # poco a arriesgar otro huérfano.
+    _t_lock0=$(now_ms)
     exec 200>"$REPO_DIR/data/shadow/git_ops.lock"
     if ! flock -w 120 200; then
         log "  ⚠️ git_ops.lock ocupado >120s (run_fast.sh probablemente sincronizando) -- se salta este ciclo de sync"
         exit 0
     fi
+    _t_lock1=$(now_ms)
+    log "  ⏱ git_ops.lock adquirido en $((_t_lock1 - _t_lock0))ms"
     # rebase huérfano (ej. `timeout 60s` matando el rebase de emergencia a
     # medias) -- mismo guard que run_fast.sh, ver comentario extenso ahí.
     if [ -d .git/rebase-merge ] || [ -d .git/rebase-apply ]; then
@@ -72,9 +86,16 @@ while true; do
                 || log "  ⚠️ stash no aplica limpio -- se deja en git stash list para revisión manual"
         fi
     fi
+    _t_add0=$(now_ms)
     git add data/prices/ data/wallets/leaderboard_*.csv data/shadow/hipotesis_*.md data/shadow/hipotesis_pendientes.json data/shadow/arb_scan_*.csv data/shadow/cross_arb_*.csv data/shadow/combi_arb_*.csv data/shadow/combi_candidates.json >> "$LOG" 2>&1 || true
+    _t_add1=$(now_ms)
+    log "  ⏱ git add: $((_t_add1 - _t_add0))ms"
     if ! git diff --cached --quiet 2>/dev/null; then
+        N_STAGED=$(git diff --cached --name-only 2>/dev/null | wc -l)
+        _t_commit0=$(now_ms)
         timeout 30s git commit -m "data: ciclo slow $CICLO $(date -u +%Y-%m-%dT%H:%MZ)" >> "$LOG" 2>&1 || true
+        _t_commit1=$(now_ms)
+        log "  ⏱ git commit ($N_STAGED ficheros): $((_t_commit1 - _t_commit0))ms"
         # 23-Jul (feedback_run_fast_git_rebase_pierde_trabajo_23jul): -X ours
         # bajo rebase favorece origin/main -- correcto para datos, pero
         # catastrófico si el directorio queda checked out en una rama de
@@ -91,7 +112,10 @@ while true; do
             # entero, incluyendo ediciones manuales sin commitear). Ahora: push
             # directo; solo si lo rechazan se entra en recuperación de
             # emergencia con stash de ámbito explícito.
+            _t_push0=$(now_ms)
             if ! timeout 60s git push origin main >> "$LOG" 2>&1; then
+                _t_push1=$(now_ms)
+                log "  ⏱ git push (fallido): $((_t_push1 - _t_push0))ms"
                 # 30-Jul (mismo hallazgo que run_fast.sh, encontrado minutos tras
                 # desplegar esto): el push también falla por motivos que NO son
                 # divergencia (.git de 12GB, OOM) -- comprobar con rev-list si
@@ -130,12 +154,15 @@ while true; do
                     log "  ⚠️ push falló pero origin NO avanzó -- no es divergencia (probable OOM/red/tamaño de .git), se reintenta el siguiente ciclo sin tocar el árbol"
                 fi
             else
+                _t_push1=$(now_ms)
+                log "  ⏱ git push (OK): $((_t_push1 - _t_push0))ms"
                 log "  Push OK"
             fi
         else
             log "  ⚠️ rama actual != main -- se salta push (solo commit local de datos)"
         fi
     fi
+    log "  ⏱ git batch TOTAL (lock+add+commit+push): $(($(now_ms) - _t_lock0))ms"
   )
 
     log "--- Ciclo slow $CICLO completado ---"
