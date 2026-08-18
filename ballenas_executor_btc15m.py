@@ -475,12 +475,18 @@ def _registrar_prediccion(mercado: dict, py: float, edge: float, restante_s: flo
     archivo = DIR_SHADOW / f"predictions_{ts[:10]}.csv"
     subtype = f"{ASSET}#{VENTANA_MIN}min"
     gate_bf = _gate_banda_fina_ballenas(ASSET, f"{VENTANA_MIN}min", py, restante_s / 60.0)
+    # 18-Ago: gate_bucket_propio_veredicto -- mismo fix que ballenas_
+    # executor_5min.py (ver comentario ahí), sin esto filtrar_filas_zona_
+    # confirmada() no tiene efecto para BALLENAS_TARDIAS#BTC#15min en
+    # analisis_log_growth.py/shadow_postmortem.py/vigia_degradacion_live.py.
+    gate_bp = _gate_bucket_propio(f"{STRATEGY}#{subtype}#BUY_YES", py)
     features = json.dumps({
         "concentracion_yes": round(pct_yes, 4), "n_ballenas": n_ballenas,
         "restante_s_al_confirmar": round(restante_s, 2),
         "banda_lo": banda_lo, "banda_hi": banda_hi,
         "banda_fina_vetaria_fase1": gate_bf["vetaria_fase1"], "banda_fina_motivo": gate_bf["motivo"],
         "ballena_activa_n": ballena_activa_n,
+        "gate_bucket_propio_veredicto": gate_bp["veredicto"],
     }, separators=(",", ":"))
     try:
         with open(PREDICTIONS_LOCK_PATH, "w") as lock_f:

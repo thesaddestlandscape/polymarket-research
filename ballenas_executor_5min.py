@@ -816,12 +816,25 @@ def _registrar_prediccion(activo: str, mercado: dict, py: float, edge: float,
     archivo = DIR_SHADOW / f"predictions_{ts[:10]}.csv"
     subtype = f"{activo}#{VENTANA_MIN}min"
     gate_bf = _gate_banda_fina_ballenas(activo, f"{VENTANA_MIN}min", py, restante_s / 60.0)
+    # 18-Ago: gate_bucket_propio_veredicto -- BALLENAS_TARDIAS nunca lo
+    # logueaba (a diferencia de GBM_LATE/shadow_predict.py, que sí), lo
+    # que dejaba sin efecto filtrar_filas_zona_confirmada() en
+    # analisis_log_growth.py/shadow_postmortem.py/vigia_degradacion_live.py
+    # (los 3 comparten ese helper) para esta familia: cualquier métrica
+    # AGREGADA calculada sobre results.csv mezclaba zonas de precio nunca
+    # ejecutables con la zona real -- encontrado al promocionar
+    # BALLENAS_TARDIAS#DOGE#5min y ver vigia_log_growth disparar "payout
+    # inverso" sobre el agregado completo (n=1050) mientras el bucket
+    # confirmado [0.55,0.60) da g(f=10%) positivo. Puro logging, mismo
+    # patrón exacto que shadow_predict.py -- no cambia edge/decision.
+    gate_bp = _gate_bucket_propio(f"{STRATEGY}#{subtype}#BUY_YES", py)
     features = json.dumps({
         "concentracion_yes": round(pct_yes, 4), "n_ballenas": n_ballenas,
         "restante_s_al_confirmar": round(restante_s, 2),
         "banda_lo": banda_lo, "banda_hi": banda_hi,
         "banda_fina_vetaria_fase1": gate_bf["vetaria_fase1"], "banda_fina_motivo": gate_bf["motivo"],
         "ballena_activa_n": ballena_activa_n,
+        "gate_bucket_propio_veredicto": gate_bp["veredicto"],
     }, separators=(",", ":"))
     try:
         with open(PREDICTIONS_LOCK_PATH, "w") as lock_f:

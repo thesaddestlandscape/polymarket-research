@@ -301,12 +301,18 @@ def _registrar_prediccion(activo: str, mercado: dict, py: float, prob_yes: float
     subtype = f"{activo}#{MARCO}"
     edge = prob_yes - py  # perspectiva YES, por convención (CLAUDE.md)
     gate_bf = _gate_banda_fina_ballenas(activo, MARCO, py, restante_s / 60.0)
+    # 18-Ago: gate_bucket_propio_veredicto -- sin esto filtrar_filas_zona_
+    # confirmada() (analisis_log_growth.py/shadow_postmortem.py/vigia_
+    # degradacion_live.py) no puede excluir zonas de precio no confirmadas
+    # del agregado de esta tupla, mismo gap que ballenas_executor_5min.py.
+    gate_bp = _gate_bucket_propio(f"{STRATEGY}#{activo}#{MARCO}#{DIRECTION}", py)
     features = json.dumps({
         "py_entrada": round(py, 4), "n_total_lado": n_no_total,
         "restante_min": round(restante_s / 60.0, 2),
         "hora_utc": datetime.now(timezone.utc).hour,
         "banda_fina_vetaria_fase1": gate_bf["vetaria_fase1"], "banda_fina_motivo": gate_bf["motivo"],
         "ejecutor_baja_latencia": True,
+        "gate_bucket_propio_veredicto": gate_bp["veredicto"],
         **(resumen_edge or {}),
     }, separators=(",", ":"))
     try:

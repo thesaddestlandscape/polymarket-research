@@ -319,12 +319,18 @@ def _registrar_prediccion(activo: str, mercado: dict, py: float, prob_yes: float
     subtype = f"{activo}#{VENTANA_MIN}min"
     edge = prob_yes - py
     gate_bf = _gate_banda_fina_ballenas(activo, f"{VENTANA_MIN}min", py, restante_s / 60.0)
+    # 18-Ago: gate_bucket_propio_veredicto -- mismo fix que los otros 3
+    # ejecutores de baja latencia (ver ballenas_executor_5min.py), sin
+    # esto filtrar_filas_zona_confirmada() no puede excluir zonas de
+    # precio no confirmadas del agregado de esta tupla.
+    gate_bp = _gate_bucket_propio(f"{STRATEGY}#{activo}#{VENTANA_MIN}min#BUY_YES", py)
     features = json.dumps({
         "py_entrada": round(py, 4), "n_total_lado": n_yes_total,
         "restante_min": round(restante_s / 60.0, 2),
         "hora_utc": datetime.now(timezone.utc).hour,
         "banda_fina_vetaria_fase1": gate_bf["vetaria_fase1"], "banda_fina_motivo": gate_bf["motivo"],
         "ejecutor_baja_latencia": True,
+        "gate_bucket_propio_veredicto": gate_bp["veredicto"],
         **(resumen_edge or {}),
     }, separators=(",", ":"))
     try:
