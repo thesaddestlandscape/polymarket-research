@@ -118,11 +118,14 @@ def clasificar(title, event_slug=""):
     return None
 
 
-def cargar_trades_whale():
+def cargar_trades_whale(vistos: set | None = None):
     """[(wallet, condition_id, categoria, outcome, price, ts, usd), ...]
-    dedupe por transaction_hash."""
+    dedupe por transaction_hash. `vistos` opcional (18-Ago) -- compartido
+    con cargar_trades_completo() para dedupe CRUZADO entre las dos
+    fuentes (un trade whale puede aparecer en ambas)."""
     files = sorted(glob.glob(f"{DATALOGS}/polymarket_activity_*.csv*"))
-    vistos = set()
+    if vistos is None:
+        vistos = set()
     out = []
     for path in files:
         opener = gzip.open if path.endswith(".gz") else open
@@ -139,6 +142,48 @@ def cargar_trades_whale():
                 title = r.get("title", "")
                 cat = clasificar(title, r.get("event_slug", ""))
                 if cat is None:
+                    continue
+                try:
+                    price = float(r["price"])
+                    usd = float(r.get("usd_value") or 0)
+                except (ValueError, KeyError):
+                    continue
+                if not (0 < price < 1):
+                    continue
+                outcome = (r.get("outcome") or "").strip().lower()
+                out.append({
+                    "wallet": r["wallet"].lower(), "condition_id": r["condition_id"],
+                    "categoria": cat, "outcome": outcome, "price": price,
+                    "ts": r.get("timestamp_utc", ""), "usd": usd,
+                })
+    return out
+
+
+def cargar_trades_completo(vistos_hash: set):
+    """18-Ago (tarde, petición explícita Javi tras el repaso a fondo del
+    sniper): cargar_trades_whale() solo veía trades >=$1000 del firehose
+    COMPARTIDO de cripto (filtro whale de fetch_polymarket_activity_ws.py)
+    -- la inmensa mayoría de actividad sports/esports (trades pequeños)
+    nunca llegaba ahí, sesgando el descubrimiento hacia generalistas de
+    alto volumen. sports_activity_ws.py (mismo día, conexión propia sin
+    ese filtro) ya lleva acumulando -- se fusiona aquí con el histórico
+    whale (21 días) para ampliar cobertura sin perder profundidad
+    histórica. Mismo formato de fila que cargar_trades_whale(), dedupe
+    cruzado por transaction_hash (un trade whale puede aparecer en AMBAS
+    fuentes)."""
+    files = sorted(glob.glob(str(DIR_SPORTS / "activity_ws_*.csv")))
+    out = []
+    for path in files:
+        with open(path, newline="", encoding="utf-8") as f:
+            for r in csv.DictReader(f):
+                h = r.get("transaction_hash", "")
+                if h in vistos_hash:
+                    continue
+                vistos_hash.add(h)
+                if (r.get("side") or "").strip().upper() != "BUY":
+                    continue
+                cat = r.get("categoria", "")
+                if not cat:
                     continue
                 try:
                     price = float(r["price"])
@@ -227,9 +272,15 @@ def _benjamini_hochberg(pvals, fdr=FDR):
 
 
 def main():
-    print("Cargando trades whale-tier de 21 dias de firehose...")
-    trades = cargar_trades_whale()
+    print("Cargando trades whale-tier de 21 dias de firehose (histórico)...")
+    vistos = set()
+    trades = cargar_trades_whale(vistos)
     print(f"trades whale-tier clasificados: {len(trades)}")
+    print("Cargando trades completos de sports_activity_ws.py (sin filtro whale)...")
+    trades_completo = cargar_trades_completo(vistos)
+    print(f"trades adicionales (no-whale) clasificados: {len(trades_completo)}")
+    trades = trades + trades_completo
+    print(f"total combinado: {len(trades)}")
     por_cat = Counter(t["categoria"] for t in trades)
     print("por categoria:", dict(por_cat))
 
