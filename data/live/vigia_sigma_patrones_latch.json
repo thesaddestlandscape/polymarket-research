@@ -341,6 +341,7 @@
   "UPDOWN_GBM_15M_CROSS_WINDOW_SPREAD#BTC#15min|patron|sigma_ewma_delta_pct|lt|BUY_YES",
   "UPDOWN_GBM_15M_CROSS_WINDOW_SPREAD#BTC#15min|patron|sigma_h|gt|BUY_YES",
   "UPDOWN_GBM_15M_CROSS_WINDOW_SPREAD#BTC#15min|patron|sigma_h|lt|BUY_YES",
+  "UPDOWN_GBM_15M_CROSS_WINDOW_SPREAD#ETH#15min|patron|sigma_ewma_delta_pct|gt|BUY_YES",
   "UPDOWN_GBM_15M_CROSS_WINDOW_SPREAD|patron|sigma_ewma_delta_pct|gt|BUY_YES",
   "UPDOWN_GBM_15M_CROSS_WINDOW_SPREAD|patron|sigma_h|gt|BUY_YES",
   "UPDOWN_GBM_15M_CROSS_WINDOW_SPREAD|patron|sigma_h|lt|BUY_YES",
