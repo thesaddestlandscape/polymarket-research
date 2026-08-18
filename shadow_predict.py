@@ -1757,6 +1757,59 @@ def _calcular_delta_ratio_macro(sym, klines_raw):
     return (tb - ts_vol) / denom
 
 
+# AMT spot-vs-perp (18-Ago, pasos 3-4 de idea_amt_spot_vs_perp_cvd_20jul,
+# pasos 1-2 construidos 11-Ago vía fetch_binance_perp_cvd_oi.py): Auction
+# Market Theory -- divergencia entre CVD spot (arriba, delta_ratio_macro)
+# y CVD del mercado PERP (con apalancamiento) para distinguir breakouts
+# genuinos (ambos alineados) de squeezes de apalancamiento (divergen).
+# PURAMENTE OBSERVACIONAL -- se loguea junto a delta_ratio_macro en los
+# mismos 2 sitios que ya lo hacen, NUNCA toca prob_yes/decisión. Requiere
+# n suficiente + aprobación explícita de Javi antes de cualquier uso
+# operativo, mismo criterio que cualquier feature nueva.
+_PERP_CVD_CACHE = {"dia": None, "ts_leido": 0.0, "por_activo": {}}
+_PERP_CVD_TTL_S = 60.0  # el cron que alimenta el CSV corre cada 5min, TTL
+# más corto que eso es gratis (evita releer el mismo minuto muchas veces
+# sin arriesgar servir un dato más viejo que la propia fuente)
+
+
+def _cargar_perp_delta_ratio_reciente(activo: str) -> float | None:
+    """Última fila de data/shadow/binance_perp_cvd_oi_HOY.csv para
+    `activo` -- tail-read (nunca el fichero completo, mismo criterio
+    anti-incidente que el resto de lectores de este fichero, CLAUDE.md
+    pt.18), cacheado con TTL corto. None si no hay fichero/filas (fail-
+    open: la feature simplemente no se loguea esa vez)."""
+    fecha = datetime.now(timezone.utc).strftime("%Y-%m-%d")
+    ahora = datetime.now(timezone.utc).timestamp()
+    if _PERP_CVD_CACHE["dia"] == fecha and ahora - _PERP_CVD_CACHE["ts_leido"] < _PERP_CVD_TTL_S:
+        return _PERP_CVD_CACHE["por_activo"].get(activo)
+    path = DIR_DATA / "shadow" / f"binance_perp_cvd_oi_{fecha}.csv"
+    por_activo = {}
+    try:
+        tam = path.stat().st_size
+        with open(path, "rb") as f:
+            f.seek(max(0, tam - 65536))
+            raw = f.read().decode("utf-8", errors="ignore")
+        lineas = raw.splitlines()
+        if lineas and "," in lineas[0] and not lineas[0][0].isdigit():
+            lineas = lineas[1:]
+        for linea in lineas:
+            partes = linea.split(",")
+            if len(partes) < 6:
+                continue
+            act = partes[1]
+            try:
+                ratio = float(partes[5])
+            except (ValueError, IndexError):
+                continue
+            por_activo[act] = ratio  # última fila del tail gana, ficheros van en orden temporal
+    except (OSError, FileNotFoundError):
+        pass
+    _PERP_CVD_CACHE["dia"] = fecha
+    _PERP_CVD_CACHE["ts_leido"] = ahora
+    _PERP_CVD_CACHE["por_activo"] = por_activo
+    return por_activo.get(activo)
+
+
 # Fracción del drift observado que se incorpora al GBM.
 # DRIFT_DAMPING por ventana — backfill 90d × 6 pares (125k predicciones GBM).
 # El momentum de Binance aporta más en ventanas cortas (5/15min) que en largas.
@@ -2325,6 +2378,9 @@ def s_updown_gbm(market, ctx, strategy_name: str = "UPDOWN_GBM"):
         features["kalman_mu_h"] = round(_kalman_mu_h, 6)  # observacional, no toca p_up
     if delta_macro is not None:
         features["delta_ratio_macro"] = round(delta_macro, 4)
+        perp_delta = _cargar_perp_delta_ratio_reciente(activo)
+        if perp_delta is not None:
+            features["divergencia_cvd_spot_perp"] = round(delta_macro - perp_delta, 4)
     if cross_window_spread is not None:
         features["cross_window_spread"] = cross_window_spread
     # gap_sigma_implicita (P19, 22-Jul): ver _gap_sigma_implicita — solo logueo.
@@ -4789,7 +4845,11 @@ def s_updown_ou_5m(market, ctx):
     }
     if drift_15 is not None: features["drift_15min"] = round(drift_15 * 100, 4)
     if drift_60 is not None: features["drift_60min"] = round(drift_60 * 100, 4)
-    if delta_macro is not None: features["delta_ratio_macro"] = round(delta_macro, 4)
+    if delta_macro is not None:
+        features["delta_ratio_macro"] = round(delta_macro, 4)
+        perp_delta = _cargar_perp_delta_ratio_reciente(activo)
+        if perp_delta is not None:
+            features["divergencia_cvd_spot_perp"] = round(delta_macro - perp_delta, 4)
 
     return {
         "prob_yes": p_up,
