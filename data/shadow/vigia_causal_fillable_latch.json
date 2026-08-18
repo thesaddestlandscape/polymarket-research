@@ -4849,7 +4849,7 @@
  "candidato_proxy#FAVORITO_CONFIRMADO_15MIN_ALTACONVICCION#DOGE#BUY_YES#hora_utclt": false,
  "candidato_proxy#FAVORITO_CONFIRMADO_15MIN_ALTACONVICCION#DOGE#BUY_YES#py_entradagt": true,
  "candidato_proxy#FAVORITO_CONFIRMADO_15MIN_ALTACONVICCION#DOGE#15min#DOGE#BUY_YES#hora_utclt": false,
- "candidato_proxy#FAVORITO_CONFIRMADO_15MIN_ALTACONVICCION#DOGE#15min#DOGE#BUY_YES#py_entradagt": false,
+ "candidato_proxy#FAVORITO_CONFIRMADO_15MIN_ALTACONVICCION#DOGE#15min#DOGE#BUY_YES#py_entradagt": true,
  "candidato_proxy#FAVORITO_CONFIRMADO_15MIN_ALTACONVICCION#ETH#BUY_YES#hora_utclt": false,
  "candidato_proxy#FAVORITO_CONFIRMADO_15MIN_ALTACONVICCION#ETH#BUY_YES#py_entradagt": false,
  "candidato_proxy#FAVORITO_CONFIRMADO_15MIN_ALTACONVICCION#ETH#15min#ETH#BUY_YES#hora_utclt": false,
@@ -5404,5 +5404,13 @@
  "candidato_proxy#UPDOWN_GBM#SOL#5min#SOL#BUY_NO#drift_15minabs_lt": false,
  "FILTRO#candidato_proxy#UPDOWN_OU_5M#BNB#BUY_NO#sigma_hgt": false,
  "FILTRO#candidato_proxy#MOMENTUM_IBS_15M_BALLENA#ETH#15min#ETH#BUY_YES#ibs_20mingt": false,
- "FILTRO#candidato_proxy#MOMENTUM_IBS_15M_BALLENA#SOL#15min#SOL#BUY_YES#ibs_20mingt": false
+ "FILTRO#candidato_proxy#MOMENTUM_IBS_15M_BALLENA#SOL#15min#SOL#BUY_YES#ibs_20mingt": false,
+ "candidato_proxy#GBM_LATE_15M_TARDIO#BNB#BUY_YES#volumen_spike_ratiogt": false,
+ "candidato_proxy#GBM_LATE_15M_TARDIO#BTC#BUY_YES#volumen_spike_ratiogt": false,
+ "candidato_proxy#GBM_LATE_15M_TARDIO#DOGE#BUY_YES#volumen_spike_ratiogt": false,
+ "candidato_proxy#GBM_LATE_15M_TARDIO#ETH#BUY_YES#volumen_spike_ratiogt": false,
+ "candidato_proxy#GBM_LATE_15M_TARDIO#SOL#BUY_YES#volumen_spike_ratiogt": false,
+ "candidato_proxy#GBM_LATE_15M_TARDIO#XRP#BUY_YES#volumen_spike_ratiogt": false,
+ "candidato_proxy#GBM_LATE_5M#BTC#BUY_NO#sigma_ewma_delta_pctgt": false,
+ "FILTRO#candidato_proxy#MOMENTUM_IBS_5M_BALLENA#BNB#5min#BNB#BUY_YES#libro_liquidezlt": false
 }
