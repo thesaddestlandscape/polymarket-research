@@ -1,10 +1,10 @@
 {
-  "timestamp_utc": "2026-08-18T00:48:55+00:00",
-  "bankroll_sim": 17255.93,
-  "pnl_total": 17235.93,
-  "n_ops": 164312,
-  "win_rate": 0.6042,
-  "estrategias_activas": 491,
+  "timestamp_utc": "2026-08-18T00:55:49+00:00",
+  "bankroll_sim": 17267.67,
+  "pnl_total": 17247.67,
+  "n_ops": 164401,
+  "win_rate": 0.6041,
+  "estrategias_activas": 489,
   "desactivadas": [
     "SMART_FLOW_1H",
     "UPDOWN_GBM#daily",
@@ -30,6 +30,8 @@
     "FAVORITO_CONFIRMADO#ETH#240min",
     "LIQUIDACIONES_15M#DOGE#15min",
     "LIQUIDACIONES_15M#DOGE",
+    "UPDOWN_OU_5M#DOGE#5min",
+    "UPDOWN_OU_5M#DOGE",
     "BALLENAS_TARDIAS#DOGE#5min",
     "BALLENAS_TARDIAS#DOGE",
     "BALLENAS_TARDIAS#XRP#5min",
@@ -58,9 +60,9 @@
   "clv_medio": 0.034,
   "monitor_5min": {
     "ou_5m": {
-      "n": 700,
-      "clv": -0.1112,
-      "clv_ult30": 0.0698
+      "n": 701,
+      "clv": -0.1118,
+      "clv_ult30": 0.0365
     },
     "of_buy_yes": {
       "n": 608,
