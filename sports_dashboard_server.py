@@ -38,7 +38,50 @@ if not DASHBOARD_USER or not DASHBOARD_PASS:
 REPO = Path(__file__).parent
 DIR_SPORTS = REPO / "data" / "sports"
 EDGE_JSON = DIR_SPORTS / "wallet_edge_score_por_categoria.json"
+MIRROR_CSV = DIR_SPORTS / "wallet_mirror_sniper_dry_run.csv"  # 18-Ago
 PORT = int(sys.argv[1]) if len(sys.argv) > 1 else 8890
+
+
+def compute_mirror():
+    """18-Ago: el dashboard llevaba desde su creación (mañana) sin
+    reflejar el Wallet Mirror en tiempo real desplegado por la tarde --
+    Javi lo detectó preguntando directamente. Lee wallet_mirror_sniper_
+    dry_run.csv (matches detectados, fill-ability, resolución).
+    18-Ago (2ª pasada, petición Javi): tabla de señales recientes con
+    detalle completo, mismo espíritu que la tabla de "live trades" del
+    dashboard de cripto -- trazabilidad real, no solo agregados."""
+    if not MIRROR_CSV.exists():
+        return {"n_matches": 0, "n_resueltos": 0, "senales_recientes": []}
+    import csv as _csv
+    filas = list(_csv.DictReader(open(MIRROR_CSV, encoding="utf-8")))
+    n = len(filas)
+    senales_recientes = list(reversed(filas))[:50]
+    resueltas = [r for r in filas if r.get("acierto") in ("0", "1")]
+    n_res = len(resueltas)
+    aciertos = sum(1 for r in resueltas if r["acierto"] == "1")
+    con_libro = [r for r in filas if r.get("libro_ok") == "1"]
+
+    def _ratio(r):
+        try:
+            return float(r.get("ratio_vs_stake_mirror") or 0)
+        except (TypeError, ValueError):
+            return 0.0
+    fillable = [r for r in con_libro if _ratio(r) > 0]
+    por_cat_wallet = defaultdict(set)
+    for r in filas:
+        por_cat_wallet[r.get("categoria", "")].add(r.get("wallet", ""))
+    concentracion = [{"categoria": c, "n_wallets_activas": len(ws)}
+                      for c, ws in sorted(por_cat_wallet.items(), key=lambda kv: len(kv[1]))]
+    return {
+        "n_matches": n, "n_seguir": sum(1 for r in filas if r.get("tipo") == "SEGUIR"),
+        "n_fade": sum(1 for r in filas if r.get("tipo") == "FADE"),
+        "n_resueltos": n_res,
+        "hit_pct": round(aciertos / n_res * 100, 1) if n_res else None,
+        "pct_libro_consultado": round(len(con_libro) / n * 100, 1) if n else 0,
+        "pct_fillable": round(len(fillable) / len(con_libro) * 100, 1) if con_libro else 0,
+        "concentracion_baja": [c for c in concentracion if c["n_wallets_activas"] == 1][:10],
+        "senales_recientes": senales_recientes,
+    }
 
 _cache = {"ts": 0.0, "data": None}
 _CACHE_TTL = 30.0
@@ -79,6 +122,7 @@ def compute_data():
         "resumen_categorias": resumen_categorias,
         "top_wallets": top_wallets,
         "peores_wallets": peores_wallets,
+        "mirror": compute_mirror(),
     }
 
 
@@ -109,11 +153,17 @@ th{color:#8b949e;font-weight:500}
 .badge{background:#1f6feb;color:#fff;padding:1px 6px;border-radius:4px;font-size:11px;margin-left:6px}
 .aviso{background:#3a2a00;border:1px solid #9e6a03;padding:10px 14px;border-radius:6px;color:#f0b429;margin-bottom:16px}
 </style></head><body>
-<h1>🏟️ Sports/Esports — inteligencia de wallets (fase: descubrimiento, sin ejecución todavía)</h1>
-<div class="aviso">Fase actual: solo detección de wallets con edge validado por categoría/deporte/liga
-(ballenas ≥$1000, shuffle test + BH-FDR, mismo rigor que cripto). Todavía NO hay ejecutor/tracker en
-tiempo real ni PnL de trading (ni shadow) — eso es el siguiente paso.</div>
+<h1>🏟️ Sports/Esports — inteligencia de wallets + Wallet Mirror en tiempo real (DRY_RUN)</h1>
+<div class="aviso">Descubrimiento: ballenas ≥$1000 + firehose completo, shuffle test + BH-FDR. Wallet Mirror
+(18-Ago): sniper en tiempo real con profundidad de libro real, 100% DRY_RUN, sin dinero real.</div>
 <div class="stats" id="stats"></div>
+<h2>🪞 Wallet Mirror — actividad en tiempo real</h2>
+<div class="stats" id="stats-mirror"></div>
+<div id="aviso-concentracion"></div>
+<h2>Señales recientes (trazabilidad)</h2>
+<table><thead><tr><th>Hora (UTC)</th><th>Wallet</th><th>Categoría</th><th>Tipo</th>
+<th>Precio</th><th>Lag(s)</th><th>Libro</th><th>Ratio/stake</th><th>Acierto</th></tr></thead>
+<tbody id="tbody-senales"></tbody></table>
 <h2>Por categoría</h2>
 <table><thead><tr><th>Categoría</th><th>trades whale</th><th>wallets validadas</th>
 <th>buenas</th><th>malas</th><th>mejor edge_pp</th></tr></thead><tbody id="tbody-cat"></tbody></table>
@@ -136,6 +186,27 @@ async function refresh(){
     <div class="stat"><div class="v">${d.n_wallets_especialistas}</div><div class="l">wallets especialistas (&ge;80%% 1 categoría)</div></div>
     <div class="stat"><div class="v">${d.n_combos_validados}</div><div class="l">(wallet,categoría) con edge validado BH-FDR</div></div>
   `;
+  const m = d.mirror || {};
+  document.getElementById('stats-mirror').innerHTML = `
+    <div class="stat"><div class="v">${m.n_matches||0}</div><div class="l">señales detectadas (${m.n_seguir||0} SEGUIR / ${m.n_fade||0} FADE)</div></div>
+    <div class="stat"><div class="v">${m.n_resueltos||0}</div><div class="l">resueltas</div></div>
+    <div class="stat"><div class="v">${m.hit_pct!=null?m.hit_pct+'%':'—'}</div><div class="l">hit-rate DRY_RUN</div></div>
+    <div class="stat"><div class="v">${m.pct_fillable||0}%</div><div class="l">con profundidad real (de ${m.pct_libro_consultado||0}% con libro consultado)</div></div>
+  `;
+  const conc = (m.concentracion_baja||[]);
+  document.getElementById('aviso-concentracion').innerHTML = conc.length
+    ? `<div class="aviso">⚠️ ${conc.length} categorías con actividad de UNA sola wallet (riesgo de concentración): ${conc.map(c=>c.categoria).join(', ')}</div>`
+    : '';
+  document.getElementById('tbody-senales').innerHTML = (m.senales_recientes||[]).map(s => {
+    const acierto = s.acierto==='1' ? '<span class="pos">✔</span>' : (s.acierto==='0' ? '<span class="neg">✘</span>' : '—');
+    const libro = s.libro_ok==='1' ? '✅' : '❌';
+    const ratio = s.ratio_vs_stake_mirror ? parseFloat(s.ratio_vs_stake_mirror).toFixed(2) : '—';
+    const tipoClass = s.tipo === 'SEGUIR' ? 'pos' : 'neg';
+    return `<tr><td>${(s.timestamp_utc||'').replace('T',' ').slice(0,19)}</td>
+      <td>${(s.wallet||'').slice(0,14)}</td><td>${s.categoria||''}</td>
+      <td class="${tipoClass}">${s.tipo||''}</td><td>${s.precio_wallet||''}</td>
+      <td>${s.lag_deteccion_s||''}</td><td>${libro}</td><td>${ratio}</td><td>${acierto}</td></tr>`;
+  }).join('');
   document.getElementById('tbody-cat').innerHTML = d.resumen_categorias.map(c =>
     `<tr><td>${c.categoria}</td><td>${c.n_trades_categoria}</td><td>${c.n_wallets}</td>
      <td class="pos">${c.n_buenas}</td><td class="neg">${c.n_malas}</td>
