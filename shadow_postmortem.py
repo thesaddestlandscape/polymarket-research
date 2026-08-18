@@ -931,14 +931,31 @@ def _extraer_features(resultado: dict, pred: dict) -> dict:
     features = {}
 
     # 1. Columna features (nueva, a partir de 2026-06-24)
+    # /code-review 18-Ago (bug real ya activo en producción, encontrado al
+    # extender favorito_confirma_coincide a MOMENTUM_IBS_*_BALLENA):
+    # la comprehension atómica de abajo abortaba el dict ENTERO en cuanto
+    # cualquier feature no numérica (ej. "BUY_YES", "twap", un veredicto de
+    # texto) aparecía en el JSON -- vaciando silenciosamente TODAS las
+    # demás features de esa fila para el aprendizaje causal, no solo la
+    # ofensora. Confirmado activo desde 13-Jul (favorito_confirma_decision
+    # en GBM_LATE_FAMILIA) y en gate_bucket_propio_veredicto/banda_fina_
+    # motivo (16.369/44.186 filas GBM_LATE afectadas, medido en el review).
+    # Fix: construir el dict incrementalmente, saltando SOLO la clave no
+    # numérica en vez de abortar todo -- ninguna fila pierde ya sus
+    # features válidas por culpa de una sola clave de texto.
     raw = resultado.get("features") or (pred or {}).get("features", "")
     if raw and raw != "{}":
         try:
             parsed = json.loads(raw) if isinstance(raw, str) else raw
-            features.update({k: float(v) for k, v in parsed.items()
-                             if v not in (None, "")})
-        except (ValueError, TypeError, json.JSONDecodeError):
-            pass
+        except (TypeError, json.JSONDecodeError):
+            parsed = {}
+        for k, v in (parsed or {}).items():
+            if v in (None, ""):
+                continue
+            try:
+                features[k] = float(v)
+            except (ValueError, TypeError):
+                continue
 
     # 2. Fallback: parsear razon string (datos históricos sin columna features)
     razon = (pred or {}).get("razon", "") if pred else ""

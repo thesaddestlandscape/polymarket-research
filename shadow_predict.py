@@ -6,6 +6,7 @@ shadow_predict.py — v8. Cuatro estrategias activas:
   4. WEEKLY_PRICE   — mercados de rango de precio semanal (BTC/ETH/SOL entre $X-$Y)
 """
 import csv, glob, io, json, math, os, pickle, re, sys
+from collections import defaultdict
 from datetime import datetime, timezone, timedelta
 from pathlib import Path
 import requests
@@ -1085,6 +1086,142 @@ def _cargar_spot():
         pass
     return SPOT_PRECIOS
 
+
+# Activos con feed OFICIAL de Chainlink como resolutionSource real de sus
+# mercados 5min/15min (confirmado vía gamma-api, ver idea_tick_vs_twap_
+# residuo_diagnosticado_17ago) -- DOGE/BNB SÍ aparecen en chainlink_*.csv
+# (mismo stream RTDS captura las 6 monedas) pero sus mercados NO resuelven
+# por ese TWAP, así que un proxy TWAP ahí no corregiría nada real.
+_TWAP_ACTIVOS_OFICIALES = {"BTC", "ETH", "SOL", "XRP"}
+_VENTANA_TWAP_S = 60.0  # ventana real de resolución hoy para 5min (desde
+# 14-Ago, TWAP_5MIN_FECHA_CAMBIO_60S en shadow_postmortem.py) y 15min
+# (sin cambiar desde 07-Ago) -- ambas coinciden hoy en 60s.
+
+_TICKS_CHAINLINK_CACHE = {"clave": None, "ts_leido": 0.0, "ticks": {}}
+_TICKS_CHAINLINK_TTL_S = 10.0  # /code-review 18-Ago: antes cacheaba por
+# (fecha,ventana_s) -- constante casi todo el día, así que un proceso
+# PERSISTENTE (gbm_late_15min_executor.py/updown_gbm_15min_tardio_btc_
+# executor.py importan _s_gbm_late/s_updown_gbm directo y corren en
+# while True:) leía el tail UNA vez y nunca más en todo el día, sirviendo
+# ticks cada vez más viejos sin refrescar jamás. TTL corto (10s, barato:
+# solo 128KB de tail-read) para que los procesos persistentes de baja
+# latencia sigan viendo datos frescos.
+_PRECIO_TWAP_MEMO = {"clave": None, "valores": {}}  # memo por activo,
+# invalidado junto al cache de ticks -- evita recalcular el TWAP del
+# mismo activo hasta 10 veces por ciclo (5 wrappers UPDOWN_GBM + 5
+# GBM_LATE_15M sobre el mismo tick list ya cacheado).
+_TWAP_STALE_S = 20.0  # si el tick mas reciente de un activo tiene mas de
+# esto de antiguedad respecto al reloj real, se trata como sin dato --
+# protege contra el screen `chainlink` colgado en silencio (incidente
+# real ya sufrido, RECV_TIMEOUT_S=30 en fetch_chainlink_prices.py): sin
+# este chequeo, ticks mutuamente consistentes pero todos viejos parecerían
+# "recientes" y _precio_twap devolvería un precio plausible pero rancio,
+# sin caer nunca al fallback de _cargar_spot().
+
+
+def _cargar_ticks_chainlink_recientes(ventana_s: float = 180.0) -> dict:
+    """Lee SOLO el tail de data/prices/chainlink_HOY.csv (últimos ~128KB,
+    ~1500-2000 ticks a ~6-9/s con las 6 monedas -- de sobra para cualquier
+    ventana TWAP de 60-90s) -- NUNCA el fichero completo, que ya supera
+    460k líneas y sigue creciendo durante el día (mismo riesgo de reescanear
+    históricos completos cada ciclo que causó el incidente real de
+    CLAUDE.md pt.18). Cacheado con TTL corto (ver _TICKS_CHAINLINK_TTL_S)
+    -- barato de refrescar, seguro tanto para procesos efímeros (un solo
+    tail-read por ciclo) como persistentes (se refresca solo cada ~10s).
+
+    Devuelve {activo: [(epoch_s, precio), ...]} ordenado ascendente,
+    recortado a `ventana_s` segundos antes del tick MÁS RECIENTE DE ESE
+    MISMO ACTIVO (no un corte global -- /code-review 18-Ago: un corte
+    global anclado al activo más rápido podía descartar de más el
+    histórico de un activo con un lag momentáneo propio)."""
+    fecha = datetime.now(timezone.utc).strftime("%Y-%m-%d")
+    ahora = datetime.now(timezone.utc).timestamp()
+    clave = (fecha, ventana_s)
+    if (_TICKS_CHAINLINK_CACHE.get("clave") == clave
+            and ahora - _TICKS_CHAINLINK_CACHE["ts_leido"] < _TICKS_CHAINLINK_TTL_S):
+        return _TICKS_CHAINLINK_CACHE["ticks"]
+    path = DIR_DATA / "prices" / f"chainlink_{fecha}.csv"
+    resultado = {}
+    try:
+        tam = path.stat().st_size
+        with open(path, "rb") as f:
+            f.seek(max(0, tam - 131072))
+            raw = f.read().decode("utf-8", errors="ignore")
+        lineas = raw.splitlines()
+        if lineas and "," in lineas[0] and not lineas[0][0].isdigit():
+            lineas = lineas[1:]  # descarta posible cabecera parcial cortada por el seek
+        por_activo = defaultdict(list)
+        for linea in lineas:
+            partes = linea.split(",")
+            if len(partes) < 3:
+                continue
+            try:
+                ts = datetime.fromisoformat(partes[0]).timestamp()
+                activo = partes[1]
+                precio = float(partes[2])
+            except (ValueError, IndexError):
+                continue
+            if precio <= 0:
+                continue  # descarta ticks corruptos/truncados (precio 0 o negativo)
+            por_activo[activo].append((ts, precio))
+        for a, pts in por_activo.items():
+            corte = max(t for t, _ in pts) - ventana_s  # corte POR ACTIVO
+            resultado[a] = [(t, p) for t, p in pts if t >= corte]
+    except (OSError, FileNotFoundError):
+        pass
+    _TICKS_CHAINLINK_CACHE["clave"] = clave
+    _TICKS_CHAINLINK_CACHE["ts_leido"] = ahora
+    _TICKS_CHAINLINK_CACHE["ticks"] = resultado
+    _PRECIO_TWAP_MEMO["clave"] = None  # invalidar el memo de _precio_twap
+    return resultado
+
+
+def _precio_twap(activo: str) -> float | None:
+    """TWAP real (media ponderada por tiempo entre ticks consecutivos,
+    mismo método que analisis_regimen_twap_chainlink_09ago.py) de los
+    últimos _VENTANA_TWAP_S segundos de precio Chainlink -- aproxima el
+    mecanismo REAL de resolución (TWAP 60s desde 07/14-Ago, ver
+    TWAP_FECHA_CAMBIO/TWAP_5MIN_FECHA_CAMBIO_60S en shadow_postmortem.py)
+    en vez de un tick puntual (_cargar_spot(), gap medido 92.8% vs 94.2%
+    acc, flip_rate 3.8%, n=74583 -- idea_tick_vs_twap_residuo_
+    diagnosticado_17ago). Solo BTC/ETH/SOL/XRP (únicos con TWAP como
+    resolutionSource real). None si no hay ticks suficientes O el tick
+    más reciente está más viejo que _TWAP_STALE_S respecto al reloj real
+    (fail-open: el caller cae a _cargar_spot(), mismo comportamiento que
+    antes de este cambio -- nunca sirve un TWAP calculado sobre datos
+    parados en silencio)."""
+    if activo not in _TWAP_ACTIVOS_OFICIALES:
+        return None
+    clave_cache = _TICKS_CHAINLINK_CACHE.get("clave")
+    if _PRECIO_TWAP_MEMO["clave"] == clave_cache and activo in _PRECIO_TWAP_MEMO["valores"]:
+        return _PRECIO_TWAP_MEMO["valores"][activo]
+    if _PRECIO_TWAP_MEMO["clave"] != clave_cache:
+        _PRECIO_TWAP_MEMO["clave"] = clave_cache
+        _PRECIO_TWAP_MEMO["valores"] = {}
+    ticks = _cargar_ticks_chainlink_recientes(_VENTANA_TWAP_S).get(activo)
+    if not ticks or len(ticks) < 2:
+        _PRECIO_TWAP_MEMO["valores"][activo] = None
+        return None
+    ticks = sorted(ticks)
+    ahora = datetime.now(timezone.utc).timestamp()
+    if ahora - ticks[-1][0] > _TWAP_STALE_S:
+        _PRECIO_TWAP_MEMO["valores"][activo] = None
+        return None
+    suma_ponderada = 0.0
+    peso_total = 0.0
+    for i in range(1, len(ticks)):
+        t0, p0 = ticks[i - 1]
+        t1, _ = ticks[i]
+        dt = t1 - t0
+        if dt <= 0:
+            continue
+        suma_ponderada += p0 * dt
+        peso_total += dt
+    resultado = suma_ponderada / peso_total if peso_total > 0 else None
+    _PRECIO_TWAP_MEMO["valores"][activo] = resultado
+    return resultado
+
+
 def s_weekly_price(market, ctx):
     import re as _re2
     tags = (market.get("event_tags") or "").lower()
@@ -1742,6 +1879,7 @@ def _aplicar_kelly_compuesto(rows: list) -> list:
 # de features del sistema. Ver idea_awesome_quant_hallazgos_13jul y
 # project_auditoria_estrategia_problema_13jul (memoria nativa Claude).
 GBM_LATE_FAMILIA = {"GBM_LATE_15M", "GBM_LATE_15M_TARDIO", "GBM_LATE_15M_ESPACIO_ATR"}
+MOMENTUM_BALLENA_FAMILIA = {"MOMENTUM_IBS_5M_BALLENA", "MOMENTUM_IBS_15M_BALLENA"}
 
 # Wang Transform (Yang, Y. 2026, "Pricing Prediction Markets" — calibrado
 # sobre 291,309 contratos reales, 6 plataformas): p_mercado =
@@ -1798,7 +1936,25 @@ def _inyectar_features_cruzadas(rows: list) -> list:
             except (TypeError, ValueError, ZeroDivisionError):
                 pass
 
-        if r[1] in GBM_LATE_FAMILIA and r[11] != "SKIP":
+        # GBM_LATE_FAMILIA (desde 13-Jul) + MOMENTUM_BALLENA_FAMILIA (18-Ago,
+        # propuesta 1 "confluencia arquetipo B", idea_confluencia_favorito_
+        # momentum_ballena_18ago -- mismo mecanismo, familia nueva. Hallazgo
+        # que motivó extenderlo: MOMENTUM acierta 59.6% cuando coincide con
+        # FAVORITO_CONFIRMADO vs 33.5% cuando no, n=649/537 shuffle p=0.0000
+        # -- pero TODO ese n viene de un único día, 17-Ago, así que aquí
+        # SOLO se loguea, no cambia prob_yes/decisión, deja que el
+        # aprendizaje causal lo confirme con varios días antes de plantear
+        # nada operativo). Un solo bloque para las 2 familias -- antes eran
+        # 2 copias literales, /code-review 18-Ago: cualquier fix futuro
+        # (como el de abajo) tenía que aplicarse dos veces o divergían.
+        # favorito_confirma_decision es un string (BUY_YES/BUY_NO/None) a
+        # propósito -- _extraer_features() en shadow_postmortem.py ahora
+        # salta claves no numéricas una a una en vez de abortar el dict
+        # entero (mismo /code-review), así que esta clave simplemente no
+        # participa en el aprendizaje causal numérico, solo queda como
+        # rastro legible en predictions.csv -- favorito_confirma_coincide
+        # (0/1) es la que sí alimenta IC_bucket.
+        if r[1] in (GBM_LATE_FAMILIA | MOMENTUM_BALLENA_FAMILIA) and r[11] != "SKIP":
             if favorito_row is not None:
                 feats["favorito_confirma_decision"] = favorito_row[11]
                 feats["favorito_confirma_coincide"] = 1 if favorito_row[11] == r[11] else 0
@@ -1961,7 +2117,24 @@ def s_updown_gbm(market, ctx, strategy_name: str = "UPDOWN_GBM"):
             return None
 
     # Spot actual: klines > precios_intraday
-    spot = ctx.get("spot_prices", {}).get(activo)
+    # 17-Ago (punto 4 calibración vs mercado, idea_tick_vs_twap_residuo_
+    # diagnosticado_17ago): TWAP real en vez de tick puntual, SOLO para
+    # slots 5/15min (única ventana con TWAP como resolutionSource real --
+    # hourly/daily resuelven por vela Binance, sin TWAP). Fail-open a la
+    # ruta de siempre (ctx["spot_prices"] -> precios_intraday) si no hay
+    # ticks suficientes -- mismo comportamiento exacto que antes.
+    # /code-review 18-Ago: `is None`, NO `not spot` -- consistente con
+    # _s_gbm_late (abajo). Un 0.0 real ya no puede salir de _precio_twap
+    # (los ticks <=0 se filtran al cargar), pero usar el mismo criterio
+    # en los dos sitios evita que un futuro cambio en uno diverja del otro.
+    spot = None
+    spot_es_twap = 0
+    if tipo == "slot" and ventana_min in (5, 15):
+        spot = _precio_twap(activo)
+        if spot is not None:
+            spot_es_twap = 1
+    if spot is None:
+        spot = ctx.get("spot_prices", {}).get(activo)
     if not spot:
         recientes = [(ts, p[activo]) for ts, p in precios_data if activo in p]
         if not recientes:
@@ -2137,6 +2310,7 @@ def s_updown_gbm(market, ctx, strategy_name: str = "UPDOWN_GBM"):
 
     features = {
         "pct_spot_vs_ref": round(pct, 4),
+        "spot_es_twap":    spot_es_twap,
         "sigma_h":         round(sigma_h, 6),
         "T_h":             round(T_h, 4),
         "hora_utc":        datetime.now(timezone.utc).hour,
@@ -4295,10 +4469,41 @@ def _s_gbm_late(market, ctx, ventana_min, rest_lo, rest_hi, espacio_k=None):
         return None
 
     precios_data = ctx.get("precios_intraday", [])
-    spot = _cargar_spot().get(activo)
+    # 17-Ago (punto 4 calibración vs mercado, idea_tick_vs_twap_residuo_
+    # diagnosticado_17ago): TWAP real en vez de tick puntual, SOLO para
+    # 5min/15min (única ventana con TWAP como resolutionSource real --
+    # 60min resuelve por vela Binance, sin TWAP, no se toca). Fail-open
+    # a _cargar_spot() si no hay ticks suficientes (activo sin feed
+    # oficial, cache vacío, fichero de hoy no accesible) -- mismo
+    # comportamiento exacto que antes de este cambio.
+    # /code-review 17-Ago: numérico (0/1), NUNCA string -- shadow_postmortem.py
+    # ::_extraer_features castea el dict de features ENTERO a float en una
+    # sola comprehension atómica; un valor no numérico ahí (ej. "twap")
+    # aborta toda la comprehension y deja features={} para la fila,
+    # silenciosamente (except capturado), vaciando el aprendizaje causal
+    # de TODA la familia GBM_LATE_* sin ningún error visible. Bug real
+    # encontrado por el review antes de commitear, no en producción.
+    spot_es_twap = 0
+    spot = None
+    if ventana_min in (5, 15):
+        spot = _precio_twap(activo)
+        if spot is not None:
+            spot_es_twap = 1
+    if spot is None:
+        spot = _cargar_spot().get(activo)
     if not spot or spot <= 0:
         return None
 
+    # ⚠️ /code-review 18-Ago, limitación conocida y ACEPTADA (no resuelta
+    # esta sesión -- rediseñarlo exige poder leer un rango histórico de
+    # chainlink_HOY.csv por timestamp sin reescanear el fichero completo,
+    # tarea aparte): cuando spot_es_twap=1, `spot` viene de Chainlink pero
+    # `ref` (abajo) sigue viniendo de precios_intraday (consenso Binance/
+    # Kraken/coingecko) -- mezcla de 2 feeds en el mismo pct/d_gbm. Ya hay
+    # precedente real de este tipo de ruido invirtiendo el orden percibido
+    # en nested_arb_sim.csv (ver fetch_chainlink_prices.py docstring). El
+    # feature `spot_es_twap` queda logueado precisamente para poder medir
+    # si esto importa en la práctica antes de acometer el rediseño.
     window_start = end_dt - timedelta(minutes=ventana_min)
     ref = _precio_en(activo, window_start, precios_data, tol_min=3)
     if ref is None or ref <= 0:
@@ -4481,6 +4686,7 @@ def _s_gbm_late(market, ctx, ventana_min, rest_lo, rest_hi, espacio_k=None):
         "subtype":  f"{activo}#{ventana_min}min",
         "features": {
             "drift_ventana_pct":   round(drift_ventana * 100, 4),
+            "spot_es_twap":        spot_es_twap,
             "restante_min":        round(restante_min, 2),
             "T_h":                 round(T_rem_h, 4),
             "sigma_h":             round(sigma_h, 5),
