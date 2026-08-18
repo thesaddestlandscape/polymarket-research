@@ -4181,7 +4181,7 @@
  "candidato_proxy#GBM_LATE_15M_ESPACIO_ATR#XRP#15min#XRP#BUY_YES#hora_utclt": false,
  "candidato_proxy#GBM_LATE_15M_TARDIO#XRP#15min#XRP#BUY_YES#sigma_hgt": false,
  "candidato_proxy#WEEKLY_PRICE#BTC#BUY_NO#T_hgt": false,
- "candidato_proxy#WEEKLY_PRICE#BTC#BTC#BUY_NO#pct_distabs_lt": false,
+ "candidato_proxy#WEEKLY_PRICE#BTC#BTC#BUY_NO#pct_distabs_lt": true,
  "candidato_proxy#WEEKLY_PRICE#ETH#BUY_NO#T_hgt": false,
  "candidato_proxy#GBM_LATE_15M_ESPACIO_ATR#ETH#15min#ETH#BUY_YES#dist_vwap_pctgt": false,
  "candidato_proxy#GBM_LATE_15M_ESPACIO_ATR#BTC#BUY_NO#sigma_ewma_delta_pctgt": false,
@@ -5239,5 +5239,17 @@
  "candidato_proxy#GBM_LATE_5M#BTC#BUY_NO#sigma_hlt": false,
  "FILTRO#candidato_proxy#MOMENTUM_IBS_5M_BALLENA#SOL#5min#SOL#BUY_YES#ibs_7minlt": false,
  "candidato_proxy#UPDOWN_GBM#XRP#15min#XRP#BUY_NO#drift_15minabs_lt": false,
- "FILTRO#candidato_proxy#UPDOWN_GBM_15M_TARDIO#ETH#15min#ETH#BUY_YES#dist_vwap_pctgt": false
+ "FILTRO#candidato_proxy#UPDOWN_GBM_15M_TARDIO#ETH#15min#ETH#BUY_YES#dist_vwap_pctgt": false,
+ "candidato_proxy#GBM_LATE_15M#BTC#15min#BTC#BUY_NO#volumen_regimenlt": false,
+ "candidato_proxy#GBM_LATE_15M#BTC#15min#BTC#BUY_NO#libro_liquidezgt": false,
+ "candidato_proxy#GBM_LATE_15M#DOGE#15min#DOGE#BUY_NO#hora_utcgt": false,
+ "FILTRO#candidato_proxy#GBM_LATE_15M_ESPACIO_ATR#ETH#15min#ETH#BUY_YES#ibs_20minlt": false,
+ "candidato_proxy#GBM_LATE_15M_MULTIHORIZONTE#XRP#15min#XRP#BUY_NO#libro_liquidezgt": false,
+ "FILTRO#candidato_proxy#MOMENTUM_IBS_5M_BALLENA#BNB#5min#BNB#BUY_YES#ibs_7minlt": false,
+ "FILTRO#candidato_proxy#MOMENTUM_IBS_5M_BALLENA#BTC#5min#BTC#BUY_YES#hora_utclt": false,
+ "FILTRO#candidato_proxy#MOMENTUM_IBS_5M_BALLENA#DOGE#BUY_YES#ibs_7minlt": false,
+ "FILTRO#candidato_proxy#MOMENTUM_IBS_5M_BALLENA#ETH#BUY_YES#py_entradalt": false,
+ "FILTRO#candidato_proxy#MOMENTUM_IBS_5M_BALLENA#ETH#5min#ETH#BUY_YES#libro_liquidezlt": false,
+ "candidato_proxy#MOMENTUM_IBS_5M_BALLENA#SOL#5min#SOL#BUY_NO#ballena_activa_nlt": false,
+ "candidato_proxy#MOMENTUM_IBS_5M_FADE#ETH#5min#ETH#BUY_NO#ibs_7minlt": false
 }
