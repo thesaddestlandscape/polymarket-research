@@ -1,4 +1,4 @@
-# Hipótesis automáticas — 2026-08-18 07:41 UTC
+# Hipótesis automáticas — 2026-08-18 07:43 UTC
 _Generado por shadow_postmortem.py sobre 60364 resoluciones (PNL=+6290.53€)_
 
 ## Patrones causales activos
@@ -2760,9 +2760,9 @@ _Generado por shadow_postmortem.py sobre 60364 resoluciones (PNL=+6290.53€)_
 
   - _Acción_: Kelly boost +0.83€ cuando `volumen_regimen` < 0.9523 (IC base=+0.105)
 
-- **PATRÓN** `volumen_pendiente_norm` < `0.1735` → IC=+0.132 (n=104)
+- **PATRÓN** `volumen_pendiente_norm` < `0.2426` → IC=+0.145 (n=119)
 
-  - _Acción_: Kelly boost +0.66€ cuando `volumen_pendiente_norm` < 0.1735 (IC base=+0.105)
+  - _Acción_: Kelly boost +0.72€ cuando `volumen_pendiente_norm` < 0.2426 (IC base=+0.105)
 
 - **PATRÓN** `volumen_spike_ratio` < `2.4757` → IC=+0.170 (n=98)
 
