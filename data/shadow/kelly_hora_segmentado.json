@@ -1,5 +1,5 @@
 {
-  "actualizado": "2026-08-18T19:46:55+00:00",
+  "actualizado": "2026-08-18T19:52:05+00:00",
   "aviso_fillability": "Gate riguroso = shadow puro (results.csv), NO verifica fill-ability. 27-Jul: VERIFICADO con datos reales -- uniendo libro_snapshots.csv (23 dias de chequeo de profundidad REAL contra la API del CLOB, no simulacion) con results.csv, el subconjunto GBM_LATE_15M realmente ejecutable en las horas 13/15/17/19h da n=45 hit=48.9% (coinflip) IC=-0.011 NO CONCLUYENTE en TODOS los criterios (Wilson cruza 0.5, no bate shuffle p=0.616, PnL bootstrap CI cruza 0) -- el edge que el gate shadow ve (GATE OK en 9 celdas) se evapora por completo al restringir a lo fillable de verdad. NO aplicar ninguna celda de esta familia a meta.hora_boost_factor sin repetir esta verificacion con n fresco. Ver idea_fillability_gbmlate_bucket_precio_23jul.",
   "celdas": {
     "ORDER_FLOW_5M##BUY_NO#13": {
@@ -1868,17 +1868,17 @@
       "veredicto": "ACUMULANDO (n<40)"
     },
     "FAVORITO_CONFIRMADO_5MIN_BAJALATENCIA#DOGE#5min#BUY_NO#19": {
-      "n": 45,
-      "hit": 0.6,
-      "ic": 0.0957446808510638,
-      "lo": 0.47751300226045257,
-      "hi": 0.7111424139055348,
-      "p_shuf": 0.112,
-      "veredicto": "NO CONCLUYENTE: Wilson cruza 0.5, no bate shuffle (p=0.112), PnL medio≤0 (-0.0613/trade)",
-      "pnl_media": -0.06129999999999997,
-      "pnl_lo": -0.26727111111111107,
-      "pnl_hi": 0.13568666666666668,
-      "pnl_pboot": 0.6978
+      "n": 46,
+      "hit": 0.6086956521739131,
+      "ic": 0.10416666666666663,
+      "lo": 0.4874627724880132,
+      "hi": 0.7178506358634178,
+      "p_shuf": 0.09,
+      "veredicto": "NO CONCLUYENTE: Wilson cruza 0.5, no bate shuffle (p=0.090), PnL medio≤0 (-0.0432/trade)",
+      "pnl_media": -0.04320434782608693,
+      "pnl_lo": -0.24753478260869563,
+      "pnl_hi": 0.1513826086956522,
+      "pnl_pboot": 0.6434
     },
     "FAVORITO_CONFIRMADO_5MIN_ALTACONVICCION#ETH#5min#BUY_YES#19": {
       "n": 39,
@@ -1997,6 +1997,12 @@
       "pnl_lo": -0.11456136363636361,
       "pnl_hi": 0.18385454545454546,
       "pnl_pboot": 0.3162
+    },
+    "FAVORITO_CONFIRMADO#DOGE#5min#BUY_NO#19": {
+      "n": 15,
+      "hit": 0.6,
+      "ic": 0.06617647058823531,
+      "veredicto": "ACUMULANDO (n<40)"
     },
     "FAVORITO_CONFIRMADO#XRP#5min#BUY_NO#19": {
       "n": 17,
