@@ -41,6 +41,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 
 REPO       = Path(__file__).parent
+REPO_WEATHER = Path("/root/polymarket-weather")
 LOG_FAST   = REPO / "logs" / "fast.log"
 LOG_LIVE   = REPO / "logs" / "live.log"
 LOG_SLOW   = REPO / "logs" / "slow.log"
@@ -147,6 +148,19 @@ SCREEN_RESTART = {
     # nested_arb_scanner.py (cadencia 1min, la más fina) se deja fuera a
     # propósito, sigue en su cron propio. Ver vigias_frecuentes_fase0.py.
     "vigiasfreq": f"cd {REPO} && nice -n 10 .venv/bin/python vigias_frecuentes_fase0.py >> logs/vigias_frecuentes_fase0.log 2>&1",
+    # dash-sports/dash-weather/sports-mirror/sports-ws/weather-mirror/
+    # weather-ws (18-Ago): 6 screens nuevas de la expansión a sports/esports
+    # y weather wallet-mirror en tiempo real -- lanzadas sin nice ni registro
+    # en este dict, mismo gap de sobresuscripción de CPU que el incidente
+    # 05-Ago (load5 hasta 6.77-10.59 en 2 cores, ratio hasta 5.3x). Ninguna
+    # ejecuta dinero real (100% DRY_RUN/dashboards de solo lectura) --
+    # niceadas igual que observadores/fetchers/ejecdryrun/vigiasfreq.
+    "dash-sports": f"cd {REPO} && nice -n 10 .venv/bin/python sports_dashboard_server.py >> logs/dashboard-sports.log 2>&1",
+    "sports-mirror": f"cd {REPO} && nice -n 10 .venv/bin/python sports_wallet_mirror_sniper.py >> logs/sports_wallet_mirror_sniper.log 2>&1",
+    "sports-ws": f"cd {REPO} && nice -n 10 .venv/bin/python sports_activity_ws.py >> logs/sports_activity_ws.log 2>&1",
+    "dash-weather": f"cd {REPO_WEATHER} && nice -n 10 .venv/bin/python dashboard_server.py >> logs/dashboard-weather.log 2>&1",
+    "weather-mirror": f"cd {REPO_WEATHER} && nice -n 10 .venv/bin/python weather_wallet_mirror_sniper.py >> logs/weather_wallet_mirror_sniper.log 2>&1",
+    "weather-ws": f"cd {REPO_WEATHER} && nice -n 10 .venv/bin/python weather_activity_ws.py >> logs/weather_activity_ws.log 2>&1",
 }
 
 # Cuando stdout está redirigido (screen >> watchdog.log), print() ya escribe al fichero
@@ -244,7 +258,8 @@ def check_screens() -> dict[str, bool]:
         r = subprocess.run(["screen", "-ls"], capture_output=True, text=True, timeout=5)
         output = r.stdout + r.stderr
         return {name: (f".{name}\t" in output or f".{name} " in output)
-                for name in ["fast", "slow", "control", "dash", "observadores", "ejeclive", "fetchers", "ejecdryrun", "walletmirror", "vigiasfreq"]}
+                for name in ["fast", "slow", "control", "dash", "observadores", "ejeclive", "fetchers", "ejecdryrun", "walletmirror", "vigiasfreq",
+                              "dash-sports", "dash-weather", "sports-mirror", "sports-ws", "weather-mirror", "weather-ws"]}
     except Exception:
         return {}
 
