@@ -71,6 +71,17 @@ PIPELINE_SCRIPTS = [
 SCREEN_RESTART = {
     "fast":    f"cd {REPO} && bash run_fast.sh >> logs/fast.log 2>&1",
     "slow":    f"cd {REPO} && bash run_slow.sh >> logs/slow.log 2>&1",
+    # mantenimiento (18-Ago): resolve/postmortem/resumen/git-batch,
+    # desacoplado de run_fast.sh para que predict/live_trade nunca se
+    # bloqueen -- ver run_fast_mantenimiento.sh. Reinicio real vía
+    # restart_screen()::name=="mantenimiento" más abajo (llama a
+    # restart_mantenimiento_seguro.sh, mismo patrón single-point-of-truth
+    # que 'fast') -- este comando de aquí NUNCA se ejecuta, solo existe
+    # para que la clave aparezca en SCREEN_RESTART y el chequeo genérico
+    # `if name in SCREEN_RESTART` de check_screens() dispare la llamada a
+    # restart_screen(). Sin nice: alimenta strategy_params.json, que
+    # live_trade.py consume, así que necesita correr con prontitud.
+    "mantenimiento": f"cd {REPO} && bash run_fast_mantenimiento.sh >> logs/fast.log 2>&1",
     "control": f"cd {REPO} && .venv/bin/python live_control.py >> logs/live_control.log 2>&1",
     "dash":    f"cd {REPO} && nice -n 10 python3 dashboard_server.py >> logs/dashboard.log 2>&1",
     # observadores (05-Ago): fusión de 10 procesos observacionales/FASE0
@@ -198,19 +209,52 @@ def ultimos_errores_log(n_lineas: int = 300) -> str:
         return ""
 
 
-def extraer_traceback(texto: str) -> str:
+# 18-Ago (/code-review, hallazgo real): logs/fast.log pasó de ser el log
+# de UN SOLO proceso a ser compartido por 'fast' (run_fast.sh) Y
+# 'mantenimiento' (run_fast_mantenimiento.sh, desacoplado el mismo día --
+# comparte el fichero a propósito, ver docstring ahí). El diagnóstico de
+# silencio de más abajo (consecutivos_silencio, basado SOLO en klines/
+# live.log, ambos exclusivos de 'fast') seguía correcto, pero
+# extraer_traceback() tomaba ciegamente el ÚLTIMO traceback del tail
+# compartido -- si 'mantenimiento' loguea un error real casi a la vez que
+# 'fast' se queda en silencio por otra causa, FIX-A podía aplicarse sobre
+# el traceback EQUIVOCADO (de shadow_postmortem.py, no de shadow_predict.py/
+# live_trade.py), retrasando el diagnóstico real del loop de dinero real.
+_SCRIPTS_FAST = ("fetch_binance_klines.py", "shadow_predict.py", "live_trade.py")
+
+
+def extraer_traceback(texto: str, scripts_permitidos: tuple[str, ...] | None = None) -> str:
+    """Devuelve el ÚLTIMO traceback del texto cuyo PUNTO DE ENTRADA (la
+    primera línea "File ..." del bloque, el script invocado directamente
+    por `$PYTHON script.py >> LOG`, no cualquier módulo importado dentro)
+    esté en `scripts_permitidos` -- None desactiva el filtro (comportamiento
+    original, usado para diagnósticos que no distinguen proceso).
+
+    18-Ago (2º /code-review, hallazgo real): la v1 de este filtro comprobaba
+    si CUALQUIER línea del bloque mencionaba un script permitido -- pero
+    shadow_resolve.py (que corre en 'mantenimiento') importa live_trade y
+    llama a live_trade._ejecutar_venta_temprana(), así que un traceback
+    originado en shadow_resolve.py con una llamada a esa función también
+    contenía "live_trade.py" en una línea intermedia y colaba el filtro.
+    La primera línea "File ..." es siempre el script que arrancó la
+    ejecución (frame más externo) -- ESA es la que identifica el proceso
+    real, no cualquier import que aparezca más abajo en la pila."""
     bloques = texto.split("Traceback")
-    if len(bloques) < 2:
-        return ""
-    ultimo = "Traceback" + bloques[-1]
-    lineas = ultimo.split("\n")
-    resultado = []
-    for l in lineas:
-        resultado.append(l)
-        if (l and not l.startswith(" ") and not l.startswith("Traceback")
-                and not l.startswith("File") and len(resultado) > 3):
-            break
-    return "\n".join(resultado[:25])
+    for bloque in reversed(bloques[1:]):
+        candidato = "Traceback" + bloque
+        if scripts_permitidos is not None:
+            m = re.search(r'File "([^"]+)"', candidato)
+            if not m or not any(s in m.group(1) for s in scripts_permitidos):
+                continue
+        lineas = candidato.split("\n")
+        resultado = []
+        for l in lineas:
+            resultado.append(l)
+            if (l and not l.startswith(" ") and not l.startswith("Traceback")
+                    and not l.startswith("File") and len(resultado) > 3):
+                break
+        return "\n".join(resultado[:25])
+    return ""
 
 
 # ──────────────────────────────────────────────────────────────────────────────
@@ -258,7 +302,7 @@ def check_screens() -> dict[str, bool]:
         r = subprocess.run(["screen", "-ls"], capture_output=True, text=True, timeout=5)
         output = r.stdout + r.stderr
         return {name: (f".{name}\t" in output or f".{name} " in output)
-                for name in ["fast", "slow", "control", "dash", "observadores", "ejeclive", "fetchers", "ejecdryrun", "walletmirror", "vigiasfreq",
+                for name in ["fast", "slow", "mantenimiento", "control", "dash", "observadores", "ejeclive", "fetchers", "ejecdryrun", "walletmirror", "vigiasfreq",
                               "dash-sports", "dash-weather", "sports-mirror", "sports-ws", "weather-mirror", "weather-ws"]}
     except Exception:
         return {}
@@ -292,6 +336,28 @@ def restart_screen(name: str) -> bool:
                 return False
         except Exception as e:
             log(f"  [SCREEN] Error ejecutando restart_fast_seguro.sh: {e}")
+            return False
+
+    # 'mantenimiento' (18-Ago): mismo motivo que 'fast' arriba -- este loop
+    # (cada 120s) y watchdog_fast.sh (cron */5min) son dos disparadores
+    # independientes que podrían crear una screen duplicada cada uno por su
+    # lado. restart_mantenimiento_seguro.sh es el único punto de verdad,
+    # compartido con watchdog_fast.sh -- no reimplementar la lógica aquí.
+    if name == "mantenimiento":
+        try:
+            r = subprocess.run(["bash", str(REPO / "restart_mantenimiento_seguro.sh")],
+                               timeout=30, capture_output=True, text=True)
+            if r.returncode == 0:
+                log("  [SCREEN] ✅ Screen 'mantenimiento' reiniciada (restart_mantenimiento_seguro.sh)")
+                return True
+            elif r.returncode == 1:
+                log("  [SCREEN] Reinicio de 'mantenimiento' pospuesto (otra invocación ya en marcha)")
+                return False
+            else:
+                log(f"  [SCREEN] restart_mantenimiento_seguro.sh falló (exit {r.returncode})")
+                return False
+        except Exception as e:
+            log(f"  [SCREEN] Error ejecutando restart_mantenimiento_seguro.sh: {e}")
             return False
 
     cmd = SCREEN_RESTART.get(name)
@@ -442,7 +508,8 @@ def check_results_growing():
         return
     age = time.time() - p.stat().st_mtime
     if age > RESOLVE_LAG_SECS:
-        log(f"  ⚠ results.csv sin actualizar hace {age/3600:.1f}h — shadow_resolve podría estar colgado")
+        log(f"  ⚠ results.csv sin actualizar hace {age/3600:.1f}h — shadow_resolve podría "
+            f"estar colgado (screen 'mantenimiento' desde el desacoplo 18-Ago, ya NO 'fast')")
 
 
 # ──────────────────────────────────────────────────────────────────────────────
@@ -784,13 +851,22 @@ def main():
             #      SCREEN_RESTART). Auto-reinicia solo screens de riesgo BAJO
             #      (control/dash/observadores/fetchers/ejecdryrun -- infra o
             #      DRY_RUN=True, verificado en sus propios docstrings).
-            #      NO_AUTO_RESTART_DINERO_REAL cubre fast/slow (no_restart=True
-            #      en verify_deploy.SCREENS, restart_fast_seguro.sh es el único
-            #      punto de verdad) Y los 4 ejecutores de baja latencia que SÍ
-            #      operan con DRY_RUN=False (10-Ago, corrección de un
-            #      comentario que afirmaba lo contrario, cazada por
-            #      /code-review antes de commitear: los 4 ejecutores ahora
-            #      viven consolidados en la screen "ejeclive", ver arriba).
+            #      NO_AUTO_RESTART_DINERO_REAL agrupa DOS motivos distintos
+            #      bajo un nombre que solo describe uno (/code-review 18-Ago,
+            #      aclarado aquí para que no se lea como "todos estos NUNCA
+            #      se reinician solos"): (a) fast/slow/mantenimiento --
+            #      marcadas shallow+no_restart=True en verify_deploy.SCREENS
+            #      porque son loops bash que invocan Python FRESCO cada
+            #      ciclo (~20-90s) -- "código en memoria desactualizado" no
+            #      aplica nunca, así que este camino de staleness (2b) no
+            #      tiene nada que hacer con ellas; SÍ se reinician solas por
+            #      la vía normal (check_screens(), sección 2 más abajo, o
+            #      restart_fast_seguro.sh/restart_mantenimiento_seguro.sh)
+            #      si la screen desaparece de verdad. (b) los 4 ejecutores
+            #      de baja latencia que SÍ operan con DRY_RUN=False (10-Ago,
+            #      consolidados en "ejeclive") -- estos SÍ son dinero real
+            #      de verdad, y aquí el motivo real es no reiniciar en medio
+            #      de un ciclo con posiciones abiertas sin revisión humana.
             #      Sin esta exclusión, cualquier commit que tocara un módulo
             #      en su cierre de imports habría hecho que este loop la
             #      reiniciara sola, sin revisión humana, en mitad de un
@@ -800,7 +876,7 @@ def main():
             #      como "NO reiniciada (dinero real, reinicia a mano si
             #      procede)", igual que antes de este cambio.
             NO_AUTO_RESTART_DINERO_REAL = {
-                "fast", "slow", "ejeclive",
+                "fast", "slow", "mantenimiento", "ejeclive",
             }
             try:
                 r = subprocess.run(
@@ -863,17 +939,44 @@ def main():
 
             # ── 3. Si hay silencio, buscar errores en fast.log ────────────────
             if consecutivos_silencio >= 2:
-                texto = ultimos_errores_log(400)
-                tb = extraer_traceback(texto)
+                # 800 (antes 400) -- /code-review 18-Ago: logs/fast.log pasó
+                # a ser compartido por 'fast' Y 'mantenimiento' (desacoplo del
+                # mismo día); con la ventana vieja, la salida intercalada de
+                # 'mantenimiento' podía empujar fuera del tail un traceback
+                # real de 'fast'. No elimina el riesgo del todo (ambos loops
+                # siguen compartiendo el mismo fichero sin separación), pero
+                # duplica el margen -- ver _SCRIPTS_FAST más abajo para el
+                # filtrado por script de origen, complementario a esto.
+                texto = ultimos_errores_log(800)
+                # Filtrado a scripts propios de 'fast' -- ver docstring de
+                # extraer_traceback()/_SCRIPTS_FAST arriba. FIX-A (más abajo)
+                # EDITA código en base a `tb`, así que aquí sí importa que
+                # sea el traceback correcto, no solo un log informativo.
+                tb = extraer_traceback(texto, scripts_permitidos=_SCRIPTS_FAST)
                 texto_reciente = texto[-4000:]
 
                 if "UnboundLocalError" in texto_reciente:
-                    log("🔴 UnboundLocalError en fast.log → aplicando FIX-A")
-                    if fix_unbound_local(tb or ultimos_errores_log(600)):
-                        commit_fix("UnboundLocalError eliminado (dead code)")
-                        consecutivos_silencio = 0
+                    # /code-review (18-Ago, hallazgo real): `tb or
+                    # ultimos_errores_log(600)` deshacía el filtro de arriba
+                    # en el momento exacto en que hacía falta -- si `tb`
+                    # sale vacío (el UnboundLocalError es de 'mantenimiento',
+                    # no de 'fast'), el fallback volvía a coger el tail SIN
+                    # filtrar, y FIX-A podía editar/commitear un fix sobre
+                    # el script EQUIVOCADO basado en un error ajeno. Sin
+                    # `tb` fast-atribuible, no hay nada seguro que arreglar
+                    # aquí -- se deja sin tocar (revisión manual), no se cae
+                    # a un texto sin filtrar solo por tener "algo" que pasar.
+                    if not tb:
+                        log("🔴 UnboundLocalError en fast.log, pero no atribuible a un script de "
+                            "'fast' (probable origen en 'mantenimiento', log compartido) -- "
+                            "FIX-A NO se aplica a ciegas, requiere revisión manual")
                     else:
-                        log("  FIX-A no aplicable automáticamente — requiere revisión manual")
+                        log("🔴 UnboundLocalError en fast.log → aplicando FIX-A")
+                        if fix_unbound_local(tb):
+                            commit_fix("UnboundLocalError eliminado (dead code)")
+                            consecutivos_silencio = 0
+                        else:
+                            log("  FIX-A no aplicable automáticamente — requiere revisión manual")
 
                 elif "SyntaxError" in texto_reciente:
                     m = re.search(r'File "([^"]+)", line (\d+)', texto_reciente)

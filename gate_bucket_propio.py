@@ -219,6 +219,45 @@ def _cargar() -> dict:
     return _cache["data"]
 
 
+def tiene_datos_propios(tupla_str: str) -> bool:
+    """False si `tupla_str` no tiene NINGÚN bucket con datos reales en
+    gate_bucket_propio.json -- clave ausente, o mapeada a un dict vacío
+    ({}, el placeholder de estrategias como WALLET_MIRROR que nunca
+    escriben en results.csv, ver analisis_gate_bucket_propio_28jul.py).
+    OJO: {} también es lo que escribe analisis_gate_bucket_propio_28jul.py
+    para CUALQUIER tupla con n<15 propio, no solo las estructuralmente
+    huérfanas -- una tupla recién promocionada que SÍ tiene cobertura vía
+    _zonas_validadas_externamente() da igualmente {} aquí. NO usar esta
+    función sola para decidir si el gate aplica (ver tiene_alguna_fuente_
+    evaluable), solo para inspección/diagnóstico."""
+    return bool(_cargar().get(tupla_str))
+
+
+def tiene_alguna_fuente_evaluable(tupla_str: str) -> bool:
+    """True si `evaluar(tupla_str, py)` puede dar un veredicto informado
+    para ALGÚN precio -- porque hay datos propios (tiene_datos_propios) O
+    porque hay una zona validada externamente para esta tupla (dato propio
+    todavía madurando, cubierto por _zonas_validadas_externamente()).
+
+    18-Ago (/code-review medium, hallazgo real): live_trade.py usaba
+    tiene_datos_propios() solo -- una tupla recién promocionada con n<15
+    propio pero YA con zona externa confirmada (el camino normal descrito
+    en CLAUDE.md pt. 'Veto de micro-bucket de precio') tiene {} en
+    gate_bucket_propio.json exactamente igual que WALLET_MIRROR (que
+    nunca escribe en results.csv y tiene su propio gate separado,
+    wallet_mirror_gate_bucket.py, aplicado río arriba) -- ambos casos
+    eran indistinguibles y el re-chequeo post-requote se saltaba entero
+    para los dos, dejando pasar cualquier precio de fill sin veto en la
+    tupla recién promocionada. Esta función solo excluye del re-chequeo
+    la situación verdaderamente estructural: sin dato propio Y sin ninguna
+    zona externa que pueda evaluarse -- ahí evaluar() no tiene NADA con lo
+    que emitir un veredicto salvo 'sin_concluir' fijo (que abortaría SIEMPRE
+    ese fill, el mismo efecto práctico que excluirla, pero explícito)."""
+    if tiene_datos_propios(tupla_str):
+        return True
+    return tupla_str in _zonas_validadas_externamente()
+
+
 def _regla_aplica(tupla_str: str, py: float):
     partes = tupla_str.split("#")
     if len(partes) != 4:

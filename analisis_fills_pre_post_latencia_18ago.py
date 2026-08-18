@@ -28,17 +28,7 @@ RESULTS = DIR / "data/shadow/results.csv"
 
 CORTE = "2026-07-24T04:00:00+00:00"
 
-PRIORIDAD = ["ejecutada", "fok_kill", "post_only_mode", "abort_requote",
-             "veto_profundidad", "veto_sin_datos", "veto_ballenas_debil",
-             "no_viable_stake", "veto_discrepancia_tuplas", "fuera_ventana",
-             "senal_caducada", "maker_colocada"]
-
-
-def _prio(motivo):
-    try:
-        return PRIORIDAD.index(motivo)
-    except ValueError:
-        return len(PRIORIDAD)
+from libro_snapshots_prioridad import PRIORIDAD, prio as _prio
 
 
 def _familia(strategy):

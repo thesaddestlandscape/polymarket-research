@@ -27,6 +27,8 @@ from pathlib import Path
 
 import requests
 
+from csv_lectura_tolerante import leer_csv_tolerante
+
 # Credenciales antes de leer POLY_DEPOSIT_WALLET en _fees_reales_recientes.
 # Fix 08-Jul (code-review): sin esto os.getenv devuelve None en producción
 # (run_fast.sh no exporta .env al proceso) y toda la confirmación de fee real
@@ -196,15 +198,36 @@ def _normalizar_pred(row: dict) -> dict:
 
 
 def cargar_predicciones_pendientes() -> list:
-    """Carga todas las predicciones que tengan decision != SKIP."""
+    """Carga todas las predicciones que tengan decision != SKIP.
+
+    18-Ago: lectura tolerante por FICHERO (no por fila -- un CSV con una
+    comilla sin cerrar por una escritura cortada a mitad hace que el
+    parser trague el resto del fichero como un solo campo, así que un
+    try/except por fila no protegería nada; el fichero entero es la
+    unidad de fallo real). Desde el desacoplo de run_fast_mantenimiento.sh
+    (predict/live_trade y resolve ya son procesos independientes, no
+    secuenciales dentro del mismo ciclo), shadow_predict.py puede estar A
+    MITAD de un predictions_HOY.csv.write() justo cuando este proceso lo
+    lee -- antes era imposible (todo corría en el mismo ciclo, secuencial).
+    csv_lectura_tolerante reintenta una vez tras 0.5s (una carrera de una
+    sola fila se cura sola en ese margen) y solo entonces se salta el
+    fichero, reportándolo como fallo persistente real (no oculto como
+    "probable concurrencia" para siempre, ver /code-review del mismo día)."""
     archivos = sorted(glob.glob(str(DIR_SHADOW / "predictions_*.csv")))
     pendientes = []
-    for arch in archivos:
+
+    def _parsear(arch: str) -> list:
+        filas = []
         with open(arch, encoding="utf-8") as f:
-            reader = csv.DictReader(f)
-            for row in reader:
+            for row in csv.DictReader(f):
                 if row.get("decision", "SKIP") in ("BUY_YES", "BUY_NO"):
-                    pendientes.append(_normalizar_pred(row))
+                    filas.append(_normalizar_pred(row))
+        return filas
+
+    for arch in archivos:
+        filas = leer_csv_tolerante(Path(arch), _parsear, log_fn=print)
+        if filas:
+            pendientes.extend(filas)
     return pendientes
 
 

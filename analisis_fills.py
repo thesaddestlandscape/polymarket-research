@@ -36,18 +36,7 @@ RESULTS = DIR / "data/shadow/results.csv"
 # la señal del bucket veto y el denominador del go/no-go se encogería durante
 # la vida del propio piloto. Los fills maker se analizan por trades.csv
 # (notas maker_pilot=1) y maker_orders.json, no por este CSV.
-PRIORIDAD = ["ejecutada", "fok_kill", "post_only_mode", "abort_requote",
-             "veto_profundidad", "veto_sin_datos", "veto_ballenas_debil",
-             "no_viable_stake", "veto_discrepancia_tuplas", "fuera_ventana",
-             "senal_caducada", "maker_colocada"]
-
-
-def _prio(motivo: str) -> int:
-    """Índice de prioridad tolerante a motivos nuevos no listados (al final)."""
-    try:
-        return PRIORIDAD.index(motivo)
-    except ValueError:
-        return len(PRIORIDAD)
+from libro_snapshots_prioridad import PRIORIDAD, prio as _prio
 N_MIN_DECISION = 30
 
 

@@ -48,8 +48,16 @@ CLIP_GRANDE_USD = 20  # umbral "clip grande": mediana observada de wowitsamazing
 N_MIN_LECTURA = 15
 N_MIN_DECISION = 30
 
-PRIORIDAD = ["ejecutada", "fok_kill", "abort_requote", "veto_profundidad",
-             "veto_sin_datos", "no_viable_stake", "fuera_ventana"]
+# 18-Ago (/code-review, 2ª ronda): subconjunto de libro_snapshots_
+# prioridad.PRIORIDAD (mismo orden relativo, este script solo distingue
+# estos 8 motivos -- ver docstring del módulo) derivado por filtro, no
+# copiado a mano, para no volver a divergir cuando se añada un motivo
+# nuevo al canónico (el mismo problema que motivó extraer ese módulo).
+from libro_snapshots_prioridad import PRIORIDAD as _PRIORIDAD_CANONICA
+
+_MOTIVOS_RELEVANTES = {"ejecutada", "fok_kill", "abort_requote", "abort_gate_bucket_postrequote",
+                       "veto_profundidad", "veto_sin_datos", "no_viable_stake", "fuera_ventana"}
+PRIORIDAD = [m for m in _PRIORIDAD_CANONICA if m in _MOTIVOS_RELEVANTES]
 
 
 def _prio(motivo: str) -> int:

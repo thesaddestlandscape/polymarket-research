@@ -70,6 +70,13 @@ SCREENS = {
     # Solo se vigila el .sh (sus hijos python son proceso fresco cada ciclo).
     "fast":    {"entry": "run_fast.sh", "shallow": True, "no_restart": True},
     "slow":    {"entry": "run_slow.sh", "shallow": True, "no_restart": True},
+    # mantenimiento (18-Ago): resolve/postmortem/resumen/git-batch,
+    # desacoplado de run_fast.sh -- ver run_fast_mantenimiento.sh y
+    # project_desacoplar_fast_loop_postmortem_18ago. No dinero real
+    # (no envía órdenes), pero tampoco se auto-reinicia a ciegas desde
+    # aquí -- mismo trato que fast/slow, watchdog_fast.sh/pipeline_
+    # watchdog.py lo cubren.
+    "mantenimiento": {"entry": "run_fast_mantenimiento.sh", "shallow": True, "no_restart": True},
 }
 
 IMPORT_RE = re.compile(r"^\s*(?:from|import)\s+([A-Za-z_]\w*)", re.MULTILINE)

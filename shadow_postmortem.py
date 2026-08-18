@@ -26,6 +26,7 @@ from pathlib import Path
 import numpy as np
 
 import gate_bucket_propio as _gbp
+from csv_lectura_tolerante import leer_csv_tolerante
 
 DIR_SHADOW      = Path("data/shadow")
 RESULTS_PATH    = DIR_SHADOW / "results.csv"
@@ -335,15 +336,33 @@ def _normalizar_pred(row: dict) -> dict:
 
 
 def cargar_predicciones_index() -> dict:
+    """18-Ago: lectura tolerante por FICHERO (mismo fix y mismo motivo que
+    shadow_resolve.py::cargar_predicciones_pendientes() -- desde el
+    desacoplo de run_fast_mantenimiento.sh, shadow_predict.py (proceso
+    independiente, screen 'fast') puede estar a mitad de un
+    predictions_HOY.csv.write() justo cuando este proceso lo lee.
+    csv_lectura_tolerante reintenta una vez tras 0.5s antes de saltar el
+    fichero y reportarlo como fallo persistente (no silenciado para
+    siempre como "probable concurrencia", ver /code-review del mismo día)."""
     index = {}
-    for arch in sorted(DIR_SHADOW.glob("predictions_*.csv")):
+
+    def _parsear(arch: Path) -> dict:
+        idx_local = {}
         with open(arch, encoding="utf-8") as f:
             for row in csv.DictReader(f):
                 if row.get("decision") in ("BUY_YES", "BUY_NO"):
                     row = _normalizar_pred(row)
                     clave = (row["strategy"], row["market_id"], row["decision"])
-                    if clave not in index:
-                        index[clave] = row
+                    if clave not in idx_local:
+                        idx_local[clave] = row
+        return idx_local
+
+    for arch in sorted(DIR_SHADOW.glob("predictions_*.csv")):
+        idx_arch = leer_csv_tolerante(arch, _parsear, log_fn=print)
+        if idx_arch:
+            for clave, row in idx_arch.items():
+                if clave not in index:
+                    index[clave] = row
     return index
 
 

@@ -18,6 +18,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 
 from data_quality import leer_estado_calidad
+from csv_lectura_tolerante import leer_csv_tolerante
 
 DIR_SHADOW   = Path("data/shadow")
 RESULTS_PATH = DIR_SHADOW / "results.csv"
@@ -97,16 +98,32 @@ def main():
         (r.get("prediction_timestamp",""), r.get("strategy",""), r.get("market_id",""))
         for r in resultados
     )
+    # 18-Ago: lectura tolerante por FICHERO -- mismo fix que shadow_resolve.py::
+    # cargar_predicciones_pendientes()/shadow_postmortem.py::
+    # cargar_predicciones_index(), mismo motivo (shadow_predict.py, proceso
+    # independiente desde el desacoplo de run_fast_mantenimiento.sh, puede
+    # estar a mitad de un predictions_HOY.csv.write() justo cuando este
+    # proceso lo lee). csv_lectura_tolerante reintenta una vez tras 0.5s
+    # antes de saltar el fichero y reportarlo como fallo persistente (no
+    # silenciado para siempre como "probable concurrencia").
     archivos_pred = sorted(glob.glob(str(DIR_SHADOW / "predictions_*.csv")))[-2:]
     abiertas = 0
-    for arch in archivos_pred:
+
+    def _contar_abiertas(arch: Path) -> int:
+        n = 0
         with open(arch, encoding="utf-8") as f:
             for row in csv.DictReader(f):
                 if row.get("decision","") not in ("BUY_YES","BUY_NO"):
                     continue
                 clave = (row.get("timestamp_utc",""), row.get("strategy",""), row.get("market_id",""))
                 if clave not in resueltos_ids:
-                    abiertas += 1
+                    n += 1
+        return n
+
+    for arch in archivos_pred:
+        n_arch = leer_csv_tolerante(Path(arch), _contar_abiertas, log_fn=print)
+        if n_arch:
+            abiertas += n_arch
 
     # ── Construir Markdown ────────────────────────────────────────────────────
     ts = ahora.strftime("%Y-%m-%d %H:%M UTC")

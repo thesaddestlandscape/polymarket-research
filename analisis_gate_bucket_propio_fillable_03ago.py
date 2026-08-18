@@ -54,8 +54,15 @@ P_MAX = 0.05
 ITERS = 1000
 RATIO_MIN = 5.0
 
-PRIORIDAD_LIVE = ["ejecutada", "abort_requote", "fok_kill"]
-PRIORIDAD_COLAPSO = ["ejecutada", "veto_profundidad", "abort_requote", "fok_kill",
+# 18-Ago (/code-review): NO se comparten con libro_snapshots_prioridad.py
+# a propósito -- ambas listas tienen orden relativo PROPIO, distinto del
+# canónico (ej. fok_kill va DESPUÉS de abort_requote aquí, antes en el
+# canónico), y PRIORIDAD_COLAPSO incluye "candidato_evaluacion", que ni
+# existe en el canónico. No son subconjuntos filtrables -- forzar el
+# import cambiaría el desempate real de este script.
+PRIORIDAD_LIVE = ["ejecutada", "abort_requote", "abort_gate_bucket_postrequote", "fok_kill"]
+PRIORIDAD_COLAPSO = ["ejecutada", "veto_profundidad", "abort_requote",
+                      "abort_gate_bucket_postrequote", "fok_kill",
                       "veto_sin_datos", "senal_caducada", "no_viable_stake",
                       "candidato_evaluacion", "fuera_ventana"]
 

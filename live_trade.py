@@ -2192,6 +2192,104 @@ def _ejecutar_orden_polymarket(market_id: str, direction: str,
                     "fee_eur": 0.0, "error": f"requote: {motivo_rq}",
                 }
 
+        # Re-chequeo de gate_bucket_propio con el precio REAL post-requote
+        # (18-Ago, petición explícita Javi tras un hallazgo real: señal
+        # BALLENAS_TARDIAS#DOGE#5min#BUY_YES a py=0.58 (bucket [0.55,0.60)
+        # bueno_confirmado) pero el fill real llegó a 0.54 (bucket
+        # [0.50,0.55) sin_concluir) -- el gate solo se evaluaba en
+        # _registrar_prediccion() con el precio de SEÑAL, nunca se
+        # revalidaba con el precio de FILL. Un solo punto de fix aquí
+        # cubre a TODOS los ejecutores por igual: _ejecutar_orden_
+        # polymarket() es la función compartida que usan tanto
+        # live_trade.py::main() como los 5 ejecutores de baja latencia
+        # (ballenas_executor_5min/btc15m, favorito_confirmado_
+        # btc60min_buyno_executor, favorito_altaconviccion_executor_15min,
+        # wallet_mirror_executor_dryrun) -- "todas las veces, en todas
+        # las estrategias" sin tener que tocar cada uno por separado.
+        #
+        # 18-Ago (/code-review, hallazgo real): este bloque vivía DENTRO
+        # de `if edge_dir is not None:` de arriba -- cualquier caller que
+        # omitiera edge_dir (existe al menos un camino real: wallet_mirror_
+        # executor_dryrun.py salta el requote sin edge_dir en algún caso)
+        # se saltaba el chequeo por completo, en silencio, contradiciendo
+        # "cubre a TODOS los ejecutores". Sacado fuera del if: usa `precio`
+        # tal cual esté en ese momento -- ya requoteado si edge_dir se pasó,
+        # o el de la señal (precio_plan) si no -- así el gate SIEMPRE se
+        # evalúa, con el mejor precio disponible en cada caso.
+        #
+        # Solo aplica a tuplas YA en pares_permitidos_live (mismo criterio
+        # fail-closed que el resto de vetos de micro-bucket; los candidatos
+        # en DRY_RUN siguen sin restricción para poder acumular evidencia).
+        # py_actual convierte el precio del TOKEN (precio, en espacio YES
+        # si BUY_YES o espacio NO si BUY_NO) de vuelta a perspectiva YES,
+        # la misma convención que usa gate_bucket_propio.json (CLAUDE.md:
+        # "edge_neto SIEMPRE en perspectiva YES").
+        ctx_gate = contexto or {}
+        # WALLET_MIRROR usa BUY_Up/BUY_Down en vez de BUY_YES/BUY_NO en sus
+        # claves de gate_bucket_propio.json (outcome real de la wallet
+        # seguida, ver wallet_mirror_executor_dryrun.py::tupla_sintetica) --
+        # solo afecta al FORMATO del string a buscar, no a si el chequeo
+        # aplica (eso lo decide tiene_datos_propios() más abajo, de forma
+        # genérica).
+        if ctx_gate.get("strategy") == "WALLET_MIRROR":
+            lado = "Up" if direction == "BUY_YES" else "Down"
+            tupla_str_gate = f"WALLET_MIRROR#{ctx_gate.get('subtype', '')}#BUY_{lado}"
+        else:
+            tupla_str_gate = f"{ctx_gate.get('strategy', '')}#{ctx_gate.get('subtype', '')}#{direction}"
+        # /code-review (18-Ago, hallazgo real): excluir por nombre de
+        # estrategia ("== WALLET_MIRROR") no generaliza -- cualquier FUTURA
+        # estrategia con la misma forma (tupla sintética que nunca escribe
+        # en results.csv, así que su entrada en gate_bucket_propio.json es
+        # un placeholder vacío {}) quedaría 100% bloqueada del mismo modo,
+        # exigiendo acordarse de hardcodear otro nombre.
+        #
+        # /code-review medium (18-Ago, hallazgo real #2): tiene_datos_propios()
+        # a secas también excluía a cualquier tupla recién promocionada con
+        # n<15 propio pero YA cubierta por zona validada externamente (el
+        # camino normal de promoción, CLAUDE.md pt. "Veto de micro-bucket de
+        # precio") -- {} en el JSON es indistinguible entre "estructural,
+        # sin mecanismo propio" (WALLET_MIRROR) y "madurando, con zona
+        # externa" (tupla nueva). tiene_alguna_fuente_evaluable() distingue
+        # los dos: solo excluye el caso verdaderamente estructural (ni dato
+        # propio ni zona externa), así que una tupla nueva con zona externa
+        # confirmada SÍ pasa por evaluar() y se abortaría igual que
+        # cualquier otra si esa zona no cubre el precio real de fill.
+        if not _gbp.tiene_alguna_fuente_evaluable(tupla_str_gate):
+            tupla_str_gate = None
+        # Reusa config_vb (ya cargado arriba en esta misma invocación,
+        # línea ~2061) -- evita un segundo disco+json.load redundante en
+        # un camino caliente (hasta 4 reintentos/~20s, 6+ ejecutores).
+        pares_ok_gate = set(config_vb.get("pares_permitidos_live", []))
+        if tupla_str_gate is not None and tupla_str_gate in pares_ok_gate:
+            # Límite aceptado (/code-review, mismo día): py_actual usa el
+            # mejor ask del snapshot pre-trade (`precio`, ya requoteado si
+            # hubo edge_dir), no el precio medio de fill real confirmado
+            # por el CLOB -- para una orden que tuviera que caminar varios
+            # niveles del libro, el fill medio real podría caer en un
+            # bucket distinto. Riesgo acotado por el veto de profundidad
+            # ya aplicado ANTES de este punto (ratio_vs_stake >= min_ratio,
+            # hoy 5x el stake -- garantiza liquidez de sobra en ese nivel
+            # de precio antes de llegar aquí), y es la MISMA limitación que
+            # ya acepta _decidir_requote() (edge también se valida contra
+            # el mismo snapshot, nunca contra el fill confirmado). No se
+            # resuelve aquí -- requeriría re-arquitecturar la validación a
+            # post-fill (la orden ya estaría ejecutada, sin poder abortar).
+            py_actual = precio if direction == "BUY_YES" else round(1.0 - precio, 6)
+            gate_bp_post = _gbp.evaluar(tupla_str_gate, py_actual)
+            if gate_bp_post["veredicto"] != "bueno_confirmado":
+                log(f"  ⛔ Re-chequeo gate_bucket_propio post-requote: "
+                    f"py_actual={py_actual:.4f} (señal py={precio_plan if direction=='BUY_YES' else round(1.0-precio_plan,6):.4f}) "
+                    f"veredicto={gate_bp_post['veredicto']} (no bueno_confirmado) -- no se ejecuta")
+                _registrar_snapshot_libro("abort_gate_bucket_postrequote", market_id, direction,
+                                          precio_plan, stake_eur, depth, contexto)
+                return {
+                    "ok": False, "no_fill": True, "gate_bucket_postrequote": True,
+                    "order_id": None, "entry_price": entry_price,
+                    "fee_eur": 0.0,
+                    "error": f"gate_bucket_propio post-requote: py_actual={py_actual:.4f} "
+                             f"veredicto={gate_bp_post['veredicto']}",
+                }
+
         # Estimación Kyle (10-Jul, solo logging — ver _estimar_slip_kyle):
         # ratio del snapshot de profundidad YA calculado arriba, antes del
         # requote. No cambia ninguna decisión, se compara con slip_real real
