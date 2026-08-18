@@ -1,9 +1,9 @@
 {
-  "timestamp_utc": "2026-08-18T12:49:22+00:00",
-  "bankroll_sim": 17725.55,
-  "pnl_total": 17705.55,
-  "n_ops": 170999,
-  "win_rate": 0.6021,
+  "timestamp_utc": "2026-08-18T12:56:52+00:00",
+  "bankroll_sim": 17749.16,
+  "pnl_total": 17729.16,
+  "n_ops": 171104,
+  "win_rate": 0.602,
   "estrategias_activas": 493,
   "desactivadas": [
     "SMART_FLOW_1H",
@@ -55,11 +55,11 @@
     }
   ],
   "brier_medio": 0.2349,
-  "clv_medio": 0.0335,
+  "clv_medio": 0.0336,
   "monitor_5min": {
     "ou_5m": {
-      "n": 729,
-      "clv": -0.1088,
+      "n": 730,
+      "clv": -0.108,
       "clv_ult30": -0.0327
     },
     "of_buy_yes": {
