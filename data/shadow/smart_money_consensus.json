@@ -1,45 +1,38 @@
 {
   "BTC": {
-    "smart_money_consensus": -0.0243,
-    "n_trades_smart": 863,
-    "n_wallets_smart": 11,
-    "smart_money_consensus_ponderado": -0.0518,
-    "n_wallets_smart_ponderado": 11
-  },
-  "BNB": {
-    "smart_money_consensus": -0.1176,
-    "n_trades_smart": 68,
-    "n_wallets_smart": 4,
-    "smart_money_consensus_ponderado": -0.1253,
-    "n_wallets_smart_ponderado": 4
-  },
-  "XRP": {
-    "smart_money_consensus": -0.1196,
-    "n_trades_smart": 184,
-    "n_wallets_smart": 7,
-    "smart_money_consensus_ponderado": 0.0673,
-    "n_wallets_smart_ponderado": 7
-  },
-  "ETH": {
-    "smart_money_consensus": 0.0528,
-    "n_trades_smart": 815,
-    "n_wallets_smart": 9,
-    "smart_money_consensus_ponderado": 0.0942,
-    "n_wallets_smart_ponderado": 9
-  },
-  "SOL": {
-    "smart_money_consensus": 0.0945,
-    "n_trades_smart": 201,
-    "n_wallets_smart": 7,
-    "smart_money_consensus_ponderado": -0.0073,
-    "n_wallets_smart_ponderado": 7
+    "smart_money_consensus": 0.1037,
+    "n_trades_smart": 781,
+    "n_wallets_smart": 5,
+    "smart_money_consensus_ponderado": 0.2506,
+    "n_wallets_smart_ponderado": 5
   },
   "DOGE": {
-    "smart_money_consensus": -0.0588,
-    "n_trades_smart": 51,
+    "smart_money_consensus": -0.3333,
+    "n_trades_smart": 3,
+    "n_wallets_smart": 1,
+    "smart_money_consensus_ponderado": -0.3398,
+    "n_wallets_smart_ponderado": 1
+  },
+  "BNB": {
+    "smart_money_consensus": 0.0,
+    "n_trades_smart": 2,
+    "n_wallets_smart": 1,
+    "smart_money_consensus_ponderado": 0.5964,
+    "n_wallets_smart_ponderado": 1
+  },
+  "XRP": {
+    "smart_money_consensus": -1.0,
+    "n_trades_smart": 2,
+    "n_wallets_smart": 1,
+    "smart_money_consensus_ponderado": -1.0,
+    "n_wallets_smart_ponderado": 1
+  },
+  "ETH": {
+    "smart_money_consensus": -0.2927,
+    "n_trades_smart": 410,
     "n_wallets_smart": 2,
-    "smart_money_consensus_ponderado": -0.0982,
+    "smart_money_consensus_ponderado": -0.3992,
     "n_wallets_smart_ponderado": 2
   },
-  "_actualizado": "2026-08-18T16:01:50+00:00"
+  "_actualizado": "2026-08-18T16:21:30+00:00"
 }
