@@ -4181,7 +4181,7 @@
  "candidato_proxy#GBM_LATE_15M_ESPACIO_ATR#XRP#15min#XRP#BUY_YES#hora_utclt": false,
  "candidato_proxy#GBM_LATE_15M_TARDIO#XRP#15min#XRP#BUY_YES#sigma_hgt": false,
  "candidato_proxy#WEEKLY_PRICE#BTC#BUY_NO#T_hgt": false,
- "candidato_proxy#WEEKLY_PRICE#BTC#BTC#BUY_NO#pct_distabs_lt": false,
+ "candidato_proxy#WEEKLY_PRICE#BTC#BTC#BUY_NO#pct_distabs_lt": true,
  "candidato_proxy#WEEKLY_PRICE#ETH#BUY_NO#T_hgt": false,
  "candidato_proxy#GBM_LATE_15M_ESPACIO_ATR#ETH#15min#ETH#BUY_YES#dist_vwap_pctgt": false,
  "candidato_proxy#GBM_LATE_15M_ESPACIO_ATR#BTC#BUY_NO#sigma_ewma_delta_pctgt": false,
@@ -4735,7 +4735,7 @@
  "candidato_proxy#GBM_LATE_15M_MULTIHORIZONTE#BTC#BUY_NO#sigma_hgt": false,
  "candidato_proxy#GBM_LATE_15M_MULTIHORIZONTE#DOGE#BUY_YES#hora_utclt": false,
  "candidato_proxy#GBM_LATE_15M_MULTIHORIZONTE#XRP#BUY_NO#sigma_ewma_delta_pctlt": false,
- "candidato_proxy#GBM_LATE_15M_MULTIHORIZONTE#XRP#BUY_NO#ibs_20minlt": true,
+ "candidato_proxy#GBM_LATE_15M_MULTIHORIZONTE#XRP#BUY_NO#ibs_20minlt": false,
  "candidato_proxy#GBM_LATE_15M_TARDIO#XRP#15min#XRP#BUY_NO#ibs_20minlt": false,
  "FILTRO#candidato_proxy#UPDOWN_GBM#SOL#15min#SOL#BUY_NO#sigma_hlt": false,
  "candidato_proxy#GBM_LATE_15M_ESPACIO_ATR#BNB#BUY_YES#libro_spreadlt": false,
@@ -5330,5 +5330,13 @@
  "candidato_proxy#UPDOWN_GBM#BTC#5min#BTC#BUY_NO#drift_60minabs_lt": false,
  "candidato_proxy#UPDOWN_GBM#ETH#5min#ETH#BUY_NO#delta_ratio_macroabs_gt": false,
  "candidato_proxy#UPDOWN_GBM#ETH#5min#ETH#BUY_NO#ibs_15gt": false,
- "candidato_proxy#UPDOWN_GBM_IBS_ALTO#BTC#BUY_YES#delta_ratio_macroabs_gt": false
+ "candidato_proxy#UPDOWN_GBM_IBS_ALTO#BTC#BUY_YES#delta_ratio_macroabs_gt": false,
+ "candidato_proxy#GBM_LATE_15M#BTC#BUY_YES#volumen_regimengt": false,
+ "FILTRO#candidato_proxy#GBM_LATE_15M_MULTIHORIZONTE#SOL#15min#SOL#BUY_YES#ibs_20minlt": false,
+ "candidato_proxy#GBM_LATE_5M#BTC#BUY_NO#drift_60minabs_lt": false,
+ "candidato_proxy#MOMENTUM_IBS_15M_BALLENA#ETH#15min#ETH#BUY_NO#hora_utclt": false,
+ "FILTRO#candidato_proxy#MOMENTUM_IBS_5M_BALLENA#BTC#BUY_YES#py_entradalt": false,
+ "FILTRO#candidato_proxy#MOMENTUM_IBS_5M_BALLENA#DOGE#5min#DOGE#BUY_YES#ibs_7minlt": false,
+ "FILTRO#candidato_proxy#MOMENTUM_IBS_5M_BALLENA#ETH#5min#ETH#BUY_YES#drift_7min_pctabs_gt": false,
+ "FILTRO#candidato_proxy#MOMENTUM_IBS_5M_BALLENA#SOL#BUY_YES#ibs_7minlt": false
 }
