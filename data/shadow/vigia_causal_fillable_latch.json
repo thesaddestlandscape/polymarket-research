@@ -4849,7 +4849,7 @@
  "candidato_proxy#FAVORITO_CONFIRMADO_15MIN_ALTACONVICCION#DOGE#BUY_YES#hora_utclt": false,
  "candidato_proxy#FAVORITO_CONFIRMADO_15MIN_ALTACONVICCION#DOGE#BUY_YES#py_entradagt": true,
  "candidato_proxy#FAVORITO_CONFIRMADO_15MIN_ALTACONVICCION#DOGE#15min#DOGE#BUY_YES#hora_utclt": false,
- "candidato_proxy#FAVORITO_CONFIRMADO_15MIN_ALTACONVICCION#DOGE#15min#DOGE#BUY_YES#py_entradagt": false,
+ "candidato_proxy#FAVORITO_CONFIRMADO_15MIN_ALTACONVICCION#DOGE#15min#DOGE#BUY_YES#py_entradagt": true,
  "candidato_proxy#FAVORITO_CONFIRMADO_15MIN_ALTACONVICCION#ETH#BUY_YES#hora_utclt": false,
  "candidato_proxy#FAVORITO_CONFIRMADO_15MIN_ALTACONVICCION#ETH#BUY_YES#py_entradagt": false,
  "candidato_proxy#FAVORITO_CONFIRMADO_15MIN_ALTACONVICCION#ETH#15min#ETH#BUY_YES#hora_utclt": false,
@@ -5532,5 +5532,11 @@
  "FILTRO#candidato_proxy#MOMENTUM_IBS_15M_BALLENA#XRP#15min#XRP#BUY_YES#py_entradalt": false,
  "FILTRO#candidato_proxy#MOMENTUM_IBS_5M_BALLENA#BNB#5min#BNB#BUY_YES#drift_7min_pctabs_gt": false,
  "FILTRO#candidato_proxy#MOMENTUM_IBS_5M_BALLENA#ETH#BUY_NO#py_entradagt": false,
- "candidato_proxy#UPDOWN_GBM#ETH#60min#ETH#BUY_YES#delta_ratio_macroabs_gt": false
+ "candidato_proxy#UPDOWN_GBM#ETH#60min#ETH#BUY_YES#delta_ratio_macroabs_gt": false,
+ "candidato_proxy#GBM_LATE_15M#DOGE#15min#DOGE#BUY_YES#volumen_pendiente_normgt": false,
+ "candidato_proxy#GBM_LATE_15M_MULTIHORIZONTE#DOGE#15min#DOGE#BUY_YES#sigma_hlt": false,
+ "FILTRO#candidato_proxy#MOMENTUM_IBS_15M_BALLENA#BNB#BUY_YES#hora_utclt": false,
+ "FILTRO#candidato_proxy#MOMENTUM_IBS_15M_BALLENA#BNB#15min#BNB#BUY_YES#py_entradagt": false,
+ "candidato_proxy#UPDOWN_GBM#BTC#5min#BTC#BUY_NO#pct_spot_vs_refabs_lt": false,
+ "FILTRO#candidato_proxy#UPDOWN_GBM#BTC#15min#BTC#BUY_NO#ibs_15lt": false
 }
