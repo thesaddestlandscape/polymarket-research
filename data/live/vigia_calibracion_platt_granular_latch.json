@@ -698,5 +698,17 @@
   "GBM_LATE_15M_PYCONFIRMADO#SOL#15min": {
     "n": 215,
     "confirmado": false
+  },
+  "UPDOWN_GBM#DOGE#5min": {
+    "n": 235,
+    "confirmado": false
+  },
+  "UPDOWN_OU_5M#BNB": {
+    "n": 205,
+    "confirmado": false
+  },
+  "UPDOWN_OU_5M#BNB#5min": {
+    "n": 205,
+    "confirmado": false
   }
 }
