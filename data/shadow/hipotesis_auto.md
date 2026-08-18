@@ -1,5 +1,5 @@
-# Hipótesis automáticas — 2026-08-18 08:49 UTC
-_Generado por shadow_postmortem.py sobre 61007 resoluciones (PNL=+6441.92€)_
+# Hipótesis automáticas — 2026-08-18 08:54 UTC
+_Generado por shadow_postmortem.py sobre 61061 resoluciones (PNL=+6447.79€)_
 
 ## Patrones causales activos
 
@@ -114,10 +114,10 @@ _Generado por shadow_postmortem.py sobre 61007 resoluciones (PNL=+6441.92€)_
   - _Acción_: Kelly boost +0.71€ cuando `py_entrada` < 0.495 (IC base=-0.020)
 
 ### BALLENAS_TARDIAS
-- **FILTRO** `restante_s_al_confirmar` < `144.23` → IC=-0.267 (n=800)
+- **FILTRO** `restante_s_al_confirmar` < `144.24` → IC=-0.267 (n=801)
 
-  - _Acción_: SKIP cuando `restante_s_al_confirmar` < 144.23
-  - _Potencial_: sin este filtro IC_bueno=-0.066 (n=2403)
+  - _Acción_: SKIP cuando `restante_s_al_confirmar` < 144.24
+  - _Potencial_: sin este filtro IC_bueno=-0.066 (n=2404)
 
 ### BALLENAS_TARDIAS#BNB#5min
 - **FILTRO** `restante_s_al_confirmar` < `113.6` → IC=-0.400 (n=88)
@@ -138,10 +138,10 @@ _Generado por shadow_postmortem.py sobre 61007 resoluciones (PNL=+6441.92€)_
   - _Potencial_: sin este filtro IC_bueno=+0.108 (n=151)
 
 ### BALLENAS_TARDIAS#ETH#5min
-- **FILTRO** `restante_s_al_confirmar` < `244.14` → IC=-0.159 (n=546)
+- **FILTRO** `restante_s_al_confirmar` < `243.99` → IC=-0.159 (n=546)
 
-  - _Acción_: SKIP cuando `restante_s_al_confirmar` < 244.14
-  - _Potencial_: sin este filtro IC_bueno=-0.065 (n=182)
+  - _Acción_: SKIP cuando `restante_s_al_confirmar` < 243.99
+  - _Potencial_: sin este filtro IC_bueno=-0.068 (n=183)
 
 ### BALLENAS_TARDIAS#SOL#5min
 - **FILTRO** `restante_s_al_confirmar` < `140.27` → IC=-0.207 (n=189)
@@ -153,40 +153,40 @@ _Generado por shadow_postmortem.py sobre 61007 resoluciones (PNL=+6441.92€)_
 - **FILTRO** `restante_s_al_confirmar` < `156.97` → IC=-0.264 (n=155)
 
   - _Acción_: SKIP cuando `restante_s_al_confirmar` < 156.97
-  - _Potencial_: sin este filtro IC_bueno=-0.202 (n=465)
+  - _Potencial_: sin este filtro IC_bueno=-0.203 (n=466)
 
 ### FAVORITO_CONFIRMADO
-- **PATRÓN** `py_entrada` > `0.7` → IC=+0.206 (n=2115)
+- **PATRÓN** `py_entrada` > `0.7` → IC=+0.205 (n=2116)
 
-  - _Acción_: Kelly boost +1.00€ cuando `py_entrada` > 0.7 (IC base=+0.097)
+  - _Acción_: Kelly boost +1.00€ cuando `py_entrada` > 0.7 (IC base=+0.096)
 
 - **PATRÓN** `libro_spread` < `0.01` → IC=+0.162 (n=1138)
 
-  - _Acción_: Kelly boost +0.81€ cuando `libro_spread` < 0.01 (IC base=+0.097)
+  - _Acción_: Kelly boost +0.81€ cuando `libro_spread` < 0.01 (IC base=+0.096)
 
 - **PATRÓN** `libro_liquidez` > `2371.8427` → IC=+0.165 (n=1103)
 
-  - _Acción_: Kelly boost +0.83€ cuando `libro_liquidez` > 2371.8427 (IC base=+0.097)
+  - _Acción_: Kelly boost +0.83€ cuando `libro_liquidez` > 2371.8427 (IC base=+0.096)
 
-- **PATRÓN** `hora_utc` > `7.0` → IC=+0.152 (n=3566)
+- **PATRÓN** `hora_utc` > `7.0` → IC=+0.152 (n=3568)
   - _Por qué funciona_: hora tardía/noche → sesión US cerrada, menos participantes informados; señales más ruidosas
-  - _Acción_: Kelly boost +0.76€ cuando `hora_utc` > 7.0 (IC base=+0.147)
+  - _Acción_: Kelly boost +0.76€ cuando `hora_utc` > 7.0 (IC base=+0.148)
 
-- **PATRÓN** `hora_utc` < `11.0` → IC=+0.152 (n=2771)
+- **PATRÓN** `hora_utc` < `11.0` → IC=+0.152 (n=2773)
   - _Por qué funciona_: hora temprana → mercados cripto menos líquidos, spreads más amplios; edge real menor
-  - _Acción_: Kelly boost +0.76€ cuando `hora_utc` < 11.0 (IC base=+0.147)
+  - _Acción_: Kelly boost +0.76€ cuando `hora_utc` < 11.0 (IC base=+0.148)
 
 - **PATRÓN** `py_entrada` < `0.335` → IC=+0.282 (n=1326)
 
-  - _Acción_: Kelly boost +1.00€ cuando `py_entrada` < 0.335 (IC base=+0.147)
+  - _Acción_: Kelly boost +1.00€ cuando `py_entrada` < 0.335 (IC base=+0.148)
 
 - **PATRÓN** `libro_spread` < `0.02` → IC=+0.185 (n=1965)
 
-  - _Acción_: Kelly boost +0.92€ cuando `libro_spread` < 0.02 (IC base=+0.147)
+  - _Acción_: Kelly boost +0.92€ cuando `libro_spread` < 0.02 (IC base=+0.148)
 
 - **PATRÓN** `libro_liquidez` > `4023.461` → IC=+0.174 (n=795)
 
-  - _Acción_: Kelly boost +0.87€ cuando `libro_liquidez` > 4023.461 (IC base=+0.147)
+  - _Acción_: Kelly boost +0.87€ cuando `libro_liquidez` > 4023.461 (IC base=+0.148)
 
 ### FAVORITO_CONFIRMADO#BTC#15min
 - **PATRÓN** `hora_utc` > `17.0` → IC=+0.227 (n=119)
@@ -369,7 +369,7 @@ _Generado por shadow_postmortem.py sobre 61007 resoluciones (PNL=+6441.92€)_
   - _Por qué funciona_: hora temprana → mercados cripto menos líquidos, spreads más amplios; edge real menor
   - _Acción_: Kelly boost +0.99€ cuando `hora_utc` < 7.0 (IC base=+0.183)
 
-- **PATRÓN** `py_entrada` < `0.7` → IC=+0.186 (n=943)
+- **PATRÓN** `py_entrada` < `0.7` → IC=+0.186 (n=944)
 
   - _Acción_: Kelly boost +0.93€ cuando `py_entrada` < 0.7 (IC base=+0.183)
 
@@ -382,13 +382,13 @@ _Generado por shadow_postmortem.py sobre 61007 resoluciones (PNL=+6441.92€)_
   - _Acción_: Kelly boost +1.00€ cuando `libro_liquidez` > 3268.7028 (IC base=+0.183)
 
 ### FAVORITO_CONFIRMADO_15MIN_ALTACONVICCION#BNB#15min
-- **PATRÓN** `hora_utc` < `15.0` → IC=+0.166 (n=579)
+- **PATRÓN** `hora_utc` < `15.0` → IC=+0.167 (n=580)
   - _Por qué funciona_: hora temprana → mercados cripto menos líquidos, spreads más amplios; edge real menor
   - _Acción_: Kelly boost +0.83€ cuando `hora_utc` < 15.0 (IC base=+0.157)
 
-- **PATRÓN** `py_entrada` < `0.73` → IC=+0.179 (n=583)
+- **PATRÓN** `py_entrada` < `0.73` → IC=+0.179 (n=584)
 
-  - _Acción_: Kelly boost +0.89€ cuando `py_entrada` < 0.73 (IC base=+0.157)
+  - _Acción_: Kelly boost +0.90€ cuando `py_entrada` < 0.73 (IC base=+0.157)
 
 ### FAVORITO_CONFIRMADO_15MIN_ALTACONVICCION#BTC#15min
 - **FILTRO** `hora_utc` > `12.0` → IC=-0.375 (n=22)
@@ -533,24 +533,24 @@ _Generado por shadow_postmortem.py sobre 61007 resoluciones (PNL=+6441.92€)_
 ### FAVORITO_CONFIRMADO_5MIN_ALTACONVICCION
 - **PATRÓN** `hora_utc` > `17.0` → IC=+0.204 (n=1422)
   - _Por qué funciona_: hora tardía/noche → sesión US cerrada, menos participantes informados; señales más ruidosas
-  - _Acción_: Kelly boost +1.00€ cuando `hora_utc` > 17.0 (IC base=+0.194)
+  - _Acción_: Kelly boost +1.00€ cuando `hora_utc` > 17.0 (IC base=+0.193)
 
 - **PATRÓN** `hora_utc` < `6.0` → IC=+0.206 (n=1805)
   - _Por qué funciona_: hora temprana → mercados cripto menos líquidos, spreads más amplios; edge real menor
-  - _Acción_: Kelly boost +1.00€ cuando `hora_utc` < 6.0 (IC base=+0.194)
+  - _Acción_: Kelly boost +1.00€ cuando `hora_utc` < 6.0 (IC base=+0.193)
 
 - **PATRÓN** `py_entrada` > `0.72` → IC=+0.230 (n=2889)
 
-  - _Acción_: Kelly boost +1.00€ cuando `py_entrada` > 0.72 (IC base=+0.194)
+  - _Acción_: Kelly boost +1.00€ cuando `py_entrada` > 0.72 (IC base=+0.193)
 
 ### FAVORITO_CONFIRMADO_5MIN_ALTACONVICCION#BNB#5min
-- **PATRÓN** `hora_utc` < `10.0` → IC=+0.128 (n=514)
+- **PATRÓN** `hora_utc` < `10.0` → IC=+0.127 (n=515)
   - _Por qué funciona_: hora temprana → mercados cripto menos líquidos, spreads más amplios; edge real menor
-  - _Acción_: Kelly boost +0.64€ cuando `hora_utc` < 10.0 (IC base=+0.102)
+  - _Acción_: Kelly boost +0.63€ cuando `hora_utc` < 10.0 (IC base=+0.101)
 
 - **PATRÓN** `py_entrada` > `0.73` → IC=+0.138 (n=371)
 
-  - _Acción_: Kelly boost +0.69€ cuando `py_entrada` > 0.73 (IC base=+0.102)
+  - _Acción_: Kelly boost +0.69€ cuando `py_entrada` > 0.73 (IC base=+0.101)
 
 ### FAVORITO_CONFIRMADO_5MIN_ALTACONVICCION#BTC#5min
 - **PATRÓN** `hora_utc` > `17.0` → IC=+0.300 (n=213)
@@ -614,32 +614,32 @@ _Generado por shadow_postmortem.py sobre 61007 resoluciones (PNL=+6441.92€)_
   - _Acción_: Kelly boost +1.00€ cuando `py_entrada` > 0.76 (IC base=+0.201)
 
 ### FAVORITO_CONFIRMADO_5MIN_BAJALATENCIA
-- **PATRÓN** `py_entrada` < `0.37` → IC=+0.225 (n=554)
+- **PATRÓN** `py_entrada` < `0.37` → IC=+0.225 (n=555)
 
-  - _Acción_: Kelly boost +1.00€ cuando `py_entrada` < 0.37 (IC base=+0.151)
+  - _Acción_: Kelly boost +1.00€ cuando `py_entrada` < 0.37 (IC base=+0.152)
 
 - **PATRÓN** `restante_min` < `3.8` → IC=+0.162 (n=486)
 
-  - _Acción_: Kelly boost +0.81€ cuando `restante_min` < 3.8 (IC base=+0.151)
+  - _Acción_: Kelly boost +0.81€ cuando `restante_min` < 3.8 (IC base=+0.152)
 
 - **PATRÓN** `restante_min` > `4.91` → IC=+0.204 (n=505)
 
-  - _Acción_: Kelly boost +1.00€ cuando `restante_min` > 4.91 (IC base=+0.151)
+  - _Acción_: Kelly boost +1.00€ cuando `restante_min` > 4.91 (IC base=+0.152)
 
-- **PATRÓN** `hora_utc` > `5.0` → IC=+0.157 (n=1472)
+- **PATRÓN** `hora_utc` > `5.0` → IC=+0.157 (n=1475)
   - _Por qué funciona_: hora tardía/noche → sesión US cerrada, menos participantes informados; señales más ruidosas
-  - _Acción_: Kelly boost +0.78€ cuando `hora_utc` > 5.0 (IC base=+0.151)
+  - _Acción_: Kelly boost +0.79€ cuando `hora_utc` > 5.0 (IC base=+0.152)
 
-- **PATRÓN** `hora_utc` < `17.0` → IC=+0.159 (n=1485)
+- **PATRÓN** `hora_utc` < `17.0` → IC=+0.160 (n=1488)
   - _Por qué funciona_: hora temprana → mercados cripto menos líquidos, spreads más amplios; edge real menor
-  - _Acción_: Kelly boost +0.80€ cuando `hora_utc` < 17.0 (IC base=+0.151)
+  - _Acción_: Kelly boost +0.80€ cuando `hora_utc` < 17.0 (IC base=+0.152)
 
 - **PATRÓN** `lag_apertura_s` < `5.39` → IC=+0.212 (n=484)
 
-  - _Acción_: Kelly boost +1.00€ cuando `lag_apertura_s` < 5.39 (IC base=+0.151)
+  - _Acción_: Kelly boost +1.00€ cuando `lag_apertura_s` < 5.39 (IC base=+0.152)
 
 ### FAVORITO_CONFIRMADO_5MIN_BAJALATENCIA#DOGE#5min
-- **PATRÓN** `py_entrada` < `0.37` → IC=+0.238 (n=273)
+- **PATRÓN** `py_entrada` < `0.37` → IC=+0.239 (n=274)
 
   - _Acción_: Kelly boost +1.00€ cuando `py_entrada` < 0.37 (IC base=+0.156)
 
@@ -651,32 +651,32 @@ _Generado por shadow_postmortem.py sobre 61007 resoluciones (PNL=+6441.92€)_
 
   - _Acción_: Kelly boost +0.97€ cuando `restante_min` > 4.88 (IC base=+0.156)
 
-- **PATRÓN** `hora_utc` > `5.0` → IC=+0.163 (n=734)
+- **PATRÓN** `hora_utc` > `5.0` → IC=+0.164 (n=736)
   - _Por qué funciona_: hora tardía/noche → sesión US cerrada, menos participantes informados; señales más ruidosas
   - _Acción_: Kelly boost +0.82€ cuando `hora_utc` > 5.0 (IC base=+0.156)
 
-- **PATRÓN** `hora_utc` < `15.0` → IC=+0.168 (n=654)
+- **PATRÓN** `hora_utc` < `15.0` → IC=+0.169 (n=656)
   - _Por qué funciona_: hora temprana → mercados cripto menos líquidos, spreads más amplios; edge real menor
   - _Acción_: Kelly boost +0.84€ cuando `hora_utc` < 15.0 (IC base=+0.156)
 
-- **PATRÓN** `lag_apertura_s` < `7.33` → IC=+0.198 (n=240)
+- **PATRÓN** `lag_apertura_s` < `7.34` → IC=+0.201 (n=242)
 
-  - _Acción_: Kelly boost +0.99€ cuando `lag_apertura_s` < 7.33 (IC base=+0.156)
+  - _Acción_: Kelly boost +1.00€ cuando `lag_apertura_s` < 7.34 (IC base=+0.156)
 
 ### FAVORITO_CONFIRMADO_5MIN_BAJALATENCIA#XRP#5min
-- **PATRÓN** `py_entrada` < `0.43` → IC=+0.176 (n=650)
+- **PATRÓN** `py_entrada` < `0.37` → IC=+0.210 (n=281)
 
-  - _Acción_: Kelly boost +0.88€ cuando `py_entrada` < 0.43 (IC base=+0.147)
+  - _Acción_: Kelly boost +1.00€ cuando `py_entrada` < 0.37 (IC base=+0.147)
 
 - **PATRÓN** `restante_min` > `4.95` → IC=+0.216 (n=273)
 
   - _Acción_: Kelly boost +1.00€ cuando `restante_min` > 4.95 (IC base=+0.147)
 
-- **PATRÓN** `hora_utc` > `6.0` → IC=+0.154 (n=691)
+- **PATRÓN** `hora_utc` > `6.0` → IC=+0.154 (n=692)
   - _Por qué funciona_: hora tardía/noche → sesión US cerrada, menos participantes informados; señales más ruidosas
   - _Acción_: Kelly boost +0.77€ cuando `hora_utc` > 6.0 (IC base=+0.147)
 
-- **PATRÓN** `hora_utc` < `17.0` → IC=+0.158 (n=749)
+- **PATRÓN** `hora_utc` < `17.0` → IC=+0.158 (n=750)
   - _Por qué funciona_: hora temprana → mercados cripto menos líquidos, spreads más amplios; edge real menor
   - _Acción_: Kelly boost +0.79€ cuando `hora_utc` < 17.0 (IC base=+0.147)
 
@@ -684,9 +684,9 @@ _Generado por shadow_postmortem.py sobre 61007 resoluciones (PNL=+6441.92€)_
 
   - _Acción_: Kelly boost +1.00€ cuando `lag_apertura_s` < 3.17 (IC base=+0.147)
 
-- **PATRÓN** `profundidad_ratio_no` > `14.1` → IC=+0.178 (n=243)
+- **PATRÓN** `profundidad_ratio_no` > `13.8` → IC=+0.180 (n=245)
 
-  - _Acción_: Kelly boost +0.89€ cuando `profundidad_ratio_no` > 14.1 (IC base=+0.147)
+  - _Acción_: Kelly boost +0.90€ cuando `profundidad_ratio_no` > 13.8 (IC base=+0.147)
 
 ### FAVORITO_CONFIRMADO_60MIN_ALTACONVICCION
 - **PATRÓN** `hora_utc` > `5.0` → IC=+0.306 (n=415)
@@ -860,43 +860,43 @@ _Generado por shadow_postmortem.py sobre 61007 resoluciones (PNL=+6441.92€)_
 ### GBM_LATE_15M
 - **PATRÓN** `hora_utc` < `6.0` → IC=+0.148 (n=441)
   - _Por qué funciona_: hora temprana → mercados cripto menos líquidos, spreads más amplios; edge real menor
-  - _Acción_: Kelly boost +0.74€ cuando `hora_utc` < 6.0 (IC base=+0.109)
+  - _Acción_: Kelly boost +0.74€ cuando `hora_utc` < 6.0 (IC base=+0.110)
 
-- **PATRÓN** `ibs_20min` > `0.9943` → IC=+0.276 (n=395)
+- **PATRÓN** `ibs_20min` > `0.9923` → IC=+0.276 (n=396)
 
-  - _Acción_: Kelly boost +1.00€ cuando `ibs_20min` > 0.9943 (IC base=+0.109)
+  - _Acción_: Kelly boost +1.00€ cuando `ibs_20min` > 0.9923 (IC base=+0.110)
 
 - **PATRÓN** `dist_vwap_pct` > `0.5816` → IC=+0.309 (n=19)
 
-  - _Acción_: Kelly boost +1.00€ cuando `dist_vwap_pct` > 0.5816 (IC base=+0.109)
+  - _Acción_: Kelly boost +1.00€ cuando `dist_vwap_pct` > 0.5816 (IC base=+0.110)
 
 - **PATRÓN** `sigma_ewma_delta_pct` > `4.85` → IC=+0.243 (n=578)
 
-  - _Acción_: Kelly boost +1.00€ cuando `sigma_ewma_delta_pct` > 4.85 (IC base=+0.109)
+  - _Acción_: Kelly boost +1.00€ cuando `sigma_ewma_delta_pct` > 4.85 (IC base=+0.110)
 
 - **PATRÓN** `volumen_regimen` < `1.3288` → IC=+0.230 (n=146)
 
-  - _Acción_: Kelly boost +1.00€ cuando `volumen_regimen` < 1.3288 (IC base=+0.109)
+  - _Acción_: Kelly boost +1.00€ cuando `volumen_regimen` < 1.3288 (IC base=+0.110)
 
 - **PATRÓN** `volumen_regimen` > `0.7602` → IC=+0.235 (n=130)
 
-  - _Acción_: Kelly boost +1.00€ cuando `volumen_regimen` > 0.7602 (IC base=+0.109)
+  - _Acción_: Kelly boost +1.00€ cuando `volumen_regimen` > 0.7602 (IC base=+0.110)
 
 - **PATRÓN** `volumen_pendiente_norm` > `0.3253` → IC=+0.177 (n=91)
 
-  - _Acción_: Kelly boost +0.89€ cuando `volumen_pendiente_norm` > 0.3253 (IC base=+0.109)
+  - _Acción_: Kelly boost +0.89€ cuando `volumen_pendiente_norm` > 0.3253 (IC base=+0.110)
 
-- **PATRÓN** `volumen_spike_ratio` > `1.6768` → IC=+0.130 (n=587)
+- **PATRÓN** `volumen_spike_ratio` > `1.6776` → IC=+0.130 (n=587)
 
-  - _Acción_: Kelly boost +0.65€ cuando `volumen_spike_ratio` > 1.6768 (IC base=+0.109)
+  - _Acción_: Kelly boost +0.65€ cuando `volumen_spike_ratio` > 1.6776 (IC base=+0.110)
 
 - **PATRÓN** `libro_spread` < `0.06` → IC=+0.121 (n=1261)
 
-  - _Acción_: Kelly boost +0.61€ cuando `libro_spread` < 0.06 (IC base=+0.109)
+  - _Acción_: Kelly boost +0.61€ cuando `libro_spread` < 0.06 (IC base=+0.110)
 
-- **PATRÓN** `ibs_20min` < `0.6579` → IC=+0.124 (n=2078)
+- **PATRÓN** `ibs_20min` < `0.6585` → IC=+0.124 (n=2079)
 
-  - _Acción_: Kelly boost +0.62€ cuando `ibs_20min` < 0.6579 (IC base=+0.080)
+  - _Acción_: Kelly boost +0.62€ cuando `ibs_20min` < 0.6585 (IC base=+0.080)
 
 - **PATRÓN** `volumen_regimen` < `0.6291` → IC=+0.152 (n=156)
 
@@ -923,29 +923,29 @@ _Generado por shadow_postmortem.py sobre 61007 resoluciones (PNL=+6441.92€)_
   - _Acción_: Kelly boost +1.00€ cuando `ballena_activa_n` < 265.0 (IC base=+0.080)
 
 ### GBM_LATE_15M#BNB#15min
-- **PATRÓN** `sigma_h` > `0.007` → IC=+0.171 (n=174)
+- **PATRÓN** `sigma_h` > `0.007` → IC=+0.172 (n=175)
   - _Por qué funciona_: alta volatilidad → el modelo GBM sobreestima la señal; el mercado es más aleatorio
-  - _Acción_: Kelly boost +0.85€ cuando `sigma_h` > 0.007 (IC base=+0.124)
+  - _Acción_: Kelly boost +0.86€ cuando `sigma_h` > 0.007 (IC base=+0.125)
 
 - **PATRÓN** `hora_utc` < `6.0` → IC=+0.191 (n=147)
   - _Por qué funciona_: hora temprana → mercados cripto menos líquidos, spreads más amplios; edge real menor
-  - _Acción_: Kelly boost +0.96€ cuando `hora_utc` < 6.0 (IC base=+0.124)
+  - _Acción_: Kelly boost +0.96€ cuando `hora_utc` < 6.0 (IC base=+0.125)
 
 - **PATRÓN** `ibs_20min` > `1.0` → IC=+0.297 (n=141)
 
-  - _Acción_: Kelly boost +1.00€ cuando `ibs_20min` > 1.0 (IC base=+0.124)
+  - _Acción_: Kelly boost +1.00€ cuando `ibs_20min` > 1.0 (IC base=+0.125)
 
-- **PATRÓN** `sigma_ewma_delta_pct` > `5.572` → IC=+0.347 (n=148)
+- **PATRÓN** `sigma_ewma_delta_pct` > `5.577` → IC=+0.346 (n=147)
 
-  - _Acción_: Kelly boost +1.00€ cuando `sigma_ewma_delta_pct` > 5.572 (IC base=+0.124)
+  - _Acción_: Kelly boost +1.00€ cuando `sigma_ewma_delta_pct` > 5.577 (IC base=+0.125)
 
 - **PATRÓN** `volumen_pendiente_norm` > `0.2097` → IC=+0.145 (n=60)
 
-  - _Acción_: Kelly boost +0.73€ cuando `volumen_pendiente_norm` > 0.2097 (IC base=+0.124)
+  - _Acción_: Kelly boost +0.73€ cuando `volumen_pendiente_norm` > 0.2097 (IC base=+0.125)
 
 - **PATRÓN** `libro_spread` < `0.06` → IC=+0.170 (n=274)
 
-  - _Acción_: Kelly boost +0.85€ cuando `libro_spread` < 0.06 (IC base=+0.124)
+  - _Acción_: Kelly boost +0.85€ cuando `libro_spread` < 0.06 (IC base=+0.125)
 
 - **PATRÓN** `sigma_h` < `0.0052` → IC=+0.331 (n=63)
   - _Por qué funciona_: baja volatilidad → señal GBM más fiable; el spread de Polymarket cubre mejor el edge
@@ -1232,69 +1232,73 @@ _Generado por shadow_postmortem.py sobre 61007 resoluciones (PNL=+6441.92€)_
   - _Acción_: Kelly boost +1.00€ cuando `volumen_regimen` > 1.3677 (IC base=+0.042)
 
 ### GBM_LATE_15M_ESPACIO_ATR
-- **PATRÓN** `ibs_20min` > `0.9449` → IC=+0.233 (n=514)
+- **PATRÓN** `ibs_20min` > `0.9461` → IC=+0.233 (n=515)
 
-  - _Acción_: Kelly boost +1.00€ cuando `ibs_20min` > 0.9449 (IC base=+0.057)
+  - _Acción_: Kelly boost +1.00€ cuando `ibs_20min` > 0.9461 (IC base=+0.058)
 
-- **PATRÓN** `dist_vwap_pct` > `0.1182` → IC=+0.169 (n=146)
+- **PATRÓN** `dist_vwap_pct` > `0.1182` → IC=+0.171 (n=147)
 
-  - _Acción_: Kelly boost +0.84€ cuando `dist_vwap_pct` > 0.1182 (IC base=+0.057)
+  - _Acción_: Kelly boost +0.86€ cuando `dist_vwap_pct` > 0.1182 (IC base=+0.058)
 
-- **PATRÓN** `sigma_ewma_delta_pct` > `2.252` → IC=+0.129 (n=961)
+- **PATRÓN** `sigma_ewma_delta_pct` > `2.252` → IC=+0.130 (n=962)
 
-  - _Acción_: Kelly boost +0.65€ cuando `sigma_ewma_delta_pct` > 2.252 (IC base=+0.057)
+  - _Acción_: Kelly boost +0.65€ cuando `sigma_ewma_delta_pct` > 2.252 (IC base=+0.058)
 
-- **PATRÓN** `volumen_pendiente_norm` > `0.339` → IC=+0.187 (n=97)
+- **PATRÓN** `volumen_pendiente_norm` > `0.3377` → IC=+0.187 (n=97)
 
-  - _Acción_: Kelly boost +0.93€ cuando `volumen_pendiente_norm` > 0.339 (IC base=+0.057)
+  - _Acción_: Kelly boost +0.93€ cuando `volumen_pendiente_norm` > 0.3377 (IC base=+0.058)
 
 - **PATRÓN** `volumen_spike_ratio` > `2.8942` → IC=+0.176 (n=282)
 
-  - _Acción_: Kelly boost +0.88€ cuando `volumen_spike_ratio` > 2.8942 (IC base=+0.057)
+  - _Acción_: Kelly boost +0.88€ cuando `volumen_spike_ratio` > 2.8942 (IC base=+0.058)
 
-- **PATRÓN** `ballena_activa_n` < `41.0` → IC=+0.341 (n=42)
+- **PATRÓN** `ballena_activa_n` < `41.0` → IC=+0.344 (n=43)
 
-  - _Acción_: Kelly boost +1.00€ cuando `ballena_activa_n` < 41.0 (IC base=+0.057)
+  - _Acción_: Kelly boost +1.00€ cuando `ballena_activa_n` < 41.0 (IC base=+0.058)
 
 - **PATRÓN** `ibs_20min` < `0.0994` → IC=+0.167 (n=829)
 
-  - _Acción_: Kelly boost +0.83€ cuando `ibs_20min` < 0.0994 (IC base=+0.049)
+  - _Acción_: Kelly boost +0.83€ cuando `ibs_20min` < 0.0994 (IC base=+0.048)
 
 - **PATRÓN** `dist_vwap_pct` > `0.5125` → IC=+0.321 (n=26)
 
-  - _Acción_: Kelly boost +1.00€ cuando `dist_vwap_pct` > 0.5125 (IC base=+0.049)
+  - _Acción_: Kelly boost +1.00€ cuando `dist_vwap_pct` > 0.5125 (IC base=+0.048)
 
 - **PATRÓN** `volumen_regimen` > `1.0773` → IC=+0.223 (n=189)
 
-  - _Acción_: Kelly boost +1.00€ cuando `volumen_regimen` > 1.0773 (IC base=+0.049)
+  - _Acción_: Kelly boost +1.00€ cuando `volumen_regimen` > 1.0773 (IC base=+0.048)
 
 - **PATRÓN** `volumen_pendiente_norm` > `0.3613` → IC=+0.405 (n=40)
 
-  - _Acción_: Kelly boost +1.00€ cuando `volumen_pendiente_norm` > 0.3613 (IC base=+0.049)
+  - _Acción_: Kelly boost +1.00€ cuando `volumen_pendiente_norm` > 0.3613 (IC base=+0.048)
 
 - **PATRÓN** `volumen_spike_ratio` > `3.805` → IC=+0.311 (n=72)
 
-  - _Acción_: Kelly boost +1.00€ cuando `volumen_spike_ratio` > 3.805 (IC base=+0.049)
+  - _Acción_: Kelly boost +1.00€ cuando `volumen_spike_ratio` > 3.805 (IC base=+0.048)
 
 - **PATRÓN** `ballena_activa_n` < `61.0` → IC=+0.226 (n=49)
 
-  - _Acción_: Kelly boost +1.00€ cuando `ballena_activa_n` < 61.0 (IC base=+0.049)
+  - _Acción_: Kelly boost +1.00€ cuando `ballena_activa_n` < 61.0 (IC base=+0.048)
 
 ### GBM_LATE_15M_ESPACIO_ATR#BNB#15min
-- **FILTRO** `sigma_ewma_delta_pct` > `5.014` → IC=-0.209 (n=101)
+- **FILTRO** `sigma_ewma_delta_pct` > `5.003` → IC=-0.209 (n=101)
 
-  - _Acción_: SKIP cuando `sigma_ewma_delta_pct` > 5.014
-  - _Potencial_: sin este filtro IC_bueno=-0.002 (n=522)
+  - _Acción_: SKIP cuando `sigma_ewma_delta_pct` > 5.003
+  - _Potencial_: sin este filtro IC_bueno=-0.003 (n=523)
 
 - **PATRÓN** `sigma_ewma_delta_pct` > `5.077` → IC=+0.190 (n=85)
 
-  - _Acción_: Kelly boost +0.95€ cuando `sigma_ewma_delta_pct` > 5.077 (IC base=-0.015)
+  - _Acción_: Kelly boost +0.95€ cuando `sigma_ewma_delta_pct` > 5.077 (IC base=-0.013)
 
-- **PATRÓN** `volumen_pendiente_norm` > `0.1149` → IC=+0.184 (n=17)
+- **PATRÓN** `volumen_pendiente_norm` > `0.1149` → IC=+0.200 (n=18)
 
-  - _Acción_: Kelly boost +0.92€ cuando `volumen_pendiente_norm` > 0.1149 (IC base=-0.015)
+  - _Acción_: Kelly boost +1.00€ cuando `volumen_pendiente_norm` > 0.1149 (IC base=-0.013)
 
 ### GBM_LATE_15M_ESPACIO_ATR#BTC#15min
+- **PATRÓN** `volumen_regimen` < `1.0528` → IC=+0.129 (n=33)
+
+  - _Acción_: Kelly boost +0.64€ cuando `volumen_regimen` < 1.0528 (IC base=+0.003)
+
 - **PATRÓN** `volumen_regimen` < `0.5727` → IC=+0.184 (n=17)
 
   - _Acción_: Kelly boost +0.92€ cuando `volumen_regimen` < 0.5727 (IC base=-0.003)
@@ -1402,9 +1406,13 @@ _Generado por shadow_postmortem.py sobre 61007 resoluciones (PNL=+6441.92€)_
   - _Potencial_: sin este filtro IC_bueno=+0.010 (n=672)
 
 ### GBM_LATE_15M_ESPACIO_ATR#SOL#15min
-- **PATRÓN** `ibs_20min` > `0.4444` → IC=+0.133 (n=137)
+- **PATRÓN** `ibs_20min` > `0.4444` → IC=+0.136 (n=138)
 
-  - _Acción_: Kelly boost +0.67€ cuando `ibs_20min` > 0.4444 (IC base=+0.000)
+  - _Acción_: Kelly boost +0.68€ cuando `ibs_20min` > 0.4444 (IC base=+0.002)
+
+- **PATRÓN** `dist_vwap_pct` > `0.1723` → IC=+0.206 (n=15)
+
+  - _Acción_: Kelly boost +1.00€ cuando `dist_vwap_pct` > 0.1723 (IC base=+0.002)
 
 ### GBM_LATE_15M_ESPACIO_ATR#XRP#15min
 - **PATRÓN** `sigma_h` > `0.0066` → IC=+0.292 (n=99)
@@ -1490,47 +1498,47 @@ _Generado por shadow_postmortem.py sobre 61007 resoluciones (PNL=+6441.92€)_
 ### GBM_LATE_15M_MULTIHORIZONTE
 - **PATRÓN** `sigma_h` < `0.0047` → IC=+0.155 (n=401)
   - _Por qué funciona_: baja volatilidad → señal GBM más fiable; el spread de Polymarket cubre mejor el edge
-  - _Acción_: Kelly boost +0.78€ cuando `sigma_h` < 0.0047 (IC base=+0.137)
+  - _Acción_: Kelly boost +0.78€ cuando `sigma_h` < 0.0047 (IC base=+0.138)
 
-- **PATRÓN** `sigma_h` > `0.007` → IC=+0.202 (n=400)
+- **PATRÓN** `sigma_h` > `0.0065` → IC=+0.193 (n=546)
   - _Por qué funciona_: alta volatilidad → el modelo GBM sobreestima la señal; el mercado es más aleatorio
-  - _Acción_: Kelly boost +1.00€ cuando `sigma_h` > 0.007 (IC base=+0.137)
+  - _Acción_: Kelly boost +0.97€ cuando `sigma_h` > 0.0065 (IC base=+0.138)
 
 - **PATRÓN** `hora_utc` > `17.0` → IC=+0.145 (n=401)
   - _Por qué funciona_: hora tardía/noche → sesión US cerrada, menos participantes informados; señales más ruidosas
-  - _Acción_: Kelly boost +0.73€ cuando `hora_utc` > 17.0 (IC base=+0.137)
+  - _Acción_: Kelly boost +0.73€ cuando `hora_utc` > 17.0 (IC base=+0.138)
 
 - **PATRÓN** `hora_utc` < `7.0` → IC=+0.156 (n=548)
   - _Por qué funciona_: hora temprana → mercados cripto menos líquidos, spreads más amplios; edge real menor
-  - _Acción_: Kelly boost +0.78€ cuando `hora_utc` < 7.0 (IC base=+0.137)
+  - _Acción_: Kelly boost +0.78€ cuando `hora_utc` < 7.0 (IC base=+0.138)
 
-- **PATRÓN** `ibs_20min` > `0.9216` → IC=+0.256 (n=796)
+- **PATRÓN** `ibs_20min` > `0.9219` → IC=+0.256 (n=797)
 
-  - _Acción_: Kelly boost +1.00€ cuando `ibs_20min` > 0.9216 (IC base=+0.137)
+  - _Acción_: Kelly boost +1.00€ cuando `ibs_20min` > 0.9219 (IC base=+0.138)
 
-- **PATRÓN** `dist_vwap_pct` > `0.217` → IC=+0.145 (n=257)
+- **PATRÓN** `dist_vwap_pct` > `0.217` → IC=+0.146 (n=258)
 
-  - _Acción_: Kelly boost +0.72€ cuando `dist_vwap_pct` > 0.217 (IC base=+0.137)
+  - _Acción_: Kelly boost +0.73€ cuando `dist_vwap_pct` > 0.217 (IC base=+0.138)
 
-- **PATRÓN** `sigma_ewma_delta_pct` > `2.425` → IC=+0.247 (n=796)
+- **PATRÓN** `sigma_ewma_delta_pct` > `2.418` → IC=+0.246 (n=798)
 
-  - _Acción_: Kelly boost +1.00€ cuando `sigma_ewma_delta_pct` > 2.425 (IC base=+0.137)
+  - _Acción_: Kelly boost +1.00€ cuando `sigma_ewma_delta_pct` > 2.418 (IC base=+0.138)
 
-- **PATRÓN** `volumen_regimen` > `0.6285` → IC=+0.133 (n=620)
+- **PATRÓN** `volumen_regimen` > `0.6285` → IC=+0.134 (n=621)
 
-  - _Acción_: Kelly boost +0.67€ cuando `volumen_regimen` > 0.6285 (IC base=+0.137)
+  - _Acción_: Kelly boost +0.67€ cuando `volumen_regimen` > 0.6285 (IC base=+0.138)
 
-- **PATRÓN** `volumen_pendiente_norm` > `0.1127` → IC=+0.161 (n=390)
+- **PATRÓN** `volumen_pendiente_norm` > `0.1127` → IC=+0.162 (n=391)
 
-  - _Acción_: Kelly boost +0.80€ cuando `volumen_pendiente_norm` > 0.1127 (IC base=+0.137)
+  - _Acción_: Kelly boost +0.81€ cuando `volumen_pendiente_norm` > 0.1127 (IC base=+0.138)
 
-- **PATRÓN** `libro_spread` < `0.06` → IC=+0.145 (n=1334)
+- **PATRÓN** `libro_spread` < `0.06` → IC=+0.145 (n=1335)
 
-  - _Acción_: Kelly boost +0.73€ cuando `libro_spread` < 0.06 (IC base=+0.137)
+  - _Acción_: Kelly boost +0.73€ cuando `libro_spread` < 0.06 (IC base=+0.138)
 
-- **PATRÓN** `libro_liquidez` > `2650.5037` → IC=+0.165 (n=398)
+- **PATRÓN** `libro_liquidez` > `2650.5037` → IC=+0.166 (n=399)
 
-  - _Acción_: Kelly boost +0.83€ cuando `libro_liquidez` > 2650.5037 (IC base=+0.137)
+  - _Acción_: Kelly boost +0.83€ cuando `libro_liquidez` > 2650.5037 (IC base=+0.138)
 
 - **PATRÓN** `sigma_h` < `0.0062` → IC=+0.223 (n=1155)
   - _Por qué funciona_: baja volatilidad → señal GBM más fiable; el spread de Polymarket cubre mejor el edge
@@ -1579,31 +1587,31 @@ _Generado por shadow_postmortem.py sobre 61007 resoluciones (PNL=+6441.92€)_
 ### GBM_LATE_15M_MULTIHORIZONTE#BNB#15min
 - **PATRÓN** `sigma_h` < `0.0058` → IC=+0.157 (n=100)
   - _Por qué funciona_: baja volatilidad → señal GBM más fiable; el spread de Polymarket cubre mejor el edge
-  - _Acción_: Kelly boost +0.78€ cuando `sigma_h` < 0.0058 (IC base=+0.152)
+  - _Acción_: Kelly boost +0.78€ cuando `sigma_h` < 0.0058 (IC base=+0.153)
 
-- **PATRÓN** `sigma_h` > `0.0071` → IC=+0.205 (n=137)
+- **PATRÓN** `sigma_h` > `0.0075` → IC=+0.216 (n=100)
   - _Por qué funciona_: alta volatilidad → el modelo GBM sobreestima la señal; el mercado es más aleatorio
-  - _Acción_: Kelly boost +1.00€ cuando `sigma_h` > 0.0071 (IC base=+0.152)
+  - _Acción_: Kelly boost +1.00€ cuando `sigma_h` > 0.0075 (IC base=+0.153)
 
 - **PATRÓN** `hora_utc` < `7.0` → IC=+0.209 (n=139)
   - _Por qué funciona_: hora temprana → mercados cripto menos líquidos, spreads más amplios; edge real menor
-  - _Acción_: Kelly boost +1.00€ cuando `hora_utc` < 7.0 (IC base=+0.152)
+  - _Acción_: Kelly boost +1.00€ cuando `hora_utc` < 7.0 (IC base=+0.153)
 
-- **PATRÓN** `ibs_20min` > `1.0` → IC=+0.327 (n=137)
+- **PATRÓN** `ibs_20min` > `1.0` → IC=+0.329 (n=138)
 
-  - _Acción_: Kelly boost +1.00€ cuando `ibs_20min` > 1.0 (IC base=+0.152)
+  - _Acción_: Kelly boost +1.00€ cuando `ibs_20min` > 1.0 (IC base=+0.153)
 
-- **PATRÓN** `sigma_ewma_delta_pct` > `3.511` → IC=+0.355 (n=143)
+- **PATRÓN** `sigma_ewma_delta_pct` > `3.482` → IC=+0.356 (n=144)
 
-  - _Acción_: Kelly boost +1.00€ cuando `sigma_ewma_delta_pct` > 3.511 (IC base=+0.152)
+  - _Acción_: Kelly boost +1.00€ cuando `sigma_ewma_delta_pct` > 3.482 (IC base=+0.153)
 
-- **PATRÓN** `volumen_pendiente_norm` > `0.1492` → IC=+0.162 (n=66)
+- **PATRÓN** `volumen_pendiente_norm` > `0.1492` → IC=+0.167 (n=67)
 
-  - _Acción_: Kelly boost +0.81€ cuando `volumen_pendiente_norm` > 0.1492 (IC base=+0.152)
+  - _Acción_: Kelly boost +0.83€ cuando `volumen_pendiente_norm` > 0.1492 (IC base=+0.153)
 
 - **PATRÓN** `libro_spread` < `0.08` → IC=+0.174 (n=323)
 
-  - _Acción_: Kelly boost +0.87€ cuando `libro_spread` < 0.08 (IC base=+0.152)
+  - _Acción_: Kelly boost +0.87€ cuando `libro_spread` < 0.08 (IC base=+0.153)
 
 - **PATRÓN** `sigma_h` < `0.0053` → IC=+0.282 (n=53)
   - _Por qué funciona_: baja volatilidad → señal GBM más fiable; el spread de Polymarket cubre mejor el edge
@@ -1909,23 +1917,18 @@ _Generado por shadow_postmortem.py sobre 61007 resoluciones (PNL=+6441.92€)_
   - _Acción_: Kelly boost +1.00€ cuando `volumen_spike_ratio` < 2.2709 (IC base=+0.196)
 
 ### GBM_LATE_15M_MULTIHORIZONTE#SOL#15min
-- **FILTRO** `ibs_20min` < `0.875` → IC=-0.121 (n=143)
-
-  - _Acción_: SKIP cuando `ibs_20min` < 0.875
-  - _Potencial_: sin este filtro IC_bueno=+0.185 (n=144)
-
 - **FILTRO** `ibs_20min` > `0.5833` → IC=-0.256 (n=76)
 
   - _Acción_: SKIP cuando `ibs_20min` > 0.5833
   - _Potencial_: sin este filtro IC_bueno=+0.232 (n=229)
 
-- **PATRÓN** `ibs_20min` > `0.875` → IC=+0.185 (n=144)
+- **PATRÓN** `ibs_20min` > `0.8889` → IC=+0.185 (n=144)
 
-  - _Acción_: Kelly boost +0.92€ cuando `ibs_20min` > 0.875 (IC base=+0.033)
+  - _Acción_: Kelly boost +0.92€ cuando `ibs_20min` > 0.8889 (IC base=+0.035)
 
-- **PATRÓN** `sigma_ewma_delta_pct` > `2.925` → IC=+0.147 (n=131)
+- **PATRÓN** `sigma_ewma_delta_pct` > `2.984` → IC=+0.147 (n=131)
 
-  - _Acción_: Kelly boost +0.73€ cuando `sigma_ewma_delta_pct` > 2.925 (IC base=+0.033)
+  - _Acción_: Kelly boost +0.73€ cuando `sigma_ewma_delta_pct` > 2.984 (IC base=+0.035)
 
 - **PATRÓN** `sigma_h` < `0.0044` → IC=+0.234 (n=77)
   - _Por qué funciona_: baja volatilidad → señal GBM más fiable; el spread de Polymarket cubre mejor el edge
@@ -2219,51 +2222,51 @@ _Generado por shadow_postmortem.py sobre 61007 resoluciones (PNL=+6441.92€)_
   - _Acción_: Kelly boost +0.94€ cuando `sigma_ewma_delta_pct` > 7.989 (IC base=+0.017)
 
 ### GBM_LATE_15M_TARDIO
-- **PATRÓN** `sigma_h` > `0.0068` → IC=+0.197 (n=493)
+- **PATRÓN** `sigma_h` > `0.0068` → IC=+0.198 (n=494)
   - _Por qué funciona_: alta volatilidad → el modelo GBM sobreestima la señal; el mercado es más aleatorio
-  - _Acción_: Kelly boost +0.98€ cuando `sigma_h` > 0.0068 (IC base=+0.116)
+  - _Acción_: Kelly boost +0.99€ cuando `sigma_h` > 0.0068 (IC base=+0.117)
 
 - **PATRÓN** `hora_utc` > `17.0` → IC=+0.148 (n=541)
   - _Por qué funciona_: hora tardía/noche → sesión US cerrada, menos participantes informados; señales más ruidosas
-  - _Acción_: Kelly boost +0.74€ cuando `hora_utc` > 17.0 (IC base=+0.116)
+  - _Acción_: Kelly boost +0.74€ cuando `hora_utc` > 17.0 (IC base=+0.117)
 
 - **PATRÓN** `ibs_20min` > `0.9589` → IC=+0.284 (n=673)
 
-  - _Acción_: Kelly boost +1.00€ cuando `ibs_20min` > 0.9589 (IC base=+0.116)
+  - _Acción_: Kelly boost +1.00€ cuando `ibs_20min` > 0.9589 (IC base=+0.117)
 
 - **PATRÓN** `dist_vwap_pct` > `0.3314` → IC=+0.175 (n=149)
 
-  - _Acción_: Kelly boost +0.88€ cuando `dist_vwap_pct` > 0.3314 (IC base=+0.116)
+  - _Acción_: Kelly boost +0.88€ cuando `dist_vwap_pct` > 0.3314 (IC base=+0.117)
 
-- **PATRÓN** `sigma_ewma_delta_pct` > `2.293` → IC=+0.231 (n=997)
+- **PATRÓN** `sigma_ewma_delta_pct` > `2.298` → IC=+0.232 (n=996)
 
-  - _Acción_: Kelly boost +1.00€ cuando `sigma_ewma_delta_pct` > 2.293 (IC base=+0.116)
+  - _Acción_: Kelly boost +1.00€ cuando `sigma_ewma_delta_pct` > 2.298 (IC base=+0.117)
 
-- **PATRÓN** `volumen_pendiente_norm` > `0.1809` → IC=+0.133 (n=339)
+- **PATRÓN** `volumen_pendiente_norm` > `0.1809` → IC=+0.135 (n=340)
 
-  - _Acción_: Kelly boost +0.67€ cuando `volumen_pendiente_norm` > 0.1809 (IC base=+0.116)
+  - _Acción_: Kelly boost +0.67€ cuando `volumen_pendiente_norm` > 0.1809 (IC base=+0.117)
 
 - **PATRÓN** `libro_liquidez` > `2695.6908` → IC=+0.142 (n=493)
 
-  - _Acción_: Kelly boost +0.71€ cuando `libro_liquidez` > 2695.6908 (IC base=+0.116)
+  - _Acción_: Kelly boost +0.71€ cuando `libro_liquidez` > 2695.6908 (IC base=+0.117)
 
-- **PATRÓN** `ballena_activa_n` < `107.0` → IC=+0.203 (n=89)
+- **PATRÓN** `ballena_activa_n` < `107.0` → IC=+0.206 (n=90)
 
-  - _Acción_: Kelly boost +1.00€ cuando `ballena_activa_n` < 107.0 (IC base=+0.116)
+  - _Acción_: Kelly boost +1.00€ cuando `ballena_activa_n` < 107.0 (IC base=+0.117)
 
 - **PATRÓN** `sigma_h` < `0.0061` → IC=+0.235 (n=1121)
   - _Por qué funciona_: baja volatilidad → señal GBM más fiable; el spread de Polymarket cubre mejor el edge
   - _Acción_: Kelly boost +1.00€ cuando `sigma_h` < 0.0061 (IC base=+0.229)
 
-- **PATRÓN** `sigma_h` > `0.0038` → IC=+0.236 (n=1269)
+- **PATRÓN** `sigma_h` > `0.0038` → IC=+0.235 (n=1270)
   - _Por qué funciona_: alta volatilidad → el modelo GBM sobreestima la señal; el mercado es más aleatorio
   - _Acción_: Kelly boost +1.00€ cuando `sigma_h` > 0.0038 (IC base=+0.229)
 
-- **PATRÓN** `hora_utc` > `6.0` → IC=+0.241 (n=1186)
+- **PATRÓN** `hora_utc` > `6.0` → IC=+0.240 (n=1187)
   - _Por qué funciona_: hora tardía/noche → sesión US cerrada, menos participantes informados; señales más ruidosas
   - _Acción_: Kelly boost +1.00€ cuando `hora_utc` > 6.0 (IC base=+0.229)
 
-- **PATRÓN** `ibs_20min` < `0.4857` → IC=+0.291 (n=1269)
+- **PATRÓN** `ibs_20min` < `0.4857` → IC=+0.290 (n=1270)
 
   - _Acción_: Kelly boost +1.00€ cuando `ibs_20min` < 0.4857 (IC base=+0.229)
 
@@ -2271,50 +2274,50 @@ _Generado por shadow_postmortem.py sobre 61007 resoluciones (PNL=+6441.92€)_
 
   - _Acción_: Kelly boost +1.00€ cuando `dist_vwap_pct` < 0.1522 (IC base=+0.229)
 
-- **PATRÓN** `sigma_ewma_delta_pct` > `7.143` → IC=+0.263 (n=251)
+- **PATRÓN** `sigma_ewma_delta_pct` > `7.137` → IC=+0.263 (n=251)
 
-  - _Acción_: Kelly boost +1.00€ cuando `sigma_ewma_delta_pct` > 7.143 (IC base=+0.229)
+  - _Acción_: Kelly boost +1.00€ cuando `sigma_ewma_delta_pct` > 7.137 (IC base=+0.229)
 
 - **PATRÓN** `volumen_regimen` < `0.6183` → IC=+0.213 (n=284)
 
   - _Acción_: Kelly boost +1.00€ cuando `volumen_regimen` < 0.6183 (IC base=+0.229)
 
-- **PATRÓN** `volumen_regimen` > `1.0794` → IC=+0.226 (n=385)
+- **PATRÓN** `volumen_regimen` > `1.0788` → IC=+0.227 (n=386)
 
-  - _Acción_: Kelly boost +1.00€ cuando `volumen_regimen` > 1.0794 (IC base=+0.229)
+  - _Acción_: Kelly boost +1.00€ cuando `volumen_regimen` > 1.0788 (IC base=+0.229)
 
 - **PATRÓN** `volumen_pendiente_norm` > `0.1846` → IC=+0.292 (n=205)
 
   - _Acción_: Kelly boost +1.00€ cuando `volumen_pendiente_norm` > 0.1846 (IC base=+0.229)
 
-- **PATRÓN** `volumen_spike_ratio` < `1.659` → IC=+0.291 (n=256)
+- **PATRÓN** `volumen_spike_ratio` < `1.659` → IC=+0.288 (n=257)
 
   - _Acción_: Kelly boost +1.00€ cuando `volumen_spike_ratio` < 1.659 (IC base=+0.229)
 
 ### GBM_LATE_15M_TARDIO#BNB#15min
-- **PATRÓN** `sigma_h` > `0.007` → IC=+0.212 (n=168)
+- **PATRÓN** `sigma_h` > `0.007` → IC=+0.213 (n=169)
   - _Por qué funciona_: alta volatilidad → el modelo GBM sobreestima la señal; el mercado es más aleatorio
-  - _Acción_: Kelly boost +1.00€ cuando `sigma_h` > 0.007 (IC base=+0.132)
+  - _Acción_: Kelly boost +1.00€ cuando `sigma_h` > 0.007 (IC base=+0.133)
 
-- **PATRÓN** `hora_utc` < `11.0` → IC=+0.157 (n=260)
+- **PATRÓN** `hora_utc` < `11.0` → IC=+0.158 (n=261)
   - _Por qué funciona_: hora temprana → mercados cripto menos líquidos, spreads más amplios; edge real menor
-  - _Acción_: Kelly boost +0.78€ cuando `hora_utc` < 11.0 (IC base=+0.132)
+  - _Acción_: Kelly boost +0.79€ cuando `hora_utc` < 11.0 (IC base=+0.133)
 
 - **PATRÓN** `ibs_20min` > `1.0` → IC=+0.301 (n=134)
 
-  - _Acción_: Kelly boost +1.00€ cuando `ibs_20min` > 1.0 (IC base=+0.132)
+  - _Acción_: Kelly boost +1.00€ cuando `ibs_20min` > 1.0 (IC base=+0.133)
 
-- **PATRÓN** `sigma_ewma_delta_pct` > `5.422` → IC=+0.360 (n=141)
+- **PATRÓN** `sigma_ewma_delta_pct` > `5.428` → IC=+0.360 (n=141)
 
-  - _Acción_: Kelly boost +1.00€ cuando `sigma_ewma_delta_pct` > 5.422 (IC base=+0.132)
+  - _Acción_: Kelly boost +1.00€ cuando `sigma_ewma_delta_pct` > 5.428 (IC base=+0.133)
 
-- **PATRÓN** `volumen_pendiente_norm` > `0.1442` → IC=+0.132 (n=85)
+- **PATRÓN** `volumen_pendiente_norm` > `0.2094` → IC=+0.143 (n=54)
 
-  - _Acción_: Kelly boost +0.66€ cuando `volumen_pendiente_norm` > 0.1442 (IC base=+0.132)
+  - _Acción_: Kelly boost +0.71€ cuando `volumen_pendiente_norm` > 0.2094 (IC base=+0.133)
 
 - **PATRÓN** `libro_spread` < `0.06` → IC=+0.176 (n=257)
 
-  - _Acción_: Kelly boost +0.88€ cuando `libro_spread` < 0.06 (IC base=+0.132)
+  - _Acción_: Kelly boost +0.88€ cuando `libro_spread` < 0.06 (IC base=+0.133)
 
 - **PATRÓN** `sigma_h` < `0.0051` → IC=+0.323 (n=60)
   - _Por qué funciona_: baja volatilidad → señal GBM más fiable; el spread de Polymarket cubre mejor el edge
@@ -2615,6 +2618,11 @@ _Generado por shadow_postmortem.py sobre 61007 resoluciones (PNL=+6441.92€)_
   - _Acción_: SKIP cuando `ibs_20min` < 0.5
   - _Potencial_: sin este filtro IC_bueno=+0.077 (n=237)
 
+- **FILTRO** `ibs_20min` > `0.5833` → IC=-0.190 (n=69)
+
+  - _Acción_: SKIP cuando `ibs_20min` > 0.5833
+  - _Potencial_: sin este filtro IC_bueno=+0.255 (n=214)
+
 - **PATRÓN** `ibs_20min` > `1.0` → IC=+0.230 (n=98)
 
   - _Acción_: Kelly boost +1.00€ cuando `ibs_20min` > 1.0 (IC base=+0.013)
@@ -2625,55 +2633,55 @@ _Generado por shadow_postmortem.py sobre 61007 resoluciones (PNL=+6441.92€)_
 
 - **PATRÓN** `sigma_h` < `0.0047` → IC=+0.201 (n=95)
   - _Por qué funciona_: baja volatilidad → señal GBM más fiable; el spread de Polymarket cubre mejor el edge
-  - _Acción_: Kelly boost +1.00€ cuando `sigma_h` < 0.0047 (IC base=+0.148)
+  - _Acción_: Kelly boost +1.00€ cuando `sigma_h` < 0.0047 (IC base=+0.146)
 
-- **PATRÓN** `drift_60min` |x|≤ `0.2828` → IC=+0.167 (n=187)
+- **PATRÓN** `drift_60min` |x|≤ `0.2773` → IC=+0.167 (n=187)
   - _Por qué funciona_: drift moderado → precio aún no ha reaccionado del todo; lag explotable
-  - _Acción_: Kelly boost +0.83€ cuando `drift_60min` |x|≤ 0.2828 (IC base=+0.148)
+  - _Acción_: Kelly boost +0.83€ cuando `drift_60min` |x|≤ 0.2773 (IC base=+0.146)
 
 - **PATRÓN** `hora_utc` > `15.0` → IC=+0.218 (n=101)
   - _Por qué funciona_: hora tardía/noche → sesión US cerrada, menos participantes informados; señales más ruidosas
-  - _Acción_: Kelly boost +1.00€ cuando `hora_utc` > 15.0 (IC base=+0.148)
+  - _Acción_: Kelly boost +1.00€ cuando `hora_utc` > 15.0 (IC base=+0.146)
 
-- **PATRÓN** `ibs_20min` < `0.5833` → IC=+0.258 (n=213)
+- **PATRÓN** `ibs_20min` < `0.5833` → IC=+0.255 (n=214)
 
-  - _Acción_: Kelly boost +1.00€ cuando `ibs_20min` < 0.5833 (IC base=+0.148)
+  - _Acción_: Kelly boost +1.00€ cuando `ibs_20min` < 0.5833 (IC base=+0.146)
 
 - **PATRÓN** `dist_vwap_pct` < `0.1758` → IC=+0.174 (n=173)
 
-  - _Acción_: Kelly boost +0.87€ cuando `dist_vwap_pct` < 0.1758 (IC base=+0.148)
+  - _Acción_: Kelly boost +0.87€ cuando `dist_vwap_pct` < 0.1758 (IC base=+0.146)
 
-- **PATRÓN** `sigma_ewma_delta_pct` > `6.235` → IC=+0.250 (n=38)
+- **PATRÓN** `sigma_ewma_delta_pct` > `6.208` → IC=+0.250 (n=38)
 
-  - _Acción_: Kelly boost +1.00€ cuando `sigma_ewma_delta_pct` > 6.235 (IC base=+0.148)
+  - _Acción_: Kelly boost +1.00€ cuando `sigma_ewma_delta_pct` > 6.208 (IC base=+0.146)
 
 - **PATRÓN** `sigma_ewma_delta_pct` < `2.149` → IC=+0.151 (n=193)
 
-  - _Acción_: Kelly boost +0.76€ cuando `sigma_ewma_delta_pct` < 2.149 (IC base=+0.148)
+  - _Acción_: Kelly boost +0.76€ cuando `sigma_ewma_delta_pct` < 2.149 (IC base=+0.146)
 
 - **PATRÓN** `volumen_regimen` < `0.6459` → IC=+0.185 (n=71)
 
-  - _Acción_: Kelly boost +0.92€ cuando `volumen_regimen` < 0.6459 (IC base=+0.148)
+  - _Acción_: Kelly boost +0.92€ cuando `volumen_regimen` < 0.6459 (IC base=+0.146)
 
 - **PATRÓN** `volumen_regimen` > `1.2615` → IC=+0.171 (n=71)
 
-  - _Acción_: Kelly boost +0.86€ cuando `volumen_regimen` > 1.2615 (IC base=+0.148)
+  - _Acción_: Kelly boost +0.86€ cuando `volumen_regimen` > 1.2615 (IC base=+0.146)
 
-- **PATRÓN** `volumen_pendiente_norm` < `0.1535` → IC=+0.355 (n=67)
+- **PATRÓN** `volumen_pendiente_norm` < `0.1474` → IC=+0.341 (n=67)
 
-  - _Acción_: Kelly boost +1.00€ cuando `volumen_pendiente_norm` < 0.1535 (IC base=+0.148)
+  - _Acción_: Kelly boost +1.00€ cuando `volumen_pendiente_norm` < 0.1474 (IC base=+0.146)
 
-- **PATRÓN** `volumen_spike_ratio` < `1.6077` → IC=+0.340 (n=23)
+- **PATRÓN** `volumen_pendiente_norm` > `0.075` → IC=+0.329 (n=33)
 
-  - _Acción_: Kelly boost +1.00€ cuando `volumen_spike_ratio` < 1.6077 (IC base=+0.148)
+  - _Acción_: Kelly boost +1.00€ cuando `volumen_pendiente_norm` > 0.075 (IC base=+0.146)
 
-- **PATRÓN** `volumen_spike_ratio` > `2.2323` → IC=+0.406 (n=30)
+- **PATRÓN** `volumen_spike_ratio` > `2.2143` → IC=+0.409 (n=31)
 
-  - _Acción_: Kelly boost +1.00€ cuando `volumen_spike_ratio` > 2.2323 (IC base=+0.148)
+  - _Acción_: Kelly boost +1.00€ cuando `volumen_spike_ratio` > 2.2143 (IC base=+0.146)
 
-- **PATRÓN** `libro_liquidez` > `1568.0425` → IC=+0.308 (n=71)
+- **PATRÓN** `libro_liquidez` > `1339.078` → IC=+0.278 (n=97)
 
-  - _Acción_: Kelly boost +1.00€ cuando `libro_liquidez` > 1568.0425 (IC base=+0.148)
+  - _Acción_: Kelly boost +1.00€ cuando `libro_liquidez` > 1339.078 (IC base=+0.146)
 
 ### GBM_LATE_15M_TARDIO#XRP#15min
 - **PATRÓN** `sigma_h` > `0.0066` → IC=+0.210 (n=98)
@@ -3227,13 +3235,13 @@ _Generado por shadow_postmortem.py sobre 61007 resoluciones (PNL=+6441.92€)_
   - _Acción_: SKIP cuando `hora_utc` < 14.0
   - _Potencial_: sin este filtro IC_bueno=+0.033 (n=148)
 
-- **PATRÓN** `drift_20min_pct` |x|≤ `0.0526` → IC=+0.219 (n=55)
+- **PATRÓN** `drift_20min_pct` |x|≤ `0.0526` → IC=+0.207 (n=56)
 
-  - _Acción_: Kelly boost +1.00€ cuando `drift_20min_pct` |x|≤ 0.0526 (IC base=+0.094)
+  - _Acción_: Kelly boost +1.00€ cuando `drift_20min_pct` |x|≤ 0.0526 (IC base=+0.091)
 
-- **PATRÓN** `libro_liquidez` > `14343.9197` → IC=+0.171 (n=74)
+- **PATRÓN** `libro_liquidez` > `14327.0782` → IC=+0.162 (n=75)
 
-  - _Acción_: Kelly boost +0.86€ cuando `libro_liquidez` > 14343.9197 (IC base=+0.094)
+  - _Acción_: Kelly boost +0.81€ cuando `libro_liquidez` > 14327.0782 (IC base=+0.091)
 
 ### MOMENTUM_IBS_15M#BNB#15min
 - **FILTRO** `libro_liquidez` < `2239.29` → IC=-0.206 (n=15)
@@ -3276,29 +3284,29 @@ _Generado por shadow_postmortem.py sobre 61007 resoluciones (PNL=+6441.92€)_
 - **FILTRO** `hora_utc` < `4.0` → IC=-0.256 (n=39)
   - _Por qué funciona_: hora temprana → mercados cripto menos líquidos, spreads más amplios; edge real menor
   - _Acción_: SKIP cuando `hora_utc` < 4.0
-  - _Potencial_: sin este filtro IC_bueno=-0.020 (n=196)
+  - _Potencial_: sin este filtro IC_bueno=-0.015 (n=198)
 
-- **FILTRO** `py_entrada` < `0.495` → IC=-0.201 (n=75)
+- **FILTRO** `py_entrada` < `0.495` → IC=-0.192 (n=76)
 
   - _Acción_: SKIP cuando `py_entrada` < 0.495
-  - _Potencial_: sin este filtro IC_bueno=+0.006 (n=160)
+  - _Potencial_: sin este filtro IC_bueno=+0.009 (n=161)
 
-- **FILTRO** `ibs_20min` < `0.7778` → IC=-0.133 (n=77)
+- **FILTRO** `ibs_20min` < `0.7801` → IC=-0.125 (n=78)
 
-  - _Acción_: SKIP cuando `ibs_20min` < 0.7778
-  - _Potencial_: sin este filtro IC_bueno=-0.025 (n=158)
+  - _Acción_: SKIP cuando `ibs_20min` < 0.7801
+  - _Potencial_: sin este filtro IC_bueno=-0.022 (n=159)
 
 - **PATRÓN** `hora_utc` < `2.0` → IC=+0.243 (n=72)
   - _Por qué funciona_: hora temprana → mercados cripto menos líquidos, spreads más amplios; edge real menor
-  - _Acción_: Kelly boost +1.00€ cuando `hora_utc` < 2.0 (IC base=+0.039)
+  - _Acción_: Kelly boost +1.00€ cuando `hora_utc` < 2.0 (IC base=+0.037)
 
 ### MOMENTUM_IBS_15M_BALLENA#BNB#15min
-- **FILTRO** `hora_utc` < `16.0` → IC=-0.200 (n=18)
+- **FILTRO** `hora_utc` < `16.0` → IC=-0.167 (n=19)
   - _Por qué funciona_: hora temprana → mercados cripto menos líquidos, spreads más amplios; edge real menor
   - _Acción_: SKIP cuando `hora_utc` < 16.0
   - _Potencial_: sin este filtro IC_bueno=-0.024 (n=19)
 
-- **FILTRO** `ibs_20min` < `0.8489` → IC=-0.200 (n=18)
+- **FILTRO** `ibs_20min` < `0.8489` → IC=-0.167 (n=19)
 
   - _Acción_: SKIP cuando `ibs_20min` < 0.8489
   - _Potencial_: sin este filtro IC_bueno=-0.024 (n=19)
@@ -3307,11 +3315,11 @@ _Generado por shadow_postmortem.py sobre 61007 resoluciones (PNL=+6441.92€)_
 - **FILTRO** `py_entrada` < `0.5` → IC=-0.222 (n=16)
 
   - _Acción_: SKIP cuando `py_entrada` < 0.5
-  - _Potencial_: sin este filtro IC_bueno=+0.022 (n=21)
+  - _Potencial_: sin este filtro IC_bueno=+0.042 (n=22)
 
-- **FILTRO** `libro_liquidez` < `14831.7206` → IC=-0.192 (n=24)
+- **FILTRO** `ibs_20min` < `0.992` → IC=-0.167 (n=25)
 
-  - _Acción_: SKIP cuando `libro_liquidez` < 14831.7206
+  - _Acción_: SKIP cuando `ibs_20min` < 0.992
   - _Potencial_: sin este filtro IC_bueno=+0.100 (n=13)
 
 ### MOMENTUM_IBS_15M_BALLENA#DOGE#15min
@@ -3440,57 +3448,52 @@ _Generado por shadow_postmortem.py sobre 61007 resoluciones (PNL=+6441.92€)_
 - **FILTRO** `hora_utc` < `4.0` → IC=-0.187 (n=148)
   - _Por qué funciona_: hora temprana → mercados cripto menos líquidos, spreads más amplios; edge real menor
   - _Acción_: SKIP cuando `hora_utc` < 4.0
-  - _Potencial_: sin este filtro IC_bueno=-0.066 (n=505)
+  - _Potencial_: sin este filtro IC_bueno=-0.070 (n=509)
 
-- **FILTRO** `py_entrada` < `0.38` → IC=-0.313 (n=153)
+- **FILTRO** `py_entrada` < `0.38` → IC=-0.314 (n=154)
 
   - _Acción_: SKIP cuando `py_entrada` < 0.38
-  - _Potencial_: sin este filtro IC_bueno=-0.026 (n=500)
+  - _Potencial_: sin este filtro IC_bueno=-0.029 (n=503)
 
-- **FILTRO** `ibs_7min` < `0.7619` → IC=-0.233 (n=163)
+- **FILTRO** `ibs_7min` < `0.7625` → IC=-0.235 (n=164)
 
-  - _Acción_: SKIP cuando `ibs_7min` < 0.7619
-  - _Potencial_: sin este filtro IC_bueno=-0.047 (n=490)
+  - _Acción_: SKIP cuando `ibs_7min` < 0.7625
+  - _Potencial_: sin este filtro IC_bueno=-0.050 (n=493)
 
 - **FILTRO** `ballena_activa_n` > `20.0` → IC=-0.224 (n=161)
 
   - _Acción_: SKIP cuando `ballena_activa_n` > 20.0
-  - _Potencial_: sin este filtro IC_bueno=-0.051 (n=492)
+  - _Potencial_: sin este filtro IC_bueno=-0.054 (n=496)
 
-- **FILTRO** `libro_liquidez` < `1924.4786` → IC=-0.183 (n=326)
+- **FILTRO** `libro_liquidez` < `1887.5338` → IC=-0.185 (n=328)
 
-  - _Acción_: SKIP cuando `libro_liquidez` < 1924.4786
-  - _Potencial_: sin este filtro IC_bueno=-0.005 (n=327)
+  - _Acción_: SKIP cuando `libro_liquidez` < 1887.5338
+  - _Potencial_: sin este filtro IC_bueno=-0.008 (n=329)
 
-- **FILTRO** `py_entrada` > `0.6` → IC=-0.269 (n=184)
+- **FILTRO** `py_entrada` > `0.64` → IC=-0.290 (n=141)
 
-  - _Acción_: SKIP cuando `py_entrada` > 0.6
-  - _Potencial_: sin este filtro IC_bueno=+0.048 (n=385)
+  - _Acción_: SKIP cuando `py_entrada` > 0.64
+  - _Potencial_: sin este filtro IC_bueno=+0.029 (n=433)
 
 ### MOMENTUM_IBS_5M_BALLENA#BNB#5min
-- **FILTRO** `py_entrada` < `0.4` → IC=-0.167 (n=34)
+- **FILTRO** `py_entrada` < `0.4` → IC=-0.176 (n=35)
 
   - _Acción_: SKIP cuando `py_entrada` < 0.4
   - _Potencial_: sin este filtro IC_bueno=-0.044 (n=77)
 
-- **FILTRO** `ballena_activa_n` > `2.0` → IC=-0.150 (n=78)
+- **FILTRO** `ballena_activa_n` > `2.0` → IC=-0.154 (n=79)
 
   - _Acción_: SKIP cuando `ballena_activa_n` > 2.0
   - _Potencial_: sin este filtro IC_bueno=+0.071 (n=33)
 
-- **FILTRO** `py_entrada` > `0.54` → IC=-0.200 (n=48)
+- **FILTRO** `py_entrada` > `0.53` → IC=-0.179 (n=51)
 
-  - _Acción_: SKIP cuando `py_entrada` > 0.54
-  - _Potencial_: sin este filtro IC_bueno=+0.200 (n=28)
+  - _Acción_: SKIP cuando `py_entrada` > 0.53
+  - _Potencial_: sin este filtro IC_bueno=+0.214 (n=26)
 
-- **FILTRO** `ibs_7min` > `0.2707` → IC=-0.250 (n=18)
+- **PATRÓN** `py_entrada` < `0.53` → IC=+0.214 (n=26)
 
-  - _Acción_: SKIP cuando `ibs_7min` > 0.2707
-  - _Potencial_: sin este filtro IC_bueno=+0.017 (n=58)
-
-- **PATRÓN** `py_entrada` < `0.54` → IC=+0.200 (n=28)
-
-  - _Acción_: Kelly boost +1.00€ cuando `py_entrada` < 0.54 (IC base=-0.051)
+  - _Acción_: Kelly boost +1.00€ cuando `py_entrada` < 0.53 (IC base=-0.044)
 
 ### MOMENTUM_IBS_5M_BALLENA#BTC#5min
 - **FILTRO** `hora_utc` < `6.0` → IC=-0.223 (n=45)
@@ -3562,35 +3565,35 @@ _Generado por shadow_postmortem.py sobre 61007 resoluciones (PNL=+6441.92€)_
 - **FILTRO** `py_entrada` > `0.65` → IC=-0.389 (n=25)
 
   - _Acción_: SKIP cuando `py_entrada` > 0.65
-  - _Potencial_: sin este filtro IC_bueno=+0.038 (n=76)
+  - _Potencial_: sin este filtro IC_bueno=+0.050 (n=78)
 
-- **FILTRO** `ibs_7min` > `0.2667` → IC=-0.241 (n=25)
+- **FILTRO** `ibs_7min` > `0.2771` → IC=-0.204 (n=25)
 
-  - _Acción_: SKIP cuando `ibs_7min` > 0.2667
-  - _Potencial_: sin este filtro IC_bueno=-0.013 (n=76)
+  - _Acción_: SKIP cuando `ibs_7min` > 0.2771
+  - _Potencial_: sin este filtro IC_bueno=-0.013 (n=78)
 
 ### MOMENTUM_IBS_5M_BALLENA#ETH#5min
 - **FILTRO** `hora_utc` < `4.0` → IC=-0.220 (n=23)
   - _Por qué funciona_: hora temprana → mercados cripto menos líquidos, spreads más amplios; edge real menor
   - _Acción_: SKIP cuando `hora_utc` < 4.0
-  - _Potencial_: sin este filtro IC_bueno=-0.083 (n=70)
+  - _Potencial_: sin este filtro IC_bueno=-0.089 (n=71)
 
-- **FILTRO** `py_entrada` < `0.4` → IC=-0.367 (n=28)
+- **FILTRO** `py_entrada` < `0.42` → IC=-0.348 (n=31)
 
-  - _Acción_: SKIP cuando `py_entrada` < 0.4
-  - _Potencial_: sin este filtro IC_bueno=-0.007 (n=65)
+  - _Acción_: SKIP cuando `py_entrada` < 0.42
+  - _Potencial_: sin este filtro IC_bueno=-0.008 (n=63)
 
 - **FILTRO** `ibs_7min` < `0.8167` → IC=-0.300 (n=23)
 
   - _Acción_: SKIP cuando `ibs_7min` < 0.8167
-  - _Potencial_: sin este filtro IC_bueno=-0.056 (n=70)
+  - _Potencial_: sin este filtro IC_bueno=-0.062 (n=71)
 
 - **FILTRO** `ballena_activa_n` > `32.0` → IC=-0.260 (n=23)
 
   - _Acción_: SKIP cuando `ballena_activa_n` > 32.0
-  - _Potencial_: sin este filtro IC_bueno=-0.069 (n=70)
+  - _Potencial_: sin este filtro IC_bueno=-0.075 (n=71)
 
-- **FILTRO** `libro_liquidez` < `8591.26` → IC=-0.151 (n=61)
+- **FILTRO** `libro_liquidez` < `8591.26` → IC=-0.156 (n=62)
 
   - _Acción_: SKIP cuando `libro_liquidez` < 8591.26
   - _Potencial_: sin este filtro IC_bueno=-0.059 (n=32)
@@ -3609,34 +3612,29 @@ _Generado por shadow_postmortem.py sobre 61007 resoluciones (PNL=+6441.92€)_
 - **FILTRO** `hora_utc` < `4.0` → IC=-0.192 (n=24)
   - _Por qué funciona_: hora temprana → mercados cripto menos líquidos, spreads más amplios; edge real menor
   - _Acción_: SKIP cuando `hora_utc` < 4.0
-  - _Potencial_: sin este filtro IC_bueno=-0.071 (n=89)
+  - _Potencial_: sin este filtro IC_bueno=-0.076 (n=90)
 
 - **FILTRO** `py_entrada` < `0.44` → IC=-0.293 (n=27)
 
   - _Acción_: SKIP cuando `py_entrada` < 0.44
-  - _Potencial_: sin este filtro IC_bueno=-0.034 (n=86)
+  - _Potencial_: sin este filtro IC_bueno=-0.039 (n=87)
 
-- **FILTRO** `ibs_7min` < `1.0` → IC=-0.190 (n=56)
+- **FILTRO** `ibs_7min` < `0.875` → IC=-0.218 (n=37)
 
-  - _Acción_: SKIP cuando `ibs_7min` < 1.0
-  - _Potencial_: sin este filtro IC_bueno=-0.009 (n=57)
+  - _Acción_: SKIP cuando `ibs_7min` < 0.875
+  - _Potencial_: sin este filtro IC_bueno=-0.044 (n=77)
 
 - **FILTRO** `ballena_activa_n` > `16.0` → IC=-0.259 (n=27)
 
   - _Acción_: SKIP cuando `ballena_activa_n` > 16.0
-  - _Potencial_: sin este filtro IC_bueno=-0.045 (n=86)
+  - _Potencial_: sin este filtro IC_bueno=-0.051 (n=87)
 
-- **PATRÓN** `libro_liquidez` > `4172.3896` → IC=+0.179 (n=26)
+- **PATRÓN** `libro_liquidez` > `4172.3896` → IC=+0.190 (n=27)
 
-  - _Acción_: Kelly boost +0.89€ cuando `libro_liquidez` > 4172.3896 (IC base=+0.014)
+  - _Acción_: Kelly boost +0.95€ cuando `libro_liquidez` > 4172.3896 (IC base=+0.023)
 
 ### MOMENTUM_IBS_5M_BALLENA#XRP#5min
-- **FILTRO** `hora_utc` < `18.0` → IC=-0.136 (n=64)
-  - _Por qué funciona_: hora temprana → mercados cripto menos líquidos, spreads más amplios; edge real menor
-  - _Acción_: SKIP cuando `hora_utc` < 18.0
-  - _Potencial_: sin este filtro IC_bueno=-0.043 (n=33)
-
-- **FILTRO** `py_entrada` < `0.5` → IC=-0.295 (n=37)
+- **FILTRO** `py_entrada` < `0.5` → IC=-0.300 (n=38)
 
   - _Acción_: SKIP cuando `py_entrada` < 0.5
   - _Potencial_: sin este filtro IC_bueno=+0.016 (n=60)
@@ -3644,17 +3642,17 @@ _Generado por shadow_postmortem.py sobre 61007 resoluciones (PNL=+6441.92€)_
 - **FILTRO** `ibs_7min` < `0.7143` → IC=-0.346 (n=24)
 
   - _Acción_: SKIP cuando `ibs_7min` < 0.7143
-  - _Potencial_: sin este filtro IC_bueno=-0.020 (n=73)
+  - _Potencial_: sin este filtro IC_bueno=-0.026 (n=74)
 
 - **FILTRO** `ballena_activa_n` > `18.0` → IC=-0.292 (n=22)
 
   - _Acción_: SKIP cuando `ballena_activa_n` > 18.0
-  - _Potencial_: sin este filtro IC_bueno=-0.045 (n=75)
+  - _Potencial_: sin este filtro IC_bueno=-0.051 (n=76)
 
-- **FILTRO** `libro_liquidez` < `1283.105` → IC=-0.200 (n=48)
+- **FILTRO** `libro_liquidez` < `3558.8016` → IC=-0.182 (n=64)
 
-  - _Acción_: SKIP cuando `libro_liquidez` < 1283.105
-  - _Potencial_: sin este filtro IC_bueno=-0.010 (n=49)
+  - _Acción_: SKIP cuando `libro_liquidez` < 3558.8016
+  - _Potencial_: sin este filtro IC_bueno=+0.028 (n=34)
 
 - **FILTRO** `py_entrada` > `0.67` → IC=-0.321 (n=26)
 
@@ -3669,6 +3667,11 @@ _Generado por shadow_postmortem.py sobre 61007 resoluciones (PNL=+6441.92€)_
 
   - _Acción_: Kelly boost +0.88€ cuando `libro_liquidez` > 3533.817 (IC base=-0.032)
 
+### MOMENTUM_IBS_5M_FADE#BNB#5min
+- **PATRÓN** `ibs_7min` > `1.0` → IC=+0.121 (n=56)
+
+  - _Acción_: Kelly boost +0.60€ cuando `ibs_7min` > 1.0 (IC base=+0.060)
+
 ### MOMENTUM_IBS_5M_FADE#BTC#5min
 - **FILTRO** `ibs_7min` < `1.0` → IC=-0.147 (n=15)
 
@@ -3681,9 +3684,9 @@ _Generado por shadow_postmortem.py sobre 61007 resoluciones (PNL=+6441.92€)_
   - _Potencial_: sin este filtro IC_bueno=+0.129 (n=33)
 
 ### MOMENTUM_IBS_5M_FADE#ETH#5min
-- **PATRÓN** `libro_liquidez` > `9403.8686` → IC=+0.173 (n=47)
+- **PATRÓN** `libro_liquidez` > `9403.8686` → IC=+0.180 (n=48)
 
-  - _Acción_: Kelly boost +0.87€ cuando `libro_liquidez` > 9403.8686 (IC base=+0.031)
+  - _Acción_: Kelly boost +0.90€ cuando `libro_liquidez` > 9403.8686 (IC base=+0.036)
 
 ### ORDER_FLOW_5M
 - **FILTRO** `total_vol_5m` > `215.224` → IC=-0.147 (n=15)
@@ -3767,11 +3770,11 @@ _Generado por shadow_postmortem.py sobre 61007 resoluciones (PNL=+6441.92€)_
 - **FILTRO** `py_entrada` > `0.495` → IC=-0.155 (n=27)
 
   - _Acción_: SKIP cuando `py_entrada` > 0.495
-  - _Potencial_: sin este filtro IC_bueno=+0.031 (n=79)
+  - _Potencial_: sin este filtro IC_bueno=+0.037 (n=80)
 
 - **PATRÓN** `hora_utc` < `4.0` → IC=+0.125 (n=38)
   - _Por qué funciona_: hora temprana → mercados cripto menos líquidos, spreads más amplios; edge real menor
-  - _Acción_: Kelly boost +0.62€ cuando `hora_utc` < 4.0 (IC base=-0.018)
+  - _Acción_: Kelly boost +0.62€ cuando `hora_utc` < 4.0 (IC base=-0.014)
 
 ### STREAK_FADE_5M#ETH#5min
 - **FILTRO** `hora_utc` > `4.0` → IC=-0.143 (n=26)
@@ -3801,11 +3804,21 @@ _Generado por shadow_postmortem.py sobre 61007 resoluciones (PNL=+6441.92€)_
   - _Potencial_: sin este filtro IC_bueno=-0.043 (n=33)
 
 ### STREAK_MOM_5M
+- **FILTRO** `ballena_activa_n` > `35.0` → IC=-0.167 (n=22)
+
+  - _Acción_: SKIP cuando `ballena_activa_n` > 35.0
+  - _Potencial_: sin este filtro IC_bueno=+0.020 (n=48)
+
 - **PATRÓN** `ballena_activa_n` < `26.0` → IC=+0.125 (n=54)
 
   - _Acción_: Kelly boost +0.62€ cuando `ballena_activa_n` < 26.0 (IC base=+0.032)
 
 ### STREAK_MOM_5M#ETH#5min
+- **FILTRO** `hora_utc` < `10.0` → IC=-0.214 (n=19)
+  - _Por qué funciona_: hora temprana → mercados cripto menos líquidos, spreads más amplios; edge real menor
+  - _Acción_: SKIP cuando `hora_utc` < 10.0
+  - _Potencial_: sin este filtro IC_bueno=+0.198 (n=41)
+
 - **FILTRO** `hora_utc` > `8.0` → IC=-0.167 (n=16)
   - _Por qué funciona_: hora tardía/noche → sesión US cerrada, menos participantes informados; señales más ruidosas
   - _Acción_: SKIP cuando `hora_utc` > 8.0
@@ -3813,11 +3826,11 @@ _Generado por shadow_postmortem.py sobre 61007 resoluciones (PNL=+6441.92€)_
 
 - **PATRÓN** `hora_utc` > `10.0` → IC=+0.198 (n=41)
   - _Por qué funciona_: hora tardía/noche → sesión US cerrada, menos participantes informados; señales más ruidosas
-  - _Acción_: Kelly boost +0.99€ cuando `hora_utc` > 10.0 (IC base=+0.074)
+  - _Acción_: Kelly boost +0.99€ cuando `hora_utc` > 10.0 (IC base=+0.065)
 
 - **PATRÓN** `py_entrada` < `0.495` → IC=+0.154 (n=24)
 
-  - _Acción_: Kelly boost +0.77€ cuando `py_entrada` < 0.495 (IC base=+0.074)
+  - _Acción_: Kelly boost +0.77€ cuando `py_entrada` < 0.495 (IC base=+0.065)
 
 ### STREAK_MOM_5M#XRP#5min
 - **FILTRO** `streak_len` > `3.0` → IC=-0.147 (n=15)
@@ -3847,12 +3860,12 @@ _Generado por shadow_postmortem.py sobre 61007 resoluciones (PNL=+6441.92€)_
 - **FILTRO** `py_entrada` < `0.495` → IC=-0.147 (n=32)
 
   - _Acción_: SKIP cuando `py_entrada` < 0.495
-  - _Potencial_: sin este filtro IC_bueno=+0.030 (n=368)
+  - _Potencial_: sin este filtro IC_bueno=+0.028 (n=369)
 
 - **FILTRO** `libro_spread` > `0.01` → IC=-0.154 (n=24)
 
   - _Acción_: SKIP cuando `libro_spread` > 0.01
-  - _Potencial_: sin este filtro IC_bueno=+0.026 (n=376)
+  - _Potencial_: sin este filtro IC_bueno=+0.025 (n=377)
 
 ### UPDOWN_GBM#15min
 - **FILTRO** `ibs_15` < `0.5676` → IC=-0.159 (n=136)
@@ -3876,13 +3889,13 @@ _Generado por shadow_postmortem.py sobre 61007 resoluciones (PNL=+6441.92€)_
 
   - _Acción_: Kelly boost +1.00€ cuando `sigma_ewma_delta_pct` > 9.021 (IC base=+0.095)
 
-- **PATRÓN** `ibs_15` < `0.4167` → IC=+0.128 (n=304)
+- **PATRÓN** `ibs_15` < `0.4239` → IC=+0.129 (n=305)
   - _Por qué funciona_: IBS bajo (precio cerca del mínimo) → sobreventa de corto plazo; BUY_NO menos fiable
-  - _Acción_: Kelly boost +0.64€ cuando `ibs_15` < 0.4167 (IC base=+0.076)
+  - _Acción_: Kelly boost +0.64€ cuando `ibs_15` < 0.4239 (IC base=+0.073)
 
 - **PATRÓN** `dist_vwap_pct` > `0.566` → IC=+0.262 (n=19)
 
-  - _Acción_: Kelly boost +1.00€ cuando `dist_vwap_pct` > 0.566 (IC base=+0.076)
+  - _Acción_: Kelly boost +1.00€ cuando `dist_vwap_pct` > 0.566 (IC base=+0.073)
 
 ### UPDOWN_GBM#5min
 - **FILTRO** `pct_spot_vs_ref` |x|> `0.0044` → IC=-0.150 (n=184)
@@ -4341,7 +4354,7 @@ _Generado por shadow_postmortem.py sobre 61007 resoluciones (PNL=+6441.92€)_
 - **FILTRO** `sigma_ewma_delta_pct` > `12.735` → IC=-0.148 (n=211)
 
   - _Acción_: SKIP cuando `sigma_ewma_delta_pct` > 12.735
-  - _Potencial_: sin este filtro IC_bueno=-0.025 (n=863)
+  - _Potencial_: sin este filtro IC_bueno=-0.025 (n=864)
 
 - **PATRÓN** `ibs_15` > `0.5714` → IC=+0.245 (n=108)
   - _Por qué funciona_: IBS alto (precio cerca del máximo) → sobrecompra de corto plazo; BUY_YES menos fiable
@@ -4349,7 +4362,7 @@ _Generado por shadow_postmortem.py sobre 61007 resoluciones (PNL=+6441.92€)_
 
 - **PATRÓN** `ibs_15` < `0.2364` → IC=+0.306 (n=29)
   - _Por qué funciona_: IBS bajo (precio cerca del mínimo) → sobreventa de corto plazo; BUY_NO menos fiable
-  - _Acción_: Kelly boost +1.00€ cuando `ibs_15` < 0.2364 (IC base=-0.049)
+  - _Acción_: Kelly boost +1.00€ cuando `ibs_15` < 0.2364 (IC base=-0.050)
 
 ### UPDOWN_GBM_15M_TARDIO#BTC#15min
 - **FILTRO** `hora_utc` < `7.0` → IC=-0.253 (n=79)
@@ -4410,7 +4423,7 @@ _Generado por shadow_postmortem.py sobre 61007 resoluciones (PNL=+6441.92€)_
 - **FILTRO** `sigma_ewma_delta_pct` > `13.855` → IC=-0.190 (n=56)
 
   - _Acción_: SKIP cuando `sigma_ewma_delta_pct` > 13.855
-  - _Potencial_: sin este filtro IC_bueno=+0.023 (n=325)
+  - _Potencial_: sin este filtro IC_bueno=+0.021 (n=326)
 
 - **PATRÓN** `sigma_ewma_delta_pct` > `9.749` → IC=+0.208 (n=22)
 
@@ -4669,7 +4682,7 @@ _Derivadas de los patrones aprendidos:_
 - **H-IBS-UPDOWN_GBM#XRP#15min**: dentro de BUY_YES, IBS > 0.4444 sube el IC de +0.081 a +0.153 en UPDOWN_GBM#XRP#15min (n=96). Ya aplicado como kelly_boost=+0.77€ automático (shadow) — no es señal de reversión a la dirección contraria.
 - **H-IBS-UPDOWN_GBM#XRP#15min**: dentro de BUY_NO, IBS < 0.2258 sube el IC de +0.096 a +0.207 en UPDOWN_GBM#XRP#15min (n=73). Ya aplicado como kelly_boost=+1.00€ automático (shadow) — no es señal de reversión a la dirección contraria.
 - **H-IBS-UPDOWN_GBM_15M_TARDIO**: dentro de BUY_YES, IBS > 0.5714 sube el IC de -0.034 a +0.245 en UPDOWN_GBM_15M_TARDIO (n=108). Ya aplicado como kelly_boost=+1.00€ automático (shadow) — no es señal de reversión a la dirección contraria.
-- **H-IBS-UPDOWN_GBM_15M_TARDIO**: dentro de BUY_NO, IBS < 0.2364 sube el IC de -0.049 a +0.306 en UPDOWN_GBM_15M_TARDIO (n=29). Ya aplicado como kelly_boost=+1.00€ automático (shadow) — no es señal de reversión a la dirección contraria.
+- **H-IBS-UPDOWN_GBM_15M_TARDIO**: dentro de BUY_NO, IBS < 0.2364 sube el IC de -0.050 a +0.306 en UPDOWN_GBM_15M_TARDIO (n=29). Ya aplicado como kelly_boost=+1.00€ automático (shadow) — no es señal de reversión a la dirección contraria.
 - **H-IBS-UPDOWN_GBM_15M_TARDIO#ETH#15min**: dentro de BUY_YES, IBS > 0.4479 sube el IC de -0.116 a +0.159 en UPDOWN_GBM_15M_TARDIO#ETH#15min (n=42). Ya aplicado como kelly_boost=+0.80€ automático (shadow) — no es señal de reversión a la dirección contraria.
 - **H-IBS-UPDOWN_GBM_15M_TARDIO#ETH#15min**: dentro de BUY_NO, IBS < 0.246 sube el IC de +0.196 a +0.340 en UPDOWN_GBM_15M_TARDIO#ETH#15min (n=23). Ya aplicado como kelly_boost=+1.00€ automático (shadow) — no es señal de reversión a la dirección contraria.
 - **H-IBS-UPDOWN_GBM_IBS_ALTO**: dentro de BUY_YES, IBS > 0.9356 sube el IC de +0.241 a +0.317 en UPDOWN_GBM_IBS_ALTO (n=69). Ya aplicado como kelly_boost=+1.00€ automático (shadow) — no es señal de reversión a la dirección contraria.
@@ -4696,9 +4709,9 @@ _Derivadas de los patrones aprendidos:_
 | ✅ BALLENAS_CONFIRMADAS_15M#SOL#15min | 208 | +0.024 | +0.48€ | 6 | 5 |
 | ✅ BALLENAS_CONFIRMADAS_15M#XRP | 24 | +0.231 | +13.21€ | 0 | 0 |
 | ✅ BALLENAS_CONFIRMADAS_15M#XRP#15min | 24 | +0.231 | +13.21€ | 0 | 0 |
-| ✅ BALLENAS_TARDIAS | 3198 | -0.116 | -492.71€ | 1 | 0 |
+| ✅ BALLENAS_TARDIAS | 3199 | -0.116 | -493.78€ | 1 | 0 |
 | ✅ BALLENAS_TARDIAS#15min | 443 | -0.010 | -8.52€ | 0 | 0 |
-| ✅ BALLENAS_TARDIAS#5min | 2755 | -0.133 | -484.18€ | 0 | 0 |
+| ✅ BALLENAS_TARDIAS#5min | 2756 | -0.133 | -485.25€ | 0 | 0 |
 | ✅ BALLENAS_TARDIAS#BNB | 353 | -0.199 | -105.65€ | 0 | 0 |
 | ✅ BALLENAS_TARDIAS#BNB#5min | 353 | -0.199 | -105.65€ | 1 | 0 |
 | ✅ BALLENAS_TARDIAS#BTC | 443 | -0.010 | -8.52€ | 0 | 0 |
@@ -4709,41 +4722,41 @@ _Derivadas de los patrones aprendidos:_
 | ✅ BALLENAS_TARDIAS#ETH#5min | 725 | -0.137 | -38.80€ | 1 | 0 |
 | ✅ BALLENAS_TARDIAS#SOL | 757 | -0.017 | -91.77€ | 0 | 0 |
 | ✅ BALLENAS_TARDIAS#SOL#5min | 757 | -0.017 | -91.77€ | 1 | 0 |
-| 🚫 BALLENAS_TARDIAS#XRP | 620 | -0.219 | -101.88€ | 0 | 0 |
-| 🚫 BALLENAS_TARDIAS#XRP#5min | 620 | -0.219 | -101.88€ | 1 | 0 |
-| ✅ FAVORITO_CONFIRMADO | 13578 | +0.116 | -777.77€ | 0 | 8 |
+| 🚫 BALLENAS_TARDIAS#XRP | 621 | -0.219 | -102.95€ | 0 | 0 |
+| 🚫 BALLENAS_TARDIAS#XRP#5min | 621 | -0.219 | -102.95€ | 1 | 0 |
+| ✅ FAVORITO_CONFIRMADO | 13586 | +0.116 | -782.82€ | 0 | 8 |
 | ✅ FAVORITO_CONFIRMADO#15min | 3278 | +0.179 | -116.76€ | 0 | 0 |
 | ✅ FAVORITO_CONFIRMADO#240min | 98 | -0.100 | -46.42€ | 0 | 0 |
-| ✅ FAVORITO_CONFIRMADO#5min | 7633 | +0.087 | -632.08€ | 0 | 0 |
+| ✅ FAVORITO_CONFIRMADO#5min | 7641 | +0.087 | -637.13€ | 0 | 0 |
 | ✅ FAVORITO_CONFIRMADO#60min | 2569 | +0.131 | +17.49€ | 0 | 0 |
-| ✅ FAVORITO_CONFIRMADO#BNB | 1290 | +0.034 | -280.36€ | 0 | 0 |
+| ✅ FAVORITO_CONFIRMADO#BNB | 1292 | +0.033 | -282.50€ | 0 | 0 |
 | ✅ FAVORITO_CONFIRMADO#BNB#15min | 13 | -0.065 | -2.29€ | 0 | 0 |
-| ✅ FAVORITO_CONFIRMADO#BNB#5min | 1273 | +0.037 | -272.32€ | 0 | 0 |
+| ✅ FAVORITO_CONFIRMADO#BNB#5min | 1275 | +0.036 | -274.46€ | 0 | 0 |
 | ✅ FAVORITO_CONFIRMADO#BTC | 3125 | +0.140 | -3.36€ | 0 | 0 |
 | ✅ FAVORITO_CONFIRMADO#BTC#15min | 893 | +0.193 | -38.42€ | 0 | 6 |
 | ✅ FAVORITO_CONFIRMADO#BTC#240min | 41 | -0.105 | -20.74€ | 0 | 0 |
 | ✅ FAVORITO_CONFIRMADO#BTC#5min | 1274 | +0.112 | -7.35€ | 0 | 0 |
 | ✅ FAVORITO_CONFIRMADO#BTC#60min | 917 | +0.139 | +63.15€ | 0 | 7 |
-| ✅ FAVORITO_CONFIRMADO#DOGE | 1286 | +0.054 | -225.40€ | 0 | 0 |
+| ✅ FAVORITO_CONFIRMADO#DOGE | 1288 | +0.054 | -225.66€ | 0 | 0 |
 | ✅ FAVORITO_CONFIRMADO#DOGE#15min | 9 | -0.021 | -3.54€ | 0 | 0 |
-| ✅ FAVORITO_CONFIRMADO#DOGE#5min | 1276 | +0.056 | -219.82€ | 0 | 0 |
-| ✅ FAVORITO_CONFIRMADO#ETH | 3375 | +0.126 | -49.25€ | 0 | 0 |
+| ✅ FAVORITO_CONFIRMADO#DOGE#5min | 1278 | +0.056 | -220.09€ | 0 | 0 |
+| ✅ FAVORITO_CONFIRMADO#ETH | 3376 | +0.126 | -48.68€ | 0 | 0 |
 | ✅ FAVORITO_CONFIRMADO#ETH#15min | 1209 | +0.159 | -26.96€ | 0 | 7 |
 | 🚫 FAVORITO_CONFIRMADO#ETH#240min | 12 | -0.129 | -8.57€ | 0 | 0 |
-| ✅ FAVORITO_CONFIRMADO#ETH#5min | 1268 | +0.105 | -14.55€ | 0 | 0 |
+| ✅ FAVORITO_CONFIRMADO#ETH#5min | 1269 | +0.105 | -13.98€ | 0 | 0 |
 | ✅ FAVORITO_CONFIRMADO#ETH#60min | 886 | +0.116 | +0.85€ | 0 | 6 |
-| ✅ FAVORITO_CONFIRMADO#SOL | 3218 | +0.137 | -189.04€ | 0 | 0 |
+| ✅ FAVORITO_CONFIRMADO#SOL | 3220 | +0.137 | -191.18€ | 0 | 0 |
 | ✅ FAVORITO_CONFIRMADO#SOL#15min | 1142 | +0.196 | -47.24€ | 0 | 7 |
 | ✅ FAVORITO_CONFIRMADO#SOL#240min | 39 | +0.012 | -7.84€ | 0 | 0 |
-| ✅ FAVORITO_CONFIRMADO#SOL#5min | 1271 | +0.087 | -87.46€ | 0 | 0 |
+| ✅ FAVORITO_CONFIRMADO#SOL#5min | 1273 | +0.086 | -89.60€ | 0 | 0 |
 | ✅ FAVORITO_CONFIRMADO#SOL#60min | 766 | +0.138 | -46.50€ | 0 | 7 |
-| ✅ FAVORITO_CONFIRMADO#XRP | 1284 | +0.125 | -30.36€ | 0 | 0 |
+| ✅ FAVORITO_CONFIRMADO#XRP | 1285 | +0.125 | -31.43€ | 0 | 0 |
 | ✅ FAVORITO_CONFIRMADO#XRP#15min | 12 | +0.043 | +1.69€ | 0 | 0 |
-| ✅ FAVORITO_CONFIRMADO#XRP#5min | 1271 | +0.126 | -30.58€ | 0 | 0 |
-| ✅ FAVORITO_CONFIRMADO_15MIN_ALTACONVICCION | 3349 | +0.164 | -304.87€ | 2 | 4 |
-| ✅ FAVORITO_CONFIRMADO_15MIN_ALTACONVICCION#15min | 3349 | +0.164 | -304.87€ | 0 | 0 |
-| ✅ FAVORITO_CONFIRMADO_15MIN_ALTACONVICCION#BNB | 840 | +0.157 | -106.66€ | 0 | 0 |
-| ✅ FAVORITO_CONFIRMADO_15MIN_ALTACONVICCION#BNB#15min | 840 | +0.157 | -106.66€ | 0 | 2 |
+| ✅ FAVORITO_CONFIRMADO#XRP#5min | 1272 | +0.126 | -31.65€ | 0 | 0 |
+| ✅ FAVORITO_CONFIRMADO_15MIN_ALTACONVICCION | 3350 | +0.164 | -304.44€ | 2 | 4 |
+| ✅ FAVORITO_CONFIRMADO_15MIN_ALTACONVICCION#15min | 3350 | +0.164 | -304.44€ | 0 | 0 |
+| ✅ FAVORITO_CONFIRMADO_15MIN_ALTACONVICCION#BNB | 841 | +0.157 | -106.24€ | 0 | 0 |
+| ✅ FAVORITO_CONFIRMADO_15MIN_ALTACONVICCION#BNB#15min | 841 | +0.157 | -106.24€ | 0 | 2 |
 | ✅ FAVORITO_CONFIRMADO_15MIN_ALTACONVICCION#BTC | 74 | -0.092 | -3.68€ | 0 | 0 |
 | ✅ FAVORITO_CONFIRMADO_15MIN_ALTACONVICCION#BTC#15min | 74 | -0.092 | -3.68€ | 2 | 3 |
 | ✅ FAVORITO_CONFIRMADO_15MIN_ALTACONVICCION#DOGE | 833 | +0.162 | -100.36€ | 0 | 0 |
@@ -4762,10 +4775,10 @@ _Derivadas de los patrones aprendidos:_
 | ✅ FAVORITO_CONFIRMADO_15MIN_EXTREMO#ETH#15min | 63 | +0.377 | -7.43€ | 0 | 4 |
 | ✅ FAVORITO_CONFIRMADO_15MIN_EXTREMO#SOL | 38 | +0.425 | +0.18€ | 0 | 0 |
 | ✅ FAVORITO_CONFIRMADO_15MIN_EXTREMO#SOL#15min | 38 | +0.425 | +0.18€ | 0 | 2 |
-| ✅ FAVORITO_CONFIRMADO_5MIN_ALTACONVICCION | 5444 | +0.194 | -476.76€ | 0 | 3 |
-| ✅ FAVORITO_CONFIRMADO_5MIN_ALTACONVICCION#5min | 5444 | +0.194 | -476.76€ | 0 | 0 |
-| ✅ FAVORITO_CONFIRMADO_5MIN_ALTACONVICCION#BNB | 1025 | +0.102 | -224.24€ | 0 | 0 |
-| ✅ FAVORITO_CONFIRMADO_5MIN_ALTACONVICCION#BNB#5min | 1025 | +0.102 | -224.24€ | 0 | 2 |
+| ✅ FAVORITO_CONFIRMADO_5MIN_ALTACONVICCION | 5445 | +0.193 | -477.83€ | 0 | 3 |
+| ✅ FAVORITO_CONFIRMADO_5MIN_ALTACONVICCION#5min | 5445 | +0.193 | -477.83€ | 0 | 0 |
+| ✅ FAVORITO_CONFIRMADO_5MIN_ALTACONVICCION#BNB | 1026 | +0.101 | -225.32€ | 0 | 0 |
+| ✅ FAVORITO_CONFIRMADO_5MIN_ALTACONVICCION#BNB#5min | 1026 | +0.101 | -225.32€ | 0 | 2 |
 | ✅ FAVORITO_CONFIRMADO_5MIN_ALTACONVICCION#BTC | 842 | +0.254 | -1.38€ | 0 | 0 |
 | ✅ FAVORITO_CONFIRMADO_5MIN_ALTACONVICCION#BTC#5min | 842 | +0.254 | -1.38€ | 0 | 3 |
 | ✅ FAVORITO_CONFIRMADO_5MIN_ALTACONVICCION#DOGE | 962 | +0.150 | -143.10€ | 0 | 0 |
@@ -4776,12 +4789,12 @@ _Derivadas de los patrones aprendidos:_
 | ✅ FAVORITO_CONFIRMADO_5MIN_ALTACONVICCION#SOL#5min | 841 | +0.251 | -4.88€ | 0 | 3 |
 | ✅ FAVORITO_CONFIRMADO_5MIN_ALTACONVICCION#XRP | 892 | +0.201 | -70.24€ | 0 | 0 |
 | ✅ FAVORITO_CONFIRMADO_5MIN_ALTACONVICCION#XRP#5min | 892 | +0.201 | -70.24€ | 0 | 3 |
-| ✅ FAVORITO_CONFIRMADO_5MIN_BAJALATENCIA | 1931 | +0.151 | +111.25€ | 0 | 6 |
-| ✅ FAVORITO_CONFIRMADO_5MIN_BAJALATENCIA#5min | 1931 | +0.151 | +111.25€ | 0 | 0 |
-| ✅ FAVORITO_CONFIRMADO_5MIN_BAJALATENCIA#DOGE | 959 | +0.156 | +63.60€ | 0 | 0 |
-| ✅ FAVORITO_CONFIRMADO_5MIN_BAJALATENCIA#DOGE#5min | 959 | +0.156 | +63.60€ | 0 | 6 |
-| ✅ FAVORITO_CONFIRMADO_5MIN_BAJALATENCIA#XRP | 972 | +0.147 | +47.65€ | 0 | 0 |
-| ✅ FAVORITO_CONFIRMADO_5MIN_BAJALATENCIA#XRP#5min | 972 | +0.147 | +47.65€ | 0 | 6 |
+| ✅ FAVORITO_CONFIRMADO_5MIN_BAJALATENCIA | 1934 | +0.152 | +113.44€ | 0 | 6 |
+| ✅ FAVORITO_CONFIRMADO_5MIN_BAJALATENCIA#5min | 1934 | +0.152 | +113.44€ | 0 | 0 |
+| ✅ FAVORITO_CONFIRMADO_5MIN_BAJALATENCIA#DOGE | 961 | +0.156 | +64.95€ | 0 | 0 |
+| ✅ FAVORITO_CONFIRMADO_5MIN_BAJALATENCIA#DOGE#5min | 961 | +0.156 | +64.95€ | 0 | 6 |
+| ✅ FAVORITO_CONFIRMADO_5MIN_BAJALATENCIA#XRP | 973 | +0.147 | +48.49€ | 0 | 0 |
+| ✅ FAVORITO_CONFIRMADO_5MIN_BAJALATENCIA#XRP#5min | 973 | +0.147 | +48.49€ | 0 | 6 |
 | ✅ FAVORITO_CONFIRMADO_60MIN_ALTACONVICCION | 526 | +0.295 | -1.42€ | 0 | 3 |
 | ✅ FAVORITO_CONFIRMADO_60MIN_ALTACONVICCION#60min | 526 | +0.295 | -1.42€ | 0 | 0 |
 | ✅ FAVORITO_CONFIRMADO_60MIN_ALTACONVICCION#BTC | 221 | +0.267 | -13.10€ | 0 | 0 |
@@ -4802,46 +4815,46 @@ _Derivadas de los patrones aprendidos:_
 | ✅ FAVORITO_CONFIRMADO_SOL_ALTACONVICCION#15min | 240 | +0.260 | -26.95€ | 0 | 0 |
 | ✅ FAVORITO_CONFIRMADO_SOL_ALTACONVICCION#SOL | 240 | +0.260 | -26.95€ | 0 | 0 |
 | ✅ FAVORITO_CONFIRMADO_SOL_ALTACONVICCION#SOL#15min | 240 | +0.260 | -26.95€ | 0 | 4 |
-| ✅ GBM_LATE_15M | 4350 | +0.090 | +1563.65€ | 0 | 16 |
-| ✅ GBM_LATE_15M#15min | 4350 | +0.090 | +1563.65€ | 0 | 0 |
-| ✅ GBM_LATE_15M#BNB | 754 | +0.176 | +473.43€ | 0 | 0 |
-| ✅ GBM_LATE_15M#BNB#15min | 754 | +0.176 | +473.43€ | 0 | 18 |
+| ✅ GBM_LATE_15M | 4352 | +0.090 | +1564.54€ | 0 | 16 |
+| ✅ GBM_LATE_15M#15min | 4352 | +0.090 | +1564.54€ | 0 | 0 |
+| ✅ GBM_LATE_15M#BNB | 755 | +0.176 | +475.39€ | 0 | 0 |
+| ✅ GBM_LATE_15M#BNB#15min | 755 | +0.176 | +475.39€ | 0 | 18 |
 | ✅ GBM_LATE_15M#BTC | 415 | +0.176 | +197.56€ | 0 | 0 |
 | ✅ GBM_LATE_15M#BTC#15min | 415 | +0.176 | +197.56€ | 0 | 22 |
 | ✅ GBM_LATE_15M#DOGE | 757 | +0.194 | +525.81€ | 0 | 0 |
 | ✅ GBM_LATE_15M#DOGE#15min | 757 | +0.194 | +525.81€ | 0 | 18 |
 | ✅ GBM_LATE_15M#ETH | 588 | +0.003 | +40.58€ | 0 | 0 |
 | ✅ GBM_LATE_15M#ETH#15min | 588 | +0.003 | +40.58€ | 0 | 4 |
-| ✅ GBM_LATE_15M#SOL | 823 | +0.010 | +83.81€ | 0 | 0 |
-| ✅ GBM_LATE_15M#SOL#15min | 823 | +0.010 | +83.81€ | 3 | 6 |
+| ✅ GBM_LATE_15M#SOL | 824 | +0.010 | +82.74€ | 0 | 0 |
+| ✅ GBM_LATE_15M#SOL#15min | 824 | +0.010 | +82.74€ | 3 | 6 |
 | ✅ GBM_LATE_15M#XRP | 1013 | +0.029 | +242.45€ | 0 | 0 |
 | ✅ GBM_LATE_15M#XRP#15min | 1013 | +0.029 | +242.45€ | 0 | 4 |
-| ✅ GBM_LATE_15M_ESPACIO_ATR | 5368 | +0.052 | +1618.11€ | 0 | 12 |
-| ✅ GBM_LATE_15M_ESPACIO_ATR#15min | 5368 | +0.052 | +1618.11€ | 0 | 0 |
-| ✅ GBM_LATE_15M_ESPACIO_ATR#BNB | 1029 | -0.028 | +187.83€ | 0 | 0 |
-| ✅ GBM_LATE_15M_ESPACIO_ATR#BNB#15min | 1029 | -0.028 | +187.83€ | 1 | 2 |
-| ✅ GBM_LATE_15M_ESPACIO_ATR#BTC | 1017 | -0.002 | +120.99€ | 0 | 0 |
-| ✅ GBM_LATE_15M_ESPACIO_ATR#BTC#15min | 1017 | -0.002 | +120.99€ | 0 | 2 |
+| ✅ GBM_LATE_15M_ESPACIO_ATR | 5372 | +0.052 | +1621.22€ | 0 | 12 |
+| ✅ GBM_LATE_15M_ESPACIO_ATR#15min | 5372 | +0.052 | +1621.22€ | 0 | 0 |
+| ✅ GBM_LATE_15M_ESPACIO_ATR#BNB | 1031 | -0.028 | +188.06€ | 0 | 0 |
+| ✅ GBM_LATE_15M_ESPACIO_ATR#BNB#15min | 1031 | -0.028 | +188.06€ | 1 | 2 |
+| ✅ GBM_LATE_15M_ESPACIO_ATR#BTC | 1018 | -0.001 | +122.37€ | 0 | 0 |
+| ✅ GBM_LATE_15M_ESPACIO_ATR#BTC#15min | 1018 | -0.001 | +122.37€ | 0 | 3 |
 | ✅ GBM_LATE_15M_ESPACIO_ATR#DOGE | 645 | +0.240 | +589.46€ | 0 | 0 |
 | ✅ GBM_LATE_15M_ESPACIO_ATR#DOGE#15min | 645 | +0.240 | +589.46€ | 0 | 19 |
 | ✅ GBM_LATE_15M_ESPACIO_ATR#ETH | 938 | -0.010 | +34.37€ | 0 | 0 |
 | ✅ GBM_LATE_15M_ESPACIO_ATR#ETH#15min | 938 | -0.010 | +34.37€ | 4 | 0 |
-| ✅ GBM_LATE_15M_ESPACIO_ATR#SOL | 963 | +0.005 | +91.50€ | 0 | 0 |
-| ✅ GBM_LATE_15M_ESPACIO_ATR#SOL#15min | 963 | +0.005 | +91.50€ | 0 | 1 |
+| ✅ GBM_LATE_15M_ESPACIO_ATR#SOL | 964 | +0.005 | +93.00€ | 0 | 0 |
+| ✅ GBM_LATE_15M_ESPACIO_ATR#SOL#15min | 964 | +0.005 | +93.00€ | 0 | 2 |
 | ✅ GBM_LATE_15M_ESPACIO_ATR#XRP | 776 | +0.202 | +593.97€ | 0 | 0 |
 | ✅ GBM_LATE_15M_ESPACIO_ATR#XRP#15min | 776 | +0.202 | +593.97€ | 0 | 20 |
-| ✅ GBM_LATE_15M_MULTIHORIZONTE | 3131 | +0.176 | +2135.44€ | 0 | 22 |
-| ✅ GBM_LATE_15M_MULTIHORIZONTE#15min | 3131 | +0.176 | +2135.44€ | 0 | 0 |
-| ✅ GBM_LATE_15M_MULTIHORIZONTE#BNB | 557 | +0.191 | +400.52€ | 0 | 0 |
-| ✅ GBM_LATE_15M_MULTIHORIZONTE#BNB#15min | 557 | +0.191 | +400.52€ | 0 | 16 |
+| ✅ GBM_LATE_15M_MULTIHORIZONTE | 3133 | +0.177 | +2138.90€ | 0 | 22 |
+| ✅ GBM_LATE_15M_MULTIHORIZONTE#15min | 3133 | +0.177 | +2138.90€ | 0 | 0 |
+| ✅ GBM_LATE_15M_MULTIHORIZONTE#BNB | 558 | +0.191 | +402.48€ | 0 | 0 |
+| ✅ GBM_LATE_15M_MULTIHORIZONTE#BNB#15min | 558 | +0.191 | +402.48€ | 0 | 16 |
 | ✅ GBM_LATE_15M_MULTIHORIZONTE#BTC | 409 | +0.198 | +276.72€ | 0 | 0 |
 | ✅ GBM_LATE_15M_MULTIHORIZONTE#BTC#15min | 409 | +0.198 | +276.72€ | 0 | 22 |
 | ✅ GBM_LATE_15M_MULTIHORIZONTE#DOGE | 555 | +0.206 | +438.92€ | 0 | 0 |
 | ✅ GBM_LATE_15M_MULTIHORIZONTE#DOGE#15min | 555 | +0.206 | +438.92€ | 0 | 22 |
 | ✅ GBM_LATE_15M_MULTIHORIZONTE#ETH | 381 | +0.218 | +293.83€ | 0 | 0 |
 | ✅ GBM_LATE_15M_MULTIHORIZONTE#ETH#15min | 381 | +0.218 | +293.83€ | 0 | 22 |
-| ✅ GBM_LATE_15M_MULTIHORIZONTE#SOL | 592 | +0.072 | +238.75€ | 0 | 0 |
-| ✅ GBM_LATE_15M_MULTIHORIZONTE#SOL#15min | 592 | +0.072 | +238.75€ | 2 | 10 |
+| ✅ GBM_LATE_15M_MULTIHORIZONTE#SOL | 593 | +0.073 | +240.25€ | 0 | 0 |
+| ✅ GBM_LATE_15M_MULTIHORIZONTE#SOL#15min | 593 | +0.073 | +240.25€ | 1 | 10 |
 | ✅ GBM_LATE_15M_MULTIHORIZONTE#XRP | 637 | +0.193 | +486.69€ | 0 | 0 |
 | ✅ GBM_LATE_15M_MULTIHORIZONTE#XRP#15min | 637 | +0.193 | +486.69€ | 0 | 24 |
 | ✅ GBM_LATE_15M_PYCONFIRMADO | 522 | +0.040 | +39.72€ | 0 | 6 |
@@ -4854,18 +4867,18 @@ _Derivadas de los patrones aprendidos:_
 | ✅ GBM_LATE_15M_PYCONFIRMADO#SOL#15min | 224 | -0.013 | +3.57€ | 4 | 2 |
 | ✅ GBM_LATE_15M_PYCONFIRMADO#XRP | 97 | +0.015 | -5.06€ | 0 | 0 |
 | ✅ GBM_LATE_15M_PYCONFIRMADO#XRP#15min | 97 | +0.015 | -5.06€ | 0 | 0 |
-| ✅ GBM_LATE_15M_TARDIO | 3662 | +0.168 | +2363.06€ | 0 | 18 |
-| ✅ GBM_LATE_15M_TARDIO#15min | 3662 | +0.168 | +2363.06€ | 0 | 0 |
-| ✅ GBM_LATE_15M_TARDIO#BNB | 725 | +0.186 | +506.39€ | 0 | 0 |
-| ✅ GBM_LATE_15M_TARDIO#BNB#15min | 725 | +0.186 | +506.39€ | 0 | 17 |
+| ✅ GBM_LATE_15M_TARDIO | 3664 | +0.168 | +2362.98€ | 0 | 18 |
+| ✅ GBM_LATE_15M_TARDIO#15min | 3664 | +0.168 | +2362.98€ | 0 | 0 |
+| ✅ GBM_LATE_15M_TARDIO#BNB | 726 | +0.187 | +508.35€ | 0 | 0 |
+| ✅ GBM_LATE_15M_TARDIO#BNB#15min | 726 | +0.187 | +508.35€ | 0 | 17 |
 | ✅ GBM_LATE_15M_TARDIO#BTC | 482 | +0.155 | +257.36€ | 0 | 0 |
 | ✅ GBM_LATE_15M_TARDIO#BTC#15min | 482 | +0.155 | +257.36€ | 1 | 23 |
 | ✅ GBM_LATE_15M_TARDIO#DOGE | 724 | +0.223 | +613.69€ | 0 | 0 |
 | ✅ GBM_LATE_15M_TARDIO#DOGE#15min | 724 | +0.223 | +613.69€ | 0 | 18 |
 | ✅ GBM_LATE_15M_TARDIO#ETH | 321 | +0.113 | +125.49€ | 0 | 0 |
 | ✅ GBM_LATE_15M_TARDIO#ETH#15min | 321 | +0.113 | +125.49€ | 1 | 18 |
-| ✅ GBM_LATE_15M_TARDIO#SOL | 592 | +0.077 | +241.64€ | 0 | 0 |
-| ✅ GBM_LATE_15M_TARDIO#SOL#15min | 592 | +0.077 | +241.64€ | 1 | 15 |
+| ✅ GBM_LATE_15M_TARDIO#SOL | 593 | +0.076 | +239.60€ | 0 | 0 |
+| ✅ GBM_LATE_15M_TARDIO#SOL#15min | 593 | +0.076 | +239.60€ | 2 | 15 |
 | ✅ GBM_LATE_15M_TARDIO#XRP | 818 | +0.198 | +618.49€ | 0 | 0 |
 | ✅ GBM_LATE_15M_TARDIO#XRP#15min | 818 | +0.198 | +618.49€ | 0 | 22 |
 | ✅ GBM_LATE_5M | 220 | +0.081 | +48.44€ | 3 | 11 |
@@ -4940,10 +4953,10 @@ _Derivadas de los patrones aprendidos:_
 | ✅ LIQUIDACIONES_60M#ETH#60min | 94 | +0.010 | +0.94€ | 0 | 0 |
 | ✅ LIQUIDACIONES_60M#SOL | 99 | +0.025 | +3.66€ | 0 | 0 |
 | ✅ LIQUIDACIONES_60M#SOL#60min | 99 | +0.025 | +3.66€ | 0 | 0 |
-| ✅ MOMENTUM_IBS_15M | 385 | +0.045 | +17.49€ | 1 | 2 |
-| ✅ MOMENTUM_IBS_15M#15min | 385 | +0.045 | +17.49€ | 0 | 0 |
-| ✅ MOMENTUM_IBS_15M#BNB | 60 | +0.000 | -2.47€ | 0 | 0 |
-| ✅ MOMENTUM_IBS_15M#BNB#15min | 60 | +0.000 | -2.47€ | 1 | 0 |
+| ✅ MOMENTUM_IBS_15M | 386 | +0.044 | +15.96€ | 1 | 2 |
+| ✅ MOMENTUM_IBS_15M#15min | 386 | +0.044 | +15.96€ | 0 | 0 |
+| ✅ MOMENTUM_IBS_15M#BNB | 61 | -0.008 | -4.00€ | 0 | 0 |
+| ✅ MOMENTUM_IBS_15M#BNB#15min | 61 | -0.008 | -4.00€ | 1 | 0 |
 | ✅ MOMENTUM_IBS_15M#BTC | 65 | +0.082 | +10.98€ | 0 | 0 |
 | ✅ MOMENTUM_IBS_15M#BTC#15min | 65 | +0.082 | +10.98€ | 0 | 0 |
 | ✅ MOMENTUM_IBS_15M#DOGE | 63 | -0.023 | -10.36€ | 0 | 0 |
@@ -4954,18 +4967,18 @@ _Derivadas de los patrones aprendidos:_
 | ✅ MOMENTUM_IBS_15M#SOL#15min | 65 | -0.007 | -8.90€ | 1 | 0 |
 | ✅ MOMENTUM_IBS_15M#XRP | 65 | +0.067 | +2.21€ | 0 | 0 |
 | ✅ MOMENTUM_IBS_15M#XRP#15min | 65 | +0.067 | +2.21€ | 0 | 0 |
-| ✅ MOMENTUM_IBS_15M_BALLENA | 491 | -0.009 | +18.37€ | 3 | 1 |
-| ✅ MOMENTUM_IBS_15M_BALLENA#15min | 491 | -0.009 | +18.37€ | 0 | 0 |
-| ✅ MOMENTUM_IBS_15M_BALLENA#BNB | 76 | -0.026 | +15.70€ | 0 | 0 |
-| ✅ MOMENTUM_IBS_15M_BALLENA#BNB#15min | 76 | -0.026 | +15.70€ | 2 | 0 |
-| ✅ MOMENTUM_IBS_15M_BALLENA#BTC | 83 | -0.053 | -7.13€ | 0 | 0 |
-| ✅ MOMENTUM_IBS_15M_BALLENA#BTC#15min | 83 | -0.053 | -7.13€ | 2 | 0 |
+| ✅ MOMENTUM_IBS_15M_BALLENA | 494 | -0.008 | +20.10€ | 3 | 1 |
+| ✅ MOMENTUM_IBS_15M_BALLENA#15min | 494 | -0.008 | +20.10€ | 0 | 0 |
+| ✅ MOMENTUM_IBS_15M_BALLENA#BNB | 77 | -0.019 | +17.46€ | 0 | 0 |
+| ✅ MOMENTUM_IBS_15M_BALLENA#BNB#15min | 77 | -0.019 | +17.46€ | 2 | 0 |
+| ✅ MOMENTUM_IBS_15M_BALLENA#BTC | 84 | -0.046 | -6.11€ | 0 | 0 |
+| ✅ MOMENTUM_IBS_15M_BALLENA#BTC#15min | 84 | -0.046 | -6.11€ | 2 | 0 |
 | ✅ MOMENTUM_IBS_15M_BALLENA#DOGE | 82 | +0.012 | +9.48€ | 0 | 0 |
 | ✅ MOMENTUM_IBS_15M_BALLENA#DOGE#15min | 82 | +0.012 | +9.48€ | 1 | 0 |
 | ✅ MOMENTUM_IBS_15M_BALLENA#ETH | 84 | +0.058 | +8.72€ | 0 | 0 |
 | ✅ MOMENTUM_IBS_15M_BALLENA#ETH#15min | 84 | +0.058 | +8.72€ | 1 | 4 |
-| ✅ MOMENTUM_IBS_15M_BALLENA#SOL | 80 | -0.073 | -12.95€ | 0 | 0 |
-| ✅ MOMENTUM_IBS_15M_BALLENA#SOL#15min | 80 | -0.073 | -12.95€ | 1 | 0 |
+| ✅ MOMENTUM_IBS_15M_BALLENA#SOL | 81 | -0.078 | -14.02€ | 0 | 0 |
+| ✅ MOMENTUM_IBS_15M_BALLENA#SOL#15min | 81 | -0.078 | -14.02€ | 1 | 0 |
 | ✅ MOMENTUM_IBS_15M_BALLENA#XRP | 86 | +0.023 | +4.56€ | 0 | 0 |
 | ✅ MOMENTUM_IBS_15M_BALLENA#XRP#15min | 86 | +0.023 | +4.56€ | 0 | 1 |
 | ✅ MOMENTUM_IBS_15M_FADE | 211 | -0.110 | -26.21€ | 4 | 0 |
@@ -4996,34 +5009,34 @@ _Derivadas de los patrones aprendidos:_
 | ✅ MOMENTUM_IBS_5M#SOL#5min | 197 | +0.007 | +2.97€ | 0 | 1 |
 | ✅ MOMENTUM_IBS_5M#XRP | 159 | -0.009 | -5.94€ | 0 | 0 |
 | ✅ MOMENTUM_IBS_5M#XRP#5min | 159 | -0.009 | -5.94€ | 0 | 0 |
-| ✅ MOMENTUM_IBS_5M_BALLENA | 1222 | -0.076 | -16.03€ | 6 | 0 |
-| ✅ MOMENTUM_IBS_5M_BALLENA#5min | 1222 | -0.076 | -16.03€ | 0 | 0 |
-| ✅ MOMENTUM_IBS_5M_BALLENA#BNB | 187 | -0.071 | +5.04€ | 0 | 0 |
-| ✅ MOMENTUM_IBS_5M_BALLENA#BNB#5min | 187 | -0.071 | +5.04€ | 4 | 1 |
+| ✅ MOMENTUM_IBS_5M_BALLENA | 1231 | -0.075 | -13.18€ | 6 | 0 |
+| ✅ MOMENTUM_IBS_5M_BALLENA#5min | 1231 | -0.075 | -13.18€ | 0 | 0 |
+| ✅ MOMENTUM_IBS_5M_BALLENA#BNB | 189 | -0.071 | +4.81€ | 0 | 0 |
+| ✅ MOMENTUM_IBS_5M_BALLENA#BNB#5min | 189 | -0.071 | +4.81€ | 3 | 1 |
 | ✅ MOMENTUM_IBS_5M_BALLENA#BTC | 227 | -0.081 | +73.87€ | 0 | 0 |
 | ✅ MOMENTUM_IBS_5M_BALLENA#BTC#5min | 227 | -0.081 | +73.87€ | 8 | 0 |
-| ✅ MOMENTUM_IBS_5M_BALLENA#DOGE | 201 | -0.086 | -37.97€ | 0 | 0 |
-| ✅ MOMENTUM_IBS_5M_BALLENA#DOGE#5min | 201 | -0.086 | -37.97€ | 7 | 0 |
-| ✅ MOMENTUM_IBS_5M_BALLENA#ETH | 185 | -0.104 | -23.00€ | 0 | 0 |
-| ✅ MOMENTUM_IBS_5M_BALLENA#ETH#5min | 185 | -0.104 | -23.00€ | 7 | 0 |
-| ✅ MOMENTUM_IBS_5M_BALLENA#SOL | 216 | -0.046 | -7.75€ | 0 | 0 |
-| ✅ MOMENTUM_IBS_5M_BALLENA#SOL#5min | 216 | -0.046 | -7.75€ | 4 | 1 |
-| ✅ MOMENTUM_IBS_5M_BALLENA#XRP | 206 | -0.067 | -26.22€ | 0 | 0 |
-| ✅ MOMENTUM_IBS_5M_BALLENA#XRP#5min | 206 | -0.067 | -26.22€ | 6 | 2 |
-| ✅ MOMENTUM_IBS_5M_FADE | 1229 | +0.013 | -1.68€ | 0 | 0 |
-| ✅ MOMENTUM_IBS_5M_FADE#5min | 1229 | +0.013 | -1.68€ | 0 | 0 |
-| ✅ MOMENTUM_IBS_5M_FADE#BNB | 208 | +0.043 | +10.67€ | 0 | 0 |
-| ✅ MOMENTUM_IBS_5M_FADE#BNB#5min | 208 | +0.043 | +10.67€ | 0 | 0 |
+| ✅ MOMENTUM_IBS_5M_BALLENA#DOGE | 203 | -0.081 | -35.21€ | 0 | 0 |
+| ✅ MOMENTUM_IBS_5M_BALLENA#DOGE#5min | 203 | -0.081 | -35.21€ | 7 | 0 |
+| ✅ MOMENTUM_IBS_5M_BALLENA#ETH | 186 | -0.106 | -24.07€ | 0 | 0 |
+| ✅ MOMENTUM_IBS_5M_BALLENA#ETH#5min | 186 | -0.106 | -24.07€ | 7 | 0 |
+| ✅ MOMENTUM_IBS_5M_BALLENA#SOL | 219 | -0.043 | -5.28€ | 0 | 0 |
+| ✅ MOMENTUM_IBS_5M_BALLENA#SOL#5min | 219 | -0.043 | -5.28€ | 4 | 1 |
+| ✅ MOMENTUM_IBS_5M_BALLENA#XRP | 207 | -0.069 | -27.29€ | 0 | 0 |
+| ✅ MOMENTUM_IBS_5M_BALLENA#XRP#5min | 207 | -0.069 | -27.29€ | 5 | 2 |
+| ✅ MOMENTUM_IBS_5M_FADE | 1237 | +0.016 | +3.26€ | 0 | 0 |
+| ✅ MOMENTUM_IBS_5M_FADE#5min | 1237 | +0.016 | +3.26€ | 0 | 0 |
+| ✅ MOMENTUM_IBS_5M_FADE#BNB | 210 | +0.047 | +11.77€ | 0 | 0 |
+| ✅ MOMENTUM_IBS_5M_FADE#BNB#5min | 210 | +0.047 | +11.77€ | 0 | 1 |
 | ✅ MOMENTUM_IBS_5M_FADE#BTC | 181 | +0.025 | -2.45€ | 0 | 0 |
 | ✅ MOMENTUM_IBS_5M_FADE#BTC#5min | 181 | +0.025 | -2.45€ | 2 | 0 |
-| ✅ MOMENTUM_IBS_5M_FADE#DOGE | 211 | -0.002 | -2.76€ | 0 | 0 |
-| ✅ MOMENTUM_IBS_5M_FADE#DOGE#5min | 211 | -0.002 | -2.76€ | 0 | 0 |
-| ✅ MOMENTUM_IBS_5M_FADE#ETH | 215 | -0.002 | -3.58€ | 0 | 0 |
-| ✅ MOMENTUM_IBS_5M_FADE#ETH#5min | 215 | -0.002 | -3.58€ | 0 | 1 |
-| ✅ MOMENTUM_IBS_5M_FADE#SOL | 215 | -0.007 | -3.30€ | 0 | 0 |
-| ✅ MOMENTUM_IBS_5M_FADE#SOL#5min | 215 | -0.007 | -3.30€ | 0 | 0 |
-| ✅ MOMENTUM_IBS_5M_FADE#XRP | 199 | +0.022 | -0.26€ | 0 | 0 |
-| ✅ MOMENTUM_IBS_5M_FADE#XRP#5min | 199 | +0.022 | -0.26€ | 0 | 0 |
+| ✅ MOMENTUM_IBS_5M_FADE#DOGE | 213 | +0.002 | -1.79€ | 0 | 0 |
+| ✅ MOMENTUM_IBS_5M_FADE#DOGE#5min | 213 | +0.002 | -1.79€ | 0 | 0 |
+| ✅ MOMENTUM_IBS_5M_FADE#ETH | 216 | +0.000 | -2.21€ | 0 | 0 |
+| ✅ MOMENTUM_IBS_5M_FADE#ETH#5min | 216 | +0.000 | -2.21€ | 0 | 1 |
+| ✅ MOMENTUM_IBS_5M_FADE#SOL | 217 | -0.002 | -2.30€ | 0 | 0 |
+| ✅ MOMENTUM_IBS_5M_FADE#SOL#5min | 217 | -0.002 | -2.30€ | 0 | 0 |
+| ✅ MOMENTUM_IBS_5M_FADE#XRP | 200 | +0.025 | +0.24€ | 0 | 0 |
+| ✅ MOMENTUM_IBS_5M_FADE#XRP#5min | 200 | +0.025 | +0.24€ | 0 | 0 |
 | ✅ ORDER_FLOW_5M | 209 | +0.073 | +31.68€ | 1 | 4 |
 | ✅ ORDER_FLOW_5M#5min | 73 | +0.100 | +19.08€ | 0 | 0 |
 | ✅ ORDER_FLOW_5M#BNB | 18 | +0.225 | +16.68€ | 0 | 0 |
@@ -5071,10 +5084,10 @@ _Derivadas de los patrones aprendidos:_
 | ✅ STREAK_FADE_15M#DOGE#15min | 18 | -0.045 | -4.15€ | 0 | 0 |
 | ✅ STREAK_FADE_15M#XRP | 21 | -0.152 | -6.28€ | 0 | 0 |
 | ✅ STREAK_FADE_15M#XRP#15min | 21 | -0.152 | -6.28€ | 0 | 0 |
-| ✅ STREAK_FADE_5M | 323 | -0.026 | -20.12€ | 1 | 1 |
-| ✅ STREAK_FADE_5M#5min | 323 | -0.026 | -20.12€ | 0 | 0 |
-| ✅ STREAK_FADE_5M#DOGE | 74 | +0.040 | +2.50€ | 0 | 0 |
-| ✅ STREAK_FADE_5M#DOGE#5min | 74 | +0.040 | +2.50€ | 0 | 0 |
+| ✅ STREAK_FADE_5M | 324 | -0.025 | -19.34€ | 1 | 1 |
+| ✅ STREAK_FADE_5M#5min | 324 | -0.025 | -19.34€ | 0 | 0 |
+| ✅ STREAK_FADE_5M#DOGE | 75 | +0.045 | +3.28€ | 0 | 0 |
+| ✅ STREAK_FADE_5M#DOGE#5min | 75 | +0.045 | +3.28€ | 0 | 0 |
 | ✅ STREAK_FADE_5M#ETH | 114 | -0.009 | -6.55€ | 0 | 0 |
 | ✅ STREAK_FADE_5M#ETH#5min | 114 | -0.009 | -6.55€ | 1 | 0 |
 | ✅ STREAK_FADE_5M#SOL | 61 | -0.087 | -8.73€ | 0 | 0 |
@@ -5087,31 +5100,31 @@ _Derivadas de los patrones aprendidos:_
 | ✅ STREAK_FADE_60M#ETH#60min | 9 | -0.061 | -1.63€ | 0 | 0 |
 | ✅ STREAK_FADE_60M#SOL | 6 | +0.000 | -0.08€ | 0 | 0 |
 | ✅ STREAK_FADE_60M#SOL#60min | 6 | +0.000 | -0.08€ | 0 | 0 |
-| ✅ STREAK_MOM_5M | 546 | +0.033 | +11.34€ | 0 | 1 |
-| ✅ STREAK_MOM_5M#5min | 546 | +0.033 | +11.34€ | 0 | 0 |
-| ✅ STREAK_MOM_5M#DOGE | 163 | +0.009 | -2.62€ | 0 | 0 |
-| ✅ STREAK_MOM_5M#DOGE#5min | 163 | +0.009 | -2.62€ | 0 | 0 |
-| ✅ STREAK_MOM_5M#ETH | 113 | +0.004 | -0.35€ | 0 | 0 |
-| ✅ STREAK_MOM_5M#ETH#5min | 113 | +0.004 | -0.35€ | 1 | 2 |
+| ✅ STREAK_MOM_5M | 549 | +0.030 | +9.56€ | 1 | 1 |
+| ✅ STREAK_MOM_5M#5min | 549 | +0.030 | +9.56€ | 0 | 0 |
+| ✅ STREAK_MOM_5M#DOGE | 164 | +0.006 | -3.13€ | 0 | 0 |
+| ✅ STREAK_MOM_5M#DOGE#5min | 164 | +0.006 | -3.13€ | 0 | 0 |
+| ✅ STREAK_MOM_5M#ETH | 114 | +0.000 | -1.10€ | 0 | 0 |
+| ✅ STREAK_MOM_5M#ETH#5min | 114 | +0.000 | -1.10€ | 2 | 2 |
 | ✅ STREAK_MOM_5M#SOL | 145 | +0.044 | +3.42€ | 0 | 0 |
 | ✅ STREAK_MOM_5M#SOL#5min | 145 | +0.044 | +3.42€ | 0 | 0 |
-| ✅ STREAK_MOM_5M#XRP | 125 | +0.075 | +10.88€ | 0 | 0 |
-| ✅ STREAK_MOM_5M#XRP#5min | 125 | +0.075 | +10.88€ | 1 | 3 |
-| ✅ STRUCT_NO_15M | 1793 | +0.012 | -10.51€ | 0 | 0 |
-| ✅ STRUCT_NO_15M#15min | 1793 | +0.012 | -10.51€ | 0 | 0 |
+| ✅ STREAK_MOM_5M#XRP | 126 | +0.070 | +10.37€ | 0 | 0 |
+| ✅ STREAK_MOM_5M#XRP#5min | 126 | +0.070 | +10.37€ | 1 | 3 |
+| ✅ STRUCT_NO_15M | 1794 | +0.012 | -11.02€ | 0 | 0 |
+| ✅ STRUCT_NO_15M#15min | 1794 | +0.012 | -11.02€ | 0 | 0 |
 | ✅ STRUCT_NO_15M#BTC | 683 | +0.007 | -8.21€ | 0 | 0 |
 | ✅ STRUCT_NO_15M#BTC#15min | 683 | +0.007 | -8.21€ | 1 | 0 |
 | ✅ STRUCT_NO_15M#ETH | 710 | +0.015 | -1.84€ | 0 | 0 |
 | ✅ STRUCT_NO_15M#ETH#15min | 710 | +0.015 | -1.84€ | 0 | 0 |
-| ✅ STRUCT_NO_15M#SOL | 400 | +0.015 | -0.46€ | 0 | 0 |
-| ✅ STRUCT_NO_15M#SOL#15min | 400 | +0.015 | -0.46€ | 2 | 0 |
-| ✅ UPDOWN_GBM | 2013 | +0.019 | +93.22€ | 0 | 0 |
-| ✅ UPDOWN_GBM#15min | 873 | +0.085 | +141.67€ | 1 | 6 |
+| ✅ STRUCT_NO_15M#SOL | 401 | +0.014 | -0.97€ | 0 | 0 |
+| ✅ STRUCT_NO_15M#SOL#15min | 401 | +0.014 | -0.97€ | 2 | 0 |
+| ✅ UPDOWN_GBM | 2015 | +0.019 | +91.93€ | 0 | 0 |
+| ✅ UPDOWN_GBM#15min | 875 | +0.084 | +140.38€ | 1 | 6 |
 | ✅ UPDOWN_GBM#240min | 116 | +0.009 | -1.44€ | 0 | 0 |
 | ✅ UPDOWN_GBM#5min | 731 | -0.028 | -35.86€ | 4 | 0 |
 | ✅ UPDOWN_GBM#60min | 246 | -0.024 | -10.64€ | 2 | 1 |
-| ✅ UPDOWN_GBM#BNB | 84 | +0.081 | +12.95€ | 0 | 0 |
-| ✅ UPDOWN_GBM#BNB#15min | 77 | +0.108 | +14.58€ | 0 | 0 |
+| ✅ UPDOWN_GBM#BNB | 85 | +0.075 | +12.18€ | 0 | 0 |
+| ✅ UPDOWN_GBM#BNB#15min | 78 | +0.100 | +13.80€ | 0 | 0 |
 | ✅ UPDOWN_GBM#BNB#5min | 6 | -0.075 | -2.16€ | 0 | 0 |
 | ✅ UPDOWN_GBM#BTC | 360 | +0.000 | -7.43€ | 0 | 0 |
 | ✅ UPDOWN_GBM#BTC#15min | 118 | +0.050 | -4.61€ | 2 | 6 |
@@ -5128,8 +5141,8 @@ _Derivadas de los patrones aprendidos:_
 | ✅ UPDOWN_GBM#ETH#5min | 119 | -0.004 | -4.42€ | 5 | 7 |
 | ✅ UPDOWN_GBM#ETH#60min | 97 | +0.005 | -1.72€ | 0 | 0 |
 | 🚫 UPDOWN_GBM#ETH#daily | 15 | -0.154 | -0.38€ | 0 | 0 |
-| ✅ UPDOWN_GBM#SOL | 351 | -0.004 | +2.69€ | 0 | 0 |
-| ✅ UPDOWN_GBM#SOL#15min | 142 | +0.021 | +2.15€ | 1 | 2 |
+| ✅ UPDOWN_GBM#SOL | 352 | -0.006 | +2.18€ | 0 | 0 |
+| ✅ UPDOWN_GBM#SOL#15min | 143 | +0.017 | +1.64€ | 1 | 2 |
 | ✅ UPDOWN_GBM#SOL#240min | 29 | -0.016 | -0.92€ | 0 | 0 |
 | ✅ UPDOWN_GBM#SOL#5min | 104 | +0.000 | +0.77€ | 2 | 6 |
 | ✅ UPDOWN_GBM#SOL#60min | 64 | -0.015 | +0.81€ | 2 | 0 |
@@ -5145,8 +5158,8 @@ _Derivadas de los patrones aprendidos:_
 | ✅ UPDOWN_GBM_15M_CROSS_WINDOW_SPREAD#BTC#15min | 69 | +0.204 | -10.17€ | 0 | 12 |
 | ✅ UPDOWN_GBM_15M_CROSS_WINDOW_SPREAD#ETH | 36 | +0.289 | +5.92€ | 0 | 0 |
 | ✅ UPDOWN_GBM_15M_CROSS_WINDOW_SPREAD#ETH#15min | 36 | +0.289 | +5.92€ | 0 | 1 |
-| ✅ UPDOWN_GBM_15M_TARDIO | 1576 | -0.044 | +171.48€ | 2 | 2 |
-| ✅ UPDOWN_GBM_15M_TARDIO#15min | 1576 | -0.044 | +171.48€ | 0 | 0 |
+| ✅ UPDOWN_GBM_15M_TARDIO | 1577 | -0.045 | +170.41€ | 2 | 2 |
+| ✅ UPDOWN_GBM_15M_TARDIO#15min | 1577 | -0.045 | +170.41€ | 0 | 0 |
 | ✅ UPDOWN_GBM_15M_TARDIO#BNB | 102 | -0.077 | -4.19€ | 0 | 0 |
 | ✅ UPDOWN_GBM_15M_TARDIO#BNB#15min | 102 | -0.077 | -4.19€ | 0 | 0 |
 | ✅ UPDOWN_GBM_15M_TARDIO#BTC | 314 | -0.130 | -4.45€ | 0 | 0 |
@@ -5155,8 +5168,8 @@ _Derivadas de los patrones aprendidos:_
 | ✅ UPDOWN_GBM_15M_TARDIO#DOGE#15min | 39 | -0.012 | +0.96€ | 0 | 0 |
 | ✅ UPDOWN_GBM_15M_TARDIO#ETH | 128 | -0.008 | +17.87€ | 0 | 0 |
 | ✅ UPDOWN_GBM_15M_TARDIO#ETH#15min | 128 | -0.008 | +17.87€ | 2 | 7 |
-| ✅ UPDOWN_GBM_15M_TARDIO#SOL | 503 | -0.005 | +98.19€ | 0 | 0 |
-| ✅ UPDOWN_GBM_15M_TARDIO#SOL#15min | 503 | -0.005 | +98.19€ | 1 | 1 |
+| ✅ UPDOWN_GBM_15M_TARDIO#SOL | 504 | -0.006 | +97.12€ | 0 | 0 |
+| ✅ UPDOWN_GBM_15M_TARDIO#SOL#15min | 504 | -0.006 | +97.12€ | 1 | 1 |
 | ✅ UPDOWN_GBM_15M_TARDIO#XRP | 490 | -0.035 | +63.10€ | 0 | 0 |
 | ✅ UPDOWN_GBM_15M_TARDIO#XRP#15min | 490 | -0.035 | +63.10€ | 3 | 0 |
 | ✅ UPDOWN_GBM_ETH_15M_HORA7 | 8 | -0.040 | -1.11€ | 0 | 0 |
@@ -5195,8 +5208,8 @@ _Derivadas de los patrones aprendidos:_
 **🟡 H-IBS-15** — IBS-15 como señal de mean-reversion
   - _Umbral_: n≥40 ops con ibs_15 en features y spread_IC>0.15 entre buckets
   - _Acción_: Añadir ibs_15 como boost/filtro en FEATURE_RULES de shadow_postmortem.py
-  - _Estado_: Spread=0.152: overbought→boost, oversold→filtro | oversold(IBS<0.3): IC=-0.032 n=695 | neutral: IC=+0.006 n=688 | overbought(IBS>0.7): IC=+0.120 n=926
-  - _Datos_: n=2473 IC=+0.039 PNL=+165.40€
+  - _Estado_: Spread=0.151: overbought→boost, oversold→filtro | oversold(IBS<0.3): IC=-0.032 n=695 | neutral: IC=+0.005 n=689 | overbought(IBS>0.7): IC=+0.119 n=927
+  - _Datos_: n=2475 IC=+0.039 PNL=+164.11€
 
 **🟡 H-HORA-GBM** — hora_utc causal automático en GBM (forward)
   - _Umbral_: n≥20 forward con hora_utc + alguna hora con n≥15 IC<-0.10 o >+0.10
@@ -5206,8 +5219,8 @@ _Derivadas de los patrones aprendidos:_
 **⚠️ H-SOL-15MIN** — SOL#15min → umbral live (IC≥0.08 n≥40)
   - _Umbral_: IC≥0.08 y n≥40
   - _Acción_: Activar live cuando haya credenciales Polymarket API
-  - _Estado_: SOL#15min: n≥40 pero IC=+0.021 < 0.08 — monitorear
-  - _Datos_: n=142 IC=+0.021 PNL=+2.15€
+  - _Estado_: SOL#15min: n≥40 pero IC=+0.017 < 0.08 — monitorear
+  - _Datos_: n=143 IC=+0.017 PNL=+1.64€
 
 **🟡 H-WEEKLY** — Predicciones semanales de precio por par
   - _Umbral_: n≥15 por par con IC≥+0.05
@@ -5217,7 +5230,7 @@ _Derivadas de los patrones aprendidos:_
 **🟡 H-STREAK-COOLDOWN** — Cooldown tras 2 derrotas consecutivas (mismo subtype)
   - _Umbral_: n≥40 tras 2 losses y gap(IC_tras_win - IC_tras_2loss)≥0.05
   - _Acción_: Reducir stake (no desactivar) 1-2h tras 2 derrotas consecutivas en el mismo subtype
-  - _Estado_: tras_win IC=+0.108 n=35849 | tras_1loss IC=+0.064 n=24860 | tras_2loss IC=+0.022 n=10768/40 | gap=+0.086 (umbral 0.05)
+  - _Estado_: tras_win IC=+0.108 n=35878 | tras_1loss IC=+0.064 n=24885 | tras_2loss IC=+0.023 n=10780/40 | gap=+0.086 (umbral 0.05)
 
 **🟡 H-KALMAN** — Kalman filter para drift adaptativo
   - _Umbral_: n≥200 por subtipo para calibrar parámetros Q/R del KF
@@ -5262,7 +5275,7 @@ _Derivadas de los patrones aprendidos:_
 **⏳ H-BTC-LEADS-ETH** — ETH/SOL GBM contrario al drift_15min de BTC del mismo ciclo
   - _Umbral_: n≥40 en contrario_BTC y gap≥0.08 — y descartar confound con drift propio antes de actuar
   - _Acción_: Si se confirma y no es confound → boost en ETH/SOL cuando decisión contraria a drift_15min BTC
-  - _Estado_: alineado_BTC IC=+0.062 n=142 | contrario_BTC IC=-0.025 n=78/40 | gap=-0.087 (umbral 0.08) — SIN CONFIRMAR independencia de filtros propios de ETH
+  - _Estado_: alineado_BTC IC=+0.062 n=142 | contrario_BTC IC=-0.031 n=79/40 | gap=-0.093 (umbral 0.08) — SIN CONFIRMAR independencia de filtros propios de ETH
 
 
 ### 🔒 Bloqueadas (requieren dataset/API)
@@ -5340,8 +5353,8 @@ _Derivadas de los patrones aprendidos:_
   - _Hipótesis_: Cuando la volatilidad horaria es muy alta el GBM puede sobreestimar el edge. Testear.
   - _Umbral_: n≥30 y IC<-0.05
   - _Acción_: Filtrar señales GBM cuando sigma_h > 0.002 si se confirma IC negativo
-  - _Estado_: n=1860 IC=+0.016 PNL=+78.62€ — sin señal clara aún (umbral IC: min=None max=-0.05)
-  - _Datos_: n=1860 IC=+0.016 PNL=+78.62€
+  - _Estado_: n=1862 IC=+0.015 PNL=+77.33€ — sin señal clara aún (umbral IC: min=None max=-0.05)
+  - _Datos_: n=1862 IC=+0.015 PNL=+77.33€
 
 **⏳ H-CUSTOM-OF-02H-BTCSOL** — ORDER_FLOW H=02h UTC — BTC+SOL solamente (revisar blacklist)
   - _Hipótesis_: La hora 02h está en el blacklist basado en TODOS los pares. Con BTC+SOL solo, el historial muestra 4/5 (80%) IC=+0.054. ¿Se confirma la señal positiva con más datos?
@@ -5404,12 +5417,12 @@ _Derivadas de los patrones aprendidos:_
   - _Acción_: Filtrar señales GBM#15min cuando drift_15min ∈ [-0.3, +0.3] — validar con n≥50 antes de implementar
   - _Estado_: 0/50 ops en el filtro definido (IC actual=+0.000 PNL=+0.00€)
 
-**🟡 H-CUSTOM-DRIFT15-MOMENTUM** — GBM#15min drift_15min > 0.3 — zona de momentum (señal fuerte)
+**〰️ H-CUSTOM-DRIFT15-MOMENTUM** — GBM#15min drift_15min > 0.3 — zona de momentum (señal fuerte)
   - _Hipótesis_: Cuando drift_15min > 0.3%/h el GBM captura bien la dirección: IC=+0.100 n=28 en todos GBM#15min; IC=+0.152 n=13 solo BTC. El mercado tiene dirección clara y el GBM la sigue. Hipótesis: este rango es donde la señal es real.
   - _Umbral_: n≥40 y IC>+0.08
   - _Acción_: Si se confirma IC>0.10 con n≥40 → boost ×1.2 en GBM#15min cuando drift_15min>0.3
-  - _Estado_: SEÑAL POSITIVA confirmada: IC=+0.081 > 0.08 con n=542 PNL=+64.00€
-  - _Datos_: n=542 IC=+0.081 PNL=+64.00€
+  - _Estado_: n=544 IC=+0.079 PNL=+62.71€ — sin señal clara aún (umbral IC: min=0.08 max=None)
+  - _Datos_: n=544 IC=+0.079 PNL=+62.71€
 
 **⏳ H-CUSTOM-LONGSHOT-BIAS** — Longshot bias — ¿mejor IC cuando py_mkt < 0.20 o > 0.80?
   - _Hipótesis_: Jon-Becker repo documenta formalmente: contratos a 1-20 cents tienen win_rate < precio implícito (compradores pierden sistemáticamente en longshots). En nuestro sistema: cuando py_mkt<0.20 el GBM predice BUY_NO con edge estructural adicional al del modelo. ¿Se confirma en nuestros datos? Buscar en feature pct_spot_vs_ref si los mercados extremos tienen mejor IC en BUY_NO.
@@ -5464,8 +5477,8 @@ _Derivadas de los patrones aprendidos:_
   - _Hipótesis_: Inspirado en 'The Volatility Edge' (Concretum Research, 2025): en equities, VIX spikes identifican regímenes de pánico donde los moves están sobreamplificados por feedback loops (deleveraging, hedgers, etc). En cripto el análogo es DVOL (Deribit BTC IV). Sin acceso a DVOL, usamos sigma_h como proxy (vol realizada 1h). Hipótesis: cuando sigma_h > 0.004/h (≈ vol diaria >9.6%), los mercados de predicción exageran la bajada en 15min → BUY_NO tiene IC superior porque el pánico se revierte intraday. Activar cuando n≥200 en BUY_NO #15min para tener potencia suficiente para subdividir por régimen.
   - _Umbral_: n≥200 BUY_NO #15min total, luego n≥40 en subconjunto sigma_h>0.004 y IC>+0.10
   - _Acción_: Si IC_sigma_alto > IC_baseline + 0.08 con n≥40 → boost ×1.2 en BUY_NO cuando sigma_h>0.004. Pendiente integrar DVOL real (Deribit API) cuando n≥500.
-  - _Estado_: n=387 IC=+0.091 PNL=+89.64€ — sin señal clara aún (umbral IC: min=0.1 max=None)
-  - _Datos_: n=387 IC=+0.091 PNL=+89.64€
+  - _Estado_: n=389 IC=+0.088 PNL=+88.35€ — sin señal clara aún (umbral IC: min=0.1 max=None)
+  - _Datos_: n=389 IC=+0.088 PNL=+88.35€
 
 **〰️ H-CUSTOM-POLY-DRIFT-CONFIRM** — poly_drift_5obs: ¿el precio YES interno de Polymarket confirma nuestra señal?
   - _Hipótesis_: Feature nueva 2026-06-27: drift del precio YES en Polymarket en últimas 5 obs (~5min). Si poly_drift<0 y decidimos BUY_NO (o poly_drift>0 y BUY_YES) → confluencia. Si diverge → reducción de stake. Hipótesis: confluencia Binance+Polymarket mejora IC; divergencia empeora.
@@ -5596,8 +5609,8 @@ _Derivadas de los patrones aprendidos:_
   - _Hipótesis_: Detectado 2026-07-03 en benchmark de calibración del mercado (7d, estrategias GBM): en el bucket precio_yes_mercado [0.3-0.4) la frecuencia real de YES fue 0.45 vs 0.35 implícito (+0.10, n=38). Posible sesgo favorito-longshot suave en binarios de 15min (complemento del LONGSHOT ya activo para BUY_NO con py<0.20). Si se confirma, BUY_YES comprado en esa banda lleva viento de cola estructural del propio mercado, independiente del modelo.
   - _Umbral_: n≥40 y IC>+0.08
   - _Acción_: Si IC>+0.08 con n≥40 → kelly_boost ×1.1 para BUY_YES con precio_yes_mercado en [0.30,0.40), simétrico al longshot BUY_NO existente
-  - _Estado_: n=1163 IC=-0.138 PNL=+98.86€ — sin señal clara aún (umbral IC: min=0.08 max=None)
-  - _Datos_: n=1163 IC=-0.138 PNL=+98.86€
+  - _Estado_: n=1164 IC=-0.137 PNL=+100.63€ — sin señal clara aún (umbral IC: min=0.08 max=None)
+  - _Datos_: n=1164 IC=-0.137 PNL=+100.63€
 
 **⏳ H-CUSTOM-LATE15-PHOTO-FINISH** — GBM_LATE_15M photo finish — entrar pegado al strike es moneda al aire cobrada como favorito
   - _Hipótesis_: Detectado 2026-07-05 validando contra nuestros datos la única idea aprovechable de un artículo-anuncio de copy-bot: GBM_LATE_15M con |drift_ventana_pct|<0.02 tenía IC=-0.145 n=181 (win 35%, -9.70€), estable en ambas mitades temporales (-0.163/-0.127), monótono con la distancia (0.02-0.05: IC=+0.061; ≥0.05: IC=+0.14..0.19) y consistente en crudo y normalizado por sigma (|d_gbm|<0.1 IC=-0.081 n=244). BTC (IC=-0.163 n=90) y ETH (-0.130 n=79) concentraban el daño; SOL/XRP apenas entran en esa zona. Mecanismo: sin distancia real al strike el resultado es ~50/50 pero py_entrada ya cobra favorito. Filtro GBM_LATE_DRIFT_VENT_MIN_PCT=0.02 aplicado en shadow_predict el 2026-07-05. Esta hipótesis trackea la zona filtrada: si vuelven a aparecer ops aquí, el filtro se ha roto.
@@ -5658,8 +5671,8 @@ _Derivadas de los patrones aprendidos:_
   - _Hipótesis_: Detectado 2026-07-09 buscando explicar por qué varias pérdidas de la racha=4 comparten ventana de 15min. Con precios reales (05-09jul, ~20k muestras BTC) se calculó el retorno concurrente de los OTROS 3 majors desde el inicio de la ventana hasta el momento exacto de la decisión (sin fuga de datos, nunca el precio de cierre) y se cruzó con resultados reales de GBM_LATE_15M BUY_YES: n=802, magnitud media de los otros 3 en deciles limpios y monótonos (decil1 IC=-0.146 hit 35% → decil6-9 IC≈+0.20/+0.29 hit 70-80%). NO es redundante con drift_ventana_pct propio del par (correlación solo 0.26); controlando por el drift propio, la anchura sigue añadiendo información (dentro de drift propio>=0, que es el 90% de los casos: IC=0.127 si anchura baja vs IC=0.211 si anchura alta). Funciona en espejo para BUY_NO (shadow, n=685, anchura negativa 0/3→3/3: hit 47.4%→70.3%). CAVEAT importante: NO explica los clusters concretos de racha=4 en vivo — 6 de los 8 eventos históricos tienen anchura ALTA en al menos 2 de las 4 pérdidas (ver notas de sesión 09-Jul), y el backtest directo sobre trades.csv real (n=105-116) es inconcluso/contradictorio (gate anchura>=3 empeora el PnL real, -2.11€ vs +32.32€ sin filtro — probablemente confusión por mezcla de pares en una muestra pequeña, SOL domina ese bucket y SOL es el par MENOS sensible a esta señal: IC 0.132→0.143 apenas cambia, vs ETH 0.038→0.192). Tratar como MODIFICADOR del filtro primario H-CUSTOM-GBMLATE-PYBAJO-LONGSHOT, no como filtro independiente — ver esa hipótesis para la tabla cruzada. Feature `mercado_anchura_pct` añadida 2026-07-09 en shadow_predict.py (_s_gbm_late), puro logging, no cambia ninguna decisión — empieza a acumular desde cero en predicciones nuevas. ACTUALIZACIÓN 12-Jul (desagregación por activo, n fresco): BTC n=35 ic=+0.392 z=+4.90, ETH n=32 ic=+0.353 z=+4.24, XRP n=31 ic=+0.288 z=+3.41 -- los 3 MUY fuertes y consistentes. SOL sigue siendo el único débil (n=30 ic=+0.094 z=+1.10), confirma el caveat ya escrito arriba (SOL insensible). Con XRP incluido, el patrón deja de ser '3 activos + SOL raro' para ser una regla casi universal salvo SOL -- candidato fuerte para boost Kelly restringido a BTC/ETH/XRP (excluir SOL explícitamente) en vez de aplicar a las 4 monedas por igual.
   - _Umbral_: n≥100 forward (feature nueva, sin histórico) e IC>+0.20 en la zona alta (mercado_anchura_pct≥0.056, el decil superior observado)
   - _Acción_: Si confirma con n≥100 IC≥0.20 → boost Kelly cuando mercado_anchura_pct≥0.056 Y prob_yes_modelo≥0.53 (la celda 'doble buena', hit 72.7% retrospectivo). No usar como filtro solo — ver CAVEAT de los clusters de racha en la descripción, y el análisis por-par (SOL insensible) antes de aplicar a las 4 monedas por igual.
-  - _Estado_: n=767 IC=+0.157 PNL=+402.74€ — sin señal clara aún (umbral IC: min=0.2 max=None)
-  - _Datos_: n=767 IC=+0.157 PNL=+402.74€
+  - _Estado_: n=768 IC=+0.157 PNL=+404.70€ — sin señal clara aún (umbral IC: min=0.2 max=None)
+  - _Datos_: n=768 IC=+0.157 PNL=+404.70€
 
 **⏳ H-CUSTOM-OF5M-SMARTMONEY-CONTRARIO** — ORDER_FLOW_5M SOL BUY_NO — smart money EN CONTRA del flujo CEX, no a favor, predice mejor
   - _Hipótesis_: Detectado 11-Jul revisando el backlog quant-desk (reencuadre de ORDER_FLOW_5M). ORDER_FLOW_5M solo dispara BUY_NO (presión vendedora en Binance). Split retrospectivo SOL#5min por smart_money_consensus (ya logueado, nunca cruzado con esta estrategia): cuando el consenso on-chain es BAJISTA (smart_money_consensus<0, 'confirma' la señal CEX) el hit cae a 47.1% (ic_bayes=-0.026, n=17); cuando el consenso es ALCISTA/neutro (smart_money_consensus>=0, CONTRARIO a la señal CEX) el hit sube a 65.0% (ic_bayes=+0.136, n=20, pnl/trade+0.294). Contraintuitivo: la 'confirmación' de dos fuentes empeora, la divergencia mejora. Hipótesis mecánica: el flujo de Binance ya captura la información rápida de 5min; smart money on-chain se mueve más lento (posiciones ya tomadas), así que cuando coincide con el flujo CEX puede ser la MISMA información ya vista dos veces sin dar nada nuevo (o incluso momentum ya agotado), mientras que la divergencia indica que el flujo CEX es el que se está moviendo AHORA sobre información fresca que smart money aún no reflejó. Distinto del cierre 08-Jul del consenso poblacional plano (n=2494, ruido puro) — aquello era agregado sobre TODAS las estrategias; esto es específico del mecanismo de ORDER_FLOW_5M. n=17/20 insuficiente para concluir (regla del proyecto n≥15 es el mínimo absoluto, no un veredicto) — vigilar forward.
@@ -5735,8 +5748,8 @@ _Derivadas de los patrones aprendidos:_
   - _Hipótesis_: 06-Ago: hallazgo al barrer gate_bucket_propio.json completo tras la extension de hoy. strategy_params.json muestra ic_bayes=+0.158 (n=1448, activa=True) -- a primera vista parece una candidata razonable. Desagregado por precio (gate_bucket_propio.json): pnl/trade NEGATIVO en 5 de 6 buckets (0.70:-0.071 bueno_confirmado[relativo, sigue siendo negativo]/0.75:-0.212 malo_confirmado/0.80:-0.263/0.85:-0.506 malo_confirmado/0.90:-0.090), solo 0.95 (n=6, ruido) da +0.025. pnl/trade ponderado por n en TODO el rango = -0.132EUR/trade sobre n=1447. Mismo patron payout-asimetrico ya conocido en el proyecto (hit-rate alto, breakeven=precio de entrada, entra caro 0.70-0.95 -> paga poco cuando gana, pierde el stake completo cuando falla). IC positivo mide correlacion/direccion, NO mide si el payout deja margen -- exactamente el gap que motivo kelly_precio_gate.py en su dia. Esta hipotesis es una ALERTA, no una oportunidad: documentar para que nadie proponga esta tupla a whitelist guiandose solo por el ic_bayes agregado.
   - _Umbral_: NO promocionar sin resolver el payout asimetrico -- ningun n adicional lo arregla si el mecanismo de precio de entrada no cambia
   - _Acción_: Bloqueo informativo -- si alguna sesion futura propone FAVORITO_CONFIRMADO_5MIN_ALTACONVICCION#BNB#5min#BUY_YES para pares_permitidos_live, releer esta nota antes de aprobar. No requiere accion de codigo, es memoria del hallazgo.
-  - _Estado_: n=1025 IC=+0.102 PNL=-224.24€ — sin señal clara aún (umbral IC: min=999 max=None)
-  - _Datos_: n=1025 IC=+0.102 PNL=-224.24€
+  - _Estado_: n=1026 IC=+0.101 PNL=-225.32€ — sin señal clara aún (umbral IC: min=999 max=None)
+  - _Datos_: n=1026 IC=+0.101 PNL=-225.32€
 
 **⏳ H-CUSTOM-GBMLATE15M-SOL-RESCATE-PRECIO** — GBM_LATE_15M#SOL#15min#BUY_YES (pausada 05-Ago) -- posible rescate con filtro py en [0.45,0.55)
   - _Hipótesis_: 06-Ago: hallazgo al barrer gate_bucket_propio.json. GBM_LATE_15M#SOL#15min#BUY_YES fue PAUSADA el 05-Ago por veto sigma_ewma_delta_pct (ver project_veto_sigma_ewma_gbmlate_05ago). Desagregando por precio: bucket [0.50,0.55) tiene n=411, pnl/trade +0.498, gate riguroso COMPLETO (bueno_confirmado, split-half consistente ambas mitades [0.305,0.273]). El bucket vecino [0.45,0.50) (n=356, sin_concluir todavia) tambien da pnl positivo +0.323. Juntos (0.45-0.55) suman n=767, la mayoria del volumen de la tupla. En cambio [0.20,0.25) (n=20) da pnl=-0.866, malo_confirmado -- el problema parece concentrado en precio bajo, no en toda la tupla. HIPOTESIS: restringir la reactivacion a un filtro de precio py en [0.45,0.55) en vez de mantener la pausa total podria rescatar la mayor parte del edge sin el drenaje que motivo la pausa -- pero el veto sigma_ewma que causo la pausa es una dimension DISTINTA (volatilidad reciente, no precio), asi que ambos filtros podrian ser complementarios, no sustitutos. NO proponer reactivacion sin cruzar este hallazgo con el analisis original de sigma_ewma que motivo la pausa. ACTUALIZADO 06-Ago mismo dia, cruce con sigma_ewma pedido por Javi: filtros COMPLEMENTARIOS confirmado, no redundantes. 4 grupos (n con sigma_ewma disponible, n=1169 total, 767 filtrado a py[0.45,0.55)): solo_precio n=348 hit=59.8% pnl=+0.266; solo_sigma n=41 hit=63.4% pnl=+0.322; AMBOS n=92 hit=75.0% pnl=+0.755 (shuffle p=0.0014, split-half CONSISTENTE ambas mitades +0.511/+0.632); ninguno n=226 hit=42.5% pnl=+0.033 (casi breakeven). El filtro combinado casi TRIPLICA el pnl/trade del filtro de precio solo y confirma con rigor completo -- el edge real de esta tupla esta concentrado en la interseccion de ambos filtros, no en cualquiera de los dos por separado. Sigue pendiente medir fill-ability real antes de proponer reactivacion (mismo caveat que siempre).
