@@ -37,6 +37,21 @@ EV_KELLY_HIST_PATH = DIR_SHADOW / "ev_kelly_historico.csv"
 EV_KELLY_HIST_THROTTLE_MIN = 15  # no más de una fila cada 15min (performance.csv se recalcula c/60s)
 INTEGRIDAD_LATCH_PATH = DIR_SHADOW / "integridad_pipeline_latch.json"
 
+def _escribir_json_atomico(path: Path, texto: str) -> None:
+    """Escribe `texto` en `path` de forma atómica (temp-file + os.replace) --
+    evita que un lector concurrente (shadow_predict.py/live_trade.py, que
+    releen strategy_params.json cada ~20s) pueda ver el fichero a medio
+    escribir. os.replace() es atómico dentro del mismo filesystem (aquí
+    siempre lo es: el temp vive en el mismo directorio que el destino).
+    18-Ago: prerequisito documentado antes de desacoplar predict/live_trade
+    de resolve/postmortem en run_fast.sh -- ver project_desacoplar_fast_
+    loop_postmortem_18ago."""
+    import os
+    tmp = path.with_suffix(path.suffix + f".tmp{os.getpid()}")
+    tmp.write_text(texto, encoding="utf-8")
+    os.replace(tmp, path)
+
+
 APUESTA_SHADOW = 0.90
 
 UMBRAL_SUBIR_EDGE = (-0.10, 3)
@@ -261,7 +276,7 @@ def _monitor_ic_live(params: dict) -> list:
             alertas.append(texto)
             latch[tupla] = nivel
     try:
-        LATCH_IC_LIVE.write_text(json.dumps(latch, ensure_ascii=False, indent=1))
+        _escribir_json_atomico(LATCH_IC_LIVE, json.dumps(latch, ensure_ascii=False, indent=1))
     except Exception as e:
         print(f"  [vigia IC live] no se pudo guardar latch: {e}")
     return alertas
@@ -305,7 +320,7 @@ def _escribir_state(params: dict, resultados: list):
         "monitor_5min":    monitor_5m,
     }
     path = PARAMS_PATH.parent / "system_state.json"
-    path.write_text(json.dumps(state, indent=2, ensure_ascii=False), encoding="utf-8")
+    _escribir_json_atomico(path, json.dumps(state, indent=2, ensure_ascii=False))
     return state
 
 
@@ -2696,14 +2711,14 @@ def main():
         # clave deja de aparecer (se resolvió) y una condición distinta
         # reaparece luego con esa misma clave, debe volver a avisar.
         try:
-            INTEGRIDAD_LATCH_PATH.write_text(json.dumps({"claves": sorted(claves_actuales)}, indent=1))
+            _escribir_json_atomico(INTEGRIDAD_LATCH_PATH, json.dumps({"claves": sorted(claves_actuales)}, indent=1))
         except Exception:
             pass
     elif INTEGRIDAD_LATCH_PATH.exists():
         # Todas las condiciones se resolvieron -- limpia el latch para que,
         # si algo vuelve a fallar más adelante, se trate como nuevo.
         try:
-            INTEGRIDAD_LATCH_PATH.write_text(json.dumps({"claves": []}, indent=1))
+            _escribir_json_atomico(INTEGRIDAD_LATCH_PATH, json.dumps({"claves": []}, indent=1))
         except Exception:
             pass
 
@@ -2925,8 +2940,7 @@ def main():
             except Exception as e:
                 print(f"  [aviso calibración] no se pudo notificar: {e}")
 
-    with open(PARAMS_PATH, "w", encoding="utf-8") as f:
-        json.dump(params, f, indent=2, ensure_ascii=False)
+    _escribir_json_atomico(PARAMS_PATH, json.dumps(params, indent=2, ensure_ascii=False))
 
     print(f"\n  Ajustes automáticos por estrategia/subtipo:")
     for s, p in sorted(params["estrategias"].items()):
