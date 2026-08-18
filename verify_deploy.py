@@ -16,6 +16,7 @@ Uso:
 fast/slow NUNCA se reinician desde aquí (regla #8 del manual: primero
 diagnosticar; el watchdog ya reinicia solo y hay marker orden_en_curso.json).
 """
+import os
 import re
 import subprocess
 import sys
@@ -103,16 +104,58 @@ def cierre_imports(entry: Path) -> set[Path]:
     return vistos
 
 
+_PROCESO_DE_RE_CACHE: dict[str, re.Pattern] = {}
+
+
 def proceso_de(entry: str) -> tuple[int, int] | None:
-    """(pid, start_epoch) del proceso cuya cmdline contiene entry, o None."""
+    """(pid, start_epoch) del proceso cuya cmdline contiene entry como
+    TOKEN completo (precedido por inicio/espacio/'/', seguido de fin/
+    espacio), o None.
+
+    18-Ago (hallazgo real, spam de "Deploy obsoleto" cada ~2min en
+    Telegram): un `entry in parts[2]` de substring plano hacía que
+    "dashboard_server.py" (nuestro dashboard cripto) matcheara también
+    "sports_dashboard_server.py" (otro subsistema del mismo repo, PID
+    vivo desde mucho antes que cualquier cambio de hoy) -- ese proceso
+    ajeno siempre "ganaba" (aparece antes en `ps`, PID más bajo), así que
+    verify_deploy() creía que "dash" corría un proceso viejísimo y lo
+    marcaba STALE en bucle infinito aunque el dashboard cripto real
+    estuviera FRESH. Con boundary de \\b (regex, no split por espacios --
+    "/" también debe cortar el match, ver 'python3 dashboard_server.py'
+    vs 'python3 sports_dashboard_server.py') el substring solo matchea
+    como palabra completa."""
+    pattern = _PROCESO_DE_RE_CACHE.get(entry)
+    if pattern is None:
+        pattern = re.compile(r"(?:^|[\s/])" + re.escape(entry) + r"(?:$|\s)")
+        _PROCESO_DE_RE_CACHE[entry] = pattern
     out = subprocess.run(["ps", "-eo", "pid,etimes,cmd"],
                          capture_output=True, text=True).stdout
     ahora = int(time.time())
+    base_resuelto = str(BASE.resolve())
+    candidatos = []
     for line in out.splitlines()[1:]:
         parts = line.split(None, 2)
-        if len(parts) == 3 and entry in parts[2] and "SCREEN" not in parts[2]:
-            return int(parts[0]), ahora - int(parts[1])
-    return None
+        if len(parts) == 3 and pattern.search(parts[2]) and "SCREEN" not in parts[2]:
+            candidatos.append((int(parts[0]), ahora - int(parts[1])))
+    if not candidatos:
+        return None
+    # 18-Ago: sigue habiendo un segundo caso real de colisión -- dos repos
+    # DISTINTOS (este y polymarket-weather) tienen cada uno su propio
+    # script llamado literalmente "dashboard_server.py", indistinguibles
+    # por cmdline sola. Desempatar por cwd real del proceso (/proc/pid/cwd)
+    # -- el nuestro se lanza con `cd {REPO} && ...`, así que su cwd (y el
+    # de su hijo python heredado) es siempre BASE, a diferencia del de
+    # otro repo. Si /proc no está disponible o ningún candidato resuelve
+    # (entorno no-Linux, proceso ya muerto) cae al primer candidato como
+    # antes -- mismo comportamiento que la versión previa, no peor.
+    for pid, edad in candidatos:
+        try:
+            cwd = os.readlink(f"/proc/{pid}/cwd")
+        except OSError:
+            continue
+        if cwd == base_resuelto:
+            return pid, edad
+    return candidatos[0]
 
 
 def probe_ok(spec: str | None, desde_epoch: float) -> tuple[bool, str]:
