@@ -60,8 +60,9 @@ import fetch_chainlink_prices
 import fetch_bybit_liquidations
 import fetch_libro_ambos_lados
 import fetch_polymarket_activity_ws
-import fetch_kalshi_btc15m  # 19-Ago: 5º fetcher, REST polling público sin
+import fetch_kalshi_btc  # 19-Ago: 5º fetcher, REST polling público sin
 # auth, sync (mismo patrón que libroambos) -- ver idea_kalshi_lidera_binance_leadlag_19ago
+# (renombrado de fetch_kalshi_btc15m.py el mismo día al extender a KXBTCD hourly)
 
 # (modulo, fichero_log_propio -- EXACTO el que ya usaba pipeline_watchdog.SCREEN_RESTART,
 #  nombre_funcion_log_a_reemplazar, es_async)
@@ -70,7 +71,7 @@ FETCHERS = [
     (fetch_bybit_liquidations, "bybit_liquidations.log", "_log", True),
     (fetch_libro_ambos_lados, "libro_ambos_lados.log", "_log", False),
     (fetch_polymarket_activity_ws, "polymarket_activity.log", "_log", True),
-    (fetch_kalshi_btc15m, "kalshi_btc15m.log", "_log", False),
+    (fetch_kalshi_btc, "kalshi_btc15m.log", "_log", False),
 ]
 
 
