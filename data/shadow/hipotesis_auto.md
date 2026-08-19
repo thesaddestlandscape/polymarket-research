@@ -1,5 +1,5 @@
-# Hipótesis automáticas — 2026-08-19 23:47 UTC
-_Generado por shadow_postmortem.py sobre 81899 resoluciones (PNL=+8240.59€)_
+# Hipótesis automáticas — 2026-08-19 23:51 UTC
+_Generado por shadow_postmortem.py sobre 81900 resoluciones (PNL=+8239.52€)_
 
 ## Patrones causales activos
 
@@ -1260,6 +1260,10 @@ _Generado por shadow_postmortem.py sobre 81899 resoluciones (PNL=+8240.59€)_
 
   - _Acción_: Kelly boost +1.00€ cuando `dist_vwap_pct` > 0.1052 (IC base=+0.046)
 
+- **PATRÓN** `dist_vwap_pct` < `0.3962` → IC=+0.188 (n=585)
+
+  - _Acción_: Kelly boost +0.94€ cuando `dist_vwap_pct` < 0.3962 (IC base=+0.046)
+
 - **PATRÓN** `volumen_regimen` > `0.6271` → IC=+0.195 (n=496)
 
   - _Acción_: Kelly boost +0.97€ cuando `volumen_regimen` > 0.6271 (IC base=+0.046)
@@ -1974,9 +1978,9 @@ _Generado por shadow_postmortem.py sobre 81899 resoluciones (PNL=+8240.59€)_
 
   - _Acción_: Kelly boost +1.00€ cuando `ibs_20min` < 0.3871 (IC base=+0.176)
 
-- **PATRÓN** `dist_vwap_pct` < `0.1525` → IC=+0.183 (n=266)
+- **PATRÓN** `dist_vwap_pct` < `0.2323` → IC=+0.187 (n=279)
 
-  - _Acción_: Kelly boost +0.91€ cuando `dist_vwap_pct` < 0.1525 (IC base=+0.176)
+  - _Acción_: Kelly boost +0.93€ cuando `dist_vwap_pct` < 0.2323 (IC base=+0.176)
 
 - **PATRÓN** `sigma_ewma_delta_pct` > `11.358` → IC=+0.267 (n=84)
 
@@ -3275,20 +3279,20 @@ _Generado por shadow_postmortem.py sobre 81899 resoluciones (PNL=+8240.59€)_
   - _Acción_: SKIP cuando `sigma_h` > 0.0111
   - _Potencial_: sin este filtro IC_bueno=-0.142 (n=160)
 
-- **FILTRO** `drift_60min` |x|> `0.0909` → IC=-0.262 (n=19)
-  - _Por qué funciona_: drift fuerte en 1h → el movimiento ya está priceado en Polymarket; edge agotado
-  - _Acción_: SKIP cuando `drift_60min` |x|> 0.0909
-  - _Potencial_: sin este filtro IC_bueno=+0.038 (n=37)
-
 - **FILTRO** `dist_vwap_pct` > `0.1067` → IC=-0.289 (n=17)
 
   - _Acción_: SKIP cuando `dist_vwap_pct` > 0.1067
   - _Potencial_: sin este filtro IC_bueno=-0.045 (n=53)
 
-- **FILTRO** `volumen_regimen` > `0.8876` → IC=-0.196 (n=54)
+- **FILTRO** `volumen_regimen` < `0.6601` → IC=-0.155 (n=27)
 
-  - _Acción_: SKIP cuando `volumen_regimen` > 0.8876
-  - _Potencial_: sin este filtro IC_bueno=-0.052 (n=56)
+  - _Acción_: SKIP cuando `volumen_regimen` < 0.6601
+  - _Potencial_: sin este filtro IC_bueno=-0.112 (n=83)
+
+- **FILTRO** `volumen_spike_ratio` < `2.7298` → IC=-0.278 (n=16)
+
+  - _Acción_: SKIP cuando `volumen_spike_ratio` < 2.7298
+  - _Potencial_: sin este filtro IC_bueno=+0.056 (n=16)
 
 - **PATRÓN** `sigma_h` < `0.0054` → IC=+0.180 (n=145)
   - _Por qué funciona_: baja volatilidad → señal GBM más fiable; el spread de Polymarket cubre mejor el edge
@@ -4056,7 +4060,7 @@ _Generado por shadow_postmortem.py sobre 81899 resoluciones (PNL=+8240.59€)_
 - **FILTRO** `py_entrada` > `0.66` → IC=-0.204 (n=580)
 
   - _Acción_: SKIP cuando `py_entrada` > 0.66
-  - _Potencial_: sin este filtro IC_bueno=+0.007 (n=1820)
+  - _Potencial_: sin este filtro IC_bueno=+0.006 (n=1821)
 
 ### MOMENTUM_IBS_5M_BALLENA#BNB#5min
 - **FILTRO** `hora_utc` > `20.0` → IC=-0.184 (n=55)
@@ -4217,12 +4221,12 @@ _Generado por shadow_postmortem.py sobre 81899 resoluciones (PNL=+8240.59€)_
 - **FILTRO** `py_entrada` > `0.7` → IC=-0.220 (n=98)
 
   - _Acción_: SKIP cuando `py_entrada` > 0.7
-  - _Potencial_: sin este filtro IC_bueno=+0.006 (n=308)
+  - _Potencial_: sin este filtro IC_bueno=+0.005 (n=309)
 
 - **FILTRO** `ibs_7min` > `0.8519` → IC=-0.170 (n=101)
 
   - _Acción_: SKIP cuando `ibs_7min` > 0.8519
-  - _Potencial_: sin este filtro IC_bueno=-0.008 (n=305)
+  - _Potencial_: sin este filtro IC_bueno=-0.010 (n=306)
 
 ### MOMENTUM_IBS_5M_FADE#BNB#5min
 - **FILTRO** `py_entrada` < `0.505` → IC=-0.143 (n=26)
@@ -5515,7 +5519,7 @@ _Derivadas de los patrones aprendidos:_
 | ✅ GBM_LATE_15M#SOL#15min | 928 | -0.009 | +165.48€ | 3 | 4 |
 | ✅ GBM_LATE_15M#XRP | 1156 | -0.004 | +201.94€ | 0 | 0 |
 | ✅ GBM_LATE_15M#XRP#15min | 1156 | -0.004 | +201.94€ | 0 | 4 |
-| ✅ GBM_LATE_15M_ESPACIO_ATR | 6002 | +0.048 | +2222.63€ | 0 | 13 |
+| ✅ GBM_LATE_15M_ESPACIO_ATR | 6002 | +0.048 | +2222.63€ | 0 | 14 |
 | ✅ GBM_LATE_15M_ESPACIO_ATR#15min | 6002 | +0.048 | +2222.63€ | 0 | 0 |
 | ✅ GBM_LATE_15M_ESPACIO_ATR#BNB | 1126 | -0.028 | +510.46€ | 0 | 0 |
 | ✅ GBM_LATE_15M_ESPACIO_ATR#BNB#15min | 1126 | -0.028 | +510.46€ | 1 | 3 |
@@ -5697,8 +5701,8 @@ _Derivadas de los patrones aprendidos:_
 | ✅ MOMENTUM_IBS_5M#SOL#5min | 197 | +0.007 | +2.97€ | 0 | 1 |
 | ✅ MOMENTUM_IBS_5M#XRP | 166 | -0.006 | -5.40€ | 0 | 0 |
 | ✅ MOMENTUM_IBS_5M#XRP#5min | 166 | -0.006 | -5.40€ | 0 | 0 |
-| ✅ MOMENTUM_IBS_5M_BALLENA | 4385 | -0.058 | +209.13€ | 5 | 0 |
-| ✅ MOMENTUM_IBS_5M_BALLENA#5min | 4385 | -0.058 | +209.13€ | 0 | 0 |
+| ✅ MOMENTUM_IBS_5M_BALLENA | 4386 | -0.058 | +208.06€ | 5 | 0 |
+| ✅ MOMENTUM_IBS_5M_BALLENA#5min | 4386 | -0.058 | +208.06€ | 0 | 0 |
 | ✅ MOMENTUM_IBS_5M_BALLENA#BNB | 638 | -0.092 | +73.72€ | 0 | 0 |
 | ✅ MOMENTUM_IBS_5M_BALLENA#BNB#5min | 638 | -0.092 | +73.72€ | 6 | 0 |
 | ✅ MOMENTUM_IBS_5M_BALLENA#BTC | 845 | -0.049 | +79.14€ | 0 | 0 |
@@ -5709,8 +5713,8 @@ _Derivadas de los patrones aprendidos:_
 | ✅ MOMENTUM_IBS_5M_BALLENA#ETH#5min | 769 | -0.067 | -35.76€ | 6 | 0 |
 | ✅ MOMENTUM_IBS_5M_BALLENA#SOL | 787 | -0.039 | -15.09€ | 0 | 0 |
 | ✅ MOMENTUM_IBS_5M_BALLENA#SOL#5min | 787 | -0.039 | -15.09€ | 5 | 0 |
-| ✅ MOMENTUM_IBS_5M_BALLENA#XRP | 688 | -0.045 | +64.17€ | 0 | 0 |
-| ✅ MOMENTUM_IBS_5M_BALLENA#XRP#5min | 688 | -0.045 | +64.17€ | 6 | 0 |
+| ✅ MOMENTUM_IBS_5M_BALLENA#XRP | 689 | -0.046 | +63.10€ | 0 | 0 |
+| ✅ MOMENTUM_IBS_5M_BALLENA#XRP#5min | 689 | -0.046 | +63.10€ | 6 | 0 |
 | ✅ MOMENTUM_IBS_5M_FADE | 3675 | +0.008 | -4.79€ | 0 | 0 |
 | ✅ MOMENTUM_IBS_5M_FADE#5min | 3675 | +0.008 | -4.79€ | 0 | 0 |
 | ✅ MOMENTUM_IBS_5M_FADE#BNB | 627 | +0.015 | +8.63€ | 0 | 0 |
@@ -5925,7 +5929,7 @@ _Derivadas de los patrones aprendidos:_
 **🟡 H-STREAK-COOLDOWN** — Cooldown tras 2 derrotas consecutivas (mismo subtype)
   - _Umbral_: n≥40 tras 2 losses y gap(IC_tras_win - IC_tras_2loss)≥0.05
   - _Acción_: Reducir stake (no desactivar) 1-2h tras 2 derrotas consecutivas en el mismo subtype
-  - _Estado_: tras_win IC=+0.097 n=47228 | tras_1loss IC=+0.054 n=34382 | tras_2loss IC=+0.012 n=15283/40 | gap=+0.085 (umbral 0.05)
+  - _Estado_: tras_win IC=+0.097 n=47229 | tras_1loss IC=+0.054 n=34382 | tras_2loss IC=+0.012 n=15283/40 | gap=+0.085 (umbral 0.05)
 
 **🟡 H-KALMAN** — Kalman filter para drift adaptativo
   - _Umbral_: n≥200 por subtipo para calibrar parámetros Q/R del KF
