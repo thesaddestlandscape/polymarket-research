@@ -4074,8 +4074,19 @@ def s_gbm_late_15min_py_confirmado(market, ctx):
 BALLENAS_CONFIRMADAS_ACTIVOS = {"SOL", "ETH", "XRP", "DOGE"}  # DOGE añadido 21-Jul:
 # mismo criterio que ballenas_executor_5min.py (DOGE añadido 20-Jul) -- shadow
 # puro, deja acumular n desde cero antes de sacar conclusiones.
-BALLENAS_CONFIRMADAS_BANDA_NO_LO = 0.5   # precio_no en [0.5,0.7) -> confirma BUY_NO
+BALLENAS_CONFIRMADAS_BANDA_NO_LO = 0.3   # precio_no en [0.3,0.7) -> confirma BUY_NO
 BALLENAS_CONFIRMADAS_BANDA_NO_HI = 0.7
+# 19-Ago (petición explícita Javi): ampliado de [0.5,0.7) a [0.3,0.7) --
+# el validador de zonas externas (analisis_zonas_validadas_externas_
+# post_twap_10ago.py, ballenas_timing_history.csv) confirmó BUY_NO real
+# en py∈[0.60,0.70) (SOL#15min, n=1407/1334, margen +4.8pp/+6.1pp), que en
+# convención precio_no equivale a (0.30,0.40] -- FUERA de la banda vieja,
+# la estrategia nunca podía generar señal ahí pese a tener edge confirmado
+# (mismo bug que project_p2_enriquecido_desplegado_18ago detectó para esta
+# tupla). Con la banda ampliada, gate_bucket_propio (micro-bucket veto)
+# sigue siendo quien decide bueno_confirmado/malo_confirmado por bucket
+# antes de cualquier ejecución real -- ampliar aquí solo permite GENERAR
+# la señal shadow, no ejecutarla ciegamente.
 BALLENAS_CONFIRMADAS_BANDA_YES_LO = 0.7  # precio_yes en [0.7,0.9) -> confirma BUY_YES
 BALLENAS_CONFIRMADAS_BANDA_YES_HI = 0.9
 BALLENAS_CONFIRMADAS_UMBRAL_PCT = 0.6   # mismo umbral que veto_ballenas (live_trade.py)
