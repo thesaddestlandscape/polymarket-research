@@ -85,6 +85,7 @@ from live_guard import puede_operar_live
 from live_stake import bloquear_por_circuit_breaker, calcular_stake
 from ballenas_banda_fina_gate import evaluar as _gate_banda_fina_ballenas
 from gate_bucket_propio import evaluar as _gate_bucket_propio
+from gbm_confluencia import evaluar as _gbm_confluencia  # 19-Ago, FASE 1 puro logging
 from calibracion_platt_lookup import entrada as _calib_platt_entrada, aplicar as _aplicar_platt
 import ballenas_firehose_cache as _fc
 
@@ -828,6 +829,9 @@ def _registrar_prediccion(activo: str, mercado: dict, py: float, edge: float,
     # confirmado [0.55,0.60) da g(f=10%) positivo. Puro logging, mismo
     # patrón exacto que shadow_predict.py -- no cambia edge/decision.
     gate_bp = _gate_bucket_propio(f"{STRATEGY}#{subtype}#BUY_YES", py)
+    # 19-Ago: FASE 1 del hallazgo GBM-confluencia, solo logging -- ver
+    # docstring de gbm_confluencia.py. BALLENAS_TARDIAS siempre es BUY_YES.
+    gbm_conf = _gbm_confluencia(mercado.get("market_id"), "BUY_YES")
     features = json.dumps({
         "concentracion_yes": round(pct_yes, 4), "n_ballenas": n_ballenas,
         "restante_s_al_confirmar": round(restante_s, 2),
@@ -835,6 +839,7 @@ def _registrar_prediccion(activo: str, mercado: dict, py: float, edge: float,
         "banda_fina_vetaria_fase1": gate_bf["vetaria_fase1"], "banda_fina_motivo": gate_bf["motivo"],
         "ballena_activa_n": ballena_activa_n,
         "gate_bucket_propio_veredicto": gate_bp["veredicto"],
+        "gbm_direccion_coincide": gbm_conf["gbm_direccion_coincide"],
     }, separators=(",", ":"))
     try:
         with open(PREDICTIONS_LOCK_PATH, "w") as lock_f:

@@ -18,6 +18,7 @@ from data_quality import (
 from smart_money_tracker import ACTIVOS as ACTIVOS_TICKERS
 from ballenas_banda_fina_gate import evaluar as _gate_banda_fina_ballenas
 from gate_bucket_propio import evaluar as _gate_bucket_propio
+from gbm_confluencia import evaluar as _gbm_confluencia  # 19-Ago, FASE 1 puro logging, ver docstring del módulo
 _pares_live_cache = {"mtime": None, "set": set()}
 # 06-Ago: calibración Platt granular (estrategia,activo)/(estrategia,activo,
 # marco) para TODAS las estrategias -- calculada fuera del hot path por
@@ -4404,6 +4405,9 @@ def s_ballenas_confirmadas_15m(market, ctx):
     edges_conocidos = [score_db[w]["edge_pp"] for w in wallets_lado if w in score_db]
     n_sig_negativo = sum(1 for w in wallets_lado
                           if w in score_db and score_db[w]["sig_bhfdr"] and score_db[w]["edge_pp"] < 0)
+    # 19-Ago: FASE 1 del hallazgo GBM-confluencia, solo logging -- ver
+    # docstring de gbm_confluencia.py.
+    gbm_conf = _gbm_confluencia(market.get("market_id") or condition_id, direccion)
 
     return {
         "prob_yes": prob_yes,
@@ -4424,6 +4428,7 @@ def s_ballenas_confirmadas_15m(market, ctx):
             "banda_z": banda_info.get("z"),
             "banda_n_historico": banda_info.get("n"),
             "hora_utc": datetime.now(timezone.utc).hour,
+            "gbm_direccion_coincide": gbm_conf["gbm_direccion_coincide"],
             **_libro_calidad(market),
         },
     }
@@ -5116,6 +5121,9 @@ def s_favorito_confirmado(market, ctx, strategy_name: str = "FAVORITO_CONFIRMADO
     # de TODA la banda de precio, no solo de la zona ya confirmada.
     tupla_str = f"{strategy_name}#{activo}#{vent}min#{direccion}" if vent else None
     gate_bp = _gate_bucket_propio(tupla_str, py) if tupla_str else {"veredicto": "sin_concluir", "detalle": None}
+    # 19-Ago: FASE 1 del hallazgo GBM-confluencia (arquetipo A dirección vs
+    # arquetipo B ejecutable), solo logging -- ver docstring de gbm_confluencia.py.
+    gbm_conf = _gbm_confluencia(market.get("market_id") or market.get("condition_id"), direccion)
 
     return {
         "prob_yes": prob_yes,
@@ -5129,6 +5137,7 @@ def s_favorito_confirmado(market, ctx, strategy_name: str = "FAVORITO_CONFIRMADO
             "banda_fina_vetaria_fase1": gate_bf["vetaria_fase1"],
             "banda_fina_motivo": gate_bf["motivo"],
             "gate_bucket_propio_veredicto": gate_bp["veredicto"],
+            "gbm_direccion_coincide": gbm_conf["gbm_direccion_coincide"],
             **_libro_calidad(market),
         },
     }
