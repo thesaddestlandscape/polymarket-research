@@ -73,6 +73,18 @@ DIR_SHADOW = DIR / "data" / "shadow"
 STRATEGY_PARAMS_PATH = DIR_SHADOW / "strategy_params.json"
 CONFIG_LIVE_PATH = DIR / "data" / "live" / "config_live.json"
 PREDICTIONS_LOCK_PATH = DIR_SHADOW / ".predictions_lock"
+# 19-Ago: chequeo de profundidad real en el instante de confirmación --
+# mismo hueco ya cerrado en favorito5min_bajalatencia_fase0.py (DOGE/XRP
+# #5min#BUY_NO). Este ejecutor lleva desde el 04-Ago corriendo DRY_RUN de
+# baja latencia SIN consultar el libro nunca -- cualquier análisis de
+# fill-ability contra libro_snapshots.csv (camino genérico ~20s) mide el
+# instante EQUIVOCADO, no el de esta confirmación. Ver
+# feedback_contrastar_fuente_correcta_por_tupla_19ago (memoria).
+DEPTH_OUT = DIR_SHADOW / "favorito60min_bajalatencia_profundidad_fase0.csv"
+DEPTH_LOCK = DIR_SHADOW / ".favorito60min_bajalatencia_profundidad.lock"
+DEPTH_COLUMNS = ["ts_deteccion_utc", "market_id", "activo", "restante_s",
+                 "py", "profundidad_ratio", "profundidad_ask"]
+STAKE_REF_EUR = 1.05
 
 CLOB = "https://clob.polymarket.com"
 
@@ -285,6 +297,32 @@ def _registrar_prediccion(activo: str, mercado: dict, py: float, prob_yes: float
         log(f"aviso: no se pudo registrar predicción para postmortem: {e}", activo)
 
 
+def _registrar_profundidad(activo: str, mercado: dict, py: float, restante_s: float) -> None:
+    """Consulta profundidad real del lado YES en el instante exacto de
+    confirmación (solo lectura, nunca ordena) -- cierra el hueco de
+    fill-ability para esta tupla. Best-effort: nunca bloquea disparar()."""
+    try:
+        depth = lt._consultar_profundidad_libro(None, mercado["yes_token"], py, STAKE_REF_EUR)
+        fila = [
+            datetime.now(timezone.utc).isoformat(timespec="seconds"),
+            mercado["market_id"], activo, round(restante_s, 1), round(py, 4),
+            depth.get("ratio_vs_stake", ""), depth.get("mejor_ask", ""),
+        ]
+        with open(DEPTH_LOCK, "w") as lock_f:
+            fcntl.flock(lock_f, fcntl.LOCK_EX)
+            try:
+                nuevo = not DEPTH_OUT.exists()
+                with open(DEPTH_OUT, "a", newline="", encoding="utf-8") as f:
+                    w = csv.writer(f)
+                    if nuevo:
+                        w.writerow(DEPTH_COLUMNS)
+                    w.writerow(fila)
+            finally:
+                fcntl.flock(lock_f, fcntl.LOCK_UN)
+    except Exception as e:
+        log(f"aviso: no se pudo registrar profundidad: {e}", activo)
+
+
 def watch_window(activo: str, mercado: dict) -> bool:
     """Vigila un mercado {activo}#60min concreto hasta su cierre. True si
     ejecutó (o habría ejecutado en DRY_RUN)."""
@@ -332,6 +370,7 @@ def watch_window(activo: str, mercado: dict) -> bool:
                 f"wallet_edge_medio={resumen_edge.get('wallet_edge_medio') if resumen_edge else None} "
                 f"({n_polls} polls)", activo)
             _registrar_prediccion(activo, mercado, py, prob_yes_raw, restante, n_yes_total, resumen_edge)
+            _registrar_profundidad(activo, mercado, py, restante)
             return disparar(activo, mercado, py, prob_yes, restante)
 
         time.sleep(POLL_INTERVAL_S)
