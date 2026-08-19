@@ -72,9 +72,13 @@ import time
 from collections import deque
 from concurrent.futures import ThreadPoolExecutor
 from datetime import datetime, timezone
+from functools import partial
 from pathlib import Path
 
 import requests
+
+import live_trade as lt
+from fetch_libro_ambos_lados import _universo_activo
 
 REPO = Path(__file__).resolve().parent
 DIR_SHADOW = REPO / "data" / "shadow"
@@ -85,7 +89,17 @@ CLOB = "https://clob.polymarket.com"
 TIMEOUT = 5
 
 ASSETS = ["BTC", "ETH", "SOL", "XRP", "DOGE", "BNB"]
-TIMEFRAMES = {"5min": (300, "5m"), "15min": (900, "15m")}
+# Marcos con slug determinista en gamma-api (verificado en vivo 19-Ago:
+# {activo}-updown-4h-{ts_start} responde con evento real, igual que 5m/15m).
+TIMEFRAMES = {"5min": (300, "5m"), "15min": (900, "15m"), "240min": (14400, "4h")}
+# 60min (hourly) NO tiene slug determinista (verificado en vivo 19-Ago:
+# {activo}-updown-1h-{ts} responde vacío en ts_start Y ts_end) -- se
+# resuelve por descubrimiento de universo (_universo_activo(), clasifica
+# por TEXTO de la pregunta), mismo mecanismo que
+# favorito_confirmado_60min_executor.py / favorito_confirmado_60_240min_
+# depth_fase0.py. Dict separado porque el discovery es distinto, no solo
+# la duración.
+TIMEFRAMES_UNIVERSO = {"60min": 3600}
 
 # Offsets de muestreo relativos al cierre nominal (segundos, negativo =
 # antes del cierre). Cubre el margen [-2, +8] con paso ~1s -- suficiente
@@ -204,6 +218,7 @@ _TAIL = _ChainlinkTail()
 # / ballenas_executor_btc15m.py) -- slug determinista, cacheado.
 # ─────────────────────────────────────────────────────────────────────────
 _CACHE_MKT = {}
+_tokens_cache_universo: dict[str, tuple[str, str]] = {}
 
 
 def mercado_slot(asset: str, marco_tag: str, ts_start: int):
@@ -222,6 +237,50 @@ def mercado_slot(asset: str, marco_tag: str, ts_start: int):
         return slug, mkt
     except Exception:
         return slug, None
+
+
+def resolver_slug(marco_tag: str, asset: str, ts_start: int, ts_end: int):
+    """Descubrimiento determinista (5min/15min/240min) -- mismo mecanismo
+    de siempre, envuelto para exponer la misma interfaz que resolver_universo.
+    `marco_tag` se fija con functools.partial por worker, ver main()."""
+    slug, mkt = mercado_slot(asset, marco_tag, ts_start)
+    if not mkt:
+        return None
+    token_yes, token_no = token_ids(mkt)
+    return {"slug": slug, "market_id": mkt.get("id", ""),
+            "condition_id": mkt.get("conditionId", ""),
+            "token_yes": token_yes, "token_no": token_no}
+
+
+def resolver_universo(marco_min: int, asset: str, ts_start: int, ts_end: int):
+    """60min (hourly): sin slug determinista -- reusa _universo_activo()
+    de fetch_libro_ambos_lados.py (clasificación por TEXTO de la
+    pregunta), mismo mecanismo que favorito_confirmado_60min_executor.py.
+    Filtra por end_date más cercano a ts_end (con margen de 90s) para no
+    confundir la ventana que cierra AHORA con la siguiente. `marco_min` se
+    fija con functools.partial por worker, ver main()."""
+    marco_str = f"{marco_min}min"
+    try:
+        universo = _universo_activo()
+    except Exception:
+        return None
+    candidatos = [(mid, cid, edt) for mid, (act, m, cid, edt) in universo.items()
+                  if act == asset and m == marco_str]
+    if not candidatos:
+        return None
+    mid, cid, edt = min(candidatos, key=lambda x: abs(x[2].timestamp() - ts_end))
+    if abs(edt.timestamp() - ts_end) > 90:
+        return None
+    if mid in _tokens_cache_universo:
+        token_yes, token_no = _tokens_cache_universo[mid]
+    else:
+        try:
+            token_yes, token_no, _cid = lt._get_token_ids(mid)
+        except Exception:
+            return None
+        _tokens_cache_universo[mid] = (token_yes, token_no)
+    return {"slug": f"{asset.lower()}-universo-1h", "market_id": mid,
+            "condition_id": cid, "token_yes": token_yes, "token_no": token_no}
 
 
 def token_ids(mkt: dict):
@@ -354,14 +413,15 @@ def resolver_pendientes():
             _log(f"resolver: {path.name} {n_res}/{len(rows)} resueltas")
 
 
-def observar_ventana(asset: str, marco: str, dur_s: int, marco_tag: str, ts_end: int):
+def observar_ventana(asset: str, marco: str, dur_s: int, ts_end: int, resolver) -> list:
     ts_start = ts_end - dur_s
-    slug, mkt = mercado_slot(asset, marco_tag, ts_start)
-    if not mkt:
+    resuelto = resolver(asset, ts_start, ts_end)
+    if not resuelto:
         return []
-    market_id = mkt.get("id", "")
-    condition_id = mkt.get("conditionId", "")
-    token_yes, token_no = token_ids(mkt)
+    slug = resuelto["slug"]
+    market_id = resuelto["market_id"]
+    condition_id = resuelto["condition_id"]
+    token_yes, token_no = resuelto["token_yes"], resuelto["token_no"]
     ref_open = _TAIL.precio_en(asset, ts_start) or _TAIL.precio_en(asset, ts_start + 2)
 
     filas = []
@@ -398,7 +458,7 @@ def observar_ventana(asset: str, marco: str, dur_s: int, marco_tag: str, ts_end:
     return filas
 
 
-def worker(asset: str, marco: str, dur_s: int, marco_tag: str):
+def worker(asset: str, marco: str, dur_s: int, resolver):
     while True:
         now = time.time()
         ts_end = (int(now) // dur_s + 1) * dur_s
@@ -407,7 +467,7 @@ def worker(asset: str, marco: str, dur_s: int, marco_tag: str):
         if resto > 0:
             time.sleep(resto)
         try:
-            filas = observar_ventana(asset, marco, dur_s, marco_tag, ts_end)
+            filas = observar_ventana(asset, marco, dur_s, ts_end, resolver)
             guardar(filas)
         except Exception as e:
             _log(f"[{asset}#{marco}] error en ventana ts_end={ts_end}: {e}")
@@ -421,14 +481,18 @@ def main():
     DIR_SHADOW.mkdir(parents=True, exist_ok=True)
     _TAIL.arrancar()
     time.sleep(2)  # dar tiempo a que el tail acumule algo de buffer inicial
-    _log(f"resolution_sniper_observer arrancado — activos={ASSETS} marcos={list(TIMEFRAMES)} "
+    todos_marcos = list(TIMEFRAMES) + list(TIMEFRAMES_UNIVERSO)
+    _log(f"resolution_sniper_observer arrancado — activos={ASSETS} marcos={todos_marcos} "
          f"offsets={OFFSETS_S}")
 
-    hilos = []
-    with ThreadPoolExecutor(max_workers=len(ASSETS) * len(TIMEFRAMES)) as ex:
+    n_workers = len(ASSETS) * (len(TIMEFRAMES) + len(TIMEFRAMES_UNIVERSO))
+    with ThreadPoolExecutor(max_workers=n_workers) as ex:
         for asset in ASSETS:
             for marco, (dur_s, tag) in TIMEFRAMES.items():
-                ex.submit(worker, asset, marco, dur_s, tag)
+                ex.submit(worker, asset, marco, dur_s, partial(resolver_slug, tag))
+            for marco, dur_s in TIMEFRAMES_UNIVERSO.items():
+                marco_min = int(marco.replace("min", ""))
+                ex.submit(worker, asset, marco, dur_s, partial(resolver_universo, marco_min))
         # loop de resolución periódica en el hilo principal del pool
         while True:
             try:
