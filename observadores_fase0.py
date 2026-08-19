@@ -100,6 +100,7 @@ import resolution_sniper_fade_depth_fase0
 # de ese módulo).
 import momentum_ibs_ballena_executor
 import favorito_confirmado_depth_fase0
+import favorito_confirmado_60_240min_depth_fase0
 import ballenas_confirmadas_15m_buyno_depth_fase0
 
 # (modulo, fichero_log_propio -- EXACTO el que ya usaba pipeline_watchdog.SCREEN_RESTART, nombre_funcion_log_a_reemplazar)
@@ -123,6 +124,7 @@ OBSERVADORES = [
     (resolution_sniper_fade_depth_fase0, "resolution_sniper_fade_depth_fase0.log", "_log"),
     (momentum_ibs_ballena_executor, "momentum_ibs_ballena_executor.log", "log"),
     (favorito_confirmado_depth_fase0, "favorito_confirmado_depth_fase0.log", "log"),
+    (favorito_confirmado_60_240min_depth_fase0, "favorito_confirmado_60_240min_depth_fase0.log", "log"),
     (ballenas_confirmadas_15m_buyno_depth_fase0, "ballenas_confirmadas_15m_buyno_depth_fase0.log", "log"),
 ]
 
