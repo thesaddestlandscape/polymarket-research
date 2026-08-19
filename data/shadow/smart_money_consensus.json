@@ -1,38 +1,45 @@
 {
   "BTC": {
-    "smart_money_consensus": -0.1205,
-    "n_trades_smart": 1460,
-    "n_wallets_smart": 10,
-    "smart_money_consensus_ponderado": -0.131,
-    "n_wallets_smart_ponderado": 10
-  },
-  "ETH": {
-    "smart_money_consensus": 0.1912,
-    "n_trades_smart": 319,
-    "n_wallets_smart": 5,
-    "smart_money_consensus_ponderado": 0.1983,
-    "n_wallets_smart_ponderado": 5
+    "smart_money_consensus": 0.0133,
+    "n_trades_smart": 452,
+    "n_wallets_smart": 7,
+    "smart_money_consensus_ponderado": 0.186,
+    "n_wallets_smart_ponderado": 7
   },
   "SOL": {
-    "smart_money_consensus": -0.1429,
-    "n_trades_smart": 154,
-    "n_wallets_smart": 4,
-    "smart_money_consensus_ponderado": 0.1842,
-    "n_wallets_smart_ponderado": 4
+    "smart_money_consensus": 0.3208,
+    "n_trades_smart": 53,
+    "n_wallets_smart": 3,
+    "smart_money_consensus_ponderado": 0.3165,
+    "n_wallets_smart_ponderado": 3
   },
   "XRP": {
-    "smart_money_consensus": 0.1707,
-    "n_trades_smart": 41,
-    "n_wallets_smart": 1,
-    "smart_money_consensus_ponderado": 0.4166,
-    "n_wallets_smart_ponderado": 1
+    "smart_money_consensus": 0.3898,
+    "n_trades_smart": 59,
+    "n_wallets_smart": 3,
+    "smart_money_consensus_ponderado": 0.1564,
+    "n_wallets_smart_ponderado": 3
+  },
+  "ETH": {
+    "smart_money_consensus": 0.2346,
+    "n_trades_smart": 162,
+    "n_wallets_smart": 4,
+    "smart_money_consensus_ponderado": 0.2581,
+    "n_wallets_smart_ponderado": 4
   },
   "BNB": {
-    "smart_money_consensus": -0.1154,
-    "n_trades_smart": 52,
+    "smart_money_consensus": 0.0,
+    "n_trades_smart": 4,
     "n_wallets_smart": 1,
-    "smart_money_consensus_ponderado": -0.1652,
+    "smart_money_consensus_ponderado": -0.3154,
     "n_wallets_smart_ponderado": 1
   },
-  "_actualizado": "2026-08-19T16:21:32+00:00"
+  "DOGE": {
+    "smart_money_consensus": 0.0,
+    "n_trades_smart": 4,
+    "n_wallets_smart": 2,
+    "smart_money_consensus_ponderado": 0.186,
+    "n_wallets_smart_ponderado": 2
+  },
+  "_actualizado": "2026-08-19T16:41:31+00:00"
 }
