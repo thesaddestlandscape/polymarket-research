@@ -49,3 +49,12 @@ data/live/ballenas_recientes.json
 # ver scripts/backup_wallet_mirror_sniper_dry_run.sh (mismo patrón que
 # backup_results_csv.sh).
 data/shadow/wallet_mirror_sniper_dry_run.csv
+# 19-Ago: vigia_tamano_ficheros_git.py cruzó el umbral warning (50MB) con
+# data/sports/activity_ws_2026-08-18.csv (69.5MB, un día completo). Mismo
+# patrón que wallet_mirror_sniper_dry_run.csv (17-Ago) -- ficheros
+# diarios ~70MB/día, sports_wallet_edge_tracker.py los lee TODOS vía
+# glob("activity_ws_*.csv") (dataset histórico real, no cache rolling) --
+# SÍ necesita backup dedicado, ver scripts/backup_activity_ws_sports.sh.
+# El patrón cubre CUALQUIER fecha (no solo hoy) -- cada día es un fichero
+# nuevo que cruzará el mismo umbral por su cuenta.
+data/sports/activity_ws_*.csv
