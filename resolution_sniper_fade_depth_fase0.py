@@ -57,6 +57,17 @@ from resolution_sniper_observer import (
     ASSETS, TIMEFRAMES, DESPERTAR_ANTICIPO_S, _TAIL,
     mercado_slot, token_ids, libro,
 )
+# 19-Ago: fusionado con resolution_sniper_naive_depth_fase0.py -- ambos
+# observadores consultaban la MISMA ventana/mercado en el MISMO instante
+# (mismos offsets 0-3s, mismo ts_end), cada uno con su propio hilo/pool de
+# 12 workers -- CPU sobresuscrita real (py-spy: 85 hilos vivos en
+# observadores_fase0.py, load5/nproc>2.9x, swap activo en vivo). Se fusiona
+# en un único paso: 1 descubrimiento de mercado + 1 libro() por offset
+# (antes 2 de cada), consultando profundidad de AMBOS lados (fade e
+# implícito) en la misma iteración -- ahorra ~12 hilos y ~40-50% de
+# llamadas API de esta familia. Los 2 CSV de salida y sus columnas NO
+# cambian (compatibilidad con los gates ya escritos hoy).
+import resolution_sniper_naive_depth_fase0 as _naive
 
 REPO = Path(__file__).resolve().parent
 DIR_SHADOW = REPO / "data" / "shadow"
@@ -98,15 +109,16 @@ def observar_ventana(asset: str, marco: str, dur_s: int, marco_tag: str, ts_end:
     ts_start = ts_end - dur_s
     slug, mkt = mercado_slot(asset, marco_tag, ts_start)
     if not mkt:
-        return []
+        return [], []
     market_id = mkt.get("id", "")
     condition_id = mkt.get("conditionId", "")
     token_yes, token_no = token_ids(mkt)
     if not token_yes or not token_no:
-        return []
+        return [], []
     ref_open = _TAIL.precio_en(asset, ts_start) or _TAIL.precio_en(asset, ts_start + 2)
 
     filas = []
+    filas_naive = []
     for offset in OFFSETS_FADE_S:
         objetivo = ts_end + offset
         espera = objetivo - time.time()
@@ -131,8 +143,22 @@ def observar_ventana(asset: str, marco: str, dur_s: int, marco_tag: str, ts_end:
         dir_fade = "Down" if dir_impl == "Up" else "Up"
         token_fade = token_no if dir_fade == "Down" else token_yes
         ask_fade = ask_no if dir_fade == "Down" else ask_yes
+        token_impl = token_yes if dir_impl == "Up" else token_no
 
         depth = lt._consultar_profundidad_libro(None, token_fade, ask_fade or 0.5, STAKE_REF_EUR)
+        depth_impl = lt._consultar_profundidad_libro(None, token_impl, ask_impl or 0.5, STAKE_REF_EUR)
+
+        filas_naive.append({
+            "timestamp_utc": datetime.now(timezone.utc).isoformat(timespec="milliseconds"),
+            "activo": asset, "marco": marco, "slug": slug,
+            "market_id": market_id, "condition_id": condition_id,
+            "ts_end": ts_end, "offset_s": offset,
+            "direccion_implicita": dir_impl, "ask_implicita": ask_impl,
+            "profundidad_implicita_eur": depth_impl.get("profundidad_eur", ""),
+            "ratio_implicita_vs_stake": depth_impl.get("ratio_vs_stake", ""),
+            "mejor_ask_implicita": depth_impl.get("mejor_ask", ""),
+            "n_niveles_implicita": depth_impl.get("n_niveles", ""),
+        })
 
         filas.append({
             "timestamp_utc": datetime.now(timezone.utc).isoformat(timespec="milliseconds"),
@@ -147,9 +173,9 @@ def observar_ventana(asset: str, marco: str, dur_s: int, marco_tag: str, ts_end:
             "n_niveles_fade": depth.get("n_niveles", ""),
         })
         _log(f"[{asset}#{marco}] ts_end={ts_end} offset={offset} "
-             f"implicita={dir_impl}@{ask_impl} fade={dir_fade}@{ask_fade} "
-             f"ratio_fade={depth.get('ratio_vs_stake')}")
-    return filas
+             f"implicita={dir_impl}@{ask_impl} (ratio={depth_impl.get('ratio_vs_stake')}) "
+             f"fade={dir_fade}@{ask_fade} (ratio={depth.get('ratio_vs_stake')})")
+    return filas, filas_naive
 
 
 def worker(asset: str, marco: str, dur_s: int, marco_tag: str):
@@ -161,8 +187,9 @@ def worker(asset: str, marco: str, dur_s: int, marco_tag: str):
         if resto > 0:
             time.sleep(resto)
         try:
-            filas = observar_ventana(asset, marco, dur_s, marco_tag, ts_end)
+            filas, filas_naive = observar_ventana(asset, marco, dur_s, marco_tag, ts_end)
             _guardar(filas)
+            _naive._guardar(filas_naive)
         except Exception as e:
             _log(f"[{asset}#{marco}] error en ventana ts_end={ts_end}: {e}")
         resto2 = ts_end + max(OFFSETS_FADE_S) + 1 - time.time()

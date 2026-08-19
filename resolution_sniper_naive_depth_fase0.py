@@ -30,20 +30,19 @@ observacional, mismo criterio de riesgo que el resto de *_fase0.py.
 Objetivo: acumular n>=40 CON profundidad antes de plantear ningún
 ejecutor -- ninguna promoción a pares_permitidos_live sin esto.
 
-Se fusiona en observadores_fase0.py (screen "observadores") -- NUNCA
-lanzar una screen suelta para este script.
+19-Ago (mismo día, hallazgo de sobresuscripción de CPU vía py-spy: 85 hilos
+vivos en observadores_fase0.py, load5/nproc>2.9x, swap activo en vivo):
+este módulo YA NO corre su propio hilo/pool -- resolution_sniper_fade_
+depth_fase0.py consulta la MISMA ventana/mercado en el MISMO instante
+(mismos offsets), así que se fusionó ahí (1 descubrimiento de mercado +
+1 libro() por offset en vez de 2, profundidad de ambos lados en la misma
+iteración). Este fichero se conserva solo por sus constantes (OUT, COLUMNS,
+_guardar) que resolution_sniper_fade_depth_fase0.py importa y reutiliza --
+NO se registra en observadores_fase0.py, NO tiene worker()/main() propios.
 """
 import csv
-import time
-from concurrent.futures import ThreadPoolExecutor
 from datetime import datetime, timezone
 from pathlib import Path
-
-import live_trade as lt
-from resolution_sniper_observer import (
-    ASSETS, TIMEFRAMES, DESPERTAR_ANTICIPO_S, _TAIL,
-    mercado_slot, token_ids, libro,
-)
 
 REPO = Path(__file__).resolve().parent
 DIR_SHADOW = REPO / "data" / "shadow"
@@ -77,88 +76,7 @@ def _guardar(filas: list):
             w.writerow([fila.get(c, "") for c in COLUMNS])
 
 
-def observar_ventana(asset: str, marco: str, dur_s: int, marco_tag: str, ts_end: int):
-    ts_start = ts_end - dur_s
-    slug, mkt = mercado_slot(asset, marco_tag, ts_start)
-    if not mkt:
-        return []
-    market_id = mkt.get("id", "")
-    condition_id = mkt.get("conditionId", "")
-    token_yes, token_no = token_ids(mkt)
-    if not token_yes or not token_no:
-        return []
-    ref_open = _TAIL.precio_en(asset, ts_start) or _TAIL.precio_en(asset, ts_start + 2)
-
-    filas = []
-    for offset in OFFSETS_S:
-        objetivo = ts_end + offset
-        espera = objetivo - time.time()
-        if espera > 0:
-            time.sleep(espera)
-
-        precio = _TAIL.precio_ultimo(asset)
-        if precio is None or ref_open is None or ref_open <= 0:
-            continue
-        if precio > ref_open:
-            dir_impl = "Up"
-        elif precio < ref_open:
-            dir_impl = "Down"
-        else:
-            continue
-
-        ask_yes, ask_no, _, _ = libro(token_yes, token_no)
-        ask_impl = ask_yes if dir_impl == "Up" else ask_no
-        if ask_impl is None or not (ASK_MIN <= ask_impl <= ASK_MAX):
-            continue  # no accionable -- ya obvio o sin dato, no gastar la consulta de profundidad
-
-        token_impl = token_yes if dir_impl == "Up" else token_no
-        depth = lt._consultar_profundidad_libro(None, token_impl, ask_impl or 0.5, STAKE_REF_EUR)
-
-        filas.append({
-            "timestamp_utc": datetime.now(timezone.utc).isoformat(timespec="milliseconds"),
-            "activo": asset, "marco": marco, "slug": slug,
-            "market_id": market_id, "condition_id": condition_id,
-            "ts_end": ts_end, "offset_s": offset,
-            "direccion_implicita": dir_impl, "ask_implicita": ask_impl,
-            "profundidad_implicita_eur": depth.get("profundidad_eur", ""),
-            "ratio_implicita_vs_stake": depth.get("ratio_vs_stake", ""),
-            "mejor_ask_implicita": depth.get("mejor_ask", ""),
-            "n_niveles_implicita": depth.get("n_niveles", ""),
-        })
-        _log(f"[{asset}#{marco}] ts_end={ts_end} offset={offset} "
-             f"implicita={dir_impl}@{ask_impl} ratio_profundidad={depth.get('ratio_vs_stake')}")
-    return filas
-
-
-def worker(asset: str, marco: str, dur_s: int, marco_tag: str):
-    while True:
-        now = time.time()
-        ts_end = (int(now) // dur_s + 1) * dur_s
-        despertar = ts_end - DESPERTAR_ANTICIPO_S
-        resto = despertar - time.time()
-        if resto > 0:
-            time.sleep(resto)
-        try:
-            filas = observar_ventana(asset, marco, dur_s, marco_tag, ts_end)
-            _guardar(filas)
-        except Exception as e:
-            _log(f"[{asset}#{marco}] error en ventana ts_end={ts_end}: {e}")
-        resto2 = ts_end + max(OFFSETS_S) + 1 - time.time()
-        if resto2 > 0:
-            time.sleep(resto2)
-
-
-def main():
-    DIR_SHADOW.mkdir(parents=True, exist_ok=True)
-    _log(f"resolution_sniper_naive_depth_fase0 arrancado — activos={ASSETS} "
-         f"marcos={list(TIMEFRAMES)} offsets={OFFSETS_S}")
-    with ThreadPoolExecutor(max_workers=len(ASSETS) * len(TIMEFRAMES)) as ex:
-        for asset in ASSETS:
-            for marco, (dur_s, tag) in TIMEFRAMES.items():
-                ex.submit(worker, asset, marco, dur_s, tag)
-        while True:
-            time.sleep(3600)
-
-
-if __name__ == "__main__":
-    main()
+# observar_ventana()/worker()/main() vivían aquí -- eliminados 19-Ago,
+# la lógica se fusionó en resolution_sniper_fade_depth_fase0.py::
+# observar_ventana() (ver docstring arriba). Este módulo solo aporta
+# OUT/COLUMNS/_guardar() de aquí en adelante.

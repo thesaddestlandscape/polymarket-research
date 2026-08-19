@@ -86,7 +86,10 @@ import cluster_wallets_fillability_fase0
 import smart_exit_logger_persistente
 import p33_maker_fillability_fase0
 import resolution_sniper_fade_depth_fase0
-import resolution_sniper_naive_depth_fase0
+# resolution_sniper_naive_depth_fase0 -- fusionado 19-Ago dentro de
+# resolution_sniper_fade_depth_fase0.py (mismo hilo, mismo mercado, mismo
+# instante), ya NO se registra aquí como observador propio (ver docstring
+# de ese módulo).
 import momentum_ibs_ballena_executor
 
 # (modulo, fichero_log_propio -- EXACTO el que ya usaba pipeline_watchdog.SCREEN_RESTART, nombre_funcion_log_a_reemplazar)
@@ -108,7 +111,6 @@ OBSERVADORES = [
     (smart_exit_logger_persistente, "smart_exit_logger.log", "_log"),
     (p33_maker_fillability_fase0, "p33_maker_fillability_fase0.log", "_log"),
     (resolution_sniper_fade_depth_fase0, "resolution_sniper_fade_depth_fase0.log", "_log"),
-    (resolution_sniper_naive_depth_fase0, "resolution_sniper_naive_depth_fase0.log", "_log"),
     (momentum_ibs_ballena_executor, "momentum_ibs_ballena_executor.log", "log"),
 ]
 
