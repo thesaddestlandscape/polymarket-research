@@ -1,45 +1,38 @@
 {
   "BTC": {
-    "smart_money_consensus": -0.0628,
-    "n_trades_smart": 1003,
-    "n_wallets_smart": 8,
-    "smart_money_consensus_ponderado": -0.0471,
-    "n_wallets_smart_ponderado": 8
+    "smart_money_consensus": 0.1451,
+    "n_trades_smart": 1296,
+    "n_wallets_smart": 11,
+    "smart_money_consensus_ponderado": 0.05,
+    "n_wallets_smart_ponderado": 11
   },
-  "BNB": {
-    "smart_money_consensus": -0.3469,
-    "n_trades_smart": 49,
+  "SOL": {
+    "smart_money_consensus": 0.037,
+    "n_trades_smart": 81,
     "n_wallets_smart": 2,
-    "smart_money_consensus_ponderado": 0.0234,
+    "smart_money_consensus_ponderado": 0.0875,
     "n_wallets_smart_ponderado": 2
   },
   "ETH": {
-    "smart_money_consensus": 0.1406,
-    "n_trades_smart": 498,
-    "n_wallets_smart": 5,
-    "smart_money_consensus_ponderado": 0.2639,
-    "n_wallets_smart_ponderado": 5
+    "smart_money_consensus": 0.0717,
+    "n_trades_smart": 237,
+    "n_wallets_smart": 3,
+    "smart_money_consensus_ponderado": 0.0304,
+    "n_wallets_smart_ponderado": 3
   },
   "XRP": {
-    "smart_money_consensus": 0.0588,
-    "n_trades_smart": 68,
+    "smart_money_consensus": -0.5,
+    "n_trades_smart": 8,
     "n_wallets_smart": 3,
-    "smart_money_consensus_ponderado": 0.0971,
+    "smart_money_consensus_ponderado": -0.5107,
     "n_wallets_smart_ponderado": 3
   },
   "DOGE": {
-    "smart_money_consensus": -0.102,
-    "n_trades_smart": 49,
-    "n_wallets_smart": 3,
-    "smart_money_consensus_ponderado": -0.1165,
-    "n_wallets_smart_ponderado": 3
+    "smart_money_consensus": 1.0,
+    "n_trades_smart": 2,
+    "n_wallets_smart": 2,
+    "smart_money_consensus_ponderado": 1.0,
+    "n_wallets_smart_ponderado": 2
   },
-  "SOL": {
-    "smart_money_consensus": 0.0164,
-    "n_trades_smart": 122,
-    "n_wallets_smart": 4,
-    "smart_money_consensus_ponderado": -0.0135,
-    "n_wallets_smart_ponderado": 4
-  },
-  "_actualizado": "2026-08-19T14:02:30+00:00"
+  "_actualizado": "2026-08-19T14:21:22+00:00"
 }
