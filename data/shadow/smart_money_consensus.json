@@ -1,45 +1,45 @@
 {
-  "BTC": {
-    "smart_money_consensus": -0.1127,
-    "n_trades_smart": 692,
+  "ETH": {
+    "smart_money_consensus": -0.0723,
+    "n_trades_smart": 1162,
     "n_wallets_smart": 9,
-    "smart_money_consensus_ponderado": -0.2093,
+    "smart_money_consensus_ponderado": 0.0459,
     "n_wallets_smart_ponderado": 9
   },
-  "ETH": {
-    "smart_money_consensus": 0.3333,
-    "n_trades_smart": 21,
-    "n_wallets_smart": 3,
-    "smart_money_consensus_ponderado": 0.2357,
-    "n_wallets_smart_ponderado": 3
+  "BTC": {
+    "smart_money_consensus": -0.0025,
+    "n_trades_smart": 1193,
+    "n_wallets_smart": 12,
+    "smart_money_consensus_ponderado": -0.1065,
+    "n_wallets_smart_ponderado": 12
   },
   "SOL": {
-    "smart_money_consensus": -0.4545,
-    "n_trades_smart": 11,
-    "n_wallets_smart": 3,
-    "smart_money_consensus_ponderado": -0.4322,
-    "n_wallets_smart_ponderado": 3
+    "smart_money_consensus": 0.018,
+    "n_trades_smart": 167,
+    "n_wallets_smart": 6,
+    "smart_money_consensus_ponderado": 0.0723,
+    "n_wallets_smart_ponderado": 6
+  },
+  "XRP": {
+    "smart_money_consensus": -0.072,
+    "n_trades_smart": 125,
+    "n_wallets_smart": 6,
+    "smart_money_consensus_ponderado": 0.1494,
+    "n_wallets_smart_ponderado": 6
   },
   "DOGE": {
-    "smart_money_consensus": 0.0,
-    "n_trades_smart": 6,
+    "smart_money_consensus": 0.1111,
+    "n_trades_smart": 9,
     "n_wallets_smart": 1,
-    "smart_money_consensus_ponderado": 0.4545,
+    "smart_money_consensus_ponderado": 0.6161,
     "n_wallets_smart_ponderado": 1
   },
   "BNB": {
-    "smart_money_consensus": 0.6,
-    "n_trades_smart": 5,
-    "n_wallets_smart": 1,
-    "smart_money_consensus_ponderado": 0.5895,
-    "n_wallets_smart_ponderado": 1
-  },
-  "XRP": {
-    "smart_money_consensus": 1.0,
+    "smart_money_consensus": -0.5,
     "n_trades_smart": 4,
     "n_wallets_smart": 1,
-    "smart_money_consensus_ponderado": 1.0,
+    "smart_money_consensus_ponderado": -0.745,
     "n_wallets_smart_ponderado": 1
   },
-  "_actualizado": "2026-08-19T12:02:06+00:00"
+  "_actualizado": "2026-08-19T12:22:01+00:00"
 }
