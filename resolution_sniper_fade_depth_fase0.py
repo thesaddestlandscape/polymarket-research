@@ -68,6 +68,7 @@ from resolution_sniper_observer import (
 # llamadas API de esta familia. Los 2 CSV de salida y sus columnas NO
 # cambian (compatibilidad con los gates ya escritos hoy).
 import resolution_sniper_naive_depth_fase0 as _naive
+import resolution_sniper_naive_executor_dryrun as _naive_exec
 
 REPO = Path(__file__).resolve().parent
 DIR_SHADOW = REPO / "data" / "shadow"
@@ -175,6 +176,15 @@ def observar_ventana(asset: str, marco: str, dur_s: int, marco_tag: str, ts_end:
         _log(f"[{asset}#{marco}] ts_end={ts_end} offset={offset} "
              f"implicita={dir_impl}@{ask_impl} (ratio={depth_impl.get('ratio_vs_stake')}) "
              f"fade={dir_fade}@{ask_fade} (ratio={depth.get('ratio_vs_stake')})")
+
+        try:
+            _naive_exec.evaluar(
+                asset, marco, slug, market_id, condition_id, ts_end, offset,
+                dir_impl, ask_impl, token_impl, depth_impl.get("ratio_vs_stake"),
+                libro, token_yes, token_no,
+            )
+        except Exception as e:
+            _log(f"[{asset}#{marco}] error en executor_dryrun offset={offset}: {e}")
     return filas, filas_naive
 
 
