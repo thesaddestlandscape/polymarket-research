@@ -78789,3 +78789,18 @@
 {"ts": "2026-08-19T20:58:33+00:00", "sym": "BNB", "value": 0.0754, "reason": "cambio_fuente coingecko->binance"}
 {"ts": "2026-08-19T21:00:18+00:00", "sym": "DOGE", "value": 0.0607, "reason": "cambio_fuente coingecko->binance"}
 {"ts": "2026-08-19T21:00:18+00:00", "sym": "BNB", "value": 0.1219, "reason": "cambio_fuente coingecko->binance"}
+{"ts": "2026-08-19T21:02:16+00:00", "sym": "DOGE", "value": 0.1079, "reason": "cambio_fuente coingecko->binance"}
+{"ts": "2026-08-19T21:02:16+00:00", "sym": "BNB", "value": 0.0144, "reason": "cambio_fuente coingecko->binance"}
+{"ts": "2026-08-19T21:03:27+00:00", "sym": "DOGE", "value": 0.1618, "reason": "cambio_fuente coingecko->binance"}
+{"ts": "2026-08-19T21:03:27+00:00", "sym": "BNB", "value": 0.1154, "reason": "cambio_fuente coingecko->binance"}
+{"ts": "2026-08-19T21:04:10+00:00", "sym": "DOGE", "value": 0.1833, "reason": "cambio_fuente coingecko->binance"}
+{"ts": "2026-08-19T21:04:10+00:00", "sym": "BNB", "value": 0.1492, "reason": "cambio_fuente coingecko->binance"}
+{"ts": "2026-08-19T21:05:00+00:00", "sym": "ETH", "value": 2222.6, "reason": "cross_source_warn coingecko=2222.6000 vs mediana=2238.7225 (1.45%)"}
+{"ts": "2026-08-19T21:05:00+00:00", "sym": "SOL", "value": 84.08, "reason": "cross_source_warn coingecko=84.0800 vs mediana=84.4300 (0.83%)"}
+{"ts": "2026-08-19T21:05:10+00:00", "sym": "DOGE", "value": 0.75, "reason": "cambio_fuente coingecko->binance"}
+{"ts": "2026-08-19T21:05:10+00:00", "sym": "BNB", "value": 0.3414, "reason": "cambio_fuente coingecko->binance"}
+{"ts": "2026-08-19T21:06:05+00:00", "sym": "ETH", "value": 2236.85, "reason": "cross_source_warn coingecko=2236.8500 vs mediana=2244.1125 (0.65%)"}
+{"ts": "2026-08-19T21:06:53+00:00", "sym": "DOGE", "value": 0.7401, "reason": "cambio_fuente coingecko->binance"}
+{"ts": "2026-08-19T21:06:53+00:00", "sym": "BNB", "value": 0.3426, "reason": "cambio_fuente coingecko->binance"}
+{"ts": "2026-08-19T21:07:11+00:00", "sym": "ETH", "value": 2247.0, "reason": "cross_source_warn coingecko=2247.0000 vs mediana=2260.9075 (1.24%)"}
+{"ts": "2026-08-19T21:07:11+00:00", "sym": "SOL", "value": 84.88, "reason": "cross_source_warn coingecko=84.8800 vs mediana=85.4350 (1.31%)"}
