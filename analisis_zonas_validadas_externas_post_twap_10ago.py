@@ -132,6 +132,12 @@ def _grupos_desde_config() -> dict:
         if len(partes) != 4:
             continue
         _strategy, activo, marco, direccion = partes
+        # 19-Ago (hallazgo real, petición Javi tras auditar por qué las
+        # tuplas live llevan tantos días sin bucket confirmado): WALLET_MIRROR
+        # usa vocabulario BUY_Up/BUY_Down (6 de las 10 tuplas live) -- se
+        # descartaban aquí en silencio, invisibles a este mecanismo por
+        # completo. Mismo mapeo ya usado en wallet_mirror_clv.py.
+        direccion = {"BUY_Up": "BUY_YES", "BUY_Down": "BUY_NO"}.get(direccion, direccion)
         marco_b = MARCO_BALLENAS_MAP.get(marco)
         if marco_b is None or direccion not in ("BUY_YES", "BUY_NO"):
             continue
