@@ -76,7 +76,15 @@ SIM_CAMPOS = ["ts_entrada", "activo", "nesting", "combo", "coste", "n_shares",
               "depth_usd", "min_orden_ok", "end_utc", "inner_slug",
               "outer_slug", "status", "ts_cierre", "gano_leg1", "gano_leg2",
               "payout_por_share", "pnl_usd", "garantia_ok", "pasa_filtro",
-              "persistio_ciclo_anterior"]
+              "persistio_ciclo_anterior",
+              "o_inner", "o_outer", "o_inner_chainlink", "o_outer_chainlink"]
+# 19-Ago: o_inner/o_outer (Binance/Kraken, ya se calculaban en evaluar_par
+# pero nunca se persistían aquí) + o_inner_chainlink/o_outer_chainlink
+# (nuevo) -- cierra el hueco pendiente de P13/Corridor Collector (CLAUDE.md:
+# "cruzar roturas contra chainlink_*.csv en vez de klines Binance/Kraken").
+# Sin esto, cada análisis futuro tenía que re-derivar los timestamps desde
+# inner_slug/outer_slug y volver a consultar los CSV de precios -- ahora
+# viene ya en la fila. NO cambia la decisión de combo (sigue Binance/Kraken).
 
 # --- Duración de episodio + sondeo ráfaga (08-Jul, tras leer Cheng/Yang/Zou
 # arXiv:2605.00864 — arbitraje NBA en Polymarket vía 75M snapshots de libro).
@@ -111,6 +119,38 @@ def _precios_minuto() -> dict:
     hoy = datetime.now(timezone.utc).date()
     for d in (hoy - timedelta(days=1), hoy):
         p = DIR_PRICES / f"{d}.csv"
+        if not p.exists():
+            continue
+        try:
+            with open(p, encoding="utf-8") as f:
+                for r in csv.DictReader(f):
+                    try:
+                        ep = int(datetime.fromisoformat(r["timestamp_utc"].replace("Z", "+00:00")).timestamp()) // 60
+                        out.setdefault(r["asset"].upper(), {})[ep] = float(r["price_usd"])
+                    except Exception:
+                        continue
+        except Exception:
+            continue
+    return out
+
+
+def _precios_chainlink_minuto() -> dict:
+    """{asset: {epoch_min: precio}} desde data/prices/chainlink_YYYY-MM-DD.csv
+    -- 19-Ago, pendiente P13/Corridor Collector (CLAUDE.md): o_inner/o_outer
+    hoy vienen de klines Binance/Kraken (_precios_minuto), pero Chainlink es
+    la fuente de resolución OFICIAL de los mercados Up/Down (mismo motivo que
+    fetch_chainlink_prices.py, 20-Jul). Hipótesis sin probar: el ruido
+    Binance-vs-Chainlink podría estar invirtiendo el orden o_inner/o_outer
+    percibido en gaps estrechos, causando roturas de garantía que en teoría
+    es matemáticamente segura. Instrumentado en paralelo (NO sustituye la
+    decisión real, que sigue usando Binance/Kraken) para acumular el dato
+    que falta -- solo 12 roturas resueltas caen dentro de la ventana con
+    Chainlink disponible (desde 14-Ago), insuficiente para concluir nada
+    todavía (ver idea_p13_chainlink_vs_binance_instrumentado_19ago)."""
+    out = {}
+    hoy = datetime.now(timezone.utc).date()
+    for d in (hoy - timedelta(days=1), hoy):
+        p = DIR_PRICES / f"chainlink_{d}.csv"
         if not p.exists():
             continue
         try:
@@ -187,11 +227,16 @@ def _tokens(mkt: dict) -> tuple:
     return None, None
 
 
-def evaluar_par(act, inner_slug, outer_slug, end_utc, inner_ini, outer_ini, precios, filas):
+def evaluar_par(act, inner_slug, outer_slug, end_utc, inner_ini, outer_ini, precios, filas, precios_cl=None):
     o_in = _precio_en(precios, act, inner_ini)
     o_out = _precio_en(precios, act, outer_ini)
     if o_in is None or o_out is None:
         return
+    # 19-Ago: o_inner/o_outer también con Chainlink, solo para loguear y
+    # comparar más adelante -- NO participa en la decisión de combo (sigue
+    # o_in/o_out de Binance/Kraken de arriba, sin cambios de comportamiento).
+    o_in_cl = _precio_en(precios_cl, act, inner_ini) if precios_cl else None
+    o_out_cl = _precio_en(precios_cl, act, outer_ini) if precios_cl else None
 
     m_in = _gamma_market(inner_slug)
     m_out = _gamma_market(outer_slug)
@@ -234,6 +279,7 @@ def evaluar_par(act, inner_slug, outer_slug, end_utc, inner_ini, outer_ini, prec
             "restante_s": int(restante_s),
             "ask_leg1": ask1, "ask_leg2": ask2,
             "o_inner": o_in, "o_outer": o_out,
+            "o_inner_chainlink": o_in_cl, "o_outer_chainlink": o_out_cl,
             "inner_slug": inner_slug, "outer_slug": outer_slug,
         })
         if coste < 1.0:
@@ -428,6 +474,9 @@ def _sim_entrar(filas: list, ends: dict, rows: list, persistentes: set) -> bool:
             # entre señales persistentes vs de un solo sondeo (posible
             # artefacto de micro-desincronización entre las 2 patas).
             "persistio_ciclo_anterior": 1 if f"{f['inner_slug']}|{f['outer_slug']}|{f['combo']}" in persistentes else 0,
+            "o_inner": f.get("o_inner"), "o_outer": f.get("o_outer"),
+            "o_inner_chainlink": f.get("o_inner_chainlink"),
+            "o_outer_chainlink": f.get("o_outer_chainlink"),
         })
         abiertos.add(key)
         cambiado = True
@@ -487,10 +536,11 @@ def main():
     for pasada in range(n_pasadas):
         ahora_pasada = datetime.now(timezone.utc)
         precios = _precios_minuto()
+        precios_cl = _precios_chainlink_minuto()
         filas = []
         for t in tareas:
             try:
-                evaluar_par(*t, precios, filas)
+                evaluar_par(*t, precios, filas, precios_cl)
             except Exception as e:
                 _log(f"  [warn] {t[0]}: {type(e).__name__}: {e}")
             time.sleep(0.15)
