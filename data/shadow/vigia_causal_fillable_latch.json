@@ -5008,7 +5008,7 @@
  "candidato_proxy#GBM_LATE_15M_ESPACIO_ATR#SOL#15min#SOL#BUY_YES#ibs_20mingt": false,
  "candidato_proxy#GBM_LATE_15M_ESPACIO_ATR#XRP#BUY_YES#volumen_spike_ratiogt": false,
  "candidato_proxy#GBM_LATE_15M_ESPACIO_ATR#XRP#15min#XRP#BUY_YES#drift_60minabs_lt": false,
- "candidato_proxy#GBM_LATE_15M_ESPACIO_ATR#XRP#15min#XRP#BUY_YES#ibs_20mingt": true,
+ "candidato_proxy#GBM_LATE_15M_ESPACIO_ATR#XRP#15min#XRP#BUY_YES#ibs_20mingt": false,
  "candidato_proxy#GBM_LATE_15M_ESPACIO_ATR#XRP#15min#XRP#BUY_YES#volumen_regimengt": false,
  "candidato_proxy#GBM_LATE_15M_ESPACIO_ATR#XRP#15min#XRP#BUY_YES#volumen_spike_ratiogt": false,
  "candidato_proxy#GBM_LATE_15M_MULTIHORIZONTE#BNB#BUY_YES#sigma_ewma_delta_pctgt": false,
@@ -5081,7 +5081,7 @@
  "candidato_proxy#GBM_LATE_15M_MULTIHORIZONTE#XRP#15min#XRP#BUY_NO#sigma_hgt": false,
  "candidato_proxy#GBM_LATE_15M_MULTIHORIZONTE#XRP#15min#XRP#BUY_NO#hora_utcgt": false,
  "candidato_proxy#GBM_LATE_15M_MULTIHORIZONTE#XRP#15min#XRP#BUY_NO#hora_utclt": false,
- "candidato_proxy#GBM_LATE_15M_MULTIHORIZONTE#XRP#15min#XRP#BUY_NO#ibs_20minlt": true,
+ "candidato_proxy#GBM_LATE_15M_MULTIHORIZONTE#XRP#15min#XRP#BUY_NO#ibs_20minlt": false,
  "candidato_proxy#GBM_LATE_15M_MULTIHORIZONTE#XRP#15min#XRP#BUY_NO#volumen_regimengt": false,
  "candidato_proxy#GBM_LATE_15M_PYCONFIRMADO#SOL#BUY_YES#ibs_20mingt": false,
  "candidato_proxy#GBM_LATE_15M_TARDIO#BNB#BUY_YES#sigma_ewma_delta_pctgt": false,
@@ -5613,5 +5613,8 @@
  "FILTRO#candidato_proxy#MOMENTUM_IBS_15M_BALLENA#BNB#15min#BNB#BUY_YES#ballena_activa_ngt": false,
  "FILTRO#candidato_proxy#MOMENTUM_IBS_15M_BALLENA#DOGE#BUY_YES#hora_utclt": false,
  "candidato_proxy#MOMENTUM_IBS_15M_BALLENA#DOGE#15min#DOGE#BUY_NO#py_entradalt": false,
- "FILTRO#candidato_proxy#UPDOWN_GBM#BTC#5min#BTC#BUY_YES#libro_liquidezlt": false
+ "FILTRO#candidato_proxy#UPDOWN_GBM#BTC#5min#BTC#BUY_YES#libro_liquidezlt": false,
+ "candidato_proxy#GBM_LATE_15M#BTC#15min#BTC#BUY_NO#volumen_pendiente_normlt": false,
+ "FILTRO#candidato_proxy#MOMENTUM_IBS_15M_BALLENA#XRP#15min#XRP#BUY_YES#drift_20min_pctabs_gt": false,
+ "FILTRO#candidato_proxy#UPDOWN_GBM#ETH#5min#ETH#BUY_YES#hora_utclt": false
 }
