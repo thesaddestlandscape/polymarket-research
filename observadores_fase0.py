@@ -74,7 +74,15 @@ import favorito_ultimosegundo_5min
 import punto_confirmacion_logger
 import resolution_sniper_observer
 import p22_cola_posicion_fase0
-import box_builder_fase0
+# box_builder_fase0 -- DESACTIVADO 19-Ago (médico del proyecto, barrido CPU):
+# estrategia REFUTADA 04-Ago (0/62 = 0.0% profundidad ejecutable en ambos
+# lados, ver idea_box_builder_refutado_profundidad_cero_04ago), pero seguía
+# corriendo cada 3s reparseando el CSV completo del día de capture_markets.py
+# (295MB/650k filas y creciendo) vía _universo_activo() -- era el hotspot de
+# CPU dominante del profiling py-spy (19-Ago). Sin valor que perder: no está
+# conectado a ninguna decisión ni pares_permitidos_live. No borrar el módulo
+# (evidencia/código reutilizable si se revisita con datos nuevos).
+# import box_builder_fase0
 import sol5min_contrario_fase0
 import xrp15min_contrario_fase0
 import favorito_confirmado_senal_contraria_fase0
@@ -101,7 +109,7 @@ OBSERVADORES = [
     (punto_confirmacion_logger, "punto_confirmacion.log", "_log"),
     (resolution_sniper_observer, "resolution_sniper_observer.log", "_log"),
     (p22_cola_posicion_fase0, "p22_cola_posicion_fase0.log", "_log"),
-    (box_builder_fase0, "box_builder_fase0.log", "log"),
+    # (box_builder_fase0, "box_builder_fase0.log", "log"),  -- desactivado, ver nota en el import de arriba
     (sol5min_contrario_fase0, "sol5min_contrario_fase0.log", "log"),
     (xrp15min_contrario_fase0, "xrp15min_contrario_fase0.log", "log"),
     (favorito_confirmado_senal_contraria_fase0, "favorito_confirmado_senal_contraria_fase0.log", "_log"),
