@@ -7253,7 +7253,7 @@
   "DOGE#BUY_NO": {
     "motivos": {
       "banda_no_confirmada": {
-        "conteo": 34372,
+        "conteo": 34406,
         "mercados": {
           "0xc132ec92b406eb13da1cb814396e60b66f819f1be1c0d8394317d53e5b2c08b1": 6,
           "0xd0672cde7ddef0a3136bf4e9209e193940596ab831742079687f92fea3d8ca1b": 10,
@@ -8950,10 +8950,10 @@
           "0x9152fd6f16091df3816dc5d37ea3151755ee571434ac09307b69e33c624265b8": 85,
           "0x26abc1d6889f9d76d847927c9551c8681bbd23bbbda27375b22c72f079045a11": 89,
           "0x2222070feaa33c713d27df938bd70d30c3daf641110e7b8b94e950a313521ba2": 92,
-          "0x9aefc4343545c7585b98226354a5d048bf5535933f66c7d5dfaca03c1ec344f5": 85,
-          "0x42e44d14609c5017518e64556b29d0d5a4f74a13e88180e226ff4b2ee8b0e0ff": 62,
-          "0xa1d97f2a17cd55b8adfb57fe3a748a0fce2657e267c6f48a12d7ba7f8ab8a336": 38,
-          "0x2178882e3c9a7141e19e0e932f50011b306eecca7d4fb0b6cf9d1fcf9f4a8a87": 14
+          "0x9aefc4343545c7585b98226354a5d048bf5535933f66c7d5dfaca03c1ec344f5": 89,
+          "0x42e44d14609c5017518e64556b29d0d5a4f74a13e88180e226ff4b2ee8b0e0ff": 72,
+          "0xa1d97f2a17cd55b8adfb57fe3a748a0fce2657e267c6f48a12d7ba7f8ab8a336": 48,
+          "0x2178882e3c9a7141e19e0e932f50011b306eecca7d4fb0b6cf9d1fcf9f4a8a87": 24
         }
       },
       "pocos_trades_en_banda": {
@@ -11730,7 +11730,7 @@
         }
       },
       "error_api": {
-        "conteo": 4052,
+        "conteo": 4062,
         "mercados": {
           "0x72b2ee27425109db606ad6eb74bd6196c9dea23dff34decc178cfe445224c468": 7,
           "0x613e5825b8fe01803bbcc6e545137bf01830f7f78fbbc6b40591e90e2ce9ec8e": 11,
@@ -12180,7 +12180,7 @@
           "0x4b869231b48833047540a330462ee72dd8128c5aa650802665fefceb326a6db4": 32,
           "0xaaab00875bcdbf5517b34eb1bf67d785d72109775e69e887b363c0854cff5fb6": 54,
           "0x8c264cae3009facf37eef4fa704db2cbf6c7692dfffba716fa2756da2db31a36": 33,
-          "0x2af0846e76b1e5bb5cc723b941b6a3a3f3a991d5198e02a67964415c5770896a": 14
+          "0x2af0846e76b1e5bb5cc723b941b6a3a3f3a991d5198e02a67964415c5770896a": 24
         }
       },
       "disparada": {
