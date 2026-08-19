@@ -66,6 +66,24 @@ RECV_TIMEOUT_S = 30
 REFRESCO_WALLETS_S = 1800
 MAX_CIDS_POR_CICLO = 60
 
+# 19-Ago: hallazgo real sobre las primeras 177 señales resueltas (petición
+# Javi, "por qué palmamos si las wallets minan pasta") -- mirrorear TODO
+# diluye el edge real de las wallets con su propio ruido. Dos filtros
+# candidatos verificados con datos reales (SEGUIR, n=144):
+#   - Tamaño de apuesta de la wallet (usd_wallet>=8.4€, corte por tercios):
+#     p_shuffle=0.0002, hit 32.6%→64.3% bajo/alto.
+#   - Precio de entrada del mirror (mejor_ask_mirror>=0.5): MÁS FUERTE,
+#     p_shuffle=0.0000, hit 31.1%→78.6%, robusto en split-half cronológico
+#     (ambas mitades). Cruzado: precio domina, tamaño no aporta información
+#     extra una vez se tiene precio (corr(usd_wallet,precio_mirror)=0.256,
+#     filtrar por ambos da PEOR PnL que solo por precio -- no combinar).
+# FADE muestra el mismo patrón direccional pero con n=1-7 por bucket,
+# insuficiente para fijar umbral propio -- se deja SIN clasificar (columna
+# vacía) hasta que acumule n suficiente. NO cambia qué se detecta/loguea
+# (se sigue capturando TODO, DRY_RUN puro) -- solo etiqueta cada señal para
+# poder filtrar en análisis futuros sin tener que rehacer el cruce.
+UMBRAL_PRECIO_SEGUIR = 0.5
+
 COLUMNS = [
     "timestamp_utc", "trade_timestamp", "wallet", "tipo", "edge_pp_validado",
     "n_validado", "categoria", "condition_id", "market_slug",
@@ -73,6 +91,7 @@ COLUMNS = [
     "mirror_outcome_index", "transaction_hash", "outcome_real_index",
     "acierto", "resolved_ts", "lag_deteccion_s",
     "libro_ok", "mejor_ask_mirror", "profundidad_eur_mirror", "ratio_vs_stake_mirror",
+    "cumple_filtro_precio",
 ]
 
 
@@ -237,6 +256,11 @@ async def _correr_una_conexion(wallets: dict, vistos: set) -> set:
                         lag_s = None
                 precio_ref = price if info["tipo"] == "SEGUIR" else round(1.0 - price, 6)
                 fill = _fillability_mirror(condition_id, mirror_idx, precio_ref)
+                mejor_ask = fill.get("mejor_ask")
+                if info["tipo"] == "SEGUIR" and isinstance(mejor_ask, (int, float)):
+                    cumple_filtro_precio = int(mejor_ask >= UMBRAL_PRECIO_SEGUIR)
+                else:
+                    cumple_filtro_precio = ""  # FADE: n insuficiente para fijar umbral propio (ver nota arriba)
                 fila = {
                     "timestamp_utc": datetime.now(timezone.utc).isoformat(timespec="milliseconds"),
                     "trade_timestamp": ws_ts,
@@ -254,6 +278,7 @@ async def _correr_una_conexion(wallets: dict, vistos: set) -> set:
                     "mejor_ask_mirror": fill.get("mejor_ask", ""),
                     "profundidad_eur_mirror": fill.get("profundidad_eur", ""),
                     "ratio_vs_stake_mirror": fill.get("ratio_vs_stake", ""),
+                    "cumple_filtro_precio": cumple_filtro_precio,
                 }
                 _escribir_fila(fila)
                 n_matches += 1
