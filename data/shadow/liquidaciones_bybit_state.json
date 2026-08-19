@@ -1,5 +1,5 @@
 {
- "generado_utc": "2026-08-19T01:45:42+00:00",
+ "generado_utc": "2026-08-19T01:58:04+00:00",
  "fuente": "bybit",
  "BNB": {
   "2min": {
@@ -36,20 +36,20 @@
   },
   "5min": {
    "usd_long": 0.0,
-   "usd_short": 41768.71,
-   "n": 9,
+   "usd_short": 64.09,
+   "n": 1,
    "imbalance": 1.0
   },
   "15min": {
    "usd_long": 0.0,
-   "usd_short": 42411.66,
-   "n": 10,
+   "usd_short": 16333.11,
+   "n": 6,
    "imbalance": 1.0
   },
   "60min": {
    "usd_long": 0.0,
-   "usd_short": 87348.17,
-   "n": 31,
+   "usd_short": 85871.22,
+   "n": 30,
    "imbalance": 1.0
   }
  },
@@ -120,14 +120,14 @@
   },
   "15min": {
    "usd_long": 0.0,
-   "usd_short": 0.0,
-   "n": 0,
-   "imbalance": null
+   "usd_short": 7285.53,
+   "n": 2,
+   "imbalance": 1.0
   },
   "60min": {
    "usd_long": 0.0,
-   "usd_short": 1069.13,
-   "n": 4,
+   "usd_short": 8354.66,
+   "n": 6,
    "imbalance": 1.0
   }
  },
@@ -159,10 +159,10 @@
  },
  "lag_bybit_ws": {
   "ventana_min": 5,
-  "n_muestras": 9,
-  "ultimo_lag_s": 0.45,
-  "max_lag_s": 0.59,
-  "media_lag_s": 0.42,
+  "n_muestras": 1,
+  "ultimo_lag_s": 0.19,
+  "max_lag_s": 0.19,
+  "media_lag_s": 0.19,
   "umbral_alerta_s": 5.0
  }
 }
