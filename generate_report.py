@@ -826,6 +826,16 @@ def hoja_live_bankroll(wb, bankroll_rows, live_trades):
 
 
 # ── HOJA 5: Shadow Operaciones ─────────────────────────────────────────────────
+SHADOW_OPS_MAX_FILAS = 3000  # 19-Ago: results.csv ya supera 168k filas --
+# escribir 1 fila Excel estilizada por resultado (openpyxl en memoria, sin
+# write_only) es el consumo de RAM real detrás del RSS~1GB de este script
+# (hallazgo del incidente de OOM de la misma sesión, ver CLAUDE.md pt.18 /
+# analisis_diario_salud_sistema.py). Esta hoja es un log de operaciones
+# para inspección puntual, no un export completo -- nadie revisa 168k filas
+# a mano en un Excel. El TOTAL de abajo sigue calculado sobre TODO el
+# histórico (resultados completo, no el subconjunto mostrado).
+
+
 def hoja_shadow_ops(wb, resultados):
     ws = wb.create_sheet("Shadow_Ops")
     ws.sheet_view.showGridLines = False
@@ -842,8 +852,20 @@ def hoja_shadow_ops(wb, resultados):
                  fill=FILL["header"], font=FONT["header"], align=AC)
     ws.row_dimensions[1].height = 22
 
-    for i, r in enumerate(resultados, 1):
-        fila    = i + 1
+    mostrados = resultados[-SHADOW_OPS_MAX_FILAS:]
+    if len(resultados) > SHADOW_OPS_MAX_FILAS:
+        ws.merge_cells("A2:L2")
+        nota = ws["A2"]
+        nota.value = (f"⚠️ Mostrando las últimas {len(mostrados)} de {len(resultados)} "
+                      f"operaciones totales (el TOTAL de abajo sí es del histórico completo)")
+        nota.font = Font(italic=True, color="B71C1C", name="Calibri", size=9)
+        ws.row_dimensions[2].height = 16
+        fila_inicio = 3
+    else:
+        fila_inicio = 2
+
+    for i, r in enumerate(mostrados, 1):
+        fila    = i + fila_inicio - 1
         acierto = int(r.get("acierto",0))
         try: pnl_n = float(r.get("pnl_neto",0))
         except: pnl_n = 0
@@ -880,7 +902,7 @@ def hoja_shadow_ops(wb, resultados):
         ws.row_dimensions[fila].height = 18
 
     if resultados:
-        fr      = len(resultados) + 2
+        fr      = len(mostrados) + fila_inicio
         pnl_tot = sum(float(r.get("pnl_neto",0)) for r in resultados)
         pnl_b_t = sum(float(r.get("pnl_bruto",0)) for r in resultados)
         roi_tot = pnl_tot / (APUESTA_SHADOW * len(resultados))
