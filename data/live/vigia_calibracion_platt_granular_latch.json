@@ -710,5 +710,117 @@
   "UPDOWN_OU_5M#BNB#5min": {
     "n": 205,
     "confirmado": false
+  },
+  "MOMENTUM_IBS_5M_BALLENA#BNB": {
+    "n": 440,
+    "confirmado": false
+  },
+  "MOMENTUM_IBS_5M_BALLENA#BNB#5min": {
+    "n": 440,
+    "confirmado": false
+  },
+  "MOMENTUM_IBS_5M_BALLENA#BTC": {
+    "n": 579,
+    "confirmado": false
+  },
+  "MOMENTUM_IBS_5M_BALLENA#BTC#5min": {
+    "n": 579,
+    "confirmado": false
+  },
+  "MOMENTUM_IBS_5M_BALLENA#DOGE": {
+    "n": 461,
+    "confirmado": false
+  },
+  "MOMENTUM_IBS_5M_BALLENA#DOGE#5min": {
+    "n": 461,
+    "confirmado": false
+  },
+  "MOMENTUM_IBS_5M_BALLENA#ETH": {
+    "n": 520,
+    "confirmado": false
+  },
+  "MOMENTUM_IBS_5M_BALLENA#ETH#5min": {
+    "n": 520,
+    "confirmado": false
+  },
+  "MOMENTUM_IBS_5M_BALLENA#SOL": {
+    "n": 545,
+    "confirmado": false
+  },
+  "MOMENTUM_IBS_5M_BALLENA#SOL#5min": {
+    "n": 545,
+    "confirmado": false
+  },
+  "MOMENTUM_IBS_5M_BALLENA#XRP": {
+    "n": 464,
+    "confirmado": false
+  },
+  "MOMENTUM_IBS_5M_BALLENA#XRP#5min": {
+    "n": 464,
+    "confirmado": false
+  },
+  "MOMENTUM_IBS_5M_FADE#BNB": {
+    "n": 440,
+    "confirmado": false
+  },
+  "MOMENTUM_IBS_5M_FADE#BNB#5min": {
+    "n": 440,
+    "confirmado": false
+  },
+  "MOMENTUM_IBS_5M_FADE#BTC": {
+    "n": 347,
+    "confirmado": false
+  },
+  "MOMENTUM_IBS_5M_FADE#BTC#5min": {
+    "n": 347,
+    "confirmado": false
+  },
+  "MOMENTUM_IBS_5M_FADE#DOGE": {
+    "n": 449,
+    "confirmado": false
+  },
+  "MOMENTUM_IBS_5M_FADE#DOGE#5min": {
+    "n": 449,
+    "confirmado": false
+  },
+  "MOMENTUM_IBS_5M_FADE#ETH": {
+    "n": 442,
+    "confirmado": false
+  },
+  "MOMENTUM_IBS_5M_FADE#ETH#5min": {
+    "n": 442,
+    "confirmado": false
+  },
+  "MOMENTUM_IBS_5M_FADE#SOL": {
+    "n": 464,
+    "confirmado": false
+  },
+  "MOMENTUM_IBS_5M_FADE#SOL#5min": {
+    "n": 464,
+    "confirmado": false
+  },
+  "MOMENTUM_IBS_5M_FADE#XRP": {
+    "n": 432,
+    "confirmado": false
+  },
+  "MOMENTUM_IBS_5M_FADE#XRP#5min": {
+    "n": 432,
+    "confirmado": false
+  },
+  "STREAK_MOM_5M#DOGE": {
+    "n": 215,
+    "confirmado": false
+  },
+  "STREAK_MOM_5M#DOGE#5min": {
+    "n": 215,
+    "confirmado": false
+  },
+  "UPDOWN_GBM#BTC#5min": {
+    "n": 212,
+    "confirmado": false
+  },
+  "UPDOWN_GBM#XRP#5min": {
+    "n": 219,
+    "confirmado": false
   }
 }
