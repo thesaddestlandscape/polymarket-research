@@ -1,4 +1,4 @@
-# Hipótesis automáticas — 2026-08-20 06:15 UTC
+# Hipótesis automáticas — 2026-08-20 06:21 UTC
 _Generado por shadow_postmortem.py sobre 85623 resoluciones (PNL=+8206.82€)_
 
 ## Patrones causales activos
@@ -5040,6 +5040,11 @@ _Generado por shadow_postmortem.py sobre 85623 resoluciones (PNL=+8206.82€)_
   - _Acción_: Kelly boost +1.00€ cuando `sigma_ewma_delta_pct` > 9.749 (IC base=-0.030)
 
 ### UPDOWN_GBM_15M_TARDIO#XRP#15min
+- **FILTRO** `sigma_h` < `0.0052` → IC=-0.143 (n=54)
+  - _Por qué funciona_: baja volatilidad → señal GBM más fiable; el spread de Polymarket cubre mejor el edge
+  - _Acción_: SKIP cuando `sigma_h` < 0.0052
+  - _Potencial_: sin este filtro IC_bueno=-0.053 (n=112)
+
 - **FILTRO** `hora_utc` > `6.0` → IC=-0.152 (n=110)
   - _Por qué funciona_: hora tardía/noche → sesión US cerrada, menos participantes informados; señales más ruidosas
   - _Acción_: SKIP cuando `hora_utc` > 6.0
@@ -5804,7 +5809,7 @@ _Derivadas de los patrones aprendidos:_
 | ✅ UPDOWN_GBM_15M_TARDIO#SOL | 661 | -0.035 | +221.04€ | 0 | 0 |
 | ✅ UPDOWN_GBM_15M_TARDIO#SOL#15min | 661 | -0.035 | +221.04€ | 2 | 1 |
 | ✅ UPDOWN_GBM_15M_TARDIO#XRP | 636 | -0.063 | +103.83€ | 0 | 0 |
-| ✅ UPDOWN_GBM_15M_TARDIO#XRP#15min | 636 | -0.063 | +103.83€ | 4 | 0 |
+| ✅ UPDOWN_GBM_15M_TARDIO#XRP#15min | 636 | -0.063 | +103.83€ | 5 | 0 |
 | ✅ UPDOWN_GBM_ETH_15M_HORA7 | 10 | +0.000 | -0.15€ | 0 | 0 |
 | ✅ UPDOWN_GBM_ETH_15M_HORA7#15min | 10 | +0.000 | -0.15€ | 0 | 0 |
 | ✅ UPDOWN_GBM_ETH_15M_HORA7#ETH | 10 | +0.000 | -0.15€ | 0 | 0 |
