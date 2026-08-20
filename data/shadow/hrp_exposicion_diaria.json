@@ -1,16 +1,16 @@
 {
-  "timestamp_utc": "2026-08-20T10:10:04+00:00",
+  "timestamp_utc": "2026-08-20T12:10:11+00:00",
   "tuplas_maduras": [],
   "tuplas_inmaduras": [
     {
       "tupla": "BALLENAS_TARDIAS#ETH#5min#BUY_YES",
       "dias_historial": 6,
-      "n": 1186
+      "n": 1209
     },
     {
       "tupla": "BALLENAS_TARDIAS#DOGE#5min#BUY_YES",
       "dias_historial": 6,
-      "n": 503
+      "n": 509
     },
     {
       "tupla": "FAVORITO_CONFIRMADO_15MIN_ALTACONVICCION#BTC#15min#BUY_YES",
@@ -50,7 +50,7 @@
     {
       "tupla": "BALLENAS_CONFIRMADAS_15M#ETH#15min#BUY_YES",
       "dias_historial": 13,
-      "n": 123
+      "n": 125
     }
   ]
 }
