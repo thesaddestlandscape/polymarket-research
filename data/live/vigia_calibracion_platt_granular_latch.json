@@ -822,5 +822,117 @@
   "UPDOWN_GBM#XRP#5min": {
     "n": 219,
     "confirmado": false
+  },
+  "FAVORITO_CONFIRMADO_DEPTH_FASE0#BTC": {
+    "n": 456,
+    "confirmado": false
+  },
+  "FAVORITO_CONFIRMADO_DEPTH_FASE0#BTC#5min": {
+    "n": 390,
+    "confirmado": false
+  },
+  "FAVORITO_CONFIRMADO_DEPTH_FASE0#SOL": {
+    "n": 213,
+    "confirmado": false
+  },
+  "FAVORITO_CONFIRMADO_DEPTH_FASE0#SOL#5min": {
+    "n": 213,
+    "confirmado": false
+  },
+  "MOMENTUM_IBS_15M#BTC": {
+    "n": 240,
+    "confirmado": false
+  },
+  "MOMENTUM_IBS_15M#BTC#15min": {
+    "n": 240,
+    "confirmado": false
+  },
+  "MOMENTUM_IBS_15M#ETH": {
+    "n": 244,
+    "confirmado": false
+  },
+  "MOMENTUM_IBS_15M#ETH#15min": {
+    "n": 244,
+    "confirmado": false
+  },
+  "MOMENTUM_IBS_15M#SOL": {
+    "n": 228,
+    "confirmado": false
+  },
+  "MOMENTUM_IBS_15M#SOL#15min": {
+    "n": 228,
+    "confirmado": false
+  },
+  "MOMENTUM_IBS_15M#XRP": {
+    "n": 230,
+    "confirmado": false
+  },
+  "MOMENTUM_IBS_15M#XRP#15min": {
+    "n": 230,
+    "confirmado": false
+  },
+  "MOMENTUM_IBS_15M_BALLENA#BNB": {
+    "n": 269,
+    "confirmado": false
+  },
+  "MOMENTUM_IBS_15M_BALLENA#BNB#15min": {
+    "n": 269,
+    "confirmado": false
+  },
+  "MOMENTUM_IBS_15M_BALLENA#BTC": {
+    "n": 305,
+    "confirmado": false
+  },
+  "MOMENTUM_IBS_15M_BALLENA#BTC#15min": {
+    "n": 305,
+    "confirmado": false
+  },
+  "MOMENTUM_IBS_15M_BALLENA#DOGE": {
+    "n": 280,
+    "confirmado": false
+  },
+  "MOMENTUM_IBS_15M_BALLENA#DOGE#15min": {
+    "n": 280,
+    "confirmado": false
+  },
+  "MOMENTUM_IBS_15M_BALLENA#ETH": {
+    "n": 309,
+    "confirmado": false
+  },
+  "MOMENTUM_IBS_15M_BALLENA#ETH#15min": {
+    "n": 309,
+    "confirmado": false
+  },
+  "MOMENTUM_IBS_15M_BALLENA#SOL": {
+    "n": 284,
+    "confirmado": false
+  },
+  "MOMENTUM_IBS_15M_BALLENA#SOL#15min": {
+    "n": 284,
+    "confirmado": false
+  },
+  "MOMENTUM_IBS_15M_BALLENA#XRP": {
+    "n": 289,
+    "confirmado": false
+  },
+  "MOMENTUM_IBS_15M_BALLENA#XRP#15min": {
+    "n": 289,
+    "confirmado": false
+  },
+  "STREAK_MOM_5M#SOL": {
+    "n": 213,
+    "confirmado": false
+  },
+  "STREAK_MOM_5M#SOL#5min": {
+    "n": 213,
+    "confirmado": false
+  },
+  "UPDOWN_GBM#ETH#5min": {
+    "n": 227,
+    "confirmado": false
+  },
+  "UPDOWN_GBM#SOL#5min": {
+    "n": 239,
+    "confirmado": false
   }
 }
