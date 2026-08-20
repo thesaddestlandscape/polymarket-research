@@ -41,6 +41,7 @@ import csv
 import json
 import math
 import sys
+import zlib
 from collections import defaultdict
 from pathlib import Path
 
@@ -59,8 +60,6 @@ N_MIN = 15
 P_MAX = 0.05
 ITERS = 2000
 FEE = 0.07
-
-_rng = np.random.default_rng(42)
 
 
 def bucket(p):
@@ -120,14 +119,27 @@ def cargar_filas():
     return grupos
 
 
-def shuffle_test(a, b, iters=ITERS):
+def shuffle_test(a, b, seed_key, iters=ITERS):
+    """20-Ago (fix real, hallazgo del vigía spameando "nuevo veredicto"
+    sin parar para el mismo bucket con los mismos datos, n y pnl idénticos
+    pero shuffle_p distinto cada ciclo): antes usaba un único _rng module-
+    level compartido entre TODAS las llamadas del bucle de main() -- con
+    semilla fija (42) pero ESTADO COMPARTIDO, el resultado para un bucket
+    concreto dependía de cuántas llamadas a shuffle_test() lo precedían en
+    ESE ciclo, que cambia según cuántos otros grupos/buckets cruzan N_MIN
+    ese día. Efecto práctico: no determinista por bucket pese a tener
+    semilla. Fix: un generador nuevo por llamada, seedeado por un hash
+    estable de `seed_key` (clave_str+bucket) -- mismo bucket, mismo par de
+    poblaciones -> mismo p_valor siempre, sin importar el orden de
+    iteración ni cuántos otros grupos se evalúen ese ciclo."""
+    rng = np.random.default_rng(zlib.crc32(seed_key.encode("utf-8")))
     a = np.asarray(a, dtype=np.float64)
     b = np.asarray(b, dtype=np.float64)
     na, nb = len(a), len(b)
     diff_real = a.mean() - b.mean()
     todos = np.concatenate([a, b])
     n = na + nb
-    idx = _rng.random((iters, n)).argsort(axis=1)
+    idx = rng.random((iters, n)).argsort(axis=1)
     permutado = todos[idx]
     media_a = permutado[:, :na].mean(axis=1)
     media_b = permutado[:, na:].mean(axis=1)
@@ -178,7 +190,7 @@ def main():
             tabla[f"{b:.2f}"] = entrada
             if n_d >= N_MIN and fuera:
                 pnl_f = [pnl for _, pnl in fuera]
-                diff, p_valor = shuffle_test(pnl_d, pnl_f)
+                diff, p_valor = shuffle_test(pnl_d, pnl_f, seed_key=f"{clave_str}#{b:.2f}")
                 entrada["shuffle_p"] = round(p_valor, 4)
                 dentro_sorted = sorted(dentro, key=lambda x: x[0])
                 mid = n_d // 2
