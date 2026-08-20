@@ -60,7 +60,14 @@
       "fecha_desde": "2026-07-11",
       "n_objetivo": 40,
       "accion": "evaluar ic_bayes con dato fresco; si IC>=0.08 considerar mantener abierto, si IC<-0.12 volver a bloquear",
-      "avisado": false
+      "avisado": true,
+      "avisado_en": "2026-08-20T06:01:22+00:00",
+      "resultado_al_avisar": {
+        "n": 40,
+        "hit": 0.7,
+        "ic_bayes": 0.19047619047619047,
+        "pnl": 27.552699999999998
+      }
     },
     {
       "id": "FAVORITOCONFIRMADO_ETHBUYNO60M_REAPERTURA",
