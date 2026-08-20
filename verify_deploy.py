@@ -68,6 +68,14 @@ SCREENS = {
     # vigias_frecuentes_fase0.py y pipeline_watchdog.py::SCREEN_RESTART.
     "vigiasfreq": {"entry": "vigias_frecuentes_fase0.py",
                    "probe": "log:logs/vigias_frecuentes_fase0.log:arrancando scheduler"},
+    # sportsfase0 (20-Ago): sports-mirror (sports_wallet_mirror_sniper.py) +
+    # sports-ws (sports_activity_ws.py) fusionados en UN proceso -- mismo
+    # patrón que "ejecdryrun"/"observadores", mitigación de la sobresuscripción
+    # de CPU detectada en el barrido diario de salud (load5~8 en 2 cores).
+    # weather-mirror/weather-ws NO se tocan (repo independiente
+    # /root/polymarket-weather, CLAUDE.md prohíbe mezclar).
+    "sportsfase0": {"entry": "sports_fase0_consolidado.py",
+                     "probe": "log:logs/sports_fase0_consolidado.log:hilos arrancados"},
     # Solo se vigila el .sh (sus hijos python son proceso fresco cada ciclo).
     "fast":    {"entry": "run_fast.sh", "shallow": True, "no_restart": True},
     "slow":    {"entry": "run_slow.sh", "shallow": True, "no_restart": True},

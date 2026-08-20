@@ -167,8 +167,14 @@ SCREEN_RESTART = {
     # ejecuta dinero real (100% DRY_RUN/dashboards de solo lectura) --
     # niceadas igual que observadores/fetchers/ejecdryrun/vigiasfreq.
     "dash-sports": f"cd {REPO} && nice -n 10 .venv/bin/python sports_dashboard_server.py >> logs/dashboard-sports.log 2>&1",
-    "sports-mirror": f"cd {REPO} && nice -n 10 .venv/bin/python sports_wallet_mirror_sniper.py >> logs/sports_wallet_mirror_sniper.log 2>&1",
-    "sports-ws": f"cd {REPO} && nice -n 10 .venv/bin/python sports_activity_ws.py >> logs/sports_activity_ws.log 2>&1",
+    # 20-Ago: sports-mirror + sports-ws fusionadas en sports_fase0_consolidado.py
+    # (barrido de salud diaria, load5 sostenido ~8 en 2 cores, ratio~4x) --
+    # mismo patrón que ejecutores_dryrun_fase0.py/observadores_fase0.py, ver
+    # docstring de ese fichero para el razonamiento completo. weather-mirror
+    # queda FUERA a propósito (repo independiente /root/polymarket-weather,
+    # CLAUDE.md prohíbe mezclar); wallet_mirror_executor_dryrun.py (crypto,
+    # screen walletmirror) también queda fuera -- DRY_RUN=False, dinero real.
+    "sportsfase0": f"cd {REPO} && nice -n 10 .venv/bin/python sports_fase0_consolidado.py >> logs/sports_fase0_consolidado.log 2>&1",
     "dash-weather": f"cd {REPO_WEATHER} && nice -n 10 .venv/bin/python dashboard_server.py >> logs/dashboard-weather.log 2>&1",
     "weather-mirror": f"cd {REPO_WEATHER} && nice -n 10 .venv/bin/python weather_wallet_mirror_sniper.py >> logs/weather_wallet_mirror_sniper.log 2>&1",
     "weather-ws": f"cd {REPO_WEATHER} && nice -n 10 .venv/bin/python weather_activity_ws.py >> logs/weather_activity_ws.log 2>&1",
@@ -274,6 +280,8 @@ SCREENS_RETIRADAS = {
     "fav5malt",
     # 07-Ago: fusionadas en "fetchers" (fetchers_fase0.py) -- ver SCREEN_RESTART.
     "chainlink", "polyactivity", "liqs", "libroambos",
+    # 20-Ago: fusionadas en "sportsfase0" (sports_fase0_consolidado.py) -- ver SCREEN_RESTART.
+    "sports-mirror", "sports-ws",
 }
 
 
@@ -303,7 +311,7 @@ def check_screens() -> dict[str, bool]:
         output = r.stdout + r.stderr
         return {name: (f".{name}\t" in output or f".{name} " in output)
                 for name in ["fast", "slow", "mantenimiento", "control", "dash", "observadores", "ejeclive", "fetchers", "ejecdryrun", "walletmirror", "vigiasfreq",
-                              "dash-sports", "dash-weather", "sports-mirror", "sports-ws", "weather-mirror", "weather-ws"]}
+                              "dash-sports", "dash-weather", "sportsfase0", "weather-mirror", "weather-ws"]}
     except Exception:
         return {}
 
