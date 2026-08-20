@@ -217,5 +217,11 @@
   },
   "cementerio:UPDOWN_GBM#SOL#240min": {
     "avisado": true
+  },
+  "cementerio:LIQUIDACIONES_5M#XRP#5min": {
+    "avisado": true
+  },
+  "cementerio:UPDOWN_GBM_15M_TARDIO#BTC#15min": {
+    "avisado": true
   }
 }
