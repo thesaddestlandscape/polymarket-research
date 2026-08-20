@@ -22,6 +22,7 @@
   "sigma_ewma_delta_pct|lt|9.579|BUY_YES"
  ],
  "GBM_LATE_15M#SOL#15min": [
+  "sigma_ewma_delta_pct|gt|2.824|BUY_NO",
   "sigma_ewma_delta_pct|gt|2.831|BUY_NO",
   "sigma_ewma_delta_pct|gt|4.603|BUY_NO",
   "sigma_ewma_delta_pct|gt|4.604|BUY_NO",
