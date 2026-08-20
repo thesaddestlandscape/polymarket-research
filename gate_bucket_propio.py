@@ -27,9 +27,13 @@ _REPO = Path(__file__).resolve().parent
 DATA_PATH = _REPO / "data/shadow/gate_bucket_propio.json"
 CONFIG_LIVE = _REPO / "data/live/config_live.json"
 OVERRIDE_PATH = _REPO / "data/live/gate_bucket_propio_override.json"
+# 20-Ago: ventana deslizante (analisis_gate_bucket_fino.py), extensión de
+# PROMOCIÓN a bueno_confirmado -- ver _zonas_finas()/evaluar() abajo.
+DATA_PATH_FINO = _REPO / "data/shadow/gate_bucket_fino.json"
 STEP = 0.05
 
 _cache = {"mtime": None, "data": {}}
+_cache_fino = {"mtime": None, "data": {}}
 _cache_cfg = {"mtime": None, "activo": False}
 _cache_override = {"mtime": None, "data": {}}
 
@@ -219,6 +223,28 @@ def _cargar() -> dict:
     return _cache["data"]
 
 
+def _zonas_finas() -> dict:
+    """{tupla_str: {"lo":, "hi":, "veredicto":, ...}} desde
+    data/shadow/gate_bucket_fino.json (analisis_gate_bucket_fino.py,
+    20-Ago) -- ventana deslizante (paso 0.01, ancho libre, NO anclada al
+    grid fijo de 0.05) sobre el mismo results.csv, con su propio rigor
+    (permutación max-statistic + split-half + BH-FDR por familia/moneda,
+    ver docstring de ese script). Fail-open a {} si el fichero falta o
+    está corrupto -- nunca bloquea el arranque por un fichero de refuerzo,
+    mismo criterio que el resto de fuentes de este módulo."""
+    try:
+        mtime = DATA_PATH_FINO.stat().st_mtime
+    except OSError:
+        return {}
+    if _cache_fino["mtime"] != mtime:
+        try:
+            _cache_fino["data"] = json.loads(DATA_PATH_FINO.read_text(encoding="utf-8"))
+            _cache_fino["mtime"] = mtime
+        except Exception:
+            pass
+    return _cache_fino["data"]
+
+
 def tiene_datos_propios(tupla_str: str) -> bool:
     """False si `tupla_str` no tiene NINGÚN bucket con datos reales en
     gate_bucket_propio.json -- clave ausente, o mapeada a un dict vacío
@@ -319,6 +345,36 @@ def evaluar(tupla_str: str, py: float) -> dict:
                     "detalle_propio": detalle,
                 },
             }
+
+    # 20-Ago: extensión de PROMOCIÓN a bueno_confirmado vía ventana
+    # deslizante (analisis_gate_bucket_fino.py, ver _zonas_finas() arriba)
+    # -- mismo patrón aditivo que _zonas_validadas_externamente() de abajo,
+    # pero con NUESTROS PROPIOS datos a resolución fina (paso 0.01, ancho
+    # libre) en vez de una fuente externa. Va ANTES que la extensión
+    # externa a propósito: mismo results.csv que el grid fijo, solo con
+    # una ventana mejor situada -- más directamente relevante que una
+    # fuente externa (ballenas) cuando ambas están disponibles. Solo
+    # promueve, nunca degrada -- si el propio dato YA confirmó algo
+    # (bueno/malo), esta rama ni se evalúa (veredicto_propio ya no es
+    # "sin_concluir"). Origen: BALLENAS_TARDIAS#ETH#5min#BUY_YES (LIVE)
+    # llevaba 17/17 buckets fijos "sin_concluir" pese a tener un edge real
+    # más estrecho que el grid de 0.05 diluía -- ver idea_gate_bucket_fino_
+    # ventana_deslizante_20ago.
+    if veredicto_propio == "sin_concluir":
+        fina = _zonas_finas().get(tupla_str)
+        if fina and fina.get("veredicto") == "bueno_confirmado":
+            lo, hi = fina.get("lo"), fina.get("hi")
+            if lo is not None and hi is not None and lo <= py < hi:
+                return {
+                    "veredicto": "bueno_confirmado",
+                    "detalle": {
+                        "origen": "ventana_deslizante_20ago",
+                        "motivo": f"py en [{lo:.2f},{hi:.2f}), ventana fina "
+                                  f"(n={fina.get('n')}, p={fina.get('p_valor')}) "
+                                  "mientras el grid fijo sigue sin_concluir",
+                        "detalle_propio": detalle,
+                    },
+                }
 
     # 05-Ago: extensión de PROMOCIÓN a bueno_confirmado (ver
     # _ZONAS_VALIDADAS_EXTERNAMENTE arriba) -- solo cuando el propio dato
