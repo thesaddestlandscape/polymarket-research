@@ -65,10 +65,16 @@ import favorito_confirmado_btc60min_buyno_executor as _m_btc60mno
 # completo, ver idea_gate_bucket_fino_ventana_deslizante_20ago). Sacado de
 # ejecutores_dryrun_fase0.py (screen ejecdryrun, exige DRY_RUN=True en
 # todos sus módulos) -- este consolidado es el destino correcto para
-# dinero real, mismo patrón que los 4 anteriores. No usa
-# ballenas_firehose_cache (a diferencia de los otros 4) -- no gana la
-# optimización de conexión compartida, pero sí gana supervisión de
-# watchdog/verify_deploy y consistencia con el resto de ejecutores live.
+# dinero real, mismo patrón que los 4 anteriores. CORRECCIÓN 20-Ago (el
+# comentario original aquí decía lo contrario, verificado en el código
+# real al auditar la conexión completa): SÍ usa ballenas_firehose_cache
+# (mismo websocket RTDS de baja latencia, fail-closed vía _fc.esta_sano()
+# si no está sano) igual que los otros 4 -- llama a _fc.iniciar() en su
+# propio main(), que al vivir ahora en este mismo proceso consolidado es
+# un no-op idéntico al de los demás (guardado por _hilo_iniciado a nivel
+# de proceso en ballenas_firehose_cache.py), así que SÍ gana la misma
+# optimización de conexión compartida, además de la supervisión de
+# watchdog/verify_deploy y la consistencia con el resto de ejecutores live.
 MODULOS = [
     ("BALLENAS_5M", _m_ballenas5m),
     ("BALLENAS_BTC15M", _m_ballenasbtc15m),
