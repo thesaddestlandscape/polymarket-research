@@ -60,6 +60,21 @@ N_SHUFFLE = 2000
 P_SHUFFLE_ALERTA = 0.10  # umbral para avisar/latchear; más laxo que el 0.05 clásico
                          # a propósito (n pequeño ya penaliza la potencia; ver memoria)
 
+# 20-Ago (fix real, spam crónico detectado: 827/827 ciclos recientes con
+# >=1 aviso nuevo, 1-10 avisos/ciclo sin parar). Causa: el latch pasaba a
+# False en el mismo ciclo en que "contrario" dejaba de cumplirse, sin
+# ningún requisito de persistencia -- con ~5830 combinaciones (estrategia x
+# activo x dirección x patrón/filtro) evaluadas cada 30min y un umbral
+# laxo (p<0.10, sin corrección por comparaciones múltiples), cientos de
+# ellas oscilan alrededor del umbral por puro ruido según crece n cada
+# ciclo, re-disparando aviso "nuevo" cada vez que cruzan hacia adentro.
+# Fix: mismo patrón "estable" que ya usa zonas_validadas_externas.json
+# (analisis_zonas_validadas_externas_post_twap_10ago.py) -- exigir
+# N_CONSECUTIVO lecturas seguidas cumpliendo contrario+p_shuffle<umbral
+# antes de avisar/latchear, no la primera. ~90min de confirmación sostenida
+# en vez de una lectura suelta.
+N_CONSECUTIVO = 3
+
 REPO = Path(__file__).resolve().parent
 sys.path.insert(0, str(REPO))
 
@@ -232,6 +247,27 @@ def stats(rows):
     return {"n": n, "hit_pct": round(hit * 100, 1), "pnl_trade": round(pnl / n, 4)}
 
 
+def _debe_avisar(latch, key, cumple):
+    """Histéresis (20-Ago): True solo cuando `cumple` lleva N_CONSECUTIVO
+    lecturas seguidas -- evita el re-disparo por ruido de una condición que
+    oscila alrededor del umbral ciclo a ciclo. Migra entradas viejas del
+    formato bool (True/False) al nuevo {"racha": int, "avisado": bool}."""
+    entry = latch.get(key)
+    if not isinstance(entry, dict):
+        entry = {"racha": N_CONSECUTIVO if entry else 0, "avisado": bool(entry)}
+    if not cumple:
+        entry["racha"] = 0
+        entry["avisado"] = False
+        latch[key] = entry
+        return False
+    entry["racha"] += 1
+    disparar = entry["racha"] >= N_CONSECUTIVO and not entry["avisado"]
+    if disparar:
+        entry["avisado"] = True
+    latch[key] = entry
+    return disparar
+
+
 def _evaluar_estrategia(strategy, fuente_rows, est, latch, avisos, fuente_label):
     """Núcleo compartido: dado el conjunto de filas ya restringidas a lo
     ejecutable (candidato_evaluacion+ratio>=5x, o trades.csv real), calcula
@@ -295,18 +331,15 @@ def _evaluar_estrategia(strategy, fuente_rows, est, latch, avisos, fuente_label)
                 # deduplicaba y reenviaba el mismo aviso por Telegram cada 30min,
                 # mismo patrón que el bug ya documentado en vigia_sigma_patrones)
                 latch_key = f"{fuente_label}#{clave}#{clave_activo}#{p['feature']}{p['condicion']}"
-                if contrario and p_shuffle is not None and p_shuffle < P_SHUFFLE_ALERTA:
-                    if not latch.get(latch_key):
-                        etiqueta = "🔴 LIVE" if fuente_label == "live_real" else "candidata"
-                        avisos.append(
-                            f"[{etiqueta}] {clave} {clave_activo} {p['feature']}{p['condicion']}{p['umbral']}: "
-                            f"shadow uplift={uplift_shadow:+.3f} (n_patron={p['n_patron']}) pero "
-                            f"{fuente_label} uplift={uplift_fillable:+.3f}€/trade (n={sf['n']}) — signo CONTRARIO "
-                            f"y p_shuffle={p_shuffle:.3f} (<{P_SHUFFLE_ALERTA})"
-                        )
-                        latch[latch_key] = True
-                else:
-                    latch[latch_key] = False
+                cumple = contrario and p_shuffle is not None and p_shuffle < P_SHUFFLE_ALERTA
+                if _debe_avisar(latch, latch_key, cumple):
+                    etiqueta = "🔴 LIVE" if fuente_label == "live_real" else "candidata"
+                    avisos.append(
+                        f"[{etiqueta}] {clave} {clave_activo} {p['feature']}{p['condicion']}{p['umbral']}: "
+                        f"shadow uplift={uplift_shadow:+.3f} (n_patron={p['n_patron']}) pero "
+                        f"{fuente_label} uplift={uplift_fillable:+.3f}€/trade (n={sf['n']}) — signo CONTRARIO "
+                        f"y p_shuffle={p_shuffle:.3f} (<{P_SHUFFLE_ALERTA}), estable {N_CONSECUTIVO} lecturas"
+                    )
 
             # Espejo: filtros_causales — ¿la zona que shadow marca "mala" (skip)
             # de verdad rinde peor en ejecución real, o estamos saltando
@@ -339,19 +372,16 @@ def _evaluar_estrategia(strategy, fuente_rows, est, latch, avisos, fuente_label)
 
                 # umbral fuera de la clave, mismo motivo que arriba
                 latch_key = f"FILTRO#{fuente_label}#{clave}#{clave_activo}#{f['feature']}{f['condicion']}"
-                if injustificado and p_shuffle is not None and p_shuffle < P_SHUFFLE_ALERTA:
-                    if not latch.get(latch_key):
-                        etiqueta = "🔴 LIVE" if fuente_label == "live_real" else "candidata"
-                        avisos.append(
-                            f"[{etiqueta}][FILTRO] {clave} {clave_activo} {f['feature']}{f['condicion']}{f['umbral']}: "
-                            f"shadow ic_malo={f['ic_malo']:+.3f} pero en ejecutable la zona 'mala' "
-                            f"(n={sm['n']}) rinde {sm['pnl_trade']:+.4f}€/trade vs {sg['pnl_trade']:+.4f}€/trade "
-                            f"de la zona 'buena' (n={sg['n']}) — el filtro puede estar saltando señal rentable "
-                            f"(p_shuffle={p_shuffle:.3f})"
-                        )
-                        latch[latch_key] = True
-                else:
-                    latch[latch_key] = False
+                cumple = injustificado and p_shuffle is not None and p_shuffle < P_SHUFFLE_ALERTA
+                if _debe_avisar(latch, latch_key, cumple):
+                    etiqueta = "🔴 LIVE" if fuente_label == "live_real" else "candidata"
+                    avisos.append(
+                        f"[{etiqueta}][FILTRO] {clave} {clave_activo} {f['feature']}{f['condicion']}{f['umbral']}: "
+                        f"shadow ic_malo={f['ic_malo']:+.3f} pero en ejecutable la zona 'mala' "
+                        f"(n={sm['n']}) rinde {sm['pnl_trade']:+.4f}€/trade vs {sg['pnl_trade']:+.4f}€/trade "
+                        f"de la zona 'buena' (n={sg['n']}) — el filtro puede estar saltando señal rentable "
+                        f"(p_shuffle={p_shuffle:.3f}), estable {N_CONSECUTIVO} lecturas"
+                    )
 
     return entry
 
