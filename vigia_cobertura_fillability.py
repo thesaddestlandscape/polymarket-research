@@ -37,6 +37,24 @@ UMBRAL_IC = 0.08
 UMBRAL_N_CERCA = 25  # "acercándose" al gate real (n>=40) sin haberlo cruzado todavía
 UMBRAL_N_GATE = 40
 
+# 20-Ago: estrategias sintéticas de instrumentación de fill-ability (los
+# scripts *_fase0.py/*_bajalatencia_fase0.py que miden profundidad real en
+# baja latencia para tuplas de OTRA estrategia). Cada una lleva en su propio
+# STRATEGY = "..." el comentario "sintética, nunca en pares_permitidos_live"
+# -- generan predicciones/IC propios (por eso cruzan UMBRAL_IC/UMBRAL_N_GATE
+# solas) pero NUNCA son candidatas a promoción, así que preguntarles "¿tienes
+# snapshot de fill-ability?" es una categoría equivocada: ELLAS SON el
+# snapshot de fill-ability de otra tupla. Sin esta exclusión, el vigía se
+# autodispara en falso cada vez que una de ellas madura (hallazgo real:
+# FAVORITO_CONFIRMADO_DEPTH_FASE0#{SOL,BTC}#5min#BUY_YES, 20-Ago). Mantener
+# sincronizada con `grep -rn '^STRATEGY = .*sint' --include="*.py" .`
+ESTRATEGIAS_SINTETICAS_EXCLUIDAS = {
+    "FAVORITO_CONFIRMADO_DEPTH_FASE0",
+    "FAVORITO_CONFIRMADO_60_240MIN_DEPTH_FASE0",
+    "FAVORITO_CONFIRMADO_5MIN_BAJALATENCIA",
+    "BALLENAS_CONFIRMADAS_15M_BUYNO_DEPTH_FASE0",
+}
+
 
 def _tuplas_con_snapshot():
     tuplas = set()
@@ -93,6 +111,8 @@ def main() -> int:
 
     gaps = []
     for strategy, subs in subtypes_reales.items():
+        if strategy in ESTRATEGIAS_SINTETICAS_EXCLUIDAS:
+            continue
         for subtype in subs:
             clave = f"{strategy}#{subtype}"
             v = est.get(clave)
