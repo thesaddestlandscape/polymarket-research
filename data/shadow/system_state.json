@@ -1,8 +1,8 @@
 {
-  "timestamp_utc": "2026-08-20T01:48:27+00:00",
-  "bankroll_sim": 19588.36,
-  "pnl_total": 19568.36,
-  "n_ops": 191163,
+  "timestamp_utc": "2026-08-20T01:53:49+00:00",
+  "bankroll_sim": 19600.61,
+  "pnl_total": 19580.61,
+  "n_ops": 191249,
   "win_rate": 0.5961,
   "estrategias_activas": 520,
   "desactivadas": [
@@ -36,23 +36,23 @@
   ],
   "top3_ic": [
     {
+      "k": "FAVORITO_CONFIRMADO_15MIN_EXTREMO",
+      "ic": 0.4184,
+      "n": 194
+    },
+    {
+      "k": "FAVORITO_CONFIRMADO_15MIN_EXTREMO#15min",
+      "ic": 0.4184,
+      "n": 194
+    },
+    {
       "k": "FAVORITO_CONFIRMADO_15MIN_EXTREMO#SOL#15min",
       "ic": 0.4184,
       "n": 47
-    },
-    {
-      "k": "FAVORITO_CONFIRMADO_15MIN_EXTREMO#SOL",
-      "ic": 0.4184,
-      "n": 47
-    },
-    {
-      "k": "FAVORITO_CONFIRMADO_15MIN_EXTREMO",
-      "ic": 0.4179,
-      "n": 193
     }
   ],
   "brier_medio": 0.2358,
-  "clv_medio": 0.031,
+  "clv_medio": 0.0311,
   "monitor_5min": {
     "ou_5m": {
       "n": 759,
