@@ -18,14 +18,24 @@ producción) pero nunca se generalizó más allá de BTC -- este fichero
 cierra ese hueco, clonando la arquitectura de ballenas_executor_5min.py
 (ya paramétrica en VENTANA_MIN/activo) con VENTANA_MIN=15 en vez de 5.
 
-DRY_RUN=True (v1, sin gate riguroso propio todavía -- a diferencia de
-ETH#5min que sí tenía n_wallets_yes>=35 validado antes de ir a live). Deja
-acumular `data/shadow/ballenas_15min_dry_run.csv` (resuelto por
-resuelve_ballenas_15min.py, mismo patrón que el compañero de 5min) antes
-de plantear cualquier promoción -- mismo criterio en dos fases que TODOS
-los ejecutores anteriores de este proyecto (nunca saltar de DRY_RUN a
-dinero real sin n≥40 + gate riguroso + /code-review + aprobación
-explícita).
+DRY_RUN=False desde 20-Ago para ETH#15min#BUY_YES ÚNICAMENTE (aprobado
+Javi, checklist de 6 categorías completo -- ver
+idea_gate_bucket_fino_ventana_deslizante_20ago / idea_ballenas_confirmadas_
+eth15min_promocion_20ago en memoria): gate riguroso en micro-bucket
+[0.28,0.33) vía ventana deslizante (n=45, p=0.003, split-half OK),
+fill-ability real 60.3% sin concentración, g(f=10%)=+0.033 (Kelly no
+sobre-apuesta aquí, a diferencia de MOMENTUM_IBS_5M_FADE#BTC#5min ese
+mismo día -- ver memoria del checklist), FEATURE_RULES ya cubierta. SOL/
+XRP/DOGE/BNB SIGUEN en DRY_RUN de facto: `puede_operar_live()` los
+bloquea por whitelist (solo ETH#15min#BUY_YES entra en
+`pares_permitidos_live`, ver estrategia_permitida() en live_guard.py --
+whitelist por tupla EXACTA activo#marco#dirección, el resto queda fuera
+aunque DRY_RUN sea False a nivel de módulo). Deja acumular `data/shadow/
+ballenas_15min_dry_run.csv` para el resto de activos (resuelto por
+resuelve_ballenas_15min.py) antes de plantear su propia promoción --
+mismo criterio en dos fases que TODOS los ejecutores anteriores de este
+proyecto (nunca saltar de DRY_RUN a dinero real sin n≥40 + gate riguroso
++ /code-review + aprobación explícita).
 
 BTC excluido a propósito: ya tiene su propio ejecutor dedicado
 (`ballenas_executor_btc15m.py`, screen `ballenas_fast`, live desde
@@ -55,8 +65,11 @@ cualquier otra moneda a dinero real requiere su propio gate riguroso +
 código en pares_permitidos_live + /code-review + aprobación explícita
 (mismo patrón en dos fases que BTC15m/ETH5min).
 
-Corre en screen propia:
-  screen -dmS ballenas_15m bash -c "cd /root/polymarket-research && .venv/bin/python ballenas_executor_15min.py >> logs/ballenas_15m.log 2>&1"
+20-Ago: DRY_RUN=True→False para ETH#15min#BUY_YES movió este módulo de
+`ejecutores_dryrun_fase0.py` (screen ejecdryrun) a
+`executores_live_consolidado.py` (screen ejeclive, junto a los otros 4
+ejecutores de dinero real) -- NO corre en screen propia, pese a lo que
+sugeriría el nombre del fichero.
 """
 import fcntl
 import json
@@ -152,7 +165,10 @@ CLOB = "https://clob.polymarket.com"
 STRATEGY = "BALLENAS_CONFIRMADAS_15M"
 VENTANA_MIN = 15
 
-DRY_RUN = True  # 29-Jul: v1 sin gate riguroso propio todavia -- ver docstring.
+DRY_RUN = False  # 20-Ago: aprobado Javi para ETH#15min#BUY_YES -- ver docstring.
+# Whitelist por tupla exacta (puede_operar_live/estrategia_permitida en
+# live_guard.py) es la protección real por activo, no este flag: SOL/XRP/
+# DOGE/BNB siguen bloqueados aunque DRY_RUN=False a nivel de módulo.
 
 POLL_INTERVAL_S = 1.5    # más conservador que BTC15m (1.0) -- 4 hilos concurrentes
 HARD_FLOOR_S = 3.0       # uniforme, mismo suelo de seguridad que BTC15m

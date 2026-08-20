@@ -55,7 +55,6 @@ LOGS = REPO / "logs"
 # verify_deploy.py sigue detectando STALE si se toca cualquiera de los 7.
 import favorito_confirmado_15min_executor
 import favorito_confirmado_60min_executor
-import ballenas_executor_15min
 import gbm_late_15min_executor
 import updown_gbm_15min_tardio_btc_executor
 import wallet_mirror_sniper
@@ -67,12 +66,17 @@ import wallet_mirror_sniper
 # de abajo) -- correcto que se negara a arrancar con el módulo dentro,
 # ahora vive en su propia screen (walletmirror), ver wallet_mirror_
 # executor_dryrun.py docstring.
+# 20-Ago: ballenas_executor_15min.py sacado de aquí, mismo motivo -- pasó a
+# DRY_RUN=False (ETH#15min#BUY_YES, checklist 6 categorías completo, ver
+# idea_gate_bucket_fino_ventana_deslizante_20ago). Ahora vive en
+# executores_live_consolidado.py (screen ejeclive), junto a los otros 4
+# ejecutores de dinero real -- no en su propia screen.
 
 # Verificación de seguridad al import -- si algún día alguien cambia
 # DRY_RUN=False en disco sin retirarlo de esta lista, el proceso se niega
 # a arrancar en vez de fusionar por error algo que mueve dinero real.
 for _mod in (favorito_confirmado_15min_executor, favorito_confirmado_60min_executor,
-             ballenas_executor_15min, gbm_late_15min_executor,
+             gbm_late_15min_executor,
              updown_gbm_15min_tardio_btc_executor):
     if getattr(_mod, "DRY_RUN", None) is not True:
         raise RuntimeError(
@@ -85,7 +89,6 @@ for _mod in (favorito_confirmado_15min_executor, favorito_confirmado_60min_execu
 EJECUTORES = [
     (favorito_confirmado_15min_executor, "favorito_confirmado_15min_executor.log", "log", False),
     (favorito_confirmado_60min_executor, "favorito_confirmado_60min_executor.log", "log", False),
-    (ballenas_executor_15min, "ballenas_15m.log", "log", False),
     (gbm_late_15min_executor, "gbm_late_15min_executor.log", "log", False),
     (updown_gbm_15min_tardio_btc_executor, "updown_gbm_15min_tardio_btc_executor.log", "log", False),
     (wallet_mirror_sniper, "wallet_mirror_sniper.log", "_log", True),

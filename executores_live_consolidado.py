@@ -56,12 +56,23 @@ from datetime import datetime, timezone
 
 import ballenas_executor_5min as _m_ballenas5m
 import ballenas_executor_btc15m as _m_ballenasbtc15m
+import ballenas_executor_15min as _m_ballenas15m
 import favorito_altaconviccion_executor_15min as _m_altaconv
 import favorito_confirmado_btc60min_buyno_executor as _m_btc60mno
 
+# 20-Ago: ballenas_executor_15min.py añadido -- pasó a DRY_RUN=False para
+# BALLENAS_CONFIRMADAS_15M#ETH#15min#BUY_YES (checklist 6 categorías
+# completo, ver idea_gate_bucket_fino_ventana_deslizante_20ago). Sacado de
+# ejecutores_dryrun_fase0.py (screen ejecdryrun, exige DRY_RUN=True en
+# todos sus módulos) -- este consolidado es el destino correcto para
+# dinero real, mismo patrón que los 4 anteriores. No usa
+# ballenas_firehose_cache (a diferencia de los otros 4) -- no gana la
+# optimización de conexión compartida, pero sí gana supervisión de
+# watchdog/verify_deploy y consistencia con el resto de ejecutores live.
 MODULOS = [
     ("BALLENAS_5M", _m_ballenas5m),
     ("BALLENAS_BTC15M", _m_ballenasbtc15m),
+    ("BALLENAS_15M", _m_ballenas15m),
     ("ALTACONVICCION_15M", _m_altaconv),
     ("FAV_BTC60M_BUYNO", _m_btc60mno),
 ]

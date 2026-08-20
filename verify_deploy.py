@@ -49,7 +49,7 @@ SCREENS = {
     # redundantes al firehose RTDS). El "entry" importa los 4 módulos
     # originales, así que el cierre de imports los cubre igual que antes.
     "ejeclive": {"entry": "executores_live_consolidado.py",
-                 "probe": "log:logs/ejecutores_live_consolidado.log:arrancando 4 ejecutores"},
+                 "probe": "log:logs/ejecutores_live_consolidado.log:arrancando 5 ejecutores"},
     # ballenas_15m/fav15mexec/fav60mexec/gbmlate15m/updowngbmtardio/
     # walletmirror/wmexec fusionados en "ejecdryrun" el 06-Ago (ver
     # ejecutores_dryrun_fase0.py) -- 7 procesos -> 1, mismo patrón que la
