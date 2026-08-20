@@ -1,13 +1,15 @@
 {
-  "timestamp_utc": "2026-08-20T16:12:25+00:00",
-  "bankroll_sim": 19521.72,
-  "pnl_total": 19501.72,
-  "n_ops": 198915,
+  "timestamp_utc": "2026-08-20T16:17:01+00:00",
+  "bankroll_sim": 19549.8,
+  "pnl_total": 19529.8,
+  "n_ops": 199056,
   "win_rate": 0.5934,
-  "estrategias_activas": 521,
+  "estrategias_activas": 520,
   "desactivadas": [
     "SMART_FLOW_1H",
     "UPDOWN_GBM#daily",
+    "PRICE_TARGET_GBM#BTC#atexpiry",
+    "PRICE_TARGET_GBM#BTC",
     "UPDOWN_GBM#ETH#daily",
     "UPDOWN_GBM#SOL#daily",
     "GBM_LATE_60M_FADE",
@@ -36,22 +38,22 @@
   "top3_ic": [
     {
       "k": "FAVORITO_CONFIRMADO_15MIN_EXTREMO",
-      "ic": 0.422,
-      "n": 203
+      "ic": 0.4223,
+      "n": 204
     },
     {
       "k": "FAVORITO_CONFIRMADO_15MIN_EXTREMO#15min",
-      "ic": 0.422,
-      "n": 203
+      "ic": 0.4223,
+      "n": 204
     },
     {
       "k": "FAVORITO_CONFIRMADO_15MIN_EXTREMO#BTC#15min",
-      "ic": 0.4211,
-      "n": 74
+      "ic": 0.4221,
+      "n": 75
     }
   ],
-  "brier_medio": 0.2359,
-  "clv_medio": 0.0295,
+  "brier_medio": 0.2358,
+  "clv_medio": 0.0296,
   "monitor_5min": {
     "ou_5m": {
       "n": 759,
