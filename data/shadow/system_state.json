@@ -1,8 +1,8 @@
 {
-  "timestamp_utc": "2026-08-20T04:57:09+00:00",
-  "bankroll_sim": 19518.22,
-  "pnl_total": 19498.22,
-  "n_ops": 192934,
+  "timestamp_utc": "2026-08-20T05:03:34+00:00",
+  "bankroll_sim": 19524.19,
+  "pnl_total": 19504.19,
+  "n_ops": 192973,
   "win_rate": 0.5954,
   "estrategias_activas": 520,
   "desactivadas": [
@@ -51,7 +51,7 @@
       "n": 47
     }
   ],
-  "brier_medio": 0.2359,
+  "brier_medio": 0.2358,
   "clv_medio": 0.0306,
   "monitor_5min": {
     "ou_5m": {
