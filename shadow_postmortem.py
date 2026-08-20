@@ -1029,6 +1029,16 @@ _BASE_GBM = [
     ("drift_15min",      "abs_gt", "abs_lt"),
     # ── Order flow macro ───────────────────────────────────────────────────────
     ("delta_ratio_macro","abs_lt", "abs_gt"),
+    # divergencia_cvd_spot_perp (20-Ago, pasos 3-4 de idea_amt_spot_vs_perp_cvd_20jul
+    # -- construida el 18-Ago, feature logueada desde entonces pero nunca
+    # registrada aquí, n=1236 resueltas ya acumuladas al añadirla): AMT --
+    # spot CVD menos perp CVD. Divergencia grande (|valor| alto) = spot y
+    # perp desalineados, candidato a squeeze de apalancamiento/swing failure
+    # (malo); divergencia pequeña = ambos alineados, breakout genuino
+    # (bueno). Solo poblada hoy en UPDOWN_GBM/UPDOWN_OU_5M -- el resto de
+    # estrategias con _BASE_GBM simplemente no tienen esta clave en
+    # `features`, se ignora sin error (mismo patrón que sigma_ewma_delta_pct).
+    ("divergencia_cvd_spot_perp", "abs_gt", "abs_lt"),
     # ── Temporal — hora UTC (0-23) ─────────────────────────────────────────────
     # El sistema aprende automáticamente qué horas son buenas/malas por estrategia
     ("hora_utc",         "lt",     "gt"),    # malo cuando hora < umbral (madrugada/mañana)
