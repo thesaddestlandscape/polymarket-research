@@ -11,6 +11,7 @@
   "ibs_20min|gt|0.8806|BUY_NO",
   "ibs_20min|gt|0.882|BUY_NO",
   "ibs_20min|gt|0.8848|BUY_NO",
+  "ibs_20min|gt|0.8879|BUY_NO",
   "libro_spread|gt|0.01|BUY_NO",
   "sigma_ewma_delta_pct|lt|4.947|BUY_YES",
   "sigma_ewma_delta_pct|lt|5.295|BUY_YES",
@@ -106,6 +107,7 @@
   "sigma_ewma_delta_pct|gt|7.996|BUY_NO",
   "sigma_ewma_delta_pct|gt|8.011|BUY_NO",
   "sigma_ewma_delta_pct|gt|8.028|BUY_NO",
-  "sigma_ewma_delta_pct|gt|8.03|BUY_NO"
+  "sigma_ewma_delta_pct|gt|8.03|BUY_NO",
+  "sigma_ewma_delta_pct|gt|8.08|BUY_NO"
  ]
 }
