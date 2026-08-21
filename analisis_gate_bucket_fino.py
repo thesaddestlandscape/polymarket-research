@@ -121,6 +121,38 @@ def evaluar_tupla(filas):
     n_v = idx_hi - idx_lo
     pnl_medio = float(pnl_sorted_real[idx_lo:idx_hi].mean())
 
+    # Robustez leave-one-out frente a outliers de payout extremo (21-Ago):
+    # con paso 0.01 y N_MIN_VENTANA=15, una ventana ganadora puede depender
+    # de 1-2 trades con pago muy asimétrico (longshot: BUY_NO a precio
+    # extremo, pocos aciertos que pagan 30-50x el resto) -- el shuffle
+    # max-statistic es válido estadísticamente (reproduce la misma cola
+    # gorda bajo la nula), pero eso no implica que el EDICTO sea fiable
+    # económicamente: quitar un solo trade puede cambiar el signo. Hallazgo
+    # real que motivó esto: UPDOWN_GBM_15M_TARDIO#SOL#15min#BUY_NO
+    # [0.95,1.00) n=16, hit=25%, pnl/tr=+9.87 -- 4 aciertos de 16 pagando
+    # 30x-50x el resto; sin este check habría pasado el gate igual.
+    pnl_ventana = pnl_sorted_real[idx_lo:idx_hi]
+    idx_extremo = int(np.argmax(np.abs(pnl_ventana - pnl_medio)))
+    pnl_loo = np.delete(pnl_ventana, idx_extremo)
+    pnl_medio_loo = float(pnl_loo.mean()) if len(pnl_loo) else 0.0
+    robusto_loo = bool(len(pnl_loo) > 0 and (pnl_medio_loo > 0) == (pnl_medio > 0)
+                        and abs(pnl_medio_loo) > 0.05 * abs(pnl_medio))
+
+    # Bootstrap CI90% dentro de la propia ventana (complementa al LOO):
+    # captura el caso donde el edge no depende de UN trade concreto sino de
+    # que pocos aciertos con pago grande dominan un hit-rate bajo (ej. n=16
+    # con 4 aciertos pagando 30x-50x -- quitar cualquier trade individual
+    # sigue positivo, pero el CI de remuestreo sí se acerca a/cruza cero
+    # porque la mayoría de remuestreos con reemplazo caen en réplicas de
+    # las 12 pérdidas). Semilla fija (misma _rng que el max-statistic) para
+    # reproducibilidad dentro de la corrida.
+    boots_idx = _rng.integers(0, n_v, size=(2000, n_v))
+    boots_medias = pnl_ventana[boots_idx].mean(axis=1)
+    boots_medias.sort()
+    ci_lo90 = float(boots_medias[int(0.05 * len(boots_medias))])
+    ci_hi90 = float(boots_medias[int(0.95 * len(boots_medias))])
+    robusto_bootstrap = bool(ci_lo90 > 0 if pnl_medio > 0 else ci_hi90 < 0)
+
     # Test de permutación max-statistic: barajar pnl (py fijo), rehacer el
     # MISMO barrido de posiciones, guardar el mejor |diff| bajo la nula.
     idx_los = np.array([p[2] for p in posiciones])
@@ -156,6 +188,9 @@ def evaluar_tupla(filas):
         "lo": lo, "hi": hi, "n": n_v, "pnl_medio": round(pnl_medio, 4),
         "diff_vs_resto": round(float(diff_real), 4), "p_valor": round(p_valor, 4),
         "split_half_diff": split_half_diff, "split_half_ok": bool(consistente),
+        "pnl_medio_loo": round(pnl_medio_loo, 4), "robusto_loo": robusto_loo,
+        "ci90_bootstrap": [round(ci_lo90, 4), round(ci_hi90, 4)],
+        "robusto_bootstrap": robusto_bootstrap,
         "n_posiciones_buscadas": len(posiciones),
     }
 
@@ -176,7 +211,7 @@ def main() -> int:
         if not info:
             continue
         resultado[tupla_str] = info
-        if info["split_half_ok"]:
+        if info["split_half_ok"] and info["robusto_loo"] and info["robusto_bootstrap"]:
             pendientes.append({"tupla_str": tupla_str, "info": info,
                                 "p": info["p_valor"], "diff": info["diff_vs_resto"], "es_live": es_live})
 
