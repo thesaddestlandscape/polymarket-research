@@ -2771,6 +2771,15 @@ def main():
             pass
 
     resultados = cargar_results(_rows_results)
+    # 21-Ago: libera el texto crudo (~190MB+ y creciendo ~3.2MB/día) y la
+    # lista de filas ya consumida -- ningún consumidor posterior los usa
+    # (cargar_results_dedup ya devolvió las mismas filas deduplicadas en
+    # `resultados`, no copias). Sin esto, ambos siguen vivos en memoria
+    # durante TODO el resto del ciclo junto con `resultados`/
+    # `resultados_twap_safe`, y ese pico (1.48GB RSS medido hoy, VPS de
+    # 3.7GB con ~15 procesos concurrentes) es lo que dispara la anomalía
+    # de CPU/swap de analisis_diario_salud_sistema.py (CLAUDE.md pt.18).
+    del _content_results, _rows_results
     if not resultados:
         print("  Sin resultados aún — nada que analizar.")
         print(f"[{ts}] === Fin postmortem ===")
