@@ -38,7 +38,14 @@
       "fecha_desde": "2026-07-11",
       "n_objetivo": 40,
       "accion": "evaluar ic_bayes con dato fresco; si IC>=0.08 considerar mantener abierto, si IC<-0.12 volver a bloquear",
-      "avisado": false
+      "avisado": true,
+      "avisado_en": "2026-08-21T19:02:04+00:00",
+      "resultado_al_avisar": {
+        "n": 40,
+        "hit": 0.55,
+        "ic_bayes": 0.04761904761904767,
+        "pnl": 3.2924999999999995
+      }
     },
     {
       "id": "OF5M_REAPERTURA_DOGE",
