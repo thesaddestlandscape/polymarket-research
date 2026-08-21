@@ -81,6 +81,14 @@ from shadow_predict import (
     MOMENTUM_IBS_5M_PARES,
     MOMENTUM_IBS_15M_PARES,
 )
+from gbm_confluencia import evaluar as _gbm_confluencia  # 21-Ago, mismo patrón que
+# shadow_predict.py/ballenas_executor_5min.py/favorito_confirmado_btc60min_buyno_executor.py
+# -- puro logging (FASE 1), nunca vetea. Verificado retroactivo el mismo día: en el
+# subconjunto REALMENTE fillable (ratio>=5x) de MOMENTUM_IBS_5M_BALLENA#ETH#5min#BUY_NO,
+# "NO" (GBM discrepa) da pnl/tr=-0.152€ confirmado negativo (bootstrap CI90% no cruza
+# cero) vs "SI" (coincide) que deja de perder (+0.013€/tr, CI cruza cero pero ya no
+# negativo) -- ver idea del 21-Ago. Cobertura baja (~8% del fillable tiene señal GBM en
+# el mismo mercado), por eso esto es logging para acumular n propio, no un veto todavía.
 
 DIR = Path(__file__).resolve().parent
 DIR_SHADOW = DIR / "data" / "shadow"
@@ -183,7 +191,7 @@ def _profundidad_al_origen(direccion: str, py: float, mercado: dict) -> dict:
 
 def _registrar_prediccion(mercado: dict, activo: str, ventana_min: int, strategy: str,
                            resultado: dict, direccion: str, restante_s: float,
-                           profundidad: dict) -> None:
+                           profundidad: dict, gbm_conf: dict) -> None:
     """Mismo formato/lock que gbm_late_15min_executor.py::_registrar_prediccion
     -- shadow_resolve.py/shadow_postmortem.py lo resuelven sin duplicar
     lógica aquí."""
@@ -198,6 +206,7 @@ def _registrar_prediccion(mercado: dict, activo: str, ventana_min: int, strategy
     features["profundidad_ok"] = bool(profundidad.get("ok"))
     features["profundidad_ratio_vs_stake"] = profundidad.get("ratio_vs_stake", "")
     features["profundidad_mejor_ask"] = profundidad.get("mejor_ask", "")
+    features["gbm_direccion_coincide"] = gbm_conf["gbm_direccion_coincide"]
     features_json = json.dumps(features, separators=(",", ":"))
     lock_path = DIR_SHADOW / ".predictions_lock"
     try:
@@ -267,12 +276,13 @@ def watch_window(activo: str, ventana_min: int, fn_senal, strategy: str, mercado
         direccion = "BUY_YES" if prob_yes >= py_edge else "BUY_NO"
 
         profundidad = _profundidad_al_origen(direccion, py_edge, mercado)
+        gbm_conf = _gbm_confluencia(mercado.get("market_id") or mercado.get("condition_id"), direccion)
         log(f"[{mercado['market_id']}] {strategy} CONFIRMADO {direccion} py={py_edge:.3f} "
             f"prob_yes={prob_yes:.3f} restante={restante_s:.1f}s "
             f"profundidad_ok={profundidad.get('ok')} ratio={profundidad.get('ratio_vs_stake')} "
-            f"({n_polls} polls)", tag)
+            f"gbm_coincide={gbm_conf['gbm_direccion_coincide']} ({n_polls} polls)", tag)
         _registrar_prediccion(mercado, activo, ventana_min, strategy, resultado, direccion,
-                              restante_s, profundidad)
+                              restante_s, profundidad, gbm_conf)
         return True  # una señal por ventana es suficiente, mismo criterio que GBM
 
 
