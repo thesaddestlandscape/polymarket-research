@@ -1,1 +1,25 @@
-{}
+{
+ "3739625#BALLENAS_CONFIRMADAS_15M#ETH#15min#BUY_YES": {
+  "clave": "3739625#BALLENAS_CONFIRMADAS_15M#ETH#15min#BUY_YES",
+  "market_id": "3739625",
+  "strategy": "BALLENAS_CONFIRMADAS_15M",
+  "subtype": "ETH#15min",
+  "direction": "BUY_YES",
+  "activo": "ETH",
+  "marco": "15m",
+  "combo": "ETH#15m",
+  "end_date": "2026-08-21T09:00:00",
+  "precio_plan": 0.775,
+  "edge_dir": 0.0616,
+  "ic_para_stake": 0.15,
+  "ts_creacion": "2026-08-21T08:47:10+00:00",
+  "intentos": 6,
+  "rest_lo_min": 4.78,
+  "rest_hi_min": 11.0,
+  "deadline_ts": "2026-08-21T08:55:31.200000+00:00",
+  "estado": "resuelto_normal",
+  "ultimo_intento_ts": "2026-08-21T08:49:03+00:00",
+  "ultimo_motivo_veto": "observacion_habria_ejecutado",
+  "ts_resolucion": "2026-08-21T08:49:03+00:00"
+ }
+}
