@@ -1,9 +1,9 @@
 {
-  "timestamp_utc": "2026-08-20T16:56:12+00:00",
-  "bankroll_sim": 19583.88,
-  "pnl_total": 19563.88,
-  "n_ops": 199400,
-  "win_rate": 0.5934,
+  "timestamp_utc": "2026-08-21T07:51:28+00:00",
+  "bankroll_sim": 19743.17,
+  "pnl_total": 19723.17,
+  "n_ops": 206943,
+  "win_rate": 0.5918,
   "estrategias_activas": 520,
   "desactivadas": [
     "SMART_FLOW_1H",
@@ -31,29 +31,29 @@
     "FAVORITO_CONFIRMADO#ETH#240min",
     "LIQUIDACIONES_15M#DOGE#15min",
     "LIQUIDACIONES_15M#DOGE",
-    "BALLENAS_TARDIAS#XRP#5min",
-    "BALLENAS_TARDIAS#XRP",
+    "LIQUIDACIONES_5M#SOL#5min",
+    "LIQUIDACIONES_5M#SOL",
     "UPDOWN_GBM#BNB#5min"
   ],
   "top3_ic": [
     {
       "k": "FAVORITO_CONFIRMADO_15MIN_EXTREMO",
-      "ic": 0.4223,
-      "n": 204
+      "ic": 0.4269,
+      "n": 217
     },
     {
       "k": "FAVORITO_CONFIRMADO_15MIN_EXTREMO#15min",
-      "ic": 0.4223,
-      "n": 204
+      "ic": 0.4269,
+      "n": 217
     },
     {
       "k": "FAVORITO_CONFIRMADO_15MIN_EXTREMO#BTC#15min",
-      "ic": 0.4221,
-      "n": 75
+      "ic": 0.4259,
+      "n": 79
     }
   ],
-  "brier_medio": 0.2358,
-  "clv_medio": 0.0296,
+  "brier_medio": 0.2357,
+  "clv_medio": 0.0286,
   "monitor_5min": {
     "ou_5m": {
       "n": 759,
@@ -68,10 +68,12 @@
       "alerta_proxima": "n=608/400, CLV=-0.030/−0.030"
     },
     "of_decay": {
-      "clv_historico": 0.021,
-      "clv_ult30": 0.0635,
-      "decay_ratio": 3.02
+      "clv_historico": 0.02,
+      "clv_ult30": -0.032,
+      "decay_ratio": -1.6
     },
-    "alertas": []
+    "alertas": [
+      "⚠️ ORDER_FLOW alpha decay: CLV histórico=+0.020 → últimas30=-0.032 (ratio=-1.6x, 2 días)"
+    ]
   }
 }

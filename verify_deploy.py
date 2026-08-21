@@ -76,6 +76,10 @@ SCREENS = {
     # /root/polymarket-weather, CLAUDE.md prohíbe mezclar).
     "sportsfase0": {"entry": "sports_fase0_consolidado.py",
                      "probe": "log:logs/sports_fase0_consolidado.log:hilos arrancados"},
+    # 20-Ago: nested_arb_scanner.py, antes cron '* * * * *', ahora proceso
+    # persistente propio vía nested_arb_loop.py (ver su docstring).
+    "nestedarb": {"entry": "nested_arb_loop.py",
+                   "probe": "log:logs/nested_arb_loop.log:arrancando"},
     # Solo se vigila el .sh (sus hijos python son proceso fresco cada ciclo).
     "fast":    {"entry": "run_fast.sh", "shallow": True, "no_restart": True},
     "slow":    {"entry": "run_slow.sh", "shallow": True, "no_restart": True},

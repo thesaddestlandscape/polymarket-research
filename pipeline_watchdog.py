@@ -175,6 +175,11 @@ SCREEN_RESTART = {
     # CLAUDE.md prohíbe mezclar); wallet_mirror_executor_dryrun.py (crypto,
     # screen walletmirror) también queda fuera -- DRY_RUN=False, dinero real.
     "sportsfase0": f"cd {REPO} && nice -n 10 .venv/bin/python sports_fase0_consolidado.py >> logs/sports_fase0_consolidado.log 2>&1",
+    # 20-Ago: nested_arb_scanner.py sale de su cron '* * * * *' (flock) a
+    # proceso persistente propio -- NO se funde con vigias_frecuentes_fase0.py
+    # (cadencia 1min más sensible que sus hermanos ahí, ver docstring de
+    # nested_arb_loop.py). Puramente observacional, sin dinero real.
+    "nestedarb": f"cd {REPO} && nice -n 10 .venv/bin/python nested_arb_loop.py >> logs/nested_arb_loop.log 2>&1",
     "dash-weather": f"cd {REPO_WEATHER} && nice -n 10 .venv/bin/python dashboard_server.py >> logs/dashboard-weather.log 2>&1",
     "weather-mirror": f"cd {REPO_WEATHER} && nice -n 10 .venv/bin/python weather_wallet_mirror_sniper.py >> logs/weather_wallet_mirror_sniper.log 2>&1",
     "weather-ws": f"cd {REPO_WEATHER} && nice -n 10 .venv/bin/python weather_activity_ws.py >> logs/weather_activity_ws.log 2>&1",

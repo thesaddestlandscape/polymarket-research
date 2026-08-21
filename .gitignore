@@ -58,3 +58,4 @@ data/shadow/wallet_mirror_sniper_dry_run.csv
 # El patrón cubre CUALQUIER fecha (no solo hoy) -- cada día es un fichero
 # nuevo que cruzará el mismo umbral por su cuenta.
 data/sports/activity_ws_*.csv
+data/prices/kalshi_btchourly_*.csv

@@ -1,9 +1,11 @@
 #!/usr/bin/env python3
 """
-vigias_frecuentes_fase0.py — consolida 17 scripts de UN SOLO DISPARO que
-hoy corren vía cron cada 5-60 minutos (~130 arranques de intérprete
+vigias_frecuentes_fase0.py — consolida 19 scripts de UN SOLO DISPARO que
+antes corrían vía cron cada 5-60 minutos (~130+ arranques de intérprete
 Python/hora dispersos) en UN SOLO proceso persistente con scheduler
-interno. Mismo patrón que vigias_horarios_fase0.py (11-Ago, cadencia
+interno. (20-Ago: 17→19, ver bloque de imports/TAREAS más abajo con fecha
+20-Ago -- smart_money_tracker y sports_wallet_mirror_sniper_resolver,
+ambos cron */20min retirados, mismo rigor de verificación AST.) Mismo patrón que vigias_horarios_fase0.py (11-Ago, cadencia
 horaria) y observadores_fase0.py (05-Ago, hilos infinitos) pero aplicado
 a la capa de cadencia SUB-horaria (5/10/15/30/60 min) que quedó fuera de
 esas dos fusiones.
@@ -60,6 +62,7 @@ Corre en screen propia:
   screen -dmS vigiasfreq bash -c "cd /root/polymarket-research && nice -n 10 .venv/bin/python vigias_frecuentes_fase0.py >> logs/vigias_frecuentes_fase0.log 2>&1"
 """
 import contextlib
+import csv
 import sys
 import time
 from pathlib import Path
@@ -91,6 +94,14 @@ import wallet_mirror_tracker as _wmt
 from wallet_mirror_sniper import OUT as _WMS_OUT, COLUMNS as _WMS_COLUMNS
 from wallet_mirror_tracker import resolver_pendientes as _resolver_pendientes
 
+# 20-Ago (Javi: "consolida procesos", presión CPU/RAM tras incidente OOM real
+# de esta sesión -- ver logs/vigia_pipeline_latencia.log 21:03 Madrid): 2
+# candidatos más plegados aquí, mismo rigor AST ya aplicado a los 17
+# anteriores (sin trabajo real a nivel de módulo, solo sys.path.insert
+# idempotente / anotación de tipo sin llamada / asignaciones puras).
+import smart_money_tracker
+import sports_wallet_mirror_sniper as _swms
+
 
 def _resolver_wallet_mirror_sniper() -> None:
     """Réplica exacta de `wallet_mirror_sniper.py --resolver` (ver
@@ -104,6 +115,24 @@ def _resolver_wallet_mirror_sniper() -> None:
         print(f"Resueltas: {n}")
     finally:
         _wmt.OUT, _wmt.OUT_LOCK, _wmt.COLUMNS = prev_out, prev_lock, prev_cols
+
+
+def _resolver_sports_wallet_mirror_sniper() -> None:
+    """Réplica exacta de `sports_wallet_mirror_sniper.py --resolver` (ver
+    su propio main(), bloque `if args.resolver`) -- resolver_pendientes()
+    es self-contained en ese módulo (no monkeypatching necesario, a
+    diferencia del hermano cripto de arriba)."""
+    n = _swms.resolver_pendientes()
+    print(f"resueltas este ciclo: {n}")
+    if _swms.OUT.exists():
+        with open(_swms.OUT, newline="", encoding="utf-8") as f:
+            filas = [r for r in csv.DictReader(f) if r.get("outcome_real_index")]
+        if filas:
+            n_tot = len(filas)
+            aciertos = sum(1 for r in filas if r["acierto"] == "1")
+            n_seguir = sum(1 for r in filas if r["tipo"] == "SEGUIR")
+            print(f"acumulado resuelto: n={n_tot} hit={aciertos/n_tot*100:.1f}% "
+                  f"(SEGUIR n={n_seguir}, FADE n={n_tot - n_seguir})")
 
 
 # (nombre, callable, log_propio -- EXACTO el que ya usaba su entrada de
@@ -126,6 +155,9 @@ TAREAS = [
     ("shadow_pnl_fiel", shadow_pnl_fiel.main, "shadow_pnl_fiel.log", 1800),
     ("vigia_micro_bucket_kill_switch", vigia_micro_bucket_kill_switch.main, "vigia_micro_bucket_kill_switch.log", 1800),
     ("vigia_gate_bucket_wallet_mirror", vigia_gate_bucket_wallet_mirror.main, "vigia_gate_bucket_wallet_mirror.log", 3600),
+    # 20-Ago: 2 más, cadencia EXACTA de sus crons retirados (*/20 * * * * = 1200s)
+    ("smart_money_tracker", smart_money_tracker.main, "smart_money.log", 1200),
+    ("sports_wallet_mirror_sniper_resolver", _resolver_sports_wallet_mirror_sniper, "sports_wallet_mirror_resolver.log", 1200),
 ]
 
 TICK_S = 20.0

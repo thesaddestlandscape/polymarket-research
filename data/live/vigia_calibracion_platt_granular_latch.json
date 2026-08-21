@@ -934,5 +934,21 @@
   "UPDOWN_GBM#SOL#5min": {
     "n": 239,
     "confirmado": false
+  },
+  "MOMENTUM_IBS_15M#DOGE": {
+    "n": 243,
+    "confirmado": false
+  },
+  "MOMENTUM_IBS_15M#DOGE#15min": {
+    "n": 243,
+    "confirmado": false
+  },
+  "MOMENTUM_IBS_5M#SOL": {
+    "n": 200,
+    "confirmado": false
+  },
+  "MOMENTUM_IBS_5M#SOL#5min": {
+    "n": 200,
+    "confirmado": false
   }
 }

@@ -1,2 +1,3 @@
 timestamp_utc,activo,marco,slug,market_id,condition_id,ts_end,offset_s,direccion_implicita,ask_deteccion,ratio_deteccion,ask_decision,ratio_decision,delta_ask,delta_ratio,sigue_fillable_decision
 2026-08-19T11:55:01.349+00:00,BTC,5min,btc-updown-5m-1787140200,3695164,0xc96b08ac8fa9d410f3ec1b237bc3a4f6edbf48922ce110700fb599d546530a9d,1787140500,0,Up,0.51,16.4,0.51,2.4,0.0,-13.999999999999998,False
+2026-08-21T00:25:02.624+00:00,ETH,5min,eth-updown-5m-1787271600,3733129,0xb905ecba09d2d15c0e4b246080a90e6c4ad65c471f54da86dc89b398f1ab10c7,1787271900,1,Up,0.19,3448.9,0.01,1060.3,-0.18,-2388.6000000000004,True

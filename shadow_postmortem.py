@@ -68,8 +68,12 @@ def _ic_bayes(aciertos, n) -> float:
     return (aciertos + 1) / (n + 2) - 0.5
 
 
-def cargar_results() -> list:
+def cargar_results(rows=None) -> list:
     """Carga results.csv deduplicado por (strategy, market_id, decision).
+
+    rows: filas ya parseadas (csv.DictReader) para evitar releer el fichero
+    si el llamante ya lo hizo este ciclo -- ver docstring de
+    cargar_results_dedup en resultados_dedup.py.
 
     12-Jul: hallado en auditoría general un duplicado real — FAVORITO_
     CONFIRMADO#2866629#BUY_YES resuelto dos veces (resolution_timestamp
@@ -91,10 +95,10 @@ def cargar_results() -> list:
     reimplementen su propio csv.DictReader crudo — un solo punto de verdad.
     """
     from resultados_dedup import cargar_results_dedup
-    return cargar_results_dedup(RESULTS_PATH)
+    return cargar_results_dedup(RESULTS_PATH, rows=rows)
 
 
-def _verificar_integridad() -> list[tuple[str, str]]:
+def _verificar_integridad(content: str = None, rows: list = None) -> list[tuple[str, str]]:
     """Grader independiente: valida results.csv antes de que el postmortem lo procese.
 
     Devuelve (clave_estable, mensaje) en vez de solo el mensaje (21-Jul,
@@ -105,14 +109,24 @@ def _verificar_integridad() -> list[tuple[str, str]]:
     días). La clave identifica el CONTENIDO real del problema (qué filas
     duplicadas exactas, no solo "hay duplicados") para que el latch del
     llamante distinga un duplicado NUEVO (debe avisar) de uno YA VISTO que
-    sigue sin limpiarse (no debe repetir el aviso)."""
+    sigue sin limpiarse (no debe repetir el aviso).
+
+    content/rows: si el llamante ya leyó/parseó results.csv este ciclo, los
+    pasa para evitar una segunda lectura+parseo completo del fichero (20-Ago,
+    ver docstring de cargar_results_dedup — con el fichero en ~156MB/200k
+    filas esta relectura duplicada contribuía a la degradación medida por
+    vigia_pipeline_latencia.py, aviso Telegram 21:03 hora Madrid)."""
     alertas = []
-    if not RESULTS_PATH.exists():
+    if content is None:
+        if not RESULTS_PATH.exists():
+            return [("results_csv_no_existe", "results.csv no existe")]
+        content = RESULTS_PATH.read_text(encoding="utf-8")
+    elif not RESULTS_PATH.exists():
         return [("results_csv_no_existe", "results.csv no existe")]
-    content = RESULTS_PATH.read_text(encoding="utf-8")
     if any(m in content for m in ["<<<<<<<", ">>>>>>>", "======="]):
         alertas.append(("conflict_markers", "CONFLICT MARKERS en results.csv — git rebase incompleto"))
-    rows = list(csv.DictReader(content.splitlines()))
+    if rows is None:
+        rows = list(csv.DictReader(content.splitlines()))
     if rows:
         if "features" not in rows[0]:
             alertas.append(("falta_columna_features", "Falta columna 'features' en results.csv — fix urgente"))
@@ -2708,8 +2722,13 @@ def main():
     ts = datetime.now(timezone.utc).isoformat(timespec="seconds")
     print(f"[{ts}] === Postmortem ===")
 
-    # Gap 1: grader independiente
-    alertas = _verificar_integridad()
+    # Gap 1: grader independiente. Lee results.csv UNA sola vez aquí (20-Ago:
+    # antes _verificar_integridad() y cargar_results() releían/reparseaban el
+    # fichero completo cada una, doble coste sobre ~156MB/200k filas y
+    # creciendo -- ver docstrings arriba).
+    _content_results = RESULTS_PATH.read_text(encoding="utf-8") if RESULTS_PATH.exists() else None
+    _rows_results = list(csv.DictReader(_content_results.splitlines())) if _content_results is not None else None
+    alertas = _verificar_integridad(_content_results, _rows_results)
     if alertas:
         for _, msg_a in alertas:
             print(f"  [ALERTA INTEGRIDAD] {msg_a}")
@@ -2751,7 +2770,7 @@ def main():
         except Exception:
             pass
 
-    resultados = cargar_results()
+    resultados = cargar_results(_rows_results)
     if not resultados:
         print("  Sin resultados aún — nada que analizar.")
         print(f"[{ts}] === Fin postmortem ===")

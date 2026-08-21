@@ -5,8 +5,10 @@
   "sigma_ewma_delta_pct|lt|6.765|BUY_YES"
  ],
  "GBM_LATE_15M#ETH#15min": [
+  "ibs_20min|gt|0.8732|BUY_NO",
   "ibs_20min|gt|0.8764|BUY_NO",
   "ibs_20min|gt|0.8786|BUY_NO",
+  "ibs_20min|gt|0.8806|BUY_NO",
   "ibs_20min|gt|0.882|BUY_NO",
   "libro_spread|gt|0.01|BUY_NO",
   "sigma_ewma_delta_pct|lt|4.947|BUY_YES",
@@ -19,13 +21,21 @@
   "sigma_ewma_delta_pct|lt|7.386|BUY_YES",
   "sigma_ewma_delta_pct|lt|7.476|BUY_YES",
   "sigma_ewma_delta_pct|lt|7.533|BUY_YES",
-  "sigma_ewma_delta_pct|lt|9.579|BUY_YES"
+  "sigma_ewma_delta_pct|lt|9.579|BUY_YES",
+  "sigma_h|gt|0.0039|BUY_NO",
+  "sigma_h|gt|0.004|BUY_NO"
  ],
  "GBM_LATE_15M#SOL#15min": [
   "sigma_ewma_delta_pct|gt|2.824|BUY_NO",
   "sigma_ewma_delta_pct|gt|2.831|BUY_NO",
   "sigma_ewma_delta_pct|gt|4.603|BUY_NO",
   "sigma_ewma_delta_pct|gt|4.604|BUY_NO",
+  "sigma_ewma_delta_pct|gt|4.612|BUY_NO",
+  "sigma_ewma_delta_pct|gt|4.618|BUY_NO",
+  "sigma_ewma_delta_pct|gt|4.622|BUY_NO",
+  "sigma_ewma_delta_pct|gt|4.627|BUY_NO",
+  "sigma_ewma_delta_pct|gt|4.646|BUY_NO",
+  "sigma_ewma_delta_pct|gt|4.656|BUY_NO",
   "sigma_ewma_delta_pct|gt|6.245|BUY_NO",
   "sigma_ewma_delta_pct|gt|7.945|BUY_NO",
   "sigma_ewma_delta_pct|gt|8.019|BUY_NO",
@@ -83,7 +93,13 @@
   "sigma_ewma_delta_pct|gt|6.308|BUY_NO",
   "sigma_ewma_delta_pct|gt|6.314|BUY_NO",
   "sigma_ewma_delta_pct|gt|6.33|BUY_NO",
+  "sigma_ewma_delta_pct|gt|6.395|BUY_NO",
+  "sigma_ewma_delta_pct|gt|6.401|BUY_NO",
+  "sigma_ewma_delta_pct|gt|7.931|BUY_NO",
+  "sigma_ewma_delta_pct|gt|7.946|BUY_NO",
   "sigma_ewma_delta_pct|gt|7.973|BUY_NO",
-  "sigma_ewma_delta_pct|gt|7.98|BUY_NO"
+  "sigma_ewma_delta_pct|gt|7.98|BUY_NO",
+  "sigma_ewma_delta_pct|gt|7.996|BUY_NO",
+  "sigma_ewma_delta_pct|gt|8.011|BUY_NO"
  ]
 }

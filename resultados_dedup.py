@@ -21,12 +21,19 @@ from pathlib import Path
 RESULTS_PATH = Path(__file__).resolve().parent / "data/shadow/results.csv"
 
 
-def cargar_results_dedup(path=None) -> list:
-    p = Path(path) if path else RESULTS_PATH
-    if not p.exists():
-        return []
-    with open(p, encoding="utf-8") as f:
-        rows = list(csv.DictReader(f))
+def cargar_results_dedup(path=None, rows=None) -> list:
+    """rows: filas ya parseadas (csv.DictReader) para evitar releer/re-parsear
+    el fichero si el llamante ya lo hizo en el mismo ciclo (20-Ago: main() de
+    shadow_postmortem.py leía results.csv dos veces por ciclo -- una en
+    _verificar_integridad(), otra aquí -- ~156MB/200k filas y creciendo
+    ~3.2MB/día, mismo patrón de riesgo de escalado que el incidente 04-Ago,
+    CLAUDE.md pt.18)."""
+    if rows is None:
+        p = Path(path) if path else RESULTS_PATH
+        if not p.exists():
+            return []
+        with open(p, encoding="utf-8") as f:
+            rows = list(csv.DictReader(f))
     vistas = {}
     for r in rows:
         clave = (r.get("strategy", ""), r.get("market_id", ""), r.get("decision", ""))
