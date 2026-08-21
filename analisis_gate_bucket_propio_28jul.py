@@ -297,12 +297,29 @@ def main():
 
             entrada = {"n": n_d, "pnl_medio": round(media_d, 4),
                        "diff_vs_resto": round(media_d - (sum(pnl_f) / len(pnl_f)), 4) if pnl_f else None,
-                       "shuffle_p": None, "split_half_diff": None, "veredicto": "sin_concluir"}
+                       "shuffle_p": None, "split_half_diff": None,
+                       "ci90_bootstrap_absoluto": None, "veredicto": "sin_concluir"}
             tabla[f"{b:.2f}"] = entrada
 
             if n_d >= N_MIN and pnl_f:
                 diff, p_valor = shuffle_test(pnl_d, pnl_f)
                 entrada["shuffle_p"] = round(p_valor, 4)
+                # 21-Ago (hallazgo real, BALLENAS_TARDIAS#BTC#15min#BUY_YES
+                # [0.20,0.25): n=50, shuffle_p=0.01 contra el RESTO de la
+                # tupla, pnl_medio=+0.369 -- pasaba el piso absoluto (media
+                # >=0) pero el bootstrap CI90% del propio bucket cruzaba
+                # cero [-0.13,+0.89] (hit=30%, payout tipo longshot). El
+                # shuffle+piso de arriba solo garantiza "mejor que el resto
+                # de una tupla mala", nunca que el bucket sea rentable en
+                # términos ABSOLUTOS con confianza -- mismo hueco que ya se
+                # blindó el mismo día en gate_bucket_fino.py (LOO+bootstrap).
+                # Aquí basta el bootstrap CI90% absoluto del propio bucket.
+                pnl_d_arr = np.asarray(pnl_d, dtype=np.float64)
+                boots = pnl_d_arr[_rng.integers(0, n_d, size=(2000, n_d))].mean(axis=1)
+                boots.sort()
+                ci_lo90 = float(boots[int(0.05 * len(boots))])
+                ci_hi90 = float(boots[int(0.95 * len(boots))])
+                entrada["ci90_bootstrap_absoluto"] = [round(ci_lo90, 4), round(ci_hi90, 4)]
                 dentro_sorted = sorted(dentro, key=lambda x: x[0])
                 mid = n_d // 2
                 m1, m2 = dentro_sorted[:mid], dentro_sorted[mid:]
@@ -345,9 +362,10 @@ def main():
     for idx, p in enumerate(pendientes):
         if idx not in sobreviven:
             continue
+        ci = p["entrada"]["ci90_bootstrap_absoluto"]
         if p["diff"] < 0:
             veredicto = "malo_confirmado"
-        elif p["entrada"]["pnl_medio"] >= 0:
+        elif p["entrada"]["pnl_medio"] >= 0 and ci is not None and ci[0] > 0:
             veredicto = "bueno_confirmado"
         else:
             # Piso absoluto (08-Ago, petición explícita Javi): "diff" es
