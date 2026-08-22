@@ -1,12 +1,12 @@
 {
-  "timestamp_utc": "2026-08-21T07:08:01+00:00",
+  "timestamp_utc": "2026-08-22T07:08:01+00:00",
   "pipeline": {
-    "n_ciclos_resolve_postmortem": 334,
-    "resolve_postmortem_p50_s": 17.0,
-    "resolve_postmortem_p95_s": 73.0,
-    "resolve_postmortem_max_s": 1996.0,
-    "n_ciclos_live_trade": 4860,
-    "hueco_live_trade_max_s": 273.0
+    "n_ciclos_resolve_postmortem": 224,
+    "resolve_postmortem_p50_s": 13.0,
+    "resolve_postmortem_p95_s": 40.0,
+    "resolve_postmortem_max_s": 77.0,
+    "n_ciclos_live_trade": 2348,
+    "hueco_live_trade_max_s": 255.0
   },
   "procesos_colgados": [],
   "deploy": {
@@ -14,37 +14,36 @@
     "stale": []
   },
   "disco": {
-    "pct_usado": 77.0,
-    "gb_libres": 16.58,
+    "pct_usado": 80.0,
+    "gb_libres": 14.89,
     "git_gb": 0.0,
-    "data_gb": 26.06,
-    "datalogs_gb": 7.25
+    "data_gb": 27.05,
+    "datalogs_gb": 7.74
   },
   "ram": {
     "ram_total_gb": 3.72,
-    "ram_disponible_gb": 1.0,
-    "ram_pct_libre": 26.8
+    "ram_disponible_gb": 0.19,
+    "ram_pct_libre": 5.0
   },
   "integridad_datos": {
     "trades_abiertos_atascados": [],
-    "n_trades_total": 441,
-    "n_results_total": 206577
+    "n_trades_total": 442,
+    "n_results_total": 218643
   },
   "carga_sistema": {
-    "load1": 3.96,
-    "load5": 6.44,
-    "load15": 8.45,
+    "load1": 8.82,
+    "load5": 12.16,
+    "load15": 14.61,
     "nproc": 2,
-    "ratio5": 3.22,
-    "n_procesos_total": 196
+    "ratio5": 6.08,
+    "n_procesos_total": 198
   },
   "git_push": {
-    "commits_sin_pushear": 101
+    "commits_sin_pushear": 0
   },
   "anomalias": [
-    "⏱️ ciclo resolve+postmortem tardó 1996s (umbral 120s)",
-    "🔥 CPU sobresuscrita: load5=6.44 en 2 cores (ratio=3.22x, umbral 3.0x) -- 196 procesos vivos",
-    "📡 git push atascado: 101 commits locales sin llegar a GitHub (umbral 15) -- riesgo de pérdida si el VPS cae"
+    "🧠 RAM disponible 5% libre",
+    "🔥 CPU sobresuscrita: load5=12.16 en 2 cores (ratio=6.08x, umbral 3.0x) -- 198 procesos vivos"
   ],
   "estado": "ANOMALIA"
 }
