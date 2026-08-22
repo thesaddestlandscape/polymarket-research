@@ -73,7 +73,6 @@ from pathlib import Path
 import requests
 
 import live_trade as lt
-import ballenas_firehose_cache as _fc
 from shadow_predict import (
     s_momentum_ibs_5m_ballena,
     s_momentum_ibs_15m_ballena,
@@ -311,7 +310,16 @@ def hilo_activo(activo: str, ventana_min: int, fn_senal, strategy: str) -> None:
 
 def main():
     log(f"momentum_ibs_ballena_executor arrancado (100% observacional, sin envío de orden real)")
-    _fc.iniciar()
+    # 22-Ago: se retiró _fc.iniciar() (conexión websocket RTDS + caché en
+    # memoria propia de ballenas_firehose_cache) -- código muerto desde el
+    # 17-Ago: nada en este fichero llama a trades_de_mercado_firehose(),
+    # solo _ballena_activa_reciente() (en shadow_predict.py), que usa
+    # leer_snapshot_reciente() (lee data/live/ballenas_recientes.json en
+    # disco, escrito por el proceso `polyactivity`, no requiere iniciar()).
+    # Diagnóstico OOM 22-Ago: al fusionarse este script dentro de
+    # observadores_fase0.py (20-Ago), esa conexión+caché sin consumidor
+    # empezó a sumar peso real en un proceso ya con 17 hilos más. Ver
+    # memoria idea_fix_oom_momentum_iniciar_muerto_22ago.
     time.sleep(3)
 
     hilos = []

@@ -66,7 +66,6 @@ from datetime import datetime, timezone
 from pathlib import Path
 
 import live_trade as lt
-import ballenas_firehose_cache as _fc
 from ballenas_executor_5min import libro_publico, resolver_mercado
 
 REPO = Path(__file__).resolve().parent
@@ -235,7 +234,12 @@ def main():
     _vistos = _cargar_vistos()
     log(f"favorito5min_bajalatencia_fase0 arrancado (solo observación, activos={list(ACTIVOS)}, "
         f"{len(_vistos)} mercados ya vistos)")
-    _fc.iniciar()
+    # 22-Ago: se retiró _fc.iniciar() -- código muerto, mismo patrón que
+    # momentum_ibs_ballena_executor.py (ver ese fichero). Este módulo solo
+    # usa libro_publico/resolver_mercado (gamma-api/CLOB) y
+    # lt._consultar_profundidad_libro, ninguno depende de la caché en
+    # memoria de ballenas_firehose_cache. Cazado por /code-review 22-Ago
+    # al revisar el fix gemelo en momentum_ibs_ballena_executor.py.
     time.sleep(3)
 
     hilos = [threading.Thread(target=hilo_activo, args=(activo,), daemon=True, name=activo)
