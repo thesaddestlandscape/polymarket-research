@@ -54336,3 +54336,10 @@ veto_timestamp_utc,market_id,strategy,subtype,direction,motivo_origen,precio_pla
 2026-08-22T05:54:44+00:00,3757653,MOMENTUM_IBS_5M_BALLENA,XRP#5min,BUY_NO,candidato_evaluacion,0.31,1.05,0.0,"[[8.8,0.0,null],[29.8,null,null]]",0,,0.0
 2026-08-22T05:54:43+00:00,3757598,MOMENTUM_IBS_15M_BALLENA,BNB#15min,BUY_NO,candidato_evaluacion,0.08,1.05,0.0,"[[22.0,15.2,0.04],[97.7,null,null]]",1,22.0,15.2
 2026-08-22T05:56:25+00:00,3757698,FAVORITO_CONFIRMADO,DOGE#5min,BUY_YES,candidato_evaluacion,0.57,1.05,0.0,"[[5.4,0.0,0.85],[16.1,0.0,0.91],[46.3,null,null]]",0,,0.0
+2026-08-22T06:02:05+00:00,3757717,FAVORITO_CONFIRMADO,SOL#5min,BUY_NO,candidato_evaluacion,0.72,1.05,0.0,"[[12.2,0.0,0.96]]",0,,0.0
+2026-08-22T06:02:05+00:00,3757712,FAVORITO_CONFIRMADO,XRP#5min,BUY_YES,candidato_evaluacion,0.56,1.05,0.0,"[[10.3,null,null]]",0,,0.0
+2026-08-22T06:03:25+00:00,3757704,GBM_LATE_15M,XRP#15min,BUY_YES,candidato_evaluacion,0.58,1.05,0.0,"[[18.5,138.1,0.56],[30.3,null,null]]",1,18.5,138.1
+2026-08-22T06:03:24+00:00,3757708,GBM_LATE_15M,ETH#15min,BUY_YES,candidato_evaluacion,0.34,1.05,0.0,"[[12.0,0.0,0.39],[55.0,null,null]]",0,,0.0
+2026-08-22T06:03:01+00:00,3757713,FAVORITO_CONFIRMADO,SOL#15min,BUY_NO,candidato_evaluacion,0.57,1.05,0.0,"[[10.1,null,null],[42.6,null,null]]",0,,0.0
+2026-08-22T06:03:00+00:00,3757708,STRUCT_NO_15M,ETH#15min,BUY_NO,candidato_evaluacion,0.535,1.05,0.0,"[[20.9,null,null],[83.6,0.0,0.8]]",0,,0.0
+2026-08-22T06:03:59+00:00,3757716,GBM_LATE_15M,BTC#15min,BUY_NO,candidato_evaluacion,0.525,1.05,0.0,"[[6.3,null,null]]",0,,0.0
