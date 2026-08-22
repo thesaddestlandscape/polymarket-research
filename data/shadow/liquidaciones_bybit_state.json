@@ -1,5 +1,5 @@
 {
- "generado_utc": "2026-08-22T20:25:58+00:00",
+ "generado_utc": "2026-08-22T20:31:40+00:00",
  "fuente": "bybit",
  "BNB": {
   "2min": {
@@ -41,10 +41,10 @@
    "imbalance": null
   },
   "15min": {
-   "usd_long": 466.25,
+   "usd_long": 0.0,
    "usd_short": 0.0,
-   "n": 1,
-   "imbalance": -1.0
+   "n": 0,
+   "imbalance": null
   },
   "60min": {
    "usd_long": 31705.15,
@@ -67,10 +67,10 @@
    "imbalance": null
   },
   "15min": {
-   "usd_long": 30570.13,
+   "usd_long": 0.0,
    "usd_short": 0.0,
-   "n": 8,
-   "imbalance": -1.0
+   "n": 0,
+   "imbalance": null
   },
   "60min": {
    "usd_long": 41408.72,
@@ -93,10 +93,10 @@
    "imbalance": null
   },
   "15min": {
-   "usd_long": 465.51,
+   "usd_long": 0.0,
    "usd_short": 0.0,
-   "n": 1,
-   "imbalance": -1.0
+   "n": 0,
+   "imbalance": null
   },
   "60min": {
    "usd_long": 42640.11,
@@ -119,10 +119,10 @@
    "imbalance": null
   },
   "15min": {
-   "usd_long": 333.37,
-   "usd_short": 565.8,
-   "n": 3,
-   "imbalance": 0.2585
+   "usd_long": 0.0,
+   "usd_short": 0.0,
+   "n": 0,
+   "imbalance": null
   },
   "60min": {
    "usd_long": 7687.32,
@@ -134,35 +134,35 @@
  "XRP": {
   "2min": {
    "usd_long": 0.0,
-   "usd_short": 0.0,
-   "n": 0,
-   "imbalance": null
+   "usd_short": 880.13,
+   "n": 1,
+   "imbalance": 1.0
   },
   "5min": {
    "usd_long": 0.0,
-   "usd_short": 1764.4,
+   "usd_short": 990.21,
    "n": 2,
    "imbalance": 1.0
   },
   "15min": {
-   "usd_long": 127230.32,
-   "usd_short": 1764.4,
-   "n": 14,
-   "imbalance": -0.9726
+   "usd_long": 0.0,
+   "usd_short": 2754.61,
+   "n": 4,
+   "imbalance": 1.0
   },
   "60min": {
    "usd_long": 163940.18,
-   "usd_short": 1987.24,
-   "n": 32,
-   "imbalance": -0.976
+   "usd_short": 2977.45,
+   "n": 34,
+   "imbalance": -0.9643
   }
  },
  "lag_bybit_ws": {
   "ventana_min": 5,
   "n_muestras": 2,
-  "ultimo_lag_s": 0.41,
-  "max_lag_s": 0.41,
-  "media_lag_s": 0.37,
+  "ultimo_lag_s": 0.45,
+  "max_lag_s": 0.45,
+  "media_lag_s": 0.29,
   "umbral_alerta_s": 5.0
  }
 }
