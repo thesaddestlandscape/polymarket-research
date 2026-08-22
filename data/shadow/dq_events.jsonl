@@ -83601,3 +83601,17 @@
 {"ts": "2026-08-22T04:31:59+00:00", "sym": "SOL", "value": 98.55, "reason": "cross_source_warn coinbase=98.5500 vs mediana=98.2000 (0.72%)"}
 {"ts": "2026-08-22T04:31:59+00:00", "sym": "XRP", "value": 1.60325, "reason": "cross_source_warn coinbase=1.6033 vs mediana=1.5966 (0.83%)"}
 {"ts": "2026-08-22T04:33:07+00:00", "sym": "XRP", "value": 1.6, "reason": "cross_source_warn coingecko=1.6000 vs mediana=1.6068 (0.85%)"}
+{"ts": "2026-08-22T04:33:28+00:00", "sym": "DOGE", "value": 1.2017, "reason": "cambio_fuente coingecko->binance"}
+{"ts": "2026-08-22T04:33:28+00:00", "sym": "BNB", "value": 0.1729, "reason": "cambio_fuente coingecko->binance"}
+{"ts": "2026-08-22T04:34:11+00:00", "sym": "XRP", "value": 1.61, "reason": "cross_source_warn coingecko=1.6100 vs mediana=1.6159 (0.74%)"}
+{"ts": "2026-08-22T04:34:38+00:00", "sym": "DOGE", "value": 1.6921, "reason": "cambio_fuente coingecko->binance"}
+{"ts": "2026-08-22T04:34:38+00:00", "sym": "BNB", "value": 0.1253, "reason": "cambio_fuente coingecko->binance"}
+{"ts": "2026-08-22T04:35:17+00:00", "sym": "SOL", "value": 98.97, "reason": "cross_source_warn coingecko=98.9700 vs mediana=99.4100 (0.89%)"}
+{"ts": "2026-08-22T04:35:17+00:00", "sym": "XRP", "value": 1.6384, "reason": "cross_source_warn coinbase=1.6384 vs mediana=1.6292 (1.14%)"}
+{"ts": "2026-08-22T04:35:48+00:00", "sym": "DOGE", "value": 0.756, "reason": "cambio_fuente coingecko->binance"}
+{"ts": "2026-08-22T04:35:48+00:00", "sym": "BNB", "value": 0.0627, "reason": "cambio_fuente coingecko->binance"}
+{"ts": "2026-08-22T04:37:08+00:00", "sym": "DOGE", "value": 0.3662, "reason": "cambio_fuente coingecko->binance"}
+{"ts": "2026-08-22T04:37:08+00:00", "sym": "BNB", "value": 0.0515, "reason": "cambio_fuente coingecko->binance"}
+{"ts": "2026-08-22T04:38:21+00:00", "sym": "DOGE", "value": 0.1728, "reason": "cambio_fuente coingecko->binance"}
+{"ts": "2026-08-22T04:38:21+00:00", "sym": "BNB", "value": 0.1935, "reason": "cambio_fuente coingecko->binance"}
+{"ts": "2026-08-22T04:38:36+00:00", "sym": "SOL", "value": 99.79, "reason": "cross_source_warn coingecko=99.7900 vs mediana=100.0925 (0.61%)"}
