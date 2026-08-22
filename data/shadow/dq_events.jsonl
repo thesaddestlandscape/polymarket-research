@@ -84104,3 +84104,17 @@
 {"ts": "2026-08-22T09:00:13+00:00", "sym": "BNB", "value": 0.1233, "reason": "cambio_fuente coingecko->binance"}
 {"ts": "2026-08-22T09:01:09+00:00", "sym": "DOGE", "value": 0.0307, "reason": "cambio_fuente coingecko->binance"}
 {"ts": "2026-08-22T09:01:09+00:00", "sym": "BNB", "value": 0.0588, "reason": "cambio_fuente coingecko->binance"}
+{"ts": "2026-08-22T09:03:03+00:00", "sym": "XRP", "value": 1.52, "reason": "cross_source_warn coingecko=1.5200 vs mediana=1.5153 (0.62%)"}
+{"ts": "2026-08-22T09:03:13+00:00", "sym": "DOGE", "value": 0.7687, "reason": "cambio_fuente coingecko->binance"}
+{"ts": "2026-08-22T09:03:13+00:00", "sym": "BNB", "value": 0.317, "reason": "cambio_fuente coingecko->binance"}
+{"ts": "2026-08-22T09:04:11+00:00", "sym": "SOL", "value": 93.71, "reason": "cross_source_warn coingecko=93.7100 vs mediana=93.3900 (0.69%)"}
+{"ts": "2026-08-22T09:04:11+00:00", "sym": "XRP", "value": 1.50175, "reason": "cross_source_warn coinbase=1.5017 vs mediana=1.5059 (0.55%)"}
+{"ts": "2026-08-22T09:04:44+00:00", "sym": "DOGE", "value": 0.6929, "reason": "cambio_fuente coingecko->binance"}
+{"ts": "2026-08-22T09:04:44+00:00", "sym": "BNB", "value": 0.5083, "reason": "cambio_fuente coingecko->binance"}
+{"ts": "2026-08-22T09:05:31+00:00", "sym": "DOGE", "value": 0.0265, "reason": "cambio_fuente coingecko->binance"}
+{"ts": "2026-08-22T09:05:31+00:00", "sym": "BNB", "value": 0.1899, "reason": "cambio_fuente coingecko->binance"}
+{"ts": "2026-08-22T09:06:22+00:00", "sym": "XRP", "value": 1.5, "reason": "cross_source_warn coingecko=1.5000 vs mediana=1.5056 (0.75%)"}
+{"ts": "2026-08-22T09:07:02+00:00", "sym": "DOGE", "value": 0.1547, "reason": "cambio_fuente coingecko->binance"}
+{"ts": "2026-08-22T09:07:02+00:00", "sym": "BNB", "value": 0.0389, "reason": "cambio_fuente coingecko->binance"}
+{"ts": "2026-08-22T09:07:43+00:00", "sym": "DOGE", "value": 0.0662, "reason": "cambio_fuente coingecko->binance"}
+{"ts": "2026-08-22T09:07:43+00:00", "sym": "BNB", "value": 0.0043, "reason": "cambio_fuente coingecko->binance"}
