@@ -189,6 +189,7 @@ async def _correr_una_conexion() -> None:
         ping_task = asyncio.create_task(_mantener_ping(ws))
         n_total = n_guardados = n_snapshots = 0
         ultimo_snapshot = 0.0
+        ultima_purga = time.time()
         try:
             while True:
                 raw = await asyncio.wait_for(ws.recv(), timeout=RECV_TIMEOUT_S)
@@ -201,6 +202,26 @@ async def _correr_una_conexion() -> None:
                 payload = msg.get("payload")
                 if not isinstance(payload, dict) or "proxyWallet" not in payload:
                     continue
+                ahora = time.time()
+                if ahora - ultima_purga > 60:
+                    # 22-Ago (fix OOM): esta conexión alimenta _bfc.ingerir_trade()
+                    # pero es un PROCESO SEPARADO de _correr_una_conexion() de
+                    # ballenas_firehose_cache.py (que sí purga cada 60s) -- sin
+                    # esta llamada, _trades_por_mercado de ESTE proceso nunca
+                    # respeta VENTANA_RETENCION_S (65min) y crece sin límite.
+                    # Encontrado con ballenas_recientes.json en 101MB/890975
+                    # trades/2187 mercados (mercados con >4000 trades, muy por
+                    # encima de lo que cabe en 65min reales) -- root cause del
+                    # incidente OOM del 22-Ago (ver memoria
+                    # project_oom_fix_firehose_muerto_22ago). Colocado ANTES
+                    # del filtro tracked/whale (/code-review 22-Ago: puesto
+                    # originalmente después del `continue` de la línea de abajo
+                    # solo se ejecutaba en mensajes relevantes, dejando la
+                    # purga sin correr en rachas de trades no-trackeados/no-
+                    # whale, igual que el patrón interno de referencia que
+                    # purga en CADA mensaje recibido, no solo en los guardados.
+                    _bfc.purgar_viejos()
+                    ultima_purga = ahora
                 n_total += 1
                 try:
                     price = float(payload.get("price", 0) or 0)
@@ -245,7 +266,6 @@ async def _correr_una_conexion() -> None:
                         "transaction_hash": fila["transaction_hash"],
                         "_recibido_ts": time.time(),
                     })
-                ahora = time.time()
                 if ahora - ultimo_snapshot >= SNAPSHOT_ESCRITURA_INTERVALO_S:
                     try:
                         n_merc, n_tr, n_bytes = _bfc.escribir_snapshot()

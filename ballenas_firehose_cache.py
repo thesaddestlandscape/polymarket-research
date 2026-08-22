@@ -117,6 +117,16 @@ def _purgar_viejos() -> None:
             _tx_vistos_por_mercado.pop(cid, None)
 
 
+def purgar_viejos() -> None:
+    """Wrapper público de `_purgar_viejos()` (22-Ago, fix OOM) -- para que
+    procesos externos que alimentan este cache vía `ingerir_trade()` desde
+    su PROPIA conexión (p.ej. `fetch_polymarket_activity_ws.py`, que no
+    pasa por `_correr_una_conexion()` de este módulo y por tanto no
+    heredaba su purga interna cada 60s) puedan aplicar la misma ventana de
+    retención sin depender de un nombre con guion bajo."""
+    _purgar_viejos()
+
+
 def ingerir_trade(activo: str, marco: str, condition_id: str, trade: dict) -> bool:
     """Guarda un trade YA PARSEADO (side/price/outcome/proxyWallet/
     transaction_hash) en el cache en memoria, si activo/marco están
