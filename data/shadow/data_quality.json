@@ -1,66 +1,79 @@
 {
-  "timestamp_utc": "2026-08-22T01:47:52+00:00",
+  "timestamp_utc": "2026-08-22T01:54:29+00:00",
   "estado_global": "DEGRADED",
   "alertas": [
-    "rechazos_1h:7 (rango=0, spike=0)"
+    "rechazos_1h:10 (rango=0, spike=0)",
+    "XRP:divergencia_0.55%"
   ],
   "rechazos_1h": {
     "rango": 0,
     "spike": 0,
-    "total": 7,
+    "total": 10,
     "cambio_fuente": 104,
     "por_sym": {
-      "XRP": 7
+      "XRP": 10
     }
   },
   "assets": {
     "BTC": {
       "estado": "OK",
-      "n": 2485,
-      "age_seconds": 8.3,
-      "ultimo_precio": 77943.285,
+      "n": 2500,
+      "age_seconds": 7.1,
+      "ultimo_precio": 77857.29,
       "gaps": [],
       "alertas": []
     },
     "ETH": {
       "estado": "OK",
-      "n": 2485,
-      "age_seconds": 8.3,
-      "ultimo_precio": 2516.63,
+      "n": 2500,
+      "age_seconds": 7.1,
+      "ultimo_precio": 2513.785,
       "gaps": [],
       "alertas": []
     },
     "SOL": {
       "estado": "OK",
-      "n": 2485,
-      "age_seconds": 8.3,
-      "ultimo_precio": 93.87,
+      "n": 2500,
+      "age_seconds": 7.1,
+      "ultimo_precio": 93.69,
       "gaps": [],
       "alertas": []
     },
     "XRP": {
       "estado": "OK",
-      "n": 2485,
-      "age_seconds": 8.3,
-      "ultimo_precio": 1.5101,
+      "n": 2500,
+      "age_seconds": 7.1,
+      "ultimo_precio": 1.485,
       "gaps": [],
       "alertas": []
     }
   },
   "cross_source": {
-    "timestamp_utc": "2026-08-22T01:46:54+00:00",
+    "timestamp_utc": "2026-08-22T01:52:24+00:00",
     "fuentes_activas": [
       "binance",
       "coinbase",
       "kraken"
     ],
     "consenso": {
-      "BTC": 77940.51,
-      "ETH": 2516.63,
-      "SOL": 93.78,
-      "XRP": 1.5011
+      "BTC": 77855.78,
+      "ETH": 2513.59,
+      "SOL": 93.54,
+      "XRP": 1.4834
     },
-    "alertas": [],
+    "alertas": [
+      {
+        "sym": "XRP",
+        "max_div_pct": 0.545,
+        "fuentes": {
+          "binance": 1.4834,
+          "coinbase": 1.4898,
+          "kraken": 1.48172
+        },
+        "consenso": 1.4834,
+        "accion": "ALERTA"
+      }
+    ],
     "bloqueados": []
   }
 }
