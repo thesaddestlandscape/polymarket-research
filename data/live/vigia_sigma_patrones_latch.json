@@ -292,6 +292,7 @@
   "PRICE_TARGET_GBM_FADE#ETH#atexpiry|filtro|sigma_h|gt|BUY_YES",
   "PRICE_TARGET_GBM_FADE#ETH#atexpiry|filtro|sigma_h|lt|BUY_NO",
   "PRICE_TARGET_GBM_FADE|filtro|sigma_h|gt|BUY_NO",
+  "PRICE_TARGET_GBM_FADE|filtro|sigma_h|lt|BUY_NO",
   "PRICE_TARGET_GBM_FADE|filtro|sigma_h|lt|BUY_YES",
   "PRICE_TARGET_GBM|filtro|sigma_h|gt|BUY_NO",
   "PRICE_TARGET_GBM|filtro|sigma_h|lt|BUY_YES",
