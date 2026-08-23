@@ -229,5 +229,14 @@
   },
   "cementerio:LIQUIDACIONES_5M#DOGE#5min": {
     "avisado": true
+  },
+  "cementerio:STREAK_FADE_60M#ETH#60min": {
+    "avisado": true
+  },
+  "cementerio:STREAK_FADE_60M#60min": {
+    "avisado": true
+  },
+  "cementerio:UPDOWN_GBM#XRP#240min": {
+    "avisado": true
   }
 }
