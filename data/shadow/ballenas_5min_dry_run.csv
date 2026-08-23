@@ -11562,3 +11562,5 @@ timestamp_utc,activo,market_id,condition_id,end_date,py,edge,concentracion,n_bal
 2026-08-23T14:46:19+00:00,XRP,3779437,0xddc4cc881918399b8c047e3bf0b5e2f10cbc197739f52fe3a5447b13c4a6b7e3,2026-08-23T14:50:00Z,0.85,-0.0472,1.0,6,222.8,,,,23,True,banda_prematura py=0.850 restante=3.71>3.30
 2026-08-23T14:47:16+00:00,BNB,3779428,0xe64a2c826953a611f76a256b0f4d4388870f43acdbad843f513e70353de44df8,2026-08-23T14:50:00Z,0.88,-0.0564,1.0,5,165.1,,,,14,False,fuera_de_bandas_significativas
 2026-08-23T14:50:37+00:00,ETH,3779455,0x3c474efc148e2bd4f53eeda769ea1352ba8cd052b8ef3880a977de7e558cd977,2026-08-23T14:55:00Z,0.63,-0.0015,1.0,8,265.5,,,,36,False,banda_ok py=0.630 rest_lo=2.08 rest_hi=4.53
+2026-08-23T14:52:21+00:00,XRP,3779456,0x6cea8a00135ca5188bedea916a8ca8ee240cc2af7fdbb7fae694ac7ed8c4d70a,2026-08-23T14:55:00Z,0.7,0.1028,1.0,3,160.8,,,,67,False,fuera_de_bandas_significativas
+2026-08-23T14:53:42+00:00,BNB,3779458,0x22e4329f9f5adac1829d41468b33ee2eeebbd82aabe7d47a3ba9f5f67ed5e90d,2026-08-23T14:55:00Z,0.89,-0.0664,1.0,3,78.1,,,,49,False,fuera_de_bandas_significativas
