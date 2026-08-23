@@ -13,6 +13,7 @@
   "ibs_20min|gt|0.882|BUY_NO",
   "ibs_20min|gt|0.8848|BUY_NO",
   "ibs_20min|gt|0.8879|BUY_NO",
+  "ibs_20min|gt|0.8939|BUY_NO",
   "libro_spread|gt|0.01|BUY_NO",
   "sigma_ewma_delta_pct|lt|4.947|BUY_YES",
   "sigma_ewma_delta_pct|lt|5.295|BUY_YES",
@@ -30,6 +31,7 @@
   "sigma_h|gt|0.0042|BUY_NO",
   "sigma_h|gt|0.0045|BUY_NO",
   "sigma_h|gt|0.0046|BUY_NO",
+  "sigma_h|gt|0.0047|BUY_NO",
   "sigma_h|gt|0.004|BUY_NO",
   "sigma_h|gt|0.0056|BUY_NO"
  ],
@@ -45,6 +47,7 @@
   "sigma_ewma_delta_pct|gt|3.011|BUY_NO",
   "sigma_ewma_delta_pct|gt|3.018|BUY_NO",
   "sigma_ewma_delta_pct|gt|3.026|BUY_NO",
+  "sigma_ewma_delta_pct|gt|3.029|BUY_NO",
   "sigma_ewma_delta_pct|gt|4.603|BUY_NO",
   "sigma_ewma_delta_pct|gt|4.604|BUY_NO",
   "sigma_ewma_delta_pct|gt|4.612|BUY_NO",
