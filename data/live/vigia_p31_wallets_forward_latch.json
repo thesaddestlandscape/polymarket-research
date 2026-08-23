@@ -14,12 +14,13 @@
  "ETH#5m#fade": "refutado_forward",
  "XRP#15m#fade": "refutado_forward",
  "DOGE#15m#follow": "refutado_forward",
- "SOL#60m#fade": "confirmado_forward_fragil",
+ "SOL#60m#fade": "confirmado_forward",
  "SOL#60m#follow": "refutado_forward",
  "ETH#weekly#follow": "confirmado_forward_fragil",
  "BTC#weekly#follow": "confirmado_forward_fragil",
  "BTC#240m#fade": "refutado_forward",
  "SOL#5m#follow": "confirmado_forward_fragil",
  "BTC#weekly#fade": "refutado_forward",
- "ETH#15m#follow": "refutado_forward"
+ "ETH#15m#follow": "refutado_forward",
+ "ETH#60m#fade": "confirmado_forward"
 }
