@@ -2653,7 +2653,7 @@
         }
       },
       "banda_no_confirmada": {
-        "conteo": 49688,
+        "conteo": 49724,
         "mercados": {
           "0x6f4fb57b0bd0e87ccb66c70d20636035e8e5ca4b5590908e9c8cbc81f6c14207": 51,
           "0x44f3cef4951a8eda8c9b45df8b69bf128b53879f117dbf4b5fc345e4a1fb78fa": 54,
@@ -3522,12 +3522,12 @@
           "0x608c0cc531d090973ae60bb76077c1ad4f98db5dd860800696c91ac9d6e6563f": 121,
           "0xd73af194ca803e9f7222b430e0a8cb233ab9eb02c7818cee449603612d229fba": 117,
           "0xef66517fd7c76efcd6c74e31c1deb31434a4d5cbd2c9642af6a34dd761bda2b6": 114,
-          "0x7ced96e50680045b6a8a796ddc6d55ce5537090a6a47a9bf8f825e000039220e": 83,
-          "0xd3a97c9c71e487631c8b2979d4f649129e533a05b2dc19a514d8b1401a0e9ac3": 69,
-          "0x66f41137f87c343d617c7b1413f6a5288ab7a0bbb93781a3dc70ea6acdb5754d": 55,
-          "0x8eb70e4bed7243dac96ed302512626ad3aa5b1ffdd1783e2a3e3baff7a750ee2": 27,
-          "0xec5645363d4437e43cf1501fb637c1c1178b75b752cd1ecde9253415ea22821e": 19,
-          "0x1e09cb1f047e01c77d1e7bafaa75e7bc9ecc65bded0b5ab7e6e388b64b07bcc0": 1
+          "0x7ced96e50680045b6a8a796ddc6d55ce5537090a6a47a9bf8f825e000039220e": 89,
+          "0xd3a97c9c71e487631c8b2979d4f649129e533a05b2dc19a514d8b1401a0e9ac3": 75,
+          "0x66f41137f87c343d617c7b1413f6a5288ab7a0bbb93781a3dc70ea6acdb5754d": 61,
+          "0x8eb70e4bed7243dac96ed302512626ad3aa5b1ffdd1783e2a3e3baff7a750ee2": 33,
+          "0xec5645363d4437e43cf1501fb637c1c1178b75b752cd1ecde9253415ea22821e": 25,
+          "0x1e09cb1f047e01c77d1e7bafaa75e7bc9ecc65bded0b5ab7e6e388b64b07bcc0": 7
         }
       },
       "error_api": {
@@ -6853,7 +6853,7 @@
         }
       },
       "banda_no_confirmada": {
-        "conteo": 53208,
+        "conteo": 53250,
         "mercados": {
           "0xf6ad48a0d23cd91b9a9368d070dd43eb4db884165273398e9838c628c8690747": 3,
           "0x5822d9be8248fc11c5b09a2533e0a6e1c4a76c841dcf85e810dfe74ff456056e": 1,
@@ -7429,13 +7429,13 @@
           "0xdddefde2e1f6365eea21982ee18133e4cb62b296530768923e00c76b33852dee": 144,
           "0xb6d6f37ccc94ef572af297f192bd01f144bb1ab7cf02899480361e896031038a": 147,
           "0xd8b233c20852c7c3f984ce305ba84041c93eee4dc436e0caa0752ae899c94092": 138,
-          "0x417b55fcb43a966610105c58bfa104880c969fa6e788ce45920cd1f1c4b66e37": 121,
-          "0x3bd6afb059b6c52180c121fd0a7d25a58955bbc414918f2d664fbc4cccc90626": 98,
-          "0xb95110a6cb88d747fe154c77eeba24692dd2eb5747715d77425da173caf486b4": 83,
-          "0x8236672b7330c32ee0eb380b14e89827dd25a21370b30ce6ab127bab1377cd0d": 55,
-          "0x4f736c088f117d6996cbc0cd4a95a8e660222e579186a75417c87fcd9ac9cbad": 47,
-          "0x16a42ba3cb2e30587f029d580c63f46e738b9a7e8a67f34852d0dc0d1c26d1f5": 27,
-          "0x41c3c5da97dda4187d1fcc825784ef2f01c655159ddce21f4e780b3e233c0719": 13
+          "0x417b55fcb43a966610105c58bfa104880c969fa6e788ce45920cd1f1c4b66e37": 127,
+          "0x3bd6afb059b6c52180c121fd0a7d25a58955bbc414918f2d664fbc4cccc90626": 104,
+          "0xb95110a6cb88d747fe154c77eeba24692dd2eb5747715d77425da173caf486b4": 89,
+          "0x8236672b7330c32ee0eb380b14e89827dd25a21370b30ce6ab127bab1377cd0d": 61,
+          "0x4f736c088f117d6996cbc0cd4a95a8e660222e579186a75417c87fcd9ac9cbad": 53,
+          "0x16a42ba3cb2e30587f029d580c63f46e738b9a7e8a67f34852d0dc0d1c26d1f5": 33,
+          "0x41c3c5da97dda4187d1fcc825784ef2f01c655159ddce21f4e780b3e233c0719": 19
         }
       },
       "error_api": {
@@ -8149,7 +8149,7 @@
   "DOGE#BUY_NO": {
     "motivos": {
       "banda_no_confirmada": {
-        "conteo": 57744,
+        "conteo": 57768,
         "mercados": {
           "0xc132ec92b406eb13da1cb814396e60b66f819f1be1c0d8394317d53e5b2c08b1": 6,
           "0xd0672cde7ddef0a3136bf4e9209e193940596ab831742079687f92fea3d8ca1b": 10,
@@ -10258,10 +10258,10 @@
           "0x1a1097195ee10f503fbddd60ed5ce3dda20dcfe380a11e03f5a97fae82f986a4": 67,
           "0xe1e2f827b0fe307a70635064de50d7e85c46780a2950e55b8db5d9f8dabe7fac": 62,
           "0xaad7099a3a95819bbb32d5b1e57b3a3be9cb980c7aceac62b64b45c868e0543a": 60,
-          "0xdde8ab78e0eb2d2be02bc6569e65bc86fbba60dd8ca1675393df191b59d6b79e": 51,
-          "0x542ec2ec88819c0be1231039cf7446626284316ff8bc4c094f2dbf9b3e5f36be": 33,
-          "0xc61ce8921e7a9d03c5e03a0ec1857948b454bd4eb1e26a38a4ead24599aae1c7": 19,
-          "0xd39b956e7a4498652081f1847a68e8d54953cfcda3c9bec7403de8c047ba16c9": 3
+          "0xdde8ab78e0eb2d2be02bc6569e65bc86fbba60dd8ca1675393df191b59d6b79e": 57,
+          "0x542ec2ec88819c0be1231039cf7446626284316ff8bc4c094f2dbf9b3e5f36be": 39,
+          "0xc61ce8921e7a9d03c5e03a0ec1857948b454bd4eb1e26a38a4ead24599aae1c7": 25,
+          "0xd39b956e7a4498652081f1847a68e8d54953cfcda3c9bec7403de8c047ba16c9": 9
         }
       },
       "pocos_trades_en_banda": {
@@ -11927,7 +11927,7 @@
         }
       },
       "banda_no_confirmada": {
-        "conteo": 34389,
+        "conteo": 34413,
         "mercados": {
           "0x56401c8ec5ff84c021d4d27a719d3040826e0d7fdf6f69dd4bda1282142a846e": 7,
           "0x0723882704c5a268fa6ef74c36a8dec35216039cf327027205d497a3613c7b57": 6,
@@ -13462,10 +13462,10 @@
           "0x4d7790fcad28218b9e62efa8d67824745c8928bc018ce789f80369b55afb45f9": 67,
           "0x0445daab546118cea3e016498b544a2e9d9314b850d65fdbdd79aecf8b5abe8d": 62,
           "0x07307c71432ef86bf45ecc8eda2e69f240c5196c5030f734e4c7ee78303459be": 60,
-          "0xaf8dfef194dc8503ba95488ee7cdb912f9c4c9e84a599f0d88fa6485bcd669ae": 51,
-          "0x6efd1a4417dad0db0cfad7377a66c03f8c3c31e1de05d3eed2f600e030f31b9a": 33,
-          "0x745c6e37c9bb747900944a098cbe0b101bb7e1ef298eea5cd428d4f5785ddad9": 19,
-          "0x56c8310f807f8a8714f9c8f26466d7d251153202affa66ebc0c19f60c4273fcd": 3
+          "0xaf8dfef194dc8503ba95488ee7cdb912f9c4c9e84a599f0d88fa6485bcd669ae": 57,
+          "0x6efd1a4417dad0db0cfad7377a66c03f8c3c31e1de05d3eed2f600e030f31b9a": 39,
+          "0x745c6e37c9bb747900944a098cbe0b101bb7e1ef298eea5cd428d4f5785ddad9": 25,
+          "0x56c8310f807f8a8714f9c8f26466d7d251153202affa66ebc0c19f60c4273fcd": 9
         }
       },
       "error_api": {
