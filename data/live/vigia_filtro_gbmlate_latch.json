@@ -32,10 +32,12 @@
   "sigma_h|gt|0.0045|BUY_NO",
   "sigma_h|gt|0.0046|BUY_NO",
   "sigma_h|gt|0.0047|BUY_NO",
+  "sigma_h|gt|0.0048|BUY_NO",
   "sigma_h|gt|0.004|BUY_NO",
   "sigma_h|gt|0.0056|BUY_NO"
  ],
  "GBM_LATE_15M#SOL#15min": [
+  "ibs_20min|gt|0.75|BUY_NO",
   "sigma_ewma_delta_pct|gt|2.824|BUY_NO",
   "sigma_ewma_delta_pct|gt|2.831|BUY_NO",
   "sigma_ewma_delta_pct|gt|2.865|BUY_NO",
@@ -148,6 +150,7 @@
   "sigma_ewma_delta_pct|gt|8.124|BUY_NO",
   "sigma_ewma_delta_pct|gt|8.15|BUY_NO",
   "sigma_ewma_delta_pct|gt|8.17|BUY_NO",
-  "sigma_ewma_delta_pct|gt|8.184|BUY_NO"
+  "sigma_ewma_delta_pct|gt|8.184|BUY_NO",
+  "sigma_h|gt|0.0107|BUY_NO"
  ]
 }
