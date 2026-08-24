@@ -89,6 +89,7 @@ import vigia_causal_vs_fillable
 import vigia_ballenas_cobertura
 import shadow_pnl_fiel
 import vigia_micro_bucket_kill_switch
+import vigia_reabrir_overrides_micro_bucket
 import vigia_gate_bucket_wallet_mirror
 import wallet_mirror_tracker as _wmt
 from wallet_mirror_sniper import OUT as _WMS_OUT, COLUMNS as _WMS_COLUMNS
@@ -154,6 +155,16 @@ TAREAS = [
     ("vigia_ballenas_cobertura", vigia_ballenas_cobertura.main, "vigia_ballenas_cobertura.log", 1800),
     ("shadow_pnl_fiel", shadow_pnl_fiel.main, "shadow_pnl_fiel.log", 1800),
     ("vigia_micro_bucket_kill_switch", vigia_micro_bucket_kill_switch.main, "vigia_micro_bucket_kill_switch.log", 1800),
+    # 24-Ago (petición explícita Javi: "es tu trabajo revisarlo, si una se
+    # bloquea, en el próximo ciclo la revisas y si está OK la desbloqueas"):
+    # el kill switch de arriba bloquea un bucket PARA SIEMPRE hasta que
+    # alguien borre el override a mano -- este vigía es la mitad que
+    # faltaba, revisa cada override automático contra dinero real reciente
+    # + el gate fresco y lo reabre solo si ambas señales lo confirman. Va
+    # DESPUÉS del kill switch en la lista (incluso con el mismo intervalo,
+    # el orden de ejecución del scheduler es el orden de esta lista) para
+    # nunca revisar un override en el mismo ciclo en que se acaba de crear.
+    ("vigia_reabrir_overrides_micro_bucket", vigia_reabrir_overrides_micro_bucket.main, "vigia_reabrir_overrides_micro_bucket.log", 1800),
     ("vigia_gate_bucket_wallet_mirror", vigia_gate_bucket_wallet_mirror.main, "vigia_gate_bucket_wallet_mirror.log", 3600),
     # 20-Ago: 2 más, cadencia EXACTA de sus crons retirados (*/20 * * * * = 1200s)
     ("smart_money_tracker", smart_money_tracker.main, "smart_money.log", 1200),

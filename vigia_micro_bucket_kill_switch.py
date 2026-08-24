@@ -51,19 +51,45 @@ sys.path.insert(0, str(REPO))
 import gate_bucket_propio as gbp
 
 TRADES = REPO / "data/live/trades.csv"
+CONFIG_LIVE = REPO / "data/live/config_live.json"
 OVERRIDE_PATH = gbp.OVERRIDE_PATH
 LATCH = REPO / "data/live/vigia_micro_bucket_kill_switch_latch.json"
 STEP = 0.05
 N_MIN_ALERTA = 3
 
-# Tuplas live con veto de micro-bucket activo -- ampliar aquí cuando se
-# active el mecanismo en una tupla nueva (mismo criterio que CLAUDE.md,
-# "Veto de micro-bucket de precio"). (strategy, subtype, direction).
-TUPLAS_VIGILADAS = [
-    ("BALLENAS_TARDIAS", "ETH#5min", "BUY_YES"),
-    ("FAVORITO_CONFIRMADO", "BTC#60min", "BUY_NO"),
-    ("FAVORITO_CONFIRMADO_15MIN_ALTACONVICCION", "BTC#15min", "BUY_YES"),
-]
+
+def cargar_tuplas_vigiladas() -> list[tuple[str, str, str]]:
+    """24-Ago (hallazgo real, barrido de salud a petición de Javi: "no hay
+    más margen para cagadas"): esta lista era ESTÁTICA desde el 05-Ago --
+    de las 10 tuplas en pares_permitidos_live hoy, solo cubría 3. Las 6
+    tuplas WALLET_MIRROR (dinero real desde 10/11/12-Ago) y
+    BALLENAS_CONFIRMADAS_15M#ETH#15min (dinero real desde 20-Ago) llevaban
+    semanas sin ningún backstop de kill-switch -- si su gate confirmara un
+    bucket malo por un fallo metodológico (el mismo tipo de incidente que
+    motivó crear este vigía el 05-Ago), nada lo habría detectado.
+
+    Ahora se auto-descubre desde config_live.json::pares_permitidos_live,
+    mismo patrón que cargar_tuplas_live() en analisis_gate_bucket_propio_
+    28jul.py -- nunca vuelve a quedar desactualizada sola. Excluye
+    WALLET_MIRROR a propósito: su veto vive en wallet_mirror_gate_bucket.py
+    (evaluar(tipo, activo, marco, ask, jugada_grande), firma DISTINTA a
+    gate_bucket_propio.evaluar(tupla_str, py)) y trades.csv no guarda
+    jugada_grande por trade -- necesita su propio kill-switch con un join
+    contra wallet_mirror_executor_dryrun.csv para recuperar ese dato, no
+    algo para improvisar aquí. Ver idea_kill_switch_wallet_mirror_pendiente_
+    24ago en memoria -- pendiente, no resuelto por esta fix."""
+    try:
+        pares = json.loads(CONFIG_LIVE.read_text(encoding="utf-8")).get("pares_permitidos_live", [])
+    except Exception:
+        return []
+    out = []
+    for t in pares:
+        partes = t.split("#")
+        if len(partes) != 4 or partes[0] == "WALLET_MIRROR":
+            continue
+        strategy, activo, marco, decision = partes
+        out.append((strategy, f"{activo}#{marco}", decision))
+    return out
 
 
 def _bucket(py: float) -> float:
@@ -83,6 +109,8 @@ def _py_real(direction: str, entry_price: float) -> float:
 
 def main() -> int:
     from shadow_digest import enviar_telegram
+
+    TUPLAS_VIGILADAS = cargar_tuplas_vigiladas()
 
     try:
         vistos = json.loads(LATCH.read_text()) if LATCH.exists() else {}
