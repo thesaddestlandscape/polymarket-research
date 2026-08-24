@@ -89,7 +89,12 @@ DIR_SHADOW = REPO / "data" / "shadow"
 CONFIG_LIVE = REPO / "data" / "live" / "config_live.json"
 OUT = DIR_SHADOW / "resolution_sniper_naive_executor_dryrun.csv"
 
-DRY_RUN = True  # guardián #1 -- nunca cambiar sin los 4 pasos del docstring
+DRY_RUN = False  # 25-Ago: activado con aprobación explícita de Javi tras revisión manual
+# completa (sin /code-review, por presupuesto de tokens) -- guardianes #2 (whitelist real)
+# y #3 (gate_bucket fail-closed, ahora con recheck post-requote correcto, ver
+# idea_wallet_mirror_recheck_postrequote_fuente_equivocada_25ago) siguen en pie. Restringido
+# a los 6 combos 5min confirmados (COMBOS_CONFIRMADOS) -- 15min/60min NUNCA entran aquí
+# hasta que crucen su propio gate.
 
 # Los combos que se MIDEN (fillability post-latencia, este script). Solo
 # 5min tiene hoy gate riguroso + profundidad real confirmada (19-Ago).
