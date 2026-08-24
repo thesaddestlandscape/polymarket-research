@@ -38,6 +38,7 @@
   "sigma_h|gt|0.004|BUY_NO",
   "sigma_h|gt|0.0056|BUY_NO",
   "sigma_h|gt|0.0061|BUY_NO",
+  "sigma_h|gt|0.0062|BUY_NO",
   "sigma_h|gt|0.01|BUY_YES"
  ],
  "GBM_LATE_15M#SOL#15min": [
@@ -171,6 +172,7 @@
   "sigma_h|gt|0.0115|BUY_NO",
   "sigma_h|gt|0.0119|BUY_NO",
   "sigma_h|gt|0.0121|BUY_NO",
-  "sigma_h|gt|0.0123|BUY_NO"
+  "sigma_h|gt|0.0123|BUY_NO",
+  "sigma_h|gt|0.0235|BUY_YES"
  ]
 }
