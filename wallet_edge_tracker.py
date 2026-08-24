@@ -65,6 +65,7 @@ Output: data/shadow/wallet_edge_score_por_activo_marco.json (desagregado
 """
 import csv
 import json
+import math
 from collections import defaultdict
 from datetime import datetime, timezone
 from pathlib import Path
@@ -82,6 +83,34 @@ OUT_POR_ACTIVO_MARCO = DIR_SHADOW / "wallet_edge_score_por_activo_marco.json"
 N_MIN = 15          # mismo suelo de rigor que el resto del proyecto
 N_SHUFFLE = 2000
 FDR = 0.10           # mismo FDR que shadow_postmortem/analisis_shuffle_patrones_causales
+
+# 24-Ago (hallazgo real, petición Javi "más mecanismos para eliminar el
+# payout inverso"): edge_pp=(hit-precio_medio)*100 y pnl_proxy son EV
+# LINEAL -- una wallet puede tener ambos positivos (parece rentable) y aun
+# así tener crecimiento Kelly NEGATIVO si su precio_medio está en zona
+# "favorito ya confirmado" (hit alto, payout pequeño, pérdida rara pero
+# casi total) -- exactamente el mismo patrón de payout inverso ya conocido
+# en FAVORITO_CONFIRMADO#*#BUY_NO (CLAUDE.md), esta vez escondido en el
+# criterio de SELECCIÓN de wallets de WALLET_MIRROR, no en una tupla
+# propia. Verificado con datos reales (24-Ago): de 245 wallets que hoy
+# pasan sig_bhfdr+n>=30+edge_pp>0, 20 (8.2%) tienen g(f=10%)<0 -- 10 de
+# ellas en BTC (el único activo con tuplas WALLET_MIRROR live). Mismas
+# constantes que analisis_log_growth.py (el gate ya usado para tuplas
+# propias) para que "payout inverso" signifique lo mismo en todo el
+# proyecto, no dos criterios distintos con el mismo nombre.
+_SLIPPAGE_KELLY = 0.02
+_F_KELLY = 0.10
+
+
+def _g_kelly(hit: float, precio_medio: float, f: float = _F_KELLY) -> float:
+    """Crecimiento logarítmico esperado de una wallet a la fracción f,
+    usando su propio (hit, precio_medio) agregado -- misma fórmula exacta
+    que analisis_log_growth.py (retorno de una apuesta binaria no depende
+    del stake real, así que hit+precio_medio agregados bastan)."""
+    p = min(0.99, max(0.01, precio_medio))
+    r_win = (1 - p) / p - _SLIPPAGE_KELLY
+    r_lose = -1 - _SLIPPAGE_KELLY
+    return hit * math.log(1 + f * r_win) + (1 - hit) * math.log(1 + f * r_lose)
 
 # 11-Ago: ballenas_timing_history.csv arranca 12-Jun, muy anterior al cambio
 # de resolución Chainlink snapshot->TWAP (07-Ago). Este script NUNCA recibió
@@ -182,6 +211,7 @@ def _filas_con_significancia(grupos, ahora, etiqueta):
                        "precio_medio": round(precio_medio, 4),
                        "edge_pp": round((hit - precio_medio) * 100, 3),
                        "pnl_proxy": round(d["pnl_proxy"], 3),
+                       "g_kelly": round(_g_kelly(hit, precio_medio), 6),
                        "p_shuffle": p,
                        "size_mediana": round(size_mediana, 2) if size_mediana else None,
                        "n_con_size": len(sizes)})

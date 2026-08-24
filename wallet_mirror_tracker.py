@@ -216,15 +216,26 @@ def cargar_wallets_validadas() -> dict:
         # lado más de la mitad de las veces, no solo mal EV) -- las
         # excluidas (edge_pp<0 pero hit>=50%) se descartan por ahora, sin
         # estrategia validada para ese caso todavía.
-        if v["edge_pp"] > 0:
+        #
+        # 24-Ago (mismo mecanismo de fondo, hallazgo real): edge_pp es EV
+        # LINEAL -- puede ser positivo con crecimiento Kelly (g_kelly)
+        # NEGATIVO si la wallet entra en zona "favorito ya confirmado"
+        # (hit alto, payout pequeño, pérdida rara pero casi total). 20/245
+        # wallets que pasaban el filtro solo con edge_pp tenían g_kelly<0
+        # (10 de ellas en BTC, el único activo con tuplas WALLET_MIRROR
+        # live) -- ver wallet_edge_tracker.py::_g_kelly. .get() con default
+        # 0 (fail-closed): un JSON viejo sin el campo nuevo excluye la
+        # wallet en vez de admitirla sin comprobar.
+        if v["edge_pp"] > 0 and v.get("g_kelly", 0) > 0:
             tipo = "SEGUIR"
         elif v["hit"] < 0.5:
             tipo = "FADE"
         else:
-            continue  # edge_pp<0 pero hit>=50% -- payout asimétrico, no dirección; sin mirror validado
+            continue  # edge_pp<=0 (o payout Kelly negativo) y hit>=50% -- payout asimétrico, no dirección; sin mirror validado
         out[(w, v["activo"], marco_activity)] = {
             "tipo": tipo, "edge_pp": v["edge_pp"], "n": v["n"],
             "size_mediana": v.get("size_mediana"), "hit": v.get("hit"),
+            "g_kelly": v.get("g_kelly"),
         }
     # NO filtrar por rendimiento reciente aquí -- esta función también
     # alimenta la detección/grabación continua (wallet_mirror_sniper.py),
