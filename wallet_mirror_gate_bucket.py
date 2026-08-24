@@ -28,10 +28,34 @@ DATA_PATH = _REPO / "data/shadow/wallet_mirror_gate_bucket.json"
 # con gate_bucket_propio_override.json -- el formato de clave es distinto,
 # tipo#activo#marco#grande#bucket, no strategy#activo#marco#decision#bucket).
 OVERRIDE_PATH = _REPO / "data/live/wallet_mirror_gate_bucket_override.json"
+# 25-Ago: ventana deslizante (mismo mecanismo que gate_bucket_propio.py::
+# _zonas_finas(), analisis_wallet_mirror_gate_bucket_fino_25ago.py) --
+# fuente ADITIVA, solo promueve sin_concluir->bueno_confirmado, nunca pisa
+# un veredicto ya confirmado por el grid fijo de arriba.
+DATA_PATH_FINO = _REPO / "data/shadow/wallet_mirror_gate_bucket_fino.json"
 STEP = 0.05
 
 _cache = {"mtime": None, "data": {}}
 _cache_override = {"mtime": None, "data": {}}
+_cache_fino = {"mtime": None, "data": {}}
+
+
+def _zonas_finas() -> dict:
+    """{clave_str: {"lo":, "hi":, "veredicto":, ...}} desde
+    wallet_mirror_gate_bucket_fino.json. Fail-open a {} si el fichero
+    falta o está corrupto -- nunca bloquea el arranque por un fichero de
+    refuerzo, mismo criterio que el resto de fuentes de este módulo."""
+    try:
+        mtime = DATA_PATH_FINO.stat().st_mtime
+    except OSError:
+        return {}
+    if _cache_fino["mtime"] != mtime:
+        try:
+            _cache_fino["data"] = json.loads(DATA_PATH_FINO.read_text(encoding="utf-8"))
+            _cache_fino["mtime"] = mtime
+        except Exception:
+            pass
+    return _cache_fino["data"]
 
 
 def _cargar() -> dict:
@@ -110,8 +134,30 @@ def evaluar_sin_override(tipo: str, activo: str, marco: str, ask: float, jugada_
     b_str = f"{bucket(ask):.2f}"
     tabla = _cargar().get(clave_str, {})
     detalle = tabla.get(b_str)
+    veredicto_propio = detalle.get("veredicto", "sin_concluir") if detalle else "sin_concluir"
+
+    # 25-Ago: ventana deslizante como fuente ADITIVA de promoción -- solo
+    # cuando el grid fijo sigue sin_concluir, nunca pisa un veredicto ya
+    # confirmado (mismo orden que gate_bucket_propio.py::
+    # evaluar_sin_override()).
+    if veredicto_propio == "sin_concluir":
+        fina = _zonas_finas().get(clave_str)
+        if fina and fina.get("veredicto") == "bueno_confirmado":
+            lo, hi = fina.get("lo"), fina.get("hi")
+            if lo is not None and hi is not None and lo <= ask < hi:
+                return {
+                    "veredicto": "bueno_confirmado",
+                    "detalle": {
+                        "origen": "ventana_deslizante_25ago",
+                        "motivo": f"ask en [{lo:.2f},{hi:.2f}), ventana fina "
+                                  f"(n={fina.get('n')}, p={fina.get('p_valor')}) "
+                                  "mientras el grid fijo sigue sin_concluir",
+                        "detalle_propio": detalle,
+                    },
+                }
+
     if detalle is not None:
-        return {"veredicto": detalle.get("veredicto", "sin_concluir"), "detalle": detalle}
+        return {"veredicto": veredicto_propio, "detalle": detalle}
     return {"veredicto": "sin_concluir", "detalle": None}
 
 
