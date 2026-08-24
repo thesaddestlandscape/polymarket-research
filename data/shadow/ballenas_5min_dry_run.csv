@@ -11873,3 +11873,4 @@ timestamp_utc,activo,market_id,condition_id,end_date,py,edge,concentracion,n_bal
 2026-08-24T01:28:49+00:00,SOL,3791315,0xdf897ced1bd5f48a08cb764912a2bb41b382fe3b156064c1bf013733c915bf25,2026-08-24T01:30:00Z,0.08,0.0221,1.0,4,70.9,,,,87,False,banda_ok py=0.080 rest_lo=1.13 rest_hi=2.50
 2026-08-24T01:31:02+00:00,DOGE,3791336,0x3762adea9a00ded051075dc3f9fbe54c8babd30e1acc028acfa53c1cc68c102e,2026-08-24T01:35:00Z,0.25,-0.0529,1.0,3,238.4,,,,5,False,fuera_de_bandas_significativas
 2026-08-24T01:31:07+00:00,SOL,3791337,0x06b8b28357f3cfd19ac9a77cbb9a354fbfe3666d3aad9ffa7bfabeb9c555a59b,2026-08-24T01:35:00Z,0.28,-0.0079,1.0,4,235.5,,,,13,False,banda_ok py=0.280 rest_lo=1.88 rest_hi=4.25
+2026-08-24T01:35:31+00:00,SOL,3791379,0x7e0815ae3a24c013af4ead32b02f3b22e8d479902a5bd164316e1228df9079a0,2026-08-24T01:40:00Z,0.35,0.0725,1.0,5,269.3,,,,13,True,banda_prematura py=0.350 restante=4.49>4.40
