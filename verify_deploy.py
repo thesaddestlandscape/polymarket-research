@@ -29,7 +29,11 @@ BASE = Path(__file__).parent
 # probe: cómo confirmar que el proceso reiniciado está VIVO y sirviendo,
 # no solo presente en ps.
 SCREENS = {
-    "dash":    {"entry": "dashboard_server.py",    "probe": "http:8888"},
+    # dash (24-Ago): fusiona dashboard_server.py (8888) + sports_dashboard_
+    # server.py (8890, antes screen "dash-sports") -- ver dashboards_
+    # consolidado.py. "entry" importa los 2 módulos originales, así que el
+    # cierre de imports los cubre igual que antes para detectar STALE.
+    "dash":    {"entry": "dashboards_consolidado.py", "probe": "http:8888"},
     "control": {"entry": "live_control.py",        "probe": "log:logs/live_control.log:escuchando comandos"},
     # pfinish/favultsec/puntoconf/ressniper/p22fase0/boxbuilder/solcontrario5m/
     # xrpcontrario15m/favcontraria/fav5malt fusionados en "observadores" el

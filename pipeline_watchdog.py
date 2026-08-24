@@ -83,7 +83,11 @@ SCREEN_RESTART = {
     # live_trade.py consume, así que necesita correr con prontitud.
     "mantenimiento": f"cd {REPO} && bash run_fast_mantenimiento.sh >> logs/fast.log 2>&1",
     "control": f"cd {REPO} && .venv/bin/python live_control.py >> logs/live_control.log 2>&1",
-    "dash":    f"cd {REPO} && nice -n 10 python3 dashboard_server.py >> logs/dashboard.log 2>&1",
+    # dash (24-Ago): fusiona dashboard_server.py (8888) + sports_dashboard_
+    # server.py (8890, antes screen "dash-sports") en un solo proceso -- ver
+    # dashboards_consolidado.py. Mismo patrón que el resto de fusiones de
+    # esta lista, ninguno mueve dinero real (HTTP de solo lectura).
+    "dash":    f"cd {REPO} && nice -n 10 .venv/bin/python dashboards_consolidado.py >> logs/dashboards_consolidado.log 2>&1",
     # observadores (05-Ago): fusión de 10 procesos observacionales/FASE0
     # (pfinish, favultsec, puntoconf, ressniper, p22fase0, boxbuilder,
     # solcontrario5m, xrpcontrario15m, favcontraria, fav5malt) en UNO solo,
@@ -159,14 +163,8 @@ SCREEN_RESTART = {
     # nested_arb_scanner.py (cadencia 1min, la más fina) se deja fuera a
     # propósito, sigue en su cron propio. Ver vigias_frecuentes_fase0.py.
     "vigiasfreq": f"cd {REPO} && nice -n 10 .venv/bin/python vigias_frecuentes_fase0.py >> logs/vigias_frecuentes_fase0.log 2>&1",
-    # dash-sports/dash-weather/sports-mirror/sports-ws/weather-mirror/
-    # weather-ws (18-Ago): 6 screens nuevas de la expansión a sports/esports
-    # y weather wallet-mirror en tiempo real -- lanzadas sin nice ni registro
-    # en este dict, mismo gap de sobresuscripción de CPU que el incidente
-    # 05-Ago (load5 hasta 6.77-10.59 en 2 cores, ratio hasta 5.3x). Ninguna
-    # ejecuta dinero real (100% DRY_RUN/dashboards de solo lectura) --
-    # niceadas igual que observadores/fetchers/ejecdryrun/vigiasfreq.
-    "dash-sports": f"cd {REPO} && nice -n 10 .venv/bin/python sports_dashboard_server.py >> logs/dashboard-sports.log 2>&1",
+    # dash-sports: 24-Ago, fusionada dentro de "dash" (dashboards_consolidado.py)
+    # -- ver esa entrada arriba y SCREENS_RETIRADAS abajo.
     # 20-Ago: sports-mirror + sports-ws fusionadas en sports_fase0_consolidado.py
     # (barrido de salud diaria, load5 sostenido ~8 en 2 cores, ratio~4x) --
     # mismo patrón que ejecutores_dryrun_fase0.py/observadores_fase0.py, ver
@@ -287,6 +285,8 @@ SCREENS_RETIRADAS = {
     "chainlink", "polyactivity", "liqs", "libroambos",
     # 20-Ago: fusionadas en "sportsfase0" (sports_fase0_consolidado.py) -- ver SCREEN_RESTART.
     "sports-mirror", "sports-ws",
+    # 24-Ago: fusionada en "dash" (dashboards_consolidado.py) -- ver SCREEN_RESTART.
+    "dash-sports",
 }
 
 
@@ -316,7 +316,7 @@ def check_screens() -> dict[str, bool]:
         output = r.stdout + r.stderr
         return {name: (f".{name}\t" in output or f".{name} " in output)
                 for name in ["fast", "slow", "mantenimiento", "control", "dash", "observadores", "ejeclive", "fetchers", "ejecdryrun", "walletmirror", "vigiasfreq",
-                              "dash-sports", "dash-weather", "sportsfase0", "weather-mirror", "weather-ws"]}
+                              "dash-weather", "sportsfase0", "weather-mirror", "weather-ws"]}
     except Exception:
         return {}
 
