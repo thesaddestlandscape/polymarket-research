@@ -1,0 +1,3 @@
+timestamp_utc,slug,market_id,condition_id,activo,ventana_min,end_date,restante_s,strike,strike_src,spot,spot_src,dist_pct,lado_rezagado,best_ask,ask_usd_le2c,ask_usd_le3c,ask_usd_le5c,best_bid,py_yes_evento,outcome_real,rezagado_gano
+2026-08-24T00:09:49+00:00,btc-updown-5m-1787529900,3790597,0xb4caac1bd474de0c271689c668aec040fcb9680cc2c3490113dfe34399cd4b26,BTC,5,2026-08-24T00:10:00+00:00,10.2,77616.72,kline_open,77695.37,binance_ticker,0.10133,Down,0.01,152.45,188.91,262.49,,0.065,,
+2026-08-24T00:09:49+00:00,eth-updown-5m-1787529900,3790601,0x5c819d1b75072669ccdd6624567ed59d5eb0f626586061c0ce300ba72fe35d95,ETH,5,2026-08-24T00:10:00+00:00,10.1,2457.53,kline_open,2460.74,binance_ticker,0.13062,Down,0.01,25.91,34.32,49.82,,0.5,,
