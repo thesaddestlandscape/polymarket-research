@@ -56,7 +56,8 @@ DRY_RUN = REPO / "data/shadow/wallet_mirror_sniper_dry_run.csv"
 LATCH = REPO / "data/live/vigia_wallet_mirror_degradacion_latch.json"
 
 N_MIN_VALIDACION = 30   # mismo umbral que cargar_wallets_validadas()
-N_RECIENTE = 20         # ventana de trades más recientes a evaluar
+N_RECIENTE = 18         # ventana de trades más recientes a evaluar -- 24-Ago:
+# sincronizado con wallet_mirror_tracker.py::N_RECIENTE_OPERAR (bajado de 20)
 MARGEN_DEGRADACION_PP = 15  # caída (en puntos porcentuales) para alertar
 
 

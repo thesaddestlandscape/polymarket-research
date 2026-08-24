@@ -100,7 +100,13 @@ UMBRAL_RESUELTO = 0.98
 # nunca tuvieron oportunidad de acumular historial). cargar_wallets_validadas()
 # se queda TAL CUAL (solo histórico) para que la detección nunca se pare;
 # solo el ejecutor de dinero real llama al wrapper filtrado.
-N_RECIENTE_OPERAR = 20          # mismo valor que vigia_wallet_mirror_degradacion.py
+N_RECIENTE_OPERAR = 18          # 24-Ago: bajado de 20 (decisión Javi, tras
+# simulación project_simulacion_n_reciente_operar_24ago -- N=18 da +4
+# wallets operativas netas (41->45) sobre N=20, payout limpio verificado
+# (g_kelly>0 en TODAS las marginales, posición real), sin resolver el
+# hueco de cobertura fuera de BTC pero sin coste conocido tampoco. Mismo
+# valor que vigia_wallet_mirror_degradacion.py::N_RECIENTE (constante
+# independiente, no importada -- mantener las dos sincronizadas a mano).
 MARGEN_DEGRADACION_PP_OPERAR = 15
 
 
