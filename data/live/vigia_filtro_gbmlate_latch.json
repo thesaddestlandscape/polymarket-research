@@ -5,6 +5,7 @@
   "sigma_ewma_delta_pct|lt|6.765|BUY_YES"
  ],
  "GBM_LATE_15M#ETH#15min": [
+  "hora_utc|lt|5.0|BUY_YES",
   "ibs_20min|gt|0.8732|BUY_NO",
   "ibs_20min|gt|0.8764|BUY_NO",
   "ibs_20min|gt|0.8786|BUY_NO",
