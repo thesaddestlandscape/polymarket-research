@@ -1002,5 +1002,21 @@
   "STREAK_MOM_5M#ETH#5min": {
     "n": 223,
     "confirmado": false
+  },
+  "GBM_LATE_15M_PYCONFIRMADO#BTC": {
+    "n": 205,
+    "confirmado": false
+  },
+  "GBM_LATE_15M_PYCONFIRMADO#BTC#15min": {
+    "n": 205,
+    "confirmado": false
+  },
+  "GBM_LATE_5M#ETH": {
+    "n": 239,
+    "confirmado": false
+  },
+  "GBM_LATE_5M#ETH#5min": {
+    "n": 239,
+    "confirmado": false
   }
 }
