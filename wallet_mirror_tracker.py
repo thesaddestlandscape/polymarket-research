@@ -42,6 +42,7 @@ decisión en tiempo real todavía).
 import csv
 import fcntl
 import json
+import math
 import sys
 from collections import defaultdict
 from datetime import datetime, timedelta, timezone
@@ -325,6 +326,30 @@ def cargar_wallets_validadas() -> dict:
         if v["edge_pp"] > 0 and v.get("g_kelly", 0) > 0:
             tipo = "SEGUIR"
         elif v["hit"] < 0.5:
+            # 24-Ago tarde (pendiente idea_wallet_edge_criterio_payout_vs_
+            # hitrate_21ago, feedback_payout_fade_usa_posicion_propia_24ago):
+            # el fix de arriba (edge_pp>0 Y g_kelly>0) solo cubre SEGUIR --
+            # g_kelly ahí es el crecimiento de LA WALLET, correcto porque
+            # copiamos su misma apuesta. Para FADE hasta ahora solo se
+            # exigía hit<0.5 (nativo), sin comprobar el Kelly de NUESTRA
+            # posición real (la contraria: hit invertido, precio
+            # complementario) -- mismo hueco de payout-asimétrico que ya
+            # se corrigió para SEGUIR, sin resolver aquí. Ejemplo concreto:
+            # wallet con hit=0.30, precio_medio=0.75 (apuesta cara, pierde
+            # la mayoría) -- nuestra posición FADE entra a 1-0.75=0.25 con
+            # hit implícito 1-0.30=0.70, que puede seguir siendo payout
+            # inverso si 0.25 todavía no es lo bastante barato.
+            precio_medio = v.get("precio_medio")
+            if precio_medio is None:
+                continue  # fail-closed, sin dato no se opera
+            hit_fade = 1 - v["hit"]
+            precio_fade = 1 - precio_medio
+            p_clamped = min(0.99, max(0.01, precio_fade))
+            r_win = (1 - p_clamped) / p_clamped - 0.02  # misma SLIPPAGE que wallet_edge_tracker._g_kelly
+            r_lose = -1 - 0.02
+            g_kelly_fade = hit_fade * math.log(1 + 0.10 * r_win) + (1 - hit_fade) * math.log(1 + 0.10 * r_lose)
+            if g_kelly_fade <= 0:
+                continue  # payout inverso en NUESTRA posición fade -- fail-closed
             tipo = "FADE"
         else:
             continue  # edge_pp<=0 (o payout Kelly negativo) y hit>=50% -- payout asimétrico, no dirección; sin mirror validado
