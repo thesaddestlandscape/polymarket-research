@@ -144,7 +144,17 @@ GUARDAR_LOCK = threading.Lock()
 # ya está escribiendo en near-tiempo-real (open+write+close por tick).
 # ─────────────────────────────────────────────────────────────────────────
 class _ChainlinkTail:
-    def __init__(self, ventana_s: int = 1800):
+    # 25-Ago (bug real encontrado en el barrido de "cosas acumulando N",
+    # petición Javi): ventana_s=1800 (30min) bastaba para 5/15min (ts_start
+    # a lo sumo 15min atrás) pero para 60min/240min ts_start está 60/240min
+    # atrás -- FUERA del buffer, precio_en() siempre devolvía None desde que
+    # se extendió a estos marcos el 19-Ago. chainlink_ref_open llevaba 6
+    # días vacío al 100% en ambos marcos (verificado: 0/3290 en 60min,
+    # 0/1480 en 240min), inutilizando chainlink_direccion_implicita/
+    # acierto_direccion_implicita para toda esa captura. 15000s (4h10min)
+    # cubre 240min con margen; huella en memoria irrelevante (tuplas
+    # (epoch,float) por tick de websocket, 6 activos).
+    def __init__(self, ventana_s: int = 15000):
         self._buf = {a: deque() for a in ASSETS}  # asset -> deque[(epoch, price)]
         self._ventana_s = ventana_s
         self._lock = threading.Lock()
