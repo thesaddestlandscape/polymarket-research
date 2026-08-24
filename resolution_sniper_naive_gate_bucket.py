@@ -166,3 +166,20 @@ def evaluar_sin_override(activo: str, marco: str, direccion: str, ask: float) ->
     if detalle is not None:
         return {"veredicto": veredicto_propio, "detalle": detalle}
     return {"veredicto": "sin_concluir", "detalle": None}
+
+
+def evaluar_para_recheck(subtype: str, direction: str, py: float, contexto: dict) -> dict:
+    """Firma uniforme que live_trade.py::_ejecutar_orden_polymarket usa en
+    el re-chequeo post-requote -- mismo mecanismo añadido 25-Ago para
+    WALLET_MIRROR (ver wallet_mirror_gate_bucket.py::evaluar_para_recheck),
+    aplicado aquí desde el diseño inicial en vez de tener que arreglarlo
+    después. `py` llega en perspectiva YES; `contexto` no se usa (esta
+    familia no tiene un equivalente a jugada_grande), solo está en la
+    firma para mantenerla uniforme con el resto del registro."""
+    partes = subtype.split("#")
+    if len(partes) != 2:
+        return {"veredicto": "sin_concluir", "detalle": {"origen": "subtype_invalido"}}
+    activo, marco = partes
+    direccion_impl = "Up" if direction == "BUY_YES" else "Down"
+    ask = py if direction == "BUY_YES" else round(1.0 - py, 6)
+    return evaluar(activo, marco, direccion_impl, ask)

@@ -270,7 +270,8 @@ def evaluar(asset: str, marco: str, slug: str, market_id: str, condition_id: str
             resultado = lt._ejecutar_orden_polymarket(
                 market_id, direction, float(stake_dryrun), precio_orden_yes,
                 edge_dir=edge_dir,
-                contexto={"strategy": "RESOLUTION_SNIPER_NAIVE", "subtype": f"{asset}#{marco}"})
+                contexto={"strategy": "RESOLUTION_SNIPER_NAIVE", "subtype": f"{asset}#{marco}",
+                          "tupla_sintetica": tupla_sintetica})
             _log(f"  🚨 ORDEN REAL enviada ({tupla_sintetica}): {resultado}")
             if not resultado.get("no_fill"):
                 end_date_real = datetime.fromtimestamp(int(ts_end), timezone.utc).isoformat()

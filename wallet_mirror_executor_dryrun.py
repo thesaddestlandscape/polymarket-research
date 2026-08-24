@@ -382,7 +382,13 @@ async def _correr_una_conexion(wallets: dict, vistos: set) -> set:
                                 resultado = lt._ejecutar_orden_polymarket(
                                     market_id, direction, float(stake_dryrun), precio_orden_yes,
                                     edge_dir=edge_dir,
-                                    contexto={"strategy": "WALLET_MIRROR", "subtype": f"{activo}#{marco}"})
+                                    contexto={"strategy": "WALLET_MIRROR", "subtype": f"{activo}#{marco}",
+                                              # 25-Ago: tupla_sintetica + jugada_grande añadidos --
+                                              # el re-chequeo post-requote de _ejecutar_orden_polymarket
+                                              # los necesita para consultar wallet_mirror_gate_bucket.py
+                                              # (el gate PROPIO) en vez de cualquier fuente distinta.
+                                              "tupla_sintetica": tupla_sintetica,
+                                              "jugada_grande": bool(ratio_size is not None and ratio_size >= 2.0)})
                                 _log(f"  🚨 ORDEN REAL enviada ({tupla_sintetica}): {resultado}")
                                 # 11-Ago: cablear ledger+Telegram en el
                                 # camino de éxito -- ANTES de este fix, un

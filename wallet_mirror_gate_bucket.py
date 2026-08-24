@@ -113,3 +113,23 @@ def evaluar_sin_override(tipo: str, activo: str, marco: str, ask: float, jugada_
     if detalle is not None:
         return {"veredicto": detalle.get("veredicto", "sin_concluir"), "detalle": detalle}
     return {"veredicto": "sin_concluir", "detalle": None}
+
+
+def evaluar_para_recheck(subtype: str, direction: str, py: float, contexto: dict) -> dict:
+    """Firma uniforme que live_trade.py::_ejecutar_orden_polymarket usa en
+    el re-chequeo post-requote (25-Ago, ver idea_wallet_mirror_recheck_
+    postrequote_fuente_equivocada_25ago) -- ANTES ese recheck consultaba
+    siempre gate_bucket_propio.py (zonas de ballenas, sin jugada_grande),
+    nunca este módulo. `py` llega en perspectiva YES (misma convención que
+    gate_bucket_propio.json); WALLET_MIRROR opera SIEMPRE tipo SEGUIR
+    (mirror_lado = lado_wallet, ver wallet_mirror_executor_dryrun.py), y
+    `jugada_grande` debe venir en contexto (el executor lo calcula ya para
+    su propio chequeo upstream -- si falta, fail-closed a False, nunca
+    asumir "grande")."""
+    partes = subtype.split("#")
+    if len(partes) != 2:
+        return {"veredicto": "sin_concluir", "detalle": {"origen": "subtype_invalido"}}
+    activo, marco = partes
+    ask = py if direction == "BUY_YES" else round(1.0 - py, 6)
+    jugada_grande = bool(contexto.get("jugada_grande", False))
+    return evaluar("SEGUIR", activo, marco, ask, jugada_grande)

@@ -31,6 +31,25 @@ from shadow_digest import enviar_telegram
 from live_balance import actualizar_balance_real, cargar_balance_real
 import ballenas_firehose_cache
 import gate_bucket_propio as _gbp
+import wallet_mirror_gate_bucket as _wmgb
+import resolution_sniper_naive_gate_bucket as _rsngb
+
+# 25-Ago (fix real, ver idea_wallet_mirror_recheck_postrequote_fuente_
+# equivocada_25ago): el re-chequeo post-requote (más abajo) hardcodeaba
+# "if strategy == WALLET_MIRROR" para cambiar solo el FORMATO de la clave,
+# pero seguía consultando SIEMPRE _gbp (gate_bucket_propio.py) -- que para
+# WALLET_MIRROR cae en zonas de BALLENAS (_zonas_validadas_externamente,
+# sin distinguir jugada_grande), nunca en wallet_mirror_gate_bucket.json
+# (el gate PROPIO, con datos reales, que SÍ distingue jugada_grande y es
+# el que la whitelist real usa para restringir). Registro explícito de
+# estrategias con gate PROPIO fuera de gate_bucket_propio.json -- cada
+# módulo expone evaluar_para_recheck(subtype, direction, py, contexto)
+# con firma uniforme, así el recheck no necesita saber nada de los
+# detalles internos de cada mecanismo.
+_GATES_EXTERNOS_POR_ESTRATEGIA = {
+    "WALLET_MIRROR": _wmgb,
+    "RESOLUTION_SNIPER_NAIVE": _rsngb,
+}
 
 DIR_LIVE    = Path("data/live")
 DIR_SHADOW  = Path("data/shadow")
@@ -2225,43 +2244,49 @@ def _ejecutar_orden_polymarket(market_id: str, direction: str,
         # la misma convención que usa gate_bucket_propio.json (CLAUDE.md:
         # "edge_neto SIEMPRE en perspectiva YES").
         ctx_gate = contexto or {}
-        # WALLET_MIRROR usa BUY_Up/BUY_Down en vez de BUY_YES/BUY_NO en sus
-        # claves de gate_bucket_propio.json (outcome real de la wallet
-        # seguida, ver wallet_mirror_executor_dryrun.py::tupla_sintetica) --
-        # solo afecta al FORMATO del string a buscar, no a si el chequeo
-        # aplica (eso lo decide tiene_datos_propios() más abajo, de forma
-        # genérica).
-        if ctx_gate.get("strategy") == "WALLET_MIRROR":
-            lado = "Up" if direction == "BUY_YES" else "Down"
-            tupla_str_gate = f"WALLET_MIRROR#{ctx_gate.get('subtype', '')}#BUY_{lado}"
-        else:
-            tupla_str_gate = f"{ctx_gate.get('strategy', '')}#{ctx_gate.get('subtype', '')}#{direction}"
-        # /code-review (18-Ago, hallazgo real): excluir por nombre de
-        # estrategia ("== WALLET_MIRROR") no generaliza -- cualquier FUTURA
-        # estrategia con la misma forma (tupla sintética que nunca escribe
-        # en results.csv, así que su entrada en gate_bucket_propio.json es
-        # un placeholder vacío {}) quedaría 100% bloqueada del mismo modo,
-        # exigiendo acordarse de hardcodear otro nombre.
-        #
-        # /code-review medium (18-Ago, hallazgo real #2): tiene_datos_propios()
-        # a secas también excluía a cualquier tupla recién promocionada con
-        # n<15 propio pero YA cubierta por zona validada externamente (el
-        # camino normal de promoción, CLAUDE.md pt. "Veto de micro-bucket de
-        # precio") -- {} en el JSON es indistinguible entre "estructural,
-        # sin mecanismo propio" (WALLET_MIRROR) y "madurando, con zona
-        # externa" (tupla nueva). tiene_alguna_fuente_evaluable() distingue
-        # los dos: solo excluye el caso verdaderamente estructural (ni dato
-        # propio ni zona externa), así que una tupla nueva con zona externa
-        # confirmada SÍ pasa por evaluar() y se abortaría igual que
-        # cualquier otra si esa zona no cubre el precio real de fill.
-        if not _gbp.tiene_alguna_fuente_evaluable(tupla_str_gate):
-            tupla_str_gate = None
+        py_actual = precio if direction == "BUY_YES" else round(1.0 - precio, 6)
+        # 25-Ago (fix real, ver idea_wallet_mirror_recheck_postrequote_
+        # fuente_equivocada_25ago): estrategias con gate PROPIO fuera de
+        # gate_bucket_propio.json (WALLET_MIRROR, RESOLUTION_SNIPER_NAIVE --
+        # ver _GATES_EXTERNOS_POR_ESTRATEGIA arriba) consultan su propio
+        # módulo directamente, con la MISMA información (jugada_grande,
+        # etc.) que usaron en su chequeo upstream -- antes esto caía
+        # siempre en gate_bucket_propio.py::_zonas_validadas_externamente()
+        # (zonas de ballenas, agregadas, sin jugada_grande), una fuente
+        # DISTINTA y más permisiva que el gate real de cada mecanismo.
         # Reusa config_vb (ya cargado arriba en esta misma invocación,
         # línea ~2061) -- evita un segundo disco+json.load redundante en
         # un camino caliente (hasta 4 reintentos/~20s, 6+ ejecutores).
         pares_ok_gate = set(config_vb.get("pares_permitidos_live", []))
-        if tupla_str_gate is not None and tupla_str_gate in pares_ok_gate:
-            # Límite aceptado (/code-review, mismo día): py_actual usa el
+        _modulo_externo = _GATES_EXTERNOS_POR_ESTRATEGIA.get(ctx_gate.get("strategy"))
+        if _modulo_externo is not None:
+            # 25-Ago: el string de whitelist de estas familias NO sigue el
+            # formato genérico STRATEGY#subtype#BUY_YES|BUY_NO (WALLET_MIRROR
+            # usa BUY_Up/BUY_Down) -- exigir que el propio executor lo pase
+            # explícito en contexto["tupla_sintetica"] en vez de reconstruirlo
+            # aquí a ciegas (fail-closed: sin el dato exacto, no se adivina).
+            tupla_str_gate = ctx_gate.get("tupla_sintetica")
+            if tupla_str_gate is None or tupla_str_gate not in pares_ok_gate:
+                gate_bp_post = None  # no whitelisteada -- mismo criterio de "solo aplica a tuplas ya live"
+            else:
+                gate_bp_post = _modulo_externo.evaluar_para_recheck(
+                    ctx_gate.get("subtype", ""), direction, py_actual, ctx_gate)
+        else:
+            tupla_str_gate = f"{ctx_gate.get('strategy', '')}#{ctx_gate.get('subtype', '')}#{direction}"
+            # /code-review medium (18-Ago, hallazgo real #2): tiene_datos_propios()
+            # a secas también excluía a cualquier tupla recién promocionada con
+            # n<15 propio pero YA cubierta por zona validada externamente (el
+            # camino normal de promoción, CLAUDE.md pt. "Veto de micro-bucket de
+            # precio") -- {} en el JSON es indistinguible entre "estructural,
+            # sin mecanismo propio" y "madurando, con zona externa".
+            # tiene_alguna_fuente_evaluable() distingue los dos.
+            if not _gbp.tiene_alguna_fuente_evaluable(tupla_str_gate):
+                tupla_str_gate = None
+            gate_bp_post = (_gbp.evaluar(tupla_str_gate, py_actual)
+                             if tupla_str_gate is not None and tupla_str_gate in pares_ok_gate
+                             else None)
+        if gate_bp_post is not None:
+            # Límite aceptado (/code-review, 18-Ago): py_actual usa el
             # mejor ask del snapshot pre-trade (`precio`, ya requoteado si
             # hubo edge_dir), no el precio medio de fill real confirmado
             # por el CLOB -- para una orden que tuviera que caminar varios
@@ -2274,10 +2299,8 @@ def _ejecutar_orden_polymarket(market_id: str, direction: str,
             # el mismo snapshot, nunca contra el fill confirmado). No se
             # resuelve aquí -- requeriría re-arquitecturar la validación a
             # post-fill (la orden ya estaría ejecutada, sin poder abortar).
-            py_actual = precio if direction == "BUY_YES" else round(1.0 - precio, 6)
-            gate_bp_post = _gbp.evaluar(tupla_str_gate, py_actual)
             if gate_bp_post["veredicto"] != "bueno_confirmado":
-                log(f"  ⛔ Re-chequeo gate_bucket_propio post-requote: "
+                log(f"  ⛔ Re-chequeo gate post-requote ({tupla_str_gate}): "
                     f"py_actual={py_actual:.4f} (señal py={precio_plan if direction=='BUY_YES' else round(1.0-precio_plan,6):.4f}) "
                     f"veredicto={gate_bp_post['veredicto']} (no bueno_confirmado) -- no se ejecuta")
                 _registrar_snapshot_libro("abort_gate_bucket_postrequote", market_id, direction,
@@ -2286,7 +2309,7 @@ def _ejecutar_orden_polymarket(market_id: str, direction: str,
                     "ok": False, "no_fill": True, "gate_bucket_postrequote": True,
                     "order_id": None, "entry_price": entry_price,
                     "fee_eur": 0.0,
-                    "error": f"gate_bucket_propio post-requote: py_actual={py_actual:.4f} "
+                    "error": f"gate post-requote ({tupla_str_gate}): py_actual={py_actual:.4f} "
                              f"veredicto={gate_bp_post['veredicto']}",
                 }
 
