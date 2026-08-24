@@ -101,11 +101,15 @@ UMBRAL_RESUELTO = 0.98
 # nunca tuvieron oportunidad de acumular historial). cargar_wallets_validadas()
 # se queda TAL CUAL (solo histórico) para que la detección nunca se pare;
 # solo el ejecutor de dinero real llama al wrapper filtrado.
-N_RECIENTE_OPERAR = 18          # 24-Ago: bajado de 20 (decisión Javi, tras
-# simulación project_simulacion_n_reciente_operar_24ago -- N=18 da +4
-# wallets operativas netas (41->45) sobre N=20, payout limpio verificado
-# (g_kelly>0 en TODAS las marginales, posición real), sin resolver el
-# hueco de cobertura fuera de BTC pero sin coste conocido tampoco. Mismo
+N_RECIENTE_OPERAR = 15          # 25-Ago: bajado de 18 (decisión explícita Javi,
+# "mira si se degrada el payout"). Simulado con datos frescos: 77->80 operativas
+# (+12 marginales, -9 perdidas, neto +3), 0/12 marginales con g_kelly_real<=0
+# -- payout limpio confirmado (de paso se encontró y arregló un bug real: el
+# campo "g_kelly" guardado para candidatas FADE era el de LA WALLET, no el de
+# g_kelly_fade -- nuestra posición real -- lo que había dado un falso "4/12
+# con payout malo" en el primer intento de esta misma verificación). Sigue sin
+# resolver el hueco de cobertura fuera de BTC. Antes: 20 (hasta 24-Ago) -> 18
+# (24-Ago, project_simulacion_n_reciente_operar_24ago) -> 15 (hoy). Mismo
 # valor que vigia_wallet_mirror_degradacion.py::N_RECIENTE (constante
 # independiente, no importada -- mantener las dos sincronizadas a mano).
 MARGEN_DEGRADACION_PP_OPERAR = 15
@@ -325,6 +329,7 @@ def cargar_wallets_validadas() -> dict:
         # wallet en vez de admitirla sin comprobar.
         if v["edge_pp"] > 0 and v.get("g_kelly", 0) > 0:
             tipo = "SEGUIR"
+            g_kelly_real = v.get("g_kelly")
         elif v["hit"] < 0.5:
             # 24-Ago tarde (pendiente idea_wallet_edge_criterio_payout_vs_
             # hitrate_21ago, feedback_payout_fade_usa_posicion_propia_24ago):
@@ -351,12 +356,23 @@ def cargar_wallets_validadas() -> dict:
             if g_kelly_fade <= 0:
                 continue  # payout inverso en NUESTRA posición fade -- fail-closed
             tipo = "FADE"
+            # 25-Ago (bug real encontrado en el barrido de N_RECIENTE_OPERAR,
+            # petición Javi): más abajo se guardaba v.get("g_kelly") también
+            # para FADE -- el g_kelly de LA WALLET (su apuesta nativa), NO el
+            # de g_kelly_fade (nuestra posición real, ya validado positivo
+            # arriba). Cualquier consumidor que leyera este campo para
+            # verificar payout de una candidata FADE (ej. una simulación de
+            # N_RECIENTE_OPERAR) veía un número negativo engañoso pese a que
+            # el filtro real ya garantiza payout limpio -- mismo tipo de
+            # confusión que feedback_payout_fade_usa_posicion_propia_24ago
+            # ya corrigió en el filtro, colada de nuevo en el campo mostrado.
+            g_kelly_real = g_kelly_fade
         else:
             continue  # edge_pp<=0 (o payout Kelly negativo) y hit>=50% -- payout asimétrico, no dirección; sin mirror validado
         out[(w, v["activo"], marco_activity)] = {
             "tipo": tipo, "edge_pp": v["edge_pp"], "n": v["n"],
             "size_mediana": v.get("size_mediana"), "hit": v.get("hit"),
-            "g_kelly": v.get("g_kelly"),
+            "g_kelly": g_kelly_real,
         }
     # NO filtrar por rendimiento reciente aquí -- esta función también
     # alimenta la detección/grabación continua (wallet_mirror_sniper.py),
