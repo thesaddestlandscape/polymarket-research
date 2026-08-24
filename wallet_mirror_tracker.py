@@ -68,6 +68,9 @@ VISTOS_PATH = DIR_SHADOW / "wallet_mirror_vistos.json"  # transaction_hash ya pr
 # CSV. Cualquier gate que necesite el histórico de mirror REAL y vivo tiene
 # que leer este otro fichero, no OUT.
 DRY_RUN_VIVO = DIR_SHADOW / "wallet_mirror_sniper_dry_run.csv"
+# 24-Ago: fuente adicional para _historial_reciente_wallet_mirror() -- ver
+# docstring de esa función. Misma fuente que wallet_edge_tracker.py::HIST.
+HIST_BALLENAS = DIR_SHADOW / "ballenas_timing_history.csv"
 
 N_MIN_WALLET = 30
 GAMMA = "https://gamma-api.polymarket.com"
@@ -101,29 +104,101 @@ N_RECIENTE_OPERAR = 20          # mismo valor que vigia_wallet_mirror_degradacio
 MARGEN_DEGRADACION_PP_OPERAR = 15
 
 
-def _historial_reciente_wallet_mirror() -> dict:
+def _historial_reciente_wallet_mirror(wallets_objetivo: set | None = None) -> dict:
     """(wallet, activo, marco_activity, tipo) -> [(trade_timestamp, acierto), ...] ordenado.
-    Fuente: DRY_RUN_VIVO (wallet_mirror_sniper_dry_run.csv), el CSV que de verdad se
-    sigue escribiendo hoy -- ver nota arriba sobre OUT/wallet_mirror_dry_run.csv muerto."""
-    hist = defaultdict(list)
-    if not DRY_RUN_VIVO.exists():
-        return hist
-    with open(DRY_RUN_VIVO, encoding="utf-8") as f:
-        for row in csv.DictReader(f):
-            if row.get("acierto") not in ("0", "1"):
-                continue
-            clave = (row.get("wallet", "").lower(), row.get("activo", ""),
-                     row.get("marco", ""), row.get("tipo", ""))
-            hist[clave].append((row.get("trade_timestamp", ""), int(row["acierto"])))
-    for clave in hist:
-        hist[clave].sort(key=lambda x: x[0])
-    return hist
+
+    24-Ago (hallazgo real, petición Javi: "wallets ETH bloqueadas solo por
+    insuficiente reciente -- vamos a solucionar esto"): antes SOLO leía
+    DRY_RUN_VIVO (wallet_mirror_sniper_dry_run.csv, arranca 30-Jul, solo
+    trades que nuestro PROPIO sniper detectó en tiempo real) -- fuera de
+    BTC (mucho menos volumen de mercado, ver project_kill_switch_
+    reapertura_wallet_mirror_24ago), muchas wallets con histórico completo
+    excelente nunca acumulaban 20 matches recientes propios, aunque llevaran
+    semanas operando de verdad en el mercado.
+
+    Ahora se enriquece con `ballenas_timing_history.csv` -- LA MISMA fuente
+    que `wallet_edge_tracker.py` ya usa para calcular `info["hit"]` (el
+    histórico contra el que se compara "reciente" para detectar
+    degradación), con muchísima más profundidad (arranca 12-Jun) y SIN el
+    sesgo de "solo lo que nuestro sniper llegó a detectar en tiempo real".
+    Metodológicamente más consistente que antes: comparar "reciente" y
+    "histórico" desde la MISMA fuente, no una filtrada (sniper) contra otra
+    sin filtrar (ballenas). El "acierto" es el resultado de LA PROPIA
+    wallet, independiente de tipo SEGUIR/FADE (igual que `info["hit"]"`) --
+    por eso la misma lista sirve para ambos tipos de la misma (wallet,
+    activo,marco). Excluye pre-TWAP igual que wallet_edge_tracker.py (mismo
+    régimen de resolución que ya usa el histórico de referencia).
+
+    DRY_RUN_VIVO se mantiene como fuente ADICIONAL (no sustituida): capta
+    trades más recientes que `ballenas_observer.py` (cron horario) puede
+    tardar hasta 1h en reflejar. Dedup por (wallet, condition_id) --
+    ambas fuentes pueden solapar en fechas comunes."""
+    from shadow_postmortem import es_pre_twap  # noqa: E402 -- import perezoso, evita ciclo con wallet_edge_tracker
+
+    hist = defaultdict(dict)  # clave -> {(wallet,condition_id): (ts, acierto)} para dedup
+
+    if HIST_BALLENAS.exists():
+        with open(HIST_BALLENAS, encoding="utf-8") as f:
+            for row in csv.DictReader(f):
+                w = (row.get("wallet") or "").lower()
+                if wallets_objetivo is not None and w not in wallets_objetivo:
+                    continue
+                if row.get("acierto") not in ("0", "1"):
+                    continue
+                marco_corto = row.get("marco", "")
+                marco_activity = MARCO_A_ACTIVITY.get(marco_corto)
+                if marco_activity is None:
+                    continue
+                ts = row.get("ts_trade", "")
+                if es_pre_twap(marco_activity, ts):
+                    continue
+                cid = row.get("condition_id", "")
+                for tipo in ("SEGUIR", "FADE"):
+                    clave = (w, row.get("activo", ""), marco_activity, tipo)
+                    hist[clave][(w, cid)] = (ts, int(row["acierto"]))
+
+    if DRY_RUN_VIVO.exists():
+        with open(DRY_RUN_VIVO, encoding="utf-8") as f:
+            for row in csv.DictReader(f):
+                if row.get("acierto") not in ("0", "1"):
+                    continue
+                w = row.get("wallet", "").lower()
+                if wallets_objetivo is not None and w not in wallets_objetivo:
+                    continue
+                tipo = row.get("tipo", "")
+                acierto = int(row["acierto"])
+                # 24-Ago (/code-review, bug real cazado antes de desplegar):
+                # el "acierto" de este CSV es el resultado de NUESTRA
+                # POSICIÓN (resolver_pendientes(): acierto=1 si outcome==
+                # mirror_lado), NO el de la wallet -- para SEGUIR coinciden
+                # (mirror_lado=lado_wallet), pero para FADE mirror_lado es
+                # el lado CONTRARIO, así que acierto=1 aquí significa que
+                # LA WALLET PERDIÓ. ballenas_timing_history.csv (arriba) usa
+                # la semántica nativa "acertó la wallet" -- la misma que
+                # info["hit"] (la referencia con la que se compara en
+                # wallets_operativas_recientes()). Invertir aquí para FADE
+                # deja las dos fuentes en la MISMA semántica antes de
+                # mezclarlas bajo la misma clave -- sin esto, mezclaba
+                # "acertó la wallet" (ballenas) con "acertó nuestra posición"
+                # (aquí, FADE) bajo la misma clave, corrompiendo el gate que
+                # decide qué wallets FADE mueven dinero real.
+                if tipo == "FADE":
+                    acierto = 1 - acierto
+                clave = (w, row.get("activo", ""), row.get("marco", ""), tipo)
+                cid = row.get("condition_id", "")
+                hist[clave][(w, cid)] = (row.get("trade_timestamp", ""), acierto)
+
+    out = {}
+    for clave, por_cid in hist.items():
+        out[clave] = sorted(por_cid.values(), key=lambda x: x[0])
+    return out
 
 
 def wallets_operativas_recientes() -> dict:
     """Wrapper de cargar_wallets_validadas() SOLO para lo que toca dinero real
     (wallet_mirror_executor_dryrun.py) -- exige rendimiento RECIENTE (últimos
-    N_RECIENTE_OPERAR trades resueltos, fuente DRY_RUN_VIVO) no degradado frente
+    N_RECIENTE_OPERAR trades resueltos, fuente ballenas_timing_history.csv +
+    DRY_RUN_VIVO, ver _historial_reciente_wallet_mirror) no degradado frente
     al histórico Y con borde estadístico propio sobre el 50%. Fail-closed:
     candidata sin suficiente historial reciente propio se EXCLUYE, no hay
     fallback silencioso al histórico agregado. NO usar para detección/logging
@@ -131,7 +206,8 @@ def wallets_operativas_recientes() -> dict:
     candidatas = cargar_wallets_validadas()
     if not candidatas:
         return candidatas
-    hist = _historial_reciente_wallet_mirror()
+    wallets_objetivo = {w for w, _, _ in candidatas}
+    hist = _historial_reciente_wallet_mirror(wallets_objetivo)
     out = {}
     for clave, info in candidatas.items():
         w, activo, marco = clave
@@ -141,7 +217,7 @@ def wallets_operativas_recientes() -> dict:
         if info.get("hit") is None:
             continue  # sin hit histórico (dato inesperado) -> fail-closed, no se opera
         recientes = [a for _, a in aciertos[-N_RECIENTE_OPERAR:]]
-        k, n = sum(recientes), len(recientes)
+        k, n = sum(recientes), len(recientes)  # k = nº recientes donde ACERTÓ LA WALLET (semántica nativa, ver _historial_reciente_wallet_mirror)
         ci_lo, ci_hi = wilson_ci(k, n)
         hit_hist = info["hit"] * 100
         if ci_hi * 100 < (hit_hist - MARGEN_DEGRADACION_PP_OPERAR):
@@ -159,7 +235,21 @@ def wallets_operativas_recientes() -> dict:
         # 50% (Wilson90 INFERIOR, no el superior de arriba) -- "hit rate
         # alto validado reciente" tiene que sostenerse por sí mismo, no solo
         # relativo a una línea base que puede estar degradándose con él.
-        if ci_lo <= 0.50:
+        # 24-Ago (/code-review, bug crítico cazado antes de desplegar):
+        # k/ci_lo/ci_hi de arriba están en semántica "acertó LA WALLET"
+        # (necesaria para la comparación de degradación de arriba, que
+        # compara contra hit_hist -- también wallet-win). Pero el edge que
+        # de verdad importa aquí es el de NUESTRA POSICIÓN: para SEGUIR
+        # coincide con "acertó la wallet" (mismo lado), para FADE es lo
+        # contrario (apostamos contra ella -- queremos su hit CONFIRMADO
+        # BAJO, no alto). Sin este split, el check exigía ci_lo>50% de
+        # "acertó la wallet" también para FADE -- justo lo opuesto de la
+        # tesis FADE (se selecciona porque hit_hist<50%), excluyendo casi
+        # todas las candidatas FADE reales (verificado: 5/97 sobrevivían
+        # vs 68/230 SEGUIR).
+        k_posicion = k if info["tipo"] == "SEGUIR" else (n - k)
+        ci_lo_posicion, _ = wilson_ci(k_posicion, n)
+        if ci_lo_posicion <= 0.50:
             continue  # sin edge reciente confirmado por sí mismo -> no se opera
         out[clave] = info
     return out

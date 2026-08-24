@@ -450,7 +450,12 @@ async def main() -> None:
     # 13-Ago: wallets_operativas_recientes(), NO cargar_wallets_validadas() --
     # este proceso toca dinero real (DRY_RUN=False), exige además rendimiento
     # reciente no degradado, ver wallet_mirror_tracker.py.
-    wallets = wallets_operativas_recientes()
+    # 24-Ago: asyncio.to_thread() -- desde que _historial_reciente_wallet_
+    # mirror() también lee ballenas_timing_history.csv (1.8M filas, ~25-30s
+    # de parseo), una llamada síncrona aquí congelaría el event loop entero
+    # (ping/websocket/detección de trades) durante ese tiempo, cada 30min.
+    # En un hilo aparte, el loop sigue respondiendo mientras se recalcula.
+    wallets = await asyncio.to_thread(wallets_operativas_recientes)
     ultimo_refresco = datetime.now(timezone.utc).timestamp()
     vistos = _vistos_cargar()
     _log(f"wallet_mirror_executor_dryrun arrancado -- {len(wallets)} wallets validadas, DRY_RUN={DRY_RUN}")
@@ -458,7 +463,7 @@ async def main() -> None:
         try:
             ahora_ts = datetime.now(timezone.utc).timestamp()
             if ahora_ts - ultimo_refresco > REFRESCO_WALLETS_S:
-                wallets = wallets_operativas_recientes()
+                wallets = await asyncio.to_thread(wallets_operativas_recientes)
                 ultimo_refresco = ahora_ts
             vistos = await _correr_una_conexion(wallets, vistos)
         except (websockets.exceptions.ConnectionClosed, OSError, asyncio.TimeoutError) as e:
