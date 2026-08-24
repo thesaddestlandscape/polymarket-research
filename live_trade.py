@@ -33,6 +33,7 @@ import ballenas_firehose_cache
 import gate_bucket_propio as _gbp
 import wallet_mirror_gate_bucket as _wmgb
 import resolution_sniper_naive_gate_bucket as _rsngb
+import gate_bucket_kelly as _gbk
 
 # 25-Ago (fix real, ver idea_wallet_mirror_recheck_postrequote_fuente_
 # equivocada_25ago): el re-chequeo post-requote (más abajo) hardcodeaba
@@ -2258,6 +2259,11 @@ def _ejecutar_orden_polymarket(market_id: str, direction: str,
         # línea ~2061) -- evita un segundo disco+json.load redundante en
         # un camino caliente (hasta 4 reintentos/~20s, 6+ ejecutores).
         pares_ok_gate = set(config_vb.get("pares_permitidos_live", []))
+        # Independiente de si gate_bucket_propio tiene o no fuente evaluable
+        # para esta tupla -- gate_bucket_kelly (más abajo) es una fuente de
+        # datos separada, nunca debe heredar el tupla_str_gate=None que
+        # gate_bucket_propio decide para SU PROPIO criterio.
+        tupla_str_generico = f"{ctx_gate.get('strategy', '')}#{ctx_gate.get('subtype', '')}#{direction}"
         _modulo_externo = _GATES_EXTERNOS_POR_ESTRATEGIA.get(ctx_gate.get("strategy"))
         if _modulo_externo is not None:
             # 25-Ago: el string de whitelist de estas familias NO sigue el
@@ -2311,6 +2317,35 @@ def _ejecutar_orden_polymarket(market_id: str, direction: str,
                     "fee_eur": 0.0,
                     "error": f"gate post-requote ({tupla_str_gate}): py_actual={py_actual:.4f} "
                              f"veredicto={gate_bp_post['veredicto']}",
+                }
+
+        # 25-Ago (fix real, hallazgo #1 del barrido de ballenas): gate de
+        # CRECIMIENTO LOGARÍTMICO (Kelly) por micro-bucket, capa ADICIONAL
+        # sobre el gate de PnL lineal de arriba -- un bucket puede tener
+        # pnl_medio>0 (EV lineal positivo, pasa gate_bucket_propio) y aun
+        # así g(f)<0 (payout inverso real: hit-rate alto con pérdidas
+        # grandes y poco frecuentes que se comen el compounding). Hallazgo
+        # confirmado con rigor completo (analisis_gate_bucket_kelly_24ago.py,
+        # Wilson+shuffle+split-half+BH-FDR) en tuplas YA EN VIVO
+        # (BALLENAS_TARDIAS#{ETH,DOGE}#5min#BUY_YES[0.00,0.05)) que llevaban
+        # desde el 24-Ago sin ningún consumidor -- este bloque es exactamente
+        # ese consumidor. Solo aplica al camino genérico (tupla_str_gate en
+        # formato STRATEGY#subtype#DIRECTION); las familias con gate propio
+        # (_GATES_EXTERNOS_POR_ESTRATEGIA) no tienen datos en este JSON
+        # todavía, se dejan fuera hasta que los tengan.
+        if _modulo_externo is None:
+            gate_kelly = _gbk.evaluar(tupla_str_generico, py_actual)
+            if gate_kelly["veredicto"] == "malo_confirmado":
+                log(f"  ⛔ Re-chequeo gate_bucket_kelly (payout inverso, g(f)<0): "
+                    f"py_actual={py_actual:.4f} tupla={tupla_str_generico} -- no se ejecuta")
+                _registrar_snapshot_libro("abort_gate_bucket_kelly", market_id, direction,
+                                          precio_plan, stake_eur, depth, contexto)
+                return {
+                    "ok": False, "no_fill": True, "gate_bucket_kelly": True,
+                    "order_id": None, "entry_price": entry_price,
+                    "fee_eur": 0.0,
+                    "error": f"gate_bucket_kelly (payout inverso): py_actual={py_actual:.4f} "
+                             f"tupla={tupla_str_generico}",
                 }
 
         # Estimación Kyle (10-Jul, solo logging — ver _estimar_slip_kyle):
