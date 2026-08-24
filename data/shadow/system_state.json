@@ -1,10 +1,10 @@
 {
-  "timestamp_utc": "2026-08-24T04:02:49+00:00",
-  "bankroll_sim": 20568.46,
-  "pnl_total": 20548.46,
-  "n_ops": 241861,
+  "timestamp_utc": "2026-08-24T04:10:07+00:00",
+  "bankroll_sim": 20606.91,
+  "pnl_total": 20586.91,
+  "n_ops": 241964,
   "win_rate": 0.5847,
-  "estrategias_activas": 526,
+  "estrategias_activas": 525,
   "desactivadas": [
     "SMART_FLOW_1H",
     "UPDOWN_GBM#daily",
@@ -27,6 +27,7 @@
     "FAVORITO_CONFIRMADO#ETH#240min",
     "LIQUIDACIONES_15M#DOGE#15min",
     "LIQUIDACIONES_15M#DOGE",
+    "PRICE_TARGET_GBM_FADE#reach",
     "UPDOWN_GBM#BNB#5min"
   ],
   "top3_ic": [
