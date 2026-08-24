@@ -29,12 +29,19 @@ def latest_markets_file():
     return csvs[-1] if csvs else None
 
 def load_markets(path):
-    rows = list(csv.DictReader(open(path)))
+    # 24-Ago (hallazgo real, RAM al límite con OOM-kills en vivo): el CSV del
+    # día crece con cada captura de run_slow.sh (~23min) y a media tarde ya
+    # pesa 600MB+/850k filas -- materializar TODO en una lista antes de
+    # deduplicar (patrón anterior) hacía que este proceso, de un solo
+    # disparo, picara a 1.4-1.5GB de RSS varias veces al día. Solo hace
+    # falta la ÚLTIMA fila por market_id: iterar el DictReader directamente
+    # sin la lista intermedia evita duplicar esa memoria por completo.
     latest = {}
-    for r in rows:
-        mid = r.get("market_id", "")
-        if mid:
-            latest[mid] = r
+    with open(path) as f:
+        for r in csv.DictReader(f):
+            mid = r.get("market_id", "")
+            if mid:
+                latest[mid] = r
     return list(latest.values())
 
 def price(m):
