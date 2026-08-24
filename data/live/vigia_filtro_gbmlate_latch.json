@@ -6,6 +6,7 @@
  ],
  "GBM_LATE_15M#ETH#15min": [
   "hora_utc|lt|5.0|BUY_YES",
+  "hora_utc|lt|6.0|BUY_YES",
   "ibs_20min|gt|0.8732|BUY_NO",
   "ibs_20min|gt|0.8764|BUY_NO",
   "ibs_20min|gt|0.8786|BUY_NO",
@@ -173,6 +174,7 @@
   "sigma_h|gt|0.0119|BUY_NO",
   "sigma_h|gt|0.0121|BUY_NO",
   "sigma_h|gt|0.0123|BUY_NO",
+  "sigma_h|gt|0.0127|BUY_NO",
   "sigma_h|gt|0.0235|BUY_YES"
  ]
 }
