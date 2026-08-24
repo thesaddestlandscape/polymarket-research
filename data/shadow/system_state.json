@@ -1,8 +1,8 @@
 {
-  "timestamp_utc": "2026-08-24T21:18:06+00:00",
-  "bankroll_sim": 21009.5,
-  "pnl_total": 20989.5,
-  "n_ops": 250689,
+  "timestamp_utc": "2026-08-24T21:24:12+00:00",
+  "bankroll_sim": 21028.07,
+  "pnl_total": 21008.07,
+  "n_ops": 250800,
   "win_rate": 0.5834,
   "estrategias_activas": 525,
   "desactivadas": [
@@ -33,13 +33,13 @@
   "top3_ic": [
     {
       "k": "FAVORITO_CONFIRMADO_15MIN_EXTREMO",
-      "ic": 0.4387,
-      "n": 259
+      "ic": 0.4389,
+      "n": 260
     },
     {
       "k": "FAVORITO_CONFIRMADO_15MIN_EXTREMO#15min",
-      "ic": 0.4387,
-      "n": 259
+      "ic": 0.4389,
+      "n": 260
     },
     {
       "k": "FAVORITO_CONFIRMADO_15MIN_EXTREMO#BTC#15min",
