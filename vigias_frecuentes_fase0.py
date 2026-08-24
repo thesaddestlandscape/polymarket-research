@@ -90,6 +90,8 @@ import vigia_ballenas_cobertura
 import shadow_pnl_fiel
 import vigia_micro_bucket_kill_switch
 import vigia_reabrir_overrides_micro_bucket
+import vigia_micro_bucket_kill_switch_wallet_mirror
+import vigia_reabrir_overrides_wallet_mirror
 import vigia_gate_bucket_wallet_mirror
 import wallet_mirror_tracker as _wmt
 from wallet_mirror_sniper import OUT as _WMS_OUT, COLUMNS as _WMS_COLUMNS
@@ -165,6 +167,16 @@ TAREAS = [
     # el orden de ejecución del scheduler es el orden de esta lista) para
     # nunca revisar un override en el mismo ciclo en que se acaba de crear.
     ("vigia_reabrir_overrides_micro_bucket", vigia_reabrir_overrides_micro_bucket.main, "vigia_reabrir_overrides_micro_bucket.log", 1800),
+    # 24-Ago: mismo par bloqueo+reapertura, pero para el gate paralelo de
+    # WALLET_MIRROR (wallet_mirror_gate_bucket.py) -- las 6 tuplas
+    # WALLET_MIRROR (dinero real desde 10/11/12-Ago) no tenían NINGÚN
+    # backstop hasta hoy. Requiere wallet_mirror_executor_dryrun.py
+    # logueando "grande=" en trades.csv (mismo día) -- trades anteriores
+    # se excluyen fail-closed, no se reconstruyen retroactivamente.
+    ("vigia_micro_bucket_kill_switch_wallet_mirror", vigia_micro_bucket_kill_switch_wallet_mirror.main,
+     "vigia_micro_bucket_kill_switch_wallet_mirror.log", 1800),
+    ("vigia_reabrir_overrides_wallet_mirror", vigia_reabrir_overrides_wallet_mirror.main,
+     "vigia_reabrir_overrides_wallet_mirror.log", 1800),
     ("vigia_gate_bucket_wallet_mirror", vigia_gate_bucket_wallet_mirror.main, "vigia_gate_bucket_wallet_mirror.log", 3600),
     # 20-Ago: 2 más, cadencia EXACTA de sus crons retirados (*/20 * * * * = 1200s)
     ("smart_money_tracker", smart_money_tracker.main, "smart_money.log", 1200),

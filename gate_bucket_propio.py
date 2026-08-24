@@ -297,26 +297,32 @@ def _regla_aplica(tupla_str: str, py: float):
     return None
 
 
+def bucket(py: float) -> float:
+    """Único punto de verdad del bucketing (STEP=0.05) -- reutilizado por
+    evaluar()/evaluar_sin_override() y por cualquier vigía externo que
+    necesite reconstruir la MISMA clave exacta (24-Ago, /code-review:
+    antes cada vigía de kill-switch/reapertura reimplicaba esta fórmula a
+    mano, riesgo real de que un cambio aquí divergiera en silencio de las
+    copias). 06-Ago (fix real): sin el +1e-9, un precio EXACTO en un
+    múltiplo de STEP (ej. 0.70) puede dar 13.999999999999998 en la
+    división por coma flotante -- math.floor lo trunca al bucket INFERIOR
+    (0.65 en vez de 0.70). Verificado real: el bucket "0.65" de
+    FAVORITO_CONFIRMADO_15MIN_ALTACONVICCION#BTC#15min#BUY_YES (n=189, el
+    de más datos) no tenía NINGÚN precio real 0.65-0.699 -- eran todos
+    0.70 exactos mal etiquetados. 5.08% de las filas de results.csv
+    afectadas (3998/78659)."""
+    import math
+    return round(math.floor(py / STEP + 1e-9) * STEP, 4)
+
+
 def evaluar(tupla_str: str, py: float) -> dict:
     """{"veredicto": "malo_confirmado"|"bueno_confirmado"|"sin_concluir",
     "detalle": {...}|None}. No decide permitido/vetado -- eso lo hace el
-    caller (fase 0: solo loguea; fase 1: veta si malo_confirmado)."""
-    import math
-    # 06-Ago (fix real, hallazgo al responder una pregunta de Javi sobre
-    # cobertura de buckets): sin el +1e-9, un precio EXACTO en un múltiplo
-    # de STEP (ej. 0.70) puede dar 13.999999999999998 en la división por
-    # coma flotante -- math.floor lo trunca al bucket INFERIOR (0.65 en vez
-    # de 0.70). Verificado real: el bucket "0.65" de FAVORITO_CONFIRMADO_
-    # 15MIN_ALTACONVICCION#BTC#15min#BUY_YES (n=189, el de más datos) no
-    # tenía NINGÚN precio real 0.65-0.699 -- eran todos 0.70 exactos mal
-    # etiquetados. 5.08% de las filas de results.csv afectadas (3998/78659).
-    # Mismo bug duplicado en 6 ficheros más, ver idea_bug_bucketing_float_
-    # precision_micro_buckets_06ago en memoria.
-    b = round(math.floor(py / STEP + 1e-9) * STEP, 4)
-    b_str = f"{b:.2f}"
+    caller (fase 0: solo loguea; fase 1: veta si malo_confirmado).
 
-    # Cortacircuitos de emergencia -- SIEMPRE se comprueba primero, gana
-    # sobre cualquier otro veredicto (incluido bueno_confirmado propio).
+    Cortacircuitos de emergencia -- SIEMPRE se comprueba primero, gana
+    sobre cualquier otro veredicto (incluido bueno_confirmado propio)."""
+    b_str = f"{bucket(py):.2f}"
     override = _cargar_override()
     ov = override.get(f"{tupla_str}#{b_str}") or override.get(tupla_str)
     if ov is not None:
@@ -325,7 +331,22 @@ def evaluar(tupla_str: str, py: float) -> dict:
             "detalle": {"origen": "override_emergencia", "motivo": ov.get("motivo", "sin motivo registrado"),
                         "desde": ov.get("desde")},
         }
+    return evaluar_sin_override(tupla_str, py)
 
+
+def evaluar_sin_override(tupla_str: str, py: float) -> dict:
+    """MISMA lógica que evaluar() pero SIN consultar el override de
+    emergencia -- exclusivamente para los vigías de reapertura (24-Ago,
+    /code-review, hallazgo real): un vigía que quiere comprobar "¿el gate
+    de verdad, sin el bloqueo que él mismo puso, ya no confirma malo?" NO
+    puede llamar a evaluar() a secas -- mientras el override siga escrito,
+    evaluar() lo ve primero y SIEMPRE devuelve malo_confirmado, sea cual
+    sea el estado real de la tabla, haciendo que la condición de
+    reapertura nunca se cumpla (bug real cazado antes de desplegar, ver
+    feedback de Javi "no podemos dejar estrategias muertas así"). Esta
+    función es el núcleo que evaluar() envuelve con el override."""
+    b = bucket(py)
+    b_str = f"{b:.2f}"
     tabla = _cargar().get(tupla_str, {})
     detalle = tabla.get(b_str)
 

@@ -58,11 +58,6 @@ N_MIN_REAPERTURA = 5
 PREFIJO_AUTOMATICO = "kill_switch automático"
 
 
-def _bucket(py: float) -> float:
-    import math
-    return round(math.floor(py / STEP + 1e-9) * STEP, 4)
-
-
 def _py_real(direction: str, entry_price: float) -> float:
     return 1 - entry_price if direction == "BUY_NO" else entry_price
 
@@ -135,7 +130,7 @@ def main() -> int:
                 continue
             if ts_close <= desde_dt:
                 continue
-            if _bucket(_py_real(direction, entry)) != bucket:
+            if gbp.bucket(_py_real(direction, entry)) != bucket:
                 continue
             pnls_recientes.append(pnl)
 
@@ -146,7 +141,14 @@ def main() -> int:
         if pnl_total < 0:
             continue
 
-        veredicto_hoy = gbp.evaluar(tupla_str, bucket + STEP / 2)["veredicto"]
+        # 24-Ago (/code-review, hallazgo real): evaluar() consulta el
+        # override PRIMERO -- mientras el bucket siga bloqueado, evaluar()
+        # siempre devolvería malo_confirmado (por el propio override, no
+        # por el estado real de la tabla), y esta condición nunca se
+        # cumpliría. evaluar_sin_override() es el núcleo sin ese paso,
+        # exactamente lo que hace falta aquí: ¿qué diría el gate si el
+        # override no existiera?
+        veredicto_hoy = gbp.evaluar_sin_override(tupla_str, bucket + STEP / 2)["veredicto"]
         if veredicto_hoy == "malo_confirmado":
             continue  # dinero real reciente OK, pero la estadística fresca sigue diciendo que no -- se queda bloqueado
 

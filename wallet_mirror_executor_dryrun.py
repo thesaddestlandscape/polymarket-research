@@ -408,7 +408,14 @@ async def _correr_una_conexion(wallets: dict, vistos: set) -> set:
                                         "close_timestamp": "", "exit_price": "", "outcome_real": "",
                                         "fee_eur": resultado.get("fee_eur", 0),
                                         "pnl_bruto_eur": "", "pnl_neto_eur": "",
-                                        "notas": (f"wallet_mirror wallet={w} tipo={info['tipo']}"
+                                        # 24-Ago: "grande=" añadido a notas -- el kill-switch de
+                                        # micro-bucket de WALLET_MIRROR (vigia_micro_bucket_kill_
+                                        # switch_wallet_mirror.py) necesita jugada_grande para
+                                        # reconstruir la MISMA clave que usó wmgb.evaluar() al
+                                        # decidir (tipo#activo#marco#grande#bucket), y trades.csv no
+                                        # tenía columna propia para ese dato.
+                                        "notas": (f"wallet_mirror wallet={w} tipo={info['tipo']} "
+                                                  f"grande={int(ratio_size is not None and ratio_size >= 2.0)}"
                                                   if resultado.get("ok") else resultado.get("error", "")),
                                     }
                                     lt._registrar_trade(trade)
