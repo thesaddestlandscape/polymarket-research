@@ -1,11 +1,11 @@
 {
- "ts": "2026-08-25T19:46:57+00:00",
+ "ts": "2026-08-25T20:09:02+00:00",
  "wallet": "0xB6eDe3A699f73cbe7f8A221c2cdAcEbFdf02028b",
- "free_usdc": 9.5429,
+ "free_usdc": 10.2424,
  "positions_value": 0.0,
- "total": 9.5429,
+ "total": 10.2424,
  "deposito_inicial": 61.22,
- "pnl_real": -51.6771,
+ "pnl_real": -50.9776,
  "pnl_por_deposito": [
   {
    "fecha": "2026-06-29",
@@ -27,9 +27,9 @@
    "fecha": "2026-08-13",
    "eur": 10.0,
    "nota": "Tercera recarga (petici\u00f3n expl\u00edcita Javi). 10 USDC nuevos + 5.97 USDC remanente del per\u00edodo 2 = 15.97 USDC de capital disponible al inicio del per\u00edodo 3",
-   "pnl_ledger": -7.6082,
-   "n_trades": 17,
-   "rendimiento_pct": -76.1
+   "pnl_ledger": -6.967,
+   "n_trades": 18,
+   "rendimiento_pct": -69.7
   }
  ],
  "daily_real": [
@@ -227,9 +227,9 @@
   },
   {
    "date": "2026-08-25",
-   "pnl": 0.35
+   "pnl": 1.05
   }
  ],
- "pnl_hoy_real": 0.35,
- "pnl_7d_real": -5.49
+ "pnl_hoy_real": 1.05,
+ "pnl_7d_real": -4.79
 }
