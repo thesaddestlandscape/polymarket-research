@@ -1,0 +1,3 @@
+timestamp_utc,trade_timestamp,wallet,arquetipo,activo,marco,bucket_precio,market_slug,lado_wallet,mejor_ask_deteccion,profundidad_eur_deteccion,ratio_vs_stake_deteccion,sigue_fillable,gate_veredicto,stake_sim_eur,circuit_breaker_bloquea,decision_dry_run
+2026-08-25T18:46:09+00:00,2026-08-25T18:45:10.119+00:00,0xeebde7a0e019a63e6b476eb425505b7b3e6eba30,DISPERSO,SOL,15min,0.50,sol-updown-15m-1787683500,Up,0.51,160.2,152.6,1,bueno_confirmado,1.05,0,DISPARARIA
+2026-08-25T18:46:09+00:00,2026-08-25T18:45:10.736+00:00,0xb27bc932bf8110d8f78e55da7d5f0497a18b5b82,DISPERSO,SOL,15min,0.50,sol-updown-15m-1787683500,Up,0.51,235.0,223.8,1,bueno_confirmado,1.05,0,DISPARARIA
