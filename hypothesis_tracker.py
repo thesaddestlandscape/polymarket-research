@@ -25,6 +25,7 @@ Hipótesis pendientes conectadas al sistema:
 """
 import csv
 import json
+import time
 from collections import defaultdict
 from datetime import datetime, timezone
 from pathlib import Path
@@ -320,7 +321,17 @@ def _eval_of_rangos_par(rows):
     return {"by_pair": by_pair, "status": overall, "rec": recs}
 
 
-KELLY_HORA_TARGET_HOURS = [13, 15, 17, 19]  # UTC → Madrid CEST +2 = 15/17/19/21h
+KELLY_HORA_TARGET_HOURS = [
+    5, 6, 7, 8, 9, 10, 11, 12,   # 25-Ago: huecos reales de ventanas_lunes_viernes
+    13, 15, 17, 19,               # (Madrid CEST 07:00-14:00 y 23:00-01:00) -- Stage 1
+    21, 22,                       # del roadmap ("ampliar ventanas horarias") llevaba
+]  # UTC → Madrid CEST +2 = 07-14h y 23-01h Madrid  # parado porque esta lista solo
+# cubría horas YA dentro de la ventana abierta (13/15/17/19 UTC = 15/17/19/21h Madrid,
+# todas dentro de tarde_completa 15:00-23:00) -- el gate nunca había evaluado ni una
+# sola celda de las horas candidatas a abrir. Huecos reales de config_live.json
+# (ventanas_lunes_viernes) hoy: UTC 05:00-06:30, 07:30-08:30, 09:30-13:00, 21:00-23:00
+# -- ver idea_kelly_hora_huecos_nunca_evaluados_25ago. Cambio shadow-puro (solo añade
+# celdas informativas al JSON, no toca prob_yes/stake/live_guard.py).
 KELLY_HORA_N_INFORMATIVO = 15
 KELLY_HORA_N_GATE = 40
 KELLY_HORA_STATE = REPO / "data/shadow/kelly_hora_segmentado.json"
@@ -347,7 +358,39 @@ def _eval_kelly_hora(rows):
     n>=40; las celdas con 15<=n<40 se registran solo como informativas
     (ACUMULANDO). El detalle completo (todas las celdas trackeadas, no solo
     las que ya pasan) se persiste en kelly_hora_segmentado.json para poder
-    ver cómo evoluciona cada una con el tiempo."""
+    ver cómo evoluciona cada una con el tiempo.
+
+    25-Ago (mitigación de emergencia, hallazgo real de carga): al ampliar
+    KELLY_HORA_TARGET_HOURS de 4 a 14 horas (huecos de Stage 0/ventanas
+    horarias), el número de celdas con n>=40 que exigen gate_riguroso
+    completo (Wilson+shuffle 5000 iters+bootstrap 5000 iters = 10k draws
+    por celda) subió de ~200 a ~680 -- y esta función se llama en CADA
+    ciclo de postmortem (~20-23s, shadow_postmortem.py::ht.run() sin
+    throttle propio). Detectado en vivo el mismo día: load average subió
+    a 18.9 en 2 cores (ratio 9.4x) con swap thrashing activo (si/so hasta
+    ~100k páginas/s en vmstat) justo tras desplegar el cambio. El patrón
+    horario no cambia en 20s -- recalcular el gate completo cada ciclo no
+    aporta nada, solo quema CPU. Throttle: si el JSON se escribió hace
+    menos de 15min, se devuelve el resumen cacheado sin recomputar nada."""
+    THROTTLE_S = 900
+    try:
+        if KELLY_HORA_STATE.exists():
+            edad_s = time.time() - KELLY_HORA_STATE.stat().st_mtime
+            if edad_s < THROTTLE_S:
+                cache = json.loads(KELLY_HORA_STATE.read_text(encoding="utf-8"))
+                celdas_cache = cache.get("celdas", {})
+                gate_ok_cache = [k for k, v in celdas_cache.items() if v.get("veredicto") == "GATE OK"]
+                n_gate_cache = sum(1 for v in celdas_cache.values() if v.get("n", 0) >= KELLY_HORA_N_GATE)
+                return {
+                    "status": "LISTA_EVALUAR" if gate_ok_cache else "ACUMULANDO",
+                    "gate_ok": gate_ok_cache,
+                    "n_celdas_trackeadas": len(celdas_cache),
+                    "n_celdas_con_gate_completo": n_gate_cache,
+                    "rec": f"(cache {edad_s:.0f}s) {len(gate_ok_cache)} celda(s) GATE OK de {len(celdas_cache)} trackeadas",
+                }
+    except Exception:
+        pass  # cache corrupto/ilegible -> recomputar como siempre
+
     from analisis_gate_riguroso import gate as _gate_riguroso  # noqa: PLC0415
 
     por_celda = defaultdict(list)
