@@ -17,9 +17,19 @@ import math
 from pathlib import Path
 
 DATA_PATH = Path("data/shadow/kelly_precio_gate.json")
+# 25-Ago: fuente ADICIONAL para familias que no pasan por results.csv
+# (mismo motivo que WALLET_MIRROR necesita joins propios en otros sitios
+# del proyecto) -- generada por analisis_kelly_precio_resolution_sniper_
+# naive_25ago.py, que YA filtra a solo entradas confirmado+pnl_medio>0
+# (petición explícita Javi: "solo los micro-buckets y micro-buckets finos
+# que tienen edge y pnl positivo confirmado"). Nunca pisa datos de
+# DATA_PATH -- solo se consulta cuando la familia no aparece ahí, mismo
+# patrón aditivo que zonas_validadas_externas.json en gate_bucket_propio.py.
+DATA_PATH_EXTRA = Path("data/shadow/kelly_precio_resolution_sniper_naive.json")
 STEP = 0.10
 
 _cache = {"mtime": None, "data": {}}
+_cache_extra = {"mtime": None, "data": {}}
 
 
 def _familia(strategy: str) -> str:
@@ -58,6 +68,54 @@ def _cargar() -> dict:
     return _cache["data"]
 
 
+def _cargar_extra() -> dict:
+    try:
+        mtime = DATA_PATH_EXTRA.stat().st_mtime
+    except OSError:
+        return {}
+    if _cache_extra["mtime"] != mtime:
+        try:
+            _cache_extra["data"] = json.loads(DATA_PATH_EXTRA.read_text(encoding="utf-8"))
+            _cache_extra["mtime"] = mtime
+        except Exception:
+            pass
+    return _cache_extra["data"]
+
+
+def _evaluar_extra(familia: str, precio_decision: float, subtype: str) -> dict | None:
+    """Consulta DATA_PATH_EXTRA -- primero el bucket fijo (misma
+    granularidad STEP=0.10 que el gate principal), y si no hay entrada
+    ahí, las ventanas finas (paso 0.01, ancho 0.05, cada una ya viene
+    filtrada a confirmado+pnl_medio>0 por el generador). Ambas fuentes
+    solo contienen entradas ya confirmadas y positivas -- no hace falta
+    re-chequear veredicto aquí, a diferencia de _cargar()."""
+    datos = _cargar_extra()
+
+    tabla = datos.get("familias", {}).get(familia, {}).get(subtype)
+    if tabla:
+        b = round(math.floor(precio_decision / STEP + 1e-9) * STEP, 4)
+        entrada = tabla.get(f"{b:.2f}")
+        if entrada is not None:
+            return {
+                "veredicto": "confirmado",
+                "ratio_correccion": entrada.get("ratio_correccion"),
+                "bucket": f"{b:.2f}", "familia": familia, "subtype": subtype,
+                "n": entrada.get("n"), "fuente": "extra_grid",
+            }
+
+    ventanas = datos.get("ventanas_finas", {}).get(familia, {}).get(subtype)
+    if ventanas:
+        for v in ventanas:
+            if v["lo"] <= precio_decision < v["hi"] and v.get("ratio_correccion") is not None:
+                return {
+                    "veredicto": "confirmado",
+                    "ratio_correccion": v["ratio_correccion"],
+                    "bucket": f"[{v['lo']:.2f},{v['hi']:.2f})", "familia": familia,
+                    "subtype": subtype, "n": v.get("n"), "fuente": "extra_fino",
+                }
+    return None
+
+
 def evaluar(strategy: str, precio_decision: float, subtype: str | None = None) -> dict | None:
     """precio_decision = precio en la perspectiva de la DECISIÓN (ya
     flipado a 1-precio_yes si es BUY_NO -- el caller es responsable de
@@ -74,14 +132,14 @@ def evaluar(strategy: str, precio_decision: float, subtype: str | None = None) -
     Devuelve None si no hay evidencia (fail-open, factor=1.0 para el
     caller), o {"veredicto", "ratio_correccion", "bucket", "familia", "n"}
     si el bucket está en el gate (confirmado o no)."""
-    familias = _cargar().get("familias", {})
     familia = _familia(strategy)
+    if not subtype:
+        return None
+    familias = _cargar().get("familias", {})
     por_subtype = familias.get(familia)
-    if not por_subtype or not subtype:
-        return None
-    tabla = por_subtype.get(subtype)
+    tabla = por_subtype.get(subtype) if por_subtype else None
     if not tabla:
-        return None
+        return _evaluar_extra(familia, precio_decision, subtype)
     # 06-Ago fix: +1e-9 evita que un precio EXACTO en un múltiplo de STEP
     # (ej. 0.70) caiga en el bucket inferior por precisión de coma flotante
     # -- ver idea_bug_bucketing_float_precision_micro_buckets_06ago (mismo
@@ -89,7 +147,7 @@ def evaluar(strategy: str, precio_decision: float, subtype: str | None = None) -
     b = round(math.floor(precio_decision / STEP + 1e-9) * STEP, 4)
     entrada = tabla.get(f"{b:.2f}")
     if entrada is None:
-        return None
+        return _evaluar_extra(familia, precio_decision, subtype)
     return {
         "veredicto": entrada.get("veredicto", "sin_concluir"),
         "ratio_correccion": entrada.get("ratio_correccion"),
