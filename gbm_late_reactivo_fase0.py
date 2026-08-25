@@ -38,7 +38,7 @@ import fcntl
 import json
 import sys
 import time
-from datetime import datetime, timezone
+from datetime import date, datetime, timezone
 from pathlib import Path
 
 import websockets
@@ -48,6 +48,9 @@ sys.path.insert(0, str(REPO))
 
 import live_trade as lt  # noqa: E402
 from resolution_sniper_observer import mercado_slot, token_ids  # noqa: E402
+from libro_multinivel_fase0 import _libro_completo, _imbalance, _slope  # noqa: E402
+import ballenas_firehose_cache as _fc  # noqa: E402
+from shadow_predict import _cargar_bot_wallets  # noqa: E402
 
 DIR_SHADOW = REPO / "data" / "shadow"
 OUT = DIR_SHADOW / "gbm_late_reactivo_fase0.csv"
@@ -67,9 +70,77 @@ WS_URL = "wss://stream.binance.com:9443/stream?streams=" + "/".join(
 COLUMNS = [
     "timestamp_utc", "activo", "market_id", "condition_id", "ts_end",
     "ts_tick_binance_ms", "ts_consulta_libro_ms", "latencia_ms",
-    "precio_ref", "precio_tick", "drift_pct",
+    "precio_ref", "precio_tick", "drift_pct", "restante_min",
     "mejor_ask", "profundidad_eur", "ratio_vs_stake", "n_niveles",
+    "imbalance_top1", "imbalance_top5", "imbalance_top10",
+    "slope_ask", "slope_bid", "n_niveles_ask", "n_niveles_bid",
+    "kalshi_mid", "kalshi_ts_utc", "kalshi_delta_ms",
+    "bot_n_trades", "bot_lado_mayoria", "bot_coincide_direccion",
 ]
+# 25-Ago (propuesta #14, Javi): en el instante del trigger, ¿ya hay bot
+# wallets (bot_wallets_universo_25ago.json, edge confirmado) operando en
+# ESTE mercado? Mide si vamos por delante del dinero informado (bot_
+# n_trades=0 -- el mercado sigue "limpio" cuando reaccionamos) o a
+# rebufo (bot_n_trades>0, y si coinciden con nuestra dirección o no).
+# Reusa _cargar_bot_wallets() de shadow_predict.py (frozenset cacheado
+# por mtime, ya en uso en producción) y leer_snapshot_reciente() del
+# firehose (mismo mecanismo de baja latencia que _gate_volumen_ballenas,
+# cero llamadas de red nuevas).
+# 25-Ago (propuesta #13, Javi, versión ligera -- medir antes de construir
+# un pipeline paralelo completo): solo para BTC (único activo con mercado
+# Kalshi 15min direccional, KXBTC15M), lee la ÚLTIMA fila ya capturada por
+# fetch_kalshi_btc.py (poll cada 2s, sin necesidad de construir nada
+# nuevo de captura) y mide si su timestamp es ANTERIOR al tick de Binance
+# que nos disparó -- kalshi_delta_ms negativo = Kalshi se adelantó,
+# positivo = Kalshi va detrás. Con esto (barato, reusa datos que ya se
+# están grabando) se puede ver si merece la pena construir un trigger
+# propio sobre Kalshi antes de invertir en ello -- ver hallazgo previo
+# (idea_kalshi_leadlag_refutado_primera_pasada_24ago): la señal agregada
+# es débil, solo +1s/+2s marginalmente significativos, dominada por la
+# dirección contraria. Este cruce con GBM_LATE es un ángulo NUEVO, no
+# repite ese análisis.
+
+DIR_PRICES = REPO / "data" / "prices"
+
+
+def _kalshi_ultimo_btc() -> tuple[float | None, str | None]:
+    """Última fila de hoy en kalshi_btc15m_YYYY-MM-DD.csv -- lectura
+    barata (solo el final del fichero, igual que el resto de tails del
+    proyecto), sin abrir conexión nueva ni depender de que Kalshi tenga
+    websocket público (no verificado, no asumido)."""
+    path = DIR_PRICES / f"kalshi_btc15m_{date.today().isoformat()}.csv"
+    if not path.exists():
+        return None, None
+    try:
+        with open(path, "rb") as f:
+            f.seek(0, 2)
+            tam = f.tell()
+            f.seek(max(0, tam - 4096))
+            ultimas = f.read().decode("utf-8", errors="replace").splitlines()
+        for linea in reversed(ultimas):
+            if not linea or linea.startswith("timestamp_utc"):
+                continue
+            partes = linea.split(",")
+            if len(partes) < 6:
+                continue
+            ts_utc, _ticker, _floor, yes_bid, yes_ask, _last = partes[:6]
+            mid = (float(yes_bid) + float(yes_ask)) / 2
+            return mid, ts_utc
+    except Exception:
+        pass
+    return None, None
+# 25-Ago (propuesta #11, Javi): `restante_min` permite filtrar a
+# posteriori qué hermanos de GBM_LATE (TARDIO/ESPACIO_ATR/PYCONFIRMADO/
+# MULTIHORIZONTE/base, ver _s_gbm_late en shadow_predict.py) tenían su
+# ventana rest_lo/rest_hi activa en el instante del trigger -- sin
+# duplicar 6 lógicas de disparo distintas (cada hermano usa su propio
+# rest_lo/rest_hi y ESPACIO_ATR incluso su propio umbral en vez de
+# GBM_LATE_DRIFT_VENT_MIN_PCT), este único trigger de 0.03% ya captura
+# el instante compartido; restante_min es lo que falta para poder
+# segmentar el análisis por hermano después.
+# 25-Ago (propuesta #12, Javi): imbalance/slope multi-nivel en el MISMO
+# instante reactivo (no en un timer aparte de 5min como libro_
+# multinivel_fase0.py) -- reusa sus mismas funciones de cálculo.
 
 _SYM_A_ACTIVO = {v: k for k, v in SYMBOLS.items()}
 
@@ -142,6 +213,53 @@ async def _procesar_tick(activo: str, precio: float, ts_tick_ms: int, estado: di
         _log(f"[{activo}] error consultando libro: {type(ex).__name__}: {ex}")
         return
 
+    # propuesta #12 (Javi, 25-Ago): niveles completos del MISMO token en
+    # el mismo instante reactivo, no en un timer aparte de 5min -- reusa
+    # las funciones de libro_multinivel_fase0.py sin duplicar cálculo.
+    try:
+        asks, bids = _libro_completo(token_id)
+        asks = asks or []
+        bids = bids or []
+    except Exception as ex:
+        _log(f"[{activo}] error consultando libro multinivel: {type(ex).__name__}: {ex}")
+        asks, bids = [], []
+
+    restante_min = round((ts_end - time.time()) / 60.0, 2)
+
+    bot_n_trades, bot_lado_mayoria, bot_coincide_direccion = 0, "", ""
+    try:
+        bots = _cargar_bot_wallets()
+        condition_id = e.mkt.get("conditionId", "")
+        if bots and condition_id:
+            trades_recientes = _fc.leer_snapshot_reciente(condition_id)
+            votos: dict = {}
+            for t in trades_recientes:
+                if (t.get("side") or "").strip().upper() != "BUY":
+                    continue
+                if (t.get("proxyWallet") or "").lower() not in bots:
+                    continue
+                lado = t.get("outcome", "")
+                if lado:
+                    votos[lado] = votos.get(lado, 0) + 1
+            bot_n_trades = sum(votos.values())
+            if bot_n_trades:
+                bot_lado_mayoria = max(votos, key=votos.get)
+                lado_nuestro = "Up" if drift_pct > 0 else "Down"
+                bot_coincide_direccion = "1" if bot_lado_mayoria == lado_nuestro else "0"
+    except Exception as ex:
+        _log(f"[{activo}] error consultando bot_consenso: {type(ex).__name__}: {ex}")
+
+    kalshi_mid, kalshi_ts_utc, kalshi_delta_ms = "", "", ""
+    if activo == "BTC":
+        try:
+            kalshi_mid, kalshi_ts_utc = _kalshi_ultimo_btc()
+            if kalshi_ts_utc:
+                kalshi_ts = datetime.fromisoformat(kalshi_ts_utc.replace("Z", "+00:00"))
+                kalshi_delta_ms = int(kalshi_ts.timestamp() * 1000) - ts_tick_ms
+        except Exception as ex:
+            _log(f"[{activo}] error leyendo kalshi: {type(ex).__name__}: {ex}")
+            kalshi_mid, kalshi_ts_utc, kalshi_delta_ms = "", "", ""
+
     fila = {
         "timestamp_utc": datetime.now(timezone.utc).isoformat(timespec="milliseconds"),
         "activo": activo, "market_id": e.mkt.get("id", ""),
@@ -149,14 +267,27 @@ async def _procesar_tick(activo: str, precio: float, ts_tick_ms: int, estado: di
         "ts_tick_binance_ms": ts_tick_ms, "ts_consulta_libro_ms": ts_consulta_ms,
         "latencia_ms": ts_consulta_ms - ts_tick_ms,
         "precio_ref": e.ref, "precio_tick": precio, "drift_pct": round(drift_pct, 4),
+        "restante_min": restante_min,
         "mejor_ask": fill.get("mejor_ask") if fill.get("ok") else "",
         "profundidad_eur": fill.get("profundidad_eur") if fill.get("ok") else "",
         "ratio_vs_stake": fill.get("ratio_vs_stake") if fill.get("ok") else "",
         "n_niveles": fill.get("n_niveles") if fill.get("ok") else "",
+        "imbalance_top1": _imbalance(asks, bids, 1),
+        "imbalance_top5": _imbalance(asks, bids, 5),
+        "imbalance_top10": _imbalance(asks, bids, 10),
+        "slope_ask": _slope(asks), "slope_bid": _slope(bids),
+        "n_niveles_ask": len(asks), "n_niveles_bid": len(bids),
+        "kalshi_mid": kalshi_mid, "kalshi_ts_utc": kalshi_ts_utc,
+        "kalshi_delta_ms": kalshi_delta_ms,
+        "bot_n_trades": bot_n_trades, "bot_lado_mayoria": bot_lado_mayoria,
+        "bot_coincide_direccion": bot_coincide_direccion,
     }
     _guardar(fila)
-    _log(f"[{activo}] TRIGGER drift={drift_pct:+.3f}% latencia={fila['latencia_ms']}ms "
-         f"profundidad={fila['profundidad_eur']} ask={fila['mejor_ask']}")
+    extra_kalshi = f" kalshi_delta={kalshi_delta_ms}ms" if activo == "BTC" else ""
+    extra_bot = f" bot_n={bot_n_trades} bot_coincide={bot_coincide_direccion}" if bot_n_trades else ""
+    _log(f"[{activo}] TRIGGER drift={drift_pct:+.3f}% restante={restante_min}min "
+         f"latencia={fila['latencia_ms']}ms profundidad={fila['profundidad_eur']} "
+         f"ask={fila['mejor_ask']} imb10={fila['imbalance_top10']}{extra_kalshi}{extra_bot}")
 
 
 async def _consumir_websocket() -> None:
