@@ -110,15 +110,30 @@ def _imbalance(asks: list, bids: list, top_n: int) -> float | None:
 
 
 def _guardar(filas: list) -> None:
+    """25-Ago (bug real encontrado por /code-review el mismo día del
+    despliegue): resolver_pendientes() reescribe el CSV ENTERO con
+    csv.DictWriter+writeheader() mientras los 6 hilos de captura seguían
+    haciendo append aquí sin ningún lock compartido -- carrera de
+    escritura concurrente que dejó cabeceras duplicadas y filas truncadas
+    en el fichero (96/193 filas parseables limpias en la primera hora).
+    Mismo fcntl.flock que ya protege resolver_pendientes(), ahora también
+    aquí -- ambas rutinas se serializan sobre el mismo OUT_LOCK."""
     if not filas:
         return
-    nuevo = not OUT.exists()
-    with open(OUT, "a", newline="", encoding="utf-8") as f:
-        w = csv.writer(f)
-        if nuevo:
-            w.writerow(COLUMNS)
-        for fila in filas:
-            w.writerow([fila.get(c, "") for c in COLUMNS])
+    import fcntl
+    lock_f = open(OUT_LOCK, "w")
+    try:
+        fcntl.flock(lock_f, fcntl.LOCK_EX)
+        nuevo = not OUT.exists()
+        with open(OUT, "a", newline="", encoding="utf-8") as f:
+            w = csv.writer(f)
+            if nuevo:
+                w.writerow(COLUMNS)
+            for fila in filas:
+                w.writerow([fila.get(c, "") for c in COLUMNS])
+    finally:
+        fcntl.flock(lock_f, fcntl.LOCK_UN)
+        lock_f.close()
 
 
 def _vistos_cargar() -> set:
