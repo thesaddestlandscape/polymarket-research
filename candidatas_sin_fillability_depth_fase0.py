@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 candidatas_sin_fillability_depth_fase0.py -- FASE 0 (solo observación) de
-profundidad real para 3 candidatas que hoy carecen de CUALQUIER
+profundidad real para candidatas que hoy carecen de CUALQUIER
 infraestructura de fill-ability (0 observaciones de libro real,
 verificado 25-Ago vía libro_snapshots.csv/ejecutores dedicados):
 
@@ -9,7 +9,21 @@ verificado 25-Ago vía libro_snapshots.csv/ejecutores dedicados):
   BALLENAS_CONFIRMADAS_15M#DOGE#15min#BUY_YES
   FAVORITO_CONFIRMADO#ETH#60min#BUY_NO
 
-Las 3 tienen zonas de precio confirmadas con rigor externo
+Ampliado 25-Ago tarde con 4 celdas más, encontradas con rigor PROPIO
+(gate_bucket_propio.json, no solo externo) al cierre de la sesión --
+mismo hueco (0% cobertura de libro real), ver checkpoint
+project_checkpoint_cierre_sesion_25ago_tarde:
+
+  WEEKLY_PRICE#ETH#BUY_NO       [0.45,0.50) n=35 pnl/tr=+1.069€ p=0.000
+  WEEKLY_PRICE#BTC#BUY_NO       [0.30,0.35) n=28 pnl/tr=+0.457€ p=0.006
+  GBM_LATE_5M#XRP#5min#BUY_YES  [0.45,0.50) n=32 pnl/tr=+1.061€ p=0.001
+  STREAK_FADE_5M#SOL#5min#BUY_YES [0.45,0.50) n=26 pnl/tr=+0.346€ p=0.006
+
+  OJO WEEKLY_PRICE: ya refutado 2 veces por fill-ability real (28-Jul
+  0% vía trades API; 20-Ago 2.1% pese a hit=96.3%) -- probable que
+  también falle aquí, pero se mide con datos frescos, no se asume.
+
+Las 7 tienen zonas de precio confirmadas con rigor propio o externo
 (`zonas_validadas_externas.json`, ballenas_timing_history.csv, n en
 cientos/miles) pero ninguna tiene ejecutor de baja latencia propio ni
 está cubierta por los depth-fase0 existentes (favorito_confirmado_
@@ -63,6 +77,10 @@ TUPLAS = [
     ("FAVORITO_CONFIRMADO_5MIN_ALTACONVICCION", "BNB", "BUY_YES"),
     ("BALLENAS_CONFIRMADAS_15M", "DOGE", "BUY_YES"),
     ("FAVORITO_CONFIRMADO", "ETH", "BUY_NO"),
+    ("WEEKLY_PRICE", "ETH", "BUY_NO"),
+    ("WEEKLY_PRICE", "BTC", "BUY_NO"),
+    ("GBM_LATE_5M", "XRP", "BUY_YES"),
+    ("STREAK_FADE_5M", "SOL", "BUY_YES"),
 ]
 _CLAVES = {(s, a, d) for s, a, d in TUPLAS}
 
