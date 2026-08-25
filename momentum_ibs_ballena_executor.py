@@ -48,19 +48,36 @@ para que, si algún día se plantea promoción, la fill-ability real ya
 esté medida desde el primer día en vez de descubrirse tarde (el error
 que ya sufrió toda la familia GBM_LATE/arquetipo A).
 
-100% observacional -- NUNCA envía una orden real. No importa
-live_stake.py/live_guard.py ni ninguna función de envío de live_trade.py
--- solo `_consultar_profundidad_libro` (solo lectura, libro público). No
-hay DRY_RUN que activar/desactivar: este script no tiene camino de
-ejecución real que exista para desactivar. MOMENTUM_IBS_*_BALLENA no
-está en pares_permitidos_live (n=338/166 hoy, IC todavía débil/negativo,
-lejos de cualquier gate) -- shadow_predict.py sigue generando estas
-mismas estrategias por el ciclo lento en paralelo (mismo patrón de doble
-camino ya aceptado en producción, dedup por (strategy,market_id,decision)
-en shadow_resolve.py).
+25-Ago: DRY_RUN=False a nivel de módulo, pero SOLO opera dinero real
+MOMENTUM_IBS_5M_BALLENA#SOL#5min#BUY_YES -- mismo patrón exacto que
+ballenas_executor_15min.py (20-Ago, ETH#15min#BUY_YES) y
+gbm_late_15min_executor.py: `puede_operar_live()`/`pares_permitidos_live`
+son la whitelist real, así que el resto de combos (BTC/ETH/XRP/DOGE/BNB
+en ambos marcos, y MOMENTUM_IBS_15M_BALLENA entero) siguen bloqueados por
+whitelist aunque DRY_RUN sea False a nivel de módulo -- para ellos no
+cambia nada, siguen siendo puro logging. Motivo de la promoción: bucket
+[0.30,0.35) confirmado con rigor propio (n=61, pnl/tr=+0.390€, shuffle
+p=0.007, split-half consistente) Y fill-ability real ya verificada por
+este mismo ejecutor desde el 17-Ago (61/62=98% de las señales con libro
+real, sin selección adversa) -- petición explícita Javi 25-Ago tras
+verificar ambas piezas, ver idea_momentum_ibs_ballena_sol_fillability_
+confirmada_25ago. Checklist de 6 categorías completo salvo
+kelly_precio_gate (familia no incluida en familias_permitidas todavía,
+pendiente explícito, no bloqueante) y banda gruesa de ballenas (sin
+entrada SOL#5min, tampoco bloqueante -- gate_bucket_propio es la
+protección primaria activa).
 
-Corre en screen propia:
-  screen -dmS momentumballena bash -c "cd /root/polymarket-research && .venv/bin/python momentum_ibs_ballena_executor.py >> logs/momentum_ibs_ballena_executor.log 2>&1"
+Añade gate_bucket_propio (fail-closed, exige bueno_confirmado antes de
+operar tuplas ya en pares_permitidos_live -- mismo mecanismo que el
+resto del sistema) + veto CLV + circuit breaker + techo de correlación +
+Kelly exacto -- mismos guardias, mismo orden, que ballenas_executor_
+15min.py/gbm_late_15min_executor.py.
+
+Se fusiona en observadores_fase0.py -- MOVIDO a
+executores_live_consolidado.py (screen ejeclive) desde el 25-Ago, mismo
+motivo que ballenas_executor_15min.py el 20-Ago: un módulo con
+DRY_RUN=False no puede vivir en un proceso observacional auto-reiniciado
+libremente.
 """
 import csv
 import fcntl
@@ -73,6 +90,9 @@ from pathlib import Path
 import requests
 
 import live_trade as lt
+from live_guard import puede_operar_live
+from live_stake import bloquear_por_circuit_breaker, calcular_stake
+from gate_bucket_propio import evaluar as _gate_bucket_propio
 from shadow_predict import (
     s_momentum_ibs_5m_ballena,
     s_momentum_ibs_15m_ballena,
@@ -91,9 +111,35 @@ from gbm_confluencia import evaluar as _gbm_confluencia  # 21-Ago, mismo patrón
 
 DIR = Path(__file__).resolve().parent
 DIR_SHADOW = DIR / "data" / "shadow"
+CONFIG_LIVE_PATH = DIR / "data" / "live" / "config_live.json"
 
 GAMMA = "https://gamma-api.polymarket.com"
 CLOB = "https://clob.polymarket.com"
+
+DRY_RUN = False  # 25-Ago: ver docstring -- solo opera MOMENTUM_IBS_5M_BALLENA
+# #SOL#5min#BUY_YES de verdad, el resto sigue bloqueado por whitelist
+# (puede_operar_live/pares_permitidos_live). NO cambiar sin revisión +
+# aprobación explícita + verificación del checklist de 6 categorías.
+
+_pares_live_cache = {"mtime": None, "set": set()}
+_orden_lock = threading.Lock()  # serializa el tramo de ejecución real entre los hilos
+
+
+def _pares_live_hoy_set() -> set:
+    """Mismo patrón fail-closed que el resto de ejecutores de baja latencia
+    (ballenas_executor_15min.py, gbm_late_15min_executor.py)."""
+    try:
+        mtime = CONFIG_LIVE_PATH.stat().st_mtime
+    except OSError:
+        return _pares_live_cache["set"]
+    if _pares_live_cache["mtime"] != mtime:
+        try:
+            data = json.loads(CONFIG_LIVE_PATH.read_text(encoding="utf-8"))
+            _pares_live_cache["set"] = set(data.get("pares_permitidos_live", []))
+            _pares_live_cache["mtime"] = mtime
+        except Exception:
+            pass
+    return _pares_live_cache["set"]
 
 # (activo, ventana_min) -- las 6 monedas en ambos marcos, mismo universo
 # que las funciones que se importan arriba (MOMENTUM_IBS_5M_PARES/15M_PARES
@@ -235,6 +281,125 @@ def _registrar_prediccion(mercado: dict, activo: str, ventana_min: int, strategy
         log(f"aviso: no se pudo registrar predicción para postmortem: {e}", activo)
 
 
+def disparar(activo: str, ventana_min: int, mercado: dict, strategy: str, py: float,
+             prob_yes: float, direccion: str, restante_s: float) -> bool:
+    """Decide y (si no es DRY_RUN, y la tupla exacta está en
+    pares_permitidos_live) ejecuta. Mismos guardias, mismo orden, que
+    ballenas_executor_15min.py/gbm_late_15min_executor.py -- este
+    ejecutor tampoco pasa por live_trade.py::main(), ninguno de sus
+    guardias se aplica gratis."""
+    subtype = f"{activo}#{ventana_min}min"
+    tupla_str = f"{strategy}#{subtype}#{direccion}"
+
+    # Whitelist por TUPLA EXACTA (con dirección) primero y fail-closed --
+    # puede_operar_live(strategy, subtype) SIN direction NO discrimina
+    # dirección (docstring propio de live_guard.py: "permitida si alguna
+    # dirección de ese strategy#subtype lo está"). Sin este check exacto
+    # aquí, una señal BUY_NO nunca verificada podría colarse a ejecución
+    # real solo porque BUY_YES del mismo par sí está en pares_permitidos_
+    # live -- encontrado en revisión manual antes de desplegar, 25-Ago.
+    if tupla_str not in _pares_live_hoy_set():
+        log(f"  {tupla_str} no está en pares_permitidos_live -- "
+            f"{'[DRY-RUN] no ejecutaría' if DRY_RUN else 'no se ejecuta'}", activo)
+        return False
+
+    gate_bp = _gate_bucket_propio(tupla_str, py)
+    if gate_bp["veredicto"] != "bueno_confirmado":
+        log(f"  ⛔ vetado por gate_bucket_propio (veredicto={gate_bp['veredicto']}) -- "
+            f"{'[DRY-RUN] no ejecutaría' if DRY_RUN else 'no se ejecuta'}", activo)
+        return False
+
+    ok_operar, motivo_operar = puede_operar_live(strategy, subtype)
+    if not ok_operar:
+        log(f"  {motivo_operar} -- {'[DRY-RUN] no ejecutaría' if DRY_RUN else 'no se ejecuta'}", activo)
+        return False
+
+    with _orden_lock:
+        config = lt._cargar_config()
+        max_misma_dir = config.get("riesgo", {}).get("max_posiciones_abiertas_misma_direccion", 2)
+        abiertas_dir = lt._posiciones_abiertas_misma_direccion(direccion)
+        if abiertas_dir >= max_misma_dir:
+            log(f"  techo de correlación: {abiertas_dir} posiciones {direccion} abiertas >= {max_misma_dir} -- "
+                f"{'[DRY-RUN] no ejecutaría' if DRY_RUN else 'no se ejecuta'}", activo)
+            return False
+
+        if mercado["market_id"] in lt._ya_operados_hoy():
+            log(f"  {mercado['market_id']} ya operado por otro proceso/hilo -- "
+                f"{'[DRY-RUN] no ejecutaría' if DRY_RUN else 'no se ejecuta'}", activo)
+            return False
+
+        if bloquear_por_circuit_breaker(
+                lambda motivo: log(f"  circuit breaker activo ({motivo}) -- "
+                                    f"{'[DRY-RUN] no ejecutaría' if DRY_RUN else 'no se ejecuta'}", activo)):
+            return False
+
+        lt._CLV_CACHE = None
+        clv_medio, n_clv = lt._clv_tupla(strategy, subtype, direccion, py=py)
+        if n_clv >= lt.CLV_VETO_MIN_N and clv_medio < 0:
+            log(f"  ⛔ Veto CLV: clv_medio={clv_medio:+.4f} (n={n_clv}) < 0 -- "
+                f"{'[DRY-RUN] no ejecutaría' if DRY_RUN else 'no se ejecuta'}", activo)
+            return False
+
+        # Kelly exacto real para binarias (mismo criterio que ballenas_executor_
+        # 15min.py/gbm_late_15min_executor.py): BUY_YES: f*=(p-py)/(1-py);
+        # BUY_NO: f*=(py-p)/py. precio_entrada en perspectiva de la DECISIÓN.
+        if direccion == "BUY_YES":
+            edge_dir = prob_yes - py
+            ic_conviccion = max(0.0, edge_dir / (1 - py)) if py < 1 else 0.0
+            precio_decision = py
+        else:
+            edge_dir = py - prob_yes
+            ic_conviccion = max(0.0, edge_dir / py) if py > 0 else 0.0
+            precio_decision = round(1.0 - py, 6)
+
+        stake_info = calcular_stake(ic_conviccion, strategy, subtype, direction=direccion,
+                                    precio_entrada=precio_decision)
+        if not stake_info.get("viable"):
+            log(f"  stake no viable: {stake_info.get('motivo')} -- "
+                f"{'[DRY-RUN] no ejecutaría' if DRY_RUN else 'no se ejecuta'}", activo)
+            return False
+
+        if DRY_RUN:
+            log(f"  [DRY-RUN] habría ejecutado {direccion} {mercado['market_id']} py={py:.3f} "
+                f"prob_yes={prob_yes:.3f} stake={stake_info['stake_eur']:.2f}€ restante={restante_s:.1f}s",
+                activo)
+            return True
+
+        resultado = lt._ejecutar_orden_polymarket(
+            mercado["market_id"], direccion, stake_info["stake_eur"], py,
+            edge_dir=edge_dir, contexto={"strategy": strategy, "subtype": subtype})
+
+        if resultado.get("no_fill"):
+            log(f"  no_fill: {resultado.get('error')}", activo)
+            return False
+
+        trade = {
+            "timestamp_utc": datetime.now(timezone.utc).isoformat(timespec="seconds"),
+            "market_id": mercado["market_id"], "question": "", "end_date": mercado.get("end_date", ""),
+            "strategy": strategy, "subtype": subtype, "direction": direccion,
+            "stake_eur": stake_info["stake_eur"] if resultado["ok"] else 0.0,
+            "entry_price": resultado["entry_price"],
+            "signal_ask": round(py, 4), "slip_real": resultado.get("slip_real", ""),
+            "ic_modelo": round(prob_yes, 4), "edge_neto": round(prob_yes - py, 4),
+            "conviction_score": round(prob_yes, 4), "kelly_recomendado": stake_info["stake_eur"],
+            "status": "OPEN" if resultado["ok"] else "ERROR",
+            "close_timestamp": "", "exit_price": "", "outcome_real": "",
+            "fee_eur": resultado.get("fee_eur", 0), "pnl_bruto_eur": "", "pnl_neto_eur": "",
+            "notas": (f"{strategy.lower()}_baja_latencia restante={restante_s:.1f}s"
+                      if resultado.get("ok") else resultado.get("error", "")),
+        }
+        lt._registrar_trade(trade)
+        log(f"  {'EJECUTADO' if resultado['ok'] else 'ERROR'}: {resultado}", activo)
+        if resultado["ok"]:
+            lt.enviar_telegram(
+                f"🎯 *Orden live ejecutada ({strategy} baja latencia)*\n"
+                f"Estrategia: {strategy}#{subtype}#{direccion}\n"
+                f"Precio fill: {resultado['entry_price']:.4f} (slip {resultado.get('slip_real', 0):+.4f})\n"
+                f"Stake: {stake_info['stake_eur']:.2f}€"
+            )
+        return resultado["ok"]
+
+
 def watch_window(activo: str, ventana_min: int, fn_senal, strategy: str, mercado: dict) -> bool:
     try:
         end_dt = datetime.fromisoformat(mercado["end_date"].replace("Z", "+00:00"))
@@ -282,6 +447,7 @@ def watch_window(activo: str, ventana_min: int, fn_senal, strategy: str, mercado
             f"gbm_coincide={gbm_conf['gbm_direccion_coincide']} ({n_polls} polls)", tag)
         _registrar_prediccion(mercado, activo, ventana_min, strategy, resultado, direccion,
                               restante_s, profundidad, gbm_conf)
+        disparar(activo, ventana_min, mercado, strategy, py_edge, prob_yes, direccion, restante_s)
         return True  # una señal por ventana es suficiente, mismo criterio que GBM
 
 
@@ -309,7 +475,8 @@ def hilo_activo(activo: str, ventana_min: int, fn_senal, strategy: str) -> None:
 
 
 def main():
-    log(f"momentum_ibs_ballena_executor arrancado (100% observacional, sin envío de orden real)")
+    log(f"momentum_ibs_ballena_executor arrancado (DRY_RUN={DRY_RUN}, "
+        f"whitelist real via pares_permitidos_live)")
     # 22-Ago: se retiró _fc.iniciar() (conexión websocket RTDS + caché en
     # memoria propia de ballenas_firehose_cache) -- código muerto desde el
     # 17-Ago: nada en este fichero llama a trades_de_mercado_firehose(),

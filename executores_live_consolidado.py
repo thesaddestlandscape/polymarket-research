@@ -59,6 +59,7 @@ import ballenas_executor_btc15m as _m_ballenasbtc15m
 import ballenas_executor_15min as _m_ballenas15m
 import favorito_altaconviccion_executor_15min as _m_altaconv
 import favorito_confirmado_btc60min_buyno_executor as _m_btc60mno
+import momentum_ibs_ballena_executor as _m_momentumballena
 
 # 20-Ago: ballenas_executor_15min.py añadido -- pasó a DRY_RUN=False para
 # BALLENAS_CONFIRMADAS_15M#ETH#15min#BUY_YES (checklist 6 categorías
@@ -75,12 +76,19 @@ import favorito_confirmado_btc60min_buyno_executor as _m_btc60mno
 # de proceso en ballenas_firehose_cache.py), así que SÍ gana la misma
 # optimización de conexión compartida, además de la supervisión de
 # watchdog/verify_deploy y la consistencia con el resto de ejecutores live.
+# 25-Ago: momentum_ibs_ballena_executor.py añadido -- pasó a DRY_RUN=False
+# SOLO para MOMENTUM_IBS_5M_BALLENA#SOL#5min#BUY_YES (edge riguroso +
+# fill-ability real 98%/n=61-62 ya medida por este mismo módulo desde el
+# 17-Ago, ver idea_momentum_ibs_ballena_sol_fillability_confirmada_25ago).
+# Resto de combos (BTC/ETH/XRP/DOGE/BNB, ambos marcos, y MOMENTUM_IBS_15M_
+# BALLENA entero) siguen bloqueados por whitelist exacta, sin cambio.
 MODULOS = [
     ("BALLENAS_5M", _m_ballenas5m),
     ("BALLENAS_BTC15M", _m_ballenasbtc15m),
     ("BALLENAS_15M", _m_ballenas15m),
     ("ALTACONVICCION_15M", _m_altaconv),
     ("FAV_BTC60M_BUYNO", _m_btc60mno),
+    ("MOMENTUM_IBS_BALLENA", _m_momentumballena),
 ]
 
 
