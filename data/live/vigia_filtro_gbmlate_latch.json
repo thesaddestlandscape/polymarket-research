@@ -155,6 +155,7 @@
   "ibs_20min|lt|0.4437|BUY_YES",
   "ibs_20min|lt|0.4466|BUY_YES",
   "ibs_20min|lt|0.44|BUY_YES",
+  "libro_spread|gt|0.01|BUY_YES",
   "sigma_ewma_delta_pct|gt|6.295|BUY_NO",
   "sigma_ewma_delta_pct|gt|6.308|BUY_NO",
   "sigma_ewma_delta_pct|gt|6.314|BUY_NO",
@@ -195,6 +196,7 @@
   "sigma_h|gt|0.0235|BUY_YES",
   "sigma_h|gt|0.0239|BUY_YES",
   "sigma_h|gt|0.0242|BUY_YES",
-  "sigma_h|gt|0.0243|BUY_YES"
+  "sigma_h|gt|0.0243|BUY_YES",
+  "sigma_h|gt|0.0245|BUY_YES"
  ]
 }
