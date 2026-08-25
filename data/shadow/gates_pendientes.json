@@ -56,7 +56,14 @@
       "fecha_desde": "2026-07-11",
       "n_objetivo": 40,
       "accion": "evaluar ic_bayes con dato fresco; si IC>=0.08 considerar mantener abierto, si IC<-0.12 volver a bloquear",
-      "avisado": false
+      "avisado": true,
+      "avisado_en": "2026-08-25T04:00:57+00:00",
+      "resultado_al_avisar": {
+        "n": 40,
+        "hit": 0.6,
+        "ic_bayes": 0.09523809523809523,
+        "pnl": 9.063699999999999
+      }
     },
     {
       "id": "OF5M_REAPERTURA_BNB",
