@@ -13,19 +13,30 @@ Solo lectura. No promociona nada por sí solo.
 """
 import csv
 import json
+import sys
 from collections import defaultdict
+from pathlib import Path
 
 import numpy as np
 
-BOTS = json.load(open("data/shadow/bot_wallets_universo_25ago.json")).keys()
-WEDGE = json.load(open("data/shadow/wallet_edge_score_por_activo_marco.json"))
+# 25-Ago: rutas relativas rompían en cron (cwd distinto de REPO,
+# FileNotFoundError en candidata2_weekly_temprano_espejo_fase0.py que
+# importa clasificar_wallets() -- 0 ejecuciones exitosas desde el
+# despliegue). Resolver siempre contra el directorio del propio fichero,
+# misma convención que el resto del proyecto.
+REPO = Path(__file__).resolve().parent
+DIR_SHADOW = REPO / "data" / "shadow"
+sys.path.insert(0, str(REPO))
+
+BOTS = json.load(open(DIR_SHADOW / "bot_wallets_universo_25ago.json")).keys()
+WEDGE = json.load(open(DIR_SHADOW / "wallet_edge_score_por_activo_marco.json"))
 UMBRAL_SNIPER_MIN = 5.0  # restante_min mediana <5min en marco corto -> sniper
 
 
 def clasificar_wallets():
     """Para cada bot, marco dominante + restante_min mediana -> arquetipo."""
     por_wallet = defaultdict(lambda: defaultdict(list))  # wallet -> marco -> [restante_min]
-    with open("data/shadow/ballenas_timing_history.csv", encoding="utf-8") as f:
+    with open(DIR_SHADOW / "ballenas_timing_history.csv", encoding="utf-8") as f:
         for r in csv.DictReader(f):
             w = r.get("wallet", "").lower()
             if w not in BOTS:
