@@ -170,8 +170,10 @@
         "GBM_LATE_15M_FAMILIA",
         "FAVORITO_CONFIRMADO_FAMILIA",
         "BALLENAS_FAMILIA",
-        "UPDOWN_GBM_FAMILIA"
+        "UPDOWN_GBM_FAMILIA",
+        "MOMENTUM_IBS_5M_BALLENA"
       ],
+      "_familia_momentum_ibs_5m_ballena_nota_2026-08-25": "25-Ago tarde (adelantado de 'semana del 01-Sep', decision explicita Javi tras auditoria de conexion): kelly_precio_gate.json YA tenia datos calculados para esta familia (el generador analisis_kelly_precio_gate_29jul.py procesa results.csv sin whitelist propia), solo faltaba activarla aqui. Evidencia real justo donde opera la tupla live MOMENTUM_IBS_5M_BALLENA#SOL#5min#BUY_YES (bucket [0.30,0.35) via gate_bucket_propio): SOL#5min[0.30,0.40) n=386 hit=42.0% ratio_correccion=1.49 shuffle_p=0.001 split-half consistente ambas mitades [+0.3049,+0.2026] veredicto=confirmado -- mismo rigor que las 4 familias ya activas. Mismo criterio fail-open que el resto: factor=1.0 en cualquier bucket/moneda/marco sin confirmar (BTC/ETH/DOGE/BNB#5min y MOMENTUM_IBS_15M_BALLENA entero siguen sin_concluir hoy, sin efecto). Ver project_auditoria_conexion_pendiente_live_25ago / idea_momentum_ibs_ballena_sol_fillability_confirmada_25ago.",
       "_updown_gbm_familia_nota_2026-08-04": "04-Ago: activada por delante, sin esperar a promoción. YA estaba validada con el mismo rigor completo (Wilson+shuffle+split-half+BH-FDR) desde el 29-Jul (analisis_kelly_precio_gate_29jul.py, [0.40,0.50) ratio 1.85x-2.93x confirmado) -- nunca se activó porque Javi pidió atacar GBM_LATE_15M_FAMILIA primero. Cero efecto en euros hoy: ninguna tupla UPDOWN_GBM está en pares_permitidos_live (UPDOWN_GBM_15M_TARDIO#BTC es candidata DRY_RUN). Se activa ahora para que la corrección ya esté lista sin depender de que alguien se acuerde de añadirla el día de una promoción futura -- mismo criterio fail-open que el resto de familias (factor=1.0 en cualquier bucket sin confirmar).",
       "factor_min": 0.0,
       "factor_max": 2.5,
