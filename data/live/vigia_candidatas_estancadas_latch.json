@@ -241,5 +241,53 @@
   },
   "cementerio:PRICE_TARGET_GBM_FADE#reach": {
     "avisado": true
+  },
+  "cand_nunca:BALLENAS_CONFIRMADAS_15M#DOGE#15min#BUY_NO": {
+    "avisado": true
+  },
+  "cand_nunca:BALLENAS_CONFIRMADAS_15M#DOGE#15min#BUY_YES": {
+    "avisado": true
+  },
+  "cand_nunca:BALLENAS_CONFIRMADAS_15M#XRP#15min#BUY_YES": {
+    "avisado": true
+  },
+  "cand_nunca:FAVORITO_CONFIRMADO_15MIN_EXTREMO#XRP#15min#BUY_YES": {
+    "avisado": true
+  },
+  "cand_nunca:ORDER_FLOW_5M#BNB#5min#BUY_YES": {
+    "avisado": true
+  },
+  "cand_nunca:ORDER_FLOW_5M#BTC#5min#BUY_NO": {
+    "avisado": true
+  },
+  "cand_nunca:ORDER_FLOW_5M#BTC#5min#BUY_YES": {
+    "avisado": true
+  },
+  "cand_nunca:ORDER_FLOW_5M#DOGE#5min#BUY_YES": {
+    "avisado": true
+  },
+  "cand_nunca:ORDER_FLOW_5M#ETH#5min#BUY_YES": {
+    "avisado": true
+  },
+  "cand_nunca:ORDER_FLOW_5M#SOL#5min#BUY_YES": {
+    "avisado": true
+  },
+  "cand_nunca:ORDER_FLOW_5M#XRP#5min#BUY_YES": {
+    "avisado": true
+  },
+  "cand_nunca:UPDOWN_GBM_15M_TARDIO#DOGE#15min#BUY_NO": {
+    "avisado": true
+  },
+  "hip_nunca:H-CUSTOM-OF-07H-BTCSOL": {
+    "avisado": true
+  },
+  "hip_nunca:H-CUSTOM-DRIFT15-ZONA-MUERTA": {
+    "avisado": true
+  },
+  "hip_nunca:H-CUSTOM-ETH15-BUYNO-PRECIO-ALTO": {
+    "avisado": true
+  },
+  "hip_nunca:H-CUSTOM-LATE15-PHOTO-FINISH": {
+    "avisado": true
   }
 }
