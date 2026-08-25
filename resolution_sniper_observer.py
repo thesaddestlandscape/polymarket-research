@@ -88,6 +88,16 @@ GAMMA = "https://gamma-api.polymarket.com"
 CLOB = "https://clob.polymarket.com"
 TIMEOUT = 5
 
+# 25-Ago (propuesta #16, hallazgo del outlier de latencia de gbm_late_
+# reactivo_fase0.py, ver idea_arquetipo_a_palancas_probadas_25ago):
+# requests.get() suelto abre TCP/TLS nuevo en CADA llamada -- medido en
+# aislado, primera llamada 217ms, siguientes con Session reutilizada
+# 51-69ms (3-4x). Este módulo es el de mayor volumen de llamadas de todo
+# `observadores_fase0.py` (ThreadPoolExecutor por (activo,marco), 6
+# monedas x varios marcos, cada uno con su propio ciclo de sondeo) --
+# el candidato con más que ganar de conexión persistente.
+_SESSION = requests.Session()
+
 ASSETS = ["BTC", "ETH", "SOL", "XRP", "DOGE", "BNB"]
 # Marcos con slug determinista en gamma-api (verificado en vivo 19-Ago:
 # {activo}-updown-4h-{ts_start} responde con evento real, igual que 5m/15m).
@@ -236,7 +246,7 @@ def mercado_slot(asset: str, marco_tag: str, ts_start: int):
     if slug in _CACHE_MKT:
         return slug, _CACHE_MKT[slug]
     try:
-        r = requests.get(f"{GAMMA}/events", params={"slug": slug}, timeout=TIMEOUT)
+        r = _SESSION.get(f"{GAMMA}/events", params={"slug": slug}, timeout=TIMEOUT)
         if r.status_code != 200:
             return slug, None
         ev = r.json()
@@ -317,7 +327,7 @@ def token_ids(mkt: dict):
 def libro(token_yes: str, token_no: str):
     def _mejor(token_id, lado):
         try:
-            r = requests.get(f"{CLOB}/book", params={"token_id": token_id}, timeout=TIMEOUT)
+            r = _SESSION.get(f"{CLOB}/book", params={"token_id": token_id}, timeout=TIMEOUT)
             if r.status_code != 200:
                 return None, None
             b = r.json()
@@ -333,7 +343,7 @@ def libro(token_yes: str, token_no: str):
 
 def outcome_oficial(market_id: str):
     try:
-        r = requests.get(f"{GAMMA}/markets/{market_id}", timeout=TIMEOUT)
+        r = _SESSION.get(f"{GAMMA}/markets/{market_id}", timeout=TIMEOUT)
         if r.status_code != 200:
             return None
         m = r.json()

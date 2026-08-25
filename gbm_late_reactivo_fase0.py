@@ -41,16 +41,64 @@ import time
 from datetime import date, datetime, timezone
 from pathlib import Path
 
+import requests
 import websockets
 
 REPO = Path(__file__).resolve().parent
 sys.path.insert(0, str(REPO))
 
-import live_trade as lt  # noqa: E402
+import live_trade as lt  # noqa: E402 -- CLOB_BOOK_URL solo, ver _libro_unico()
 from resolution_sniper_observer import mercado_slot, token_ids  # noqa: E402
-from libro_multinivel_fase0 import _libro_completo, _imbalance, _slope  # noqa: E402
+from libro_multinivel_fase0 import _imbalance, _slope  # noqa: E402
 import ballenas_firehose_cache as _fc  # noqa: E402
 from shadow_predict import _cargar_bot_wallets  # noqa: E402
+
+# 25-Ago (propuesta #15, Javi: "averigua exactamente qué es, tenemos que
+# explotarlo a nuestro favor"): investigado el outlier de latencia
+# compartido en las 6 monedas -- causa real encontrada, no especulada:
+# `_consultar_profundidad_libro()` (agregado) y `_libro_completo()`
+# (multi-nivel) hacían DOS peticiones HTTP SEPARADAS al mismo endpoint
+# /book para el mismo token, casi al mismo instante, cada una con
+# `requests.get()` suelto (sin Session -> sin reutilizar conexión TCP/TLS,
+# cada llamada paga el handshake completo desde cero). `_libro_unico()`
+# fusiona ambas en UNA sola petición sobre una Session compartida a nivel
+# de módulo (keep-alive real entre triggers) -- debería reducir tanto la
+# latencia base como la frecuencia de outliers de conexión fría.
+_SESSION = requests.Session()
+
+
+def _libro_unico(token_id: str, precio_entrada: float, stake_eur: float):
+    """Una sola petición a /book -- devuelve (fill_dict, asks, bids) donde
+    fill_dict tiene el mismo shape que _consultar_profundidad_libro()
+    (mejor_ask/profundidad_eur/ratio_vs_stake/n_niveles/ok) y asks/bids
+    son las listas completas [(price,size),...] que antes daba
+    _libro_completo() -- mismo cálculo, una sola llamada de red."""
+    try:
+        r = _SESSION.get(lt.CLOB_BOOK_URL, params={"token_id": token_id}, timeout=10)
+        r.raise_for_status()
+        book = r.json()
+    except Exception as e:
+        return {"ok": False, "error": str(e)}, [], []
+
+    asks_raw = book.get("asks") or []
+    bids_raw = book.get("bids") or []
+    asks = sorted([(float(a["price"]), float(a["size"])) for a in asks_raw])
+    bids = sorted([(float(a["price"]), float(a["size"])) for a in bids_raw], reverse=True)
+
+    techo = precio_entrada * 1.05
+    profundidad_eur = 0.0
+    mejor_ask = None
+    for p, s in asks:
+        if mejor_ask is None or p < mejor_ask:
+            mejor_ask = p
+        if p <= techo:
+            profundidad_eur += p * s
+    ratio = (profundidad_eur / stake_eur) if stake_eur > 0 else None
+    fill = {
+        "ok": True, "mejor_ask": mejor_ask, "profundidad_eur": round(profundidad_eur, 2),
+        "n_niveles": len(asks), "ratio_vs_stake": round(ratio, 1) if ratio is not None else None,
+    }
+    return fill, asks, bids
 
 DIR_SHADOW = REPO / "data" / "shadow"
 OUT = DIR_SHADOW / "gbm_late_reactivo_fase0.csv"
@@ -207,22 +255,18 @@ async def _procesar_tick(activo: str, precio: float, ts_tick_ms: int, estado: di
     token_id = token_yes if drift_pct > 0 else token_no
     ts_consulta_ms = int(time.time() * 1000)
 
+    # propuesta #15 (fix de la investigación del outlier de latencia,
+    # 25-Ago): UNA sola petición de red para el agregado (#fill) y los
+    # niveles completos (#12), sobre una Session con keep-alive -- antes
+    # eran 2 peticiones separadas sin reutilizar conexión.
     try:
-        fill = lt._consultar_profundidad_libro(None, token_id, 0.5, STAKE_REF_EUR)
+        fill, asks, bids = _libro_unico(token_id, 0.5, STAKE_REF_EUR)
     except Exception as ex:
         _log(f"[{activo}] error consultando libro: {type(ex).__name__}: {ex}")
         return
-
-    # propuesta #12 (Javi, 25-Ago): niveles completos del MISMO token en
-    # el mismo instante reactivo, no en un timer aparte de 5min -- reusa
-    # las funciones de libro_multinivel_fase0.py sin duplicar cálculo.
-    try:
-        asks, bids = _libro_completo(token_id)
-        asks = asks or []
-        bids = bids or []
-    except Exception as ex:
-        _log(f"[{activo}] error consultando libro multinivel: {type(ex).__name__}: {ex}")
-        asks, bids = [], []
+    if not fill.get("ok"):
+        _log(f"[{activo}] libro sin respuesta: {fill.get('error')}")
+        return
 
     restante_min = round((ts_end - time.time()) / 60.0, 2)
 
