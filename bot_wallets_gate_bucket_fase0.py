@@ -33,6 +33,7 @@ ballenas_timing_history.csv.
 """
 import csv
 import json
+import fcntl
 import math
 import sys
 import time
@@ -43,11 +44,15 @@ from pathlib import Path
 REPO = Path(__file__).resolve().parent
 sys.path.insert(0, str(REPO))
 
-from wallet_mirror_tracker import _archivos_activity, _fillability_mirror  # noqa: E402
+from wallet_mirror_tracker import (  # noqa: E402
+    _archivos_activity, _fillability_mirror, outcome_por_slug,
+)
 
 DIR_SHADOW = REPO / "data" / "shadow"
 OUT = DIR_SHADOW / "bot_wallets_gate_bucket_fase0.csv"
+OUT_LOCK = DIR_SHADOW / "bot_wallets_gate_bucket_fase0.csv.lock"
 VISTOS_PATH = DIR_SHADOW / "bot_wallets_gate_bucket_fase0_vistos.json"
+MAX_SLUGS_POR_CICLO = 150  # mismo cap que wallet_mirror_tracker.py::resolver_pendientes
 BOTS_PATH = DIR_SHADOW / "bot_wallets_universo_25ago.json"
 HIST = DIR_SHADOW / "ballenas_timing_history.csv"
 
@@ -59,6 +64,7 @@ COLUMNS = [
     "timestamp_utc", "trade_timestamp", "wallet", "arquetipo", "activo", "marco",
     "bucket_precio", "condition_id", "market_slug", "lado_wallet", "precio_wallet",
     "usd_trade", "ratio_vs_stake_deteccion", "mejor_ask_deteccion", "profundidad_eur_deteccion",
+    "outcome_real", "acierto", "resolved_ts",
 ]
 
 
@@ -188,6 +194,62 @@ def _procesar_fila(row: dict, wallets: set, arquetipos: dict, vistos: set) -> di
     }
 
 
+def resolver_pendientes() -> int:
+    """25-Ago (P-GALLINA FASE0, cierre del hueco de instrumentación pedido
+    por Javi): reusa `outcome_por_slug()` de wallet_mirror_tracker.py
+    (misma fuente, mismo criterio de mercado ya resuelto vía gamma-api) --
+    sin esto, `bot_wallets_gate_bucket_fase0.csv` medía fill-ability pero
+    nunca PnL real, porque nadie comparaba `lado_wallet` contra el
+    resultado oficial del mercado. Mismo patrón exacto que `wallet_mirror_
+    sniper.py::resolver_pendientes` (reexportado de wallet_mirror_
+    tracker.py) -- leer sin lock, resolver red sin lock, lock solo para
+    el tramo final de escritura (releer fresco por si el observador live
+    añadió filas mientras tanto)."""
+    if not OUT.exists():
+        return 0
+    with open(OUT, newline="", encoding="utf-8") as f:
+        filas = list(csv.DictReader(f))
+
+    slugs_pendientes = sorted({r["market_slug"] for r in filas
+                                if not r.get("outcome_real") and r.get("market_slug")})
+    outcomes_por_slug = {}
+    for slug in slugs_pendientes[:MAX_SLUGS_POR_CICLO]:
+        outcome = outcome_por_slug(slug)
+        if outcome is not None:
+            outcomes_por_slug[slug] = outcome
+
+    if not outcomes_por_slug:
+        return 0
+
+    lock_f = open(OUT_LOCK, "w")
+    try:
+        fcntl.flock(lock_f, fcntl.LOCK_EX)
+        try:
+            with open(OUT, newline="", encoding="utf-8") as f:
+                filas = list(csv.DictReader(f))
+            resueltas = 0
+            for r in filas:
+                if r.get("outcome_real"):
+                    continue
+                outcome = outcomes_por_slug.get(r.get("market_slug"))
+                if outcome is None:
+                    continue
+                r["outcome_real"] = outcome
+                r["acierto"] = "1" if outcome == r.get("lado_wallet") else "0"
+                r["resolved_ts"] = datetime.now(timezone.utc).isoformat(timespec="seconds")
+                resueltas += 1
+            if resueltas:
+                with open(OUT, "w", newline="", encoding="utf-8") as f:
+                    w = csv.DictWriter(f, fieldnames=COLUMNS)
+                    w.writeheader()
+                    w.writerows(filas)
+            return resueltas
+        finally:
+            fcntl.flock(lock_f, fcntl.LOCK_UN)
+    finally:
+        lock_f.close()
+
+
 def main() -> None:
     bots = json.loads(BOTS_PATH.read_text(encoding="utf-8"))
     wallets = set(bots.keys())
@@ -241,4 +303,8 @@ def main() -> None:
 
 
 if __name__ == "__main__":
-    main()
+    if len(sys.argv) > 1 and sys.argv[1] == "--resolver":
+        n = resolver_pendientes()
+        _log(f"resueltas: {n}")
+    else:
+        main()
