@@ -1039,8 +1039,28 @@ def _cargar_spot():
     # en None SIEMPRE desde el 20-Jul. Impacto verificado: GBM_LATE_15M#
     # {DOGE,BNB}#15min llevaban 0 predicciones desde que se añadieron
     # (22/23-Jul) -- una semana de "dejar acumular n" sin producir nada.
+    #
+    # 25-Ago: MISMO bug, reincidencia real -- fetch_kalshi_btc.py (19-Ago)
+    # escribe kalshi_btc15m_YYYY-MM-DD.csv/kalshi_btchourly_YYYY-MM-DD.csv,
+    # que también ordenan DESPUÉS de "YYYY-..." y el filtro solo excluía
+    # "chainlink_". Desde el 20-Ago (primer día con un kalshi_btchourly_*
+    # de fecha posterior al fichero base), archivos[-1] cogía
+    # kalshi_btchourly_*.csv (columnas ticker/floor_strike/yes_bid, SIN
+    # "asset"/"price_usd") -- SPOT_PRECIOS quedaba vacío/basura,
+    # _cargar_spot().get(activo) devolvía None SIEMPRE. Impacto verificado:
+    # WEEKLY_PRICE (y por el mismo camino RESOLUTION_SNIPER/LATE_WINDOW_5MIN
+    # /OU, todo lo que depende de _cargar_spot) pasó de 130-270
+    # predicciones/día a CERO durante 6 días seguidos (20→25-Ago) sin que
+    # nadie lo notara -- ver idea_bug_cargar_spot_kalshi_weekly_price_25ago.
+    #
+    # Fix robusto (no basta con excluir "kalshi_" también -- el próximo
+    # fetcher nuevo reproduciría el mismo bug): exigir que el nombre
+    # coincida EXACTAMENTE con el patrón del fichero base (YYYY-MM-DD.csv,
+    # sin prefijo), en vez de intentar mantener una lista negra de
+    # prefijos a excluir que crece con cada fetcher nuevo.
+    _RE_ARCHIVO_SPOT = _re.compile(r"^\d{4}-\d{2}-\d{2}\.csv$")
     archivos = sorted(p for p in glob.glob(str(DIR_DATA / "prices" / "*.csv"))
-                       if not Path(p).name.startswith("chainlink_"))
+                       if _RE_ARCHIVO_SPOT.match(Path(p).name))
     if not archivos:
         return {}
     try:
