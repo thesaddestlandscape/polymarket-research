@@ -65,6 +65,14 @@ from shadow_predict import _cargar_bot_wallets  # noqa: E402
 # de módulo (keep-alive real entre triggers) -- debería reducir tanto la
 # latencia base como la frecuencia de outliers de conexión fría.
 _SESSION = requests.Session()
+# 25-Ago: pool_maxsize por defecto de requests/urllib3 es 10 -- con las 6
+# monedas pudiendo disparar casi a la vez (ráfaga real observada 19:45:21-29,
+# 6 triggers en 8s con latencias de 10-25s, vs 142-854ms normal) más margen
+# nunca hace daño y es gratis. No confirma que el pool fuera la causa (6<10,
+# no debería saturar por sí solo -- más probable congestión real de la API
+# coincidiendo con el movimiento de mercado que disparó las 6 a la vez), pero
+# quita esta posibilidad de la ecuación sin coste.
+_SESSION.mount("https://", requests.adapters.HTTPAdapter(pool_maxsize=20))
 
 
 def _libro_unico(token_id: str, precio_entrada: float, stake_eur: float):

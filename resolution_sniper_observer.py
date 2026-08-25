@@ -97,6 +97,11 @@ TIMEOUT = 5
 # monedas x varios marcos, cada uno con su propio ciclo de sondeo) --
 # el candidato con más que ganar de conexión persistente.
 _SESSION = requests.Session()
+# 25-Ago: este módulo SÍ tiene concurrencia real alta (ThreadPoolExecutor,
+# hasta 18 workers simultáneos por (activo,marco)) -- pool_maxsize por
+# defecto (10) puede saturarse de verdad aquí, a diferencia de gbm_late_
+# reactivo_fase0.py (un solo hilo). Subido con margen.
+_SESSION.mount("https://", requests.adapters.HTTPAdapter(pool_maxsize=30, pool_connections=30))
 
 ASSETS = ["BTC", "ETH", "SOL", "XRP", "DOGE", "BNB"]
 # Marcos con slug determinista en gamma-api (verificado en vivo 19-Ago:
