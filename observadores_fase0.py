@@ -96,6 +96,7 @@ import p33_maker_fillability_fase0
 import resolution_sniper_fade_depth_fase0
 import bot_wallets_gate_bucket_fase0
 import momentum_ibs_15m_depth_fase0
+import candidatas_sin_fillability_depth_fase0
 # resolution_sniper_naive_depth_fase0 -- fusionado 19-Ago dentro de
 # resolution_sniper_fade_depth_fase0.py (mismo hilo, mismo mercado, mismo
 # instante), ya NO se registra aquí como observador propio (ver docstring
@@ -133,6 +134,7 @@ OBSERVADORES = [
     (ballenas_confirmadas_15m_buyno_depth_fase0, "ballenas_confirmadas_15m_buyno_depth_fase0.log", "log"),
     (bot_wallets_gate_bucket_fase0, "bot_wallets_gate_bucket_fase0.log", "_log"),
     (momentum_ibs_15m_depth_fase0, "momentum_ibs_15m_depth_fase0.log", "_log"),
+    (candidatas_sin_fillability_depth_fase0, "candidatas_sin_fillability_depth_fase0.log", "_log"),
 ]
 
 
