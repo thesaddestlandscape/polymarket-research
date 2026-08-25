@@ -1115,7 +1115,7 @@ def _get_token_ids(market_id: str) -> tuple[str, str, str | None]:
     API solo para ese campo (código de seguridad live 03-Jul: "el import
     de py_clob_client se paga solo cuando toca" tiene el mismo espíritu,
     no pagar dos veces la misma llamada de red)."""
-    resp = requests.get(
+    resp = _SESSION.get(
         f"https://gamma-api.polymarket.com/markets/{market_id}",
         timeout=10
     )
@@ -1148,6 +1148,21 @@ def _get_token_ids(market_id: str) -> tuple[str, str, str | None]:
 
 CLOB_BOOK_URL = "https://clob.polymarket.com/book"
 
+# 25-Ago: conexión HTTP persistente (mismo fix ya verificado en
+# gbm_late_reactivo_fase0.py/resolution_sniper_observer.py — un
+# requests.get() suelto abre un handshake TCP/TLS nuevo en cada llamada,
+# medido 3-4x más lento que reusar conexión vía Session). Aquí el efecto
+# es directo sobre dinero real: _fetch_book_publico/_get_token_ids las
+# llaman los ejecutores live (gbm_late_15min_executor.py, momentum_ibs_
+# ballena_executor.py, wallet_mirror_executor_dryrun.py, etc.) en el
+# camino crítico de decisión, y también aquí mismo antes de cada orden
+# real. NO cambia ningún dato ni lógica de decisión — mismo contrato de
+# retorno, solo la conexión subyacente. pool_maxsize con margen (mismo
+# valor que resolution_sniper_observer.py) por si varios ejecutores
+# consultan a la vez.
+_SESSION = requests.Session()
+_SESSION.mount("https://", requests.adapters.HTTPAdapter(pool_maxsize=20, pool_connections=20))
+
 
 def _fetch_book_publico(token_id: str) -> dict | None:
     """Libro de un token vía REST público (sin auth, sin construir ClobClient).
@@ -1161,7 +1176,7 @@ def _fetch_book_publico(token_id: str) -> dict | None:
     ordenan (veto_profundidad 2515 vs ejecutada 129, histórico). None en
     error — mismo contrato que antes (el caller ya lo trata como fail-closed)."""
     try:
-        r = requests.get(CLOB_BOOK_URL, params={"token_id": token_id}, timeout=10)
+        r = _SESSION.get(CLOB_BOOK_URL, params={"token_id": token_id}, timeout=10)
         r.raise_for_status()
         return r.json()
     except Exception:
