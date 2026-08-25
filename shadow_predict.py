@@ -2472,6 +2472,7 @@ def s_updown_gbm(market, ctx, strategy_name: str = "UPDOWN_GBM"):
             sigma_b = (sum(d**2 for d in diffs) / len(diffs)) ** 0.5
             features["sigma_b"] = round(sigma_b, 4)
     features.update(_libro_calidad(market))
+    features.update(_bots_consenso(market))
 
     # 30-Jul: mismos 3 gates observacionales que FAVORITO_CONFIRMADO/
     # GBM_LATE_15M -- ninguno estaba cableado aquí pese a que UPDOWN_GBM es
@@ -3093,6 +3094,7 @@ def s_order_flow_5m(market, ctx):
             "hora_utc": hora_utc,
             "es_ntm_5min": _es_ntm_5min(market),
             **_libro_calidad(market),
+            **_bots_consenso(market),
         },
     }
 
@@ -3171,6 +3173,7 @@ def _s_liquidaciones(market, ctx, ventana_min, ventana_lookback="5min", minutos_
             "py_entrada": round(py, 3),
             "hora_utc": datetime.now(timezone.utc).hour,
             **_libro_calidad(market),
+            **_bots_consenso(market),
         },
     }
 
@@ -4450,6 +4453,7 @@ def s_ballenas_confirmadas_15m(market, ctx):
             "hora_utc": datetime.now(timezone.utc).hour,
             "gbm_direccion_coincide": gbm_conf["gbm_direccion_coincide"],
             **_libro_calidad(market),
+            **_bots_consenso(market),
         },
     }
 
@@ -4767,6 +4771,7 @@ def _s_gbm_late(market, ctx, ventana_min, rest_lo, rest_hi, espacio_k=None):
     # prob_fillable_gbm_late (P2 plan profundidad de libro, 13-Ago): ver
     # docstring de _prob_fillable_gbm_late — solo logueo, nunca decide.
     libro_calidad = _libro_calidad(market)
+    bots_consenso = _bots_consenso(market)
     prob_fillable_gbm_late = _prob_fillable_gbm_late(
         libro_calidad.get("libro_spread"), libro_calidad.get("libro_liquidez"),
         py, now_utc.hour)
@@ -4806,6 +4811,7 @@ def _s_gbm_late(market, ctx, ventana_min, rest_lo, rest_hi, espacio_k=None):
             "en_zona_sigma_ewma_buyyes": en_zona_sigma_ewma_buyyes,
             "en_zona_precio_buyyes":     en_zona_precio_buyyes,
             **libro_calidad,
+            **bots_consenso,
         },
     }
 
@@ -4933,6 +4939,83 @@ def _libro_calidad(market: dict) -> dict:
     return {"libro_spread": spread, "libro_liquidez": liquidez}
 
 
+_BOT_WALLETS_PATH = DIR_SHADOW / "bot_wallets_universo_25ago.json"
+_bot_wallets_cache = {"mtime": None, "set": frozenset()}
+
+
+def _cargar_bot_wallets() -> frozenset:
+    """Carga perezosa + cacheada por mtime (mismo patrón que
+    `leer_snapshot_reciente`) de las 84 bot wallets con edge confirmado
+    (`bot_wallets_universo_25ago.json`, ver `analisis_bot_arquetipos_
+    25ago.py`/`project_wallet_bots_identificados_25ago`). Fail-open a
+    frozenset() si el fichero no existe todavía o está corrupto -- nunca
+    bloquea la generación de la señal base, mismo criterio que el resto
+    de features de solo-logueo de este módulo."""
+    global _bot_wallets_cache
+    try:
+        mtime = _BOT_WALLETS_PATH.stat().st_mtime
+    except OSError:
+        return frozenset()
+    if _bot_wallets_cache["mtime"] != mtime:
+        try:
+            data = json.loads(_BOT_WALLETS_PATH.read_text(encoding="utf-8"))
+            _bot_wallets_cache = {"mtime": mtime, "set": frozenset(w.lower() for w in data.keys())}
+        except Exception:
+            return _bot_wallets_cache["set"]
+    return _bot_wallets_cache["set"]
+
+
+def _bots_consenso(market: dict) -> dict:
+    """Candidata 9 "gallina de los huevos de oro" (25-Ago, petición
+    explícita Javi: "instrumenta como feature observacional"): consenso
+    mayoritario de las 84 bot wallets con edge confirmado sobre el
+    MISMO mercado que se está prediciendo -- verificado con rigor
+    (`analisis_candidata9_bots_regimen_agregado_25ago.py`, sobre
+    `bot_wallets_gate_bucket_fase0.csv` ya resuelto): el lado mayoritario
+    acierta 65-83% en 9/11 combinaciones (activo,marco) con n≥15,
+    p<0.001 -- feature de RÉGIMEN transversal, no específica de ninguna
+    estrategia, por eso se splice junto a `_libro_calidad()` en TODAS las
+    estrategias que ya la loguean, no solo la familia GBM/UPDOWN.
+
+    Reusa `leer_snapshot_reciente()` (mismo mecanismo de baja latencia,
+    cero llamadas de red, que `_gate_volumen_ballenas()` ya usa en
+    producción) -- filtra a las 84 bot wallets y cuenta lado_wallet
+    (`outcome` del trade parseado) por mayoría simple. Solo LOGUEA -- no
+    toca `prob_yes` de ninguna estrategia, mismo criterio cauteloso que
+    P17/P19 (nunca conectar una feature nueva a una decisión real sin
+    acumular forward + aprobación explícita de Javi)."""
+    condition_id = market.get("condition_id")
+    if not condition_id:
+        return {"bot_consenso_n": 0, "bot_consenso_lado": None, "bot_consenso_pct": None}
+    bots = _cargar_bot_wallets()
+    if not bots:
+        return {"bot_consenso_n": 0, "bot_consenso_lado": None, "bot_consenso_pct": None}
+    try:
+        trades = _fc.leer_snapshot_reciente(condition_id)
+    except Exception:
+        return {"bot_consenso_n": 0, "bot_consenso_lado": None, "bot_consenso_pct": None}
+    votos: dict = {}
+    for t in trades:
+        if (t.get("side") or "").strip().upper() != "BUY":
+            continue
+        w = (t.get("proxyWallet") or "").lower()
+        if w not in bots:
+            continue
+        lado = t.get("outcome", "")
+        if not lado:
+            continue
+        votos[lado] = votos.get(lado, 0) + 1
+    n_total = sum(votos.values())
+    if n_total == 0:
+        return {"bot_consenso_n": 0, "bot_consenso_lado": None, "bot_consenso_pct": None}
+    lado_mayoria = max(votos, key=votos.get)
+    return {
+        "bot_consenso_n": n_total,
+        "bot_consenso_lado": lado_mayoria,
+        "bot_consenso_pct": round(votos[lado_mayoria] / n_total, 4),
+    }
+
+
 def _ballena_activa_reciente(condition_id: str, ventana_min: float) -> int:
     """17-Ago (hallazgo momentum-gateado-por-ballenas): cuenta trades REALES
     de ballenas en `condition_id` dentro de los últimos `ventana_min`
@@ -5010,6 +5093,7 @@ def s_struct_no_15m(market, ctx):
             "restante_min": restante_min,
             "hora_utc":     datetime.now(timezone.utc).hour,
             **_libro_calidad(market),
+            **_bots_consenso(market),
         },
     }
 
@@ -5159,6 +5243,7 @@ def s_favorito_confirmado(market, ctx, strategy_name: str = "FAVORITO_CONFIRMADO
             "gate_bucket_propio_veredicto": gate_bp["veredicto"],
             "gbm_direccion_coincide": gbm_conf["gbm_direccion_coincide"],
             **_libro_calidad(market),
+            **_bots_consenso(market),
         },
     }
 
@@ -5633,6 +5718,7 @@ def s_streak_mom_5m(market, ctx):
             # de esto? Puro logging, ventana = duración real de la racha.
             "ballena_activa_n": _ballena_activa_reciente(market.get("condition_id", ""), max(k * 5, 5)),
             **_libro_calidad(market),
+            **_bots_consenso(market),
         },
     }
 
@@ -5710,6 +5796,7 @@ def s_momentum_ibs_5m(market, ctx):
             "es_ntm_5min":    _es_ntm_5min(market),
             "ballena_activa_n": _ballena_activa_reciente(market.get("condition_id", ""), MOMENTUM_IBS_5M_LOOKBACK_MIN),
             **_libro_calidad(market),
+            **_bots_consenso(market),
         },
     }
 
@@ -5768,6 +5855,7 @@ def s_momentum_ibs_5m_fade(market, ctx):
             "es_ntm_5min":    _es_ntm_5min(market),
             "ballena_activa_n": _ballena_activa_reciente(market.get("condition_id", ""), MOMENTUM_IBS_5M_LOOKBACK_MIN),
             **_libro_calidad(market),
+            **_bots_consenso(market),
         },
     }
 
@@ -5824,6 +5912,7 @@ def s_momentum_ibs_15m(market, ctx):
             "hora_utc":        datetime.now(timezone.utc).hour,
             "ballena_activa_n": _ballena_activa_reciente(market.get("condition_id", ""), MOMENTUM_IBS_15M_LOOKBACK_MIN),
             **_libro_calidad(market),
+            **_bots_consenso(market),
         },
     }
 
@@ -5873,6 +5962,7 @@ def s_momentum_ibs_15m_fade(market, ctx):
             "hora_utc":        datetime.now(timezone.utc).hour,
             "ballena_activa_n": _ballena_activa_reciente(market.get("condition_id", ""), MOMENTUM_IBS_15M_LOOKBACK_MIN),
             **_libro_calidad(market),
+            **_bots_consenso(market),
         },
     }
 
@@ -5942,6 +6032,7 @@ def s_momentum_ibs_5m_ballena(market, ctx):
             "es_ntm_5min":    _es_ntm_5min(market),
             "ballena_activa_n": n_ballena,
             **_libro_calidad(market),
+            **_bots_consenso(market),
         },
     }
 
@@ -5989,6 +6080,7 @@ def s_momentum_ibs_15m_ballena(market, ctx):
             "hora_utc":        datetime.now(timezone.utc).hour,
             "ballena_activa_n": n_ballena,
             **_libro_calidad(market),
+            **_bots_consenso(market),
         },
     }
 
@@ -6044,6 +6136,7 @@ def s_streak_fade_5m(market, ctx):
             "es_ntm_5min":   _es_ntm_5min(market),
             "streak_estiramiento": _streak_estiramiento(activo, 5, k, edt, ctx),
             **_libro_calidad(market),
+            **_bots_consenso(market),
         },
     }
 
@@ -6134,6 +6227,7 @@ def s_streak_fade_15m(market, ctx):
             "volumen_racha_corto": _volumen_racha(activo, ctx, n_velas=3),
             "streak_estiramiento": _streak_estiramiento(activo, 15, k, edt, ctx),
             **_libro_calidad(market),
+            **_bots_consenso(market),
         },
     }
 
@@ -6196,6 +6290,7 @@ def s_streak_fade_60m(market, ctx):
             "volumen_racha":     _volumen_racha(activo, ctx),
             "streak_estiramiento": _streak_estiramiento(activo, 60, k, edt, ctx),
             **_libro_calidad(market),
+            **_bots_consenso(market),
         },
     }
 
@@ -6295,6 +6390,7 @@ def s_leadlag_btc_xrp(market, ctx):
             "py_entrada":     round(market.get("_precio_yes", 0), 3),
             "hora_utc":       datetime.now(timezone.utc).hour,
             **_libro_calidad(market),
+            **_bots_consenso(market),
         },
     }
 
