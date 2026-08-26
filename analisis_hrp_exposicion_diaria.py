@@ -60,11 +60,20 @@ def _tuplas_live():
     return cfg.get("pares_permitidos_live", [])
 
 
+_DIRECCION_NORM = {"BUY_Up": "BUY_YES", "BUY_Down": "BUY_NO"}  # mismo mapeo que
+# wallet_mirror_clv.py -- pares_permitidos_live usa BUY_Up/BUY_Down para
+# WALLET_MIRROR, pero trades.csv/results.csv guardan siempre BUY_YES/BUY_NO
+# (vocabulario real). Sin esto, el índice de match nunca encuentra las filas
+# de WALLET_MIRROR y su exposición/pnl real queda invisible para HRP (bug
+# real encontrado 26-Ago: 13 trades reales desde 11-Ago, exposición
+# reportada 0.0 por el mismatch, no por falta de datos).
+
+
 def _clave(tupla_str):
     """'STRATEGY#SUBTYPE#DIRECTION' (3 campos) -- subtype ya trae activo#marco."""
     partes = tupla_str.split("#")
     strategy = partes[0]
-    direction = partes[-1]
+    direction = _DIRECCION_NORM.get(partes[-1], partes[-1])
     subtype = "#".join(partes[1:-1])
     return strategy, subtype, direction
 
@@ -97,6 +106,33 @@ def cargar_pnl_diario(tuplas):
             conteos[t] += 1
             if t not in primeras or fecha < primeras[t]:
                 primeras[t] = fecha
+
+    # 26-Ago: estrategias de arquitectura "sniper/executor" (WALLET_MIRROR,
+    # RESOLUTION_SNIPER_NAIVE) nunca pasan por shadow_predict.py -> results.csv
+    # -- su único historial resuelto vive en trades.csv (dinero real). Sin
+    # esto, cargaban con n=0/dias_historial=0 aunque llevaran semanas
+    # operando con dinero real, invisibles a la puerta de madurez.
+    if TRADES.exists():
+        with open(TRADES, encoding="utf-8") as f:
+            for r in csv.DictReader(f):
+                if r.get("status") != "CLOSED":
+                    continue
+                k = (r.get("strategy"), r.get("subtype"), r.get("direction"))
+                t = idx.get(k)
+                if t is None:
+                    continue
+                ts = r.get("close_timestamp") or r.get("timestamp_utc")
+                if not ts:
+                    continue
+                fecha = ts[:10]
+                try:
+                    pnl = float(r.get("pnl_neto_eur") or 0)
+                except ValueError:
+                    continue
+                series[t][fecha] += pnl
+                conteos[t] += 1
+                if t not in primeras or fecha < primeras[t]:
+                    primeras[t] = fecha
     return series, conteos, primeras
 
 
