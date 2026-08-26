@@ -1,5 +1,5 @@
 {
-  "actualizado": "2026-08-26T19:57:25+00:00",
+  "actualizado": "2026-08-26T20:16:13+00:00",
   "aviso_fillability": "Gate riguroso = shadow puro (results.csv), NO verifica fill-ability. 27-Jul: VERIFICADO con datos reales -- uniendo libro_snapshots.csv (23 dias de chequeo de profundidad REAL contra la API del CLOB, no simulacion) con results.csv, el subconjunto GBM_LATE_15M realmente ejecutable en las horas 13/15/17/19h da n=45 hit=48.9% (coinflip) IC=-0.011 NO CONCLUYENTE en TODOS los criterios (Wilson cruza 0.5, no bate shuffle p=0.616, PnL bootstrap CI cruza 0) -- el edge que el gate shadow ve (GATE OK en 9 celdas) se evapora por completo al restringir a lo fillable de verdad. NO aplicar ninguna celda de esta familia a meta.hora_boost_factor sin repetir esta verificacion con n fresco. Ver idea_fillability_gbmlate_bucket_precio_23jul.",
   "celdas": {
     "ORDER_FLOW_5M##BUY_YES#11": {
@@ -16553,17 +16553,17 @@
       "veredicto": "ACUMULANDO (n<40)"
     },
     "FAVORITO_CONFIRMADO_DEPTH_FASE0#BTC#5min#BUY_YES#19": {
-      "n": 72,
-      "hit": 0.625,
-      "ic": 0.1216216216216216,
-      "lo": 0.5282219782863626,
-      "hi": 0.7127224435323595,
-      "p_shuf": 0.02,
-      "veredicto": "NO CONCLUYENTE: PnL no bate bootstrap (CI90%=[-0.1292,+0.2098] cruza 0)",
-      "pnl_media": 0.03885555555555557,
-      "pnl_lo": -0.12920416666666665,
-      "pnl_hi": 0.20980138888888888,
-      "pnl_pboot": 0.3482
+      "n": 73,
+      "hit": 0.6301369863013698,
+      "ic": 0.1266666666666667,
+      "lo": 0.5340947130238908,
+      "hi": 0.716876065061473,
+      "p_shuf": 0.0194,
+      "veredicto": "NO CONCLUYENTE: PnL no bate bootstrap (CI90%=[-0.1178,+0.2147] cruza 0)",
+      "pnl_media": 0.049804109589041114,
+      "pnl_lo": -0.11780684931506846,
+      "pnl_hi": 0.21473835616438355,
+      "pnl_pboot": 0.3044
     },
     "FAVORITO_CONFIRMADO_DEPTH_FASE0#SOL#5min#BUY_YES#19": {
       "n": 80,
