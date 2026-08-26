@@ -1,4 +1,4 @@
-# Estado del bot — 2026-08-26 05:39 UTC
+# Estado del bot — 2026-08-26 05:46 UTC
 
 ## Live — dinero real (on-chain)
 | | |
@@ -9,23 +9,23 @@
 ## Shadow — MODELO SIMULADO (no cobrable)
 | | |
 |---|---|
-| P&L fiel (stake fijo 1$) | +3985.66 $ |
-| P&L sim compuesto | 🟢 +22066.68 $ (ficción Kelly: +86740% s/ operativo) |
-| P&L sim hoy (2026-08-26) | 🟢 +408.27 $ |
-| Operaciones resueltas | 267151 (155387 WIN / 111764 LOSS) — 58.2% |
-| Señales abiertas | 1513 |
+| P&L fiel (stake fijo 1$) | +3965.12 $ |
+| P&L sim compuesto | 🟢 +22033.62 $ (ficción Kelly: +86610% s/ operativo) |
+| P&L sim hoy (2026-08-26) | 🟢 +375.22 $ |
+| Operaciones resueltas | 267183 (155393 WIN / 111790 LOSS) — 58.2% |
+| Señales abiertas | 1493 |
 
 ## Estrategias (visión global)
 
 | Estrategia | n | Win% | IC_efectivo | Tendencia | PNL | Apuesta | Estado |
 |---|---|---|---|---|---|---|---|
-| GBM_LATE_15M_ESPACIO_ATR | 17642 | 59.0% | +0.090 | 📉 agota (-0.08) | +7864.09$ | 0.50$ | ✅ activa |
-| GBM_LATE_15M_TARDIO | 16105 | 61.9% | +0.118 | 📈 madura (+0.09) | +7515.32$ | 1.67$ | ✅ activa |
-| GBM_LATE_15M | 19343 | 58.0% | +0.080 | 📉 agota (-0.03) | +6210.65$ | 0.50$ | ✅ activa |
-| GBM_LATE_15M_MULTIHORIZONTE | 5953 | 67.3% | +0.173 | ➡️ estable | +4096.06$ | 1.71$ | ✅ activa |
-| UPDOWN_GBM_15M_TARDIO | 6960 | 54.3% | +0.043 | 📉 agota (-0.24) | +2254.61$ | 0.50$ | ✅ activa |
-| GBM_LATE_5M | 3297 | 55.7% | +0.057 | 📈 madura (+0.13) | +723.63$ | 1.26$ | ✅ activa |
-| UPDOWN_GBM | 9635 | 52.9% | +0.029 | 📉 agota (-0.05) | +704.50$ | 0.50$ | ✅ activa |
+| GBM_LATE_15M_ESPACIO_ATR | 17646 | 59.0% | +0.090 | 📉 agota (-0.08) | +7857.86$ | 0.50$ | ✅ activa |
+| GBM_LATE_15M_TARDIO | 16110 | 61.8% | +0.118 | 📈 madura (+0.09) | +7505.12$ | 1.66$ | ✅ activa |
+| GBM_LATE_15M | 19348 | 58.0% | +0.080 | 📉 agota (-0.03) | +6202.89$ | 0.50$ | ✅ activa |
+| GBM_LATE_15M_MULTIHORIZONTE | 5958 | 67.3% | +0.173 | ➡️ estable | +4085.86$ | 1.70$ | ✅ activa |
+| UPDOWN_GBM_15M_TARDIO | 6964 | 54.3% | +0.043 | 📉 agota (-0.24) | +2252.75$ | 0.50$ | ✅ activa |
+| GBM_LATE_5M | 3299 | 55.7% | +0.057 | 📈 madura (+0.13) | +727.38$ | 1.27$ | ✅ activa |
+| UPDOWN_GBM | 9636 | 52.9% | +0.029 | 📉 agota (-0.05) | +705.00$ | 0.50$ | ✅ activa |
 | WEEKLY_PRICE | 1057 | 78.6% | +0.286 | 📈 madura (+0.06) | +427.80$ | 2.00$ | ✅ activa |
 | GBM_LATE_15M_PYCONFIRMADO | 1396 | 56.9% | +0.069 | 📈 madura (+0.05) | +282.49$ | 0.77$ | ✅ activa |
 | UPDOWN_GBM_IBS_ALTO | 395 | 77.5% | +0.273 | ➡️ estable | +271.20$ | 2.00$ | ✅ activa |
@@ -49,7 +49,7 @@
 | LATE_WINDOW_5MIN | 407 | 45.2% | -0.048 | 📉 agota (-0.10) | -1.87$ | 1.67$ | ⚠️ IC negativo |
 | STREAK_FADE_60M | 29 | 41.4% | -0.081 | — | -3.00$ | 0.50$ | ⚠️ IC negativo |
 | LIQUIDACIONES_60M | 417 | 48.7% | -0.013 | 📉 agota (-0.08) | -6.97$ | 0.50$ | ⚠️ IC negativo |
-| MOMENTUM_IBS_5M | 3129 | 50.3% | +0.003 | ➡️ estable | -8.42$ | 0.50$ | ✅ activa |
+| MOMENTUM_IBS_5M | 3130 | 50.3% | +0.003 | ➡️ estable | -7.94$ | 0.50$ | ✅ activa |
 | SMART_FLOW_1H | 29 | 20.7% | -0.274 | — | -13.82$ | 0.00$ | 🚫 desactivada |
 | FAVORITO_CONFIRMADO_60MIN_EXTREMO | 314 | 91.4% | +0.411 | 📈 madura (+0.04) | -15.22$ | 2.00$ | ✅ activa |
 | PRICE_TARGET_GBM | 256 | 33.6% | -0.163 | ➡️ estable | -20.27$ | 0.50$ | ⚠️ IC negativo |
@@ -59,7 +59,7 @@
 | LIQUIDACIONES_15M | 270 | 38.9% | -0.110 | 📈 madura (+0.04) | -36.66$ | 0.50$ | ⚠️ IC negativo |
 | MOMENTUM_IBS_15M_FADE | 554 | 44.0% | -0.059 | 📈 madura (+0.06) | -41.50$ | 0.50$ | ⚠️ IC negativo |
 | STREAK_FADE_5M | 1425 | 49.0% | -0.010 | ➡️ estable | -51.03$ | 0.50$ | ⚠️ IC negativo |
-| MOMENTUM_IBS_15M | 4033 | 50.1% | +0.001 | ➡️ estable | -54.57$ | 0.50$ | ✅ activa |
+| MOMENTUM_IBS_15M | 4038 | 50.0% | +0.000 | ➡️ estable | -56.13$ | 0.50$ | ✅ activa |
 | LIQUIDACIONES_5M | 718 | 42.8% | -0.072 | 📈 madura (+0.16) | -60.26$ | 0.50$ | ⚠️ IC negativo |
 | UPDOWN_OU_5M | 802 | 37.2% | -0.128 | 📈 madura (+0.10) | -106.33$ | 0.50$ | ⚠️ IC negativo |
 | MOMENTUM_IBS_5M_FADE | 6011 | 49.0% | -0.010 | 📉 agota (-0.05) | -119.48$ | 0.50$ | ⚠️ IC negativo |
@@ -73,30 +73,30 @@
 
 | Timestamp | Estrategia | Mercado | Resultado | PNL |
 |---|---|---|---|---|
-| 2026-08-26T05:35 | GBM_LATE_5M#BTC#5min | Bitcoin Up or Down - August 26, 1:20AM-1:25AM ET… | ❌ LOSS | -2.04$ |
-| 2026-08-26T05:35 | GBM_LATE_5M#ETH#5min | Ethereum Up or Down - August 26, 1:20AM-1:25AM ET… | ❌ LOSS | -2.04$ |
-| 2026-08-26T05:35 | UPDOWN_GBM#ETH#5min | Ethereum Up or Down - August 26, 1:20AM-1:25AM ET… | ❌ LOSS | -0.51$ |
-| 2026-08-26T05:35 | MOMENTUM_IBS_5M#ETH#5min | Ethereum Up or Down - August 26, 1:20AM-1:25AM ET… | ✅ WIN | +0.48$ |
-| 2026-08-26T05:33 | GBM_LATE_5M#BNB#5min | BNB Up or Down - August 26, 1:20AM-1:25AM ET… | ❌ LOSS | -2.04$ |
+| 2026-08-26T05:43 | UPDOWN_GBM_15M_TARDIO#BTC#15min | Bitcoin Up or Down - August 26, 1:15AM-1:30AM ET… | ✅ WIN | +1.35$ |
+| 2026-08-26T05:42 | GBM_LATE_5M#BNB#5min | BNB Up or Down - August 26, 1:30AM-1:35AM ET… | ✅ WIN | +1.83$ |
+| 2026-08-26T05:42 | GBM_LATE_15M_ESPACIO_ATR#ETH#15min | … | ❌ LOSS | -1.07$ |
+| 2026-08-26T05:42 | UPDOWN_GBM#SOL#5min | Solana Up or Down - August 26, 1:25AM-1:30AM ET… | ✅ WIN | +0.50$ |
+| 2026-08-26T05:42 | GBM_LATE_15M_TARDIO#ETH#15min | Ethereum Up or Down - August 26, 1:15AM-1:30AM ET… | ❌ LOSS | -2.04$ |
 
 ## Calidad de datos
 
-✅ **OK** — última verificación 2026-08-26T05:39 UTC | rechazos 1h: 2 (rango=0, spike=0)
+✅ **OK** — última verificación 2026-08-26T05:46 UTC | rechazos 1h: 2 (rango=0, spike=0)
 
 | Asset | Precio | Age | Alertas |
 |---|---|---|---|
-| ✅ BTC | $79,047.77 | 0.1min |  |
-| ✅ ETH | $2,463.42 | 0.1min |  |
-| ✅ SOL | $97.05 | 0.1min |  |
+| ✅ BTC | $79,074.29 | 0.1min |  |
+| ✅ ETH | $2,464.66 | 0.1min |  |
+| ✅ SOL | $97.10 | 0.1min |  |
 | ✅ XRP | $1.44 | 0.1min |  |
 
 **Cross-source** (binance, coinbase, kraken):
 
 | Asset | Consenso | Fuente | Estado |
 |---|---|---|---|
-| BTC | $79,059.60 | consenso |  |
-| ETH | $2,463.72 | consenso |  |
-| SOL | $97.05 | consenso |  |
+| BTC | $79,074.29 | consenso |  |
+| ETH | $2,464.11 | consenso |  |
+| SOL | $97.12 | consenso |  |
 | XRP | $1.44 | consenso |  |
 
 **Alertas activas:**
