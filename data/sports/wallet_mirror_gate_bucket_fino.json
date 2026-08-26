@@ -1,0 +1,24 @@
+{
+ "CS#SEGUIR": {
+  "lo": 0.26,
+  "hi": 0.31,
+  "n": 17,
+  "pnl_medio": 1.2439,
+  "diff_vs_resto": 1.321,
+  "p_valor": 0.0,
+  "split_half_diff": [
+   1.244,
+   1.3895
+  ],
+  "split_half_ok": true,
+  "pnl_medio_loo": 1.3841,
+  "robusto_loo": true,
+  "ci90_bootstrap": [
+   0.6017,
+   1.8756
+  ],
+  "robusto_bootstrap": true,
+  "n_posiciones_buscadas": 29,
+  "veredicto": "bueno_confirmado"
+ }
+}

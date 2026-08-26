@@ -36,7 +36,15 @@ OUT_PATH = REPO / "data/sports/wallet_mirror_gate_bucket.json"
 
 N_MIN = 15
 RATIO_MIN = 5.0
-FEE = 0.07
+# FEE verificado 26-Ago con condition_ids reales del propio dataset contra gamma-api
+# (feeType/feeSchedule): sports usa "sports_fees_v3" rate=0.05 en CS/LoL/Tennis/Dota/
+# Valorant/Cricket/UFC/ATP/EPL (9/10 categorías muestreadas) -- NO el 0.07 de cripto,
+# que es un supuesto copiado sin verificar (mismo aviso ya dejado en el fichero gemelo
+# de weather). Único outlier visto: F1 usa "sports_fees_v2" rate=0.03 (volumen
+# despreciable hoy, 1 señal). 0.05 es la mejor aproximación única disponible; no cambia
+# qué buckets se confirman (breakeven/hit no dependen de FEE aquí) pero corrige el
+# pnl_medio reportado, que con 0.07 estaba sistemáticamente infravalorado.
+FEE = 0.05
 STAKE = 1.0
 Z90 = 1.645
 STEP = 0.05
