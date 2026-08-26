@@ -1,9 +1,9 @@
 {
-  "timestamp_utc": "2026-08-26T17:19:38+00:00",
-  "bankroll_sim": 22886.9,
-  "pnl_total": 22866.9,
-  "n_ops": 272338,
-  "win_rate": 0.5808,
+  "timestamp_utc": "2026-08-26T17:26:11+00:00",
+  "bankroll_sim": 22913.04,
+  "pnl_total": 22893.04,
+  "n_ops": 272442,
+  "win_rate": 0.5809,
   "estrategias_activas": 529,
   "desactivadas": [
     "SMART_FLOW_1H",
@@ -43,8 +43,8 @@
     },
     {
       "k": "FAVORITO_CONFIRMADO_15MIN_EXTREMO#BTC#15min",
-      "ic": 0.4459,
-      "n": 109
+      "ic": 0.4464,
+      "n": 110
     }
   ],
   "brier_medio": 0.2358,
