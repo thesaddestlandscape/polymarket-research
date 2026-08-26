@@ -2,24 +2,29 @@
 """
 dispersed_bot_executor_dryrun.py -- P-GALLINA FASE 1 (25-Ago noche,
 petición explícita Javi: "busca alfa, dinero... cerrar el stage 0").
+ACTUALIZADO 26-Ago (petición explícita Javi, tras ver 6/8 veredictos
+nuevos del aviso de Telegram revertir a sin_concluir en el mismo día --
+"actualízalo y déjalo acumulando para que trackee absolutamente todo el
+universo, así tenemos datos de todo ya"): se elimina el filtro fijo a 3
+combos hardcodeados. La inestabilidad del propio gate (buckets que pasan
+y dejan de pasar en horas con solo un poco más de n) es la prueba de que
+fijar el ejecutor a un snapshot puntual queda obsoleto casi de inmediato
+-- mejor trackear TODO lo que detecta el firehose (4 arquetipos x 6
+activos x 5 marcos x buckets de precio) y dejar que `_gate_veredicto()`
+decida en vivo, en cada fila, si ese combo/bucket exacto está confirmado
+HOY. Así se acumula histórico completo de decisión simulada (stake real,
+circuit breakers) para el universo entero, sin tener que re-desplegar
+cada vez que el gate cambia de veredicto.
 
 Extensión de bot_wallets_gate_bucket_fase0.py (FASE 0, solo lectura) a
-FASE 1 DRY_RUN para los 3 únicos candidatos que hoy tienen veredicto
-`bueno_confirmado` en `bot_wallets_gate_bucket.json` con rigor completo
-(Wilson+shuffle+split-half+BH-FDR) Y sobreviven excluir la wallet
-dominante (verificado a mano, ver idea_alfa_nuevo_25ago_noche):
-
-  DISPERSO#XRP#5min  [0.45,0.50) n=49  pnl+0.243€/tr (sin_top n=34 +0.38€)
-  DISPERSO#SOL#15min [0.50,0.55) n=69  pnl+0.237€/tr (sin_top n=53 +0.26€)
-  DISPERSO#BTC#60min [0.45,0.50) n=26  pnl+0.418€/tr (sin_top n=20 +0.435€)
-
-Fill-ability real (ratio_vs_stake>=5x) sobre bot_wallets_gate_bucket_
-fase0.csv: SOL 58.1%, BTC 85.2%, XRP 60.4% -- señales genuinamente
-ejecutables, no teóricas.
+FASE 1 DRY_RUN. Fill-ability real (ratio_vs_stake>=5x) ya verificada
+sólida en varios combos (SOL 58%, BTC 85%, XRP 60%, ver histórico) --
+señales genuinamente ejecutables cuando el gate las confirma, no solo
+teóricas.
 
 Mismo patrón EXACTO de detección que bot_wallets_gate_bucket_fase0.py
 (firehose vía _archivos_activity(), fill-ability vía _fillability_mirror()
-de wallet_mirror_tracker.py) -- filtrado a estos 3 combos únicamente.
+de wallet_mirror_tracker.py) -- ahora SIN restringir a combos concretos.
 Añade la capa que bot_wallets_gate_bucket_fase0.py no tiene: simulación
 de decisión de trade real (calcular_stake real, circuit breakers) --
 mismo criterio que wallet_mirror_executor_dryrun.py/momentum_ibs_
@@ -28,9 +33,11 @@ ballena_executor.py.
 ⚠️ DRY_RUN=True SIEMPRE. Activar DRY_RUN=False (dinero real) requiere
 aprobación explícita de Javi en una sesión futura, con el checklist de
 6 categorías (project_checklist_conexion_promocion_live_31jul) revisado
-a fondo -- pendiente: cruce contra ballenas/franja fina NO hecho todavía
-para estos 3 combos (arquetipo DISPERSO no es una estrategia de
-shadow_predict.py, zonas_validadas_externas.json no lo cubre).
+a fondo para el combo concreto -- pendiente: cruce contra ballenas/franja
+fina NO hecho todavía (arquetipo de bot wallets no es una estrategia de
+shadow_predict.py, zonas_validadas_externas.json no lo cubre), y exigir
+ESTABILIDAD del veredicto durante varios días seguidos antes de proponer
+nada, dada la fragilidad observada 26-Ago.
 
 NO coloca, cancela ni modifica ninguna orden real mientras DRY_RUN=True.
 """
@@ -60,13 +67,6 @@ HIST = DIR_SHADOW / "ballenas_timing_history.csv"
 POLL_S = 5
 STEP_BUCKET = 0.05
 UMBRAL_SNIPER_MIN = 5.0
-
-# (arquetipo, activo, marco) -> bucket confirmado (float ya redondeado a STEP)
-TARGETS = {
-    ("DISPERSO", "XRP", "5min"): 0.45,
-    ("DISPERSO", "SOL", "15min"): 0.50,
-    ("DISPERSO", "BTC", "60min"): 0.45,
-}
 
 COLUMNS = [
     "timestamp_utc", "trade_timestamp", "wallet", "arquetipo", "activo", "marco",
@@ -170,9 +170,6 @@ def _procesar_fila(row: dict, wallets: set, arquetipos: dict, vistos: set) -> di
     arquetipo = arquetipos.get(w, "?")
     activo = row.get("activo", "")
     marco = row.get("marco", "")
-    key = (arquetipo, activo, marco)
-    if key not in TARGETS:
-        return None
     dedup_key = f"{w}|{row.get('market_slug','')}"
     if dedup_key in vistos:
         return None
@@ -184,8 +181,9 @@ def _procesar_fila(row: dict, wallets: set, arquetipos: dict, vistos: set) -> di
     if not (0.0 < precio < 1.0):
         return None
     b = _bucket(precio)
-    if abs(b - TARGETS[key]) > 1e-6:
-        return None  # solo el bucket exacto confirmado, no todo el activo/marco
+    # 26-Ago: sin filtro de combo -- se procesa TODO el universo (4
+    # arquetipos x 6 activos x 5 marcos x bucket), el gate decide en vivo
+    # por fila si ese combo/bucket exacto está confirmado hoy.
 
     lado = row.get("outcome", "")
     fill = _fillability_mirror(row.get("market_slug", ""), lado, row.get("price", ""))
@@ -235,7 +233,7 @@ def main() -> None:
     wallets = set(bots.keys())
     arquetipos = clasificar_arquetipos(wallets)
     _log(f"dispersed_bot_executor_dryrun arrancado (DRY_RUN={DRY_RUN}) -- "
-         f"{len(wallets)} bot wallets, targets={list(TARGETS.keys())}")
+         f"{len(wallets)} bot wallets, universo completo (sin filtro de combo)")
 
     vistos = _seed_vistos_sin_consultar(wallets)
     _vistos_guardar(vistos)

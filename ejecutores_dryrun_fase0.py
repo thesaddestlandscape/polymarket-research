@@ -58,6 +58,7 @@ import favorito_confirmado_60min_executor
 import gbm_late_15min_executor
 import updown_gbm_15min_tardio_btc_executor
 import wallet_mirror_sniper
+import dispersed_bot_executor_dryrun
 
 # 11-Ago: wallet_mirror_executor_dryrun.py sacado de aquí -- pasó a
 # DRY_RUN=False (activación real aprobada por Javi, SEGUIR#BTC#5min#grande,
@@ -77,7 +78,7 @@ import wallet_mirror_sniper
 # a arrancar en vez de fusionar por error algo que mueve dinero real.
 for _mod in (favorito_confirmado_15min_executor, favorito_confirmado_60min_executor,
              gbm_late_15min_executor,
-             updown_gbm_15min_tardio_btc_executor):
+             updown_gbm_15min_tardio_btc_executor, dispersed_bot_executor_dryrun):
     if getattr(_mod, "DRY_RUN", None) is not True:
         raise RuntimeError(
             f"🚨 {_mod.__name__} tiene DRY_RUN={getattr(_mod, 'DRY_RUN', None)!r} -- "
@@ -92,6 +93,7 @@ EJECUTORES = [
     (gbm_late_15min_executor, "gbm_late_15min_executor.log", "log", False),
     (updown_gbm_15min_tardio_btc_executor, "updown_gbm_15min_tardio_btc_executor.log", "log", False),
     (wallet_mirror_sniper, "wallet_mirror_sniper.log", "_log", True),
+    (dispersed_bot_executor_dryrun, "dispersed_bot_executor_dryrun.log", "_log", False),
 ]
 
 
