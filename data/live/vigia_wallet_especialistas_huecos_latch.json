@@ -1,18 +1,4 @@
 {
- "0x07295e8e3f1dc42a6bdcb5e8c93c954bd3885f54#BNB#15m": {
-  "wallet": "0x07295e8e3f1dc42a6bdcb5e8c93c954bd3885f54",
-  "activo": "BNB",
-  "marco": "15m",
-  "n": 67,
-  "concentracion": 1.0,
-  "hit": 0.8955,
-  "edge_pp": -8.211,
-  "precio_medio": 0.9776,
-  "cobertura_propia_n": 0,
-  "cobertura_propia_ic_bayes": null,
-  "primera_vez_visto": "2026-08-22T06:45:20+00:00",
-  "ultima_vez_visto": "2026-08-26T06:45:04+00:00"
- },
  "0x0df2626035c1fa0cc1c3a8e98f2a64ef21942d28#BNB#15m": {
   "wallet": "0x0df2626035c1fa0cc1c3a8e98f2a64ef21942d28",
   "activo": "BNB",
@@ -25,20 +11,7 @@
   "cobertura_propia_n": 0,
   "cobertura_propia_ic_bayes": null,
   "primera_vez_visto": "2026-08-23T06:45:04+00:00",
-  "ultima_vez_visto": "2026-08-26T06:45:04+00:00"
- },
- "0x07295e8e3f1dc42a6bdcb5e8c93c954bd3885f54#BNB#5m": {
-  "wallet": "0x07295e8e3f1dc42a6bdcb5e8c93c954bd3885f54",
-  "activo": "BNB",
-  "marco": "5m",
-  "n": 125,
-  "concentracion": 0.8446,
-  "hit": 0.88,
-  "edge_pp": -9.282,
-  "precio_medio": 0.9728,
-  "cobertura_propia_n": 0,
-  "cobertura_propia_ic_bayes": null,
-  "primera_vez_visto": "2026-08-26T06:45:04+00:00",
-  "ultima_vez_visto": "2026-08-26T06:45:04+00:00"
+  "ultima_vez_visto": "2026-08-26T06:45:04+00:00",
+  "g_kelly": 0.017819
  }
 }
