@@ -1,5 +1,5 @@
 {
- "generado_utc": "2026-08-26T22:45:09+00:00",
+ "generado_utc": "2026-08-26T22:50:10+00:00",
  "fuente": "bybit",
  "BNB": {
   "2min": {
@@ -36,21 +36,21 @@
   },
   "5min": {
    "usd_long": 0.0,
-   "usd_short": 0.0,
-   "n": 0,
-   "imbalance": null
+   "usd_short": 2743.47,
+   "n": 1,
+   "imbalance": 1.0
   },
   "15min": {
    "usd_long": 0.0,
-   "usd_short": 2194.89,
-   "n": 1,
+   "usd_short": 4938.36,
+   "n": 2,
    "imbalance": 1.0
   },
   "60min": {
    "usd_long": 150180.15,
-   "usd_short": 4002.17,
-   "n": 59,
-   "imbalance": -0.9481
+   "usd_short": 6745.64,
+   "n": 60,
+   "imbalance": -0.914
   }
  },
  "DOGE": {
@@ -99,10 +99,10 @@
    "imbalance": 1.0
   },
   "60min": {
-   "usd_long": 622499.36,
+   "usd_long": 617501.91,
    "usd_short": 247552.8,
-   "n": 64,
-   "imbalance": -0.4309
+   "n": 62,
+   "imbalance": -0.4277
   }
  },
  "SOL": {
@@ -114,9 +114,9 @@
   },
   "5min": {
    "usd_long": 0.0,
-   "usd_short": 21434.42,
-   "n": 1,
-   "imbalance": 1.0
+   "usd_short": 0.0,
+   "n": 0,
+   "imbalance": null
   },
   "15min": {
    "usd_long": 0.0,
@@ -125,9 +125,9 @@
    "imbalance": 1.0
   },
   "60min": {
-   "usd_long": 830842.41,
+   "usd_long": 830567.87,
    "usd_short": 69050.21,
-   "n": 154,
+   "n": 153,
    "imbalance": -0.8465
   }
  },
@@ -140,29 +140,29 @@
   },
   "5min": {
    "usd_long": 0.0,
-   "usd_short": 0.0,
-   "n": 0,
-   "imbalance": null
+   "usd_short": 2660.16,
+   "n": 1,
+   "imbalance": 1.0
   },
   "15min": {
    "usd_long": 0.0,
-   "usd_short": 1978.05,
+   "usd_short": 2660.16,
    "n": 1,
    "imbalance": 1.0
   },
   "60min": {
    "usd_long": 104881.01,
-   "usd_short": 4630.56,
-   "n": 30,
-   "imbalance": -0.9154
+   "usd_short": 7290.73,
+   "n": 31,
+   "imbalance": -0.87
   }
  },
  "lag_bybit_ws": {
   "ventana_min": 5,
-  "n_muestras": 1,
-  "ultimo_lag_s": 0.17,
-  "max_lag_s": 0.17,
-  "media_lag_s": 0.17,
+  "n_muestras": 2,
+  "ultimo_lag_s": 0.64,
+  "max_lag_s": 0.64,
+  "media_lag_s": 0.62,
   "umbral_alerta_s": 5.0
  }
 }
