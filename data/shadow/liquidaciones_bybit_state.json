@@ -1,5 +1,5 @@
 {
- "generado_utc": "2026-08-26T15:37:45+00:00",
+ "generado_utc": "2026-08-26T15:43:38+00:00",
  "fuente": "bybit",
  "BNB": {
   "2min": {
@@ -41,16 +41,16 @@
    "imbalance": null
   },
   "15min": {
-   "usd_long": 59718.47,
+   "usd_long": 5485.61,
    "usd_short": 0.0,
-   "n": 12,
+   "n": 4,
    "imbalance": -1.0
   },
   "60min": {
    "usd_long": 60812.32,
-   "usd_short": 1155422.11,
-   "n": 154,
-   "imbalance": 0.9
+   "usd_short": 1081062.82,
+   "n": 141,
+   "imbalance": 0.8935
   }
  },
  "DOGE": {
@@ -67,16 +67,16 @@
    "imbalance": null
   },
   "15min": {
-   "usd_long": 635.04,
+   "usd_long": 0.0,
    "usd_short": 0.0,
-   "n": 1,
-   "imbalance": -1.0
+   "n": 0,
+   "imbalance": null
   },
   "60min": {
    "usd_long": 635.04,
-   "usd_short": 109445.15,
-   "n": 42,
-   "imbalance": 0.9885
+   "usd_short": 108873.21,
+   "n": 34,
+   "imbalance": 0.9884
   }
  },
  "ETH": {
@@ -93,15 +93,15 @@
    "imbalance": null
   },
   "15min": {
-   "usd_long": 24119.24,
+   "usd_long": 2486.02,
    "usd_short": 0.0,
-   "n": 9,
+   "n": 3,
    "imbalance": -1.0
   },
   "60min": {
    "usd_long": 24119.24,
-   "usd_short": 201056.38,
-   "n": 44,
+   "usd_short": 201032.02,
+   "n": 43,
    "imbalance": 0.7858
   }
  },
@@ -119,16 +119,16 @@
    "imbalance": null
   },
   "15min": {
-   "usd_long": 1592.99,
+   "usd_long": 551.22,
    "usd_short": 0.0,
-   "n": 4,
+   "n": 3,
    "imbalance": -1.0
   },
   "60min": {
-   "usd_long": 1689.03,
-   "usd_short": 195660.5,
-   "n": 66,
-   "imbalance": 0.9829
+   "usd_long": 1592.99,
+   "usd_short": 141107.61,
+   "n": 49,
+   "imbalance": 0.9777
   }
  },
  "XRP": {
@@ -145,16 +145,16 @@
    "imbalance": null
   },
   "15min": {
-   "usd_long": 27817.77,
+   "usd_long": 368.56,
    "usd_short": 0.0,
-   "n": 7,
+   "n": 1,
    "imbalance": -1.0
   },
   "60min": {
    "usd_long": 45321.21,
-   "usd_short": 785137.28,
-   "n": 163,
-   "imbalance": 0.8909
+   "usd_short": 761577.66,
+   "n": 148,
+   "imbalance": 0.8877
   }
  },
  "lag_bybit_ws": {
