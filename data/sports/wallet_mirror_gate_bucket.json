@@ -1,0 +1,1176 @@
+{
+ "CS#SEGUIR": {
+  "0.75": {
+   "n": 16,
+   "hit": 1.0,
+   "pnl_medio": 0.2758,
+   "ask_medio": 0.7744,
+   "wilson90lo": 0.8553,
+   "p_binomial": 0.0167,
+   "split_half": [
+    0.2769,
+    0.2747
+   ],
+   "p_bh": 0.0669,
+   "veredicto": "sin_concluir"
+  },
+  "0.45": {
+   "n": 15,
+   "hit": 0.8,
+   "pnl_medio": 0.6021,
+   "ask_medio": 0.4873,
+   "wilson90lo": 0.5912,
+   "p_binomial": 0.0138,
+   "split_half": [
+    0.427,
+    0.7553
+   ],
+   "p_bh": 0.0669,
+   "veredicto": "sin_concluir"
+  },
+  "0.40": {
+   "n": 9,
+   "veredicto": "n_insuficiente"
+  },
+  "0.85": {
+   "n": 4,
+   "veredicto": "n_insuficiente"
+  },
+  "0.10": {
+   "n": 3,
+   "veredicto": "n_insuficiente"
+  },
+  "0.70": {
+   "n": 9,
+   "veredicto": "n_insuficiente"
+  },
+  "0.90": {
+   "n": 6,
+   "veredicto": "n_insuficiente"
+  },
+  "0.95": {
+   "n": 3,
+   "veredicto": "n_insuficiente"
+  },
+  "0.35": {
+   "n": 10,
+   "veredicto": "n_insuficiente"
+  },
+  "0.25": {
+   "n": 13,
+   "veredicto": "n_insuficiente"
+  },
+  "0.60": {
+   "n": 12,
+   "veredicto": "n_insuficiente"
+  },
+  "0.50": {
+   "n": 7,
+   "veredicto": "n_insuficiente"
+  },
+  "0.65": {
+   "n": 13,
+   "veredicto": "n_insuficiente"
+  },
+  "0.55": {
+   "n": 20,
+   "hit": 0.65,
+   "pnl_medio": 0.1101,
+   "ask_medio": 0.5714,
+   "wilson90lo": 0.4665,
+   "p_binomial": 0.3175,
+   "split_half": [
+    0.3634,
+    -0.1432
+   ],
+   "p_bh": 0.6351,
+   "veredicto": "sin_concluir"
+  },
+  "0.80": {
+   "n": 8,
+   "veredicto": "n_insuficiente"
+  },
+  "0.30": {
+   "n": 11,
+   "veredicto": "n_insuficiente"
+  },
+  "0.20": {
+   "n": 5,
+   "veredicto": "n_insuficiente"
+  },
+  "0.15": {
+   "n": 4,
+   "veredicto": "n_insuficiente"
+  }
+ },
+ "Tennis#FADE": {
+  "0.60": {
+   "n": 5,
+   "veredicto": "n_insuficiente"
+  },
+  "0.45": {
+   "n": 2,
+   "veredicto": "n_insuficiente"
+  },
+  "0.90": {
+   "n": 5,
+   "veredicto": "n_insuficiente"
+  },
+  "0.65": {
+   "n": 4,
+   "veredicto": "n_insuficiente"
+  },
+  "0.20": {
+   "n": 2,
+   "veredicto": "n_insuficiente"
+  },
+  "0.70": {
+   "n": 2,
+   "veredicto": "n_insuficiente"
+  },
+  "0.15": {
+   "n": 1,
+   "veredicto": "n_insuficiente"
+  },
+  "0.25": {
+   "n": 9,
+   "veredicto": "n_insuficiente"
+  },
+  "0.10": {
+   "n": 1,
+   "veredicto": "n_insuficiente"
+  },
+  "0.80": {
+   "n": 3,
+   "veredicto": "n_insuficiente"
+  },
+  "0.75": {
+   "n": 2,
+   "veredicto": "n_insuficiente"
+  },
+  "0.85": {
+   "n": 3,
+   "veredicto": "n_insuficiente"
+  },
+  "0.50": {
+   "n": 3,
+   "veredicto": "n_insuficiente"
+  },
+  "0.55": {
+   "n": 2,
+   "veredicto": "n_insuficiente"
+  },
+  "0.30": {
+   "n": 1,
+   "veredicto": "n_insuficiente"
+  },
+  "0.95": {
+   "n": 4,
+   "veredicto": "n_insuficiente"
+  },
+  "0.40": {
+   "n": 3,
+   "veredicto": "n_insuficiente"
+  },
+  "0.35": {
+   "n": 1,
+   "veredicto": "n_insuficiente"
+  },
+  "0.05": {
+   "n": 1,
+   "veredicto": "n_insuficiente"
+  }
+ },
+ "Soccer-clf#FADE": {
+  "0.15": {
+   "n": 1,
+   "veredicto": "n_insuficiente"
+  },
+  "0.90": {
+   "n": 3,
+   "veredicto": "n_insuficiente"
+  },
+  "0.85": {
+   "n": 1,
+   "veredicto": "n_insuficiente"
+  }
+ },
+ "LoL#SEGUIR": {
+  "0.20": {
+   "n": 9,
+   "veredicto": "n_insuficiente"
+  },
+  "0.70": {
+   "n": 12,
+   "veredicto": "n_insuficiente"
+  },
+  "0.05": {
+   "n": 1,
+   "veredicto": "n_insuficiente"
+  },
+  "0.85": {
+   "n": 9,
+   "veredicto": "n_insuficiente"
+  },
+  "0.90": {
+   "n": 15,
+   "hit": 0.9333,
+   "pnl_medio": -0.0065,
+   "ask_medio": 0.9347,
+   "wilson90lo": 0.7492,
+   "p_binomial": 0.7435,
+   "split_half": [
+    0.0721,
+    -0.0753
+   ],
+   "p_bh": 0.9562,
+   "veredicto": "sin_concluir"
+  },
+  "0.75": {
+   "n": 3,
+   "veredicto": "n_insuficiente"
+  },
+  "0.80": {
+   "n": 12,
+   "veredicto": "n_insuficiente"
+  },
+  "0.40": {
+   "n": 18,
+   "hit": 0.2778,
+   "pnl_medio": -0.3732,
+   "ask_medio": 0.425,
+   "wilson90lo": 0.1423,
+   "p_binomial": 0.9367,
+   "split_half": [
+    0.0054,
+    -0.7518
+   ],
+   "p_bh": 0.9562,
+   "veredicto": "sin_concluir"
+  },
+  "0.60": {
+   "n": 8,
+   "veredicto": "n_insuficiente"
+  },
+  "0.65": {
+   "n": 11,
+   "veredicto": "n_insuficiente"
+  },
+  "0.35": {
+   "n": 12,
+   "veredicto": "n_insuficiente"
+  },
+  "0.30": {
+   "n": 6,
+   "veredicto": "n_insuficiente"
+  },
+  "0.45": {
+   "n": 31,
+   "hit": 0.6129,
+   "pnl_medio": 0.2382,
+   "ask_medio": 0.4848,
+   "wilson90lo": 0.4655,
+   "p_binomial": 0.1061,
+   "split_half": [
+    0.4915,
+    0.0007
+   ],
+   "p_bh": 0.2828,
+   "veredicto": "sin_concluir"
+  },
+  "0.95": {
+   "n": 5,
+   "veredicto": "n_insuficiente"
+  },
+  "0.55": {
+   "n": 8,
+   "veredicto": "n_insuficiente"
+  },
+  "0.50": {
+   "n": 12,
+   "veredicto": "n_insuficiente"
+  },
+  "0.25": {
+   "n": 4,
+   "veredicto": "n_insuficiente"
+  },
+  "0.15": {
+   "n": 8,
+   "veredicto": "n_insuficiente"
+  },
+  "0.10": {
+   "n": 1,
+   "veredicto": "n_insuficiente"
+  }
+ },
+ "Soccer-mls#FADE": {
+  "0.60": {
+   "n": 2,
+   "veredicto": "n_insuficiente"
+  },
+  "0.40": {
+   "n": 1,
+   "veredicto": "n_insuficiente"
+  },
+  "0.55": {
+   "n": 3,
+   "veredicto": "n_insuficiente"
+  },
+  "0.80": {
+   "n": 1,
+   "veredicto": "n_insuficiente"
+  },
+  "0.30": {
+   "n": 3,
+   "veredicto": "n_insuficiente"
+  },
+  "0.25": {
+   "n": 1,
+   "veredicto": "n_insuficiente"
+  },
+  "0.45": {
+   "n": 1,
+   "veredicto": "n_insuficiente"
+  },
+  "0.50": {
+   "n": 2,
+   "veredicto": "n_insuficiente"
+  }
+ },
+ "Soccer-sud#SEGUIR": {
+  "0.55": {
+   "n": 1,
+   "veredicto": "n_insuficiente"
+  },
+  "0.85": {
+   "n": 1,
+   "veredicto": "n_insuficiente"
+  },
+  "0.90": {
+   "n": 1,
+   "veredicto": "n_insuficiente"
+  },
+  "0.65": {
+   "n": 1,
+   "veredicto": "n_insuficiente"
+  },
+  "0.80": {
+   "n": 1,
+   "veredicto": "n_insuficiente"
+  },
+  "0.45": {
+   "n": 1,
+   "veredicto": "n_insuficiente"
+  }
+ },
+ "Tennis#SEGUIR": {
+  "0.60": {
+   "n": 11,
+   "veredicto": "n_insuficiente"
+  },
+  "0.40": {
+   "n": 11,
+   "veredicto": "n_insuficiente"
+  },
+  "0.65": {
+   "n": 7,
+   "veredicto": "n_insuficiente"
+  },
+  "0.30": {
+   "n": 4,
+   "veredicto": "n_insuficiente"
+  },
+  "0.15": {
+   "n": 1,
+   "veredicto": "n_insuficiente"
+  },
+  "0.70": {
+   "n": 5,
+   "veredicto": "n_insuficiente"
+  },
+  "0.80": {
+   "n": 8,
+   "veredicto": "n_insuficiente"
+  },
+  "0.90": {
+   "n": 3,
+   "veredicto": "n_insuficiente"
+  },
+  "0.45": {
+   "n": 4,
+   "veredicto": "n_insuficiente"
+  },
+  "0.25": {
+   "n": 5,
+   "veredicto": "n_insuficiente"
+  },
+  "0.20": {
+   "n": 2,
+   "veredicto": "n_insuficiente"
+  },
+  "0.85": {
+   "n": 5,
+   "veredicto": "n_insuficiente"
+  },
+  "0.95": {
+   "n": 4,
+   "veredicto": "n_insuficiente"
+  },
+  "0.75": {
+   "n": 3,
+   "veredicto": "n_insuficiente"
+  },
+  "0.05": {
+   "n": 4,
+   "veredicto": "n_insuficiente"
+  },
+  "0.55": {
+   "n": 5,
+   "veredicto": "n_insuficiente"
+  },
+  "0.35": {
+   "n": 1,
+   "veredicto": "n_insuficiente"
+  },
+  "0.50": {
+   "n": 3,
+   "veredicto": "n_insuficiente"
+  },
+  "0.10": {
+   "n": 1,
+   "veredicto": "n_insuficiente"
+  }
+ },
+ "CS#FADE": {
+  "0.55": {
+   "n": 8,
+   "veredicto": "n_insuficiente"
+  },
+  "0.35": {
+   "n": 9,
+   "veredicto": "n_insuficiente"
+  },
+  "0.30": {
+   "n": 4,
+   "veredicto": "n_insuficiente"
+  },
+  "0.40": {
+   "n": 8,
+   "veredicto": "n_insuficiente"
+  },
+  "0.60": {
+   "n": 7,
+   "veredicto": "n_insuficiente"
+  },
+  "0.20": {
+   "n": 6,
+   "veredicto": "n_insuficiente"
+  },
+  "0.65": {
+   "n": 8,
+   "veredicto": "n_insuficiente"
+  },
+  "0.50": {
+   "n": 10,
+   "veredicto": "n_insuficiente"
+  },
+  "0.25": {
+   "n": 5,
+   "veredicto": "n_insuficiente"
+  },
+  "0.70": {
+   "n": 8,
+   "veredicto": "n_insuficiente"
+  },
+  "0.80": {
+   "n": 8,
+   "veredicto": "n_insuficiente"
+  },
+  "0.75": {
+   "n": 6,
+   "veredicto": "n_insuficiente"
+  },
+  "0.90": {
+   "n": 5,
+   "veredicto": "n_insuficiente"
+  },
+  "0.45": {
+   "n": 9,
+   "veredicto": "n_insuficiente"
+  },
+  "0.95": {
+   "n": 1,
+   "veredicto": "n_insuficiente"
+  },
+  "0.85": {
+   "n": 1,
+   "veredicto": "n_insuficiente"
+  },
+  "0.10": {
+   "n": 1,
+   "veredicto": "n_insuficiente"
+  }
+ },
+ "LoL#FADE": {
+  "0.60": {
+   "n": 13,
+   "veredicto": "n_insuficiente"
+  },
+  "0.40": {
+   "n": 7,
+   "veredicto": "n_insuficiente"
+  },
+  "0.45": {
+   "n": 8,
+   "veredicto": "n_insuficiente"
+  },
+  "0.65": {
+   "n": 6,
+   "veredicto": "n_insuficiente"
+  },
+  "0.85": {
+   "n": 5,
+   "veredicto": "n_insuficiente"
+  },
+  "0.90": {
+   "n": 5,
+   "veredicto": "n_insuficiente"
+  },
+  "0.95": {
+   "n": 2,
+   "veredicto": "n_insuficiente"
+  },
+  "0.20": {
+   "n": 4,
+   "veredicto": "n_insuficiente"
+  },
+  "0.75": {
+   "n": 5,
+   "veredicto": "n_insuficiente"
+  },
+  "0.80": {
+   "n": 2,
+   "veredicto": "n_insuficiente"
+  },
+  "0.70": {
+   "n": 4,
+   "veredicto": "n_insuficiente"
+  },
+  "0.35": {
+   "n": 6,
+   "veredicto": "n_insuficiente"
+  },
+  "0.55": {
+   "n": 6,
+   "veredicto": "n_insuficiente"
+  },
+  "0.15": {
+   "n": 2,
+   "veredicto": "n_insuficiente"
+  },
+  "0.50": {
+   "n": 15,
+   "hit": 0.5333,
+   "pnl_medio": 0.008,
+   "ask_medio": 0.5227,
+   "wilson90lo": 0.3331,
+   "p_binomial": 0.5709,
+   "split_half": [
+    0.0803,
+    -0.0553
+   ],
+   "p_bh": 0.9134,
+   "veredicto": "sin_concluir"
+  },
+  "0.30": {
+   "n": 5,
+   "veredicto": "n_insuficiente"
+  },
+  "0.05": {
+   "n": 3,
+   "veredicto": "n_insuficiente"
+  },
+  "0.10": {
+   "n": 3,
+   "veredicto": "n_insuficiente"
+  },
+  "0.25": {
+   "n": 4,
+   "veredicto": "n_insuficiente"
+  }
+ },
+ "Soccer-lib#FADE": {
+  "0.30": {
+   "n": 1,
+   "veredicto": "n_insuficiente"
+  },
+  "0.35": {
+   "n": 3,
+   "veredicto": "n_insuficiente"
+  },
+  "0.45": {
+   "n": 4,
+   "veredicto": "n_insuficiente"
+  },
+  "0.50": {
+   "n": 2,
+   "veredicto": "n_insuficiente"
+  },
+  "0.75": {
+   "n": 1,
+   "veredicto": "n_insuficiente"
+  },
+  "0.20": {
+   "n": 1,
+   "veredicto": "n_insuficiente"
+  },
+  "0.40": {
+   "n": 1,
+   "veredicto": "n_insuficiente"
+  },
+  "0.60": {
+   "n": 2,
+   "veredicto": "n_insuficiente"
+  },
+  "0.85": {
+   "n": 2,
+   "veredicto": "n_insuficiente"
+  },
+  "0.10": {
+   "n": 1,
+   "veredicto": "n_insuficiente"
+  },
+  "0.55": {
+   "n": 1,
+   "veredicto": "n_insuficiente"
+  }
+ },
+ "Dota#SEGUIR": {
+  "0.45": {
+   "n": 9,
+   "veredicto": "n_insuficiente"
+  },
+  "0.55": {
+   "n": 6,
+   "veredicto": "n_insuficiente"
+  },
+  "0.50": {
+   "n": 3,
+   "veredicto": "n_insuficiente"
+  },
+  "0.30": {
+   "n": 4,
+   "veredicto": "n_insuficiente"
+  },
+  "0.60": {
+   "n": 8,
+   "veredicto": "n_insuficiente"
+  },
+  "0.40": {
+   "n": 10,
+   "veredicto": "n_insuficiente"
+  },
+  "0.35": {
+   "n": 11,
+   "veredicto": "n_insuficiente"
+  },
+  "0.65": {
+   "n": 7,
+   "veredicto": "n_insuficiente"
+  },
+  "0.70": {
+   "n": 1,
+   "veredicto": "n_insuficiente"
+  },
+  "0.80": {
+   "n": 3,
+   "veredicto": "n_insuficiente"
+  }
+ },
+ "Soccer-ucl#FADE": {
+  "0.40": {
+   "n": 7,
+   "veredicto": "n_insuficiente"
+  },
+  "0.60": {
+   "n": 3,
+   "veredicto": "n_insuficiente"
+  },
+  "0.35": {
+   "n": 2,
+   "veredicto": "n_insuficiente"
+  },
+  "0.55": {
+   "n": 5,
+   "veredicto": "n_insuficiente"
+  },
+  "0.80": {
+   "n": 2,
+   "veredicto": "n_insuficiente"
+  },
+  "0.20": {
+   "n": 1,
+   "veredicto": "n_insuficiente"
+  },
+  "0.30": {
+   "n": 3,
+   "veredicto": "n_insuficiente"
+  },
+  "0.65": {
+   "n": 2,
+   "veredicto": "n_insuficiente"
+  },
+  "0.45": {
+   "n": 1,
+   "veredicto": "n_insuficiente"
+  },
+  "0.75": {
+   "n": 1,
+   "veredicto": "n_insuficiente"
+  },
+  "0.50": {
+   "n": 1,
+   "veredicto": "n_insuficiente"
+  }
+ },
+ "Soccer-ucl#SEGUIR": {
+  "0.60": {
+   "n": 4,
+   "veredicto": "n_insuficiente"
+  },
+  "0.35": {
+   "n": 2,
+   "veredicto": "n_insuficiente"
+  },
+  "0.55": {
+   "n": 15,
+   "hit": 0.4,
+   "pnl_medio": -0.3139,
+   "ask_medio": 0.5853,
+   "wilson90lo": 0.2232,
+   "p_binomial": 0.9562,
+   "split_half": [
+    -1.0,
+    0.2864
+   ],
+   "p_bh": 0.9562,
+   "veredicto": "sin_concluir"
+  },
+  "0.15": {
+   "n": 1,
+   "veredicto": "n_insuficiente"
+  },
+  "0.40": {
+   "n": 6,
+   "veredicto": "n_insuficiente"
+  },
+  "0.20": {
+   "n": 5,
+   "veredicto": "n_insuficiente"
+  },
+  "0.65": {
+   "n": 9,
+   "veredicto": "n_insuficiente"
+  },
+  "0.75": {
+   "n": 1,
+   "veredicto": "n_insuficiente"
+  },
+  "0.30": {
+   "n": 1,
+   "veredicto": "n_insuficiente"
+  },
+  "0.95": {
+   "n": 1,
+   "veredicto": "n_insuficiente"
+  },
+  "0.80": {
+   "n": 1,
+   "veredicto": "n_insuficiente"
+  }
+ },
+ "Valorant#SEGUIR": {
+  "0.80": {
+   "n": 2,
+   "veredicto": "n_insuficiente"
+  },
+  "0.10": {
+   "n": 2,
+   "veredicto": "n_insuficiente"
+  },
+  "0.35": {
+   "n": 6,
+   "veredicto": "n_insuficiente"
+  },
+  "0.40": {
+   "n": 7,
+   "veredicto": "n_insuficiente"
+  },
+  "0.70": {
+   "n": 6,
+   "veredicto": "n_insuficiente"
+  },
+  "0.25": {
+   "n": 7,
+   "veredicto": "n_insuficiente"
+  },
+  "0.60": {
+   "n": 1,
+   "veredicto": "n_insuficiente"
+  },
+  "0.50": {
+   "n": 3,
+   "veredicto": "n_insuficiente"
+  },
+  "0.55": {
+   "n": 5,
+   "veredicto": "n_insuficiente"
+  },
+  "0.75": {
+   "n": 4,
+   "veredicto": "n_insuficiente"
+  },
+  "0.20": {
+   "n": 1,
+   "veredicto": "n_insuficiente"
+  },
+  "0.30": {
+   "n": 6,
+   "veredicto": "n_insuficiente"
+  },
+  "0.65": {
+   "n": 12,
+   "veredicto": "n_insuficiente"
+  },
+  "0.45": {
+   "n": 2,
+   "veredicto": "n_insuficiente"
+  },
+  "0.15": {
+   "n": 1,
+   "veredicto": "n_insuficiente"
+  }
+ },
+ "Soccer-lal#FADE": {
+  "0.90": {
+   "n": 1,
+   "veredicto": "n_insuficiente"
+  },
+  "0.70": {
+   "n": 3,
+   "veredicto": "n_insuficiente"
+  },
+  "0.85": {
+   "n": 1,
+   "veredicto": "n_insuficiente"
+  },
+  "0.25": {
+   "n": 4,
+   "veredicto": "n_insuficiente"
+  }
+ },
+ "Soccer-grc#SEGUIR": {
+  "0.65": {
+   "n": 1,
+   "veredicto": "n_insuficiente"
+  }
+ },
+ "Soccer-uzb1#FADE": {
+  "0.80": {
+   "n": 1,
+   "veredicto": "n_insuficiente"
+  },
+  "0.65": {
+   "n": 1,
+   "veredicto": "n_insuficiente"
+  }
+ },
+ "Soccer-skc#SEGUIR": {
+  "0.80": {
+   "n": 1,
+   "veredicto": "n_insuficiente"
+  }
+ },
+ "Valorant#FADE": {
+  "0.75": {
+   "n": 4,
+   "veredicto": "n_insuficiente"
+  },
+  "0.50": {
+   "n": 2,
+   "veredicto": "n_insuficiente"
+  },
+  "0.65": {
+   "n": 9,
+   "veredicto": "n_insuficiente"
+  },
+  "0.25": {
+   "n": 2,
+   "veredicto": "n_insuficiente"
+  },
+  "0.55": {
+   "n": 2,
+   "veredicto": "n_insuficiente"
+  },
+  "0.70": {
+   "n": 3,
+   "veredicto": "n_insuficiente"
+  },
+  "0.30": {
+   "n": 3,
+   "veredicto": "n_insuficiente"
+  },
+  "0.85": {
+   "n": 3,
+   "veredicto": "n_insuficiente"
+  },
+  "0.15": {
+   "n": 1,
+   "veredicto": "n_insuficiente"
+  },
+  "0.80": {
+   "n": 1,
+   "veredicto": "n_insuficiente"
+  },
+  "0.95": {
+   "n": 1,
+   "veredicto": "n_insuficiente"
+  }
+ },
+ "Soccer-mls#SEGUIR": {
+  "0.20": {
+   "n": 2,
+   "veredicto": "n_insuficiente"
+  },
+  "0.40": {
+   "n": 1,
+   "veredicto": "n_insuficiente"
+  },
+  "0.60": {
+   "n": 3,
+   "veredicto": "n_insuficiente"
+  },
+  "0.50": {
+   "n": 3,
+   "veredicto": "n_insuficiente"
+  },
+  "0.30": {
+   "n": 1,
+   "veredicto": "n_insuficiente"
+  },
+  "0.75": {
+   "n": 1,
+   "veredicto": "n_insuficiente"
+  },
+  "0.55": {
+   "n": 1,
+   "veredicto": "n_insuficiente"
+  },
+  "0.65": {
+   "n": 1,
+   "veredicto": "n_insuficiente"
+  },
+  "0.45": {
+   "n": 1,
+   "veredicto": "n_insuficiente"
+  },
+  "0.80": {
+   "n": 1,
+   "veredicto": "n_insuficiente"
+  },
+  "0.70": {
+   "n": 1,
+   "veredicto": "n_insuficiente"
+  },
+  "0.25": {
+   "n": 1,
+   "veredicto": "n_insuficiente"
+  }
+ },
+ "Soccer-chi#FADE": {
+  "0.70": {
+   "n": 1,
+   "veredicto": "n_insuficiente"
+  },
+  "0.10": {
+   "n": 1,
+   "veredicto": "n_insuficiente"
+  },
+  "0.40": {
+   "n": 1,
+   "veredicto": "n_insuficiente"
+  },
+  "0.65": {
+   "n": 1,
+   "veredicto": "n_insuficiente"
+  },
+  "0.55": {
+   "n": 1,
+   "veredicto": "n_insuficiente"
+  },
+  "0.30": {
+   "n": 1,
+   "veredicto": "n_insuficiente"
+  }
+ },
+ "Soccer-clf#SEGUIR": {
+  "0.40": {
+   "n": 1,
+   "veredicto": "n_insuficiente"
+  },
+  "0.85": {
+   "n": 1,
+   "veredicto": "n_insuficiente"
+  }
+ },
+ "Soccer-col#FADE": {
+  "0.65": {
+   "n": 1,
+   "veredicto": "n_insuficiente"
+  },
+  "0.55": {
+   "n": 1,
+   "veredicto": "n_insuficiente"
+  },
+  "0.70": {
+   "n": 2,
+   "veredicto": "n_insuficiente"
+  },
+  "0.80": {
+   "n": 2,
+   "veredicto": "n_insuficiente"
+  },
+  "0.10": {
+   "n": 1,
+   "veredicto": "n_insuficiente"
+  },
+  "0.25": {
+   "n": 3,
+   "veredicto": "n_insuficiente"
+  },
+  "0.20": {
+   "n": 2,
+   "veredicto": "n_insuficiente"
+  },
+  "0.40": {
+   "n": 1,
+   "veredicto": "n_insuficiente"
+  },
+  "0.35": {
+   "n": 2,
+   "veredicto": "n_insuficiente"
+  },
+  "0.50": {
+   "n": 1,
+   "veredicto": "n_insuficiente"
+  }
+ },
+ "Soccer-lib#SEGUIR": {
+  "0.45": {
+   "n": 1,
+   "veredicto": "n_insuficiente"
+  },
+  "0.70": {
+   "n": 3,
+   "veredicto": "n_insuficiente"
+  },
+  "0.60": {
+   "n": 1,
+   "veredicto": "n_insuficiente"
+  },
+  "0.75": {
+   "n": 2,
+   "veredicto": "n_insuficiente"
+  },
+  "0.85": {
+   "n": 1,
+   "veredicto": "n_insuficiente"
+  },
+  "0.10": {
+   "n": 1,
+   "veredicto": "n_insuficiente"
+  },
+  "0.50": {
+   "n": 1,
+   "veredicto": "n_insuficiente"
+  }
+ },
+ "Soccer-uel#SEGUIR": {
+  "0.50": {
+   "n": 2,
+   "veredicto": "n_insuficiente"
+  },
+  "0.25": {
+   "n": 2,
+   "veredicto": "n_insuficiente"
+  },
+  "0.00": {
+   "n": 1,
+   "veredicto": "n_insuficiente"
+  },
+  "0.65": {
+   "n": 1,
+   "veredicto": "n_insuficiente"
+  }
+ },
+ "Dota#FADE": {
+  "0.45": {
+   "n": 8,
+   "veredicto": "n_insuficiente"
+  },
+  "0.50": {
+   "n": 5,
+   "veredicto": "n_insuficiente"
+  },
+  "0.55": {
+   "n": 6,
+   "veredicto": "n_insuficiente"
+  },
+  "0.35": {
+   "n": 11,
+   "veredicto": "n_insuficiente"
+  },
+  "0.60": {
+   "n": 9,
+   "veredicto": "n_insuficiente"
+  },
+  "0.65": {
+   "n": 1,
+   "veredicto": "n_insuficiente"
+  },
+  "0.30": {
+   "n": 6,
+   "veredicto": "n_insuficiente"
+  },
+  "0.70": {
+   "n": 1,
+   "veredicto": "n_insuficiente"
+  },
+  "0.40": {
+   "n": 8,
+   "veredicto": "n_insuficiente"
+  }
+ },
+ "Soccer-lal#SEGUIR": {
+  "0.25": {
+   "n": 2,
+   "veredicto": "n_insuficiente"
+  },
+  "0.70": {
+   "n": 1,
+   "veredicto": "n_insuficiente"
+  }
+ },
+ "Soccer-spl#SEGUIR": {
+  "0.20": {
+   "n": 1,
+   "veredicto": "n_insuficiente"
+  }
+ },
+ "Soccer-sud#FADE": {
+  "0.40": {
+   "n": 1,
+   "veredicto": "n_insuficiente"
+  }
+ }
+}
