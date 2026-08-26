@@ -15,6 +15,16 @@ origin/main (git no hace fetch).
 Avisa por Telegram con latch simple: solo cuando pasa de sano a anómalo,
 o cuando el push llevaba atascado y se recupera (para que se sepa que ya
 volvió a la normalidad sin tener que ir a comprobarlo).
+
+26-Ago (bug real cazado por Javi -- "soluciona también el mensaje de
+telegram de las 13:49"): con `ratio5` oscilando justo alrededor de
+UMBRAL_LOAD_RATIO (3.0x) durante una sesión con varios análisis pesados
+en paralelo, el latch de un solo umbral hacía "flapping" -- cada cruce
+del 3.0x en cualquier dirección (cron cada 15min) mandaba un Telegram
+nuevo, varias veces en una hora. Arreglado con HISTÉRESIS: entra en
+anomalía a ratio>UMBRAL_LOAD_RATIO_ALTO, pero solo se considera
+recuperado por debajo de UMBRAL_LOAD_RATIO_BAJO (más bajo) -- la zona
+intermedia no dispara ningún aviso nuevo en ninguna dirección.
 """
 import json
 import sys
@@ -30,6 +40,9 @@ from analisis_diario_salud_sistema import (
 
 LATCH = REPO / "data/live/vigia_carga_sistema_latch.json"
 
+UMBRAL_LOAD_RATIO_ALTO = UMBRAL_LOAD_RATIO  # 3.0x -- entra en anomalía
+UMBRAL_LOAD_RATIO_BAJO = 2.0  # sale de anomalía solo por debajo de esto
+
 
 def main() -> int:
     from shadow_digest import enviar_telegram
@@ -37,15 +50,24 @@ def main() -> int:
     cs = medir_carga_sistema()
     gp = medir_git_push_lag()
 
-    carga_mal = cs.get("ratio5") is not None and cs["ratio5"] > UMBRAL_LOAD_RATIO
+    try:
+        prev0 = json.loads(LATCH.read_text()) if LATCH.exists() else {}
+    except Exception:
+        prev0 = {}
+    prev_anomalo0 = prev0.get("anomalo", False)
+
+    ratio5 = cs.get("ratio5")
+    if ratio5 is None:
+        carga_mal = False
+    elif prev_anomalo0:
+        # ya estábamos en anomalía -- solo sale si cae por debajo del umbral bajo
+        carga_mal = ratio5 > UMBRAL_LOAD_RATIO_BAJO
+    else:
+        # estábamos sanos -- solo entra si sube del umbral alto
+        carga_mal = ratio5 > UMBRAL_LOAD_RATIO_ALTO
     push_mal = gp.get("commits_sin_pushear", 0) > UMBRAL_PUSH_LAG_COMMITS
     anomalo = carga_mal or push_mal
-
-    try:
-        prev = json.loads(LATCH.read_text()) if LATCH.exists() else {}
-    except Exception:
-        prev = {}
-    prev_anomalo = prev.get("anomalo", False)
+    prev_anomalo = prev_anomalo0
 
     print(f"[vigia_carga_sistema] load5={cs.get('load5')} nproc={cs.get('nproc')} "
           f"ratio5={cs.get('ratio5')} push_lag={gp.get('commits_sin_pushear')} "
