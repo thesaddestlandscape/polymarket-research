@@ -355,8 +355,58 @@ def _es_estable(entradas: list, ahora: datetime) -> bool:
     return all(e["pasa"] for e in ventana)
 
 
+RESULTS = REPO / "data/shadow/results.csv"
+N_MIN_ALCANZABLE = 5  # umbral bajo a propósito: solo para descartar buckets
+                       # donde la estrategia NUNCA entra (n=0), no para exigir
+                       # rigor -- el rigor real ya lo aporta evaluar_zona()
+
+
+def _cargar_alcanzabilidad() -> dict:
+    """(strategy, subtype, decision) -> Counter(bucket) desde results.csv --
+    26-Ago (petición explícita Javi, tras encontrar que zonas_bueno_
+    confirmado se calcula UNA VEZ por (activo,marco,dirección) y se copia
+    igual a TODAS las variantes de esa familia -- FAVORITO_CONFIRMADO base
+    y sus wrappers ALTACONVICCION/EXTREMO tienen umbrales de entrada (py>=X)
+    DISTINTOS, así que una zona confirmada para el grupo puede caer fuera
+    del rango donde una variante concreta dispara de verdad (verificado:
+    FAVORITO_CONFIRMADO_5MIN_ALTACONVICCION#BNB#5min#BUY_YES solo entra con
+    py>=0.70, pero el grupo confirmó [0.60,0.65) -- 0 filas reales ahí en
+    libro_snapshots.csv). Usa results.csv (TODO el histórico de shadow,
+    cualquier predicción logueada, no solo live) como fuente de verdad de
+    "esta estrategia concreta, ¿alguna vez ha entrado en este bucket?" --
+    más robusto que parsear el umbral de cada wrapper a mano en código
+    (habría que mantenerlo strategy por strategy, se desincroniza)."""
+    from collections import Counter
+    alcanzable = defaultdict(Counter)
+    if not RESULTS.exists():
+        return alcanzable
+    with open(RESULTS, encoding="utf-8") as f:
+        for row in csv.DictReader(f):
+            try:
+                py = float(row.get("precio_yes_mercado") or "")
+            except (TypeError, ValueError):
+                continue
+            if not (0.0 <= py < 1.0):
+                continue
+            key = (row.get("strategy", ""), row.get("subtype", ""), row.get("decision", ""))
+            alcanzable[key][bucket(py)] += 1
+    return alcanzable
+
+
+def _es_alcanzable(alcanzabilidad: dict, tupla_str: str, b: float) -> bool:
+    partes = tupla_str.split("#")
+    if len(partes) < 3:
+        return True  # formato inesperado -- fail-open a propósito, no bloquear por un parseo raro
+    strategy = partes[0]
+    decision = partes[-1]
+    subtype = "#".join(partes[1:-1])
+    return alcanzabilidad.get((strategy, subtype, decision), {}).get(b, 0) >= N_MIN_ALCANZABLE
+
+
 def main():
     ahora = datetime.now(timezone.utc)
+    alcanzabilidad = _cargar_alcanzabilidad()
+    print(f"Alcanzabilidad cargada desde results.csv: {len(alcanzabilidad)} (strategy,subtype,decision) únicos")
     historial = _cargar_historial()
     resultado = {}
     grupos = _grupos_desde_config()
@@ -382,15 +432,25 @@ def main():
             detalle[b_key] = info
             if estable:
                 zonas_confirmadas.append([b, round(b + STEP, 2)])
-        salida_grupo = {
-            "zonas_bueno_confirmado": zonas_confirmadas,
-            "detalle_por_bucket": detalle,
-            "fuente": "ballenas_timing_history.csv post-07-Ago (TWAP-safe)",
-            "regenerado_utc": ahora.isoformat(timespec="seconds"),
-            "tuplas_grupo": sorted(tuplas_del_grupo),
-        }
         for tupla_str in tuplas_del_grupo:
-            resultado[tupla_str] = salida_grupo
+            # 26-Ago: cada tupla filtra zonas_confirmadas a las que su
+            # propio umbral de entrada realmente alcanza (ver
+            # _cargar_alcanzabilidad) -- antes se copiaba el mismo
+            # zonas_bueno_confirmado del grupo a TODAS las variantes de la
+            # familia (base/ALTACONVICCION/EXTREMO), aunque tuvieran
+            # umbrales py>=X distintos.
+            zonas_alcanzables = [[b, hi] for b, hi in zonas_confirmadas
+                                  if _es_alcanzable(alcanzabilidad, tupla_str, b)]
+            zonas_no_alcanzables = [[b, hi] for b, hi in zonas_confirmadas
+                                     if [b, hi] not in zonas_alcanzables]
+            resultado[tupla_str] = {
+                "zonas_bueno_confirmado": zonas_alcanzables,
+                "zonas_confirmadas_no_alcanzables": zonas_no_alcanzables,
+                "detalle_por_bucket": detalle,
+                "fuente": "ballenas_timing_history.csv post-07-Ago (TWAP-safe)",
+                "regenerado_utc": ahora.isoformat(timespec="seconds"),
+                "tuplas_grupo": sorted(tuplas_del_grupo),
+            }
         print(f"\n=== {activo}#{marco}#{direccion} ({len(tuplas_del_grupo)} tuplas) ===")
         if zonas_confirmadas:
             n_grupos_con_zona += 1

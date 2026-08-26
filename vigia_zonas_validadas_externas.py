@@ -47,23 +47,39 @@ def main() -> int:
     # por encima del límite de 4096 de Telegram -- requests.post fallaba
     # con 400, la excepción se tragaba en enviar_telegram(), y NINGÚN
     # aviso llegaba esa corrida, incluidos cambios reales en tuplas con
-    # dinero real). Se avisa una vez por GRUPO (usando el campo nuevo
-    # "tuplas_grupo"), no por tupla -- el cambio (activo,marco,dirección)
-    # es el mismo para todas, listarlas todas 15 veces no añade info.
+    # dinero real). Se avisa una vez por SUBGRUPO (mismo tuplas_grupo Y
+    # mismo zonas_bueno_confirmado exacto), no por grupo entero.
+    #
+    # 26-Ago (petición explícita Javi, tras encontrar que zonas_bueno_
+    # confirmado se calculaba UNA VEZ por grupo y se copiaba igual a TODAS
+    # sus tuplas, aunque cada variante -- base/ALTACONVICCION/EXTREMO --
+    # tenga su propio umbral de entrada py>=X y por tanto pueda alcanzar
+    # buckets distintos): analisis_zonas_validadas_externas_post_twap_
+    # 10ago.py ahora filtra zonas_bueno_confirmado POR TUPLA (solo zonas
+    # que esa tupla concreta alcanza de verdad, ver _es_alcanzable/
+    # results.csv). El viejo supuesto "todas comparten zonas idéntico" ya
+    # NO es cierto -- agrupar solo por tuplas_grupo volvería a mezclar
+    # tuplas con respuestas distintas bajo una sola etiqueta. Se agrupa
+    # ahora por (tuplas_grupo, zonas_bueno_confirmado) para no perder la
+    # distinción real, aceptando más líneas cuando de verdad divergen.
     vistos = set()
     avisos = []
     for tupla_str, info in nuevo.items():
-        tuplas_grupo = tuple(sorted(set(info.get("tuplas_grupo", [tupla_str]))))
-        if tuplas_grupo in vistos:
+        zonas_nuevas = tuple(sorted(tuple(z) for z in info.get("zonas_bueno_confirmado", [])))
+        clave_subgrupo = (tupla_str, zonas_nuevas)
+        if clave_subgrupo in vistos:
             continue
-        vistos.add(tuplas_grupo)
-        # clave de comparación contra el latch anterior: cualquier tupla
-        # del grupo vale, todas comparten "zonas_bueno_confirmado" idéntico.
-        zonas_nuevas = {tuple(z) for z in info.get("zonas_bueno_confirmado", [])}
+        # miembros reales de este subgrupo: mismas zonas alcanzables que tupla_str,
+        # dentro de las tuplas que comparten grupo (activo,marco,dirección)
+        tuplas_grupo = sorted(set(info.get("tuplas_grupo", [tupla_str])))
+        miembros = [t for t in tuplas_grupo
+                    if tuple(sorted(tuple(z) for z in nuevo.get(t, {}).get("zonas_bueno_confirmado", []))) == zonas_nuevas]
+        for t in miembros:
+            vistos.add((t, zonas_nuevas))
         zonas_antes = {tuple(z) for z in previo.get(tupla_str, {}).get("zonas_bueno_confirmado", [])}
-        entraron = zonas_nuevas - zonas_antes
-        salieron = zonas_antes - zonas_nuevas
-        etiqueta = tuplas_grupo[0] if len(tuplas_grupo) == 1 else f"{tuplas_grupo[0]} (+{len(tuplas_grupo)-1} más)"
+        entraron = set(zonas_nuevas) - zonas_antes
+        salieron = zonas_antes - set(zonas_nuevas)
+        etiqueta = miembros[0] if len(miembros) == 1 else f"{miembros[0]} (+{len(miembros)-1} más)"
         for lo, hi in sorted(entraron):
             det = info["detalle_por_bucket"].get(f"{lo:.2f}", {})
             avisos.append(f"🟢 {etiqueta} [{lo:.2f},{hi:.2f}) ENTRA confirmada "
