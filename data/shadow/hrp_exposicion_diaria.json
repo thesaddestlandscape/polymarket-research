@@ -1,5 +1,5 @@
 {
-  "timestamp_utc": "2026-08-26T10:10:08+00:00",
+  "timestamp_utc": "2026-08-26T12:04:30+00:00",
   "tuplas_maduras": [
     {
       "tupla": "BALLENAS_CONFIRMADAS_15M#ETH#15min#BUY_YES",
@@ -20,22 +20,22 @@
     {
       "tupla": "MOMENTUM_IBS_5M_BALLENA#SOL#5min#BUY_YES",
       "dias_historial": 9,
-      "n": 1381
+      "n": 1396
     },
     {
       "tupla": "BALLENAS_TARDIAS#ETH#5min#BUY_YES",
       "dias_historial": 12,
-      "n": 2429
+      "n": 2443
     },
     {
       "tupla": "BALLENAS_TARDIAS#DOGE#5min#BUY_YES",
       "dias_historial": 12,
-      "n": 1103
+      "n": 1109
     },
     {
       "tupla": "FAVORITO_CONFIRMADO_15MIN_ALTACONVICCION#BTC#15min#BUY_YES",
       "dias_historial": 19,
-      "n": 84
+      "n": 85
     },
     {
       "tupla": "WALLET_MIRROR#BTC#5min#BUY_Up",
