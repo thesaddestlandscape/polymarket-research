@@ -7,6 +7,7 @@
  "GBM_LATE_15M#ETH#15min": [
   "hora_utc|lt|5.0|BUY_YES",
   "hora_utc|lt|6.0|BUY_YES",
+  "ibs_20min|gt|0.8712|BUY_NO",
   "ibs_20min|gt|0.872|BUY_NO",
   "ibs_20min|gt|0.8732|BUY_NO",
   "ibs_20min|gt|0.8764|BUY_NO",
@@ -58,6 +59,7 @@
   "ibs_20min|gt|0.7561|BUY_NO",
   "ibs_20min|gt|0.7595|BUY_NO",
   "ibs_20min|gt|0.75|BUY_NO",
+  "ibs_20min|gt|0.7612|BUY_NO",
   "ibs_20min|gt|0.76|BUY_NO",
   "sigma_ewma_delta_pct|gt|2.824|BUY_NO",
   "sigma_ewma_delta_pct|gt|2.831|BUY_NO",
@@ -218,6 +220,7 @@
   "sigma_h|gt|0.0123|BUY_NO",
   "sigma_h|gt|0.0127|BUY_NO",
   "sigma_h|gt|0.0129|BUY_NO",
+  "sigma_h|gt|0.0198|BUY_YES",
   "sigma_h|gt|0.0235|BUY_YES",
   "sigma_h|gt|0.0239|BUY_YES",
   "sigma_h|gt|0.0242|BUY_YES",
