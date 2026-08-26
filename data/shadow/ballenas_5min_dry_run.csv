@@ -13322,3 +13322,4 @@ timestamp_utc,activo,market_id,condition_id,end_date,py,edge,concentracion,n_bal
 2026-08-26T08:30:44+00:00,DOGE,3870010,0xd49adc8b0b60d08c0de4c3d23ba2a6da1ee1a701c374d2728073aca6a54725b9,2026-08-26T08:35:00Z,0.13,0.0662,1.0,9,256.5,,,,13,False,fuera_de_bandas_significativas
 2026-08-26T08:35:15+00:00,XRP,3870058,0xc12ddb5cea46cead7e8f5df24ec1701b791dcd7a1b27f8622a7ecd808384adfb,2026-08-26T08:40:00Z,0.38,0.0308,1.0,3,285.3,,,,5,False,fuera_de_bandas_significativas
 2026-08-26T08:37:27+00:00,DOGE,3870051,0xf77063a7a1bca14a9dfc0486340d751f0e1fdc5ae6bfe0e5c9883ab73f189ce9,2026-08-26T08:40:00Z,0.28,-0.0838,1.0,3,153.6,,,,14,False,banda_ok py=0.280 rest_lo=2.15 rest_hi=4.20
+2026-08-26T08:42:09+00:00,ETH,3870144,0x35af4273d3df0b614a8d7ccb244913fd084fdb3952172ffc2fc2f20015deea7d,2026-08-26T08:45:00Z,0.69,-0.0181,1.0,3,171.3,,,,82,False,banda_ok py=0.690 rest_lo=2.13 rest_hi=4.28
