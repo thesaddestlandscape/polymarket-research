@@ -5666,3 +5666,4 @@ timestamp_utc,activo,market_id,condition_id,end_date,py,edge,concentracion,n_bal
 2026-08-26T13:53:16+00:00,BNB,3873283,0xc39f399e760ea6dcdf74c4924fec1cd7bb0f22acd381ea766a3dc1900e972a9e,2026-08-26T14:00:00Z,0.09,0.0495,1.0,3,403.9,,,,35,False,banda_ok py=0.090 rest_lo=4.88 rest_hi=8.03
 2026-08-26T13:54:12+00:00,SOL,3873269,0xefcfe1fca2cecd1fe7b951d0855a3967433fe5e304cd1770d3a3c2a00e45b955,2026-08-26T14:00:00Z,0.19,0.002,0.9,20,347.8,,,,32,False,fuera_de_bandas_significativas
 2026-08-26T13:54:53+00:00,DOGE,3873274,0xd049b06738d8ee0e0b0f4e7b8f4620e9011f14558b1eb1f0b3a7b98c686fd4ba,2026-08-26T14:00:00Z,0.11,0.0879,1.0,3,306.9,,,,13,False,fuera_de_bandas_significativas
+2026-08-26T14:04:13+00:00,ETH,3873463,0x1e313599af4c9b77750129b2cd6c5eb77efa7a11c6a520a96ff44bb4254fbd42,2026-08-26T14:15:00Z,0.72,0.0322,1.0,3,646.6,,,,99,False,banda_ok py=0.720 rest_lo=5.38 rest_hi=12.35
