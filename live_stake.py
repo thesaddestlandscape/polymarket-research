@@ -125,9 +125,87 @@ def _balance_real_fresco() -> dict | None:
     return _memoizar(snap)
 
 
+_memo_capital_ajeno: dict = {"valor": None, "ts_monotonic": 0.0}
+
+
+def _capital_ajeno_en_wallet_compartida() -> float:
+    """27-Ago (hallazgo real, encontrado ANTES de que Javi depositara los
+    primeros 5€ de sports -- petición explícita de verificar el riesgo
+    antes de mandar el dinero): sports comparte la MISMA wallet on-chain
+    que cripto (misma clave privada, mismo .env -- ver docstring de
+    sports_live_trade.py). El saldo real on-chain que lee live_balance.py
+    incluye TODO lo que hay en la wallet, sin distinguir a qué sistema
+    pertenece.
+
+    Sin esta resta, bankroll_actual() de cripto trataría cualquier
+    depósito hecho para sports como capital PROPIO de cripto en cuanto
+    tocara la wallet -- inflando el Kelly y el margen del circuit
+    breaker de cripto con dinero que no es suyo.
+
+    ⚠️ SOLO sports, deliberadamente -- NO weather (code-review 27-Ago,
+    hallazgo real: una versión anterior de esta función leía
+    /root/polymarket-weather/data/live/{config_live.json,trades.csv}
+    directamente, violando la regla "no mezclar datos, código ni
+    params" del propio CLAUDE.md, sección weather -- la misma regla que
+    esta sesión ha exigido a rajatabla en todo lo demás. weather no
+    tiene depósito hoy (depositos=[] en su config), así que esto no
+    cambia nada ahora mismo, pero si algún día weather SÍ comparte esta
+    wallet con capital real, hace falta un mecanismo que no requiera
+    leer los ficheros del otro repo desde aquí (ej. que weather publique
+    un número agregado en un sitio neutral, o gestionar la wallet
+    compartida de otra forma) -- pendiente, no resuelto hoy.
+
+    Cost-basis, no mark-to-market (code-review 27-Ago, hallazgo real):
+    sports_live_stake.bankroll_actual() = depósitos + PnL de trades
+    CERRADOS, ignora el valor de mercado de posiciones OPEN -- pero el
+    saldo on-chain que estamos restando de esto SÍ incluye el valor
+    real de esas posiciones abiertas. Si una posición de sports está
+    ahora mismo perdiendo, esta resta infravalora el capital ajeno
+    (seguro: infla el bankroll de sports, no el de cripto). Si está
+    ganando, la infravalora al revés -- podría sobrestimar ligeramente
+    el bankroll de cripto. Mitigado (no resuelto del todo) sumando
+    también `stakes_abiertos_total()` de sports como colchón extra: así
+    la resta nunca es MENOR que "todo el capital que sports tiene
+    comprometido ahora mismo, incluido lo abierto" -- el residual sin
+    cubrir es solo la plusvalía NO realizada de posiciones ganadoras
+    abiertas, acotado por el stake máximo de sports (2€) y el nº de
+    posiciones concurrentes (normalmente 1).
+
+    Memoizado con el mismo TTL de 5s que _balance_real_fresco() (mismo
+    motivo: calcular_stake()/verificar_circuit_breaker() llaman a
+    bankroll_actual() varias veces dentro de la misma fórmula -- sin
+    memoizar, un trade de sports podría cerrar entre dos lecturas del
+    mismo ciclo y los dos términos de la fórmula verían un capital
+    ajeno distinto).
+
+    Fail-open deliberado (try/except silencioso): si sports se queda
+    sin fichero de config o falla al leerlo, NO se debe bloquear el
+    cálculo de bankroll de cripto (que sí opera con dinero real ahora
+    mismo) por un problema en un sistema hermano. El riesgo de ese
+    fallo (crédito de más a cripto) es acotado -- el propio circuit
+    breaker de cripto sigue actuando sobre el número resultante."""
+    ahora_mono = time.monotonic()
+    if ahora_mono - _memo_capital_ajeno["ts_monotonic"] < _MEMO_TTL_S and _memo_capital_ajeno["valor"] is not None:
+        return _memo_capital_ajeno["valor"]
+
+    total = 0.0
+    try:
+        import sports_live_stake
+        total += sports_live_stake.bankroll_actual() + sports_live_stake.stakes_abiertos_total()
+    except Exception:
+        pass
+
+    _memo_capital_ajeno["valor"] = total
+    _memo_capital_ajeno["ts_monotonic"] = ahora_mono
+    return total
+
+
 def bankroll_actual() -> float:
     """Capital total: balance real on-chain (ver live_balance.py) si el
     cache está fresco, si no PNL de plan (inicial + trades cerrados).
+    Descuenta SIEMPRE el capital de sistemas hermanos que comparten la
+    misma wallet (sports/weather, ver _capital_ajeno_en_wallet_compartida)
+    -- el saldo on-chain crudo NO es capital de cripto en su totalidad.
 
     Decisión 13-Jul (aprobado Javi): el freno diario y el Kelly estaban
     anclados al PnL de *plan* (precio de entrada previsto), que diverge del
@@ -142,7 +220,7 @@ def bankroll_actual() -> float:
     """
     real = _balance_real_fresco()
     if real is not None:
-        return real["total"]
+        return real["total"] - _capital_ajeno_en_wallet_compartida()
     return _bankroll_ledger()
 
 
