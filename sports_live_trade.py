@@ -23,6 +23,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 
 import live_trade as _crypto_lt  # mismo repo -- SOLO se usan sus piezas de bajo nivel, agnósticas de mercado
+from shadow_digest import enviar_telegram  # bot="sports" (27-Ago), ver SPORTS_TELEGRAM_TOKEN ahí
 
 DIR_SPORTS_LIVE = Path("data/sports")
 DIR_SPORTS_LIVE.mkdir(parents=True, exist_ok=True)
@@ -149,6 +150,13 @@ def ejecutar_orden_token(token_id: str, precio: float, stake_eur: float,
 
         log(f"  ✅ Orden ejecutada: token={token_id} market={market_id_log or '?'} "
             f"stake={stake_eur:.2f}€ precio={filled_price:.4f} slip={slip_real:+.4f} order_id={order_id}")
+        enviar_telegram(
+            f"⚽ *Trade SPORTS ejecutado (dinero real)*\n"
+            f"market={market_id_log or token_id}\n"
+            f"stake={stake_eur:.2f}€ precio={filled_price:.4f} slip={slip_real:+.4f}\n"
+            f"order_id={order_id}",
+            bot="sports",
+        )
         return {"ok": True, "order_id": order_id, "entry_price": filled_price,
                 "fee_eur": fee, "slip_real": slip_real, "error": ""}
     except Exception as e:
@@ -158,6 +166,10 @@ def ejecutar_orden_token(token_id: str, precio: float, stake_eur: float,
             return {"ok": False, "no_fill": True, "order_id": None,
                     "entry_price": entry_price, "fee_eur": 0.0, "error": err_str}
         log(f"  ❌ error ejecutando orden: {e}")
+        enviar_telegram(
+            f"❌ *Error orden SPORTS (dinero real)*\nmarket={market_id_log or token_id}\n{err_str}",
+            bot="sports",
+        )
         return {"ok": False, "no_fill": False, "order_id": None,
                 "entry_price": entry_price, "fee_eur": 0.0, "error": err_str}
 

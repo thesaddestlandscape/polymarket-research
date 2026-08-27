@@ -51,6 +51,17 @@ except ImportError:
 TELEGRAM_TOKEN = os.environ.get("TELEGRAM_TOKEN", "")
 TELEGRAM_CHAT_ID = os.environ.get("TELEGRAM_CHAT_ID", "")
 
+# 27-Ago: bot separado para dinero real de sports (petición explícita Javi:
+# "quiero diferenciar los mensajes de bot live dinero real, uno cripto y
+# otro sports, para diferenciar el dinero, los datos"). Mismo patrón que
+# TELEGRAM_TOKEN/TELEGRAM_CHAT_ID de arriba, prefijo SPORTS_ -- vacío hasta
+# que Javi cree el bot con @BotFather y añada las 2 líneas a data/live/.env
+# (fail-open: si no están configuradas, enviar_telegram(bot="sports") cae
+# a las credenciales de cripto, con un aviso, para no dejar sports mudo
+# mientras tanto -- ver enviar_telegram()).
+SPORTS_TELEGRAM_TOKEN = os.environ.get("SPORTS_TELEGRAM_TOKEN", "")
+SPORTS_TELEGRAM_CHAT_ID = os.environ.get("SPORTS_TELEGRAM_CHAT_ID", "")
+
 EMOJI = {
     1: "🥇", 2: "🥈", 3: "🥉",
 }
@@ -274,24 +285,38 @@ def construir_digest() -> str:
     return "\n".join(lineas)
 
 
-def enviar_telegram(texto: str) -> bool:
-    if not TELEGRAM_TOKEN or not TELEGRAM_CHAT_ID:
-        print("(TELEGRAM_TOKEN o TELEGRAM_CHAT_ID no configurados, "
+def enviar_telegram(texto: str, bot: str = "cripto") -> bool:
+    """bot='cripto' (default, compatibilidad total con las ~70 llamadas ya
+    existentes en el proyecto -- ningún caller necesita cambiar) o
+    bot='sports' (dinero real de sports, bot de Telegram separado para que
+    Javi distinga a simple vista qué pote de dinero manda cada aviso, ver
+    SPORTS_TELEGRAM_TOKEN arriba). Fail-open explícito si sports aún no
+    tiene credenciales propias: cae al bot de cripto con un prefijo
+    [SPORTS] en vez de quedarse muda -- nunca None/excepción por falta de
+    config todavía no hecha por Javi."""
+    token, chat_id = TELEGRAM_TOKEN, TELEGRAM_CHAT_ID
+    if bot == "sports":
+        if SPORTS_TELEGRAM_TOKEN and SPORTS_TELEGRAM_CHAT_ID:
+            token, chat_id = SPORTS_TELEGRAM_TOKEN, SPORTS_TELEGRAM_CHAT_ID
+        else:
+            texto = "[SPORTS] " + texto
+    if not token or not chat_id:
+        print(f"(TELEGRAM_TOKEN o TELEGRAM_CHAT_ID no configurados para bot='{bot}', "
               "no se envía mensaje)")
         return False
-    url = f"https://api.telegram.org/bot{TELEGRAM_TOKEN}/sendMessage"
+    url = f"https://api.telegram.org/bot{token}/sendMessage"
     payload = {
-        "chat_id": TELEGRAM_CHAT_ID,
+        "chat_id": chat_id,
         "text": texto,
         "disable_web_page_preview": True,
     }
     try:
         r = requests.post(url, json=payload, timeout=TIMEOUT)
         r.raise_for_status()
-        print("Mensaje enviado a Telegram.")
+        print(f"Mensaje enviado a Telegram (bot={bot}).")
         return True
     except Exception as e:
-        print(f"Error enviando Telegram: {type(e).__name__}: {e}")
+        print(f"Error enviando Telegram (bot={bot}): {type(e).__name__}: {e}")
         return False
 
 
