@@ -72,6 +72,7 @@ CATEGORIAS = [
     ("NBA", re.compile(r'\bNBA\b', re.I)),
     ("WNBA", re.compile(r'\bWNBA\b', re.I)),
     ("NFL", re.compile(r'\bNFL\b', re.I)),
+    ("NCAAF", re.compile(r'\bNCAAF\b|College Football', re.I)),
     ("MLB", re.compile(r'\bMLB\b', re.I)),
     ("NHL", re.compile(r'\bNHL\b', re.I)),
     ("Tennis", re.compile(r'\bATP\b|\bWTA\b|\bITF\b|\btennis\b', re.I)),
