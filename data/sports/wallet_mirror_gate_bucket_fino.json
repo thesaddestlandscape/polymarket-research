@@ -1,24 +1,46 @@
 {
  "CS#SEGUIR": {
-  "lo": 0.26,
-  "hi": 0.31,
-  "n": 17,
-  "pnl_medio": 1.2439,
-  "diff_vs_resto": 1.321,
+  "lo": 0.24,
+  "hi": 0.29,
+  "n": 21,
+  "pnl_medio": 1.5291,
+  "diff_vs_resto": 1.5778,
   "p_valor": 0.0,
   "split_half_diff": [
-   1.244,
-   1.3895
+   0.8844,
+   2.2082
   ],
   "split_half_ok": true,
-  "pnl_medio_loo": 1.3841,
+  "pnl_medio_loo": 1.6555,
   "robusto_loo": true,
   "ci90_bootstrap": [
-   0.6017,
-   1.8756
+   0.8296,
+   2.1144
   ],
   "robusto_bootstrap": true,
-  "n_posiciones_buscadas": 29,
+  "n_posiciones_buscadas": 58,
+  "veredicto": "bueno_confirmado"
+ },
+ "CS#FADE": {
+  "lo": 0.24,
+  "hi": 0.29,
+  "n": 15,
+  "pnl_medio": 1.5914,
+  "diff_vs_resto": 1.7066,
+  "p_valor": 0.0,
+  "split_half_diff": [
+   1.3138,
+   2.0503
+  ],
+  "split_half_ok": true,
+  "pnl_medio_loo": 1.7765,
+  "robusto_loo": true,
+  "ci90_bootstrap": [
+   0.7989,
+   2.3635
+  ],
+  "robusto_bootstrap": true,
+  "n_posiciones_buscadas": 38,
   "veredicto": "bueno_confirmado"
  }
 }
