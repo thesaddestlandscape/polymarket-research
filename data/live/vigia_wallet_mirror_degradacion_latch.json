@@ -143,11 +143,7 @@
   "avisado": false
  },
  "0xd59d898484f9e3a8cf2f5f2cd7475fd99df865b3#BTC#60min": {
-  "avisado": true,
-  "hit_hist": 62.7,
-  "hit_reciente": 20.0,
-  "n_reciente": 20,
-  "telegram_ok": true
+  "avisado": false
  },
  "0xb528de45d8e0e3d11336cb3a3e1639e0e721aade#BTC#15min": {
   "avisado": true,
@@ -380,11 +376,7 @@
   "telegram_ok": true
  },
  "0x9441c737e19f346ce9069f746879432ba81fbe7b#BTC#240min": {
-  "avisado": true,
-  "hit_hist": 83.6,
-  "hit_reciente": 46.7,
-  "n_reciente": 15,
-  "telegram_ok": true
+  "avisado": false
  },
  "0x349223f098965ca36a56e89f2eb55006e76a4de8#BTC#5min": {
   "avisado": true,
@@ -408,11 +400,7 @@
   "telegram_ok": true
  },
  "0x5bc707f9c7f09590c649ad4c107df263dcd52415#BTC#5min": {
-  "avisado": true,
-  "hit_hist": 79.1,
-  "hit_reciente": 33.3,
-  "n_reciente": 15,
-  "telegram_ok": true
+  "avisado": false
  },
  "0xf31325f14d1a7549fde0ae0185f610f0684b560f#BTC#5min": {
   "avisado": true,
@@ -422,11 +410,7 @@
   "telegram_ok": true
  },
  "0xfbed0307a45430864a3d567fcf25b4307d8f6930#BTC#5min": {
-  "avisado": true,
-  "hit_hist": 78.0,
-  "hit_reciente": 33.3,
-  "n_reciente": 15,
-  "telegram_ok": true
+  "avisado": false
  },
  "0xda34423c4aa818a0e65b9fb1966901e3f14db1de#BTC#5min": {
   "avisado": true,
@@ -443,9 +427,33 @@
   "telegram_ok": true
  },
  "0x206b8801df5436eaa98362ec407873ece99b7d6a#BTC#5min": {
+  "avisado": false
+ },
+ "0xc7ebaf519aa1769914fb2722fb1f8943f8a5e7ff#BNB#240min": {
   "avisado": true,
-  "hit_hist": 68.0,
-  "hit_reciente": 26.7,
+  "hit_hist": 59.0,
+  "hit_reciente": 13.3,
+  "n_reciente": 15,
+  "telegram_ok": true
+ },
+ "0x905b451eeb0d1b6334306bcb92137c2b0eca2e9d#BTC#15min": {
+  "avisado": true,
+  "hit_hist": 73.1,
+  "hit_reciente": 33.3,
+  "n_reciente": 15,
+  "telegram_ok": true
+ },
+ "0xd8a1d866321d1bb75cae74402a3e02f44237d59e#BTC#5min": {
+  "avisado": true,
+  "hit_hist": 100.0,
+  "hit_reciente": 60.0,
+  "n_reciente": 15,
+  "telegram_ok": true
+ },
+ "0x2613b0dab94d169027482ec064f5cbdebd443dcc#DOGE#5min": {
+  "avisado": true,
+  "hit_hist": 93.8,
+  "hit_reciente": 53.3,
   "n_reciente": 15,
   "telegram_ok": true
  }
