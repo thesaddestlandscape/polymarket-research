@@ -37,7 +37,7 @@ TRADES_COLS = [
     "timestamp_utc", "market_id", "question", "end_date", "categoria",
     "tipo", "direction", "stake_eur", "entry_price", "edge_neto",
     "status", "close_timestamp", "exit_price", "outcome_real",
-    "fee_eur", "pnl_bruto_eur", "pnl_neto_eur", "notas",
+    "fee_eur", "pnl_bruto_eur", "pnl_neto_eur", "slip_real", "notas",
 ]
 
 

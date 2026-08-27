@@ -357,7 +357,8 @@ async def _correr_una_conexion(wallets: dict, vistos: set) -> set:
                                                 "close_timestamp": "", "exit_price": "",
                                                 "outcome_real": "", "fee_eur": resultado.get("fee_eur", 0.0),
                                                 "pnl_bruto_eur": "", "pnl_neto_eur": "",
-                                                "notas": f"wallet_mirror wallet={wallet} slip={resultado.get('slip_real','')}",
+                                                "slip_real": resultado.get("slip_real", ""),
+                                                "notas": f"wallet_mirror wallet={wallet}",
                                             })
 
                 fila = {
