@@ -225,12 +225,22 @@
       "id": "ALTACONVICCION_15MIN_NUNCA_EJECUTA_LATENCIA",
       "descripcion": "30-Jul: FAVORITO_CONFIRMADO_15MIN_ALTACONVICCION#{BTC,ETH}#15min#BUY_YES (live desde 29-Jul) tiene 0 trades reales en 64 señales shadow generadas (32+32). Verificado que NO es bug de conectividad: whitelist matchea correctamente (pares_ok check pasa), la señal SI llega al camino de ejecucion real. Verificado que NO es falta de runway: restante_min mediana=7.2min (rango 3-12), de sobra. Verificado que la mayoria de las 64 señales SI caen dentro de alguna ventana horaria de trading (distribucion por hora UTC no concentrada en horas muertas). La causa que SI se confirmo con evidencia directa: de los ~10 intentos reales que llegaron al chequeo de latencia (unicos visibles en fast.log via 'Señal caducada'), TODOS murieron por latencia>=100s (SENAL_MAX_LATENCIA_SEG) -- ejemplo medido: primer intento a 125.25s ya caducada, comparado con un trade real EXITOSO de GBM_LATE_15M#ETH#15min (mismo pipeline, misma ts-al-inicio-de-ciclo) que se ejecuto con solo 40s de latencia en su primer intento. shadow_predict.py fija 'ts' UNA VEZ al inicio de main() (linea 4980) para TODAS las filas del ciclo -- un ciclo lento (documentado 100-130s, con picos de varios minutos observados en fast.log, ej. gap de 3min entre 23:25:33 y 23:28:30) deja las señales de ese ciclo ya cerca o por encima del techo de 100s desde que nacen. NO se toco SENAL_MAX_LATENCIA_SEG ni el mecanismo de caducidad -- es DELIBERADAMENTE protector (ver nota grande en CLAUDE.md 'NO arreglar el timestamp de predictions.csv', confirmado que tocarlo costo -96.46€ en su momento). Con solo n=10 intentos reales visibles, no se puede confirmar con rigor que esta tupla sea PEOR que el resto del sistema en este aspecto (podria ser mala suerte de muestra pequeña) -- pero 0/10 es sugestivo.",
       "strategy": "FAVORITO_CONFIRMADO_15MIN_ALTACONVICCION",
-      "par": "BTC,ETH",
+      "par_in": [
+        "BTC",
+        "ETH"
+      ],
       "decision": "BUY_YES",
       "fecha_desde": "2026-07-29",
       "n_objetivo": 25,
       "accion": "Vigilar tasa de señales que sobreviven al chequeo de latencia (no solo trades ejecutados) segun crezca n. Si se confirma con mas n que esta tupla sufre latencia sistematicamente peor que el resto (ej. porque su condicion de disparo requiere features mas caras de calcular, o coincide con mercados evaluados tarde en el ciclo), la solucion correcta NO es aflojar SENAL_MAX_LATENCIA_SEG (protector, project-wide) sino construir un ejecutor de baja latencia dedicado para esta tupla, mismo patron que ballenas_executor_btc15m.py/ballenas_executor_5min.py -- infraestructura nueva, requiere aprobacion explicita de Javi antes de construir (mismo alcance que P22).",
-      "avisado": false
+      "avisado": true,
+      "avisado_en": "2026-08-27T16:37:56+00:00",
+      "resultado_al_avisar": {
+        "n": 1421,
+        "hit": 0.7353976073187896,
+        "ic_bayes": 0.23506676036542518,
+        "pnl": -44.67969999999999
+      }
     }
   ]
 }
