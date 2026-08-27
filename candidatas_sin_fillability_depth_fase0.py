@@ -81,6 +81,13 @@ TUPLAS = [
     ("WEEKLY_PRICE", "BTC", "BUY_NO"),
     ("GBM_LATE_5M", "XRP", "BUY_YES"),
     ("STREAK_FADE_5M", "SOL", "BUY_YES"),
+    # 27-Ago noche (petición explícita Javi, pendiente anotado el mismo día en
+    # CLAUDE.md: "LIQUIDACIONES_5M/60M -- pendiente de instrumentar fill-ability"):
+    # gate_bucket_propio dio 2 bueno_confirmado el 27-Ago, familia sin NINGÚN
+    # observador de profundidad, ni siquiera este genérico -- mismo hueco
+    # exacto que motivó este fichero para las 7 tuplas de arriba.
+    ("LIQUIDACIONES_5M", "BTC", "BUY_YES"),   # [0.45,0.50) n=19 pnl+0.404€ p=0.016
+    ("LIQUIDACIONES_60M", "ETH", "BUY_YES"),  # [0.45,0.50) n=28 pnl+0.221€ p=0.008
 ]
 _CLAVES = {(s, a, d) for s, a, d in TUPLAS}
 
