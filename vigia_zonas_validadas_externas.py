@@ -23,6 +23,7 @@ LATCH = REPO / "data/live/vigia_zonas_validadas_externas_latch.json"
 
 def main() -> int:
     from shadow_digest import enviar_telegram
+    import gate_bucket_propio
 
     # 11-Ago: el análisis ahora cubre ~300 tuplas agrupadas (antes 15
     # estáticas) -- una corrida completa tarda ~5.5min (verificado), el
@@ -82,8 +83,19 @@ def main() -> int:
         etiqueta = miembros[0] if len(miembros) == 1 else f"{miembros[0]} (+{len(miembros)-1} más)"
         for lo, hi in sorted(entraron):
             det = info["detalle_por_bucket"].get(f"{lo:.2f}", {})
+            # 27-Ago (hallazgo real, ver feedback en memoria): esta fuente EXTERNA
+            # solo promueve un veredicto propio "sin_concluir" -- si el propio ya
+            # es malo_confirmado, ese manda siempre (gate_bucket_propio.evaluar())
+            # y el bucket sigue vetado en producción pese a que aquí diga "ENTRA
+            # confirmada". Sin esta nota el aviso induce a pensar que es operable.
+            try:
+                veredicto_propio = gate_bucket_propio.evaluar(miembros[0], (lo + hi) / 2)["veredicto"]
+            except Exception:
+                veredicto_propio = None
+            nota = " -- ⚠️ VETADO por dato propio (malo_confirmado), NO opera" \
+                if veredicto_propio == "malo_confirmado" else ""
             avisos.append(f"🟢 {etiqueta} [{lo:.2f},{hi:.2f}) ENTRA confirmada "
-                          f"(n={det.get('n')} margen={det.get('margen_pp'):+.1f}pp)")
+                          f"(n={det.get('n')} margen={det.get('margen_pp'):+.1f}pp){nota}")
         for lo, hi in sorted(salieron):
             avisos.append(f"🔴 {etiqueta} [{lo:.2f},{hi:.2f}) SALE de confirmada (revisar por qué)")
 
