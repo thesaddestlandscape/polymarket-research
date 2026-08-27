@@ -1,5 +1,5 @@
 {
-  "actualizado": "2026-08-27T20:48:08+00:00",
+  "actualizado": "2026-08-27T21:05:19+00:00",
   "aviso_fillability": "Gate riguroso = shadow puro (results.csv), NO verifica fill-ability. 27-Jul: VERIFICADO con datos reales -- uniendo libro_snapshots.csv (23 dias de chequeo de profundidad REAL contra la API del CLOB, no simulacion) con results.csv, el subconjunto GBM_LATE_15M realmente ejecutable en las horas 13/15/17/19h da n=45 hit=48.9% (coinflip) IC=-0.011 NO CONCLUYENTE en TODOS los criterios (Wilson cruza 0.5, no bate shuffle p=0.616, PnL bootstrap CI cruza 0) -- el edge que el gate shadow ve (GATE OK en 9 celdas) se evapora por completo al restringir a lo fillable de verdad. NO aplicar ninguna celda de esta familia a meta.hora_boost_factor sin repetir esta verificacion con n fresco. Ver idea_fillability_gbmlate_bucket_precio_23jul.",
   "celdas": {
     "ORDER_FLOW_5M##BUY_YES#11": {
@@ -13367,17 +13367,17 @@
       "veredicto": "ACUMULANDO (n<40)"
     },
     "MOMENTUM_IBS_5M_BALLENA#DOGE#5min#BUY_NO#21": {
-      "n": 78,
-      "hit": 0.38461538461538464,
-      "ic": -0.11249999999999999,
-      "lo": 0.29931622342421627,
-      "hi": 0.47765210081179954,
-      "p_shuf": 0.9868,
-      "veredicto": "NO CONCLUYENTE: IC<0.08, Wilson cruza 0.5, no bate shuffle (p=0.987), PnL medio≤0 (-0.0282/trade)",
-      "pnl_media": -0.028158974358974354,
-      "pnl_lo": -0.27447179487179485,
-      "pnl_hi": 0.24132307692307692,
-      "pnl_pboot": 0.5764
+      "n": 79,
+      "hit": 0.3924050632911392,
+      "ic": -0.1049382716049383,
+      "lo": 0.307035666697031,
+      "hi": 0.4849013416202871,
+      "p_shuf": 0.982,
+      "veredicto": "NO CONCLUYENTE: IC<0.08, Wilson cruza 0.5, no bate shuffle (p=0.982), PnL medio≤0 (-0.0142/trade)",
+      "pnl_media": -0.014234177215189865,
+      "pnl_lo": -0.2625822784810127,
+      "pnl_hi": 0.25685696202531644,
+      "pnl_pboot": 0.5484
     },
     "MOMENTUM_IBS_5M_BALLENA#SOL#5min#BUY_NO#21": {
       "n": 82,
