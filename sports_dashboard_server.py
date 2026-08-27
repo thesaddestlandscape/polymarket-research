@@ -41,6 +41,11 @@ EDGE_JSON = DIR_SPORTS / "wallet_edge_score_por_categoria.json"
 MIRROR_CSV = DIR_SPORTS / "wallet_mirror_sniper_dry_run.csv"  # 18-Ago
 PORT = int(sys.argv[1]) if len(sys.argv) > 1 else 8890
 
+# 27-Ago: mismo static/lc.js (LightweightCharts) que dashboard_server.py
+# (cripto) -- fichero único en el repo, ambos dashboards lo sirven.
+_STATIC_DIR = REPO / "static"
+_LC_JS = (_STATIC_DIR / "lc.js").read_bytes() if (_STATIC_DIR / "lc.js").exists() else b""
+
 
 def compute_mirror():
     """18-Ago: el dashboard llevaba desde su creación (mañana) sin
@@ -122,12 +127,83 @@ def compute_live():
             if r.get("decision_dry_run") == "DISPARARIA":
                 n_dispararia += 1
 
+    # ── Capital inicial (para la equity curve) ──────────────────────────
+    capital_inicial = 0.0
+    try:
+        cfg = _g._cargar_config()
+        capital_inicial = sum(float(d.get("eur", 0)) for d in cfg.get("depositos", []))
+    except Exception:
+        pass
+
+    # ── Equity curve: un punto por trade CERRADO, ordenado por cierre ──
+    closed_ord = sorted(closed, key=lambda t: t.get("close_timestamp") or t.get("timestamp_utc") or "")
+
+    def _epoch(ts):
+        try:
+            from datetime import datetime, timezone
+            s = (ts or "").replace("Z", "+00:00")
+            dt = datetime.fromisoformat(s)
+            if dt.tzinfo is None:
+                dt = dt.replace(tzinfo=timezone.utc)
+            return int(dt.timestamp())
+        except Exception:
+            return None
+
+    equity = []
+    bankroll_run = capital_inicial
+    seen_ts = {}
+    for t in closed_ord:
+        ts = _epoch(t.get("close_timestamp") or t.get("timestamp_utc"))
+        if ts is None:
+            continue
+        bankroll_run += float(t.get("pnl_neto_eur") or 0)
+        seen_ts[ts] = round(bankroll_run, 4)  # dedup por segundo, LW exige tiempos crecientes
+    equity = [{"time": ts, "value": v} for ts, v in sorted(seen_ts.items())]
+    if equity:
+        equity = [{"time": equity[0]["time"] - 1, "value": round(capital_inicial, 4)}] + equity
+
+    # ── PnL diario ───────────────────────────────────────────────────────
+    daily = defaultdict(lambda: {"pnl": 0.0, "n": 0, "wins": 0})
+    for t in closed:
+        d = (t.get("close_timestamp") or t.get("timestamp_utc") or "")[:10]
+        if not d:
+            continue
+        pnl = float(t.get("pnl_neto_eur") or 0)
+        daily[d]["pnl"] += pnl
+        daily[d]["n"] += 1
+        daily[d]["wins"] += 1 if pnl > 0 else 0
+    daily_pnl = sorted([
+        {"time": d, "value": round(v["pnl"], 4), "n": v["n"],
+         "wr": round(v["wins"] / v["n"] * 100, 1) if v["n"] else 0,
+         "color": "#26a69a" if v["pnl"] >= 0 else "#ef5350"}
+        for d, v in daily.items()
+    ], key=lambda x: x["time"])
+
+    # ── Por categoría#tipo ───────────────────────────────────────────────
+    por_cat = defaultdict(lambda: {"n": 0, "wins": 0, "pnl": 0.0})
+    for t in closed:
+        k = f"{t.get('categoria','?')}#{t.get('tipo','?')} {t.get('direction','')}"
+        pnl = float(t.get("pnl_neto_eur") or 0)
+        por_cat[k]["n"] += 1
+        por_cat[k]["wins"] += 1 if pnl > 0 else 0
+        por_cat[k]["pnl"] += pnl
+    by_categoria = sorted([
+        {"name": k, "n": v["n"],
+         "wr": round(v["wins"] / v["n"] * 100, 1) if v["n"] else 0,
+         "pnl": round(v["pnl"], 4)}
+        for k, v in por_cat.items()
+    ], key=lambda x: -abs(x["pnl"]))
+
     return {
         "switch": estado["switch"],
         "pares_permitidos": estado["pares_permitidos"],
         "bankroll": round(bkr, 2),
+        "capital_inicial": round(capital_inicial, 2),
         "pnl_hoy": round(pnl_hoy, 2),
         "pnl_total_cerrado": round(pnl_total, 2),
+        "equity_curve": equity,
+        "daily_pnl": daily_pnl,
+        "by_categoria": by_categoria,
         "circuit_breaker_disparado": cb_disparado,
         "circuit_breaker_motivo": cb_motivo,
         "n_trades_reales": len(trades),
@@ -208,6 +284,18 @@ th{color:#8b949e;font-weight:500}
 .pos{color:#3fb950}.neg{color:#f85149}
 .badge{background:#1f6feb;color:#fff;padding:1px 6px;border-radius:4px;font-size:11px;margin-left:6px}
 .aviso{background:#3a2a00;border:1px solid #9e6a03;padding:10px 14px;border-radius:6px;color:#f0b429;margin-bottom:16px}
+/* ── mismo lenguaje visual que dashboard_server.py (cripto) ── */
+.panel{background:#161b22;border-radius:8px;padding:14px}
+.panel-title{font-size:11px;color:#8b949e;text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px}
+.chart-host{width:100%}
+.grid-2{display:grid;grid-template-columns:2fr 1fr;gap:8px;margin:12px 0}
+.grid-2b{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:12px 0}
+.bar-row{display:flex;align-items:center;gap:8px;margin-bottom:5px;font-size:11px}
+.bar-label{width:160px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:#e6edf3;flex-shrink:0}
+.bar-track{flex:1;height:14px;background:#ffffff0a;border-radius:2px;position:relative;overflow:hidden}
+.bar-fill{height:100%;border-radius:2px;transition:width .3s}
+.bar-val{width:64px;text-align:right;flex-shrink:0}
+.bar-n{width:36px;text-align:right;color:#8b949e;flex-shrink:0}
 </style></head><body>
 <h1>🏟️ Sports/Esports — inteligencia de wallets + Wallet Mirror en tiempo real (DRY_RUN)</h1>
 <div class="aviso">Descubrimiento: ballenas ≥$1000 + firehose completo, shuffle test + BH-FDR. Wallet Mirror
@@ -216,6 +304,20 @@ th{color:#8b949e;font-weight:500}
 <h2>💰 Live — dinero real</h2>
 <div id="aviso-live"></div>
 <div class="stats" id="stats-live"></div>
+<div class="grid-2">
+  <div class="panel">
+    <div class="panel-title">📈 Evolución del capital real — un punto por trade cerrado</div>
+    <div class="chart-host" id="live-equity-chart" style="height:200px"></div>
+  </div>
+  <div class="panel">
+    <div class="panel-title">📊 PnL real por día</div>
+    <div class="chart-host" id="live-daily-chart" style="height:200px"></div>
+  </div>
+</div>
+<div class="panel" style="margin-bottom:12px">
+  <div class="panel-title">🏆 PnL total por categoría (SEGUIR/FADE, dinero real)</div>
+  <div id="live-cat-bars"><span style="color:#8b949e;font-size:11px">Sin datos aún — cero trades reales todavía</span></div>
+</div>
 <table><thead><tr><th>Hora</th><th>Categoría</th><th>Tipo</th><th>Dirección</th>
 <th>Stake</th><th>Entrada</th><th>Estado</th><th>PnL</th></tr></thead>
 <tbody id="tbody-live-trades"></tbody></table>
@@ -235,13 +337,72 @@ th{color:#8b949e;font-weight:500}
 <h2>Peores wallets (candidatas a fade)</h2>
 <table><thead><tr><th>Wallet</th><th>Categoría</th><th>n</th><th>hit%</th><th>edge_pp</th></tr></thead>
 <tbody id="tbody-worst"></tbody></table>
+<script src="/lc.js"></script>
 <script>
+let liveEqChart, liveEqArea, liveDailyChart, liveDailySeries;
+function makeLWChart(id){
+  const el = document.getElementById(id);
+  return LightweightCharts.createChart(el, {
+    width: el.offsetWidth, height: el.offsetHeight,
+    layout: { background: { color: "transparent" }, textColor: "#787b86" },
+    grid: { vertLines: { color: "#2a2e39" }, horzLines: { color: "#2a2e39" } },
+    crosshair: { mode: LightweightCharts.CrosshairMode.Normal },
+    rightPriceScale: { borderColor: "#2a2e39" },
+    timeScale: { borderColor: "#2a2e39", timeVisible: true, secondsVisible: false },
+  });
+}
+function initCharts(){
+  liveEqChart = makeLWChart("live-equity-chart");
+  liveEqArea = liveEqChart.addAreaSeries({
+    lineColor: "#26a69a", topColor: "#26a69a44", bottomColor: "#26a69a00",
+    lineWidth: 2, priceFormat: { type: "price", precision: 2, minMove: 0.01 }, title: "€",
+  });
+  liveDailyChart = makeLWChart("live-daily-chart");
+  liveDailySeries = liveDailyChart.addHistogramSeries({
+    color: "#26a69a", priceFormat: { type: "price", precision: 2, minMove: 0.01 },
+  });
+  window.addEventListener("resize", () => {
+    for (const [id, chart] of [["live-equity-chart", liveEqChart], ["live-daily-chart", liveDailyChart]]) {
+      const el = document.getElementById(id);
+      if (el) chart.applyOptions({ width: el.offsetWidth });
+    }
+  });
+}
+function renderBars(elId, data){
+  const el = document.getElementById(elId);
+  if(!data || !data.length){
+    el.innerHTML = '<span style="color:#8b949e;font-size:11px">Sin datos aún — cero trades reales todavía</span>';
+    return;
+  }
+  const maxAbs = Math.max(...data.map(d => Math.abs(d.pnl)), 0.01);
+  el.innerHTML = data.slice(0, 20).map(d => {
+    const pct = Math.abs(d.pnl) / maxAbs * 100;
+    const color = d.pnl >= 0 ? "#26a69a" : "#ef5350";
+    return `<div class="bar-row">
+      <div class="bar-label" title="${d.name}">${d.name}</div>
+      <div class="bar-track"><div class="bar-fill" style="width:${pct}%;background:${color}"></div></div>
+      <div class="bar-val" style="color:${color}">${d.pnl>=0?'+':''}${d.pnl.toFixed(2)}€</div>
+      <div class="bar-n">n=${d.n}</div>
+    </div>`;
+  }).join("");
+}
+function renderLiveCharts(live){
+  if(!live) return;
+  const eq = live.equity_curve || [];
+  liveEqArea.setData(eq);
+  if(eq.length) liveEqChart.timeScale().fitContent();
+  const daily = live.daily_pnl || [];
+  liveDailySeries.setData(daily.map(p => ({ time: p.time, value: p.value, color: p.color })));
+  if(daily.length) liveDailyChart.timeScale().fitContent();
+  renderBars('live-cat-bars', live.by_categoria);
+}
 async function refresh(){
   const r = await fetch('/api/data'); const d = await r.json();
   if(d.sin_datos){
     document.getElementById('stats').innerHTML = '<div class="stat"><div class="v">Sin datos todavía</div></div>';
     return;
   }
+  renderLiveCharts(d.live);
   document.getElementById('stats').innerHTML = `
     <div class="stat"><div class="v">${d.n_trades_whale_clasificados}</div><div class="l">trades whale (${d.ventana_dias}d)</div></div>
     <div class="stat"><div class="v">${d.n_trades_resueltos}</div><div class="l">con outcome resuelto</div></div>
@@ -304,7 +465,7 @@ async function refresh(){
      <td>${w.categoria}</td><td>${w.n}</td><td>${(w.hit*100).toFixed(1)}%</td>
      <td class="neg">${w.edge_pp.toFixed(2)}</td></tr>`).join('');
 }
-refresh(); setInterval(refresh, 10000);
+initCharts(); refresh(); setInterval(refresh, 10000);
 </script></body></html>"""
 
 
@@ -334,6 +495,18 @@ class Handler(BaseHTTPRequestHandler):
             self.send_header("Content-Length", str(len(body)))
             self.end_headers()
             self.wfile.write(body)
+        elif self.path == "/lc.js":
+            # mismo static/lc.js que dashboard_server.py (cripto) -- un
+            # único fichero de librería, servido por los dos dashboards.
+            if not _LC_JS:
+                self.send_response(404)
+                self.end_headers()
+                return
+            self.send_response(200)
+            self.send_header("Content-Type", "application/javascript")
+            self.send_header("Content-Length", str(len(_LC_JS)))
+            self.end_headers()
+            self.wfile.write(_LC_JS)
         else:
             body = PAGE_HTML.encode()
             self.send_response(200)
