@@ -1,4 +1,4 @@
-# Estado del bot — 2026-08-27 02:10 UTC
+# Estado del bot — 2026-08-27 02:17 UTC
 
 ## Live — dinero real (on-chain)
 | | |
@@ -13,11 +13,11 @@
 ## Shadow — MODELO SIMULADO (no cobrable)
 | | |
 |---|---|
-| P&L fiel (stake fijo 1$) | +4329.69 $ |
-| P&L sim compuesto | 🟢 +23503.50 $ (ficción Kelly: +92388% s/ operativo) |
-| P&L sim hoy (2026-08-27) | 🟢 +120.88 $ |
-| Operaciones resueltas | 277079 (160972 WIN / 116107 LOSS) — 58.1% |
-| Señales abiertas | 1113 |
+| P&L fiel (stake fijo 1$) | +4329.19 $ |
+| P&L sim compuesto | 🟢 +23503.20 $ (ficción Kelly: +92387% s/ operativo) |
+| P&L sim hoy (2026-08-27) | 🟢 +120.58 $ |
+| Operaciones resueltas | 277118 (160996 WIN / 116122 LOSS) — 58.1% |
+| Señales abiertas | 1119 |
 
 ## Estrategias (visión global)
 
@@ -28,13 +28,13 @@
 | GBM_LATE_15M | 19783 | 58.0% | +0.080 | 📉 agota (-0.04) | +6462.00$ | 0.50$ | ✅ activa |
 | GBM_LATE_15M_MULTIHORIZONTE | 6345 | 67.2% | +0.172 | ➡️ estable | +4345.32$ | 1.70$ | ✅ activa |
 | UPDOWN_GBM_15M_TARDIO | 7192 | 54.1% | +0.041 | 📉 agota (-0.24) | +2650.64$ | 0.50$ | ✅ activa |
-| GBM_LATE_5M | 3485 | 56.5% | +0.065 | 📈 madura (+0.13) | +870.25$ | 1.35$ | ✅ activa |
+| GBM_LATE_5M | 3486 | 56.5% | +0.065 | 📈 madura (+0.13) | +871.46$ | 1.36$ | ✅ activa |
 | UPDOWN_GBM | 10005 | 52.8% | +0.028 | 📉 agota (-0.05) | +707.87$ | 0.50$ | ✅ activa |
 | WEEKLY_PRICE | 1070 | 78.7% | +0.286 | 📈 madura (+0.07) | +432.37$ | 2.00$ | ✅ activa |
 | GBM_LATE_15M_PYCONFIRMADO | 1497 | 57.5% | +0.075 | 📈 madura (+0.06) | +331.50$ | 0.84$ | ✅ activa |
 | UPDOWN_GBM_IBS_ALTO | 411 | 77.9% | +0.277 | 📈 madura (+0.06) | +287.20$ | 2.00$ | ✅ activa |
-| MOMENTUM_IBS_5M_BALLENA | 17765 | 42.7% | -0.073 | ➡️ estable | +282.39$ | 0.50$ | ⚠️ IC negativo |
-| FAVORITO_CONFIRMADO_5MIN_BAJALATENCIA | 8842 | 62.9% | +0.129 | ➡️ estable | +223.54$ | 1.33$ | ✅ activa |
+| MOMENTUM_IBS_5M_BALLENA | 17774 | 42.7% | -0.073 | ➡️ estable | +282.02$ | 0.50$ | ⚠️ IC negativo |
+| FAVORITO_CONFIRMADO_5MIN_BAJALATENCIA | 8843 | 62.9% | +0.129 | ➡️ estable | +222.47$ | 1.33$ | ✅ activa |
 | MOMENTUM_IBS_15M_BALLENA | 6462 | 46.6% | -0.034 | ➡️ estable | +193.88$ | 0.50$ | ⚠️ IC negativo |
 | ORDER_FLOW_5M | 2019 | 52.9% | +0.029 | 📈 madura (+0.03) | +112.84$ | 0.99$ | ✅ activa |
 | LEADLAG_BTC_XRP_15M | 629 | 56.8% | +0.067 | 📈 madura (+0.12) | +112.57$ | 1.23$ | ✅ activa |
@@ -62,46 +62,49 @@
 | GBM_LATE_60M_FADE | 193 | 19.2% | -0.305 | 📈 madura (+0.11) | -34.48$ | 0.00$ | 🚫 desactivada |
 | LIQUIDACIONES_15M | 271 | 38.7% | -0.112 | 📈 madura (+0.03) | -37.17$ | 0.50$ | ⚠️ IC negativo |
 | MOMENTUM_IBS_15M_FADE | 554 | 44.0% | -0.059 | 📈 madura (+0.06) | -41.50$ | 0.50$ | ⚠️ IC negativo |
-| LIQUIDACIONES_5M | 753 | 43.8% | -0.062 | 📈 madura (+0.16) | -54.21$ | 0.50$ | ⚠️ IC negativo |
+| LIQUIDACIONES_5M | 754 | 43.9% | -0.061 | 📈 madura (+0.16) | -53.71$ | 0.50$ | ⚠️ IC negativo |
 | STREAK_FADE_5M | 1499 | 48.2% | -0.018 | ➡️ estable | -64.85$ | 0.50$ | ⚠️ IC negativo |
 | MOMENTUM_IBS_15M | 4407 | 49.7% | -0.003 | ➡️ estable | -76.55$ | 0.50$ | ⚠️ IC negativo |
 | UPDOWN_OU_5M | 832 | 37.4% | -0.126 | 📈 madura (+0.11) | -107.27$ | 0.50$ | ⚠️ IC negativo |
 | MOMENTUM_IBS_5M_FADE | 6012 | 49.0% | -0.010 | 📉 agota (-0.05) | -119.99$ | 0.50$ | ⚠️ IC negativo |
-| FAVORITO_CONFIRMADO_DEPTH_FASE0 | 6041 | 59.5% | +0.095 | ➡️ estable | -224.19$ | 0.95$ | ✅ activa |
+| FAVORITO_CONFIRMADO_DEPTH_FASE0 | 6047 | 59.5% | +0.095 | ➡️ estable | -225.44$ | 0.95$ | ✅ activa |
 | FAVORITO_CONFIRMADO_15MIN_ALTACONVICCION | 7586 | 68.0% | +0.180 | 📉 agota (-0.03) | -583.06$ | 1.72$ | ✅ activa |
-| BALLENAS_TARDIAS | 14470 | 41.8% | -0.082 | ➡️ estable | -2278.89$ | 0.50$ | ⚠️ IC negativo |
-| FAVORITO_CONFIRMADO_5MIN_ALTACONVICCION | 33601 | 69.3% | +0.193 | ➡️ estable | -2831.32$ | 1.90$ | ✅ activa |
-| FAVORITO_CONFIRMADO | 63572 | 61.1% | +0.111 | ➡️ estable | -3262.06$ | 1.14$ | ✅ activa |
+| BALLENAS_TARDIAS | 14473 | 41.8% | -0.082 | ➡️ estable | -2277.67$ | 0.50$ | ⚠️ IC negativo |
+| FAVORITO_CONFIRMADO_5MIN_ALTACONVICCION | 33610 | 69.3% | +0.193 | ➡️ estable | -2830.73$ | 1.90$ | ✅ activa |
+| FAVORITO_CONFIRMADO | 63581 | 61.1% | +0.111 | ➡️ estable | -3263.19$ | 1.14$ | ✅ activa |
 
 ## Últimas 5 resoluciones
 
 | Timestamp | Estrategia | Mercado | Resultado | PNL |
 |---|---|---|---|---|
-| 2026-08-27T02:06 | MOMENTUM_IBS_5M_BALLENA#ETH#5min | … | ❌ LOSS | -1.07$ |
-| 2026-08-27T02:06 | FAVORITO_CONFIRMADO_5MIN_ALTACONVICCION#ETH#5min | … | ❌ LOSS | -1.07$ |
-| 2026-08-27T02:06 | FAVORITO_CONFIRMADO#ETH#5min | … | ✅ WIN | +0.84$ |
-| 2026-08-27T02:06 | FAVORITO_CONFIRMADO_DEPTH_FASE0#BTC#5min | … | ❌ LOSS | -1.07$ |
-| 2026-08-27T02:06 | MOMENTUM_IBS_5M_BALLENA#SOL#5min | … | ❌ LOSS | -1.07$ |
+| 2026-08-27T02:15 | BALLENAS_TARDIAS#DOGE#5min | … | ✅ WIN | +0.54$ |
+| 2026-08-27T02:15 | FAVORITO_CONFIRMADO_5MIN_ALTACONVICCION#DOGE#5min | … | ✅ WIN | +0.43$ |
+| 2026-08-27T02:15 | MOMENTUM_IBS_5M_BALLENA#DOGE#5min | … | ✅ WIN | +0.68$ |
+| 2026-08-27T02:15 | FAVORITO_CONFIRMADO#DOGE#5min | … | ✅ WIN | +0.68$ |
+| 2026-08-27T02:15 | FAVORITO_CONFIRMADO_DEPTH_FASE0#BTC#5min | … | ✅ WIN | +0.62$ |
 
 ## Calidad de datos
 
-✅ **OK** — última verificación 2026-08-27T02:10 UTC
+✅ **OK** — última verificación 2026-08-27T02:16 UTC | rechazos 1h: 1 (rango=0, spike=0)
 
 | Asset | Precio | Age | Alertas |
 |---|---|---|---|
-| ✅ BTC | $78,945.18 | 0.1min |  |
-| ✅ ETH | $2,504.32 | 0.1min |  |
-| ✅ SOL | $101.85 | 0.1min |  |
-| ✅ XRP | $1.42 | 0.1min |  |
+| ✅ BTC | $78,866.70 | 0.3min |  |
+| ✅ ETH | $2,502.22 | 0.3min |  |
+| ✅ SOL | $101.65 | 0.3min |  |
+| ✅ XRP | $1.41 | 0.3min |  |
 
 **Cross-source** (binance, coinbase, kraken):
 
 | Asset | Consenso | Fuente | Estado |
 |---|---|---|---|
-| BTC | $78,945.18 | consenso |  |
-| ETH | $2,504.56 | consenso |  |
-| SOL | $101.85 | consenso |  |
-| XRP | $1.42 | consenso |  |
+| BTC | $78,864.50 | consenso |  |
+| ETH | $2,501.74 | consenso |  |
+| SOL | $101.69 | consenso |  |
+| XRP | $1.41 | consenso |  |
+
+**Alertas activas:**
+- ⚠ rechazos_1h:1 (rango=0, spike=0)
 
 ---
 *Actualizado automáticamente cada ~60s por el fast loop*
