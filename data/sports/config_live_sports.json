@@ -10,6 +10,7 @@
     "circuit_breaker": {
       "bankroll_minimo_eur": 0.50,
       "freno_diario_pct": 0.15,
+      "margen_diario_minimo_trades": 2,
       "max_perdidas_consecutivas": 3
     }
   }

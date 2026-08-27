@@ -179,10 +179,37 @@ def _inventory_penalty(direction: str, inv: dict) -> float:
     return max(0.50, 1.0 - exceso * 0.20)
 
 
+def freno_diario_pct_efectivo(bkr: float, riesgo: dict) -> float:
+    """27-Ago (petición explícita Javi, tras verificar con bankroll real
+    de 5€ que el freno diario fijo bloqueaba TODOS los trades desde el
+    día 1): con un bankroll pequeño, un freno_diario_pct fijo (ej. 15%,
+    pensado para los bankrolls de cripto) puede dar un margen diario en
+    euros MENOR que el suelo del CLOB (1,05€) -- ninguna orden cabría
+    nunca, en silencio (stake=0€ sin error visible).
+
+    Se AUTO-AJUSTA: el % efectivo es el mayor entre el configurado y el
+    que garantiza que el margen diario cubra al menos
+    `margen_diario_minimo_trades` operaciones al suelo del CLOB. Con
+    bankroll pequeño, el % sube (más laxo en términos relativos, pero
+    el € de riesgo real sigue siendo pequeño en términos absolutos). En
+    cuanto el bankroll crece con el PnL, el suelo en € se vuelve
+    irrelevante frente al %, y se auto-estrecha de vuelta al valor base
+    -- no hace falta acordarse de subir/bajar nada a mano."""
+    cb = riesgo.get("circuit_breaker", {})
+    freno_base = cb.get("freno_diario_pct", 0.15)
+    min_stake = riesgo.get("min_stake_eur", 1.05)
+    n_trades_min = cb.get("margen_diario_minimo_trades", 2)
+    if bkr <= 0:
+        return freno_base
+    pct_minimo_por_suelo = (n_trades_min * min_stake) / bkr
+    return max(freno_base, pct_minimo_por_suelo)
+
+
 def verificar_circuit_breaker() -> tuple[bool, str]:
     """Tres niveles de freno. Devuelve (disparado, motivo)."""
     config = _cargar_config()
-    cb = config.get("riesgo", {}).get("circuit_breaker", {})
+    riesgo = config.get("riesgo", {})
+    cb = riesgo.get("circuit_breaker", {})
     bkr = bankroll_actual(config)
     bkr_min = cb.get("bankroll_minimo_eur", 1.0)
 
@@ -191,7 +218,7 @@ def verificar_circuit_breaker() -> tuple[bool, str]:
             SWITCH_PATH.unlink()
         return True, f"🛑 bankroll {bkr:.2f}€ <= mínimo {bkr_min:.2f}€ -- switch desactivado"
 
-    freno_dia_pct = cb.get("freno_diario_pct", 0.15)
+    freno_dia_pct = freno_diario_pct_efectivo(bkr, riesgo)
     bkr_ini_dia = bankroll_inicio_dia()
     if bkr_ini_dia > 0:
         caida_dia = (bkr_ini_dia - bkr) / bkr_ini_dia
@@ -246,7 +273,7 @@ def calcular_stake(edge: float, categoria: str = "", tipo: str = "",
                        f"(q_net={inv['q_net']:+d} YES={inv['YES']} NO={inv['NO']})")
 
     freno_str = ""
-    freno_dia_pct = riesgo.get("circuit_breaker", {}).get("freno_diario_pct", 0.15)
+    freno_dia_pct = freno_diario_pct_efectivo(bkr, riesgo)
     bkr_min = riesgo.get("circuit_breaker", {}).get("bankroll_minimo_eur", 1.0)
     bkr_ini_dia = bankroll_inicio_dia()
     abiertos = stakes_abiertos_total()
