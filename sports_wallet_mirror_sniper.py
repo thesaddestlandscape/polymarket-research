@@ -138,6 +138,12 @@ def cargar_wallets_validadas() -> dict:
 _TOKEN_CACHE: dict = {}
 
 
+_END_DATE_CACHE: dict = {}  # 27-Ago: mismo request que _tokens_para_condition,
+# cacheado aparte -- alimenta analisis_diario_salud_sistema.py (chequeo de
+# trades OPEN atascados tras el cierre del mercado), que sin esto no podía
+# vigilar sports (end_date siempre vacío en trades.csv).
+
+
 def _tokens_para_condition(condition_id: str):
     if condition_id in _TOKEN_CACHE:
         return _TOKEN_CACHE[condition_id]
@@ -154,11 +160,20 @@ def _tokens_para_condition(condition_id: str):
             ids = json.loads(raw) if isinstance(raw, str) else raw
             if ids and len(ids) == 2:
                 tokens = [str(ids[0]), str(ids[1])]
+            _END_DATE_CACHE[condition_id] = m.get("endDate", "")
             break
     except Exception:
         tokens = None
     _TOKEN_CACHE[condition_id] = tokens
     return tokens
+
+
+def _end_date_para_condition(condition_id: str) -> str:
+    """Requiere que _tokens_para_condition() ya se haya llamado para este
+    condition_id (mismo request, sin llamada de red extra) -- fail-open a
+    "" si no está cacheado todavía (nunca bloquea el registro del trade
+    por esto)."""
+    return _END_DATE_CACHE.get(condition_id, "")
 
 
 def _consultar_profundidad_libro(token_id: str, precio_entrada: float, stake_eur: float) -> dict:
@@ -347,7 +362,7 @@ async def _correr_una_conexion(wallets: dict, vistos: set) -> set:
                                                 "timestamp_utc": datetime.now(timezone.utc).isoformat(timespec="seconds"),
                                                 "market_id": condition_id,
                                                 "question": payload.get("slug", ""),
-                                                "end_date": "",
+                                                "end_date": _end_date_para_condition(condition_id),
                                                 "categoria": categoria, "tipo": info["tipo"],
                                                 "direction": str(mirror_idx),
                                                 "stake_eur": stake_sim,

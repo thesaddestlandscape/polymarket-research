@@ -43,6 +43,7 @@ sys.path.insert(0, str(REPO))
 
 DIR_SHADOW = REPO / "data" / "shadow"
 DIR_LIVE = REPO / "data" / "live"
+DIR_SPORTS = REPO / "data" / "sports"
 FAST_LOG = REPO / "logs" / "fast.log"
 HIST_PATH = DIR_SHADOW / "salud_sistema_historico.json"
 HOY_PATH = DIR_SHADOW / "salud_sistema_diaria.json"
@@ -267,6 +268,48 @@ def medir_integridad_datos() -> dict:
     return salida
 
 
+def medir_integridad_datos_sports() -> dict:
+    """27-Ago noche (petición explícita Javi, auditoría de paridad
+    cripto/sports): mismo chequeo (a) que medir_integridad_datos() pero
+    para data/sports/trades.csv -- antes de hoy, ESTE ledger era invisible
+    para el barrido diario de salud, exactamente el mismo punto ciego que
+    motivó crear medir_integridad_datos() para cripto el 04-Ago. Sin
+    trades reales todavía (n=0), pero el mecanismo ya vigila desde antes
+    del primer trade, mismo criterio que el resto de infraestructura de
+    sports construida hoy."""
+    salida = {}
+    ahora = datetime.now(timezone.utc)
+
+    trades_path = DIR_SPORTS / "trades.csv"
+    atascados = []
+    n_trades = 0
+    try:
+        with open(trades_path, encoding="utf-8") as f:
+            for row in csv.DictReader(f):
+                n_trades += 1
+                if row.get("status") != "OPEN":
+                    continue
+                end_str = (row.get("end_date") or "").replace("Z", "+00:00")
+                try:
+                    end_dt = datetime.fromisoformat(end_str)
+                    if end_dt.tzinfo is None:
+                        end_dt = end_dt.replace(tzinfo=timezone.utc)
+                except Exception:
+                    continue
+                edad_min = (ahora - end_dt).total_seconds() / 60
+                if edad_min > UMBRAL_TRADE_ABIERTO_TRAS_CIERRE_MIN:
+                    atascados.append({
+                        "market_id": row.get("market_id"), "categoria": row.get("categoria"),
+                        "tipo": row.get("tipo"), "minutos_desde_cierre": round(edad_min, 1),
+                    })
+    except FileNotFoundError:
+        salida["trades_csv_error"] = "no existe (sin trades reales todavía)"
+
+    salida["trades_abiertos_atascados"] = atascados
+    salida["n_trades_total"] = n_trades
+    return salida
+
+
 def medir_carga_sistema() -> dict:
     """Load average + nº de cores -- ratio>UMBRAL_LOAD_RATIO sostenido
     revienta operaciones CPU-intensivas (git pack-objects el 05-Ago) sin
@@ -313,6 +356,7 @@ def main() -> int:
         "disco": medir_disco(),
         "ram": medir_ram(),
         "integridad_datos": medir_integridad_datos(),
+        "integridad_datos_sports": medir_integridad_datos_sports(),
         "carga_sistema": medir_carga_sistema(),
         "git_push": medir_git_push_lag(),
     }
@@ -361,6 +405,12 @@ def main() -> int:
         for t in integ["trades_abiertos_atascados"]:
             anomalias.append(f"⛔ trade real OPEN sin cerrar {t['minutos_desde_cierre']:.0f}min "
                               f"tras su cierre: {t['strategy']}#{t['subtype']} ({t['market_id']})")
+
+    integ_sp = reporte["integridad_datos_sports"]
+    if integ_sp.get("trades_abiertos_atascados"):
+        for t in integ_sp["trades_abiertos_atascados"]:
+            anomalias.append(f"⛔ trade SPORTS real OPEN sin cerrar {t['minutos_desde_cierre']:.0f}min "
+                              f"tras su cierre: {t['categoria']}#{t['tipo']} ({t['market_id']})")
     cs = reporte["carga_sistema"]
     if cs.get("ratio5") is not None and cs["ratio5"] > UMBRAL_LOAD_RATIO:
         anomalias.append(f"🔥 CPU sobresuscrita: load5={cs['load5']} en {cs['nproc']} cores "
@@ -382,6 +432,13 @@ def main() -> int:
                 anomalias.append(f"🔴 {etiqueta} tiene MENOS filas que ayer ({hoy_n} < {ayer_n}) "
                                   f"-- posible pérdida de datos")
 
+        ayer_integ_sp = ayer.get("integridad_datos_sports", {})
+        hoy_n_sp = integ_sp.get("n_trades_total")
+        ayer_n_sp = ayer_integ_sp.get("n_trades_total")
+        if hoy_n_sp is not None and ayer_n_sp is not None and hoy_n_sp < ayer_n_sp:
+            anomalias.append(f"🔴 sports/trades.csv tiene MENOS filas que ayer "
+                              f"({hoy_n_sp} < {ayer_n_sp}) -- posible pérdida de datos")
+
     reporte["anomalias"] = anomalias
     reporte["estado"] = "ANOMALIA" if anomalias else "OK"
 
@@ -397,6 +454,8 @@ def main() -> int:
     _log(f"ram: {r.get('ram_pct_libre')}% libre ({r.get('ram_disponible_gb')}GB de {r.get('ram_total_gb')}GB)")
     _log(f"integridad: {integ.get('n_trades_total')} trades, {integ.get('n_results_total')} results, "
          f"{len(integ.get('trades_abiertos_atascados', []))} atascados")
+    _log(f"integridad sports: {integ_sp.get('n_trades_total')} trades, "
+         f"{len(integ_sp.get('trades_abiertos_atascados', []))} atascados")
     _log(f"carga: load5={cs.get('load5')} nproc={cs.get('nproc')} ratio5={cs.get('ratio5')} "
          f"procesos={cs.get('n_procesos_total')} | git_push_lag={gp.get('commits_sin_pushear')} commits")
     _log(f"estado: {reporte['estado']} ({len(anomalias)} anomalía(s))")
