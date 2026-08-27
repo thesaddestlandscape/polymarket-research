@@ -64,7 +64,17 @@ STRATEGY = "ORDER_FLOW_5M_REACTIVO"  # sintética, nunca en pares_permitidos_liv
 ACTIVOS = ["ETH", "SOL", "XRP", "DOGE", "BNB"]  # BTC ya en ORDER_FLOW_PAIR_BLACKLIST
 DUR_S = 300  # 5min
 SEGUNDA_CONSULTA_ESPERA_S = 3.0
-POLL_S = 15
+POLL_S = 3  # 27-Ago noche (petición Javi: "¿no es mejor milisegundos para
+# reaccionar a una posición volátil?"): medido en vivo -- la vela EN
+# FORMACIÓN de Binance ya se actualiza en tiempo casi real vía REST
+# (delta_ratio de ETH cambió 0.322->0.343->0.327 en solo 13s de poll a
+# 3s). No hace falta reescribir a websocket (como gbm_late_reactivo_
+# fase0.py) para tener ese frescor -- ahí SÍ compensaba porque el trigger
+# es un evento de un solo tick (cruce de precio); aquí el trigger es un
+# agregado de 5min que evoluciona de forma continua, no una ráfaga
+# puntual. Sondear cada 3s en vez de 15s ya captura ese frescor con una
+# fracción del coste de ingeniería. 5 activos * 1 llamada/3s ~= 100
+# llamadas/min a klines REST, muy por debajo del límite de Binance.
 RATIO_MIN = 5.0
 STAKE_REF_EUR = 1.05
 
