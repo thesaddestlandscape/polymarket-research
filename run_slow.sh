@@ -51,7 +51,7 @@ while true; do
             data/prices/ "data/wallets/leaderboard_*.csv" "data/shadow/hipotesis_*.md" \
             data/shadow/hipotesis_pendientes.json "data/shadow/arb_scan_*.csv" \
             "data/shadow/cross_arb_*.csv" "data/shadow/combi_arb_*.csv" data/shadow/combi_candidates.json \
-            -- data/shadow data/live data/prices data/wallets
+            -- data/shadow data/live data/prices data/wallets data/sports
     )
 
     log "--- Ciclo slow $CICLO completado ---"

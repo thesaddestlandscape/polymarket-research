@@ -320,6 +320,11 @@ def fetch_balance_real() -> dict:
     free = _free_usdc(client)
     pos = _positions_value(wallet)
     total = round(free + pos, 4)
+    total_bruto = total  # 27-Ago noche: guardado ANTES de restar sports --
+    # única forma de que reconciliar_sports.py pueda aislar por diferencia
+    # cuánto del movimiento real de la wallet es atribuible a sports (ver
+    # docstring de reconciliar_sports.py). Sin esto, la resta de más abajo
+    # destruye la información necesaria para reconciliar sports por su cuenta.
 
     # 27-Ago (bug real, encontrado por Javi al ver +5€ de sports colados en
     # el dashboard de cripto): esta wallet on-chain es COMPARTIDA con sports
@@ -356,6 +361,7 @@ def fetch_balance_real() -> dict:
         "free_usdc": round(free, 4),
         "positions_value": round(pos, 4),
         "total": total,
+        "total_bruto": total_bruto,  # wallet compartida completa, SIN restar sports
         "deposito_inicial": round(deposito_total, 4),  # total acumulado (sum de todos los depósitos)
         "pnl_real": round(total - deposito_total, 4),
         "pnl_por_deposito": pnl_desglose,              # nuevo: desglose por período
@@ -366,13 +372,17 @@ def fetch_balance_real() -> dict:
 
 
 def _append_history(snap: dict) -> None:
-    """Serie temporal del balance real (para la equity curve fiel)."""
+    """Serie temporal del balance real (para la equity curve fiel).
+    `total_bruto` al FINAL a propósito (27-Ago noche) -- ~5300 filas ya
+    escritas con el header viejo, una columna en medio habría desalineado
+    todo bajo DictReader (mismo criterio que la migración de
+    wallet_mirror_sniper_dry_run.csv el mismo día)."""
     nuevo = not HIST_PATH.exists()
     with open(HIST_PATH, "a", encoding="utf-8") as f:
         if nuevo:
-            f.write("ts,free_usdc,positions_value,total,pnl_real\n")
+            f.write("ts,free_usdc,positions_value,total,pnl_real,total_bruto\n")
         f.write(f"{snap['ts']},{snap['free_usdc']},{snap['positions_value']},"
-                f"{snap['total']},{snap['pnl_real']}\n")
+                f"{snap['total']},{snap['pnl_real']},{snap.get('total_bruto', '')}\n")
 
 
 def actualizar_balance_real() -> dict | None:

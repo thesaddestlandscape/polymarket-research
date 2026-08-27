@@ -89,8 +89,8 @@ while true; do
           bash "$REPO_DIR/git_batch_sync.sh" \
               "shadow: ciclo $CICLO $(date -u +%Y-%m-%dT%H:%MZ)" \
               "mantenimiento" \
-              data/shadow/ data/live/ data/prices/ \
-              -- data/shadow data/live data/prices
+              data/shadow/ data/live/ data/prices/ data/sports/ \
+              -- data/shadow data/live data/prices data/sports
         )
     fi
 
