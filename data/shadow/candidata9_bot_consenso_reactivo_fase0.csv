@@ -1,0 +1,2 @@
+timestamp_utc,trade_timestamp,condition_id,market_slug,lado_mayoria,n_votos_trigger,precio_trigger,ratio_deteccion,ask_deteccion,ratio_decision,ask_decision,degradacion_ask_pct,sigue_fillable_en_decision,en_zona_confirmada,registrada_prediccion
+2026-08-27T11:57:45+00:00,2026-08-27T11:56:40.509+00:00,0x0588801192d229c6b10cbd08389c52f932df1ebf4228fb0a84ef2149dddd0c8c,btc-updown-5m-1787831700,Up,3,0.69,2168.1,0.62,1235.6,0.67,8.06,1,0,0
