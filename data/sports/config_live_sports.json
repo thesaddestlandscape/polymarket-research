@@ -1,0 +1,16 @@
+{
+  "_nota_creacion_27ago": "27-Ago: infraestructura live de sports creada (sports_live_guard.py/sports_live_stake.py/sports_live_trade.py), petición explícita Javi tras confirmar que CS#SEGUIR[0.24,0.29) pasa el checklist de promoción salvo n minimo (21/40). pares_permitidos_live y depositos EMPIEZAN VACÍOS a propósito (fail-closed) -- nada opera hasta que (1) Javi indique el depósito real en 'depositos', (2) CS#SEGUIR (u otra tupla) cruce n>=40 y se decida promocionar explícitamente, (3) /code-review completo de los 3 ficheros nuevos, (4) touch data/sports/LIVE_MODE_ON. Valores de riesgo son un punto de partida conservador (mismo criterio que cripto/weather), a revisar con Javi antes de activar nada.",
+  "depositos": [],
+  "pares_permitidos_live": [],
+  "riesgo": {
+    "half_kelly": true,
+    "max_pct_bankroll_por_trade": 0.10,
+    "min_stake_eur": 1.05,
+    "max_stake_eur": 2.00,
+    "circuit_breaker": {
+      "bankroll_minimo_eur": 0.50,
+      "freno_diario_pct": 0.15,
+      "max_perdidas_consecutivas": 3
+    }
+  }
+}
