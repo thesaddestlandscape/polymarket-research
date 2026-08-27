@@ -1,6 +1,13 @@
 {
   "_nota_creacion_27ago": "27-Ago: infraestructura live de sports creada (sports_live_guard.py/sports_live_stake.py/sports_live_trade.py), petición explícita Javi tras confirmar que CS#SEGUIR[0.24,0.29) pasa el checklist de promoción salvo n minimo (21/40). pares_permitidos_live y depositos EMPIEZAN VACÍOS a propósito (fail-closed) -- nada opera hasta que (1) Javi indique el depósito real en 'depositos', (2) CS#SEGUIR (u otra tupla) cruce n>=40 y se decida promocionar explícitamente, (3) /code-review completo de los 3 ficheros nuevos, (4) touch data/sports/LIVE_MODE_ON. Valores de riesgo son un punto de partida conservador (mismo criterio que cripto/weather), a revisar con Javi antes de activar nada.",
-  "depositos": [],
+  "_nota_deposito_27ago_tarde": "27-Ago ~15:05 UTC: Javi confirma por chat traspaso de 5€ como capital de arranque de sports (misma wallet on-chain compartida con cripto, 0xB6eDe...028b). live_balance.py leído en ese momento seguía mostrando 8.4303 USDC, SIN reflejar aún el ingreso -- puede ser latencia on-chain normal. sports_live_stake.bankroll_actual() empieza a devolver 5.0€ desde este commit, y live_stake.py (cripto) lo resta automáticamente del total on-chain leído (mecanismo ya construido 27-Ago, _capital_ajeno_en_wallet_compartida) -- mientras el ingreso no aparezca on-chain, esto infravalora ligeramente el bankroll de cripto (dirección conservadora, nunca arriesga de más). Verificar en próxima sesión que el total on-chain ya refleja los +5€ (esperar ~13.43 USDC total); si no, investigar antes de asumir que el traspaso llegó. pares_permitidos_live sigue VACÍO -- este cambio es solo el punto de partida contable, no activa ningún trade real todavía (sigue pendiente n>=40 + /code-review + LIVE_MODE_ON, sin cambios respecto a la nota de creación).",
+  "depositos": [
+    {
+      "fecha": "2026-08-27",
+      "eur": 5.00,
+      "nota": "Depósito inicial de arranque para sports, confirmado por Javi por chat ~15:05 UTC. No cuenta en el PnL/bankroll de cripto -- descontado automáticamente vía live_stake.py::_capital_ajeno_en_wallet_compartida."
+    }
+  ],
   "pares_permitidos_live": [],
   "riesgo": {
     "half_kelly": true,
