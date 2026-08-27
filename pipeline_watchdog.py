@@ -630,7 +630,7 @@ def fix_postmortem_bloat() -> bool:
 # ──────────────────────────────────────────────────────────────────────────────
 def fix_log_size() -> bool:
     rotado_alguno = False
-    for logf in (LOG_FAST, LOG_LIVE, LOG_SLOW):
+    for logf in sorted((REPO / "logs").glob("*.log")):
         if not logf.exists():
             continue
         size_mb = logf.stat().st_size / 1_000_000
