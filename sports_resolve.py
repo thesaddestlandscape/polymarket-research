@@ -51,73 +51,102 @@ def _log(msg: str) -> None:
     print(f"[{datetime.now(timezone.utc).isoformat(timespec='seconds')}] {msg}", flush=True)
 
 
+def _leer_bajo_lock() -> list[dict]:
+    lock_f = open(LOCK_PATH, "w")
+    fcntl.flock(lock_f, fcntl.LOCK_EX)
+    try:
+        with open(TRADES, newline="", encoding="utf-8") as f:
+            return list(csv.DictReader(f))
+    finally:
+        fcntl.flock(lock_f, fcntl.LOCK_UN)
+
+
 def resolver_una_pasada() -> int:
+    """Dos lecturas a propósito -- ver hallazgo real 27-Ago noche
+    (/code-review post-construcción, petición Javi "revisa que todo esté
+    perfecto"): la 1ª lectura decide QUÉ condition_ids consultar (red,
+    puede tardar varios segundos -- 20 cids * hasta 15s timeout cada
+    uno); si se escribiera de vuelta el resultado sobre esa MISMA lista
+    en memoria, cualquier trade real registrado por
+    sports_wallet_mirror_sniper.py DURANTE la consulta de red se
+    perdería al sobrescribir el fichero entero con datos ya obsoletos
+    (TOCTOU clásico). La 2ª lectura (bajo el mismo lock que la escritura,
+    justo antes de escribir) es SIEMPRE la fuente de verdad para qué
+    filas existen -- los outcomes ya resueltos solo se aplican encima."""
     if not TRADES.exists():
+        return 0
+
+    filas_iniciales = _leer_bajo_lock()
+    if not filas_iniciales:
+        return 0
+
+    abiertas = [r for r in filas_iniciales if r.get("status") == "OPEN"]
+    if not abiertas:
+        return 0
+
+    cids = sorted({r["market_id"] for r in abiertas if r.get("market_id")})[:MAX_CIDS_POR_CICLO]
+
+    # Consulta de red (lenta) -- SIN mantener el lock, para no bloquear
+    # registrar_trade() más de lo necesario.
+    outcomes: dict[str, int] = {}
+    for cid in cids:
+        idx = outcome_por_condition_id(cid)
+        if idx is not None:
+            outcomes[cid] = idx
+    if not outcomes:
         return 0
 
     lock_f = open(LOCK_PATH, "w")
     fcntl.flock(lock_f, fcntl.LOCK_EX)
     try:
         with open(TRADES, newline="", encoding="utf-8") as f:
-            filas = list(csv.DictReader(f))
-            fieldnames = f.fieldnames if hasattr(f, "fieldnames") else None
-    finally:
-        fcntl.flock(lock_f, fcntl.LOCK_UN)
-    if not filas:
-        return 0
+            filas = list(csv.DictReader(f))  # relectura fresca, fuente de verdad real
+        if not filas:
+            return 0
+        fieldnames = list(filas[0].keys())
 
-    fieldnames = list(filas[0].keys())
-    abiertas = [r for r in filas if r.get("status") == "OPEN"]
-    if not abiertas:
-        return 0
+        n_resueltas = 0
+        for r in filas:
+            if r.get("status") != "OPEN":
+                continue
+            idx_real = outcomes.get(r.get("market_id"))
+            if idx_real is None:
+                continue
+            try:
+                direction_idx = int(r.get("direction", ""))
+                entry_price = float(r.get("entry_price", ""))
+                stake_eur = float(r.get("stake_eur", ""))
+                fee_eur = float(r.get("fee_eur", "") or 0.0)
+            except (TypeError, ValueError):
+                _log(f"  ⚠️ fila con datos incompletos para {r.get('market_id')}, no se resuelve")
+                continue
 
-    cids = sorted({r["market_id"] for r in abiertas if r.get("market_id")})[:MAX_CIDS_POR_CICLO]
-    n_resueltas = 0
-    for r in filas:
-        if r.get("status") != "OPEN" or r.get("market_id") not in cids:
-            continue
-        idx_real = outcome_por_condition_id(r["market_id"])
-        if idx_real is None:
-            continue
-        try:
-            direction_idx = int(r.get("direction", ""))
-            entry_price = float(r.get("entry_price", ""))
-            stake_eur = float(r.get("stake_eur", ""))
-            fee_eur = float(r.get("fee_eur", "") or 0.0)
-        except (TypeError, ValueError):
-            _log(f"  ⚠️ fila con datos incompletos para {r.get('market_id')}, no se resuelve")
-            continue
+            acierto = int(idx_real == direction_idx)
+            if acierto:
+                gross_win = (1.0 - entry_price) / entry_price if entry_price > 0 else 0.0
+                pnl_bruto = gross_win * stake_eur
+            else:
+                pnl_bruto = -stake_eur
+            pnl_neto = pnl_bruto - fee_eur
 
-        acierto = int(idx_real == direction_idx)
-        if acierto:
-            gross_win = (1.0 - entry_price) / entry_price if entry_price > 0 else 0.0
-            pnl_bruto = gross_win * stake_eur
-        else:
-            pnl_bruto = -stake_eur
-        pnl_neto = pnl_bruto - fee_eur
+            r["status"] = "CLOSED"
+            r["close_timestamp"] = datetime.now(timezone.utc).isoformat(timespec="seconds")
+            r["exit_price"] = "1.0" if acierto else "0.0"
+            r["outcome_real"] = str(idx_real)
+            r["pnl_bruto_eur"] = round(pnl_bruto, 4)
+            r["pnl_neto_eur"] = round(pnl_neto, 4)
+            n_resueltas += 1
+            _log(f"  ✅ resuelto {r['market_id']} categoria={r.get('categoria')} tipo={r.get('tipo')} "
+                 f"acierto={acierto} pnl_neto={pnl_neto:+.3f}€")
 
-        r["status"] = "CLOSED"
-        r["close_timestamp"] = datetime.now(timezone.utc).isoformat(timespec="seconds")
-        r["exit_price"] = "1.0" if acierto else "0.0"
-        r["outcome_real"] = str(idx_real)
-        r["pnl_bruto_eur"] = round(pnl_bruto, 4)
-        r["pnl_neto_eur"] = round(pnl_neto, 4)
-        n_resueltas += 1
-        _log(f"  ✅ resuelto {r['market_id']} categoria={r.get('categoria')} tipo={r.get('tipo')} "
-             f"acierto={acierto} pnl_neto={pnl_neto:+.3f}€")
-
-    if n_resueltas:
-        lock_f = open(LOCK_PATH, "w")
-        fcntl.flock(lock_f, fcntl.LOCK_EX)
-        try:
+        if n_resueltas:
             with open(TRADES, "w", newline="", encoding="utf-8") as f:
                 w = csv.DictWriter(f, fieldnames=fieldnames)
                 w.writeheader()
                 w.writerows(filas)
-        finally:
-            fcntl.flock(lock_f, fcntl.LOCK_UN)
-
-    return n_resueltas
+        return n_resueltas
+    finally:
+        fcntl.flock(lock_f, fcntl.LOCK_UN)
 
 
 async def main_async(loop_s: int = 60) -> None:

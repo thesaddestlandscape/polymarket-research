@@ -316,7 +316,13 @@ async def _correr_una_conexion(wallets: dict, vistos: set) -> set:
                         cb_bloquea = _stake.bloquear_por_circuit_breaker(lambda m: _log(f"circuit breaker: {m}"))
                         if not cb_bloquea:
                             edge_frac = abs(info["edge_pp"]) / 100.0
-                            stake_info = _stake.calcular_stake(edge_frac, categoria, info["tipo"], direction=info["tipo"])
+                            # 27-Ago noche (/code-review, hallazgo real): direction= debe ser
+                            # el índice del outcome que se compraría (mirror_idx, "0"/"1" --
+                            # lo que de verdad se guarda luego en trades.csv), NUNCA info["tipo"]
+                            # (SEGUIR/FADE) -- con ese valor la penalización de inventario
+                            # direccional nunca podía activarse (comparaba "SEGUIR"/"FADE"
+                            # contra "0"/"1", cero coincidencias posibles).
+                            stake_info = _stake.calcular_stake(edge_frac, categoria, info["tipo"], direction=str(mirror_idx))
                             stake_sim = stake_info["stake_eur"]
                             if stake_info["viable"]:
                                 decision_dry_run = "DISPARARIA"

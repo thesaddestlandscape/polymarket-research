@@ -150,29 +150,42 @@ def racha_perdidas_consecutivas() -> int:
 
 
 def inventario_direccional_hoy() -> dict:
-    """Posiciones OPEN de hoy por dirección (BUY_SEGUIR/BUY_FADE, o el
-    lado real de mercado -- normalizado a Yes/No en el registro de
-    trade). Concentración direccional es riesgo real mientras un partido
-    o ronda está en curso, igual que en weather."""
+    """Posiciones OPEN de hoy por índice de outcome comprado (`direction`
+    en trades.csv = mirror_idx, "0"/"1" -- ver sports_wallet_mirror_
+    sniper.py, NUNCA "YES"/"NO" literal: sports no siempre es binario
+    Yes/No, muchos mercados son "Equipo A vs Equipo B" y solo el índice
+    generaliza). Concentración en el mismo índice es un proxy de riesgo
+    correlacionado más débil que en cripto/weather (ahí Yes/No sí tiene
+    un significado consistente cruzando mercados distintos; aquí el
+    índice 0 en un partido no tiene por qué correlacionar con el índice
+    0 de otro) -- pero sigue protegiendo el caso real más probable:
+    varias posiciones abiertas en el MISMO índice dentro de mercados de
+    la misma categoría/torneo en curso a la vez.
+
+    27-Ago noche (/code-review, hallazgo real tras 'revisa que todo esté
+    perfecto'): esta función comparaba contra "YES"/"NO" literal desde
+    que se escribió, pero registrar_trade() nunca guarda esos strings --
+    la penalización llevaba siendo un no-op silencioso desde el diseño
+    original, nunca se había activado con datos reales (n=0 hasta hoy)."""
     if not TRADES_CSV.exists():
-        return {"YES": 0, "NO": 0, "q_net": 0}
-    n_yes = n_no = 0
+        return {"IDX0": 0, "IDX1": 0, "q_net": 0}
+    n_0 = n_1 = 0
     with open(TRADES_CSV, encoding="utf-8") as f:
         for row in csv.DictReader(f):
             if row.get("status") != "OPEN":
                 continue
-            if row.get("direction") == "YES":
-                n_yes += 1
-            elif row.get("direction") == "NO":
-                n_no += 1
-    return {"YES": n_yes, "NO": n_no, "q_net": n_yes - n_no}
+            if row.get("direction") == "0":
+                n_0 += 1
+            elif row.get("direction") == "1":
+                n_1 += 1
+    return {"IDX0": n_0, "IDX1": n_1, "q_net": n_0 - n_1}
 
 
 def _inventory_penalty(direction: str, inv: dict) -> float:
     q_net = inv.get("q_net", 0)
-    if direction == "YES" and q_net > 0:
+    if direction == "0" and q_net > 0:
         exceso = q_net
-    elif direction == "NO" and q_net < 0:
+    elif direction == "1" and q_net < 0:
         exceso = abs(q_net)
     else:
         return 1.0
