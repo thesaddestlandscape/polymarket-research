@@ -2472,7 +2472,7 @@ def s_updown_gbm(market, ctx, strategy_name: str = "UPDOWN_GBM"):
             sigma_b = (sum(d**2 for d in diffs) / len(diffs)) ** 0.5
             features["sigma_b"] = round(sigma_b, 4)
     features.update(_libro_calidad(market))
-    features.update(_bots_consenso(market))
+    features.update(_bots_consenso(market, activo))
 
     # 30-Jul: mismos 3 gates observacionales que FAVORITO_CONFIRMADO/
     # GBM_LATE_15M -- ninguno estaba cableado aquí pese a que UPDOWN_GBM es
@@ -3094,7 +3094,7 @@ def s_order_flow_5m(market, ctx):
             "hora_utc": hora_utc,
             "es_ntm_5min": _es_ntm_5min(market),
             **_libro_calidad(market),
-            **_bots_consenso(market),
+            **_bots_consenso(market, activo),
         },
     }
 
@@ -3173,7 +3173,7 @@ def _s_liquidaciones(market, ctx, ventana_min, ventana_lookback="5min", minutos_
             "py_entrada": round(py, 3),
             "hora_utc": datetime.now(timezone.utc).hour,
             **_libro_calidad(market),
-            **_bots_consenso(market),
+            **_bots_consenso(market, activo),
         },
     }
 
@@ -4453,7 +4453,7 @@ def s_ballenas_confirmadas_15m(market, ctx):
             "hora_utc": datetime.now(timezone.utc).hour,
             "gbm_direccion_coincide": gbm_conf["gbm_direccion_coincide"],
             **_libro_calidad(market),
-            **_bots_consenso(market),
+            **_bots_consenso(market, activo),
         },
     }
 
@@ -4771,7 +4771,7 @@ def _s_gbm_late(market, ctx, ventana_min, rest_lo, rest_hi, espacio_k=None):
     # prob_fillable_gbm_late (P2 plan profundidad de libro, 13-Ago): ver
     # docstring de _prob_fillable_gbm_late — solo logueo, nunca decide.
     libro_calidad = _libro_calidad(market)
-    bots_consenso = _bots_consenso(market)
+    bots_consenso = _bots_consenso(market, activo)
     prob_fillable_gbm_late = _prob_fillable_gbm_late(
         libro_calidad.get("libro_spread"), libro_calidad.get("libro_liquidez"),
         py, now_utc.hour)
@@ -4941,6 +4941,8 @@ def _libro_calidad(market: dict) -> dict:
 
 _BOT_WALLETS_PATH = DIR_SHADOW / "bot_wallets_universo_25ago.json"
 _bot_wallets_cache = {"mtime": None, "set": frozenset()}
+_WEDGE_PATH = DIR_SHADOW / "wallet_edge_score_por_activo_marco.json"
+_bot_wallets_por_activo_cache = {"mtime": None, "por_activo": {}}
 
 
 def _cargar_bot_wallets() -> frozenset:
@@ -4965,7 +4967,49 @@ def _cargar_bot_wallets() -> frozenset:
     return _bot_wallets_cache["set"]
 
 
-def _bots_consenso(market: dict) -> dict:
+def _cargar_bot_wallets_por_activo(activo: str) -> frozenset:
+    """27-Ago, hallazgo real (revisión de sesión, verificado cruzando el
+    universo de 84 bot wallets contra las wallets validadas de sports):
+    `bot_wallets_universo_25ago.json` mete en el mismo saco a cualquier
+    wallet con edge confirmado en AL MENOS UN (activo,marco) -- pero
+    `_bots_consenso()` la contaba en el consenso de CUALQUIER mercado, sin
+    exigir que su edge estuviera confirmado para ESE activo concreto. Una
+    wallet confirmada solo en BTC#5min podía votar (con el mismo peso que
+    una confirmada en DOGE#60min) sobre un mercado de DOGE, diluyendo la
+    señal con ruido fuera de su dominio de habilidad probada -- mismo
+    espíritu que CLAUDE.md pt.17 (desagregar SIEMPRE por activo).
+
+    Filtra el universo de bots a solo las wallets cuyo edge en
+    `wallet_edge_score_por_activo_marco.json` está confirmado (sig_bhfdr +
+    g_kelly>0 + edge_pp>0) para ESTE activo en CUALQUIER marco -- más
+    estrecho que el flat de 84, sin fragmentar tanto como exigir también
+    el marco exacto (dejaría muy pocas wallets por celda). Cacheado por
+    activo + mtime del fichero fuente, recalculado solo cuando cambia."""
+    global _bot_wallets_por_activo_cache
+    try:
+        mtime = _WEDGE_PATH.stat().st_mtime
+    except OSError:
+        return frozenset()
+    if _bot_wallets_por_activo_cache["mtime"] != mtime:
+        try:
+            wedge = json.loads(_WEDGE_PATH.read_text(encoding="utf-8"))
+        except Exception:
+            return _bot_wallets_por_activo_cache["por_activo"].get(activo, frozenset())
+        por_activo: dict = {}
+        for v in wedge.values():
+            if not (v.get("sig_bhfdr") and v.get("g_kelly", 0) > 0 and v.get("edge_pp", 0) > 0):
+                continue
+            a = v.get("activo")
+            w = (v.get("wallet") or "").lower()
+            if not a or not w:
+                continue
+            por_activo.setdefault(a, set()).add(w)
+        por_activo = {a: frozenset(ws) for a, ws in por_activo.items()}
+        _bot_wallets_por_activo_cache = {"mtime": mtime, "por_activo": por_activo}
+    return _bot_wallets_por_activo_cache["por_activo"].get(activo, frozenset())
+
+
+def _bots_consenso(market: dict, activo: str | None = None) -> dict:
     """Candidata 9 "gallina de los huevos de oro" (25-Ago, petición
     explícita Javi: "instrumenta como feature observacional"): consenso
     mayoritario de las 84 bot wallets con edge confirmado sobre el
@@ -4983,37 +5027,63 @@ def _bots_consenso(market: dict) -> dict:
     (`outcome` del trade parseado) por mayoría simple. Solo LOGUEA -- no
     toca `prob_yes` de ninguna estrategia, mismo criterio cauteloso que
     P17/P19 (nunca conectar una feature nueva a una decisión real sin
-    acumular forward + aprobación explícita de Javi)."""
+    acumular forward + aprobación explícita de Javi).
+
+    27-Ago, extensión aditiva (NUNCA se toca `bot_consenso_n/lado/pct`
+    original -- Candidata 9/10 ya lo consumen en producción, cambiar su
+    semántica silenciosamente rompería continuidad de una serie ya en
+    validación forward): además del consenso de las 84 bots planas, si se
+    pasa `activo` se calcula un segundo consenso `bot_consenso_activo_*`
+    restringido a las wallets cuyo edge está confirmado (sig_bhfdr+
+    g_kelly>0+edge_pp>0) específicamente para ESE activo -- ver
+    `_cargar_bot_wallets_por_activo()`. Hallazgo que lo motiva: una wallet
+    con edge confirmado SOLO en BTC#5min contaba en el consenso de
+    cualquier mercado (ej. DOGE#60min) con el mismo peso que una wallet
+    confirmada ahí -- dilución de dominio, no ruido aleatorio."""
     condition_id = market.get("condition_id")
+    base_vacio = {"bot_consenso_n": 0, "bot_consenso_lado": None, "bot_consenso_pct": None,
+                  "bot_consenso_activo_n": 0, "bot_consenso_activo_lado": None, "bot_consenso_activo_pct": None}
     if not condition_id:
-        return {"bot_consenso_n": 0, "bot_consenso_lado": None, "bot_consenso_pct": None}
+        return base_vacio
     bots = _cargar_bot_wallets()
-    if not bots:
-        return {"bot_consenso_n": 0, "bot_consenso_lado": None, "bot_consenso_pct": None}
+    bots_activo = _cargar_bot_wallets_por_activo(activo) if activo else frozenset()
+    if not bots and not bots_activo:
+        return base_vacio
     try:
         trades = _fc.leer_snapshot_reciente(condition_id)
     except Exception:
-        return {"bot_consenso_n": 0, "bot_consenso_lado": None, "bot_consenso_pct": None}
+        return base_vacio
     votos: dict = {}
+    votos_activo: dict = {}
     for t in trades:
         if (t.get("side") or "").strip().upper() != "BUY":
             continue
         w = (t.get("proxyWallet") or "").lower()
-        if w not in bots:
-            continue
         lado = t.get("outcome", "")
         if not lado:
             continue
-        votos[lado] = votos.get(lado, 0) + 1
+        if w in bots:
+            votos[lado] = votos.get(lado, 0) + 1
+        if w in bots_activo:
+            votos_activo[lado] = votos_activo.get(lado, 0) + 1
     n_total = sum(votos.values())
-    if n_total == 0:
-        return {"bot_consenso_n": 0, "bot_consenso_lado": None, "bot_consenso_pct": None}
-    lado_mayoria = max(votos, key=votos.get)
-    return {
-        "bot_consenso_n": n_total,
-        "bot_consenso_lado": lado_mayoria,
-        "bot_consenso_pct": round(votos[lado_mayoria] / n_total, 4),
-    }
+    n_total_activo = sum(votos_activo.values())
+    resultado = dict(base_vacio)
+    if n_total > 0:
+        lado_mayoria = max(votos, key=votos.get)
+        resultado.update({
+            "bot_consenso_n": n_total,
+            "bot_consenso_lado": lado_mayoria,
+            "bot_consenso_pct": round(votos[lado_mayoria] / n_total, 4),
+        })
+    if n_total_activo > 0:
+        lado_mayoria_activo = max(votos_activo, key=votos_activo.get)
+        resultado.update({
+            "bot_consenso_activo_n": n_total_activo,
+            "bot_consenso_activo_lado": lado_mayoria_activo,
+            "bot_consenso_activo_pct": round(votos_activo[lado_mayoria_activo] / n_total_activo, 4),
+        })
+    return resultado
 
 
 def _ballena_activa_reciente(condition_id: str, ventana_min: float) -> int:
@@ -5093,7 +5163,7 @@ def s_struct_no_15m(market, ctx):
             "restante_min": restante_min,
             "hora_utc":     datetime.now(timezone.utc).hour,
             **_libro_calidad(market),
-            **_bots_consenso(market),
+            **_bots_consenso(market, activo),
         },
     }
 
@@ -5243,7 +5313,7 @@ def s_favorito_confirmado(market, ctx, strategy_name: str = "FAVORITO_CONFIRMADO
             "gate_bucket_propio_veredicto": gate_bp["veredicto"],
             "gbm_direccion_coincide": gbm_conf["gbm_direccion_coincide"],
             **_libro_calidad(market),
-            **_bots_consenso(market),
+            **_bots_consenso(market, activo),
         },
     }
 
@@ -5718,7 +5788,7 @@ def s_streak_mom_5m(market, ctx):
             # de esto? Puro logging, ventana = duración real de la racha.
             "ballena_activa_n": _ballena_activa_reciente(market.get("condition_id", ""), max(k * 5, 5)),
             **_libro_calidad(market),
-            **_bots_consenso(market),
+            **_bots_consenso(market, activo),
         },
     }
 
@@ -5796,7 +5866,7 @@ def s_momentum_ibs_5m(market, ctx):
             "es_ntm_5min":    _es_ntm_5min(market),
             "ballena_activa_n": _ballena_activa_reciente(market.get("condition_id", ""), MOMENTUM_IBS_5M_LOOKBACK_MIN),
             **_libro_calidad(market),
-            **_bots_consenso(market),
+            **_bots_consenso(market, activo),
         },
     }
 
@@ -5855,7 +5925,7 @@ def s_momentum_ibs_5m_fade(market, ctx):
             "es_ntm_5min":    _es_ntm_5min(market),
             "ballena_activa_n": _ballena_activa_reciente(market.get("condition_id", ""), MOMENTUM_IBS_5M_LOOKBACK_MIN),
             **_libro_calidad(market),
-            **_bots_consenso(market),
+            **_bots_consenso(market, activo),
         },
     }
 
@@ -5912,7 +5982,7 @@ def s_momentum_ibs_15m(market, ctx):
             "hora_utc":        datetime.now(timezone.utc).hour,
             "ballena_activa_n": _ballena_activa_reciente(market.get("condition_id", ""), MOMENTUM_IBS_15M_LOOKBACK_MIN),
             **_libro_calidad(market),
-            **_bots_consenso(market),
+            **_bots_consenso(market, activo),
         },
     }
 
@@ -5962,7 +6032,7 @@ def s_momentum_ibs_15m_fade(market, ctx):
             "hora_utc":        datetime.now(timezone.utc).hour,
             "ballena_activa_n": _ballena_activa_reciente(market.get("condition_id", ""), MOMENTUM_IBS_15M_LOOKBACK_MIN),
             **_libro_calidad(market),
-            **_bots_consenso(market),
+            **_bots_consenso(market, activo),
         },
     }
 
@@ -6032,7 +6102,7 @@ def s_momentum_ibs_5m_ballena(market, ctx):
             "es_ntm_5min":    _es_ntm_5min(market),
             "ballena_activa_n": n_ballena,
             **_libro_calidad(market),
-            **_bots_consenso(market),
+            **_bots_consenso(market, activo),
         },
     }
 
@@ -6080,7 +6150,7 @@ def s_momentum_ibs_15m_ballena(market, ctx):
             "hora_utc":        datetime.now(timezone.utc).hour,
             "ballena_activa_n": n_ballena,
             **_libro_calidad(market),
-            **_bots_consenso(market),
+            **_bots_consenso(market, activo),
         },
     }
 
@@ -6136,7 +6206,7 @@ def s_streak_fade_5m(market, ctx):
             "es_ntm_5min":   _es_ntm_5min(market),
             "streak_estiramiento": _streak_estiramiento(activo, 5, k, edt, ctx),
             **_libro_calidad(market),
-            **_bots_consenso(market),
+            **_bots_consenso(market, activo),
         },
     }
 
@@ -6227,7 +6297,7 @@ def s_streak_fade_15m(market, ctx):
             "volumen_racha_corto": _volumen_racha(activo, ctx, n_velas=3),
             "streak_estiramiento": _streak_estiramiento(activo, 15, k, edt, ctx),
             **_libro_calidad(market),
-            **_bots_consenso(market),
+            **_bots_consenso(market, activo),
         },
     }
 
@@ -6290,7 +6360,7 @@ def s_streak_fade_60m(market, ctx):
             "volumen_racha":     _volumen_racha(activo, ctx),
             "streak_estiramiento": _streak_estiramiento(activo, 60, k, edt, ctx),
             **_libro_calidad(market),
-            **_bots_consenso(market),
+            **_bots_consenso(market, activo),
         },
     }
 
@@ -6390,7 +6460,7 @@ def s_leadlag_btc_xrp(market, ctx):
             "py_entrada":     round(market.get("_precio_yes", 0), 3),
             "hora_utc":       datetime.now(timezone.utc).hour,
             **_libro_calidad(market),
-            **_bots_consenso(market),
+            **_bots_consenso(market, "XRP"),
         },
     }
 
