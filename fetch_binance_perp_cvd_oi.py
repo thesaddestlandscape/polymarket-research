@@ -42,6 +42,7 @@ este script hoy -- la captura cruda (timestamp por fila) permite recortar
 después, pero el análisis debe diseñarse con esto en mente desde el
 principio, no como parche posterior."""
 import csv
+import json
 import sys
 from datetime import datetime, timezone
 from pathlib import Path
@@ -137,8 +138,33 @@ def main() -> int:
         for fila in filas:
             w.writerow(fila)
 
+    _guardar_snapshot_latest(filas)
+
     print(f"[{ahora.isoformat(timespec='seconds')}] {len(filas)}/{len(BINANCE_SYMBOLS)} activos escritos en {path}")
     return 0
+
+
+DIR_SHADOW = Path(__file__).parent / "data" / "shadow"
+RUTA_SNAPSHOT_LATEST = DIR_SHADOW / "perp_cvd_latest.json"
+
+
+def _guardar_snapshot_latest(filas: list) -> None:
+    """Snapshot pequeño {activo: {perp_delta_ratio, open_interest, ts}} para
+    que shadow_predict.py lo lea barato en cada ciclo sin releer el CSV
+    historico -- propuesta #8 de la ronda de alfa 27-Ago (rediseño: feature
+    en vivo en vez de join post-hoc, ver idea_10_propuestas_alfa_cripto_27ago)."""
+    try:
+        data = {f["activo"]: {"perp_delta_ratio": f["perp_delta_ratio"],
+                               "open_interest": f["open_interest"],
+                               "ts": f["timestamp_utc"]}
+                for f in filas if f.get("perp_delta_ratio") != ""}
+        DIR_SHADOW.mkdir(parents=True, exist_ok=True)
+        tmp = RUTA_SNAPSHOT_LATEST.with_suffix(".tmp")
+        with open(tmp, "w", encoding="utf-8") as f:
+            json.dump(data, f)
+        tmp.replace(RUTA_SNAPSHOT_LATEST)
+    except Exception as e:
+        print(f"  [WARN] no se pudo escribir snapshot latest: {type(e).__name__}: {e}", file=sys.stderr)
 
 
 if __name__ == "__main__":

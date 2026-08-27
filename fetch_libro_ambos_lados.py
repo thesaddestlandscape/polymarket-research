@@ -34,6 +34,7 @@ Corre en screen propio (mismo patrón que chainlink/liqs):
 """
 
 import csv
+import json
 import time
 from datetime import datetime, timezone
 from pathlib import Path
@@ -195,6 +196,9 @@ def _capturar_mercado(mid: str, activo: str, marco: str, condition_id: str, edt)
     }
 
 
+RUTA_SNAPSHOT_LATEST = DIR_SHADOW / "libro_ambos_lados_latest.json"
+
+
 def _guardar(filas: list) -> None:
     if not filas:
         return
@@ -206,6 +210,25 @@ def _guardar(filas: list) -> None:
             w.writeheader()
         for fila in filas:
             w.writerow(fila)
+    _guardar_snapshot_latest(filas)
+
+
+def _guardar_snapshot_latest(filas: list) -> None:
+    """Snapshot pequeño {market_id: {ask_sum, ts}} en data/shadow/ (dentro
+    del repo, a diferencia del CSV histórico que vive fuera en DIR_DATALOGS)
+    -- permite que shadow_predict.py lo lea barato (unas decenas de KB) sin
+    tener que abrir el CSV de ~30MB/dia de DIR_DATALOGS. Solo lectura para
+    quien lo consuma; propuesta #7/#8 de la ronda de alfa 27-Ago (libro
+    ancho como feature de regimen, ver idea_10_propuestas_alfa_cripto_27ago)."""
+    try:
+        data = {f["market_id"]: {"ask_sum": f["ask_sum"], "ts": f["timestamp_utc"]}
+                for f in filas if isinstance(f.get("ask_sum"), float)}
+        tmp = RUTA_SNAPSHOT_LATEST.with_suffix(".tmp")
+        with open(tmp, "w", encoding="utf-8") as f:
+            json.dump(data, f)
+        tmp.replace(RUTA_SNAPSHOT_LATEST)
+    except Exception as e:
+        _log(f"WARN: no se pudo escribir snapshot latest: {type(e).__name__}: {e}")
 
 
 def main() -> None:
