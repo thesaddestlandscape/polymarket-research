@@ -61,12 +61,21 @@ def main() -> int:
                     )
 
     if avisos:
-        msg = (
-            "⚖️ Kelly-precio gate — nuevos buckets confirmados (afectan al stake real HOY):\n"
-            + "\n".join(avisos)
-        )
-        print(msg)
-        enviar_telegram(msg)
+        # 27-Ago: mismo bug ya cazado en vigia_zonas_validadas_externas.py
+        # 11-Ago -- un mensaje >4096 chars (Telegram) falla con 400 y
+        # enviar_telegram() se traga la excepción, así que el aviso entero
+        # se pierde en silencio. Trocear igual que allí.
+        LIMITE = 3500
+        cabecera = "⚖️ Kelly-precio gate — nuevos buckets confirmados (afectan al stake real HOY):\n"
+        bloque = cabecera
+        for linea in avisos:
+            if len(bloque) + len(linea) + 1 > LIMITE:
+                print(bloque)
+                enviar_telegram(bloque)
+                bloque = cabecera
+            bloque += linea + "\n"
+        print(bloque)
+        enviar_telegram(bloque)
     else:
         n_conf = sum(1 for v in estado_plano.values() if v == "confirmado")
         print(f"Sin veredictos nuevos hoy ({n_conf} buckets confirmados en total).")
