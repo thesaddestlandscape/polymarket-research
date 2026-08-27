@@ -1,9 +1,10 @@
 #!/usr/bin/env python3
 """
 favorito_confirmado_depth_fase0.py — FASE 0 (SOLO OBSERVACIÓN) de
-profundidad real en baja latencia para las 4 combinaciones de
+profundidad real en baja latencia para las combinaciones de
 FAVORITO_CONFIRMADO que hoy carecen de ejecutor dedicado:
-  BTC#5min#BUY_YES, BTC#5min#BUY_NO, BTC#15min#BUY_NO, SOL#5min#BUY_YES.
+  BTC#5min#BUY_YES, BTC#5min#BUY_NO, BTC#15min#BUY_NO, SOL#5min#BUY_YES,
+  ETH#5min#BUY_NO.
 
 Origen (19-Ago, petición explícita Javi tras cazar un error real de
 metodología: la primera vez que se midió fill-ability de estas 4 tuplas
@@ -13,6 +14,17 @@ confirmación -- mismo patrón exacto que ya se corrigió para DOGE#5min
 #BUY_NO con favorito5min_bajalatencia_fase0.py, y para BTC/SOL#60min
 #BUY_YES con favorito_confirmado_60min_executor.py hoy mismo. Ver
 feedback_contrastar_fuente_correcta_por_tupla_19ago (memoria).
+
+27-Ago: añadida ETH#5min#BUY_NO -- mismo error de metodología encontrado
+de nuevo (petición explícita Javi de repasar todo el barrido de
+zonas_validadas_externas con más rigor): esta tupla se venía midiendo con
+candidatas_sin_fillability_depth_fase0.py (poll 15s), pero ese script
+solo está validado/justificado para ETH#60min#BUY_NO (su propio docstring
+dice "ninguna de las 3 necesita baja latencia" -- juicio hecho para el
+60min, nunca verificado para 5min, donde el libro se mueve mucho más
+rápido). Sin observador reactivo dedicado, la conclusión de fill-ability
+sobre el 5min no era fiable -- movida aquí (poll 1s), mismo patrón que
+las otras 4.
 
 Mismo patrón EXACTO que favorito5min_bajalatencia_fase0.py (no
 reinventar): s_favorito_confirmado() es MODEL-FREE (solo umbral de
@@ -59,6 +71,8 @@ TUPLAS = [
     ("BTC", 5, "BUY_NO"),
     ("BTC", 15, "BUY_NO"),
     ("SOL", 5, "BUY_YES"),
+    ("ETH", 5, "BUY_NO"),  # 27-Ago: movida desde candidatas_sin_fillability_depth_fase0.py (poll
+                            # 15s, no validado para 5min) -- ver docstring del módulo.
 ]
 
 # Mismos valores exactos que s_favorito_confirmado (shadow_predict.py).
