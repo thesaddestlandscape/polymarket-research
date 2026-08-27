@@ -56,3 +56,6 @@
 {"ts": "2026-08-21T08:47:10+00:00", "clave": "3739625#BALLENAS_CONFIRMADAS_15M#ETH#15min#BUY_YES", "evento": "creado", "combo": "ETH#15m", "motivo_vb": "concentracion_ok", "deadline_ts": "2026-08-21T08:55:31.200000+00:00"}
 {"ts": "2026-08-21T08:49:03+00:00", "clave": "3739625#BALLENAS_CONFIRMADAS_15M#ETH#15min#BUY_YES", "evento": "resuelto_normal", "motivo": "observacion_habria_ejecutado"}
 {"ts": "2026-08-21T08:49:03+00:00", "clave": "3739625#BALLENAS_CONFIRMADAS_15M#ETH#15min#BUY_YES", "evento": "observacion_habria_ejecutado", "combo": "ETH#15m", "minutos_restantes": 10.935645}
+{"ts": "2026-08-27T08:31:25+00:00", "clave": "3899834#BALLENAS_CONFIRMADAS_15M#ETH#15min#BUY_YES", "evento": "creado", "combo": "ETH#15m", "motivo_vb": "concentracion_ok", "deadline_ts": "2026-08-27T08:40:48+00:00"}
+{"ts": "2026-08-27T08:33:56+00:00", "clave": "3899834#BALLENAS_CONFIRMADAS_15M#ETH#15min#BUY_YES", "evento": "resuelto_normal", "motivo": "observacion_habria_ejecutado"}
+{"ts": "2026-08-27T08:33:56+00:00", "clave": "3899834#BALLENAS_CONFIRMADAS_15M#ETH#15min#BUY_YES", "evento": "observacion_habria_ejecutado", "combo": "ETH#15m", "minutos_restantes": 11.053653416666666}
