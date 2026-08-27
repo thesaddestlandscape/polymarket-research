@@ -320,6 +320,23 @@ def fetch_balance_real() -> dict:
     free = _free_usdc(client)
     pos = _positions_value(wallet)
     total = round(free + pos, 4)
+
+    # 27-Ago (bug real, encontrado por Javi al ver +5€ de sports colados en
+    # el dashboard de cripto): esta wallet on-chain es COMPARTIDA con sports
+    # (mismo mecanismo ya documentado en live_stake._capital_ajeno_en_wallet_
+    # compartida, usado ahí para el bankroll operativo de Kelly/circuit
+    # breaker -- pero live_balance.py, la fuente que alimenta dashboard/
+    # /status/pnl_real, seguía usando el `total` crudo sin esta resta).
+    # Mismo criterio: SOLO sports (nunca weather, ver docstring del import).
+    try:
+        from live_stake import _capital_ajeno_en_wallet_compartida
+        capital_ajeno = _capital_ajeno_en_wallet_compartida()
+    except Exception:
+        capital_ajeno = 0.0
+    if capital_ajeno:
+        free = round(free - capital_ajeno, 4)
+        total = round(total - capital_ajeno, 4)
+
     ts = datetime.now(timezone.utc).isoformat(timespec="seconds")
     depositos = _cargar_depositos_config()
     # PnL real por día — best-effort (no debe tumbar el balance si algo falla).
