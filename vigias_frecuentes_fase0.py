@@ -93,6 +93,8 @@ import vigia_reabrir_overrides_micro_bucket
 import vigia_micro_bucket_kill_switch_wallet_mirror
 import vigia_reabrir_overrides_wallet_mirror
 import vigia_gate_bucket_wallet_mirror
+import vigia_sports_micro_bucket_kill_switch_wallet_mirror
+import vigia_sports_reabrir_overrides_wallet_mirror
 import wallet_mirror_tracker as _wmt
 from wallet_mirror_sniper import OUT as _WMS_OUT, COLUMNS as _WMS_COLUMNS
 from wallet_mirror_tracker import resolver_pendientes as _resolver_pendientes
@@ -178,6 +180,16 @@ TAREAS = [
     ("vigia_reabrir_overrides_wallet_mirror", vigia_reabrir_overrides_wallet_mirror.main,
      "vigia_reabrir_overrides_wallet_mirror.log", 1800),
     ("vigia_gate_bucket_wallet_mirror", vigia_gate_bucket_wallet_mirror.main, "vigia_gate_bucket_wallet_mirror.log", 3600),
+    # 27-Ago noche (petición explícita Javi: "construye lo que falte de
+    # sports para tenerlo ya hecho cuando toque operar en directo"): mismo
+    # par bloqueo+reapertura que WALLET_MIRROR cripto arriba, pero para
+    # sports_wallet_mirror_gate_bucket.py -- construido ANTES del primer
+    # trade real (sports sigue con pares_permitidos_live=[] hoy), no
+    # semanas después como pasó con WALLET_MIRROR (10/11-Ago -> 24-Ago).
+    ("vigia_sports_micro_bucket_kill_switch_wallet_mirror", vigia_sports_micro_bucket_kill_switch_wallet_mirror.main,
+     "vigia_sports_micro_bucket_kill_switch_wallet_mirror.log", 1800),
+    ("vigia_sports_reabrir_overrides_wallet_mirror", vigia_sports_reabrir_overrides_wallet_mirror.main,
+     "vigia_sports_reabrir_overrides_wallet_mirror.log", 1800),
     # 20-Ago: 2 más, cadencia EXACTA de sus crons retirados (*/20 * * * * = 1200s)
     ("smart_money_tracker", smart_money_tracker.main, "smart_money.log", 1200),
     ("sports_wallet_mirror_sniper_resolver", _resolver_sports_wallet_mirror_sniper, "sports_wallet_mirror_resolver.log", 1200),

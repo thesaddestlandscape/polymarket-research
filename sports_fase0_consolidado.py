@@ -61,6 +61,7 @@ LOGS = REPO / "logs"
 # verify_deploy.py sigue detectando STALE si se toca cualquiera de los 2.
 import sports_wallet_mirror_sniper
 import sports_activity_ws
+import sports_resolve  # 27-Ago noche: resuelve trades reales OPEN, ver docstring del módulo
 
 # (modulo, fichero_log_propio -- EXACTO el que ya usaba la screen individual,
 #  nombre_funcion_log_a_reemplazar, coroutine_a_lanzar)
@@ -69,6 +70,8 @@ PROCESOS = [
      lambda: sports_wallet_mirror_sniper.main_ws()),
     (sports_activity_ws, "sports_activity_ws.log", "_log",
      lambda: sports_activity_ws.main()),
+    (sports_resolve, "sports_resolve.log", "_log",
+     lambda: sports_resolve.main_async(60)),
 ]
 
 

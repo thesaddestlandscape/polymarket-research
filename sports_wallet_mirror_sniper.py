@@ -46,6 +46,8 @@ import websockets
 
 import sports_live_guard as _guard
 import sports_live_stake as _stake
+import sports_wallet_mirror_gate_bucket as _gate  # 27-Ago: segundo guardián,
+# independiente de pares_permitidos_live -- ver docstring del módulo
 
 REPO = Path(__file__).resolve().parent
 
@@ -107,6 +109,11 @@ COLUMNS = [
     "libro_ok", "mejor_ask_mirror", "profundidad_eur_mirror", "ratio_vs_stake_mirror",
     "cumple_filtro_precio",
     "gate_veredicto", "stake_sim_eur", "circuit_breaker_bloquea", "decision_dry_run",
+    "gate_bucket_veredicto",  # 27-Ago noche, añadida al final a propósito --
+    # el CSV ya tenía ~10k filas escritas con el header viejo; una columna
+    # nueva en medio habría desalineado todas las filas futuras bajo
+    # DictReader (ver commit del mismo día). Al final, las filas viejas
+    # simplemente quedan con este campo vacío bajo el header nuevo.
 ]
 
 
@@ -283,13 +290,28 @@ async def _correr_una_conexion(wallets: dict, vistos: set) -> set:
                 # contrario). Requiere mejor_ask real para evaluar el
                 # micro-bucket -- sin libro consultado con éxito, no se
                 # puede decidir nada (fail-closed, no "permitir por defecto").
+                #
+                # 27-Ago noche: DOS guardianes independientes, mismo patrón
+                # que WALLET_MIRROR cripto (wallet_mirror_executor_dryrun.py)
+                # -- (1) whitelist estática pares_permitidos_live (editada a
+                # mano por Javi, categoria#tipo#lo:hi), (2) gate VIVO
+                # (sports_wallet_mirror_gate_bucket.evaluar(), regenerado a
+                # diario) que puede vetar automáticamente un bucket ya
+                # aprobado si empieza a sangrar dinero real (kill switch),
+                # sin que nadie tenga que tocar la whitelist a mano.
                 gate_veredicto = "sin_libro"
+                gate_bucket_veredicto = None
                 stake_sim = 0.0
                 cb_bloquea = False
                 decision_dry_run = "NO_dispara"
                 if isinstance(mejor_ask, (int, float)):
                     ok_operar, motivo_guard = _guard.puede_operar_live(categoria, info["tipo"], precio=mejor_ask)
                     gate_veredicto = motivo_guard if not ok_operar else "permitido"
+                    if ok_operar:
+                        gate_bucket_veredicto = _gate.evaluar(categoria, info["tipo"], mejor_ask)["veredicto"]
+                        if gate_bucket_veredicto != "bueno_confirmado":
+                            ok_operar = False
+                            gate_veredicto = f"gate_bucket={gate_bucket_veredicto}"
                     if ok_operar:
                         cb_bloquea = _stake.bloquear_por_circuit_breaker(lambda m: _log(f"circuit breaker: {m}"))
                         if not cb_bloquea:
@@ -308,6 +330,29 @@ async def _correr_una_conexion(wallets: dict, vistos: set) -> set:
                                             tokens_orden[mirror_idx], mejor_ask, stake_sim,
                                             market_id_log=condition_id)
                                         _log(f"  {'EJECUTADO' if resultado.get('ok') else 'ERROR'}: {resultado}")
+                                        if resultado.get("ok"):
+                                            # 27-Ago noche: sin esto, un trade real se enviaba
+                                            # pero NUNCA se registraba -- bankroll_actual()/
+                                            # circuit breakers habrían quedado ciegos a él para
+                                            # siempre (hallazgo real, corregido antes del primer
+                                            # trade real, ver vigia_sports_micro_bucket_kill_
+                                            # switch_wallet_mirror.py y sports_resolve.py).
+                                            _trade.registrar_trade({
+                                                "timestamp_utc": datetime.now(timezone.utc).isoformat(timespec="seconds"),
+                                                "market_id": condition_id,
+                                                "question": payload.get("slug", ""),
+                                                "end_date": "",
+                                                "categoria": categoria, "tipo": info["tipo"],
+                                                "direction": str(mirror_idx),
+                                                "stake_eur": stake_sim,
+                                                "entry_price": resultado.get("entry_price", mejor_ask),
+                                                "edge_neto": edge_frac,
+                                                "status": "OPEN",
+                                                "close_timestamp": "", "exit_price": "",
+                                                "outcome_real": "", "fee_eur": resultado.get("fee_eur", 0.0),
+                                                "pnl_bruto_eur": "", "pnl_neto_eur": "",
+                                                "notas": f"wallet_mirror wallet={wallet} slip={resultado.get('slip_real','')}",
+                                            })
 
                 fila = {
                     "timestamp_utc": datetime.now(timezone.utc).isoformat(timespec="milliseconds"),
@@ -328,6 +373,7 @@ async def _correr_una_conexion(wallets: dict, vistos: set) -> set:
                     "ratio_vs_stake_mirror": fill.get("ratio_vs_stake", ""),
                     "cumple_filtro_precio": cumple_filtro_precio,
                     "gate_veredicto": gate_veredicto,
+                    "gate_bucket_veredicto": gate_bucket_veredicto or "",
                     "stake_sim_eur": stake_sim,
                     "circuit_breaker_bloquea": int(cb_bloquea),
                     "decision_dry_run": decision_dry_run,
