@@ -74,11 +74,23 @@ def _limpiar_orden_en_curso() -> None:
         log(f"  ⚠️ fallo al borrar orden_en_curso.json: {e}")
 
 
-def ejecutar_orden_polymarket(market_id: str, direction: str, stake_eur: float,
-                               entry_price: float) -> dict:
-    """Ejecuta orden real FOK (fill-or-kill) en Polymarket. direction:
-    "YES" o "NO". entry_price: precio del lado YES del mercado (si
-    direction="NO", se resuelve 1-entry_price aquí, igual que cripto).
+def ejecutar_orden_token(token_id: str, precio: float, stake_eur: float,
+                          market_id_log: str = "") -> dict:
+    """Ejecuta orden real FOK (fill-or-kill) en Polymarket para un
+    token_id YA RESUELTO por el caller. `precio` es el precio del LADO
+    DEL TOKEN que se compra (no siempre el lado YES -- el caller resuelve
+    SEGUIR/FADE -> qué token_id y qué precio antes de llamar aquí).
+
+    Deliberadamente NO recibe market_id/condition_id + resuelve tokens
+    internamente (a diferencia de live_trade.py/weather_live_trade.py):
+    en sports, el caller natural (sports_wallet_mirror_sniper.py) ya
+    tiene el token_id correcto vía `_tokens_para_condition()` (resuelto
+    desde condition_id, no desde el market_id numérico de Gamma que
+    espera `gamma-api/markets/{market_id}`) -- pasar condition_id donde
+    se espera market_id habría sido un bug real de identificador
+    equivocado. Si algún día hace falta un camino que solo tenga
+    market_id, añadir una función de resolución explícita, no reusar
+    ésta a ciegas.
 
     Simplificado respecto a live_trade.py (cripto): sin veto_ballenas,
     sin requote contra edge_dir, sin veto CLV -- esos guardias no
@@ -86,17 +98,10 @@ def ejecutar_orden_polymarket(market_id: str, direction: str, stake_eur: float,
     el CALLER (sports_live_guard.py + sports_live_stake.py +
     verificar_circuit_breaker). Esta función solo firma y envía,
     reusando la mecánica CLOB de bajo nivel de live_trade.py."""
+    entry_price = precio
     try:
         client = _crypto_lt._get_clob_client()
         from py_clob_client_v2 import MarketOrderArgsV2, OrderType
-
-        yes_token, no_token, condition_id = get_token_ids(market_id)
-        if direction == "YES":
-            token_id = yes_token
-            precio = entry_price
-        else:
-            token_id = no_token
-            precio = round(1.0 - entry_price, 6)
 
         if stake_eur < MIN_ORDEN_CLOB_USD:
             log(f"  ⛔ Stake {stake_eur:.2f}€ < mínimo CLOB ${MIN_ORDEN_CLOB_USD:.2f} -- no se ejecuta")
@@ -107,7 +112,7 @@ def ejecutar_orden_polymarket(market_id: str, direction: str, stake_eur: float,
         _lock_f = open(TRADES_LOCK_PATH, "w")
         fcntl.flock(_lock_f, fcntl.LOCK_EX)
         try:
-            _marcar_orden_en_curso(market_id, direction)
+            _marcar_orden_en_curso(market_id_log or token_id, "BUY")
             # Reintento con stake desplazado +-0.01€ -- mismo bug de
             # precisión decimal de la librería que ya se cazó en cripto/
             # weather (_parchear_redondeo_clob ya debería evitarlo casi
@@ -142,7 +147,7 @@ def ejecutar_orden_polymarket(market_id: str, direction: str, stake_eur: float,
         fee = float(resp.get("feeRateBps", 0)) / 10000 * stake_eur
         slip_real = round(filled_price - precio, 4)
 
-        log(f"  ✅ Orden ejecutada: {direction} market={market_id} "
+        log(f"  ✅ Orden ejecutada: token={token_id} market={market_id_log or '?'} "
             f"stake={stake_eur:.2f}€ precio={filled_price:.4f} slip={slip_real:+.4f} order_id={order_id}")
         return {"ok": True, "order_id": order_id, "entry_price": filled_price,
                 "fee_eur": fee, "slip_real": slip_real, "error": ""}

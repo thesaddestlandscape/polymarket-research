@@ -44,7 +44,21 @@ from pathlib import Path
 import requests
 import websockets
 
+import sports_live_guard as _guard
+import sports_live_stake as _stake
+
 REPO = Path(__file__).resolve().parent
+
+# 27-Ago: conexión explícita a la infraestructura live de sports
+# (sports_live_guard.py/sports_live_stake.py/sports_live_trade.py,
+# construida el mismo día). DRY_RUN=True SIEMPRE aquí -- activar
+# DRY_RUN=False requiere aprobación explícita de Javi en una sesión
+# futura, con el depósito ya indicado en config_live_sports.json y el
+# checklist de promoción completo (incl. n>=40) para la tupla concreta.
+# Import de sports_live_trade.ejecutar_orden_token() se hace DENTRO
+# de la rama DRY_RUN=False (import perezoso) para no forzar
+# credenciales del CLOB en el camino puramente observacional de hoy.
+DRY_RUN = True
 sys.path.insert(0, str(REPO))
 
 from sports_wallet_edge_tracker import clasificar  # noqa: E402
@@ -92,6 +106,7 @@ COLUMNS = [
     "acierto", "resolved_ts", "lag_deteccion_s",
     "libro_ok", "mejor_ask_mirror", "profundidad_eur_mirror", "ratio_vs_stake_mirror",
     "cumple_filtro_precio",
+    "gate_veredicto", "stake_sim_eur", "circuit_breaker_bloquea", "decision_dry_run",
 ]
 
 
@@ -261,6 +276,39 @@ async def _correr_una_conexion(wallets: dict, vistos: set) -> set:
                     cumple_filtro_precio = int(mejor_ask >= UMBRAL_PRECIO_SEGUIR)
                 else:
                     cumple_filtro_precio = ""  # FADE: n insuficiente para fijar umbral propio (ver nota arriba)
+
+                # 27-Ago: evaluación de la infraestructura live (fail-closed
+                # por diseño -- switch OFF y whitelist vacía hoy, así que
+                # esto siempre da "no se ejecuta" mientras Javi no decida lo
+                # contrario). Requiere mejor_ask real para evaluar el
+                # micro-bucket -- sin libro consultado con éxito, no se
+                # puede decidir nada (fail-closed, no "permitir por defecto").
+                gate_veredicto = "sin_libro"
+                stake_sim = 0.0
+                cb_bloquea = False
+                decision_dry_run = "NO_dispara"
+                if isinstance(mejor_ask, (int, float)):
+                    ok_operar, motivo_guard = _guard.puede_operar_live(categoria, info["tipo"], precio=mejor_ask)
+                    gate_veredicto = motivo_guard if not ok_operar else "permitido"
+                    if ok_operar:
+                        cb_bloquea = _stake.bloquear_por_circuit_breaker(lambda m: _log(f"circuit breaker: {m}"))
+                        if not cb_bloquea:
+                            edge_frac = abs(info["edge_pp"]) / 100.0
+                            stake_info = _stake.calcular_stake(edge_frac, categoria, info["tipo"], direction=info["tipo"])
+                            stake_sim = stake_info["stake_eur"]
+                            if stake_info["viable"]:
+                                decision_dry_run = "DISPARARIA"
+                                if not DRY_RUN:
+                                    import sports_live_trade as _trade
+                                    tokens_orden = _tokens_para_condition(condition_id)
+                                    if tokens_orden is None:
+                                        _log(f"  ⚠️ no se pudo resolver token_id para {condition_id}, no se ejecuta")
+                                    else:
+                                        resultado = _trade.ejecutar_orden_token(
+                                            tokens_orden[mirror_idx], mejor_ask, stake_sim,
+                                            market_id_log=condition_id)
+                                        _log(f"  {'EJECUTADO' if resultado.get('ok') else 'ERROR'}: {resultado}")
+
                 fila = {
                     "timestamp_utc": datetime.now(timezone.utc).isoformat(timespec="milliseconds"),
                     "trade_timestamp": ws_ts,
@@ -279,6 +327,10 @@ async def _correr_una_conexion(wallets: dict, vistos: set) -> set:
                     "profundidad_eur_mirror": fill.get("profundidad_eur", ""),
                     "ratio_vs_stake_mirror": fill.get("ratio_vs_stake", ""),
                     "cumple_filtro_precio": cumple_filtro_precio,
+                    "gate_veredicto": gate_veredicto,
+                    "stake_sim_eur": stake_sim,
+                    "circuit_breaker_bloquea": int(cb_bloquea),
+                    "decision_dry_run": decision_dry_run,
                 }
                 _escribir_fila(fila)
                 n_matches += 1
