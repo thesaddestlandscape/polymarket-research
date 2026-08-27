@@ -389,7 +389,7 @@
     -0.2732,
     0.5573
    ],
-   "p_bh": 0.8226,
+   "p_bh": 0.8859,
    "veredicto": "sin_concluir"
   },
   "0.60": {
@@ -573,17 +573,17 @@
    "veredicto": "sin_concluir"
   },
   "0.40": {
-   "n": 29,
-   "hit": 0.5172,
-   "pnl_medio": 0.2011,
-   "ask_medio": 0.4234,
-   "wilson90lo": 0.3698,
-   "p_binomial": 0.2014,
+   "n": 31,
+   "hit": 0.4839,
+   "pnl_medio": 0.1236,
+   "ask_medio": 0.4248,
+   "wilson90lo": 0.3436,
+   "p_binomial": 0.3123,
    "split_half": [
-    0.675,
-    -0.2411
+    0.7165,
+    -0.4321
    ],
-   "p_bh": 0.8057,
+   "p_bh": 0.9553,
    "veredicto": "sin_concluir"
   },
   "0.65": {
@@ -609,15 +609,15 @@
    "veredicto": "n_insuficiente"
   },
   "0.70": {
-   "n": 15,
-   "hit": 0.4,
-   "pnl_medio": -0.456,
-   "ask_medio": 0.728,
-   "wilson90lo": 0.2232,
-   "p_binomial": 0.9984,
+   "n": 16,
+   "hit": 0.4375,
+   "pnl_medio": -0.4064,
+   "ask_medio": 0.7288,
+   "wilson90lo": 0.2576,
+   "p_binomial": 0.9968,
    "split_half": [
-    -0.4237,
-    -0.4843
+    -0.4957,
+    -0.3171
    ],
    "p_bh": 1.0,
    "veredicto": "sin_concluir"
@@ -633,11 +633,11 @@
     0.2002,
     -0.0312
    ],
-   "p_bh": 0.9281,
+   "p_bh": 0.9553,
    "veredicto": "sin_concluir"
   },
   "0.90": {
-   "n": 9,
+   "n": 10,
    "veredicto": "n_insuficiente"
   },
   "0.45": {
@@ -711,7 +711,7 @@
    "veredicto": "n_insuficiente"
   },
   "0.10": {
-   "n": 3,
+   "n": 4,
    "veredicto": "n_insuficiente"
   },
   "0.00": {
@@ -1135,7 +1135,7 @@
     -0.3187,
     0.5553
    ],
-   "p_bh": 0.9383,
+   "p_bh": 0.9553,
    "veredicto": "sin_concluir"
   },
   "0.40": {
@@ -1279,7 +1279,7 @@
    "veredicto": "n_insuficiente"
   },
   "0.40": {
-   "n": 7,
+   "n": 8,
    "veredicto": "n_insuficiente"
   },
   "0.70": {
@@ -1299,7 +1299,7 @@
    "veredicto": "n_insuficiente"
   },
   "0.55": {
-   "n": 5,
+   "n": 8,
    "veredicto": "n_insuficiente"
   },
   "0.75": {
@@ -1323,6 +1323,10 @@
    "veredicto": "n_insuficiente"
   },
   "0.15": {
+   "n": 1,
+   "veredicto": "n_insuficiente"
+  },
+  "0.85": {
    "n": 1,
    "veredicto": "n_insuficiente"
   }
@@ -1413,7 +1417,7 @@
    "veredicto": "n_insuficiente"
   },
   "0.55": {
-   "n": 3,
+   "n": 4,
    "veredicto": "n_insuficiente"
   },
   "0.70": {
@@ -1641,7 +1645,7 @@
     0.6598,
     -0.2519
    ],
-   "p_bh": 0.8874,
+   "p_bh": 0.9508,
    "veredicto": "sin_concluir"
   },
   "0.50": {
@@ -1827,6 +1831,22 @@
   "0.30": {
    "n": 1,
    "veredicto": "n_insuficiente"
+  },
+  "0.60": {
+   "n": 1,
+   "veredicto": "n_insuficiente"
+  },
+  "0.25": {
+   "n": 1,
+   "veredicto": "n_insuficiente"
+  },
+  "0.45": {
+   "n": 1,
+   "veredicto": "n_insuficiente"
+  },
+  "0.50": {
+   "n": 1,
+   "veredicto": "n_insuficiente"
   }
  },
  "Soccer-spl#FADE": {
@@ -1873,6 +1893,16 @@
    "veredicto": "n_insuficiente"
   },
   "0.05": {
+   "n": 1,
+   "veredicto": "n_insuficiente"
+  }
+ },
+ "Cricket#SEGUIR": {
+  "0.70": {
+   "n": 1,
+   "veredicto": "n_insuficiente"
+  },
+  "0.60": {
    "n": 1,
    "veredicto": "n_insuficiente"
   }
