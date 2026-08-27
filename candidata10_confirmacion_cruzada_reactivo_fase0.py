@@ -56,6 +56,7 @@ REPO = Path(__file__).resolve().parent
 sys.path.insert(0, str(REPO))
 
 from wallet_mirror_tracker import _archivos_activity, _fillability_mirror  # noqa: E402
+from market_id_resolver import resolver_inverso  # noqa: E402
 
 DIR_SHADOW = REPO / "data" / "shadow"
 OUT = DIR_SHADOW / "candidata10_confirmacion_cruzada_reactivo_fase0.csv"
@@ -114,7 +115,23 @@ def _escribir_auditoria(fila: dict) -> None:
 def _registrar_prediccion(condition_id: str, marco: str, lado: str, py: float) -> None:
     """Mismo formato que candidata9_bot_consenso_reactivo_fase0.py --
     shadow_resolve.py/shadow_postmortem.py lo resuelven sin duplicar
-    lógica aquí."""
+    lógica aquí.
+
+    27-Ago, bug real corregido: `market_id` exige el ID numérico de
+    gamma-api (shadow_resolve.py::estado_mercado() hace GET /markets/
+    {market_id}) -- escribir el condition_id crudo ahí daba 422
+    Unprocessable Entity en cada intento de resolución, así que ninguna
+    predicción de este observador se resolvía nunca (n=0 permanente en
+    results.csv pese a cientos de señales logueadas desde su despliegue
+    horas antes). Se resuelve aquí vía market_id_resolver.resolver_inverso()
+    antes de escribir; si no se puede resolver (condition_id demasiado
+    nuevo, ni en el índice persistido ni en el CSV de mercados de hoy) se
+    descarta la fila -- fail-closed, mejor no loguear que loguear algo que
+    nunca podrá resolverse."""
+    market_id = resolver_inverso(condition_id)
+    if not market_id:
+        _log(f"aviso: no se pudo resolver market_id para condition_id={condition_id} -- predicción descartada")
+        return
     ts = datetime.now(timezone.utc).isoformat(timespec="seconds")
     archivo = DIR_SHADOW / f"predictions_{ts[:10]}.csv"
     subtype = f"{ACTIVO_OBJETIVO}#{marco}"
@@ -141,7 +158,7 @@ def _registrar_prediccion(condition_id: str, marco: str, lado: str, py: float) -
                             "subtype", "apuesta", "features",
                         ])
                     w.writerow([
-                        ts, STRATEGY, condition_id, "", "",
+                        ts, STRATEGY, market_id, "", "",
                         "0.02", f"{py:.4f}", f"{prob_yes:.4f}",
                         f"{edge:.4f}", f"{edge:.4f}", f"{edge:.4f}", decision,
                         "candidata10_confirmacion_cruzada_reactivo", subtype, "1.05", features,

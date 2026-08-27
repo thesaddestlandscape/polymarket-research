@@ -134,6 +134,78 @@ def resolver_lote(market_ids: list[str], usar_api_fallback: bool = True,
     return resultado
 
 
+_INVERSO_CACHE = {"mtime": None, "mapa": {}}
+_HOY_CACHE = {"mtime": None, "mapa": {}}
+
+
+def _indice_inverso() -> dict:
+    """{condition_id: market_id}, cacheado en memoria por proceso e
+    invalidado si INDEX_PATH cambia en disco (otro proceso lo actualizó).
+    Construido invirtiendo el índice persistido -- ningún condition_id
+    debería repetirse entre dos market_id distintos (1:1 real), así que
+    la inversión es segura sin necesidad de detectar colisiones."""
+    try:
+        mtime = os.path.getmtime(INDEX_PATH)
+    except OSError:
+        mtime = None
+    if _INVERSO_CACHE["mtime"] != mtime:
+        mapa = _cargar_indice()
+        _INVERSO_CACHE["mapa"] = {cid: mid for mid, cid in mapa.items() if cid}
+        _INVERSO_CACHE["mtime"] = mtime
+    return _INVERSO_CACHE["mapa"]
+
+
+def _indice_inverso_hoy() -> dict:
+    """Fallback para condition_id de mercados TAN recientes que el índice
+    persistido (regenerado a mano vía --build) todavía no los tiene --
+    escanea SOLO el CSV de mercados de hoy (data/markets/YYYY-MM-DD.csv,
+    refrescado ~cada minuto por el scanner), cacheado por mtime igual que
+    arriba. No escanea el histórico completo (caro, ~1.3M filas/día) salvo
+    que el condition_id buscado sea de hoy -- caso de uso real: ejecutores
+    reactivos (candidata9/10) resolviendo condition_id de mercados que
+    acaban de abrir."""
+    hoy = time.strftime("%Y-%m-%d", time.gmtime())
+    path = os.path.join(BASE, "data", "markets", f"{hoy}.csv")
+    try:
+        mtime = os.path.getmtime(path)
+    except OSError:
+        return {}
+    if _HOY_CACHE["mtime"] != mtime:
+        try:
+            df = pd.read_csv(path, usecols=["market_id", "condition_id"], dtype=str)
+        except Exception:
+            return _HOY_CACHE["mapa"]
+        df = df.dropna(subset=["market_id", "condition_id"])
+        _HOY_CACHE["mapa"] = dict(zip(df["condition_id"], df["market_id"]))
+        _HOY_CACHE["mtime"] = mtime
+    return _HOY_CACHE["mapa"]
+
+
+def resolver_inverso(condition_id: str, persistir: bool = True) -> str | None:
+    """condition_id -> market_id (dirección inversa de resolver()). Usada
+    por observadores reactivos que reciben condition_id vía websocket
+    (fetch_polymarket_activity_ws.py) y necesitan el market_id numérico
+    real para que shadow_resolve.py pueda consultar gamma-api (que exige
+    market_id, un condition_id le da 422 Unprocessable Entity -- bug real
+    encontrado 27-Ago: candidata9/10_reactivo_fase0.py escribían el
+    condition_id crudo en la columna market_id de predictions.csv, así que
+    ninguna de sus predicciones se resolvía nunca, n=0 permanente pese a
+    cientos de señales logueadas). None si no se encuentra en ningún lado."""
+    if not condition_id:
+        return None
+    mid = _indice_inverso().get(condition_id)
+    if mid:
+        return mid
+    mid = _indice_inverso_hoy().get(condition_id)
+    if mid and persistir:
+        mapa = _cargar_indice()
+        if mid not in mapa:
+            mapa[mid] = condition_id
+            _guardar_indice(mapa)
+            _INVERSO_CACHE["mtime"] = None  # fuerza recarga en la próxima llamada
+    return mid
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--build", action="store_true",

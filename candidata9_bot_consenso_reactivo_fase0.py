@@ -60,6 +60,7 @@ REPO = Path(__file__).resolve().parent
 sys.path.insert(0, str(REPO))
 
 from wallet_mirror_tracker import _archivos_activity, _fillability_mirror  # noqa: E402
+from market_id_resolver import resolver_inverso  # noqa: E402
 
 DIR_SHADOW = REPO / "data" / "shadow"
 OUT = DIR_SHADOW / "candidata9_bot_consenso_reactivo_fase0.csv"
@@ -120,7 +121,18 @@ def _registrar_prediccion(condition_id: str, market_slug: str, lado_mayoria: str
                            py: float, restante_s: float | None) -> None:
     """Mismo formato que el resto de ejecutores de baja latencia --
     shadow_resolve.py/shadow_postmortem.py lo resuelven sin duplicar
-    lógica aquí."""
+    lógica aquí.
+
+    27-Ago, bug real corregido (mismo hallazgo que en el gemelo
+    candidata10_confirmacion_cruzada_reactivo_fase0.py): `market_id`
+    exige el ID numérico de gamma-api, el condition_id crudo daba 422 y
+    ninguna predicción se resolvía nunca. Resuelto vía
+    market_id_resolver.resolver_inverso(); si no resuelve, se descarta
+    fail-closed."""
+    market_id = resolver_inverso(condition_id)
+    if not market_id:
+        _log(f"aviso: no se pudo resolver market_id para condition_id={condition_id} -- predicción descartada")
+        return
     ts = datetime.now(timezone.utc).isoformat(timespec="seconds")
     archivo = DIR_SHADOW / f"predictions_{ts[:10]}.csv"
     subtype = f"{ACTIVO}#{MARCO}"
@@ -148,7 +160,7 @@ def _registrar_prediccion(condition_id: str, market_slug: str, lado_mayoria: str
                             "subtype", "apuesta", "features",
                         ])
                     w.writerow([
-                        ts, STRATEGY, condition_id, "", "",
+                        ts, STRATEGY, market_id, "", "",
                         f"{horas_venc:.4f}", f"{py:.4f}", f"{prob_yes:.4f}",
                         f"{edge:.4f}", f"{edge:.4f}", f"{edge:.4f}", decision,
                         "candidata9_bot_consenso_reactivo", subtype, "1.05", features,
