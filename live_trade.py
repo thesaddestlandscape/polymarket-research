@@ -3025,6 +3025,7 @@ def _procesar_pendientes_ballenas(pendientes: dict, config: dict, params: dict,
             f"({espera_seg if espera_seg is not None else '?'}s, {entrada.get('intentos', 0)} intentos)")
         if resultado.get("ok"):
             enviar_telegram(
+                f"🪙 CRIPTO\n"
                 f"🎯🐋 *Orden live ejecutada (tras esperar confirmación de ballenas)*\n"
                 f"Estrategia: {strategy}#{subtype}\n"
                 f"Dirección: {direction}\n"
@@ -3036,6 +3037,7 @@ def _procesar_pendientes_ballenas(pendientes: dict, config: dict, params: dict,
             )
         else:
             enviar_telegram(
+                f"🪙 CRIPTO\n"
                 f"❌🐋 *Orden live ERROR (tras esperar confirmación de ballenas)*\n"
                 f"{strategy}#{subtype} {direction}\n"
                 f"{str(resultado.get('error', ''))[:200]}"
@@ -3692,6 +3694,7 @@ def main():
 
         if resultado["ok"]:
             enviar_telegram(
+                f"🪙 CRIPTO\n"
                 f"🎯 *Orden live ejecutada*\n"
                 f"Estrategia: {strategy}#{subtype}\n"
                 f"Dirección: {dec}\n"
@@ -3702,6 +3705,7 @@ def main():
             )
         else:
             enviar_telegram(
+                f"🪙 CRIPTO\n"
                 f"❌ *Orden live ERROR*\n"
                 f"{strategy}#{subtype} {dec}\n"
                 f"{resultado.get('error', '')[:200]}"

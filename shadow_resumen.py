@@ -530,9 +530,53 @@ def _telegram_periodico(ahora):
     try:
         _post(msg_live)
         LAST_TG_PATH.write_text(str(ahora_ts))
-        print(f"  [telegram] Mensaje live enviado ({ahora.strftime('%H:%M UTC')})")
+        print(f"  [telegram] Mensaje live CRIPTO enviado ({ahora.strftime('%H:%M UTC')})")
     except Exception as e:
         print(f"  [telegram] Error: {e}")
+
+    # ════════════════════════════════════════════════════════════════════════
+    # MENSAJE 2 — SPORTS (dinero real, mismo /update -- petición explícita
+    # Javi 27-Ago: quiere las dos infos juntas en el mismo comando, con
+    # indicador claro de cuál es cuál, sin necesidad de un bot de Telegram
+    # separado).
+    # ════════════════════════════════════════════════════════════════════════
+    try:
+        import sports_live_guard
+        import sports_live_stake
+        est_sp = sports_live_guard.estado_live()
+        bkr_sp = sports_live_stake.bankroll_actual()
+        pares_sp = est_sp["pares_permitidos"]
+        switch_sp_txt = "✅ ON" if est_sp["switch"] else "❌ OFF"
+        pares_sp_txt = f"{len(pares_sp)} activo(s)" if pares_sp else "0 (fail-closed, nada opera)"
+
+        trades_sp_csv = Path("data/sports/trades.csv")
+        n_sp_total = n_sp_hoy = w_sp_total = 0
+        if trades_sp_csv.exists() and trades_sp_csv.stat().st_size > 100:
+            cerrados_sp = [r for r in csv.DictReader(open(trades_sp_csv, encoding="utf-8"))
+                           if r.get("status") == "CLOSED"]
+            n_sp_total = len(cerrados_sp)
+            n_sp_hoy = sum(1 for r in cerrados_sp
+                           if (r.get("close_timestamp", "") or "").startswith(hoy))
+            w_sp_total = sum(1 for r in cerrados_sp if float(r.get("pnl_neto_eur") or 0) > 0)
+
+        if n_sp_total:
+            wr_sp = w_sp_total / n_sp_total * 100
+            sp_perf = f"Trades: {n_sp_total}  |  WR {wr_sp:.0f}%  |  hoy {n_sp_hoy} cerrados"
+        else:
+            sp_perf = "Sin trades cerrados aún"
+
+        msg_sports = (
+            f"⚽ *BOT SPORTS — dinero real* — {ahora.strftime('%H:%M UTC')}\n"
+            f"\n"
+            f"Bankroll: *{bkr_sp:.2f}€*\n"
+            f"{sp_perf}\n"
+            f"\n"
+            f"Switch: {switch_sp_txt}  |  pares_permitidos_live: {pares_sp_txt}"
+        )
+        _post(msg_sports)
+        print(f"  [telegram] Mensaje live SPORTS enviado ({ahora.strftime('%H:%M UTC')})")
+    except Exception as e:
+        print(f"  [telegram] Error generando/enviando mensaje SPORTS: {type(e).__name__}: {e}")
 
 
 if __name__ == "__main__":
