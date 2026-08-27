@@ -83,6 +83,61 @@ def compute_mirror():
         "senales_recientes": senales_recientes,
     }
 
+TRADES_LIVE_CSV = DIR_SPORTS / "trades.csv"
+CONFIG_LIVE_SPORTS = DIR_SPORTS / "config_live_sports.json"
+SWITCH_LIVE_SPORTS = DIR_SPORTS / "LIVE_MODE_ON"
+
+
+def compute_live():
+    """27-Ago: sección Live -- mismo espíritu que compute_live_data() del
+    dashboard de cripto, pero sports todavía no tiene dinero real
+    desplegado (config_live_sports.json::depositos=[] hoy), así que se
+    limita a lo que hay: estado del switch/circuit-breaker/whitelist +
+    trades reales (0 hoy, tabla lista para cuando empiecen) + cuántas
+    señales del sniper YA habrían disparado si el switch estuviera ON
+    (columna decision_dry_run, útil para ver el ritmo real antes de
+    mandar dinero)."""
+    try:
+        import sports_live_guard as _g
+        import sports_live_stake as _s
+        estado = _g.estado_live()
+        bkr = _s.bankroll_actual()
+        cb_disparado, cb_motivo = _s.verificar_circuit_breaker()
+        pnl_hoy = _s.pnl_hoy()
+    except Exception as e:
+        return {"error": str(e)}
+
+    trades = []
+    if TRADES_LIVE_CSV.exists():
+        import csv as _csv
+        trades = list(_csv.DictReader(open(TRADES_LIVE_CSV, encoding="utf-8")))
+    closed = [t for t in trades if t.get("status") == "CLOSED"]
+    open_trades = [t for t in trades if t.get("status") == "OPEN"]
+    pnl_total = sum(float(t.get("pnl_neto_eur") or 0) for t in closed)
+
+    n_dispararia = 0
+    if MIRROR_CSV.exists():
+        import csv as _csv
+        for r in _csv.DictReader(open(MIRROR_CSV, encoding="utf-8")):
+            if r.get("decision_dry_run") == "DISPARARIA":
+                n_dispararia += 1
+
+    return {
+        "switch": estado["switch"],
+        "pares_permitidos": estado["pares_permitidos"],
+        "bankroll": round(bkr, 2),
+        "pnl_hoy": round(pnl_hoy, 2),
+        "pnl_total_cerrado": round(pnl_total, 2),
+        "circuit_breaker_disparado": cb_disparado,
+        "circuit_breaker_motivo": cb_motivo,
+        "n_trades_reales": len(trades),
+        "n_open": len(open_trades),
+        "n_closed": len(closed),
+        "n_señales_dispararia_hoy": n_dispararia,
+        "trades_recientes": sorted(trades, key=lambda t: t.get("timestamp_utc", ""), reverse=True)[:20],
+    }
+
+
 _cache = {"ts": 0.0, "data": None}
 _CACHE_TTL = 30.0
 
@@ -123,6 +178,7 @@ def compute_data():
         "top_wallets": top_wallets,
         "peores_wallets": peores_wallets,
         "mirror": compute_mirror(),
+        "live": compute_live(),
     }
 
 
@@ -157,6 +213,12 @@ th{color:#8b949e;font-weight:500}
 <div class="aviso">Descubrimiento: ballenas ≥$1000 + firehose completo, shuffle test + BH-FDR. Wallet Mirror
 (18-Ago): sniper en tiempo real con profundidad de libro real, 100% DRY_RUN, sin dinero real.</div>
 <div class="stats" id="stats"></div>
+<h2>💰 Live — dinero real</h2>
+<div id="aviso-live"></div>
+<div class="stats" id="stats-live"></div>
+<table><thead><tr><th>Hora</th><th>Categoría</th><th>Tipo</th><th>Dirección</th>
+<th>Stake</th><th>Entrada</th><th>Estado</th><th>PnL</th></tr></thead>
+<tbody id="tbody-live-trades"></tbody></table>
 <h2>🪞 Wallet Mirror — actividad en tiempo real</h2>
 <div class="stats" id="stats-mirror"></div>
 <div id="aviso-concentracion"></div>
@@ -186,6 +248,28 @@ async function refresh(){
     <div class="stat"><div class="v">${d.n_wallets_especialistas}</div><div class="l">wallets especialistas (&ge;80%% 1 categoría)</div></div>
     <div class="stat"><div class="v">${d.n_combos_validados}</div><div class="l">(wallet,categoría) con edge validado BH-FDR</div></div>
   `;
+  const l = d.live || {};
+  const switchTxt = l.switch ? '<span class="pos">ON</span>' : '<span class="neg">OFF</span>';
+  const cbTxt = l.circuit_breaker_disparado ? '<span class="neg">DISPARADO</span>' : '<span class="pos">OK</span>';
+  document.getElementById('stats-live').innerHTML = `
+    <div class="stat"><div class="v">${switchTxt}</div><div class="l">switch live</div></div>
+    <div class="stat"><div class="v">${(l.pares_permitidos||[]).length}</div><div class="l">micro-buckets en whitelist</div></div>
+    <div class="stat"><div class="v">${l.bankroll!=null?l.bankroll.toFixed(2)+'€':'—'}</div><div class="l">bankroll actual</div></div>
+    <div class="stat"><div class="v" style="color:${(l.pnl_hoy||0)>=0?'#3fb950':'#f85149'}">${l.pnl_hoy!=null?(l.pnl_hoy>=0?'+':'')+l.pnl_hoy.toFixed(2)+'€':'—'}</div><div class="l">PnL hoy</div></div>
+    <div class="stat"><div class="v">${cbTxt}</div><div class="l">circuit breaker</div></div>
+    <div class="stat"><div class="v">${l.n_trades_reales||0}</div><div class="l">trades reales (${l.n_open||0} abiertos)</div></div>
+    <div class="stat"><div class="v">${l.n_señales_dispararia_hoy||0}</div><div class="l">señales que YA dispararían si switch=ON</div></div>
+  `;
+  document.getElementById('aviso-live').innerHTML = (l.pares_permitidos||[]).length===0
+    ? '<div class="aviso">⚠️ Whitelist vacía -- fail-closed, ninguna señal puede operar con dinero real todavía.</div>'
+    : (l.circuit_breaker_disparado ? `<div class="aviso">🛑 Circuit breaker disparado: ${l.circuit_breaker_motivo}</div>` : '');
+  document.getElementById('tbody-live-trades').innerHTML = (l.trades_recientes||[]).map(t => {
+    const pnl = t.pnl_neto_eur ? parseFloat(t.pnl_neto_eur) : null;
+    return `<tr><td>${(t.timestamp_utc||'').replace('T',' ').slice(0,16)}</td><td>${t.categoria||''}</td>
+      <td>${t.tipo||''}</td><td>${t.direction||''}</td><td>${t.stake_eur||''}€</td>
+      <td>${t.entry_price||''}</td><td>${t.status||''}</td>
+      <td class="${pnl>=0?'pos':'neg'}">${pnl!=null?pnl.toFixed(2)+'€':'—'}</td></tr>`;
+  }).join('') || '<tr><td colspan="8" style="text-align:center;color:#8b949e">Sin trades reales todavía</td></tr>';
   const m = d.mirror || {};
   document.getElementById('stats-mirror').innerHTML = `
     <div class="stat"><div class="v">${m.n_matches||0}</div><div class="l">señales detectadas (${m.n_seguir||0} SEGUIR / ${m.n_fade||0} FADE)</div></div>
