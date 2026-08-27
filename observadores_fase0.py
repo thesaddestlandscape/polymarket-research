@@ -112,6 +112,7 @@ import ballenas_confirmadas_15m_buyno_depth_fase0
 import libro_multinivel_fase0
 import gbm_late_reactivo_fase0
 import candidata9_bot_consenso_reactivo_fase0
+import candidata10_confirmacion_cruzada_reactivo_fase0
 
 # (modulo, fichero_log_propio -- EXACTO el que ya usaba pipeline_watchdog.SCREEN_RESTART, nombre_funcion_log_a_reemplazar)
 OBSERVADORES = [
@@ -141,6 +142,7 @@ OBSERVADORES = [
     (libro_multinivel_fase0, "libro_multinivel_fase0.log", "_log"),
     (gbm_late_reactivo_fase0, "gbm_late_reactivo_fase0.log", "_log"),
     (candidata9_bot_consenso_reactivo_fase0, "candidata9_bot_consenso_reactivo_fase0.log", "_log"),
+    (candidata10_confirmacion_cruzada_reactivo_fase0, "candidata10_confirmacion_cruzada_reactivo_fase0.log", "_log"),
 ]
 
 
