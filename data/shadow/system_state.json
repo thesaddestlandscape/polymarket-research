@@ -1,9 +1,9 @@
 {
-  "timestamp_utc": "2026-08-28T00:27:51+00:00",
-  "bankroll_sim": 24383.6,
-  "pnl_total": 24363.6,
-  "n_ops": 289020,
-  "win_rate": 0.5802,
+  "timestamp_utc": "2026-08-28T00:34:31+00:00",
+  "bankroll_sim": 24383.18,
+  "pnl_total": 24363.18,
+  "n_ops": 289080,
+  "win_rate": 0.5801,
   "estrategias_activas": 541,
   "desactivadas": [
     "SMART_FLOW_1H",
@@ -47,7 +47,7 @@
       "n": 75
     }
   ],
-  "brier_medio": 0.2356,
+  "brier_medio": 0.2355,
   "clv_medio": 0.0251,
   "monitor_5min": {
     "ou_5m": {
