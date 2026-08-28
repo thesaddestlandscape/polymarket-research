@@ -53,6 +53,7 @@
   "sigma_h|gt|0.0063|BUY_NO",
   "sigma_h|gt|0.0064|BUY_NO",
   "sigma_h|gt|0.0065|BUY_NO",
+  "sigma_h|gt|0.0095|BUY_YES",
   "sigma_h|gt|0.01|BUY_YES"
  ],
  "GBM_LATE_15M#SOL#15min": [
@@ -165,6 +166,7 @@
   "sigma_h|gt|0.0102|BUY_NO",
   "sigma_h|gt|0.0103|BUY_NO",
   "sigma_h|gt|0.0104|BUY_NO",
+  "sigma_h|gt|0.0105|BUY_NO",
   "volumen_pendiente_norm|lt|0.0964|BUY_NO",
   "volumen_spike_ratio|gt|1.6234|BUY_NO",
   "volumen_spike_ratio|lt|2.8678|BUY_NO"
@@ -181,6 +183,7 @@
   "drift_60min|abs_gt|0.5168|BUY_YES",
   "drift_60min|abs_gt|0.5171|BUY_YES",
   "drift_60min|abs_gt|0.5186|BUY_YES",
+  "drift_60min|abs_gt|0.5207|BUY_YES",
   "ibs_20min|gt|0.6061|BUY_NO",
   "ibs_20min|gt|0.6154|BUY_NO",
   "ibs_20min|gt|0.7414|BUY_NO",
