@@ -3,15 +3,15 @@
   "wallet": "0x0df2626035c1fa0cc1c3a8e98f2a64ef21942d28",
   "activo": "BNB",
   "marco": "15m",
-  "n": 285,
+  "n": 288,
   "concentracion": 1.0,
-  "hit": 0.6561,
-  "edge_pp": 11.32,
-  "precio_medio": 0.5429,
+  "hit": 0.6562,
+  "edge_pp": 9.968,
+  "precio_medio": 0.5566,
   "cobertura_propia_n": 0,
   "cobertura_propia_ic_bayes": null,
   "primera_vez_visto": "2026-08-23T06:45:04+00:00",
-  "ultima_vez_visto": "2026-08-27T06:45:05+00:00",
-  "g_kelly": 0.00846
+  "ultima_vez_visto": "2026-08-28T06:45:02+00:00",
+  "g_kelly": 0.006073
  }
 }
