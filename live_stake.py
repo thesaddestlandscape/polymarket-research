@@ -203,9 +203,19 @@ def _capital_ajeno_en_wallet_compartida() -> float:
 def bankroll_actual() -> float:
     """Capital total: balance real on-chain (ver live_balance.py) si el
     cache está fresco, si no PNL de plan (inicial + trades cerrados).
-    Descuenta SIEMPRE el capital de sistemas hermanos que comparten la
-    misma wallet (sports/weather, ver _capital_ajeno_en_wallet_compartida)
-    -- el saldo on-chain crudo NO es capital de cripto en su totalidad.
+
+    ⚠️ NO restar aquí el capital de sistemas hermanos (sports/weather):
+    `real["total"]` ya viene neto de sports desde `live_balance.py::
+    fetch_balance_real()` (fix 27-Ago, `_capital_ajeno_en_wallet_
+    compartida()` restado ANTES de escribir el caché `balance_real.json`,
+    precisamente para que el dashboard/pnl_real de cripto no incluyeran el
+    dinero de sports). Restarlo otra vez aquí encima de `real["total"]`
+    era una RESTA DUPLICADA (bug real, encontrado 28-Ago con datos: wallet
+    13,493€, sports 5,00€, `total` cacheado ya neto=8,493€, pero
+    bankroll_actual() devolvía 3,493€ — el mismo 5€ de sports descontado
+    dos veces, desde el 27-Ago). `total_bruto` (wallet cruda, SIN restar)
+    es el único campo que conserva el dato pre-resta, para quien lo
+    necesite (ver `reconciliar_sports.py`) — `total` no.
 
     Decisión 13-Jul (aprobado Javi): el freno diario y el Kelly estaban
     anclados al PnL de *plan* (precio de entrada previsto), que diverge del
@@ -220,7 +230,7 @@ def bankroll_actual() -> float:
     """
     real = _balance_real_fresco()
     if real is not None:
-        return real["total"] - _capital_ajeno_en_wallet_compartida()
+        return real["total"]
     return _bankroll_ledger()
 
 
