@@ -1,38 +1,45 @@
 {
-  "ETH": {
-    "smart_money_consensus": 0.0222,
-    "n_trades_smart": 90,
-    "n_wallets_smart": 5,
-    "smart_money_consensus_ponderado": 0.083,
-    "n_wallets_smart_ponderado": 5
-  },
   "BTC": {
-    "smart_money_consensus": -0.0107,
-    "n_trades_smart": 562,
-    "n_wallets_smart": 6,
-    "smart_money_consensus_ponderado": 0.0262,
-    "n_wallets_smart_ponderado": 6
+    "smart_money_consensus": -0.0453,
+    "n_trades_smart": 729,
+    "n_wallets_smart": 3,
+    "smart_money_consensus_ponderado": -0.0374,
+    "n_wallets_smart_ponderado": 3
   },
-  "DOGE": {
-    "smart_money_consensus": 1.0,
-    "n_trades_smart": 2,
-    "n_wallets_smart": 1,
-    "smart_money_consensus_ponderado": 1.0,
-    "n_wallets_smart_ponderado": 1
+  "ETH": {
+    "smart_money_consensus": -0.0644,
+    "n_trades_smart": 295,
+    "n_wallets_smart": 2,
+    "smart_money_consensus_ponderado": -0.0611,
+    "n_wallets_smart_ponderado": 2
   },
-  "SOL": {
-    "smart_money_consensus": 0.5556,
-    "n_trades_smart": 9,
+  "XRP": {
+    "smart_money_consensus": 0.2414,
+    "n_trades_smart": 29,
     "n_wallets_smart": 1,
-    "smart_money_consensus_ponderado": 0.3694,
+    "smart_money_consensus_ponderado": 0.2089,
     "n_wallets_smart_ponderado": 1
   },
   "BNB": {
-    "smart_money_consensus": 0.5,
-    "n_trades_smart": 8,
+    "smart_money_consensus": 0.1053,
+    "n_trades_smart": 38,
     "n_wallets_smart": 1,
-    "smart_money_consensus_ponderado": 0.1628,
+    "smart_money_consensus_ponderado": 0.1345,
     "n_wallets_smart_ponderado": 1
   },
-  "_actualizado": "2026-08-28T21:00:21+00:00"
+  "DOGE": {
+    "smart_money_consensus": 0.2,
+    "n_trades_smart": 5,
+    "n_wallets_smart": 1,
+    "smart_money_consensus_ponderado": 0.2658,
+    "n_wallets_smart_ponderado": 1
+  },
+  "SOL": {
+    "smart_money_consensus": -0.0685,
+    "n_trades_smart": 73,
+    "n_wallets_smart": 1,
+    "smart_money_consensus_ponderado": -0.0493,
+    "n_wallets_smart_ponderado": 1
+  },
+  "_actualizado": "2026-08-28T21:24:04+00:00"
 }
