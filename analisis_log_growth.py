@@ -40,10 +40,24 @@ SLIPPAGE = 0.02  # misma constante que shadow_resolve.py:64
 N_MIN = 15       # regla del proyecto: ninguna conclusión con n<15
 
 
+# Vocabulario alterno de decisión: WALLET_MIRROR/RESOLUTION_SNIPER_NAIVE (y
+# cualquier estrategia futura sobre mercados Up/Down) usan "BUY_Down" en vez
+# de "BUY_NO" (CLAUDE.md pt.19 -- mismo vocabulario distinto que ya rompió
+# _grupos_desde_config() el 19-Ago). 28-Ago (/code-review, hallazgo real):
+# _retorno() solo comprobaba "BUY_NO" -- una tupla BUY_Down calculaba g_kelly
+# como si fuera BUY_YES (signo invertido, sin flip de precio). Inerte hoy
+# (ninguna de las 2 estrategias escribe en results.csv todavía), pero
+# cargar_tuplas_live() de analisis_gate_bucket_propio_fillable_03ago.py ya
+# incluye sus 20 tuplas live/candidato genéricamente -- el día que empiecen a
+# resolver en results.csv esto habría escrito g_kelly con signo equivocado
+# sin ningún aviso.
+_DECISIONES_NO = {"BUY_NO", "BUY_Down"}
+
+
 def _retorno(row: dict) -> float:
     p = float(row["precio_yes_mercado"])
     p = min(0.99, max(0.01, p))
-    if row["decision"] == "BUY_NO":
+    if row["decision"] in _DECISIONES_NO:
         p = 1 - p
     if row["acierto"] == "1":
         return (1 - p) / p - SLIPPAGE
