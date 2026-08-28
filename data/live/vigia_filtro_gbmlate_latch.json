@@ -7,6 +7,7 @@
  "GBM_LATE_15M#ETH#15min": [
   "hora_utc|lt|5.0|BUY_YES",
   "hora_utc|lt|6.0|BUY_YES",
+  "ibs_20min|gt|0.8642|BUY_NO",
   "ibs_20min|gt|0.8686|BUY_NO",
   "ibs_20min|gt|0.8701|BUY_NO",
   "ibs_20min|gt|0.8708|BUY_NO",
