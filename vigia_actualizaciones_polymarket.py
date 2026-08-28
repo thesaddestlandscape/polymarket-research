@@ -95,8 +95,16 @@ def _extraer_cuerpo_changelog(texto: str) -> str:
     i1 = texto.find(marca)
     i2 = texto.find(marca, i1 + 1) if i1 >= 0 else -1
     if i2 >= 0:
-        return texto[i2 + len(marca):].strip()
-    return texto
+        texto = texto[i2 + len(marca):].strip()
+    # 28-Ago: falso positivo real cazado -- un hint de atajo de teclado
+    # de la UI del doc site (Mintlify, "⌘ I" tipo "Ask AI"/command
+    # palette) aparece/desaparece entre fetches según estado de carga,
+    # sin relación con el contenido real del changelog. Filtrar líneas
+    # que sean SOLO un símbolo de atajo (⌘/⌃/⌥/⇧ + 1-2 caracteres) antes
+    # de hashear/diffear, para no disparar alertas de ruido de UI.
+    lineas = texto.splitlines()
+    lineas = [l for l in lineas if not re.fullmatch(r"[⌘⌃⌥⇧]\s*[A-Za-z0-9]{0,2}", l.strip())]
+    return "\n".join(lineas)
 
 
 def revisar_changelog_oficial() -> dict | None:
