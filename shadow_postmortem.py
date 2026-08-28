@@ -2273,43 +2273,62 @@ def aprender_patrones_causales(resultados: list, pred_index: dict) -> dict:
     resultado_final = {}
     candidatos_shuffle = []  # [(strat_key, "FILTRO"|"PATRON", dict), ...] — gate al final
 
+    # 28-Ago: índice construido en UNA sola pasada sobre `resultados` (antes:
+    # un escaneo completo de `resultados` POR CADA strat_key de FEATURE_RULES,
+    # O(n_strat_keys × n_resultados) -- diagnosticado con py-spy, hot path en
+    # json.loads dentro de _extraer_features llamado repetidas veces para la
+    # misma fila según crecía el histórico: 291.889 filas en results.csv,
+    # ciclos de 95-140s cuando el umbral histórico es 120s, mismo patrón de
+    # incidente que el fit de calibración del 04-Ago). Misma jerarquía de
+    # claves posibles (exacta/asset/duración/agregado) y mismo resultado
+    # final por strat_key/dirección -- solo cambia el orden de los bucles:
+    # ahora se recorre `resultados` una vez, se calculan las `posibles` y los
+    # `feats` (json.loads) UNA vez por fila, y se reparten a todos los
+    # strat_keys de FEATURE_RULES con los que esa fila coincide.
+    _claves_feature_rules = set(FEATURE_RULES.keys())
+    _indice: dict[str, dict[str, list]] = {
+        k: {"BUY_YES": [], "BUY_NO": []} for k in _claves_feature_rules
+    }
+    for r in resultados:
+        s   = r.get("strategy", "")
+        sub = r.get("subtype", "")
+        dec = r.get("decision", "")
+        if dec not in ("BUY_YES", "BUY_NO"):
+            continue
+        # Claves posibles a las que esta fila puede contribuir: exacta,
+        # asset, duración y agregado total — igual jerarquía que
+        # calcular_params()/lookup_keys en shadow_predict.py. Antes solo
+        # se comparaba la clave exacta (s+"#"+sub), así que las entradas
+        # agregadas de FEATURE_RULES (ej. "ORDER_FLOW_5M", "UPDOWN_GBM#15min")
+        # casi nunca recibían datos reales (2026-07-01: "ORDER_FLOW_5M"
+        # llevaba desde el 24-jun estancado en 136 filas con subtype vacío
+        # por un bug ya corregido, en vez de las 792 operaciones reales).
+        posibles = {s}
+        if "#" in sub:
+            a_part, d_part = sub.split("#", 1)
+            posibles |= {f"{s}#{sub}", f"{s}#{a_part}", f"{s}#{d_part}"}
+        elif sub:
+            posibles.add(f"{s}#{sub}")
+        posibles &= _claves_feature_rules
+        if not posibles:
+            continue
+        clave_pred = (s, r.get("market_id", ""), dec)
+        pred  = pred_index.get(clave_pred)
+        feats = _extraer_features(r, pred)
+        if not feats:
+            continue
+        for strat_key in posibles:
+            _indice[strat_key][dec].append((r, feats))
+
     for strat_key, feature_specs in FEATURE_RULES.items():
-        # Separado por dirección (BUY_YES/BUY_NO) desde el principio — antes
-        # se mezclaban ambas direcciones en el mismo bucket, así que un
-        # patrón "ganador" podía en realidad ser casi todo BUY_NO (ej.
-        # ibs_15<0.148 en UPDOWN_GBM#ETH#15min: 80% win_rate en BUY_NO n=20
-        # vs 55.6% en BUY_YES n=9, verificado 2026-07-01) y el kelly_boost se
-        # aplicaba igual a un futuro BUY_YES con esa feature, cuya edge real
-        # es marginal. Un patrón/filtro descubierto en una dirección NO se
-        # aplica nunca a la otra.
-        datos_por_dir: dict[str, list] = {"BUY_YES": [], "BUY_NO": []}
-        for r in resultados:
-            s   = r.get("strategy", "")
-            sub = r.get("subtype", "")
-            dec = r.get("decision", "")
-            if dec not in datos_por_dir:
-                continue
-            # Claves posibles a las que esta fila puede contribuir: exacta,
-            # asset, duración y agregado total — igual jerarquía que
-            # calcular_params()/lookup_keys en shadow_predict.py. Antes solo
-            # se comparaba la clave exacta (s+"#"+sub), así que las entradas
-            # agregadas de FEATURE_RULES (ej. "ORDER_FLOW_5M", "UPDOWN_GBM#15min")
-            # casi nunca recibían datos reales (2026-07-01: "ORDER_FLOW_5M"
-            # llevaba desde el 24-jun estancado en 136 filas con subtype vacío
-            # por un bug ya corregido, en vez de las 792 operaciones reales).
-            posibles = {s}
-            if "#" in sub:
-                a_part, d_part = sub.split("#", 1)
-                posibles |= {f"{s}#{sub}", f"{s}#{a_part}", f"{s}#{d_part}"}
-            elif sub:
-                posibles.add(f"{s}#{sub}")
-            if strat_key not in posibles:
-                continue
-            clave_pred = (s, r.get("market_id", ""), dec)
-            pred  = pred_index.get(clave_pred)
-            feats = _extraer_features(r, pred)
-            if feats:
-                datos_por_dir[dec].append((r, feats))
+        # .pop() en vez de indexar: libera el bucket de este strat_key del
+        # índice en cuanto se procesa (mismo patrón de liberación incremental
+        # que el código anterior por-strat_key), para no mantener las ~600K-
+        # 1.2M tuplas (row, feats) de TODOS los strat_keys en memoria a la vez
+        # -- hallazgo de /code-review 28-Ago: pico RSS +400MB (1.66GB→2.07GB)
+        # en un proceso que el fast loop relanza cada ~20s, en un VPS que ya
+        # ha sufrido OOM kills recientes.
+        datos_por_dir = _indice.pop(strat_key)
 
         for direccion, datos in datos_por_dir.items():
             if len(datos) < N_BUCKET_MIN:
