@@ -1018,5 +1018,49 @@
   "GBM_LATE_5M#ETH#5min": {
     "n": 239,
     "confirmado": false
+  },
+  "CANDIDATA10_CONFIRMACION_CRUZADA#BTC": {
+    "n": 303,
+    "confirmado": false
+  },
+  "CANDIDATA10_CONFIRMACION_CRUZADA#BTC#5min": {
+    "n": 218,
+    "confirmado": false
+  },
+  "FAVORITO_CONFIRMADO_60_240MIN_DEPTH_FASE0#ETH": {
+    "n": 211,
+    "confirmado": false
+  },
+  "FAVORITO_CONFIRMADO_DEPTH_FASE0#ETH": {
+    "n": 228,
+    "confirmado": false
+  },
+  "FAVORITO_CONFIRMADO_DEPTH_FASE0#ETH#5min": {
+    "n": 228,
+    "confirmado": false
+  },
+  "LIQUIDACIONES_5M#ETH": {
+    "n": 202,
+    "confirmado": true
+  },
+  "LIQUIDACIONES_5M#ETH#5min": {
+    "n": 202,
+    "confirmado": true
+  },
+  "LIQUIDACIONES_5M#SOL": {
+    "n": 251,
+    "confirmado": true
+  },
+  "LIQUIDACIONES_5M#SOL#5min": {
+    "n": 251,
+    "confirmado": true
+  },
+  "STREAK_FADE_5M#XRP": {
+    "n": 207,
+    "confirmado": false
+  },
+  "STREAK_FADE_5M#XRP#5min": {
+    "n": 207,
+    "confirmado": false
   }
 }
