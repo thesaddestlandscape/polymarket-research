@@ -6020,3 +6020,4 @@ timestamp_utc,activo,market_id,condition_id,end_date,py,edge,concentracion,n_bal
 2026-08-28T16:05:13+00:00,XRP,3933096,0x88d67ebeda03429556365beca2663ab83e9b0f6cdf73d002821d222cc8a0cf1d,2026-08-28T16:15:00Z,0.58,-0.0007,1.0,3,586.4,,,,26,False,banda_ok py=0.580 rest_lo=5.33 rest_hi=13.93
 2026-08-28T16:15:06+00:00,DOGE,3933180,0xa5a475aa19f042b53003e23ab49a80fd706f7d148a9e72e9b3bb689bee4eb600,2026-08-28T16:30:00Z,0.54,-0.0188,1.0,3,893.2,,,,3,False,banda_ok py=0.540 rest_lo=10.83 rest_hi=14.90
 2026-08-28T16:18:28+00:00,BNB,3933177,0xf6edb4fac3d87a2b8ca924ae59c5fcb5a045ac2fcaf028cdfde01248367f19fa,2026-08-28T16:30:00Z,0.29,-0.0791,1.0,3,691.3,,,,40,False,fuera_de_bandas_significativas
+2026-08-28T16:19:07+00:00,XRP,3933169,0x2e7f06fd85fec80d71a21e4bb75abd79bc1ab4205984242dd3bcf95d684c2ac7,2026-08-28T16:30:00Z,0.28,-0.0071,1.0,3,653.3,,,,12,False,banda_ok py=0.280 rest_lo=4.38 rest_hi=11.88
