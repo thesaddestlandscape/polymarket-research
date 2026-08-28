@@ -2007,6 +2007,58 @@ def _colocar_orden_maker(pred: dict, dec: str, contexto: dict) -> bool:
 # antes de asumir que el mismo umbral aplica — no extender sin re-medir.
 SENAL_MAX_LATENCIA_SEG = 100
 
+# 28-Ago: registro ÚNICO y centralizado de tuplas live cuya ejecución real
+# está reservada EXCLUSIVAMENTE a su ejecutor de baja latencia dedicado --
+# ver feedback_conectar_todas_tuplas_a_toda_infra_28ago. Motivo: se encontró
+# BALLENAS_CONFIRMADAS_15M#ETH#15min#BUY_YES ejecutándose real por DOS
+# rutas simultáneas -- esta genérica (ciclo ~20s, sin depth-check propio en
+# el instante de disparo) Y ballenas_executor_15min.py (que sí re-consulta
+# el libro real antes de firmar) -- con selección adversa medible: la ruta
+# genérica perdió -1,27€ (5 trades) mientras el ejecutor dedicado ganó
+# +1,13€ (2 trades). Deliberadamente NO se tocó shadow_predict.py (primer
+# intento, revertido tras /code-review): excluir un activo de la función
+# generadora ahí corta también la escritura en predictions.csv/results.csv
+# de la que depende gate_bucket_propio.json para actualizar su veredicto, Y
+# si el ejecutor dedicado REUSA esa misma función como fuente de señal
+# (import directo, ej. momentum_ibs_ballena_executor.py) apagarla ahí apaga
+# también al propio ejecutor -- verificado con datos reales en ambos casos.
+# Este filtro vive SOLO aquí, en el punto de decisión de EJECUCIÓN real de
+# la ruta genérica: la predicción se sigue generando y logueando normal
+# (aprendizaje causal/gate_bucket_propio intactos), simplemente esta ruta
+# nunca la dispara -- el ejecutor dedicado sigue viéndola y operando por su
+# cuenta, sin ningún cambio.
+EJECUTOR_DEDICADO_EXCLUSIVO = {
+    # BALLENAS_CONFIRMADAS_15M#ETH#15min#BUY_YES -- ballenas_executor_15min.py
+    # (29-Jul) reimplementa su propia detección independiente (no reusa
+    # s_ballenas_confirmadas_15m), así que excluir aquí es seguro: la ruta
+    # genérica deja de intentar ejecutar, el ejecutor dedicado sigue igual.
+    "BALLENAS_CONFIRMADAS_15M#ETH#15min#BUY_YES",
+    # FAVORITO_CONFIRMADO_15MIN_ALTACONVICCION#BTC#15min#BUY_YES --
+    # favorito_altaconviccion_executor_15min.py (29-Jul) REPLICA la lógica
+    # de s_favorito_confirmado_15min_altaconviccion en vez de importarla
+    # (ver docstring del ejecutor) -- mismo criterio de seguridad que arriba.
+    "FAVORITO_CONFIRMADO_15MIN_ALTACONVICCION#BTC#15min#BUY_YES",
+    # NOTA: MOMENTUM_IBS_5M_BALLENA#SOL#5min#BUY_YES NO va aquí -- su
+    # ejecutor (momentum_ibs_ballena_executor.py) IMPORTA Y LLAMA
+    # DIRECTAMENTE a s_momentum_ibs_5m_ballena() como su propia fuente de
+    # señal (VENTANAS, línea ~148) -- no hay ruta genérica independiente
+    # que excluir; la única "ruta genérica" que existiría sería la MISMA
+    # función que ya usa el ejecutor. Confirmado real por /code-review
+    # 28-Ago tras un primer intento (revertido) que sí lo intentó excluir
+    # en shadow_predict.py y dejó al ejecutor sin ninguna señal.
+    #
+    # ⚠️ MANTENIMIENTO MANUAL (/code-review 28-Ago): ballenas_executor_15min.py
+    # cubre ACTIVOS=(ETH,SOL,XRP,DOGE,BNB) y favorito_altaconviccion_executor_
+    # 15min.py cubre ACTIVOS=(BTC,ETH,XRP,DOGE,BNB), pero solo ETH/BTC están
+    # hoy en pares_permitidos_live -- el resto sigue en DRY_RUN. Al promocionar
+    # CUALQUIER otro activo de estas dos familias (o de una futura con el mismo
+    # patrón) a pares_permitidos_live, añadir aquí la tupla exacta EN EL MISMO
+    # commit de la promoción -- si no, el mismo bug de doble ejecución
+    # reaparece en silencio para esa tupla nueva. Pendiente: vigía que
+    # detecte automáticamente el hueco (ver feedback_conectar_todas_tuplas_
+    # a_toda_infra_28ago), no construido todavía.
+}
+
 
 def _decidir_requote(edge_dir: float, precio_plan: float,
                      mejor_ask: float | None) -> tuple[float, float, bool, str]:
@@ -2873,6 +2925,13 @@ def _procesar_pendientes_ballenas(pendientes: dict, config: dict, params: dict,
         if f"{strategy}#{subtype}#{direction}" not in pares_ok:
             _cerrar_pendiente_ballenas(clave, "abortado_guardia", "fuera_whitelist")
             continue
+        # 28-Ago: ver EJECUTOR_DEDICADO_EXCLUSIVO -- misma guardia que el
+        # loop principal de main(), aplicada aquí también porque esta cola
+        # de "aparcados" es un segundo camino independiente hacia
+        # _ejecutar_orden_polymarket.
+        if f"{strategy}#{subtype}#{direction}" in EJECUTOR_DEDICADO_EXCLUSIVO:
+            _cerrar_pendiente_ballenas(clave, "abortado_guardia", "ejecutor_dedicado_exclusivo")
+            continue
         if not _tupla_activa(strategy, subtype, params, direction):
             _cerrar_pendiente_ballenas(clave, "abortado_guardia", "estrategia_desactivada")
             continue
@@ -3228,7 +3287,15 @@ def main():
         dec      = pred.get("decision", "")
 
         # Filtros de elegibilidad — tupla exacta aprobada para live
-        if f"{strategy}#{subtype}#{dec}" not in pares_ok:
+        tupla_str = f"{strategy}#{subtype}#{dec}"
+        if tupla_str not in pares_ok:
+            continue
+        # 28-Ago: ver EJECUTOR_DEDICADO_EXCLUSIVO -- esta ruta genérica no
+        # dispara para tuplas reservadas a su ejecutor de baja latencia
+        # dedicado (silencioso a propósito: la predicción se sigue
+        # generando/logueando normal más arriba en el pipeline, solo la
+        # EJECUCIÓN se salta aquí).
+        if tupla_str in EJECUTOR_DEDICADO_EXCLUSIVO:
             continue
         # Veto activa=False (code-review 11-Jul): antes de hoy ninguna tupla
         # whitelisted pertenecía a ACUMULAR_SHADOW_AUNQUE_DESACTIVADA
