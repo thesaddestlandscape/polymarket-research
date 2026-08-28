@@ -30,12 +30,35 @@ OVERRIDE_PATH = _REPO / "data/live/gate_bucket_propio_override.json"
 # 20-Ago: ventana deslizante (analisis_gate_bucket_fino.py), extensión de
 # PROMOCIÓN a bueno_confirmado -- ver _zonas_finas()/evaluar() abajo.
 DATA_PATH_FINO = _REPO / "data/shadow/gate_bucket_fino.json"
+# 28-Ago: veto por fill-ability real (analisis_gate_bucket_propio_fillable_
+# 03ago.py, construido 03-Ago, NUNCA conectado hasta hoy -- ver
+# feedback_veto_fillable_conectado_28ago). Petición explícita Javi tras
+# encontrar el MISMO patrón 3 veces en una sola sesión: un bucket con
+# pnl_medio espectacular en results.csv (agregado, sin filtrar fill-ability)
+# resulta, al restringir al subconjunto realmente ejecutable (profundidad-al-
+# origen vía features::profundidad_ratio_vs_stake o libro_snapshots.csv
+# colapsado), con edge negativo o insuficiente liquidez para siquiera medir
+# algo -- selección adversa disfrazada de señal. Antes esto se cazaba a mano,
+# tupla por tupla, cada vez que alguien se molestaba en comprobarlo. Ver
+# _veto_fillable() más abajo.
+DATA_PATH_FILLABLE = _REPO / "data/shadow/gate_bucket_propio_fillable.json"
 STEP = 0.05
 
 _cache = {"mtime": None, "data": {}}
 _cache_fino = {"mtime": None, "data": {}}
+_cache_fillable = {"mtime": None, "data": {}}
 _cache_cfg = {"mtime": None, "activo": False}
 _cache_override = {"mtime": None, "data": {}}
+
+# Umbrales del veto de fill-ability -- deliberadamente conservadores (mismo
+# n_min que el resto del proyecto, CLAUDE.md: "ninguna conclusión con n<15").
+# Solo puede DEGRADAR bueno_confirmado -> malo_confirmado, nunca al revés --
+# si no hay evidencia suficiente (n<15 en cualquiera de los dos chequeos),
+# el veredicto original se mantiene sin tocar (fail-open EN EL VETO, no en
+# el gate -- ausencia de evidencia de selección adversa no es evidencia de
+# que no la haya, pero tampoco se puede inventar un umbral sin datos).
+_FILLABLE_N_MIN = 15
+_FILLABLE_RATE_MIN = 0.30  # por debajo del rango 53-90% típico de arquetipo B
 
 # 04-Ago: extensión validada con wallets EXPERTAS (sig_bhfdr=True en
 # wallet_edge_score_por_activo_marco.json, no todo el ruido de ballenas) --
@@ -245,6 +268,107 @@ def _zonas_finas() -> dict:
     return _cache_fino["data"]
 
 
+def _cargar_fillable() -> dict:
+    """{tupla_str: {bucket_str: {"n":, "pnl_medio":, ...}}} desde
+    data/shadow/gate_bucket_propio_fillable.json (analisis_gate_bucket_
+    propio_fillable_03ago.py, cron diario). OJO: el campo "veredicto" de
+    ese fichero usa un criterio DISTINTO (solo relativo al resto de la
+    tupla, sin el piso absoluto de bootstrap que sí tiene el gate
+    principal desde el 08-Ago) -- _veto_fillable() de abajo NUNCA lee ese
+    campo, solo "n"/"pnl_medio" en crudo para su propia comparación
+    absoluta contra cero. Fail-open a {} si falta/corrupto, mismo
+    criterio que el resto de fuentes de este módulo."""
+    try:
+        mtime = DATA_PATH_FILLABLE.stat().st_mtime
+    except OSError:
+        return {}
+    if _cache_fillable["mtime"] != mtime:
+        try:
+            _cache_fillable["data"] = json.loads(DATA_PATH_FILLABLE.read_text(encoding="utf-8"))
+            _cache_fillable["mtime"] = mtime
+        except Exception:
+            pass
+    return _cache_fillable["data"]
+
+
+def _veto_fillable(tupla_str: str, py: float, resultado: dict) -> dict:
+    """Último paso de evaluar(): si el resultado es "bueno_confirmado"
+    (venga del propio gate_bucket_propio.json, de zonas_finas o de
+    zonas_validadas_externamente -- no importa el origen), lo contrasta
+    contra el subconjunto REALMENTE fillable de ese mismo micro-bucket de
+    precio. Solo puede DEGRADAR a malo_confirmado, nunca promocionar --
+    si no hay evidencia (n<15 en ambos chequeos), el resultado original
+    se devuelve intacto.
+
+    TRES señales independientes, cualquiera basta (28-Ago, hallazgo real:
+    3 tuplas confirmadas por gate_bucket_fino en la misma sesión con pnl
+    de shadow espectacular resultaron, al mirar el subconjunto fillable,
+    en 6-32% de fill real y/o pnl invertido -- ver feedback_veto_
+    fillable_conectado_28ago; ampliado el mismo día tras corrección
+    explícita de Javi -- "ya sabes que tenemos la solución al payout
+    asimétrico" -- el primer intento solo cubría selección adversa/
+    profundidad, faltaba la tercera pata):
+      1. El subconjunto fillable tiene n>=15 propio Y su pnl_medio es
+         negativo -- contradicción directa y medible, no solo "poca
+         liquidez": el edge que parecía confirmado no sobrevive donde
+         de verdad se podría haber ejecutado.
+      2. La TASA de fill (fillable / total del propio gate_bucket_
+         propio.json en ese bucket) cae por debajo de _FILLABLE_RATE_MIN
+         -- incluso sin pnl suficiente para concluir signo, un bucket
+         donde menos del 30% de las señales tenían libro real es
+         estructuralmente el mismo patrón que arquetipo A (edge y hueco
+         de libro coinciden en el tiempo), no una señal operable.
+      3. Payout asimétrico (Kelly g(f=10%), CLAUDE.md pt.14/P28, misma
+         fórmula que analisis_log_growth.py -- NUNCA reimplementada
+         aparte): con n_fill>=15, g_kelly_f10<=0 en el subconjunto
+         fillable -- hit-rate alto con pérdidas grandes y raras puede
+         dar pnl_medio positivo y aun así crecimiento compuesto
+         negativo. Mismo bug que casi promociona MOMENTUM_IBS_5M_
+         BALLENA#ETH#5min#BUY_YES con el agregado equivocado esta
+         misma sesión (el agregado sin filtrar por bucket daba
+         g=-0.01535; restringido al bucket operativo real daba
+         g=+0.01332) -- ahora el gate lo calcula solo, no hace falta
+         repetir el cálculo a mano cada vez que se evalúa una promoción.
+
+    LIMITACIÓN CONOCIDA (documentada, no bloqueante): gate_bucket_propio_
+    fillable.json usa el mismo grid fijo (STEP=0.05) que este módulo,
+    pero una confirmación de zonas_finas (ventana deslizante, ancho
+    libre, NO anclada al grid) puede caer a caballo entre dos buckets
+    fijos -- el veto solo ve el bucket fijo que contiene el `py` exacto
+    de la señal, no toda la ventana fina. Cobertura parcial es mejor que
+    ninguna, pero no es una garantía perfecta para ventanas finas que
+    crucen un límite de 0.05."""
+    if resultado.get("veredicto") != "bueno_confirmado":
+        return resultado
+    b_str = f"{bucket(py):.2f}"
+    entrada_fill = _cargar_fillable().get(tupla_str, {}).get(b_str)
+    if not entrada_fill:
+        return resultado
+    n_fill = entrada_fill.get("n", 0)
+    pnl_fill = entrada_fill.get("pnl_medio")
+    g_kelly = entrada_fill.get("g_kelly_f10")
+    n_total = (_cargar().get(tupla_str, {}).get(b_str) or {}).get("n", 0)
+
+    motivo = None
+    if n_fill >= _FILLABLE_N_MIN and pnl_fill is not None and pnl_fill < 0:
+        motivo = (f"subconjunto fillable (n={n_fill}) da pnl_medio={pnl_fill:+.4f} "
+                  f"negativo pese a bueno_confirmado -- selección adversa")
+    elif n_fill >= _FILLABLE_N_MIN and g_kelly is not None and g_kelly <= 0:
+        motivo = (f"subconjunto fillable (n={n_fill}) da g_kelly(f=10%)={g_kelly:+.5f} "
+                  f"-- payout inverso (hit-rate alto con pérdidas grandes raras)")
+    elif n_total >= _FILLABLE_N_MIN and n_fill < n_total * _FILLABLE_RATE_MIN:
+        ratio_pct = (n_fill / n_total * 100) if n_total else 0.0
+        motivo = (f"fill-ability real {n_fill}/{n_total} ({ratio_pct:.1f}%) por debajo "
+                  f"del {_FILLABLE_RATE_MIN*100:.0f}% mínimo -- selección adversa")
+    if motivo is None:
+        return resultado
+    return {
+        "veredicto": "malo_confirmado",
+        "detalle": {"origen": "veto_fillable_28ago", "motivo": motivo,
+                    "detalle_original": resultado.get("detalle")},
+    }
+
+
 def tiene_datos_propios(tupla_str: str) -> bool:
     """False si `tupla_str` no tiene NINGÚN bucket con datos reales en
     gate_bucket_propio.json -- clave ausente, o mapeada a un dict vacío
@@ -344,7 +468,21 @@ def evaluar_sin_override(tupla_str: str, py: float) -> dict:
     sea el estado real de la tabla, haciendo que la condición de
     reapertura nunca se cumpla (bug real cazado antes de desplegar, ver
     feedback de Javi "no podemos dejar estrategias muertas así"). Esta
-    función es el núcleo que evaluar() envuelve con el override."""
+    función es el núcleo que evaluar() envuelve con el override.
+
+    28-Ago (/code-review, hallazgo real): el veto de fill-ability (ver
+    _veto_fillable() abajo) SIEMPRE se aplica aquí también, no solo desde
+    evaluar() -- sin esto, un vigía de reapertura que llame a esta función
+    directamente (ej. vigia_reabrir_overrides_micro_bucket.py) vería
+    "bueno_confirmado" cuando el gate real (vía evaluar()) ya lo habría
+    degradado a malo_confirmado por selección adversa/payout inverso,
+    reabriendo overrides con un diagnóstico falso -- mismo patrón exacto
+    que el bug de "sin override" que motivó separar esta función el
+    24-Ago, ahora aplicado al veto nuevo."""
+    return _veto_fillable(tupla_str, py, _evaluar_sin_override_ni_veto(tupla_str, py))
+
+
+def _evaluar_sin_override_ni_veto(tupla_str: str, py: float) -> dict:
     b = bucket(py)
     b_str = f"{b:.2f}"
     tabla = _cargar().get(tupla_str, {})

@@ -42,6 +42,16 @@ from pathlib import Path
 
 import numpy as np
 
+# 28-Ago: reusa la MISMA fórmula de retorno normalizado que analisis_log_
+# growth.py (Kelly g(f), CLAUDE.md pt.14/P28) -- NUNCA reimplementarla
+# aparte, el payout asimétrico es la misma cicatriz de siempre (hit-rate
+# alto + pérdidas grandes raras se come el compounding aunque pnl_medio
+# agregado sea positivo). Petición explícita Javi 28-Ago: conectar payout
+# asimétrico en el mismo veto que selección adversa/profundidad de libro,
+# no como chequeo manual aparte cada vez.
+from analisis_log_growth import _retorno as _retorno_kelly  # noqa: E402
+_F_KELLY = 0.10  # mismo default que analisis_log_growth.py/live
+
 REPO = Path(__file__).resolve().parent
 RESULTS = str(REPO / "data/shadow/results.csv")
 LIBRO = str(REPO / "data/live/libro_snapshots.csv")
@@ -156,7 +166,7 @@ def cargar_filas_accionables(tuplas):
                 pnl = float(row["pnl_neto"])
             except Exception:
                 continue
-            out[t].append((row.get("prediction_timestamp", ""), py, pnl))
+            out[t].append((row.get("prediction_timestamp", ""), py, pnl, row["decision"], row["acierto"]))
     return out, {t: len(accionables_por_tupla.get(t, ())) for _, _, _, t, _ in tuplas}
 
 
@@ -209,20 +219,33 @@ def main():
             continue
 
         por_bucket = defaultdict(list)
-        for ts, py, pnl in filas:
-            por_bucket[bucket(py)].append((ts, pnl))
+        for ts, py, pnl, dec, acierto in filas:
+            por_bucket[bucket(py)].append((ts, pnl, py, dec, acierto))
 
         tabla = {"_n_accionable_total": len(filas), "_es_live": es_live}
         for b in sorted(por_bucket):
             dentro = por_bucket[b]
-            fuera = [(ts, pnl) for bb, fs in por_bucket.items() if bb != b for ts, pnl in fs]
+            fuera = [(ts, pnl) for bb, fs in por_bucket.items() if bb != b for ts, pnl, *_ in fs]
             n_d = len(dentro)
-            pnl_d = [pnl for _, pnl in dentro]
+            pnl_d = [pnl for _, pnl, *_ in dentro]
             pnl_f = [pnl for _, pnl in fuera]
             media_d = sum(pnl_d) / n_d
 
+            # Payout asimétrico (Kelly g(f=10%)) sobre el MISMO subconjunto
+            # fillable -- un bucket puede tener pnl_medio positivo y aun así
+            # crecimiento compuesto negativo (hit-rate alto, pérdidas grandes
+            # raras). Solo se calcula con n_d>=N_MIN (mismo piso que el resto
+            # del gate); con menos, g_kelly queda None (sin evidencia, no se
+            # inventa un valor).
+            g_kelly = None
+            if n_d >= N_MIN:
+                retornos = [_retorno_kelly({"precio_yes_mercado": py, "decision": dec, "acierto": acierto})
+                            for _, _, py, dec, acierto in dentro]
+                g_kelly = round(sum(math.log(1 + _F_KELLY * r) for r in retornos) / n_d, 5)
+
             entrada = {"n": n_d, "pnl_medio": round(media_d, 4),
                        "diff_vs_resto": round(media_d - (sum(pnl_f) / len(pnl_f)), 4) if pnl_f else None,
+                       "g_kelly_f10": g_kelly,
                        "shuffle_p": None, "split_half_diff": None, "veredicto": "sin_concluir"}
             tabla[f"{b:.2f}"] = entrada
 
@@ -233,8 +256,8 @@ def main():
                 mid = n_d // 2
                 m1, m2 = dentro_sorted[:mid], dentro_sorted[mid:]
                 if len(m1) >= 5 and len(m2) >= 5:
-                    d1 = sum(pnl for _, pnl in m1) / len(m1) - sum(pnl_f) / len(pnl_f)
-                    d2 = sum(pnl for _, pnl in m2) / len(m2) - sum(pnl_f) / len(pnl_f)
+                    d1 = sum(pnl for _, pnl, *_ in m1) / len(m1) - sum(pnl_f) / len(pnl_f)
+                    d2 = sum(pnl for _, pnl, *_ in m2) / len(m2) - sum(pnl_f) / len(pnl_f)
                     entrada["split_half_diff"] = [round(d1, 4), round(d2, 4)]
                     consistente = (d1 < 0 and d2 < 0) or (d1 > 0 and d2 > 0)
                     if consistente:
