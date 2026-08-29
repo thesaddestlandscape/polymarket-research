@@ -612,20 +612,20 @@
     "pnl_total": -1159.31,
     "tamano_medio_usd": 2.32,
     "clasificacion": "normal",
-    "trades_muestra_reciente": 28,
+    "trades_muestra_reciente": 25,
     "activos_muestra_reciente": {
-      "ETH": {
-        "up": 4,
-        "down": 9
-      },
       "BTC": {
         "up": 10,
-        "down": 5
+        "down": 12
+      },
+      "ETH": {
+        "up": 2,
+        "down": 1
       }
     },
     "duraciones_muestra_reciente": {
-      "5m": 23,
-      "15m": 5
+      "5m": 16,
+      "15m": 9
     },
     "primera_vez_visto": "2026-07-01T12:36:06+00:00",
     "ultima_actualizacion": "2026-08-29T12:16:05+00:00"
@@ -905,20 +905,16 @@
     "pnl_total": -6690.07,
     "tamano_medio_usd": 64.95,
     "clasificacion": "normal",
-    "trades_muestra_reciente": 9,
+    "trades_muestra_reciente": 6,
     "activos_muestra_reciente": {
-      "SOL": {
-        "up": 1,
-        "down": 3
-      },
       "BTC": {
-        "up": 3,
+        "up": 4,
         "down": 2
       }
     },
     "duraciones_muestra_reciente": {
-      "15m": 5,
-      "5m": 4
+      "15m": 1,
+      "5m": 5
     },
     "primera_vez_visto": "2026-07-01T12:36:06+00:00",
     "ultima_actualizacion": "2026-08-29T15:44:57+00:00"
@@ -929,23 +925,35 @@
     "pnl_total": -14.45,
     "tamano_medio_usd": 6.45,
     "clasificacion": "normal",
-    "trades_muestra_reciente": 27,
+    "trades_muestra_reciente": 26,
     "activos_muestra_reciente": {
-      "XRP": {
-        "up": 7,
+      "SOL": {
+        "up": 5,
+        "down": 2
+      },
+      "ETH": {
+        "up": 0,
         "down": 3
       },
-      "SOL": {
-        "up": 9,
-        "down": 6
+      "BNB": {
+        "up": 1,
+        "down": 1
+      },
+      "DOGE": {
+        "up": 0,
+        "down": 4
       },
       "BTC": {
-        "up": 2,
+        "up": 7,
+        "down": 0
+      },
+      "XRP": {
+        "up": 3,
         "down": 0
       }
     },
     "duraciones_muestra_reciente": {
-      "5m": 27
+      "5m": 26
     },
     "primera_vez_visto": "2026-07-01T12:36:06+00:00",
     "ultima_actualizacion": "2026-08-29T13:49:38+00:00"
@@ -1251,28 +1259,28 @@
     "tamano_medio_usd": 238.46,
     "clasificacion": "smart",
     "pnl_leaderboard_mes": 72178.38,
-    "trades_muestra_reciente": 816,
+    "trades_muestra_reciente": 818,
     "activos_muestra_reciente": {
-      "BNB": {
-        "up": 100,
-        "down": 86
-      },
       "SOL": {
-        "up": 105,
-        "down": 88
+        "up": 120,
+        "down": 92
       },
       "BTC": {
-        "up": 159,
-        "down": 96
+        "up": 109,
+        "down": 131
       },
       "ETH": {
-        "up": 85,
-        "down": 97
+        "up": 106,
+        "down": 86
+      },
+      "BNB": {
+        "up": 87,
+        "down": 87
       }
     },
     "duraciones_muestra_reciente": {
-      "5m": 660,
-      "15m": 156
+      "5m": 668,
+      "15m": 150
     },
     "primera_vez_visto": "2026-07-01T12:36:06+00:00",
     "ultima_actualizacion": "2026-08-29T11:52:43+00:00",
@@ -1684,36 +1692,36 @@
     "pnl_total": 3007.71,
     "tamano_medio_usd": 23.82,
     "clasificacion": "candidato_posiciones",
-    "trades_muestra_reciente": 266,
+    "trades_muestra_reciente": 208,
     "activos_muestra_reciente": {
       "SOL": {
-        "up": 7,
-        "down": 35
+        "up": 9,
+        "down": 11
       },
-      "DOGE": {
-        "up": 36,
-        "down": 39
+      "XRP": {
+        "up": 5,
+        "down": 16
       },
       "BTC": {
         "up": 14,
-        "down": 12
+        "down": 23
       },
       "ETH": {
-        "up": 49,
-        "down": 30
+        "up": 28,
+        "down": 7
       },
       "BNB": {
-        "up": 12,
-        "down": 12
+        "up": 15,
+        "down": 18
       },
-      "XRP": {
-        "up": 9,
-        "down": 11
+      "DOGE": {
+        "up": 22,
+        "down": 40
       }
     },
     "duraciones_muestra_reciente": {
-      "5m": 258,
-      "15m": 8
+      "5m": 205,
+      "15m": 3
     },
     "primera_vez_visto": "2026-07-01T12:36:06+00:00",
     "ultima_actualizacion": "2026-08-29T15:21:45+00:00",
@@ -1795,28 +1803,28 @@
     "pnl_total": -5963.95,
     "tamano_medio_usd": 12.05,
     "clasificacion": "normal",
-    "trades_muestra_reciente": 49,
+    "trades_muestra_reciente": 26,
     "activos_muestra_reciente": {
       "SOL": {
-        "up": 0,
-        "down": 9
+        "up": 2,
+        "down": 4
       },
       "BTC": {
-        "up": 9,
-        "down": 11
-      },
-      "ETH": {
-        "up": 8,
-        "down": 8
+        "up": 7,
+        "down": 4
       },
       "XRP": {
+        "up": 3,
+        "down": 1
+      },
+      "ETH": {
         "up": 1,
-        "down": 3
+        "down": 4
       }
     },
     "duraciones_muestra_reciente": {
-      "5m": 40,
-      "15m": 9
+      "5m": 24,
+      "15m": 2
     },
     "primera_vez_visto": "2026-07-01T12:36:06+00:00",
     "ultima_actualizacion": "2026-08-29T12:40:40+00:00"
@@ -3095,31 +3103,31 @@
   },
   "0x5ab45ddee2126babe629b8f127b235f2ed2b9e82": {
     "n": 3,
-    "win_rate": 0.0,
-    "pnl_total": -5.65,
-    "tamano_medio_usd": 2.5,
+    "win_rate": 0.6667,
+    "pnl_total": 3.1,
+    "tamano_medio_usd": 3.21,
     "clasificacion": "normal",
-    "trades_muestra_reciente": 7,
+    "trades_muestra_reciente": 5,
     "activos_muestra_reciente": {
       "BTC": {
-        "up": 3,
-        "down": 2
-      },
-      "XRP": {
-        "up": 1,
-        "down": 0
+        "up": 0,
+        "down": 3
       },
       "BNB": {
-        "up": 1,
-        "down": 0
+        "up": 0,
+        "down": 1
+      },
+      "DOGE": {
+        "up": 0,
+        "down": 1
       }
     },
     "duraciones_muestra_reciente": {
-      "5m": 5,
+      "5m": 3,
       "15m": 2
     },
     "primera_vez_visto": "2026-07-01T12:45:01+00:00",
-    "ultima_actualizacion": "2026-08-29T08:27:07+00:00"
+    "ultima_actualizacion": "2026-08-29T16:07:45+00:00"
   },
   "0x27dcd89849af35c379fbebab3b545ac852f5028a": {
     "n": 123,
@@ -4403,27 +4411,24 @@
     "ultima_actualizacion": "2026-07-15T16:01:15+00:00"
   },
   "0x9b6f7013be0c5a2c8dc98e8b6a84347467c77fb9": {
-    "n": 1,
-    "win_rate": 1.0,
-    "pnl_total": 199.9,
-    "tamano_medio_usd": 0.0,
+    "n": 0,
     "clasificacion": "normal",
-    "trades_muestra_reciente": 9,
+    "trades_muestra_reciente": 7,
     "activos_muestra_reciente": {
       "BTC": {
         "up": 3,
-        "down": 3
+        "down": 2
       },
       "ETH": {
-        "up": 1,
+        "up": 0,
         "down": 2
       }
     },
     "duraciones_muestra_reciente": {
-      "5m": 9
+      "5m": 7
     },
     "primera_vez_visto": "2026-07-01T12:45:01+00:00",
-    "ultima_actualizacion": "2026-08-29T04:40:06+00:00"
+    "ultima_actualizacion": "2026-08-29T16:07:45+00:00"
   },
   "0x0dcf3b75e872473fb2a363906238095e536c6d62": {
     "n": 123,
@@ -4814,21 +4819,20 @@
     "pnl_total": -4330.95,
     "tamano_medio_usd": 8.75,
     "clasificacion": "normal",
-    "trades_muestra_reciente": 48,
+    "trades_muestra_reciente": 30,
     "activos_muestra_reciente": {
-      "BTC": {
-        "up": 5,
-        "down": 16
-      },
       "ETH": {
-        "up": 13,
-        "down": 14
+        "up": 10,
+        "down": 6
+      },
+      "BTC": {
+        "up": 10,
+        "down": 4
       }
     },
     "duraciones_muestra_reciente": {
-      "60m": 2,
-      "5m": 14,
-      "15m": 32
+      "5m": 13,
+      "15m": 17
     },
     "primera_vez_visto": "2026-07-01T12:45:01+00:00",
     "ultima_actualizacion": "2026-08-29T11:52:43+00:00"
@@ -10491,15 +10495,15 @@
     "pnl_total": -12231.64,
     "tamano_medio_usd": 24.46,
     "clasificacion": "normal",
-    "trades_muestra_reciente": 13,
+    "trades_muestra_reciente": 10,
     "activos_muestra_reciente": {
       "XRP": {
         "up": 8,
-        "down": 5
+        "down": 2
       }
     },
     "duraciones_muestra_reciente": {
-      "5m": 13
+      "5m": 10
     },
     "primera_vez_visto": "2026-07-01T13:01:11+00:00",
     "ultima_actualizacion": "2026-08-29T12:16:05+00:00"
@@ -10601,21 +10605,25 @@
     "clasificacion": "normal",
     "trades_muestra_reciente": 6,
     "activos_muestra_reciente": {
-      "XRP": {
-        "up": 1,
-        "down": 1
-      },
-      "BTC": {
-        "up": 1,
-        "down": 1
-      },
-      "BNB": {
+      "SOL": {
         "up": 0,
         "down": 1
       },
-      "DOGE": {
+      "BNB": {
         "up": 1,
         "down": 0
+      },
+      "DOGE": {
+        "up": 1,
+        "down": 1
+      },
+      "ETH": {
+        "up": 1,
+        "down": 0
+      },
+      "XRP": {
+        "up": 0,
+        "down": 1
       }
     },
     "duraciones_muestra_reciente": {
@@ -10748,24 +10756,24 @@
     "pnl_total": -6327.1,
     "tamano_medio_usd": 13.88,
     "clasificacion": "normal",
-    "trades_muestra_reciente": 6,
+    "trades_muestra_reciente": 7,
     "activos_muestra_reciente": {
       "SOL": {
-        "up": 3,
+        "up": 2,
+        "down": 0
+      },
+      "BTC": {
+        "up": 4,
         "down": 0
       },
       "DOGE": {
-        "up": 1,
-        "down": 1
-      },
-      "BTC": {
         "up": 1,
         "down": 0
       }
     },
     "duraciones_muestra_reciente": {
-      "15m": 1,
-      "5m": 5
+      "5m": 5,
+      "15m": 2
     },
     "primera_vez_visto": "2026-07-01T13:01:11+00:00",
     "ultima_actualizacion": "2026-08-29T13:49:38+00:00"
@@ -11007,15 +11015,15 @@
     "pnl_total": -47543.96,
     "tamano_medio_usd": 95.09,
     "clasificacion": "normal",
-    "trades_muestra_reciente": 8,
+    "trades_muestra_reciente": 5,
     "activos_muestra_reciente": {
       "BTC": {
-        "up": 0,
-        "down": 8
+        "up": 3,
+        "down": 2
       }
     },
     "duraciones_muestra_reciente": {
-      "5m": 8
+      "5m": 5
     },
     "primera_vez_visto": "2026-07-01T13:01:11+00:00",
     "ultima_actualizacion": "2026-08-29T10:43:37+00:00"
@@ -12565,15 +12573,15 @@
     "pnl_total": -14074.88,
     "tamano_medio_usd": 28.15,
     "clasificacion": "normal",
-    "trades_muestra_reciente": 22,
+    "trades_muestra_reciente": 13,
     "activos_muestra_reciente": {
       "SOL": {
-        "up": 8,
-        "down": 14
+        "up": 6,
+        "down": 7
       }
     },
     "duraciones_muestra_reciente": {
-      "5m": 22
+      "5m": 13
     },
     "primera_vez_visto": "2026-07-01T13:21:14+00:00",
     "ultima_actualizacion": "2026-08-29T13:49:38+00:00"
@@ -12865,24 +12873,24 @@
     "ultima_actualizacion": "2026-08-29T15:21:45+00:00"
   },
   "0x7e5d2991c2647de2348287e2f499329fc6a6c4c3": {
-    "n": 160,
-    "win_rate": 0.0,
-    "pnl_total": -12500.02,
-    "tamano_medio_usd": 78.13,
+    "n": 164,
+    "win_rate": 0.0061,
+    "pnl_total": -12489.21,
+    "tamano_medio_usd": 76.78,
     "clasificacion": "smart",
     "pnl_leaderboard_mes": 37801.47,
-    "trades_muestra_reciente": 54,
+    "trades_muestra_reciente": 65,
     "activos_muestra_reciente": {
       "BTC": {
-        "up": 16,
-        "down": 38
+        "up": 34,
+        "down": 31
       }
     },
     "duraciones_muestra_reciente": {
-      "15m": 54
+      "15m": 65
     },
     "primera_vez_visto": "2026-07-01T13:21:14+00:00",
-    "ultima_actualizacion": "2026-08-29T07:41:45+00:00",
+    "ultima_actualizacion": "2026-08-29T16:07:45+00:00",
     "mediana_apuesta_usd": 7.45,
     "mediana_actualizada": "2026-08-28T18:13:54+00:00"
   },
@@ -12905,27 +12913,35 @@
     "pnl_total": -14620.1,
     "tamano_medio_usd": 29.24,
     "clasificacion": "normal",
-    "trades_muestra_reciente": 15,
+    "trades_muestra_reciente": 24,
     "activos_muestra_reciente": {
-      "BNB": {
+      "XRP": {
         "up": 1,
-        "down": 3
-      },
-      "DOGE": {
-        "up": 2,
         "down": 0
       },
       "BTC": {
-        "up": 0,
-        "down": 1
+        "up": 2,
+        "down": 5
       },
       "ETH": {
-        "up": 4,
+        "up": 1,
+        "down": 2
+      },
+      "SOL": {
+        "up": 2,
+        "down": 1
+      },
+      "BNB": {
+        "up": 2,
         "down": 4
+      },
+      "DOGE": {
+        "up": 1,
+        "down": 3
       }
     },
     "duraciones_muestra_reciente": {
-      "5m": 15
+      "5m": 24
     },
     "primera_vez_visto": "2026-07-01T13:21:14+00:00",
     "ultima_actualizacion": "2026-08-29T10:43:37+00:00"
@@ -14076,22 +14092,21 @@
     "pnl_total": 26.69,
     "tamano_medio_usd": 55.97,
     "clasificacion": "normal",
-    "trades_muestra_reciente": 146,
+    "trades_muestra_reciente": 29,
     "activos_muestra_reciente": {
-      "BTC": {
-        "up": 42,
-        "down": 57
-      },
       "ETH": {
         "up": 13,
-        "down": 34
+        "down": 5
+      },
+      "BTC": {
+        "up": 2,
+        "down": 9
       }
     },
     "duraciones_muestra_reciente": {
-      "15m": 9,
-      "5m": 34,
-      "60m": 41,
-      "weekly": 62
+      "60m": 10,
+      "5m": 17,
+      "15m": 2
     },
     "primera_vez_visto": "2026-07-01T13:21:14+00:00",
     "ultima_actualizacion": "2026-08-29T15:21:45+00:00",
@@ -14857,23 +14872,23 @@
     "ultima_actualizacion": "2026-08-17T10:21:34+00:00"
   },
   "0x0c7f0327ca81d86522fa893dbf6daa208c9eafca": {
-    "n": 47,
-    "win_rate": 0.0,
-    "pnl_total": -10246.17,
-    "tamano_medio_usd": 218.0,
+    "n": 50,
+    "win_rate": 0.02,
+    "pnl_total": -11090.05,
+    "tamano_medio_usd": 222.4,
     "clasificacion": "normal",
-    "trades_muestra_reciente": 14,
+    "trades_muestra_reciente": 9,
     "activos_muestra_reciente": {
-      "ETH": {
-        "up": 14,
-        "down": 0
+      "BTC": {
+        "up": 0,
+        "down": 9
       }
     },
     "duraciones_muestra_reciente": {
-      "240m": 14
+      "60m": 9
     },
     "primera_vez_visto": "2026-07-01T13:21:14+00:00",
-    "ultima_actualizacion": "2026-08-29T08:27:07+00:00"
+    "ultima_actualizacion": "2026-08-29T16:07:45+00:00"
   },
   "0xf02e68364bdd074a14159946277035fb16a957b7": {
     "n": 123,
@@ -14900,15 +14915,15 @@
     "pnl_total": -8756.5,
     "tamano_medio_usd": 17.51,
     "clasificacion": "normal",
-    "trades_muestra_reciente": 11,
+    "trades_muestra_reciente": 13,
     "activos_muestra_reciente": {
       "XRP": {
-        "up": 5,
+        "up": 7,
         "down": 6
       }
     },
     "duraciones_muestra_reciente": {
-      "15m": 11
+      "15m": 13
     },
     "primera_vez_visto": "2026-07-01T13:21:14+00:00",
     "ultima_actualizacion": "2026-08-29T12:40:40+00:00"
@@ -14919,22 +14934,26 @@
     "pnl_total": -271.05,
     "tamano_medio_usd": 52.45,
     "clasificacion": "smart",
-    "pnl_leaderboard_mes": 115229.93,
-    "trades_muestra_reciente": 21,
+    "pnl_leaderboard_mes": 115406.15,
+    "trades_muestra_reciente": 40,
     "activos_muestra_reciente": {
-      "BTC": {
-        "up": 10,
-        "down": 6
-      },
       "ETH": {
-        "up": 2,
-        "down": 3
+        "up": 3,
+        "down": 10
+      },
+      "BTC": {
+        "up": 6,
+        "down": 20
+      },
+      "XRP": {
+        "up": 0,
+        "down": 1
       }
     },
     "duraciones_muestra_reciente": {
-      "5m": 13,
-      "15m": 1,
-      "240m": 7
+      "60m": 13,
+      "5m": 22,
+      "15m": 5
     },
     "primera_vez_visto": "2026-07-01T13:21:14+00:00",
     "ultima_actualizacion": "2026-08-29T13:03:35+00:00",
@@ -14944,25 +14963,25 @@
   "0x2bba66d28d6b8828f1b8e649fb66bce0ae6b2d0b": {
     "n": 494,
     "win_rate": 0.0,
-    "pnl_total": -18547.63,
-    "tamano_medio_usd": 37.68,
+    "pnl_total": -18784.92,
+    "tamano_medio_usd": 38.03,
     "clasificacion": "normal",
-    "trades_muestra_reciente": 27,
+    "trades_muestra_reciente": 16,
     "activos_muestra_reciente": {
-      "ETH": {
-        "up": 19,
+      "BTC": {
+        "up": 6,
         "down": 0
       },
-      "BTC": {
-        "up": 8,
+      "ETH": {
+        "up": 10,
         "down": 0
       }
     },
     "duraciones_muestra_reciente": {
-      "15m": 27
+      "15m": 16
     },
     "primera_vez_visto": "2026-07-01T13:21:14+00:00",
-    "ultima_actualizacion": "2026-08-29T09:58:07+00:00"
+    "ultima_actualizacion": "2026-08-29T16:07:45+00:00"
   },
   "0x64db18033a3631ff8af30e657aede9a3cc279a6f": {
     "n": 132,
@@ -15939,25 +15958,21 @@
     "clasificacion": "normal",
     "trades_muestra_reciente": 5,
     "activos_muestra_reciente": {
-      "SOL": {
-        "up": 0,
-        "down": 1
+      "BTC": {
+        "up": 1,
+        "down": 2
       },
       "ETH": {
         "up": 0,
-        "down": 1
-      },
-      "BTC": {
-        "up": 1,
         "down": 2
       }
     },
     "duraciones_muestra_reciente": {
-      "5m": 2,
-      "15m": 3
+      "15m": 3,
+      "5m": 2
     },
     "primera_vez_visto": "2026-07-01T13:41:12+00:00",
-    "ultima_actualizacion": "2026-08-29T09:35:22+00:00"
+    "ultima_actualizacion": "2026-08-29T16:07:45+00:00"
   },
   "0x4b5cd6695b6fdbeb00553376591fe143f3f88aa4": {
     "n": 500,
@@ -15965,15 +15980,15 @@
     "pnl_total": -8100.8,
     "tamano_medio_usd": 16.2,
     "clasificacion": "normal",
-    "trades_muestra_reciente": 5,
+    "trades_muestra_reciente": 8,
     "activos_muestra_reciente": {
       "ETH": {
         "up": 3,
-        "down": 2
+        "down": 5
       }
     },
     "duraciones_muestra_reciente": {
-      "15m": 5
+      "15m": 8
     },
     "primera_vez_visto": "2026-07-01T13:41:12+00:00",
     "ultima_actualizacion": "2026-08-29T14:35:41+00:00"
@@ -19773,19 +19788,23 @@
     "pnl_total": -30.61,
     "tamano_medio_usd": 12.1,
     "clasificacion": "normal",
-    "trades_muestra_reciente": 19,
+    "trades_muestra_reciente": 35,
     "activos_muestra_reciente": {
-      "ETH": {
-        "up": 7,
-        "down": 4
-      },
       "SOL": {
+        "up": 13,
+        "down": 10
+      },
+      "ETH": {
         "up": 4,
-        "down": 4
+        "down": 1
+      },
+      "BTC": {
+        "up": 1,
+        "down": 6
       }
     },
     "duraciones_muestra_reciente": {
-      "60m": 19
+      "60m": 35
     },
     "primera_vez_visto": "2026-07-01T14:41:13+00:00",
     "ultima_actualizacion": "2026-08-29T10:20:39+00:00"
@@ -24685,23 +24704,19 @@
     "tamano_medio_usd": 1553.28,
     "clasificacion": "normal",
     "pnl_leaderboard_mes": -110503.43,
-    "trades_muestra_reciente": 103,
+    "trades_muestra_reciente": 101,
     "activos_muestra_reciente": {
-      "SOL": {
-        "up": 0,
-        "down": 1
+      "ETH": {
+        "up": 2,
+        "down": 32
       },
       "BTC": {
-        "up": 31,
-        "down": 45
-      },
-      "ETH": {
-        "up": 1,
-        "down": 25
+        "up": 51,
+        "down": 16
       }
     },
     "duraciones_muestra_reciente": {
-      "weekly": 103
+      "weekly": 101
     },
     "primera_vez_visto": "2026-07-01T16:01:15+00:00",
     "ultima_actualizacion": "2026-08-29T10:43:37+00:00",
@@ -28304,15 +28319,15 @@
     "pnl_total": -1.25,
     "tamano_medio_usd": 2.6,
     "clasificacion": "normal",
-    "trades_muestra_reciente": 16,
+    "trades_muestra_reciente": 13,
     "activos_muestra_reciente": {
       "ETH": {
-        "up": 9,
-        "down": 7
+        "up": 8,
+        "down": 5
       }
     },
     "duraciones_muestra_reciente": {
-      "5m": 16
+      "5m": 13
     },
     "primera_vez_visto": "2026-07-01T19:21:15+00:00",
     "ultima_actualizacion": "2026-08-29T15:21:45+00:00"
@@ -29895,27 +29910,27 @@
     "ultima_actualizacion": "2026-08-29T11:06:36+00:00"
   },
   "0x1e6d8febc6d3cf0f087653f8c8a642b96ba0c739": {
-    "n": 418,
-    "win_rate": 0.0,
-    "pnl_total": -8670.3,
-    "tamano_medio_usd": 20.74,
+    "n": 428,
+    "win_rate": 0.0023,
+    "pnl_total": -8986.07,
+    "tamano_medio_usd": 21.04,
     "clasificacion": "normal",
-    "trades_muestra_reciente": 6,
+    "trades_muestra_reciente": 7,
     "activos_muestra_reciente": {
-      "BTC": {
-        "up": 3,
-        "down": 1
-      },
       "ETH": {
-        "up": 1,
+        "up": 2,
+        "down": 2
+      },
+      "BTC": {
+        "up": 2,
         "down": 1
       }
     },
     "duraciones_muestra_reciente": {
-      "60m": 6
+      "60m": 7
     },
     "primera_vez_visto": "2026-07-01T20:41:15+00:00",
-    "ultima_actualizacion": "2026-08-29T09:12:34+00:00"
+    "ultima_actualizacion": "2026-08-29T16:07:45+00:00"
   },
   "0xdc92b303dab1637e987bd7a5959bfab2a3b1741b": {
     "n": 2,
@@ -33381,15 +33396,15 @@
     "pnl_total": -2611.69,
     "tamano_medio_usd": 5.22,
     "clasificacion": "normal",
-    "trades_muestra_reciente": 8,
+    "trades_muestra_reciente": 11,
     "activos_muestra_reciente": {
       "BTC": {
-        "up": 3,
-        "down": 5
+        "up": 4,
+        "down": 7
       }
     },
     "duraciones_muestra_reciente": {
-      "5m": 8
+      "5m": 11
     },
     "primera_vez_visto": "2026-07-02T01:01:14+00:00",
     "ultima_actualizacion": "2026-08-29T11:29:32+00:00"
@@ -34346,15 +34361,15 @@
     "pnl_total": -790.32,
     "tamano_medio_usd": 2.85,
     "clasificacion": "normal",
-    "trades_muestra_reciente": 24,
+    "trades_muestra_reciente": 16,
     "activos_muestra_reciente": {
       "BTC": {
-        "up": 12,
-        "down": 12
+        "up": 10,
+        "down": 6
       }
     },
     "duraciones_muestra_reciente": {
-      "15m": 24
+      "15m": 16
     },
     "primera_vez_visto": "2026-07-02T02:21:05+00:00",
     "ultima_actualizacion": "2026-08-29T13:26:47+00:00"
@@ -38913,15 +38928,16 @@
     "pnl_total": -71510.96,
     "tamano_medio_usd": 143.31,
     "clasificacion": "normal",
-    "trades_muestra_reciente": 31,
+    "trades_muestra_reciente": 18,
     "activos_muestra_reciente": {
       "BTC": {
-        "up": 31,
-        "down": 0
+        "up": 0,
+        "down": 18
       }
     },
     "duraciones_muestra_reciente": {
-      "15m": 31
+      "15m": 10,
+      "5m": 8
     },
     "primera_vez_visto": "2026-07-02T09:41:15+00:00",
     "ultima_actualizacion": "2026-08-29T12:16:05+00:00"
@@ -39869,15 +39885,15 @@
     "clasificacion": "normal",
     "trades_muestra_reciente": 6,
     "activos_muestra_reciente": {
-      "SOL": {
+      "BTC": {
         "up": 2,
-        "down": 2
-      },
-      "ETH": {
-        "up": 1,
         "down": 0
       },
-      "BTC": {
+      "SOL": {
+        "up": 2,
+        "down": 1
+      },
+      "ETH": {
         "up": 0,
         "down": 1
       }
@@ -41413,35 +41429,35 @@
   "0xb13d611e6de5f691e23a27f2373e6a11c47b2289": {
     "n": 0,
     "clasificacion": "normal",
-    "trades_muestra_reciente": 30,
+    "trades_muestra_reciente": 34,
     "activos_muestra_reciente": {
       "SOL": {
-        "up": 3,
-        "down": 3
+        "up": 2,
+        "down": 2
+      },
+      "BNB": {
+        "up": 6,
+        "down": 2
       },
       "DOGE": {
-        "up": 4,
+        "up": 7,
         "down": 3
       },
+      "BTC": {
+        "up": 2,
+        "down": 4
+      },
       "XRP": {
-        "up": 5,
-        "down": 2
+        "up": 2,
+        "down": 0
       },
       "ETH": {
         "up": 1,
         "down": 3
-      },
-      "BTC": {
-        "up": 1,
-        "down": 3
-      },
-      "BNB": {
-        "up": 1,
-        "down": 1
       }
     },
     "duraciones_muestra_reciente": {
-      "5m": 30
+      "5m": 34
     },
     "primera_vez_visto": "2026-07-02T16:41:22+00:00",
     "ultima_actualizacion": "2026-08-29T10:43:37+00:00"
@@ -43484,15 +43500,15 @@
     "pnl_total": -4298.03,
     "tamano_medio_usd": 32.1,
     "clasificacion": "normal",
-    "trades_muestra_reciente": 7,
+    "trades_muestra_reciente": 10,
     "activos_muestra_reciente": {
       "BTC": {
-        "up": 4,
-        "down": 3
+        "up": 6,
+        "down": 4
       }
     },
     "duraciones_muestra_reciente": {
-      "60m": 7
+      "60m": 10
     },
     "primera_vez_visto": "2026-07-02T21:41:17+00:00",
     "ultima_actualizacion": "2026-08-29T15:44:57+00:00"
@@ -45581,15 +45597,15 @@
     "pnl_total": -3.38,
     "tamano_medio_usd": 7.39,
     "clasificacion": "normal",
-    "trades_muestra_reciente": 20,
+    "trades_muestra_reciente": 16,
     "activos_muestra_reciente": {
       "BTC": {
         "up": 11,
-        "down": 9
+        "down": 5
       }
     },
     "duraciones_muestra_reciente": {
-      "5m": 20
+      "5m": 16
     },
     "primera_vez_visto": "2026-07-03T01:41:08+00:00",
     "ultima_actualizacion": "2026-08-29T11:52:43+00:00"
@@ -50256,15 +50272,15 @@
     "pnl_total": -10.68,
     "tamano_medio_usd": 2.67,
     "clasificacion": "normal",
-    "trades_muestra_reciente": 11,
+    "trades_muestra_reciente": 5,
     "activos_muestra_reciente": {
       "BTC": {
-        "up": 5,
-        "down": 6
+        "up": 3,
+        "down": 2
       }
     },
     "duraciones_muestra_reciente": {
-      "5m": 11
+      "5m": 5
     },
     "primera_vez_visto": "2026-07-03T15:21:08+00:00",
     "ultima_actualizacion": "2026-08-29T13:49:38+00:00"
@@ -55020,15 +55036,15 @@
     "pnl_total": -37216.71,
     "tamano_medio_usd": 77.2,
     "clasificacion": "normal",
-    "trades_muestra_reciente": 47,
+    "trades_muestra_reciente": 24,
     "activos_muestra_reciente": {
       "BTC": {
-        "up": 23,
-        "down": 24
+        "up": 7,
+        "down": 17
       }
     },
     "duraciones_muestra_reciente": {
-      "15m": 47
+      "15m": 24
     },
     "primera_vez_visto": "2026-07-04T07:21:05+00:00",
     "ultima_actualizacion": "2026-08-29T11:06:36+00:00"
@@ -55765,20 +55781,23 @@
     "ultima_actualizacion": "2026-07-04T23:21:11+00:00"
   },
   "0x696c53bc9aa833bca5a66b14316343474e050285": {
-    "n": 0,
+    "n": 4,
+    "win_rate": 0.25,
+    "pnl_total": -11.21,
+    "tamano_medio_usd": 3.48,
     "clasificacion": "normal",
-    "trades_muestra_reciente": 6,
+    "trades_muestra_reciente": 5,
     "activos_muestra_reciente": {
       "ETH": {
-        "up": 6,
-        "down": 0
+        "up": 3,
+        "down": 2
       }
     },
     "duraciones_muestra_reciente": {
-      "15m": 6
+      "15m": 5
     },
     "primera_vez_visto": "2026-07-04T10:01:07+00:00",
-    "ultima_actualizacion": "2026-08-29T08:49:43+00:00"
+    "ultima_actualizacion": "2026-08-29T16:07:45+00:00"
   },
   "0x1411077e3e657f875a60a2309225b39e8ddd631d": {
     "n": 298,
@@ -68591,29 +68610,29 @@
     "pnl_total": -5642.1,
     "tamano_medio_usd": 12.16,
     "clasificacion": "normal",
-    "trades_muestra_reciente": 50,
+    "trades_muestra_reciente": 42,
     "activos_muestra_reciente": {
-      "ETH": {
-        "up": 15,
-        "down": 8
-      },
       "SOL": {
         "up": 5,
-        "down": 1
-      },
-      "BTC": {
-        "up": 10,
         "down": 3
       },
+      "ETH": {
+        "up": 3,
+        "down": 10
+      },
+      "BTC": {
+        "up": 9,
+        "down": 7
+      },
       "XRP": {
-        "up": 4,
+        "up": 1,
         "down": 4
       }
     },
     "duraciones_muestra_reciente": {
-      "15m": 34,
-      "60m": 5,
-      "5m": 11
+      "60m": 11,
+      "15m": 24,
+      "5m": 7
     },
     "primera_vez_visto": "2026-07-06T03:01:03+00:00",
     "ultima_actualizacion": "2026-08-29T14:58:43+00:00"
@@ -69639,15 +69658,15 @@
     "pnl_total": -20578.77,
     "tamano_medio_usd": 123.23,
     "clasificacion": "normal",
-    "trades_muestra_reciente": 7,
+    "trades_muestra_reciente": 5,
     "activos_muestra_reciente": {
       "BTC": {
-        "up": 0,
-        "down": 7
+        "up": 1,
+        "down": 4
       }
     },
     "duraciones_muestra_reciente": {
-      "15m": 7
+      "15m": 5
     },
     "primera_vez_visto": "2026-07-06T07:21:07+00:00",
     "ultima_actualizacion": "2026-08-29T11:06:36+00:00",
@@ -70070,28 +70089,23 @@
     "pnl_total": -10003.42,
     "tamano_medio_usd": 20.29,
     "clasificacion": "normal",
-    "trades_muestra_reciente": 16,
+    "trades_muestra_reciente": 13,
     "activos_muestra_reciente": {
-      "XRP": {
-        "up": 0,
-        "down": 2
-      },
       "SOL": {
-        "up": 0,
-        "down": 2
+        "up": 5,
+        "down": 5
       },
-      "ETH": {
-        "up": 3,
+      "XRP": {
+        "up": 1,
         "down": 0
       },
       "BTC": {
-        "up": 5,
-        "down": 4
+        "up": 1,
+        "down": 1
       }
     },
     "duraciones_muestra_reciente": {
-      "5m": 15,
-      "15m": 1
+      "5m": 13
     },
     "primera_vez_visto": "2026-07-06T09:21:07+00:00",
     "ultima_actualizacion": "2026-08-29T13:49:38+00:00"
@@ -75560,18 +75574,18 @@
     "pnl_total": -87.66,
     "tamano_medio_usd": 1.39,
     "clasificacion": "normal",
-    "trades_muestra_reciente": 9,
+    "trades_muestra_reciente": 5,
     "activos_muestra_reciente": {
       "BTC": {
         "up": 3,
-        "down": 6
+        "down": 2
       }
     },
     "duraciones_muestra_reciente": {
-      "5m": 9
+      "5m": 5
     },
     "primera_vez_visto": "2026-07-07T11:41:08+00:00",
-    "ultima_actualizacion": "2026-08-29T09:58:07+00:00"
+    "ultima_actualizacion": "2026-08-29T16:07:45+00:00"
   },
   "0x25cf9ab6e2f01c674f3500bd7ee3d2441d5acfd6": {
     "n": 248,
@@ -76017,15 +76031,15 @@
     "pnl_total": -4365.58,
     "tamano_medio_usd": 18.42,
     "clasificacion": "normal",
-    "trades_muestra_reciente": 7,
+    "trades_muestra_reciente": 5,
     "activos_muestra_reciente": {
       "BTC": {
-        "up": 7,
-        "down": 0
+        "up": 0,
+        "down": 5
       }
     },
     "duraciones_muestra_reciente": {
-      "15m": 7
+      "15m": 5
     },
     "primera_vez_visto": "2026-07-07T14:21:12+00:00",
     "ultima_actualizacion": "2026-08-29T14:12:36+00:00"
@@ -76128,19 +76142,23 @@
     "pnl_total": -13218.8,
     "tamano_medio_usd": 26.44,
     "clasificacion": "normal",
-    "trades_muestra_reciente": 10,
+    "trades_muestra_reciente": 9,
     "activos_muestra_reciente": {
-      "SOL": {
-        "up": 4,
+      "BTC": {
+        "up": 6,
         "down": 0
       },
+      "SOL": {
+        "up": 0,
+        "down": 1
+      },
       "ETH": {
-        "up": 6,
+        "up": 2,
         "down": 0
       }
     },
     "duraciones_muestra_reciente": {
-      "5m": 10
+      "5m": 9
     },
     "primera_vez_visto": "2026-07-07T15:01:12+00:00",
     "ultima_actualizacion": "2026-08-29T11:29:32+00:00"
@@ -81206,8 +81224,8 @@
     "trades_muestra_reciente": 5,
     "activos_muestra_reciente": {
       "BTC": {
-        "up": 2,
-        "down": 3
+        "up": 3,
+        "down": 2
       }
     },
     "duraciones_muestra_reciente": {
@@ -83930,15 +83948,15 @@
     "trades_muestra_reciente": 5,
     "activos_muestra_reciente": {
       "SOL": {
-        "up": 2,
-        "down": 3
+        "up": 5,
+        "down": 0
       }
     },
     "duraciones_muestra_reciente": {
       "5m": 5
     },
     "primera_vez_visto": "2026-07-09T03:21:03+00:00",
-    "ultima_actualizacion": "2026-08-29T07:41:45+00:00"
+    "ultima_actualizacion": "2026-08-29T16:07:45+00:00"
   },
   "0x6a0d342b28a332d0aa2d171b6905062ce67d0d74": {
     "n": 207,
@@ -84884,15 +84902,15 @@
     "pnl_total": -8778.39,
     "tamano_medio_usd": 17.56,
     "clasificacion": "normal",
-    "trades_muestra_reciente": 12,
+    "trades_muestra_reciente": 21,
     "activos_muestra_reciente": {
       "BTC": {
-        "up": 5,
-        "down": 7
+        "up": 10,
+        "down": 11
       }
     },
     "duraciones_muestra_reciente": {
-      "5m": 12
+      "5m": 21
     },
     "primera_vez_visto": "2026-07-09T08:01:06+00:00",
     "ultima_actualizacion": "2026-08-29T15:21:45+00:00"
@@ -86259,31 +86277,24 @@
     "ultima_actualizacion": "2026-07-10T06:01:05+00:00"
   },
   "0xd97d1af5cd65a51cc22c63c4a09df7fc60a1b56e": {
-    "n": 3,
-    "win_rate": 0.0,
-    "pnl_total": -190.84,
-    "tamano_medio_usd": 63.61,
+    "n": 0,
     "clasificacion": "normal",
-    "trades_muestra_reciente": 14,
+    "trades_muestra_reciente": 6,
     "activos_muestra_reciente": {
+      "BTC": {
+        "up": 5,
+        "down": 0
+      },
       "ETH": {
         "up": 0,
-        "down": 2
-      },
-      "BTC": {
-        "up": 7,
-        "down": 3
-      },
-      "XRP": {
-        "up": 0,
-        "down": 2
+        "down": 1
       }
     },
     "duraciones_muestra_reciente": {
-      "15m": 14
+      "15m": 6
     },
     "primera_vez_visto": "2026-07-09T15:01:09+00:00",
-    "ultima_actualizacion": "2026-08-29T05:25:18+00:00"
+    "ultima_actualizacion": "2026-08-29T16:07:45+00:00"
   },
   "0x128ddfef37f12f97ef07addebb3f39ad3b80bea4": {
     "n": 0,
@@ -89099,23 +89110,23 @@
     "pnl_total": -7540.67,
     "tamano_medio_usd": 15.11,
     "clasificacion": "normal",
-    "trades_muestra_reciente": 7,
+    "trades_muestra_reciente": 6,
     "activos_muestra_reciente": {
       "SOL": {
         "up": 0,
         "down": 1
       },
       "ETH": {
-        "up": 0,
-        "down": 3
+        "up": 2,
+        "down": 1
       },
       "BTC": {
         "up": 2,
-        "down": 1
+        "down": 0
       }
     },
     "duraciones_muestra_reciente": {
-      "15m": 7
+      "15m": 6
     },
     "primera_vez_visto": "2026-07-10T04:01:03+00:00",
     "ultima_actualizacion": "2026-08-29T11:06:36+00:00"
@@ -89715,15 +89726,15 @@
     "pnl_total": -12757.97,
     "tamano_medio_usd": 25.52,
     "clasificacion": "normal",
-    "trades_muestra_reciente": 8,
+    "trades_muestra_reciente": 16,
     "activos_muestra_reciente": {
       "BTC": {
-        "up": 3,
-        "down": 5
+        "up": 7,
+        "down": 9
       }
     },
     "duraciones_muestra_reciente": {
-      "5m": 8
+      "5m": 16
     },
     "primera_vez_visto": "2026-07-10T07:01:05+00:00",
     "ultima_actualizacion": "2026-08-29T10:43:37+00:00"
@@ -91816,24 +91827,15 @@
     "pnl_total": -15.34,
     "tamano_medio_usd": 2.19,
     "clasificacion": "normal",
-    "trades_muestra_reciente": 6,
+    "trades_muestra_reciente": 5,
     "activos_muestra_reciente": {
-      "BNB": {
-        "up": 2,
-        "down": 0
-      },
-      "SOL": {
-        "up": 2,
-        "down": 0
-      },
-      "BTC": {
-        "up": 0,
+      "DOGE": {
+        "up": 3,
         "down": 2
       }
     },
     "duraciones_muestra_reciente": {
-      "5m": 2,
-      "15m": 4
+      "15m": 5
     },
     "primera_vez_visto": "2026-07-10T18:01:17+00:00",
     "ultima_actualizacion": "2026-08-29T14:35:41+00:00"
@@ -92547,18 +92549,18 @@
     "pnl_total": -4353.67,
     "tamano_medio_usd": 28.46,
     "clasificacion": "normal",
-    "trades_muestra_reciente": 19,
+    "trades_muestra_reciente": 9,
     "activos_muestra_reciente": {
       "BTC": {
-        "up": 10,
-        "down": 9
+        "up": 1,
+        "down": 8
       }
     },
     "duraciones_muestra_reciente": {
-      "5m": 19
+      "5m": 9
     },
     "primera_vez_visto": "2026-07-10T22:01:17+00:00",
-    "ultima_actualizacion": "2026-08-29T01:40:00+00:00"
+    "ultima_actualizacion": "2026-08-29T16:07:45+00:00"
   },
   "0x6db4bb76598dd66e3009214b17f75538a14da28d": {
     "n": 33,
@@ -92566,15 +92568,19 @@
     "pnl_total": -135.72,
     "tamano_medio_usd": 4.11,
     "clasificacion": "normal",
-    "trades_muestra_reciente": 15,
+    "trades_muestra_reciente": 19,
     "activos_muestra_reciente": {
       "BTC": {
-        "up": 1,
-        "down": 14
+        "up": 5,
+        "down": 11
+      },
+      "ETH": {
+        "up": 0,
+        "down": 3
       }
     },
     "duraciones_muestra_reciente": {
-      "5m": 15
+      "5m": 19
     },
     "primera_vez_visto": "2026-07-10T22:01:17+00:00",
     "ultima_actualizacion": "2026-08-29T12:16:05+00:00"
@@ -96001,20 +96007,20 @@
     "pnl_total": -159.31,
     "tamano_medio_usd": 3.12,
     "clasificacion": "normal",
-    "trades_muestra_reciente": 30,
+    "trades_muestra_reciente": 29,
     "activos_muestra_reciente": {
       "BTC": {
-        "up": 4,
-        "down": 14
+        "up": 8,
+        "down": 15
       },
       "ETH": {
-        "up": 12,
-        "down": 0
+        "up": 2,
+        "down": 4
       }
     },
     "duraciones_muestra_reciente": {
-      "5m": 28,
-      "15m": 2
+      "5m": 11,
+      "15m": 18
     },
     "primera_vez_visto": "2026-07-11T14:01:12+00:00",
     "ultima_actualizacion": "2026-08-29T11:29:32+00:00"
@@ -96958,15 +96964,15 @@
     "pnl_total": -5498.17,
     "tamano_medio_usd": 11.0,
     "clasificacion": "normal",
-    "trades_muestra_reciente": 12,
+    "trades_muestra_reciente": 10,
     "activos_muestra_reciente": {
       "BTC": {
-        "up": 5,
-        "down": 7
+        "up": 2,
+        "down": 8
       }
     },
     "duraciones_muestra_reciente": {
-      "15m": 12
+      "15m": 10
     },
     "primera_vez_visto": "2026-07-11T19:21:25+00:00",
     "ultima_actualizacion": "2026-08-29T14:35:41+00:00"
@@ -98906,15 +98912,15 @@
     "trades_muestra_reciente": 5,
     "activos_muestra_reciente": {
       "BTC": {
-        "up": 1,
-        "down": 4
+        "up": 5,
+        "down": 0
       }
     },
     "duraciones_muestra_reciente": {
       "5m": 5
     },
     "primera_vez_visto": "2026-07-12T04:01:21+00:00",
-    "ultima_actualizacion": "2026-08-29T02:02:36+00:00"
+    "ultima_actualizacion": "2026-08-29T16:07:45+00:00"
   },
   "0x8583405c5740c90f4fbaad5a83a7480643e3ca05": {
     "n": 11,
@@ -104357,29 +104363,24 @@
     "pnl_total": -4.76,
     "tamano_medio_usd": 236.97,
     "clasificacion": "normal",
-    "trades_muestra_reciente": 32,
+    "trades_muestra_reciente": 41,
     "activos_muestra_reciente": {
-      "SOL": {
-        "up": 2,
+      "XRP": {
+        "up": 0,
         "down": 2
       },
       "BTC": {
-        "up": 5,
-        "down": 4
+        "up": 10,
+        "down": 15
       },
       "ETH": {
-        "up": 7,
-        "down": 7
-      },
-      "XRP": {
-        "up": 3,
-        "down": 2
+        "up": 8,
+        "down": 6
       }
     },
     "duraciones_muestra_reciente": {
-      "5m": 20,
-      "15m": 8,
-      "60m": 4
+      "5m": 19,
+      "15m": 22
     },
     "primera_vez_visto": "2026-07-13T08:41:09+00:00",
     "ultima_actualizacion": "2026-08-29T13:03:35+00:00",
@@ -104673,15 +104674,15 @@
     "pnl_total": -7802.34,
     "tamano_medio_usd": 15.6,
     "clasificacion": "normal",
-    "trades_muestra_reciente": 9,
+    "trades_muestra_reciente": 6,
     "activos_muestra_reciente": {
       "BTC": {
         "up": 2,
-        "down": 7
+        "down": 4
       }
     },
     "duraciones_muestra_reciente": {
-      "5m": 9
+      "5m": 6
     },
     "primera_vez_visto": "2026-07-13T10:21:06+00:00",
     "ultima_actualizacion": "2026-08-29T11:52:43+00:00"
@@ -107066,18 +107067,18 @@
     "pnl_total": -311.13,
     "tamano_medio_usd": 155.57,
     "clasificacion": "normal",
-    "trades_muestra_reciente": 5,
+    "trades_muestra_reciente": 6,
     "activos_muestra_reciente": {
       "BTC": {
-        "up": 5,
-        "down": 0
+        "up": 0,
+        "down": 6
       }
     },
     "duraciones_muestra_reciente": {
-      "weekly": 5
+      "weekly": 6
     },
     "primera_vez_visto": "2026-07-13T22:41:15+00:00",
-    "ultima_actualizacion": "2026-08-29T07:41:45+00:00",
+    "ultima_actualizacion": "2026-08-29T16:07:45+00:00",
     "weekly": {
       "n": 2,
       "win_rate": 0.0,
@@ -109659,23 +109660,21 @@
     "pnl_total": -17.25,
     "tamano_medio_usd": 2.46,
     "clasificacion": "normal",
-    "trades_muestra_reciente": 6,
+    "trades_muestra_reciente": 8,
     "activos_muestra_reciente": {
-      "SOL": {
-        "up": 3,
-        "down": 0
-      },
       "BTC": {
-        "up": 3,
+        "up": 8,
         "down": 0
       }
     },
     "duraciones_muestra_reciente": {
-      "15m": 3,
-      "60m": 3
+      "weekly": 8
     },
     "primera_vez_visto": "2026-07-14T11:21:06+00:00",
-    "ultima_actualizacion": "2026-08-28T07:13:31+00:00"
+    "ultima_actualizacion": "2026-08-29T16:07:45+00:00",
+    "weekly": {
+      "n": 0
+    }
   },
   "0x8393278f78ab21fccd9c7ed1990c3b6883faf7cf": {
     "n": 486,
@@ -110106,28 +110105,28 @@
     "pnl_total": 2.36,
     "tamano_medio_usd": 16.87,
     "clasificacion": "normal",
-    "trades_muestra_reciente": 303,
+    "trades_muestra_reciente": 317,
     "activos_muestra_reciente": {
       "SOL": {
-        "up": 31,
-        "down": 45
-      },
-      "BTC": {
-        "up": 40,
-        "down": 76
+        "up": 33,
+        "down": 43
       },
       "XRP": {
         "up": 18,
-        "down": 23
+        "down": 9
+      },
+      "BTC": {
+        "up": 91,
+        "down": 94
       },
       "ETH": {
-        "up": 26,
-        "down": 44
+        "up": 9,
+        "down": 20
       }
     },
     "duraciones_muestra_reciente": {
-      "5m": 263,
-      "15m": 40
+      "5m": 231,
+      "15m": 86
     },
     "primera_vez_visto": "2026-07-14T13:21:07+00:00",
     "ultima_actualizacion": "2026-08-29T10:43:37+00:00",
@@ -115037,16 +115036,16 @@
     "pnl_total": -129586.26,
     "tamano_medio_usd": 259.7,
     "clasificacion": "normal",
-    "trades_muestra_reciente": 42,
+    "trades_muestra_reciente": 26,
     "activos_muestra_reciente": {
       "BTC": {
-        "up": 38,
-        "down": 4
+        "up": 5,
+        "down": 21
       }
     },
     "duraciones_muestra_reciente": {
-      "5m": 9,
-      "15m": 33
+      "15m": 21,
+      "5m": 5
     },
     "primera_vez_visto": "2026-07-15T08:41:06+00:00",
     "ultima_actualizacion": "2026-08-29T12:16:05+00:00"
@@ -116045,24 +116044,23 @@
     "ultima_actualizacion": "2026-07-16T06:41:02+00:00"
   },
   "0xd94890ab6b89fb20d12105fd93dd48bf027ee777": {
-    "n": 22,
+    "n": 25,
     "win_rate": 0.0,
-    "pnl_total": -107.5,
-    "tamano_medio_usd": 4.89,
+    "pnl_total": -122.5,
+    "tamano_medio_usd": 4.9,
     "clasificacion": "normal",
-    "trades_muestra_reciente": 14,
+    "trades_muestra_reciente": 5,
     "activos_muestra_reciente": {
       "BTC": {
-        "up": 7,
-        "down": 7
+        "up": 3,
+        "down": 2
       }
     },
     "duraciones_muestra_reciente": {
-      "15m": 4,
-      "5m": 10
+      "5m": 5
     },
     "primera_vez_visto": "2026-07-15T10:01:05+00:00",
-    "ultima_actualizacion": "2026-08-29T09:12:34+00:00"
+    "ultima_actualizacion": "2026-08-29T16:07:45+00:00"
   },
   "0x416e707ccc379c6d47dde13ef7f1820b8ffec357": {
     "n": 2,
@@ -116440,13 +116438,12 @@
     "trades_muestra_reciente": 6,
     "activos_muestra_reciente": {
       "BTC": {
-        "up": 3,
-        "down": 3
+        "up": 1,
+        "down": 5
       }
     },
     "duraciones_muestra_reciente": {
-      "5m": 5,
-      "15m": 1
+      "5m": 6
     },
     "primera_vez_visto": "2026-07-15T10:21:06+00:00",
     "ultima_actualizacion": "2026-08-29T10:43:37+00:00"
@@ -117154,33 +117151,37 @@
     "tamano_medio_usd": 72.16,
     "clasificacion": "smart",
     "pnl_leaderboard_mes": 29212.41,
-    "trades_muestra_reciente": 88,
+    "trades_muestra_reciente": 94,
     "activos_muestra_reciente": {
-      "DOGE": {
-        "up": 9,
-        "down": 7
+      "ETH": {
+        "up": 7,
+        "down": 15
       },
       "SOL": {
-        "up": 6,
+        "up": 11,
+        "down": 3
+      },
+      "DOGE": {
+        "up": 5,
         "down": 4
       },
-      "BTC": {
-        "up": 6,
-        "down": 13
-      },
-      "ETH": {
-        "up": 17,
-        "down": 7
-      },
       "BNB": {
-        "up": 8,
-        "down": 11
+        "up": 7,
+        "down": 9
+      },
+      "BTC": {
+        "up": 19,
+        "down": 12
+      },
+      "XRP": {
+        "up": 2,
+        "down": 0
       }
     },
     "duraciones_muestra_reciente": {
-      "5m": 58,
-      "15m": 7,
-      "240m": 23
+      "5m": 66,
+      "15m": 27,
+      "240m": 1
     },
     "primera_vez_visto": "2026-07-15T11:21:07+00:00",
     "ultima_actualizacion": "2026-08-29T13:26:47+00:00",
@@ -117661,16 +117662,16 @@
     "pnl_total": -3.7,
     "tamano_medio_usd": 10.0,
     "clasificacion": "normal",
-    "trades_muestra_reciente": 10,
+    "trades_muestra_reciente": 62,
     "activos_muestra_reciente": {
       "BTC": {
-        "up": 5,
-        "down": 5
+        "up": 21,
+        "down": 41
       }
     },
     "duraciones_muestra_reciente": {
-      "5m": 9,
-      "15m": 1
+      "5m": 58,
+      "15m": 4
     },
     "primera_vez_visto": "2026-07-15T13:01:08+00:00",
     "ultima_actualizacion": "2026-08-29T10:20:39+00:00"
@@ -117716,15 +117717,15 @@
     "pnl_total": -937.0,
     "tamano_medio_usd": 17.68,
     "clasificacion": "normal",
-    "trades_muestra_reciente": 32,
+    "trades_muestra_reciente": 78,
     "activos_muestra_reciente": {
       "BTC": {
-        "up": 32,
-        "down": 0
+        "up": 70,
+        "down": 8
       }
     },
     "duraciones_muestra_reciente": {
-      "5m": 32
+      "5m": 78
     },
     "primera_vez_visto": "2026-07-15T13:01:08+00:00",
     "ultima_actualizacion": "2026-08-29T13:49:38+00:00"
@@ -121775,19 +121776,19 @@
     "pnl_total": -1102.74,
     "tamano_medio_usd": 4.29,
     "clasificacion": "normal",
-    "trades_muestra_reciente": 6,
+    "trades_muestra_reciente": 7,
     "activos_muestra_reciente": {
       "BTC": {
-        "up": 4,
+        "up": 3,
         "down": 0
       },
       "ETH": {
-        "up": 2,
-        "down": 0
+        "up": 0,
+        "down": 4
       }
     },
     "duraciones_muestra_reciente": {
-      "5m": 6
+      "5m": 7
     },
     "primera_vez_visto": "2026-07-16T00:01:14+00:00",
     "ultima_actualizacion": "2026-08-29T12:40:40+00:00"
@@ -122338,17 +122339,17 @@
     "pnl_total": -8190.08,
     "tamano_medio_usd": 16.61,
     "clasificacion": "normal",
-    "trades_muestra_reciente": 7,
+    "trades_muestra_reciente": 5,
     "activos_muestra_reciente": {
       "BTC": {
-        "up": 5,
-        "down": 2
+        "up": 2,
+        "down": 3
       }
     },
     "duraciones_muestra_reciente": {
-      "240m": 4,
-      "15m": 2,
-      "5m": 1
+      "5m": 2,
+      "60m": 1,
+      "15m": 2
     },
     "primera_vez_visto": "2026-07-16T02:01:00+00:00",
     "ultima_actualizacion": "2026-08-29T13:03:35+00:00"
@@ -122667,15 +122668,15 @@
     "pnl_total": -5874.64,
     "tamano_medio_usd": 11.85,
     "clasificacion": "normal",
-    "trades_muestra_reciente": 17,
+    "trades_muestra_reciente": 25,
     "activos_muestra_reciente": {
       "BTC": {
-        "up": 1,
-        "down": 16
+        "up": 8,
+        "down": 17
       }
     },
     "duraciones_muestra_reciente": {
-      "5m": 17
+      "5m": 25
     },
     "primera_vez_visto": "2026-07-16T02:41:05+00:00",
     "ultima_actualizacion": "2026-08-29T13:49:38+00:00"
@@ -125533,23 +125534,23 @@
     "ultima_actualizacion": "2026-08-16T23:21:36+00:00"
   },
   "0x3738f01bbdbc0b8dba83b1512bc1c9f89338ed32": {
-    "n": 98,
-    "win_rate": 0.0,
-    "pnl_total": -269.23,
+    "n": 115,
+    "win_rate": 0.0087,
+    "pnl_total": -312.23,
     "tamano_medio_usd": 2.75,
     "clasificacion": "normal",
-    "trades_muestra_reciente": 5,
+    "trades_muestra_reciente": 6,
     "activos_muestra_reciente": {
       "BTC": {
-        "up": 5,
-        "down": 0
+        "up": 3,
+        "down": 3
       }
     },
     "duraciones_muestra_reciente": {
-      "5m": 5
+      "5m": 6
     },
     "primera_vez_visto": "2026-07-16T12:01:11+00:00",
-    "ultima_actualizacion": "2026-08-29T08:04:19+00:00"
+    "ultima_actualizacion": "2026-08-29T16:07:45+00:00"
   },
   "0xf3be000b2330c0df478db70be07c3a17afb24609": {
     "n": 0,
@@ -125773,18 +125774,27 @@
     "pnl_total": -13267.29,
     "tamano_medio_usd": 27.13,
     "clasificacion": "normal",
-    "trades_muestra_reciente": 35,
+    "trades_muestra_reciente": 5,
     "activos_muestra_reciente": {
+      "BTC": {
+        "up": 1,
+        "down": 0
+      },
       "XRP": {
         "up": 0,
-        "down": 35
+        "down": 1
+      },
+      "SOL": {
+        "up": 2,
+        "down": 1
       }
     },
     "duraciones_muestra_reciente": {
-      "15m": 35
+      "15m": 3,
+      "60m": 2
     },
     "primera_vez_visto": "2026-07-16T13:01:09+00:00",
-    "ultima_actualizacion": "2026-08-29T08:27:07+00:00"
+    "ultima_actualizacion": "2026-08-29T16:07:45+00:00"
   },
   "0x8a1283ba7911c67c48bfb2a1934051f6af822cb3": {
     "n": 120,
@@ -127884,15 +127894,15 @@
     "pnl_total": -120.54,
     "tamano_medio_usd": 8.61,
     "clasificacion": "normal",
-    "trades_muestra_reciente": 6,
+    "trades_muestra_reciente": 10,
     "activos_muestra_reciente": {
       "BTC": {
         "up": 4,
-        "down": 2
+        "down": 6
       }
     },
     "duraciones_muestra_reciente": {
-      "5m": 6
+      "5m": 10
     },
     "primera_vez_visto": "2026-07-16T18:21:12+00:00",
     "ultima_actualizacion": "2026-08-29T10:20:39+00:00"
@@ -131445,23 +131455,23 @@
     "ultima_actualizacion": "2026-08-15T17:02:05+00:00"
   },
   "0xe97ffa3cdae216530c7e24c46efed9d72e1d1b75": {
-    "n": 55,
+    "n": 56,
     "win_rate": 0.0,
-    "pnl_total": -77.99,
-    "tamano_medio_usd": 1.42,
+    "pnl_total": -78.15,
+    "tamano_medio_usd": 1.43,
     "clasificacion": "normal",
-    "trades_muestra_reciente": 14,
+    "trades_muestra_reciente": 11,
     "activos_muestra_reciente": {
       "BTC": {
-        "up": 8,
+        "up": 5,
         "down": 6
       }
     },
     "duraciones_muestra_reciente": {
-      "5m": 14
+      "5m": 11
     },
     "primera_vez_visto": "2026-07-17T07:01:03+00:00",
-    "ultima_actualizacion": "2026-08-29T07:41:45+00:00"
+    "ultima_actualizacion": "2026-08-29T16:07:45+00:00"
   },
   "0x4ee35074a241e72058c9053f55f77f1222401b83": {
     "n": 1,
@@ -133844,18 +133854,18 @@
     "pnl_total": -45290.36,
     "tamano_medio_usd": 92.83,
     "clasificacion": "normal",
-    "trades_muestra_reciente": 24,
+    "trades_muestra_reciente": 34,
     "activos_muestra_reciente": {
       "BTC": {
-        "up": 8,
-        "down": 16
+        "up": 7,
+        "down": 27
       }
     },
     "duraciones_muestra_reciente": {
-      "15m": 24
+      "15m": 34
     },
     "primera_vez_visto": "2026-07-17T16:21:09+00:00",
-    "ultima_actualizacion": "2026-08-29T08:49:43+00:00",
+    "ultima_actualizacion": "2026-08-29T16:07:45+00:00",
     "mediana_apuesta_usd": 2.5,
     "mediana_actualizada": "2026-08-13T04:01:38+00:00"
   },
@@ -133957,23 +133967,23 @@
     }
   },
   "0x0a322e03e95493f476e23fabcbf0c15748624a41": {
-    "n": 11,
-    "win_rate": 0.0,
-    "pnl_total": -29.0,
-    "tamano_medio_usd": 2.64,
+    "n": 45,
+    "win_rate": 0.0222,
+    "pnl_total": -138.17,
+    "tamano_medio_usd": 3.17,
     "clasificacion": "normal",
-    "trades_muestra_reciente": 8,
+    "trades_muestra_reciente": 5,
     "activos_muestra_reciente": {
       "BTC": {
-        "up": 5,
-        "down": 3
+        "up": 1,
+        "down": 4
       }
     },
     "duraciones_muestra_reciente": {
-      "5m": 8
+      "5m": 5
     },
     "primera_vez_visto": "2026-07-17T16:41:14+00:00",
-    "ultima_actualizacion": "2026-08-25T11:40:13+00:00"
+    "ultima_actualizacion": "2026-08-29T16:07:45+00:00"
   },
   "0x2792269c58602debfaa53bd51524fd36a1589a7e": {
     "n": 0,
@@ -134810,27 +134820,23 @@
     "pnl_total": -43338.63,
     "tamano_medio_usd": 86.68,
     "clasificacion": "normal",
-    "trades_muestra_reciente": 11,
+    "trades_muestra_reciente": 12,
     "activos_muestra_reciente": {
-      "SOL": {
-        "up": 2,
-        "down": 1
+      "BTC": {
+        "up": 6,
+        "down": 0
       },
       "ETH": {
+        "up": 2,
+        "down": 2
+      },
+      "SOL": {
         "up": 1,
-        "down": 2
-      },
-      "XRP": {
-        "up": 0,
-        "down": 2
-      },
-      "BTC": {
-        "up": 0,
-        "down": 3
+        "down": 1
       }
     },
     "duraciones_muestra_reciente": {
-      "15m": 11
+      "15m": 12
     },
     "primera_vez_visto": "2026-07-17T20:41:12+00:00",
     "ultima_actualizacion": "2026-08-29T10:43:37+00:00",
@@ -135235,27 +135241,23 @@
   "0xaf9eec236faea7139db10dc5cddffeb5d44911b3": {
     "n": 0,
     "clasificacion": "normal",
-    "trades_muestra_reciente": 15,
+    "trades_muestra_reciente": 10,
     "activos_muestra_reciente": {
-      "BTC": {
-        "up": 3,
-        "down": 4
-      },
       "SOL": {
-        "up": 0,
-        "down": 4
+        "up": 4,
+        "down": 2
+      },
+      "BTC": {
+        "up": 2,
+        "down": 0
       },
       "ETH": {
         "up": 0,
-        "down": 3
-      },
-      "XRP": {
-        "up": 0,
-        "down": 1
+        "down": 2
       }
     },
     "duraciones_muestra_reciente": {
-      "5m": 15
+      "5m": 10
     },
     "primera_vez_visto": "2026-07-17T22:21:19+00:00",
     "ultima_actualizacion": "2026-08-29T14:12:36+00:00"
@@ -139588,23 +139590,23 @@
     "ultima_actualizacion": "2026-08-17T19:02:08+00:00"
   },
   "0x63fc8df78b42ed52e65c2133f0fc5da4ace932a2": {
-    "n": 2,
-    "win_rate": 0.5,
-    "pnl_total": 4.15,
-    "tamano_medio_usd": 15.15,
+    "n": 1,
+    "win_rate": 0.0,
+    "pnl_total": -3.15,
+    "tamano_medio_usd": 4.2,
     "clasificacion": "normal",
-    "trades_muestra_reciente": 6,
+    "trades_muestra_reciente": 5,
     "activos_muestra_reciente": {
       "BTC": {
         "up": 4,
-        "down": 2
+        "down": 1
       }
     },
     "duraciones_muestra_reciente": {
-      "15m": 6
+      "15m": 5
     },
     "primera_vez_visto": "2026-07-18T14:01:09+00:00",
-    "ultima_actualizacion": "2026-08-26T20:41:20+00:00"
+    "ultima_actualizacion": "2026-08-29T16:07:45+00:00"
   },
   "0x864d65c6cdd99b7c8f12af2831391d7927a6714a": {
     "n": 6,
@@ -140231,29 +140233,21 @@
   "0xb4119278ce385787c189b9a597f25d88fb978a7c": {
     "n": 357,
     "win_rate": 0.0028,
-    "pnl_total": -705.17,
-    "tamano_medio_usd": 2.67,
+    "pnl_total": -701.17,
+    "tamano_medio_usd": 2.66,
     "clasificacion": "normal",
-    "trades_muestra_reciente": 9,
+    "trades_muestra_reciente": 8,
     "activos_muestra_reciente": {
-      "SOL": {
-        "up": 2,
-        "down": 2
-      },
       "BTC": {
-        "up": 3,
-        "down": 0
-      },
-      "ETH": {
-        "up": 0,
-        "down": 2
+        "up": 5,
+        "down": 3
       }
     },
     "duraciones_muestra_reciente": {
-      "5m": 9
+      "5m": 8
     },
     "primera_vez_visto": "2026-07-18T16:41:09+00:00",
-    "ultima_actualizacion": "2026-08-29T08:49:43+00:00"
+    "ultima_actualizacion": "2026-08-29T16:07:45+00:00"
   },
   "0x2e5b8865282aafd75211eec7b277bb8804b1d992": {
     "n": 1,
@@ -142954,32 +142948,32 @@
     "pnl_total": -2609.01,
     "tamano_medio_usd": 5.63,
     "clasificacion": "normal",
-    "trades_muestra_reciente": 12,
+    "trades_muestra_reciente": 13,
     "activos_muestra_reciente": {
+      "SOL": {
+        "up": 1,
+        "down": 1
+      },
       "XRP": {
+        "up": 1,
+        "down": 1
+      },
+      "ETH": {
+        "up": 3,
+        "down": 1
+      },
+      "DOGE": {
         "up": 0,
         "down": 1
       },
       "BTC": {
-        "up": 1,
-        "down": 2
-      },
-      "DOGE": {
-        "up": 0,
-        "down": 4
-      },
-      "SOL": {
-        "up": 0,
-        "down": 3
-      },
-      "ETH": {
-        "up": 1,
-        "down": 0
+        "up": 3,
+        "down": 1
       }
     },
     "duraciones_muestra_reciente": {
-      "15m": 7,
-      "5m": 5
+      "5m": 9,
+      "15m": 4
     },
     "primera_vez_visto": "2026-07-19T02:41:01+00:00",
     "ultima_actualizacion": "2026-08-29T13:03:35+00:00"
@@ -149217,15 +149211,15 @@
     "pnl_total": -51038.05,
     "tamano_medio_usd": 104.68,
     "clasificacion": "normal",
-    "trades_muestra_reciente": 34,
+    "trades_muestra_reciente": 28,
     "activos_muestra_reciente": {
       "BTC": {
-        "up": 17,
-        "down": 17
+        "up": 12,
+        "down": 16
       }
     },
     "duraciones_muestra_reciente": {
-      "5m": 34
+      "5m": 28
     },
     "primera_vez_visto": "2026-07-20T01:01:03+00:00",
     "ultima_actualizacion": "2026-08-29T12:40:40+00:00",
@@ -150435,15 +150429,19 @@
     "clasificacion": "normal",
     "trades_muestra_reciente": 7,
     "activos_muestra_reciente": {
-      "ETH": {
-        "up": 1,
-        "down": 2
+      "XRP": {
+        "up": 3,
+        "down": 0
       },
       "BTC": {
-        "up": 1,
-        "down": 2
+        "up": 2,
+        "down": 0
       },
       "SOL": {
+        "up": 1,
+        "down": 0
+      },
+      "ETH": {
         "up": 1,
         "down": 0
       }
@@ -155956,15 +155954,15 @@
     "pnl_total": -76488.45,
     "tamano_medio_usd": 152.98,
     "clasificacion": "normal",
-    "trades_muestra_reciente": 24,
+    "trades_muestra_reciente": 11,
     "activos_muestra_reciente": {
       "BTC": {
         "up": 0,
-        "down": 24
+        "down": 11
       }
     },
     "duraciones_muestra_reciente": {
-      "5m": 24
+      "5m": 11
     },
     "primera_vez_visto": "2026-07-21T05:21:08+00:00",
     "ultima_actualizacion": "2026-08-29T10:43:37+00:00",
@@ -158875,20 +158873,20 @@
     "pnl_total": -5335.11,
     "tamano_medio_usd": 12.9,
     "clasificacion": "smart",
-    "pnl_leaderboard_mes": 159347.37,
-    "trades_muestra_reciente": 282,
+    "pnl_leaderboard_mes": 159539.85,
+    "trades_muestra_reciente": 347,
     "activos_muestra_reciente": {
       "BTC": {
-        "up": 129,
-        "down": 109
+        "up": 169,
+        "down": 160
       },
       "ETH": {
-        "up": 18,
-        "down": 26
+        "up": 4,
+        "down": 14
       }
     },
     "duraciones_muestra_reciente": {
-      "5m": 282
+      "5m": 347
     },
     "primera_vez_visto": "2026-07-21T18:01:13+00:00",
     "ultima_actualizacion": "2026-08-29T13:26:47+00:00",
@@ -158901,24 +158899,24 @@
     "pnl_total": -15773.49,
     "tamano_medio_usd": 31.55,
     "clasificacion": "normal",
-    "trades_muestra_reciente": 40,
+    "trades_muestra_reciente": 53,
     "activos_muestra_reciente": {
+      "SOL": {
+        "up": 9,
+        "down": 8
+      },
       "BTC": {
-        "up": 10,
-        "down": 14
+        "up": 14,
+        "down": 15
       },
       "ETH": {
         "up": 4,
         "down": 3
-      },
-      "SOL": {
-        "up": 5,
-        "down": 4
       }
     },
     "duraciones_muestra_reciente": {
-      "5m": 28,
-      "15m": 12
+      "5m": 36,
+      "15m": 17
     },
     "primera_vez_visto": "2026-07-21T18:01:13+00:00",
     "ultima_actualizacion": "2026-08-29T13:03:35+00:00"
@@ -161044,21 +161042,21 @@
   "0x0b7d7b7d6195233d2166e3f9db6e1861f705e3f1": {
     "n": 495,
     "win_rate": 0.0,
-    "pnl_total": -1543.05,
-    "tamano_medio_usd": 3.12,
+    "pnl_total": -1550.8,
+    "tamano_medio_usd": 3.13,
     "clasificacion": "normal",
-    "trades_muestra_reciente": 7,
+    "trades_muestra_reciente": 5,
     "activos_muestra_reciente": {
       "BTC": {
-        "up": 5,
-        "down": 2
+        "up": 2,
+        "down": 3
       }
     },
     "duraciones_muestra_reciente": {
-      "5m": 7
+      "5m": 5
     },
     "primera_vez_visto": "2026-07-22T01:01:05+00:00",
-    "ultima_actualizacion": "2026-08-29T09:35:22+00:00"
+    "ultima_actualizacion": "2026-08-29T16:07:45+00:00"
   },
   "0x336ef99ab40a56589430dbed4939ae07c45e2ae5": {
     "n": 53,
@@ -166715,23 +166713,23 @@
     "pnl_total": -12127.26,
     "tamano_medio_usd": 24.25,
     "clasificacion": "normal",
-    "trades_muestra_reciente": 31,
+    "trades_muestra_reciente": 25,
     "activos_muestra_reciente": {
+      "BTC": {
+        "up": 5,
+        "down": 8
+      },
       "SOL": {
-        "up": 6,
+        "up": 2,
         "down": 0
       },
       "ETH": {
-        "up": 14,
-        "down": 0
-      },
-      "BTC": {
-        "up": 11,
+        "up": 10,
         "down": 0
       }
     },
     "duraciones_muestra_reciente": {
-      "15m": 31
+      "15m": 25
     },
     "primera_vez_visto": "2026-07-23T02:01:05+00:00",
     "ultima_actualizacion": "2026-08-29T11:29:32+00:00"
@@ -166742,15 +166740,15 @@
     "pnl_total": -13.76,
     "tamano_medio_usd": 0.49,
     "clasificacion": "normal",
-    "trades_muestra_reciente": 47,
+    "trades_muestra_reciente": 19,
     "activos_muestra_reciente": {
       "BTC": {
-        "up": 16,
-        "down": 31
+        "up": 8,
+        "down": 11
       }
     },
     "duraciones_muestra_reciente": {
-      "5m": 47
+      "5m": 19
     },
     "primera_vez_visto": "2026-07-23T02:21:03+00:00",
     "ultima_actualizacion": "2026-08-29T12:40:40+00:00"
@@ -170023,19 +170021,19 @@
     "pnl_total": -806.88,
     "tamano_medio_usd": 1.64,
     "clasificacion": "normal",
-    "trades_muestra_reciente": 45,
+    "trades_muestra_reciente": 33,
     "activos_muestra_reciente": {
-      "BTC": {
-        "up": 12,
-        "down": 8
-      },
       "ETH": {
-        "up": 18,
+        "up": 7,
         "down": 7
+      },
+      "BTC": {
+        "up": 7,
+        "down": 12
       }
     },
     "duraciones_muestra_reciente": {
-      "5m": 45
+      "5m": 33
     },
     "primera_vez_visto": "2026-07-23T18:41:21+00:00",
     "ultima_actualizacion": "2026-08-29T15:21:45+00:00"
@@ -174993,8 +174991,8 @@
     "trades_muestra_reciente": 5,
     "activos_muestra_reciente": {
       "BTC": {
-        "up": 3,
-        "down": 2
+        "up": 4,
+        "down": 1
       }
     },
     "duraciones_muestra_reciente": {
@@ -180034,15 +180032,15 @@
     "pnl_total": -2162.29,
     "tamano_medio_usd": 6.11,
     "clasificacion": "normal",
-    "trades_muestra_reciente": 7,
+    "trades_muestra_reciente": 8,
     "activos_muestra_reciente": {
       "BTC": {
         "up": 3,
-        "down": 4
+        "down": 5
       }
     },
     "duraciones_muestra_reciente": {
-      "5m": 7
+      "5m": 8
     },
     "primera_vez_visto": "2026-07-25T14:01:10+00:00",
     "ultima_actualizacion": "2026-08-29T14:58:43+00:00"
@@ -180556,30 +180554,30 @@
   "0x13e92f1cd635990b84bccc0cf445e7f848c17cd4": {
     "n": 456,
     "win_rate": 0.0,
-    "pnl_total": -12746.56,
-    "tamano_medio_usd": 28.0,
+    "pnl_total": -12776.33,
+    "tamano_medio_usd": 28.02,
     "clasificacion": "normal",
-    "trades_muestra_reciente": 6,
+    "trades_muestra_reciente": 5,
     "activos_muestra_reciente": {
-      "ETH": {
-        "up": 2,
-        "down": 2
-      },
-      "DOGE": {
+      "BTC": {
         "up": 1,
         "down": 0
       },
-      "SOL": {
+      "XRP": {
         "up": 0,
+        "down": 1
+      },
+      "SOL": {
+        "up": 2,
         "down": 1
       }
     },
     "duraciones_muestra_reciente": {
-      "15m": 5,
-      "60m": 1
+      "15m": 3,
+      "60m": 2
     },
     "primera_vez_visto": "2026-07-25T16:41:13+00:00",
-    "ultima_actualizacion": "2026-08-29T03:32:50+00:00"
+    "ultima_actualizacion": "2026-08-29T16:07:45+00:00"
   },
   "0xb4a1436c94546bae22c0f8b65fd06a2c2225b6d5": {
     "n": 1,
@@ -181632,41 +181630,35 @@
     "ultima_actualizacion": "2026-08-12T21:41:54+00:00"
   },
   "0x628ce07b7c1138aa627e20218aaa2861781f8692": {
-    "n": 382,
+    "n": 381,
     "win_rate": 0.0,
-    "pnl_total": -1810.27,
-    "tamano_medio_usd": 4.74,
+    "pnl_total": -1807.03,
+    "tamano_medio_usd": 4.76,
     "clasificacion": "normal",
     "trades_muestra_reciente": 6,
     "activos_muestra_reciente": {
-      "ETH": {
+      "DOGE": {
         "up": 0,
         "down": 2
       },
-      "BTC": {
-        "up": 1,
-        "down": 0
-      },
-      "DOGE": {
+      "ETH": {
         "up": 0,
-        "down": 1
+        "down": 2
       },
       "XRP": {
         "up": 0,
         "down": 1
       },
-      "SOL": {
+      "BNB": {
         "up": 1,
         "down": 0
       }
     },
     "duraciones_muestra_reciente": {
-      "5m": 2,
-      "15m": 3,
-      "60m": 1
+      "15m": 6
     },
     "primera_vez_visto": "2026-07-25T22:01:17+00:00",
-    "ultima_actualizacion": "2026-08-29T09:35:22+00:00"
+    "ultima_actualizacion": "2026-08-29T16:07:45+00:00"
   },
   "0x39afc9927de51e4b51f5410c42736452d2d20367": {
     "n": 500,
@@ -185039,8 +185031,8 @@
     "trades_muestra_reciente": 8,
     "activos_muestra_reciente": {
       "BTC": {
-        "up": 5,
-        "down": 3
+        "up": 8,
+        "down": 0
       }
     },
     "duraciones_muestra_reciente": {
@@ -191033,20 +191025,21 @@
     "pnl_total": -9492.99,
     "tamano_medio_usd": 21.23,
     "clasificacion": "normal",
-    "trades_muestra_reciente": 31,
+    "trades_muestra_reciente": 42,
     "activos_muestra_reciente": {
       "BTC": {
-        "up": 18,
+        "up": 32,
         "down": 0
       },
       "ETH": {
-        "up": 13,
+        "up": 10,
         "down": 0
       }
     },
     "duraciones_muestra_reciente": {
-      "15m": 14,
-      "5m": 17
+      "15m": 31,
+      "5m": 8,
+      "60m": 3
     },
     "primera_vez_visto": "2026-07-27T20:41:13+00:00",
     "ultima_actualizacion": "2026-08-29T13:49:38+00:00"
@@ -191057,15 +191050,15 @@
     "pnl_total": -299.14,
     "tamano_medio_usd": 5.98,
     "clasificacion": "normal",
-    "trades_muestra_reciente": 9,
+    "trades_muestra_reciente": 13,
     "activos_muestra_reciente": {
       "BTC": {
-        "up": 3,
-        "down": 6
+        "up": 5,
+        "down": 8
       }
     },
     "duraciones_muestra_reciente": {
-      "5m": 9
+      "5m": 13
     },
     "primera_vez_visto": "2026-07-27T20:41:13+00:00",
     "ultima_actualizacion": "2026-08-29T13:26:47+00:00"
@@ -191685,23 +191678,23 @@
     "ultima_actualizacion": "2026-08-01T14:41:27+00:00"
   },
   "0x8fea5707100f02d51ead9d7b75fe4040b3d14923": {
-    "n": 424,
+    "n": 427,
     "win_rate": 0.0,
-    "pnl_total": -804.72,
-    "tamano_medio_usd": 1.9,
+    "pnl_total": -808.72,
+    "tamano_medio_usd": 1.89,
     "clasificacion": "normal",
-    "trades_muestra_reciente": 20,
+    "trades_muestra_reciente": 7,
     "activos_muestra_reciente": {
       "BTC": {
-        "up": 16,
-        "down": 4
+        "up": 0,
+        "down": 7
       }
     },
     "duraciones_muestra_reciente": {
-      "5m": 20
+      "5m": 7
     },
     "primera_vez_visto": "2026-07-28T00:21:02+00:00",
-    "ultima_actualizacion": "2026-08-29T08:27:07+00:00"
+    "ultima_actualizacion": "2026-08-29T16:07:45+00:00"
   },
   "0xcfe0c7ac8f82b61d6284d46c8720ad9471ca507c": {
     "n": 14,
@@ -192620,20 +192613,20 @@
     "pnl_total": 1.11,
     "tamano_medio_usd": 7.65,
     "clasificacion": "normal",
-    "trades_muestra_reciente": 20,
+    "trades_muestra_reciente": 25,
     "activos_muestra_reciente": {
       "BTC": {
-        "up": 11,
-        "down": 3
+        "up": 9,
+        "down": 12
       },
       "ETH": {
         "up": 4,
-        "down": 2
+        "down": 0
       }
     },
     "duraciones_muestra_reciente": {
-      "5m": 9,
-      "15m": 11
+      "15m": 15,
+      "5m": 10
     },
     "primera_vez_visto": "2026-07-28T04:41:06+00:00",
     "ultima_actualizacion": "2026-08-29T15:44:57+00:00"
@@ -193568,20 +193561,21 @@
     "pnl_total": -5979.11,
     "tamano_medio_usd": 17.35,
     "clasificacion": "normal",
-    "trades_muestra_reciente": 12,
+    "trades_muestra_reciente": 16,
     "activos_muestra_reciente": {
-      "ETH": {
-        "up": 3,
+      "BTC": {
+        "up": 12,
         "down": 0
       },
-      "BTC": {
-        "up": 9,
+      "ETH": {
+        "up": 4,
         "down": 0
       }
     },
     "duraciones_muestra_reciente": {
-      "5m": 5,
-      "15m": 7
+      "15m": 11,
+      "5m": 2,
+      "60m": 3
     },
     "primera_vez_visto": "2026-07-28T08:41:09+00:00",
     "ultima_actualizacion": "2026-08-29T13:49:38+00:00"
@@ -195738,15 +195732,15 @@
     "pnl_total": -3602.96,
     "tamano_medio_usd": 30.99,
     "clasificacion": "normal",
-    "trades_muestra_reciente": 12,
+    "trades_muestra_reciente": 5,
     "activos_muestra_reciente": {
       "BTC": {
-        "up": 8,
-        "down": 4
+        "up": 4,
+        "down": 1
       }
     },
     "duraciones_muestra_reciente": {
-      "5m": 12
+      "5m": 5
     },
     "primera_vez_visto": "2026-07-28T18:01:24+00:00",
     "ultima_actualizacion": "2026-08-29T11:06:36+00:00"
@@ -197753,15 +197747,15 @@
     "pnl_total": -40551.72,
     "tamano_medio_usd": 83.1,
     "clasificacion": "normal",
-    "trades_muestra_reciente": 8,
+    "trades_muestra_reciente": 7,
     "activos_muestra_reciente": {
       "BTC": {
-        "up": 3,
-        "down": 5
+        "up": 5,
+        "down": 2
       }
     },
     "duraciones_muestra_reciente": {
-      "5m": 8
+      "5m": 7
     },
     "primera_vez_visto": "2026-07-28T18:41:24+00:00",
     "ultima_actualizacion": "2026-08-29T14:12:36+00:00"
@@ -199093,15 +199087,15 @@
     "pnl_total": -3.25,
     "tamano_medio_usd": 6.5,
     "clasificacion": "normal",
-    "trades_muestra_reciente": 10,
+    "trades_muestra_reciente": 7,
     "activos_muestra_reciente": {
       "BTC": {
-        "up": 8,
-        "down": 2
+        "up": 2,
+        "down": 5
       }
     },
     "duraciones_muestra_reciente": {
-      "5m": 10
+      "5m": 7
     },
     "primera_vez_visto": "2026-07-28T19:01:29+00:00",
     "ultima_actualizacion": "2026-08-29T14:12:36+00:00"
@@ -201699,23 +201693,23 @@
     "ultima_actualizacion": "2026-07-28T19:21:24+00:00"
   },
   "0xd5e2004f433afc994d49cd423f8041928ea95048": {
-    "n": 3,
-    "win_rate": 0.6667,
-    "pnl_total": 1.98,
+    "n": 2,
+    "win_rate": 0.5,
+    "pnl_total": 0.0,
     "tamano_medio_usd": 2.0,
     "clasificacion": "normal",
-    "trades_muestra_reciente": 9,
+    "trades_muestra_reciente": 6,
     "activos_muestra_reciente": {
       "BTC": {
-        "up": 3,
-        "down": 6
+        "up": 1,
+        "down": 5
       }
     },
     "duraciones_muestra_reciente": {
-      "5m": 9
+      "5m": 6
     },
     "primera_vez_visto": "2026-07-28T19:21:24+00:00",
-    "ultima_actualizacion": "2026-08-29T09:35:22+00:00"
+    "ultima_actualizacion": "2026-08-29T16:07:45+00:00"
   },
   "0x04b2d5fc40d147e73db29bc8f3de7d88d11430cc": {
     "n": 0,
@@ -202050,15 +202044,15 @@
     "pnl_total": 0.03,
     "tamano_medio_usd": 4.15,
     "clasificacion": "normal",
-    "trades_muestra_reciente": 10,
+    "trades_muestra_reciente": 13,
     "activos_muestra_reciente": {
       "BTC": {
-        "up": 3,
-        "down": 7
+        "up": 8,
+        "down": 5
       }
     },
     "duraciones_muestra_reciente": {
-      "5m": 10
+      "5m": 13
     },
     "primera_vez_visto": "2026-07-28T19:21:24+00:00",
     "ultima_actualizacion": "2026-08-29T13:03:35+00:00"
@@ -204518,15 +204512,15 @@
     "trades_muestra_reciente": 5,
     "activos_muestra_reciente": {
       "BTC": {
-        "up": 4,
-        "down": 1
+        "up": 2,
+        "down": 3
       }
     },
     "duraciones_muestra_reciente": {
       "5m": 5
     },
     "primera_vez_visto": "2026-07-28T20:21:24+00:00",
-    "ultima_actualizacion": "2026-08-29T05:02:49+00:00"
+    "ultima_actualizacion": "2026-08-29T16:07:45+00:00"
   },
   "0x60f18d119c9eedc905b3dac8e0994fa745e72f40": {
     "n": 73,
@@ -204713,15 +204707,15 @@
     "pnl_total": -8313.45,
     "tamano_medio_usd": 16.63,
     "clasificacion": "normal",
-    "trades_muestra_reciente": 72,
+    "trades_muestra_reciente": 95,
     "activos_muestra_reciente": {
       "BTC": {
-        "up": 33,
+        "up": 56,
         "down": 39
       }
     },
     "duraciones_muestra_reciente": {
-      "5m": 72
+      "5m": 95
     },
     "primera_vez_visto": "2026-07-28T20:21:24+00:00",
     "ultima_actualizacion": "2026-08-29T10:43:37+00:00"
@@ -205186,8 +205180,8 @@
     "trades_muestra_reciente": 5,
     "activos_muestra_reciente": {
       "BTC": {
-        "up": 5,
-        "down": 0
+        "up": 3,
+        "down": 2
       }
     },
     "duraciones_muestra_reciente": {
@@ -206072,18 +206066,18 @@
     "pnl_total": -9.8,
     "tamano_medio_usd": 1.96,
     "clasificacion": "normal",
-    "trades_muestra_reciente": 9,
+    "trades_muestra_reciente": 10,
     "activos_muestra_reciente": {
       "BTC": {
-        "up": 3,
-        "down": 6
+        "up": 7,
+        "down": 3
       }
     },
     "duraciones_muestra_reciente": {
-      "5m": 9
+      "5m": 10
     },
     "primera_vez_visto": "2026-07-28T20:41:24+00:00",
-    "ultima_actualizacion": "2026-08-29T08:27:07+00:00"
+    "ultima_actualizacion": "2026-08-29T16:07:45+00:00"
   },
   "0xfbd87945fdd7b4e7438f0981621459024af8f564": {
     "n": 0,
@@ -206251,10 +206245,10 @@
     "ultima_actualizacion": "2026-07-29T20:01:28+00:00"
   },
   "0x09b7c7435bd14ab7cfed0be0e796c2363816d0e2": {
-    "n": 27,
+    "n": 29,
     "win_rate": 0.0,
-    "pnl_total": -463.23,
-    "tamano_medio_usd": 17.16,
+    "pnl_total": -483.33,
+    "tamano_medio_usd": 17.28,
     "clasificacion": "normal",
     "trades_muestra_reciente": 7,
     "activos_muestra_reciente": {
@@ -206267,7 +206261,7 @@
       "5m": 7
     },
     "primera_vez_visto": "2026-07-28T20:41:24+00:00",
-    "ultima_actualizacion": "2026-08-29T08:49:43+00:00"
+    "ultima_actualizacion": "2026-08-29T16:07:45+00:00"
   },
   "0x6334bcac4212f5b7d33e6d97db25c2fa83fb68b4": {
     "n": 6,
@@ -206728,8 +206722,8 @@
     "trades_muestra_reciente": 7,
     "activos_muestra_reciente": {
       "BTC": {
-        "up": 3,
-        "down": 4
+        "up": 2,
+        "down": 5
       }
     },
     "duraciones_muestra_reciente": {
@@ -207194,28 +207188,28 @@
     "pnl_total": -4900.26,
     "tamano_medio_usd": 10.0,
     "clasificacion": "normal",
-    "trades_muestra_reciente": 27,
+    "trades_muestra_reciente": 33,
     "activos_muestra_reciente": {
       "SOL": {
-        "up": 6,
+        "up": 2,
+        "down": 7
+      },
+      "BTC": {
+        "up": 7,
+        "down": 7
+      },
+      "DOGE": {
+        "up": 5,
         "down": 3
       },
       "ETH": {
         "up": 2,
-        "down": 2
-      },
-      "DOGE": {
-        "up": 4,
-        "down": 2
-      },
-      "BTC": {
-        "up": 4,
-        "down": 4
+        "down": 0
       }
     },
     "duraciones_muestra_reciente": {
-      "15m": 18,
-      "5m": 9
+      "5m": 17,
+      "15m": 16
     },
     "primera_vez_visto": "2026-07-28T20:41:24+00:00",
     "ultima_actualizacion": "2026-08-29T15:44:57+00:00"
@@ -208250,15 +208244,15 @@
     "pnl_total": -0.87,
     "tamano_medio_usd": 200.0,
     "clasificacion": "normal",
-    "trades_muestra_reciente": 18,
+    "trades_muestra_reciente": 44,
     "activos_muestra_reciente": {
       "BTC": {
-        "up": 13,
-        "down": 5
+        "up": 19,
+        "down": 25
       }
     },
     "duraciones_muestra_reciente": {
-      "5m": 18
+      "5m": 44
     },
     "primera_vez_visto": "2026-07-28T21:01:24+00:00",
     "ultima_actualizacion": "2026-08-29T13:49:38+00:00"
@@ -209156,21 +209150,16 @@
     "pnl_total": -6576.06,
     "tamano_medio_usd": 20.45,
     "clasificacion": "normal",
-    "trades_muestra_reciente": 21,
+    "trades_muestra_reciente": 15,
     "activos_muestra_reciente": {
       "BTC": {
-        "up": 18,
-        "down": 0
-      },
-      "ETH": {
-        "up": 3,
+        "up": 15,
         "down": 0
       }
     },
     "duraciones_muestra_reciente": {
-      "15m": 12,
-      "5m": 6,
-      "60m": 3
+      "15m": 10,
+      "5m": 5
     },
     "primera_vez_visto": "2026-07-28T22:01:26+00:00",
     "ultima_actualizacion": "2026-08-29T14:35:41+00:00"
@@ -210479,15 +210468,15 @@
   "0x1d7bcac80e0ffa0a445c64baf1a003a980b20d94": {
     "n": 0,
     "clasificacion": "normal",
-    "trades_muestra_reciente": 6,
+    "trades_muestra_reciente": 10,
     "activos_muestra_reciente": {
       "BTC": {
-        "up": 5,
-        "down": 1
+        "up": 7,
+        "down": 3
       }
     },
     "duraciones_muestra_reciente": {
-      "5m": 6
+      "5m": 10
     },
     "primera_vez_visto": "2026-07-28T22:21:48+00:00",
     "ultima_actualizacion": "2026-08-29T15:21:45+00:00"
@@ -211902,8 +211891,8 @@
     "trades_muestra_reciente": 11,
     "activos_muestra_reciente": {
       "BTC": {
-        "up": 5,
-        "down": 6
+        "up": 7,
+        "down": 4
       }
     },
     "duraciones_muestra_reciente": {
@@ -213155,33 +213144,25 @@
     "ultima_actualizacion": "2026-08-18T19:01:56+00:00"
   },
   "0x61aca9f3f54c42df9459c3b73bb505d266404781": {
-    "n": 240,
+    "n": 239,
     "win_rate": 0.0,
-    "pnl_total": -43585.55,
-    "tamano_medio_usd": 181.61,
+    "pnl_total": -43548.54,
+    "tamano_medio_usd": 182.21,
     "clasificacion": "normal",
-    "trades_muestra_reciente": 6,
+    "trades_muestra_reciente": 5,
     "activos_muestra_reciente": {
       "BTC": {
-        "up": 6,
-        "down": 0
+        "up": 2,
+        "down": 3
       }
     },
     "duraciones_muestra_reciente": {
-      "weekly": 4,
-      "5m": 1,
-      "15m": 1
+      "5m": 5
     },
     "primera_vez_visto": "2026-07-28T23:01:26+00:00",
-    "ultima_actualizacion": "2026-08-29T02:02:36+00:00",
+    "ultima_actualizacion": "2026-08-29T16:07:45+00:00",
     "mediana_apuesta_usd": 10.62,
-    "mediana_actualizada": "2026-08-12T22:41:47+00:00",
-    "weekly": {
-      "n": 20,
-      "win_rate": 0.0,
-      "pnl_total": -3239.19,
-      "tamano_medio_usd": 161.97
-    }
+    "mediana_actualizada": "2026-08-12T22:41:47+00:00"
   },
   "0xce70ac9d53c0ee1d5ac9d21e29c6cc498ccbc729": {
     "n": 24,
@@ -214530,15 +214511,15 @@
     "pnl_total": -1.84,
     "tamano_medio_usd": 2.65,
     "clasificacion": "normal",
-    "trades_muestra_reciente": 10,
+    "trades_muestra_reciente": 6,
     "activos_muestra_reciente": {
       "BTC": {
         "up": 3,
-        "down": 7
+        "down": 3
       }
     },
     "duraciones_muestra_reciente": {
-      "5m": 10
+      "5m": 6
     },
     "primera_vez_visto": "2026-07-28T23:21:26+00:00",
     "ultima_actualizacion": "2026-08-29T11:06:36+00:00"
@@ -215625,23 +215606,15 @@
     "pnl_total": -19379.21,
     "tamano_medio_usd": 38.76,
     "clasificacion": "normal",
-    "trades_muestra_reciente": 13,
+    "trades_muestra_reciente": 9,
     "activos_muestra_reciente": {
       "BTC": {
-        "up": 9,
-        "down": 2
-      },
-      "BNB": {
-        "up": 1,
-        "down": 0
-      },
-      "ETH": {
-        "up": 0,
+        "up": 8,
         "down": 1
       }
     },
     "duraciones_muestra_reciente": {
-      "5m": 13
+      "5m": 9
     },
     "primera_vez_visto": "2026-07-29T00:01:23+00:00",
     "ultima_actualizacion": "2026-08-29T15:21:45+00:00"
@@ -218462,15 +218435,15 @@
     "pnl_total": -522.75,
     "tamano_medio_usd": 1.05,
     "clasificacion": "normal",
-    "trades_muestra_reciente": 24,
+    "trades_muestra_reciente": 18,
     "activos_muestra_reciente": {
       "BTC": {
-        "up": 16,
-        "down": 8
+        "up": 12,
+        "down": 6
       }
     },
     "duraciones_muestra_reciente": {
-      "5m": 24
+      "5m": 18
     },
     "primera_vez_visto": "2026-07-29T02:41:13+00:00",
     "ultima_actualizacion": "2026-08-29T14:58:43+00:00"
@@ -221010,18 +220983,18 @@
     "pnl_total": -38419.17,
     "tamano_medio_usd": 76.84,
     "clasificacion": "normal",
-    "trades_muestra_reciente": 7,
+    "trades_muestra_reciente": 10,
     "activos_muestra_reciente": {
       "BTC": {
-        "up": 3,
-        "down": 4
+        "up": 4,
+        "down": 6
       }
     },
     "duraciones_muestra_reciente": {
-      "5m": 7
+      "5m": 10
     },
     "primera_vez_visto": "2026-07-29T04:01:13+00:00",
-    "ultima_actualizacion": "2026-08-29T07:18:53+00:00"
+    "ultima_actualizacion": "2026-08-29T16:07:45+00:00"
   },
   "0xad1720aa2cff65f290f7da1358374a4f91edfcad": {
     "n": 265,
@@ -221392,15 +221365,15 @@
     "pnl_total": -1639.1,
     "tamano_medio_usd": 3.29,
     "clasificacion": "normal",
-    "trades_muestra_reciente": 8,
+    "trades_muestra_reciente": 5,
     "activos_muestra_reciente": {
       "BTC": {
-        "up": 4,
-        "down": 4
+        "up": 0,
+        "down": 5
       }
     },
     "duraciones_muestra_reciente": {
-      "5m": 8
+      "5m": 5
     },
     "primera_vez_visto": "2026-07-29T05:01:18+00:00",
     "ultima_actualizacion": "2026-08-29T12:16:05+00:00"
@@ -221743,18 +221716,18 @@
     "pnl_total": -428.41,
     "tamano_medio_usd": 2.32,
     "clasificacion": "normal",
-    "trades_muestra_reciente": 6,
+    "trades_muestra_reciente": 11,
     "activos_muestra_reciente": {
       "BTC": {
-        "up": 4,
-        "down": 2
+        "up": 2,
+        "down": 9
       }
     },
     "duraciones_muestra_reciente": {
-      "5m": 6
+      "5m": 11
     },
     "primera_vez_visto": "2026-07-29T05:41:17+00:00",
-    "ultima_actualizacion": "2026-08-28T07:13:31+00:00"
+    "ultima_actualizacion": "2026-08-29T16:07:45+00:00"
   },
   "0x9de92bf941b25569fedf6c925f71331e0d04ee25": {
     "n": 159,
@@ -224056,15 +224029,15 @@
     "pnl_total": -8764.88,
     "tamano_medio_usd": 17.53,
     "clasificacion": "normal",
-    "trades_muestra_reciente": 8,
+    "trades_muestra_reciente": 7,
     "activos_muestra_reciente": {
       "BTC": {
-        "up": 6,
-        "down": 2
+        "up": 4,
+        "down": 3
       }
     },
     "duraciones_muestra_reciente": {
-      "5m": 8
+      "5m": 7
     },
     "primera_vez_visto": "2026-07-29T06:41:23+00:00",
     "ultima_actualizacion": "2026-08-29T12:16:05+00:00"
@@ -227750,23 +227723,23 @@
     "ultima_actualizacion": "2026-08-29T09:58:07+00:00"
   },
   "0xeb2c0afa89243150eb3303d30655ce869150ba61": {
-    "n": 14,
-    "win_rate": 0.0714,
-    "pnl_total": -40.96,
-    "tamano_medio_usd": 2.93,
+    "n": 18,
+    "win_rate": 0.0,
+    "pnl_total": -64.92,
+    "tamano_medio_usd": 3.61,
     "clasificacion": "normal",
-    "trades_muestra_reciente": 6,
+    "trades_muestra_reciente": 5,
     "activos_muestra_reciente": {
       "BTC": {
         "up": 3,
-        "down": 3
+        "down": 2
       }
     },
     "duraciones_muestra_reciente": {
-      "5m": 6
+      "5m": 5
     },
     "primera_vez_visto": "2026-07-29T10:41:24+00:00",
-    "ultima_actualizacion": "2026-08-29T06:56:25+00:00"
+    "ultima_actualizacion": "2026-08-29T16:07:45+00:00"
   },
   "0x82ae434f983771a5bc94092a6850da80368e2890": {
     "n": 427,
@@ -227815,15 +227788,15 @@
     "pnl_total": -4499.27,
     "tamano_medio_usd": 9.0,
     "clasificacion": "normal",
-    "trades_muestra_reciente": 6,
+    "trades_muestra_reciente": 5,
     "activos_muestra_reciente": {
       "BTC": {
-        "up": 5,
-        "down": 1
+        "up": 2,
+        "down": 3
       }
     },
     "duraciones_muestra_reciente": {
-      "5m": 6
+      "5m": 5
     },
     "primera_vez_visto": "2026-07-29T10:41:24+00:00",
     "ultima_actualizacion": "2026-08-29T15:21:45+00:00"
@@ -232987,18 +232960,18 @@
     "pnl_total": -23586.58,
     "tamano_medio_usd": 47.94,
     "clasificacion": "normal",
-    "trades_muestra_reciente": 5,
+    "trades_muestra_reciente": 6,
     "activos_muestra_reciente": {
       "BTC": {
-        "up": 4,
-        "down": 1
+        "up": 1,
+        "down": 5
       }
     },
     "duraciones_muestra_reciente": {
-      "5m": 5
+      "5m": 6
     },
     "primera_vez_visto": "2026-07-29T15:21:23+00:00",
-    "ultima_actualizacion": "2026-08-29T08:04:19+00:00"
+    "ultima_actualizacion": "2026-08-29T16:07:45+00:00"
   },
   "0x0a976ecd930332f9c012550cd1363ad43fba79be": {
     "n": 0,
@@ -237147,16 +237120,15 @@
     "pnl_total": -3699.44,
     "tamano_medio_usd": 17.05,
     "clasificacion": "normal",
-    "trades_muestra_reciente": 19,
+    "trades_muestra_reciente": 9,
     "activos_muestra_reciente": {
       "BTC": {
-        "up": 7,
-        "down": 12
+        "up": 1,
+        "down": 8
       }
     },
     "duraciones_muestra_reciente": {
-      "5m": 15,
-      "15m": 4
+      "5m": 9
     },
     "primera_vez_visto": "2026-07-29T19:01:34+00:00",
     "ultima_actualizacion": "2026-08-29T14:12:36+00:00"
@@ -242831,7 +242803,7 @@
       "5m": 5
     },
     "primera_vez_visto": "2026-07-30T00:21:13+00:00",
-    "ultima_actualizacion": "2026-08-29T06:10:56+00:00"
+    "ultima_actualizacion": "2026-08-29T16:07:45+00:00"
   },
   "0x49922b47b3c91a39f8a85080c43071e8420dd416": {
     "n": 120,
@@ -246025,15 +245997,15 @@
     "pnl_total": -20.1,
     "tamano_medio_usd": 6.7,
     "clasificacion": "normal",
-    "trades_muestra_reciente": 7,
+    "trades_muestra_reciente": 23,
     "activos_muestra_reciente": {
       "BTC": {
-        "up": 3,
-        "down": 4
+        "up": 15,
+        "down": 8
       }
     },
     "duraciones_muestra_reciente": {
-      "5m": 7
+      "5m": 23
     },
     "primera_vez_visto": "2026-07-30T03:21:14+00:00",
     "ultima_actualizacion": "2026-08-29T13:03:35+00:00"
@@ -260961,12 +260933,17 @@
     "trades_muestra_reciente": 6,
     "activos_muestra_reciente": {
       "BTC": {
-        "up": 1,
-        "down": 5
+        "up": 0,
+        "down": 4
+      },
+      "ETH": {
+        "up": 0,
+        "down": 2
       }
     },
     "duraciones_muestra_reciente": {
-      "5m": 6
+      "5m": 4,
+      "15m": 2
     },
     "primera_vez_visto": "2026-07-30T18:02:05+00:00",
     "ultima_actualizacion": "2026-08-29T11:52:43+00:00"
@@ -262283,18 +262260,18 @@
     "pnl_total": -7320.67,
     "tamano_medio_usd": 14.67,
     "clasificacion": "normal",
-    "trades_muestra_reciente": 5,
+    "trades_muestra_reciente": 7,
     "activos_muestra_reciente": {
       "BTC": {
-        "up": 5,
-        "down": 0
+        "up": 2,
+        "down": 5
       }
     },
     "duraciones_muestra_reciente": {
-      "5m": 5
+      "5m": 7
     },
     "primera_vez_visto": "2026-07-30T19:21:47+00:00",
-    "ultima_actualizacion": "2026-08-29T00:32:16+00:00"
+    "ultima_actualizacion": "2026-08-29T16:07:45+00:00"
   },
   "0xd748328f5e297cb32a0faafa42ff05d45a728d4a": {
     "n": 7,
@@ -266485,15 +266462,15 @@
     "pnl_total": -7789.06,
     "tamano_medio_usd": 20.5,
     "clasificacion": "normal",
-    "trades_muestra_reciente": 9,
+    "trades_muestra_reciente": 17,
     "activos_muestra_reciente": {
       "BTC": {
-        "up": 9,
-        "down": 0
+        "up": 15,
+        "down": 2
       }
     },
     "duraciones_muestra_reciente": {
-      "5m": 9
+      "5m": 17
     },
     "primera_vez_visto": "2026-07-31T00:01:44+00:00",
     "ultima_actualizacion": "2026-08-29T10:43:37+00:00"
@@ -272001,21 +271978,24 @@
     "ultima_actualizacion": "2026-08-09T03:01:56+00:00"
   },
   "0x3109a418bfb47665c145567d9f903efb27af12d2": {
-    "n": 0,
+    "n": 3,
+    "win_rate": 1.0,
+    "pnl_total": 6.19,
+    "tamano_medio_usd": 14.53,
     "clasificacion": "normal",
-    "trades_muestra_reciente": 5,
+    "trades_muestra_reciente": 18,
     "activos_muestra_reciente": {
       "BTC": {
-        "up": 4,
-        "down": 1
+        "up": 12,
+        "down": 6
       }
     },
     "duraciones_muestra_reciente": {
-      "15m": 4,
-      "5m": 1
+      "5m": 13,
+      "15m": 5
     },
     "primera_vez_visto": "2026-07-31T04:41:18+00:00",
-    "ultima_actualizacion": "2026-08-29T06:10:56+00:00"
+    "ultima_actualizacion": "2026-08-29T16:07:45+00:00"
   },
   "0x132b4f8660c4127becedb2ef4e62560f086024e1": {
     "n": 0,
@@ -274711,15 +274691,15 @@
     "trades_muestra_reciente": 11,
     "activos_muestra_reciente": {
       "BTC": {
-        "up": 7,
-        "down": 4
+        "up": 6,
+        "down": 5
       }
     },
     "duraciones_muestra_reciente": {
       "5m": 11
     },
     "primera_vez_visto": "2026-07-31T07:21:25+00:00",
-    "ultima_actualizacion": "2026-08-29T09:58:07+00:00"
+    "ultima_actualizacion": "2026-08-29T16:07:45+00:00"
   },
   "0x1d865fef1e56590588b19b9ad5e8cc12fe9e0412": {
     "n": 23,
@@ -279322,27 +279302,27 @@
     "ultima_actualizacion": "2026-08-02T04:41:27+00:00"
   },
   "0xe8275cfbb33241be2e0f22499eff396a150359f1": {
-    "n": 226,
+    "n": 231,
     "win_rate": 0.0,
-    "pnl_total": -1310.87,
-    "tamano_medio_usd": 5.8,
+    "pnl_total": -1346.99,
+    "tamano_medio_usd": 5.92,
     "clasificacion": "normal",
-    "trades_muestra_reciente": 12,
+    "trades_muestra_reciente": 5,
     "activos_muestra_reciente": {
-      "BTC": {
-        "up": 3,
-        "down": 4
-      },
       "ETH": {
-        "up": 3,
-        "down": 2
+        "up": 2,
+        "down": 1
+      },
+      "BTC": {
+        "up": 2,
+        "down": 0
       }
     },
     "duraciones_muestra_reciente": {
-      "15m": 12
+      "15m": 5
     },
     "primera_vez_visto": "2026-07-31T12:41:31+00:00",
-    "ultima_actualizacion": "2026-08-29T02:25:13+00:00"
+    "ultima_actualizacion": "2026-08-29T16:07:45+00:00"
   },
   "0xfaf9519e3d421f00bb0565c526a0726c4ce11614": {
     "n": 233,
@@ -289905,8 +289885,8 @@
     "trades_muestra_reciente": 7,
     "activos_muestra_reciente": {
       "BTC": {
-        "up": 4,
-        "down": 3
+        "up": 3,
+        "down": 4
       }
     },
     "duraciones_muestra_reciente": {
@@ -291233,24 +291213,24 @@
     "mediana_actualizada": "2026-08-08T22:21:34+00:00"
   },
   "0x5d6ea50c477750e77951e2c9c6a4f042d5f8888d": {
-    "n": 295,
+    "n": 300,
     "win_rate": 0.0,
-    "pnl_total": -3105.88,
-    "tamano_medio_usd": 10.53,
+    "pnl_total": -3164.88,
+    "tamano_medio_usd": 10.55,
     "clasificacion": "normal",
-    "trades_muestra_reciente": 5,
+    "trades_muestra_reciente": 6,
     "activos_muestra_reciente": {
       "BTC": {
-        "up": 0,
-        "down": 5
+        "up": 2,
+        "down": 4
       }
     },
     "duraciones_muestra_reciente": {
       "15m": 3,
-      "5m": 2
+      "5m": 3
     },
     "primera_vez_visto": "2026-08-01T03:41:18+00:00",
-    "ultima_actualizacion": "2026-08-29T02:47:45+00:00"
+    "ultima_actualizacion": "2026-08-29T16:07:45+00:00"
   },
   "0xe68ba84c4b41741f34864695dd5472209d77b796": {
     "n": 1,
@@ -295751,18 +295731,18 @@
     "pnl_total": -3.4,
     "tamano_medio_usd": 1.7,
     "clasificacion": "normal",
-    "trades_muestra_reciente": 9,
+    "trades_muestra_reciente": 6,
     "activos_muestra_reciente": {
       "BTC": {
         "up": 0,
-        "down": 9
+        "down": 6
       }
     },
     "duraciones_muestra_reciente": {
-      "5m": 9
+      "5m": 6
     },
     "primera_vez_visto": "2026-08-01T09:41:32+00:00",
-    "ultima_actualizacion": "2026-08-29T08:27:07+00:00"
+    "ultima_actualizacion": "2026-08-29T16:07:45+00:00"
   },
   "0xd4f750fe672e74068da3982afcc36a1f4a6579a4": {
     "n": 178,
@@ -299821,15 +299801,15 @@
     "pnl_total": -429.63,
     "tamano_medio_usd": 1.53,
     "clasificacion": "normal",
-    "trades_muestra_reciente": 5,
+    "trades_muestra_reciente": 7,
     "activos_muestra_reciente": {
       "BTC": {
         "up": 3,
-        "down": 2
+        "down": 4
       }
     },
     "duraciones_muestra_reciente": {
-      "5m": 5
+      "5m": 7
     },
     "primera_vez_visto": "2026-08-01T15:21:57+00:00",
     "ultima_actualizacion": "2026-08-29T10:20:39+00:00"
@@ -303903,24 +303883,24 @@
     "ultima_actualizacion": "2026-08-06T05:41:28+00:00"
   },
   "0xc8219716ad0f79d7b6c9f3bf9646dbd70fd20c3d": {
-    "n": 267,
+    "n": 272,
     "win_rate": 0.0,
-    "pnl_total": -8238.49,
-    "tamano_medio_usd": 30.86,
+    "pnl_total": -8401.81,
+    "tamano_medio_usd": 30.9,
     "clasificacion": "normal",
-    "trades_muestra_reciente": 5,
+    "trades_muestra_reciente": 7,
     "activos_muestra_reciente": {
       "BTC": {
-        "up": 2,
-        "down": 3
+        "up": 3,
+        "down": 4
       }
     },
     "duraciones_muestra_reciente": {
-      "5m": 3,
-      "15m": 2
+      "60m": 3,
+      "15m": 4
     },
     "primera_vez_visto": "2026-08-01T19:41:39+00:00",
-    "ultima_actualizacion": "2026-08-27T15:45:44+00:00"
+    "ultima_actualizacion": "2026-08-29T16:07:45+00:00"
   },
   "0x198456b6fa36b1bc386f258359bdb16c304ffc22": {
     "n": 95,
@@ -304602,15 +304582,15 @@
     "pnl_total": -3864.12,
     "tamano_medio_usd": 7.73,
     "clasificacion": "normal",
-    "trades_muestra_reciente": 5,
+    "trades_muestra_reciente": 10,
     "activos_muestra_reciente": {
       "BTC": {
-        "up": 5,
-        "down": 0
+        "up": 6,
+        "down": 4
       }
     },
     "duraciones_muestra_reciente": {
-      "5m": 5
+      "5m": 10
     },
     "primera_vez_visto": "2026-08-01T20:41:32+00:00",
     "ultima_actualizacion": "2026-08-29T12:40:40+00:00"
@@ -321032,23 +321012,23 @@
     "ultima_actualizacion": "2026-08-20T20:37:11+00:00"
   },
   "0x0fa0b2fd6a0d06670a2ecff61d85b6381b0bd90b": {
-    "n": 3,
+    "n": 8,
     "win_rate": 0.0,
-    "pnl_total": -29.0,
-    "tamano_medio_usd": 9.67,
+    "pnl_total": -82.01,
+    "tamano_medio_usd": 10.25,
     "clasificacion": "normal",
-    "trades_muestra_reciente": 12,
+    "trades_muestra_reciente": 32,
     "activos_muestra_reciente": {
       "BTC": {
-        "up": 9,
-        "down": 3
+        "up": 0,
+        "down": 32
       }
     },
     "duraciones_muestra_reciente": {
-      "5m": 12
+      "5m": 32
     },
     "primera_vez_visto": "2026-08-02T18:41:59+00:00",
-    "ultima_actualizacion": "2026-08-27T04:06:50+00:00"
+    "ultima_actualizacion": "2026-08-29T16:07:45+00:00"
   },
   "0xe77811ecddf1c2efd43cfeb67c4918a964778657": {
     "n": 1,
@@ -324354,23 +324334,23 @@
     "ultima_actualizacion": "2026-08-03T18:41:36+00:00"
   },
   "0x6535440b94a5ee2ab8e7812b8e6dc4163d55a4be": {
-    "n": 42,
+    "n": 84,
     "win_rate": 0.0,
-    "pnl_total": -48.36,
-    "tamano_medio_usd": 1.15,
+    "pnl_total": -103.36,
+    "tamano_medio_usd": 1.23,
     "clasificacion": "normal",
     "trades_muestra_reciente": 5,
     "activos_muestra_reciente": {
       "BTC": {
-        "up": 5,
-        "down": 0
+        "up": 2,
+        "down": 3
       }
     },
     "duraciones_muestra_reciente": {
       "5m": 5
     },
     "primera_vez_visto": "2026-08-02T23:41:55+00:00",
-    "ultima_actualizacion": "2026-08-17T04:01:38+00:00"
+    "ultima_actualizacion": "2026-08-29T16:07:45+00:00"
   },
   "0x1548e2ea8314d2146e81a591f76f568d71f3dcb1": {
     "n": 0,
@@ -324872,15 +324852,15 @@
     "pnl_total": -59.87,
     "tamano_medio_usd": 2.14,
     "clasificacion": "normal",
-    "trades_muestra_reciente": 6,
+    "trades_muestra_reciente": 7,
     "activos_muestra_reciente": {
       "BTC": {
-        "up": 4,
+        "up": 5,
         "down": 2
       }
     },
     "duraciones_muestra_reciente": {
-      "5m": 6
+      "5m": 7
     },
     "primera_vez_visto": "2026-08-03T00:21:38+00:00",
     "ultima_actualizacion": "2026-08-29T11:06:36+00:00"
@@ -333314,19 +333294,19 @@
   "0x68a2c665469c391d939e73c9e07a5c9e25ec8010": {
     "n": 0,
     "clasificacion": "normal",
-    "trades_muestra_reciente": 7,
+    "trades_muestra_reciente": 11,
     "activos_muestra_reciente": {
-      "DOGE": {
-        "up": 1,
+      "BNB": {
+        "up": 6,
         "down": 4
       },
-      "ETH": {
+      "DOGE": {
         "up": 0,
-        "down": 2
+        "down": 1
       }
     },
     "duraciones_muestra_reciente": {
-      "5m": 6,
+      "5m": 10,
       "15m": 1
     },
     "primera_vez_visto": "2026-08-03T13:22:01+00:00",
@@ -333645,16 +333625,16 @@
     "pnl_total": -12.16,
     "tamano_medio_usd": 6.9,
     "clasificacion": "normal",
-    "trades_muestra_reciente": 7,
+    "trades_muestra_reciente": 5,
     "activos_muestra_reciente": {
       "BTC": {
-        "up": 5,
-        "down": 2
+        "up": 1,
+        "down": 4
       }
     },
     "duraciones_muestra_reciente": {
-      "5m": 3,
-      "15m": 4
+      "15m": 3,
+      "5m": 2
     },
     "primera_vez_visto": "2026-08-03T14:22:10+00:00",
     "ultima_actualizacion": "2026-08-29T13:49:38+00:00"
@@ -336180,23 +336160,20 @@
     "ultima_actualizacion": "2026-08-04T14:01:46+00:00"
   },
   "0x3161321ef91341566d54b8afe1447864a8fb623d": {
-    "n": 1,
-    "win_rate": 0.0,
-    "pnl_total": 0.0,
-    "tamano_medio_usd": 0.0,
+    "n": 0,
     "clasificacion": "normal",
-    "trades_muestra_reciente": 19,
+    "trades_muestra_reciente": 11,
     "activos_muestra_reciente": {
       "BTC": {
-        "up": 12,
+        "up": 4,
         "down": 7
       }
     },
     "duraciones_muestra_reciente": {
-      "5m": 19
+      "5m": 11
     },
     "primera_vez_visto": "2026-08-03T18:41:36+00:00",
-    "ultima_actualizacion": "2026-08-29T06:56:25+00:00"
+    "ultima_actualizacion": "2026-08-29T16:07:45+00:00"
   },
   "0xeb93fc1eb755aab25e6eb358de48740683f77080": {
     "n": 1,
@@ -336604,15 +336581,15 @@
     "pnl_total": -704.79,
     "tamano_medio_usd": 9.79,
     "clasificacion": "normal",
-    "trades_muestra_reciente": 8,
+    "trades_muestra_reciente": 6,
     "activos_muestra_reciente": {
       "BTC": {
-        "up": 0,
-        "down": 8
+        "up": 5,
+        "down": 1
       }
     },
     "duraciones_muestra_reciente": {
-      "5m": 8
+      "5m": 6
     },
     "primera_vez_visto": "2026-08-03T19:21:58+00:00",
     "ultima_actualizacion": "2026-08-29T14:35:41+00:00"
@@ -343574,15 +343551,15 @@
     "pnl_total": -318.44,
     "tamano_medio_usd": 3.32,
     "clasificacion": "normal",
-    "trades_muestra_reciente": 10,
+    "trades_muestra_reciente": 8,
     "activos_muestra_reciente": {
       "BTC": {
-        "up": 7,
-        "down": 3
+        "up": 4,
+        "down": 4
       }
     },
     "duraciones_muestra_reciente": {
-      "5m": 10
+      "5m": 8
     },
     "primera_vez_visto": "2026-08-04T05:41:26+00:00",
     "ultima_actualizacion": "2026-08-29T14:12:36+00:00"
@@ -346137,19 +346114,19 @@
     "pnl_total": -171.82,
     "tamano_medio_usd": 23.04,
     "clasificacion": "normal",
-    "trades_muestra_reciente": 14,
+    "trades_muestra_reciente": 39,
     "activos_muestra_reciente": {
       "BTC": {
-        "up": 1,
-        "down": 7
+        "up": 33,
+        "down": 4
       },
       "ETH": {
-        "up": 4,
-        "down": 2
+        "up": 2,
+        "down": 0
       }
     },
     "duraciones_muestra_reciente": {
-      "60m": 14
+      "60m": 39
     },
     "primera_vez_visto": "2026-08-04T10:23:11+00:00",
     "ultima_actualizacion": "2026-08-29T15:44:57+00:00"
@@ -347999,23 +347976,23 @@
     "ultima_actualizacion": "2026-08-19T18:02:30+00:00"
   },
   "0x93af2962c2e11f4880d3d0ce3fe52f362813d414": {
-    "n": 3,
+    "n": 8,
     "win_rate": 0.0,
-    "pnl_total": -396.14,
-    "tamano_medio_usd": 132.05,
+    "pnl_total": -18.65,
+    "tamano_medio_usd": 2.33,
     "clasificacion": "normal",
-    "trades_muestra_reciente": 8,
+    "trades_muestra_reciente": 5,
     "activos_muestra_reciente": {
       "BTC": {
-        "up": 6,
-        "down": 2
+        "up": 2,
+        "down": 3
       }
     },
     "duraciones_muestra_reciente": {
-      "5m": 8
+      "5m": 5
     },
     "primera_vez_visto": "2026-08-04T13:01:47+00:00",
-    "ultima_actualizacion": "2026-08-23T06:41:37+00:00"
+    "ultima_actualizacion": "2026-08-29T16:07:45+00:00"
   },
   "0x85b3802a2ce75154f550962254d0c835f8760b2e": {
     "n": 52,
@@ -349442,13 +349419,13 @@
     "clasificacion": "normal",
     "trades_muestra_reciente": 5,
     "activos_muestra_reciente": {
-      "SOL": {
+      "BTC": {
         "up": 1,
-        "down": 1
-      },
-      "XRP": {
-        "up": 3,
         "down": 0
+      },
+      "SOL": {
+        "up": 3,
+        "down": 1
       }
     },
     "duraciones_muestra_reciente": {
@@ -350594,15 +350571,15 @@
   "0x5835d4942ea3d18a4aebda5ae8b57e87cc7124ea": {
     "n": 0,
     "clasificacion": "normal",
-    "trades_muestra_reciente": 12,
+    "trades_muestra_reciente": 5,
     "activos_muestra_reciente": {
       "BTC": {
-        "up": 7,
-        "down": 5
+        "up": 2,
+        "down": 3
       }
     },
     "duraciones_muestra_reciente": {
-      "5m": 12
+      "5m": 5
     },
     "primera_vez_visto": "2026-08-04T17:01:38+00:00",
     "ultima_actualizacion": "2026-08-29T11:52:43+00:00"
@@ -353230,25 +353207,33 @@
     "ultima_actualizacion": "2026-08-05T22:01:53+00:00"
   },
   "0xcccbeeaa28545d983aefd8f02cd8b2f6be318590": {
-    "n": 349,
+    "n": 352,
     "win_rate": 0.0,
-    "pnl_total": -5902.26,
-    "tamano_medio_usd": 16.97,
+    "pnl_total": -5996.95,
+    "tamano_medio_usd": 17.06,
     "clasificacion": "normal",
-    "trades_muestra_reciente": 20,
+    "trades_muestra_reciente": 22,
     "activos_muestra_reciente": {
       "BTC": {
-        "up": 8,
+        "up": 7,
         "down": 12
+      },
+      "ETH": {
+        "up": 1,
+        "down": 0
+      },
+      "BNB": {
+        "up": 0,
+        "down": 2
       }
     },
     "duraciones_muestra_reciente": {
-      "60m": 10,
-      "5m": 1,
-      "15m": 9
+      "5m": 9,
+      "15m": 9,
+      "60m": 4
     },
     "primera_vez_visto": "2026-08-04T20:41:31+00:00",
-    "ultima_actualizacion": "2026-08-29T09:58:07+00:00"
+    "ultima_actualizacion": "2026-08-29T16:07:45+00:00"
   },
   "0x70890f41aed79504cd63b65f780084769b826d2c": {
     "n": 1,
@@ -358391,15 +358376,15 @@
     "pnl_total": -400.49,
     "tamano_medio_usd": 1.45,
     "clasificacion": "normal",
-    "trades_muestra_reciente": 6,
+    "trades_muestra_reciente": 7,
     "activos_muestra_reciente": {
       "BTC": {
-        "up": 3,
-        "down": 3
+        "up": 2,
+        "down": 5
       }
     },
     "duraciones_muestra_reciente": {
-      "5m": 6
+      "5m": 7
     },
     "primera_vez_visto": "2026-08-05T04:41:19+00:00",
     "ultima_actualizacion": "2026-08-29T11:29:32+00:00"
@@ -362509,24 +362494,19 @@
     "pnl_total": -5313.45,
     "tamano_medio_usd": 171.4,
     "clasificacion": "normal",
-    "trades_muestra_reciente": 22,
+    "trades_muestra_reciente": 12,
     "activos_muestra_reciente": {
       "BTC": {
-        "up": 9,
-        "down": 8
-      },
-      "SOL": {
         "up": 0,
-        "down": 3
+        "down": 10
       },
       "ETH": {
-        "up": 0,
-        "down": 2
+        "up": 2,
+        "down": 0
       }
     },
     "duraciones_muestra_reciente": {
-      "5m": 19,
-      "15m": 3
+      "5m": 12
     },
     "primera_vez_visto": "2026-08-05T12:22:05+00:00",
     "ultima_actualizacion": "2026-08-29T15:21:45+00:00"
@@ -365619,31 +365599,32 @@
     "pnl_total": -732.89,
     "tamano_medio_usd": 16.14,
     "clasificacion": "normal",
-    "trades_muestra_reciente": 19,
+    "trades_muestra_reciente": 22,
     "activos_muestra_reciente": {
       "SOL": {
-        "up": 1,
+        "up": 0,
         "down": 4
+      },
+      "DOGE": {
+        "up": 7,
+        "down": 3
       },
       "XRP": {
         "up": 4,
-        "down": 4
+        "down": 1
       },
-      "BTC": {
+      "ETH": {
         "up": 0,
         "down": 2
       },
-      "ETH": {
-        "up": 1,
-        "down": 0
-      },
-      "DOGE": {
-        "up": 1,
-        "down": 2
+      "BTC": {
+        "up": 0,
+        "down": 1
       }
     },
     "duraciones_muestra_reciente": {
-      "5m": 17,
+      "60m": 1,
+      "5m": 19,
       "15m": 2
     },
     "primera_vez_visto": "2026-08-05T18:01:46+00:00",
@@ -370678,34 +370659,34 @@
   "0x9891ce1339d55e0a048634aa7675a62741518949": {
     "n": 460,
     "win_rate": 0.0,
-    "pnl_total": -5275.94,
-    "tamano_medio_usd": 11.47,
+    "pnl_total": -5273.64,
+    "tamano_medio_usd": 11.46,
     "clasificacion": "normal",
-    "trades_muestra_reciente": 58,
+    "trades_muestra_reciente": 64,
     "activos_muestra_reciente": {
+      "SOL": {
+        "up": 8,
+        "down": 2
+      },
       "ETH": {
-        "up": 12,
-        "down": 5
+        "up": 4,
+        "down": 12
       },
       "BNB": {
-        "up": 4,
-        "down": 5
+        "up": 5,
+        "down": 3
       },
       "BTC": {
         "up": 16,
-        "down": 9
-      },
-      "SOL": {
-        "up": 5,
-        "down": 2
+        "down": 14
       }
     },
     "duraciones_muestra_reciente": {
-      "5m": 36,
-      "15m": 22
+      "5m": 43,
+      "15m": 21
     },
     "primera_vez_visto": "2026-08-06T01:21:18+00:00",
-    "ultima_actualizacion": "2026-08-29T06:56:25+00:00"
+    "ultima_actualizacion": "2026-08-29T16:07:45+00:00"
   },
   "0x78af3a37e6c495dbd511ab8144777f819e01cd8f": {
     "n": 18,
@@ -372262,27 +372243,23 @@
     "pnl_total": -677.61,
     "tamano_medio_usd": 169.4,
     "clasificacion": "normal",
-    "trades_muestra_reciente": 23,
+    "trades_muestra_reciente": 31,
     "activos_muestra_reciente": {
       "BTC": {
-        "up": 10,
-        "down": 11
-      },
-      "ETH": {
-        "up": 0,
-        "down": 2
+        "up": 13,
+        "down": 18
       }
     },
     "duraciones_muestra_reciente": {
-      "weekly": 23
+      "weekly": 31
     },
     "primera_vez_visto": "2026-08-06T04:01:37+00:00",
-    "ultima_actualizacion": "2026-08-29T09:35:22+00:00",
+    "ultima_actualizacion": "2026-08-29T16:07:45+00:00",
     "weekly": {
       "n": 430,
       "win_rate": 0.014,
-      "pnl_total": -42223.3,
-      "tamano_medio_usd": 113.87
+      "pnl_total": -41958.18,
+      "tamano_medio_usd": 113.99
     }
   },
   "0x56db4e9073b3f0357da687645235426deccd171c": {
@@ -375053,23 +375030,23 @@
     "ultima_actualizacion": "2026-08-06T10:01:40+00:00"
   },
   "0x071d8cd461953dec1bbc9945967af0068ef0c7ee": {
-    "n": 92,
+    "n": 93,
     "win_rate": 0.0,
-    "pnl_total": -1011.84,
-    "tamano_medio_usd": 11.06,
+    "pnl_total": -1014.44,
+    "tamano_medio_usd": 10.93,
     "clasificacion": "normal",
-    "trades_muestra_reciente": 36,
+    "trades_muestra_reciente": 15,
     "activos_muestra_reciente": {
       "BTC": {
-        "up": 20,
-        "down": 16
+        "up": 3,
+        "down": 12
       }
     },
     "duraciones_muestra_reciente": {
-      "5m": 36
+      "5m": 15
     },
     "primera_vez_visto": "2026-08-06T10:01:40+00:00",
-    "ultima_actualizacion": "2026-08-29T09:12:34+00:00",
+    "ultima_actualizacion": "2026-08-29T16:07:45+00:00",
     "mediana_apuesta_usd": 10.13,
     "mediana_actualizada": "2026-08-11T13:01:39+00:00"
   },
@@ -375322,24 +375299,24 @@
     "pnl_total": -698.37,
     "tamano_medio_usd": 23.06,
     "clasificacion": "normal",
-    "trades_muestra_reciente": 12,
+    "trades_muestra_reciente": 17,
     "activos_muestra_reciente": {
-      "XRP": {
-        "up": 1,
-        "down": 0
-      },
-      "SOL": {
+      "BTC": {
         "up": 8,
         "down": 0
       },
-      "BTC": {
+      "SOL": {
+        "up": 3,
+        "down": 0
+      },
+      "ETH": {
         "up": 2,
-        "down": 1
+        "down": 4
       }
     },
     "duraciones_muestra_reciente": {
-      "15m": 10,
-      "5m": 2
+      "15m": 13,
+      "5m": 4
     },
     "primera_vez_visto": "2026-08-06T10:21:23+00:00",
     "ultima_actualizacion": "2026-08-29T10:43:37+00:00"
@@ -382512,17 +382489,17 @@
   "0xda3ba29c3605ad5c268b34674e212250aea642cc": {
     "n": 0,
     "clasificacion": "normal",
-    "trades_muestra_reciente": 6,
+    "trades_muestra_reciente": 11,
     "activos_muestra_reciente": {
-      "DOGE": {
-        "up": 0,
-        "down": 2
+      "BTC": {
+        "up": 1,
+        "down": 7
       },
-      "ETH": {
-        "up": 2,
+      "XRP": {
+        "up": 1,
         "down": 0
       },
-      "BTC": {
+      "ETH": {
         "up": 0,
         "down": 1
       },
@@ -382532,7 +382509,7 @@
       }
     },
     "duraciones_muestra_reciente": {
-      "5m": 6
+      "5m": 11
     },
     "primera_vez_visto": "2026-08-06T23:41:33+00:00",
     "ultima_actualizacion": "2026-08-29T12:16:05+00:00"
@@ -385936,15 +385913,15 @@
     "pnl_total": -68.3,
     "tamano_medio_usd": 1.63,
     "clasificacion": "normal",
-    "trades_muestra_reciente": 7,
+    "trades_muestra_reciente": 6,
     "activos_muestra_reciente": {
       "BTC": {
-        "up": 5,
+        "up": 4,
         "down": 2
       }
     },
     "duraciones_muestra_reciente": {
-      "5m": 7
+      "5m": 6
     },
     "primera_vez_visto": "2026-08-07T04:21:25+00:00",
     "ultima_actualizacion": "2026-08-29T13:03:35+00:00"
@@ -386463,8 +386440,8 @@
     "trades_muestra_reciente": 5,
     "activos_muestra_reciente": {
       "BTC": {
-        "up": 3,
-        "down": 2
+        "up": 2,
+        "down": 3
       }
     },
     "duraciones_muestra_reciente": {
@@ -394919,15 +394896,15 @@
     "pnl_total": -1925.97,
     "tamano_medio_usd": 3.86,
     "clasificacion": "normal",
-    "trades_muestra_reciente": 7,
+    "trades_muestra_reciente": 5,
     "activos_muestra_reciente": {
       "BTC": {
-        "up": 2,
-        "down": 5
+        "up": 1,
+        "down": 4
       }
     },
     "duraciones_muestra_reciente": {
-      "5m": 7
+      "5m": 5
     },
     "primera_vez_visto": "2026-08-07T19:21:28+00:00",
     "ultima_actualizacion": "2026-08-29T10:43:37+00:00"
@@ -395565,15 +395542,15 @@
     "pnl_total": -928.55,
     "tamano_medio_usd": 1.86,
     "clasificacion": "normal",
-    "trades_muestra_reciente": 11,
+    "trades_muestra_reciente": 15,
     "activos_muestra_reciente": {
       "BTC": {
-        "up": 7,
-        "down": 4
+        "up": 10,
+        "down": 5
       }
     },
     "duraciones_muestra_reciente": {
-      "5m": 11
+      "5m": 15
     },
     "primera_vez_visto": "2026-08-07T20:21:32+00:00",
     "ultima_actualizacion": "2026-08-29T13:03:35+00:00"
@@ -400770,25 +400747,25 @@
     "ultima_actualizacion": "2026-08-08T04:21:22+00:00"
   },
   "0xa0e72d5575095199ae08ce0dce447f21b7249461": {
-    "n": 46,
-    "win_rate": 0.587,
-    "pnl_total": 272.66,
-    "tamano_medio_usd": 106.15,
-    "clasificacion": "candidato_posiciones",
+    "n": 36,
+    "win_rate": 0.5556,
+    "pnl_total": -102.55,
+    "tamano_medio_usd": 55.79,
+    "clasificacion": "normal",
     "pnl_leaderboard_mes": -3329.79,
-    "trades_muestra_reciente": 13,
+    "trades_muestra_reciente": 8,
     "activos_muestra_reciente": {
       "BTC": {
-        "up": 4,
-        "down": 9
+        "up": 6,
+        "down": 2
       }
     },
     "duraciones_muestra_reciente": {
-      "15m": 12,
+      "15m": 7,
       "5m": 1
     },
     "primera_vez_visto": "2026-08-08T04:21:22+00:00",
-    "ultima_actualizacion": "2026-08-28T23:46:42+00:00",
+    "ultima_actualizacion": "2026-08-29T16:07:45+00:00",
     "mediana_apuesta_usd": 9.0,
     "mediana_actualizada": "2026-08-11T22:02:05+00:00"
   },
@@ -402931,18 +402908,18 @@
   "0xfeabe155aedc86ce4c0dbd0102455224716ef3a8": {
     "n": 0,
     "clasificacion": "normal",
-    "trades_muestra_reciente": 9,
+    "trades_muestra_reciente": 6,
     "activos_muestra_reciente": {
       "BTC": {
-        "up": 3,
-        "down": 6
+        "up": 4,
+        "down": 2
       }
     },
     "duraciones_muestra_reciente": {
-      "15m": 9
+      "15m": 6
     },
     "primera_vez_visto": "2026-08-08T08:01:37+00:00",
-    "ultima_actualizacion": "2026-08-29T09:58:07+00:00"
+    "ultima_actualizacion": "2026-08-29T16:07:45+00:00"
   },
   "0x53059c0a8159324ad1a220f1eccce008709cbd59": {
     "n": 2,
@@ -404284,8 +404261,8 @@
     "trades_muestra_reciente": 5,
     "activos_muestra_reciente": {
       "BTC": {
-        "up": 1,
-        "down": 4
+        "up": 3,
+        "down": 2
       }
     },
     "duraciones_muestra_reciente": {
@@ -405272,15 +405249,15 @@
     "pnl_total": -21853.67,
     "tamano_medio_usd": 44.25,
     "clasificacion": "normal",
-    "trades_muestra_reciente": 10,
+    "trades_muestra_reciente": 8,
     "activos_muestra_reciente": {
       "BTC": {
-        "up": 2,
+        "up": 0,
         "down": 8
       }
     },
     "duraciones_muestra_reciente": {
-      "5m": 10
+      "5m": 8
     },
     "primera_vez_visto": "2026-08-08T11:41:26+00:00",
     "ultima_actualizacion": "2026-08-29T11:29:32+00:00"
@@ -408949,16 +408926,21 @@
   "0x629da223adfc9957329e02de95ae3d263f92756c": {
     "n": 0,
     "clasificacion": "normal",
-    "trades_muestra_reciente": 11,
+    "trades_muestra_reciente": 23,
     "activos_muestra_reciente": {
       "BTC": {
-        "up": 4,
-        "down": 7
+        "up": 12,
+        "down": 10
+      },
+      "XRP": {
+        "up": 1,
+        "down": 0
       }
     },
     "duraciones_muestra_reciente": {
-      "5m": 7,
-      "15m": 4
+      "5m": 20,
+      "60m": 2,
+      "15m": 1
     },
     "primera_vez_visto": "2026-08-08T18:21:47+00:00",
     "ultima_actualizacion": "2026-08-29T12:40:40+00:00"
@@ -409387,18 +409369,18 @@
     "pnl_total": -2087.37,
     "tamano_medio_usd": 6.58,
     "clasificacion": "normal",
-    "trades_muestra_reciente": 6,
+    "trades_muestra_reciente": 24,
     "activos_muestra_reciente": {
       "BTC": {
-        "up": 6,
-        "down": 0
+        "up": 16,
+        "down": 8
       }
     },
     "duraciones_muestra_reciente": {
-      "5m": 6
+      "5m": 24
     },
     "primera_vez_visto": "2026-08-08T19:21:29+00:00",
-    "ultima_actualizacion": "2026-08-29T05:48:02+00:00"
+    "ultima_actualizacion": "2026-08-29T16:07:45+00:00"
   },
   "0x1781f536089fb4d303e7e5674344032fd9f32352": {
     "n": 135,
@@ -431457,15 +431439,15 @@
     "pnl_total": -481.88,
     "tamano_medio_usd": 2.24,
     "clasificacion": "normal",
-    "trades_muestra_reciente": 7,
+    "trades_muestra_reciente": 5,
     "activos_muestra_reciente": {
       "BTC": {
         "up": 3,
-        "down": 4
+        "down": 2
       }
     },
     "duraciones_muestra_reciente": {
-      "5m": 7
+      "5m": 5
     },
     "primera_vez_visto": "2026-08-10T13:01:59+00:00",
     "ultima_actualizacion": "2026-08-29T12:40:40+00:00"
@@ -431581,27 +431563,27 @@
     "ultima_actualizacion": "2026-08-22T06:43:07+00:00"
   },
   "0x33ebcafa08b9a105a80dc2facb2f00fca64c025a": {
-    "n": 164,
+    "n": 181,
     "win_rate": 0.0,
-    "pnl_total": -1808.24,
-    "tamano_medio_usd": 11.03,
+    "pnl_total": -1872.34,
+    "tamano_medio_usd": 10.36,
     "clasificacion": "normal",
-    "trades_muestra_reciente": 8,
+    "trades_muestra_reciente": 14,
     "activos_muestra_reciente": {
-      "ETH": {
-        "up": 0,
-        "down": 4
-      },
       "BTC": {
-        "up": 2,
+        "up": 3,
+        "down": 6
+      },
+      "ETH": {
+        "up": 3,
         "down": 2
       }
     },
     "duraciones_muestra_reciente": {
-      "5m": 8
+      "5m": 14
     },
     "primera_vez_visto": "2026-08-10T13:21:32+00:00",
-    "ultima_actualizacion": "2026-08-29T07:41:45+00:00"
+    "ultima_actualizacion": "2026-08-29T16:07:45+00:00"
   },
   "0x54967613b6eaa67d4f3a14b4c5b81943c2351488": {
     "n": 18,
@@ -439516,20 +439498,23 @@
     "ultima_actualizacion": "2026-08-20T10:41:33+00:00"
   },
   "0x501283cb6b2a080c4df6eb70b6b4a8e394af261b": {
-    "n": 0,
+    "n": 3,
+    "win_rate": 0.0,
+    "pnl_total": -4.0,
+    "tamano_medio_usd": 1.33,
     "clasificacion": "normal",
-    "trades_muestra_reciente": 5,
+    "trades_muestra_reciente": 7,
     "activos_muestra_reciente": {
       "BTC": {
-        "up": 3,
-        "down": 2
+        "up": 7,
+        "down": 0
       }
     },
     "duraciones_muestra_reciente": {
-      "5m": 5
+      "5m": 7
     },
     "primera_vez_visto": "2026-08-11T05:21:18+00:00",
-    "ultima_actualizacion": "2026-08-20T08:41:27+00:00"
+    "ultima_actualizacion": "2026-08-29T16:07:45+00:00"
   },
   "0xff3e45b236abcdbdd04db441ddf551bcd28634e0": {
     "n": 500,
@@ -445689,15 +445674,15 @@
     "pnl_total": -370.61,
     "tamano_medio_usd": 3.94,
     "clasificacion": "normal",
-    "trades_muestra_reciente": 7,
+    "trades_muestra_reciente": 9,
     "activos_muestra_reciente": {
       "BTC": {
-        "up": 0,
-        "down": 7
+        "up": 1,
+        "down": 8
       }
     },
     "duraciones_muestra_reciente": {
-      "5m": 7
+      "5m": 9
     },
     "primera_vez_visto": "2026-08-11T16:21:36+00:00",
     "ultima_actualizacion": "2026-08-29T10:20:39+00:00"
@@ -451331,18 +451316,18 @@
     "pnl_total": -8941.65,
     "tamano_medio_usd": 36.95,
     "clasificacion": "normal",
-    "trades_muestra_reciente": 6,
+    "trades_muestra_reciente": 7,
     "activos_muestra_reciente": {
       "BTC": {
-        "up": 2,
-        "down": 4
+        "up": 6,
+        "down": 1
       }
     },
     "duraciones_muestra_reciente": {
-      "5m": 6
+      "5m": 7
     },
     "primera_vez_visto": "2026-08-12T01:41:15+00:00",
-    "ultima_actualizacion": "2026-08-29T09:58:07+00:00"
+    "ultima_actualizacion": "2026-08-29T16:07:45+00:00"
   },
   "0x6b4d66f9a46347e61a754c76fcb5ae3245d793e2": {
     "n": 35,
@@ -453206,21 +453191,24 @@
     "pnl_total": -4.17,
     "tamano_medio_usd": 12.39,
     "clasificacion": "normal",
-    "trades_muestra_reciente": 11,
+    "trades_muestra_reciente": 13,
     "activos_muestra_reciente": {
       "BTC": {
-        "up": 2,
-        "down": 8
+        "up": 4,
+        "down": 7
       },
-      "SOL": {
+      "XRP": {
         "up": 0,
         "down": 1
+      },
+      "ETH": {
+        "up": 1,
+        "down": 0
       }
     },
     "duraciones_muestra_reciente": {
-      "60m": 1,
       "5m": 6,
-      "15m": 4
+      "15m": 7
     },
     "primera_vez_visto": "2026-08-12T05:21:19+00:00",
     "ultima_actualizacion": "2026-08-29T14:35:41+00:00"
@@ -454837,15 +454825,15 @@
     "pnl_total": -221.01,
     "tamano_medio_usd": 36.83,
     "clasificacion": "normal",
-    "trades_muestra_reciente": 8,
+    "trades_muestra_reciente": 6,
     "activos_muestra_reciente": {
       "BTC": {
-        "up": 3,
-        "down": 5
+        "up": 2,
+        "down": 4
       }
     },
     "duraciones_muestra_reciente": {
-      "5m": 8
+      "5m": 6
     },
     "primera_vez_visto": "2026-08-12T09:01:39+00:00",
     "ultima_actualizacion": "2026-08-29T12:16:05+00:00"
@@ -459310,28 +459298,20 @@
     "pnl_total": -2884.95,
     "tamano_medio_usd": 5.84,
     "clasificacion": "normal",
-    "trades_muestra_reciente": 36,
+    "trades_muestra_reciente": 30,
     "activos_muestra_reciente": {
       "SOL": {
-        "up": 6,
-        "down": 12
+        "up": 5,
+        "down": 7
       },
       "BTC": {
-        "up": 2,
-        "down": 5
-      },
-      "XRP": {
-        "up": 0,
-        "down": 2
-      },
-      "ETH": {
-        "up": 6,
-        "down": 3
+        "up": 7,
+        "down": 11
       }
     },
     "duraciones_muestra_reciente": {
-      "5m": 34,
-      "15m": 2
+      "5m": 25,
+      "15m": 5
     },
     "primera_vez_visto": "2026-08-12T18:41:52+00:00",
     "ultima_actualizacion": "2026-08-29T11:52:43+00:00"
@@ -463666,7 +463646,8 @@
       }
     },
     "duraciones_muestra_reciente": {
-      "5m": 5
+      "5m": 4,
+      "15m": 1
     },
     "primera_vez_visto": "2026-08-13T02:01:26+00:00",
     "ultima_actualizacion": "2026-08-29T11:06:36+00:00"
@@ -478562,20 +478543,20 @@
     "pnl_total": -383.83,
     "tamano_medio_usd": 7.92,
     "clasificacion": "normal",
-    "trades_muestra_reciente": 260,
+    "trades_muestra_reciente": 201,
     "activos_muestra_reciente": {
       "DOGE": {
-        "up": 94,
-        "down": 93
+        "up": 90,
+        "down": 89
       },
       "XRP": {
-        "up": 33,
-        "down": 40
+        "up": 12,
+        "down": 10
       }
     },
     "duraciones_muestra_reciente": {
-      "5m": 215,
-      "15m": 45
+      "15m": 52,
+      "5m": 149
     },
     "primera_vez_visto": "2026-08-14T06:21:51+00:00",
     "ultima_actualizacion": "2026-08-29T11:29:32+00:00"
@@ -483286,15 +483267,15 @@
   "0xbdf221228d7c75697bbbe8293d203c43e1a513c6": {
     "n": 0,
     "clasificacion": "normal",
-    "trades_muestra_reciente": 6,
+    "trades_muestra_reciente": 5,
     "activos_muestra_reciente": {
       "BTC": {
         "up": 3,
-        "down": 3
+        "down": 2
       }
     },
     "duraciones_muestra_reciente": {
-      "5m": 6
+      "5m": 5
     },
     "primera_vez_visto": "2026-08-14T15:41:48+00:00",
     "ultima_actualizacion": "2026-08-29T14:58:43+00:00"
@@ -486762,19 +486743,16 @@
     "pnl_total": -1099.48,
     "tamano_medio_usd": 8.66,
     "clasificacion": "normal",
-    "trades_muestra_reciente": 14,
+    "trades_muestra_reciente": 10,
     "activos_muestra_reciente": {
       "BTC": {
-        "up": 3,
-        "down": 6
-      },
-      "ETH": {
-        "up": 0,
-        "down": 5
+        "up": 7,
+        "down": 3
       }
     },
     "duraciones_muestra_reciente": {
-      "5m": 14
+      "15m": 6,
+      "5m": 4
     },
     "primera_vez_visto": "2026-08-14T22:02:17+00:00",
     "ultima_actualizacion": "2026-08-29T13:03:35+00:00"
@@ -487533,36 +487511,36 @@
     "pnl_total": -7245.48,
     "tamano_medio_usd": 15.46,
     "clasificacion": "normal",
-    "trades_muestra_reciente": 22,
+    "trades_muestra_reciente": 20,
     "activos_muestra_reciente": {
       "DOGE": {
         "up": 0,
-        "down": 2
-      },
-      "SOL": {
-        "up": 2,
         "down": 6
       },
-      "BNB": {
+      "XRP": {
         "up": 0,
-        "down": 2
+        "down": 4
+      },
+      "SOL": {
+        "up": 0,
+        "down": 1
       },
       "BTC": {
-        "up": 2,
-        "down": 2
+        "up": 1,
+        "down": 3
       },
       "ETH": {
         "up": 1,
-        "down": 2
+        "down": 1
       },
-      "XRP": {
-        "up": 1,
-        "down": 2
+      "BNB": {
+        "up": 2,
+        "down": 1
       }
     },
     "duraciones_muestra_reciente": {
-      "15m": 9,
-      "5m": 12,
+      "15m": 11,
+      "5m": 8,
       "60m": 1
     },
     "primera_vez_visto": "2026-08-14T23:41:53+00:00",
@@ -490798,17 +490776,16 @@
     "pnl_total": -4946.22,
     "tamano_medio_usd": 38.04,
     "clasificacion": "normal",
-    "trades_muestra_reciente": 11,
+    "trades_muestra_reciente": 12,
     "activos_muestra_reciente": {
       "BTC": {
-        "up": 11,
+        "up": 12,
         "down": 0
       }
     },
     "duraciones_muestra_reciente": {
-      "60m": 2,
-      "15m": 5,
-      "5m": 4
+      "15m": 7,
+      "5m": 5
     },
     "primera_vez_visto": "2026-08-15T06:21:45+00:00",
     "ultima_actualizacion": "2026-08-29T12:16:05+00:00"
@@ -494517,15 +494494,15 @@
     "pnl_total": -650.06,
     "tamano_medio_usd": 5.24,
     "clasificacion": "normal",
-    "trades_muestra_reciente": 29,
+    "trades_muestra_reciente": 17,
     "activos_muestra_reciente": {
       "BTC": {
-        "up": 23,
-        "down": 6
+        "up": 9,
+        "down": 8
       }
     },
     "duraciones_muestra_reciente": {
-      "5m": 29
+      "5m": 17
     },
     "primera_vez_visto": "2026-08-15T14:21:51+00:00",
     "ultima_actualizacion": "2026-08-29T11:06:36+00:00"
@@ -496079,18 +496056,18 @@
     "pnl_total": -39.76,
     "tamano_medio_usd": 1.99,
     "clasificacion": "normal",
-    "trades_muestra_reciente": 5,
+    "trades_muestra_reciente": 6,
     "activos_muestra_reciente": {
       "BTC": {
         "up": 2,
-        "down": 3
+        "down": 4
       }
     },
     "duraciones_muestra_reciente": {
-      "5m": 5
+      "5m": 6
     },
     "primera_vez_visto": "2026-08-15T18:22:12+00:00",
-    "ultima_actualizacion": "2026-08-29T06:56:25+00:00"
+    "ultima_actualizacion": "2026-08-29T16:07:45+00:00"
   },
   "0x429aec54faf750949641c4c9abadb9170c6dc98f": {
     "n": 215,
@@ -499353,15 +499330,15 @@
     "pnl_total": -31.03,
     "tamano_medio_usd": 1.48,
     "clasificacion": "normal",
-    "trades_muestra_reciente": 9,
+    "trades_muestra_reciente": 12,
     "activos_muestra_reciente": {
       "BTC": {
-        "up": 2,
-        "down": 7
+        "up": 7,
+        "down": 5
       }
     },
     "duraciones_muestra_reciente": {
-      "5m": 9
+      "5m": 12
     },
     "primera_vez_visto": "2026-08-16T00:41:17+00:00",
     "ultima_actualizacion": "2026-08-29T10:20:39+00:00"
@@ -500645,15 +500622,15 @@
     "pnl_total": -3981.7,
     "tamano_medio_usd": 21.85,
     "clasificacion": "normal",
-    "trades_muestra_reciente": 7,
+    "trades_muestra_reciente": 5,
     "activos_muestra_reciente": {
       "BTC": {
-        "up": 7,
-        "down": 0
+        "up": 2,
+        "down": 3
       }
     },
     "duraciones_muestra_reciente": {
-      "15m": 7
+      "15m": 5
     },
     "primera_vez_visto": "2026-08-16T03:01:41+00:00",
     "ultima_actualizacion": "2026-08-29T14:58:43+00:00"
@@ -502667,23 +502644,23 @@
     "ultima_actualizacion": "2026-08-21T11:40:13+00:00"
   },
   "0x95dae94eaacdcc5ec3dec1e9f8104cbcc06460b4": {
-    "n": 216,
-    "win_rate": 0.0,
-    "pnl_total": -803.15,
+    "n": 220,
+    "win_rate": 0.0045,
+    "pnl_total": -808.37,
     "tamano_medio_usd": 3.72,
     "clasificacion": "normal",
-    "trades_muestra_reciente": 5,
+    "trades_muestra_reciente": 6,
     "activos_muestra_reciente": {
       "BTC": {
-        "up": 3,
+        "up": 4,
         "down": 2
       }
     },
     "duraciones_muestra_reciente": {
-      "5m": 5
+      "5m": 6
     },
     "primera_vez_visto": "2026-08-16T07:21:22+00:00",
-    "ultima_actualizacion": "2026-08-29T08:04:19+00:00"
+    "ultima_actualizacion": "2026-08-29T16:07:45+00:00"
   },
   "0x130340592f4f836464b5ac3d4d4e14122422cc35": {
     "n": 6,
@@ -502986,18 +502963,18 @@
   "0xaf03d90525e19c55878cc8e13c0ea33c6ced4537": {
     "n": 0,
     "clasificacion": "normal",
-    "trades_muestra_reciente": 8,
+    "trades_muestra_reciente": 9,
     "activos_muestra_reciente": {
       "BTC": {
-        "up": 5,
-        "down": 3
+        "up": 8,
+        "down": 1
       }
     },
     "duraciones_muestra_reciente": {
-      "5m": 8
+      "5m": 9
     },
     "primera_vez_visto": "2026-08-16T08:01:58+00:00",
-    "ultima_actualizacion": "2026-08-29T08:27:07+00:00"
+    "ultima_actualizacion": "2026-08-29T16:07:45+00:00"
   },
   "0x547dcec8d1a3322b7887b624652658938296b224": {
     "n": 7,
@@ -507442,19 +507419,15 @@
     "pnl_total": -239.83,
     "tamano_medio_usd": 13.32,
     "clasificacion": "normal",
-    "trades_muestra_reciente": 40,
+    "trades_muestra_reciente": 33,
     "activos_muestra_reciente": {
-      "ETH": {
-        "up": 2,
-        "down": 13
-      },
       "BTC": {
-        "up": 20,
-        "down": 5
+        "up": 13,
+        "down": 20
       }
     },
     "duraciones_muestra_reciente": {
-      "5m": 40
+      "5m": 33
     },
     "primera_vez_visto": "2026-08-16T19:02:20+00:00",
     "ultima_actualizacion": "2026-08-29T14:12:36+00:00"
@@ -507465,15 +507438,15 @@
     "pnl_total": -33.75,
     "tamano_medio_usd": 3.5,
     "clasificacion": "normal",
-    "trades_muestra_reciente": 14,
+    "trades_muestra_reciente": 23,
     "activos_muestra_reciente": {
       "BTC": {
-        "up": 4,
-        "down": 10
+        "up": 12,
+        "down": 11
       }
     },
     "duraciones_muestra_reciente": {
-      "5m": 14
+      "5m": 23
     },
     "primera_vez_visto": "2026-08-16T19:02:20+00:00",
     "ultima_actualizacion": "2026-08-29T14:58:43+00:00"
@@ -530028,23 +530001,15 @@
   "0x438d61e858be1e3726d1ff177cfd91f3af51ce57": {
     "n": 0,
     "clasificacion": "normal",
-    "trades_muestra_reciente": 7,
+    "trades_muestra_reciente": 5,
     "activos_muestra_reciente": {
-      "SOL": {
-        "up": 0,
-        "down": 1
-      },
-      "ETH": {
-        "up": 0,
-        "down": 1
-      },
       "BTC": {
-        "up": 1,
-        "down": 4
+        "up": 0,
+        "down": 5
       }
     },
     "duraciones_muestra_reciente": {
-      "weekly": 7
+      "weekly": 5
     },
     "primera_vez_visto": "2026-08-18T18:22:38+00:00",
     "ultima_actualizacion": "2026-08-29T11:52:43+00:00",
@@ -533934,15 +533899,15 @@
     "pnl_total": -34.55,
     "tamano_medio_usd": 3.74,
     "clasificacion": "normal",
-    "trades_muestra_reciente": 6,
+    "trades_muestra_reciente": 5,
     "activos_muestra_reciente": {
       "BTC": {
-        "up": 4,
-        "down": 2
+        "up": 0,
+        "down": 5
       }
     },
     "duraciones_muestra_reciente": {
-      "15m": 6
+      "15m": 5
     },
     "primera_vez_visto": "2026-08-19T02:01:34+00:00",
     "ultima_actualizacion": "2026-08-29T14:12:36+00:00"
@@ -535157,15 +535122,15 @@
     "pnl_total": -477.99,
     "tamano_medio_usd": 2.91,
     "clasificacion": "normal",
-    "trades_muestra_reciente": 7,
+    "trades_muestra_reciente": 5,
     "activos_muestra_reciente": {
       "BTC": {
-        "up": 3,
-        "down": 4
+        "up": 2,
+        "down": 3
       }
     },
     "duraciones_muestra_reciente": {
-      "5m": 7
+      "5m": 5
     },
     "primera_vez_visto": "2026-08-19T04:02:03+00:00",
     "ultima_actualizacion": "2026-08-29T10:20:39+00:00"
@@ -537328,15 +537293,15 @@
     "pnl_total": -3.95,
     "tamano_medio_usd": 3.95,
     "clasificacion": "normal",
-    "trades_muestra_reciente": 6,
+    "trades_muestra_reciente": 7,
     "activos_muestra_reciente": {
       "BTC": {
-        "up": 4,
-        "down": 2
+        "up": 3,
+        "down": 4
       }
     },
     "duraciones_muestra_reciente": {
-      "5m": 6
+      "5m": 7
     },
     "primera_vez_visto": "2026-08-19T09:41:18+00:00",
     "ultima_actualizacion": "2026-08-29T10:20:39+00:00"
@@ -539506,32 +539471,32 @@
     "pnl_total": -214.97,
     "tamano_medio_usd": 1.21,
     "clasificacion": "normal",
-    "trades_muestra_reciente": 32,
+    "trades_muestra_reciente": 36,
     "activos_muestra_reciente": {
-      "DOGE": {
-        "up": 3,
-        "down": 1
-      },
-      "BTC": {
-        "up": 6,
-        "down": 7
-      },
       "SOL": {
-        "up": 3,
-        "down": 7
-      },
-      "BNB": {
-        "up": 1,
-        "down": 1
+        "up": 5,
+        "down": 6
       },
       "ETH": {
+        "up": 3,
+        "down": 4
+      },
+      "BTC": {
+        "up": 8,
+        "down": 6
+      },
+      "BNB": {
+        "up": 2,
+        "down": 1
+      },
+      "XRP": {
         "up": 1,
-        "down": 2
+        "down": 0
       }
     },
     "duraciones_muestra_reciente": {
-      "5m": 24,
-      "15m": 8
+      "5m": 23,
+      "15m": 13
     },
     "primera_vez_visto": "2026-08-19T15:21:29+00:00",
     "ultima_actualizacion": "2026-08-29T10:43:37+00:00"
@@ -539872,15 +539837,15 @@
     "pnl_total": -11249.92,
     "tamano_medio_usd": 33.78,
     "clasificacion": "normal",
-    "trades_muestra_reciente": 34,
+    "trades_muestra_reciente": 24,
     "activos_muestra_reciente": {
       "BTC": {
-        "up": 21,
-        "down": 13
+        "up": 14,
+        "down": 10
       }
     },
     "duraciones_muestra_reciente": {
-      "5m": 34
+      "5m": 24
     },
     "primera_vez_visto": "2026-08-19T16:21:32+00:00",
     "ultima_actualizacion": "2026-08-29T11:52:43+00:00"
@@ -539948,15 +539913,15 @@
     "pnl_total": -145.59,
     "tamano_medio_usd": 4.12,
     "clasificacion": "normal",
-    "trades_muestra_reciente": 8,
+    "trades_muestra_reciente": 27,
     "activos_muestra_reciente": {
       "BTC": {
-        "up": 4,
-        "down": 4
+        "up": 11,
+        "down": 16
       }
     },
     "duraciones_muestra_reciente": {
-      "5m": 8
+      "5m": 27
     },
     "primera_vez_visto": "2026-08-19T16:41:31+00:00",
     "ultima_actualizacion": "2026-08-29T13:26:47+00:00"
@@ -540761,23 +540726,23 @@
     "ultima_actualizacion": "2026-08-22T05:26:02+00:00"
   },
   "0x2fe4ae98d12dd1c3d77355a28d01669b1ea25504": {
-    "n": 101,
+    "n": 108,
     "win_rate": 0.0,
-    "pnl_total": -950.88,
-    "tamano_medio_usd": 9.41,
+    "pnl_total": -1035.92,
+    "tamano_medio_usd": 9.59,
     "clasificacion": "normal",
-    "trades_muestra_reciente": 7,
+    "trades_muestra_reciente": 5,
     "activos_muestra_reciente": {
       "BTC": {
         "up": 4,
-        "down": 3
+        "down": 1
       }
     },
     "duraciones_muestra_reciente": {
-      "5m": 7
+      "5m": 5
     },
     "primera_vez_visto": "2026-08-19T18:22:19+00:00",
-    "ultima_actualizacion": "2026-08-27T14:56:46+00:00"
+    "ultima_actualizacion": "2026-08-29T16:07:45+00:00"
   },
   "0xd4c7b848e611250455ea25646e41d99cb40d064f": {
     "n": 4,
@@ -544547,20 +544512,23 @@
     "ultima_actualizacion": "2026-08-20T19:02:53+00:00"
   },
   "0xf25edf32019707f9102d78c802d9f01419db6a10": {
-    "n": 0,
+    "n": 20,
+    "win_rate": 0.0,
+    "pnl_total": -1173.7,
+    "tamano_medio_usd": 60.98,
     "clasificacion": "normal",
-    "trades_muestra_reciente": 5,
+    "trades_muestra_reciente": 7,
     "activos_muestra_reciente": {
       "BTC": {
-        "up": 2,
-        "down": 3
+        "up": 3,
+        "down": 4
       }
     },
     "duraciones_muestra_reciente": {
-      "5m": 5
+      "5m": 7
     },
     "primera_vez_visto": "2026-08-20T01:21:12+00:00",
-    "ultima_actualizacion": "2026-08-29T09:12:34+00:00"
+    "ultima_actualizacion": "2026-08-29T16:07:45+00:00"
   },
   "0xa8cb06f327e885bb5fd08dc2ea7427bdafe57a28": {
     "n": 6,
@@ -546455,15 +546423,19 @@
   "0x3561190a250fbf7cede1a83db23006c33eebf1b7": {
     "n": 0,
     "clasificacion": "normal",
-    "trades_muestra_reciente": 7,
+    "trades_muestra_reciente": 26,
     "activos_muestra_reciente": {
       "BTC": {
-        "up": 3,
-        "down": 4
+        "up": 0,
+        "down": 18
+      },
+      "ETH": {
+        "up": 0,
+        "down": 8
       }
     },
     "duraciones_muestra_reciente": {
-      "weekly": 7
+      "weekly": 26
     },
     "primera_vez_visto": "2026-08-20T04:21:19+00:00",
     "ultima_actualizacion": "2026-08-29T11:29:32+00:00",
@@ -546670,23 +546642,23 @@
   },
   "0xc32d99972b053995298494895efa16c3e608f3e5": {
     "n": 500,
-    "win_rate": 0.002,
-    "pnl_total": -2248.32,
-    "tamano_medio_usd": 4.54,
+    "win_rate": 0.004,
+    "pnl_total": -2383.29,
+    "tamano_medio_usd": 4.81,
     "clasificacion": "normal",
-    "trades_muestra_reciente": 12,
+    "trades_muestra_reciente": 13,
     "activos_muestra_reciente": {
       "BTC": {
-        "up": 8,
+        "up": 9,
         "down": 4
       }
     },
     "duraciones_muestra_reciente": {
-      "5m": 11,
-      "15m": 1
+      "5m": 7,
+      "15m": 6
     },
     "primera_vez_visto": "2026-08-20T05:02:04+00:00",
-    "ultima_actualizacion": "2026-08-29T08:27:07+00:00"
+    "ultima_actualizacion": "2026-08-29T16:07:45+00:00"
   },
   "0x8e0f77b0e11f1d500c431ed0c861d8da01fa65af": {
     "n": 83,
@@ -551207,18 +551179,18 @@
     "pnl_total": -2.0,
     "tamano_medio_usd": 1.0,
     "clasificacion": "normal",
-    "trades_muestra_reciente": 6,
+    "trades_muestra_reciente": 11,
     "activos_muestra_reciente": {
       "BTC": {
-        "up": 4,
-        "down": 2
+        "up": 8,
+        "down": 3
       }
     },
     "duraciones_muestra_reciente": {
-      "5m": 6
+      "5m": 11
     },
     "primera_vez_visto": "2026-08-20T14:02:26+00:00",
-    "ultima_actualizacion": "2026-08-29T09:12:34+00:00"
+    "ultima_actualizacion": "2026-08-29T16:07:45+00:00"
   },
   "0xd9c6ded9a6dd12607f14d7aaf462213b43b990f5": {
     "n": 7,
@@ -552144,15 +552116,15 @@
     "pnl_total": -25552.18,
     "tamano_medio_usd": 77.43,
     "clasificacion": "normal",
-    "trades_muestra_reciente": 18,
+    "trades_muestra_reciente": 20,
     "activos_muestra_reciente": {
       "BTC": {
-        "up": 8,
-        "down": 10
+        "up": 14,
+        "down": 6
       }
     },
     "duraciones_muestra_reciente": {
-      "5m": 18
+      "5m": 20
     },
     "primera_vez_visto": "2026-08-20T15:41:39+00:00",
     "ultima_actualizacion": "2026-08-29T14:12:36+00:00"
@@ -555948,15 +555920,15 @@
     "trades_muestra_reciente": 5,
     "activos_muestra_reciente": {
       "BTC": {
-        "up": 1,
-        "down": 4
+        "up": 3,
+        "down": 2
       }
     },
     "duraciones_muestra_reciente": {
       "5m": 5
     },
     "primera_vez_visto": "2026-08-21T00:27:16+00:00",
-    "ultima_actualizacion": "2026-08-29T06:33:25+00:00"
+    "ultima_actualizacion": "2026-08-29T16:07:45+00:00"
   },
   "0xf0f922239fc3891a314496e2f189f24a9a3868db": {
     "n": 3,
@@ -558196,23 +558168,23 @@
     "ultima_actualizacion": "2026-08-21T04:41:44+00:00"
   },
   "0xfa3295a3b351ef783a78ade164000816c429b11e": {
-    "n": 4,
+    "n": 14,
     "win_rate": 0.0,
-    "pnl_total": -5.0,
-    "tamano_medio_usd": 1.25,
+    "pnl_total": -15.0,
+    "tamano_medio_usd": 1.07,
     "clasificacion": "normal",
-    "trades_muestra_reciente": 8,
+    "trades_muestra_reciente": 7,
     "activos_muestra_reciente": {
       "BTC": {
-        "up": 6,
+        "up": 5,
         "down": 2
       }
     },
     "duraciones_muestra_reciente": {
-      "15m": 8
+      "5m": 7
     },
     "primera_vez_visto": "2026-08-21T05:04:45+00:00",
-    "ultima_actualizacion": "2026-08-21T05:04:45+00:00"
+    "ultima_actualizacion": "2026-08-29T16:07:45+00:00"
   },
   "0xc3f21d023c61d34571a6383288b71299e6d526d5": {
     "n": 14,
@@ -560098,23 +560070,20 @@
     "pnl_total": -2.54,
     "tamano_medio_usd": 2.12,
     "clasificacion": "normal",
-    "trades_muestra_reciente": 5,
+    "trades_muestra_reciente": 16,
     "activos_muestra_reciente": {
       "BTC": {
-        "up": 1,
-        "down": 1
+        "up": 9,
+        "down": 6
       },
-      "XRP": {
+      "ETH": {
         "up": 0,
         "down": 1
-      },
-      "SOL": {
-        "up": 0,
-        "down": 2
       }
     },
     "duraciones_muestra_reciente": {
-      "5m": 5
+      "15m": 10,
+      "5m": 6
     },
     "primera_vez_visto": "2026-08-21T09:25:11+00:00",
     "ultima_actualizacion": "2026-08-29T11:52:43+00:00"
@@ -562271,18 +562240,18 @@
     "pnl_total": -35.35,
     "tamano_medio_usd": 2.53,
     "clasificacion": "normal",
-    "trades_muestra_reciente": 13,
+    "trades_muestra_reciente": 6,
     "activos_muestra_reciente": {
       "BTC": {
         "up": 6,
-        "down": 7
+        "down": 0
       }
     },
     "duraciones_muestra_reciente": {
-      "5m": 13
+      "15m": 6
     },
     "primera_vez_visto": "2026-08-21T15:09:30+00:00",
-    "ultima_actualizacion": "2026-08-23T08:30:05+00:00"
+    "ultima_actualizacion": "2026-08-29T16:07:45+00:00"
   },
   "0xc21dbf5fbe7ceab8f21d03d94929ba8e8841fdd3": {
     "n": 0,
@@ -563182,43 +563151,39 @@
     }
   },
   "0x5e60d871c2d646de185e541290689b727ef0e468": {
-    "n": 445,
-    "win_rate": 0.0045,
-    "pnl_total": -27910.52,
-    "tamano_medio_usd": 63.36,
+    "n": 447,
+    "win_rate": 0.0022,
+    "pnl_total": -30694.14,
+    "tamano_medio_usd": 68.82,
     "clasificacion": "normal",
-    "trades_muestra_reciente": 65,
+    "trades_muestra_reciente": 57,
     "activos_muestra_reciente": {
       "DOGE": {
-        "up": 11,
-        "down": 3
-      },
-      "ETH": {
-        "up": 2,
-        "down": 7
-      },
-      "BTC": {
-        "up": 4,
-        "down": 8
-      },
-      "SOL": {
-        "up": 13,
-        "down": 7
-      },
-      "XRP": {
-        "up": 4,
+        "up": 9,
         "down": 4
       },
-      "BNB": {
-        "up": 0,
+      "XRP": {
+        "up": 16,
         "down": 2
+      },
+      "BTC": {
+        "up": 1,
+        "down": 11
+      },
+      "SOL": {
+        "up": 2,
+        "down": 1
+      },
+      "ETH": {
+        "up": 11,
+        "down": 0
       }
     },
     "duraciones_muestra_reciente": {
-      "15m": 65
+      "15m": 57
     },
     "primera_vez_visto": "2026-08-21T17:30:52+00:00",
-    "ultima_actualizacion": "2026-08-29T06:56:25+00:00"
+    "ultima_actualizacion": "2026-08-29T16:07:45+00:00"
   },
   "0xad0fab2e0e06d9a0c52e075595e77eac159f29a6": {
     "n": 55,
@@ -567055,16 +567020,15 @@
     "pnl_total": -57035.87,
     "tamano_medio_usd": 114.07,
     "clasificacion": "normal",
-    "trades_muestra_reciente": 5,
+    "trades_muestra_reciente": 8,
     "activos_muestra_reciente": {
       "BTC": {
-        "up": 3,
-        "down": 2
+        "up": 8,
+        "down": 0
       }
     },
     "duraciones_muestra_reciente": {
-      "5m": 2,
-      "15m": 3
+      "15m": 8
     },
     "primera_vez_visto": "2026-08-22T01:07:16+00:00",
     "ultima_actualizacion": "2026-08-29T11:52:43+00:00"
@@ -568663,14 +568627,14 @@
     "pnl_total": -85.91,
     "tamano_medio_usd": 4.24,
     "clasificacion": "normal",
-    "trades_muestra_reciente": 8,
+    "trades_muestra_reciente": 6,
     "activos_muestra_reciente": {
-      "SOL": {
-        "up": 3,
-        "down": 3
-      },
       "BTC": {
-        "up": 0,
+        "up": 2,
+        "down": 0
+      },
+      "SOL": {
+        "up": 2,
         "down": 1
       },
       "ETH": {
@@ -568679,7 +568643,7 @@
       }
     },
     "duraciones_muestra_reciente": {
-      "15m": 8
+      "15m": 6
     },
     "primera_vez_visto": "2026-08-22T03:09:00+00:00",
     "ultima_actualizacion": "2026-08-29T14:35:41+00:00"
@@ -576210,20 +576174,19 @@
     "pnl_total": 0.19,
     "tamano_medio_usd": 1.5,
     "clasificacion": "normal",
-    "trades_muestra_reciente": 7,
+    "trades_muestra_reciente": 5,
     "activos_muestra_reciente": {
-      "BTC": {
-        "up": 4,
-        "down": 1
-      },
       "ETH": {
         "up": 1,
-        "down": 1
+        "down": 0
+      },
+      "BTC": {
+        "up": 4,
+        "down": 0
       }
     },
     "duraciones_muestra_reciente": {
-      "5m": 5,
-      "15m": 2
+      "5m": 5
     },
     "primera_vez_visto": "2026-08-22T22:06:07+00:00",
     "ultima_actualizacion": "2026-08-29T13:26:47+00:00"
@@ -576307,8 +576270,8 @@
     "trades_muestra_reciente": 10,
     "activos_muestra_reciente": {
       "BTC": {
-        "up": 6,
-        "down": 4
+        "up": 2,
+        "down": 8
       }
     },
     "duraciones_muestra_reciente": {
@@ -579242,15 +579205,15 @@
     "pnl_total": -210.0,
     "tamano_medio_usd": 23.33,
     "clasificacion": "normal",
-    "trades_muestra_reciente": 7,
+    "trades_muestra_reciente": 5,
     "activos_muestra_reciente": {
       "BTC": {
-        "up": 4,
+        "up": 2,
         "down": 3
       }
     },
     "duraciones_muestra_reciente": {
-      "5m": 7
+      "5m": 5
     },
     "primera_vez_visto": "2026-08-23T04:39:46+00:00",
     "ultima_actualizacion": "2026-08-29T11:06:36+00:00"
@@ -580760,15 +580723,15 @@
     "pnl_total": -109.41,
     "tamano_medio_usd": 6.65,
     "clasificacion": "normal",
-    "trades_muestra_reciente": 8,
+    "trades_muestra_reciente": 5,
     "activos_muestra_reciente": {
       "BTC": {
-        "up": 2,
-        "down": 6
+        "up": 4,
+        "down": 1
       }
     },
     "duraciones_muestra_reciente": {
-      "5m": 8
+      "5m": 5
     },
     "primera_vez_visto": "2026-08-23T07:28:45+00:00",
     "ultima_actualizacion": "2026-08-29T11:06:36+00:00"
@@ -587288,18 +587251,18 @@
     "pnl_total": -115.48,
     "tamano_medio_usd": 8.88,
     "clasificacion": "normal",
-    "trades_muestra_reciente": 6,
+    "trades_muestra_reciente": 7,
     "activos_muestra_reciente": {
       "BTC": {
         "up": 3,
-        "down": 3
+        "down": 4
       }
     },
     "duraciones_muestra_reciente": {
-      "15m": 6
+      "15m": 7
     },
     "primera_vez_visto": "2026-08-24T01:21:26+00:00",
-    "ultima_actualizacion": "2026-08-29T02:47:45+00:00"
+    "ultima_actualizacion": "2026-08-29T16:07:45+00:00"
   },
   "0x36ed724ff3e3945181cf308a1a03af27955445d6": {
     "n": 91,
@@ -587443,24 +587406,24 @@
     "pnl_total": -3656.75,
     "tamano_medio_usd": 7.31,
     "clasificacion": "normal",
-    "trades_muestra_reciente": 20,
+    "trades_muestra_reciente": 13,
     "activos_muestra_reciente": {
-      "SOL": {
+      "BTC": {
         "up": 0,
-        "down": 5
+        "down": 6
       },
       "ETH": {
-        "up": 5,
-        "down": 2
+        "up": 2,
+        "down": 1
       },
-      "BTC": {
-        "up": 6,
-        "down": 2
+      "SOL": {
+        "up": 4,
+        "down": 0
       }
     },
     "duraciones_muestra_reciente": {
-      "5m": 8,
-      "15m": 12
+      "5m": 7,
+      "15m": 6
     },
     "primera_vez_visto": "2026-08-24T01:21:26+00:00",
     "ultima_actualizacion": "2026-08-29T15:44:57+00:00"
@@ -588217,24 +588180,23 @@
     "ultima_actualizacion": "2026-08-25T03:55:36+00:00"
   },
   "0x3de2e71ae92b6000889419ef159c947423a3ec01": {
-    "n": 24,
+    "n": 109,
     "win_rate": 0.0,
-    "pnl_total": -27.5,
-    "tamano_medio_usd": 1.15,
+    "pnl_total": -41.44,
+    "tamano_medio_usd": 0.38,
     "clasificacion": "normal",
-    "trades_muestra_reciente": 11,
+    "trades_muestra_reciente": 5,
     "activos_muestra_reciente": {
       "BTC": {
-        "up": 8,
-        "down": 3
+        "up": 4,
+        "down": 1
       }
     },
     "duraciones_muestra_reciente": {
-      "5m": 10,
-      "15m": 1
+      "5m": 5
     },
     "primera_vez_visto": "2026-08-24T02:36:05+00:00",
-    "ultima_actualizacion": "2026-08-25T16:52:46+00:00"
+    "ultima_actualizacion": "2026-08-29T16:07:45+00:00"
   },
   "0xf00da8fcf0f0e91946d532360da97a0549fdf6e2": {
     "n": 1,
@@ -589160,16 +589122,15 @@
     "pnl_total": -12.0,
     "tamano_medio_usd": 3.0,
     "clasificacion": "normal",
-    "trades_muestra_reciente": 13,
+    "trades_muestra_reciente": 9,
     "activos_muestra_reciente": {
       "BTC": {
-        "up": 6,
+        "up": 2,
         "down": 7
       }
     },
     "duraciones_muestra_reciente": {
-      "15m": 9,
-      "5m": 4
+      "15m": 9
     },
     "primera_vez_visto": "2026-08-24T05:11:26+00:00",
     "ultima_actualizacion": "2026-08-29T14:35:41+00:00"
@@ -591197,15 +591158,15 @@
     "pnl_total": -1574.76,
     "tamano_medio_usd": 10.86,
     "clasificacion": "normal",
-    "trades_muestra_reciente": 6,
+    "trades_muestra_reciente": 5,
     "activos_muestra_reciente": {
       "BTC": {
         "up": 3,
-        "down": 3
+        "down": 2
       }
     },
     "duraciones_muestra_reciente": {
-      "5m": 6
+      "5m": 5
     },
     "primera_vez_visto": "2026-08-24T11:07:24+00:00",
     "ultima_actualizacion": "2026-08-29T13:03:35+00:00"
@@ -591270,18 +591231,18 @@
     "pnl_total": -293.99,
     "tamano_medio_usd": 8.17,
     "clasificacion": "normal",
-    "trades_muestra_reciente": 8,
+    "trades_muestra_reciente": 5,
     "activos_muestra_reciente": {
       "BTC": {
-        "up": 5,
+        "up": 2,
         "down": 3
       }
     },
     "duraciones_muestra_reciente": {
-      "5m": 8
+      "5m": 5
     },
     "primera_vez_visto": "2026-08-24T11:07:24+00:00",
-    "ultima_actualizacion": "2026-08-29T08:04:19+00:00"
+    "ultima_actualizacion": "2026-08-29T16:07:45+00:00"
   },
   "0xbab4e4cefd91aebc100daf63dde64d00120d4d5a": {
     "n": 5,
@@ -592268,15 +592229,15 @@
     "pnl_total": -3727.34,
     "tamano_medio_usd": 9.39,
     "clasificacion": "normal",
-    "trades_muestra_reciente": 6,
+    "trades_muestra_reciente": 17,
     "activos_muestra_reciente": {
       "BTC": {
-        "up": 4,
-        "down": 2
+        "up": 8,
+        "down": 9
       }
     },
     "duraciones_muestra_reciente": {
-      "5m": 6
+      "5m": 17
     },
     "primera_vez_visto": "2026-08-24T16:12:02+00:00",
     "ultima_actualizacion": "2026-08-29T10:20:39+00:00"
@@ -592430,33 +592391,37 @@
   "0x65226d8a3df008f0255aae4210cd3d9951a2ddc5": {
     "n": 500,
     "win_rate": 0.0,
-    "pnl_total": -1656.1,
-    "tamano_medio_usd": 3.32,
+    "pnl_total": -1656.5,
+    "tamano_medio_usd": 3.31,
     "clasificacion": "normal",
-    "trades_muestra_reciente": 8,
+    "trades_muestra_reciente": 7,
     "activos_muestra_reciente": {
-      "ETH": {
-        "up": 1,
-        "down": 2
-      },
       "SOL": {
-        "up": 2,
+        "up": 1,
         "down": 0
+      },
+      "XRP": {
+        "up": 0,
+        "down": 2
       },
       "BNB": {
         "up": 1,
         "down": 1
       },
-      "XRP": {
-        "up": 1,
-        "down": 0
+      "BTC": {
+        "up": 0,
+        "down": 1
+      },
+      "DOGE": {
+        "up": 0,
+        "down": 1
       }
     },
     "duraciones_muestra_reciente": {
-      "15m": 8
+      "15m": 7
     },
     "primera_vez_visto": "2026-08-24T16:12:02+00:00",
-    "ultima_actualizacion": "2026-08-29T09:35:22+00:00"
+    "ultima_actualizacion": "2026-08-29T16:07:45+00:00"
   },
   "0x35607a4f473b56f90800acf8040bfaaa03ab9ba4": {
     "n": 12,
@@ -596884,28 +596849,28 @@
     "pnl_total": -470.01,
     "tamano_medio_usd": 3.07,
     "clasificacion": "normal",
-    "trades_muestra_reciente": 48,
+    "trades_muestra_reciente": 42,
     "activos_muestra_reciente": {
       "SOL": {
-        "up": 2,
-        "down": 8
-      },
-      "BNB": {
-        "up": 3,
-        "down": 4
-      },
-      "BTC": {
-        "up": 6,
-        "down": 11
+        "up": 7,
+        "down": 0
       },
       "ETH": {
-        "up": 5,
-        "down": 9
+        "up": 3,
+        "down": 7
+      },
+      "BNB": {
+        "up": 4,
+        "down": 3
+      },
+      "BTC": {
+        "up": 8,
+        "down": 10
       }
     },
     "duraciones_muestra_reciente": {
-      "15m": 15,
-      "5m": 33
+      "5m": 28,
+      "15m": 14
     },
     "primera_vez_visto": "2026-08-25T01:47:23+00:00",
     "ultima_actualizacion": "2026-08-29T15:21:45+00:00"
@@ -600250,16 +600215,16 @@
     "pnl_total": -115.44,
     "tamano_medio_usd": 6.28,
     "clasificacion": "normal",
-    "trades_muestra_reciente": 13,
+    "trades_muestra_reciente": 21,
     "activos_muestra_reciente": {
       "BTC": {
-        "up": 6,
-        "down": 7
+        "up": 12,
+        "down": 9
       }
     },
     "duraciones_muestra_reciente": {
-      "5m": 8,
-      "15m": 5
+      "5m": 14,
+      "15m": 7
     },
     "primera_vez_visto": "2026-08-25T10:47:16+00:00",
     "ultima_actualizacion": "2026-08-29T14:35:41+00:00"
@@ -602212,15 +602177,15 @@
   "0x11ec0cf7739f70f43c920101f857b9aa04d2f98c": {
     "n": 0,
     "clasificacion": "normal",
-    "trades_muestra_reciente": 21,
+    "trades_muestra_reciente": 46,
     "activos_muestra_reciente": {
       "BTC": {
-        "up": 10,
-        "down": 11
+        "up": 24,
+        "down": 22
       }
     },
     "duraciones_muestra_reciente": {
-      "5m": 21
+      "5m": 46
     },
     "primera_vez_visto": "2026-08-25T17:18:59+00:00",
     "ultima_actualizacion": "2026-08-29T11:52:43+00:00"
@@ -602814,15 +602779,15 @@
     "pnl_total": -90.22,
     "tamano_medio_usd": 2.44,
     "clasificacion": "normal",
-    "trades_muestra_reciente": 22,
+    "trades_muestra_reciente": 20,
     "activos_muestra_reciente": {
       "BTC": {
-        "up": 1,
-        "down": 21
+        "up": 20,
+        "down": 0
       }
     },
     "duraciones_muestra_reciente": {
-      "5m": 22
+      "5m": 20
     },
     "primera_vez_visto": "2026-08-25T19:40:36+00:00",
     "ultima_actualizacion": "2026-08-29T12:16:05+00:00"
@@ -602995,15 +602960,15 @@
     "pnl_total": -569.8,
     "tamano_medio_usd": 12.77,
     "clasificacion": "normal",
-    "trades_muestra_reciente": 34,
+    "trades_muestra_reciente": 24,
     "activos_muestra_reciente": {
       "BTC": {
-        "up": 24,
-        "down": 10
+        "up": 10,
+        "down": 14
       }
     },
     "duraciones_muestra_reciente": {
-      "5m": 34
+      "5m": 24
     },
     "primera_vez_visto": "2026-08-25T19:40:36+00:00",
     "ultima_actualizacion": "2026-08-29T12:16:05+00:00"
@@ -603032,27 +602997,23 @@
     "ultima_actualizacion": "2026-08-27T08:31:13+00:00"
   },
   "0x5b79bf8b17ea9d988409060328f8ead5ff8ff2ac": {
-    "n": 17,
+    "n": 21,
     "win_rate": 0.0,
-    "pnl_total": -20.21,
-    "tamano_medio_usd": 1.19,
+    "pnl_total": -24.29,
+    "tamano_medio_usd": 1.17,
     "clasificacion": "normal",
-    "trades_muestra_reciente": 8,
+    "trades_muestra_reciente": 7,
     "activos_muestra_reciente": {
-      "ETH": {
-        "up": 4,
-        "down": 2
-      },
       "BTC": {
-        "up": 0,
+        "up": 5,
         "down": 2
       }
     },
     "duraciones_muestra_reciente": {
-      "5m": 8
+      "5m": 7
     },
     "primera_vez_visto": "2026-08-25T19:40:36+00:00",
-    "ultima_actualizacion": "2026-08-27T09:17:00+00:00"
+    "ultima_actualizacion": "2026-08-29T16:07:45+00:00"
   },
   "0xce4be702c152df82ec2afa3d49cecdd4f45826c6": {
     "n": 27,
@@ -604133,15 +604094,15 @@
     "pnl_total": -50.93,
     "tamano_medio_usd": 2.31,
     "clasificacion": "normal",
-    "trades_muestra_reciente": 8,
+    "trades_muestra_reciente": 13,
     "activos_muestra_reciente": {
       "BTC": {
-        "up": 8,
-        "down": 0
+        "up": 3,
+        "down": 10
       }
     },
     "duraciones_muestra_reciente": {
-      "5m": 8
+      "5m": 13
     },
     "primera_vez_visto": "2026-08-25T23:37:27+00:00",
     "ultima_actualizacion": "2026-08-29T15:44:57+00:00"
@@ -606435,27 +606396,23 @@
     "ultima_actualizacion": "2026-08-28T00:02:30+00:00"
   },
   "0x6d211dacacd046fcbe3d7bdfddeb2e6b09acb6e5": {
-    "n": 29,
+    "n": 43,
     "win_rate": 0.0,
-    "pnl_total": -722.76,
-    "tamano_medio_usd": 24.92,
+    "pnl_total": -889.99,
+    "tamano_medio_usd": 20.7,
     "clasificacion": "normal",
     "trades_muestra_reciente": 10,
     "activos_muestra_reciente": {
       "BTC": {
-        "up": 4,
-        "down": 4
-      },
-      "ETH": {
-        "up": 0,
-        "down": 2
+        "up": 5,
+        "down": 5
       }
     },
     "duraciones_muestra_reciente": {
       "5m": 10
     },
     "primera_vez_visto": "2026-08-26T02:56:14+00:00",
-    "ultima_actualizacion": "2026-08-29T04:17:42+00:00"
+    "ultima_actualizacion": "2026-08-29T16:07:45+00:00"
   },
   "0x893a56fb5f5c17bc098e0ac9b974fb48355db228": {
     "n": 12,
@@ -611049,33 +611006,37 @@
   "0x7176b079f440d4a7c0e5531567ca65f586f3bc8c": {
     "n": 483,
     "win_rate": 0.0,
-    "pnl_total": -16738.19,
-    "tamano_medio_usd": 34.65,
+    "pnl_total": -16838.08,
+    "tamano_medio_usd": 34.86,
     "clasificacion": "normal",
-    "trades_muestra_reciente": 6,
+    "trades_muestra_reciente": 8,
     "activos_muestra_reciente": {
       "SOL": {
-        "up": 1,
-        "down": 0
+        "up": 2,
+        "down": 1
       },
-      "BTC": {
-        "up": 1,
+      "ETH": {
+        "up": 0,
         "down": 2
       },
       "XRP": {
         "up": 1,
         "down": 0
       },
-      "BNB": {
+      "BTC": {
+        "up": 1,
+        "down": 0
+      },
+      "DOGE": {
         "up": 0,
         "down": 1
       }
     },
     "duraciones_muestra_reciente": {
-      "5m": 6
+      "5m": 8
     },
     "primera_vez_visto": "2026-08-26T15:52:36+00:00",
-    "ultima_actualizacion": "2026-08-29T07:41:45+00:00"
+    "ultima_actualizacion": "2026-08-29T16:07:45+00:00"
   },
   "0xe522d0a6b77bf77f8460bf81e19492c4f8310dd1": {
     "n": 1,
@@ -612158,28 +612119,28 @@
     "pnl_total": 0.06,
     "tamano_medio_usd": 3.0,
     "clasificacion": "normal",
-    "trades_muestra_reciente": 9,
+    "trades_muestra_reciente": 56,
     "activos_muestra_reciente": {
       "SOL": {
-        "up": 1,
-        "down": 0
+        "up": 0,
+        "down": 3
       },
       "BTC": {
-        "up": 4,
-        "down": 2
+        "up": 47,
+        "down": 3
       },
-      "DOGE": {
+      "BNB": {
         "up": 0,
         "down": 1
       },
       "ETH": {
-        "up": 1,
-        "down": 0
+        "up": 0,
+        "down": 2
       }
     },
     "duraciones_muestra_reciente": {
-      "5m": 7,
-      "15m": 2
+      "5m": 55,
+      "15m": 1
     },
     "primera_vez_visto": "2026-08-26T19:03:35+00:00",
     "ultima_actualizacion": "2026-08-29T12:16:05+00:00"
@@ -613063,23 +613024,19 @@
     "pnl_total": -3600.52,
     "tamano_medio_usd": 171.45,
     "clasificacion": "normal",
-    "trades_muestra_reciente": 8,
+    "trades_muestra_reciente": 9,
     "activos_muestra_reciente": {
+      "BTC": {
+        "up": 3,
+        "down": 4
+      },
       "ETH": {
         "up": 0,
-        "down": 1
-      },
-      "SOL": {
-        "up": 1,
-        "down": 0
-      },
-      "BTC": {
-        "up": 5,
-        "down": 1
+        "down": 2
       }
     },
     "duraciones_muestra_reciente": {
-      "5m": 8
+      "5m": 9
     },
     "primera_vez_visto": "2026-08-26T21:32:47+00:00",
     "ultima_actualizacion": "2026-08-29T14:12:36+00:00"
@@ -613641,23 +613598,23 @@
     "ultima_actualizacion": "2026-08-27T06:24:46+00:00"
   },
   "0x2c80ed0023d188a0d2e35307803b26324aab9056": {
-    "n": 91,
+    "n": 95,
     "win_rate": 0.0,
-    "pnl_total": -22323.23,
-    "tamano_medio_usd": 245.31,
+    "pnl_total": -23187.31,
+    "tamano_medio_usd": 244.08,
     "clasificacion": "normal",
-    "trades_muestra_reciente": 15,
+    "trades_muestra_reciente": 13,
     "activos_muestra_reciente": {
       "ETH": {
-        "up": 5,
-        "down": 10
+        "up": 10,
+        "down": 3
       }
     },
     "duraciones_muestra_reciente": {
-      "5m": 15
+      "5m": 13
     },
     "primera_vez_visto": "2026-08-26T21:57:46+00:00",
-    "ultima_actualizacion": "2026-08-29T08:49:43+00:00"
+    "ultima_actualizacion": "2026-08-29T16:07:45+00:00"
   },
   "0x06af6dcb18592f6acf9e889845acf29ff775d8e2": {
     "n": 53,
@@ -615644,23 +615601,23 @@
     "ultima_actualizacion": "2026-08-28T00:02:30+00:00"
   },
   "0x0f6af3130a3fcc47e57046c40cb8f7a9e4d6bf81": {
-    "n": 12,
+    "n": 16,
     "win_rate": 0.0,
-    "pnl_total": -215.31,
-    "tamano_medio_usd": 17.94,
+    "pnl_total": -244.97,
+    "tamano_medio_usd": 15.32,
     "clasificacion": "normal",
     "trades_muestra_reciente": 9,
     "activos_muestra_reciente": {
       "BTC": {
-        "up": 3,
-        "down": 6
+        "up": 5,
+        "down": 4
       }
     },
     "duraciones_muestra_reciente": {
       "5m": 9
     },
     "primera_vez_visto": "2026-08-27T02:00:14+00:00",
-    "ultima_actualizacion": "2026-08-29T06:56:25+00:00"
+    "ultima_actualizacion": "2026-08-29T16:07:45+00:00"
   },
   "0xefcb904e65212f1d92067c22af1333edb3c929a3": {
     "n": 0,
@@ -615943,15 +615900,15 @@
     "pnl_total": -575.0,
     "tamano_medio_usd": 14.38,
     "clasificacion": "normal",
-    "trades_muestra_reciente": 8,
+    "trades_muestra_reciente": 12,
     "activos_muestra_reciente": {
       "BTC": {
-        "up": 6,
-        "down": 2
+        "up": 2,
+        "down": 10
       }
     },
     "duraciones_muestra_reciente": {
-      "5m": 8
+      "5m": 12
     },
     "primera_vez_visto": "2026-08-27T02:26:29+00:00",
     "ultima_actualizacion": "2026-08-29T14:58:43+00:00"
@@ -618147,15 +618104,15 @@
     "pnl_total": -34.99,
     "tamano_medio_usd": 2.92,
     "clasificacion": "normal",
-    "trades_muestra_reciente": 46,
+    "trades_muestra_reciente": 26,
     "activos_muestra_reciente": {
       "BTC": {
-        "up": 25,
-        "down": 21
+        "up": 6,
+        "down": 20
       }
     },
     "duraciones_muestra_reciente": {
-      "60m": 46
+      "60m": 26
     },
     "primera_vez_visto": "2026-08-27T08:54:00+00:00",
     "ultima_actualizacion": "2026-08-29T14:35:41+00:00"
@@ -618384,15 +618341,15 @@
     "pnl_total": -34.78,
     "tamano_medio_usd": 2.33,
     "clasificacion": "normal",
-    "trades_muestra_reciente": 8,
+    "trades_muestra_reciente": 7,
     "activos_muestra_reciente": {
       "BTC": {
-        "up": 4,
-        "down": 4
+        "up": 2,
+        "down": 5
       }
     },
     "duraciones_muestra_reciente": {
-      "15m": 8
+      "15m": 7
     },
     "primera_vez_visto": "2026-08-27T09:39:53+00:00",
     "ultima_actualizacion": "2026-08-29T10:20:39+00:00"
@@ -619051,23 +619008,23 @@
     "ultima_actualizacion": "2026-08-27T11:19:01+00:00"
   },
   "0xed22b2f2a388d9b60a46308764485e3b952dc5d8": {
-    "n": 154,
-    "win_rate": 0.0,
-    "pnl_total": -3537.14,
-    "tamano_medio_usd": 22.97,
+    "n": 167,
+    "win_rate": 0.006,
+    "pnl_total": -3618.38,
+    "tamano_medio_usd": 21.69,
     "clasificacion": "normal",
-    "trades_muestra_reciente": 14,
+    "trades_muestra_reciente": 24,
     "activos_muestra_reciente": {
       "BTC": {
         "up": 11,
-        "down": 3
+        "down": 13
       }
     },
     "duraciones_muestra_reciente": {
-      "5m": 14
+      "5m": 24
     },
     "primera_vez_visto": "2026-08-27T11:19:01+00:00",
-    "ultima_actualizacion": "2026-08-29T09:12:34+00:00"
+    "ultima_actualizacion": "2026-08-29T16:07:45+00:00"
   },
   "0x6b2426e17c76fddece95896c99e8eef120717186": {
     "n": 1,
@@ -619457,19 +619414,19 @@
     "pnl_total": -647.77,
     "tamano_medio_usd": 56.59,
     "clasificacion": "normal",
-    "trades_muestra_reciente": 9,
+    "trades_muestra_reciente": 11,
     "activos_muestra_reciente": {
       "ETH": {
-        "up": 3,
-        "down": 1
+        "up": 1,
+        "down": 3
       },
       "BTC": {
         "up": 3,
-        "down": 2
+        "down": 4
       }
     },
     "duraciones_muestra_reciente": {
-      "5m": 9
+      "5m": 11
     },
     "primera_vez_visto": "2026-08-27T12:01:48+00:00",
     "ultima_actualizacion": "2026-08-29T10:20:39+00:00"
@@ -620401,23 +620358,23 @@
     "ultima_actualizacion": "2026-08-27T13:57:51+00:00"
   },
   "0xa6db9f18220750fc4c1b64ff2a461448f3dbe0cb": {
-    "n": 316,
-    "win_rate": 0.0158,
-    "pnl_total": -690.5,
-    "tamano_medio_usd": 2.21,
+    "n": 325,
+    "win_rate": 0.0,
+    "pnl_total": -714.65,
+    "tamano_medio_usd": 2.2,
     "clasificacion": "normal",
-    "trades_muestra_reciente": 5,
+    "trades_muestra_reciente": 11,
     "activos_muestra_reciente": {
       "BTC": {
-        "up": 2,
-        "down": 3
+        "up": 5,
+        "down": 6
       }
     },
     "duraciones_muestra_reciente": {
-      "5m": 5
+      "5m": 11
     },
     "primera_vez_visto": "2026-08-27T13:57:51+00:00",
-    "ultima_actualizacion": "2026-08-28T07:36:23+00:00"
+    "ultima_actualizacion": "2026-08-29T16:07:45+00:00"
   },
   "0x2fb27bf48982040a654c71cf81548d21a960e495": {
     "n": 4,
@@ -620506,15 +620463,15 @@
   "0xea8a372b4951187742b638c6fdb875d390c9dd2c": {
     "n": 0,
     "clasificacion": "normal",
-    "trades_muestra_reciente": 24,
+    "trades_muestra_reciente": 9,
     "activos_muestra_reciente": {
       "BTC": {
-        "up": 11,
-        "down": 13
+        "up": 3,
+        "down": 6
       }
     },
     "duraciones_muestra_reciente": {
-      "5m": 24
+      "5m": 9
     },
     "primera_vez_visto": "2026-08-27T13:57:51+00:00",
     "ultima_actualizacion": "2026-08-29T12:40:40+00:00"
@@ -620544,15 +620501,15 @@
     "pnl_total": -277.4,
     "tamano_medio_usd": 5.39,
     "clasificacion": "normal",
-    "trades_muestra_reciente": 7,
+    "trades_muestra_reciente": 5,
     "activos_muestra_reciente": {
       "BTC": {
-        "up": 2,
-        "down": 5
+        "up": 3,
+        "down": 2
       }
     },
     "duraciones_muestra_reciente": {
-      "15m": 7
+      "15m": 5
     },
     "primera_vez_visto": "2026-08-27T14:56:46+00:00",
     "ultima_actualizacion": "2026-08-29T14:12:36+00:00"
@@ -622320,15 +622277,15 @@
     "pnl_total": -404.2,
     "tamano_medio_usd": 11.25,
     "clasificacion": "normal",
-    "trades_muestra_reciente": 49,
+    "trades_muestra_reciente": 103,
     "activos_muestra_reciente": {
       "BTC": {
-        "up": 26,
-        "down": 23
+        "up": 55,
+        "down": 48
       }
     },
     "duraciones_muestra_reciente": {
-      "5m": 49
+      "5m": 103
     },
     "primera_vez_visto": "2026-08-27T18:50:49+00:00",
     "ultima_actualizacion": "2026-08-29T13:03:35+00:00"
@@ -622493,29 +622450,34 @@
     "pnl_total": -19.4,
     "tamano_medio_usd": 20.67,
     "clasificacion": "normal",
-    "trades_muestra_reciente": 33,
+    "trades_muestra_reciente": 78,
     "activos_muestra_reciente": {
       "ETH": {
-        "up": 3,
-        "down": 5
-      },
-      "SOL": {
-        "up": 1,
-        "down": 1
+        "up": 2,
+        "down": 8
       },
       "BTC": {
-        "up": 7,
-        "down": 14
+        "up": 34,
+        "down": 29
       },
       "XRP": {
         "up": 0,
         "down": 2
+      },
+      "BNB": {
+        "up": 0,
+        "down": 1
+      },
+      "SOL": {
+        "up": 1,
+        "down": 1
       }
     },
     "duraciones_muestra_reciente": {
-      "15m": 5,
-      "5m": 20,
-      "60m": 8
+      "60m": 7,
+      "5m": 58,
+      "15m": 12,
+      "240m": 1
     },
     "primera_vez_visto": "2026-08-27T19:12:17+00:00",
     "ultima_actualizacion": "2026-08-29T10:43:37+00:00"
@@ -625713,15 +625675,15 @@
     "pnl_total": -275.55,
     "tamano_medio_usd": 10.6,
     "clasificacion": "normal",
-    "trades_muestra_reciente": 6,
+    "trades_muestra_reciente": 7,
     "activos_muestra_reciente": {
       "BTC": {
         "up": 2,
-        "down": 4
+        "down": 5
       }
     },
     "duraciones_muestra_reciente": {
-      "15m": 6
+      "15m": 7
     },
     "primera_vez_visto": "2026-08-28T02:18:23+00:00",
     "ultima_actualizacion": "2026-08-29T12:16:05+00:00"
@@ -626380,15 +626342,15 @@
     "pnl_total": 0.35,
     "tamano_medio_usd": 10.19,
     "clasificacion": "normal",
-    "trades_muestra_reciente": 50,
+    "trades_muestra_reciente": 71,
     "activos_muestra_reciente": {
       "BTC": {
-        "up": 50,
-        "down": 0
+        "up": 14,
+        "down": 57
       }
     },
     "duraciones_muestra_reciente": {
-      "5m": 50
+      "5m": 71
     },
     "primera_vez_visto": "2026-08-28T03:26:22+00:00",
     "ultima_actualizacion": "2026-08-29T12:16:05+00:00"
@@ -626399,15 +626361,15 @@
     "pnl_total": -81.01,
     "tamano_medio_usd": 2.53,
     "clasificacion": "normal",
-    "trades_muestra_reciente": 5,
+    "trades_muestra_reciente": 6,
     "activos_muestra_reciente": {
       "BTC": {
-        "up": 0,
-        "down": 5
+        "up": 4,
+        "down": 2
       }
     },
     "duraciones_muestra_reciente": {
-      "5m": 5
+      "5m": 6
     },
     "primera_vez_visto": "2026-08-28T03:26:22+00:00",
     "ultima_actualizacion": "2026-08-29T11:06:36+00:00"
@@ -627245,15 +627207,15 @@
     "pnl_total": -9981.31,
     "tamano_medio_usd": 19.96,
     "clasificacion": "normal",
-    "trades_muestra_reciente": 10,
+    "trades_muestra_reciente": 13,
     "activos_muestra_reciente": {
       "BTC": {
-        "up": 7,
-        "down": 3
+        "up": 6,
+        "down": 7
       }
     },
     "duraciones_muestra_reciente": {
-      "5m": 10
+      "5m": 13
     },
     "primera_vez_visto": "2026-08-28T05:20:01+00:00",
     "ultima_actualizacion": "2026-08-29T11:06:36+00:00"
@@ -628242,28 +628204,23 @@
     "ultima_actualizacion": "2026-08-29T11:29:32+00:00"
   },
   "0x0d965c3bf55ce6542a7b1f5127acd2cb3e4d2bf0": {
-    "n": 65,
+    "n": 70,
     "win_rate": 0.0,
-    "pnl_total": -168.48,
-    "tamano_medio_usd": 2.59,
+    "pnl_total": -182.49,
+    "tamano_medio_usd": 2.61,
     "clasificacion": "normal",
-    "trades_muestra_reciente": 6,
+    "trades_muestra_reciente": 7,
     "activos_muestra_reciente": {
-      "XRP": {
-        "up": 0,
-        "down": 2
-      },
-      "ETH": {
-        "up": 0,
-        "down": 4
+      "BTC": {
+        "up": 2,
+        "down": 5
       }
     },
     "duraciones_muestra_reciente": {
-      "15m": 2,
-      "5m": 4
+      "5m": 7
     },
     "primera_vez_visto": "2026-08-28T07:59:17+00:00",
-    "ultima_actualizacion": "2026-08-29T09:58:07+00:00"
+    "ultima_actualizacion": "2026-08-29T16:07:45+00:00"
   },
   "0x6de727964a4d8d32bcd74e7aa00ca95a649f10ee": {
     "n": 2,
@@ -629018,15 +628975,15 @@
     "pnl_total": -167.6,
     "tamano_medio_usd": 4.19,
     "clasificacion": "normal",
-    "trades_muestra_reciente": 8,
+    "trades_muestra_reciente": 6,
     "activos_muestra_reciente": {
       "BTC": {
-        "up": 0,
-        "down": 8
+        "up": 2,
+        "down": 4
       }
     },
     "duraciones_muestra_reciente": {
-      "5m": 8
+      "5m": 6
     },
     "primera_vez_visto": "2026-08-28T10:28:12+00:00",
     "ultima_actualizacion": "2026-08-29T12:16:05+00:00"
@@ -629603,7 +629560,8 @@
       }
     },
     "duraciones_muestra_reciente": {
-      "15m": 31
+      "15m": 29,
+      "5m": 2
     },
     "primera_vez_visto": "2026-08-28T11:13:49+00:00",
     "ultima_actualizacion": "2026-08-29T11:06:36+00:00"
@@ -630217,23 +630175,23 @@
     "ultima_actualizacion": "2026-08-28T12:50:28+00:00"
   },
   "0xe5882b9bbb3c93c57240bc4ebf698108635da71e": {
-    "n": 5,
-    "win_rate": 0.2,
-    "pnl_total": -30.04,
-    "tamano_medio_usd": 10.59,
+    "n": 9,
+    "win_rate": 0.0,
+    "pnl_total": -109.65,
+    "tamano_medio_usd": 12.18,
     "clasificacion": "normal",
-    "trades_muestra_reciente": 8,
+    "trades_muestra_reciente": 7,
     "activos_muestra_reciente": {
       "BTC": {
-        "up": 3,
-        "down": 5
+        "up": 0,
+        "down": 7
       }
     },
     "duraciones_muestra_reciente": {
-      "5m": 8
+      "5m": 7
     },
     "primera_vez_visto": "2026-08-28T12:50:28+00:00",
-    "ultima_actualizacion": "2026-08-29T09:58:07+00:00"
+    "ultima_actualizacion": "2026-08-29T16:07:45+00:00"
   },
   "0x16ef34268d96ddbf7e274ca0b02cfc3d2f4b5cfe": {
     "n": 11,
@@ -630474,23 +630432,23 @@
     "ultima_actualizacion": "2026-08-29T03:10:24+00:00"
   },
   "0x2102c70478876caa5c43396beeb768bb9eef96f1": {
-    "n": 3,
-    "win_rate": 0.6667,
-    "pnl_total": 1.9,
-    "tamano_medio_usd": 1.03,
+    "n": 7,
+    "win_rate": 0.0,
+    "pnl_total": -15.35,
+    "tamano_medio_usd": 2.19,
     "clasificacion": "normal",
-    "trades_muestra_reciente": 6,
+    "trades_muestra_reciente": 25,
     "activos_muestra_reciente": {
       "BTC": {
-        "up": 6,
-        "down": 0
+        "up": 13,
+        "down": 12
       }
     },
     "duraciones_muestra_reciente": {
-      "5m": 6
+      "5m": 25
     },
     "primera_vez_visto": "2026-08-28T13:57:21+00:00",
-    "ultima_actualizacion": "2026-08-29T04:17:42+00:00"
+    "ultima_actualizacion": "2026-08-29T16:07:45+00:00"
   },
   "0x2440690ae4f34df4b167ec33c7c73e33d762042d": {
     "n": 3,
@@ -631157,15 +631115,15 @@
     "pnl_total": -163.35,
     "tamano_medio_usd": 5.1,
     "clasificacion": "normal",
-    "trades_muestra_reciente": 8,
+    "trades_muestra_reciente": 5,
     "activos_muestra_reciente": {
       "SOL": {
-        "up": 5,
+        "up": 2,
         "down": 3
       }
     },
     "duraciones_muestra_reciente": {
-      "5m": 8
+      "5m": 5
     },
     "primera_vez_visto": "2026-08-28T15:06:53+00:00",
     "ultima_actualizacion": "2026-08-29T13:03:35+00:00"
@@ -631357,35 +631315,35 @@
     "ultima_actualizacion": "2026-08-29T12:16:05+00:00"
   },
   "0x122355e36875ae7769efbe5061ba2672941e1902": {
-    "n": 222,
+    "n": 248,
     "win_rate": 0.0,
-    "pnl_total": -1783.56,
-    "tamano_medio_usd": 8.03,
+    "pnl_total": -2043.05,
+    "tamano_medio_usd": 8.24,
     "clasificacion": "normal",
     "trades_muestra_reciente": 5,
     "activos_muestra_reciente": {
-      "BTC": {
+      "ETH": {
         "up": 1,
         "down": 1
+      },
+      "BTC": {
+        "up": 1,
+        "down": 0
       },
       "XRP": {
         "up": 0,
         "down": 1
       },
-      "ETH": {
+      "SOL": {
         "up": 0,
         "down": 1
-      },
-      "SOL": {
-        "up": 1,
-        "down": 0
       }
     },
     "duraciones_muestra_reciente": {
       "15m": 5
     },
     "primera_vez_visto": "2026-08-28T15:29:51+00:00",
-    "ultima_actualizacion": "2026-08-28T15:29:51+00:00"
+    "ultima_actualizacion": "2026-08-29T16:07:45+00:00"
   },
   "0x7e64c0c7ac1093de36b160e776ea00c12b1e1824": {
     "n": 1,
@@ -631487,27 +631445,15 @@
     "pnl_total": -664.43,
     "tamano_medio_usd": 11.66,
     "clasificacion": "normal",
-    "trades_muestra_reciente": 16,
+    "trades_muestra_reciente": 5,
     "activos_muestra_reciente": {
       "BTC": {
-        "up": 0,
+        "up": 2,
         "down": 3
-      },
-      "SOL": {
-        "up": 1,
-        "down": 2
-      },
-      "DOGE": {
-        "up": 2,
-        "down": 1
-      },
-      "ETH": {
-        "up": 2,
-        "down": 5
       }
     },
     "duraciones_muestra_reciente": {
-      "5m": 16
+      "5m": 5
     },
     "primera_vez_visto": "2026-08-28T15:29:51+00:00",
     "ultima_actualizacion": "2026-08-29T12:40:40+00:00"
@@ -631619,18 +631565,18 @@
     "pnl_total": -68.0,
     "tamano_medio_usd": 2.12,
     "clasificacion": "normal",
-    "trades_muestra_reciente": 13,
+    "trades_muestra_reciente": 7,
     "activos_muestra_reciente": {
       "BTC": {
-        "up": 4,
-        "down": 9
+        "up": 3,
+        "down": 4
       }
     },
     "duraciones_muestra_reciente": {
-      "5m": 13
+      "5m": 7
     },
     "primera_vez_visto": "2026-08-28T15:53:15+00:00",
-    "ultima_actualizacion": "2026-08-29T09:35:22+00:00"
+    "ultima_actualizacion": "2026-08-29T16:07:45+00:00"
   },
   "0x14a406f23aff4f5f4505ecaee1bb64066ce25b9b": {
     "n": 98,
@@ -632199,18 +632145,18 @@
   "0x1b122b8d2b215b7b1e852e97e8ff01cd4c8f2cfa": {
     "n": 0,
     "clasificacion": "normal",
-    "trades_muestra_reciente": 5,
+    "trades_muestra_reciente": 8,
     "activos_muestra_reciente": {
       "BTC": {
-        "up": 4,
-        "down": 1
+        "up": 6,
+        "down": 2
       }
     },
     "duraciones_muestra_reciente": {
-      "5m": 5
+      "5m": 8
     },
     "primera_vez_visto": "2026-08-28T17:03:46+00:00",
-    "ultima_actualizacion": "2026-08-29T05:25:18+00:00"
+    "ultima_actualizacion": "2026-08-29T16:07:45+00:00"
   },
   "0x70bfd3f71b0c757fab32389e581378e3d9b9fe7a": {
     "n": 1,
@@ -632275,19 +632221,19 @@
     "pnl_total": -2668.53,
     "tamano_medio_usd": 5.34,
     "clasificacion": "normal",
-    "trades_muestra_reciente": 5,
+    "trades_muestra_reciente": 6,
     "activos_muestra_reciente": {
-      "DOGE": {
-        "up": 0,
-        "down": 1
-      },
       "BTC": {
-        "up": 2,
+        "up": 0,
         "down": 2
+      },
+      "DOGE": {
+        "up": 1,
+        "down": 3
       }
     },
     "duraciones_muestra_reciente": {
-      "5m": 5
+      "5m": 6
     },
     "primera_vez_visto": "2026-08-28T17:03:46+00:00",
     "ultima_actualizacion": "2026-08-29T11:06:36+00:00"
@@ -632337,24 +632283,24 @@
     "pnl_total": -49.58,
     "tamano_medio_usd": 1.38,
     "clasificacion": "normal",
-    "trades_muestra_reciente": 16,
+    "trades_muestra_reciente": 8,
     "activos_muestra_reciente": {
       "SOL": {
-        "up": 8,
-        "down": 4
-      },
-      "BTC": {
         "up": 0,
         "down": 2
       },
       "ETH": {
         "up": 2,
-        "down": 0
+        "down": 2
+      },
+      "BTC": {
+        "up": 0,
+        "down": 2
       }
     },
     "duraciones_muestra_reciente": {
-      "15m": 10,
-      "5m": 6
+      "5m": 6,
+      "15m": 2
     },
     "primera_vez_visto": "2026-08-28T17:27:56+00:00",
     "ultima_actualizacion": "2026-08-29T14:35:41+00:00"
@@ -632599,15 +632545,15 @@
     "pnl_total": -4.0,
     "tamano_medio_usd": 1.0,
     "clasificacion": "normal",
-    "trades_muestra_reciente": 10,
+    "trades_muestra_reciente": 6,
     "activos_muestra_reciente": {
       "BTC": {
-        "up": 2,
-        "down": 8
+        "up": 0,
+        "down": 6
       }
     },
     "duraciones_muestra_reciente": {
-      "5m": 10
+      "5m": 6
     },
     "primera_vez_visto": "2026-08-28T18:13:54+00:00",
     "ultima_actualizacion": "2026-08-29T14:58:43+00:00"
@@ -632781,15 +632727,15 @@
     "pnl_total": -72.5,
     "tamano_medio_usd": 4.53,
     "clasificacion": "normal",
-    "trades_muestra_reciente": 8,
+    "trades_muestra_reciente": 6,
     "activos_muestra_reciente": {
       "BTC": {
-        "up": 5,
-        "down": 3
+        "up": 2,
+        "down": 4
       }
     },
     "duraciones_muestra_reciente": {
-      "5m": 8
+      "5m": 6
     },
     "primera_vez_visto": "2026-08-28T18:13:54+00:00",
     "ultima_actualizacion": "2026-08-29T13:26:47+00:00"
@@ -633004,27 +632950,15 @@
     "pnl_total": -1753.22,
     "tamano_medio_usd": 22.14,
     "clasificacion": "normal",
-    "trades_muestra_reciente": 14,
+    "trades_muestra_reciente": 15,
     "activos_muestra_reciente": {
-      "SOL": {
-        "up": 2,
-        "down": 3
-      },
-      "XRP": {
-        "up": 0,
-        "down": 1
-      },
-      "ETH": {
-        "up": 2,
-        "down": 2
-      },
       "BTC": {
-        "up": 2,
-        "down": 2
+        "up": 6,
+        "down": 9
       }
     },
     "duraciones_muestra_reciente": {
-      "5m": 14
+      "5m": 15
     },
     "primera_vez_visto": "2026-08-28T19:02:28+00:00",
     "ultima_actualizacion": "2026-08-29T15:44:57+00:00"
@@ -634158,15 +634092,16 @@
     "pnl_total": -18.6,
     "tamano_medio_usd": 1.57,
     "clasificacion": "normal",
-    "trades_muestra_reciente": 11,
+    "trades_muestra_reciente": 18,
     "activos_muestra_reciente": {
       "BTC": {
-        "up": 6,
-        "down": 5
+        "up": 8,
+        "down": 10
       }
     },
     "duraciones_muestra_reciente": {
-      "5m": 11
+      "15m": 10,
+      "5m": 8
     },
     "primera_vez_visto": "2026-08-28T21:24:04+00:00",
     "ultima_actualizacion": "2026-08-29T15:21:45+00:00"
@@ -635061,23 +634996,27 @@
     "pnl_total": -212.51,
     "tamano_medio_usd": 6.59,
     "clasificacion": "normal",
-    "trades_muestra_reciente": 10,
+    "trades_muestra_reciente": 15,
     "activos_muestra_reciente": {
-      "DOGE": {
+      "BTC": {
         "up": 0,
         "down": 5
       },
-      "XRP": {
-        "up": 0,
-        "down": 1
-      },
-      "ETH": {
-        "up": 0,
+      "SOL": {
+        "up": 3,
         "down": 4
+      },
+      "DOGE": {
+        "up": 1,
+        "down": 0
+      },
+      "BNB": {
+        "up": 2,
+        "down": 0
       }
     },
     "duraciones_muestra_reciente": {
-      "5m": 10
+      "5m": 15
     },
     "primera_vez_visto": "2026-08-28T22:59:45+00:00",
     "ultima_actualizacion": "2026-08-29T10:20:39+00:00"
@@ -635280,15 +635219,15 @@
     "pnl_total": -5.0,
     "tamano_medio_usd": 2.5,
     "clasificacion": "normal",
-    "trades_muestra_reciente": 5,
+    "trades_muestra_reciente": 7,
     "activos_muestra_reciente": {
       "BTC": {
         "up": 4,
-        "down": 1
+        "down": 3
       }
     },
     "duraciones_muestra_reciente": {
-      "5m": 5
+      "5m": 7
     },
     "primera_vez_visto": "2026-08-28T23:23:04+00:00",
     "ultima_actualizacion": "2026-08-29T13:03:35+00:00"
@@ -635318,24 +635257,28 @@
     "pnl_total": -3.75,
     "tamano_medio_usd": 3.75,
     "clasificacion": "normal",
-    "trades_muestra_reciente": 48,
+    "trades_muestra_reciente": 60,
     "activos_muestra_reciente": {
-      "SOL": {
-        "up": 11,
-        "down": 18
-      },
       "ETH": {
-        "up": 1,
-        "down": 5
+        "up": 26,
+        "down": 10
+      },
+      "SOL": {
+        "up": 6,
+        "down": 4
+      },
+      "BTC": {
+        "up": 3,
+        "down": 3
       },
       "BNB": {
-        "up": 8,
-        "down": 5
+        "up": 4,
+        "down": 4
       }
     },
     "duraciones_muestra_reciente": {
       "5m": 42,
-      "15m": 6
+      "15m": 18
     },
     "primera_vez_visto": "2026-08-28T23:46:42+00:00",
     "ultima_actualizacion": "2026-08-29T14:35:41+00:00"
@@ -635879,18 +635822,18 @@
   "0x5b98334a77bdf9ca7128dbaffff688791da9f5ff": {
     "n": 0,
     "clasificacion": "normal",
-    "trades_muestra_reciente": 10,
+    "trades_muestra_reciente": 5,
     "activos_muestra_reciente": {
       "BTC": {
-        "up": 8,
-        "down": 2
+        "up": 5,
+        "down": 0
       }
     },
     "duraciones_muestra_reciente": {
-      "5m": 10
+      "5m": 5
     },
     "primera_vez_visto": "2026-08-29T00:32:16+00:00",
-    "ultima_actualizacion": "2026-08-29T08:04:19+00:00"
+    "ultima_actualizacion": "2026-08-29T16:07:45+00:00"
   },
   "0xdf300c7cff5180fd5cd67dc25ac345f9be0d3d60": {
     "n": 28,
@@ -636566,23 +636509,31 @@
     "ultima_actualizacion": "2026-08-29T01:17:32+00:00"
   },
   "0x2383196ed3009aa0eb596678368ea2020afa5b74": {
-    "n": 15,
-    "win_rate": 0.0667,
-    "pnl_total": -18.3,
-    "tamano_medio_usd": 1.33,
+    "n": 26,
+    "win_rate": 0.0385,
+    "pnl_total": -42.65,
+    "tamano_medio_usd": 2.12,
     "clasificacion": "normal",
-    "trades_muestra_reciente": 7,
+    "trades_muestra_reciente": 8,
     "activos_muestra_reciente": {
       "ETH": {
-        "up": 3,
-        "down": 4
+        "up": 1,
+        "down": 2
+      },
+      "SOL": {
+        "up": 0,
+        "down": 2
+      },
+      "BTC": {
+        "up": 0,
+        "down": 3
       }
     },
     "duraciones_muestra_reciente": {
-      "5m": 7
+      "5m": 8
     },
     "primera_vez_visto": "2026-08-29T01:17:32+00:00",
-    "ultima_actualizacion": "2026-08-29T07:41:45+00:00"
+    "ultima_actualizacion": "2026-08-29T16:07:45+00:00"
   },
   "0xb699547123b9352453caa296569733ca33882aeb": {
     "n": 0,
@@ -636726,15 +636677,15 @@
     "pnl_total": -26.39,
     "tamano_medio_usd": 2.64,
     "clasificacion": "normal",
-    "trades_muestra_reciente": 7,
+    "trades_muestra_reciente": 9,
     "activos_muestra_reciente": {
       "BTC": {
-        "up": 3,
-        "down": 4
+        "up": 6,
+        "down": 3
       }
     },
     "duraciones_muestra_reciente": {
-      "5m": 7
+      "5m": 9
     },
     "primera_vez_visto": "2026-08-29T01:17:32+00:00",
     "ultima_actualizacion": "2026-08-29T14:58:43+00:00"
@@ -637089,27 +637040,31 @@
     "ultima_actualizacion": "2026-08-29T02:25:13+00:00"
   },
   "0xc20acae284f26acaedaa91a09a4db52d6b9d8985": {
-    "n": 35,
+    "n": 73,
     "win_rate": 0.0,
-    "pnl_total": -75.5,
-    "tamano_medio_usd": 2.16,
+    "pnl_total": -145.98,
+    "tamano_medio_usd": 2.0,
     "clasificacion": "normal",
-    "trades_muestra_reciente": 6,
+    "trades_muestra_reciente": 7,
     "activos_muestra_reciente": {
+      "SOL": {
+        "up": 0,
+        "down": 3
+      },
       "ETH": {
         "up": 2,
         "down": 1
       },
       "BTC": {
         "up": 1,
-        "down": 2
+        "down": 0
       }
     },
     "duraciones_muestra_reciente": {
-      "5m": 6
+      "5m": 7
     },
     "primera_vez_visto": "2026-08-29T02:25:13+00:00",
-    "ultima_actualizacion": "2026-08-29T02:25:13+00:00"
+    "ultima_actualizacion": "2026-08-29T16:07:45+00:00"
   },
   "0x8af76202a99e53ffd95958be04b8403ae47eff7c": {
     "n": 0,
@@ -637447,15 +637402,15 @@
     "pnl_total": -12.4,
     "tamano_medio_usd": 2.93,
     "clasificacion": "normal",
-    "trades_muestra_reciente": 21,
+    "trades_muestra_reciente": 13,
     "activos_muestra_reciente": {
       "BTC": {
-        "up": 11,
-        "down": 10
+        "up": 4,
+        "down": 9
       }
     },
     "duraciones_muestra_reciente": {
-      "5m": 21
+      "5m": 13
     },
     "primera_vez_visto": "2026-08-29T03:10:24+00:00",
     "ultima_actualizacion": "2026-08-29T15:21:45+00:00"
@@ -638102,7 +638057,7 @@
       "5m": 5
     },
     "primera_vez_visto": "2026-08-29T05:02:49+00:00",
-    "ultima_actualizacion": "2026-08-29T05:02:49+00:00"
+    "ultima_actualizacion": "2026-08-29T16:07:45+00:00"
   },
   "0x744003d375189e22dd81d0659831ff9a34b55a56": {
     "n": 38,
@@ -638451,10 +638406,7 @@
     "ultima_actualizacion": "2026-08-29T05:48:02+00:00"
   },
   "0x2fb1a508c0d87293aebb14d9e87c1413462aa204": {
-    "n": 1,
-    "win_rate": 1.0,
-    "pnl_total": 5.13,
-    "tamano_medio_usd": 0.0,
+    "n": 0,
     "clasificacion": "normal",
     "trades_muestra_reciente": 5,
     "activos_muestra_reciente": {
@@ -638467,7 +638419,7 @@
       "15m": 5
     },
     "primera_vez_visto": "2026-08-29T05:48:02+00:00",
-    "ultima_actualizacion": "2026-08-29T05:48:02+00:00"
+    "ultima_actualizacion": "2026-08-29T16:07:45+00:00"
   },
   "0xc6c4f680945debc0a9b2e6c2fec963eca2a20e5d": {
     "n": 2,
@@ -638565,23 +638517,23 @@
     "ultima_actualizacion": "2026-08-29T06:10:56+00:00"
   },
   "0x1c194c5be36cf18b15d56664c56d5b10bf969bcc": {
-    "n": 6,
-    "win_rate": 0.3333,
-    "pnl_total": -350.22,
-    "tamano_medio_usd": 347.05,
+    "n": 4,
+    "win_rate": 0.0,
+    "pnl_total": -826.79,
+    "tamano_medio_usd": 206.7,
     "clasificacion": "normal",
-    "trades_muestra_reciente": 17,
+    "trades_muestra_reciente": 6,
     "activos_muestra_reciente": {
       "BTC": {
-        "up": 7,
-        "down": 10
+        "up": 3,
+        "down": 3
       }
     },
     "duraciones_muestra_reciente": {
-      "15m": 17
+      "15m": 6
     },
     "primera_vez_visto": "2026-08-29T06:10:56+00:00",
-    "ultima_actualizacion": "2026-08-29T06:10:56+00:00"
+    "ultima_actualizacion": "2026-08-29T16:07:45+00:00"
   },
   "0x7f697dfeae428ab5f4fec71f2f1f4e6a83d9f230": {
     "n": 14,
@@ -638803,18 +638755,18 @@
   "0x839e21f2e129034cc7f3dee34e876d006a3af643": {
     "n": 0,
     "clasificacion": "normal",
-    "trades_muestra_reciente": 6,
+    "trades_muestra_reciente": 5,
     "activos_muestra_reciente": {
       "BTC": {
-        "up": 0,
-        "down": 6
+        "up": 1,
+        "down": 4
       }
     },
     "duraciones_muestra_reciente": {
-      "5m": 6
+      "5m": 5
     },
     "primera_vez_visto": "2026-08-29T06:33:25+00:00",
-    "ultima_actualizacion": "2026-08-29T06:33:25+00:00"
+    "ultima_actualizacion": "2026-08-29T16:07:45+00:00"
   },
   "0xe1a964c8964b7ce6cc0520840c98cd543f832573": {
     "n": 11,
@@ -640045,18 +639997,18 @@
     "pnl_total": -103.46,
     "tamano_medio_usd": 4.7,
     "clasificacion": "normal",
-    "trades_muestra_reciente": 6,
+    "trades_muestra_reciente": 5,
     "activos_muestra_reciente": {
       "BTC": {
-        "up": 4,
-        "down": 2
+        "up": 1,
+        "down": 4
       }
     },
     "duraciones_muestra_reciente": {
-      "5m": 6
+      "5m": 5
     },
     "primera_vez_visto": "2026-08-29T08:49:43+00:00",
-    "ultima_actualizacion": "2026-08-29T08:49:43+00:00"
+    "ultima_actualizacion": "2026-08-29T16:07:45+00:00"
   },
   "0x8e34510fe6f8d9d1d21342ff359e622bfb006e15": {
     "n": 4,
@@ -640415,15 +640367,15 @@
   "0xa4c80b7f1949ac22fb2d7a58968cc2d75108757d": {
     "n": 0,
     "clasificacion": "normal",
-    "trades_muestra_reciente": 10,
+    "trades_muestra_reciente": 15,
     "activos_muestra_reciente": {
       "BTC": {
-        "up": 8,
-        "down": 2
+        "up": 1,
+        "down": 14
       }
     },
     "duraciones_muestra_reciente": {
-      "5m": 10
+      "5m": 15
     },
     "primera_vez_visto": "2026-08-29T10:20:39+00:00",
     "ultima_actualizacion": "2026-08-29T10:20:39+00:00"
@@ -640952,20 +640904,20 @@
   "0x7157c23f3b74b01a70719df0ab958e933083149f": {
     "n": 0,
     "clasificacion": "normal",
-    "trades_muestra_reciente": 26,
+    "trades_muestra_reciente": 22,
     "activos_muestra_reciente": {
-      "XRP": {
-        "up": 0,
-        "down": 1
-      },
       "BTC": {
-        "up": 7,
-        "down": 18
+        "up": 10,
+        "down": 8
+      },
+      "ETH": {
+        "up": 0,
+        "down": 4
       }
     },
     "duraciones_muestra_reciente": {
-      "5m": 12,
-      "15m": 14
+      "5m": 18,
+      "15m": 4
     },
     "primera_vez_visto": "2026-08-29T11:52:43+00:00",
     "ultima_actualizacion": "2026-08-29T11:52:43+00:00"
@@ -641087,25 +641039,25 @@
   "0x05e56f3ffbecf2b5dc3e4cc9b11a338ae0b405af": {
     "n": 0,
     "clasificacion": "normal",
-    "trades_muestra_reciente": 8,
+    "trades_muestra_reciente": 6,
     "activos_muestra_reciente": {
-      "ETH": {
+      "BNB": {
         "up": 2,
-        "down": 2
+        "down": 0
       },
       "SOL": {
-        "up": 0,
-        "down": 2
+        "up": 2,
+        "down": 0
       },
-      "BNB": {
+      "ETH": {
         "up": 2,
         "down": 0
       }
     },
     "duraciones_muestra_reciente": {
-      "60m": 2,
-      "15m": 2,
-      "5m": 4
+      "240m": 2,
+      "5m": 2,
+      "60m": 2
     },
     "primera_vez_visto": "2026-08-29T12:16:05+00:00",
     "ultima_actualizacion": "2026-08-29T12:16:05+00:00"
@@ -641196,15 +641148,15 @@
     "pnl_total": -53.21,
     "tamano_medio_usd": 1.97,
     "clasificacion": "normal",
-    "trades_muestra_reciente": 6,
+    "trades_muestra_reciente": 5,
     "activos_muestra_reciente": {
       "BTC": {
-        "up": 6,
-        "down": 0
+        "up": 4,
+        "down": 1
       }
     },
     "duraciones_muestra_reciente": {
-      "5m": 6
+      "5m": 5
     },
     "primera_vez_visto": "2026-08-29T12:16:05+00:00",
     "ultima_actualizacion": "2026-08-29T12:16:05+00:00"
@@ -642305,5 +642257,181 @@
     },
     "primera_vez_visto": "2026-08-29T15:44:57+00:00",
     "ultima_actualizacion": "2026-08-29T15:44:57+00:00"
+  },
+  "0x0e3c205dfcb54c6c629682353e7d9be7af0d75c3": {
+    "n": 94,
+    "win_rate": 0.0106,
+    "pnl_total": -216.22,
+    "tamano_medio_usd": 2.33,
+    "clasificacion": "normal",
+    "trades_muestra_reciente": 8,
+    "activos_muestra_reciente": {
+      "BTC": {
+        "up": 0,
+        "down": 8
+      }
+    },
+    "duraciones_muestra_reciente": {
+      "5m": 8
+    },
+    "primera_vez_visto": "2026-08-29T16:07:45+00:00",
+    "ultima_actualizacion": "2026-08-29T16:07:45+00:00"
+  },
+  "0xb738bb663fc80b381024e866100177847ab913c8": {
+    "n": 300,
+    "win_rate": 0.0033,
+    "pnl_total": -367.7,
+    "tamano_medio_usd": 1.29,
+    "clasificacion": "normal",
+    "trades_muestra_reciente": 5,
+    "activos_muestra_reciente": {
+      "BTC": {
+        "up": 3,
+        "down": 2
+      }
+    },
+    "duraciones_muestra_reciente": {
+      "5m": 5
+    },
+    "primera_vez_visto": "2026-08-29T16:07:45+00:00",
+    "ultima_actualizacion": "2026-08-29T16:07:45+00:00"
+  },
+  "0x46124a2e6df11523277f62f9ade27c00acc64f40": {
+    "n": 5,
+    "win_rate": 0.0,
+    "pnl_total": -30.95,
+    "tamano_medio_usd": 6.19,
+    "clasificacion": "normal",
+    "trades_muestra_reciente": 6,
+    "activos_muestra_reciente": {
+      "BTC": {
+        "up": 2,
+        "down": 4
+      }
+    },
+    "duraciones_muestra_reciente": {
+      "15m": 6
+    },
+    "primera_vez_visto": "2026-08-29T16:07:45+00:00",
+    "ultima_actualizacion": "2026-08-29T16:07:45+00:00"
+  },
+  "0x0bcd68e4735f566c2b2e2c2ac3f817f4b03a5df4": {
+    "n": 2,
+    "win_rate": 0.0,
+    "pnl_total": -6.0,
+    "tamano_medio_usd": 3.0,
+    "clasificacion": "normal",
+    "trades_muestra_reciente": 6,
+    "activos_muestra_reciente": {
+      "BTC": {
+        "up": 0,
+        "down": 6
+      }
+    },
+    "duraciones_muestra_reciente": {
+      "5m": 6
+    },
+    "primera_vez_visto": "2026-08-29T16:07:45+00:00",
+    "ultima_actualizacion": "2026-08-29T16:07:45+00:00"
+  },
+  "0x7348beef49773ab7d99f61525d20d01432d40a82": {
+    "n": 220,
+    "win_rate": 0.0,
+    "pnl_total": -820.71,
+    "tamano_medio_usd": 3.73,
+    "clasificacion": "normal",
+    "trades_muestra_reciente": 6,
+    "activos_muestra_reciente": {
+      "BTC": {
+        "up": 0,
+        "down": 6
+      }
+    },
+    "duraciones_muestra_reciente": {
+      "5m": 6
+    },
+    "primera_vez_visto": "2026-08-29T16:07:45+00:00",
+    "ultima_actualizacion": "2026-08-29T16:07:45+00:00"
+  },
+  "0x22ece10953102eb17a46b957c1a7811d58ec669f": {
+    "n": 2,
+    "win_rate": 0.0,
+    "pnl_total": -3.0,
+    "tamano_medio_usd": 1.5,
+    "clasificacion": "normal",
+    "trades_muestra_reciente": 9,
+    "activos_muestra_reciente": {
+      "BTC": {
+        "up": 7,
+        "down": 2
+      }
+    },
+    "duraciones_muestra_reciente": {
+      "5m": 9
+    },
+    "primera_vez_visto": "2026-08-29T16:07:45+00:00",
+    "ultima_actualizacion": "2026-08-29T16:07:45+00:00"
+  },
+  "0x3ab93c4ee6a649b8b783948932fb2b68ebf9a9fa": {
+    "n": 5,
+    "win_rate": 0.2,
+    "pnl_total": -18.35,
+    "tamano_medio_usd": 9.0,
+    "clasificacion": "normal",
+    "trades_muestra_reciente": 7,
+    "activos_muestra_reciente": {
+      "BTC": {
+        "up": 2,
+        "down": 2
+      },
+      "SOL": {
+        "up": 1,
+        "down": 0
+      },
+      "XRP": {
+        "up": 0,
+        "down": 2
+      }
+    },
+    "duraciones_muestra_reciente": {
+      "5m": 7
+    },
+    "primera_vez_visto": "2026-08-29T16:07:45+00:00",
+    "ultima_actualizacion": "2026-08-29T16:07:45+00:00"
+  },
+  "0x9e4d277841fea5383662adf54f1c6eeb7632686f": {
+    "n": 0,
+    "clasificacion": "normal",
+    "trades_muestra_reciente": 6,
+    "activos_muestra_reciente": {
+      "BTC": {
+        "up": 0,
+        "down": 6
+      }
+    },
+    "duraciones_muestra_reciente": {
+      "5m": 6
+    },
+    "primera_vez_visto": "2026-08-29T16:07:45+00:00",
+    "ultima_actualizacion": "2026-08-29T16:07:45+00:00"
+  },
+  "0x404cba6333480b9c97d798e7dd9b7ca4c25febc1": {
+    "n": 12,
+    "win_rate": 0.0,
+    "pnl_total": -37.83,
+    "tamano_medio_usd": 3.15,
+    "clasificacion": "normal",
+    "trades_muestra_reciente": 7,
+    "activos_muestra_reciente": {
+      "BTC": {
+        "up": 4,
+        "down": 3
+      }
+    },
+    "duraciones_muestra_reciente": {
+      "5m": 7
+    },
+    "primera_vez_visto": "2026-08-29T16:07:45+00:00",
+    "ultima_actualizacion": "2026-08-29T16:07:45+00:00"
   }
 }
