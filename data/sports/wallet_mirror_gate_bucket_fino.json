@@ -19,6 +19,7 @@
   ],
   "robusto_bootstrap": true,
   "n_posiciones_buscadas": 75,
+  "g_kelly_f10": 0.14334,
   "veredicto": "bueno_confirmado"
  },
  "CS#FADE": {
@@ -41,6 +42,7 @@
   ],
   "robusto_bootstrap": true,
   "n_posiciones_buscadas": 70,
+  "g_kelly_f10": 0.13605,
   "veredicto": "bueno_confirmado"
  },
  "Valorant#SEGUIR": {
@@ -63,6 +65,7 @@
   ],
   "robusto_bootstrap": true,
   "n_posiciones_buscadas": 12,
+  "g_kelly_f10": 0.08371,
   "veredicto": "bueno_confirmado"
  }
 }
