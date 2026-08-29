@@ -60,6 +60,7 @@ N_MIN = 15
 P_MAX = 0.05
 ITERS = 2000
 FEE = 0.07
+F_KELLY = 0.10  # 29-Ago: mismo default que analisis_log_growth.py/gate_bucket_propio.py (P28/CLAUDE.md pt.14)
 
 
 def bucket(p):
@@ -185,7 +186,23 @@ def main():
             n_d = len(dentro)
             pnl_d = [pnl for _, pnl in dentro]
             media_d = sum(pnl_d) / n_d
-            entrada = {"n": n_d, "pnl_medio": round(media_d, 4),
+            # 29-Ago (hallazgo real, sesión de racha de pérdidas reales en
+            # WALLET_MIRROR -7,01€/16 trades): este módulo nunca tuvo el
+            # veto de payout asimétrico (Kelly g(f)) que sí protege a
+            # GBM_LATE/FAVORITO/BALLENAS/MOMENTUM_IBS vía gate_bucket_
+            # propio.py::_veto_fillable() señal #2 (CLAUDE.md pt.14/P28) --
+            # WALLET_MIRROR tiene su propio gate separado porque nunca
+            # escribe en results.csv, y ese gate propio se quedó sin la
+            # actualización del 28-Ago. `pnl_d` aquí ya es el retorno neto
+            # por trade (fee 7% aplicado en pnl_neto() arriba, mismo
+            # concepto que analisis_log_growth.py::_retorno()) -- misma
+            # fórmula g(f)=mean(ln(1+f*x)), f=0.10 (F_KELLY, mismo default
+            # que el resto del proyecto), NO reimplementa _retorno() porque
+            # la forma del dato de entrada es distinta (ask/acierto ya
+            # reducidos a pnl, no una fila de results.csv), pero es la
+            # MISMA matemática.
+            g_kelly = sum(math.log(1 + F_KELLY * x) for x in pnl_d) / n_d if n_d > 0 else None
+            entrada = {"n": n_d, "pnl_medio": round(media_d, 4), "g_kelly_f10": round(g_kelly, 5),
                        "shuffle_p": None, "split_half": None, "veredicto": "sin_concluir"}
             tabla[f"{b:.2f}"] = entrada
             if n_d >= N_MIN and fuera:
@@ -229,11 +246,22 @@ def main():
             veredicto = "bueno_confirmado"
         else:
             continue  # piso absoluto, mismo criterio que gate_bucket_propio 08-Ago
+        # 29-Ago: veto de payout asimétrico -- degrada bueno_confirmado si
+        # el crecimiento compuesto (Kelly g(f=10%)) es <=0 pese a pnl_medio
+        # lineal positivo (hit-rate alto con pérdidas grandes raras que se
+        # comen el compounding). Mismo criterio que gate_bucket_propio.py::
+        # _veto_fillable() señal #2 -- solo puede DEGRADAR, nunca promover.
+        nota_payout = ""
+        g_kelly = p["entrada"].get("g_kelly_f10")
+        if veredicto == "bueno_confirmado" and g_kelly is not None and g_kelly <= 0:
+            veredicto = "malo_confirmado"
+            nota_payout = f" [degradado: payout asimétrico g_kelly(f=10%)={g_kelly:+.5f}<=0]"
         p["entrada"]["veredicto"] = veredicto
         marca = "🔴" if veredicto == "malo_confirmado" else "🟢"
         veredictos_nuevos.append(
             f"{marca} {p['clave_str']} [{p['bucket']},{float(p['bucket'])+STEP:.2f}) "
-            f"n={p['entrada']['n']} pnl_medio={p['entrada']['pnl_medio']:+.3f} p={p['p']:.4f} {veredicto}"
+            f"n={p['entrada']['n']} pnl_medio={p['entrada']['pnl_medio']:+.3f} "
+            f"g_kelly={g_kelly:+.5f} p={p['p']:.4f} {veredicto}{nota_payout}"
         )
 
     print(f"\n{len(veredictos_nuevos)} bucket(s) con veredicto tras BH-FDR:")
