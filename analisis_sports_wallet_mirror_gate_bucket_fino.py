@@ -30,11 +30,14 @@ conecta a ningún ejecutor. Salida: data/sports/wallet_mirror_gate_bucket_fino.j
 """
 import csv
 import json
+import math
 import sys
 from collections import defaultdict
 from pathlib import Path
 
 from analisis_gate_bucket_fino import evaluar_tupla, bh_fdr_signif, P_MAX
+
+F_KELLY = 0.10  # 29-Ago: mismo default que analisis_log_growth.py/gate_bucket_propio.py (P28/CLAUDE.md pt.14)
 
 csv.field_size_limit(sys.maxsize)
 
@@ -113,6 +116,24 @@ def main() -> int:
             veredicto = "bueno_confirmado"
         else:
             continue
+        # 29-Ago (paridad con el mismo hueco cerrado en el grid fijo,
+        # analisis_sports_wallet_mirror_gate_bucket_26ago.py, y en
+        # WALLET_MIRROR cripto): veto de payout asimétrico (Kelly g(f)) --
+        # calculado localmente sobre las filas propias que caen dentro de
+        # la ventana [lo,hi) confirmada, sin tocar el motor genérico
+        # compartido analisis_gate_bucket_fino.py (ese motor también
+        # alimenta gate_bucket_fino.json de cripto, que SÍ vetea dinero
+        # real hoy -- cambiar su firma exige su propio /code-review por
+        # separado, fuera del alcance de esta paridad sports). Solo puede
+        # degradar bueno_confirmado, nunca promover.
+        categoria, tipo = p["tupla_str"].split("#")
+        filas_tupla = grupos.get((categoria, tipo), [])
+        pnls_ventana = [pnl for _, ask, pnl in filas_tupla if info["lo"] <= ask < info["hi"]]
+        g_kelly = (sum(math.log(1 + F_KELLY * x) for x in pnls_ventana) / len(pnls_ventana)
+                   if pnls_ventana else None)
+        info["g_kelly_f10"] = round(g_kelly, 5) if g_kelly is not None else None
+        if veredicto == "bueno_confirmado" and g_kelly is not None and g_kelly <= 0:
+            veredicto = "malo_confirmado"
         info["veredicto"] = veredicto
         salida[p["tupla_str"]] = info
         marca = "🔴" if veredicto == "malo_confirmado" else "🟢"

@@ -35,6 +35,7 @@ DRY_RUN = REPO / "data/sports/wallet_mirror_sniper_dry_run.csv"
 OUT_PATH = REPO / "data/sports/wallet_mirror_gate_bucket.json"
 
 N_MIN = 15
+F_KELLY = 0.10  # 29-Ago: mismo default que analisis_log_growth.py/gate_bucket_propio.py (P28/CLAUDE.md pt.14)
 RATIO_MIN = 5.0
 # FEE verificado 26-Ago con condition_ids reales del propio dataset contra gamma-api
 # (feeType/feeSchedule): sports usa "sports_fees_v3" rate=0.05 en CS/LoL/Tennis/Dota/
@@ -97,6 +98,7 @@ def main() -> int:
     n_confirmados_buenos = 0
     n_confirmados_malos = 0
     pvals = []
+    g_kelly_raw = {}  # (tupla_str, b) -> g_kelly SIN redondear, para el veto de abajo
     for (categoria, tipo, b), items in grupos.items():
         n = len(items)
         tupla_str = f"{categoria}#{tipo}"
@@ -106,6 +108,15 @@ def main() -> int:
             continue
         hit = sum(x[0] for x in items) / n
         pnl_medio = sum(x[1] for x in items) / n
+        # 29-Ago (paridad con el mismo hueco cerrado en WALLET_MIRROR cripto,
+        # ver analisis_wallet_mirror_gate_bucket_10ago.py): payout asimétrico
+        # (Kelly g(f)) -- pnl_medio lineal positivo puede convivir con
+        # crecimiento compuesto negativo (hit-rate alto, pérdidas grandes
+        # raras). Misma fórmula g(f)=mean(ln(1+f*x)), reusando x=pnl ya
+        # calculado por trade (items[i][1], mismo concepto normalizado que
+        # analisis_log_growth.py::_retorno()).
+        g_kelly = sum(math.log(1 + F_KELLY * x[1]) for x in items) / n
+        g_kelly_raw[(tupla_str, b)] = g_kelly
         ask_medio = sum(x[2] for x in items) / n
         breakeven = ask_medio
         wlo = wilson_lo(hit, n)
@@ -118,6 +129,7 @@ def main() -> int:
         pvals.append(((tupla_str, b), p_binom, hit > breakeven))
         salida[tupla_str][b] = {
             "n": n, "hit": round(hit, 4), "pnl_medio": round(pnl_medio, 4),
+            "g_kelly_f10": round(g_kelly, 5),
             "ask_medio": round(ask_medio, 4), "wilson90lo": round(wlo, 4),
             "p_binomial": round(p_binom, 4), "split_half": [round(m1, 4), round(m2, 4)],
         }
@@ -150,6 +162,21 @@ def main() -> int:
                     n_confirmados_malos += 1
                 else:
                     info["veredicto"] = "sin_concluir"
+                # 29-Ago: veto de payout asimétrico -- degrada bueno_confirmado
+                # si g_kelly(f=10%)<=0 pese a pnl_medio lineal positivo. Solo
+                # puede degradar, nunca promover (mismo invariante que
+                # gate_bucket_propio.py::_veto_fillable() señal #2 y su
+                # gemelo en analisis_wallet_mirror_gate_bucket_10ago.py).
+                # /code-review 29-Ago: comparar SIEMPRE contra g_kelly_raw
+                # (sin redondear) -- info["g_kelly_f10"] redondeado a 5
+                # decimales puede aplastar un valor positivo minúsculo a
+                # 0.00000 y disparar el veto por error de redondeo, no por
+                # payout asimétrico real.
+                g_raw = g_kelly_raw.get(key)
+                if info["veredicto"] == "bueno_confirmado" and g_raw is not None and g_raw <= 0:
+                    info["veredicto"] = "malo_confirmado"
+                    n_confirmados_buenos -= 1
+                    n_confirmados_malos += 1
 
     OUT_PATH.write_text(json.dumps(salida, ensure_ascii=False, indent=1), encoding="utf-8")
     print(f"Categorías#tipo con datos: {len(salida)}")
