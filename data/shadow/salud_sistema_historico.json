@@ -1526,5 +1526,56 @@
     },
     "anomalias": [],
     "estado": "OK"
+  },
+  {
+    "timestamp_utc": "2026-08-29T07:08:01+00:00",
+    "pipeline": {
+      "n_ciclos_resolve_postmortem": 354,
+      "resolve_postmortem_p50_s": 16.0,
+      "resolve_postmortem_p95_s": 19.0,
+      "resolve_postmortem_max_s": 26.0,
+      "n_ciclos_live_trade": 4396,
+      "hueco_live_trade_max_s": 30.0
+    },
+    "procesos_colgados": [],
+    "deploy": {
+      "n_screens": 13,
+      "stale": []
+    },
+    "disco": {
+      "pct_usado": 86.0,
+      "gb_libres": 10.51,
+      "git_gb": 0.0,
+      "data_gb": 32.03,
+      "datalogs_gb": 8.33
+    },
+    "ram": {
+      "ram_total_gb": 7.56,
+      "ram_disponible_gb": 5.04,
+      "ram_pct_libre": 66.7
+    },
+    "integridad_datos": {
+      "trades_abiertos_atascados": [],
+      "n_trades_total": 459,
+      "n_results_total": 306594
+    },
+    "integridad_datos_sports": {
+      "trades_csv_error": "no existe (sin trades reales todavía)",
+      "trades_abiertos_atascados": [],
+      "n_trades_total": 0
+    },
+    "carga_sistema": {
+      "load1": 6.3,
+      "load5": 5.98,
+      "load15": 6.13,
+      "nproc": 4,
+      "ratio5": 1.5,
+      "n_procesos_total": 217
+    },
+    "git_push": {
+      "commits_sin_pushear": 1
+    },
+    "anomalias": [],
+    "estado": "OK"
   }
 ]
