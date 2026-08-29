@@ -1062,5 +1062,33 @@
   "STREAK_FADE_5M#XRP#5min": {
     "n": 207,
     "confirmado": false
+  },
+  "CANDIDATA10_CONFIRMACION_CRUZADA#BTC#15min": {
+    "n": 265,
+    "confirmado": false
+  },
+  "GBM_LATE_15M_PYCONFIRMADO#DOGE": {
+    "n": 226,
+    "confirmado": false
+  },
+  "GBM_LATE_15M_PYCONFIRMADO#DOGE#15min": {
+    "n": 226,
+    "confirmado": false
+  },
+  "GBM_LATE_15M_PYCONFIRMADO#XRP": {
+    "n": 233,
+    "confirmado": false
+  },
+  "GBM_LATE_15M_PYCONFIRMADO#XRP#15min": {
+    "n": 233,
+    "confirmado": false
+  },
+  "GBM_LATE_5M#DOGE": {
+    "n": 274,
+    "confirmado": false
+  },
+  "GBM_LATE_5M#DOGE#5min": {
+    "n": 274,
+    "confirmado": false
   }
 }
