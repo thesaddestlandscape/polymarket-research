@@ -1090,5 +1090,25 @@
   "GBM_LATE_5M#DOGE#5min": {
     "n": 274,
     "confirmado": false
+  },
+  "FAVORITO_CONFIRMADO_60_240MIN_DEPTH_FASE0#ETH#60min": {
+    "n": 218,
+    "confirmado": false
+  },
+  "GBM_LATE_60M#ETH": {
+    "n": 205,
+    "confirmado": false
+  },
+  "GBM_LATE_60M#ETH#60min": {
+    "n": 205,
+    "confirmado": false
+  },
+  "UPDOWN_GBM_IBS_ALTO#BTC": {
+    "n": 211,
+    "confirmado": false
+  },
+  "UPDOWN_GBM_IBS_ALTO#BTC#15min": {
+    "n": 211,
+    "confirmado": false
   }
 }
