@@ -1,8 +1,8 @@
 {
-  "generated_at": "2026-08-30T18:08:37.831886+00:00",
+  "generated_at": "2026-08-30T18:20:13.368992+00:00",
   "markets_file": "2026-08-30.csv",
-  "total_filtered": 2227,
-  "total_pairs": 1706,
+  "total_filtered": 2249,
+  "total_pairs": 1720,
   "candidates": [
     {
       "market_id_a": "701502",
@@ -452,7 +452,7 @@
       "market_id_b": "701553",
       "question_b": "Will Ethereum dip to $1,000 by December 31, 2026?",
       "price_yes_b": 0.055,
-      "liq_b": 127518.0
+      "liq_b": 127517.0
     },
     {
       "market_id_a": "3013350",
@@ -478,7 +478,7 @@
       "market_id_a": "701553",
       "question_a": "Will Ethereum dip to $1,000 by December 31, 2026?",
       "price_yes_a": 0.055,
-      "liq_a": 127518.0,
+      "liq_a": 127517.0,
       "market_id_b": "701554",
       "question_b": "Will Ethereum dip to $800 by December 31, 2026?",
       "price_yes_b": 0.045,
@@ -508,11 +508,11 @@
       "market_id_a": "2467362",
       "question_a": "Will Ethereum dip to $1,250 by December 31, 2026?",
       "price_yes_a": 0.09,
-      "liq_a": 98208.0,
+      "liq_a": 98189.0,
       "market_id_b": "701553",
       "question_b": "Will Ethereum dip to $1,000 by December 31, 2026?",
       "price_yes_b": 0.055,
-      "liq_b": 127518.0
+      "liq_b": 127517.0
     },
     {
       "market_id_a": "701496",
