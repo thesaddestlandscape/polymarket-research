@@ -722,64 +722,29 @@ def _ultimo_cierre_ventana_ts(config: dict) -> datetime | None:
     return ultimo
 
 
-def _bankroll_minimo_usa_solo_real_hoy(config: dict | None = None) -> bool:
-    """Override puntual con fecha (mismo patrón que freno_diario_pct_hoy/
-    freno_ventana_pct_hoy) — riesgo.circuit_breaker.bankroll_minimo_usa_solo_real_override
-    = {fecha, motivo, aprobado_por}. Solo aplica si fecha == hoy (Madrid); al
-    día siguiente vuelve sola al min(real,ledger) por defecto sin depender de
-    que nadie revierta el config a mano.
+def _ultimo_cierre_ts() -> datetime | None:
+    """Timestamp del cierre CLOSED más reciente en TODO trades.csv (sin
+    restringir a la ventana actual) -- 31-Ago, mismo patrón que
+    _ultimo_cierre_ventana_ts() (17-Jul) pero para Freno 1 (bankroll
+    mínimo), que no está acotado a una ventana. Usado para exigir que el
+    snapshot de balance_real.json sea AL MENOS tan reciente como el último
+    trade cerrado antes de confiar en él como suelo del kill-switch --
+    protege contra el mismo fail-open ya diagnosticado en Freno 3: si
+    `actualizar_balance_real()` falla en silencio (`except Exception: pass`
+    en shadow_resolve.py) justo tras cerrar un trade, el cache seguiría
+    "fresco" por timestamp pero con el saldo PRE-pérdida."""
+    if not TRADES_CSV.exists():
+        return None
+    ultimo = None
+    with open(TRADES_CSV, encoding="utf-8") as f:
+        for row in csv.DictReader(f):
+            if row.get("status") != "CLOSED":
+                continue
+            ts = _parse_ts(row.get("close_timestamp") or row.get("timestamp_utc") or "")
+            if ts is not None and (ultimo is None or ts > ultimo):
+                ultimo = ts
+    return ultimo
 
-    2026-07-17 (decisión explícita Javi, revisado en /code-review): el
-    min(real,ledger) de freno 1 disparó con bkr real=2.94€ (sano) solo porque
-    el ledger de PLAN marcaba 0.43€ — drift YA investigado y cerrado dos veces
-    (07-Jul project_reconciliacion_dashboard, 11-Jul
-    project_tracking_error_arqueologia): redondeo de tick del CLOB al
-    ejecutar, PLANO desde el 12-Jul (reconciliar.py), no es un bug activo.
-    Pero el propio code-review de hoy encontró que quitar el min() de forma
-    PERMANENTE también quita la única defensa contra el escenario contrario
-    (el real reportando de más por un fallo silencioso de refresco —
-    `except Exception: pass` en el refresco de balance_real.json — o por
-    `positions_value` desfasado cerca de una resolución). Por eso el fix es
-    un override fecha-acotado, no un cambio de código permanente: hoy usa
-    bkr real solo (para no quedarse bloqueado con dinero real disponible),
-    pero el min() de seguridad vuelve automáticamente en cuanto pase la
-    fecha, salvo que se reextienda explícitamente como los demás overrides
-    de este fichero."""
-    if config is None:
-        config = _cargar_config()
-    cb = config.get("riesgo", {}).get("circuit_breaker", {})
-    ov = cb.get("bankroll_minimo_usa_solo_real_override") or {}
-    try:
-        return ov.get("fecha") == _ahora_madrid(config).date().isoformat()
-    except (KeyError, TypeError, ValueError):
-        return False
-
-
-def _freno_ventana_usa_solo_real_hoy(config: dict | None = None) -> bool:
-    """Override puntual con fecha (mismo patrón que
-    _bankroll_minimo_usa_solo_real_hoy/freno_diario_pct_hoy) —
-    riesgo.circuit_breaker.freno_ventana_usa_solo_real_override =
-    {fecha, motivo, aprobado_por}. Solo aplica si fecha == hoy (Madrid).
-
-    2026-07-17 (decisión explícita Javi, misma sesión que el fix de freno 1):
-    freno 3 (caída en ventana) disparó con solo 1 pérdida real (-1.09€)
-    porque su base (_bankroll_ledger()) es negativa (-0.67€) por el MISMO
-    drift ledger-vs-real ya diagnosticado y cerrado dos veces (07-Jul/11-Jul,
-    ver bankroll_minimo_usa_solo_real_override) — con esa base, cualquier
-    pérdida normal cruza el 70% aunque el bankroll real (1.85€) esté sano.
-    Con esta fecha activa, freno 3 usa bkr real (ya calculado arriba en
-    verificar_circuit_breaker) menos el pnl_v de ESTA ventana (ledger, pero
-    de una sola ventana — su propio drift es céntimos, no el problema) en
-    vez de _bankroll_ledger() íntegro. Vuelve sola al comportamiento
-    original mañana salvo que se reextienda con dato nuevo."""
-    if config is None:
-        config = _cargar_config()
-    cb = config.get("riesgo", {}).get("circuit_breaker", {})
-    ov = cb.get("freno_ventana_usa_solo_real_override") or {}
-    try:
-        return ov.get("fecha") == _ahora_madrid(config).date().isoformat()
-    except (KeyError, TypeError, ValueError):
-        return False
 
 
 def verificar_circuit_breaker() -> tuple[bool, str]:
@@ -807,14 +772,62 @@ def verificar_circuit_breaker() -> tuple[bool, str]:
     bkr_min = cb.get("bankroll_minimo_eur", 5.0)
 
     # Freno 1 — bankroll mínimo absoluto (máxima prioridad, apaga el switch).
-    # Por defecto sigue siendo min(real, ledger) (13-Jul, fail-closed general
-    # — protege contra el real reportando de más por un fallo silencioso de
-    # refresco o un positions_value desfasado cerca de una resolución). Ver
-    # _bankroll_minimo_usa_solo_real_hoy() para el override fecha-acotado de
-    # hoy (17-Jul): el drift de ~2.5€ del ledger está diagnosticado y cerrado,
-    # así que hoy se usa solo el real; el min() de seguridad vuelve solo en
-    # cuanto pase la fecha, sin depender de que nadie lo revierta a mano.
-    bkr_suelo = bkr if _bankroll_minimo_usa_solo_real_hoy(config) else min(bkr, _bankroll_ledger(config))
+    # 31-Ago: eliminado el min(real, ledger) permanentemente (era
+    # min(real,ledger) por defecto, real-solo solo con un override fecha-
+    # acotado que dependía de que alguien lo renovara a mano cada día — no
+    # se renovó desde el 21-Jul y el bug quedó activo >1 mes sin que nadie
+    # lo notara: `_bankroll_ledger()` es la suma de depósitos + pnl_neto_eur
+    # de trades.csv, con un drift plano ~2.5€ vs el real ya diagnosticado y
+    # cerrado dos veces en Jul (redondeo de tick del CLOB, no crece — hoy
+    # 2.54€, igual que en Jul); con el bankroll bajo, el ledger cae por
+    # debajo de bkr_min mientras el real (más fiable, 3.19€) sigue sano, y
+    # el freno borraba el switch en cada ciclo (~20s) pase lo que pase el
+    # usuario haga /on. `bkr` (bankroll_actual()) YA aplica el fail-safe que
+    # el min() perseguía — real solo si `_balance_real_fresco()` confirma
+    # edad+mismo-día-UTC+pnl_hoy_real no-None, si no cae solo a ledger — así
+    # que el min() con ledger era una segunda capa redundante que en la
+    # práctica SIEMPRE ganaba el ledger (por ser crónicamente más bajo),
+    # anulando en silencio el propio diseño de bankroll_actual(). Mismo
+    # criterio ya usado por el Freno 2 (caída diaria), que usa `bkr` directo
+    # sin ningún min() adicional — Freno 1 queda consistente con el resto.
+    #
+    # 31-Ago (/code-review adversarial del fix de arriba, hallazgo real):
+    # quitar el min() sin más SÍ reabre el fail-open que Freno 3 ya blindó
+    # el 17-Jul — si shadow_resolve.py cierra un trade y el refresco de
+    # balance_real.json falla en silencio (`except Exception: pass`),
+    # `_balance_real_fresco()` puede seguir devolviendo un snapshot
+    # "fresco" por edad pero con el saldo PRE-pérdida (no ha capturado
+    # todavía la pérdida recién cerrada) — Freno 1 no saltaría con el
+    # bankroll real ya por debajo del suelo. Mismo guard que Freno 3 ya usa
+    # (_ultimo_cierre_ventana_ts): exigir que el snapshot real sea al menos
+    # tan reciente como el último trade CERRADO antes de confiar en él;
+    # si no lo es, cae a ledger para ESTE cálculo puntual (fail-closed,
+    # nunca al revés).
+    #
+    # Riesgo residual conocido, NO cubierto por este guard (segundo
+    # /code-review, 31-Ago): una posición OPEN a punto de resolver como
+    # pérdida con `positions_value` desfasado/alto en el cache, sin que
+    # todavía exista una fila CLOSED nueva en trades.csv que adelante
+    # `_ultimo_cierre_ts()` -- en ese hueco concreto `bkr` seguiría
+    # inflado. Aceptado explícitamente: es la MISMA asimetría que el
+    # Freno 2 (caída diaria, arriba) ya acepta desde siempre usando `bkr`
+    # directo sin ningún guard adicional, en producción desde hace
+    # semanas sin incidente conocido -- cerrarlo del todo exigiría
+    # trackear frescura de `positions_value` por posición abierta,
+    # fuera de alcance de este fix (motivado por el switch borrándose en
+    # cada ciclo pese al /on de Javi, no por este escenario).
+    bkr_suelo = bkr
+    _real_cb = _balance_real_fresco()
+    _ultimo_cierre = _ultimo_cierre_ts()
+    if _real_cb is not None and _ultimo_cierre is not None:
+        try:
+            _ts_real_cb = datetime.fromisoformat(_real_cb["ts"])
+            if _ts_real_cb.tzinfo is None:
+                _ts_real_cb = _ts_real_cb.replace(tzinfo=timezone.utc)
+            if _ts_real_cb < _ultimo_cierre:
+                bkr_suelo = _bankroll_ledger(config)
+        except Exception:
+            bkr_suelo = _bankroll_ledger(config)
     if bkr_suelo <= bkr_min:
         if SWITCH_PATH.exists():
             SWITCH_PATH.unlink()
@@ -852,33 +865,33 @@ def verificar_circuit_breaker() -> tuple[bool, str]:
                           f"{latch.get('ts','?')} — no reabre hasta la siguiente ventana")
         pnl_v       = pnl_live_ventana_actual()
         desp        = stakes_desplegados_ventana_actual()
-        # _bankroll_ledger() (no bkr, que puede ser real): pnl_v es de ledger
-        # y no hay real con granularidad de ventana — ver docstring de
-        # _bankroll_ledger(). Mezclar bkr real con pnl_v de ledger daría una
-        # base de ventana incoherente -- EXCEPTO hoy (ver
-        # _freno_ventana_usa_solo_real_hoy), donde la base de ledger está
-        # rota (negativa) por el drift ya diagnosticado y el mix puntual
-        # (real - pnl_v de una sola ventana) es más fiable que la ledger íntegra.
+        # 31-Ago: mismo fix que Freno 1 — antes usaba _bankroll_ledger()
+        # íntegro por defecto (base rota, crónicamente baja por el mismo
+        # drift ~2.5€), con `bkr real - pnl_v` solo bajo un override
+        # fecha-acotado que tampoco se renovó desde el 21-Jul. `bkr` (arriba,
+        # bankroll_actual()) ya trae su propio fail-safe de frescura — se usa
+        # directo, igual que Freno 1 y Freno 2, sin mezclar con el ledger.
+        # El chequeo de "el real confirma el último cierre de ventana" sigue
+        # aplicando: si el cache real es más viejo que el último cierre de
+        # ventana conocido, no se puede confiar en que ya refleje esa
+        # resolución — cae a ledger solo para ESTE cálculo puntual (fail-closed).
+        real = _balance_real_fresco()
+        ultimo_cierre = _ultimo_cierre_ventana_ts(config)
         real_confirma_ultimo_cierre = True
-        if _freno_ventana_usa_solo_real_hoy(config):
-            real = _balance_real_fresco()
-            ultimo_cierre = _ultimo_cierre_ventana_ts(config)
-            if real is not None and ultimo_cierre is not None:
-                try:
-                    ts_real = datetime.fromisoformat(real["ts"])
-                    if ts_real.tzinfo is None:
-                        ts_real = ts_real.replace(tzinfo=timezone.utc)
-                    real_confirma_ultimo_cierre = ts_real >= ultimo_cierre
-                except Exception:
-                    real_confirma_ultimo_cierre = False
-        if _freno_ventana_usa_solo_real_hoy(config) and real_confirma_ultimo_cierre:
+        if real is not None and ultimo_cierre is not None:
+            try:
+                ts_real = datetime.fromisoformat(real["ts"])
+                if ts_real.tzinfo is None:
+                    ts_real = ts_real.replace(tzinfo=timezone.utc)
+                real_confirma_ultimo_cierre = ts_real >= ultimo_cierre
+            except Exception:
+                real_confirma_ultimo_cierre = False
+        if real_confirma_ultimo_cierre:
             bkr_ini_v = bkr - pnl_v
         else:
-            bkr_ini_v = _bankroll_ledger(config) - pnl_v  # bankroll al inicio de esta ventana
-                                                      # (fail-closed: si el override está
-                                                      # activo pero el cache real todavía no
-                                                      # confirma el último cierre, se queda en
-                                                      # el cálculo más restrictivo)
+            bkr_ini_v = _bankroll_ledger(config) - pnl_v  # fail-closed: real no
+                                                      # confirma el último cierre
+                                                      # de ventana todavía
         if bkr_ini_v > 0 and pnl_v < 0:
             caida_v = abs(pnl_v) / bkr_ini_v
             if caida_v >= freno_v_pct:
