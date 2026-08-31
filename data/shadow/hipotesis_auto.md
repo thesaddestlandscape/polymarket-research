@@ -1,5 +1,5 @@
-# Hipótesis automáticas — 2026-08-31 08:01 UTC
-_Generado por shadow_postmortem.py sobre 224051 resoluciones (PNL=+17606.04€)_
+# Hipótesis automáticas — 2026-08-31 08:06 UTC
+_Generado por shadow_postmortem.py sobre 224053 resoluciones (PNL=+17603.49€)_
 
 ## Patrones causales activos
 
@@ -3409,13 +3409,13 @@ _Generado por shadow_postmortem.py sobre 224051 resoluciones (PNL=+17606.04€)_
   - _Acción_: SKIP cuando `libro_spread` > 0.01
   - _Potencial_: sin este filtro IC_bueno=+0.144 (n=1365)
 
-- **PATRÓN** `sigma_h` < `0.0078` → IC=+0.141 (n=677)
+- **PATRÓN** `sigma_h` < `0.0078` → IC=+0.140 (n=678)
   - _Por qué funciona_: baja volatilidad → señal GBM más fiable; el spread de Polymarket cubre mejor el edge
   - _Acción_: Kelly boost +0.70€ cuando `sigma_h` < 0.0078 (IC base=+0.121)
 
-- **PATRÓN** `drift_60min` |x|≤ `0.4489` → IC=+0.135 (n=893)
+- **PATRÓN** `drift_60min` |x|≤ `0.4485` → IC=+0.135 (n=893)
   - _Por qué funciona_: drift moderado → precio aún no ha reaccionado del todo; lag explotable
-  - _Acción_: Kelly boost +0.67€ cuando `drift_60min` |x|≤ 0.4489 (IC base=+0.121)
+  - _Acción_: Kelly boost +0.67€ cuando `drift_60min` |x|≤ 0.4485 (IC base=+0.121)
 
 - **PATRÓN** `hora_utc` > `17.0` → IC=+0.148 (n=410)
   - _Por qué funciona_: hora tardía/noche → sesión US cerrada, menos participantes informados; señales más ruidosas
@@ -3425,7 +3425,7 @@ _Generado por shadow_postmortem.py sobre 224051 resoluciones (PNL=+17606.04€)_
   - _Por qué funciona_: hora temprana → mercados cripto menos líquidos, spreads más amplios; edge real menor
   - _Acción_: Kelly boost +0.66€ cuando `hora_utc` < 4.0 (IC base=+0.121)
 
-- **PATRÓN** `ibs_20min` > `0.2719` → IC=+0.147 (n=1014)
+- **PATRÓN** `ibs_20min` > `0.2719` → IC=+0.146 (n=1015)
 
   - _Acción_: Kelly boost +0.73€ cuando `ibs_20min` > 0.2719 (IC base=+0.121)
 
@@ -3441,13 +3441,17 @@ _Generado por shadow_postmortem.py sobre 224051 resoluciones (PNL=+17606.04€)_
 
   - _Acción_: Kelly boost +0.78€ cuando `volumen_pendiente_norm` > 0.2511 (IC base=+0.121)
 
-- **PATRÓN** `volumen_spike_ratio` < `1.4626` → IC=+0.167 (n=334)
+- **PATRÓN** `volumen_spike_ratio` < `1.4605` → IC=+0.164 (n=334)
 
-  - _Acción_: Kelly boost +0.83€ cuando `volumen_spike_ratio` < 1.4626 (IC base=+0.121)
+  - _Acción_: Kelly boost +0.82€ cuando `volumen_spike_ratio` < 1.4605 (IC base=+0.121)
 
 - **PATRÓN** `volumen_spike_ratio` > `2.6893` → IC=+0.152 (n=334)
 
   - _Acción_: Kelly boost +0.76€ cuando `volumen_spike_ratio` > 2.6893 (IC base=+0.121)
+
+- **PATRÓN** `libro_liquidez` > `8958.3045` → IC=+0.129 (n=461)
+
+  - _Acción_: Kelly boost +0.64€ cuando `libro_liquidez` > 8958.3045 (IC base=+0.121)
 
 - **PATRÓN** `sigma_h` < `0.0036` → IC=+0.196 (n=347)
   - _Por qué funciona_: baja volatilidad → señal GBM más fiable; el spread de Polymarket cubre mejor el edge
@@ -6016,13 +6020,13 @@ _Generado por shadow_postmortem.py sobre 224051 resoluciones (PNL=+17606.04€)_
 - **FILTRO** `ballena_activa_n` > `9.0` → IC=-0.170 (n=104)
 
   - _Acción_: SKIP cuando `ballena_activa_n` > 9.0
-  - _Potencial_: sin este filtro IC_bueno=-0.056 (n=52)
+  - _Potencial_: sin este filtro IC_bueno=-0.064 (n=53)
 
 ### UPDOWN_OU_5M#BNB#5min
 - **FILTRO** `ballena_activa_n` > `15.0` → IC=-0.160 (n=45)
 
   - _Acción_: SKIP cuando `ballena_activa_n` > 15.0
-  - _Potencial_: sin este filtro IC_bueno=-0.040 (n=48)
+  - _Potencial_: sin este filtro IC_bueno=-0.049 (n=49)
 
 ### UPDOWN_OU_5M#BTC#5min
 - **FILTRO** `delta_ratio_macro` |x|≤ `0.1143` → IC=-0.149 (n=35)
@@ -6366,10 +6370,10 @@ _Derivadas de los patrones aprendidos:_
 | ✅ GBM_LATE_15M_TARDIO#SOL#15min | 1664 | +0.097 | +828.83€ | 0 | 16 |
 | ✅ GBM_LATE_15M_TARDIO#XRP | 2046 | +0.204 | +1596.33€ | 0 | 0 |
 | ✅ GBM_LATE_15M_TARDIO#XRP#15min | 2046 | +0.204 | +1596.33€ | 0 | 21 |
-| ✅ GBM_LATE_5M | 2732 | +0.131 | +1269.75€ | 1 | 23 |
-| ✅ GBM_LATE_5M#5min | 2732 | +0.131 | +1269.75€ | 0 | 0 |
-| ✅ GBM_LATE_5M#BNB | 114 | +0.215 | +86.21€ | 0 | 0 |
-| ✅ GBM_LATE_5M#BNB#5min | 114 | +0.215 | +86.21€ | 0 | 0 |
+| ✅ GBM_LATE_5M | 2733 | +0.131 | +1267.71€ | 1 | 24 |
+| ✅ GBM_LATE_5M#5min | 2733 | +0.131 | +1267.71€ | 0 | 0 |
+| ✅ GBM_LATE_5M#BNB | 115 | +0.209 | +84.17€ | 0 | 0 |
+| ✅ GBM_LATE_5M#BNB#5min | 115 | +0.209 | +84.17€ | 0 | 0 |
 | ✅ GBM_LATE_5M#BTC | 923 | +0.127 | +452.19€ | 0 | 0 |
 | ✅ GBM_LATE_5M#BTC#5min | 923 | +0.127 | +452.19€ | 1 | 18 |
 | ✅ GBM_LATE_5M#DOGE | 335 | +0.171 | +202.98€ | 0 | 0 |
@@ -6688,10 +6692,10 @@ _Derivadas de los patrones aprendidos:_
 | ✅ UPDOWN_GBM_IBS_ALTO#BTC#15min | 218 | +0.282 | +165.27€ | 0 | 12 |
 | ✅ UPDOWN_GBM_IBS_ALTO#ETH | 164 | +0.289 | +133.69€ | 0 | 0 |
 | ✅ UPDOWN_GBM_IBS_ALTO#ETH#15min | 164 | +0.289 | +133.69€ | 0 | 12 |
-| ✅ UPDOWN_OU_5M | 603 | -0.098 | -69.32€ | 3 | 0 |
-| ✅ UPDOWN_OU_5M#5min | 603 | -0.098 | -69.32€ | 0 | 0 |
-| ✅ UPDOWN_OU_5M#BNB | 301 | -0.074 | -33.42€ | 0 | 0 |
-| ✅ UPDOWN_OU_5M#BNB#5min | 301 | -0.074 | -33.42€ | 1 | 0 |
+| ✅ UPDOWN_OU_5M | 604 | -0.099 | -69.83€ | 3 | 0 |
+| ✅ UPDOWN_OU_5M#5min | 604 | -0.099 | -69.83€ | 0 | 0 |
+| ✅ UPDOWN_OU_5M#BNB | 302 | -0.076 | -33.93€ | 0 | 0 |
+| ✅ UPDOWN_OU_5M#BNB#5min | 302 | -0.076 | -33.93€ | 1 | 0 |
 | ✅ UPDOWN_OU_5M#BTC | 146 | -0.047 | -7.54€ | 0 | 0 |
 | ✅ UPDOWN_OU_5M#BTC#5min | 146 | -0.047 | -7.54€ | 2 | 0 |
 | ✅ UPDOWN_OU_5M#DOGE | 30 | -0.188 | -6.21€ | 0 | 0 |
@@ -6720,7 +6724,7 @@ _Derivadas de los patrones aprendidos:_
 **🟡 H-KELLY-HORA** — Kelly boost ×1.2 por celda (estrategia#subtype#dirección#hora)
   - _Umbral_: n≥40 por celda + gate riguroso completo (Wilson+shuffle+PnL bootstrap)
   - _Acción_: Añadir claves 'ESTRATEGIA#SUBTYPE#DIRECCION#HORA':1.2 a meta.hora_boost_factor, solo por celda confirmada
-  - _Estado_: (cache 882s) 53 celda(s) GATE OK de 2277 trackeadas
+  - _Estado_: (cache 106s) 53 celda(s) GATE OK de 2277 trackeadas
 
 **⚠️ H-SOL-15MIN** — SOL#15min → umbral live (IC≥0.08 n≥40)
   - _Umbral_: IC≥0.08 y n≥40
@@ -6736,7 +6740,7 @@ _Derivadas de los patrones aprendidos:_
 **🟡 H-STREAK-COOLDOWN** — Cooldown tras 2 derrotas consecutivas (mismo subtype)
   - _Umbral_: n≥40 tras 2 losses y gap(IC_tras_win - IC_tras_2loss)≥0.05
   - _Acción_: Reducir stake (no desactivar) 1-2h tras 2 derrotas consecutivas en el mismo subtype
-  - _Estado_: tras_win IC=+0.072 n=125287 | tras_1loss IC=+0.044 n=98447 | tras_2loss IC=+0.007 n=44817/40 | gap=+0.066 (umbral 0.05)
+  - _Estado_: tras_win IC=+0.072 n=125288 | tras_1loss IC=+0.044 n=98448 | tras_2loss IC=+0.007 n=44818/40 | gap=+0.066 (umbral 0.05)
 
 **🟡 H-KALMAN** — Kalman filter para drift adaptativo
   - _Umbral_: n≥200 por subtipo para calibrar parámetros Q/R del KF

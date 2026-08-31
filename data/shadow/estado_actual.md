@@ -1,4 +1,4 @@
-# Estado del bot — 2026-08-31 08:01 UTC
+# Estado del bot — 2026-08-31 08:06 UTC
 
 ## Live — dinero real (on-chain)
 | | |
@@ -13,11 +13,11 @@
 ## Shadow — MODELO SIMULADO (no cobrable)
 | | |
 |---|---|
-| P&L fiel (stake fijo 1$) | +4984.93 $ |
-| P&L sim compuesto | 🟢 +28860.74 $ (ficción Kelly: +113446% s/ operativo) |
-| P&L sim hoy (2026-08-31) | 🟢 +490.44 $ |
-| Operaciones resueltas | 332100 (191374 WIN / 140726 LOSS) — 57.6% |
-| Señales abiertas | 2744 |
+| P&L fiel (stake fijo 1$) | +4982.93 $ |
+| P&L sim compuesto | 🟢 +28858.19 $ (ficción Kelly: +113436% s/ operativo) |
+| P&L sim hoy (2026-08-31) | 🟢 +487.89 $ |
+| Operaciones resueltas | 332102 (191374 WIN / 140728 LOSS) — 57.6% |
+| Señales abiertas | 2771 |
 
 ## Estrategias (visión global)
 
@@ -28,7 +28,7 @@
 | GBM_LATE_15M | 21917 | 57.7% | +0.077 | 📉 agota (-0.05) | +7357.37$ | 0.50$ | ✅ activa |
 | GBM_LATE_15M_MULTIHORIZONTE | 8211 | 67.3% | +0.173 | ➡️ estable | +5752.22$ | 1.71$ | ✅ activa |
 | UPDOWN_GBM_15M_TARDIO | 8125 | 52.6% | +0.026 | 📉 agota (-0.22) | +2696.23$ | 0.50$ | ✅ activa |
-| GBM_LATE_5M | 4653 | 58.0% | +0.080 | 📈 madura (+0.11) | +1382.65$ | 1.31$ | ✅ activa |
+| GBM_LATE_5M | 4654 | 58.0% | +0.080 | 📈 madura (+0.11) | +1380.61$ | 1.31$ | ✅ activa |
 | CANDIDATA10_CONFIRMACION_CRUZADA | 2214 | 44.6% | -0.054 | ➡️ estable | +1041.20$ | 0.50$ | ⚠️ IC negativo |
 | UPDOWN_GBM | 11535 | 52.3% | +0.023 | 📉 agota (-0.05) | +701.82$ | 0.50$ | ✅ activa |
 | WEEKLY_PRICE | 1229 | 79.0% | +0.290 | 📈 madura (+0.07) | +528.72$ | 2.00$ | ✅ activa |
@@ -68,7 +68,7 @@
 | MOMENTUM_IBS_15M | 5495 | 50.0% | -0.000 | ➡️ estable | -73.61$ | 0.50$ | ⚠️ IC negativo |
 | STREAK_FADE_5M | 1890 | 48.0% | -0.020 | ➡️ estable | -80.56$ | 0.50$ | ⚠️ IC negativo |
 | MOMENTUM_IBS_5M_FADE | 6012 | 49.0% | -0.010 | 📉 agota (-0.05) | -119.99$ | 0.50$ | ⚠️ IC negativo |
-| UPDOWN_OU_5M | 994 | 36.7% | -0.133 | 📈 madura (+0.07) | -139.23$ | 0.50$ | ⚠️ IC negativo |
+| UPDOWN_OU_5M | 995 | 36.7% | -0.133 | 📈 madura (+0.07) | -139.74$ | 0.50$ | ⚠️ IC negativo |
 | FAVORITO_CONFIRMADO_DEPTH_FASE0 | 10348 | 59.5% | +0.095 | ➡️ estable | -391.47$ | 0.95$ | ✅ activa |
 | FAVORITO_CONFIRMADO_15MIN_ALTACONVICCION | 8789 | 68.2% | +0.182 | ➡️ estable | -656.22$ | 1.76$ | ✅ activa |
 | BALLENAS_TARDIAS | 17697 | 41.2% | -0.088 | 📉 agota (-0.03) | -2959.31$ | 0.50$ | ⚠️ IC negativo |
@@ -79,30 +79,30 @@
 
 | Timestamp | Estrategia | Mercado | Resultado | PNL |
 |---|---|---|---|---|
+| 2026-08-31T08:04 | GBM_LATE_5M#BNB#5min | BNB Up or Down - August 31, 3:45AM-3:50AM ET… | ❌ LOSS | -2.04$ |
+| 2026-08-31T08:04 | UPDOWN_OU_5M#BNB#5min | BNB Up or Down - August 31, 3:35AM-3:40AM ET… | ❌ LOSS | -0.51$ |
 | 2026-08-31T07:34 | STREAK_FADE_5M#DOGE#5min | Dogecoin Up or Down - August 31, 3:20AM-3:25AM ET… | ❌ LOSS | -0.70$ |
 | 2026-08-31T07:34 | STREAK_MOM_5M#DOGE#5min | Dogecoin Up or Down - August 31, 3:20AM-3:25AM ET… | ✅ WIN | +0.48$ |
 | 2026-08-31T07:32 | STREAK_MOM_5M#ETH#5min | Ethereum Up or Down - August 31, 3:20AM-3:25AM ET… | ✅ WIN | +0.48$ |
-| 2026-08-31T07:32 | STREAK_MOM_5M#SOL#5min | Solana Up or Down - August 31, 3:20AM-3:25AM ET… | ✅ WIN | +0.48$ |
-| 2026-08-31T07:30 | UPDOWN_OU_5M#BNB#5min | BNB Up or Down - August 31, 3:15AM-3:20AM ET… | ❌ LOSS | -0.51$ |
 
 ## Calidad de datos
 
-✅ **OK** — última verificación 2026-08-31T08:01 UTC
+✅ **OK** — última verificación 2026-08-31T08:06 UTC
 
 | Asset | Precio | Age | Alertas |
 |---|---|---|---|
-| ✅ BTC | $78,184.16 | 0.1min |  |
-| ✅ ETH | $2,439.85 | 0.1min |  |
-| ✅ SOL | $103.05 | 0.1min |  |
+| ✅ BTC | $78,220.43 | 0.1min |  |
+| ✅ ETH | $2,441.20 | 0.1min |  |
+| ✅ SOL | $102.62 | 0.1min |  |
 | ✅ XRP | $1.37 | 0.1min |  |
 
-**Cross-source** (binance, coinbase, kraken):
+**Cross-source** (coinbase, kraken):
 
 | Asset | Consenso | Fuente | Estado |
 |---|---|---|---|
-| BTC | $78,197.90 | consenso |  |
-| ETH | $2,439.52 | consenso |  |
-| SOL | $102.98 | consenso |  |
+| BTC | $78,207.32 | consenso |  |
+| ETH | $2,440.89 | consenso |  |
+| SOL | $103.00 | consenso |  |
 | XRP | $1.37 | consenso |  |
 
 ---
