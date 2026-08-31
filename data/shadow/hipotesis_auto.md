@@ -1,4 +1,4 @@
-# Hipótesis automáticas — 2026-08-31 07:43 UTC
+# Hipótesis automáticas — 2026-08-31 07:49 UTC
 _Generado por shadow_postmortem.py sobre 224051 resoluciones (PNL=+17606.04€)_
 
 ## Patrones causales activos
@@ -5176,6 +5176,10 @@ _Generado por shadow_postmortem.py sobre 224051 resoluciones (PNL=+17606.04€)_
   - _Por qué funciona_: baja volatilidad → señal GBM más fiable; el spread de Polymarket cubre mejor el edge
   - _Acción_: Kelly boost +0.78€ cuando `sigma_h` < 0.0038 (IC base=+0.123)
 
+- **PATRÓN** `sigma_h` > `0.0062` → IC=+0.140 (n=137)
+  - _Por qué funciona_: alta volatilidad → el modelo GBM sobreestima la señal; el mercado es más aleatorio
+  - _Acción_: Kelly boost +0.70€ cuando `sigma_h` > 0.0062 (IC base=+0.123)
+
 - **PATRÓN** `drift_60min` |x|≤ `0.1873` → IC=+0.130 (n=411)
   - _Por qué funciona_: drift moderado → precio aún no ha reaccionado del todo; lag explotable
   - _Acción_: Kelly boost +0.65€ cuando `drift_60min` |x|≤ 0.1873 (IC base=+0.123)
@@ -5974,9 +5978,9 @@ _Generado por shadow_postmortem.py sobre 224051 resoluciones (PNL=+17606.04€)_
   - _Por qué funciona_: hora tardía/noche → sesión US cerrada, menos participantes informados; señales más ruidosas
   - _Acción_: Kelly boost +1.00€ cuando `hora_utc` > 5.0 (IC base=+0.289)
 
-- **PATRÓN** `ibs_15` > `0.8489` → IC=+0.316 (n=123)
+- **PATRÓN** `ibs_15` > `0.8702` → IC=+0.321 (n=110)
   - _Por qué funciona_: IBS alto (precio cerca del máximo) → sobrecompra de corto plazo; BUY_YES menos fiable
-  - _Acción_: Kelly boost +1.00€ cuando `ibs_15` > 0.8489 (IC base=+0.289)
+  - _Acción_: Kelly boost +1.00€ cuando `ibs_15` > 0.8702 (IC base=+0.289)
 
 - **PATRÓN** `dist_vwap_pct` > `0.6362` → IC=+0.352 (n=25)
 
@@ -6131,7 +6135,7 @@ _Derivadas de los patrones aprendidos:_
 - **H-IBS-UPDOWN_GBM_15M_TARDIO#XRP#15min**: dentro de BUY_NO, IBS > 0.2737 sube el IC de -0.073 a +0.333 en UPDOWN_GBM_15M_TARDIO#XRP#15min (n=28). Ya aplicado como kelly_boost=+1.00€ automático (shadow) — no es señal de reversión a la dirección contraria.
 - **H-IBS-UPDOWN_GBM_IBS_ALTO**: dentro de BUY_YES, IBS > 0.9673 sube el IC de +0.286 a +0.364 en UPDOWN_GBM_IBS_ALTO (n=130). Ya aplicado como kelly_boost=+1.00€ automático (shadow) — no es señal de reversión a la dirección contraria.
 - **H-IBS-UPDOWN_GBM_IBS_ALTO#BTC#15min**: dentro de BUY_YES, IBS > 0.968 sube el IC de +0.282 a +0.333 en UPDOWN_GBM_IBS_ALTO#BTC#15min (n=76). Ya aplicado como kelly_boost=+1.00€ automático (shadow) — no es señal de reversión a la dirección contraria.
-- **H-IBS-UPDOWN_GBM_IBS_ALTO#ETH#15min**: dentro de BUY_YES, IBS > 0.8489 sube el IC de +0.289 a +0.316 en UPDOWN_GBM_IBS_ALTO#ETH#15min (n=123). Ya aplicado como kelly_boost=+1.00€ automático (shadow) — no es señal de reversión a la dirección contraria.
+- **H-IBS-UPDOWN_GBM_IBS_ALTO#ETH#15min**: dentro de BUY_YES, IBS > 0.8702 sube el IC de +0.289 a +0.321 en UPDOWN_GBM_IBS_ALTO#ETH#15min (n=110). Ya aplicado como kelly_boost=+1.00€ automático (shadow) — no es señal de reversión a la dirección contraria.
 - **H-IBS-UPDOWN_GBM_15M_CROSS_WINDOW_SPREAD**: dentro de BUY_YES, IBS > 0.8357 sube el IC de +0.321 a +0.377 en UPDOWN_GBM_15M_CROSS_WINDOW_SPREAD (n=160). Ya aplicado como kelly_boost=+1.00€ automático (shadow) — no es señal de reversión a la dirección contraria.
 - **H-IBS-UPDOWN_GBM_15M_CROSS_WINDOW_SPREAD#BTC#15min**: dentro de BUY_YES, IBS > 0.8418 sube el IC de +0.308 a +0.354 en UPDOWN_GBM_15M_CROSS_WINDOW_SPREAD#BTC#15min (n=94). Ya aplicado como kelly_boost=+1.00€ automático (shadow) — no es señal de reversión a la dirección contraria.
 - **H-IBS-UPDOWN_GBM_15M_CROSS_WINDOW_SPREAD#ETH#15min**: dentro de BUY_YES, IBS > 0.8893 sube el IC de +0.332 a +0.404 en UPDOWN_GBM_15M_CROSS_WINDOW_SPREAD#ETH#15min (n=50). Ya aplicado como kelly_boost=+1.00€ automático (shadow) — no es señal de reversión a la dirección contraria.
@@ -6619,7 +6623,7 @@ _Derivadas de los patrones aprendidos:_
 | ✅ STRUCT_NO_15M#SOL | 812 | -0.010 | -20.48€ | 0 | 0 |
 | ✅ STRUCT_NO_15M#SOL#15min | 812 | -0.010 | -20.48€ | 2 | 0 |
 | ✅ UPDOWN_GBM | 7471 | +0.003 | +149.98€ | 0 | 0 |
-| ✅ UPDOWN_GBM#15min | 2671 | +0.036 | +233.82€ | 0 | 10 |
+| ✅ UPDOWN_GBM#15min | 2671 | +0.036 | +233.82€ | 0 | 11 |
 | ✅ UPDOWN_GBM#240min | 297 | +0.015 | +1.49€ | 0 | 0 |
 | ✅ UPDOWN_GBM#5min | 4009 | -0.016 | -79.12€ | 3 | 0 |
 | ✅ UPDOWN_GBM#60min | 447 | -0.008 | -5.70€ | 3 | 1 |
@@ -6716,7 +6720,7 @@ _Derivadas de los patrones aprendidos:_
 **🟡 H-KELLY-HORA** — Kelly boost ×1.2 por celda (estrategia#subtype#dirección#hora)
   - _Umbral_: n≥40 por celda + gate riguroso completo (Wilson+shuffle+PnL bootstrap)
   - _Acción_: Añadir claves 'ESTRATEGIA#SUBTYPE#DIRECCION#HORA':1.2 a meta.hora_boost_factor, solo por celda confirmada
-  - _Estado_: (cache 793s) 53 celda(s) GATE OK de 2277 trackeadas
+  - _Estado_: (cache 209s) 53 celda(s) GATE OK de 2277 trackeadas
 
 **⚠️ H-SOL-15MIN** — SOL#15min → umbral live (IC≥0.08 n≥40)
   - _Umbral_: IC≥0.08 y n≥40
