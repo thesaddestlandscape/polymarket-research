@@ -114,6 +114,7 @@ import gbm_late_reactivo_fase0
 import candidata9_bot_consenso_reactivo_fase0
 import candidata10_confirmacion_cruzada_reactivo_fase0
 import order_flow_5m_reactivo_fase0
+import huecos_extremos_fase0
 
 # (modulo, fichero_log_propio -- EXACTO el que ya usaba pipeline_watchdog.SCREEN_RESTART, nombre_funcion_log_a_reemplazar)
 OBSERVADORES = [
@@ -145,6 +146,11 @@ OBSERVADORES = [
     (candidata9_bot_consenso_reactivo_fase0, "candidata9_bot_consenso_reactivo_fase0.log", "_log"),
     (candidata10_confirmacion_cruzada_reactivo_fase0, "candidata10_confirmacion_cruzada_reactivo_fase0.log", "_log"),
     (order_flow_5m_reactivo_fase0, "order_flow_5m_reactivo_fase0.log", "_log"),
+    # 31-Ago: 4 huecos de cobertura [0.95,1.00) encontrados en
+    # analisis_franja_milimetrica_ballenas.py (BTC/XRP#15min, BTC/ETH#60min,
+    # ballenas hit 97-98% con miles de mercados, nosotros shadow_n=1-8) --
+    # mide fill-ability real de la zona, no de una estrategia concreta.
+    (huecos_extremos_fase0, "huecos_extremos_fase0.log", "_log"),
 ]
 
 
