@@ -189,10 +189,71 @@ def _positions_value(wallet: str) -> float:
     return val
 
 
-def _daily_real_pnl_balance(depositos: list, total_actual: float,
+SPORTS_CONFIG_PATH = Path(__file__).parent / "data" / "sports" / "config_live_sports.json"
+SPORTS_TRADES_PATH = Path(__file__).parent / "data" / "sports" / "trades.csv"
+
+
+def _sports_delta_realizado_por_dia_madrid() -> dict:
+    """31-Ago (bug real, encontrado el día que sports abrió su primer trade
+    real): `total`/`free_usdc` de esta wallet ya vienen NETOS de sports vía
+    `_capital_ajeno_en_wallet_compartida()` (depósitos de sports + STAKES
+    ABIERTOS de sports, ver docstring de esa función -- deliberadamente
+    incluye lo abierto para no sobrestimar el bankroll disponible de
+    cripto). Bien para `bankroll_actual()`/el circuit breaker de TAMAÑO,
+    pero `_daily_real_pnl_balance()` compara snapshots de ese mismo `total`
+    día a día -- cuando sports ABRE una posición nueva, `capital_ajeno` sube
+    aunque ese dinero siga siendo suyo (no se ha ganado ni perdido todavía),
+    y la resta se leía como si cripto hubiera perdido ese importe. Caso real
+    31-Ago: sports abrió LoL#SEGUIR (stake 1,05€) a las 17:16 UTC, sin
+    ningún trade ni pérdida de cripto en ese momento -- `pnl_hoy_real` pasó
+    de +1,09€ a -1,07€ solo por eso, y esa cifra alimenta también el
+    circuit breaker de cripto (`live_stake.pnl_live_hoy()`).
+
+    Fix: para el DELTA diario (no para el bankroll disponible, que sigue
+    igual), se compara `total_bruto` (bruto, sin restar nada de sports) y
+    se neta aparte solo lo REALIZADO de sports por día Madrid -- depósitos
+    de sports + PnL de sus trades CERRADOS ese día (mismo criterio
+    cost-basis ya aceptado en `_capital_ajeno_en_wallet_compartida`: una
+    posición de sports abierta no mueve el día de cripto hasta que cierra,
+    igual que tampoco mueve el bankroll de sports hasta entonces).
+
+    Fail-safe: cualquier error (ficheros de sports ausentes/corruptos)
+    devuelve {} -- sin este ajuste el comportamiento es el de antes de
+    31-Ago (sports en 0€, no distinto de un sports inactivo)."""
+    from collections import defaultdict
+    from zoneinfo import ZoneInfo
+    madrid = ZoneInfo("Europe/Madrid")
+    delta = defaultdict(float)
+    try:
+        cfg = json.loads(SPORTS_CONFIG_PATH.read_text(encoding="utf-8"))
+        for d in cfg.get("depositos", []):
+            if isinstance(d, dict) and d.get("eur") and d.get("fecha"):
+                delta[d["fecha"]] += float(d["eur"])
+    except Exception:
+        pass
+    try:
+        if SPORTS_TRADES_PATH.exists():
+            with open(SPORTS_TRADES_PATH, encoding="utf-8") as f:
+                for row in csv.DictReader(f):
+                    if row.get("status") != "CLOSED":
+                        continue
+                    ts_raw = row.get("close_timestamp") or row.get("timestamp_utc") or ""
+                    try:
+                        dt = datetime.fromisoformat(ts_raw.replace("Z", "+00:00"))
+                        pnl = float(row.get("pnl_neto_eur", 0) or 0)
+                    except (ValueError, KeyError):
+                        continue
+                    dia = dt.astimezone(madrid).strftime("%Y-%m-%d")
+                    delta[dia] += pnl
+    except Exception:
+        pass
+    return dict(delta)
+
+
+def _daily_real_pnl_balance(depositos: list, total_bruto_actual: float,
                             ts_actual: str) -> tuple[list, float, float]:
-    """PnL real por día desde balance_history.csv (delta de `total` on-chain
-    por día MADRID) -- reemplaza a _daily_real_pnl() (31-Jul, bug diagnosticado
+    """PnL real por día desde balance_history.csv (delta de `total_bruto`
+    on-chain por día MADRID) -- reemplaza a _daily_real_pnl() (31-Jul, bug diagnosticado
     en sesión: comparado día a día contra balance_history.csv, el método viejo
     de actividad on-chain (buy/redeem) desviaba hasta -9.31$/+7.42$ en un solo
     día, ej. 29-Jul real=+8.13 vs activity=-1.18, 30-Jul real=-10.90 vs
@@ -216,19 +277,26 @@ def _daily_real_pnl_balance(depositos: list, total_actual: float,
     from collections import defaultdict
     from zoneinfo import ZoneInfo
 
+    # 31-Ago: total_bruto (wallet compartida cruda, sin restar sports) en vez
+    # de `total` (neto) -- ver docstring de _sports_delta_realizado_por_dia_
+    # madrid(), evita que un stake de sports ABRIÉNDOSE/CERRÁNDOSE se lea
+    # como ganancia/pérdida de cripto. Fallback a `total` en filas anteriores
+    # a 27-Ago (columna no existía, pero tampoco existía la resta de sports
+    # todavía -- total==total_bruto en ese periodo).
     filas = []
     if HIST_PATH.exists():
         with open(HIST_PATH, encoding="utf-8") as f:
             for r in csv.DictReader(f):
                 try:
                     dt = datetime.fromisoformat(r["ts"].replace("Z", "+00:00"))
-                    total = float(r["total"])
+                    bruto_raw = r.get("total_bruto")
+                    total = float(bruto_raw) if bruto_raw not in (None, "") else float(r["total"])
                 except (ValueError, KeyError):
                     continue
                 filas.append((dt, total))
     # snapshot actual (aún no escrito en el CSV -- se añade tras esta llamada)
     try:
-        filas.append((datetime.fromisoformat(ts_actual), total_actual))
+        filas.append((datetime.fromisoformat(ts_actual), total_bruto_actual))
     except ValueError:
         pass
     if not filas:
@@ -239,6 +307,7 @@ def _daily_real_pnl_balance(depositos: list, total_actual: float,
     dep_por_dia = defaultdict(float)
     for d in depositos:
         dep_por_dia[d.get("fecha", "")] += float(d.get("eur") or 0)
+    sports_por_dia = _sports_delta_realizado_por_dia_madrid()
 
     # último snapshot de cada día Madrid = "cierre" de ese día
     cierre_por_dia = {}
@@ -251,7 +320,8 @@ def _daily_real_pnl_balance(depositos: list, total_actual: float,
     prev = None
     for dia in dias:
         if prev is not None:
-            delta = cierre_por_dia[dia] - prev - dep_por_dia.get(dia, 0.0)
+            ajeno_dia = dep_por_dia.get(dia, 0.0) + sports_por_dia.get(dia, 0.0)
+            delta = cierre_por_dia[dia] - prev - ajeno_dia
             daily_list.append({"date": dia, "pnl": round(delta, 2)})
         prev = cierre_por_dia[dia]
 
@@ -349,7 +419,7 @@ def fetch_balance_real() -> dict:
     # (buy/redeem) -- ver docstring de _daily_real_pnl_balance, bug real
     # diagnosticado con Javi (desviaciones de hasta 9$/día).
     try:
-        daily_real, pnl_hoy_real, pnl_7d_real = _daily_real_pnl_balance(depositos, total, ts)
+        daily_real, pnl_hoy_real, pnl_7d_real = _daily_real_pnl_balance(depositos, total_bruto, ts)
     except Exception:
         daily_real, pnl_hoy_real, pnl_7d_real = [], None, None
     deposito_total = (sum(float(d["eur"]) for d in depositos)
