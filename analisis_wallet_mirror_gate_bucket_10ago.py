@@ -53,6 +53,7 @@ import shadow_postmortem as sp  # noqa: E402 -- reusa TWAP_MARCOS_AFECTADOS/TWAP
 
 EXECUTOR = REPO / "data/shadow/wallet_mirror_executor_dryrun.csv"
 SNIPER = REPO / "data/shadow/wallet_mirror_sniper_dry_run.csv"
+TRADES_REAL = REPO / "data/live/trades.csv"
 OUT = REPO / "data/shadow/wallet_mirror_gate_bucket.json"
 
 STEP = 0.05
@@ -163,6 +164,55 @@ def bh_fdr_signif(p_valores, q=0.05):
     return set(orden[:corte])
 
 
+def _cargar_pnl_real_por_bucket() -> dict:
+    """{clave_str: {bucket_str: [pnl_neto_eur, ...]}} de trades.csv REALES
+    (WALLET_MIRROR, CLOSED) -- verdad de suelo, no proxy.
+
+    31-Ago (petición explícita Javi, "solucionalo" -- ya son 18 trades
+    reales -7,04€ 33,3% win-rate pese al veto de payout asimétrico del
+    29-Ago): el veredicto de este gate se calcula ENTERO sobre el log del
+    ejecutor (EXECUTOR arriba, decisiones fillable, nunca lo que el dinero
+    real terminó haciendo en esa tupla/bucket exacta) -- nunca se había
+    contrastado contra trades.csv. Mismo espíritu que el veto de payout
+    asimétrico (degrada, nunca promueve): si YA hay evidencia real
+    (n_real>=2, mismo umbral mínimo de "no ruido de una sola vez" que el
+    resto del proyecto) y esa evidencia es negativa, no seguir confiando
+    ciegamente en el proxy del ejecutor para ESE bucket concreto.
+
+    Fail-safe: fichero ausente/corrupto -> {} (comportamiento idéntico al
+    de antes de este cambio, ningún bucket se degrada)."""
+    out = defaultdict(lambda: defaultdict(list))
+    try:
+        with open(TRADES_REAL, encoding="utf-8") as f:
+            for r in csv.DictReader(f):
+                if r.get("strategy") != "WALLET_MIRROR" or r.get("status") != "CLOSED":
+                    continue
+                notas = r.get("notas") or ""
+                if "tipo=SEGUIR" in notas:
+                    tipo = "SEGUIR"
+                elif "tipo=FADE" in notas:
+                    tipo = "FADE"
+                else:
+                    continue
+                grande = "1" if "grande=1" in notas else "0"
+                subtype = r.get("subtype") or ""
+                if "#" not in subtype:
+                    continue
+                activo, marco = subtype.split("#", 1)
+                try:
+                    ask = float(r.get("entry_price") or "")
+                    pnl = float(r.get("pnl_neto_eur") or "")
+                except (TypeError, ValueError):
+                    continue
+                if not (0.0 < ask < 1.0):
+                    continue
+                clave_str = f"{tipo}#{activo}#{marco}#{grande}"
+                out[clave_str][f"{bucket(ask):.2f}"].append(pnl)
+    except Exception:
+        return {}
+    return {k: dict(v) for k, v in out.items()}
+
+
 def _cargar_veredictos_crudos_previos() -> dict:
     """{clave_str: {bucket_str: veredicto_crudo}} de la corrida anterior --
     mismo guard de 2 días que gate_bucket_propio.py (31-Ago). Fail-closed:
@@ -186,6 +236,7 @@ def main():
     grupos = cargar_filas()
     print(f"Grupos (tipo,activo,marco,grande): {len(grupos)}")
     veredictos_crudos_previos = _cargar_veredictos_crudos_previos()
+    pnl_real_por_bucket = _cargar_pnl_real_por_bucket()
 
     resultado = {}  # "tipo#activo#marco#grande" -> {bucket_str: entrada}
     pendientes = []
@@ -278,6 +329,20 @@ def main():
             veredicto_crudo = "malo_confirmado"
             nota_payout = f" [degradado: payout asimétrico g_kelly(f=10%)={g_kelly:+.5f}<=0]"
 
+        # 31-Ago: veto de verdad-de-suelo -- degrada bueno_confirmado si YA
+        # hay trades REALES (no proxy) en este bucket exacto y su pnl medio
+        # es negativo. n_real>=2 (mismo umbral mínimo de "no ruido de una
+        # sola vez" que el resto del proyecto usa para split-half). Solo
+        # puede degradar, nunca promover -- ver _cargar_pnl_real_por_bucket().
+        nota_real = ""
+        pnls_reales = pnl_real_por_bucket.get(p["clave_str"], {}).get(p["bucket"])
+        if veredicto_crudo == "bueno_confirmado" and pnls_reales and len(pnls_reales) >= 2:
+            media_real = sum(pnls_reales) / len(pnls_reales)
+            if media_real < 0:
+                veredicto_crudo = "malo_confirmado"
+                nota_real = (f" [degradado: {len(pnls_reales)} trades REALES "
+                             f"pnl_medio={media_real:+.3f}€<0]")
+
         p["entrada"]["veredicto_crudo_hoy"] = veredicto_crudo
         b = p["bucket"]
 
@@ -308,7 +373,7 @@ def main():
         veredictos_nuevos.append(
             f"{marca} {p['clave_str']} [{b},{float(b)+STEP:.2f}) "
             f"n={p['entrada']['n']} pnl_medio={p['entrada']['pnl_medio']:+.3f} "
-            f"g_kelly={g_kelly:+.5f} p={p['p']:.4f} {veredicto}{nota_payout}"
+            f"g_kelly={g_kelly:+.5f} p={p['p']:.4f} {veredicto}{nota_payout}{nota_real}"
         )
 
     print(f"\n{len(veredictos_nuevos)} bucket(s) con veredicto tras BH-FDR:")
