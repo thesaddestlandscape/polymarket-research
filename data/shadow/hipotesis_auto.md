@@ -1,5 +1,5 @@
-# Hipótesis automáticas — 2026-08-31 07:26 UTC
-_Generado por shadow_postmortem.py sobre 224043 resoluciones (PNL=+17604.37€)_
+# Hipótesis automáticas — 2026-08-31 07:32 UTC
+_Generado por shadow_postmortem.py sobre 224047 resoluciones (PNL=+17605.30€)_
 
 ## Patrones causales activos
 
@@ -4258,7 +4258,7 @@ _Generado por shadow_postmortem.py sobre 224043 resoluciones (PNL=+17604.37€)_
 - **FILTRO** `liq_imbalance_15min` |x|≤ `1.0` → IC=-0.121 (n=85)
 
   - _Acción_: SKIP cuando `liq_imbalance_15min` |x|≤ 1.0
-  - _Potencial_: sin este filtro IC_bueno=+0.026 (n=762)
+  - _Potencial_: sin este filtro IC_bueno=+0.027 (n=763)
 
 - **FILTRO** `liq_imbalance_15min` |x|≤ `1.0` → IC=-0.283 (n=21)
 
@@ -5147,7 +5147,7 @@ _Generado por shadow_postmortem.py sobre 224043 resoluciones (PNL=+17604.37€)_
 - **FILTRO** `py_entrada` < `0.5` → IC=-0.121 (n=27)
 
   - _Acción_: SKIP cuando `py_entrada` < 0.5
-  - _Potencial_: sin este filtro IC_bueno=-0.005 (n=206)
+  - _Potencial_: sin este filtro IC_bueno=-0.002 (n=207)
 
 - **FILTRO** `streak_len` > `3.0` → IC=-0.147 (n=15)
 
@@ -6009,16 +6009,16 @@ _Generado por shadow_postmortem.py sobre 224043 resoluciones (PNL=+17604.37€)_
   - _Acción_: SKIP cuando `drift_60min` |x|> 0.2701
   - _Potencial_: sin este filtro IC_bueno=-0.085 (n=140)
 
-- **FILTRO** `ballena_activa_n` > `10.0` → IC=-0.167 (n=103)
+- **FILTRO** `ballena_activa_n` > `9.0` → IC=-0.170 (n=104)
 
-  - _Acción_: SKIP cuando `ballena_activa_n` > 10.0
+  - _Acción_: SKIP cuando `ballena_activa_n` > 9.0
   - _Potencial_: sin este filtro IC_bueno=-0.056 (n=52)
 
 ### UPDOWN_OU_5M#BNB#5min
 - **FILTRO** `ballena_activa_n` > `15.0` → IC=-0.160 (n=45)
 
   - _Acción_: SKIP cuando `ballena_activa_n` > 15.0
-  - _Potencial_: sin este filtro IC_bueno=-0.031 (n=47)
+  - _Potencial_: sin este filtro IC_bueno=-0.040 (n=48)
 
 ### UPDOWN_OU_5M#BTC#5min
 - **FILTRO** `delta_ratio_macro` |x|≤ `0.1143` → IC=-0.149 (n=35)
@@ -6422,8 +6422,8 @@ _Derivadas de los patrones aprendidos:_
 | ✅ LIQUIDACIONES_15M#SOL#15min | 72 | -0.027 | -3.31€ | 0 | 0 |
 | ✅ LIQUIDACIONES_15M#XRP | 48 | -0.180 | -9.97€ | 0 | 0 |
 | ✅ LIQUIDACIONES_15M#XRP#15min | 48 | -0.180 | -9.97€ | 1 | 0 |
-| ✅ LIQUIDACIONES_5M | 957 | -0.016 | -19.28€ | 4 | 0 |
-| ✅ LIQUIDACIONES_5M#5min | 957 | -0.016 | -19.28€ | 0 | 0 |
+| ✅ LIQUIDACIONES_5M | 958 | -0.016 | -18.80€ | 4 | 0 |
+| ✅ LIQUIDACIONES_5M#5min | 958 | -0.016 | -18.80€ | 0 | 0 |
 | ✅ LIQUIDACIONES_5M#BNB | 60 | +0.000 | -2.56€ | 0 | 0 |
 | ✅ LIQUIDACIONES_5M#BNB#5min | 60 | +0.000 | -2.56€ | 0 | 1 |
 | ✅ LIQUIDACIONES_5M#BTC | 132 | -0.037 | -4.04€ | 0 | 0 |
@@ -6432,8 +6432,8 @@ _Derivadas de los patrones aprendidos:_
 | ✅ LIQUIDACIONES_5M#DOGE#5min | 73 | -0.087 | -7.42€ | 1 | 0 |
 | ✅ LIQUIDACIONES_5M#ETH | 276 | +0.011 | +7.17€ | 0 | 0 |
 | ✅ LIQUIDACIONES_5M#ETH#5min | 276 | +0.011 | +7.17€ | 3 | 0 |
-| ✅ LIQUIDACIONES_5M#SOL | 355 | -0.001 | -5.33€ | 0 | 0 |
-| ✅ LIQUIDACIONES_5M#SOL#5min | 355 | -0.001 | -5.33€ | 3 | 0 |
+| ✅ LIQUIDACIONES_5M#SOL | 356 | +0.000 | -4.85€ | 0 | 0 |
+| ✅ LIQUIDACIONES_5M#SOL#5min | 356 | +0.000 | -4.85€ | 3 | 0 |
 | ✅ LIQUIDACIONES_5M#XRP | 61 | -0.103 | -7.10€ | 0 | 0 |
 | ✅ LIQUIDACIONES_5M#XRP#5min | 61 | -0.103 | -7.10€ | 2 | 0 |
 | ✅ LIQUIDACIONES_60M | 504 | -0.006 | -0.17€ | 1 | 0 |
@@ -6600,16 +6600,16 @@ _Derivadas de los patrones aprendidos:_
 | ✅ STREAK_FADE_60M#ETH#60min | 24 | -0.115 | -3.40€ | 0 | 0 |
 | ✅ STREAK_FADE_60M#SOL | 16 | +0.089 | +1.64€ | 0 | 0 |
 | ✅ STREAK_FADE_60M#SOL#60min | 16 | +0.089 | +1.64€ | 0 | 0 |
-| ✅ STREAK_MOM_5M | 2981 | +0.027 | +59.50€ | 0 | 0 |
-| ✅ STREAK_MOM_5M#5min | 2981 | +0.027 | +59.50€ | 0 | 0 |
+| ✅ STREAK_MOM_5M | 2983 | +0.027 | +60.46€ | 0 | 0 |
+| ✅ STREAK_MOM_5M#5min | 2983 | +0.027 | +60.46€ | 0 | 0 |
 | ✅ STREAK_MOM_5M#DOGE | 977 | +0.026 | +13.34€ | 0 | 0 |
 | ✅ STREAK_MOM_5M#DOGE#5min | 977 | +0.026 | +13.34€ | 0 | 0 |
 | ✅ STREAK_MOM_5M#ETH | 579 | +0.034 | +19.46€ | 0 | 0 |
 | ✅ STREAK_MOM_5M#ETH#5min | 579 | +0.034 | +19.46€ | 1 | 1 |
-| ✅ STREAK_MOM_5M#SOL | 895 | +0.022 | +7.05€ | 0 | 0 |
-| ✅ STREAK_MOM_5M#SOL#5min | 895 | +0.022 | +7.05€ | 1 | 0 |
-| ✅ STREAK_MOM_5M#XRP | 530 | +0.028 | +19.65€ | 0 | 0 |
-| ✅ STREAK_MOM_5M#XRP#5min | 530 | +0.028 | +19.65€ | 2 | 0 |
+| ✅ STREAK_MOM_5M#SOL | 896 | +0.022 | +7.53€ | 0 | 0 |
+| ✅ STREAK_MOM_5M#SOL#5min | 896 | +0.022 | +7.53€ | 1 | 0 |
+| ✅ STREAK_MOM_5M#XRP | 531 | +0.029 | +20.13€ | 0 | 0 |
+| ✅ STREAK_MOM_5M#XRP#5min | 531 | +0.029 | +20.13€ | 2 | 0 |
 | ✅ STRUCT_NO_15M | 3651 | +0.008 | -33.46€ | 0 | 0 |
 | ✅ STRUCT_NO_15M#15min | 3651 | +0.008 | -33.46€ | 0 | 0 |
 | ✅ STRUCT_NO_15M#BTC | 1400 | +0.011 | -11.00€ | 0 | 0 |
@@ -6684,10 +6684,10 @@ _Derivadas de los patrones aprendidos:_
 | ✅ UPDOWN_GBM_IBS_ALTO#BTC#15min | 218 | +0.282 | +165.27€ | 0 | 12 |
 | ✅ UPDOWN_GBM_IBS_ALTO#ETH | 164 | +0.289 | +133.69€ | 0 | 0 |
 | ✅ UPDOWN_GBM_IBS_ALTO#ETH#15min | 164 | +0.289 | +133.69€ | 0 | 12 |
-| ✅ UPDOWN_OU_5M | 602 | -0.098 | -68.81€ | 3 | 0 |
-| ✅ UPDOWN_OU_5M#5min | 602 | -0.098 | -68.81€ | 0 | 0 |
-| ✅ UPDOWN_OU_5M#BNB | 300 | -0.073 | -32.91€ | 0 | 0 |
-| ✅ UPDOWN_OU_5M#BNB#5min | 300 | -0.073 | -32.91€ | 1 | 0 |
+| ✅ UPDOWN_OU_5M | 603 | -0.098 | -69.32€ | 3 | 0 |
+| ✅ UPDOWN_OU_5M#5min | 603 | -0.098 | -69.32€ | 0 | 0 |
+| ✅ UPDOWN_OU_5M#BNB | 301 | -0.074 | -33.42€ | 0 | 0 |
+| ✅ UPDOWN_OU_5M#BNB#5min | 301 | -0.074 | -33.42€ | 1 | 0 |
 | ✅ UPDOWN_OU_5M#BTC | 146 | -0.047 | -7.54€ | 0 | 0 |
 | ✅ UPDOWN_OU_5M#BTC#5min | 146 | -0.047 | -7.54€ | 2 | 0 |
 | ✅ UPDOWN_OU_5M#DOGE | 30 | -0.188 | -6.21€ | 0 | 0 |
@@ -6716,7 +6716,7 @@ _Derivadas de los patrones aprendidos:_
 **🟡 H-KELLY-HORA** — Kelly boost ×1.2 por celda (estrategia#subtype#dirección#hora)
   - _Umbral_: n≥40 por celda + gate riguroso completo (Wilson+shuffle+PnL bootstrap)
   - _Acción_: Añadir claves 'ESTRATEGIA#SUBTYPE#DIRECCION#HORA':1.2 a meta.hora_boost_factor, solo por celda confirmada
-  - _Estado_: (cache 870s) 51 celda(s) GATE OK de 2277 trackeadas
+  - _Estado_: (cache 126s) 53 celda(s) GATE OK de 2277 trackeadas
 
 **⚠️ H-SOL-15MIN** — SOL#15min → umbral live (IC≥0.08 n≥40)
   - _Umbral_: IC≥0.08 y n≥40
@@ -6732,7 +6732,7 @@ _Derivadas de los patrones aprendidos:_
 **🟡 H-STREAK-COOLDOWN** — Cooldown tras 2 derrotas consecutivas (mismo subtype)
   - _Umbral_: n≥40 tras 2 losses y gap(IC_tras_win - IC_tras_2loss)≥0.05
   - _Acción_: Reducir stake (no desactivar) 1-2h tras 2 derrotas consecutivas en el mismo subtype
-  - _Estado_: tras_win IC=+0.072 n=125282 | tras_1loss IC=+0.044 n=98444 | tras_2loss IC=+0.007 n=44814/40 | gap=+0.066 (umbral 0.05)
+  - _Estado_: tras_win IC=+0.072 n=125284 | tras_1loss IC=+0.044 n=98446 | tras_2loss IC=+0.007 n=44816/40 | gap=+0.066 (umbral 0.05)
 
 **🟡 H-KALMAN** — Kalman filter para drift adaptativo
   - _Umbral_: n≥200 por subtipo para calibrar parámetros Q/R del KF
