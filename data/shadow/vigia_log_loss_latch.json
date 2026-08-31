@@ -9,7 +9,7 @@
  "GBM_LATE_60M": false,
  "LATE_WINDOW_5MIN": false,
  "LEADLAG_BTC_XRP_15M": false,
- "ORDER_FLOW_5M": false,
+ "ORDER_FLOW_5M": true,
  "PRICE_TARGET_GBM": true,
  "SMART_FLOW_1H": true,
  "STREAK_FADE_15M": true,
