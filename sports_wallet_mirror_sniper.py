@@ -53,14 +53,18 @@ REPO = Path(__file__).resolve().parent
 
 # 27-Ago: conexión explícita a la infraestructura live de sports
 # (sports_live_guard.py/sports_live_stake.py/sports_live_trade.py,
-# construida el mismo día). DRY_RUN=True SIEMPRE aquí -- activar
-# DRY_RUN=False requiere aprobación explícita de Javi en una sesión
-# futura, con el depósito ya indicado en config_live_sports.json y el
-# checklist de promoción completo (incl. n>=40) para la tupla concreta.
-# Import de sports_live_trade.ejecutar_orden_token() se hace DENTRO
-# de la rama DRY_RUN=False (import perezoso) para no forzar
-# credenciales del CLOB en el camino puramente observacional de hoy.
-DRY_RUN = True
+# construida el mismo día).
+#
+# 31-Ago: DRY_RUN=False -- aprobación explícita de Javi en sesión,
+# primera promoción real de sports. Whitelist restringida a
+# LoL#SEGUIR#0.45:0.50 en config_live_sports.json (checklist completo:
+# n=69, BH-FDR, split-half, g_kelly positivo, sin concentración,
+# fill-ability real 82.1% -- ver nota de promoción en el propio config).
+# CUALQUIER otra tupla sigue fail-closed (whitelist vacía para ellas +
+# gate_bucket_veredicto vivo como segundo guardián, ver comentario más
+# abajo). Import de sports_live_trade.ejecutar_orden_token() se hace
+# DENTRO de la rama DRY_RUN=False (import perezoso).
+DRY_RUN = False
 sys.path.insert(0, str(REPO))
 
 from sports_wallet_edge_tracker import clasificar  # noqa: E402

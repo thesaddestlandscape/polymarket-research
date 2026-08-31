@@ -8,7 +8,8 @@
       "nota": "Depósito inicial de arranque para sports, confirmado por Javi por chat ~15:05 UTC. No cuenta en el PnL/bankroll de cripto -- descontado automáticamente vía live_stake.py::_capital_ajeno_en_wallet_compartida."
     }
   ],
-  "pares_permitidos_live": [],
+  "_pares_lol_seguir_promocion_nota_2026-08-31": "31-Ago: primera promoción real de sports, aprobación explícita de Javi en sesión. Wallet Mirror#LoL#SEGUIR[0.45,0.50): gate grid n=69, hit=66.7%, wilson90lo=56.9% (breakeven≈48%, margen +8.9pp), p_binomial=0.0014, p_bh=0.0295 (sobrevive BH-FDR), split-half consistente ambas mitades ([0.256,0.476]), g_kelly(f=10%)=+0.0315 (sin payout inverso), sin concentración de wallet (117 wallets, top1=6.6%) ni de mercado (122 mercados, top1=3.3%). Fill-ability real medida con ask real (wallet_mirror_sniper_dry_run.csv, mejor_ask_mirror+ratio_vs_stake_mirror): 82.1% (n=335, fillable=275) -- del subconjunto fillable ya resuelto (n=70), hit=64.3%, consistente con el gate, sin selección adversa visible (a diferencia de WALLET_MIRROR/MOMENTUM_IBS en cripto). CS#SEGUIR/CS#FADE cerca (n=30, rigor limpio) pero sin llegar a n=40 -- quedan en observación, no promocionados hoy.",
+  "pares_permitidos_live": ["LoL#SEGUIR#0.45:0.50"],
   "riesgo": {
     "half_kelly": true,
     "max_pct_bankroll_por_trade": 0.10,
