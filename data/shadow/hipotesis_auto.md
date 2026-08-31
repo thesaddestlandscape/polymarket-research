@@ -1,4 +1,4 @@
-# Hipótesis automáticas — 2026-08-31 07:49 UTC
+# Hipótesis automáticas — 2026-08-31 07:55 UTC
 _Generado por shadow_postmortem.py sobre 224051 resoluciones (PNL=+17606.04€)_
 
 ## Patrones causales activos
@@ -2926,9 +2926,9 @@ _Generado por shadow_postmortem.py sobre 224051 resoluciones (PNL=+17606.04€)_
   - _Por qué funciona_: hora temprana → mercados cripto menos líquidos, spreads más amplios; edge real menor
   - _Acción_: Kelly boost +1.00€ cuando `hora_utc` < 11.0 (IC base=+0.269)
 
-- **PATRÓN** `ibs_20min` < `0.519` → IC=+0.305 (n=418)
+- **PATRÓN** `ibs_20min` < `0.4192` → IC=+0.311 (n=368)
 
-  - _Acción_: Kelly boost +1.00€ cuando `ibs_20min` < 0.519 (IC base=+0.269)
+  - _Acción_: Kelly boost +1.00€ cuando `ibs_20min` < 0.4192 (IC base=+0.269)
 
 - **PATRÓN** `sigma_ewma_delta_pct` < `3.196` → IC=+0.285 (n=450)
 
@@ -6720,7 +6720,7 @@ _Derivadas de los patrones aprendidos:_
 **🟡 H-KELLY-HORA** — Kelly boost ×1.2 por celda (estrategia#subtype#dirección#hora)
   - _Umbral_: n≥40 por celda + gate riguroso completo (Wilson+shuffle+PnL bootstrap)
   - _Acción_: Añadir claves 'ESTRATEGIA#SUBTYPE#DIRECCION#HORA':1.2 a meta.hora_boost_factor, solo por celda confirmada
-  - _Estado_: (cache 209s) 53 celda(s) GATE OK de 2277 trackeadas
+  - _Estado_: (cache 537s) 53 celda(s) GATE OK de 2277 trackeadas
 
 **⚠️ H-SOL-15MIN** — SOL#15min → umbral live (IC≥0.08 n≥40)
   - _Umbral_: IC≥0.08 y n≥40
