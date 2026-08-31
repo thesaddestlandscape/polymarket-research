@@ -40,6 +40,8 @@ from pathlib import Path
 REPO = Path(__file__).resolve().parent
 sys.path.insert(0, str(REPO))
 
+import gate_bucket_propio as gbp  # noqa: E402
+
 DATA_PATH = REPO / "data/shadow/gate_bucket_propio.json"
 LATCH = REPO / "data/live/vigia_gate_bucket_propio_latch.json"
 
@@ -60,6 +62,25 @@ def main() -> int:
     except Exception:
         previo = {}
 
+    # 31-Ago (petición explícita Javi, tras perseguir varias alertas de este
+    # vigía que resultaron negativas al aplicar fill-ability real): este
+    # mensaje leía SIEMPRE el JSON crudo (grid sin fill-ability), mientras
+    # que evaluar()/evaluar_sin_override() (el camino real de ejecución) SÍ
+    # aplica _veto_fillable() desde el 28-Ago -- el aviso podía anunciar
+    # "bueno_confirmado" sobre un bucket que el propio sistema ya vetaría en
+    # cuanto se intentara operar. Regenerar aquí (no depender del orden de
+    # cron con vigia_gate_bucket_propio_fillable.py, que corre 4 min después)
+    # y anotar el veredicto real de evaluar_sin_override() junto al crudo --
+    # solo para bueno_confirmado, que es el único caso donde el veto puede
+    # degradar (malo_confirmado ya es la alarma final).
+    r_fill = subprocess.run(
+        [sys.executable, str(REPO / "analisis_gate_bucket_propio_fillable_03ago.py")],
+        capture_output=True, text=True, timeout=180, cwd=str(REPO))
+    if r_fill.returncode != 0:
+        print(f"⚠️ ERROR ejecutando analisis_gate_bucket_propio_fillable_03ago.py "
+              f"(la alerta sigue sin la nota de fill-ability): {r_fill.stderr[-1000:]}")
+    gbp._cache_fillable["mtime"] = None
+
     avisos = []
     cobertura = []
     for tupla_str, tabla in nuevo.items():
@@ -71,9 +92,17 @@ def main() -> int:
             v_antes = veredictos_antes.get(b, {}).get("veredicto", "sin_concluir")
             if v_nuevo != "sin_concluir":
                 if v_antes != v_nuevo:
+                    nota_fillable = ""
+                    if v_nuevo == "bueno_confirmado":
+                        py_mid = round(float(b) + gbp.STEP / 2, 4)
+                        real = gbp.evaluar_sin_override(tupla_str, py_mid)
+                        if real.get("veredicto") != "bueno_confirmado":
+                            motivo = (real.get("detalle") or {}).get("motivo", "sin motivo registrado")
+                            nota_fillable = f" -- ⚠️ VETADO en la práctica ({real['veredicto']}): {motivo}"
                     avisos.append(
                         f"{'🔴' if v_nuevo == 'malo_confirmado' else '🟢'} {tupla_str} [{b},{float(b)+0.05:.2f}) "
                         f"-> {v_nuevo} (n={info['n']} pnl/tr={info['pnl_medio']:+.3f} p={info.get('shuffle_p')})"
+                        f"{nota_fillable}"
                     )
             else:
                 n_sin_concluir += 1

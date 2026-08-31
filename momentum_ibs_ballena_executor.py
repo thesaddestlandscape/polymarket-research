@@ -282,12 +282,19 @@ def _registrar_prediccion(mercado: dict, activo: str, ventana_min: int, strategy
 
 
 def disparar(activo: str, ventana_min: int, mercado: dict, strategy: str, py: float,
-             prob_yes: float, direccion: str, restante_s: float) -> bool:
+             prob_yes: float, direccion: str, restante_s: float, bot_consenso_lado=None) -> bool:
     """Decide y (si no es DRY_RUN, y la tupla exacta está en
     pares_permitidos_live) ejecuta. Mismos guardias, mismo orden, que
     ballenas_executor_15min.py/gbm_late_15min_executor.py -- este
     ejecutor tampoco pasa por live_trade.py::main(), ninguno de sus
-    guardias se aplica gratis."""
+    guardias se aplica gratis.
+
+    `bot_consenso_lado` (31-Ago): feature ya calculada por s_momentum_ibs_
+    *_ballena (resultado["features"]["bot_consenso_lado"]) -- se reenvía
+    tal cual a gate_bucket_propio.evaluar() para habilitar su promoción
+    condicional por consenso de bots (ver gate_bucket_propio.py::_bot_
+    consenso_coincide). Opcional, default None -- si no se pasa, cero
+    cambio de comportamiento."""
     subtype = f"{activo}#{ventana_min}min"
     tupla_str = f"{strategy}#{subtype}#{direccion}"
 
@@ -303,7 +310,7 @@ def disparar(activo: str, ventana_min: int, mercado: dict, strategy: str, py: fl
             f"{'[DRY-RUN] no ejecutaría' if DRY_RUN else 'no se ejecuta'}", activo)
         return False
 
-    gate_bp = _gate_bucket_propio(tupla_str, py)
+    gate_bp = _gate_bucket_propio(tupla_str, py, bot_consenso_lado=bot_consenso_lado)
     if gate_bp["veredicto"] != "bueno_confirmado":
         log(f"  ⛔ vetado por gate_bucket_propio (veredicto={gate_bp['veredicto']}) -- "
             f"{'[DRY-RUN] no ejecutaría' if DRY_RUN else 'no se ejecuta'}", activo)
@@ -447,7 +454,8 @@ def watch_window(activo: str, ventana_min: int, fn_senal, strategy: str, mercado
             f"gbm_coincide={gbm_conf['gbm_direccion_coincide']} ({n_polls} polls)", tag)
         _registrar_prediccion(mercado, activo, ventana_min, strategy, resultado, direccion,
                               restante_s, profundidad, gbm_conf)
-        disparar(activo, ventana_min, mercado, strategy, py_edge, prob_yes, direccion, restante_s)
+        disparar(activo, ventana_min, mercado, strategy, py_edge, prob_yes, direccion, restante_s,
+                 bot_consenso_lado=resultado["features"].get("bot_consenso_lado"))
         return True  # una señal por ventana es suficiente, mismo criterio que GBM
 
 

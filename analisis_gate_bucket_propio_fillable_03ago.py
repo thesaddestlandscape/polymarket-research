@@ -37,6 +37,7 @@ antes de decidir si sustituye a la fuente de verdad actual (requiere
 import csv
 import json
 import math
+import os
 from collections import defaultdict
 from pathlib import Path
 
@@ -296,8 +297,22 @@ def main():
     for linea in veredictos_nuevos:
         print(f"  {linea}")
 
-    with open(OUT, "w", encoding="utf-8") as f:
+    # 31-Ago (/code-review, hallazgo real): escritura atómica -- desde que
+    # vigia_gate_bucket_propio.py (06:55 UTC) también invoca este script
+    # además del cron dedicado vigia_gate_bucket_propio_fillable.py (06:59
+    # UTC, flock DISTINTO, sin exclusión mutua entre los dos), dos
+    # ejecuciones concurrentes de este fichero podían escribir OUT a la vez
+    # y dejarlo truncado/corrupto -- gate_bucket_propio.py::_cargar_fillable()
+    # solo hace `except Exception: pass` y mantiene el cache previo, dejando
+    # el veto de fill-ability silenciosamente desactivado ({}) ese ciclo sin
+    # ningún error visible más allá de un print. tmp+os.replace() es atómico
+    # dentro del mismo filesystem (mismo patrón ya usado en shadow_postmortem.
+    # py/market_id_resolver.py/backfill_fee_historico.py) -- un lector nunca
+    # ve un fichero a medio escribir, gane quien gane la carrera.
+    tmp = OUT + ".tmp"
+    with open(tmp, "w", encoding="utf-8") as f:
         json.dump(resultado, f, indent=2, ensure_ascii=False)
+    os.replace(tmp, OUT)
     print(f"\nGuardado en {OUT}")
 
 

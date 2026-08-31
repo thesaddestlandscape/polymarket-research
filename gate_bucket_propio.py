@@ -42,11 +42,23 @@ DATA_PATH_FINO = _REPO / "data/shadow/gate_bucket_fino.json"
 # tupla por tupla, cada vez que alguien se molestaba en comprobarlo. Ver
 # _veto_fillable() más abajo.
 DATA_PATH_FILLABLE = _REPO / "data/shadow/gate_bucket_propio_fillable.json"
+# 31-Ago: promoción condicional por consenso de bot wallets (Candidata 9,
+# analisis_bot_consenso_gate_momentum_ballena.py, cron diario) -- a
+# diferencia de _zonas_finas()/_zonas_validadas_externamente() (dependen
+# solo de tupla_str+py), esta fuente depende TAMBIÉN de si bot_consenso_lado
+# coincide con la dirección de la señal en el momento exacto -- por eso
+# necesita el parámetro opcional `bot_consenso_lado` en evaluar() (ver
+# pendiente #1 de project_checkpoint_sesion_31ago_dashboard_walletmirror).
+# Solo cubre MOMENTUM_IBS_5M_BALLENA hoy, tupla PAUSADA (fuera de
+# pares_permitidos_live desde 29-Ago) -- cero riesgo de dinero real al
+# conectarlo, listo para cuando se reactive.
+DATA_PATH_BOTCONSENSO = _REPO / "data/shadow/bot_consenso_gate_momentum_ballena.json"
 STEP = 0.05
 
 _cache = {"mtime": None, "data": {}}
 _cache_fino = {"mtime": None, "data": {}}
 _cache_fillable = {"mtime": None, "data": {}}
+_cache_botconsenso = {"mtime": None, "data": {}}
 _cache_cfg = {"mtime": None, "activo": False}
 _cache_override = {"mtime": None, "data": {}}
 
@@ -291,6 +303,48 @@ def _cargar_fillable() -> dict:
     return _cache_fillable["data"]
 
 
+def _cargar_bot_consenso() -> dict:
+    """{tupla_str: {bucket_str: {"coincide": {...}, "discrepa": {...}}}}
+    desde data/shadow/bot_consenso_gate_momentum_ballena.json (31-Ago).
+    Fail-open a {} si falta/corrupto, mismo criterio que el resto de
+    fuentes de este módulo."""
+    try:
+        mtime = DATA_PATH_BOTCONSENSO.stat().st_mtime
+    except OSError:
+        return {}
+    if _cache_botconsenso["mtime"] != mtime:
+        try:
+            _cache_botconsenso["data"] = json.loads(DATA_PATH_BOTCONSENSO.read_text(encoding="utf-8"))
+            _cache_botconsenso["mtime"] = mtime
+        except Exception:
+            pass
+    return _cache_botconsenso["data"]
+
+
+def _bot_consenso_coincide(tupla_str: str, bot_consenso_lado):
+    """True/False si `bot_consenso_lado` (feature cruda de _bots_consenso()
+    en shadow_predict.py, valores "Up"/"Down") coincide con la dirección
+    codificada en `tupla_str` (STRATEGY#ACTIVO#MARCO#DIRECCION). None si no
+    se puede determinar (tupla_str mal formada, lado vacío, o dirección
+    fuera del vocabulario BUY_YES/BUY_NO -- ej. WALLET_MIRROR usa
+    BUY_Up/BUY_Down, este mecanismo no aplica ahí).
+
+    MISMA fórmula que analisis_bot_consenso_gate_momentum_ballena.py
+    (única fuente de verdad, no reimplementar aparte -- ver ese script si
+    esto diverge)."""
+    if not bot_consenso_lado:
+        return None
+    partes = tupla_str.split("#")
+    if len(partes) != 4:
+        return None
+    decision = partes[3]
+    if decision == "BUY_YES":
+        return bot_consenso_lado == "Up"
+    if decision == "BUY_NO":
+        return bot_consenso_lado == "Down"
+    return None
+
+
 def _veto_fillable(tupla_str: str, py: float, resultado: dict) -> dict:
     """Último paso de evaluar(): si el resultado es "bueno_confirmado"
     (venga del propio gate_bucket_propio.json, de zonas_finas o de
@@ -439,10 +493,17 @@ def bucket(py: float) -> float:
     return round(math.floor(py / STEP + 1e-9) * STEP, 4)
 
 
-def evaluar(tupla_str: str, py: float) -> dict:
+def evaluar(tupla_str: str, py: float, bot_consenso_lado=None) -> dict:
     """{"veredicto": "malo_confirmado"|"bueno_confirmado"|"sin_concluir",
     "detalle": {...}|None}. No decide permitido/vetado -- eso lo hace el
     caller (fase 0: solo loguea; fase 1: veta si malo_confirmado).
+
+    `bot_consenso_lado` (31-Ago, opcional, default None -- NINGÚN caller
+    existente cambia de comportamiento si no lo pasa): feature cruda
+    "Up"/"Down" de _bots_consenso() en shadow_predict.py, en el momento
+    exacto de la señal. Si se pasa, habilita la promoción adicional de
+    bot_consenso_gate_momentum_ballena.json (ver _evaluar_sin_override_ni_
+    veto() abajo) -- hoy solo cubre MOMENTUM_IBS_5M_BALLENA.
 
     Cortacircuitos de emergencia -- SIEMPRE se comprueba primero, gana
     sobre cualquier otro veredicto (incluido bueno_confirmado propio)."""
@@ -455,10 +516,10 @@ def evaluar(tupla_str: str, py: float) -> dict:
             "detalle": {"origen": "override_emergencia", "motivo": ov.get("motivo", "sin motivo registrado"),
                         "desde": ov.get("desde")},
         }
-    return evaluar_sin_override(tupla_str, py)
+    return evaluar_sin_override(tupla_str, py, bot_consenso_lado=bot_consenso_lado)
 
 
-def evaluar_sin_override(tupla_str: str, py: float) -> dict:
+def evaluar_sin_override(tupla_str: str, py: float, bot_consenso_lado=None) -> dict:
     """MISMA lógica que evaluar() pero SIN consultar el override de
     emergencia -- exclusivamente para los vigías de reapertura (24-Ago,
     /code-review, hallazgo real): un vigía que quiere comprobar "¿el gate
@@ -479,10 +540,10 @@ def evaluar_sin_override(tupla_str: str, py: float) -> dict:
     reabriendo overrides con un diagnóstico falso -- mismo patrón exacto
     que el bug de "sin override" que motivó separar esta función el
     24-Ago, ahora aplicado al veto nuevo."""
-    return _veto_fillable(tupla_str, py, _evaluar_sin_override_ni_veto(tupla_str, py))
+    return _veto_fillable(tupla_str, py, _evaluar_sin_override_ni_veto(tupla_str, py, bot_consenso_lado))
 
 
-def _evaluar_sin_override_ni_veto(tupla_str: str, py: float) -> dict:
+def _evaluar_sin_override_ni_veto(tupla_str: str, py: float, bot_consenso_lado=None) -> dict:
     b = bucket(py)
     b_str = f"{b:.2f}"
     tabla = _cargar().get(tupla_str, {})
@@ -550,6 +611,54 @@ def _evaluar_sin_override_ni_veto(tupla_str: str, py: float) -> dict:
                         "motivo": f"py en [{lo:.2f},{hi:.2f}), validado con fuente externa "
                                   "(ballenas_timing_history/franja_milimetrica_ballenas/"
                                   "punto_confirmacion) mientras el dato propio madura",
+                        "detalle_propio": detalle,
+                    },
+                }
+
+    # 31-Ago: extensión de PROMOCIÓN a bueno_confirmado vía consenso
+    # CONDICIONAL de bot wallets (Candidata 9, bot_consenso_gate_momentum_
+    # ballena.json) -- distinta de las 2 extensiones de arriba porque no
+    # depende solo de (tupla_str, py): el edge de bot_consenso solo existe
+    # cuando el consenso de bots COINCIDE con la dirección de nuestra
+    # señal (bucket "discrepa" es un régimen distinto, con su propio
+    # veredicto independiente). Sin flag de activación separado, mismo
+    # criterio que validacion_externa_05ago -- solo promueve, nunca
+    # degrada, y pasa igualmente por _veto_fillable() en evaluar_sin_
+    # override(). Requiere bot_consenso_lado (opcional, ver evaluar()) --
+    # si el caller no lo pasa, esta rama simplemente no aplica, cero
+    # cambio de comportamiento. Hoy solo cubre MOMENTUM_IBS_5M_BALLENA
+    # (tupla pausada, fuera de pares_permitidos_live) -- diseñado y
+    # conectado por adelantado para cuando se reactive, ver pendiente #1
+    # de project_checkpoint_sesion_31ago_dashboard_walletmirror.
+    #
+    # LIMITACIÓN CONOCIDA (/code-review 31-Ago, no bloqueante -- mismo
+    # espíritu que la limitación ya documentada en _veto_fillable() para
+    # zonas_finas): _veto_fillable() (más abajo en evaluar_sin_override())
+    # contrasta esta promoción contra gate_bucket_propio_fillable.json, que
+    # mide fill-ability sobre la población AGREGADA del bucket (coincide +
+    # discrepa mezclados), no sobre el subconjunto exacto que produjo este
+    # veredicto. Hoy degrada correctamente ambas celdas bueno_confirmado
+    # existentes (payout inverso real, g_kelly_f10<0, verificado a mano) --
+    # pero eso es coincidencia empírica, no garantía estructural: en teoría
+    # podría dejar pasar una promoción con población agregada sana pero
+    # subconjunto coincide/discrepa realmente adverso, o vetar una buena por
+    # ruido del otro subconjunto. No construir el fillable desagregado por
+    # coincide/discrepa hasta que MOMENTUM_IBS_5M_BALLENA esté cerca de
+    # reactivarse -- prematuro mientras la tupla siga pausada.
+    if veredicto_propio == "sin_concluir" and bot_consenso_lado:
+        coincide = _bot_consenso_coincide(tupla_str, bot_consenso_lado)
+        if coincide is not None:
+            entrada = _cargar_bot_consenso().get(tupla_str, {}).get(b_str, {}).get(
+                "coincide" if coincide else "discrepa")
+            if entrada and entrada.get("veredicto") == "bueno_confirmado":
+                return {
+                    "veredicto": "bueno_confirmado",
+                    "detalle": {
+                        "origen": "bot_consenso_gate_momentum_ballena_31ago",
+                        "motivo": f"bot_consenso_lado={bot_consenso_lado} "
+                                  f"({'coincide' if coincide else 'discrepa'} con la dirección), "
+                                  f"n={entrada.get('n')} pnl/tr={entrada.get('pnl_medio')} "
+                                  f"p={entrada.get('p_binomial')}",
                         "detalle_propio": detalle,
                     },
                 }
