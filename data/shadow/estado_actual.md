@@ -1,4 +1,4 @@
-# Estado del bot — 2026-08-31 17:53 UTC
+# Estado del bot — 2026-08-31 17:59 UTC
 
 ## Live — dinero real (on-chain)
 | | |
@@ -13,11 +13,11 @@
 ## Shadow — MODELO SIMULADO (no cobrable)
 | | |
 |---|---|
-| P&L fiel (stake fijo 1$) | +5225.20 $ |
-| P&L sim compuesto | 🟢 +29656.22 $ (ficción Kelly: +116573% s/ operativo) |
-| P&L sim hoy (2026-08-31) | 🟢 +1285.92 $ |
-| Operaciones resueltas | 336603 (193861 WIN / 142742 LOSS) — 57.6% |
-| Señales abiertas | 3442 |
+| P&L fiel (stake fijo 1$) | +5226.46 $ |
+| P&L sim compuesto | 🟢 +29657.44 $ (ficción Kelly: +116578% s/ operativo) |
+| P&L sim hoy (2026-08-31) | 🟢 +1287.15 $ |
+| Operaciones resueltas | 336625 (193875 WIN / 142750 LOSS) — 57.6% |
+| Señales abiertas | 3470 |
 
 ## Estrategias (visión global)
 
@@ -33,15 +33,15 @@
 | UPDOWN_GBM | 11655 | 52.2% | +0.022 | 📉 agota (-0.05) | +697.13$ | 0.50$ | ✅ activa |
 | GBM_LATE_15M_PYCONFIRMADO | 2081 | 58.2% | +0.082 | 📈 madura (+0.05) | +551.91$ | 0.89$ | ✅ activa |
 | WEEKLY_PRICE | 1265 | 79.1% | +0.291 | 📈 madura (+0.06) | +550.23$ | 2.00$ | ✅ activa |
-| MOMENTUM_IBS_5M_BALLENA | 26228 | 42.0% | -0.080 | ➡️ estable | +403.47$ | 0.50$ | ⚠️ IC negativo |
+| MOMENTUM_IBS_5M_BALLENA | 26233 | 42.0% | -0.080 | ➡️ estable | +401.67$ | 0.50$ | ⚠️ IC negativo |
 | UPDOWN_GBM_IBS_ALTO | 497 | 78.5% | +0.284 | 📈 madura (+0.04) | +371.08$ | 2.00$ | ✅ activa |
-| FAVORITO_CONFIRMADO_5MIN_BAJALATENCIA | 10907 | 62.9% | +0.129 | ➡️ estable | +298.30$ | 1.33$ | ✅ activa |
+| FAVORITO_CONFIRMADO_5MIN_BAJALATENCIA | 10909 | 62.9% | +0.129 | ➡️ estable | +296.16$ | 1.32$ | ✅ activa |
 | MOMENTUM_IBS_15M_BALLENA | 9521 | 46.2% | -0.038 | ➡️ estable | +219.49$ | 0.50$ | ⚠️ IC negativo |
 | ORDER_FLOW_5M | 2248 | 53.8% | +0.038 | 📈 madura (+0.06) | +197.17$ | 1.05$ | ✅ activa |
 | GBM_LATE_60M | 578 | 49.1% | -0.009 | 📈 madura (+0.20) | +128.23$ | 0.50$ | ⚠️ IC negativo |
 | UPDOWN_GBM_15M_CROSS_WINDOW_SPREAD | 521 | 81.8% | +0.316 | ➡️ estable | +114.66$ | 2.00$ | ✅ activa |
 | LEADLAG_BTC_XRP_15M | 700 | 56.0% | +0.060 | 📈 madura (+0.08) | +103.72$ | 0.98$ | ✅ activa |
-| STREAK_MOM_5M | 3529 | 51.6% | +0.016 | ➡️ estable | +27.49$ | 0.50$ | ✅ activa |
+| STREAK_MOM_5M | 3531 | 51.6% | +0.016 | ➡️ estable | +28.47$ | 0.50$ | ✅ activa |
 | RESOLUTION_SNIPER | 86 | 86.0% | +0.352 | 📈 madura (+0.09) | +27.04$ | 2.00$ | ✅ activa |
 | STREAK_FADE_15M | 511 | 55.6% | +0.056 | 📉 agota (-0.06) | +24.62$ | 0.50$ | ✅ activa |
 | GBM_LATE_60M_PYCONFIRMADO | 381 | 54.1% | +0.040 | ➡️ estable | +11.63$ | 0.50$ | ✅ activa |
@@ -66,43 +66,43 @@
 | LIQUIDACIONES_15M | 332 | 40.1% | -0.099 | ➡️ estable | -40.50$ | 0.50$ | ⚠️ IC negativo |
 | MOMENTUM_IBS_15M_FADE | 556 | 43.9% | -0.061 | 📈 madura (+0.06) | -42.52$ | 0.50$ | ⚠️ IC negativo |
 | MOMENTUM_IBS_15M | 5621 | 50.1% | +0.001 | ➡️ estable | -66.96$ | 0.50$ | ✅ activa |
-| STREAK_FADE_5M | 1936 | 48.0% | -0.020 | 📉 agota (-0.03) | -81.57$ | 0.50$ | ⚠️ IC negativo |
+| STREAK_FADE_5M | 1938 | 48.0% | -0.020 | 📉 agota (-0.03) | -82.59$ | 0.50$ | ⚠️ IC negativo |
 | MOMENTUM_IBS_5M_FADE | 6012 | 49.0% | -0.010 | 📉 agota (-0.05) | -119.99$ | 0.50$ | ⚠️ IC negativo |
 | UPDOWN_OU_5M | 1003 | 36.7% | -0.133 | 📈 madura (+0.07) | -140.82$ | 0.50$ | ⚠️ IC negativo |
-| FAVORITO_CONFIRMADO_DEPTH_FASE0 | 10679 | 59.4% | +0.093 | ➡️ estable | -418.55$ | 0.94$ | ✅ activa |
+| FAVORITO_CONFIRMADO_DEPTH_FASE0 | 10680 | 59.3% | +0.093 | ➡️ estable | -419.62$ | 0.93$ | ✅ activa |
 | FAVORITO_CONFIRMADO_15MIN_ALTACONVICCION | 8873 | 68.3% | +0.183 | ➡️ estable | -660.31$ | 1.77$ | ✅ activa |
-| BALLENAS_TARDIAS | 17890 | 41.2% | -0.088 | 📉 agota (-0.03) | -2970.19$ | 0.50$ | ⚠️ IC negativo |
-| FAVORITO_CONFIRMADO_5MIN_ALTACONVICCION | 39088 | 69.4% | +0.194 | ➡️ estable | -3315.32$ | 1.91$ | ✅ activa |
-| FAVORITO_CONFIRMADO | 73019 | 61.1% | +0.111 | ➡️ estable | -3805.93$ | 1.14$ | ✅ activa |
+| BALLENAS_TARDIAS | 17892 | 41.2% | -0.088 | 📉 agota (-0.03) | -2967.96$ | 0.50$ | ⚠️ IC negativo |
+| FAVORITO_CONFIRMADO_5MIN_ALTACONVICCION | 39092 | 69.4% | +0.194 | ➡️ estable | -3314.11$ | 1.91$ | ✅ activa |
+| FAVORITO_CONFIRMADO | 73023 | 61.1% | +0.111 | ➡️ estable | -3803.09$ | 1.14$ | ✅ activa |
 
 ## Últimas 5 resoluciones
 
 | Timestamp | Estrategia | Mercado | Resultado | PNL |
 |---|---|---|---|---|
-| 2026-08-31T17:51 | CANDIDATA10_CONFIRMACION_CRUZADA#BTC#5min | … | ❌ LOSS | -1.07$ |
-| 2026-08-31T17:51 | LIQUIDACIONES_5M#SOL#5min | Solana Up or Down - August 31, 1:40PM-1:45PM ET… | ✅ WIN | +0.49$ |
-| 2026-08-31T17:51 | FAVORITO_CONFIRMADO_5MIN_ALTACONVICCION#DOGE#5min | … | ✅ WIN | +0.37$ |
-| 2026-08-31T17:51 | MOMENTUM_IBS_5M_BALLENA#DOGE#5min | … | ❌ LOSS | -1.07$ |
-| 2026-08-31T17:51 | MOMENTUM_IBS_5M_BALLENA#SOL#5min | … | ❌ LOSS | -1.07$ |
+| 2026-08-31T17:56 | FAVORITO_CONFIRMADO_5MIN_ALTACONVICCION#ETH#5min | … | ✅ WIN | +0.24$ |
+| 2026-08-31T17:56 | FAVORITO_CONFIRMADO_DEPTH_FASE0#ETH#5min | … | ❌ LOSS | -1.07$ |
+| 2026-08-31T17:56 | FAVORITO_CONFIRMADO_5MIN_ALTACONVICCION#BNB#5min | … | ✅ WIN | +0.33$ |
+| 2026-08-31T17:56 | MOMENTUM_IBS_5M_BALLENA#BNB#5min | … | ❌ LOSS | -1.07$ |
+| 2026-08-31T17:56 | STREAK_MOM_5M#ETH#5min | Ethereum Up or Down - August 31, 1:45PM-1:50PM ET… | ✅ WIN | +0.49$ |
 
 ## Calidad de datos
 
-✅ **OK** — última verificación 2026-08-31T17:53 UTC | rechazos 1h: 1 (rango=0, spike=0)
+✅ **OK** — última verificación 2026-08-31T17:59 UTC | rechazos 1h: 1 (rango=0, spike=0)
 
 | Asset | Precio | Age | Alertas |
 |---|---|---|---|
-| ✅ BTC | $78,875.46 | 0.2min |  |
-| ✅ ETH | $2,474.11 | 0.2min |  |
-| ✅ SOL | $103.64 | 0.2min |  |
-| ✅ XRP | $1.39 | 0.2min |  |
+| ✅ BTC | $78,870.05 | 0.1min |  |
+| ✅ ETH | $2,473.99 | 0.1min |  |
+| ✅ SOL | $103.69 | 0.1min |  |
+| ✅ XRP | $1.39 | 0.1min |  |
 
 **Cross-source** (binance, coinbase, kraken):
 
 | Asset | Consenso | Fuente | Estado |
 |---|---|---|---|
-| BTC | $78,880.30 | consenso |  |
-| ETH | $2,474.34 | consenso |  |
-| SOL | $103.64 | consenso |  |
+| BTC | $78,882.12 | consenso |  |
+| ETH | $2,474.51 | consenso |  |
+| SOL | $103.67 | consenso |  |
 | XRP | $1.39 | consenso |  |
 
 **Alertas activas:**
