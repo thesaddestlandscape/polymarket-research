@@ -1,23 +1,23 @@
 {
-  "timestamp_utc": "2026-08-31T18:10:06+00:00",
+  "timestamp_utc": "2026-08-31T20:10:05+00:00",
   "tuplas_maduras": [
     {
       "tupla": "FAVORITO_CONFIRMADO_15MIN_ALTACONVICCION#BTC#15min#BUY_YES",
-      "peso_hrp": 0.5087,
+      "peso_hrp": 0.5074,
       "exposicion_reciente_eur": 2.1,
       "share_exposicion_reciente": 0.3333,
       "excede_techo_hrp_x1_5": false
     },
     {
       "tupla": "FAVORITO_CONFIRMADO#BTC#60min#BUY_NO",
-      "peso_hrp": 0.4403,
+      "peso_hrp": 0.4416,
       "exposicion_reciente_eur": 0.0,
       "share_exposicion_reciente": 0.0,
       "excede_techo_hrp_x1_5": false
     },
     {
       "tupla": "BALLENAS_CONFIRMADAS_15M#ETH#15min#BUY_YES",
-      "peso_hrp": 0.0511,
+      "peso_hrp": 0.0509,
       "exposicion_reciente_eur": 4.2,
       "share_exposicion_reciente": 0.6667,
       "excede_techo_hrp_x1_5": true
@@ -37,7 +37,7 @@
     {
       "tupla": "WALLET_MIRROR#BTC#15min#BUY_Up",
       "dias_historial": 19,
-      "n": 5
+      "n": 6
     },
     {
       "tupla": "WALLET_MIRROR#BTC#15min#BUY_Down",
