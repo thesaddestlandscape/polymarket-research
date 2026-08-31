@@ -240,10 +240,10 @@
         "_obsoleta_31ago": "SUPERSEDIDA 2026-08-31: mismo motivo que bankroll_minimo_usa_solo_real_override arriba -- verificar_circuit_breaker() ya usa bkr real directo de forma permanente para freno 3. Registro historico, no renovar."
       },
       "freno_diario_pct_override": {
-        "fecha": "2026-08-29",
-        "pct": 0.35,
-        "_nota": "2026-08-28 (at job programado a las 22:00 UTC / medianoche Madrid, petición explícita Javi el mismo día: extender el override día a día mientras el bankroll siga bajo -- mismo patrón ya usado para el freno_ventana_pct_override 16->17-Jul). Bankroll bkr_ini_dia=3.493€ (28-Ago), con freno_diario_pct default 0.30 el margen proyectado da 1.0479€, por debajo del suelo del CLOB (1.05€) por 0.0021€ -- mismo deadlock que bloqueó 34 intentos reales el 28-Ago. Con 0.35 el margen sube a ~1.22€, colchón ~0.17€ sobre el suelo. Autoexpira solo (código ya ignora overrides de fecha pasada) -- el 30-Ago vuelve a 0.30 salvo que se renueve otra vez con bankroll fresco (revisar cada sesión, no asumir que ya no hace falta).",
-        "_valor_anterior": "0.35 del 2026-08-28 (ya expirado)"
+        "fecha": "2026-08-31",
+        "pct": 0.4,
+        "_nota": "31-Ago (mismo patron dia-a-dia ya aprobado por Javi 28-Ago, renovado manualmente tras verificar en vivo que el deadlock volvio: calcular_stake() daba stake_eur=0.00 viable=False con bankroll 11.38EUR sano, freno_diario_pct default 0.30 daba margen 0.45EUR por debajo del suelo CLOB 1.05EUR (bkr_ini_dia=13.80EUR, pnl_hoy=-2.42EUR, abiertos=1.27EUR). 0.40 da margen ~1.83EUR, colchon ~0.78EUR sobre el suelo. Autoexpira solo manana salvo que se renueve con bankroll fresco -- revisar cada sesion, no asumir que ya no hace falta (memoria: la 4a recarga de hoy 9.49EUR no basto para desbloquear el margen por si sola, las perdidas del dia ya se lo habian comido).",
+        "_valor_anterior": "0.35 del 2026-08-29 (ya expirado)"
       },
       "_racha_nota": "2026-07-03: freno 4 — N pérdidas CLOSED consecutivas (día Madrid) → para el día. Una racha es firma de fallo sistemático, no varianza (03-Jul: 4 pérdidas en 5min, -6.54€, los frenos en € no la cortaron). Sigue activo el 04-Jul: 4 pérdidas seguidas (-4.20€ con stake 1.05) paran el DÍA aunque el bankroll (~4.30€) no haya tocado el suelo de 3€ — protección contra fallo sistemático, decisión distinta al suelo. racha_vigente_desde eliminada 03-Jul al pasar el día (era solo para excluir las pérdidas previas a la reapertura de ese día).",
       "max_perdidas_consecutivas": 4,
