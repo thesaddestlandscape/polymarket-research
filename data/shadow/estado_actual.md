@@ -1,4 +1,4 @@
-# Estado del bot — 2026-08-31 07:16 UTC
+# Estado del bot — 2026-08-31 07:21 UTC
 
 ## Live — dinero real (on-chain)
 | | |
@@ -13,11 +13,11 @@
 ## Shadow — MODELO SIMULADO (no cobrable)
 | | |
 |---|---|
-| P&L fiel (stake fijo 1$) | +4964.75 $ |
-| P&L sim compuesto | 🟢 +28829.29 $ (ficción Kelly: +113323% s/ operativo) |
-| P&L sim hoy (2026-08-31) | 🟢 +459.00 $ |
-| Operaciones resueltas | 332057 (191341 WIN / 140716 LOSS) — 57.6% |
-| Señales abiertas | 2675 |
+| P&L fiel (stake fijo 1$) | +4964.65 $ |
+| P&L sim compuesto | 🟢 +28829.26 $ (ficción Kelly: +113323% s/ operativo) |
+| P&L sim hoy (2026-08-31) | 🟢 +458.97 $ |
+| Operaciones resueltas | 332059 (191342 WIN / 140717 LOSS) — 57.6% |
+| Señales abiertas | 2705 |
 
 ## Estrategias (visión global)
 
@@ -66,9 +66,9 @@
 | LIQUIDACIONES_15M | 330 | 40.0% | -0.099 | ➡️ estable | -40.51$ | 0.50$ | ⚠️ IC negativo |
 | MOMENTUM_IBS_15M_FADE | 556 | 43.9% | -0.061 | 📈 madura (+0.06) | -42.52$ | 0.50$ | ⚠️ IC negativo |
 | MOMENTUM_IBS_15M | 5492 | 50.0% | -0.000 | ➡️ estable | -73.01$ | 0.50$ | ⚠️ IC negativo |
-| STREAK_FADE_5M | 1888 | 48.0% | -0.020 | ➡️ estable | -80.34$ | 0.50$ | ⚠️ IC negativo |
+| STREAK_FADE_5M | 1889 | 48.0% | -0.020 | ➡️ estable | -79.86$ | 0.50$ | ⚠️ IC negativo |
 | MOMENTUM_IBS_5M_FADE | 6012 | 49.0% | -0.010 | 📉 agota (-0.05) | -119.99$ | 0.50$ | ⚠️ IC negativo |
-| UPDOWN_OU_5M | 992 | 36.8% | -0.132 | 📈 madura (+0.07) | -138.21$ | 0.50$ | ⚠️ IC negativo |
+| UPDOWN_OU_5M | 993 | 36.8% | -0.132 | 📈 madura (+0.07) | -138.72$ | 0.50$ | ⚠️ IC negativo |
 | FAVORITO_CONFIRMADO_DEPTH_FASE0 | 10348 | 59.5% | +0.095 | ➡️ estable | -391.47$ | 0.95$ | ✅ activa |
 | FAVORITO_CONFIRMADO_15MIN_ALTACONVICCION | 8789 | 68.2% | +0.182 | ➡️ estable | -656.22$ | 1.76$ | ✅ activa |
 | BALLENAS_TARDIAS | 17697 | 41.2% | -0.088 | 📉 agota (-0.03) | -2959.31$ | 0.50$ | ⚠️ IC negativo |
@@ -79,30 +79,30 @@
 
 | Timestamp | Estrategia | Mercado | Resultado | PNL |
 |---|---|---|---|---|
+| 2026-08-31T07:20 | STREAK_FADE_5M#ETH#5min | Ethereum Up or Down - August 31, 3:05AM-3:10AM ET… | ✅ WIN | +0.48$ |
+| 2026-08-31T07:16 | UPDOWN_OU_5M#BNB#5min | BNB Up or Down - August 31, 3:00AM-3:05AM ET… | ❌ LOSS | -0.51$ |
 | 2026-08-31T07:12 | STREAK_FADE_5M#ETH#5min | Ethereum Up or Down - August 31, 3:00AM-3:05AM ET… | ❌ LOSS | -0.51$ |
 | 2026-08-31T07:12 | GBM_LATE_15M_TARDIO#BNB#15min | BNB Up or Down - August 31, 2:45AM-3:00AM ET… | ✅ WIN | +1.92$ |
 | 2026-08-31T07:12 | GBM_LATE_15M_MULTIHORIZONTE#BNB#15min | BNB Up or Down - August 31, 2:45AM-3:00AM ET… | ✅ WIN | +1.92$ |
-| 2026-08-31T07:12 | GBM_LATE_15M#BNB#15min | BNB Up or Down - August 31, 2:45AM-3:00AM ET… | ✅ WIN | +1.92$ |
-| 2026-08-31T07:12 | GBM_LATE_15M_ESPACIO_ATR#BNB#15min | … | ✅ WIN | +0.99$ |
 
 ## Calidad de datos
 
-✅ **OK** — última verificación 2026-08-31T07:16 UTC
+✅ **OK** — última verificación 2026-08-31T07:21 UTC
 
 | Asset | Precio | Age | Alertas |
 |---|---|---|---|
-| ✅ BTC | $78,159.01 | 0.1min |  |
-| ✅ ETH | $2,441.59 | 0.1min |  |
-| ✅ SOL | $102.93 | 0.1min |  |
+| ✅ BTC | $78,167.00 | 0.1min |  |
+| ✅ ETH | $2,441.55 | 0.1min |  |
+| ✅ SOL | $102.88 | 0.1min |  |
 | ✅ XRP | $1.37 | 0.1min |  |
 
 **Cross-source** (binance, coinbase, kraken):
 
 | Asset | Consenso | Fuente | Estado |
 |---|---|---|---|
-| BTC | $78,139.30 | consenso |  |
-| ETH | $2,440.22 | consenso |  |
-| SOL | $102.89 | consenso |  |
+| BTC | $78,210.66 | consenso |  |
+| ETH | $2,443.00 | consenso |  |
+| SOL | $102.96 | consenso |  |
 | XRP | $1.37 | consenso |  |
 
 ---
