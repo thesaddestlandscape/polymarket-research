@@ -19,6 +19,8 @@ Ledger PROPIO (data/sports/trades.csv) -- nunca el de cripto.
 
 import fcntl
 import json
+import os
+import time
 from datetime import datetime, timezone
 from pathlib import Path
 
@@ -73,6 +75,66 @@ def _limpiar_orden_en_curso() -> None:
         ORDEN_EN_CURSO_PATH.unlink(missing_ok=True)
     except Exception as e:
         log(f"  ⚠️ fallo al borrar orden_en_curso.json: {e}")
+
+
+def _verificar_fill_real(client, condition_id: str, order_id: str, ts_envio: float) -> dict | None:
+    """31-Ago (hallazgo real, dinero real): `client.post_order(...,
+    OrderType.FOK)` puede devolver una respuesta con `orderID` SIN
+    lanzar excepción incluso cuando la orden NUNCA casó con contraparte
+    -- verificado en el primer trade real de sports (LoL#SEGUIR,
+    17:16 UTC 31-Ago): el código marcaba `ok=True` y `sports_resolve.py`
+    acabó registrando un WIN de +1,184€ que jamás existió on-chain
+    (confirmado con 3 fuentes independientes de Polymarket: /activity
+    de la wallet sin ningún evento, `client.get_order(order_id)` ->
+    None, `client.get_trades()` -- 458 trades reales -- sin ninguna
+    coincidencia por order_id ni por franja horaria). Pausado sports
+    (switch OFF) hasta este fix, decisión explícita de Javi.
+
+    Poll corto sobre `client.get_trades()` filtrado por mercado --
+    fiable porque compara contra el histórico REAL de fills, no contra
+    los campos de `resp` (que pueden traer el valor SOLICITADO como
+    fallback, nunca el realmente ejecutado, si la orden no llegó a
+    casar). Fail-closed: sin evidencia de fill tras el poll, devuelve
+    None -- el caller NUNCA debe tratar eso como ejecutado.
+
+    Condición `maker_address==nuestra wallet AND trader_side=="TAKER"`
+    (31-Ago, /code-review medium -- un subagente marcó esto CONFIRMED
+    como bug, citando la doc oficial de Polymarket, que documenta
+    `maker_address` como "la contraparte" en general): **refutado
+    empíricamente** contra las 458 trades reales de esta wallet --
+    447/447 con trader_side=="TAKER" tienen maker_address==nuestra
+    wallet (0 discrepancias); las 11 con trader_side=="MAKER" tienen
+    maker_address DISTINTO de la nuestra. El comportamiento real de
+    este endpoint para esta cuenta no coincide con la lectura de la doc
+    que hizo el subagente -- verificar contra datos reales de la propia
+    wallet SIEMPRE gana sobre la interpretación de documentación externa
+    cuando divergen (mismo criterio que CLAUDE.md: contrastar con datos
+    reales, nunca alucinar). NO se aplica el cambio sugerido por el
+    review.
+
+    `condition_id` vacío (finding real del mismo review, sí aplicado):
+    fail-closed inmediato -- sin mercado que acotar la consulta,
+    `TradeParams(market="")` haría un fetch sin filtrar de todo el
+    histórico de la cuenta (458+ trades y creciendo) en cada orden."""
+    from py_clob_client_v2.clob_types import TradeParams
+    if not condition_id:
+        log("  ⚠️ _verificar_fill_real sin condition_id -- fail-closed, no se puede verificar")
+        return None
+    wallet = (os.getenv("POLY_DEPOSIT_WALLET") or "").lower()
+    for intento in range(3):
+        try:
+            trades = client.get_trades(TradeParams(market=condition_id, after=int(ts_envio) - 5))
+        except Exception as e:
+            log(f"  ⚠️ error consultando get_trades para verificar fill (intento {intento + 1}): {e}")
+            trades = []
+        for t in trades:
+            if (str(t.get("maker_address", "")).lower() == wallet
+                    and t.get("trader_side") == "TAKER"
+                    and t.get("taker_order_id") == order_id):
+                return t
+        if intento < 2:
+            time.sleep(1.5)
+    return None
 
 
 def ejecutar_orden_token(token_id: str, precio: float, stake_eur: float,
@@ -144,15 +206,37 @@ def ejecutar_orden_token(token_id: str, precio: float, stake_eur: float,
             _lock_f.close()
 
         order_id = resp.get("orderID") or resp.get("id") or str(resp)
-        filled_price = float(resp.get("price", precio))
-        fee = float(resp.get("feeRateBps", 0)) / 10000 * stake_eur
+
+        # 31-Ago (hallazgo real, ver _verificar_fill_real): NUNCA confiar
+        # en resp.get("price"/"feeRateBps") a secas -- pueden venir con el
+        # valor SOLICITADO (fallback silencioso) si la orden no llegó a
+        # casar. Verificar contra el histórico real de fills antes de
+        # devolver ok=True.
+        ts_envio = datetime.now(timezone.utc).timestamp()
+        trade_real = _verificar_fill_real(client, market_id_log or "", order_id, ts_envio)
+        if trade_real is None:
+            log(f"  ⛔ orden aceptada (order_id={order_id}) pero SIN evidencia de fill real "
+                f"tras el poll -- fail-closed, no se registra como ejecutada")
+            enviar_telegram(
+                f"⚽ SPORTS\n⚠️ *Orden aceptada pero sin fill confirmado* (posible fantasma)\n"
+                f"market={market_id_log or token_id}\norder_id={order_id}\n"
+                f"NO se ha registrado ningún trade -- revisar manualmente.",
+                bot="sports",
+            )
+            return {"ok": False, "no_fill": True, "sin_fill_confirmado": True,
+                    "order_id": order_id, "entry_price": entry_price, "fee_eur": 0.0,
+                    "error": "orden aceptada por la API pero sin evidencia de fill real en get_trades()"}
+
+        filled_price = float(trade_real.get("price", precio))
+        fee_rate_bps = trade_real.get("fee_rate_bps") or 0
+        fee = float(fee_rate_bps) / 10000 * stake_eur if fee_rate_bps else 0.0
         slip_real = round(filled_price - precio, 4)
 
-        log(f"  ✅ Orden ejecutada: token={token_id} market={market_id_log or '?'} "
+        log(f"  ✅ Orden ejecutada y VERIFICADA: token={token_id} market={market_id_log or '?'} "
             f"stake={stake_eur:.2f}€ precio={filled_price:.4f} slip={slip_real:+.4f} order_id={order_id}")
         enviar_telegram(
             f"⚽ SPORTS\n"
-            f"🎯 *Orden live ejecutada*\n"
+            f"🎯 *Orden live ejecutada (verificada contra get_trades)*\n"
             f"market={market_id_log or token_id}\n"
             f"stake={stake_eur:.2f}€ precio={filled_price:.4f} slip={slip_real:+.4f}\n"
             f"order_id={order_id}",
