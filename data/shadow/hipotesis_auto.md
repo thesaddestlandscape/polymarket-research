@@ -1,5 +1,5 @@
-# Hipótesis automáticas — 2026-08-31 07:32 UTC
-_Generado por shadow_postmortem.py sobre 224047 resoluciones (PNL=+17605.30€)_
+# Hipótesis automáticas — 2026-08-31 07:37 UTC
+_Generado por shadow_postmortem.py sobre 224051 resoluciones (PNL=+17606.04€)_
 
 ## Patrones causales activos
 
@@ -6584,10 +6584,10 @@ _Derivadas de los patrones aprendidos:_
 | ✅ STREAK_FADE_15M#SOL#15min | 19 | +0.113 | +1.96€ | 0 | 0 |
 | ✅ STREAK_FADE_15M#XRP | 77 | +0.006 | -1.10€ | 0 | 0 |
 | ✅ STREAK_FADE_15M#XRP#15min | 77 | +0.006 | -1.10€ | 0 | 0 |
-| ✅ STREAK_FADE_5M | 1456 | -0.023 | -66.73€ | 0 | 0 |
-| ✅ STREAK_FADE_5M#5min | 1456 | -0.023 | -66.73€ | 0 | 0 |
-| ✅ STREAK_FADE_5M#DOGE | 516 | -0.008 | -11.53€ | 0 | 0 |
-| ✅ STREAK_FADE_5M#DOGE#5min | 516 | -0.008 | -11.53€ | 0 | 0 |
+| ✅ STREAK_FADE_5M | 1457 | -0.024 | -67.44€ | 0 | 0 |
+| ✅ STREAK_FADE_5M#5min | 1457 | -0.024 | -67.44€ | 0 | 0 |
+| ✅ STREAK_FADE_5M#DOGE | 517 | -0.009 | -12.23€ | 0 | 0 |
+| ✅ STREAK_FADE_5M#DOGE#5min | 517 | -0.009 | -12.23€ | 0 | 0 |
 | ✅ STREAK_FADE_5M#ETH | 516 | -0.019 | -20.16€ | 0 | 0 |
 | ✅ STREAK_FADE_5M#ETH#5min | 516 | -0.019 | -20.16€ | 2 | 0 |
 | ✅ STREAK_FADE_5M#SOL | 135 | -0.040 | -12.98€ | 0 | 0 |
@@ -6600,14 +6600,14 @@ _Derivadas de los patrones aprendidos:_
 | ✅ STREAK_FADE_60M#ETH#60min | 24 | -0.115 | -3.40€ | 0 | 0 |
 | ✅ STREAK_FADE_60M#SOL | 16 | +0.089 | +1.64€ | 0 | 0 |
 | ✅ STREAK_FADE_60M#SOL#60min | 16 | +0.089 | +1.64€ | 0 | 0 |
-| ✅ STREAK_MOM_5M | 2983 | +0.027 | +60.46€ | 0 | 0 |
-| ✅ STREAK_MOM_5M#5min | 2983 | +0.027 | +60.46€ | 0 | 0 |
-| ✅ STREAK_MOM_5M#DOGE | 977 | +0.026 | +13.34€ | 0 | 0 |
-| ✅ STREAK_MOM_5M#DOGE#5min | 977 | +0.026 | +13.34€ | 0 | 0 |
-| ✅ STREAK_MOM_5M#ETH | 579 | +0.034 | +19.46€ | 0 | 0 |
-| ✅ STREAK_MOM_5M#ETH#5min | 579 | +0.034 | +19.46€ | 1 | 1 |
-| ✅ STREAK_MOM_5M#SOL | 896 | +0.022 | +7.53€ | 0 | 0 |
-| ✅ STREAK_MOM_5M#SOL#5min | 896 | +0.022 | +7.53€ | 1 | 0 |
+| ✅ STREAK_MOM_5M | 2986 | +0.027 | +61.90€ | 0 | 0 |
+| ✅ STREAK_MOM_5M#5min | 2986 | +0.027 | +61.90€ | 0 | 0 |
+| ✅ STREAK_MOM_5M#DOGE | 978 | +0.026 | +13.82€ | 0 | 0 |
+| ✅ STREAK_MOM_5M#DOGE#5min | 978 | +0.026 | +13.82€ | 0 | 0 |
+| ✅ STREAK_MOM_5M#ETH | 580 | +0.034 | +19.94€ | 0 | 0 |
+| ✅ STREAK_MOM_5M#ETH#5min | 580 | +0.034 | +19.94€ | 1 | 1 |
+| ✅ STREAK_MOM_5M#SOL | 897 | +0.023 | +8.01€ | 0 | 0 |
+| ✅ STREAK_MOM_5M#SOL#5min | 897 | +0.023 | +8.01€ | 1 | 0 |
 | ✅ STREAK_MOM_5M#XRP | 531 | +0.029 | +20.13€ | 0 | 0 |
 | ✅ STREAK_MOM_5M#XRP#5min | 531 | +0.029 | +20.13€ | 2 | 0 |
 | ✅ STRUCT_NO_15M | 3651 | +0.008 | -33.46€ | 0 | 0 |
@@ -6716,7 +6716,7 @@ _Derivadas de los patrones aprendidos:_
 **🟡 H-KELLY-HORA** — Kelly boost ×1.2 por celda (estrategia#subtype#dirección#hora)
   - _Umbral_: n≥40 por celda + gate riguroso completo (Wilson+shuffle+PnL bootstrap)
   - _Acción_: Añadir claves 'ESTRATEGIA#SUBTYPE#DIRECCION#HORA':1.2 a meta.hora_boost_factor, solo por celda confirmada
-  - _Estado_: (cache 126s) 53 celda(s) GATE OK de 2277 trackeadas
+  - _Estado_: (cache 463s) 53 celda(s) GATE OK de 2277 trackeadas
 
 **⚠️ H-SOL-15MIN** — SOL#15min → umbral live (IC≥0.08 n≥40)
   - _Umbral_: IC≥0.08 y n≥40
@@ -6732,7 +6732,7 @@ _Derivadas de los patrones aprendidos:_
 **🟡 H-STREAK-COOLDOWN** — Cooldown tras 2 derrotas consecutivas (mismo subtype)
   - _Umbral_: n≥40 tras 2 losses y gap(IC_tras_win - IC_tras_2loss)≥0.05
   - _Acción_: Reducir stake (no desactivar) 1-2h tras 2 derrotas consecutivas en el mismo subtype
-  - _Estado_: tras_win IC=+0.072 n=125284 | tras_1loss IC=+0.044 n=98446 | tras_2loss IC=+0.007 n=44816/40 | gap=+0.066 (umbral 0.05)
+  - _Estado_: tras_win IC=+0.072 n=125287 | tras_1loss IC=+0.044 n=98447 | tras_2loss IC=+0.007 n=44817/40 | gap=+0.066 (umbral 0.05)
 
 **🟡 H-KALMAN** — Kalman filter para drift adaptativo
   - _Umbral_: n≥200 por subtipo para calibrar parámetros Q/R del KF
