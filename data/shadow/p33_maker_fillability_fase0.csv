@@ -133785,3 +133785,57 @@ timestamp_utc,event_title,direccion,umbral_bajo,umbral_alto,bid_yes_bajo,ask_yes
 2026-08-31T23:15:08+00:00,What price will Plasma hit in 2026?,reach,1.8,2.0,0.019,0.03,0.967,0.969,0.02,0.968,False,False,False
 2026-08-31T23:15:08+00:00,What price will Uniswap hit in 2026?,dip to,2.0,3.0,0.02,0.09,0.71,0.98,0.021,0.711,False,False,False
 2026-08-31T23:15:08+00:00,What price will Uniswap hit in 2026?,reach,14.0,15.5,0.047,0.057,0.93,0.96,0.048,0.931,False,False,False
+2026-08-31T23:20:09+00:00,What price will Bitcoin hit in 2026?,dip to,15000.0,20000.0,0.02,0.021,0.983,0.984,0.021,0.984,True,True,True
+2026-08-31T23:20:09+00:00,What price will Bitcoin hit in 2026?,reach,180000.0,190000.0,0.008,0.012,0.986,0.989,0.009,0.987,False,False,False
+2026-08-31T23:20:10+00:00,What price will Bitcoin hit in 2026?,reach,250000.0,500000.0,0.01,0.012,0.987,0.988,0.011,0.988,False,True,False
+2026-08-31T23:20:10+00:00,What price will Ethereum hit in 2026?,dip to,500.0,600.0,0.023,0.025,0.972,0.981,0.024,0.973,False,False,False
+2026-08-31T23:20:10+00:00,What price will Ethereum hit in 2026?,reach,5500.0,6000.0,0.03,0.036,0.956,0.969,0.031,0.957,False,False,False
+2026-08-31T23:20:10+00:00,What price will Solana hit in 2026?,reach,260.0,280.0,0.037,0.056,0.953,0.963,0.038,0.954,False,False,False
+2026-08-31T23:20:10+00:00,What price will Solana hit in 2026?,reach,300.0,320.0,0.03,0.049,0.96,0.973,0.031,0.961,False,False,False
+2026-08-31T23:20:11+00:00,What price will XRP hit in 2026?,reach,3.0,3.2,0.035,0.062,0.903,0.944,0.036,0.904,False,False,False
+2026-08-31T23:20:11+00:00,What price will XRP hit in 2026?,reach,3.4,3.6,0.059,0.067,0.924,0.942,0.06,0.925,False,False,False
+2026-08-31T23:20:11+00:00,What price will XRP hit in 2026?,reach,4.2,5.0,0.02,0.05,0.948,0.975,0.021,0.949,False,False,False
+2026-08-31T23:20:11+00:00,What price will Dogecoin hit in 2026?,reach,0.28,0.32,0.03,0.07,0.91,0.96,0.031,0.911,False,False,False
+2026-08-31T23:20:11+00:00,What price will Dogecoin hit in 2026?,reach,0.36,0.4,0.028,0.09,0.91,0.969,0.029,0.911,False,False,False
+2026-08-31T23:20:12+00:00,What price will Hyperliquid hit in 2026?,dip to,65.0,70.0,0.42,0.93,0.13,0.62,0.421,0.131,False,False,False
+2026-08-31T23:20:12+00:00,What price will BNB hit in 2026?,reach,1400.0,1500.0,0.047,0.062,0.932,0.938,0.048,0.933,False,False,False
+2026-08-31T23:20:12+00:00,What price will Ethena hit in 2026?,reach,0.48,0.52,0.021,0.066,0.899,0.975,0.022,0.9,False,False,False
+2026-08-31T23:20:12+00:00,What price will Ethena hit in 2026?,reach,0.8,1.0,0.014,0.041,0.961,0.98,0.015,0.962,False,False,False
+2026-08-31T23:20:12+00:00,What price will Ethena hit in 2026?,reach,1.0,1.2,0.02,0.039,0.963,0.977,0.021,0.964,False,False,False
+2026-08-31T23:20:12+00:00,What price will Chainlink hit in 2026?,dip to,8.0,10.0,0.1,0.92,0.43,0.89,0.101,0.431,False,False,False
+2026-08-31T23:20:13+00:00,What price will Chainlink hit in 2026?,reach,16.0,18.0,0.33,0.39,0.39,0.79,0.331,0.391,False,False,False
+2026-08-31T23:20:13+00:00,What price will Zcash hit in 2026?,dip to,200.0,300.0,0.1,0.98,0.6,0.85,0.101,0.601,False,False,False
+2026-08-31T23:20:13+00:00,What price will Zcash hit in 2026?,dip to,600.0,700.0,0.36,0.84,0.24,0.28,0.361,0.241,False,False,False
+2026-08-31T23:20:13+00:00,What price will Pump.fun hit in 2026?,reach,0.007,0.008,0.02,0.44,0.64,0.65,0.021,0.641,False,False,False
+2026-08-31T23:20:14+00:00,What price will Pump.fun hit in 2026?,reach,0.009,0.01,0.21,0.23,0.57,0.97,0.211,0.571,False,False,False
+2026-08-31T23:20:14+00:00,What price will Plasma hit in 2026?,reach,0.24,0.3,0.08,0.38,0.52,0.93,0.081,0.521,False,False,False
+2026-08-31T23:20:14+00:00,What price will Plasma hit in 2026?,reach,1.8,2.0,0.019,0.03,0.967,0.969,0.02,0.968,False,False,False
+2026-08-31T23:20:14+00:00,What price will Uniswap hit in 2026?,dip to,2.0,3.0,0.02,0.09,0.71,0.98,0.021,0.711,False,False,False
+2026-08-31T23:20:14+00:00,What price will Uniswap hit in 2026?,reach,14.0,15.5,0.047,0.057,0.93,0.96,0.048,0.931,False,False,False
+2026-08-31T23:25:15+00:00,What price will Bitcoin hit in 2026?,dip to,15000.0,20000.0,0.02,0.021,0.983,0.984,0.021,0.984,True,True,True
+2026-08-31T23:25:15+00:00,What price will Bitcoin hit in 2026?,reach,180000.0,190000.0,0.008,0.012,0.986,0.989,0.009,0.987,False,False,False
+2026-08-31T23:25:15+00:00,What price will Bitcoin hit in 2026?,reach,250000.0,500000.0,0.01,0.012,0.987,0.988,0.011,0.988,False,True,False
+2026-08-31T23:25:15+00:00,What price will Ethereum hit in 2026?,dip to,500.0,600.0,0.023,0.025,0.972,0.981,0.024,0.973,False,False,False
+2026-08-31T23:25:16+00:00,What price will Ethereum hit in 2026?,reach,5500.0,6000.0,0.03,0.036,0.956,0.969,0.031,0.957,False,False,False
+2026-08-31T23:25:16+00:00,What price will Solana hit in 2026?,reach,260.0,280.0,0.037,0.056,0.953,0.963,0.038,0.954,False,False,False
+2026-08-31T23:25:16+00:00,What price will Solana hit in 2026?,reach,300.0,320.0,0.03,0.049,0.96,0.973,0.031,0.961,False,False,False
+2026-08-31T23:25:16+00:00,What price will XRP hit in 2026?,reach,3.0,3.2,0.035,0.062,0.903,0.944,0.036,0.904,False,False,False
+2026-08-31T23:25:17+00:00,What price will XRP hit in 2026?,reach,3.4,3.6,0.059,0.067,0.924,0.942,0.06,0.925,False,False,False
+2026-08-31T23:25:17+00:00,What price will XRP hit in 2026?,reach,4.2,5.0,0.02,0.05,0.948,0.975,0.021,0.949,False,False,False
+2026-08-31T23:25:17+00:00,What price will Dogecoin hit in 2026?,reach,0.28,0.32,0.03,0.07,0.91,0.96,0.031,0.911,False,False,False
+2026-08-31T23:25:17+00:00,What price will Dogecoin hit in 2026?,reach,0.36,0.4,0.028,0.09,0.91,0.969,0.029,0.911,False,False,False
+2026-08-31T23:25:17+00:00,What price will Hyperliquid hit in 2026?,dip to,65.0,70.0,0.42,0.93,0.13,0.62,0.421,0.131,False,False,False
+2026-08-31T23:25:18+00:00,What price will BNB hit in 2026?,reach,1400.0,1500.0,0.047,0.062,0.932,0.938,0.048,0.933,False,False,False
+2026-08-31T23:25:18+00:00,What price will Ethena hit in 2026?,reach,0.48,0.52,0.021,0.066,0.899,0.975,0.022,0.9,False,False,False
+2026-08-31T23:25:18+00:00,What price will Ethena hit in 2026?,reach,0.8,1.0,0.014,0.041,0.961,0.98,0.015,0.962,False,False,False
+2026-08-31T23:25:18+00:00,What price will Ethena hit in 2026?,reach,1.0,1.2,0.02,0.039,0.963,0.977,0.021,0.964,False,False,False
+2026-08-31T23:25:18+00:00,What price will Chainlink hit in 2026?,dip to,8.0,10.0,0.1,0.92,0.43,0.89,0.101,0.431,False,False,False
+2026-08-31T23:25:18+00:00,What price will Chainlink hit in 2026?,reach,16.0,18.0,0.33,0.39,0.39,0.79,0.331,0.391,False,False,False
+2026-08-31T23:25:18+00:00,What price will Zcash hit in 2026?,dip to,200.0,300.0,0.1,0.98,0.6,0.85,0.101,0.601,False,False,False
+2026-08-31T23:25:18+00:00,What price will Zcash hit in 2026?,dip to,600.0,700.0,0.36,0.84,0.24,0.28,0.361,0.241,False,False,False
+2026-08-31T23:25:19+00:00,What price will Pump.fun hit in 2026?,reach,0.007,0.008,0.02,0.44,0.64,0.65,0.021,0.641,False,False,False
+2026-08-31T23:25:19+00:00,What price will Pump.fun hit in 2026?,reach,0.009,0.01,0.21,0.23,0.57,0.97,0.211,0.571,False,False,False
+2026-08-31T23:25:19+00:00,What price will Plasma hit in 2026?,reach,0.24,0.3,0.08,0.38,0.52,0.93,0.081,0.521,False,False,False
+2026-08-31T23:25:19+00:00,What price will Plasma hit in 2026?,reach,1.8,2.0,0.019,0.03,0.967,0.969,0.02,0.968,False,False,False
+2026-08-31T23:25:19+00:00,What price will Uniswap hit in 2026?,dip to,2.0,3.0,0.02,0.09,0.71,0.98,0.021,0.711,False,False,False
+2026-08-31T23:25:19+00:00,What price will Uniswap hit in 2026?,reach,14.0,15.5,0.047,0.057,0.93,0.96,0.048,0.931,False,False,False
