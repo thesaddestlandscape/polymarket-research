@@ -175,6 +175,44 @@ def _marco_de_subtype(subtype):
     return subtype.split("#")[-1] if "#" in subtype else ""
 
 
+# 31-Ago: pnl_medio a STAKE FIJO, nunca el `pnl_neto` crudo de results.csv
+# -- ese campo usa `apuesta` = Kelly simulado por predicción (compounding,
+# ver shadow_resolve.py::_resolver_prediccion, `apuesta = pred.get("apuesta")
+# or APUESTA_SIMULADA`), que varía por predicción según el bankroll shadow
+# ficticio del momento (~$29K hoy, ver estado_actual.md "P&L sim compuesto").
+# Hallazgo real que motiva el fix: CANDIDATA10_CONFIRMACION_CRUZADA#BTC#
+# 5min#BUY_NO [0.95,1.00) confirmado "bueno_confirmado" con pnl_medio=
+# +43,26€/trade (n=15) -- no es un dato corrupto, es el propio mecanismo:
+# precio_entrada tiene suelo 0,01 (shadow_resolve.py), así que una tupla
+# con `apuesta` simulada grande y un WIN en esa zona da payout=apuesta/0,01
+# (hasta ~99x). Sin normalizar, dos buckets con el MISMO edge real pueden
+# dar pnl_medio muy distinto solo porque sus predicciones tenían `apuesta`
+# simulada distinta -- el gate deja de ser comparable entre tuplas/buckets,
+# justo lo que el propio piso "pnl_medio>=0" (08-Ago) asume que sí lo es.
+# Fórmula: misma que shadow_resolve.py (payout=stake/precio_entrada,
+# floor/techo [0.01,0.99], slippage 2%) pero con stake=STAKE_NORMALIZADO_EUR
+# fijo para TODAS las filas -- así el "€/trade" del gate es comparable
+# entre cualquier tupla/bucket del sistema, y dos tuplas con igual edge
+# real (mismo precio, mismo acierto-rate) dan el mismo pnl_medio.
+STAKE_NORMALIZADO_EUR = 1.0
+SLIPPAGE_NORMALIZADO = 0.02
+
+
+def _pnl_normalizado(py, decision, acierto):
+    try:
+        py = float(py)
+    except (TypeError, ValueError):
+        return None
+    precio_entrada = min(0.99, max(0.01, py))
+    if decision == "BUY_NO":
+        precio_entrada = 1 - precio_entrada
+    stake = STAKE_NORMALIZADO_EUR
+    if acierto:
+        payout = stake / max(0.01, precio_entrada)
+        return (payout - stake) - SLIPPAGE_NORMALIZADO * stake
+    return -stake - SLIPPAGE_NORMALIZADO * stake
+
+
 def cargar_filas(tuplas):
     claves = {(s, sub, d): t for s, sub, d, t, _ in tuplas}
     marco_por_tupla = {t: _marco_de_subtype(sub) for _, sub, _, t, _ in tuplas}
@@ -200,8 +238,11 @@ def cargar_filas(tuplas):
                     continue
             try:
                 py = float(row["precio_yes_mercado"])
-                pnl = float(row["pnl_neto"])
             except Exception:
+                continue
+            acierto = row.get("acierto") == "1"
+            pnl = _pnl_normalizado(py, row["decision"], acierto)
+            if pnl is None:
                 continue
             out[t].append((row.get("prediction_timestamp", ""), py, pnl))
     if n_excluidas_pre_twap:
@@ -263,11 +304,32 @@ def bh_fdr_signif(p_valores, q=0.05):
     return set(orden[:corte])
 
 
+def _cargar_veredictos_crudos_previos() -> dict:
+    """{tupla_str: {bucket_str: veredicto_crudo}} de la corrida ANTERIOR
+    (el fichero OUT tal y como estaba antes de que esta corrida lo
+    sobreescriba) -- base de comparación para el guard de 2 días de
+    abajo. Fail-closed: fichero ausente/corrupto -> {} (ninguna
+    promoción "bueno_confirmado" pasará el guard hoy, exige empezar de
+    cero, nunca al revés)."""
+    try:
+        data = json.loads(OUT.read_text(encoding="utf-8"))
+    except Exception:
+        return {}
+    out = {}
+    for tupla_str, tabla in data.items():
+        if not isinstance(tabla, dict):
+            continue
+        out[tupla_str] = {b: v.get("veredicto_crudo_hoy") or v.get("veredicto")
+                           for b, v in tabla.items() if isinstance(v, dict)}
+    return out
+
+
 def main():
     tuplas = cargar_tuplas_live()
     filas_por_tupla = cargar_filas(tuplas)
     n_live = sum(1 for *_, es_live in tuplas if es_live)
     print(f"Tuplas a evaluar: {len(tuplas)} ({n_live} live, {len(tuplas) - n_live} candidatos)")
+    veredictos_crudos_previos = _cargar_veredictos_crudos_previos()
 
     # PASADA 1: calcular todos los buckets candidatos (n>=N_MIN, split-half
     # consistente) y acumular p-valores SIN decidir veredicto todavía --
@@ -359,14 +421,15 @@ def main():
     print(f"\nTests candidatos: {len(pendientes)} | sobreviven BH-FDR (por familia+moneda): {len(sobreviven)}")
 
     veredictos_nuevos = []
+    veredictos_pendientes_confirmacion = []
     for idx, p in enumerate(pendientes):
         if idx not in sobreviven:
             continue
         ci = p["entrada"]["ci90_bootstrap_absoluto"]
         if p["diff"] < 0:
-            veredicto = "malo_confirmado"
+            veredicto_crudo = "malo_confirmado"
         elif p["entrada"]["pnl_medio"] >= 0 and ci is not None and ci[0] > 0:
-            veredicto = "bueno_confirmado"
+            veredicto_crudo = "bueno_confirmado"
         else:
             # Piso absoluto (08-Ago, petición explícita Javi): "diff" es
             # relativo al RESTO de buckets de la misma tupla -- un bucket
@@ -380,14 +443,52 @@ def main():
             # no hay evidencia de que sea PEOR que el resto, solo de que no
             # basta para confirmar "bueno" en términos absolutos.
             continue
-        p["entrada"]["veredicto"] = veredicto
-        marca = "🔴" if veredicto == "malo_confirmado" else "🟢"
-        etiqueta = "LIVE" if p["es_live"] else "candidato"
+        p["entrada"]["veredicto_crudo_hoy"] = veredicto_crudo
         b = p["bucket"]
+
+        # 31-Ago (petición explícita Javi): guard de 2 días consecutivos
+        # ANTES de exponer "bueno_confirmado" a evaluar()/ejecutores live.
+        # Motivo: confirmaciones al filo del mínimo (n=15-60) revierten en
+        # 1 sola corrida diaria más -- visto dos veces en la misma sesión
+        # (MOMENTUM_IBS_5M_BALLENA#SOL#5min, WALLET_MIRROR#BTC varios
+        # buckets), mismo patrón P5 (multiple-testing) de
+        # project_lecciones_aprendidas_estrategias. Asimétrico a propósito
+        # (mismo espíritu que _veto_fillable: "solo puede degradar, nunca
+        # promover más rápido de lo debido") -- "malo_confirmado" sigue
+        # inmediato (1 día basta para VETAR, la dirección segura), solo
+        # "bueno_confirmado" (la que desbloquea dinero real) exige que el
+        # veredicto CRUDO de ayer (antes de este mismo guard) ya fuera
+        # también "bueno_confirmado" para el MISMO bucket.
+        if veredicto_crudo == "malo_confirmado":
+            veredicto_final = "malo_confirmado"
+        else:
+            crudo_ayer = veredictos_crudos_previos.get(p["tupla_str"], {}).get(b)
+            if crudo_ayer == "bueno_confirmado":
+                veredicto_final = "bueno_confirmado"
+            else:
+                veredicto_final = "sin_concluir"
+                veredictos_pendientes_confirmacion.append(
+                    f"⏳ [{'LIVE' if p['es_live'] else 'candidato'}] {p['tupla_str']} "
+                    f"[{b},{float(b)+STEP:.2f}) n={p['entrada']['n']} "
+                    f"pnl_medio={p['entrada']['pnl_medio']:+.3f} p={p['p']:.4f} "
+                    f"bueno_confirmado HOY, esperando confirmación de mañana"
+                )
+
+        p["entrada"]["veredicto"] = veredicto_final
+        if veredicto_final == "sin_concluir":
+            continue  # no listar como "veredicto nuevo" -- sigue pendiente, ver arriba
+        marca = "🔴" if veredicto_final == "malo_confirmado" else "🟢"
+        etiqueta = "LIVE" if p["es_live"] else "candidato"
         veredictos_nuevos.append(
             f"{marca} [{etiqueta}] {p['tupla_str']} [{b},{float(b)+STEP:.2f}) n={p['entrada']['n']} "
-            f"pnl_medio={p['entrada']['pnl_medio']:+.3f} p={p['p']:.4f} {veredicto}"
+            f"pnl_medio={p['entrada']['pnl_medio']:+.3f} p={p['p']:.4f} {veredicto_final}"
         )
+
+    if veredictos_pendientes_confirmacion:
+        print(f"\n{len(veredictos_pendientes_confirmacion)} bucket(s) 'bueno' hoy, "
+              f"pendientes de 2ª confirmación mañana:")
+        for linea in veredictos_pendientes_confirmacion:
+            print(f"  {linea}")
 
     print(f"\n{len(veredictos_nuevos)} bucket(s) con veredicto final tras BH-FDR:")
     for linea in veredictos_nuevos:

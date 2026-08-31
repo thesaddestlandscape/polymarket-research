@@ -50,6 +50,13 @@ import numpy as np
 # asimétrico en el mismo veto que selección adversa/profundidad de libro,
 # no como chequeo manual aparte cada vez.
 from analisis_log_growth import _retorno as _retorno_kelly  # noqa: E402
+# 31-Ago: mismo motivo que el fix de analisis_gate_bucket_propio_28jul.py
+# (pnl_medio a stake fijo, nunca el pnl_neto crudo de results.csv, que usa
+# `apuesta` Kelly-simulada por predicción) -- señal #1 de _veto_fillable()
+# ("subconjunto fillable pnl_medio negativo") comparte la misma
+# vulnerabilidad que motivó ese fix. g_kelly (arriba) ya estaba a salvo
+# porque _retorno_kelly() es intrínsecamente relativo (fracción, no €).
+from analisis_gate_bucket_propio_28jul import _pnl_normalizado  # noqa: E402
 _F_KELLY = 0.10  # mismo default que analisis_log_growth.py/live
 
 REPO = Path(__file__).resolve().parent
@@ -163,7 +170,9 @@ def cargar_filas_accionables(tuplas):
                 continue
             try:
                 py = float(row["precio_yes_mercado"])
-                pnl = float(row["pnl_neto"])
+                pnl = _pnl_normalizado(py, row["decision"], row["acierto"] == "1")
+                if pnl is None:
+                    continue
             except Exception:
                 continue
             out[t].append((row.get("prediction_timestamp", ""), py, pnl, row["decision"], row["acierto"]))
