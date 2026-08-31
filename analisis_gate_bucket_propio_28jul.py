@@ -312,7 +312,8 @@ def _cargar_veredictos_crudos_previos() -> dict:
     promoción "bueno_confirmado" pasará el guard hoy, exige empezar de
     cero, nunca al revés)."""
     try:
-        data = json.loads(OUT.read_text(encoding="utf-8"))
+        with open(OUT, encoding="utf-8") as f:
+            data = json.load(f)
     except Exception:
         return {}
     out = {}

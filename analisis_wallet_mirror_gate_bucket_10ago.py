@@ -163,9 +163,29 @@ def bh_fdr_signif(p_valores, q=0.05):
     return set(orden[:corte])
 
 
+def _cargar_veredictos_crudos_previos() -> dict:
+    """{clave_str: {bucket_str: veredicto_crudo}} de la corrida anterior --
+    mismo guard de 2 días que gate_bucket_propio.py (31-Ago). Fail-closed:
+    fichero ausente/corrupto -> {} (ninguna promoción "bueno_confirmado"
+    pasará el guard hoy)."""
+    try:
+        with open(OUT, encoding="utf-8") as f:
+            data = json.load(f)
+    except Exception:
+        return {}
+    out = {}
+    for clave_str, tabla in data.items():
+        if not isinstance(tabla, dict):
+            continue
+        out[clave_str] = {b: v.get("veredicto_crudo_hoy") or v.get("veredicto")
+                           for b, v in tabla.items() if isinstance(v, dict)}
+    return out
+
+
 def main():
     grupos = cargar_filas()
     print(f"Grupos (tipo,activo,marco,grande): {len(grupos)}")
+    veredictos_crudos_previos = _cargar_veredictos_crudos_previos()
 
     resultado = {}  # "tipo#activo#marco#grande" -> {bucket_str: entrada}
     pendientes = []
@@ -237,13 +257,14 @@ def main():
         sobreviven |= {indices[j] for j in bh_fdr_signif(p_valores, q=P_MAX)}
 
     veredictos_nuevos = []
+    veredictos_pendientes_confirmacion = []
     for idx, p in enumerate(pendientes):
         if idx not in sobreviven:
             continue
         if p["diff"] < 0:
-            veredicto = "malo_confirmado"
+            veredicto_crudo = "malo_confirmado"
         elif p["entrada"]["pnl_medio"] >= 0:
-            veredicto = "bueno_confirmado"
+            veredicto_crudo = "bueno_confirmado"
         else:
             continue  # piso absoluto, mismo criterio que gate_bucket_propio 08-Ago
         # 29-Ago: veto de payout asimétrico -- degrada bueno_confirmado si
@@ -253,13 +274,39 @@ def main():
         # _veto_fillable() señal #2 -- solo puede DEGRADAR, nunca promover.
         nota_payout = ""
         g_kelly = p["entrada"].get("g_kelly_f10")
-        if veredicto == "bueno_confirmado" and g_kelly is not None and g_kelly <= 0:
-            veredicto = "malo_confirmado"
+        if veredicto_crudo == "bueno_confirmado" and g_kelly is not None and g_kelly <= 0:
+            veredicto_crudo = "malo_confirmado"
             nota_payout = f" [degradado: payout asimétrico g_kelly(f=10%)={g_kelly:+.5f}<=0]"
+
+        p["entrada"]["veredicto_crudo_hoy"] = veredicto_crudo
+        b = p["bucket"]
+
+        # 31-Ago (mismo guard que gate_bucket_propio.py, petición explícita
+        # Javi): "bueno_confirmado" exige que el veredicto CRUDO de la
+        # corrida anterior ya fuera también "bueno_confirmado" para el
+        # MISMO bucket -- asimétrico, "malo_confirmado" sigue inmediato
+        # (1 día basta para vetar). Este gate ya opera con dinero real hoy
+        # (WALLET_MIRROR#BTC, DRY_RUN=False desde 11-Ago) -- máxima cautela.
+        if veredicto_crudo == "malo_confirmado":
+            veredicto = "malo_confirmado"
+        else:
+            crudo_ayer = veredictos_crudos_previos.get(p["clave_str"], {}).get(b)
+            if crudo_ayer == "bueno_confirmado":
+                veredicto = "bueno_confirmado"
+            else:
+                veredicto = "sin_concluir"
+                veredictos_pendientes_confirmacion.append(
+                    f"⏳ {p['clave_str']} [{b},{float(b)+STEP:.2f}) n={p['entrada']['n']} "
+                    f"pnl_medio={p['entrada']['pnl_medio']:+.3f} bueno_confirmado HOY, "
+                    f"esperando confirmación de mañana"
+                )
+
         p["entrada"]["veredicto"] = veredicto
+        if veredicto == "sin_concluir":
+            continue
         marca = "🔴" if veredicto == "malo_confirmado" else "🟢"
         veredictos_nuevos.append(
-            f"{marca} {p['clave_str']} [{p['bucket']},{float(p['bucket'])+STEP:.2f}) "
+            f"{marca} {p['clave_str']} [{b},{float(b)+STEP:.2f}) "
             f"n={p['entrada']['n']} pnl_medio={p['entrada']['pnl_medio']:+.3f} "
             f"g_kelly={g_kelly:+.5f} p={p['p']:.4f} {veredicto}{nota_payout}"
         )
@@ -267,6 +314,10 @@ def main():
     print(f"\n{len(veredictos_nuevos)} bucket(s) con veredicto tras BH-FDR:")
     for linea in veredictos_nuevos:
         print(f"  {linea}")
+    if veredictos_pendientes_confirmacion:
+        print(f"\n{len(veredictos_pendientes_confirmacion)} bucket(s) pendientes de 2ª confirmación mañana:")
+        for linea in veredictos_pendientes_confirmacion:
+            print(f"  {linea}")
 
     with open(OUT, "w", encoding="utf-8") as f:
         json.dump(resultado, f, indent=2, ensure_ascii=False)

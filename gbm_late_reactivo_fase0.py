@@ -132,6 +132,12 @@ COLUMNS = [
     "slope_ask", "slope_bid", "n_niveles_ask", "n_niveles_bid",
     "kalshi_mid", "kalshi_ts_utc", "kalshi_delta_ms",
     "bot_n_trades", "bot_lado_mayoria", "bot_coincide_direccion",
+    "dia_semana",  # 31-Ago: fin de semana explica la caída de fillability
+    # 47,7%->5,7% que preocupó el 29-Ago (sáb/dom mínimos, lunes rebota a
+    # 36,1% -- ver idea_gbm_late_reactivo_fillability_degradacion_29ago,
+    # CERRADO). Aunque se puede derivar de timestamp_utc, se guarda aparte
+    # para no tener que reparsear fechas en cada análisis futuro que
+    # quiera desagregar por régimen de liquidez semanal (0=lunes..6=domingo).
 ]
 # 25-Ago (propuesta #14, Javi): en el instante del trigger, ¿ya hay bot
 # wallets (bot_wallets_universo_25ago.json, edge confirmado) operando en
@@ -333,6 +339,7 @@ async def _procesar_tick(activo: str, precio: float, ts_tick_ms: int, estado: di
         "kalshi_delta_ms": kalshi_delta_ms,
         "bot_n_trades": bot_n_trades, "bot_lado_mayoria": bot_lado_mayoria,
         "bot_coincide_direccion": bot_coincide_direccion,
+        "dia_semana": datetime.now(timezone.utc).weekday(),
     }
     _guardar(fila)
     extra_kalshi = f" kalshi_delta={kalshi_delta_ms}ms" if activo == "BTC" else ""
