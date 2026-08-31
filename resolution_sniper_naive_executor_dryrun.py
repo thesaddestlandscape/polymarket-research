@@ -138,6 +138,24 @@ def _log(msg: str):
     print(f"[{datetime.now(timezone.utc).isoformat(timespec='seconds')}] {msg}", flush=True)
 
 
+def _veto_clv(asset: str, marco: str, direction: str, ask_ref) -> bool:
+    """True si hay que vetar por CLV negativo. Mismo mecanismo exacto que
+    momentum_ibs_ballena_executor.py/live_trade.py::main() -- 31-Ago
+    (pendiente #4 checkpoint 31-Ago, hallazgo real): este ejecutor era el
+    único de los live que NO lo tenía conectado, pese a que trades.csv
+    todavía no acumula evidencia (n=0 RESOLUTION_SNIPER_NAIVE hoy) --
+    fail-open por ausencia de evidencia, no por diseño (n_clv<CLV_VETO_MIN_N
+    siempre da False hoy, cero cambio de comportamiento actual; listo para
+    cuando el volumen real empiece a acumularse)."""
+    try:
+        py = float(ask_ref) if ask_ref not in (None, "") else None
+    except (TypeError, ValueError):
+        py = None
+    lt._CLV_CACHE = None
+    clv_medio, n_clv = lt._clv_tupla("RESOLUTION_SNIPER_NAIVE", f"{asset}#{marco}", direction, py=py)
+    return n_clv >= lt.CLV_VETO_MIN_N and clv_medio < 0
+
+
 def _guardar(fila: dict):
     nuevo = not OUT.exists()
     with open(OUT, "a", newline="", encoding="utf-8") as f:
@@ -254,6 +272,8 @@ def evaluar(asset: str, marco: str, slug: str, market_id: str, condition_id: str
         elif gate_bp.get("veredicto") != "bueno_confirmado":
             _log(f"  ⛔ veto micro-bucket (solo opera en bueno_confirmado): "
                  f"veredicto={gate_bp.get('veredicto')} -- no se ejecuta")
+        elif _veto_clv(asset, marco, direction, ask_ref):
+            _log("  ⛔ veto CLV: clv_medio<0 con n suficiente -- no se ejecuta")
         elif (lt._posiciones_abiertas_misma_direccion(direction)
               >= lt._cargar_config().get("riesgo", {})
                   .get("max_posiciones_abiertas_misma_direccion", 2)):

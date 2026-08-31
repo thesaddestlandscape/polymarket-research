@@ -54,9 +54,10 @@ except Exception:
 
 try:
     # Balance REAL on-chain (verdad de suelo), cacheado por live_balance.py.
-    from live_balance import cargar_balance_real
+    from live_balance import cargar_balance_real, _sports_delta_realizado_por_dia_madrid
 except Exception:
     cargar_balance_real = lambda **_: None  # fail-closed: sin módulo → sin real
+    _sports_delta_realizado_por_dia_madrid = lambda: {}
 
 # ─── Lectura consistente (28-Jul) ─────────────────────────────────────────────
 def _leer_snapshot_consistente(fn):
@@ -449,6 +450,21 @@ def compute_live_data():
         real_daily   = real.get("daily_real") or []
         real_por_deposito = real.get("pnl_por_deposito") or []
         real_stale   = False
+        # 31-Ago (Javi preguntó por qué "PnL real hoy" no cuadraba con el
+        # movimiento visible del wallet, 1,72€ esperado vs 0,53€ mostrado):
+        # real_hoy YA excluye correctamente el PnL realizado de sports del
+        # día (fix 27/31-Ago, _sports_delta_realizado_por_dia_madrid) -- el
+        # número es correcto, pero al no mostrarse en ningún sitio de este
+        # dashboard, la resta parece "dinero desaparecido". Se expone aparte
+        # solo para anotar, nunca para sumarlo de vuelta a real_hoy.
+        try:
+            from datetime import datetime as _dt
+            from zoneinfo import ZoneInfo as _ZI
+            _hoy_madrid = _dt.now(_ZI("Europe/Madrid")).strftime("%Y-%m-%d")
+            real_hoy_sports_excluido = round(
+                _sports_delta_realizado_por_dia_madrid().get(_hoy_madrid, 0.0), 2) or None
+        except Exception:
+            real_hoy_sports_excluido = None
         # tracking error de ejecución: real − modelo(trades.csv). 31-Jul:
         # unificado con el signo de reconciliar.py::te (mismo cálculo, dos
         # sitios distintos) -- antes este lado usaba modelo−real (signo
@@ -464,6 +480,7 @@ def compute_live_data():
         real_daily = []
         real_por_deposito = []
         real_stale = bool(real and real.get("_rancio"))
+        real_hoy_sports_excluido = None
 
     # % de beneficio sobre el depósito inicial — pedido explícito 09-Jul: no
     # solo el $ absoluto, también el % relativo al depósito (por día y total).
@@ -567,6 +584,7 @@ def compute_live_data():
         "real_ts": real_ts,
         "real_deposito": real_deposito,
         "real_hoy": real_hoy,
+        "real_hoy_sports_excluido": real_hoy_sports_excluido,
         "real_7d": real_7d,
         "real_daily": real_daily,
         "real_por_deposito": real_por_deposito,
@@ -1093,7 +1111,7 @@ footer { text-align: center; padding: 10px; font-size: 10px; color: var(--muted)
     <div style="background:#ffffff08;border-radius:6px;padding:8px;text-align:center">
       <div style="font-size:9px;color:var(--muted)">🎯 PNL hoy</div>
       <div id="live-pnl-hoy" style="font-size:20px;font-weight:700">—</div>
-      <div style="font-size:9px;color:var(--muted)">real · día UTC</div>
+      <div id="live-pnl-hoy-nota" style="font-size:9px;color:var(--muted)">real · día Madrid</div>
     </div>
     <div style="background:#ffffff08;border-radius:6px;padding:8px;text-align:center" title="PNL de hoy dividido entre el depósito inicial">
       <div style="font-size:9px;color:var(--muted)">📊 % hoy</div>
@@ -1439,6 +1457,10 @@ function renderLive(live) {
   // PNL real del PERÍODO ACTUAL (última recarga) / hoy / 7 días — todo del wallet on-chain
   document.getElementById("live-pnl").innerHTML     = fmtOr(live.header_pnl);
   document.getElementById("live-pnl-hoy").innerHTML = fmtOr(live.real_hoy);
+  document.getElementById("live-pnl-hoy-nota").textContent =
+    live.real_hoy_sports_excluido
+      ? `real · día Madrid (excluye sports ${live.real_hoy_sports_excluido >= 0 ? "+" : ""}${live.real_hoy_sports_excluido.toFixed(2)}$ hoy)`
+      : "real · día Madrid";
   document.getElementById("live-pnl-7d").innerHTML  = fmtOr(live.real_7d);
   // % de beneficio sobre el depósito del período actual (no el acumulado histórico)
   document.getElementById("live-pct-total").innerHTML =
