@@ -75,9 +75,25 @@ def cargar_filas() -> dict:
     return grupos
 
 
+def _cargar_veredictos_crudos_previos() -> dict:
+    """{tupla_str: veredicto_crudo} de la corrida anterior -- mismo guard
+    de 2 días que el resto de gates (31-Ago, /code-review encontró que
+    esta ruta "fina" evitaba por completo el guard del grid principal).
+    Este gate ya opera con dinero real (LoL#SEGUIR[0.45,0.50), desde hoy).
+    Fail-closed: fichero ausente/corrupto -> {}."""
+    try:
+        with open(OUT, encoding="utf-8") as f:
+            data = json.load(f)
+    except Exception:
+        return {}
+    return {tupla_str: info.get("veredicto_crudo_hoy") or info.get("veredicto")
+            for tupla_str, info in data.items() if isinstance(info, dict)}
+
+
 def main() -> int:
     grupos = cargar_filas()
     print(f"Combos (categoria,tipo): {len(grupos)}")
+    veredictos_crudos_previos = _cargar_veredictos_crudos_previos()
 
     pendientes = []
     for (categoria, tipo), filas in grupos.items():
@@ -111,9 +127,9 @@ def main() -> int:
             continue
         info = p["info"]
         if p["diff"] < 0:
-            veredicto = "malo_confirmado"
+            veredicto_crudo = "malo_confirmado"
         elif info["pnl_medio"] >= 0:
-            veredicto = "bueno_confirmado"
+            veredicto_crudo = "bueno_confirmado"
         else:
             continue
         # 29-Ago (paridad con el mismo hueco cerrado en el grid fijo,
@@ -132,10 +148,26 @@ def main() -> int:
         g_kelly = (sum(math.log(1 + F_KELLY * x) for x in pnls_ventana) / len(pnls_ventana)
                    if pnls_ventana else None)
         info["g_kelly_f10"] = round(g_kelly, 5) if g_kelly is not None else None
-        if veredicto == "bueno_confirmado" and g_kelly is not None and g_kelly <= 0:
+        if veredicto_crudo == "bueno_confirmado" and g_kelly is not None and g_kelly <= 0:
+            veredicto_crudo = "malo_confirmado"
+
+        info["veredicto_crudo_hoy"] = veredicto_crudo
+        # 31-Ago: guard de 2 días -- "bueno_confirmado" exige que la
+        # corrida anterior YA diera "bueno_confirmado" para la misma
+        # tupla; "malo_confirmado" sigue inmediato.
+        if veredicto_crudo == "malo_confirmado":
             veredicto = "malo_confirmado"
+        elif veredictos_crudos_previos.get(p["tupla_str"]) == "bueno_confirmado":
+            veredicto = "bueno_confirmado"
+        else:
+            veredicto = "sin_concluir"
+            print(f"  ⏳ {p['tupla_str']} [{info['lo']:.2f},{info['hi']:.2f}) n={info['n']} "
+                  f"pnl_medio={info['pnl_medio']:+.3f} bueno_confirmado HOY, esperando confirmación de mañana")
+
         info["veredicto"] = veredicto
         salida[p["tupla_str"]] = info
+        if veredicto == "sin_concluir":
+            continue
         marca = "🔴" if veredicto == "malo_confirmado" else "🟢"
         print(f"  {marca} {p['tupla_str']} [{info['lo']:.2f},{info['hi']:.2f}) "
               f"n={info['n']} pnl_medio={info['pnl_medio']:+.3f} p={info['p_valor']:.4f} {veredicto}")

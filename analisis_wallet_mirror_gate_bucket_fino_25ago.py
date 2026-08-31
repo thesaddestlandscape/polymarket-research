@@ -28,9 +28,26 @@ REPO = Path(__file__).resolve().parent
 OUT = REPO / "data/shadow/wallet_mirror_gate_bucket_fino.json"
 
 
+def _cargar_veredictos_crudos_previos() -> dict:
+    """{clave_str: veredicto_crudo} de la corrida anterior -- mismo guard
+    de 2 días que el resto de gates (31-Ago, /code-review encontró que
+    esta ruta "fina" evitaba por completo el guard del grid principal
+    vía la promoción aditiva en wallet_mirror_gate_bucket.py::evaluar()).
+    Este gate ya opera con dinero real (WALLET_MIRROR#BTC, DRY_RUN=False
+    desde 11-Ago). Fail-closed: fichero ausente/corrupto -> {}."""
+    try:
+        with open(OUT, encoding="utf-8") as f:
+            data = json.load(f)
+    except Exception:
+        return {}
+    return {clave_str: info.get("veredicto_crudo_hoy") or info.get("veredicto")
+            for clave_str, info in data.items() if isinstance(info, dict)}
+
+
 def main() -> int:
     grupos = cargar_filas()
     print(f"Grupos (tipo,activo,marco,grande): {len(grupos)}")
+    veredictos_crudos_previos = _cargar_veredictos_crudos_previos()
 
     pendientes = []
     resultado = {}
@@ -59,19 +76,35 @@ def main() -> int:
           f"| sobreviven BH-FDR por activo: {len(sobreviven)}")
 
     veredictos = []
+    pendientes_confirmacion = []
     salida_final = {}
     for idx, p in enumerate(pendientes):
         if idx not in sobreviven:
             continue
         info = p["info"]
         if p["diff"] < 0:
-            veredicto = "malo_confirmado"
+            veredicto_crudo = "malo_confirmado"
         elif info["pnl_medio"] >= 0:
-            veredicto = "bueno_confirmado"
+            veredicto_crudo = "bueno_confirmado"
         else:
             continue
+
+        info["veredicto_crudo_hoy"] = veredicto_crudo
+        if veredicto_crudo == "malo_confirmado":
+            veredicto = "malo_confirmado"
+        elif veredictos_crudos_previos.get(p["clave_str"]) == "bueno_confirmado":
+            veredicto = "bueno_confirmado"
+        else:
+            veredicto = "sin_concluir"
+            pendientes_confirmacion.append(
+                f"⏳ {p['clave_str']} [{info['lo']:.2f},{info['hi']:.2f}) n={info['n']} "
+                f"pnl_medio={info['pnl_medio']:+.3f} bueno_confirmado HOY, esperando confirmación de mañana"
+            )
+
         info["veredicto"] = veredicto
         salida_final[p["clave_str"]] = info
+        if veredicto == "sin_concluir":
+            continue
         marca = "🔴" if veredicto == "malo_confirmado" else "🟢"
         veredictos.append(
             f"{marca} {p['clave_str']} [{info['lo']:.2f},{info['hi']:.2f}) "
@@ -82,6 +115,10 @@ def main() -> int:
     print(f"\n{len(veredictos)} ventana(s) con veredicto final:")
     for linea in veredictos:
         print(f"  {linea}")
+    if pendientes_confirmacion:
+        print(f"\n{len(pendientes_confirmacion)} ventana(s) pendientes de 2ª confirmación mañana:")
+        for linea in pendientes_confirmacion:
+            print(f"  {linea}")
 
     with open(OUT, "w", encoding="utf-8") as f:
         json.dump(salida_final, f, indent=2, ensure_ascii=False)

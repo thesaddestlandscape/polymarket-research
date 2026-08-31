@@ -195,11 +195,29 @@ def evaluar_tupla(filas):
     }
 
 
+def _cargar_veredictos_crudos_previos() -> dict:
+    """{tupla_str: veredicto_crudo} de la corrida anterior -- mismo guard
+    de 2 días que gate_bucket_propio.py/wallet_mirror_gate_bucket (31-Ago).
+    31-Ago (/code-review encontró el hueco): esta ruta "fina" promueve
+    directamente a bueno_confirmado en evaluar()/evaluar_sin_override()
+    cuando el grid fijo sigue sin_concluir -- sin este guard, el guard del
+    grid principal se puede evitar por completo pasando por aquí. Fail-
+    closed: fichero ausente/corrupto -> {} (nada confirma hoy)."""
+    try:
+        with open(OUT, encoding="utf-8") as f:
+            data = json.load(f)
+    except Exception:
+        return {}
+    return {tupla_str: info.get("veredicto_crudo_hoy") or info.get("veredicto")
+            for tupla_str, info in data.items() if isinstance(info, dict)}
+
+
 def main() -> int:
     tuplas = cargar_tuplas_live()
     filas_por_tupla = cargar_filas(tuplas)
     n_live = sum(1 for *_, es_live in tuplas if es_live)
     print(f"Tuplas a evaluar: {len(tuplas)} ({n_live} live, {len(tuplas) - n_live} candidatos)")
+    veredictos_crudos_previos = _cargar_veredictos_crudos_previos()
 
     pendientes = []
     resultado = {}
@@ -232,19 +250,40 @@ def main() -> int:
     print(f"\nVentanas candidatas: {len(pendientes)} | sobreviven BH-FDR: {len(sobreviven)}")
 
     veredictos_nuevos = []
+    veredictos_pendientes_confirmacion = []
     salida_final = {}
     for idx, p in enumerate(pendientes):
         if idx not in sobreviven:
             continue
         info = p["info"]
         if p["diff"] < 0:
-            veredicto = "malo_confirmado"
+            veredicto_crudo = "malo_confirmado"
         elif info["pnl_medio"] >= 0:
-            veredicto = "bueno_confirmado"
+            veredicto_crudo = "bueno_confirmado"
         else:
             continue  # mismo piso absoluto que gate_bucket_propio (08-Ago)
+
+        info["veredicto_crudo_hoy"] = veredicto_crudo
+        # 31-Ago: mismo guard de 2 días que el grid fijo -- "bueno_confirmado"
+        # exige que la corrida anterior YA diera "bueno_confirmado" para la
+        # MISMA tupla (una sola ventana activa por tupla aquí, a diferencia
+        # del grid que tiene varios buckets); "malo_confirmado" inmediato.
+        if veredicto_crudo == "malo_confirmado":
+            veredicto = "malo_confirmado"
+        elif veredictos_crudos_previos.get(p["tupla_str"]) == "bueno_confirmado":
+            veredicto = "bueno_confirmado"
+        else:
+            veredicto = "sin_concluir"
+            veredictos_pendientes_confirmacion.append(
+                f"⏳ [{'LIVE' if p['es_live'] else 'candidato'}] {p['tupla_str']} "
+                f"[{info['lo']:.2f},{info['hi']:.2f}) n={info['n']} "
+                f"pnl_medio={info['pnl_medio']:+.3f} bueno_confirmado HOY, esperando confirmación de mañana"
+            )
+
         info["veredicto"] = veredicto
         salida_final[p["tupla_str"]] = info
+        if veredicto == "sin_concluir":
+            continue
         marca = "🔴" if veredicto == "malo_confirmado" else "🟢"
         etiqueta = "LIVE" if p["es_live"] else "candidato"
         veredictos_nuevos.append(
@@ -255,6 +294,10 @@ def main() -> int:
     print(f"\n{len(veredictos_nuevos)} ventana(s) con veredicto final:")
     for linea in veredictos_nuevos:
         print(f"  {linea}")
+    if veredictos_pendientes_confirmacion:
+        print(f"\n{len(veredictos_pendientes_confirmacion)} ventana(s) pendientes de 2ª confirmación mañana:")
+        for linea in veredictos_pendientes_confirmacion:
+            print(f"  {linea}")
 
     with open(OUT, "w", encoding="utf-8") as f:
         json.dump(salida_final, f, indent=2, ensure_ascii=False)

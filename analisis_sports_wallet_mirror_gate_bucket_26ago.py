@@ -16,9 +16,13 @@ binomial + split-half. Generaliza a TODAS las categorías de sports, no
 solo LoL -- mismo criterio "nunca hardcodear una tupla" ya aplicado
 hoy en cripto.
 
-Salida: data/sports/wallet_mirror_gate_bucket.json. Solo lectura --
-NO conecta a ningún ejecutor todavía (sports no tiene infraestructura
-de dinero real desplegada, es shadow puro).
+Salida: data/sports/wallet_mirror_gate_bucket.json. Solo lectura, no
+coloca ninguna orden -- pero SÍ conecta a dinero real desde 31-Ago
+(sports_wallet_mirror_sniper.py, DRY_RUN=False, LoL#SEGUIR[0.45,0.50)
+primera promoción real de sports): sports_live_guard.puede_operar_live()
+exige veredicto=="bueno_confirmado" de este mismo gate como segundo
+guardián fail-closed, además de la whitelist estática
+pares_permitidos_live. Este generador dejó de ser puramente shadow.
 """
 import csv
 import json
@@ -74,7 +78,29 @@ def payout_win(precio: float) -> float:
     return STAKE * (1 - precio) / precio - STAKE * FEE * (1 - precio)
 
 
+def _cargar_veredictos_crudos_previos() -> dict:
+    """{tupla_str: {bucket_str: veredicto_crudo}} de la corrida anterior --
+    mismo guard de 2 días que gate_bucket_propio.py/analisis_wallet_mirror_
+    gate_bucket_10ago.py (31-Ago). Fail-closed: fichero ausente/corrupto ->
+    {} (ninguna promoción "bueno_confirmado" pasará el guard hoy). Sports
+    ya opera con dinero real desde hoy (LoL#SEGUIR[0.45,0.50), aprobación
+    explícita Javi) -- este gate deja de ser puramente shadow."""
+    try:
+        with open(OUT_PATH, encoding="utf-8") as f:
+            data = json.load(f)
+    except Exception:
+        return {}
+    out = {}
+    for tupla_str, tabla in data.items():
+        if not isinstance(tabla, dict):
+            continue
+        out[tupla_str] = {b: v.get("veredicto_crudo_hoy") or v.get("veredicto")
+                           for b, v in tabla.items() if isinstance(v, dict)}
+    return out
+
+
 def main() -> int:
+    veredictos_crudos_previos = _cargar_veredictos_crudos_previos()
     grupos = defaultdict(list)
     with open(DRY_RUN, encoding="utf-8") as f:
         for row in csv.DictReader(f):
@@ -155,13 +181,11 @@ def main() -> int:
                 m1, m2 = info["split_half"]
                 mejor = info["hit"] > info["ask_medio"]
                 if q < 0.05 and mejor and m1 > 0 and m2 > 0:
-                    info["veredicto"] = "bueno_confirmado"
-                    n_confirmados_buenos += 1
+                    veredicto_crudo = "bueno_confirmado"
                 elif q < 0.05 and not mejor and m1 < 0 and m2 < 0:
-                    info["veredicto"] = "malo_confirmado"
-                    n_confirmados_malos += 1
+                    veredicto_crudo = "malo_confirmado"
                 else:
-                    info["veredicto"] = "sin_concluir"
+                    veredicto_crudo = "sin_concluir"
                 # 29-Ago: veto de payout asimétrico -- degrada bueno_confirmado
                 # si g_kelly(f=10%)<=0 pese a pnl_medio lineal positivo. Solo
                 # puede degradar, nunca promover (mismo invariante que
@@ -173,9 +197,26 @@ def main() -> int:
                 # 0.00000 y disparar el veto por error de redondeo, no por
                 # payout asimétrico real.
                 g_raw = g_kelly_raw.get(key)
-                if info["veredicto"] == "bueno_confirmado" and g_raw is not None and g_raw <= 0:
-                    info["veredicto"] = "malo_confirmado"
-                    n_confirmados_buenos -= 1
+                if veredicto_crudo == "bueno_confirmado" and g_raw is not None and g_raw <= 0:
+                    veredicto_crudo = "malo_confirmado"
+
+                info["veredicto_crudo_hoy"] = veredicto_crudo
+                # 31-Ago: guard de 2 días (mismo criterio que gate_bucket_
+                # propio.py/wallet_mirror cripto) -- "bueno_confirmado" exige
+                # que el crudo de la corrida anterior YA fuera también
+                # "bueno_confirmado" para el mismo bucket; "malo_confirmado"
+                # sigue inmediato (dirección segura, no hace falta esperar).
+                if veredicto_crudo == "malo_confirmado":
+                    veredicto = "malo_confirmado"
+                elif veredicto_crudo == "bueno_confirmado":
+                    crudo_ayer = veredictos_crudos_previos.get(tupla_str, {}).get(b)
+                    veredicto = "bueno_confirmado" if crudo_ayer == "bueno_confirmado" else "sin_concluir"
+                else:
+                    veredicto = "sin_concluir"
+                info["veredicto"] = veredicto
+                if veredicto == "bueno_confirmado":
+                    n_confirmados_buenos += 1
+                elif veredicto == "malo_confirmado":
                     n_confirmados_malos += 1
 
     OUT_PATH.write_text(json.dumps(salida, ensure_ascii=False, indent=1), encoding="utf-8")
