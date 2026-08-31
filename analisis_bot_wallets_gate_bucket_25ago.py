@@ -29,6 +29,19 @@ bucket.py, nunca duplicar con una fórmula distinta.
 Solo lectura, solo ESCRIBE data/shadow/bot_wallets_gate_bucket.json --
 no toca ningún gate real, estas tuplas no están en pares_permitidos_live
 (FASE 0, solo observación).
+
+31-Ago (/code-review sesión, pendiente #3 checkpoint 31-Ago): exigir
+ratio_vs_stake_deteccion>=RATIO_MIN además de mejor_ask_deteccion --
+antes solo se comprobaba que hubiera UN ask capturado, sin verificar que
+el libro tuviera profundidad real en ese instante (mismo hueco ya
+corregido para Wallet Mirror el 10-Ago, project_p24_wallet_mirror_
+refutado_ask_real_10ago, y que Sports Wallet Mirror ya evitó desde el
+día 1 -- analisis_sports_wallet_mirror_gate_bucket_fino.py::RATIO_MIN).
+Verificado con datos reales antes de aplicar el fix: de los 9 buckets
+`bueno_confirmado` de hoy, 8/9 sobreviven con n_fillable>=15 (incluso
+mejoran en varios), pero DISPERSO#SOL#15min[0.50,0.55) SE INVIERTE
+(n_fillable=345, pnl_medio=-0.061€ -- selección adversa real, no ruido:
+n de sobra) -- exactamente el patrón que este fix existe para cazar.
 """
 import csv
 import json
@@ -52,6 +65,7 @@ N_MIN = 15
 P_MAX = 0.05
 ITERS = 2000
 FEE = 0.07
+RATIO_MIN = 5.0
 
 
 def bucket(p):
@@ -65,9 +79,12 @@ def pnl_neto(ask, acierto):
 
 def cargar_filas():
     """clave de grupo: (arquetipo, activo, marco) -> [(ts, ask, pnl), ...].
-    Solo filas resueltas (outcome_real presente) y con ask real capturado
+    Solo filas resueltas (outcome_real presente), con ask real capturado
     (mejor_ask_deteccion no vacío -- si _fillability_mirror falló, no hay
-    ask real que usar, la fila no aporta a PnL, solo a fill-ability)."""
+    ask real que usar, la fila no aporta a PnL, solo a fill-ability) Y con
+    ratio_vs_stake_deteccion>=RATIO_MIN (31-Ago -- ver docstring del
+    módulo: un ask capturado no implica libro con profundidad real, mismo
+    hueco ya corregido para Wallet Mirror el 10-Ago)."""
     grupos = defaultdict(list)
     with open(IN, encoding="utf-8") as f:
         for r in csv.DictReader(f):
@@ -81,6 +98,13 @@ def cargar_filas():
             except (TypeError, ValueError):
                 continue
             if not (0.0 < ask < 1.0):
+                continue
+            ratio_raw = r.get("ratio_vs_stake_deteccion", "")
+            try:
+                ratio = float(ratio_raw) if ratio_raw else None
+            except (TypeError, ValueError):
+                ratio = None
+            if ratio is None or ratio < RATIO_MIN:
                 continue
             marco = r.get("marco", "?")
             if sp.es_pre_twap(marco, r.get("timestamp_utc", "")):

@@ -48,6 +48,14 @@ P_MAX = 0.05
 FEE = 0.07
 VENTANA_MIN_C10 = 30
 N_MIN_BOTS_C9 = 3
+# 31-Ago (/code-review sesión, pendiente #3 checkpoint 31-Ago): igual que
+# analisis_bot_wallets_gate_bucket_25ago.py (mismo IN_BOTS) -- un ask
+# capturado no implica profundidad real, mismo hueco ya corregido para
+# Wallet Mirror el 10-Ago. Verificado con datos reales: Candidata9
+# sobrevive limpio en sus 4 buckets confirmados (n_fillable>=15 en todos);
+# Candidata10#BTC#60min[0.15,0.20) se queda sin evidencia suficiente
+# (n_fillable=4<15, no concluyente -- no confirma ni refuta).
+RATIO_MIN = 5.0
 
 
 def bucket(p):
@@ -112,6 +120,9 @@ def eventos_candidata9():
         ask = to_float(trigger["mejor_ask_deteccion"])
         if ask is None or not (0.0 < ask < 1.0):
             continue
+        ratio = to_float(trigger.get("ratio_vs_stake_deteccion", ""))
+        if ratio is None or ratio < RATIO_MIN:
+            continue
         acierto = 1 if lado_mayoria == outcome else 0
         pnl = pnl_neto(ask, acierto)
         ts = parse_ts(trigger["trade_timestamp"])
@@ -152,6 +163,9 @@ def eventos_candidata10():
                 continue
             ask = to_float(ti["mejor_ask_deteccion"])
             if ask is None or not (0.0 < ask < 1.0):
+                continue
+            ratio = to_float(ti.get("ratio_vs_stake_deteccion", ""))
+            if ratio is None or ratio < RATIO_MIN:
                 continue
             acierto = int(ti["acierto"])
             pnl = pnl_neto(ask, acierto)
