@@ -1,12 +1,12 @@
 {
-  "timestamp_utc": "2026-08-30T07:08:01+00:00",
+  "timestamp_utc": "2026-08-31T07:08:02+00:00",
   "pipeline": {
-    "n_ciclos_resolve_postmortem": 370,
-    "resolve_postmortem_p50_s": 17.0,
-    "resolve_postmortem_p95_s": 20.0,
-    "resolve_postmortem_max_s": 31.0,
-    "n_ciclos_live_trade": 4914,
-    "hueco_live_trade_max_s": 33.0
+    "n_ciclos_resolve_postmortem": 352,
+    "resolve_postmortem_p50_s": 19.0,
+    "resolve_postmortem_p95_s": 23.0,
+    "resolve_postmortem_max_s": 39.0,
+    "n_ciclos_live_trade": 5100,
+    "hueco_live_trade_max_s": 32.0
   },
   "procesos_colgados": [],
   "deploy": {
@@ -14,21 +14,21 @@
     "stale": []
   },
   "disco": {
-    "pct_usado": 88.0,
-    "gb_libres": 9.26,
+    "pct_usado": 89.0,
+    "gb_libres": 8.45,
     "git_gb": 0.0,
-    "data_gb": 32.89,
-    "datalogs_gb": 8.23
+    "data_gb": 33.85,
+    "datalogs_gb": 8.21
   },
   "ram": {
     "ram_total_gb": 7.56,
-    "ram_disponible_gb": 4.17,
-    "ram_pct_libre": 55.1
+    "ram_disponible_gb": 5.4,
+    "ram_pct_libre": 71.4
   },
   "integridad_datos": {
     "trades_abiertos_atascados": [],
-    "n_trades_total": 459,
-    "n_results_total": 319484
+    "n_trades_total": 460,
+    "n_results_total": 332031
   },
   "integridad_datos_sports": {
     "trades_csv_error": "no existe (sin trades reales todavía)",
@@ -36,12 +36,12 @@
     "n_trades_total": 0
   },
   "carga_sistema": {
-    "load1": 5.01,
-    "load5": 6.12,
-    "load15": 6.57,
+    "load1": 4.75,
+    "load5": 6.73,
+    "load15": 7.28,
     "nproc": 4,
-    "ratio5": 1.53,
-    "n_procesos_total": 213
+    "ratio5": 1.68,
+    "n_procesos_total": 211
   },
   "git_push": {
     "commits_sin_pushear": 0
