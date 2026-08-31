@@ -1,4 +1,4 @@
-# Hipótesis automáticas — 2026-08-31 07:37 UTC
+# Hipótesis automáticas — 2026-08-31 07:43 UTC
 _Generado por shadow_postmortem.py sobre 224051 resoluciones (PNL=+17606.04€)_
 
 ## Patrones causales activos
@@ -3729,9 +3729,9 @@ _Generado por shadow_postmortem.py sobre 224051 resoluciones (PNL=+17606.04€)_
 
   - _Acción_: Kelly boost +0.83€ cuando `volumen_spike_ratio` > 1.4556 (IC base=+0.141)
 
-- **PATRÓN** `libro_liquidez` > `8304.7792` → IC=+0.153 (n=306)
+- **PATRÓN** `libro_liquidez` > `8742.148` → IC=+0.145 (n=274)
 
-  - _Acción_: Kelly boost +0.76€ cuando `libro_liquidez` > 8304.7792 (IC base=+0.141)
+  - _Acción_: Kelly boost +0.72€ cuando `libro_liquidez` > 8742.148 (IC base=+0.141)
 
 ### GBM_LATE_5M#SOL#5min
 - **FILTRO** `hora_utc` > `5.0` → IC=-0.143 (n=26)
@@ -6004,10 +6004,10 @@ _Generado por shadow_postmortem.py sobre 224051 resoluciones (PNL=+17606.04€)_
   - _Acción_: SKIP cuando `pct_spot_vs_ref` |x|> 0.0852
   - _Potencial_: sin este filtro IC_bueno=-0.028 (n=123)
 
-- **FILTRO** `drift_60min` |x|> `0.2701` → IC=-0.188 (n=46)
-  - _Por qué funciona_: drift fuerte en 1h → el movimiento ya está priceado en Polymarket; edge agotado
-  - _Acción_: SKIP cuando `drift_60min` |x|> 0.2701
-  - _Potencial_: sin este filtro IC_bueno=-0.085 (n=140)
+- **FILTRO** `sigma_h` > `0.0046` → IC=-0.238 (n=63)
+  - _Por qué funciona_: alta volatilidad → el modelo GBM sobreestima la señal; el mercado es más aleatorio
+  - _Acción_: SKIP cuando `sigma_h` > 0.0046
+  - _Potencial_: sin este filtro IC_bueno=-0.044 (n=123)
 
 - **FILTRO** `ballena_activa_n` > `9.0` → IC=-0.170 (n=104)
 
@@ -6716,7 +6716,7 @@ _Derivadas de los patrones aprendidos:_
 **🟡 H-KELLY-HORA** — Kelly boost ×1.2 por celda (estrategia#subtype#dirección#hora)
   - _Umbral_: n≥40 por celda + gate riguroso completo (Wilson+shuffle+PnL bootstrap)
   - _Acción_: Añadir claves 'ESTRATEGIA#SUBTYPE#DIRECCION#HORA':1.2 a meta.hora_boost_factor, solo por celda confirmada
-  - _Estado_: (cache 463s) 53 celda(s) GATE OK de 2277 trackeadas
+  - _Estado_: (cache 793s) 53 celda(s) GATE OK de 2277 trackeadas
 
 **⚠️ H-SOL-15MIN** — SOL#15min → umbral live (IC≥0.08 n≥40)
   - _Umbral_: IC≥0.08 y n≥40
