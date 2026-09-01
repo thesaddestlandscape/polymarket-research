@@ -1558,17 +1558,17 @@
    "n": 17,
    "pnl_medio": 0.3109,
    "g_kelly_f10": 0.02705,
-   "shuffle_p": 0.112,
+   "shuffle_p": 0.068,
    "split_half": [
-    0.773,
-    0.1514
+    0.8272,
+    0.2056
    ],
    "veredicto": "sin_concluir"
   },
   "0.55": {
-   "n": 5,
-   "pnl_medio": 0.0272,
-   "g_kelly_f10": -0.00088,
+   "n": 7,
+   "pnl_medio": -0.2663,
+   "g_kelly_f10": -0.03073,
    "shuffle_p": null,
    "split_half": null,
    "veredicto": "sin_concluir"
