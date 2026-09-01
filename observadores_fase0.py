@@ -115,6 +115,7 @@ import candidata9_bot_consenso_reactivo_fase0
 import candidata10_confirmacion_cruzada_reactivo_fase0
 import order_flow_5m_reactivo_fase0
 import huecos_extremos_fase0
+import resolution_sniper_precierre_depth_fase0
 
 # (modulo, fichero_log_propio -- EXACTO el que ya usaba pipeline_watchdog.SCREEN_RESTART, nombre_funcion_log_a_reemplazar)
 OBSERVADORES = [
@@ -151,6 +152,15 @@ OBSERVADORES = [
     # ballenas hit 97-98% con miles de mercados, nosotros shadow_n=1-8) --
     # mide fill-ability real de la zona, no de una estrategia concreta.
     (huecos_extremos_fase0, "huecos_extremos_fase0.log", "_log"),
+    # 01-Sep: RESOLUTION_SNIPER_NAIVE post-cierre murió (59/59 órdenes
+    # reales "trading is disabled", incluido el intento más rápido a 2.0s
+    # -- Polymarket cierra el libro de órdenes en el endDate exacto, sin
+    # margen). Prueba el ángulo simétrico: 1-2s ANTES del cierre, donde
+    # resolution_sniper_observer.py lleva semanas confirmando que el libro
+    # sigue abierto. Análisis retrospectivo ya positivo (n=3973, hit=72.4%,
+    # pnl/tr=+0.276€ sin fee) -- este observador mide profundidad REAL
+    # antes de proponer nada con dinero. Puramente lectura.
+    (resolution_sniper_precierre_depth_fase0, "resolution_sniper_precierre_depth_fase0.log", "_log"),
 ]
 
 
