@@ -709,23 +709,44 @@ def cargar_trades_recientes():
 
 UPDOWN_ASSETS_LOWER = ["btc", "eth", "sol", "xrp", "doge", "bnb"]
 
-def _fetch_slot(slug: str, ahora_iso: str) -> list:
-    """Descarga un slot concreto de Polymarket. Llamado en paralelo."""
+def _fetch_slot(slug: str, ahora_iso: str, horizonte_min: int) -> list:
+    """Descarga un slot concreto de Polymarket. Llamado en paralelo.
+
+    01-Sep, hallazgo real (ver idea_precio_stale_fetch_slots_directos_01sep):
+    para un slot que TODAVÍA no ha abierto (ventanas_adelante>0, la ventana
+    empieza en el futuro), `outcomePrices` de gamma-api es el precio semilla
+    de creación del mercado (sin trading real todavía), no un precio de
+    mercado -- verificado: 81.1% de las señales de MOMENTUM_IBS_5M_FADE del
+    01-Sep traían precio_yes_mercado pegado a ~0.50 (0.4850-0.5150) y todas
+    correspondían a horas_a_vencimiento > horizonte_min/60 (ventana aún sin
+    abrir). Se descarta aquí el precio de cualquier slot que no haya abierto
+    todavía -- la metadata (question/end_date/market_id) para adelantar el
+    descubrimiento del mercado seguía siendo el objetivo real de esta
+    función, nunca usar su precio antes de que exista libro real."""
     url = "https://gamma-api.polymarket.com/events"
     mercados = []
     try:
+        ahora_dt = datetime.fromisoformat(ahora_iso)
         r = requests.get(url, params={"slug": slug}, timeout=5)
         if r.status_code != 200:
             return []
         events = r.json() if isinstance(r.json(), list) else []
         for ev in events:
             for m in (ev.get("markets") or []):
+                end_date_raw = (m.get("endDate") or "")[:19]
+                try:
+                    fin_dt = datetime.fromisoformat(end_date_raw).replace(tzinfo=timezone.utc)
+                    ventana_abierta = ahora_dt >= fin_dt - timedelta(minutes=horizonte_min)
+                except Exception:
+                    ventana_abierta = False  # sin end_date fiable -> fail-closed, sin precio
                 precios_raw = m.get("outcomePrices")
                 try:
                     pr = json.loads(precios_raw) if isinstance(precios_raw, str) else precios_raw
                     py = float(pr[0]) if pr else None
                 except Exception:
                     py = None
+                if not ventana_abierta:
+                    py = None  # ventana aún no abierta: precio semilla, no de mercado -- descartado
                 if py is None or not (0.01 < py < 0.99):
                     continue
                 mercados.append({
@@ -765,7 +786,7 @@ def fetch_slots_directos(horizonte_min=5, ventanas_adelante=2):
 
     mercados = []
     with ThreadPoolExecutor(max_workers=len(slugs)) as executor:
-        futuros = {executor.submit(_fetch_slot, slug, ahora_iso): slug for slug in slugs}
+        futuros = {executor.submit(_fetch_slot, slug, ahora_iso, horizonte_min): slug for slug in slugs}
         for futuro in as_completed(futuros):
             try:
                 mercados.extend(futuro.result())
@@ -6649,9 +6670,17 @@ def main():
 
     # Enriquecer con slots frescos obtenidos directamente de la API
     # Garantiza cobertura de slots 5min/15min independientemente del slow loop
+    # 01-Sep (/code-review, hallazgo real): _fetch_slot ahora descarta el
+    # precio de cualquier ventana que no haya abierto todavía (ver docstring
+    # de _fetch_slot) -- una ventana futura (delta>=1) NUNCA está abierta en
+    # el momento del fetch, así que con ventanas_adelante>0 esas peticiones
+    # HTTP siempre volvían vacías tras el fix (nunca aportan precio, y sin
+    # precio main() las descarta igual en el filtro de operables de abajo).
+    # ventanas_adelante=0 mantiene el mismo comportamiento observable, sin
+    # gastar peticiones que ya no pueden servir para nada.
     ids_conocidos = {m.get("market_id", "") for m in mercados}
-    frescos_5m  = fetch_slots_directos(horizonte_min=5,  ventanas_adelante=2)
-    frescos_15m = fetch_slots_directos(horizonte_min=15, ventanas_adelante=1)
+    frescos_5m  = fetch_slots_directos(horizonte_min=5,  ventanas_adelante=0)
+    frescos_15m = fetch_slots_directos(horizonte_min=15, ventanas_adelante=0)
     nuevos_frescos = [m for m in frescos_5m + frescos_15m
                       if m.get("market_id", "") not in ids_conocidos and m.get("market_id", "")]
     if nuevos_frescos:
