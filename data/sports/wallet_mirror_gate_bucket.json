@@ -30,11 +30,7 @@
    ],
    "p_bh": 0.0047,
    "veredicto_crudo_hoy": "bueno_confirmado",
-   "historial_crudo": [
-    "bueno_confirmado",
-    "bueno_confirmado"
-   ],
-   "veredicto": "bueno_confirmado"
+   "veredicto": "sin_concluir"
   },
   "0.40": {
    "n": 49,
@@ -138,10 +134,6 @@
    ],
    "p_bh": 0.0047,
    "veredicto_crudo_hoy": "bueno_confirmado",
-   "historial_crudo": [
-    "bueno_confirmado",
-    "bueno_confirmado"
-   ],
    "veredicto": "bueno_confirmado"
   },
   "0.60": {
@@ -670,10 +662,6 @@
    ],
    "p_bh": 0.024,
    "veredicto_crudo_hoy": "bueno_confirmado",
-   "historial_crudo": [
-    "bueno_confirmado",
-    "bueno_confirmado"
-   ],
    "veredicto": "bueno_confirmado"
   },
   "0.95": {
@@ -972,11 +960,7 @@
    ],
    "p_bh": 0.0311,
    "veredicto_crudo_hoy": "bueno_confirmado",
-   "historial_crudo": [
-    "bueno_confirmado",
-    "bueno_confirmado"
-   ],
-   "veredicto": "bueno_confirmado"
+   "veredicto": "sin_concluir"
   },
   "0.85": {
    "n": 29,
@@ -1298,11 +1282,7 @@
    ],
    "p_bh": 0.0,
    "veredicto_crudo_hoy": "bueno_confirmado",
-   "historial_crudo": [
-    "bueno_confirmado",
-    "bueno_confirmado"
-   ],
-   "veredicto": "bueno_confirmado"
+   "veredicto": "sin_concluir"
   },
   "0.95": {
    "n": 16,
@@ -1938,10 +1918,6 @@
    ],
    "p_bh": 0.0311,
    "veredicto_crudo_hoy": "bueno_confirmado",
-   "historial_crudo": [
-    "bueno_confirmado",
-    "bueno_confirmado"
-   ],
    "veredicto": "bueno_confirmado"
   },
   "0.55": {
@@ -2426,10 +2402,6 @@
    ],
    "p_bh": 0.0255,
    "veredicto_crudo_hoy": "bueno_confirmado",
-   "historial_crudo": [
-    "bueno_confirmado",
-    "bueno_confirmado"
-   ],
    "veredicto": "bueno_confirmado"
   },
   "0.25": {
