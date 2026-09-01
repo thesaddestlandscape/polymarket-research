@@ -93,6 +93,7 @@ import vigia_reabrir_overrides_micro_bucket
 import vigia_micro_bucket_kill_switch_wallet_mirror
 import vigia_reabrir_overrides_wallet_mirror
 import vigia_gate_bucket_wallet_mirror
+import vigia_gate_bucket_wallet_mirror_fino
 import vigia_sports_micro_bucket_kill_switch_wallet_mirror
 import vigia_sports_reabrir_overrides_wallet_mirror
 import wallet_mirror_tracker as _wmt
@@ -180,6 +181,15 @@ TAREAS = [
     ("vigia_reabrir_overrides_wallet_mirror", vigia_reabrir_overrides_wallet_mirror.main,
      "vigia_reabrir_overrides_wallet_mirror.log", 1800),
     ("vigia_gate_bucket_wallet_mirror", vigia_gate_bucket_wallet_mirror.main, "vigia_gate_bucket_wallet_mirror.log", 3600),
+    # 01-Sep (hallazgo real, petición explícita Javi tras reabrir WALLET_MIRROR
+    # restringido por el fino esta misma noche): el fino de WALLET_MIRROR
+    # cripto NUNCA tuvo vigía programado -- a diferencia del grid (línea de
+    # arriba) y del hermano de sports (cron 07:07). Sin esto, las zonas
+    # reabiertas que dependen del fino habrían quedado fail-closed por
+    # antigüedad (MAX_ANTIGUEDAD_S=2h15min en wallet_mirror_gate_bucket.py)
+    # sin que nada las refrescara nunca.
+    ("vigia_gate_bucket_wallet_mirror_fino", vigia_gate_bucket_wallet_mirror_fino.main,
+     "vigia_gate_bucket_wallet_mirror_fino.log", 3600),
     # 27-Ago noche (petición explícita Javi: "construye lo que falte de
     # sports para tenerlo ya hecho cuando toque operar en directo"): mismo
     # par bloqueo+reapertura que WALLET_MIRROR cripto arriba, pero para

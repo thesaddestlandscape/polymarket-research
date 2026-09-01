@@ -13,7 +13,26 @@ Solo los buckets "malo_confirmado"/"bueno_confirmado" tienen evidencia
 suficiente; todo lo demás es "sin_concluir" y no se toca (fail-open).
 """
 import json
+import time
 from pathlib import Path
+
+# 01-Sep: guardián de frescura (petición explícita Javi, "no lo podemos
+# permitir, tiene que hacerlo cada vez que se vaya a hacer un trade, sino
+# corremos riesgo de perder pasta") -- evaluar() YA lee el fichero en vivo
+# en cada llamada (nunca cachea más allá de un ciclo, ver _cargar()), pero
+# el DATO en sí solo se recalcula una vez al día (cron 06:55/06:58 UTC,
+# analisis_gate_bucket_propio_28jul.py/analisis_gate_bucket_fino.py) --
+# recomputar el gate riguroso completo (shuffle+bootstrap+búsqueda de
+# ventana) en el instante exacto de cada señal no es viable (son minutos
+# de cómputo, no compatible con la latencia de un ejecutor). La protección
+# real y viable: si el fichero lleva más tiempo del esperado sin
+# regenerarse (el cron se rompió, o algo lo bloqueó), tratar el dato como
+# NO FIABLE (equivalente a sin datos) en vez de confiar ciegamente en un
+# "bueno_confirmado" de ayer o de hace días -- fail-closed por antigüedad,
+# no solo por ausencia. Margen generoso sobre la cadencia real del cron
+# (2x + un colchón) para no disparar por una ejecución de cron puntualmente
+# tardía.
+MAX_ANTIGUEDAD_S = 30 * 3600  # 30h -- cron diario (06:55/06:58 UTC) + margen
 
 # 15-Ago (/code-review, hallazgo real): estas rutas eran relativas al cwd
 # del proceso que importa este módulo -- funcionaba mientras solo lo
@@ -249,6 +268,8 @@ def _cargar() -> dict:
         mtime = DATA_PATH.stat().st_mtime
     except OSError:
         return {}
+    if time.time() - mtime > MAX_ANTIGUEDAD_S:
+        return {}  # dato demasiado viejo -- tratar como sin datos, fail-closed
     if _cache["mtime"] != mtime:
         try:
             _cache["data"] = json.loads(DATA_PATH.read_text(encoding="utf-8"))
@@ -271,6 +292,8 @@ def _zonas_finas() -> dict:
         mtime = DATA_PATH_FINO.stat().st_mtime
     except OSError:
         return {}
+    if time.time() - mtime > MAX_ANTIGUEDAD_S:
+        return {}  # 01-Sep: mismo guardián de frescura que _cargar()
     if _cache_fino["mtime"] != mtime:
         try:
             _cache_fino["data"] = json.loads(DATA_PATH_FINO.read_text(encoding="utf-8"))

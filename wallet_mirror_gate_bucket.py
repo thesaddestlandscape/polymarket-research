@@ -16,6 +16,7 @@ dinero real.
 """
 import json
 import math
+import time
 from pathlib import Path
 
 _REPO = Path(__file__).resolve().parent
@@ -38,6 +39,15 @@ _CONFLUENCIA_N_MIN = 15  # 01-Sep: piso absoluto CLAUDE.md ("ninguna conclusión
 # con n<15"), mismo valor que _FILLABLE_N_MIN en gate_bucket_propio.py --
 # reusado aquí para la confluencia suave de abajo, ver su comentario.
 
+# 01-Sep: guardián de frescura, mismo mecanismo y misma razón que
+# gate_bucket_propio.py::MAX_ANTIGUEDAD_S (petición explícita Javi tras la
+# reapertura de WALLET_MIRROR restringida por este gate: "no lo podemos
+# permitir, tiene que hacerlo cada vez que se vaya a hacer un trade, sino
+# corremos riesgo de perder pasta"). Aquí el margen es más ajustado porque
+# este gate se regenera cada hora (vigia_gate_bucket_wallet_mirror.py,
+# screen vigiasfreq, 3600s), no cada día -- 2x + colchón.
+MAX_ANTIGUEDAD_S = 2 * 3600 + 900  # 2h15min
+
 _cache = {"mtime": None, "data": {}}
 _cache_override = {"mtime": None, "data": {}}
 _cache_fino = {"mtime": None, "data": {}}
@@ -52,6 +62,13 @@ def _zonas_finas() -> dict:
         mtime = DATA_PATH_FINO.stat().st_mtime
     except OSError:
         return {}
+    if time.time() - mtime > MAX_ANTIGUEDAD_S:
+        return {}  # 01-Sep (/code-review, hallazgo real): el guardián de
+        # frescura se había aplicado a _cargar() pero no aquí -- el fino
+        # (ventana deslizante) es justo la fuente de la que dependen las 2
+        # zonas reabiertas esta noche (BTC#15min[0.09,0.14), ETH#15min
+        # [0.22,0.27)), así que sin este guardián podían seguir promocionando
+        # con datos de días sin que nada lo impidiera.
     if _cache_fino["mtime"] != mtime:
         try:
             _cache_fino["data"] = json.loads(DATA_PATH_FINO.read_text(encoding="utf-8"))
@@ -66,6 +83,8 @@ def _cargar() -> dict:
         mtime = DATA_PATH.stat().st_mtime
     except OSError:
         return {}
+    if time.time() - mtime > MAX_ANTIGUEDAD_S:
+        return {}  # dato demasiado viejo -- tratar como sin datos, fail-closed
     if _cache["mtime"] != mtime:
         try:
             _cache["data"] = json.loads(DATA_PATH.read_text(encoding="utf-8"))
