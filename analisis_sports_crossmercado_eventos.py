@@ -101,7 +101,21 @@ def analizar_leadlag(por_evento):
     for event_slug, mercados in por_evento.items():
         if len(mercados) != 2:
             continue
-        (slug_a, puntos_a), (slug_b, puntos_b) = list(mercados.items())
+        # /code-review 01-Sep (hallazgo real): el orden de list(mercados.items())
+        # depende del orden de inserción en el firehose (arbitrario por
+        # evento), no del rol de cada mercado -- un lead-lag real y
+        # consistente (ej. "partido completo" siempre lidera por X min) se
+        # diluía al agregar porque unos eventos entraban como (líder,
+        # seguidor) y otros como (seguidor, líder), cancelándose entre sí.
+        # Orden determinista por rol: el mercado SIN sufijo -game/-map
+        # (partido completo, mismo criterio que analizar_arb_suma) va
+        # primero como "a"; si ambos o ninguno tiene sufijo, se ordena por
+        # slug para que al menos sea consistente entre eventos.
+        slugs_ordenados = sorted(
+            mercados.items(),
+            key=lambda kv: (any(suf in kv[0] for suf in ("-game", "-map")), kv[0]),
+        )
+        (slug_a, puntos_a), (slug_b, puntos_b) = slugs_ordenados
         if len(puntos_a) < 20 or len(puntos_b) < 20:
             continue
         bins_a = resample(puntos_a, BIN_S)
@@ -229,12 +243,25 @@ def analizar_arb_suma(por_evento):
         boot.append(statistics.fmean(muestra))
     boot.sort()
     ci90 = (boot[int(0.05 * len(boot))], boot[int(0.95 * len(boot))])
+    # /code-review 01-Sep (hallazgo real): este análisis usa precio de
+    # ÚLTIMO TRADE del firehose, nunca profundidad/ask real de libro -- el
+    # mismo patrón (suma<1 en precio) ya se refutó DOS VECES en este
+    # proyecto al comprobar libro real (Box Builder 04-Ago, Spread-Harvest
+    # Maker 11-Ago, ambos CLAUDE.md). "confirmado" aquí describiría una
+    # estructura ejecutable que NO se ha verificado -- veredicto explícito
+    # que deja claro que falta ese paso, para que ninguna sesión futura lo
+    # lea como accionable sin releer este comentario.
+    veredicto = ("confirmado_en_precio_no_en_libro" if (ci90[0] > 0 or ci90[1] < 0)
+                 else "sin_concluir")
     return {
         "n": n,
         "pct_snapshots_explotables_tras_fee": round(n_snapshots_explotables / n * 100, 2),
         "media_desviacion_suma_vs_1": round(media, 4),
         "ci90_bootstrap": [round(ci90[0], 4), round(ci90[1], 4)],
-        "veredicto": "confirmado" if (ci90[0] > 0 or ci90[1] < 0) else "sin_concluir",
+        "veredicto": veredicto,
+        "nota": "precio de último trade, NO profundidad/ask real de libro -- "
+                "mismo patrón refutado 2x en cripto (Box Builder, Spread-Harvest "
+                "Maker) al comprobar libro real. No accionable sin ese paso.",
     }
 
 
