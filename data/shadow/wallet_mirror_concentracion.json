@@ -1,30 +1,30 @@
 {
- "generado_utc": "2026-08-31T06:46:01+00:00",
+ "generado_utc": "2026-09-01T06:46:01+00:00",
  "tuplas": {
   "BTC#15min": {
-   "n_senales": 28801,
-   "n_wallets_distintas": 549,
-   "n_mercados_distintos": 2934,
+   "n_senales": 29287,
+   "n_wallets_distintas": 558,
+   "n_mercados_distintos": 3008,
    "top5_wallets": [
     {
      "wallet": "0x0cb038487586d1119b165466072e9baf666f3a90",
      "n": 1432,
-     "pct": 5.0
+     "pct": 4.9
     },
     {
      "wallet": "0xce25e214d5cfe4f459cf67f08df581885aae7fdc",
      "n": 1238,
-     "pct": 4.3
+     "pct": 4.2
     },
     {
      "wallet": "0x20d2309cd92b797ae7ca175ed828ed8a27fbe29d",
-     "n": 916,
-     "pct": 3.2
+     "n": 961,
+     "pct": 3.3
     },
     {
      "wallet": "0xe4f7f7950210228a32c9ebbfb633c004a6d230f6",
      "n": 857,
-     "pct": 3.0
+     "pct": 2.9
     },
     {
      "wallet": "0x0c7c5204404e9d5402d258fedac59c7212bae4cb",
@@ -59,30 +59,30 @@
      "pct": 0.1
     }
    ],
-   "top1_wallet_pct": 5.0,
+   "top1_wallet_pct": 4.9,
    "top1_mercado_pct": 0.2,
    "alerta_wallet": false,
    "alerta_mercado": false
   },
   "BTC#5min": {
-   "n_senales": 118988,
-   "n_wallets_distintas": 1027,
-   "n_mercados_distintos": 8781,
+   "n_senales": 121020,
+   "n_wallets_distintas": 1051,
+   "n_mercados_distintos": 9001,
    "top5_wallets": [
     {
      "wallet": "0x0cb038487586d1119b165466072e9baf666f3a90",
      "n": 5066,
-     "pct": 4.3
+     "pct": 4.2
     },
     {
      "wallet": "0x75cc3b63a2f2423085e10706c78b494017b93ce1",
-     "n": 4480,
+     "n": 4655,
      "pct": 3.8
     },
     {
      "wallet": "0x5e2b9261b0c4f697b55bf921ff2bc227183d9101",
      "n": 3633,
-     "pct": 3.1
+     "pct": 3.0
     },
     {
      "wallet": "0x3c58ef422754ff22c7e806336feba0064d8b776b",
@@ -92,7 +92,7 @@
     {
      "wallet": "0x3048d65321be3497164cdfc2996f94f98a2e7537",
      "n": 2598,
-     "pct": 2.2
+     "pct": 2.1
     }
    ],
    "top5_mercados": [
@@ -122,40 +122,40 @@
      "pct": 0.0
     }
    ],
-   "top1_wallet_pct": 4.3,
+   "top1_wallet_pct": 4.2,
    "top1_mercado_pct": 0.0,
    "alerta_wallet": false,
    "alerta_mercado": false
   },
   "BTC#60min": {
-   "n_senales": 3284,
-   "n_wallets_distintas": 85,
-   "n_mercados_distintos": 738,
+   "n_senales": 3366,
+   "n_wallets_distintas": 86,
+   "n_mercados_distintos": 758,
    "top5_wallets": [
     {
      "wallet": "0xeebde7a0e019a63e6b476eb425505b7b3e6eba30",
      "n": 423,
-     "pct": 12.9
+     "pct": 12.6
     },
     {
      "wallet": "0xf31819f7f05eeb17ab40ff8e417447df339c68f0",
-     "n": 314,
-     "pct": 9.6
+     "n": 317,
+     "pct": 9.4
+    },
+    {
+     "wallet": "0x727b4b36ad0eeb3d64fbe4a3aa9ddf18eca593f5",
+     "n": 293,
+     "pct": 8.7
     },
     {
      "wallet": "0x9d57c42e847173d06841703825d3fe2299e456ea",
      "n": 286,
-     "pct": 8.7
-    },
-    {
-     "wallet": "0x727b4b36ad0eeb3d64fbe4a3aa9ddf18eca593f5",
-     "n": 275,
-     "pct": 8.4
+     "pct": 8.5
     },
     {
      "wallet": "0x0ae4a8d6146c304d69208cdf114129e63c67fb39",
      "n": 155,
-     "pct": 4.7
+     "pct": 4.6
     }
    ],
    "top5_mercados": [
@@ -185,25 +185,25 @@
      "pct": 0.4
     }
    ],
-   "top1_wallet_pct": 12.9,
+   "top1_wallet_pct": 12.6,
    "top1_mercado_pct": 0.4,
    "alerta_wallet": false,
    "alerta_mercado": false
   },
   "ETH#15min": {
-   "n_senales": 9344,
-   "n_wallets_distintas": 136,
-   "n_mercados_distintos": 2587,
+   "n_senales": 9441,
+   "n_wallets_distintas": 137,
+   "n_mercados_distintos": 2648,
    "top5_wallets": [
     {
      "wallet": "0x5d4aba8ad45bb5eab3499a0294b42da5d1e455d3",
      "n": 607,
-     "pct": 6.5
+     "pct": 6.4
     },
     {
      "wallet": "0x0c7c5204404e9d5402d258fedac59c7212bae4cb",
      "n": 606,
-     "pct": 6.5
+     "pct": 6.4
     },
     {
      "wallet": "0xe8e086f7ef06af27889edfb5026e1453c61d7eec",
@@ -248,7 +248,7 @@
      "pct": 0.2
     }
    ],
-   "top1_wallet_pct": 6.5,
+   "top1_wallet_pct": 6.4,
    "top1_mercado_pct": 0.3,
    "alerta_wallet": false,
    "alerta_mercado": false

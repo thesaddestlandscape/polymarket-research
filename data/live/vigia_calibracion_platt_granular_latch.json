@@ -1114,5 +1114,13 @@
   "UPDOWN_GBM#ETH#60min": {
     "n": 201,
     "confirmado": false
+  },
+  "GBM_LATE_60M#BTC": {
+    "n": 200,
+    "confirmado": false
+  },
+  "GBM_LATE_60M#BTC#60min": {
+    "n": 200,
+    "confirmado": false
   }
 }
