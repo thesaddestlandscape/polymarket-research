@@ -30,6 +30,14 @@ from gate_confirmacion_historial import (
 REPO = Path(__file__).resolve().parent
 OUT = REPO / "data/shadow/wallet_mirror_gate_bucket_fino.json"
 
+# 01-Sep: umbral propio de WALLET_MIRROR, n>=40 (no el N_MIN_VENTANA=15
+# compartido de analisis_gate_bucket_fino.py, que usan otras familias live
+# y no se toca aqui para no ampliar el radio del cambio) -- ventanas
+# confirmadas con n=30 (ej. SEGUIR#BTC#15min#1[0.35,0.40) n=30) se
+# revertian con mas datos tras disparar dinero real, ver nota
+# _pares_walletmirror_pausa_nota_2026-09-01 en config_live.json.
+N_MIN_WALLET_MIRROR = 40
+
 
 def main() -> int:
     grupos = cargar_filas()
@@ -84,7 +92,7 @@ def main() -> int:
         info = p["info"]
         if p["diff"] < 0:
             veredicto_crudo = "malo_confirmado"
-        elif info["pnl_medio"] >= 0:
+        elif info["pnl_medio"] >= 0 and info["n"] >= N_MIN_WALLET_MIRROR:
             veredicto_crudo = "bueno_confirmado"
         else:
             _preservar_historial(p["clave_str"])

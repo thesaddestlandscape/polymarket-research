@@ -59,7 +59,11 @@ TRADES_REAL = REPO / "data/live/trades.csv"
 OUT = REPO / "data/shadow/wallet_mirror_gate_bucket.json"
 
 STEP = 0.05
-N_MIN = 15
+N_MIN = 40  # 01-Sep: subido de 15 a 40 (n>=40 = estandar de confirmacion del
+# proyecto, CLAUDE.md) tras confirmar que buckets confirmados con n=30-65
+# se revertian a sin_concluir/malo_confirmado horas despues de disparar
+# dinero real (vigia_wallet_mirror_postfix.py n=15 hit=26.7% pnl=-6.33EUR,
+# ver nota _pares_walletmirror_pausa_nota_2026-09-01 en config_live.json)
 P_MAX = 0.05
 ITERS = 2000
 FEE = 0.07
