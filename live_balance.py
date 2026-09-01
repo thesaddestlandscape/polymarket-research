@@ -137,14 +137,59 @@ _POSITIONS_VALUE_TOLERANCIA_PCT = 0.15   # 15% del propio /value, lo que sea may
 def _positions_value_sumada(wallet: str) -> float | None:
     """Suma currentValue de data-api /positions -- fuente independiente de
     /value, usada solo como cross-check (08-11). Devuelve None si la llamada
-    falla (best-effort, no debe tumbar _positions_value)."""
+    falla (best-effort, no debe tumbar _positions_value).
+
+    01-Sep (bug real de dinero, encontrado en el barrido de esta sesión tras
+    2 alertas de reconciliación -- cripto TE delta_dia=-2.12$, sports
+    delta_dia=-1.07€, el mismo día que sports abrió su primera posición
+    OPEN real de verdad, `LoL#SEGUIR` 1.05€): `/positions` SIN filtro
+    devuelve por defecto solo ~100 filas (paginación silenciosa de la API,
+    sin error ni aviso), y esta wallet ya acumula 200+ posiciones
+    históricas -- casi todas resueltas hace tiempo con currentValue=0. La
+    única posición REALMENTE abierta (`redeemable=false`) puede quedar
+    fuera de esa página si su `size` no está entre las ~100 mayores de
+    todo el historial (aquí: size=2.19 de la posición viva vs decenas de
+    posiciones históricas más grandes ya resueltas). La suma salía 0.0,
+    /value devolvía el valor correcto (1.0391€), pero como la discrepancia
+    superó la tolerancia de _positions_value(), el cross-check DESCARTÓ el
+    valor correcto y usó la suma incompleta -- exactamente al revés de lo
+    que ese cross-check existe para prevenir (ver docstring de abajo, caso
+    11-Ago). Fix: filtrar por `redeemable=false` -- servidor devuelve SOLO
+    las posiciones aún no resueltas (por diseño no puede haber cientos,
+    nunca trunca), sin depender de un límite fijo que la cuenta puede
+    volver a desbordar según crezca el historial.
+
+    /code-review de este mismo fix (01-Sep) señaló un hueco teórico: una
+    posición GANADA pero todavía no reclamada también sale con
+    `redeemable=true` (mismo flag que una posición vieja ya resuelta y sin
+    valor, ver candidata2_weekly_temprano_espejo_fase0.py:70-71) -- filtrar
+    solo por `redeemable=false` la excluiría con currentValue real. Nunca
+    observado en esta wallet (verificado en vivo: 0/220 posiciones
+    `redeemable=true` con currentValue>0 -- Polymarket parece liquidar el
+    payout sin dejar posición reclamable pendiente), pero se cubre igual
+    sin reintroducir el problema de paginación original: sumar TAMBIÉN
+    cualquier `redeemable=true` con currentValue>0 dentro de una página
+    igual de acotada (nunca puede haber cientos de posiciones ganadas con
+    saldo pendiente de golpe, a diferencia del histórico completo)."""
     try:
-        r = requests.get(f"{DATA_API}/positions", params={"user": wallet}, timeout=20)
+        r = requests.get(f"{DATA_API}/positions",
+                          params={"user": wallet, "redeemable": "false", "limit": 500},
+                          timeout=20)
         r.raise_for_status()
         d = r.json()
         if not isinstance(d, list):
             return None
-        return sum(float(p.get("currentValue") or 0.0) for p in d)
+        suma = sum(float(p.get("currentValue") or 0.0) for p in d)
+
+        r2 = requests.get(f"{DATA_API}/positions",
+                           params={"user": wallet, "redeemable": "true", "limit": 500},
+                           timeout=20)
+        r2.raise_for_status()
+        d2 = r2.json()
+        if isinstance(d2, list):
+            suma += sum(float(p.get("currentValue") or 0.0) for p in d2
+                        if float(p.get("currentValue") or 0.0) > 0)
+        return suma
     except Exception:
         return None
 
