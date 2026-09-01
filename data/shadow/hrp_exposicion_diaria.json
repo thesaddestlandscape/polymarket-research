@@ -1,23 +1,23 @@
 {
-  "timestamp_utc": "2026-09-01T04:10:05+00:00",
+  "timestamp_utc": "2026-09-01T06:10:05+00:00",
   "tuplas_maduras": [
     {
       "tupla": "FAVORITO_CONFIRMADO_15MIN_ALTACONVICCION#BTC#15min#BUY_YES",
-      "peso_hrp": 0.5055,
+      "peso_hrp": 0.5123,
       "exposicion_reciente_eur": 2.1,
       "share_exposicion_reciente": 0.4,
       "excede_techo_hrp_x1_5": false
     },
     {
       "tupla": "FAVORITO_CONFIRMADO#BTC#60min#BUY_NO",
-      "peso_hrp": 0.443,
+      "peso_hrp": 0.4331,
       "exposicion_reciente_eur": 0.0,
       "share_exposicion_reciente": 0.0,
       "excede_techo_hrp_x1_5": false
     },
     {
       "tupla": "BALLENAS_CONFIRMADAS_15M#ETH#15min#BUY_YES",
-      "peso_hrp": 0.0515,
+      "peso_hrp": 0.0545,
       "exposicion_reciente_eur": 3.15,
       "share_exposicion_reciente": 0.6,
       "excede_techo_hrp_x1_5": true
@@ -51,66 +51,6 @@
     },
     {
       "tupla": "WALLET_MIRROR#BTC#60min#BUY_Down",
-      "dias_historial": 0,
-      "n": 0
-    },
-    {
-      "tupla": "RESOLUTION_SNIPER_NAIVE#BTC#5min#BUY_Up",
-      "dias_historial": 0,
-      "n": 0
-    },
-    {
-      "tupla": "RESOLUTION_SNIPER_NAIVE#BTC#5min#BUY_Down",
-      "dias_historial": 0,
-      "n": 0
-    },
-    {
-      "tupla": "RESOLUTION_SNIPER_NAIVE#ETH#5min#BUY_Up",
-      "dias_historial": 0,
-      "n": 0
-    },
-    {
-      "tupla": "RESOLUTION_SNIPER_NAIVE#ETH#5min#BUY_Down",
-      "dias_historial": 0,
-      "n": 0
-    },
-    {
-      "tupla": "RESOLUTION_SNIPER_NAIVE#SOL#5min#BUY_Up",
-      "dias_historial": 0,
-      "n": 0
-    },
-    {
-      "tupla": "RESOLUTION_SNIPER_NAIVE#SOL#5min#BUY_Down",
-      "dias_historial": 0,
-      "n": 0
-    },
-    {
-      "tupla": "RESOLUTION_SNIPER_NAIVE#XRP#5min#BUY_Up",
-      "dias_historial": 0,
-      "n": 0
-    },
-    {
-      "tupla": "RESOLUTION_SNIPER_NAIVE#XRP#5min#BUY_Down",
-      "dias_historial": 0,
-      "n": 0
-    },
-    {
-      "tupla": "RESOLUTION_SNIPER_NAIVE#DOGE#5min#BUY_Up",
-      "dias_historial": 0,
-      "n": 0
-    },
-    {
-      "tupla": "RESOLUTION_SNIPER_NAIVE#DOGE#5min#BUY_Down",
-      "dias_historial": 0,
-      "n": 0
-    },
-    {
-      "tupla": "RESOLUTION_SNIPER_NAIVE#BNB#5min#BUY_Up",
-      "dias_historial": 0,
-      "n": 0
-    },
-    {
-      "tupla": "RESOLUTION_SNIPER_NAIVE#BNB#5min#BUY_Down",
       "dias_historial": 0,
       "n": 0
     },
