@@ -1,4 +1,4 @@
-# Hipótesis automáticas — 2026-09-01 23:30 UTC
+# Hipótesis automáticas — 2026-09-01 23:37 UTC
 _Generado por shadow_postmortem.py sobre 245363 resoluciones (PNL=+21298.00€)_
 
 ## Patrones causales activos
@@ -2607,9 +2607,9 @@ _Generado por shadow_postmortem.py sobre 245363 resoluciones (PNL=+21298.00€)_
   - _Por qué funciona_: baja volatilidad → señal GBM más fiable; el spread de Polymarket cubre mejor el edge
   - _Acción_: Kelly boost +1.00€ cuando `sigma_h` < 0.0052 (IC base=+0.269)
 
-- **PATRÓN** `sigma_h` > `0.0076` → IC=+0.296 (n=52)
+- **PATRÓN** `sigma_h` > `0.0039` → IC=+0.287 (n=139)
   - _Por qué funciona_: alta volatilidad → el modelo GBM sobreestima la señal; el mercado es más aleatorio
-  - _Acción_: Kelly boost +1.00€ cuando `sigma_h` > 0.0076 (IC base=+0.269)
+  - _Acción_: Kelly boost +1.00€ cuando `sigma_h` > 0.0039 (IC base=+0.269)
 
 - **PATRÓN** `drift_60min` |x|≤ `0.0994` → IC=+0.278 (n=52)
   - _Por qué funciona_: drift moderado → precio aún no ha reaccionado del todo; lag explotable
@@ -6802,7 +6802,7 @@ _Derivadas de los patrones aprendidos:_
 **🟡 H-KELLY-HORA** — Kelly boost ×1.2 por celda (estrategia#subtype#dirección#hora)
   - _Umbral_: n≥40 por celda + gate riguroso completo (Wilson+shuffle+PnL bootstrap)
   - _Acción_: Añadir claves 'ESTRATEGIA#SUBTYPE#DIRECCION#HORA':1.2 a meta.hora_boost_factor, solo por celda confirmada
-  - _Estado_: 98 celda(s) pasan gate riguroso completo de 1076 evaluadas (n>=40) y 2370 trackeadas (n>=15). Detalle: kelly_hora_segmentado.json
+  - _Estado_: (cache 346s) 98 celda(s) GATE OK de 2370 trackeadas
 
 **⚠️ H-SOL-15MIN** — SOL#15min → umbral live (IC≥0.08 n≥40)
   - _Umbral_: IC≥0.08 y n≥40
