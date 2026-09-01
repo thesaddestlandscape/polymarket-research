@@ -4333,6 +4333,30 @@ def _banda_confirmada_ballenas(activo: str, marco: str, lo: float, hi: float) ->
     return None
 
 
+def _banda_confirmada_ballenas_en_precio(activo: str, marco: str, precio: float) -> dict | None:
+    """01-Sep (bug real encontrado en el barrido de sesión, ver
+    idea_ballenas_confirmadas_banda_ancha_inalcanzable_01sep): el 19-Ago se
+    amplió BALLENAS_CONFIRMADAS_BANDA_NO de [0.5,0.7) a [0.3,0.7) para
+    capturar edge confirmado en [0.3,0.5) -- pero ballenas_observer.py
+    sigue particionando en bandas FIJAS más estrechas (..., [0.3,0.5),
+    [0.5,0.7), ...) y _banda_confirmada_ballenas() exige coincidencia
+    EXACTA de (lo,hi). Ningún par (banda_lo,banda_hi) calculado por el
+    observer coincide jamás con el rango ancho [0.3,0.7) -- la ampliación
+    quedó estructuralmente inalcanzable desde el mismo día del fix (0
+    señales BUY_NO para SOL#15min desde 19-Ago, verificado). Fallback: si
+    no hay coincidencia exacta, buscar la banda ESTRECHA del observer que
+    de verdad contiene `precio` -- mismo criterio fail-closed (None si esa
+    banda no pasa gates), pero sin exigir que el rango amplio del llamador
+    coincida con una única banda que nunca podrá existir."""
+    estado = _cargar_ballenas_timing_state().get(f"{activo}#{marco}", {})
+    for b in estado.get("bandas", []):
+        blo, bhi = b.get("banda_lo"), b.get("banda_hi")
+        if (isinstance(blo, (int, float)) and isinstance(bhi, (int, float))
+                and blo <= precio < bhi):
+            return b if b.get("pasa_gates") else None
+    return None
+
+
 def s_ballenas_confirmadas_15m(market, ctx):
     """
     BUY_YES o BUY_NO en SOL/ETH/XRP#15min cuando el precio ya cotiza dentro
@@ -4383,8 +4407,24 @@ def s_ballenas_confirmadas_15m(market, ctx):
 
     banda_info = _banda_confirmada_ballenas(activo, "15m", banda_lo, banda_hi)
     if banda_info is None:
+        # Fallback (01-Sep): el rango del llamador puede ser más ancho que
+        # cualquier banda individual que el observer calcule (ver docstring
+        # de _banda_confirmada_ballenas_en_precio) -- comprobar la banda
+        # ESTRECHA real que contiene el precio de este mercado concreto
+        # antes de descartar. Mismo criterio fail-closed: None si esa banda
+        # tampoco pasa gates.
+        banda_info = _banda_confirmada_ballenas_en_precio(activo, "15m", precio_lado)
+    if banda_info is None:
         _log_diagnostico_ballenas_confirmadas(activo, direccion, "banda_no_confirmada", condition_id)
         return None  # el observer no confirma esta banda concreta para este activo ahora
+    # /code-review 01-Sep: sin esto, cuando el fallback resuelve una banda
+    # ESTRECHA (ej. [0.5,0.7)) distinta del rango ANCHO del llamador (ej.
+    # [0.3,0.7)), el bucle de trades de abajo seguía filtrando contra el
+    # rango ancho -- contaminando el gate de concentración con trades de
+    # una sub-banda vecina NO confirmada (ej. [0.3,0.5), pasa_gates=False,
+    # hit≈0.39-0.41, señal casi opuesta). Realinear banda_lo/banda_hi a los
+    # límites reales de la banda confirmada antes de contar trades.
+    banda_lo, banda_hi = banda_info["banda_lo"], banda_info["banda_hi"]
 
     if not condition_id:
         _log_diagnostico_ballenas_confirmadas(activo, direccion, "sin_condition_id")
