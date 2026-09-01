@@ -47,6 +47,8 @@ from pathlib import Path
 
 import numpy as np
 
+from gate_confirmacion_historial import cargar_historial_previo, veredicto_con_tolerancia
+
 REPO = Path(__file__).resolve().parent
 sys.path.insert(0, str(REPO))
 import shadow_postmortem as sp  # noqa: E402 -- reusa TWAP_MARCOS_AFECTADOS/TWAP_FECHA_CAMBIO
@@ -213,29 +215,10 @@ def _cargar_pnl_real_por_bucket() -> dict:
     return {k: dict(v) for k, v in out.items()}
 
 
-def _cargar_veredictos_crudos_previos() -> dict:
-    """{clave_str: {bucket_str: veredicto_crudo}} de la corrida anterior --
-    mismo guard de 2 días que gate_bucket_propio.py (31-Ago). Fail-closed:
-    fichero ausente/corrupto -> {} (ninguna promoción "bueno_confirmado"
-    pasará el guard hoy)."""
-    try:
-        with open(OUT, encoding="utf-8") as f:
-            data = json.load(f)
-    except Exception:
-        return {}
-    out = {}
-    for clave_str, tabla in data.items():
-        if not isinstance(tabla, dict):
-            continue
-        out[clave_str] = {b: v.get("veredicto_crudo_hoy") or v.get("veredicto")
-                           for b, v in tabla.items() if isinstance(v, dict)}
-    return out
-
-
 def main():
     grupos = cargar_filas()
     print(f"Grupos (tipo,activo,marco,grande): {len(grupos)}")
-    veredictos_crudos_previos = _cargar_veredictos_crudos_previos()
+    historial_previo = cargar_historial_previo(OUT, anidado_por_bucket=True)
     pnl_real_por_bucket = _cargar_pnl_real_por_bucket()
 
     resultado = {}  # "tipo#activo#marco#grande" -> {bucket_str: entrada}
@@ -244,7 +227,15 @@ def main():
         tipo, activo, marco, grande = clave
         clave_str = f"{tipo}#{activo}#{marco}#{grande}"
         if len(filas) < N_MIN:
-            resultado[clave_str] = {}
+            # /code-review 01-Sep (mismo patrón que gate_bucket_propio_
+            # 28jul.py): no perder el historial_crudo de los buckets de
+            # esta clave si hoy cae por debajo de N_MIN a nivel clave -- un
+            # día flojo no es un día MALO a nivel bucket.
+            historial_clave = historial_previo.get(clave_str, {})
+            resultado[clave_str] = {
+                b: {"veredicto": "sin_concluir", "historial_crudo": hist}
+                for b, hist in historial_clave.items() if hist
+            }
             continue
         por_bucket = defaultdict(list)
         for ts, ask, pnl in filas:
@@ -273,8 +264,14 @@ def main():
             # reducidos a pnl, no una fila de results.csv), pero es la
             # MISMA matemática.
             g_kelly = sum(math.log(1 + F_KELLY * x) for x in pnl_d) / n_d if n_d > 0 else None
+            # /code-review 01-Sep: sembrar historial_crudo aquí -- si este
+            # bucket no sobrevive más abajo (BH-FDR/piso), esta entrada por
+            # defecto es la que queda escrita, y sin la semilla perdía el
+            # historial acumulado sin que hubiera pasado un día MALO.
+            historial_semilla = historial_previo.get(clave_str, {}).get(f"{b:.2f}", [])
             entrada = {"n": n_d, "pnl_medio": round(media_d, 4), "g_kelly_f10": round(g_kelly, 5),
-                       "shuffle_p": None, "split_half": None, "veredicto": "sin_concluir"}
+                       "shuffle_p": None, "split_half": None, "veredicto": "sin_concluir",
+                       "historial_crudo": historial_semilla}
             tabla[f"{b:.2f}"] = entrada
             if n_d >= N_MIN and fuera:
                 pnl_f = [pnl for _, pnl in fuera]
@@ -347,24 +344,22 @@ def main():
         b = p["bucket"]
 
         # 31-Ago (mismo guard que gate_bucket_propio.py, petición explícita
-        # Javi): "bueno_confirmado" exige que el veredicto CRUDO de la
-        # corrida anterior ya fuera también "bueno_confirmado" para el
-        # MISMO bucket -- asimétrico, "malo_confirmado" sigue inmediato
-        # (1 día basta para vetar). Este gate ya opera con dinero real hoy
-        # (WALLET_MIRROR#BTC, DRY_RUN=False desde 11-Ago) -- máxima cautela.
-        if veredicto_crudo == "malo_confirmado":
-            veredicto = "malo_confirmado"
-        else:
-            crudo_ayer = veredictos_crudos_previos.get(p["clave_str"], {}).get(b)
-            if crudo_ayer == "bueno_confirmado":
-                veredicto = "bueno_confirmado"
-            else:
-                veredicto = "sin_concluir"
-                veredictos_pendientes_confirmacion.append(
-                    f"⏳ {p['clave_str']} [{b},{float(b)+STEP:.2f}) n={p['entrada']['n']} "
-                    f"pnl_medio={p['entrada']['pnl_medio']:+.3f} bueno_confirmado HOY, "
-                    f"esperando confirmación de mañana"
-                )
+        # Javi): asimétrico, "malo_confirmado" sigue inmediato (1 día basta
+        # para vetar). Este gate ya opera con dinero real hoy (WALLET_MIRROR
+        # #BTC, DRY_RUN=False desde 11-Ago) -- máxima cautela.
+        # 01-Sep (petición explícita Javi, "un día de mala racha no puede
+        # entorpecer esto"): antes exigía el día INMEDIATAMENTE anterior
+        # también bueno_confirmado (reset a 1 día flojo). Ahora exige 2 de
+        # los últimos 3 días (incluido hoy) vía gate_confirmacion_historial.py.
+        historial_bucket = historial_previo.get(p["clave_str"], {}).get(b)
+        veredicto, p["entrada"]["historial_crudo"] = veredicto_con_tolerancia(
+            veredicto_crudo, historial_bucket)
+        if veredicto == "sin_concluir" and veredicto_crudo == "bueno_confirmado":
+            veredictos_pendientes_confirmacion.append(
+                f"⏳ {p['clave_str']} [{b},{float(b)+STEP:.2f}) n={p['entrada']['n']} "
+                f"pnl_medio={p['entrada']['pnl_medio']:+.3f} bueno_confirmado HOY, "
+                f"esperando confirmación de mañana"
+            )
 
         p["entrada"]["veredicto"] = veredicto
         if veredicto == "sin_concluir":

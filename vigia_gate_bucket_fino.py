@@ -55,10 +55,21 @@ def main() -> int:
         rango_antes = (antes.get("lo"), antes.get("hi"))
         rango_nuevo = (info.get("lo"), info.get("hi"))
         if v_nuevo != v_antes or rango_nuevo != rango_antes:
+            # /code-review 01-Sep: tras el fix de preservación de historial,
+            # una tupla puede pasar a "sin_concluir" vía un placeholder que
+            # SOLO tiene veredicto+historial_crudo (sin lo/hi/n/pnl_medio,
+            # p.ej. porque salió de pares_permitidos_live/candidatos_
+            # evaluacion_live o cayó por debajo de N_MIN hoy) -- usar
+            # valores por defecto en vez de indexar directo evita el
+            # KeyError que tumbaba este cron.
+            lo, hi = info.get("lo"), info.get("hi")
+            rango_txt = f"[{lo:.2f},{hi:.2f})" if lo is not None and hi is not None else "(sin ventana hoy)"
+            n_txt = info.get("n", "?")
+            pnl_txt = f"{info['pnl_medio']:+.3f}" if info.get("pnl_medio") is not None else "?"
             avisos.append(
                 f"{'🔴' if v_nuevo == 'malo_confirmado' else '🟢'} {tupla_str} "
-                f"[{info['lo']:.2f},{info['hi']:.2f}) -> {v_nuevo} "
-                f"(n={info['n']} pnl/tr={info['pnl_medio']:+.3f} p={info.get('p_valor')})"
+                f"{rango_txt} -> {v_nuevo} "
+                f"(n={n_txt} pnl/tr={pnl_txt} p={info.get('p_valor')})"
             )
 
     print(f"{len(nuevo)} tupla(s) con ventana confirmada hoy, {len(avisos)} cambio(s) nuevo(s)")

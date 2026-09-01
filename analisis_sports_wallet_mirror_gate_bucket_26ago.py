@@ -32,6 +32,8 @@ from collections import defaultdict
 from math import comb
 from pathlib import Path
 
+from gate_confirmacion_historial import cargar_historial_previo, veredicto_con_tolerancia
+
 csv.field_size_limit(sys.maxsize)
 
 REPO = Path(__file__).resolve().parent
@@ -78,29 +80,8 @@ def payout_win(precio: float) -> float:
     return STAKE * (1 - precio) / precio - STAKE * FEE * (1 - precio)
 
 
-def _cargar_veredictos_crudos_previos() -> dict:
-    """{tupla_str: {bucket_str: veredicto_crudo}} de la corrida anterior --
-    mismo guard de 2 días que gate_bucket_propio.py/analisis_wallet_mirror_
-    gate_bucket_10ago.py (31-Ago). Fail-closed: fichero ausente/corrupto ->
-    {} (ninguna promoción "bueno_confirmado" pasará el guard hoy). Sports
-    ya opera con dinero real desde hoy (LoL#SEGUIR[0.45,0.50), aprobación
-    explícita Javi) -- este gate deja de ser puramente shadow."""
-    try:
-        with open(OUT_PATH, encoding="utf-8") as f:
-            data = json.load(f)
-    except Exception:
-        return {}
-    out = {}
-    for tupla_str, tabla in data.items():
-        if not isinstance(tabla, dict):
-            continue
-        out[tupla_str] = {b: v.get("veredicto_crudo_hoy") or v.get("veredicto")
-                           for b, v in tabla.items() if isinstance(v, dict)}
-    return out
-
-
 def main() -> int:
-    veredictos_crudos_previos = _cargar_veredictos_crudos_previos()
+    historial_previo = cargar_historial_previo(OUT_PATH, anidado_por_bucket=True)
     grupos = defaultdict(list)
     with open(DRY_RUN, encoding="utf-8") as f:
         for row in csv.DictReader(f):
@@ -130,7 +111,15 @@ def main() -> int:
         tupla_str = f"{categoria}#{tipo}"
         salida.setdefault(tupla_str, {})
         if n < N_MIN:
-            salida[tupla_str][b] = {"n": n, "veredicto": "n_insuficiente"}
+            entrada = {"n": n, "veredicto": "n_insuficiente"}
+            # /code-review 01-Sep (mismo patrón que los 5 ficheros gemelos):
+            # si el bucket tenía historial_crudo acumulado y hoy cae por
+            # debajo de N_MIN (día flojo, no un veto real), preservarlo en
+            # vez de perderlo -- n_insuficiente no es un día MALO.
+            hist = historial_previo.get(tupla_str, {}).get(b)
+            if hist:
+                entrada["historial_crudo"] = hist
+            salida[tupla_str][b] = entrada
             continue
         hit = sum(x[0] for x in items) / n
         pnl_medio = sum(x[1] for x in items) / n
@@ -201,18 +190,24 @@ def main() -> int:
                     veredicto_crudo = "malo_confirmado"
 
                 info["veredicto_crudo_hoy"] = veredicto_crudo
-                # 31-Ago: guard de 2 días (mismo criterio que gate_bucket_
-                # propio.py/wallet_mirror cripto) -- "bueno_confirmado" exige
-                # que el crudo de la corrida anterior YA fuera también
-                # "bueno_confirmado" para el mismo bucket; "malo_confirmado"
-                # sigue inmediato (dirección segura, no hace falta esperar).
-                if veredicto_crudo == "malo_confirmado":
-                    veredicto = "malo_confirmado"
-                elif veredicto_crudo == "bueno_confirmado":
-                    crudo_ayer = veredictos_crudos_previos.get(tupla_str, {}).get(b)
-                    veredicto = "bueno_confirmado" if crudo_ayer == "bueno_confirmado" else "sin_concluir"
-                else:
+                # 31-Ago: guard de estabilidad (mismo criterio que
+                # gate_bucket_propio.py/wallet_mirror cripto) --
+                # "malo_confirmado" sigue inmediato (dirección segura, no
+                # hace falta esperar), solo "bueno_confirmado" exige
+                # consistencia. 01-Sep (petición explícita Javi, "un día de
+                # mala racha no puede entorpecer esto"): 2 de los últimos 3
+                # días (incluido hoy), no solo el inmediatamente anterior --
+                # ver gate_confirmacion_historial.py.
+                historial_bucket = historial_previo.get(tupla_str, {}).get(b)
+                if veredicto_crudo == "sin_concluir":
+                    # sin evidencia hoy (n<N_MIN u otro motivo) -- no consume
+                    # ni rompe el historial de días con datos reales.
                     veredicto = "sin_concluir"
+                    if historial_bucket:
+                        info["historial_crudo"] = historial_bucket
+                else:
+                    veredicto, info["historial_crudo"] = veredicto_con_tolerancia(
+                        veredicto_crudo, historial_bucket)
                 info["veredicto"] = veredicto
                 if veredicto == "bueno_confirmado":
                     n_confirmados_buenos += 1

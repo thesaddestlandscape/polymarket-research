@@ -23,31 +23,29 @@ from pathlib import Path
 
 from analisis_wallet_mirror_gate_bucket_10ago import cargar_filas
 from analisis_gate_bucket_fino import evaluar_tupla, bh_fdr_signif, P_MAX
+from gate_confirmacion_historial import (
+    cargar_historial_previo, veredicto_con_tolerancia, sembrar_no_confirmados,
+)
 
 REPO = Path(__file__).resolve().parent
 OUT = REPO / "data/shadow/wallet_mirror_gate_bucket_fino.json"
 
 
-def _cargar_veredictos_crudos_previos() -> dict:
-    """{clave_str: veredicto_crudo} de la corrida anterior -- mismo guard
-    de 2 días que el resto de gates (31-Ago, /code-review encontró que
-    esta ruta "fina" evitaba por completo el guard del grid principal
-    vía la promoción aditiva en wallet_mirror_gate_bucket.py::evaluar()).
-    Este gate ya opera con dinero real (WALLET_MIRROR#BTC, DRY_RUN=False
-    desde 11-Ago). Fail-closed: fichero ausente/corrupto -> {}."""
-    try:
-        with open(OUT, encoding="utf-8") as f:
-            data = json.load(f)
-    except Exception:
-        return {}
-    return {clave_str: info.get("veredicto_crudo_hoy") or info.get("veredicto")
-            for clave_str, info in data.items() if isinstance(info, dict)}
-
-
 def main() -> int:
     grupos = cargar_filas()
     print(f"Grupos (tipo,activo,marco,grande): {len(grupos)}")
-    veredictos_crudos_previos = _cargar_veredictos_crudos_previos()
+    historial_previo = cargar_historial_previo(OUT, anidado_por_bucket=False)
+    salida_final = {}
+
+    def _preservar_historial(clave_str: str) -> None:
+        """/code-review 01-Sep: ver misma función en analisis_gate_bucket_
+        fino.py -- sin esto, un bucket que no sobrevive hoy (incluyendo
+        cuando evaluar_tupla() devuelve falsy por falta de datos) desaparece
+        del fichero entero (json.dump sobreescribe) y pierde su
+        historial_crudo aunque no haya pasado ningún día malo."""
+        hist = historial_previo.get(clave_str)
+        if hist and clave_str not in salida_final:
+            salida_final[clave_str] = {"veredicto": "sin_concluir", "historial_crudo": hist}
 
     pendientes = []
     resultado = {}
@@ -56,6 +54,7 @@ def main() -> int:
         clave_str = f"{tipo}#{activo}#{marco}#{grande}"
         info = evaluar_tupla(filas)
         if not info:
+            _preservar_historial(clave_str)
             continue
         resultado[clave_str] = info
         if info["split_half_ok"] and info["robusto_loo"] and info["robusto_bootstrap"]:
@@ -77,9 +76,10 @@ def main() -> int:
 
     veredictos = []
     pendientes_confirmacion = []
-    salida_final = {}
+
     for idx, p in enumerate(pendientes):
         if idx not in sobreviven:
+            _preservar_historial(p["clave_str"])
             continue
         info = p["info"]
         if p["diff"] < 0:
@@ -87,15 +87,16 @@ def main() -> int:
         elif info["pnl_medio"] >= 0:
             veredicto_crudo = "bueno_confirmado"
         else:
+            _preservar_historial(p["clave_str"])
             continue
 
         info["veredicto_crudo_hoy"] = veredicto_crudo
-        if veredicto_crudo == "malo_confirmado":
-            veredicto = "malo_confirmado"
-        elif veredictos_crudos_previos.get(p["clave_str"]) == "bueno_confirmado":
-            veredicto = "bueno_confirmado"
-        else:
-            veredicto = "sin_concluir"
+        # 01-Sep (petición explícita Javi, "un día de mala racha no puede
+        # entorpecer esto"): 2 de los últimos 3 días (incluido hoy), no solo
+        # el día inmediatamente anterior -- ver gate_confirmacion_historial.py.
+        veredicto, info["historial_crudo"] = veredicto_con_tolerancia(
+            veredicto_crudo, historial_previo.get(p["clave_str"]))
+        if veredicto == "sin_concluir" and veredicto_crudo == "bueno_confirmado":
             pendientes_confirmacion.append(
                 f"⏳ {p['clave_str']} [{info['lo']:.2f},{info['hi']:.2f}) n={info['n']} "
                 f"pnl_medio={info['pnl_medio']:+.3f} bueno_confirmado HOY, esperando confirmación de mañana"
@@ -119,6 +120,14 @@ def main() -> int:
         print(f"\n{len(pendientes_confirmacion)} ventana(s) pendientes de 2ª confirmación mañana:")
         for linea in pendientes_confirmacion:
             print(f"  {linea}")
+
+    # /code-review 01-Sep, ronda 2: barrido final de seguridad centralizado
+    # (antes duplicado inline en los 3 ficheros "_fino") -- cualquier clave
+    # con historial_crudo previo no preservada por ninguno de los puntos de
+    # salida de arriba (p.ej. info truthy pero sin pasar split_half_ok/
+    # robusto_loo/robusto_bootstrap) igualmente conserva su historial en vez
+    # de perderlo.
+    sembrar_no_confirmados(historial_previo, salida_final)
 
     with open(OUT, "w", encoding="utf-8") as f:
         json.dump(salida_final, f, indent=2, ensure_ascii=False)

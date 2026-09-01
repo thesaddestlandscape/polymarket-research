@@ -36,6 +36,9 @@ from collections import defaultdict
 from pathlib import Path
 
 from analisis_gate_bucket_fino import evaluar_tupla, bh_fdr_signif, P_MAX
+from gate_confirmacion_historial import (
+    cargar_historial_previo, veredicto_con_tolerancia, sembrar_no_confirmados,
+)
 
 F_KELLY = 0.10  # 29-Ago: mismo default que analisis_log_growth.py/gate_bucket_propio.py (P28/CLAUDE.md pt.14)
 
@@ -75,31 +78,28 @@ def cargar_filas() -> dict:
     return grupos
 
 
-def _cargar_veredictos_crudos_previos() -> dict:
-    """{tupla_str: veredicto_crudo} de la corrida anterior -- mismo guard
-    de 2 días que el resto de gates (31-Ago, /code-review encontró que
-    esta ruta "fina" evitaba por completo el guard del grid principal).
-    Este gate ya opera con dinero real (LoL#SEGUIR[0.45,0.50), desde hoy).
-    Fail-closed: fichero ausente/corrupto -> {}."""
-    try:
-        with open(OUT, encoding="utf-8") as f:
-            data = json.load(f)
-    except Exception:
-        return {}
-    return {tupla_str: info.get("veredicto_crudo_hoy") or info.get("veredicto")
-            for tupla_str, info in data.items() if isinstance(info, dict)}
-
-
 def main() -> int:
     grupos = cargar_filas()
     print(f"Combos (categoria,tipo): {len(grupos)}")
-    veredictos_crudos_previos = _cargar_veredictos_crudos_previos()
+    historial_previo = cargar_historial_previo(OUT, anidado_por_bucket=False)
+    salida = {}
+
+    def _preservar_historial(tupla_str: str) -> None:
+        """/code-review 01-Sep: ver misma función en analisis_gate_bucket_
+        fino.py -- sin esto, un bucket que no sobrevive hoy (incluyendo
+        cuando evaluar_tupla() devuelve falsy por falta de datos) desaparece
+        del fichero entero y pierde su historial_crudo sin haber pasado un
+        día malo."""
+        hist = historial_previo.get(tupla_str)
+        if hist and tupla_str not in salida:
+            salida[tupla_str] = {"veredicto": "sin_concluir", "historial_crudo": hist}
 
     pendientes = []
     for (categoria, tipo), filas in grupos.items():
         tupla_str = f"{categoria}#{tipo}"
         info = evaluar_tupla(filas)
         if not info:
+            _preservar_historial(tupla_str)
             continue
         if info["split_half_ok"] and info["robusto_loo"] and info["robusto_bootstrap"]:
             pendientes.append({"tupla_str": tupla_str, "info": info,
@@ -121,9 +121,9 @@ def main() -> int:
 
     print(f"Sobreviven BH-FDR: {len(sobreviven)}")
 
-    salida = {}
     for idx, p in enumerate(pendientes):
         if idx not in sobreviven:
+            _preservar_historial(p["tupla_str"])
             continue
         info = p["info"]
         if p["diff"] < 0:
@@ -131,6 +131,7 @@ def main() -> int:
         elif info["pnl_medio"] >= 0:
             veredicto_crudo = "bueno_confirmado"
         else:
+            _preservar_historial(p["tupla_str"])
             continue
         # 29-Ago (paridad con el mismo hueco cerrado en el grid fijo,
         # analisis_sports_wallet_mirror_gate_bucket_26ago.py, y en
@@ -152,15 +153,14 @@ def main() -> int:
             veredicto_crudo = "malo_confirmado"
 
         info["veredicto_crudo_hoy"] = veredicto_crudo
-        # 31-Ago: guard de 2 días -- "bueno_confirmado" exige que la
-        # corrida anterior YA diera "bueno_confirmado" para la misma
-        # tupla; "malo_confirmado" sigue inmediato.
-        if veredicto_crudo == "malo_confirmado":
-            veredicto = "malo_confirmado"
-        elif veredictos_crudos_previos.get(p["tupla_str"]) == "bueno_confirmado":
-            veredicto = "bueno_confirmado"
-        else:
-            veredicto = "sin_concluir"
+        # 31-Ago: guard de estabilidad -- "malo_confirmado" sigue inmediato.
+        # 01-Sep (petición explícita Javi, "un día de mala racha no puede
+        # entorpecer esto"): "bueno_confirmado" exige 2 de los últimos 3
+        # días (incluido hoy), no solo el inmediatamente anterior -- ver
+        # gate_confirmacion_historial.py.
+        veredicto, info["historial_crudo"] = veredicto_con_tolerancia(
+            veredicto_crudo, historial_previo.get(p["tupla_str"]))
+        if veredicto == "sin_concluir" and veredicto_crudo == "bueno_confirmado":
             print(f"  ⏳ {p['tupla_str']} [{info['lo']:.2f},{info['hi']:.2f}) n={info['n']} "
                   f"pnl_medio={info['pnl_medio']:+.3f} bueno_confirmado HOY, esperando confirmación de mañana")
 
@@ -171,6 +171,14 @@ def main() -> int:
         marca = "🔴" if veredicto == "malo_confirmado" else "🟢"
         print(f"  {marca} {p['tupla_str']} [{info['lo']:.2f},{info['hi']:.2f}) "
               f"n={info['n']} pnl_medio={info['pnl_medio']:+.3f} p={info['p_valor']:.4f} {veredicto}")
+
+    # /code-review 01-Sep, ronda 2: barrido final de seguridad centralizado
+    # (antes duplicado inline en los 3 ficheros "_fino") -- cualquier combo
+    # con historial_crudo previo no preservado por ninguno de los puntos de
+    # salida de arriba (p.ej. info truthy pero sin pasar split_half_ok/
+    # robusto_loo/robusto_bootstrap) igualmente conserva su historial en vez
+    # de perderlo.
+    sembrar_no_confirmados(historial_previo, salida)
 
     OUT.write_text(json.dumps(salida, ensure_ascii=False, indent=1), encoding="utf-8")
     print(f"Guardado en {OUT}")

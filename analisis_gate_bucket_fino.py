@@ -43,6 +43,9 @@ from pathlib import Path
 
 import numpy as np
 
+from gate_confirmacion_historial import (
+    cargar_historial_previo, veredicto_con_tolerancia, sembrar_no_confirmados,
+)
 from analisis_gate_bucket_propio_28jul import (
     cargar_tuplas_live, cargar_filas, bh_fdr_signif,
     N_MIN as N_MIN_GRUESO, P_MAX,
@@ -195,29 +198,26 @@ def evaluar_tupla(filas):
     }
 
 
-def _cargar_veredictos_crudos_previos() -> dict:
-    """{tupla_str: veredicto_crudo} de la corrida anterior -- mismo guard
-    de 2 días que gate_bucket_propio.py/wallet_mirror_gate_bucket (31-Ago).
-    31-Ago (/code-review encontró el hueco): esta ruta "fina" promueve
-    directamente a bueno_confirmado en evaluar()/evaluar_sin_override()
-    cuando el grid fijo sigue sin_concluir -- sin este guard, el guard del
-    grid principal se puede evitar por completo pasando por aquí. Fail-
-    closed: fichero ausente/corrupto -> {} (nada confirma hoy)."""
-    try:
-        with open(OUT, encoding="utf-8") as f:
-            data = json.load(f)
-    except Exception:
-        return {}
-    return {tupla_str: info.get("veredicto_crudo_hoy") or info.get("veredicto")
-            for tupla_str, info in data.items() if isinstance(info, dict)}
-
-
 def main() -> int:
     tuplas = cargar_tuplas_live()
     filas_por_tupla = cargar_filas(tuplas)
     n_live = sum(1 for *_, es_live in tuplas if es_live)
     print(f"Tuplas a evaluar: {len(tuplas)} ({n_live} live, {len(tuplas) - n_live} candidatos)")
-    veredictos_crudos_previos = _cargar_veredictos_crudos_previos()
+    historial_previo = cargar_historial_previo(Path(OUT), anidado_por_bucket=False)
+    salida_final = {}
+
+    def _preservar_historial(tupla_str: str) -> None:
+        """/code-review 01-Sep: si el bucket no sobrevive hoy (sin datos
+        suficientes para ventana, BH-FDR, o piso absoluto), salida_final se
+        guarda SIN su entrada -- y como json.dump sobreescribe el fichero
+        entero, el historial_crudo acumulado desaparecía sin que hubiera
+        pasado ningún día MALO, el mismo problema que este fix del 01-Sep
+        quería evitar. Preserva un placeholder con el historial intacto
+        (sin_concluir, sin stats frescas) para que una futura corrida que
+        SÍ sobreviva pueda seguir sumando desde donde se quedó."""
+        hist = historial_previo.get(tupla_str)
+        if hist and tupla_str not in salida_final:
+            salida_final[tupla_str] = {"veredicto": "sin_concluir", "historial_crudo": hist}
 
     pendientes = []
     resultado = {}
@@ -227,6 +227,7 @@ def main() -> int:
         filas = filas_por_tupla.get(tupla_str, [])
         info = evaluar_tupla(filas)
         if not info:
+            _preservar_historial(tupla_str)
             continue
         resultado[tupla_str] = info
         if info["split_half_ok"] and info["robusto_loo"] and info["robusto_bootstrap"]:
@@ -251,9 +252,10 @@ def main() -> int:
 
     veredictos_nuevos = []
     veredictos_pendientes_confirmacion = []
-    salida_final = {}
+
     for idx, p in enumerate(pendientes):
         if idx not in sobreviven:
+            _preservar_historial(p["tupla_str"])
             continue
         info = p["info"]
         if p["diff"] < 0:
@@ -261,19 +263,20 @@ def main() -> int:
         elif info["pnl_medio"] >= 0:
             veredicto_crudo = "bueno_confirmado"
         else:
+            _preservar_historial(p["tupla_str"])
             continue  # mismo piso absoluto que gate_bucket_propio (08-Ago)
 
         info["veredicto_crudo_hoy"] = veredicto_crudo
-        # 31-Ago: mismo guard de 2 días que el grid fijo -- "bueno_confirmado"
-        # exige que la corrida anterior YA diera "bueno_confirmado" para la
-        # MISMA tupla (una sola ventana activa por tupla aquí, a diferencia
-        # del grid que tiene varios buckets); "malo_confirmado" inmediato.
-        if veredicto_crudo == "malo_confirmado":
-            veredicto = "malo_confirmado"
-        elif veredictos_crudos_previos.get(p["tupla_str"]) == "bueno_confirmado":
-            veredicto = "bueno_confirmado"
-        else:
-            veredicto = "sin_concluir"
+        # 01-Sep (petición explícita Javi, "un día de mala racha no puede
+        # entorpecer esto"): antes exigía que la corrida INMEDIATAMENTE
+        # anterior también diera bueno_confirmado -- un solo día flojo
+        # reiniciaba el progreso a cero. Ahora exige 2 de los últimos 3 días
+        # (incluido hoy), tolerando un día suelto sin perder la evidencia
+        # acumulada. malo_confirmado sigue siendo inmediato (ver
+        # gate_confirmacion_historial.py).
+        veredicto, info["historial_crudo"] = veredicto_con_tolerancia(
+            veredicto_crudo, historial_previo.get(p["tupla_str"]))
+        if veredicto == "sin_concluir" and veredicto_crudo == "bueno_confirmado":
             veredictos_pendientes_confirmacion.append(
                 f"⏳ [{'LIVE' if p['es_live'] else 'candidato'}] {p['tupla_str']} "
                 f"[{info['lo']:.2f},{info['hi']:.2f}) n={info['n']} "
@@ -298,6 +301,14 @@ def main() -> int:
         print(f"\n{len(veredictos_pendientes_confirmacion)} ventana(s) pendientes de 2ª confirmación mañana:")
         for linea in veredictos_pendientes_confirmacion:
             print(f"  {linea}")
+
+    # /code-review 01-Sep, ronda 2: barrido final de seguridad centralizado
+    # (antes duplicado inline en los 3 ficheros "_fino") -- cualquier tupla
+    # con historial_crudo previo que no haya sido preservada por ninguno de
+    # los puntos de salida de arriba (p.ej. info truthy pero sin pasar
+    # split_half_ok/robusto_loo/robusto_bootstrap, así que nunca entra en
+    # `pendientes`) igualmente conserva su historial en vez de perderlo.
+    sembrar_no_confirmados(historial_previo, salida_final)
 
     with open(OUT, "w", encoding="utf-8") as f:
         json.dump(salida_final, f, indent=2, ensure_ascii=False)

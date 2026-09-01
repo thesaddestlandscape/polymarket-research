@@ -57,6 +57,7 @@ from pathlib import Path
 
 import numpy as np
 
+from gate_confirmacion_historial import cargar_historial_previo, veredicto_con_tolerancia
 from kelly_precio_gate import _familia
 
 REPO = Path(__file__).resolve().parent
@@ -304,33 +305,12 @@ def bh_fdr_signif(p_valores, q=0.05):
     return set(orden[:corte])
 
 
-def _cargar_veredictos_crudos_previos() -> dict:
-    """{tupla_str: {bucket_str: veredicto_crudo}} de la corrida ANTERIOR
-    (el fichero OUT tal y como estaba antes de que esta corrida lo
-    sobreescriba) -- base de comparación para el guard de 2 días de
-    abajo. Fail-closed: fichero ausente/corrupto -> {} (ninguna
-    promoción "bueno_confirmado" pasará el guard hoy, exige empezar de
-    cero, nunca al revés)."""
-    try:
-        with open(OUT, encoding="utf-8") as f:
-            data = json.load(f)
-    except Exception:
-        return {}
-    out = {}
-    for tupla_str, tabla in data.items():
-        if not isinstance(tabla, dict):
-            continue
-        out[tupla_str] = {b: v.get("veredicto_crudo_hoy") or v.get("veredicto")
-                           for b, v in tabla.items() if isinstance(v, dict)}
-    return out
-
-
 def main():
     tuplas = cargar_tuplas_live()
     filas_por_tupla = cargar_filas(tuplas)
     n_live = sum(1 for *_, es_live in tuplas if es_live)
     print(f"Tuplas a evaluar: {len(tuplas)} ({n_live} live, {len(tuplas) - n_live} candidatos)")
-    veredictos_crudos_previos = _cargar_veredictos_crudos_previos()
+    historial_previo = cargar_historial_previo(Path(OUT), anidado_por_bucket=True)
 
     # PASADA 1: calcular todos los buckets candidatos (n>=N_MIN, split-half
     # consistente) y acumular p-valores SIN decidir veredicto todavía --
@@ -342,7 +322,15 @@ def main():
             print(f"  ... {i}/{len(tuplas)} tuplas procesadas (pasada 1/2)", flush=True)
         filas = filas_por_tupla.get(tupla_str, [])
         if len(filas) < N_MIN:
-            resultado[tupla_str] = {}
+            # /code-review 01-Sep (mismo patrón, un nivel más arriba): si la
+            # tupla entera cae hoy por debajo de N_MIN, no perder el
+            # historial_crudo de sus buckets individuales -- un día flojo a
+            # nivel tupla no es un día MALO a nivel bucket.
+            historial_tupla = historial_previo.get(tupla_str, {})
+            resultado[tupla_str] = {
+                b: {"veredicto": "sin_concluir", "historial_crudo": hist}
+                for b, hist in historial_tupla.items() if hist
+            }
             continue
 
         por_bucket = defaultdict(list)
@@ -358,10 +346,19 @@ def main():
             pnl_f = [pnl for _, pnl in fuera]
             media_d = sum(pnl_d) / n_d
 
+            # /code-review 01-Sep: si este bucket no sobrevive más abajo
+            # (n<N_MIN, BH-FDR de la pasada 2, o el "piso absoluto"), esta
+            # entrada por defecto es la que queda escrita en el fichero --
+            # sin sembrar historial_crudo aquí, un día sin evidencia nueva
+            # (no un día MALO, simplemente sin sobrevivir el corte de hoy)
+            # borraba el progreso acumulado igual que el bug original que
+            # este mismo fix del 01-Sep quería evitar.
+            historial_semilla = historial_previo.get(tupla_str, {}).get(f"{b:.2f}", [])
             entrada = {"n": n_d, "pnl_medio": round(media_d, 4),
                        "diff_vs_resto": round(media_d - (sum(pnl_f) / len(pnl_f)), 4) if pnl_f else None,
                        "shuffle_p": None, "split_half_diff": None,
-                       "ci90_bootstrap_absoluto": None, "veredicto": "sin_concluir"}
+                       "ci90_bootstrap_absoluto": None, "veredicto": "sin_concluir",
+                       "historial_crudo": historial_semilla}
             tabla[f"{b:.2f}"] = entrada
 
             if n_d >= N_MIN and pnl_f:
@@ -447,33 +444,31 @@ def main():
         p["entrada"]["veredicto_crudo_hoy"] = veredicto_crudo
         b = p["bucket"]
 
-        # 31-Ago (petición explícita Javi): guard de 2 días consecutivos
-        # ANTES de exponer "bueno_confirmado" a evaluar()/ejecutores live.
-        # Motivo: confirmaciones al filo del mínimo (n=15-60) revierten en
-        # 1 sola corrida diaria más -- visto dos veces en la misma sesión
+        # 31-Ago (petición explícita Javi): guard de estabilidad ANTES de
+        # exponer "bueno_confirmado" a evaluar()/ejecutores live. Motivo:
+        # confirmaciones al filo del mínimo (n=15-60) revierten en 1 sola
+        # corrida diaria más -- visto dos veces en la misma sesión
         # (MOMENTUM_IBS_5M_BALLENA#SOL#5min, WALLET_MIRROR#BTC varios
         # buckets), mismo patrón P5 (multiple-testing) de
         # project_lecciones_aprendidas_estrategias. Asimétrico a propósito
-        # (mismo espíritu que _veto_fillable: "solo puede degradar, nunca
-        # promover más rápido de lo debido") -- "malo_confirmado" sigue
-        # inmediato (1 día basta para VETAR, la dirección segura), solo
-        # "bueno_confirmado" (la que desbloquea dinero real) exige que el
-        # veredicto CRUDO de ayer (antes de este mismo guard) ya fuera
-        # también "bueno_confirmado" para el MISMO bucket.
-        if veredicto_crudo == "malo_confirmado":
-            veredicto_final = "malo_confirmado"
-        else:
-            crudo_ayer = veredictos_crudos_previos.get(p["tupla_str"], {}).get(b)
-            if crudo_ayer == "bueno_confirmado":
-                veredicto_final = "bueno_confirmado"
-            else:
-                veredicto_final = "sin_concluir"
-                veredictos_pendientes_confirmacion.append(
-                    f"⏳ [{'LIVE' if p['es_live'] else 'candidato'}] {p['tupla_str']} "
-                    f"[{b},{float(b)+STEP:.2f}) n={p['entrada']['n']} "
-                    f"pnl_medio={p['entrada']['pnl_medio']:+.3f} p={p['p']:.4f} "
-                    f"bueno_confirmado HOY, esperando confirmación de mañana"
-                )
+        # -- "malo_confirmado" sigue inmediato (1 día basta para VETAR, la
+        # dirección segura), solo "bueno_confirmado" exige consistencia.
+        # 01-Sep (petición explícita Javi, "un día de mala racha no puede
+        # entorpecer esto"): el guard original exigía que el día
+        # INMEDIATAMENTE anterior también fuera bueno_confirmado -- un solo
+        # día flojo reiniciaba a cero. Ahora exige 2 de los últimos 3 días
+        # (incluido hoy) vía gate_confirmacion_historial.py, tolerando un
+        # día suelto sin perder la evidencia ya acumulada.
+        historial_bucket = historial_previo.get(p["tupla_str"], {}).get(b)
+        veredicto_final, p["entrada"]["historial_crudo"] = veredicto_con_tolerancia(
+            veredicto_crudo, historial_bucket)
+        if veredicto_final == "sin_concluir" and veredicto_crudo == "bueno_confirmado":
+            veredictos_pendientes_confirmacion.append(
+                f"⏳ [{'LIVE' if p['es_live'] else 'candidato'}] {p['tupla_str']} "
+                f"[{b},{float(b)+STEP:.2f}) n={p['entrada']['n']} "
+                f"pnl_medio={p['entrada']['pnl_medio']:+.3f} p={p['p']:.4f} "
+                f"bueno_confirmado HOY, esperando confirmación de mañana"
+            )
 
         p["entrada"]["veredicto"] = veredicto_final
         if veredicto_final == "sin_concluir":
