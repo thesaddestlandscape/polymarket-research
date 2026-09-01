@@ -8,6 +8,7 @@
   "hora_utc|lt|5.0|BUY_YES",
   "hora_utc|lt|6.0|BUY_YES",
   "hora_utc|lt|7.0|BUY_YES",
+  "ibs_20min|gt|0.8413|BUY_NO",
   "ibs_20min|gt|0.8414|BUY_NO",
   "ibs_20min|gt|0.8428|BUY_NO",
   "ibs_20min|gt|0.8432|BUY_NO",
