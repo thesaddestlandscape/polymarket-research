@@ -87,6 +87,45 @@ def _pares_live_hoy_set() -> set:
             pass
     return _pares_live_cache["set"]
 
+
+# 01-Sep: dedup de re-predicción por cooldown corto para whitelist+candidatos
+# (ver docstring de COOLDOWN_CORTO_REPREDICCION_S más abajo, junto al bucle
+# principal). Mismo patrón de caché por mtime que _pares_live_hoy_set() --
+# comparten timestamp de archivo, un solo stat() por ciclo basta para las
+# dos lecturas si el mtime coincide, sin llamada extra a disco.
+_candidatos_live_cache = {"mtime": None, "set": set()}
+
+
+def _candidatos_live_hoy_set() -> set:
+    """Lectura fresca de candidatos_evaluacion_live, mismo criterio
+    fail-closed que _pares_live_hoy_set() (última copia conocida ante fallo
+    transitorio de lectura, nunca vacío de golpe)."""
+    path = Path("data/live/config_live.json")
+    try:
+        mtime = path.stat().st_mtime
+    except OSError:
+        return _candidatos_live_cache["set"]
+    if _candidatos_live_cache["mtime"] != mtime:
+        try:
+            data = json.loads(path.read_text(encoding="utf-8"))
+            _candidatos_live_cache["set"] = set(data.get("candidatos_evaluacion_live", []))
+            _candidatos_live_cache["mtime"] = mtime
+        except Exception:
+            pass
+    return _candidatos_live_cache["set"]
+
+
+def _estrategias_prioritarias_cooldown() -> set:
+    """Nombres BASE de estrategia (antes del primer '#') que aparecen en
+    pares_permitidos_live O candidatos_evaluacion_live -- estas usan el
+    cooldown corto de re-predicción en vez del dedup "una vez al día" (ver
+    COOLDOWN_CORTO_REPREDICCION_S)."""
+    nombres = set()
+    for t in _pares_live_hoy_set() | _candidatos_live_hoy_set():
+        if isinstance(t, str) and t:
+            nombres.add(t.split("#", 1)[0])
+    return nombres
+
 # 06-Ago: fix estructural del "cementerio" (project_candidatas_estancadas_
 # diagnostico_05ago, Parte 3) -- ver ACUMULAR_SHADOW_AUNQUE_DESACTIVADA más
 # abajo para el porqué y el uso real. Persiste (y auto-actualiza, sin volver
@@ -6684,14 +6723,72 @@ def main():
     archivo = DIR_SHADOW / f"predictions_{fecha}.csv"
     nuevo   = not archivo.exists()
     ya_predichos = set()
+    # 01-Sep (hallazgo real, medido en libro_snapshots.csv): el dedup de abajo
+    # (una predicción por (estrategia,market_id) POR DÍA) da a cada señal una
+    # única ventana de ~100s (SENAL_MAX_LATENCIA_SEG en live_trade.py) para
+    # ejecutar en TODA la vida del mercado -- si se pierde esa ventana (libro
+    # flojo un instante, jitter del ciclo), la señal queda muerta el resto del
+    # día aunque el mercado siga abierto. Medido: de las tuplas YA en
+    # pares_permitidos_live, 80.1% de los mercados que mueren "señal caducada"
+    # tuvieron una ÚNICA predicción jamás, desperdiciando una mediana de 13.7
+    # min de vida del mercado (p90=54.7 min) sin ninguna segunda oportunidad.
+    # Mismo patrón en candidatos_evaluacion_live (83.6% de un solo disparo).
+    # Fix (petición explícita Javi, "aprovechar todas las oportunidades
+    # posibles... cooldown lo más corto posible"): para estrategias con
+    # cualquier tupla en pares_permitidos_live O candidatos_evaluacion_live,
+    # sustituir el dedup "una vez al día" por un cooldown corto -- deja que se
+    # vuelva a predecir el mismo mercado en el siguiente ciclo si la anterior
+    # predicción ya tiene más de COOLDOWN_CORTO_REPREDICCION_S segundos.
+    # Deliberadamente NO aplicado a las ~500 estrategias shadow-only restantes
+    # (fuera de whitelist/candidatos): multiplicaría su volumen de filas sin
+    # ningún beneficio real (no hay ejecución que rescatar) e infla el n de
+    # sus estadísticas de IC/postmortem con observaciones no independientes
+    # del mismo mercado -- ver feedback_desagregar_por_activo_siempre, mismo
+    # principio de rigor aplicado aquí al eje temporal.
+    COOLDOWN_CORTO_REPREDICCION_S = 8  # bien por debajo del ciclo del fast loop (~20-23s) -- en la práctica, una predicción fresca en CADA ciclo mientras la tupla siga aplicando
+    _prioritarias = _estrategias_prioritarias_cooldown()
+    ultima_ts_prioritaria = {}        # (strategy, market_id) -> datetime de la última predicción
+    decision_bloqueada_prioritaria = {}  # (strategy, market_id) -> decision (BUY_YES/BUY_NO) YA registrada
     if not nuevo:
         try:
             with open(archivo, encoding="utf-8") as f_exist:
                 for row in csv.DictReader(f_exist):
-                    ya_predichos.add((row.get("strategy", ""), row.get("market_id", "")))
+                    strat = row.get("strategy", "")
+                    mid_row = row.get("market_id", "")
+                    clave = (strat, mid_row)
+                    if strat in _prioritarias:
+                        row_ts = row.get("timestamp_utc", "")
+                        try:
+                            row_dt = datetime.fromisoformat(row_ts)
+                        except ValueError:
+                            row_dt = None
+                        if row_dt is not None:
+                            anterior = ultima_ts_prioritaria.get(clave)
+                            if anterior is None or row_dt > anterior:
+                                ultima_ts_prioritaria[clave] = row_dt
+                        # /code-review 01-Sep: sin esto, re-predecir el mismo
+                        # mercado varias veces podía cruzar el precio por
+                        # AMBOS lados del umbral (BUY_YES en un ciclo, BUY_NO
+                        # en otro) -- shadow_resolve.py dedupea por
+                        # (strategy, market_id, decision), NO por (strategy,
+                        # market_id), así que las dos se habrían resuelto por
+                        # separado en results.csv: una ganadora, una
+                        # perdedora, del MISMO mercado -- exactamente la
+                        # doble contabilización no-independiente que este fix
+                        # dice evitar. Se fija la PRIMERA decisión no-SKIP
+                        # vista y solo se permite refrescar timestamp/precio
+                        # de esa MISMA decisión; una decisión distinta para
+                        # el mismo mercado se descarta (no se escribe).
+                        row_dec = row.get("decision", "")
+                        if row_dec and row_dec != "SKIP" and clave not in decision_bloqueada_prioritaria:
+                            decision_bloqueada_prioritaria[clave] = row_dec
+                    else:
+                        ya_predichos.add(clave)
         except Exception as e:
             print(f"  Aviso leyendo predicciones existentes: {e}")
-    print(f"  Pares (strategy,market_id) ya predichos hoy: {len(ya_predichos)}")
+    print(f"  Pares (strategy,market_id) ya predichos hoy (dedup total): {len(ya_predichos)} "
+          f"| en cooldown corto ({COOLDOWN_CORTO_REPREDICCION_S}s, {len(_prioritarias)} estrategias prioritarias): {len(ultima_ts_prioritaria)}")
+    _ahora_dt = datetime.now(timezone.utc)
     total, ops, skipped_dup, skipped_extremo = 0, 0, 0, 0
     contador = {nombre: {"aplica": 0, "operable": 0} for nombre, _ in ESTRATEGIAS}
     # Conexión "correlación de ventana" (13-Jul, idea_racha_correlacion_ventana):
@@ -6723,6 +6820,11 @@ def main():
                 if (nombre, mid) in ya_predichos:
                     skipped_dup += 1
                     continue
+                if nombre in _prioritarias:
+                    _ult = ultima_ts_prioritaria.get((nombre, mid))
+                    if _ult is not None and (_ahora_dt - _ult).total_seconds() < COOLDOWN_CORTO_REPREDICCION_S:
+                        skipped_dup += 1
+                        continue
                 try:
                     pred = func(m, ctx)
                 except Exception as e:
@@ -6730,6 +6832,16 @@ def main():
                     continue
                 if pred is None:
                     continue
+                if nombre in _prioritarias:
+                    _dec_nueva = pred.get("decision", "")
+                    _dec_previa = decision_bloqueada_prioritaria.get((nombre, mid))
+                    if _dec_previa and _dec_nueva and _dec_nueva != _dec_previa:
+                        # el precio cruzó al otro lado del umbral entre ciclos
+                        # -- NO escribir una segunda decisión contradictoria
+                        # para el mismo mercado (ver comentario en la lectura
+                        # de decision_bloqueada_prioritaria más arriba).
+                        skipped_dup += 1
+                        continue
                 # dist_max/min_dia_anterior_pct (07-Ago, petición Javi):
                 # inyectado aquí para TODAS las estrategias por igual, no
                 # solo GBM_LATE (donde nació) -- corrección tras pregunta
