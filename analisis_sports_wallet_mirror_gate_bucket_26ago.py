@@ -40,7 +40,12 @@ REPO = Path(__file__).resolve().parent
 DRY_RUN = REPO / "data/sports/wallet_mirror_sniper_dry_run.csv"
 OUT_PATH = REPO / "data/sports/wallet_mirror_gate_bucket.json"
 
-N_MIN = 15
+N_MIN = 40  # 01-Sep: subido de 15->40, mismo fix que WALLET_MIRROR cripto
+# (config_live.json::_pares_walletmirror_pausa_nota_2026-09-01 -- buckets
+# confirmados con n=15-65 disparaban dinero real y revertian con mas
+# datos). Sports ya tiene dinero real desde 31-Ago (WALLET_MIRROR#LoL),
+# mismo riesgo exacto -- verificado 01-Sep noche que este generador seguia
+# en 15 sin el fix.
 F_KELLY = 0.10  # 29-Ago: mismo default que analisis_log_growth.py/gate_bucket_propio.py (P28/CLAUDE.md pt.14)
 RATIO_MIN = 5.0
 # FEE verificado 26-Ago con condition_ids reales del propio dataset contra gamma-api
@@ -119,6 +124,17 @@ def main() -> int:
             hist = historial_previo.get(tupla_str, {}).get(b)
             if hist:
                 entrada["historial_crudo"] = hist
+            # /code-review 01-Sep (hallazgo real, segunda ronda): la
+            # confluencia suave de sports_wallet_mirror_gate_bucket.py
+            # necesita pnl_medio para comparar contra el fino incluso con
+            # n insuficiente (15<=n<40) -- sin esto, el chequeo quedaba
+            # estructuralmente inerte justo en el rango de n que existe
+            # para proteger. Mismo criterio que el grid gemelo de cripto
+            # (analisis_gate_bucket_propio_28jul.py): reportar pnl_medio
+            # para todo bucket presente en `grupos` (n>=1 siempre, ya que
+            # solo se crea la clave cuando hay filas -- no es un guardián
+            # real, solo documenta la garantía).
+            entrada["pnl_medio"] = round(sum(x[1] for x in items) / n, 4)
             salida[tupla_str][b] = entrada
             continue
         hit = sum(x[0] for x in items) / n

@@ -203,6 +203,11 @@ def _zonas_validadas_externamente() -> dict:
         mtime = _ZONAS_DINAMICAS_PATH.stat().st_mtime
     except OSError:
         return combinado
+    if time.time() - mtime > MAX_ANTIGUEDAD_S:
+        return combinado  # 01-Sep (/code-review, hallazgo real, tercera
+        # fuente sin proteger de las 3 que evaluar() consulta): dinámico
+        # demasiado viejo -- se descarta, solo quedan las estáticas
+        # (las estáticas no dependen de un cron, no necesitan este guardián).
     if _cache_zonas_dinamicas["mtime"] != mtime:
         try:
             bruto = json.loads(_ZONAS_DINAMICAS_PATH.read_text(encoding="utf-8"))
@@ -317,6 +322,18 @@ def _cargar_fillable() -> dict:
         mtime = DATA_PATH_FILLABLE.stat().st_mtime
     except OSError:
         return {}
+    # 01-Sep (/code-review, hallazgo real): NO se le añade el guardián de
+    # frescura de las otras fuentes -- _veto_fillable() (abajo) SOLO puede
+    # DEGRADAR (bueno_confirmado->malo_confirmado), nunca promocionar, y ya
+    # es fail-open POR DISEÑO cuando faltan datos (`if not entrada_fill:
+    # return resultado`, documentado explícitamente: "ausencia de evidencia
+    # de selección adversa no es evidencia de ausencia" -- decisión previa
+    # aceptada, no algo a cambiar de pasada esta noche). Añadir el guardián
+    # aquí habría convertido "dato viejo" en "veto desactivado" -- el
+    # sentido contrario al que se pretendía (fail-open donde se buscaba
+    # fail-closed). Dejar la puerta MTIME sin tocar; solo el corte por
+    # OSError (fichero ausente) sigue aplicando, igual que antes de esta
+    # sesión.
     if _cache_fillable["mtime"] != mtime:
         try:
             _cache_fillable["data"] = json.loads(DATA_PATH_FILLABLE.read_text(encoding="utf-8"))
@@ -335,6 +352,9 @@ def _cargar_bot_consenso() -> dict:
         mtime = DATA_PATH_BOTCONSENSO.stat().st_mtime
     except OSError:
         return {}
+    if time.time() - mtime > MAX_ANTIGUEDAD_S:
+        return {}  # 01-Sep: mismo guardián de frescura -- fuente de promoción,
+        # mismo riesgo que las otras 3 ya protegidas
     if _cache_botconsenso["mtime"] != mtime:
         try:
             _cache_botconsenso["data"] = json.loads(DATA_PATH_BOTCONSENSO.read_text(encoding="utf-8"))
@@ -482,7 +502,50 @@ def tiene_alguna_fuente_evaluable(tupla_str: str) -> bool:
     ese fill, el mismo efecto práctico que excluirla, pero explícito)."""
     if tiene_datos_propios(tupla_str):
         return True
-    return tupla_str in _zonas_validadas_externamente()
+    return tupla_str in _zonas_validadas_externamente_claves()
+
+
+def _zonas_validadas_externamente_claves() -> set:
+    """01-Sep (/code-review, hallazgo real): tiene_alguna_fuente_evaluable()
+    llamaba a _zonas_validadas_externamente() -- desde el guardián de
+    frescura de esta noche, esa función devuelve SOLO las estáticas cuando
+    el dinámico está viejo, así que una tupla cuya ÚNICA cobertura sea la
+    zona dinámica (ahora stale) desaparecía del todo del set de claves, y
+    tiene_alguna_fuente_evaluable() pasaba a devolver False -- en
+    live_trade.py eso NO degrada a 'siempre abortar' (el efecto que el
+    docstring de arriba documenta como aceptable), salta el bloque de
+    re-chequeo post-requote ENTERO, dejando pasar el fill sin ningún veto.
+    Esta función responde una pregunta distinta y más barata: ¿existe
+    ALGUNA fuente (estática o dinámica, viva o stale) que en principio
+    pudiera cubrir esta tupla? -- pura existencia de clave, ignora
+    antigüedad a propósito (evaluar() ya se encarga de que una zona stale
+    nunca promocione nada; aquí solo interesa que el re-chequeo no se
+    salte por completo)."""
+    claves = set(_ZONAS_VALIDADAS_EXTERNAMENTE_ESTATICAS.keys())
+    # /code-review 01-Sep (hallazgo real): la primera versión releía y
+    # reparseaba el JSON en CADA llamada (esta función se invoca en el
+    # camino de cada trade real, vía tiene_alguna_fuente_evaluable() desde
+    # live_trade.py) en vez de reusar el mismo caché por mtime que el resto
+    # del módulo -- comparte _cache_zonas_dinamicas con
+    # _zonas_validadas_externamente(), refrescándolo igual (sin el
+    # guardián de frescura, a propósito: aquí solo interesa la existencia
+    # de la clave, no si el dato es fiable ahora mismo).
+    try:
+        mtime = _ZONAS_DINAMICAS_PATH.stat().st_mtime
+    except OSError:
+        return claves
+    if _cache_zonas_dinamicas["mtime"] != mtime:
+        try:
+            bruto = json.loads(_ZONAS_DINAMICAS_PATH.read_text(encoding="utf-8"))
+            _cache_zonas_dinamicas["data"] = {
+                tupla: [tuple(z) for z in info.get("zonas_bueno_confirmado", [])]
+                for tupla, info in bruto.items()
+            }
+            _cache_zonas_dinamicas["mtime"] = mtime
+        except Exception:
+            pass
+    claves |= set(_cache_zonas_dinamicas["data"].keys())
+    return claves
 
 
 def _regla_aplica(tupla_str: str, py: float):

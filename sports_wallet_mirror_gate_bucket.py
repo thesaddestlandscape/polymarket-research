@@ -24,6 +24,7 @@ CATEGORIA#TIPO sin volver a calcular nada.
 """
 import json
 import math
+import time
 from pathlib import Path
 
 _REPO = Path(__file__).resolve().parent
@@ -31,6 +32,19 @@ DATA_PATH = _REPO / "data/sports/wallet_mirror_gate_bucket.json"
 DATA_PATH_FINO = _REPO / "data/sports/wallet_mirror_gate_bucket_fino.json"
 OVERRIDE_PATH = _REPO / "data/sports/wallet_mirror_gate_bucket_override.json"
 STEP = 0.05
+
+# 01-Sep: guardián de frescura + confluencia suave, mismo patrón aplicado
+# esta misma noche a gate_bucket_propio.py y wallet_mirror_gate_bucket.py
+# (cripto) -- petición explícita Javi ("no lo podemos permitir, tiene que
+# hacerlo cada vez que se vaya a hacer un trade, sino corremos riesgo de
+# perder pasta"). Sports tiene dinero real desde 31-Ago (WALLET_MIRROR#LoL,
+# ver data/sports/trades.csv), mismo riesgo exacto que motivó el fix en
+# cripto -- el grid/fino de sports (cron diario 07:05/07:07 UTC) no tenían
+# ninguna de las dos protecciones hasta ahora. N_MIN_MIN local para el
+# chequeo de confluencia (piso absoluto CLAUDE.md, mismo valor que
+# _FILLABLE_N_MIN/_CONFLUENCIA_N_MIN de los módulos gemelos).
+MAX_ANTIGUEDAD_S = 30 * 3600  # cron diario + margen, mismo criterio que gate_bucket_propio.py
+_CONFLUENCIA_N_MIN = 15
 
 _cache = {"mtime": None, "data": {}}
 _cache_override = {"mtime": None, "data": {}}
@@ -46,6 +60,8 @@ def _zonas_finas() -> dict:
         mtime = DATA_PATH_FINO.stat().st_mtime
     except OSError:
         return {}
+    if time.time() - mtime > MAX_ANTIGUEDAD_S:
+        return {}  # 01-Sep: dato demasiado viejo -- tratar como sin datos, fail-closed
     if _cache_fino["mtime"] != mtime:
         try:
             _cache_fino["data"] = json.loads(DATA_PATH_FINO.read_text(encoding="utf-8"))
@@ -60,6 +76,8 @@ def _cargar() -> dict:
         mtime = DATA_PATH.stat().st_mtime
     except OSError:
         return {}
+    if time.time() - mtime > MAX_ANTIGUEDAD_S:
+        return {}  # 01-Sep: mismo guardián de frescura
     if _cache["mtime"] != mtime:
         try:
             _cache["data"] = json.loads(DATA_PATH.read_text(encoding="utf-8"))
@@ -130,13 +148,48 @@ def evaluar_sin_override(categoria: str, tipo: str, ask: float) -> dict:
     tabla = _cargar().get(clave_str, {})
     detalle = tabla.get(b_str)
     veredicto_propio = detalle.get("veredicto", "sin_concluir") if detalle else "sin_concluir"
+    # /code-review 01-Sep (hallazgo real, tercera ronda): el generador de
+    # sports (analisis_sports_wallet_mirror_gate_bucket_26ago.py) escribe
+    # "n_insuficiente" para buckets con n<N_MIN, NO "sin_concluir" como el
+    # gemelo de cripto -- la promoción del fino (línea de abajo) y la
+    # confluencia suave comparan contra "sin_concluir" a secas, así que
+    # "n_insuficiente" nunca entraba ahí: la promoción del fino llevaba
+    # TODA su vida inerte en sports para cualquier bucket bajo n=40 (antes
+    # n=15), no solo desde el fix de esta noche. Normalizado aquí en vez
+    # de en el generador para no tocar el vocabulario que otros
+    # consumidores (vigía, dashboard) puedan mostrar distinto.
+    if veredicto_propio == "n_insuficiente":
+        veredicto_propio = "sin_concluir"
 
     # Ventana deslizante como fuente ADITIVA de promoción -- solo cuando el
     # grid fijo sigue sin_concluir, nunca pisa un veredicto ya decidido por
     # el grid fijo.
     if veredicto_propio == "sin_concluir":
         fino = _zonas_finas().get(clave_str)
-        if fino and fino.get("lo", 0) <= ask < fino.get("hi", 0) and fino.get("veredicto") == "bueno_confirmado":
+        lo_fino, hi_fino = (fino or {}).get("lo"), (fino or {}).get("hi")
+        # /code-review 01-Sep (hallazgo real): defaults silenciosos a 0
+        # (fino.get("lo",0)) en vez de exigir explícitamente que ambos
+        # existan -- mismo fix ya aplicado al gemelo de cripto
+        # (wallet_mirror_gate_bucket.py). Un JSON parcial (falta "lo",
+        # sobra "hi" y bueno_confirmado) ensancharía la promoción a
+        # [0, hi) en vez de fallar cerrado.
+        if fino and lo_fino is not None and hi_fino is not None and lo_fino <= ask < hi_fino \
+                and fino.get("veredicto") == "bueno_confirmado":
+            # 01-Sep: confluencia suave, mismo patrón que gate_bucket_propio.py/
+            # wallet_mirror_gate_bucket.py -- el fino puede promocionar en
+            # solitario mientras el grid está sin_concluir, pero no si el
+            # propio grid, en este bucket exacto, ya apunta en contra
+            # (pnl_medio negativo con n>=_CONFLUENCIA_N_MIN).
+            n_grid = (detalle or {}).get("n") or 0
+            pnl_grid = (detalle or {}).get("pnl_medio")
+            if pnl_grid is not None and n_grid >= _CONFLUENCIA_N_MIN and pnl_grid < 0:
+                return {
+                    "veredicto": "sin_concluir",
+                    "detalle": {"origen": "confluencia_suave_01sep",
+                                "motivo": f"fino confirma pero el grid en {b_str} (n={n_grid}) "
+                                          f"ya apunta en contra (pnl_medio={pnl_grid:.3f})",
+                                "detalle_propio": detalle, "detalle_fino": fino},
+                }
             return {"veredicto": "bueno_confirmado", "detalle": {**fino, "origen": "ventana_fina"}}
 
     return {"veredicto": veredicto_propio, "detalle": {**detalle, "origen": "grid_fijo"} if detalle else None}

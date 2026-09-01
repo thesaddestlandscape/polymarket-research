@@ -47,9 +47,49 @@ def main() -> int:
                     f"[{b},{float(b)+0.05:.2f}) -> {v_nuevo} "
                     f"(n={info.get('n')} pnl/tr={info.get('pnl_medio')} p_bh={info.get('p_bh')})"
                 )
+            # 01-Sep (/code-review, hallazgo real -- misma noche del fix
+            # N_MIN 15->40): solo se avisaba al ENTRAR en bueno/malo_
+            # confirmado, nunca al SALIR (ej. bueno_confirmado -> n_
+            # insuficiente al subir el umbral, o sin_concluir). Un bucket
+            # live real (CS#SEGUIR[0.25,0.30)) perdió su confirmación
+            # exactamente así, sin aviso -- mismo punto ciego que CLAUDE.md
+            # ya documenta para vigia_log_growth.
+            elif v_antes in ("bueno_confirmado", "malo_confirmado") and v_nuevo != v_antes:
+                avisos.append(
+                    f"⚠️ {tupla_str} [{b},{float(b)+0.05:.2f}) pierde confirmación "
+                    f"({v_antes} -> {v_nuevo}, n={info.get('n')})"
+                )
+
+    # /code-review 01-Sep (hallazgo real, segunda ronda): el bucle de
+    # arriba solo recorre las claves presentes HOY en `nuevo` -- un bucket
+    # que ayer tenía filas (confirmado) y hoy tiene CERO (0 filas nuevas en
+    # ese categoria#tipo#bucket exacto) ni siquiera aparece en `nuevo`
+    # (analisis_sports_wallet_mirror_gate_bucket_26ago.py solo crea claves
+    # para combos con al menos 1 fila), así que la pérdida de confirmación
+    # pasaba igual de silenciosa que el caso que el fix de arriba
+    # pretendía cerrar. Recorrer también lo que había en `previo` y ya no
+    # está en `nuevo`.
+    for tupla_str, buckets in previo.items():
+        for b, info in buckets.items():
+            v_antes = info.get("veredicto", "sin_concluir")
+            if v_antes not in ("bueno_confirmado", "malo_confirmado"):
+                continue
+            if b not in nuevo.get(tupla_str, {}):
+                avisos.append(
+                    f"⚠️ {tupla_str} [{b},{float(b)+0.05:.2f}) pierde confirmación "
+                    f"({v_antes} -> sin datos hoy)"
+                )
 
     if avisos:
-        msg = "🏆 Sports Wallet Mirror gate bucket — nuevos veredictos:\n" + "\n".join(avisos)
+        # /code-review 01-Sep (hallazgo real): la cabecera siempre decía
+        # "🏆 nuevos veredictos" incluso cuando avisos solo contenía
+        # pérdidas de confirmación (⚠️) -- un operador mirando por encima
+        # podía leer el trofeo y no darse cuenta de que un bucket con
+        # dinero real acababa de dejar de operar.
+        solo_perdidas = all(a.startswith("⚠️") for a in avisos)
+        cabecera = "⚠️ Sports Wallet Mirror gate bucket — pérdidas de confirmación:" \
+            if solo_perdidas else "🏆 Sports Wallet Mirror gate bucket — cambios hoy:"
+        msg = cabecera + "\n" + "\n".join(avisos)
         print(msg)
         enviar_telegram(msg)
     else:
