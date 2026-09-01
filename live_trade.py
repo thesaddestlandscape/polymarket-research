@@ -2113,6 +2113,48 @@ def _decidir_requote(edge_dir: float, precio_plan: float,
     return mejor_ask, edge_ahora, True, motivo
 
 
+def _techo_precio_fok(mejor_ask: float, edge_vivo: float | None,
+                      techo_verificado: float | None = None) -> float:
+    """Propuesta #3 Arquetipo A (01-Sep, aprobación explícita Javi): el FOK
+    real se enviaba con `price=mejor_ask` exacto -- una limit-buy a ese
+    precio solo puede casar contra ventas EN ese nivel, nunca contra
+    niveles peores, aunque `_consultar_profundidad_libro` (techo=precio×1.05)
+    ya hubiera confirmado profundidad agregada de sobra unos niveles más
+    arriba. Verificado con los 56 `fok_kill` reales de `libro_snapshots.csv`
+    (histórico completo): 100% tenían ratio_vs_stake mediana=161,8x y
+    mediana 32 niveles -- liquidez agregada de sobra, matada solo por el
+    límite de precio demasiado estrecho.
+
+    Ensancha el límite hasta el punto exacto donde, en el PEOR caso (que
+    la orden entera se llene justo en ese límite, nunca peor por
+    definición de un limit order), el edge resultante sigue siendo
+    >= REQUOTE_EDGE_MIN -- el mismo listón que ya exige `_decidir_requote`
+    para operar. Nunca puede producir un precio peor que el que ya se
+    acepta hoy en el peor caso teórico; solo permite que el CLOB reclame
+    más niveles del libro dentro del mismo FOK cuando el nivel 1 no basta.
+    Tope duro en REQUOTE_PRECIO_MAX (nunca pagar más, pase lo que pase).
+
+    `techo_verificado` (code-review 01-Sep, hallazgo real): el margen de
+    edge por sí solo podía ensanchar el límite MÁS ALLÁ de la banda
+    (precio×1.05) dentro de la cual `_consultar_profundidad_libro` sumó
+    profundidad_eur/n_niveles -- esa banda es la única con evidencia
+    empírica real (los 56 fok_kill verificados caen dentro de ella). Se
+    tope adicional ahí: nunca se ensancha más allá de lo que ya se sabe
+    que tiene profundidad medida, aunque el edge diera margen para más.
+
+    Sin edge_vivo (caller no pasó edge_dir a _ejecutar_orden_polymarket,
+    nunca se llamó _decidir_requote) no hay margen de edge conocido que
+    justifique ensanchar nada -- se mantiene el comportamiento anterior
+    (limit = mejor_ask exacto), fail-closed por falta de dato."""
+    if edge_vivo is None:
+        return mejor_ask
+    margen = max(0.0, edge_vivo - REQUOTE_EDGE_MIN)
+    techo = round(mejor_ask + margen, 6)
+    if techo_verificado is not None:
+        techo = min(techo, techo_verificado)
+    return min(max(techo, mejor_ask), REQUOTE_PRECIO_MAX)
+
+
 def _verificar_fill_real(client, condition_id: str, order_id: str, ts_envio: float) -> dict | None:
     """01-Sep (hallazgo real de code-review + barrido de salud, ver
     memoria/CLAUDE.md): esta función existía SOLO en sports_live_trade.py
@@ -2196,6 +2238,7 @@ def _ejecutar_orden_polymarket(market_id: str, direction: str,
     ejecutar (ver _decidir_requote)."""
     depth: dict = {}
     precio_plan = entry_price
+    edge_vivo = None  # solo se rellena si el caller pasó edge_dir (ver _decidir_requote más abajo)
     try:
         from py_clob_client_v2 import MarketOrderArgsV2, OrderType
         yes_token, no_token, condition_id = _get_token_ids(market_id)
@@ -2299,6 +2342,13 @@ def _ejecutar_orden_polymarket(market_id: str, direction: str,
         # veto_profundidad/veto_sin_datos/abort_requote (la inmensa mayoría:
         # histórico 2515+345 vetos vs 129 ejecutadas). Se construye más abajo,
         # SOLO si de verdad vamos a firmar y enviar la orden.
+        # techo_verificado: mismo banda (precio×1.05) dentro de la cual
+        # _consultar_profundidad_libro sumó profundidad_eur/n_niveles --
+        # _techo_precio_fok NUNCA debe ensanchar el límite del FOK más
+        # allá de esta banda (code-review 01-Sep, hallazgo real: el margen
+        # de edge por sí solo podía extenderse a niveles cuya liquidez
+        # nunca se verificó, invalidando la premisa empírica del fix).
+        techo_verificado = round(precio * 1.05, 6)
         depth = _consultar_profundidad_libro(None, token_id, precio, stake_eur)
         if depth.get("ok"):
             log(f"  📊 Libro {market_id}/{direction}: mejor_ask={depth['mejor_ask']} "
@@ -2555,6 +2605,18 @@ def _ejecutar_orden_polymarket(market_id: str, direction: str,
                     "fee_eur": 0.0,
                     "error": f"stake {stake_eur:.2f} < mínimo CLOB {MIN_ORDEN_CLOB_USD}",
                 }
+            # Propuesta #3 Arquetipo A (01-Sep, aprobación explícita Javi +
+            # /code-review antes de commitear): el límite del FOK se
+            # ensancha hasta el techo que el edge ya validado permite (ver
+            # _techo_precio_fok) -- `precio` (mejor_ask/gate) NO cambia,
+            # solo el precio que se envía al CLOB en la orden real, para no
+            # contaminar ningún chequeo de gate/py_actual ya hecho arriba
+            # con este precio, más pesimista por diseño.
+            precio_limite_fok = _techo_precio_fok(precio, edge_vivo, techo_verificado)
+            if precio_limite_fok > precio:
+                log(f"  📈 Límite FOK ensanchado {precio:.4f}→{precio_limite_fok:.4f} "
+                    f"(edge_vivo={edge_vivo}, margen sobre REQUOTE_EDGE_MIN={REQUOTE_EDGE_MIN}) "
+                    f"-- deja al CLOB barrer niveles peores sin matar la orden")
             resp = None
             for intento, amt in enumerate(intentos_stake):
                 if amt <= 0:
@@ -2563,7 +2625,7 @@ def _ejecutar_orden_polymarket(market_id: str, direction: str,
                     token_id=token_id,
                     amount=amt,
                     side="BUY",
-                    price=precio,
+                    price=precio_limite_fok,
                 )
                 try:
                     signed_order = client.create_market_order(order_args)
@@ -2629,7 +2691,12 @@ def _ejecutar_orden_polymarket(market_id: str, direction: str,
                 "error": "orden aceptada por la API pero sin evidencia de fill real en get_trades()",
             }
 
-        filled_price = float(trade_real.get("price", precio))
+        # code-review 01-Sep (hallazgo real): el fallback usaba `precio`
+        # (mejor_ask pre-ensanche) -- desde que el FOK se envía con
+        # `precio_limite_fok` (posiblemente mayor), ese era el default
+        # obsoleto si get_trades() alguna vez devolviera el dict sin
+        # "price". `precio_limite_fok` es el precio real que se pidió.
+        filled_price = float(trade_real.get("price", precio_limite_fok))
         # /code-review 01-Sep, hallazgo real: `fee_rate_bps` de get_trades()
         # (a diferencia del resto de campos, que sí reflejan el fill real)
         # viene sistemáticamente "0" incluso en fills con fee real cobrada
