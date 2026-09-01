@@ -151,8 +151,23 @@ def ic_para(strategy: str, subtype: str, decision: str, params: dict):
 
 
 def construir_indice_libro(root: Path) -> dict:
-    """(market_id, direction) -> fila de libro_snapshots.csv, prefiriendo
-    motivo='ejecutada' (fill real) > 'candidato_evaluacion' > 'fuera_ventana'."""
+    """(strategy, market_id, direction) -> fila de libro_snapshots.csv,
+    prefiriendo motivo='ejecutada' (fill real) > 'candidato_evaluacion' >
+    'fuera_ventana'.
+
+    01-Sep (hallazgo real, ver idea_bug_indice_libro_cross_strategy_01sep):
+    la clave ANTES no incluía 'strategy' -- (market_id, direction) a secas.
+    Cuando varias estrategias evalúan el MISMO mercado y misma dirección
+    (frecuente: 4.611/5.995 mercados de FAVORITO_CONFIRMADO_5MIN_
+    ALTACONVICCION#BTC#5min#BUY_YES los comparten con otra estrategia), el
+    índice se quedaba con el snapshot de CUALQUIERA de ellas -- verificado:
+    82.1% de las "ejecuciones" simuladas de esa tupla tomaban el precio de
+    libro de OTRA estrategia (691 de FAVORITO_CONFIRMADO base, 344+232 de
+    MOMENTUM_IBS_5M_BALLENA/FADE), no el propio -- entrada real exige
+    py>=0.70 (FAVORITO_5MIN_ALTACONVICCION_TH) pero el precio de ejecución
+    simulado promediaba 0.52, prestado de una estrategia con umbral más
+    bajo. Infla/distorsiona el PnL de CUALQUIER tupla que comparta
+    mercados con otra (la mayoría)."""
     prioridad = {"ejecutada": 0, "candidato_evaluacion": 1, "fuera_ventana": 2}
     indice: dict[tuple, tuple] = {}  # key -> (prioridad_actual, row)
     p = root / "data" / "live" / "libro_snapshots.csv"
@@ -161,7 +176,7 @@ def construir_indice_libro(root: Path) -> dict:
             motivo = row.get("motivo", "")
             if motivo not in prioridad:
                 continue
-            key = (row.get("market_id"), row.get("direction"))
+            key = (row.get("strategy"), row.get("market_id"), row.get("direction"))
             pr = prioridad[motivo]
             actual = indice.get(key)
             if actual is None or pr < actual[0]:
@@ -261,7 +276,7 @@ def simular_tupla(rows: list, config: dict, params: dict, indice_libro: dict,
             stats["n_bloqueado_freno"] += 1
             continue
 
-        libro_row = indice_libro.get((row["market_id"], decision))
+        libro_row = indice_libro.get((strategy, row["market_id"], decision))
         if libro_row is None:
             stats["n_sin_dato_libro"] += 1
             continue
