@@ -71,31 +71,82 @@ DIR_SHADOW = REPO / "data" / "shadow"
 OUT = DIR_SHADOW / "candidatas_sin_fillability_depth_fase0.csv"
 VISTOS_PATH = DIR_SHADOW / "candidatas_sin_fillability_depth_fase0_vistos.json"
 
-# (strategy, activo, decision) -- ampliable si aparecen más candidatas
-# confirmadas externamente sin infraestructura de fill-ability propia.
+# (strategy, activo, marco, decision) -- ampliable si aparecen más
+# candidatas confirmadas externamente sin infraestructura de fill-ability
+# propia. `marco=None` = comodín (mantiene el comportamiento original de
+# las 9 primeras entradas, todas con un solo marco posible en su propio
+# nombre salvo FAVORITO_CONFIRMADO base, que sí puede abarcar varios --
+# no se ha desambiguado a propósito, fuera de alcance de este cambio).
+#
+# 01-Sep noche (petición explícita Javi, "el problema de profundidad,
+# selección adversa y payout asimétrico ya" + barrido de Arquetipo A):
+# 17 familias candidatas en candidatos_evaluacion_live NUNCA tuvieron
+# NINGÚN dato de profundidad real -- cualquier convergencia grid+fino
+# para ellas es una confirmación estadística sin verificar si es
+# cobrable. UPDOWN_GBM (39 tuplas, la familia con más volumen de las 17)
+# es la primera en instrumentarse -- se necesitó añadir `marco` al
+# esquema (antes ausente) porque UPDOWN_GBM abarca 5/15/60/240min/daily
+# a la vez y sin marco se mezclarían en la misma fila. Las otras 16
+# familias quedan pendientes, ampliación incremental del mismo fichero,
+# mismo patrón, no de golpe (evitar sobrecarga de red real -- una
+# consulta de libro por señal nueva).
 TUPLAS = [
-    ("FAVORITO_CONFIRMADO_5MIN_ALTACONVICCION", "BNB", "BUY_YES"),
-    ("BALLENAS_CONFIRMADAS_15M", "DOGE", "BUY_YES"),
-    ("FAVORITO_CONFIRMADO", "ETH", "BUY_NO"),
-    ("WEEKLY_PRICE", "ETH", "BUY_NO"),
-    ("WEEKLY_PRICE", "BTC", "BUY_NO"),
-    ("GBM_LATE_5M", "XRP", "BUY_YES"),
-    ("STREAK_FADE_5M", "SOL", "BUY_YES"),
+    ("FAVORITO_CONFIRMADO_5MIN_ALTACONVICCION", "BNB", None, "BUY_YES"),
+    ("BALLENAS_CONFIRMADAS_15M", "DOGE", None, "BUY_YES"),
+    ("FAVORITO_CONFIRMADO", "ETH", None, "BUY_NO"),
+    ("WEEKLY_PRICE", "ETH", None, "BUY_NO"),
+    ("WEEKLY_PRICE", "BTC", None, "BUY_NO"),
+    ("GBM_LATE_5M", "XRP", None, "BUY_YES"),
+    ("STREAK_FADE_5M", "SOL", None, "BUY_YES"),
     # 27-Ago noche (petición explícita Javi, pendiente anotado el mismo día en
     # CLAUDE.md: "LIQUIDACIONES_5M/60M -- pendiente de instrumentar fill-ability"):
     # gate_bucket_propio dio 2 bueno_confirmado el 27-Ago, familia sin NINGÚN
     # observador de profundidad, ni siquiera este genérico -- mismo hueco
     # exacto que motivó este fichero para las 7 tuplas de arriba.
-    ("LIQUIDACIONES_5M", "BTC", "BUY_YES"),   # [0.45,0.50) n=19 pnl+0.404€ p=0.016
-    ("LIQUIDACIONES_60M", "ETH", "BUY_YES"),  # [0.45,0.50) n=28 pnl+0.221€ p=0.008
+    ("LIQUIDACIONES_5M", "BTC", None, "BUY_YES"),   # [0.45,0.50) n=19 pnl+0.404€ p=0.016
+    ("LIQUIDACIONES_60M", "ETH", None, "BUY_YES"),  # [0.45,0.50) n=28 pnl+0.221€ p=0.008
 ]
-_CLAVES = {(s, a, d) for s, a, d in TUPLAS}
+# UPDOWN_GBM -- las 39 tuplas exactas de candidatos_evaluacion_live (5
+# activos x hasta 5 marcos x 2 direcciones, no todas las combinaciones
+# existen para todos los activos). Generado por barrido real 01-Sep, no
+# a mano -- ver project_5_propuestas_arquetipo_a_01sep en memoria nativa.
+_UPDOWN_GBM_MARCOS = {
+    "BNB": ["15min"],
+    "BTC": ["15min", "240min", "5min", "60min", "daily"],
+    "DOGE": ["15min", "5min"],
+    "ETH": ["15min", "240min", "5min", "60min", "daily"],
+    "SOL": ["15min", "240min", "5min", "60min", "daily"],
+    "XRP": ["15min", "5min"],
+}
+for _activo, _marcos in _UPDOWN_GBM_MARCOS.items():
+    for _marco in _marcos:
+        for _decision in ("BUY_YES", "BUY_NO"):
+            if _activo == "SOL" and _marco == "240min" and _decision == "BUY_NO":
+                continue  # no existe en candidatos_evaluacion_live (verificado)
+            TUPLAS.append(("UPDOWN_GBM", _activo, _marco, _decision))
+_CLAVES = {(s, a, m, d) for s, a, m, d in TUPLAS}
+
+
+def _activo_marco(subtype: str) -> tuple:
+    """/code-review 01-Sep: mismo split reusado en _procesar_fila() y en
+    el backlog de main() -- factorizado para que un cambio de formato de
+    subtype no pueda actualizarse en un sitio y olvidarse en el otro."""
+    partes = subtype.split("#", 1) if "#" in subtype else [subtype, ""]
+    return partes[0], partes[1]
+
+
+def _coincide(strategy: str, activo: str, marco: str, decision: str) -> bool:
+    """(strategy, activo, marco, decision) exacto, o con marco=None como
+    comodín (las 9 entradas originales, ver comentario de TUPLAS)."""
+    return (strategy, activo, marco, decision) in _CLAVES or \
+           (strategy, activo, None, decision) in _CLAVES
+
 
 STAKE_REFERENCIA_EUR = 1.05
 POLL_S = 15
 
 COLUMNS = ["ts_deteccion_utc", "ts_prediccion_utc", "market_id", "strategy",
-           "activo", "decision", "precio_yes_mercado", "mejor_ask_deteccion",
+           "activo", "marco", "decision", "precio_yes_mercado", "mejor_ask_deteccion",
            "profundidad_eur_deteccion", "ratio_vs_stake_deteccion"]
 
 
@@ -134,9 +185,8 @@ def _procesar_fila(row: dict, vistos: set) -> dict | None:
     strategy = row.get("strategy", "")
     decision = row.get("decision", "")
     subtype = row.get("subtype", "")
-    activo = subtype.split("#", 1)[0] if "#" in subtype else subtype
-    clave = (strategy, activo, decision)
-    if clave not in _CLAVES:
+    activo, marco = _activo_marco(subtype)
+    if not _coincide(strategy, activo, marco, decision):
         return None
     market_id = row.get("market_id", "")
     dedup_key = f"{market_id}|{strategy}|{decision}"
@@ -164,6 +214,7 @@ def _procesar_fila(row: dict, vistos: set) -> dict | None:
         "market_id": market_id,
         "strategy": strategy,
         "activo": activo,
+        "marco": marco,
         "decision": decision,
         "precio_yes_mercado": py,
         "mejor_ask_deteccion": fill.get("mejor_ask") if fill.get("ok") else "",
@@ -191,8 +242,8 @@ def main() -> None:
                 strategy = row.get("strategy", "")
                 decision = row.get("decision", "")
                 subtype = row.get("subtype", "")
-                activo = subtype.split("#", 1)[0] if "#" in subtype else subtype
-                if (strategy, activo, decision) in _CLAVES:
+                activo, marco = _activo_marco(subtype)
+                if _coincide(strategy, activo, marco, decision):
                     vistos.add(f"{row.get('market_id','')}|{strategy}|{decision}")
                     nuevos += 1
             posicion = f.tell()
