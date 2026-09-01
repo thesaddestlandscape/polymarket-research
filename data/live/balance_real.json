@@ -1,12 +1,12 @@
 {
- "ts": "2026-09-01T15:13:20+00:00",
+ "ts": "2026-09-01T15:20:52+00:00",
  "wallet": "0xB6eDe3A699f73cbe7f8A221c2cdAcEbFdf02028b",
  "free_usdc": 7.9195,
- "positions_value": 1.0435,
- "total": 8.963,
- "total_bruto": 16.063,
+ "positions_value": 1.0404,
+ "total": 8.9599,
+ "total_bruto": 16.0599,
  "deposito_inicial": 70.71,
- "pnl_real": -61.747,
+ "pnl_real": -61.7501,
  "pnl_por_deposito": [
   {
    "fecha": "2026-06-29",
@@ -36,9 +36,9 @@
    "fecha": "2026-08-31",
    "eur": 9.49,
    "nota": "Cuarta recarga (petici\u00f3n expl\u00edcita Javi, chat 31-Ago ~13:45 UTC, mismo d\u00eda del fix del freno de bankroll m\u00ednimo). 9.49 USDC nuevos.",
-   "pnl_ledger": 0.6009,
-   "n_trades": 4,
-   "rendimiento_pct": 6.3
+   "pnl_ledger": -0.5101,
+   "n_trades": 5,
+   "rendimiento_pct": -5.4
   }
  ],
  "daily_real": [
@@ -264,9 +264,9 @@
   },
   {
    "date": "2026-09-01",
-   "pnl": -2.35
+   "pnl": -2.36
   }
  ],
- "pnl_hoy_real": -2.35,
- "pnl_7d_real": -5.51
+ "pnl_hoy_real": -2.36,
+ "pnl_7d_real": -5.52
 }
