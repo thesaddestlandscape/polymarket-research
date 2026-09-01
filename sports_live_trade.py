@@ -19,8 +19,6 @@ Ledger PROPIO (data/sports/trades.csv) -- nunca el de cripto.
 
 import fcntl
 import json
-import os
-import time
 from datetime import datetime, timezone
 from pathlib import Path
 
@@ -77,64 +75,12 @@ def _limpiar_orden_en_curso() -> None:
         log(f"  ⚠️ fallo al borrar orden_en_curso.json: {e}")
 
 
-def _verificar_fill_real(client, condition_id: str, order_id: str, ts_envio: float) -> dict | None:
-    """31-Ago (hallazgo real, dinero real): `client.post_order(...,
-    OrderType.FOK)` puede devolver una respuesta con `orderID` SIN
-    lanzar excepción incluso cuando la orden NUNCA casó con contraparte
-    -- verificado en el primer trade real de sports (LoL#SEGUIR,
-    17:16 UTC 31-Ago): el código marcaba `ok=True` y `sports_resolve.py`
-    acabó registrando un WIN de +1,184€ que jamás existió on-chain
-    (confirmado con 3 fuentes independientes de Polymarket: /activity
-    de la wallet sin ningún evento, `client.get_order(order_id)` ->
-    None, `client.get_trades()` -- 458 trades reales -- sin ninguna
-    coincidencia por order_id ni por franja horaria). Pausado sports
-    (switch OFF) hasta este fix, decisión explícita de Javi.
-
-    Poll corto sobre `client.get_trades()` filtrado por mercado --
-    fiable porque compara contra el histórico REAL de fills, no contra
-    los campos de `resp` (que pueden traer el valor SOLICITADO como
-    fallback, nunca el realmente ejecutado, si la orden no llegó a
-    casar). Fail-closed: sin evidencia de fill tras el poll, devuelve
-    None -- el caller NUNCA debe tratar eso como ejecutado.
-
-    Condición `maker_address==nuestra wallet AND trader_side=="TAKER"`
-    (31-Ago, /code-review medium -- un subagente marcó esto CONFIRMED
-    como bug, citando la doc oficial de Polymarket, que documenta
-    `maker_address` como "la contraparte" en general): **refutado
-    empíricamente** contra las 458 trades reales de esta wallet --
-    447/447 con trader_side=="TAKER" tienen maker_address==nuestra
-    wallet (0 discrepancias); las 11 con trader_side=="MAKER" tienen
-    maker_address DISTINTO de la nuestra. El comportamiento real de
-    este endpoint para esta cuenta no coincide con la lectura de la doc
-    que hizo el subagente -- verificar contra datos reales de la propia
-    wallet SIEMPRE gana sobre la interpretación de documentación externa
-    cuando divergen (mismo criterio que CLAUDE.md: contrastar con datos
-    reales, nunca alucinar). NO se aplica el cambio sugerido por el
-    review.
-
-    `condition_id` vacío (finding real del mismo review, sí aplicado):
-    fail-closed inmediato -- sin mercado que acotar la consulta,
-    `TradeParams(market="")` haría un fetch sin filtrar de todo el
-    histórico de la cuenta (458+ trades y creciendo) en cada orden."""
-    from py_clob_client_v2.clob_types import TradeParams
-    if not condition_id:
-        log("  ⚠️ _verificar_fill_real sin condition_id -- fail-closed, no se puede verificar")
-        return None
-    wallet = (os.getenv("POLY_DEPOSIT_WALLET") or "").lower()
-    for intento in range(3):
-        try:
-            trades = client.get_trades(TradeParams(market=condition_id, after=int(ts_envio) - 5))
-        except Exception as e:
-            log(f"  ⚠️ error consultando get_trades para verificar fill (intento {intento + 1}): {e}")
-            trades = []
-        for t in trades:
-            if (str(t.get("maker_address", "")).lower() == wallet
-                    and t.get("trader_side") == "TAKER"
-                    and t.get("taker_order_id") == order_id):
-                return t
-        if intento < 2:
-            time.sleep(1.5)
-    return None
+# 01-Sep: _verificar_fill_real se trasladó a live_trade.py (código
+# compartido) -- _ejecutar_orden_polymarket (el motor de cripto) tenía
+# exactamente el mismo hueco que este comentario documentaba solo para
+# sports, así que ahora vive en un único punto de verdad. Alias local
+# para no tocar las ~2 llamadas de abajo.
+_verificar_fill_real = _crypto_lt._verificar_fill_real
 
 
 def ejecutar_orden_token(token_id: str, precio: float, stake_eur: float,

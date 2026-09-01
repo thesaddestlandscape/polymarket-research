@@ -442,6 +442,11 @@ def compute_live_data():
     real = cargar_balance_real(max_edad_s=3600)
     if real and not real.get("_rancio"):
         real_total   = real.get("total")
+        # 01-Sep (petición explícita Javi): total bruto de la wallet
+        # COMPARTIDA (cripto+sports, sin restar el capital ajeno de sports)
+        # -- solo para visibilidad, real_total sigue siendo la cifra neta
+        # de cripto que ya usa el resto del dashboard/circuit breaker.
+        real_total_bruto = real.get("total_bruto")
         real_pnl     = real.get("pnl_real")
         real_ts      = real.get("ts")
         real_deposito = real.get("deposito_inicial")
@@ -476,6 +481,7 @@ def compute_live_data():
         tracking_error = round(real_pnl - pnl_total, 2) if real_pnl is not None else None
     else:
         real_total = real_pnl = real_ts = tracking_error = None
+        real_total_bruto = None
         real_deposito = real_hoy = real_7d = None
         real_daily = []
         real_por_deposito = []
@@ -580,6 +586,7 @@ def compute_live_data():
         "bankroll": round(LIVE_BANKROLL_INICIAL + pnl_total, 2),
         "bankroll_inicial": LIVE_BANKROLL_INICIAL,
         "real_total": real_total,
+        "real_total_bruto": real_total_bruto,
         "real_pnl": real_pnl,
         "real_ts": real_ts,
         "real_deposito": real_deposito,
@@ -1093,10 +1100,10 @@ footer { text-align: center; padding: 10px; font-size: 10px; color: var(--muted)
       <div id="live-deposito" style="font-size:20px;font-weight:700">—</div>
       <div id="live-deposito-fecha" style="font-size:9px;color:var(--muted)">—</div>
     </div>
-    <div style="background:#ffffff08;border-radius:6px;padding:8px;text-align:center">
-      <div style="font-size:9px;color:var(--muted)">🏦 Dinero actual</div>
+    <div style="background:#ffffff08;border-radius:6px;padding:8px;text-align:center" title="Balance NETO de cripto (wallet compartida con sports, menos depósitos+stake abierto de sports)">
+      <div style="font-size:9px;color:var(--muted)">🏦 Dinero actual (cripto)</div>
       <div id="live-bankroll" style="font-size:20px;font-weight:700">—</div>
-      <div style="font-size:9px;color:var(--muted)">balance wallet</div>
+      <div id="live-bankroll-bruto" style="font-size:9px;color:var(--muted)">balance wallet</div>
     </div>
     <div style="background:#ffffff08;border-radius:6px;padding:8px;text-align:center" title="PNL del período de capital actual (última recarga), no el acumulado desde el primer depósito">
       <div style="font-size:9px;color:var(--muted)">📈 PNL real (período)</div>
@@ -1454,6 +1461,15 @@ function renderLive(live) {
   // Dinero actual = balance real del wallet
   document.getElementById("live-bankroll").textContent =
     live.real_total != null ? `${live.real_total.toFixed(2)}$` : "n/d";
+  // 01-Sep (petición explícita Javi): total bruto de la wallet compartida
+  // (cripto+sports) junto al neto, para que quede claro de dónde sale la
+  // diferencia en vez de parecer dinero desaparecido.
+  const bankrollBrutoEl = document.getElementById("live-bankroll-bruto");
+  if (bankrollBrutoEl) {
+    bankrollBrutoEl.textContent = (live.real_total_bruto != null && live.real_total != null)
+      ? `wallet compartida: ${live.real_total_bruto.toFixed(2)}$ (sports: ${(live.real_total_bruto - live.real_total).toFixed(2)}$)`
+      : "balance wallet";
+  }
   // PNL real del PERÍODO ACTUAL (última recarga) / hoy / 7 días — todo del wallet on-chain
   document.getElementById("live-pnl").innerHTML     = fmtOr(live.header_pnl);
   document.getElementById("live-pnl-hoy").innerHTML = fmtOr(live.real_hoy);

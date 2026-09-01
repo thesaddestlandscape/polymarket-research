@@ -17,6 +17,7 @@ import fcntl
 import json
 import math
 import os
+import time
 import requests
 from collections import defaultdict
 from datetime import datetime, timezone, timedelta
@@ -2112,6 +2113,77 @@ def _decidir_requote(edge_dir: float, precio_plan: float,
     return mejor_ask, edge_ahora, True, motivo
 
 
+def _verificar_fill_real(client, condition_id: str, order_id: str, ts_envio: float) -> dict | None:
+    """01-Sep (hallazgo real de code-review + barrido de salud, ver
+    memoria/CLAUDE.md): esta función existía SOLO en sports_live_trade.py
+    (añadida 31-Ago tras un trade fantasma real -- ver su propio
+    historial abajo). `_ejecutar_orden_polymarket` (esta función, el
+    motor de TODAS las tuplas cripto en vivo) tenía exactamente el mismo
+    hueco: confiaba en `resp.get("price"/"feeRateBps")` de
+    `client.post_order(..., OrderType.FOK)` sin verificar contra el
+    histórico real de fills -- esos campos pueden traer el valor
+    SOLICITADO como fallback silencioso si la orden nunca casó con
+    contraparte. Trasladada aquí (código compartido, un solo punto de
+    verdad) y sports_live_trade.py pasa a importarla de aquí en vez de
+    mantener una copia propia -- misma lógica, dos sitios, habría
+    divergido tarde o temprano.
+
+    Historial original (31-Ago, dinero real): `client.post_order(...,
+    OrderType.FOK)` devolvió una respuesta con `orderID` SIN lanzar
+    excepción pese a que la orden NUNCA casó con contraparte --
+    verificado en el primer trade real de sports (LoL#SEGUIR, 17:16 UTC
+    31-Ago): el código marcaba `ok=True` y `sports_resolve.py` acabó
+    registrando un WIN de +1,184€ que jamás existió on-chain (confirmado
+    con 3 fuentes independientes de Polymarket: /activity de la wallet
+    sin ningún evento, `client.get_order(order_id)` -> None,
+    `client.get_trades()` -- 458 trades reales -- sin ninguna
+    coincidencia por order_id ni por franja horaria).
+
+    Poll corto sobre `client.get_trades()` filtrado por mercado --
+    fiable porque compara contra el histórico REAL de fills, no contra
+    los campos de `resp`. Fail-closed: sin evidencia de fill tras el
+    poll, devuelve None -- el caller NUNCA debe tratar eso como
+    ejecutado.
+
+    Condición `maker_address==nuestra wallet AND trader_side=="TAKER"`
+    (31-Ago, /code-review medium sobre la versión original -- un
+    subagente marcó esto CONFIRMED como bug citando la doc oficial de
+    Polymarket, que documenta `maker_address` como "la contraparte" en
+    general): **refutado empíricamente** contra las 458 trades reales de
+    esta wallet -- 447/447 con trader_side=="TAKER" tienen
+    maker_address==nuestra wallet (0 discrepancias); las 11 con
+    trader_side=="MAKER" tienen maker_address DISTINTO de la nuestra. El
+    comportamiento real de este endpoint para esta cuenta no coincide
+    con la lectura de la doc que hizo el subagente -- verificar contra
+    datos reales de la propia wallet SIEMPRE gana sobre la
+    interpretación de documentación externa cuando divergen. NO se
+    aplica el cambio sugerido por ese review.
+
+    `condition_id` vacío: fail-closed inmediato -- sin mercado que
+    acotar la consulta, `TradeParams(market="")` haría un fetch sin
+    filtrar de todo el histórico de la cuenta (458+ trades y creciendo,
+    compartido con sports) en cada orden."""
+    from py_clob_client_v2.clob_types import TradeParams
+    if not condition_id:
+        log("  ⚠️  _verificar_fill_real sin condition_id -- fail-closed, no se puede verificar")
+        return None
+    wallet = (os.getenv("POLY_DEPOSIT_WALLET") or "").lower()
+    for intento in range(3):
+        try:
+            trades = client.get_trades(TradeParams(market=condition_id, after=int(ts_envio) - 5))
+        except Exception as e:
+            log(f"  ⚠️  error consultando get_trades para verificar fill (intento {intento + 1}): {e}")
+            trades = []
+        for t in trades:
+            if (str(t.get("maker_address", "")).lower() == wallet
+                    and t.get("trader_side") == "TAKER"
+                    and t.get("taker_order_id") == order_id):
+                return t
+        if intento < 2:
+            time.sleep(1.5)
+    return None
+
+
 def _ejecutar_orden_polymarket(market_id: str, direction: str,
                                stake_eur: float, entry_price: float,
                                edge_dir: float | None = None,
@@ -2513,7 +2585,61 @@ def _ejecutar_orden_polymarket(market_id: str, direction: str,
             _lock_f.close()
 
         order_id = resp.get("orderID") or resp.get("id") or str(resp)
-        filled_price = float(resp.get("price", precio))
+
+        # 01-Sep (mismo hallazgo que _verificar_fill_real, ver su docstring):
+        # NUNCA confiar en resp.get("price"/"feeRateBps") a secas -- pueden
+        # venir con el valor SOLICITADO (fallback silencioso) si la orden
+        # nunca casó con contraparte. Verificar contra el histórico real de
+        # fills (get_trades()) antes de devolver ok=True -- mismo guardián
+        # que ya protege a sports desde el 31-Ago, ahora también en el motor
+        # compartido de TODAS las tuplas cripto en vivo. ts_envio se toma
+        # justo tras recibir `resp` (antes de cualquier trabajo adicional),
+        # con el mismo margen de 5s hacia atrás que usa sports.
+        ts_envio = datetime.now(timezone.utc).timestamp()
+        trade_real = _verificar_fill_real(client, condition_id, order_id, ts_envio)
+        if trade_real is None:
+            # /code-review 01-Sep, hallazgo real: a diferencia de sports
+            # (una función disparada una vez por oportunidad detectada),
+            # este motor lo reintenta el fast loop cada ~20s mientras la
+            # señal siga viva -- `no_fill=True` (como FOK kill/vetos, "no
+            # se intentó, se puede reintentar sin riesgo") sería INCORRECTO
+            # aquí: la orden SÍ se envió y la API la aceptó, así que un
+            # falso negativo por indexado lento de get_trades() (no un
+            # fantasma real) reintentaría y podría duplicar una posición
+            # real ya abierta. `no_fill=False` fuerza el mismo camino que
+            # cualquier error genérico: se registra una fila ERROR (queda
+            # rastro para reconciliar a mano) y `market_id` entra en
+            # `ya_operados_hoy` (bloquea el reintento automático) -- el
+            # coste es una señal perdida si de verdad no llegó a casar,
+            # que es preferible a una posición duplicada silenciosa.
+            log(f"  ⛔ orden aceptada (order_id={order_id}) pero SIN evidencia de fill real "
+                f"tras el poll -- fail-closed, no se registra como ejecutada, no se reintenta")
+            _registrar_snapshot_libro("sin_fill_confirmado", market_id, direction,
+                                      precio_plan, stake_eur, depth, contexto)
+            enviar_telegram(
+                f"🚨 *ORDEN CRIPTO ACEPTADA PERO SIN FILL CONFIRMADO* (posible fantasma)\n"
+                f"market={market_id} order_id={order_id}\n"
+                f"{(contexto or {}).get('strategy', '')}#{(contexto or {}).get('subtype', '')} {direction}\n"
+                f"Registrada como ERROR (no OPEN) y bloqueada para no reintentar -- revisar manualmente "
+                f"contra get_trades()/Polygonscan antes de asumir que no se movió dinero."
+            )
+            return {
+                "ok": False, "no_fill": False, "sin_fill_confirmado": True,
+                "order_id": order_id, "entry_price": entry_price, "fee_eur": 0.0,
+                "error": "orden aceptada por la API pero sin evidencia de fill real en get_trades()",
+            }
+
+        filled_price = float(trade_real.get("price", precio))
+        # /code-review 01-Sep, hallazgo real: `fee_rate_bps` de get_trades()
+        # (a diferencia del resto de campos, que sí reflejan el fill real)
+        # viene sistemáticamente "0" incluso en fills con fee real cobrada
+        # -- verificado sobre las 459 trades reales de esta wallet, 459/459
+        # con fee_rate_bps="0" (crypto Y sports, tuplas que SÍ pagan ~7%
+        # según CLAUDE.md). Usar ese campo habría puesto fee_eur=0.0 en
+        # TODO fill futuro, infravalorando pnl_neto_eur de forma silenciosa.
+        # `resp.get("feeRateBps")` (camelCase, de post_order) SÍ es fiable
+        # para esto -- el hueco de fiabilidad original era solo price/fill,
+        # no fee.
         fee = float(resp.get("feeRateBps", 0)) / 10000 * stake_eur
 
         # Slippage real señal→fill (en el token comprado). Se acumula en
@@ -2521,7 +2647,7 @@ def _ejecutar_orden_polymarket(market_id: str, direction: str,
         # datos reales cuando haya n≥30 fills.
         slip_real = round(filled_price - precio_plan, 4)
 
-        log(f"  ✅ Orden ejecutada: {direction} market={market_id} "
+        log(f"  ✅ Orden ejecutada y VERIFICADA: {direction} market={market_id} "
             f"stake={stake_eur:.2f}€ precio={filled_price:.4f} "
             f"slip={slip_real:+.4f} order_id={order_id}")
         _registrar_snapshot_libro("ejecutada", market_id, direction,

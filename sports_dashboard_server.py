@@ -95,13 +95,16 @@ SWITCH_LIVE_SPORTS = DIR_SPORTS / "LIVE_MODE_ON"
 
 def compute_live():
     """27-Ago: sección Live -- mismo espíritu que compute_live_data() del
-    dashboard de cripto, pero sports todavía no tiene dinero real
-    desplegado (config_live_sports.json::depositos=[] hoy), así que se
-    limita a lo que hay: estado del switch/circuit-breaker/whitelist +
-    trades reales (0 hoy, tabla lista para cuando empiecen) + cuántas
-    señales del sniper YA habrían disparado si el switch estuviera ON
-    (columna decision_dry_run, útil para ver el ritmo real antes de
-    mandar dinero)."""
+    dashboard de cripto. 01-Sep: sports YA tiene dinero real desplegado
+    (primer trade real WALLET_MIRROR#LoL#SEGUIR, 31-Ago) -- este docstring
+    y el banner HTML de arriba decían "sin dinero real" de forma obsoleta;
+    corregido. Muestra estado del switch/circuit-breaker/whitelist +
+    trades reales (propios, `data/sports/trades.csv`, PnL de plan -- sin
+    reconciliación on-chain propia todavía, ver `feedback_capital_
+    compartido_wallet_sports_unico_punto_28ago` para el equivalente de
+    cripto si algún día hace falta aquí) + cuántas señales del sniper YA
+    habrían disparado si el switch estuviera ON (columna decision_dry_run,
+    útil para ver el ritmo real antes de escalar el sizing)."""
     try:
         import sports_live_guard as _g
         import sports_live_stake as _s
@@ -297,9 +300,10 @@ th{color:#8b949e;font-weight:500}
 .bar-val{width:64px;text-align:right;flex-shrink:0}
 .bar-n{width:36px;text-align:right;color:#8b949e;flex-shrink:0}
 </style></head><body>
-<h1>🏟️ Sports/Esports — inteligencia de wallets + Wallet Mirror en tiempo real (DRY_RUN)</h1>
+<h1>🏟️ Sports/Esports — inteligencia de wallets + Wallet Mirror en tiempo real</h1>
 <div class="aviso">Descubrimiento: ballenas ≥$1000 + firehose completo, shuffle test + BH-FDR. Wallet Mirror
-(18-Ago): sniper en tiempo real con profundidad de libro real, 100% DRY_RUN, sin dinero real.</div>
+(18-Ago): sniper en tiempo real con profundidad de libro real. ⚠️ Dinero real desde el 31-Ago
+(primer trade WALLET_MIRROR#LoL#SEGUIR) -- ver sección "Live — dinero real" abajo.</div>
 <div class="stats" id="stats"></div>
 <h2>💰 Live — dinero real</h2>
 <div id="aviso-live"></div>

@@ -12,7 +12,19 @@ script, produciendo conclusiones inconsistentes entre scripts que
 analizan el mismo dataset. Fuente única de verdad desde ahora.
 """
 
-PRIORIDAD = ["ejecutada", "fok_kill", "post_only_mode", "abort_requote",
+PRIORIDAD = ["ejecutada", "fok_kill",
+             # 01-Sep: orden REALMENTE enviada y aceptada por la API (a
+             # diferencia de todo lo que sigue en esta lista, que nunca
+             # llegó a intentarse) pero sin evidencia de fill real tras el
+             # poll de _verificar_fill_real() -- estado ambiguo (puede ser
+             # un fill real con indexado lento de get_trades(), o una orden
+             # que de verdad nunca casó), deliberadamente NO tratado como
+             # "ejecutada" (fail-closed) ni mezclado con los vetos/abortos
+             # de más abajo (esos nunca llegaron a la API). Debería ser muy
+             # raro -- si no lo es, es señal de que el poll de 3×1.5s se
+             # queda corto.
+             "sin_fill_confirmado",
+             "post_only_mode", "abort_requote",
              "abort_gate_bucket_postrequote",
              "veto_profundidad", "veto_sin_datos", "veto_ballenas_debil",
              "no_viable_stake", "veto_discrepancia_tuplas", "fuera_ventana",
