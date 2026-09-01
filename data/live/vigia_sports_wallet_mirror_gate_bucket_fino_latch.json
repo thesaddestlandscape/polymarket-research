@@ -2,70 +2,97 @@
  "CS#SEGUIR": {
   "lo": 0.26,
   "hi": 0.31,
-  "n": 30,
-  "pnl_medio": 1.2687,
-  "diff_vs_resto": 1.2578,
-  "p_valor": 0.0045,
+  "n": 31,
+  "pnl_medio": 1.1955,
+  "diff_vs_resto": 1.2004,
+  "p_valor": 0.002,
   "split_half_diff": [
-   1.5321,
-   0.9834
+   1.548,
+   0.8746
   ],
   "split_half_ok": true,
-  "pnl_medio_loo": 1.347,
+  "pnl_medio_loo": 1.2687,
   "robusto_loo": true,
   "ci90_bootstrap": [
-   0.7791,
-   1.78
+   0.6406,
+   1.6679
+  ],
+  "robusto_bootstrap": true,
+  "n_posiciones_buscadas": 80,
+  "g_kelly_f10": 0.09991,
+  "veredicto_crudo_hoy": "bueno_confirmado",
+  "veredicto": "bueno_confirmado"
+ },
+ "Tennis#SEGUIR": {
+  "lo": 0.16,
+  "hi": 0.21,
+  "n": 15,
+  "pnl_medio": 3.0743,
+  "diff_vs_resto": 3.0658,
+  "p_valor": 0.0065,
+  "split_half_diff": [
+   2.4865,
+   3.5727
+  ],
+  "split_half_ok": true,
+  "pnl_medio_loo": 3.3653,
+  "robusto_loo": true,
+  "ci90_bootstrap": [
+   2.0301,
+   4.1491
+  ],
+  "robusto_bootstrap": true,
+  "n_posiciones_buscadas": 80,
+  "g_kelly_f10": 0.25949,
+  "veredicto_crudo_hoy": "bueno_confirmado",
+  "veredicto": "sin_concluir"
+ },
+ "CS#FADE": {
+  "lo": 0.25,
+  "hi": 0.3,
+  "n": 25,
+  "pnl_medio": 1.0058,
+  "diff_vs_resto": 1.0281,
+  "p_valor": 0.003,
+  "split_half_diff": [
+   1.6001,
+   0.5
+  ],
+  "split_half_ok": true,
+  "pnl_medio_loo": 1.0893,
+  "robusto_loo": true,
+  "ci90_bootstrap": [
+   0.3836,
+   1.6275
   ],
   "robusto_bootstrap": true,
   "n_posiciones_buscadas": 79,
-  "g_kelly_f10": 0.10675,
-  "veredicto": "bueno_confirmado"
- },
- "CS#FADE": {
-  "lo": 0.24,
-  "hi": 0.29,
-  "n": 30,
-  "pnl_medio": 1.095,
-  "diff_vs_resto": 1.1667,
-  "p_valor": 0.0,
-  "split_half_diff": [
-   1.6631,
-   0.6703
-  ],
-  "split_half_ok": true,
-  "pnl_medio_loo": 1.1672,
-  "robusto_loo": true,
-  "ci90_bootstrap": [
-   0.55,
-   1.7144
-  ],
-  "robusto_bootstrap": true,
-  "n_posiciones_buscadas": 75,
-  "g_kelly_f10": 0.08777,
+  "g_kelly_f10": 0.0801,
+  "veredicto_crudo_hoy": "bueno_confirmado",
   "veredicto": "bueno_confirmado"
  },
  "Dota#SEGUIR": {
-  "lo": 0.4,
-  "hi": 0.45,
-  "n": 16,
-  "pnl_medio": 0.7588,
-  "diff_vs_resto": 0.7246,
-  "p_valor": 0.031,
+  "lo": 0.39,
+  "hi": 0.44,
+  "n": 20,
+  "pnl_medio": 0.7984,
+  "diff_vs_resto": 0.7548,
+  "p_valor": 0.018,
   "split_half_diff": [
-   1.0042,
-   0.445
+   0.6108,
+   0.8987
   ],
   "split_half_ok": true,
-  "pnl_medio_loo": 0.8761,
+  "pnl_medio_loo": 0.893,
   "robusto_loo": true,
   "ci90_bootstrap": [
-   0.3172,
-   1.1831
+   0.4188,
+   1.1639
   ],
   "robusto_bootstrap": true,
-  "n_posiciones_buscadas": 29,
-  "g_kelly_f10": 0.06829,
+  "n_posiciones_buscadas": 33,
+  "g_kelly_f10": 0.07176,
+  "veredicto_crudo_hoy": "bueno_confirmado",
   "veredicto": "bueno_confirmado"
  },
  "Valorant#SEGUIR": {
@@ -74,7 +101,7 @@
   "n": 17,
   "pnl_medio": 1.2584,
   "diff_vs_resto": 1.2775,
-  "p_valor": 0.0,
+  "p_valor": 0.0005,
   "split_half_diff": [
    1.0806,
    1.4525
@@ -83,35 +110,37 @@
   "pnl_medio_loo": 1.3995,
   "robusto_loo": true,
   "ci90_bootstrap": [
-   0.7777,
-   1.601
+   0.778,
+   1.5997
   ],
   "robusto_bootstrap": true,
   "n_posiciones_buscadas": 24,
   "g_kelly_f10": 0.11366,
+  "veredicto_crudo_hoy": "bueno_confirmado",
   "veredicto": "bueno_confirmado"
  },
  "Dota#FADE": {
-  "lo": 0.41,
-  "hi": 0.46,
-  "n": 15,
-  "pnl_medio": 0.8217,
-  "diff_vs_resto": 0.9739,
-  "p_valor": 0.0015,
+  "lo": 0.42,
+  "hi": 0.47,
+  "n": 21,
+  "pnl_medio": 0.8131,
+  "diff_vs_resto": 1.009,
+  "p_valor": 0.0005,
   "split_half_diff": [
-   1.481,
-   0.5301
+   1.2555,
+   0.785
   ],
   "split_half_ok": true,
-  "pnl_medio_loo": 0.9518,
+  "pnl_medio_loo": 0.9038,
   "robusto_loo": true,
   "ci90_bootstrap": [
-   0.3761,
-   1.1489
+   0.489,
+   1.1225
   ],
   "robusto_bootstrap": true,
-  "n_posiciones_buscadas": 17,
-  "g_kelly_f10": 0.07506,
+  "n_posiciones_buscadas": 22,
+  "g_kelly_f10": 0.07452,
+  "veredicto_crudo_hoy": "bueno_confirmado",
   "veredicto": "bueno_confirmado"
  },
  "Soccer-epl#SEGUIR": {
@@ -135,6 +164,7 @@
   "robusto_bootstrap": true,
   "n_posiciones_buscadas": 8,
   "g_kelly_f10": -0.10536,
+  "veredicto_crudo_hoy": "malo_confirmado",
   "veredicto": "malo_confirmado"
  },
  "Soccer-fl1#SEGUIR": {
@@ -143,7 +173,7 @@
   "n": 26,
   "pnl_medio": 0.9547,
   "diff_vs_resto": 1.4401,
-  "p_valor": 0.0,
+  "p_valor": 0.0005,
   "split_half_diff": [
    2.5193,
    0.3609
@@ -152,12 +182,13 @@
   "pnl_medio_loo": 1.0329,
   "robusto_loo": true,
   "ci90_bootstrap": [
-   0.4892,
-   1.4027
+   0.4864,
+   1.4098
   ],
   "robusto_bootstrap": true,
   "n_posiciones_buscadas": 5,
   "g_kelly_f10": 0.08215,
+  "veredicto_crudo_hoy": "bueno_confirmado",
   "veredicto": "bueno_confirmado"
  }
 }
