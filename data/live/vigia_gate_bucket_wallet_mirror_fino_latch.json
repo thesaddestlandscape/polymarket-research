@@ -21,7 +21,7 @@
   "robusto_loo": true,
   "ci90_bootstrap": [
    -0.8092,
-   -0.2882
+   -0.2811
   ],
   "robusto_bootstrap": true,
   "n_posiciones_buscadas": 69,
@@ -36,18 +36,18 @@
   "hi": 0.14,
   "n": 73,
   "pnl_medio": 1.1989,
-  "diff_vs_resto": 1.2209,
+  "diff_vs_resto": 1.2205,
   "p_valor": 0.0,
   "split_half_diff": [
-   0.186,
-   2.2279
+   0.1855,
+   2.2275
   ],
   "split_half_ok": true,
   "pnl_medio_loo": 1.0849,
   "robusto_loo": true,
   "ci90_bootstrap": [
-   0.5262,
-   1.9637
+   0.5024,
+   1.9496
   ],
   "robusto_bootstrap": true,
   "n_posiciones_buscadas": 93,
@@ -64,18 +64,18 @@
   "hi": 0.42,
   "n": 48,
   "pnl_medio": 0.4307,
-  "diff_vs_resto": 0.4237,
-  "p_valor": 0.0055,
+  "diff_vs_resto": 0.4235,
+  "p_valor": 0.005,
   "split_half_diff": [
-   0.326,
-   0.5215
+   0.3258,
+   0.5213
   ],
   "split_half_ok": true,
   "pnl_medio_loo": 0.4612,
   "robusto_loo": true,
   "ci90_bootstrap": [
-   0.1335,
-   0.7213
+   0.1648,
+   0.7303
   ],
   "robusto_bootstrap": true,
   "n_posiciones_buscadas": 59,
@@ -102,8 +102,8 @@
   "pnl_medio_loo": 0.4839,
   "robusto_loo": true,
   "ci90_bootstrap": [
-   0.1315,
-   0.9346
+   0.1497,
+   0.9316
   ],
   "robusto_bootstrap": true,
   "n_posiciones_buscadas": 75,
@@ -120,11 +120,11 @@
   "hi": 0.06,
   "n": 42,
   "pnl_medio": -1.0,
-  "diff_vs_resto": -0.9889,
+  "diff_vs_resto": -0.9888,
   "p_valor": 0.0,
   "split_half_diff": [
-   -0.9889,
-   -0.9889
+   -0.9888,
+   -0.9888
   ],
   "split_half_ok": true,
   "pnl_medio_loo": -1.0,
@@ -146,18 +146,18 @@
   "hi": 0.42,
   "n": 43,
   "pnl_medio": -0.32,
-  "diff_vs_resto": -0.3024,
-  "p_valor": 0.014,
+  "diff_vs_resto": -0.3028,
+  "p_valor": 0.0175,
   "split_half_diff": [
-   -0.4006,
-   -0.2087
+   -0.4011,
+   -0.2091
   ],
   "split_half_ok": true,
   "pnl_medio_loo": -0.3654,
   "robusto_loo": true,
   "ci90_bootstrap": [
-   -0.5502,
-   -0.0372
+   -0.5999,
+   -0.0348
   ],
   "robusto_bootstrap": true,
   "n_posiciones_buscadas": 59,
@@ -172,23 +172,24 @@
   "hi": 0.5,
   "n": 62,
   "pnl_medio": 0.3998,
-  "diff_vs_resto": 0.4779,
-  "p_valor": 0.003,
+  "diff_vs_resto": 0.4792,
+  "p_valor": 0.002,
   "split_half_diff": [
-   0.3144,
-   0.6414
+   0.3157,
+   0.6427
   ],
   "split_half_ok": true,
   "pnl_medio_loo": 0.4227,
   "robusto_loo": true,
   "ci90_bootstrap": [
-   0.202,
-   0.593
+   0.2027,
+   0.5906
   ],
   "robusto_bootstrap": true,
   "n_posiciones_buscadas": 50,
   "veredicto_crudo_hoy": "bueno_confirmado",
   "historial_crudo": [
+   "bueno_confirmado",
    "bueno_confirmado",
    "bueno_confirmado"
   ],
