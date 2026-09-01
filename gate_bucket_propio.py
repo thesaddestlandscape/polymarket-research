@@ -661,13 +661,35 @@ def _evaluar_sin_override_ni_veto(tupla_str: str, py: float, bot_consenso_lado=N
     if veredicto_propio == "sin_concluir":
         for lo, hi in _zonas_validadas_externamente().get(tupla_str, []):
             if lo <= py < hi:
+                # 01-Sep: confluencia suave, mismo patrón que la rama del
+                # fino de arriba (ver ese comentario para el caso
+                # fundacional completo) -- una fuente externa puede seguir
+                # promocionando en solitario mientras el dato propio
+                # madura, pero no si el propio grid, en el bucket exacto
+                # que la fuente externa está validando, ya apunta en
+                # contra (pnl_medio negativo con n>=_FILLABLE_N_MIN).
+                n_grid = (detalle or {}).get("n") or 0
+                pnl_grid = (detalle or {}).get("pnl_medio")
+                if pnl_grid is not None and n_grid >= _FILLABLE_N_MIN and pnl_grid < 0:
+                    return {
+                        "veredicto": "sin_concluir",
+                        "detalle": {
+                            "origen": "confluencia_suave_01sep",
+                            "motivo": f"validación externa confirma [{lo:.2f},{hi:.2f}) pero "
+                                      f"el grid en {b_str} (n={n_grid}) ya apunta en contra "
+                                      f"(pnl_medio={pnl_grid:.3f}) -- no se promociona sin "
+                                      "corroboración",
+                            "detalle_propio": detalle,
+                        },
+                    }
                 return {
                     "veredicto": "bueno_confirmado",
                     "detalle": {
                         "origen": "validacion_externa_05ago",
                         "motivo": f"py en [{lo:.2f},{hi:.2f}), validado con fuente externa "
                                   "(ballenas_timing_history/franja_milimetrica_ballenas/"
-                                  "punto_confirmacion) mientras el dato propio madura",
+                                  "punto_confirmacion) mientras el dato propio madura "
+                                  "(confluencia suave: grid no contradice)",
                         "detalle_propio": detalle,
                     },
                 }
@@ -708,6 +730,24 @@ def _evaluar_sin_override_ni_veto(tupla_str: str, py: float, bot_consenso_lado=N
             entrada = _cargar_bot_consenso().get(tupla_str, {}).get(b_str, {}).get(
                 "coincide" if coincide else "discrepa")
             if entrada and entrada.get("veredicto") == "bueno_confirmado":
+                # 01-Sep: confluencia suave, mismo patrón que las 2 ramas
+                # de arriba -- bot_consenso puede seguir promocionando en
+                # solitario, pero no si el propio grid, en este bucket
+                # exacto, ya apunta en contra.
+                n_grid = (detalle or {}).get("n") or 0
+                pnl_grid = (detalle or {}).get("pnl_medio")
+                if pnl_grid is not None and n_grid >= _FILLABLE_N_MIN and pnl_grid < 0:
+                    return {
+                        "veredicto": "sin_concluir",
+                        "detalle": {
+                            "origen": "confluencia_suave_01sep",
+                            "motivo": f"bot_consenso confirma pero el grid en {b_str} "
+                                      f"(n={n_grid}) ya apunta en contra "
+                                      f"(pnl_medio={pnl_grid:.3f}) -- no se promociona sin "
+                                      "corroboración",
+                            "detalle_propio": detalle,
+                        },
+                    }
                 return {
                     "veredicto": "bueno_confirmado",
                     "detalle": {
@@ -715,7 +755,8 @@ def _evaluar_sin_override_ni_veto(tupla_str: str, py: float, bot_consenso_lado=N
                         "motivo": f"bot_consenso_lado={bot_consenso_lado} "
                                   f"({'coincide' if coincide else 'discrepa'} con la dirección), "
                                   f"n={entrada.get('n')} pnl/tr={entrada.get('pnl_medio')} "
-                                  f"p={entrada.get('p_binomial')}",
+                                  f"p={entrada.get('p_binomial')} "
+                                  "(confluencia suave: grid no contradice)",
                         "detalle_propio": detalle,
                     },
                 }
