@@ -503,6 +503,7 @@
   "UPDOWN_GBM_IBS_ALTO|patron|sigma_h|gt|BUY_YES",
   "UPDOWN_GBM_IBS_ALTO|patron|sigma_h|lt|BUY_YES",
   "UPDOWN_OU_5M#BNB#5min|filtro|sigma_h|gt|BUY_NO",
+  "UPDOWN_OU_5M#BTC#5min|filtro|sigma_h|gt|BUY_NO",
   "UPDOWN_OU_5M#DOGE#5min|filtro|sigma_h|gt|BUY_NO",
   "UPDOWN_OU_5M#ETH#5min|filtro|sigma_h|lt|BUY_NO",
   "UPDOWN_OU_5M#SOL#5min|filtro|sigma_h|gt|BUY_NO",
