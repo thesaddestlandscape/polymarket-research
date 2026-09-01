@@ -1,8 +1,8 @@
 {
-  "timestamp_utc": "2026-09-01T04:00:22+00:00",
-  "bankroll_sim": 30837.78,
-  "pnl_total": 30817.78,
-  "n_ops": 341545,
+  "timestamp_utc": "2026-09-01T04:06:39+00:00",
+  "bankroll_sim": 30866.18,
+  "pnl_total": 30846.18,
+  "n_ops": 341696,
   "win_rate": 0.5755,
   "estrategias_activas": 544,
   "desactivadas": [
@@ -28,7 +28,7 @@
     "FAVORITO_CONFIRMADO_15MIN_ALTACONVICCION#SOL",
     "FAVORITO_CONFIRMADO#ETH#240min",
     "FAVORITO_CONFIRMADO#BNB#240min",
-    "PRICE_TARGET_GBM_FADE#reach",
+    "PRICE_TARGET_GBM_FADE#BTC#reach",
     "UPDOWN_GBM#BNB#5min"
   ],
   "top3_ic": [
