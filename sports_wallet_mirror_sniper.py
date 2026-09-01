@@ -320,6 +320,7 @@ async def _correr_una_conexion(wallets: dict, vistos: set) -> set:
                 # sin que nadie tenga que tocar la whitelist a mano.
                 gate_veredicto = "sin_libro"
                 gate_bucket_veredicto = None
+                gate_bucket_resultado = None
                 stake_sim = 0.0
                 cb_bloquea = False
                 decision_dry_run = "NO_dispara"
@@ -327,7 +328,8 @@ async def _correr_una_conexion(wallets: dict, vistos: set) -> set:
                     ok_operar, motivo_guard = _guard.puede_operar_live(categoria, info["tipo"], precio=mejor_ask)
                     gate_veredicto = motivo_guard if not ok_operar else "permitido"
                     if ok_operar:
-                        gate_bucket_veredicto = _gate.evaluar(categoria, info["tipo"], mejor_ask)["veredicto"]
+                        gate_bucket_resultado = _gate.evaluar(categoria, info["tipo"], mejor_ask)
+                        gate_bucket_veredicto = gate_bucket_resultado["veredicto"]
                         if gate_bucket_veredicto != "bueno_confirmado":
                             ok_operar = False
                             gate_veredicto = f"gate_bucket={gate_bucket_veredicto}"
@@ -351,9 +353,17 @@ async def _correr_una_conexion(wallets: dict, vistos: set) -> set:
                                     if tokens_orden is None:
                                         _log(f"  ⚠️ no se pudo resolver token_id para {condition_id}, no se ejecuta")
                                     else:
+                                        # Propuesta #3 Arquetipo A aplicada a sports
+                                        # (01-Sep, aprobación explícita Javi): techo
+                                        # de precio seguro derivado de la zona EXACTA
+                                        # que confirmó bueno_confirmado (grid o fino),
+                                        # nunca del edge (sports no tiene edge_dir en
+                                        # unidades de precio como cripto).
+                                        techo_precio = _gate.techo_confirmado(
+                                            categoria, info["tipo"], mejor_ask, gate_bucket_resultado)
                                         resultado = _trade.ejecutar_orden_token(
                                             tokens_orden[mirror_idx], mejor_ask, stake_sim,
-                                            market_id_log=condition_id)
+                                            market_id_log=condition_id, techo_precio=techo_precio)
                                         _log(f"  {'EJECUTADO' if resultado.get('ok') else 'ERROR'}: {resultado}")
                                         if resultado.get("ok"):
                                             # 27-Ago noche: sin esto, un trade real se enviaba

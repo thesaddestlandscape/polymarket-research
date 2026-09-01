@@ -32,6 +32,7 @@ TRADES_LOCK_PATH = DIR_SPORTS_LIVE / ".trades_lock"
 ORDEN_EN_CURSO_PATH = DIR_SPORTS_LIVE / "orden_en_curso.json"
 
 MIN_ORDEN_CLOB_USD = 1.00  # el CLOB rechaza marketable BUY < $1 ("min size: 1"), mismo exchange que cripto
+SPORTS_PRECIO_MAX = 0.95  # mismo tope duro que REQUOTE_PRECIO_MAX en live_trade.py -- nunca pagar más, pase lo que pase
 
 TRADES_COLS = [
     "timestamp_utc", "market_id", "question", "end_date", "categoria",
@@ -84,7 +85,7 @@ _verificar_fill_real = _crypto_lt._verificar_fill_real
 
 
 def ejecutar_orden_token(token_id: str, precio: float, stake_eur: float,
-                          market_id_log: str = "") -> dict:
+                          market_id_log: str = "", techo_precio: float | None = None) -> dict:
     """Ejecuta orden real FOK (fill-or-kill) en Polymarket para un
     token_id YA RESUELTO por el caller. `precio` es el precio del LADO
     DEL TOKEN que se compra (no siempre el lado YES -- el caller resuelve
@@ -106,8 +107,39 @@ def ejecutar_orden_token(token_id: str, precio: float, stake_eur: float,
     aplican al modelo de decisión de sports (Wallet Mirror) o viven en
     el CALLER (sports_live_guard.py + sports_live_stake.py +
     verificar_circuit_breaker). Esta función solo firma y envía,
-    reusando la mecánica CLOB de bajo nivel de live_trade.py."""
+    reusando la mecánica CLOB de bajo nivel de live_trade.py.
+
+    `techo_precio` (propuesta #3 Arquetipo A aplicada a sports, 01-Sep,
+    aprobación explícita Javi): el FOK se enviaba con price=precio exacto
+    -- una limit-buy a ese precio solo puede casar contra ventas EN ese
+    nivel, nunca contra niveles peores, aunque `wallet_mirror_sniper_
+    dry_run.csv` confirme profundidad agregada de sobra (mediana
+    ratio_vs_stake_mirror=499,8x) unos niveles más arriba. El caller pasa
+    aquí el límite superior de la zona de precio YA confirmada rentable
+    (`sports_wallet_mirror_gate_bucket.techo_confirmado()`) -- nunca se
+    ensancha más allá de esa zona, y nunca por encima de `precio` si el
+    caller no pasa nada (comportamiento anterior exacto, fail-closed por
+    falta de dato)."""
     entry_price = precio
+    precio_limite_fok = precio
+    if techo_precio is not None and techo_precio > precio:
+        # code-review 01-Sep (hallazgo real, 2 rondas): el primer intento
+        # (min(max(techo_precio,precio), SPORTS_PRECIO_MAX)) seguía pudiendo
+        # dar un resultado < precio en el caso extremo de que `precio` YA
+        # superara SPORTS_PRECIO_MAX (sports no tiene el veto previo que sí
+        # tiene cripto sobre mejor_ask>REQUOTE_PRECIO_MAX) -- eso enviaría
+        # un límite peor que el ask actual, garantizando que el FOK muera,
+        # peor que el comportamiento anterior (price=precio exacto). Fix
+        # definitivo: solo ensanchar si el candidato resultante es >= precio
+        # de verdad; si no, se queda en `precio` sin cambios -- nunca puede
+        # producir un precio peor que antes, en NINGÚN caso, sin necesitar
+        # ningún veto adicional. No disparable con la whitelist de hoy
+        # (todo hi<=0.50), pero blindado igual por ser código de dinero real.
+        candidato = min(max(techo_precio, precio), SPORTS_PRECIO_MAX)
+        if candidato >= precio:
+            precio_limite_fok = candidato
+            log(f"  📈 Límite FOK ensanchado {precio:.4f}→{precio_limite_fok:.4f} "
+                f"(techo de zona confirmada) -- deja al CLOB barrer niveles peores sin matar la orden")
     try:
         client = _crypto_lt._get_clob_client()
         from py_clob_client_v2 import MarketOrderArgsV2, OrderType
@@ -132,7 +164,7 @@ def ejecutar_orden_token(token_id: str, precio: float, stake_eur: float,
             for intento, amt in enumerate(intentos_stake):
                 if amt <= 0:
                     continue
-                order_args = MarketOrderArgsV2(token_id=token_id, amount=amt, side="BUY", price=precio)
+                order_args = MarketOrderArgsV2(token_id=token_id, amount=amt, side="BUY", price=precio_limite_fok)
                 try:
                     signed_order = client.create_market_order(order_args)
                     resp = client.post_order(signed_order, OrderType.FOK)
@@ -173,7 +205,9 @@ def ejecutar_orden_token(token_id: str, precio: float, stake_eur: float,
                     "order_id": order_id, "entry_price": entry_price, "fee_eur": 0.0,
                     "error": "orden aceptada por la API pero sin evidencia de fill real en get_trades()"}
 
-        filled_price = float(trade_real.get("price", precio))
+        # fallback usa precio_limite_fok (precio real solicitado), no
+        # `precio` (mejor_ask pre-ensanche) -- mismo fix que en cripto.
+        filled_price = float(trade_real.get("price", precio_limite_fok))
         fee_rate_bps = trade_real.get("fee_rate_bps") or 0
         fee = float(fee_rate_bps) / 10000 * stake_eur if fee_rate_bps else 0.0
         slip_real = round(filled_price - precio, 4)

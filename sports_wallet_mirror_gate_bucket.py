@@ -137,6 +137,46 @@ def evaluar(categoria: str, tipo: str, ask: float) -> dict:
     return evaluar_sin_override(categoria, tipo, ask)
 
 
+def techo_confirmado(categoria: str, tipo: str, ask: float, resultado_evaluar: dict) -> float | None:
+    """Propuesta #3 Arquetipo A aplicada a sports (01-Sep, aprobación
+    explícita Javi): techo de precio seguro para ensanchar el límite del
+    FOK real -- mismo hallazgo que en cripto (`_techo_precio_fok` en
+    live_trade.py), verificado aquí con `wallet_mirror_sniper_dry_run.csv`
+    (mediana ratio_vs_stake_mirror=499,8x, incluso más liquidez agregada
+    de sobra que en cripto), pero sports NO tiene un edge_dir/requote en
+    unidades de precio como cripto -- en vez de derivar el margen del
+    edge, se usa el límite superior de la ZONA EXACTA que `evaluar()` ya
+    validó como `bueno_confirmado`, sea grid fijo o ventana fina. Nunca
+    ensancha más allá de la zona ya confirmada rentable, sin necesitar
+    traducir `edge_pp` (comportamental, wallet) a precio.
+
+    `resultado_evaluar` es el dict YA devuelto por `evaluar()` para este
+    mismo (categoria, tipo, ask) -- se reusa en vez de recalcular, y así
+    el techo siempre corresponde EXACTAMENTE a la zona que produjo el
+    veredicto que el caller ya comprobó. None si el veredicto no es
+    bueno_confirmado (fail-closed: sin zona confirmada, no hay techo que
+    ofrecer -- el caller no debería llegar aquí en ese caso de todas
+    formas, dado que el gate ya bloquea antes)."""
+    if resultado_evaluar.get("veredicto") != "bueno_confirmado":
+        return None
+    detalle = resultado_evaluar.get("detalle") or {}
+    if detalle.get("origen") == "ventana_fina":
+        # code-review 01-Sep (hallazgo real): sin este chequeo, un
+        # `resultado_evaluar` desincronizado con el `ask` real (p.ej. de un
+        # caller futuro que reusara un dict de una iteración anterior) daría
+        # un techo de una zona equivocada sin ninguna señal de alarma --
+        # exigir que `ask` caiga de verdad dentro de [lo,hi) antes de
+        # confiar en `hi`, fail-closed si no.
+        lo, hi = detalle.get("lo"), detalle.get("hi")
+        if lo is None or hi is None or not (lo <= ask < hi):
+            return None
+        return float(hi)
+    # grid_fijo (u override, aunque ese caso nunca es bueno_confirmado):
+    # el bucket fijo de ancho STEP que contiene `ask`, mismo bucketing
+    # que usa evaluar() para indexar la tabla.
+    return round(bucket(ask) + STEP, 6)
+
+
 def evaluar_sin_override(categoria: str, tipo: str, ask: float) -> dict:
     """MISMA lógica que evaluar() pero SIN consultar el override de
     emergencia -- exclusivamente para el vigía de reapertura (mismo motivo
