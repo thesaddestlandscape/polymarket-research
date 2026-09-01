@@ -34,6 +34,9 @@ OVERRIDE_PATH = _REPO / "data/live/wallet_mirror_gate_bucket_override.json"
 # un veredicto ya confirmado por el grid fijo de arriba.
 DATA_PATH_FINO = _REPO / "data/shadow/wallet_mirror_gate_bucket_fino.json"
 STEP = 0.05
+_CONFLUENCIA_N_MIN = 15  # 01-Sep: piso absoluto CLAUDE.md ("ninguna conclusión
+# con n<15"), mismo valor que _FILLABLE_N_MIN en gate_bucket_propio.py --
+# reusado aquí para la confluencia suave de abajo, ver su comentario.
 
 _cache = {"mtime": None, "data": {}}
 _cache_override = {"mtime": None, "data": {}}
@@ -145,13 +148,50 @@ def evaluar_sin_override(tipo: str, activo: str, marco: str, ask: float, jugada_
         if fina and fina.get("veredicto") == "bueno_confirmado":
             lo, hi = fina.get("lo"), fina.get("hi")
             if lo is not None and hi is not None and lo <= ask < hi:
+                # 01-Sep: confluencia suave, mismo patrón y misma razón que
+                # gate_bucket_propio.py::_evaluar_sin_override_ni_veto()
+                # (ver ese commit para el caso fundacional completo) -- el
+                # fino puede seguir promocionando en solitario cuando el
+                # grid está sin_concluir, pero NO si el propio grid, en
+                # ESTE bucket exacto (el que contiene `ask`, dentro de la
+                # ventana que el fino confirma), ya apunta en contra
+                # (pnl_medio negativo con n suficiente). Verificado con
+                # SEGUIR#BTC#15min#0 (fino confirma [0.11,0.16)): la parte
+                # de la ventana que cae en el bucket 0.15 del grid
+                # (malo_confirmado) ya queda protegida SIN este fix -- ese
+                # bucket nunca llega a "sin_concluir" en primer lugar, así
+                # que la rama de promoción del fino ni se evalúa ahí. Este
+                # fix cubre el caso distinto: un bucket de grid sin_concluir
+                # (no malo_confirmado) pero con pnl_medio ya negativo --
+                # evidencia de que discrepa, aunque no haya llegado a
+                # confirmarse como malo todavía. Exige n>=_CONFLUENCIA_N_MIN
+                # para que el pnl del grid cuente como evidencia real
+                # (mismo bug que /code-review cazó en gate_bucket_propio.py:
+                # sin este guardián, un bucket de grid con n=1-3 podría
+                # vetar una confirmación robusta).
+                n_grid = (detalle or {}).get("n") or 0
+                pnl_grid = (detalle or {}).get("pnl_medio")
+                if pnl_grid is not None and n_grid >= _CONFLUENCIA_N_MIN and pnl_grid < 0:
+                    return {
+                        "veredicto": "sin_concluir",
+                        "detalle": {
+                            "origen": "confluencia_suave_01sep",
+                            "motivo": f"fino confirma [{lo:.2f},{hi:.2f}) pero el grid en "
+                                      f"{b_str} (n={n_grid}) ya apunta en contra "
+                                      f"(pnl_medio={pnl_grid:.3f}) -- no se promociona sin "
+                                      "corroboración",
+                            "detalle_propio": detalle,
+                            "detalle_fino": fina,
+                        },
+                    }
                 return {
                     "veredicto": "bueno_confirmado",
                     "detalle": {
                         "origen": "ventana_deslizante_25ago",
                         "motivo": f"ask en [{lo:.2f},{hi:.2f}), ventana fina "
                                   f"(n={fina.get('n')}, p={fina.get('p_valor')}) "
-                                  "mientras el grid fijo sigue sin_concluir",
+                                  "mientras el grid fijo sigue sin_concluir "
+                                  "(confluencia suave: grid no contradice)",
                         "detalle_propio": detalle,
                     },
                 }
