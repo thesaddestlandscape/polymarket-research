@@ -321,6 +321,27 @@ def check_screens() -> dict[str, bool]:
         return {}
 
 
+def _sesiones_con_nombre(name: str) -> list[str]:
+    """IDs exactos ('<pid>.<name>') de todas las screens vivas con ese nombre.
+
+    'screen -S <name> -X quit' es ambiguo (y no hace nada) en cuanto hay 2+
+    sesiones con el mismo nombre -- hay que apuntar al <pid>.<name> exacto de
+    cada una para poder limpiarlas todas antes de spawnear una nueva.
+    """
+    try:
+        r = subprocess.run(["screen", "-ls"], capture_output=True, text=True, timeout=5)
+        out = r.stdout + r.stderr
+    except Exception:
+        return []
+    sesiones = []
+    for line in out.splitlines():
+        line = line.strip()
+        primer_campo = line.split()[0] if line.split() else ""
+        if primer_campo.endswith(f".{name}"):
+            sesiones.append(primer_campo)
+    return sesiones
+
+
 def restart_screen(name: str) -> bool:
     # 'fast' (dinero real, live_trade.py corre dentro) NUNCA se reinicia con
     # el screen -dmS desnudo de abajo -- code-review 21-Jul: este camino no
@@ -377,6 +398,24 @@ def restart_screen(name: str) -> bool:
     if not cmd:
         return False
     try:
+        # 01-Sep: sin esto, dos disparadores independientes en el mismo ciclo
+        # (check_screens() "ausente" en sección 2 + verify_deploy "deploy
+        # obsoleto" en sección 2b) podían llamar a restart_screen(name) casi
+        # a la vez sin que ninguno supiera del otro -- spawneando DOS screens
+        # 'control' con el mismo nombre (mismo timestamp exacto, 01-Sep
+        # 05:19:02Z). Con 'control' eso significa dos procesos haciendo
+        # polling a Telegram getUpdates con el mismo offset -> 409 Conflict
+        # perpetuo, silencioso (nadie lo ve hasta que un comando no responde),
+        # bot de control muerto durante >1h hasta el barrido de esta sesión.
+        # Mismo riesgo late en cualquier screen de esta lista (dash,
+        # observadores, fetchers, ejecdryrun, walletmirror, vigiasfreq...).
+        # Matar cualquier screen viva con ese nombre ANTES de crear una nueva
+        # hace el restart idempotente frente a llamadas concurrentes, mismo
+        # principio que restart_fast_seguro.sh/restart_mantenimiento_seguro.sh
+        # ya aplican para 'fast'/'mantenimiento'.
+        for sess_id in _sesiones_con_nombre(name):
+            subprocess.run(["screen", "-S", sess_id, "-X", "quit"],
+                           timeout=5, capture_output=True)
         subprocess.run(["screen", "-dmS", name, "bash", "-c", cmd],
                        timeout=10, check=True)
         log(f"  [SCREEN] ✅ Screen '{name}' reiniciada")
