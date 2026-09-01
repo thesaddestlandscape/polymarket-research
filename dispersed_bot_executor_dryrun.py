@@ -119,14 +119,18 @@ def _gate_veredicto(arquetipo: str, activo: str, marco: str, bucket: float) -> s
     return entrada.get("veredicto", "sin_concluir") if entrada else "sin_concluir"
 
 
-def _vistos_cargar() -> set:
+def _vistos_cargar() -> dict:
+    """dict en vez de set: mismo fix 01-Sep que wallet_mirror_sniper.py/
+    wallet_mirror_executor_dryrun.py -- Python preserva orden de inserción
+    en dict (NO en set), necesario para que el cap de abajo descarte las
+    entradas más VIEJAS, no un subconjunto arbitrario por hash."""
     try:
-        return set(json.loads(VISTOS_PATH.read_text(encoding="utf-8")))
+        return dict.fromkeys(json.loads(VISTOS_PATH.read_text(encoding="utf-8")))
     except Exception:
-        return set()
+        return {}
 
 
-def _vistos_guardar(vistos: set) -> None:
+def _vistos_guardar(vistos: dict) -> None:
     VISTOS_PATH.write_text(json.dumps(list(vistos)[-20000:]), encoding="utf-8")
 
 
@@ -142,7 +146,7 @@ def _guardar(filas: list) -> None:
             w.writerow([fila.get(c, "") for c in COLUMNS])
 
 
-def _seed_vistos_sin_consultar(wallets: set) -> set:
+def _seed_vistos_sin_consultar(wallets: set) -> dict:
     vistos = _vistos_cargar()
     nuevos = 0
     for path in _archivos_activity():
@@ -153,15 +157,20 @@ def _seed_vistos_sin_consultar(wallets: set) -> set:
                 w = (row.get("wallet") or "").lower()
                 if w not in wallets:
                     continue
-                dedup_key = f"{w}|{row.get('market_slug','')}"
+                # 01-Sep: mismo fix que wallet_mirror -- dedup por
+                # transaction_hash, no permanente por (wallet,mercado), para
+                # no perder trades de convicción repetida de la misma bot
+                # wallet en el mismo mercado.
+                tx_hash = row.get("transaction_hash", "")
+                dedup_key = f"{w}|{row.get('market_slug','')}|{tx_hash}" if tx_hash else f"{w}|{row.get('market_slug','')}|{row.get('ws_timestamp','')}"
                 if dedup_key not in vistos:
-                    vistos.add(dedup_key)
+                    vistos[dedup_key] = None
                     nuevos += 1
     _log(f"backlog existente marcado como visto sin consultar profundidad: {nuevos} matches")
     return vistos
 
 
-def _procesar_fila(row: dict, wallets: set, arquetipos: dict, vistos: set) -> dict | None:
+def _procesar_fila(row: dict, wallets: set, arquetipos: dict, vistos: dict) -> dict | None:
     if (row.get("side") or "").strip().upper() != "BUY":
         return None
     w = (row.get("wallet") or "").lower()
@@ -170,10 +179,16 @@ def _procesar_fila(row: dict, wallets: set, arquetipos: dict, vistos: set) -> di
     arquetipo = arquetipos.get(w, "?")
     activo = row.get("activo", "")
     marco = row.get("marco", "")
-    dedup_key = f"{w}|{row.get('market_slug','')}"
+    # 01-Sep (mismo fix que wallet_mirror, petición explícita Javi): antes
+    # dedup_key era f"{w}|{market_slug}", PERMANENTE -- una bot wallet que
+    # opera el mismo mercado varias veces solo se capturaba la primera vez,
+    # para siempre, perdiendo evidencia real que alimenta bot_wallets_gate_
+    # bucket_fase0.csv (Candidata 9/10 "gallina de huevos de oro").
+    tx_hash = row.get("transaction_hash", "")
+    dedup_key = f"{w}|{row.get('market_slug','')}|{tx_hash}" if tx_hash else f"{w}|{row.get('market_slug','')}|{row.get('ws_timestamp','')}"
     if dedup_key in vistos:
         return None
-    vistos.add(dedup_key)
+    vistos[dedup_key] = None
     try:
         precio = float(row.get("price") or 0)
     except (TypeError, ValueError):
