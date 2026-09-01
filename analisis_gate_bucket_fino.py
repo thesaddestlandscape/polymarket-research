@@ -57,7 +57,19 @@ OUT = str(REPO / "data/shadow/gate_bucket_fino.json")
 
 STEP_SCAN = 0.01     # paso de la ventana deslizante
 WIDTH = 0.05          # mismo ancho que el grid fijo, pero SIN anclar a múltiplos de 0.05
-N_MIN_VENTANA = 15    # mínimo dentro de la ventana ganadora (CLAUDE.md)
+N_MIN_VENTANA = 40    # 01-Sep: subido de 15->40 (mismo fix que WALLET_MIRROR el
+# mismo día, ver nota "_pares_walletmirror_pausa_nota_2026-09-01" en
+# config_live.json) -- confirmar con n=15-30 dispara dinero real y luego se
+# revierte a sin_concluir/malo_confirmado con más datos (el gate NUNCA debería
+# ser más laxo que el estándar de rigor del resto del proyecto, CLAUDE.md:
+# "ninguna conclusión de estrategia con n<15" es el PISO absoluto, no el
+# listón de confirmación para dinero real). Único impacto en tuplas YA live:
+# BALLENAS_CONFIRMADAS_15M#ETH#15min#BUY_YES (único bucket fino confirmado,
+# n=17) pasa a sin_concluir -- su grid tampoco confirma nada (sin_concluir),
+# así que el gate combinado (evaluar()) deja de decir bueno_confirmado y el
+# ejecutor fail-closed (ballenas_executor_15min.py) deja de operar la tupla
+# hasta que acumule n>=40 real -- mismo criterio que WALLET_MIRROR, sin tocar
+# pares_permitidos_live (no hace falta, el gate ya protege solo).
 N_MIN_TUPLA = 40      # mínimo total en la tupla para que valga la pena buscar
 ITERS = 2000
 
