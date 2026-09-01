@@ -112,14 +112,18 @@ def _log(msg: str) -> None:
     print(f"[{ts}] {msg}", flush=True)
 
 
-def _vistos_cargar() -> set:
+def _vistos_cargar() -> dict:
+    """dict en vez de set: mismo fix que wallet_mirror_sniper.py (01-Sep) --
+    Python preserva orden de inserción en dict (NO en set), necesario para
+    que el cap de abajo descarte las entradas más VIEJAS, no un subconjunto
+    arbitrario por hash."""
     try:
-        return set(json.loads(VISTOS_PATH.read_text(encoding="utf-8")))
+        return dict.fromkeys(json.loads(VISTOS_PATH.read_text(encoding="utf-8")))
     except Exception:
-        return set()
+        return {}
 
 
-def _vistos_guardar(vistos: set) -> None:
+def _vistos_guardar(vistos: dict) -> None:
     VISTOS_PATH.write_text(json.dumps(list(vistos)[-50000:]), encoding="utf-8")
 
 
@@ -149,7 +153,7 @@ async def _mantener_ping(ws):
         pass
 
 
-async def _correr_una_conexion(wallets: dict, vistos: set) -> set:
+async def _correr_una_conexion(wallets: dict, vistos: dict) -> dict:
     async with websockets.connect(WS_URL, open_timeout=10, close_timeout=5) as ws:
         sub = {"action": "subscribe", "subscriptions": [{"topic": "activity", "type": "trades"}]}
         await ws.send(json.dumps(sub))
@@ -181,10 +185,24 @@ async def _correr_una_conexion(wallets: dict, vistos: set) -> set:
                     continue  # FADE ya descartado (hit=31.9% en fillable, sin valor)
 
                 market_slug = payload.get("slug", "")
-                dedup_key = f"{w}|{market_slug}"
+                # 01-Sep (petición explícita Javi, mismo fix que
+                # wallet_mirror_sniper.py -- este SÍ es el ejecutor live,
+                # DRY_RUN=False): antes el dedup era f"{w}|{market_slug}",
+                # PERMANENTE -- una wallet que añade convicción operando el
+                # MISMO mercado varias veces solo se capturaba la primera
+                # vez, para siempre. NO se pierde ninguna protección contra
+                # abrir 2 posiciones reales en el mismo mercado: eso ya lo
+                # bloquea live_trade.py::_ya_operados_hoy() de forma
+                # independiente (fail-closed sobre trades.csv real, no sobre
+                # este dedup de detección). Incluir transaction_hash hace
+                # que este dedup solo bloquee una redelivery EXACTA del
+                # mismo trade (reconexión del websocket), no trades reales
+                # distintos de la misma wallet en el mismo mercado.
+                tx_hash = payload.get("transactionHash", "")
+                dedup_key = f"{w}|{market_slug}|{tx_hash}" if tx_hash else f"{w}|{market_slug}|{payload.get('timestamp')}"
                 if dedup_key in vistos:
                     continue
-                vistos.add(dedup_key)
+                vistos[dedup_key] = None
 
                 t_deteccion = time.monotonic()
                 ahora = datetime.now(timezone.utc)
