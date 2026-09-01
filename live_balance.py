@@ -209,13 +209,29 @@ def _sports_delta_realizado_por_dia_madrid() -> dict:
     de +1,09€ a -1,07€ solo por eso, y esa cifra alimenta también el
     circuit breaker de cripto (`live_stake.pnl_live_hoy()`).
 
-    Fix: para el DELTA diario (no para el bankroll disponible, que sigue
-    igual), se compara `total_bruto` (bruto, sin restar nada de sports) y
-    se neta aparte solo lo REALIZADO de sports por día Madrid -- depósitos
-    de sports + PnL de sus trades CERRADOS ese día (mismo criterio
-    cost-basis ya aceptado en `_capital_ajeno_en_wallet_compartida`: una
-    posición de sports abierta no mueve el día de cripto hasta que cierra,
-    igual que tampoco mueve el bankroll de sports hasta entonces).
+    01-Sep (mismo bug REPETIDO, no arreglado del todo el 31-Ago): la
+    primera versión de este fix solo netaba lo REALIZADO (depósitos +
+    PnL de CERRADOS), asumiendo que `positions_value` (vía /value de
+    data-api) reflejaría el valor mark-to-market de una posición de
+    sports ABIERTA y así compensaría la salida de `free_usdc` -- verificado
+    hoy que NO es así: `/value` devolvió 0 para la posición LoL abierta a
+    las 2026-09-01T01:07 UTC (stake 1,05€) durante horas (balance_history.csv:
+    free_usdc cayó 15,52€→13,39€ en ese instante, positions_value siguió en
+    0,0 el resto de la sesión) -- `pnl_hoy_real` de CRIPTO marcó -1,08€ sin
+    ningún trade cripto ese día, y ese número es el que sale en el mensaje
+    de Telegram "💰 BOT LIVE" (por eso un trade de sports se leía como si
+    fuera una pérdida de cripto).
+
+    Fix real: tratar el CASH-FLOW completo de sports, no solo lo cerrado --
+    al ABRIR una posición, `stake_eur` sale de `free_usdc` ese día (se resta
+    de `ajeno_dia`, cancelando la caída de `total_bruto` que no es de
+    cripto); al CERRAR, la redención completa (`stake_eur + pnl_neto_eur`)
+    vuelve a entrar ese día (se suma a `ajeno_dia`). Si abre y cierra el
+    mismo día Madrid, ambos términos se cancelan y queda solo el PnL neto,
+    igual que la versión anterior. Si abre un día y cierra otro (o sigue
+    abierta), cada día queda neteado por separado -- ninguna posición de
+    sports, abierta o cerrada, puede ya aparecer como ganancia o pérdida
+    de cripto.
 
     Fail-safe: cualquier error (ficheros de sports ausentes/corruptos)
     devuelve {} -- sin este ajuste el comportamiento es el de antes de
@@ -235,16 +251,50 @@ def _sports_delta_realizado_por_dia_madrid() -> dict:
         if SPORTS_TRADES_PATH.exists():
             with open(SPORTS_TRADES_PATH, encoding="utf-8") as f:
                 for row in csv.DictReader(f):
-                    if row.get("status") != "CLOSED":
-                        continue
-                    ts_raw = row.get("close_timestamp") or row.get("timestamp_utc") or ""
                     try:
-                        dt = datetime.fromisoformat(ts_raw.replace("Z", "+00:00"))
-                        pnl = float(row.get("pnl_neto_eur", 0) or 0)
-                    except (ValueError, KeyError):
+                        stake = float(row.get("stake_eur", 0) or 0)
+                    except ValueError:
+                        stake = 0.0
+                    if stake <= 0:
                         continue
-                    dia = dt.astimezone(madrid).strftime("%Y-%m-%d")
-                    delta[dia] += pnl
+                    ts_open = row.get("timestamp_utc") or ""
+                    try:
+                        dia_open = (datetime.fromisoformat(ts_open.replace("Z", "+00:00"))
+                                    .astimezone(madrid).strftime("%Y-%m-%d"))
+                    except ValueError:
+                        continue  # sin fecha de apertura fiable: no se puede
+                        # ni debitar ni casar el crédito de cierre -- se
+                        # ignora la fila entera (mismo criterio fail-safe
+                        # que "sports en 0€" del docstring de arriba).
+
+                    # /code-review 01-Sep: débito de apertura y crédito de
+                    # cierre deben viajar SIEMPRE juntos -- si el cierre no
+                    # se puede fechar/parsear, el fallback es acreditar en
+                    # el propio día de apertura (con pnl=0 si tampoco se
+                    # puede leer) en vez de dejar el débito huérfano
+                    # (bug real encontrado por code-review: una fila CLOSED
+                    # con close_timestamp/pnl corruptos dejaba el día de
+                    # apertura permanentemente `stake` euros de más negativo).
+                    dia_cierre, pnl = None, 0.0
+                    if row.get("status") == "CLOSED":
+                        ts_raw = row.get("close_timestamp") or row.get("timestamp_utc") or ""
+                        try:
+                            dia_cierre = (datetime.fromisoformat(ts_raw.replace("Z", "+00:00"))
+                                          .astimezone(madrid).strftime("%Y-%m-%d"))
+                            pnl = float(row.get("pnl_neto_eur", 0) or 0)
+                        except (ValueError, KeyError):
+                            dia_cierre = dia_open  # fallback: casar en apertura, nunca dejarlo huérfano
+                            pnl = 0.0
+
+                    # cash sale de free_usdc hacia la posición el día que abre --
+                    # no es pérdida de cripto, se cancela aquí.
+                    delta[dia_open] -= stake
+                    if dia_cierre is not None:
+                        # redención completa (stake + pnl) vuelve a free_usdc
+                        # el día que cierra -- suma stake+pnl, no solo pnl,
+                        # para cancelar exactamente la resta de apertura
+                        # (mismo día o distinto).
+                        delta[dia_cierre] += stake + pnl
     except Exception:
         pass
     return dict(delta)
