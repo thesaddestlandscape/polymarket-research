@@ -59,3 +59,11 @@ data/shadow/wallet_mirror_sniper_dry_run.csv
 # nuevo que cruzará el mismo umbral por su cuenta.
 data/sports/activity_ws_*.csv
 data/prices/kalshi_btchourly_*.csv
+# 01-Sep: mismo motivo que results.csv (línea 38) -- predictions_YYYY-MM-DD.csv
+# creció a 210MB+ en un solo día (features JSON por predicción, todas las
+# estrategias, cada ~5-20s) y bloqueó CADA push desde ~12:30 UTC (GitHub
+# rechaza cualquier blob >100MB). No es dataset agregado histórico como
+# results.csv -- es un log intra-día, se puede regenerar/descartar sin
+# pérdida real (results.csv ya captura el resumen persistente). Sin backup
+# dedicado necesario.
+data/shadow/predictions_*.csv
