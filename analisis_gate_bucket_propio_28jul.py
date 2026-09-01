@@ -9,7 +9,9 @@ en 3/5 tuplas con n suficiente vetaba el grupo BUENO).
 
 Rigor por bucket (petición explícita Javi, "hay suficientes datos para
 hacer los robustos"):
-  1. n >= N_MIN (15, mínimo CLAUDE.md)
+  1. n >= N_MIN (40 desde 01-Sep, ver comentario junto a la constante --
+     antes 15, subido tras confirmar con dinero real que ese piso dejaba
+     revertir veredictos que ya habían disparado ejecución)
   2. shuffle test: pnl del bucket vs pnl del RESTO de la misma tupla,
      H0 = la etiqueta bucket/resto no importa. p < P_MAX para considerar
      la diferencia real (no ruido de muestreo).
@@ -66,7 +68,15 @@ CONFIG_LIVE = str(REPO / "data/live/config_live.json")
 OUT = str(REPO / "data/shadow/gate_bucket_propio.json")
 
 STEP = 0.05
-N_MIN = 15
+N_MIN = 40    # 01-Sep: subido de 15->40, mismo fix aplicado hoy a WALLET_MIRROR
+# (config_live.json::_pares_walletmirror_pausa_nota_2026-09-01) y a
+# analisis_gate_bucket_fino.py::N_MIN_VENTANA -- confirmado con dinero real
+# que un bucket "bueno_confirmado" con n=15-65 puede disparar ejecución y
+# revertir a sin_concluir/malo_confirmado con más datos. Verificado antes de
+# subir: ninguna tupla en pares_permitidos_live tiene bucket confirmado por
+# esta vía con n<40 (0 impacto en dinero real), solo 41 buckets de
+# candidatas (sin riesgo) degradan a sin_concluir -- protección pura para
+# futuras promociones.
 P_MAX = 0.05
 ITERS = 1000
 

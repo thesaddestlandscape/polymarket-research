@@ -585,13 +585,70 @@ def _evaluar_sin_override_ni_veto(tupla_str: str, py: float, bot_consenso_lado=N
         if fina and fina.get("veredicto") == "bueno_confirmado":
             lo, hi = fina.get("lo"), fina.get("hi")
             if lo is not None and hi is not None and lo <= py < hi:
+                # 01-Sep: confluencia suave (petición explícita Javi, tras
+                # el hallazgo de la misma noche de que n<40 en una sola
+                # fuente ya disparó dinero real dos veces) -- el fino puede
+                # seguir promocionando en solitario cuando el grid está
+                # sin_concluir por falta de n (ese es su propósito
+                # original, 20-Ago: rescatar un edge más estrecho que el
+                # grid de 0.05 diluye), pero NO si el propio grid, con los
+                # datos que sí tiene en ESTE bucket exacto (el que contiene
+                # `py`, dentro de la ventana que el fino está confirmando),
+                # ya apunta en contra (pnl_medio negativo). No exige que el
+                # grid TAMBIÉN confirme (eso mataría el caso fundacional
+                # BALLENAS_TARDIAS#ETH#5min, 17/17 buckets fijos
+                # sin_concluir con edge real dentro) -- solo exige que no
+                # contradiga. Sin dato de grid en este bucket (detalle is
+                # None) se trata como neutral, no como bloqueo.
+                #
+                # /code-review 01-Sep (2 hallazgos reales, corregidos antes
+                # de commitear):
+                # 1. La primera versión leía pnl_medio SIN exigir n mínimo
+                #    -- analisis_gate_bucket_propio_28jul.py::main() escribe
+                #    pnl_medio para CUALQUIER bucket no vacío (n_d>=1), los
+                #    campos de rigor (shuffle/CI/veredicto) solo se añaden
+                #    si n_d>=N_MIN. Un bucket de grid con n=1-3 (ruido puro)
+                #    podía vetar una confirmación robusta del fino (caso
+                #    real de hoy: WEEKLY_PRICE#ETH#BUY_NO bucket 0.50, n=3
+                #    pnl_medio=-1.02, mientras el fino confirma esa zona con
+                #    n=55 p<0.05). Reusa _FILLABLE_N_MIN (15, piso absoluto
+                #    CLAUDE.md) como mínimo para que el pnl del grid cuente
+                #    como evidencia real.
+                # 2. La segunda versión comprobaba el bucket del grid en
+                #    `b_str` (el bucket de CUALQUIER `py`, calculado al
+                #    principio de la función) ANTES de saber si `py` caía
+                #    dentro de [lo,hi) -- para un `py` fuera de la ventana
+                #    fina pero con esa misma tupla teniendo una ventana fina
+                #    confirmada EN OTRO PRECIO, el chequeo se ejecutaba
+                #    igual y podía devolver sin_concluir sin motivo,
+                #    cortando en seco las extensiones de abajo (validación
+                #    externa, bot_consenso) que son mecanismos independientes
+                #    para ESE `py` distinto. Movido dentro de este
+                #    `if lo <= py < hi:` -- ahora solo se compara el grid
+                #    contra la MISMA ventana que el fino está confirmando.
+                n_grid = (detalle or {}).get("n") or 0
+                pnl_grid = (detalle or {}).get("pnl_medio")
+                if pnl_grid is not None and n_grid >= _FILLABLE_N_MIN and pnl_grid < 0:
+                    return {
+                        "veredicto": "sin_concluir",
+                        "detalle": {
+                            "origen": "confluencia_suave_01sep",
+                            "motivo": f"fino confirma [{lo:.2f},{hi:.2f}) pero el grid en "
+                                      f"{b_str} (n={n_grid}) ya apunta en contra "
+                                      f"(pnl_medio={pnl_grid:.3f}) -- no se promociona sin "
+                                      "corroboración",
+                            "detalle_propio": detalle,
+                            "detalle_fino": fina,
+                        },
+                    }
                 return {
                     "veredicto": "bueno_confirmado",
                     "detalle": {
                         "origen": "ventana_deslizante_20ago",
                         "motivo": f"py en [{lo:.2f},{hi:.2f}), ventana fina "
                                   f"(n={fina.get('n')}, p={fina.get('p_valor')}) "
-                                  "mientras el grid fijo sigue sin_concluir",
+                                  "mientras el grid fijo sigue sin_concluir "
+                                  "(confluencia suave: grid no contradice)",
                         "detalle_propio": detalle,
                     },
                 }
