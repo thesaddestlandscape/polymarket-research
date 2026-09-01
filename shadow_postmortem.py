@@ -57,7 +57,16 @@ APUESTA_SHADOW = 0.90
 
 UMBRAL_SUBIR_EDGE = (-0.10, 3)
 UMBRAL_SUBIR_MAS  = (-0.20, 5)
-UMBRAL_DESACTIVAR = (-0.20, 8)  # bajado de -0.30: desactiva antes estrategias con IC negativo claro
+UMBRAL_DESACTIVAR = (-0.20, 15)  # 01-Sep: subido de 8 a 15 -- n=8 estaba por
+# debajo del mínimo duro del proyecto para concluir nada (CLAUDE.md: "ninguna
+# conclusión con n<15"), y a diferencia de UMBRAL_SUBIR_MAS/UMBRAL_SUBIR_EDGE
+# (edge_minimo, reversible cada ciclo) esto pone activa=False -- sin la
+# excepción ACUMULAR_SHADOW_AUNQUE_DESACTIVADA/_nunca_estuvo_live(), una
+# estrategia atrapada así no puede generar más filas para corregirse.
+# Triage 26-Ago (project_pendiente_umbral_desactivar_diseno_26ago): 3 casos
+# reales muertos con n=8-12 mostraban regresión a la media clara semanas
+# después (IC recuperado por encima de -0.20); verificado de nuevo 01-Sep,
+# 4 casos activa=False con n en [8,15) hoy, los 4 con ic_bayes ya>-0.20.
 
 
 def _ic_bayes(aciertos, n) -> float:
