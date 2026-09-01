@@ -27,6 +27,23 @@ if [ "$libre" -lt "$MIN_LIBRE_MB" ]; then
   exit 0
 fi
 
+# 01-Sep: este script solo tenía SU PROPIO lock (/tmp/git_maintenance.lock),
+# sin exclusión mutua con git_ops.lock (git_batch_sync.sh: fast/slow/
+# mantenimiento) NI con operaciones manuales (git rm --cached/commit/push
+# hechas directamente sobre el repo) -- las dos cosas mutan .git a la vez
+# sin coordinarse. Causa real de un fallo real el mismo día (14:52 UTC,
+# "unable to write file .../pack/loose-*.pack: No such file or directory"),
+# coincidiendo con una consolidación manual de commits en curso. Ahora
+# adquiere el MISMO lock compartido que usa git_batch_sync.sh antes de
+# tocar objetos -- si está ocupado (commit/push/operación manual en
+# vuelo), esta pasada se salta entera y se reintenta en 15min, igual que
+# ya hace git_batch_sync.sh cuando el lock lo tiene otro.
+exec 200>data/shadow/git_ops.lock
+if ! flock -w 30 200; then
+  echo "$(date -u) ABORTADO: git_ops.lock ocupado >30s (commit/push en curso), se reintenta la próxima pasada." >> "$LOG"
+  exit 0
+fi
+
 echo "$(date -u) inicio (libre=${libre}MB)" >> "$LOG"
 nice -n 10 git -c pack.windowMemory=100m -c pack.threads=1 maintenance run \
   --task=loose-objects --task=incremental-repack --task=commit-graph \

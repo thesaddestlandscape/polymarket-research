@@ -63,6 +63,9 @@ import fetch_polymarket_activity_ws
 import fetch_kalshi_btc  # 19-Ago: 5º fetcher, REST polling público sin
 # auth, sync (mismo patrón que libroambos) -- ver idea_kalshi_lidera_binance_leadlag_19ago
 # (renombrado de fetch_kalshi_btc15m.py el mismo día al extender a KXBTCD hourly)
+import fetch_libro_book_ws  # 01-Sep: 6º fetcher, websocket oficial del CLOB
+# (wss://ws-subscriptions-clob.polymarket.com/ws/market), push no polling --
+# ver docstring del módulo (CLAUDE.md pt.21b propuesta #1, footprint pre-trade)
 
 # (modulo, fichero_log_propio -- EXACTO el que ya usaba pipeline_watchdog.SCREEN_RESTART,
 #  nombre_funcion_log_a_reemplazar, es_async)
@@ -72,6 +75,7 @@ FETCHERS = [
     (fetch_libro_ambos_lados, "libro_ambos_lados.log", "_log", False),
     (fetch_polymarket_activity_ws, "polymarket_activity.log", "_log", True),
     (fetch_kalshi_btc, "kalshi_btc15m.log", "_log", False),
+    (fetch_libro_book_ws, "libro_book_ws.log", "_log", True),
 ]
 
 

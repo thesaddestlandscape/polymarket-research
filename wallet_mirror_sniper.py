@@ -82,7 +82,17 @@ COLUMNS = ["timestamp_utc", "trade_timestamp", "wallet", "tipo", "edge_pp_valida
            "outcome_real", "acierto", "resolved_ts",
            "ratio_vs_stake_deteccion", "mejor_ask_deteccion",
            "usd_trade", "size_mediana_wallet", "ratio_vs_mediana_propia",
-           "es_jugada_grande", "lag_deteccion_s"]
+           "es_jugada_grande", "lag_deteccion_s", "n_repeticiones_wallet_mercado"]
+# 01-Sep: última columna nueva -- CLAUDE.md pt.21b propuesta #10 (edge NO
+# capturado). Solo logueo, no toca prob_yes ni ninguna decisión. Ordinal de
+# convicción repetida (1ª vez=1, 2ª vez=2, ...) de la MISMA wallet en el
+# MISMO market_slug -- desbloqueado hoy mismo por el fix del dedup
+# permanente (commit 5633065c9b, 01-Sep) que antes descartaba la 2ª+ visita
+# de una wallet al mismo mercado. Verificación ad-hoc previa (fork, misma
+# sesión) sobre wallet_mirror_sniper_dry_run.csv (246k filas, antes del fix)
+# ya insinuaba un patrón no-monotónico débil (1ª=57.3%, 2ª=60.0%, 3ª=62.5%,
+# 4ª+=54.1%) -- instrumentado aquí para medirlo con rigor (shuffle+split-
+# half) una vez haya n fresco post-fix, no antes.
 
 
 def _log(msg: str) -> None:
@@ -125,7 +135,7 @@ async def _mantener_ping(ws):
         pass
 
 
-async def _correr_una_conexion(wallets: dict, vistos: dict) -> dict:
+async def _correr_una_conexion(wallets: dict, vistos: dict, conteo_repeticion: dict) -> dict:
     async with websockets.connect(WS_URL, open_timeout=10, close_timeout=5) as ws:
         sub = {"action": "subscribe", "subscriptions": [{"topic": "activity", "type": "trades"}]}
         await ws.send(json.dumps(sub))
@@ -201,6 +211,10 @@ async def _correr_una_conexion(wallets: dict, vistos: dict) -> dict:
                 size_mediana = info.get("size_mediana")
                 ratio_size = round(usd_trade / size_mediana, 2) if size_mediana and usd_trade > 0 else None
 
+                clave_repeticion = f"{w}|{market_slug}"
+                conteo_repeticion[clave_repeticion] = conteo_repeticion.get(clave_repeticion, 0) + 1
+                n_repeticion = conteo_repeticion[clave_repeticion]
+
                 fila = {
                     "timestamp_utc": ahora.isoformat(timespec="seconds"),
                     "trade_timestamp": datetime.fromtimestamp(float(ws_ts), timezone.utc).isoformat(timespec="milliseconds") if ws_ts else "",
@@ -217,6 +231,7 @@ async def _correr_una_conexion(wallets: dict, vistos: dict) -> dict:
                     "ratio_vs_mediana_propia": ratio_size if ratio_size is not None else "",
                     "es_jugada_grande": int(ratio_size >= 2.0) if ratio_size is not None else "",
                     "lag_deteccion_s": lag_s if lag_s is not None else "",
+                    "n_repeticiones_wallet_mercado": n_repeticion,
                 }
                 _guardar_fila(fila)
                 n_matches += 1
@@ -237,6 +252,10 @@ async def main() -> None:
     wallets = cargar_wallets_validadas()
     ultimo_refresco = datetime.now(timezone.utc).timestamp()
     vistos = _vistos_cargar()
+    conteo_repeticion: dict = {}  # {"wallet|market_slug": n} -- solo en memoria
+    # (no persistido, a propósito: es una feature de logueo puro, un reinicio
+    # de la screen simplemente diluye la convicción a 1 de nuevo, no rompe
+    # nada -- mismo criterio de simplicidad que el resto de FASE0)
     _log(f"wallet_mirror_sniper arrancado -- {len(wallets)} wallets validadas (sig_bhfdr, n>=30)")
     while True:
         try:
@@ -245,7 +264,7 @@ async def main() -> None:
                 wallets = cargar_wallets_validadas()
                 ultimo_refresco = ahora_ts
                 _log(f"wallets validadas refrescadas -- {len(wallets)} activas")
-            vistos = await _correr_una_conexion(wallets, vistos)
+            vistos = await _correr_una_conexion(wallets, vistos, conteo_repeticion)
         except (websockets.exceptions.ConnectionClosed, OSError, asyncio.TimeoutError) as e:
             _log(f"Conexión perdida ({type(e).__name__}: {e}) — reintentando en {RECONNECT_ESPERA_S}s")
         except Exception as e:
