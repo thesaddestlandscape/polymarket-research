@@ -105,6 +105,14 @@ TUPLAS = [
     # exacto que motivó este fichero para las 7 tuplas de arriba.
     ("LIQUIDACIONES_5M", "BTC", None, "BUY_YES"),   # [0.45,0.50) n=19 pnl+0.404€ p=0.016
     ("LIQUIDACIONES_60M", "ETH", None, "BUY_YES"),  # [0.45,0.50) n=28 pnl+0.221€ p=0.008
+    # 02-Sep (barrido de sesión, propuesta A7): mejor pnl/trade de todo el
+    # sistema en pnl_fiel_por_estrategia.json (+56,86€ n=26, ~2,19€/trade
+    # nocional) y CERO observadores de profundidad -- libro_snapshots.csv
+    # solo tenía motivo='candidato_evaluacion' genérico (~20s), sin ningún
+    # dato de baja latencia. n propio todavía insuficiente para promoción
+    # (26<40), se instrumenta ahora para que la fill-ability real esté
+    # lista en cuanto n crezca, mismo criterio que LIQUIDACIONES arriba.
+    ("ORDER_FLOW_5M", "SOL", None, "BUY_NO"),
 ]
 # UPDOWN_GBM -- las 39 tuplas exactas de candidatos_evaluacion_live (5
 # activos x hasta 5 marcos x 2 direcciones, no todas las combinaciones
