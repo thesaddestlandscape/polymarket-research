@@ -1,38 +1,45 @@
 {
-  "BTC": {
-    "smart_money_consensus": 0.0344,
-    "n_trades_smart": 1046,
-    "n_wallets_smart": 14,
-    "smart_money_consensus_ponderado": -0.0206,
-    "n_wallets_smart_ponderado": 14
-  },
-  "ETH": {
-    "smart_money_consensus": -0.2805,
-    "n_trades_smart": 353,
-    "n_wallets_smart": 5,
-    "smart_money_consensus_ponderado": -0.2876,
-    "n_wallets_smart_ponderado": 5
-  },
   "XRP": {
     "smart_money_consensus": 0.0,
-    "n_trades_smart": 110,
+    "n_trades_smart": 82,
+    "n_wallets_smart": 2,
+    "smart_money_consensus_ponderado": 0.0462,
+    "n_wallets_smart_ponderado": 2
+  },
+  "BTC": {
+    "smart_money_consensus": -0.0412,
+    "n_trades_smart": 413,
+    "n_wallets_smart": 6,
+    "smart_money_consensus_ponderado": 0.0664,
+    "n_wallets_smart_ponderado": 6
+  },
+  "SOL": {
+    "smart_money_consensus": -0.1111,
+    "n_trades_smart": 108,
+    "n_wallets_smart": 4,
+    "smart_money_consensus_ponderado": -0.0803,
+    "n_wallets_smart_ponderado": 4
+  },
+  "ETH": {
+    "smart_money_consensus": -0.0128,
+    "n_trades_smart": 391,
     "n_wallets_smart": 3,
-    "smart_money_consensus_ponderado": -0.0918,
+    "smart_money_consensus_ponderado": -0.0593,
     "n_wallets_smart_ponderado": 3
   },
   "DOGE": {
-    "smart_money_consensus": 0.5,
-    "n_trades_smart": 4,
+    "smart_money_consensus": 0.0,
+    "n_trades_smart": 8,
     "n_wallets_smart": 1,
-    "smart_money_consensus_ponderado": 0.9803,
+    "smart_money_consensus_ponderado": 0.1216,
     "n_wallets_smart_ponderado": 1
   },
-  "SOL": {
-    "smart_money_consensus": 0.0667,
-    "n_trades_smart": 90,
-    "n_wallets_smart": 3,
-    "smart_money_consensus_ponderado": 0.0007,
-    "n_wallets_smart_ponderado": 3
+  "BNB": {
+    "smart_money_consensus": -1.0,
+    "n_trades_smart": 1,
+    "n_wallets_smart": 1,
+    "smart_money_consensus_ponderado": -1.0,
+    "n_wallets_smart_ponderado": 1
   },
-  "_actualizado": "2026-09-02T16:55:00+00:00"
+  "_actualizado": "2026-09-02T17:18:17+00:00"
 }
