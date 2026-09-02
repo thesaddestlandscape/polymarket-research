@@ -1,0 +1,112 @@
+{
+ "n_filas_fillable": 184,
+ "grid": {
+  "BNB#0.80": {
+   "n": 15,
+   "hit": 0.8667,
+   "pnl_medio": 0.048,
+   "ask_medio": 0.82,
+   "wilson90lo": 0.6664,
+   "breakeven_aprox": 0.82,
+   "diff_pnl_vs_resto": -0.4018,
+   "p_shuffle": 0.0135,
+   "split_half_positivo_ambas": false,
+   "n_min_live_ok": false,
+   "p_bh_signif": true,
+   "veredicto": "sin_concluir"
+  },
+  "BTC#0.50": {
+   "n": 45,
+   "hit": 0.9556,
+   "pnl_medio": 0.8682,
+   "ask_medio": 0.5071,
+   "wilson90lo": 0.8742,
+   "breakeven_aprox": 0.5071,
+   "diff_pnl_vs_resto": 0.5973,
+   "p_shuffle": 0.0,
+   "split_half_positivo_ambas": true,
+   "n_min_live_ok": true,
+   "p_bh_signif": true,
+   "veredicto": "bueno_confirmado"
+  },
+  "DOGE#0.80": {
+   "n": 15,
+   "hit": 0.7333,
+   "pnl_medio": -0.1133,
+   "ask_medio": 0.82,
+   "wilson90lo": 0.5212,
+   "breakeven_aprox": 0.82,
+   "diff_pnl_vs_resto": -0.5773,
+   "p_shuffle": 0.0005,
+   "split_half_positivo_ambas": false,
+   "n_min_live_ok": false,
+   "p_bh_signif": true,
+   "veredicto": "sin_concluir"
+  },
+  "SOL#0.90": {
+   "n": 19,
+   "hit": 0.8421,
+   "pnl_medio": -0.1164,
+   "ask_medio": 0.95,
+   "wilson90lo": 0.6638,
+   "breakeven_aprox": 0.95,
+   "diff_pnl_vs_resto": -0.5948,
+   "p_shuffle": 0.0,
+   "split_half_positivo_ambas": false,
+   "n_min_live_ok": false,
+   "p_bh_signif": true,
+   "veredicto": "sin_concluir"
+  },
+  "XRP#0.80": {
+   "n": 15,
+   "hit": 0.9333,
+   "pnl_medio": 0.1286,
+   "ask_medio": 0.82,
+   "wilson90lo": 0.7492,
+   "breakeven_aprox": 0.82,
+   "diff_pnl_vs_resto": -0.314,
+   "p_shuffle": 0.0525,
+   "split_half_positivo_ambas": true,
+   "n_min_live_ok": false,
+   "p_bh_signif": false,
+   "veredicto": "sin_concluir"
+  }
+ },
+ "fino": {
+  "BNB": {
+   "veredicto": "n_insuficiente_para_ventana",
+   "n_max_bucket": 0
+  },
+  "BTC": {
+   "n": 45,
+   "hit": 0.9556,
+   "pnl_medio": 0.8682,
+   "ask_medio": 0.5071,
+   "wilson90lo": 0.8742,
+   "breakeven_aprox": 0.5071,
+   "diff_pnl_vs_resto": 0.8501,
+   "p_shuffle": 0.0005,
+   "split_half_positivo_ambas": true,
+   "n_min_live_ok": true,
+   "lo": 0.47,
+   "hi": 0.52,
+   "veredicto": "bueno_confirmado"
+  },
+  "DOGE": {
+   "veredicto": "n_insuficiente_para_ventana",
+   "n_max_bucket": 0
+  },
+  "ETH": {
+   "veredicto": "n_insuficiente_para_ventana",
+   "n_max_bucket": 0
+  },
+  "SOL": {
+   "veredicto": "n_insuficiente_para_ventana",
+   "n_max_bucket": 0
+  },
+  "XRP": {
+   "veredicto": "n_insuficiente_para_ventana",
+   "n_max_bucket": 0
+  }
+ }
+}
