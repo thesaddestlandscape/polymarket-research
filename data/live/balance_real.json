@@ -1,12 +1,12 @@
 {
- "ts": "2026-09-02T10:15:50+00:00",
+ "ts": "2026-09-02T10:31:06+00:00",
  "wallet": "0xB6eDe3A699f73cbe7f8A221c2cdAcEbFdf02028b",
  "free_usdc": 12.9273,
- "positions_value": 1.0391,
- "total": 13.9664,
- "total_bruto": 17.9164,
+ "positions_value": 1.0609,
+ "total": 13.9882,
+ "total_bruto": 17.9382,
  "deposito_inicial": 70.71,
- "pnl_real": -56.7436,
+ "pnl_real": -56.7218,
  "pnl_por_deposito": [
   {
    "fecha": "2026-06-29",
@@ -268,9 +268,9 @@
   },
   {
    "date": "2026-09-02",
-   "pnl": 2.91
+   "pnl": 2.93
   }
  ],
- "pnl_hoy_real": 2.91,
- "pnl_7d_real": -3.66
+ "pnl_hoy_real": 2.93,
+ "pnl_7d_real": -3.64
 }
