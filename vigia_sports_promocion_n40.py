@@ -21,6 +21,17 @@ compara contra el umbral. Cron sugerido: justo después, 07:09 UTC.
 Puramente informativo. No promociona nada por sí solo, no toca
 config_live.json ni ningún fichero de producción -- avisa para que
 Javi decida.
+
+02-Sep (bug real encontrado en barrido de sesión): el script NUNCA
+comprobaba `pares_permitidos_live` -- CS#SEGUIR y CS#FADE se
+promocionaron el 01-Sep (ver `_pares_cs_seguir_fade_promocion_nota_
+2026-09-01` en config_live_sports.json) pero siguieron en VIGILADAS,
+así que en cuanto el gate FINO (distinto del grid usado para la
+promoción) cruzó su propio n=40 el vigía volvió a avisar "LISTA PARA
+REVISAR PROMOCIÓN" sobre algo YA promocionado. Fix: comprobar contra
+`config_live_sports.json::pares_permitidos_live` antes de avisar --
+si ya está en whitelist, el mensaje cambia a informativo (confirmación
+adicional, no una promoción pendiente).
 """
 import json
 import sys
@@ -30,6 +41,7 @@ REPO = Path(__file__).resolve().parent
 sys.path.insert(0, str(REPO))
 
 DATA_PATH = REPO / "data/sports/wallet_mirror_gate_bucket_fino.json"
+CONFIG_PATH = REPO / "data/sports/config_live_sports.json"
 LATCH = REPO / "data/live/vigia_sports_promocion_n40_latch.json"
 
 N_PROMOCION = 40
@@ -42,6 +54,15 @@ VIGILADAS = [
 ]
 
 
+def _ya_promocionada(tupla_str: str, config: dict) -> bool:
+    """True si YA existe alguna entrada categoria#tipo#lo:hi en
+    pares_permitidos_live para esta categoria#tipo (cualquier bucket) --
+    no comparamos el bucket exacto porque el fino usa ventana deslizante,
+    no el mismo grid que decidió la promoción original."""
+    prefijo = f"{tupla_str}#"
+    return any(p.startswith(prefijo) for p in config.get("pares_permitidos_live", []))
+
+
 def main() -> int:
     from shadow_digest import enviar_telegram
 
@@ -50,6 +71,10 @@ def main() -> int:
         return 1
 
     nuevo = json.loads(DATA_PATH.read_text(encoding="utf-8"))
+    try:
+        config = json.loads(CONFIG_PATH.read_text(encoding="utf-8"))
+    except Exception:
+        config = {}
     try:
         previo = json.loads(LATCH.read_text(encoding="utf-8")) if LATCH.exists() else {}
     except Exception:
@@ -67,11 +92,20 @@ def main() -> int:
         n_antes = previo.get(tupla_str, 0)
         cruzo_ahora = n >= N_PROMOCION and n_antes < N_PROMOCION
         if cruzo_ahora and veredicto == "bueno_confirmado":
-            avisos.append(
-                f"🚀 {tupla_str} [{info['lo']:.2f},{info['hi']:.2f}) cruzó n={n}>={N_PROMOCION} "
-                f"(pnl/tr={info['pnl_medio']:+.3f} p={info['p_valor']}) -- LISTA PARA REVISAR PROMOCIÓN"
-            )
-        print(f"{tupla_str}: n={n}/{N_PROMOCION} veredicto={veredicto}")
+            ya_promocionada = _ya_promocionada(tupla_str, config)
+            if ya_promocionada:
+                avisos.append(
+                    f"ℹ️ {tupla_str} [{info['lo']:.2f},{info['hi']:.2f}) cruzó n={n}>={N_PROMOCION} "
+                    f"(pnl/tr={info['pnl_medio']:+.3f} p={info['p_valor']}) -- YA está en "
+                    f"pares_permitidos_live, esto solo refuerza la confirmación (no requiere decisión)"
+                )
+            else:
+                avisos.append(
+                    f"🚀 {tupla_str} [{info['lo']:.2f},{info['hi']:.2f}) cruzó n={n}>={N_PROMOCION} "
+                    f"(pnl/tr={info['pnl_medio']:+.3f} p={info['p_valor']}) -- LISTA PARA REVISAR PROMOCIÓN"
+                )
+        print(f"{tupla_str}: n={n}/{N_PROMOCION} veredicto={veredicto} "
+              f"ya_promocionada={_ya_promocionada(tupla_str, config)}")
 
     if avisos:
         msg = "🎯 Sports — candidata cruzó el umbral de promoción (n≥40):\n" + "\n".join(avisos)
