@@ -1,17 +1,17 @@
 {
  "STREAK_MOM_5M": {
-  "ic_bayes_familia": 0.0289,
+  "ic_bayes_familia": 0.0283,
   "n_tuplas_fuertes": 3,
-  "pnl_fiel_combinado_eur": 118.44,
+  "pnl_fiel_combinado_eur": 116.59,
   "tuplas": [
    {
     "k": "STREAK_MOM_5M#DOGE#5min#BUY_NO",
-    "pnl_fiel_eur_sin_suelo": 65.3802,
+    "pnl_fiel_eur_sin_suelo": 64.8303,
     "n_ejecutado": 143
    },
    {
     "k": "STREAK_MOM_5M#XRP#5min#BUY_NO",
-    "pnl_fiel_eur_sin_suelo": 33.8284,
+    "pnl_fiel_eur_sin_suelo": 32.5311,
     "n_ejecutado": 88
    },
    {
@@ -22,21 +22,21 @@
   ]
  },
  "GBM_LATE_15M": {
-  "ic_bayes_familia": 0.0526,
+  "ic_bayes_familia": 0.0528,
   "n_tuplas_fuertes": 1,
-  "pnl_fiel_combinado_eur": 49.56,
+  "pnl_fiel_combinado_eur": 49.46,
   "tuplas": [
    {
     "k": "GBM_LATE_15M#XRP#15min#BUY_YES",
-    "pnl_fiel_eur_sin_suelo": 49.5603,
+    "pnl_fiel_eur_sin_suelo": 49.4589,
     "n_ejecutado": 373
    }
   ]
  },
  "GBM_LATE_15M_ESPACIO_ATR": {
-  "ic_bayes_familia": 0.0556,
+  "ic_bayes_familia": 0.0555,
   "n_tuplas_fuertes": 2,
-  "pnl_fiel_combinado_eur": 36.6,
+  "pnl_fiel_combinado_eur": 36.65,
   "tuplas": [
    {
     "k": "GBM_LATE_15M_ESPACIO_ATR#XRP#15min#BUY_NO",
@@ -45,7 +45,7 @@
    },
    {
     "k": "GBM_LATE_15M_ESPACIO_ATR#BTC#15min#BUY_YES",
-    "pnl_fiel_eur_sin_suelo": 15.0369,
+    "pnl_fiel_eur_sin_suelo": 15.0841,
     "n_ejecutado": 322
    }
   ]
@@ -63,7 +63,7 @@
   ]
  },
  "STREAK_FADE_5M": {
-  "ic_bayes_familia": -0.0259,
+  "ic_bayes_familia": -0.0252,
   "n_tuplas_fuertes": 1,
   "pnl_fiel_combinado_eur": 22.78,
   "tuplas": [
@@ -87,7 +87,7 @@
   ]
  },
  "UPDOWN_GBM": {
-  "ic_bayes_familia": 0.0069,
+  "ic_bayes_familia": 0.007,
   "n_tuplas_fuertes": 1,
   "pnl_fiel_combinado_eur": 18.75,
   "tuplas": [
@@ -107,6 +107,18 @@
     "k": "MOMENTUM_IBS_15M_BALLENA#BNB#15min#BUY_NO",
     "pnl_fiel_eur_sin_suelo": 16.5961,
     "n_ejecutado": 125
+   }
+  ]
+ },
+ "MOMENTUM_IBS_15M": {
+  "ic_bayes_familia": -0.0035,
+  "n_tuplas_fuertes": 1,
+  "pnl_fiel_combinado_eur": 16.12,
+  "tuplas": [
+   {
+    "k": "MOMENTUM_IBS_15M#ETH#15min#BUY_NO",
+    "pnl_fiel_eur_sin_suelo": 16.1174,
+    "n_ejecutado": 338
    }
   ]
  }
