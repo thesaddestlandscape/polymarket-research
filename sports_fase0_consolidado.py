@@ -62,6 +62,7 @@ LOGS = REPO / "logs"
 import sports_wallet_mirror_sniper
 import sports_activity_ws
 import sports_resolve  # 27-Ago noche: resuelve trades reales OPEN, ver docstring del módulo
+import tennis_spread_observer_fase0  # 02-Sep: observador FASE 0 de spread/rewards tenis, ver docstring del módulo
 
 # (modulo, fichero_log_propio -- EXACTO el que ya usaba la screen individual,
 #  nombre_funcion_log_a_reemplazar, coroutine_a_lanzar)
@@ -72,6 +73,8 @@ PROCESOS = [
      lambda: sports_activity_ws.main()),
     (sports_resolve, "sports_resolve.log", "_log",
      lambda: sports_resolve.main_async(60)),
+    (tennis_spread_observer_fase0, "tennis_spread_observer_fase0.log", "_log",
+     lambda: tennis_spread_observer_fase0.main_async()),
 ]
 
 
