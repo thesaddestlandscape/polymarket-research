@@ -1,59 +1,77 @@
 {
-  "timestamp_utc": "2026-09-02T07:08:01+00:00",
+  "timestamp_utc": "2026-09-02T18:39:27+00:00",
   "pipeline": {
-    "n_ciclos_resolve_postmortem": 68,
-    "resolve_postmortem_p50_s": 31.0,
-    "resolve_postmortem_p95_s": 46.0,
-    "resolve_postmortem_max_s": 52.0,
-    "n_ciclos_live_trade": 1361,
+    "n_ciclos_resolve_postmortem": 149,
+    "resolve_postmortem_p50_s": 41.0,
+    "resolve_postmortem_p95_s": 2443.0,
+    "resolve_postmortem_max_s": 4793.0,
+    "n_ciclos_live_trade": 3254,
     "hueco_live_trade_max_s": 83.0
   },
-  "procesos_colgados": [
-    {
-      "pid": "2157252",
-      "cmd": "/root/polymarket-research/.venv/bin/python /root/polymarket-research/shadow_postmortem.py",
-      "segundos_vivo": 189
-    }
-  ],
+  "procesos_colgados": [],
   "deploy": {
     "n_screens": 13,
     "stale": []
   },
   "disco": {
-    "pct_usado": 84.0,
-    "gb_libres": 11.91,
+    "pct_usado": 83.0,
+    "gb_libres": 12.61,
     "git_gb": 0.0,
-    "data_gb": 29.78,
-    "datalogs_gb": 8.29
+    "data_gb": 28.72,
+    "datalogs_gb": 8.81
   },
   "ram": {
     "ram_total_gb": 7.56,
-    "ram_disponible_gb": 1.42,
-    "ram_pct_libre": 18.8
+    "ram_disponible_gb": 1.21,
+    "ram_pct_libre": 16.0
   },
   "integridad_datos": {
     "trades_abiertos_atascados": [],
-    "n_trades_total": 525,
-    "n_results_total": 356771
+    "n_trades_total": 528,
+    "n_results_total": 364038
   },
   "integridad_datos_sports": {
     "trades_abiertos_atascados": [],
     "n_trades_total": 4
   },
   "carga_sistema": {
-    "load1": 11.85,
-    "load5": 17.24,
-    "load15": 17.43,
+    "load1": 14.75,
+    "load5": 14.14,
+    "load15": 14.05,
     "nproc": 4,
-    "ratio5": 4.31,
-    "n_procesos_total": 224
+    "ratio5": 3.54,
+    "n_procesos_total": 236
+  },
+  "oom_kills": {
+    "n_oom_kills_24h": 3,
+    "eventos": [
+      {
+        "ts": "Sep 02 07:01:23",
+        "pid": "2155124",
+        "nombre": "python",
+        "rss_mb": 1840.4
+      },
+      {
+        "ts": "Sep 02 12:35:09",
+        "pid": "2223725",
+        "nombre": "python",
+        "rss_mb": 3499.8
+      },
+      {
+        "ts": "Sep 02 15:10:02",
+        "pid": "2257267",
+        "nombre": "python",
+        "rss_mb": 3364.0
+      }
+    ]
   },
   "git_push": {
-    "commits_sin_pushear": 2
+    "commits_sin_pushear": 0
   },
   "anomalias": [
-    "🚨 proceso colgado: /root/polymarket-research/.venv/bin/python /root/polymarket-research/shadow_postmortem.py (189s vivo)",
-    "🔥 CPU sobresuscrita: load5=17.24 en 4 cores (ratio=4.31x, umbral 3.0x) -- 224 procesos vivos"
+    "⏱️ ciclo resolve+postmortem tardó 4793s (umbral 120s)",
+    "🔥 CPU sobresuscrita: load5=14.14 en 4 cores (ratio=3.54x, umbral 3.0x) -- 236 procesos vivos",
+    "💀 3 OOM-kill(s) del kernel en 24h: python(pid 2155124, 1840.4MB), python(pid 2223725, 3499.8MB), python(pid 2257267, 3364.0MB)"
   ],
   "estado": "ANOMALIA"
 }
