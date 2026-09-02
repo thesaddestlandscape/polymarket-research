@@ -332,6 +332,42 @@ def medir_carga_sistema() -> dict:
     }
 
 
+def medir_oom_kills() -> dict:
+    """OOM-kills reales del kernel en las últimas 24h (journalctl -k).
+
+    Origen (02-Sep, hallazgo real en barrido de sesión): 2 outliers de
+    vigia_pipeline_latencia.py (08:02 y 13:02 UTC, ciclos de hasta 1234s)
+    resultaron coincidir EXACTAMENTE con 2 OOM-kills reales del kernel
+    (07:01 y 12:35 UTC, procesos python matados con 1.9GB y 3.6GB de RSS,
+    RAM disponible cayendo 71%→46%→18.8% en 3 días). El resto del barrido
+    (load5/ratio5, RAM% libre, procesos colgados) daba pistas indirectas
+    pero ninguno confirmaba la causa real -- el kernel matando procesos a
+    mitad de ciclo explica exactamente por qué un ciclo aparece "colgado"
+    ~10-20min (se reinicia y repite trabajo) sin que ningún proceso quede
+    vivo más de UMBRAL_PROCESO_COLGADO_S para que medir_procesos_colgados()
+    lo cace. Mismo principio que el resto del script: convertir el hallazgo
+    en código que se audite solo, en vez de depender de que alguien lo
+    busque a mano en dmesg."""
+    try:
+        out = _sh(["journalctl", "-k", "--since", "-24h", "--no-pager"])
+    except Exception as e:
+        return {"error": str(e), "n_oom_kills_24h": None}
+    eventos = []
+    for linea in out.splitlines():
+        if "Out of memory: Killed process" not in linea:
+            continue
+        m = re.match(r"^(\w+ \d+ [\d:]+)", linea)
+        ts = m.group(1) if m else None
+        m2 = re.search(r"Killed process (\d+) \((\S+)\).*?anon-rss:(\d+)kB", linea)
+        eventos.append({
+            "ts": ts,
+            "pid": m2.group(1) if m2 else None,
+            "nombre": m2.group(2) if m2 else None,
+            "rss_mb": round(int(m2.group(3)) / 1024, 1) if m2 else None,
+        })
+    return {"n_oom_kills_24h": len(eventos), "eventos": eventos}
+
+
 def medir_git_push_lag() -> dict:
     """Commits en HEAD por delante de la referencia LOCAL origin/main (sin
     fetch -- cero red, cero coste). Si el push lleva fallando, esta ref no
@@ -358,6 +394,7 @@ def main() -> int:
         "integridad_datos": medir_integridad_datos(),
         "integridad_datos_sports": medir_integridad_datos_sports(),
         "carga_sistema": medir_carga_sistema(),
+        "oom_kills": medir_oom_kills(),
         "git_push": medir_git_push_lag(),
     }
 
@@ -416,6 +453,11 @@ def main() -> int:
         anomalias.append(f"🔥 CPU sobresuscrita: load5={cs['load5']} en {cs['nproc']} cores "
                           f"(ratio={cs['ratio5']}x, umbral {UMBRAL_LOAD_RATIO}x) -- "
                           f"{cs.get('n_procesos_total')} procesos vivos")
+
+    oom = reporte["oom_kills"]
+    if oom.get("n_oom_kills_24h"):
+        procesos = ", ".join(f"{e.get('nombre')}(pid {e.get('pid')}, {e.get('rss_mb')}MB)" for e in oom["eventos"])
+        anomalias.append(f"💀 {oom['n_oom_kills_24h']} OOM-kill(s) del kernel en 24h: {procesos}")
 
     gp = reporte["git_push"]
     if gp.get("commits_sin_pushear", 0) > UMBRAL_PUSH_LAG_COMMITS:
