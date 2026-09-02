@@ -88,6 +88,7 @@ import vigia_ballenas_bypass
 import vigia_causal_vs_fillable
 import vigia_ballenas_cobertura
 import shadow_pnl_fiel
+import wallet_mirror_pnl_tracker
 import vigia_micro_bucket_kill_switch
 import vigia_reabrir_overrides_micro_bucket
 import vigia_micro_bucket_kill_switch_wallet_mirror
@@ -159,6 +160,10 @@ TAREAS = [
     ("vigia_causal_vs_fillable", vigia_causal_vs_fillable.main, "vigia_causal_fillable.log", 1800),
     ("vigia_ballenas_cobertura", vigia_ballenas_cobertura.main, "vigia_ballenas_cobertura.log", 1800),
     ("shadow_pnl_fiel", shadow_pnl_fiel.main, "shadow_pnl_fiel.log", 1800),
+    # 02-Sep (propuesta B2, barrido de sesión "edge sin capturar"): PnL real
+    # por wallet fuente de WALLET_MIRROR (cripto+sports), ver docstring del
+    # módulo -- n todavía bajo por wallet, solo informativo/revisión manual.
+    ("wallet_mirror_pnl_tracker", wallet_mirror_pnl_tracker.main, "wallet_mirror_pnl_tracker.log", 1800),
     ("vigia_micro_bucket_kill_switch", vigia_micro_bucket_kill_switch.main, "vigia_micro_bucket_kill_switch.log", 1800),
     # 24-Ago (petición explícita Javi: "es tu trabajo revisarlo, si una se
     # bloquea, en el próximo ciclo la revisas y si está OK la desbloqueas"):
