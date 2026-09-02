@@ -1122,5 +1122,13 @@
   "GBM_LATE_60M#BTC#60min": {
     "n": 200,
     "confirmado": false
+  },
+  "LIQUIDACIONES_60M#SOL": {
+    "n": 214,
+    "confirmado": true
+  },
+  "LIQUIDACIONES_60M#SOL#60min": {
+    "n": 214,
+    "confirmado": true
   }
 }
