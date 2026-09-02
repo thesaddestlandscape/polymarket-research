@@ -49,6 +49,14 @@ data/live/ballenas_recientes.json
 # ver scripts/backup_wallet_mirror_sniper_dry_run.sh (mismo patrón que
 # backup_results_csv.sh).
 data/shadow/wallet_mirror_sniper_dry_run.csv
+# 02-Sep: vigia_tamano_ficheros_git.py cruzó el umbral warning (50MB) con
+# data/shadow/dispersed_bot_executor_dryrun.csv (55MB, ~8MB/día desde
+# 25-Ago). Log DRY_RUN append-only, sin ningún lector aparte de su propio
+# script (verificado -- ejecutores_dryrun_fase0.py solo lo registra, no
+# lo consume) -- mismo patrón "cache rolling sin backup dedicado" que
+# data/live/ballenas_recientes.json arriba, no como wallet_mirror_sniper_
+# dry_run.csv (ese sí lo leen varios analisis_wallet_mirror_*.py).
+data/shadow/dispersed_bot_executor_dryrun.csv
 # 19-Ago: vigia_tamano_ficheros_git.py cruzó el umbral warning (50MB) con
 # data/sports/activity_ws_2026-08-18.csv (69.5MB, un día completo). Mismo
 # patrón que wallet_mirror_sniper_dry_run.csv (17-Ago) -- ficheros
