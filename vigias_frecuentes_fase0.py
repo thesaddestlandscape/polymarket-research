@@ -89,6 +89,7 @@ import vigia_causal_vs_fillable
 import vigia_ballenas_cobertura
 import shadow_pnl_fiel
 import wallet_mirror_pnl_tracker
+import analisis_familias_ic_bajo_tuplas_fuertes
 import vigia_micro_bucket_kill_switch
 import vigia_reabrir_overrides_micro_bucket
 import vigia_micro_bucket_kill_switch_wallet_mirror
@@ -164,6 +165,10 @@ TAREAS = [
     # por wallet fuente de WALLET_MIRROR (cripto+sports), ver docstring del
     # módulo -- n todavía bajo por wallet, solo informativo/revisión manual.
     ("wallet_mirror_pnl_tracker", wallet_mirror_pnl_tracker.main, "wallet_mirror_pnl_tracker.log", 1800),
+    # 02-Sep (propuesta B9): familias con IC agregado~0 que esconden tuplas
+    # individuales fuertes -- generaliza el hallazgo manual de STREAK_MOM_5M.
+    ("analisis_familias_ic_bajo_tuplas_fuertes", analisis_familias_ic_bajo_tuplas_fuertes.main,
+     "analisis_familias_ic_bajo_tuplas_fuertes.log", 1800),
     ("vigia_micro_bucket_kill_switch", vigia_micro_bucket_kill_switch.main, "vigia_micro_bucket_kill_switch.log", 1800),
     # 24-Ago (petición explícita Javi: "es tu trabajo revisarlo, si una se
     # bloquea, en el próximo ciclo la revisas y si está OK la desbloqueas"):
