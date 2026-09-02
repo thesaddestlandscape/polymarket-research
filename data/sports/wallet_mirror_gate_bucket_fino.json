@@ -34,11 +34,11 @@
   "hi": 0.38,
   "n": 59,
   "pnl_medio": -0.5754,
-  "diff_vs_resto": -0.6762,
-  "p_valor": 0.004,
+  "diff_vs_resto": -0.6743,
+  "p_valor": 0.008,
   "split_half_diff": [
-   -0.5267,
-   -0.8207
+   -0.5248,
+   -0.8188
   ],
   "split_half_ok": true,
   "pnl_medio_loo": -0.6182,
@@ -56,27 +56,35 @@
   ],
   "veredicto": "malo_confirmado"
  },
+ "Tennis#SEGUIR": {
+  "veredicto": "sin_concluir",
+  "historial_crudo": [
+   "bueno_confirmado",
+   "bueno_confirmado",
+   "bueno_confirmado"
+  ]
+ },
  "CS#FADE": {
-  "lo": 0.44,
-  "hi": 0.49,
-  "n": 68,
-  "pnl_medio": 0.6432,
-  "diff_vs_resto": 0.6888,
+  "lo": 0.45,
+  "hi": 0.5,
+  "n": 71,
+  "pnl_medio": 0.646,
+  "diff_vs_resto": 0.6976,
   "p_valor": 0.0005,
   "split_half_diff": [
-   0.4311,
-   0.9465
+   0.3715,
+   1.0146
   ],
   "split_half_ok": true,
-  "pnl_medio_loo": 0.6678,
+  "pnl_medio_loo": 0.6695,
   "robusto_loo": true,
   "ci90_bootstrap": [
-   0.4766,
-   0.814
+   0.4717,
+   0.8188
   ],
   "robusto_bootstrap": true,
   "n_posiciones_buscadas": 56,
-  "g_kelly_f10": 0.05867,
+  "g_kelly_f10": 0.05912,
   "veredicto_crudo_hoy": "bueno_confirmado",
   "historial_crudo": [
    "bueno_confirmado",
@@ -86,26 +94,26 @@
   "veredicto": "bueno_confirmado"
  },
  "LoL#FADE": {
-  "lo": 0.25,
-  "hi": 0.3,
+  "lo": 0.28,
+  "hi": 0.33,
   "n": 40,
-  "pnl_medio": -0.7346,
-  "diff_vs_resto": -0.7141,
-  "p_valor": 0.0,
+  "pnl_medio": -0.6641,
+  "diff_vs_resto": -0.6429,
+  "p_valor": 0.001,
   "split_half_diff": [
-   -0.4487,
-   -0.9795
+   -0.3069,
+   -0.9788
   ],
   "split_half_ok": true,
-  "pnl_medio_loo": -0.8218,
+  "pnl_medio_loo": -0.7461,
   "robusto_loo": true,
   "ci90_bootstrap": [
    -0.9147,
-   -0.4723
+   -0.4048
   ],
   "robusto_bootstrap": true,
-  "n_posiciones_buscadas": 43,
-  "g_kelly_f10": -0.08049,
+  "n_posiciones_buscadas": 45,
+  "g_kelly_f10": -0.07365,
   "veredicto_crudo_hoy": "malo_confirmado",
   "historial_crudo": [
    "malo_confirmado"
@@ -127,8 +135,8 @@
   "pnl_medio_loo": 0.4354,
   "robusto_loo": true,
   "ci90_bootstrap": [
-   0.1593,
-   0.6446
+   0.1597,
+   0.6419
   ],
   "robusto_bootstrap": true,
   "n_posiciones_buscadas": 2,
@@ -140,13 +148,5 @@
    "bueno_confirmado"
   ],
   "veredicto": "bueno_confirmado"
- },
- "Tennis#SEGUIR": {
-  "veredicto": "sin_concluir",
-  "historial_crudo": [
-   "bueno_confirmado",
-   "bueno_confirmado",
-   "bueno_confirmado"
-  ]
  }
 }

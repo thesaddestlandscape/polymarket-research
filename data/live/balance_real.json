@@ -1,5 +1,5 @@
 {
- "ts": "2026-09-02T07:00:59+00:00",
+ "ts": "2026-09-02T07:16:12+00:00",
  "wallet": "0xB6eDe3A699f73cbe7f8A221c2cdAcEbFdf02028b",
  "free_usdc": 12.9273,
  "positions_value": 1.0391,
@@ -36,9 +36,9 @@
    "fecha": "2026-08-31",
    "eur": 9.49,
    "nota": "Cuarta recarga (petici\u00f3n expl\u00edcita Javi, chat 31-Ago ~13:45 UTC, mismo d\u00eda del fix del freno de bankroll m\u00ednimo). 9.49 USDC nuevos.",
-   "pnl_ledger": -0.5101,
-   "n_trades": 5,
-   "rendimiento_pct": -5.4
+   "pnl_ledger": 2.424,
+   "n_trades": 6,
+   "rendimiento_pct": 25.5
   }
  ],
  "daily_real": [

@@ -1729,5 +1729,64 @@
     },
     "anomalias": [],
     "estado": "OK"
+  },
+  {
+    "timestamp_utc": "2026-09-02T07:08:01+00:00",
+    "pipeline": {
+      "n_ciclos_resolve_postmortem": 68,
+      "resolve_postmortem_p50_s": 31.0,
+      "resolve_postmortem_p95_s": 46.0,
+      "resolve_postmortem_max_s": 52.0,
+      "n_ciclos_live_trade": 1361,
+      "hueco_live_trade_max_s": 83.0
+    },
+    "procesos_colgados": [
+      {
+        "pid": "2157252",
+        "cmd": "/root/polymarket-research/.venv/bin/python /root/polymarket-research/shadow_postmortem.py",
+        "segundos_vivo": 189
+      }
+    ],
+    "deploy": {
+      "n_screens": 13,
+      "stale": []
+    },
+    "disco": {
+      "pct_usado": 84.0,
+      "gb_libres": 11.91,
+      "git_gb": 0.0,
+      "data_gb": 29.78,
+      "datalogs_gb": 8.29
+    },
+    "ram": {
+      "ram_total_gb": 7.56,
+      "ram_disponible_gb": 1.42,
+      "ram_pct_libre": 18.8
+    },
+    "integridad_datos": {
+      "trades_abiertos_atascados": [],
+      "n_trades_total": 525,
+      "n_results_total": 356771
+    },
+    "integridad_datos_sports": {
+      "trades_abiertos_atascados": [],
+      "n_trades_total": 4
+    },
+    "carga_sistema": {
+      "load1": 11.85,
+      "load5": 17.24,
+      "load15": 17.43,
+      "nproc": 4,
+      "ratio5": 4.31,
+      "n_procesos_total": 224
+    },
+    "git_push": {
+      "commits_sin_pushear": 2
+    },
+    "anomalias": [
+      "🚨 proceso colgado: /root/polymarket-research/.venv/bin/python /root/polymarket-research/shadow_postmortem.py (189s vivo)",
+      "🔥 CPU sobresuscrita: load5=17.24 en 4 cores (ratio=4.31x, umbral 3.0x) -- 224 procesos vivos"
+    ],
+    "estado": "ANOMALIA"
   }
 ]
