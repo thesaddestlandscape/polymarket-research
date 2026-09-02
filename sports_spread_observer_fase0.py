@@ -72,7 +72,10 @@ from sports_wallet_edge_tracker import clasificar  # noqa: E402
 GAMMA = "https://gamma-api.polymarket.com"
 TIMEOUT = 20
 POLL_S = 240
-TAG_SLUGS = ["sports", "tennis"]  # "sports" = umbrella (CS/LoL/Dota/NBA/UFC/
+TAG_SLUGS = ["tennis", "sports"]  # tennis PRIMERO -- fuente autoritativa
+# para su propia subcategorización fina (ver _categoria_tenis); "sports"
+# después solo añade lo que tennis no cubrió, dedup por market_id se
+# queda con la primera fuente vista. "sports" = umbrella (CS/LoL/Dota/NBA/UFC/
 # Cricket/etc); "tennis" dedicado porque el umbrella subclasifica tenis
 # (verificado 02-Sep, ver docstring). Ampliar aquí si una auditoría futura
 # encuentra otra categoría con el mismo hueco (mismo patrón que
@@ -94,23 +97,64 @@ def _log(msg: str, *extra) -> None:
     print(linea, flush=True)
 
 
-def _categoria(event_title: str, event_slug: str, question: str) -> str:
+# 02-Sep noche, tras auditar el bucket "partido_sin_categoria_regex" a
+# petición de Javi ("alguna categoría tiene que tener, tendremos que
+# estudiarlos" / "no podemos dejar nada sin cubrir, es dinero encima de
+# la mesa"): NFL/MLB/KBO/decenas de ligas de fútbol regional (English FA
+# non-league, Uruguay, Colombia, Ucrania, Eslovaquia, USL...) escondidas
+# ahí, ninguna se arregla con el regex compartido `clasificar()` porque
+# sus títulos no llevan la sigla de la liga (equipos por nombre propio,
+# ej. "Patriots vs. Seahawks" sin "NFL"). En vez de perseguir cada liga
+# con una lista de equipos (whack-a-mole sin fin, nunca cubre TODO),
+# se usa el PREFIJO DEL SLUG que Polymarket ya asigna internamente
+# ("nfl-ne-sea-2026-09-10" -> "nfl", "efa-cri-fai-..." -> "efa",
+# "mlb-det-cle-..." -> "mlb") -- mismo truco que `clasificar()` ya usa
+# para su fallback `Soccer-<liga>`, generalizado aquí a CUALQUIER
+# deporte, no solo fútbol con patrón "will X win on Y". Cobertura TOTAL
+# automática: una liga nueva que aparezca mañana cae en su propio
+# prefijo sin tocar código, en vez de quedar invisible hasta la próxima
+# auditoría manual. Deliberadamente NO se toca
+# sports_wallet_edge_tracker.py::CATEGORIAS/clasificar() -- esa función
+# alimenta sports_wallet_mirror_sniper.py, que ya opera con dinero real
+# (DRY_RUN=False desde 31-Ago) -- CLAUDE.md exige diseño cuidadoso +
+# aprobación antes de tocar código compartido del motor de decisión.
+# Este fallback vive SOLO aquí, en un observador FASE 0 sin ninguna
+# conexión a dinero real.
+def _categoria_tenis(t: str) -> str:
+    """Refinado el mismo que ya se validó en la versión solo-tenis (02-Sep
+    tarde) -- ver git log tennis_spread_observer_fase0.py. Se aplica solo
+    a filas cuya fuente fue tag_slug=tennis (fetch_eventos_sports procesa
+    ese tag primero, así que es la fuente autoritativa para tenis)."""
+    if "doubles" in t:
+        return "doubles"
+    if "qualification" in t or "qualifying" in t or "clasificat" in t:
+        return "qualifier"
+    if any(gs in t for gs in ("us open", "australian open", "roland garros", "wimbledon")):
+        return "grand_slam_main_draw"
+    return "challenger_itf_tour"
+
+
+def _categoria(event_title: str, event_slug: str, question: str,
+                fuente_tag: str = "") -> str:
     """Primero la taxonomía compartida (`clasificar()`, ya validada por el
     resto del stack de sports). Si no reconoce el título (hueco real, ver
-    docstring del módulo), heurística propia: "vs" en el título = partido
-    real head-to-head (maker de dos lados tiene sentido aunque no sepamos
-    el deporte exacto) vs prop/futuro (otro tipo de mercado, no aplica)."""
+    docstring del módulo): (1) tenis por fuente (ver _categoria_tenis,
+    subcategorización rica -- vale la pena mantenerla aparte); (2)
+    CUALQUIER otro partido real ("vs" en el título) -> prefijo del slug
+    de Polymarket como categoría ("Liga-<prefijo>", ej. nfl/mlb/efa/
+    uru1/crickerala) -- cobertura total automática, sin lista de equipos
+    que mantener; (3) sin "vs" = prop/futuro, otro tipo de mercado."""
     cat = clasificar(event_title, event_slug) or clasificar(question, event_slug)
     if cat:
         return cat
     t = f"{event_title} {question}".lower()
-    if " vs " in t or " vs. " in t:
-        if "doubles" in t:
-            return "partido_dobles_sin_categoria"
-        if "qualification" in t or "qualifying" in t or "clasificat" in t:
-            return "partido_clasificatorio_sin_categoria"
-        return "partido_sin_categoria_regex"
-    return "props_futuros"
+    es_partido = " vs " in t or " vs. " in t
+    if not es_partido:
+        return "props_futuros"
+    if fuente_tag == "tennis":
+        return _categoria_tenis(t)
+    prefijo = event_slug.split("-")[0] if event_slug else "sin_slug"
+    return f"Liga-{prefijo}"
 
 
 def fetch_eventos_sports() -> list:
@@ -146,12 +190,21 @@ def fetch_eventos_sports() -> list:
     return filas
 
 
+UMBRAL_AVISO_LIGA_GENERICA = 20  # 02-Sep: mismo espíritu que
+# vigia_sports_categoria_sin_clasificar.py -- con el fallback por prefijo
+# de slug (ver _categoria) ya no hay "sin categoría" de verdad (cobertura
+# total garantizada), pero un bucket "Liga-<prefijo>" grande sigue siendo
+# candidato a nombre humano en clasificar() -- avisa solo, sin depender
+# de otra auditoría manual como la que encontró NFL/MLB/efa/uru1 aquí.
+
+
 def ciclo() -> int:
     filas_raw = fetch_eventos_sports()
     ts = datetime.now(timezone.utc).isoformat(timespec="seconds")
     path = DIR_SHADOW / f"sports_spread_fase0_{datetime.now(timezone.utc).strftime('%Y-%m-%d')}.csv"
     nuevo = not path.exists()
     n_filas = 0
+    volumen_por_liga_generica: dict = {}
     with open(path, "a", newline="", encoding="utf-8") as f:
         w = csv.DictWriter(f, fieldnames=CSV_COLS)
         if nuevo:
@@ -176,13 +229,17 @@ def ciclo() -> int:
                 and spread * 100 <= float(rewards_max_spread)
             )
             event_title = ev.get("title", "")
+            event_slug = ev.get("slug", "")
+            categoria = _categoria(event_title, event_slug, mk.get("question", ""), fuente_tag)
+            if categoria.startswith("Liga-"):
+                volumen_por_liga_generica[categoria] = volumen_por_liga_generica.get(categoria, 0) + 1
             w.writerow({
                 "timestamp_utc": ts,
                 "event_title": event_title,
                 "market_id": mk.get("id", ""),
                 "condition_id": mk.get("conditionId", ""),
                 "question": mk.get("question", ""),
-                "categoria": _categoria(event_title, ev.get("slug", ""), mk.get("question", "")),
+                "categoria": categoria,
                 "fuente_tag": fuente_tag,
                 "closed": mk.get("closed", False),
                 "active": mk.get("active", False),
@@ -195,6 +252,10 @@ def ciclo() -> int:
                 "elegible_rewards_hoy": elegible,
             })
             n_filas += 1
+    grandes = {p: n for p, n in volumen_por_liga_generica.items() if n >= UMBRAL_AVISO_LIGA_GENERICA}
+    if grandes:
+        top = sorted(grandes.items(), key=lambda x: -x[1])[:10]
+        _log(f"ℹ️ ligas genéricas (por prefijo de slug) con volumen — candidatas a nombre humano en clasificar(): {top}")
     return n_filas
 
 
