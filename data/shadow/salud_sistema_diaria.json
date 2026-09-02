@@ -1,46 +1,62 @@
 {
-  "timestamp_utc": "2026-09-02T18:39:27+00:00",
+  "timestamp_utc": "2026-09-02T19:08:36+00:00",
   "pipeline": {
-    "n_ciclos_resolve_postmortem": 149,
-    "resolve_postmortem_p50_s": 41.0,
+    "n_ciclos_resolve_postmortem": 153,
+    "resolve_postmortem_p50_s": 42.0,
     "resolve_postmortem_p95_s": 2443.0,
     "resolve_postmortem_max_s": 4793.0,
-    "n_ciclos_live_trade": 3254,
+    "n_ciclos_live_trade": 3339,
     "hueco_live_trade_max_s": 83.0
   },
-  "procesos_colgados": [],
+  "procesos_colgados": [
+    {
+      "pid": "2305971",
+      "cmd": "/bin/bash -c source /root/.claude/shell-snapshots/snapshot-bash-1788370095701-vgyva8.sh 2>/dev/null || true && shopt -u extglob 2>/dev/null || true && { \\builtin unalias -- 'unsetenv'; \\builtin unset -f -- 'unsetenv'; } >/dev/null 2>&1 || true && eval 'tail -f -n0 logs/fast.log | grep --line-buffered \"shadow_postmortem.py:\"' < /dev/null && pwd -P >| /tmp/claude-3623-cwd",
+      "segundos_vivo": 238
+    },
+    {
+      "pid": "2305974",
+      "cmd": "/bin/bash -c source /root/.claude/shell-snapshots/snapshot-bash-1788370095701-vgyva8.sh 2>/dev/null || true && shopt -u extglob 2>/dev/null || true && { \\builtin unalias -- 'unsetenv'; \\builtin unset -f -- 'unsetenv'; } >/dev/null 2>&1 || true && eval 'tail -f -n0 logs/fast.log | grep --line-buffered \"shadow_postmortem.py:\"' < /dev/null && pwd -P >| /tmp/claude-3623-cwd",
+      "segundos_vivo": 238
+    },
+    {
+      "pid": "2305975",
+      "cmd": "ugrep -G --ignore-files --hidden -I --exclude-dir=.git --exclude-dir=.svn --exclude-dir=.hg --exclude-dir=.bzr --exclude-dir=.jj --exclude-dir=.sl --line-buffered shadow_postmortem.py:",
+      "segundos_vivo": 238
+    }
+  ],
   "deploy": {
     "n_screens": 13,
     "stale": []
   },
   "disco": {
     "pct_usado": 83.0,
-    "gb_libres": 12.61,
+    "gb_libres": 12.49,
     "git_gb": 0.0,
-    "data_gb": 28.72,
-    "datalogs_gb": 8.81
+    "data_gb": 28.81,
+    "datalogs_gb": 8.83
   },
   "ram": {
     "ram_total_gb": 7.56,
-    "ram_disponible_gb": 1.21,
-    "ram_pct_libre": 16.0
+    "ram_disponible_gb": 1.96,
+    "ram_pct_libre": 25.9
   },
   "integridad_datos": {
     "trades_abiertos_atascados": [],
     "n_trades_total": 528,
-    "n_results_total": 364038
+    "n_results_total": 364395
   },
   "integridad_datos_sports": {
     "trades_abiertos_atascados": [],
     "n_trades_total": 4
   },
   "carga_sistema": {
-    "load1": 14.75,
-    "load5": 14.14,
-    "load15": 14.05,
+    "load1": 13.36,
+    "load5": 14.26,
+    "load15": 13.69,
     "nproc": 4,
-    "ratio5": 3.54,
-    "n_procesos_total": 236
+    "ratio5": 3.56,
+    "n_procesos_total": 234
   },
   "oom_kills": {
     "n_oom_kills_24h": 3,
@@ -70,7 +86,10 @@
   },
   "anomalias": [
     "⏱️ ciclo resolve+postmortem tardó 4793s (umbral 120s)",
-    "🔥 CPU sobresuscrita: load5=14.14 en 4 cores (ratio=3.54x, umbral 3.0x) -- 236 procesos vivos",
+    "🚨 proceso colgado: /bin/bash -c source /root/.claude/shell-snapshots/snapshot-bash-1788370095701-vgyva8.sh 2>/dev/null || true && shopt -u extglob 2>/dev/null || true && { \\builtin unalias -- 'unsetenv'; \\builtin unset -f -- 'unsetenv'; } >/dev/null 2>&1 || true && eval 'tail -f -n0 logs/fast.log | grep --line-buffered \"shadow_postmortem.py:\"' < /dev/null && pwd -P >| /tmp/claude-3623-cwd (238s vivo)",
+    "🚨 proceso colgado: /bin/bash -c source /root/.claude/shell-snapshots/snapshot-bash-1788370095701-vgyva8.sh 2>/dev/null || true && shopt -u extglob 2>/dev/null || true && { \\builtin unalias -- 'unsetenv'; \\builtin unset -f -- 'unsetenv'; } >/dev/null 2>&1 || true && eval 'tail -f -n0 logs/fast.log | grep --line-buffered \"shadow_postmortem.py:\"' < /dev/null && pwd -P >| /tmp/claude-3623-cwd (238s vivo)",
+    "🚨 proceso colgado: ugrep -G --ignore-files --hidden -I --exclude-dir=.git --exclude-dir=.svn --exclude-dir=.hg --exclude-dir=.bzr --exclude-dir=.jj --exclude-dir=.sl --line-buffered shadow_postmortem.py: (238s vivo)",
+    "🔥 CPU sobresuscrita: load5=14.26 en 4 cores (ratio=3.56x, umbral 3.0x) -- 234 procesos vivos",
     "💀 3 OOM-kill(s) del kernel en 24h: python(pid 2155124, 1840.4MB), python(pid 2223725, 3499.8MB), python(pid 2257267, 3364.0MB)"
   ],
   "estado": "ANOMALIA"
