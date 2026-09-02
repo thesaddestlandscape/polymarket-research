@@ -1,8 +1,8 @@
 {
  "STREAK_MOM_5M": {
-  "ic_bayes_familia": 0.028,
+  "ic_bayes_familia": 0.0284,
   "n_tuplas_fuertes": 3,
-  "pnl_fiel_combinado_eur": 116.42,
+  "pnl_fiel_combinado_eur": 116.89,
   "tuplas": [
    {
     "k": "STREAK_MOM_5M#DOGE#5min#BUY_NO",
@@ -11,7 +11,7 @@
    },
    {
     "k": "STREAK_MOM_5M#XRP#5min#BUY_NO",
-    "pnl_fiel_eur_sin_suelo": 32.2946,
+    "pnl_fiel_eur_sin_suelo": 32.7691,
     "n_ejecutado": 88
    },
    {
@@ -34,13 +34,13 @@
   ]
  },
  "GBM_LATE_15M_ESPACIO_ATR": {
-  "ic_bayes_familia": 0.0558,
+  "ic_bayes_familia": 0.056,
   "n_tuplas_fuertes": 2,
-  "pnl_fiel_combinado_eur": 35.34,
+  "pnl_fiel_combinado_eur": 35.43,
   "tuplas": [
    {
     "k": "GBM_LATE_15M_ESPACIO_ATR#BTC#15min#BUY_YES",
-    "pnl_fiel_eur_sin_suelo": 17.7745,
+    "pnl_fiel_eur_sin_suelo": 17.8617,
     "n_ejecutado": 326
    },
    {
@@ -63,14 +63,14 @@
   ]
  },
  "LIQUIDACIONES_5M": {
-  "ic_bayes_familia": -0.0155,
+  "ic_bayes_familia": -0.015,
   "n_tuplas_fuertes": 1,
-  "pnl_fiel_combinado_eur": 27.96,
+  "pnl_fiel_combinado_eur": 27.97,
   "tuplas": [
    {
     "k": "LIQUIDACIONES_5M#ETH#5min#BUY_YES",
-    "pnl_fiel_eur_sin_suelo": 27.9627,
-    "n_ejecutado": 92
+    "pnl_fiel_eur_sin_suelo": 27.9668,
+    "n_ejecutado": 94
    }
   ]
  },
@@ -87,7 +87,7 @@
   ]
  },
  "STREAK_FADE_5M": {
-  "ic_bayes_familia": -0.0237,
+  "ic_bayes_familia": -0.0243,
   "n_tuplas_fuertes": 1,
   "pnl_fiel_combinado_eur": 20.68,
   "tuplas": [
@@ -99,7 +99,7 @@
   ]
  },
  "UPDOWN_GBM": {
-  "ic_bayes_familia": 0.0071,
+  "ic_bayes_familia": 0.007,
   "n_tuplas_fuertes": 1,
   "pnl_fiel_combinado_eur": 17.7,
   "tuplas": [
@@ -107,18 +107,6 @@
     "k": "UPDOWN_GBM#BTC#5min#BUY_NO",
     "pnl_fiel_eur_sin_suelo": 17.7002,
     "n_ejecutado": 290
-   }
-  ]
- },
- "MOMENTUM_IBS_15M": {
-  "ic_bayes_familia": -0.0038,
-  "n_tuplas_fuertes": 1,
-  "pnl_fiel_combinado_eur": 16.05,
-  "tuplas": [
-   {
-    "k": "MOMENTUM_IBS_15M#ETH#15min#BUY_NO",
-    "pnl_fiel_eur_sin_suelo": 16.0474,
-    "n_ejecutado": 346
    }
   ]
  }

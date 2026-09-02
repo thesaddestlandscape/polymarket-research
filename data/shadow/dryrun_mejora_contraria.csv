@@ -1,2 +1,3 @@
 evento_timestamp_utc,market_id,strategy,subtype,direction,precio_original,ratio_original,ratio_contrario_inicial,ratio_contrario_max,mejora_contraria,habria_operado,acierto,pnl_neto_dryrun,resolved_ts
-2026-09-02T16:42:11+00:00,4063381,LIQUIDACIONES_5M,ETH#5min,BUY_YES,0.495,580.5,0.0,0.0,False,False,,,
+2026-09-02T16:42:11+00:00,4063381,LIQUIDACIONES_5M,ETH#5min,BUY_YES,0.495,580.5,0.0,0.0,False,False,0,-0.5100,2026-09-02T17:00:07+00:00
+2026-09-02T17:02:32+00:00,4063586,BALLENAS_TARDIAS,BTC#15min,BUY_YES,0.51,6846.9,0.0,0.0,False,False,,,
