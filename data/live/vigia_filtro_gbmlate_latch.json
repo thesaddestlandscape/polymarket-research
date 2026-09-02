@@ -8,6 +8,7 @@
   "hora_utc|lt|5.0|BUY_YES",
   "hora_utc|lt|6.0|BUY_YES",
   "hora_utc|lt|7.0|BUY_YES",
+  "ibs_20min|gt|0.8316|BUY_NO",
   "ibs_20min|gt|0.8335|BUY_NO",
   "ibs_20min|gt|0.8388|BUY_NO",
   "ibs_20min|gt|0.8413|BUY_NO",
@@ -402,6 +403,7 @@
   "sigma_h|gt|0.0244|BUY_NO",
   "sigma_h|gt|0.0245|BUY_NO",
   "sigma_h|gt|0.0245|BUY_YES",
+  "sigma_h|gt|0.0246|BUY_NO",
   "sigma_h|gt|0.0246|BUY_YES",
   "sigma_h|gt|0.024|BUY_NO"
  ]
