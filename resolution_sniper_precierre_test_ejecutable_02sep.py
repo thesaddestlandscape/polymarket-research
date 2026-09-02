@@ -53,9 +53,13 @@ Mecanismo:
   - edge_dir sintético (EDGE_SINTETICO=0.05, NO es un edge modelado real)
     se pasa únicamente para activar la protección de _decidir_requote().
   - SINGLE-SHOT DE VERDAD: en cuanto se intenta una orden (éxito o
-    fallo) el script termina. Si no aparece la condición en MAX_VENTANAS
-    ciclos de 5min (~30min), también termina sin haber intentado nada.
-    No se registra en ninguna screen/cron -- se lanza a mano, supervisado.
+    fallo) el script termina. 02-Sep ampliado a MAX_VENTANAS=864 (~3
+    días) tras verificar en la primera pasada (30min) que el pipeline
+    funciona pero la zona confirmada es rara -- si no aparece la
+    condición en ese plazo, también termina sin haber intentado nada.
+    Corre en screen dedicada ("rsniper_test", NO en pipeline_watchdog.py
+    -- experimento de un solo uso, no se auto-reinicia si cae) para
+    sobrevivir sin depender de ninguna sesión de Claude Code.
   - Aviso por Telegram con el resultado exacto.
 
 Resultado registrado en data/live/trades.csv (strategy=
@@ -81,7 +85,15 @@ MARCO_TAG = "5m"
 OFFSET_S = -2
 STAKE_EUR = 1.05
 MIN_RATIO = 5.0
-MAX_VENTANAS = 6  # ~30 min a 5min/ventana
+# 02-Sep, ampliación (petición explícita Javi): la primera pasada (30min,
+# 6 ventanas) confirmó que el pipeline funciona (verificado en vivo tras
+# terminar) pero no capturó la condición -- la zona confirmada es rara
+# (mercados genuinamente inciertos justo antes del cierre son minoría).
+# Ampliado a 3 días (864 ventanas de 5min) para dar tiempo real a que
+# aparezca. Sigue siendo single-shot: en cuanto encuentra condición e
+# intenta UNA orden, termina -- no repite.
+MAX_VENTANAS = 3 * 24 * 60 // 5  # 864 ventanas ≈ 3 días
+HEARTBEAT_CADA = 12 * 60 // 5  # log de vida cada ~12h (144 ventanas) sin ruido
 
 OUT_RESULTADO = REPO / "data" / "shadow" / "resolution_sniper_precierre_test_resultado.json"
 
@@ -196,6 +208,8 @@ def main() -> None:
     _log(f"resolution_sniper_precierre_test_ejecutable_02sep (v2, gate vivo) arrancado -- "
          f"activos={ASSETS} offset={OFFSET_S}s stake={STAKE_EUR}€ max_ventanas={MAX_VENTANAS}")
     for i in range(MAX_VENTANAS):
+        if i > 0 and i % HEARTBEAT_CADA == 0:
+            _log(f"heartbeat: ventana {i}/{MAX_VENTANAS}, sigue viva, sin condición todavía")
         now = time.time()
         ts_end = (int(now) // DUR_S + 1) * DUR_S
         salida = intentar_ventana(ts_end)
@@ -229,7 +243,7 @@ def main() -> None:
             time.sleep(min(resto, 90))
 
     msg = (f"🧪 PRUEBA CONTROLADA RESOLUTION_SNIPER_PRECIERRE — sin condición "
-           f"(convergencia grid+fino viva en ningún activo) en {MAX_VENTANAS} ventanas (~30min), "
+           f"(convergencia grid+fino viva en ningún activo) en {MAX_VENTANAS} ventanas (~3 días), "
            f"script termina sin intentar ninguna orden real")
     _log(msg)
     try:
