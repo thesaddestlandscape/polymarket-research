@@ -92,6 +92,12 @@ CATEGORIAS = [
     ("RocketLeague", re.compile(r'Rocket League', re.I)),
     ("StarCraft", re.compile(r'StarCraft', re.I)),
     ("PUBG", re.compile(r'\bPUBG\b', re.I)),
+    # 02-Sep: premios individuales de fútbol -- ni título ni slug llevan
+    # sigla de liga (ej. "ballon-dor-winner-2026"), no cubiertos por
+    # ningún fallback de arriba/abajo. Lista finita y estable, cero
+    # riesgo de colisión con política.
+    ("Soccer_Awards", re.compile(
+        r"ballon d.?or|golden boot|fifa best|uefa player of the year", re.I)),
 ]
 
 # Ligas de soccer/futbol -- auto-descubiertas por el prefijo del event_slug
@@ -107,16 +113,89 @@ CATEGORIAS = [
 _WILL_WIN_RE = re.compile(r'\bwill\b.*\bwin on\b', re.I)
 _SLUG_PREFIX_RE = re.compile(r'^([a-z0-9]+)-')
 
+# 02-Sep noche, petición explícita Javi tras "puede haber eventos que nos
+# hemos perdido su seguimiento para live?": medido con el firehose whale
+# REAL de hoy (polymarket_activity_2026-09-02.csv, filas sports puras) --
+# **36,9% del volumen ($11,9M de $32,4M) devolvía cat=None** y se
+# descartaba en silencio en 3 puntos (aquí, sports_activity_ws.py,
+# sports_wallet_mirror_sniper.py -- este último YA con dinero real,
+# DRY_RUN=False desde 31-Ago). Causa: NFL/MLB por nombre de equipo sin
+# sigla de liga ("Patriots vs. Seahawks"), y sobre todo el fallback
+# `_WILL_WIN_RE` de abajo solo cubría fútbol con patrón "will X win on Y"
+# -- CUALQUIER otro partido real ("X vs Y", el 99% del volumen de fútbol/
+# béisbol/cricket/etc real) nunca llegaba a clasificarse.
+#
+# Fix, verificado con `sports_spread_observer_fase0.py` (observador FASE
+#0 sin dinero real, mismo día): sobre TODO el universo abierto de sports
+# de gamma-api (tag_slug=sports+tennis, ~20k mercados), el prefijo de
+# slug de Polymarket agrupa 100+ ligas reales (fútbol mundial completo,
+# NPB/KBO/CPBL béisbol, cricket T20 por serie, lacrosse, tenis de mesa
+# por jugador, esports) con CERO falsos positivos detectados en la
+# auditoría manual completa de esa corrida. Se generaliza aquí el mismo
+# mecanismo -- antes solo activo para el patrón "will X win on Y", ahora
+# para cualquier título con " vs "/" vs. " -- con 2 guardas de seguridad
+# baratas (`_NO_ES_DEPORTE_RE`) porque esta función es el ÚNICO filtro
+# que separa sports del resto de la plataforma (política/legal/crypto)
+# en el firehose sin filtrar de `sports_activity_ws.py`: un catch-all
+# ciego podría colar un mercado no-deportivo ("X vs Y" de un caso legal,
+# un debate político) al sniper de dinero real. NFL/MLB no necesitan
+# lista de equipos aparte -- ya se resuelven arriba vía el chequeo de
+# slug contra CATEGORIAS (slug "nfl-.../mlb-..." matchea `\bNFL\b`/
+# `\bMLB\b` directamente); ver comentario junto a `_VS_RE` sobre por qué
+# se descartó la lista de nombres de equipo (3 rondas de /code-review).
+_VS_RE = re.compile(r'\bvs\.?\b', re.I)
+_NO_ES_DEPORTE_RE = re.compile(
+    r'\blawsuit\b|\bcase\b|\bv\.\s|\bdebate\b|\belection\b|\bpresident\b|'
+    r'\bsenate\b|\bcongress\b|\bpeace\b|\bwar\b|\bcombo\b|\bshutdown\b',
+    re.I)
+# 02-Sep, 3 rondas de /code-review: el primer intento de este fix incluía
+# listas de nombres de equipo NFL/MLB para conservar el nombre humano
+# ("NFL"/"MLB") en vez de "Liga-nfl"/"Liga-mlb" -- descartado por
+# completo. Cada ronda encontró una colisión real entre ligas distintas
+# con el mismo nombre de equipo (Giants NFL/MLB, Cardinals NFL/MLB,
+# Rangers MLB/NHL/fútbol escocés, Panthers NFL/NHL) que un simple
+# `if team in title` no puede distinguir -- superficie de bugs sin fondo,
+# nunca demostrablemente completa. Con `event_slug` presente (caso común,
+# verificado con datos reales del firehose) el chequeo de slug contra
+# CATEGORIAS de arriba YA resuelve NFL/MLB sin ambigüedad (slug
+# "nfl-ne-sea-..."/"mlb-det-cle-..." matchea `\bNFL\b`/`\bMLB\b`
+# literalmente). Sin slug, el fallback genérico `Liga-<prefijo>` de abajo
+# es la respuesta correcta -- no comprometerse con una liga concreta que
+# no se puede verificar, mejor no clasificar que clasificar mal con
+# dinero real de por medio (alimenta sports_wallet_mirror_sniper.py,
+# DRY_RUN=False desde 31-Ago).
+
 
 def clasificar(title, event_slug=""):
     for nombre, rx in CATEGORIAS:
         if rx.search(title):
             return nombre
+    # 02-Sep, petición explícita Javi ("y además ganará Alcaraz el US
+    # Open???/igual que ganará Vinicius el Balón de Oro???"): futuros de
+    # un solo competidor ("Will Alcaraz win the 2026 US Open?") no tienen
+    # "vs" en el título (el gate `_VS_RE` de abajo no los alcanza) y el
+    # título tampoco lleva la sigla de liga -- pero el SLUG casi siempre
+    # sí ("2026-mens-us-open-winner-tennis", "nba-2027-champion",
+    # "mlb-2026-nl-mvp", "f1-italian-grand-prix-..."). Comprobar el slug
+    # contra la MISMA lista CATEGORIAS ya vetada (nunca una lista nueva)
+    # es seguro por construcción -- verificado contra 29 slugs políticos
+    # reales del mismo día (*-senate-election-winner, *-presidential-
+    # nominee-2028, *-parliamentary-election-winner...): NINGUNO contiene
+    # ninguna palabra de CATEGORIAS, cero riesgo de colar política/legal
+    # como deporte (a diferencia de un blacklist de política, que nunca
+    # puede garantizarse completo).
+    for nombre, rx in CATEGORIAS:
+        if rx.search(event_slug or ""):
+            return nombre
     if _WILL_WIN_RE.search(title):
         m = _SLUG_PREFIX_RE.match(event_slug or "")
         liga = m.group(1) if m else "otra"
         return f"Soccer-{liga}"
-    return None
+    if not _VS_RE.search(title) or _NO_ES_DEPORTE_RE.search(title):
+        return None
+    m = _SLUG_PREFIX_RE.match(event_slug or "")
+    liga = m.group(1) if m else "otra"
+    return f"Liga-{liga}"
 
 
 def cargar_trades_whale(vistos: set | None = None):
