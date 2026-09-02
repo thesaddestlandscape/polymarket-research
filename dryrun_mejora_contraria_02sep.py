@@ -1,9 +1,17 @@
 #!/usr/bin/env python3
 """
 dryrun_mejora_contraria_02sep.py — DRY_RUN de decisión forward (sin
-dinero real) para los 2 candidatos con doble confirmación de la sesión
+dinero real) para los candidatos con doble confirmación de la sesión
 02-Sep (pnl_fiel_v2 positivo + gate mejora_contraria>=2x significativo):
-BALLENAS_TARDIAS#BTC#15min#BUY_YES y LIQUIDACIONES_5M#ETH#5min#BUY_YES.
+BALLENAS_TARDIAS#BTC#15min#BUY_YES, LIQUIDACIONES_5M#ETH#5min#BUY_YES,
+STREAK_MOM_5M#DOGE#5min#BUY_NO, STREAK_FADE_5M#DOGE#5min#BUY_NO,
+GBM_LATE_5M#BTC#5min#BUY_YES.
+
+Ampliado 02-Sep (misma sesión, tras verificar IC real por dirección en
+strategy_params.json): estas 3 últimas tienen IC consistente con
+pnl_fiel (sin la contradicción que sí tiene GBM_LATE_15M#XRP#15min#
+BUY_YES, IC=-0.1041 vs pnl_fiel positivo -- esa se investiga aparte,
+NO se añade a este dry-run hasta resolver la contradicción).
 
 Petición explícita Javi (02-Sep, "se podría hacer un dry-run para ver
 cómo se comportan"): antes de tocar pares_permitidos_live, medir hacia
@@ -49,6 +57,9 @@ STAKE_SIMULADO = 1.05
 OBJETIVOS = {
     ("BALLENAS_TARDIAS", "BTC#15min", "BUY_YES"),
     ("LIQUIDACIONES_5M", "ETH#5min", "BUY_YES"),
+    ("STREAK_MOM_5M", "DOGE#5min", "BUY_NO"),
+    ("STREAK_FADE_5M", "DOGE#5min", "BUY_NO"),
+    ("GBM_LATE_5M", "BTC#5min", "BUY_YES"),
 }
 
 COLUMNS = [
