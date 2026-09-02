@@ -237,7 +237,8 @@ def simular_tupla(rows: list, config: dict, params: dict, indice_libro: dict,
     stats = dict(n_total=0, n_fuera_rango_validacion=0, n_fuera_ventana=0,
                  n_bloqueado_freno=0, n_sin_dato_libro=0, n_vetado_profundidad=0,
                  n_sin_ic=0, n_no_viable_stake=0, n_precio_invalido=0,
-                 n_precio_sospechoso=0, n_ejecutado=0)
+                 n_precio_sospechoso=0, n_ejecutado=0,
+                 n_ejecutado_post_quiebra=0, pnl_post_quiebra_eur=0.0)
     equity = []
     periodos_off = periodos_off or []
 
@@ -270,8 +271,17 @@ def simular_tupla(rows: list, config: dict, params: dict, indice_libro: dict,
             bankroll_inicio_ventana = bankroll
             pnl_ventana = 0.0
 
-        if (suelo_disparado or freno_diario_activo_hoy
-                or ventana_actual in latches_ventana
+        # 02-Sep: suelo_disparado ya NO bloquea aquí -- ver más abajo. Antes
+        # era una condición más del mismo `continue`, y como suelo_disparado
+        # nunca se resetea (estado absorbente, mismo patrón que
+        # GBM_LATE_15M_MULTIHORIZONTE en CLAUDE.md pt.2), una tupla que
+        # quebraba su bankroll nocional aislado dejaba de evaluarse para
+        # SIEMPRE -- 44/464 tuplas (9,5%) quebraron y se llevaron el 64% del
+        # pnl_fiel total negativo, con una media de 1176 filas nunca vueltas
+        # a evaluar. freno_diario/ventana/racha SÍ siguen bloqueando aquí
+        # porque se autorresetean (representan riesgo real recurrente, no un
+        # artefacto de simulación).
+        if (freno_diario_activo_hoy or ventana_actual in latches_ventana
                 or (len(racha_hoy) >= max_racha and not any(racha_hoy[-max_racha:]))):
             stats["n_bloqueado_freno"] += 1
             continue
@@ -293,13 +303,21 @@ def simular_tupla(rows: list, config: dict, params: dict, indice_libro: dict,
             stats["n_sin_ic"] += 1
             continue
 
-        techo_kelly = bankroll * abs(ic) * (0.5 if half_kelly else 1.0)
-        techo_pct = bankroll * max_pct
-        stake = min(techo_kelly, techo_pct, max_stake)
-        stake = max(stake, min_stake) if bankroll >= min_stake else 0.0
-        if stake <= 0:
-            stats["n_no_viable_stake"] += 1
-            continue
+        if suelo_disparado:
+            # Modo exploratorio post-quiebra: bankroll nocional ya muerto,
+            # no tiene sentido un Kelly proporcional a un bankroll congelado
+            # -- usar stake fijo mínimo, mismo criterio que "PnL fiel stake
+            # fijo 1$" (shadow_resumen.py), para seguir midiendo el signo
+            # del edge sin reactivar compounding real.
+            stake = min_stake
+        else:
+            techo_kelly = bankroll * abs(ic) * (0.5 if half_kelly else 1.0)
+            techo_pct = bankroll * max_pct
+            stake = min(techo_kelly, techo_pct, max_stake)
+            stake = max(stake, min_stake) if bankroll >= min_stake else 0.0
+            if stake <= 0:
+                stats["n_no_viable_stake"] += 1
+                continue
 
         try:
             precio_fill = float(libro_row["mejor_ask"])
@@ -320,6 +338,14 @@ def simular_tupla(rows: list, config: dict, params: dict, indice_libro: dict,
         fee = FEE_RATE_TAKER_CRYPTO * precio_fill * (1 - precio_fill)
         acierto = row.get("acierto") == "1"
         pnl = stake * (1.0 / precio_fill - 1.0) - fee if acierto else -stake
+
+        if suelo_disparado:
+            # Bankroll nocional real se queda congelado (mismo pnl_fiel_eur/
+            # equity_curve que antes) -- solo se acumula la exploración
+            # aparte, para no alterar ningún número ya citado/vigilado.
+            stats["n_ejecutado_post_quiebra"] += 1
+            stats["pnl_post_quiebra_eur"] += pnl
+            continue
 
         bankroll += pnl
         stats["n_ejecutado"] += 1
@@ -346,6 +372,14 @@ def simular_tupla(rows: list, config: dict, params: dict, indice_libro: dict,
         "bankroll_nocional_final": round(bankroll, 4),
         "pnl_fiel_eur": round(bankroll - bankroll_inicial, 4),
         "suelo_disparado_final": suelo_disparado,
+        "pnl_post_quiebra_eur": round(stats["pnl_post_quiebra_eur"], 4),
+        # 02-Sep: pnl_fiel_eur (arriba) es fiel a los circuit breakers reales
+        # -- se queda congelado tras quebrar, como en producción. Este campo
+        # es la estimación de EDGE ignorando el artefacto de bankroll
+        # aislado muerto -- útil solo para decidir si una tupla que quebró
+        # pronto merece revisión, nunca para promoción (usa stake fijo, no
+        # Kelly real).
+        "pnl_fiel_eur_sin_suelo": round((bankroll - bankroll_inicial) + stats["pnl_post_quiebra_eur"], 4),
         "equity_curve": equity,
     }
 
