@@ -119,6 +119,45 @@ def _get_clob_client():
     )
 
 
+def _saldo_pusd_onchain() -> float | None:
+    """Saldo pUSD real on-chain (mismo método que taker_rebate_tracker.py::
+    _saldo_pusd -- RPC directo a Polygon, balanceOf, sin librería web3).
+
+    Origen (02-Sep, hallazgo de sesión): la API de balance del CLOB
+    (`_free_usdc`, AssetType.COLLATERAL) reportó 9,60 USDC mientras el
+    saldo pUSD real on-chain era 13,55 -- una diferencia de ~4€ invisible
+    al bankroll reportado (`total`/`pnl_real`). Verificado que NO es un
+    bloqueo de aprobación (`allowance()` de pUSD hacia exchange_v2/
+    neg_risk_exchange_v2 ya está en máximo/ilimitado) -- la causa más
+    probable es un desfase de indexación del backend de Polymarket tras
+    el pago automático del Taker Rebate. Puramente informativo por ahora
+    (no se suma a `total`/`pnl_real` sin verificar primero, en una
+    próxima sesión, si ese saldo es realmente utilizable como margen de
+    trading o si Polymarket tarda en reconciliarlo solo) -- fail-soft,
+    nunca tumba el resto del balance si el RPC falla."""
+    import requests
+    wallet = os.getenv("POLY_DEPOSIT_WALLET")
+    if not wallet:
+        return None
+    pusd_contrato = "0xC011a7E12a19f7B1f670d46F03B03f3342E82DFB"
+    selector = "0x70a08231" + wallet[2:].rjust(64, "0").lower()
+    try:
+        r = requests.post(
+            "https://polygon-bor-rpc.publicnode.com",
+            json={"jsonrpc": "2.0", "id": 1, "method": "eth_call",
+                  "params": [{"to": pusd_contrato, "data": selector}, "latest"]},
+            timeout=10,
+        )
+        r.raise_for_status()
+        result = r.json().get("result")
+        if not result:
+            return None
+        return int(result, 16) / 1_000_000
+    except Exception as e:
+        print(f"[live_balance] aviso: no se pudo leer saldo pUSD on-chain ({type(e).__name__}: {e})")
+        return None
+
+
 def _free_usdc(client) -> float:
     """USDC libre (colateral) del wallet, en unidades USDC."""
     from py_clob_client_v2.clob_types import BalanceAllowanceParams, AssetType
@@ -485,6 +524,9 @@ def fetch_balance_real() -> dict:
     free = _free_usdc(client)
     pos = _positions_value(wallet)
     total = round(free + pos, 4)
+    pusd_onchain = _saldo_pusd_onchain()
+    pusd_no_reflejado = (round(pusd_onchain - free, 4)
+                          if pusd_onchain is not None and pusd_onchain > free else None)
     total_bruto = total  # 27-Ago noche: guardado ANTES de restar sports --
     # única forma de que reconciliar_sports.py pueda aislar por diferencia
     # cuánto del movimiento real de la wallet es atribuible a sports (ver
@@ -530,6 +572,8 @@ def fetch_balance_real() -> dict:
         "deposito_inicial": round(deposito_total, 4),  # total acumulado (sum de todos los depósitos)
         "pnl_real": round(total - deposito_total, 4),
         "pnl_por_deposito": pnl_desglose,              # nuevo: desglose por período
+        "pusd_onchain": round(pusd_onchain, 4) if pusd_onchain is not None else None,
+        "pusd_no_reflejado_en_collateral": pusd_no_reflejado,  # informativo, ver _saldo_pusd_onchain
         "daily_real": daily_real,
         "pnl_hoy_real": pnl_hoy_real,
         "pnl_7d_real": pnl_7d_real,
