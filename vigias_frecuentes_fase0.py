@@ -91,6 +91,7 @@ import shadow_pnl_fiel
 import wallet_mirror_pnl_tracker
 import analisis_familias_ic_bajo_tuplas_fuertes
 import taker_rebate_tracker
+import analisis_gate_riguroso_resolution_sniper_precierre_02sep
 import vigia_micro_bucket_kill_switch
 import vigia_reabrir_overrides_micro_bucket
 import vigia_micro_bucket_kill_switch_wallet_mirror
@@ -173,6 +174,15 @@ TAREAS = [
     # 02-Sep (propuesta C10): KPI de volumen ponderado (wV) del Taker Rebate
     # Program, cripto+sports comparten wallet/cuenta -- mismo contador de tier.
     ("taker_rebate_tracker", taker_rebate_tracker.main, "taker_rebate_tracker.log", 1800),
+    # 02-Sep (petición explícita Javi: el gate tiene que reconfirmarse
+    # constantemente, no quedarse congelado): regenera el gate riguroso de
+    # RESOLUTION_SNIPER_PRECIERRE cada 30min -- dataset todavía muy joven
+    # (1.5 días), 30min en vez del cron diario 06:55-06:59 UTC del resto de
+    # gates del proyecto mientras n crece rápido. Consumido en vivo por
+    # resolution_sniper_precierre_gate.py::evaluar() (caché por mtime).
+    ("resolution_sniper_precierre_gate_riguroso",
+     analisis_gate_riguroso_resolution_sniper_precierre_02sep.main,
+     "resolution_sniper_precierre_gate_riguroso.log", 1800),
     ("vigia_micro_bucket_kill_switch", vigia_micro_bucket_kill_switch.main, "vigia_micro_bucket_kill_switch.log", 1800),
     # 24-Ago (petición explícita Javi: "es tu trabajo revisarlo, si una se
     # bloquea, en el próximo ciclo la revisas y si está OK la desbloqueas"):
