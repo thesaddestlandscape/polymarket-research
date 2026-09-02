@@ -116,11 +116,11 @@
   "hi": 0.27,
   "n": 77,
   "pnl_medio": 0.6904,
-  "diff_vs_resto": 0.708,
-  "p_valor": 0.0005,
+  "diff_vs_resto": 0.7087,
+  "p_valor": 0.0,
   "split_half_diff": [
-   0.8398,
-   0.5797
+   0.8404,
+   0.5803
   ],
   "split_half_ok": true,
   "pnl_medio_loo": 0.6561,
@@ -171,7 +171,7 @@
   "n": 43,
   "pnl_medio": -0.32,
   "diff_vs_resto": -0.3079,
-  "p_valor": 0.014,
+  "p_valor": 0.0135,
   "split_half_diff": [
    -0.4061,
    -0.2141
@@ -180,8 +180,8 @@
   "pnl_medio_loo": -0.3654,
   "robusto_loo": true,
   "ci90_bootstrap": [
-   -0.6001,
-   -0.0355
+   -0.5988,
+   -0.0328
   ],
   "robusto_bootstrap": true,
   "n_posiciones_buscadas": 59,
@@ -196,18 +196,18 @@
   "hi": 0.5,
   "n": 68,
   "pnl_medio": 0.4019,
-  "diff_vs_resto": 0.4489,
-  "p_valor": 0.004,
+  "diff_vs_resto": 0.4537,
+  "p_valor": 0.0015,
   "split_half_diff": [
-   0.3589,
-   0.5389
+   0.3637,
+   0.5437
   ],
   "split_half_ok": true,
   "pnl_medio_loo": 0.4229,
   "robusto_loo": true,
   "ci90_bootstrap": [
-   0.2173,
-   0.5854
+   0.2164,
+   0.583
   ],
   "robusto_bootstrap": true,
   "n_posiciones_buscadas": 50,
