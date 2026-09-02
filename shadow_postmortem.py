@@ -2090,7 +2090,29 @@ def _cargar_predicciones_recientes_por_estrategia(dias: int = COBERTURA_RECIENTE
     siempre en el proceso y nunca vería predictions.csv del día nuevo.
     """
     corte = datetime.now(timezone.utc) - timedelta(days=dias)
-    idx: dict[str, list] = {}
+    # 02-Sep: idx acumula por market_id (dict, no list) -- dedupe a UNA
+    # entrada por (clave, market_id), quedándose con la más reciente
+    # (los ficheros se recorren en orden cronológico, así que sobrescribir
+    # ya hace "quedarse con la última" gratis). Antes de este fix,
+    # cada fila de re-predicción del mismo mercado se acumulaba aparte --
+    # inofensivo mientras el dedup de shadow_predict.py era "una vez al
+    # día", pero el fix de cooldown corto del 01-Sep (commit 79291666c7,
+    # re-predicción cada ~20s para las 49 estrategias de whitelist/
+    # candidatos) multiplicó por 15-180x las filas por mercado
+    # (predictions_2026-09-02.csv pasó de ~22MB/día a 582MB/705.387 filas
+    # en un solo día) -- esta función materializaba TODAS esas filas
+    # casi-idénticas en memoria (idx en RAM llegó a 4-4.7GB, shadow_
+    # postmortem.py entero a 62% de la RAM del VPS, swap al 95%, ciclos
+    # resolve+postmortem de hasta 80min bloqueando todo el pipeline
+    # detrás -- diagnosticado con py-spy dump en vivo, 02-Sep noche).
+    # El dedup NO cambia lo que `_filtro_degenerado_en_veto_total` mide
+    # (sigue viendo la dirección efectiva más reciente por mercado, que
+    # es exactamente lo que "predicciones recientes" quiere decir) --
+    # solo elimina observaciones repetidas y no independientes del MISMO
+    # mercado en el MISMO día, alineado con el mismo principio de rigor
+    # ya aplicado en feedback_desagregar_por_activo_siempre (no inflar
+    # el n con pseudo-réplicas).
+    idx: dict[str, dict] = {}
     archivos = sorted(DIR_SHADOW.glob("predictions_*.csv"))[-(dias + 2):]
     for arch in archivos:
         try:
@@ -2122,6 +2144,7 @@ def _cargar_predicciones_recientes_por_estrategia(dias: int = COBERTURA_RECIENTE
                         feats = json.loads(row.get("features", "{}") or "{}")
                     except Exception:
                         continue
+                    mid = row.get("market_id", "")
                     s = row.get("strategy", "")
                     sub = row.get("subtype", "")
                     posibles = {s}
@@ -2131,10 +2154,10 @@ def _cargar_predicciones_recientes_por_estrategia(dias: int = COBERTURA_RECIENTE
                     elif sub:
                         posibles.add(f"{s}#{sub}")
                     for clave in posibles:
-                        idx.setdefault(clave, []).append((dec_efectiva, feats))
+                        idx.setdefault(clave, {})[mid] = (dec_efectiva, feats)
         except Exception:
             continue
-    return idx
+    return {clave: list(por_mercado.values()) for clave, por_mercado in idx.items()}
 
 
 @lru_cache(maxsize=None)
