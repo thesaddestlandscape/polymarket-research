@@ -8,10 +8,15 @@
 # 28-Jul, decisión explícita Javi tras barrido de disco al 90%; ampliado a
 # política permanente el 03-Ago tras un segundo episodio con el disco a 0
 # bytes libres — el script de un solo uso nunca se dejó programado).
+# 02-Sep: DIAS_BORRAR 90->45 (barrido de salud de sesión) — disco al 93%,
+# 5.8GB libres, ritmo real ~2.7GB/día (crisis en ~2 días). >45d de .gz
+# eran 6.5GB recuperables de golpe vs solo 2.6GB con el umbral de 90d.
+# Los .gz siguen siendo capturas en bruto ya extraídas a results.csv/
+# trades.csv, nada que dependa de leer más allá de 45d en producción.
 set -euo pipefail
 
 DIAS_MANTENER=5
-DIAS_BORRAR=90
+DIAS_BORRAR=45
 CUTOFF_COMPRIMIR=$(date -u -d "-${DIAS_MANTENER} days" +%Y-%m-%d)
 CUTOFF_BORRAR=$(date -u -d "-${DIAS_BORRAR} days" +%Y-%m-%d)
 
