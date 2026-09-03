@@ -10,11 +10,11 @@
     "hi": 0.78,
     "n": 93,
     "pnl_medio": -0.4526,
-    "diff_vs_resto": -0.3777,
-    "p_valor": 0.002,
+    "diff_vs_resto": -0.3779,
+    "p_valor": 0.0035,
     "split_half_diff": [
-      -0.4971,
-      -0.2609
+      -0.4973,
+      -0.261
     ],
     "split_half_ok": true,
     "pnl_medio_loo": -0.4613,
@@ -44,18 +44,18 @@
     "hi": 0.46,
     "n": 56,
     "pnl_medio": -0.4485,
-    "diff_vs_resto": -0.466,
-    "p_valor": 0.0035,
+    "diff_vs_resto": -0.4663,
+    "p_valor": 0.005,
     "split_half_diff": [
-      -0.4641,
-      -0.4679
+      -0.4644,
+      -0.4681
     ],
     "split_half_ok": true,
     "pnl_medio_loo": -0.481,
     "robusto_loo": true,
     "ci90_bootstrap": [
-      -0.648,
-      -0.2188
+      -0.6472,
+      -0.2471
     ],
     "robusto_bootstrap": true,
     "n_posiciones_buscadas": 21,
@@ -71,7 +71,7 @@
     "n": 65,
     "pnl_medio": -0.5518,
     "diff_vs_resto": -0.5465,
-    "p_valor": 0.0005,
+    "p_valor": 0.0,
     "split_half_diff": [
       -0.5729,
       -0.5208
@@ -80,8 +80,8 @@
     "pnl_medio_loo": -0.6151,
     "robusto_loo": true,
     "ci90_bootstrap": [
-      -0.8042,
-      -0.2673
+      -0.8092,
+      -0.2785
     ],
     "robusto_bootstrap": true,
     "n_posiciones_buscadas": 69,
@@ -96,18 +96,18 @@
     "hi": 0.1,
     "n": 71,
     "pnl_medio": 1.3866,
-    "diff_vs_resto": 1.424,
+    "diff_vs_resto": 1.4253,
     "p_valor": 0.0,
     "split_half_diff": [
-      0.0503,
-      2.7595
+      0.0517,
+      2.7608
     ],
     "split_half_ok": true,
     "pnl_medio_loo": 1.1983,
     "robusto_loo": true,
     "ci90_bootstrap": [
-      0.4695,
-      2.3869
+      0.4653,
+      2.3817
     ],
     "robusto_bootstrap": true,
     "n_posiciones_buscadas": 96,
@@ -124,18 +124,18 @@
     "hi": 0.41,
     "n": 44,
     "pnl_medio": 0.6478,
-    "diff_vs_resto": 0.6461,
+    "diff_vs_resto": 0.6467,
     "p_valor": 0.0,
     "split_half_diff": [
-      0.708,
-      0.5842
+      0.7086,
+      0.5848
     ],
     "split_half_ok": true,
     "pnl_medio_loo": 0.6861,
     "robusto_loo": true,
     "ci90_bootstrap": [
-      0.347,
-      0.9327
+      0.3554,
+      0.94
     ],
     "robusto_bootstrap": true,
     "n_posiciones_buscadas": 60,
@@ -152,18 +152,18 @@
     "hi": 0.3,
     "n": 144,
     "pnl_medio": 0.3258,
-    "diff_vs_resto": 0.3773,
-    "p_valor": 0.004,
+    "diff_vs_resto": 0.3775,
+    "p_valor": 0.008,
     "split_half_diff": [
-      0.3472,
-      0.4074
+      0.3474,
+      0.4076
     ],
     "split_half_ok": true,
     "pnl_medio_loo": 0.3086,
     "robusto_loo": true,
     "ci90_bootstrap": [
-      0.0968,
-      0.5532
+      0.0966,
+      0.5547
     ],
     "robusto_bootstrap": true,
     "n_posiciones_buscadas": 80,
@@ -178,20 +178,20 @@
   "SEGUIR#BTC#5min#1": {
     "lo": 0.29,
     "hi": 0.34,
-    "n": 46,
-    "pnl_medio": 0.7116,
-    "diff_vs_resto": 0.7421,
+    "n": 47,
+    "pnl_medio": 0.6752,
+    "diff_vs_resto": 0.7072,
     "p_valor": 0.0,
     "split_half_diff": [
-      0.7531,
-      0.7311
+      0.7546,
+      0.6617
     ],
     "split_half_ok": true,
-    "pnl_medio_loo": 0.7497,
+    "pnl_medio_loo": 0.7116,
     "robusto_loo": true,
     "ci90_bootstrap": [
-      0.3352,
-      1.0665
+      0.346,
+      1.0369
     ],
     "robusto_bootstrap": true,
     "n_posiciones_buscadas": 67,
@@ -204,32 +204,12 @@
     "veredicto": "bueno_confirmado"
   },
   "SEGUIR#ETH#5min#0": {
-    "lo": 0.43,
-    "hi": 0.48,
-    "n": 54,
-    "pnl_medio": 0.4125,
-    "diff_vs_resto": 0.4334,
-    "p_valor": 0.006,
-    "split_half_diff": [
-      0.3625,
-      0.5043
-    ],
-    "split_half_ok": true,
-    "pnl_medio_loo": 0.4391,
-    "robusto_loo": true,
-    "ci90_bootstrap": [
-      0.1798,
-      0.6462
-    ],
-    "robusto_bootstrap": true,
-    "n_posiciones_buscadas": 53,
-    "veredicto_crudo_hoy": "bueno_confirmado",
+    "veredicto": "sin_concluir",
     "historial_crudo": [
       "bueno_confirmado",
       "bueno_confirmado",
       "bueno_confirmado"
-    ],
-    "veredicto": "bueno_confirmado"
+    ]
   },
   "SEGUIR#BTC#5min#0": {
     "veredicto": "sin_concluir",
