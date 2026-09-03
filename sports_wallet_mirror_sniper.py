@@ -48,6 +48,13 @@ import sports_live_guard as _guard
 import sports_live_stake as _stake
 import sports_wallet_mirror_gate_bucket as _gate  # 27-Ago: segundo guardián,
 # independiente de pares_permitidos_live -- ver docstring del módulo
+from sports_wallet_mirror_clv import clv_tupla_sports  # 03-Sep: tercer
+# guardián -- petición explícita Javi al promocionar CS#FADE[0.60,0.65)/
+# LoL#FADE[0.70,0.75)/Dota#SEGUIR[0.47,0.52): mismo veto CLV que cripto
+# (live_trade.py::_clv_tupla), construido 27-Ago pero nunca conectado a
+# ninguna decisión hasta hoy.
+
+CLV_VETO_MIN_N = 20  # mismo umbral que cripto (live_trade.py::CLV_VETO_MIN_N)
 
 REPO = Path(__file__).resolve().parent
 
@@ -334,6 +341,21 @@ async def _correr_una_conexion(wallets: dict, vistos: set) -> set:
                             ok_operar = False
                             gate_veredicto = f"gate_bucket={gate_bucket_veredicto}"
                     if ok_operar:
+                        # Veto CLV (03-Sep, mismo patrón que live_trade.py::
+                        # _clv_tupla en cripto): tupla#dirección con CLV medio
+                        # < 0 sostenido pierde contra la línea de cierre --
+                        # guardia adicional sobre el gate de micro-bucket, no
+                        # sustituto. Sin datos suficientes (n<20) no veta
+                        # (fail-open por n insuficiente, mismo criterio que
+                        # el resto del proyecto -- un veto que nunca ha visto
+                        # datos no debe bloquear nada).
+                        clv_medio, n_clv = clv_tupla_sports(categoria, info["tipo"])
+                        if n_clv >= CLV_VETO_MIN_N and clv_medio < 0:
+                            ok_operar = False
+                            gate_veredicto = f"veto_clv(clv={clv_medio:+.4f},n={n_clv})"
+                            _log(f"  ⛔ Veto CLV: {categoria}#{info['tipo']} clv_medio={clv_medio:+.4f} "
+                                 f"(n={n_clv}) < 0 — no se ejecuta")
+                    if ok_operar:
                         cb_bloquea = _stake.bloquear_por_circuit_breaker(lambda m: _log(f"circuit breaker: {m}"))
                         if not cb_bloquea:
                             edge_frac = abs(info["edge_pp"]) / 100.0
@@ -353,19 +375,89 @@ async def _correr_una_conexion(wallets: dict, vistos: set) -> set:
                                     if tokens_orden is None:
                                         _log(f"  ⚠️ no se pudo resolver token_id para {condition_id}, no se ejecuta")
                                     else:
-                                        # Propuesta #3 Arquetipo A aplicada a sports
-                                        # (01-Sep, aprobación explícita Javi): techo
-                                        # de precio seguro derivado de la zona EXACTA
-                                        # que confirmó bueno_confirmado (grid o fino),
-                                        # nunca del edge (sports no tiene edge_dir en
-                                        # unidades de precio como cripto).
-                                        techo_precio = _gate.techo_confirmado(
-                                            categoria, info["tipo"], mejor_ask, gate_bucket_resultado)
-                                        resultado = _trade.ejecutar_orden_token(
-                                            tokens_orden[mirror_idx], mejor_ask, stake_sim,
-                                            market_id_log=condition_id, techo_precio=techo_precio)
-                                        _log(f"  {'EJECUTADO' if resultado.get('ok') else 'ERROR'}: {resultado}")
-                                        if resultado.get("ok"):
+                                        # 03-Sep (fix real, mismo hallazgo y mismo
+                                        # patrón que _ejecutar_orden_polymarket en
+                                        # cripto, ver commit de la misma fecha:
+                                        # racha WALLET_MIRROR#BTC/ETH#15min real
+                                        # -6,55€ por validar el gate contra UN solo
+                                        # snapshot de precio antes de firmar).
+                                        # `mejor_ask`/`gate_bucket_resultado` de
+                                        # arriba pueden ser de varios cientos de ms
+                                        # atrás (websocket→guard→circuit
+                                        # breaker→stake→resolución de token, todo
+                                        # antes de llegar aquí) -- en un mercado
+                                        # moviéndose rápido eso no protege nada.
+                                        # Se exige reconfirmar bueno_confirmado en
+                                        # N lecturas FRESCAS consecutivas
+                                        # (re-consultando el libro cada vez, nunca
+                                        # reusando el mismo snapshot) lo más pegado
+                                        # posible a la construcción de la orden
+                                        # real. Código de seguridad live -- no
+                                        # minimizar.
+                                        _n_rechequeos = _guard._cargar_config().get(
+                                            "riesgo", {}).get("n_rechequeos_gate_bucket", 2)
+                                        _ask_confirmado = None
+                                        _gate_confirmado = gate_bucket_resultado
+                                        resultado = None  # sin esto, un rechequeo abortado
+                                        # reutilizaría el `resultado` de una iteración
+                                        # ANTERIOR del bucle exterior (websocket) y
+                                        # `if resultado.get("ok"):` de abajo registraría
+                                        # un trade fantasma o reventaría con AttributeError
+                                        # si nunca hubo un trade previo -- fail-closed.
+                                        for _intento in range(1, _n_rechequeos + 1):
+                                            if _intento > 1:
+                                                # /code-review 03-Sep, hallazgo real: esta
+                                                # coroutine (_correr_una_conexion) es la que
+                                                # también mantiene vivo el ping/recv del
+                                                # websocket -- time.sleep() bloqueante aquí
+                                                # congela TODO el event loop (ping no sale,
+                                                # ningún otro mensaje se procesa) durante la
+                                                # pausa. await asyncio.sleep() cede el control.
+                                                await asyncio.sleep(0.25)
+                                            # /code-review 03-Sep, segundo hallazgo real:
+                                            # _fillability_mirror() hace un requests.get()
+                                            # bloqueante (timeout=10s) -- llamarlo a pelo aquí
+                                            # añade 1-2 bloqueos más del event loop por señal
+                                            # disparada (encima del que ya existe en la línea
+                                            # ~299 de este mismo flujo), justo en el momento de
+                                            # ejecutar dinero real. to_thread() lo saca del loop
+                                            # sin tocar la función síncrona compartida.
+                                            _fill_fresh = await asyncio.to_thread(
+                                                _fillability_mirror, condition_id, mirror_idx, precio_ref)
+                                            _ask_fresh = _fill_fresh.get("mejor_ask")
+                                            if not isinstance(_ask_fresh, (int, float)):
+                                                _log(f"  ⛔ Re-chequeo gate {_intento}/{_n_rechequeos}: "
+                                                     f"sin datos de libro frescos -- no se ejecuta (fail-closed)")
+                                                _ask_confirmado = None
+                                                break
+                                            _gate_fresh = _gate.evaluar(categoria, info["tipo"], float(_ask_fresh))
+                                            if _gate_fresh["veredicto"] != "bueno_confirmado":
+                                                _log(f"  ⛔ Re-chequeo gate {_intento}/{_n_rechequeos}: "
+                                                     f"ask_fresco={_ask_fresh:.4f} veredicto={_gate_fresh['veredicto']} "
+                                                     f"(precio en movimiento, no bueno_confirmado) -- no se ejecuta")
+                                                _ask_confirmado = None
+                                                break
+                                            _ask_confirmado = float(_ask_fresh)
+                                            _gate_confirmado = _gate_fresh
+                                        if _ask_confirmado is None:
+                                            gate_veredicto = "rechequeo_abortado"
+                                        else:
+                                            mejor_ask = _ask_confirmado
+                                            # Propuesta #3 Arquetipo A aplicada a sports
+                                            # (01-Sep, aprobación explícita Javi): techo
+                                            # de precio seguro derivado de la zona EXACTA
+                                            # que confirmó bueno_confirmado (grid o fino),
+                                            # nunca del edge (sports no tiene edge_dir en
+                                            # unidades de precio como cripto). Recalculado
+                                            # con el ask/veredicto del rechequeo, no el
+                                            # snapshot viejo de antes de reconfirmar.
+                                            techo_precio = _gate.techo_confirmado(
+                                                categoria, info["tipo"], mejor_ask, _gate_confirmado)
+                                            resultado = _trade.ejecutar_orden_token(
+                                                tokens_orden[mirror_idx], mejor_ask, stake_sim,
+                                                market_id_log=condition_id, techo_precio=techo_precio)
+                                            _log(f"  {'EJECUTADO' if resultado.get('ok') else 'ERROR'}: {resultado}")
+                                        if resultado is not None and resultado.get("ok"):
                                             # 27-Ago noche: sin esto, un trade real se enviaba
                                             # pero NUNCA se registraba -- bankroll_actual()/
                                             # circuit breakers habrían quedado ciegos a él para

@@ -49,6 +49,13 @@ def _buckets_confirmados() -> list[dict]:
     if GATE_FINO.exists():
         d = json.loads(GATE_FINO.read_text(encoding="utf-8"))
         for tupla_str, info in d.items():
+            # 03-Sep (bug real, crash en producción): combos sin ventana
+            # significativa encontrada quedan como {"veredicto":...,
+            # "historial_crudo":[...]} sin "lo"/"hi"/demás stats -- no
+            # tienen bucket concreto que auditar por concentración, se
+            # saltan en vez de reventar el script entero.
+            if "lo" not in info or "hi" not in info:
+                continue
             categoria, tipo = tupla_str.split("#")
             out.append({"categoria": categoria, "tipo": tipo,
                         "lo": info["lo"], "hi": info["hi"],

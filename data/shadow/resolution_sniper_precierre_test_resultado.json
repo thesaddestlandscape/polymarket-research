@@ -1,4 +1,71 @@
 {
- "timestamp_utc": "2026-09-02T11:50:03.320842+00:00",
- "intentado": false
+ "timestamp_utc": "2026-09-03T13:15:00.449751+00:00",
+ "intentado": true,
+ "ok": false,
+ "resultado": {
+  "ok": false,
+  "no_fill": false,
+  "order_id": null,
+  "entry_price": 0.51,
+  "fee_eur": 0.0,
+  "error": "PolyApiException[status_code=503, error_message={'error': 'trading is disabled'}]"
+ },
+ "trade": {
+  "timestamp_utc": "2026-09-03T13:15:00+00:00",
+  "market_id": "4130519",
+  "question": "Bitcoin Up or Down - September 3, 9:10AM-9:15AM ET",
+  "end_date": "2026-09-03T13:15:00Z",
+  "strategy": "RESOLUTION_SNIPER_PRECIERRE_TEST",
+  "subtype": "BTC#5min",
+  "direction": "BUY_YES",
+  "stake_eur": 0.0,
+  "entry_price": 0.51,
+  "signal_ask": 0.51,
+  "slip_real": "",
+  "ic_modelo": "",
+  "edge_neto": "",
+  "conviction_score": "",
+  "kelly_recomendado": 1.05,
+  "status": "ERROR",
+  "close_timestamp": "",
+  "exit_price": "",
+  "outcome_real": "",
+  "fee_eur": 0.0,
+  "pnl_bruto_eur": "",
+  "pnl_neto_eur": "",
+  "notas": "PRUEBA CONTROLADA offset=-2s -- PolyApiException[status_code=503, error_message={'error': 'trading is disabled'}]"
+ },
+ "gate": {
+  "confirmado": true,
+  "motivo": "convergencia_grid_fino",
+  "grid": {
+   "n": 45,
+   "hit": 0.9556,
+   "pnl_medio": 0.8682,
+   "ask_medio": 0.5071,
+   "wilson90lo": 0.8742,
+   "breakeven_aprox": 0.5071,
+   "diff_pnl_vs_resto": 0.5837,
+   "p_shuffle": 0.0,
+   "split_half_positivo_ambas": true,
+   "n_min_live_ok": true,
+   "p_bh_signif": true,
+   "veredicto": "bueno_confirmado"
+  },
+  "fino": {
+   "n": 45,
+   "hit": 0.9556,
+   "pnl_medio": 0.8682,
+   "ask_medio": 0.5071,
+   "wilson90lo": 0.8742,
+   "breakeven_aprox": 0.5071,
+   "diff_pnl_vs_resto": 0.8501,
+   "p_shuffle": 0.0005,
+   "split_half_positivo_ambas": true,
+   "n_min_live_ok": true,
+   "lo": 0.47,
+   "hi": 0.52,
+   "veredicto": "bueno_confirmado"
+  }
+ }
 }

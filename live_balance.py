@@ -173,10 +173,46 @@ _POSITIONS_VALUE_TOLERANCIA_ABS = 1.0    # € — margen antes de desconfiar de
 _POSITIONS_VALUE_TOLERANCIA_PCT = 0.15   # 15% del propio /value, lo que sea mayor
 
 
-def _positions_value_sumada(wallet: str) -> float | None:
+def _fetch_posiciones_wallet(wallet: str) -> list | None:
+    """Trae TODAS las posiciones de la wallet (`/positions`, redeemable=false
+    + redeemable=true con currentValue>0, mismo criterio de paginación
+    acotada que `_positions_value_sumada` documenta abajo) en UNA sola
+    pasada de 2 llamadas HTTP, compartida entre `_positions_value_sumada`
+    (cross-check crudo de cripto) y `_sports_positions_value_actual` (split
+    sports) -- antes cada una hacía sus propias 2 llamadas por separado,
+    duplicando red/IO en cada `fetch_balance_real()` donde sports tuviera
+    una posición abierta (/code-review 03-Sep). Devuelve None si falla
+    (best-effort, cada caller decide su propio fallback)."""
+    try:
+        out = []
+        r = requests.get(f"{DATA_API}/positions",
+                          params={"user": wallet, "redeemable": "false", "limit": 500},
+                          timeout=20)
+        r.raise_for_status()
+        d = r.json()
+        if isinstance(d, list):
+            out.extend(d)
+        r2 = requests.get(f"{DATA_API}/positions",
+                           params={"user": wallet, "redeemable": "true", "limit": 500},
+                           timeout=20)
+        r2.raise_for_status()
+        d2 = r2.json()
+        if isinstance(d2, list):
+            out.extend(p for p in d2 if float(p.get("currentValue") or 0.0) > 0)
+        return out
+    except Exception:
+        return None
+
+
+def _positions_value_sumada(wallet: str, posiciones: list | None = None) -> float | None:
     """Suma currentValue de data-api /positions -- fuente independiente de
     /value, usada solo como cross-check (08-11). Devuelve None si la llamada
     falla (best-effort, no debe tumbar _positions_value).
+
+    `posiciones`: lista ya traída por `_fetch_posiciones_wallet()` (evita
+    repetir las 2 llamadas HTTP si el caller ya las hizo); si es None, las
+    trae aquí mismo (comportamiento previo, sin cambios para otros
+    callers).
 
     01-Sep (bug real de dinero, encontrado en el barrido de esta sesión tras
     2 alertas de reconciliación -- cripto TE delta_dia=-2.12$, sports
@@ -210,32 +246,17 @@ def _positions_value_sumada(wallet: str) -> float | None:
     cualquier `redeemable=true` con currentValue>0 dentro de una página
     igual de acotada (nunca puede haber cientos de posiciones ganadas con
     saldo pendiente de golpe, a diferencia del histórico completo)."""
-    try:
-        r = requests.get(f"{DATA_API}/positions",
-                          params={"user": wallet, "redeemable": "false", "limit": 500},
-                          timeout=20)
-        r.raise_for_status()
-        d = r.json()
-        if not isinstance(d, list):
-            return None
-        suma = sum(float(p.get("currentValue") or 0.0) for p in d)
-
-        r2 = requests.get(f"{DATA_API}/positions",
-                           params={"user": wallet, "redeemable": "true", "limit": 500},
-                           timeout=20)
-        r2.raise_for_status()
-        d2 = r2.json()
-        if isinstance(d2, list):
-            suma += sum(float(p.get("currentValue") or 0.0) for p in d2
-                        if float(p.get("currentValue") or 0.0) > 0)
-        return suma
-    except Exception:
+    if posiciones is None:
+        posiciones = _fetch_posiciones_wallet(wallet)
+    if posiciones is None:
         return None
+    return sum(float(p.get("currentValue") or 0.0) for p in posiciones)
 
 
-def _positions_value(wallet: str) -> float:
+def _positions_value(wallet: str) -> tuple[float, list | None]:
     """Valor mark-to-market de las posiciones abiertas (data-api /value),
-    con cross-check contra la suma de currentValue de /positions.
+    con cross-check contra la suma de currentValue de /positions. Devuelve
+    (valor, lista_posiciones_cruda_o_None) -- ver nota 03-Sep abajo.
 
     Devuelve 0.0 si no hay posiciones vivas (todo resuelto/redimido).
 
@@ -250,7 +271,10 @@ def _positions_value(wallet: str) -> float:
     fallar así) -- se usa la suma de /positions en su lugar y se deja
     rastro en el log del caller. Si /positions falla (best-effort), se
     confía en /value solo (comportamiento previo, sin cross-check).
-    """
+
+    03-Sep: devuelve también la lista cruda de `/positions` (o None si
+    falló) para que `fetch_balance_real()` se la pase a
+    `_sports_positions_value_actual()` sin repetir las 2 llamadas HTTP."""
     r = requests.get(f"{DATA_API}/value", params={"user": wallet}, timeout=20)
     r.raise_for_status()
     d = r.json()
@@ -261,7 +285,8 @@ def _positions_value(wallet: str) -> float:
     else:
         val = 0.0
 
-    suma = _positions_value_sumada(wallet)
+    posiciones = _fetch_posiciones_wallet(wallet)
+    suma = _positions_value_sumada(wallet, posiciones)
     if suma is not None:
         tolerancia = max(_POSITIONS_VALUE_TOLERANCIA_ABS,
                           _POSITIONS_VALUE_TOLERANCIA_PCT * val)
@@ -269,68 +294,188 @@ def _positions_value(wallet: str) -> float:
             print(f"⚠️  /value ({val:.4f}€) discrepa de suma /positions "
                   f"({suma:.4f}€) más de la tolerancia ({tolerancia:.2f}€) "
                   f"-- usando suma /positions", file=sys.stderr)
-            return suma
-    return val
+            return suma, posiciones
+    return val, posiciones
 
 
 SPORTS_CONFIG_PATH = Path(__file__).parent / "data" / "sports" / "config_live_sports.json"
 SPORTS_TRADES_PATH = Path(__file__).parent / "data" / "sports" / "trades.csv"
 
 
-def _sports_delta_realizado_por_dia_madrid() -> dict:
-    """31-Ago (bug real, encontrado el día que sports abrió su primer trade
-    real): `total`/`free_usdc` de esta wallet ya vienen NETOS de sports vía
-    `_capital_ajeno_en_wallet_compartida()` (depósitos de sports + STAKES
-    ABIERTOS de sports, ver docstring de esa función -- deliberadamente
-    incluye lo abierto para no sobrestimar el bankroll disponible de
-    cripto). Bien para `bankroll_actual()`/el circuit breaker de TAMAÑO,
-    pero `_daily_real_pnl_balance()` compara snapshots de ese mismo `total`
-    día a día -- cuando sports ABRE una posición nueva, `capital_ajeno` sube
-    aunque ese dinero siga siendo suyo (no se ha ganado ni perdido todavía),
-    y la resta se leía como si cripto hubiera perdido ese importe. Caso real
-    31-Ago: sports abrió LoL#SEGUIR (stake 1,05€) a las 17:16 UTC, sin
-    ningún trade ni pérdida de cripto en ese momento -- `pnl_hoy_real` pasó
-    de +1,09€ a -1,07€ solo por eso, y esa cifra alimenta también el
-    circuit breaker de cripto (`live_stake.pnl_live_hoy()`).
+def _sports_open_condition_ids_y_coste() -> dict:
+    """conditionId (=market_id en data/sports/trades.csv) -> coste combinado
+    (suma de stake_eur, por si dos filas OPEN compartieran el mismo
+    conditionId) de las posiciones de sports actualmente OPEN.
 
-    01-Sep (mismo bug REPETIDO, no arreglado del todo el 31-Ago): la
-    primera versión de este fix solo netaba lo REALIZADO (depósitos +
-    PnL de CERRADOS), asumiendo que `positions_value` (vía /value de
-    data-api) reflejaría el valor mark-to-market de una posición de
-    sports ABIERTA y así compensaría la salida de `free_usdc` -- verificado
-    hoy que NO es así: `/value` devolvió 0 para la posición LoL abierta a
-    las 2026-09-01T01:07 UTC (stake 1,05€) durante horas (balance_history.csv:
-    free_usdc cayó 15,52€→13,39€ en ese instante, positions_value siguió en
-    0,0 el resto de la sesión) -- `pnl_hoy_real` de CRIPTO marcó -1,08€ sin
-    ningún trade cripto ese día, y ese número es el que sale en el mensaje
-    de Telegram "💰 BOT LIVE" (por eso un trade de sports se leía como si
-    fuera una pérdida de cripto).
+    dict por-id (no un total agregado) a propósito -- /code-review 03-Sep
+    encontró que un fallback todo-o-nada (si `/positions` devuelve ALGUNA
+    posición, usar la suma completa de valores reales; si no, el coste
+    agregado completo) puede ocultar una posición real: si `/positions`
+    devuelve solo 1 de 2 posiciones abiertas (paginación, o indexado con
+    lag justo tras abrir una nueva), un fallback agregado no cubre la que
+    falta. Con este dict, `_sports_positions_value_actual()` hace fallback
+    POR POSICIÓN -- la que sí aparece usa su valor real, la que no,
+    su propio coste.
 
-    Fix real: tratar el CASH-FLOW completo de sports, no solo lo cerrado --
-    al ABRIR una posición, `stake_eur` sale de `free_usdc` ese día (se resta
-    de `ajeno_dia`, cancelando la caída de `total_bruto` que no es de
-    cripto); al CERRAR, la redención completa (`stake_eur + pnl_neto_eur`)
-    vuelve a entrar ese día (se suma a `ajeno_dia`). Si abre y cierra el
-    mismo día Madrid, ambos términos se cancelan y queda solo el PnL neto,
-    igual que la versión anterior. Si abre un día y cierra otro (o sigue
-    abierta), cada día queda neteado por separado -- ninguna posición de
-    sports, abierta o cerrada, puede ya aparecer como ganancia o pérdida
-    de cripto.
+    Filtro `status != "CLOSED"` (no `== "OPEN"`) a propósito -- segunda
+    ronda /code-review 03-Sep: `_cargar_sports_eventos()`/
+    `_sports_capital_en_free_usdc()` ya tratan cualquier status que no sea
+    "CLOSED" (incluido un futuro "ERROR" con stake real) como todavía
+    abierto y restan su stake del lado de caja -- si esta función solo
+    reconocía "OPEN", una fila así habría restado de caja sin ningún
+    fallback de posición que la compensara, infravalorando `total` de
+    cripto en silencio. No observado hoy (el único escritor de sports solo
+    escribe filas cuando la orden se confirma), pero ambas funciones deben
+    coincidir en qué cuenta como "abierta"."""
+    costes: dict = {}
+    try:
+        if SPORTS_TRADES_PATH.exists():
+            with open(SPORTS_TRADES_PATH, encoding="utf-8") as f:
+                for row in csv.DictReader(f):
+                    if row.get("status") == "CLOSED" or not row.get("market_id"):
+                        continue
+                    try:
+                        stake = float(row.get("stake_eur", 0) or 0)
+                    except ValueError:
+                        stake = 0.0
+                    if stake <= 0:
+                        continue
+                    costes[row["market_id"]] = costes.get(row["market_id"], 0.0) + stake
+    except Exception:
+        pass
+    return costes
 
-    Fail-safe: cualquier error (ficheros de sports ausentes/corruptos)
-    devuelve {} -- sin este ajuste el comportamiento es el de antes de
-    31-Ago (sports en 0€, no distinto de un sports inactivo)."""
-    from collections import defaultdict
-    from zoneinfo import ZoneInfo
-    madrid = ZoneInfo("Europe/Madrid")
-    delta = defaultdict(float)
+
+def _sports_positions_value_actual(wallet: str, posiciones: list | None = None) -> float:
+    """Valor mark-to-market REAL (data-api /positions, `currentValue`) de
+    las posiciones de sports actualmente abiertas en la wallet compartida
+    -- contraparte de `_sports_capital_en_free_usdc()` (que cubre el lado
+    `free_usdc`/caja) para el lado `positions_value` de `fetch_balance_
+    real()`.
+
+    03-Sep noche (bug real, encontrado en el barrido de esta sesión tras
+    la pregunta de Javi sobre por qué el balance de cripto oscilaba sin
+    ningún trade de cripto ejecutándose): la función que existía para esto
+    (`live_stake._capital_ajeno_en_wallet_compartida()`, 27-Ago) restaba
+    `sports_live_stake.bankroll_actual() + stakes_abiertos_total()` de
+    AMBOS `free_usdc` y `total` -- dos bugs a la vez:
+      1. El stake de una posición de sports abierta ya salió de `free_usdc`
+         en el momento de abrir (está en `positions_value`, no en
+         `free_usdc`) -- restarlo TAMBIÉN de `free_usdc` lo cuenta dos
+         veces (`bankroll_actual()` = depósitos+pnl_cerrado YA incluye ese
+         coste, a precio de coste, dentro de su cifra agregada). Mismo bug
+         de fondo que motivó `_sports_capital_en_free_usdc()` el mismo día,
+         pero esa función solo se conectó a la reconstrucción histórica de
+         `_daily_real_pnl_balance()`, nunca al snapshot EN VIVO de
+         `fetch_balance_real()` -- este es el hueco real.
+      2. Restar el COSTE (`stakes_abiertos_total()`, precio de apertura) en
+         vez del VALOR DE MERCADO actual de `total`/`positions_value`
+         sobre/sub-estima según se haya movido el precio desde la apertura.
+         Verificado en vivo 03-Sep ~14:30 UTC: 2 posiciones abiertas
+         (LoL + CS2), coste combinado 2,10€, valor de mercado real
+         (`/positions::currentValue`) 1,12€ -- la de CS2 cayó de 0,49 a
+         0,09 (partida en curso yendo mal para esa wallet). Usar el coste
+         ahí sub-restaba ~0,98€ del lado de `total`/`positions_value` de
+         cripto en ese instante, y el error crece o decrece con cada
+         movimiento de precio de la partida en vivo -- exactamente el
+         vaivén sin trades de cripto que motivó la pregunta.
+      Combinado: `total`/`free_usdc` de cripto llegaron a estar
+      infravalorados varios euros de golpe (verificado: ~3-4€ el 03-Sep)
+      sin que ningún trade de cripto real lo justificara -- afecta
+      directamente a `live_stake.bankroll_actual()` (Kelly + circuit
+      breaker), no solo al dashboard.
+
+    Fix: caja exacta (`_sports_capital_en_free_usdc()`) restada de
+    `free_usdc`, y VALOR DE MERCADO real (esta función, matched por
+    `conditionId`) restado de `total` -- NUNCA de `positions_value`
+    reportado, que se deja crudo a propósito (ver comentario en
+    `fetch_balance_real()` sobre por qué: `_daily_real_pnl_balance()`
+    depende de que `positions_value` sea crudo).
+
+    Fail-safe POR POSICIÓN (/code-review 03-Sep, ver docstring de
+    `_sports_open_condition_ids_y_coste`): cada conditionId abierto empieza
+    con su propio coste como valor por defecto; si `/positions` lo
+    devuelve, se sustituye por su `currentValue` real. Si `/positions`
+    falla por completo, TODOS quedan en su coste (mismo comportamiento
+    conservador que antes) -- pero si falla a medias (devuelve 1 de 2), la
+    que sí aparece usa valor real y la otra no queda en 0 silencioso.
+
+    03-Sep, segunda ronda /code-review -- 2 hallazgos más, ambos cerrados:
+      - Dos filas OPEN con el mismo conditionId (outcomes opuestos del
+        mismo mercado, o reentrada): `/positions` las devuelve como
+        entradas SEPARADAS (comparten conditionId, difieren en `asset` --
+        el token). La primera vez que se ve ese conditionId se sustituye
+        el coste por su currentValue; la SEGUNDA vez se SUMA (no se pisa)
+        -- coherente con `_sports_open_condition_ids_y_coste()`, que ya
+        suma los costes de ambas filas bajo la misma clave. No requiere
+        matchear por `asset` porque no nos importa distinguir CUÁL de las
+        dos es cada una, solo que ninguna se pierda.
+      - `posiciones`: lista ya traída por `_fetch_posiciones_wallet()`
+        (compartida con el cross-check de `_positions_value`) -- si es
+        None, se trae aquí (comportamiento previo). Antes esta función
+        siempre hacía sus 2 llamadas HTTP propias, duplicando red/IO con
+        el cross-check de cripto cada vez que sports tenía una posición
+        abierta."""
+    costes = _sports_open_condition_ids_y_coste()
+    if not costes:
+        return 0.0
+    if posiciones is None:
+        posiciones = _fetch_posiciones_wallet(wallet)
+    valores = dict(costes)  # default: coste; se sustituye/acumula con valor real si aparece
+    if posiciones is not None:
+        vistos: set = set()
+        for p in posiciones:
+            cid = p.get("conditionId")
+            if cid in costes:
+                val = float(p.get("currentValue") or 0.0)
+                if cid in vistos:
+                    valores[cid] += val       # 2ª+ posición bajo el mismo mercado: se suma
+                else:
+                    valores[cid] = val        # 1ª vez: sustituye el coste fallback
+                vistos.add(cid)
+    return sum(valores.values())
+
+
+def _cargar_sports_eventos() -> tuple[list, list]:
+    """03-Sep (`/code-review`, hallazgo real de rendimiento): lee UNA sola
+    vez los depósitos de sports y las filas de `data/sports/trades.csv`,
+    en vez de que `_sports_capital_en_free_usdc()` reabra y re-parsee
+    ambos ficheros en CADA llamada -- `_daily_real_pnl_balance()` la llama
+    una vez por fila de `balance_history.csv` (5978 filas hoy, creciendo
+    en cada trade real abierto/cerrado, y `fetch_balance_real()` corre en
+    cada apertura/resolución real) -- sin este cache, cada refresco de
+    balance reabría los 2 ficheros ~6000 veces. Mismo patrón de fondo que
+    el incidente real de `shadow_postmortem.py` (CLAUDE.md pt.18, 02-Sep):
+    crecimiento sin límite × trabajo repetido en un camino que bloquea
+    resolución de dinero real.
+
+    Devuelve (depositos, eventos): depositos = [(fecha_dt_utc, eur), ...];
+    eventos = [(ts_open, ts_close_o_None, stake, pnl, closed_bool), ...],
+    ya parseados y listos para que `_sports_capital_en_free_usdc()` solo
+    itere en memoria."""
+    depositos = []
     try:
         cfg = json.loads(SPORTS_CONFIG_PATH.read_text(encoding="utf-8"))
         for d in cfg.get("depositos", []):
-            if isinstance(d, dict) and d.get("eur") and d.get("fecha"):
-                delta[d["fecha"]] += float(d["eur"])
+            if not (isinstance(d, dict) and d.get("eur") and d.get("fecha")):
+                continue
+            try:
+                fecha_dt = datetime.strptime(d["fecha"], "%Y-%m-%d").replace(tzinfo=timezone.utc)
+            except ValueError:
+                continue
+            depositos.append((fecha_dt, float(d["eur"])))
     except Exception:
         pass
+
+    def _parse_ts(raw: str):
+        if not raw:
+            return None
+        try:
+            return datetime.fromisoformat(raw.replace("Z", "+00:00"))
+        except ValueError:
+            return None
+
+    eventos = []
     try:
         if SPORTS_TRADES_PATH.exists():
             with open(SPORTS_TRADES_PATH, encoding="utf-8") as f:
@@ -341,52 +486,109 @@ def _sports_delta_realizado_por_dia_madrid() -> dict:
                         stake = 0.0
                     if stake <= 0:
                         continue
-                    ts_open = row.get("timestamp_utc") or ""
+                    ts_open = _parse_ts(row.get("timestamp_utc") or "")
+                    if ts_open is None:
+                        continue
+                    closed = row.get("status") == "CLOSED"
+                    ts_close = _parse_ts(row.get("close_timestamp") or "") if closed else None
+                    if closed and ts_close is None:
+                        ts_close = ts_open
                     try:
-                        dia_open = (datetime.fromisoformat(ts_open.replace("Z", "+00:00"))
-                                    .astimezone(madrid).strftime("%Y-%m-%d"))
+                        pnl = float(row.get("pnl_neto_eur", 0) or 0) if closed else 0.0
                     except ValueError:
-                        continue  # sin fecha de apertura fiable: no se puede
-                        # ni debitar ni casar el crédito de cierre -- se
-                        # ignora la fila entera (mismo criterio fail-safe
-                        # que "sports en 0€" del docstring de arriba).
-
-                    # /code-review 01-Sep: débito de apertura y crédito de
-                    # cierre deben viajar SIEMPRE juntos -- si el cierre no
-                    # se puede fechar/parsear, el fallback es acreditar en
-                    # el propio día de apertura (con pnl=0 si tampoco se
-                    # puede leer) en vez de dejar el débito huérfano
-                    # (bug real encontrado por code-review: una fila CLOSED
-                    # con close_timestamp/pnl corruptos dejaba el día de
-                    # apertura permanentemente `stake` euros de más negativo).
-                    dia_cierre, pnl = None, 0.0
-                    if row.get("status") == "CLOSED":
-                        ts_raw = row.get("close_timestamp") or row.get("timestamp_utc") or ""
-                        try:
-                            dia_cierre = (datetime.fromisoformat(ts_raw.replace("Z", "+00:00"))
-                                          .astimezone(madrid).strftime("%Y-%m-%d"))
-                            pnl = float(row.get("pnl_neto_eur", 0) or 0)
-                        except (ValueError, KeyError):
-                            dia_cierre = dia_open  # fallback: casar en apertura, nunca dejarlo huérfano
-                            pnl = 0.0
-
-                    # cash sale de free_usdc hacia la posición el día que abre --
-                    # no es pérdida de cripto, se cancela aquí.
-                    delta[dia_open] -= stake
-                    if dia_cierre is not None:
-                        # redención completa (stake + pnl) vuelve a free_usdc
-                        # el día que cierra -- suma stake+pnl, no solo pnl,
-                        # para cancelar exactamente la resta de apertura
-                        # (mismo día o distinto).
-                        delta[dia_cierre] += stake + pnl
+                        pnl = 0.0
+                    eventos.append((ts_open, ts_close, stake, pnl, closed))
     except Exception:
         pass
-    return dict(delta)
+    return depositos, eventos
 
 
-def _daily_real_pnl_balance(depositos: list, total_bruto_actual: float,
+def _sports_capital_en_free_usdc(ts: datetime, depositos: list | None = None,
+                                  eventos: list | None = None) -> float:
+    """03-Sep (sustituye TRES intentos previos en la misma sesión -- ver
+    `feedback_no_mezclar_dinero_sports_cripto_03sep` en memoria nativa --
+    mismo bug de fondo repetido por cuarta vez desde 31-Ago: un trade de
+    sports se leía como ganancia/pérdida de cripto).
+
+    Petición explícita de Javi: "el dinero de sports va por un lado y el
+    de cripto por otro, los trades de sports se tienen que ajustar al
+    dinero de sports y los de cripto a cripto, no puedes estar mezclando
+    así."
+
+    Intento 1 (día anterior, cash-flow por día Madrid, ya borrado):
+    asumía que `/value` tarda "horas" en reflejar una posición nueva y
+    compensaba con un débito/crédito de UN DÍA ENTERO -- el 03-Sep
+    `/value` reflejó la posición nueva en 11 minutos, no horas, y la
+    compensación quedó sobrando (+1,05€ de más en `pnl_hoy_real`).
+
+    Intento 2 (misma sesión, ~20 min después): `deposits + realizado -
+    stakes_abiertos` restado de `total_bruto` (free_usdc+positions_value)
+    -- si `/value` SÍ se actualiza rápido, `positions_value` ya refleja
+    el stake nuevo, y sumarlo (signo `+stakes_abiertos`) lo contaba dos
+    veces sobre esa misma base.
+
+    Intento 3 (misma sesión, ~15 min después): cambiar la base a
+    `free_usdc` (sin lag de API, ambigüedad cero) pero SIN el término de
+    stakes abiertos -- error en la dirección contraria: cuando sports
+    ABRE una posición, el stake sale de `free_usdc` de verdad (movimiento
+    de caja real), y sin restar ese movimiento aparte, esa salida de caja
+    se atribuía entera a cripto (-1,05€ de más).
+
+    Fix real, verificado con aritmética completa contra los 3 trades
+    reales de cripto del día (-3,33€) antes de aceptarlo: la caja de
+    sports dentro de `free_usdc` en el instante `ts` es su equity total
+    (depósitos + PnL realizado de CERRADOS) MENOS lo que tiene
+    ACTUALMENTE inmovilizado en posiciones abiertas (ese dinero ya no
+    está en `free_usdc`, está en `positions_value`, y no hace falta
+    tocar ese lado para nada -- por eso no hay término de `positions_
+    value` en ningún sitio de esta función, a diferencia de los intentos
+    1 y 2):
+
+        sports_en_free_usdc(ts) = depósitos(ts) + realizado_cerrados(ts)
+                                   - stakes_abiertos_en(ts)
+
+    Caveat aceptado y acotado (no un lag de API, estructural): la
+    revalorización NO REALIZADA de una posición de sports abierta (su
+    `positions_value` real puede diferir un poco de su stake por
+    spread/movimiento de precio) no se atribuye a nadie hasta que la
+    posición cierra -- acotado por el stake máximo de sports (2€) y el
+    nº de posiciones concurrentes (normalmente 1-2), verificado hoy en
+    ~1 céntimo por posición, no ~1€ como los intentos anteriores.
+
+    Fail-safe: cualquier error (ficheros de sports ausentes/corruptos)
+    devuelve 0.0 -- sin este ajuste el comportamiento es "sports en 0€",
+    igual que un sports inactivo.
+
+    `depositos`/`eventos` opcionales (`_cargar_sports_eventos()`, ver esa
+    función) -- si no se pasan, se cargan aquí una sola vez para esta
+    llamada suelta; el llamante que itera muchos `ts` (`_daily_real_pnl_
+    balance()`) los carga UNA vez fuera del bucle y los pasa siempre,
+    para no reabrir los ficheros por cada fila de `balance_history.csv`."""
+    if depositos is None or eventos is None:
+        depositos, eventos = _cargar_sports_eventos()
+
+    total = 0.0
+    for fecha_dt, eur in depositos:
+        if fecha_dt <= ts:
+            total += eur
+
+    for ts_open, ts_close, stake, pnl, closed in eventos:
+        if ts_open > ts:
+            continue  # todavía no había abierto en ts
+        if closed and ts_close is not None and ts_close <= ts:
+            # ya realizado en ts -- suma el PnL (el stake ya volvió a
+            # free_usdc con la redención, no se resta aparte)
+            total += pnl
+        else:
+            total -= stake  # seguía abierta en ts (o cerró después de ts)
+            # -- ese stake ya había salido de free_usdc, no cuenta como
+            # caja de sports todavía disponible
+    return total
+
+
+def _daily_real_pnl_balance(depositos: list, free_usdc_bruto_actual: float,
                             ts_actual: str) -> tuple[list, float, float]:
-    """PnL real por día desde balance_history.csv (delta de `total_bruto`
+    """PnL real por día desde balance_history.csv (delta de `free_usdc`
     on-chain por día MADRID) -- reemplaza a _daily_real_pnl() (31-Jul, bug diagnosticado
     en sesión: comparado día a día contra balance_history.csv, el método viejo
     de actividad on-chain (buy/redeem) desviaba hasta -9.31$/+7.42$ en un solo
@@ -397,26 +599,40 @@ def _daily_real_pnl_balance(depositos: list, total_bruto_actual: float,
     contiguos. Además el método viejo tenía `limit=500` sin paginación
     (riesgo de truncar actividad antigua en silencio) y asumía que TODO
     evento TRADE es una compra (frágil si algún día hay ventas reales, ej.
-    Smart Exit). Esta versión usa la MISMA fuente que ya es "verdad de
-    suelo" para real_total/real_pnl -- el delta de balance total incluye
-    de forma natural el mark-to-market de posiciones abiertas, así que no
-    depende de que compra y redención caigan el mismo día.
+    Smart Exit).
 
     Día MADRID (no UTC) a propósito: es el mismo criterio que usa
     dashboard_server.py para 'pnl_hoy' (el lado modelo/trades.csv) -- antes
     los dos lados del dashboard usaban fronteras de día distintas (UTC aquí,
     Madrid allá), comparando cifras de "hoy" que en realidad correspondían
     a ventanas de tiempo distintas.
+
+    03-Sep: usa `free_usdc` (caja líquida real, sin ambigüedad de API) en
+    vez de `total_bruto`/`total` (que incluyen `positions_value`, sujeto al
+    lag de `/value` que causó 3 incidentes reales de dinero mezclando
+    cripto/sports -- 31-Ago, 01-Sep, 03-Sep, ver `_sports_capital_en_
+    free_usdc()`). Cada snapshot se neta de sports ANTES de bucketear por
+    día -- ya no existe un ajuste "por día" separado para sports, así una
+    posición de sports abriéndose/cerrándose nunca puede aparecer como
+    ganancia o pérdida de cripto. `positions_value` (de cripto o de
+    sports) queda fuera de este cálculo por completo -- ver caveat acotado
+    en el docstring de `_sports_capital_en_free_usdc()`.
     """
     from collections import defaultdict
     from zoneinfo import ZoneInfo
 
-    # 31-Ago: total_bruto (wallet compartida cruda, sin restar sports) en vez
-    # de `total` (neto) -- ver docstring de _sports_delta_realizado_por_dia_
-    # madrid(), evita que un stake de sports ABRIÉNDOSE/CERRÁNDOSE se lea
-    # como ganancia/pérdida de cripto. Fallback a `total` en filas anteriores
-    # a 27-Ago (columna no existía, pero tampoco existía la resta de sports
-    # todavía -- total==total_bruto en ese periodo).
+    # `free_usdc` en balance_history.csv ya sale NETO de la resta de
+    # `capital_ajeno_en_wallet_compartida()` (ver fetch_balance_real() --
+    # `free` se muta ANTES de escribirse) -- no sirve como base aquí,
+    # restaríamos sports dos veces con dos fórmulas distintas. `total_bruto`
+    # y `positions_value` sí quedan crudos (nunca se tocan), así que se
+    # reconstruye el free_usdc CRUDO como total_bruto - positions_value.
+    #
+    # 03-Sep (`/code-review`, hallazgo real de rendimiento): depósitos y
+    # trades de sports se cargan UNA sola vez aquí, no una vez POR FILA de
+    # balance_history.csv (5978 filas hoy, creciendo en cada trade real) --
+    # ver `_cargar_sports_eventos()`.
+    sports_dep, sports_ev = _cargar_sports_eventos()
     filas = []
     if HIST_PATH.exists():
         with open(HIST_PATH, encoding="utf-8") as f:
@@ -424,13 +640,16 @@ def _daily_real_pnl_balance(depositos: list, total_bruto_actual: float,
                 try:
                     dt = datetime.fromisoformat(r["ts"].replace("Z", "+00:00"))
                     bruto_raw = r.get("total_bruto")
-                    total = float(bruto_raw) if bruto_raw not in (None, "") else float(r["total"])
+                    total_bruto_fila = float(bruto_raw) if bruto_raw not in (None, "") else float(r["total"])
+                    free_bruto = total_bruto_fila - float(r["positions_value"])
                 except (ValueError, KeyError):
                     continue
-                filas.append((dt, total))
+                filas.append((dt, free_bruto - _sports_capital_en_free_usdc(dt, sports_dep, sports_ev)))
     # snapshot actual (aún no escrito en el CSV -- se añade tras esta llamada)
     try:
-        filas.append((datetime.fromisoformat(ts_actual), total_bruto_actual))
+        dt_actual = datetime.fromisoformat(ts_actual)
+        filas.append((dt_actual,
+                      free_usdc_bruto_actual - _sports_capital_en_free_usdc(dt_actual, sports_dep, sports_ev)))
     except ValueError:
         pass
     if not filas:
@@ -441,9 +660,8 @@ def _daily_real_pnl_balance(depositos: list, total_bruto_actual: float,
     dep_por_dia = defaultdict(float)
     for d in depositos:
         dep_por_dia[d.get("fecha", "")] += float(d.get("eur") or 0)
-    sports_por_dia = _sports_delta_realizado_por_dia_madrid()
 
-    # último snapshot de cada día Madrid = "cierre" de ese día
+    # último snapshot de cada día Madrid = "cierre" de ese día (ya neto de sports)
     cierre_por_dia = {}
     for dt, total in filas:
         dia = dt.astimezone(madrid).strftime("%Y-%m-%d")
@@ -454,7 +672,7 @@ def _daily_real_pnl_balance(depositos: list, total_bruto_actual: float,
     prev = None
     for dia in dias:
         if prev is not None:
-            ajeno_dia = dep_por_dia.get(dia, 0.0) + sports_por_dia.get(dia, 0.0)
+            ajeno_dia = dep_por_dia.get(dia, 0.0)  # solo depósitos PROPIOS de cripto -- sports ya se netó por snapshot arriba
             delta = cierre_por_dia[dia] - prev - ajeno_dia
             daily_list.append({"date": dia, "pnl": round(delta, 2)})
         prev = cierre_por_dia[dia]
@@ -522,7 +740,11 @@ def fetch_balance_real() -> dict:
     if not wallet:
         wallet = os.getenv("POLY_DEPOSIT_WALLET")
     free = _free_usdc(client)
-    pos = _positions_value(wallet)
+    free_bruto = free  # 03-Sep: capturado ANTES de restar sports (igual que
+    # total_bruto abajo) -- lo necesita _daily_real_pnl_balance() para
+    # netear con su propia fórmula (_sports_capital_en_free_usdc), sin
+    # heredar la resta de capital_ajeno de más abajo y contar dos veces.
+    pos, posiciones_wallet = _positions_value(wallet)
     total = round(free + pos, 4)
     pusd_onchain = _saldo_pusd_onchain()
     pusd_no_reflejado = (round(pusd_onchain - free, 4)
@@ -535,19 +757,40 @@ def fetch_balance_real() -> dict:
 
     # 27-Ago (bug real, encontrado por Javi al ver +5€ de sports colados en
     # el dashboard de cripto): esta wallet on-chain es COMPARTIDA con sports
-    # (mismo mecanismo ya documentado en live_stake._capital_ajeno_en_wallet_
-    # compartida, usado ahí para el bankroll operativo de Kelly/circuit
-    # breaker -- pero live_balance.py, la fuente que alimenta dashboard/
-    # /status/pnl_real, seguía usando el `total` crudo sin esta resta).
-    # Mismo criterio: SOLO sports (nunca weather, ver docstring del import).
+    # (mismo mecanismo usado para el bankroll operativo de Kelly/circuit
+    # breaker de cripto vía live_stake.bankroll_actual(), que lee `total`
+    # de este mismo snapshot -- no solo el dashboard). Mismo criterio: SOLO
+    # sports (nunca weather, ver docstring de `_sports_positions_value_
+    # actual`). 03-Sep noche: sustituido `live_stake._capital_ajeno_en_
+    # wallet_compartida()` (bug real, doble resta del stake abierto + coste
+    # en vez de valor de mercado -- ver docstring de
+    # `_sports_positions_value_actual`) por las dos piezas YA correctas y
+    # ya revisadas por separado: caja exacta (`_sports_capital_en_free_
+    # usdc()`, usada hasta hoy solo en la reconstrucción histórica) y
+    # valor de mercado real de posiciones (`_sports_positions_value_
+    # actual()`, nueva).
     try:
-        from live_stake import _capital_ajeno_en_wallet_compartida
-        capital_ajeno = _capital_ajeno_en_wallet_compartida()
+        capital_ajeno_cash = _sports_capital_en_free_usdc(datetime.now(timezone.utc))
     except Exception:
-        capital_ajeno = 0.0
-    if capital_ajeno:
-        free = round(free - capital_ajeno, 4)
-        total = round(total - capital_ajeno, 4)
+        capital_ajeno_cash = 0.0
+    try:
+        capital_ajeno_pos = _sports_positions_value_actual(wallet, posiciones_wallet)
+    except Exception:
+        capital_ajeno_pos = 0.0
+    if capital_ajeno_cash or capital_ajeno_pos:
+        free = round(free - capital_ajeno_cash, 4)
+        # `pos` NO se toca aquí a propósito (/code-review 03-Sep, hallazgo
+        # real): `_daily_real_pnl_balance()` reconstruye `free_bruto =
+        # total_bruto_fila - positions_value` asumiendo que ambos son
+        # crudos (comentario de `total_bruto` arriba) -- restar sports de
+        # `pos` también rompería esa reconstrucción y reintroduciría el
+        # mismo bug de mezcla sports/cripto por la puerta de atrás
+        # (`pnl_hoy_real` volvería a oscilar con el mark-to-market de
+        # sports). `total` sí se corrige (lo que de verdad alimenta
+        # `bankroll_actual()`/Kelly/circuit breaker), restando el
+        # componente de posiciones aparte, sin persistir esa resta en
+        # `pos`/`positions_value`.
+        total = round(total - capital_ajeno_cash - capital_ajeno_pos, 4)
 
     ts = datetime.now(timezone.utc).isoformat(timespec="seconds")
     depositos = _cargar_depositos_config()
@@ -556,7 +799,7 @@ def fetch_balance_real() -> dict:
     # (buy/redeem) -- ver docstring de _daily_real_pnl_balance, bug real
     # diagnosticado con Javi (desviaciones de hasta 9$/día).
     try:
-        daily_real, pnl_hoy_real, pnl_7d_real = _daily_real_pnl_balance(depositos, total_bruto, ts)
+        daily_real, pnl_hoy_real, pnl_7d_real = _daily_real_pnl_balance(depositos, free_bruto, ts)
     except Exception:
         daily_real, pnl_hoy_real, pnl_7d_real = [], None, None
     deposito_total = (sum(float(d["eur"]) for d in depositos)

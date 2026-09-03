@@ -2893,16 +2893,27 @@ def main():
     # Params con todos los resultados (histórico COMPLETO -- generar_
     # performance()/performance.csv deben reflejar la verdad de suelo
     # completa, no la vista TWAP-safe usada para IC/filtros/patrones)
+    #
+    # 03-Sep (rediseño de memoria, paso 1 -- ver project_incidente_swap_
+    # pipeline_lento_02sep): esta función construía una copia NUEVA del
+    # histórico COMPLETO (`{**r, "causa_perdida": ...}` por cada una de las
+    # ~373k filas) mientras `resultados` (el original) y `resultados_twap_
+    # safe` seguían vivos a la vez -- 3 estructuras de tamaño ~histórico
+    # completo simultáneas era el pico real de RSS que dispara swap.
+    # Mutar en sitio y devolver la MISMA lista elimina una de las tres sin
+    # cambiar ni un solo valor calculado (`resultados` no se usa en su
+    # forma sin `causa_perdida` en ningún otro sitio de este módulo,
+    # verificado -- el único consumidor posterior, `_escribir_state()`,
+    # solo lee campos numéricos concretos, una clave extra no le afecta).
     def _con_causa(filas):
-        out = []
         for r in filas:
             if int(r.get("acierto", 1)) == 0:
                 clave_pred = (r["strategy"], r["market_id"], r.get("decision", ""))
                 pred  = pred_index.get(clave_pred)
-                out.append({**r, "causa_perdida": clasificar_causa(r, pred)})
+                r["causa_perdida"] = clasificar_causa(r, pred)
             else:
-                out.append({**r, "causa_perdida": ""})
-        return out
+                r["causa_perdida"] = ""
+        return filas
 
     todos_con_causa = _con_causa(resultados)
     # 11-Ago (/code-review, hallazgo real): calcular_params (IC/filtros/

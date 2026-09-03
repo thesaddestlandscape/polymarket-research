@@ -74,12 +74,40 @@ log "=== Proceso MANTENIMIENTO arrancado (resolve/postmortem/resumen/git, objeti
 CICLO=0
 LAST_GIT=0
 GIT_BATCH_S=300
+LAST_POSTMORTEM=0
+POSTMORTEM_MIN_INTERVAL_S=300  # 03-Sep (rediseño de memoria, paso 2 -- ver
+# project_incidente_swap_pipeline_lento_02sep / feedback_no_mezclar... no,
+# ver la memoria del incidente de swap): shadow_postmortem.py sostiene
+# ~2,7GB de RSS mientras procesa el histórico completo (~373k filas,
+# necesario para no perder rigor estadístico -- nunca se recorta la
+# ventana). Antes se re-encadenaba SIN NINGÚN hueco (siguiente ciclo
+# arrancaba en cuanto terminaba el anterior), así que ese pico de memoria
+# estaba presente casi de forma continua, chocando con cualquier otro
+# proceso pesado del sistema (el mismo día, un `git repack` programado).
+# Los patrones causales/IC no necesitan actualizarse más rápido que cada
+# pocos minutos para que las decisiones de trading sigan bien informadas
+# -- limitar el ARRANQUE de postmortem a como mucho una vez cada
+# POSTMORTEM_MIN_INTERVAL_S da tiempo real a que el sistema libere RAM/swap
+# entre ejecuciones, sin recortar ni un solo dato del cálculo en sí cuando
+# SÍ corre. Mismo valor que GIT_BATCH_S (300s) a propósito -- deja margen
+# amplio bajo el umbral de 900s de watchdog_fast.sh (MAX_SILENCE_S, que
+# reinicia el loop si strategy_params.json no se actualiza) incluso si una
+# ejecución individual tarda varios minutos bajo carga. shadow_resolve.py
+# (cierra trades reales) sigue corriendo TODOS los ciclos sin throttle --
+# esto solo afecta al aprendizaje causal, nunca a la resolución de dinero
+# real.
 while true; do
     CICLO=$((CICLO + 1))
     _t_ciclo0=$(now_ms)
 
     _t0=$(now_ms); $PYTHON "$REPO_DIR/shadow_resolve.py"     >> "$LOG" 2>&1 || true; log "  ⏱ shadow_resolve.py: $(($(now_ms) - _t0))ms"
-    _t0=$(now_ms); $PYTHON "$REPO_DIR/shadow_postmortem.py"  >> "$LOG" 2>&1 || true; log "  ⏱ shadow_postmortem.py: $(($(now_ms) - _t0))ms"
+    NOW_PM=$(date +%s)
+    if [ $((NOW_PM - LAST_POSTMORTEM)) -ge $POSTMORTEM_MIN_INTERVAL_S ]; then
+        LAST_POSTMORTEM=$NOW_PM
+        _t0=$(now_ms); $PYTHON "$REPO_DIR/shadow_postmortem.py"  >> "$LOG" 2>&1 || true; log "  ⏱ shadow_postmortem.py: $(($(now_ms) - _t0))ms"
+    else
+        log "  ⏭ shadow_postmortem.py: saltado (último hace $((NOW_PM - LAST_POSTMORTEM))s < ${POSTMORTEM_MIN_INTERVAL_S}s)"
+    fi
     _t0=$(now_ms); $PYTHON "$REPO_DIR/shadow_resumen.py"     >> "$LOG" 2>&1 || true; log "  ⏱ shadow_resumen.py: $(($(now_ms) - _t0))ms"
 
     NOW=$(date +%s)

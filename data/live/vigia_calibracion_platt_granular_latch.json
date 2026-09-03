@@ -1130,5 +1130,17 @@
   "LIQUIDACIONES_60M#SOL#60min": {
     "n": 214,
     "confirmado": true
+  },
+  "GBM_LATE_5M#BNB": {
+    "n": 235,
+    "confirmado": false
+  },
+  "GBM_LATE_5M#BNB#5min": {
+    "n": 235,
+    "confirmado": false
+  },
+  "UPDOWN_GBM#BTC#60min": {
+    "n": 208,
+    "confirmado": false
   }
 }

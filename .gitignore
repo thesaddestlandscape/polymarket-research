@@ -75,3 +75,17 @@ data/prices/kalshi_btchourly_*.csv
 # pérdida real (results.csv ya captura el resumen persistente). Sin backup
 # dedicado necesario.
 data/shadow/predictions_*.csv
+
+# 03-Sep (bug real encontrado en el barrido de esta sesión): el commit
+# `6bc3ceb39a` (02-Sep) decía en su mensaje "gitignorado hacia delante"
+# pero solo hizo `git rm`/vació el fichero -- NUNCA añadió la entrada real
+# a este fichero. sports_spread_observer_fase0.py siguió creciendo el CSV
+# del día (304MB/1,24M filas y subiendo, ~19.775 filas/ciclo, sin
+# rotación) TODAVÍA TRACKEADO por git desde entonces -- mismo patrón
+# exacto que results.csv/predictions_*.csv, y probablemente la causa real
+# de un "Out of diskspace" durante el `git repack` de esta misma mañana
+# (crecimiento sin límite compitiendo por el margen de disco). Mismo
+# criterio: log intra-día de alta frecuencia, sin backup dedicado
+# necesario salvo que algún análisis empiece a depender de su histórico
+# completo.
+data/shadow/sports_spread_fase0_*.csv

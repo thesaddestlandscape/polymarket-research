@@ -2461,11 +2461,6 @@ def _ejecutar_orden_polymarket(market_id: str, direction: str,
             # explícito en contexto["tupla_sintetica"] en vez de reconstruirlo
             # aquí a ciegas (fail-closed: sin el dato exacto, no se adivina).
             tupla_str_gate = ctx_gate.get("tupla_sintetica")
-            if tupla_str_gate is None or tupla_str_gate not in pares_ok_gate:
-                gate_bp_post = None  # no whitelisteada -- mismo criterio de "solo aplica a tuplas ya live"
-            else:
-                gate_bp_post = _modulo_externo.evaluar_para_recheck(
-                    ctx_gate.get("subtype", ""), direction, py_actual, ctx_gate)
         else:
             tupla_str_gate = f"{ctx_gate.get('strategy', '')}#{ctx_gate.get('subtype', '')}#{direction}"
             # /code-review medium (18-Ago, hallazgo real #2): tiene_datos_propios()
@@ -2477,10 +2472,42 @@ def _ejecutar_orden_polymarket(market_id: str, direction: str,
             # tiene_alguna_fuente_evaluable() distingue los dos.
             if not _gbp.tiene_alguna_fuente_evaluable(tupla_str_gate):
                 tupla_str_gate = None
-            gate_bp_post = (_gbp.evaluar(tupla_str_gate, py_actual)
-                             if tupla_str_gate is not None and tupla_str_gate in pares_ok_gate
-                             else None)
+
+        # 03-Sep (/code-review, hallazgo real): despacho ÚNICO al módulo de
+        # gate correcto (externo tipo WALLET_MIRROR vía evaluar_para_recheck,
+        # o gate_bucket_propio genérico vía evaluar) -- antes el chequeo
+        # post-requote de una sola lectura (aquí abajo) y el rechequeo
+        # multi-lectura de antes de firmar (más abajo en esta misma función)
+        # tenían cada uno su propia copia de este if/else, con nombres de
+        # variable ya divergentes (py_actual vs _py_fresh). Exactamente el
+        # patrón de duplicación que el propio historial del proyecto señala
+        # como el que acaba causando discrepancias de dinero real no
+        # detectadas (ver CLAUDE.md: bug de dedup de vigia_sigma_patrones,
+        # bugs de filtros_causales) -- un cambio futuro en el despacho
+        # (nueva entrada en _GATES_EXTERNOS_POR_ESTRATEGIA, cambio de firma
+        # de evaluar_para_recheck) ahora solo se toca en un sitio.
+        def _gate_veredicto(py: float) -> dict:
+            if _modulo_externo is not None:
+                return _modulo_externo.evaluar_para_recheck(
+                    ctx_gate.get("subtype", ""), direction, py, ctx_gate)
+            return _gbp.evaluar(tupla_str_gate, py)
+
+        gate_bp_post = (_gate_veredicto(py_actual)
+                         if tupla_str_gate is not None and tupla_str_gate in pares_ok_gate
+                         else None)
         if gate_bp_post is not None:
+            # 03-Sep (/code-review, aclaración de intención): este chequeo
+            # (una lectura, aquí, ANTES del lock TOCTOU/cliente CLOB) es un
+            # filtro BARATO de salida rápida -- descarta señales claramente
+            # fuera de zona antes de pagar el coste de adquirir el lock
+            # compartido por todos los procesos de dinero real y construir
+            # el cliente CLOB. NO es la protección autoritativa: esa es el
+            # rechequeo multi-lectura de justo antes de firmar la orden
+            # (_gate_veredicto() dentro del bucle más abajo en esta misma
+            # función, tras adquirir el lock) -- ese es el que de verdad
+            # tiene que sobrevivir para que la orden salga. Los dos
+            # comparten el mismo `_gate_veredicto()` (03-Sep, ver arriba)
+            # así que no pueden divergir en CÓMO deciden, solo en CUÁNDO.
             # Límite aceptado (/code-review, 18-Ago): py_actual usa el
             # mejor ask del snapshot pre-trade (`precio`, ya requoteado si
             # hubo edge_dir), no el precio medio de fill real confirmado
@@ -2537,6 +2564,128 @@ def _ejecutar_orden_polymarket(market_id: str, direction: str,
                              f"tupla={tupla_str_generico}",
                 }
 
+        # 03-Sep (/code-review, hallazgo real -- rechequeo movido FUERA del
+        # lock): este rechequeo multi-lectura hace I/O de red
+        # (_consultar_profundidad_libro) + sleeps entre lecturas -- hacerlo
+        # bajo TRADES_LOCK_PATH (como en un intento anterior del mismo día)
+        # retenía el lock exclusivo compartido por TODOS los procesos de
+        # dinero real (main() + 6+ ejecutores de baja latencia) 0.5-2s+ por
+        # orden, bloqueando a cualquier OTRO proceso que quisiera disparar
+        # una señal distinta en esa ventana -- justo lo contrario de lo que
+        # los ejecutores de baja latencia existen para conseguir. El
+        # rechequeo no necesita el lock (solo lee el libro público, no
+        # escribe ni reserva nada) -- se hace aquí, ANTES de tocar el lock;
+        # solo se entra en la sección con lock (dedup + construcción/envío
+        # de la orden, más abajo) una vez ya confirmado. El hueco residual
+        # entre la última lectura fresca y el disparo real vuelve a ser del
+        # orden de la adquisición del lock + dedup + cliente CLOB (~270ms
+        # documentados) -- el mismo margen que ya existía ANTES de que se
+        # añadiera este mecanismo de rechequeo, no se reintroduce el bug
+        # original (que era NO reconfirmar en absoluto), solo se evita
+        # retener el lock durante la parte lenta. Solo aplica cuando había
+        # un gate propio evaluable para esta tupla (tupla_str_gate no es
+        # None) -- para estrategias sin gate propio, no hay nada que
+        # reconfirmar (mismo comportamiento fail-soft que gate_bp_post).
+        # Código de seguridad live -- no minimizar.
+        if tupla_str_gate is not None and tupla_str_gate in pares_ok_gate:
+            _n_rechequeos = _cargar_config().get("riesgo", {}).get("n_rechequeos_gate_bucket", 2)
+            _pausa_rechequeo_s = 0.25
+            for _intento in range(1, _n_rechequeos + 1):
+                if _intento > 1:
+                    time.sleep(_pausa_rechequeo_s)
+                _depth_fresh = _consultar_profundidad_libro(None, token_id, precio, stake_eur)
+                _ask_fresh = _depth_fresh.get("mejor_ask") if _depth_fresh.get("ok") else None
+                if _ask_fresh is None:
+                    log(f"  ⛔ Re-chequeo gate {_intento}/{_n_rechequeos}: sin datos de "
+                        f"libro frescos — no se ejecuta (fail-closed)")
+                    _registrar_snapshot_libro("abort_gate_bucket_rechequeo", market_id, direction,
+                                              precio_plan, stake_eur, depth, contexto)
+                    return {
+                        "ok": False, "no_fill": True, "gate_bucket_rechequeo": True,
+                        "order_id": None, "entry_price": entry_price,
+                        "fee_eur": 0.0, "error": "re-chequeo gate: sin datos de libro frescos",
+                    }
+                _ask_fresh = float(_ask_fresh)
+                _py_fresh = _ask_fresh if direction == "BUY_YES" else round(1.0 - _ask_fresh, 6)
+                _gate_fresh = _gate_veredicto(_py_fresh)
+                if _gate_fresh["veredicto"] != "bueno_confirmado":
+                    log(f"  ⛔ Re-chequeo gate {_intento}/{_n_rechequeos} ({tupla_str_gate}): "
+                        f"ask_fresco={_ask_fresh:.4f} veredicto={_gate_fresh['veredicto']} "
+                        f"(precio en movimiento, no bueno_confirmado) — no se ejecuta")
+                    _registrar_snapshot_libro("abort_gate_bucket_rechequeo", market_id, direction,
+                                              precio_plan, stake_eur, depth, contexto)
+                    return {
+                        "ok": False, "no_fill": True, "gate_bucket_rechequeo": True,
+                        "order_id": None, "entry_price": entry_price,
+                        "fee_eur": 0.0,
+                        "error": f"re-chequeo gate {_intento}/{_n_rechequeos} ({tupla_str_gate}): "
+                                 f"ask_fresco={_ask_fresh:.4f} veredicto={_gate_fresh['veredicto']}",
+                    }
+                # último ask fresco confirmado pasa a ser el precio vivo
+                # para el resto del flujo (FOK) -- el dato más reciente
+                # posible antes de firmar la orden. techo_verificado se
+                # recalcula junto con precio (/code-review 03-Sep, hallazgo
+                # real: _techo_precio_fok mezclaba este precio fresco con
+                # un techo_verificado calculado contra el precio VIEJO de
+                # antes del rechequeo, banda desalineada del precio que de
+                # verdad se acaba de confirmar) -- mismo criterio que su
+                # cálculo original en línea ~2351 (precio × 1.05).
+                precio = _ask_fresh
+                techo_verificado = round(precio * 1.05, 6)
+                # /code-review 03-Sep, segundo hallazgo real: edge_vivo
+                # (calculado UNA vez en _decidir_requote, línea ~2392)
+                # no se recalculaba aquí -- _techo_precio_fok(precio,
+                # edge_vivo, ...) podía ensanchar el techo del FOK con un
+                # margen de edge que ya no reflejaba el precio recién
+                # confirmado (edge_vivo favorable de antes + precio
+                # empeorado ahora = techo inflado sin que el edge real
+                # lo respalde). Recalculado con la MISMA fórmula que
+                # _decidir_requote (deterioro = ask - precio_plan, nunca
+                # premia una mejora, solo penaliza empeoramiento) -- y si
+                # el edge recalculado ya no llega a REQUOTE_EDGE_MIN, se
+                # aborta aquí igual que abortaría _decidir_requote con un
+                # snapshot inicial tan malo.
+                if edge_dir is not None:
+                    _deterioro_fresh = round(precio - precio_plan, 4)
+                    # /code-review 03-Sep, tercer hallazgo real: solo se
+                    # penalizaba empeoramiento (_deterioro_fresh>0) --
+                    # una caída GRANDE y favorable del ask entre lecturas
+                    # (el patrón "regalo" que _decidir_requote ya veta
+                    # explícitamente, REQUOTE_DIVERGENCIA_MAX, por la
+                    # pérdida real de -1.63€ en XRP 03-Jul: un ask muy
+                    # por debajo del plan normalmente significa modelo
+                    # desfasado, no una oportunidad real) no disparaba
+                    # nada aquí porque edge_vivo solo mejora o se queda
+                    # igual. Reaplicar el mismo veto de divergencia en
+                    # ambas direcciones, no solo el lado de empeoramiento.
+                    if abs(_deterioro_fresh) > REQUOTE_DIVERGENCIA_MAX:
+                        log(f"  ⛔ Re-chequeo gate {_intento}/{_n_rechequeos}: divergencia "
+                            f"plan↔libro en la reconfirmación ({_deterioro_fresh:+.4f}) > "
+                            f"{REQUOTE_DIVERGENCIA_MAX} — no se ejecuta")
+                        _registrar_snapshot_libro("abort_gate_bucket_rechequeo", market_id, direction,
+                                                  precio_plan, stake_eur, depth, contexto)
+                        return {
+                            "ok": False, "no_fill": True, "divergencia_rechequeo": True,
+                            "order_id": None, "entry_price": entry_price,
+                            "fee_eur": 0.0,
+                            "error": f"re-chequeo gate {_intento}/{_n_rechequeos}: divergencia "
+                                     f"{_deterioro_fresh:+.4f} > {REQUOTE_DIVERGENCIA_MAX}",
+                        }
+                    edge_vivo = round(edge_dir - max(0.0, _deterioro_fresh), 4)
+                    if edge_vivo < REQUOTE_EDGE_MIN:
+                        log(f"  ⛔ Re-chequeo gate {_intento}/{_n_rechequeos}: edge "
+                            f"evaporado en la reconfirmación ({edge_dir:+.4f} → "
+                            f"{edge_vivo:+.4f}) < {REQUOTE_EDGE_MIN} — no se ejecuta")
+                        _registrar_snapshot_libro("abort_gate_bucket_rechequeo", market_id, direction,
+                                                  precio_plan, stake_eur, depth, contexto)
+                        return {
+                            "ok": False, "no_fill": True, "edge_evaporado": True,
+                            "order_id": None, "entry_price": entry_price,
+                            "fee_eur": 0.0,
+                            "error": f"re-chequeo gate {_intento}/{_n_rechequeos}: edge "
+                                     f"evaporado {edge_dir:+.4f} → {edge_vivo:+.4f}",
+                        }
+
         # Estimación Kyle (10-Jul, solo logging — ver _estimar_slip_kyle):
         # ratio del snapshot de profundidad YA calculado arriba, antes del
         # requote. No cambia ninguna decisión, se compara con slip_real real
@@ -2552,12 +2701,16 @@ def _ejecutar_orden_polymarket(market_id: str, direction: str,
         # cross-proceso puro. El lock de _registrar_trade (TRADES_LOCK_PATH,
         # 16-Jul) solo protegía el append en sí, no esta ventana de decisión.
         # Se reusa el mismo fichero de lock: se adquiere aquí, en el punto de
-        # no retorno (vetos/requote ya pasados), se re-chequea ya_operados_hoy
-        # en caliente bajo el lock, y se libera solo tras colocar la orden --
-        # serializa la ejecución real entre TODOS los procesos del sistema
-        # (barato: unas pocas órdenes reales por hora, nunca contended en la
-        # práctica) sin rediseñar el resto del pipeline. Código de seguridad
-        # live -- no minimizar/quitar este bloque.
+        # no retorno (vetos/requote/rechequeo de gate ya pasados), se
+        # re-chequea ya_operados_hoy en caliente bajo el lock, y se libera
+        # solo tras colocar la orden -- serializa la ejecución real entre
+        # TODOS los procesos del sistema. Ya NO incluye el rechequeo de gate
+        # (movido arriba, fuera del lock, 03-Sep, ver comentario de esa
+        # sección) -- lo que queda bajo lock es solo dedup + cliente CLOB +
+        # construcción/envío de la orden, rápido de verdad (barato: unas
+        # pocas órdenes reales por hora, nunca contended en la práctica)
+        # sin rediseñar el resto del pipeline. Código de seguridad live --
+        # no minimizar/quitar este bloque.
         _lock_f = open(TRADES_LOCK_PATH, "w")
         fcntl.flock(_lock_f, fcntl.LOCK_EX)
         if market_id in _ya_operados_hoy():
@@ -2570,9 +2723,18 @@ def _ejecutar_orden_polymarket(market_id: str, direction: str,
                 "fee_eur": 0.0,
                 "error": "market_id ya operado por otro proceso (race cerrada bajo lock)",
             }
-        client = _get_clob_client()  # recién aquí: vetos/requote ya pasaron, orden real inminente
-        _marcar_orden_en_curso(market_id, direction)
+        # 03-Sep (/code-review, hallazgo real): TODO lo que sigue -- cliente
+        # CLOB, marcado de orden en curso y construcción/envío de la orden --
+        # vive bajo UN solo try/finally que libera el lock TOCTOU pase lo
+        # que pase. Una sola excepción sin cubrir (config leído a mitad de
+        # escritura, fallo transitorio de red/auth del cliente CLOB) dejaba
+        # el lock bloqueado para SIEMPRE (hasta reiniciar el proceso),
+        # deadlock total de todo el trading real del sistema. Código de
+        # seguridad live -- no minimizar.
         try:
+            client = _get_clob_client()  # recién aquí: vetos/requote/rechequeo ya pasaron, orden real inminente
+            _marcar_orden_en_curso(market_id, direction)
+
             # py_clob_client_v2 calcula makerAmount/takerAmount dividiendo
             # amount/price en float puro y redondeando después — para ciertas
             # combinaciones concretas el resultado conserva más decimales de

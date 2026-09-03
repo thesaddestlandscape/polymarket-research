@@ -397,7 +397,27 @@ async def _correr_una_conexion(wallets: dict, vistos: dict) -> dict:
                                 # validado A FAVOR de esta dirección (solo
                                 # SEGUIR llega aquí, edge_pp>0 por construcción).
                                 edge_dir = info["edge_pp"] / 100.0
-                                resultado = lt._ejecutar_orden_polymarket(
+                                # 03-Sep (/code-review, hallazgo real, verificado
+                                # con subagente independiente): _ejecutar_orden_
+                                # polymarket() es una función SÍNCRONA (bloqueante
+                                # -- cliente CLOB, y desde hoy el rechequeo
+                                # multi-lectura del gate con time.sleep()+
+                                # requests.get(timeout=10) por intento) llamada
+                                # aquí a pelo dentro de una coroutine que también
+                                # mantiene vivo el ping del websocket
+                                # (_mantener_ping) y procesa mensajes entrantes
+                                # (await ws.recv()) -- sin envolver en un hilo,
+                                # cada orden real congela TODO el event loop
+                                # varios segundos, exactamente el mismo problema
+                                # que motivó usar asyncio.to_thread() en
+                                # sports_wallet_mirror_sniper.py el mismo día
+                                # (ver ese fichero) pero que no se aplicó aquí.
+                                # to_thread() saca la función síncrona completa
+                                # del loop sin tocar su código interno (compartido
+                                # por 10+ ejecutores síncronos que no pueden ni
+                                # deben convertirse a async).
+                                resultado = await asyncio.to_thread(
+                                    lt._ejecutar_orden_polymarket,
                                     market_id, direction, float(stake_dryrun), precio_orden_yes,
                                     edge_dir=edge_dir,
                                     contexto={"strategy": "WALLET_MIRROR", "subtype": f"{activo}#{marco}",
