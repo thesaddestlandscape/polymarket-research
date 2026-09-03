@@ -1,24 +1,24 @@
 {
-  "timestamp_utc": "2026-09-03T18:12:23+00:00",
+  "timestamp_utc": "2026-09-03T18:16:56+00:00",
   "estado_global": "OK",
   "alertas": [
-    "rechazos_1h:1 (rango=0, spike=0)"
+    "rechazos_1h:2 (rango=0, spike=0)"
   ],
   "rechazos_1h": {
     "rango": 0,
     "spike": 0,
-    "total": 1,
-    "cambio_fuente": 78,
+    "total": 2,
+    "cambio_fuente": 76,
     "por_sym": {
-      "XRP": 1
+      "XRP": 2
     }
   },
   "assets": {
     "BTC": {
       "estado": "OK",
-      "n": 4162,
-      "age_seconds": 5.0,
-      "ultimo_precio": 81281.925,
+      "n": 4169,
+      "age_seconds": 7.3,
+      "ultimo_precio": 81212.55,
       "gaps": [
         {
           "inicio": "2026-09-03T06:46:02",
@@ -30,9 +30,9 @@
     },
     "ETH": {
       "estado": "OK",
-      "n": 4162,
-      "age_seconds": 5.0,
-      "ultimo_precio": 2508.795,
+      "n": 4169,
+      "age_seconds": 7.3,
+      "ultimo_precio": 2506.785,
       "gaps": [
         {
           "inicio": "2026-09-03T06:46:02",
@@ -44,9 +44,9 @@
     },
     "SOL": {
       "estado": "OK",
-      "n": 4162,
-      "age_seconds": 5.0,
-      "ultimo_precio": 104.95,
+      "n": 4169,
+      "age_seconds": 7.3,
+      "ultimo_precio": 104.88,
       "gaps": [
         {
           "inicio": "2026-09-03T06:46:02",
@@ -58,9 +58,9 @@
     },
     "XRP": {
       "estado": "OK",
-      "n": 4162,
-      "age_seconds": 5.0,
-      "ultimo_precio": 1.4656,
+      "n": 4169,
+      "age_seconds": 7.3,
+      "ultimo_precio": 1.4669,
       "gaps": [
         {
           "inicio": "2026-09-03T06:46:02",
@@ -72,17 +72,17 @@
     }
   },
   "cross_source": {
-    "timestamp_utc": "2026-09-03T18:10:52+00:00",
+    "timestamp_utc": "2026-09-03T18:16:53+00:00",
     "fuentes_activas": [
       "binance",
       "coinbase",
       "kraken"
     ],
     "consenso": {
-      "BTC": 81281.925,
-      "ETH": 2508.71,
-      "SOL": 105.09,
-      "XRP": 1.46778
+      "BTC": 81212.55,
+      "ETH": 2506.785,
+      "SOL": 104.88,
+      "XRP": 1.4669
     },
     "alertas": [],
     "bloqueados": []
