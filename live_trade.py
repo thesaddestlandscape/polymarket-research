@@ -1184,6 +1184,52 @@ def _fetch_book_publico(token_id: str) -> dict | None:
         return None
 
 
+def vwap_fill_desde_niveles(asks: list, stake_eur: float, mejor_ask: float | None) -> tuple:
+    """Precio medio ponderado (VWAP) que pagaría una orden marketable de
+    `stake_eur` barriendo `asks` (lista de niveles con price/size, en
+    cualquier orden) desde el más barato hacia arriba, y si esos niveles
+    alcanzan para cubrir el stake completo.
+
+    03-Sep noche (petición explícita Javi: "no puede haber huecos... toda
+    consulta tiene que ser fresca, coordinada, certera" -- en TODO lo que
+    opere en live, cripto y sports, ver docstring completo de dónde se usa
+    esto en `_consultar_profundidad_libro`). Extraída como función pura
+    (sin red, sin estado) para que cripto (`_consultar_profundidad_libro`,
+    este módulo) y sports (`sports_wallet_mirror_sniper.py`, que hace su
+    propia consulta del libro por un endpoint distinto) compartan la MISMA
+    matemática -- dos implementaciones independientes del mismo cálculo de
+    riesgo de dinero real es exactamente el patrón que este proyecto ya ha
+    visto divergir en silencio (CLAUDE.md: bug de dedup, bugs de
+    filtros_causales).
+
+    Devuelve (vwap_estimado, fill_completo): `fill_completo=False` si ni
+    sumando TODOS los niveles se cubre `stake_eur` -- profundidad
+    insuficiente para estimar el precio real, el caller debe tratarlo como
+    "sin datos" (fail-closed), nunca usar un VWAP parcial como si fuera
+    del stake completo."""
+    asks_ordenados = sorted(
+        ((float(lvl.get("price") if isinstance(lvl, dict) else lvl.price),
+          float(lvl.get("size") if isinstance(lvl, dict) else lvl.size))
+         for lvl in asks),
+        key=lambda t: t[0],
+    )
+    restante_eur = stake_eur
+    gasto_eur = 0.0
+    acciones = 0.0
+    for p, s in asks_ordenados:
+        if restante_eur <= 0:
+            break
+        valor_nivel = p * s
+        tomar = min(restante_eur, valor_nivel)
+        if p > 0:
+            acciones += tomar / p
+        gasto_eur += tomar
+        restante_eur -= tomar
+    vwap_fill_estimado = round(gasto_eur / acciones, 6) if acciones > 0 else mejor_ask
+    fill_completo_en_niveles = restante_eur <= max(0.01, stake_eur * 0.01)
+    return vwap_fill_estimado, fill_completo_en_niveles
+
+
 def _consultar_profundidad_libro(client, token_id: str, precio_entrada: float,
                                  stake_eur: float) -> dict:
     """
@@ -1221,12 +1267,44 @@ def _consultar_profundidad_libro(client, token_id: str, precio_entrada: float,
             if p <= techo:
                 profundidad_eur += p * s
         ratio = (profundidad_eur / stake_eur) if stake_eur > 0 else None
+
+        # 03-Sep noche (petición explícita Javi: "no puede haber huecos, no
+        # nos lo podemos permitir" -- cierra el hueco identificado el mismo
+        # día en `_pares_walletmirror_btc15min_eth15min_pausa_nota_2026-09-03`
+        # y nunca implementado): el re-chequeo validaba `mejor_ask` -- el
+        # PRIMER nivel del libro -- pero una orden marketable de $stake_eur
+        # consume niveles desde el mejor ask HACIA ARRIBA hasta completar el
+        # importe; en un libro fino (precios bajos = libro fino por
+        # definición) el precio medio de fill real puede caer muy por
+        # encima del mejor ask que el gate acaba de confirmar, saliendo de
+        # la zona (micro-bucket estrecho, no un techo) que el gate marcó
+        # `bueno_confirmado`. Trade real que lo confirmó: 03-Sep 03:14
+        # BTC#15min, gate validado a ask=0.14 (dentro de zona confirmada
+        # [0.09,0.14)), fill real 0.062 -- fuera de zona por el lado
+        # contrario (el libro tenía MÁS liquidez barata de la que el ask de
+        # cima sugería, y el requote/FOK terminó cazando un nivel más
+        # favorable pero fuera del micro-bucket validado). `vwap_fill_
+        # estimado` cubre el caso de riesgo real (sobrepago si el libro es
+        # fino hacia arriba): simula un BUY marketable de `stake_eur`
+        # consumiendo niveles del libro desde el más barato, y devuelve el
+        # precio medio ponderado que pagaría -- el gate del recheck valida
+        # ESTE precio (el que de verdad se pagaría por el stake completo),
+        # no solo el mejor ask de la cima. `fill_completo_en_niveles=False`
+        # significa que ni sumando TODOS los niveles devueltos por el libro
+        # se llega a cubrir `stake_eur` -- profundidad insuficiente para
+        # siquiera estimar el precio real, fail-closed (igual que "sin
+        # datos frescos").
+        vwap_fill_estimado, fill_completo_en_niveles = vwap_fill_desde_niveles(
+            asks, stake_eur, mejor_ask)
+
         return {
             "ok": True,
             "mejor_ask": mejor_ask,
             "profundidad_eur": round(profundidad_eur, 2),
             "n_niveles": len(asks),
             "ratio_vs_stake": round(ratio, 1) if ratio is not None else None,
+            "vwap_fill_estimado": vwap_fill_estimado,
+            "fill_completo_en_niveles": fill_completo_en_niveles,
         }
     except Exception as e:
         return {"ok": False, "error": str(e)}
@@ -2594,23 +2672,54 @@ def _ejecutar_orden_polymarket(market_id: str, direction: str,
                 if _intento > 1:
                     time.sleep(_pausa_rechequeo_s)
                 _depth_fresh = _consultar_profundidad_libro(None, token_id, precio, stake_eur)
-                _ask_fresh = _depth_fresh.get("mejor_ask") if _depth_fresh.get("ok") else None
-                if _ask_fresh is None:
+                # 03-Sep noche (petición explícita Javi: "no puede haber
+                # huecos... toda consulta tiene que ser fresca, coordinada,
+                # certera y sin dejar margen a perder dinero"): valida
+                # `vwap_fill_estimado` (precio medio ponderado que pagaría
+                # el stake COMPLETO barriendo el libro, ver docstring de
+                # `_consultar_profundidad_libro`), no `mejor_ask` (solo la
+                # cima) -- cierra el hueco documentado y nunca implementado
+                # en `_pares_walletmirror_btc15min_eth15min_pausa_nota_
+                # 2026-09-03`. `fill_completo_en_niveles=False` (el libro
+                # devuelto no tiene profundidad ni para estimar el precio
+                # real del stake completo) se trata igual que "sin datos" --
+                # fail-closed, no se adivina.
+                _ask_fresh = _depth_fresh.get("vwap_fill_estimado") if _depth_fresh.get("ok") else None
+                # /code-review 03-Sep (segunda ronda), hallazgo real: el
+                # deterioro/edge_vivo de más abajo compara contra
+                # `precio_plan` (basado en el mejor ask del snapshot
+                # ORIGINAL, no en VWAP) -- comparar eso contra el VWAP
+                # fresco mezcla dos bases de medida distintas. En un libro
+                # fino el VWAP es sistemáticamente más alto que el mejor
+                # ask aunque el mercado no se haya movido nada, inflando
+                # `_deterioro_fresh` de forma artificial y pudiendo abortar
+                # trades válidos sin que el precio real se haya movido.
+                # `_mejor_ask_fresh` (misma base que `precio_plan`) se
+                # guarda aparte SOLO para esa comparación de deterioro --
+                # el gate y el precio de ejecución (`precio`/techo_
+                # verificado más abajo) siguen usando el VWAP, que es lo
+                # que de verdad hay que validar/pagar.
+                _mejor_ask_fresh = (_depth_fresh.get("mejor_ask")
+                                    if _depth_fresh.get("ok") else None)
+                _fill_completo = _depth_fresh.get("fill_completo_en_niveles", False)
+                if _ask_fresh is None or not _fill_completo:
                     log(f"  ⛔ Re-chequeo gate {_intento}/{_n_rechequeos}: sin datos de "
-                        f"libro frescos — no se ejecuta (fail-closed)")
+                        f"libro frescos o profundidad insuficiente para el stake completo "
+                        f"(fill_completo={_fill_completo}) — no se ejecuta (fail-closed)")
                     _registrar_snapshot_libro("abort_gate_bucket_rechequeo", market_id, direction,
                                               precio_plan, stake_eur, depth, contexto)
                     return {
                         "ok": False, "no_fill": True, "gate_bucket_rechequeo": True,
                         "order_id": None, "entry_price": entry_price,
-                        "fee_eur": 0.0, "error": "re-chequeo gate: sin datos de libro frescos",
+                        "fee_eur": 0.0, "error": "re-chequeo gate: sin datos de libro frescos "
+                                                  "o profundidad insuficiente para el stake completo",
                     }
                 _ask_fresh = float(_ask_fresh)
                 _py_fresh = _ask_fresh if direction == "BUY_YES" else round(1.0 - _ask_fresh, 6)
                 _gate_fresh = _gate_veredicto(_py_fresh)
                 if _gate_fresh["veredicto"] != "bueno_confirmado":
                     log(f"  ⛔ Re-chequeo gate {_intento}/{_n_rechequeos} ({tupla_str_gate}): "
-                        f"ask_fresco={_ask_fresh:.4f} veredicto={_gate_fresh['veredicto']} "
+                        f"vwap_fresco={_ask_fresh:.4f} veredicto={_gate_fresh['veredicto']} "
                         f"(precio en movimiento, no bueno_confirmado) — no se ejecuta")
                     _registrar_snapshot_libro("abort_gate_bucket_rechequeo", market_id, direction,
                                               precio_plan, stake_eur, depth, contexto)
@@ -2619,17 +2728,19 @@ def _ejecutar_orden_polymarket(market_id: str, direction: str,
                         "order_id": None, "entry_price": entry_price,
                         "fee_eur": 0.0,
                         "error": f"re-chequeo gate {_intento}/{_n_rechequeos} ({tupla_str_gate}): "
-                                 f"ask_fresco={_ask_fresh:.4f} veredicto={_gate_fresh['veredicto']}",
+                                 f"vwap_fresco={_ask_fresh:.4f} veredicto={_gate_fresh['veredicto']}",
                     }
-                # último ask fresco confirmado pasa a ser el precio vivo
-                # para el resto del flujo (FOK) -- el dato más reciente
-                # posible antes de firmar la orden. techo_verificado se
-                # recalcula junto con precio (/code-review 03-Sep, hallazgo
-                # real: _techo_precio_fok mezclaba este precio fresco con
-                # un techo_verificado calculado contra el precio VIEJO de
-                # antes del rechequeo, banda desalineada del precio que de
-                # verdad se acaba de confirmar) -- mismo criterio que su
-                # cálculo original en línea ~2351 (precio × 1.05).
+                # último precio de fill (VWAP sobre el stake completo, no
+                # solo la cima) fresco y confirmado pasa a ser el precio
+                # vivo para el resto del flujo (FOK) -- el dato más
+                # realista posible antes de firmar la orden. techo_
+                # verificado se recalcula junto con precio (/code-review
+                # 03-Sep, hallazgo real: _techo_precio_fok mezclaba este
+                # precio fresco con un techo_verificado calculado contra el
+                # precio VIEJO de antes del rechequeo, banda desalineada
+                # del precio que de verdad se acaba de confirmar) -- mismo
+                # criterio que su cálculo original en línea ~2351
+                # (precio × 1.05).
                 precio = _ask_fresh
                 techo_verificado = round(precio * 1.05, 6)
                 # /code-review 03-Sep, segundo hallazgo real: edge_vivo
@@ -2646,7 +2757,16 @@ def _ejecutar_orden_polymarket(market_id: str, direction: str,
                 # aborta aquí igual que abortaría _decidir_requote con un
                 # snapshot inicial tan malo.
                 if edge_dir is not None:
-                    _deterioro_fresh = round(precio - precio_plan, 4)
+                    # /code-review 03-Sep (segunda ronda), hallazgo real:
+                    # usar `precio` (VWAP) aquí compara contra `precio_plan`
+                    # (basado en mejor ask) con bases distintas -- infla el
+                    # deterioro en libros finos sin que el mercado se haya
+                    # movido. `_mejor_ask_fresh` mantiene la misma base que
+                    # `precio_plan`; fallback a `precio` solo si por lo que
+                    # sea no vino (no debería pasar si `_ask_fresh` es
+                    # válido, ver comentario donde se lee más arriba).
+                    _base_deterioro = _mejor_ask_fresh if _mejor_ask_fresh is not None else precio
+                    _deterioro_fresh = round(_base_deterioro - precio_plan, 4)
                     # /code-review 03-Sep, tercer hallazgo real: solo se
                     # penalizaba empeoramiento (_deterioro_fresh>0) --
                     # una caída GRANDE y favorable del ask entre lecturas

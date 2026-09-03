@@ -44,6 +44,10 @@ from pathlib import Path
 import requests
 import websockets
 
+from live_trade import vwap_fill_desde_niveles  # 03-Sep: misma matemática de
+# VWAP-hasta-el-stake-completo que cripto, ver docstring de la función y de
+# `_consultar_profundidad_libro` más abajo -- un solo cálculo compartido,
+# nunca dos implementaciones independientes del mismo riesgo de dinero real.
 import sports_live_guard as _guard
 import sports_live_stake as _stake
 import sports_wallet_mirror_gate_bucket as _gate  # 27-Ago: segundo guardián,
@@ -188,6 +192,13 @@ def _end_date_para_condition(condition_id: str) -> str:
 
 
 def _consultar_profundidad_libro(token_id: str, precio_entrada: float, stake_eur: float) -> dict:
+    """03-Sep noche (petición explícita Javi: "no puede haber huecos... en
+    absolutamente todo lo que opere en live... tanto en cripto como en
+    sports"): añade `vwap_fill_estimado`/`fill_completo_en_niveles`, mismo
+    mecanismo y misma función compartida (`live_trade.vwap_fill_desde_
+    niveles`) que cripto -- ver su docstring. `mejor_ask` (solo la cima del
+    libro) se mantiene sin cambios para no romper otros consumidores de
+    este mismo dict (columnas CSV, filtros de precio de SEGUIR más arriba)."""
     try:
         r = requests.get(CLOB_BOOK_URL, params={"token_id": token_id}, timeout=10)
         r.raise_for_status()
@@ -207,18 +218,36 @@ def _consultar_profundidad_libro(token_id: str, precio_entrada: float, stake_eur
                 mejor_ask = p
             if p <= techo:
                 profundidad_eur += p * s
+        # /code-review 03-Sep (segunda ronda), hallazgo real: la llamada al
+        # VWAP compartido vivía FUERA de este try/except -- a diferencia de
+        # la versión de cripto (mismo fix, un solo try envolvente), un
+        # formato de nivel que este bucle tolera pero que `vwap_fill_desde_
+        # niveles` (isinstance(lvl, dict)/lvl.price) no, propagaría la
+        # excepción sin capturar. Movido dentro para que las dos
+        # implementaciones compartan el mismo comportamiento fail-closed.
+        vwap_fill_estimado, fill_completo_en_niveles = vwap_fill_desde_niveles(asks, stake_eur, mejor_ask)
     except (TypeError, ValueError, AttributeError):
         return {"ok": False, "error": "libro con formato inesperado"}
     ratio = (profundidad_eur / stake_eur) if stake_eur > 0 else None
     return {"ok": True, "mejor_ask": mejor_ask, "profundidad_eur": round(profundidad_eur, 2),
-            "ratio_vs_stake": round(ratio, 2) if ratio is not None else None}
+            "ratio_vs_stake": round(ratio, 2) if ratio is not None else None,
+            "vwap_fill_estimado": vwap_fill_estimado,
+            "fill_completo_en_niveles": fill_completo_en_niveles}
 
 
-def _fillability_mirror(condition_id: str, mirror_outcome_index: int, precio_referencia: float) -> dict:
+def _fillability_mirror(condition_id: str, mirror_outcome_index: int, precio_referencia: float,
+                         stake_eur: float = STAKE_REF_EUR) -> dict:
+    """`stake_eur` por defecto usa el de referencia (chequeo temprano, antes
+    de que `calcular_stake()` resuelva el stake real de la señal) -- pero
+    03-Sep noche (petición explícita Javi, "no puede haber huecos"): el
+    re-chequeo FRESCO justo antes de firmar SÍ conoce el stake real
+    (`stake_sim`, hasta `max_stake_eur=2.00€`, no siempre 1.05€ como
+    `STAKE_REF_EUR` asumía) -- pasarlo explícito ahí evita subestimar
+    cuánto barre el libro un stake mayor al de referencia."""
     tokens = _tokens_para_condition(condition_id)
     if not tokens or mirror_outcome_index not in (0, 1):
         return {"ok": False, "error": "sin token_id"}
-    return _consultar_profundidad_libro(tokens[mirror_outcome_index], precio_referencia, STAKE_REF_EUR)
+    return _consultar_profundidad_libro(tokens[mirror_outcome_index], precio_referencia, stake_eur)
 
 
 def _vistos_cargar() -> set:
@@ -422,18 +451,29 @@ async def _correr_una_conexion(wallets: dict, vistos: set) -> set:
                                             # ~299 de este mismo flujo), justo en el momento de
                                             # ejecutar dinero real. to_thread() lo saca del loop
                                             # sin tocar la función síncrona compartida.
+                                            # 03-Sep noche (petición explícita Javi: "no
+                                            # puede haber huecos... toda consulta tiene que
+                                            # ser fresca, coordinada, certera"): valida
+                                            # `vwap_fill_estimado` (precio medio del stake
+                                            # COMPLETO barriendo el libro), no `mejor_ask`
+                                            # (solo la cima) -- mismo fix y misma función
+                                            # compartida que cripto, ver
+                                            # `live_trade.vwap_fill_desde_niveles`.
                                             _fill_fresh = await asyncio.to_thread(
-                                                _fillability_mirror, condition_id, mirror_idx, precio_ref)
-                                            _ask_fresh = _fill_fresh.get("mejor_ask")
-                                            if not isinstance(_ask_fresh, (int, float)):
+                                                _fillability_mirror, condition_id, mirror_idx, precio_ref, stake_sim)
+                                            _ask_fresh = _fill_fresh.get("vwap_fill_estimado")
+                                            _fill_completo = _fill_fresh.get("fill_completo_en_niveles", False)
+                                            if not isinstance(_ask_fresh, (int, float)) or not _fill_completo:
                                                 _log(f"  ⛔ Re-chequeo gate {_intento}/{_n_rechequeos}: "
-                                                     f"sin datos de libro frescos -- no se ejecuta (fail-closed)")
+                                                     f"sin datos de libro frescos o profundidad insuficiente "
+                                                     f"para el stake completo (fill_completo={_fill_completo}) "
+                                                     f"-- no se ejecuta (fail-closed)")
                                                 _ask_confirmado = None
                                                 break
                                             _gate_fresh = _gate.evaluar(categoria, info["tipo"], float(_ask_fresh))
                                             if _gate_fresh["veredicto"] != "bueno_confirmado":
                                                 _log(f"  ⛔ Re-chequeo gate {_intento}/{_n_rechequeos}: "
-                                                     f"ask_fresco={_ask_fresh:.4f} veredicto={_gate_fresh['veredicto']} "
+                                                     f"vwap_fresco={_ask_fresh:.4f} veredicto={_gate_fresh['veredicto']} "
                                                      f"(precio en movimiento, no bueno_confirmado) -- no se ejecuta")
                                                 _ask_confirmado = None
                                                 break

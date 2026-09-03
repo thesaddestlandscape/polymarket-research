@@ -89,7 +89,25 @@ OUT = DIR_SHADOW / "resolution_sniper_precierre_depth_fase0.csv"
 DUR_S = 300      # 5min -- único marco confirmado el 19-Ago para esta familia
 MARCO = "5min"
 MARCO_TAG = "5m"
-OFFSETS_PRE_S = [-2, -1]  # segundos ANTES del cierre nominal
+# 03-Sep noche: ampliado de [-2,-1] a la rejilla completa. Motivo (hallazgo
+# real de esta sesión, prueba controlada 13:14:58Z): el edge de esta familia
+# está medido SOLO a -1/-2s, y a -2s NO llegamos a tiempo -- el pipeline
+# genérico de dinero real consume los 2s enteros en validaciones y la orden
+# aterriza en ts_end exacto ("trading is disabled", mismo muro que tumbó
+# RESOLUTION_SNIPER_NAIVE 59/59). Entre 60s (último punto que mide
+# punto_confirmacion_*.csv) y 2s NADIE medía precio+profundidad+outcome:
+# zona ciega real. Sin esa curva no se puede decidir a qué offset disparar
+# -- mover el offset cambia la distribución medida, así que el hit=95,6%
+# de [0,47-0,52) NO se puede asumir válido a -5s ni a -10s, hay que medirlo.
+# Coste: 8 offsets × 6 activos × 2 GET (~74ms cada uno) por ventana de 5min,
+# un hilo por activo (sin contención entre ellos), offsets separados ≥1s.
+OFFSETS_PRE_S = [-30, -20, -12, -8, -5, -3, -2, -1]  # segundos ANTES del cierre nominal
+# Anticipo propio, NO se toca DESPERTAR_ANTICIPO_S (=6) importado de
+# resolution_sniper_observer.py: esa constante la comparte el observador
+# post-cierre, que lleva meses acumulando con ella. Aquí hace falta más
+# margen porque el primer offset ya no es -2s sino -30s, y observar_ventana()
+# resuelve el mercado en gamma (~35ms) antes del primer offset.
+ANTICIPO_PRE_S = abs(min(OFFSETS_PRE_S)) + 6
 STAKE_REF_EUR = 1.05
 ASK_MIN, ASK_MAX = 0.05, 0.95
 
@@ -173,7 +191,7 @@ def worker(asset: str):
     while True:
         now = time.time()
         ts_end = (int(now) // DUR_S + 1) * DUR_S
-        despertar = ts_end - DESPERTAR_ANTICIPO_S
+        despertar = ts_end - ANTICIPO_PRE_S
         resto = despertar - time.time()
         if resto > 0:
             time.sleep(resto)
