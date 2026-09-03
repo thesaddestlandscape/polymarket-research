@@ -1,24 +1,24 @@
 {
-  "timestamp_utc": "2026-09-03T16:50:09+00:00",
+  "timestamp_utc": "2026-09-03T16:56:28+00:00",
   "estado_global": "OK",
   "alertas": [
-    "rechazos_1h:3 (rango=0, spike=0)"
+    "rechazos_1h:2 (rango=0, spike=0)"
   ],
   "rechazos_1h": {
     "rango": 0,
     "spike": 0,
-    "total": 3,
-    "cambio_fuente": 64,
+    "total": 2,
+    "cambio_fuente": 66,
     "por_sym": {
-      "XRP": 3
+      "XRP": 2
     }
   },
   "assets": {
     "BTC": {
       "estado": "OK",
-      "n": 4043,
-      "age_seconds": 10.9,
-      "ultimo_precio": 80881.995,
+      "n": 4052,
+      "age_seconds": 10.1,
+      "ultimo_precio": 81032.285,
       "gaps": [
         {
           "inicio": "2026-09-03T06:46:02",
@@ -30,9 +30,9 @@
     },
     "ETH": {
       "estado": "OK",
-      "n": 4043,
-      "age_seconds": 10.9,
-      "ultimo_precio": 2493.04,
+      "n": 4052,
+      "age_seconds": 10.1,
+      "ultimo_precio": 2495.435,
       "gaps": [
         {
           "inicio": "2026-09-03T06:46:02",
@@ -44,9 +44,9 @@
     },
     "SOL": {
       "estado": "OK",
-      "n": 4043,
-      "age_seconds": 10.9,
-      "ultimo_precio": 104.55,
+      "n": 4052,
+      "age_seconds": 10.1,
+      "ultimo_precio": 104.73,
       "gaps": [
         {
           "inicio": "2026-09-03T06:46:02",
@@ -58,9 +58,9 @@
     },
     "XRP": {
       "estado": "OK",
-      "n": 4043,
-      "age_seconds": 10.9,
-      "ultimo_precio": 1.4595,
+      "n": 4052,
+      "age_seconds": 10.1,
+      "ultimo_precio": 1.4587,
       "gaps": [
         {
           "inicio": "2026-09-03T06:46:02",
@@ -72,17 +72,17 @@
     }
   },
   "cross_source": {
-    "timestamp_utc": "2026-09-03T16:46:57+00:00",
+    "timestamp_utc": "2026-09-03T16:53:11+00:00",
     "fuentes_activas": [
       "binance",
       "coinbase",
       "kraken"
     ],
     "consenso": {
-      "BTC": 80874.5,
-      "ETH": 2492.57,
-      "SOL": 104.5,
-      "XRP": 1.4595
+      "BTC": 81032.285,
+      "ETH": 2495.64,
+      "SOL": 104.68,
+      "XRP": 1.46112
     },
     "alertas": [],
     "bloqueados": []
