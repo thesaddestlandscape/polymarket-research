@@ -136,7 +136,8 @@ def _evaluar_activo(asset: str, ts_end: int) -> dict | None:
     if ask_impl is None:
         return None
 
-    veredicto_gate = gate.evaluar(asset, ask_impl)
+    # 03-Sep: el gate exige el offset -- el edge no se hereda entre offsets.
+    veredicto_gate = gate.evaluar(asset, ask_impl, OFFSET_S)
     if not veredicto_gate["confirmado"]:
         _log(f"[{asset}] ts_end={ts_end}: dir={dir_impl} ask={ask_impl} "
              f"gate NO confirma ({veredicto_gate['motivo']}) -- se pasa")

@@ -58,19 +58,34 @@ def _cargar() -> dict | None:
     return _cache["data"]
 
 
-def evaluar(activo: str, ask: float) -> dict:
+def evaluar(activo: str, ask: float, offset_s: int) -> dict:
     """{"confirmado": bool, "motivo": str, "grid": {...}|None, "fino": {...}|None}.
 
     Solo True si AMBOS (grid Y fino) dicen bueno_confirmado para este
-    activo/precio -- misma regla de convergencia del 01-Sep aplicada al
-    resto del proyecto. Fail-closed en cualquier ausencia de dato."""
+    activo/precio EN ESE OFFSET -- misma regla de convergencia del 01-Sep
+    aplicada al resto del proyecto. Fail-closed en cualquier ausencia de dato.
+
+    `offset_s` es OBLIGATORIO desde el 03-Sep (petición explícita Javi tras
+    el fallo de la prueba controlada): el edge de esta familia está medido
+    por offset y NO se hereda entre offsets -- mover el instante de entrada
+    cambia la distribución (a -8s el mercado es más incierto y el ask es
+    otro), así que una zona confirmada a -1s no autoriza absolutamente nada
+    a -5s. Si el JSON no trae evidencia de ESE offset exacto, se rechaza."""
     d = _cargar()
     if d is None:
         return {"confirmado": False, "motivo": "sin_datos_o_gate_viejo", "grid": None, "fino": None}
 
+    # Formato v2 (por_offset). Un JSON en formato viejo (sin eje de offset)
+    # se trata como SIN DATOS: sus veredictos mezclaban offsets y no se
+    # puede saber a cuál corresponden -- fail-closed, nunca reinterpretar.
+    bloque = (d.get("por_offset") or {}).get(str(int(offset_s)))
+    if not bloque:
+        return {"confirmado": False, "motivo": f"sin_datos_para_offset_{int(offset_s)}s",
+                "grid": None, "fino": None}
+
     clave_grid = f"{activo}#{bucket(ask)}"
-    grid = d.get("grid", {}).get(clave_grid)
-    fino_activo = d.get("fino", {}).get(activo)
+    grid = bloque.get("grid", {}).get(clave_grid)
+    fino_activo = bloque.get("fino", {}).get(activo)
     fino = None
     if fino_activo and fino_activo.get("veredicto") == "bueno_confirmado":
         lo, hi = fino_activo.get("lo"), fino_activo.get("hi")
