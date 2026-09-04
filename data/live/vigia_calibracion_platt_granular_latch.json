@@ -1142,5 +1142,13 @@
   "UPDOWN_GBM#BTC#60min": {
     "n": 208,
     "confirmado": false
+  },
+  "GBM_LATE_60M#SOL": {
+    "n": 211,
+    "confirmado": false
+  },
+  "GBM_LATE_60M#SOL#60min": {
+    "n": 211,
+    "confirmado": false
   }
 }
