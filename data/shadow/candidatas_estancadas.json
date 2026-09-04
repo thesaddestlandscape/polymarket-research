@@ -1,5 +1,5 @@
 {
-  "generado": "2026-09-02T07:03:07.232677+00:00",
+  "generado": "2026-09-04T07:03:16.514572+00:00",
   "cementerio": [
     {
       "clave": "UPDOWN_GBM#ETH#daily",
@@ -23,13 +23,6 @@
       "viola_n_minimo": false
     },
     {
-      "clave": "UPDOWN_GBM#XRP#240min",
-      "n": 37,
-      "ic_bayes": -0.1667,
-      "motivo": "IC_bayes=-0.167 n=37 conf=1.00 → edge_minimo=0.04",
-      "viola_n_minimo": false
-    },
-    {
       "clave": "UPDOWN_GBM#daily",
       "n": 45,
       "ic_bayes": -0.2021,
@@ -38,30 +31,23 @@
     },
     {
       "clave": "LIQUIDACIONES_15M#XRP#15min",
-      "n": 50,
-      "ic_bayes": -0.1731,
-      "motivo": "IC_bayes=-0.173 n=50 conf=1.00 → edge_minimo=0.04",
-      "viola_n_minimo": false
-    },
-    {
-      "clave": "PRICE_TARGET_GBM_FADE#SOL#atexpiry",
       "n": 52,
-      "ic_bayes": -0.1852,
-      "motivo": "IC_bayes=-0.185 n=52 conf=1.00 → edge_minimo=0.04",
+      "ic_bayes": -0.1667,
+      "motivo": "IC_bayes=-0.167 n=52 conf=1.00 → edge_minimo=0.04",
       "viola_n_minimo": false
     },
     {
       "clave": "UPDOWN_OU_5M#ETH#5min",
-      "n": 52,
-      "ic_bayes": -0.1481,
-      "motivo": "IC_bayes=-0.148 n=52 conf=1.00 → edge_minimo=0.04",
+      "n": 54,
+      "ic_bayes": -0.1607,
+      "motivo": "IC_bayes=-0.161 n=54 conf=1.00 → edge_minimo=0.04",
       "viola_n_minimo": false
     },
     {
-      "clave": "GBM_LATE_60M_FADE#SOL#60min",
-      "n": 54,
-      "ic_bayes": -0.2679,
-      "motivo": "IC_bayes=-0.268 n=54 conf=1.00 → DESACTIVADA",
+      "clave": "PRICE_TARGET_GBM_FADE#SOL#atexpiry",
+      "n": 59,
+      "ic_bayes": -0.1885,
+      "motivo": "IC_bayes=-0.189 n=59 conf=1.00 → edge_minimo=0.04",
       "viola_n_minimo": false
     },
     {
@@ -72,52 +58,59 @@
       "viola_n_minimo": false
     },
     {
+      "clave": "GBM_LATE_60M_FADE#SOL#60min",
+      "n": 62,
+      "ic_bayes": -0.2812,
+      "motivo": "IC_bayes=-0.281 n=62 conf=1.00 → DESACTIVADA",
+      "viola_n_minimo": false
+    },
+    {
       "clave": "GBM_LATE_60M_FADE#ETH#60min",
-      "n": 68,
-      "ic_bayes": -0.3571,
-      "motivo": "IC_bayes=-0.357 n=68 conf=1.00 → DESACTIVADA",
+      "n": 70,
+      "ic_bayes": -0.3472,
+      "motivo": "IC_bayes=-0.347 n=70 conf=1.00 → DESACTIVADA",
       "viola_n_minimo": false
     },
     {
       "clave": "GBM_LATE_60M_FADE#BTC#60min",
-      "n": 82,
-      "ic_bayes": -0.25,
-      "motivo": "IC_bayes=-0.250 n=82 conf=1.00 → DESACTIVADA",
+      "n": 85,
+      "ic_bayes": -0.2471,
+      "motivo": "IC_bayes=-0.247 n=85 conf=1.00 → DESACTIVADA",
       "viola_n_minimo": false
     },
     {
       "clave": "PRICE_TARGET_GBM_FADE#ETH#atexpiry",
-      "n": 97,
-      "ic_bayes": -0.3081,
-      "motivo": "IC_bayes=-0.308 n=97 conf=1.00 → DESACTIVADA",
+      "n": 106,
+      "ic_bayes": -0.287,
+      "motivo": "IC_bayes=-0.287 n=106 conf=1.00 → DESACTIVADA",
       "viola_n_minimo": false
     },
     {
       "clave": "PRICE_TARGET_GBM#BTC#atexpiry",
-      "n": 112,
-      "ic_bayes": -0.2632,
-      "motivo": "IC_bayes=-0.263 n=112 conf=1.00 → DESACTIVADA",
+      "n": 117,
+      "ic_bayes": -0.2647,
+      "motivo": "IC_bayes=-0.265 n=117 conf=1.00 → DESACTIVADA",
       "viola_n_minimo": false
     },
     {
       "clave": "PRICE_TARGET_GBM_FADE#BTC#atexpiry",
-      "n": 113,
-      "ic_bayes": -0.1522,
-      "motivo": "IC_bayes=-0.152 n=113 conf=1.00 → edge_minimo=0.04",
+      "n": 127,
+      "ic_bayes": -0.1589,
+      "motivo": "IC_bayes=-0.159 n=127 conf=1.00 → edge_minimo=0.04",
       "viola_n_minimo": false
     },
     {
       "clave": "GBM_LATE_60M_FADE#60min",
-      "n": 204,
-      "ic_bayes": -0.2961,
-      "motivo": "IC_bayes=-0.296 n=204 conf=1.00 → DESACTIVADA",
+      "n": 217,
+      "ic_bayes": -0.2945,
+      "motivo": "IC_bayes=-0.295 n=217 conf=1.00 → DESACTIVADA",
       "viola_n_minimo": false
     },
     {
       "clave": "PRICE_TARGET_GBM_FADE#atexpiry",
-      "n": 262,
-      "ic_bayes": -0.2197,
-      "motivo": "IC_bayes=-0.220 n=262 conf=1.00 → DESACTIVADA",
+      "n": 292,
+      "ic_bayes": -0.2143,
+      "motivo": "IC_bayes=-0.214 n=292 conf=1.00 → DESACTIVADA",
       "viola_n_minimo": false
     },
     {
@@ -129,30 +122,37 @@
     },
     {
       "clave": "LIQUIDACIONES_5M#ETH#5min",
-      "n": 345,
-      "ic_bayes": 0.013,
-      "motivo": "IC_bayes=+0.013 n=345 conf=1.00",
+      "n": 402,
+      "ic_bayes": 0.0124,
+      "motivo": "IC_bayes=+0.012 n=402 conf=1.00",
       "viola_n_minimo": false
     },
     {
       "clave": "LIQUIDACIONES_5M#SOL#5min",
-      "n": 410,
-      "ic_bayes": -0.0024,
-      "motivo": "IC_bayes=-0.002 n=410 conf=1.00",
+      "n": 444,
+      "ic_bayes": -0.0045,
+      "motivo": "IC_bayes=-0.004 n=444 conf=1.00",
       "viola_n_minimo": false
     },
     {
       "clave": "UPDOWN_GBM_15M_TARDIO#BTC#15min",
-      "n": 1046,
-      "ic_bayes": -0.1546,
-      "motivo": "IC_bayes=-0.155 n=1046 conf=1.00 → edge_minimo=0.04",
+      "n": 1172,
+      "ic_bayes": -0.1508,
+      "motivo": "IC_bayes=-0.151 n=1172 conf=1.00 → edge_minimo=0.04",
       "viola_n_minimo": false
     },
     {
       "clave": "LIQUIDACIONES_5M#5min",
-      "n": 1134,
-      "ic_bayes": -0.0158,
-      "motivo": "IC_bayes=-0.016 n=1134 conf=1.00",
+      "n": 1250,
+      "ic_bayes": -0.012,
+      "motivo": "IC_bayes=-0.012 n=1250 conf=1.00",
+      "viola_n_minimo": false
+    },
+    {
+      "clave": "FAVORITO_CONFIRMADO_5MIN_ALTACONVICCION#5min",
+      "n": 25681,
+      "ic_bayes": 0.1875,
+      "motivo": "IC_bayes=+0.188 n=25681 conf=1.00",
       "viola_n_minimo": false
     }
   ],
@@ -176,12 +176,6 @@
       "dias": 7
     },
     {
-      "clave": "FAVORITO_CONFIRMADO#DOGE#15min#BUY_YES",
-      "n_hace_dias": 1,
-      "n_hoy": 1,
-      "dias": 7
-    },
-    {
       "clave": "FAVORITO_CONFIRMADO#ETH#240min#BUY_NO",
       "n_hace_dias": 10,
       "n_hoy": 10,
@@ -189,12 +183,6 @@
     },
     {
       "clave": "FAVORITO_CONFIRMADO#ETH#240min#BUY_YES",
-      "n_hace_dias": 2,
-      "n_hoy": 2,
-      "dias": 7
-    },
-    {
-      "clave": "FAVORITO_CONFIRMADO#XRP#15min#BUY_YES",
       "n_hace_dias": 2,
       "n_hoy": 2,
       "dias": 7
@@ -236,12 +224,6 @@
       "dias": 7
     },
     {
-      "clave": "RESOLUTION_SNIPER#BTC#sniper#BUY_NO",
-      "n_hace_dias": 11,
-      "n_hoy": 11,
-      "dias": 7
-    },
-    {
       "clave": "RESOLUTION_SNIPER#BTC#sniper#BUY_YES",
       "n_hace_dias": 6,
       "n_hoy": 6,
@@ -275,12 +257,6 @@
       "clave": "STREAK_FADE_5M#SOL#5min#BUY_YES",
       "n_hace_dias": 104,
       "n_hoy": 104,
-      "dias": 7
-    },
-    {
-      "clave": "UPDOWN_GBM#BNB#15min#BUY_YES",
-      "n_hace_dias": 36,
-      "n_hoy": 36,
       "dias": 7
     },
     {
@@ -332,9 +308,21 @@
       "dias": 7
     },
     {
+      "clave": "UPDOWN_OU_5M#XRP#5min#BUY_NO",
+      "n_hace_dias": 22,
+      "n_hoy": 22,
+      "dias": 7
+    },
+    {
       "clave": "WEEKLY_PRICE#SOL#BUY_YES",
       "n_hace_dias": 32,
       "n_hoy": 32,
+      "dias": 7
+    },
+    {
+      "clave": "LIQUIDACIONES_5M#ETH#5min#BUY_NO",
+      "n_hace_dias": 30,
+      "n_hoy": 30,
       "dias": 7
     },
     {
@@ -386,18 +374,6 @@
       "dias": 7
     },
     {
-      "clave": "GBM_LATE_60M_FADE#ETH#60min#BUY_YES",
-      "n_hace_dias": 32,
-      "n_hoy": 32,
-      "dias": 7
-    },
-    {
-      "clave": "GBM_LATE_60M_FADE#SOL#60min#BUY_NO",
-      "n_hace_dias": 24,
-      "n_hoy": 24,
-      "dias": 7
-    },
-    {
       "clave": "FAVORITO_CONFIRMADO_15MIN_ALTACONVICCION#SOL#15min#BUY_NO",
       "n_hace_dias": 78,
       "n_hoy": 78,
@@ -422,12 +398,6 @@
       "dias": 7
     },
     {
-      "clave": "MOMENTUM_IBS_5M_FADE#BNB#5min#BUY_YES",
-      "n_hace_dias": 175,
-      "n_hoy": 175,
-      "dias": 7
-    },
-    {
       "clave": "MOMENTUM_IBS_15M_FADE#ETH#15min#BUY_YES",
       "n_hace_dias": 31,
       "n_hoy": 31,
@@ -446,15 +416,15 @@
       "dias": 7
     },
     {
-      "clave": "MOMENTUM_IBS_15M_FADE#DOGE#15min#BUY_YES",
-      "n_hace_dias": 25,
-      "n_hoy": 25,
+      "clave": "MOMENTUM_IBS_15M_FADE#DOGE#15min#BUY_NO",
+      "n_hace_dias": 11,
+      "n_hoy": 11,
       "dias": 7
     },
     {
-      "clave": "MOMENTUM_IBS_15M_FADE#BNB#15min#BUY_NO",
-      "n_hace_dias": 81,
-      "n_hoy": 81,
+      "clave": "MOMENTUM_IBS_15M_FADE#DOGE#15min#BUY_YES",
+      "n_hace_dias": 25,
+      "n_hoy": 25,
       "dias": 7
     },
     {
@@ -540,199 +510,39 @@
     {
       "clave": "LIQUIDACIONES_60M#BNB#60min#BUY_NO",
       "dias_historial": 14
+    },
+    {
+      "clave": "ORDER_FLOW_5M_REACTIVO#ETH#5min#BUY_NO",
+      "dias_historial": 8
+    },
+    {
+      "clave": "ORDER_FLOW_5M_REACTIVO#SOL#5min#BUY_NO",
+      "dias_historial": 8
+    },
+    {
+      "clave": "ORDER_FLOW_5M_REACTIVO#XRP#5min#BUY_NO",
+      "dias_historial": 8
+    },
+    {
+      "clave": "ORDER_FLOW_5M_REACTIVO#DOGE#5min#BUY_NO",
+      "dias_historial": 8
+    },
+    {
+      "clave": "ORDER_FLOW_5M_REACTIVO#BNB#5min#BUY_NO",
+      "dias_historial": 8
     }
   ],
   "hipotesis_estancadas": [
     {
       "clave": "H-GBM-18H",
-      "n_hace_dias": 119,
+      "n_hace_dias": 4,
       "n_hoy": 4,
       "dias": 7
     },
     {
-      "clave": "H-IBS-15",
-      "n_hace_dias": 14268,
-      "n_hoy": 9993,
-      "dias": 7
-    },
-    {
-      "clave": "H-HORA-GBM",
-      "n_hace_dias": 9444,
-      "n_hoy": 8377,
-      "dias": 7
-    },
-    {
-      "clave": "H-WINDOW-MOMENTUM",
-      "n_hace_dias": 311,
-      "n_hoy": 83,
-      "dias": 7
-    },
-    {
-      "clave": "H-OF-PAR",
-      "n_hace_dias": 482,
-      "n_hoy": 95,
-      "dias": 7
-    },
-    {
-      "clave": "H-SOL-15MIN",
-      "n_hace_dias": 919,
-      "n_hoy": 779,
-      "dias": 7
-    },
-    {
-      "clave": "H-STREAK-COOLDOWN",
-      "n_hace_dias": 321874,
-      "n_hoy": 297692,
-      "dias": 7
-    },
-    {
-      "clave": "H-24H-GBM-BUYYES-MADRUGADA",
-      "n_hace_dias": 256,
-      "n_hoy": 80,
-      "dias": 7
-    },
-    {
-      "clave": "H-24H-GBM-BUYYES-TARDE",
-      "n_hace_dias": 470,
-      "n_hoy": 108,
-      "dias": 7
-    },
-    {
-      "clave": "H-24H-OF-18H",
-      "n_hace_dias": 445,
-      "n_hoy": 22,
-      "dias": 7
-    },
-    {
-      "clave": "H-CUSTOM-GBM-17H-BTC",
-      "n_hace_dias": 91,
-      "n_hoy": 74,
-      "dias": 7
-    },
-    {
-      "clave": "H-CUSTOM-OF-MADRUGADA",
-      "n_hace_dias": 129,
-      "n_hoy": 26,
-      "dias": 7
-    },
-    {
-      "clave": "H-CUSTOM-GBM-SIGMA-ALTO",
-      "n_hace_dias": 9419,
-      "n_hoy": 8162,
-      "dias": 7
-    },
-    {
-      "clave": "H-CUSTOM-OF-02H-BTCSOL",
-      "n_hace_dias": 7,
-      "n_hoy": 2,
-      "dias": 7
-    },
-    {
-      "clave": "H-CUSTOM-GBM-18H",
-      "n_hace_dias": 322,
-      "n_hoy": 149,
-      "dias": 7
-    },
-    {
-      "clave": "H-CUSTOM-BUYYES-15MIN-POSTFILTRO",
-      "n_hace_dias": 1981,
-      "n_hoy": 602,
-      "dias": 7
-    },
-    {
-      "clave": "H-CUSTOM-GBM-SIGMA-BAJO",
-      "n_hace_dias": 208,
-      "n_hoy": 194,
-      "dias": 7
-    },
-    {
-      "clave": "H-CUSTOM-BTC15-TENDENCIA",
-      "n_hace_dias": 819,
-      "n_hoy": 314,
-      "dias": 7
-    },
-    {
-      "clave": "H-CUSTOM-DRIFT15-MOMENTUM",
-      "n_hace_dias": 3191,
-      "n_hoy": 1732,
-      "dias": 7
-    },
-    {
-      "clave": "H-CUSTOM-LONGSHOT-BIAS",
-      "n_hace_dias": 38,
-      "n_hoy": 32,
-      "dias": 7
-    },
-    {
-      "clave": "H-CUSTOM-ETH15-REVERSION",
-      "n_hace_dias": 205,
-      "n_hoy": 93,
-      "dias": 7
-    },
-    {
-      "clave": "H-CUSTOM-GBM-09H",
-      "n_hace_dias": 134,
-      "n_hoy": 113,
-      "dias": 7
-    },
-    {
-      "clave": "H-CUSTOM-GBM-10H",
-      "n_hace_dias": 29,
-      "n_hoy": 8,
-      "dias": 7
-    },
-    {
-      "clave": "H-LATE-WINDOW-5MIN",
-      "n_hace_dias": 406,
-      "n_hoy": 36,
-      "dias": 7
-    },
-    {
-      "clave": "H-DVOL-SPIKE-BUYNO",
-      "n_hace_dias": 3636,
-      "n_hoy": 2221,
-      "dias": 7
-    },
-    {
-      "clave": "H-CUSTOM-POLY-DRIFT-CONFIRM",
-      "n_hace_dias": 1110,
-      "n_hoy": 580,
-      "dias": 7
-    },
-    {
-      "clave": "H-CUSTOM-OF-VOLUMEN-ALTO",
-      "n_hace_dias": 484,
-      "n_hoy": 198,
-      "dias": 7
-    },
-    {
-      "clave": "H-CUSTOM-CROSS-WINDOW-SPREAD-POS",
-      "n_hace_dias": 398,
-      "n_hoy": 141,
-      "dias": 7
-    },
-    {
-      "clave": "H-CUSTOM-CROSS-WINDOW-SPREAD-NEG",
-      "n_hace_dias": 378,
-      "n_hoy": 135,
-      "dias": 7
-    },
-    {
       "clave": "H-CUSTOM-MERCURY-RETROGRADO",
-      "n_hace_dias": 27547,
+      "n_hace_dias": 1792,
       "n_hoy": 1792,
-      "dias": 7
-    },
-    {
-      "clave": "H-CUSTOM-SMART-MONEY-CONSENSUS",
-      "n_hace_dias": 1376,
-      "n_hoy": 1157,
-      "dias": 7
-    },
-    {
-      "clave": "H-CUSTOM-OF-EDGE-ALTO",
-      "n_hace_dias": 608,
-      "n_hoy": 378,
       "dias": 7
     },
     {
@@ -742,147 +552,9 @@
       "dias": 7
     },
     {
-      "clave": "H-CUSTOM-GBM-BUYYES-GLOBAL-MALO",
-      "n_hace_dias": 3151,
-      "n_hoy": 1909,
-      "dias": 7
-    },
-    {
-      "clave": "H-CUSTOM-LATE-ENTRY-15MIN",
-      "n_hace_dias": 2346,
-      "n_hoy": 899,
-      "dias": 7
-    },
-    {
-      "clave": "H-CUSTOM-BUYNO-LONGSHOT-15MIN",
-      "n_hace_dias": 101,
-      "n_hoy": 43,
-      "dias": 7
-    },
-    {
-      "clave": "H-CUSTOM-XRP15-BUYNO-LIVE",
-      "n_hace_dias": 893,
-      "n_hoy": 561,
-      "dias": 7
-    },
-    {
       "clave": "H-CUSTOM-DAILY-BUYNO",
       "n_hace_dias": 30,
       "n_hoy": 30,
-      "dias": 7
-    },
-    {
-      "clave": "H-CUSTOM-BTC15-TARDE",
-      "n_hace_dias": 341,
-      "n_hoy": 103,
-      "dias": 7
-    },
-    {
-      "clave": "H-CUSTOM-LATE15-BTC-BUYNO-COINFLIP",
-      "n_hace_dias": 1993,
-      "n_hoy": 842,
-      "dias": 7
-    },
-    {
-      "clave": "H-CUSTOM-BUYYES15-SOLO-TARDIO",
-      "n_hace_dias": 1577,
-      "n_hoy": 583,
-      "dias": 7
-    },
-    {
-      "clave": "H-CUSTOM-GBM-04H-ASIA",
-      "n_hace_dias": 894,
-      "n_hoy": 870,
-      "dias": 7
-    },
-    {
-      "clave": "H-CUSTOM-LATE-04H-ASIA",
-      "n_hace_dias": 1568,
-      "n_hoy": 868,
-      "dias": 7
-    },
-    {
-      "clave": "H-CUSTOM-UPDOWNGBM-BTC15-TARDIO",
-      "n_hace_dias": 520,
-      "n_hoy": 173,
-      "dias": 7
-    },
-    {
-      "clave": "H-CUSTOM-GBMLATE-PYBAJO-LONGSHOT",
-      "n_hace_dias": 975,
-      "n_hoy": 757,
-      "dias": 7
-    },
-    {
-      "clave": "H-CUSTOM-GBMLATE-ANCHURA-MERCADO",
-      "n_hace_dias": 2741,
-      "n_hoy": 1921,
-      "dias": 7
-    },
-    {
-      "clave": "H-CUSTOM-OF5M-SMARTMONEY-CONTRARIO",
-      "n_hace_dias": 49,
-      "n_hoy": 45,
-      "dias": 7
-    },
-    {
-      "clave": "H-CUSTOM-ETH15-SIGMA-ACCEL",
-      "n_hace_dias": 1455,
-      "n_hoy": 864,
-      "dias": 7
-    },
-    {
-      "clave": "H-CUSTOM-BTC15-SIGMA-ACCEL",
-      "n_hace_dias": 1432,
-      "n_hoy": 772,
-      "dias": 7
-    },
-    {
-      "clave": "H-CUSTOM-XRP15-SIGMA-DECEL",
-      "n_hace_dias": 2167,
-      "n_hoy": 1294,
-      "dias": 7
-    },
-    {
-      "clave": "H-CUSTOM-SMARTMONEY-FAVORITO-SOL",
-      "n_hace_dias": 621,
-      "n_hoy": 295,
-      "dias": 7
-    },
-    {
-      "clave": "H-CUSTOM-FAVORITO-SOL-ALTACONVICCION",
-      "n_hace_dias": 2121,
-      "n_hoy": 1903,
-      "dias": 7
-    },
-    {
-      "clave": "H-CUSTOM-GBM18H-XRP-EXCEPCION",
-      "n_hace_dias": 44,
-      "n_hoy": 15,
-      "dias": 7
-    },
-    {
-      "clave": "H-CUSTOM-LEADLAG-XRP-BUYNO",
-      "n_hace_dias": 296,
-      "n_hoy": 232,
-      "dias": 7
-    },
-    {
-      "clave": "H-CUSTOM-ETH15-BUYNO-TARDIO",
-      "n_hace_dias": 223,
-      "n_hoy": 93,
-      "dias": 7
-    },
-    {
-      "clave": "H-CUSTOM-FAVALTACONV-BNB5M-PAYOUT-NEGATIVO",
-      "n_hace_dias": 6045,
-      "n_hoy": 4156,
-      "dias": 7
-    },
-    {
-      "clave": "H-CUSTOM-GBMLATE15M-SOL-RESCATE-PRECIO",
-      "n_hace_dias": 807,
-      "n_hoy": 56,
       "dias": 7
     }
   ],

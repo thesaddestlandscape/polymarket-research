@@ -295,5 +295,23 @@
   },
   "cementerio:PRICE_TARGET_GBM_FADE#BTC#reach": {
     "avisado": true
+  },
+  "cementerio:FAVORITO_CONFIRMADO_5MIN_ALTACONVICCION#5min": {
+    "avisado": true
+  },
+  "cand_nunca:ORDER_FLOW_5M_REACTIVO#ETH#5min#BUY_NO": {
+    "avisado": true
+  },
+  "cand_nunca:ORDER_FLOW_5M_REACTIVO#SOL#5min#BUY_NO": {
+    "avisado": true
+  },
+  "cand_nunca:ORDER_FLOW_5M_REACTIVO#XRP#5min#BUY_NO": {
+    "avisado": true
+  },
+  "cand_nunca:ORDER_FLOW_5M_REACTIVO#DOGE#5min#BUY_NO": {
+    "avisado": true
+  },
+  "cand_nunca:ORDER_FLOW_5M_REACTIVO#BNB#5min#BUY_NO": {
+    "avisado": true
   }
 }
