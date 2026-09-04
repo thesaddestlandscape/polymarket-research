@@ -1,8 +1,8 @@
 {
  "STREAK_MOM_5M": {
-  "ic_bayes_familia": 0.0252,
+  "ic_bayes_familia": 0.0247,
   "n_tuplas_fuertes": 3,
-  "pnl_fiel_combinado_eur": 106.49,
+  "pnl_fiel_combinado_eur": 105.44,
   "tuplas": [
    {
     "k": "STREAK_MOM_5M#DOGE#5min#BUY_NO",
@@ -16,25 +16,25 @@
    },
    {
     "k": "STREAK_MOM_5M#ETH#5min#BUY_NO",
-    "pnl_fiel_eur_sin_suelo": 19.9321,
-    "n_ejecutado": 83
+    "pnl_fiel_eur_sin_suelo": 18.8821,
+    "n_ejecutado": 84
    }
   ]
  },
  "GBM_LATE_15M": {
-  "ic_bayes_familia": 0.0574,
+  "ic_bayes_familia": 0.0576,
   "n_tuplas_fuertes": 1,
-  "pnl_fiel_combinado_eur": 59.06,
+  "pnl_fiel_combinado_eur": 59.25,
   "tuplas": [
    {
     "k": "GBM_LATE_15M#XRP#15min#BUY_YES",
-    "pnl_fiel_eur_sin_suelo": 59.0566,
+    "pnl_fiel_eur_sin_suelo": 59.2491,
     "n_ejecutado": 391
    }
   ]
  },
  "GBM_LATE_60M": {
-  "ic_bayes_familia": 0.0265,
+  "ic_bayes_familia": 0.0258,
   "n_tuplas_fuertes": 1,
   "pnl_fiel_combinado_eur": 50.43,
   "tuplas": [
@@ -46,7 +46,7 @@
   ]
  },
  "UPDOWN_GBM": {
-  "ic_bayes_familia": 0.0085,
+  "ic_bayes_familia": 0.0086,
   "n_tuplas_fuertes": 2,
   "pnl_fiel_combinado_eur": 36.67,
   "tuplas": [
@@ -63,14 +63,14 @@
   ]
  },
  "MOMENTUM_IBS_5M_FADE": {
-  "ic_bayes_familia": -0.012,
+  "ic_bayes_familia": -0.0122,
   "n_tuplas_fuertes": 1,
-  "pnl_fiel_combinado_eur": 26.5,
+  "pnl_fiel_combinado_eur": 25.45,
   "tuplas": [
    {
     "k": "MOMENTUM_IBS_5M_FADE#BTC#5min#BUY_NO",
-    "pnl_fiel_eur_sin_suelo": 26.5048,
-    "n_ejecutado": 133
+    "pnl_fiel_eur_sin_suelo": 25.4548,
+    "n_ejecutado": 134
    }
   ]
  },
@@ -87,14 +87,14 @@
   ]
  },
  "MOMENTUM_IBS_15M_BALLENA": {
-  "ic_bayes_familia": -0.0322,
+  "ic_bayes_familia": -0.0321,
   "n_tuplas_fuertes": 1,
-  "pnl_fiel_combinado_eur": 17.4,
+  "pnl_fiel_combinado_eur": 18.39,
   "tuplas": [
    {
     "k": "MOMENTUM_IBS_15M_BALLENA#BNB#15min#BUY_NO",
-    "pnl_fiel_eur_sin_suelo": 17.3996,
-    "n_ejecutado": 144
+    "pnl_fiel_eur_sin_suelo": 18.391,
+    "n_ejecutado": 145
    }
   ]
  },
