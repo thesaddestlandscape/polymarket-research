@@ -16,21 +16,21 @@
     "hi": 0.46,
     "n": 56,
     "pnl_medio": -0.4485,
-    "diff_vs_resto": -0.4773,
-    "p_valor": 0.0025,
+    "diff_vs_resto": -0.4803,
+    "p_valor": 0.0015,
     "split_half_diff": [
-      -0.4754,
-      -0.4791
+      -0.4784,
+      -0.4822
     ],
     "split_half_ok": true,
     "pnl_medio_loo": -0.481,
     "robusto_loo": true,
     "ci90_bootstrap": [
-      -0.6472,
-      -0.2188
+      -0.6481,
+      -0.2154
     ],
     "robusto_bootstrap": true,
-    "n_posiciones_buscadas": 24,
+    "n_posiciones_buscadas": 25,
     "veredicto_crudo_hoy": "malo_confirmado",
     "historial_crudo": [
       "malo_confirmado"
@@ -52,8 +52,8 @@
     "pnl_medio_loo": -0.582,
     "robusto_loo": true,
     "ci90_bootstrap": [
-      -0.77,
-      -0.2411
+      -0.7678,
+      -0.2571
     ],
     "robusto_bootstrap": true,
     "n_posiciones_buscadas": 69,
@@ -68,18 +68,18 @@
     "hi": 0.1,
     "n": 71,
     "pnl_medio": 1.3866,
-    "diff_vs_resto": 1.4224,
+    "diff_vs_resto": 1.4225,
     "p_valor": 0.0,
     "split_half_diff": [
-      0.0487,
-      2.7579
+      0.0488,
+      2.758
     ],
     "split_half_ok": true,
     "pnl_medio_loo": 1.1983,
     "robusto_loo": true,
     "ci90_bootstrap": [
-      0.4617,
-      2.3853
+      0.4477,
+      2.3671
     ],
     "robusto_bootstrap": true,
     "n_posiciones_buscadas": 96,
@@ -106,8 +106,8 @@
     "pnl_medio_loo": 0.6686,
     "robusto_loo": true,
     "ci90_bootstrap": [
-      0.3488,
-      0.9075
+      0.315,
+      0.911
     ],
     "robusto_bootstrap": true,
     "n_posiciones_buscadas": 60,
@@ -135,7 +135,7 @@
     "robusto_loo": true,
     "ci90_bootstrap": [
       -1.0,
-      -0.3988
+      -0.2938
     ],
     "robusto_bootstrap": true,
     "n_posiciones_buscadas": 82,
