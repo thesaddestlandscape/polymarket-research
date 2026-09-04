@@ -1,6 +1,6 @@
 {
  "STREAK_MOM_5M": {
-  "ic_bayes_familia": 0.0222,
+  "ic_bayes_familia": 0.0221,
   "n_tuplas_fuertes": 3,
   "pnl_fiel_combinado_eur": 98.15,
   "tuplas": [
@@ -34,13 +34,13 @@
   ]
  },
  "GBM_LATE_60M": {
-  "ic_bayes_familia": 0.0204,
+  "ic_bayes_familia": 0.0217,
   "n_tuplas_fuertes": 1,
-  "pnl_fiel_combinado_eur": 45.27,
+  "pnl_fiel_combinado_eur": 45.47,
   "tuplas": [
    {
     "k": "GBM_LATE_60M#ETH#60min#BUY_YES",
-    "pnl_fiel_eur_sin_suelo": 45.2694,
+    "pnl_fiel_eur_sin_suelo": 45.4678,
     "n_ejecutado": 34
    }
   ]
