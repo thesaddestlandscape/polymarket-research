@@ -62,7 +62,8 @@ REPO = Path(__file__).resolve().parent
 sys.path.insert(0, str(REPO))
 
 from wallet_mirror_tracker import (  # noqa: E402
-    wallets_operativas_recientes, _opuesto, _fillability_mirror, _market_id_y_direccion,
+    wallets_operativas_recientes, wallets_operativas_recientes_por_bucket, wallet_aprueba_bucket,
+    _opuesto, _fillability_mirror, _market_id_y_direccion,
 )
 from fetch_polymarket_activity_ws import _parse_updown  # noqa: E402
 import live_trade as lt  # noqa: E402
@@ -153,7 +154,7 @@ async def _mantener_ping(ws):
         pass
 
 
-async def _correr_una_conexion(wallets: dict, vistos: dict) -> dict:
+async def _correr_una_conexion(wallets: dict, vistos: dict, wallets_bucket: dict) -> dict:
     async with websockets.connect(WS_URL, open_timeout=10, close_timeout=5) as ws:
         sub = {"action": "subscribe", "subscriptions": [{"topic": "activity", "type": "trades"}]}
         await ws.send(json.dumps(sub))
@@ -360,11 +361,33 @@ async def _correr_una_conexion(wallets: dict, vistos: dict) -> dict:
                             info["tipo"], activo, marco, ask_ref,
                             bool(ratio_size is not None and ratio_size >= 2.0),
                         ) if resuelto is not None and ask_ref not in (None, "") else {"veredicto": "sin_concluir"}
+                        # 04-Sep (petición explícita Javi: "contrastar que la
+                        # wallet que sigue en ese momento tiene datos óptimos
+                        # de hit rate, pnl y edge" -- ver idea_walletmirror_
+                        # 15min_causa_concentracion_wallet_04sep): gate_bp de
+                        # arriba mide el bucket de precio AGREGADO (todas las
+                        # wallets mezcladas) y wallets/wallets_bucket (abajo)
+                        # ya excluyeron esta wallet de la conexión si estaba
+                        # degradada EN AGREGADO -- pero ninguno de los dos
+                        # comprobaba si ESTA wallet concreta sigue teniendo
+                        # edge reciente DENTRO de este micro-bucket de precio
+                        # exacto (el hallazgo real: una wallet con 26,2% de
+                        # concentración en un bucket puede seguir pasando el
+                        # filtro agregado mientras se degrada solo ahí). Fail-
+                        # closed: sin evidencia reciente en este bucket
+                        # concreto -> no se opera, aunque la wallet siga
+                        # admitida en agregado.
+                        aprueba_bucket = (resuelto is not None and ask_ref not in (None, "")
+                                          and wallet_aprueba_bucket(w, activo, marco, info["tipo"],
+                                                                    float(ask_ref), wallets_bucket))
                         if resuelto is None:
                             pass
                         elif gate_bp["veredicto"] != "bueno_confirmado":
                             _log(f"  ⛔ veto micro-bucket (solo opera en bueno_confirmado): "
                                  f"veredicto={gate_bp['veredicto']} -- no se ejecuta")
+                        elif not aprueba_bucket:
+                            _log(f"  ⛔ wallet {w[:10]}... sin edge reciente confirmado en este "
+                                 f"micro-bucket de precio (ask={ask_ref}) -- no se ejecuta")
                         elif (lt._posiciones_abiertas_misma_direccion(direction)
                               >= lt._cargar_config().get("riesgo", {})
                                   .get("max_posiciones_abiertas_misma_direccion", 2)):
@@ -500,16 +523,24 @@ async def main() -> None:
     # (ping/websocket/detección de trades) durante ese tiempo, cada 30min.
     # En un hilo aparte, el loop sigue respondiendo mientras se recalcula.
     wallets = await asyncio.to_thread(wallets_operativas_recientes)
+    # 04-Sep: capa adicional por micro-bucket de precio, ver docstring en
+    # wallet_mirror_tracker.py. Se calcula A PARTIR de `wallets` (solo
+    # evalúa bucket para wallets ya admitidas en agregado) -- mismo
+    # refresco que `wallets`, mismo hilo aparte por el mismo motivo (lee
+    # ballenas_timing_history.csv completo).
+    wallets_bucket = await asyncio.to_thread(wallets_operativas_recientes_por_bucket, wallets)
     ultimo_refresco = datetime.now(timezone.utc).timestamp()
     vistos = _vistos_cargar()
-    _log(f"wallet_mirror_executor_dryrun arrancado -- {len(wallets)} wallets validadas, DRY_RUN={DRY_RUN}")
+    _log(f"wallet_mirror_executor_dryrun arrancado -- {len(wallets)} wallets validadas "
+         f"({len(wallets_bucket)} combinaciones wallet+bucket con edge reciente), DRY_RUN={DRY_RUN}")
     while True:
         try:
             ahora_ts = datetime.now(timezone.utc).timestamp()
             if ahora_ts - ultimo_refresco > REFRESCO_WALLETS_S:
                 wallets = await asyncio.to_thread(wallets_operativas_recientes)
+                wallets_bucket = await asyncio.to_thread(wallets_operativas_recientes_por_bucket, wallets)
                 ultimo_refresco = ahora_ts
-            vistos = await _correr_una_conexion(wallets, vistos)
+            vistos = await _correr_una_conexion(wallets, vistos, wallets_bucket)
         except (websockets.exceptions.ConnectionClosed, OSError, asyncio.TimeoutError) as e:
             _log(f"Conexión perdida ({type(e).__name__}: {e}) — reintentando en {RECONNECT_ESPERA_S}s")
         except Exception as e:

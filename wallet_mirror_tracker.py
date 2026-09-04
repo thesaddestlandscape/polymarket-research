@@ -73,6 +73,46 @@ DRY_RUN_VIVO = DIR_SHADOW / "wallet_mirror_sniper_dry_run.csv"
 # docstring de esa función. Misma fuente que wallet_edge_tracker.py::HIST.
 HIST_BALLENAS = DIR_SHADOW / "ballenas_timing_history.csv"
 
+_cache_dry_run_vivo = {"mtime": None, "filas": None}
+
+
+def _leer_dry_run_vivo_filas() -> list:
+    """Lee wallet_mirror_sniper_dry_run.csv UNA vez, cacheado por mtime
+    (04-Sep, /code-review: _historial_reciente_wallet_mirror() y
+    _historial_reciente_wallet_mirror_por_bucket() lo leían cada una por
+    separado en el MISMO refresco de 30min de wallet_mirror_executor_
+    dryrun.py -- doble I/O/CPU sobre un fichero de 400k+ filas y
+    creciendo. Mismo patrón de caché por mtime que resolution_sniper_
+    precierre_gate.py/gate_bucket_propio.py -- nunca sirve un dato más
+    viejo que el propio fichero en disco, solo evita reparsearlo si no
+    ha cambiado desde la última lectura."""
+    try:
+        mtime = DRY_RUN_VIVO.stat().st_mtime
+    except OSError:
+        return []
+    if _cache_dry_run_vivo["mtime"] != mtime:
+        with open(DRY_RUN_VIVO, encoding="utf-8") as f:
+            _cache_dry_run_vivo["filas"] = list(csv.DictReader(f))
+        _cache_dry_run_vivo["mtime"] = mtime
+    return _cache_dry_run_vivo["filas"]
+
+
+def _acierto_wallet_desde_fila_dry_run(row: dict) -> int | None:
+    """None si la fila no tiene acierto resuelto. Si no, el acierto en
+    semántica NATIVA de la wallet (¿acertó ELLA?), invertido para FADE --
+    ver docstring de _historial_reciente_wallet_mirror() para el porqué
+    (bug real 24-Ago de mezclar semánticas). /code-review 04-Sep: extraído
+    a función compartida -- esta misma lógica vivía duplicada en
+    _historial_reciente_wallet_mirror() y _historial_reciente_wallet_
+    mirror_por_bucket(), con el riesgo real de corregir una copia y
+    olvidar la otra."""
+    if row.get("acierto") not in ("0", "1"):
+        return None
+    acierto = int(row["acierto"])
+    if row.get("tipo", "") == "FADE":
+        acierto = 1 - acierto
+    return acierto
+
 N_MIN_WALLET = 30
 GAMMA = "https://gamma-api.polymarket.com"
 UMBRAL_RESUELTO = 0.98
@@ -168,36 +208,28 @@ def _historial_reciente_wallet_mirror(wallets_objetivo: set | None = None) -> di
                     clave = (w, row.get("activo", ""), marco_activity, tipo)
                     hist[clave][(w, cid)] = (ts, int(row["acierto"]))
 
-    if DRY_RUN_VIVO.exists():
-        with open(DRY_RUN_VIVO, encoding="utf-8") as f:
-            for row in csv.DictReader(f):
-                if row.get("acierto") not in ("0", "1"):
-                    continue
-                w = row.get("wallet", "").lower()
-                if wallets_objetivo is not None and w not in wallets_objetivo:
-                    continue
-                tipo = row.get("tipo", "")
-                acierto = int(row["acierto"])
-                # 24-Ago (/code-review, bug real cazado antes de desplegar):
-                # el "acierto" de este CSV es el resultado de NUESTRA
-                # POSICIÓN (resolver_pendientes(): acierto=1 si outcome==
-                # mirror_lado), NO el de la wallet -- para SEGUIR coinciden
-                # (mirror_lado=lado_wallet), pero para FADE mirror_lado es
-                # el lado CONTRARIO, así que acierto=1 aquí significa que
-                # LA WALLET PERDIÓ. ballenas_timing_history.csv (arriba) usa
-                # la semántica nativa "acertó la wallet" -- la misma que
-                # info["hit"] (la referencia con la que se compara en
-                # wallets_operativas_recientes()). Invertir aquí para FADE
-                # deja las dos fuentes en la MISMA semántica antes de
-                # mezclarlas bajo la misma clave -- sin esto, mezclaba
-                # "acertó la wallet" (ballenas) con "acertó nuestra posición"
-                # (aquí, FADE) bajo la misma clave, corrompiendo el gate que
-                # decide qué wallets FADE mueven dinero real.
-                if tipo == "FADE":
-                    acierto = 1 - acierto
-                clave = (w, row.get("activo", ""), row.get("marco", ""), tipo)
-                cid = row.get("condition_id", "")
-                hist[clave][(w, cid)] = (row.get("trade_timestamp", ""), acierto)
+    # 24-Ago (/code-review, bug real cazado antes de desplegar): el
+    # "acierto" de este CSV es el resultado de NUESTRA POSICIÓN
+    # (resolver_pendientes(): acierto=1 si outcome==mirror_lado), NO el de
+    # la wallet -- para SEGUIR coinciden (mirror_lado=lado_wallet), pero
+    # para FADE mirror_lado es el lado CONTRARIO, así que acierto=1 aquí
+    # significa que LA WALLET PERDIÓ. ballenas_timing_history.csv (arriba)
+    # usa la semántica nativa "acertó la wallet" -- la misma que
+    # info["hit"] (la referencia con la que se compara en
+    # wallets_operativas_recientes()). _acierto_wallet_desde_fila_dry_run()
+    # invierte para FADE, dejando las dos fuentes en la MISMA semántica
+    # antes de mezclarlas bajo la misma clave.
+    for row in _leer_dry_run_vivo_filas():
+        acierto = _acierto_wallet_desde_fila_dry_run(row)
+        if acierto is None:
+            continue
+        w = row.get("wallet", "").lower()
+        if wallets_objetivo is not None and w not in wallets_objetivo:
+            continue
+        tipo = row.get("tipo", "")
+        clave = (w, row.get("activo", ""), row.get("marco", ""), tipo)
+        cid = row.get("condition_id", "")
+        hist[clave][(w, cid)] = (row.get("trade_timestamp", ""), acierto)
 
     out = {}
     for clave, por_cid in hist.items():
@@ -264,6 +296,170 @@ def wallets_operativas_recientes() -> dict:
             continue  # sin edge reciente confirmado por sí mismo -> no se opera
         out[clave] = info
     return out
+
+
+# 04-Sep (petición explícita Javi, tras el hallazgo real de
+# idea_walletmirror_15min_causa_concentracion_wallet_04sep -- la racha
+# 1W/6L de WALLET_MIRROR#BTC/ETH#15min no fue varianza pura: una wallet
+# concentraba el 26,2% del volumen de ETH#15min[0.22,0.27) y su hit-rate
+# EN ESA ZONA de precio concreta venía cayendo 41,9%->26,9% en días,
+# mientras `wallets_operativas_recientes()` de arriba -- que solo mira
+# (wallet,activo,marco,tipo), sin desagregar por precio -- seguía
+# admitiéndola porque su agregado en BTC/ETH#15min entero no había caído
+# lo suficiente para disparar la comparación de arriba. CLAUDE.md pt.17:
+# "desagregar SIEMPRE por micro-bucket de precio, en TODO análisis" --
+# esto faltaba aquí. Mismo mecanismo que wallets_operativas_recientes(),
+# un eje más de segmentación (bucket de precio, STEP=0.05, MISMA función
+# que wallet_mirror_gate_bucket.bucket() -- no reinventar el bucketing).
+from wallet_mirror_gate_bucket import bucket as _bucket_precio  # noqa: E402
+
+N_RECIENTE_BUCKET_OPERAR = 8    # calibrado 04-Sep sobre datos reales: con
+# N=8, 8.624/17.826 combinaciones (wallet,activo,marco,tipo,bucket) tienen
+# evidencia suficiente para evaluarse (resto queda fail-closed, "sin
+# evidencia" -- normal y esperado, un bucket de 0,05 de ancho recibe mucho
+# menos volumen que el marco entero). Con N=15 (mismo valor que el check
+# agregado) solo 6.076/17.826 -- demasiado restrictivo para un primer
+# despliegue; revisar con más n según crezca el histórico.
+MARGEN_DEGRADACION_PP_BUCKET = 15  # mismo criterio que MARGEN_DEGRADACION_PP_OPERAR
+MIN_ANTIGUOS_DEGRADACION_BUCKET = 5  # mínimo de trades ANTERIORES a la ventana reciente
+# para que el histórico DEL PROPIO BUCKET sea informativo -- ver uso en
+# wallets_operativas_recientes_por_bucket().
+
+
+def _historial_reciente_wallet_mirror_por_bucket(wallets_objetivo: set | None = None) -> dict:
+    """(wallet, activo, marco_activity, tipo, bucket_precio) -> [(ts, acierto), ...].
+
+    MISMA semántica de "acierto" (resultado de LA WALLET, no de nuestra
+    posición -- FADE invertido igual que en _historial_reciente_wallet_
+    mirror()) que la función agregada de arriba, con un eje extra: el
+    bucket de precio (STEP=0,05) al que perteneció CADA trade individual.
+
+    /code-review 04-Sep, hallazgo real: la primera versión mezclaba
+    HIST_BALLENAS (bucket por `precio`, el precio al que operó LA WALLET
+    en el mercado -- feed de actividad de mercado, sin ningún concepto de
+    "nuestro ask") y DRY_RUN_VIVO (bucket por `mejor_ask_deteccion`,
+    NUESTRO precio de entrada real) bajo la MISMA clave de bucket -- dos
+    puntos de medida distintos, mezclados. Fix: esta función usa SOLO
+    DRY_RUN_VIVO (`wallet_mirror_sniper_dry_run.csv`, 400k+ filas
+    resueltas desde 30-Jul -- de sobra para esta capa) para que el bucket
+    represente SIEMPRE el mismo precio (nuestro ask real), consistente
+    con lo que se comprueba en el ejecutor (`ask_ref`). La función
+    agregada de arriba (wallets_operativas_recientes(), sin eje de
+    precio) SÍ sigue combinando ambas fuentes -- ahí no hay mezcla de
+    semánticas de precio porque no hay bucket que corromper.
+
+    Función separada (no se reutiliza la de arriba) a propósito: añadir
+    un elemento al tuple interno (ts, acierto) de la función agregada,
+    ya usada en producción por wallets_operativas_recientes(), es más
+    riesgo del necesario para un cambio que solo hace falta aquí -- más
+    vale una function nueva y clara que tocar código ya en dinero real."""
+    hist = defaultdict(dict)  # clave -> {(wallet,condition_id): (ts, acierto)} para dedup
+
+    for row in _leer_dry_run_vivo_filas():
+        acierto = _acierto_wallet_desde_fila_dry_run(row)
+        if acierto is None:
+            continue
+        w = row.get("wallet", "").lower()
+        if wallets_objetivo is not None and w not in wallets_objetivo:
+            continue
+        tipo = row.get("tipo", "")
+        # mejor_ask_deteccion (nuestro precio de entrada real) es el ÚNICO
+        # ancla válida para el bucket -- mismo campo que usa
+        # wallet_mirror_gate_bucket.py. /code-review 04-Sep (2ª ronda):
+        # la primera versión caía a precio_wallet cuando mejor_ask_
+        # deteccion venía vacío ("" en ~1,4% de las filas, cuando
+        # fill_deteccion.get("ok") es False en el sniper) -- eso
+        # reintroducía la MISMA mezcla de dos precios distintos bajo la
+        # misma clave que se acababa de corregir. Sin fallback: una fila
+        # sin ask real conocido se descarta para el bucket (sigue contando
+        # para el check AGREGADO, que no depende de precio).
+        precio_raw = row.get("mejor_ask_deteccion")
+        try:
+            precio = float(precio_raw)
+        except (TypeError, ValueError):
+            continue
+        b = _bucket_precio(precio)
+        clave = (w, row.get("activo", ""), row.get("marco", ""), tipo, b)
+        cid = row.get("condition_id", "")
+        hist[clave][(w, cid)] = (row.get("trade_timestamp", ""), acierto)
+
+    out = {}
+    for clave, por_cid in hist.items():
+        out[clave] = sorted(por_cid.values(), key=lambda x: x[0])
+    return out
+
+
+def wallets_operativas_recientes_por_bucket(wallets_admitidas: dict | None = None) -> dict:
+    """(wallet, activo, marco, tipo, bucket_precio) -> info si la wallet
+    tiene evidencia reciente SUFICIENTE Y CON EDGE dentro de ESE
+    micro-bucket de precio concreto -- no solo en agregado. Fail-closed:
+    ausente de este dict = no operar en ese bucket con esa wallet, aunque
+    esté admitida en agregado.
+
+    wallets_admitidas: dict de wallets_operativas_recientes() (opcional,
+    recomendado) -- si se pasa, solo se evalúa el bucket para wallets que
+    YA pasaron el filtro agregado (evita trabajo redundante; el check de
+    bucket es una capa ADICIONAL sobre el agregado, no un sustituto -- una
+    wallet degradada en agregado sigue vetada aunque un bucket concreto
+    pareciera bien por casualidad de n bajo)."""
+    candidatas = cargar_wallets_validadas()
+    if not candidatas:
+        return {}
+    if wallets_admitidas is not None:
+        candidatas = {k: v for k, v in candidatas.items() if k in wallets_admitidas}
+    wallets_objetivo = {w for w, _, _ in candidatas}
+    hist = _historial_reciente_wallet_mirror_por_bucket(wallets_objetivo)
+    out = {}
+    for (w, activo, marco, tipo, b), aciertos in hist.items():
+        clave_agregada = (w, activo, marco)
+        info = candidatas.get(clave_agregada)
+        if info is None or info["tipo"] != tipo:
+            continue
+        if len(aciertos) < N_RECIENTE_BUCKET_OPERAR:
+            continue  # sin evidencia reciente suficiente en ESTE bucket -> no operar aquí
+        recientes_tup = aciertos[-N_RECIENTE_BUCKET_OPERAR:]
+        recientes = [a for _, a in recientes_tup]
+        k, n = sum(recientes), len(recientes)
+        # /code-review 04-Sep, hallazgo real: faltaba el check de
+        # degradación-vs-histórico que SÍ tiene la función agregada
+        # (wallets_operativas_recientes) -- sin esto, una wallet que se
+        # degrada dentro de un bucket concreto pero sigue por encima del
+        # 50% plano pasaba el gate igual, exactamente el caso que motivó
+        # este mecanismo (0xeebde... en ETH#15min[0.22,0.27), 41,9%->26,9%
+        # en días, ambas cifras por encima de breakeven de la zona). El
+        # histórico de ESTE bucket concreto no está precalculado en
+        # ningún sitio (a diferencia de info["hit"] agregado) -- se
+        # calcula aquí mismo con la parte de `aciertos` anterior a la
+        # ventana reciente. MIN_ANTIGUOS_DEGRADACION: si no hay suficiente
+        # historia previa al margen reciente, no se puede comparar --
+        # se deja pasar solo por el criterio de borde >50% de arriba
+        # (fail-closed seguiría siendo excesivo con un bucket que apenas
+        # tiene más que los N_RECIENTE_BUCKET_OPERAR mínimos).
+        antiguos_tup = aciertos[:-N_RECIENTE_BUCKET_OPERAR]
+        if len(antiguos_tup) >= MIN_ANTIGUOS_DEGRADACION_BUCKET:
+            k_hist = sum(a for _, a in antiguos_tup)
+            hit_hist_bucket = k_hist / len(antiguos_tup) * 100
+            _, ci_hi = wilson_ci(k, n)
+            if ci_hi * 100 < (hit_hist_bucket - MARGEN_DEGRADACION_PP_BUCKET):
+                continue  # degradada frente a SU histórico EN ESTE BUCKET -> no operar aquí
+        k_posicion = k if tipo == "SEGUIR" else (n - k)
+        ci_lo_posicion, _ = wilson_ci(k_posicion, n)
+        if ci_lo_posicion <= 0.50:
+            continue  # sin edge reciente confirmado EN ESTE BUCKET -> no operar aquí
+        out[(w, activo, marco, tipo, b)] = {"n": n, "hit_reciente": round(k / n, 4)}
+    return out
+
+
+def wallet_aprueba_bucket(wallet: str, activo: str, marco: str, tipo: str, ask: float,
+                          cache: dict) -> bool:
+    """Lookup de conveniencia para el ejecutor: ¿esta wallet, en este
+    micro-bucket de precio, tiene evidencia reciente con edge? `cache` es
+    el dict ya calculado por wallets_operativas_recientes_por_bucket()
+    (refrescado cada REFRESCO_WALLETS_S, mismo cadencia que el agregado --
+    el llamante lo recalcula, esta función no vuelve a leer disco)."""
+    b = _bucket_precio(ask)
+    return (wallet.lower(), activo, marco, tipo, b) in cache
+
 
 # 29-Jul (bug real encontrado en el primer smoke test, 0 matches pese a
 # haber decenas en los datos crudos): wallet_edge_score_por_activo_marco.json
