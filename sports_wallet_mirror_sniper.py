@@ -57,6 +57,18 @@ from sports_wallet_mirror_clv import clv_tupla_sports  # 03-Sep: tercer
 # LoL#FADE[0.70,0.75)/Dota#SEGUIR[0.47,0.52): mismo veto CLV que cripto
 # (live_trade.py::_clv_tupla), construido 27-Ago pero nunca conectado a
 # ninguna decisión hasta hoy.
+from sports_wallet_mirror_frescura import (  # 04-Sep: cuarto guardián --
+    wallets_operativas_recientes, wallets_operativas_recientes_por_bucket, wallet_aprueba_bucket,
+)
+# petición explícita Javi ("no podemos dejar nada sin cubrir"): mismo
+# mecanismo que cripto (wallet_mirror_executor_dryrun.py) -- exige que la
+# wallet que dispara AHORA tenga edge reciente confirmado (a) en agregado
+# (categoria,tipo) Y (b) específicamente en el micro-bucket de precio de
+# ESTE trade. cargar_wallets_validadas() de arriba (línea 140) sigue
+# siendo histórico SIN filtrar -- se mantiene para no romper nada que ya
+# dependa de la lista completa; wallets_operativas_recientes() (importada
+# aquí) es la que de verdad filtra por frescura, sustituyendo el `wallets`
+# usado en main_ws()/_correr_una_conexion() más abajo.
 
 CLV_VETO_MIN_N = 20  # mismo umbral que cripto (live_trade.py::CLV_VETO_MIN_N)
 
@@ -279,7 +291,7 @@ async def _mantener_ping(ws):
         pass
 
 
-async def _correr_una_conexion(wallets: dict, vistos: set) -> set:
+async def _correr_una_conexion(wallets: dict, vistos: set, wallets_bucket: dict) -> set:
     async with websockets.connect(WS_URL, open_timeout=10, close_timeout=5) as ws:
         sub = {"action": "subscribe", "subscriptions": [{"topic": "activity", "type": "trades"}]}
         await ws.send(json.dumps(sub))
@@ -369,6 +381,19 @@ async def _correr_una_conexion(wallets: dict, vistos: set) -> set:
                         if gate_bucket_veredicto != "bueno_confirmado":
                             ok_operar = False
                             gate_veredicto = f"gate_bucket={gate_bucket_veredicto}"
+                    if ok_operar and not wallet_aprueba_bucket(wallet, categoria, info["tipo"],
+                                                               float(mejor_ask), wallets_bucket):
+                        # 04-Sep (petición explícita Javi, "no podemos dejar
+                        # nada sin cubrir" -- mismo mecanismo que cripto,
+                        # ver wallet_mirror_tracker.py el mismo día):
+                        # gate_bucket_resultado de arriba mide el bucket
+                        # AGREGADO (todas las wallets mezcladas) -- esto
+                        # comprueba que ESTA wallet concreta sigue teniendo
+                        # edge reciente confirmado DENTRO de este
+                        # micro-bucket de precio exacto, no solo en agregado
+                        # (categoria,tipo). Fail-closed.
+                        ok_operar = False
+                        gate_veredicto = "sin_edge_reciente_wallet_en_bucket"
                     if ok_operar:
                         # Veto CLV (03-Sep, mismo patrón que live_trade.py::
                         # _clv_tupla en cripto): tupla#dirección con CLV medio
@@ -627,24 +652,34 @@ def resolver_pendientes() -> int:
 
 
 async def main_ws() -> None:
-    wallets = cargar_wallets_validadas()
-    _log(f"wallets validadas: {len(wallets)} combos (SEGUIR="
+    # 04-Sep: wallets_operativas_recientes(), NO cargar_wallets_validadas()
+    # -- este proceso toca dinero real (DRY_RUN=False para LoL#SEGUIR),
+    # exige además rendimiento reciente no degradado, mismo criterio que
+    # cripto (wallet_mirror_executor_dryrun.py, 13-Ago). to_thread() por
+    # consistencia con cripto (evita bloquear ping/websocket mientras
+    # recalcula), aunque el volumen de sports es mucho menor.
+    wallets = await asyncio.to_thread(wallets_operativas_recientes)
+    wallets_bucket = await asyncio.to_thread(wallets_operativas_recientes_por_bucket, wallets)
+    _log(f"wallets validadas: {len(wallets)} combos frescos "
+         f"({len(wallets_bucket)} combinaciones wallet+bucket con edge reciente) (SEGUIR="
          f"{sum(1 for v in wallets.values() if v['tipo']=='SEGUIR')}, "
          f"FADE={sum(1 for v in wallets.values() if v['tipo']=='FADE')})")
     vistos = _vistos_cargar()
     ultimo_refresco = time.time()
     while True:
         try:
-            vistos = await _correr_una_conexion(wallets, vistos)
+            vistos = await _correr_una_conexion(wallets, vistos, wallets_bucket)
         except (websockets.exceptions.ConnectionClosed, OSError, asyncio.TimeoutError) as e:
             _log(f"Conexión perdida ({type(e).__name__}: {e}) — reintentando en {RECONNECT_ESPERA_S}s")
         except Exception as e:
             _log(f"Error inesperado ({type(e).__name__}: {e}) — reintentando en {RECONNECT_ESPERA_S}s")
         _vistos_guardar(vistos)
         if time.time() - ultimo_refresco >= REFRESCO_WALLETS_S:
-            wallets = cargar_wallets_validadas()
+            wallets = await asyncio.to_thread(wallets_operativas_recientes)
+            wallets_bucket = await asyncio.to_thread(wallets_operativas_recientes_por_bucket, wallets)
             ultimo_refresco = time.time()
-            _log(f"wallets validadas refrescadas: {len(wallets)} combos")
+            _log(f"wallets validadas refrescadas: {len(wallets)} combos "
+                 f"({len(wallets_bucket)} combinaciones wallet+bucket)")
         await asyncio.sleep(RECONNECT_ESPERA_S)
 
 
