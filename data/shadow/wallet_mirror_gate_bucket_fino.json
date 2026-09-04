@@ -187,7 +187,7 @@
     "n": 55,
     "pnl_medio": 0.5964,
     "diff_vs_resto": 0.5879,
-    "p_valor": 0.0,
+    "p_valor": 0.0005,
     "split_half_diff": [
       0.3715,
       0.7966
@@ -196,8 +196,8 @@
     "pnl_medio_loo": 0.626,
     "robusto_loo": true,
     "ci90_bootstrap": [
-      0.3104,
-      0.885
+      0.3082,
+      0.8893
     ],
     "robusto_bootstrap": true,
     "n_posiciones_buscadas": 63,
