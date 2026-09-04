@@ -1,10 +1,10 @@
 {
-  "timestamp_utc": "2026-09-04T00:09:38+00:00",
-  "bankroll_sim": 37830.43,
-  "pnl_total": 37810.43,
-  "n_ops": 381169,
-  "win_rate": 0.574,
-  "estrategias_activas": 547,
+  "timestamp_utc": "2026-09-04T00:14:44+00:00",
+  "bankroll_sim": 37812.13,
+  "pnl_total": 37792.13,
+  "n_ops": 381308,
+  "win_rate": 0.5739,
+  "estrategias_activas": 546,
   "desactivadas": [
     "SMART_FLOW_1H",
     "UPDOWN_GBM#daily",
@@ -25,6 +25,7 @@
     "PRICE_TARGET_GBM_FADE#atexpiry",
     "FAVORITO_CONFIRMADO_15MIN_ALTACONVICCION#SOL#15min",
     "FAVORITO_CONFIRMADO_15MIN_ALTACONVICCION#SOL",
+    "FAVORITO_CONFIRMADO#BNB#240min",
     "PRICE_TARGET_GBM_FADE#reach",
     "PRICE_TARGET_GBM_FADE#BTC#reach"
   ],
@@ -49,9 +50,9 @@
   "clv_medio": 0.025,
   "monitor_5min": {
     "ou_5m": {
-      "n": 1030,
-      "clv": -0.1107,
-      "clv_ult30": 0.0
+      "n": 1031,
+      "clv": -0.111,
+      "clv_ult30": -0.0303
     },
     "of_buy_yes": {
       "n": 608,
