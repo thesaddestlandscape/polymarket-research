@@ -1,0 +1,13 @@
+timestamp_utc,ts_end,dry_run,activo,direccion_implicita,ask_implicita,gate_confirmado,gate_motivo,ratio_vs_stake,vwap_fill_estimado,t_lectura_ms,t_firma_ms,t_total_ms,disparado,order_ok,order_error
+2026-09-04T06:29:58+00:00,1788503400,True,BTC,Down,,False,sin_ask,,,371.1,,,,,
+2026-09-04T06:29:58+00:00,1788503400,True,ETH,Down,,False,sin_ask,,,51.9,,,,,
+2026-09-04T06:29:58+00:00,1788503400,True,SOL,Down,,False,sin_ask,,,53.4,,,,,
+2026-09-04T06:29:58+00:00,1788503400,True,XRP,Down,,False,sin_ask,,,48.9,,,,,
+2026-09-04T06:29:58+00:00,1788503400,True,DOGE,Down,,False,sin_ask,,,47.7,,,,,
+2026-09-04T06:29:58+00:00,1788503400,True,BNB,Down,,False,sin_ask,,,53.3,,,,,
+2026-09-04T06:34:58+00:00,1788503700,True,BTC,Down,,False,sin_ask,,,219.6,,,,,
+2026-09-04T06:34:58+00:00,1788503700,True,ETH,Down,,False,sin_ask,,,50.4,,,,,
+2026-09-04T06:34:58+00:00,1788503700,True,SOL,Up,,False,sin_ask,,,48.0,,,,,
+2026-09-04T06:34:58+00:00,1788503700,True,XRP,Up,,False,sin_ask,,,47.7,,,,,
+2026-09-04T06:34:58+00:00,1788503700,True,DOGE,Down,,False,sin_ask,,,47.8,,,,,
+2026-09-04T06:34:58+00:00,1788503700,True,BNB,Down,,False,sin_ask,,,82.6,,,,,
