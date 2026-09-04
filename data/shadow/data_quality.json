@@ -1,27 +1,27 @@
 {
-  "timestamp_utc": "2026-09-04T12:42:46+00:00",
+  "timestamp_utc": "2026-09-04T12:48:43+00:00",
   "estado_global": "DEGRADED",
   "alertas": [
-    "rechazos_1h:11 (rango=0, spike=0)"
+    "rechazos_1h:15 (rango=0, spike=0)"
   ],
   "rechazos_1h": {
     "rango": 0,
     "spike": 0,
-    "total": 11,
+    "total": 15,
     "cambio_fuente": 76,
     "por_sym": {
       "BTC": 2,
       "ETH": 3,
-      "SOL": 3,
-      "XRP": 3
+      "SOL": 5,
+      "XRP": 5
     }
   },
   "assets": {
     "BTC": {
       "estado": "OK",
-      "n": 3678,
-      "age_seconds": 9.8,
-      "ultimo_precio": 79912.6,
+      "n": 3688,
+      "age_seconds": 2.0,
+      "ultimo_precio": 79236.0,
       "gaps": [
         {
           "inicio": "2026-09-03T06:46:02",
@@ -33,9 +33,9 @@
     },
     "ETH": {
       "estado": "OK",
-      "n": 3678,
-      "age_seconds": 9.8,
-      "ultimo_precio": 2461.77,
+      "n": 3688,
+      "age_seconds": 2.0,
+      "ultimo_precio": 2437.03,
       "gaps": [
         {
           "inicio": "2026-09-03T06:46:02",
@@ -47,9 +47,9 @@
     },
     "SOL": {
       "estado": "OK",
-      "n": 3678,
-      "age_seconds": 9.8,
-      "ultimo_precio": 102.14,
+      "n": 3688,
+      "age_seconds": 2.0,
+      "ultimo_precio": 100.82,
       "gaps": [
         {
           "inicio": "2026-09-03T06:46:02",
@@ -61,9 +61,9 @@
     },
     "XRP": {
       "estado": "OK",
-      "n": 3678,
-      "age_seconds": 9.8,
-      "ultimo_precio": 1.422,
+      "n": 3688,
+      "age_seconds": 2.0,
+      "ultimo_precio": 1.4,
       "gaps": [
         {
           "inicio": "2026-09-03T06:46:02",
@@ -75,17 +75,17 @@
     }
   },
   "cross_source": {
-    "timestamp_utc": "2026-09-04T12:41:07+00:00",
+    "timestamp_utc": "2026-09-04T12:47:05+00:00",
     "fuentes_activas": [
       "binance",
       "coinbase",
       "kraken"
     ],
     "consenso": {
-      "BTC": 79942.92,
-      "ETH": 2462.28,
-      "SOL": 101.87,
-      "XRP": 1.419
+      "BTC": 79250.6,
+      "ETH": 2436.53,
+      "SOL": 100.79,
+      "XRP": 1.3995
     },
     "alertas": [],
     "bloqueados": []
