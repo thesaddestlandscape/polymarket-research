@@ -1,24 +1,20 @@
 {
-  "timestamp_utc": "2026-09-04T01:48:43+00:00",
+  "timestamp_utc": "2026-09-04T01:54:35+00:00",
   "estado_global": "OK",
-  "alertas": [
-    "rechazos_1h:1 (rango=0, spike=0)"
-  ],
+  "alertas": [],
   "rechazos_1h": {
     "rango": 0,
     "spike": 0,
-    "total": 1,
-    "cambio_fuente": 100,
-    "por_sym": {
-      "XRP": 1
-    }
+    "total": 0,
+    "cambio_fuente": 102,
+    "por_sym": {}
   },
   "assets": {
     "BTC": {
       "estado": "OK",
-      "n": 2541,
-      "age_seconds": 5.1,
-      "ultimo_precio": 80828.775,
+      "n": 2554,
+      "age_seconds": 6.1,
+      "ultimo_precio": 80892.405,
       "gaps": [
         {
           "inicio": "2026-09-03T06:46:02",
@@ -30,9 +26,9 @@
     },
     "ETH": {
       "estado": "OK",
-      "n": 2541,
-      "age_seconds": 5.1,
-      "ultimo_precio": 2499.405,
+      "n": 2554,
+      "age_seconds": 6.1,
+      "ultimo_precio": 2502.585,
       "gaps": [
         {
           "inicio": "2026-09-03T06:46:02",
@@ -44,9 +40,9 @@
     },
     "SOL": {
       "estado": "OK",
-      "n": 2541,
-      "age_seconds": 5.1,
-      "ultimo_precio": 103.47,
+      "n": 2554,
+      "age_seconds": 6.1,
+      "ultimo_precio": 103.73,
       "gaps": [
         {
           "inicio": "2026-09-03T06:46:02",
@@ -58,9 +54,9 @@
     },
     "XRP": {
       "estado": "OK",
-      "n": 2541,
-      "age_seconds": 5.1,
-      "ultimo_precio": 1.4377,
+      "n": 2554,
+      "age_seconds": 6.1,
+      "ultimo_precio": 1.4418,
       "gaps": [
         {
           "inicio": "2026-09-03T06:46:02",
@@ -72,17 +68,17 @@
     }
   },
   "cross_source": {
-    "timestamp_utc": "2026-09-04T01:47:16+00:00",
+    "timestamp_utc": "2026-09-04T01:52:24+00:00",
     "fuentes_activas": [
       "binance",
       "coinbase",
       "kraken"
     ],
     "consenso": {
-      "BTC": 80821.1,
-      "ETH": 2499.55,
-      "SOL": 103.4,
-      "XRP": 1.4372
+      "BTC": 80897.05,
+      "ETH": 2502.99,
+      "SOL": 103.61,
+      "XRP": 1.4401
     },
     "alertas": [],
     "bloqueados": []
