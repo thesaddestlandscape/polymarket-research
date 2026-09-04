@@ -1,5 +1,12 @@
 {
  "0x10ef48324b3ebc06d9137794c70285e8e37a7d7b#LoL": {
   "avisado": false
+ },
+ "0x4b39020eb64e9237d12f23bb3fc6e1c728918b50#LoL": {
+  "avisado": true,
+  "hit_hist": 60.6,
+  "hit_reciente": 25.0,
+  "n_reciente": 20,
+  "telegram_ok": true
  }
 }
