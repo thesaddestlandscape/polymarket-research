@@ -75,27 +75,37 @@ CICLO=0
 LAST_GIT=0
 GIT_BATCH_S=300
 LAST_POSTMORTEM=0
-POSTMORTEM_MIN_INTERVAL_S=300  # 03-Sep (rediseño de memoria, paso 2 -- ver
-# project_incidente_swap_pipeline_lento_02sep / feedback_no_mezclar... no,
-# ver la memoria del incidente de swap): shadow_postmortem.py sostiene
-# ~2,7GB de RSS mientras procesa el histórico completo (~373k filas,
-# necesario para no perder rigor estadístico -- nunca se recorta la
-# ventana). Antes se re-encadenaba SIN NINGÚN hueco (siguiente ciclo
-# arrancaba en cuanto terminaba el anterior), así que ese pico de memoria
-# estaba presente casi de forma continua, chocando con cualquier otro
-# proceso pesado del sistema (el mismo día, un `git repack` programado).
-# Los patrones causales/IC no necesitan actualizarse más rápido que cada
-# pocos minutos para que las decisiones de trading sigan bien informadas
-# -- limitar el ARRANQUE de postmortem a como mucho una vez cada
-# POSTMORTEM_MIN_INTERVAL_S da tiempo real a que el sistema libere RAM/swap
-# entre ejecuciones, sin recortar ni un solo dato del cálculo en sí cuando
-# SÍ corre. Mismo valor que GIT_BATCH_S (300s) a propósito -- deja margen
-# amplio bajo el umbral de 900s de watchdog_fast.sh (MAX_SILENCE_S, que
-# reinicia el loop si strategy_params.json no se actualiza) incluso si una
-# ejecución individual tarda varios minutos bajo carga. shadow_resolve.py
-# (cierra trades reales) sigue corriendo TODOS los ciclos sin throttle --
-# esto solo afecta al aprendizaje causal, nunca a la resolución de dinero
-# real.
+POSTMORTEM_MIN_INTERVAL_S=600  # 04-Sep (subido de 300->600, ver aviso
+# Telegram "pipeline lento" 06:01 UTC y project_incidente_swap_pipeline_
+# lento_02sep): con results.csv ya en 385k filas/310MB, cada ejecución de
+# shadow_postmortem.py tarda 180-285s (antes ~49-95s cuando se fijó 300s el
+# 03-Sep) -- con un intervalo de 300s, casi TODA ejecución de postmortem ya
+# empuja al ciclo por encima del umbral de alarma de 120s de
+# vigia_pipiline_latencia, y swap subía activamente (4,2->5,3GB en 40s)
+# mientras corría. 600s da el doble de margen para que RAM/swap se
+# asienten entre picos, sin recortar ni un dato del cálculo (el histórico
+# completo se sigue procesando igual cuando corre). Diagnóstico 04-Sep:
+# NO hubo OOM-kill nuevo (los 2 de dmesg siguen siendo los del 02-Sep), la
+# CPU (git pack-objects + swap-in) y no un bug de loop es la causa directa
+# -- este es un alivio de cadencia, el rediseño real pendiente (ventana
+# rolling/streaming, CLAUDE.md pt.18) sigue sin hacer, requiere diseño +
+# /code-review por tocar el motor de aprendizaje causal compartido.
+# 03-Sep (rediseño de memoria, paso 2 -- ver project_incidente_swap_
+# pipeline_lento_02sep): shadow_postmortem.py sostiene ~2,7GB de RSS
+# mientras procesa el histórico completo (~373k filas, necesario para no
+# perder rigor estadístico -- nunca se recorta la ventana). Antes se
+# re-encadenaba SIN NINGÚN hueco (siguiente ciclo arrancaba en cuanto
+# terminaba el anterior), así que ese pico de memoria estaba presente casi
+# de forma continua, chocando con cualquier otro proceso pesado del
+# sistema (el mismo día, un `git repack` programado). Los patrones
+# causales/IC no necesitan actualizarse más rápido que cada pocos minutos
+# para que las decisiones de trading sigan bien informadas -- limitar el
+# ARRANQUE de postmortem a como mucho una vez cada POSTMORTEM_MIN_INTERVAL_S
+# da tiempo real a que el sistema libere RAM/swap entre ejecuciones, sin
+# recortar ni un solo dato del cálculo en sí cuando SÍ corre.
+# shadow_resolve.py (cierra trades reales) sigue corriendo TODOS los
+# ciclos sin throttle -- esto solo afecta al aprendizaje causal, nunca a
+# la resolución de dinero real.
 while true; do
     CICLO=$((CICLO + 1))
     _t_ciclo0=$(now_ms)
