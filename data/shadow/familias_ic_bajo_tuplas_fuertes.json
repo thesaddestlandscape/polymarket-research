@@ -1,12 +1,12 @@
 {
  "STREAK_MOM_5M": {
-  "ic_bayes_familia": 0.0238,
+  "ic_bayes_familia": 0.0237,
   "n_tuplas_fuertes": 3,
-  "pnl_fiel_combinado_eur": 103.65,
+  "pnl_fiel_combinado_eur": 103.47,
   "tuplas": [
    {
     "k": "STREAK_MOM_5M#DOGE#5min#BUY_NO",
-    "pnl_fiel_eur_sin_suelo": 56.7427,
+    "pnl_fiel_eur_sin_suelo": 56.5627,
     "n_ejecutado": 157
    },
    {
@@ -58,7 +58,7 @@
   ]
  },
  "MOMENTUM_IBS_5M_FADE": {
-  "ic_bayes_familia": -0.0125,
+  "ic_bayes_familia": -0.0126,
   "n_tuplas_fuertes": 1,
   "pnl_fiel_combinado_eur": 24.4,
   "tuplas": [
@@ -82,7 +82,7 @@
   ]
  },
  "MOMENTUM_IBS_15M_BALLENA": {
-  "ic_bayes_familia": -0.0329,
+  "ic_bayes_familia": -0.0327,
   "n_tuplas_fuertes": 1,
   "pnl_fiel_combinado_eur": 16.27,
   "tuplas": [

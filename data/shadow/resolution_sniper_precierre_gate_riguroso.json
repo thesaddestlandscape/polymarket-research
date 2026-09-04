@@ -1,11 +1,11 @@
 {
  "formato": "por_offset_v2",
- "n_filas_fillable": 927,
+ "n_filas_fillable": 930,
  "n_por_offset": {
   "-2": 313,
   "-1": 314,
-  "-30": 87,
-  "-20": 61,
+  "-30": 89,
+  "-20": 62,
   "-12": 48,
   "-8": 37,
   "-5": 35,
@@ -21,7 +21,7 @@
     },
     "BTC": {
      "veredicto": "n_insuficiente_para_ventana",
-     "n_disponible": 18
+     "n_disponible": 19
     },
     "DOGE": {
      "veredicto": "n_insuficiente_para_ventana",
@@ -37,7 +37,7 @@
     },
     "XRP": {
      "veredicto": "n_insuficiente_para_ventana",
-     "n_disponible": 22
+     "n_disponible": 23
     }
    }
   },
@@ -50,7 +50,7 @@
     },
     "BTC": {
      "veredicto": "n_insuficiente_para_ventana",
-     "n_disponible": 10
+     "n_disponible": 11
     },
     "DOGE": {
      "veredicto": "n_insuficiente_para_ventana",
