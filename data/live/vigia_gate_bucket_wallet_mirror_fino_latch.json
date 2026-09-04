@@ -16,18 +16,18 @@
   "hi": 0.46,
   "n": 56,
   "pnl_medio": -0.4485,
-  "diff_vs_resto": -0.4763,
-  "p_valor": 0.003,
+  "diff_vs_resto": -0.4773,
+  "p_valor": 0.0025,
   "split_half_diff": [
-   -0.4745,
-   -0.4782
+   -0.4754,
+   -0.4791
   ],
   "split_half_ok": true,
   "pnl_medio_loo": -0.481,
   "robusto_loo": true,
   "ci90_bootstrap": [
-   -0.6463,
-   -0.2411
+   -0.6472,
+   -0.2188
   ],
   "robusto_bootstrap": true,
   "n_posiciones_buscadas": 24,
@@ -43,7 +43,7 @@
   "n": 69,
   "pnl_medio": -0.5228,
   "diff_vs_resto": -0.5012,
-  "p_valor": 0.003,
+  "p_valor": 0.0015,
   "split_half_diff": [
    -0.4654,
    -0.536
@@ -53,7 +53,7 @@
   "robusto_loo": true,
   "ci90_bootstrap": [
    -0.77,
-   -0.2388
+   -0.2411
   ],
   "robusto_bootstrap": true,
   "n_posiciones_buscadas": 69,
@@ -68,7 +68,7 @@
   "hi": 0.1,
   "n": 71,
   "pnl_medio": 1.3866,
-  "diff_vs_resto": 1.4226,
+  "diff_vs_resto": 1.4225,
   "p_valor": 0.0,
   "split_half_diff": [
    0.0489,
@@ -78,8 +78,8 @@
   "pnl_medio_loo": 1.1983,
   "robusto_loo": true,
   "ci90_bootstrap": [
-   0.4799,
-   2.3541
+   0.4617,
+   2.3853
   ],
   "robusto_bootstrap": true,
   "n_posiciones_buscadas": 96,
@@ -106,8 +106,8 @@
   "pnl_medio_loo": 0.6686,
   "robusto_loo": true,
   "ci90_bootstrap": [
-   0.3498,
-   0.9107
+   0.3418,
+   0.9056
   ],
   "robusto_bootstrap": true,
   "n_posiciones_buscadas": 60,
