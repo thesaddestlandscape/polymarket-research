@@ -1,8 +1,8 @@
 {
  "STREAK_MOM_5M": {
-  "ic_bayes_familia": 0.0179,
+  "ic_bayes_familia": 0.0177,
   "n_tuplas_fuertes": 3,
-  "pnl_fiel_combinado_eur": 105.05,
+  "pnl_fiel_combinado_eur": 106.29,
   "tuplas": [
    {
     "k": "STREAK_MOM_5M#DOGE#5min#BUY_NO",
@@ -11,8 +11,8 @@
    },
    {
     "k": "STREAK_MOM_5M#XRP#5min#BUY_NO",
-    "pnl_fiel_eur_sin_suelo": 34.9505,
-    "n_ejecutado": 94
+    "pnl_fiel_eur_sin_suelo": 36.1973,
+    "n_ejecutado": 95
    },
    {
     "k": "STREAK_MOM_5M#ETH#5min#BUY_NO",
@@ -22,14 +22,14 @@
   ]
  },
  "GBM_LATE_15M": {
-  "ic_bayes_familia": 0.0592,
+  "ic_bayes_familia": 0.0591,
   "n_tuplas_fuertes": 2,
-  "pnl_fiel_combinado_eur": 72.28,
+  "pnl_fiel_combinado_eur": 80.96,
   "tuplas": [
    {
     "k": "GBM_LATE_15M#XRP#15min#BUY_YES",
-    "pnl_fiel_eur_sin_suelo": 56.5586,
-    "n_ejecutado": 394
+    "pnl_fiel_eur_sin_suelo": 65.2341,
+    "n_ejecutado": 395
    },
    {
     "k": "GBM_LATE_15M#SOL#15min#BUY_NO",
@@ -56,19 +56,19 @@
   ]
  },
  "GBM_LATE_60M": {
-  "ic_bayes_familia": 0.0235,
+  "ic_bayes_familia": 0.0253,
   "n_tuplas_fuertes": 1,
-  "pnl_fiel_combinado_eur": 43.72,
+  "pnl_fiel_combinado_eur": 43.92,
   "tuplas": [
    {
     "k": "GBM_LATE_60M#ETH#60min#BUY_YES",
-    "pnl_fiel_eur_sin_suelo": 43.723,
+    "pnl_fiel_eur_sin_suelo": 43.916,
     "n_ejecutado": 34
    }
   ]
  },
  "MOMENTUM_IBS_5M_FADE": {
-  "ic_bayes_familia": -0.0147,
+  "ic_bayes_familia": -0.0149,
   "n_tuplas_fuertes": 1,
   "pnl_fiel_combinado_eur": 21.25,
   "tuplas": [
@@ -80,7 +80,7 @@
   ]
  },
  "STREAK_FADE_15M": {
-  "ic_bayes_familia": 0.0276,
+  "ic_bayes_familia": 0.0312,
   "n_tuplas_fuertes": 1,
   "pnl_fiel_combinado_eur": 16.68,
   "tuplas": [
@@ -88,6 +88,18 @@
     "k": "STREAK_FADE_15M#XRP#15min#BUY_YES",
     "pnl_fiel_eur_sin_suelo": 16.6761,
     "n_ejecutado": 24
+   }
+  ]
+ },
+ "MOMENTUM_IBS_15M_BALLENA": {
+  "ic_bayes_familia": -0.0298,
+  "n_tuplas_fuertes": 1,
+  "pnl_fiel_combinado_eur": 15.15,
+  "tuplas": [
+   {
+    "k": "MOMENTUM_IBS_15M_BALLENA#BNB#15min#BUY_NO",
+    "pnl_fiel_eur_sin_suelo": 15.1473,
+    "n_ejecutado": 154
    }
   ]
  }
