@@ -52,7 +52,10 @@ DIR_BINANCE = REPO / "data" / "binance"
 CHECK_INTERVAL     = 120   # segundos entre ciclos
 MAX_PRED_SILENCE   = 300   # sin actualizar predictions → alerta
 MAX_POSTMORTEM_MB  = 50    # MB máx postmortem.csv
-MAX_LOG_MB         = 200   # MB máx por log (fast/live/slow) antes de rotar
+MAX_LOG_MB         = 80    # MB máx por log antes de rotar (05-Sep: bajado de 200 a 80 —
+# disco al 93%, 13 logs de ejecutores/vigías habían crecido a 95-155MB sin rotar
+# nunca por quedarse justo debajo del umbral viejo; fix_log_size() ya cubre TODOS
+# los logs/*.log via glob desde 18-Ago, el bug real era el umbral, no el alcance)
 DISK_WARN_PCT      = 85    # % usado → warning
 SYNTAX_CHECK_EVERY = 5     # ciclos entre chequeos de sintaxis de todos los scripts
 
