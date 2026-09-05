@@ -1,11 +1,11 @@
 {
  "formato": "por_offset_v2",
- "n_filas_fillable": 1221,
+ "n_filas_fillable": 1229,
  "n_por_offset": {
   "-2": 316,
   "-1": 317,
-  "-30": 232,
-  "-20": 131,
+  "-30": 237,
+  "-20": 134,
   "-12": 85,
   "-8": 56,
   "-5": 45,
@@ -21,8 +21,8 @@
      "ask_medio": 0.9435,
      "wilson90lo": 0.804,
      "breakeven_aprox": 0.9435,
-     "diff_pnl_vs_resto": 0.2605,
-     "p_shuffle": 0.159,
+     "diff_pnl_vs_resto": 0.2669,
+     "p_shuffle": 0.154,
      "split_half_positivo_ambas": false,
      "n_min_live_ok": false,
      "p_bh_signif": false,
@@ -36,8 +36,8 @@
      "ask_medio": 0.9456,
      "wilson90lo": 0.7852,
      "breakeven_aprox": 0.9456,
-     "diff_pnl_vs_resto": 0.2493,
-     "p_shuffle": 0.1755,
+     "diff_pnl_vs_resto": 0.2557,
+     "p_shuffle": 0.172,
      "split_half_positivo_ambas": false,
      "n_min_live_ok": false,
      "p_bh_signif": false,
@@ -48,11 +48,11 @@
    "fino": {
     "BNB": {
      "veredicto": "n_insuficiente_para_ventana",
-     "n_disponible": 36
+     "n_disponible": 37
     },
     "BTC": {
      "veredicto": "n_insuficiente_para_ventana",
-     "n_disponible": 37
+     "n_disponible": 39
     },
     "DOGE": {
      "veredicto": "n_insuficiente_para_ventana",
@@ -60,7 +60,7 @@
     },
     "ETH": {
      "veredicto": "n_insuficiente_para_ventana",
-     "n_disponible": 34
+     "n_disponible": 36
     },
     "SOL": {
      "veredicto": "n_insuficiente_para_ventana",
@@ -81,8 +81,8 @@
      "ask_medio": 0.9389,
      "wilson90lo": 0.6482,
      "breakeven_aprox": 0.9389,
-     "diff_pnl_vs_resto": 0.1649,
-     "p_shuffle": 0.3905,
+     "diff_pnl_vs_resto": 0.1738,
+     "p_shuffle": 0.387,
      "split_half_positivo_ambas": false,
      "n_min_live_ok": false,
      "p_bh_signif": false,
@@ -105,7 +105,7 @@
     },
     "ETH": {
      "veredicto": "n_insuficiente_para_ventana",
-     "n_disponible": 16
+     "n_disponible": 18
     },
     "SOL": {
      "veredicto": "n_insuficiente_para_ventana",
@@ -113,7 +113,7 @@
     },
     "XRP": {
      "veredicto": "n_insuficiente_para_ventana",
-     "n_disponible": 35
+     "n_disponible": 36
     }
    }
   },
@@ -239,7 +239,7 @@
      "wilson90lo": 0.6838,
      "breakeven_aprox": 0.8187,
      "diff_pnl_vs_resto": -0.3502,
-     "p_shuffle": 0.035,
+     "p_shuffle": 0.0355,
      "split_half_positivo_ambas": false,
      "n_min_live_ok": false,
      "p_bh_signif": false,
@@ -269,7 +269,7 @@
      "wilson90lo": 0.5212,
      "breakeven_aprox": 0.82,
      "diff_pnl_vs_resto": -0.5308,
-     "p_shuffle": 0.005,
+     "p_shuffle": 0.003,
      "split_half_positivo_ambas": false,
      "n_min_live_ok": false,
      "p_bh_signif": true,
@@ -284,7 +284,7 @@
      "wilson90lo": 0.8553,
      "breakeven_aprox": 0.5119,
      "diff_pnl_vs_resto": 0.5732,
-     "p_shuffle": 0.0005,
+     "p_shuffle": 0.001,
      "split_half_positivo_ambas": true,
      "n_min_live_ok": false,
      "p_bh_signif": true,
@@ -329,7 +329,7 @@
      "wilson90lo": 0.7492,
      "breakeven_aprox": 0.82,
      "diff_pnl_vs_resto": -0.277,
-     "p_shuffle": 0.112,
+     "p_shuffle": 0.1055,
      "split_half_positivo_ambas": true,
      "n_min_live_ok": false,
      "p_bh_signif": false,
@@ -424,7 +424,7 @@
      "wilson90lo": 0.6838,
      "breakeven_aprox": 0.8187,
      "diff_pnl_vs_resto": -0.338,
-     "p_shuffle": 0.046,
+     "p_shuffle": 0.0485,
      "split_half_positivo_ambas": false,
      "n_min_live_ok": false,
      "p_bh_signif": false,
@@ -454,7 +454,7 @@
      "wilson90lo": 0.5212,
      "breakeven_aprox": 0.82,
      "diff_pnl_vs_resto": -0.5187,
-     "p_shuffle": 0.0025,
+     "p_shuffle": 0.0065,
      "split_half_positivo_ambas": false,
      "n_min_live_ok": false,
      "p_bh_signif": true,
@@ -469,7 +469,7 @@
      "wilson90lo": 0.8553,
      "breakeven_aprox": 0.5119,
      "diff_pnl_vs_resto": 0.5853,
-     "p_shuffle": 0.001,
+     "p_shuffle": 0.0005,
      "split_half_positivo_ambas": true,
      "n_min_live_ok": false,
      "p_bh_signif": true,
@@ -514,7 +514,7 @@
      "wilson90lo": 0.7492,
      "breakeven_aprox": 0.82,
      "diff_pnl_vs_resto": -0.2648,
-     "p_shuffle": 0.134,
+     "p_shuffle": 0.123,
      "split_half_positivo_ambas": true,
      "n_min_live_ok": false,
      "p_bh_signif": false,
