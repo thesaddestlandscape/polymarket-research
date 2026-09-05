@@ -2956,8 +2956,16 @@ def main():
               "el filtro de zona confirmada para tuplas live NO se aplica "
               "(agregado ic_bayes puede incluir zonas no confirmadas hasta "
               "el próximo ciclo)")
+    # 05-Sep (barrido de salud, disco/swap crítico): _excluir_pre_twap(todos_
+    # con_causa) era una segunda pasada completa idéntica a resultados_twap_
+    # safe (misma función, mismos objetos -- _excluir_pre_twap devuelve
+    # referencias sin copiar y causa_perdida se mutó in-place en ambas listas
+    # por igual, verificado). Reusar resultados_twap_safe evita re-escanear
+    # ~400k filas y otra lista de tamaño ~histórico completo viva a la vez --
+    # mismo patrón que los fixes de 11-Ago/21-Ago/03-Sep en esta función,
+    # cero cambio de valores calculados.
     params = calcular_params(
-        _gbp.filtrar_filas_zona_confirmada(_excluir_pre_twap(todos_con_causa), pares_live))
+        _gbp.filtrar_filas_zona_confirmada(resultados_twap_safe, pares_live))
 
     # Aprendizaje causal completo: aprende POR QUÉ pierde Y POR QUÉ gana
     patrones = aprender_patrones_causales(resultados_twap_safe, pred_index)
