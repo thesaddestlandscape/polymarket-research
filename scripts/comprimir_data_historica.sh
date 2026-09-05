@@ -16,7 +16,12 @@
 set -euo pipefail
 
 DIAS_MANTENER=5
-DIAS_BORRAR=45
+DIAS_BORRAR=30
+# 05-Sep: bajado de 45->30 (barrido de salud) — disco al 92-93% pese al ajuste
+# del 02-Sep, ritmo real ~2.7GB/día, crisis en ~2 días con margen de 45d.
+# Recupera ~2.2GB de golpe (verificado antes de aplicar). Mismo criterio que
+# el cambio 90->45: .gz son capturas en bruto ya extraídas a results.csv/
+# trades.csv, nada en producción lee más allá de 30d.
 CUTOFF_COMPRIMIR=$(date -u -d "-${DIAS_MANTENER} days" +%Y-%m-%d)
 CUTOFF_BORRAR=$(date -u -d "-${DIAS_BORRAR} days" +%Y-%m-%d)
 
