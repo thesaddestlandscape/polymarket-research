@@ -1,14 +1,14 @@
 {
  "formato": "por_offset_v2",
- "n_filas_fillable": 1229,
+ "n_filas_fillable": 1237,
  "n_por_offset": {
   "-2": 316,
   "-1": 317,
-  "-30": 237,
-  "-20": 134,
-  "-12": 85,
+  "-30": 240,
+  "-20": 136,
+  "-12": 87,
   "-8": 56,
-  "-5": 45,
+  "-5": 46,
   "-3": 39
  },
  "por_offset": {
@@ -21,8 +21,8 @@
      "ask_medio": 0.9435,
      "wilson90lo": 0.804,
      "breakeven_aprox": 0.9435,
-     "diff_pnl_vs_resto": 0.2669,
-     "p_shuffle": 0.154,
+     "diff_pnl_vs_resto": 0.2721,
+     "p_shuffle": 0.125,
      "split_half_positivo_ambas": false,
      "n_min_live_ok": false,
      "p_bh_signif": false,
@@ -36,8 +36,8 @@
      "ask_medio": 0.9456,
      "wilson90lo": 0.7852,
      "breakeven_aprox": 0.9456,
-     "diff_pnl_vs_resto": 0.2557,
-     "p_shuffle": 0.172,
+     "diff_pnl_vs_resto": 0.2609,
+     "p_shuffle": 0.168,
      "split_half_positivo_ambas": false,
      "n_min_live_ok": false,
      "p_bh_signif": false,
@@ -60,11 +60,11 @@
     },
     "ETH": {
      "veredicto": "n_insuficiente_para_ventana",
-     "n_disponible": 36
+     "n_disponible": 38
     },
     "SOL": {
      "veredicto": "n_insuficiente_para_ventana",
-     "n_disponible": 52
+     "n_disponible": 53
     },
     "XRP": {
      "veredicto": "n_insuficiente_para_ventana",
@@ -81,8 +81,8 @@
      "ask_medio": 0.9389,
      "wilson90lo": 0.6482,
      "breakeven_aprox": 0.9389,
-     "diff_pnl_vs_resto": 0.1738,
-     "p_shuffle": 0.387,
+     "diff_pnl_vs_resto": 0.1858,
+     "p_shuffle": 0.333,
      "split_half_positivo_ambas": false,
      "n_min_live_ok": false,
      "p_bh_signif": false,
@@ -105,11 +105,11 @@
     },
     "ETH": {
      "veredicto": "n_insuficiente_para_ventana",
-     "n_disponible": 18
+     "n_disponible": 19
     },
     "SOL": {
      "veredicto": "n_insuficiente_para_ventana",
-     "n_disponible": 29
+     "n_disponible": 30
     },
     "XRP": {
      "veredicto": "n_insuficiente_para_ventana",
@@ -134,11 +134,11 @@
     },
     "ETH": {
      "veredicto": "n_insuficiente_para_ventana",
-     "n_disponible": 12
+     "n_disponible": 13
     },
     "SOL": {
      "veredicto": "n_insuficiente_para_ventana",
-     "n_disponible": 21
+     "n_disponible": 22
     },
     "XRP": {
      "veredicto": "n_insuficiente_para_ventana",
@@ -196,7 +196,7 @@
     },
     "SOL": {
      "veredicto": "n_insuficiente_para_ventana",
-     "n_disponible": 13
+     "n_disponible": 14
     },
     "XRP": {
      "veredicto": "n_insuficiente_para_ventana",
@@ -239,7 +239,7 @@
      "wilson90lo": 0.6838,
      "breakeven_aprox": 0.8187,
      "diff_pnl_vs_resto": -0.3502,
-     "p_shuffle": 0.0355,
+     "p_shuffle": 0.0395,
      "split_half_positivo_ambas": false,
      "n_min_live_ok": false,
      "p_bh_signif": false,
@@ -329,7 +329,7 @@
      "wilson90lo": 0.7492,
      "breakeven_aprox": 0.82,
      "diff_pnl_vs_resto": -0.277,
-     "p_shuffle": 0.1055,
+     "p_shuffle": 0.115,
      "split_half_positivo_ambas": true,
      "n_min_live_ok": false,
      "p_bh_signif": false,
@@ -424,7 +424,7 @@
      "wilson90lo": 0.6838,
      "breakeven_aprox": 0.8187,
      "diff_pnl_vs_resto": -0.338,
-     "p_shuffle": 0.0485,
+     "p_shuffle": 0.05,
      "split_half_positivo_ambas": false,
      "n_min_live_ok": false,
      "p_bh_signif": false,
@@ -454,7 +454,7 @@
      "wilson90lo": 0.5212,
      "breakeven_aprox": 0.82,
      "diff_pnl_vs_resto": -0.5187,
-     "p_shuffle": 0.0065,
+     "p_shuffle": 0.002,
      "split_half_positivo_ambas": false,
      "n_min_live_ok": false,
      "p_bh_signif": true,
@@ -514,7 +514,7 @@
      "wilson90lo": 0.7492,
      "breakeven_aprox": 0.82,
      "diff_pnl_vs_resto": -0.2648,
-     "p_shuffle": 0.123,
+     "p_shuffle": 0.1335,
      "split_half_positivo_ambas": true,
      "n_min_live_ok": false,
      "p_bh_signif": false,
