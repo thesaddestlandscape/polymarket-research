@@ -5,22 +5,16 @@
    "malo_confirmado"
   ]
  },
- "SEGUIR#BTC#60min#0": {
-  "veredicto": "sin_concluir",
-  "historial_crudo": [
-   "malo_confirmado"
-  ]
- },
  "SEGUIR#ETH#60min#0": {
   "lo": 0.24,
   "hi": 0.29,
   "n": 43,
   "pnl_medio": -0.6572,
-  "diff_vs_resto": -0.6044,
+  "diff_vs_resto": -0.597,
   "p_valor": 0.0,
   "split_half_diff": [
-   -0.419,
-   -0.7815
+   -0.4115,
+   -0.7741
   ],
   "split_half_ok": true,
   "pnl_medio_loo": -0.7393,
@@ -52,8 +46,8 @@
   "pnl_medio_loo": -0.481,
   "robusto_loo": true,
   "ci90_bootstrap": [
-   -0.6472,
-   -0.2492
+   -0.648,
+   -0.2481
   ],
   "robusto_bootstrap": true,
   "n_posiciones_buscadas": 26,
@@ -69,7 +63,7 @@
   "n": 70,
   "pnl_medio": -0.4683,
   "diff_vs_resto": -0.4451,
-  "p_valor": 0.012,
+  "p_valor": 0.0125,
   "split_half_diff": [
    -0.4785,
    -0.4116
@@ -78,8 +72,8 @@
   "pnl_medio_loo": -0.5258,
   "robusto_loo": true,
   "ci90_bootstrap": [
-   -0.7429,
-   -0.18
+   -0.7225,
+   -0.1918
   ],
   "robusto_bootstrap": true,
   "n_posiciones_buscadas": 69,
@@ -92,20 +86,20 @@
  "SEGUIR#BTC#15min#0": {
   "lo": 0.05,
   "hi": 0.1,
-  "n": 71,
-  "pnl_medio": 1.3866,
-  "diff_vs_resto": 1.4239,
+  "n": 73,
+  "pnl_medio": 1.3212,
+  "diff_vs_resto": 1.3576,
   "p_valor": 0.0,
   "split_half_diff": [
-   0.0503,
-   2.7594
+   0.0212,
+   2.6578
   ],
   "split_half_ok": true,
-  "pnl_medio_loo": 1.1983,
+  "pnl_medio_loo": 1.1372,
   "robusto_loo": true,
   "ci90_bootstrap": [
-   0.4617,
-   2.3532
+   0.4292,
+   2.2834
   ],
   "robusto_bootstrap": true,
   "n_posiciones_buscadas": 96,
@@ -120,20 +114,20 @@
  "SEGUIR#BTC#15min#1": {
   "lo": 0.36,
   "hi": 0.41,
-  "n": 47,
-  "pnl_medio": 0.6526,
-  "diff_vs_resto": 0.6677,
+  "n": 48,
+  "pnl_medio": 0.668,
+  "diff_vs_resto": 0.6826,
   "p_valor": 0.0,
   "split_half_diff": [
-   0.6505,
-   0.6842
+   0.5818,
+   0.7834
   ],
   "split_half_ok": true,
-  "pnl_medio_loo": 0.6885,
+  "pnl_medio_loo": 0.7035,
   "robusto_loo": true,
   "ci90_bootstrap": [
-   0.3736,
-   0.9234
+   0.3895,
+   0.9306
   ],
   "robusto_bootstrap": true,
   "n_posiciones_buscadas": 60,
@@ -161,7 +155,7 @@
   "robusto_loo": true,
   "ci90_bootstrap": [
    -1.0,
-   -0.3988
+   -0.3196
   ],
   "robusto_bootstrap": true,
   "n_posiciones_buscadas": 82,
@@ -185,7 +179,7 @@
   "n": 42,
   "pnl_medio": 0.0122,
   "diff_vs_resto": 1.0122,
-  "p_valor": 0.029,
+  "p_valor": 0.03,
   "split_half_diff": [
    1.0149,
    1.0094
@@ -194,7 +188,7 @@
   "pnl_medio_loo": 0.012,
   "robusto_loo": true,
   "ci90_bootstrap": [
-   0.0111,
+   0.0112,
    0.0133
   ],
   "robusto_bootstrap": true,
@@ -210,20 +204,20 @@
  "SEGUIR#BTC#5min#0": {
   "lo": 0.0,
   "hi": 0.05,
-  "n": 1564,
-  "pnl_medio": 5.7844,
-  "diff_vs_resto": 5.7688,
+  "n": 1618,
+  "pnl_medio": 5.6156,
+  "diff_vs_resto": 5.6035,
   "p_valor": 0.0,
   "split_half_diff": [
-   4.9454,
-   6.5922
+   5.239,
+   5.968
   ],
   "split_half_ok": true,
-  "pnl_medio_loo": 5.7292,
+  "pnl_medio_loo": 5.5621,
   "robusto_loo": true,
   "ci90_bootstrap": [
-   4.8075,
-   6.8063
+   4.6857,
+   6.5694
   ],
   "robusto_bootstrap": true,
   "n_posiciones_buscadas": 96,
@@ -238,23 +232,23 @@
  "SEGUIR#BTC#5min#1": {
   "lo": 0.0,
   "hi": 0.05,
-  "n": 72,
-  "pnl_medio": 3.9562,
-  "diff_vs_resto": 3.9871,
-  "p_valor": 0.0,
+  "n": 73,
+  "pnl_medio": 3.8884,
+  "diff_vs_resto": 3.9202,
+  "p_valor": 0.001,
   "split_half_diff": [
-   1.6162,
-   6.3581
+   1.6171,
+   6.161
   ],
   "split_half_ok": true,
-  "pnl_medio_loo": 2.7152,
+  "pnl_medio_loo": 2.6636,
   "robusto_loo": true,
   "ci90_bootstrap": [
-   0.2936,
-   8.0514
+   0.2759,
+   7.9255
   ],
   "robusto_bootstrap": true,
-  "n_posiciones_buscadas": 85,
+  "n_posiciones_buscadas": 86,
   "veredicto_crudo_hoy": "bueno_confirmado",
   "historial_crudo": [
    "bueno_confirmado",
@@ -269,6 +263,12 @@
    "bueno_confirmado",
    "bueno_confirmado",
    "bueno_confirmado"
+  ]
+ },
+ "SEGUIR#BTC#60min#0": {
+  "veredicto": "sin_concluir",
+  "historial_crudo": [
+   "malo_confirmado"
   ]
  }
 }
