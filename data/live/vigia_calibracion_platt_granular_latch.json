@@ -1150,5 +1150,25 @@
   "GBM_LATE_60M#SOL#60min": {
     "n": 211,
     "confirmado": false
+  },
+  "MOMENTUM_IBS_15M_FADE#SOL": {
+    "n": 223,
+    "confirmado": true
+  },
+  "MOMENTUM_IBS_15M_FADE#SOL#15min": {
+    "n": 223,
+    "confirmado": true
+  },
+  "UPDOWN_GBM#BNB#5min": {
+    "n": 307,
+    "confirmado": false
+  },
+  "UPDOWN_GBM_IBS_ALTO#ETH": {
+    "n": 201,
+    "confirmado": false
+  },
+  "UPDOWN_GBM_IBS_ALTO#ETH#15min": {
+    "n": 201,
+    "confirmado": false
   }
 }
