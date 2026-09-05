@@ -37,6 +37,19 @@ PERFORMANCE_PATH = DIR_SHADOW / "performance.csv"
 EV_KELLY_HIST_PATH = DIR_SHADOW / "ev_kelly_historico.csv"
 EV_KELLY_HIST_THROTTLE_MIN = 15  # no más de una fila cada 15min (performance.csv se recalcula c/60s)
 INTEGRIDAD_LATCH_PATH = DIR_SHADOW / "integridad_pipeline_latch.json"
+PATRONES_CAUSALES_STATE_PATH = DIR_SHADOW / "patrones_causales_ultimo_run.json"
+PATRONES_CAUSALES_MIN_INTERVAL_S = 3600  # 05-Sep (barrido salud, swap/OOM
+# crítico): aprender_patrones_causales() es el coste dominante real de
+# postmortem (percentiles × features × strat_keys + shuffle+BH-FDR sobre
+# TODA la historia, ~400k filas -- el ciclo de 914s medido hoy). El gate
+# externo de run_fast_mantenimiento.sh (POSTMORTEM_MIN_INTERVAL_S=600) ya
+# limita cuántas veces se INVOCA postmortem entero, pero cada invocación
+# seguía recalculando esto desde cero. calcular_params() (IC/n/activa, lo
+# que live_trade.py lee para activar/desactivar/Kelly) sigue corriendo
+# CADA vez que postmortem se invoca -- solo esta parte, mucho más cara y
+# mucho más lenta de cambiar de verdad ciclo a ciclo, se throttlea aparte.
+# Diseño completo + verificación de preservación en el commit que añade
+# este bloque.
 
 def _escribir_json_atomico(path: Path, texto: str) -> None:
     """Escribe `texto` en `path` de forma atómica (temp-file + os.replace) --
@@ -2350,7 +2363,18 @@ def aprender_patrones_causales(resultados: list, pred_index: dict) -> dict:
         if not feats:
             continue
         for strat_key in posibles:
-            _indice[strat_key][dec].append((r, feats))
+            # 05-Sep (barrido de salud, swap/OOM crítico): antes se guardaba
+            # la fila `r` COMPLETA (~15-20 columnas incl. el JSON crudo de
+            # features, aunque `feats` ya es la versión parseada) por cada
+            # combinación (strat_key, dirección) que matchea -- verificado
+            # línea a línea que lo único que se lee de `r` más abajo en toda
+            # esta función es "acierto" (3 sitios, todos sum(int(r.get(
+            # "acierto",0)))) -- _evaluar_bucket() trata el primer elemento
+            # de la tupla como opaco, solo lo reenvía. Guardar solo el int
+            # reduce el tamaño de esta estructura (la misma que el fix del
+            # 28-Ago ya identificó como el pico de RSS real) varias veces sin
+            # tocar ni un valor calculado.
+            _indice[strat_key][dec].append((int(r.get("acierto", 0)), feats))
 
     for strat_key, feature_specs in FEATURE_RULES.items():
         # .pop() en vez de indexar: libera el bucket de este strat_key del
@@ -2366,10 +2390,10 @@ def aprender_patrones_causales(resultados: list, pred_index: dict) -> dict:
             if len(datos) < N_BUCKET_MIN:
                 continue
 
-            ic_base = _ic_bayes(sum(int(r.get("acierto", 0)) for r, _ in datos), len(datos))
+            ic_base = _ic_bayes(sum(a for a, _ in datos), len(datos))
 
             for feature, cond_mala, cond_buena in feature_specs:
-                vals = [(r, f[feature]) for r, f in datos if feature in f]
+                vals = [(a, f[feature]) for a, f in datos if feature in f]
                 if len(vals) < N_BUCKET_MIN:
                     continue
 
@@ -2394,8 +2418,8 @@ def aprender_patrones_causales(resultados: list, pred_index: dict) -> dict:
                     if len(malo) < N_BUCKET_MIN or len(bueno) < 3:
                         continue
 
-                    wins_malo  = sum(int(r.get("acierto", 0)) for r, _ in malo)
-                    wins_bueno = sum(int(r.get("acierto", 0)) for r, _ in bueno)
+                    wins_malo  = sum(a for a, _ in malo)
+                    wins_bueno = sum(a for a, _ in bueno)
                     ic_malo    = _ic_bayes(wins_malo,  len(malo))
                     ic_bueno   = _ic_bayes(wins_bueno, len(bueno))
                     dif        = ic_bueno - ic_malo
@@ -2769,6 +2793,29 @@ def actualizar_ev_kelly_historico(performance: list):
           f"(pred={fila['edge_pred_ponderado']:+.4f} real={fila['edge_real_ponderado']:+.4f})")
 
 
+def _debe_correr_patrones_causales() -> bool:
+    """True si ha pasado PATRONES_CAUSALES_MIN_INTERVAL_S desde el último
+    run real de aprender_patrones_causales() (no desde el último ciclo de
+    postmortem -- son cadencias independientes). Fail-open a favor de
+    CORRER (no de saltar): si el fichero de estado no existe, está
+    corrupto, o no se puede leer, corre -- el coste de un ciclo caro de
+    más es bajo; el coste de saltarse el aprendizaje causal indefinidamente
+    por un JSON roto sí sería un fallo silencioso real."""
+    try:
+        data = json.loads(PATRONES_CAUSALES_STATE_PATH.read_text(encoding="utf-8"))
+        ultimo = datetime.fromisoformat(data["ultimo_run_utc"])
+        return (datetime.now(timezone.utc) - ultimo).total_seconds() >= PATRONES_CAUSALES_MIN_INTERVAL_S
+    except Exception:
+        return True
+
+
+def _marcar_patrones_causales_ejecutado() -> None:
+    _escribir_json_atomico(
+        PATRONES_CAUSALES_STATE_PATH,
+        json.dumps({"ultimo_run_utc": datetime.now(timezone.utc).isoformat(timespec="seconds")}),
+    )
+
+
 def main():
     ts = datetime.now(timezone.utc).isoformat(timespec="seconds")
     print(f"[{ts}] === Postmortem ===")
@@ -2967,13 +3014,28 @@ def main():
     params = calcular_params(
         _gbp.filtrar_filas_zona_confirmada(resultados_twap_safe, pares_live))
 
-    # Aprendizaje causal completo: aprende POR QUÉ pierde Y POR QUÉ gana
-    patrones = aprender_patrones_causales(resultados_twap_safe, pred_index)
+    # Aprendizaje causal completo: aprende POR QUÉ pierde Y POR QUÉ gana.
+    # 05-Sep: throttleado a PATRONES_CAUSALES_MIN_INTERVAL_S -- es la parte
+    # cara de verdad (percentiles×features×strat_keys + shuffle+BH-FDR sobre
+    # ~400k filas). Los ciclos saltados NO tocan filtros_causales/patrones_
+    # ganadores en absoluto (ver preservación explícita más abajo) -- una
+    # tupla live sigue protegida por el último veredicto real, nunca por
+    # uno en blanco.
+    corre_patrones_causales = _debe_correr_patrones_causales()
+    if corre_patrones_causales:
+        patrones = aprender_patrones_causales(resultados_twap_safe, pred_index)
+        _marcar_patrones_causales_ejecutado()
+    else:
+        patrones = {}
 
     n_filtros  = sum(len(v["filtros_causales"])  for v in patrones.values())
     n_patrones = sum(len(v["patrones_ganadores"]) for v in patrones.values())
 
-    if patrones:
+    if not corre_patrones_causales:
+        print(f"\n  Aprendizaje causal: omitido este ciclo (throttle "
+              f"{PATRONES_CAUSALES_MIN_INTERVAL_S}s) -- filtros_causales/"
+              f"patrones_ganadores existentes se preservan tal cual")
+    elif patrones:
         print(f"\n  Aprendizaje causal: {n_filtros} filtros (evitar) + {n_patrones} patrones (amplificar)")
         for strat_key, p in patrones.items():
             for f in p["filtros_causales"]:
@@ -3015,6 +3077,18 @@ def main():
                 if k not in params["estrategias"]:
                     params["estrategias"][k] = v
                     continue
+                # 05-Sep: si este ciclo se saltó aprender_patrones_causales
+                # (throttle), params["estrategias"][k] es una entry NUEVA de
+                # calcular_params() sin filtros_causales/patrones_ganadores
+                # -- sin este preservado, cada ciclo saltado dejaría a TODAS
+                # las tuplas (incl. live) sin esa protección durante hasta
+                # PATRONES_CAUSALES_MIN_INTERVAL_S, no solo la que de verdad
+                # cambió. Copia el último veredicto real tal cual.
+                if not corre_patrones_causales:
+                    if "filtros_causales" in v:
+                        params["estrategias"][k]["filtros_causales"] = v["filtros_causales"]
+                    if "patrones_ganadores" in v:
+                        params["estrategias"][k]["patrones_ganadores"] = v["patrones_ganadores"]
                 if not v.get("activa", True):
                     motivo_old = v.get("motivo", "")
                     if "MANUALMENTE" in motivo_old or ("DESACTIVADA 202" in motivo_old and "DESACTIVADA" in motivo_old):
