@@ -147,6 +147,16 @@ SCREEN_RESTART = {
     # "ejecdryrun" (exige DRY_RUN=True en todos sus módulos) a su propia
     # screen, dinero real, sin nice (mismo trato que ejeclive).
     "walletmirror": f"cd {REPO} && .venv/bin/python wallet_mirror_executor_dryrun.py >> logs/wallet_mirror_executor.log 2>&1",
+    # precierre (05-Sep): resolution_sniper_precierre_executor.py, DRY_RUN=True
+    # -- ejecutor de baja latencia con camino crítico propio (nunca pasa por
+    # _ejecutar_orden_polymarket, ver docstring del propio módulo), presupuesto
+    # de 2s a offset=-2s del cierre nominal. Screen PROPIA (no en "ejecdryrun")
+    # a propósito: comparte proceso/GIL con otros 7 hilos DRY_RUN metería
+    # jitter justo en la medición de latencia real que este ejecutor existe
+    # para validar antes de plantear DRY_RUN=False. Sin nice -- aunque hoy no
+    # mueve dinero, su propósito es medir el peor caso de latencia real, y
+    # nice reduciría prioridad justo en el instante que importa medir bien.
+    "precierre": f"cd {REPO} && .venv/bin/python resolution_sniper_precierre_executor.py >> logs/resolution_sniper_precierre_executor.log 2>&1",
     # vigiasfreq (17-Ago): consolida 17 scripts de un solo disparo que
     # corrían vía cron cada 5-60min (~130 arranques de intérprete/hora
     # dispersos: vigia_calidad_datos, vigia_ballenas_snapshot_freshness,
@@ -318,7 +328,7 @@ def check_screens() -> dict[str, bool]:
         r = subprocess.run(["screen", "-ls"], capture_output=True, text=True, timeout=5)
         output = r.stdout + r.stderr
         return {name: (f".{name}\t" in output or f".{name} " in output)
-                for name in ["fast", "slow", "mantenimiento", "control", "dash", "observadores", "ejeclive", "fetchers", "ejecdryrun", "walletmirror", "vigiasfreq",
+                for name in ["fast", "slow", "mantenimiento", "control", "dash", "observadores", "ejeclive", "fetchers", "ejecdryrun", "walletmirror", "vigiasfreq", "precierre",
                               "dash-weather", "sportsfase0", "weather-mirror", "weather-ws"]}
     except Exception:
         return {}
