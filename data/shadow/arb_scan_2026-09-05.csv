@@ -1,0 +1,11 @@
+timestamp_utc,tipo,accionable,event,end_date,n_brackets,suma_yes,suma_ask,suma_bid,gap_pct,profit_pct,roi_no_pct,liq_min,liq_total,rango_min,rango_max
+2026-09-05T00:10:53+00:00,OVERROUND,False,Solana price on September 8?,2026-09-08,9,4.495,8.9,0.09,-790.0,-792.0,-12.01,0.0,19.0,110,150
+2026-09-05T00:10:53+00:00,OVERROUND,False,Solana price on September 7?,2026-09-07,9,3.919,7.752,0.086,-675.2,-677.2,-12.05,7.0,148.0,110,150
+2026-09-05T00:10:53+00:00,OVERROUND,False,Solana price on September 9?,2026-09-09,9,3.8385,7.507,0.17,-650.7,-652.7,-11.21,7.0,268.0,110,140
+2026-09-05T00:10:53+00:00,OVERROUND,False,Solana price on September 6?,2026-09-06,9,3.5885,7.009,0.168,-600.9,-602.9,-11.23,31.0,572.0,110,150
+2026-09-05T00:10:53+00:00,OVERROUND,False,Solana price on September 5?,2026-09-05,9,1.641,2.959,0.323,-195.9,-197.9,-9.65,87.0,23881.0,110,150
+2026-09-05T00:10:53+00:00,OVERROUND,False,Ethereum price on September 9?,2026-09-09,9,1.067,1.242,0.892,-24.2,-26.2,-3.31,2734.0,27360.0,1900,2800
+2026-09-05T00:10:53+00:00,OVERROUND,False,Ethereum price on September 7?,2026-09-07,9,1.0705,1.213,0.928,-21.3,-23.3,-2.87,3101.0,39812.0,2000,2900
+2026-09-05T00:10:53+00:00,OVERROUND,False,Ethereum price on September 8?,2026-09-08,9,1.057,1.207,0.907,-20.7,-22.7,-3.13,3090.0,33861.0,2000,2900
+2026-09-05T00:10:53+00:00,OVERROUND,False,Bitcoin price on September 6?,2026-09-06,9,1.0395,1.132,0.947,-13.2,-15.2,-2.64,6428.0,77641.0,70000,88000
+2026-09-05T00:10:53+00:00,OVERROUND,False,Ethereum price on September 6?,2026-09-06,9,1.0205,1.132,0.909,-13.2,-15.2,-3.1,3019.0,35320.0,2000,2900
