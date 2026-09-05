@@ -34,11 +34,11 @@
   "hi": 0.29,
   "n": 43,
   "pnl_medio": 0.8499,
-  "diff_vs_resto": 0.8425,
+  "diff_vs_resto": 0.8424,
   "p_valor": 0.0,
   "split_half_diff": [
-   1.5217,
-   0.1942
+   1.5216,
+   0.1941
   ],
   "split_half_ok": true,
   "pnl_medio_loo": 0.7996,
@@ -53,9 +53,10 @@
   "veredicto_crudo_hoy": "bueno_confirmado",
   "historial_crudo": [
    "malo_confirmado",
+   "bueno_confirmado",
    "bueno_confirmado"
   ],
-  "veredicto": "sin_concluir"
+  "veredicto": "bueno_confirmado"
  },
  "Tennis#SEGUIR": {
   "veredicto": "sin_concluir",
@@ -70,21 +71,21 @@
   "hi": 0.33,
   "n": 41,
   "pnl_medio": -0.6722,
-  "diff_vs_resto": -0.6534,
-  "p_valor": 0.0,
+  "diff_vs_resto": -0.6517,
+  "p_valor": 0.0005,
   "split_half_diff": [
-   -0.3092,
-   -0.9811
+   -0.3076,
+   -0.9794
   ],
   "split_half_ok": true,
   "pnl_medio_loo": -0.7524,
   "robusto_loo": true,
   "ci90_bootstrap": [
    -0.9168,
-   -0.4136
+   -0.4167
   ],
   "robusto_bootstrap": true,
-  "n_posiciones_buscadas": 48,
+  "n_posiciones_buscadas": 50,
   "g_kelly_f10": -0.07442,
   "veredicto_crudo_hoy": "malo_confirmado",
   "historial_crudo": [
@@ -97,18 +98,18 @@
   "hi": 0.52,
   "n": 42,
   "pnl_medio": 0.4013,
-  "diff_vs_resto": 0.3803,
-  "p_valor": 0.023,
+  "diff_vs_resto": 0.3689,
+  "p_valor": 0.025,
   "split_half_diff": [
-   0.639,
-   0.1216
+   0.6275,
+   0.1102
   ],
   "split_half_ok": true,
   "pnl_medio_loo": 0.4354,
   "robusto_loo": true,
   "ci90_bootstrap": [
-   0.1566,
-   0.6386
+   0.1591,
+   0.64
   ],
   "robusto_bootstrap": true,
   "n_posiciones_buscadas": 2,

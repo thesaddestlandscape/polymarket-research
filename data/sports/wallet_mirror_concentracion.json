@@ -1,8 +1,8 @@
 {
- "generado_utc": "2026-09-04T07:08:01+00:00",
+ "generado_utc": "2026-09-05T07:08:01+00:00",
  "buckets": {
   "CS#SEGUIR[0.45,0.50)#grid_fijo": {
-   "n_senales": 505,
+   "n_senales": 508,
    "n_wallets_distintas": 129,
    "n_mercados_distintos": 272,
    "top5_wallets": [
@@ -29,11 +29,11 @@
     {
      "wallet": "0xfd144099a983b0cfdb88d0b89e0ca049fae22267",
      "n": 20,
-     "pct": 4.0
+     "pct": 3.9
     }
    ],
    "top1_wallet_pct": 7.9,
-   "top1_mercado_pct": 3.6,
+   "top1_mercado_pct": 3.5,
    "alerta_wallet": false,
    "alerta_mercado": false,
    "veredicto_gate": "bueno_confirmado"
@@ -76,38 +76,38 @@
    "veredicto_gate": "bueno_confirmado"
   },
   "CS#FADE[0.45,0.50)#grid_fijo": {
-   "n_senales": 657,
+   "n_senales": 670,
    "n_wallets_distintas": 143,
-   "n_mercados_distintos": 328,
+   "n_mercados_distintos": 339,
    "top5_wallets": [
     {
      "wallet": "0x775d9de0c72c76a459fadfbb4cd79d5715236beb",
      "n": 48,
-     "pct": 7.3
+     "pct": 7.2
     },
     {
      "wallet": "0xf1ee4842fa0c7283632185e42577027452d4519c",
      "n": 46,
-     "pct": 7.0
+     "pct": 6.9
+    },
+    {
+     "wallet": "0xda770326bd091d26f816917aa83a6baff668683f",
+     "n": 42,
+     "pct": 6.3
     },
     {
      "wallet": "0xe8e086f7ef06af27889edfb5026e1453c61d7eec",
      "n": 40,
-     "pct": 6.1
-    },
-    {
-     "wallet": "0xda770326bd091d26f816917aa83a6baff668683f",
-     "n": 33,
-     "pct": 5.0
+     "pct": 6.0
     },
     {
      "wallet": "0x629da223adfc9957329e02de95ae3d263f92756c",
      "n": 28,
-     "pct": 4.3
+     "pct": 4.2
     }
    ],
-   "top1_wallet_pct": 7.3,
-   "top1_mercado_pct": 4.3,
+   "top1_wallet_pct": 7.2,
+   "top1_mercado_pct": 4.2,
    "alerta_wallet": false,
    "alerta_mercado": false,
    "veredicto_gate": "bueno_confirmado"
@@ -184,7 +184,7 @@
    "top1_mercado_pct": 3.3,
    "alerta_wallet": false,
    "alerta_mercado": false,
-   "veredicto_gate": "sin_concluir"
+   "veredicto_gate": "bueno_confirmado"
   },
   "LoL#FADE[0.28,0.33)#ventana_fina": {
    "n_senales": 245,
