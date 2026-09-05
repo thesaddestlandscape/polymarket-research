@@ -1,11 +1,11 @@
 {
  "formato": "por_offset_v2",
- "n_filas_fillable": 1255,
+ "n_filas_fillable": 1262,
  "n_por_offset": {
   "-2": 317,
   "-1": 318,
-  "-30": 247,
-  "-20": 139,
+  "-30": 252,
+  "-20": 141,
   "-12": 89,
   "-8": 58,
   "-5": 47,
@@ -21,8 +21,8 @@
      "ask_medio": 0.9435,
      "wilson90lo": 0.804,
      "breakeven_aprox": 0.9435,
-     "diff_pnl_vs_resto": 0.2745,
-     "p_shuffle": 0.111,
+     "diff_pnl_vs_resto": 0.2792,
+     "p_shuffle": 0.1115,
      "split_half_positivo_ambas": false,
      "n_min_live_ok": false,
      "p_bh_signif": false,
@@ -36,8 +36,8 @@
      "ask_medio": 0.9456,
      "wilson90lo": 0.7852,
      "breakeven_aprox": 0.9456,
-     "diff_pnl_vs_resto": 0.2634,
-     "p_shuffle": 0.16,
+     "diff_pnl_vs_resto": 0.2681,
+     "p_shuffle": 0.138,
      "split_half_positivo_ambas": false,
      "n_min_live_ok": false,
      "p_bh_signif": false,
@@ -48,7 +48,7 @@
    "fino": {
     "BNB": {
      "veredicto": "n_insuficiente_para_ventana",
-     "n_disponible": 38
+     "n_disponible": 40
     },
     "BTC": {
      "veredicto": "n_insuficiente_para_ventana",
@@ -56,7 +56,7 @@
     },
     "DOGE": {
      "veredicto": "n_insuficiente_para_ventana",
-     "n_disponible": 30
+     "n_disponible": 32
     },
     "ETH": {
      "veredicto": "n_insuficiente_para_ventana",
@@ -68,7 +68,7 @@
     },
     "XRP": {
      "veredicto": "n_insuficiente_para_ventana",
-     "n_disponible": 44
+     "n_disponible": 45
     }
    }
   },
@@ -81,8 +81,8 @@
      "ask_medio": 0.9389,
      "wilson90lo": 0.6482,
      "breakeven_aprox": 0.9389,
-     "diff_pnl_vs_resto": 0.203,
-     "p_shuffle": 0.3165,
+     "diff_pnl_vs_resto": 0.2055,
+     "p_shuffle": 0.3115,
      "split_half_positivo_ambas": false,
      "n_min_live_ok": false,
      "p_bh_signif": false,
@@ -93,7 +93,7 @@
    "fino": {
     "BNB": {
      "veredicto": "n_insuficiente_para_ventana",
-     "n_disponible": 15
+     "n_disponible": 16
     },
     "BTC": {
      "veredicto": "n_insuficiente_para_ventana",
@@ -113,7 +113,7 @@
     },
     "XRP": {
      "veredicto": "n_insuficiente_para_ventana",
-     "n_disponible": 36
+     "n_disponible": 37
     }
    }
   },
@@ -239,7 +239,7 @@
      "wilson90lo": 0.6838,
      "breakeven_aprox": 0.8187,
      "diff_pnl_vs_resto": -0.3455,
-     "p_shuffle": 0.044,
+     "p_shuffle": 0.0395,
      "split_half_positivo_ambas": false,
      "n_min_live_ok": false,
      "p_bh_signif": false,
@@ -269,7 +269,7 @@
      "wilson90lo": 0.5212,
      "breakeven_aprox": 0.82,
      "diff_pnl_vs_resto": -0.5262,
-     "p_shuffle": 0.0045,
+     "p_shuffle": 0.0035,
      "split_half_positivo_ambas": false,
      "n_min_live_ok": false,
      "p_bh_signif": true,
@@ -329,7 +329,7 @@
      "wilson90lo": 0.7492,
      "breakeven_aprox": 0.82,
      "diff_pnl_vs_resto": -0.2723,
-     "p_shuffle": 0.1245,
+     "p_shuffle": 0.117,
      "split_half_positivo_ambas": true,
      "n_min_live_ok": false,
      "p_bh_signif": false,
@@ -357,8 +357,8 @@
      "pnl_medio_loo": 0.9271,
      "robusto_loo": true,
      "ci90_bootstrap": [
-      0.8467,
-      0.9536
+      0.848,
+      0.9531
      ],
      "robusto_bootstrap": true,
      "n_posiciones_buscadas": 5,
@@ -424,7 +424,7 @@
      "wilson90lo": 0.6838,
      "breakeven_aprox": 0.8187,
      "diff_pnl_vs_resto": -0.3334,
-     "p_shuffle": 0.046,
+     "p_shuffle": 0.041,
      "split_half_positivo_ambas": false,
      "n_min_live_ok": false,
      "p_bh_signif": false,
@@ -454,7 +454,7 @@
      "wilson90lo": 0.5212,
      "breakeven_aprox": 0.82,
      "diff_pnl_vs_resto": -0.514,
-     "p_shuffle": 0.0065,
+     "p_shuffle": 0.0015,
      "split_half_positivo_ambas": false,
      "n_min_live_ok": false,
      "p_bh_signif": true,
@@ -469,7 +469,7 @@
      "wilson90lo": 0.8553,
      "breakeven_aprox": 0.5119,
      "diff_pnl_vs_resto": 0.5898,
-     "p_shuffle": 0.0005,
+     "p_shuffle": 0.0,
      "split_half_positivo_ambas": true,
      "n_min_live_ok": false,
      "p_bh_signif": true,
@@ -514,7 +514,7 @@
      "wilson90lo": 0.7492,
      "breakeven_aprox": 0.82,
      "diff_pnl_vs_resto": -0.2602,
-     "p_shuffle": 0.1415,
+     "p_shuffle": 0.1485,
      "split_half_positivo_ambas": true,
      "n_min_live_ok": false,
      "p_bh_signif": false,
@@ -542,8 +542,8 @@
      "pnl_medio_loo": 0.9015,
      "robusto_loo": true,
      "ci90_bootstrap": [
-      0.8001,
-      0.9475
+      0.7998,
+      0.9318
      ],
      "robusto_bootstrap": true,
      "n_posiciones_buscadas": 5,
