@@ -16,18 +16,18 @@
     "hi": 0.29,
     "n": 43,
     "pnl_medio": -0.6572,
-    "diff_vs_resto": -0.6004,
+    "diff_vs_resto": -0.6044,
     "p_valor": 0.0,
     "split_half_diff": [
-      -0.4149,
-      -0.7774
+      -0.419,
+      -0.7815
     ],
     "split_half_ok": true,
     "pnl_medio_loo": -0.7393,
     "robusto_loo": true,
     "ci90_bootstrap": [
       -0.9119,
-      -0.3958
+      -0.393
     ],
     "robusto_bootstrap": true,
     "n_posiciones_buscadas": 45,
@@ -43,7 +43,7 @@
     "n": 56,
     "pnl_medio": -0.4485,
     "diff_vs_resto": -0.4766,
-    "p_valor": 0.0015,
+    "p_valor": 0.001,
     "split_half_diff": [
       -0.4747,
       -0.4785
@@ -52,8 +52,8 @@
     "pnl_medio_loo": -0.481,
     "robusto_loo": true,
     "ci90_bootstrap": [
-      -0.6481,
-      -0.2153
+      -0.6472,
+      -0.2492
     ],
     "robusto_bootstrap": true,
     "n_posiciones_buscadas": 26,
@@ -69,7 +69,7 @@
     "n": 70,
     "pnl_medio": -0.4683,
     "diff_vs_resto": -0.4451,
-    "p_valor": 0.0115,
+    "p_valor": 0.012,
     "split_half_diff": [
       -0.4785,
       -0.4116
@@ -78,8 +78,8 @@
     "pnl_medio_loo": -0.5258,
     "robusto_loo": true,
     "ci90_bootstrap": [
-      -0.72,
-      -0.1835
+      -0.7429,
+      -0.18
     ],
     "robusto_bootstrap": true,
     "n_posiciones_buscadas": 69,
@@ -94,18 +94,18 @@
     "hi": 0.1,
     "n": 71,
     "pnl_medio": 1.3866,
-    "diff_vs_resto": 1.4236,
+    "diff_vs_resto": 1.4239,
     "p_valor": 0.0,
     "split_half_diff": [
-      0.05,
-      2.7591
+      0.0503,
+      2.7594
     ],
     "split_half_ok": true,
     "pnl_medio_loo": 1.1983,
     "robusto_loo": true,
     "ci90_bootstrap": [
-      0.5214,
-      2.3256
+      0.4617,
+      2.3532
     ],
     "robusto_bootstrap": true,
     "n_posiciones_buscadas": 96,
@@ -122,18 +122,18 @@
     "hi": 0.41,
     "n": 47,
     "pnl_medio": 0.6526,
-    "diff_vs_resto": 0.6635,
+    "diff_vs_resto": 0.6677,
     "p_valor": 0.0,
     "split_half_diff": [
-      0.6463,
-      0.68
+      0.6505,
+      0.6842
     ],
     "split_half_ok": true,
     "pnl_medio_loo": 0.6885,
     "robusto_loo": true,
     "ci90_bootstrap": [
-      0.3501,
-      0.9245
+      0.3736,
+      0.9234
     ],
     "robusto_bootstrap": true,
     "n_posiciones_buscadas": 60,
@@ -161,7 +161,7 @@
     "robusto_loo": true,
     "ci90_bootstrap": [
       -1.0,
-      -0.2938
+      -0.3988
     ],
     "robusto_bootstrap": true,
     "n_posiciones_buscadas": 82,
@@ -185,7 +185,7 @@
     "n": 42,
     "pnl_medio": 0.0122,
     "diff_vs_resto": 1.0122,
-    "p_valor": 0.0215,
+    "p_valor": 0.029,
     "split_half_diff": [
       1.0149,
       1.0094
@@ -194,7 +194,7 @@
     "pnl_medio_loo": 0.012,
     "robusto_loo": true,
     "ci90_bootstrap": [
-      0.011,
+      0.0111,
       0.0133
     ],
     "robusto_bootstrap": true,
@@ -210,20 +210,20 @@
   "SEGUIR#BTC#5min#0": {
     "lo": 0.0,
     "hi": 0.05,
-    "n": 1534,
-    "pnl_medio": 5.8766,
-    "diff_vs_resto": 5.859,
+    "n": 1564,
+    "pnl_medio": 5.7844,
+    "diff_vs_resto": 5.7688,
     "p_valor": 0.0,
     "split_half_diff": [
-      4.9386,
-      6.7793
+      4.9454,
+      6.5922
     ],
     "split_half_ok": true,
-    "pnl_medio_loo": 5.8204,
+    "pnl_medio_loo": 5.7292,
     "robusto_loo": true,
     "ci90_bootstrap": [
-      4.9057,
-      6.9332
+      4.8075,
+      6.8063
     ],
     "robusto_bootstrap": true,
     "n_posiciones_buscadas": 96,
@@ -240,18 +240,18 @@
     "hi": 0.05,
     "n": 72,
     "pnl_medio": 3.9562,
-    "diff_vs_resto": 3.9878,
-    "p_valor": 0.001,
+    "diff_vs_resto": 3.9871,
+    "p_valor": 0.0,
     "split_half_diff": [
-      1.6168,
-      6.3588
+      1.6162,
+      6.3581
     ],
     "split_half_ok": true,
     "pnl_medio_loo": 2.7152,
     "robusto_loo": true,
     "ci90_bootstrap": [
-      0.7242,
-      8.0494
+      0.2936,
+      8.0514
     ],
     "robusto_bootstrap": true,
     "n_posiciones_buscadas": 85,
