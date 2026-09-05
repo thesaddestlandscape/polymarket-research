@@ -1,8 +1,8 @@
 {
  "STREAK_MOM_5M": {
-  "ic_bayes_familia": 0.0166,
+  "ic_bayes_familia": 0.0169,
   "n_tuplas_fuertes": 3,
-  "pnl_fiel_combinado_eur": 103.11,
+  "pnl_fiel_combinado_eur": 101.89,
   "tuplas": [
    {
     "k": "STREAK_MOM_5M#DOGE#5min#BUY_NO",
@@ -11,8 +11,8 @@
    },
    {
     "k": "STREAK_MOM_5M#XRP#5min#BUY_NO",
-    "pnl_fiel_eur_sin_suelo": 36.1661,
-    "n_ejecutado": 95
+    "pnl_fiel_eur_sin_suelo": 34.9449,
+    "n_ejecutado": 96
    },
    {
     "k": "STREAK_MOM_5M#ETH#5min#BUY_NO",
@@ -22,14 +22,14 @@
   ]
  },
  "GBM_LATE_15M": {
-  "ic_bayes_familia": 0.0596,
+  "ic_bayes_familia": 0.0598,
   "n_tuplas_fuertes": 1,
-  "pnl_fiel_combinado_eur": 65.98,
+  "pnl_fiel_combinado_eur": 70.12,
   "tuplas": [
    {
     "k": "GBM_LATE_15M#XRP#15min#BUY_YES",
-    "pnl_fiel_eur_sin_suelo": 65.9815,
-    "n_ejecutado": 399
+    "pnl_fiel_eur_sin_suelo": 70.1182,
+    "n_ejecutado": 401
    }
   ]
  },
@@ -51,19 +51,19 @@
   ]
  },
  "GBM_LATE_60M": {
-  "ic_bayes_familia": 0.0233,
+  "ic_bayes_familia": 0.022,
   "n_tuplas_fuertes": 1,
-  "pnl_fiel_combinado_eur": 41.31,
+  "pnl_fiel_combinado_eur": 40.99,
   "tuplas": [
    {
     "k": "GBM_LATE_60M#ETH#60min#BUY_YES",
-    "pnl_fiel_eur_sin_suelo": 41.3062,
+    "pnl_fiel_eur_sin_suelo": 40.9871,
     "n_ejecutado": 35
    }
   ]
  },
  "MOMENTUM_IBS_5M_FADE": {
-  "ic_bayes_familia": -0.0151,
+  "ic_bayes_familia": -0.0149,
   "n_tuplas_fuertes": 1,
   "pnl_fiel_combinado_eur": 21.25,
   "tuplas": [
@@ -71,18 +71,6 @@
     "k": "MOMENTUM_IBS_5M_FADE#BTC#5min#BUY_NO",
     "pnl_fiel_eur_sin_suelo": 21.2548,
     "n_ejecutado": 138
-   }
-  ]
- },
- "UPDOWN_GBM": {
-  "ic_bayes_familia": 0.0113,
-  "n_tuplas_fuertes": 1,
-  "pnl_fiel_combinado_eur": 17.64,
-  "tuplas": [
-   {
-    "k": "UPDOWN_GBM#BTC#5min#BUY_NO",
-    "pnl_fiel_eur_sin_suelo": 17.6432,
-    "n_ejecutado": 302
    }
   ]
  },
@@ -98,15 +86,15 @@
    }
   ]
  },
- "MOMENTUM_IBS_15M_BALLENA": {
-  "ic_bayes_familia": -0.0297,
+ "UPDOWN_GBM": {
+  "ic_bayes_familia": 0.0112,
   "n_tuplas_fuertes": 1,
-  "pnl_fiel_combinado_eur": 15.89,
+  "pnl_fiel_combinado_eur": 16.59,
   "tuplas": [
    {
-    "k": "MOMENTUM_IBS_15M_BALLENA#BNB#15min#BUY_NO",
-    "pnl_fiel_eur_sin_suelo": 15.8942,
-    "n_ejecutado": 158
+    "k": "UPDOWN_GBM#BTC#5min#BUY_NO",
+    "pnl_fiel_eur_sin_suelo": 16.5932,
+    "n_ejecutado": 303
    }
   ]
  }
