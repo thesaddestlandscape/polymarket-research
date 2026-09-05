@@ -1,12 +1,12 @@
 {
  "formato": "por_offset_v2",
- "n_filas_fillable": 1285,
+ "n_filas_fillable": 1291,
  "n_por_offset": {
   "-2": 317,
   "-1": 318,
-  "-30": 261,
-  "-20": 148,
-  "-12": 92,
+  "-30": 265,
+  "-20": 149,
+  "-12": 93,
   "-8": 60,
   "-5": 48,
   "-3": 41
@@ -22,7 +22,7 @@
      "wilson90lo": 0.804,
      "breakeven_aprox": 0.9435,
      "diff_pnl_vs_resto": 0.2748,
-     "p_shuffle": 0.114,
+     "p_shuffle": 0.139,
      "split_half_positivo_ambas": false,
      "n_min_live_ok": false,
      "p_bh_signif": false,
@@ -37,7 +37,7 @@
      "wilson90lo": 0.7852,
      "breakeven_aprox": 0.9456,
      "diff_pnl_vs_resto": 0.2639,
-     "p_shuffle": 0.1425,
+     "p_shuffle": 0.1515,
      "split_half_positivo_ambas": false,
      "n_min_live_ok": false,
      "p_bh_signif": false,
@@ -48,7 +48,7 @@
    "fino": {
     "BNB": {
      "veredicto": "n_insuficiente_para_ventana",
-     "n_disponible": 41
+     "n_disponible": 43
     },
     "BTC": {
      "veredicto": "n_insuficiente_para_ventana",
@@ -68,7 +68,7 @@
     },
     "XRP": {
      "veredicto": "n_insuficiente_para_ventana",
-     "n_disponible": 46
+     "n_disponible": 48
     }
    }
   },
@@ -81,8 +81,8 @@
      "ask_medio": 0.9389,
      "wilson90lo": 0.6482,
      "breakeven_aprox": 0.9389,
-     "diff_pnl_vs_resto": 0.2066,
-     "p_shuffle": 0.287,
+     "diff_pnl_vs_resto": 0.1993,
+     "p_shuffle": 0.301,
      "split_half_positivo_ambas": false,
      "n_min_live_ok": false,
      "p_bh_signif": false,
@@ -113,7 +113,7 @@
     },
     "XRP": {
      "veredicto": "n_insuficiente_para_ventana",
-     "n_disponible": 37
+     "n_disponible": 38
     }
    }
   },
@@ -142,7 +142,7 @@
     },
     "XRP": {
      "veredicto": "n_insuficiente_para_ventana",
-     "n_disponible": 22
+     "n_disponible": 23
     }
    }
   },
@@ -239,7 +239,7 @@
      "wilson90lo": 0.6838,
      "breakeven_aprox": 0.8187,
      "diff_pnl_vs_resto": -0.3455,
-     "p_shuffle": 0.038,
+     "p_shuffle": 0.0425,
      "split_half_positivo_ambas": false,
      "n_min_live_ok": false,
      "p_bh_signif": false,
@@ -269,7 +269,7 @@
      "wilson90lo": 0.5212,
      "breakeven_aprox": 0.82,
      "diff_pnl_vs_resto": -0.5262,
-     "p_shuffle": 0.0035,
+     "p_shuffle": 0.0045,
      "split_half_positivo_ambas": false,
      "n_min_live_ok": false,
      "p_bh_signif": true,
@@ -329,7 +329,7 @@
      "wilson90lo": 0.7492,
      "breakeven_aprox": 0.82,
      "diff_pnl_vs_resto": -0.2723,
-     "p_shuffle": 0.1155,
+     "p_shuffle": 0.1375,
      "split_half_positivo_ambas": true,
      "n_min_live_ok": false,
      "p_bh_signif": false,
@@ -357,8 +357,8 @@
      "pnl_medio_loo": 0.9271,
      "robusto_loo": true,
      "ci90_bootstrap": [
-      0.8293,
-      0.9535
+      0.8309,
+      0.9531
      ],
      "robusto_bootstrap": true,
      "n_posiciones_buscadas": 5,
@@ -424,7 +424,7 @@
      "wilson90lo": 0.6838,
      "breakeven_aprox": 0.8187,
      "diff_pnl_vs_resto": -0.3334,
-     "p_shuffle": 0.0505,
+     "p_shuffle": 0.05,
      "split_half_positivo_ambas": false,
      "n_min_live_ok": false,
      "p_bh_signif": false,
@@ -454,7 +454,7 @@
      "wilson90lo": 0.5212,
      "breakeven_aprox": 0.82,
      "diff_pnl_vs_resto": -0.514,
-     "p_shuffle": 0.005,
+     "p_shuffle": 0.004,
      "split_half_positivo_ambas": false,
      "n_min_live_ok": false,
      "p_bh_signif": true,
@@ -469,7 +469,7 @@
      "wilson90lo": 0.8553,
      "breakeven_aprox": 0.5119,
      "diff_pnl_vs_resto": 0.5898,
-     "p_shuffle": 0.001,
+     "p_shuffle": 0.0005,
      "split_half_positivo_ambas": true,
      "n_min_live_ok": false,
      "p_bh_signif": true,
@@ -514,7 +514,7 @@
      "wilson90lo": 0.7492,
      "breakeven_aprox": 0.82,
      "diff_pnl_vs_resto": -0.2602,
-     "p_shuffle": 0.1265,
+     "p_shuffle": 0.127,
      "split_half_positivo_ambas": true,
      "n_min_live_ok": false,
      "p_bh_signif": false,
@@ -543,7 +543,7 @@
      "robusto_loo": true,
      "ci90_bootstrap": [
       0.8001,
-      0.9485
+      0.9314
      ],
      "robusto_bootstrap": true,
      "n_posiciones_buscadas": 5,
