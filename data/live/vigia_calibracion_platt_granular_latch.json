@@ -1170,5 +1170,29 @@
   "UPDOWN_GBM_IBS_ALTO#ETH#15min": {
     "n": 201,
     "confirmado": false
+  },
+  "FAVORITO_CONFIRMADO_60MIN_EXTREMO#ETH": {
+    "n": 205,
+    "confirmado": false
+  },
+  "FAVORITO_CONFIRMADO_60MIN_EXTREMO#ETH#60min": {
+    "n": 205,
+    "confirmado": false
+  },
+  "LIQUIDACIONES_60M#BTC": {
+    "n": 200,
+    "confirmado": true
+  },
+  "LIQUIDACIONES_60M#BTC#60min": {
+    "n": 200,
+    "confirmado": true
+  },
+  "LIQUIDACIONES_60M#ETH": {
+    "n": 206,
+    "confirmado": true
+  },
+  "LIQUIDACIONES_60M#ETH#60min": {
+    "n": 206,
+    "confirmado": true
   }
 }
