@@ -2394,5 +2394,161 @@
       "💀 27 OOM-kill(s) del kernel en 24h: python(pid 2754774, 3049.7MB), python(pid 2854082, 2530.1MB), python(pid 2863822, 2777.8MB), python(pid 2877115, 3193.5MB), python(pid 2877569, 3180.0MB), python(pid 2873949, 759.3MB), python(pid 2878006, 3059.1MB), python(pid 2896003, 4040.7MB), python(pid 2896797, 3312.8MB), python(pid 2897141, 3125.8MB), python(pid 2905885, 2596.3MB), python(pid 2902894, 2662.8MB), python(pid 2915642, 2828.9MB), python(pid 2942091, 75.5MB), python(pid 2929227, 3131.6MB), python(pid 2963203, 2900.0MB), python(pid 2963691, 2759.3MB), python(pid 2984231, 3034.8MB), python(pid 3011278, 3738.4MB), python(pid 3020876, 2249.2MB), python(pid 3022174, 3020.3MB), python(pid 3026507, 3491.9MB), python(pid 3026984, 2847.1MB), python(pid 3027555, 2863.5MB), python(pid 3027494, 2829.8MB), python(pid 3023601, 426.1MB), python(pid 3030893, 1302.8MB)"
     ],
     "estado": "ANOMALIA"
+  },
+  {
+    "timestamp_utc": "2026-09-06T07:08:01+00:00",
+    "pipeline": {
+      "n_ciclos_resolve_postmortem": 423,
+      "resolve_postmortem_p50_s": 238.0,
+      "resolve_postmortem_p95_s": 498.0,
+      "resolve_postmortem_max_s": 1443.0,
+      "n_ciclos_live_trade": 4479,
+      "hueco_live_trade_max_s": 81.0
+    },
+    "procesos_colgados": [
+      {
+        "pid": "3327332",
+        "cmd": "/root/polymarket-research/.venv/bin/python /root/polymarket-research/shadow_postmortem.py",
+        "segundos_vivo": 218
+      }
+    ],
+    "deploy": {
+      "n_screens": 14,
+      "stale": []
+    },
+    "disco": {
+      "pct_usado": 92.0,
+      "gb_libres": 5.76,
+      "git_gb": 0.0,
+      "data_gb": 32.95,
+      "datalogs_gb": 7.99
+    },
+    "ram": {
+      "ram_total_gb": 7.56,
+      "ram_disponible_gb": 2.7,
+      "ram_pct_libre": 35.7
+    },
+    "integridad_datos": {
+      "trades_abiertos_atascados": [],
+      "n_trades_total": 535,
+      "n_results_total": 414782
+    },
+    "integridad_datos_sports": {
+      "trades_abiertos_atascados": [],
+      "n_trades_total": 5
+    },
+    "carga_sistema": {
+      "load1": 7.93,
+      "load5": 11.54,
+      "load15": 11.84,
+      "nproc": 4,
+      "ratio5": 2.88,
+      "n_procesos_total": 228
+    },
+    "oom_kills": {
+      "n_oom_kills_24h": 15,
+      "eventos": [
+        {
+          "ts": "Sep 05 07:22:12",
+          "pid": "3027931",
+          "nombre": "python",
+          "rss_mb": 1551.1
+        },
+        {
+          "ts": "Sep 05 07:25:43",
+          "pid": "3036487",
+          "nombre": "python",
+          "rss_mb": 3944.8
+        },
+        {
+          "ts": "Sep 05 08:00:14",
+          "pid": "3036939",
+          "nombre": "python",
+          "rss_mb": 2599.9
+        },
+        {
+          "ts": "Sep 05 18:59:12",
+          "pid": "3069905",
+          "nombre": "python",
+          "rss_mb": 3427.1
+        },
+        {
+          "ts": "Sep 05 19:03:05",
+          "pid": "3176847",
+          "nombre": "python",
+          "rss_mb": 3359.5
+        },
+        {
+          "ts": "Sep 06 00:38:37",
+          "pid": "3177784",
+          "nombre": "python",
+          "rss_mb": 3851.6
+        },
+        {
+          "ts": "Sep 06 00:41:15",
+          "pid": "3239888",
+          "nombre": "python",
+          "rss_mb": 2598.1
+        },
+        {
+          "ts": "Sep 06 03:16:10",
+          "pid": "3240156",
+          "nombre": "python",
+          "rss_mb": 2136.4
+        },
+        {
+          "ts": "Sep 06 06:32:40",
+          "pid": "3273815",
+          "nombre": "python",
+          "rss_mb": 3538.4
+        },
+        {
+          "ts": "Sep 06 06:36:40",
+          "pid": "3314636",
+          "nombre": "python",
+          "rss_mb": 3030.3
+        },
+        {
+          "ts": "Sep 06 06:39:54",
+          "pid": "3315536",
+          "nombre": "python",
+          "rss_mb": 4296.7
+        },
+        {
+          "ts": "Sep 06 06:42:53",
+          "pid": "3316639",
+          "nombre": "python",
+          "rss_mb": 3951.5
+        },
+        {
+          "ts": "Sep 06 06:47:30",
+          "pid": "3323231",
+          "nombre": "python",
+          "rss_mb": 4369.6
+        },
+        {
+          "ts": "Sep 06 06:49:52",
+          "pid": "3324142",
+          "nombre": "python",
+          "rss_mb": 3211.8
+        },
+        {
+          "ts": "Sep 06 06:51:04",
+          "pid": "3310240",
+          "nombre": "python",
+          "rss_mb": 354.4
+        }
+      ]
+    },
+    "git_push": {
+      "commits_sin_pushear": 0
+    },
+    "anomalias": [
+      "⏱️ ciclo resolve+postmortem tardó 1443s (umbral 120s)",
+      "🚨 proceso colgado: /root/polymarket-research/.venv/bin/python /root/polymarket-research/shadow_postmortem.py (218s vivo)",
+      "💾 disco al 92% (5.76GB libres)",
+      "💀 15 OOM-kill(s) del kernel en 24h: python(pid 3027931, 1551.1MB), python(pid 3036487, 3944.8MB), python(pid 3036939, 2599.9MB), python(pid 3069905, 3427.1MB), python(pid 3176847, 3359.5MB), python(pid 3177784, 3851.6MB), python(pid 3239888, 2598.1MB), python(pid 3240156, 2136.4MB), python(pid 3273815, 3538.4MB), python(pid 3314636, 3030.3MB), python(pid 3315536, 4296.7MB), python(pid 3316639, 3951.5MB), python(pid 3323231, 4369.6MB), python(pid 3324142, 3211.8MB), python(pid 3310240, 354.4MB)"
+    ],
+    "estado": "ANOMALIA"
   }
 ]
