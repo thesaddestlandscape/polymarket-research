@@ -360,6 +360,7 @@
   "PRICE_TARGET_GBM|filtro|sigma_h|gt|BUY_NO",
   "PRICE_TARGET_GBM|filtro|sigma_h|lt|BUY_YES",
   "PRICE_TARGET_GBM|patron|sigma_h|lt|BUY_NO",
+  "RESOLUTION_SNIPER#SOL#sniper|patron|sigma_h|gt|BUY_NO",
   "RESOLUTION_SNIPER|patron|sigma_h|gt|BUY_NO",
   "UPDOWN_GBM#15min|filtro|sigma_ewma_delta_pct|gt|BUY_NO",
   "UPDOWN_GBM#15min|patron|sigma_ewma_delta_pct|gt|BUY_NO",
