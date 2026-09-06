@@ -3,7 +3,7 @@
  "SOL#15m#fade": "refutado_forward",
  "SOL#15m#follow": "refutado_forward",
  "_telegram_ok": true,
- "BTC#5m#follow": "confirmado_forward_fragil",
+ "BTC#5m#follow": "confirmado_forward",
  "BTC#60m#follow": "refutado_forward",
  "ETH#15m#fade": "confirmado_forward_fragil",
  "XRP#15m#follow": "refutado_forward",
