@@ -13,7 +13,7 @@
  "BTC#5m#fade": "confirmado_forward",
  "ETH#5m#fade": "refutado_forward",
  "XRP#15m#fade": "confirmado_forward",
- "DOGE#15m#follow": "confirmado_forward_fragil",
+ "DOGE#15m#follow": "refutado_forward",
  "SOL#60m#fade": "confirmado_forward",
  "SOL#60m#follow": "refutado_forward",
  "ETH#weekly#follow": "refutado_forward",
