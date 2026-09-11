@@ -1,0 +1,62 @@
+name: Daily Digest
+
+on:
+  workflow_run:
+    workflows: ["Shadow Paper Trader"]
+    types: [completed]
+    branches: [main]
+  schedule:
+    - cron: '0 20 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  digest:
+    if: |
+      github.event_name == 'workflow_dispatch' ||
+      github.event_name == 'schedule' ||
+      (github.event_name == 'workflow_run' && github.event.workflow_run.conclusion == 'success')
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+
+    steps:
+      - name: Check time window (only for workflow_run trigger)
+        if: github.event_name == 'workflow_run'
+        run: |
+          HOUR=$(date -u +%H)
+          echo "Hora UTC actual: $HOUR"
+          if [ "$HOUR" -ge 7 ] && [ "$HOUR" -le 22 ]; then
+            echo "DENTRO de la ventana 07-22 UTC, se enviará el digest."
+            echo "SEND_DIGEST=true" >> $GITHUB_ENV
+          else
+            echo "FUERA de la ventana 07-22 UTC (hora=$HOUR), se omite."
+            echo "SEND_DIGEST=false" >> $GITHUB_ENV
+          fi
+
+      - name: Set send flag for schedule/dispatch
+        if: github.event_name != 'workflow_run'
+        run: echo "SEND_DIGEST=true" >> $GITHUB_ENV
+
+      - name: Checkout
+        if: env.SEND_DIGEST == 'true'
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        if: env.SEND_DIGEST == 'true'
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+
+      - name: Install dependencies
+        if: env.SEND_DIGEST == 'true'
+        run: pip install -r requirements.txt
+
+      - name: Send daily digest
+        if: env.SEND_DIGEST == 'true'
+        env:
+          TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+        run: python shadow_digest.py

@@ -1,0 +1,56 @@
+name: Capture Markets
+# schedule desactivado 2026-07-01: corría shadow_resolve.py cada 10min desde
+# GitHub Actions en paralelo con el fast loop del VPS, que ejecuta el mismo
+# script cada ~20-60s. Dos procesos no coordinados resolviendo predicciones
+# y cerrando trades LIVE en trades.csv a la vez es un riesgo real de doble
+# resolución / condición de carrera, agravado por el merge "-X union" en
+# conflictos de git (puede duplicar filas en CSVs). capture_markets.py ya
+# lo cubre run_slow.sh en el VPS. Se deja workflow_dispatch por si hace
+# falta correrlo manual.
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  capture:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Run capture loop
+        run: python capture_markets.py
+
+      - name: Run price alerts
+        run: python price_alerts.py
+
+      - name: Run resolve (mercados 5m y cortos)
+        run: python shadow_resolve.py
+
+      - name: Commit and push
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/
+          if git diff --cached --quiet; then
+            echo "No changes to commit"
+          else
+            git commit -m "data: markets+resolve $(date -u +%Y-%m-%dT%H:%MZ)"
+            git pull origin main --no-rebase -X union || git pull origin main --no-rebase
+            git push
+          fi

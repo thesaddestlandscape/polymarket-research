@@ -1,0 +1,26 @@
+__pycache__/
+.venv/
+logs/
+
+# Datos re-generables o demasiado grandes para GitHub (>100MB)
+data/binance/
+data/markets/
+data/trades/
+data/wallets/positions_*.csv
+data/wallets/leaderboard_*.csv
+data/funding/
+data/alerts/
+data/live/LIVE_MODE_ON
+data/live/*.key
+data/live/.env
+data/live/orden_en_curso.json
+data/live/freno_ventana_latch.json
+data/live/overrides_notificados.json
+data/reports/
+data/backfill/klines/
+data/shadow/_cache_*.pkl
+data/funding_rates_cache.json
+data/shadow/postmortem.csv
+data/shadow/combi_arb_llm_*.csv
+data/shadow/cross_arb_*.csv
+data/live/ledger_fiscal_*.csv

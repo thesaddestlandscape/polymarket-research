@@ -1,0 +1,8 @@
+# Merge strategy for append-only data CSVs:
+# "union" keeps ALL lines from both sides without conflict markers.
+# Duplicates are handled at read time by cargar_precios_intraday() and shadow_resolve.py.
+data/prices/*.csv       merge=union
+data/shadow/*.csv       merge=union
+data/wallets/*.csv      merge=union
+data/markets/*.csv      merge=union
+data/binance/*.json     merge=union
