@@ -1,17 +1,17 @@
 {
  "STREAK_MOM_5M": {
-  "ic_bayes_familia": 0.0227,
+  "ic_bayes_familia": 0.0223,
   "n_tuplas_fuertes": 3,
-  "pnl_fiel_combinado_eur": 137.89,
+  "pnl_fiel_combinado_eur": 137.95,
   "tuplas": [
    {
     "k": "STREAK_MOM_5M#DOGE#5min#BUY_NO",
-    "pnl_fiel_eur_sin_suelo": 77.2109,
+    "pnl_fiel_eur_sin_suelo": 77.2286,
     "n_ejecutado": 223
    },
    {
     "k": "STREAK_MOM_5M#XRP#5min#BUY_NO",
-    "pnl_fiel_eur_sin_suelo": 40.3167,
+    "pnl_fiel_eur_sin_suelo": 40.3648,
     "n_ejecutado": 129
    },
    {
@@ -22,13 +22,13 @@
   ]
  },
  "LIQUIDACIONES_5M": {
-  "ic_bayes_familia": -0.0073,
+  "ic_bayes_familia": -0.007,
   "n_tuplas_fuertes": 2,
-  "pnl_fiel_combinado_eur": 38.94,
+  "pnl_fiel_combinado_eur": 38.78,
   "tuplas": [
    {
     "k": "LIQUIDACIONES_5M#ETH#5min#BUY_YES",
-    "pnl_fiel_eur_sin_suelo": 22.7499,
+    "pnl_fiel_eur_sin_suelo": 22.5865,
     "n_ejecutado": 132
    },
    {
@@ -39,7 +39,7 @@
   ]
  },
  "UPDOWN_GBM_15M_TARDIO": {
-  "ic_bayes_familia": -0.0531,
+  "ic_bayes_familia": -0.0533,
   "n_tuplas_fuertes": 1,
   "pnl_fiel_combinado_eur": 33.83,
   "tuplas": [
@@ -51,19 +51,19 @@
   ]
  },
  "GBM_LATE_60M": {
-  "ic_bayes_familia": 0.0447,
+  "ic_bayes_familia": 0.046,
   "n_tuplas_fuertes": 1,
-  "pnl_fiel_combinado_eur": 30.28,
+  "pnl_fiel_combinado_eur": 30.43,
   "tuplas": [
    {
     "k": "GBM_LATE_60M#ETH#60min#BUY_YES",
-    "pnl_fiel_eur_sin_suelo": 30.2786,
+    "pnl_fiel_eur_sin_suelo": 30.4334,
     "n_ejecutado": 48
    }
   ]
  },
  "UPDOWN_GBM": {
-  "ic_bayes_familia": 0.0239,
+  "ic_bayes_familia": 0.024,
   "n_tuplas_fuertes": 1,
   "pnl_fiel_combinado_eur": 22.88,
   "tuplas": [
@@ -75,7 +75,7 @@
   ]
  },
  "MOMENTUM_IBS_15M_BALLENA": {
-  "ic_bayes_familia": -0.0175,
+  "ic_bayes_familia": -0.0178,
   "n_tuplas_fuertes": 1,
   "pnl_fiel_combinado_eur": 20.39,
   "tuplas": [
@@ -99,7 +99,7 @@
   ]
  },
  "STRUCT_NO_15M": {
-  "ic_bayes_familia": 0.0128,
+  "ic_bayes_familia": 0.0127,
   "n_tuplas_fuertes": 1,
   "pnl_fiel_combinado_eur": 16.6,
   "tuplas": [
