@@ -15,20 +15,6 @@
    "bueno_confirmado"
   ]
  },
- "Soccer-epl#SEGUIR": {
-  "veredicto": "sin_concluir",
-  "historial_crudo": [
-   "malo_confirmado"
-  ]
- },
- "Soccer-fl1#SEGUIR": {
-  "veredicto": "sin_concluir",
-  "historial_crudo": [
-   "bueno_confirmado",
-   "bueno_confirmado",
-   "bueno_confirmado"
-  ]
- },
  "CS#SEGUIR": {
   "lo": 0.31,
   "hi": 0.36,
@@ -69,11 +55,11 @@
   "hi": 0.24,
   "n": 44,
   "pnl_medio": -0.5875,
-  "diff_vs_resto": -0.6112,
-  "p_valor": 0.0005,
+  "diff_vs_resto": -0.6096,
+  "p_valor": 0.0015,
   "split_half_diff": [
-   -0.5905,
-   -0.632
+   -0.5888,
+   -0.6303
   ],
   "split_half_ok": true,
   "pnl_medio_loo": -0.6993,
@@ -119,6 +105,20 @@
   "veredicto": "malo_confirmado"
  },
  "Dota#SEGUIR": {
+  "veredicto": "sin_concluir",
+  "historial_crudo": [
+   "bueno_confirmado",
+   "bueno_confirmado",
+   "bueno_confirmado"
+  ]
+ },
+ "epl-ganador#SEGUIR": {
+  "veredicto": "sin_concluir",
+  "historial_crudo": [
+   "malo_confirmado"
+  ]
+ },
+ "fl1-ganador#SEGUIR": {
   "veredicto": "sin_concluir",
   "historial_crudo": [
    "bueno_confirmado",
