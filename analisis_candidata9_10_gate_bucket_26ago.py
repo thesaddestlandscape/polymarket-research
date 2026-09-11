@@ -132,7 +132,15 @@ def eventos_candidata9():
 
 
 def eventos_candidata10():
-    """tupla_str -> [(ts, ask, pnl), ...] solo BTC, grupo con_confirm."""
+    """tupla_str -> [(ts, ask, pnl), ...] para CUALQUIER activo, grupo con_confirm.
+
+    11-Sep: generalizado de "solo BTC" a todos los activos -- la
+    restricción original (26-Ago) era por falta de n en el grupo
+    "sin_confirmar" para ETH/SOL en ese momento (`analisis_candidata10_
+    v2_sinlookahead_26ago.py`), no una limitación estructural del
+    mecanismo. Han pasado >2 semanas más de acumulación en
+    bot_wallets_gate_bucket_fase0.csv desde entonces -- comprobar si
+    ahora hay n suficiente en más activos antes de descartarlos."""
     filas = []
     with open(IN_BOTS, encoding="utf-8") as f:
         for r in csv.DictReader(f):
@@ -150,8 +158,6 @@ def eventos_candidata10():
             continue
         trs_ts = sorted([(parse_ts(t["trade_timestamp"]), t) for t in trs], key=lambda x: x[0])
         for idx, (ts_i, ti) in enumerate(trs_ts):
-            if ti["activo"] != "BTC":
-                continue
             confirm = False
             for ts_j, tj in trs_ts[:idx]:
                 if tj["activo"] == ti["activo"]:
@@ -170,7 +176,7 @@ def eventos_candidata10():
             acierto = int(ti["acierto"])
             pnl = pnl_neto(ask, acierto)
             marco = ti["marco"]
-            tupla_str = f"CANDIDATA10_CROSSACTIVO#BTC#{marco}"
+            tupla_str = f"CANDIDATA10_CROSSACTIVO#{ti['activo']}#{marco}"
             eventos[tupla_str].append((ts_i, ask, pnl))
     return eventos
 
