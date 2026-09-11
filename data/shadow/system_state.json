@@ -1,10 +1,10 @@
 {
-  "timestamp_utc": "2026-09-11T08:26:33+00:00",
-  "bankroll_sim": 51121.89,
-  "pnl_total": 51101.89,
-  "n_ops": 494213,
+  "timestamp_utc": "2026-09-11T08:37:42+00:00",
+  "bankroll_sim": 51129.2,
+  "pnl_total": 51109.2,
+  "n_ops": 494338,
   "win_rate": 0.5708,
-  "estrategias_activas": 552,
+  "estrategias_activas": 554,
   "desactivadas": [
     "SMART_FLOW_1H",
     "PRICE_TARGET_GBM#BTC#atexpiry",
