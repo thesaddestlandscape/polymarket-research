@@ -1,0 +1,66 @@
+{
+  "generado_utc": "2026-08-17T19:26:48+00:00",
+  "1_gate_calibracion_ya_conocido": {
+    "GBM_LATE_15M": "mal_calibrado_confirmado, Platt activo",
+    "GBM_LATE_15M_ESPACIO_ATR": "mal_calibrado_confirmado, Platt activo",
+    "GBM_LATE_15M_TARDIO": "bien_calibrado_confirmado, Platt no aplica",
+    "conclusion": "el patron H bajo>H medio aparece en las 3 pese a estados de calibracion distintos -> no es artefacto Platt"
+  },
+  "2_prob_fillable_gbm_late_P2_por_bucket_h": {
+    "bajo_reversion": {
+      "n": 4618,
+      "prob_fillable_medio": 0.2836
+    },
+    "medio_paseo_aleatorio": {
+      "n": 1705,
+      "prob_fillable_medio": 0.3796
+    },
+    "alto_tendencial": {
+      "n": 5,
+      "prob_fillable_medio": 0.4652
+    }
+  },
+  "3_fillability_real_libro_snapshots_por_bucket_h": {
+    "bajo_reversion": {
+      "n": 20462,
+      "fillable_rate": 0.329
+    },
+    "medio_paseo_aleatorio": {
+      "n": 9815,
+      "fillable_rate": 0.3415
+    },
+    "alto_tendencial": {
+      "n": 177,
+      "fillable_rate": 0.2429
+    }
+  },
+  "p_shuffle_fillable_rate_bajo_vs_medio": 0.029,
+  "4_pnl_SOLO_subconjunto_fillable_real_por_bucket_h": {
+    "bajo_reversion": {
+      "n": 6732,
+      "pnl_medio": -0.4457
+    },
+    "medio_paseo_aleatorio": {
+      "n": 3352,
+      "pnl_medio": -0.3425
+    },
+    "alto_tendencial": {
+      "n": 43,
+      "pnl_medio": -0.4646
+    }
+  },
+  "5_py_entrada_medio_por_bucket_h_kelly_precio_gate_check": {
+    "bajo_reversion": {
+      "n": 31573,
+      "py_medio": 0.5055
+    },
+    "medio_paseo_aleatorio": {
+      "n": 12191,
+      "py_medio": 0.5126
+    },
+    "alto_tendencial": {
+      "n": 177,
+      "py_medio": 0.5385
+    }
+  }
+}

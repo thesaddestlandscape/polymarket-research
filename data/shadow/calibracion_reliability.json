@@ -1,0 +1,756 @@
+{
+  "FAVORITO_CONFIRMADO#BTC": [
+    {
+      "bin": "[0.6,0.7)",
+      "n": 136,
+      "predicho": 0.6476,
+      "realizado": 0.625,
+      "gap": 0.0226
+    },
+    {
+      "bin": "[0.7,0.8)",
+      "n": 70,
+      "predicho": 0.7454,
+      "realizado": 0.6857,
+      "gap": 0.0597
+    },
+    {
+      "bin": "[0.8,0.9)",
+      "n": 53,
+      "predicho": 0.841,
+      "realizado": 0.717,
+      "gap": 0.1241
+    },
+    {
+      "bin": "[0.9,1.0)",
+      "n": 20,
+      "predicho": 0.94,
+      "realizado": 1.0,
+      "gap": -0.06
+    }
+  ],
+  "FAVORITO_CONFIRMADO#ETH": [
+    {
+      "bin": "[0.6,0.7)",
+      "n": 173,
+      "predicho": 0.6462,
+      "realizado": 0.6069,
+      "gap": 0.0392
+    },
+    {
+      "bin": "[0.7,0.8)",
+      "n": 95,
+      "predicho": 0.74,
+      "realizado": 0.6526,
+      "gap": 0.0874
+    },
+    {
+      "bin": "[0.8,0.9)",
+      "n": 42,
+      "predicho": 0.8412,
+      "realizado": 0.7857,
+      "gap": 0.0555
+    },
+    {
+      "bin": "[0.9,1.0)",
+      "n": 27,
+      "predicho": 0.9376,
+      "realizado": 0.8889,
+      "gap": 0.0487
+    }
+  ],
+  "FAVORITO_CONFIRMADO#SOL": [
+    {
+      "bin": "[0.6,0.7)",
+      "n": 154,
+      "predicho": 0.6493,
+      "realizado": 0.6234,
+      "gap": 0.0259
+    },
+    {
+      "bin": "[0.7,0.8)",
+      "n": 101,
+      "predicho": 0.7424,
+      "realizado": 0.6832,
+      "gap": 0.0593
+    },
+    {
+      "bin": "[0.8,0.9)",
+      "n": 48,
+      "predicho": 0.8446,
+      "realizado": 0.875,
+      "gap": -0.0304
+    },
+    {
+      "bin": "[0.9,1.0)",
+      "n": 28,
+      "predicho": 0.9323,
+      "realizado": 0.8214,
+      "gap": 0.1109
+    }
+  ],
+  "GBM_LATE_15M#BTC": [
+    {
+      "bin": "[0.5,0.6)",
+      "n": 289,
+      "predicho": 0.5538,
+      "realizado": 0.4602,
+      "gap": 0.0936
+    },
+    {
+      "bin": "[0.6,0.7)",
+      "n": 300,
+      "predicho": 0.6446,
+      "realizado": 0.6567,
+      "gap": -0.012
+    },
+    {
+      "bin": "[0.7,0.8)",
+      "n": 150,
+      "predicho": 0.7446,
+      "realizado": 0.7533,
+      "gap": -0.0087
+    },
+    {
+      "bin": "[0.8,0.9)",
+      "n": 43,
+      "predicho": 0.8348,
+      "realizado": 0.7907,
+      "gap": 0.0441
+    }
+  ],
+  "GBM_LATE_15M#ETH": [
+    {
+      "bin": "[0.5,0.6)",
+      "n": 300,
+      "predicho": 0.5551,
+      "realizado": 0.51,
+      "gap": 0.0451
+    },
+    {
+      "bin": "[0.6,0.7)",
+      "n": 303,
+      "predicho": 0.6481,
+      "realizado": 0.6403,
+      "gap": 0.0078
+    },
+    {
+      "bin": "[0.7,0.8)",
+      "n": 154,
+      "predicho": 0.74,
+      "realizado": 0.7273,
+      "gap": 0.0127
+    },
+    {
+      "bin": "[0.8,0.9)",
+      "n": 35,
+      "predicho": 0.8381,
+      "realizado": 0.8286,
+      "gap": 0.0095
+    }
+  ],
+  "GBM_LATE_15M#SOL": [
+    {
+      "bin": "[0.5,0.6)",
+      "n": 536,
+      "predicho": 0.5577,
+      "realizado": 0.6604,
+      "gap": -0.1027
+    },
+    {
+      "bin": "[0.6,0.7)",
+      "n": 222,
+      "predicho": 0.6363,
+      "realizado": 0.7658,
+      "gap": -0.1295
+    },
+    {
+      "bin": "[0.7,0.8)",
+      "n": 38,
+      "predicho": 0.736,
+      "realizado": 0.7368,
+      "gap": -0.0008
+    }
+  ],
+  "GBM_LATE_15M#XRP": [
+    {
+      "bin": "[0.5,0.6)",
+      "n": 675,
+      "predicho": 0.5541,
+      "realizado": 0.6593,
+      "gap": -0.1052
+    },
+    {
+      "bin": "[0.6,0.7)",
+      "n": 176,
+      "predicho": 0.6293,
+      "realizado": 0.733,
+      "gap": -0.1036
+    },
+    {
+      "bin": "[0.7,0.8)",
+      "n": 15,
+      "predicho": 0.7335,
+      "realizado": 0.6667,
+      "gap": 0.0668
+    }
+  ],
+  "GBM_LATE_15M_ESPACIO_ATR#BTC": [
+    {
+      "bin": "[0.6,0.7)",
+      "n": 141,
+      "predicho": 0.6488,
+      "realizado": 0.6809,
+      "gap": -0.0321
+    },
+    {
+      "bin": "[0.7,0.8)",
+      "n": 61,
+      "predicho": 0.7483,
+      "realizado": 0.8197,
+      "gap": -0.0714
+    },
+    {
+      "bin": "[0.8,0.9)",
+      "n": 18,
+      "predicho": 0.8332,
+      "realizado": 0.7778,
+      "gap": 0.0554
+    }
+  ],
+  "GBM_LATE_15M_ESPACIO_ATR#ETH": [
+    {
+      "bin": "[0.6,0.7)",
+      "n": 115,
+      "predicho": 0.6513,
+      "realizado": 0.6087,
+      "gap": 0.0426
+    },
+    {
+      "bin": "[0.7,0.8)",
+      "n": 82,
+      "predicho": 0.7448,
+      "realizado": 0.7073,
+      "gap": 0.0374
+    },
+    {
+      "bin": "[0.8,0.9)",
+      "n": 23,
+      "predicho": 0.8369,
+      "realizado": 0.913,
+      "gap": -0.0761
+    }
+  ],
+  "GBM_LATE_15M_ESPACIO_ATR#SOL": [
+    {
+      "bin": "[0.6,0.7)",
+      "n": 182,
+      "predicho": 0.6478,
+      "realizado": 0.7473,
+      "gap": -0.0995
+    },
+    {
+      "bin": "[0.7,0.8)",
+      "n": 25,
+      "predicho": 0.7284,
+      "realizado": 0.8,
+      "gap": -0.0716
+    }
+  ],
+  "GBM_LATE_15M_ESPACIO_ATR#XRP": [
+    {
+      "bin": "[0.6,0.7)",
+      "n": 173,
+      "predicho": 0.6401,
+      "realizado": 0.7919,
+      "gap": -0.1518
+    }
+  ],
+  "GBM_LATE_15M_TARDIO#BTC": [
+    {
+      "bin": "[0.5,0.6)",
+      "n": 51,
+      "predicho": 0.5627,
+      "realizado": 0.4314,
+      "gap": 0.1314
+    },
+    {
+      "bin": "[0.6,0.7)",
+      "n": 90,
+      "predicho": 0.6494,
+      "realizado": 0.6667,
+      "gap": -0.0173
+    },
+    {
+      "bin": "[0.7,0.8)",
+      "n": 57,
+      "predicho": 0.7435,
+      "realizado": 0.7544,
+      "gap": -0.0109
+    },
+    {
+      "bin": "[0.8,0.9)",
+      "n": 22,
+      "predicho": 0.834,
+      "realizado": 0.8182,
+      "gap": 0.0158
+    }
+  ],
+  "GBM_LATE_15M_TARDIO#ETH": [
+    {
+      "bin": "[0.5,0.6)",
+      "n": 53,
+      "predicho": 0.5691,
+      "realizado": 0.4151,
+      "gap": 0.154
+    },
+    {
+      "bin": "[0.6,0.7)",
+      "n": 93,
+      "predicho": 0.6525,
+      "realizado": 0.5591,
+      "gap": 0.0934
+    },
+    {
+      "bin": "[0.7,0.8)",
+      "n": 59,
+      "predicho": 0.7434,
+      "realizado": 0.678,
+      "gap": 0.0654
+    },
+    {
+      "bin": "[0.8,0.9)",
+      "n": 20,
+      "predicho": 0.8357,
+      "realizado": 0.85,
+      "gap": -0.0143
+    }
+  ],
+  "GBM_LATE_15M_TARDIO#SOL": [
+    {
+      "bin": "[0.5,0.6)",
+      "n": 110,
+      "predicho": 0.5569,
+      "realizado": 0.5545,
+      "gap": 0.0024
+    },
+    {
+      "bin": "[0.6,0.7)",
+      "n": 77,
+      "predicho": 0.6432,
+      "realizado": 0.7273,
+      "gap": -0.084
+    },
+    {
+      "bin": "[0.7,0.8)",
+      "n": 19,
+      "predicho": 0.7327,
+      "realizado": 0.7895,
+      "gap": -0.0567
+    }
+  ],
+  "GBM_LATE_15M_TARDIO#XRP": [
+    {
+      "bin": "[0.5,0.6)",
+      "n": 229,
+      "predicho": 0.5536,
+      "realizado": 0.6943,
+      "gap": -0.1407
+    },
+    {
+      "bin": "[0.6,0.7)",
+      "n": 57,
+      "predicho": 0.6415,
+      "realizado": 0.7018,
+      "gap": -0.0603
+    }
+  ],
+  "GBM_LATE_60M#SOL": [
+    {
+      "bin": "[0.5,0.6)",
+      "n": 17,
+      "predicho": 0.5474,
+      "realizado": 0.8824,
+      "gap": -0.3349
+    }
+  ],
+  "LATE_WINDOW_5MIN#BTC": [
+    {
+      "bin": "[0.7,0.8)",
+      "n": 33,
+      "predicho": 0.7,
+      "realizado": 0.7576,
+      "gap": -0.0576
+    }
+  ],
+  "LEADLAG_BTC_XRP_15M#XRP": [
+    {
+      "bin": "[0.5,0.6)",
+      "n": 68,
+      "predicho": 0.5265,
+      "realizado": 0.6324,
+      "gap": -0.1059
+    }
+  ],
+  "ORDER_FLOW_5M#BNB": [
+    {
+      "bin": "[0.6,0.7)",
+      "n": 34,
+      "predicho": 0.6908,
+      "realizado": 0.5588,
+      "gap": 0.132
+    },
+    {
+      "bin": "[0.7,0.8)",
+      "n": 139,
+      "predicho": 0.7352,
+      "realizado": 0.5396,
+      "gap": 0.1957
+    },
+    {
+      "bin": "[0.8,0.9)",
+      "n": 17,
+      "predicho": 0.8286,
+      "realizado": 0.5882,
+      "gap": 0.2404
+    }
+  ],
+  "ORDER_FLOW_5M#BTC": [
+    {
+      "bin": "[0.6,0.7)",
+      "n": 73,
+      "predicho": 0.6915,
+      "realizado": 0.4795,
+      "gap": 0.2121
+    },
+    {
+      "bin": "[0.7,0.8)",
+      "n": 196,
+      "predicho": 0.7212,
+      "realizado": 0.4949,
+      "gap": 0.2263
+    }
+  ],
+  "ORDER_FLOW_5M#DOGE": [
+    {
+      "bin": "[0.6,0.7)",
+      "n": 27,
+      "predicho": 0.6929,
+      "realizado": 0.3333,
+      "gap": 0.3596
+    },
+    {
+      "bin": "[0.7,0.8)",
+      "n": 148,
+      "predicho": 0.7312,
+      "realizado": 0.5405,
+      "gap": 0.1907
+    },
+    {
+      "bin": "[0.8,0.9)",
+      "n": 30,
+      "predicho": 0.829,
+      "realizado": 0.4667,
+      "gap": 0.3623
+    }
+  ],
+  "ORDER_FLOW_5M#ETH": [
+    {
+      "bin": "[0.6,0.7)",
+      "n": 66,
+      "predicho": 0.6931,
+      "realizado": 0.5303,
+      "gap": 0.1628
+    },
+    {
+      "bin": "[0.7,0.8)",
+      "n": 158,
+      "predicho": 0.7282,
+      "realizado": 0.4367,
+      "gap": 0.2915
+    },
+    {
+      "bin": "[0.8,0.9)",
+      "n": 26,
+      "predicho": 0.8268,
+      "realizado": 0.6538,
+      "gap": 0.173
+    }
+  ],
+  "ORDER_FLOW_5M#SIN_ACTIVO": [
+    {
+      "bin": "[0.6,0.7)",
+      "n": 50,
+      "predicho": 0.6737,
+      "realizado": 0.44,
+      "gap": 0.2337
+    },
+    {
+      "bin": "[0.7,0.8)",
+      "n": 78,
+      "predicho": 0.7316,
+      "realizado": 0.6282,
+      "gap": 0.1034
+    }
+  ],
+  "ORDER_FLOW_5M#SOL": [
+    {
+      "bin": "[0.6,0.7)",
+      "n": 64,
+      "predicho": 0.6895,
+      "realizado": 0.5469,
+      "gap": 0.1426
+    },
+    {
+      "bin": "[0.7,0.8)",
+      "n": 240,
+      "predicho": 0.7312,
+      "realizado": 0.5333,
+      "gap": 0.1978
+    }
+  ],
+  "ORDER_FLOW_5M#XRP": [
+    {
+      "bin": "[0.6,0.7)",
+      "n": 26,
+      "predicho": 0.682,
+      "realizado": 0.4615,
+      "gap": 0.2204
+    },
+    {
+      "bin": "[0.7,0.8)",
+      "n": 137,
+      "predicho": 0.732,
+      "realizado": 0.5036,
+      "gap": 0.2283
+    },
+    {
+      "bin": "[0.8,0.9)",
+      "n": 23,
+      "predicho": 0.8389,
+      "realizado": 0.5217,
+      "gap": 0.3171
+    }
+  ],
+  "STREAK_FADE_15M#ETH": [
+    {
+      "bin": "[0.7,0.8)",
+      "n": 35,
+      "predicho": 0.7,
+      "realizado": 0.6571,
+      "gap": 0.0429
+    }
+  ],
+  "STREAK_FADE_15M#SOL": [
+    {
+      "bin": "[0.7,0.8)",
+      "n": 55,
+      "predicho": 0.7,
+      "realizado": 0.6545,
+      "gap": 0.0455
+    }
+  ],
+  "STREAK_FADE_15M#XRP": [
+    {
+      "bin": "[0.7,0.8)",
+      "n": 64,
+      "predicho": 0.7,
+      "realizado": 0.5781,
+      "gap": 0.1219
+    }
+  ],
+  "STREAK_FADE_5M#ETH": [
+    {
+      "bin": "[0.5,0.6)",
+      "n": 45,
+      "predicho": 0.58,
+      "realizado": 0.3556,
+      "gap": 0.2244
+    }
+  ],
+  "STREAK_FADE_5M#SOL": [
+    {
+      "bin": "[0.5,0.6)",
+      "n": 58,
+      "predicho": 0.58,
+      "realizado": 0.4655,
+      "gap": 0.1145
+    }
+  ],
+  "STREAK_FADE_5M#XRP": [
+    {
+      "bin": "[0.5,0.6)",
+      "n": 58,
+      "predicho": 0.58,
+      "realizado": 0.5172,
+      "gap": 0.0628
+    }
+  ],
+  "STREAK_MOM_5M#ETH": [
+    {
+      "bin": "[0.5,0.6)",
+      "n": 103,
+      "predicho": 0.58,
+      "realizado": 0.4466,
+      "gap": 0.1334
+    }
+  ],
+  "STREAK_MOM_5M#SOL": [
+    {
+      "bin": "[0.5,0.6)",
+      "n": 108,
+      "predicho": 0.58,
+      "realizado": 0.4907,
+      "gap": 0.0893
+    }
+  ],
+  "STREAK_MOM_5M#XRP": [
+    {
+      "bin": "[0.5,0.6)",
+      "n": 98,
+      "predicho": 0.58,
+      "realizado": 0.3878,
+      "gap": 0.1922
+    }
+  ],
+  "UPDOWN_GBM#BTC": [
+    {
+      "bin": "[0.5,0.6)",
+      "n": 133,
+      "predicho": 0.5593,
+      "realizado": 0.4361,
+      "gap": 0.1232
+    },
+    {
+      "bin": "[0.6,0.7)",
+      "n": 86,
+      "predicho": 0.6453,
+      "realizado": 0.5116,
+      "gap": 0.1337
+    },
+    {
+      "bin": "[0.7,0.8)",
+      "n": 53,
+      "predicho": 0.7403,
+      "realizado": 0.5283,
+      "gap": 0.212
+    },
+    {
+      "bin": "[0.8,0.9)",
+      "n": 32,
+      "predicho": 0.8543,
+      "realizado": 0.7188,
+      "gap": 0.1355
+    },
+    {
+      "bin": "[0.9,1.0)",
+      "n": 31,
+      "predicho": 0.9351,
+      "realizado": 0.8065,
+      "gap": 0.1286
+    }
+  ],
+  "UPDOWN_GBM#ETH": [
+    {
+      "bin": "[0.5,0.6)",
+      "n": 294,
+      "predicho": 0.5531,
+      "realizado": 0.4898,
+      "gap": 0.0634
+    },
+    {
+      "bin": "[0.6,0.7)",
+      "n": 184,
+      "predicho": 0.6444,
+      "realizado": 0.4511,
+      "gap": 0.1933
+    },
+    {
+      "bin": "[0.7,0.8)",
+      "n": 67,
+      "predicho": 0.7414,
+      "realizado": 0.5224,
+      "gap": 0.219
+    },
+    {
+      "bin": "[0.8,0.9)",
+      "n": 36,
+      "predicho": 0.8528,
+      "realizado": 0.75,
+      "gap": 0.1028
+    },
+    {
+      "bin": "[0.9,1.0)",
+      "n": 31,
+      "predicho": 0.9337,
+      "realizado": 0.871,
+      "gap": 0.0627
+    }
+  ],
+  "UPDOWN_GBM#SOL": [
+    {
+      "bin": "[0.5,0.6)",
+      "n": 104,
+      "predicho": 0.5417,
+      "realizado": 0.4327,
+      "gap": 0.109
+    },
+    {
+      "bin": "[0.6,0.7)",
+      "n": 18,
+      "predicho": 0.64,
+      "realizado": 0.7222,
+      "gap": -0.0822
+    }
+  ],
+  "UPDOWN_GBM#XRP": [
+    {
+      "bin": "[0.5,0.6)",
+      "n": 67,
+      "predicho": 0.5462,
+      "realizado": 0.5224,
+      "gap": 0.0238
+    }
+  ],
+  "WEEKLY_PRICE#BTC": [
+    {
+      "bin": "[0.8,0.9)",
+      "n": 17,
+      "predicho": 0.8611,
+      "realizado": 0.7647,
+      "gap": 0.0964
+    },
+    {
+      "bin": "[0.9,1.0)",
+      "n": 22,
+      "predicho": 0.9,
+      "realizado": 0.5909,
+      "gap": 0.3091
+    }
+  ],
+  "WEEKLY_PRICE#ETH": [
+    {
+      "bin": "[0.8,0.9)",
+      "n": 25,
+      "predicho": 0.8652,
+      "realizado": 0.76,
+      "gap": 0.1052
+    }
+  ],
+  "WEEKLY_PRICE#SOL": [
+    {
+      "bin": "[0.6,0.7)",
+      "n": 32,
+      "predicho": 0.6378,
+      "realizado": 0.5312,
+      "gap": 0.1065
+    },
+    {
+      "bin": "[0.7,0.8)",
+      "n": 35,
+      "predicho": 0.7315,
+      "realizado": 0.7143,
+      "gap": 0.0172
+    }
+  ]
+}

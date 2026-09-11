@@ -1,0 +1,27 @@
+{
+  "generado_utc": "2026-08-13T06:49:24.966127+00:00",
+  "n_predicciones": 6961,
+  "n_filas_evaluadas": 27388,
+  "resumen_por_offset": [
+    {
+      "offset": 0.05,
+      "n": 6945,
+      "fill_rate": 46.925845932325416
+    },
+    {
+      "offset": 0.1,
+      "n": 6909,
+      "fill_rate": 39.16630481980026
+    },
+    {
+      "offset": 0.15,
+      "n": 6839,
+      "fill_rate": 32.21231174148267
+    },
+    {
+      "offset": 0.2,
+      "n": 6695,
+      "fill_rate": 27.274085138162807
+    }
+  ]
+}

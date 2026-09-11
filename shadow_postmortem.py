@@ -1,0 +1,3597 @@
+"""
+shadow_postmortem.py — Diagnóstico automático de pérdidas + análisis de rendimiento.
+
+Por cada pérdida nueva en results.csv:
+1. Clasifica la causa
+2. Calcula IC Bayesiano por estrategia desde la primera observación
+3. Genera strategy_params.json → shadow_predict.py lo aplica en el siguiente ciclo
+4. Genera performance.csv con métricas completas de trader por estrategia
+
+Causas de pérdida:
+  SPREAD_TRAP       — slippage implícito > 4%, el spread se comió el edge
+  EDGE_INSUFICIENTE — edge neto < 3%, demasiado fino para ser real
+  TIMING_CORTO      — mercado < 24h, perdimos por timing
+  DIRECTION_ERROR   — dirección incorrecta del activo (el fallo principal)
+"""
+import csv
+import json
+import math
+import random
+import re
+import os
+import hashlib
+from collections import Counter
+from datetime import datetime, timedelta, timezone
+from functools import lru_cache
+from pathlib import Path
+
+import numpy as np
+
+import gate_bucket_propio as _gbp
+from csv_lectura_tolerante import leer_csv_tolerante
+
+DIR_SHADOW      = Path("data/shadow")
+PRED_RECIENTES_CACHE_DIR = DIR_SHADOW / "_predicciones_recientes_cache"
+RESULTS_PATH    = DIR_SHADOW / "results.csv"
+POSTMORTEM_PATH = DIR_SHADOW / "postmortem.csv"
+POSTMORTEM_KEYS_PATH = DIR_SHADOW / "postmortem_procesadas.json"
+PARAMS_PATH     = DIR_SHADOW / "strategy_params.json"
+PERFORMANCE_PATH = DIR_SHADOW / "performance.csv"
+EV_KELLY_HIST_PATH = DIR_SHADOW / "ev_kelly_historico.csv"
+EV_KELLY_HIST_THROTTLE_MIN = 15  # no más de una fila cada 15min (performance.csv se recalcula c/60s)
+INTEGRIDAD_LATCH_PATH = DIR_SHADOW / "integridad_pipeline_latch.json"
+HIPOTESIS_TRACKER_STATE_PATH = DIR_SHADOW / "hipotesis_tracker_ultimo_run.json"
+HIPOTESIS_TRACKER_MIN_INTERVAL_S = 3600  # 08-Sep (barrido salud, perfilado con
+# cProfile en producción, petición explícita Javi): hypothesis_tracker.run()
+# corría en TODOS los ciclos de postmortem, sin throttle -- 128s sobre 344k
+# filas TWAP-safe, dominado por las 65 hipótesis custom (_eval_custom, 109.8s)
+# vía _aplicar_filtro (39.2M llamadas) y su re-parseo de JSON de features por
+# fila (_feat, 1.7M json.loads, 24.8s). Mismo criterio y mismo patrón que
+# PATRONES_CAUSALES_MIN_INTERVAL_S (05-Sep): puramente observacional/
+# informativo (hipotesis_auto.md, hipotesis_pendientes.json, avisos Telegram
+# de hipótesis nuevas vía _auto_apply -- que desde 15-Jul solo notifica, no
+# escribe strategy_params.json), no alimenta filtros_causales/patrones_
+# ganadores ni ningún veto de dinero real -- throttlearlo no reduce
+# protección live, solo la cadencia de un informe.
+PATRONES_CAUSALES_STATE_PATH = DIR_SHADOW / "patrones_causales_ultimo_run.json"
+PATRONES_CAUSALES_MIN_INTERVAL_S = 3600  # 05-Sep (barrido salud, swap/OOM
+# crítico): aprender_patrones_causales() es el coste dominante real de
+# postmortem (percentiles × features × strat_keys + shuffle+BH-FDR sobre
+# TODA la historia, ~400k filas -- el ciclo de 914s medido hoy). El gate
+# externo de run_fast_mantenimiento.sh (POSTMORTEM_MIN_INTERVAL_S=600) ya
+# limita cuántas veces se INVOCA postmortem entero, pero cada invocación
+# seguía recalculando esto desde cero. calcular_params() (IC/n/activa, lo
+# que live_trade.py lee para activar/desactivar/Kelly) sigue corriendo
+# CADA vez que postmortem se invoca -- solo esta parte, mucho más cara y
+# mucho más lenta de cambiar de verdad ciclo a ciclo, se throttlea aparte.
+# Diseño completo + verificación de preservación en el commit que añade
+# este bloque.
+
+def _escribir_json_atomico(path: Path, texto: str) -> None:
+    """Escribe `texto` en `path` de forma atómica (temp-file + os.replace) --
+    evita que un lector concurrente (shadow_predict.py/live_trade.py, que
+    releen strategy_params.json cada ~20s) pueda ver el fichero a medio
+    escribir. os.replace() es atómico dentro del mismo filesystem (aquí
+    siempre lo es: el temp vive en el mismo directorio que el destino).
+    18-Ago: prerequisito documentado antes de desacoplar predict/live_trade
+    de resolve/postmortem en run_fast.sh -- ver project_desacoplar_fast_
+    loop_postmortem_18ago."""
+    import os
+    tmp = path.with_suffix(path.suffix + f".tmp{os.getpid()}")
+    tmp.write_text(texto, encoding="utf-8")
+    os.replace(tmp, path)
+
+
+APUESTA_SHADOW = 0.90
+
+UMBRAL_SUBIR_EDGE = (-0.10, 3)
+UMBRAL_SUBIR_MAS  = (-0.20, 5)
+UMBRAL_DESACTIVAR = (-0.20, 15)  # 01-Sep: subido de 8 a 15 -- n=8 estaba por
+# debajo del mínimo duro del proyecto para concluir nada (CLAUDE.md: "ninguna
+# conclusión con n<15"), y a diferencia de UMBRAL_SUBIR_MAS/UMBRAL_SUBIR_EDGE
+# (edge_minimo, reversible cada ciclo) esto pone activa=False -- sin la
+# excepción ACUMULAR_SHADOW_AUNQUE_DESACTIVADA/_nunca_estuvo_live(), una
+# estrategia atrapada así no puede generar más filas para corregirse.
+# Triage 26-Ago (project_pendiente_umbral_desactivar_diseno_26ago): 3 casos
+# reales muertos con n=8-12 mostraban regresión a la media clara semanas
+# después (IC recuperado por encima de -0.20); verificado de nuevo 01-Sep,
+# 4 casos activa=False con n en [8,15) hoy, los 4 con ic_bayes ya>-0.20.
+
+
+def _ic_bayes(aciertos, n) -> float:
+    """IC Bayesiano suavizado: (aciertos+1)/(n+2)-0.5 — fuente única (20-Jul,
+    hallazgo code-review: la misma fórmula vivía inline en 6+ sitios de este
+    fichero además de copias en analisis_gate_riguroso.py y
+    analisis_shuffle_patrones_causales.py)."""
+    return (aciertos + 1) / (n + 2) - 0.5
+
+
+def cargar_results(rows=None) -> list:
+    """Carga results.csv deduplicado por (strategy, market_id, decision).
+
+    rows: filas ya parseadas (csv.DictReader) para evitar releer el fichero
+    si el llamante ya lo hizo este ciclo -- ver docstring de
+    cargar_results_dedup en resultados_dedup.py.
+
+    12-Jul: hallado en auditoría general un duplicado real — FAVORITO_
+    CONFIRMADO#2866629#BUY_YES resuelto dos veces (resolution_timestamp
+    03:13:26 y 03:16:24, 11-Jul), filas por lo demás idénticas. Causa más
+    probable: shadow_resolve.py lee results.csv fresco cada ciclo para
+    saber qué ya está resuelto, y una carrera con el stash/rebase/push del
+    fast loop (run_fast.sh) puede dejarle ver una versión momentáneamente
+    desactualizada del fichero, re-resolviendo un mercado que otro ciclo
+    ya había resuelto segundos/minutos antes; merge=union (protege contra
+    PÉRDIDA de filas) preserva ambas copias en vez de detectar el choque.
+    Este loader es el punto único de lectura para IC/n/filtros_causales/
+    patrones_ganadores — deduplicar aquí protege TODOS los consumidores
+    sin depender de arreglar la causa raíz de la carrera en el loop.
+    Se queda la fila con resolution_timestamp más temprano (la resolución
+    real); las demás son el eco de la re-resolución.
+
+    13-Jul: lógica extraída a resultados_dedup.py (propuesta #4 lista puntos
+    ciegos) para que otros consumidores (hypothesis_tracker.py, vigias) no
+    reimplementen su propio csv.DictReader crudo — un solo punto de verdad.
+    """
+    from resultados_dedup import cargar_results_dedup
+    return cargar_results_dedup(RESULTS_PATH, rows=rows)
+
+
+def _verificar_integridad(content: str = None, rows: list = None) -> list[tuple[str, str]]:
+    """Grader independiente: valida results.csv antes de que el postmortem lo procese.
+
+    Devuelve (clave_estable, mensaje) en vez de solo el mensaje (21-Jul,
+    hallazgo: la clave de duplicados vive en el propio results.csv desde el
+    12-Jul — FAVORITO_CONFIRMADO#2866629#BUY_YES nunca se limpia del CSV
+    porque el dedup es solo en memoria vía cargar_results_dedup, así que la
+    misma alerta se reenviaba por Telegram cada ciclo (~23min) durante 10
+    días). La clave identifica el CONTENIDO real del problema (qué filas
+    duplicadas exactas, no solo "hay duplicados") para que el latch del
+    llamante distinga un duplicado NUEVO (debe avisar) de uno YA VISTO que
+    sigue sin limpiarse (no debe repetir el aviso).
+
+    content/rows: si el llamante ya leyó/parseó results.csv este ciclo, los
+    pasa para evitar una segunda lectura+parseo completo del fichero (20-Ago,
+    ver docstring de cargar_results_dedup — con el fichero en ~156MB/200k
+    filas esta relectura duplicada contribuía a la degradación medida por
+    vigia_pipeline_latencia.py, aviso Telegram 21:03 hora Madrid)."""
+    alertas = []
+    if content is None:
+        if not RESULTS_PATH.exists():
+            return [("results_csv_no_existe", "results.csv no existe")]
+        content = RESULTS_PATH.read_text(encoding="utf-8")
+    elif not RESULTS_PATH.exists():
+        return [("results_csv_no_existe", "results.csv no existe")]
+    if any(m in content for m in ["<<<<<<<", ">>>>>>>", "======="]):
+        alertas.append(("conflict_markers", "CONFLICT MARKERS en results.csv — git rebase incompleto"))
+    if rows is None:
+        rows = list(csv.DictReader(content.splitlines()))
+    if rows:
+        if "features" not in rows[0]:
+            alertas.append(("falta_columna_features", "Falta columna 'features' en results.csv — fix urgente"))
+        bad = sum(1 for r in rows if r.get("pnl_neto") in (None, ""))
+        if bad:
+            alertas.append((f"pnl_neto_invalido:{bad}", f"{bad} filas con pnl_neto inválido"))
+        # 12-Jul: detecta duplicados (strategy, market_id, decision) — ya
+        # deduplicados de forma transparente en cargar_results(), pero se
+        # avisa igual para poder investigar la causa raíz (carrera git) si
+        # empieza a repetirse con frecuencia en vez de ser un caso aislado.
+        contador = Counter((r.get("strategy",""), r.get("market_id",""), r.get("decision",""))
+                           for r in rows)
+        dup_keys = sorted(k for k, n in contador.items() if n > 1)
+        if dup_keys:
+            ejemplos = ", ".join(f"{s}#{m}#{d}" for s, m, d in dup_keys[:3])
+            clave = "duplicados:" + ",".join(f"{s}#{m}#{d}" for s, m, d in dup_keys)
+            alertas.append((clave, f"{len(dup_keys)} predicción(es) resuelta(s) más de una vez "
+                            f"(deduplicado automáticamente en cargar_results): {ejemplos}"))
+    return alertas
+
+
+def _monitor_5min(resultados: list) -> dict:
+    """
+    Monitor específico del mercado de 5 minutos.
+    Tres señales bajo vigilancia:
+      1. OU_5M: CLV y tendencia (¿THETA_OU=30 sigue siendo válido?)
+      2. ORDER_FLOW BUY_YES: CLV rolling — umbral de desactivación en -0.030 con n≥400
+      3. Alpha decay ORDER_FLOW: IC rolling últimas 30 vs histórico
+    """
+    alertas = []
+
+    # 1. UPDOWN_OU_5M
+    ou = [r for r in resultados if r.get("strategy") == "UPDOWN_OU_5M"]
+    ou_clv = [float(r["clv"]) for r in ou if r.get("clv")]
+    ou_state = {
+        "n": len(ou),
+        "clv": round(sum(ou_clv)/len(ou_clv), 4) if ou_clv else None,
+        "clv_ult30": None,
+    }
+    if len(ou) >= 10:
+        ult30 = sorted(ou, key=lambda r: r["resolution_timestamp"])[-30:]
+        clv30 = [float(r["clv"]) for r in ult30 if r.get("clv")]
+        ou_state["clv_ult30"] = round(sum(clv30)/len(clv30), 4) if clv30 else None
+
+    # 2. ORDER_FLOW BUY_YES: umbral de desactivación
+    of_yes = [r for r in resultados
+              if r.get("strategy") == "ORDER_FLOW_5M" and r.get("decision") == "BUY_YES"
+              and r.get("subtype","")]
+    of_yes_clv = [float(r["clv"]) for r in of_yes if r.get("clv")]
+    of_yes_state = {
+        "n": len(of_yes),
+        "clv": round(sum(of_yes_clv)/len(of_yes_clv), 4) if of_yes_clv else None,
+        "umbral_accion": -0.030,
+        "n_umbral": 400,
+    }
+    if of_yes_clv:
+        clv_m = sum(of_yes_clv)/len(of_yes_clv)
+        if len(of_yes) >= 400 and clv_m < -0.030:
+            alertas.append(f"🚨 ORDER_FLOW BUY_YES: CLV={clv_m:+.3f} con n={len(of_yes)} → DESACTIVAR BUY_YES")
+        elif len(of_yes) >= 300:
+            # Alerta temprana cuando se acerca al umbral
+            of_yes_state["alerta_proxima"] = f"n={len(of_yes)}/400, CLV={clv_m:+.3f}/−0.030"
+
+    # 3. Alpha decay ORDER_FLOW global (rolling 30 vs histórico)
+    of_all = [r for r in resultados if r.get("strategy") == "ORDER_FLOW_5M" and r.get("subtype","")]
+    of_clv_all = [float(r["clv"]) for r in of_all if r.get("clv")]
+    of_clv_hist = sum(of_clv_all)/len(of_clv_all) if of_clv_all else 0
+    ult30_of = sorted(of_all, key=lambda r: r["resolution_timestamp"])[-30:]
+    of_clv_30 = [float(r["clv"]) for r in ult30_of if r.get("clv")]
+    of_clv_30m = sum(of_clv_30)/len(of_clv_30) if of_clv_30 else 0
+    decay_ratio = of_clv_30m / of_clv_hist if of_clv_hist > 0.005 else None
+
+    of_state = {
+        "clv_historico": round(of_clv_hist, 4),
+        "clv_ult30":     round(of_clv_30m, 4),
+        "decay_ratio":   round(decay_ratio, 2) if decay_ratio else None,
+    }
+    # Decay real = varias sesiones consecutivas negativas, no un único día malo.
+    # Solo alertar si hay ops de al menos 2 días distintos en las últimas 30
+    dias_distintos = len({r["resolution_timestamp"][:10] for r in ult30_of})
+    if decay_ratio is not None and decay_ratio < 0.5 and dias_distintos >= 2:
+        alertas.append(f"⚠️ ORDER_FLOW alpha decay: CLV histórico={of_clv_hist:+.3f} → últimas30={of_clv_30m:+.3f} (ratio={decay_ratio:.1f}x, {dias_distintos} días)")
+
+    # Enviar alertas por Telegram si las hay
+    if alertas:
+        try:
+            import os, requests
+            tok = os.environ.get("TELEGRAM_TOKEN", "")
+            cid = os.environ.get("TELEGRAM_CHAT_ID", "")
+            if tok and cid:
+                msg = "📊 *Monitor 5min — alerta*\n" + "\n".join(alertas)
+                requests.post(f"https://api.telegram.org/bot{tok}/sendMessage",
+                              json={"chat_id": cid, "text": msg, "parse_mode": "Markdown"},
+                              timeout=10)
+        except Exception as e:
+            print(f"  [aviso 5min] no se pudo notificar Telegram: {e}")
+    for a in alertas:
+        print(f"  [5MIN ALERTA] {a}")
+
+    return {"ou_5m": ou_state, "of_buy_yes": of_yes_state, "of_decay": of_state, "alertas": alertas}
+
+
+IC_GATE_LIVE = 0.08  # mismo umbral que exige la promoción a pares_permitidos_live
+LATCH_IC_LIVE = Path("data/shadow/vigia_ic_live_latch.json")
+_NIVEL_ORDEN = {"verde": 0, "amarillo": 1, "rojo": 2}
+
+
+def _monitor_ic_live(params: dict) -> list:
+    """
+    Vigía de decaimiento — petición Javi 11-Jul: "vigila el ETH de cerca y
+    avísame si baja de 0.08". Cada tupla de `pares_permitidos_live`
+    (config_live.json) es dinero real; si su ic_bayes (o ic_BUY_YES/
+    ic_BUY_NO según la dirección de la tupla) cae por debajo del MISMO
+    umbral que exigió su promoción, avisa por Telegram.
+
+    12-Jul: añadido latch por tupla (antes "sin latch a propósito" —
+    correcto en la intención, pero el ciclo lento corre cada ~60-90s, no
+    cada ~23min como se pensaba, y sin latch reenviaba el MISMO aviso
+    cientos de veces mientras el IC se quedaba parado en la misma zona
+    (832 envíos acumulados en logs/fast.log, spam confirmado por Javi).
+    Ahora solo avisa al ENTRAR o EMPEORAR de zona (verde→amarillo→rojo);
+    la recuperación a verde resetea el latch en silencio, así que un
+    nuevo bajón futuro sí vuelve a avisar — sigue "recordar de más que
+    de menos" en las transiciones que importan, sin martillear.
+    """
+    alertas = []
+    try:
+        config = json.loads(Path("data/live/config_live.json").read_text())
+    except Exception:
+        return alertas
+    try:
+        latch = json.loads(LATCH_IC_LIVE.read_text()) if LATCH_IC_LIVE.exists() else {}
+    except Exception:
+        latch = {}
+    estrategias = params.get("estrategias", {})
+    for tupla in config.get("pares_permitidos_live", []):
+        partes = tupla.split("#")
+        if len(partes) != 4:
+            continue
+        estrategia, activo, duracion, direccion = partes
+        clave = f"{estrategia}#{activo}#{duracion}"
+        sp = estrategias.get(clave)
+        if not sp:
+            continue
+        campo_ic = f"ic_{direccion}"
+        campo_n  = f"n_{direccion}"
+        ic = sp.get(campo_ic, sp.get("ic_bayes"))
+        n  = sp.get(campo_n, sp.get("n", 0))
+        if ic is None:
+            continue
+        if ic < IC_GATE_LIVE:
+            nivel, texto = "rojo", f"🔴 LIVE {tupla}: ic={ic:+.4f} < {IC_GATE_LIVE} (n={n}) — por debajo del gate que la promovió"
+        elif ic < IC_GATE_LIVE + 0.02:
+            nivel, texto = "amarillo", f"🟡 LIVE {tupla}: ic={ic:+.4f} cerca del gate {IC_GATE_LIVE} (n={n}) — vigilar"
+        else:
+            nivel, texto = "verde", None
+        nivel_previo = latch.get(tupla)
+        if nivel == "verde":
+            if nivel_previo is not None:
+                latch[tupla] = None  # recuperado, reset silencioso
+        elif nivel != nivel_previo:
+            alertas.append(texto)
+            latch[tupla] = nivel
+    try:
+        _escribir_json_atomico(LATCH_IC_LIVE, json.dumps(latch, ensure_ascii=False, indent=1))
+    except Exception as e:
+        print(f"  [vigia IC live] no se pudo guardar latch: {e}")
+    return alertas
+
+
+def _escribir_state(params: dict, resultados: list):
+    """Gap 2: state file machine-generated con snapshot del sistema."""
+    estrategias = params.get("estrategias", {})
+    activas      = {k: v for k, v in estrategias.items() if v.get("activa", True)}
+    desactivadas = {k: v for k, v in estrategias.items() if not v.get("activa", True)}
+    pnl_total    = sum(float(r.get("pnl_neto", 0)) for r in resultados)
+    brier_vals   = [float(r["brier_score"]) for r in resultados if r.get("brier_score")]
+    clv_vals     = [float(r["clv"])         for r in resultados if r.get("clv")]
+    brier_mean   = round(sum(brier_vals)/len(brier_vals), 4) if brier_vals else None
+    clv_mean     = round(sum(clv_vals)/len(clv_vals), 4)     if clv_vals  else None
+    n_total      = len(resultados)
+    wins         = sum(int(r.get("acierto", 0)) for r in resultados)
+    top3         = sorted(activas.items(), key=lambda x: x[1].get("ic_bayes", 0), reverse=True)[:3]
+    monitor_5m   = _monitor_5min(resultados)
+
+    alertas_ic_live = _monitor_ic_live(params)
+    if alertas_ic_live:
+        for a in alertas_ic_live:
+            print(f"  [IC LIVE] {a}")
+        try:
+            from shadow_digest import enviar_telegram
+            enviar_telegram("📊 *Vigía IC live*\n" + "\n".join(alertas_ic_live))
+        except Exception as e:
+            print(f"  [aviso IC live] no se pudo notificar Telegram: {e}")
+    state = {
+        "timestamp_utc":   datetime.now(timezone.utc).isoformat(timespec="seconds"),
+        "bankroll_sim":    round(20.0 + pnl_total, 2),
+        "pnl_total":       round(pnl_total, 2),
+        "n_ops":           n_total,
+        "win_rate":        round(wins / n_total, 4) if n_total else 0,
+        "estrategias_activas": len(activas),
+        "desactivadas":    list(desactivadas.keys()),
+        "top3_ic":         [{"k": k, "ic": round(v.get("ic_bayes", 0), 4), "n": v.get("n", 0)} for k, v in top3],
+        "brier_medio":     brier_mean,
+        "clv_medio":       clv_mean,
+        "monitor_5min":    monitor_5m,
+    }
+    path = PARAMS_PATH.parent / "system_state.json"
+    _escribir_json_atomico(path, json.dumps(state, indent=2, ensure_ascii=False))
+    return state
+
+
+def _normalizar_pred(row: dict) -> dict:
+    """Extrae subtype, apuesta y features del key None cuando el header es antiguo (13 cols)."""
+    extra = row.pop(None, None)
+    if isinstance(extra, list):
+        for i, campo in enumerate(["subtype", "apuesta", "features"]):
+            if i < len(extra) and extra[i] and not row.get(campo):
+                row[campo] = extra[i]
+    return row
+
+
+def cargar_predicciones_index() -> dict:
+    """18-Ago: lectura tolerante por FICHERO (mismo fix y mismo motivo que
+    shadow_resolve.py::cargar_predicciones_pendientes() -- desde el
+    desacoplo de run_fast_mantenimiento.sh, shadow_predict.py (proceso
+    independiente, screen 'fast') puede estar a mitad de un
+    predictions_HOY.csv.write() justo cuando este proceso lo lee.
+    csv_lectura_tolerante reintenta una vez tras 0.5s antes de saltar el
+    fichero y reportarlo como fallo persistente (no silenciado para
+    siempre como "probable concurrencia", ver /code-review del mismo día)."""
+    index = {}
+
+    def _parsear(arch: Path) -> dict:
+        idx_local = {}
+        with open(arch, encoding="utf-8") as f:
+            for row in csv.DictReader(f):
+                if row.get("decision") in ("BUY_YES", "BUY_NO"):
+                    row = _normalizar_pred(row)
+                    clave = (row["strategy"], row["market_id"], row["decision"])
+                    if clave not in idx_local:
+                        idx_local[clave] = row
+        return idx_local
+
+    for arch in sorted(DIR_SHADOW.glob("predictions_*.csv")):
+        idx_arch = leer_csv_tolerante(arch, _parsear, log_fn=print)
+        if idx_arch:
+            for clave, row in idx_arch.items():
+                if clave not in index:
+                    index[clave] = row
+    return index
+
+
+def cargar_ya_postmortem() -> set:
+    """Claves ya diagnosticadas. 17-Ago: fuente de verdad movida de
+    postmortem.csv a POSTMORTEM_KEYS_PATH (índice JSON ligero) -- antes,
+    cuando pipeline_watchdog.py borraba postmortem.csv por bloat (>50MB),
+    este loader volvía a ver el fichero vacío y reclasificaba TODO el
+    histórico de pérdidas (63k+) como "nuevo" en el siguiente ciclo,
+    reescribiendo otro CSV >50MB en ~70s -- bucle infinito con el propio
+    fix del watchdog (65 borrados en 2h, 17-Ago). El índice JSON persiste
+    independiente del CSV: watchdog puede seguir truncando/borrando
+    postmortem.csv (es solo un log de diagnóstico, nada más lo lee) sin
+    volver a disparar el reproceso completo.
+    """
+    if POSTMORTEM_KEYS_PATH.exists():
+        try:
+            claves = json.loads(POSTMORTEM_KEYS_PATH.read_text(encoding="utf-8"))
+            return {tuple(k) for k in claves}
+        except Exception:
+            pass
+    # Fallback de compatibilidad (primer arranque tras el fix, o índice
+    # corrupto): reconstruir desde el CSV si todavía existe.
+    if not POSTMORTEM_PATH.exists():
+        return set()
+    with open(POSTMORTEM_PATH, encoding="utf-8") as f:
+        return {(r["strategy"], r["market_id"], r["prediction_timestamp"])
+                for r in csv.DictReader(f)}
+
+
+def guardar_ya_postmortem(claves: set) -> None:
+    try:
+        POSTMORTEM_KEYS_PATH.write_text(
+            json.dumps(sorted(list(k) for k in claves)), encoding="utf-8")
+    except Exception as e:
+        print(f"  [aviso] no se pudo persistir {POSTMORTEM_KEYS_PATH.name}: {e}")
+
+
+def clasificar_causa(resultado: dict, pred: dict | None) -> str:
+    strategy = resultado.get("strategy", "")
+    subtype  = resultado.get("subtype", "") or (pred.get("subtype", "") if pred else "")
+
+    if pred:
+        try:
+            eb = abs(float(pred.get("edge_bruto", 0)))
+            en = abs(float(pred.get("edge_neto", 0)))
+            if eb - en > 0.04:
+                return "SPREAD_TRAP"
+        except (ValueError, TypeError):
+            pass
+        try:
+            if abs(float(pred.get("edge_neto", 0))) < 0.03:
+                return "EDGE_INSUFICIENTE"
+        except (ValueError, TypeError):
+            pass
+
+    # SLOT_OVERCONFIDENCE: modelo GBM da prob extrema en slots cortos
+    # El mercado valora esos slots en ~0.50 → el edge aparente es ilusorio
+    if strategy == "UPDOWN_GBM" and subtype and "min" in subtype:
+        try:
+            mins = int(subtype.replace("min", ""))
+            prob = float(resultado.get("prob_yes_modelo", 0.5) or 0.5)
+            if mins <= 10 and (prob > 0.75 or prob < 0.25):
+                return "SLOT_OVERCONFIDENCE"
+        except (ValueError, TypeError):
+            pass
+
+    # TIMING_CORTO: solo para estrategias que no están diseñadas para slots cortos
+    if strategy not in ("UPDOWN_GBM", "PRICE_TARGET_GBM") and pred:
+        try:
+            if float(pred.get("horas_a_vencimiento", 999)) < 24:
+                return "TIMING_CORTO"
+        except (ValueError, TypeError):
+            pass
+
+    # DRIFT_ERROR: PRICE_TARGET_GBM asume drift=0; si el mercado hizo un movimiento
+    # direccional sostenido grande (>5%) la hipótesis es incorrecta
+    if strategy == "PRICE_TARGET_GBM":
+        try:
+            prob = float(resultado.get("prob_yes_modelo", 0.5) or 0.5)
+            edge = abs(float(resultado.get("edge_direccional", 0) or 0))
+            # edge alto + fallo = modelo muy seguro pero mercado tenía razón
+            if edge > 0.15 and prob < 0.20:
+                return "DRIFT_ERROR"  # modelo dijo ~0 pero ocurrió: drift alcista
+            if edge > 0.15 and prob > 0.80:
+                return "DRIFT_ERROR"  # modelo dijo ~1 pero no ocurrió: drift bajista
+        except (ValueError, TypeError):
+            pass
+
+    return "DIRECTION_ERROR"
+
+
+# ── Recalibración Platt de prob_yes_modelo ──────────────────────────────
+# Motivado por análisis walk-forward 2026-07-01: prob_yes_modelo (GBM y
+# ORDER_FLOW_5M) resultó sistemáticamente sobreconfiado — el log-loss
+# out-of-sample con p'=Phi(a+b*Phi^-1(p)) fue mejor que con el crudo en
+# ambas estrategias. Solo se activa por estrategia cuando el holdout
+# cronológico reciente confirma mejora significativa (CI bootstrap>0);
+# si no, se sigue reintentando cada ciclo según crece el histórico.
+CALIB_MIN_N = 200
+CALIB_A_GRID = [i / 20 for i in range(-20, 21)]       # -1.00 .. 1.00 paso 0.05 (fit final)
+CALIB_B_GRID = [i / 20 for i in range(0, 41)]         #  0.00 .. 2.00 paso 0.05 (fit final)
+CALIB_A_GRID_FOLD = [i / 10 for i in range(-10, 11)]  # -1.0 .. 1.0 paso 0.1 (por fold walk-forward, más rápido)
+CALIB_B_GRID_FOLD = [i / 10 for i in range(0, 21)]    #  0.0 .. 2.0 paso 0.1
+CALIB_Z_ALPHA, CALIB_Z_BETA = 1.96, 0.84              # potencia 80%, alpha 0.05
+CALIB_CACHE_PATH = DIR_SHADOW / "calibracion_folds_cache.json"
+# 07-Sep: caché incremental de folds walk-forward -- ver _fit_calibracion_prob.
+# Antes cada ciclo (~cada pocos minutos, ~51 estrategias top-level) reajustaba
+# TODOS los folds desde cero sobre un prefijo creciente de datos (O(n²)-ish con
+# el histórico total) -- medido en 71.9s de los ~100s del ciclo con
+# results.csv=356MB/430k+ filas (project_incidente_git_size_y_salud_07sep).
+# Con el caché, cada ciclo solo ajusta los folds NUEVOS desde el último
+# checkpoint -- coste por ciclo ~O(datos_nuevos), no O(n_total). No cambia
+# ninguna fórmula de aceptación (CI bootstrap, potencia, estabilidad) ni el
+# fit final (a,b) sobre todos los datos -- solo evita re-resolver folds ya
+# resueltos. Verificado antes de desplegar (ver script de comparación).
+
+
+def _cargar_calib_cache() -> dict:
+    if not CALIB_CACHE_PATH.exists():
+        return {}
+    try:
+        return json.loads(CALIB_CACHE_PATH.read_text(encoding="utf-8"))
+    except (json.JSONDecodeError, OSError):
+        return {}  # caché corrupto/vacío -> se reconstruye solo, fail-safe
+
+
+def _guardar_calib_cache(cache: dict) -> None:
+    _escribir_json_atomico(CALIB_CACHE_PATH, json.dumps(cache, ensure_ascii=False))
+
+
+def _calib_fingerprint(datos, hasta) -> str:
+    """Hash barato y ESTABLE entre procesos sobre una muestra acotada del
+    prefijo datos[:hasta] (ts,p,y) -- detecta si el histórico ya usado para
+    folds cacheados cambió retroactivamente (p.ej. dedup que reordena/elimina
+    filas antiguas de results.csv). Si no coincide, el caché de esa
+    estrategia se invalida y se recalcula desde cero (mismo resultado que sin
+    caché, solo un ciclo más lento -- nunca un (a,b) incorrecto silencioso).
+
+    07-Sep, 2 fixes de /code-review sobre la v1:
+    1. NUNCA usar hash() built-in de Python sobre str/tuplas -- está
+       randomizado por PYTHONHASHSEED por proceso, y shadow_postmortem.py se
+       relanza como proceso NUEVO cada ciclo (run_fast_mantenimiento.sh) --
+       con hash() el fingerprint jamás habría coincidido entre ciclos,
+       usar_cache habría sido False siempre, y el caché entero habría sido
+       un no-op silencioso. hashlib.sha1 es estable entre procesos.
+    2. Muestra acotada (primeros+últimos 20), NO todo datos[:hasta] -- re-
+       hashear el prefijo COMPLETO cada ciclo vuelve a ser O(hasta), que
+       tiende a O(n_total) según el caché envejece, anulando la ganancia de
+       no re-ajustar folds. No es infalible a un cambio retroactivo que caiga
+       exactamente en el MEDIO del prefijo sin tocar extremos ni el conteo
+       -- aceptado (mismo espíritu 'barato' del diseño original); el peor
+       caso es no detectar y usar un checkpoint ligeramente desalineado,
+       nunca un (a,b) sin las 3 condiciones de aceptación de más abajo.
+    """
+    muestra = datos[:20] + datos[max(20, hasta - 20):hasta]
+    texto = str(hasta) + "|" + "|".join(f"{ts}:{p:.6f}:{y}" for ts, p, y in muestra)
+    return hashlib.sha1(texto.encode("utf-8")).hexdigest()
+
+def _norm_cdf(x):
+    if x < -8.0: return 0.0
+    if x > 8.0: return 1.0
+    sign = 1.0 if x >= 0 else -1.0
+    x = abs(x)
+    t = 1.0 / (1.0 + 0.2316419 * x)
+    d = 0.3989422804014327 * math.exp(-0.5 * x * x)
+    p = d * t * (0.3193815302
+        + t * (-0.3565637813
+        + t * (1.7814779372
+        + t * (-1.8212559978
+        + t * 1.3302744929))))
+    return 1.0 - p if sign > 0 else p
+
+def _norm_ppf(p, lo=-8.0, hi=8.0, it=60):
+    if p <= 1e-9: return -8.0
+    if p >= 1 - 1e-9: return 8.0
+    for _ in range(it):
+        mid = (lo + hi) / 2
+        if _norm_cdf(mid) < p: lo = mid
+        else: hi = mid
+    return (lo + hi) / 2
+
+def _negloglik(a, b, zs, ys):
+    if not zs:
+        return 0.0
+    s = 0.0
+    for z, y in zip(zs, ys):
+        p = min(max(_norm_cdf(a + b * z), 1e-6), 1 - 1e-6)
+        s += -(y * math.log(p) + (1 - y) * math.log(1 - p))
+    return s / len(zs)
+
+
+def _norm_ppf_np(p: np.ndarray, it=60) -> np.ndarray:
+    """08-Sep: versión vectorizada de _norm_ppf, MISMO algoritmo (bisección
+    sobre _norm_cdf, 60 iteraciones, mismos bordes -8/8) -- no una fórmula
+    distinta, para no introducir ninguna diferencia numérica frente a los
+    (a,b) ya ajustados/persistidos en producción (mismo criterio que
+    _norm_cdf_np, 04-Ago). Encontrado con cProfile (08-Sep, aviso de
+    pipeline lento): `zs_all = [_norm_ppf(p) for _, p, _ in datos]` en
+    _fit_calibracion_prob se recalculaba con bisección ESCALAR para el
+    HISTÓRICO COMPLETO de cada estrategia en cada ciclo (fuera de la rama
+    `usar_cache` -- el caché de folds walk-forward del 07-Sep no lo cubre),
+    pese a no cambiar entre ciclos salvo por las filas nuevas -- 333k filas
+    x 60 iteraciones = ~20M llamadas escalares a _norm_cdf, ~15s/ciclo
+    medidos. Vectorizado, el mismo trabajo baja a fracciones de segundo."""
+    p = np.asarray(p, dtype=np.float64)
+    out = np.empty_like(p)
+    lo_mask = p <= 1e-9
+    hi_mask = p >= 1 - 1e-9
+    mid_mask = ~(lo_mask | hi_mask)
+    out[lo_mask] = -8.0
+    out[hi_mask] = 8.0
+    lo = np.full_like(p, -8.0)
+    hi = np.full_like(p, 8.0)
+    for _ in range(it):
+        mid = (lo + hi) / 2
+        cdf_mid = _norm_cdf_np(mid)
+        menor = cdf_mid < p
+        lo = np.where(menor, mid, lo)
+        hi = np.where(menor, hi, mid)
+    out[mid_mask] = ((lo + hi) / 2)[mid_mask]
+    return out
+
+
+def _norm_cdf_np(x: np.ndarray) -> np.ndarray:
+    """04-Ago: versión vectorizada de _norm_cdf, MISMA fórmula (Zelen&Severo/
+    Abramowitz-Stegun) término a término -- no sustituida por erf de scipy
+    para no introducir ninguna diferencia numérica, por pequeña que sea,
+    frente a los (a,b) ya ajustados/persistidos en producción."""
+    x = np.asarray(x, dtype=np.float64)
+    out = np.empty_like(x)
+    lo = x < -8.0
+    hi = x > 8.0
+    mid = ~(lo | hi)
+    out[lo] = 0.0
+    out[hi] = 1.0
+    xm = x[mid]
+    sign = np.where(xm >= 0, 1.0, -1.0)
+    xa = np.abs(xm)
+    t = 1.0 / (1.0 + 0.2316419 * xa)
+    d = 0.3989422804014327 * np.exp(-0.5 * xa * xa)
+    p = d * t * (0.3193815302
+        + t * (-0.3565637813
+        + t * (1.7814779372
+        + t * (-1.8212559978
+        + t * 1.3302744929))))
+    out[mid] = np.where(sign > 0, 1.0 - p, p)
+    return out
+
+
+def _fit_ab(zs, ys, a_grid=CALIB_A_GRID, b_grid=CALIB_B_GRID):
+    """04-Ago: vectorizado con numpy -- MISMA búsqueda de grid exhaustiva
+    (a,b) que minimiza negloglik, mismo resultado (dentro de precisión de
+    coma flotante), pero sin el bucle Python anidado a×b×n que se volvió
+    O(n²)-ish dentro del walk-forward de _fit_calibracion_prob() a medida
+    que crecía el histórico (results.csv ya con estrategias de n>16.000) --
+    diagnosticado 04-Ago con py-spy: shadow_postmortem.py atascado >10min
+    en _negloglik, bloqueando todo el pipeline (resolve/nuevas señales)
+    detrás. Verificado antes de desplegar: mismo (a,b) que la versión
+    Python en un dataset de prueba (ver memoria del hallazgo). Empates
+    exactos en negloglik (extremadamente raros en la práctica, función
+    continua sobre floats) pueden resolverse a un (a,b) ligeramente
+    distinto en el grid por el orden de iteración -- no afecta al
+    resultado real, solo al desempate teórico."""
+    if not zs:
+        return a_grid[0], b_grid[0]
+    zs_arr = np.asarray(zs, dtype=np.float64)
+    ys_arr = np.asarray(ys, dtype=np.float64)
+    a_arr = np.asarray(a_grid, dtype=np.float64)
+    best = None
+    for b in b_grid:
+        x = a_arr[:, None] + b * zs_arr[None, :]
+        p = np.clip(_norm_cdf_np(x), 1e-6, 1 - 1e-6)
+        nl = -(ys_arr[None, :] * np.log(p) + (1 - ys_arr[None, :]) * np.log(1 - p))
+        nl_mean = nl.mean(axis=1)
+        idx = int(np.argmin(nl_mean))
+        if best is None or nl_mean[idx] < best[2]:
+            best = (float(a_arr[idx]), float(b), float(nl_mean[idx]))
+    return best[0], best[1]
+
+def _fit_calibracion_prob(triples, cache_entry=None):
+    """
+    triples: [(prediction_timestamp, prob_yes_modelo_str, outcome_real_str), ...]
+    para una estrategia agregada (clave sin '#'). Ajusta p'=Phi(a+b*Phi^-1(p)).
+
+    Validación: walk-forward de ventana expansiva (igual metodología usada para
+    decidir el N significativo en sesión 2026-07-01) — se reentrena (a,b) cada
+    `step` observaciones nuevas y se evalúa out-of-sample en el siguiente bloque.
+    Solo se activa si:
+      1. El CI bootstrap 95% de la mejora media de log-loss excluye 0.
+      2. n_oos acumulado ≥ N requerido por análisis de potencia (80%, α=0.05)
+         dado el efecto observado.
+      3. (a,b) estables en los últimos folds (no siguen saltando → no es ruido).
+    Si no se cumplen las 3, devuelve None y se reintenta el ciclo siguiente
+    según crece el histórico (igual que otros filtros_causales/patrones).
+
+    cache_entry (07-Sep): checkpoint de folds ya resueltos en un ciclo anterior
+    (ver CALIB_CACHE_PATH). Si es válido (fingerprint del prefijo coincide),
+    solo se ajustan los folds NUEVOS desde `n_procesado` -- min_train/step
+    quedan FIJADOS al valor de cuando se creó el caché (antes se recalculaban
+    cada ciclo sobre n_total creciente, con drift menor ciclo a ciclo; con
+    caché los folds ya resueltos nunca se re-derivan, a cambio de fijar su
+    tamaño una vez). Devuelve (resultado_o_None, cache_actualizado_o_None).
+    """
+    datos = []
+    for ts, p_raw, out_raw in triples:
+        try:
+            p = float(p_raw)
+        except (TypeError, ValueError):
+            continue
+        if p <= 0.001 or p >= 0.999:
+            continue
+        y = 1 if out_raw in ("1", "YES", "True", "true") else 0
+        datos.append((ts or "", p, y))
+    n_total = len(datos)
+    if n_total < CALIB_MIN_N:
+        return None, None
+    # 07-Sep (fix real, ver commit del caché de folds del mismo día): NO
+    # reordenar por prediction_timestamp -- `triples` ya llega en el orden
+    # de aparición en results.csv (calib_pairs se construye iterando
+    # `resultados_twap` con .append(), y ese orden es el de escritura/
+    # resolución -- casi siempre monótono porque results.csv es
+    # append-only, salvo el caso raro ya documentado en
+    # cargar_results_dedup(): una carrera git stash/rebase/push puede
+    # duplicar una fila y el dedup conserva la de resolution_timestamp
+    # más temprano en la POSICIÓN de la primera aparición en el fichero
+    # crudo, pudiendo desplazar esa fila 1-2 puestos de su orden
+    # cronológico real. Impacto aceptado: en el peor caso mueve un puñado
+    # de (ts,p,y) a través de un límite de fold walk-forward -- ruido
+    # marginal, nunca invalida las 3 condiciones de aceptación (CI
+    # bootstrap, potencia, estabilidad de b), y sigue siendo muchísimo
+    # más estable que ordenar por prediction_timestamp con varios
+    # ejecutores concurrentes (el problema real que este fix soluciona).
+    # Ordenar por prediction_timestamp
+    # rompía esa monotonía para estrategias con VARIOS ejecutores
+    # concurrentes (FAVORITO_CONFIRMADO: fast loop + ejecutores de baja
+    # latencia) -- cada resolución nueva podía insertarse en MITAD de la
+    # secuencia ordenada (su prediction_timestamp es más antiguo que el de
+    # resoluciones ya procesadas), desplazando el índice de TODOS los folds
+    # posteriores. El fingerprint (diseñado para detectar justo esto)
+    # invalidaba el caché en CASI todos los ciclos para las 2 estrategias
+    # de mayor volumen -- medido: 149s de los ~170s de calcular_params()
+    # solo en FAVORITO_CONFIRMADO/_15MIN_ALTACONVICCION, pese al caché ya
+    # desplegado. Usar el orden de resolución (== orden de aparición en el
+    # fichero) es además más correcto para un walk-forward real: simula
+    # cuándo el sistema SUPO el resultado, no cuándo se generó la señal --
+    # nunca se puede entrenar con un resultado antes de conocerlo, y con
+    # varios ejecutores el prediction_timestamp no refleja eso.
+    zs_all = _norm_ppf_np(np.asarray([p for _, p, _ in datos], dtype=np.float64)).tolist()
+    ys_all = [y for _, _, y in datos]
+
+    usar_cache = (
+        cache_entry is not None
+        and isinstance(cache_entry.get("n_procesado"), int)
+        and cache_entry["n_procesado"] <= n_total
+        and cache_entry.get("min_train") is not None
+        and cache_entry.get("step") is not None
+        and _calib_fingerprint(datos, cache_entry["n_procesado"]) == cache_entry.get("fingerprint")
+    )
+    if usar_cache:
+        min_train = cache_entry["min_train"]
+        step = cache_entry["step"]
+        i = cache_entry["n_procesado"]
+        diffs = list(cache_entry["diffs"])
+        folds_ab = [tuple(x) for x in cache_entry["folds_ab"]]
+    else:
+        min_train = max(100, n_total // 3)
+        step = max(15, n_total // 25)
+        i = min_train
+        diffs, folds_ab = [], []
+
+    if min_train >= n_total:
+        return None, None
+
+    while i < n_total:
+        j = min(i + step, n_total)
+        a, b = _fit_ab(zs_all[:i], ys_all[:i], CALIB_A_GRID_FOLD, CALIB_B_GRID_FOLD)
+        folds_ab.append((a, b))
+        for z, y in zip(zs_all[i:j], ys_all[i:j]):
+            p_raw_ = min(max(_norm_cdf(z), 1e-6), 1 - 1e-6)
+            p_cal_ = min(max(_norm_cdf(a + b * z), 1e-6), 1 - 1e-6)
+            raw_l = -(y * math.log(p_raw_) + (1 - y) * math.log(1 - p_raw_))
+            cal_l = -(y * math.log(p_cal_) + (1 - y) * math.log(1 - p_cal_))
+            diffs.append(raw_l - cal_l)
+        i = j
+
+    cache_nuevo = {
+        "n_procesado": i,
+        "min_train": min_train,
+        "step": step,
+        "diffs": diffs,
+        "folds_ab": [list(x) for x in folds_ab],
+        "fingerprint": _calib_fingerprint(datos, i),
+    }
+
+    n_oos = len(diffs)
+    if n_oos < 100 or len(folds_ab) < 4:
+        return None, cache_nuevo
+
+    mu = sum(diffs) / n_oos
+    var = sum((d - mu) ** 2 for d in diffs) / (n_oos - 1)
+    sigma = math.sqrt(var)
+    if mu <= 0:
+        return None, cache_nuevo
+
+    # 04-Ago: vectorizado con numpy -- mismo bootstrap (1500 remuestreos con
+    # reemplazo de tamaño n_oos, misma semilla fija 42 para reproducibilidad
+    # dentro de esta llamada), pero el bucle Python puro (1500 × n_oos
+    # llamadas a randrange) era el segundo cuello de botella real detrás
+    # de _fit_ab -- para n_oos grande (estrategias con >10k resoluciones)
+    # esto por sí solo tardaba varios minutos. La semilla es de numpy, no
+    # la misma secuencia exacta que random.Random(42) -- el resultado
+    # estadístico (mismo procedimiento, mismos datos) es equivalente, solo
+    # cambia el generador; no afecta a la interpretación de ci_lo<=0."""
+    diffs_arr = np.asarray(diffs, dtype=np.float64)
+    rng_np = np.random.default_rng(42)
+    idx = rng_np.integers(0, n_oos, size=(1500, n_oos))
+    boots = np.sort(diffs_arr[idx].mean(axis=1))
+    ci_lo = float(boots[int(0.025 * len(boots))])
+    if ci_lo <= 0:
+        return None, cache_nuevo  # condición 1: no significativo out-of-sample todavía
+
+    n_requerido = ((CALIB_Z_ALPHA + CALIB_Z_BETA) * sigma / mu) ** 2
+    if n_oos < n_requerido:
+        return None, cache_nuevo  # condición 2: potencia insuficiente para el efecto observado
+
+    # condición 3: estabilidad — los últimos 3 folds no deben saltar más de 0.3 en b
+    b_recientes = [b for _, b in folds_ab[-3:]]
+    if len(b_recientes) >= 2 and (max(b_recientes) - min(b_recientes)) > 0.3:
+        return None, cache_nuevo
+
+    # 08-Sep (cProfile en producción, aviso "pipeline lento"): el fit FINAL
+    # (grid completo CALIB_A_GRID×CALIB_B_GRID, 41×41 -- mucho más fino que
+    # el grid de fold) se recalculaba sobre zs_all/ys_all COMPLETO en TODOS
+    # los ciclos en los que las 3 condiciones ya pasaban, aunque apenas
+    # hubiera llegado un puñado de filas nuevas desde el último cálculo --
+    # a diferencia de los folds (cacheados desde el 07-Sep), este resultado
+    # nunca se persistía. Medido: 27 fits finales/ciclo, 25,1s de los 51,2s
+    # totales de calcular_params() (FAVORITO_CONFIRMADO sola, n=89.030,
+    # 15,1s) -- coste que crece con n_total y solo empeorará según crezca
+    # results.csv, mismo patrón que _norm_ppf/cargar_ya_resueltas ya
+    # arreglados esta semana.
+    #
+    # Fix: cachear (a_final,b_final) junto con el n_total con el que se
+    # calcularon. Recalcular solo si creció al menos 1% (mínimo 20 filas)
+    # desde el último cálculo -- mismo espíritu de amortización que el
+    # `step` de los folds, pero MUCHO más sensible (los folds tardan
+    # `step`≈4%·n_total en actualizar; aquí basta 1%) para no introducir
+    # un retraso perceptible en la calibración que sí se aplica a prob_yes
+    # en vivo (strategy_params.json::calibracion_prob). Nunca cambia el
+    # RESULTADO en sí (mismos zs_all/ys_all/grid cuando sí se recalcula),
+    # solo con qué frecuencia se recalcula.
+    final_cache = cache_entry.get("final_ab") if usar_cache and cache_entry else None
+    n_final_previo = final_cache.get("n_total") if final_cache else None
+    umbral_refit = max(20, round(0.01 * n_final_previo)) if n_final_previo else 0
+    if (final_cache is not None and n_final_previo is not None
+            and n_total - n_final_previo < umbral_refit):
+        # Reusa el fit cacheado -- n_total_usado se mantiene en el valor al
+        # que (a,b) se ajustaron de verdad (NO el n_total de este ciclo:
+        # /code-review 08-Sep encontró que sobreescribirlo aquí con el
+        # n_total actual mueve la referencia cada ciclo, así que el umbral
+        # de 1% nunca se cumple contra el punto de fit real y el refit no
+        # vuelve a dispararse nunca más tras el primer cálculo).
+        a_final, b_final = final_cache["a"], final_cache["b"]
+        n_total_usado = n_final_previo
+    else:
+        a_final, b_final = _fit_ab(zs_all, ys_all)
+        n_total_usado = n_total
+    cache_nuevo["final_ab"] = {"a": a_final, "b": b_final, "n_total": n_total_usado}
+
+    resultado = {
+        "a": a_final, "b": b_final, "n": n_total,
+        "n_oos_validado": n_oos, "n_requerido": round(n_requerido, 1),
+        "mejora_media_oos": round(mu, 4),
+        "actualizado": datetime.now(timezone.utc).isoformat(timespec="seconds"),
+    }
+    return resultado, cache_nuevo
+
+
+# 06-Ago: el ajuste de calibración Platt por (estrategia,activo,marco) --
+# granularidad extrema, petición explícita Javi -- se movió FUERA de este
+# módulo a analisis_calibracion_platt_granular.py (script aparte + cron
+# diario), exactamente el mismo patrón que gate_bucket_propio.py/
+# kelly_precio_gate.py. Motivo documentado el 30-Jul (ver git blame): un
+# whitelist manual (CALIB_POR_ACTIVO_ESTRATEGIAS, aquí antes) probó sin
+# restricción y el fit extra para solo 42 combinaciones (estrategia,activo)
+# con n>=200 tardó >100s -- esto corre DENTRO del fast loop cada ~20-25s,
+# habría bloqueado el trading en vivo (mismo tipo de incidente que el
+# postmortem atascado del 04-Ago). Sacarlo del hot path permite CUALQUIER
+# granularidad (activo Y marco, todas las estrategias) sin ese límite,
+# porque ya no compite por el presupuesto de tiempo del ciclo rápido.
+# Este módulo sigue calculando SOLO la calibración de nivel base (sin '#',
+# ~34 fits, ya validado dentro de presupuesto desde antes del 30-Jul) --
+# ver el bloque de fit más abajo.
+
+
+def calcular_params(resultados: list) -> dict:
+    """11-Ago: espera recibir `resultados` ya filtrado por
+    _excluir_pre_twap() (filtrado una vez en main(), ver
+    resultados_twap_safe) -- no vuelve a filtrar aquí para no re-escanear
+    el histórico completo varias veces por ciclo."""
+    por_estrategia = {}
+    calib_pairs = {}
+    calib_cache = _cargar_calib_cache()  # 07-Sep: un único read por ciclo, no por estrategia
+    for r in resultados:
+        s = r["strategy"]
+        subtype = r.get("subtype", "")
+        calib_pairs.setdefault(s, []).append(
+            (r.get("prediction_timestamp", ""), r.get("prob_yes_modelo"), r.get("outcome_real"))
+        )
+        # Generar todas las claves de agregación relevantes
+        claves = [s]
+        if "#" in subtype:
+            a_part, d_part = subtype.split("#", 1)
+            claves += [
+                f"{s}#{subtype}",   # UPDOWN_GBM#BTC#15min  (más específico)
+                f"{s}#{a_part}",    # UPDOWN_GBM#BTC         (nivel asset)
+                f"{s}#{d_part}",    # UPDOWN_GBM#15min       (nivel duración)
+            ]
+            # calib_pairs por (activo)/(activo,marco) YA NO se recolecta
+            # aquí -- ver analisis_calibracion_platt_granular.py (fuera del
+            # hot path, sin límite de granularidad).
+        elif subtype:
+            claves.append(f"{s}#{subtype}")   # WEEKLY_PRICE#BTC
+        decision = r.get("decision", "")
+        for clave in claves:
+            if clave not in por_estrategia:
+                por_estrategia[clave] = {"n": 0, "aciertos": 0, "pnl": 0.0, "causas": {}, "por_decision": {}}
+            por_estrategia[clave]["n"] += 1
+            por_estrategia[clave]["aciertos"] += int(r.get("acierto", 0))
+            try:
+                por_estrategia[clave]["pnl"] += float(r.get("pnl_neto", 0))
+            except (ValueError, TypeError):
+                pass
+            causa = r.get("causa_perdida", "")
+            if causa:
+                por_estrategia[clave]["causas"][causa] = por_estrategia[clave]["causas"].get(causa, 0) + 1
+            if decision in ("BUY_YES", "BUY_NO"):
+                pd = por_estrategia[clave]["por_decision"]
+                if decision not in pd:
+                    pd[decision] = {"n": 0, "aciertos": 0, "pnl": 0.0}
+                pd[decision]["n"] += 1
+                pd[decision]["aciertos"] += int(r.get("acierto", 0))
+                try:
+                    pd[decision]["pnl"] += float(r.get("pnl_neto", 0))
+                except (ValueError, TypeError):
+                    pass
+
+    params = {
+        "timestamp_utc": datetime.now(timezone.utc).isoformat(timespec="seconds"),
+        "estrategias": {},
+    }
+
+    for s, d in por_estrategia.items():
+        n = d["n"]
+        ic_bayes   = _ic_bayes(d["aciertos"], n)
+        confianza  = min(1.0, n / 20)
+        ic_efectivo = round(ic_bayes * confianza, 4)
+
+        activa      = True
+        edge_minimo = 0.02
+        motivo      = f"IC_bayes={ic_bayes:+.3f} n={n} conf={confianza:.2f}"
+        causa_principal = max(d["causas"], key=d["causas"].get) if d["causas"] else ""
+
+        if n >= UMBRAL_DESACTIVAR[1] and ic_bayes < UMBRAL_DESACTIVAR[0]:
+            activa  = False
+            motivo += " → DESACTIVADA"
+        elif n >= UMBRAL_SUBIR_MAS[1] and ic_bayes < UMBRAL_SUBIR_MAS[0]:
+            edge_minimo = 0.06
+            motivo += " → edge_minimo=0.06"
+        elif n >= UMBRAL_SUBIR_EDGE[1] and ic_bayes < UMBRAL_SUBIR_EDGE[0]:
+            edge_minimo = 0.04
+            motivo += " → edge_minimo=0.04"
+
+        # Kelly simplificado: apuesta = 20€ * |ic_efectivo| * 0.5 (half-Kelly)
+        # Mínimo 0.50€ (sin datos / IC negativo), máximo 2.00€ (10% del capital)
+        # Sólo escala hacia arriba con IC positivo confirmado (n >= 5)
+        if activa and n >= 5 and ic_efectivo > 0:
+            apuesta_kelly = round(min(2.00, max(0.50, 20.0 * ic_efectivo * 0.5)), 2)
+        else:
+            apuesta_kelly = 0.50 if activa else 0.0
+
+        entry = {
+            "activa":          activa,
+            "edge_minimo":     edge_minimo,
+            "ic_bayes":        ic_efectivo,
+            "n":               n,
+            "pnl_total":       round(d["pnl"], 4),
+            "causa_principal": causa_principal,
+            "motivo":          motivo,
+            "apuesta_kelly":   apuesta_kelly,
+        }
+
+        # Kelly por dirección (BUY_YES / BUY_NO separados)
+        for dec_name, dec_d in d.get("por_decision", {}).items():
+            dn = dec_d["n"]
+            d_ic_b = _ic_bayes(dec_d["aciertos"], dn)
+            d_ic_e = round(d_ic_b * min(1.0, dn / 20), 4)
+            if dn >= 5 and d_ic_e > 0:
+                d_ap = round(min(2.00, max(0.50, 20.0 * d_ic_e * 0.5)), 2)
+            else:
+                d_ap = 0.50
+            # activa por dirección (mismo umbral que el 'activa' mixto de
+            # arriba, pero sobre el IC de ESA dirección sola): evita que un
+            # BUY_NO shadow hundido apague en silencio una tupla BUY_YES
+            # live sana (o al revés) — ver auditoría 15-Jul, _tupla_activa
+            # en live_trade.py ya la usa con fallback al 'activa' mixto.
+            d_activa = not (dn >= UMBRAL_DESACTIVAR[1] and d_ic_b < UMBRAL_DESACTIVAR[0])
+            entry[f"n_{dec_name}"]               = dn
+            entry[f"ic_{dec_name}"]              = d_ic_e
+            entry[f"apuesta_kelly_{dec_name}"]   = d_ap
+            entry[f"activa_{dec_name}"]          = d_activa
+
+        # Recalibración Platt: SOLO nivel agregado de estrategia (sin '#'),
+        # barato (~34 fits), dentro de presupuesto del fast loop desde
+        # antes del 30-Jul. La granularidad por (activo)/(activo,marco) se
+        # calcula aparte, fuera del hot path -- ver
+        # analisis_calibracion_platt_granular.py.
+        if "#" not in s:
+            calib, cache_entry_nuevo = _fit_calibracion_prob(calib_pairs.get(s, []), calib_cache.get(s))
+            if cache_entry_nuevo is not None:
+                calib_cache[s] = cache_entry_nuevo
+            elif s in calib_cache:
+                # min_train nunca alcanzado (histórico se redujo por debajo del
+                # checkpoint cacheado) -- purga para no arrastrar un checkpoint
+                # inválido, se reconstruye solo desde cero el próximo ciclo.
+                del calib_cache[s]
+            if calib:
+                entry["calibracion_prob"] = calib
+            # calib=None (folds insuficientes/CI cruza 0/inestable) se
+            # comporta exactamente igual que antes del caché: sin
+            # "calibracion_prob" este ciclo -- ya era recalculado desde cero
+            # cada vez, nunca persistía entre ciclos, así que no hay
+            # información nueva que perder aquí. Lo que SÍ persiste ahora
+            # (el caché de folds) nunca alimenta directamente esta clave sin
+            # pasar las 3 condiciones de aceptación, igual que antes.
+
+        params["estrategias"][s] = entry
+
+    _guardar_calib_cache(calib_cache)
+    return params
+
+
+def generar_performance(resultados: list, pred_index: dict) -> list:
+    """
+    Métricas completas de trader por estrategia:
+    hit rate, expectancy, profit factor, Kelly, rachas, edge predicho vs real.
+    """
+    por_estrategia = {}
+
+    for r in resultados:
+        s = r["strategy"]
+        if s not in por_estrategia:
+            por_estrategia[s] = []
+
+        acierto = int(r.get("acierto", 0))
+        try:
+            pnl = float(r.get("pnl_neto", 0))
+        except (ValueError, TypeError):
+            pnl = 0.0
+
+        clave_pred = (r["strategy"], r["market_id"], r.get("decision", ""))
+        pred = pred_index.get(clave_pred, {})
+        try:
+            edge_pred = float(pred.get("edge_neto", 0))
+        except (ValueError, TypeError):
+            edge_pred = 0.0
+        try:
+            horas = float(pred.get("horas_a_vencimiento", 0))
+        except (ValueError, TypeError):
+            horas = 0.0
+
+        por_estrategia[s].append({
+            "acierto":  acierto,
+            "pnl":      pnl,
+            "edge_pred": edge_pred,
+            "horas":    horas,
+            "causa":    r.get("causa_perdida", ""),
+        })
+
+    performance = []
+
+    for s, ops in sorted(por_estrategia.items()):
+        n        = len(ops)
+        aciertos = sum(o["acierto"] for o in ops)
+        fallos   = n - aciertos
+        hit_rate = aciertos / n if n else 0.0
+
+        pnls      = [o["pnl"] for o in ops]
+        pnl_total = sum(pnls)
+        pnl_medio = pnl_total / n if n else 0.0
+
+        ganancias = [p for p in pnls if p > 0]
+        perdidas  = [p for p in pnls if p < 0]
+        avg_win   = sum(ganancias) / len(ganancias) if ganancias else 0.0
+        avg_loss  = sum(perdidas)  / len(perdidas)  if perdidas  else 0.0
+
+        expectancy    = hit_rate * avg_win + (1 - hit_rate) * avg_loss
+        total_wins    = sum(ganancias)
+        total_losses  = abs(sum(perdidas))
+        profit_factor = (total_wins / total_losses) if total_losses > 0 else (99.0 if total_wins > 0 else 0.0)
+
+        # Rachas
+        mejor_racha = peor_racha = racha_pos = racha_neg = 0
+        for o in ops:
+            if o["acierto"]:
+                racha_pos += 1
+                racha_neg  = 0
+                mejor_racha = max(mejor_racha, racha_pos)
+            else:
+                racha_neg += 1
+                racha_pos  = 0
+                peor_racha = max(peor_racha, racha_neg)
+
+        # Horas promedio en ganadora vs perdedora
+        hw = [o["horas"] for o in ops if o["acierto"] and o["horas"] > 0]
+        hl = [o["horas"] for o in ops if not o["acierto"] and o["horas"] > 0]
+        avg_horas_win  = sum(hw) / len(hw) if hw else 0.0
+        avg_horas_loss = sum(hl) / len(hl) if hl else 0.0
+
+        edges = [o["edge_pred"] for o in ops if o["edge_pred"] != 0]
+        edge_medio_pred = sum(edges) / len(edges) if edges else 0.0
+        edge_real       = pnl_medio / APUESTA_SHADOW if APUESTA_SHADOW else 0.0
+
+        # IC Bayesiano
+        ic_bayes    = _ic_bayes(aciertos, n)
+        confianza   = min(1.0, n / 20)
+        ic_efectivo = round(ic_bayes * confianza, 4)
+
+        # 08-Jul (artículo EV/Kelly/LLN): comparación shadow, NO sustituye
+        # ic_efectivo (que sí consume live_stake.py vía strategy_params.json).
+        # (a) confianza alternativa saturando en n=40 (el propio umbral de
+        #     promoción live) en vez de n=20 — hoy confianza=1.0 trata igual
+        #     un patrón con n=20 que uno con n=280, sin más matiz.
+        # (b) n necesario para que el IC excluya cero al 95% (binomial approx,
+        #     p=hit_rate): cuantifica si n>=40 es la vara correcta para nuestra
+        #     magnitud de edge (mucho mayor que el 50.75% de Renaissance) o si
+        #     sobra/falta margen.
+        confianza_n40   = min(1.0, n / 40)
+        ic_efectivo_n40 = round(ic_bayes * confianza_n40, 4)
+        if abs(ic_bayes) > 1e-6:
+            p_var = max(hit_rate * (1 - hit_rate), 1e-6)
+            n_necesario_95 = math.ceil((1.96 ** 2) * p_var / (ic_bayes ** 2))
+        else:
+            n_necesario_95 = None
+
+        # Kelly fracción óptima
+        if hit_rate > 0 and avg_loss < 0:
+            b     = avg_win / abs(avg_loss)
+            kelly = (hit_rate * b - (1 - hit_rate)) / b if b > 0 else 0.0
+            kelly = max(0.0, min(0.40, kelly))
+        else:
+            kelly = 0.0
+
+        # Causa de pérdida principal
+        causas = {}
+        for o in ops:
+            c = o["causa"]
+            if c:
+                causas[c] = causas.get(c, 0) + 1
+        causa_principal = max(causas, key=causas.get) if causas else ""
+
+        performance.append({
+            "strategy":            s,
+            "n_total":             n,
+            "n_aciertos":          aciertos,
+            "n_fallos":            fallos,
+            "hit_rate":            round(hit_rate, 4),
+            "ic_bayes":            round(ic_bayes, 4),
+            "confianza":           round(confianza, 4),
+            "ic_efectivo":         ic_efectivo,
+            "pnl_total":           round(pnl_total, 4),
+            "pnl_medio":           round(pnl_medio, 4),
+            "max_ganancia":        round(max(pnls), 4) if pnls else 0.0,
+            "max_perdida":         round(min(pnls), 4) if pnls else 0.0,
+            "avg_win":             round(avg_win,  4),
+            "avg_loss":            round(avg_loss, 4),
+            "expectancy":          round(expectancy, 4),
+            "profit_factor":       round(min(profit_factor, 99.0), 4),
+            "mejor_racha":         mejor_racha,
+            "peor_racha":          peor_racha,
+            "edge_medio_pred":     round(edge_medio_pred, 4),
+            "edge_real":           round(edge_real, 4),
+            "avg_horas_ganadora":  round(avg_horas_win,  1),
+            "avg_horas_perdedora": round(avg_horas_loss, 1),
+            "kelly_optimo":        round(kelly, 4),
+            "causa_perdida_principal": causa_principal,
+            "confianza_n40":       round(confianza_n40, 4),
+            "ic_efectivo_n40":     ic_efectivo_n40,
+            "n_necesario_95":      n_necesario_95,
+        })
+
+    performance.sort(key=lambda x: x["pnl_total"], reverse=True)
+    return performance
+
+
+def _extraer_features(resultado: dict, pred: dict) -> dict:
+    """
+    Extrae features del momento de la predicción para análisis causal.
+    Lee primero la columna 'features' (JSON estructurado, predicciones nuevas),
+    luego parsea la cadena 'razon' como fallback para datos históricos.
+    """
+    features = {}
+
+    # 1. Columna features (nueva, a partir de 2026-06-24)
+    # /code-review 18-Ago (bug real ya activo en producción, encontrado al
+    # extender favorito_confirma_coincide a MOMENTUM_IBS_*_BALLENA):
+    # la comprehension atómica de abajo abortaba el dict ENTERO en cuanto
+    # cualquier feature no numérica (ej. "BUY_YES", "twap", un veredicto de
+    # texto) aparecía en el JSON -- vaciando silenciosamente TODAS las
+    # demás features de esa fila para el aprendizaje causal, no solo la
+    # ofensora. Confirmado activo desde 13-Jul (favorito_confirma_decision
+    # en GBM_LATE_FAMILIA) y en gate_bucket_propio_veredicto/banda_fina_
+    # motivo (16.369/44.186 filas GBM_LATE afectadas, medido en el review).
+    # Fix: construir el dict incrementalmente, saltando SOLO la clave no
+    # numérica en vez de abortar todo -- ninguna fila pierde ya sus
+    # features válidas por culpa de una sola clave de texto.
+    raw = resultado.get("features") or (pred or {}).get("features", "")
+    if raw and raw != "{}":
+        try:
+            parsed = json.loads(raw) if isinstance(raw, str) else raw
+        except (TypeError, json.JSONDecodeError):
+            parsed = {}
+        for k, v in (parsed or {}).items():
+            if v in (None, ""):
+                continue
+            try:
+                features[k] = float(v)
+            except (ValueError, TypeError):
+                continue
+
+    # 2. Fallback: parsear razon string (datos históricos sin columna features)
+    razon = (pred or {}).get("razon", "") if pred else ""
+    if "pct_spot_vs_ref" not in features:
+        m = re.search(r'\(([+-]\d+\.?\d*)%\)', razon)
+        if m:
+            try: features["pct_spot_vs_ref"] = float(m.group(1))
+            except ValueError: pass
+    if "sigma_h" not in features:
+        m = re.search(r'sigma_h=(\d+\.?\d+)', razon)
+        if m:
+            try: features["sigma_h"] = float(m.group(1))
+            except ValueError: pass
+    if "delta_ratio" not in features:
+        m = re.search(r'delta=([+-]\d+\.?\d+)', razon)
+        if m:
+            try: features["delta_ratio"] = float(m.group(1))
+            except ValueError: pass
+
+    return features
+
+
+# Features a analizar y en qué dirección buscar el patrón
+# (feature, condicion_mala, condicion_buena)
+# condicion_mala: "abs_gt" = malo cuando |feature| > umbral (ej: pct_spot alto)
+# condicion_buena: "abs_lt" = bueno cuando |feature| < umbral (ej: delta alto es bueno)
+_BASE_GBM = [
+    # ── Features de precio y volatilidad ──────────────────────────────────────
+    # pct alto = precio ya movió mucho desde ref → el modelo sobreestima la señal
+    ("pct_spot_vs_ref",  "abs_gt", "abs_lt"),
+    # sigma alta = alta volatilidad → señales más ruidosas (varía por activo/ventana)
+    ("sigma_h",          "gt",     "lt"),
+    ("sigma_h",          "lt",     "gt"),    # algunas estrategias prefieren alta vol
+    # ── Features de régimen / drift ────────────────────────────────────────────
+    # drift fuerte en cualquier dirección → precio ya priceado en Polymarket
+    ("drift_60min",      "abs_gt", "abs_lt"),
+    ("drift_15min",      "abs_gt", "abs_lt"),
+    # ── Order flow macro ───────────────────────────────────────────────────────
+    ("delta_ratio_macro","abs_lt", "abs_gt"),
+    # divergencia_cvd_spot_perp (20-Ago, pasos 3-4 de idea_amt_spot_vs_perp_cvd_20jul
+    # -- construida el 18-Ago, feature logueada desde entonces pero nunca
+    # registrada aquí, n=1236 resueltas ya acumuladas al añadirla): AMT --
+    # spot CVD menos perp CVD. Divergencia grande (|valor| alto) = spot y
+    # perp desalineados, candidato a squeeze de apalancamiento/swing failure
+    # (malo); divergencia pequeña = ambos alineados, breakout genuino
+    # (bueno). Solo poblada hoy en UPDOWN_GBM/UPDOWN_OU_5M -- el resto de
+    # estrategias con _BASE_GBM simplemente no tienen esta clave en
+    # `features`, se ignora sin error (mismo patrón que sigma_ewma_delta_pct).
+    ("divergencia_cvd_spot_perp", "abs_gt", "abs_lt"),
+    # ── Temporal — hora UTC (0-23) ─────────────────────────────────────────────
+    # El sistema aprende automáticamente qué horas son buenas/malas por estrategia
+    ("hora_utc",         "lt",     "gt"),    # malo cuando hora < umbral (madrugada/mañana)
+    ("hora_utc",         "gt",     "lt"),    # malo cuando hora > umbral (noche)
+    # ── IBS-15 (Internal Bar Strength, últimas 15 velas 1min) ──────────────────
+    # IBS>0.7: precio cerca del máximo → sobrecompra → refuerza BUY_NO
+    # IBS<0.3: precio cerca del mínimo → sobreventa → refuerza BUY_YES
+    # El postmortem descubrirá automáticamente qué umbral separa ganadores de perdedores
+    ("ibs_15",           "gt",     "lt"),
+    ("ibs_15",           "lt",     "gt"),
+    # ── IBS_20min (12-Ago) ──────────────────────────────────────────────────────
+    # Clave DISTINTA de ibs_15 -- _s_gbm_late() (motor de toda la familia
+    # GBM_LATE_15M/TARDIO/ESPACIO_ATR/MULTIHORIZONTE/PYCONFIRMADO) calcula y
+    # loguea "ibs_20min", nunca "ibs_15" (esa es de s_updown_gbm, función
+    # distinta). _BASE_GBM solo tenía reglas para "ibs_15" -- clave de
+    # features fantasma real, la familia GBM_LATE llevaba desde su creación
+    # sin que el pipeline causal pudiera ver esta feature. Verificado con
+    # results.csv antes de commitear: GBM_LATE_15M#BUY_YES monótono y
+    # limpio (hit 37.9%->73.2%, pnl/tr -0.227->+0.734 según ibs_20min sube
+    # de 0 a 1), shuffle p=0.0000 (n=2179 en bucket alto vs n=2302 resto),
+    # split-half estable en ambas mitades (+0.601/+0.696). Señal real de
+    # continuación de tendencia (precio cerca del máximo reciente ->
+    # sigue subiendo), coherente con literatura de breakout/momentum en
+    # timeframes cortos -- contrario a la intuición de sobrecompra de
+    # ibs_15 arriba, pero es una feature y un mecanismo distintos.
+    ("ibs_20min",        "gt",     "lt"),
+    ("ibs_20min",        "lt",     "gt"),
+    # ── VWAP relativo (11-Jul, paper Zarattini/Aziz "VWAP the Holy Grail") ─────
+    # spot>VWAP = tendencia alcista de sesión; spot<VWAP = bajista. Chequeo manual
+    # UPDOWN_GBM BUY_NO n=114: contra-tendencia (spot>=VWAP) ic=-0.105 n=36 vs
+    # a-favor (spot<VWAP) ic=+0.038 n=78 — mismo patrón cualitativo que el paper
+    # (operar a favor del VWAP bate ir en contra). BUY_YES más débil pero mismo
+    # signo (+0.162 a-favor vs +0.087 en contra). Nunca estaba en FEATURE_RULES
+    # pese a llevar logueado desde el 07-Jul — el pipeline no podía verlo solo.
+    # Es signo, no magnitud (mismo patrón que hora_utc) -> ambas direcciones.
+    ("dist_vwap_pct",    "lt",     "gt"),
+    ("dist_vwap_pct",    "gt",     "lt"),
+    # ── Aceleración de volatilidad (12-Jul, petición Javi "modelo más rápido") ─
+    # sigma_ewma_delta_pct = (EWMA10min - flat)/flat. Verificado forward
+    # n=66-86/activo: el SIGNO no es uniforme — ETH/BTC mejoran cuando la vol
+    # acelera, XRP empeora, SOL plano. Solo detectable desagregado por activo
+    # (agregado se diluye a ruido) — exactamente el motivo por el que este
+    # feature entra aquí en vez de en un umbral global hardcoded.
+    ("sigma_ewma_delta_pct", "lt", "gt"),
+    ("sigma_ewma_delta_pct", "gt", "lt"),
+    # ── volumen_regimen (12-Ago) ────────────────────────────────────────────────
+    # Ratio de volumen reciente del spot (Binance) vs línea base propia del
+    # activo (fetch_binance_klines.py::fetch_volume_regimen, >1 = actividad
+    # elevada). Logueado desde el 10-Jul en toda la familia GBM_LATE_15M
+    # (_s_gbm_late) pero NUNCA estuvo en FEATURE_RULES -- mismo tipo de clave
+    # de features fantasma que ibs_20min (ver arriba, mismo día). Chequeo
+    # agregado antes de commitear (GBM_LATE_15M#BUY_YES, n=3056): sin efecto
+    # fuerte en agregado (creciente>1.2x vs resto: diff=+0.055, shuffle
+    # p=0.46, NO significativo) -- a diferencia de ibs_20min, no es un
+    # hallazgo grande ya destapado, pero es el mismo bug real y el pipeline
+    # causal puede encontrar algo desagregado por activo que el agregado
+    # diluye (mismo principio CLAUDE.md pt.17).
+    ("volumen_regimen",  "gt",     "lt"),
+    ("volumen_regimen",  "lt",     "gt"),
+    # ── volumen_pendiente_norm / volumen_spike_ratio (12-Ago) ──────────────────
+    # Forma del volumen reciente, no solo su nivel (fetch_binance_klines.py::
+    # fetch_volume_patron, cableado como feature de solo-logging por petición
+    # explícita Javi tras el prototipo retrospectivo). pendiente_norm>0 =
+    # volumen creciente sostenido en los últimos 20min (4 bloques de 5min);
+    # spike_ratio alto = un solo bloque domina (actividad puntual/agotamiento).
+    # Prototipo (analisis_taxonomia_volumen_12ago.py, n=318 post-TWAP
+    # GBM_LATE_15M#BUY_YES): agrupando {creciente,plano} vs {decreciente,spike}
+    # -- hit=79.1% vs 70.0%, gap 9.1pp, p_shuffle=0.072 -- prometedor, NO
+    # confirmado (no cruza 0.05). Se loguean los valores CRUDOS (no la
+    # clasificación categórica ya decidida) para que el bucketing automático
+    # de abajo (N_BUCKET_MIN=15) descubra el umbral real con más n, en vez de
+    # precocinar la respuesta -- mismo criterio que sigma_ewma_delta_pct.
+    # Revisar cuando n>=40 y algún bucket cruce shuffle p<0.05 de verdad.
+    ("volumen_pendiente_norm", "gt", "lt"),
+    ("volumen_pendiente_norm", "lt", "gt"),
+    ("volumen_spike_ratio",    "gt", "lt"),
+    ("volumen_spike_ratio",    "lt", "gt"),
+    # ── Libro (28-Jul, backlog ítem 7 -- idea_moondev_10_hallazgos_
+    # priorizados_28jul): _libro_calidad(market) YA se loguea en todas las
+    # variantes de esta familia (vía _s_gbm_late/s_gbm_late_5min, sin
+    # llamada de red extra -- reusa spread/liquidity ya capturados por
+    # capture_markets.py) pero nunca estuvo en FEATURE_RULES -- el pipeline
+    # causal tenía el dato desde hace semanas y nunca lo miró. Mismo
+    # espíritu que la corrección de dist_vwap_pct (arriba, 07-Jul).
+    ("libro_spread",    "gt", "lt"),
+    ("libro_liquidez",  "lt", "gt"),
+    ("ballena_activa_n", "gt", "lt"),  # 17-Ago, punto 2 calibracion vs mercado (project_calibracion_vs_mercado_5puntos_17ago)
+]
+
+# Features de FAVORITO_CONFIRMADO (momentum-consenso, model-free — NO usa el
+# estadístico GBM, _BASE_GBM no le sirve: sus features son otras).
+_BASE_FAVORITO = [
+    ("hora_utc",      "lt", "gt"),
+    ("hora_utc",      "gt", "lt"),
+    ("py_entrada",    "gt", "lt"),
+    ("py_entrada",    "lt", "gt"),
+    ("libro_spread",  "gt", "lt"),
+    ("libro_liquidez","lt", "gt"),
+]
+
+# Features de STREAK_FADE_15M (reversión de racha, features propias).
+_BASE_MOMENTUM_IBS_5M = [
+    ("hora_utc",       "lt", "gt"),
+    ("hora_utc",       "gt", "lt"),
+    ("py_entrada",     "gt", "lt"),
+    ("py_entrada",     "lt", "gt"),
+    ("drift_7min_pct", "abs_gt", "abs_lt"),
+    ("ibs_7min",       "gt", "lt"),
+    ("ibs_7min",       "lt", "gt"),
+    ("ballena_activa_n", "gt", "lt"),  # 17-Ago, hallazgo central: momentum solo funciona con ballena activa
+    ("libro_spread",   "gt", "lt"),
+    ("libro_liquidez", "lt", "gt"),
+]
+
+_BASE_MOMENTUM_IBS_15M = [
+    ("hora_utc",        "lt", "gt"),
+    ("hora_utc",        "gt", "lt"),
+    ("py_entrada",      "gt", "lt"),
+    ("py_entrada",      "lt", "gt"),
+    ("drift_20min_pct", "abs_gt", "abs_lt"),
+    ("ibs_20min",       "gt", "lt"),
+    ("ibs_20min",       "lt", "gt"),
+    ("ballena_activa_n", "gt", "lt"),  # 17-Ago, hallazgo central
+    ("libro_spread",    "gt", "lt"),
+    ("libro_liquidez",  "lt", "gt"),
+]
+
+_BASE_STREAK_FADE = [
+    ("hora_utc",          "lt", "gt"),
+    ("hora_utc",          "gt", "lt"),
+    ("py_entrada",        "gt", "lt"),
+    ("py_entrada",        "lt", "gt"),
+    ("streak_len",        "gt", "lt"),
+    ("regimen_ma_toques", "lt", "gt"),
+    ("volumen_racha",     "gt", "lt"),
+    # streak_estiramiento (28-Jul, idea_moondev_10_hallazgos_priorizados_28jul):
+    # ratio |movimiento acumulado en la racha| / volatilidad esperada en ese
+    # lapso -- fuente externa (streak_snapper) dice que fadear SIN exigir
+    # estiramiento da coinflip, CON el filtro sube a 54.3% robusto. No se
+    # hardcodea su múltiplo; el pipeline causal descubre el corte con
+    # datos propios (N_BUCKET_MIN=15).
+    ("streak_estiramiento", "gt", "lt"),
+    ("ballena_activa_n",  "gt", "lt"),  # 17-Ago, extensión del hallazgo central -- solo lo loguea STREAK_MOM_5M hoy, se salta sola en las hermanas FADE
+    ("libro_spread",      "gt", "lt"),
+    ("libro_liquidez",    "lt", "gt"),
+]
+
+# Features de WEEKLY_PRICE (2 variantes: in_range/pct_dist o ratio/is_above,
+# ambas comparten T_h; las que no existan en una fila se saltan solas).
+_BASE_WEEKLY = [
+    ("T_h",        "gt", "lt"),
+    ("T_h",        "lt", "gt"),
+    ("pct_dist",   "abs_gt", "abs_lt"),
+    ("in_range",   "lt", "gt"),
+    ("ratio",      "gt", "lt"),
+    ("ratio",      "lt", "gt"),
+    ("ballena_activa_n", "gt", "lt"),  # 17-Ago, punto 2 calibracion vs mercado (project_calibracion_vs_mercado_5puntos_17ago)
+]
+
+# Features de PRICE_TARGET_GBM (motor GBM propio, distinto de _s_gbm_late).
+_BASE_PRICE_TARGET = [
+    ("sigma_h",    "gt", "lt"),
+    ("sigma_h",    "lt", "gt"),
+    ("T_h",        "gt", "lt"),
+    ("T_h",        "lt", "gt"),
+    ("pct_vs_K",   "abs_gt", "abs_lt"),
+    ("ballena_activa_n", "gt", "lt"),  # 17-Ago, punto 2 calibracion vs mercado (project_calibracion_vs_mercado_5puntos_17ago)
+]
+
+# Features de ORDER_FLOW_5M (delta_ratio es la señal principal + hora +
+# volumen). Extraída a variable reusable (12-Jul) para poder aplicarla tanto
+# al agregado como a cada activo por separado.
+_BASE_ORDER_FLOW = [
+    ("delta_ratio",  "abs_lt", "abs_gt"),
+    ("hora_utc",     "lt",     "gt"),
+    ("hora_utc",     "gt",     "lt"),
+    ("total_vol_5m", "gt",     "lt"),
+    # 28-Jul, mismo fix que _BASE_GBM: ya logueado, nunca analizado.
+    ("libro_spread",    "gt", "lt"),
+    ("libro_liquidez",  "lt", "gt"),
+    ("ballena_activa_n", "gt", "lt"),  # 17-Ago, punto 2 calibracion vs mercado (project_calibracion_vs_mercado_5puntos_17ago)
+]
+
+# Features de LIQUIDACIONES_15M/60M (28-Jul, idea_moondev_10_hallazgos_
+# priorizados_28jul, ítem B): señal de order-flow real (liquidaciones
+# Binance Futures, no volumen normal). liq_imbalance es la señal principal
+# (misma ventana de lookback que decide prob_yes); las variantes _2min/
+# _15min/_60min son observacionales, para comparar qué lookback generaliza
+# mejor sin comprometerse a un umbral prestado de la fuente externa.
+_BASE_LIQUIDACIONES = [
+    ("liq_imbalance",       "abs_lt", "abs_gt"),
+    ("liq_n",               "lt", "gt"),
+    ("liq_usd_total",       "lt", "gt"),
+    ("liq_imbalance_2min",  "abs_lt", "abs_gt"),
+    ("liq_imbalance_15min", "abs_lt", "abs_gt"),
+    ("liq_imbalance_60min", "abs_lt", "abs_gt"),
+    ("hora_utc",            "lt", "gt"),
+    ("hora_utc",            "gt", "lt"),
+    ("py_entrada",          "gt", "lt"),
+    ("py_entrada",          "lt", "gt"),
+    ("libro_spread",        "gt", "lt"),
+    ("libro_liquidez",      "lt", "gt"),
+    ("ballena_activa_n", "gt", "lt"),  # 17-Ago, punto 2 calibracion vs mercado (project_calibracion_vs_mercado_5puntos_17ago)
+]
+
+# Features de LEADLAG_BTC_XRP_15M (single-asset por diseño: solo opera XRP
+# siguiendo el momentum de BTC, no hay "por activo" que desagregar aquí).
+_BASE_LEADLAG = [
+    ("hora_utc",       "lt", "gt"),
+    ("hora_utc",       "gt", "lt"),
+    ("py_entrada",     "gt", "lt"),
+    ("py_entrada",     "lt", "gt"),
+    ("btc_momentum",   "abs_gt", "abs_lt"),
+    ("libro_spread",   "gt", "lt"),
+    ("libro_liquidez", "lt", "gt"),
+    ("ballena_activa_n", "gt", "lt"),  # 17-Ago, punto 2 calibracion vs mercado (project_calibracion_vs_mercado_5puntos_17ago)
+]
+
+# 12-Ago: 4 estrategias detectadas SIN dict "features" en absoluto (auditoría
+# manual tras vigia_cobertura_feature_rules.py) -- shadow_predict.py
+# corregido el mismo día para que las 3 primeras logueen features (aditivo,
+# no toca prob_yes); LATE_WINDOW_5MIN ya las tenía, solo le faltaba esta
+# entrada.
+_BASE_PRICE_MOMENTUM = [
+    ("drift_abs",   "lt", "gt"),
+    ("consistency", "lt", "gt"),
+    ("spread",      "gt", "lt"),
+    ("n_obs",       "lt", "gt"),
+    ("hora_utc",    "lt", "gt"),
+    ("hora_utc",    "gt", "lt"),
+    ("ballena_activa_n", "gt", "lt"),  # 17-Ago, punto 2 calibracion vs mercado (project_calibracion_vs_mercado_5puntos_17ago)
+]
+
+_BASE_SMART_FLOW = [
+    ("dom_count",  "lt", "gt"),
+    ("imbalance",  "lt", "gt"),
+    ("n_top",      "lt", "gt"),
+    ("hora_utc",   "lt", "gt"),
+    ("hora_utc",   "gt", "lt"),
+    ("ballena_activa_n", "gt", "lt"),  # 17-Ago, punto 2 calibracion vs mercado (project_calibracion_vs_mercado_5puntos_17ago)
+]
+
+_BASE_RESOLUTION_SNIPER = [
+    ("edge",     "lt", "gt"),
+    ("sigma_h",  "gt", "lt"),
+    ("sigma_h",  "lt", "gt"),
+    ("T_h",      "gt", "lt"),
+    ("T_h",      "lt", "gt"),
+    ("dist_50",  "lt", "gt"),
+    ("hora_utc", "lt", "gt"),
+    ("hora_utc", "gt", "lt"),
+    ("ballena_activa_n", "gt", "lt"),  # 17-Ago, punto 2 calibracion vs mercado (project_calibracion_vs_mercado_5puntos_17ago)
+]
+
+_BASE_LATE_WINDOW = [
+    ("drift_ventana_pct", "abs_lt", "abs_gt"),
+    ("elapsed_s",         "lt", "gt"),
+    ("elapsed_s",         "gt", "lt"),
+    ("drift_15min",       "abs_gt", "abs_lt"),
+    ("drift_60min",       "abs_gt", "abs_lt"),
+    ("es_ntm_5min",       "lt", "gt"),
+    ("ballena_activa_n", "gt", "lt"),  # 17-Ago, punto 2 calibracion vs mercado (project_calibracion_vs_mercado_5puntos_17ago)
+]
+
+# Features de BALLENAS_CONFIRMADAS_15M (31-Jul, gap detectado por
+# vigia_cobertura_feature_rules.py -- 1483 predicciones desde 27-Jul sin
+# NINGÚN aprendizaje causal. Propias de s_ballenas_confirmadas_15m:
+# concentración/volumen de ballenas en la banda confirmada, no un
+# estadístico GBM ni el momentum-consenso de FAVORITO_CONFIRMADO).
+_BASE_BALLENAS_CONFIRMADAS = [
+    ("py_entrada",                 "gt", "lt"),
+    ("py_entrada",                 "lt", "gt"),
+    ("concentracion_lado",         "gt", "lt"),
+    ("n_ballena_banda",            "lt", "gt"),
+    ("n_total_lado",               "lt", "gt"),
+    ("banda_hit_calibrado",        "lt", "gt"),
+    ("banda_z",                    "lt", "gt"),
+    ("ballenas_wallet_edge_medio", "lt", "gt"),
+    ("hora_utc",                   "lt", "gt"),
+    ("hora_utc",                   "gt", "lt"),
+    ("libro_spread",               "gt", "lt"),
+    ("libro_liquidez",             "lt", "gt"),
+    ("ballena_activa_n", "gt", "lt"),  # 17-Ago, punto 2 calibracion vs mercado (project_calibracion_vs_mercado_5puntos_17ago)
+]
+
+# Features de BALLENAS_TARDIAS (31-Jul, mismo gap -- toca dinero real HOY
+# en BTC#15min y ETH#5min). Los ejecutores de baja latencia
+# (ballenas_executor_btc15m.py/ballenas_executor_5min.py) escriben directo
+# a predictions.csv fuera del loop de shadow_predict.py, con un set de
+# features propio y más reducido (sin libro_spread/libro_liquidez -- esos
+# ejecutores no llaman a _libro_calidad).
+_BASE_BALLENAS_TARDIAS = [
+    ("concentracion_yes",       "gt", "lt"),
+    ("concentracion_yes",       "lt", "gt"),
+    ("n_ballenas",              "lt", "gt"),
+    ("restante_s_al_confirmar", "gt", "lt"),
+    ("restante_s_al_confirmar", "lt", "gt"),
+]
+
+# Features de FAVORITO_CONFIRMADO_5MIN_BAJALATENCIA (08-Ago, vigia_
+# cobertura_feature_rules.py). Ejecutor fase0 de baja latencia -- features
+# reducidas propias (favorito5min_bajalatencia_fase0.py::_registrar_
+# prediccion), no llama a _libro_calidad -- _BASE_FAVORITO no encaja
+# porque sus claves libro_spread/libro_liquidez faltarían siempre.
+_BASE_FAVORITO_BAJALATENCIA = [
+    ("py_entrada",           "gt", "lt"),
+    ("py_entrada",           "lt", "gt"),
+    ("restante_min",         "gt", "lt"),
+    ("restante_min",         "lt", "gt"),
+    ("hora_utc",             "lt", "gt"),
+    ("hora_utc",             "gt", "lt"),
+    ("lag_apertura_s",       "gt", "lt"),
+    ("profundidad_ratio_no", "lt", "gt"),
+    ("ballena_activa_n", "gt", "lt"),  # 17-Ago, punto 2 calibracion vs mercado (project_calibracion_vs_mercado_5puntos_17ago)
+]
+
+# CANDIDATA9_BOT_CONSENSO (09-Sep, vigia_cobertura_feature_rules.py: n=58/3d,
+# activos BNB/BTC/ETH, 0 aprendizaje causal). Ejecutor de baja latencia
+# sintético (candidata9_bot_consenso_reactivo_fase0.py, solo observación,
+# nunca en pares_permitidos_live directamente -- la tupla real que SÍ opera
+# dinero es CANDIDATA9_BOT_CONSENSO#ETH#15min#BUY_YES/NO vía
+# candidata9_bot_consenso_executor.py, que escribe directo a trades.csv sin
+# pasar por predictions.csv/results.csv). El único feature numérico
+# realmente logueado hoy en la columna "features" es `py_entrada`
+# (ver candidata9_bot_consenso_reactivo_fase0.py::_registrar_prediccion) --
+# lado_mayoria es texto (se descarta en _extraer_features, no castea a
+# float), y ejecutor_baja_latencia/fase0_solo_observacion/
+# candidata9_zona_confirmada son flags constantes (siempre True en todas
+# las filas), sin varianza para aprender nada. NO se inventan aquí
+# hora_utc/restante_min/libro_spread -- ese script no los loguea todavía;
+# añadir esas features al logger es un paso aparte, no parte de este fix.
+_BASE_CANDIDATA9_BOT_CONSENSO = [
+    ("py_entrada", "gt", "lt"),
+    ("py_entrada", "lt", "gt"),
+]
+
+FEATURE_RULES = {
+    # 5min: desactivadas manualmente, pero seguimos aprendiendo por si acaso se reactivan
+    "UPDOWN_GBM#5min":     _BASE_GBM,
+    "UPDOWN_GBM#BTC#5min": _BASE_GBM,
+    "UPDOWN_GBM#ETH#5min": _BASE_GBM,
+    "UPDOWN_GBM#SOL#5min": _BASE_GBM,
+    # 15min: nuestras estrategias más activas
+    "UPDOWN_GBM#15min":    _BASE_GBM,
+    "UPDOWN_GBM#BTC#15min": _BASE_GBM,
+    "UPDOWN_GBM#ETH#15min": _BASE_GBM,
+    "UPDOWN_GBM#SOL#15min": _BASE_GBM,
+    "UPDOWN_GBM#XRP#15min": _BASE_GBM,
+    # 60min: candidatas a live con mejor IC — CRÍTICO tener aprendizaje aquí
+    # En 60min sigma_h baja correlaciona con IC alto (H-60MIN confirmada en shadow)
+    "UPDOWN_GBM#60min":    _BASE_GBM,
+    "UPDOWN_GBM#BTC#60min": _BASE_GBM,
+    "UPDOWN_GBM#ETH#60min": _BASE_GBM,
+    "UPDOWN_GBM#SOL#60min": _BASE_GBM,
+    # GBM_LATE_15M (11-Jul/12-Jul, aprobado Javi): estrategia live principal,
+    # nunca había estado en FEATURE_RULES — todo su aprendizaje causal venía
+    # de scripts manuales/hipótesis custom, no del pipeline automático. Dry
+    # run 12-Jul (mismo _BASE_GBM que UPDOWN_GBM) sobre el histórico real:
+    # 0 filtros_causales (ningún bucket cruza IC<-0.12, no se saltaría
+    # ninguna señal viva hoy), solo patrones_ganadores/boosts — y esos boosts
+    # no mueven dinero real mientras el stake siga pineado a 1.05€ (
+    # live_stake.calcular_stake ignora apuesta_kelly). Empieza a acumular
+    # aprendizaje ahora para cuando se despinee el stake.
+    "GBM_LATE_15M":        _BASE_GBM,
+    "GBM_LATE_15M#BTC#15min": _BASE_GBM,
+    "GBM_LATE_15M#ETH#15min": _BASE_GBM,
+    "GBM_LATE_15M#SOL#15min": _BASE_GBM,
+    "GBM_LATE_15M#XRP#15min": _BASE_GBM,
+    # 16-Ago: BNB/DOGE llevaban operando (results.csv, n en cientos por
+    # variante) sin entrada propia -- vigia_cobertura_feature_rules.py no lo
+    # cazaba porque su check de "por activo" pasa si AL MENOS una moneda
+    # tiene entrada, no si TODAS las que operan la tienen. Encontrado
+    # aplicando el checklist de conexión a un candidato BNB#15min#BUY_NO
+    # (ver idea_gbm_bnb15min_buyno_checklist_conexion_16ago).
+    "GBM_LATE_15M#BNB#15min": _BASE_GBM,
+    "GBM_LATE_15M#DOGE#15min": _BASE_GBM,
+
+    # Variantes de GBM_LATE_15M (12-Jul, petición Javi "desagregar todo por
+    # activo"): TARDIO/ESPACIO_ATR/60M reusan el mismo motor _s_gbm_late, así
+    # que su dict de features es IDÉNTICO a GBM_LATE_15M — _BASE_GBM aplica
+    # directo. Ninguna tenía NINGÚN aprendizaje causal, ni agregado ni por
+    # activo, pese a ser candidatas activas a whitelist hoy mismo.
+    "GBM_LATE_15M_TARDIO":         _BASE_GBM,
+    "GBM_LATE_15M_TARDIO#BTC#15min": _BASE_GBM,
+    "GBM_LATE_15M_TARDIO#ETH#15min": _BASE_GBM,
+    "GBM_LATE_15M_TARDIO#SOL#15min": _BASE_GBM,
+    "GBM_LATE_15M_TARDIO#XRP#15min": _BASE_GBM,
+    "GBM_LATE_15M_TARDIO#BNB#15min": _BASE_GBM,   # 16-Ago, mismo hallazgo que arriba
+    "GBM_LATE_15M_TARDIO#DOGE#15min": _BASE_GBM,
+    "GBM_LATE_15M_ESPACIO_ATR":         _BASE_GBM,
+    "GBM_LATE_15M_ESPACIO_ATR#BTC#15min": _BASE_GBM,
+    "GBM_LATE_15M_ESPACIO_ATR#ETH#15min": _BASE_GBM,
+    "GBM_LATE_15M_ESPACIO_ATR#SOL#15min": _BASE_GBM,
+    "GBM_LATE_15M_ESPACIO_ATR#XRP#15min": _BASE_GBM,
+    "GBM_LATE_15M_ESPACIO_ATR#BNB#15min": _BASE_GBM,   # 16-Ago, mismo hallazgo que arriba
+    "GBM_LATE_15M_ESPACIO_ATR#DOGE#15min": _BASE_GBM,
+
+    # GBM_LATE_15M_MULTIHORIZONTE / GBM_LATE_15M_PYCONFIRMADO (06-Ago,
+    # vigia_cobertura_feature_rules.py): mismas variantes de _s_gbm_late que
+    # las de arriba, mismo dict de features -- _BASE_GBM aplica directo.
+    # MULTIHORIZONTE llevaba desde el 22-Jul sin ninguna entrada (0 aprendizaje
+    # causal) porque nadie la añadió al recuperarla del stash; PYCONFIRMADO
+    # nunca la tuvo tampoco pese a llevar acumulando desde antes. Ver
+    # idea_bug_filtros_causales_cobertura_total_05ago para el contexto del
+    # bug hermano (filtros degenerados) encontrado la misma noche.
+    "GBM_LATE_15M_MULTIHORIZONTE":         _BASE_GBM,
+    "GBM_LATE_15M_MULTIHORIZONTE#BTC#15min": _BASE_GBM,
+    "GBM_LATE_15M_MULTIHORIZONTE#ETH#15min": _BASE_GBM,
+    "GBM_LATE_15M_MULTIHORIZONTE#SOL#15min": _BASE_GBM,
+    "GBM_LATE_15M_MULTIHORIZONTE#XRP#15min": _BASE_GBM,
+    "GBM_LATE_15M_MULTIHORIZONTE#BNB#15min": _BASE_GBM,   # 16-Ago, mismo hallazgo que arriba
+    "GBM_LATE_15M_MULTIHORIZONTE#DOGE#15min": _BASE_GBM,
+    "GBM_LATE_15M_PYCONFIRMADO":         _BASE_GBM,
+    "GBM_LATE_15M_PYCONFIRMADO#BTC#15min": _BASE_GBM,
+    "GBM_LATE_15M_PYCONFIRMADO#ETH#15min": _BASE_GBM,
+    "GBM_LATE_15M_PYCONFIRMADO#SOL#15min": _BASE_GBM,
+    "GBM_LATE_15M_PYCONFIRMADO#XRP#15min": _BASE_GBM,
+    "GBM_LATE_60M":         _BASE_GBM,
+    "GBM_LATE_60M#BTC#60min": _BASE_GBM,
+    "GBM_LATE_60M#ETH#60min": _BASE_GBM,
+    "GBM_LATE_60M#SOL#60min": _BASE_GBM,
+    "GBM_LATE_60M#XRP#60min": _BASE_GBM,
+
+    # FAVORITO_CONFIRMADO (12-Jul): candidata top de hoy (6 tuplas BTC/ETH/SOL
+    # x BUY_YES/BUY_NO), 0 aprendizaje causal hasta ahora — mecanismo distinto
+    # (model-free), features propias vía _BASE_FAVORITO.
+    "FAVORITO_CONFIRMADO":            _BASE_FAVORITO,
+    "FAVORITO_CONFIRMADO#BTC#15min":  _BASE_FAVORITO,
+    "FAVORITO_CONFIRMADO#ETH#15min":  _BASE_FAVORITO,
+    "FAVORITO_CONFIRMADO#SOL#15min":  _BASE_FAVORITO,
+    "FAVORITO_CONFIRMADO#BTC#60min":  _BASE_FAVORITO,
+    "FAVORITO_CONFIRMADO#ETH#60min":  _BASE_FAVORITO,
+    "FAVORITO_CONFIRMADO#SOL#60min":  _BASE_FAVORITO,
+
+    # STREAK_FADE_15M (12-Jul): shadow activa con IC prometedor, 0 aprendizaje
+    # causal por activo hasta ahora.
+    "STREAK_FADE_15M":         _BASE_STREAK_FADE,
+    "STREAK_FADE_15M#BTC#15min": _BASE_STREAK_FADE,
+    "STREAK_FADE_15M#ETH#15min": _BASE_STREAK_FADE,
+    "STREAK_FADE_15M#SOL#15min": _BASE_STREAK_FADE,
+    "STREAK_FADE_15M#XRP#15min": _BASE_STREAK_FADE,
+
+    # STREAK_FADE_60M (28-Jul, nueva -- ver STREAK_FADE_60M_PARES en
+    # shadow_predict.py, mismo esquema de features que STREAK_FADE_15M).
+    "STREAK_FADE_60M":           _BASE_STREAK_FADE,
+    "STREAK_FADE_60M#ETH#60min": _BASE_STREAK_FADE,
+    "STREAK_FADE_60M#SOL#60min": _BASE_STREAK_FADE,
+    "STREAK_FADE_60M#XRP#60min": _BASE_STREAK_FADE,
+    "STREAK_FADE_60M#DOGE#60min": _BASE_STREAK_FADE,
+    "STREAK_FADE_60M#BNB#60min": _BASE_STREAK_FADE,
+
+    # LIQUIDACIONES_15M/60M (28-Jul, nuevas -- ver LIQUIDACIONES_PARES en
+    # shadow_predict.py, 6 activos).
+    "LIQUIDACIONES_5M":            _BASE_LIQUIDACIONES,
+    "LIQUIDACIONES_5M#BTC#5min":   _BASE_LIQUIDACIONES,
+    "LIQUIDACIONES_5M#ETH#5min":   _BASE_LIQUIDACIONES,
+    "LIQUIDACIONES_5M#SOL#5min":   _BASE_LIQUIDACIONES,
+    "LIQUIDACIONES_5M#XRP#5min":   _BASE_LIQUIDACIONES,
+    "LIQUIDACIONES_5M#DOGE#5min":  _BASE_LIQUIDACIONES,
+    "LIQUIDACIONES_5M#BNB#5min":   _BASE_LIQUIDACIONES,
+    "LIQUIDACIONES_15M":           _BASE_LIQUIDACIONES,
+    "LIQUIDACIONES_15M#BTC#15min": _BASE_LIQUIDACIONES,
+    "LIQUIDACIONES_15M#ETH#15min": _BASE_LIQUIDACIONES,
+    "LIQUIDACIONES_15M#SOL#15min": _BASE_LIQUIDACIONES,
+    "LIQUIDACIONES_15M#XRP#15min": _BASE_LIQUIDACIONES,
+    "LIQUIDACIONES_15M#DOGE#15min": _BASE_LIQUIDACIONES,
+    "LIQUIDACIONES_15M#BNB#15min": _BASE_LIQUIDACIONES,
+    "LIQUIDACIONES_60M":           _BASE_LIQUIDACIONES,
+    "LIQUIDACIONES_60M#BTC#60min": _BASE_LIQUIDACIONES,
+    "LIQUIDACIONES_60M#ETH#60min": _BASE_LIQUIDACIONES,
+    "LIQUIDACIONES_60M#SOL#60min": _BASE_LIQUIDACIONES,
+    "LIQUIDACIONES_60M#XRP#60min": _BASE_LIQUIDACIONES,
+    "LIQUIDACIONES_60M#DOGE#60min": _BASE_LIQUIDACIONES,
+    "LIQUIDACIONES_60M#BNB#60min": _BASE_LIQUIDACIONES,
+
+    # STREAK_MOM_5M / STREAK_FADE_5M (12-Jul): 465+145 predicciones en 3 días,
+    # 0 aprendizaje causal por activo hasta ahora. Mismo esquema de features
+    # que STREAK_FADE_15M (streak_len/py_entrada/hora_utc/libro_calidad).
+    # Universo SOL/ETH/XRP (BTC excluido por diseño, ver STREAK_MOM_5M_PARES).
+    "STREAK_MOM_5M":         _BASE_STREAK_FADE,
+    "STREAK_MOM_5M#SOL#5min": _BASE_STREAK_FADE,
+    "STREAK_MOM_5M#ETH#5min": _BASE_STREAK_FADE,
+    "STREAK_MOM_5M#XRP#5min": _BASE_STREAK_FADE,
+    "STREAK_FADE_5M":         _BASE_STREAK_FADE,
+    "STREAK_FADE_5M#SOL#5min": _BASE_STREAK_FADE,
+    "STREAK_FADE_5M#ETH#5min": _BASE_STREAK_FADE,
+    "STREAK_FADE_5M#XRP#5min": _BASE_STREAK_FADE,
+
+    # MOMENTUM_IBS_5M (17-Ago): momentum genuino continuo (drift+ibs a 7min),
+    # no streak discreta -- ver s_momentum_ibs_5m. Mismo universo que
+    # STREAK_MOM_5M (SOL/ETH/XRP/DOGE, BTC excluido). Las 4 entradas por
+    # activo puestas desde el día 1 -- error real ya cazado en STREAK_MOM_5M
+    # (le faltaba DOGE#5min pese a operarlo desde el 22-Jul, vigia_cobertura_
+    # feature_rules.py no lo cazó porque su check pasa con "al menos una
+    # moneda"), no repetirlo aquí.
+    "MOMENTUM_IBS_5M":          _BASE_MOMENTUM_IBS_5M,
+    "MOMENTUM_IBS_5M#BTC#5min": _BASE_MOMENTUM_IBS_5M,
+    "MOMENTUM_IBS_5M#ETH#5min": _BASE_MOMENTUM_IBS_5M,
+    "MOMENTUM_IBS_5M#SOL#5min": _BASE_MOMENTUM_IBS_5M,
+    "MOMENTUM_IBS_5M#XRP#5min": _BASE_MOMENTUM_IBS_5M,
+    "MOMENTUM_IBS_5M#DOGE#5min": _BASE_MOMENTUM_IBS_5M,
+    "MOMENTUM_IBS_5M#BNB#5min": _BASE_MOMENTUM_IBS_5M,
+    "MOMENTUM_IBS_5M_FADE":          _BASE_MOMENTUM_IBS_5M,
+    "MOMENTUM_IBS_5M_FADE#BTC#5min": _BASE_MOMENTUM_IBS_5M,
+    "MOMENTUM_IBS_5M_FADE#ETH#5min": _BASE_MOMENTUM_IBS_5M,
+    "MOMENTUM_IBS_5M_FADE#SOL#5min": _BASE_MOMENTUM_IBS_5M,
+    "MOMENTUM_IBS_5M_FADE#XRP#5min": _BASE_MOMENTUM_IBS_5M,
+    "MOMENTUM_IBS_5M_FADE#DOGE#5min": _BASE_MOMENTUM_IBS_5M,
+    "MOMENTUM_IBS_5M_FADE#BNB#5min": _BASE_MOMENTUM_IBS_5M,
+
+    "MOMENTUM_IBS_15M":          _BASE_MOMENTUM_IBS_15M,
+    "MOMENTUM_IBS_15M#BTC#15min": _BASE_MOMENTUM_IBS_15M,
+    "MOMENTUM_IBS_15M#ETH#15min": _BASE_MOMENTUM_IBS_15M,
+    "MOMENTUM_IBS_15M#SOL#15min": _BASE_MOMENTUM_IBS_15M,
+    "MOMENTUM_IBS_15M#XRP#15min": _BASE_MOMENTUM_IBS_15M,
+    "MOMENTUM_IBS_15M#DOGE#15min": _BASE_MOMENTUM_IBS_15M,
+    "MOMENTUM_IBS_15M#BNB#15min": _BASE_MOMENTUM_IBS_15M,
+    "MOMENTUM_IBS_15M_FADE":          _BASE_MOMENTUM_IBS_15M,
+    "MOMENTUM_IBS_15M_FADE#BTC#15min": _BASE_MOMENTUM_IBS_15M,
+    "MOMENTUM_IBS_15M_FADE#ETH#15min": _BASE_MOMENTUM_IBS_15M,
+    "MOMENTUM_IBS_15M_FADE#SOL#15min": _BASE_MOMENTUM_IBS_15M,
+    "MOMENTUM_IBS_15M_FADE#XRP#15min": _BASE_MOMENTUM_IBS_15M,
+    "MOMENTUM_IBS_15M_FADE#DOGE#15min": _BASE_MOMENTUM_IBS_15M,
+    "MOMENTUM_IBS_15M_FADE#BNB#15min": _BASE_MOMENTUM_IBS_15M,
+
+    "MOMENTUM_IBS_5M_BALLENA":          _BASE_MOMENTUM_IBS_5M,
+    "MOMENTUM_IBS_5M_BALLENA#BTC#5min": _BASE_MOMENTUM_IBS_5M,
+    "MOMENTUM_IBS_5M_BALLENA#ETH#5min": _BASE_MOMENTUM_IBS_5M,
+    "MOMENTUM_IBS_5M_BALLENA#SOL#5min": _BASE_MOMENTUM_IBS_5M,
+    "MOMENTUM_IBS_5M_BALLENA#XRP#5min": _BASE_MOMENTUM_IBS_5M,
+    "MOMENTUM_IBS_5M_BALLENA#DOGE#5min": _BASE_MOMENTUM_IBS_5M,
+    "MOMENTUM_IBS_5M_BALLENA#BNB#5min": _BASE_MOMENTUM_IBS_5M,
+    "MOMENTUM_IBS_15M_BALLENA":          _BASE_MOMENTUM_IBS_15M,
+    "MOMENTUM_IBS_15M_BALLENA#BTC#15min": _BASE_MOMENTUM_IBS_15M,
+    "MOMENTUM_IBS_15M_BALLENA#ETH#15min": _BASE_MOMENTUM_IBS_15M,
+    "MOMENTUM_IBS_15M_BALLENA#SOL#15min": _BASE_MOMENTUM_IBS_15M,
+    "MOMENTUM_IBS_15M_BALLENA#XRP#15min": _BASE_MOMENTUM_IBS_15M,
+    "MOMENTUM_IBS_15M_BALLENA#DOGE#15min": _BASE_MOMENTUM_IBS_15M,
+    "MOMENTUM_IBS_15M_BALLENA#BNB#15min": _BASE_MOMENTUM_IBS_15M,
+
+    # WEEKLY_PRICE (12-Jul): 404 predicciones en 3 días, 0 aprendizaje causal
+    # por activo. subtype=activo (sin sufijo de duración).
+    "WEEKLY_PRICE":     _BASE_WEEKLY,
+    "WEEKLY_PRICE#BTC": _BASE_WEEKLY,
+    "WEEKLY_PRICE#ETH": _BASE_WEEKLY,
+    "WEEKLY_PRICE#SOL": _BASE_WEEKLY,
+
+    # PRICE_TARGET_GBM (12-Jul): 332 predicciones en 3 días (ETH/SOL, #atexpiry
+    # y #reach), 0 aprendizaje causal.
+    "PRICE_TARGET_GBM":            _BASE_PRICE_TARGET,
+    "PRICE_TARGET_GBM#ETH#atexpiry": _BASE_PRICE_TARGET,
+    "PRICE_TARGET_GBM#SOL#atexpiry": _BASE_PRICE_TARGET,
+    "PRICE_TARGET_GBM#ETH#reach":    _BASE_PRICE_TARGET,
+    "PRICE_TARGET_GBM#SOL#reach":    _BASE_PRICE_TARGET,
+
+    # PRICE_TARGET_GBM_FADE (03-Ago): espejo invertido shadow-only de
+    # PRICE_TARGET_GBM (idea_price_target_gbm_fade_construido_03ago) --
+    # reusa s_price_target_gbm completo, mismas features, solo invierte
+    # prob_yes. Gap detectado por vigia_cobertura_feature_rules.py el
+    # mismo día en que se construyó (n aún bajo pero ya cruzó el umbral).
+    "PRICE_TARGET_GBM_FADE":            _BASE_PRICE_TARGET,
+    "PRICE_TARGET_GBM_FADE#BTC#atexpiry": _BASE_PRICE_TARGET,
+    "PRICE_TARGET_GBM_FADE#ETH#atexpiry": _BASE_PRICE_TARGET,
+    "PRICE_TARGET_GBM_FADE#SOL#atexpiry": _BASE_PRICE_TARGET,
+    "PRICE_TARGET_GBM_FADE#BTC#reach":    _BASE_PRICE_TARGET,
+    "PRICE_TARGET_GBM_FADE#ETH#reach":    _BASE_PRICE_TARGET,
+    "PRICE_TARGET_GBM_FADE#SOL#reach":    _BASE_PRICE_TARGET,
+
+    # LEADLAG_BTC_XRP_15M (12-Jul): 223 predicciones en 3 días, single-asset
+    # por diseño (solo XRP) -- no hay "por activo" que desagregar, pero
+    # tampoco tenía NINGÚN aprendizaje causal (ni siquiera agregado).
+    "LEADLAG_BTC_XRP_15M":          _BASE_LEADLAG,
+    "LEADLAG_BTC_XRP_15M#XRP#15min": _BASE_LEADLAG,
+
+    # ORDER_FLOW: delta_ratio es la señal principal + hora
+    # total_vol_5m (11-Jul, análisis manual SOL#5min): terciles invertidos —
+    # vol BAJO ic_bayes+0.038→+0.119 forward, vol ALTO ic=0.000→-0.100 forward
+    # (n=94/n=8, replica fuera de la ventana burst 24-25jun que calibró los
+    # demás filtros). Nunca estaba en FEATURE_RULES pese a llevar logueado
+    # desde el principio — el pipeline automático no podía descubrirlo solo.
+    "ORDER_FLOW_5M":       _BASE_ORDER_FLOW,
+    # Por activo (12-Jul): ya sabíamos que BTC/SOL se comportan distinto
+    # (BTC bloqueado por zero-intelligence 11-Jul, SOL único con IC real) —
+    # pero el aprendizaje causal solo miraba el agregado. Con esto, cada
+    # activo acumula su propio filtro/patrón en vez de heredar el ajeno.
+    "ORDER_FLOW_5M#SOL#5min": _BASE_ORDER_FLOW,
+    "ORDER_FLOW_5M#BTC#5min": _BASE_ORDER_FLOW,
+    "ORDER_FLOW_5M#ETH#5min": _BASE_ORDER_FLOW,
+    "ORDER_FLOW_5M#XRP#5min": _BASE_ORDER_FLOW,
+    "ORDER_FLOW_5M#DOGE#5min": _BASE_ORDER_FLOW,
+    "ORDER_FLOW_5M#BNB#5min": _BASE_ORDER_FLOW,
+
+    # 31-Jul: 7 gaps detectados por vigia_cobertura_feature_rules.py (n>=50
+    # en 3 días, cero aprendizaje causal desde su creación) -- incluye 2
+    # familias con dinero real hoy (FAVORITO_CONFIRMADO_15MIN_ALTACONVICCION,
+    # BALLENAS_TARDIAS). Ver memoria idea_gate_calibracion_log_loss_31jul.
+
+    # UPDOWN_GBM_15M_TARDIO (wrapper de s_updown_gbm, mismas features GBM).
+    "UPDOWN_GBM_15M_TARDIO":         _BASE_GBM,
+    "UPDOWN_GBM_15M_TARDIO#BTC#15min": _BASE_GBM,
+    "UPDOWN_GBM_15M_TARDIO#ETH#15min": _BASE_GBM,
+    "UPDOWN_GBM_15M_TARDIO#SOL#15min": _BASE_GBM,
+    "UPDOWN_GBM_15M_TARDIO#XRP#15min": _BASE_GBM,
+
+    # 12-Ago (vigia_cobertura_feature_rules.py + auditoría manual, sesión de
+    # arranque): 3 wrappers más de s_updown_gbm() sin NINGÚN aprendizaje
+    # causal desde su creación (15/28-Jul) -- mismo patrón exacto que
+    # UPDOWN_GBM_15M_TARDIO arriba (llaman a s_updown_gbm() y devuelven su
+    # resultado tal cual, mismo dict "features"), _BASE_GBM aplica directo.
+    # UPDOWN_GBM_IBS_ALTO y CROSS_WINDOW_SPREAD ya tenían n=260/220 en
+    # candidatos_evaluacion_live -- volumen real acumulando sin que ningún
+    # filtro_causal/patron_ganador pudiera formarse.
+    "UPDOWN_GBM_ETH_15M_HORA7":            _BASE_GBM,
+    "UPDOWN_GBM_ETH_15M_HORA7#ETH#15min":  _BASE_GBM,
+    "UPDOWN_GBM_IBS_ALTO":                 _BASE_GBM,
+    "UPDOWN_GBM_IBS_ALTO#BTC#15min":       _BASE_GBM,
+    "UPDOWN_GBM_IBS_ALTO#ETH#15min":       _BASE_GBM,
+    "UPDOWN_GBM_15M_CROSS_WINDOW_SPREAD":           _BASE_GBM,
+    "UPDOWN_GBM_15M_CROSS_WINDOW_SPREAD#BTC#15min":  _BASE_GBM,
+    "UPDOWN_GBM_15M_CROSS_WINDOW_SPREAD#ETH#15min":  _BASE_GBM,
+
+    # GBM_LATE_5M (llama a _s_gbm_late, mismas features que el resto de la
+    # familia GBM_LATE_15M/_TARDIO/_ESPACIO_ATR). Activos: GBM_LATE_5M_PARES.
+    "GBM_LATE_5M":         _BASE_GBM,
+    "GBM_LATE_5M#BTC#5min": _BASE_GBM,
+    "GBM_LATE_5M#ETH#5min": _BASE_GBM,
+    "GBM_LATE_5M#SOL#5min": _BASE_GBM,
+    "GBM_LATE_5M#DOGE#5min": _BASE_GBM,
+
+    # FAVORITO_CONFIRMADO_*_ALTACONVICCION (wrappers de s_favorito_confirmado
+    # con strategy_name propio -- el lookup de calibración/FEATURE_RULES es
+    # por nombre exacto, NO heredan la cobertura de FAVORITO_CONFIRMADO base).
+    "FAVORITO_CONFIRMADO_15MIN_ALTACONVICCION":         _BASE_FAVORITO,
+    "FAVORITO_CONFIRMADO_15MIN_ALTACONVICCION#BTC#15min": _BASE_FAVORITO,
+    "FAVORITO_CONFIRMADO_15MIN_ALTACONVICCION#ETH#15min": _BASE_FAVORITO,
+    "FAVORITO_CONFIRMADO_15MIN_ALTACONVICCION#SOL#15min": _BASE_FAVORITO,
+    "FAVORITO_CONFIRMADO_15MIN_ALTACONVICCION#XRP#15min": _BASE_FAVORITO,
+    "FAVORITO_CONFIRMADO_15MIN_ALTACONVICCION#DOGE#15min": _BASE_FAVORITO,
+    "FAVORITO_CONFIRMADO_15MIN_ALTACONVICCION#BNB#15min": _BASE_FAVORITO,
+
+    "FAVORITO_CONFIRMADO_60MIN_ALTACONVICCION":         _BASE_FAVORITO,
+    "FAVORITO_CONFIRMADO_60MIN_ALTACONVICCION#BTC#60min": _BASE_FAVORITO,
+    "FAVORITO_CONFIRMADO_60MIN_ALTACONVICCION#ETH#60min": _BASE_FAVORITO,
+    "FAVORITO_CONFIRMADO_60MIN_ALTACONVICCION#SOL#60min": _BASE_FAVORITO,
+
+    # FAVORITO_CONFIRMADO_SOL_ALTACONVICCION (12-Jul, wrapper de
+    # s_favorito_confirmado igual que las de arriba, single-asset por
+    # diseño) -- gap detectado por vigia_cobertura_feature_rules.py (12-Ago,
+    # n=384 histórico acumulado, n=53/3d en el momento del aviso) sin
+    # ninguna entrada desde su creación, más de un mes sin aprendizaje causal.
+    "FAVORITO_CONFIRMADO_SOL_ALTACONVICCION":            _BASE_FAVORITO,
+    "FAVORITO_CONFIRMADO_SOL_ALTACONVICCION#SOL#15min":  _BASE_FAVORITO,
+
+    "FAVORITO_CONFIRMADO_5MIN_ALTACONVICCION":         _BASE_FAVORITO,
+    "FAVORITO_CONFIRMADO_5MIN_ALTACONVICCION#BTC#5min": _BASE_FAVORITO,
+    "FAVORITO_CONFIRMADO_5MIN_ALTACONVICCION#ETH#5min": _BASE_FAVORITO,
+    "FAVORITO_CONFIRMADO_5MIN_ALTACONVICCION#SOL#5min": _BASE_FAVORITO,
+    "FAVORITO_CONFIRMADO_5MIN_ALTACONVICCION#XRP#5min": _BASE_FAVORITO,
+    "FAVORITO_CONFIRMADO_5MIN_ALTACONVICCION#DOGE#5min": _BASE_FAVORITO,
+    "FAVORITO_CONFIRMADO_5MIN_ALTACONVICCION#BNB#5min": _BASE_FAVORITO,
+
+    # FAVORITO_CONFIRMADO_*_EXTREMO (cola py>=0.90 de FAVORITO_CONFIRMADO,
+    # ver s_favorito_confirmado_15min_extremo/_60min_extremo en
+    # shadow_predict.py) -- llaman a s_favorito_confirmado, mismas
+    # features que ALTACONVICCION -> _BASE_FAVORITO. Gap detectado por
+    # vigia_cobertura_feature_rules.py 03-Ago (n>=50/3d, 0 cobertura).
+    "FAVORITO_CONFIRMADO_15MIN_EXTREMO":         _BASE_FAVORITO,
+    "FAVORITO_CONFIRMADO_15MIN_EXTREMO#BTC#15min": _BASE_FAVORITO,
+    "FAVORITO_CONFIRMADO_15MIN_EXTREMO#ETH#15min": _BASE_FAVORITO,
+    "FAVORITO_CONFIRMADO_15MIN_EXTREMO#SOL#15min": _BASE_FAVORITO,
+    "FAVORITO_CONFIRMADO_15MIN_EXTREMO#XRP#15min": _BASE_FAVORITO,
+    "FAVORITO_CONFIRMADO_15MIN_EXTREMO#DOGE#15min": _BASE_FAVORITO,
+    "FAVORITO_CONFIRMADO_15MIN_EXTREMO#BNB#15min": _BASE_FAVORITO,
+
+    "FAVORITO_CONFIRMADO_60MIN_EXTREMO":         _BASE_FAVORITO,
+    "FAVORITO_CONFIRMADO_60MIN_EXTREMO#BTC#60min": _BASE_FAVORITO,
+    "FAVORITO_CONFIRMADO_60MIN_EXTREMO#ETH#60min": _BASE_FAVORITO,
+    "FAVORITO_CONFIRMADO_60MIN_EXTREMO#SOL#60min": _BASE_FAVORITO,
+
+    # BALLENAS_CONFIRMADAS_15M (s_ballenas_confirmadas_15m, shadow puro).
+    "BALLENAS_CONFIRMADAS_15M":         _BASE_BALLENAS_CONFIRMADAS,
+    "BALLENAS_CONFIRMADAS_15M#SOL#15min": _BASE_BALLENAS_CONFIRMADAS,
+    "BALLENAS_CONFIRMADAS_15M#ETH#15min": _BASE_BALLENAS_CONFIRMADAS,
+    "BALLENAS_CONFIRMADAS_15M#XRP#15min": _BASE_BALLENAS_CONFIRMADAS,
+    "BALLENAS_CONFIRMADAS_15M#DOGE#15min": _BASE_BALLENAS_CONFIRMADAS,
+
+    # BALLENAS_TARDIAS (ejecutores de baja latencia, dinero real en
+    # BTC#15min y ETH#5min desde 17/27-Jul -- el resto acumula shadow).
+    "BALLENAS_TARDIAS":          _BASE_BALLENAS_TARDIAS,
+    "BALLENAS_TARDIAS#BTC#15min": _BASE_BALLENAS_TARDIAS,
+    "BALLENAS_TARDIAS#ETH#5min":  _BASE_BALLENAS_TARDIAS,
+    "BALLENAS_TARDIAS#SOL#5min":  _BASE_BALLENAS_TARDIAS,
+    "BALLENAS_TARDIAS#XRP#5min":  _BASE_BALLENAS_TARDIAS,
+    "BALLENAS_TARDIAS#DOGE#5min": _BASE_BALLENAS_TARDIAS,
+    "BALLENAS_TARDIAS#BNB#5min":  _BASE_BALLENAS_TARDIAS,
+
+    # STRUCT_NO_15M (08-Ago, vigia_cobertura_feature_rules.py: n=400/3d,
+    # 0 aprendizaje causal). Model-free -- mismas features propias que
+    # s_struct_no_15m (py_entrada/restante_min/hora_utc/libro_calidad),
+    # subconjunto de _BASE_FAVORITO -- lo reusa directo.
+    "STRUCT_NO_15M":         _BASE_FAVORITO,
+    "STRUCT_NO_15M#BTC#15min": _BASE_FAVORITO,
+    "STRUCT_NO_15M#ETH#15min": _BASE_FAVORITO,
+    "STRUCT_NO_15M#SOL#15min": _BASE_FAVORITO,
+
+    # UPDOWN_OU_5M (08-Ago, mismo vigía: n=894/3d, 0 aprendizaje causal).
+    # s_updown_ou_5m loguea pct_spot_vs_ref/sigma_h/drift_15min/drift_60min/
+    # delta_ratio_macro -- mismas claves que _BASE_GBM, sin libro_spread/
+    # libro_liquidez (esta función no llama a _libro_calidad) ni hora_utc/
+    # ibs_15/dist_vwap_pct/sigma_ewma_delta_pct (no los calcula) -- las
+    # reglas de esas claves simplemente no aplican a ninguna fila suya
+    # (mismo patrón que WEEKLY_PRICE con sus dos variantes de features).
+    "UPDOWN_OU_5M":         _BASE_GBM,
+    "UPDOWN_OU_5M#BTC#5min": _BASE_GBM,
+    "UPDOWN_OU_5M#ETH#5min": _BASE_GBM,
+    "UPDOWN_OU_5M#SOL#5min": _BASE_GBM,
+    "UPDOWN_OU_5M#XRP#5min": _BASE_GBM,
+    "UPDOWN_OU_5M#DOGE#5min": _BASE_GBM,
+    "UPDOWN_OU_5M#BNB#5min": _BASE_GBM,
+
+    # GBM_LATE_60M_PYCONFIRMADO / GBM_LATE_60M_FADE (08-Ago, mismo vigía:
+    # n=77 y n=135/3d, 0 aprendizaje causal). Ambas reusan el motor
+    # s_gbm_late_60min (_FADE invierte prob_yes sobre su resultado sin
+    # tocar el dict de features, _PYCONFIRMADO comparte _s_gbm_late) --
+    # mismo dict de features que el resto de la familia GBM_LATE ->
+    # _BASE_GBM aplica directo, igual que TARDIO/ESPACIO_ATR/MULTIHORIZONTE
+    # arriba.
+    "GBM_LATE_60M_PYCONFIRMADO":         _BASE_GBM,
+    "GBM_LATE_60M_PYCONFIRMADO#BTC#60min": _BASE_GBM,
+    "GBM_LATE_60M_PYCONFIRMADO#ETH#60min": _BASE_GBM,
+    "GBM_LATE_60M_PYCONFIRMADO#SOL#60min": _BASE_GBM,
+    "GBM_LATE_60M_FADE":         _BASE_GBM,
+    "GBM_LATE_60M_FADE#BTC#60min": _BASE_GBM,
+    "GBM_LATE_60M_FADE#ETH#60min": _BASE_GBM,
+    "GBM_LATE_60M_FADE#SOL#60min": _BASE_GBM,
+
+    # FAVORITO_CONFIRMADO_5MIN_BAJALATENCIA (08-Ago, mismo vigía: n=456/3d,
+    # 0 aprendizaje causal). Ejecutor de baja latencia fase0 (favorito5min_
+    # bajalatencia_fase0.py, sintética, nunca en pares_permitidos_live) --
+    # features propias reducidas (py_entrada/restante_min/hora_utc/
+    # lag_apertura_s/profundidad_ratio_no), mismo patrón que BALLENAS_
+    # TARDIAS (ejecutores de baja latencia no llaman a _libro_calidad).
+    "FAVORITO_CONFIRMADO_5MIN_BAJALATENCIA":           _BASE_FAVORITO_BAJALATENCIA,
+    "FAVORITO_CONFIRMADO_5MIN_BAJALATENCIA#XRP#5min":  _BASE_FAVORITO_BAJALATENCIA,
+    "FAVORITO_CONFIRMADO_5MIN_BAJALATENCIA#DOGE#5min": _BASE_FAVORITO_BAJALATENCIA,
+
+    # 12-Ago: las 4 estrategias que no tenían NINGÚN dict "features" (ver
+    # project_gaps_feature_rules_cerrados_12ago) -- shadow_predict.py
+    # corregido el mismo día. PRICE_MOMENTUM n=0 hoy (prácticamente sin uso,
+    # solo agregado por si vuelve a activarse); SMART_FLOW_1H/
+    # RESOLUTION_SNIPER con volumen real, desagregadas por activo.
+    "PRICE_MOMENTUM":       _BASE_PRICE_MOMENTUM,
+    "SMART_FLOW_1H":        _BASE_SMART_FLOW,
+    "SMART_FLOW_1H#BTC":    _BASE_SMART_FLOW,
+    "SMART_FLOW_1H#ETH":    _BASE_SMART_FLOW,
+    "SMART_FLOW_1H#SOL":    _BASE_SMART_FLOW,
+    "SMART_FLOW_1H#XRP":    _BASE_SMART_FLOW,
+    "RESOLUTION_SNIPER":         _BASE_RESOLUTION_SNIPER,
+    "RESOLUTION_SNIPER#BTC#sniper": _BASE_RESOLUTION_SNIPER,
+    "RESOLUTION_SNIPER#ETH#sniper": _BASE_RESOLUTION_SNIPER,
+    "RESOLUTION_SNIPER#SOL#sniper": _BASE_RESOLUTION_SNIPER,
+    "LATE_WINDOW_5MIN":          _BASE_LATE_WINDOW,
+    "LATE_WINDOW_5MIN#BTC#5min": _BASE_LATE_WINDOW,
+
+    "CANDIDATA9_BOT_CONSENSO":           _BASE_CANDIDATA9_BOT_CONSENSO,
+    "CANDIDATA9_BOT_CONSENSO#BTC#5min":  _BASE_CANDIDATA9_BOT_CONSENSO,
+    "CANDIDATA9_BOT_CONSENSO#ETH#5min":  _BASE_CANDIDATA9_BOT_CONSENSO,
+    "CANDIDATA9_BOT_CONSENSO#ETH#15min": _BASE_CANDIDATA9_BOT_CONSENSO,
+    "CANDIDATA9_BOT_CONSENSO#BNB#5min":  _BASE_CANDIDATA9_BOT_CONSENSO,
+}
+
+TWAP_MARCOS_AFECTADOS = {"5min", "15min", "240min"}
+TWAP_FECHA_CAMBIO = datetime(2026, 8, 7, tzinfo=timezone.utc)  # mismo valor
+# que live_trade.py::CLV_FECHA_CAMBIO_TWAP / gate_bucket_propio.py --
+# cambio real de TWAP en la resolución Chainlink, confirmado con datos
+# propios (idea_manipulacion_twap_confirmada_datos_propios_10ago).
+
+# 14-Ago: SEGUNDO cambio de régimen, esta vez SOLO en 5min -- Polymarket
+# pasó la ventana TWAP de 5min de 30s a 60s a las 00:00 UTC del 14-Ago
+# (confirmado al minuto con datos propios vía gamma-api: ventana "7:55PM-
+# 8:00PM ET, 13-Ago" resolutionSource=twap-30s-streams, ventana "8:00PM-
+# 8:05PM ET, 13-Ago" [=00:00 UTC 14-Ago] ya twap-60s-streams). 15min/240min
+# NO afectados por este segundo cambio -- siguen usando solo TWAP_FECHA_CAMBIO.
+TWAP_5MIN_FECHA_CAMBIO_60S = datetime(2026, 8, 14, tzinfo=timezone.utc)  # mismo
+# valor que live_trade.py::CLV_5MIN_FECHA_CAMBIO_60S / gate_bucket_propio /
+# kelly_precio_gate.
+
+
+def _excluir_pre_twap(resultados: list) -> list:
+    """Descarta filas de marcos afectados por el cambio TWAP (07-Ago) con
+    prediction_timestamp anterior al cambio -- mismo fix ya aplicado en
+    gate_bucket_propio.py/kelly_precio_gate.py/live_trade.py::_clv_tupla
+    el 10/11-Ago, NUNCA aplicado aquí hasta ahora (11-Ago).
+
+    Hallazgo real que motiva esto: cargar_results() no filtraba nada --
+    ic_bayes/filtros_causales/patrones_ganadores para 5min/15min/240min
+    se calculaban mezclando régimen pre-TWAP (85.1% de las filas de
+    15min, 62.9% de 5min, 94.1% de 240min en results.csv) con post-TWAP,
+    exactamente el mismo problema que ya se corrigió en el resto del
+    pipeline -- pero shadow_postmortem.py es EL motor de aprendizaje
+    causal que escribe strategy_params.json cada ~23min, así que la
+    contaminación llegaba a filtros_causales/patrones_ganadores activos
+    HOY en 55 tuplas (53 filtros + 233 patrones) sin que nadie lo hubiera
+    revisado. Comparación real (BALLENAS_TARDIAS#ETH#5min): ic_bayes
+    full-history 0.1225 (n=659) vs solo post-TWAP 0.3850 (n=437) --
+    diferencia de más del doble, la contaminación no es cosmética.
+
+    Marcos NO afectados (60min/daily/weekly) pasan sin tocar -- el
+    cambio de TWAP en la resolución Chainlink solo se confirmó en esos
+    3 marcos (ver TWAP_MARCOS_AFECTADOS)."""
+    out = []
+    for r in resultados:
+        sub = r.get("subtype", "")
+        marco = sub.rsplit("#", 1)[-1] if "#" in sub else sub
+        if es_pre_twap(marco, r.get("prediction_timestamp", "")):
+            continue
+        out.append(r)
+    return out
+
+
+def es_pre_twap(marco: str, ts_iso: str) -> bool:
+    """True si `marco` está afectado por el cambio TWAP (07-Ago) Y `ts_iso`
+    es anterior al cambio (o ilegible -- fail-closed, se trata como
+    pre-TWAP/descartable). Extraído de _excluir_pre_twap() el 11-Ago
+    (/code-review: analisis_wallet_mirror_gate_bucket_10ago.py reimplementaba
+    la misma comparación a mano con su propio esquema de filas -- timestamp_
+    utc+marco en vez de prediction_timestamp+subtype -- ahora ambos llaman
+    a esta única función con el marco/timestamp ya extraídos por el
+    llamador, sin duplicar la lógica de comparación en sí."""
+    if marco not in TWAP_MARCOS_AFECTADOS:
+        return False
+    try:
+        ts_dt = datetime.fromisoformat(ts_iso)
+    except (TypeError, ValueError):
+        return True  # fail-closed: timestamp ilegible en marco afectado, se descarta
+    if ts_dt.tzinfo is None:
+        ts_dt = ts_dt.replace(tzinfo=timezone.utc)
+    corte = TWAP_5MIN_FECHA_CAMBIO_60S if marco == "5min" else TWAP_FECHA_CAMBIO
+    return ts_dt < corte
+
+
+IC_FILTRO_MIN   = -0.12   # IC para activar filtro (evitar)
+IC_PATRON_MIN   = +0.12   # IC para activar patrón ganador (amplificar)
+N_BUCKET_MIN    = 15      # mínimo de observaciones en cualquier bucket (subido de 8: n<15 → demasiado ruidoso para kelly_boost)
+_POSTMORTEM_CACHE_BUCKET = [0]  # invalidación manual del lru_cache de
+# _cargar_predicciones_recientes_por_estrategia DENTRO de una misma corrida
+# (shadow_postmortem.py es un subproceso de un solo ciclo, relanzado por
+# run_fast.sh -- el proceso no vive entre ciclos, así que este cache NO
+# persiste entre corridas de por sí; el bucket solo evita releer las
+# predictions_*.csv una vez POR CADA candidato de filtro dentro de la MISMA
+# llamada a aprender_patrones_causales, que evalúa docenas de percentiles).
+COBERTURA_RECIENTE_MAX  = 0.80  # 05-Ago (fix, ver idea_bug_filtros_causales_cobertura_total_05ago):
+COBERTURA_RECIENTE_DIAS = 7     # el umbral de un filtro se elige por percentil sobre el
+COBERTURA_RECIENTE_MIN_N = 15   # HISTÓRICO COMPLETO -- si la feature deriva con el tiempo
+# (05-Ago, /code-review): subido de 10 a 15 -- el manual exige explícitamente
+# "ninguna conclusión de estrategia con n<15" (CLAUDE.md, Errores de datos #2)
+# y esta función SÍ concluye algo (que el filtro ha degenerado) con esos datos,
+# así que tiene que cumplir la misma barra que cualquier otra conclusión.
+# (ej. compresión de volatilidad), un filtro que en su día recortaba ~25-33% del
+# histórico puede degenerar en silencio hasta cubrir el 100% de las observaciones
+# ACTUALES sin que nada lo detecte (el sistema solo mide el IC en el momento del
+# descubrimiento, nunca la cobertura después). Confirmado real 05-Ago: 17/104
+# filtros_causales cubrían >=85% de los datos de un día real (6 al 100%),
+# incluido UPDOWN_GBM#BTC#60min (sigma_h<0.012 cubría el 100% de 57 observaciones
+# reales -- veto total, no filtro). Este gate exige que el bucket "malo" NO cubra
+# más de COBERTURA_RECIENTE_MAX de los últimos COBERTURA_RECIENTE_DIAS días
+# (si hay suficiente dato reciente, COBERTURA_RECIENTE_MIN_N) -- si lo cubre, el
+# filtro ya no discrimina, es un veto de facto, y no se promociona ni se
+# mantiene activo aunque su IC histórico siga pareciendo válido.
+PERCENTILES_MIN_ESTABLES = 2  # 20-Jul (code-review, hallazgo de altitud): exigir que
+# al menos 2 de los 5 percentiles candidatos califiquen de forma independiente,
+# no solo el que gana el argmax por `dif` — evita un pico aislado de un único
+# percentile (el caso real: GBM_LATE_15M#ETH#15min dist_vwap_pct BUY_YES,
+# n=19, solo un percentil cruzaba el umbral). Complementa (no sustituye) el
+# gate de shuffle+BH-FDR de más abajo: esto filtra en el grid original de 5
+# candidatos, el shuffle filtra en la muestra final ya elegida.
+
+# Patrones ganadores bloqueados (12-Jul, aprobado Javi, vigia_causal_vs_fillable.py):
+# el strat_key AGREGADO (sin activo) mezcla los 4 activos de GBM_LATE_15M en un
+# solo bucket — "sigma_h>0.0151 BUY_YES" salía positivo en shadow (ic 0.1395)
+# pero desagregado por activo el signo lo sostenía CASI SOLO XRP (ic 0.175 n=253;
+# BTC/ETH/SOL planos o peor: 0.000/0.071/0.095 vs sus propios ic_base). Cruzado
+# con ejecución real (trades.csv): la zona "boosteada" de SOL vivo rinde
+# +0.007€/trade frente a +0.24€/trade del resto de SOL — el boost se aplicaba
+# sobre el peor segmento, no el mejor. Además, junto con la regla propia de SOL
+# (GBM_LATE_15M#SOL#15min: sigma_h<0.0162, esa SÍ se sostiene en real) las dos
+# condiciones juntas cubrían el 100% de los valores de sigma_h — el "boost
+# condicional" era en la práctica incondicional. Se bloquea solo el patrón
+# AGREGADO (strat_key sin activo); las reglas propias de SOL/ETH no se tocan.
+PATRONES_BLOQUEADOS = {
+    # GBM_LATE_15M sigma_h BUY_YES: se mantiene bloqueado, pero por una razón
+    # ESTRUCTURAL/matemática, no estadística — un test de permutación sobre
+    # el gap de pnl live (SOL, n=27 vs n=30) dio p=0.219, NO significativo al
+    # 0.05 por sí solo. La razón real para bloquearlo: junto con la regla
+    # propia de SOL (sigma_h<0.0162) las dos condiciones cubrían el 100% del
+    # rango de sigma_h — el boost "condicional" no discriminaba nada, hecho
+    # verificable sin estadística. Ver project_vigia_causal_fillable_12jul.
+    ("GBM_LATE_15M", "sigma_h", "BUY_YES"),
+    # Los 5 bloqueos de FAVORITO_CONFIRMADO del primer barrido (12-Jul) se
+    # REVIRTIERON el mismo día: un test de permutación retroactivo dio
+    # p=0.29-0.997 en los 5 (ninguno significativo al 0.05; el de
+    # py_entrada BUY_NO, p=0.997, es prácticamente ruido puro). El criterio
+    # "mayoría de activos + gap>0.02€/trade" usado para bloquearlos no
+    # sustituye un test de significancia — n=15-25 por grupo es demasiado
+    # poco para que ese gap sea distinguible de una partición aleatoria.
+    # Se dejan sin bloquear, vigilando con más n. Ver
+    # feedback_shuffle_antes_de_bloquear y project_vigia_causal_fillable_12jul.
+
+    # 20-Jul: dist_vwap_pct BUY_YES de GBM_LATE_15M#ETH#15min (patrón real en
+    # pares_permitidos_live, kelly_boost activo) verificado FRÁGIL en dos vías
+    # independientes: (1) barrido fino de percentiles (0.05 a 0.95) sin meseta
+    # — IC rebota 0.04-0.16 sin zona estable, el umbral elegido no destaca de
+    # sus vecinos; (2) shuffle test (2000 tiradas) NO sobrevive BH-FDR
+    # (p=0.074 sobre n=19-20, ver data/shadow/shuffle_patrones_causales.csv).
+    # El resto de patrones de esta misma clave (sigma_h, sigma_ewma_delta_pct)
+    # sí sostienen meseta+shuffle. Ver idea_estabilidad_umbrales_patrones_19jul.md.
+    #
+    # RETIRADO el mismo 20-Jul (code-review): esta clave bloquea por
+    # (strat_key, feature, direccion), SIN distinguir condicion — bloqueaba a
+    # la vez el "gt" frágil (n=19-20, el caso de arriba) Y un "lt" DISTINTO
+    # (dist_vwap_pct<0.2869, n=91, p_shuffle=0.006) que es un patrón real,
+    # verificado con el gate nuevo de vecinos+shuffle (PERCENTILES_MIN_
+    # ESTABLES + _shuffle_pvalue) que ahora hace este bloqueo manual
+    # redundante: probado con el blocklist vacío en memoria, el gate solo
+    # acepta el "lt" (n=91) y rechaza el "gt" (n=19-20) correctamente, sin
+    # ayuda de esta entrada. Mantenerla habría suprimido un patrón bueno por
+    # error de granularidad. Si el gate nuevo alguna vez deja pasar un pico
+    # aislado real, bloquear aquí por (strat_key, feature, CONDICION,
+    # direccion) — no repetir el bloqueo por feature entera.
+}
+
+
+N_SHUFFLE_GATE = 1000   # tiradas por candidato — cada ciclo (~60s), cientos de candidatos
+SHUFFLE_FDR = 0.10  # mismo FDR que analisis_shuffle_patrones_causales.py (13-Jul)
+
+
+@lru_cache(maxsize=None)
+def _simular_null_binomial(n: int, n_shuffle: int) -> np.ndarray:
+    """Distribución nula Binomial(n, 0.5) para el shuffle test — array de
+    `ic_sim` simulados, cacheada por (n, n_shuffle).
+
+    20-Jul, hallazgo code-review: la versión anterior llamaba random.random()
+    sin semilla dentro de un bucle Python O(n_shuffle*n) — dos problemas a la
+    vez: (1) NO DETERMINISTA (dos ciclos consecutivos sobre los MISMOS datos
+    podían aceptar/rechazar un patrón distinto solo por ruido de muestreo,
+    verificado: hasta 5 entradas cambiaban entre dos llamadas idénticas); (2)
+    lento (~3.5-4s/ciclo medido con ~340 candidatos, 61% del tiempo total de
+    aprender_patrones_causales). Semilla determinista = n (mismo n -> misma
+    muestra SIEMPRE, sin importar cuántas veces se llame ni en qué ciclo) +
+    numpy vectorizado (ya dependencia del repo) en vez del bucle Python +
+    cacheada por (n, n_shuffle) dentro del proceso — como cada invocación de
+    shadow_postmortem.py es un proceso nuevo (run_fast.sh lo lanza como
+    subproceso cada ciclo), no hace falta gestionar expiración del caché."""
+    rng = np.random.default_rng(seed=n)
+    aciertos_sim = rng.binomial(n, 0.5, size=n_shuffle)
+    return (aciertos_sim + 1) / (n + 2) - 0.5
+
+
+def _shuffle_pvalue(n: int, ic_real: float, cola: str = "alta",
+                    n_shuffle: int = N_SHUFFLE_GATE) -> float:
+    """Fracción de tiradas 50/50 (n observaciones) que igualan o superan
+    (cola="alta") / igualan o quedan por debajo (cola="baja") de ic_real.
+
+    cola="alta": ¿es sorprendentemente BUENO? — uso correcto para PATRON
+    (ic_real positivo, kelly_boost).
+    cola="baja": ¿es sorprendentemente MALO? — uso correcto para FILTRO
+    (ic_real negativo, el bucket que se salta). Antes de 20-Jul,
+    analisis_shuffle_patrones_causales.py aplicaba SIEMPRE la cola "alta"
+    a ambos tipos: para un ic_real negativo (FILTRO), P(ic_sim >= ic_real)
+    es casi 1 sin importar si el efecto es real (un shuffle 50/50 centrado
+    en 0 rara vez cae POR DEBAJO de un número negativo) — el resultado
+    observado era 0/98 filtros "sobreviviendo" BH-FDR, un artefacto del test
+    mal orientado, no evidencia real de que todos los filtros sean ruido.
+
+    Mismo modelo nulo que shuffle_percentile() en analisis_gate_riguroso.py
+    (el gate que ya decide promoción a whitelist) — no se inventa un
+    criterio nuevo; de hecho ese script ahora delega en esta función (ver
+    analisis_gate_riguroso.py). Nota: el resultado de "coinflip ==
+    outcome_real" tiene probabilidad 0.5 sea cual sea outcome_real, así que
+    el test solo depende de n (no hace falta la lista de outcomes fila a
+    fila) — ver _simular_null_binomial."""
+    if n == 0:
+        return 1.0
+    ic_sims = _simular_null_binomial(n, n_shuffle)
+    if cola == "alta":
+        return float(np.mean(ic_sims >= ic_real))
+    return float(np.mean(ic_sims <= ic_real))
+
+
+def _benjamini_hochberg(pvals: list, fdr: float = SHUFFLE_FDR) -> list:
+    """Qué p-valores sobreviven controlando la tasa de falsos descubrimientos
+    a `fdr` sobre TODO el lote — mismo método y mismo FDR=0.10 que
+    analisis_shuffle_patrones_causales.py (13-Jul), ahora como gate real en
+    vez de auditoría manual posterior."""
+    n = len(pvals)
+    if n == 0:
+        return []
+    indexed = sorted(range(n), key=lambda i: pvals[i])
+    keep = [False] * n
+    cutoff = -1
+    for rank, i in enumerate(indexed, start=1):
+        if pvals[i] <= fdr * rank / n:
+            cutoff = rank
+    if cutoff >= 0:
+        for rank, i in enumerate(indexed, start=1):
+            if rank <= cutoff:
+                keep[i] = True
+    return keep
+
+
+def _evaluar_bucket(vals, umbral, condicion_mala):
+    """Separa vals en [malo, bueno] según condicion_mala y umbral."""
+    if condicion_mala == "abs_gt":
+        malo  = [(r, v) for r, v in vals if abs(v) > umbral]
+        bueno = [(r, v) for r, v in vals if abs(v) <= umbral]
+        cond_buena = "abs_lt"
+    elif condicion_mala == "abs_lt":
+        malo  = [(r, v) for r, v in vals if abs(v) < umbral]
+        bueno = [(r, v) for r, v in vals if abs(v) >= umbral]
+        cond_buena = "abs_gt"
+    elif condicion_mala == "gt":
+        malo  = [(r, v) for r, v in vals if v > umbral]
+        bueno = [(r, v) for r, v in vals if v <= umbral]
+        cond_buena = "lt"
+    elif condicion_mala == "lt":
+        malo  = [(r, v) for r, v in vals if v < umbral]
+        bueno = [(r, v) for r, v in vals if v >= umbral]
+        cond_buena = "gt"
+    else:
+        malo, bueno, cond_buena = [], [], ""
+    return malo, bueno, cond_buena
+
+
+def _parsear_predicciones_archivo(arch: Path) -> dict:
+    """Parsea UN predictions_YYYY-MM-DD.csv completo, SIN aplicar corte de
+    fecha (eso se hace después, en agregación -- ver
+    _cargar_predicciones_recientes_por_estrategia) -> {clave: {market_id:
+    [timestamp_utc, direccion_efectiva, features_dict]}}.
+
+    ⚠️ Nido por CLAVE primero, market_id después -- ver hallazgo real del
+    08-Sep: una primera versión aplanaba directamente a {market_id: ...}
+    (una sola entrada por mercado, sin distinguir estrategia), y como el
+    MISMO market_id recibe predicciones de VARIAS estrategias distintas
+    en el mismo fichero (ej. un mercado BTC#15min predicho a la vez por
+    GBM_LATE_15M, UPDOWN_GBM, FAVORITO_CONFIRMADO...), esa versión
+    sobrescribía entre estrategias -- solo sobrevivía la última fila del
+    fichero para ese mercado, perdiendo 155 de 564 claves reales en la
+    verificación previa al despliegue. Con el nido correcto (clave
+    primero) cada estrategia tiene su propio espacio de mercados, igual
+    que la versión original sin caché.
+
+    Dedup DENTRO de cada clave, por market_id, a UNA entrada (la última
+    fila del fichero para esa clave+mercado, orden cronológico -- ver
+    comentario 02-Sep más abajo): idéntico al comportamiento anterior,
+    porque dentro de un único fichero (un solo día) el corte de fecha
+    nunca podía descartar la fila MÁS RECIENTE de un mercado y aceptar
+    una más antigua del mismo mercado a la vez (las filas son monótonas
+    en el tiempo dentro del fichero) -- separar el corte de aquí no
+    cambia qué fila gana el dedup.
+
+    02-Sep: idx acumula por market_id (dict, no list) -- dedupe a UNA
+    entrada por (clave, market_id), quedándose con la más reciente (los
+    ficheros se recorren en orden cronológico, así que sobrescribir ya
+    hace "quedarse con la última" gratis). Antes de este fix, cada fila
+    de re-predicción del mismo mercado se acumulaba aparte -- inofensivo
+    mientras el dedup de shadow_predict.py era "una vez al día", pero el
+    fix de cooldown corto del 01-Sep (commit 79291666c7, re-predicción
+    cada ~20s para las 49 estrategias de whitelist/candidatos) multiplicó
+    por 15-180x las filas por mercado (predictions_2026-09-02.csv pasó de
+    ~22MB/día a 582MB/705.387 filas en un solo día) -- esta función
+    materializaba TODAS esas filas casi-idénticas en memoria (idx en RAM
+    llegó a 4-4.7GB, shadow_postmortem.py entero a 62% de la RAM del VPS,
+    swap al 95%, ciclos resolve+postmortem de hasta 80min bloqueando todo
+    el pipeline detrás -- diagnosticado con py-spy dump en vivo, 02-Sep
+    noche). El dedup NO cambia lo que `_filtro_degenerado_en_veto_total`
+    mide (sigue viendo la dirección efectiva más reciente por mercado,
+    que es exactamente lo que "predicciones recientes" quiere decir) --
+    solo elimina observaciones repetidas y no independientes del MISMO
+    mercado en el MISMO día, alineado con el mismo principio de rigor ya
+    aplicado en feedback_desagregar_por_activo_siempre (no inflar el n
+    con pseudo-réplicas)."""
+    idx: dict[str, dict] = {}
+    with open(arch, encoding="utf-8") as f:
+        for row in csv.DictReader(f):
+            ts = row.get("timestamp_utc", "")
+            dec = row.get("decision", "")
+            if dec not in ("BUY_YES", "BUY_NO", "SKIP"):
+                continue
+            if dec == "SKIP":
+                try:
+                    en = float(row.get("edge_neto", 0) or 0)
+                except (ValueError, TypeError):
+                    continue
+                if en == 0:
+                    continue
+                dec_efectiva = "BUY_YES" if en > 0 else "BUY_NO"
+            else:
+                dec_efectiva = dec
+            try:
+                feats = json.loads(row.get("features", "{}") or "{}")
+            except Exception:
+                continue
+            mid = row.get("market_id", "")
+            s = row.get("strategy", "")
+            sub = row.get("subtype", "")
+            posibles = {s}
+            if "#" in sub:
+                a_part, d_part = sub.split("#", 1)
+                posibles |= {f"{s}#{sub}", f"{s}#{a_part}", f"{s}#{d_part}"}
+            elif sub:
+                posibles.add(f"{s}#{sub}")
+            for clave in posibles:
+                idx.setdefault(clave, {})[mid] = [ts, dec_efectiva, feats]
+    return idx
+
+
+def _cargar_predicciones_archivo_cacheado(arch: Path) -> dict:
+    """08-Sep (cProfile en producción, aviso "pipeline lento"): perfilado
+    fresco de aprender_patrones_causales() (213,5s) mostró que
+    _cargar_predicciones_recientes_por_estrategia (105,2s, de eso 31,5s
+    propios) releía y re-parseaba con csv.DictReader+json.loads TODOS los
+    predictions_YYYY-MM-DD.csv de los últimos `dias+2` días (2,7M filas,
+    2,87M json.loads) EN CADA EJECUCIÓN -- el lru_cache(maxsize=1) de la
+    función de arriba solo evita releer DENTRO de la misma corrida
+    (shadow_postmortem.py se relanza como proceso nuevo cada ciclo, ver
+    comentario de _POSTMORTEM_CACHE_BUCKET), así que entre ejecuciones no
+    había ningún ahorro real. Los ficheros de días YA CERRADOS son
+    inmutables (predictions_HOY.csv es el único que crece) -- cachear en
+    disco el parseo por fichero, keyed por (mtime,size), evita repetir el
+    trabajo caro (CSV+JSON) para los días viejos en cada ejecución nueva.
+    Mismo patrón de checkpoint fail-safe que cargar_ya_resueltas()/
+    calibracion_folds_cache.json: cualquier duda invalida y reparsea
+    entero, nunca usa un caché potencialmente desalineado.
+
+    /code-review: esta función alimenta filtros_causales, que SÍ vetan
+    ejecución de trades reales en shadow_predict.py -- el caché solo
+    debe ahorrar TRABAJO, nunca cambiar el resultado. Verificado bit a
+    bit contra la versión sin caché antes de desplegar (ver commit)."""
+    PRED_RECIENTES_CACHE_DIR.mkdir(exist_ok=True)
+    cache_path = PRED_RECIENTES_CACHE_DIR / f"{arch.name}.json"
+    try:
+        st = arch.stat()
+    except OSError:
+        return {}
+    if cache_path.exists():
+        try:
+            cached = json.loads(cache_path.read_text(encoding="utf-8"))
+            if cached.get("mtime") == st.st_mtime and cached.get("size") == st.st_size:
+                return cached["datos"]
+        except Exception:
+            pass  # caché corrupto/desalineado -- fail-safe, reparsear entero
+    datos = _parsear_predicciones_archivo(arch)
+    try:
+        _escribir_json_atomico(
+            cache_path,
+            json.dumps({"mtime": st.st_mtime, "size": st.st_size, "datos": datos}, ensure_ascii=False),
+        )
+    except Exception:
+        pass  # cache best-effort -- si no se puede escribir, solo se pierde el ahorro, no la corrección
+    return datos
+
+
+def _purgar_cache_predicciones_fuera_de_ventana(archivos_ventana: list[Path]) -> None:
+    """/code-review 08-Sep: el caché por fichero no tenía retención --
+    cada predictions_YYYY-MM-DD.csv cerrado se cachea para siempre en
+    disco aunque `archivos` (la ventana de `dias+2` días) lo deje fuera
+    al día siguiente, creciendo sin límite (cada JSON puede pesar tanto o
+    más que el CSV de origen -- 376MB+ el de hoy). Se borra aquí,
+    fail-safe (nunca levanta excepción hacia el llamante): cualquier
+    fichero de caché cuyo nombre no esté en la ventana actual se elimina.
+    Barato (listar un directorio con como mucho unas pocas decenas de
+    entradas, no volver a parsear nada)."""
+    if not PRED_RECIENTES_CACHE_DIR.exists():
+        return
+    nombres_en_ventana = {f"{a.name}.json" for a in archivos_ventana}
+    try:
+        for cache_file in PRED_RECIENTES_CACHE_DIR.glob("predictions_*.csv.json"):
+            if cache_file.name not in nombres_en_ventana:
+                try:
+                    cache_file.unlink()
+                except OSError:
+                    pass
+    except Exception:
+        pass
+
+
+@lru_cache(maxsize=1)
+def _cargar_predicciones_recientes_por_estrategia(dias: int = COBERTURA_RECIENTE_DIAS,
+                                                     cache_bucket: int = 0):
+    """Índice strat_key -> [(direccion_efectiva, features_dict), ...] de los
+    últimos `dias` días de predictions_YYYY-MM-DD.csv -- a diferencia de
+    results.csv (que solo tiene BUY_YES/BUY_NO ya RESUELTOS), esta fuente
+    incluye también las filas SKIP, con la dirección que el modelo habría
+    tomado inferida del signo de edge_neto. Es la única fuente que no está
+    contaminada por el propio filtro que se quiere auditar: un filtro que
+    hoy bloquea el 100% de BUY_YES para una tupla deja resultados.csv sin
+    NINGÚN BUY_YES reciente que resolver (ciego por construcción -- el
+    filtro tan eficaz que se autoprotege de ser detectado), pero
+    predictions.csv sigue registrando la señal con decision=SKIP y el
+    edge_neto que habría tenido.
+
+    cache_bucket solo existe para poder invalidar el lru_cache manualmente
+    entre llamadas DENTRO de una misma corrida (ver _POSTMORTEM_CACHE_
+    BUCKET) -- el trabajo caro de parseo por fichero vive aparte, en
+    _cargar_predicciones_archivo_cacheado (disco, persiste entre
+    ejecuciones); esta capa solo aplica el corte de fecha (barato) sobre
+    esos datos ya parseados.
+    """
+    corte = datetime.now(timezone.utc) - timedelta(days=dias)
+    idx: dict[str, dict] = {}
+    archivos = sorted(DIR_SHADOW.glob("predictions_*.csv"))[-(dias + 2):]
+    _purgar_cache_predicciones_fuera_de_ventana(archivos)
+    for arch in archivos:
+        try:
+            datos = _cargar_predicciones_archivo_cacheado(arch)
+        except Exception:
+            continue
+        for clave, por_mercado_archivo in datos.items():
+            for mid, (ts, dec_efectiva, feats) in por_mercado_archivo.items():
+                try:
+                    tsd = datetime.fromisoformat(ts.replace("Z", "+00:00"))
+                    if tsd.tzinfo is None:
+                        tsd = tsd.replace(tzinfo=timezone.utc)
+                except Exception:
+                    continue
+                if tsd < corte:
+                    continue
+                # setdefault DESPUÉS del corte (verificación 08-Sep: hacerlo
+                # antes creaba idx[clave]={} para claves cuyas filas del
+                # fichero no pasaban el corte, dejando un "clave: []" vacío
+                # en el resultado final que el original nunca producía --
+                # inofensivo en la práctica, todo consumidor usa
+                # idx.get(strat_key, []), pero no era un match exacto).
+                # Ficheros recorridos en orden cronológico (sorted arriba) --
+                # sobrescribir aquí ya implementa "el fichero más reciente
+                # gana" para el mismo (clave, mid) repetido entre días.
+                idx.setdefault(clave, {})[mid] = (dec_efectiva, feats)
+    return {clave: list(por_mercado.values()) for clave, por_mercado in idx.items()}
+
+
+@lru_cache(maxsize=None)
+def _candidatos_recientes_feature(strat_key, feature, direccion, cache_bucket):
+    """Valores de `feature` en las predicciones recientes de (strat_key,
+    direccion) -- extraído de _filtro_degenerado_en_veto_total el 18-Ago
+    (perfilado con py-spy, ver hallazgo del hueco de latencia del pipeline):
+    esta construcción de lista NO depende de `condicion`/`umbral`, pero
+    aprender_patrones_causales() llama a _filtro_degenerado_en_veto_total
+    hasta 10 veces por (strat_key,feature,direccion) -- 5 percentiles x 2
+    chequeos (FILTRO/PATRON) -- reconstruyéndola idéntica cada vez desde
+    cero sobre `idx` (que ya está cacheado, pero el filtrado posterior no
+    lo estaba). Cacheado aquí por (strat_key,feature,direccion,cache_bucket)
+    -- invalidación idéntica a _cargar_predicciones_recientes_por_estrategia
+    (mismo cache_bucket, incrementado una vez por ciclo de postmortem).
+    Verificado (500 pruebas + casos límite) que el resultado es idéntico al
+    de la reconstrucción inline que sustituye; ~7x más rápido en el caso
+    típico (10 llamadas por combo)."""
+    idx = _cargar_predicciones_recientes_por_estrategia(cache_bucket=cache_bucket)
+    return tuple(feats.get(feature) for dec, feats in idx.get(strat_key, [])
+                 if dec == direccion and feats.get(feature) is not None)
+
+
+def _filtro_degenerado_en_veto_total(strat_key, feature, direccion, condicion, umbral,
+                                       min_n=COBERTURA_RECIENTE_MIN_N,
+                                       cobertura_max=COBERTURA_RECIENTE_MAX):
+    """True si `condicion` (la condición "mala" de un filtro, o la condición
+    "buena" de un patrón ganador -- misma función para ambos, ver las 2
+    llamadas) cubre >=cobertura_max de las observaciones REALES recientes
+    (predictions.csv, incluye SKIP -- ver
+    _cargar_predicciones_recientes_por_estrategia) -- señal de que el
+    umbral (elegido por percentil sobre el histórico COMPLETO de
+    results.csv) ha derivado hasta convertirse en un veto/boost total en
+    vez de un filtro/patrón parcial que de verdad discrimina. Si no hay
+    suficiente dato reciente (< min_n),
+    devuelve False -- no bloquear un filtro por falta de datos recientes,
+    solo por evidencia real de sobre-cobertura."""
+    candidatos = _candidatos_recientes_feature(strat_key, feature, direccion,
+                                                _POSTMORTEM_CACHE_BUCKET[0])
+    if len(candidatos) < min_n:
+        return False
+    cubiertos = 0
+    for v in candidatos:
+        if condicion == "abs_gt":
+            match = abs(v) > umbral
+        elif condicion == "abs_lt":
+            match = abs(v) < umbral
+        elif condicion == "gt":
+            match = v > umbral
+        elif condicion == "lt":
+            match = v < umbral
+        else:
+            match = False
+        if match:
+            cubiertos += 1
+    return (cubiertos / len(candidatos)) >= cobertura_max
+
+
+def _podar_filtros_por_cobertura_union(strat_key, filtros_dir,
+                                        cobertura_max=COBERTURA_RECIENTE_MAX,
+                                        min_n=COBERTURA_RECIENTE_MIN_N):
+    """Poda un grupo de filtros_causales de la MISMA (strat_key, dirección)
+    cuando su UNIÓN (en shadow_predict.py basta con que UNO cualquiera
+    matchee para hacer skip_causal=True, ver bucle "for f in ... break")
+    cubre >=cobertura_max de las observaciones REALES recientes --
+    `_filtro_degenerado_en_veto_total` (05-Ago) solo comprueba cada filtro
+    POR SEPARADO, así que varios filtros al 20-75% cada uno pueden
+    combinarse (OR) en un veto de facto cercano al 100% sin que ninguno
+    individual lo detecte. Hallazgo real 10-Ago: UPDOWN_OU_5M#BUY_NO, 5
+    filtros causales al 25-75% cada uno por separado, unión=97.2% de 716
+    observaciones recientes -- la estrategia cayó de ~90 resoluciones/día
+    a 0 en dos días sin que ningún filtro individual disparara el gate
+    existente. Mantiene los filtros de mayor ic_malo (más discriminativos,
+    orden ascendente = más negativo primero) mientras la cobertura unión
+    acumulada quepa bajo el cap; descarta el resto (por construcción cada
+    filtro individual ya está <cobertura_max, así que el primero siempre
+    se mantiene)."""
+    if len(filtros_dir) <= 1:
+        return filtros_dir
+    idx = _cargar_predicciones_recientes_por_estrategia(cache_bucket=_POSTMORTEM_CACHE_BUCKET[0])
+    direccion = filtros_dir[0]["direccion"]
+    obs = [feats for dec, feats in idx.get(strat_key, []) if dec == direccion]
+    if len(obs) < min_n:
+        return filtros_dir  # sin dato reciente suficiente, no podar (mismo criterio que el gate individual)
+
+    def _match(v, cond, umbral):
+        if v is None:
+            return False
+        if cond == "abs_gt": return abs(v) > umbral
+        if cond == "abs_lt": return abs(v) < umbral
+        if cond == "gt": return v > umbral
+        if cond == "lt": return v < umbral
+        return False
+
+    ordenados = sorted(filtros_dir, key=lambda f: f["ic_malo"])
+    mantenidos: list = []
+    cubiertos_idx: set = set()
+    for f in ordenados:
+        candidato_idx = set(cubiertos_idx)
+        for i, feats in enumerate(obs):
+            if i in candidato_idx:
+                continue
+            if _match(feats.get(f["feature"]), f["condicion"], f["umbral"]):
+                candidato_idx.add(i)
+        if mantenidos and len(candidato_idx) / len(obs) >= cobertura_max:
+            continue  # añadirlo ya cruzaría el cap -- descartado
+        mantenidos.append(f)
+        cubiertos_idx = candidato_idx
+        if len(cubiertos_idx) / len(obs) >= cobertura_max:
+            break
+    return mantenidos
+
+
+def aprender_patrones_causales(resultados: list, pred_index: dict) -> dict:
+    """
+    Aprende TANTO por qué el modelo pierde COMO por qué gana.
+
+    Para cada estrategia/subtipo y feature relevante, busca el umbral que
+    mejor separa ganadores de perdedores y genera:
+      - filtros_causales: rangos de features donde siempre pierde → skip
+      - patrones_ganadores: rangos de features donde gana consistentemente → boost kelly
+
+    El aprendizaje es completamente automático y se actualiza cada ciclo.
+
+    20-Jul: tanto patrones_ganadores (kelly_boost) como filtros_causales
+    (skip señal) pasan un gate de shuffle+BH-FDR conjunto sobre TODOS los
+    candidatos del ciclo antes de aceptarse — antes se elegía el mejor de 5
+    percentiles por feature sin comprobar estabilidad ni corregir por
+    multiplicidad (ver PATRONES_BLOQUEADOS, entrada dist_vwap_pct/
+    GBM_LATE_15M#ETH#15min, y idea_estabilidad_umbrales_patrones_19jul.md).
+    Cada tipo usa la cola correcta del test (PATRON: ¿sorprendentemente
+    bueno?; FILTRO: ¿sorprendentemente malo? — antes de corregir _shuffle_
+    pvalue el 20-Jul, aplicar la cola de PATRON a FILTRO daba 0/98 filtros
+    "sobreviviendo", un artefacto, no una refutación real). Preferible dejar
+    pasar una señal que un filtro no distinguible de ruido bloqueaba sin
+    motivo real (decisión Javi 20-Jul) — el filtro sigue aprendiéndose y
+    reevaluándose cada ciclo, solo deja de aplicarse mientras no sea estable.
+
+    11-Ago: espera recibir `resultados` ya filtrado por _excluir_pre_twap()
+    (filtrado una vez en main(), ver resultados_twap_safe) -- no vuelve a
+    filtrar aquí.
+    """
+    ts_ahora = datetime.now(timezone.utc).isoformat(timespec="seconds")
+    _POSTMORTEM_CACHE_BUCKET[0] += 1  # invalida el cache de predicciones recientes de este ciclo
+    resultado_final = {}
+    candidatos_shuffle = []  # [(strat_key, "FILTRO"|"PATRON", dict), ...] — gate al final
+
+    # 28-Ago: índice construido en UNA sola pasada sobre `resultados` (antes:
+    # un escaneo completo de `resultados` POR CADA strat_key de FEATURE_RULES,
+    # O(n_strat_keys × n_resultados) -- diagnosticado con py-spy, hot path en
+    # json.loads dentro de _extraer_features llamado repetidas veces para la
+    # misma fila según crecía el histórico: 291.889 filas en results.csv,
+    # ciclos de 95-140s cuando el umbral histórico es 120s, mismo patrón de
+    # incidente que el fit de calibración del 04-Ago). Misma jerarquía de
+    # claves posibles (exacta/asset/duración/agregado) y mismo resultado
+    # final por strat_key/dirección -- solo cambia el orden de los bucles:
+    # ahora se recorre `resultados` una vez, se calculan las `posibles` y los
+    # `feats` (json.loads) UNA vez por fila, y se reparten a todos los
+    # strat_keys de FEATURE_RULES con los que esa fila coincide.
+    _claves_feature_rules = set(FEATURE_RULES.keys())
+    _indice: dict[str, dict[str, list]] = {
+        k: {"BUY_YES": [], "BUY_NO": []} for k in _claves_feature_rules
+    }
+    for r in resultados:
+        s   = r.get("strategy", "")
+        sub = r.get("subtype", "")
+        dec = r.get("decision", "")
+        if dec not in ("BUY_YES", "BUY_NO"):
+            continue
+        # Claves posibles a las que esta fila puede contribuir: exacta,
+        # asset, duración y agregado total — igual jerarquía que
+        # calcular_params()/lookup_keys en shadow_predict.py. Antes solo
+        # se comparaba la clave exacta (s+"#"+sub), así que las entradas
+        # agregadas de FEATURE_RULES (ej. "ORDER_FLOW_5M", "UPDOWN_GBM#15min")
+        # casi nunca recibían datos reales (2026-07-01: "ORDER_FLOW_5M"
+        # llevaba desde el 24-jun estancado en 136 filas con subtype vacío
+        # por un bug ya corregido, en vez de las 792 operaciones reales).
+        posibles = {s}
+        if "#" in sub:
+            a_part, d_part = sub.split("#", 1)
+            posibles |= {f"{s}#{sub}", f"{s}#{a_part}", f"{s}#{d_part}"}
+        elif sub:
+            posibles.add(f"{s}#{sub}")
+        posibles &= _claves_feature_rules
+        if not posibles:
+            continue
+        clave_pred = (s, r.get("market_id", ""), dec)
+        pred  = pred_index.get(clave_pred)
+        feats = _extraer_features(r, pred)
+        if not feats:
+            continue
+        for strat_key in posibles:
+            # 05-Sep (barrido de salud, swap/OOM crítico): antes se guardaba
+            # la fila `r` COMPLETA (~15-20 columnas incl. el JSON crudo de
+            # features, aunque `feats` ya es la versión parseada) por cada
+            # combinación (strat_key, dirección) que matchea -- verificado
+            # línea a línea que lo único que se lee de `r` más abajo en toda
+            # esta función es "acierto" (3 sitios, todos sum(int(r.get(
+            # "acierto",0)))) -- _evaluar_bucket() trata el primer elemento
+            # de la tupla como opaco, solo lo reenvía. Guardar solo el int
+            # reduce el tamaño de esta estructura (la misma que el fix del
+            # 28-Ago ya identificó como el pico de RSS real) varias veces sin
+            # tocar ni un valor calculado.
+            _indice[strat_key][dec].append((int(r.get("acierto", 0)), feats))
+
+    for strat_key, feature_specs in FEATURE_RULES.items():
+        # .pop() en vez de indexar: libera el bucket de este strat_key del
+        # índice en cuanto se procesa (mismo patrón de liberación incremental
+        # que el código anterior por-strat_key), para no mantener las ~600K-
+        # 1.2M tuplas (row, feats) de TODOS los strat_keys en memoria a la vez
+        # -- hallazgo de /code-review 28-Ago: pico RSS +400MB (1.66GB→2.07GB)
+        # en un proceso que el fast loop relanza cada ~20s, en un VPS que ya
+        # ha sufrido OOM kills recientes.
+        datos_por_dir = _indice.pop(strat_key)
+
+        for direccion, datos in datos_por_dir.items():
+            if len(datos) < N_BUCKET_MIN:
+                continue
+
+            ic_base = _ic_bayes(sum(a for a, _ in datos), len(datos))
+
+            for feature, cond_mala, cond_buena in feature_specs:
+                vals = [(a, f[feature]) for a, f in datos if feature in f]
+                if len(vals) < N_BUCKET_MIN:
+                    continue
+
+                # Probar percentiles como posibles umbrales de corte
+                abs_vals = sorted(abs(v) for _, v in vals)
+                percentiles = [0.25, 0.33, 0.50, 0.66, 0.75]
+
+                mejor_filtro  = None
+                mejor_patron  = None
+                mejor_dif_filtro = 0.0
+                mejor_dif_patron = 0.0
+                n_percentiles_filtro_ok = 0
+                n_percentiles_patron_ok = 0
+
+                for p in percentiles:
+                    idx = int(len(abs_vals) * p)
+                    umbral = abs_vals[idx] if idx < len(abs_vals) else None
+                    if umbral is None or umbral == 0:
+                        continue
+
+                    malo, bueno, _ = _evaluar_bucket(vals, umbral, cond_mala)
+                    if len(malo) < N_BUCKET_MIN or len(bueno) < 3:
+                        continue
+
+                    wins_malo  = sum(a for a, _ in malo)
+                    wins_bueno = sum(a for a, _ in bueno)
+                    ic_malo    = _ic_bayes(wins_malo,  len(malo))
+                    ic_bueno   = _ic_bayes(wins_bueno, len(bueno))
+                    dif        = ic_bueno - ic_malo
+
+                    # ── Filtro: el bucket malo es suficientemente malo ──
+                    # 05-Ago (fix): además de IC_FILTRO_MIN, exigir que el
+                    # umbral NO haya degenerado en veto total sobre los datos
+                    # RECIENTES (ver COBERTURA_RECIENTE_MAX/_filtro_degenerado_
+                    # en_veto_total arriba) -- un filtro con IC histórico
+                    # válido pero que hoy cubre >=80% de las observaciones
+                    # reales ya no discrimina, es un veto disfrazado.
+                    if (ic_malo < IC_FILTRO_MIN
+                            and not _filtro_degenerado_en_veto_total(
+                                strat_key, feature, direccion, cond_mala, umbral)):
+                        n_percentiles_filtro_ok += 1
+                        if dif > mejor_dif_filtro:
+                            mejor_dif_filtro = dif
+                            mejor_filtro = {
+                                "feature":    feature,
+                                "condicion":  cond_mala,
+                                "umbral":     round(umbral, 4),
+                                "ic_malo":    round(ic_malo,  4),
+                                "ic_bueno":   round(ic_bueno, 4),
+                                "n_malo":     len(malo),
+                                "n_bueno":    len(bueno),
+                                "direccion":  direccion,
+                                "descubierto": ts_ahora,
+                            }
+
+                    # ── Patrón ganador: el bucket bueno es suficientemente bueno ──
+                    if ((strat_key, feature, direccion) in PATRONES_BLOQUEADOS):
+                        continue  # ver PATRONES_BLOQUEADOS: contradicho por ejecución real
+                    # 05-Ago (/code-review): mismo chequeo de degeneración que el
+                    # filtro, aplicado al lado simétrico -- un patrón ganador cuyo
+                    # bucket "bueno" ha derivado hasta cubrir casi el 100% de las
+                    # observaciones recientes dejaría de discriminar nada y
+                    # aplicaría kelly_boost (hasta x1.00, dinero real) a casi
+                    # todas las operaciones sin criterio real.
+                    if (ic_bueno > IC_PATRON_MIN and len(bueno) >= N_BUCKET_MIN
+                            and not _filtro_degenerado_en_veto_total(
+                                strat_key, feature, direccion, cond_buena, umbral)):
+                        n_percentiles_patron_ok += 1
+                        if dif > mejor_dif_patron:
+                            # Kelly boost: cuánto apostar extra cuando esta condición se cumple
+                            kelly_boost = round(min(1.00, max(0.10, 20.0 * ic_bueno * 0.25)), 2)
+                            mejor_dif_patron = dif
+                            mejor_patron = {
+                                "feature":     feature,
+                                "condicion":   cond_buena,
+                                "umbral":      round(umbral, 4),
+                                "ic_patron":   round(ic_bueno, 4),
+                                "ic_base":     round(ic_base,  4),
+                                "n_patron":    len(bueno),
+                                "kelly_boost": kelly_boost,
+                                "direccion":   direccion,
+                                "descubierto": ts_ahora,
+                            }
+
+                # PERCENTILES_MIN_ESTABLES: no basta con el mejor de 5 —
+                # exige que al menos otro percentil vecino también califique
+                # (evita el pico aislado, ver comentario en la constante).
+                if mejor_filtro and n_percentiles_filtro_ok >= PERCENTILES_MIN_ESTABLES:
+                    candidatos_shuffle.append((strat_key, "FILTRO", mejor_filtro))
+                if mejor_patron and n_percentiles_patron_ok >= PERCENTILES_MIN_ESTABLES:
+                    candidatos_shuffle.append((strat_key, "PATRON", mejor_patron))
+
+    # ── Gate de significancia: shuffle+BH-FDR conjunto sobre TODOS los
+    # candidatos del ciclo (filtros_causales Y patrones_ganadores, mismo lote
+    # — ver docstring de la función) ──
+    if candidatos_shuffle:
+        pvals = [
+            _shuffle_pvalue(cand["n_patron"], cand["ic_patron"], cola="alta")
+            if tipo == "PATRON" else
+            _shuffle_pvalue(cand["n_malo"], cand["ic_malo"], cola="baja")
+            for _, tipo, cand in candidatos_shuffle
+        ]
+        sobrevive = _benjamini_hochberg(pvals, SHUFFLE_FDR)
+        for (strat_key, tipo, cand), ok, pval in zip(candidatos_shuffle, sobrevive, pvals):
+            if not ok:
+                continue
+            cand["p_shuffle"] = round(pval, 4)
+            if strat_key not in resultado_final:
+                resultado_final[strat_key] = {"filtros_causales": [], "patrones_ganadores": []}
+            clave = "patrones_ganadores" if tipo == "PATRON" else "filtros_causales"
+            resultado_final[strat_key][clave].append(cand)
+
+    # Poda de cobertura UNIÓN (10-Ago) -- cada filtro individual ya pasó el
+    # chequeo de 05-Ago (_filtro_degenerado_en_veto_total), pero varios
+    # filtros de la MISMA (estrategia, dirección) se combinan con OR en
+    # shadow_predict.py y pueden vetar mucho más juntos que cualquiera por
+    # separado. Ver docstring de _podar_filtros_por_cobertura_union.
+    for strat_key, info in resultado_final.items():
+        for direccion in ("BUY_YES", "BUY_NO"):
+            grupo = [f for f in info["filtros_causales"] if f["direccion"] == direccion]
+            if len(grupo) <= 1:
+                continue
+            podados = _podar_filtros_por_cobertura_union(strat_key, grupo)
+            if len(podados) < len(grupo):
+                descartados = [f["feature"] for f in grupo if f not in podados]
+                print(f"  ⚠️ {strat_key}#{direccion}: unión de filtros_causales "
+                      f"excedía cobertura_max, podados por baja discriminación: {descartados}")
+                info["filtros_causales"] = [
+                    f for f in info["filtros_causales"]
+                    if f["direccion"] != direccion or f in podados
+                ]
+
+    return resultado_final
+
+
+def _generar_hipotesis_auto(params: dict, patrones: dict, resultados: list) -> None:
+    """
+    Traduce los patrones causales aprendidos a hipótesis accionables en markdown.
+    Escribe data/shadow/hipotesis_auto.md — leída por el LLM nocturno y por el humano.
+
+    Cada patrón descubierto se expresa como:
+      - QUÉ condición predice éxito/fracaso
+      - POR QUÉ (interpretación microestructural)
+      - ACCIÓN sugerida (filtro, boost, nueva estrategia)
+    """
+    ts = datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M UTC")
+    n_total = len(resultados)
+    pnl_total = sum(float(r.get("pnl_neto", 0)) for r in resultados)
+
+    lineas = [
+        f"# Hipótesis automáticas — {ts}",
+        f"_Generado por shadow_postmortem.py sobre {n_total} resoluciones (PNL={pnl_total:+.2f}€)_",
+        "",
+        "## Patrones causales activos",
+        "",
+    ]
+
+    # Interpretaciones microestructurales por feature
+    INTERPRETACIONES = {
+        "sigma_h": {
+            "gt":    "alta volatilidad → el modelo GBM sobreestima la señal; el mercado es más aleatorio",
+            "lt":    "baja volatilidad → señal GBM más fiable; el spread de Polymarket cubre mejor el edge",
+            "abs_gt":"alta volatilidad en cualquier dirección → señal contaminada por ruido",
+        },
+        "drift_60min": {
+            "abs_gt":"drift fuerte en 1h → el movimiento ya está priceado en Polymarket; edge agotado",
+            "abs_lt":"drift moderado → precio aún no ha reaccionado del todo; lag explotable",
+        },
+        "drift_15min": {
+            "abs_gt":"drift fuerte en 15min → momentum reciente ya en el precio Polymarket",
+        },
+        "pct_spot_vs_ref": {
+            "abs_gt":"precio spot lejos de la referencia → señal GBM sobreextiende; riesgo de reversión",
+            "abs_lt":"precio spot cerca de la referencia → señal GBM más calibrada",
+        },
+        "hora_utc": {
+            "lt":    "hora temprana → mercados cripto menos líquidos, spreads más amplios; edge real menor",
+            "gt":    "hora tardía/noche → sesión US cerrada, menos participantes informados; señales más ruidosas",
+        },
+        "ibs_15": {
+            "gt":    "IBS alto (precio cerca del máximo) → sobrecompra de corto plazo; BUY_YES menos fiable",
+            "lt":    "IBS bajo (precio cerca del mínimo) → sobreventa de corto plazo; BUY_NO menos fiable",
+        },
+        "delta_ratio": {
+            "abs_lt":"delta_ratio bajo → order flow débil; señal insuficiente para batir el spread",
+            "abs_gt":"delta_ratio alto → flow informado visible; edge real en el desequilibrio",
+        },
+        "delta_ratio_macro": {
+            "abs_gt":"flow macro dominante → el lado comprador/vendedor ya fijó el precio en Polymarket",
+            "abs_lt":"flow macro débil → el mercado no ha procesado aún la presión; lag explotable",
+        },
+    }
+
+    tiene_patrones = False
+    for strat_key, p in sorted(patrones.items()):
+        filtros   = p.get("filtros_causales", [])
+        ganadores = p.get("patrones_ganadores", [])
+        if not filtros and not ganadores:
+            continue
+        tiene_patrones = True
+        lineas.append(f"### {strat_key}")
+
+        for f in filtros:
+            feat = f["feature"]; cond = f["condicion"]
+            interp = INTERPRETACIONES.get(feat, {}).get(cond, "")
+            accion = f"SKIP cuando `{feat}` {_cond_legible(cond)} {f['umbral']}"
+            lineas += [
+                f"- **FILTRO** `{feat}` {_cond_legible(cond)} `{f['umbral']}` → IC={f['ic_malo']:+.3f} (n={f['n_malo']})",
+                f"  - _Por qué funciona_: {interp}" if interp else "",
+                f"  - _Acción_: {accion}",
+                f"  - _Potencial_: sin este filtro IC_bueno={f['ic_bueno']:+.3f} (n={f['n_bueno']})",
+                "",
+            ]
+
+        for g in ganadores:
+            feat = g["feature"]; cond = g["condicion"]
+            interp = INTERPRETACIONES.get(feat, {}).get(cond, "")
+            accion = f"Kelly boost +{g['kelly_boost']:.2f}€ cuando `{feat}` {_cond_legible(cond)} {g['umbral']}"
+            lineas += [
+                f"- **PATRÓN** `{feat}` {_cond_legible(cond)} `{g['umbral']}` → IC={g['ic_patron']:+.3f} (n={g['n_patron']})",
+                f"  - _Por qué funciona_: {interp}" if interp else "",
+                f"  - _Acción_: {accion} (IC base={g['ic_base']:+.3f})",
+                "",
+            ]
+
+    if not tiene_patrones:
+        lineas.append("_Sin patrones causales con n≥15 aún. El sistema necesita más datos._\n")
+
+    lineas += [
+        "## Estrategias nuevas sugeridas",
+        "_Derivadas de los patrones aprendidos:_",
+        "",
+    ]
+
+    # Generar sugerencias basadas en patrones encontrados
+    sugerencias = _sugerir_estrategias(patrones, params, resultados)
+    if sugerencias:
+        for s in sugerencias:
+            lineas.append(f"- {s}")
+    else:
+        lineas.append("_Sin sugerencias automáticas con datos actuales. Ampliar n por estrategia._")
+
+    lineas += [
+        "",
+        "## Estado de aprendizaje por estrategia",
+        "",
+        "| Estrategia | n | IC | PNL | Filtros | Patrones |",
+        "|---|---|---|---|---|---|",
+    ]
+    for k, v in sorted(params.get("estrategias", {}).items()):
+        if not isinstance(v, dict): continue
+        n = v.get("n", 0)
+        if n < 5: continue
+        ic = v.get("ic_bayes", 0)
+        pnl = v.get("pnl_total", 0)
+        nf = len(v.get("filtros_causales", []))
+        np_ = len(v.get("patrones_ganadores", []))
+        act = "✅" if v.get("activa", True) else "🚫"
+        lineas.append(f"| {act} {k} | {n} | {ic:+.3f} | {pnl:+.2f}€ | {nf} | {np_} |")
+
+    out = "\n".join(l for l in lineas if l is not None)
+    hip_path = DIR_SHADOW / "hipotesis_auto.md"
+    hip_path.write_text(out, encoding="utf-8")
+    print(f"  → hipotesis_auto.md actualizado ({len(patrones)} estrategias con patrones)")
+
+
+def _cond_legible(cond: str) -> str:
+    return {"gt": ">", "lt": "<", "abs_gt": "|x|>", "abs_lt": "|x|≤"}.get(cond, cond)
+
+
+def _sugerir_estrategias(patrones: dict, params: dict, resultados: list) -> list[str]:
+    """
+    A partir de los patrones aprendidos, propone estrategias nuevas o ajustes.
+    Devuelve lista de strings (markdown) con sugerencias accionables.
+    """
+    sugs = []
+    estrats = params.get("estrategias", {})
+
+    # 1. Si BTC#60min o ETH#60min tienen patrón en sigma_h → proponer filtro sigma
+    for activo in ["BTC", "ETH", "SOL"]:
+        key = f"UPDOWN_GBM#{activo}#60min"
+        sp = estrats.get(key, {})
+        pats_key = patrones.get(key, {})
+        for p in pats_key.get("patrones_ganadores", []):
+            if p["feature"] == "sigma_h" and p["ic_patron"] > 0.15:
+                sugs.append(
+                    f"**H-SIGMA-{activo}-60MIN**: `{key}` gana cuando sigma_h {_cond_legible(p['condicion'])} "
+                    f"{p['umbral']} (IC={p['ic_patron']:+.3f} n={p['n_patron']}). "
+                    f"Implementar como filtro pre-predicción en shadow_predict.py."
+                )
+
+    # 2. Si hora_utc aparece como patrón en ORDER_FLOW → refinar blacklist horaria
+    of_pats = patrones.get("ORDER_FLOW_5M", {})
+    for f in of_pats.get("filtros_causales", []):
+        if f["feature"] == "hora_utc":
+            cond = f["condicion"]
+            umb = f["umbral"]
+            hora_int = int(umb)
+            sugs.append(
+                f"**H-HORA-OF**: ORDER_FLOW_5M tiene IC={f['ic_malo']:+.3f} cuando hora_utc {_cond_legible(cond)} {umb}. "
+                f"Añadir hora {hora_int} a ORDER_FLOW_BLACKLIST_HOURS si n≥20."
+            )
+
+    # 3. Si IBS aparece como patrón ganador → proponer IBS-boost en shadow_predict
+    # 21-Jul: dir_text ANTES se inferia de la condicion (gt→BUY_NO, lt→BUY_YES),
+    # asumiendo ciegamente "IBS alto = reversión, apuesta NO" -- pero el patrón
+    # ya trae su direccion real (el bucket BUY_YES/BUY_NO donde se descubrió,
+    # separados desde aprender_patrones_causales). Los 3 patrones IBS vistos
+    # hasta ahora (general/BTC/ETH #15min) viven TODOS en direccion=BUY_YES: no
+    # es una señal de reversión que pide cambiar a NO, es que dentro de un BUY_YES
+    # ya decidido, IBS alto (precio cerca de máximos recientes) confirma más
+    # aciertos -- ver idea_ibs_updowngbm_hallazgo_21jul.md.
+    for key, pdata in patrones.items():
+        for g in pdata.get("patrones_ganadores", []):
+            if g["feature"] == "ibs_15" and g["ic_patron"] > 0.15 and g["n_patron"] >= 15:
+                sugs.append(
+                    f"**H-IBS-{key}**: dentro de {g['direccion']}, IBS {_cond_legible(g['condicion'])} {g['umbral']} "
+                    f"sube el IC de {g['ic_base']:+.3f} a {g['ic_patron']:+.3f} en {key} (n={g['n_patron']}). "
+                    f"Ya aplicado como kelly_boost=+{g['kelly_boost']:.2f}€ automático (shadow) — no es señal de reversión a la dirección contraria."
+                )
+
+    # 4. Si hay estrategia activa con IC creciente y n acercándose a 40 → alertar
+    for key, v in estrats.items():
+        if not isinstance(v, dict): continue
+        if not v.get("activa", True): continue
+        n = v.get("n", 0)
+        ic = v.get("ic_bayes", 0)
+        if 30 <= n < 40 and ic > 0.08:
+            ops_rest = 40 - n
+            sugs.append(
+                f"**LIVE-CANDIDATA**: `{key}` — IC={ic:+.3f} n={n}. "
+                f"Faltan ~{ops_rest} resoluciones para umbral n≥40. ETA: ~{ops_rest * 0.7:.0f}h."
+            )
+
+    return sugs
+
+
+def guardar_performance(performance: list):
+    if not performance:
+        return
+    columnas = list(performance[0].keys())
+    with open(PERFORMANCE_PATH, "w", newline="", encoding="utf-8") as f:
+        w = csv.DictWriter(f, fieldnames=columnas)
+        w.writeheader()
+        for p in performance:
+            w.writerow(p)
+    print(f"  Performance guardado: {PERFORMANCE_PATH}")
+
+
+def actualizar_ev_kelly_historico(performance: list):
+    """
+    Snapshot append-only de EV/Kelly agregado (08-Jul, artículo EV/Kelly/LLN).
+    performance.csv se SOBREESCRIBE cada ciclo (solo el estado actual) — no
+    deja rastro de si edge_real converge hacia edge_medio_pred con el tiempo.
+    Aquí se añade una fila agregada (ponderada por n) cada
+    EV_KELLY_HIST_THROTTLE_MIN minutos, para poder revisar en unos días la
+    tendencia de calibración y de Kelly óptimo. Puramente observacional — no
+    gatea nada, no lo lee ningún proceso live.
+    """
+    activos = [p for p in performance if p.get("n_total", 0) >= 5]
+    if not activos:
+        return
+
+    if EV_KELLY_HIST_PATH.exists():
+        try:
+            ultima = None
+            with open(EV_KELLY_HIST_PATH, encoding="utf-8") as f:
+                for ultima in csv.DictReader(f):
+                    pass
+            if ultima:
+                prev_ts = datetime.fromisoformat(ultima["timestamp_utc"])
+                if (datetime.now(timezone.utc) - prev_ts).total_seconds() < EV_KELLY_HIST_THROTTLE_MIN * 60:
+                    return
+        except Exception:
+            pass
+
+    n_tot = sum(p["n_total"] for p in activos)
+    edge_pred_pond  = sum(p["edge_medio_pred"] * p["n_total"] for p in activos) / n_tot
+    edge_real_pond  = sum(p["edge_real"] * p["n_total"] for p in activos) / n_tot
+    kelly_pond      = sum(p["kelly_optimo"] * p["n_total"] for p in activos) / n_tot
+    fila = {
+        "timestamp_utc":          datetime.now(timezone.utc).isoformat(timespec="seconds"),
+        "n_estrategias_activas":  len(activos),
+        "n_total_ops":            n_tot,
+        "edge_pred_ponderado":    round(edge_pred_pond, 4),
+        "edge_real_ponderado":    round(edge_real_pond, 4),
+        "gap_calibracion":        round(edge_real_pond - edge_pred_pond, 4),
+        "kelly_optimo_ponderado": round(kelly_pond, 4),
+    }
+    nuevo = not EV_KELLY_HIST_PATH.exists()
+    with open(EV_KELLY_HIST_PATH, "a", newline="", encoding="utf-8") as f:
+        w = csv.DictWriter(f, fieldnames=list(fila.keys()))
+        if nuevo:
+            w.writeheader()
+        w.writerow(fila)
+    print(f"  EV/Kelly histórico: gap_calibracion={fila['gap_calibracion']:+.4f} "
+          f"(pred={fila['edge_pred_ponderado']:+.4f} real={fila['edge_real_ponderado']:+.4f})")
+
+
+def _debe_correr_patrones_causales() -> bool:
+    """True si ha pasado PATRONES_CAUSALES_MIN_INTERVAL_S desde el último
+    run real de aprender_patrones_causales() (no desde el último ciclo de
+    postmortem -- son cadencias independientes). Fail-open a favor de
+    CORRER (no de saltar): si el fichero de estado no existe, está
+    corrupto, o no se puede leer, corre -- el coste de un ciclo caro de
+    más es bajo; el coste de saltarse el aprendizaje causal indefinidamente
+    por un JSON roto sí sería un fallo silencioso real."""
+    try:
+        data = json.loads(PATRONES_CAUSALES_STATE_PATH.read_text(encoding="utf-8"))
+        ultimo = datetime.fromisoformat(data["ultimo_run_utc"])
+        return (datetime.now(timezone.utc) - ultimo).total_seconds() >= PATRONES_CAUSALES_MIN_INTERVAL_S
+    except Exception:
+        return True
+
+
+def _marcar_patrones_causales_ejecutado() -> None:
+    _escribir_json_atomico(
+        PATRONES_CAUSALES_STATE_PATH,
+        json.dumps({"ultimo_run_utc": datetime.now(timezone.utc).isoformat(timespec="seconds")}),
+    )
+
+
+def _debe_correr_hipotesis_tracker() -> bool:
+    """Mismo patrón exacto que _debe_correr_patrones_causales() -- fail-open
+    a favor de CORRER (nunca saltar por un JSON roto)."""
+    try:
+        data = json.loads(HIPOTESIS_TRACKER_STATE_PATH.read_text(encoding="utf-8"))
+        ultimo = datetime.fromisoformat(data["ultimo_run_utc"])
+        return (datetime.now(timezone.utc) - ultimo).total_seconds() >= HIPOTESIS_TRACKER_MIN_INTERVAL_S
+    except Exception:
+        return True
+
+
+def _marcar_hipotesis_tracker_ejecutado() -> None:
+    _escribir_json_atomico(
+        HIPOTESIS_TRACKER_STATE_PATH,
+        json.dumps({"ultimo_run_utc": datetime.now(timezone.utc).isoformat(timespec="seconds")}),
+    )
+
+
+def main():
+    ts = datetime.now(timezone.utc).isoformat(timespec="seconds")
+    print(f"[{ts}] === Postmortem ===")
+
+    # Gap 1: grader independiente. Lee results.csv UNA sola vez aquí (20-Ago:
+    # antes _verificar_integridad() y cargar_results() releían/reparseaban el
+    # fichero completo cada una, doble coste sobre ~156MB/200k filas y
+    # creciendo -- ver docstrings arriba).
+    _content_results = RESULTS_PATH.read_text(encoding="utf-8") if RESULTS_PATH.exists() else None
+    _rows_results = list(csv.DictReader(_content_results.splitlines())) if _content_results is not None else None
+    alertas = _verificar_integridad(_content_results, _rows_results)
+    if alertas:
+        for _, msg_a in alertas:
+            print(f"  [ALERTA INTEGRIDAD] {msg_a}")
+        # Latch por clave estable (21-Jul, ver docstring de _verificar_
+        # integridad): solo notifica por Telegram las claves NUEVAS desde
+        # el último aviso -- una condición que persiste sin limpiarse (ej.
+        # el duplicado FAVORITO_CONFIRMADO#2866629#BUY_YES, sin tocar desde
+        # el 11-Jul) ya no reenvía el mismo mensaje cada ciclo (~23min).
+        try:
+            claves_vistas = set(json.loads(INTEGRIDAD_LATCH_PATH.read_text()).get("claves", []))
+        except Exception:
+            claves_vistas = set()
+        claves_actuales = {clave for clave, _ in alertas}
+        nuevas = [(c, m) for c, m in alertas if c not in claves_vistas]
+        if nuevas:
+            try:
+                import os, requests
+                tok = os.environ.get("TELEGRAM_TOKEN", "")
+                cid = os.environ.get("TELEGRAM_CHAT_ID", "")
+                if tok and cid:
+                    msg = "⚠️ *Alerta integridad pipeline*\n" + "\n".join(f"• {m}" for _, m in nuevas)
+                    requests.post(f"https://api.telegram.org/bot{tok}/sendMessage",
+                                  json={"chat_id": cid, "text": msg, "parse_mode": "Markdown"},
+                                  timeout=10)
+            except Exception as e:
+                print(f"  [aviso integridad] no se pudo notificar Telegram: {e}")
+        # Persiste el conjunto ACTUAL completo (no solo las nuevas): si una
+        # clave deja de aparecer (se resolvió) y una condición distinta
+        # reaparece luego con esa misma clave, debe volver a avisar.
+        try:
+            _escribir_json_atomico(INTEGRIDAD_LATCH_PATH, json.dumps({"claves": sorted(claves_actuales)}, indent=1))
+        except Exception:
+            pass
+    elif INTEGRIDAD_LATCH_PATH.exists():
+        # Todas las condiciones se resolvieron -- limpia el latch para que,
+        # si algo vuelve a fallar más adelante, se trate como nuevo.
+        try:
+            _escribir_json_atomico(INTEGRIDAD_LATCH_PATH, json.dumps({"claves": []}, indent=1))
+        except Exception:
+            pass
+
+    resultados = cargar_results(_rows_results)
+    # 21-Ago: libera el texto crudo (~190MB+ y creciendo ~3.2MB/día) y la
+    # lista de filas ya consumida -- ningún consumidor posterior los usa
+    # (cargar_results_dedup ya devolvió las mismas filas deduplicadas en
+    # `resultados`, no copias). Sin esto, ambos siguen vivos en memoria
+    # durante TODO el resto del ciclo junto con `resultados`/
+    # `resultados_twap_safe`, y ese pico (1.48GB RSS medido hoy, VPS de
+    # 3.7GB con ~15 procesos concurrentes) es lo que dispara la anomalía
+    # de CPU/swap de analisis_diario_salud_sistema.py (CLAUDE.md pt.18).
+    del _content_results, _rows_results
+    if not resultados:
+        print("  Sin resultados aún — nada que analizar.")
+        print(f"[{ts}] === Fin postmortem ===")
+        return
+    # 11-Ago (/code-review, hallazgo real): filtrar UNA vez aquí y reusar,
+    # en vez de que calcular_params/aprender_patrones_causales/
+    # _generar_hipotesis_auto llamen cada una a _excluir_pre_twap sobre el
+    # results.csv completo (~110k filas y creciendo ~3.2MB/día) -- ese
+    # patrón de re-escanear el histórico completo varias veces por ciclo
+    # es la MISMA clase de riesgo de escalado que ya causó un incidente
+    # real (CLAUDE.md pt.18, 04-Ago: postmortem colgado >10min bloqueando
+    # resolve/señales nuevas con dinero real abierto).
+    resultados_twap_safe = _excluir_pre_twap(resultados)
+
+    pred_index    = cargar_predicciones_index()
+    ya_procesadas = cargar_ya_postmortem()
+
+    perdidas_nuevas = []
+    for r in resultados:
+        if int(r.get("acierto", 1)) == 1:
+            continue
+        clave_pm = (r["strategy"], r["market_id"], r.get("prediction_timestamp", ""))
+        if clave_pm in ya_procesadas:
+            continue
+        clave_pred = (r["strategy"], r["market_id"], r.get("decision", ""))
+        pred  = pred_index.get(clave_pred)
+        causa = clasificar_causa(r, pred)
+        perdidas_nuevas.append({**r, "causa_perdida": causa})
+
+    perdidas_total = [r for r in resultados if int(r.get("acierto", 1)) == 0]
+    aciertos_total = len(resultados) - len(perdidas_total)
+    print(f"  Resultados totales: {len(resultados)}")
+    print(f"  Aciertos: {aciertos_total} | Pérdidas: {len(perdidas_total)}")
+    print(f"  Pérdidas nuevas a diagnosticar: {len(perdidas_nuevas)}")
+
+    if perdidas_nuevas:
+        nuevo    = not POSTMORTEM_PATH.exists()
+        columnas = list(perdidas_nuevas[0].keys())
+        with open(POSTMORTEM_PATH, "a", newline="", encoding="utf-8") as f:
+            w = csv.DictWriter(f, fieldnames=columnas, extrasaction="ignore")
+            if nuevo:
+                w.writeheader()
+            for p in perdidas_nuevas:
+                w.writerow(p)
+
+        ya_procesadas |= {
+            (p["strategy"], p["market_id"], p.get("prediction_timestamp", ""))
+            for p in perdidas_nuevas
+        }
+        guardar_ya_postmortem(ya_procesadas)
+
+        causas = {}
+        for p in perdidas_nuevas:
+            c = p["causa_perdida"]
+            causas[c] = causas.get(c, 0) + 1
+        print("  Causas de pérdidas nuevas:")
+        for c, n in sorted(causas.items(), key=lambda x: -x[1]):
+            print(f"    {c:25s}: {n}")
+
+    # Params con todos los resultados (histórico COMPLETO -- generar_
+    # performance()/performance.csv deben reflejar la verdad de suelo
+    # completa, no la vista TWAP-safe usada para IC/filtros/patrones)
+    #
+    # 03-Sep (rediseño de memoria, paso 1 -- ver project_incidente_swap_
+    # pipeline_lento_02sep): esta función construía una copia NUEVA del
+    # histórico COMPLETO (`{**r, "causa_perdida": ...}` por cada una de las
+    # ~373k filas) mientras `resultados` (el original) y `resultados_twap_
+    # safe` seguían vivos a la vez -- 3 estructuras de tamaño ~histórico
+    # completo simultáneas era el pico real de RSS que dispara swap.
+    # Mutar en sitio y devolver la MISMA lista elimina una de las tres sin
+    # cambiar ni un solo valor calculado (`resultados` no se usa en su
+    # forma sin `causa_perdida` en ningún otro sitio de este módulo,
+    # verificado -- el único consumidor posterior, `_escribir_state()`,
+    # solo lee campos numéricos concretos, una clave extra no le afecta).
+    def _con_causa(filas):
+        for r in filas:
+            if int(r.get("acierto", 1)) == 0:
+                clave_pred = (r["strategy"], r["market_id"], r.get("decision", ""))
+                pred  = pred_index.get(clave_pred)
+                r["causa_perdida"] = clasificar_causa(r, pred)
+            else:
+                r["causa_perdida"] = ""
+        return filas
+
+    todos_con_causa = _con_causa(resultados)
+    # 11-Ago (/code-review, hallazgo real): calcular_params (IC/filtros/
+    # patrones -> strategy_params.json) filtra la lista YA anotada
+    # (todos_con_causa) en vez de volver a llamar a _con_causa() sobre
+    # resultados_twap_safe -- la versión anterior recalculaba
+    # clasificar_causa() dos veces para el mismo subconjunto de filas
+    # (una vez aquí, otra dentro del _con_causa duplicado), justo el tipo
+    # de trabajo repetido por ciclo que este fix pretendía evitar.
+    #
+    # 15-Ago (/code-review sobre el fix de estado absorbente de
+    # gate_bucket_propio en shadow_predict.py): desde hoy, las tuplas ya
+    # en pares_permitidos_live vuelven a generar predicciones en TODA la
+    # banda de precio (antes solo en la zona ya confirmada) para que
+    # gate_bucket_propio.json pueda aprender de las zonas no confirmadas
+    # -- gate_bucket_propio.py lee results.csv DIRECTAMENTE del disco
+    # (script propio, fuera de este proceso), así que esa parte del
+    # aprendizaje ya funciona sin tocar nada más aquí. Pero el ic_bayes/n
+    # AGREGADO que este mismo calcular_params() escribe en
+    # strategy_params.json (leído por _ic_n_para_subtype()/
+    # UMBRAL_DESACTIVAR en live_trade.py, el gate PRINCIPAL de ejecución y
+    # de desactivación automática de la tupla entera) mezclaría de golpe
+    # esas zonas todavía no confirmadas -- diluyendo o incluso tumbando el
+    # ic_bayes de una tupla que hoy solo opera, y solo debe seguir
+    # midiéndose, en su zona ya confirmada. gate_bucket_propio.filtrar_
+    # filas_zona_confirmada() excluye aquí (solo para ESTE cálculo
+    # agregado, results.csv en disco no se toca) las filas de una tupla
+    # live cuyo propio gate_bucket_propio_veredicto diga que esa fila cae
+    # fuera de la zona confirmada -- mismo criterio fail-closed que ya
+    # aplica live_trade.py para decidir si ejecuta. Si config_live.json no
+    # se puede leer este ciclo (pares_live_ok=False), se avisa fuerte en
+    # vez de fallar en silencio -- el propio live_trade.py ya queda
+    # fail-closed sin operar en ese mismo escenario (su propia lectura de
+    # config_live.json), así que el peor caso real aquí es un ciclo de
+    # postmortem con el agregado sin filtrar hasta que config vuelva a ser
+    # legible (próximo ciclo, ~20-25min), no dinero real desprotegido.
+    pares_live, pares_live_ok = _gbp.cargar_pares_live_fail_closed()
+    if not pares_live_ok:
+        print("[shadow_postmortem] ⚠️ config_live.json ilegible este ciclo -- "
+              "el filtro de zona confirmada para tuplas live NO se aplica "
+              "(agregado ic_bayes puede incluir zonas no confirmadas hasta "
+              "el próximo ciclo)")
+    # 05-Sep (barrido de salud, disco/swap crítico): _excluir_pre_twap(todos_
+    # con_causa) era una segunda pasada completa idéntica a resultados_twap_
+    # safe (misma función, mismos objetos -- _excluir_pre_twap devuelve
+    # referencias sin copiar y causa_perdida se mutó in-place en ambas listas
+    # por igual, verificado). Reusar resultados_twap_safe evita re-escanear
+    # ~400k filas y otra lista de tamaño ~histórico completo viva a la vez --
+    # mismo patrón que los fixes de 11-Ago/21-Ago/03-Sep en esta función,
+    # cero cambio de valores calculados.
+    params = calcular_params(
+        _gbp.filtrar_filas_zona_confirmada(resultados_twap_safe, pares_live))
+
+    # Aprendizaje causal completo: aprende POR QUÉ pierde Y POR QUÉ gana.
+    # 05-Sep: throttleado a PATRONES_CAUSALES_MIN_INTERVAL_S -- es la parte
+    # cara de verdad (percentiles×features×strat_keys + shuffle+BH-FDR sobre
+    # ~400k filas). Los ciclos saltados NO tocan filtros_causales/patrones_
+    # ganadores en absoluto (ver preservación explícita más abajo) -- una
+    # tupla live sigue protegida por el último veredicto real, nunca por
+    # uno en blanco.
+    corre_patrones_causales = _debe_correr_patrones_causales()
+    if corre_patrones_causales:
+        patrones = aprender_patrones_causales(resultados_twap_safe, pred_index)
+        _marcar_patrones_causales_ejecutado()
+    else:
+        patrones = {}
+
+    n_filtros  = sum(len(v["filtros_causales"])  for v in patrones.values())
+    n_patrones = sum(len(v["patrones_ganadores"]) for v in patrones.values())
+
+    if not corre_patrones_causales:
+        print(f"\n  Aprendizaje causal: omitido este ciclo (throttle "
+              f"{PATRONES_CAUSALES_MIN_INTERVAL_S}s) -- filtros_causales/"
+              f"patrones_ganadores existentes se preservan tal cual")
+    elif patrones:
+        print(f"\n  Aprendizaje causal: {n_filtros} filtros (evitar) + {n_patrones} patrones (amplificar)")
+        for strat_key, p in patrones.items():
+            for f in p["filtros_causales"]:
+                print(f"    ✗ EVITAR  {strat_key}: |{f['feature']}|>{f['umbral']}"
+                      f"  IC={f['ic_malo']:+.3f} (n={f['n_malo']})"
+                      f"  vs bueno={f['ic_bueno']:+.3f}")
+            for g in p["patrones_ganadores"]:
+                print(f"    ✓ AMPLIF  {strat_key}: {g['condicion']} {g['feature']} {g['umbral']}"
+                      f"  IC={g['ic_patron']:+.3f} (n={g['n_patron']})"
+                      f"  kelly_boost=+{g['kelly_boost']:.2f}€")
+            # Inyectar en params de esa estrategia
+            if strat_key in params["estrategias"]:
+                params["estrategias"][strat_key]["filtros_causales"]   = p["filtros_causales"]
+                params["estrategias"][strat_key]["patrones_ganadores"] = p["patrones_ganadores"]
+            else:
+                params["estrategias"][strat_key] = p
+    else:
+        print(f"\n  Sin patrones causales nuevos (datos insuficientes o sin señal clara)")
+
+    # Preservar desactivaciones manuales y sección meta (ambas sobreviven al ciclo de reescritura)
+    old = {}
+    if PARAMS_PATH.exists():
+        try:
+            old_data = json.load(open(PARAMS_PATH, encoding="utf-8"))
+            old = old_data.get("estrategias", {})
+            for k, v in old.items():
+                # 11-Ago (/code-review, hallazgo real): _excluir_pre_twap
+                # puede dejar una clave sin NINGUNA fila (toda su evidencia
+                # era pre-TWAP) -- antes esa clave desaparecía entera de
+                # params["estrategias"], y como live_trade.py/shadow_
+                # predict.py tratan una clave ausente como "sin opinión"
+                # (caen a una clave de nivel superior que sí está activa),
+                # una desactivación manual quedaba silenciosamente
+                # revertida -- mismo fallo fail-open ya cazado esta semana
+                # (project_bug_critico_fallopen_gatebucketpropio_10ago).
+                # Fix: si la clave no sobrevivió al ciclo nuevo, se
+                # preserva el estado anterior completo (no solo el flag
+                # activa) en vez de perderla.
+                if k not in params["estrategias"]:
+                    params["estrategias"][k] = v
+                    continue
+                # 05-Sep: si este ciclo se saltó aprender_patrones_causales
+                # (throttle), params["estrategias"][k] es una entry NUEVA de
+                # calcular_params() sin filtros_causales/patrones_ganadores
+                # -- sin este preservado, cada ciclo saltado dejaría a TODAS
+                # las tuplas (incl. live) sin esa protección durante hasta
+                # PATRONES_CAUSALES_MIN_INTERVAL_S, no solo la que de verdad
+                # cambió. Copia el último veredicto real tal cual.
+                if not corre_patrones_causales:
+                    if "filtros_causales" in v:
+                        params["estrategias"][k]["filtros_causales"] = v["filtros_causales"]
+                    if "patrones_ganadores" in v:
+                        params["estrategias"][k]["patrones_ganadores"] = v["patrones_ganadores"]
+                if not v.get("activa", True):
+                    motivo_old = v.get("motivo", "")
+                    if "MANUALMENTE" in motivo_old or ("DESACTIVADA 202" in motivo_old and "DESACTIVADA" in motivo_old):
+                        params["estrategias"][k]["activa"] = False
+                        if "DESACTIVADA" not in params["estrategias"][k]["motivo"]:
+                            params["estrategias"][k]["motivo"] += f" | {motivo_old.split('|')[-1].strip()}"
+            # Preservar meta (hypothesis_tracker y cambios manuales lo usan)
+            if "meta" in old_data and old_data["meta"]:
+                existing_meta = old_data["meta"]
+                new_meta = params.get("meta", {})
+                # Merge: hypothesis_tracker puede añadir a gbm_blacklist_hours_auto; preservar entradas manuales
+                if "gbm_blacklist_hours_auto" in existing_meta:
+                    merged_bl = set(existing_meta.get("gbm_blacklist_hours_auto", []))
+                    merged_bl.update(new_meta.get("gbm_blacklist_hours_auto", []))
+                    existing_meta["gbm_blacklist_hours_auto"] = sorted(merged_bl)
+                existing_meta.update({k: v for k, v in new_meta.items() if k != "gbm_blacklist_hours_auto"})
+                params["meta"] = existing_meta
+        except Exception as e:
+            # Fail loud (13-Jul, purificación): este bloque preserva
+            # desactivaciones MANUALES (activa=False que Javi puso a mano) y
+            # la sección meta (hora_boost_factor, gbm_blacklist_hours_auto,
+            # que shadow_predict.py lee cada ciclo) por encima de lo que este
+            # postmortem acaba de recalcular. Si falla en silencio, params
+            # se escribe igual unas líneas más abajo SIN esa preservación —
+            # una estrategia desactivada a mano podría reactivarse sola y el
+            # meta aprendido se perdería, sin ningún rastro de por qué.
+            print(f"  ⚠️ fallo preservando desactivaciones manuales/meta de "
+                  f"strategy_params.json: {type(e).__name__}: {e} — el "
+                  f"guardado de este ciclo NO las conserva")
+
+    # Aviso Telegram una sola vez cuando la recalibración Platt de una estrategia
+    # pasa de no-validada a validada (walk-forward + potencia estadística OK) —
+    # 2026-07-01: UPDOWN_GBM confirmado significativo pero bloqueado por potencia
+    # (n_oos=378/447 en ese momento), se esperaba activación en 1-2 días.
+    for strat_key, p in params["estrategias"].items():
+        if "#" in strat_key:
+            continue
+        nueva_calib = p.get("calibracion_prob")
+        vieja_calib = old.get(strat_key, {}).get("calibracion_prob")
+        if nueva_calib and not vieja_calib:
+            try:
+                from shadow_digest import enviar_telegram
+                enviar_telegram(
+                    f"📐 *Recalibración Platt activada: {strat_key}*\n"
+                    f"a={nueva_calib['a']:+.2f} b={nueva_calib['b']:.2f} "
+                    f"n_oos={nueva_calib['n_oos_validado']} "
+                    f"mejora_oos={nueva_calib['mejora_media_oos']:+.4f}\n"
+                    f"prob_yes_modelo se corrige automáticamente en las próximas decisiones."
+                )
+            except Exception as e:
+                print(f"  [aviso calibración] no se pudo notificar: {e}")
+
+    _escribir_json_atomico(PARAMS_PATH, json.dumps(params, indent=2, ensure_ascii=False))
+
+    print(f"\n  Ajustes automáticos por estrategia/subtipo:")
+    for s, p in sorted(params["estrategias"].items()):
+        estado = "✓" if p["activa"] else "✗ DESACT"
+        print(f"    [{estado}] {s:35s}  n={p['n']:>3}  edge≥{p['edge_minimo']:.2f}  {p['motivo']}")
+
+    # Performance completo
+    performance = generar_performance(todos_con_causa, pred_index)
+    guardar_performance(performance)
+    actualizar_ev_kelly_historico(performance)
+
+    print(f"\n  Ranking de estrategias por P&L:")
+    for p in performance:
+        pf_str = f"{p['profit_factor']:.2f}" if p["profit_factor"] < 99 else "∞"
+        print(f"    {p['strategy']:30s}  {p['n_total']:>3}ops  "
+              f"hit={p['hit_rate']*100:.0f}%  "
+              f"pnl={p['pnl_total']:+.2f}€  "
+              f"exp={p['expectancy']:+.4f}  "
+              f"IC={p['ic_bayes']:+.3f}  PF={pf_str}")
+
+    print(f"\n  Params guardados: {PARAMS_PATH}")
+    _escribir_state(params, resultados)  # Gap 2: state file
+
+    # Generador de hipótesis automáticas — aprende POR QUÉ y propone QUÉ hacer
+    # 11-Ago (/code-review): usa la misma vista TWAP-safe que calcular_params/
+    # aprender_patrones_causales -- hipotesis_auto.md (CLAUDE.md protocolo
+    # pt.6, revisado cada sesión) citaba hit-rate/pnl/IC de 5min/15min/240min
+    # con régimen mezclado si no se filtraba aquí también.
+    try:
+        _generar_hipotesis_auto(params, patrones, resultados_twap_safe)
+    except Exception as e:
+        print(f"  [WARN] hipotesis_auto.md: {e}")
+
+    # 08-Sep: SOLO ht.run() (el cómputo caro, 128s medidos con cProfile en
+    # producción) está throttleado a HIPOTESIS_TRACKER_MIN_INTERVAL_S -- el
+    # APPEND del markdown a hipotesis_auto.md corre en TODOS los ciclos,
+    # regardless. Motivo (/code-review, hallazgo real): _generar_hipotesis_
+    # auto() de arriba sobreescribe hipotesis_auto.md por completo SIN
+    # throttle, cada ~POSTMORTEM_MIN_INTERVAL_S (600s) -- si el append de
+    # esta sección también se saltara, sobreviviría solo ~10 de cada 60
+    # minutos (una ventana de 1 ciclo), no "hasta 1h obsoleta" como decía la
+    # primera versión de este comentario. generate_markdown_section(None)
+    # ya sabe recargar el último resultado persistido (hipotesis_pendientes.
+    # json) cuando no se le pasa nada, así que el append siempre tiene datos
+    # frescos de la última hora, sin re-ejecutar las 65 hipótesis.
+    try:
+        import hypothesis_tracker as ht
+        if _debe_correr_hipotesis_tracker():
+            # 11-Ago (/code-review, hallazgo real): usaba `resultados` sin
+            # filtrar -- hypothesis_tracker.py evalúa marcos afectados por TWAP
+            # (ej. _eval_sol_15min_live) y su IC/n mezclaba régimen, igual que
+            # calcular_params/aprender_patrones_causales antes del fix de hoy.
+            h_resultados = ht.run(resultados_twap_safe)
+            listas = [hid for hid, d in h_resultados.items()
+                      if d.get("status") in ("LISTA_IMPLEMENTAR", "LISTA_LIVE", "LISTA_EVALUAR")]
+            print(f"  → hypothesis_tracker: {len(h_resultados)} hipótesis | "
+                  f"{len(listas)} listas para evaluar: {listas}")
+            _marcar_hipotesis_tracker_ejecutado()
+        else:
+            h_resultados = None  # generate_markdown_section recarga el JSON persistido
+            print(f"  hypothesis_tracker: cómputo omitido este ciclo (throttle "
+                  f"{HIPOTESIS_TRACKER_MIN_INTERVAL_S}s) -- markdown reusa "
+                  f"hipotesis_pendientes.json de la última ejecución real")
+        h_md = ht.generate_markdown_section(h_resultados)
+        hip_path = DIR_SHADOW / "hipotesis_auto.md"
+        hip_path.write_text(hip_path.read_text(encoding="utf-8") + h_md, encoding="utf-8")
+    except Exception as e:
+        print(f"  [WARN] hypothesis_tracker: {e}")
+
+    print(f"[{ts}] === Fin postmortem ===")
+
+
+if __name__ == "__main__":
+    main()

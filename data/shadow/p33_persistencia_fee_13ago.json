@@ -1,0 +1,948 @@
+{
+ "generado_utc": "2026-08-13T05:26:27.673814+00:00",
+ "dias_analizados": [
+  "2026-08-09",
+  "2026-08-10",
+  "2026-08-11",
+  "2026-08-12",
+  "2026-08-13"
+ ],
+ "n_violaciones_por_dia": {
+  "2026-08-09": 26,
+  "2026-08-10": 32,
+  "2026-08-11": 28,
+  "2026-08-12": 26,
+  "2026-08-13": 27
+ },
+ "n_pares_persistentes_3mas_dias": 23,
+ "pares_persistentes": [
+  {
+   "event_title": "What price will Bitcoin hit in 2026?",
+   "direccion": "reach",
+   "umbral_bajo": 180000.0,
+   "umbral_alto": 190000.0,
+   "apariciones": [
+    {
+     "fecha": "2026-08-09",
+     "gap_pp": 0.2,
+     "liq_bajo": 52685.2,
+     "liq_alto": 78217.3,
+     "ask_bajo": 0.022,
+     "bid_alto": 0.023
+    },
+    {
+     "fecha": "2026-08-10",
+     "gap_pp": 0.2,
+     "liq_bajo": 50152.5,
+     "liq_alto": 72461.7,
+     "ask_bajo": 0.022,
+     "bid_alto": 0.023
+    },
+    {
+     "fecha": "2026-08-11",
+     "gap_pp": 0.2,
+     "liq_bajo": 53321.3,
+     "liq_alto": 74768.8,
+     "ask_bajo": 0.022,
+     "bid_alto": 0.023
+    },
+    {
+     "fecha": "2026-08-12",
+     "gap_pp": 0.2,
+     "liq_bajo": 44553.2,
+     "liq_alto": 68790.9,
+     "ask_bajo": 0.022,
+     "bid_alto": 0.023
+    },
+    {
+     "fecha": "2026-08-13",
+     "gap_pp": 0.15,
+     "liq_bajo": 37305.8,
+     "liq_alto": 45532.5,
+     "ask_bajo": 0.023,
+     "bid_alto": 0.023
+    }
+   ]
+  },
+  {
+   "event_title": "What price will Ethereum hit in 2026?",
+   "direccion": "reach",
+   "umbral_bajo": 5000.0,
+   "umbral_alto": 5500.0,
+   "apariciones": [
+    {
+     "fecha": "2026-08-09",
+     "gap_pp": 0.15,
+     "liq_bajo": 43073.8,
+     "liq_alto": 42759.7,
+     "ask_bajo": 0.042,
+     "bid_alto": 0.031
+    },
+    {
+     "fecha": "2026-08-10",
+     "gap_pp": 0.15,
+     "liq_bajo": 34845.2,
+     "liq_alto": 28650.5,
+     "ask_bajo": 0.044,
+     "bid_alto": 0.031
+    },
+    {
+     "fecha": "2026-08-11",
+     "gap_pp": 0.85,
+     "liq_bajo": 31352.6,
+     "liq_alto": 28644.3,
+     "ask_bajo": 0.032,
+     "bid_alto": 0.031
+    },
+    {
+     "fecha": "2026-08-12",
+     "gap_pp": 0.15,
+     "liq_bajo": 28697.9,
+     "liq_alto": 27293.0,
+     "ask_bajo": 0.034,
+     "bid_alto": 0.031
+    },
+    {
+     "fecha": "2026-08-13",
+     "gap_pp": 0.75,
+     "liq_bajo": 19916.5,
+     "liq_alto": 21817.7,
+     "ask_bajo": 0.033,
+     "bid_alto": 0.032
+    }
+   ]
+  },
+  {
+   "event_title": "What price will Solana hit in 2026?",
+   "direccion": "reach",
+   "umbral_bajo": 240.0,
+   "umbral_alto": 260.0,
+   "apariciones": [
+    {
+     "fecha": "2026-08-09",
+     "gap_pp": 1.1,
+     "liq_bajo": 14612.4,
+     "liq_alto": 7781.5,
+     "ask_bajo": 0.041,
+     "bid_alto": 0.027
+    },
+    {
+     "fecha": "2026-08-10",
+     "gap_pp": 1.6,
+     "liq_bajo": 12369.7,
+     "liq_alto": 6543.9,
+     "ask_bajo": 0.04,
+     "bid_alto": 0.033
+    },
+    {
+     "fecha": "2026-08-11",
+     "gap_pp": 1.5,
+     "liq_bajo": 16020.4,
+     "liq_alto": 6504.6,
+     "ask_bajo": 0.038,
+     "bid_alto": 0.029
+    },
+    {
+     "fecha": "2026-08-12",
+     "gap_pp": 1.7,
+     "liq_bajo": 14851.9,
+     "liq_alto": 6576.3,
+     "ask_bajo": 0.037,
+     "bid_alto": 0.03
+    },
+    {
+     "fecha": "2026-08-13",
+     "gap_pp": 1.7,
+     "liq_bajo": 11074.6,
+     "liq_alto": 5766.2,
+     "ask_bajo": 0.037,
+     "bid_alto": 0.03
+    }
+   ]
+  },
+  {
+   "event_title": "What price will XRP hit in 2026?",
+   "direccion": "reach",
+   "umbral_bajo": 3.0,
+   "umbral_alto": 3.2,
+   "apariciones": [
+    {
+     "fecha": "2026-08-09",
+     "gap_pp": 0.15,
+     "liq_bajo": 2249.6,
+     "liq_alto": 6447.2,
+     "ask_bajo": 0.059,
+     "bid_alto": 0.027
+    },
+    {
+     "fecha": "2026-08-10",
+     "gap_pp": 0.15,
+     "liq_bajo": 2098.8,
+     "liq_alto": 5744.1,
+     "ask_bajo": 0.059,
+     "bid_alto": 0.027
+    },
+    {
+     "fecha": "2026-08-11",
+     "gap_pp": 0.25,
+     "liq_bajo": 2423.1,
+     "liq_alto": 5210.0,
+     "ask_bajo": 0.056,
+     "bid_alto": 0.036
+    }
+   ]
+  },
+  {
+   "event_title": "What price will XRP hit in 2026?",
+   "direccion": "reach",
+   "umbral_bajo": 3.6,
+   "umbral_alto": 3.8,
+   "apariciones": [
+    {
+     "fecha": "2026-08-09",
+     "gap_pp": 0.65,
+     "liq_bajo": 11086.7,
+     "liq_alto": 2217.8,
+     "ask_bajo": 0.049,
+     "bid_alto": 0.025
+    },
+    {
+     "fecha": "2026-08-10",
+     "gap_pp": 0.7,
+     "liq_bajo": 8628.3,
+     "liq_alto": 2344.3,
+     "ask_bajo": 0.049,
+     "bid_alto": 0.027
+    },
+    {
+     "fecha": "2026-08-11",
+     "gap_pp": 0.25,
+     "liq_bajo": 8593.3,
+     "liq_alto": 2226.5,
+     "ask_bajo": 0.049,
+     "bid_alto": 0.029
+    }
+   ]
+  },
+  {
+   "event_title": "What price will Dogecoin hit in 2026?",
+   "direccion": "reach",
+   "umbral_bajo": 0.24,
+   "umbral_alto": 0.28,
+   "apariciones": [
+    {
+     "fecha": "2026-08-09",
+     "gap_pp": 0.5,
+     "liq_bajo": 298.2,
+     "liq_alto": 166.4,
+     "ask_bajo": 0.11,
+     "bid_alto": 0.07
+    },
+    {
+     "fecha": "2026-08-11",
+     "gap_pp": 0.5,
+     "liq_bajo": 302.9,
+     "liq_alto": 167.4,
+     "ask_bajo": 0.11,
+     "bid_alto": 0.08
+    },
+    {
+     "fecha": "2026-08-12",
+     "gap_pp": 2.5,
+     "liq_bajo": 328.8,
+     "liq_alto": 193.8,
+     "ask_bajo": 0.07,
+     "bid_alto": 0.08
+    },
+    {
+     "fecha": "2026-08-13",
+     "gap_pp": 2.5,
+     "liq_bajo": 319.4,
+     "liq_alto": 186.6,
+     "ask_bajo": 0.07,
+     "bid_alto": 0.08
+    }
+   ]
+  },
+  {
+   "event_title": "What price will Dogecoin hit in 2026?",
+   "direccion": "reach",
+   "umbral_bajo": 0.36,
+   "umbral_alto": 0.4,
+   "apariciones": [
+    {
+     "fecha": "2026-08-09",
+     "gap_pp": 2.5,
+     "liq_bajo": 213.0,
+     "liq_alto": 148.8,
+     "ask_bajo": 0.08,
+     "bid_alto": 0.06
+    },
+    {
+     "fecha": "2026-08-10",
+     "gap_pp": 2.5,
+     "liq_bajo": 213.1,
+     "liq_alto": 146.6,
+     "ask_bajo": 0.08,
+     "bid_alto": 0.06
+    },
+    {
+     "fecha": "2026-08-11",
+     "gap_pp": 1.5,
+     "liq_bajo": 212.7,
+     "liq_alto": 144.9,
+     "ask_bajo": 0.08,
+     "bid_alto": 0.05
+    },
+    {
+     "fecha": "2026-08-13",
+     "gap_pp": 3.5,
+     "liq_bajo": 219.5,
+     "liq_alto": 123.1,
+     "ask_bajo": 0.06,
+     "bid_alto": 0.06
+    }
+   ]
+  },
+  {
+   "event_title": "What price will Dogecoin hit in 2026?",
+   "direccion": "reach",
+   "umbral_bajo": 0.44,
+   "umbral_alto": 0.48,
+   "apariciones": [
+    {
+     "fecha": "2026-08-09",
+     "gap_pp": 0.7,
+     "liq_bajo": 320.4,
+     "liq_alto": 6927.2,
+     "ask_bajo": 0.078,
+     "bid_alto": 0.03
+    },
+    {
+     "fecha": "2026-08-10",
+     "gap_pp": 0.7,
+     "liq_bajo": 218.2,
+     "liq_alto": 4967.6,
+     "ask_bajo": 0.08,
+     "bid_alto": 0.03
+    },
+    {
+     "fecha": "2026-08-11",
+     "gap_pp": 0.5,
+     "liq_bajo": 312.2,
+     "liq_alto": 4503.0,
+     "ask_bajo": 0.077,
+     "bid_alto": 0.04
+    }
+   ]
+  },
+  {
+   "event_title": "What price will BNB hit in 2026?",
+   "direccion": "reach",
+   "umbral_bajo": 1500.0,
+   "umbral_alto": 1600.0,
+   "apariciones": [
+    {
+     "fecha": "2026-08-09",
+     "gap_pp": 0.55,
+     "liq_bajo": 3337.7,
+     "liq_alto": 7269.8,
+     "ask_bajo": 0.046,
+     "bid_alto": 0.031
+    },
+    {
+     "fecha": "2026-08-11",
+     "gap_pp": 0.3,
+     "liq_bajo": 3323.8,
+     "liq_alto": 5938.0,
+     "ask_bajo": 0.052,
+     "bid_alto": 0.032
+    },
+    {
+     "fecha": "2026-08-12",
+     "gap_pp": 0.5,
+     "liq_bajo": 3349.9,
+     "liq_alto": 6006.7,
+     "ask_bajo": 0.042,
+     "bid_alto": 0.031
+    },
+    {
+     "fecha": "2026-08-13",
+     "gap_pp": 0.45,
+     "liq_bajo": 3285.8,
+     "liq_alto": 3515.2,
+     "ask_bajo": 0.041,
+     "bid_alto": 0.031
+    }
+   ]
+  },
+  {
+   "event_title": "What price will Ethena hit in 2026?",
+   "direccion": "reach",
+   "umbral_bajo": 0.4,
+   "umbral_alto": 0.44,
+   "apariciones": [
+    {
+     "fecha": "2026-08-09",
+     "gap_pp": 0.5,
+     "liq_bajo": 821.8,
+     "liq_alto": 404.6,
+     "ask_bajo": 0.08,
+     "bid_alto": 0.04
+    },
+    {
+     "fecha": "2026-08-10",
+     "gap_pp": 0.5,
+     "liq_bajo": 819.7,
+     "liq_alto": 402.5,
+     "ask_bajo": 0.08,
+     "bid_alto": 0.04
+    },
+    {
+     "fecha": "2026-08-13",
+     "gap_pp": 1.5,
+     "liq_bajo": 818.7,
+     "liq_alto": 402.6,
+     "ask_bajo": 0.08,
+     "bid_alto": 0.06
+    }
+   ]
+  },
+  {
+   "event_title": "What price will Ethena hit in 2026?",
+   "direccion": "reach",
+   "umbral_bajo": 0.52,
+   "umbral_alto": 0.6,
+   "apariciones": [
+    {
+     "fecha": "2026-08-09",
+     "gap_pp": 0.7,
+     "liq_bajo": 637.5,
+     "liq_alto": 450.9,
+     "ask_bajo": 0.031,
+     "bid_alto": 0.021
+    },
+    {
+     "fecha": "2026-08-10",
+     "gap_pp": 1.7,
+     "liq_bajo": 590.1,
+     "liq_alto": 452.7,
+     "ask_bajo": 0.031,
+     "bid_alto": 0.028
+    },
+    {
+     "fecha": "2026-08-11",
+     "gap_pp": 1.5,
+     "liq_bajo": 593.3,
+     "liq_alto": 451.8,
+     "ask_bajo": 0.031,
+     "bid_alto": 0.028
+    },
+    {
+     "fecha": "2026-08-12",
+     "gap_pp": 1.25,
+     "liq_bajo": 642.9,
+     "liq_alto": 452.4,
+     "ask_bajo": 0.031,
+     "bid_alto": 0.022
+    },
+    {
+     "fecha": "2026-08-13",
+     "gap_pp": 1.0,
+     "liq_bajo": 644.6,
+     "liq_alto": 448.6,
+     "ask_bajo": 0.031,
+     "bid_alto": 0.021
+    }
+   ]
+  },
+  {
+   "event_title": "What price will Ethena hit in 2026?",
+   "direccion": "reach",
+   "umbral_bajo": 0.6,
+   "umbral_alto": 0.7,
+   "apariciones": [
+    {
+     "fecha": "2026-08-09",
+     "gap_pp": 0.45,
+     "liq_bajo": 450.9,
+     "liq_alto": 347.7,
+     "ask_bajo": 0.044,
+     "bid_alto": 0.028
+    },
+    {
+     "fecha": "2026-08-10",
+     "gap_pp": 0.1,
+     "liq_bajo": 452.7,
+     "liq_alto": 348.0,
+     "ask_bajo": 0.044,
+     "bid_alto": 0.028
+    },
+    {
+     "fecha": "2026-08-11",
+     "gap_pp": 0.1,
+     "liq_bajo": 451.8,
+     "liq_alto": 348.0,
+     "ask_bajo": 0.044,
+     "bid_alto": 0.028
+    },
+    {
+     "fecha": "2026-08-12",
+     "gap_pp": 0.55,
+     "liq_bajo": 452.4,
+     "liq_alto": 349.1,
+     "ask_bajo": 0.044,
+     "bid_alto": 0.031
+    },
+    {
+     "fecha": "2026-08-13",
+     "gap_pp": 0.65,
+     "liq_bajo": 448.6,
+     "liq_alto": 347.6,
+     "ask_bajo": 0.044,
+     "bid_alto": 0.032
+    }
+   ]
+  },
+  {
+   "event_title": "What price will Zcash hit in 2026?",
+   "direccion": "reach",
+   "umbral_bajo": 800.0,
+   "umbral_alto": 900.0,
+   "apariciones": [
+    {
+     "fecha": "2026-08-09",
+     "gap_pp": 6.0,
+     "liq_bajo": 4992.3,
+     "liq_alto": 788.9,
+     "ask_bajo": 0.22,
+     "bid_alto": 0.19
+    },
+    {
+     "fecha": "2026-08-10",
+     "gap_pp": 4.0,
+     "liq_bajo": 3531.6,
+     "liq_alto": 737.2,
+     "ask_bajo": 0.22,
+     "bid_alto": 0.17
+    },
+    {
+     "fecha": "2026-08-11",
+     "gap_pp": 5.5,
+     "liq_bajo": 3086.1,
+     "liq_alto": 681.8,
+     "ask_bajo": 0.22,
+     "bid_alto": 0.17
+    }
+   ]
+  },
+  {
+   "event_title": "What price will Pump.fun hit in 2026?",
+   "direccion": "reach",
+   "umbral_bajo": 0.0038,
+   "umbral_alto": 0.0042,
+   "apariciones": [
+    {
+     "fecha": "2026-08-09",
+     "gap_pp": 2.0,
+     "liq_bajo": 5571.6,
+     "liq_alto": 785.5,
+     "ask_bajo": 0.36,
+     "bid_alto": 0.28
+    },
+    {
+     "fecha": "2026-08-10",
+     "gap_pp": 0.5,
+     "liq_bajo": 4465.2,
+     "liq_alto": 544.0,
+     "ask_bajo": 0.37,
+     "bid_alto": 0.28
+    },
+    {
+     "fecha": "2026-08-11",
+     "gap_pp": 2.5,
+     "liq_bajo": 4378.9,
+     "liq_alto": 626.7,
+     "ask_bajo": 0.39,
+     "bid_alto": 0.3
+    },
+    {
+     "fecha": "2026-08-12",
+     "gap_pp": 6.5,
+     "liq_bajo": 2472.1,
+     "liq_alto": 1735.2,
+     "ask_bajo": 0.4,
+     "bid_alto": 0.44
+    }
+   ]
+  },
+  {
+   "event_title": "What price will Aster hit in 2026?",
+   "direccion": "reach",
+   "umbral_bajo": 2.0,
+   "umbral_alto": 2.2,
+   "apariciones": [
+    {
+     "fecha": "2026-08-09",
+     "gap_pp": 1.0,
+     "liq_bajo": 643.0,
+     "liq_alto": 580.6,
+     "ask_bajo": 0.07,
+     "bid_alto": 0.04
+    },
+    {
+     "fecha": "2026-08-10",
+     "gap_pp": 2.0,
+     "liq_bajo": 933.2,
+     "liq_alto": 576.1,
+     "ask_bajo": 0.06,
+     "bid_alto": 0.04
+    },
+    {
+     "fecha": "2026-08-11",
+     "gap_pp": 3.0,
+     "liq_bajo": 923.3,
+     "liq_alto": 523.6,
+     "ask_bajo": 0.06,
+     "bid_alto": 0.07
+    },
+    {
+     "fecha": "2026-08-12",
+     "gap_pp": 2.5,
+     "liq_bajo": 921.3,
+     "liq_alto": 445.2,
+     "ask_bajo": 0.06,
+     "bid_alto": 0.06
+    },
+    {
+     "fecha": "2026-08-13",
+     "gap_pp": 1.5,
+     "liq_bajo": 920.3,
+     "liq_alto": 498.5,
+     "ask_bajo": 0.06,
+     "bid_alto": 0.04
+    }
+   ]
+  },
+  {
+   "event_title": "What price will Plasma hit in 2026?",
+   "direccion": "reach",
+   "umbral_bajo": 2.0,
+   "umbral_alto": 2.2,
+   "apariciones": [
+    {
+     "fecha": "2026-08-09",
+     "gap_pp": 0.25,
+     "liq_bajo": 301.6,
+     "liq_alto": 264.7,
+     "ask_bajo": 0.059,
+     "bid_alto": 0.019
+    },
+    {
+     "fecha": "2026-08-10",
+     "gap_pp": 0.1,
+     "liq_bajo": 298.8,
+     "liq_alto": 160.7,
+     "ask_bajo": 0.059,
+     "bid_alto": 0.015
+    },
+    {
+     "fecha": "2026-08-11",
+     "gap_pp": 0.55,
+     "liq_bajo": 302.0,
+     "liq_alto": 136.7,
+     "ask_bajo": 0.059,
+     "bid_alto": 0.027
+    },
+    {
+     "fecha": "2026-08-12",
+     "gap_pp": 1.75,
+     "liq_bajo": 303.5,
+     "liq_alto": 135.8,
+     "ask_bajo": 0.059,
+     "bid_alto": 0.055
+    }
+   ]
+  },
+  {
+   "event_title": "What price will Uniswap hit in 2026?",
+   "direccion": "reach",
+   "umbral_bajo": 12.5,
+   "umbral_alto": 14.0,
+   "apariciones": [
+    {
+     "fecha": "2026-08-09",
+     "gap_pp": 0.3,
+     "liq_bajo": 2591.2,
+     "liq_alto": 2720.2,
+     "ask_bajo": 0.05,
+     "bid_alto": 0.028
+    },
+    {
+     "fecha": "2026-08-10",
+     "gap_pp": 0.15,
+     "liq_bajo": 2567.4,
+     "liq_alto": 2697.4,
+     "ask_bajo": 0.05,
+     "bid_alto": 0.028
+    },
+    {
+     "fecha": "2026-08-11",
+     "gap_pp": 0.75,
+     "liq_bajo": 2574.8,
+     "liq_alto": 2727.0,
+     "ask_bajo": 0.05,
+     "bid_alto": 0.038
+    },
+    {
+     "fecha": "2026-08-12",
+     "gap_pp": 0.1,
+     "liq_bajo": 2574.8,
+     "liq_alto": 2701.4,
+     "ask_bajo": 0.05,
+     "bid_alto": 0.03
+    },
+    {
+     "fecha": "2026-08-13",
+     "gap_pp": 0.1,
+     "liq_bajo": 2586.1,
+     "liq_alto": 2710.9,
+     "ask_bajo": 0.05,
+     "bid_alto": 0.028
+    }
+   ]
+  },
+  {
+   "event_title": "What price will Uniswap hit in 2026?",
+   "direccion": "reach",
+   "umbral_bajo": 14.0,
+   "umbral_alto": 15.5,
+   "apariciones": [
+    {
+     "fecha": "2026-08-09",
+     "gap_pp": 1.2,
+     "liq_bajo": 2720.2,
+     "liq_alto": 2724.1,
+     "ask_bajo": 0.058,
+     "bid_alto": 0.04
+    },
+    {
+     "fecha": "2026-08-10",
+     "gap_pp": 0.35,
+     "liq_bajo": 2697.4,
+     "liq_alto": 2745.3,
+     "ask_bajo": 0.055,
+     "bid_alto": 0.03
+    },
+    {
+     "fecha": "2026-08-11",
+     "gap_pp": 0.25,
+     "liq_bajo": 2727.0,
+     "liq_alto": 2746.3,
+     "ask_bajo": 0.057,
+     "bid_alto": 0.04
+    },
+    {
+     "fecha": "2026-08-12",
+     "gap_pp": 0.9,
+     "liq_bajo": 2701.4,
+     "liq_alto": 2720.8,
+     "ask_bajo": 0.052,
+     "bid_alto": 0.04
+    },
+    {
+     "fecha": "2026-08-13",
+     "gap_pp": 0.4,
+     "liq_bajo": 2710.9,
+     "liq_alto": 2751.6,
+     "ask_bajo": 0.054,
+     "bid_alto": 0.04
+    }
+   ]
+  },
+  {
+   "event_title": "What price will Pump.fun hit in 2026?",
+   "direccion": "reach",
+   "umbral_bajo": 0.008,
+   "umbral_alto": 0.009,
+   "apariciones": [
+    {
+     "fecha": "2026-08-10",
+     "gap_pp": 3.5,
+     "liq_bajo": 889.3,
+     "liq_alto": 5582.5,
+     "ask_bajo": 0.1,
+     "bid_alto": 0.08
+    },
+    {
+     "fecha": "2026-08-11",
+     "gap_pp": 2.0,
+     "liq_bajo": 906.3,
+     "liq_alto": 5692.0,
+     "ask_bajo": 0.1,
+     "bid_alto": 0.09
+    },
+    {
+     "fecha": "2026-08-12",
+     "gap_pp": 1.5,
+     "liq_bajo": 907.6,
+     "liq_alto": 5639.3,
+     "ask_bajo": 0.1,
+     "bid_alto": 0.08
+    },
+    {
+     "fecha": "2026-08-13",
+     "gap_pp": 4.0,
+     "liq_bajo": 888.5,
+     "liq_alto": 2738.8,
+     "ask_bajo": 0.1,
+     "bid_alto": 0.1
+    }
+   ]
+  },
+  {
+   "event_title": "What price will Plasma hit in 2026?",
+   "direccion": "reach",
+   "umbral_bajo": 0.24,
+   "umbral_alto": 0.3,
+   "apariciones": [
+    {
+     "fecha": "2026-08-10",
+     "gap_pp": 2.5,
+     "liq_bajo": 168.0,
+     "liq_alto": 51.8,
+     "ask_bajo": 0.49,
+     "bid_alto": 0.08
+    },
+    {
+     "fecha": "2026-08-11",
+     "gap_pp": 4.5,
+     "liq_bajo": 182.2,
+     "liq_alto": 78.1,
+     "ask_bajo": 0.6,
+     "bid_alto": 0.08
+    },
+    {
+     "fecha": "2026-08-12",
+     "gap_pp": 23.0,
+     "liq_bajo": 285.8,
+     "liq_alto": 58.2,
+     "ask_bajo": 0.43,
+     "bid_alto": 0.08
+    },
+    {
+     "fecha": "2026-08-13",
+     "gap_pp": 15.5,
+     "liq_bajo": 142.9,
+     "liq_alto": 45.3,
+     "ask_bajo": 0.61,
+     "bid_alto": 0.07
+    }
+   ]
+  },
+  {
+   "event_title": "What price will Plasma hit in 2026?",
+   "direccion": "reach",
+   "umbral_bajo": 0.6,
+   "umbral_alto": 1.2,
+   "apariciones": [
+    {
+     "fecha": "2026-08-10",
+     "gap_pp": 3.5,
+     "liq_bajo": 386.4,
+     "liq_alto": 159.2,
+     "ask_bajo": 0.11,
+     "bid_alto": 0.05
+    },
+    {
+     "fecha": "2026-08-11",
+     "gap_pp": 0.5,
+     "liq_bajo": 380.0,
+     "liq_alto": 157.5,
+     "ask_bajo": 0.12,
+     "bid_alto": 0.04
+    },
+    {
+     "fecha": "2026-08-12",
+     "gap_pp": 0.5,
+     "liq_bajo": 388.1,
+     "liq_alto": 264.6,
+     "ask_bajo": 0.1,
+     "bid_alto": 0.08
+    },
+    {
+     "fecha": "2026-08-13",
+     "gap_pp": 4.5,
+     "liq_bajo": 387.1,
+     "liq_alto": 164.4,
+     "ask_bajo": 0.1,
+     "bid_alto": 0.07
+    }
+   ]
+  },
+  {
+   "event_title": "What price will XRP hit in 2026?",
+   "direccion": "reach",
+   "umbral_bajo": 2.6,
+   "umbral_alto": 2.8,
+   "apariciones": [
+    {
+     "fecha": "2026-08-11",
+     "gap_pp": 1.05,
+     "liq_bajo": 7924.0,
+     "liq_alto": 610.0,
+     "ask_bajo": 0.05,
+     "bid_alto": 0.031
+    },
+    {
+     "fecha": "2026-08-12",
+     "gap_pp": 1.05,
+     "liq_bajo": 7904.0,
+     "liq_alto": 571.1,
+     "ask_bajo": 0.05,
+     "bid_alto": 0.031
+    },
+    {
+     "fecha": "2026-08-13",
+     "gap_pp": 1.0,
+     "liq_bajo": 4218.2,
+     "liq_alto": 601.7,
+     "ask_bajo": 0.05,
+     "bid_alto": 0.031
+    }
+   ]
+  },
+  {
+   "event_title": "What price will Solana hit in August?",
+   "direccion": "dip to",
+   "umbral_bajo": 30.0,
+   "umbral_alto": 40.0,
+   "apariciones": [
+    {
+     "fecha": "2026-08-11",
+     "gap_pp": 0.2,
+     "liq_bajo": 12850.7,
+     "liq_alto": 15042.4,
+     "ask_bajo": 0.019,
+     "bid_alto": 0.006
+    },
+    {
+     "fecha": "2026-08-12",
+     "gap_pp": 0.25,
+     "liq_bajo": 16363.2,
+     "liq_alto": 18418.2,
+     "ask_bajo": 0.019,
+     "bid_alto": 0.006
+    },
+    {
+     "fecha": "2026-08-13",
+     "gap_pp": 0.25,
+     "liq_bajo": 7398.0,
+     "liq_alto": 8011.2,
+     "ask_bajo": 0.019,
+     "bid_alto": 0.006
+    }
+   ]
+  }
+ ]
+}

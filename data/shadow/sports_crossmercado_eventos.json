@@ -1,0 +1,67 @@
+{
+  "generado_utc": "2026-09-01T18:31:17+00:00",
+  "n_eventos_totales": 5978,
+  "n_eventos_usados_leadlag": 927,
+  "leadlag_por_lag_bins5min": {
+    "-3": {
+      "n": 15174,
+      "n_eventos": 917,
+      "r": 0.007,
+      "p_shuffle": 0.3736,
+      "veredicto": "sin_concluir"
+    },
+    "-2": {
+      "n": 15632,
+      "n_eventos": 916,
+      "r": -0.0201,
+      "p_shuffle": 0.011,
+      "veredicto": "confirmado"
+    },
+    "-1": {
+      "n": 16212,
+      "n_eventos": 917,
+      "r": 0.0264,
+      "p_shuffle": 0.002,
+      "veredicto": "confirmado"
+    },
+    "0": {
+      "n": 16677,
+      "n_eventos": 917,
+      "r": 0.015,
+      "p_shuffle": 0.0539,
+      "veredicto": "sin_concluir"
+    },
+    "1": {
+      "n": 16246,
+      "n_eventos": 918,
+      "r": -0.0011,
+      "p_shuffle": 0.9031,
+      "veredicto": "sin_concluir"
+    },
+    "2": {
+      "n": 15662,
+      "n_eventos": 917,
+      "r": 0.0076,
+      "p_shuffle": 0.3327,
+      "veredicto": "sin_concluir"
+    },
+    "3": {
+      "n": 15262,
+      "n_eventos": 912,
+      "r": 0.0029,
+      "p_shuffle": 0.7143,
+      "veredicto": "sin_concluir"
+    }
+  },
+  "arb_suma_complementaria": {
+    "n": 32727,
+    "pct_snapshots_explotables_tras_fee": 43.77,
+    "media_desviacion_suma_vs_1": 0.0637,
+    "ci90_bootstrap": [
+      0.0597,
+      0.0679
+    ],
+    "veredicto": "confirmado_en_precio_no_en_libro",
+    "nota": "precio de último trade, NO profundidad/ask real de libro -- mismo patrón refutado 2x en cripto (Box Builder, Spread-Harvest Maker) al comprobar libro real. No accionable sin ese paso."
+  }
+}

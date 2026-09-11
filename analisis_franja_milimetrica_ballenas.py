@@ -1,0 +1,327 @@
+#!/usr/bin/env python3
+"""Franja milimétrica ballenas — cruce a resolución fina (no la banda única
+[0.70,0.90) que usa el resto del sistema) de TRES fuentes por (activo,marco),
+para TODOS los marcos y monedas que operamos (5min/15min/60min × BTC/ETH/
+SOL/XRP/DOGE, no solo 15min):
+
+  1. BALLENAS  — ballenas_timing_history.csv: TODAS las compras de TODAS las
+     wallets en TODOS los mercados resueltos de nuestro nicho (no solo las
+     "smart"), vía /trades real de Polymarket. Histórico completo de
+     mercado, no filtrado por si nuestras estrategias dispararon o no ahí.
+  2. SHADOW    — results.csv: qué habría pasado con cada predicción nuestra,
+     para CUALQUIER estrategia BUY_YES con volumen (n agregado >=100) en ese
+     (activo,marco) -- descubierto dinámicamente, no una lista fija.
+  3. REAL      — trades.csv: lo que de verdad hemos operado con dinero desde
+     que estamos en live, agregado por (activo,marco,BUY_YES).
+
+Para cada bucket fino con n>=N_MIN_BUCKET_MADURO que pasa el gate riguroso
+completo (Wilson+shuffle+bootstrap, misma función que usa el resto del
+proyecto), se repite el gate en SPLIT-HALF cronológico (primera vs segunda
+mitad de fechas) -- un bucket que solo pasa en la muestra completa pero no
+en ambas mitades es candidato a sobreajuste/selección post-hoc (mirar todos
+los buckets y quedarse con el mejor), NO se reporta como "robusto".
+
+Objetivo (petición explícita Javi, 21-Jul, ampliada el mismo día a "todas
+las monedas y marcos que operamos, quizá nos estemos dejando franjas sin
+operar"): detectar tanto huecos de cobertura (ballenas con hit alto donde
+apenas operamos) como franjas ya cubiertas por nuestras propias señales
+donde el pnl/trade es mejor DENTRO de un bucket fino que en el agregado de
+la tupla -- pero exigiendo que sobreviva split-half antes de proponer tocar
+ningún filtro real.
+
+Solo lectura. No decide nada, no toca prob_yes ni ningún gate real. Pensado
+para correr cada inicio de sesión (protocolo CLAUDE.md punto 9) y ver cómo
+crece n en cada bucket día a día antes de decidir cortar nada.
+"""
+import csv
+import json
+import sys
+from collections import defaultdict, Counter
+from pathlib import Path
+
+from analisis_gate_riguroso import gate
+
+REPO = Path(__file__).resolve().parent
+sys.path.insert(0, str(REPO))
+from shadow_postmortem import es_pre_twap  # noqa: E402 -- 11-Ago, mismo hueco ya cerrado en
+# shadow_postmortem/gate_bucket_propio/kelly_precio_gate/analisis_gate_calibracion: esta
+# herramienta mezclaba régimen pre/post-TWAP (07-Ago) en las 3 fuentes (ballenas/shadow/
+# real) sin excluir nada -- confirmado con dinero real: hallazgo "GBM_LATE_15M#ETH/SOL
+# #15min#BUY_YES robusto en [0.45,0.55)" resultó ser 100% pre-TWAP (n post-TWAP=0/3),
+# el modelo casi no genera BUY_YES post-TWAP para esos activos. es_pre_twap() espera
+# marco en convención "15min" (no "15m") -- convertir donde haga falta antes de llamarla.
+BALLENAS_HIST = REPO / "data" / "shadow" / "ballenas_timing_history.csv"
+RESULTS = REPO / "data" / "shadow" / "results.csv"
+TRADES = REPO / "data" / "live" / "trades.csv"
+OUT = REPO / "data" / "shadow" / "franja_milimetrica_ballenas.json"
+
+STEP = 0.05
+ACTIVOS = ("BTC", "ETH", "SOL", "XRP", "DOGE", "BNB")  # BNB añadido 27-Jul --
+# ballenas_timing_history.csv ya lo cubre (18.3k filas, ballenas_observer.py
+# no distinguía monedas al capturar), pero esta herramienta lo dejaba fuera
+# del barrido -- punto ciego real, nunca se había cruzado BNB contra el
+# histórico fino de ballenas pese a tener datos de sobra.
+MARCOS = ("5min", "15min", "60min")           # nomenclatura results/trades
+MARCO_BALLENAS_MAP = {"5min": "5m", "15min": "15m", "60min": "60m"}
+MARCO_BALLENAS_MAP_INV = {v: k for k, v in MARCO_BALLENAS_MAP.items()}  # "5m"->"5min", para es_pre_twap
+N_MIN_AGREGADO_ESTRATEGIA = 100   # mínimo para que una (strategy,subtype) entre al barrido
+N_MIN_BUCKET_INFORMATIVO = 15
+N_MIN_BUCKET_MADURO = 40          # umbral de gate riguroso + split-half
+FAMILIAS_BALLENA_DEPENDIENTES_SIN_UMBRAL = {
+    # 29-Jul: TODAS las estrategias de shadow_predict.py cuya función usa
+    # ballenas_timing_state.json/_banda_y_timing_ballenas/_gate_volumen_
+    # ballenas/_gate_banda_fina_ballenas/_banda_confirmada_ballenas/wallet_
+    # edge_score (verificado por grep de línea de código real, no de
+    # nombre) -- petición explícita Javi: "conéctalo a todas las
+    # estrategias que usan datos de ballenas... tanto en live, como
+    # shadow, como en el cementerio". Antes solo estaba la recién
+    # promocionada FAVORITO_CONFIRMADO_15MIN_ALTACONVICCION; el resto
+    # llevaba fuera del barrido sin que nadie lo hubiera auditado.
+    # Bypasea SOLO el filtro agregado N_MIN_AGREGADO_ESTRATEGIA (pensado
+    # para reducir ruido de reporte, no para excluir familias ballena-
+    # dependientes de acumular desde el principio) -- el gate por bucket
+    # (n>=N_MIN_BUCKET_MADURO=40) se exige igual para todas.
+    "GBM_LATE_15M",                              # LIVE
+    "FAVORITO_CONFIRMADO",                        # LIVE (varios pares)
+    "FAVORITO_CONFIRMADO_15MIN_ALTACONVICCION",   # LIVE (BTC/ETH, 29-Jul)
+    "BALLENAS_TARDIAS",                           # LIVE (BTC15m ejecutor, ETH5m ejecutor)
+    "UPDOWN_GBM_15M_TARDIO",                      # retirada de live 28-Jul, sigue en candidatos_evaluacion_live
+    "BALLENAS_CONFIRMADAS_15M",                   # shadow, feed de ballenas_executor_15min.py DRY_RUN
+    "GBM_LATE_5M",                                # shadow
+    "GBM_LATE_15M_PYCONFIRMADO",                  # shadow
+    "GBM_LATE_60M_PYCONFIRMADO",                  # shadow, n aún muy bajo
+    "LATE_WINDOW_5MIN",                           # shadow (wallet_edge_score + ballenas_timing_state)
+    "LEADLAG_BTC_XRP_15M",                        # shadow/tracking, expectativa baja
+    "FAVORITO_CONFIRMADO_60MIN_ALTACONVICCION",   # shadow, no promocionada
+    "FAVORITO_CONFIRMADO_SOL_ALTACONVICCION",     # 🪦 cementerio (payout asimétrico ya confirmado), se deja acumular por si un ángulo nuevo la revive
+}
+
+
+def bucket(p):
+    # 06-Ago fix: +1e-9 evita mal-clasificar precios EXACTOS en un múltiplo
+    # de STEP al bucket inferior (coma flotante, "//" tiene el mismo
+    # problema que math.floor(p/STEP)) -- ver idea_bug_bucketing_float_
+    # precision_micro_buckets_06ago (encontrado por /code-review, hallado
+    # tras el fix hermano en gate_bucket_propio.py/kelly_precio_gate.py).
+    return round(((p + 1e-9) // STEP) * STEP, 3)
+
+
+def cargar_ballenas():
+    """(activo,marco_ballenas) -> bucket -> [aciertos, n, Counter(condition_id)].
+    El Counter de condition_id (22-Jul, bug real cazado) permite detectar
+    buckets donde el "n" está inflado por UN SOLO mercado con muchas
+    wallets apostando el mismo resultado -- no son n observaciones
+    independientes, es 1 evento amplificado. Hallazgo concreto: BTC#5min
+    [0.55,0.60) mostraba hit=90.5% (n=94) pero 76/94 filas (81%) venían de
+    un único condition_id -- 8 mercados reales, no 94. Mismo patrón que
+    atrapó analisis_wallet_quirurgico_precio_timing_22jul.py (fills≠
+    posiciones independientes), aquí a nivel de mercado en vez de wallet."""
+    out = defaultdict(lambda: defaultdict(lambda: [0, 0, Counter()]))
+    with open(BALLENAS_HIST, encoding="utf-8") as f:
+        for row in csv.DictReader(f):
+            activo, marco = row.get("activo"), row.get("marco")
+            if activo not in ACTIVOS or marco not in MARCO_BALLENAS_MAP.values():
+                continue
+            if row.get("compro_yes") not in ("0", "1"):
+                continue
+            if es_pre_twap(MARCO_BALLENAS_MAP_INV.get(marco, marco), row.get("ts_trade", "")):
+                continue
+            try:
+                p = float(row["precio"])
+                acierto = int(row["acierto"])
+            except (TypeError, ValueError):
+                continue
+            d = out[(activo, marco)][bucket(p)]
+            d[0] += acierto
+            d[1] += 1
+            d[2][row.get("condition_id", "")] += 1
+    return out
+
+
+def cargar_shadow_filas():
+    """(strategy,subtype,decision) -> lista de filas (dict results.csv),
+    solo BUY_YES, solo subtypes que acaben en alguno de MARCOS."""
+    out = defaultdict(list)
+    with open(RESULTS, encoding="utf-8") as f:
+        for row in csv.DictReader(f):
+            if row["decision"] != "BUY_YES":
+                continue
+            sub = row["subtype"] or ""
+            if "#" not in sub:
+                continue
+            activo, marco = sub.split("#", 1)
+            if activo not in ACTIVOS or marco not in MARCOS:
+                continue
+            if row.get("acierto") not in ("0", "1"):
+                continue
+            if es_pre_twap(marco, row.get("prediction_timestamp", "")):
+                continue
+            try:
+                float(row["precio_yes_mercado"])
+            except (TypeError, ValueError):
+                continue
+            out[(row["strategy"], sub, "BUY_YES")].append(row)
+    return out
+
+
+def cargar_real():
+    """(activo,marco) -> bucket -> [n, aciertos, pnl_total] -- dinero real."""
+    out = defaultdict(lambda: defaultdict(lambda: [0, 0, 0.0]))
+    if not TRADES.exists():
+        return out
+    with open(TRADES, encoding="utf-8") as f:
+        for row in csv.DictReader(f):
+            if row.get("status") != "CLOSED" or row.get("direction") != "BUY_YES":
+                continue
+            sub = row.get("subtype") or ""
+            if "#" not in sub:
+                continue
+            activo, marco = sub.split("#", 1)
+            if activo not in ACTIVOS or marco not in MARCOS:
+                continue
+            if es_pre_twap(marco, row.get("timestamp_utc", "")):
+                continue
+            try:
+                p = float(row["entry_price"])
+                pnl = float(row["pnl_neto_eur"])
+            except (TypeError, ValueError):
+                continue
+            acierto = 1 if pnl > 0 else 0
+            d = out[(activo, marco)][bucket(p)]
+            d[0] += 1
+            d[1] += acierto
+            d[2] += pnl
+    return out
+
+
+def split_half(rows):
+    filas = sorted(rows, key=lambda r: r.get("prediction_timestamp", ""))
+    mid = len(filas) // 2
+    return filas[:mid], filas[mid:]
+
+
+def main():
+    ballenas = cargar_ballenas()
+    shadow_filas = cargar_shadow_filas()
+    real = cargar_real()
+
+    # (strategy,subtype,decision) -> bucket fino -> filas
+    shadow_buckets = defaultdict(lambda: defaultdict(list))
+    for clave, filas in shadow_filas.items():
+        for r in filas:
+            b = bucket(float(r["precio_yes_mercado"]))
+            shadow_buckets[clave][b].append(r)
+
+    resultado = {}
+    robustos, fragiles, huecos_totales = [], [], []
+
+    print(f"{'='*110}")
+    print(f"FRANJA MILIMÉTRICA — ballenas / shadow / real, step={STEP}, marcos={MARCOS}")
+    print(f"{'='*110}")
+
+    for marco in MARCOS:
+        marco_b = MARCO_BALLENAS_MAP[marco]
+        for activo in ACTIVOS:
+            estrategias = [k for k in shadow_buckets if k[1] == f"{activo}#{marco}"
+                           and (k[0] in FAMILIAS_BALLENA_DEPENDIENTES_SIN_UMBRAL
+                                or sum(len(v) for v in shadow_buckets[k].values()) >= N_MIN_AGREGADO_ESTRATEGIA)]
+            ballenas_ab = ballenas.get((activo, marco_b), {})
+            real_ab = real.get((activo, marco), {})
+            if not estrategias and not ballenas_ab:
+                continue
+
+            print(f"\n########## {activo}#{marco} ##########")
+
+            # huecos de cobertura: bucket con ballenas fuerte donde NINGUNA
+            # estrategia nuestra tiene n>=N_MIN_BUCKET_INFORMATIVO
+            todos_los_buckets = set(ballenas_ab.keys())
+            for k in estrategias:
+                todos_los_buckets |= set(shadow_buckets[k].keys())
+            for b in sorted(todos_los_buckets):
+                ab, nb, cids = ballenas_ab.get(b, [0, 0, Counter()])
+                if nb < 50:
+                    continue
+                hit_b = ab / nb * 100
+                if hit_b < 70:
+                    continue
+                # Filtro de concentración de mercado (22-Jul, bug real cazado:
+                # BTC#5min[0.55,0.60) mostraba hit=90.5% n=94 pero 76/94 filas
+                # (81%) venían de UN SOLO condition_id -- 8 mercados reales,
+                # no 94 observaciones independientes). Exigir diversidad
+                # mínima de mercados antes de reportar como hueco real.
+                n_mercados = len(cids)
+                top1_pct = (cids.most_common(1)[0][1] / nb * 100) if cids else 100.0
+                if n_mercados < 15 or top1_pct > 30:
+                    continue
+                n_shadow_total = sum(len(shadow_buckets[k].get(b, [])) for k in estrategias)
+                if n_shadow_total < N_MIN_BUCKET_INFORMATIVO:
+                    huecos_totales.append((activo, marco, b, hit_b, nb, n_shadow_total, n_mercados, top1_pct))
+
+            if not estrategias:
+                print("  (sin estrategia shadow con volumen suficiente aquí)")
+                continue
+
+            for k in sorted(estrategias):
+                strat, sub, dec = k
+                bd = shadow_buckets[k]
+                n_total = sum(len(v) for v in bd.values())
+                buenos = []
+                for b, filas in sorted(bd.items()):
+                    n = len(filas)
+                    if n < N_MIN_BUCKET_MADURO:
+                        continue
+                    v = gate(filas)
+                    if v is None or v["veredicto"] != "GATE OK":
+                        continue
+                    h1, h2 = split_half(filas)
+                    v1 = gate(h1) if len(h1) >= 15 else None
+                    v2 = gate(h2) if len(h2) >= 15 else None
+                    pnl1 = v1["pnl_media"] if v1 else None
+                    pnl2 = v2["pnl_media"] if v2 else None
+                    robusto = (pnl1 is not None and pnl2 is not None
+                               and pnl1 > 0 and pnl2 > 0)
+                    ab, nb, _cids = ballenas_ab.get(b, [0, 0, Counter()])
+                    fila = {
+                        "bucket": f"[{b:.2f},{b+STEP:.2f})", "n": n,
+                        "hit": round(v["hit"] * 100, 1), "pnl_media": round(v["pnl_media"], 3),
+                        "pnl_ci90": [round(v["pnl_lo"], 3), round(v["pnl_hi"], 3)],
+                        "split_half_pnl": [round(pnl1, 3) if pnl1 is not None else None,
+                                           round(pnl2, 3) if pnl2 is not None else None],
+                        "robusto_split_half": robusto,
+                        "ballenas_hit": round(ab / nb * 100, 1) if nb else None, "ballenas_n": nb,
+                    }
+                    buenos.append(fila)
+                    (robustos if robusto else fragiles).append((strat, sub, dec, fila))
+                if buenos:
+                    print(f"  {strat}#{sub}#{dec} (n_total={n_total}):")
+                    for fila in buenos:
+                        marca = "✅ ROBUSTO" if fila["robusto_split_half"] else "⚠️  frágil (no sobrevive split-half)"
+                        sh = fila["split_half_pnl"]
+                        print(f"    {fila['bucket']} n={fila['n']:4d} hit={fila['hit']:5.1f}% "
+                              f"pnl/trade={fila['pnl_media']:+.3f} CI90%={fila['pnl_ci90']} "
+                              f"split_half=[{sh[0]},{sh[1]}]  ballenas_hit={fila['ballenas_hit']} (n={fila['ballenas_n']})  {marca}")
+                    resultado[f"{strat}#{sub}#{dec}"] = buenos
+
+    print(f"\n\n{'='*110}")
+    print(f"RESUMEN — {len(robustos)} bucket(s) ROBUSTO(S) (gate OK + split-half positivo ambas mitades):")
+    print(f"{'='*110}")
+    for strat, sub, dec, fila in robustos:
+        print(f"  {strat}#{sub}#{dec} {fila['bucket']} n={fila['n']} pnl/trade={fila['pnl_media']:+.3f}")
+
+    print(f"\n{len(fragiles)} bucket(s) pasan gate en muestra completa pero NO split-half (no accionar):")
+    for strat, sub, dec, fila in fragiles:
+        print(f"  {strat}#{sub}#{dec} {fila['bucket']} n={fila['n']} pnl/trade={fila['pnl_media']:+.3f} split_half={fila['split_half_pnl']}")
+
+    if huecos_totales:
+        print(f"\n🚨 HUECOS DE COBERTURA (ballenas n>=50 hit>=70%, >=15 mercados distintos, ningún mercado >30% del bucket, "
+              f"shadow_n<{N_MIN_BUCKET_INFORMATIVO} sumando todas las estrategias):")
+        for activo, marco, b, hit_b, nb, n_sh, n_mercados, top1_pct in huecos_totales:
+            print(f"  {activo}#{marco} [{b:.2f},{b+STEP:.2f}) ballenas hit={hit_b:.1f}% (n={nb}, "
+                  f"{n_mercados} mercados, top1={top1_pct:.0f}%) — shadow_n_total={n_sh}")
+
+    OUT.write_text(json.dumps(resultado, indent=2, ensure_ascii=False), encoding="utf-8")
+    print(f"\nGuardado en {OUT}")
+
+
+if __name__ == "__main__":
+    main()

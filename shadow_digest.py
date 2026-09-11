@@ -1,0 +1,332 @@
+"""
+shadow_digest.py — resumen diario único del experimento, enviado por Telegram.
+
+Filosofía: una sola notificación al día, conciso, informativo, sin
+recomendaciones operativas. El objetivo es tener visibilidad del
+experimento sin caer en el sesgo de saliencia que provocan las
+notificaciones constantes.
+
+Contiene:
+  - Estado de actividad de las últimas 24 horas (predicciones emitidas,
+    resueltas).
+  - Horserace global de las seis estrategias: P&L acumulado, win rate,
+    número de operaciones.
+  - Resoluciones nuevas del último día desglosadas por estrategia.
+  - Número de predicciones operables pendientes de resolver, agrupadas
+    por horizonte temporal.
+
+Ejecutado una vez al día por .github/workflows/digest.yml a las 20:00 UTC
+(21:00 hora España invierno / 22:00 verano).
+
+Secretos requeridos en GitHub (Settings → Secrets and variables → Actions):
+  - TELEGRAM_TOKEN
+  - TELEGRAM_CHAT_ID
+
+Si no están configurados, el script genera el digest e imprime por
+stdout pero no envía nada (no falla).
+"""
+
+import csv
+import glob
+import os
+from collections import defaultdict
+from datetime import datetime, timezone, timedelta
+from pathlib import Path
+
+import requests
+
+TIMEOUT = 15
+DIR_SHADOW = Path("data/shadow")
+RESULTS_PATH = DIR_SHADOW / "results.csv"
+
+# Credenciales también desde data/live/.env: así un restart de screen desde un
+# shell sin las vars exportadas no deja Telegram mudo. En GitHub Actions el
+# fichero no existe y load_dotenv es no-op (siguen valiendo los secrets).
+try:
+    from dotenv import load_dotenv
+    load_dotenv(Path(__file__).parent / "data" / "live" / ".env")
+except ImportError:
+    pass
+
+TELEGRAM_TOKEN = os.environ.get("TELEGRAM_TOKEN", "")
+TELEGRAM_CHAT_ID = os.environ.get("TELEGRAM_CHAT_ID", "")
+
+# 27-Ago: bot separado para dinero real de sports (petición explícita Javi:
+# "quiero diferenciar los mensajes de bot live dinero real, uno cripto y
+# otro sports, para diferenciar el dinero, los datos"). Mismo patrón que
+# TELEGRAM_TOKEN/TELEGRAM_CHAT_ID de arriba, prefijo SPORTS_ -- vacío hasta
+# que Javi cree el bot con @BotFather y añada las 2 líneas a data/live/.env
+# (fail-open: si no están configuradas, enviar_telegram(bot="sports") cae
+# a las credenciales de cripto, con un aviso, para no dejar sports mudo
+# mientras tanto -- ver enviar_telegram()).
+SPORTS_TELEGRAM_TOKEN = os.environ.get("SPORTS_TELEGRAM_TOKEN", "")
+SPORTS_TELEGRAM_CHAT_ID = os.environ.get("SPORTS_TELEGRAM_CHAT_ID", "")
+
+EMOJI = {
+    1: "🥇", 2: "🥈", 3: "🥉",
+}
+
+
+def cargar_predicciones_de_ultimo_dia() -> list:
+    """Carga predicciones (todas, no solo operables) del último día."""
+    desde = datetime.now(timezone.utc) - timedelta(hours=24)
+    todas = []
+    archivos = sorted(glob.glob(str(DIR_SHADOW / "predictions_*.csv")))[-3:]
+    for arch in archivos:
+        with open(arch, encoding="utf-8") as f:
+            reader = csv.DictReader(f)
+            for row in reader:
+                try:
+                    ts = datetime.fromisoformat(
+                        row["timestamp_utc"].replace("Z", "+00:00"))
+                except Exception:
+                    continue
+                if ts < desde:
+                    continue
+                todas.append(row)
+    return todas
+
+
+def cargar_resultados_acumulados() -> list:
+    """Carga TODOS los resultados acumulados desde el inicio."""
+    if not RESULTS_PATH.exists():
+        return []
+    with open(RESULTS_PATH, encoding="utf-8") as f:
+        return list(csv.DictReader(f))
+
+
+def horserace_global(resultados: list) -> dict:
+    """Agrega P&L y win rate por estrategia desde el inicio del experimento."""
+    agg = defaultdict(lambda: {"n": 0, "aciertos": 0, "pnl": 0.0})
+    for r in resultados:
+        s = r.get("strategy", "")
+        if not s:
+            continue
+        agg[s]["n"] += 1
+        try:
+            agg[s]["aciertos"] += int(r.get("acierto", 0))
+        except (ValueError, TypeError):
+            pass
+        try:
+            agg[s]["pnl"] += float(r.get("pnl_neto", 0))
+        except (ValueError, TypeError):
+            pass
+    return dict(agg)
+
+
+def horserace_ultimo_dia(resultados: list) -> dict:
+    """Resoluciones registradas en las últimas 24 horas (no creadas)."""
+    desde = datetime.now(timezone.utc) - timedelta(hours=24)
+    sub = []
+    for r in resultados:
+        try:
+            ts = datetime.fromisoformat(
+                r.get("resolution_timestamp", "").replace("Z", "+00:00"))
+        except Exception:
+            continue
+        if ts >= desde:
+            sub.append(r)
+    return horserace_global(sub)
+
+
+def horas_a(end_date: str) -> float | None:
+    if not end_date:
+        return None
+    try:
+        s = end_date
+        if "T" not in s and len(s) == 10:
+            s = s + "T23:59:59"
+        if not s.endswith("Z") and "+" not in s[10:]:
+            s = s + "+00:00"
+        else:
+            s = s.replace("Z", "+00:00")
+        fin = datetime.fromisoformat(s)
+        ahora = datetime.now(timezone.utc)
+        return (fin - ahora).total_seconds() / 3600
+    except Exception:
+        return None
+
+
+def pendientes_por_horizonte() -> dict:
+    """Cuenta predicciones operables aún no resueltas, por horizonte temporal."""
+    archivos = sorted(glob.glob(str(DIR_SHADOW / "predictions_*.csv")))
+    pendientes_ids = set()
+    if RESULTS_PATH.exists():
+        with open(RESULTS_PATH, encoding="utf-8") as f:
+            for r in csv.DictReader(f):
+                pendientes_ids.add((r.get("prediction_timestamp", ""),
+                                     r.get("strategy", ""),
+                                     r.get("market_id", "")))
+
+    buckets = {"<24h": 0, "1-7d": 0, "7-14d": 0, "vencidas_sin_resolver": 0}
+    for arch in archivos:
+        with open(arch, encoding="utf-8") as f:
+            for row in csv.DictReader(f):
+                if row.get("decision", "SKIP") == "SKIP":
+                    continue
+                clave = (row.get("timestamp_utc", ""),
+                         row.get("strategy", ""),
+                         row.get("market_id", ""))
+                if clave in pendientes_ids:
+                    continue
+                h = horas_a(row.get("end_date", ""))
+                if h is None:
+                    continue
+                if h < 0:
+                    buckets["vencidas_sin_resolver"] += 1
+                elif h < 24:
+                    buckets["<24h"] += 1
+                elif h < 168:
+                    buckets["1-7d"] += 1
+                else:
+                    buckets["7-14d"] += 1
+    return buckets
+
+
+def formato_eur(x: float) -> str:
+    signo = "+" if x >= 0 else ""
+    return f"{signo}{x:.2f}$"
+
+
+def construir_digest() -> str:
+    ahora = datetime.now(timezone.utc)
+
+    predicciones_24h = cargar_predicciones_de_ultimo_dia()
+    operables_24h = [p for p in predicciones_24h
+                     if p.get("decision", "SKIP") != "SKIP"]
+
+    resultados_todos = cargar_resultados_acumulados()
+    hr_global = horserace_global(resultados_todos)
+    hr_dia = horserace_ultimo_dia(resultados_todos)
+    buckets = pendientes_por_horizonte()
+
+    lineas = []
+    lineas.append("📊 Polymarket Shadow Trader")
+    lineas.append(f"Resumen diario · {ahora.strftime('%Y-%m-%d %H:%M UTC')}")
+    lineas.append("")
+    lineas.append("── ÚLTIMAS 24 HORAS ──")
+    lineas.append(f"Predicciones emitidas: {len(predicciones_24h)}")
+    lineas.append(f"  · operables: {len(operables_24h)}")
+    lineas.append(f"  · SKIP (sin edge): {len(predicciones_24h) - len(operables_24h)}")
+    n_resueltas_dia = sum(d["n"] for d in hr_dia.values())
+    lineas.append(f"Resoluciones nuevas: {n_resueltas_dia}")
+    lineas.append("")
+
+    # LIVE real (verdad de suelo on-chain) — coordinado con el dashboard. El
+    # horserace de abajo es SHADOW simulado (sin fricciones); esto es el wallet.
+    try:
+        from live_balance import cargar_balance_real
+        _snap = cargar_balance_real(max_edad_s=3600)
+        if _snap and not _snap.get("_rancio"):
+            # Win rate + trades reales ejecutados (trades.csv CLOSED) — mismas
+            # métricas que la sección live del dashboard.
+            wr_str = ""
+            try:
+                import csv as _csv
+                from pathlib import Path as _P
+                _cl = [r for r in _csv.DictReader(open(_P("data/live/trades.csv"), encoding="utf-8"))
+                       if r.get("status") == "CLOSED"]
+                _n = len(_cl)
+                _w = sum(1 for r in _cl if float(r.get("pnl_neto_eur") or 0) > 0)
+                if _n:
+                    wr_str = f"Win rate: {_w/_n*100:.0f}%  ·  Trades: {_n}"
+            except Exception:
+                pass
+            _hoy = _snap.get("pnl_hoy_real")
+            _7d  = _snap.get("pnl_7d_real")
+            lineas.append("── LIVE (dinero real on-chain) ──")
+            lineas.append(f"Depósito {_snap['deposito_inicial']:.2f}$  →  Balance {_snap['total']:.2f}$")
+            lineas.append(f"P&L real total: {formato_eur(_snap['pnl_real'])}")
+            if _hoy is not None and _7d is not None:
+                lineas.append(f"Hoy: {formato_eur(_hoy)}  ·  7 días: {formato_eur(_7d)}")
+            if wr_str:
+                lineas.append(wr_str)
+            lineas.append("")
+    except Exception:
+        pass
+
+    if hr_global:
+        lineas.append("── HORSERACE GLOBAL (P&L acumulado) ──")
+        ranking = sorted(hr_global.items(), key=lambda kv: kv[1]["pnl"],
+                         reverse=True)
+        for i, (s, d) in enumerate(ranking, 1):
+            wr = d["aciertos"] / d["n"] * 100 if d["n"] else 0
+            emoji = EMOJI.get(i, "  ")
+            lineas.append(f"{emoji} {s[:22]:<22} {formato_eur(d['pnl']):>9}"
+                          f" n={d['n']:>3} wr={wr:4.0f}%")
+        lineas.append("")
+    else:
+        lineas.append("── HORSERACE GLOBAL ──")
+        lineas.append("(aún no hay resoluciones)")
+        lineas.append("")
+
+    if hr_dia:
+        lineas.append("── NUEVAS RESOLUCIONES (24h) ──")
+        for s, d in sorted(hr_dia.items(), key=lambda kv: kv[1]["pnl"],
+                           reverse=True):
+            wr = d["aciertos"] / d["n"] * 100 if d["n"] else 0
+            lineas.append(f"{s[:22]:<22} {d['aciertos']}/{d['n']:<3} "
+                          f"{formato_eur(d['pnl']):>9} wr={wr:.0f}%")
+        lineas.append("")
+
+    lineas.append("── PENDIENTES DE RESOLVER ──")
+    total_pend = sum(buckets.values())
+    lineas.append(f"Total operables: {total_pend}")
+    lineas.append(f"  · <24h: {buckets['<24h']}")
+    lineas.append(f"  · 1-7 días: {buckets['1-7d']}")
+    lineas.append(f"  · 7-14 días: {buckets['7-14d']}")
+    if buckets["vencidas_sin_resolver"]:
+        lineas.append(f"  · ⚠ vencidas sin resolver: "
+                      f"{buckets['vencidas_sin_resolver']}")
+    lineas.append("")
+    lineas.append("(Sin recomendaciones operativas. "
+                  "Decisión al final de las 3 semanas.)")
+
+    return "\n".join(lineas)
+
+
+def enviar_telegram(texto: str, bot: str = "cripto") -> bool:
+    """bot='cripto' (default, compatibilidad total con las ~70 llamadas ya
+    existentes en el proyecto -- ningún caller necesita cambiar) o
+    bot='sports' (dinero real de sports, bot de Telegram separado para que
+    Javi distinga a simple vista qué pote de dinero manda cada aviso, ver
+    SPORTS_TELEGRAM_TOKEN arriba). Fail-open explícito si sports aún no
+    tiene credenciales propias: cae al bot de cripto con un prefijo
+    [SPORTS] en vez de quedarse muda -- nunca None/excepción por falta de
+    config todavía no hecha por Javi."""
+    token, chat_id = TELEGRAM_TOKEN, TELEGRAM_CHAT_ID
+    if bot == "sports":
+        if SPORTS_TELEGRAM_TOKEN and SPORTS_TELEGRAM_CHAT_ID:
+            token, chat_id = SPORTS_TELEGRAM_TOKEN, SPORTS_TELEGRAM_CHAT_ID
+        else:
+            texto = "[SPORTS] " + texto
+    if not token or not chat_id:
+        print(f"(TELEGRAM_TOKEN o TELEGRAM_CHAT_ID no configurados para bot='{bot}', "
+              "no se envía mensaje)")
+        return False
+    url = f"https://api.telegram.org/bot{token}/sendMessage"
+    payload = {
+        "chat_id": chat_id,
+        "text": texto,
+        "disable_web_page_preview": True,
+    }
+    try:
+        r = requests.post(url, json=payload, timeout=TIMEOUT)
+        r.raise_for_status()
+        print(f"Mensaje enviado a Telegram (bot={bot}).")
+        return True
+    except Exception as e:
+        print(f"Error enviando Telegram (bot={bot}): {type(e).__name__}: {e}")
+        return False
+
+
+def main():
+    digest = construir_digest()
+    print("=" * 50)
+    print(digest)
+    print("=" * 50)
+    enviar_telegram(digest)
+
+
+if __name__ == "__main__":
+    main()

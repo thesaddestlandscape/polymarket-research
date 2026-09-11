@@ -1,0 +1,129 @@
+{
+ "Valorant#SEGUIR": {
+  "veredicto": "sin_concluir",
+  "historial_crudo": [
+   "bueno_confirmado",
+   "bueno_confirmado",
+   "bueno_confirmado"
+  ]
+ },
+ "Dota#FADE": {
+  "veredicto": "sin_concluir",
+  "historial_crudo": [
+   "bueno_confirmado",
+   "bueno_confirmado",
+   "bueno_confirmado"
+  ]
+ },
+ "epl-ganador#SEGUIR": {
+  "veredicto": "sin_concluir",
+  "historial_crudo": [
+   "malo_confirmado"
+  ]
+ },
+ "fl1-ganador#SEGUIR": {
+  "veredicto": "sin_concluir",
+  "historial_crudo": [
+   "bueno_confirmado",
+   "bueno_confirmado",
+   "bueno_confirmado"
+  ]
+ },
+ "CS#SEGUIR": {
+  "lo": 0.31,
+  "hi": 0.36,
+  "n": 82,
+  "pnl_medio": -0.5677,
+  "diff_vs_resto": -0.6321,
+  "p_valor": 0.0035,
+  "split_half_diff": [
+   -0.632,
+   -0.6322
+  ],
+  "split_half_ok": true,
+  "pnl_medio_loo": -0.6005,
+  "robusto_loo": true,
+  "ci90_bootstrap": [
+   -0.7484,
+   -0.3528
+  ],
+  "robusto_bootstrap": true,
+  "n_posiciones_buscadas": 68,
+  "g_kelly_f10": -0.06382,
+  "veredicto_crudo_hoy": "malo_confirmado",
+  "historial_crudo": [
+   "malo_confirmado"
+  ],
+  "veredicto": "malo_confirmado"
+ },
+ "Tennis#SEGUIR": {
+  "veredicto": "sin_concluir",
+  "historial_crudo": [
+   "bueno_confirmado",
+   "bueno_confirmado",
+   "bueno_confirmado"
+  ]
+ },
+ "CS#FADE": {
+  "lo": 0.19,
+  "hi": 0.24,
+  "n": 44,
+  "pnl_medio": -0.5875,
+  "diff_vs_resto": -0.6112,
+  "p_valor": 0.0005,
+  "split_half_diff": [
+   -0.5905,
+   -0.632
+  ],
+  "split_half_ok": true,
+  "pnl_medio_loo": -0.6993,
+  "robusto_loo": true,
+  "ci90_bootstrap": [
+   -0.9021,
+   -0.2522
+  ],
+  "robusto_bootstrap": true,
+  "n_posiciones_buscadas": 76,
+  "g_kelly_f10": -0.06828,
+  "veredicto_crudo_hoy": "malo_confirmado",
+  "historial_crudo": [
+   "malo_confirmado"
+  ],
+  "veredicto": "malo_confirmado"
+ },
+ "LoL#FADE": {
+  "lo": 0.28,
+  "hi": 0.33,
+  "n": 47,
+  "pnl_medio": -0.5663,
+  "diff_vs_resto": -0.5458,
+  "p_valor": 0.0075,
+  "split_half_diff": [
+   -0.3953,
+   -0.69
+  ],
+  "split_half_ok": true,
+  "pnl_medio_loo": -0.6337,
+  "robusto_loo": true,
+  "ci90_bootstrap": [
+   -0.8496,
+   -0.2751
+  ],
+  "robusto_bootstrap": true,
+  "n_posiciones_buscadas": 60,
+  "g_kelly_f10": -0.06448,
+  "veredicto_crudo_hoy": "malo_confirmado",
+  "historial_crudo": [
+   "malo_confirmado"
+  ],
+  "veredicto": "malo_confirmado"
+ },
+ "Dota#SEGUIR": {
+  "veredicto": "sin_concluir",
+  "historial_crudo": [
+   "bueno_confirmado",
+   "bueno_confirmado",
+   "bueno_confirmado"
+  ]
+ }
+}

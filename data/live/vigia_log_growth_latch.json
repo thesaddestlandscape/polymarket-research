@@ -1,0 +1,100 @@
+{
+ "BALLENAS_TARDIAS#BTC#15min#BUY_YES": {
+  "avisado": true,
+  "n": 15,
+  "growth": -0.006991945889778262,
+  "ev_por_dolar": -0.057250601175533836,
+  "telegram_ok": true
+ },
+ "FAVORITO_CONFIRMADO#ETH#15min#BUY_YES": {
+  "avisado": true,
+  "n": 594,
+  "growth": -0.0001638256991388277,
+  "ev_por_dolar": 0.02282684193728098,
+  "telegram_ok": true
+ },
+ "FAVORITO_CONFIRMADO#SOL#15min#BUY_YES": {
+  "avisado": true,
+  "n": 712,
+  "growth": -7.5502443958136085e-06,
+  "ev_por_dolar": 0.023631176098705232,
+  "telegram_ok": true
+ },
+ "FAVORITO_CONFIRMADO_15MIN_ALTACONVICCION#BTC#15min#BUY_YES": {
+  "avisado": true,
+  "n": 16,
+  "growth": -0.002521443186629101,
+  "ev_por_dolar": -0.012219924250219293,
+  "telegram_ok": true
+ },
+ "FAVORITO_CONFIRMADO_15MIN_ALTACONVICCION#ETH#15min#BUY_YES": {
+  "avisado": true,
+  "n": 21,
+  "growth": -0.0026499422412122157,
+  "ev_por_dolar": -0.013204577858284872,
+  "telegram_ok": true
+ },
+ "BALLENAS_TARDIAS#ETH#5min#BUY_YES": {
+  "avisado": true,
+  "n": 26,
+  "growth": -0.00043028708216780214,
+  "ev_por_dolar": 0.02675132518745601,
+  "telegram_ok": true
+ },
+ "BALLENAS_TARDIAS#DOGE#5min#BUY_YES": {
+  "avisado": true,
+  "n": 1050,
+  "growth": -0.02721059500748628,
+  "ev_por_dolar": -0.17189910730340974,
+  "telegram_ok": true
+ },
+ "BALLENAS_CONFIRMADAS_15M#ETH#15min#BUY_YES": {
+  "avisado": true,
+  "n": 362,
+  "growth": -0.004380856000187604,
+  "ev_por_dolar": 0.0014306917383350901,
+  "telegram_ok": true
+ },
+ "MOMENTUM_IBS_5M_BALLENA#SOL#5min#BUY_YES": {
+  "avisado": true,
+  "n": 1222,
+  "growth": -0.008626052500790805,
+  "ev_por_dolar": -0.014750408453279806,
+  "telegram_ok": true
+ },
+ "MOMENTUM_IBS_5M_BALLENA#ETH#5min#BUY_YES": {
+  "avisado": true,
+  "n": 1531,
+  "growth": -0.01535060650480544,
+  "ev_por_dolar": -0.07675767676454749,
+  "telegram_ok": true
+ },
+ "WALLET_MIRROR#BTC#15min#BUY_YES": {
+  "avisado": true,
+  "n": 17,
+  "growth": -0.002586801803238944,
+  "ev_por_dolar": 0.008235294117647077,
+  "telegram_ok": true
+ },
+ "WALLET_MIRROR#BTC#15min#BUY_NO": {
+  "avisado": true,
+  "n": 16,
+  "growth": -0.027715296609277233,
+  "ev_por_dolar": -0.25388690476190473,
+  "telegram_ok": true
+ },
+ "CANDIDATA9_BOT_CONSENSO#ETH#5min#BUY_YES": {
+  "avisado": true,
+  "n": 21,
+  "growth": -0.01727132413213705,
+  "ev_por_dolar": -0.0649908668762952,
+  "telegram_ok": true
+ },
+ "CANDIDATA9_BOT_CONSENSO#ETH#5min#BUY_NO": {
+  "avisado": true,
+  "n": 15,
+  "growth": -0.07881369031314535,
+  "ev_por_dolar": -0.742116482679863,
+  "telegram_ok": true
+ }
+}

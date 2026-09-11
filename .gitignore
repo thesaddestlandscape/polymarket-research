@@ -1,0 +1,146 @@
+__pycache__/
+.venv/
+logs/
+
+# Datos re-generables o demasiado grandes para GitHub (>100MB)
+data/binance/
+data/markets/
+data/trades/
+data/wallets/
+data/funding/
+data/alerts/
+data/live/LIVE_MODE_ON
+data/live/*.key
+data/live/.env
+data/live/orden_en_curso.json
+data/live/.trades_lock
+data/shadow/shadow_resolve.lock
+data/shadow/restart_fast_seguro.lock
+data/shadow/git_ops.lock
+data/live/freno_ventana_latch.json
+data/live/overrides_notificados.json
+data/live/vigia_pybajo_latch.json
+data/live/maker_orders.json
+data/reports/
+data/backfill/klines/
+data/shadow/_cache_*.pkl
+data/funding_rates_cache.json
+data/shadow/postmortem.csv
+data/shadow/combi_arb_llm_*.csv
+data/shadow/cross_arb_*.csv
+data/live/ledger_fiscal_*.csv
+data/shadow/ballenas_timing_history.csv
+data/shadow/wallet_mirror_dry_run.csv
+data/shadow/ballenas_universo_cache/
+# 09-Ago: mismo motivo que ballenas_timing_history.csv arriba -- 77.5MB,
+# ~3.2MB/día, a ~1 semana del bloqueo duro de GitHub. Backup diario propio
+# vía scripts/backup_results_csv.sh (volumen dedicado, fuera de git).
+data/shadow/results.csv
+# 07-Sep: caché incremental de folds walk-forward de shadow_postmortem.py
+# (project_pendiente_lunes_07sep_rediseno_postmortem) -- 4.5MB al crear,
+# crece con n_oos acumulado por estrategia (más lento que results.csv, pero
+# sin cota). Puramente derivado/regenerable: si se borra o corrompe, el
+# siguiente ciclo se reconstruye solo desde cero (un ciclo más lento, ningún
+# dato perdido -- calibracion_prob sigue viniendo de results.csv, nunca de
+# este caché en sí). No necesita historial de git ni backup dedicado.
+data/shadow/calibracion_folds_cache.json
+# 07-Sep: mismo motivo exacto que la línea anterior -- caché incremental
+# por offset de bytes de shadow_resolve.py::cargar_ya_resueltas() (evita
+# releer results.csv completo cada ciclo de resolve). Crece ~1 línea por
+# resolución nueva (~17MB hoy, sin cota), puramente derivado/regenerable
+# (si se borra, el siguiente ciclo reconstruye desde cero, un ciclo más
+# lento, ningún dato perdido -- la fuente de verdad sigue siendo
+# results.csv). /code-review 07-Sep: encontrado sin gitignorar en el mismo
+# commit que lo introdujo, mismo patrón de bloat ya sufrido hoy.
+data/shadow/ya_resueltas_cache.txt
+data/shadow/ya_resueltas_checkpoint.json
+# 10-Ago: mismo motivo, detectado en barrido de vigías (vigia_tamano_ficheros_git.py) --
+# 82MB y creciendo ~2MB/30min (run_fast.sh hace `git add data/live/` genérico cada
+# ciclo), a horas del bloqueo duro de GitHub, no ~1 semana como results.csv. Es un
+# cache rolling regenerado por ballenas_firehose_cache.py/fetch_polymarket_activity_ws.py,
+# no un dataset histórico -- no necesita backup dedicado como results.csv.
+data/live/ballenas_recientes.json
+# 17-Ago: mismo motivo que results.csv -- 53.7MB, ~2.7MB/día (34.9MB 10-Ago
+# -> 53.7MB 17-Ago), a ~2.5 semanas del bloqueo duro de GitHub. Dataset
+# histórico de análisis (wallet_mirror_tracker.py y los analisis_wallet_
+# mirror_*.py lo leen), no un cache rolling -- SÍ necesita backup dedicado,
+# ver scripts/backup_wallet_mirror_sniper_dry_run.sh (mismo patrón que
+# backup_results_csv.sh).
+data/shadow/wallet_mirror_sniper_dry_run.csv
+# 02-Sep: vigia_tamano_ficheros_git.py cruzó el umbral warning (50MB) con
+# data/shadow/dispersed_bot_executor_dryrun.csv (55MB, ~8MB/día desde
+# 25-Ago). Log DRY_RUN append-only, sin ningún lector aparte de su propio
+# script (verificado -- ejecutores_dryrun_fase0.py solo lo registra, no
+# lo consume) -- mismo patrón "cache rolling sin backup dedicado" que
+# data/live/ballenas_recientes.json arriba, no como wallet_mirror_sniper_
+# dry_run.csv (ese sí lo leen varios analisis_wallet_mirror_*.py).
+data/shadow/dispersed_bot_executor_dryrun.csv
+# 19-Ago: vigia_tamano_ficheros_git.py cruzó el umbral warning (50MB) con
+# data/sports/activity_ws_2026-08-18.csv (69.5MB, un día completo). Mismo
+# patrón que wallet_mirror_sniper_dry_run.csv (17-Ago) -- ficheros
+# diarios ~70MB/día, sports_wallet_edge_tracker.py los lee TODOS vía
+# glob("activity_ws_*.csv") (dataset histórico real, no cache rolling) --
+# SÍ necesita backup dedicado, ver scripts/backup_activity_ws_sports.sh.
+# El patrón cubre CUALQUIER fecha (no solo hoy) -- cada día es un fichero
+# nuevo que cruzará el mismo umbral por su cuenta.
+data/sports/activity_ws_*.csv
+data/prices/kalshi_btchourly_*.csv
+# 01-Sep: mismo motivo que results.csv (línea 38) -- predictions_YYYY-MM-DD.csv
+# creció a 210MB+ en un solo día (features JSON por predicción, todas las
+# estrategias, cada ~5-20s) y bloqueó CADA push desde ~12:30 UTC (GitHub
+# rechaza cualquier blob >100MB). No es dataset agregado histórico como
+# results.csv -- es un log intra-día, se puede regenerar/descartar sin
+# pérdida real (results.csv ya captura el resumen persistente). Sin backup
+# dedicado necesario.
+data/shadow/predictions_*.csv
+
+# 11-Sep (barrido de salud -- disco del volumen dedicado de git a 0 bytes
+# libres 7,5h seguidas, git commit/rm --cached empezando a fallar con "No
+# space left on device"): 5 CSV que crecen sin parar seguían trackeados en
+# git pese a nunca haberse añadido aquí -- cada uno se re-commiteaba
+# COMPLETO cada ciclo (mismo motivo que results.csv/predictions_*.csv),
+# causa real de que el .git volviera a 66GB solo 4 días después del
+# filter-repo del 07-Sep. Ninguno tiene backup dedicado todavía (gap real,
+# pendiente evaluar si lo necesitan -- solo results.csv/trades.csv/
+# wallet_mirror_sniper_dry_run.csv/activity_ws_sports lo tienen hoy).
+# git rm --cached aplicado en la misma sesión, tamaño histórico ya en
+# packs no se libera con esto solo (necesitaría repack/filter-repo aparte).
+data/shadow/bot_wallets_gate_bucket_fase0.csv
+data/shadow/wallet_mirror_executor_dryrun.csv
+data/shadow/favorito_confirmado_senal_contraria_fase0.csv
+data/shadow/p22_cola_posicion_fase0.csv
+data/live/libro_snapshots.csv
+
+# 08-Sep: caché en disco de _cargar_predicciones_archivo_cacheado()
+# (shadow_postmortem.py) -- un JSON por cada predictions_YYYY-MM-DD.csv
+# de la ventana reciente, de tamaño comparable o mayor al CSV de origen
+# (376MB+ el de hoy). /code-review encontró esto ANTES de desplegar --
+# sin esta línea el autocommit del fast loop lo habría subido a git,
+# reproduciendo el mismo incidente de bloat/límite de 2GB por pack de
+# GitHub del 07-Sep. Puramente regenerable (se reconstruye solo del CSV
+# de origen si se borra), cero pérdida real.
+data/shadow/_predicciones_recientes_cache/
+
+# 03-Sep (bug real encontrado en el barrido de esta sesión): el commit
+# `6bc3ceb39a` (02-Sep) decía en su mensaje "gitignorado hacia delante"
+# pero solo hizo `git rm`/vació el fichero -- NUNCA añadió la entrada real
+# a este fichero. sports_spread_observer_fase0.py siguió creciendo el CSV
+# del día (304MB/1,24M filas y subiendo, ~19.775 filas/ciclo, sin
+# rotación) TODAVÍA TRACKEADO por git desde entonces -- mismo patrón
+# exacto que results.csv/predictions_*.csv, y probablemente la causa real
+# de un "Out of diskspace" durante el `git repack` de esta misma mañana
+# (crecimiento sin límite compitiendo por el margen de disco). Mismo
+# criterio: log intra-día de alta frecuencia, sin backup dedicado
+# necesario salvo que algún análisis empiece a depender de su histórico
+# completo.
+data/shadow/sports_spread_fase0_*.csv
+data/shadow/sports_spread_fase0_*.csv.gz
+# 10-Sep: vigia_tamano_ficheros_git.py cruzó el umbral warning (50MB) con
+# data/shadow/ladder_arb_weather_fase0.csv (52.2MB y subiendo rápido,
+# ~2.5MB en un solo ciclo de 15min -- cron */15 * * * *, sin rotación).
+# FASE 0 solo observación (ladder-arb de escalera de temperatura weather,
+# idea_ronda2_propuestas_profundas_27ago: sin arb libre en el spread de
+# hoy, vigilando por si se estrecha). Sin otro lector aparte de su propio
+# script (verificado) -- mismo patrón "cache rolling sin backup dedicado"
+# que dispersed_bot_executor_dryrun.csv arriba.
+data/shadow/ladder_arb_weather_fase0.csv

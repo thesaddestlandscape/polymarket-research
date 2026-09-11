@@ -1,0 +1,1969 @@
+{
+  "generado": "2026-09-09",
+  "ficheros_fuente": [
+    "/root/polymarket-research/data/sports/activity_ws_2026-09-06.csv",
+    "/root/polymarket-research/data/sports/activity_ws_2026-09-07.csv",
+    "/root/polymarket-research/data/sports/activity_ws_2026-09-08.csv",
+    "/root/polymarket-research/data/sports/activity_ws_2026-09-09.csv"
+  ],
+  "dias_cobertura": 4,
+  "n_trades_totales_buy": 895418,
+  "n_eventos_wallet_combo": 44503,
+  "n_wallets_distintas_combo": 6357,
+  "n_condition_ids_combo": 13636,
+  "n_condition_ids_resueltos": 13851,
+  "resumen_combo": {
+    "n": 414531,
+    "hits": 208141,
+    "hit_rate": 0.5021,
+    "wilson90_lo": 0.5008,
+    "usd_medio": 81.13,
+    "precio_medio_entrada": 0.5022
+  },
+  "resumen_no_combo_mismaswallets": {
+    "n": 256746,
+    "hits": 132819,
+    "hit_rate": 0.5173,
+    "wilson90_lo": 0.5157,
+    "usd_medio": 106.59,
+    "precio_medio_entrada": 0.5132
+  },
+  "resumen_agregado_mercado": {
+    "n": 793820,
+    "hits": 406279,
+    "hit_rate": 0.5118,
+    "wilson90_lo": 0.5109,
+    "usd_medio": 95.21,
+    "precio_medio_entrada": 0.5108
+  },
+  "shuffle_combo_vs_agregado": {
+    "obs_diff_pp": -0.97,
+    "p_shuffle": 0.0,
+    "metodo": "fisher_exact (equivalente exacto de shuffle en pool combinado, ver docstring)"
+  },
+  "shuffle_combo_vs_mismaswallets_nocombo": {
+    "obs_diff_pp": -1.52,
+    "p_shuffle": 0.0,
+    "metodo": "fisher_exact (equivalente exacto de shuffle en pool combinado, ver docstring)"
+  },
+  "por_categoria_combo": {
+    "LoL": {
+      "n": 85762,
+      "hits": 43840,
+      "hit_rate": 0.5112,
+      "wilson90_lo": 0.5084,
+      "usd_medio": 102.18,
+      "precio_medio_entrada": 0.5117
+    },
+    "CS": {
+      "n": 76446,
+      "hits": 38193,
+      "hit_rate": 0.4996,
+      "wilson90_lo": 0.4966,
+      "usd_medio": 68.56,
+      "precio_medio_entrada": 0.5011
+    },
+    "MLB": {
+      "n": 41366,
+      "hits": 20486,
+      "hit_rate": 0.4952,
+      "wilson90_lo": 0.4912,
+      "usd_medio": 95.05,
+      "precio_medio_entrada": 0.5001
+    },
+    "Tennis": {
+      "n": 17013,
+      "hits": 8285,
+      "hit_rate": 0.487,
+      "wilson90_lo": 0.4807,
+      "usd_medio": 134.02,
+      "precio_medio_entrada": 0.481
+    },
+    "Dota": {
+      "n": 15347,
+      "hits": 7641,
+      "hit_rate": 0.4979,
+      "wilson90_lo": 0.4912,
+      "usd_medio": 48.82,
+      "precio_medio_entrada": 0.4943
+    },
+    "Liga-ucl": {
+      "n": 13355,
+      "hits": 6787,
+      "hit_rate": 0.5082,
+      "wilson90_lo": 0.5011,
+      "usd_medio": 94.54,
+      "precio_medio_entrada": 0.5077
+    },
+    "Soccer-ucl": {
+      "n": 11150,
+      "hits": 6074,
+      "hit_rate": 0.5448,
+      "wilson90_lo": 0.537,
+      "usd_medio": 155.82,
+      "precio_medio_entrada": 0.5147
+    },
+    "Liga-lal": {
+      "n": 10300,
+      "hits": 5110,
+      "hit_rate": 0.4961,
+      "wilson90_lo": 0.488,
+      "usd_medio": 94.5,
+      "precio_medio_entrada": 0.5016
+    },
+    "Soccer-lal": {
+      "n": 7066,
+      "hits": 3522,
+      "hit_rate": 0.4984,
+      "wilson90_lo": 0.4887,
+      "usd_medio": 110.69,
+      "precio_medio_entrada": 0.5026
+    },
+    "Liga-sea": {
+      "n": 7050,
+      "hits": 3475,
+      "hit_rate": 0.4929,
+      "wilson90_lo": 0.4831,
+      "usd_medio": 81.46,
+      "precio_medio_entrada": 0.5045
+    },
+    "Soccer-epl": {
+      "n": 6721,
+      "hits": 3147,
+      "hit_rate": 0.4682,
+      "wilson90_lo": 0.4582,
+      "usd_medio": 93.98,
+      "precio_medio_entrada": 0.4813
+    },
+    "Liga-epl": {
+      "n": 6527,
+      "hits": 3136,
+      "hit_rate": 0.4805,
+      "wilson90_lo": 0.4703,
+      "usd_medio": 94.5,
+      "precio_medio_entrada": 0.5041
+    },
+    "Soccer-sea": {
+      "n": 5524,
+      "hits": 2713,
+      "hit_rate": 0.4911,
+      "wilson90_lo": 0.4801,
+      "usd_medio": 124.26,
+      "precio_medio_entrada": 0.4953
+    },
+    "Liga-cfb": {
+      "n": 5301,
+      "hits": 2586,
+      "hit_rate": 0.4878,
+      "wilson90_lo": 0.4765,
+      "usd_medio": 109.07,
+      "precio_medio_entrada": 0.4839
+    },
+    "Valorant": {
+      "n": 4731,
+      "hits": 2422,
+      "hit_rate": 0.5119,
+      "wilson90_lo": 0.5,
+      "usd_medio": 41.85,
+      "precio_medio_entrada": 0.5054
+    },
+    "F1": {
+      "n": 4535,
+      "hits": 2245,
+      "hit_rate": 0.495,
+      "wilson90_lo": 0.4828,
+      "usd_medio": 39.05,
+      "precio_medio_entrada": 0.4878
+    },
+    "Liga-spl": {
+      "n": 4116,
+      "hits": 2028,
+      "hit_rate": 0.4927,
+      "wilson90_lo": 0.4799,
+      "usd_medio": 61.41,
+      "precio_medio_entrada": 0.5021
+    },
+    "Liga-bra": {
+      "n": 3541,
+      "hits": 1767,
+      "hit_rate": 0.499,
+      "wilson90_lo": 0.4852,
+      "usd_medio": 47.76,
+      "precio_medio_entrada": 0.4958
+    },
+    "Soccer-bra": {
+      "n": 3516,
+      "hits": 1698,
+      "hit_rate": 0.4829,
+      "wilson90_lo": 0.4691,
+      "usd_medio": 53.8,
+      "precio_medio_entrada": 0.5011
+    },
+    "Soccer-spl": {
+      "n": 3390,
+      "hits": 1725,
+      "hit_rate": 0.5088,
+      "wilson90_lo": 0.4947,
+      "usd_medio": 53.91,
+      "precio_medio_entrada": 0.4832
+    },
+    "Liga-mls": {
+      "n": 3070,
+      "hits": 1419,
+      "hit_rate": 0.4622,
+      "wilson90_lo": 0.4475,
+      "usd_medio": 28.61,
+      "precio_medio_entrada": 0.4896
+    },
+    "Soccer-elc": {
+      "n": 2702,
+      "hits": 1373,
+      "hit_rate": 0.5081,
+      "wilson90_lo": 0.4923,
+      "usd_medio": 47.59,
+      "precio_medio_entrada": 0.5063
+    },
+    "Liga-kor": {
+      "n": 2675,
+      "hits": 1338,
+      "hit_rate": 0.5002,
+      "wilson90_lo": 0.4843,
+      "usd_medio": 42.48,
+      "precio_medio_entrada": 0.51
+    },
+    "Liga-elc": {
+      "n": 2623,
+      "hits": 1306,
+      "hit_rate": 0.4979,
+      "wilson90_lo": 0.4819,
+      "usd_medio": 54.06,
+      "precio_medio_entrada": 0.5076
+    },
+    "Soccer-mls": {
+      "n": 2538,
+      "hits": 1280,
+      "hit_rate": 0.5043,
+      "wilson90_lo": 0.488,
+      "usd_medio": 20.96,
+      "precio_medio_entrada": 0.5014
+    },
+    "Soccer-mex": {
+      "n": 2123,
+      "hits": 1082,
+      "hit_rate": 0.5097,
+      "wilson90_lo": 0.4918,
+      "usd_medio": 37.84,
+      "precio_medio_entrada": 0.5144
+    },
+    "Liga-arg": {
+      "n": 1970,
+      "hits": 1020,
+      "hit_rate": 0.5178,
+      "wilson90_lo": 0.4992,
+      "usd_medio": 58.65,
+      "precio_medio_entrada": 0.5014
+    },
+    "Soccer-arg": {
+      "n": 1958,
+      "hits": 998,
+      "hit_rate": 0.5097,
+      "wilson90_lo": 0.4911,
+      "usd_medio": 50.41,
+      "precio_medio_entrada": 0.4959
+    },
+    "Soccer-kor": {
+      "n": 1908,
+      "hits": 945,
+      "hit_rate": 0.4953,
+      "wilson90_lo": 0.4765,
+      "usd_medio": 31.67,
+      "precio_medio_entrada": 0.5031
+    },
+    "Liga-ere": {
+      "n": 1805,
+      "hits": 924,
+      "hit_rate": 0.5119,
+      "wilson90_lo": 0.4926,
+      "usd_medio": 43.89,
+      "precio_medio_entrada": 0.5055
+    },
+    "Liga-bun": {
+      "n": 1700,
+      "hits": 832,
+      "hit_rate": 0.4894,
+      "wilson90_lo": 0.4695,
+      "usd_medio": 68.43,
+      "precio_medio_entrada": 0.5092
+    },
+    "Soccer-egy1": {
+      "n": 1635,
+      "hits": 853,
+      "hit_rate": 0.5217,
+      "wilson90_lo": 0.5014,
+      "usd_medio": 50.35,
+      "precio_medio_entrada": 0.5143
+    },
+    "Liga-fl1": {
+      "n": 1600,
+      "hits": 807,
+      "hit_rate": 0.5044,
+      "wilson90_lo": 0.4838,
+      "usd_medio": 76.65,
+      "precio_medio_entrada": 0.524
+    },
+    "Soccer-col1": {
+      "n": 1542,
+      "hits": 808,
+      "hit_rate": 0.524,
+      "wilson90_lo": 0.503,
+      "usd_medio": 54.08,
+      "precio_medio_entrada": 0.495
+    },
+    "Soccer-fl1": {
+      "n": 1540,
+      "hits": 688,
+      "hit_rate": 0.4468,
+      "wilson90_lo": 0.426,
+      "usd_medio": 92.87,
+      "precio_medio_entrada": 0.4881
+    },
+    "Liga-lec": {
+      "n": 1536,
+      "hits": 824,
+      "hit_rate": 0.5365,
+      "wilson90_lo": 0.5155,
+      "usd_medio": 44.86,
+      "precio_medio_entrada": 0.5088
+    },
+    "Liga-mex": {
+      "n": 1460,
+      "hits": 722,
+      "hit_rate": 0.4945,
+      "wilson90_lo": 0.473,
+      "usd_medio": 36.07,
+      "precio_medio_entrada": 0.5106
+    },
+    "Liga-jap": {
+      "n": 1412,
+      "hits": 735,
+      "hit_rate": 0.5205,
+      "wilson90_lo": 0.4986,
+      "usd_medio": 39.83,
+      "precio_medio_entrada": 0.4942
+    },
+    "Soccer-ere": {
+      "n": 1374,
+      "hits": 692,
+      "hit_rate": 0.5036,
+      "wilson90_lo": 0.4815,
+      "usd_medio": 35.17,
+      "precio_medio_entrada": 0.4953
+    },
+    "Soccer-jap": {
+      "n": 1278,
+      "hits": 789,
+      "hit_rate": 0.6174,
+      "wilson90_lo": 0.5948,
+      "usd_medio": 43.16,
+      "precio_medio_entrada": 0.5113
+    },
+    "Liga-por": {
+      "n": 1177,
+      "hits": 602,
+      "hit_rate": 0.5115,
+      "wilson90_lo": 0.4875,
+      "usd_medio": 61.77,
+      "precio_medio_entrada": 0.5123
+    },
+    "Liga-sud": {
+      "n": 1130,
+      "hits": 578,
+      "hit_rate": 0.5115,
+      "wilson90_lo": 0.487,
+      "usd_medio": 37.89,
+      "precio_medio_entrada": 0.5056
+    },
+    "Soccer-sud": {
+      "n": 1044,
+      "hits": 551,
+      "hit_rate": 0.5278,
+      "wilson90_lo": 0.5023,
+      "usd_medio": 76.94,
+      "precio_medio_entrada": 0.5223
+    },
+    "Liga-tur": {
+      "n": 1021,
+      "hits": 504,
+      "hit_rate": 0.4936,
+      "wilson90_lo": 0.4679,
+      "usd_medio": 50.56,
+      "precio_medio_entrada": 0.4961
+    },
+    "Soccer-tur": {
+      "n": 1019,
+      "hits": 563,
+      "hit_rate": 0.5525,
+      "wilson90_lo": 0.5268,
+      "usd_medio": 84.33,
+      "precio_medio_entrada": 0.529
+    },
+    "Liga-efl": {
+      "n": 994,
+      "hits": 479,
+      "hit_rate": 0.4819,
+      "wilson90_lo": 0.4559,
+      "usd_medio": 40.29,
+      "precio_medio_entrada": 0.5008
+    },
+    "Liga-den": {
+      "n": 988,
+      "hits": 525,
+      "hit_rate": 0.5314,
+      "wilson90_lo": 0.5052,
+      "usd_medio": 57.28,
+      "precio_medio_entrada": 0.5096
+    },
+    "Soccer-efl": {
+      "n": 964,
+      "hits": 443,
+      "hit_rate": 0.4595,
+      "wilson90_lo": 0.4333,
+      "usd_medio": 58.04,
+      "precio_medio_entrada": 0.4844
+    },
+    "Liga-bl2": {
+      "n": 921,
+      "hits": 509,
+      "hit_rate": 0.5527,
+      "wilson90_lo": 0.5256,
+      "usd_medio": 48.09,
+      "precio_medio_entrada": 0.5168
+    },
+    "Soccer-por": {
+      "n": 874,
+      "hits": 470,
+      "hit_rate": 0.5378,
+      "wilson90_lo": 0.5099,
+      "usd_medio": 68.27,
+      "precio_medio_entrada": 0.5187
+    },
+    "Liga-swe": {
+      "n": 817,
+      "hits": 432,
+      "hit_rate": 0.5288,
+      "wilson90_lo": 0.5,
+      "usd_medio": 40.64,
+      "precio_medio_entrada": 0.5011
+    },
+    "Soccer-chi1": {
+      "n": 809,
+      "hits": 418,
+      "hit_rate": 0.5167,
+      "wilson90_lo": 0.4878,
+      "usd_medio": 43.22,
+      "precio_medio_entrada": 0.4753
+    },
+    "Soccer-chi": {
+      "n": 796,
+      "hits": 370,
+      "hit_rate": 0.4648,
+      "wilson90_lo": 0.4359,
+      "usd_medio": 31.41,
+      "precio_medio_entrada": 0.4758
+    },
+    "Soccer-ecu1": {
+      "n": 787,
+      "hits": 397,
+      "hit_rate": 0.5044,
+      "wilson90_lo": 0.4752,
+      "usd_medio": 33.52,
+      "precio_medio_entrada": 0.4927
+    },
+    "Liga-itsb": {
+      "n": 782,
+      "hits": 367,
+      "hit_rate": 0.4693,
+      "wilson90_lo": 0.4401,
+      "usd_medio": 28.52,
+      "precio_medio_entrada": 0.5021
+    },
+    "Liga-nwsl": {
+      "n": 782,
+      "hits": 362,
+      "hit_rate": 0.4629,
+      "wilson90_lo": 0.4338,
+      "usd_medio": 20.11,
+      "precio_medio_entrada": 0.4759
+    },
+    "Soccer-per1": {
+      "n": 762,
+      "hits": 398,
+      "hit_rate": 0.5223,
+      "wilson90_lo": 0.4925,
+      "usd_medio": 36.19,
+      "precio_medio_entrada": 0.4959
+    },
+    "Liga-chi": {
+      "n": 753,
+      "hits": 364,
+      "hit_rate": 0.4834,
+      "wilson90_lo": 0.4536,
+      "usd_medio": 34.27,
+      "precio_medio_entrada": 0.4885
+    },
+    "Soccer-den": {
+      "n": 748,
+      "hits": 389,
+      "hit_rate": 0.5201,
+      "wilson90_lo": 0.49,
+      "usd_medio": 59.59,
+      "precio_medio_entrada": 0.5071
+    },
+    "Liga-es2": {
+      "n": 736,
+      "hits": 381,
+      "hit_rate": 0.5177,
+      "wilson90_lo": 0.4874,
+      "usd_medio": 31.21,
+      "precio_medio_entrada": 0.5063
+    },
+    "Soccer-swe": {
+      "n": 727,
+      "hits": 394,
+      "hit_rate": 0.542,
+      "wilson90_lo": 0.5115,
+      "usd_medio": 52.78,
+      "precio_medio_entrada": 0.51
+    },
+    "Soccer-bun": {
+      "n": 689,
+      "hits": 340,
+      "hit_rate": 0.4935,
+      "wilson90_lo": 0.4622,
+      "usd_medio": 85.81,
+      "precio_medio_entrada": 0.475
+    },
+    "Soccer-es2": {
+      "n": 647,
+      "hits": 315,
+      "hit_rate": 0.4869,
+      "wilson90_lo": 0.4547,
+      "usd_medio": 55.64,
+      "precio_medio_entrada": 0.5174
+    },
+    "Soccer-nwsl": {
+      "n": 627,
+      "hits": 274,
+      "hit_rate": 0.437,
+      "wilson90_lo": 0.4048,
+      "usd_medio": 23.16,
+      "precio_medio_entrada": 0.4666
+    },
+    "Soccer-bra2": {
+      "n": 626,
+      "hits": 319,
+      "hit_rate": 0.5096,
+      "wilson90_lo": 0.4767,
+      "usd_medio": 47.51,
+      "precio_medio_entrada": 0.5011
+    },
+    "Liga-tur2": {
+      "n": 571,
+      "hits": 288,
+      "hit_rate": 0.5044,
+      "wilson90_lo": 0.47,
+      "usd_medio": 72.49,
+      "precio_medio_entrada": 0.5041
+    },
+    "Soccer-itsb": {
+      "n": 567,
+      "hits": 299,
+      "hit_rate": 0.5273,
+      "wilson90_lo": 0.4928,
+      "usd_medio": 69.49,
+      "precio_medio_entrada": 0.5001
+    },
+    "Soccer-sui": {
+      "n": 565,
+      "hits": 282,
+      "hit_rate": 0.4991,
+      "wilson90_lo": 0.4646,
+      "usd_medio": 28.64,
+      "precio_medio_entrada": 0.5031
+    },
+    "Liga-col1": {
+      "n": 561,
+      "hits": 262,
+      "hit_rate": 0.467,
+      "wilson90_lo": 0.4326,
+      "usd_medio": 24.05,
+      "precio_medio_entrada": 0.4744
+    },
+    "Soccer-tur2": {
+      "n": 554,
+      "hits": 257,
+      "hit_rate": 0.4639,
+      "wilson90_lo": 0.4293,
+      "usd_medio": 45.25,
+      "precio_medio_entrada": 0.4974
+    },
+    "Liga-efa": {
+      "n": 545,
+      "hits": 276,
+      "hit_rate": 0.5064,
+      "wilson90_lo": 0.4712,
+      "usd_medio": 18.38,
+      "precio_medio_entrada": 0.5193
+    },
+    "Liga-lib": {
+      "n": 528,
+      "hits": 280,
+      "hit_rate": 0.5303,
+      "wilson90_lo": 0.4945,
+      "usd_medio": 55.89,
+      "precio_medio_entrada": 0.5128
+    },
+    "Soccer-lec": {
+      "n": 520,
+      "hits": 247,
+      "hit_rate": 0.475,
+      "wilson90_lo": 0.4392,
+      "usd_medio": 38.56,
+      "precio_medio_entrada": 0.5107
+    },
+    "Soccer-bl2": {
+      "n": 510,
+      "hits": 250,
+      "hit_rate": 0.4902,
+      "wilson90_lo": 0.4539,
+      "usd_medio": 46.27,
+      "precio_medio_entrada": 0.4994
+    },
+    "Liga-ecu1": {
+      "n": 501,
+      "hits": 251,
+      "hit_rate": 0.501,
+      "wilson90_lo": 0.4643,
+      "usd_medio": 31.07,
+      "precio_medio_entrada": 0.4975
+    },
+    "Liga-fin1": {
+      "n": 500,
+      "hits": 275,
+      "hit_rate": 0.55,
+      "wilson90_lo": 0.5132,
+      "usd_medio": 37.49,
+      "precio_medio_entrada": 0.5199
+    },
+    "Soccer-rou1": {
+      "n": 435,
+      "hits": 222,
+      "hit_rate": 0.5103,
+      "wilson90_lo": 0.471,
+      "usd_medio": 42.19,
+      "precio_medio_entrada": 0.5249
+    },
+    "Liga-egy1": {
+      "n": 428,
+      "hits": 234,
+      "hit_rate": 0.5467,
+      "wilson90_lo": 0.507,
+      "usd_medio": 22.95,
+      "precio_medio_entrada": 0.5268
+    },
+    "Liga-nor": {
+      "n": 426,
+      "hits": 209,
+      "hit_rate": 0.4906,
+      "wilson90_lo": 0.451,
+      "usd_medio": 30.12,
+      "precio_medio_entrada": 0.5068
+    },
+    "Liga-bel1": {
+      "n": 396,
+      "hits": 181,
+      "hit_rate": 0.4571,
+      "wilson90_lo": 0.4163,
+      "usd_medio": 41.53,
+      "precio_medio_entrada": 0.4675
+    },
+    "Liga-scop": {
+      "n": 396,
+      "hits": 203,
+      "hit_rate": 0.5126,
+      "wilson90_lo": 0.4714,
+      "usd_medio": 27.54,
+      "precio_medio_entrada": 0.4993
+    },
+    "Soccer-uru1": {
+      "n": 396,
+      "hits": 189,
+      "hit_rate": 0.4773,
+      "wilson90_lo": 0.4363,
+      "usd_medio": 13.35,
+      "precio_medio_entrada": 0.5053
+    },
+    "Soccer-argpn": {
+      "n": 390,
+      "hits": 183,
+      "hit_rate": 0.4692,
+      "wilson90_lo": 0.428,
+      "usd_medio": 33.53,
+      "precio_medio_entrada": 0.5325
+    },
+    "Liga-est1": {
+      "n": 374,
+      "hits": 187,
+      "hit_rate": 0.5,
+      "wilson90_lo": 0.4576,
+      "usd_medio": 42.79,
+      "precio_medio_entrada": 0.5169
+    },
+    "Liga-u20wwc": {
+      "n": 364,
+      "hits": 142,
+      "hit_rate": 0.3901,
+      "wilson90_lo": 0.349,
+      "usd_medio": 17.5,
+      "precio_medio_entrada": 0.4404
+    },
+    "Soccer-lib": {
+      "n": 359,
+      "hits": 200,
+      "hit_rate": 0.5571,
+      "wilson90_lo": 0.5137,
+      "usd_medio": 57.5,
+      "precio_medio_entrada": 0.5287
+    },
+    "Soccer-scop": {
+      "n": 346,
+      "hits": 161,
+      "hit_rate": 0.4653,
+      "wilson90_lo": 0.4216,
+      "usd_medio": 41.04,
+      "precio_medio_entrada": 0.4838
+    },
+    "Liga-argpn": {
+      "n": 338,
+      "hits": 178,
+      "hit_rate": 0.5266,
+      "wilson90_lo": 0.4819,
+      "usd_medio": 63.42,
+      "precio_medio_entrada": 0.5185
+    },
+    "Liga-pol": {
+      "n": 337,
+      "hits": 192,
+      "hit_rate": 0.5697,
+      "wilson90_lo": 0.525,
+      "usd_medio": 51.33,
+      "precio_medio_entrada": 0.5175
+    },
+    "Soccer-pol": {
+      "n": 334,
+      "hits": 176,
+      "hit_rate": 0.5269,
+      "wilson90_lo": 0.482,
+      "usd_medio": 28.68,
+      "precio_medio_entrada": 0.496
+    },
+    "Liga-lva1": {
+      "n": 328,
+      "hits": 188,
+      "hit_rate": 0.5732,
+      "wilson90_lo": 0.5278,
+      "usd_medio": 61.79,
+      "precio_medio_entrada": 0.5213
+    },
+    "Liga-isr": {
+      "n": 312,
+      "hits": 168,
+      "hit_rate": 0.5385,
+      "wilson90_lo": 0.4919,
+      "usd_medio": 66.13,
+      "precio_medio_entrada": 0.5234
+    },
+    "Soccer-efa": {
+      "n": 310,
+      "hits": 172,
+      "hit_rate": 0.5548,
+      "wilson90_lo": 0.5081,
+      "usd_medio": 8.98,
+      "precio_medio_entrada": 0.5225
+    },
+    "Liga-sui": {
+      "n": 306,
+      "hits": 155,
+      "hit_rate": 0.5065,
+      "wilson90_lo": 0.4597,
+      "usd_medio": 31.18,
+      "precio_medio_entrada": 0.4688
+    },
+    "Soccer-isr": {
+      "n": 296,
+      "hits": 127,
+      "hit_rate": 0.4291,
+      "wilson90_lo": 0.3826,
+      "usd_medio": 39.35,
+      "precio_medio_entrada": 0.485
+    },
+    "Liga-auc": {
+      "n": 293,
+      "hits": 151,
+      "hit_rate": 0.5154,
+      "wilson90_lo": 0.4674,
+      "usd_medio": 54.17,
+      "precio_medio_entrada": 0.509
+    },
+    "Soccer-u20wwc": {
+      "n": 274,
+      "hits": 109,
+      "hit_rate": 0.3978,
+      "wilson90_lo": 0.3504,
+      "usd_medio": 14.2,
+      "precio_medio_entrada": 0.4248
+    },
+    "Liga-fr2": {
+      "n": 268,
+      "hits": 150,
+      "hit_rate": 0.5597,
+      "wilson90_lo": 0.5095,
+      "usd_medio": 89.02,
+      "precio_medio_entrada": 0.5208
+    },
+    "Liga-ja2": {
+      "n": 249,
+      "hits": 134,
+      "hit_rate": 0.5382,
+      "wilson90_lo": 0.486,
+      "usd_medio": 21.47,
+      "precio_medio_entrada": 0.5006
+    },
+    "Soccer-fin1": {
+      "n": 246,
+      "hits": 131,
+      "hit_rate": 0.5325,
+      "wilson90_lo": 0.4801,
+      "usd_medio": 40.75,
+      "precio_medio_entrada": 0.5151
+    },
+    "Liga-ned2": {
+      "n": 242,
+      "hits": 119,
+      "hit_rate": 0.4917,
+      "wilson90_lo": 0.4393,
+      "usd_medio": 40.9,
+      "precio_medio_entrada": 0.4786
+    },
+    "Soccer-nor": {
+      "n": 231,
+      "hits": 110,
+      "hit_rate": 0.4762,
+      "wilson90_lo": 0.4227,
+      "usd_medio": 38.01,
+      "precio_medio_entrada": 0.4633
+    },
+    "Liga-uru1": {
+      "n": 225,
+      "hits": 116,
+      "hit_rate": 0.5156,
+      "wilson90_lo": 0.4609,
+      "usd_medio": 25.41,
+      "precio_medio_entrada": 0.4834
+    },
+    "Soccer-fr2": {
+      "n": 217,
+      "hits": 99,
+      "hit_rate": 0.4562,
+      "wilson90_lo": 0.4015,
+      "usd_medio": 48.77,
+      "precio_medio_entrada": 0.515
+    },
+    "Soccer-est1": {
+      "n": 216,
+      "hits": 84,
+      "hit_rate": 0.3889,
+      "wilson90_lo": 0.336,
+      "usd_medio": 19.49,
+      "precio_medio_entrada": 0.4897
+    },
+    "Liga-chi1": {
+      "n": 216,
+      "hits": 106,
+      "hit_rate": 0.4907,
+      "wilson90_lo": 0.4352,
+      "usd_medio": 19.47,
+      "precio_medio_entrada": 0.5023
+    },
+    "Liga-ven1": {
+      "n": 216,
+      "hits": 118,
+      "hit_rate": 0.5463,
+      "wilson90_lo": 0.4903,
+      "usd_medio": 24.26,
+      "precio_medio_entrada": 0.5261
+    },
+    "Soccer-lva1": {
+      "n": 212,
+      "hits": 120,
+      "hit_rate": 0.566,
+      "wilson90_lo": 0.5096,
+      "usd_medio": 54.61,
+      "precio_medio_entrada": 0.4447
+    },
+    "Soccer-auc": {
+      "n": 207,
+      "hits": 99,
+      "hit_rate": 0.4783,
+      "wilson90_lo": 0.4218,
+      "usd_medio": 25.64,
+      "precio_medio_entrada": 0.5431
+    },
+    "UFC": {
+      "n": 202,
+      "hits": 108,
+      "hit_rate": 0.5347,
+      "wilson90_lo": 0.4768,
+      "usd_medio": 28.33,
+      "precio_medio_entrada": 0.5277
+    },
+    "Liga-rus": {
+      "n": 201,
+      "hits": 111,
+      "hit_rate": 0.5522,
+      "wilson90_lo": 0.4942,
+      "usd_medio": 37.72,
+      "precio_medio_entrada": 0.5166
+    },
+    "Soccer-bel1": {
+      "n": 195,
+      "hits": 79,
+      "hit_rate": 0.4051,
+      "wilson90_lo": 0.349,
+      "usd_medio": 23.67,
+      "precio_medio_entrada": 0.4725
+    },
+    "Liga-bra3": {
+      "n": 188,
+      "hits": 94,
+      "hit_rate": 0.5,
+      "wilson90_lo": 0.4404,
+      "usd_medio": 26.22,
+      "precio_medio_entrada": 0.5095
+    },
+    "Liga-grc": {
+      "n": 184,
+      "hits": 99,
+      "hit_rate": 0.538,
+      "wilson90_lo": 0.4775,
+      "usd_medio": 27.61,
+      "precio_medio_entrada": 0.5051
+    },
+    "Liga-gre1": {
+      "n": 166,
+      "hits": 88,
+      "hit_rate": 0.5301,
+      "wilson90_lo": 0.4664,
+      "usd_medio": 53.51,
+      "precio_medio_entrada": 0.4869
+    },
+    "Liga-per1": {
+      "n": 166,
+      "hits": 81,
+      "hit_rate": 0.488,
+      "wilson90_lo": 0.4248,
+      "usd_medio": 14.32,
+      "precio_medio_entrada": 0.4992
+    },
+    "Liga-chl2": {
+      "n": 163,
+      "hits": 63,
+      "hit_rate": 0.3865,
+      "wilson90_lo": 0.3261,
+      "usd_medio": 50.46,
+      "precio_medio_entrada": 0.4573
+    },
+    "Soccer-cze1": {
+      "n": 156,
+      "hits": 75,
+      "hit_rate": 0.4808,
+      "wilson90_lo": 0.4159,
+      "usd_medio": 43.2,
+      "precio_medio_entrada": 0.5081
+    },
+    "Soccer-ven1": {
+      "n": 153,
+      "hits": 99,
+      "hit_rate": 0.6471,
+      "wilson90_lo": 0.5815,
+      "usd_medio": 33.22,
+      "precio_medio_entrada": 0.5457
+    },
+    "Soccer-bol1": {
+      "n": 150,
+      "hits": 72,
+      "hit_rate": 0.48,
+      "wilson90_lo": 0.4138,
+      "usd_medio": 31.27,
+      "precio_medio_entrada": 0.4836
+    },
+    "Liga-el1": {
+      "n": 133,
+      "hits": 61,
+      "hit_rate": 0.4586,
+      "wilson90_lo": 0.3891,
+      "usd_medio": 34.32,
+      "precio_medio_entrada": 0.438
+    },
+    "Liga-bra2": {
+      "n": 130,
+      "hits": 71,
+      "hit_rate": 0.5462,
+      "wilson90_lo": 0.4741,
+      "usd_medio": 25.02,
+      "precio_medio_entrada": 0.5015
+    },
+    "Liga-gtm": {
+      "n": 130,
+      "hits": 64,
+      "hit_rate": 0.4923,
+      "wilson90_lo": 0.4211,
+      "usd_medio": 32.34,
+      "precio_medio_entrada": 0.5122
+    },
+    "Soccer-chi2": {
+      "n": 129,
+      "hits": 76,
+      "hit_rate": 0.5891,
+      "wilson90_lo": 0.5168,
+      "usd_medio": 33.91,
+      "precio_medio_entrada": 0.4796
+    },
+    "Liga-dota2": {
+      "n": 128,
+      "hits": 63,
+      "hit_rate": 0.4922,
+      "wilson90_lo": 0.4204,
+      "usd_medio": 17.92,
+      "precio_medio_entrada": 0.4956
+    },
+    "Liga-atc": {
+      "n": 127,
+      "hits": 66,
+      "hit_rate": 0.5197,
+      "wilson90_lo": 0.4471,
+      "usd_medio": 18.85,
+      "precio_medio_entrada": 0.5153
+    },
+    "Liga-rou1": {
+      "n": 124,
+      "hits": 57,
+      "hit_rate": 0.4597,
+      "wilson90_lo": 0.3877,
+      "usd_medio": 22.71,
+      "precio_medio_entrada": 0.4982
+    },
+    "Soccer-bra3": {
+      "n": 123,
+      "hits": 60,
+      "hit_rate": 0.4878,
+      "wilson90_lo": 0.4147,
+      "usd_medio": 36.15,
+      "precio_medio_entrada": 0.5286
+    },
+    "Liga-fpd": {
+      "n": 118,
+      "hits": 52,
+      "hit_rate": 0.4407,
+      "wilson90_lo": 0.3677,
+      "usd_medio": 18.28,
+      "precio_medio_entrada": 0.4641
+    },
+    "Soccer-ja2": {
+      "n": 116,
+      "hits": 59,
+      "hit_rate": 0.5086,
+      "wilson90_lo": 0.4329,
+      "usd_medio": 31.92,
+      "precio_medio_entrada": 0.5199
+    },
+    "Soccer-gre1": {
+      "n": 113,
+      "hits": 48,
+      "hit_rate": 0.4248,
+      "wilson90_lo": 0.3509,
+      "usd_medio": 44.3,
+      "precio_medio_entrada": 0.484
+    },
+    "Liga-isl1": {
+      "n": 85,
+      "hits": 47,
+      "hit_rate": 0.5529,
+      "wilson90_lo": 0.464,
+      "usd_medio": 17.92,
+      "precio_medio_entrada": 0.5263
+    },
+    "Liga-ltu1": {
+      "n": 84,
+      "hits": 38,
+      "hit_rate": 0.4524,
+      "wilson90_lo": 0.3659,
+      "usd_medio": 14.57,
+      "precio_medio_entrada": 0.5027
+    },
+    "Soccer-ltu1": {
+      "n": 84,
+      "hits": 30,
+      "hit_rate": 0.3571,
+      "wilson90_lo": 0.2768,
+      "usd_medio": 29.91,
+      "precio_medio_entrada": 0.4878
+    },
+    "Soccer-rus": {
+      "n": 82,
+      "hits": 53,
+      "hit_rate": 0.6463,
+      "wilson90_lo": 0.5561,
+      "usd_medio": 22.38,
+      "precio_medio_entrada": 0.5461
+    },
+    "Soccer-chl2": {
+      "n": 80,
+      "hits": 49,
+      "hit_rate": 0.6125,
+      "wilson90_lo": 0.5206,
+      "usd_medio": 21.52,
+      "precio_medio_entrada": 0.5162
+    },
+    "Liga-uslc": {
+      "n": 79,
+      "hits": 35,
+      "hit_rate": 0.443,
+      "wilson90_lo": 0.3545,
+      "usd_medio": 27.01,
+      "precio_medio_entrada": 0.4982
+    },
+    "Liga-srb": {
+      "n": 72,
+      "hits": 31,
+      "hit_rate": 0.4306,
+      "wilson90_lo": 0.3388,
+      "usd_medio": 15.1,
+      "precio_medio_entrada": 0.4619
+    },
+    "Liga-hr1": {
+      "n": 71,
+      "hits": 34,
+      "hit_rate": 0.4789,
+      "wilson90_lo": 0.3839,
+      "usd_medio": 10.29,
+      "precio_medio_entrada": 0.498
+    },
+    "Liga-hok": {
+      "n": 69,
+      "hits": 24,
+      "hit_rate": 0.3478,
+      "wilson90_lo": 0.2609,
+      "usd_medio": 18.48,
+      "precio_medio_entrada": 0.3948
+    },
+    "Liga-nor2": {
+      "n": 68,
+      "hits": 28,
+      "hit_rate": 0.4118,
+      "wilson90_lo": 0.3188,
+      "usd_medio": 20.94,
+      "precio_medio_entrada": 0.5142
+    },
+    "Soccer-el1": {
+      "n": 68,
+      "hits": 27,
+      "hit_rate": 0.3971,
+      "wilson90_lo": 0.3052,
+      "usd_medio": 81.03,
+      "precio_medio_entrada": 0.5064
+    },
+    "Soccer-isl1": {
+      "n": 65,
+      "hits": 34,
+      "hit_rate": 0.5231,
+      "wilson90_lo": 0.4223,
+      "usd_medio": 24.06,
+      "precio_medio_entrada": 0.4641
+    },
+    "Liga-ukr1": {
+      "n": 64,
+      "hits": 30,
+      "hit_rate": 0.4688,
+      "wilson90_lo": 0.3695,
+      "usd_medio": 60.94,
+      "precio_medio_entrada": 0.5503
+    },
+    "Liga-svk1": {
+      "n": 64,
+      "hits": 37,
+      "hit_rate": 0.5781,
+      "wilson90_lo": 0.4754,
+      "usd_medio": 20.65,
+      "precio_medio_entrada": 0.5084
+    },
+    "Liga-bul": {
+      "n": 64,
+      "hits": 40,
+      "hit_rate": 0.625,
+      "wilson90_lo": 0.5223,
+      "usd_medio": 21.87,
+      "precio_medio_entrada": 0.5384
+    },
+    "Liga-nirl1": {
+      "n": 63,
+      "hits": 24,
+      "hit_rate": 0.381,
+      "wilson90_lo": 0.2872,
+      "usd_medio": 14.23,
+      "precio_medio_entrada": 0.5102
+    },
+    "Liga-chi2": {
+      "n": 62,
+      "hits": 31,
+      "hit_rate": 0.5,
+      "wilson90_lo": 0.3977,
+      "usd_medio": 11.5,
+      "precio_medio_entrada": 0.45
+    },
+    "Soccer-uslc": {
+      "n": 59,
+      "hits": 28,
+      "hit_rate": 0.4746,
+      "wilson90_lo": 0.3711,
+      "usd_medio": 9.75,
+      "precio_medio_entrada": 0.4191
+    },
+    "Liga-cze1": {
+      "n": 59,
+      "hits": 35,
+      "hit_rate": 0.5932,
+      "wilson90_lo": 0.4862,
+      "usd_medio": 26.31,
+      "precio_medio_entrada": 0.5105
+    },
+    "Soccer-ukr1": {
+      "n": 58,
+      "hits": 34,
+      "hit_rate": 0.5862,
+      "wilson90_lo": 0.4783,
+      "usd_medio": 32.74,
+      "precio_medio_entrada": 0.5108
+    },
+    "Soccer-bul": {
+      "n": 57,
+      "hits": 34,
+      "hit_rate": 0.5965,
+      "wilson90_lo": 0.4876,
+      "usd_medio": 47.85,
+      "precio_medio_entrada": 0.5328
+    },
+    "Soccer-kaz1": {
+      "n": 56,
+      "hits": 16,
+      "hit_rate": 0.2857,
+      "wilson90_lo": 0.1981,
+      "usd_medio": 31.96,
+      "precio_medio_entrada": 0.4463
+    },
+    "Liga-canpl": {
+      "n": 53,
+      "hits": 28,
+      "hit_rate": 0.5283,
+      "wilson90_lo": 0.4169,
+      "usd_medio": 20.27,
+      "precio_medio_entrada": 0.5334
+    },
+    "Soccer-ned2": {
+      "n": 53,
+      "hits": 30,
+      "hit_rate": 0.566,
+      "wilson90_lo": 0.4535,
+      "usd_medio": 106.27,
+      "precio_medio_entrada": 0.4772
+    },
+    "Soccer-idn1": {
+      "n": 53,
+      "hits": 23,
+      "hit_rate": 0.434,
+      "wilson90_lo": 0.3279,
+      "usd_medio": 10.73,
+      "precio_medio_entrada": 0.4711
+    },
+    "Liga-hun": {
+      "n": 53,
+      "hits": 27,
+      "hit_rate": 0.5094,
+      "wilson90_lo": 0.3988,
+      "usd_medio": 44.59,
+      "precio_medio_entrada": 0.5242
+    },
+    "Liga-col2": {
+      "n": 50,
+      "hits": 25,
+      "hit_rate": 0.5,
+      "wilson90_lo": 0.3867,
+      "usd_medio": 18.72,
+      "precio_medio_entrada": 0.5528
+    },
+    "Liga-val": {
+      "n": 50,
+      "hits": 23,
+      "hit_rate": 0.46,
+      "wilson90_lo": 0.3491,
+      "usd_medio": 23.85,
+      "precio_medio_entrada": 0.4666
+    },
+    "Soccer-srb": {
+      "n": 49,
+      "hits": 27,
+      "hit_rate": 0.551,
+      "wilson90_lo": 0.4345,
+      "usd_medio": 19.25,
+      "precio_medio_entrada": 0.5495
+    },
+    "Liga-usl1": {
+      "n": 49,
+      "hits": 34,
+      "hit_rate": 0.6939,
+      "wilson90_lo": 0.5778,
+      "usd_medio": 75.7,
+      "precio_medio_entrada": 0.6657
+    },
+    "Soccer-fpd": {
+      "n": 48,
+      "hits": 36,
+      "hit_rate": 0.75,
+      "wilson90_lo": 0.6357,
+      "usd_medio": 41.02,
+      "precio_medio_entrada": 0.5785
+    },
+    "Liga-idn1": {
+      "n": 43,
+      "hits": 25,
+      "hit_rate": 0.5814,
+      "wilson90_lo": 0.4564,
+      "usd_medio": 34.21,
+      "precio_medio_entrada": 0.5258
+    },
+    "Soccer-grc": {
+      "n": 43,
+      "hits": 13,
+      "hit_rate": 0.3023,
+      "wilson90_lo": 0.2017,
+      "usd_medio": 34.1,
+      "precio_medio_entrada": 0.3556
+    },
+    "Soccer-gtm": {
+      "n": 42,
+      "hits": 23,
+      "hit_rate": 0.5476,
+      "wilson90_lo": 0.4222,
+      "usd_medio": 13.66,
+      "precio_medio_entrada": 0.4691
+    },
+    "Soccer-nor2": {
+      "n": 39,
+      "hits": 32,
+      "hit_rate": 0.8205,
+      "wilson90_lo": 0.6998,
+      "usd_medio": 26.81,
+      "precio_medio_entrada": 0.49
+    },
+    "Liga-swe2": {
+      "n": 35,
+      "hits": 17,
+      "hit_rate": 0.4857,
+      "wilson90_lo": 0.3528,
+      "usd_medio": 30.63,
+      "precio_medio_entrada": 0.4955
+    },
+    "Soccer-kor2": {
+      "n": 33,
+      "hits": 13,
+      "hit_rate": 0.3939,
+      "wilson90_lo": 0.2672,
+      "usd_medio": 7.44,
+      "precio_medio_entrada": 0.4591
+    },
+    "Liga-bol1": {
+      "n": 32,
+      "hits": 14,
+      "hit_rate": 0.4375,
+      "wilson90_lo": 0.3038,
+      "usd_medio": 45.98,
+      "precio_medio_entrada": 0.4484
+    },
+    "Liga-uae1": {
+      "n": 28,
+      "hits": 11,
+      "hit_rate": 0.3929,
+      "wilson90_lo": 0.257,
+      "usd_medio": 95.35,
+      "precio_medio_entrada": 0.4918
+    },
+    "Soccer-svk1": {
+      "n": 24,
+      "hits": 12,
+      "hit_rate": 0.5,
+      "wilson90_lo": 0.3408,
+      "usd_medio": 40.92,
+      "precio_medio_entrada": 0.5387
+    },
+    "Soccer-hun": {
+      "n": 24,
+      "hits": 18,
+      "hit_rate": 0.75,
+      "wilson90_lo": 0.5845,
+      "usd_medio": 67.91,
+      "precio_medio_entrada": 0.5647
+    },
+    "Liga-kaz1": {
+      "n": 24,
+      "hits": 9,
+      "hit_rate": 0.375,
+      "wilson90_lo": 0.233,
+      "usd_medio": 23.49,
+      "precio_medio_entrada": 0.3935
+    },
+    "Soccer-bel2": {
+      "n": 23,
+      "hits": 9,
+      "hit_rate": 0.3913,
+      "wilson90_lo": 0.244,
+      "usd_medio": 17.9,
+      "precio_medio_entrada": 0.4496
+    },
+    "Soccer-hr1": {
+      "n": 21,
+      "hits": 11,
+      "hit_rate": 0.5238,
+      "wilson90_lo": 0.3523,
+      "usd_medio": 7.78,
+      "precio_medio_entrada": 0.499
+    },
+    "Liga-wsl": {
+      "n": 20,
+      "hits": 9,
+      "hit_rate": 0.45,
+      "wilson90_lo": 0.2841,
+      "usd_medio": 41.98,
+      "precio_medio_entrada": 0.4887
+    },
+    "Liga-aze1": {
+      "n": 20,
+      "hits": 11,
+      "hit_rate": 0.55,
+      "wilson90_lo": 0.3722,
+      "usd_medio": 72.12,
+      "precio_medio_entrada": 0.6457
+    },
+    "Liga-mlbb": {
+      "n": 20,
+      "hits": 7,
+      "hit_rate": 0.35,
+      "wilson90_lo": 0.2022,
+      "usd_medio": 23.58,
+      "precio_medio_entrada": 0.5052
+    },
+    "Soccer-canpl": {
+      "n": 19,
+      "hits": 12,
+      "hit_rate": 0.6316,
+      "wilson90_lo": 0.4441,
+      "usd_medio": 6.44,
+      "precio_medio_entrada": 0.52
+    },
+    "Soccer-wsl": {
+      "n": 19,
+      "hits": 5,
+      "hit_rate": 0.2632,
+      "wilson90_lo": 0.1344,
+      "usd_medio": 6.36,
+      "precio_medio_entrada": 0.3444
+    },
+    "Soccer-cafcl": {
+      "n": 19,
+      "hits": 12,
+      "hit_rate": 0.6316,
+      "wilson90_lo": 0.4441,
+      "usd_medio": 5.69,
+      "precio_medio_entrada": 0.5179
+    },
+    "Liga-kor2": {
+      "n": 17,
+      "hits": 10,
+      "hit_rate": 0.5882,
+      "wilson90_lo": 0.3933,
+      "usd_medio": 14.01,
+      "precio_medio_entrada": 0.5165
+    },
+    "Soccer-swe2": {
+      "n": 17,
+      "hits": 11,
+      "hit_rate": 0.6471,
+      "wilson90_lo": 0.4486,
+      "usd_medio": 44.08,
+      "precio_medio_entrada": 0.4812
+    },
+    "Soccer-slo": {
+      "n": 16,
+      "hits": 9,
+      "hit_rate": 0.5625,
+      "wilson90_lo": 0.3646,
+      "usd_medio": 81.46,
+      "precio_medio_entrada": 0.4912
+    },
+    "Soccer-col2": {
+      "n": 16,
+      "hits": 8,
+      "hit_rate": 0.5,
+      "wilson90_lo": 0.3098,
+      "usd_medio": 11.31,
+      "precio_medio_entrada": 0.4766
+    },
+    "Liga-bel2": {
+      "n": 14,
+      "hits": 6,
+      "hit_rate": 0.4286,
+      "wilson90_lo": 0.2406,
+      "usd_medio": 6.2,
+      "precio_medio_entrada": 0.4571
+    },
+    "Soccer-uae1": {
+      "n": 14,
+      "hits": 5,
+      "hit_rate": 0.3571,
+      "wilson90_lo": 0.1861,
+      "usd_medio": 54.46,
+      "precio_medio_entrada": 0.5821
+    },
+    "Liga-cafcl": {
+      "n": 14,
+      "hits": 8,
+      "hit_rate": 0.5714,
+      "wilson90_lo": 0.3604,
+      "usd_medio": 7.74,
+      "precio_medio_entrada": 0.3807
+    },
+    "Soccer-atc": {
+      "n": 12,
+      "hits": 5,
+      "hit_rate": 0.4167,
+      "wilson90_lo": 0.22,
+      "usd_medio": 25.97,
+      "precio_medio_entrada": 0.3933
+    },
+    "Cricket": {
+      "n": 11,
+      "hits": 7,
+      "hit_rate": 0.6364,
+      "wilson90_lo": 0.394,
+      "usd_medio": 8.66,
+      "precio_medio_entrada": 0.63
+    },
+    "Liga-slo": {
+      "n": 10,
+      "hits": 6,
+      "hit_rate": 0.6,
+      "wilson90_lo": 0.3516,
+      "usd_medio": 5.93,
+      "precio_medio_entrada": 0.5779
+    },
+    "Soccer-saf1": {
+      "n": 10,
+      "hits": 6,
+      "hit_rate": 0.6,
+      "wilson90_lo": 0.3516,
+      "usd_medio": 4.89,
+      "precio_medio_entrada": 0.587
+    },
+    "Soccer-nirl1": {
+      "n": 8,
+      "hits": 5,
+      "hit_rate": 0.625,
+      "wilson90_lo": 0.348,
+      "usd_medio": 17.25,
+      "precio_medio_entrada": 0.6163
+    },
+    "Liga-setkameua": {
+      "n": 8,
+      "hits": 0,
+      "hit_rate": 0.0,
+      "wilson90_lo": 0.0,
+      "usd_medio": 0.1,
+      "precio_medio_entrada": 0.0055
+    },
+    "Liga-cricsherepunjab": {
+      "n": 7,
+      "hits": 0,
+      "hit_rate": 0.0,
+      "wilson90_lo": 0.0,
+      "usd_medio": 0.38,
+      "precio_medio_entrada": 0.02
+    },
+    "Liga-setkamecz": {
+      "n": 6,
+      "hits": 2,
+      "hit_rate": 0.3333,
+      "wilson90_lo": 0.1173,
+      "usd_medio": 8.85,
+      "precio_medio_entrada": 0.3367
+    },
+    "Liga-crint": {
+      "n": 5,
+      "hits": 1,
+      "hit_rate": 0.2,
+      "wilson90_lo": 0.046,
+      "usd_medio": 2.41,
+      "precio_medio_entrada": 0.358
+    },
+    "Soccer-usl1": {
+      "n": 4,
+      "hits": 2,
+      "hit_rate": 0.5,
+      "wilson90_lo": 0.1824,
+      "usd_medio": 2.7,
+      "precio_medio_entrada": 0.61
+    },
+    "Liga-crickcct20": {
+      "n": 4,
+      "hits": 4,
+      "hit_rate": 1.0,
+      "wilson90_lo": 0.5965,
+      "usd_medio": 21.75,
+      "precio_medio_entrada": 0.985
+    },
+    "Liga-vbeuro": {
+      "n": 3,
+      "hits": 0,
+      "hit_rate": 0.0,
+      "wilson90_lo": 0.0,
+      "usd_medio": 0.38,
+      "precio_medio_entrada": 0.0133
+    },
+    "Liga-saf1": {
+      "n": 2,
+      "hits": 1,
+      "hit_rate": 0.5,
+      "wilson90_lo": 0.1209,
+      "usd_medio": 6.7,
+      "precio_medio_entrada": 0.66
+    },
+    "Soccer-aze1": {
+      "n": 2,
+      "hits": 1,
+      "hit_rate": 0.5,
+      "wilson90_lo": 0.1209,
+      "usd_medio": 11.28,
+      "precio_medio_entrada": 0.55
+    },
+    "Liga-setkawoua": {
+      "n": 2,
+      "hits": 2,
+      "hit_rate": 1.0,
+      "wilson90_lo": 0.425,
+      "usd_medio": 9.9,
+      "precio_medio_entrada": 0.99
+    },
+    "Liga-cricmajort20": {
+      "n": 2,
+      "hits": 2,
+      "hit_rate": 1.0,
+      "wilson90_lo": 0.425,
+      "usd_medio": 18.3,
+      "precio_medio_entrada": 0.99
+    },
+    "Liga-cricnrwt10": {
+      "n": 2,
+      "hits": 0,
+      "hit_rate": 0.0,
+      "wilson90_lo": 0.0,
+      "usd_medio": 0.16,
+      "precio_medio_entrada": 0.01
+    }
+  },
+  "top_wallets_combo_n_ge_5": [
+    {
+      "n": 444,
+      "hits": 444,
+      "hit_rate": 1.0,
+      "wilson90_lo": 0.9939,
+      "usd_medio": 394.23,
+      "precio_medio_entrada": 0.9981,
+      "wallet": "0x4638702f203aaabc57fe2b9676c5cd9a2a686b0a"
+    },
+    {
+      "n": 273,
+      "hits": 273,
+      "hit_rate": 1.0,
+      "wilson90_lo": 0.9902,
+      "usd_medio": 158.29,
+      "precio_medio_entrada": 0.9987,
+      "wallet": "0x5f486fdf01685dc2fd8880d0d1fc3495858aba84"
+    },
+    {
+      "n": 227,
+      "hits": 227,
+      "hit_rate": 1.0,
+      "wilson90_lo": 0.9882,
+      "usd_medio": 791.42,
+      "precio_medio_entrada": 0.999,
+      "wallet": "0x14f147aad3c4a759e5c9350491af61646f2c4a46"
+    },
+    {
+      "n": 206,
+      "hits": 206,
+      "hit_rate": 1.0,
+      "wilson90_lo": 0.987,
+      "usd_medio": 192.52,
+      "precio_medio_entrada": 0.999,
+      "wallet": "0x5251940f4b80b6456a3e8c461f0f14da09dd6719"
+    },
+    {
+      "n": 191,
+      "hits": 191,
+      "hit_rate": 1.0,
+      "wilson90_lo": 0.986,
+      "usd_medio": 848.08,
+      "precio_medio_entrada": 0.9935,
+      "wallet": "0x996ac56c9e72b6ca38a30ae9f6e85152d9afe3cc"
+    },
+    {
+      "n": 171,
+      "hits": 171,
+      "hit_rate": 1.0,
+      "wilson90_lo": 0.9844,
+      "usd_medio": 300.54,
+      "precio_medio_entrada": 0.9965,
+      "wallet": "0x9977760c6bd6f824cac834d1a36ee99478d63020"
+    },
+    {
+      "n": 167,
+      "hits": 167,
+      "hit_rate": 1.0,
+      "wilson90_lo": 0.9841,
+      "usd_medio": 1088.84,
+      "precio_medio_entrada": 0.7692,
+      "wallet": "0x31e5d54aded22aa7cd80dbe9e33102abe2504879"
+    },
+    {
+      "n": 159,
+      "hits": 159,
+      "hit_rate": 1.0,
+      "wilson90_lo": 0.9833,
+      "usd_medio": 101.02,
+      "precio_medio_entrada": 0.937,
+      "wallet": "0xb0c85813a7a4428f1139ff91d3118a92c391fe7f"
+    },
+    {
+      "n": 145,
+      "hits": 145,
+      "hit_rate": 1.0,
+      "wilson90_lo": 0.9817,
+      "usd_medio": 317.76,
+      "precio_medio_entrada": 0.9895,
+      "wallet": "0xd487f513cfead22d76b6db4567c756b3cf25053e"
+    },
+    {
+      "n": 143,
+      "hits": 143,
+      "hit_rate": 1.0,
+      "wilson90_lo": 0.9814,
+      "usd_medio": 1463.04,
+      "precio_medio_entrada": 0.999,
+      "wallet": "0x731a241767938bb23d1b2fac4c9cd2f3cea9033f"
+    },
+    {
+      "n": 136,
+      "hits": 136,
+      "hit_rate": 1.0,
+      "wilson90_lo": 0.9805,
+      "usd_medio": 332.1,
+      "precio_medio_entrada": 0.9989,
+      "wallet": "0x1d210989cb55aad6ae080c7d989c82d04708dba6"
+    },
+    {
+      "n": 129,
+      "hits": 129,
+      "hit_rate": 1.0,
+      "wilson90_lo": 0.9795,
+      "usd_medio": 228.44,
+      "precio_medio_entrada": 0.9978,
+      "wallet": "0xca5e097bc5a73bafbf68ef83470cb4b3bd50a236"
+    },
+    {
+      "n": 128,
+      "hits": 128,
+      "hit_rate": 1.0,
+      "wilson90_lo": 0.9793,
+      "usd_medio": 799.06,
+      "precio_medio_entrada": 0.9975,
+      "wallet": "0x61fefe72aebe7afc69d190bacfad8b561dc70956"
+    },
+    {
+      "n": 122,
+      "hits": 122,
+      "hit_rate": 1.0,
+      "wilson90_lo": 0.9783,
+      "usd_medio": 21.55,
+      "precio_medio_entrada": 0.9057,
+      "wallet": "0x942e79166821f3f4e67872e44f1672fcccd2be27"
+    },
+    {
+      "n": 118,
+      "hits": 118,
+      "hit_rate": 1.0,
+      "wilson90_lo": 0.9776,
+      "usd_medio": 840.97,
+      "precio_medio_entrada": 0.999,
+      "wallet": "0x3b4c4ff8459237e1c65c981d7a8ee43746e5e850"
+    },
+    {
+      "n": 113,
+      "hits": 113,
+      "hit_rate": 1.0,
+      "wilson90_lo": 0.9766,
+      "usd_medio": 891.16,
+      "precio_medio_entrada": 0.999,
+      "wallet": "0xe557e4a25d385bf03395153a32faa989f5999597"
+    },
+    {
+      "n": 113,
+      "hits": 113,
+      "hit_rate": 1.0,
+      "wilson90_lo": 0.9766,
+      "usd_medio": 666.28,
+      "precio_medio_entrada": 0.999,
+      "wallet": "0x5e04e12c3376a6a68f8cdffc8b972df3bd9e08a2"
+    },
+    {
+      "n": 111,
+      "hits": 111,
+      "hit_rate": 1.0,
+      "wilson90_lo": 0.9762,
+      "usd_medio": 872.17,
+      "precio_medio_entrada": 0.999,
+      "wallet": "0x73b18f50526851ac8e52f07ae0f3cc665bfdbd8b"
+    },
+    {
+      "n": 106,
+      "hits": 106,
+      "hit_rate": 1.0,
+      "wilson90_lo": 0.9751,
+      "usd_medio": 177.14,
+      "precio_medio_entrada": 0.9989,
+      "wallet": "0x7afcbc6fc922e774c8f7f5802b6f512e2cadea2c"
+    },
+    {
+      "n": 104,
+      "hits": 104,
+      "hit_rate": 1.0,
+      "wilson90_lo": 0.9746,
+      "usd_medio": 523.86,
+      "precio_medio_entrada": 0.999,
+      "wallet": "0x543b6b3d6b86c630e06a0cad3260b294a3806c81"
+    },
+    {
+      "n": 100,
+      "hits": 100,
+      "hit_rate": 1.0,
+      "wilson90_lo": 0.9737,
+      "usd_medio": 962.85,
+      "precio_medio_entrada": 0.9949,
+      "wallet": "0x204e14f11a08a465479e437b0e37b7e9e0358d08"
+    },
+    {
+      "n": 93,
+      "hits": 93,
+      "hit_rate": 1.0,
+      "wilson90_lo": 0.9717,
+      "usd_medio": 947.01,
+      "precio_medio_entrada": 0.999,
+      "wallet": "0xd703c88c0b726ae01ee9602a422013ca8d4171bf"
+    },
+    {
+      "n": 90,
+      "hits": 90,
+      "hit_rate": 1.0,
+      "wilson90_lo": 0.9708,
+      "usd_medio": 271.68,
+      "precio_medio_entrada": 0.999,
+      "wallet": "0x151932d0b12055e6a6a8c5f5f0cef65dad918dfb"
+    },
+    {
+      "n": 89,
+      "hits": 89,
+      "hit_rate": 1.0,
+      "wilson90_lo": 0.9705,
+      "usd_medio": 148.46,
+      "precio_medio_entrada": 0.9985,
+      "wallet": "0x2db098d402c3f90531380b03834791b3744c2fed"
+    },
+    {
+      "n": 86,
+      "hits": 86,
+      "hit_rate": 1.0,
+      "wilson90_lo": 0.9695,
+      "usd_medio": 22.39,
+      "precio_medio_entrada": 0.9813,
+      "wallet": "0x85630920a4199fb360724c2e07492b343cdf5e98"
+    },
+    {
+      "n": 82,
+      "hits": 82,
+      "hit_rate": 1.0,
+      "wilson90_lo": 0.9681,
+      "usd_medio": 259.42,
+      "precio_medio_entrada": 0.9989,
+      "wallet": "0x0997f4b1f822423c65907c57963fe7191e1ec9f6"
+    },
+    {
+      "n": 78,
+      "hits": 78,
+      "hit_rate": 1.0,
+      "wilson90_lo": 0.9665,
+      "usd_medio": 137.09,
+      "precio_medio_entrada": 0.9038,
+      "wallet": "0xe0bf7ab5b11dcbdbb169638cacf43edaa540d7fe"
+    },
+    {
+      "n": 77,
+      "hits": 77,
+      "hit_rate": 1.0,
+      "wilson90_lo": 0.966,
+      "usd_medio": 435.95,
+      "precio_medio_entrada": 0.999,
+      "wallet": "0xc1288413973a8e48a28b702c94450a6b1fc3d982"
+    },
+    {
+      "n": 73,
+      "hits": 73,
+      "hit_rate": 1.0,
+      "wilson90_lo": 0.9643,
+      "usd_medio": 76.73,
+      "precio_medio_entrada": 0.9185,
+      "wallet": "0xb63d2c013589f469350d55d9fce81b47243f239f"
+    },
+    {
+      "n": 71,
+      "hits": 71,
+      "hit_rate": 1.0,
+      "wilson90_lo": 0.9633,
+      "usd_medio": 569.01,
+      "precio_medio_entrada": 0.9966,
+      "wallet": "0xb2cbf3389906f0cadb8d727bc166cfcc818b2bad"
+    }
+  ],
+  "notas": [
+    "Definicion combo = wallet BUY en >=2 condition_id distintos del mismo event_slug (no hay objeto 'parlay' nativo en el firehose).",
+    "Cobertura real limitada a 4 dias (06..09-Sep) -- ventana corta, la mayoria de mercados sports resuelven rapido pero el n de resueltos puede ser bajo.",
+    "n<15 en cualquier grupo => 'insuficiente', no concluir nada con ese grupo.",
+    "outcome resuelto via gamma-api closed=true, mismo patron que sports_wallet_edge_tracker.py::resolver_outcomes."
+  ]
+}

@@ -1,0 +1,15 @@
+{
+  "n": 5328,
+  "n_trades_en_rango": 6085,
+  "n_con_libro_cercano": 5328,
+  "senal_media": -0.0031,
+  "senal_sd": 0.10397,
+  "p_valor_permutacion": 0.0,
+  "veredicto": "sin_concluir",
+  "ventana_previa_s": 60,
+  "rango_datalog": [
+    "2026-09-01T15:37:47+00:00",
+    "2026-09-01T18:11:52+00:00"
+  ],
+  "nota": "libro_book_ws.py desplegado hoy mismo, dataset de ~2.5h -- resultado orientativo, repetir con mas historia antes de construir cualquier ejecutor sobre esto."
+}

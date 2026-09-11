@@ -1,0 +1,2818 @@
+{
+  "nota": "27-Jul: reconstruccion via API (data-api.polymarket.com/trades) sobre condition_ids historicos de ballenas_timing_history.csv, banda calibrada por moneda. DOGE limpiado a n_banda>=3 (ver idea_ballenas5min_volumen_wallets_yes_todas_monedas_27jul). BTC confirmado inservible (n=5, ventana degenerada). No sustituye al tracker propio (ballenas_5min_dry_run.csv), que ya acumula BNB/DOGE en tiempo real desde hoy.",
+  "BTC": [
+    {
+      "market_id": "0xbd9bdfcf634edf4b974db925bf48c33e7acd1282edd3c2ee5803b046f7fa215b",
+      "py": 0.4471830456,
+      "acierto": 1,
+      "n_wallets_yes": 46,
+      "n_banda": 4
+    },
+    {
+      "market_id": "0xddbdbcbd916453ff4d9999786add763668774d7acae13309f0ea81af8b8955b6",
+      "py": 0.35996096342,
+      "acierto": 0,
+      "n_wallets_yes": 35,
+      "n_banda": 5
+    },
+    {
+      "market_id": "0x4cf363d16394e2f6dd113dbd93a27b78ff7487f9efa0c31f7a49b2158b149905",
+      "py": 0.4209966079375,
+      "acierto": 1,
+      "n_wallets_yes": 26,
+      "n_banda": 8
+    },
+    {
+      "market_id": "0x0d58f65f75e5bb4e0072ea5927070259ac1f86fcac4c37a16de5a47fdfeab862",
+      "py": 0.45249995265,
+      "acierto": 0,
+      "n_wallets_yes": 52,
+      "n_banda": 8
+    },
+    {
+      "market_id": "0x1b11efce2fa96da551aff85caf0e1d0ce71712e17b078ea81da470970ffba610",
+      "py": 0.4690004,
+      "acierto": 0,
+      "n_wallets_yes": 46,
+      "n_banda": 2
+    }
+  ],
+  "BNB": [
+    {
+      "market_id": "0xd8be77766f62e1af51b15c7b3f7cc94683fa6a78423e33bb73699aa6114b9e7d",
+      "py": 0.41728108384999996,
+      "acierto": 0,
+      "n_wallets_yes": 22,
+      "n_banda": 2
+    },
+    {
+      "market_id": "0xfdf8d2f55cf9a49bd819df680a230432a00ffa50b747f9b9fb5bfca8b3d9b936",
+      "py": 0.44499991425,
+      "acierto": 0,
+      "n_wallets_yes": 10,
+      "n_banda": 2
+    },
+    {
+      "market_id": "0x08a9cd3231461eb70fc90dbd3ae3aeedd3e8b20f567942b2cadf1aa315f950af",
+      "py": 0.4099999605,
+      "acierto": 0,
+      "n_wallets_yes": 7,
+      "n_banda": 1
+    },
+    {
+      "market_id": "0xad84e4274e1f10865fe7aa5f11896e5c7f21234d8a977e90a05eaeaa65641d13",
+      "py": 0.48,
+      "acierto": 1,
+      "n_wallets_yes": 5,
+      "n_banda": 1
+    },
+    {
+      "market_id": "0x3796d2b9fa25d7413de45790fc68df821e4e7e9d341b4e3dbf3c90d56724fbd3",
+      "py": 0.38,
+      "acierto": 0,
+      "n_wallets_yes": 6,
+      "n_banda": 1
+    },
+    {
+      "market_id": "0xc386c5de50d4e1c5d9347b52c3fe0d505afa1a5c0aa302e1eb0d195349cfbc07",
+      "py": 0.3715869731333334,
+      "acierto": 0,
+      "n_wallets_yes": 7,
+      "n_banda": 3
+    },
+    {
+      "market_id": "0x30af5b8e93bb0d1f0693d0546101e34421efe52ba058d3bab1b9baf3bb19a0a3",
+      "py": 0.42,
+      "acierto": 1,
+      "n_wallets_yes": 14,
+      "n_banda": 1
+    },
+    {
+      "market_id": "0x6c02b6ba5636ba063958ea620cd4db765a47382f37a6647d328bc41bbe76e683",
+      "py": 0.3599998704,
+      "acierto": 0,
+      "n_wallets_yes": 3,
+      "n_banda": 1
+    },
+    {
+      "market_id": "0x97379b1b692cbae7393a29bf2be1f24bc9679deb6a9cd41a06c1b64eea7dbc0f",
+      "py": 0.374999914,
+      "acierto": 1,
+      "n_wallets_yes": 19,
+      "n_banda": 2
+    },
+    {
+      "market_id": "0xdf5fd36841589f555747f1580b19f86495a4e4f0a88cb14a0fbd0953beb015ae",
+      "py": 0.4099998968,
+      "acierto": 1,
+      "n_wallets_yes": 7,
+      "n_banda": 2
+    },
+    {
+      "market_id": "0x8a701f7b88f274ab45d6d625f53213d048f7cf39ceb6d022a9a844eb2b96f9c8",
+      "py": 0.3933333333333333,
+      "acierto": 1,
+      "n_wallets_yes": 39,
+      "n_banda": 3
+    },
+    {
+      "market_id": "0x958e658906ecacaec10cee4d4aa1a1951cf4f95d3a703ef88bf14132a7fa1fc3",
+      "py": 0.47,
+      "acierto": 1,
+      "n_wallets_yes": 23,
+      "n_banda": 2
+    },
+    {
+      "market_id": "0x20eb8f1d952e673691f9634e6c496ce9fa87e4d5a0d0fbd760260248ba25bb63",
+      "py": 0.3305620155,
+      "acierto": 0,
+      "n_wallets_yes": 10,
+      "n_banda": 2
+    },
+    {
+      "market_id": "0xe68c9f4732cd19bcd2e380ccfe7b9908368d794206f2f5d49153a26806dd36d8",
+      "py": 0.32,
+      "acierto": 0,
+      "n_wallets_yes": 4,
+      "n_banda": 1
+    },
+    {
+      "market_id": "0xb15e5de0877bbda99da02800a6ddc0663314f30abd7091cd2ca407d25bdeb8bc",
+      "py": 0.405,
+      "acierto": 1,
+      "n_wallets_yes": 33,
+      "n_banda": 2
+    },
+    {
+      "market_id": "0x8f108fd3550634caf35c62856dd82ce3c122f4185ac711bc38cfadc97b390923",
+      "py": 0.3099999364,
+      "acierto": 0,
+      "n_wallets_yes": 11,
+      "n_banda": 1
+    },
+    {
+      "market_id": "0x1cf11b2ef9a022a1a23b51667035e71a03c29c733d54a1200ced3c1f822e4f59",
+      "py": 0.4199999832,
+      "acierto": 0,
+      "n_wallets_yes": 18,
+      "n_banda": 1
+    },
+    {
+      "market_id": "0x7063157e957a2092a5a5d36d7aecb8aa1a93c65d28165d0c432cd5f43cbf3661",
+      "py": 0.4699998778,
+      "acierto": 0,
+      "n_wallets_yes": 3,
+      "n_banda": 1
+    },
+    {
+      "market_id": "0x763f7b4d20716db85dd6213d1603d6f403aa850120ad41c3aad9c74e9c213ada",
+      "py": 0.31,
+      "acierto": 1,
+      "n_wallets_yes": 11,
+      "n_banda": 1
+    },
+    {
+      "market_id": "0xfea817ad247a9c2e753508eb18df9806f499543ec0256f210ab166a285b611b8",
+      "py": 0.44,
+      "acierto": 0,
+      "n_wallets_yes": 7,
+      "n_banda": 1
+    },
+    {
+      "market_id": "0xdf5058ecd67fe932f8882e15de7f259f29777b02da535edf7a2830c6c7a62745",
+      "py": 0.48,
+      "acierto": 0,
+      "n_wallets_yes": 2,
+      "n_banda": 1
+    },
+    {
+      "market_id": "0xeb51cee16e1e50741092da80c95007f240ca86722e28ff6a4c9eae493eb6eb09",
+      "py": 0.49,
+      "acierto": 0,
+      "n_wallets_yes": 6,
+      "n_banda": 1
+    },
+    {
+      "market_id": "0x65bcfdcb130f7481d86dd516c5490d1e619a003cad8341d922e420cf16c345ae",
+      "py": 0.38,
+      "acierto": 0,
+      "n_wallets_yes": 7,
+      "n_banda": 2
+    },
+    {
+      "market_id": "0xf77e34b898648a56fe27567d92fd13df30bbdbab121df52dbc51e615daa046d1",
+      "py": 0.49,
+      "acierto": 1,
+      "n_wallets_yes": 12,
+      "n_banda": 1
+    },
+    {
+      "market_id": "0xdd7f95fb4cd34b67be21d71c3fd7109ea17317739fed6d91bcd4004de4bd14b9",
+      "py": 0.447708300125,
+      "acierto": 1,
+      "n_wallets_yes": 38,
+      "n_banda": 4
+    },
+    {
+      "market_id": "0x410594924cb7d63276d775a3731b4298829557c71b8fdd749ab689745f959c15",
+      "py": 0.4,
+      "acierto": 1,
+      "n_wallets_yes": 12,
+      "n_banda": 1
+    },
+    {
+      "market_id": "0x275408b8fccd04e4229ced2ab38b3512d14452dd811b774d83ed8abab17e1827",
+      "py": 0.3999304866,
+      "acierto": 0,
+      "n_wallets_yes": 1,
+      "n_banda": 1
+    },
+    {
+      "market_id": "0x40fe4262099d5486270a521d541fe38fb8bf44c6c7e7f5096a23d5582b216264",
+      "py": 0.4749999437,
+      "acierto": 0,
+      "n_wallets_yes": 4,
+      "n_banda": 2
+    },
+    {
+      "market_id": "0x9125e3ba1806f829a0de9839f28df206e0a964d024fd279fe60d040edadade6a",
+      "py": 0.38333327666666667,
+      "acierto": 0,
+      "n_wallets_yes": 22,
+      "n_banda": 3
+    },
+    {
+      "market_id": "0x71918404ba7c823bba97093581122cad6b18315b351b11af64a1de54412d6139",
+      "py": 0.48,
+      "acierto": 1,
+      "n_wallets_yes": 9,
+      "n_banda": 1
+    },
+    {
+      "market_id": "0x8536d253540f069cf3ffd7a3322f04a3b18b0ba3baeccdf4eef984f3fc9cc00b",
+      "py": 0.47999998693333334,
+      "acierto": 1,
+      "n_wallets_yes": 45,
+      "n_banda": 3
+    },
+    {
+      "market_id": "0xea4842a0393d15156bbfaef7b9f6bd6a6659fbc53f76aa7b788c855b2eff0ab0",
+      "py": 0.4399999467,
+      "acierto": 0,
+      "n_wallets_yes": 5,
+      "n_banda": 3
+    },
+    {
+      "market_id": "0x944b448ab8c3c232ca5898f059a7938a75b3ec1e488b575bc8a474b741ced2eb",
+      "py": 0.3299999296,
+      "acierto": 0,
+      "n_wallets_yes": 5,
+      "n_banda": 1
+    },
+    {
+      "market_id": "0x38d7f0cae1dd9edd9f917de107bf2102dd3387379092badb3b2bb3ea0096cf46",
+      "py": 0.3449998257,
+      "acierto": 1,
+      "n_wallets_yes": 6,
+      "n_banda": 2
+    },
+    {
+      "market_id": "0xb12342a458646616f1980453edd282ac53182a7ede86502548b49fafc65b53bc",
+      "py": 0.4358593415,
+      "acierto": 1,
+      "n_wallets_yes": 31,
+      "n_banda": 2
+    },
+    {
+      "market_id": "0x97115c6f7b2c05004e902b05bd1b8b964cba1495fac6538bf612f12ad3ac501a",
+      "py": 0.48,
+      "acierto": 1,
+      "n_wallets_yes": 29,
+      "n_banda": 1
+    },
+    {
+      "market_id": "0x67154a52a2e038b9cdf9dbb51bbee680bd79bedb470e0d50db1189c1673e5014",
+      "py": 0.49,
+      "acierto": 1,
+      "n_wallets_yes": 14,
+      "n_banda": 1
+    },
+    {
+      "market_id": "0x73914f217aaf770871cfe606fc926879b2af94110d9c5db7d1a911dbbe2a5ee7",
+      "py": 0.3,
+      "acierto": 1,
+      "n_wallets_yes": 37,
+      "n_banda": 1
+    },
+    {
+      "market_id": "0x6ee773c7492be41077ea55809bebd50a29bc0b5da9f0cfd5988a3435a6c8f406",
+      "py": 0.37,
+      "acierto": 0,
+      "n_wallets_yes": 6,
+      "n_banda": 2
+    },
+    {
+      "market_id": "0xe59d702048196c8b3663adf41b63707190b7443aed3fe16ba45fd88dede0bc8c",
+      "py": 0.4899998285,
+      "acierto": 1,
+      "n_wallets_yes": 16,
+      "n_banda": 1
+    },
+    {
+      "market_id": "0x6e9837d11e067a308243f1aede0730b930e771f0cf8d913eba53f19bf1749f34",
+      "py": 0.3799999493,
+      "acierto": 0,
+      "n_wallets_yes": 3,
+      "n_banda": 2
+    },
+    {
+      "market_id": "0x045d4b3ff4b790fa4cb5304b729455f210db75e4d7f43edb30349d38e851b792",
+      "py": 0.37,
+      "acierto": 0,
+      "n_wallets_yes": 5,
+      "n_banda": 1
+    },
+    {
+      "market_id": "0xbbc2bf38aeccb37afc93e578a3568ea59cf45cbc7ef2adfea00816fa217c6258",
+      "py": 0.34599909303333337,
+      "acierto": 0,
+      "n_wallets_yes": 19,
+      "n_banda": 3
+    },
+    {
+      "market_id": "0xaf7430f217874246d555758f132beb87f47b42ae9d84ece000bec18845920e68",
+      "py": 0.4221410913,
+      "acierto": 1,
+      "n_wallets_yes": 7,
+      "n_banda": 2
+    },
+    {
+      "market_id": "0x56cb33b6d8c1646c540ebdf243ee8f1d323c70a90ed7e8233f98ca2982f71d00",
+      "py": 0.4215052307666667,
+      "acierto": 1,
+      "n_wallets_yes": 28,
+      "n_banda": 15
+    },
+    {
+      "market_id": "0x3f4d5f45a305850499f6c3c3ebb40b5b4eb2876c3a4ee07935dae1f313e3dbf8",
+      "py": 0.38227026561538463,
+      "acierto": 1,
+      "n_wallets_yes": 37,
+      "n_banda": 13
+    },
+    {
+      "market_id": "0x9ddba57d024788e01e107977bdbe2b30224324a0bdc8b73011d1be7ddc5598be",
+      "py": 0.39,
+      "acierto": 0,
+      "n_wallets_yes": 1,
+      "n_banda": 1
+    },
+    {
+      "market_id": "0x9a309c14cf0fe0802ae87c5eab0cf856df42aa7128d56f92252909ab218187ed",
+      "py": 0.45499999999999996,
+      "acierto": 0,
+      "n_wallets_yes": 8,
+      "n_banda": 2
+    },
+    {
+      "market_id": "0x126be4d743ba84de5a70383101873450afb0219f1736319eb44e17ec6c392cfd",
+      "py": 0.400912,
+      "acierto": 1,
+      "n_wallets_yes": 7,
+      "n_banda": 1
+    },
+    {
+      "market_id": "0xc733e1c9e0e885ce56ac3d4dbdc771302d270721d5b37b75bf8f05e37246ae02",
+      "py": 0.49,
+      "acierto": 1,
+      "n_wallets_yes": 11,
+      "n_banda": 1
+    },
+    {
+      "market_id": "0x3dad114d748cb848a754ea83e198d49d301c9aa68bd15ed724626d38e75d50ea",
+      "py": 0.4299998985,
+      "acierto": 0,
+      "n_wallets_yes": 3,
+      "n_banda": 2
+    },
+    {
+      "market_id": "0x94b2847dfea35291f0f5cfe2b1212371f702c25630e98f95811ea258165cf31c",
+      "py": 0.429999828,
+      "acierto": 0,
+      "n_wallets_yes": 3,
+      "n_banda": 1
+    },
+    {
+      "market_id": "0xd8498b51347c780f11936dbfbef40df42dc1f7216823b239bbeb6fcff896108b",
+      "py": 0.32,
+      "acierto": 0,
+      "n_wallets_yes": 4,
+      "n_banda": 1
+    },
+    {
+      "market_id": "0x054c61e8df968d9c201a79e45ac3761bcc28b1c90105fe3d2dfa9f953a9eaa84",
+      "py": 0.49,
+      "acierto": 1,
+      "n_wallets_yes": 28,
+      "n_banda": 1
+    },
+    {
+      "market_id": "0x36f5e034f7decacbe8d1d8705926c5f42b6a26b1ffdfc033f126b786ed0d7b7d",
+      "py": 0.345,
+      "acierto": 1,
+      "n_wallets_yes": 6,
+      "n_banda": 2
+    },
+    {
+      "market_id": "0x6d696071ad783aca31641b901c0ed160a91a6bfe66272bc4890e9ddcb3dd4bd4",
+      "py": 0.3399998084,
+      "acierto": 0,
+      "n_wallets_yes": 7,
+      "n_banda": 1
+    },
+    {
+      "market_id": "0x466de1673e60de8ed255f7711afd442814148f60e2addadf3a4b1f977909210f",
+      "py": 0.41999995506666665,
+      "acierto": 0,
+      "n_wallets_yes": 5,
+      "n_banda": 3
+    },
+    {
+      "market_id": "0xa5ffe71d080b7e87500a951fbda98e23d4c6d2bde86bf40eb3e6b0e41c1058e8",
+      "py": 0.47889854686666666,
+      "acierto": 1,
+      "n_wallets_yes": 24,
+      "n_banda": 3
+    },
+    {
+      "market_id": "0x02ff3a23daa747605f13477d50ab6c77c9d387b04fa3e863caca480d507d2e59",
+      "py": 0.3,
+      "acierto": 0,
+      "n_wallets_yes": 2,
+      "n_banda": 1
+    },
+    {
+      "market_id": "0x4e1cc4a2a9e5f9764f8afe6c06ce4528adb008cb1fd4e31a5b005a52f507a7c4",
+      "py": 0.3499999475,
+      "acierto": 0,
+      "n_wallets_yes": 47,
+      "n_banda": 1
+    },
+    {
+      "market_id": "0x6ac7d5ea15dee6e15adfd3b4e9933003adf2c6362a01b78e8a7aa1aa38c6c007",
+      "py": 0.3749999363,
+      "acierto": 1,
+      "n_wallets_yes": 17,
+      "n_banda": 2
+    },
+    {
+      "market_id": "0xa88f31d76a950611ac3cde466d9f2adf409c1e878483df6b0820387f300f4b94",
+      "py": 0.4899999906,
+      "acierto": 0,
+      "n_wallets_yes": 8,
+      "n_banda": 1
+    },
+    {
+      "market_id": "0xbb6dc6aabcff09f5e2f60881f18a3c6790466c49a86581b7e739ec634b5892a4",
+      "py": 0.3,
+      "acierto": 1,
+      "n_wallets_yes": 37,
+      "n_banda": 2
+    },
+    {
+      "market_id": "0x3ec4d60417cc2f3c16b37e925c88625dbc8b8da16854e681a8f20c87b8886e5b",
+      "py": 0.34,
+      "acierto": 0,
+      "n_wallets_yes": 4,
+      "n_banda": 1
+    },
+    {
+      "market_id": "0xed664e515bb9c5e483f80d380b1c5a8021c801746de428d59c946fbf438b3729",
+      "py": 0.32531615481,
+      "acierto": 0,
+      "n_wallets_yes": 22,
+      "n_banda": 10
+    },
+    {
+      "market_id": "0x89700e69a2b718484ed161eccd4546b8664d662cedef8a2b78dae385f671eba3",
+      "py": 0.35,
+      "acierto": 1,
+      "n_wallets_yes": 18,
+      "n_banda": 1
+    },
+    {
+      "market_id": "0x984562aa78c34e4e64651ac1a7ecd551ba521c5337674b6d0e5d79c4550ce370",
+      "py": 0.32,
+      "acierto": 1,
+      "n_wallets_yes": 4,
+      "n_banda": 1
+    },
+    {
+      "market_id": "0x847957dfa4967ff74fd1e8f34722cf640c5fa542d4ffd2f0741eba8ce5ae15c1",
+      "py": 0.43499995375,
+      "acierto": 0,
+      "n_wallets_yes": 6,
+      "n_banda": 2
+    },
+    {
+      "market_id": "0x1847d5ac5d8374bbb66248a12e20a0f6dbd664942a693f6e6a73ead703da3d17",
+      "py": 0.337272683175,
+      "acierto": 0,
+      "n_wallets_yes": 7,
+      "n_banda": 4
+    },
+    {
+      "market_id": "0x1fde7b52040d25614eb39a3ae4b3f2864fa2aeb9ae31c1521dc24335cbcb8e03",
+      "py": 0.46,
+      "acierto": 0,
+      "n_wallets_yes": 26,
+      "n_banda": 1
+    },
+    {
+      "market_id": "0x20a7aa8f803f1aeb69e490c971202e1b7c28f72f969cc1c7d989c7a6df5fc11d",
+      "py": 0.45,
+      "acierto": 0,
+      "n_wallets_yes": 1,
+      "n_banda": 1
+    },
+    {
+      "market_id": "0x42db561cd08fa893de48b223faa143812a648de4cd5983621cd386b65b585852",
+      "py": 0.41777446566,
+      "acierto": 0,
+      "n_wallets_yes": 9,
+      "n_banda": 5
+    },
+    {
+      "market_id": "0x704a539923d9fd90c322eacb3732a53197148f1619a78aecdc34b90e5b421e4c",
+      "py": 0.44,
+      "acierto": 1,
+      "n_wallets_yes": 17,
+      "n_banda": 1
+    },
+    {
+      "market_id": "0x0957057cdabd392fdc3d893a0721bf3273f593a217da7bad56ea29475d244cb7",
+      "py": 0.47,
+      "acierto": 1,
+      "n_wallets_yes": 10,
+      "n_banda": 2
+    },
+    {
+      "market_id": "0x23534967bb0ffaf794d9d94bcec2cb94d3bbe45de60345c8b954c771d8569bc5",
+      "py": 0.35666649980000004,
+      "acierto": 0,
+      "n_wallets_yes": 8,
+      "n_banda": 3
+    },
+    {
+      "market_id": "0x9cdd6bf323f6857244ff76ef76e68fcd734c41626adde3d0141325b42939668b",
+      "py": 0.44999987565,
+      "acierto": 0,
+      "n_wallets_yes": 4,
+      "n_banda": 2
+    },
+    {
+      "market_id": "0x78ee3a3fff1a1a6412526e2a66c737be78edbeb3eec8951088bc5137891b2085",
+      "py": 0.38,
+      "acierto": 1,
+      "n_wallets_yes": 18,
+      "n_banda": 4
+    },
+    {
+      "market_id": "0x9e21db26d8e7d0c7116ca0803b507c6b5e0f654306477a9568e151d3e54999f5",
+      "py": 0.4738596363,
+      "acierto": 1,
+      "n_wallets_yes": 14,
+      "n_banda": 3
+    },
+    {
+      "market_id": "0xde923233edcae979b8ca222326799261d1a47e630205268585615e394e948cad",
+      "py": 0.39,
+      "acierto": 0,
+      "n_wallets_yes": 6,
+      "n_banda": 1
+    },
+    {
+      "market_id": "0x179bd322a1563f5b1e0490812fba8edd9133106ba513cfb73809c4ebffe6c9d1",
+      "py": 0.46,
+      "acierto": 0,
+      "n_wallets_yes": 31,
+      "n_banda": 1
+    },
+    {
+      "market_id": "0x508af855cd825a01693f831bd14b44b5bfab55ac23b7d1d247cbb9f975138772",
+      "py": 0.3099999364,
+      "acierto": 0,
+      "n_wallets_yes": 4,
+      "n_banda": 1
+    },
+    {
+      "market_id": "0x7525a825d6cdb600729cb7ed1eed6272022765304c542a4d26033c48e7965ef1",
+      "py": 0.37,
+      "acierto": 0,
+      "n_wallets_yes": 2,
+      "n_banda": 2
+    },
+    {
+      "market_id": "0xad0b181267a7cbbb2f1e2adbf9d81518e204c21fd681b33b95b32c1713491fdd",
+      "py": 0.36399759905,
+      "acierto": 0,
+      "n_wallets_yes": 5,
+      "n_banda": 2
+    },
+    {
+      "market_id": "0x38ad3bb9d50abb36906bdd8c536a87e3664abeb4f51e111135fadbca00f91a5d",
+      "py": 0.36,
+      "acierto": 0,
+      "n_wallets_yes": 6,
+      "n_banda": 1
+    },
+    {
+      "market_id": "0x56dd96cdf3398fa8508d78a5f493d4cb5cbe5df2c053bbd6f1abee4e98cfa384",
+      "py": 0.48,
+      "acierto": 1,
+      "n_wallets_yes": 17,
+      "n_banda": 1
+    },
+    {
+      "market_id": "0x69a013b0860a834b69500c8adde20b34aa492d0ce5f18c4a40fb2b0b6c4986c7",
+      "py": 0.3299997822,
+      "acierto": 0,
+      "n_wallets_yes": 4,
+      "n_banda": 1
+    },
+    {
+      "market_id": "0x85d4b77848243c1edf3f16aa7129b98713030ffea409473d54842ceccb8d3780",
+      "py": 0.42499999315000003,
+      "acierto": 0,
+      "n_wallets_yes": 15,
+      "n_banda": 2
+    },
+    {
+      "market_id": "0x4d42b9b0f2b4c1f2cea74e6da56e7e3f3a232947b89b5c28d6a22d73c0c7e800",
+      "py": 0.36333333333333334,
+      "acierto": 0,
+      "n_wallets_yes": 7,
+      "n_banda": 3
+    },
+    {
+      "market_id": "0xa7d079748ff4d193d1a2432dc0f87b3fe869c15e621ebd7114466afbfcf23e17",
+      "py": 0.3399999081,
+      "acierto": 0,
+      "n_wallets_yes": 1,
+      "n_banda": 1
+    },
+    {
+      "market_id": "0x1f631e4cf081c76a469f646133f1379d254f4b3cb8997732264143d7030db2f3",
+      "py": 0.3599998314,
+      "acierto": 0,
+      "n_wallets_yes": 3,
+      "n_banda": 1
+    },
+    {
+      "market_id": "0x8282a545851f8ef3165241eb66acc7073f15a63d661490c7a2c0e9ffcd676021",
+      "py": 0.45999999999999996,
+      "acierto": 1,
+      "n_wallets_yes": 35,
+      "n_banda": 3
+    },
+    {
+      "market_id": "0x6c0bdf5077d8f26206c5ed318103388dcc228990755af4ab256d365d64cf3e87",
+      "py": 0.39999996685,
+      "acierto": 0,
+      "n_wallets_yes": 6,
+      "n_banda": 2
+    },
+    {
+      "market_id": "0x52acd76a6a20805811017383438cf36a6e06540d2d289f4a52e3ddff2df23201",
+      "py": 0.35,
+      "acierto": 1,
+      "n_wallets_yes": 4,
+      "n_banda": 1
+    },
+    {
+      "market_id": "0xa6f6e5ae8be4ed4b1d127a54d96dd7d59df226d97cc99741e6f34a79d59dfe3c",
+      "py": 0.44,
+      "acierto": 0,
+      "n_wallets_yes": 3,
+      "n_banda": 1
+    },
+    {
+      "market_id": "0xa200eb54b43721de2dbcd12a961b016b35ffcdd72c60f9f734f860ac9c6bd951",
+      "py": 0.4695867769,
+      "acierto": 0,
+      "n_wallets_yes": 7,
+      "n_banda": 1
+    },
+    {
+      "market_id": "0xb074226e7979785f3774638ad5cd0f0de0081ee9533a5615f266bf05141c1d09",
+      "py": 0.48,
+      "acierto": 1,
+      "n_wallets_yes": 8,
+      "n_banda": 1
+    },
+    {
+      "market_id": "0x6ded4b30e917587e7820d03bee7853ad9ae71bd8adb6f55b7a46fadbba59bca5",
+      "py": 0.404999914,
+      "acierto": 0,
+      "n_wallets_yes": 7,
+      "n_banda": 2
+    },
+    {
+      "market_id": "0xc1bbf822f32c6dee8c5b7a7eda3645a39d80bf40dba18697c78d4e0e6cfc4a7a",
+      "py": 0.4666666536,
+      "acierto": 0,
+      "n_wallets_yes": 5,
+      "n_banda": 3
+    },
+    {
+      "market_id": "0x6cc638acbeefd8855ae66b6efa2174df7d5352c302b29515505ba17162d3374a",
+      "py": 0.3625462223,
+      "acierto": 0,
+      "n_wallets_yes": 2,
+      "n_banda": 1
+    },
+    {
+      "market_id": "0x84c60a4613293020116c6e5a271857319b454d3e5d8483f675d3d01eb9c7eef3",
+      "py": 0.35499998745,
+      "acierto": 0,
+      "n_wallets_yes": 3,
+      "n_banda": 2
+    },
+    {
+      "market_id": "0x2f66e59162a24cb72935e19ac0bb4484709b68e9e502f8687b4d3c537c81e35c",
+      "py": 0.36723738888,
+      "acierto": 1,
+      "n_wallets_yes": 25,
+      "n_banda": 10
+    },
+    {
+      "market_id": "0x7ace2d3732fbb0e476e5cf1ca217165ab5173b25ff6d2d01ca13dde67c0f67c1",
+      "py": 0.49,
+      "acierto": 0,
+      "n_wallets_yes": 74,
+      "n_banda": 1
+    }
+  ],
+  "DOGE_sin_limpiar": [
+    {
+      "market_id": "0xc6b1bacd1cb063b8c5a4c65bbf2d3499d9fa58bd206b82c861993478e66e8141",
+      "py": 0.7,
+      "acierto": 0,
+      "n_wallets_yes": 13,
+      "n_banda": 1
+    },
+    {
+      "market_id": "0x1112e126075e8e08353be51e0aa51d16547bd9f645ab1dbd5e2390f96743694c",
+      "py": 0.7099999702,
+      "acierto": 0,
+      "n_wallets_yes": 21,
+      "n_banda": 1
+    },
+    {
+      "market_id": "0x5e2d4fd82defcee360b8fd5b65fa1f45cffcae1d52864e4001b8cff6ae9595bc",
+      "py": 0.81343840835,
+      "acierto": 1,
+      "n_wallets_yes": 11,
+      "n_banda": 4
+    },
+    {
+      "market_id": "0x35a4919e2f2773bdef6a206e1e61d9182b0f0b0d8c72779e109e8f0d1650cf32",
+      "py": 0.8099999757,
+      "acierto": 0,
+      "n_wallets_yes": 10,
+      "n_banda": 1
+    },
+    {
+      "market_id": "0x24736073ad4f5b134ddb7b4e855c7cf35fd08b8e0539281855c60845422b1bc0",
+      "py": 0.7,
+      "acierto": 1,
+      "n_wallets_yes": 12,
+      "n_banda": 1
+    },
+    {
+      "market_id": "0x2881a9d62098c1adb7962a54b8d82303017e3346ca6b336f5cc5733380c3e1b3",
+      "py": 0.8349999960500001,
+      "acierto": 1,
+      "n_wallets_yes": 29,
+      "n_banda": 2
+    },
+    {
+      "market_id": "0x8ce905ea0f8a9cec407051de1fde9a3b6995b8e15f9275af9905374882545133",
+      "py": 0.8315529198111111,
+      "acierto": 1,
+      "n_wallets_yes": 17,
+      "n_banda": 9
+    },
+    {
+      "market_id": "0x34b40d8bf521f8f03a731d388f4c3c6f54c63b678cd41807830cd85747d24ed7",
+      "py": 0.781249976275,
+      "acierto": 0,
+      "n_wallets_yes": 13,
+      "n_banda": 8
+    },
+    {
+      "market_id": "0xee20d8891c2fbb3c83a84fc5f1f2b10f185f77f9be968c3c5cca4b05ceaec400",
+      "py": 0.75,
+      "acierto": 1,
+      "n_wallets_yes": 12,
+      "n_banda": 1
+    },
+    {
+      "market_id": "0x2cf2b4e691ebc4fc396229eea9faf9beb0390e64756f80bbf62df09f1b020f83",
+      "py": 0.8334157450666666,
+      "acierto": 1,
+      "n_wallets_yes": 22,
+      "n_banda": 3
+    },
+    {
+      "market_id": "0xdb34762589f6555326037dea9d95a98ceb2a18b64baead505808abe4dc772271",
+      "py": 0.8622221913666667,
+      "acierto": 1,
+      "n_wallets_yes": 31,
+      "n_banda": 9
+    },
+    {
+      "market_id": "0x3701b8f5bc7231f0692bdfe1543bdfc5d7acab2b42baed6b6d53ecb15e7050ee",
+      "py": 0.83482433852,
+      "acierto": 1,
+      "n_wallets_yes": 41,
+      "n_banda": 10
+    },
+    {
+      "market_id": "0x8ef5c211685ec7c0650815c6958f511644f8dca6439afb88b0cb04eef1a7a200",
+      "py": 0.8241846391444444,
+      "acierto": 1,
+      "n_wallets_yes": 46,
+      "n_banda": 9
+    },
+    {
+      "market_id": "0x9b25d6472a86c8db7037f78dc564c3b407d9480fd49a871bfd3cde0f156c3c6e",
+      "py": 0.7775275958705883,
+      "acierto": 1,
+      "n_wallets_yes": 37,
+      "n_banda": 17
+    },
+    {
+      "market_id": "0x4d71d381dc3dfdf32de2f0d8526908a7fc89d243d380dde34db5172eedfe347b",
+      "py": 0.7981726895833333,
+      "acierto": 1,
+      "n_wallets_yes": 19,
+      "n_banda": 6
+    },
+    {
+      "market_id": "0xdf5054f1c096f11894fa09e5de9886a41a7bed26f13058a1782e185eb8ac6ff7",
+      "py": 0.811338752425,
+      "acierto": 1,
+      "n_wallets_yes": 18,
+      "n_banda": 4
+    },
+    {
+      "market_id": "0xb74ca2602bc2056fd422b7d295dd4f94564df36a0e1ba66aa127baf97e8a18f0",
+      "py": 0.81740771670625,
+      "acierto": 0,
+      "n_wallets_yes": 22,
+      "n_banda": 16
+    },
+    {
+      "market_id": "0x5562736bc0fef828fe6fa030813c37610226e4667c6c140d63f1d4ad1d8f4ac5",
+      "py": 0.7914000614428572,
+      "acierto": 1,
+      "n_wallets_yes": 52,
+      "n_banda": 14
+    },
+    {
+      "market_id": "0xcfc7b08d7ebd6ec5879d9b1d571a000853cf2d514175f9af5df85d7ed136d2b0",
+      "py": 0.8414756791999999,
+      "acierto": 1,
+      "n_wallets_yes": 17,
+      "n_banda": 6
+    },
+    {
+      "market_id": "0xd7148cbc0ddc2e77121b86f12fa02f8e4c317d9c21d17d1f9b3f6ddea9c41073",
+      "py": 0.8094267241499999,
+      "acierto": 1,
+      "n_wallets_yes": 29,
+      "n_banda": 2
+    },
+    {
+      "market_id": "0x03dcd58c3b5401c55efd85a18f87ba00c6bf9f373faf4c1074f75929e761a113",
+      "py": 0.7300217153,
+      "acierto": 0,
+      "n_wallets_yes": 10,
+      "n_banda": 3
+    },
+    {
+      "market_id": "0x5a6c6026fafbe38b51e24938d8025d9684b272782da415d2c7200db7b095d773",
+      "py": 0.8099999175,
+      "acierto": 1,
+      "n_wallets_yes": 22,
+      "n_banda": 1
+    },
+    {
+      "market_id": "0xd5aa996d850dfc9dfa012dc6f4f0c7aad8f6b67745ea63ec0b968b9669b48a8e",
+      "py": 0.7936517155285714,
+      "acierto": 1,
+      "n_wallets_yes": 26,
+      "n_banda": 7
+    },
+    {
+      "market_id": "0x414594808d2dae2ccf93acff089fdf6b70d27916e8c5f92a848252d166927f09",
+      "py": 0.7719999591800001,
+      "acierto": 1,
+      "n_wallets_yes": 16,
+      "n_banda": 5
+    },
+    {
+      "market_id": "0x61af1696775ae3ddfd5db8824cf0345cfd236ae4da576598be56d8f9b1e50847",
+      "py": 0.8066666502333333,
+      "acierto": 1,
+      "n_wallets_yes": 21,
+      "n_banda": 3
+    },
+    {
+      "market_id": "0xb4a812b243d79a3e58b07b4f1309f55c0eb476b7111454cfe95f442c60f31f27",
+      "py": 0.75863037036,
+      "acierto": 1,
+      "n_wallets_yes": 27,
+      "n_banda": 5
+    },
+    {
+      "market_id": "0x2682059a50d04fae06acbe4154bd18a7c3622c4a2177bff78ebc302ad62821ca",
+      "py": 0.774999984725,
+      "acierto": 1,
+      "n_wallets_yes": 32,
+      "n_banda": 8
+    },
+    {
+      "market_id": "0x07c3b8abd6ded6d5580b197f9dbdd47c55b4c3c1d87af048de3226d4630975ff",
+      "py": 0.74395856715,
+      "acierto": 1,
+      "n_wallets_yes": 25,
+      "n_banda": 8
+    },
+    {
+      "market_id": "0x9b0bdd4144c268ea443aee869ea5e589c4e8a1b054645bf4c768a750ef19bcd7",
+      "py": 0.7487499987499999,
+      "acierto": 1,
+      "n_wallets_yes": 33,
+      "n_banda": 8
+    },
+    {
+      "market_id": "0xca2bc5b47f7f45340ddfff98b71d9335a401d5e52b678cda87b48fdd327ed2b7",
+      "py": 0.8102777631,
+      "acierto": 1,
+      "n_wallets_yes": 28,
+      "n_banda": 4
+    },
+    {
+      "market_id": "0x64502eaf91148ba7a381dd4cd7700ae3a924ebe3b5a0ab8628893038810bca50",
+      "py": 0.823279171325,
+      "acierto": 1,
+      "n_wallets_yes": 42,
+      "n_banda": 8
+    },
+    {
+      "market_id": "0xcad544db503d7d770217e3ece6880fe8f4efe2f56be96be05b88d4cc9b5f5434",
+      "py": 0.7716666666666666,
+      "acierto": 1,
+      "n_wallets_yes": 18,
+      "n_banda": 6
+    },
+    {
+      "market_id": "0x8382f9c3a945c27e3ce9d3ca3681c1cd0b824dec4eae7f27a507f76f1637fba0",
+      "py": 0.7924128392210527,
+      "acierto": 1,
+      "n_wallets_yes": 43,
+      "n_banda": 19
+    },
+    {
+      "market_id": "0xfb3c7e52f771cb5544b7567ef0103eab1f2281fc522e8982e02a68fea7f9b23e",
+      "py": 0.837499984975,
+      "acierto": 1,
+      "n_wallets_yes": 23,
+      "n_banda": 4
+    },
+    {
+      "market_id": "0xbf41ec1224dbc2cf587628b5e84f553552a6aa2d023dac1244d7950cd1483b30",
+      "py": 0.8116032677666668,
+      "acierto": 1,
+      "n_wallets_yes": 18,
+      "n_banda": 6
+    },
+    {
+      "market_id": "0x1678474a8a6cd7460faa2178c5a8f3ba53746e8122d41fb716a0f1a2a8c5ebd7",
+      "py": 0.78599999672,
+      "acierto": 0,
+      "n_wallets_yes": 13,
+      "n_banda": 5
+    },
+    {
+      "market_id": "0xf3fa25561ee66cd42caf09d80827aab5adc05a53df8456d8ae051c3feee68d40",
+      "py": 0.7702160745857143,
+      "acierto": 1,
+      "n_wallets_yes": 31,
+      "n_banda": 7
+    },
+    {
+      "market_id": "0xd1d4f00d8cf10f67b563de03a2b5f241f972d15830431b4cf6f74a48476cf745",
+      "py": 0.7766666335333333,
+      "acierto": 1,
+      "n_wallets_yes": 21,
+      "n_banda": 6
+    },
+    {
+      "market_id": "0x90a41ccbe71a98587a190b59e073e60d7680bb0747f983202afa0f6b82655eca",
+      "py": 0.8408902103111111,
+      "acierto": 1,
+      "n_wallets_yes": 40,
+      "n_banda": 9
+    },
+    {
+      "market_id": "0xfd74df1af5391c9925f858cdfcaba7e10b507931c4e2dbb9284ab0ce7371535d",
+      "py": 0.8400528721333334,
+      "acierto": 1,
+      "n_wallets_yes": 35,
+      "n_banda": 9
+    },
+    {
+      "market_id": "0x8008f021dddfc46ef7ba5ce8c62185368d85683c74bfb33377b81873de026736",
+      "py": 0.8390278504857144,
+      "acierto": 1,
+      "n_wallets_yes": 57,
+      "n_banda": 14
+    },
+    {
+      "market_id": "0x8d7365f5f209216642fc37f2f184934f6fd245392f815473fbe7abc101090228",
+      "py": 0.8326316545,
+      "acierto": 1,
+      "n_wallets_yes": 15,
+      "n_banda": 2
+    },
+    {
+      "market_id": "0xdab1d907847b0891e76f6917d28c4e18cff57240dddea9b9b1b38b9835533b72",
+      "py": 0.8110014919499999,
+      "acierto": 1,
+      "n_wallets_yes": 39,
+      "n_banda": 14
+    },
+    {
+      "market_id": "0xe9aa7dca6f269c5f1d8d0339c460b38950a7eb1145c3b92c61375a8471e0bad1",
+      "py": 0.86,
+      "acierto": 1,
+      "n_wallets_yes": 21,
+      "n_banda": 1
+    },
+    {
+      "market_id": "0xf2f66b3ec34a9c340b39e5db56b6e2a71be642b803624b1b32813763ea491deb",
+      "py": 0.72,
+      "acierto": 1,
+      "n_wallets_yes": 18,
+      "n_banda": 1
+    },
+    {
+      "market_id": "0x8b5dfb7becfa1bd46f9f7e05902ba014e10bb779bff4bdb5f5ea0316ef386eb0",
+      "py": 0.7,
+      "acierto": 1,
+      "n_wallets_yes": 13,
+      "n_banda": 1
+    },
+    {
+      "market_id": "0xe862a2de1a4c663dd71bfe4e7abf947c0b4b85245af9aba078b5e91304dd885a",
+      "py": 0.8289999769199999,
+      "acierto": 1,
+      "n_wallets_yes": 30,
+      "n_banda": 5
+    },
+    {
+      "market_id": "0x2c1bddb7848f32bfd343bd88041ad6efe129fad4cc81000e11cacf06d547fdb7",
+      "py": 0.82307141408,
+      "acierto": 1,
+      "n_wallets_yes": 35,
+      "n_banda": 10
+    },
+    {
+      "market_id": "0x8a2d5a36487dfe1b997f75275b7a112011e04d3b2936300a9633bdfba0da512f",
+      "py": 0.8487499655625,
+      "acierto": 1,
+      "n_wallets_yes": 19,
+      "n_banda": 8
+    },
+    {
+      "market_id": "0xd849dedf4350dfc6ba7b74850529619c3d9601a164873b6e13d016bb67c0810b",
+      "py": 0.8174999906,
+      "acierto": 1,
+      "n_wallets_yes": 25,
+      "n_banda": 4
+    },
+    {
+      "market_id": "0x798077e6e1c1d8940dad85d2b3eefc34da43c2a0bc6dc36383a52b2be212bece",
+      "py": 0.8174999969,
+      "acierto": 1,
+      "n_wallets_yes": 15,
+      "n_banda": 4
+    },
+    {
+      "market_id": "0x29fa93fa0613b9dfe872c4a5e7d2fbc47bbaea6700d7aead3c58e8a34dcbc2eb",
+      "py": 0.84116997455,
+      "acierto": 1,
+      "n_wallets_yes": 28,
+      "n_banda": 4
+    },
+    {
+      "market_id": "0xadceac8dd1fc48822cdde73a415a509a1f733aa14361c9630d46a63dc695e531",
+      "py": 0.8253377219666667,
+      "acierto": 1,
+      "n_wallets_yes": 30,
+      "n_banda": 21
+    },
+    {
+      "market_id": "0xb6e40858535c8de9fd20514848023e06c94f1794aa4d654f34decc88336554cb",
+      "py": 0.8092991879,
+      "acierto": 0,
+      "n_wallets_yes": 14,
+      "n_banda": 7
+    },
+    {
+      "market_id": "0x25bd3fc40d430a920a1f3b0fd733e8d89406395fbc362a4a46330adb3fab29c1",
+      "py": 0.80564637055,
+      "acierto": 1,
+      "n_wallets_yes": 17,
+      "n_banda": 8
+    },
+    {
+      "market_id": "0x1a5e3575876fe098b9fd80fd53dbcd351ff5e48f0717ccd356a1edf08bf7a151",
+      "py": 0.8379767371380952,
+      "acierto": 1,
+      "n_wallets_yes": 45,
+      "n_banda": 21
+    },
+    {
+      "market_id": "0x51cdb7e3762ffcc77bc6d32cc21a362b3ac38636980145305106462e8045295a",
+      "py": 0.8011250913571429,
+      "acierto": 1,
+      "n_wallets_yes": 31,
+      "n_banda": 14
+    },
+    {
+      "market_id": "0xade7085276b5767e9c8dee35cf8270649dc725f033b039edec8baf2bb7f6421a",
+      "py": 0.8533333036666667,
+      "acierto": 0,
+      "n_wallets_yes": 27,
+      "n_banda": 3
+    },
+    {
+      "market_id": "0x92cf6792cf6d82b2885ed26cd2352a058fcdc4c23fbce87f525f64eae57f3069",
+      "py": 0.7424999999999999,
+      "acierto": 1,
+      "n_wallets_yes": 26,
+      "n_banda": 4
+    },
+    {
+      "market_id": "0x5c641d3077081f094e6d280d40439d23141a8661f2b92e9f2988935de8ac2ae4",
+      "py": 0.8342856942571428,
+      "acierto": 1,
+      "n_wallets_yes": 34,
+      "n_banda": 14
+    },
+    {
+      "market_id": "0xf68ac8bcbc0362b4b1d44ec611640b60747f6b0db3b42ff2534a5e7746fb998b",
+      "py": 0.7787499572,
+      "acierto": 1,
+      "n_wallets_yes": 35,
+      "n_banda": 8
+    },
+    {
+      "market_id": "0x371a3b13beeb3777d11aff2ef79bbf0d48186a2d37310f8a8348fbc07820ce7a",
+      "py": 0.80199998097,
+      "acierto": 1,
+      "n_wallets_yes": 33,
+      "n_banda": 10
+    },
+    {
+      "market_id": "0xa0aa4e925640e53ca66d29da99384f7178f1f5836d416ef41843a6c0df200487",
+      "py": 0.8216866523333333,
+      "acierto": 1,
+      "n_wallets_yes": 24,
+      "n_banda": 6
+    },
+    {
+      "market_id": "0xab121c4e8c9e87e9404279d92b556997f90b286f860d2760a1881ad92ee3d9bd",
+      "py": 0.8333333333333334,
+      "acierto": 1,
+      "n_wallets_yes": 21,
+      "n_banda": 3
+    },
+    {
+      "market_id": "0x6efaa447f86b47a1b648a77252a698b150b4e61da4667c60852f3c8231d8d9e5",
+      "py": 0.8343863376857142,
+      "acierto": 1,
+      "n_wallets_yes": 22,
+      "n_banda": 7
+    },
+    {
+      "market_id": "0x5c53d460f0661e783c487b0343e349958e99eab1b163d94f1ada0d0abe19a2b6",
+      "py": 0.7699999886400001,
+      "acierto": 1,
+      "n_wallets_yes": 20,
+      "n_banda": 5
+    },
+    {
+      "market_id": "0xdd31cbb21c4c7fccea148531a1f33fd551cc8ee096bf11b7b99a3ac097e06b39",
+      "py": 0.784,
+      "acierto": 1,
+      "n_wallets_yes": 26,
+      "n_banda": 5
+    },
+    {
+      "market_id": "0x94a5e62db6ba05d317be7d3f800435780941056540e38e7e8195684a68cbb09c",
+      "py": 0.8216666571500001,
+      "acierto": 1,
+      "n_wallets_yes": 20,
+      "n_banda": 6
+    },
+    {
+      "market_id": "0x65c859cd982e6f3d48d27e050dadfd3c29d0d7c9023ee849bcd0fc2871703a74",
+      "py": 0.7612790697749999,
+      "acierto": 1,
+      "n_wallets_yes": 18,
+      "n_banda": 4
+    },
+    {
+      "market_id": "0x0137a8062fcdccacc5b0381cc556284a3ff9368c3df298268b2a574f2397ed41",
+      "py": 0.8048267692384615,
+      "acierto": 0,
+      "n_wallets_yes": 22,
+      "n_banda": 13
+    },
+    {
+      "market_id": "0xeeea01ac0125fe0aee9e128a9fb70ad2125a6b5fdaf63f12b0dd0706de83b21c",
+      "py": 0.7332645434833333,
+      "acierto": 1,
+      "n_wallets_yes": 26,
+      "n_banda": 12
+    },
+    {
+      "market_id": "0x812976a1c16b091b20e12ec376ea7e0b7e6cf2372c6a9c842521e445f6a4d4f2",
+      "py": 0.852499992875,
+      "acierto": 1,
+      "n_wallets_yes": 16,
+      "n_banda": 4
+    },
+    {
+      "market_id": "0x623f5a8552723257d5bd53df85ededdd00ca35345bd9149e41cbe2f437957b24",
+      "py": 0.8328818366875,
+      "acierto": 1,
+      "n_wallets_yes": 24,
+      "n_banda": 8
+    },
+    {
+      "market_id": "0xe08cce8eab5d94462d9bc998e048dfdaaeeebfb19638b5759e443ad079412237",
+      "py": 0.7024999654749999,
+      "acierto": 0,
+      "n_wallets_yes": 9,
+      "n_banda": 4
+    },
+    {
+      "market_id": "0x28f3ff98e9c294e97dda89fc386c5723f92a50d2c9784ed4fb03b56684b45722",
+      "py": 0.7867469634333334,
+      "acierto": 1,
+      "n_wallets_yes": 16,
+      "n_banda": 3
+    },
+    {
+      "market_id": "0x26fe879f53c0101e493637035709adb392790e9c65807e9b0963749a1bd17d68",
+      "py": 0.7799999506499999,
+      "acierto": 1,
+      "n_wallets_yes": 19,
+      "n_banda": 2
+    },
+    {
+      "market_id": "0x1133ce825a1fff92324bffb91a02a60b56e7ed3537c1ad587d70170d5d218ea1",
+      "py": 0.7748012176333333,
+      "acierto": 1,
+      "n_wallets_yes": 33,
+      "n_banda": 6
+    },
+    {
+      "market_id": "0x03770a612551fc49ff2da2a38fa471e113279c3e4e3826a95253078eb9b0ffb7",
+      "py": 0.80987930856,
+      "acierto": 1,
+      "n_wallets_yes": 35,
+      "n_banda": 10
+    },
+    {
+      "market_id": "0xa6c610290933983c38a7a8a33b17486f58ea2333fdcf89f0d98affe775fd0f0e",
+      "py": 0.8503735857538461,
+      "acierto": 1,
+      "n_wallets_yes": 43,
+      "n_banda": 26
+    },
+    {
+      "market_id": "0xffb1e527869d28138efd211a0719ff1dd5a8789e3ba1229f90fd1d2015ccbf14",
+      "py": 0.8363333333333333,
+      "acierto": 1,
+      "n_wallets_yes": 30,
+      "n_banda": 6
+    },
+    {
+      "market_id": "0x9a34d277fc6dd7e2b54499e340694d3994e06e0ea6889df86473c9ae2614c374",
+      "py": 0.7617996087285714,
+      "acierto": 1,
+      "n_wallets_yes": 30,
+      "n_banda": 14
+    },
+    {
+      "market_id": "0xa43e495ac4c06aa500a3d8da0fb64aa83f4ad8d9bc52c0a2d145deba4702189a",
+      "py": 0.8109999651,
+      "acierto": 1,
+      "n_wallets_yes": 33,
+      "n_banda": 5
+    },
+    {
+      "market_id": "0x3cf9bafa1aff560a1ee1712039fcf50aa36e16179e98af911496b6faa8309db0",
+      "py": 0.72,
+      "acierto": 0,
+      "n_wallets_yes": 7,
+      "n_banda": 2
+    },
+    {
+      "market_id": "0xb823b6a1304b28df84d97a1319d8246db37002adf1c866e9de62504701aa7264",
+      "py": 0.8110464943357142,
+      "acierto": 1,
+      "n_wallets_yes": 43,
+      "n_banda": 14
+    },
+    {
+      "market_id": "0xd18ea69cd2fb83f6ca37bce79511e1f11fb34abeb93489659e873d4d99e14e42",
+      "py": 0.7628198609571429,
+      "acierto": 0,
+      "n_wallets_yes": 24,
+      "n_banda": 7
+    },
+    {
+      "market_id": "0x4d9d3bcbd1df7520115a6c628b61198f7635c6416a76ccdc123fcdd7b61f01ec",
+      "py": 0.812499998775,
+      "acierto": 1,
+      "n_wallets_yes": 22,
+      "n_banda": 4
+    },
+    {
+      "market_id": "0x96a3482090944be4b4f04f30a0fe68800177d3b6b4e004d5d47fa606474b2df3",
+      "py": 0.73,
+      "acierto": 0,
+      "n_wallets_yes": 8,
+      "n_banda": 1
+    },
+    {
+      "market_id": "0x2a82caef291fee5a34f33f10075543808988b4e908955ebb794f51f1529d3dd6",
+      "py": 0.8409707988874999,
+      "acierto": 1,
+      "n_wallets_yes": 23,
+      "n_banda": 8
+    },
+    {
+      "market_id": "0xa06c7e659d54441d39a27db54636cb10f3837a8fcf3851170d7952f0dc064e83",
+      "py": 0.8,
+      "acierto": 1,
+      "n_wallets_yes": 16,
+      "n_banda": 1
+    },
+    {
+      "market_id": "0xf96f016f9cba5c893546995f832bf2db900b42f2d13ed64c942a630d009831e0",
+      "py": 0.81199999268,
+      "acierto": 1,
+      "n_wallets_yes": 15,
+      "n_banda": 10
+    },
+    {
+      "market_id": "0xd973790b6586b84aafd03cbeadf1c6eb4437371f25e8c8949a58346a710a3645",
+      "py": 0.7724898664166666,
+      "acierto": 1,
+      "n_wallets_yes": 33,
+      "n_banda": 12
+    },
+    {
+      "market_id": "0xba212cf9295bca5fa9f664166e6974476733a2da90056d67bca2197194080815",
+      "py": 0.8233333192333333,
+      "acierto": 1,
+      "n_wallets_yes": 20,
+      "n_banda": 3
+    },
+    {
+      "market_id": "0xf8798df49f74b57b8430ab05d584d2e534c7dae48d0c7e95a723d3cfef4e9540",
+      "py": 0.8036738222083333,
+      "acierto": 1,
+      "n_wallets_yes": 40,
+      "n_banda": 12
+    },
+    {
+      "market_id": "0x3797c7c22eeccdc1b4918c76e455c490246350bf08089207db6b75dadc7ddfc2",
+      "py": 0.7841774865375,
+      "acierto": 1,
+      "n_wallets_yes": 19,
+      "n_banda": 8
+    },
+    {
+      "market_id": "0x3bbd445f51ca5c51c3f62fb0962cd4ff695c6e281069973318c3bd3fc6c32348",
+      "py": 0.8359999982599999,
+      "acierto": 1,
+      "n_wallets_yes": 15,
+      "n_banda": 5
+    },
+    {
+      "market_id": "0x6b0dc5fa311c0a1221229ae5f6c34bbee71789b1af3c4ec7573b70b4e47482cd",
+      "py": 0.7889556984111111,
+      "acierto": 1,
+      "n_wallets_yes": 23,
+      "n_banda": 9
+    },
+    {
+      "market_id": "0x99332b5371ba239aceb4e2c0e6eace5c2525b90de56a47e2d22a223a20a7ba3a",
+      "py": 0.8199999836,
+      "acierto": 1,
+      "n_wallets_yes": 21,
+      "n_banda": 1
+    },
+    {
+      "market_id": "0xc4c6a1e83fcc7abd03781900c5e4801d770db9d5952d3c5323e981b05844ac98",
+      "py": 0.7714764258,
+      "acierto": 0,
+      "n_wallets_yes": 11,
+      "n_banda": 4
+    },
+    {
+      "market_id": "0xd860c0d349f04603aa1e46554b0ce0114f6fe69cb5bbd4822f5c9453d7dbe090",
+      "py": 0.8199999602250001,
+      "acierto": 1,
+      "n_wallets_yes": 28,
+      "n_banda": 4
+    },
+    {
+      "market_id": "0xc59c57a674872ea360ffb4aacad812ad18d022f4caf8da9c1cf8544c92cc2a99",
+      "py": 0.7299999848000001,
+      "acierto": 0,
+      "n_wallets_yes": 5,
+      "n_banda": 2
+    },
+    {
+      "market_id": "0x6188c24c4df5923cf819299983a277643fcf0da1f0bdeee347b0ff23f1befe71",
+      "py": 0.8238659475666666,
+      "acierto": 1,
+      "n_wallets_yes": 16,
+      "n_banda": 3
+    },
+    {
+      "market_id": "0x46a38b93f7c87b0d372c2b105c606db77d89405928531b0c4f9c3c79f6555086",
+      "py": 0.8068259429142858,
+      "acierto": 0,
+      "n_wallets_yes": 20,
+      "n_banda": 7
+    },
+    {
+      "market_id": "0xda0ec71b8a6c348c5d6ad7dd16baefbc1a28afa5ad4bb88234df4d5ff496fb80",
+      "py": 0.8799999788666666,
+      "acierto": 1,
+      "n_wallets_yes": 17,
+      "n_banda": 3
+    },
+    {
+      "market_id": "0xe141df52004108e66552b83b9481cebd21ad8e34b5e3e61b70bc4f2c2afcc8f2",
+      "py": 0.7992673441833333,
+      "acierto": 1,
+      "n_wallets_yes": 26,
+      "n_banda": 6
+    },
+    {
+      "market_id": "0xa28bc70e72b0da2a80d306c6c0d9e6d81eaacf0e20dc301b2b048db2028df631",
+      "py": 0.81999996445,
+      "acierto": 1,
+      "n_wallets_yes": 19,
+      "n_banda": 2
+    },
+    {
+      "market_id": "0x86e43fa2b2d3039d31083a1dad894135d1de4f94184f8625cb661aeca7dbe536",
+      "py": 0.78377358395,
+      "acierto": 0,
+      "n_wallets_yes": 11,
+      "n_banda": 4
+    },
+    {
+      "market_id": "0x7ff1bd037a5b1d97e211b6c674fb64ea568d601c5261b254326e02457a95e6db",
+      "py": 0.8133018008444445,
+      "acierto": 0,
+      "n_wallets_yes": 14,
+      "n_banda": 9
+    },
+    {
+      "market_id": "0xe5c6f636f195a8248116d464dc6a2bfcc93fb802737132bd5c65f4e1d60f8da6",
+      "py": 0.83605750615,
+      "acierto": 0,
+      "n_wallets_yes": 7,
+      "n_banda": 2
+    },
+    {
+      "market_id": "0x453964253bd318be29bcb6b2556f3044d8b97cc37c8f69f4ba82055ce2965107",
+      "py": 0.8274999684,
+      "acierto": 1,
+      "n_wallets_yes": 12,
+      "n_banda": 4
+    },
+    {
+      "market_id": "0x1d97b2f2e554e7f1370c5b6b732a4968ad6dfd0109fe996e541df116a9f8c655",
+      "py": 0.7939999796,
+      "acierto": 0,
+      "n_wallets_yes": 8,
+      "n_banda": 5
+    },
+    {
+      "market_id": "0x316cf442f069321251c03a86886845f7b6b62671246f28b74f3d7cdf48b8a7c1",
+      "py": 0.8499999951,
+      "acierto": 1,
+      "n_wallets_yes": 20,
+      "n_banda": 2
+    },
+    {
+      "market_id": "0x86b151b383935d96d25f79dc9209f5f0b2cc59fc4c1abfc125039c901a3aac21",
+      "py": 0.7939999753,
+      "acierto": 1,
+      "n_wallets_yes": 13,
+      "n_banda": 5
+    },
+    {
+      "market_id": "0xe960d569ba6503f21eac8ac8007325574aafe64e1cf08b11f04416c4949b288a",
+      "py": 0.8144444211,
+      "acierto": 1,
+      "n_wallets_yes": 30,
+      "n_banda": 9
+    },
+    {
+      "market_id": "0x1576b61b7e4d36547f4e237d8f95c3ed958a440ec26757d64769afaf338f7cc2",
+      "py": 0.7849999999999999,
+      "acierto": 1,
+      "n_wallets_yes": 27,
+      "n_banda": 2
+    },
+    {
+      "market_id": "0x59ab264296878fdd9e147b75413c3e7293d233de86ac1b0db25838e2da5ccd5a",
+      "py": 0.7599999352000001,
+      "acierto": 1,
+      "n_wallets_yes": 21,
+      "n_banda": 3
+    },
+    {
+      "market_id": "0x75d268507cde6425c7435f9bf0c1211aeae25d1ae38576a4ccd359f52fa1c8af",
+      "py": 0.7918918878166666,
+      "acierto": 1,
+      "n_wallets_yes": 29,
+      "n_banda": 12
+    },
+    {
+      "market_id": "0x2546687c00b682858f29dd666ca06809e11411f1d8384e0b8e4dd1b65f85cbe0",
+      "py": 0.767632005475,
+      "acierto": 1,
+      "n_wallets_yes": 27,
+      "n_banda": 12
+    },
+    {
+      "market_id": "0xe3bd26a3f6a49e859ebc289ea2388479f5725da63d23d22bcd3d31a345a853b5",
+      "py": 0.8251114066333333,
+      "acierto": 1,
+      "n_wallets_yes": 16,
+      "n_banda": 3
+    },
+    {
+      "market_id": "0x90bf1ce5a2ef3059532ff79806fd6c2ed49406a40462f7f12982602d9d896881",
+      "py": 0.8166907282666666,
+      "acierto": 1,
+      "n_wallets_yes": 24,
+      "n_banda": 6
+    },
+    {
+      "market_id": "0xa7903b2f395f2652b4cea424d3f634ace2c48ca4b601008e1467b8da5c9c949d",
+      "py": 0.8126666612000001,
+      "acierto": 1,
+      "n_wallets_yes": 26,
+      "n_banda": 3
+    },
+    {
+      "market_id": "0x8e1858681cfa21d15c7484e1a6f348992df1b3c711cf70b98b51c38df96c18fd",
+      "py": 0.7906172837000001,
+      "acierto": 1,
+      "n_wallets_yes": 27,
+      "n_banda": 2
+    },
+    {
+      "market_id": "0x45119076f59543666059a71e7f1c3ce2caed1ce133901e37fd6c0790934dbdd4",
+      "py": 0.74255549112,
+      "acierto": 1,
+      "n_wallets_yes": 18,
+      "n_banda": 5
+    },
+    {
+      "market_id": "0x3c9a751bc51cab0d24c2ec432d5eefa9deb7d3178f7723d148c22972d8f8873b",
+      "py": 0.714999989,
+      "acierto": 1,
+      "n_wallets_yes": 12,
+      "n_banda": 4
+    },
+    {
+      "market_id": "0x8f206bad5f66c8faa3c777ac7b75d1c8776c824ca39568d0e459a1dd579f1ecf",
+      "py": 0.76071998578,
+      "acierto": 0,
+      "n_wallets_yes": 9,
+      "n_banda": 5
+    },
+    {
+      "market_id": "0xed0e172a5cc1fc7fc59897031be8189f60aa8a2080a8dd143c6cf05d6e66f319",
+      "py": 0.8218052584416666,
+      "acierto": 1,
+      "n_wallets_yes": 23,
+      "n_banda": 12
+    },
+    {
+      "market_id": "0xeeea90e5d1603f57878a0e51ad30a329d2303f7b86e61ac3acaa9aadde16b135",
+      "py": 0.8393165993666667,
+      "acierto": 1,
+      "n_wallets_yes": 20,
+      "n_banda": 6
+    },
+    {
+      "market_id": "0x4da03522e9c2727277d7557e8335c50df450fee55f7bcce8194dd992e7dd5e7c",
+      "py": 0.719999856,
+      "acierto": 0,
+      "n_wallets_yes": 6,
+      "n_banda": 1
+    },
+    {
+      "market_id": "0xdced87bca899a853259564f56c419c7dd9c942d8a6b04f431537feb7de6f7bf9",
+      "py": 0.7,
+      "acierto": 1,
+      "n_wallets_yes": 10,
+      "n_banda": 2
+    },
+    {
+      "market_id": "0xf35665dabbdb18322b77235be9e445c68837c294a5e2b04c7625e4b7bf84699f",
+      "py": 0.7,
+      "acierto": 0,
+      "n_wallets_yes": 6,
+      "n_banda": 2
+    },
+    {
+      "market_id": "0x903af76c13ea492c6275fd636b5e9a41d266204a9d0842d0054cc57dd8d0593f",
+      "py": 0.8633603479333333,
+      "acierto": 1,
+      "n_wallets_yes": 12,
+      "n_banda": 3
+    },
+    {
+      "market_id": "0xd4f8b5f01c488af93f6fceec78bdccc0a49d6d6d9f9584acb777f96788a15dfc",
+      "py": 0.80499999565,
+      "acierto": 1,
+      "n_wallets_yes": 12,
+      "n_banda": 2
+    },
+    {
+      "market_id": "0xee1a08558fc89067b23c06ba25267382bc327a46d5725d865e5950f1672eb609",
+      "py": 0.84399996376,
+      "acierto": 0,
+      "n_wallets_yes": 11,
+      "n_banda": 5
+    },
+    {
+      "market_id": "0x3ac878b2e5f84a1b0ee82bc9ca8b84a44939dbc6c4c5b9571354244099b04d6c",
+      "py": 0.7466265016000001,
+      "acierto": 1,
+      "n_wallets_yes": 20,
+      "n_banda": 3
+    },
+    {
+      "market_id": "0xaaba54f3fb0342c3e3fcb14a6d59bf4875568aa45c11efea9c4042fa3d3bfa62",
+      "py": 0.8077387188,
+      "acierto": 1,
+      "n_wallets_yes": 21,
+      "n_banda": 1
+    },
+    {
+      "market_id": "0xfd747d6e11372def6066429790167b174bd6db62a67e1c12be6e1e9f6bcf5b8f",
+      "py": 0.7942856893,
+      "acierto": 1,
+      "n_wallets_yes": 16,
+      "n_banda": 7
+    },
+    {
+      "market_id": "0xda7f824095018b01156e25665208c78cbbd8b36114aa55029c3a1be064de9e26",
+      "py": 0.83890899142,
+      "acierto": 1,
+      "n_wallets_yes": 27,
+      "n_banda": 5
+    },
+    {
+      "market_id": "0x53376bbf4cf56b6aa7358c71573ad3b1dae7c13cb9a085fa23fbf8026642bf3e",
+      "py": 0.7643409988444445,
+      "acierto": 1,
+      "n_wallets_yes": 23,
+      "n_banda": 9
+    },
+    {
+      "market_id": "0x2a462af419a1ee482246b5d0032cdc84bac45e2ff662a5d815005f51c768d95d",
+      "py": 0.76999995195,
+      "acierto": 0,
+      "n_wallets_yes": 7,
+      "n_banda": 2
+    },
+    {
+      "market_id": "0x646abd9ea15e627e6932b17050f47409e2727da78e9c6bd154cd5ea8aa172cc8",
+      "py": 0.8577777633888889,
+      "acierto": 1,
+      "n_wallets_yes": 28,
+      "n_banda": 9
+    },
+    {
+      "market_id": "0x44b5b8c7f1dd43a3fff98e35d6e18681150f8d0f9150d9333f215feade18f4ae",
+      "py": 0.8103135171333333,
+      "acierto": 1,
+      "n_wallets_yes": 17,
+      "n_banda": 6
+    },
+    {
+      "market_id": "0xed18a96f1f83065339788d16c74ff3f94fe4b99c2947521fbc3245b119b7537e",
+      "py": 0.81641769095,
+      "acierto": 1,
+      "n_wallets_yes": 40,
+      "n_banda": 8
+    },
+    {
+      "market_id": "0x7b2b2b4d84dc3d6e1b93922766d977531a4fc154baaba9f0d8bc4edba22f37df",
+      "py": 0.80499994465,
+      "acierto": 0,
+      "n_wallets_yes": 7,
+      "n_banda": 2
+    },
+    {
+      "market_id": "0xef0ba8a1adfb013820377d140294e76e2c1cf2b09b169046a84f171175288664",
+      "py": 0.75,
+      "acierto": 0,
+      "n_wallets_yes": 11,
+      "n_banda": 1
+    },
+    {
+      "market_id": "0x2e6d70884f1c623ce77dbcb73fdcaa1be955fd343c058f1a5ad2f902bdd127a2",
+      "py": 0.7366666149666666,
+      "acierto": 0,
+      "n_wallets_yes": 14,
+      "n_banda": 3
+    },
+    {
+      "market_id": "0x1ba57cf4bdd65eff9fb6788bfc843b8db845a50e8d388784160c69bafd6e642c",
+      "py": 0.7584714411333332,
+      "acierto": 1,
+      "n_wallets_yes": 16,
+      "n_banda": 3
+    },
+    {
+      "market_id": "0x5974a20bc40052c2f25b6b123a5a44f18b1e144bebe5bccfe02b7fedb220c2de",
+      "py": 0.7,
+      "acierto": 0,
+      "n_wallets_yes": 6,
+      "n_banda": 1
+    },
+    {
+      "market_id": "0x3ccbdd777acda0e57f47dd1a61ed9c006f82399f02b56bdec4d305b7374467dc",
+      "py": 0.71762779766,
+      "acierto": 0,
+      "n_wallets_yes": 41,
+      "n_banda": 5
+    },
+    {
+      "market_id": "0xeee9d469f024a15f363fd91095b6fb6967cda0b68cea83b010686a9a8defacb7",
+      "py": 0.846996472575,
+      "acierto": 1,
+      "n_wallets_yes": 45,
+      "n_banda": 16
+    },
+    {
+      "market_id": "0xea0607cd34198c5b3b97334905f88e8c69920abbdd6c27a63f5307784feb19cd",
+      "py": 0.7616666520833334,
+      "acierto": 1,
+      "n_wallets_yes": 21,
+      "n_banda": 6
+    },
+    {
+      "market_id": "0xdfa9fb9a9e8968f17368a9e9f301c6c10c0d757864aa6e2695627c1d14ab9f55",
+      "py": 0.7849999763,
+      "acierto": 1,
+      "n_wallets_yes": 19,
+      "n_banda": 6
+    },
+    {
+      "market_id": "0x0373022acd5a269e00a1f6dc4029e0119ff7702117e1b8aa65eb76b8d50a4881",
+      "py": 0.76199996352,
+      "acierto": 1,
+      "n_wallets_yes": 22,
+      "n_banda": 5
+    },
+    {
+      "market_id": "0xdae74c8da29b12996fd1e6c481e8ad686c77844ca1735ab0b30a354cbbd73ebe",
+      "py": 0.822499994825,
+      "acierto": 1,
+      "n_wallets_yes": 30,
+      "n_banda": 8
+    },
+    {
+      "market_id": "0xf2ce82035412a897f8e7890860488432b7bc55846d94b309982ca4eec4c76888",
+      "py": 0.8766666542333333,
+      "acierto": 1,
+      "n_wallets_yes": 16,
+      "n_banda": 3
+    },
+    {
+      "market_id": "0x2cb99de5c851a0adca72150de9351ae54bfa6aec8045f36a6a6bdad285b23077",
+      "py": 0.805,
+      "acierto": 1,
+      "n_wallets_yes": 13,
+      "n_banda": 2
+    },
+    {
+      "market_id": "0x5d9a16491582d4951162253d0527d1a16339f27eabe10505f3274672f7cc9c8d",
+      "py": 0.8574767146111112,
+      "acierto": 1,
+      "n_wallets_yes": 31,
+      "n_banda": 9
+    },
+    {
+      "market_id": "0x3a9c61df283cfa188e2080cddd5cfadf5f4a349215539f4eaf4f6f7e93196550",
+      "py": 0.8177638462857143,
+      "acierto": 1,
+      "n_wallets_yes": 80,
+      "n_banda": 42
+    },
+    {
+      "market_id": "0x5e8529f997ce5a567c9fa725933a21b0f8d80bac6bcf36b3761869c86fb9ea0e",
+      "py": 0.80499999505,
+      "acierto": 1,
+      "n_wallets_yes": 21,
+      "n_banda": 4
+    },
+    {
+      "market_id": "0xb4ff303c318332997b604b19c3f5da680747709f067bea261e8dfca80fc1eb9b",
+      "py": 0.7099999432,
+      "acierto": 0,
+      "n_wallets_yes": 7,
+      "n_banda": 1
+    },
+    {
+      "market_id": "0xf177841d5ad9b2551de7a80646e1f41b1c2816014872a05ace5b7db620f2131c",
+      "py": 0.7231930209999999,
+      "acierto": 0,
+      "n_wallets_yes": 18,
+      "n_banda": 4
+    },
+    {
+      "market_id": "0x75d456ab4216521b5d576df54e2d19746d247f4e725bb3b8f70955806e841ac0",
+      "py": 0.7894569565,
+      "acierto": 1,
+      "n_wallets_yes": 22,
+      "n_banda": 11
+    },
+    {
+      "market_id": "0xaefbb94f15b9a356bd4914f78ff0f56f34be13695b314cf90207183b88388cc6",
+      "py": 0.8499999515500001,
+      "acierto": 1,
+      "n_wallets_yes": 29,
+      "n_banda": 6
+    },
+    {
+      "market_id": "0xa7ce510626aa95eac483213527d925f0a2f8b9d27df4c480ffab3286586c1141",
+      "py": 0.8049999999999999,
+      "acierto": 0,
+      "n_wallets_yes": 12,
+      "n_banda": 2
+    },
+    {
+      "market_id": "0xf2cb59effe745768155fd322fba1c2f326d429a48568f4d734100ecfda261934",
+      "py": 0.81399997362,
+      "acierto": 1,
+      "n_wallets_yes": 24,
+      "n_banda": 5
+    },
+    {
+      "market_id": "0xb5013b4b7d6deb72ea44c3d42d7941e22f81af7d6225ee34c40674da127ac709",
+      "py": 0.7785714145428572,
+      "acierto": 1,
+      "n_wallets_yes": 20,
+      "n_banda": 7
+    },
+    {
+      "market_id": "0x418a238b0eb444c2aa0ff4d99c1f008544cdb1cae60aa409a7d68607e5644349",
+      "py": 0.74,
+      "acierto": 0,
+      "n_wallets_yes": 3,
+      "n_banda": 1
+    }
+  ],
+  "DOGE_limpio_n_banda_gte_3": [
+    {
+      "market_id": "0x5e2d4fd82defcee360b8fd5b65fa1f45cffcae1d52864e4001b8cff6ae9595bc",
+      "py": 0.81343840835,
+      "acierto": 1,
+      "n_wallets_yes": 11,
+      "n_banda": 4
+    },
+    {
+      "market_id": "0x8ce905ea0f8a9cec407051de1fde9a3b6995b8e15f9275af9905374882545133",
+      "py": 0.8315529198111111,
+      "acierto": 1,
+      "n_wallets_yes": 17,
+      "n_banda": 9
+    },
+    {
+      "market_id": "0x34b40d8bf521f8f03a731d388f4c3c6f54c63b678cd41807830cd85747d24ed7",
+      "py": 0.781249976275,
+      "acierto": 0,
+      "n_wallets_yes": 13,
+      "n_banda": 8
+    },
+    {
+      "market_id": "0x2cf2b4e691ebc4fc396229eea9faf9beb0390e64756f80bbf62df09f1b020f83",
+      "py": 0.8334157450666666,
+      "acierto": 1,
+      "n_wallets_yes": 22,
+      "n_banda": 3
+    },
+    {
+      "market_id": "0xdb34762589f6555326037dea9d95a98ceb2a18b64baead505808abe4dc772271",
+      "py": 0.8622221913666667,
+      "acierto": 1,
+      "n_wallets_yes": 31,
+      "n_banda": 9
+    },
+    {
+      "market_id": "0x3701b8f5bc7231f0692bdfe1543bdfc5d7acab2b42baed6b6d53ecb15e7050ee",
+      "py": 0.83482433852,
+      "acierto": 1,
+      "n_wallets_yes": 41,
+      "n_banda": 10
+    },
+    {
+      "market_id": "0x8ef5c211685ec7c0650815c6958f511644f8dca6439afb88b0cb04eef1a7a200",
+      "py": 0.8241846391444444,
+      "acierto": 1,
+      "n_wallets_yes": 46,
+      "n_banda": 9
+    },
+    {
+      "market_id": "0x9b25d6472a86c8db7037f78dc564c3b407d9480fd49a871bfd3cde0f156c3c6e",
+      "py": 0.7775275958705883,
+      "acierto": 1,
+      "n_wallets_yes": 37,
+      "n_banda": 17
+    },
+    {
+      "market_id": "0x4d71d381dc3dfdf32de2f0d8526908a7fc89d243d380dde34db5172eedfe347b",
+      "py": 0.7981726895833333,
+      "acierto": 1,
+      "n_wallets_yes": 19,
+      "n_banda": 6
+    },
+    {
+      "market_id": "0xdf5054f1c096f11894fa09e5de9886a41a7bed26f13058a1782e185eb8ac6ff7",
+      "py": 0.811338752425,
+      "acierto": 1,
+      "n_wallets_yes": 18,
+      "n_banda": 4
+    },
+    {
+      "market_id": "0xb74ca2602bc2056fd422b7d295dd4f94564df36a0e1ba66aa127baf97e8a18f0",
+      "py": 0.81740771670625,
+      "acierto": 0,
+      "n_wallets_yes": 22,
+      "n_banda": 16
+    },
+    {
+      "market_id": "0x5562736bc0fef828fe6fa030813c37610226e4667c6c140d63f1d4ad1d8f4ac5",
+      "py": 0.7914000614428572,
+      "acierto": 1,
+      "n_wallets_yes": 52,
+      "n_banda": 14
+    },
+    {
+      "market_id": "0xcfc7b08d7ebd6ec5879d9b1d571a000853cf2d514175f9af5df85d7ed136d2b0",
+      "py": 0.8414756791999999,
+      "acierto": 1,
+      "n_wallets_yes": 17,
+      "n_banda": 6
+    },
+    {
+      "market_id": "0x03dcd58c3b5401c55efd85a18f87ba00c6bf9f373faf4c1074f75929e761a113",
+      "py": 0.7300217153,
+      "acierto": 0,
+      "n_wallets_yes": 10,
+      "n_banda": 3
+    },
+    {
+      "market_id": "0xd5aa996d850dfc9dfa012dc6f4f0c7aad8f6b67745ea63ec0b968b9669b48a8e",
+      "py": 0.7936517155285714,
+      "acierto": 1,
+      "n_wallets_yes": 26,
+      "n_banda": 7
+    },
+    {
+      "market_id": "0x414594808d2dae2ccf93acff089fdf6b70d27916e8c5f92a848252d166927f09",
+      "py": 0.7719999591800001,
+      "acierto": 1,
+      "n_wallets_yes": 16,
+      "n_banda": 5
+    },
+    {
+      "market_id": "0x61af1696775ae3ddfd5db8824cf0345cfd236ae4da576598be56d8f9b1e50847",
+      "py": 0.8066666502333333,
+      "acierto": 1,
+      "n_wallets_yes": 21,
+      "n_banda": 3
+    },
+    {
+      "market_id": "0xb4a812b243d79a3e58b07b4f1309f55c0eb476b7111454cfe95f442c60f31f27",
+      "py": 0.75863037036,
+      "acierto": 1,
+      "n_wallets_yes": 27,
+      "n_banda": 5
+    },
+    {
+      "market_id": "0x2682059a50d04fae06acbe4154bd18a7c3622c4a2177bff78ebc302ad62821ca",
+      "py": 0.774999984725,
+      "acierto": 1,
+      "n_wallets_yes": 32,
+      "n_banda": 8
+    },
+    {
+      "market_id": "0x07c3b8abd6ded6d5580b197f9dbdd47c55b4c3c1d87af048de3226d4630975ff",
+      "py": 0.74395856715,
+      "acierto": 1,
+      "n_wallets_yes": 25,
+      "n_banda": 8
+    },
+    {
+      "market_id": "0x9b0bdd4144c268ea443aee869ea5e589c4e8a1b054645bf4c768a750ef19bcd7",
+      "py": 0.7487499987499999,
+      "acierto": 1,
+      "n_wallets_yes": 33,
+      "n_banda": 8
+    },
+    {
+      "market_id": "0xca2bc5b47f7f45340ddfff98b71d9335a401d5e52b678cda87b48fdd327ed2b7",
+      "py": 0.8102777631,
+      "acierto": 1,
+      "n_wallets_yes": 28,
+      "n_banda": 4
+    },
+    {
+      "market_id": "0x64502eaf91148ba7a381dd4cd7700ae3a924ebe3b5a0ab8628893038810bca50",
+      "py": 0.823279171325,
+      "acierto": 1,
+      "n_wallets_yes": 42,
+      "n_banda": 8
+    },
+    {
+      "market_id": "0xcad544db503d7d770217e3ece6880fe8f4efe2f56be96be05b88d4cc9b5f5434",
+      "py": 0.7716666666666666,
+      "acierto": 1,
+      "n_wallets_yes": 18,
+      "n_banda": 6
+    },
+    {
+      "market_id": "0x8382f9c3a945c27e3ce9d3ca3681c1cd0b824dec4eae7f27a507f76f1637fba0",
+      "py": 0.7924128392210527,
+      "acierto": 1,
+      "n_wallets_yes": 43,
+      "n_banda": 19
+    },
+    {
+      "market_id": "0xfb3c7e52f771cb5544b7567ef0103eab1f2281fc522e8982e02a68fea7f9b23e",
+      "py": 0.837499984975,
+      "acierto": 1,
+      "n_wallets_yes": 23,
+      "n_banda": 4
+    },
+    {
+      "market_id": "0xbf41ec1224dbc2cf587628b5e84f553552a6aa2d023dac1244d7950cd1483b30",
+      "py": 0.8116032677666668,
+      "acierto": 1,
+      "n_wallets_yes": 18,
+      "n_banda": 6
+    },
+    {
+      "market_id": "0x1678474a8a6cd7460faa2178c5a8f3ba53746e8122d41fb716a0f1a2a8c5ebd7",
+      "py": 0.78599999672,
+      "acierto": 0,
+      "n_wallets_yes": 13,
+      "n_banda": 5
+    },
+    {
+      "market_id": "0xf3fa25561ee66cd42caf09d80827aab5adc05a53df8456d8ae051c3feee68d40",
+      "py": 0.7702160745857143,
+      "acierto": 1,
+      "n_wallets_yes": 31,
+      "n_banda": 7
+    },
+    {
+      "market_id": "0xd1d4f00d8cf10f67b563de03a2b5f241f972d15830431b4cf6f74a48476cf745",
+      "py": 0.7766666335333333,
+      "acierto": 1,
+      "n_wallets_yes": 21,
+      "n_banda": 6
+    },
+    {
+      "market_id": "0x90a41ccbe71a98587a190b59e073e60d7680bb0747f983202afa0f6b82655eca",
+      "py": 0.8408902103111111,
+      "acierto": 1,
+      "n_wallets_yes": 40,
+      "n_banda": 9
+    },
+    {
+      "market_id": "0xfd74df1af5391c9925f858cdfcaba7e10b507931c4e2dbb9284ab0ce7371535d",
+      "py": 0.8400528721333334,
+      "acierto": 1,
+      "n_wallets_yes": 35,
+      "n_banda": 9
+    },
+    {
+      "market_id": "0x8008f021dddfc46ef7ba5ce8c62185368d85683c74bfb33377b81873de026736",
+      "py": 0.8390278504857144,
+      "acierto": 1,
+      "n_wallets_yes": 57,
+      "n_banda": 14
+    },
+    {
+      "market_id": "0xdab1d907847b0891e76f6917d28c4e18cff57240dddea9b9b1b38b9835533b72",
+      "py": 0.8110014919499999,
+      "acierto": 1,
+      "n_wallets_yes": 39,
+      "n_banda": 14
+    },
+    {
+      "market_id": "0xe862a2de1a4c663dd71bfe4e7abf947c0b4b85245af9aba078b5e91304dd885a",
+      "py": 0.8289999769199999,
+      "acierto": 1,
+      "n_wallets_yes": 30,
+      "n_banda": 5
+    },
+    {
+      "market_id": "0x2c1bddb7848f32bfd343bd88041ad6efe129fad4cc81000e11cacf06d547fdb7",
+      "py": 0.82307141408,
+      "acierto": 1,
+      "n_wallets_yes": 35,
+      "n_banda": 10
+    },
+    {
+      "market_id": "0x8a2d5a36487dfe1b997f75275b7a112011e04d3b2936300a9633bdfba0da512f",
+      "py": 0.8487499655625,
+      "acierto": 1,
+      "n_wallets_yes": 19,
+      "n_banda": 8
+    },
+    {
+      "market_id": "0xd849dedf4350dfc6ba7b74850529619c3d9601a164873b6e13d016bb67c0810b",
+      "py": 0.8174999906,
+      "acierto": 1,
+      "n_wallets_yes": 25,
+      "n_banda": 4
+    },
+    {
+      "market_id": "0x798077e6e1c1d8940dad85d2b3eefc34da43c2a0bc6dc36383a52b2be212bece",
+      "py": 0.8174999969,
+      "acierto": 1,
+      "n_wallets_yes": 15,
+      "n_banda": 4
+    },
+    {
+      "market_id": "0x29fa93fa0613b9dfe872c4a5e7d2fbc47bbaea6700d7aead3c58e8a34dcbc2eb",
+      "py": 0.84116997455,
+      "acierto": 1,
+      "n_wallets_yes": 28,
+      "n_banda": 4
+    },
+    {
+      "market_id": "0xadceac8dd1fc48822cdde73a415a509a1f733aa14361c9630d46a63dc695e531",
+      "py": 0.8253377219666667,
+      "acierto": 1,
+      "n_wallets_yes": 30,
+      "n_banda": 21
+    },
+    {
+      "market_id": "0xb6e40858535c8de9fd20514848023e06c94f1794aa4d654f34decc88336554cb",
+      "py": 0.8092991879,
+      "acierto": 0,
+      "n_wallets_yes": 14,
+      "n_banda": 7
+    },
+    {
+      "market_id": "0x25bd3fc40d430a920a1f3b0fd733e8d89406395fbc362a4a46330adb3fab29c1",
+      "py": 0.80564637055,
+      "acierto": 1,
+      "n_wallets_yes": 17,
+      "n_banda": 8
+    },
+    {
+      "market_id": "0x1a5e3575876fe098b9fd80fd53dbcd351ff5e48f0717ccd356a1edf08bf7a151",
+      "py": 0.8379767371380952,
+      "acierto": 1,
+      "n_wallets_yes": 45,
+      "n_banda": 21
+    },
+    {
+      "market_id": "0x51cdb7e3762ffcc77bc6d32cc21a362b3ac38636980145305106462e8045295a",
+      "py": 0.8011250913571429,
+      "acierto": 1,
+      "n_wallets_yes": 31,
+      "n_banda": 14
+    },
+    {
+      "market_id": "0xade7085276b5767e9c8dee35cf8270649dc725f033b039edec8baf2bb7f6421a",
+      "py": 0.8533333036666667,
+      "acierto": 0,
+      "n_wallets_yes": 27,
+      "n_banda": 3
+    },
+    {
+      "market_id": "0x92cf6792cf6d82b2885ed26cd2352a058fcdc4c23fbce87f525f64eae57f3069",
+      "py": 0.7424999999999999,
+      "acierto": 1,
+      "n_wallets_yes": 26,
+      "n_banda": 4
+    },
+    {
+      "market_id": "0x5c641d3077081f094e6d280d40439d23141a8661f2b92e9f2988935de8ac2ae4",
+      "py": 0.8342856942571428,
+      "acierto": 1,
+      "n_wallets_yes": 34,
+      "n_banda": 14
+    },
+    {
+      "market_id": "0xf68ac8bcbc0362b4b1d44ec611640b60747f6b0db3b42ff2534a5e7746fb998b",
+      "py": 0.7787499572,
+      "acierto": 1,
+      "n_wallets_yes": 35,
+      "n_banda": 8
+    },
+    {
+      "market_id": "0x371a3b13beeb3777d11aff2ef79bbf0d48186a2d37310f8a8348fbc07820ce7a",
+      "py": 0.80199998097,
+      "acierto": 1,
+      "n_wallets_yes": 33,
+      "n_banda": 10
+    },
+    {
+      "market_id": "0xa0aa4e925640e53ca66d29da99384f7178f1f5836d416ef41843a6c0df200487",
+      "py": 0.8216866523333333,
+      "acierto": 1,
+      "n_wallets_yes": 24,
+      "n_banda": 6
+    },
+    {
+      "market_id": "0xab121c4e8c9e87e9404279d92b556997f90b286f860d2760a1881ad92ee3d9bd",
+      "py": 0.8333333333333334,
+      "acierto": 1,
+      "n_wallets_yes": 21,
+      "n_banda": 3
+    },
+    {
+      "market_id": "0x6efaa447f86b47a1b648a77252a698b150b4e61da4667c60852f3c8231d8d9e5",
+      "py": 0.8343863376857142,
+      "acierto": 1,
+      "n_wallets_yes": 22,
+      "n_banda": 7
+    },
+    {
+      "market_id": "0x5c53d460f0661e783c487b0343e349958e99eab1b163d94f1ada0d0abe19a2b6",
+      "py": 0.7699999886400001,
+      "acierto": 1,
+      "n_wallets_yes": 20,
+      "n_banda": 5
+    },
+    {
+      "market_id": "0xdd31cbb21c4c7fccea148531a1f33fd551cc8ee096bf11b7b99a3ac097e06b39",
+      "py": 0.784,
+      "acierto": 1,
+      "n_wallets_yes": 26,
+      "n_banda": 5
+    },
+    {
+      "market_id": "0x94a5e62db6ba05d317be7d3f800435780941056540e38e7e8195684a68cbb09c",
+      "py": 0.8216666571500001,
+      "acierto": 1,
+      "n_wallets_yes": 20,
+      "n_banda": 6
+    },
+    {
+      "market_id": "0x65c859cd982e6f3d48d27e050dadfd3c29d0d7c9023ee849bcd0fc2871703a74",
+      "py": 0.7612790697749999,
+      "acierto": 1,
+      "n_wallets_yes": 18,
+      "n_banda": 4
+    },
+    {
+      "market_id": "0x0137a8062fcdccacc5b0381cc556284a3ff9368c3df298268b2a574f2397ed41",
+      "py": 0.8048267692384615,
+      "acierto": 0,
+      "n_wallets_yes": 22,
+      "n_banda": 13
+    },
+    {
+      "market_id": "0xeeea01ac0125fe0aee9e128a9fb70ad2125a6b5fdaf63f12b0dd0706de83b21c",
+      "py": 0.7332645434833333,
+      "acierto": 1,
+      "n_wallets_yes": 26,
+      "n_banda": 12
+    },
+    {
+      "market_id": "0x812976a1c16b091b20e12ec376ea7e0b7e6cf2372c6a9c842521e445f6a4d4f2",
+      "py": 0.852499992875,
+      "acierto": 1,
+      "n_wallets_yes": 16,
+      "n_banda": 4
+    },
+    {
+      "market_id": "0x623f5a8552723257d5bd53df85ededdd00ca35345bd9149e41cbe2f437957b24",
+      "py": 0.8328818366875,
+      "acierto": 1,
+      "n_wallets_yes": 24,
+      "n_banda": 8
+    },
+    {
+      "market_id": "0xe08cce8eab5d94462d9bc998e048dfdaaeeebfb19638b5759e443ad079412237",
+      "py": 0.7024999654749999,
+      "acierto": 0,
+      "n_wallets_yes": 9,
+      "n_banda": 4
+    },
+    {
+      "market_id": "0x28f3ff98e9c294e97dda89fc386c5723f92a50d2c9784ed4fb03b56684b45722",
+      "py": 0.7867469634333334,
+      "acierto": 1,
+      "n_wallets_yes": 16,
+      "n_banda": 3
+    },
+    {
+      "market_id": "0x1133ce825a1fff92324bffb91a02a60b56e7ed3537c1ad587d70170d5d218ea1",
+      "py": 0.7748012176333333,
+      "acierto": 1,
+      "n_wallets_yes": 33,
+      "n_banda": 6
+    },
+    {
+      "market_id": "0x03770a612551fc49ff2da2a38fa471e113279c3e4e3826a95253078eb9b0ffb7",
+      "py": 0.80987930856,
+      "acierto": 1,
+      "n_wallets_yes": 35,
+      "n_banda": 10
+    },
+    {
+      "market_id": "0xa6c610290933983c38a7a8a33b17486f58ea2333fdcf89f0d98affe775fd0f0e",
+      "py": 0.8503735857538461,
+      "acierto": 1,
+      "n_wallets_yes": 43,
+      "n_banda": 26
+    },
+    {
+      "market_id": "0xffb1e527869d28138efd211a0719ff1dd5a8789e3ba1229f90fd1d2015ccbf14",
+      "py": 0.8363333333333333,
+      "acierto": 1,
+      "n_wallets_yes": 30,
+      "n_banda": 6
+    },
+    {
+      "market_id": "0x9a34d277fc6dd7e2b54499e340694d3994e06e0ea6889df86473c9ae2614c374",
+      "py": 0.7617996087285714,
+      "acierto": 1,
+      "n_wallets_yes": 30,
+      "n_banda": 14
+    },
+    {
+      "market_id": "0xa43e495ac4c06aa500a3d8da0fb64aa83f4ad8d9bc52c0a2d145deba4702189a",
+      "py": 0.8109999651,
+      "acierto": 1,
+      "n_wallets_yes": 33,
+      "n_banda": 5
+    },
+    {
+      "market_id": "0xb823b6a1304b28df84d97a1319d8246db37002adf1c866e9de62504701aa7264",
+      "py": 0.8110464943357142,
+      "acierto": 1,
+      "n_wallets_yes": 43,
+      "n_banda": 14
+    },
+    {
+      "market_id": "0xd18ea69cd2fb83f6ca37bce79511e1f11fb34abeb93489659e873d4d99e14e42",
+      "py": 0.7628198609571429,
+      "acierto": 0,
+      "n_wallets_yes": 24,
+      "n_banda": 7
+    },
+    {
+      "market_id": "0x4d9d3bcbd1df7520115a6c628b61198f7635c6416a76ccdc123fcdd7b61f01ec",
+      "py": 0.812499998775,
+      "acierto": 1,
+      "n_wallets_yes": 22,
+      "n_banda": 4
+    },
+    {
+      "market_id": "0x2a82caef291fee5a34f33f10075543808988b4e908955ebb794f51f1529d3dd6",
+      "py": 0.8409707988874999,
+      "acierto": 1,
+      "n_wallets_yes": 23,
+      "n_banda": 8
+    },
+    {
+      "market_id": "0xf96f016f9cba5c893546995f832bf2db900b42f2d13ed64c942a630d009831e0",
+      "py": 0.81199999268,
+      "acierto": 1,
+      "n_wallets_yes": 15,
+      "n_banda": 10
+    },
+    {
+      "market_id": "0xd973790b6586b84aafd03cbeadf1c6eb4437371f25e8c8949a58346a710a3645",
+      "py": 0.7724898664166666,
+      "acierto": 1,
+      "n_wallets_yes": 33,
+      "n_banda": 12
+    },
+    {
+      "market_id": "0xba212cf9295bca5fa9f664166e6974476733a2da90056d67bca2197194080815",
+      "py": 0.8233333192333333,
+      "acierto": 1,
+      "n_wallets_yes": 20,
+      "n_banda": 3
+    },
+    {
+      "market_id": "0xf8798df49f74b57b8430ab05d584d2e534c7dae48d0c7e95a723d3cfef4e9540",
+      "py": 0.8036738222083333,
+      "acierto": 1,
+      "n_wallets_yes": 40,
+      "n_banda": 12
+    },
+    {
+      "market_id": "0x3797c7c22eeccdc1b4918c76e455c490246350bf08089207db6b75dadc7ddfc2",
+      "py": 0.7841774865375,
+      "acierto": 1,
+      "n_wallets_yes": 19,
+      "n_banda": 8
+    },
+    {
+      "market_id": "0x3bbd445f51ca5c51c3f62fb0962cd4ff695c6e281069973318c3bd3fc6c32348",
+      "py": 0.8359999982599999,
+      "acierto": 1,
+      "n_wallets_yes": 15,
+      "n_banda": 5
+    },
+    {
+      "market_id": "0x6b0dc5fa311c0a1221229ae5f6c34bbee71789b1af3c4ec7573b70b4e47482cd",
+      "py": 0.7889556984111111,
+      "acierto": 1,
+      "n_wallets_yes": 23,
+      "n_banda": 9
+    },
+    {
+      "market_id": "0xc4c6a1e83fcc7abd03781900c5e4801d770db9d5952d3c5323e981b05844ac98",
+      "py": 0.7714764258,
+      "acierto": 0,
+      "n_wallets_yes": 11,
+      "n_banda": 4
+    },
+    {
+      "market_id": "0xd860c0d349f04603aa1e46554b0ce0114f6fe69cb5bbd4822f5c9453d7dbe090",
+      "py": 0.8199999602250001,
+      "acierto": 1,
+      "n_wallets_yes": 28,
+      "n_banda": 4
+    },
+    {
+      "market_id": "0x6188c24c4df5923cf819299983a277643fcf0da1f0bdeee347b0ff23f1befe71",
+      "py": 0.8238659475666666,
+      "acierto": 1,
+      "n_wallets_yes": 16,
+      "n_banda": 3
+    },
+    {
+      "market_id": "0x46a38b93f7c87b0d372c2b105c606db77d89405928531b0c4f9c3c79f6555086",
+      "py": 0.8068259429142858,
+      "acierto": 0,
+      "n_wallets_yes": 20,
+      "n_banda": 7
+    },
+    {
+      "market_id": "0xda0ec71b8a6c348c5d6ad7dd16baefbc1a28afa5ad4bb88234df4d5ff496fb80",
+      "py": 0.8799999788666666,
+      "acierto": 1,
+      "n_wallets_yes": 17,
+      "n_banda": 3
+    },
+    {
+      "market_id": "0xe141df52004108e66552b83b9481cebd21ad8e34b5e3e61b70bc4f2c2afcc8f2",
+      "py": 0.7992673441833333,
+      "acierto": 1,
+      "n_wallets_yes": 26,
+      "n_banda": 6
+    },
+    {
+      "market_id": "0x86e43fa2b2d3039d31083a1dad894135d1de4f94184f8625cb661aeca7dbe536",
+      "py": 0.78377358395,
+      "acierto": 0,
+      "n_wallets_yes": 11,
+      "n_banda": 4
+    },
+    {
+      "market_id": "0x7ff1bd037a5b1d97e211b6c674fb64ea568d601c5261b254326e02457a95e6db",
+      "py": 0.8133018008444445,
+      "acierto": 0,
+      "n_wallets_yes": 14,
+      "n_banda": 9
+    },
+    {
+      "market_id": "0x453964253bd318be29bcb6b2556f3044d8b97cc37c8f69f4ba82055ce2965107",
+      "py": 0.8274999684,
+      "acierto": 1,
+      "n_wallets_yes": 12,
+      "n_banda": 4
+    },
+    {
+      "market_id": "0x1d97b2f2e554e7f1370c5b6b732a4968ad6dfd0109fe996e541df116a9f8c655",
+      "py": 0.7939999796,
+      "acierto": 0,
+      "n_wallets_yes": 8,
+      "n_banda": 5
+    },
+    {
+      "market_id": "0x86b151b383935d96d25f79dc9209f5f0b2cc59fc4c1abfc125039c901a3aac21",
+      "py": 0.7939999753,
+      "acierto": 1,
+      "n_wallets_yes": 13,
+      "n_banda": 5
+    },
+    {
+      "market_id": "0xe960d569ba6503f21eac8ac8007325574aafe64e1cf08b11f04416c4949b288a",
+      "py": 0.8144444211,
+      "acierto": 1,
+      "n_wallets_yes": 30,
+      "n_banda": 9
+    },
+    {
+      "market_id": "0x59ab264296878fdd9e147b75413c3e7293d233de86ac1b0db25838e2da5ccd5a",
+      "py": 0.7599999352000001,
+      "acierto": 1,
+      "n_wallets_yes": 21,
+      "n_banda": 3
+    },
+    {
+      "market_id": "0x75d268507cde6425c7435f9bf0c1211aeae25d1ae38576a4ccd359f52fa1c8af",
+      "py": 0.7918918878166666,
+      "acierto": 1,
+      "n_wallets_yes": 29,
+      "n_banda": 12
+    },
+    {
+      "market_id": "0x2546687c00b682858f29dd666ca06809e11411f1d8384e0b8e4dd1b65f85cbe0",
+      "py": 0.767632005475,
+      "acierto": 1,
+      "n_wallets_yes": 27,
+      "n_banda": 12
+    },
+    {
+      "market_id": "0xe3bd26a3f6a49e859ebc289ea2388479f5725da63d23d22bcd3d31a345a853b5",
+      "py": 0.8251114066333333,
+      "acierto": 1,
+      "n_wallets_yes": 16,
+      "n_banda": 3
+    },
+    {
+      "market_id": "0x90bf1ce5a2ef3059532ff79806fd6c2ed49406a40462f7f12982602d9d896881",
+      "py": 0.8166907282666666,
+      "acierto": 1,
+      "n_wallets_yes": 24,
+      "n_banda": 6
+    },
+    {
+      "market_id": "0xa7903b2f395f2652b4cea424d3f634ace2c48ca4b601008e1467b8da5c9c949d",
+      "py": 0.8126666612000001,
+      "acierto": 1,
+      "n_wallets_yes": 26,
+      "n_banda": 3
+    },
+    {
+      "market_id": "0x45119076f59543666059a71e7f1c3ce2caed1ce133901e37fd6c0790934dbdd4",
+      "py": 0.74255549112,
+      "acierto": 1,
+      "n_wallets_yes": 18,
+      "n_banda": 5
+    },
+    {
+      "market_id": "0x3c9a751bc51cab0d24c2ec432d5eefa9deb7d3178f7723d148c22972d8f8873b",
+      "py": 0.714999989,
+      "acierto": 1,
+      "n_wallets_yes": 12,
+      "n_banda": 4
+    },
+    {
+      "market_id": "0x8f206bad5f66c8faa3c777ac7b75d1c8776c824ca39568d0e459a1dd579f1ecf",
+      "py": 0.76071998578,
+      "acierto": 0,
+      "n_wallets_yes": 9,
+      "n_banda": 5
+    },
+    {
+      "market_id": "0xed0e172a5cc1fc7fc59897031be8189f60aa8a2080a8dd143c6cf05d6e66f319",
+      "py": 0.8218052584416666,
+      "acierto": 1,
+      "n_wallets_yes": 23,
+      "n_banda": 12
+    },
+    {
+      "market_id": "0xeeea90e5d1603f57878a0e51ad30a329d2303f7b86e61ac3acaa9aadde16b135",
+      "py": 0.8393165993666667,
+      "acierto": 1,
+      "n_wallets_yes": 20,
+      "n_banda": 6
+    },
+    {
+      "market_id": "0x903af76c13ea492c6275fd636b5e9a41d266204a9d0842d0054cc57dd8d0593f",
+      "py": 0.8633603479333333,
+      "acierto": 1,
+      "n_wallets_yes": 12,
+      "n_banda": 3
+    },
+    {
+      "market_id": "0xee1a08558fc89067b23c06ba25267382bc327a46d5725d865e5950f1672eb609",
+      "py": 0.84399996376,
+      "acierto": 0,
+      "n_wallets_yes": 11,
+      "n_banda": 5
+    },
+    {
+      "market_id": "0x3ac878b2e5f84a1b0ee82bc9ca8b84a44939dbc6c4c5b9571354244099b04d6c",
+      "py": 0.7466265016000001,
+      "acierto": 1,
+      "n_wallets_yes": 20,
+      "n_banda": 3
+    },
+    {
+      "market_id": "0xfd747d6e11372def6066429790167b174bd6db62a67e1c12be6e1e9f6bcf5b8f",
+      "py": 0.7942856893,
+      "acierto": 1,
+      "n_wallets_yes": 16,
+      "n_banda": 7
+    },
+    {
+      "market_id": "0xda7f824095018b01156e25665208c78cbbd8b36114aa55029c3a1be064de9e26",
+      "py": 0.83890899142,
+      "acierto": 1,
+      "n_wallets_yes": 27,
+      "n_banda": 5
+    },
+    {
+      "market_id": "0x53376bbf4cf56b6aa7358c71573ad3b1dae7c13cb9a085fa23fbf8026642bf3e",
+      "py": 0.7643409988444445,
+      "acierto": 1,
+      "n_wallets_yes": 23,
+      "n_banda": 9
+    },
+    {
+      "market_id": "0x646abd9ea15e627e6932b17050f47409e2727da78e9c6bd154cd5ea8aa172cc8",
+      "py": 0.8577777633888889,
+      "acierto": 1,
+      "n_wallets_yes": 28,
+      "n_banda": 9
+    },
+    {
+      "market_id": "0x44b5b8c7f1dd43a3fff98e35d6e18681150f8d0f9150d9333f215feade18f4ae",
+      "py": 0.8103135171333333,
+      "acierto": 1,
+      "n_wallets_yes": 17,
+      "n_banda": 6
+    },
+    {
+      "market_id": "0xed18a96f1f83065339788d16c74ff3f94fe4b99c2947521fbc3245b119b7537e",
+      "py": 0.81641769095,
+      "acierto": 1,
+      "n_wallets_yes": 40,
+      "n_banda": 8
+    },
+    {
+      "market_id": "0x2e6d70884f1c623ce77dbcb73fdcaa1be955fd343c058f1a5ad2f902bdd127a2",
+      "py": 0.7366666149666666,
+      "acierto": 0,
+      "n_wallets_yes": 14,
+      "n_banda": 3
+    },
+    {
+      "market_id": "0x1ba57cf4bdd65eff9fb6788bfc843b8db845a50e8d388784160c69bafd6e642c",
+      "py": 0.7584714411333332,
+      "acierto": 1,
+      "n_wallets_yes": 16,
+      "n_banda": 3
+    },
+    {
+      "market_id": "0x3ccbdd777acda0e57f47dd1a61ed9c006f82399f02b56bdec4d305b7374467dc",
+      "py": 0.71762779766,
+      "acierto": 0,
+      "n_wallets_yes": 41,
+      "n_banda": 5
+    },
+    {
+      "market_id": "0xeee9d469f024a15f363fd91095b6fb6967cda0b68cea83b010686a9a8defacb7",
+      "py": 0.846996472575,
+      "acierto": 1,
+      "n_wallets_yes": 45,
+      "n_banda": 16
+    },
+    {
+      "market_id": "0xea0607cd34198c5b3b97334905f88e8c69920abbdd6c27a63f5307784feb19cd",
+      "py": 0.7616666520833334,
+      "acierto": 1,
+      "n_wallets_yes": 21,
+      "n_banda": 6
+    },
+    {
+      "market_id": "0xdfa9fb9a9e8968f17368a9e9f301c6c10c0d757864aa6e2695627c1d14ab9f55",
+      "py": 0.7849999763,
+      "acierto": 1,
+      "n_wallets_yes": 19,
+      "n_banda": 6
+    },
+    {
+      "market_id": "0x0373022acd5a269e00a1f6dc4029e0119ff7702117e1b8aa65eb76b8d50a4881",
+      "py": 0.76199996352,
+      "acierto": 1,
+      "n_wallets_yes": 22,
+      "n_banda": 5
+    },
+    {
+      "market_id": "0xdae74c8da29b12996fd1e6c481e8ad686c77844ca1735ab0b30a354cbbd73ebe",
+      "py": 0.822499994825,
+      "acierto": 1,
+      "n_wallets_yes": 30,
+      "n_banda": 8
+    },
+    {
+      "market_id": "0xf2ce82035412a897f8e7890860488432b7bc55846d94b309982ca4eec4c76888",
+      "py": 0.8766666542333333,
+      "acierto": 1,
+      "n_wallets_yes": 16,
+      "n_banda": 3
+    },
+    {
+      "market_id": "0x5d9a16491582d4951162253d0527d1a16339f27eabe10505f3274672f7cc9c8d",
+      "py": 0.8574767146111112,
+      "acierto": 1,
+      "n_wallets_yes": 31,
+      "n_banda": 9
+    },
+    {
+      "market_id": "0x3a9c61df283cfa188e2080cddd5cfadf5f4a349215539f4eaf4f6f7e93196550",
+      "py": 0.8177638462857143,
+      "acierto": 1,
+      "n_wallets_yes": 80,
+      "n_banda": 42
+    },
+    {
+      "market_id": "0x5e8529f997ce5a567c9fa725933a21b0f8d80bac6bcf36b3761869c86fb9ea0e",
+      "py": 0.80499999505,
+      "acierto": 1,
+      "n_wallets_yes": 21,
+      "n_banda": 4
+    },
+    {
+      "market_id": "0xf177841d5ad9b2551de7a80646e1f41b1c2816014872a05ace5b7db620f2131c",
+      "py": 0.7231930209999999,
+      "acierto": 0,
+      "n_wallets_yes": 18,
+      "n_banda": 4
+    },
+    {
+      "market_id": "0x75d456ab4216521b5d576df54e2d19746d247f4e725bb3b8f70955806e841ac0",
+      "py": 0.7894569565,
+      "acierto": 1,
+      "n_wallets_yes": 22,
+      "n_banda": 11
+    },
+    {
+      "market_id": "0xaefbb94f15b9a356bd4914f78ff0f56f34be13695b314cf90207183b88388cc6",
+      "py": 0.8499999515500001,
+      "acierto": 1,
+      "n_wallets_yes": 29,
+      "n_banda": 6
+    },
+    {
+      "market_id": "0xf2cb59effe745768155fd322fba1c2f326d429a48568f4d734100ecfda261934",
+      "py": 0.81399997362,
+      "acierto": 1,
+      "n_wallets_yes": 24,
+      "n_banda": 5
+    },
+    {
+      "market_id": "0xb5013b4b7d6deb72ea44c3d42d7941e22f81af7d6225ee34c40674da127ac709",
+      "py": 0.7785714145428572,
+      "acierto": 1,
+      "n_wallets_yes": 20,
+      "n_banda": 7
+    }
+  ]
+}

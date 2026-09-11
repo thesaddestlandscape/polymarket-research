@@ -1,0 +1,1598 @@
+{
+ "BALLENAS_CONFIRMADAS_15M#DOGE#15min#BUY_NO": {
+  "gate_ok": false,
+  "n": 42
+ },
+ "BALLENAS_CONFIRMADAS_15M#DOGE#15min#BUY_YES": {
+  "gate_ok": false,
+  "n": 3
+ },
+ "BALLENAS_CONFIRMADAS_15M#ETH#15min#BUY_NO": {
+  "gate_ok": false,
+  "n": 820
+ },
+ "BALLENAS_CONFIRMADAS_15M#ETH#15min#BUY_YES": {
+  "gate_ok": false,
+  "n": 660
+ },
+ "BALLENAS_CONFIRMADAS_15M#SOL#15min#BUY_NO": {
+  "gate_ok": false,
+  "n": 501
+ },
+ "BALLENAS_CONFIRMADAS_15M#SOL#15min#BUY_YES": {
+  "gate_ok": false,
+  "n": 342
+ },
+ "BALLENAS_CONFIRMADAS_15M#XRP#15min#BUY_NO": {
+  "gate_ok": true,
+  "n": 347
+ },
+ "BALLENAS_CONFIRMADAS_15M#XRP#15min#BUY_YES": {
+  "gate_ok": false,
+  "n": 10
+ },
+ "BALLENAS_TARDIAS#BTC#15min#BUY_YES": {
+  "gate_ok": false,
+  "n": 1439
+ },
+ "BALLENAS_TARDIAS#DOGE#5min#BUY_YES": {
+  "gate_ok": false,
+  "n": 3239
+ },
+ "BALLENAS_TARDIAS#ETH#5min#BUY_YES": {
+  "gate_ok": false,
+  "n": 6134
+ },
+ "BALLENAS_TARDIAS#BNB#5min#BUY_YES": {
+  "gate_ok": false,
+  "n": 3402
+ },
+ "BALLENAS_TARDIAS#SOL#5min#BUY_YES": {
+  "gate_ok": false,
+  "n": 5692
+ },
+ "BALLENAS_TARDIAS#XRP#5min#BUY_YES": {
+  "gate_ok": false,
+  "n": 4558
+ },
+ "FAVORITO_CONFIRMADO#BNB#5min#BUY_NO": {
+  "gate_ok": true,
+  "n": 3370
+ },
+ "FAVORITO_CONFIRMADO#BTC#15min#BUY_NO": {
+  "gate_ok": false,
+  "n": 2470
+ },
+ "FAVORITO_CONFIRMADO#BTC#15min#BUY_YES": {
+  "gate_ok": false,
+  "n": 2333
+ },
+ "FAVORITO_CONFIRMADO#BTC#240min#BUY_NO": {
+  "gate_ok": false,
+  "n": 103
+ },
+ "FAVORITO_CONFIRMADO#BTC#240min#BUY_YES": {
+  "gate_ok": false,
+  "n": 78
+ },
+ "FAVORITO_CONFIRMADO#BTC#5min#BUY_NO": {
+  "gate_ok": false,
+  "n": 5705
+ },
+ "FAVORITO_CONFIRMADO#BTC#5min#BUY_YES": {
+  "gate_ok": false,
+  "n": 6229
+ },
+ "FAVORITO_CONFIRMADO#BTC#60min#BUY_NO": {
+  "gate_ok": false,
+  "n": 743
+ },
+ "FAVORITO_CONFIRMADO#BTC#60min#BUY_YES": {
+  "gate_ok": false,
+  "n": 966
+ },
+ "FAVORITO_CONFIRMADO#DOGE#15min#BUY_NO": {
+  "gate_ok": false,
+  "n": 38
+ },
+ "FAVORITO_CONFIRMADO#DOGE#15min#BUY_YES": {
+  "gate_ok": false,
+  "n": 14
+ },
+ "FAVORITO_CONFIRMADO#DOGE#240min#BUY_NO": {
+  "gate_ok": false,
+  "n": 16
+ },
+ "FAVORITO_CONFIRMADO#DOGE#240min#BUY_YES": {
+  "gate_ok": false,
+  "n": 0
+ },
+ "FAVORITO_CONFIRMADO#DOGE#5min#BUY_NO": {
+  "gate_ok": true,
+  "n": 3504
+ },
+ "FAVORITO_CONFIRMADO#DOGE#5min#BUY_YES": {
+  "gate_ok": false,
+  "n": 8477
+ },
+ "FAVORITO_CONFIRMADO#DOGE#60min#BUY_NO": {
+  "gate_ok": false,
+  "n": 0
+ },
+ "FAVORITO_CONFIRMADO#DOGE#60min#BUY_YES": {
+  "gate_ok": false,
+  "n": 0
+ },
+ "FAVORITO_CONFIRMADO#ETH#15min#BUY_NO": {
+  "gate_ok": false,
+  "n": 2111
+ },
+ "FAVORITO_CONFIRMADO#ETH#15min#BUY_YES": {
+  "gate_ok": false,
+  "n": 3533
+ },
+ "FAVORITO_CONFIRMADO#ETH#240min#BUY_NO": {
+  "gate_ok": false,
+  "n": 89
+ },
+ "FAVORITO_CONFIRMADO#ETH#240min#BUY_YES": {
+  "gate_ok": false,
+  "n": 65
+ },
+ "FAVORITO_CONFIRMADO#ETH#5min#BUY_NO": {
+  "gate_ok": false,
+  "n": 5805
+ },
+ "FAVORITO_CONFIRMADO#ETH#5min#BUY_YES": {
+  "gate_ok": false,
+  "n": 6580
+ },
+ "FAVORITO_CONFIRMADO#ETH#60min#BUY_NO": {
+  "gate_ok": false,
+  "n": 999
+ },
+ "FAVORITO_CONFIRMADO#ETH#60min#BUY_YES": {
+  "gate_ok": false,
+  "n": 617
+ },
+ "FAVORITO_CONFIRMADO#SOL#15min#BUY_NO": {
+  "gate_ok": false,
+  "n": 2253
+ },
+ "FAVORITO_CONFIRMADO#SOL#15min#BUY_YES": {
+  "gate_ok": false,
+  "n": 2755
+ },
+ "FAVORITO_CONFIRMADO#SOL#240min#BUY_NO": {
+  "gate_ok": false,
+  "n": 156
+ },
+ "FAVORITO_CONFIRMADO#SOL#240min#BUY_YES": {
+  "gate_ok": false,
+  "n": 123
+ },
+ "FAVORITO_CONFIRMADO#SOL#5min#BUY_NO": {
+  "gate_ok": false,
+  "n": 5587
+ },
+ "FAVORITO_CONFIRMADO#SOL#5min#BUY_YES": {
+  "gate_ok": false,
+  "n": 6862
+ },
+ "FAVORITO_CONFIRMADO#SOL#60min#BUY_NO": {
+  "gate_ok": false,
+  "n": 861
+ },
+ "FAVORITO_CONFIRMADO#SOL#60min#BUY_YES": {
+  "gate_ok": false,
+  "n": 368
+ },
+ "FAVORITO_CONFIRMADO#XRP#15min#BUY_NO": {
+  "gate_ok": false,
+  "n": 45
+ },
+ "FAVORITO_CONFIRMADO#XRP#15min#BUY_YES": {
+  "gate_ok": false,
+  "n": 22
+ },
+ "FAVORITO_CONFIRMADO#XRP#5min#BUY_NO": {
+  "gate_ok": true,
+  "n": 4672
+ },
+ "FAVORITO_CONFIRMADO#XRP#5min#BUY_YES": {
+  "gate_ok": false,
+  "n": 7296
+ },
+ "FAVORITO_CONFIRMADO_15MIN_ALTACONVICCION#BNB#15min#BUY_YES": {
+  "gate_ok": false,
+  "n": 2692
+ },
+ "FAVORITO_CONFIRMADO_15MIN_ALTACONVICCION#BTC#15min#BUY_YES": {
+  "gate_ok": false,
+  "n": 686
+ },
+ "FAVORITO_CONFIRMADO_15MIN_ALTACONVICCION#DOGE#15min#BUY_YES": {
+  "gate_ok": false,
+  "n": 2665
+ },
+ "FAVORITO_CONFIRMADO_15MIN_ALTACONVICCION#ETH#15min#BUY_YES": {
+  "gate_ok": false,
+  "n": 2675
+ },
+ "FAVORITO_CONFIRMADO_15MIN_ALTACONVICCION#SOL#15min#BUY_YES": {
+  "gate_ok": false,
+  "n": 99
+ },
+ "FAVORITO_CONFIRMADO_15MIN_ALTACONVICCION#XRP#15min#BUY_YES": {
+  "gate_ok": false,
+  "n": 2601
+ },
+ "FAVORITO_CONFIRMADO_15MIN_EXTREMO#BNB#15min#BUY_YES": {
+  "gate_ok": false,
+  "n": 4
+ },
+ "FAVORITO_CONFIRMADO_15MIN_EXTREMO#BTC#15min#BUY_YES": {
+  "gate_ok": false,
+  "n": 211
+ },
+ "FAVORITO_CONFIRMADO_15MIN_EXTREMO#DOGE#15min#BUY_YES": {
+  "gate_ok": false,
+  "n": 5
+ },
+ "FAVORITO_CONFIRMADO_15MIN_EXTREMO#ETH#15min#BUY_YES": {
+  "gate_ok": false,
+  "n": 201
+ },
+ "FAVORITO_CONFIRMADO_15MIN_EXTREMO#SOL#15min#BUY_YES": {
+  "gate_ok": false,
+  "n": 123
+ },
+ "FAVORITO_CONFIRMADO_15MIN_EXTREMO#XRP#15min#BUY_YES": {
+  "gate_ok": false,
+  "n": 5
+ },
+ "FAVORITO_CONFIRMADO_5MIN_ALTACONVICCION#BNB#5min#BUY_YES": {
+  "gate_ok": false,
+  "n": 9022
+ },
+ "FAVORITO_CONFIRMADO_5MIN_ALTACONVICCION#BTC#5min#BUY_YES": {
+  "gate_ok": false,
+  "n": 8000
+ },
+ "FAVORITO_CONFIRMADO_5MIN_ALTACONVICCION#DOGE#5min#BUY_YES": {
+  "gate_ok": false,
+  "n": 8773
+ },
+ "FAVORITO_CONFIRMADO_5MIN_ALTACONVICCION#ETH#5min#BUY_YES": {
+  "gate_ok": false,
+  "n": 8121
+ },
+ "FAVORITO_CONFIRMADO_5MIN_ALTACONVICCION#SOL#5min#BUY_YES": {
+  "gate_ok": false,
+  "n": 8307
+ },
+ "FAVORITO_CONFIRMADO_5MIN_ALTACONVICCION#XRP#5min#BUY_YES": {
+  "gate_ok": false,
+  "n": 8498
+ },
+ "FAVORITO_CONFIRMADO_5MIN_BAJALATENCIA#DOGE#5min#BUY_NO": {
+  "gate_ok": true,
+  "n": 7537
+ },
+ "FAVORITO_CONFIRMADO_5MIN_BAJALATENCIA#XRP#5min#BUY_NO": {
+  "gate_ok": false,
+  "n": 7693
+ },
+ "FAVORITO_CONFIRMADO_60MIN_ALTACONVICCION#BTC#60min#BUY_YES": {
+  "gate_ok": false,
+  "n": 486
+ },
+ "FAVORITO_CONFIRMADO_60MIN_ALTACONVICCION#ETH#60min#BUY_YES": {
+  "gate_ok": false,
+  "n": 523
+ },
+ "FAVORITO_CONFIRMADO_60MIN_ALTACONVICCION#SOL#60min#BUY_YES": {
+  "gate_ok": false,
+  "n": 96
+ },
+ "FAVORITO_CONFIRMADO_60MIN_EXTREMO#BTC#60min#BUY_YES": {
+  "gate_ok": false,
+  "n": 223
+ },
+ "FAVORITO_CONFIRMADO_60MIN_EXTREMO#ETH#60min#BUY_YES": {
+  "gate_ok": false,
+  "n": 228
+ },
+ "FAVORITO_CONFIRMADO_60MIN_EXTREMO#SOL#60min#BUY_YES": {
+  "gate_ok": false,
+  "n": 37
+ },
+ "FAVORITO_CONFIRMADO_SOL_ALTACONVICCION#SOL#15min#BUY_YES": {
+  "gate_ok": false,
+  "n": 1216
+ },
+ "GBM_LATE_15M#BNB#15min#BUY_NO": {
+  "gate_ok": true,
+  "n": 1268
+ },
+ "GBM_LATE_15M#BNB#15min#BUY_YES": {
+  "gate_ok": true,
+  "n": 2064
+ },
+ "GBM_LATE_15M#BTC#15min#BUY_NO": {
+  "gate_ok": true,
+  "n": 2666
+ },
+ "GBM_LATE_15M#BTC#15min#BUY_YES": {
+  "gate_ok": true,
+  "n": 2213
+ },
+ "GBM_LATE_15M#DOGE#15min#BUY_NO": {
+  "gate_ok": true,
+  "n": 1457
+ },
+ "GBM_LATE_15M#DOGE#15min#BUY_YES": {
+  "gate_ok": true,
+  "n": 1979
+ },
+ "GBM_LATE_15M#ETH#15min#BUY_NO": {
+  "gate_ok": false,
+  "n": 3038
+ },
+ "GBM_LATE_15M#ETH#15min#BUY_YES": {
+  "gate_ok": false,
+  "n": 1690
+ },
+ "GBM_LATE_15M#SOL#15min#BUY_NO": {
+  "gate_ok": false,
+  "n": 3721
+ },
+ "GBM_LATE_15M#SOL#15min#BUY_YES": {
+  "gate_ok": false,
+  "n": 1410
+ },
+ "GBM_LATE_15M#XRP#15min#BUY_NO": {
+  "gate_ok": false,
+  "n": 3764
+ },
+ "GBM_LATE_15M#XRP#15min#BUY_YES": {
+  "gate_ok": false,
+  "n": 2862
+ },
+ "GBM_LATE_15M_ESPACIO_ATR#BNB#15min#BUY_NO": {
+  "gate_ok": false,
+  "n": 1510
+ },
+ "GBM_LATE_15M_ESPACIO_ATR#BNB#15min#BUY_YES": {
+  "gate_ok": false,
+  "n": 2137
+ },
+ "GBM_LATE_15M_ESPACIO_ATR#BTC#15min#BUY_NO": {
+  "gate_ok": false,
+  "n": 3149
+ },
+ "GBM_LATE_15M_ESPACIO_ATR#BTC#15min#BUY_YES": {
+  "gate_ok": false,
+  "n": 2566
+ },
+ "GBM_LATE_15M_ESPACIO_ATR#DOGE#15min#BUY_NO": {
+  "gate_ok": true,
+  "n": 1226
+ },
+ "GBM_LATE_15M_ESPACIO_ATR#DOGE#15min#BUY_YES": {
+  "gate_ok": true,
+  "n": 1785
+ },
+ "GBM_LATE_15M_ESPACIO_ATR#ETH#15min#BUY_NO": {
+  "gate_ok": false,
+  "n": 2543
+ },
+ "GBM_LATE_15M_ESPACIO_ATR#ETH#15min#BUY_YES": {
+  "gate_ok": false,
+  "n": 1987
+ },
+ "GBM_LATE_15M_ESPACIO_ATR#SOL#15min#BUY_NO": {
+  "gate_ok": false,
+  "n": 2480
+ },
+ "GBM_LATE_15M_ESPACIO_ATR#SOL#15min#BUY_YES": {
+  "gate_ok": false,
+  "n": 2429
+ },
+ "GBM_LATE_15M_ESPACIO_ATR#XRP#15min#BUY_NO": {
+  "gate_ok": true,
+  "n": 2307
+ },
+ "GBM_LATE_15M_ESPACIO_ATR#XRP#15min#BUY_YES": {
+  "gate_ok": true,
+  "n": 2205
+ },
+ "GBM_LATE_15M_MULTIHORIZONTE#BNB#15min#BUY_NO": {
+  "gate_ok": true,
+  "n": 795
+ },
+ "GBM_LATE_15M_MULTIHORIZONTE#BNB#15min#BUY_YES": {
+  "gate_ok": true,
+  "n": 1122
+ },
+ "GBM_LATE_15M_MULTIHORIZONTE#BTC#15min#BUY_NO": {
+  "gate_ok": true,
+  "n": 1146
+ },
+ "GBM_LATE_15M_MULTIHORIZONTE#BTC#15min#BUY_YES": {
+  "gate_ok": true,
+  "n": 975
+ },
+ "GBM_LATE_15M_MULTIHORIZONTE#DOGE#15min#BUY_NO": {
+  "gate_ok": true,
+  "n": 921
+ },
+ "GBM_LATE_15M_MULTIHORIZONTE#DOGE#15min#BUY_YES": {
+  "gate_ok": true,
+  "n": 1076
+ },
+ "GBM_LATE_15M_MULTIHORIZONTE#ETH#15min#BUY_NO": {
+  "gate_ok": true,
+  "n": 1139
+ },
+ "GBM_LATE_15M_MULTIHORIZONTE#SOL#15min#BUY_NO": {
+  "gate_ok": true,
+  "n": 1234
+ },
+ "GBM_LATE_15M_MULTIHORIZONTE#XRP#15min#BUY_NO": {
+  "gate_ok": true,
+  "n": 1313
+ },
+ "GBM_LATE_15M_MULTIHORIZONTE#XRP#15min#BUY_YES": {
+  "gate_ok": true,
+  "n": 1212
+ },
+ "GBM_LATE_15M_PYCONFIRMADO#BTC#15min#BUY_NO": {
+  "gate_ok": true,
+  "n": 527
+ },
+ "GBM_LATE_15M_PYCONFIRMADO#BTC#15min#BUY_YES": {
+  "gate_ok": true,
+  "n": 302
+ },
+ "GBM_LATE_15M_PYCONFIRMADO#ETH#15min#BUY_NO": {
+  "gate_ok": false,
+  "n": 497
+ },
+ "GBM_LATE_15M_PYCONFIRMADO#ETH#15min#BUY_YES": {
+  "gate_ok": true,
+  "n": 549
+ },
+ "GBM_LATE_15M_PYCONFIRMADO#SOL#15min#BUY_NO": {
+  "gate_ok": false,
+  "n": 256
+ },
+ "GBM_LATE_15M_PYCONFIRMADO#SOL#15min#BUY_YES": {
+  "gate_ok": false,
+  "n": 327
+ },
+ "GBM_LATE_15M_PYCONFIRMADO#XRP#15min#BUY_NO": {
+  "gate_ok": true,
+  "n": 276
+ },
+ "GBM_LATE_15M_PYCONFIRMADO#XRP#15min#BUY_YES": {
+  "gate_ok": true,
+  "n": 277
+ },
+ "GBM_LATE_15M_TARDIO#BNB#15min#BUY_NO": {
+  "gate_ok": true,
+  "n": 1244
+ },
+ "GBM_LATE_15M_TARDIO#BNB#15min#BUY_YES": {
+  "gate_ok": true,
+  "n": 1910
+ },
+ "GBM_LATE_15M_TARDIO#BTC#15min#BUY_NO": {
+  "gate_ok": true,
+  "n": 2219
+ },
+ "GBM_LATE_15M_TARDIO#BTC#15min#BUY_YES": {
+  "gate_ok": true,
+  "n": 2134
+ },
+ "GBM_LATE_15M_TARDIO#DOGE#15min#BUY_NO": {
+  "gate_ok": true,
+  "n": 1481
+ },
+ "GBM_LATE_15M_TARDIO#DOGE#15min#BUY_YES": {
+  "gate_ok": true,
+  "n": 1766
+ },
+ "GBM_LATE_15M_TARDIO#ETH#15min#BUY_NO": {
+  "gate_ok": false,
+  "n": 2065
+ },
+ "GBM_LATE_15M_TARDIO#ETH#15min#BUY_YES": {
+  "gate_ok": true,
+  "n": 2298
+ },
+ "GBM_LATE_15M_TARDIO#SOL#15min#BUY_NO": {
+  "gate_ok": true,
+  "n": 2330
+ },
+ "GBM_LATE_15M_TARDIO#SOL#15min#BUY_YES": {
+  "gate_ok": false,
+  "n": 2433
+ },
+ "GBM_LATE_15M_TARDIO#XRP#15min#BUY_NO": {
+  "gate_ok": true,
+  "n": 2821
+ },
+ "GBM_LATE_15M_TARDIO#XRP#15min#BUY_YES": {
+  "gate_ok": true,
+  "n": 2629
+ },
+ "MOMENTUM_IBS_5M_FADE#BTC#5min#BUY_NO": {
+  "gate_ok": false,
+  "n": 498
+ },
+ "MOMENTUM_IBS_5M_FADE#BTC#5min#BUY_YES": {
+  "gate_ok": false,
+  "n": 906
+ },
+ "MOMENTUM_IBS_5M_FADE#ETH#5min#BUY_NO": {
+  "gate_ok": false,
+  "n": 817
+ },
+ "MOMENTUM_IBS_5M_FADE#ETH#5min#BUY_YES": {
+  "gate_ok": false,
+  "n": 601
+ },
+ "MOMENTUM_IBS_5M_FADE#SOL#5min#BUY_NO": {
+  "gate_ok": false,
+  "n": 554
+ },
+ "MOMENTUM_IBS_5M_FADE#SOL#5min#BUY_YES": {
+  "gate_ok": false,
+  "n": 377
+ },
+ "MOMENTUM_IBS_5M_FADE#XRP#5min#BUY_NO": {
+  "gate_ok": false,
+  "n": 463
+ },
+ "MOMENTUM_IBS_5M_FADE#XRP#5min#BUY_YES": {
+  "gate_ok": false,
+  "n": 274
+ },
+ "MOMENTUM_IBS_5M_FADE#DOGE#5min#BUY_NO": {
+  "gate_ok": false,
+  "n": 613
+ },
+ "MOMENTUM_IBS_5M_FADE#DOGE#5min#BUY_YES": {
+  "gate_ok": false,
+  "n": 389
+ },
+ "MOMENTUM_IBS_5M_FADE#BNB#5min#BUY_NO": {
+  "gate_ok": false,
+  "n": 817
+ },
+ "MOMENTUM_IBS_5M_FADE#BNB#5min#BUY_YES": {
+  "gate_ok": false,
+  "n": 179
+ },
+ "MOMENTUM_IBS_15M_FADE#BTC#15min#BUY_NO": {
+  "gate_ok": false,
+  "n": 196
+ },
+ "MOMENTUM_IBS_15M_FADE#BTC#15min#BUY_YES": {
+  "gate_ok": false,
+  "n": 158
+ },
+ "MOMENTUM_IBS_15M_FADE#ETH#15min#BUY_NO": {
+  "gate_ok": false,
+  "n": 162
+ },
+ "MOMENTUM_IBS_15M_FADE#ETH#15min#BUY_YES": {
+  "gate_ok": false,
+  "n": 144
+ },
+ "MOMENTUM_IBS_15M_FADE#SOL#15min#BUY_NO": {
+  "gate_ok": false,
+  "n": 479
+ },
+ "MOMENTUM_IBS_15M_FADE#SOL#15min#BUY_YES": {
+  "gate_ok": false,
+  "n": 421
+ },
+ "MOMENTUM_IBS_15M_FADE#XRP#15min#BUY_NO": {
+  "gate_ok": false,
+  "n": 186
+ },
+ "MOMENTUM_IBS_15M_FADE#XRP#15min#BUY_YES": {
+  "gate_ok": false,
+  "n": 397
+ },
+ "MOMENTUM_IBS_15M_FADE#DOGE#15min#BUY_NO": {
+  "gate_ok": false,
+  "n": 13
+ },
+ "MOMENTUM_IBS_15M_FADE#DOGE#15min#BUY_YES": {
+  "gate_ok": false,
+  "n": 27
+ },
+ "MOMENTUM_IBS_15M_FADE#BNB#15min#BUY_NO": {
+  "gate_ok": false,
+  "n": 148
+ },
+ "MOMENTUM_IBS_15M_FADE#BNB#15min#BUY_YES": {
+  "gate_ok": false,
+  "n": 231
+ },
+ "MOMENTUM_IBS_5M_BALLENA#BTC#5min#BUY_NO": {
+  "gate_ok": false,
+  "n": 3571
+ },
+ "MOMENTUM_IBS_5M_BALLENA#BTC#5min#BUY_YES": {
+  "gate_ok": false,
+  "n": 3531
+ },
+ "MOMENTUM_IBS_5M_BALLENA#ETH#5min#BUY_NO": {
+  "gate_ok": false,
+  "n": 3346
+ },
+ "MOMENTUM_IBS_5M_BALLENA#ETH#5min#BUY_YES": {
+  "gate_ok": false,
+  "n": 3274
+ },
+ "MOMENTUM_IBS_5M_BALLENA#SOL#5min#BUY_NO": {
+  "gate_ok": false,
+  "n": 4688
+ },
+ "MOMENTUM_IBS_5M_BALLENA#SOL#5min#BUY_YES": {
+  "gate_ok": false,
+  "n": 3702
+ },
+ "MOMENTUM_IBS_5M_BALLENA#XRP#5min#BUY_NO": {
+  "gate_ok": false,
+  "n": 4410
+ },
+ "MOMENTUM_IBS_5M_BALLENA#XRP#5min#BUY_YES": {
+  "gate_ok": false,
+  "n": 3281
+ },
+ "MOMENTUM_IBS_5M_BALLENA#DOGE#5min#BUY_NO": {
+  "gate_ok": false,
+  "n": 4525
+ },
+ "MOMENTUM_IBS_5M_BALLENA#DOGE#5min#BUY_YES": {
+  "gate_ok": false,
+  "n": 2883
+ },
+ "MOMENTUM_IBS_5M_BALLENA#BNB#5min#BUY_NO": {
+  "gate_ok": false,
+  "n": 4307
+ },
+ "MOMENTUM_IBS_5M_BALLENA#BNB#5min#BUY_YES": {
+  "gate_ok": false,
+  "n": 3004
+ },
+ "MOMENTUM_IBS_15M_BALLENA#BTC#15min#BUY_NO": {
+  "gate_ok": false,
+  "n": 1303
+ },
+ "MOMENTUM_IBS_15M_BALLENA#BTC#15min#BUY_YES": {
+  "gate_ok": false,
+  "n": 1445
+ },
+ "MOMENTUM_IBS_15M_BALLENA#ETH#15min#BUY_NO": {
+  "gate_ok": false,
+  "n": 1313
+ },
+ "MOMENTUM_IBS_15M_BALLENA#ETH#15min#BUY_YES": {
+  "gate_ok": false,
+  "n": 1322
+ },
+ "MOMENTUM_IBS_15M_BALLENA#SOL#15min#BUY_NO": {
+  "gate_ok": false,
+  "n": 1427
+ },
+ "MOMENTUM_IBS_15M_BALLENA#SOL#15min#BUY_YES": {
+  "gate_ok": false,
+  "n": 1402
+ },
+ "MOMENTUM_IBS_15M_BALLENA#XRP#15min#BUY_NO": {
+  "gate_ok": false,
+  "n": 1497
+ },
+ "MOMENTUM_IBS_15M_BALLENA#XRP#15min#BUY_YES": {
+  "gate_ok": false,
+  "n": 1304
+ },
+ "MOMENTUM_IBS_15M_BALLENA#DOGE#15min#BUY_NO": {
+  "gate_ok": false,
+  "n": 1488
+ },
+ "MOMENTUM_IBS_15M_BALLENA#DOGE#15min#BUY_YES": {
+  "gate_ok": false,
+  "n": 1418
+ },
+ "MOMENTUM_IBS_15M_BALLENA#BNB#15min#BUY_NO": {
+  "gate_ok": false,
+  "n": 1520
+ },
+ "MOMENTUM_IBS_15M_BALLENA#BNB#15min#BUY_YES": {
+  "gate_ok": false,
+  "n": 1346
+ },
+ "MOMENTUM_IBS_15M#BTC#15min#BUY_NO": {
+  "gate_ok": false,
+  "n": 779
+ },
+ "MOMENTUM_IBS_15M#XRP#15min#BUY_NO": {
+  "gate_ok": false,
+  "n": 739
+ },
+ "MOMENTUM_IBS_15M#ETH#15min#BUY_NO": {
+  "gate_ok": false,
+  "n": 962
+ },
+ "MOMENTUM_IBS_15M#BNB#15min#BUY_NO": {
+  "gate_ok": false,
+  "n": 388
+ },
+ "MOMENTUM_IBS_15M#DOGE#15min#BUY_NO": {
+  "gate_ok": false,
+  "n": 1313
+ },
+ "MOMENTUM_IBS_15M#BTC#15min#BUY_YES": {
+  "gate_ok": false,
+  "n": 807
+ },
+ "GBM_LATE_5M#BTC#5min#BUY_NO": {
+  "gate_ok": true,
+  "n": 1028
+ },
+ "GBM_LATE_5M#BTC#5min#BUY_YES": {
+  "gate_ok": true,
+  "n": 561
+ },
+ "GBM_LATE_5M#DOGE#5min#BUY_NO": {
+  "gate_ok": true,
+  "n": 59
+ },
+ "GBM_LATE_5M#DOGE#5min#BUY_YES": {
+  "gate_ok": true,
+  "n": 574
+ },
+ "GBM_LATE_5M#ETH#5min#BUY_NO": {
+  "gate_ok": true,
+  "n": 699
+ },
+ "GBM_LATE_5M#ETH#5min#BUY_YES": {
+  "gate_ok": true,
+  "n": 894
+ },
+ "GBM_LATE_5M#SOL#5min#BUY_NO": {
+  "gate_ok": false,
+  "n": 244
+ },
+ "GBM_LATE_5M#SOL#5min#BUY_YES": {
+  "gate_ok": false,
+  "n": 794
+ },
+ "GBM_LATE_5M#XRP#5min#BUY_NO": {
+  "gate_ok": true,
+  "n": 356
+ },
+ "GBM_LATE_5M#XRP#5min#BUY_YES": {
+  "gate_ok": false,
+  "n": 867
+ },
+ "GBM_LATE_60M#BTC#60min#BUY_NO": {
+  "gate_ok": false,
+  "n": 112
+ },
+ "GBM_LATE_60M#BTC#60min#BUY_YES": {
+  "gate_ok": true,
+  "n": 229
+ },
+ "GBM_LATE_60M#ETH#60min#BUY_NO": {
+  "gate_ok": false,
+  "n": 94
+ },
+ "GBM_LATE_60M#ETH#60min#BUY_YES": {
+  "gate_ok": true,
+  "n": 240
+ },
+ "GBM_LATE_60M#SOL#60min#BUY_NO": {
+  "gate_ok": false,
+  "n": 104
+ },
+ "GBM_LATE_60M#SOL#60min#BUY_YES": {
+  "gate_ok": false,
+  "n": 200
+ },
+ "GBM_LATE_60M_FADE#BTC#60min#BUY_NO": {
+  "gate_ok": false,
+  "n": 51
+ },
+ "GBM_LATE_60M_FADE#BTC#60min#BUY_YES": {
+  "gate_ok": false,
+  "n": 47
+ },
+ "GBM_LATE_60M_FADE#ETH#60min#BUY_NO": {
+  "gate_ok": false,
+  "n": 42
+ },
+ "GBM_LATE_60M_FADE#ETH#60min#BUY_YES": {
+  "gate_ok": false,
+  "n": 43
+ },
+ "GBM_LATE_60M_FADE#SOL#60min#BUY_NO": {
+  "gate_ok": false,
+  "n": 34
+ },
+ "GBM_LATE_60M_FADE#SOL#60min#BUY_YES": {
+  "gate_ok": false,
+  "n": 37
+ },
+ "GBM_LATE_60M_PYCONFIRMADO#BTC#60min#BUY_NO": {
+  "gate_ok": false,
+  "n": 110
+ },
+ "GBM_LATE_60M_PYCONFIRMADO#BTC#60min#BUY_YES": {
+  "gate_ok": false,
+  "n": 79
+ },
+ "GBM_LATE_60M_PYCONFIRMADO#DOGE#60min#BUY_NO": {
+  "gate_ok": false,
+  "n": 0
+ },
+ "GBM_LATE_60M_PYCONFIRMADO#DOGE#60min#BUY_YES": {
+  "gate_ok": false,
+  "n": 0
+ },
+ "GBM_LATE_60M_PYCONFIRMADO#SOL#60min#BUY_NO": {
+  "gate_ok": false,
+  "n": 61
+ },
+ "GBM_LATE_60M_PYCONFIRMADO#SOL#60min#BUY_YES": {
+  "gate_ok": false,
+  "n": 100
+ },
+ "LATE_WINDOW_5MIN#BTC#5min#BUY_NO": {
+  "gate_ok": false,
+  "n": 256
+ },
+ "LATE_WINDOW_5MIN#BTC#5min#BUY_YES": {
+  "gate_ok": false,
+  "n": 188
+ },
+ "LEADLAG_BTC_XRP_15M#XRP#15min#BUY_NO": {
+  "gate_ok": true,
+  "n": 655
+ },
+ "LEADLAG_BTC_XRP_15M#XRP#15min#BUY_YES": {
+  "gate_ok": false,
+  "n": 640
+ },
+ "LIQUIDACIONES_15M#BNB#15min#BUY_NO": {
+  "gate_ok": false,
+  "n": 5
+ },
+ "LIQUIDACIONES_15M#BNB#15min#BUY_YES": {
+  "gate_ok": false,
+  "n": 1
+ },
+ "LIQUIDACIONES_15M#BTC#15min#BUY_NO": {
+  "gate_ok": false,
+  "n": 47
+ },
+ "LIQUIDACIONES_15M#BTC#15min#BUY_YES": {
+  "gate_ok": false,
+  "n": 44
+ },
+ "LIQUIDACIONES_15M#DOGE#15min#BUY_NO": {
+  "gate_ok": false,
+  "n": 16
+ },
+ "LIQUIDACIONES_15M#DOGE#15min#BUY_YES": {
+  "gate_ok": false,
+  "n": 17
+ },
+ "LIQUIDACIONES_15M#ETH#15min#BUY_NO": {
+  "gate_ok": false,
+  "n": 41
+ },
+ "LIQUIDACIONES_15M#ETH#15min#BUY_YES": {
+  "gate_ok": false,
+  "n": 37
+ },
+ "LIQUIDACIONES_15M#SOL#15min#BUY_NO": {
+  "gate_ok": false,
+  "n": 87
+ },
+ "LIQUIDACIONES_15M#SOL#15min#BUY_YES": {
+  "gate_ok": false,
+  "n": 29
+ },
+ "LIQUIDACIONES_15M#XRP#15min#BUY_NO": {
+  "gate_ok": false,
+  "n": 28
+ },
+ "LIQUIDACIONES_15M#XRP#15min#BUY_YES": {
+  "gate_ok": false,
+  "n": 33
+ },
+ "LIQUIDACIONES_5M#BNB#5min#BUY_NO": {
+  "gate_ok": false,
+  "n": 11
+ },
+ "LIQUIDACIONES_5M#BNB#5min#BUY_YES": {
+  "gate_ok": false,
+  "n": 70
+ },
+ "LIQUIDACIONES_5M#BTC#5min#BUY_NO": {
+  "gate_ok": false,
+  "n": 48
+ },
+ "LIQUIDACIONES_5M#BTC#5min#BUY_YES": {
+  "gate_ok": false,
+  "n": 148
+ },
+ "LIQUIDACIONES_5M#DOGE#5min#BUY_NO": {
+  "gate_ok": false,
+  "n": 8
+ },
+ "LIQUIDACIONES_5M#DOGE#5min#BUY_YES": {
+  "gate_ok": false,
+  "n": 99
+ },
+ "LIQUIDACIONES_5M#ETH#5min#BUY_NO": {
+  "gate_ok": false,
+  "n": 40
+ },
+ "LIQUIDACIONES_5M#ETH#5min#BUY_YES": {
+  "gate_ok": false,
+  "n": 511
+ },
+ "LIQUIDACIONES_5M#SOL#5min#BUY_NO": {
+  "gate_ok": false,
+  "n": 41
+ },
+ "LIQUIDACIONES_5M#SOL#5min#BUY_YES": {
+  "gate_ok": false,
+  "n": 447
+ },
+ "LIQUIDACIONES_5M#XRP#5min#BUY_NO": {
+  "gate_ok": false,
+  "n": 20
+ },
+ "LIQUIDACIONES_5M#XRP#5min#BUY_YES": {
+  "gate_ok": false,
+  "n": 97
+ },
+ "LIQUIDACIONES_60M#BNB#60min#BUY_NO": {
+  "gate_ok": false,
+  "n": 0
+ },
+ "LIQUIDACIONES_60M#BNB#60min#BUY_YES": {
+  "gate_ok": false,
+  "n": 0
+ },
+ "LIQUIDACIONES_60M#BTC#60min#BUY_NO": {
+  "gate_ok": false,
+  "n": 68
+ },
+ "LIQUIDACIONES_60M#BTC#60min#BUY_YES": {
+  "gate_ok": false,
+  "n": 164
+ },
+ "LIQUIDACIONES_60M#DOGE#60min#BUY_NO": {
+  "gate_ok": false,
+  "n": 0
+ },
+ "LIQUIDACIONES_60M#DOGE#60min#BUY_YES": {
+  "gate_ok": false,
+  "n": 0
+ },
+ "LIQUIDACIONES_60M#ETH#60min#BUY_NO": {
+  "gate_ok": false,
+  "n": 59
+ },
+ "LIQUIDACIONES_60M#ETH#60min#BUY_YES": {
+  "gate_ok": false,
+  "n": 179
+ },
+ "LIQUIDACIONES_60M#SOL#60min#BUY_NO": {
+  "gate_ok": false,
+  "n": 78
+ },
+ "LIQUIDACIONES_60M#SOL#60min#BUY_YES": {
+  "gate_ok": false,
+  "n": 230
+ },
+ "LIQUIDACIONES_60M#XRP#60min#BUY_NO": {
+  "gate_ok": false,
+  "n": 0
+ },
+ "LIQUIDACIONES_60M#XRP#60min#BUY_YES": {
+  "gate_ok": false,
+  "n": 0
+ },
+ "ORDER_FLOW_5M#BNB#5min#BUY_NO": {
+  "gate_ok": true,
+  "n": 294
+ },
+ "ORDER_FLOW_5M#BNB#5min#BUY_YES": {
+  "gate_ok": false,
+  "n": 96
+ },
+ "ORDER_FLOW_5M#BTC#5min#BUY_NO": {
+  "gate_ok": false,
+  "n": 188
+ },
+ "ORDER_FLOW_5M#BTC#5min#BUY_YES": {
+  "gate_ok": false,
+  "n": 103
+ },
+ "ORDER_FLOW_5M#DOGE#5min#BUY_NO": {
+  "gate_ok": false,
+  "n": 282
+ },
+ "ORDER_FLOW_5M#DOGE#5min#BUY_YES": {
+  "gate_ok": false,
+  "n": 94
+ },
+ "ORDER_FLOW_5M#ETH#5min#BUY_NO": {
+  "gate_ok": false,
+  "n": 265
+ },
+ "ORDER_FLOW_5M#ETH#5min#BUY_YES": {
+  "gate_ok": false,
+  "n": 155
+ },
+ "ORDER_FLOW_5M#SOL#5min#BUY_NO": {
+  "gate_ok": true,
+  "n": 370
+ },
+ "ORDER_FLOW_5M#SOL#5min#BUY_YES": {
+  "gate_ok": false,
+  "n": 95
+ },
+ "ORDER_FLOW_5M#XRP#5min#BUY_NO": {
+  "gate_ok": false,
+  "n": 300
+ },
+ "ORDER_FLOW_5M#XRP#5min#BUY_YES": {
+  "gate_ok": false,
+  "n": 65
+ },
+ "PRICE_TARGET_GBM#BTC#atexpiry#BUY_NO": {
+  "gate_ok": false,
+  "n": 113
+ },
+ "PRICE_TARGET_GBM#BTC#atexpiry#BUY_YES": {
+  "gate_ok": false,
+  "n": 25
+ },
+ "PRICE_TARGET_GBM#BTC#reach#BUY_NO": {
+  "gate_ok": false,
+  "n": 8
+ },
+ "PRICE_TARGET_GBM#BTC#reach#BUY_YES": {
+  "gate_ok": false,
+  "n": 26
+ },
+ "PRICE_TARGET_GBM#ETH#atexpiry#BUY_NO": {
+  "gate_ok": false,
+  "n": 85
+ },
+ "PRICE_TARGET_GBM#ETH#atexpiry#BUY_YES": {
+  "gate_ok": false,
+  "n": 19
+ },
+ "PRICE_TARGET_GBM#ETH#reach#BUY_NO": {
+  "gate_ok": false,
+  "n": 6
+ },
+ "PRICE_TARGET_GBM#ETH#reach#BUY_YES": {
+  "gate_ok": false,
+  "n": 32
+ },
+ "PRICE_TARGET_GBM#SOL#atexpiry#BUY_NO": {
+  "gate_ok": false,
+  "n": 47
+ },
+ "PRICE_TARGET_GBM#SOL#atexpiry#BUY_YES": {
+  "gate_ok": false,
+  "n": 12
+ },
+ "PRICE_TARGET_GBM#SOL#reach#BUY_YES": {
+  "gate_ok": false,
+  "n": 17
+ },
+ "RESOLUTION_SNIPER#BTC#sniper#BUY_NO": {
+  "gate_ok": false,
+  "n": 15
+ },
+ "RESOLUTION_SNIPER#BTC#sniper#BUY_YES": {
+  "gate_ok": false,
+  "n": 6
+ },
+ "RESOLUTION_SNIPER#ETH#sniper#BUY_NO": {
+  "gate_ok": false,
+  "n": 18
+ },
+ "RESOLUTION_SNIPER#ETH#sniper#BUY_YES": {
+  "gate_ok": false,
+  "n": 12
+ },
+ "RESOLUTION_SNIPER#SOL#sniper#BUY_NO": {
+  "gate_ok": true,
+  "n": 65
+ },
+ "RESOLUTION_SNIPER#SOL#sniper#BUY_YES": {
+  "gate_ok": false,
+  "n": 23
+ },
+ "STREAK_FADE_15M#DOGE#15min#BUY_NO": {
+  "gate_ok": false,
+  "n": 98
+ },
+ "STREAK_FADE_15M#DOGE#15min#BUY_YES": {
+  "gate_ok": false,
+  "n": 48
+ },
+ "STREAK_FADE_15M#ETH#15min#BUY_NO": {
+  "gate_ok": false,
+  "n": 41
+ },
+ "STREAK_FADE_15M#ETH#15min#BUY_YES": {
+  "gate_ok": false,
+  "n": 44
+ },
+ "STREAK_FADE_15M#SOL#15min#BUY_NO": {
+  "gate_ok": false,
+  "n": 66
+ },
+ "STREAK_FADE_15M#SOL#15min#BUY_YES": {
+  "gate_ok": false,
+  "n": 55
+ },
+ "STREAK_FADE_15M#XRP#15min#BUY_NO": {
+  "gate_ok": false,
+  "n": 163
+ },
+ "STREAK_FADE_15M#XRP#15min#BUY_YES": {
+  "gate_ok": false,
+  "n": 116
+ },
+ "STREAK_FADE_5M#DOGE#5min#BUY_NO": {
+  "gate_ok": false,
+  "n": 355
+ },
+ "STREAK_FADE_5M#DOGE#5min#BUY_YES": {
+  "gate_ok": false,
+  "n": 455
+ },
+ "STREAK_FADE_5M#ETH#5min#BUY_NO": {
+  "gate_ok": false,
+  "n": 144
+ },
+ "STREAK_FADE_5M#ETH#5min#BUY_YES": {
+  "gate_ok": false,
+  "n": 519
+ },
+ "STREAK_FADE_5M#SOL#5min#BUY_NO": {
+  "gate_ok": false,
+  "n": 89
+ },
+ "STREAK_FADE_5M#SOL#5min#BUY_YES": {
+  "gate_ok": false,
+  "n": 215
+ },
+ "STREAK_FADE_5M#XRP#5min#BUY_NO": {
+  "gate_ok": false,
+  "n": 347
+ },
+ "STREAK_FADE_5M#XRP#5min#BUY_YES": {
+  "gate_ok": false,
+  "n": 460
+ },
+ "STREAK_MOM_5M#DOGE#5min#BUY_NO": {
+  "gate_ok": false,
+  "n": 919
+ },
+ "STREAK_MOM_5M#DOGE#5min#BUY_YES": {
+  "gate_ok": false,
+  "n": 748
+ },
+ "STREAK_MOM_5M#ETH#5min#BUY_NO": {
+  "gate_ok": false,
+  "n": 482
+ },
+ "STREAK_MOM_5M#ETH#5min#BUY_YES": {
+  "gate_ok": false,
+  "n": 717
+ },
+ "STREAK_MOM_5M#SOL#5min#BUY_NO": {
+  "gate_ok": false,
+  "n": 843
+ },
+ "STREAK_MOM_5M#SOL#5min#BUY_YES": {
+  "gate_ok": false,
+  "n": 798
+ },
+ "STREAK_MOM_5M#XRP#5min#BUY_NO": {
+  "gate_ok": false,
+  "n": 557
+ },
+ "STREAK_MOM_5M#XRP#5min#BUY_YES": {
+  "gate_ok": false,
+  "n": 487
+ },
+ "STRUCT_NO_15M#BTC#15min#BUY_NO": {
+  "gate_ok": false,
+  "n": 2000
+ },
+ "STRUCT_NO_15M#ETH#15min#BUY_NO": {
+  "gate_ok": false,
+  "n": 2081
+ },
+ "STRUCT_NO_15M#SOL#15min#BUY_NO": {
+  "gate_ok": false,
+  "n": 1119
+ },
+ "UPDOWN_GBM#BNB#15min#BUY_NO": {
+  "gate_ok": true,
+  "n": 461
+ },
+ "UPDOWN_GBM#BNB#15min#BUY_YES": {
+  "gate_ok": true,
+  "n": 221
+ },
+ "UPDOWN_GBM#BTC#15min#BUY_NO": {
+  "gate_ok": false,
+  "n": 395
+ },
+ "UPDOWN_GBM#BTC#15min#BUY_YES": {
+  "gate_ok": true,
+  "n": 799
+ },
+ "UPDOWN_GBM#BTC#240min#BUY_NO": {
+  "gate_ok": false,
+  "n": 75
+ },
+ "UPDOWN_GBM#BTC#240min#BUY_YES": {
+  "gate_ok": false,
+  "n": 126
+ },
+ "UPDOWN_GBM#BTC#5min#BUY_NO": {
+  "gate_ok": false,
+  "n": 1347
+ },
+ "UPDOWN_GBM#BTC#5min#BUY_YES": {
+  "gate_ok": false,
+  "n": 221
+ },
+ "UPDOWN_GBM#BTC#60min#BUY_NO": {
+  "gate_ok": false,
+  "n": 155
+ },
+ "UPDOWN_GBM#BTC#60min#BUY_YES": {
+  "gate_ok": false,
+  "n": 278
+ },
+ "UPDOWN_GBM#BTC#daily#BUY_NO": {
+  "gate_ok": false,
+  "n": 17
+ },
+ "UPDOWN_GBM#BTC#daily#BUY_YES": {
+  "gate_ok": false,
+  "n": 11
+ },
+ "UPDOWN_GBM#DOGE#15min#BUY_NO": {
+  "gate_ok": false,
+  "n": 457
+ },
+ "UPDOWN_GBM#DOGE#15min#BUY_YES": {
+  "gate_ok": true,
+  "n": 135
+ },
+ "UPDOWN_GBM#DOGE#5min#BUY_NO": {
+  "gate_ok": false,
+  "n": 1076
+ },
+ "UPDOWN_GBM#DOGE#5min#BUY_YES": {
+  "gate_ok": false,
+  "n": 791
+ },
+ "UPDOWN_GBM#ETH#15min#BUY_NO": {
+  "gate_ok": false,
+  "n": 1827
+ },
+ "UPDOWN_GBM#ETH#15min#BUY_YES": {
+  "gate_ok": false,
+  "n": 859
+ },
+ "UPDOWN_GBM#ETH#240min#BUY_NO": {
+  "gate_ok": false,
+  "n": 69
+ },
+ "UPDOWN_GBM#ETH#240min#BUY_YES": {
+  "gate_ok": false,
+  "n": 122
+ },
+ "UPDOWN_GBM#ETH#5min#BUY_NO": {
+  "gate_ok": false,
+  "n": 1082
+ },
+ "UPDOWN_GBM#ETH#5min#BUY_YES": {
+  "gate_ok": false,
+  "n": 383
+ },
+ "UPDOWN_GBM#ETH#60min#BUY_NO": {
+  "gate_ok": false,
+  "n": 50
+ },
+ "UPDOWN_GBM#ETH#60min#BUY_YES": {
+  "gate_ok": false,
+  "n": 341
+ },
+ "UPDOWN_GBM#ETH#daily#BUY_NO": {
+  "gate_ok": false,
+  "n": 15
+ },
+ "UPDOWN_GBM#ETH#daily#BUY_YES": {
+  "gate_ok": false,
+  "n": 11
+ },
+ "UPDOWN_GBM#SOL#15min#BUY_NO": {
+  "gate_ok": false,
+  "n": 1587
+ },
+ "UPDOWN_GBM#SOL#15min#BUY_YES": {
+  "gate_ok": false,
+  "n": 211
+ },
+ "UPDOWN_GBM#SOL#240min#BUY_YES": {
+  "gate_ok": false,
+  "n": 100
+ },
+ "UPDOWN_GBM#SOL#5min#BUY_NO": {
+  "gate_ok": false,
+  "n": 2496
+ },
+ "UPDOWN_GBM#SOL#5min#BUY_YES": {
+  "gate_ok": false,
+  "n": 451
+ },
+ "UPDOWN_GBM#SOL#60min#BUY_NO": {
+  "gate_ok": false,
+  "n": 48
+ },
+ "UPDOWN_GBM#SOL#60min#BUY_YES": {
+  "gate_ok": false,
+  "n": 152
+ },
+ "UPDOWN_GBM#SOL#daily#BUY_NO": {
+  "gate_ok": false,
+  "n": 13
+ },
+ "UPDOWN_GBM#SOL#daily#BUY_YES": {
+  "gate_ok": false,
+  "n": 8
+ },
+ "UPDOWN_GBM#XRP#15min#BUY_NO": {
+  "gate_ok": false,
+  "n": 1486
+ },
+ "UPDOWN_GBM#XRP#15min#BUY_YES": {
+  "gate_ok": true,
+  "n": 336
+ },
+ "UPDOWN_GBM#XRP#5min#BUY_NO": {
+  "gate_ok": false,
+  "n": 969
+ },
+ "UPDOWN_GBM#XRP#5min#BUY_YES": {
+  "gate_ok": false,
+  "n": 446
+ },
+ "UPDOWN_GBM_15M_CROSS_WINDOW_SPREAD#BTC#15min#BUY_YES": {
+  "gate_ok": true,
+  "n": 332
+ },
+ "UPDOWN_GBM_15M_CROSS_WINDOW_SPREAD#ETH#15min#BUY_YES": {
+  "gate_ok": true,
+  "n": 288
+ },
+ "UPDOWN_GBM_15M_TARDIO#BNB#15min#BUY_NO": {
+  "gate_ok": true,
+  "n": 432
+ },
+ "UPDOWN_GBM_15M_TARDIO#BNB#15min#BUY_YES": {
+  "gate_ok": false,
+  "n": 288
+ },
+ "UPDOWN_GBM_15M_TARDIO#BTC#15min#BUY_NO": {
+  "gate_ok": false,
+  "n": 1238
+ },
+ "UPDOWN_GBM_15M_TARDIO#BTC#15min#BUY_YES": {
+  "gate_ok": true,
+  "n": 589
+ },
+ "UPDOWN_GBM_15M_TARDIO#DOGE#15min#BUY_NO": {
+  "gate_ok": true,
+  "n": 278
+ },
+ "UPDOWN_GBM_15M_TARDIO#DOGE#15min#BUY_YES": {
+  "gate_ok": true,
+  "n": 203
+ },
+ "UPDOWN_GBM_15M_TARDIO#ETH#15min#BUY_NO": {
+  "gate_ok": true,
+  "n": 723
+ },
+ "UPDOWN_GBM_15M_TARDIO#ETH#15min#BUY_YES": {
+  "gate_ok": true,
+  "n": 622
+ },
+ "UPDOWN_GBM_15M_TARDIO#SOL#15min#BUY_NO": {
+  "gate_ok": false,
+  "n": 2372
+ },
+ "UPDOWN_GBM_15M_TARDIO#SOL#15min#BUY_YES": {
+  "gate_ok": false,
+  "n": 714
+ },
+ "UPDOWN_GBM_15M_TARDIO#XRP#15min#BUY_NO": {
+  "gate_ok": false,
+  "n": 2391
+ },
+ "UPDOWN_GBM_15M_TARDIO#XRP#15min#BUY_YES": {
+  "gate_ok": false,
+  "n": 924
+ },
+ "UPDOWN_GBM_ETH_15M_HORA7#ETH#15min#BUY_NO": {
+  "gate_ok": false,
+  "n": 76
+ },
+ "UPDOWN_GBM_ETH_15M_HORA7#ETH#15min#BUY_YES": {
+  "gate_ok": false,
+  "n": 29
+ },
+ "UPDOWN_GBM_IBS_ALTO#BTC#15min#BUY_YES": {
+  "gate_ok": true,
+  "n": 382
+ },
+ "UPDOWN_GBM_IBS_ALTO#ETH#15min#BUY_YES": {
+  "gate_ok": true,
+  "n": 305
+ },
+ "UPDOWN_OU_5M#BNB#5min#BUY_NO": {
+  "gate_ok": false,
+  "n": 349
+ },
+ "UPDOWN_OU_5M#BNB#5min#BUY_YES": {
+  "gate_ok": false,
+  "n": 32
+ },
+ "UPDOWN_OU_5M#BTC#5min#BUY_NO": {
+  "gate_ok": false,
+  "n": 55
+ },
+ "UPDOWN_OU_5M#BTC#5min#BUY_YES": {
+  "gate_ok": false,
+  "n": 154
+ },
+ "UPDOWN_OU_5M#DOGE#5min#BUY_NO": {
+  "gate_ok": false,
+  "n": 83
+ },
+ "UPDOWN_OU_5M#DOGE#5min#BUY_YES": {
+  "gate_ok": false,
+  "n": 16
+ },
+ "UPDOWN_OU_5M#ETH#5min#BUY_NO": {
+  "gate_ok": false,
+  "n": 45
+ },
+ "UPDOWN_OU_5M#ETH#5min#BUY_YES": {
+  "gate_ok": false,
+  "n": 64
+ },
+ "UPDOWN_OU_5M#SOL#5min#BUY_NO": {
+  "gate_ok": false,
+  "n": 85
+ },
+ "UPDOWN_OU_5M#SOL#5min#BUY_YES": {
+  "gate_ok": false,
+  "n": 44
+ },
+ "UPDOWN_OU_5M#XRP#5min#BUY_NO": {
+  "gate_ok": false,
+  "n": 87
+ },
+ "UPDOWN_OU_5M#XRP#5min#BUY_YES": {
+  "gate_ok": false,
+  "n": 36
+ },
+ "GBM_LATE_60M_PYCONFIRMADO#ETH#60min#BUY_YES": {
+  "gate_ok": false,
+  "n": 60
+ },
+ "GBM_LATE_60M_PYCONFIRMADO#ETH#60min#BUY_NO": {
+  "gate_ok": false,
+  "n": 68
+ },
+ "GBM_LATE_15M_MULTIHORIZONTE#ETH#15min#BUY_YES": {
+  "gate_ok": true,
+  "n": 1036
+ },
+ "GBM_LATE_15M_MULTIHORIZONTE#SOL#15min#BUY_YES": {
+  "gate_ok": true,
+  "n": 1277
+ },
+ "PRICE_TARGET_GBM_FADE#ETH#atexpiry#BUY_YES": {
+  "gate_ok": false,
+  "n": 61
+ },
+ "PRICE_TARGET_GBM_FADE#ETH#atexpiry#BUY_NO": {
+  "gate_ok": false,
+  "n": 67
+ },
+ "PRICE_TARGET_GBM_FADE#BTC#atexpiry#BUY_NO": {
+  "gate_ok": false,
+  "n": 70
+ },
+ "PRICE_TARGET_GBM_FADE#SOL#atexpiry#BUY_NO": {
+  "gate_ok": false,
+  "n": 33
+ },
+ "FAVORITO_CONFIRMADO_15MIN_ALTACONVICCION#SOL#15min#BUY_NO": {
+  "gate_ok": false,
+  "n": 89
+ },
+ "CANDIDATA9_BOT_CONSENSO#BTC#5min#BUY_YES": {
+  "gate_ok": false,
+  "n": 99
+ },
+ "CANDIDATA9_BOT_CONSENSO#BTC#5min#BUY_NO": {
+  "gate_ok": false,
+  "n": 88
+ },
+ "CANDIDATA10_CONFIRMACION_CRUZADA#BTC#5min#BUY_YES": {
+  "gate_ok": false,
+  "n": 2898
+ },
+ "CANDIDATA10_CONFIRMACION_CRUZADA#BTC#5min#BUY_NO": {
+  "gate_ok": false,
+  "n": 2859
+ },
+ "CANDIDATA10_CONFIRMACION_CRUZADA#BTC#15min#BUY_YES": {
+  "gate_ok": false,
+  "n": 1119
+ },
+ "CANDIDATA10_CONFIRMACION_CRUZADA#BTC#15min#BUY_NO": {
+  "gate_ok": false,
+  "n": 1119
+ },
+ "ORDER_FLOW_5M_REACTIVO#ETH#5min#BUY_NO": {
+  "gate_ok": false,
+  "n": 0
+ },
+ "ORDER_FLOW_5M_REACTIVO#SOL#5min#BUY_NO": {
+  "gate_ok": false,
+  "n": 0
+ },
+ "ORDER_FLOW_5M_REACTIVO#XRP#5min#BUY_NO": {
+  "gate_ok": false,
+  "n": 0
+ },
+ "ORDER_FLOW_5M_REACTIVO#DOGE#5min#BUY_NO": {
+  "gate_ok": false,
+  "n": 0
+ },
+ "ORDER_FLOW_5M_REACTIVO#BNB#5min#BUY_NO": {
+  "gate_ok": false,
+  "n": 0
+ }
+}

@@ -1,0 +1,297 @@
+#!/usr/bin/env python3
+"""
+fetch_polymarket_activity_ws.py — Captura continua del firehose de trades
+reales de Polymarket vía RTDS (wss://ws-live-data.polymarket.com), topic
+"activity" type "trades". Solo lectura.
+
+Origen (28-Jul): al revisar el repo moondevonyt/Hyperliquid-Data-Layer-API
+(que cobra por una "Polymarket Whales API" describiéndola como "persistent
+WebSocket a wss://ws-live-data.polymarket.com, cada trade ≥$1000"), Javi
+pidió NO suscribirse a ningún servicio de pago sino intentar replicarlo
+gratis. Confirmado con sondeo manual (probe_rtds*.py, scratchpad de la
+sesión): el topic real es "activity"/"trades" (no documentado en
+docs.polymarket.com/market-data/websocket/rtds, que solo lista precios y
+comentarios) — sin autenticación, mismo endpoint que ya usa
+fetch_chainlink_prices.py para precios Chainlink. Payload real por trade:
+proxyWallet, pseudonym, side, size, price, outcome, conditionId,
+eventSlug, slug, title, timestamp, transactionHash — exactamente lo que
+Moon Dev cobra por dar.
+
+NO reemplaza `ballenas_observer.py` (cron horario, ballenas_timing_
+history.csv) todavía -- eso sería un cambio de pipeline core que merece
+su propia sesión dedicada de revisión/comparación, no un swap silencioso.
+Esto es una captura NUEVA e independiente, puramente aditiva: fichero
+propio, para comparar más adelante fidelidad/latencia contra el método
+de polling actual antes de proponer ningún reemplazo.
+
+Filtra dos categorías (ambas se guardan, columna `categoria`):
+  - "updown_tracked": trades en nuestros mercados Up/Down de
+    BTC/ETH/SOL/XRP/DOGE/BNB (5m/15m/1h) -- el universo que ya operamos.
+  - "whale": cualquier trade (de cualquier mercado) con usd_value >=
+    WHALE_USD_MIN (1000, mismo suelo que usa el servicio de pago).
+  Un trade puede cumplir ambas a la vez (columnas booleanas separadas).
+
+Salida: data/shadow/polymarket_activity_YYYY-MM-DD.csv (rota a
+medianoche UTC). Puramente shadow/observacional, NO toca dinero ni
+ninguna decisión todavía.
+
+Corre en screen propio (mismo patrón que chainlink/pfinish):
+  screen -dmS polyactivity bash -c "cd /root/polymarket-research && .venv/bin/python fetch_polymarket_activity_ws.py >> logs/polymarket_activity.log 2>&1"
+"""
+
+import csv
+import json
+import re
+import sys
+import time
+from datetime import datetime, timezone
+from pathlib import Path
+
+import asyncio
+import websockets
+
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+# 29-Jul (petición Javi: ampliar wallet_mirror a TODAS las monedas/marcos):
+# el regex de slug _RE_UPDOWN_SLUG solo reconoce 5m/15m -- los mercados
+# "hourly" (60min) NO tienen slug updown-1h resoluble (mismo hallazgo ya
+# documentado en fetch_libro_ambos_lados.py 28-Jul, nunca aplicado aquí),
+# y "weekly" no es un mercado Up/Down en absoluto (rango de precio, otro
+# formato de pregunta). Fallback por TEXTO del título (mismas funciones
+# que ya usa shadow_predict.py/fetch_libro_ambos_lados.py) para no perder
+# ninguna moneda/marco por depender solo del slug.
+from shadow_predict import _parse_updown_tipo, identificar_activo  # noqa: E402
+
+REPO = Path(__file__).resolve().parent
+DIR_SHADOW = REPO / "data" / "shadow"
+# 29-Jul: fichero movido FUERA del repo (DIR_DATALOGS, no versionado) --
+# crece varias decenas de MB/día y cada commit de run_fast.sh lo re-subía
+# entero, inflando .git (8.7GB) y provocando rebases lentos/con conflicto
+# que bloqueaban el loop síncrono >10min, disparando el vigía de calidad
+# de datos (fail-open de simbolo_bloqueado() en GBM_LATE_15M live SOL/ETH
+# mientras dura). Ver feedback_fix_datalogs_fuera_repo_29jul. Puramente
+# shadow/observacional, no afecta a ningún path de trading.
+DIR_DATALOGS = Path("/root/polymarket-research-datalogs")
+DIR_DATALOGS.mkdir(parents=True, exist_ok=True)
+
+WS_URL = "wss://ws-live-data.polymarket.com"
+PING_INTERVAL_S = 5
+RECONNECT_ESPERA_S = 5
+RECV_TIMEOUT_S = 30  # 29-Jul: MISMO bug ya encontrado y arreglado en
+# fetch_chainlink_prices.py el 28-Jul, nunca aplicado aquí -- `async for
+# raw in ws` sin timeout deja el bucle bloqueado para siempre si la
+# conexión muere en silencio (sin frame de cierre), sin lanzar ninguna
+# excepción que main() pudiera capturar y reconectar. Encontrado
+# comparando fidelidad contra ballenas_timing_history.csv (petición Javi
+# de revisar las 3 conexiones pendientes de polyactivity): 17 de 24
+# mercados ETH#15min de HOY (71%) tenían CERO trades capturados pese a
+# 135-387 trades reales cada uno -- 3 huecos silenciosos de ~2h en el log
+# (01:49, 03:49, 05:50 UTC), sin ningún "Conexión perdida"/"Error
+# inesperado" previo, exactamente la firma de este bug. A cientos/miles
+# de trades por minuto en este firehose, 30s sin ningún mensaje ya es
+# anómalo -- fuerza un TimeoutError que main() ya captura y reconecta.
+WHALE_USD_MIN = 1000.0
+
+ACTIVOS_TRACKEADOS = {"BTC", "ETH", "SOL", "XRP", "DOGE", "BNB"}
+_RE_UPDOWN_SLUG = re.compile(r"^([a-z]+)-updown-(\d+)(m|h)-\d+$")
+
+COLUMNS = [
+    "timestamp_utc", "ws_timestamp", "condition_id", "event_slug", "market_slug",
+    "title", "activo", "marco", "categoria_updown_tracked", "categoria_whale",
+    "wallet", "pseudonym", "outcome", "side", "price", "size", "usd_value",
+    "transaction_hash",
+]
+
+
+def _log(msg: str) -> None:
+    ts = datetime.now(timezone.utc).isoformat(timespec="seconds")
+    print(f"[{ts}] {msg}", flush=True)
+
+
+def _archivo_hoy() -> Path:
+    fecha = datetime.now(timezone.utc).strftime("%Y-%m-%d")
+    return DIR_DATALOGS / f"polymarket_activity_{fecha}.csv"
+
+
+def _parse_updown(event_slug: str, title: str = ""):
+    """('BTC','5min') a partir de 'btc-updown-5m-1785237000' (camino rápido,
+    cubre 5m/15m, la mayoría del volumen) -- o, si el slug no resuelve
+    (mercados 'hourly'/60min, que no tienen slug updown-1h; o 'weekly',
+    que no es Up/Down), fallback por TEXTO del título. Ver nota en el
+    import de shadow_predict arriba."""
+    m = _RE_UPDOWN_SLUG.match(event_slug or "")
+    if m:
+        activo = m.group(1).upper()
+        if activo in ACTIVOS_TRACKEADOS:
+            n, unidad = m.group(2), m.group(3)
+            marco = f"{n}min" if unidad == "m" else f"{int(n)*60}min"
+            return activo, marco
+
+    if not title:
+        return None, None
+    activo = identificar_activo(title)
+    if activo not in ACTIVOS_TRACKEADOS:
+        return None, None
+
+    tipo, vent = _parse_updown_tipo(title)
+    if tipo in ("slot", "hourly") and vent in (5, 15, 60):
+        return activo, f"{vent}min"
+
+    if "week" in title.lower():
+        return activo, "weekly"
+
+    return None, None
+
+
+# 04-Ago (paso 2 de idea_veto_ballenas_firehose_snapshot_diseno_04ago):
+# import DIFERIDO hasta aquí a propósito -- ballenas_firehose_cache.py
+# hace `from fetch_polymarket_activity_ws import WS_URL, _parse_updown` a
+# nivel de módulo; importarlo ANTES de que WS_URL/_parse_updown existan en
+# este fichero (p.ej. junto al resto de imports, arriba) crearía un
+# import circular real (ImportError, WS_URL no definido todavía en el
+# momento en que ballenas_firehose_cache intenta leerlo). Aquí ambos ya
+# existen, así que la importación circular se resuelve sin problema.
+import ballenas_firehose_cache as _bfc  # noqa: E402
+
+# 04-Ago: medido en aislado antes de desplegar -- el snapshot completo (65min
+# de retención) ronda ~5MB; a 3s de cadencia eso es ~1.6MB/s de I/O sostenido
+# 24/7, más presión de disco de la necesaria dado que nada lee este fichero
+# todavía más rápido que el ciclo de live_trade.py (4-20s). 10s de sobra de
+# fresco para ese caso de uso, ~0.5MB/s.
+SNAPSHOT_ESCRITURA_INTERVALO_S = 10.0
+
+
+def _escribir_fila(fila: dict) -> None:
+    archivo = _archivo_hoy()
+    with open(archivo, "a", newline="", encoding="utf-8") as f:
+        w = csv.DictWriter(f, fieldnames=COLUMNS)
+        if f.tell() == 0:
+            w.writeheader()
+        w.writerow(fila)
+
+
+async def _mantener_ping(ws):
+    try:
+        while True:
+            await asyncio.sleep(PING_INTERVAL_S)
+            await ws.send("PING")
+    except (asyncio.CancelledError, websockets.exceptions.ConnectionClosed):
+        pass
+
+
+async def _correr_una_conexion() -> None:
+    async with websockets.connect(WS_URL, open_timeout=10, close_timeout=5) as ws:
+        sub = {
+            "action": "subscribe",
+            "subscriptions": [{"topic": "activity", "type": "trades"}],
+        }
+        await ws.send(json.dumps(sub))
+        _log(f"Conectado a {WS_URL}, suscrito a activity/trades")
+        ping_task = asyncio.create_task(_mantener_ping(ws))
+        n_total = n_guardados = n_snapshots = 0
+        ultimo_snapshot = 0.0
+        ultima_purga = time.time()
+        try:
+            while True:
+                raw = await asyncio.wait_for(ws.recv(), timeout=RECV_TIMEOUT_S)
+                if not raw:
+                    continue
+                try:
+                    msg = json.loads(raw)
+                except (json.JSONDecodeError, TypeError):
+                    continue
+                payload = msg.get("payload")
+                if not isinstance(payload, dict) or "proxyWallet" not in payload:
+                    continue
+                ahora = time.time()
+                if ahora - ultima_purga > 60:
+                    # 22-Ago (fix OOM): esta conexión alimenta _bfc.ingerir_trade()
+                    # pero es un PROCESO SEPARADO de _correr_una_conexion() de
+                    # ballenas_firehose_cache.py (que sí purga cada 60s) -- sin
+                    # esta llamada, _trades_por_mercado de ESTE proceso nunca
+                    # respeta VENTANA_RETENCION_S (65min) y crece sin límite.
+                    # Encontrado con ballenas_recientes.json en 101MB/890975
+                    # trades/2187 mercados (mercados con >4000 trades, muy por
+                    # encima de lo que cabe en 65min reales) -- root cause del
+                    # incidente OOM del 22-Ago (ver memoria
+                    # project_oom_fix_firehose_muerto_22ago). Colocado ANTES
+                    # del filtro tracked/whale (/code-review 22-Ago: puesto
+                    # originalmente después del `continue` de la línea de abajo
+                    # solo se ejecutaba en mensajes relevantes, dejando la
+                    # purga sin correr en rachas de trades no-trackeados/no-
+                    # whale, igual que el patrón interno de referencia que
+                    # purga en CADA mensaje recibido, no solo en los guardados.
+                    _bfc.purgar_viejos()
+                    ultima_purga = ahora
+                n_total += 1
+                try:
+                    price = float(payload.get("price", 0) or 0)
+                    size = float(payload.get("size", 0) or 0)
+                except (TypeError, ValueError):
+                    continue
+                usd_value = round(price * size, 4)
+                event_slug = payload.get("eventSlug", "")
+                activo, marco = _parse_updown(event_slug, payload.get("title", ""))
+                es_tracked = activo is not None
+                es_whale = usd_value >= WHALE_USD_MIN
+                if not es_tracked and not es_whale:
+                    continue  # fail-cheap: no guardar el ruido de trades pequeños fuera de nuestro universo
+                fila = {
+                    "timestamp_utc": datetime.now(timezone.utc).isoformat(timespec="milliseconds"),
+                    "ws_timestamp": payload.get("timestamp"),
+                    "condition_id": payload.get("conditionId", ""),
+                    "event_slug": event_slug,
+                    "market_slug": payload.get("slug", ""),
+                    "title": payload.get("title", ""),
+                    "activo": activo or "",
+                    "marco": marco or "",
+                    "categoria_updown_tracked": int(es_tracked),
+                    "categoria_whale": int(es_whale),
+                    "wallet": payload.get("proxyWallet", ""),
+                    "pseudonym": payload.get("pseudonym", ""),
+                    "outcome": payload.get("outcome", ""),
+                    "side": payload.get("side", ""),
+                    "price": price,
+                    "size": size,
+                    "usd_value": usd_value,
+                    "transaction_hash": payload.get("transactionHash", ""),
+                }
+                _escribir_fila(fila)
+                n_guardados += 1
+                if es_tracked:
+                    _bfc.ingerir_trade(activo, marco or "", fila["condition_id"], {
+                        "side": fila["side"],
+                        "price": fila["price"],
+                        "outcome": fila["outcome"],
+                        "proxyWallet": fila["wallet"],
+                        "transaction_hash": fila["transaction_hash"],
+                        "_recibido_ts": time.time(),
+                    })
+                if ahora - ultimo_snapshot >= SNAPSHOT_ESCRITURA_INTERVALO_S:
+                    try:
+                        n_merc, n_tr, n_bytes = _bfc.escribir_snapshot()
+                        n_snapshots += 1
+                        if n_snapshots % 12 == 0:  # loguea el tamaño ~cada 2min (12 volcados x 10s), no cada volcado
+                            _log(f"snapshot ballenas_recientes.json: {n_merc} mercados, {n_tr} trades, {n_bytes/1024:.0f}KB")
+                    except Exception as e:
+                        _log(f"error escribiendo snapshot ballenas ({type(e).__name__}: {e})")
+                    ultimo_snapshot = ahora
+                if n_total % 1000 == 0:
+                    _log(f"{n_total} trades vistos, {n_guardados} guardados (tracked o whale) en esta conexión")
+        finally:
+            ping_task.cancel()
+
+
+async def main() -> None:
+    DIR_SHADOW.mkdir(parents=True, exist_ok=True)
+    while True:
+        try:
+            await _correr_una_conexion()
+        except (websockets.exceptions.ConnectionClosed, OSError, asyncio.TimeoutError) as e:
+            _log(f"Conexión perdida ({type(e).__name__}: {e}) — reintentando en {RECONNECT_ESPERA_S}s")
+        except Exception as e:
+            _log(f"Error inesperado ({type(e).__name__}: {e}) — reintentando en {RECONNECT_ESPERA_S}s")
+        await asyncio.sleep(RECONNECT_ESPERA_S)
+
+
+if __name__ == "__main__":
+    asyncio.run(main())

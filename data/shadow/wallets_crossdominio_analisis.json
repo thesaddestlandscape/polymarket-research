@@ -1,0 +1,1784 @@
+{
+  "generado_utc": "2026-09-01T16:44:48+00:00",
+  "ventana_dias": [
+    "2026-08-27",
+    "2026-08-28",
+    "2026-08-29",
+    "2026-08-30",
+    "2026-08-31",
+    "2026-09-01"
+  ],
+  "umbral_trades_total_baja_frecuencia": 60,
+  "n_wallets_sports": 33336,
+  "n_wallets_crypto": 30009,
+  "n_wallets_crossdominio_total": 7077,
+  "n_wallets_crossdominio_baja_frecuencia": 4116,
+  "n_wallets_crossdominio_con_score_valido_n>=15": 220,
+  "edge_pp_medio_crossdominio_bajafrecuencia": -2.201,
+  "n_wallets_especialistas_baseline": 1262,
+  "edge_pp_medio_especialistas_undominio": -1.049,
+  "weather_incluido": false,
+  "weather_motivo_exclusion": "repo aparte (/root/polymarket-weather), sin overlap de wallets accesible sin tocar su código -- CLAUDE.md prohíbe mezclar",
+  "wallets_crossdominio_baja_frecuencia": [
+    {
+      "wallet": "0xad0be253358a44cefbee8ab5edfb9a85790da514",
+      "n_trades_sports_6d": 55,
+      "n_trades_crypto_6d": 5,
+      "n_trades_total_6d": 60,
+      "score_crypto": null,
+      "score_sports": null
+    },
+    {
+      "wallet": "0xa4d706059f1ed9a6bb3f62b2a6616b07636cfe8d",
+      "n_trades_sports_6d": 9,
+      "n_trades_crypto_6d": 51,
+      "n_trades_total_6d": 60,
+      "score_crypto": null,
+      "score_sports": null
+    },
+    {
+      "wallet": "0x10658d371ae1f09eed503a3a14c8ac6a1a936218",
+      "n_trades_sports_6d": 55,
+      "n_trades_crypto_6d": 5,
+      "n_trades_total_6d": 60,
+      "score_crypto": null,
+      "score_sports": {
+        "n_total": 33,
+        "edge_pp_ponderado": -25.909,
+        "n_entradas": 1,
+        "n_significativas_p<0.05": 1
+      }
+    },
+    {
+      "wallet": "0x56c9fbdeccf198f1f5ad95ace39b24f5f7fb0d9e",
+      "n_trades_sports_6d": 54,
+      "n_trades_crypto_6d": 6,
+      "n_trades_total_6d": 60,
+      "score_crypto": null,
+      "score_sports": {
+        "n_total": 72,
+        "edge_pp_ponderado": -23.219,
+        "n_entradas": 1,
+        "n_significativas_p<0.05": 1
+      }
+    },
+    {
+      "wallet": "0x698bbfabc657d1e08b608b8ce0a58ed808b74426",
+      "n_trades_sports_6d": 46,
+      "n_trades_crypto_6d": 14,
+      "n_trades_total_6d": 60,
+      "score_crypto": null,
+      "score_sports": null
+    },
+    {
+      "wallet": "0xb8acaa8e22ddaa7692fdfd4636f5e3ddf069708d",
+      "n_trades_sports_6d": 15,
+      "n_trades_crypto_6d": 45,
+      "n_trades_total_6d": 60,
+      "score_crypto": {
+        "n_total": 16,
+        "edge_pp_ponderado": 5.807,
+        "n_entradas": 1,
+        "n_significativas_p<0.05": 0
+      },
+      "score_sports": null
+    },
+    {
+      "wallet": "0x07dbf92a4ab37696f033b637a4b23854e04d83b2",
+      "n_trades_sports_6d": 13,
+      "n_trades_crypto_6d": 47,
+      "n_trades_total_6d": 60,
+      "score_crypto": {
+        "n_total": 24,
+        "edge_pp_ponderado": -1.363,
+        "n_entradas": 1,
+        "n_significativas_p<0.05": 0
+      },
+      "score_sports": null
+    },
+    {
+      "wallet": "0xd1688c51b5a99d3095e5a1b3430b134785ff7eb5",
+      "n_trades_sports_6d": 33,
+      "n_trades_crypto_6d": 27,
+      "n_trades_total_6d": 60,
+      "score_crypto": null,
+      "score_sports": null
+    },
+    {
+      "wallet": "0x60a92c8620846d81f5ea17b0564e0d4b7c545a71",
+      "n_trades_sports_6d": 12,
+      "n_trades_crypto_6d": 48,
+      "n_trades_total_6d": 60,
+      "score_crypto": null,
+      "score_sports": null
+    },
+    {
+      "wallet": "0xa3a8bbcc0c5da98b364d679e7d792d7556bc5762",
+      "n_trades_sports_6d": 41,
+      "n_trades_crypto_6d": 19,
+      "n_trades_total_6d": 60,
+      "score_crypto": null,
+      "score_sports": null
+    },
+    {
+      "wallet": "0x4cb03276679d644ec1852f744668f345d41657e0",
+      "n_trades_sports_6d": 42,
+      "n_trades_crypto_6d": 18,
+      "n_trades_total_6d": 60,
+      "score_crypto": null,
+      "score_sports": null
+    },
+    {
+      "wallet": "0x0a56140826656d75a50585a58c5e15fe85b7c6e0",
+      "n_trades_sports_6d": 57,
+      "n_trades_crypto_6d": 3,
+      "n_trades_total_6d": 60,
+      "score_crypto": null,
+      "score_sports": null
+    },
+    {
+      "wallet": "0xf4442dc7b4a513f4ea9658ff00c82cfc71648c90",
+      "n_trades_sports_6d": 52,
+      "n_trades_crypto_6d": 8,
+      "n_trades_total_6d": 60,
+      "score_crypto": null,
+      "score_sports": null
+    },
+    {
+      "wallet": "0x59fc1605562e665985a2f590309cafe991be0102",
+      "n_trades_sports_6d": 55,
+      "n_trades_crypto_6d": 5,
+      "n_trades_total_6d": 60,
+      "score_crypto": null,
+      "score_sports": null
+    },
+    {
+      "wallet": "0x58fc7b96bac2bcf6e59bbe841a1fefc4ada0704f",
+      "n_trades_sports_6d": 54,
+      "n_trades_crypto_6d": 6,
+      "n_trades_total_6d": 60,
+      "score_crypto": null,
+      "score_sports": null
+    },
+    {
+      "wallet": "0x7f01c99a3a09212f19eec379250c228b69949e91",
+      "n_trades_sports_6d": 34,
+      "n_trades_crypto_6d": 26,
+      "n_trades_total_6d": 60,
+      "score_crypto": null,
+      "score_sports": null
+    },
+    {
+      "wallet": "0x45dac7648433bad2157cd199687869082c2172fe",
+      "n_trades_sports_6d": 59,
+      "n_trades_crypto_6d": 1,
+      "n_trades_total_6d": 60,
+      "score_crypto": null,
+      "score_sports": null
+    },
+    {
+      "wallet": "0x9ca0e117a36b510ac6af346963096b2468504b69",
+      "n_trades_sports_6d": 59,
+      "n_trades_crypto_6d": 1,
+      "n_trades_total_6d": 60,
+      "score_crypto": null,
+      "score_sports": null
+    },
+    {
+      "wallet": "0xffbec38f325be5ff7f4c24141ce0434101bf82ce",
+      "n_trades_sports_6d": 57,
+      "n_trades_crypto_6d": 3,
+      "n_trades_total_6d": 60,
+      "score_crypto": null,
+      "score_sports": null
+    },
+    {
+      "wallet": "0x4410108997d7321edf1f364d5baf441acdd84cf1",
+      "n_trades_sports_6d": 2,
+      "n_trades_crypto_6d": 58,
+      "n_trades_total_6d": 60,
+      "score_crypto": null,
+      "score_sports": null
+    },
+    {
+      "wallet": "0xb62d6d7191e78e0872e11fa81269527327d1c8cc",
+      "n_trades_sports_6d": 55,
+      "n_trades_crypto_6d": 5,
+      "n_trades_total_6d": 60,
+      "score_crypto": null,
+      "score_sports": null
+    },
+    {
+      "wallet": "0x51c302201c261873b82ba34ecbe53b177fe29ac3",
+      "n_trades_sports_6d": 18,
+      "n_trades_crypto_6d": 42,
+      "n_trades_total_6d": 60,
+      "score_crypto": null,
+      "score_sports": null
+    },
+    {
+      "wallet": "0x76f48f6be34132a93f3c7bfc5cc81f934bcd3dc9",
+      "n_trades_sports_6d": 10,
+      "n_trades_crypto_6d": 50,
+      "n_trades_total_6d": 60,
+      "score_crypto": null,
+      "score_sports": null
+    },
+    {
+      "wallet": "0x9c036f0e521c7ff087521e2543f1e88c24c38e6e",
+      "n_trades_sports_6d": 55,
+      "n_trades_crypto_6d": 5,
+      "n_trades_total_6d": 60,
+      "score_crypto": null,
+      "score_sports": null
+    },
+    {
+      "wallet": "0x344d6beef6ea5386bae7729d6d2c6c5afa98fd5b",
+      "n_trades_sports_6d": 47,
+      "n_trades_crypto_6d": 13,
+      "n_trades_total_6d": 60,
+      "score_crypto": null,
+      "score_sports": {
+        "n_total": 44,
+        "edge_pp_ponderado": -26.841,
+        "n_entradas": 1,
+        "n_significativas_p<0.05": 1
+      }
+    },
+    {
+      "wallet": "0xb8ffc18b80a29ebc19373e90bd1572600343f5b0",
+      "n_trades_sports_6d": 8,
+      "n_trades_crypto_6d": 52,
+      "n_trades_total_6d": 60,
+      "score_crypto": {
+        "n_total": 30,
+        "edge_pp_ponderado": -4.5,
+        "n_entradas": 1,
+        "n_significativas_p<0.05": 0
+      },
+      "score_sports": null
+    },
+    {
+      "wallet": "0xdc21c3082d65f26f19e4b6fa88e4f674dcb201e9",
+      "n_trades_sports_6d": 48,
+      "n_trades_crypto_6d": 11,
+      "n_trades_total_6d": 59,
+      "score_crypto": null,
+      "score_sports": null
+    },
+    {
+      "wallet": "0x31706006a0ef88b2b8f6d093efbc83b359fbc6a0",
+      "n_trades_sports_6d": 12,
+      "n_trades_crypto_6d": 47,
+      "n_trades_total_6d": 59,
+      "score_crypto": null,
+      "score_sports": {
+        "n_total": 362,
+        "edge_pp_ponderado": -1.119,
+        "n_entradas": 6,
+        "n_significativas_p<0.05": 6
+      }
+    },
+    {
+      "wallet": "0x6a937f25ab00ec1edb4416d46485e7aba7a98e36",
+      "n_trades_sports_6d": 45,
+      "n_trades_crypto_6d": 14,
+      "n_trades_total_6d": 59,
+      "score_crypto": null,
+      "score_sports": null
+    },
+    {
+      "wallet": "0xf395a47ed88c8f18df328680ef0fbbf496e523dd",
+      "n_trades_sports_6d": 55,
+      "n_trades_crypto_6d": 4,
+      "n_trades_total_6d": 59,
+      "score_crypto": null,
+      "score_sports": {
+        "n_total": 53,
+        "edge_pp_ponderado": -25.855,
+        "n_entradas": 2,
+        "n_significativas_p<0.05": 2
+      }
+    },
+    {
+      "wallet": "0x7ecc991edc1c9e8f2e623bd511d63429a0056c37",
+      "n_trades_sports_6d": 53,
+      "n_trades_crypto_6d": 6,
+      "n_trades_total_6d": 59,
+      "score_crypto": null,
+      "score_sports": null
+    },
+    {
+      "wallet": "0x52e3180759acc52c20828a4842fa5819daf8da5a",
+      "n_trades_sports_6d": 2,
+      "n_trades_crypto_6d": 57,
+      "n_trades_total_6d": 59,
+      "score_crypto": null,
+      "score_sports": null
+    },
+    {
+      "wallet": "0xbf7fe55c0738cb588cae34267b4ed838e54fd110",
+      "n_trades_sports_6d": 58,
+      "n_trades_crypto_6d": 1,
+      "n_trades_total_6d": 59,
+      "score_crypto": null,
+      "score_sports": null
+    },
+    {
+      "wallet": "0xecf3434ca49093b6f927ffdcbe2218f264323859",
+      "n_trades_sports_6d": 3,
+      "n_trades_crypto_6d": 56,
+      "n_trades_total_6d": 59,
+      "score_crypto": null,
+      "score_sports": null
+    },
+    {
+      "wallet": "0x9ddfa4d5b954379a03d19f87df36b9820b862c83",
+      "n_trades_sports_6d": 38,
+      "n_trades_crypto_6d": 21,
+      "n_trades_total_6d": 59,
+      "score_crypto": null,
+      "score_sports": null
+    },
+    {
+      "wallet": "0x25a48fa0aaaa0b8a51822f4497989b9e312469f6",
+      "n_trades_sports_6d": 55,
+      "n_trades_crypto_6d": 4,
+      "n_trades_total_6d": 59,
+      "score_crypto": null,
+      "score_sports": null
+    },
+    {
+      "wallet": "0x57b7f0f6959db3ae1e90078d80c636921e44f0af",
+      "n_trades_sports_6d": 16,
+      "n_trades_crypto_6d": 43,
+      "n_trades_total_6d": 59,
+      "score_crypto": {
+        "n_total": 15,
+        "edge_pp_ponderado": 0.578,
+        "n_entradas": 1,
+        "n_significativas_p<0.05": 0
+      },
+      "score_sports": null
+    },
+    {
+      "wallet": "0xc1ba56bd51d2d230449d0bbfd919832ec09eb1ed",
+      "n_trades_sports_6d": 16,
+      "n_trades_crypto_6d": 43,
+      "n_trades_total_6d": 59,
+      "score_crypto": null,
+      "score_sports": null
+    },
+    {
+      "wallet": "0x2f9542efdd6dd92c0e396413acf3c9da48cce270",
+      "n_trades_sports_6d": 58,
+      "n_trades_crypto_6d": 1,
+      "n_trades_total_6d": 59,
+      "score_crypto": null,
+      "score_sports": null
+    },
+    {
+      "wallet": "0xce2b583424e27188d9e002fc831d814a4f763a57",
+      "n_trades_sports_6d": 37,
+      "n_trades_crypto_6d": 22,
+      "n_trades_total_6d": 59,
+      "score_crypto": null,
+      "score_sports": null
+    },
+    {
+      "wallet": "0xd88f92d4eb895cacd1276144c2e5bd9732029f70",
+      "n_trades_sports_6d": 10,
+      "n_trades_crypto_6d": 49,
+      "n_trades_total_6d": 59,
+      "score_crypto": null,
+      "score_sports": null
+    },
+    {
+      "wallet": "0xe98c6194374418b1d1b27321f025bd64ac2c8792",
+      "n_trades_sports_6d": 21,
+      "n_trades_crypto_6d": 38,
+      "n_trades_total_6d": 59,
+      "score_crypto": null,
+      "score_sports": null
+    },
+    {
+      "wallet": "0x6a7687c8bc3da109a2d74bdcc087b8151f3b37e5",
+      "n_trades_sports_6d": 3,
+      "n_trades_crypto_6d": 56,
+      "n_trades_total_6d": 59,
+      "score_crypto": null,
+      "score_sports": null
+    },
+    {
+      "wallet": "0xb48a929f649339970f15b8994b3b57065e800540",
+      "n_trades_sports_6d": 3,
+      "n_trades_crypto_6d": 56,
+      "n_trades_total_6d": 59,
+      "score_crypto": {
+        "n_total": 26,
+        "edge_pp_ponderado": -5.736,
+        "n_entradas": 1,
+        "n_significativas_p<0.05": 0
+      },
+      "score_sports": null
+    },
+    {
+      "wallet": "0xf16ea77df0f38d332969ca58a42129eab9c943af",
+      "n_trades_sports_6d": 54,
+      "n_trades_crypto_6d": 5,
+      "n_trades_total_6d": 59,
+      "score_crypto": null,
+      "score_sports": null
+    },
+    {
+      "wallet": "0xe1faef87550af372f64bdf5dc14daf0d678e9c2c",
+      "n_trades_sports_6d": 51,
+      "n_trades_crypto_6d": 8,
+      "n_trades_total_6d": 59,
+      "score_crypto": null,
+      "score_sports": {
+        "n_total": 20,
+        "edge_pp_ponderado": 53.1,
+        "n_entradas": 1,
+        "n_significativas_p<0.05": 1
+      }
+    },
+    {
+      "wallet": "0xfc3427a8069d1ca46adf3945d9e0e52d0e2b0953",
+      "n_trades_sports_6d": 51,
+      "n_trades_crypto_6d": 8,
+      "n_trades_total_6d": 59,
+      "score_crypto": null,
+      "score_sports": null
+    },
+    {
+      "wallet": "0xb619ed5b378053f8309c307d2f7adf9c13665068",
+      "n_trades_sports_6d": 54,
+      "n_trades_crypto_6d": 5,
+      "n_trades_total_6d": 59,
+      "score_crypto": null,
+      "score_sports": {
+        "n_total": 202,
+        "edge_pp_ponderado": 8.094,
+        "n_entradas": 4,
+        "n_significativas_p<0.05": 4
+      }
+    },
+    {
+      "wallet": "0x4bf4949d9c899a7202c65ba406cddcb027287e67",
+      "n_trades_sports_6d": 58,
+      "n_trades_crypto_6d": 1,
+      "n_trades_total_6d": 59,
+      "score_crypto": null,
+      "score_sports": null
+    },
+    {
+      "wallet": "0xc641087e325834e0746ac80901570ef05a39af3d",
+      "n_trades_sports_6d": 48,
+      "n_trades_crypto_6d": 11,
+      "n_trades_total_6d": 59,
+      "score_crypto": null,
+      "score_sports": null
+    },
+    {
+      "wallet": "0xdfe4f8e057dbe77485d21c69beeaf5d6c2173cbd",
+      "n_trades_sports_6d": 58,
+      "n_trades_crypto_6d": 1,
+      "n_trades_total_6d": 59,
+      "score_crypto": null,
+      "score_sports": null
+    },
+    {
+      "wallet": "0xfb25772398f6fb04be829221cca352b793e40e5b",
+      "n_trades_sports_6d": 42,
+      "n_trades_crypto_6d": 17,
+      "n_trades_total_6d": 59,
+      "score_crypto": null,
+      "score_sports": null
+    },
+    {
+      "wallet": "0xc043236078115702133ba5ce7b8a7f3774f8edce",
+      "n_trades_sports_6d": 8,
+      "n_trades_crypto_6d": 51,
+      "n_trades_total_6d": 59,
+      "score_crypto": null,
+      "score_sports": null
+    },
+    {
+      "wallet": "0x54096e86cac2d70d04fd98ee16f633c7e9d479db",
+      "n_trades_sports_6d": 30,
+      "n_trades_crypto_6d": 29,
+      "n_trades_total_6d": 59,
+      "score_crypto": null,
+      "score_sports": null
+    },
+    {
+      "wallet": "0xc2c32c7128a59035bfec95451c52e2248041bfb0",
+      "n_trades_sports_6d": 2,
+      "n_trades_crypto_6d": 56,
+      "n_trades_total_6d": 58,
+      "score_crypto": null,
+      "score_sports": null
+    },
+    {
+      "wallet": "0xb3cb6782f5c39aafebad7a72830f3ed97ade6f2f",
+      "n_trades_sports_6d": 1,
+      "n_trades_crypto_6d": 57,
+      "n_trades_total_6d": 58,
+      "score_crypto": {
+        "n_total": 58,
+        "edge_pp_ponderado": -6.993,
+        "n_entradas": 1,
+        "n_significativas_p<0.05": 0
+      },
+      "score_sports": null
+    },
+    {
+      "wallet": "0x32c33e94811907ef68321e9e97b1449030cf5284",
+      "n_trades_sports_6d": 42,
+      "n_trades_crypto_6d": 16,
+      "n_trades_total_6d": 58,
+      "score_crypto": null,
+      "score_sports": null
+    },
+    {
+      "wallet": "0xf549eae2a6792bcf7c985ab758d4463c367f130a",
+      "n_trades_sports_6d": 1,
+      "n_trades_crypto_6d": 57,
+      "n_trades_total_6d": 58,
+      "score_crypto": null,
+      "score_sports": null
+    },
+    {
+      "wallet": "0x40b96182a35fbe3c2bb4162e036ecf0c786db002",
+      "n_trades_sports_6d": 53,
+      "n_trades_crypto_6d": 5,
+      "n_trades_total_6d": 58,
+      "score_crypto": null,
+      "score_sports": {
+        "n_total": 35,
+        "edge_pp_ponderado": -24.257,
+        "n_entradas": 1,
+        "n_significativas_p<0.05": 1
+      }
+    },
+    {
+      "wallet": "0xc43df4fed57b714d12185a63b9798ff51fde79a5",
+      "n_trades_sports_6d": 56,
+      "n_trades_crypto_6d": 2,
+      "n_trades_total_6d": 58,
+      "score_crypto": null,
+      "score_sports": null
+    },
+    {
+      "wallet": "0x184cca568d3e0eaee8e6301456207fe45d58984f",
+      "n_trades_sports_6d": 53,
+      "n_trades_crypto_6d": 5,
+      "n_trades_total_6d": 58,
+      "score_crypto": null,
+      "score_sports": {
+        "n_total": 21,
+        "edge_pp_ponderado": 29.491,
+        "n_entradas": 1,
+        "n_significativas_p<0.05": 1
+      }
+    },
+    {
+      "wallet": "0x26273b50e0dce6f2f17795f28ca7a9303517fa13",
+      "n_trades_sports_6d": 42,
+      "n_trades_crypto_6d": 16,
+      "n_trades_total_6d": 58,
+      "score_crypto": null,
+      "score_sports": null
+    },
+    {
+      "wallet": "0x0d587a1d9a47819589976993cb53d7fc00d8fb04",
+      "n_trades_sports_6d": 2,
+      "n_trades_crypto_6d": 56,
+      "n_trades_total_6d": 58,
+      "score_crypto": null,
+      "score_sports": null
+    },
+    {
+      "wallet": "0x1f07b4cc17002c353e208aa8e51223a61d15e887",
+      "n_trades_sports_6d": 15,
+      "n_trades_crypto_6d": 43,
+      "n_trades_total_6d": 58,
+      "score_crypto": null,
+      "score_sports": null
+    },
+    {
+      "wallet": "0xc1519e026778e01d2482b9759d4294b560f82501",
+      "n_trades_sports_6d": 55,
+      "n_trades_crypto_6d": 3,
+      "n_trades_total_6d": 58,
+      "score_crypto": null,
+      "score_sports": null
+    },
+    {
+      "wallet": "0x70a26f9f86f717876486e3d06607bf1e68035599",
+      "n_trades_sports_6d": 38,
+      "n_trades_crypto_6d": 20,
+      "n_trades_total_6d": 58,
+      "score_crypto": null,
+      "score_sports": null
+    },
+    {
+      "wallet": "0xb0ebcf84855ecf05fc98425848336a47fc57990f",
+      "n_trades_sports_6d": 53,
+      "n_trades_crypto_6d": 5,
+      "n_trades_total_6d": 58,
+      "score_crypto": null,
+      "score_sports": null
+    },
+    {
+      "wallet": "0xc53da918c76cac5930b9e93369549eeb6f894346",
+      "n_trades_sports_6d": 46,
+      "n_trades_crypto_6d": 12,
+      "n_trades_total_6d": 58,
+      "score_crypto": null,
+      "score_sports": null
+    },
+    {
+      "wallet": "0x4b10fb0719201c74bc2ca2fe5b843b4209c87bde",
+      "n_trades_sports_6d": 24,
+      "n_trades_crypto_6d": 34,
+      "n_trades_total_6d": 58,
+      "score_crypto": null,
+      "score_sports": null
+    },
+    {
+      "wallet": "0x941725805414ea4356e3917989ec7c71a1a88440",
+      "n_trades_sports_6d": 57,
+      "n_trades_crypto_6d": 1,
+      "n_trades_total_6d": 58,
+      "score_crypto": null,
+      "score_sports": null
+    },
+    {
+      "wallet": "0x0b3586028b72ff1d619f1f33da7b90de59b4bdd3",
+      "n_trades_sports_6d": 55,
+      "n_trades_crypto_6d": 3,
+      "n_trades_total_6d": 58,
+      "score_crypto": null,
+      "score_sports": null
+    },
+    {
+      "wallet": "0x53305381f980bdf081e37b284ab72cd9e2560e4d",
+      "n_trades_sports_6d": 12,
+      "n_trades_crypto_6d": 46,
+      "n_trades_total_6d": 58,
+      "score_crypto": null,
+      "score_sports": null
+    },
+    {
+      "wallet": "0x98fc21b64d321cf5e8c69e9d9a575aa42385a4a2",
+      "n_trades_sports_6d": 26,
+      "n_trades_crypto_6d": 32,
+      "n_trades_total_6d": 58,
+      "score_crypto": null,
+      "score_sports": null
+    },
+    {
+      "wallet": "0x43c6aaf11bb6ea9549a73646b32f315e7ae0a427",
+      "n_trades_sports_6d": 7,
+      "n_trades_crypto_6d": 51,
+      "n_trades_total_6d": 58,
+      "score_crypto": null,
+      "score_sports": null
+    },
+    {
+      "wallet": "0x2c8b174fb84cd6512239e4df1d8d368b6b7fb9a7",
+      "n_trades_sports_6d": 22,
+      "n_trades_crypto_6d": 36,
+      "n_trades_total_6d": 58,
+      "score_crypto": null,
+      "score_sports": null
+    },
+    {
+      "wallet": "0xbbeaf4e416d9ec0d954e205340eaa208d52cd783",
+      "n_trades_sports_6d": 54,
+      "n_trades_crypto_6d": 4,
+      "n_trades_total_6d": 58,
+      "score_crypto": null,
+      "score_sports": null
+    },
+    {
+      "wallet": "0x843bd120ff05e41d665402b44c59baa1e3d82673",
+      "n_trades_sports_6d": 10,
+      "n_trades_crypto_6d": 48,
+      "n_trades_total_6d": 58,
+      "score_crypto": null,
+      "score_sports": null
+    },
+    {
+      "wallet": "0x4e9aabc5de284016a2a78e873c0d310dd54cbc08",
+      "n_trades_sports_6d": 51,
+      "n_trades_crypto_6d": 7,
+      "n_trades_total_6d": 58,
+      "score_crypto": null,
+      "score_sports": null
+    },
+    {
+      "wallet": "0x9d29e50a7c88df520624d9db03af3b6d267a5111",
+      "n_trades_sports_6d": 1,
+      "n_trades_crypto_6d": 57,
+      "n_trades_total_6d": 58,
+      "score_crypto": null,
+      "score_sports": null
+    },
+    {
+      "wallet": "0x8c3ae15e0828149d80cbbd184b420dbef6a350ae",
+      "n_trades_sports_6d": 24,
+      "n_trades_crypto_6d": 34,
+      "n_trades_total_6d": 58,
+      "score_crypto": null,
+      "score_sports": null
+    },
+    {
+      "wallet": "0xe51a98358fb64fe961839c672ee5fd2e7a3359e4",
+      "n_trades_sports_6d": 7,
+      "n_trades_crypto_6d": 50,
+      "n_trades_total_6d": 57,
+      "score_crypto": {
+        "n_total": 15,
+        "edge_pp_ponderado": -10.399,
+        "n_entradas": 1,
+        "n_significativas_p<0.05": 0
+      },
+      "score_sports": null
+    },
+    {
+      "wallet": "0x569020f0b515d13d95eab1818abdc558078f7a58",
+      "n_trades_sports_6d": 56,
+      "n_trades_crypto_6d": 1,
+      "n_trades_total_6d": 57,
+      "score_crypto": null,
+      "score_sports": null
+    },
+    {
+      "wallet": "0x581e745bc168e7d8824f7d257b844b5ed7f11914",
+      "n_trades_sports_6d": 11,
+      "n_trades_crypto_6d": 46,
+      "n_trades_total_6d": 57,
+      "score_crypto": null,
+      "score_sports": null
+    },
+    {
+      "wallet": "0xc793eaa2a7fbcbbfc37750d96bcc1da8b783e656",
+      "n_trades_sports_6d": 56,
+      "n_trades_crypto_6d": 1,
+      "n_trades_total_6d": 57,
+      "score_crypto": null,
+      "score_sports": null
+    },
+    {
+      "wallet": "0xf6b870d8d0a05a0a5a8ae1e2bedd6534b6c1ce54",
+      "n_trades_sports_6d": 36,
+      "n_trades_crypto_6d": 21,
+      "n_trades_total_6d": 57,
+      "score_crypto": null,
+      "score_sports": null
+    },
+    {
+      "wallet": "0x0a7ee14493d5e6924708d2db412fb894de06b805",
+      "n_trades_sports_6d": 55,
+      "n_trades_crypto_6d": 2,
+      "n_trades_total_6d": 57,
+      "score_crypto": null,
+      "score_sports": null
+    },
+    {
+      "wallet": "0x45720deb102f700682bfcb19b5872b5022ad83ff",
+      "n_trades_sports_6d": 35,
+      "n_trades_crypto_6d": 22,
+      "n_trades_total_6d": 57,
+      "score_crypto": null,
+      "score_sports": null
+    },
+    {
+      "wallet": "0x68b695136d475ca38ac5c8046b03fcba902999b4",
+      "n_trades_sports_6d": 55,
+      "n_trades_crypto_6d": 2,
+      "n_trades_total_6d": 57,
+      "score_crypto": null,
+      "score_sports": null
+    },
+    {
+      "wallet": "0xeed3eae2b3ed69233830b3e3d0765cd3a183039b",
+      "n_trades_sports_6d": 5,
+      "n_trades_crypto_6d": 52,
+      "n_trades_total_6d": 57,
+      "score_crypto": null,
+      "score_sports": null
+    },
+    {
+      "wallet": "0x404cba6333480b9c97d798e7dd9b7ca4c25febc1",
+      "n_trades_sports_6d": 2,
+      "n_trades_crypto_6d": 55,
+      "n_trades_total_6d": 57,
+      "score_crypto": null,
+      "score_sports": null
+    },
+    {
+      "wallet": "0xabd35e799ccc855f1f267537da6bee3435c76635",
+      "n_trades_sports_6d": 32,
+      "n_trades_crypto_6d": 25,
+      "n_trades_total_6d": 57,
+      "score_crypto": null,
+      "score_sports": null
+    },
+    {
+      "wallet": "0x39eae31c06b5243c5b8163747279af8f3a96ca1f",
+      "n_trades_sports_6d": 4,
+      "n_trades_crypto_6d": 53,
+      "n_trades_total_6d": 57,
+      "score_crypto": {
+        "n_total": 15,
+        "edge_pp_ponderado": 5.6,
+        "n_entradas": 1,
+        "n_significativas_p<0.05": 0
+      },
+      "score_sports": null
+    },
+    {
+      "wallet": "0x4c104e61febf3944fcfc05ee94551b815ffdb6a4",
+      "n_trades_sports_6d": 47,
+      "n_trades_crypto_6d": 10,
+      "n_trades_total_6d": 57,
+      "score_crypto": null,
+      "score_sports": null
+    },
+    {
+      "wallet": "0xcb4780614b8abc4aa0218a8fd4d86c9d6ec07db9",
+      "n_trades_sports_6d": 1,
+      "n_trades_crypto_6d": 56,
+      "n_trades_total_6d": 57,
+      "score_crypto": null,
+      "score_sports": null
+    },
+    {
+      "wallet": "0x246be8a4e3805e318801b79ad1ee1268d5fbfb5b",
+      "n_trades_sports_6d": 5,
+      "n_trades_crypto_6d": 52,
+      "n_trades_total_6d": 57,
+      "score_crypto": null,
+      "score_sports": null
+    },
+    {
+      "wallet": "0x7d8f0b336127827de3837cd9aa6c2e5810226dfd",
+      "n_trades_sports_6d": 49,
+      "n_trades_crypto_6d": 8,
+      "n_trades_total_6d": 57,
+      "score_crypto": null,
+      "score_sports": null
+    },
+    {
+      "wallet": "0xd45d27ff96f9cc6848a772209c3bd117639477b9",
+      "n_trades_sports_6d": 7,
+      "n_trades_crypto_6d": 50,
+      "n_trades_total_6d": 57,
+      "score_crypto": null,
+      "score_sports": null
+    },
+    {
+      "wallet": "0xa5daf2db197ee5954b0aecbb670c083ad061ed2e",
+      "n_trades_sports_6d": 45,
+      "n_trades_crypto_6d": 12,
+      "n_trades_total_6d": 57,
+      "score_crypto": null,
+      "score_sports": null
+    },
+    {
+      "wallet": "0x8af52543f0b592df4b4bd25204e5868f05424bba",
+      "n_trades_sports_6d": 38,
+      "n_trades_crypto_6d": 19,
+      "n_trades_total_6d": 57,
+      "score_crypto": null,
+      "score_sports": null
+    },
+    {
+      "wallet": "0x50f144c4a6fe271a20feecc1e7fe29a02eabb265",
+      "n_trades_sports_6d": 50,
+      "n_trades_crypto_6d": 7,
+      "n_trades_total_6d": 57,
+      "score_crypto": null,
+      "score_sports": null
+    },
+    {
+      "wallet": "0x268a215b84e0b273821342ff43f5c876387a54e1",
+      "n_trades_sports_6d": 3,
+      "n_trades_crypto_6d": 54,
+      "n_trades_total_6d": 57,
+      "score_crypto": null,
+      "score_sports": null
+    },
+    {
+      "wallet": "0x666ec64aad27710608dfae3679842908a3bce195",
+      "n_trades_sports_6d": 56,
+      "n_trades_crypto_6d": 1,
+      "n_trades_total_6d": 57,
+      "score_crypto": null,
+      "score_sports": null
+    },
+    {
+      "wallet": "0x3663ed135115e034de3a9ad8cdca8493e8d68950",
+      "n_trades_sports_6d": 49,
+      "n_trades_crypto_6d": 8,
+      "n_trades_total_6d": 57,
+      "score_crypto": null,
+      "score_sports": null
+    },
+    {
+      "wallet": "0x5b1fd7a4d8be6504c2d18c6c6a62a50647cc57ad",
+      "n_trades_sports_6d": 46,
+      "n_trades_crypto_6d": 11,
+      "n_trades_total_6d": 57,
+      "score_crypto": null,
+      "score_sports": null
+    },
+    {
+      "wallet": "0xb64d9216729f10d8a282e921818d8f75d4037392",
+      "n_trades_sports_6d": 45,
+      "n_trades_crypto_6d": 12,
+      "n_trades_total_6d": 57,
+      "score_crypto": null,
+      "score_sports": null
+    },
+    {
+      "wallet": "0xd475865af0101fb0e36192f99d14f88e0e94bbfb",
+      "n_trades_sports_6d": 4,
+      "n_trades_crypto_6d": 53,
+      "n_trades_total_6d": 57,
+      "score_crypto": {
+        "n_total": 24,
+        "edge_pp_ponderado": -5.708,
+        "n_entradas": 1,
+        "n_significativas_p<0.05": 0
+      },
+      "score_sports": null
+    },
+    {
+      "wallet": "0x04e6840687847a98f9ecfbb512a8c8b98d073914",
+      "n_trades_sports_6d": 28,
+      "n_trades_crypto_6d": 29,
+      "n_trades_total_6d": 57,
+      "score_crypto": null,
+      "score_sports": null
+    },
+    {
+      "wallet": "0x5fd86de46798abe62b3b1a45911477a6bd6cce32",
+      "n_trades_sports_6d": 55,
+      "n_trades_crypto_6d": 2,
+      "n_trades_total_6d": 57,
+      "score_crypto": null,
+      "score_sports": {
+        "n_total": 20,
+        "edge_pp_ponderado": -31.484,
+        "n_entradas": 1,
+        "n_significativas_p<0.05": 1
+      }
+    },
+    {
+      "wallet": "0x3be2fc97e913079f0f6d563c7a5f01fc349591a0",
+      "n_trades_sports_6d": 45,
+      "n_trades_crypto_6d": 11,
+      "n_trades_total_6d": 56,
+      "score_crypto": null,
+      "score_sports": null
+    },
+    {
+      "wallet": "0xfa437237273a4b9d7f511d7abdc466309af2a23d",
+      "n_trades_sports_6d": 3,
+      "n_trades_crypto_6d": 53,
+      "n_trades_total_6d": 56,
+      "score_crypto": null,
+      "score_sports": null
+    },
+    {
+      "wallet": "0xbfba06280db29761d681f3257b1fa283441c583c",
+      "n_trades_sports_6d": 17,
+      "n_trades_crypto_6d": 39,
+      "n_trades_total_6d": 56,
+      "score_crypto": null,
+      "score_sports": null
+    },
+    {
+      "wallet": "0xfa866e24583108bda587c59263ad71327b222f4e",
+      "n_trades_sports_6d": 36,
+      "n_trades_crypto_6d": 20,
+      "n_trades_total_6d": 56,
+      "score_crypto": null,
+      "score_sports": null
+    },
+    {
+      "wallet": "0x938ca81f5fda13ce5b44b504badc6f4361b98df4",
+      "n_trades_sports_6d": 33,
+      "n_trades_crypto_6d": 23,
+      "n_trades_total_6d": 56,
+      "score_crypto": null,
+      "score_sports": null
+    },
+    {
+      "wallet": "0x4fb07931c7185e4c71f770881e76ae085f166197",
+      "n_trades_sports_6d": 53,
+      "n_trades_crypto_6d": 3,
+      "n_trades_total_6d": 56,
+      "score_crypto": null,
+      "score_sports": null
+    },
+    {
+      "wallet": "0xdf0c0cc0f950c9963c0abf3834b108b188816ab2",
+      "n_trades_sports_6d": 51,
+      "n_trades_crypto_6d": 5,
+      "n_trades_total_6d": 56,
+      "score_crypto": null,
+      "score_sports": {
+        "n_total": 18,
+        "edge_pp_ponderado": -30.567,
+        "n_entradas": 1,
+        "n_significativas_p<0.05": 1
+      }
+    },
+    {
+      "wallet": "0x91b82ab931c8961da82e0de7c404833120ca6b28",
+      "n_trades_sports_6d": 4,
+      "n_trades_crypto_6d": 52,
+      "n_trades_total_6d": 56,
+      "score_crypto": null,
+      "score_sports": null
+    },
+    {
+      "wallet": "0xfb8f297fe31dcbc084bc1a6240918514a4c44a0b",
+      "n_trades_sports_6d": 55,
+      "n_trades_crypto_6d": 1,
+      "n_trades_total_6d": 56,
+      "score_crypto": null,
+      "score_sports": null
+    },
+    {
+      "wallet": "0x74ef37655b2a0e1b57082e160a16fa2f23571ac6",
+      "n_trades_sports_6d": 46,
+      "n_trades_crypto_6d": 10,
+      "n_trades_total_6d": 56,
+      "score_crypto": null,
+      "score_sports": null
+    },
+    {
+      "wallet": "0x67066d10ba694cb17aa281571c0d5b1c9f332341",
+      "n_trades_sports_6d": 54,
+      "n_trades_crypto_6d": 2,
+      "n_trades_total_6d": 56,
+      "score_crypto": null,
+      "score_sports": null
+    },
+    {
+      "wallet": "0x86c878cde72660ec52f5e6f0f0438b76de8fc867",
+      "n_trades_sports_6d": 44,
+      "n_trades_crypto_6d": 12,
+      "n_trades_total_6d": 56,
+      "score_crypto": null,
+      "score_sports": null
+    },
+    {
+      "wallet": "0xc6afa28f1aded8b64d8792534337eff28b1bd575",
+      "n_trades_sports_6d": 22,
+      "n_trades_crypto_6d": 34,
+      "n_trades_total_6d": 56,
+      "score_crypto": null,
+      "score_sports": null
+    },
+    {
+      "wallet": "0x7bccd2d3dfd370f65aa3cc5d51c7c9649ad9b4fa",
+      "n_trades_sports_6d": 53,
+      "n_trades_crypto_6d": 3,
+      "n_trades_total_6d": 56,
+      "score_crypto": null,
+      "score_sports": null
+    },
+    {
+      "wallet": "0xb63d2c013589f469350d55d9fce81b47243f239f",
+      "n_trades_sports_6d": 52,
+      "n_trades_crypto_6d": 4,
+      "n_trades_total_6d": 56,
+      "score_crypto": null,
+      "score_sports": {
+        "n_total": 121,
+        "edge_pp_ponderado": 7.94,
+        "n_entradas": 1,
+        "n_significativas_p<0.05": 1
+      }
+    },
+    {
+      "wallet": "0xdce0d1016ead1525fc8c7b6513f989a60ff02daf",
+      "n_trades_sports_6d": 32,
+      "n_trades_crypto_6d": 24,
+      "n_trades_total_6d": 56,
+      "score_crypto": null,
+      "score_sports": null
+    },
+    {
+      "wallet": "0x23395c3276a6788457d168da579fb5c254ceadc2",
+      "n_trades_sports_6d": 54,
+      "n_trades_crypto_6d": 2,
+      "n_trades_total_6d": 56,
+      "score_crypto": null,
+      "score_sports": null
+    },
+    {
+      "wallet": "0x33556ae900e5d2a18f8de35cce10b2a572c7384e",
+      "n_trades_sports_6d": 3,
+      "n_trades_crypto_6d": 53,
+      "n_trades_total_6d": 56,
+      "score_crypto": null,
+      "score_sports": null
+    },
+    {
+      "wallet": "0x41b4cd880a61de2f5728594decf7f2cbfc2a10da",
+      "n_trades_sports_6d": 40,
+      "n_trades_crypto_6d": 16,
+      "n_trades_total_6d": 56,
+      "score_crypto": null,
+      "score_sports": null
+    },
+    {
+      "wallet": "0xc65c0127ed73a404a8c042de0889056bd082dd56",
+      "n_trades_sports_6d": 53,
+      "n_trades_crypto_6d": 2,
+      "n_trades_total_6d": 55,
+      "score_crypto": null,
+      "score_sports": null
+    },
+    {
+      "wallet": "0x691d8f0450ec1b0490e0303f745de267138866ab",
+      "n_trades_sports_6d": 35,
+      "n_trades_crypto_6d": 20,
+      "n_trades_total_6d": 55,
+      "score_crypto": null,
+      "score_sports": null
+    },
+    {
+      "wallet": "0x561cec11bf71f0742c0ded870ef6dca3449dddd7",
+      "n_trades_sports_6d": 7,
+      "n_trades_crypto_6d": 48,
+      "n_trades_total_6d": 55,
+      "score_crypto": {
+        "n_total": 30,
+        "edge_pp_ponderado": -3.155,
+        "n_entradas": 1,
+        "n_significativas_p<0.05": 0
+      },
+      "score_sports": null
+    },
+    {
+      "wallet": "0x0b083f44d065a7b9ef54e1e96283c0288c1102ab",
+      "n_trades_sports_6d": 36,
+      "n_trades_crypto_6d": 19,
+      "n_trades_total_6d": 55,
+      "score_crypto": null,
+      "score_sports": {
+        "n_total": 72,
+        "edge_pp_ponderado": 32.361,
+        "n_entradas": 2,
+        "n_significativas_p<0.05": 2
+      }
+    },
+    {
+      "wallet": "0xc88adcf407a63baa2e470998c24f6fc0d1867e26",
+      "n_trades_sports_6d": 35,
+      "n_trades_crypto_6d": 20,
+      "n_trades_total_6d": 55,
+      "score_crypto": null,
+      "score_sports": null
+    },
+    {
+      "wallet": "0xfd09f163a3a15104875e7f9cbba8000c14635e37",
+      "n_trades_sports_6d": 45,
+      "n_trades_crypto_6d": 10,
+      "n_trades_total_6d": 55,
+      "score_crypto": null,
+      "score_sports": null
+    },
+    {
+      "wallet": "0xd5ec915a06fe8c6d20b6ae402ca5ad85f5321baf",
+      "n_trades_sports_6d": 2,
+      "n_trades_crypto_6d": 53,
+      "n_trades_total_6d": 55,
+      "score_crypto": {
+        "n_total": 65,
+        "edge_pp_ponderado": -3.72,
+        "n_entradas": 1,
+        "n_significativas_p<0.05": 0
+      },
+      "score_sports": null
+    },
+    {
+      "wallet": "0x2fe7bf9fa9ea1ccfb5f995437311095941500c14",
+      "n_trades_sports_6d": 54,
+      "n_trades_crypto_6d": 1,
+      "n_trades_total_6d": 55,
+      "score_crypto": null,
+      "score_sports": null
+    },
+    {
+      "wallet": "0x28b844119af83effc4b7081a56357e1dfe9cbd70",
+      "n_trades_sports_6d": 43,
+      "n_trades_crypto_6d": 12,
+      "n_trades_total_6d": 55,
+      "score_crypto": null,
+      "score_sports": null
+    },
+    {
+      "wallet": "0xf05c56c28dea0bbc2a386ad61d4742295a983634",
+      "n_trades_sports_6d": 31,
+      "n_trades_crypto_6d": 24,
+      "n_trades_total_6d": 55,
+      "score_crypto": null,
+      "score_sports": null
+    },
+    {
+      "wallet": "0xe7952335816d6236573e0fe0b174de7d41796879",
+      "n_trades_sports_6d": 47,
+      "n_trades_crypto_6d": 8,
+      "n_trades_total_6d": 55,
+      "score_crypto": null,
+      "score_sports": null
+    },
+    {
+      "wallet": "0xc8ca4205453705fcb0dd947a311258d6813c0097",
+      "n_trades_sports_6d": 50,
+      "n_trades_crypto_6d": 5,
+      "n_trades_total_6d": 55,
+      "score_crypto": null,
+      "score_sports": null
+    },
+    {
+      "wallet": "0xf5660e8556d9f83eb4a7be121e4bc6df288a85d6",
+      "n_trades_sports_6d": 6,
+      "n_trades_crypto_6d": 49,
+      "n_trades_total_6d": 55,
+      "score_crypto": null,
+      "score_sports": null
+    },
+    {
+      "wallet": "0x204b382df532a8106768ccceaf699a89c4ed8ca3",
+      "n_trades_sports_6d": 2,
+      "n_trades_crypto_6d": 53,
+      "n_trades_total_6d": 55,
+      "score_crypto": null,
+      "score_sports": null
+    },
+    {
+      "wallet": "0x8488ef25f79c0cf2ffdff307973b2ac10464588c",
+      "n_trades_sports_6d": 44,
+      "n_trades_crypto_6d": 11,
+      "n_trades_total_6d": 55,
+      "score_crypto": null,
+      "score_sports": null
+    },
+    {
+      "wallet": "0x2772868905c267a8f779c3e579b4ec13b864ac19",
+      "n_trades_sports_6d": 46,
+      "n_trades_crypto_6d": 9,
+      "n_trades_total_6d": 55,
+      "score_crypto": null,
+      "score_sports": {
+        "n_total": 56,
+        "edge_pp_ponderado": 22.857,
+        "n_entradas": 1,
+        "n_significativas_p<0.05": 1
+      }
+    },
+    {
+      "wallet": "0x7170bdd5bcc397511600486ee71966ee9a6d2bd0",
+      "n_trades_sports_6d": 50,
+      "n_trades_crypto_6d": 5,
+      "n_trades_total_6d": 55,
+      "score_crypto": null,
+      "score_sports": null
+    },
+    {
+      "wallet": "0xeac7a7a8c000e0d46a10c341adfbd8cffb611531",
+      "n_trades_sports_6d": 36,
+      "n_trades_crypto_6d": 19,
+      "n_trades_total_6d": 55,
+      "score_crypto": null,
+      "score_sports": null
+    },
+    {
+      "wallet": "0xe5f0ae9cc9aef77ae3c2a64c9e69caa3f335dc1d",
+      "n_trades_sports_6d": 25,
+      "n_trades_crypto_6d": 30,
+      "n_trades_total_6d": 55,
+      "score_crypto": null,
+      "score_sports": null
+    },
+    {
+      "wallet": "0x815b20a25768b34fd38e555f339376bd5c2da1c7",
+      "n_trades_sports_6d": 53,
+      "n_trades_crypto_6d": 2,
+      "n_trades_total_6d": 55,
+      "score_crypto": null,
+      "score_sports": null
+    },
+    {
+      "wallet": "0x40148890bc03a9db1b210599d74aabc6e2bb8c3f",
+      "n_trades_sports_6d": 34,
+      "n_trades_crypto_6d": 21,
+      "n_trades_total_6d": 55,
+      "score_crypto": null,
+      "score_sports": null
+    },
+    {
+      "wallet": "0xa3de54cf752b259a2c1d98dc9cdc628145cddb55",
+      "n_trades_sports_6d": 2,
+      "n_trades_crypto_6d": 53,
+      "n_trades_total_6d": 55,
+      "score_crypto": null,
+      "score_sports": null
+    },
+    {
+      "wallet": "0x38f50488b14a87769e0c5cd6c514b6c2e8ec6824",
+      "n_trades_sports_6d": 52,
+      "n_trades_crypto_6d": 3,
+      "n_trades_total_6d": 55,
+      "score_crypto": null,
+      "score_sports": null
+    },
+    {
+      "wallet": "0xe07766251048429ae29ad4c250d905715792369b",
+      "n_trades_sports_6d": 41,
+      "n_trades_crypto_6d": 14,
+      "n_trades_total_6d": 55,
+      "score_crypto": null,
+      "score_sports": null
+    },
+    {
+      "wallet": "0x03f0af2135efe9b80d17ba6552460504c9bb3b57",
+      "n_trades_sports_6d": 29,
+      "n_trades_crypto_6d": 26,
+      "n_trades_total_6d": 55,
+      "score_crypto": null,
+      "score_sports": null
+    },
+    {
+      "wallet": "0xa3b48b1e1e3c44c2c8181092206f65f29bce88df",
+      "n_trades_sports_6d": 54,
+      "n_trades_crypto_6d": 1,
+      "n_trades_total_6d": 55,
+      "score_crypto": null,
+      "score_sports": null
+    },
+    {
+      "wallet": "0x75cf6be35400048f8978815f9fd4ae7ef5fabe46",
+      "n_trades_sports_6d": 35,
+      "n_trades_crypto_6d": 20,
+      "n_trades_total_6d": 55,
+      "score_crypto": null,
+      "score_sports": null
+    },
+    {
+      "wallet": "0xf6251c1ea571c3993bdc02d8e2d14e09eaf0b7c7",
+      "n_trades_sports_6d": 49,
+      "n_trades_crypto_6d": 6,
+      "n_trades_total_6d": 55,
+      "score_crypto": null,
+      "score_sports": null
+    },
+    {
+      "wallet": "0x5f0ba7717b6589bcc578427cb69397c36b3d4d11",
+      "n_trades_sports_6d": 5,
+      "n_trades_crypto_6d": 50,
+      "n_trades_total_6d": 55,
+      "score_crypto": null,
+      "score_sports": null
+    },
+    {
+      "wallet": "0xb1ca909e848cc24ec4e220ce1c453bc290c51705",
+      "n_trades_sports_6d": 4,
+      "n_trades_crypto_6d": 50,
+      "n_trades_total_6d": 54,
+      "score_crypto": null,
+      "score_sports": null
+    },
+    {
+      "wallet": "0xdd23fa3601b9427ab24fa9eb84f3d5f04164387e",
+      "n_trades_sports_6d": 52,
+      "n_trades_crypto_6d": 2,
+      "n_trades_total_6d": 54,
+      "score_crypto": null,
+      "score_sports": null
+    },
+    {
+      "wallet": "0x24fe178f2f40efe6bad18a8dbcc997745d6731f5",
+      "n_trades_sports_6d": 14,
+      "n_trades_crypto_6d": 40,
+      "n_trades_total_6d": 54,
+      "score_crypto": {
+        "n_total": 15,
+        "edge_pp_ponderado": -18.902,
+        "n_entradas": 1,
+        "n_significativas_p<0.05": 0
+      },
+      "score_sports": null
+    },
+    {
+      "wallet": "0xe542afd3881c4c330ba0ebbb603bb470b2ba0a37",
+      "n_trades_sports_6d": 52,
+      "n_trades_crypto_6d": 2,
+      "n_trades_total_6d": 54,
+      "score_crypto": null,
+      "score_sports": null
+    },
+    {
+      "wallet": "0x347d059b0c81bff89d2ac59af4097709e3908165",
+      "n_trades_sports_6d": 50,
+      "n_trades_crypto_6d": 4,
+      "n_trades_total_6d": 54,
+      "score_crypto": null,
+      "score_sports": {
+        "n_total": 35,
+        "edge_pp_ponderado": 34.027,
+        "n_entradas": 1,
+        "n_significativas_p<0.05": 1
+      }
+    },
+    {
+      "wallet": "0x2a2b01f9a14e1e7f937da19374be9c2c637e4b88",
+      "n_trades_sports_6d": 18,
+      "n_trades_crypto_6d": 36,
+      "n_trades_total_6d": 54,
+      "score_crypto": null,
+      "score_sports": null
+    },
+    {
+      "wallet": "0xd3c0c1ded2d6938302f523997794d141ece1fbe6",
+      "n_trades_sports_6d": 2,
+      "n_trades_crypto_6d": 52,
+      "n_trades_total_6d": 54,
+      "score_crypto": null,
+      "score_sports": null
+    },
+    {
+      "wallet": "0x401ee31e9ebf9ab9f6315cd95faca5f950436fc9",
+      "n_trades_sports_6d": 15,
+      "n_trades_crypto_6d": 39,
+      "n_trades_total_6d": 54,
+      "score_crypto": null,
+      "score_sports": null
+    },
+    {
+      "wallet": "0x3cf4d007fa9cea7f3a12abf6b2d911d7ab425324",
+      "n_trades_sports_6d": 39,
+      "n_trades_crypto_6d": 15,
+      "n_trades_total_6d": 54,
+      "score_crypto": null,
+      "score_sports": null
+    },
+    {
+      "wallet": "0xe2981fb219c98952ebe655061df138ffc74f8ca9",
+      "n_trades_sports_6d": 52,
+      "n_trades_crypto_6d": 2,
+      "n_trades_total_6d": 54,
+      "score_crypto": null,
+      "score_sports": null
+    },
+    {
+      "wallet": "0xa9b4427e5def414ac24ef6124f16672832f59fc9",
+      "n_trades_sports_6d": 51,
+      "n_trades_crypto_6d": 3,
+      "n_trades_total_6d": 54,
+      "score_crypto": null,
+      "score_sports": {
+        "n_total": 19,
+        "edge_pp_ponderado": 28.105,
+        "n_entradas": 1,
+        "n_significativas_p<0.05": 1
+      }
+    },
+    {
+      "wallet": "0x189cafec481ed3fec5e4a5ad97ece8af2d0cc9ae",
+      "n_trades_sports_6d": 53,
+      "n_trades_crypto_6d": 1,
+      "n_trades_total_6d": 54,
+      "score_crypto": null,
+      "score_sports": null
+    },
+    {
+      "wallet": "0xbac7d6a115dc528440583d3e3c96fc208929ad16",
+      "n_trades_sports_6d": 2,
+      "n_trades_crypto_6d": 52,
+      "n_trades_total_6d": 54,
+      "score_crypto": null,
+      "score_sports": null
+    },
+    {
+      "wallet": "0x4b26e699a8c3f3d6301c6851821143761bec0c0e",
+      "n_trades_sports_6d": 5,
+      "n_trades_crypto_6d": 49,
+      "n_trades_total_6d": 54,
+      "score_crypto": null,
+      "score_sports": null
+    },
+    {
+      "wallet": "0xc440c68eeef8c4e0782ba26e77def7596ccd2e0e",
+      "n_trades_sports_6d": 21,
+      "n_trades_crypto_6d": 33,
+      "n_trades_total_6d": 54,
+      "score_crypto": null,
+      "score_sports": null
+    },
+    {
+      "wallet": "0x46f7d34068d8663dbde7e6ed6f3d57d46a78ded2",
+      "n_trades_sports_6d": 1,
+      "n_trades_crypto_6d": 53,
+      "n_trades_total_6d": 54,
+      "score_crypto": null,
+      "score_sports": null
+    },
+    {
+      "wallet": "0x31efa5f5d0f50d857351f59443e9c807d15cc9a3",
+      "n_trades_sports_6d": 21,
+      "n_trades_crypto_6d": 33,
+      "n_trades_total_6d": 54,
+      "score_crypto": null,
+      "score_sports": null
+    },
+    {
+      "wallet": "0xce29847e9fa60650a120ff5bc1befd1bddee4b3f",
+      "n_trades_sports_6d": 11,
+      "n_trades_crypto_6d": 43,
+      "n_trades_total_6d": 54,
+      "score_crypto": null,
+      "score_sports": null
+    },
+    {
+      "wallet": "0x198bd688bac4af287c4dce3ccdb44c51ee21bb19",
+      "n_trades_sports_6d": 52,
+      "n_trades_crypto_6d": 2,
+      "n_trades_total_6d": 54,
+      "score_crypto": null,
+      "score_sports": null
+    },
+    {
+      "wallet": "0xfaf310af70a9a9fa1a43225db317260a2a84f1bc",
+      "n_trades_sports_6d": 40,
+      "n_trades_crypto_6d": 14,
+      "n_trades_total_6d": 54,
+      "score_crypto": {
+        "n_total": 159,
+        "edge_pp_ponderado": 0.207,
+        "n_entradas": 3,
+        "n_significativas_p<0.05": 0
+      },
+      "score_sports": null
+    },
+    {
+      "wallet": "0xaf3e992ca9eb70f1a14c6e77ece8d3d4517e7c3e",
+      "n_trades_sports_6d": 29,
+      "n_trades_crypto_6d": 25,
+      "n_trades_total_6d": 54,
+      "score_crypto": null,
+      "score_sports": null
+    },
+    {
+      "wallet": "0xeb68675c06e0bb9f08ba510550912d77289ce362",
+      "n_trades_sports_6d": 52,
+      "n_trades_crypto_6d": 2,
+      "n_trades_total_6d": 54,
+      "score_crypto": {
+        "n_total": 156,
+        "edge_pp_ponderado": 1.752,
+        "n_entradas": 2,
+        "n_significativas_p<0.05": 0
+      },
+      "score_sports": null
+    },
+    {
+      "wallet": "0x21f52494cdecc2b9ba03aad69f57c87ae798c161",
+      "n_trades_sports_6d": 35,
+      "n_trades_crypto_6d": 19,
+      "n_trades_total_6d": 54,
+      "score_crypto": null,
+      "score_sports": null
+    },
+    {
+      "wallet": "0x99b1af99643f7c31810b02e477768b8a91c39fd2",
+      "n_trades_sports_6d": 52,
+      "n_trades_crypto_6d": 2,
+      "n_trades_total_6d": 54,
+      "score_crypto": null,
+      "score_sports": null
+    },
+    {
+      "wallet": "0xb692256f86207231892c08fc9f14a6941c09c227",
+      "n_trades_sports_6d": 2,
+      "n_trades_crypto_6d": 52,
+      "n_trades_total_6d": 54,
+      "score_crypto": null,
+      "score_sports": null
+    },
+    {
+      "wallet": "0x816b8451382b8e9cb66972fa4dd4777091739ec7",
+      "n_trades_sports_6d": 52,
+      "n_trades_crypto_6d": 2,
+      "n_trades_total_6d": 54,
+      "score_crypto": null,
+      "score_sports": null
+    },
+    {
+      "wallet": "0x1dbb08d3d94289f92a0a8ac9cf7bdb33694e352f",
+      "n_trades_sports_6d": 41,
+      "n_trades_crypto_6d": 12,
+      "n_trades_total_6d": 53,
+      "score_crypto": null,
+      "score_sports": null
+    },
+    {
+      "wallet": "0x99fc64e30de1d36502c984d69d3b81f39910ec26",
+      "n_trades_sports_6d": 51,
+      "n_trades_crypto_6d": 2,
+      "n_trades_total_6d": 53,
+      "score_crypto": null,
+      "score_sports": null
+    },
+    {
+      "wallet": "0x32d1f0159dd59c734deebfcbf91db7c924fae5c8",
+      "n_trades_sports_6d": 44,
+      "n_trades_crypto_6d": 9,
+      "n_trades_total_6d": 53,
+      "score_crypto": null,
+      "score_sports": null
+    },
+    {
+      "wallet": "0x5cd4e9cf40574245498302ccb15dee707fc342aa",
+      "n_trades_sports_6d": 5,
+      "n_trades_crypto_6d": 48,
+      "n_trades_total_6d": 53,
+      "score_crypto": null,
+      "score_sports": null
+    },
+    {
+      "wallet": "0xdebbe89ceb32828a99648bca497684f5209ceedb",
+      "n_trades_sports_6d": 26,
+      "n_trades_crypto_6d": 27,
+      "n_trades_total_6d": 53,
+      "score_crypto": null,
+      "score_sports": null
+    },
+    {
+      "wallet": "0xd32d9f6da3cb0d6d37f96f6af5096371accf23b4",
+      "n_trades_sports_6d": 50,
+      "n_trades_crypto_6d": 3,
+      "n_trades_total_6d": 53,
+      "score_crypto": null,
+      "score_sports": null
+    },
+    {
+      "wallet": "0xbe0b51cd591efa9f0e4a5356617b23ad0c4e48fd",
+      "n_trades_sports_6d": 37,
+      "n_trades_crypto_6d": 16,
+      "n_trades_total_6d": 53,
+      "score_crypto": null,
+      "score_sports": null
+    },
+    {
+      "wallet": "0x42512d1d3a29905f4f9327cd268fe7f8d1af8565",
+      "n_trades_sports_6d": 48,
+      "n_trades_crypto_6d": 5,
+      "n_trades_total_6d": 53,
+      "score_crypto": null,
+      "score_sports": null
+    },
+    {
+      "wallet": "0x34c860a9060e2d685aa17b1cf78be03e25e39978",
+      "n_trades_sports_6d": 50,
+      "n_trades_crypto_6d": 3,
+      "n_trades_total_6d": 53,
+      "score_crypto": null,
+      "score_sports": null
+    },
+    {
+      "wallet": "0xb1dbca8782dda416f2327252d0c7ede9d00ec0af",
+      "n_trades_sports_6d": 16,
+      "n_trades_crypto_6d": 37,
+      "n_trades_total_6d": 53,
+      "score_crypto": null,
+      "score_sports": null
+    },
+    {
+      "wallet": "0xf86385103cca0a79a3eb2cfff1c9b1d52b09160b",
+      "n_trades_sports_6d": 50,
+      "n_trades_crypto_6d": 3,
+      "n_trades_total_6d": 53,
+      "score_crypto": null,
+      "score_sports": null
+    },
+    {
+      "wallet": "0xb5a5dca472a82c1b7770dc801d637b429032e3ca",
+      "n_trades_sports_6d": 44,
+      "n_trades_crypto_6d": 9,
+      "n_trades_total_6d": 53,
+      "score_crypto": {
+        "n_total": 19,
+        "edge_pp_ponderado": -0.819,
+        "n_entradas": 1,
+        "n_significativas_p<0.05": 0
+      },
+      "score_sports": null
+    },
+    {
+      "wallet": "0x57169c875485b2eae4895119bde41bff12dcbbf6",
+      "n_trades_sports_6d": 13,
+      "n_trades_crypto_6d": 40,
+      "n_trades_total_6d": 53,
+      "score_crypto": {
+        "n_total": 323,
+        "edge_pp_ponderado": 0.161,
+        "n_entradas": 4,
+        "n_significativas_p<0.05": 0
+      },
+      "score_sports": null
+    },
+    {
+      "wallet": "0x0a230a16ffd4ef3a57745806b521d95d8d003253",
+      "n_trades_sports_6d": 45,
+      "n_trades_crypto_6d": 8,
+      "n_trades_total_6d": 53,
+      "score_crypto": null,
+      "score_sports": null
+    },
+    {
+      "wallet": "0x6aca59f3dd4618275841f508fe831d9a3704e738",
+      "n_trades_sports_6d": 52,
+      "n_trades_crypto_6d": 1,
+      "n_trades_total_6d": 53,
+      "score_crypto": null,
+      "score_sports": null
+    },
+    {
+      "wallet": "0xd3148832eed604c91ef3aa6c199e4819aa459fd3",
+      "n_trades_sports_6d": 43,
+      "n_trades_crypto_6d": 10,
+      "n_trades_total_6d": 53,
+      "score_crypto": null,
+      "score_sports": null
+    },
+    {
+      "wallet": "0x4873713d4954ab6ecebaf5fb1b018f622bb515ba",
+      "n_trades_sports_6d": 33,
+      "n_trades_crypto_6d": 20,
+      "n_trades_total_6d": 53,
+      "score_crypto": null,
+      "score_sports": null
+    },
+    {
+      "wallet": "0xdd5f14945aa227dd4782f27036144004ffaa85d5",
+      "n_trades_sports_6d": 51,
+      "n_trades_crypto_6d": 2,
+      "n_trades_total_6d": 53,
+      "score_crypto": null,
+      "score_sports": null
+    }
+  ]
+}

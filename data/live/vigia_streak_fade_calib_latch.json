@@ -1,0 +1,14 @@
+{
+ "avisado": true,
+ "n": 323,
+ "calibracion_prob": {
+  "a": 0.0,
+  "b": 0.25,
+  "n": 323,
+  "n_oos_validado": 216,
+  "n_requerido": 209.3,
+  "mejora_media_oos": 0.046,
+  "actualizado": "2026-08-08T11:36:53+00:00"
+ },
+ "telegram_ok": true
+}

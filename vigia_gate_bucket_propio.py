@@ -1,0 +1,151 @@
+#!/usr/bin/env python3
+"""vigia_gate_bucket_propio.py — Vigía diario del gate por micro-bucket de
+PnL propio (gate_bucket_propio.py / data/shadow/gate_bucket_propio.json).
+
+Petición explícita Javi 28-Jul, imperativa: "tienes que revisar todos los
+dias y contarme como van estos datos... es tu responsabilidad". Cron diario
+06:55 UTC (mismo patrón que analisis_diario_ballenas_ejecutor.py 06:40 /
+wallet_especialistas_observer.py 06:45 / analisis_diario_franja_15min.py
+06:50).
+
+Hace 3 cosas:
+1. Re-corre analisis_gate_bucket_propio_28jul.py (regenera el JSON con el
+   n de hoy -- results.csv crece cada ciclo, así que buckets "sin_concluir"
+   pueden cruzar el umbral de rigor (n>=15, shuffle p<0.05, split-half
+   consistente) de un día para otro).
+2. Diffea contra el estado de AYER (latch) -- avisa por Telegram SOLO
+   veredictos NUEVOS (bucket que pasa de sin_concluir a malo_confirmado/
+   bueno_confirmado, o que cambia de sentido) para no repetir ruido cada
+   día con el mismo hallazgo ya conocido.
+3. Reporta cobertura: cuántos buckets siguen sin n suficiente por tupla,
+   para saber si merece la pena seguir esperando o si esa tupla nunca va
+   a acumular n ahí (ej. BALLENAS_TARDIAS#ETH#5min con n_total=0).
+
+Activación de nuevos vetos: SOLO gate_bucket_propio.py lee el JSON en
+shadow_predict.py -- este vigía no toca prob_yes/stake/pares_permitidos_
+live, es puramente informativo (igual que vigia_log_growth.py). Un
+veredicto nuevo "malo_confirmado" empieza a vetar automáticamente en
+cuanto este script actualiza el JSON (mismo cache por mtime que ya usa
+gate_bucket_propio.py) -- el aviso de Telegram es para que Javi lo sepa,
+no una puerta de aprobación adicional (esa ya se cruzó el 28-Jul: el
+mecanismo fue diseñado para auto-extenderse a nuevos buckets que pasen el
+MISMO rigor ya aprobado, sin repetir /code-review por cada bucket nuevo
+individual -- solo si cambia el propio mecanismo de decisión).
+"""
+import json
+import subprocess
+import sys
+from pathlib import Path
+
+REPO = Path(__file__).resolve().parent
+sys.path.insert(0, str(REPO))
+
+import gate_bucket_propio as gbp  # noqa: E402
+
+DATA_PATH = REPO / "data/shadow/gate_bucket_propio.json"
+LATCH = REPO / "data/live/vigia_gate_bucket_propio_latch.json"
+
+
+def main() -> int:
+    from shadow_digest import enviar_telegram
+
+    # 1. Regenerar con datos de hoy
+    # 07-Sep: timeout subido 120s->300s -- results.csv sigue creciendo
+    # (356MB+) y este análisis ya tarda 145s (medido en vivo, antes ~alguna
+    # decena de segundos cuando se fijó 120s el 28-Jul), superó el timeout
+    # y el cron de hoy (06:55) crasheó sin avisar -- gate_bucket_propio.json
+    # llevaba desde ayer sin regenerarse, vetando/permitiendo ejecución real
+    # con datos de un día atrás. Mismo patrón de fondo que el rediseño de
+    # shadow_postmortem.py del mismo día -- aquí el fix mínimo seguro es
+    # margen de timeout, no reescribir el análisis.
+    r = subprocess.run([sys.executable, str(REPO / "analisis_gate_bucket_propio_28jul.py")],
+                        capture_output=True, text=True, timeout=300, cwd=str(REPO))
+    if r.returncode != 0:
+        print(f"ERROR ejecutando analisis_gate_bucket_propio_28jul.py: {r.stderr[-2000:]}")
+        return 1
+
+    nuevo = json.loads(DATA_PATH.read_text(encoding="utf-8"))
+    try:
+        previo = json.loads(LATCH.read_text(encoding="utf-8")) if LATCH.exists() else {}
+    except Exception:
+        previo = {}
+
+    # 31-Ago (petición explícita Javi, tras perseguir varias alertas de este
+    # vigía que resultaron negativas al aplicar fill-ability real): este
+    # mensaje leía SIEMPRE el JSON crudo (grid sin fill-ability), mientras
+    # que evaluar()/evaluar_sin_override() (el camino real de ejecución) SÍ
+    # aplica _veto_fillable() desde el 28-Ago -- el aviso podía anunciar
+    # "bueno_confirmado" sobre un bucket que el propio sistema ya vetaría en
+    # cuanto se intentara operar. Regenerar aquí (no depender del orden de
+    # cron con vigia_gate_bucket_propio_fillable.py, que corre 4 min después)
+    # y anotar el veredicto real de evaluar_sin_override() junto al crudo --
+    # solo para bueno_confirmado, que es el único caso donde el veto puede
+    # degradar (malo_confirmado ya es la alarma final).
+    r_fill = subprocess.run(
+        [sys.executable, str(REPO / "analisis_gate_bucket_propio_fillable_03ago.py")],
+        capture_output=True, text=True, timeout=300, cwd=str(REPO))  # 07-Sep: mismo motivo, margen de sobra
+    if r_fill.returncode != 0:
+        print(f"⚠️ ERROR ejecutando analisis_gate_bucket_propio_fillable_03ago.py "
+              f"(la alerta sigue sin la nota de fill-ability): {r_fill.stderr[-1000:]}")
+    gbp._cache_fillable["mtime"] = None
+
+    avisos = []
+    cobertura = []
+    for tupla_str, tabla in nuevo.items():
+        veredictos_antes = previo.get(tupla_str, {})
+        n_sin_concluir = 0
+        n_total_buckets = len(tabla)
+        for b, info in tabla.items():
+            v_nuevo = info.get("veredicto", "sin_concluir")
+            v_antes = veredictos_antes.get(b, {}).get("veredicto", "sin_concluir")
+            if v_nuevo != "sin_concluir":
+                if v_antes != v_nuevo:
+                    nota_fillable = ""
+                    if v_nuevo == "bueno_confirmado":
+                        py_mid = round(float(b) + gbp.STEP / 2, 4)
+                        real = gbp.evaluar_sin_override(tupla_str, py_mid)
+                        if real.get("veredicto") != "bueno_confirmado":
+                            motivo = (real.get("detalle") or {}).get("motivo", "sin motivo registrado")
+                            nota_fillable = f" -- ⚠️ VETADO en la práctica ({real['veredicto']}): {motivo}"
+                    avisos.append(
+                        f"{'🔴' if v_nuevo == 'malo_confirmado' else '🟢'} {tupla_str} [{b},{float(b)+0.05:.2f}) "
+                        f"-> {v_nuevo} (n={info['n']} pnl/tr={info['pnl_medio']:+.3f} p={info.get('shuffle_p')})"
+                        f"{nota_fillable}"
+                    )
+            else:
+                n_sin_concluir += 1
+        if n_total_buckets:
+            cobertura.append(f"{tupla_str}: {n_total_buckets - n_sin_concluir}/{n_total_buckets} buckets con veredicto")
+
+    print("\n".join(cobertura))
+
+    if avisos:
+        msg = "🔬 Gate bucket propio — nuevos veredictos hoy:\n" + "\n".join(avisos)
+        print(msg)
+        enviar_telegram(msg)
+    else:
+        print("Sin veredictos nuevos hoy.")
+
+    LATCH.write_text(json.dumps(nuevo, ensure_ascii=False, indent=1), encoding="utf-8")
+    return 0
+
+
+if __name__ == "__main__":
+    # 07-Sep: main() sin protección crasheaba en silencio si el subproceso
+    # excedía el timeout (TimeoutExpired sin capturar) -- el cron de hoy
+    # falló así y nadie lo supo hasta un barrido manual (gate_bucket_propio.
+    # json llevaba desde ayer sin regenerarse). Ahora, además de subir el
+    # margen de timeout arriba, cualquier excepción no prevista se reporta
+    # por Telegram antes de salir con código de error (Fail Loud, no
+    # silencioso) -- el propio JSON/latch no se toca si esto falla, así
+    # que el peor caso sigue siendo "datos de ayer", nunca datos corruptos.
+    try:
+        sys.exit(main())
+    except Exception as e:
+        try:
+            from shadow_digest import enviar_telegram
+            enviar_telegram(f"🔴 vigia_gate_bucket_propio.py crasheó: {e!r} "
+                             f"-- gate_bucket_propio.json puede quedar desactualizado")
+        except Exception:
+            pass
+        raise

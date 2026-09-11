@@ -1,0 +1,324 @@
+#!/usr/bin/env python3
+"""
+candidatas_sin_fillability_depth_fase0.py -- FASE 0 (solo observación) de
+profundidad real para candidatas que hoy carecen de CUALQUIER
+infraestructura de fill-ability (0 observaciones de libro real,
+verificado 25-Ago vía libro_snapshots.csv/ejecutores dedicados):
+
+  FAVORITO_CONFIRMADO_5MIN_ALTACONVICCION#BNB#5min#BUY_YES
+  BALLENAS_CONFIRMADAS_15M#DOGE#15min#BUY_YES
+  FAVORITO_CONFIRMADO#ETH#60min#BUY_NO
+
+Ampliado 25-Ago tarde con 4 celdas más, encontradas con rigor PROPIO
+(gate_bucket_propio.json, no solo externo) al cierre de la sesión --
+mismo hueco (0% cobertura de libro real), ver checkpoint
+project_checkpoint_cierre_sesion_25ago_tarde:
+
+  WEEKLY_PRICE#ETH#BUY_NO       [0.45,0.50) n=35 pnl/tr=+1.069€ p=0.000
+  WEEKLY_PRICE#BTC#BUY_NO       [0.30,0.35) n=28 pnl/tr=+0.457€ p=0.006
+  GBM_LATE_5M#XRP#5min#BUY_YES  [0.45,0.50) n=32 pnl/tr=+1.061€ p=0.001
+  STREAK_FADE_5M#SOL#5min#BUY_YES [0.45,0.50) n=26 pnl/tr=+0.346€ p=0.006
+
+  OJO WEEKLY_PRICE: ya refutado 2 veces por fill-ability real (28-Jul
+  0% vía trades API; 20-Ago 2.1% pese a hit=96.3%) -- probable que
+  también falle aquí, pero se mide con datos frescos, no se asume.
+
+Las 7 tienen zonas de precio confirmadas con rigor propio o externo
+(`zonas_validadas_externas.json`, ballenas_timing_history.csv, n en
+cientos/miles) pero ninguna tiene ejecutor de baja latencia propio ni
+está cubierta por los depth-fase0 existentes (favorito_confirmado_
+depth_fase0.py = solo BTC/SOL; ballenas_confirmadas_15m_buyno_depth_
+fase0.py = solo BUY_NO; favorito_confirmado_60_240min_depth_fase0.py =
+solo ETH#60min#BUY_YES, no BUY_NO) -- hueco real encontrado al intentar
+promocionarlas.
+
+Mismo mecanismo exacto que momentum_ibs_15m_depth_fase0.py (no
+duplicar lógica compartida en un módulo común -- cada fase0 es
+self-contained a propósito en este proyecto, mismo criterio que
+favorito_confirmado_depth_fase0.py/ballenas_confirmadas_15m_buyno_
+depth_fase0.py ya establecido): sigue (tail incremental, por posición
+de fichero) `predictions_YYYY-MM-DD.csv` -- el mismo fichero que
+shadow_predict.py YA escribe cada ciclo -- y en cuanto aparece una fila
+nueva de alguna de las 3 tuplas, consulta el libro público real
+(`lt._consultar_profundidad_libro`, solo lectura, nunca ordena) del
+lado exacto que se compraría. NO escribe nada en predictions.csv/
+results.csv -- CSV propio aparte, no contamina el aprendizaje causal.
+
+Ninguna de las 3 necesita baja latencia (ninguna depende de "llegar
+antes de que el libro reaccione a una ballena activa", a diferencia de
+MOMENTUM_IBS_*_BALLENA/BALLENAS_TARDIAS) -- medir la profundidad justo
+después del ciclo normal (~20-40s) es representativo de cómo operarían
+si se promocionan vía el camino genérico.
+
+NO coloca, cancela ni modifica ninguna orden real.
+
+Se fusiona en observadores_fase0.py (screen "observadores") -- NUNCA
+lanzar una screen suelta para este script.
+"""
+import csv
+import json
+import sys
+import time
+from datetime import datetime, timezone
+from pathlib import Path
+
+REPO = Path(__file__).resolve().parent
+sys.path.insert(0, str(REPO))
+
+import live_trade as lt  # noqa: E402
+
+DIR_SHADOW = REPO / "data" / "shadow"
+OUT = DIR_SHADOW / "candidatas_sin_fillability_depth_fase0.csv"
+VISTOS_PATH = DIR_SHADOW / "candidatas_sin_fillability_depth_fase0_vistos.json"
+
+# (strategy, activo, marco, decision) -- ampliable si aparecen más
+# candidatas confirmadas externamente sin infraestructura de fill-ability
+# propia. `marco=None` = comodín (mantiene el comportamiento original de
+# las 9 primeras entradas, todas con un solo marco posible en su propio
+# nombre salvo FAVORITO_CONFIRMADO base, que sí puede abarcar varios --
+# no se ha desambiguado a propósito, fuera de alcance de este cambio).
+#
+# 01-Sep noche (petición explícita Javi, "el problema de profundidad,
+# selección adversa y payout asimétrico ya" + barrido de Arquetipo A):
+# 17 familias candidatas en candidatos_evaluacion_live NUNCA tuvieron
+# NINGÚN dato de profundidad real -- cualquier convergencia grid+fino
+# para ellas es una confirmación estadística sin verificar si es
+# cobrable. UPDOWN_GBM (39 tuplas, la familia con más volumen de las 17)
+# es la primera en instrumentarse -- se necesitó añadir `marco` al
+# esquema (antes ausente) porque UPDOWN_GBM abarca 5/15/60/240min/daily
+# a la vez y sin marco se mezclarían en la misma fila. Las otras 16
+# familias quedan pendientes, ampliación incremental del mismo fichero,
+# mismo patrón, no de golpe (evitar sobrecarga de red real -- una
+# consulta de libro por señal nueva).
+TUPLAS = [
+    ("FAVORITO_CONFIRMADO_5MIN_ALTACONVICCION", "BNB", None, "BUY_YES"),
+    ("BALLENAS_CONFIRMADAS_15M", "DOGE", None, "BUY_YES"),
+    ("FAVORITO_CONFIRMADO", "ETH", None, "BUY_NO"),
+    ("WEEKLY_PRICE", "ETH", None, "BUY_NO"),
+    ("WEEKLY_PRICE", "BTC", None, "BUY_NO"),
+    ("GBM_LATE_5M", "XRP", None, "BUY_YES"),
+    ("STREAK_FADE_5M", "SOL", None, "BUY_YES"),
+    # 27-Ago noche (petición explícita Javi, pendiente anotado el mismo día en
+    # CLAUDE.md: "LIQUIDACIONES_5M/60M -- pendiente de instrumentar fill-ability"):
+    # gate_bucket_propio dio 2 bueno_confirmado el 27-Ago, familia sin NINGÚN
+    # observador de profundidad, ni siquiera este genérico -- mismo hueco
+    # exacto que motivó este fichero para las 7 tuplas de arriba.
+    ("LIQUIDACIONES_5M", "BTC", None, "BUY_YES"),   # [0.45,0.50) n=19 pnl+0.404€ p=0.016
+    ("LIQUIDACIONES_60M", "ETH", None, "BUY_YES"),  # [0.45,0.50) n=28 pnl+0.221€ p=0.008
+    # 02-Sep (barrido de sesión, propuesta A7): mejor pnl/trade de todo el
+    # sistema en pnl_fiel_por_estrategia.json (+56,86€ n=26, ~2,19€/trade
+    # nocional) y CERO observadores de profundidad -- libro_snapshots.csv
+    # solo tenía motivo='candidato_evaluacion' genérico (~20s), sin ningún
+    # dato de baja latencia. n propio todavía insuficiente para promoción
+    # (26<40), se instrumenta ahora para que la fill-ability real esté
+    # lista en cuanto n crezca, mismo criterio que LIQUIDACIONES arriba.
+    ("ORDER_FLOW_5M", "SOL", None, "BUY_NO"),
+    # 09-Sep (barrido de sesión, item pendiente #9 "instrumentar fill-ability
+    # LIQUIDACIONES"): gate_bucket_propio.json creció desde el 27-Ago --
+    # LIQUIDACIONES_5M#XRP#5min#BUY_YES[0.50,0.55) ya malo_confirmado (n=48,
+    # pnl/tr=-0.319€) y LIQUIDACIONES_60M#BTC#60min#BUY_YES[0.45,0.50) cerca
+    # de confirmar (n=59, pnl/tr=+0.058€) -- mismo hueco de cobertura que
+    # BTC#5min/ETH#60min ya instrumentadas, ninguna de las 2 tenía depth
+    # propio todavía. De paso, verificado con las 2 ya instrumentadas
+    # (51 BTC#5min + 76 ETH#60min filas acumuladas desde 27-Ago/02-Sep):
+    # BTC#5min[0.45,0.50) (bueno_confirmado) solo 23,3% fillable vs
+    # [0.50,0.55) (malo_confirmado) 57,9% fillable -- mismo patrón de
+    # selección adversa que el resto del proyecto, el bucket bueno
+    # estadísticamente es el MENOS ejecutable.
+    ("LIQUIDACIONES_5M", "XRP", None, "BUY_YES"),
+    ("LIQUIDACIONES_60M", "BTC", None, "BUY_YES"),
+]
+# UPDOWN_GBM -- las 39 tuplas exactas de candidatos_evaluacion_live (5
+# activos x hasta 5 marcos x 2 direcciones, no todas las combinaciones
+# existen para todos los activos). Generado por barrido real 01-Sep, no
+# a mano -- ver project_5_propuestas_arquetipo_a_01sep en memoria nativa.
+_UPDOWN_GBM_MARCOS = {
+    "BNB": ["15min"],
+    "BTC": ["15min", "240min", "5min", "60min", "daily"],
+    "DOGE": ["15min", "5min"],
+    "ETH": ["15min", "240min", "5min", "60min", "daily"],
+    "SOL": ["15min", "240min", "5min", "60min", "daily"],
+    "XRP": ["15min", "5min"],
+}
+for _activo, _marcos in _UPDOWN_GBM_MARCOS.items():
+    for _marco in _marcos:
+        for _decision in ("BUY_YES", "BUY_NO"):
+            if _activo == "SOL" and _marco == "240min" and _decision == "BUY_NO":
+                continue  # no existe en candidatos_evaluacion_live (verificado)
+            TUPLAS.append(("UPDOWN_GBM", _activo, _marco, _decision))
+_CLAVES = {(s, a, m, d) for s, a, m, d in TUPLAS}
+
+
+def _activo_marco(subtype: str) -> tuple:
+    """/code-review 01-Sep: mismo split reusado en _procesar_fila() y en
+    el backlog de main() -- factorizado para que un cambio de formato de
+    subtype no pueda actualizarse en un sitio y olvidarse en el otro."""
+    partes = subtype.split("#", 1) if "#" in subtype else [subtype, ""]
+    return partes[0], partes[1]
+
+
+def _coincide(strategy: str, activo: str, marco: str, decision: str) -> bool:
+    """(strategy, activo, marco, decision) exacto, o con marco=None como
+    comodín (las 9 entradas originales, ver comentario de TUPLAS)."""
+    return (strategy, activo, marco, decision) in _CLAVES or \
+           (strategy, activo, None, decision) in _CLAVES
+
+
+STAKE_REFERENCIA_EUR = 1.05
+POLL_S = 15
+
+COLUMNS = ["ts_deteccion_utc", "ts_prediccion_utc", "market_id", "strategy",
+           "activo", "marco", "decision", "precio_yes_mercado", "mejor_ask_deteccion",
+           "profundidad_eur_deteccion", "ratio_vs_stake_deteccion"]
+
+
+def _log(msg: str) -> None:
+    print(f"[{datetime.now(timezone.utc).isoformat(timespec='seconds')}] {msg}", flush=True)
+
+
+def _vistos_cargar() -> set:
+    try:
+        return set(json.loads(VISTOS_PATH.read_text(encoding="utf-8")))
+    except Exception:
+        return set()
+
+
+def _vistos_guardar(vistos: set) -> None:
+    VISTOS_PATH.write_text(json.dumps(list(vistos)[-20000:]), encoding="utf-8")
+
+
+def _guardar(filas: list) -> None:
+    if not filas:
+        return
+    nuevo = not OUT.exists()
+    with open(OUT, "a", newline="", encoding="utf-8") as f:
+        w = csv.writer(f)
+        if nuevo:
+            w.writerow(COLUMNS)
+        for fila in filas:
+            w.writerow([fila.get(c, "") for c in COLUMNS])
+
+
+def _archivo_hoy() -> Path:
+    return DIR_SHADOW / f"predictions_{datetime.now(timezone.utc).date().isoformat()}.csv"
+
+
+def _procesar_fila(row: dict, vistos: set) -> dict | None:
+    strategy = row.get("strategy", "")
+    decision = row.get("decision", "")
+    subtype = row.get("subtype", "")
+    activo, marco = _activo_marco(subtype)
+    if not _coincide(strategy, activo, marco, decision):
+        return None
+    market_id = row.get("market_id", "")
+    dedup_key = f"{market_id}|{strategy}|{decision}"
+    if dedup_key in vistos:
+        return None
+    vistos.add(dedup_key)
+
+    try:
+        yes_token, no_token, _ = lt._get_token_ids(market_id)
+    except Exception as e:
+        _log(f"WARN no se pudo resolver tokens para market_id={market_id}: {e}")
+        return None
+    token_id = no_token if decision == "BUY_NO" else yes_token
+
+    try:
+        py = float(row.get("precio_yes_mercado", ""))
+    except (TypeError, ValueError):
+        py = 0.5
+    precio_entrada = py if decision == "BUY_YES" else (1.0 - py)
+
+    fill = lt._consultar_profundidad_libro(None, token_id, precio_entrada, STAKE_REFERENCIA_EUR)
+    return {
+        "ts_deteccion_utc": datetime.now(timezone.utc).isoformat(timespec="seconds"),
+        "ts_prediccion_utc": row.get("timestamp_utc", ""),
+        "market_id": market_id,
+        "strategy": strategy,
+        "activo": activo,
+        "marco": marco,
+        "decision": decision,
+        "precio_yes_mercado": py,
+        "mejor_ask_deteccion": fill.get("mejor_ask") if fill.get("ok") else "",
+        "profundidad_eur_deteccion": fill.get("profundidad_eur") if fill.get("ok") else "",
+        "ratio_vs_stake_deteccion": fill.get("ratio_vs_stake") if fill.get("ok") else "",
+    }
+
+
+def main() -> None:
+    _log(f"arrancado -- vigilando {TUPLAS}")
+    vistos = _vistos_cargar()
+
+    # Backlog del día ya escrito antes de arrancar: se marca como visto
+    # SIN consultar libro (fill-ability es del instante de detección, no
+    # reconstruible retroactivamente -- mismo criterio que el resto de
+    # observadores fase0 del proyecto).
+    archivo = _archivo_hoy()
+    posicion = 0
+    if archivo.exists():
+        with open(archivo, encoding="utf-8") as f:
+            header = f.readline()
+            cabecera = next(csv.reader([header]))
+            nuevos = 0
+            for row in csv.DictReader(f, fieldnames=cabecera):
+                strategy = row.get("strategy", "")
+                decision = row.get("decision", "")
+                subtype = row.get("subtype", "")
+                activo, marco = _activo_marco(subtype)
+                if _coincide(strategy, activo, marco, decision):
+                    vistos.add(f"{row.get('market_id','')}|{strategy}|{decision}")
+                    nuevos += 1
+            posicion = f.tell()
+        _log(f"backlog de hoy marcado como visto sin consultar libro: {nuevos} señales")
+    _vistos_guardar(vistos)
+
+    archivo_actual = archivo
+    cabecera = None
+    while True:
+        try:
+            hoy = _archivo_hoy()
+            if hoy != archivo_actual:
+                archivo_actual = hoy
+                posicion = 0
+                cabecera = None
+
+            if not archivo_actual.exists():
+                time.sleep(POLL_S)
+                continue
+
+            filas_nuevas = []
+            with open(archivo_actual, encoding="utf-8") as f:
+                if cabecera is None:
+                    f.seek(0)
+                    header_line = f.readline()
+                    cabecera = next(csv.reader([header_line]))
+                    if posicion == 0:
+                        posicion = f.tell()
+                f.seek(posicion)
+                nuevas_lineas = f.readlines()
+                posicion = f.tell()
+
+            for linea in nuevas_lineas:
+                try:
+                    row = next(csv.DictReader([linea], fieldnames=cabecera))
+                except Exception:
+                    continue
+                resultado = _procesar_fila(row, vistos)
+                if resultado:
+                    filas_nuevas.append(resultado)
+                    _log(f"NUEVA deteccion: {resultado['strategy']}#{resultado['activo']}#"
+                         f"{resultado['decision']} py={resultado['precio_yes_mercado']} "
+                         f"profundidad={resultado['profundidad_eur_deteccion']}")
+
+            if filas_nuevas:
+                _guardar(filas_nuevas)
+                _vistos_guardar(vistos)
+
+        except Exception as e:
+            _log(f"WARN ciclo fallido: {type(e).__name__}: {e}")
+
+        time.sleep(POLL_S)
+
+
+if __name__ == "__main__":
+    main()

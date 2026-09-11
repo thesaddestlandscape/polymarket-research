@@ -1,0 +1,259 @@
+#!/usr/bin/env python3
+"""
+fetch_libro_ambos_lados.py — Captura periódica del libro de AMBOS lados
+(YES y NO) para nuestro universo de mercados Up/Down (5/15/60min,
+BTC/ETH/SOL/XRP/DOGE/BNB). Solo lectura.
+
+Origen (28-Jul, backlog Moon Dev — Box Builder / Corridor Collector /
+Spread-Harvest Maker, Stage 3/4): los 3 comparten el mismo bloqueo —
+`libro_snapshots.csv` (live_trade.py) solo registra el lado que
+NOSOTROS compramos, nunca el lado opuesto, así que no se puede calcular
+"¿el libro está ancho?" (ask_YES+ask_NO) con los datos que ya
+teníamos, en ningún timeframe.
+
+Deliberadamente NO se toca `live_trade.py` para esto -- es código que
+decide dinero real, CLAUDE.md exige `/code-review` antes de CUALQUIER
+cambio ahí sin excepción (antecedente real 18-Jul: un refactor
+"seguro" de 6 líneas rompió el 100% de las compras live). En su lugar,
+este script IMPORTA sus funciones de solo lectura ya existentes
+(`_get_token_ids`, `_fetch_book_publico`) sin modificarlas -- mismo
+patrón ya usado por `ballenas_executor_5min.py`/`ballenas_executor_
+btc15m.py` (`import live_trade as lt`).
+
+Descubre el universo activo leyendo `data/markets/HOY.csv` (ya lo
+mantiene `capture_markets.py`, sin llamada de red nueva para eso) y
+resuelve tokens/libro vía Gamma+CLOB públicos (sin auth, sin construir
+ClobClient).
+
+Salida: data/shadow/libro_ambos_lados_YYYY-MM-DD.csv, columnas
+incluyen ask_yes, ask_no, ask_sum (la métrica "libro ancho" que
+Box Builder/Spread-Harvest necesitan: ask_sum>=X ~ MMs ausentes).
+
+Corre en screen propio (mismo patrón que chainlink/liqs):
+  screen -dmS libroambos bash -c "cd /root/polymarket-research && .venv/bin/python fetch_libro_ambos_lados.py >> logs/libro_ambos_lados.log 2>&1"
+"""
+
+import csv
+import json
+import time
+from datetime import datetime, timezone
+from pathlib import Path
+
+import live_trade as lt  # solo lectura: _get_token_ids, _fetch_book_publico -- NUNCA se llama nada que ordene
+# _parse_updown_tipo/identificar_activo (solo lectura, funciones puras sobre
+# texto) en vez de parsear el slug -- descubierto en vivo (28-Jul): los
+# mercados 'hourly' (60min) NO tienen slug updown-1h resoluble (confirmado
+# contra la API real, 0 resultados) -- se identifican por el TEXTO de la
+# pregunta ("June 24, 9am ET", sin rango de minutos), exactamente lo que
+# ya hace shadow_predict.py. Reinventar esto contra el slug se habría
+# quedado ciego a todo el universo 60min silenciosamente.
+from shadow_predict import _parse_updown_tipo, identificar_activo
+
+REPO = Path(__file__).resolve().parent
+DIR_MARKETS = REPO / "data" / "markets"
+DIR_SHADOW = REPO / "data" / "shadow"
+# 29-Jul: fichero movido FUERA del repo (DIR_DATALOGS, no versionado) --
+# mismo motivo que fetch_polymarket_activity_ws.py (ver comentario ahí):
+# crecía ~20MB/día dentro de git, inflando .git y provocando rebases
+# lentos que bloqueaban el loop síncrono de run_fast.sh >10min, disparando
+# el vigía de calidad de datos. Puramente shadow, no toca trading.
+DIR_DATALOGS = Path("/root/polymarket-research-datalogs")
+DIR_DATALOGS.mkdir(parents=True, exist_ok=True)
+
+ACTIVOS = {"BTC", "ETH", "SOL", "XRP", "DOGE", "BNB"}
+MARCOS_TRACKEADOS = {5, 15, 60}  # minutos -- nuestro universo real de trading
+INTERVALO_ESCANEO_S = 45
+
+COLUMNS = [
+    "timestamp_utc", "market_id", "condition_id", "activo", "marco",
+    "end_date", "restante_s", "ask_yes", "ask_no", "ask_sum",
+    "bid_yes", "bid_no",
+]
+
+
+def _log(msg: str) -> None:
+    ts = datetime.now(timezone.utc).isoformat(timespec="seconds")
+    print(f"[{ts}] {msg}", flush=True)
+
+
+def _archivo_hoy() -> Path:
+    fecha = datetime.now(timezone.utc).strftime("%Y-%m-%d")
+    return DIR_DATALOGS / f"libro_ambos_lados_{fecha}.csv"
+
+
+# Caché de _universo_activo() (08-Ago): el CSV de hoy lo va apendizando
+# capture_markets.py sin parar (557k filas / 253MB a media mañana) y esta
+# función lo releía ENTERO en cada llamada -- box_builder_fase0.py la
+# invoca cada 3s, lo que convertía un simple "qué mercados hay vivos" en
+# el consumidor de CPU dominante del proceso observadores_fase0.py (load5
+# flapping >3x nproc todo el día, ver vigia_carga_sistema). El propio
+# executor de dinero real (favorito_confirmado_btc60min_buyno_executor.py)
+# ya se protegía solo -- solo llama a esta función cada REFRESCO_UNIVERSO_S=
+# 30s, nunca en su loop rápido de 1.5s -- así que un TTL por debajo de eso
+# no introduce ninguna staleness nueva para el dinero real, solo evita que
+# los consumidores de solo lectura (Box Builder FASE 0, etc.) fuercen un
+# rescan completo cada pocos segundos. Solo lectura, misma firma/salida.
+_UNIVERSO_CACHE: dict = {"ts": 0.0, "fecha": "", "data": {}}
+_UNIVERSO_CACHE_TTL_S = 15.0
+
+
+def _universo_activo() -> dict:
+    """{market_id: (activo, marco_str, condition_id, end_date)} desde el CSV
+    de hoy de capture_markets.py, solo mercados Up/Down aún no vencidos.
+    Clasificación por TEXTO de la pregunta (_parse_updown_tipo/
+    identificar_activo, mismas funciones que usa shadow_predict.py) -- no
+    por slug, ver nota arriba sobre por qué el slug no sirve para 60min."""
+    fecha = datetime.now(timezone.utc).strftime("%Y-%m-%d")
+    ahora_ts = time.time()
+    if (_UNIVERSO_CACHE["fecha"] == fecha
+            and ahora_ts - _UNIVERSO_CACHE["ts"] < _UNIVERSO_CACHE_TTL_S):
+        return _UNIVERSO_CACHE["data"]
+
+    archivo = DIR_MARKETS / f"{fecha}.csv"
+    if not archivo.exists():
+        return {}
+    ahora = datetime.now(timezone.utc)
+    universo = {}
+    with open(archivo, encoding="utf-8") as f:
+        for r in csv.DictReader(f):
+            question = r.get("question") or ""
+            tipo, vent = _parse_updown_tipo(question)
+            if tipo not in ("slot", "hourly") or vent not in MARCOS_TRACKEADOS:
+                continue
+            activo = identificar_activo(question)
+            if activo not in ACTIVOS:
+                continue
+            end_date = r.get("end_date") or ""
+            try:
+                edt = datetime.fromisoformat(end_date.replace("Z", "+00:00"))
+                if edt.tzinfo is None:
+                    edt = edt.replace(tzinfo=timezone.utc)
+            except Exception:
+                continue
+            if edt <= ahora:
+                continue
+            universo[r.get("market_id", "")] = (activo, f"{vent}min", r.get("condition_id", ""), edt)
+    _UNIVERSO_CACHE["ts"] = ahora_ts
+    _UNIVERSO_CACHE["fecha"] = fecha
+    _UNIVERSO_CACHE["data"] = universo
+    return universo
+
+
+def _mejor_ask(book: dict | None) -> float | None:
+    if not book:
+        return None
+    asks = book.get("asks") or []
+    mejor = None
+    for lvl in asks:
+        try:
+            p = float(lvl.get("price"))
+        except (TypeError, ValueError, AttributeError):
+            continue
+        if mejor is None or p < mejor:
+            mejor = p
+    return mejor
+
+
+def _mejor_bid(book: dict | None) -> float | None:
+    if not book:
+        return None
+    bids = book.get("bids") or []
+    mejor = None
+    for lvl in bids:
+        try:
+            p = float(lvl.get("price"))
+        except (TypeError, ValueError, AttributeError):
+            continue
+        if mejor is None or p > mejor:
+            mejor = p
+    return mejor
+
+
+def _capturar_mercado(mid: str, activo: str, marco: str, condition_id: str, edt) -> dict | None:
+    try:
+        yes_token, no_token, cid_real = lt._get_token_ids(mid)
+    except Exception:
+        return None
+    book_yes = lt._fetch_book_publico(yes_token)
+    book_no = lt._fetch_book_publico(no_token)
+    ask_yes = _mejor_ask(book_yes)
+    ask_no = _mejor_ask(book_no)
+    ask_sum = round(ask_yes + ask_no, 4) if (ask_yes is not None and ask_no is not None) else None
+    ahora = datetime.now(timezone.utc)
+    return {
+        "timestamp_utc": ahora.isoformat(timespec="seconds"),
+        "market_id": mid,
+        "condition_id": cid_real or condition_id,
+        "activo": activo,
+        "marco": marco,
+        "end_date": edt.isoformat(timespec="seconds"),
+        "restante_s": round((edt - ahora).total_seconds(), 1),
+        "ask_yes": ask_yes if ask_yes is not None else "",
+        "ask_no": ask_no if ask_no is not None else "",
+        "ask_sum": ask_sum if ask_sum is not None else "",
+        "bid_yes": _mejor_bid(book_yes) or "",
+        "bid_no": _mejor_bid(book_no) or "",
+    }
+
+
+RUTA_SNAPSHOT_LATEST = DIR_SHADOW / "libro_ambos_lados_latest.json"
+
+
+def _guardar(filas: list) -> None:
+    if not filas:
+        return
+    archivo = _archivo_hoy()
+    nuevo = not archivo.exists()
+    with open(archivo, "a", newline="", encoding="utf-8") as f:
+        w = csv.DictWriter(f, fieldnames=COLUMNS)
+        if nuevo:
+            w.writeheader()
+        for fila in filas:
+            w.writerow(fila)
+    _guardar_snapshot_latest(filas)
+
+
+def _guardar_snapshot_latest(filas: list) -> None:
+    """Snapshot pequeño {market_id: {ask_sum, ts}} en data/shadow/ (dentro
+    del repo, a diferencia del CSV histórico que vive fuera en DIR_DATALOGS)
+    -- permite que shadow_predict.py lo lea barato (unas decenas de KB) sin
+    tener que abrir el CSV de ~30MB/dia de DIR_DATALOGS. Solo lectura para
+    quien lo consuma; propuesta #7/#8 de la ronda de alfa 27-Ago (libro
+    ancho como feature de regimen, ver idea_10_propuestas_alfa_cripto_27ago)."""
+    try:
+        data = {f["market_id"]: {"ask_sum": f["ask_sum"], "ts": f["timestamp_utc"]}
+                for f in filas if isinstance(f.get("ask_sum"), float)}
+        tmp = RUTA_SNAPSHOT_LATEST.with_suffix(".tmp")
+        with open(tmp, "w", encoding="utf-8") as f:
+            json.dump(data, f)
+        tmp.replace(RUTA_SNAPSHOT_LATEST)
+    except Exception as e:
+        _log(f"WARN: no se pudo escribir snapshot latest: {type(e).__name__}: {e}")
+
+
+def main() -> None:
+    DIR_SHADOW.mkdir(parents=True, exist_ok=True)
+    _log(f"fetch_libro_ambos_lados arrancado — escaneo cada {INTERVALO_ESCANEO_S}s")
+    while True:
+        t0 = time.time()
+        try:
+            universo = _universo_activo()
+            filas = []
+            for mid, (activo, marco, cid, edt) in universo.items():
+                fila = _capturar_mercado(mid, activo, marco, cid, edt)
+                if fila:
+                    filas.append(fila)
+            _guardar(filas)
+            if filas:
+                anchos = [f for f in filas if isinstance(f["ask_sum"], float) and f["ask_sum"] >= 1.10]
+                _log(f"escaneados {len(universo)} mercados, {len(filas)} con libro leído, "
+                     f"{len(anchos)} con ask_sum>=1.10 (libro ancho)")
+        except Exception as e:
+            _log(f"Error en ciclo de escaneo: {type(e).__name__}: {e}")
+        dormir = INTERVALO_ESCANEO_S - (time.time() - t0)
+        if dormir > 0:
+            time.sleep(dormir)
+
+
+if __name__ == "__main__":
+    main()

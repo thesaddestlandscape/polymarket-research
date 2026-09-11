@@ -1,0 +1,509 @@
+"""
+analisis_gate_bucket_propio_28jul.py — gate de entrada por micro-bucket de
+precio (paso 0.05) construido desde NUESTRO PROPIO histórico de PnL
+(results.csv), no desde el timing de ballenas (que la validación
+retrospectiva del mismo día refutó -- ver ballenas_banda_fina_gate.py y
+project_gate_banda_fina_ballenas_28jul en memoria: mezclar el timing de
+ballenas con la causalidad de FAVORITO_CONFIRMADO/GBM_LATE no transfiere,
+en 3/5 tuplas con n suficiente vetaba el grupo BUENO).
+
+Rigor por bucket (petición explícita Javi, "hay suficientes datos para
+hacer los robustos"):
+  1. n >= N_MIN (40 desde 01-Sep, ver comentario junto a la constante --
+     antes 15, subido tras confirmar con dinero real que ese piso dejaba
+     revertir veredictos que ya habían disparado ejecución)
+  2. shuffle test: pnl del bucket vs pnl del RESTO de la misma tupla,
+     H0 = la etiqueta bucket/resto no importa. p < P_MAX para considerar
+     la diferencia real (no ruido de muestreo).
+  3. split-half CRONOLÓGICO: el signo de (pnl_bucket - pnl_resto) tiene
+     que repetirse en las dos mitades temporales -- un resultado que solo
+     aparece en una mitad es la firma de un artefacto puntual, no un
+     patrón estable (mismo criterio que analisis_gate_riguroso.py usa en
+     el resto del proyecto).
+  4. BH-FDR POR (FAMILIA, MONEDA) (04-Ago, corregido dos veces el mismo
+     día -- primero de global a por familia, luego Javi señaló que hay
+     que desagregar TAMBIÉN por moneda, mismo principio que CLAUDE.md
+     pt.17/feedback_desagregar_por_activo_siempre exige en todo el
+     proyecto: antes se aplicaba GLOBAL sobre las ~264 tuplas×bucket del
+     sistema a la vez, diluyendo el presupuesto de significancia de
+     familias/monedas con menos tests candidatos. Hallazgo real: SOL#15min
+     tenía 3 buckets con shuffle p<0.05 Y split-half consistente en ambas
+     mitades -- exactamente el mismo rigor que sí confirmaba otros
+     buckets -- pero se quedaban en "sin_concluir" solo por competir con
+     miles de tests de otras familias/monedas en el mismo corte BH-FDR.
+     Usa `_familia()` de kelly_precio_gate.py -- misma fuente de verdad de
+     agrupamiento por arquetipo que el resto del sistema, GBM_LATE_15M{,
+     _TARDIO,_ESPACIO_ATR,_PYCONFIRMADO} cuentan como una familia -- pero
+     BTC/ETH/SOL/XRP/DOGE/BNB dentro de esa familia corrigen cada uno por
+     su cuenta, no mezclados).
+
+Un bucket se marca "malo_confirmado" (candidato a stake=0 en el filtro) o
+"bueno_confirmado" solo si pasa las 3 barras. "bueno_confirmado" exige
+ADEMÁS un piso absoluto (08-Ago): pnl_medio del bucket >= 0 -- "diff" es
+relativo al resto de buckets de la misma tupla, así que un bucket puede
+ser "el menos malo" de una tupla que pierde dinero en todos sus buckets
+sin este piso. Todo lo demás queda "sin_concluir" -- fail-open, no se
+toca.
+
+Solo lectura -- no cambia prob_yes/stake/pares_permitidos_live. Genera
+`data/shadow/gate_bucket_propio.json`, consumido por
+`gate_bucket_propio.py` (Fase 0 observacional, igual patrón que
+ballenas_banda_fina_gate).
+"""
+import csv
+import json
+import math
+from collections import defaultdict
+from datetime import datetime, timezone
+from pathlib import Path
+
+import numpy as np
+
+from gate_confirmacion_historial import cargar_historial_previo, veredicto_con_tolerancia
+from kelly_precio_gate import _familia
+
+REPO = Path(__file__).resolve().parent
+RESULTS = str(REPO / "data/shadow/results.csv")
+CONFIG_LIVE = str(REPO / "data/live/config_live.json")
+OUT = str(REPO / "data/shadow/gate_bucket_propio.json")
+
+STEP = 0.05
+N_MIN = 40    # 01-Sep: subido de 15->40, mismo fix aplicado hoy a WALLET_MIRROR
+# (config_live.json::_pares_walletmirror_pausa_nota_2026-09-01) y a
+# analisis_gate_bucket_fino.py::N_MIN_VENTANA -- confirmado con dinero real
+# que un bucket "bueno_confirmado" con n=15-65 puede disparar ejecución y
+# revertir a sin_concluir/malo_confirmado con más datos. Verificado antes de
+# subir: ninguna tupla en pares_permitidos_live tiene bucket confirmado por
+# esta vía con n<40 (0 impacto en dinero real), solo 41 buckets de
+# candidatas (sin riesgo) degradan a sin_concluir -- protección pura para
+# futuras promociones.
+P_MAX = 0.05
+ITERS = 1000
+
+# 10-Ago: Polymarket cambió la resolución de mercados 5min/15min/240min de
+# snapshot a TWAP Chainlink el 07-Ago (confirmado 09-Ago, ver memoria
+# project_twap_chainlink_confirmado_09ago -- misma FECHA_CAMBIO que usa
+# analisis_regimen_twap_chainlink_09ago.py, medianoche UTC como corte).
+# 60min/weekly/daily resuelven por vela Binance u otra fuente, AJENOS al
+# cambio (verificado vía gamma-api). Sin este filtro, un bucket de un marco
+# afectado podía "confirmarse" (n>=15, shuffle p<0.05, split-half) con datos
+# dominados por el mecanismo VIEJO, dando una falsa sensación de evidencia
+# sobre el régimen ACTUAL -- exactamente el riesgo que motivó pausar a mano
+# (override de emergencia) las 2 tuplas live afectadas el 09-Ago. Esto NO
+# reabre esas 2 tuplas (el override sigue mandando siempre, ver
+# gate_bucket_propio.py::_cargar_override) -- corrige el generador para las
+# 246 candidatas DRY_RUN restantes, que dependían de la misma mezcla de
+# régimen sin que nadie lo hubiera pausado.
+FECHA_CAMBIO_TWAP = datetime(2026, 8, 7, tzinfo=timezone.utc)
+MARCOS_TWAP_AFECTADOS = {"5min", "15min", "240min"}
+# 14-Ago: segundo cambio de régimen, solo 5min, 30s->60s a las 00:00 UTC
+# (confirmado al minuto con datos propios vía gamma-api, ver
+# shadow_postmortem.py::TWAP_5MIN_FECHA_CAMBIO_60S). 15min/240min siguen
+# usando solo FECHA_CAMBIO_TWAP (07-Ago).
+FECHA_CAMBIO_TWAP_5MIN_60S = datetime(2026, 8, 14, tzinfo=timezone.utc)
+
+
+def bucket(p):
+    # 06-Ago fix: +1e-9 evita mal-clasificar precios EXACTOS en un múltiplo
+    # de STEP al bucket inferior (coma flotante) -- ver idea_bug_bucketing_
+    # float_precision_micro_buckets_06ago. Regenera gate_bucket_propio.json,
+    # que consume gate_bucket_propio.py::evaluar() (mismo fix aplicado ahí).
+    return round(math.floor(p / STEP + 1e-9) * STEP, 4)
+
+
+def cargar_tuplas_live():
+    """28-Jul: extendido a candidatos_evaluacion_live (petición explícita
+    Javi, "aplícalo también a candidatos_evaluacion_live") -- el análisis
+    en sí no distingue live/candidato (ambos ya están en results.csv,
+    shadow_predict.py loguea todo igual), la diferencia real vive en el
+    RUNTIME: gate_bucket_propio.py solo VETA ejecución si la tupla está
+    en pares_permitidos_live (dinero real); en candidatos solo se loguea
+    el veredicto como feature, nunca bloquea (no tiene sentido frenar la
+    propia acumulación de fill-ability de un candidato por su PnL en
+    shadow, que es justo lo que se está todavía evaluando). Devuelve
+    (strategy, subtype, decision, tupla_str, es_live) -- es_live=True
+    solo para las de pares_permitidos_live (dedupe: si una tupla está
+    en ambas listas, cuenta como live).
+
+    06-Ago (petición explícita Javi, "hay que recogerlo todo y hacerlo
+    bien" -- mismo espíritu que el fix del cementerio del mismo día):
+    ADEMÁS de las dos listas de config_live.json, escanea results.csv
+    directamente y añade CUALQUIER (strategy,subtype,decision) que no
+    esté ya cubierto -- es_live=False (candidato "descubierto", nunca
+    puede vetar dinero real por construcción, ver runtime en
+    gate_bucket_propio.py::evaluar()). Antes de este cambio, una
+    estrategia nueva que empezara a generar en shadow se quedaba SIN
+    micro-buckets hasta que alguien se acordara de añadirla a mano a
+    candidatos_evaluacion_live -- confirmado real el mismo día: 24
+    combos activos en results.csv (LIQUIDACIONES aparte, ya añadidas
+    antes) llevaban tiempo sin cobertura, y el formato de 3 segmentos de
+    WEEKLY_PRICE (activo sin marco, ej. "WEEKLY_PRICE#SOL#BUY_YES") ni
+    siquiera lo soportaba el parseo de arriba (exigía exactamente 4
+    segmentos). Con esto, la cobertura ya no depende de que nadie
+    recuerde mantener una lista -- se auto-mantiene sola cada vez que
+    este script corre (cron diario 06:55 UTC)."""
+    with open(CONFIG_LIVE, encoding="utf-8") as f:
+        c = json.load(f)
+    vistos = {}
+    for lista, es_live in ((c.get("pares_permitidos_live", []), True),
+                            (c.get("candidatos_evaluacion_live", []), False)):
+        for t in lista:
+            partes = t.split("#")
+            if len(partes) != 4:
+                continue
+            strategy, activo, marco, decision = partes
+            if t in vistos and vistos[t][4]:
+                continue  # ya está marcada live, no degradar a candidato
+            vistos[t] = (strategy, f"{activo}#{marco}", decision, t, es_live)
+
+    claves_cubiertas = {(s, sub, d) for s, sub, d, _, _ in vistos.values()}
+    descubiertos = 0
+    with open(RESULTS, encoding="utf-8") as f:
+        for row in csv.DictReader(f):
+            s = row.get("strategy", "")
+            sub = row.get("subtype", "")
+            d = row.get("decision", "")
+            if not s or not sub or not d:
+                continue
+            if (s, sub, d) in claves_cubiertas:
+                continue
+            t = f"{s}#{sub}#{d}"
+            if t in vistos:
+                continue
+            claves_cubiertas.add((s, sub, d))
+            vistos[t] = (s, sub, d, t, False)
+            descubiertos += 1
+    if descubiertos:
+        print(f"[cargar_tuplas_live] {descubiertos} tuplas descubiertas directamente "
+              f"en results.csv (no estaban en config_live.json)")
+    return list(vistos.values())
+
+
+def _marco_de_subtype(subtype):
+    # subtype = "activo#marco" en el caso general (ej. "BTC#15min");
+    # excepciones sin marco (ej. WEEKLY_PRICE#SOL, 2 segmentos) tratadas
+    # como no-afectadas por construcción (no están en MARCOS_TWAP_AFECTADOS).
+    return subtype.split("#")[-1] if "#" in subtype else ""
+
+
+# 31-Ago: pnl_medio a STAKE FIJO, nunca el `pnl_neto` crudo de results.csv
+# -- ese campo usa `apuesta` = Kelly simulado por predicción (compounding,
+# ver shadow_resolve.py::_resolver_prediccion, `apuesta = pred.get("apuesta")
+# or APUESTA_SIMULADA`), que varía por predicción según el bankroll shadow
+# ficticio del momento (~$29K hoy, ver estado_actual.md "P&L sim compuesto").
+# Hallazgo real que motiva el fix: CANDIDATA10_CONFIRMACION_CRUZADA#BTC#
+# 5min#BUY_NO [0.95,1.00) confirmado "bueno_confirmado" con pnl_medio=
+# +43,26€/trade (n=15) -- no es un dato corrupto, es el propio mecanismo:
+# precio_entrada tiene suelo 0,01 (shadow_resolve.py), así que una tupla
+# con `apuesta` simulada grande y un WIN en esa zona da payout=apuesta/0,01
+# (hasta ~99x). Sin normalizar, dos buckets con el MISMO edge real pueden
+# dar pnl_medio muy distinto solo porque sus predicciones tenían `apuesta`
+# simulada distinta -- el gate deja de ser comparable entre tuplas/buckets,
+# justo lo que el propio piso "pnl_medio>=0" (08-Ago) asume que sí lo es.
+# Fórmula: misma que shadow_resolve.py (payout=stake/precio_entrada,
+# floor/techo [0.01,0.99], slippage 2%) pero con stake=STAKE_NORMALIZADO_EUR
+# fijo para TODAS las filas -- así el "€/trade" del gate es comparable
+# entre cualquier tupla/bucket del sistema, y dos tuplas con igual edge
+# real (mismo precio, mismo acierto-rate) dan el mismo pnl_medio.
+STAKE_NORMALIZADO_EUR = 1.0
+SLIPPAGE_NORMALIZADO = 0.02
+
+
+def _pnl_normalizado(py, decision, acierto):
+    try:
+        py = float(py)
+    except (TypeError, ValueError):
+        return None
+    precio_entrada = min(0.99, max(0.01, py))
+    if decision == "BUY_NO":
+        precio_entrada = 1 - precio_entrada
+    stake = STAKE_NORMALIZADO_EUR
+    if acierto:
+        payout = stake / max(0.01, precio_entrada)
+        return (payout - stake) - SLIPPAGE_NORMALIZADO * stake
+    return -stake - SLIPPAGE_NORMALIZADO * stake
+
+
+def cargar_filas(tuplas):
+    claves = {(s, sub, d): t for s, sub, d, t, _ in tuplas}
+    marco_por_tupla = {t: _marco_de_subtype(sub) for _, sub, _, t, _ in tuplas}
+    out = defaultdict(list)  # tupla_str -> [(ts, py, pnl), ...]
+    n_excluidas_pre_twap = 0
+    with open(RESULTS, encoding="utf-8") as f:
+        for row in csv.DictReader(f):
+            if row.get("acierto") not in ("0", "1"):
+                continue
+            clave = (row["strategy"], row["subtype"], row["decision"])
+            t = claves.get(clave)
+            if t is None:
+                continue
+            marco_t = marco_por_tupla.get(t)
+            if marco_t in MARCOS_TWAP_AFECTADOS:
+                try:
+                    ts_dt = datetime.fromisoformat(row.get("prediction_timestamp", ""))
+                except Exception:
+                    continue  # timestamp ilegible en un marco afectado: fail-closed, se descarta
+                corte = FECHA_CAMBIO_TWAP_5MIN_60S if marco_t == "5min" else FECHA_CAMBIO_TWAP
+                if ts_dt < corte:
+                    n_excluidas_pre_twap += 1
+                    continue
+            try:
+                py = float(row["precio_yes_mercado"])
+            except Exception:
+                continue
+            acierto = row.get("acierto") == "1"
+            pnl = _pnl_normalizado(py, row["decision"], acierto)
+            if pnl is None:
+                continue
+            out[t].append((row.get("prediction_timestamp", ""), py, pnl))
+    if n_excluidas_pre_twap:
+        print(f"[cargar_filas] {n_excluidas_pre_twap} filas pre-TWAP (antes de "
+              f"{FECHA_CAMBIO_TWAP.date()}) excluidas en marcos afectados "
+              f"({sorted(MARCOS_TWAP_AFECTADOS)}) -- régimen de resolución distinto")
+    return out
+
+
+_rng = np.random.default_rng(42)
+
+
+def shuffle_test(a, b, iters=ITERS):
+    """Vectorizado con numpy -- la versión con random.shuffle en Python
+    puro (O(n) por iteración con listas de miles de filas, cientos de
+    tuplas/buckets) tardaba minutos en el barrido completo de
+    candidatos_evaluacion_live (248 tuplas). Mismo test estadístico
+    (permutación), resultado idéntico en distribución, solo más rápido:
+    genera todas las permutaciones de golpe como matriz (iters, n) y
+    calcula las medias de grupo con sumas acumuladas (argpartition)."""
+    a = np.asarray(a, dtype=np.float64)
+    b = np.asarray(b, dtype=np.float64)
+    na, nb = len(a), len(b)
+    diff_real = a.mean() - b.mean()
+    todos = np.concatenate([a, b])
+    n = na + nb
+    # (iters, n) de índices barajados -- argsort de valores aleatorios es
+    # la forma estándar de vectorizar "shuffle" por filas en numpy.
+    idx = _rng.random((iters, n)).argsort(axis=1)
+    permutado = todos[idx]
+    media_a = permutado[:, :na].mean(axis=1)
+    media_b = permutado[:, na:].mean(axis=1)
+    diffs = media_a - media_b
+    p_valor = float(np.mean(np.abs(diffs) >= abs(diff_real)))
+    return float(diff_real), p_valor
+
+
+def bh_fdr_signif(p_valores, q=0.05):
+    """Benjamini-Hochberg -- devuelve el set de ÍNDICES (en el orden
+    original de p_valores) que sobreviven la corrección a nivel q.
+    Con cientos/miles de tests simultáneos (candidatos_evaluacion_live:
+    ~230 tuplas x ~10 buckets = miles de tests), p<0.05 SIN corregir
+    produce ~5% de falsos positivos por puro azar -- con ~2000 tests,
+    ~100 buckets "confirmados" que no serían nada. BH-FDR controla la
+    tasa de falsos descubrimientos sobre el conjunto completo, mismo
+    criterio que el resto del proyecto exige para hipótesis con muchos
+    tests (feedback_shuffle_antes_de_bloquear, feedback_no_declarar_
+    muerta_sin_agotar_opciones)."""
+    n = len(p_valores)
+    if n == 0:
+        return set()
+    orden = sorted(range(n), key=lambda i: p_valores[i])
+    corte = -1
+    for rank, i in enumerate(orden, start=1):
+        if p_valores[i] <= (rank / n) * q:
+            corte = rank
+    if corte == -1:
+        return set()
+    return set(orden[:corte])
+
+
+def main():
+    tuplas = cargar_tuplas_live()
+    filas_por_tupla = cargar_filas(tuplas)
+    n_live = sum(1 for *_, es_live in tuplas if es_live)
+    print(f"Tuplas a evaluar: {len(tuplas)} ({n_live} live, {len(tuplas) - n_live} candidatos)")
+    historial_previo = cargar_historial_previo(Path(OUT), anidado_por_bucket=True)
+
+    # PASADA 1: calcular todos los buckets candidatos (n>=N_MIN, split-half
+    # consistente) y acumular p-valores SIN decidir veredicto todavía --
+    # BH-FDR necesita la familia completa de tests antes de cortar.
+    pendientes = []
+    resultado = {}
+    for i, (strategy, subtype, decision, tupla_str, es_live) in enumerate(tuplas):
+        if i % 25 == 0:
+            print(f"  ... {i}/{len(tuplas)} tuplas procesadas (pasada 1/2)", flush=True)
+        filas = filas_por_tupla.get(tupla_str, [])
+        if len(filas) < N_MIN:
+            # /code-review 01-Sep (mismo patrón, un nivel más arriba): si la
+            # tupla entera cae hoy por debajo de N_MIN, no perder el
+            # historial_crudo de sus buckets individuales -- un día flojo a
+            # nivel tupla no es un día MALO a nivel bucket.
+            historial_tupla = historial_previo.get(tupla_str, {})
+            resultado[tupla_str] = {
+                b: {"veredicto": "sin_concluir", "historial_crudo": hist}
+                for b, hist in historial_tupla.items() if hist
+            }
+            continue
+
+        por_bucket = defaultdict(list)
+        for ts, py, pnl in filas:
+            por_bucket[bucket(py)].append((ts, pnl))
+
+        tabla = {}
+        for b in sorted(por_bucket):
+            dentro = por_bucket[b]
+            fuera = [(ts, pnl) for bb, fs in por_bucket.items() if bb != b for ts, pnl in fs]
+            n_d = len(dentro)
+            pnl_d = [pnl for _, pnl in dentro]
+            pnl_f = [pnl for _, pnl in fuera]
+            media_d = sum(pnl_d) / n_d
+
+            # /code-review 01-Sep: si este bucket no sobrevive más abajo
+            # (n<N_MIN, BH-FDR de la pasada 2, o el "piso absoluto"), esta
+            # entrada por defecto es la que queda escrita en el fichero --
+            # sin sembrar historial_crudo aquí, un día sin evidencia nueva
+            # (no un día MALO, simplemente sin sobrevivir el corte de hoy)
+            # borraba el progreso acumulado igual que el bug original que
+            # este mismo fix del 01-Sep quería evitar.
+            historial_semilla = historial_previo.get(tupla_str, {}).get(f"{b:.2f}", [])
+            entrada = {"n": n_d, "pnl_medio": round(media_d, 4),
+                       "diff_vs_resto": round(media_d - (sum(pnl_f) / len(pnl_f)), 4) if pnl_f else None,
+                       "shuffle_p": None, "split_half_diff": None,
+                       "ci90_bootstrap_absoluto": None, "veredicto": "sin_concluir",
+                       "historial_crudo": historial_semilla}
+            tabla[f"{b:.2f}"] = entrada
+
+            if n_d >= N_MIN and pnl_f:
+                diff, p_valor = shuffle_test(pnl_d, pnl_f)
+                entrada["shuffle_p"] = round(p_valor, 4)
+                # 21-Ago (hallazgo real, BALLENAS_TARDIAS#BTC#15min#BUY_YES
+                # [0.20,0.25): n=50, shuffle_p=0.01 contra el RESTO de la
+                # tupla, pnl_medio=+0.369 -- pasaba el piso absoluto (media
+                # >=0) pero el bootstrap CI90% del propio bucket cruzaba
+                # cero [-0.13,+0.89] (hit=30%, payout tipo longshot). El
+                # shuffle+piso de arriba solo garantiza "mejor que el resto
+                # de una tupla mala", nunca que el bucket sea rentable en
+                # términos ABSOLUTOS con confianza -- mismo hueco que ya se
+                # blindó el mismo día en gate_bucket_fino.py (LOO+bootstrap).
+                # Aquí basta el bootstrap CI90% absoluto del propio bucket.
+                pnl_d_arr = np.asarray(pnl_d, dtype=np.float64)
+                boots = pnl_d_arr[_rng.integers(0, n_d, size=(2000, n_d))].mean(axis=1)
+                boots.sort()
+                ci_lo90 = float(boots[int(0.05 * len(boots))])
+                ci_hi90 = float(boots[int(0.95 * len(boots))])
+                entrada["ci90_bootstrap_absoluto"] = [round(ci_lo90, 4), round(ci_hi90, 4)]
+                dentro_sorted = sorted(dentro, key=lambda x: x[0])
+                mid = n_d // 2
+                m1, m2 = dentro_sorted[:mid], dentro_sorted[mid:]
+                if len(m1) >= 5 and len(m2) >= 5:
+                    d1 = sum(pnl for _, pnl in m1) / len(m1) - sum(pnl_f) / len(pnl_f)
+                    d2 = sum(pnl for _, pnl in m2) / len(m2) - sum(pnl_f) / len(pnl_f)
+                    entrada["split_half_diff"] = [round(d1, 4), round(d2, 4)]
+                    consistente = (d1 < 0 and d2 < 0) or (d1 > 0 and d2 > 0)
+                    if consistente:
+                        pendientes.append({"tupla_str": tupla_str, "bucket": f"{b:.2f}", "entrada": entrada,
+                                            "p": p_valor, "diff": diff, "es_live": es_live})
+        resultado[tupla_str] = tabla
+
+    # PASADA 2: BH-FDR POR (FAMILIA, MONEDA) -- cada (arquetipo, activo)
+    # corrige solo contra sus propios tests candidatos, no contra los de
+    # las ~264 tuplas×bucket del sistema entero NI contra las otras 5
+    # monedas de la misma familia (CLAUDE.md pt.17, desagregar siempre por
+    # activo). Estrategias sin agrupar en kelly_precio_gate._familia()
+    # (devuelve el nombre tal cual) quedan igual, solo se añade la moneda
+    # a la clave.
+    por_familia_moneda = defaultdict(list)
+    for idx, p in enumerate(pendientes):
+        partes = p["tupla_str"].split("#")
+        strategy = partes[0]
+        activo = partes[1] if len(partes) > 1 else "?"
+        clave = (_familia(strategy), activo)
+        por_familia_moneda[clave].append(idx)
+
+    sobreviven = set()
+    for (familia, activo), indices in por_familia_moneda.items():
+        p_valores_grupo = [pendientes[i]["p"] for i in indices]
+        sobreviven_grupo = bh_fdr_signif(p_valores_grupo, q=P_MAX)
+        sobreviven |= {indices[j] for j in sobreviven_grupo}
+        print(f"  familia={familia} activo={activo}: {len(indices)} tests candidatos, "
+              f"{len(sobreviven_grupo)} sobreviven BH-FDR q={P_MAX}")
+
+    print(f"\nTests candidatos: {len(pendientes)} | sobreviven BH-FDR (por familia+moneda): {len(sobreviven)}")
+
+    veredictos_nuevos = []
+    veredictos_pendientes_confirmacion = []
+    for idx, p in enumerate(pendientes):
+        if idx not in sobreviven:
+            continue
+        ci = p["entrada"]["ci90_bootstrap_absoluto"]
+        if p["diff"] < 0:
+            veredicto_crudo = "malo_confirmado"
+        elif p["entrada"]["pnl_medio"] >= 0 and ci is not None and ci[0] > 0:
+            veredicto_crudo = "bueno_confirmado"
+        else:
+            # Piso absoluto (08-Ago, petición explícita Javi): "diff" es
+            # relativo al RESTO de buckets de la misma tupla -- un bucket
+            # puede ser significativamente mejor que el resto y aun así
+            # perder dinero en términos absolutos (ej. tupla entera con
+            # pnl negativo en todos sus buckets, este es "el menos malo").
+            # Los ejecutores live exigen veredicto=="bueno_confirmado" para
+            # operar (fail-closed) -- sin este piso, "bueno_confirmado"
+            # podía dejar operar en una zona que sigue perdiendo dinero.
+            # Queda "sin_concluir" (default), nunca "malo_confirmado" --
+            # no hay evidencia de que sea PEOR que el resto, solo de que no
+            # basta para confirmar "bueno" en términos absolutos.
+            continue
+        p["entrada"]["veredicto_crudo_hoy"] = veredicto_crudo
+        b = p["bucket"]
+
+        # 31-Ago (petición explícita Javi): guard de estabilidad ANTES de
+        # exponer "bueno_confirmado" a evaluar()/ejecutores live. Motivo:
+        # confirmaciones al filo del mínimo (n=15-60) revierten en 1 sola
+        # corrida diaria más -- visto dos veces en la misma sesión
+        # (MOMENTUM_IBS_5M_BALLENA#SOL#5min, WALLET_MIRROR#BTC varios
+        # buckets), mismo patrón P5 (multiple-testing) de
+        # project_lecciones_aprendidas_estrategias. Asimétrico a propósito
+        # -- "malo_confirmado" sigue inmediato (1 día basta para VETAR, la
+        # dirección segura), solo "bueno_confirmado" exige consistencia.
+        # 01-Sep (petición explícita Javi, "un día de mala racha no puede
+        # entorpecer esto"): el guard original exigía que el día
+        # INMEDIATAMENTE anterior también fuera bueno_confirmado -- un solo
+        # día flojo reiniciaba a cero. Ahora exige 2 de los últimos 3 días
+        # (incluido hoy) vía gate_confirmacion_historial.py, tolerando un
+        # día suelto sin perder la evidencia ya acumulada.
+        historial_bucket = historial_previo.get(p["tupla_str"], {}).get(b)
+        veredicto_final, p["entrada"]["historial_crudo"] = veredicto_con_tolerancia(
+            veredicto_crudo, historial_bucket)
+        if veredicto_final == "sin_concluir" and veredicto_crudo == "bueno_confirmado":
+            veredictos_pendientes_confirmacion.append(
+                f"⏳ [{'LIVE' if p['es_live'] else 'candidato'}] {p['tupla_str']} "
+                f"[{b},{float(b)+STEP:.2f}) n={p['entrada']['n']} "
+                f"pnl_medio={p['entrada']['pnl_medio']:+.3f} p={p['p']:.4f} "
+                f"bueno_confirmado HOY, esperando confirmación de mañana"
+            )
+
+        p["entrada"]["veredicto"] = veredicto_final
+        if veredicto_final == "sin_concluir":
+            continue  # no listar como "veredicto nuevo" -- sigue pendiente, ver arriba
+        marca = "🔴" if veredicto_final == "malo_confirmado" else "🟢"
+        etiqueta = "LIVE" if p["es_live"] else "candidato"
+        veredictos_nuevos.append(
+            f"{marca} [{etiqueta}] {p['tupla_str']} [{b},{float(b)+STEP:.2f}) n={p['entrada']['n']} "
+            f"pnl_medio={p['entrada']['pnl_medio']:+.3f} p={p['p']:.4f} {veredicto_final}"
+        )
+
+    if veredictos_pendientes_confirmacion:
+        print(f"\n{len(veredictos_pendientes_confirmacion)} bucket(s) 'bueno' hoy, "
+              f"pendientes de 2ª confirmación mañana:")
+        for linea in veredictos_pendientes_confirmacion:
+            print(f"  {linea}")
+
+    print(f"\n{len(veredictos_nuevos)} bucket(s) con veredicto final tras BH-FDR:")
+    for linea in veredictos_nuevos:
+        print(f"  {linea}")
+
+    with open(OUT, "w", encoding="utf-8") as f:
+        json.dump(resultado, f, indent=2, ensure_ascii=False)
+    print(f"\nGuardado en {OUT}")
+
+
+if __name__ == "__main__":
+    main()

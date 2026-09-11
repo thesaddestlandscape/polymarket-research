@@ -1,0 +1,62 @@
+{
+  "timestamp_utc": "2026-09-11T06:23:27+00:00",
+  "estado_global": "OK",
+  "alertas": [],
+  "rechazos_1h": {
+    "rango": 0,
+    "spike": 0,
+    "total": 0,
+    "cambio_fuente": 98,
+    "por_sym": {}
+  },
+  "assets": {
+    "BTC": {
+      "estado": "OK",
+      "n": 3040,
+      "age_seconds": 5.7,
+      "ultimo_precio": 77267.34,
+      "gaps": [],
+      "alertas": []
+    },
+    "ETH": {
+      "estado": "OK",
+      "n": 3040,
+      "age_seconds": 5.7,
+      "ultimo_precio": 2467.31,
+      "gaps": [],
+      "alertas": []
+    },
+    "SOL": {
+      "estado": "OK",
+      "n": 3040,
+      "age_seconds": 5.7,
+      "ultimo_precio": 99.815,
+      "gaps": [],
+      "alertas": []
+    },
+    "XRP": {
+      "estado": "OK",
+      "n": 3040,
+      "age_seconds": 5.7,
+      "ultimo_precio": 1.3512,
+      "gaps": [],
+      "alertas": []
+    }
+  },
+  "cross_source": {
+    "timestamp_utc": "2026-09-11T06:23:27+00:00",
+    "fuentes_activas": [
+      "binance",
+      "coinbase",
+      "kraken"
+    ],
+    "consenso": {
+      "BTC": 77267.34,
+      "ETH": 2467.31,
+      "SOL": 99.815,
+      "XRP": 1.3512
+    },
+    "alertas": [],
+    "bloqueados": []
+  }
+}

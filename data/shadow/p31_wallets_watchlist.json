@@ -1,0 +1,494 @@
+{
+ "cutoff_utc": "2026-08-11T18:06:19+00:00",
+ "origen": "idea_p31_fade_wallets_sistematicamente_malas_11ago -- split-half + gate pooled 11-Ago",
+ "combos": {
+  "SOL#weekly#follow": {
+   "activo": "SOL",
+   "marco": "weekly",
+   "lado": "follow",
+   "wallets": [
+    "0x06dc51826bc524d9a83770e7de9dd7e005b04524",
+    "0xcee6a215f2de749afd3a6a74721cc0c4fbb80a45"
+   ],
+   "n_wallets": 2
+  },
+  "BTC#weekly#fade": {
+   "activo": "BTC",
+   "marco": "weekly",
+   "lado": "fade",
+   "wallets": [
+    "0x09705c0b0a5a7359f5c94688687fc73447e65ae4",
+    "0x0e3b53744520f6d6353d35d36b8bebe136d505aa",
+    "0x26a67625d30cc23ebc2860892404a7897f2b394a",
+    "0x31676bc3d0dcacd46a71246f8d6e612a2185679e",
+    "0x388537259dc9e693c1c9b96fdf07a63f6b7aca77",
+    "0x5a41c5695731f2dcffd5253bad3b737c2aa1fe2d",
+    "0x5d634050ad89f172afb340437ed3170eaa2c9075",
+    "0x6f2a0d4ff16a3ef378a65c62d20cde974578de7d",
+    "0x6fd089a1556cdda1ad5efef08f997a03c7c0a85b",
+    "0x8f523ba7d7a219249dc98231244cd5027e817764",
+    "0x9a48de0798131148fa865a2434f0a8a3890dba21",
+    "0xaa5a8e86d35a4adb15b213fa09063c572eca058c",
+    "0xbfa41f44e58e10de3c74ad00af749efea6356ba3",
+    "0xc0e4eac75334ce2686391feeeb1df182ae7e4ec7"
+   ],
+   "n_wallets": 14
+  },
+  "BTC#weekly#follow": {
+   "activo": "BTC",
+   "marco": "weekly",
+   "lado": "follow",
+   "wallets": [
+    "0x0288ea95e7253e0ed9ea8ce140269864f192d979",
+    "0x1cf169df887c8aca4d8afc83b1a37710b2756ca1",
+    "0x21a6cf5059c850ec25c296f2db02b5dac6dc7442",
+    "0x3ca8ab3a0724e9172502896da380d1a92c2d0164",
+    "0x4b3c5ba3a3eb539a007072cfe970f83bb6da7cd3",
+    "0x4cdb2582b32604b89b1fbd71b58898de48a3172c",
+    "0x4ee29e4e7d4c380babeae5e22e5c02400c2246e1",
+    "0x55be7aa03ecfbe37aa5460db791205f7ac9ddca3",
+    "0x58c82d3f75c03101c304d1e5bb7fcb31a438e4ed",
+    "0x69a45e7cdb98010bc1091c4848eaede99892503f",
+    "0x71a70f24538d885d1b45f9cea158a2cdf2e56fcf",
+    "0x742dda913cd29c49c3db844f608e0510ef2e100e",
+    "0x81134ca47528889a0ad55f1fe81f5789c2bf288b",
+    "0xa42f127d7e8df9f16881ffcc9ed0bc0326875f5a",
+    "0xccd4e810a7f3d9ce903526dd5e7ccddc03d55707",
+    "0xd09763942d4e2bba7dd45085b520df159b0ce127",
+    "0xd678911aadc5d3b9db0ee1feb1d476e3f9c3f49b",
+    "0xe70ddd03b22523719f6ce61e111e3cf4671e924c",
+    "0xeeb69a3468fedb81d1073b4187bb8b50f1d2cc67"
+   ],
+   "n_wallets": 19
+  },
+  "ETH#weekly#fade": {
+   "activo": "ETH",
+   "marco": "weekly",
+   "lado": "fade",
+   "wallets": [
+    "0xd2fcd7a0484e35a04be7a24f645afa6326fe20bb",
+    "0xd95768b03f9ba188d5f0c65c619837a13601572f"
+   ],
+   "n_wallets": 2
+  },
+  "ETH#weekly#follow": {
+   "activo": "ETH",
+   "marco": "weekly",
+   "lado": "follow",
+   "wallets": [
+    "0x409367ef0150830a411b4731d8ed8a3324075749",
+    "0x71a70f24538d885d1b45f9cea158a2cdf2e56fcf",
+    "0x8f64e037a795eef6e8b829053d803fd865c3660f"
+   ],
+   "n_wallets": 3
+  },
+  "ETH#60m#fade": {
+   "activo": "ETH",
+   "marco": "60m",
+   "lado": "fade",
+   "wallets": [
+    "0x2241e8a3248aa08f2fcb98c8745b38b79109c481",
+    "0x336b234db9d830973a4b78dc50aaee7c070e2126"
+   ],
+   "n_wallets": 2
+  },
+  "BTC#60m#fade": {
+   "activo": "BTC",
+   "marco": "60m",
+   "lado": "fade",
+   "wallets": [
+    "0x03f6b895c8b932fbf70b9fde28b8b2bb3024714c",
+    "0x162e0ed01a0e487beded744e5289f7b2521afe52",
+    "0x1a61e966cffd2aa055a6f3add0deb0283d9d8560",
+    "0x3024821d3a7a3ffa5f1258bab54bd906d9e6b996",
+    "0x336b234db9d830973a4b78dc50aaee7c070e2126",
+    "0x6a3feb7eb14c0256d2586da8392ddd0a4f509459",
+    "0x95af93a6da589c79dfe809e152995a69d5d522a8",
+    "0xd2fcd7a0484e35a04be7a24f645afa6326fe20bb",
+    "0xddb0629096a8a03f490b6572c06f2ee76465f95a"
+   ],
+   "n_wallets": 9
+  },
+  "BTC#60m#follow": {
+   "activo": "BTC",
+   "marco": "60m",
+   "lado": "follow",
+   "wallets": [
+    "0x500ae3db27b9b8a721a8bc1f68a1ed8b47c3a800",
+    "0x8b410b99b05d32e277264f0d7ee280df2096de3e",
+    "0x8f1fb27ac8f3cbdb8659ffe68f19b9cf8ad75318",
+    "0x9412cdfc1e3171e1aabb013d0f494986445d0cd0",
+    "0x9d57c42e847173d06841703825d3fe2299e456ea",
+    "0xb27bc932bf8110d8f78e55da7d5f0497a18b5b82",
+    "0xdeee9829aefa1592ed4a9cc5db21708a166bfe08",
+    "0xf31819f7f05eeb17ab40ff8e417447df339c68f0"
+   ],
+   "n_wallets": 8
+  },
+  "SOL#60m#fade": {
+   "activo": "SOL",
+   "marco": "60m",
+   "lado": "fade",
+   "wallets": [
+    "0x148b9bf6bcfe840460fd0344976df3f92c8ad392",
+    "0x6cf148fef595cfb07d99514b11c913809f010ce5",
+    "0xa00f53688d5298fc63f0edc00447aba2c0ac0636",
+    "0xaa3bdf49a964049f389311f96db565170d98f4a7",
+    "0xd938e7555677c08dd9cacfb20436f9ec10750481",
+    "0xe1b19397bdb939f1ecb21408b141e7c51f81b9bc"
+   ],
+   "n_wallets": 6
+  },
+  "SOL#60m#follow": {
+   "activo": "SOL",
+   "marco": "60m",
+   "lado": "follow",
+   "wallets": [
+    "0x007b8961239af104bb5fdc8afb64e52b5bf0c181",
+    "0x580845f990155aacc66eac14a3852a4fa38be67f",
+    "0x628ce07b7c1138aa627e20218aaa2861781f8692",
+    "0xa3e1177124b8cdd923b5edc970228879924297bc",
+    "0xb55fa1296e6ec55d0ce53d93b9237389f11764d4"
+   ],
+   "n_wallets": 5
+  },
+  "BTC#15m#fade": {
+   "activo": "BTC",
+   "marco": "15m",
+   "lado": "fade",
+   "wallets": [
+    "0x0002b68892688adb7edc99fa66b9c5e62dfd3420",
+    "0x01d08f180b50d9c358b883b2fd2c40119db87b12",
+    "0x0f4d1cb3edaadbbe2abd694014140788a20b2f50",
+    "0x22b0a5ac3bdc5a865dbb5989299a766d14784d5e",
+    "0x3024821d3a7a3ffa5f1258bab54bd906d9e6b996",
+    "0x32698e192e4eae0ab6ff598cebd7be918df34b0b",
+    "0x3ff3db55b6ed3b04d1ae25f164328a432d8b88e9",
+    "0x41f47c6b6e30e22317e6e294ab5b206c4284ee16",
+    "0x549b874796a5194071c8728209af45d9c01e28c2",
+    "0x59e79abd7705aaa930750cf61906260b1aa93d05",
+    "0x629da223adfc9957329e02de95ae3d263f92756c",
+    "0x662033e4b3bb8e5468b1a5b855bc93d297d26c63",
+    "0x6c785950af840594ddd357caeaf385fb7590f71b",
+    "0x6f7c3cdb8c19bb88ea6ffdd67dc6aea16eb334e7",
+    "0x775d9de0c72c76a459fadfbb4cd79d5715236beb",
+    "0x7e5d2991c2647de2348287e2f499329fc6a6c4c3",
+    "0x8c12fe4656e3042c8ebdef23f3fe4947c8b2d5ba",
+    "0x95af93a6da589c79dfe809e152995a69d5d522a8",
+    "0x9a28ce826b6c96ea27a5167f423fc1124eeed762",
+    "0x9a8572be93f8d53f111249bba23df67d32cf4528",
+    "0xa29303090a04819cb8fbf56bc107dae3679019f3",
+    "0xaa9621853f92c2dd3be06871b352bce365ef6969",
+    "0xb0c078c893300f44d341f4e854d8964b47dce88f",
+    "0xbdd305996bcc43fd4ac05884684a1084005e21b8",
+    "0xc0f804bc746826984d39148782dce95556991a51",
+    "0xcb9bce3e8a7e3c6eb38c13894aff87a3f5c612ea",
+    "0xd280ea62b092d37540974442c2b7817ae5ba707e",
+    "0xd46526dfa84e86b0fe50360cc517f755cabaa2ee",
+    "0xd5df8601242d9d7b263ba6e0a28ba00d4b08dc1c",
+    "0xd64b97d16171b3893f671db209bac30579f19be5",
+    "0xd912131221d75b624963c928fa5bfd284c4775c3",
+    "0xda096abb597ee63b31b544fbf46805ac50f1bee1",
+    "0xddb6e6246546230503f153506ac1e9914978b9b3",
+    "0xe1b19397bdb939f1ecb21408b141e7c51f81b9bc",
+    "0xe8e086f7ef06af27889edfb5026e1453c61d7eec",
+    "0xee8f1015bbd26ed0bbb2921e950c67a90352819d",
+    "0xfca82164a87b8ba38e887bd594483d29a23c5795"
+   ],
+   "n_wallets": 37
+  },
+  "BTC#15m#follow": {
+   "activo": "BTC",
+   "marco": "15m",
+   "lado": "follow",
+   "wallets": [
+    "0x00f87f52b8df341341d6a31101f7d52a2318cfb9",
+    "0x03f6b895c8b932fbf70b9fde28b8b2bb3024714c",
+    "0x081cf62b0e5ded5a351ef11b3ef6ea4d1d7cbfb1",
+    "0x0cb038487586d1119b165466072e9baf666f3a90",
+    "0x0f2ebdcb20c9037f9b79d6773256e5aefac91103",
+    "0x13324715c215cf7a73836a3d0575cb7b1495c83a",
+    "0x1b414826a2c991d5ae1669a754291626d0df0b56",
+    "0x1e574aeaaeb08c72ea0fb0cd5c4ccfe37b649271",
+    "0x20d2309cd92b797ae7ca175ed828ed8a27fbe29d",
+    "0x22a4827ca94ba6e9f77f5dd9f49e6512b8e163eb",
+    "0x24f5bab872129fde97221b3b69ca9eb2013398d2",
+    "0x2560beefbe36856bdbc3644d3c2fe7a095878d6d",
+    "0x29de3c62b7b49a2d2a062f93b6e659980a4bd9e6",
+    "0x30c53317fc15d7eb8acde5c259a63d1ac0c38511",
+    "0x36507c60823603f7fffeffaf15dbd5ed6d61d17c",
+    "0x3c58ef422754ff22c7e806336feba0064d8b776b",
+    "0x3df531c9dca21d8051d6f2b0be11e2b24b9bd752",
+    "0x41889afb7160d5824bf25895afc6240a2afaa3e5",
+    "0x4a4a1da42089e7084c25e810b16e39942857eba9",
+    "0x4c8ed7ead1ac18338f816e964b1edde8a50eb38f",
+    "0x51928a6454475e6b0d883f5d6ba663670c83df62",
+    "0x5bab23c857df2b3b57d0d0f32090affd0877676f",
+    "0x6434474bd9c0927e8f15d38b0ea3b499afe5c970",
+    "0x6a2ddf20909bd84c86284d1e8dab5a44d3bfd58a",
+    "0x6b6669191c5ba274386febd8b8497c76e049f51e",
+    "0x7df1854c8bd10b573f1281c2e978b8104075491d",
+    "0x8408d503038e6c5989fdca36f7a6a70cf2362af4",
+    "0x8970907074ed21451e42cf9c33e115643c970942",
+    "0x919a9a3f3fb9265560703cf6fe3b38567f3b87b9",
+    "0xa1d57d329227c75b12b09f927fb3d6d6ef8f1343",
+    "0xa596f87cdf44812237ca7ddc8218f95b7983081d",
+    "0xa5e669ed64f76e3c54115862040faaa87f478133",
+    "0xb1e26bbd425fd17658b40c8310d36db342447538",
+    "0xb3b0780f2877882047a22ef99c7ea0f195fb8501",
+    "0xb476bff32237c035bea976d2c1fb7fdcccd8ddc2",
+    "0xb55fa1296e6ec55d0ce53d93b9237389f11764d4",
+    "0xbfb4a10c7e6ec17d72d62dd87af80d31921cc563",
+    "0xce25e214d5cfe4f459cf67f08df581885aae7fdc",
+    "0xd02b6d910a38479c3125308fc4737a46509cd6df",
+    "0xe0b10aae4a591173e75b406f488916d16809a837",
+    "0xf1731a2ee6aa318f4795ff1642366aca420418c0",
+    "0xfa21fba68c77c3c97cd13052a4aa829a2a89d4ef",
+    "0xfcefc196f9c260705ae2434333061cc2ca43ed6c"
+   ],
+   "n_wallets": 43
+  },
+  "DOGE#15m#follow": {
+   "activo": "DOGE",
+   "marco": "15m",
+   "lado": "follow",
+   "wallets": [
+    "0x3be059f270943962a8832abe0da8482978cd9b50",
+    "0x8f34e45fe06d6fad7d9d9d2738859a4022c02f50"
+   ],
+   "n_wallets": 2
+  },
+  "XRP#15m#fade": {
+   "activo": "XRP",
+   "marco": "15m",
+   "lado": "fade",
+   "wallets": [
+    "0x629da223adfc9957329e02de95ae3d263f92756c",
+    "0x65a4af3a849498677da17e277bba11b51e4ccd6d",
+    "0x775d9de0c72c76a459fadfbb4cd79d5715236beb",
+    "0x97b3cdaa9248f178b42d9fe4bbf3f4f68e2d82f5",
+    "0xddb6e6246546230503f153506ac1e9914978b9b3",
+    "0xe8e086f7ef06af27889edfb5026e1453c61d7eec"
+   ],
+   "n_wallets": 6
+  },
+  "XRP#15m#follow": {
+   "activo": "XRP",
+   "marco": "15m",
+   "lado": "follow",
+   "wallets": [
+    "0x3c58ef422754ff22c7e806336feba0064d8b776b",
+    "0x810828d6483fbcde2d9d14c8ea088f218d4cc791",
+    "0xb41650ab898d1e8c1e7d55e8d9aba43ae4c7a676",
+    "0xce25e214d5cfe4f459cf67f08df581885aae7fdc",
+    "0xdf7930e89a2c47560165331863c31deca0733dcd",
+    "0xf9db8ab7fd02a21e5c33823011484fb4b4fe0889"
+   ],
+   "n_wallets": 6
+  },
+  "SOL#15m#fade": {
+   "activo": "SOL",
+   "marco": "15m",
+   "lado": "fade",
+   "wallets": [
+    "0x13e92f1cd635990b84bccc0cf445e7f848c17cd4",
+    "0x562a11bcd7354ea82a09ed803cb1739d60862ad4",
+    "0x7de001e23eeed566d90294e2a3e3e779736372c5",
+    "0xaa571a3fddd176d57a27e15ea544a53ff0688f53",
+    "0xca0c6d9b7a2c0cb9582591cd2d8ff42d5674b9b6"
+   ],
+   "n_wallets": 5
+  },
+  "SOL#15m#follow": {
+   "activo": "SOL",
+   "marco": "15m",
+   "lado": "follow",
+   "wallets": [
+    "0x13324715c215cf7a73836a3d0575cb7b1495c83a",
+    "0x3c58ef422754ff22c7e806336feba0064d8b776b",
+    "0x629da223adfc9957329e02de95ae3d263f92756c",
+    "0x775d9de0c72c76a459fadfbb4cd79d5715236beb",
+    "0x7f79776860e6eab3a84b0b96bcf82a48e13a16a1",
+    "0x8bdf09f52ef96a25ecee7dc709ad64c630fc68c1",
+    "0x981c71ce5035d97093fb1ee408f2012001bf0cd1",
+    "0xb55fa1296e6ec55d0ce53d93b9237389f11764d4",
+    "0xd02b6d910a38479c3125308fc4737a46509cd6df",
+    "0xd1dd2677e21f1704cdd87f6259c9af7f56521fe7",
+    "0xddb6e6246546230503f153506ac1e9914978b9b3",
+    "0xdf7930e89a2c47560165331863c31deca0733dcd",
+    "0xe8e086f7ef06af27889edfb5026e1453c61d7eec"
+   ],
+   "n_wallets": 13
+  },
+  "ETH#15m#fade": {
+   "activo": "ETH",
+   "marco": "15m",
+   "lado": "fade",
+   "wallets": [
+    "0x22b085e025dfe3da6c585355370bf7810c770448",
+    "0x42a88473327670f2ee775bae2f87180db14876d3",
+    "0x6f7c3cdb8c19bb88ea6ffdd67dc6aea16eb334e7",
+    "0x7121364063e70c2929ed22bd8c51ca9e4723b28d",
+    "0x8cc6d0d2ef3dcec712a99489b5718aca698acf5d",
+    "0x97b3cdaa9248f178b42d9fe4bbf3f4f68e2d82f5",
+    "0x97d8c0a35cb0449520982bee19716a27ac410a12",
+    "0xcb9bce3e8a7e3c6eb38c13894aff87a3f5c612ea",
+    "0xd02b6d910a38479c3125308fc4737a46509cd6df",
+    "0xdeee9829aefa1592ed4a9cc5db21708a166bfe08"
+   ],
+   "n_wallets": 10
+  },
+  "ETH#15m#follow": {
+   "activo": "ETH",
+   "marco": "15m",
+   "lado": "follow",
+   "wallets": [
+    "0x03f6b895c8b932fbf70b9fde28b8b2bb3024714c",
+    "0x0489c54aa90edca5290c475714bc851019110168",
+    "0x7e5d2991c2647de2348287e2f499329fc6a6c4c3",
+    "0xa3e1177124b8cdd923b5edc970228879924297bc",
+    "0xd912131221d75b624963c928fa5bfd284c4775c3",
+    "0xfa21fba68c77c3c97cd13052a4aa829a2a89d4ef"
+   ],
+   "n_wallets": 6
+  },
+  "BTC#240m#fade": {
+   "activo": "BTC",
+   "marco": "240m",
+   "lado": "fade",
+   "wallets": [
+    "0x69dcf8fc254c9acff196aa047f02b4888fca0cf5",
+    "0x8320b90db15e5b777e5a023b5ba3cfa214d4904e",
+    "0xd925e4f45a530beedb8852bb4eb901518215f36f"
+   ],
+   "n_wallets": 3
+  },
+  "ETH#5m#fade": {
+   "activo": "ETH",
+   "marco": "5m",
+   "lado": "fade",
+   "wallets": [
+    "0x1e4091ebddb8b8976e4ac5d2ceb0b65c390984d0",
+    "0xafe01c41b67df3979877da061bc206004c9a9552"
+   ],
+   "n_wallets": 2
+  },
+  "ETH#5m#follow": {
+   "activo": "ETH",
+   "marco": "5m",
+   "lado": "follow",
+   "wallets": [
+    "0x07ea18eedc16a8f5d49d73639bd0b6f0d4a5a6ba",
+    "0x22a4827ca94ba6e9f77f5dd9f49e6512b8e163eb",
+    "0x29de3c62b7b49a2d2a062f93b6e659980a4bd9e6",
+    "0x4c8ed7ead1ac18338f816e964b1edde8a50eb38f",
+    "0x79fbe037790061d8444f519bb8ac04ade6e244ba",
+    "0x8dbeabb5961fd2fb28647b7bcadec1bef6d288f8"
+   ],
+   "n_wallets": 6
+  },
+  "BTC#5m#fade": {
+   "activo": "BTC",
+   "marco": "5m",
+   "lado": "fade",
+   "wallets": [
+    "0x110d6a10d7b888538da176edb5680c867f31105f",
+    "0x1e4091ebddb8b8976e4ac5d2ceb0b65c390984d0",
+    "0x47e777cdd37511b475d05f6bd6da7843a0e8b168",
+    "0x5e3038ffeada3119a345dcb3bd31d49c077d1613",
+    "0x5e4038f162016682b47c0708f313f5ca64df33ce",
+    "0x6876472b48f488a144c79e51cba56f9527598dc9",
+    "0x6d00859306a27089f55bfef0c6d59231cb1b515b",
+    "0x6fc4f9b8ef80e6857269c0ce0d35d42b38ef9cdc",
+    "0x77147b7c93ac9b1d151a3998bf3a24e7ab94b1c8",
+    "0x8408d503038e6c5989fdca36f7a6a70cf2362af4",
+    "0xa191f2791f6dc0adf74c4d9223ae7df3cdf6b426",
+    "0xabd028f72b4dde95c3cbea5d290834b21db6fe12",
+    "0xb1a64983ca4eb99106b73e3d68726ff6506b53bc",
+    "0xc9027e128c318551de3d6eac9fa299e7ef03ec67",
+    "0xced1d473666cce912667ef912c4832a71c3e91bc",
+    "0xd569c5f7d9addb1c9ad8f0d6f9ceb0aeea19cf76",
+    "0xe38cc08b122dc5fdf21ebd936059cb47f30def5b",
+    "0xe6e4b7b7bcbeb2bcdd55d7d05871e52c78abce20",
+    "0xede5ceeb71f38889b8ffc88810df873850292554",
+    "0xf6bca52b5a6b96c6d142c0a9a1de0e8148f6ff96",
+    "0xf8dc8477cc3c479a9a2a38cccef91e131e6aa495"
+   ],
+   "n_wallets": 21
+  },
+  "BTC#5m#follow": {
+   "activo": "BTC",
+   "marco": "5m",
+   "lado": "follow",
+   "wallets": [
+    "0x007b8961239af104bb5fdc8afb64e52b5bf0c181",
+    "0x0a1a27b06c80d2c2ff9a5cefc6a2557a1e46db57",
+    "0x1774e0edd5888044d6307f82c767180af9993006",
+    "0x2277c18fb73d4cfbd61384be80ef9339a9496604",
+    "0x22af02a0570f3bb33516fa4f63ef007665551bf9",
+    "0x251c1a283703beed41590b0875a8dcb8ddd1541f",
+    "0x252a0889659015b957251fe30f6f9cca26998cf1",
+    "0x29ca6c127d896bb40219c25a28b032838aa9eed4",
+    "0x29cc9c7a33a2bda724e9822142b313c3209bc842",
+    "0x3b275448f536eb592c1bb918034fc938f1370b98",
+    "0x3d02d37e9fd377788e6370c95208dd3177b1d900",
+    "0x408160507d91470d4d9342f1b9f332fc6a7a649b",
+    "0x40e93159480976e2c60d19f592c85eab39d84c3c",
+    "0x4171038d6e472cce0236d8705d75cfb8c68fbdb1",
+    "0x44832d0d2ec11187c1e77d786feb15f6a50254c6",
+    "0x4b1dcea006f82a2b72074163daeabf952f27ccb2",
+    "0x4e6f446878259fb3d5e536f711980ac63aa0358e",
+    "0x4f46f55302ac9ff12791ca138bef3a04ba5e1cfb",
+    "0x55b12b6a28b60043a313109536b096e3e8c5a258",
+    "0x5d4aba8ad45bb5eab3499a0294b42da5d1e455d3",
+    "0x5e2b9261b0c4f697b55bf921ff2bc227183d9101",
+    "0x5eaa5f0a92c691c7e06501e9c66a84ecb6b0accf",
+    "0x60f1bc55c17cfaab04d3f9a0082485623189dc7c",
+    "0x6398da87c6123f7934ad51f51e9a78434beeacac",
+    "0x6920a7398f1e1c990701dae3d3ba2a82f392d8de",
+    "0x6b14096b2adad7da689b326d0a2fba4179b890e6",
+    "0x750e9938d714f7645cd0388812708a31b216cef6",
+    "0x75cc3b63a2f2423085e10706c78b494017b93ce1",
+    "0x7879fc0d6a6f21d892c8b80d51dde576608b822a",
+    "0x7dcd8bfe71a70627adb7627ae9e2c5605b24e292",
+    "0x8443e310042deecc9de4d5d32ad6a504263b6086",
+    "0x8970907074ed21451e42cf9c33e115643c970942",
+    "0x9104a88305bcb8e5d3f811214cbc97368e235290",
+    "0xa061cc42ea5e40600b581852b21a56b1b0c50964",
+    "0xa306c4311d72412600898f9485e7c1d40a3bc65c",
+    "0xa4dd5e1c6c618692efbc1d6a165af0175229847f",
+    "0xa581b5ea25087d44273ada94cef95a1910e1a14c",
+    "0xb676dea23d6d2abf8d172dd641227a8ed61e7fb8",
+    "0xbdd305996bcc43fd4ac05884684a1084005e21b8",
+    "0xbeb4400ab92eb72bb54086569c2dbc0ad22dda45",
+    "0xc35726b9db3f161aee1e52ddbaa12dbabff9da50",
+    "0xc7c5be6af13191ba22166b199062aae3874c3cf7",
+    "0xc8a03dc8bd0073ee715cb962b7574b96f3af6c71",
+    "0xcf2df4ada0766ea4742fb3dbb52c2526b402e11d",
+    "0xd5d9e583a6b4420d971db0a8ef80a4d5176e6bd3",
+    "0xd64eb72758038c8e7fcf00f21322f3f565c46925",
+    "0xd7b965786ead83d357163e00e8d65f54cd9d5bd1",
+    "0xdb50ced8f5507681ae6a07845f3510131ed671a8",
+    "0xdbf8e8e551fb7c546b740bb8e0a693b3ac9c5716",
+    "0xdfba9ccf8591f1eb69f3adfbbc3683c467c372fc",
+    "0xe12ac31a7208f300e3cc13d5a7a1b9f91ea1fdd1",
+    "0xe32e4e4c8ac1bdd0f07a8d0c9d1ed38777a4b18f",
+    "0xeb4a9a3fefc922786656d546b318317073b3fdbe",
+    "0xee43e52d619bb87c37a80aaf7e55408ae36721f9",
+    "0xef045ed0f5e9c29ee5b74fd549fa9bf1b081f6e3",
+    "0xef971486c3097891baaba8ca0d642aa91d528246"
+   ],
+   "n_wallets": 56
+  },
+  "SOL#5m#follow": {
+   "activo": "SOL",
+   "marco": "5m",
+   "lado": "follow",
+   "wallets": [
+    "0x4d9063953b5c8a8fb9b3c49eaa566f7bcf342512",
+    "0x60f1bc55c17cfaab04d3f9a0082485623189dc7c"
+   ],
+   "n_wallets": 2
+  }
+ }
+}
