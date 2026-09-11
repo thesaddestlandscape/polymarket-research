@@ -151,6 +151,19 @@ def main() -> int:
         n_gate = gate_info.get("n", 0)
         if n_gate < N_MIN_LIVE:
             continue
+        # 11-Sep (bug real encontrado al revisar SNIPER#BTC#15min[0.10,0.15)
+        # a petición de Javi): faltaba exigir que el veredicto ACTUAL del
+        # gate sea bueno_confirmado -- antes solo se exigía n_gate>=40, así
+        # que un bucket que HOY es sin_concluir (split-half inconsistente,
+        # veredicto en flip-flop día a día) seguía apareciendo en
+        # "CANDIDATOS A REAL" mientras al menos una fila vieja del CSV
+        # llevara la etiqueta bueno_confirmado histórica (gate_veredicto
+        # por fila, congelada en el momento del log, usada solo para
+        # aproximar fill-ability bajo gate activo). Esto rompía la
+        # confianza del informe -- un candidato listado aquí debe estar
+        # confirmado HOY, no solo haberlo estado alguna vez.
+        if gate_info.get("veredicto") != "bueno_confirmado":
+            continue
         item = {
             "tupla": f"{arq}#{act}#{mar}[{buc:.2f},{buc+STEP:.2f})",
             "n_gate": n_gate, "pnl_medio_gate": gate_info.get("pnl_medio"),
