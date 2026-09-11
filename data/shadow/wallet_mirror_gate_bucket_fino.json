@@ -4,11 +4,11 @@
     "hi": 0.35,
     "n": 45,
     "pnl_medio": -0.5364,
-    "diff_vs_resto": -0.5418,
+    "diff_vs_resto": -0.5415,
     "p_valor": 0.0,
     "split_half_diff": [
-      -0.7338,
-      -0.3581
+      -0.7335,
+      -0.3578
     ],
     "split_half_ok": true,
     "pnl_medio_loo": -0.5979,
@@ -107,23 +107,16 @@
     "fecha_historial": "2026-09-11",
     "veredicto": "malo_confirmado"
   },
-  "SEGUIR#BTC#15min#0": {
-    "veredicto": "sin_concluir",
-    "historial_crudo": [
-      "malo_confirmado"
-    ],
-    "fecha_historial": "2026-09-11"
-  },
   "SEGUIR#BTC#15min#1": {
     "lo": 0.01,
     "hi": 0.06,
     "n": 58,
     "pnl_medio": -1.0,
-    "diff_vs_resto": -0.9606,
+    "diff_vs_resto": -0.9677,
     "p_valor": 0.0,
     "split_half_diff": [
-      -0.9606,
-      -0.9606
+      -0.9677,
+      -0.9677
     ],
     "split_half_ok": true,
     "pnl_medio_loo": -1.0,
@@ -238,20 +231,20 @@
   "SEGUIR#BTC#5min#0": {
     "lo": 0.0,
     "hi": 0.05,
-    "n": 2713,
-    "pnl_medio": 4.5135,
-    "diff_vs_resto": 4.4994,
+    "n": 2721,
+    "pnl_medio": 4.5344,
+    "diff_vs_resto": 4.5199,
     "p_valor": 0.0,
     "split_half_diff": [
-      5.3238,
-      3.6757
+      5.3048,
+      3.7357
     ],
     "split_half_ok": true,
-    "pnl_medio_loo": 4.4812,
+    "pnl_medio_loo": 4.5023,
     "robusto_loo": true,
     "ci90_bootstrap": [
-      3.8845,
-      5.1684
+      3.899,
+      5.1959
     ],
     "robusto_bootstrap": true,
     "n_posiciones_buscadas": 96,
@@ -269,11 +262,11 @@
     "hi": 0.05,
     "n": 115,
     "pnl_medio": 6.0154,
-    "diff_vs_resto": 6.0304,
+    "diff_vs_resto": 6.0309,
     "p_valor": 0.0,
     "split_half_diff": [
-      3.9135,
-      8.1109
+      3.9139,
+      8.1114
     ],
     "split_half_ok": true,
     "pnl_medio_loo": 5.2605,
@@ -349,6 +342,12 @@
     ],
     "fecha_historial": "2026-09-11",
     "veredicto": "bueno_confirmado"
+  },
+  "SEGUIR#BTC#15min#0": {
+    "veredicto": "sin_concluir",
+    "historial_crudo": [
+      "malo_confirmado"
+    ]
   },
   "SEGUIR#DOGE#15min#0": {
     "veredicto": "sin_concluir",
