@@ -84,24 +84,28 @@ def _tuplas_live() -> list[tuple[str, str, str]]:
     return tuplas
 
 
-def _direcciones_reales_walletmirror(subtype: str) -> list[str]:
-    """13-Ago (bug encontrado al conectar este vigía a WALLET_MIRROR): la
-    whitelist usa vocabulario BUY_Up/BUY_Down (mirror_lado crudo del
-    trade de la wallet), pero trades.csv registra la dirección REAL de
-    la orden en vocabulario BUY_YES/BUY_NO (resuelta por
-    _market_id_y_direccion en wallet_mirror_executor_dryrun.py) -- son
-    dos vocabularios distintos, un filtro `direction==decision` con el
-    token de la whitelist nunca casa con ninguna fila real. Este vigía
-    (y probablemente vigia_slippage_kill_switch.py, mismo patrón de
-    parseo) necesitan descubrir la dirección real desde trades.csv en
-    vez de fiarse del token de pares_permitidos_live para esta
-    estrategia en concreto."""
+def _direcciones_reales(strategy: str, subtype: str) -> list[str]:
+    """13-Ago (bug encontrado al conectar este vigía a WALLET_MIRROR),
+    GENERALIZADO 11-Sep (mismo bug encontrado en SNIPER/DISPERSO -- barrido
+    de salud de sesión): cualquier familia cuya whitelist use vocabulario
+    BUY_Up/BUY_Down (mirror_lado/lado crudo del trade de la wallet, familias
+    WALLET_MIRROR y P-GALLINA -- SNIPER/DISPERSO/WEEKLY_TEMPRANO/WEEKLY_
+    TARDIO vía dispersed_bot_executor_dryrun.py) nunca coincide con
+    trades.csv, que registra SIEMPRE BUY_YES/BUY_NO (verificado 11-Sep:
+    trades.csv no contiene NUNCA BUY_Up/BUY_Down, en ninguna estrategia) --
+    un filtro `direction==decision` con el token BUY_Up/BUY_Down de la
+    whitelist nunca casa con ninguna fila real, dejando el gate de
+    crecimiento logarítmico ciego (n=0 permanente) para esas tuplas
+    exactas mientras operan con dinero real. Este vigía (y probablemente
+    vigia_slippage_kill_switch.py, mismo patrón de parseo) necesitan
+    descubrir la dirección real desde trades.csv en vez de fiarse del
+    token de pares_permitidos_live para estas estrategias."""
     if not TRADES.exists():
         return []
     dirs = set()
     with open(TRADES, encoding="utf-8") as fh:
         for row in csv.DictReader(fh):
-            if (row.get("strategy") == "WALLET_MIRROR" and row.get("subtype") == subtype
+            if (row.get("strategy") == strategy and row.get("subtype") == subtype
                     and row.get("status") == "CLOSED" and row.get("direction")):
                 dirs.add(row["direction"])
     return sorted(dirs)
@@ -154,18 +158,20 @@ def main() -> int:
 
     f = _f_bankroll()
     cambiado = False
-    subtypes_walletmirror_vistos = set()
+    subtypes_vocab_up_down_vistos = set()
     for strategy, subtype, decision in _tuplas_live():
-        if strategy == "WALLET_MIRROR":
-            # Vocabulario BUY_Up/BUY_Down de la whitelist no coincide con
-            # BUY_YES/BUY_NO real de trades.csv -- evaluar UNA vez por
-            # subtype con las direcciones REALES encontradas, no con el
-            # decision literal de pares_permitidos_live (ver docstring
-            # de _direcciones_reales_walletmirror).
-            if subtype in subtypes_walletmirror_vistos:
+        if decision in ("BUY_Up", "BUY_Down"):
+            # 11-Sep: generalizado más allá de WALLET_MIRROR -- vocabulario
+            # BUY_Up/BUY_Down de la whitelist no coincide con BUY_YES/BUY_NO
+            # real de trades.csv para NINGUNA estrategia (SNIPER/DISPERSO
+            # incluidas, ver docstring de _direcciones_reales). Evaluar UNA
+            # vez por (strategy,subtype) con las direcciones REALES
+            # encontradas, no con el decision literal de pares_permitidos_live.
+            clave = (strategy, subtype)
+            if clave in subtypes_vocab_up_down_vistos:
                 continue
-            subtypes_walletmirror_vistos.add(subtype)
-            for direction_real in _direcciones_reales_walletmirror(subtype):
+            subtypes_vocab_up_down_vistos.add(clave)
+            for direction_real in _direcciones_reales(strategy, subtype):
                 tupla = f"{strategy}#{subtype}#{direction_real}"
                 if latch.get(tupla, {}).get("avisado"):
                     continue
