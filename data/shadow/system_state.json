@@ -1,10 +1,10 @@
 {
-  "timestamp_utc": "2026-09-11T19:47:30+00:00",
-  "bankroll_sim": 52644.01,
-  "pnl_total": 52624.01,
-  "n_ops": 501376,
+  "timestamp_utc": "2026-09-11T19:56:39+00:00",
+  "bankroll_sim": 52652.61,
+  "pnl_total": 52632.61,
+  "n_ops": 501472,
   "win_rate": 0.5709,
-  "estrategias_activas": 555,
+  "estrategias_activas": 556,
   "desactivadas": [
     "SMART_FLOW_1H",
     "GBM_LATE_60M_FADE",
@@ -27,8 +27,7 @@
     "PRICE_TARGET_GBM_FADE#reach",
     "PRICE_TARGET_GBM_FADE#BTC#reach",
     "FAVORITO_CONFIRMADO#DOGE#240min",
-    "CANDIDATA9_BOT_CONSENSO#ETH#5min",
-    "CANDIDATA9_BOT_CONSENSO#ETH"
+    "CANDIDATA9_BOT_CONSENSO#ETH#5min"
   ],
   "top3_ic": [
     {
