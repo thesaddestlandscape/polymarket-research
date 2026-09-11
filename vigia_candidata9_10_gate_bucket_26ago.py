@@ -53,8 +53,14 @@ def _append_historico(nuevo: dict) -> None:
 def main() -> int:
     from shadow_digest import enviar_telegram
 
+    # 11-Sep (barrido de salud, vigía roto por TimeoutExpired): el script
+    # ya tarda ~370s con el crecimiento de results.csv/candidata9_10 CSVs
+    # derivados, por encima del timeout=300 original -- mismo patrón ya
+    # arreglado 07-Sep en vigia_gate_bucket_propio.py/vigia_gate_calibracion.py/
+    # vigia_gate_bucket_wallet_mirror.py (timeout fijo no escala con datos
+    # que crecen). Subido a 900s, margen de sobra sobre el tiempo medido.
     r = subprocess.run([sys.executable, str(REPO / "analisis_candidata9_10_gate_bucket_26ago.py")],
-                        capture_output=True, text=True, timeout=300, cwd=str(REPO))
+                        capture_output=True, text=True, timeout=900, cwd=str(REPO))
     if r.returncode != 0:
         print(f"ERROR ejecutando analisis_candidata9_10_gate_bucket_26ago.py: {r.stderr[-2000:]}")
         return 1
