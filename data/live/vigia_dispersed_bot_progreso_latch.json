@@ -1,9 +1,9 @@
 {
- "total_filas": 1955386,
+ "total_filas": 2139777,
  "candidatos": [
   "SNIPER#BTC#5min[0.25,0.30)",
-  "DISPERSO#BTC#5min[0.50,0.55)",
   "SNIPER#BTC#5min[0.05,0.10)",
+  "DISPERSO#BTC#5min[0.50,0.55)",
   "DISPERSO#BTC#15min[0.75,0.80)",
   "DISPERSO#ETH#15min[0.50,0.55)",
   "DISPERSO#ETH#5min[0.25,0.30)",
@@ -15,9 +15,10 @@
   "DISPERSO#ETH#5min[0.10,0.15)",
   "SNIPER#BTC#15min[0.30,0.35)",
   "DISPERSO#SOL#15min[0.50,0.55)",
+  "SNIPER#BTC#15min[0.05,0.10)",
   "DISPERSO#ETH#15min[0.60,0.65)",
   "DISPERSO#ETH#60min[0.40,0.45)",
-  "SNIPER#BTC#15min[0.05,0.10)",
+  "SNIPER#DOGE#15min[0.95,1.00)",
   "SNIPER#SOL#15min[0.95,1.00)"
  ]
 }
