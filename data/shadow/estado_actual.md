@@ -1,4 +1,4 @@
-# Estado del bot — 2026-09-11 18:38 UTC
+# Estado del bot — 2026-09-11 18:43 UTC
 
 ## Live — dinero real (on-chain)
 | | |
@@ -17,7 +17,7 @@
 | P&L sim compuesto | 🟢 +52467.98 $ (ficción Kelly: +206242% s/ operativo) |
 | P&L sim hoy (2026-09-11) | 🟢 +1938.29 $ |
 | Operaciones resueltas | 500679 (285830 WIN / 214849 LOSS) — 57.1% |
-| Señales abiertas | 355441 |
+| Señales abiertas | 355939 |
 
 ## Estrategias (visión global)
 
@@ -31,7 +31,7 @@
 | UPDOWN_GBM_15M_TARDIO | 11200 | 51.4% | +0.014 | 📉 agota (-0.12) | +3418.77$ | 0.50$ | ✅ activa |
 | GBM_LATE_5M | 6943 | 59.9% | +0.099 | 📈 madura (+0.07) | +2687.98$ | 1.34$ | ✅ activa |
 | UPDOWN_GBM | 22843 | 53.1% | +0.031 | ➡️ estable | +1501.53$ | 0.50$ | ✅ activa |
-| GBM_LATE_15M_PYCONFIRMADO | 3707 | 61.1% | +0.111 | 📈 madura (+0.07) | +1299.29$ | 1.18$ | ✅ activa |
+| GBM_LATE_15M_PYCONFIRMADO | 3707 | 61.1% | +0.111 | 📈 madura (+0.07) | +1299.29$ | 1.19$ | ✅ activa |
 | MOMENTUM_IBS_5M_BALLENA | 47496 | 42.6% | -0.074 | ➡️ estable | +913.73$ | 0.50$ | ⚠️ IC negativo |
 | MOMENTUM_IBS_15M_BALLENA | 17969 | 48.2% | -0.018 | 📈 madura (+0.04) | +871.98$ | 0.50$ | ⚠️ IC negativo |
 | WEEKLY_PRICE | 1696 | 80.0% | +0.300 | 📈 madura (+0.04) | +841.58$ | 2.00$ | ✅ activa |
@@ -87,13 +87,13 @@
 
 ## Calidad de datos
 
-✅ **OK** — última verificación 2026-09-11T18:38 UTC | rechazos 1h: 3 (rango=0, spike=0)
+✅ **OK** — última verificación 2026-09-11T18:42 UTC | rechazos 1h: 3 (rango=0, spike=0)
 
 | Asset | Precio | Age | Alertas |
 |---|---|---|---|
 | ✅ BTC | $77,163.79 | 0.2min |  |
 | ✅ ETH | $2,543.14 | 0.2min |  |
-| ✅ SOL | $101.29 | 0.2min |  |
+| ✅ SOL | $101.45 | 0.2min |  |
 | ✅ XRP | $1.36 | 0.2min |  |
 
 **Cross-source** (binance, coinbase, kraken):
