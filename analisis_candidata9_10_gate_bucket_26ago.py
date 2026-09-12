@@ -37,7 +37,9 @@ import numpy as np
 REPO = Path(__file__).resolve().parent
 sys.path.insert(0, str(REPO))
 
-from analisis_gate_bucket_propio_28jul import shuffle_test, bh_fdr_signif  # noqa: E402
+from analisis_gate_bucket_propio_28jul import (  # noqa: E402
+    shuffle_test, bh_fdr_signif, UMBRAL_ABSOLUTO_EUR, bootstrap_absoluto, rescatar_via_absoluta,
+)
 
 IN_BOTS = REPO / "data/shadow/bot_wallets_gate_bucket_fase0.csv"
 OUT = REPO / "data/shadow/candidata9_10_gate_bucket.json"
@@ -195,6 +197,7 @@ def main():
     print(f"Tuplas (candidata9+10): {len(eventos)}")
 
     pendientes = []
+    candidatos_abs = []  # vía absoluta (12-Sep), ver UMBRAL_ABSOLUTO_EUR
     resultado = {}
     for tupla_str, filas in eventos.items():
         if len(filas) < N_MIN:
@@ -220,16 +223,32 @@ def main():
                        "ci90_bootstrap_absoluto": None, "veredicto": "sin_concluir"}
             tabla[f"{b:.2f}"] = entrada
 
+            if n_d >= N_MIN:
+                # 12-Sep (decisión explícita Javi, ver UMBRAL_ABSOLUTO_EUR en
+                # analisis_gate_bucket_propio_28jul.py): vía absoluta,
+                # independiente de pnl_f. Reemplaza el bootstrap ad-hoc que
+                # tenía este módulo (semilla no determinista, hash() varía
+                # entre procesos) por el compartido -- mismo criterio "nunca
+                # duplicar la fórmula" del docstring de este fichero.
+                ci_lo90, ci_hi90, p_valor_abs = bootstrap_absoluto(
+                    pnl_d, seed_key=f"abs#{tupla_str}#{b:.2f}")
+                entrada["ci90_bootstrap_absoluto"] = [round(ci_lo90, 4), round(ci_hi90, 4)]
+                entrada["p_valor_abs"] = round(p_valor_abs, 4)
+                dentro_sorted = sorted(dentro, key=lambda x: x[0])
+                mid = n_d // 2
+                m1, m2 = dentro_sorted[:mid], dentro_sorted[mid:]
+                split_half_abs = None
+                if len(m1) >= 5 and len(m2) >= 5:
+                    m1_abs = sum(pnl for _, pnl in m1) / len(m1)
+                    m2_abs = sum(pnl for _, pnl in m2) / len(m2)
+                    split_half_abs = [round(m1_abs, 4), round(m2_abs, 4)]
+                    entrada["split_half_absoluto"] = split_half_abs
+                candidatos_abs.append({"clave_str": tupla_str, "bucket": f"{b:.2f}",
+                                        "entrada": entrada, "p_valor_abs": p_valor_abs,
+                                        "split_half_abs": split_half_abs})
             if n_d >= N_MIN and pnl_f:
                 diff, p_valor = shuffle_test(pnl_d, pnl_f)
                 entrada["shuffle_p"] = round(p_valor, 4)
-                pnl_d_arr = np.asarray(pnl_d, dtype=np.float64)
-                rng = np.random.default_rng(abs(hash((tupla_str, b))) % (2**32))
-                boots = pnl_d_arr[rng.integers(0, n_d, size=(2000, n_d))].mean(axis=1)
-                boots.sort()
-                ci_lo90 = float(boots[int(0.05 * len(boots))])
-                ci_hi90 = float(boots[int(0.95 * len(boots))])
-                entrada["ci90_bootstrap_absoluto"] = [round(ci_lo90, 4), round(ci_hi90, 4)]
                 dentro_sorted = sorted(dentro, key=lambda x: x[0])
                 mid = n_d // 2
                 m1, m2 = dentro_sorted[:mid], dentro_sorted[mid:]
@@ -277,6 +296,21 @@ def main():
         veredictos_nuevos.append(
             f"{marca} {p['tupla_str']} [{b},{float(b)+STEP:.2f}) n={p['entrada']['n']} "
             f"pnl_medio={p['entrada']['pnl_medio']:+.3f} p={p['p']:.4f} {veredicto}"
+        )
+
+    # 12-Sep, vía absoluta (decisión explícita Javi, ver UMBRAL_ABSOLUTO_EUR
+    # en analisis_gate_bucket_propio_28jul.py): rescata buckets rentables de
+    # sobra que la vía relativa dejó en malo_confirmado/sin_concluir solo
+    # por ser peores que un vecino de la misma tupla.
+    rescatados = rescatar_via_absoluta(
+        candidatos_abs, agrupador_fn=lambda tupla_str: (_familia(tupla_str), tupla_str.split("#")[1]))
+    for c in rescatados:
+        b = c["bucket"]
+        resultado[c["clave_str"]][b]["veredicto"] = "bueno_confirmado"
+        resultado[c["clave_str"]][b]["via"] = "absoluta"
+        veredictos_nuevos.append(
+            f"🟢 [vía absoluta] {c['clave_str']} [{b},{float(b)+STEP:.2f}) n={c['entrada']['n']} "
+            f"pnl_medio={c['entrada']['pnl_medio']:+.3f} p_abs={c['p_valor_abs']:.4f} bueno_confirmado"
         )
 
     print(f"\n{len(veredictos_nuevos)} bucket(s) con veredicto tras BH-FDR:")

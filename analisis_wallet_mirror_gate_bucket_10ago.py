@@ -54,6 +54,9 @@ from gate_confirmacion_historial import (
 REPO = Path(__file__).resolve().parent
 sys.path.insert(0, str(REPO))
 import shadow_postmortem as sp  # noqa: E402 -- reusa TWAP_MARCOS_AFECTADOS/TWAP_FECHA_CAMBIO
+from analisis_gate_bucket_propio_28jul import (  # noqa: E402
+    UMBRAL_ABSOLUTO_EUR, bootstrap_absoluto, rescatar_via_absoluta,
+)
 
 EXECUTOR = REPO / "data/shadow/wallet_mirror_executor_dryrun.csv"
 SNIPER = REPO / "data/shadow/wallet_mirror_sniper_dry_run.csv"
@@ -221,6 +224,34 @@ def _cargar_pnl_real_por_bucket() -> dict:
     return {k: dict(v) for k, v in out.items()}
 
 
+def _cargar_historial_abs_previo(out_path):
+    """12-Sep (/code-review encontró el hueco: reusar historial_crudo/
+    fecha_historial de la vía relativa para la vía absoluta mezclaba dos
+    tests distintos en la MISMA ventana de tolerancia -- un bucket podía
+    quedar malo_confirmado por la vía relativa y luego "reconfirmarse"
+    bueno_confirmado con solo 2 días de rescate absoluto sin que la vía
+    relativa hubiera cambiado de opinión nunca). Namespace INDEPENDIENTE
+    (campos *_abs, mismo fichero de salida) para que la vía absoluta
+    acumule su propio historial de 2-de-3-días sin contaminar ni ser
+    contaminada por la vía relativa -- a diferencia de la PASADA 2.5 de
+    analisis_gate_bucket_propio_28jul.py (que arranca en blanco cada vez,
+    nunca acumula), esta SÍ persiste entre corridas."""
+    try:
+        with open(out_path, encoding="utf-8") as f:
+            data = json.load(f)
+    except Exception:
+        return {}, {}
+    hist, fecha = {}, {}
+    for clave_str, tabla in data.items():
+        if not isinstance(tabla, dict):
+            continue
+        hist[clave_str] = {b: v.get("historial_crudo_abs", [])
+                            for b, v in tabla.items() if isinstance(v, dict)}
+        fecha[clave_str] = {b: v.get("fecha_historial_abs")
+                             for b, v in tabla.items() if isinstance(v, dict)}
+    return hist, fecha
+
+
 def main():
     grupos = cargar_filas()
     print(f"Grupos (tipo,activo,marco,grande): {len(grupos)}")
@@ -234,10 +265,12 @@ def main():
     # HORAS". Ver gate_confirmacion_historial.py::
     # veredicto_con_tolerancia_diario() para el detalle completo.
     fecha_historial_previo = cargar_fecha_historial_previo(OUT, anidado_por_bucket=True)
+    historial_abs_previo, fecha_historial_abs_previo = _cargar_historial_abs_previo(OUT)
     pnl_real_por_bucket = _cargar_pnl_real_por_bucket()
 
     resultado = {}  # "tipo#activo#marco#grande" -> {bucket_str: entrada}
     pendientes = []
+    candidatos_abs = []  # vía absoluta (12-Sep), ver UMBRAL_ABSOLUTO_EUR
     for clave, filas in grupos.items():
         tipo, activo, marco, grande = clave
         clave_str = f"{tipo}#{activo}#{marco}#{grande}"
@@ -297,11 +330,31 @@ def main():
                        "shuffle_p": None, "split_half": None, "veredicto": "sin_concluir",
                        "historial_crudo": historial_semilla, "fecha_historial": fecha_semilla}
             tabla[f"{b:.2f}"] = entrada
+            if n_d >= N_MIN:
+                # 12-Sep (decisión explícita Javi, ver UMBRAL_ABSOLUTO_EUR
+                # en analisis_gate_bucket_propio_28jul.py): vía absoluta,
+                # independiente de si hay "fuera" -- un bucket rentable de
+                # sobra no debe depender de tener vecinos con los que
+                # compararse. dentro_sorted se reusa más abajo también para
+                # el split-half relativo si hay `fuera`.
+                dentro_sorted = sorted(dentro, key=lambda x: x[0])
+                _, _, p_valor_abs = bootstrap_absoluto(pnl_d, seed_key=f"abs#{clave_str}#{b:.2f}")
+                entrada["p_valor_abs"] = round(p_valor_abs, 4)
+                mid = n_d // 2
+                m1, m2 = dentro_sorted[:mid], dentro_sorted[mid:]
+                split_half_abs = None
+                if len(m1) >= 5 and len(m2) >= 5:
+                    m1_abs = sum(pnl for _, pnl in m1) / len(m1)
+                    m2_abs = sum(pnl for _, pnl in m2) / len(m2)
+                    split_half_abs = [round(m1_abs, 4), round(m2_abs, 4)]
+                    entrada["split_half_absoluto"] = split_half_abs
+                candidatos_abs.append({"clave_str": clave_str, "bucket": f"{b:.2f}",
+                                        "entrada": entrada, "p_valor_abs": p_valor_abs,
+                                        "split_half_abs": split_half_abs})
             if n_d >= N_MIN and fuera:
                 pnl_f = [pnl for _, pnl in fuera]
                 diff, p_valor = shuffle_test(pnl_d, pnl_f, seed_key=f"{clave_str}#{b:.2f}")
                 entrada["shuffle_p"] = round(p_valor, 4)
-                dentro_sorted = sorted(dentro, key=lambda x: x[0])
                 mid = n_d // 2
                 m1, m2 = dentro_sorted[:mid], dentro_sorted[mid:]
                 if len(m1) >= 5 and len(m2) >= 5:
@@ -328,6 +381,27 @@ def main():
         p_valores = [pendientes[i]["p"] for i in indices]
         sobreviven |= {indices[j] for j in bh_fdr_signif(p_valores, q=P_MAX)}
 
+    def _degradar(veredicto_crudo, entrada, clave_str, b):
+        """29-Ago/31-Ago: vetos de payout asimétrico (Kelly g(f=10%)<=0) y
+        verdad-de-suelo (trades REALES ya negativos en este bucket exacto,
+        n_real>=2) -- factorizado 12-Sep para reusarlo también en la vía
+        absoluta de abajo, mismo criterio EXACTO, solo puede DEGRADAR,
+        nunca promover."""
+        nota_payout = ""
+        g_kelly = entrada.get("g_kelly_f10")
+        if veredicto_crudo == "bueno_confirmado" and g_kelly is not None and g_kelly <= 0:
+            veredicto_crudo = "malo_confirmado"
+            nota_payout = f" [degradado: payout asimétrico g_kelly(f=10%)={g_kelly:+.5f}<=0]"
+        nota_real = ""
+        pnls_reales = pnl_real_por_bucket.get(clave_str, {}).get(b)
+        if veredicto_crudo == "bueno_confirmado" and pnls_reales and len(pnls_reales) >= 2:
+            media_real = sum(pnls_reales) / len(pnls_reales)
+            if media_real < 0:
+                veredicto_crudo = "malo_confirmado"
+                nota_real = (f" [degradado: {len(pnls_reales)} trades REALES "
+                             f"pnl_medio={media_real:+.3f}€<0]")
+        return veredicto_crudo, nota_payout, nota_real, g_kelly
+
     veredictos_nuevos = []
     veredictos_pendientes_confirmacion = []
     for idx, p in enumerate(pendientes):
@@ -339,33 +413,10 @@ def main():
             veredicto_crudo = "bueno_confirmado"
         else:
             continue  # piso absoluto, mismo criterio que gate_bucket_propio 08-Ago
-        # 29-Ago: veto de payout asimétrico -- degrada bueno_confirmado si
-        # el crecimiento compuesto (Kelly g(f=10%)) es <=0 pese a pnl_medio
-        # lineal positivo (hit-rate alto con pérdidas grandes raras que se
-        # comen el compounding). Mismo criterio que gate_bucket_propio.py::
-        # _veto_fillable() señal #2 -- solo puede DEGRADAR, nunca promover.
-        nota_payout = ""
-        g_kelly = p["entrada"].get("g_kelly_f10")
-        if veredicto_crudo == "bueno_confirmado" and g_kelly is not None and g_kelly <= 0:
-            veredicto_crudo = "malo_confirmado"
-            nota_payout = f" [degradado: payout asimétrico g_kelly(f=10%)={g_kelly:+.5f}<=0]"
-
-        # 31-Ago: veto de verdad-de-suelo -- degrada bueno_confirmado si YA
-        # hay trades REALES (no proxy) en este bucket exacto y su pnl medio
-        # es negativo. n_real>=2 (mismo umbral mínimo de "no ruido de una
-        # sola vez" que el resto del proyecto usa para split-half). Solo
-        # puede degradar, nunca promover -- ver _cargar_pnl_real_por_bucket().
-        nota_real = ""
-        pnls_reales = pnl_real_por_bucket.get(p["clave_str"], {}).get(p["bucket"])
-        if veredicto_crudo == "bueno_confirmado" and pnls_reales and len(pnls_reales) >= 2:
-            media_real = sum(pnls_reales) / len(pnls_reales)
-            if media_real < 0:
-                veredicto_crudo = "malo_confirmado"
-                nota_real = (f" [degradado: {len(pnls_reales)} trades REALES "
-                             f"pnl_medio={media_real:+.3f}€<0]")
-
-        p["entrada"]["veredicto_crudo_hoy"] = veredicto_crudo
         b = p["bucket"]
+        veredicto_crudo, nota_payout, nota_real, g_kelly = _degradar(
+            veredicto_crudo, p["entrada"], p["clave_str"], b)
+        p["entrada"]["veredicto_crudo_hoy"] = veredicto_crudo
 
         # 31-Ago (mismo guard que gate_bucket_propio.py, petición explícita
         # Javi): asimétrico, "malo_confirmado" sigue inmediato (1 día basta
@@ -396,6 +447,52 @@ def main():
             f"{marca} {p['clave_str']} [{b},{float(b)+STEP:.2f}) "
             f"n={p['entrada']['n']} pnl_medio={p['entrada']['pnl_medio']:+.3f} "
             f"g_kelly={g_kelly:+.5f} p={p['p']:.4f} {veredicto}{nota_payout}{nota_real}"
+        )
+
+    # 12-Sep, vía absoluta (decisión explícita Javi, ver UMBRAL_ABSOLUTO_EUR
+    # en analisis_gate_bucket_propio_28jul.py): rescata buckets rentables de
+    # sobra (pnl_medio>=UMBRAL_ABSOLUTO_EUR, robusto tras BH-FDR) que la vía
+    # relativa de arriba dejó en "malo_confirmado" solo por ser peores que
+    # un vecino de la misma tupla -- pasa por las MISMAS degradaciones
+    # (payout asimétrico, verdad-de-suelo) y la MISMA tolerancia diaria que
+    # la vía relativa, nunca las relaja.
+    rescatados = rescatar_via_absoluta(
+        candidatos_abs, agrupador_fn=lambda clave_str: tuple(clave_str.split("#")[1:]))
+    for c in rescatados:
+        b = c["bucket"]
+        veredicto_crudo, nota_payout, nota_real, g_kelly = _degradar(
+            "bueno_confirmado", c["entrada"], c["clave_str"], b)
+        c["entrada"]["veredicto_crudo_hoy_abs"] = veredicto_crudo
+        c["entrada"]["via"] = "absoluta"
+        # Namespace INDEPENDIENTE de historial (historial_abs_previo/
+        # *_abs, ver _cargar_historial_abs_previo) -- /code-review 12-Sep:
+        # reusar historial_crudo/fecha_historial de la vía relativa
+        # contaminaba su ventana de tolerancia (un malo_confirmado
+        # relativo podía "reconfirmarse" bueno con solo 2 días de rescate
+        # absoluto, sin que la vía relativa hubiera cambiado de opinión).
+        historial_bucket = historial_abs_previo.get(c["clave_str"], {}).get(b)
+        fecha_bucket_previa = fecha_historial_abs_previo.get(c["clave_str"], {}).get(b)
+        veredicto, hist_abs, fecha_abs = veredicto_con_tolerancia_diario(
+            veredicto_crudo, historial_bucket, fecha_bucket_previa)
+        c["entrada"]["historial_crudo_abs"] = hist_abs
+        c["entrada"]["fecha_historial_abs"] = fecha_abs
+        if veredicto == "sin_concluir":
+            # NUNCA pisa el veredicto ya decidido por la vía relativa (que
+            # puede ser malo_confirmado, sin_concluir o -- imposible aquí,
+            # ver rescatar_via_absoluta -- bueno_confirmado) mientras la
+            # vía absoluta no acumule sus propios 2-de-3-días.
+            if veredicto_crudo == "bueno_confirmado":
+                veredictos_pendientes_confirmacion.append(
+                    f"⏳ [vía absoluta] {c['clave_str']} [{b},{float(b)+STEP:.2f}) "
+                    f"n={c['entrada']['n']} pnl_medio={c['entrada']['pnl_medio']:+.3f} "
+                    f"bueno_confirmado HOY, esperando confirmación de mañana")
+            continue
+        c["entrada"]["veredicto"] = veredicto
+        marca = "🔴" if veredicto == "malo_confirmado" else "🟢"
+        veredictos_nuevos.append(
+            f"{marca} [vía absoluta] {c['clave_str']} [{b},{float(b)+STEP:.2f}) "
+            f"n={c['entrada']['n']} pnl_medio={c['entrada']['pnl_medio']:+.3f} "
+            f"g_kelly={g_kelly:+.5f} p_abs={c['p_valor_abs']:.4f} {veredicto}{nota_payout}{nota_real}"
         )
 
     print(f"\n{len(veredictos_nuevos)} bucket(s) con veredicto tras BH-FDR:")

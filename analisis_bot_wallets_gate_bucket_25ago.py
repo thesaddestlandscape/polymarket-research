@@ -57,6 +57,9 @@ from gate_confirmacion_historial import cargar_historial_previo, veredicto_con_t
 
 REPO = Path(__file__).resolve().parent
 sys.path.insert(0, str(REPO))
+from analisis_gate_bucket_propio_28jul import (  # noqa: E402
+    UMBRAL_ABSOLUTO_EUR, bootstrap_absoluto, rescatar_via_absoluta,
+)
 import shadow_postmortem as sp  # noqa: E402 -- reusa es_pre_twap
 
 IN = REPO / "data/shadow/bot_wallets_gate_bucket_fase0.csv"
@@ -168,6 +171,26 @@ def bh_fdr_signif(p_valores, q=0.05):
     return set(orden[:corte])
 
 
+def _cargar_historial_abs_previo(out_path):
+    """12-Sep (/code-review, mismo hueco que analisis_wallet_mirror_gate_
+    bucket_10ago.py): namespace INDEPENDIENTE de historial para la vía
+    absoluta -- reusar historial_crudo de la vía relativa contaminaba su
+    ventana de tolerancia (un malo_confirmado relativo podía "reconfirmarse"
+    bueno con solo 2 días de rescate absoluto)."""
+    try:
+        with open(out_path, encoding="utf-8") as f:
+            data = json.load(f)
+    except Exception:
+        return {}
+    hist = {}
+    for clave_str, tabla in data.items():
+        if not isinstance(tabla, dict):
+            continue
+        hist[clave_str] = {b: v.get("historial_crudo_abs", [])
+                            for b, v in tabla.items() if isinstance(v, dict)}
+    return hist
+
+
 def main():
     grupos = cargar_filas()
     print(f"Grupos (arquetipo,activo,marco): {len(grupos)}")
@@ -184,9 +207,11 @@ def main():
     # gate_bucket.py, 06:59 UTC) -- no hace falta el wrapper "_diario" que
     # sí necesitó Wallet Mirror (ese corre horario).
     historial_previo = cargar_historial_previo(OUT, anidado_por_bucket=True)
+    historial_abs_previo = _cargar_historial_abs_previo(OUT)
 
     resultado = {}
     pendientes = []
+    candidatos_abs = []  # vía absoluta (12-Sep), ver UMBRAL_ABSOLUTO_EUR
     for clave, filas in grupos.items():
         arquetipo, activo, marco = clave
         clave_str = f"{arquetipo}#{activo}#{marco}"
@@ -222,11 +247,28 @@ def main():
                        "shuffle_p": None, "split_half": None, "veredicto": "sin_concluir",
                        "historial_crudo": historial_semilla}
             tabla[f"{b:.2f}"] = entrada
+            if n_d >= N_MIN:
+                # 12-Sep (decisión explícita Javi, ver UMBRAL_ABSOLUTO_EUR
+                # en analisis_gate_bucket_propio_28jul.py): vía absoluta,
+                # independiente de "fuera".
+                dentro_sorted = sorted(dentro, key=lambda x: x[0])
+                _, _, p_valor_abs = bootstrap_absoluto(pnl_d, seed_key=f"abs#{clave_str}#{b:.2f}")
+                entrada["p_valor_abs"] = round(p_valor_abs, 4)
+                mid = n_d // 2
+                m1, m2 = dentro_sorted[:mid], dentro_sorted[mid:]
+                split_half_abs = None
+                if len(m1) >= 5 and len(m2) >= 5:
+                    m1_abs = sum(pnl for _, pnl in m1) / len(m1)
+                    m2_abs = sum(pnl for _, pnl in m2) / len(m2)
+                    split_half_abs = [round(m1_abs, 4), round(m2_abs, 4)]
+                    entrada["split_half_absoluto"] = split_half_abs
+                candidatos_abs.append({"clave_str": clave_str, "bucket": f"{b:.2f}",
+                                        "entrada": entrada, "p_valor_abs": p_valor_abs,
+                                        "split_half_abs": split_half_abs})
             if n_d >= N_MIN and fuera:
                 pnl_f = [pnl for _, pnl in fuera]
                 diff, p_valor = shuffle_test(pnl_d, pnl_f, seed_key=f"{clave_str}#{b:.2f}")
                 entrada["shuffle_p"] = round(p_valor, 4)
-                dentro_sorted = sorted(dentro, key=lambda x: x[0])
                 mid = n_d // 2
                 m1, m2 = dentro_sorted[:mid], dentro_sorted[mid:]
                 if len(m1) >= 5 and len(m2) >= 5:
@@ -277,6 +319,30 @@ def main():
         veredictos_nuevos.append(
             f"{marca} {p['clave_str']} [{p['bucket']},{float(p['bucket'])+STEP:.2f}) "
             f"n={p['entrada']['n']} pnl_medio={p['entrada']['pnl_medio']:+.3f} p={p['p']:.4f} {veredicto}"
+        )
+
+    # 12-Sep, vía absoluta (decisión explícita Javi, ver UMBRAL_ABSOLUTO_EUR
+    # en analisis_gate_bucket_propio_28jul.py): rescata buckets rentables de
+    # sobra que la vía relativa dejó en malo_confirmado/sin_concluir solo
+    # por ser peores que un vecino de la misma tupla.
+    rescatados = rescatar_via_absoluta(
+        candidatos_abs, agrupador_fn=lambda clave_str: tuple(clave_str.split("#")[1:]))
+    for c in rescatados:
+        b = c["bucket"]
+        historial_bucket = historial_abs_previo.get(c["clave_str"], {}).get(b)
+        veredicto, c["entrada"]["historial_crudo_abs"] = veredicto_con_tolerancia(
+            "bueno_confirmado", historial_bucket)
+        c["entrada"]["veredicto_crudo_hoy_abs"] = "bueno_confirmado"
+        c["entrada"]["via"] = "absoluta"
+        if veredicto == "sin_concluir":
+            # NUNCA pisa el veredicto ya decidido por la vía relativa --
+            # ver comentario en _cargar_historial_abs_previo.
+            continue
+        c["entrada"]["veredicto"] = veredicto
+        veredictos_nuevos.append(
+            f"🟢 [vía absoluta] {c['clave_str']} [{b},{float(b)+STEP:.2f}) "
+            f"n={c['entrada']['n']} pnl_medio={c['entrada']['pnl_medio']:+.3f} "
+            f"p_abs={c['p_valor_abs']:.4f} {veredicto}"
         )
 
     print(f"\n{len(veredictos_nuevos)} bucket(s) con veredicto tras BH-FDR:")

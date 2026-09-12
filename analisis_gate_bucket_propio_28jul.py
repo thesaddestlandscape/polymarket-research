@@ -53,6 +53,7 @@ ballenas_banda_fina_gate).
 import csv
 import json
 import math
+import zlib
 from collections import defaultdict
 from datetime import datetime, timezone
 from pathlib import Path
@@ -79,6 +80,81 @@ N_MIN = 40    # 01-Sep: subido de 15->40, mismo fix aplicado hoy a WALLET_MIRROR
 # futuras promociones.
 P_MAX = 0.05
 ITERS = 1000
+
+# 12-Sep, decisión explícita Javi (caso real: SEGUIR#BTC#5min#0[0.10,0.15)
+# en wallet_mirror_gate_bucket.json, n=2170, pnl_medio=+0.303€/trade,
+# marcado "malo_confirmado" solo porque sus vecinos [0.00,0.05)/[0.05,0.10)
+# rinden aún mejor -- "no puede ser, si queremos cerrar el Stage 0 tenemos
+# que operar en todos los buckets que den +10 céntimos de media por trade
+# y este en concreto lo da"): piso mínimo operable de la VÍA ABSOLUTA,
+# aplicado de forma UNIFORME a TODA la familia de gates de micro-bucket del
+# proyecto (este módulo -- PASADA 2.5 más abajo --, wallet_mirror,
+# bot_wallets SNIPER/DISPERSO/WEEKLY_*, candidata9/10) vía las funciones
+# compartidas `bootstrap_absoluto`/`rescatar_via_absoluta` de abajo. Antes
+# el piso de la PASADA 2.5 de este módulo era >=0 (solo "no pierde dinero");
+# ahora es >=UMBRAL_ABSOLUTO_EUR en TODOS los mecanismos, para que ningún
+# bucket rentable por encima de este piso quede vetado solo por ser peor
+# que un vecino espectacular de la misma tupla -- la vía relativa
+# (shuffle-vs-resto) sigue existiendo para comparar buckets ENTRE sí, pero
+# ya NO tiene la última palabra sobre si algo se opera o no.
+UMBRAL_ABSOLUTO_EUR = 0.10
+
+
+def bootstrap_absoluto(pnl_d, seed_key, umbral_eur=UMBRAL_ABSOLUTO_EUR, iters=2000):
+    """CI90 bootstrap de la media absoluta de una lista de pnl (ya neta de
+    fee) + p-valor de una cola para H0: media<=umbral_eur. Reutilizable por
+    CUALQUIER gate de micro-bucket del proyecto (ver UMBRAL_ABSOLUTO_EUR
+    arriba) -- semilla determinista por `seed_key` (hash crc32, mismo
+    patrón que shuffle_test() de wallet_mirror/bot_wallets: nunca un _rng
+    module-level compartido entre llamadas, ver el bug real de eso
+    documentado el 20-Ago en analisis_wallet_mirror_gate_bucket_10ago.py)
+    -- mismo bucket, mismos datos -> mismo resultado siempre, sin importar
+    cuántos otros buckets/tuplas se evalúen antes en el mismo ciclo."""
+    rng = np.random.default_rng(zlib.crc32(seed_key.encode("utf-8")))
+    arr = np.asarray(pnl_d, dtype=np.float64)
+    n = len(arr)
+    boots = arr[rng.integers(0, n, size=(iters, n))].mean(axis=1)
+    boots.sort()
+    ci_lo90 = float(boots[int(0.05 * len(boots))])
+    ci_hi90 = float(boots[int(0.95 * len(boots))])
+    p_valor_abs = float(np.mean(boots <= umbral_eur))
+    return ci_lo90, ci_hi90, p_valor_abs
+
+
+def rescatar_via_absoluta(candidatos, agrupador_fn, umbral_eur=UMBRAL_ABSOLUTO_EUR, p_max=P_MAX):
+    """candidatos: lista de dicts {clave_str, bucket, entrada, p_valor_abs,
+    split_half_abs} -- split_half_abs es [media_mitad1, media_mitad2] de la
+    media ABSOLUTA propia del bucket (no diff vs resto). Filtra por
+    consistencia de signo entre mitades (mismo criterio laxo que la PASADA
+    2.5 de este módulo, no exige que cada mitad individual ya supere el
+    umbral -- sería sobre-exigente con n moderado dividido en dos), agrupa
+    con agrupador_fn(clave_str)->hashable, corrige BH-FDR por grupo sobre
+    p_valor_abs, y devuelve el subconjunto que demuestra de forma robusta
+    pnl_medio>=umbral_eur (BH-FDR sobre el p-valor bootstrap contra ese
+    umbral, no contra cero -- test más exigente que "gana dinero", exige
+    "gana AL MENOS lo que Javi pide de sobra para no ser ruido").
+
+    Aplica INDEPENDIENTEMENTE de cuál sea el veredicto actual del bucket
+    por la vía relativa -- puede rescatar tanto 'sin_concluir' como
+    'malo_confirmado': un bucket puede ser "peor que sus vecinos" y seguir
+    siendo rentable de sobra en términos absolutos (decisión explícita
+    Javi 12-Sep, ver UMBRAL_ABSOLUTO_EUR arriba). Nunca toca un bucket ya
+    'bueno_confirmado' por la vía relativa -- no hace falta, ya opera."""
+    elegibles = [
+        c for c in candidatos
+        if c.get("split_half_abs") is not None
+        and ((c["split_half_abs"][0] > 0 and c["split_half_abs"][1] > 0))
+        and c["entrada"].get("veredicto") != "bueno_confirmado"
+    ]
+    por_grupo = defaultdict(list)
+    for idx, c in enumerate(elegibles):
+        por_grupo[agrupador_fn(c["clave_str"])].append(idx)
+    sobreviven = set()
+    for _grupo, indices in por_grupo.items():
+        p_valores = [elegibles[i]["p_valor_abs"] for i in indices]
+        sobreviven |= {indices[j] for j in bh_fdr_signif(p_valores, q=p_max)}
+    return [elegibles[idx] for idx in sorted(sobreviven)
+            if elegibles[idx]["entrada"]["pnl_medio"] >= umbral_eur]
 
 # 10-Ago: Polymarket cambió la resolución de mercados 5min/15min/240min de
 # snapshot a TWAP Chainlink el 07-Ago (confirmado 09-Ago, ver memoria
@@ -392,13 +468,17 @@ def main():
                 entrada["ci90_bootstrap_absoluto"] = [round(ci_lo90, 4), round(ci_hi90, 4)]
                 # 11-Sep (petición explícita Javi, ver p_valor_abs/pendientes_
                 # absolutos más abajo): p-valor bootstrap de una cola para
-                # H0: media_bucket<=0 -- fracción de remuestreos con media
-                # <=0. Vía DISTINTA e independiente del shuffle_p de arriba
-                # (que compara contra el RESTO de la tupla) -- esta compara
-                # contra cero, para la vía absoluta que rescata buckets de
-                # tuplas uniformemente planas/buenas (ver docstring de la
-                # PASADA 2.5 al final de esta función).
-                entrada["p_valor_abs"] = round(float(np.mean(boots <= 0)), 4)
+                # H0: media_bucket<=umbral -- fracción de remuestreos con
+                # media<=umbral. Vía DISTINTA e independiente del shuffle_p
+                # de arriba (que compara contra el RESTO de la tupla) --
+                # esta compara contra un umbral absoluto, para la vía
+                # absoluta que rescata buckets de tuplas uniformemente
+                # planas/buenas (ver docstring de la PASADA 2.5 al final de
+                # esta función). 12-Sep: umbral subido de 0 a
+                # UMBRAL_ABSOLUTO_EUR (decisión Javi, ver la constante) --
+                # ya no basta "gana dinero", exige "gana al menos lo que
+                # Javi pide de sobra para no ser ruido".
+                entrada["p_valor_abs"] = round(float(np.mean(boots <= UMBRAL_ABSOLUTO_EUR)), 4)
                 dentro_sorted = sorted(dentro, key=lambda x: x[0])
                 mid = n_d // 2
                 m1, m2 = dentro_sorted[:mid], dentro_sorted[mid:]
@@ -525,11 +605,12 @@ def main():
     # no un bug -- una estrategia uniformemente floja O uniformemente
     # buena queda muda por igual.
     #
-    # Esta vía es puramente ADITIVA (mismo patrón que gate_bucket_fino.py/
-    # _zonas_validadas_externamente(): solo puede promover un "sin_concluir"
-    # a "bueno_confirmado", JAMÁS pisa un veredicto ya decidido por la vía
-    # normal, ni "malo_confirmado" ni "bueno_confirmado"). Test: bootstrap
-    # de una cola sobre la media ABSOLUTA del propio bucket (H0: media<=0,
+    # Esta vía nunca toca un bucket ya "bueno_confirmado" (no hace falta,
+    # ya opera), pero SÍ puede rescatar uno "malo_confirmado" por la vía
+    # normal (12-Sep, decisión explícita Javi -- ver UMBRAL_ABSOLUTO_EUR:
+    # "peor que el vecino" no es lo mismo que "no rentable", y ese dinero
+    # ya no se deja sobre la mesa). Test: bootstrap de una cola sobre la
+    # media ABSOLUTA del propio bucket (H0: media<=UMBRAL_ABSOLUTO_EUR,
     # p_valor_abs ya calculado en PASADA 1) + split-half ABSOLUTO consistente
     # (ambas mitades por encima de cero, no solo "mejor que el resto") +
     # mismo BH-FDR por (familia,activo) + mismo guard de estabilidad
@@ -584,9 +665,10 @@ def main():
         # Piso absoluto DESPUÉS de sobrevivir BH-FDR (nunca antes, ver
         # comentario en la construcción de pendientes_abs más arriba) --
         # candidatos negativo-consistentes que sobrevivan la corrección se
-        # descartan aquí, esta vía NUNCA produce malo_confirmado (esa
-        # clasificación sigue siendo exclusiva de la vía normal).
-        if p["entrada"]["pnl_medio"] < 0 or ci is None or ci[0] <= 0:
+        # descartan aquí. 12-Sep: piso subido de >=0 a >=UMBRAL_ABSOLUTO_EUR
+        # (decisión Javi, ver comentario junto a la constante) -- mismo
+        # criterio ahora en toda la familia de gates de micro-bucket.
+        if p["entrada"]["pnl_medio"] < UMBRAL_ABSOLUTO_EUR or ci is None or ci[0] <= 0:
             continue
         p["entrada"]["veredicto_crudo_hoy"] = "bueno_confirmado"
         p["entrada"]["via"] = "absoluta"
