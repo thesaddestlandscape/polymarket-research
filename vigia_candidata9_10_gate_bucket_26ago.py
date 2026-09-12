@@ -59,8 +59,18 @@ def main() -> int:
     # arreglado 07-Sep en vigia_gate_bucket_propio.py/vigia_gate_calibracion.py/
     # vigia_gate_bucket_wallet_mirror.py (timeout fijo no escala con datos
     # que crecen). Subido a 900s, margen de sobra sobre el tiempo medido.
-    r = subprocess.run([sys.executable, str(REPO / "analisis_candidata9_10_gate_bucket_26ago.py")],
-                        capture_output=True, text=True, timeout=900, cwd=str(REPO))
+    # 12-Sep: volvió a fallar a los 900s -- no es que el script se haya
+    # vuelto mas lento por si solo, es contencion real de RAM/CPU del VPS
+    # (causa raiz sin resolver: shadow_postmortem.py::calcular_params()
+    # relee results.csv completo -509k filas/428MB hoy- cada ciclo, ver
+    # memoria project_dia_dedicado_rediseno_postmortem_11sep, rediseño
+    # aplazado por la crisis de disco del mismo dia). Subido otra vez a
+    # 1800s como parche de contencion (este vigia es solo informativo,
+    # NO conectado a ningun ejecutor real) + nice para no competir por CPU
+    # con el motor de decision compartido mientras dura.
+    r = subprocess.run(["nice", "-n", "15", sys.executable,
+                         str(REPO / "analisis_candidata9_10_gate_bucket_26ago.py")],
+                        capture_output=True, text=True, timeout=1800, cwd=str(REPO))
     if r.returncode != 0:
         print(f"ERROR ejecutando analisis_candidata9_10_gate_bucket_26ago.py: {r.stderr[-2000:]}")
         return 1
