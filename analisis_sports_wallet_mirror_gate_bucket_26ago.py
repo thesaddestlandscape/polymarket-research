@@ -290,9 +290,19 @@ def main() -> int:
         c["entrada"]["via"] = "absoluta"
         if veredicto == "sin_concluir":
             continue  # nunca pisa el veredicto ya decidido por el test hit-vs-breakeven
+        # /code-review 12-Sep: veredicto aquí puede ser malo_confirmado (si
+        # el veto de payout asimétrico degradó el rescate) -- contar/marcar
+        # según el veredicto FINAL, no asumir bueno. Si el bucket ya estaba
+        # malo_confirmado por la vía normal y sigue malo aquí, no duplicar
+        # el conteo (ya se contó arriba); si venía de sin_concluir, sí suma.
+        venia_de_malo = c["entrada"].get("veredicto") == "malo_confirmado"
         c["entrada"]["veredicto"] = veredicto
-        n_confirmados_buenos += 1
-        print(f"  🟢 [vía absoluta] {c['clave_str']} [{b},{float(b)+STEP:.2f}) "
+        if veredicto == "bueno_confirmado":
+            n_confirmados_buenos += 1
+        elif veredicto == "malo_confirmado" and not venia_de_malo:
+            n_confirmados_malos += 1
+        marca = "🟢" if veredicto == "bueno_confirmado" else "🔴"
+        print(f"  {marca} [vía absoluta] {c['clave_str']} [{b},{float(b)+STEP:.2f}) "
               f"n={c['entrada']['n']} pnl_medio={c['entrada']['pnl_medio']:+.3f} "
               f"p_abs={c['p_valor_abs']:.4f} {veredicto}")
 
