@@ -110,20 +110,20 @@
   "SEGUIR#BTC#15min#1": {
     "lo": 0.1,
     "hi": 0.15,
-    "n": 42,
-    "pnl_medio": 1.6208,
-    "diff_vs_resto": 1.6633,
+    "n": 43,
+    "pnl_medio": 1.5598,
+    "diff_vs_resto": 1.6028,
     "p_valor": 0.0,
     "split_half_diff": [
-      1.7901,
-      1.5365
+      1.7906,
+      1.4236
     ],
     "split_half_ok": true,
-    "pnl_medio_loo": 1.4561,
+    "pnl_medio_loo": 1.3977,
     "robusto_loo": true,
     "ci90_bootstrap": [
-      0.6687,
-      2.6126
+      0.6419,
+      2.518
     ],
     "robusto_bootstrap": true,
     "n_posiciones_buscadas": 87,
@@ -166,11 +166,11 @@
     "hi": 0.19,
     "n": 40,
     "pnl_medio": -0.7123,
-    "diff_vs_resto": -0.6796,
+    "diff_vs_resto": -0.6797,
     "p_valor": 0.0,
     "split_half_diff": [
-      -0.7054,
-      -0.6538
+      -0.7056,
+      -0.6539
     ],
     "split_half_ok": true,
     "pnl_medio_loo": -0.8657,
@@ -229,20 +229,20 @@
   "SEGUIR#BTC#5min#0": {
     "lo": 0.0,
     "hi": 0.05,
-    "n": 3095,
-    "pnl_medio": 5.8345,
-    "diff_vs_resto": 5.8243,
+    "n": 3130,
+    "pnl_medio": 5.768,
+    "diff_vs_resto": 5.7575,
     "p_valor": 0.0,
     "split_half_diff": [
-      5.8287,
-      5.82
+      5.7695,
+      5.7455
     ],
     "split_half_ok": true,
-    "pnl_medio_loo": 5.5361,
+    "pnl_medio_loo": 5.473,
     "robusto_loo": true,
     "ci90_bootstrap": [
-      4.6523,
-      7.1045
+      4.6066,
+      7.0437
     ],
     "robusto_bootstrap": true,
     "n_posiciones_buscadas": 96,
@@ -258,20 +258,20 @@
   "SEGUIR#BTC#5min#1": {
     "lo": 0.0,
     "hi": 0.05,
-    "n": 120,
-    "pnl_medio": 5.7231,
-    "diff_vs_resto": 5.7324,
+    "n": 122,
+    "pnl_medio": 5.6129,
+    "diff_vs_resto": 5.6226,
     "p_valor": 0.0,
     "split_half_diff": [
-      3.6628,
-      7.802
+      3.5869,
+      7.6582
     ],
     "split_half_ok": true,
-    "pnl_medio_loo": 4.9975,
+    "pnl_medio_loo": 4.8983,
     "robusto_loo": true,
     "ci90_bootstrap": [
-      2.6202,
-      9.0849
+      2.5608,
+      9.1725
     ],
     "robusto_bootstrap": true,
     "n_posiciones_buscadas": 96,
