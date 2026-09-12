@@ -4,11 +4,11 @@
     "hi": 0.38,
     "n": 47,
     "pnl_medio": -0.543,
-    "diff_vs_resto": -0.5607,
+    "diff_vs_resto": -0.5601,
     "p_valor": 0.0,
     "split_half_diff": [
-      -0.5464,
-      -0.5744
+      -0.5458,
+      -0.5737
     ],
     "split_half_ok": true,
     "pnl_medio_loo": -0.5959,
@@ -199,6 +199,33 @@
     ],
     "fecha_historial": null
   },
+  "SEGUIR#BNB#15min#0": {
+    "lo": 0.51,
+    "hi": 0.56,
+    "n": 40,
+    "pnl_medio": 0.3466,
+    "diff_vs_resto": 0.365,
+    "p_valor": 0.0125,
+    "split_half_diff": [
+      0.579,
+      0.151
+    ],
+    "split_half_ok": true,
+    "pnl_medio_loo": 0.3812,
+    "robusto_loo": true,
+    "ci90_bootstrap": [
+      0.1159,
+      0.5443
+    ],
+    "robusto_bootstrap": true,
+    "n_posiciones_buscadas": 1,
+    "veredicto_crudo_hoy": "bueno_confirmado",
+    "historial_crudo": [
+      "bueno_confirmado"
+    ],
+    "fecha_historial": "2026-09-12",
+    "veredicto": "sin_concluir"
+  },
   "SEGUIR#XRP#240min#0": {
     "lo": 0.95,
     "hi": 1.0,
@@ -233,11 +260,11 @@
     "hi": 0.05,
     "n": 2730,
     "pnl_medio": 4.5162,
-    "diff_vs_resto": 4.5025,
+    "diff_vs_resto": 4.5026,
     "p_valor": 0.0,
     "split_half_diff": [
-      5.2825,
-      3.7226
+      5.2826,
+      3.7227
     ],
     "split_half_ok": true,
     "pnl_medio_loo": 4.4841,
