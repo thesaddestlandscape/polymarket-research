@@ -1250,5 +1250,13 @@
   "UPDOWN_GBM_15M_CROSS_WINDOW_SPREAD#BTC#15min": {
     "n": 203,
     "confirmado": false
+  },
+  "UPDOWN_GBM#ETH#240min": {
+    "n": 209,
+    "confirmado": false
+  },
+  "UPDOWN_GBM#SOL#240min": {
+    "n": 203,
+    "confirmado": false
   }
 }
