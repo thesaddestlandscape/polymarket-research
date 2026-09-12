@@ -33,6 +33,9 @@ from math import comb
 from pathlib import Path
 
 from gate_confirmacion_historial import cargar_historial_previo, veredicto_con_tolerancia
+from analisis_gate_bucket_propio_28jul import (
+    UMBRAL_ABSOLUTO_EUR, bootstrap_absoluto, rescatar_via_absoluta,
+)
 
 csv.field_size_limit(sys.maxsize)
 
@@ -111,6 +114,7 @@ def main() -> int:
     n_confirmados_malos = 0
     pvals = []
     g_kelly_raw = {}  # (tupla_str, b) -> g_kelly SIN redondear, para el veto de abajo
+    candidatos_abs = []  # vía absoluta (12-Sep), ver UMBRAL_ABSOLUTO_EUR
     for (categoria, tipo, b), items in grupos.items():
         n = len(items)
         tupla_str = f"{categoria}#{tipo}"
@@ -158,12 +162,35 @@ def main() -> int:
         m1 = sum(x[1] for x in items_sorted[:half]) / half
         m2 = sum(x[1] for x in items_sorted[half:]) / (n - half)
         pvals.append(((tupla_str, b), p_binom, hit > breakeven))
-        salida[tupla_str][b] = {
+        entrada = {
             "n": n, "hit": round(hit, 4), "pnl_medio": round(pnl_medio, 4),
             "g_kelly_f10": round(g_kelly, 5),
             "ask_medio": round(ask_medio, 4), "wilson90lo": round(wlo, 4),
             "p_binomial": round(p_binom, 4), "split_half": [round(m1, 4), round(m2, 4)],
         }
+        salida[tupla_str][b] = entrada
+        # 12-Sep (decisión explícita Javi, ver UMBRAL_ABSOLUTO_EUR en
+        # analisis_gate_bucket_propio_28jul.py, extensión pedida por Javi
+        # al ver el mismo fix en cripto: "¿tiene sentido hacerlo en
+        # sports? lleva mucho tiempo sin operar nada"): vía absoluta,
+        # candidatos con n>=N_MIN independientemente del test hit-vs-
+        # breakeven de arriba -- ese test YA es "absoluto" en espíritu
+        # (hit vs breakeven, no bucket-vs-vecino como en cripto) pero
+        # corrige BH-FDR sobre TODA la familia sports junta (m puede ser
+        # grande, penaliza mucho), y exige split-half del MISMO signo que
+        # el test binomial. La vía absoluta corrige por CATEGORÍA (grupo
+        # mucho más pequeño) y con un piso en euros directo, independiente
+        # de si esta tupla le gana o no a su breakeven -- rescata
+        # candidatos como Dota#SEGUIR[0.45,0.50) o CS#SEGUIR[0.25,0.30)
+        # que hoy quedan "sin_concluir" pese a pnl/tr>=0.10€ con n=41-154.
+        # m1/m2 ya son medias ABSOLUTAS por mitad (no diff vs resto, a
+        # diferencia de cripto) -- reusar directamente como split_half_abs.
+        pnl_d = [x[1] for x in items]
+        _, _, p_valor_abs = bootstrap_absoluto(pnl_d, seed_key=f"abs#{tupla_str}#{b}")
+        entrada["p_valor_abs"] = round(p_valor_abs, 4)
+        entrada["split_half_absoluto"] = [round(m1, 4), round(m2, 4)]
+        candidatos_abs.append({"clave_str": tupla_str, "bucket": b, "entrada": entrada,
+                                "p_valor_abs": p_valor_abs, "split_half_abs": (m1, m2)})
 
     # BH-FDR sobre la familia completa de buckets con n>=N_MIN
     m = len(pvals)
@@ -229,6 +256,45 @@ def main() -> int:
                     n_confirmados_buenos += 1
                 elif veredicto == "malo_confirmado":
                     n_confirmados_malos += 1
+
+    # 12-Sep, vía absoluta (decisión explícita Javi, ver UMBRAL_ABSOLUTO_EUR
+    # en analisis_gate_bucket_propio_28jul.py): rescata buckets rentables de
+    # sobra (pnl_medio>=0.10€/tr robusto) que el test hit-vs-breakeven+BH-FDR
+    # sobre TODA la familia sports dejó en sin_concluir/malo_confirmado --
+    # agrupa por CATEGORÍA (mucho más estrecho que "toda la familia junta",
+    # menos penalización de multiple-testing). Namespace de historial
+    # INDEPENDIENTE (historial_crudo_abs, mismo fix de /code-review 12-Sep
+    # aplicado al gemelo cripto -- nunca reusar el ledger de "2 de 3 días"
+    # del test hit-vs-breakeven, mezclaría dos tests distintos).
+    historial_abs_previo = {}
+    try:
+        _prev = json.loads(OUT_PATH.read_text(encoding="utf-8"))
+        for tupla_str, tabla in _prev.items():
+            if isinstance(tabla, dict):
+                historial_abs_previo[tupla_str] = {
+                    b: v.get("historial_crudo_abs", []) for b, v in tabla.items() if isinstance(v, dict)}
+    except Exception:
+        pass
+    rescatados = rescatar_via_absoluta(
+        candidatos_abs, agrupador_fn=lambda tupla_str: tupla_str.split("#")[0])
+    for c in rescatados:
+        b = c["bucket"]
+        veredicto_crudo_abs = "bueno_confirmado"
+        g_raw = g_kelly_raw.get((c["clave_str"], b))
+        if g_raw is not None and g_raw <= 0:
+            veredicto_crudo_abs = "malo_confirmado"  # mismo veto payout asimétrico que la vía normal
+        historial_bucket = historial_abs_previo.get(c["clave_str"], {}).get(b)
+        veredicto, c["entrada"]["historial_crudo_abs"] = veredicto_con_tolerancia(
+            veredicto_crudo_abs, historial_bucket)
+        c["entrada"]["veredicto_crudo_hoy_abs"] = veredicto_crudo_abs
+        c["entrada"]["via"] = "absoluta"
+        if veredicto == "sin_concluir":
+            continue  # nunca pisa el veredicto ya decidido por el test hit-vs-breakeven
+        c["entrada"]["veredicto"] = veredicto
+        n_confirmados_buenos += 1
+        print(f"  🟢 [vía absoluta] {c['clave_str']} [{b},{float(b)+STEP:.2f}) "
+              f"n={c['entrada']['n']} pnl_medio={c['entrada']['pnl_medio']:+.3f} "
+              f"p_abs={c['p_valor_abs']:.4f} {veredicto}")
 
     OUT_PATH.write_text(json.dumps(salida, ensure_ascii=False, indent=1), encoding="utf-8")
     print(f"Categorías#tipo con datos: {len(salida)}")
