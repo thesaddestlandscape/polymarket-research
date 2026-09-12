@@ -1,5 +1,5 @@
 {
- "generado_utc": "2026-09-12T18:59:18+00:00",
+ "generado_utc": "2026-09-12T19:09:43+00:00",
  "fuente": "bybit",
  "BNB": {
   "2min": {
@@ -16,15 +16,15 @@
   },
   "15min": {
    "usd_long": 0.0,
-   "usd_short": 0.0,
-   "n": 0,
-   "imbalance": null
+   "usd_short": 159.13,
+   "n": 1,
+   "imbalance": 1.0
   },
   "60min": {
    "usd_long": 0.0,
-   "usd_short": 0.0,
-   "n": 0,
-   "imbalance": null
+   "usd_short": 159.13,
+   "n": 1,
+   "imbalance": 1.0
   }
  },
  "BTC": {
@@ -100,8 +100,8 @@
   },
   "60min": {
    "usd_long": 0.0,
-   "usd_short": 68798.47,
-   "n": 9,
+   "usd_short": 67415.09,
+   "n": 8,
    "imbalance": 1.0
   }
  },
@@ -152,8 +152,8 @@
   },
   "60min": {
    "usd_long": 0.0,
-   "usd_short": 70.96,
-   "n": 5,
+   "usd_short": 65.66,
+   "n": 4,
    "imbalance": 1.0
   }
  },
