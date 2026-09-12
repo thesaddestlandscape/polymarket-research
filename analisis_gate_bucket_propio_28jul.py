@@ -390,6 +390,15 @@ def main():
                 ci_lo90 = float(boots[int(0.05 * len(boots))])
                 ci_hi90 = float(boots[int(0.95 * len(boots))])
                 entrada["ci90_bootstrap_absoluto"] = [round(ci_lo90, 4), round(ci_hi90, 4)]
+                # 11-Sep (petición explícita Javi, ver p_valor_abs/pendientes_
+                # absolutos más abajo): p-valor bootstrap de una cola para
+                # H0: media_bucket<=0 -- fracción de remuestreos con media
+                # <=0. Vía DISTINTA e independiente del shuffle_p de arriba
+                # (que compara contra el RESTO de la tupla) -- esta compara
+                # contra cero, para la vía absoluta que rescata buckets de
+                # tuplas uniformemente planas/buenas (ver docstring de la
+                # PASADA 2.5 al final de esta función).
+                entrada["p_valor_abs"] = round(float(np.mean(boots <= 0)), 4)
                 dentro_sorted = sorted(dentro, key=lambda x: x[0])
                 mid = n_d // 2
                 m1, m2 = dentro_sorted[:mid], dentro_sorted[mid:]
@@ -401,6 +410,11 @@ def main():
                     if consistente:
                         pendientes.append({"tupla_str": tupla_str, "bucket": f"{b:.2f}", "entrada": entrada,
                                             "p": p_valor, "diff": diff, "es_live": es_live})
+                    # split-half ABSOLUTO (media propia del bucket, no diff
+                    # vs resto) -- usado solo por la vía absoluta de abajo.
+                    m1_abs = sum(pnl for _, pnl in m1) / len(m1)
+                    m2_abs = sum(pnl for _, pnl in m2) / len(m2)
+                    entrada["split_half_absoluto"] = [round(m1_abs, 4), round(m2_abs, 4)]
         resultado[tupla_str] = tabla
 
     # PASADA 2: BH-FDR POR (FAMILIA, MONEDA) -- cada (arquetipo, activo)
@@ -498,6 +512,107 @@ def main():
 
     print(f"\n{len(veredictos_nuevos)} bucket(s) con veredicto final tras BH-FDR:")
     for linea in veredictos_nuevos:
+        print(f"  {linea}")
+
+    # PASADA 2.5 -- VÍA ABSOLUTA (11-Sep, petición explícita Javi, hallazgo
+    # de sesión: FAVORITO_CONFIRMADO#BTC#60min#BUY_NO, FAVORITO_CONFIRMADO_
+    # 15MIN_ALTACONVICCION#BTC#15min#BUY_YES y BALLENAS_CONFIRMADAS_15M#
+    # ETH#15min#BUY_YES llevaban 14-28 días SIN operar en real -- ningún
+    # bucket suyo confirma nunca vía shuffle-vs-resto porque su pnl es
+    # uniformemente plano/mediocre en TODOS los buckets: el bucket no
+    # puede "ganarle al resto" cuando el resto es igual de mediocre. Punto
+    # ciego de diseño de la vía normal (bucket vs RESTO de la misma tupla),
+    # no un bug -- una estrategia uniformemente floja O uniformemente
+    # buena queda muda por igual.
+    #
+    # Esta vía es puramente ADITIVA (mismo patrón que gate_bucket_fino.py/
+    # _zonas_validadas_externamente(): solo puede promover un "sin_concluir"
+    # a "bueno_confirmado", JAMÁS pisa un veredicto ya decidido por la vía
+    # normal, ni "malo_confirmado" ni "bueno_confirmado"). Test: bootstrap
+    # de una cola sobre la media ABSOLUTA del propio bucket (H0: media<=0,
+    # p_valor_abs ya calculado en PASADA 1) + split-half ABSOLUTO consistente
+    # (ambas mitades por encima de cero, no solo "mejor que el resto") +
+    # mismo BH-FDR por (familia,activo) + mismo guard de estabilidad
+    # (veredicto_con_tolerancia, 2 de últimos 3 días) que la vía normal --
+    # ningún criterio de rigor se relaja, solo se cambia CONTRA QUÉ se
+    # compara el bucket.
+    # OJO (bug real encontrado y corregido ANTES de dejar correr esto en
+    # producción, mismo día): la primera versión pre-filtraba por
+    # ci[0]>0/pnl_medio>=0 ANTES de entrar en el pool de BH-FDR -- eso es
+    # sesgo de supervivencia (corregir solo sobre "los que ya parecen
+    # buenos" no corrige nada, 294/294 sobrevivían). La corrección debe
+    # aplicarse sobre TODOS los candidatos con split-half consistente
+    # (dirección positiva O negativa, igual que hace la vía normal con
+    # "consistente" antes de mirar si diff<0 o >=0) -- el filtro de "es
+    # bueno de verdad" (piso absoluto) va DESPUÉS de sobrevivir BH-FDR,
+    # nunca antes.
+    pendientes_abs = []
+    for tupla_str, tabla in resultado.items():
+        for b, entrada in tabla.items():
+            if entrada.get("veredicto") == "bueno_confirmado":
+                continue  # ya confirmado por la vía normal -- no hace falta
+            ci = entrada.get("ci90_bootstrap_absoluto")
+            split_abs = entrada.get("split_half_absoluto")
+            p_abs = entrada.get("p_valor_abs")
+            if ci is None or split_abs is None or p_abs is None:
+                continue
+            consistente_abs = (split_abs[0] > 0 and split_abs[1] > 0) or (split_abs[0] < 0 and split_abs[1] < 0)
+            if not consistente_abs:
+                continue
+            pendientes_abs.append({"tupla_str": tupla_str, "bucket": b, "entrada": entrada, "p": p_abs})
+
+    por_familia_moneda_abs = defaultdict(list)
+    for idx, p in enumerate(pendientes_abs):
+        partes = p["tupla_str"].split("#")
+        clave = (_familia(partes[0]), partes[1] if len(partes) > 1 else "?")
+        por_familia_moneda_abs[clave].append(idx)
+
+    sobreviven_abs = set()
+    for (familia, activo), indices in por_familia_moneda_abs.items():
+        p_valores_grupo = [pendientes_abs[i]["p"] for i in indices]
+        sobreviven_grupo = bh_fdr_signif(p_valores_grupo, q=P_MAX)
+        sobreviven_abs |= {indices[j] for j in sobreviven_grupo}
+
+    print(f"\n[vía absoluta] Tests candidatos: {len(pendientes_abs)} | "
+          f"sobreviven BH-FDR (por familia+moneda): {len(sobreviven_abs)}")
+
+    veredictos_nuevos_abs = []
+    for idx, p in enumerate(pendientes_abs):
+        if idx not in sobreviven_abs:
+            continue
+        ci = p["entrada"]["ci90_bootstrap_absoluto"]
+        # Piso absoluto DESPUÉS de sobrevivir BH-FDR (nunca antes, ver
+        # comentario en la construcción de pendientes_abs más arriba) --
+        # candidatos negativo-consistentes que sobrevivan la corrección se
+        # descartan aquí, esta vía NUNCA produce malo_confirmado (esa
+        # clasificación sigue siendo exclusiva de la vía normal).
+        if p["entrada"]["pnl_medio"] < 0 or ci is None or ci[0] <= 0:
+            continue
+        p["entrada"]["veredicto_crudo_hoy"] = "bueno_confirmado"
+        p["entrada"]["via"] = "absoluta"
+        b = p["bucket"]
+        # 11-Sep, primer despliegue de esta vía: NO reutilizar historial_
+        # crudo heredado de la vía normal (riesgo real detectado en
+        # revisión -- un bucket pudo tener 1-2 días de bueno_confirmado
+        # vía shuffle-vs-resto hace semanas, y esa historia NO acredita
+        # nada sobre ESTE test distinto, contra breakeven absoluto).
+        # Arrancar en blanco: exige sus propios 2-de-3 días desde hoy antes
+        # de exponerse a ejecutores live. Pendiente para /code-review:
+        # decidir si esta vía necesita namespace de historial propio
+        # (ej. sufijo "_abs" en la clave) en vez de arrancar en blanco
+        # cada vez que se re-audite este mecanismo.
+        veredicto_final, p["entrada"]["historial_crudo"] = veredicto_con_tolerancia(
+            "bueno_confirmado", None)
+        p["entrada"]["veredicto"] = veredicto_final
+        if veredicto_final == "sin_concluir":
+            continue
+        veredictos_nuevos_abs.append(
+            f"🟢 [vía absoluta] {p['tupla_str']} [{b},{float(b)+STEP:.2f}) n={p['entrada']['n']} "
+            f"pnl_medio={p['entrada']['pnl_medio']:+.3f} p_abs={p['p']:.4f} {veredicto_final}"
+        )
+
+    print(f"\n{len(veredictos_nuevos_abs)} bucket(s) con veredicto vía absoluta:")
+    for linea in veredictos_nuevos_abs:
         print(f"  {linea}")
 
     with open(OUT, "w", encoding="utf-8") as f:
