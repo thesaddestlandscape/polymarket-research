@@ -1,5 +1,5 @@
-# Hipótesis automáticas — 2026-09-12 07:31 UTC
-_Generado por shadow_postmortem.py sobre 401213 resoluciones (PNL=+42163.58€)_
+# Hipótesis automáticas — 2026-09-12 07:42 UTC
+_Generado por shadow_postmortem.py sobre 401217 resoluciones (PNL=+42161.99€)_
 
 ## Patrones causales activos
 
@@ -42,12 +42,12 @@ _Derivadas de los patrones aprendidos:_
 | ✅ BALLENAS_TARDIAS#SOL#5min | 4750 | -0.115 | -366.82€ | 1 | 0 |
 | ✅ BALLENAS_TARDIAS#XRP | 3919 | -0.178 | -932.45€ | 0 | 0 |
 | ✅ BALLENAS_TARDIAS#XRP#5min | 3919 | -0.178 | -932.45€ | 1 | 0 |
-| ✅ CANDIDATA10_CONFIRMACION_CRUZADA | 9427 | -0.053 | +3892.55€ | 0 | 0 |
+| ✅ CANDIDATA10_CONFIRMACION_CRUZADA | 9428 | -0.053 | +3891.48€ | 0 | 0 |
 | ✅ CANDIDATA10_CONFIRMACION_CRUZADA#15min | 2596 | -0.010 | +1641.45€ | 0 | 0 |
-| ✅ CANDIDATA10_CONFIRMACION_CRUZADA#5min | 6831 | -0.069 | +2251.11€ | 0 | 0 |
-| ✅ CANDIDATA10_CONFIRMACION_CRUZADA#BTC | 9427 | -0.053 | +3892.55€ | 0 | 0 |
+| ✅ CANDIDATA10_CONFIRMACION_CRUZADA#5min | 6832 | -0.069 | +2250.03€ | 0 | 0 |
+| ✅ CANDIDATA10_CONFIRMACION_CRUZADA#BTC | 9428 | -0.053 | +3891.48€ | 0 | 0 |
 | ✅ CANDIDATA10_CONFIRMACION_CRUZADA#BTC#15min | 2596 | -0.010 | +1641.45€ | 0 | 0 |
-| ✅ CANDIDATA10_CONFIRMACION_CRUZADA#BTC#5min | 6831 | -0.069 | +2251.11€ | 0 | 0 |
+| ✅ CANDIDATA10_CONFIRMACION_CRUZADA#BTC#5min | 6832 | -0.069 | +2250.03€ | 0 | 0 |
 | ✅ CANDIDATA9_BOT_CONSENSO | 298 | -0.100 | -52.88€ | 2 | 0 |
 | ✅ CANDIDATA9_BOT_CONSENSO#15min | 5 | +0.018 | +0.75€ | 0 | 0 |
 | ✅ CANDIDATA9_BOT_CONSENSO#5min | 293 | -0.103 | -53.62€ | 0 | 0 |
@@ -502,35 +502,35 @@ _Derivadas de los patrones aprendidos:_
 | ✅ STRUCT_NO_15M#ETH#15min | 2134 | +0.016 | -3.19€ | 0 | 0 |
 | ✅ STRUCT_NO_15M#SOL | 1136 | -0.005 | -23.34€ | 0 | 0 |
 | ✅ STRUCT_NO_15M#SOL#15min | 1136 | -0.005 | -23.34€ | 2 | 0 |
-| ✅ UPDOWN_GBM | 19729 | +0.025 | +1019.65€ | 0 | 0 |
+| ✅ UPDOWN_GBM | 19732 | +0.025 | +1019.13€ | 0 | 0 |
 | ✅ UPDOWN_GBM#15min | 5716 | +0.055 | +863.99€ | 0 | 12 |
 | ✅ UPDOWN_GBM#240min | 763 | +0.001 | +5.48€ | 0 | 0 |
-| ✅ UPDOWN_GBM#5min | 11990 | +0.017 | +160.36€ | 0 | 0 |
+| ✅ UPDOWN_GBM#5min | 11993 | +0.017 | +159.84€ | 0 | 0 |
 | ✅ UPDOWN_GBM#60min | 1173 | -0.005 | -14.16€ | 1 | 0 |
 | ✅ UPDOWN_GBM#BNB | 1577 | +0.067 | +146.18€ | 0 | 0 |
 | ✅ UPDOWN_GBM#BNB#15min | 254 | +0.125 | +78.05€ | 0 | 0 |
 | ✅ UPDOWN_GBM#BNB#240min | 18 | -0.045 | -1.06€ | 0 | 0 |
 | ✅ UPDOWN_GBM#BNB#5min | 1305 | +0.058 | +69.19€ | 0 | 0 |
-| ✅ UPDOWN_GBM#BTC | 3422 | +0.029 | +233.62€ | 0 | 0 |
+| ✅ UPDOWN_GBM#BTC | 3423 | +0.029 | +233.11€ | 0 | 0 |
 | ✅ UPDOWN_GBM#BTC#15min | 676 | +0.083 | +160.71€ | 1 | 13 |
 | ✅ UPDOWN_GBM#BTC#240min | 221 | +0.029 | +7.34€ | 0 | 0 |
-| ✅ UPDOWN_GBM#BTC#5min | 1982 | +0.021 | +66.10€ | 0 | 0 |
+| ✅ UPDOWN_GBM#BTC#5min | 1983 | +0.020 | +65.59€ | 0 | 0 |
 | ✅ UPDOWN_GBM#BTC#60min | 511 | -0.001 | -2.78€ | 0 | 0 |
 | ✅ UPDOWN_GBM#BTC#daily | 32 | -0.118 | +2.24€ | 0 | 0 |
 | ✅ UPDOWN_GBM#DOGE | 2368 | +0.024 | +59.18€ | 0 | 0 |
 | ✅ UPDOWN_GBM#DOGE#15min | 219 | +0.111 | +53.25€ | 0 | 0 |
 | ✅ UPDOWN_GBM#DOGE#240min | 14 | -0.044 | -1.32€ | 0 | 0 |
 | ✅ UPDOWN_GBM#DOGE#5min | 2135 | +0.015 | +7.26€ | 0 | 0 |
-| ✅ UPDOWN_GBM#ETH | 3990 | +0.013 | +145.95€ | 0 | 0 |
+| ✅ UPDOWN_GBM#ETH | 3991 | +0.012 | +145.44€ | 0 | 0 |
 | ✅ UPDOWN_GBM#ETH#15min | 1574 | +0.037 | +149.48€ | 1 | 12 |
 | ✅ UPDOWN_GBM#ETH#240min | 209 | +0.007 | +8.33€ | 0 | 0 |
-| ✅ UPDOWN_GBM#ETH#5min | 1740 | -0.001 | -10.63€ | 0 | 0 |
+| ✅ UPDOWN_GBM#ETH#5min | 1741 | -0.001 | -11.14€ | 0 | 0 |
 | ✅ UPDOWN_GBM#ETH#60min | 438 | -0.009 | -5.65€ | 1 | 1 |
 | ✅ UPDOWN_GBM#ETH#daily | 29 | -0.145 | +4.42€ | 0 | 0 |
-| ✅ UPDOWN_GBM#SOL | 5281 | +0.014 | +107.73€ | 0 | 0 |
+| ✅ UPDOWN_GBM#SOL | 5282 | +0.014 | +108.23€ | 0 | 0 |
 | ✅ UPDOWN_GBM#SOL#15min | 1528 | +0.022 | +82.61€ | 0 | 11 |
 | ✅ UPDOWN_GBM#SOL#240min | 203 | -0.007 | -2.59€ | 0 | 0 |
-| ✅ UPDOWN_GBM#SOL#5min | 3302 | +0.015 | +34.28€ | 0 | 0 |
+| ✅ UPDOWN_GBM#SOL#5min | 3303 | +0.015 | +34.78€ | 0 | 0 |
 | ✅ UPDOWN_GBM#SOL#60min | 224 | -0.009 | -5.74€ | 1 | 0 |
 | ✅ UPDOWN_GBM#SOL#daily | 24 | -0.154 | -0.83€ | 0 | 0 |
 | ✅ UPDOWN_GBM#XRP | 3089 | +0.037 | +328.83€ | 0 | 0 |
