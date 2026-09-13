@@ -25400,3 +25400,4 @@ timestamp_utc,activo,market_id,condition_id,end_date,py,edge,concentracion,n_bal
 2026-09-13T16:06:50+00:00,ETH,4499102,0x25db5928d24b2393dd28e335b27ffd29342530988a951c51ef69ffdbe68ca47c,2026-09-13T16:10:00Z,0.86,-0.0577,1.0,6,189.4,,,,53,True,banda_prematura py=0.860 restante=3.16>2.85
 2026-09-13T16:10:23+00:00,DOGE,4499119,0xf8fa9cc9970d7547c7fcbba586c917b465d0afb6bfaacc025897cb5e0385279b,2026-09-13T16:15:00Z,0.63,-0.0488,1.0,3,276.7,,,,3,False,fuera_de_bandas_significativas
 2026-09-13T16:11:36+00:00,ETH,4499121,0x4caffe8322ca4775297902db2c6486c7e0424c725f9e054dfd3d0d475dbabe34,2026-09-13T16:15:00Z,0.81,-0.008,1.0,5,203.3,,,,52,False,fuera_de_bandas_significativas
+2026-09-13T16:15:18+00:00,SOL,4499131,0x53c3d8046c9a5e98e2c2a745b9f40d6bc13d4ea75c0ef0d753381b74dfe5ca7f,2026-09-13T16:20:00Z,0.3,0.1209,1.0,3,286.9,,,,5,False,fuera_de_bandas_significativas
