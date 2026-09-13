@@ -1,6 +1,6 @@
 {
  "STREAK_MOM_5M": {
-  "ic_bayes_familia": 0.0213,
+  "ic_bayes_familia": 0.0219,
   "n_tuplas_fuertes": 3,
   "pnl_fiel_combinado_eur": 135.76,
   "tuplas": [
@@ -22,7 +22,7 @@
   ]
  },
  "UPDOWN_GBM_15M_TARDIO": {
-  "ic_bayes_familia": -0.0518,
+  "ic_bayes_familia": -0.052,
   "n_tuplas_fuertes": 1,
   "pnl_fiel_combinado_eur": 41.81,
   "tuplas": [
@@ -51,7 +51,7 @@
   ]
  },
  "STRUCT_NO_15M": {
-  "ic_bayes_familia": 0.0137,
+  "ic_bayes_familia": 0.0133,
   "n_tuplas_fuertes": 2,
   "pnl_fiel_combinado_eur": 36.83,
   "tuplas": [
@@ -68,7 +68,7 @@
   ]
  },
  "GBM_LATE_60M": {
-  "ic_bayes_familia": 0.0518,
+  "ic_bayes_familia": 0.0513,
   "n_tuplas_fuertes": 1,
   "pnl_fiel_combinado_eur": 28.15,
   "tuplas": [
@@ -80,7 +80,7 @@
   ]
  },
  "UPDOWN_GBM": {
-  "ic_bayes_familia": 0.0256,
+  "ic_bayes_familia": 0.0259,
   "n_tuplas_fuertes": 1,
   "pnl_fiel_combinado_eur": 21.57,
   "tuplas": [
@@ -92,7 +92,7 @@
   ]
  },
  "MOMENTUM_IBS_15M_BALLENA": {
-  "ic_bayes_familia": -0.0152,
+  "ic_bayes_familia": -0.015,
   "n_tuplas_fuertes": 1,
   "pnl_fiel_combinado_eur": 15.56,
   "tuplas": [
