@@ -31,7 +31,24 @@ agrupación que la corrección por (familia,activo) del gate original.
 pnl_neto calculado con la fórmula exacta (gross_win=(1-ask)/ask, fee 7%)
 sobre el ASK REAL de wallet_mirror_executor_dryrun.csv en el momento de
 decisión (no precio_wallet, aproximación optimista ya refutada hoy) +
-outcome real de wallet_mirror_sniper_dry_run.csv.
+outcome real resuelto en el propio wallet_mirror_executor_dryrun.csv
+(columnas outcome_real/acierto, añadidas 13-Sep -- ver wallet_mirror_
+executor_dryrun.py --resolver).
+
+⚠️ 13-Sep (bug real encontrado en barrido de salud, ver idea_join_wallet_
+mirror_executor_sniper_roto_13sep): ANTES este script cruzaba EXECUTOR
+(fillability, roster = wallets_operativas_recientes(), rendimiento
+reciente, rota) contra wallet_mirror_sniper_dry_run.csv (outcomes, roster
+= cargar_wallets_validadas(), histórico completo) por (wallet,market_
+slug,trade_timestamp) -- son DOS POBLACIONES DE WALLETS DISTINTAS por
+diseño (13-Ago), y el cruce por clave exacta entre ambas solo emparejaba
+~0.3% de las filas (52/16.971 combos wallet+market en común), dando n/p
+inestables entre corridas consecutivas sin que cambiara nada real (ej.
+SEGUIR#BTC#5min[0.10,0.15) pasó de n=2170,p=0.04 a n=2672,p=0.752 en
+<1h). Fix: outcome resuelto DIRECTAMENTE en el CSV de EXECUTOR (misma
+mecánica --resolver que ya usaba sniper.py) -- ya no hace falta cruzar
+con ningún otro fichero, el gate mide exactamente la población que
+decide con dinero real.
 
 Solo lectura de sus fuentes, solo ESCRIBE data/shadow/wallet_mirror_gate_
 bucket.json -- no toca ningún gate real, WALLET_MIRROR no puede estar en
@@ -59,7 +76,6 @@ from analisis_gate_bucket_propio_28jul import (  # noqa: E402
 )
 
 EXECUTOR = REPO / "data/shadow/wallet_mirror_executor_dryrun.csv"
-SNIPER = REPO / "data/shadow/wallet_mirror_sniper_dry_run.csv"
 TRADES_REAL = REPO / "data/live/trades.csv"
 OUT = REPO / "data/shadow/wallet_mirror_gate_bucket.json"
 
@@ -84,16 +100,6 @@ def pnl_neto(ask, acierto):
     return gross_win * (1 - FEE) if acierto else -1.0
 
 
-def cargar_outcomes():
-    out = {}
-    with open(SNIPER, encoding="utf-8") as f:
-        for r in csv.DictReader(f):
-            if r.get("acierto") not in ("0", "1"):
-                continue
-            out[(r["wallet"], r["market_slug"], r["trade_timestamp"])] = int(r["acierto"])
-    return out
-
-
 def cargar_filas():
     """11-Ago (petición explícita Javi, auditoría de huecos TWAP):
     excluye filas pre-07-Ago de marcos afectados (5min/15min/240min,
@@ -103,18 +109,21 @@ def cargar_filas():
     kelly_precio_gate.py/live_trade.py::_clv_tupla. Los 3 candidatos de
     Wallet Mirror viven en marcos afectados (5min/15min) y toda su
     ventana de datos (03->10-Ago) cruza el cambio TWAP (07-Ago) -- su
-    veredicto podía estar contaminado igual que los demás mecanismos."""
-    outcomes = cargar_outcomes()
+    veredicto podía estar contaminado igual que los demás mecanismos.
+
+    13-Sep: el outcome se lee DIRECTAMENTE de EXECUTOR (columna `acierto`,
+    resuelta por `wallet_mirror_executor_dryrun.py --resolver`) -- ya NO
+    se cruza con wallet_mirror_sniper_dry_run.csv (ver docstring del
+    módulo, población de wallets distinta, el join fallaba ~99.7%)."""
     # clave de grupo: (tipo, activo, marco, jugada_grande) -> [(ts, ask, pnl), ...]
     grupos = defaultdict(list)
     with open(EXECUTOR, encoding="utf-8") as f:
         for r in csv.DictReader(f):
             if r.get("sigue_fillable_en_decision") != "1":
                 continue
-            clave_out = (r["wallet"], r["market_slug"], r["trade_timestamp"])
-            ac = outcomes.get(clave_out)
-            if ac is None:
-                continue
+            if r.get("acierto") not in ("0", "1"):
+                continue  # sin resolver todavía (resolver_pendientes corre horario)
+            ac = int(r["acierto"])
             try:
                 ask = float(r["ask_decision"])
             except (TypeError, ValueError):

@@ -3205,6 +3205,23 @@ def main():
     # creciendo -- ver docstrings arriba).
     _content_results = RESULTS_PATH.read_text(encoding="utf-8") if RESULTS_PATH.exists() else None
     _rows_results = list(csv.DictReader(_content_results.splitlines())) if _content_results is not None else None
+    # 13-Sep (barrido de salud, swap/RAM crítico -- causa raíz aplazada
+    # desde 05/08/09-Sep, ver project_dia_dedicado_rediseno_postmortem_11sep):
+    # "features" es el 65% del contenido de cada fila (medido: 390 de 600
+    # chars/fila de media) y el ÚNICO consumidor es aprender_patrones_
+    # causales() (vía _extraer_features(), único call site en todo el
+    # fichero) -- que YA está throttleado a 1x/hora desde el 05-Sep. En los
+    # ~5 de cada 6 ciclos donde NO va a correr, esa columna se parseaba y se
+    # mantenía viva en memoria para TODAS las ~480k filas sin que nada la
+    # leyera. Decidir el throttle AQUÍ (antes, no solo en el call site de
+    # más abajo) y vaciar la columna en los ciclos que la saltan corta el
+    # contenido de `_rows_results`/`resultados`/`resultados_twap_safe`
+    # aproximadamente a un tercio en esos ciclos -- sin tocar ninguna lógica
+    # de agregación/dedup/IC, cero riesgo de alterar un resultado calculado.
+    corre_patrones_causales = _debe_correr_patrones_causales()
+    if not corre_patrones_causales and _rows_results:
+        for _r in _rows_results:
+            _r["features"] = ""
     alertas = _verificar_integridad(_content_results, _rows_results)
     if alertas:
         for _, msg_a in alertas:
@@ -3400,7 +3417,10 @@ def main():
     # ganadores en absoluto (ver preservación explícita más abajo) -- una
     # tupla live sigue protegida por el último veredicto real, nunca por
     # uno en blanco.
-    corre_patrones_causales = _debe_correr_patrones_causales()
+    # corre_patrones_causales ya se decidió arriba, al principio de main()
+    # (mismo valor -- reusado, no recalculado, para no arriesgar que el
+    # umbral de 3600s se cruce a mitad de un mismo ciclo y quede
+    # inconsistente con el vaciado de "features" que ya se aplicó).
     if corre_patrones_causales:
         patrones = aprender_patrones_causales(resultados_twap_safe, pred_index)
         _marcar_patrones_causales_ejecutado()

@@ -50,6 +50,7 @@ Corre en screen propia:
 """
 import asyncio
 import csv
+import fcntl
 import json
 import sys
 import time
@@ -74,6 +75,11 @@ import wallet_mirror_gate_bucket as wmgb  # noqa: E402
 DIR_SHADOW = REPO / "data" / "shadow"
 CONFIG_LIVE = REPO / "data" / "live" / "config_live.json"
 OUT = DIR_SHADOW / "wallet_mirror_executor_dryrun.csv"
+OUT_LOCK = DIR_SHADOW / "wallet_mirror_executor_dryrun.csv.lock"  # 13-Sep:
+# protege el append en vivo (_guardar_fila) contra la reescritura completa
+# que hace --resolver (resolver_pendientes() de wallet_mirror_tracker.py)
+# -- mismo patrón que wallet_mirror_sniper.py, evita perder una fila
+# escrita justo en la ventana entre el re-read y el write del resolver.
 VISTOS_PATH = DIR_SHADOW / "wallet_mirror_executor_vistos.json"
 
 WS_URL = "wss://ws-live-data.polymarket.com"
@@ -97,6 +103,26 @@ COLUMNS = ["timestamp_utc", "trade_timestamp", "wallet", "tipo", "edge_pp_valida
            "lag_ws_ms", "lag_deteccion_a_decision_ms",
            "ratio_deteccion", "ask_deteccion", "ratio_decision", "ask_decision",
            "degradacion_ask_pct", "sigue_fillable_en_decision",
+           # 13-Sep (bug real encontrado en sesión de barrido de salud, ver
+           # idea_join_wallet_mirror_executor_sniper_roto_13sep): el gate
+           # (analisis_wallet_mirror_gate_bucket_10ago.py) calculaba pnl/tr
+           # cruzando este CSV contra wallet_mirror_sniper_dry_run.csv por
+           # (wallet,market_slug,trade_timestamp) -- pero sniper.py vigila
+           # cargar_wallets_validadas() (histórico completo, 495 wallets) y
+           # este script vigila wallets_operativas_recientes() (rendimiento
+           # reciente, roster que ROTA, 1.328 wallets acumuladas) -- son
+           # POBLACIONES DISTINTAS por diseño (13-Ago, ver comentario en
+           # main() más abajo), y el cruce por clave exacta entre ambas solo
+           # empareja ~0.3% de las filas (52/16.971 combos wallet+market en
+           # común), dando n/p inestables entre corridas (ej. la MISMA
+           # tupla/bucket pasó de n=2170,p=0.04 a n=2672,p=0.752 en <1h sin
+           # que cambiara nada real). Fix: resolver el outcome AQUÍ, con la
+           # MISMA mecánica que ya usa wallet_mirror_sniper.py --resolver
+           # (reusa resolver_pendientes() de wallet_mirror_tracker.py, ver
+           # bloque --resolver abajo) -- el gate ya no necesita cruzar con
+           # sniper.csv, calcula todo desde la población que de verdad
+           # decide con dinero real.
+           "outcome_real", "acierto", "resolved_ts",
            "stake_dryrun_eur", "tupla_sintetica", "en_whitelist_real",
            "puede_operar_ventana",
            # 03-Ago: cruce con el hallazgo "grandes jugadas" (idea_grandes_
@@ -129,12 +155,20 @@ def _vistos_guardar(vistos: dict) -> None:
 
 
 def _guardar_fila(fila: dict) -> None:
-    nuevo = not OUT.exists()
-    with open(OUT, "a", newline="", encoding="utf-8") as f:
-        w = csv.DictWriter(f, fieldnames=COLUMNS)
-        if nuevo:
-            w.writeheader()
-        w.writerow(fila)
+    lock_f = open(OUT_LOCK, "w")
+    try:
+        fcntl.flock(lock_f, fcntl.LOCK_EX)
+        try:
+            nuevo = not OUT.exists()
+            with open(OUT, "a", newline="", encoding="utf-8") as f:
+                w = csv.DictWriter(f, fieldnames=COLUMNS)
+                if nuevo:
+                    w.writeheader()
+                w.writerow(fila)
+        finally:
+            fcntl.flock(lock_f, fcntl.LOCK_UN)
+    finally:
+        lock_f.close()
 
 
 def _en_whitelist(tupla: str) -> bool:
@@ -550,4 +584,20 @@ async def main() -> None:
 
 
 if __name__ == "__main__":
-    asyncio.run(main())
+    if len(sys.argv) > 1 and sys.argv[1] == "--resolver":
+        # 13-Sep: mismo patrón exacto que wallet_mirror_sniper.py --resolver
+        # -- reusa resolver_pendientes() de wallet_mirror_tracker.py apuntado
+        # a NUESTRO propio CSV (OUT/OUT_LOCK/COLUMNS monkey-patched), para que
+        # el gate (analisis_wallet_mirror_gate_bucket_10ago.py) calcule pnl
+        # directamente desde la población que decide con dinero real, sin
+        # cruzar con wallet_mirror_sniper_dry_run.csv (población distinta,
+        # ver comentario en COLUMNS arriba).
+        import wallet_mirror_tracker as wmt
+        from wallet_mirror_tracker import resolver_pendientes
+        wmt.OUT = OUT
+        wmt.OUT_LOCK = OUT_LOCK
+        wmt.COLUMNS = COLUMNS
+        n = resolver_pendientes()
+        print(f"Resueltas: {n}")
+    else:
+        asyncio.run(main())

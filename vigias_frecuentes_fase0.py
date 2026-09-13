@@ -103,6 +103,9 @@ import vigia_sports_reabrir_overrides_wallet_mirror
 import wallet_mirror_tracker as _wmt
 from wallet_mirror_sniper import OUT as _WMS_OUT, COLUMNS as _WMS_COLUMNS
 from wallet_mirror_tracker import resolver_pendientes as _resolver_pendientes
+from wallet_mirror_executor_dryrun import (
+    OUT as _WME_OUT, OUT_LOCK as _WME_LOCK, COLUMNS as _WME_COLUMNS,
+)
 
 # 20-Ago (Javi: "consolida procesos", presión CPU/RAM tras incidente OOM real
 # de esta sesión -- ver logs/vigia_pipeline_latencia.log 21:03 Madrid): 2
@@ -121,6 +124,25 @@ def _resolver_wallet_mirror_sniper() -> None:
         _wmt.OUT = _WMS_OUT
         _wmt.OUT_LOCK = REPO / "data" / "shadow" / "wallet_mirror_sniper_dry_run.csv.lock"
         _wmt.COLUMNS = _WMS_COLUMNS
+        n = _resolver_pendientes()
+        print(f"Resueltas: {n}")
+    finally:
+        _wmt.OUT, _wmt.OUT_LOCK, _wmt.COLUMNS = prev_out, prev_lock, prev_cols
+
+
+def _resolver_wallet_mirror_executor() -> None:
+    """13-Sep: mismo patrón que _resolver_wallet_mirror_sniper() (arriba)
+    pero apuntado a wallet_mirror_executor_dryrun.csv -- necesario para
+    que analisis_wallet_mirror_gate_bucket_10ago.py calcule pnl/outcome
+    desde la propia población de EXECUTOR (roster = wallets_operativas_
+    recientes(), el que decide con dinero real) en vez de cruzar con
+    wallet_mirror_sniper_dry_run.csv (roster distinto por diseño, ver
+    idea_join_wallet_mirror_executor_sniper_roto_13sep)."""
+    prev_out, prev_lock, prev_cols = _wmt.OUT, _wmt.OUT_LOCK, _wmt.COLUMNS
+    try:
+        _wmt.OUT = _WME_OUT
+        _wmt.OUT_LOCK = _WME_LOCK
+        _wmt.COLUMNS = _WME_COLUMNS
         n = _resolver_pendientes()
         print(f"Resueltas: {n}")
     finally:
@@ -154,6 +176,7 @@ TAREAS = [
     ("resuelve_ballenas_5min", resuelve_ballenas_5min.main, "resuelve_ballenas_5min.log", 600),
     ("resuelve_ballenas_15min", resuelve_ballenas_15min.main, "resuelve_ballenas_15min.log", 600),
     ("wallet_mirror_sniper_resolver", _resolver_wallet_mirror_sniper, "wallet_mirror_sniper_resolver.log", 600),
+    ("wallet_mirror_executor_resolver", _resolver_wallet_mirror_executor, "wallet_mirror_executor_resolver.log", 600),
     ("live_balance", live_balance.main, "balance.log", 900),
     ("vigia_carga_sistema", vigia_carga_sistema.main, "vigia_carga_sistema.log", 900),
     ("vigia_wallet_mirror_postfix", vigia_wallet_mirror_postfix.main, "vigia_wallet_mirror_postfix.log", 900),
