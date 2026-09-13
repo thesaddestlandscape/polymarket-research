@@ -177,11 +177,21 @@ def _registrar_prediccion(condition_id: str, market_slug: str, lado_mayoria: str
     archivo = DIR_SHADOW / f"predictions_{ts[:10]}.csv"
     subtype = f"{activo}#{marco}"
     decision = "BUY_YES" if lado_mayoria in ("Up", "Yes") else "BUY_NO"
-    prob_yes = min(0.97, py + 0.03) if decision == "BUY_YES" else max(0.03, py - 0.03)
-    edge = prob_yes - py
+    # 13-Sep, bug real corregido (ver project_bug_inversion_precio_
+    # candidata9_buyno_11sep en memoria): `py` es el ask del lado que la
+    # wallet mayoritaria REALMENTE compró (lado_mayoria), no el precio YES
+    # canónico -- pero "precio_yes_mercado"/"prob_yes_modelo" (columnas de
+    # predictions.csv) y el feature "py_entrada" (convención universal del
+    # proyecto, ver shadow_predict.py) SIEMPRE representan el YES canónico.
+    # Convertir UNA sola vez aquí; results.csv/shadow_postmortem.py derivan
+    # solos el 1-precio para BUY_NO, así que escribir `py` crudo invertía
+    # el precio para toda fila BUY_NO de esta familia.
+    precio_yes = py if decision == "BUY_YES" else round(1.0 - py, 6)
+    prob_yes = min(0.97, precio_yes + 0.03) if decision == "BUY_YES" else max(0.03, precio_yes - 0.03)
+    edge = prob_yes - precio_yes
     horas_venc = (restante_s / 3600.0) if restante_s is not None else 0.02
     features = json.dumps({
-        "py_entrada": round(py, 4), "lado_mayoria": lado_mayoria,
+        "py_entrada": round(precio_yes, 4), "lado_mayoria": lado_mayoria,
         "ejecutor_baja_latencia": True, "fase0_solo_observacion": True,
         "candidata9_zona_confirmada": True,
     }, separators=(",", ":"))
@@ -201,7 +211,7 @@ def _registrar_prediccion(condition_id: str, market_slug: str, lado_mayoria: str
                         ])
                     w.writerow([
                         ts, STRATEGY, market_id, "", "",
-                        f"{horas_venc:.4f}", f"{py:.4f}", f"{prob_yes:.4f}",
+                        f"{horas_venc:.4f}", f"{precio_yes:.4f}", f"{prob_yes:.4f}",
                         f"{edge:.4f}", f"{edge:.4f}", f"{edge:.4f}", decision,
                         "candidata9_bot_consenso_reactivo", subtype, "1.05", features,
                     ])

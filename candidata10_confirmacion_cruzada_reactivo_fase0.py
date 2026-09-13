@@ -137,10 +137,18 @@ def _registrar_prediccion(condition_id: str, marco: str, lado: str, py: float) -
     archivo = DIR_SHADOW / f"predictions_{ts[:10]}.csv"
     subtype = f"{ACTIVO_OBJETIVO}#{marco}"
     decision = "BUY_YES" if lado in ("Up", "Yes") else "BUY_NO"
-    prob_yes = min(0.97, py + 0.03) if decision == "BUY_YES" else max(0.03, py - 0.03)
-    edge = prob_yes - py
+    # 13-Sep, bug real corregido (mismo hallazgo que el gemelo
+    # candidata9_bot_consenso_reactivo_fase0.py, ver project_bug_inversion_
+    # precio_candidata9_buyno_11sep en memoria): `py` es el ask del lado
+    # que realmente disparó la confirmación cruzada (`lado`), no el precio
+    # YES canónico -- convertir UNA sola vez, "precio_yes_mercado"/
+    # "prob_yes_modelo"/"py_entrada" siempre representan el YES canónico
+    # en el resto del proyecto.
+    precio_yes = py if decision == "BUY_YES" else round(1.0 - py, 6)
+    prob_yes = min(0.97, precio_yes + 0.03) if decision == "BUY_YES" else max(0.03, precio_yes - 0.03)
+    edge = prob_yes - precio_yes
     features = json.dumps({
-        "py_entrada": round(py, 4), "lado": lado,
+        "py_entrada": round(precio_yes, 4), "lado": lado,
         "ejecutor_baja_latencia": True, "fase0_solo_observacion": True,
         "candidata10_confirmacion_cruzada": True,
     }, separators=(",", ":"))
@@ -160,7 +168,7 @@ def _registrar_prediccion(condition_id: str, marco: str, lado: str, py: float) -
                         ])
                     w.writerow([
                         ts, STRATEGY, market_id, "", "",
-                        "0.02", f"{py:.4f}", f"{prob_yes:.4f}",
+                        "0.02", f"{precio_yes:.4f}", f"{prob_yes:.4f}",
                         f"{edge:.4f}", f"{edge:.4f}", f"{edge:.4f}", decision,
                         "candidata10_confirmacion_cruzada_reactivo", subtype, "1.05", features,
                     ])

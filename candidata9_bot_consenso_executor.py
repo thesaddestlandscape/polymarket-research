@@ -169,6 +169,21 @@ def _disparar(activo: str, marco: str, market_slug: str, lado_mayoria: str, py: 
     subtype = f"{activo}#{marco}"
     tupla_str = f"{STRATEGY}#{subtype}#{direction}"
 
+    # 13-Sep, bug real corregido (ver project_bug_inversion_precio_
+    # candidata9_buyno_11sep en memoria): `py` llega en perspectiva de la
+    # DECISIÓN -- es el ask del lado que la wallet mayoritaria REALMENTE
+    # compró (lado_mayoria), no el precio YES canónico del mercado. Es la
+    # convención correcta para _gate_confirma()/permitido_real() (bucketing
+    # "del lado sostenido", ver candidata9_gate_bucket.py -- NO tocar) y
+    # para calcular_stake() (que ya quiere perspectiva de decisión, ver su
+    # propio docstring) -- pero _clv_tupla() bucketea por precio_yes_mercado
+    # (misma convención que gate_bucket_propio.py) y _ejecutar_orden_
+    # polymarket() SIEMPRE espera el YES canónico (aplica su propio 1-precio
+    # para BUY_NO). Sin esta conversión, ambas aplicaban 1-precio sobre un
+    # valor que YA era el precio del lado NO -- doble inversión, precio de
+    # entrada y sizing Kelly erróneos en cualquier señal BUY_NO.
+    py_yes = py if direction == "BUY_YES" else round(1.0 - py, 6)
+
     ok_operar, motivo_operar = puede_operar_live(STRATEGY, subtype)
     if not ok_operar:
         return False, motivo_operar
@@ -187,7 +202,7 @@ def _disparar(activo: str, marco: str, market_slug: str, lado_mayoria: str, py: 
             return False, f"techo correlación: {abiertas_dir}>={max_misma_dir} posiciones {direction} abiertas"
 
         lt._CLV_CACHE = None
-        clv_medio, n_clv = lt._clv_tupla(STRATEGY, subtype, direction, py=py)
+        clv_medio, n_clv = lt._clv_tupla(STRATEGY, subtype, direction, py=py_yes)
         if n_clv >= lt.CLV_VETO_MIN_N and clv_medio < 0:
             return False, f"veto CLV: clv_medio={clv_medio:+.4f} (n={n_clv})"
 
@@ -199,7 +214,7 @@ def _disparar(activo: str, marco: str, market_slug: str, lado_mayoria: str, py: 
         # pedido por Javi ("empezando con stake mínimo") sin necesidad de
         # inflar esto artificialmente.
         ic_conviccion = 0.05
-        precio_entrada = py if direction == "BUY_YES" else round(1.0 - py, 6)
+        precio_entrada = py  # ya en perspectiva de decisión (ver py_yes arriba)
         stake_info = calcular_stake(ic_conviccion, STRATEGY, subtype, direction=direction,
                                     precio_entrada=precio_entrada)
         if not stake_info.get("viable"):
@@ -211,7 +226,7 @@ def _disparar(activo: str, marco: str, market_slug: str, lado_mayoria: str, py: 
             return True, "dry_run_habria_ejecutado"
 
         resultado = lt._ejecutar_orden_polymarket(
-            market_id, direction, stake_info["stake_eur"], py,
+            market_id, direction, stake_info["stake_eur"], py_yes,
             edge_dir=EDGE_DIR_ESTIMADO, contexto={"strategy": STRATEGY, "subtype": subtype})
 
         if resultado.get("no_fill"):
@@ -223,6 +238,11 @@ def _disparar(activo: str, marco: str, market_slug: str, lado_mayoria: str, py: 
             "strategy": STRATEGY, "subtype": subtype, "direction": direction,
             "stake_eur": stake_info["stake_eur"] if resultado["ok"] else 0.0,
             "entry_price": resultado["entry_price"],
+            # signal_ask/slip_real SIEMPRE en perspectiva de decisión (ver
+            # live_trade.py:803-805, "slip_real es entry_price-signal_ask"
+            # y entry_price=filled_price es el precio del TOKEN comprado,
+            # no el YES canónico) -- usar py (crudo), NUNCA py_yes aquí.
+            # /code-review 13-Sep cazó justo este error en el primer intento.
             "signal_ask": round(py, 4), "slip_real": resultado.get("slip_real", ""),
             "ic_modelo": "", "edge_neto": "",
             "conviction_score": "", "kelly_recomendado": stake_info["stake_eur"],
