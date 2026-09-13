@@ -1,10 +1,11 @@
 {
- "total_filas": 2313542,
+ "total_filas": 2451162,
  "candidatos": [
-  "SNIPER#BTC#5min[0.05,0.10)",
   "DISPERSO#BTC#15min[0.75,0.80)",
   "DISPERSO#ETH#5min[0.10,0.15)",
   "SNIPER#BTC#15min[0.10,0.15)",
-  "SNIPER#XRP#5min[0.20,0.25)"
+  "SNIPER#XRP#5min[0.20,0.25)",
+  "SNIPER#DOGE#15min[0.95,1.00)",
+  "DISPERSO#ETH#15min[0.00,0.05)"
  ]
 }
