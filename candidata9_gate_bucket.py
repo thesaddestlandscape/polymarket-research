@@ -54,8 +54,36 @@ _gate_cache: dict = {"mtime": None, "datos": {}}
 # wallet/mercado dominante). Cruce con ballenas: señal independiente
 # (hit propio 55,4% vs baseline agregado ballenas ETH#5min 59,1% -- no
 # redescubre el mismo edge). Checklist completo, decisión explícita Javi.
+#
+# 13-Sep, 12 buckets adicionales aprobados (petición explícita Javi, tras
+# barrido de rescate post-fix precio invertido -- ver project_bug_
+# inversion_precio_candidata9_buyno_11sep): mismo checklist (g_kelly a
+# mano vía wallet_edge_tracker._g_kelly sobre eventos_candidata9(),
+# fill-ability real desde candidata9_bot_consenso_executor.csv,
+# concentración wallet/mercado). Todos g_kelly>0, fill-ability 51-96%,
+# top1-wallet<14% salvo donde se anota. Dejados FUERA a propósito (aviso,
+# revisar más adelante): ETH#5min[0.55,0.60) (fill-ability 28,2%, posible
+# arquetipo A) y BNB#5min[0.25,0.30) (top1-wallet 28,1% de solo 15
+# wallets, cerca del umbral de alarma 30%).
+#   BTC#5min[0.40,0.45) n=155 g=+0,0260 fill=95,7% top1=n/d
+#   BTC#5min[0.45,0.50) n=955 g=+0,0146 fill=88,1% top1=6,3%
+#   BTC#5min[0.50,0.55) n=1433 g=+0,0227 fill=59,9% top1=6,0%
+#   ETH#5min[0.25,0.30) n=45 g=+0,0676 fill=80,6% top1=13,9%
+#   ETH#5min[0.35,0.40) n=124 g=+0,0314 fill=83,8% top1=10,7%
+#   ETH#5min[0.50,0.55) n=697 g=+0,0193 fill=60,0% top1=8,8%
+#   SOL#5min[0.45,0.50) n=215 g=+0,0294 fill=76,8% top1=10,1%
+#   SOL#5min[0.50,0.55) n=702 g=+0,0176 fill=63,8% top1=12,2%
+#   BTC#15min[0.45,0.50) n=308 g=+0,0270 fill=82,4% top1=5,8%
+#   BTC#15min[0.50,0.55) n=458 g=+0,0337 fill=61,8% top1=4,5%
+#   ETH#15min[0.50,0.55) n=449 g=+0,0245 fill=51,2% top1=7,1% -- ÚNICO
+#   bucket de la tupla ya viva desde 08-Sep (CANDIDATA9_BOT_CONSENSO#ETH#
+#   15min), que llevaba muda (0 buckets aprobados) desde entonces.
 BUCKETS_APROBADOS_REAL = {
-    ("ETH", "5min"): {0.30},
+    ("ETH", "5min"): {0.25, 0.30, 0.35, 0.50},
+    ("BTC", "5min"): {0.40, 0.45, 0.50},
+    ("SOL", "5min"): {0.45, 0.50},
+    ("BTC", "15min"): {0.45, 0.50},
+    ("ETH", "15min"): {0.50},
 }
 
 
