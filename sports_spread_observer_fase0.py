@@ -71,7 +71,11 @@ from sports_wallet_edge_tracker import clasificar  # noqa: E402
 
 GAMMA = "https://gamma-api.polymarket.com"
 TIMEOUT = 20
-POLL_S = 240
+POLL_S = 1800  # 13-Sep: subido de 240s -- a 240s este logger sin ningún
+# consumidor (grep confirmado: nada lee sports_spread_fase0_*.csv) escribía
+# ~2.3-2.7GB/día, y llevó el disco al 92% (6GB libres) el mismo 13-Sep.
+# 1800s conserva resolución suficiente para elegibilidad de rewards
+# (rewards_max_spread cambia con poca frecuencia) y corta el volumen ~87%.
 TAG_SLUGS = ["tennis", "sports"]  # tennis PRIMERO -- fuente autoritativa
 # para su propia subcategorización fina (ver _categoria_tenis); "sports"
 # después solo añade lo que tennis no cubrió, dedup por market_id se
