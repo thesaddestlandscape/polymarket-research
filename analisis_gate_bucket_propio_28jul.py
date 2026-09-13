@@ -178,6 +178,17 @@ MARCOS_TWAP_AFECTADOS = {"5min", "15min", "240min"}
 # usando solo FECHA_CAMBIO_TWAP (07-Ago).
 FECHA_CAMBIO_TWAP_5MIN_60S = datetime(2026, 8, 14, tzinfo=timezone.utc)
 
+# 13-Sep: bug real de precio invertido (doble flip 1-p) en CANDIDATA9_BOT_
+# CONSENSO/CANDIDATA10_CONFIRMACION_CRUZADA para decision=BUY_NO (ver
+# project_bug_inversion_precio_candidata9_buyno_11sep, commit eb5b5056 --
+# corregido esa misma sesión). precio_yes_mercado/prob_yes_modelo de
+# results.csv están invertidos en TODAS las filas BUY_NO de estas 2
+# estrategias resueltas ANTES de este corte (5.212 filas medidas al
+# desplegar el fix) -- mismo patrón exacto que FECHA_CAMBIO_TWAP arriba,
+# excluir mientras el gate recalcula solo con datos post-fix.
+FECHA_FIX_PRECIO_CANDIDATA9_10 = datetime(2026, 9, 13, 9, 36, tzinfo=timezone.utc)
+ESTRATEGIAS_FIX_PRECIO_CANDIDATA9_10 = {"CANDIDATA9_BOT_CONSENSO", "CANDIDATA10_CONFIRMACION_CRUZADA"}
+
 
 def bucket(p):
     # 06-Ago fix: +1e-9 evita mal-clasificar precios EXACTOS en un múltiplo
@@ -305,6 +316,7 @@ def cargar_filas(tuplas):
     marco_por_tupla = {t: _marco_de_subtype(sub) for _, sub, _, t, _ in tuplas}
     out = defaultdict(list)  # tupla_str -> [(ts, py, pnl), ...]
     n_excluidas_pre_twap = 0
+    n_excluidas_precio_invertido = 0
     with open(RESULTS, encoding="utf-8") as f:
         for row in csv.DictReader(f):
             if row.get("acierto") not in ("0", "1"):
@@ -323,6 +335,14 @@ def cargar_filas(tuplas):
                 if ts_dt < corte:
                     n_excluidas_pre_twap += 1
                     continue
+            if row["strategy"] in ESTRATEGIAS_FIX_PRECIO_CANDIDATA9_10 and row["decision"] == "BUY_NO":
+                try:
+                    ts_dt = datetime.fromisoformat(row.get("prediction_timestamp", ""))
+                except Exception:
+                    continue  # fail-closed, mismo criterio que el filtro TWAP de arriba
+                if ts_dt < FECHA_FIX_PRECIO_CANDIDATA9_10:
+                    n_excluidas_precio_invertido += 1
+                    continue
             try:
                 py = float(row["precio_yes_mercado"])
             except Exception:
@@ -336,6 +356,11 @@ def cargar_filas(tuplas):
         print(f"[cargar_filas] {n_excluidas_pre_twap} filas pre-TWAP (antes de "
               f"{FECHA_CAMBIO_TWAP.date()}) excluidas en marcos afectados "
               f"({sorted(MARCOS_TWAP_AFECTADOS)}) -- régimen de resolución distinto")
+    if n_excluidas_precio_invertido:
+        print(f"[cargar_filas] {n_excluidas_precio_invertido} filas BUY_NO de "
+              f"{sorted(ESTRATEGIAS_FIX_PRECIO_CANDIDATA9_10)} excluidas (antes de "
+              f"{FECHA_FIX_PRECIO_CANDIDATA9_10.isoformat()}) -- precio invertido, "
+              f"ver project_bug_inversion_precio_candidata9_buyno_11sep")
     return out
 
 
