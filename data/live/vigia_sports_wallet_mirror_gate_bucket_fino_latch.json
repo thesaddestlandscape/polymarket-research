@@ -7,24 +7,16 @@
    "bueno_confirmado"
   ]
  },
- "Dota#FADE": {
-  "veredicto": "sin_concluir",
-  "historial_crudo": [
-   "bueno_confirmado",
-   "bueno_confirmado",
-   "bueno_confirmado"
-  ]
- },
  "CS#SEGUIR": {
   "lo": 0.31,
   "hi": 0.36,
   "n": 82,
   "pnl_medio": -0.5677,
-  "diff_vs_resto": -0.6316,
-  "p_valor": 0.003,
+  "diff_vs_resto": -0.6282,
+  "p_valor": 0.005,
   "split_half_diff": [
-   -0.6315,
-   -0.6317
+   -0.628,
+   -0.6283
   ],
   "split_half_ok": true,
   "pnl_medio_loo": -0.6005,
@@ -55,11 +47,11 @@
   "hi": 0.24,
   "n": 44,
   "pnl_medio": -0.5875,
-  "diff_vs_resto": -0.6089,
+  "diff_vs_resto": -0.6086,
   "p_valor": 0.0005,
   "split_half_diff": [
-   -0.5882,
-   -0.6297
+   -0.5879,
+   -0.6294
   ],
   "split_half_ok": true,
   "pnl_medio_loo": -0.6993,
@@ -80,24 +72,24 @@
  "LoL#FADE": {
   "lo": 0.28,
   "hi": 0.33,
-  "n": 47,
-  "pnl_medio": -0.5663,
-  "diff_vs_resto": -0.5457,
-  "p_valor": 0.0045,
+  "n": 49,
+  "pnl_medio": -0.584,
+  "diff_vs_resto": -0.5614,
+  "p_valor": 0.003,
   "split_half_diff": [
-   -0.3952,
-   -0.69
+   -0.4176,
+   -0.6995
   ],
   "split_half_ok": true,
-  "pnl_medio_loo": -0.6337,
+  "pnl_medio_loo": -0.6489,
   "robusto_loo": true,
   "ci90_bootstrap": [
-   -0.8496,
-   -0.2751
+   -0.8582,
+   -0.3052
   ],
   "robusto_bootstrap": true,
-  "n_posiciones_buscadas": 60,
-  "g_kelly_f10": -0.06448,
+  "n_posiciones_buscadas": 61,
+  "g_kelly_f10": -0.06615,
   "veredicto_crudo_hoy": "malo_confirmado",
   "historial_crudo": [
    "malo_confirmado"
@@ -111,6 +103,35 @@
    "bueno_confirmado",
    "bueno_confirmado"
   ]
+ },
+ "Dota#FADE": {
+  "lo": 0.45,
+  "hi": 0.5,
+  "n": 40,
+  "pnl_medio": 0.2667,
+  "diff_vs_resto": 0.4169,
+  "p_valor": 0.012,
+  "split_half_diff": [
+   0.3915,
+   0.4423
+  ],
+  "split_half_ok": true,
+  "pnl_medio_loo": 0.2992,
+  "robusto_loo": true,
+  "ci90_bootstrap": [
+   0.0005,
+   0.5344
+  ],
+  "robusto_bootstrap": true,
+  "n_posiciones_buscadas": 1,
+  "g_kelly_f10": 0.02107,
+  "veredicto_crudo_hoy": "bueno_confirmado",
+  "historial_crudo": [
+   "bueno_confirmado",
+   "bueno_confirmado",
+   "bueno_confirmado"
+  ],
+  "veredicto": "bueno_confirmado"
  },
  "epl-ganador#SEGUIR": {
   "veredicto": "sin_concluir",
