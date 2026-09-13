@@ -1,18 +1,18 @@
 {
  "STREAK_MOM_5M": {
-  "ic_bayes_familia": 0.0212,
+  "ic_bayes_familia": 0.0213,
   "n_tuplas_fuertes": 3,
-  "pnl_fiel_combinado_eur": 134.02,
+  "pnl_fiel_combinado_eur": 135.76,
   "tuplas": [
    {
     "k": "STREAK_MOM_5M#DOGE#5min#BUY_NO",
-    "pnl_fiel_eur_sin_suelo": 75.1686,
-    "n_ejecutado": 226
+    "pnl_fiel_eur_sin_suelo": 75.139,
+    "n_ejecutado": 228
    },
    {
     "k": "STREAK_MOM_5M#XRP#5min#BUY_NO",
-    "pnl_fiel_eur_sin_suelo": 40.5902,
-    "n_ejecutado": 129
+    "pnl_fiel_eur_sin_suelo": 42.362,
+    "n_ejecutado": 130
    },
    {
     "k": "STREAK_MOM_5M#ETH#5min#BUY_NO",
@@ -22,7 +22,7 @@
   ]
  },
  "UPDOWN_GBM_15M_TARDIO": {
-  "ic_bayes_familia": -0.052,
+  "ic_bayes_familia": -0.0518,
   "n_tuplas_fuertes": 1,
   "pnl_fiel_combinado_eur": 41.81,
   "tuplas": [
@@ -51,24 +51,24 @@
   ]
  },
  "STRUCT_NO_15M": {
-  "ic_bayes_familia": 0.0136,
+  "ic_bayes_familia": 0.0137,
   "n_tuplas_fuertes": 2,
-  "pnl_fiel_combinado_eur": 35.9,
+  "pnl_fiel_combinado_eur": 36.83,
   "tuplas": [
    {
     "k": "STRUCT_NO_15M#ETH#15min#BUY_NO",
-    "pnl_fiel_eur_sin_suelo": 18.6327,
-    "n_ejecutado": 832
+    "pnl_fiel_eur_sin_suelo": 18.5741,
+    "n_ejecutado": 834
    },
    {
     "k": "STRUCT_NO_15M#BTC#15min#BUY_NO",
-    "pnl_fiel_eur_sin_suelo": 17.2628,
-    "n_ejecutado": 795
+    "pnl_fiel_eur_sin_suelo": 18.2541,
+    "n_ejecutado": 796
    }
   ]
  },
  "GBM_LATE_60M": {
-  "ic_bayes_familia": 0.0509,
+  "ic_bayes_familia": 0.0518,
   "n_tuplas_fuertes": 1,
   "pnl_fiel_combinado_eur": 28.15,
   "tuplas": [
@@ -82,17 +82,17 @@
  "UPDOWN_GBM": {
   "ic_bayes_familia": 0.0256,
   "n_tuplas_fuertes": 1,
-  "pnl_fiel_combinado_eur": 22.64,
+  "pnl_fiel_combinado_eur": 21.57,
   "tuplas": [
    {
     "k": "UPDOWN_GBM#BTC#5min#BUY_NO",
-    "pnl_fiel_eur_sin_suelo": 22.6419,
-    "n_ejecutado": 423
+    "pnl_fiel_eur_sin_suelo": 21.5744,
+    "n_ejecutado": 426
    }
   ]
  },
  "MOMENTUM_IBS_15M_BALLENA": {
-  "ic_bayes_familia": -0.0153,
+  "ic_bayes_familia": -0.0152,
   "n_tuplas_fuertes": 1,
   "pnl_fiel_combinado_eur": 15.56,
   "tuplas": [
