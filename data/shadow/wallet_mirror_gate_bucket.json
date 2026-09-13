@@ -1,1 +1,119 @@
-{}
+{
+  "SEGUIR#BTC#5min#0": {
+    "0.25": {
+      "n": 1,
+      "pnl_medio": -1.0,
+      "g_kelly_f10": -0.10536,
+      "shuffle_p": null,
+      "split_half": null,
+      "veredicto": "sin_concluir",
+      "historial_crudo": [],
+      "fecha_historial": null
+    },
+    "0.30": {
+      "n": 1,
+      "pnl_medio": -1.0,
+      "g_kelly_f10": -0.10536,
+      "shuffle_p": null,
+      "split_half": null,
+      "veredicto": "sin_concluir",
+      "historial_crudo": [],
+      "fecha_historial": null
+    },
+    "0.55": {
+      "n": 2,
+      "pnl_medio": -1.0,
+      "g_kelly_f10": -0.10536,
+      "shuffle_p": null,
+      "split_half": null,
+      "veredicto": "sin_concluir",
+      "historial_crudo": [],
+      "fecha_historial": null
+    },
+    "0.60": {
+      "n": 4,
+      "pnl_medio": 0.5589,
+      "g_kelly_f10": 0.05437,
+      "shuffle_p": null,
+      "split_half": null,
+      "veredicto": "sin_concluir",
+      "historial_crudo": [],
+      "fecha_historial": null
+    },
+    "0.65": {
+      "n": 5,
+      "pnl_medio": 0.4753,
+      "g_kelly_f10": 0.04643,
+      "shuffle_p": null,
+      "split_half": null,
+      "veredicto": "sin_concluir",
+      "historial_crudo": [],
+      "fecha_historial": null
+    },
+    "0.70": {
+      "n": 11,
+      "pnl_medio": -0.6335,
+      "g_kelly_f10": -0.0674,
+      "shuffle_p": null,
+      "split_half": null,
+      "veredicto": "sin_concluir",
+      "historial_crudo": [],
+      "fecha_historial": null
+    },
+    "0.75": {
+      "n": 7,
+      "pnl_medio": -0.8175,
+      "g_kelly_f10": -0.08639,
+      "shuffle_p": null,
+      "split_half": null,
+      "veredicto": "sin_concluir",
+      "historial_crudo": [],
+      "fecha_historial": null
+    },
+    "0.80": {
+      "n": 2,
+      "pnl_medio": -0.4048,
+      "g_kelly_f10": -0.04325,
+      "shuffle_p": null,
+      "split_half": null,
+      "veredicto": "sin_concluir",
+      "historial_crudo": [],
+      "fecha_historial": null
+    },
+    "0.85": {
+      "n": 3,
+      "pnl_medio": 0.131,
+      "g_kelly_f10": 0.01301,
+      "shuffle_p": null,
+      "split_half": null,
+      "veredicto": "sin_concluir",
+      "historial_crudo": [],
+      "fecha_historial": null
+    },
+    "0.90": {
+      "n": 10,
+      "pnl_medio": 0.0768,
+      "g_kelly_f10": 0.00765,
+      "shuffle_p": null,
+      "split_half": null,
+      "veredicto": "sin_concluir",
+      "historial_crudo": [],
+      "fecha_historial": null
+    },
+    "0.95": {
+      "n": 8,
+      "pnl_medio": 0.0277,
+      "g_kelly_f10": 0.00277,
+      "shuffle_p": null,
+      "split_half": null,
+      "veredicto": "sin_concluir",
+      "historial_crudo": [],
+      "fecha_historial": null
+    }
+  },
+  "SEGUIR#BTC#15min#0": {},
+  "SEGUIR#ETH#5min#0": {},
+  "SEGUIR#XRP#15min#1": {},
+  "SEGUIR#BTC#5min#1": {},
+  "SEGUIR#ETH#5min#1": {}
+}
