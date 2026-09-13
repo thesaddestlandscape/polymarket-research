@@ -268,8 +268,53 @@ def _monitor_5min(resultados: list) -> dict:
 
 
 IC_GATE_LIVE = 0.08  # mismo umbral que exige la promoción a pares_permitidos_live
+IC_LIVE_N_MIN = 15   # CLAUDE.md regla #2: ninguna conclusión con n<15
 LATCH_IC_LIVE = Path("data/shadow/vigia_ic_live_latch.json")
 _NIVEL_ORDEN = {"verde": 0, "amarillo": 1, "rojo": 2}
+_PRECIOS_SWEEP_GATE_BUCKET = [round(0.05 + 0.05 * i, 2) for i in range(19)]  # 0.05..0.95
+
+
+def _tupla_tiene_zona_confirmada_viva(tupla_str: str) -> bool:
+    """True si `gate_bucket_propio.evaluar()` (la MISMA función fail-closed
+    que consultan los ejecutores reales antes de operar) todavía devuelve
+    "bueno_confirmado" para algún precio de la tupla. Barrido 13-Sep:
+    CANDIDATA9_BOT_CONSENSO#{BTC,SOL}#5min/#BTC#15min dispararon "rojo" en
+    _monitor_ic_live() por ic_bayes AGREGADO de toda la familia (incluye
+    micro-buckets nunca operados, ej. BTC#5min[0.00,0.10) con n=3-10 y
+    pnl_medio=-1.0€), mientras las zonas realmente operables
+    ([0.20,0.30) BTC#5min, n=155-1428, pnl_medio=+0.18 a +0.30€) seguían
+    "bueno_confirmado" sin degradación real — falsa alarma por comparar
+    el IC en el ámbito equivocado (mismo error de fondo que CLAUDE.md
+    pt.17 prohíbe). Si la tupla no tiene NINGÚN dato propio en
+    gate_bucket_propio.json (tupla_tiene_alguna_fuente_evaluable=False),
+    devuelve False para que el llamador caiga al chequeo de IC agregado
+    de siempre (fallback, no todas las tuplas live tienen gate de
+    micro-bucket todavía).
+
+    CANDIDATA9_BOT_CONSENSO es un caso especial (verificado 13-Sep): su
+    gate real fail-closed NO es gate_bucket_propio.py genérico (que para
+    esta familia tiene mucho menos n, ej. BTC#5min[0.40,0.50) con n=4-85
+    vs n=155-1428 en su fuente real) sino candidata9_gate_bucket.py::
+    permitido_real(), el módulo que consulta candidata9_bot_consenso_
+    executor.py en caliente — se comprueba ese primero para esta familia."""
+    partes = tupla_str.split("#")
+    if len(partes) == 4 and partes[0] == "CANDIDATA9_BOT_CONSENSO":
+        try:
+            import candidata9_gate_bucket as _c9
+            _, activo, marco, _ = partes
+            if any(_c9.permitido_real(activo, marco, py) for py in _PRECIOS_SWEEP_GATE_BUCKET):
+                return True
+        except Exception:
+            pass
+    if not _gbp.tiene_alguna_fuente_evaluable(tupla_str):
+        return False
+    for py in _PRECIOS_SWEEP_GATE_BUCKET:
+        try:
+            if _gbp.evaluar(tupla_str, py).get("veredicto") == "bueno_confirmado":
+                return True
+        except Exception:
+            continue
+    return False
 
 
 def _monitor_ic_live(params: dict) -> list:
@@ -315,7 +360,19 @@ def _monitor_ic_live(params: dict) -> list:
         n  = sp.get(campo_n, sp.get("n", 0))
         if ic is None:
             continue
-        if ic < IC_GATE_LIVE:
+        if _tupla_tiene_zona_confirmada_viva(tupla):
+            # El gate que promovió/mantiene esta tupla es el micro-bucket
+            # (gate_bucket_propio.evaluar()), no el ic_bayes agregado de
+            # la familia entera -- ese agregado mezcla precios que el
+            # ejecutor nunca opera. Mientras siga habiendo al menos una
+            # zona "bueno_confirmado" viva, el ic agregado no es señal
+            # de decaimiento real: no generar alerta con él.
+            nivel, texto = "verde", None
+        elif n < IC_LIVE_N_MIN:
+            # n insuficiente para concluir nada (CLAUDE.md regla #2) --
+            # p.ej. tuplas recién promocionadas con n=1-14 forward.
+            nivel, texto = "verde", None
+        elif ic < IC_GATE_LIVE:
             nivel, texto = "rojo", f"🔴 LIVE {tupla}: ic={ic:+.4f} < {IC_GATE_LIVE} (n={n}) — por debajo del gate que la promovió"
         elif ic < IC_GATE_LIVE + 0.02:
             nivel, texto = "amarillo", f"🟡 LIVE {tupla}: ic={ic:+.4f} cerca del gate {IC_GATE_LIVE} (n={n}) — vigilar"
