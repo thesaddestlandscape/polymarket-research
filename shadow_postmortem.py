@@ -271,7 +271,7 @@ IC_GATE_LIVE = 0.08  # mismo umbral que exige la promoción a pares_permitidos_l
 IC_LIVE_N_MIN = 15   # CLAUDE.md regla #2: ninguna conclusión con n<15
 LATCH_IC_LIVE = Path("data/shadow/vigia_ic_live_latch.json")
 _NIVEL_ORDEN = {"verde": 0, "amarillo": 1, "rojo": 2}
-_PRECIOS_SWEEP_GATE_BUCKET = [round(0.05 + 0.05 * i, 2) for i in range(19)]  # 0.05..0.95
+_PRECIOS_SWEEP_GATE_BUCKET = [round(0.05 * i, 2) for i in range(20)]  # 0.00..0.95 (los 20 buckets del grid)
 
 
 def _tupla_tiene_zona_confirmada_viva(tupla_str: str) -> bool:
