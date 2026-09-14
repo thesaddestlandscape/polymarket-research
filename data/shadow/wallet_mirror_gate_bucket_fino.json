@@ -2,20 +2,20 @@
   "SEGUIR#BTC#60min#0": {
     "lo": 0.3,
     "hi": 0.35,
-    "n": 48,
-    "pnl_medio": -0.5654,
-    "diff_vs_resto": -0.576,
+    "n": 54,
+    "pnl_medio": -0.6137,
+    "diff_vs_resto": -0.6244,
     "p_valor": 0.0,
     "split_half_diff": [
-      -0.7617,
-      -0.3904
+      -0.7894,
+      -0.4594
     ],
     "split_half_ok": true,
-    "pnl_medio_loo": -0.6236,
+    "pnl_medio_loo": -0.6662,
     "robusto_loo": true,
     "ci90_bootstrap": [
-      -0.8135,
-      -0.3171
+      -0.8329,
+      -0.3812
     ],
     "robusto_bootstrap": true,
     "n_posiciones_buscadas": 69,
@@ -27,22 +27,22 @@
     "veredicto": "malo_confirmado"
   },
   "SEGUIR#ETH#60min#0": {
-    "lo": 0.16,
-    "hi": 0.21,
-    "n": 70,
-    "pnl_medio": -0.6395,
-    "diff_vs_resto": -0.5387,
+    "lo": 0.12,
+    "hi": 0.17,
+    "n": 48,
+    "pnl_medio": -0.5989,
+    "diff_vs_resto": -0.4841,
     "p_valor": 0.0015,
     "split_half_diff": [
-      -0.1783,
-      -0.8992
+      -0.8852,
+      -0.083
     ],
     "split_half_ok": true,
-    "pnl_medio_loo": -0.7146,
+    "pnl_medio_loo": -0.7332,
     "robusto_loo": true,
     "ci90_bootstrap": [
-      -0.8609,
-      -0.3763
+      -0.8694,
+      -0.1978
     ],
     "robusto_bootstrap": true,
     "n_posiciones_buscadas": 67,
@@ -85,11 +85,11 @@
     "hi": 0.06,
     "n": 67,
     "pnl_medio": -1.0,
-    "diff_vs_resto": -0.9545,
+    "diff_vs_resto": -0.9544,
     "p_valor": 0.0,
     "split_half_diff": [
-      -0.9545,
-      -0.9545
+      -0.9544,
+      -0.9544
     ],
     "split_half_ok": true,
     "pnl_medio_loo": -1.0,
@@ -112,11 +112,11 @@
     "hi": 0.25,
     "n": 79,
     "pnl_medio": -0.4963,
-    "diff_vs_resto": -0.4702,
+    "diff_vs_resto": -0.4678,
     "p_valor": 0.002,
     "split_half_diff": [
-      -0.5267,
-      -0.4152
+      -0.5243,
+      -0.4127
     ],
     "split_half_ok": true,
     "pnl_medio_loo": -0.5504,
@@ -137,20 +137,20 @@
   "SEGUIR#BTC#15min#0": {
     "lo": 0.0,
     "hi": 0.05,
-    "n": 549,
-    "pnl_medio": -0.7879,
-    "diff_vs_resto": -0.7319,
+    "n": 550,
+    "pnl_medio": -0.7883,
+    "diff_vs_resto": -0.7334,
     "p_valor": 0.0,
     "split_half_diff": [
-      -0.689,
-      -0.7747
+      -0.691,
+      -0.7758
     ],
     "split_half_ok": true,
-    "pnl_medio_loo": -0.8725,
+    "pnl_medio_loo": -0.8727,
     "robusto_loo": true,
     "ci90_bootstrap": [
-      -0.9575,
-      -0.5757
+      -0.9576,
+      -0.5765
     ],
     "robusto_bootstrap": true,
     "n_posiciones_buscadas": 96,
@@ -224,23 +224,30 @@
     ],
     "fecha_historial": null
   },
+  "SEGUIR#BNB#15min#0": {
+    "veredicto": "sin_concluir",
+    "historial_crudo": [
+      "bueno_confirmado"
+    ],
+    "fecha_historial": null
+  },
   "SEGUIR#BTC#5min#0": {
     "lo": 0.0,
     "hi": 0.05,
-    "n": 4128,
-    "pnl_medio": -0.5954,
-    "diff_vs_resto": -0.5666,
+    "n": 4142,
+    "pnl_medio": -0.5968,
+    "diff_vs_resto": -0.5697,
     "p_valor": 0.0,
     "split_half_diff": [
-      -0.7904,
-      -0.3428
+      -0.7928,
+      -0.3467
     ],
     "split_half_ok": true,
-    "pnl_medio_loo": -0.6179,
+    "pnl_medio_loo": -0.6192,
     "robusto_loo": true,
     "ci90_bootstrap": [
-      -0.6894,
-      -0.4995
+      -0.6905,
+      -0.4993
     ],
     "robusto_bootstrap": true,
     "n_posiciones_buscadas": 96,
@@ -254,20 +261,20 @@
   "SEGUIR#BTC#5min#1": {
     "lo": 0.01,
     "hi": 0.06,
-    "n": 192,
-    "pnl_medio": -0.8382,
-    "diff_vs_resto": -0.8322,
+    "n": 193,
+    "pnl_medio": -0.839,
+    "diff_vs_resto": -0.832,
     "p_valor": 0.0,
     "split_half_diff": [
-      -0.994,
-      -0.6704
+      -0.993,
+      -0.6727
     ],
     "split_half_ok": true,
     "pnl_medio_loo": -1.0,
     "robusto_loo": true,
     "ci90_bootstrap": [
       -1.0,
-      -0.5145
+      -0.517
     ],
     "robusto_bootstrap": true,
     "n_posiciones_buscadas": 96,
@@ -306,12 +313,6 @@
     "historial_crudo": [
       "bueno_confirmado",
       "bueno_confirmado",
-      "bueno_confirmado"
-    ]
-  },
-  "SEGUIR#BNB#15min#0": {
-    "veredicto": "sin_concluir",
-    "historial_crudo": [
       "bueno_confirmado"
     ]
   }
