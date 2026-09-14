@@ -1258,5 +1258,33 @@
   "UPDOWN_GBM#SOL#240min": {
     "n": 203,
     "confirmado": false
+  },
+  "CANDIDATA9_BOT_CONSENSO#BTC": {
+    "n": 329,
+    "confirmado": false
+  },
+  "CANDIDATA9_BOT_CONSENSO#BTC#5min": {
+    "n": 317,
+    "confirmado": false
+  },
+  "FAVORITO_CONFIRMADO_15MIN_EXTREMO#BTC": {
+    "n": 201,
+    "confirmado": false
+  },
+  "FAVORITO_CONFIRMADO_15MIN_EXTREMO#BTC#15min": {
+    "n": 201,
+    "confirmado": false
+  },
+  "GBM_LATE_60M_PYCONFIRMADO#BTC": {
+    "n": 200,
+    "confirmado": false
+  },
+  "GBM_LATE_60M_PYCONFIRMADO#BTC#60min": {
+    "n": 200,
+    "confirmado": false
+  },
+  "PRICE_TARGET_GBM_FADE#BTC": {
+    "n": 210,
+    "confirmado": true
   }
 }
