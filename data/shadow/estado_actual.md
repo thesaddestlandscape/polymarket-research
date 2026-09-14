@@ -1,4 +1,4 @@
-# Estado del bot — 2026-09-14 11:26 UTC
+# Estado del bot — 2026-09-14 11:33 UTC
 
 ## Live — dinero real (on-chain)
 | | |
@@ -17,7 +17,7 @@
 | P&L sim compuesto | 🟢 +57599.39 $ (ficción Kelly: +226413% s/ operativo) |
 | P&L sim hoy (2026-09-14) | 🟢 +1148.79 $ |
 | Operaciones resueltas | 542734 (309656 WIN / 233078 LOSS) — 57.1% |
-| Señales abiertas | 255372 |
+| Señales abiertas | 256034 |
 
 ## Estrategias (visión global)
 
@@ -37,7 +37,7 @@
 | WEEKLY_PRICE | 1805 | 80.1% | +0.301 | 📈 madura (+0.03) | +905.28$ | 2.00$ | ✅ activa |
 | UPDOWN_GBM_IBS_ALTO | 769 | 78.8% | +0.287 | ➡️ estable | +608.04$ | 2.00$ | ✅ activa |
 | GBM_LATE_60M | 1162 | 55.9% | +0.059 | 📈 madura (+0.13) | +404.41$ | 0.59$ | ✅ activa |
-| LEADLAG_BTC_XRP_15M | 1585 | 57.9% | +0.078 | ➡️ estable | +337.83$ | 0.94$ | ✅ activa |
+| LEADLAG_BTC_XRP_15M | 1585 | 57.9% | +0.078 | ➡️ estable | +337.83$ | 0.95$ | ✅ activa |
 | ORDER_FLOW_5M | 2539 | 54.8% | +0.048 | 📈 madura (+0.07) | +321.08$ | 1.10$ | ✅ activa |
 | FAVORITO_CONFIRMADO_5MIN_BAJALATENCIA | 17178 | 62.4% | +0.124 | ➡️ estable | +298.89$ | 1.25$ | ✅ activa |
 | UPDOWN_GBM_15M_CROSS_WINDOW_SPREAD | 670 | 82.7% | +0.326 | 📈 madura (+0.05) | +165.73$ | 2.00$ | ✅ activa |
@@ -87,22 +87,22 @@
 
 ## Calidad de datos
 
-✅ **OK** — última verificación 2026-09-14T11:25 UTC
+✅ **OK** — última verificación 2026-09-14T11:32 UTC
 
 | Asset | Precio | Age | Alertas |
 |---|---|---|---|
-| ✅ BTC | $77,820.96 | 0.1min |  |
-| ✅ ETH | $2,512.74 | 0.1min |  |
-| ✅ SOL | $101.84 | 0.1min |  |
-| ✅ XRP | $1.40 | 0.1min |  |
+| ✅ BTC | $77,851.32 | 0.3min |  |
+| ✅ ETH | $2,513.84 | 0.3min |  |
+| ✅ SOL | $101.84 | 0.3min |  |
+| ✅ XRP | $1.41 | 0.3min |  |
 
 **Cross-source** (binance, coinbase, kraken):
 
 | Asset | Consenso | Fuente | Estado |
 |---|---|---|---|
-| BTC | $77,820.96 | consenso |  |
-| ETH | $2,512.74 | consenso |  |
-| SOL | $101.70 | consenso |  |
+| BTC | $77,865.80 | consenso |  |
+| ETH | $2,513.91 | consenso |  |
+| SOL | $101.80 | consenso |  |
 | XRP | $1.40 | consenso |  |
 
 ---
