@@ -20,7 +20,7 @@
   "hi": 0.24,
   "n": 45,
   "pnl_medio": -0.5967,
-  "diff_vs_resto": -0.6196,
+  "diff_vs_resto": -0.6195,
   "p_valor": 0.0,
   "split_half_diff": [
    -0.5896,
@@ -47,11 +47,11 @@
   "hi": 0.33,
   "n": 54,
   "pnl_medio": -0.6225,
-  "diff_vs_resto": -0.5836,
-  "p_valor": 0.001,
+  "diff_vs_resto": -0.5827,
+  "p_valor": 0.002,
   "split_half_diff": [
-   -0.4634,
-   -0.7038
+   -0.4625,
+   -0.7029
   ],
   "split_half_ok": true,
   "pnl_medio_loo": -0.6821,
@@ -75,10 +75,10 @@
   "n": 42,
   "pnl_medio": -0.334,
   "diff_vs_resto": -0.4575,
-  "p_valor": 0.0225,
+  "p_valor": 0.0215,
   "split_half_diff": [
    -0.3696,
-   -0.5453
+   -0.5454
   ],
   "split_half_ok": true,
   "pnl_medio_loo": -0.3624,
@@ -99,24 +99,24 @@
  "Dota#FADE": {
   "lo": 0.45,
   "hi": 0.5,
-  "n": 41,
-  "pnl_medio": 0.2882,
-  "diff_vs_resto": 0.4436,
-  "p_valor": 0.0105,
+  "n": 42,
+  "pnl_medio": 0.3055,
+  "diff_vs_resto": 0.4609,
+  "p_valor": 0.0095,
   "split_half_diff": [
-   0.3967,
-   0.4882
+   0.3376,
+   0.5842
   ],
   "split_half_ok": true,
-  "pnl_medio_loo": 0.3204,
+  "pnl_medio_loo": 0.3374,
   "robusto_loo": true,
   "ci90_bootstrap": [
-   0.0293,
-   0.5476
+   0.0456,
+   0.5596
   ],
   "robusto_bootstrap": true,
-  "n_posiciones_buscadas": 3,
-  "g_kelly_f10": 0.0232,
+  "n_posiciones_buscadas": 4,
+  "g_kelly_f10": 0.02495,
   "veredicto_crudo_hoy": "bueno_confirmado",
   "historial_crudo": [
    "bueno_confirmado",
