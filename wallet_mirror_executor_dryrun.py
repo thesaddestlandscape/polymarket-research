@@ -517,7 +517,7 @@ async def _correr_una_conexion(wallets: dict, vistos: dict, wallets_bucket: dict
                                         # tenía columna propia para ese dato.
                                         "notas": (f"wallet_mirror wallet={w} tipo={info['tipo']} "
                                                   f"grande={int(ratio_size is not None and ratio_size >= 2.0)}"
-                                                  if resultado.get("ok") else resultado.get("error", "")),
+                                                  if resultado.get("ok") else lt.notas_error_con_order_id(resultado)),
                                     }
                                     lt._registrar_trade(trade)
                                     if resultado.get("ok"):

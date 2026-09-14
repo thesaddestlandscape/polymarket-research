@@ -250,7 +250,7 @@ def _disparar(activo: str, marco: str, market_slug: str, lado_mayoria: str, py: 
             "close_timestamp": "", "exit_price": "", "outcome_real": "",
             "fee_eur": resultado.get("fee_eur", 0), "pnl_bruto_eur": "", "pnl_neto_eur": "",
             "notas": (f"candidata9_bot_consenso_baja_latencia lado={lado_mayoria}"
-                      if resultado.get("ok") else resultado.get("error", "")),
+                      if resultado.get("ok") else lt.notas_error_con_order_id(resultado)),
         }
         lt._registrar_trade(trade)
         log(f"  {'EJECUTADO' if resultado['ok'] else 'ERROR'}: {resultado}")

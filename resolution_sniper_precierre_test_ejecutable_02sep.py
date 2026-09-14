@@ -182,7 +182,7 @@ def _evaluar_activo(asset: str, ts_end: int) -> dict | None:
         "fee_eur": resultado.get("fee_eur", 0), "pnl_bruto_eur": "", "pnl_neto_eur": "",
         "notas": (f"PRUEBA CONTROLADA ejecutabilidad offset={OFFSET_S}s gate={veredicto_gate['motivo']}"
                   if resultado.get("ok")
-                  else f"PRUEBA CONTROLADA offset={OFFSET_S}s -- {resultado.get('error', '')}"),
+                  else f"PRUEBA CONTROLADA offset={OFFSET_S}s -- {lt.notas_error_con_order_id(resultado)}"),
     }
     lt._registrar_trade(trade)
 

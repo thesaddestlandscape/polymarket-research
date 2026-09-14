@@ -828,7 +828,7 @@ def disparar(mercado: dict, py: float, edge: float, restante_s: float, prob_buck
         "fee_eur": resultado.get("fee_eur", 0),
         "pnl_bruto_eur": "", "pnl_neto_eur": "",
         "notas": (f"ballenas_tardias restante={restante_s:.1f}s"
-                  if resultado.get("ok") else resultado.get("error", "")),
+                  if resultado.get("ok") else lt.notas_error_con_order_id(resultado)),
     }
     lt._registrar_trade(trade)
     log(f"  {'EJECUTADO' if resultado['ok'] else 'ERROR'}: {resultado}")

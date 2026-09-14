@@ -418,7 +418,7 @@ def _procesar_fila(row: dict, wallets: set, arquetipos: dict, vistos: dict) -> d
                                 "fee_eur": resultado.get("fee_eur", 0),
                                 "pnl_bruto_eur": "", "pnl_neto_eur": "",
                                 "notas": (f"dispersed_bot wallet={w} arquetipo={arquetipo}"
-                                          if resultado.get("ok") else resultado.get("error", "")),
+                                          if resultado.get("ok") else lt.notas_error_con_order_id(resultado)),
                             }
                             lt._registrar_trade(trade)
                             if resultado.get("ok"):

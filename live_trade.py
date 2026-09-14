@@ -3289,6 +3289,24 @@ def _evaluar_pre_trade(pred: dict, decision: str) -> tuple[bool, str]:
     return True, f"PASS {flag_str}"
 
 
+def notas_error_con_order_id(resultado: dict) -> str:
+    """Texto de `notas` para una fila ERROR de trades.csv -- único punto
+    de verdad para los ~13 executores que registran el resultado de
+    `_ejecutar_orden_polymarket()` (14-Sep, hallazgo de /code-review:
+    el fix original solo se aplicó a mano en un executor, dejando el
+    mismo hueco abierto en el resto). Incluye `order_id=0x...` cuando el
+    motivo es `sin_fill_confirmado` -- sin esto, `reconciliar_fill_
+    fantasma.py` (regex `order_id=(0x[0-9a-fA-F]+)`) nunca encuentra la
+    fila y un fill real queda para siempre mal registrado como
+    ERROR/stake=0. Caso real que lo motivó: market 4531125,
+    DISPERSO#BTC#15min#BUY_YES, fill real de +0,60€ perdido en el
+    contable durante horas hasta reconciliarse a mano."""
+    error = resultado.get("error", "")
+    if resultado.get("sin_fill_confirmado"):
+        return f"{error} order_id={resultado.get('order_id', '')}"
+    return error
+
+
 def _registrar_trade(row: dict):
     # flock (16-Jul): ver nota junto a TRADES_LOCK_PATH -- protege el
     # append en sí de un entrelazado entre dos procesos escribiendo a la
@@ -3559,9 +3577,8 @@ def _procesar_pendientes_ballenas(pendientes: dict, config: dict, params: dict,
             "close_timestamp": "", "exit_price": "", "outcome_real": "",
             "fee_eur": resultado.get("fee_eur", 0),
             "pnl_bruto_eur": "", "pnl_neto_eur": "",
-            "notas": tag_espera + ("" if resultado.get("ok") else f" {resultado.get('error', '')}"
-                                    + (f" order_id={resultado.get('order_id', '')}"
-                                       if resultado.get("sin_fill_confirmado") else "")),
+            "notas": tag_espera + ("" if resultado.get("ok")
+                                    else f" {notas_error_con_order_id(resultado)}"),
         }
         _registrar_trade(trade)
         ya_operados.add(mid)
@@ -4236,17 +4253,7 @@ def main():
                                 + (f" slip_est_kyle={resultado['slip_estimado_kyle']:.4f}"
                                    if resultado.get("slip_estimado_kyle") is not None else "")
                                 if resultado.get("ok") and "slip_real" in resultado
-                                else resultado.get("error", "")
-                                # 14-Sep (hallazgo real, ver reconciliar_fill_fantasma.py):
-                                # sin_fill_confirmado=True es EXACTAMENTE el caso "puede
-                                # ser un falso negativo de indexado lento" -- sin el
-                                # order_id persistido aquí, la única forma de comprobarlo
-                                # después era buscarlo a mano en logs/live.log. Con esto,
-                                # el reconciliador automático puede re-pollear get_trades()
-                                # y corregir la fila solo, sin depender de que alguien lo
-                                # note en el aviso de Telegram.
-                                + (f" order_id={resultado.get('order_id', '')}"
-                                   if resultado.get("sin_fill_confirmado") else ""))
+                                else notas_error_con_order_id(resultado))
                                 + (f" coincide_tupla=1 ic_boost={ic_para_stake:+.3f}" if coincide else "")
                                 + (f" smartmoney_boost=1 ic_boost={ic_para_stake:+.3f}" if smartmoney_boost_aplicado else "")
                                 + (f" ballenas_boost=1 ic_boost={ic_para_stake:+.3f}" if ballenas_boost_aplicado else "")
