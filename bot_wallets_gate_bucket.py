@@ -79,8 +79,26 @@ _gate_cache: dict = {"mtime": None, "datos": {}}
 # win_rate=0.0 y pnl_total=-15.214€ -- lo contrario de una wallet
 # informada, n congelado 3 días seguidos porque esa wallet dejó de
 # operar ahí -- ver idea_sniper_xrp5min_concentracion_wallet_perdedora_10sep).
+#
+# 14-Sep, aprobación explícita Javi ("saca a live... dinero encima de la
+# mesa"): SNIPER#BTC#15min[0.10,0.15) -- la concentración que la bloqueó
+# el 10-Sep (36.7%/15 wallets) bajó a 21.3%/19 wallets con más n, sana
+# ahora. Gate: n=98, pnl/tr=+0.466€, p=0.000, g_kelly(f=10%)=+0.0126, 3/3
+# días bueno_confirmado. Fill-ability real 77.2% (127 señales, 98
+# fillable). Ballenas: ballenas_timing_history.csv sin NINGUNA fila BTC#
+# 15min[0.10,0.15) -- señal independiente. Grid y fino (analisis_bot_
+# wallets_gate_bucket_fino.py, construido la misma sesión) NO se
+# contradicen: la ventana ganadora del fino para este grupo cae en
+# [0.00,0.05) malo_confirmado, zona distinta. Descartadas la misma
+# ronda: SNIPER#SOL#5min[0.05,0.10) y SNIPER#XRP#5min[0.20,0.25) --
+# ambas dominadas (69.8%/81.8%) por la MISMA wallet 0x11a5aaec...,
+# fichada con win_rate=0.0 y pnl_total=-15.214€ (mismo hallazgo que ya
+# descartó XRP el 10-Sep, hoy confirma que SOL tiene el mismo problema).
+# SNIPER#ETH#15min[0.15,0.20) sigue en observación: n=39 (<40), fill-
+# ability floja (48.8%).
 BUCKETS_APROBADOS_REAL = {
     ("SNIPER", "BTC", "5min"): {0.25},
+    ("SNIPER", "BTC", "15min"): {0.10},
     ("DISPERSO", "BTC", "15min"): {0.75},
 }
 
