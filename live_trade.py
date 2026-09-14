@@ -3559,7 +3559,9 @@ def _procesar_pendientes_ballenas(pendientes: dict, config: dict, params: dict,
             "close_timestamp": "", "exit_price": "", "outcome_real": "",
             "fee_eur": resultado.get("fee_eur", 0),
             "pnl_bruto_eur": "", "pnl_neto_eur": "",
-            "notas": tag_espera + ("" if resultado.get("ok") else f" {resultado.get('error', '')}"),
+            "notas": tag_espera + ("" if resultado.get("ok") else f" {resultado.get('error', '')}"
+                                    + (f" order_id={resultado.get('order_id', '')}"
+                                       if resultado.get("sin_fill_confirmado") else "")),
         }
         _registrar_trade(trade)
         ya_operados.add(mid)
@@ -4234,7 +4236,17 @@ def main():
                                 + (f" slip_est_kyle={resultado['slip_estimado_kyle']:.4f}"
                                    if resultado.get("slip_estimado_kyle") is not None else "")
                                 if resultado.get("ok") and "slip_real" in resultado
-                                else resultado.get("error", ""))
+                                else resultado.get("error", "")
+                                # 14-Sep (hallazgo real, ver reconciliar_fill_fantasma.py):
+                                # sin_fill_confirmado=True es EXACTAMENTE el caso "puede
+                                # ser un falso negativo de indexado lento" -- sin el
+                                # order_id persistido aquí, la única forma de comprobarlo
+                                # después era buscarlo a mano en logs/live.log. Con esto,
+                                # el reconciliador automático puede re-pollear get_trades()
+                                # y corregir la fila solo, sin depender de que alguien lo
+                                # note en el aviso de Telegram.
+                                + (f" order_id={resultado.get('order_id', '')}"
+                                   if resultado.get("sin_fill_confirmado") else ""))
                                 + (f" coincide_tupla=1 ic_boost={ic_para_stake:+.3f}" if coincide else "")
                                 + (f" smartmoney_boost=1 ic_boost={ic_para_stake:+.3f}" if smartmoney_boost_aplicado else "")
                                 + (f" ballenas_boost=1 ic_boost={ic_para_stake:+.3f}" if ballenas_boost_aplicado else "")
