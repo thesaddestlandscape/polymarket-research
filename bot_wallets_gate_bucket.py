@@ -100,6 +100,13 @@ BUCKETS_APROBADOS_REAL = {
     ("SNIPER", "BTC", "5min"): {0.25},
     ("SNIPER", "BTC", "15min"): {0.10},
     ("DISPERSO", "BTC", "15min"): {0.75},
+    # 14-Sep, checklist completo (ver nota _pares_sniper_eth15min_promocion_
+    # nota_2026-09-14 en config_live.json): n=43, ballenas +7,8pp sobre
+    # baseline, g_kelly positivo y estable f=0.05-0.20, concentración sana.
+    # Descartado en la misma sesión: SNIPER#SOL#5min[0.05,0.10) -- pnl medio
+    # atractivo pero hit=10,4% y g_kelly casi cero a f=10% (negativo a partir
+    # de f=15%), payout casi invertido, NO añadir sin repetir este análisis.
+    ("SNIPER", "ETH", "15min"): {0.15},
 }
 
 
