@@ -92,10 +92,12 @@ def main() -> int:
             v_antes = veredictos_antes.get(b, {}).get("veredicto", "sin_concluir")
             if v_nuevo != "sin_concluir":
                 if v_antes != v_nuevo:
+                    g_kelly = info.get("g_kelly_f10")
+                    g_kelly_str = f" g_kelly={g_kelly:+.5f}" if g_kelly is not None else ""
                     avisos.append(
                         f"{'🔴' if v_nuevo == 'malo_confirmado' else '🟢'} {clave_str} "
                         f"[{b},{float(b)+0.05:.2f}) -> {v_nuevo} "
-                        f"(n={info['n']} pnl/tr={info['pnl_medio']:+.3f} p={info.get('shuffle_p')})"
+                        f"(n={info['n']} pnl/tr={info['pnl_medio']:+.3f}{g_kelly_str} p={info.get('shuffle_p')})"
                     )
             else:
                 n_sin_concluir += 1

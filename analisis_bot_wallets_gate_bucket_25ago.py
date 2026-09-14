@@ -64,6 +64,7 @@ import shadow_postmortem as sp  # noqa: E402 -- reusa es_pre_twap
 
 IN = REPO / "data/shadow/bot_wallets_gate_bucket_fase0.csv"
 OUT = REPO / "data/shadow/bot_wallets_gate_bucket.json"
+TRADES_REAL = REPO / "data/live/trades.csv"
 
 STEP = 0.05
 N_MIN = 15
@@ -71,6 +72,8 @@ P_MAX = 0.05
 ITERS = 2000
 FEE = 0.07
 RATIO_MIN = 5.0
+F_KELLY = 0.10  # 14-Sep: mismo default que analisis_log_growth.py/gate_bucket_propio.py/
+# analisis_wallet_mirror_gate_bucket_10ago.py (P28/CLAUDE.md pt.14)
 # 07-Sep (vigia_bot_wallets_gate_bucket seguía colgándose con timeout=600s
 # tras el fix de la sesión anterior -- root cause real: shuffle_test()
 # construye una matriz (ITERS, na+nb) y hace argsort de cada fila; con
@@ -171,6 +174,100 @@ def bh_fdr_signif(p_valores, q=0.05):
     return set(orden[:corte])
 
 
+def _cargar_pnl_real_crudo() -> dict:
+    """{clave_str: [(ask, pnl_neto_eur), ...]} de trades.csv REALES, SIN
+    bucketizar a grid 0.05 -- para el consumidor fino (analisis_bot_
+    wallets_gate_bucket_fino.py), cuyas ventanas ganadoras caen en cortes
+    libres de 0.01, no en el grid fijo (14-Sep, /code-review: la versión
+    bucketizada de abajo, _cargar_pnl_real_por_bucket(), solo coincide con
+    ~21% de las posiciones posibles de ventana fina -- lookup exacto por
+    clave '0.27' nunca encuentra nada si el bucket real es '0.25'). Filtro
+    de rango [lo,hi) se aplica en el consumidor, no aquí."""
+    out = defaultdict(list)
+    try:
+        with open(TRADES_REAL, encoding="utf-8") as f:
+            for r in csv.DictReader(f):
+                strategy = r.get("strategy") or ""
+                if strategy not in ("SNIPER", "DISPERSO", "WEEKLY_TEMPRANO", "WEEKLY_TARDIO"):
+                    continue
+                if r.get("status") != "CLOSED":
+                    continue
+                subtype = r.get("subtype") or ""
+                if "#" not in subtype:
+                    continue
+                try:
+                    ask = float(r.get("entry_price") or "")
+                    pnl = float(r.get("pnl_neto_eur") or "")
+                except (TypeError, ValueError):
+                    continue
+                if not (0.0 < ask < 1.0):
+                    continue
+                out[f"{strategy}#{subtype}"].append((ask, pnl))
+    except (OSError, csv.Error):
+        return {}
+    return dict(out)
+
+
+def _cargar_pnl_real_por_bucket() -> dict:
+    """{clave_str: {bucket_str: [pnl_neto_eur, ...]}} de trades.csv REALES
+    (arquetipo==strategy, CLOSED) -- verdad de suelo, mismo mecanismo que
+    analisis_wallet_mirror_gate_bucket_10ago.py::_cargar_pnl_real_por_bucket
+    (14-Sep, petición explícita Javi: "protegida... no podemos perder
+    dinero", construido junto al veto de payout asimétrico que sigue).
+    A diferencia de Wallet Mirror, aquí `strategy` en trades.csv YA es el
+    arquetipo (SNIPER/DISPERSO/WEEKLY_TEMPRANO/WEEKLY_TARDIO), no hace
+    falta parsear `notas` para extraer tipo/grande.
+
+    Fail-safe: fichero ausente/corrupto -> {} (ningún bucket se degrada)."""
+    out = defaultdict(lambda: defaultdict(list))
+    try:
+        with open(TRADES_REAL, encoding="utf-8") as f:
+            for r in csv.DictReader(f):
+                strategy = r.get("strategy") or ""
+                if strategy not in ("SNIPER", "DISPERSO", "WEEKLY_TEMPRANO", "WEEKLY_TARDIO"):
+                    continue
+                if r.get("status") != "CLOSED":
+                    continue
+                subtype = r.get("subtype") or ""
+                if "#" not in subtype:
+                    continue
+                try:
+                    ask = float(r.get("entry_price") or "")
+                    pnl = float(r.get("pnl_neto_eur") or "")
+                except (TypeError, ValueError):
+                    continue
+                if not (0.0 < ask < 1.0):
+                    continue
+                clave_str = f"{strategy}#{subtype}"
+                out[clave_str][f"{bucket(ask):.2f}"].append(pnl)
+    except (OSError, csv.Error):
+        return {}
+    return {k: dict(v) for k, v in out.items()}
+
+
+def _degradar(veredicto_crudo, entrada, clave_str, b, pnl_real_por_bucket):
+    """14-Sep: vetos de payout asimétrico (Kelly g(f=10%)<=0) y verdad-de-
+    suelo (trades REALES ya negativos en este bucket exacto, n_real>=2) --
+    mismo criterio EXACTO que analisis_wallet_mirror_gate_bucket_10ago.py,
+    portado tal cual para que bot_wallets (SNIPER/DISPERSO/WEEKLY_*) deje
+    de ser la única familia de gate sin este veto (hueco señalado en
+    project_checkpoint_sesion_12sep_piso_absoluto_microbuckets). Solo
+    puede DEGRADAR, nunca promover."""
+    nota_payout = ""
+    g_kelly = entrada.get("g_kelly_f10")
+    if veredicto_crudo == "bueno_confirmado" and g_kelly is not None and g_kelly <= 0:
+        veredicto_crudo = "malo_confirmado"
+        nota_payout = f" [degradado: payout asimétrico g_kelly(f=10%)={g_kelly:+.5f}<=0]"
+    nota_real = ""
+    pnls_reales = pnl_real_por_bucket.get(clave_str, {}).get(b)
+    if veredicto_crudo == "bueno_confirmado" and pnls_reales and len(pnls_reales) >= 2:
+        media_real = sum(pnls_reales) / len(pnls_reales)
+        if media_real < 0:
+            veredicto_crudo = "malo_confirmado"
+            nota_real = f" [degradado: {len(pnls_reales)} trades REALES pnl_medio={media_real:+.3f}€<0]"
+    return veredicto_crudo, nota_payout, nota_real, g_kelly
+
+
 def _cargar_historial_abs_previo(out_path):
     """12-Sep (/code-review, mismo hueco que analisis_wallet_mirror_gate_
     bucket_10ago.py): namespace INDEPENDIENTE de historial para la vía
@@ -208,6 +305,7 @@ def main():
     # sí necesitó Wallet Mirror (ese corre horario).
     historial_previo = cargar_historial_previo(OUT, anidado_por_bucket=True)
     historial_abs_previo = _cargar_historial_abs_previo(OUT)
+    pnl_real_por_bucket = _cargar_pnl_real_por_bucket()
 
     resultado = {}
     pendientes = []
@@ -243,7 +341,9 @@ def main():
             # que hubiera pasado un día MALO (mismo motivo que la rama de
             # arriba, a nivel bucket en vez de a nivel clave).
             historial_semilla = historial_previo.get(clave_str, {}).get(f"{b:.2f}", [])
+            g_kelly = sum(math.log(1 + F_KELLY * x) for x in pnl_d) / n_d if n_d > 0 else None
             entrada = {"n": n_d, "pnl_medio": round(media_d, 4),
+                       "g_kelly_f10": round(g_kelly, 5) if g_kelly is not None else None,
                        "shuffle_p": None, "split_half": None, "veredicto": "sin_concluir",
                        "historial_crudo": historial_semilla}
             tabla[f"{b:.2f}"] = entrada
@@ -304,6 +404,8 @@ def main():
             veredicto_crudo = "bueno_confirmado"
         else:
             continue
+        veredicto_crudo, nota_payout, nota_real, g_kelly = _degradar(
+            veredicto_crudo, p["entrada"], p["clave_str"], p["bucket"], pnl_real_por_bucket)
         p["entrada"]["veredicto_crudo_hoy"] = veredicto_crudo
         # 10-Sep: 2 de los últimos 3 días (incluido hoy), asimétrico --
         # "malo_confirmado" sigue inmediato. Mismo mecanismo que el resto
@@ -318,7 +420,8 @@ def main():
         marca = "🔴" if veredicto == "malo_confirmado" else "🟢"
         veredictos_nuevos.append(
             f"{marca} {p['clave_str']} [{p['bucket']},{float(p['bucket'])+STEP:.2f}) "
-            f"n={p['entrada']['n']} pnl_medio={p['entrada']['pnl_medio']:+.3f} p={p['p']:.4f} {veredicto}"
+            f"n={p['entrada']['n']} pnl_medio={p['entrada']['pnl_medio']:+.3f} "
+            f"g_kelly={g_kelly:+.5f} p={p['p']:.4f} {veredicto}{nota_payout}{nota_real}"
         )
 
     # 12-Sep, vía absoluta (decisión explícita Javi, ver UMBRAL_ABSOLUTO_EUR
@@ -329,20 +432,23 @@ def main():
         candidatos_abs, agrupador_fn=lambda clave_str: tuple(clave_str.split("#")[1:]))
     for c in rescatados:
         b = c["bucket"]
+        veredicto_crudo_abs, nota_payout, nota_real, g_kelly = _degradar(
+            "bueno_confirmado", c["entrada"], c["clave_str"], b, pnl_real_por_bucket)
         historial_bucket = historial_abs_previo.get(c["clave_str"], {}).get(b)
         veredicto, c["entrada"]["historial_crudo_abs"] = veredicto_con_tolerancia(
-            "bueno_confirmado", historial_bucket)
-        c["entrada"]["veredicto_crudo_hoy_abs"] = "bueno_confirmado"
+            veredicto_crudo_abs, historial_bucket)
+        c["entrada"]["veredicto_crudo_hoy_abs"] = veredicto_crudo_abs
         c["entrada"]["via"] = "absoluta"
         if veredicto == "sin_concluir":
             # NUNCA pisa el veredicto ya decidido por la vía relativa --
             # ver comentario en _cargar_historial_abs_previo.
             continue
         c["entrada"]["veredicto"] = veredicto
+        marca = "🔴" if veredicto == "malo_confirmado" else "🟢"
         veredictos_nuevos.append(
-            f"🟢 [vía absoluta] {c['clave_str']} [{b},{float(b)+STEP:.2f}) "
+            f"{marca} [vía absoluta] {c['clave_str']} [{b},{float(b)+STEP:.2f}) "
             f"n={c['entrada']['n']} pnl_medio={c['entrada']['pnl_medio']:+.3f} "
-            f"p_abs={c['p_valor_abs']:.4f} {veredicto}"
+            f"g_kelly={g_kelly:+.5f} p_abs={c['p_valor_abs']:.4f} {veredicto}{nota_payout}{nota_real}"
         )
 
     print(f"\n{len(veredictos_nuevos)} bucket(s) con veredicto tras BH-FDR:")

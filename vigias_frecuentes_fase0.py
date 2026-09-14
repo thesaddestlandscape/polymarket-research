@@ -98,6 +98,7 @@ import vigia_micro_bucket_kill_switch_wallet_mirror
 import vigia_reabrir_overrides_wallet_mirror
 import vigia_gate_bucket_wallet_mirror
 import vigia_gate_bucket_wallet_mirror_fino
+import vigia_bot_wallets_gate_bucket_fino
 import vigia_sports_micro_bucket_kill_switch_wallet_mirror
 import vigia_sports_reabrir_overrides_wallet_mirror
 import wallet_mirror_tracker as _wmt
@@ -237,6 +238,14 @@ TAREAS = [
     # sin que nada las refrescara nunca.
     ("vigia_gate_bucket_wallet_mirror_fino", vigia_gate_bucket_wallet_mirror_fino.main,
      "vigia_gate_bucket_wallet_mirror_fino.log", 3600),
+    # 14-Sep (petición explícita Javi: "como en wallet mirror, que cuando
+    # se confirme un micro-bucket propio y fino bueno, nos avise por
+    # telegram... estamos dejando dinero de sniper encima de la mesa"):
+    # mismo par grid(vigia_bot_wallets_gate_bucket.py, cron diario 06:59)+
+    # fino que WALLET_MIRROR arriba, pero para la familia P-GALLINA
+    # (SNIPER/DISPERSO/WEEKLY_*) -- que nunca tuvo fino hasta hoy.
+    ("vigia_bot_wallets_gate_bucket_fino", vigia_bot_wallets_gate_bucket_fino.main,
+     "vigia_bot_wallets_gate_bucket_fino.log", 3600),
     # 27-Ago noche (petición explícita Javi: "construye lo que falte de
     # sports para tenerlo ya hecho cuando toque operar en directo"): mismo
     # par bloqueo+reapertura que WALLET_MIRROR cripto arriba, pero para
