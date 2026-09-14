@@ -40,8 +40,10 @@ sys.path.insert(0, str(REPO))
 from analisis_gate_bucket_propio_28jul import (  # noqa: E402
     shuffle_test, bh_fdr_signif, UMBRAL_ABSOLUTO_EUR, bootstrap_absoluto, rescatar_via_absoluta,
 )
+from analisis_bot_wallets_gate_bucket_25ago import _degradar, F_KELLY  # noqa: E402
 
 IN_BOTS = REPO / "data/shadow/bot_wallets_gate_bucket_fase0.csv"
+TRADES_REAL = REPO / "data/live/trades.csv"
 OUT = REPO / "data/shadow/candidata9_10_gate_bucket.json"
 
 STEP = 0.05
@@ -187,6 +189,51 @@ def _familia(tupla_str):
     return tupla_str.split("#")[0]
 
 
+def _cargar_pnl_real_crudo() -> dict:
+    """{clave_str: [(ask, pnl_neto_eur), ...]} de trades.csv REALES
+    (strategy in {CANDIDATA9_BOT_CONSENSO, CANDIDATA10_CROSSACTIVO}) --
+    verdad de suelo, mismo mecanismo portado hoy a bot_wallets (14-Sep,
+    petición explícita Javi: "hazlo" tras ver que esta familia era la
+    única sin veto de payout asimétrico). Sin bucketizar a grid -- el
+    consumidor filtra por rango si algún día hace falta un fino, pero
+    hoy este gate solo tiene grid, así que se bucketiza directamente.
+
+    Fail-safe: fichero ausente/corrupto -> {} (ningún bucket se degrada)."""
+    out = defaultdict(list)
+    try:
+        with open(TRADES_REAL, encoding="utf-8") as f:
+            for r in csv.DictReader(f):
+                strategy = r.get("strategy") or ""
+                if strategy not in ("CANDIDATA9_BOT_CONSENSO", "CANDIDATA10_CROSSACTIVO"):
+                    continue
+                if r.get("status") != "CLOSED":
+                    continue
+                subtype = r.get("subtype") or ""
+                if "#" not in subtype:
+                    continue
+                try:
+                    ask = float(r.get("entry_price") or "")
+                    pnl = float(r.get("pnl_neto_eur") or "")
+                except (TypeError, ValueError):
+                    continue
+                if not (0.0 < ask < 1.0):
+                    continue
+                out[f"{strategy}#{subtype}"].append((ask, pnl))
+    except (OSError, csv.Error):
+        return {}
+    return dict(out)
+
+
+def _pnl_real_por_bucket_desde_crudo(pnl_real_crudo: dict) -> dict:
+    """Bucketiza (grid 0.05) el crudo de arriba -- formato exacto que
+    _degradar() espera ({clave_str: {bucket_str: [pnl,...]}})."""
+    out = defaultdict(lambda: defaultdict(list))
+    for clave_str, pares in pnl_real_crudo.items():
+        for ask, pnl in pares:
+            out[clave_str][f"{bucket(ask):.2f}"].append(pnl)
+    return {k: dict(v) for k, v in out.items()}
+
+
 def main():
     eventos = defaultdict(list)
     for tupla_str, evs in eventos_candidata9().items():
@@ -195,6 +242,7 @@ def main():
         eventos[tupla_str].extend(evs)
 
     print(f"Tuplas (candidata9+10): {len(eventos)}")
+    pnl_real_por_bucket = _pnl_real_por_bucket_desde_crudo(_cargar_pnl_real_crudo())
 
     pendientes = []
     candidatos_abs = []  # vía absoluta (12-Sep), ver UMBRAL_ABSOLUTO_EUR
@@ -216,8 +264,10 @@ def main():
             pnl_d = [pnl for _, pnl in dentro]
             pnl_f = [pnl for _, pnl in fuera]
             media_d = sum(pnl_d) / n_d
+            g_kelly = sum(math.log(1 + F_KELLY * x) for x in pnl_d) / n_d if n_d > 0 else None
 
             entrada = {"n": n_d, "pnl_medio": round(media_d, 4),
+                       "g_kelly_f10": round(g_kelly, 5) if g_kelly is not None else None,
                        "diff_vs_resto": round(media_d - (sum(pnl_f) / len(pnl_f)), 4) if pnl_f else None,
                        "shuffle_p": None, "split_half_diff": None,
                        "ci90_bootstrap_absoluto": None, "veredicto": "sin_concluir"}
@@ -290,12 +340,15 @@ def main():
             veredicto = "bueno_confirmado"
         else:
             continue
+        veredicto, nota_payout, nota_real, g_kelly = _degradar(
+            veredicto, p["entrada"], p["tupla_str"], p["bucket"], pnl_real_por_bucket)
         resultado[p["tupla_str"]][p["bucket"]]["veredicto"] = veredicto
         marca = "🔴" if veredicto == "malo_confirmado" else "🟢"
         b = p["bucket"]
         veredictos_nuevos.append(
             f"{marca} {p['tupla_str']} [{b},{float(b)+STEP:.2f}) n={p['entrada']['n']} "
-            f"pnl_medio={p['entrada']['pnl_medio']:+.3f} p={p['p']:.4f} {veredicto}"
+            f"pnl_medio={p['entrada']['pnl_medio']:+.3f} g_kelly={g_kelly:+.5f} "
+            f"p={p['p']:.4f} {veredicto}{nota_payout}{nota_real}"
         )
 
     # 12-Sep, vía absoluta (decisión explícita Javi, ver UMBRAL_ABSOLUTO_EUR
@@ -306,11 +359,15 @@ def main():
         candidatos_abs, agrupador_fn=lambda tupla_str: (_familia(tupla_str), tupla_str.split("#")[1]))
     for c in rescatados:
         b = c["bucket"]
-        resultado[c["clave_str"]][b]["veredicto"] = "bueno_confirmado"
+        veredicto, nota_payout, nota_real, g_kelly = _degradar(
+            "bueno_confirmado", c["entrada"], c["clave_str"], b, pnl_real_por_bucket)
+        resultado[c["clave_str"]][b]["veredicto"] = veredicto
         resultado[c["clave_str"]][b]["via"] = "absoluta"
+        marca = "🔴" if veredicto == "malo_confirmado" else "🟢"
         veredictos_nuevos.append(
-            f"🟢 [vía absoluta] {c['clave_str']} [{b},{float(b)+STEP:.2f}) n={c['entrada']['n']} "
-            f"pnl_medio={c['entrada']['pnl_medio']:+.3f} p_abs={c['p_valor_abs']:.4f} bueno_confirmado"
+            f"{marca} [vía absoluta] {c['clave_str']} [{b},{float(b)+STEP:.2f}) n={c['entrada']['n']} "
+            f"pnl_medio={c['entrada']['pnl_medio']:+.3f} g_kelly={g_kelly:+.5f} "
+            f"p_abs={c['p_valor_abs']:.4f} {veredicto}{nota_payout}{nota_real}"
         )
 
     print(f"\n{len(veredictos_nuevos)} bucket(s) con veredicto tras BH-FDR:")
