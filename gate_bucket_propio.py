@@ -445,6 +445,18 @@ def _veto_fillable(tupla_str: str, py: float, resultado: dict) -> dict:
     pnl_fill = entrada_fill.get("pnl_medio")
     g_kelly = entrada_fill.get("g_kelly_f10")
     n_total = (_cargar().get(tupla_str, {}).get(b_str) or {}).get("n", 0)
+    # 14-Sep (/code-review, hallazgo real): `n_fill` (arriba) desde hoy solo
+    # cuenta señales DENTRO de ventana horaria real (fix de la discrepancia
+    # gate_bucket_propio_fillable vs pnl_fiel -- ver el docstring de
+    # analisis_gate_bucket_propio_fillable_03ago.py) -- pero `n_total` (del
+    # script HERMANO, gate_bucket_propio_28jul.py) nunca filtró por ventana.
+    # Comparar n_fill (filtrado) contra n_total (sin filtrar) hundía el
+    # ratio de la Señal 2 artificialmente, degradando buckets sanos solo
+    # por la hora del día. `n_accionable_dia_completo` es la MISMA
+    # población sin filtrar que n_total -- se usa aquí en su lugar,
+    # mientras n_fill (filtrado) sigue siendo la base correcta de pnl_fill/
+    # g_kelly (Señal 1/3, sin cambios).
+    n_fill_sin_ventana = entrada_fill.get("n_accionable_dia_completo", n_fill)
 
     motivo = None
     if n_fill >= _FILLABLE_N_MIN and pnl_fill is not None and pnl_fill < 0:
@@ -453,9 +465,9 @@ def _veto_fillable(tupla_str: str, py: float, resultado: dict) -> dict:
     elif n_fill >= _FILLABLE_N_MIN and g_kelly is not None and g_kelly <= 0:
         motivo = (f"subconjunto fillable (n={n_fill}) da g_kelly(f=10%)={g_kelly:+.5f} "
                   f"-- payout inverso (hit-rate alto con pérdidas grandes raras)")
-    elif n_total >= _FILLABLE_N_MIN and n_fill < n_total * _FILLABLE_RATE_MIN:
-        ratio_pct = (n_fill / n_total * 100) if n_total else 0.0
-        motivo = (f"fill-ability real {n_fill}/{n_total} ({ratio_pct:.1f}%) por debajo "
+    elif n_total >= _FILLABLE_N_MIN and n_fill_sin_ventana < n_total * _FILLABLE_RATE_MIN:
+        ratio_pct = (n_fill_sin_ventana / n_total * 100) if n_total else 0.0
+        motivo = (f"fill-ability real {n_fill_sin_ventana}/{n_total} ({ratio_pct:.1f}%) por debajo "
                   f"del {_FILLABLE_RATE_MIN*100:.0f}% mínimo -- selección adversa")
     if motivo is None:
         return resultado

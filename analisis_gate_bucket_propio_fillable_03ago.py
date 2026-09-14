@@ -51,14 +51,39 @@ import numpy as np
 # asimétrico en el mismo veto que selección adversa/profundidad de libro,
 # no como chequeo manual aparte cada vez.
 from analisis_log_growth import _retorno as _retorno_kelly  # noqa: E402
-# 31-Ago: mismo motivo que el fix de analisis_gate_bucket_propio_28jul.py
-# (pnl_medio a stake fijo, nunca el pnl_neto crudo de results.csv, que usa
-# `apuesta` Kelly-simulada por predicción) -- señal #1 de _veto_fillable()
-# ("subconjunto fillable pnl_medio negativo") comparte la misma
-# vulnerabilidad que motivó ese fix. g_kelly (arriba) ya estaba a salvo
-# porque _retorno_kelly() es intrínsecamente relativo (fracción, no €).
-from analisis_gate_bucket_propio_28jul import _pnl_normalizado  # noqa: E402
 _F_KELLY = 0.10  # mismo default que analisis_log_growth.py/live
+
+# 14-Sep (hallazgo real de sesión, ver project_discrepancia_gate_fillable_
+# pnlfiel_14sep): este script y `shadow_pnl_fiel.py` medían "fill-ability"
+# con DOS metodologías incompatibles sobre la misma tupla --
+# FAVORITO_CONFIRMADO#BTC#5min#BUY_NO daba pnl_medio=-0.15€ aquí (todos los
+# buckets grandes negativos) y +0.044€/trade en pnl_fiel (CI90 sin cruzar
+# cero) para la MISMA población nominal ("candidato_evaluacion, ratio>=5x").
+# Causa encontrada, dos diferencias reales:
+#   1. Este script no filtraba por VENTANA HORARIA -- contaba señales de
+#      cualquier hora del día, incluidas las que la operativa real de
+#      config_live.json nunca opera. pnl_fiel sí filtra (ventana_en()).
+#   2. Este script usaba `precio_yes_mercado` (precio de DETECCIÓN, el que
+#      logueó shadow_predict.py) + slippage flat 2% -- pnl_fiel usa el
+#      `mejor_ask` real del libro en el momento de evaluación (precio de
+#      EJECUCIÓN) + fee 7% real (validado contra fees on-chain, solo se
+#      paga en el lado ganador, no un flat en todas las filas).
+# Dado que `_veto_fillable()` en gate_bucket_propio.py SOLO puede DEGRADAR
+# un "bueno_confirmado" a "malo_confirmado" (nunca promocionar, ver su
+# docstring) -- una metodología con estas dos discrepancias puede estar
+# VETANDO buckets genuinamente rentables por error de medición, no por
+# selección adversa real (exactamente el riesgo que motivó esta sesión:
+# "lo mismo estamos perdiendo dinero de estrategias que están calladas").
+# Fix: usa las MISMAS fuentes que pnl_fiel (import, no reimplementación) --
+# ventana_en()+cargar_config() para el filtro horario, mejor_ask del libro
+# (ya cargado vía colapsar_libro()) en vez de precio_yes_mercado, y
+# FEE_RATE_TAKER_CRYPTO (7%, ganador-only) en vez de SLIPPAGE_NORMALIZADO
+# (2% flat). g_kelly (_retorno_kelly, arriba) queda FUERA de este fix: es
+# intrínsecamente relativo (fracción del stake, no €) y ya usa
+# precio_yes_mercado de forma consistente con el resto del proyecto
+# (analisis_log_growth.py, vigilado en vivo) -- cambiar su base de precio
+# es un cambio de alcance mayor, no parte de esta corrección puntual.
+from shadow_pnl_fiel import cargar_config, ventana_en, parse_ts, FEE_RATE_TAKER_CRYPTO  # noqa: E402
 
 REPO = Path(__file__).resolve().parent
 RESULTS = str(REPO / "data/shadow/results.csv")
@@ -141,12 +166,15 @@ def es_accionable(motivo, ratio, es_live):
     return motivo == "candidato_evaluacion"
 
 
-def cargar_filas_accionables(tuplas):
+def cargar_filas_accionables(tuplas, config):
     claves = {(s, sub, d): (t, es_live) for s, sub, d, t, es_live in tuplas}
     by_key = colapsar_libro()
 
-    # market_ids accionables por tupla
-    accionables_por_tupla = defaultdict(set)
+    # market_id accionable -> fila de libro (para el mejor_ask real), por
+    # tupla -- 14-Sep: ANTES solo se guardaba el set de mids, el precio se
+    # releía de results.csv (precio de detección); ahora se necesita la
+    # fila del libro para el precio de EJECUCIÓN.
+    accionables_por_tupla: dict[str, dict[str, dict]] = defaultdict(dict)
     for (tupla_libro, mid), r in by_key.items():
         strat, sub, direc = tupla_libro
         info = claves.get((strat, sub, direc))
@@ -154,9 +182,10 @@ def cargar_filas_accionables(tuplas):
             continue
         t, es_live = info
         if es_accionable(r.get("motivo"), r.get("ratio_vs_stake"), es_live):
-            accionables_por_tupla[t].add(mid)
+            accionables_por_tupla[t][mid] = r
 
     out = defaultdict(list)
+    n_fuera_ventana = 0
     with open(RESULTS, encoding="utf-8") as f:
         for row in csv.DictReader(f):
             if row.get("acierto") not in ("0", "1"):
@@ -167,17 +196,58 @@ def cargar_filas_accionables(tuplas):
                 continue
             t, es_live = info
             mid = row.get("market_id")
-            if mid not in accionables_por_tupla.get(t, ()):
+            libro_row = accionables_por_tupla.get(t, {}).get(mid)
+            if libro_row is None:
                 continue
+            # 14-Sep: mismo filtro de ventana horaria que shadow_pnl_fiel.py
+            # -- una señal fuera de la operativa real (config_live.json::
+            # ventanas_*) no es "fillable" en el sentido que le importa a
+            # Javi (¿operaríamos esto de verdad?), aunque tuviera libro con
+            # profundidad. Sin este filtro, "accionable" mezclaba horas que
+            # el propio proyecto nunca opera con las que sí -- la causa
+            # principal de la discrepancia con pnl_fiel (ver comentario en
+            # los imports de arriba).
+            #
+            # /code-review (mismo día, hallazgo real): filtrar por ventana
+            # AQUÍ y nada más rompía la Señal 2 de gate_bucket_propio.py::
+            # _veto_fillable() (ratio n_fill/n_total) -- n_total viene del
+            # script HERMANO (analisis_gate_bucket_propio_28jul.py), que
+            # NUNCA filtra por ventana. Reducir n_fill sin tocar n_total
+            # hunde artificialmente el ratio y puede degradar buckets sanos
+            # (verificado: FAVORITO_CONFIRMADO_5MIN_BAJALATENCIA#XRP#5min#
+            # BUY_NO [0.45,0.50) pasaba de 43% a 25% de fill-ability, cruzando
+            # el piso _FILLABLE_RATE_MIN=30% por el filtro, no por selección
+            # adversa real). Fix: NUNCA se descarta la fila aquí -- se marca
+            # `en_ventana` y se cuenta SIEMPRE para `n` (paridad con n_total,
+            # Señal 2 sigue viendo la población de siempre); solo las filas
+            # CON en_ventana=True entran en pnl_d/shuffle/split-half/g_kelly
+            # (Señal 1/3, la corrección real de hoy) -- ver más abajo en main().
+            ts_dt = parse_ts(row.get("prediction_timestamp", ""))
+            en_ventana = ts_dt is not None and ventana_en(ts_dt, config) is not None
+            if not en_ventana:
+                n_fuera_ventana += 1
             try:
-                py = float(row["precio_yes_mercado"])
-                pnl = _pnl_normalizado(py, row["decision"], row["acierto"] == "1")
-                if pnl is None:
-                    continue
-            except Exception:
+                py = float(row["precio_yes_mercado"])  # solo para bucketizar/g_kelly, no para pnl
+                precio_fill = float(libro_row["mejor_ask"])
+            except (KeyError, TypeError, ValueError):
                 continue
-            out[t].append((row.get("prediction_timestamp", ""), py, pnl, row["decision"], row["acierto"]))
-    return out, {t: len(accionables_por_tupla.get(t, ())) for _, _, _, t, _ in tuplas}
+            if not (0.01 < precio_fill < 0.99):
+                continue
+            acierto = row["acierto"] == "1"
+            fee = FEE_RATE_TAKER_CRYPTO * precio_fill * (1 - precio_fill)
+            # 14-Sep: pnl a precio de EJECUCIÓN (mejor_ask del libro, lo que
+            # de verdad se habría pagado) + fee 7% real ganador-only -- antes
+            # era precio de DETECCIÓN (precio_yes_mercado) + slippage flat
+            # 2% en toda fila. `precio_fill` ya está en la perspectiva
+            # correcta del lado operado (indexado por `direction` en
+            # colapsar_libro()), sin necesidad del 1-p de _pnl_normalizado.
+            pnl = (1.0 / precio_fill - 1.0) - fee if acierto else -1.0
+            out[t].append((row.get("prediction_timestamp", ""), py, pnl, row["decision"], row["acierto"], en_ventana))
+    if n_fuera_ventana:
+        print(f"[cargar_filas_accionables] {n_fuera_ventana} señales accionables fuera de ventana "
+              f"horaria real -- se cuentan para el ratio de fill-ability (Señal 2) pero NO entran "
+              f"en pnl_medio/shuffle/g_kelly (Señal 1/3)")
+    return out, {t: len(accionables_por_tupla.get(t, {})) for _, _, _, t, _ in tuplas}
 
 
 _rng = np.random.default_rng(42)
@@ -214,8 +284,9 @@ def bh_fdr_signif(p_valores, q=0.05):
 
 
 def main():
+    config = cargar_config(REPO)
     tuplas = cargar_tuplas_live()
-    filas_por_tupla, n_accionables = cargar_filas_accionables(tuplas)
+    filas_por_tupla, n_accionables = cargar_filas_accionables(tuplas, config)
     n_live = sum(1 for *_, es_live in tuplas if es_live)
     print(f"Tuplas a evaluar: {len(tuplas)} ({n_live} live, {len(tuplas) - n_live} candidatos)")
     print(f"Tuplas con >=1 mercado accionable: {sum(1 for v in n_accionables.values() if v > 0)}")
@@ -229,17 +300,41 @@ def main():
             continue
 
         por_bucket = defaultdict(list)
-        for ts, py, pnl, dec, acierto in filas:
-            por_bucket[bucket(py)].append((ts, pnl, py, dec, acierto))
+        for ts, py, pnl, dec, acierto, en_ventana in filas:
+            por_bucket[bucket(py)].append((ts, pnl, py, dec, acierto, en_ventana))
 
         tabla = {"_n_accionable_total": len(filas), "_es_live": es_live}
         for b in sorted(por_bucket):
-            dentro = por_bucket[b]
-            fuera = [(ts, pnl) for bb, fs in por_bucket.items() if bb != b for ts, pnl, *_ in fs]
+            dentro_todo = por_bucket[b]
+            # 14-Sep (/code-review, fix Señal 2): `n` (y todo lo que depende
+            # de pnl -- shuffle/split-half/g_kelly) SOLO usa la ventana
+            # horaria real; `n_accionable_dia_completo` cuenta TODAS las
+            # señales accionables del bucket sin filtrar por ventana, misma
+            # población que `n_total` del script hermano (gate_bucket_propio.
+            # py lee ambos para la Señal 2 -- ver _veto_fillable()). Sin
+            # este segundo conteo, reducir `n` por ventana sin más hundía el
+            # ratio n_fill/n_total artificialmente.
+            dentro = [f for f in dentro_todo if f[5]]
+            n_accionable_dia_completo = len(dentro_todo)
+            # "fuera" (el RESTO de la tupla, para shuffle-vs-resto) usa la
+            # MISMA población ventana-filtrada que "dentro" -- comparar un
+            # bucket filtrado contra un resto sin filtrar mezclaría de nuevo
+            # las dos poblaciones que este fix separa.
+            fuera = [(ts, pnl) for bb, fs in por_bucket.items() if bb != b
+                     for ts, pnl, *_r, ev in fs if ev]
             n_d = len(dentro)
+            entrada = {"n": n_d, "n_accionable_dia_completo": n_accionable_dia_completo,
+                       "pnl_medio": None, "diff_vs_resto": None, "g_kelly_f10": None,
+                       "shuffle_p": None, "split_half_diff": None, "veredicto": "sin_concluir"}
+            tabla[f"{b:.2f}"] = entrada
+            if n_d == 0 or not fuera:
+                continue
+
             pnl_d = [pnl for _, pnl, *_ in dentro]
             pnl_f = [pnl for _, pnl in fuera]
             media_d = sum(pnl_d) / n_d
+            entrada["pnl_medio"] = round(media_d, 4)
+            entrada["diff_vs_resto"] = round(media_d - (sum(pnl_f) / len(pnl_f)), 4) if pnl_f else None
 
             # Payout asimétrico (Kelly g(f=10%)) sobre el MISMO subconjunto
             # fillable -- un bucket puede tener pnl_medio positivo y aun así
@@ -247,17 +342,10 @@ def main():
             # raras). Solo se calcula con n_d>=N_MIN (mismo piso que el resto
             # del gate); con menos, g_kelly queda None (sin evidencia, no se
             # inventa un valor).
-            g_kelly = None
             if n_d >= N_MIN:
                 retornos = [_retorno_kelly({"precio_yes_mercado": py, "decision": dec, "acierto": acierto})
-                            for _, _, py, dec, acierto in dentro]
-                g_kelly = round(sum(math.log(1 + _F_KELLY * r) for r in retornos) / n_d, 5)
-
-            entrada = {"n": n_d, "pnl_medio": round(media_d, 4),
-                       "diff_vs_resto": round(media_d - (sum(pnl_f) / len(pnl_f)), 4) if pnl_f else None,
-                       "g_kelly_f10": g_kelly,
-                       "shuffle_p": None, "split_half_diff": None, "veredicto": "sin_concluir"}
-            tabla[f"{b:.2f}"] = entrada
+                            for _, _, py, dec, acierto, _ev in dentro]
+                entrada["g_kelly_f10"] = round(sum(math.log(1 + _F_KELLY * r) for r in retornos) / n_d, 5)
 
             if n_d >= N_MIN and pnl_f:
                 diff, p_valor = shuffle_test(pnl_d, pnl_f)
