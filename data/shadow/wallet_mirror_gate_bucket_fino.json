@@ -4,11 +4,11 @@
     "hi": 0.35,
     "n": 66,
     "pnl_medio": -0.6839,
-    "diff_vs_resto": -0.6955,
+    "diff_vs_resto": -0.6893,
     "p_valor": 0.0,
     "split_half_diff": [
-      -0.6502,
-      -0.7409
+      -0.6439,
+      -0.7346
     ],
     "split_half_ok": true,
     "pnl_medio_loo": -0.7278,
@@ -31,11 +31,11 @@
     "hi": 0.17,
     "n": 48,
     "pnl_medio": -0.5989,
-    "diff_vs_resto": -0.4841,
-    "p_valor": 0.0015,
+    "diff_vs_resto": -0.4843,
+    "p_valor": 0.0035,
     "split_half_diff": [
-      -0.8852,
-      -0.083
+      -0.8854,
+      -0.0832
     ],
     "split_half_ok": true,
     "pnl_medio_loo": -0.7332,
@@ -83,13 +83,13 @@
   "SEGUIR#BTC#15min#1": {
     "lo": 0.01,
     "hi": 0.06,
-    "n": 67,
+    "n": 68,
     "pnl_medio": -1.0,
-    "diff_vs_resto": -0.9543,
+    "diff_vs_resto": -0.9546,
     "p_valor": 0.0,
     "split_half_diff": [
-      -0.9543,
-      -0.9543
+      -0.9546,
+      -0.9546
     ],
     "split_half_ok": true,
     "pnl_medio_loo": -1.0,
@@ -112,11 +112,11 @@
     "hi": 0.25,
     "n": 79,
     "pnl_medio": -0.4963,
-    "diff_vs_resto": -0.4671,
-    "p_valor": 0.0025,
+    "diff_vs_resto": -0.4643,
+    "p_valor": 0.003,
     "split_half_diff": [
-      -0.5236,
-      -0.4121
+      -0.5208,
+      -0.4093
     ],
     "split_half_ok": true,
     "pnl_medio_loo": -0.5504,
@@ -137,20 +137,20 @@
   "SEGUIR#BTC#15min#0": {
     "lo": 0.0,
     "hi": 0.05,
-    "n": 550,
-    "pnl_medio": -0.7883,
-    "diff_vs_resto": -0.7338,
+    "n": 552,
+    "pnl_medio": -0.789,
+    "diff_vs_resto": -0.7346,
     "p_valor": 0.0,
     "split_half_diff": [
-      -0.6914,
-      -0.7762
+      -0.6923,
+      -0.7768
     ],
     "split_half_ok": true,
-    "pnl_medio_loo": -0.8727,
+    "pnl_medio_loo": -0.8732,
     "robusto_loo": true,
     "ci90_bootstrap": [
-      -0.9576,
-      -0.5765
+      -0.9578,
+      -0.5359
     ],
     "robusto_bootstrap": true,
     "n_posiciones_buscadas": 96,
@@ -193,11 +193,11 @@
     "hi": 0.18,
     "n": 41,
     "pnl_medio": -1.0,
-    "diff_vs_resto": -0.9544,
+    "diff_vs_resto": -0.955,
     "p_valor": 0.0,
     "split_half_diff": [
-      -0.9544,
-      -0.9544
+      -0.955,
+      -0.955
     ],
     "split_half_ok": true,
     "pnl_medio_loo": -1.0,
@@ -231,23 +231,52 @@
     ],
     "fecha_historial": null
   },
+  "SEGUIR#XRP#240min#0": {
+    "lo": 0.95,
+    "hi": 1.0,
+    "n": 350,
+    "pnl_medio": 0.0116,
+    "diff_vs_resto": 0.6513,
+    "p_valor": 0.0,
+    "split_half_diff": [
+      0.6522,
+      0.6505
+    ],
+    "split_half_ok": true,
+    "pnl_medio_loo": 0.0115,
+    "robusto_loo": true,
+    "ci90_bootstrap": [
+      0.0111,
+      0.0121
+    ],
+    "robusto_bootstrap": true,
+    "n_posiciones_buscadas": 3,
+    "veredicto_crudo_hoy": "bueno_confirmado",
+    "historial_crudo": [
+      "bueno_confirmado",
+      "bueno_confirmado",
+      "bueno_confirmado"
+    ],
+    "fecha_historial": "2026-09-14",
+    "veredicto": "bueno_confirmado"
+  },
   "SEGUIR#BTC#5min#0": {
     "lo": 0.0,
     "hi": 0.05,
-    "n": 4159,
-    "pnl_medio": -0.5984,
-    "diff_vs_resto": -0.5717,
+    "n": 4167,
+    "pnl_medio": -0.5992,
+    "diff_vs_resto": -0.572,
     "p_valor": 0.0,
     "split_half_diff": [
-      -0.7938,
-      -0.3497
+      -0.7937,
+      -0.3505
     ],
     "split_half_ok": true,
-    "pnl_medio_loo": -0.6207,
+    "pnl_medio_loo": -0.6215,
     "robusto_loo": true,
     "ci90_bootstrap": [
-      -0.6899,
-      -0.5051
+      -0.6905,
+      -0.5023
     ],
     "robusto_bootstrap": true,
     "n_posiciones_buscadas": 96,
@@ -266,8 +295,8 @@
     "diff_vs_resto": -0.8324,
     "p_valor": 0.0,
     "split_half_diff": [
-      -0.9934,
-      -0.6731
+      -0.9933,
+      -0.673
     ],
     "split_half_ok": true,
     "pnl_medio_loo": -1.0,
@@ -306,14 +335,6 @@
     "veredicto": "sin_concluir",
     "historial_crudo": [
       "malo_confirmado"
-    ]
-  },
-  "SEGUIR#XRP#240min#0": {
-    "veredicto": "sin_concluir",
-    "historial_crudo": [
-      "bueno_confirmado",
-      "bueno_confirmado",
-      "bueno_confirmado"
     ]
   }
 }
