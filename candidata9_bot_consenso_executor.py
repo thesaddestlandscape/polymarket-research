@@ -85,7 +85,7 @@ from live_guard import puede_operar_live  # noqa: E402
 from live_stake import bloquear_por_circuit_breaker, calcular_stake  # noqa: E402
 from wallet_mirror_tracker import _fillability_mirror, _market_id_y_direccion, leer_activity_incremental  # noqa: E402
 from candidata9_bot_consenso_reactivo_fase0 import _cargar_bots, _gate_confirma, BOTS_PATH  # noqa: E402
-from candidata9_gate_bucket import permitido_real  # noqa: E402
+from candidata9_gate_bucket import permitido_real, edge_estimado  # noqa: E402
 import ballenas_firehose_cache as _fc  # noqa: E402
 
 DIR_SHADOW = REPO / "data" / "shadow"
@@ -130,11 +130,19 @@ DRY_RUN = False  # 14-Sep: REACTIVADO -- petición explícita Javi tras
 # mecanismo de re-quote/abort-si-el-edge-se-evapora (_decidir_requote,
 # REQUOTE_EDGE_MIN=0.02) se SALTA por completo -- la orden saldría al
 # precio de detección aunque el libro se hubiera movido en contra entre
-# la señal y el envío real. Constante por ahora (una sola zona
-# confirmada activa) -- si el gate confirma una zona nueva con un edge
-# medido distinto, medir y actualizar aquí, no asumir que 0.072 aplica
-# a cualquier (activo,marco,bucket) futuro.
-EDGE_DIR_ESTIMADO = 0.072
+# la señal y el envío real.
+#
+# 14-Sep, cerrado (petición explícita Javi: "no podemos permitirnos
+# perder trades ganadores"): la constante única de arriba (0.072) medida
+# SOLO para ETH#15min[0.50,0.55) se aplicaba a los 12 buckets ya
+# aprobados en BUCKETS_APROBADOS_REAL -- todos con edge real medido
+# 10,1-21,7pp (ver candidata9_gate_bucket.py::EDGE_MEDIDO_REAL), muy por
+# encima del 7,2pp asumido. Usar el valor bajo abortaba por deterioro
+# trades que en realidad seguían con edge de sobra -- exactamente la
+# señal óptima que no se puede dejar pasar. Sustituido por
+# cgb.edge_estimado(activo, marco, py) en _disparar(), lookup por bucket
+# exacto con fallback conservador (0.072) si algún día se aprueba un
+# bucket nuevo sin medir todavía.
 
 COLUMNS = [
     "timestamp_utc", "condition_id", "market_slug", "activo", "marco",
@@ -240,7 +248,7 @@ def _disparar(activo: str, marco: str, market_slug: str, lado_mayoria: str, py: 
 
         resultado = lt._ejecutar_orden_polymarket(
             market_id, direction, stake_info["stake_eur"], py_yes,
-            edge_dir=EDGE_DIR_ESTIMADO,
+            edge_dir=edge_estimado(activo, marco, py),
             # 14-Sep, /code-review: sin "tupla_sintetica", live_trade.py
             # (CANDIDATA9_BOT_CONSENSO vive en _GATES_EXTERNOS_POR_ESTRATEGIA)
             # calcula tupla_str_gate=None -- los 2 re-chequeos de gate antes

@@ -86,9 +86,48 @@ BUCKETS_APROBADOS_REAL = {
     ("ETH", "15min"): {0.50},
 }
 
+# 14-Sep (hallazgo real, petición explícita Javi -- "no podemos permitirnos
+# perder trades ganadores, tiene que dejar pasar las señales óptimas"):
+# candidata9_bot_consenso_executor.py usaba una única constante
+# EDGE_DIR_ESTIMADO=0.072 (medida el 08-Sep SOLO para ETH#15min[0.50,0.55))
+# para los 12 buckets de arriba -- el _decidir_requote() de live_trade.py
+# usa ese valor como presupuesto de edge que el deterioro del libro puede
+# comerse antes de abortar. Medido ahora (mismo pipeline fiable que
+# BUCKETS_APROBADOS_REAL, eventos_candidata9() sobre bot_wallets_gate_
+# bucket_fase0.csv, hit_rate-ask_medio): el edge real de LOS 12 buckets es
+# 10,1pp a 21,7pp -- muy por encima del 7,2pp asumido -- así que la
+# constante vieja era sistemáticamente demasiado conservadora en los 12,
+# abortando por deterioro trades que en realidad seguían teniendo edge de
+# sobra. Nunca al revés (ningún bucket mide menos de 0.072), así que este
+# cambio solo deja pasar MÁS trades ganadores, nunca menos protección.
+EDGE_MEDIDO_REAL = {
+    ("ETH", "5min", 0.25): 0.217,
+    ("ETH", "5min", 0.30): 0.216,
+    ("ETH", "5min", 0.35): 0.139,
+    ("ETH", "5min", 0.50): 0.131,
+    ("BTC", "5min", 0.40): 0.145,
+    ("BTC", "5min", 0.45): 0.101,
+    ("BTC", "5min", 0.50): 0.149,
+    ("SOL", "5min", 0.45): 0.176,
+    ("SOL", "5min", 0.50): 0.124,
+    ("BTC", "15min", 0.45): 0.166,
+    ("BTC", "15min", 0.50): 0.200,
+    ("ETH", "15min", 0.50): 0.158,
+}
+# Fallback SOLO para un bucket que se apruebe en el futuro en
+# BUCKETS_APROBADOS_REAL sin medir todavía aquí -- mismo valor
+# conservador de origen (08-Sep), nunca asumir un edge alto sin medirlo.
+EDGE_FALLBACK_CONSERVADOR = 0.072
+
 
 def _bucket(precio: float) -> float:
     return round(math.floor(precio / GATE_STEP + 1e-9) * GATE_STEP, 4)
+
+
+def edge_estimado(activo: str, marco: str, ask: float) -> float:
+    """Edge real medido para el bucket exacto (ver EDGE_MEDIDO_REAL) --
+    fallback conservador si el bucket no está medido todavía."""
+    return EDGE_MEDIDO_REAL.get((activo, marco, _bucket(ask)), EDGE_FALLBACK_CONSERVADOR)
 
 
 def permitido_real(activo: str, marco: str, precio: float) -> bool:
