@@ -174,7 +174,10 @@ def bh_fdr_signif(p_valores, q=0.05):
     return set(orden[:corte])
 
 
-def _cargar_pnl_real_crudo() -> dict:
+ESTRATEGIAS_BOT_WALLETS = ("SNIPER", "DISPERSO", "WEEKLY_TEMPRANO", "WEEKLY_TARDIO")
+
+
+def _cargar_pnl_real_crudo(estrategias: tuple = ESTRATEGIAS_BOT_WALLETS) -> dict:
     """{clave_str: [(ask, pnl_neto_eur), ...]} de trades.csv REALES, SIN
     bucketizar a grid 0.05 -- para el consumidor fino (analisis_bot_
     wallets_gate_bucket_fino.py), cuyas ventanas ganadoras caen en cortes
@@ -182,13 +185,18 @@ def _cargar_pnl_real_crudo() -> dict:
     bucketizada de abajo, _cargar_pnl_real_por_bucket(), solo coincide con
     ~21% de las posiciones posibles de ventana fina -- lookup exacto por
     clave '0.27' nunca encuentra nada si el bucket real es '0.25'). Filtro
-    de rango [lo,hi) se aplica en el consumidor, no aquí."""
+    de rango [lo,hi) se aplica en el consumidor, no aquí.
+
+    `estrategias` parametrizable (14-Sep, /code-review: analisis_
+    candidata9_10_gate_bucket_26ago.py reusa esta función en vez de
+    duplicarla con su propio filtro de strategy -- "nunca duplicar la
+    fórmula", mismo criterio que el resto del proyecto)."""
     out = defaultdict(list)
     try:
         with open(TRADES_REAL, encoding="utf-8") as f:
             for r in csv.DictReader(f):
                 strategy = r.get("strategy") or ""
-                if strategy not in ("SNIPER", "DISPERSO", "WEEKLY_TEMPRANO", "WEEKLY_TARDIO"):
+                if strategy not in estrategias:
                     continue
                 if r.get("status") != "CLOSED":
                     continue

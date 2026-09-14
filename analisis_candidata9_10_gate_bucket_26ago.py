@@ -40,11 +40,14 @@ sys.path.insert(0, str(REPO))
 from analisis_gate_bucket_propio_28jul import (  # noqa: E402
     shuffle_test, bh_fdr_signif, UMBRAL_ABSOLUTO_EUR, bootstrap_absoluto, rescatar_via_absoluta,
 )
-from analisis_bot_wallets_gate_bucket_25ago import _degradar, F_KELLY  # noqa: E402
+from analisis_bot_wallets_gate_bucket_25ago import (  # noqa: E402
+    _degradar, _cargar_pnl_real_crudo, F_KELLY,
+)
 
 IN_BOTS = REPO / "data/shadow/bot_wallets_gate_bucket_fase0.csv"
-TRADES_REAL = REPO / "data/live/trades.csv"
 OUT = REPO / "data/shadow/candidata9_10_gate_bucket.json"
+
+ESTRATEGIAS_CANDIDATA9_10 = ("CANDIDATA9_BOT_CONSENSO", "CANDIDATA10_CROSSACTIVO")
 
 STEP = 0.05
 N_MIN = 15
@@ -189,41 +192,6 @@ def _familia(tupla_str):
     return tupla_str.split("#")[0]
 
 
-def _cargar_pnl_real_crudo() -> dict:
-    """{clave_str: [(ask, pnl_neto_eur), ...]} de trades.csv REALES
-    (strategy in {CANDIDATA9_BOT_CONSENSO, CANDIDATA10_CROSSACTIVO}) --
-    verdad de suelo, mismo mecanismo portado hoy a bot_wallets (14-Sep,
-    petición explícita Javi: "hazlo" tras ver que esta familia era la
-    única sin veto de payout asimétrico). Sin bucketizar a grid -- el
-    consumidor filtra por rango si algún día hace falta un fino, pero
-    hoy este gate solo tiene grid, así que se bucketiza directamente.
-
-    Fail-safe: fichero ausente/corrupto -> {} (ningún bucket se degrada)."""
-    out = defaultdict(list)
-    try:
-        with open(TRADES_REAL, encoding="utf-8") as f:
-            for r in csv.DictReader(f):
-                strategy = r.get("strategy") or ""
-                if strategy not in ("CANDIDATA9_BOT_CONSENSO", "CANDIDATA10_CROSSACTIVO"):
-                    continue
-                if r.get("status") != "CLOSED":
-                    continue
-                subtype = r.get("subtype") or ""
-                if "#" not in subtype:
-                    continue
-                try:
-                    ask = float(r.get("entry_price") or "")
-                    pnl = float(r.get("pnl_neto_eur") or "")
-                except (TypeError, ValueError):
-                    continue
-                if not (0.0 < ask < 1.0):
-                    continue
-                out[f"{strategy}#{subtype}"].append((ask, pnl))
-    except (OSError, csv.Error):
-        return {}
-    return dict(out)
-
-
 def _pnl_real_por_bucket_desde_crudo(pnl_real_crudo: dict) -> dict:
     """Bucketiza (grid 0.05) el crudo de arriba -- formato exacto que
     _degradar() espera ({clave_str: {bucket_str: [pnl,...]}})."""
@@ -242,7 +210,8 @@ def main():
         eventos[tupla_str].extend(evs)
 
     print(f"Tuplas (candidata9+10): {len(eventos)}")
-    pnl_real_por_bucket = _pnl_real_por_bucket_desde_crudo(_cargar_pnl_real_crudo())
+    pnl_real_por_bucket = _pnl_real_por_bucket_desde_crudo(
+        _cargar_pnl_real_crudo(ESTRATEGIAS_CANDIDATA9_10))
 
     pendientes = []
     candidatos_abs = []  # vía absoluta (12-Sep), ver UMBRAL_ABSOLUTO_EUR
