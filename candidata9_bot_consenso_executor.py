@@ -99,15 +99,28 @@ SEGUNDA_CONSULTA_ESPERA_S = 3.0
 POLL_S = 5
 RATIO_MIN = 5.0
 
-DRY_RUN = True  # 10-Sep: REVERTIDO a los ~15min de activarlo -- vigía IC
-# live disparó ic=-0.1957/-0.1985 sobre resultados.csv (n=21/15, NO trades
-# reales, 0 en trades.csv) que usan py_ref=ask_dec (precio de DECISIÓN,
-# ~3s después del trigger) en vez del ask de DETECCIÓN que usó el gate
-# retrospectivo (candidata9_10_gate_bucket.json, n=65, positivo). Posible
-# selección adversa real entre detección y decisión, sin investigar
-# todavía -- pausado por precaución (CLAUDE.md: ante la duda, parar).
-# Ver idea_candidata9_eth5min_alarma_ic_post_promocion_10sep. NO reactivar
-# sin resolver la discrepancia.
+DRY_RUN = False  # 14-Sep: REACTIVADO -- petición explícita Javi tras
+# verificar el checklist completo tras el aviso del vigía diario. La
+# falsa alarma del 10-Sep (ic=-0.1957/-0.1985) ya se diagnosticó y
+# arregló el 13-Sep (bug real: doble flip 1-p en precio_entrada/Kelly
+# para BUY_NO, commits eb5b5056+bee94d32, vigía parcheado) -- nadie
+# volvió a poner DRY_RUN=False después de ese fix, quedó huérfano.
+# Antes de reactivar HOY se verificó de nuevo con datos frescos:
+#   - Los 4 buckets candidatos (ETH#5min[0.30,0.35), SOL#5min[0.45,0.50)
+#     y [0.50,0.55), ETH#15min[0.50,0.55)) están "bueno_confirmado" en
+#     candidata9_10_gate_bucket.json Y en BUCKETS_APROBADOS_REAL.
+#   - Verificación cruzada independiente sobre los datos crudos (no solo
+#     el JSON): hit-rate real 53,7-67,4% con ask 0,32-0,52 -> edge real
+#     +12,4 a +21,6pp, muy por encima de breakeven en los 4.
+#   - Bug real encontrado y corregido la misma sesión: faltaba
+#     "tupla_sintetica" en el contexto pasado a _ejecutar_orden_
+#     polymarket -- sin eso, las DOS protecciones de re-quote antes de
+#     firmar (post-requote + multi-lectura hasta n_rechequeos_gate_
+#     bucket veces) se saltaban en silencio para toda esta familia,
+#     mismo bug ya corregido en WALLET_MIRROR el 25-Ago. Ver el fix
+#     justo arriba en _disparar(). /code-review sin hallazgos.
+# Ver idea_candidata9_eth5min_alarma_ic_post_promocion_10sep (contexto
+# de la falsa alarma original) y memoria de esta sesión (14-Sep).
 
 # 08-Sep (hallazgo real, mismo bug que /code-review encontró en
 # wallet_mirror_executor_dryrun.py el 06-Ago): edge_dir estimado A FAVOR
@@ -227,7 +240,15 @@ def _disparar(activo: str, marco: str, market_slug: str, lado_mayoria: str, py: 
 
         resultado = lt._ejecutar_orden_polymarket(
             market_id, direction, stake_info["stake_eur"], py_yes,
-            edge_dir=EDGE_DIR_ESTIMADO, contexto={"strategy": STRATEGY, "subtype": subtype})
+            edge_dir=EDGE_DIR_ESTIMADO,
+            # 14-Sep, /code-review: sin "tupla_sintetica", live_trade.py
+            # (CANDIDATA9_BOT_CONSENSO vive en _GATES_EXTERNOS_POR_ESTRATEGIA)
+            # calcula tupla_str_gate=None -- los 2 re-chequeos de gate antes
+            # de firmar (post-requote y el multi-lectura de hasta
+            # n_rechequeos_gate_bucket veces) se saltaban en silencio para
+            # TODA esta familia, mismo bug ya corregido en WALLET_MIRROR el
+            # 25-Ago, nunca replicado aquí al construir este ejecutor.
+            contexto={"strategy": STRATEGY, "subtype": subtype, "tupla_sintetica": tupla_str})
 
         if resultado.get("no_fill"):
             return False, f"no_fill: {resultado.get('error')}"
