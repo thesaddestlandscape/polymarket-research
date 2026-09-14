@@ -92,10 +92,22 @@ def main() -> int:
             v_antes = veredictos_antes.get(b, {}).get("veredicto", "sin_concluir")
             if v_nuevo != "sin_concluir":
                 if v_antes != v_nuevo:
+                    # 14-Sep (hallazgo real, mismo bug ya corregido en el
+                    # fino de bot_wallets): confirmaciones por la "vía
+                    # absoluta" (info.get("via")=="absoluta") tienen
+                    # shuffle_p intrascendente (compara contra vecinos, un
+                    # test que la vía absoluta explícitamente NO necesita
+                    # pasar) -- el p que de verdad las confirma es
+                    # p_valor_abs (bootstrap contra el umbral 0.10€,
+                    # BH-FDR). Mostrar shuffle_p ahí engañaba (ej. "p=1.0"
+                    # en un bucket confirmado con p_valor_abs=0.0).
+                    es_absoluta = info.get("via") == "absoluta"
+                    p_str = (f"p_abs={info.get('p_valor_abs')} [vía absoluta]" if es_absoluta
+                             else f"p={info.get('shuffle_p')}")
                     avisos.append(
                         f"{'🔴' if v_nuevo == 'malo_confirmado' else '🟢'} {clave_str} "
                         f"[{b},{float(b)+0.05:.2f}) -> {v_nuevo} "
-                        f"(n={info['n']} pnl/tr={info['pnl_medio']:+.3f} p={info.get('shuffle_p')})"
+                        f"(n={info['n']} pnl/tr={info['pnl_medio']:+.3f} {p_str})"
                     )
             else:
                 n_sin_concluir += 1

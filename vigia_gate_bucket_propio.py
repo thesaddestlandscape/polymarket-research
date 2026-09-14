@@ -107,9 +107,15 @@ def main() -> int:
                         if real.get("veredicto") != "bueno_confirmado":
                             motivo = (real.get("detalle") or {}).get("motivo", "sin motivo registrado")
                             nota_fillable = f" -- ⚠️ VETADO en la práctica ({real['veredicto']}): {motivo}"
+                    # 14-Sep, mismo bug encontrado y corregido en los
+                    # vigías hermanos (bot_wallets/candidata9): la vía
+                    # absoluta confirma sobre p_valor_abs, no shuffle_p.
+                    es_absoluta = info.get("via") == "absoluta"
+                    p_str = (f"p_abs={info.get('p_valor_abs')} [vía absoluta]" if es_absoluta
+                             else f"p={info.get('shuffle_p')}")
                     avisos.append(
                         f"{'🔴' if v_nuevo == 'malo_confirmado' else '🟢'} {tupla_str} [{b},{float(b)+0.05:.2f}) "
-                        f"-> {v_nuevo} (n={info['n']} pnl/tr={info['pnl_medio']:+.3f} p={info.get('shuffle_p')})"
+                        f"-> {v_nuevo} (n={info['n']} pnl/tr={info['pnl_medio']:+.3f} {p_str})"
                         f"{nota_fillable}"
                     )
             else:

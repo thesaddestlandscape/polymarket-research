@@ -94,10 +94,17 @@ def main() -> int:
                 if v_antes != v_nuevo:
                     g_kelly = info.get("g_kelly_f10")
                     g_kelly_str = f" g_kelly={g_kelly:+.5f}" if g_kelly is not None else ""
+                    # 14-Sep, mismo bug que vigia_candidata9_10_gate_bucket_
+                    # 26ago.py: la vía absoluta confirma sobre p_valor_abs,
+                    # no shuffle_p (irrelevante ahí, puede llegar a 1.0 en
+                    # un bucket confirmado de verdad).
+                    es_absoluta = info.get("via") == "absoluta"
+                    p_str = (f"p_abs={info.get('p_valor_abs')} [vía absoluta]" if es_absoluta
+                             else f"p={info.get('shuffle_p')}")
                     avisos.append(
                         f"{'🔴' if v_nuevo == 'malo_confirmado' else '🟢'} {clave_str} "
                         f"[{b},{float(b)+0.05:.2f}) -> {v_nuevo} "
-                        f"(n={info['n']} pnl/tr={info['pnl_medio']:+.3f}{g_kelly_str} p={info.get('shuffle_p')})"
+                        f"(n={info['n']} pnl/tr={info['pnl_medio']:+.3f}{g_kelly_str} {p_str})"
                     )
             else:
                 n_sin_concluir += 1

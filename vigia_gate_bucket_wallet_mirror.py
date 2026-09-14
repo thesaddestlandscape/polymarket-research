@@ -69,10 +69,16 @@ def main() -> int:
             v_antes = veredictos_antes.get(b, {}).get("veredicto", "sin_concluir")
             if v_nuevo != "sin_concluir":
                 if v_antes != v_nuevo:
+                    # 14-Sep, mismo bug encontrado y corregido en los
+                    # vigías hermanos (bot_wallets/candidata9/gate_bucket_
+                    # propio): la vía absoluta confirma sobre p_valor_abs.
+                    es_absoluta = info.get("via") == "absoluta"
+                    p_str = (f"p_abs={info.get('p_valor_abs')} [vía absoluta]" if es_absoluta
+                             else f"p={info.get('shuffle_p')}")
                     avisos.append(
                         f"{'🔴' if v_nuevo == 'malo_confirmado' else '🟢'} {clave_str} "
                         f"[{b},{float(b)+0.05:.2f}) -> {v_nuevo} "
-                        f"(n={info['n']} pnl/tr={info['pnl_medio']:+.3f} p={info.get('shuffle_p')})"
+                        f"(n={info['n']} pnl/tr={info['pnl_medio']:+.3f} {p_str})"
                     )
             else:
                 n_sin_concluir += 1
