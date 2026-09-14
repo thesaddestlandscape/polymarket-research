@@ -1,8 +1,8 @@
 {
-  "timestamp_utc": "2026-09-14T04:06:29+00:00",
-  "bankroll_sim": 56918.25,
-  "pnl_total": 56898.25,
-  "n_ops": 537920,
+  "timestamp_utc": "2026-09-14T04:16:05+00:00",
+  "bankroll_sim": 56965.7,
+  "pnl_total": 56945.7,
+  "n_ops": 538048,
   "win_rate": 0.5707,
   "estrategias_activas": 556,
   "desactivadas": [
@@ -33,13 +33,13 @@
   "top3_ic": [
     {
       "k": "RESOLUTION_SNIPER#SOL#sniper",
-      "ic": 0.4908,
-      "n": 107
+      "ic": 0.4909,
+      "n": 108
     },
     {
       "k": "RESOLUTION_SNIPER#SOL",
-      "ic": 0.4908,
-      "n": 107
+      "ic": 0.4909,
+      "n": 108
     },
     {
       "k": "FAVORITO_CONFIRMADO_15MIN_EXTREMO#ETH#15min",
@@ -63,12 +63,12 @@
       "alerta_proxima": "n=608/400, CLV=-0.030/−0.030"
     },
     "of_decay": {
-      "clv_historico": 0.0468,
-      "clv_ult30": 0.0053,
-      "decay_ratio": 0.11
+      "clv_historico": 0.047,
+      "clv_ult30": 0.0055,
+      "decay_ratio": 0.12
     },
     "alertas": [
-      "⚠️ ORDER_FLOW alpha decay: CLV histórico=+0.047 → últimas30=+0.005 (ratio=0.1x, 2 días)"
+      "⚠️ ORDER_FLOW alpha decay: CLV histórico=+0.047 → últimas30=+0.006 (ratio=0.1x, 2 días)"
     ]
   }
 }
