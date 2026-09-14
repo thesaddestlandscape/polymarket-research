@@ -29,6 +29,16 @@
   ],
   "n_suficiente_para_concluir": false
  },
+ "0x13e0d447520ebe7f8eeaf7817211201b2c585204": {
+  "n": 3,
+  "pnl_total_eur": -1.9891,
+  "pnl_medio_eur": -0.663,
+  "hit_rate": 0.3333,
+  "fuentes": [
+   "cripto"
+  ],
+  "n_suficiente_para_concluir": false
+ },
  "0xd972acefb74470cd60107b523783b5454675017e": {
   "n": 1,
   "pnl_total_eur": -1.9287,
@@ -169,16 +179,6 @@
   ],
   "n_suficiente_para_concluir": false
  },
- "0x13e0d447520ebe7f8eeaf7817211201b2c585204": {
-  "n": 2,
-  "pnl_total_eur": -0.9288,
-  "pnl_medio_eur": -0.4644,
-  "hit_rate": 0.5,
-  "fuentes": [
-   "cripto"
-  ],
-  "n_suficiente_para_concluir": false
- },
  "0xa4eb1cc5bd05bbcad1cd44e76308d5b8ecbb393f": {
   "n": 3,
   "pnl_total_eur": -0.5734,
@@ -279,16 +279,6 @@
   ],
   "n_suficiente_para_concluir": false
  },
- "0x0ae4a8d6146c304d69208cdf114129e63c67fb39": {
-  "n": 7,
-  "pnl_total_eur": 1.2729,
-  "pnl_medio_eur": 0.1818,
-  "hit_rate": 1.0,
-  "fuentes": [
-   "cripto"
-  ],
-  "n_suficiente_para_concluir": false
- },
  "0x0e76a837066241124095fe1572eb4579b7e75d70": {
   "n": 4,
   "pnl_total_eur": 1.3533,
@@ -303,6 +293,16 @@
   "n": 2,
   "pnl_total_eur": 1.5272,
   "pnl_medio_eur": 0.7636,
+  "hit_rate": 1.0,
+  "fuentes": [
+   "cripto"
+  ],
+  "n_suficiente_para_concluir": false
+ },
+ "0x0ae4a8d6146c304d69208cdf114129e63c67fb39": {
+  "n": 9,
+  "pnl_total_eur": 1.622,
+  "pnl_medio_eur": 0.1802,
   "hit_rate": 1.0,
   "fuentes": [
    "cripto"
