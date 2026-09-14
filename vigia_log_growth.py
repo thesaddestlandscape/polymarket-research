@@ -24,6 +24,7 @@ REPO = Path(__file__).resolve().parent
 sys.path.insert(0, str(REPO))
 
 from analisis_log_growth import gate, CONFIG_LIVE, N_MIN
+from shadow_postmortem import _tupla_tiene_zona_confirmada_viva
 
 LATCH = REPO / "data/live/vigia_log_growth_latch.json"
 TRADES = REPO / "data/live/trades.csv"
@@ -138,6 +139,17 @@ def main() -> int:
               f"EV/$={r['ev_por_dolar']:+.3f} g(f={f:.0%})={r['growth']:+.5f} "
               f"{'PASA' if r['pasa'] else 'NO -- payout inverso'}")
         if r["pasa"]:
+            return False
+        # 14-Sep (mismo bug que _monitor_ic_live esta mañana, ver commit
+        # 774fdde5): g(f) aquí es SIEMPRE el agregado de toda la tupla,
+        # mezclando micro-buckets de precio nunca operados con la zona
+        # real que el ejecutor sí opera bajo gate_bucket_propio/
+        # candidata9_gate_bucket. Si la tupla sigue teniendo una zona
+        # "bueno_confirmado" viva en el gate real, el g agregado no es
+        # señal de decaimiento del bucket operado -- no alarmar con él.
+        if _tupla_tiene_zona_confirmada_viva(tupla):
+            print(f"[vigia_log_growth] {tupla}{fuente_tag}: g agregado negativo pero "
+                  f"zona de precio confirmada sigue viva -- no alarma (falsa alarma evitada)")
             return False
         msg = (
             f"🔔 VIGÍA log-growth: {tupla} (dinero real) — payout inverso\n"
