@@ -1286,5 +1286,25 @@
   "PRICE_TARGET_GBM_FADE#BTC": {
     "n": 210,
     "confirmado": true
+  },
+  "CANDIDATA9_BOT_CONSENSO#ETH": {
+    "n": 218,
+    "confirmado": false
+  },
+  "CANDIDATA9_BOT_CONSENSO#ETH#5min": {
+    "n": 205,
+    "confirmado": false
+  },
+  "FAVORITO_CONFIRMADO_15MIN_EXTREMO#ETH": {
+    "n": 202,
+    "confirmado": false
+  },
+  "FAVORITO_CONFIRMADO_15MIN_EXTREMO#ETH#15min": {
+    "n": 202,
+    "confirmado": false
+  },
+  "PRICE_TARGET_GBM#BTC": {
+    "n": 200,
+    "confirmado": false
   }
 }
