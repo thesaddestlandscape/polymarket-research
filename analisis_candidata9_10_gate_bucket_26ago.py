@@ -20,9 +20,11 @@ fee 7% -- import directo de kelly_precio_gate._familia() para agrupar
 BH-FDR, e import directo de shuffle_test/bh_fdr_signif de
 analisis_gate_bucket_propio_28jul.py (nunca duplicar la fórmula).
 
-FASE 0 -- solo lectura. Escribe data/shadow/candidata9_10_gate_bucket.json.
-NO conectado a ningún ejecutor real, estas tuplas no existen en
-pares_permitidos_live ni candidatos_evaluacion_live -- exploratorio.
+Solo lectura, escribe data/shadow/candidata9_10_gate_bucket.json. 15-Sep:
+docstring corregido -- CANDIDATA9_BOT_CONSENSO SÍ está en pares_permitidos_
+live desde principios de Sep (candidata9_gate_bucket.py::evaluar_para_recheck
+lo consulta vía live_trade.py, dinero real). CANDIDATA10_CROSSACTIVO sigue
+exploratoria, fuera de pares_permitidos_live/candidatos_evaluacion_live.
 """
 import csv
 import json
@@ -41,8 +43,9 @@ from analisis_gate_bucket_propio_28jul import (  # noqa: E402
     shuffle_test, bh_fdr_signif, UMBRAL_ABSOLUTO_EUR, bootstrap_absoluto, rescatar_via_absoluta,
 )
 from analisis_bot_wallets_gate_bucket_25ago import (  # noqa: E402
-    _degradar, _cargar_pnl_real_crudo, F_KELLY,
+    _degradar, _cargar_pnl_real_crudo, _cargar_historial_abs_previo, F_KELLY,
 )
+from gate_confirmacion_historial import cargar_historial_previo, veredicto_con_tolerancia  # noqa: E402
 
 IN_BOTS = REPO / "data/shadow/bot_wallets_gate_bucket_fase0.csv"
 OUT = REPO / "data/shadow/candidata9_10_gate_bucket.json"
@@ -213,12 +216,53 @@ def main():
     pnl_real_por_bucket = _pnl_real_por_bucket_desde_crudo(
         _cargar_pnl_real_crudo(ESTRATEGIAS_CANDIDATA9_10))
 
+    # 15-Sep, petición explícita Javi ("que la confirmación de CANDIDATA9 sea
+    # igual de exigente que la de SNIPER/DISPERSO"): esta familia SÍ está en
+    # pares_permitidos_live (a diferencia de lo que dice el docstring del
+    # módulo, desactualizado desde que se promocionó) pero, a diferencia de
+    # bot_wallets_gate_bucket (SNIPER/DISPERSO/WEEKLY_*), nunca se conectó al
+    # guard de estabilidad multi-día (gate_confirmacion_historial.py, 01-Sep)
+    # -- podía confirmar "bueno_confirmado" con el BH-FDR de un solo día,
+    # mientras el resto de la familia P-GALLINA exige 2 de los últimos 3 días
+    # antes de promover (malo_confirmado sigue siendo inmediato, asimetría
+    # deliberada). Mismo patrón EXACTO que analisis_bot_wallets_gate_bucket_
+    # 25ago.py -- namespaces independientes para vía relativa y vía absoluta
+    # (ver _cargar_historial_abs_previo: mezclar los dos permitía "reconfirmar"
+    # bueno con solo 2 días de rescate absoluto sobre un malo_confirmado
+    # relativo).
+    historial_previo = cargar_historial_previo(OUT, anidado_por_bucket=True)
+    historial_abs_previo = _cargar_historial_abs_previo(OUT)
+
     pendientes = []
     candidatos_abs = []  # vía absoluta (12-Sep), ver UMBRAL_ABSOLUTO_EUR
     resultado = {}
     for tupla_str, filas in eventos.items():
         if len(filas) < N_MIN:
+            # Mismo patrón que analisis_bot_wallets_gate_bucket_25ago.py: un
+            # día flojo a nivel tupla no debe perder el historial_crudo ya
+            # acumulado a nivel bucket. /code-review 15-Sep: el hermano
+            # también preserva SOLO historial_crudo (vía relativa) aquí,
+            # descartando en silencio historial_crudo_abs (vía absoluta) --
+            # exactamente el hueco de "un día flojo no puede entorpecer esto"
+            # que gate_confirmacion_historial.py existe para evitar, aquí a
+            # nivel tupla. Se corrige en este módulo preservando ambos
+            # namespaces por separado (nunca mezclados, mismo motivo que
+            # _cargar_historial_abs_previo).
+            historial_tupla = historial_previo.get(tupla_str, {})
+            historial_tupla_abs = historial_abs_previo.get(tupla_str, {})
+            buckets_previos = set(historial_tupla) | set(historial_tupla_abs)
             resultado[tupla_str] = {}
+            for b in buckets_previos:
+                hist = historial_tupla.get(b)
+                hist_abs = historial_tupla_abs.get(b)
+                if not hist and not hist_abs:
+                    continue
+                entrada = {"veredicto": "sin_concluir"}
+                if hist:
+                    entrada["historial_crudo"] = hist
+                if hist_abs:
+                    entrada["historial_crudo_abs"] = hist_abs
+                resultado[tupla_str][b] = entrada
             continue
 
         por_bucket = defaultdict(list)
@@ -234,12 +278,14 @@ def main():
             pnl_f = [pnl for _, pnl in fuera]
             media_d = sum(pnl_d) / n_d
             g_kelly = sum(math.log(1 + F_KELLY * x) for x in pnl_d) / n_d if n_d > 0 else None
+            historial_semilla = historial_previo.get(tupla_str, {}).get(f"{b:.2f}", [])
 
             entrada = {"n": n_d, "pnl_medio": round(media_d, 4),
                        "g_kelly_f10": round(g_kelly, 5) if g_kelly is not None else None,
                        "diff_vs_resto": round(media_d - (sum(pnl_f) / len(pnl_f)), 4) if pnl_f else None,
                        "shuffle_p": None, "split_half_diff": None,
-                       "ci90_bootstrap_absoluto": None, "veredicto": "sin_concluir"}
+                       "ci90_bootstrap_absoluto": None, "veredicto": "sin_concluir",
+                       "historial_crudo": historial_semilla}
             tabla[f"{b:.2f}"] = entrada
 
             if n_d >= N_MIN:
@@ -309,9 +355,15 @@ def main():
             veredicto = "bueno_confirmado"
         else:
             continue
-        veredicto, nota_payout, nota_real, g_kelly = _degradar(
+        veredicto_crudo, nota_payout, nota_real, g_kelly = _degradar(
             veredicto, p["entrada"], p["tupla_str"], p["bucket"], pnl_real_por_bucket)
+        p["entrada"]["veredicto_crudo_hoy"] = veredicto_crudo
+        historial_bucket = historial_previo.get(p["tupla_str"], {}).get(p["bucket"])
+        veredicto, p["entrada"]["historial_crudo"] = veredicto_con_tolerancia(
+            veredicto_crudo, historial_bucket)
         resultado[p["tupla_str"]][p["bucket"]]["veredicto"] = veredicto
+        if veredicto == "sin_concluir":
+            continue
         marca = "🔴" if veredicto == "malo_confirmado" else "🟢"
         b = p["bucket"]
         veredictos_nuevos.append(
@@ -328,8 +380,23 @@ def main():
         candidatos_abs, agrupador_fn=lambda tupla_str: (_familia(tupla_str), tupla_str.split("#")[1]))
     for c in rescatados:
         b = c["bucket"]
-        veredicto, nota_payout, nota_real, g_kelly = _degradar(
+        veredicto_crudo_abs, nota_payout, nota_real, g_kelly = _degradar(
             "bueno_confirmado", c["entrada"], c["clave_str"], b, pnl_real_por_bucket)
+        historial_bucket = historial_abs_previo.get(c["clave_str"], {}).get(b)
+        veredicto, c["entrada"]["historial_crudo_abs"] = veredicto_con_tolerancia(
+            veredicto_crudo_abs, historial_bucket)
+        c["entrada"]["veredicto_crudo_hoy_abs"] = veredicto_crudo_abs
+        if veredicto == "sin_concluir":
+            # NUNCA pisa el veredicto ya decidido por la vía relativa --
+            # mismo criterio que analisis_bot_wallets_gate_bucket_25ago.py.
+            # /code-review 15-Sep: "via" NO se marca aquí -- c["entrada"] es
+            # el MISMO objeto que resultado[clave_str][b] (ver "tabla[...] =
+            # entrada" más arriba), así que fijar "via" antes de este
+            # continue lo dejaba corrupto (marcado "absoluta") incluso
+            # cuando el veredicto vigente lo puso la vía relativa. El
+            # hermano (analisis_bot_wallets_gate_bucket_25ago.py) tiene el
+            # mismo orden -- pendiente de aplicar allí también.
+            continue
         resultado[c["clave_str"]][b]["veredicto"] = veredicto
         resultado[c["clave_str"]][b]["via"] = "absoluta"
         marca = "🔴" if veredicto == "malo_confirmado" else "🟢"
