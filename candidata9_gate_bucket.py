@@ -78,9 +78,25 @@ _gate_cache: dict = {"mtime": None, "datos": {}}
 #   ETH#15min[0.50,0.55) n=449 g=+0,0245 fill=51,2% top1=7,1% -- ÚNICO
 #   bucket de la tupla ya viva desde 08-Sep (CANDIDATA9_BOT_CONSENSO#ETH#
 #   15min), que llevaba muda (0 buckets aprobados) desde entonces.
+# 15-Sep, checklist completo (petición explícita Javi, "procede atendiendo
+# a los objetivos y misiones de este proyecto"): BTC#5min[0.30,0.35)
+# añadido -- gate propio n=37-39, shuffle_p=0,0, p_valor_abs=0,0, 3/3 días
+# de historial (tolerancia multi-día, fix del mismo 15-Sep), fill-ability
+# real 98,5% (n=65, candidata9_bot_consenso_executor.csv), concentración
+# de mercado limpia (66/66 mercados distintos, top1=1,5%), g_kelly(f=10%)
+# =+0,072 (positivo, sin payout inverso). Cruce con ballenas (
+# ballenas_timing_history.csv, BTC#5m): hit=32,8% n=11.273 vs breakeven
+# ~34,9% -- NO corrobora (población de "cualquier ballena a este precio"
+# es mediocre/neutra), el edge parece venir específicamente del filtro de
+# consenso de bots (~4-5 wallets votando el mismo lado), no de la zona de
+# precio en sí -- aceptado con esa reserva explícita, no es una
+# contradicción del gate propio. BTC#5min[0.20,0.25) (n=18, mismo cruce
+# con ballenas peor, hit=18,3% vs breakeven ~24,2%) se deja FUERA a
+# propósito -- menos n y peor cruce, dejar acumular más días antes de
+# repetir el checklist.
 BUCKETS_APROBADOS_REAL = {
     ("ETH", "5min"): {0.25, 0.30, 0.35, 0.50},
-    ("BTC", "5min"): {0.40, 0.45, 0.50},
+    ("BTC", "5min"): {0.30, 0.40, 0.45, 0.50},
     ("SOL", "5min"): {0.45, 0.50},
     ("BTC", "15min"): {0.45, 0.50},
     ("ETH", "15min"): {0.50},
@@ -105,6 +121,7 @@ EDGE_MEDIDO_REAL = {
     ("ETH", "5min", 0.30): 0.216,
     ("ETH", "5min", 0.35): 0.139,
     ("ETH", "5min", 0.50): 0.131,
+    ("BTC", "5min", 0.30): 0.294,
     ("BTC", "5min", 0.40): 0.145,
     ("BTC", "5min", 0.45): 0.101,
     ("BTC", "5min", 0.50): 0.149,
