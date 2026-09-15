@@ -34,6 +34,7 @@ REPO = Path(__file__).resolve().parent
 sys.path.insert(0, str(REPO))
 
 import shadow_postmortem as sp  # noqa: E402 -- reusa es_pre_twap
+from bot_wallets_gate_bucket import BUCKETS_APROBADOS_REAL, _bucket as _bwgb_bucket  # noqa: E402
 
 DRYRUN_CSV = REPO / "data/shadow/dispersed_bot_executor_dryrun.csv"
 GATE_JSON = REPO / "data/shadow/bot_wallets_gate_bucket.json"
@@ -163,6 +164,17 @@ def main() -> int:
         # confianza del informe -- un candidato listado aquí debe estar
         # confirmado HOY, no solo haberlo estado alguna vez.
         if gate_info.get("veredicto") != "bueno_confirmado":
+            continue
+        # 15-Sep (petición explícita Javi, "masterizar" -- punto 5:
+        # automatizar la ÚLTIMA etapa de la propuesta, nunca la
+        # promoción en sí): sin este filtro, un bucket YA aprobado en
+        # BUCKETS_APROBADOS_REAL seguía apareciendo como "candidato" cada
+        # día (visto hoy mismo: 3/4 candidatos del informe ya estaban en
+        # dinero real) -- ruido que obliga a comprobar a mano cuál es
+        # realmente nuevo. Ahora el informe SOLO lista huecos de decisión
+        # de verdad: bueno_confirmado + fill-ability + AÚN NO aprobado.
+        ya_aprobado = _bwgb_bucket(buc) in BUCKETS_APROBADOS_REAL.get((arq, act, mar), set())
+        if ya_aprobado:
             continue
         item = {
             "tupla": f"{arq}#{act}#{mar}[{buc:.2f},{buc+STEP:.2f})",

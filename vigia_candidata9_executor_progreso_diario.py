@@ -31,6 +31,8 @@ import time
 from collections import defaultdict
 from pathlib import Path
 
+from candidata9_gate_bucket import BUCKETS_APROBADOS_REAL, _bucket as _c9gb_bucket
+
 REPO = Path(__file__).resolve().parent
 sys.path.insert(0, str(REPO))
 
@@ -142,6 +144,13 @@ def main() -> int:
         gate_key = f"CANDIDATA9_BOT_CONSENSO#{act}#{mar}"
         gate_info = gate.get(gate_key, {}).get(buc_str, {})
         if gate_info.get("veredicto") != "bueno_confirmado":
+            continue
+        # 15-Sep (petición explícita Javi, "masterizar" -- punto 5): sin
+        # este filtro, un bucket YA aprobado en BUCKETS_APROBADOS_REAL
+        # seguía apareciendo como "candidato" cada día (visto hoy mismo:
+        # los 5 candidatos del informe ya estaban en dinero real) -- ruido
+        # que obliga a comprobar a mano cuál es realmente nuevo.
+        if _c9gb_bucket(float(buc_str)) in BUCKETS_APROBADOS_REAL.get((act, mar), set()):
             continue
         n_gate = gate_info.get("n", 0)
         fillability = (n_fill / n_zona) if n_zona else 0.0
