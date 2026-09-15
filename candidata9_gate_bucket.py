@@ -136,15 +136,53 @@ EDGE_MEDIDO_REAL = {
 # conservador de origen (08-Sep), nunca asumir un edge alto sin medirlo.
 EDGE_FALLBACK_CONSERVADOR = 0.072
 
+# 15-Sep (petición explícita Javi, propuesta 1 de "10 para explotar el
+# edge ya capturado"): EDGE_MEDIDO_REAL de arriba era una foto fija --
+# solo se remedía a mano cuando alguien añadía un bucket nuevo (ETH#15min
+# seguía con el dato de una sola sesión del 08-Sep). El edge cambia con
+# el tiempo igual que cualquier otro gate del proyecto; el dict de arriba
+# ahora es solo la SEMILLA/fallback de origen -- la fuente de verdad viva
+# es este JSON, regenerado a diario por analisis_candidata9_edge_medido_
+# real.py (mismo patrón mtime-cache que _gate_veredicto_dict de abajo).
+# Solo puede venir de un bucket que YA esté en BUCKETS_APROBADOS_REAL
+# (nunca "descubre" edge de un bucket no aprobado).
+EDGE_JSON_PATH = REPO / "data" / "shadow" / "candidata9_edge_medido_real.json"
+_edge_cache: dict = {"mtime": None, "datos": {}}
+
 
 def _bucket(precio: float) -> float:
     return round(math.floor(precio / GATE_STEP + 1e-9) * GATE_STEP, 4)
 
 
+def _edge_medido_vivo(activo: str, marco: str, b: float) -> float | None:
+    """Lee data/shadow/candidata9_edge_medido_real.json (mtime-cached).
+    None si el fichero no existe todavía, está corrupto, o el bucket no
+    aparece -- el caller cae al dict EDGE_MEDIDO_REAL/fallback estático,
+    nunca a "sin protección" (mismo fail-closed que el resto del módulo)."""
+    try:
+        st = EDGE_JSON_PATH.stat()
+    except OSError:
+        return None
+    if _edge_cache["mtime"] != st.st_mtime:
+        try:
+            _edge_cache["datos"] = json.loads(EDGE_JSON_PATH.read_text(encoding="utf-8"))
+            _edge_cache["mtime"] = st.st_mtime
+        except Exception:
+            return None
+    clave = f"{activo}#{marco}#{b:.2f}"
+    valor = _edge_cache["datos"].get(clave)
+    return float(valor) if valor is not None else None
+
+
 def edge_estimado(activo: str, marco: str, ask: float) -> float:
-    """Edge real medido para el bucket exacto (ver EDGE_MEDIDO_REAL) --
-    fallback conservador si el bucket no está medido todavía."""
-    return EDGE_MEDIDO_REAL.get((activo, marco, _bucket(ask)), EDGE_FALLBACK_CONSERVADOR)
+    """Edge real medido para el bucket exacto -- primero el JSON vivo
+    (remedido a diario), si no existe cae al dict estático EDGE_MEDIDO_
+    REAL (semilla de origen), si tampoco está ahí, fallback conservador."""
+    b = _bucket(ask)
+    vivo = _edge_medido_vivo(activo, marco, b)
+    if vivo is not None:
+        return vivo
+    return EDGE_MEDIDO_REAL.get((activo, marco, b), EDGE_FALLBACK_CONSERVADOR)
 
 
 def permitido_real(activo: str, marco: str, precio: float) -> bool:
