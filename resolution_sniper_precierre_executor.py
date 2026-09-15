@@ -126,6 +126,7 @@ class _Precalculo:
                 "market_id": mkt.get("id", ""), "question": mkt.get("question", ""),
                 "end_date": mkt.get("endDate", ""),
                 "token_yes": token_yes, "token_no": token_no, "ref_open": ref_open,
+                "condition_id": mkt.get("conditionId", ""),  # 15-Sep: necesario para _verificar_fill_real
             }
         if self.client is None:
             try:
@@ -311,24 +312,74 @@ def _instante_critico(pre: _Precalculo, activo: str) -> dict | None:
         resp, ok, error = None, False, str(e)
     t_post_ms = (time.perf_counter() - t2) * 1000
     resultado["disparado"] = True
-    resultado["order_ok"] = ok
     resultado["order_error"] = error
     resultado["t_total_ms"] = round(t_lectura_ms + t_firma_ms + t_post_ms, 1)
+
+    # 15-Sep (hallazgo real, barrido de salud pedido por Javi: "no quiero
+    # un trade fantasma en ningún repo"): `ok=True` en cuanto post_order()
+    # no lanza excepción NUNCA es suficiente -- puede devolver una
+    # respuesta con orderID sin haber casado con contraparte (mismo hueco
+    # que causó el trade fantasma real de sports el 31-Ago, ya corregido
+    # en live_trade.py/sports_live_trade.py/weather_live_trade.py el mismo
+    # día que este). Este ejecutor lo tenía sin corregir -- dormido porque
+    # DRY_RUN=True, pero listo para repetir el mismo incidente en cuanto
+    # alguien lo activara. Verificación real contra get_trades() antes de
+    # registrar nada, fail-closed, reusando la misma función que ya usan
+    # los otros tres ejecutores (un solo punto de verdad).
+    trade_real = None
+    sin_fill_confirmado = False
+    if ok:
+        order_id = resp.get("orderID") or resp.get("id") or str(resp)
+        ts_envio = time.time()
+        trade_real = lt._verificar_fill_real(pre.client, m.get("condition_id", ""), order_id, ts_envio)
+        if trade_real is None:
+            # /code-review 15-Sep, hallazgo real: ok=False aquí NO debe
+            # dejar la orden sin ningún rastro -- mismo criterio que
+            # _ejecutar_orden_polymarket (live_trade.py, 01-Sep): la API SÍ
+            # aceptó la orden, un falso negativo de get_trades() (indexado
+            # lento) es indistinguible aquí de un fantasma real, así que se
+            # registra una fila ERROR (nunca OPEN) para dejar rastro
+            # reconciliable en vez de un aviso de Telegram sin ningún
+            # registro en trades.csv.
+            ok = False
+            sin_fill_confirmado = True
+            error = "orden aceptada por la API pero sin evidencia de fill real en get_trades()"
+            _log(f"  ⛔ {activo} {direction} orden aceptada (order_id={order_id}) pero SIN evidencia "
+                 f"de fill real -- fail-closed, se registra como ERROR (no OPEN)")
+            lt.enviar_telegram(
+                f"⚠️ RESOLUTION_SNIPER_PRECIERRE\nOrden aceptada pero sin fill confirmado (posible fantasma)\n"
+                f"activo={activo} direction={direction} order_id={order_id}\n"
+                f"Registrada como ERROR (no OPEN) -- revisar manualmente contra get_trades()/Polygonscan."
+            )
+    resultado["order_ok"] = ok
     _log(f"ORDEN REAL {activo} {direction} ask={ask} -> ok={ok} resp={str(resp)[:120]} "
          f"t_lectura={t_lectura_ms:.0f}ms t_firma={t_firma_ms:.0f}ms t_post={t_post_ms:.0f}ms "
          f"error={error}")
-    if ok:
+
+    # Se registra siempre que la API haya llegado a aceptar la orden
+    # (resp is not None) -- OPEN si el fill se verificó, ERROR si no. Un
+    # FOK kill (resp sigue None, la excepción ya viene en `error`) nunca
+    # llegó a existir en el exchange y no se registra, igual que el resto
+    # del proyecto.
+    if resp is not None:
+        filled_price = float(trade_real.get("price", precio_orden)) if trade_real else precio_orden
+        fee_rate_bps = (trade_real.get("fee_rate_bps") if trade_real else None) or 0
+        notas = (f"RESOLUTION_SNIPER_PRECIERRE offset={OFFSET_S}s gate={veredicto['motivo']} "
+                 f"t_total={resultado['t_total_ms']}ms")
+        if sin_fill_confirmado:
+            notas += " | sin_fill_confirmado=1 (revisar manualmente)"
         trade = {
             "timestamp_utc": datetime.now(timezone.utc).isoformat(timespec="seconds"),
             "market_id": m["market_id"], "question": m["question"], "end_date": m["end_date"],
             "strategy": STRATEGY, "subtype": f"{activo}#{SUBTYPE_SUFFIX}", "direction": direction,
-            "stake_eur": STAKE_EUR, "entry_price": precio_orden,
-            "signal_ask": round(ask, 4), "slip_real": "",
+            "stake_eur": STAKE_EUR, "entry_price": filled_price,
+            "signal_ask": round(ask, 4), "slip_real": round(filled_price - precio_orden, 4),
             "ic_modelo": "", "edge_neto": "", "conviction_score": "", "kelly_recomendado": STAKE_EUR,
-            "status": "OPEN", "close_timestamp": "", "exit_price": "", "outcome_real": "",
-            "fee_eur": "", "pnl_bruto_eur": "", "pnl_neto_eur": "",
-            "notas": f"RESOLUTION_SNIPER_PRECIERRE offset={OFFSET_S}s gate={veredicto['motivo']} "
-                     f"t_total={resultado['t_total_ms']}ms",
+            "status": "OPEN" if ok else "ERROR",
+            "close_timestamp": "", "exit_price": "", "outcome_real": "",
+            "fee_eur": round(float(fee_rate_bps) / 10000 * STAKE_EUR, 4) if fee_rate_bps else 0.0,
+            "pnl_bruto_eur": "", "pnl_neto_eur": "",
+            "notas": notas,
         }
         lt._registrar_trade(trade)
     return resultado

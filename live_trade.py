@@ -3132,7 +3132,7 @@ def _ejecutar_venta_temprana(market_id: str, direction: str, entry_price: float,
         if entry_price <= 0 or stake_eur <= 0:
             return {"ok": False, "error": "entry_price/stake_eur inválidos"}
         from py_clob_client_v2 import MarketOrderArgsV2, OrderType
-        yes_token, no_token, _ = _get_token_ids(market_id)
+        yes_token, no_token, condition_id = _get_token_ids(market_id)
         token_id = yes_token if direction == "BUY_YES" else no_token
         shares = stake_eur / entry_price
 
@@ -3207,12 +3207,40 @@ def _ejecutar_venta_temprana(market_id: str, direction: str, entry_price: float,
             _limpiar_orden_en_curso()
 
         order_id = resp.get("orderID") or resp.get("id") or str(resp)
-        filled_price = float(resp.get("price", libro.get("mejor_bid", 0)))
+
+        # 15-Sep (hallazgo real, barrido de salud pedido por Javi: "no
+        # quiero un trade fantasma en ningún repo"): este camino de venta
+        # (`smart_exit_stop_loss`, hoy DESACTIVADO por config, ver CLAUDE.md
+        # P18) confiaba en resp.get("price"/"feeRateBps") sin verificar
+        # contra get_trades() -- el mismo hueco que ya causó el trade
+        # fantasma real de sports el 31-Ago y que _ejecutar_orden_polymarket
+        # (el lado de COMPRA de esta misma función) ya corrigió el 01-Sep.
+        # El lado de VENTA se quedó sin el mismo fix. Verificación real
+        # antes de dar la venta por buena, fail-closed.
+        ts_envio_venta = time.time()
+        trade_real = _verificar_fill_real(client, condition_id or "", order_id, ts_envio_venta)
+        if trade_real is None:
+            log(f"  ⛔ Smart-exit stop-loss: orden de venta aceptada (order_id={order_id}) pero SIN "
+                f"evidencia de fill real -- fail-closed, sigue OPEN, no se registra venta fantasma")
+            enviar_telegram(
+                f"⚠️ SMART_EXIT_STOP_LOSS\nOrden de venta aceptada pero sin fill confirmado (posible fantasma)\n"
+                f"market={market_id} direction={direction} order_id={order_id}\n"
+                f"Posición sigue OPEN -- revisar manualmente."
+            )
+            return {"ok": False, "no_fill": False, "sin_fill_confirmado": True,
+                    "error": "orden de venta aceptada por la API pero sin evidencia de fill real en get_trades()"}
+
+        filled_price = float(trade_real.get("price", libro.get("mejor_bid", 0)))
         valor_venta_eur = filled_price * shares
+        # /code-review 15-Sep: `fee_rate_bps` de get_trades() (trade_real) es
+        # el mismo campo ya documentado arriba (01-Sep, línea ~2992) como NO
+        # fiable -- viene "0" incluso en fills que sí pagaron fee real. El
+        # campo fiable es `feeRateBps` (camelCase) de `resp` (post_order),
+        # todavía en scope aquí -- mismo fix que el lado de compra.
         fee = float(resp.get("feeRateBps", 0)) / 10000 * valor_venta_eur
         pnl_neto = valor_venta_eur - stake_eur - fee
 
-        log(f"  🔴 Smart-exit stop-loss EJECUTADO: {market_id}/{direction} "
+        log(f"  🔴 Smart-exit stop-loss EJECUTADO y VERIFICADO: {market_id}/{direction} "
             f"shares={shares:.3f} precio_venta={filled_price:.4f} "
             f"pnl_neto={pnl_neto:+.2f}€ order_id={order_id}")
         _registrar_snapshot_libro("smart_exit_ejecutado", market_id, direction,
