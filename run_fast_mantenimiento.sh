@@ -110,11 +110,21 @@ while true; do
     CICLO=$((CICLO + 1))
     _t_ciclo0=$(now_ms)
 
-    _t0=$(now_ms); $PYTHON "$REPO_DIR/shadow_resolve.py"     >> "$LOG" 2>&1 || true; log "  ⏱ shadow_resolve.py: $(($(now_ms) - _t0))ms"
+    # 15-Sep (crisis RAM/OOM real: 16 kills del kernel en 24h, mantenimiento
+    # reiniciándose cada 5min por strategy_params.json estancado): mismo
+    # `choom -n -500` que run_fast.sh ya usa para live_trade.py -- resolve
+    # cierra trades reales cada ciclo y postmortem sostiene ~2,7GB de RSS a
+    # propósito (histórico completo, nunca se recorta), así que ambos son
+    # los primeros candidatos del OOM-killer bajo presión de memoria del
+    # resto del sistema (cron de vigías apilados 06:50-07:20 UTC). Protegerlos
+    # no reduce su consumo de RAM -- solo evita que el kernel los elija a
+    # ELLOS primero cuando mate algo; la causa raíz (demasiados cron jobs
+    # pesados a la misma hora) sigue pendiente de restagger.
+    _t0=$(now_ms); choom -n -500 -- $PYTHON "$REPO_DIR/shadow_resolve.py"     >> "$LOG" 2>&1 || true; log "  ⏱ shadow_resolve.py: $(($(now_ms) - _t0))ms"
     NOW_PM=$(date +%s)
     if [ $((NOW_PM - LAST_POSTMORTEM)) -ge $POSTMORTEM_MIN_INTERVAL_S ]; then
         LAST_POSTMORTEM=$NOW_PM
-        _t0=$(now_ms); $PYTHON "$REPO_DIR/shadow_postmortem.py"  >> "$LOG" 2>&1 || true; log "  ⏱ shadow_postmortem.py: $(($(now_ms) - _t0))ms"
+        _t0=$(now_ms); choom -n -500 -- $PYTHON "$REPO_DIR/shadow_postmortem.py"  >> "$LOG" 2>&1 || true; log "  ⏱ shadow_postmortem.py: $(($(now_ms) - _t0))ms"
     else
         log "  ⏭ shadow_postmortem.py: saltado (último hace $((NOW_PM - LAST_POSTMORTEM))s < ${POSTMORTEM_MIN_INTERVAL_S}s)"
     fi
