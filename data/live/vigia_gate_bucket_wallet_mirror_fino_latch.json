@@ -58,11 +58,11 @@
   "hi": 0.46,
   "n": 95,
   "pnl_medio": -0.4184,
-  "diff_vs_resto": -0.4676,
-  "p_valor": 0.0005,
+  "diff_vs_resto": -0.4674,
+  "p_valor": 0.0,
   "split_half_diff": [
-   -0.388,
-   -0.5455
+   -0.3877,
+   -0.5453
   ],
   "split_half_ok": true,
   "pnl_medio_loo": -0.4371,
@@ -85,11 +85,11 @@
   "hi": 0.06,
   "n": 68,
   "pnl_medio": -1.0,
-  "diff_vs_resto": -0.9548,
+  "diff_vs_resto": -0.9549,
   "p_valor": 0.0,
   "split_half_diff": [
-   -0.9548,
-   -0.9548
+   -0.9549,
+   -0.9549
   ],
   "split_half_ok": true,
   "pnl_medio_loo": -1.0,
@@ -112,11 +112,11 @@
   "hi": 0.26,
   "n": 85,
   "pnl_medio": -0.4563,
-  "diff_vs_resto": -0.427,
-  "p_valor": 0.0035,
+  "diff_vs_resto": -0.4273,
+  "p_valor": 0.0025,
   "split_half_diff": [
-   -0.5555,
-   -0.3015
+   -0.5558,
+   -0.3018
   ],
   "split_half_ok": true,
   "pnl_medio_loo": -0.5033,
@@ -139,11 +139,11 @@
   "hi": 0.05,
   "n": 555,
   "pnl_medio": -0.7902,
-  "diff_vs_resto": -0.736,
+  "diff_vs_resto": -0.7359,
   "p_valor": 0.0,
   "split_half_diff": [
-   -0.6935,
-   -0.7783
+   -0.6934,
+   -0.7782
   ],
   "split_half_ok": true,
   "pnl_medio_loo": -0.8738,
@@ -193,11 +193,11 @@
   "hi": 0.18,
   "n": 41,
   "pnl_medio": -1.0,
-  "diff_vs_resto": -0.9496,
+  "diff_vs_resto": -0.9478,
   "p_valor": 0.0,
   "split_half_diff": [
-   -0.9496,
-   -0.9496
+   -0.9478,
+   -0.9478
   ],
   "split_half_ok": true,
   "pnl_medio_loo": -1.0,
@@ -207,7 +207,7 @@
    -1.0
   ],
   "robusto_bootstrap": true,
-  "n_posiciones_buscadas": 83,
+  "n_posiciones_buscadas": 84,
   "veredicto_crudo_hoy": "malo_confirmado",
   "historial_crudo": [
    "malo_confirmado"
@@ -263,20 +263,20 @@
  "SEGUIR#BTC#5min#0": {
   "lo": 0.0,
   "hi": 0.05,
-  "n": 4277,
-  "pnl_medio": -0.5913,
-  "diff_vs_resto": -0.5643,
+  "n": 4279,
+  "pnl_medio": -0.5915,
+  "diff_vs_resto": -0.5645,
   "p_valor": 0.0,
   "split_half_diff": [
-   -0.6641,
-   -0.4646
+   -0.6642,
+   -0.4648
   ],
   "split_half_ok": true,
-  "pnl_medio_loo": -0.613,
+  "pnl_medio_loo": -0.6132,
   "robusto_loo": true,
   "ci90_bootstrap": [
-   -0.6822,
-   -0.4915
+   -0.6786,
+   -0.4936
   ],
   "robusto_bootstrap": true,
   "n_posiciones_buscadas": 96,
@@ -292,11 +292,11 @@
   "hi": 0.06,
   "n": 204,
   "pnl_medio": -0.8477,
-  "diff_vs_resto": -0.8406,
+  "diff_vs_resto": -0.8408,
   "p_valor": 0.0,
   "split_half_diff": [
-   -0.9929,
-   -0.6883
+   -0.9931,
+   -0.6885
   ],
   "split_half_ok": true,
   "pnl_medio_loo": -1.0,
