@@ -578,6 +578,61 @@ def _telegram_periodico(ahora):
     except Exception as e:
         print(f"  [telegram] Error generando/enviando mensaje SPORTS: {type(e).__name__}: {e}")
 
+    # ════════════════════════════════════════════════════════════════════════
+    # MENSAJE 3 — WEATHER (dinero real, mismo /update -- petición explícita
+    # Javi 15-Sep: "cada vez que le dé a update en telegram que me mande un
+    # reporte de cómo vamos en trading de Cripto, Sports (como hasta ahora)
+    # y Weather", mismo día del primer depósito real de weather (6€).
+    #
+    # Lectura cross-repo de FICHEROS de estado (config_live.json/trades.csv),
+    # no de código -- weather es un repo independiente (/root/polymarket-
+    # weather, CLAUDE.md: "no mezclar datos, código ni params"), pero leer
+    # sus ficheros para un resumen de solo-lectura no importa ningún módulo
+    # de weather ni escribe nada ahí -- mismo criterio ya aplicado en
+    # live_balance.py::_weather_capital_en_free_usdc() el mismo día.
+    # ════════════════════════════════════════════════════════════════════════
+    try:
+        WEATHER_REPO = Path("/root/polymarket-weather")
+        weather_cfg = json.loads((WEATHER_REPO / "data/live/config_live.json").read_text(encoding="utf-8"))
+        switch_we = (WEATHER_REPO / "data/live/LIVE_MODE_ON").exists()
+        pares_we = weather_cfg.get("pares_permitidos_live", [])
+        depositos_we = sum(float(d.get("eur", 0) or 0) for d in weather_cfg.get("depositos", []))
+
+        trades_we_csv = WEATHER_REPO / "data/live/trades.csv"
+        n_we_total = n_we_hoy = w_we_total = 0
+        pnl_we_total = 0.0
+        if trades_we_csv.exists() and trades_we_csv.stat().st_size > 100:
+            cerrados_we = [r for r in csv.DictReader(open(trades_we_csv, encoding="utf-8"))
+                           if r.get("status") == "CLOSED"]
+            n_we_total = len(cerrados_we)
+            n_we_hoy = sum(1 for r in cerrados_we
+                           if (r.get("close_timestamp", "") or "").startswith(hoy))
+            w_we_total = sum(1 for r in cerrados_we if float(r.get("pnl_neto_eur") or 0) > 0)
+            pnl_we_total = sum(float(r.get("pnl_neto_eur") or 0) for r in cerrados_we)
+        bkr_we = depositos_we + pnl_we_total  # mismo criterio que weather_live_stake.bankroll_actual()
+
+        switch_we_txt = "✅ ON" if switch_we else "❌ OFF"
+        pares_we_txt = f"{len(pares_we)} activo(s)" if pares_we else "0 (fail-closed, nada opera)"
+        if n_we_total:
+            wr_we = w_we_total / n_we_total * 100
+            we_perf = (f"Trades: {n_we_total}  |  WR {wr_we:.0f}%  |  hoy {n_we_hoy} cerrados  |  "
+                       f"PnL: {pnl_we_total:+.2f}€")
+        else:
+            we_perf = "Sin trades cerrados aún"
+
+        msg_weather = (
+            f"🌦️ *BOT WEATHER — dinero real* — {ahora.strftime('%H:%M UTC')}\n"
+            f"\n"
+            f"Bankroll: *{bkr_we:.2f}€*  (depósito {depositos_we:.2f}€)\n"
+            f"{we_perf}\n"
+            f"\n"
+            f"Switch: {switch_we_txt}  |  pares_permitidos_live: {pares_we_txt}"
+        )
+        _post(msg_weather)
+        print(f"  [telegram] Mensaje live WEATHER enviado ({ahora.strftime('%H:%M UTC')})")
+    except Exception as e:
+        print(f"  [telegram] Error generando/enviando mensaje WEATHER: {type(e).__name__}: {e}")
+
 
 if __name__ == "__main__":
     main()
