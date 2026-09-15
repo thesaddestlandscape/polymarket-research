@@ -89,5 +89,33 @@
   "growth": -0.006829313578151595,
   "ev_por_dolar": -0.05090960819840045,
   "telegram_ok": true
+ },
+ "CANDIDATA9_BOT_CONSENSO#BTC#5min#BUY_YES": {
+  "avisado": true,
+  "n": 228,
+  "growth": -0.02571396237484631,
+  "ev_por_dolar": -0.20044565982457446,
+  "telegram_ok": true
+ },
+ "CANDIDATA9_BOT_CONSENSO#BTC#5min#BUY_NO": {
+  "avisado": true,
+  "n": 212,
+  "growth": -0.008553228871174252,
+  "ev_por_dolar": -0.028458875666184966,
+  "telegram_ok": true
+ },
+ "CANDIDATA9_BOT_CONSENSO#SOL#5min#BUY_YES": {
+  "avisado": true,
+  "n": 35,
+  "growth": -0.021308727703874274,
+  "ev_por_dolar": -0.16151487266566159,
+  "telegram_ok": true
+ },
+ "CANDIDATA9_BOT_CONSENSO#SOL#5min#BUY_NO": {
+  "avisado": true,
+  "n": 29,
+  "growth": -0.017815598153791908,
+  "ev_por_dolar": -0.12733370860870138,
+  "telegram_ok": true
  }
 }
