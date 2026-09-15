@@ -1,23 +1,23 @@
 {
-  "timestamp_utc": "2026-09-15T02:10:07+00:00",
+  "timestamp_utc": "2026-09-15T04:10:06+00:00",
   "tuplas_maduras": [
     {
       "tupla": "CANDIDATA9_BOT_CONSENSO#BTC#5min#BUY_YES",
-      "peso_hrp": 0.4781,
+      "peso_hrp": 0.4745,
       "exposicion_reciente_eur": 0.0,
       "share_exposicion_reciente": 0.0,
       "excede_techo_hrp_x1_5": false
     },
     {
       "tupla": "CANDIDATA9_BOT_CONSENSO#BTC#5min#BUY_NO",
-      "peso_hrp": 0.4497,
+      "peso_hrp": 0.4531,
       "exposicion_reciente_eur": 4.2,
       "share_exposicion_reciente": 1.0,
       "excede_techo_hrp_x1_5": true
     },
     {
       "tupla": "BALLENAS_TARDIAS#DOGE#5min#BUY_YES",
-      "peso_hrp": 0.0722,
+      "peso_hrp": 0.0724,
       "exposicion_reciente_eur": 0.0,
       "share_exposicion_reciente": 0.0,
       "excede_techo_hrp_x1_5": false
@@ -97,12 +97,12 @@
     {
       "tupla": "CANDIDATA9_BOT_CONSENSO#ETH#5min#BUY_YES",
       "dias_historial": 7,
-      "n": 89
+      "n": 94
     },
     {
       "tupla": "CANDIDATA9_BOT_CONSENSO#ETH#5min#BUY_NO",
       "dias_historial": 7,
-      "n": 104
+      "n": 106
     },
     {
       "tupla": "SNIPER#BTC#5min#BUY_Up",
@@ -142,7 +142,7 @@
     {
       "tupla": "CANDIDATA9_BOT_CONSENSO#SOL#5min#BUY_NO",
       "dias_historial": 5,
-      "n": 27
+      "n": 29
     },
     {
       "tupla": "CANDIDATA9_BOT_CONSENSO#BTC#15min#BUY_YES",
@@ -152,7 +152,7 @@
     {
       "tupla": "CANDIDATA9_BOT_CONSENSO#BTC#15min#BUY_NO",
       "dias_historial": 2,
-      "n": 11
+      "n": 13
     },
     {
       "tupla": "SNIPER#ETH#15min#BUY_Up",
