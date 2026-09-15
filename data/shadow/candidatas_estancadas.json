@@ -1,5 +1,5 @@
 {
-  "generado": "2026-09-15T07:03:26.841437+00:00",
+  "generado": "2026-09-15T07:39:08.850313+00:00",
   "cementerio": [
     {
       "clave": "FAVORITO_CONFIRMADO#BNB#240min",
@@ -66,9 +66,9 @@
     },
     {
       "clave": "GBM_LATE_60M_FADE#SOL#60min",
-      "n": 83,
-      "ic_bayes": -0.2765,
-      "motivo": "IC_bayes=-0.276 n=83 conf=1.00 → DESACTIVADA",
+      "n": 84,
+      "ic_bayes": -0.2791,
+      "motivo": "IC_bayes=-0.279 n=84 conf=1.00 → DESACTIVADA",
       "viola_n_minimo": false
     },
     {
@@ -129,9 +129,9 @@
     },
     {
       "clave": "GBM_LATE_60M_FADE#60min",
-      "n": 288,
-      "ic_bayes": -0.2724,
-      "motivo": "IC_bayes=-0.272 n=288 conf=1.00 → DESACTIVADA",
+      "n": 289,
+      "ic_bayes": -0.2732,
+      "motivo": "IC_bayes=-0.273 n=289 conf=1.00 → DESACTIVADA",
       "viola_n_minimo": false
     },
     {
@@ -157,9 +157,9 @@
     },
     {
       "clave": "FAVORITO_CONFIRMADO_15MIN_ALTACONVICCION#BTC#15min",
-      "n": 557,
-      "ic_bayes": 0.1852,
-      "motivo": "IC_bayes=+0.185 n=557 conf=1.00",
+      "n": 559,
+      "ic_bayes": 0.1845,
+      "motivo": "IC_bayes=+0.184 n=559 conf=1.00",
       "viola_n_minimo": false
     },
     {
@@ -177,31 +177,24 @@
       "viola_n_minimo": false
     },
     {
-      "clave": "UPDOWN_GBM_15M_TARDIO#BTC#15min",
-      "n": 1666,
-      "ic_bayes": -0.1295,
-      "motivo": "IC_bayes=-0.129 n=1666 conf=1.00 → edge_minimo=0.04",
-      "viola_n_minimo": false
-    },
-    {
       "clave": "FAVORITO_CONFIRMADO_5MIN_ALTACONVICCION#ETH#5min",
-      "n": 6261,
-      "ic_bayes": 0.2174,
-      "motivo": "IC_bayes=+0.217 n=6261 conf=1.00",
+      "n": 6269,
+      "ic_bayes": 0.2173,
+      "motivo": "IC_bayes=+0.217 n=6269 conf=1.00",
       "viola_n_minimo": false
     },
     {
       "clave": "FAVORITO_CONFIRMADO_15MIN_ALTACONVICCION#15min",
-      "n": 11415,
-      "ic_bayes": 0.1887,
-      "motivo": "IC_bayes=+0.189 n=11415 conf=1.00",
+      "n": 11429,
+      "ic_bayes": 0.1882,
+      "motivo": "IC_bayes=+0.188 n=11429 conf=1.00",
       "viola_n_minimo": false
     },
     {
       "clave": "FAVORITO_CONFIRMADO_5MIN_ALTACONVICCION#5min",
-      "n": 38968,
-      "ic_bayes": 0.1937,
-      "motivo": "IC_bayes=+0.194 n=38968 conf=1.00",
+      "n": 39019,
+      "ic_bayes": 0.1935,
+      "motivo": "IC_bayes=+0.194 n=39019 conf=1.00",
       "viola_n_minimo": false
     }
   ],
