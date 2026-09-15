@@ -446,12 +446,17 @@ def main():
         veredicto, c["entrada"]["historial_crudo_abs"] = veredicto_con_tolerancia(
             veredicto_crudo_abs, historial_bucket)
         c["entrada"]["veredicto_crudo_hoy_abs"] = veredicto_crudo_abs
-        c["entrada"]["via"] = "absoluta"
         if veredicto == "sin_concluir":
             # NUNCA pisa el veredicto ya decidido por la vía relativa --
-            # ver comentario en _cargar_historial_abs_previo.
+            # ver comentario en _cargar_historial_abs_previo. /code-review
+            # 15-Sep (aplicado primero en analisis_candidata9_10_gate_
+            # bucket_26ago.py): "via" NO se marca aquí -- c["entrada"] es el
+            # MISMO objeto que resultado[clave_str][b], así que fijar "via"
+            # antes de este continue lo dejaba corrupto ("absoluta") incluso
+            # cuando el veredicto vigente lo puso la vía relativa.
             continue
         c["entrada"]["veredicto"] = veredicto
+        c["entrada"]["via"] = "absoluta"
         marca = "🔴" if veredicto == "malo_confirmado" else "🟢"
         veredictos_nuevos.append(
             f"{marca} [vía absoluta] {c['clave_str']} [{b},{float(b)+STEP:.2f}) "
