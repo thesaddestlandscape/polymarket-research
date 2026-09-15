@@ -803,3 +803,4 @@
 {"ts": "2026-09-06T13:01:14+00:00", "market_id": "4246103", "aplica": true, "veta": true, "motivo": "concentracion_debil", "combo": "ETH#15m", "pct": 0.5, "pct_crudo": 0.5, "n": 6, "umbral": 0.6}
 {"ts": "2026-09-07T13:18:56+00:00", "market_id": "4287819", "aplica": true, "veta": false, "motivo": "concentracion_ok", "combo": "ETH#15m", "pct": 1.0, "pct_crudo": 1.0, "n": 8, "umbral": 0.6}
 {"ts": "2026-09-07T13:50:46+00:00", "market_id": "4288630", "aplica": true, "veta": false, "motivo": "concentracion_ok", "combo": "ETH#15m", "pct": 1.0, "pct_crudo": 1.0, "n": 4, "umbral": 0.6}
+{"ts": "2026-09-15T00:24:43+00:00", "market_id": "4544486", "aplica": true, "veta": true, "motivo": "concentracion_debil", "combo": "ETH#5m", "pct": 0.0, "pct_crudo": 0.0, "n": 4, "umbral": 0.6}
