@@ -3660,6 +3660,24 @@ def main():
         return
 
     # 2. Circuit breaker — verificar límites de pérdida antes de operar
+    #
+    # 15-Sep: el refresco del caché de balance real (actualizar_balance_real())
+    # SOLO ocurría al ejecutar/cerrar un trade -- un hueco sin actividad de
+    # 46min lo dejó rancio (umbral 30min) justo cuando verificar_circuit_
+    # breaker() lo necesitaba, y bankroll_actual() cayó al ledger (~2.3€ más
+    # pesimista, drift ya documentado), disparando un freno diario con
+    # números que no correspondían al wallet real.
+    # Primer intento de fix (revertido tras /code-review): refresco
+    # proactivo inline aquí mismo, antes de verificar_circuit_breaker().
+    # Descartado -- este main() corre DENTRO del micro-reintento 4x/~4-5s de
+    # run_fast.sh (diseñado en 10-Jul para reaccionar a cambios de
+    # profundidad del libro en segundos), y fetch_balance_real() encadena
+    # varias llamadas HTTP sin timeout combinado (hasta ~70-90s en el peor
+    # caso) -- habría podido bloquear la ventana de reintento entera,
+    # arriesgando fills perdidos en señales con dinero real por un problema
+    # de una métrica de reporting. Fix real: cron independiente, fuera del
+    # loop rápido (ver crontab `*/5 * * * * live_balance.py`) -- acota la
+    # frescura del caché a 5min máximo sin tocar el camino caliente.
     disparado, motivo_cb = verificar_circuit_breaker()
     desp  = stakes_desplegados_ventana_actual()
     pnl_d = pnl_live_hoy()
