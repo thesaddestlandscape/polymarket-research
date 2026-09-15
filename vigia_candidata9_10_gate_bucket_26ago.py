@@ -65,12 +65,18 @@ def main() -> int:
     # relee results.csv completo -509k filas/428MB hoy- cada ciclo, ver
     # memoria project_dia_dedicado_rediseno_postmortem_11sep, rediseño
     # aplazado por la crisis de disco del mismo dia). Subido otra vez a
-    # 1800s como parche de contencion (este vigia es solo informativo,
-    # NO conectado a ningun ejecutor real) + nice para no competir por CPU
-    # con el motor de decision compartido mientras dura.
+    # 1800s como parche de contencion + nice para no competir por CPU con
+    # el motor de decision compartido mientras dura. ⚠️ 15-Sep: el
+    # comentario anterior ("solo informativo, NO conectado a ningun
+    # ejecutor real") estaba DESACTUALIZADO -- CANDIDATA9_BOT_CONSENSO
+    # opera con dinero real desde principios de Sep y este JSON alimenta
+    # candidata9_gate_bucket.py::evaluar()/edge_estimado(), consultado en
+    # caliente por el ejecutor real en cada trade. Subido otra vez a 2700s
+    # (falló de nuevo a los 1800s el 15-Sep, contención del VPS agravada
+    # por trabajo manual de la sesión, no solo por crecimiento de datos).
     r = subprocess.run(["nice", "-n", "15", sys.executable,
                          str(REPO / "analisis_candidata9_10_gate_bucket_26ago.py")],
-                        capture_output=True, text=True, timeout=1800, cwd=str(REPO))
+                        capture_output=True, text=True, timeout=2700, cwd=str(REPO))
     if r.returncode != 0:
         print(f"ERROR ejecutando analisis_candidata9_10_gate_bucket_26ago.py: {r.stderr[-2000:]}")
         return 1
