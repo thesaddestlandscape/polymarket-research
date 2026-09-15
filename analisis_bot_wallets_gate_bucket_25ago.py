@@ -61,6 +61,7 @@ from analisis_gate_bucket_propio_28jul import (  # noqa: E402
     UMBRAL_ABSOLUTO_EUR, bootstrap_absoluto, rescatar_via_absoluta,
 )
 import shadow_postmortem as sp  # noqa: E402 -- reusa es_pre_twap
+import ballenas_cross_check as bcc  # noqa: E402 -- refuerzo informativo, ver docstring del módulo
 
 IN = REPO / "data/shadow/bot_wallets_gate_bucket_fase0.csv"
 OUT = REPO / "data/shadow/bot_wallets_gate_bucket.json"
@@ -379,9 +380,20 @@ def main():
             # arriba, a nivel bucket en vez de a nivel clave).
             historial_semilla = historial_previo.get(clave_str, {}).get(f"{b:.2f}", [])
             g_kelly = sum(math.log(1 + F_KELLY * x) for x in pnl_d) / n_d if n_d > 0 else None
+            # 15-Sep (petición explícita Javi, "masterizar" pt.4, "me
+            # parece bien como refuerzo, pero no como veto"): cruce con
+            # ballenas PURAMENTE INFORMATIVO -- `ask` aquí ya está en la
+            # perspectiva de la DECISIÓN (precio del lado que la wallet
+            # realmente compró, ver cargar_filas()), así que se consulta
+            # como "BUY_YES" (misma convención que candidata9/wallet_
+            # mirror: "apostamos a que el lado a este precio gana").
+            # NUNCA afecta a veredicto/degradación.
+            ballenas = bcc.consultar(activo, marco, b, "BUY_YES")
             entrada = {"n": n_d, "pnl_medio": round(media_d, 4),
                        "g_kelly_f10": round(g_kelly, 5) if g_kelly is not None else None,
                        "concentracion_top1_wallet": round(concentracion_top1, 4) if concentracion_top1 is not None else None,
+                       "ballenas_hit_rate_yes": ballenas["hit_rate_yes"], "ballenas_n": ballenas["n"],
+                       "ballenas_coincide": ballenas["coincide"],
                        "shuffle_p": None, "split_half": None, "veredicto": "sin_concluir",
                        "historial_crudo": historial_semilla}
             tabla[f"{b:.2f}"] = entrada

@@ -2070,13 +2070,13 @@
    "BTC#15min": {
     "0.10": {
      "fuente": "SNIPER#0.10",
-     "n": 105,
+     "n": 109,
      "ratio_correccion": 1.1111,
      "veredicto": "confirmado"
     },
     "0.70": {
      "fuente": "DISPERSO#0.75",
-     "n": 669,
+     "n": 675,
      "ratio_correccion": 3.3333,
      "veredicto": "confirmado"
     }
@@ -2084,7 +2084,7 @@
    "BTC#5min": {
     "0.20": {
      "fuente": "SNIPER#0.25",
-     "n": 724,
+     "n": 733,
      "ratio_correccion": null,
      "veredicto": "sin_concluir"
     }
@@ -15093,7 +15093,7 @@
    "BTC#15min": {
     "0.10": {
      "fuente": "SEGUIR#0.10",
-     "n": 51,
+     "n": 53,
      "ratio_correccion": 1.1111,
      "veredicto": "confirmado"
     },
@@ -15101,14 +15101,6 @@
      "fuente": "SEGUIR#0.35",
      "n": 308,
      "ratio_correccion": 1.4286,
-     "veredicto": "confirmado"
-    }
-   },
-   "BTC#5min": {
-    "0.90": {
-     "fuente": "SEGUIR#0.95",
-     "n": 8157,
-     "ratio_correccion": 10.0,
      "veredicto": "confirmado"
     }
    },

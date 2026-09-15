@@ -71,6 +71,7 @@ from gate_confirmacion_historial import (
 REPO = Path(__file__).resolve().parent
 sys.path.insert(0, str(REPO))
 import shadow_postmortem as sp  # noqa: E402 -- reusa TWAP_MARCOS_AFECTADOS/TWAP_FECHA_CAMBIO
+import ballenas_cross_check as bcc  # noqa: E402 -- refuerzo informativo, ver docstring del módulo
 from analisis_gate_bucket_propio_28jul import (  # noqa: E402
     UMBRAL_ABSOLUTO_EUR, bootstrap_absoluto, rescatar_via_absoluta,
 )
@@ -342,8 +343,15 @@ def main():
             # vuelva a ser significativo la contaría como "día nuevo" en vez
             # de seguir colapsando dentro de hoy.
             fecha_semilla = fecha_historial_previo.get(clave_str, {}).get(f"{b:.2f}")
+            # 15-Sep (petición explícita Javi, "masterizar" pt.4, refuerzo
+            # nunca veto): `ask` ya en perspectiva de decisión (el lado
+            # SEGUIR), consultado como "BUY_YES" (misma convención que el
+            # resto de gates portados hoy).
+            ballenas = bcc.consultar(activo, marco, b, "BUY_YES")
             entrada = {"n": n_d, "pnl_medio": round(media_d, 4), "g_kelly_f10": round(g_kelly, 5),
                        "concentracion_top1_wallet": round(concentracion_top1, 4) if concentracion_top1 is not None else None,
+                       "ballenas_hit_rate_yes": ballenas["hit_rate_yes"], "ballenas_n": ballenas["n"],
+                       "ballenas_coincide": ballenas["coincide"],
                        "shuffle_p": None, "split_half": None, "veredicto": "sin_concluir",
                        "historial_crudo": historial_semilla, "fecha_historial": fecha_semilla}
             tabla[f"{b:.2f}"] = entrada

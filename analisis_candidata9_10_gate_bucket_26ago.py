@@ -46,6 +46,7 @@ from analisis_bot_wallets_gate_bucket_25ago import (  # noqa: E402
     _degradar, _cargar_pnl_real_crudo, _cargar_historial_abs_previo, F_KELLY,
 )
 from gate_confirmacion_historial import cargar_historial_previo, veredicto_con_tolerancia  # noqa: E402
+import ballenas_cross_check as bcc  # noqa: E402 -- refuerzo informativo, ver docstring del módulo
 
 IN_BOTS = REPO / "data/shadow/bot_wallets_gate_bucket_fase0.csv"
 OUT = REPO / "data/shadow/candidata9_10_gate_bucket.json"
@@ -265,6 +266,7 @@ def main():
                 resultado[tupla_str][b] = entrada
             continue
 
+        _, activo, marco = tupla_str.split("#")
         por_bucket = defaultdict(list)
         for ts, ask, pnl in filas:
             por_bucket[bucket(ask)].append((ts, pnl))
@@ -279,10 +281,17 @@ def main():
             media_d = sum(pnl_d) / n_d
             g_kelly = sum(math.log(1 + F_KELLY * x) for x in pnl_d) / n_d if n_d > 0 else None
             historial_semilla = historial_previo.get(tupla_str, {}).get(f"{b:.2f}", [])
+            # 15-Sep (petición explícita Javi, "masterizar" pt.4, refuerzo
+            # nunca veto): `ask` ya en perspectiva de decisión (el lado que
+            # de verdad dispara la mayoría), consultado como "BUY_YES"
+            # (misma convención que el resto de gates portados hoy).
+            ballenas = bcc.consultar(activo, marco, b, "BUY_YES")
 
             entrada = {"n": n_d, "pnl_medio": round(media_d, 4),
                        "g_kelly_f10": round(g_kelly, 5) if g_kelly is not None else None,
                        "diff_vs_resto": round(media_d - (sum(pnl_f) / len(pnl_f)), 4) if pnl_f else None,
+                       "ballenas_hit_rate_yes": ballenas["hit_rate_yes"], "ballenas_n": ballenas["n"],
+                       "ballenas_coincide": ballenas["coincide"],
                        "shuffle_p": None, "split_half_diff": None,
                        "ci90_bootstrap_absoluto": None, "veredicto": "sin_concluir",
                        "historial_crudo": historial_semilla}
