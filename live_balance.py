@@ -301,6 +301,18 @@ def _positions_value(wallet: str) -> tuple[float, list | None]:
 SPORTS_CONFIG_PATH = Path(__file__).parent / "data" / "sports" / "config_live_sports.json"
 SPORTS_TRADES_PATH = Path(__file__).parent / "data" / "sports" / "trades.csv"
 
+# 15-Sep: mismo mecanismo que sports (docstrings de arriba), extendido a
+# weather -- primer depósito real llegó hoy (6€/USDC), la wallet on-chain
+# es la MISMA compartida con cripto (ver weather CLAUDE.md/config_live.json
+# ::_nota, "unificamos y es menos lío"). Rutas cross-repo A PROPÓSITO: leer
+# un JSON/CSV de datos de otro repo para reconciliar quién es dueño de qué
+# parte de una wallet on-chain compartida no es "compartir código" (lo que
+# prohíbe el CLAUDE.md de weather) -- es la pieza que EVITA que el saldo de
+# weather se mezcle con el de cripto, mismo espíritu que ya existía para
+# sports (que sí vive dentro de este repo).
+WEATHER_CONFIG_PATH = Path("/root/polymarket-weather/data/live/config_live.json")
+WEATHER_TRADES_PATH = Path("/root/polymarket-weather/data/live/trades.csv")
+
 
 def _sports_open_condition_ids_y_coste() -> dict:
     """conditionId (=market_id en data/sports/trades.csv) -> coste combinado
@@ -586,6 +598,138 @@ def _sports_capital_en_free_usdc(ts: datetime, depositos: list | None = None,
     return total
 
 
+def _weather_open_condition_ids_y_coste() -> dict:
+    """Idéntico a `_sports_open_condition_ids_y_coste()` -- ver su
+    docstring para el razonamiento completo (dict por-id, filtro
+    `!= "CLOSED"`). Única diferencia real: `data/live/trades.csv` de
+    weather guarda `market_id` = condition_id (0x...) directamente (ver
+    weather_consensus_gate_fase0.py::_disparar_real, 15-Sep) -- mismo
+    formato que sports, sin traducción necesaria."""
+    costes: dict = {}
+    try:
+        if WEATHER_TRADES_PATH.exists():
+            with open(WEATHER_TRADES_PATH, encoding="utf-8") as f:
+                for row in csv.DictReader(f):
+                    if row.get("status") == "CLOSED" or not row.get("market_id"):
+                        continue
+                    try:
+                        stake = float(row.get("stake_eur", 0) or 0)
+                    except ValueError:
+                        stake = 0.0
+                    if stake <= 0:
+                        continue
+                    costes[row["market_id"]] = costes.get(row["market_id"], 0.0) + stake
+    except Exception:
+        pass
+    return costes
+
+
+def _weather_positions_value_actual(wallet: str, posiciones: list | None = None) -> float:
+    """Idéntico a `_sports_positions_value_actual()` -- valor mark-to-
+    market real (`/positions::currentValue`) de las posiciones de weather
+    actualmente abiertas en la wallet compartida. Ver esa función para el
+    razonamiento completo (coste como fallback por posición, matched por
+    conditionId, nunca se toca `positions_value` crudo)."""
+    costes = _weather_open_condition_ids_y_coste()
+    if not costes:
+        return 0.0
+    if posiciones is None:
+        posiciones = _fetch_posiciones_wallet(wallet)
+    valores = dict(costes)
+    if posiciones is not None:
+        vistos: set = set()
+        for p in posiciones:
+            cid = p.get("conditionId")
+            if cid in costes:
+                val = float(p.get("currentValue") or 0.0)
+                if cid in vistos:
+                    valores[cid] += val
+                else:
+                    valores[cid] = val
+                vistos.add(cid)
+    return sum(valores.values())
+
+
+def _cargar_weather_eventos() -> tuple[list, list]:
+    """Idéntico a `_cargar_sports_eventos()` -- cachea depósitos+trades de
+    weather en memoria para que `_weather_capital_en_free_usdc()` no
+    reabra `config_live.json`/`trades.csv` de weather en cada llamada."""
+    depositos = []
+    try:
+        cfg = json.loads(WEATHER_CONFIG_PATH.read_text(encoding="utf-8"))
+        for d in cfg.get("depositos", []):
+            if not (isinstance(d, dict) and d.get("eur") and d.get("fecha")):
+                continue
+            try:
+                fecha_dt = datetime.strptime(d["fecha"], "%Y-%m-%d").replace(tzinfo=timezone.utc)
+            except ValueError:
+                continue
+            depositos.append((fecha_dt, float(d["eur"])))
+    except Exception:
+        pass
+
+    def _parse_ts(raw: str):
+        if not raw:
+            return None
+        try:
+            return datetime.fromisoformat(raw.replace("Z", "+00:00"))
+        except ValueError:
+            return None
+
+    eventos = []
+    try:
+        if WEATHER_TRADES_PATH.exists():
+            with open(WEATHER_TRADES_PATH, encoding="utf-8") as f:
+                for row in csv.DictReader(f):
+                    try:
+                        stake = float(row.get("stake_eur", 0) or 0)
+                    except ValueError:
+                        stake = 0.0
+                    if stake <= 0:
+                        continue
+                    ts_open = _parse_ts(row.get("timestamp_utc") or "")
+                    if ts_open is None:
+                        continue
+                    closed = row.get("status") == "CLOSED"
+                    ts_close = _parse_ts(row.get("close_timestamp") or "") if closed else None
+                    if closed and ts_close is None:
+                        ts_close = ts_open
+                    try:
+                        pnl = float(row.get("pnl_neto_eur", 0) or 0) if closed else 0.0
+                    except ValueError:
+                        pnl = 0.0
+                    eventos.append((ts_open, ts_close, stake, pnl, closed))
+    except Exception:
+        pass
+    return depositos, eventos
+
+
+def _weather_capital_en_free_usdc(ts: datetime, depositos: list | None = None,
+                                   eventos: list | None = None) -> float:
+    """Idéntico a `_sports_capital_en_free_usdc()` -- misma fórmula
+    (depósitos + realizado_cerrados - stakes_abiertos), ver esa función
+    para el razonamiento completo y el historial de los 3 intentos
+    fallidos que la motivaron. Aplicado a weather el mismo día de su
+    primer depósito real (15-Sep) para no repetir el mismo error que
+    costó 3 incidentes reales con sports (31-Ago a 03-Sep)."""
+    if depositos is None or eventos is None:
+        depositos, eventos = _cargar_weather_eventos()
+
+    total = 0.0
+    for fecha_dt, eur in depositos:
+        if fecha_dt <= ts:
+            total += eur
+
+    for ts_open, ts_close, stake, pnl, closed in eventos:
+        if ts_open > ts:
+            continue
+        if closed and ts_close is not None and ts_close <= ts:
+            total += pnl
+        else:
+            total -= stake
+    return total
+
+
 def _daily_real_pnl_balance(depositos: list, free_usdc_bruto_actual: float,
                             ts_actual: str) -> tuple[list, float, float]:
     """PnL real por día desde balance_history.csv (delta de `free_usdc`
@@ -633,6 +777,11 @@ def _daily_real_pnl_balance(depositos: list, free_usdc_bruto_actual: float,
     # balance_history.csv (5978 filas hoy, creciendo en cada trade real) --
     # ver `_cargar_sports_eventos()`.
     sports_dep, sports_ev = _cargar_sports_eventos()
+    # 15-Sep: mismo tratamiento para weather (primer depósito real llegó
+    # hoy) -- para fechas anteriores al depósito, _weather_capital_en_
+    # free_usdc() devuelve 0.0 sin más (ningún depósito califica), así que
+    # reconstruir el histórico completo con esto no altera nada previo.
+    weather_dep, weather_ev = _cargar_weather_eventos()
     filas = []
     if HIST_PATH.exists():
         with open(HIST_PATH, encoding="utf-8") as f:
@@ -644,12 +793,16 @@ def _daily_real_pnl_balance(depositos: list, free_usdc_bruto_actual: float,
                     free_bruto = total_bruto_fila - float(r["positions_value"])
                 except (ValueError, KeyError):
                     continue
-                filas.append((dt, free_bruto - _sports_capital_en_free_usdc(dt, sports_dep, sports_ev)))
+                free_neto = (free_bruto - _sports_capital_en_free_usdc(dt, sports_dep, sports_ev)
+                             - _weather_capital_en_free_usdc(dt, weather_dep, weather_ev))
+                filas.append((dt, free_neto))
     # snapshot actual (aún no escrito en el CSV -- se añade tras esta llamada)
     try:
         dt_actual = datetime.fromisoformat(ts_actual)
-        filas.append((dt_actual,
-                      free_usdc_bruto_actual - _sports_capital_en_free_usdc(dt_actual, sports_dep, sports_ev)))
+        free_neto_actual = (free_usdc_bruto_actual
+                             - _sports_capital_en_free_usdc(dt_actual, sports_dep, sports_ev)
+                             - _weather_capital_en_free_usdc(dt_actual, weather_dep, weather_ev))
+        filas.append((dt_actual, free_neto_actual))
     except ValueError:
         pass
     if not filas:
@@ -756,27 +909,44 @@ def fetch_balance_real() -> dict:
     # destruye la información necesaria para reconciliar sports por su cuenta.
 
     # 27-Ago (bug real, encontrado por Javi al ver +5€ de sports colados en
-    # el dashboard de cripto): esta wallet on-chain es COMPARTIDA con sports
-    # (mismo mecanismo usado para el bankroll operativo de Kelly/circuit
-    # breaker de cripto vía live_stake.bankroll_actual(), que lee `total`
-    # de este mismo snapshot -- no solo el dashboard). Mismo criterio: SOLO
-    # sports (nunca weather, ver docstring de `_sports_positions_value_
-    # actual`). 03-Sep noche: sustituido `live_stake._capital_ajeno_en_
-    # wallet_compartida()` (bug real, doble resta del stake abierto + coste
-    # en vez de valor de mercado -- ver docstring de
-    # `_sports_positions_value_actual`) por las dos piezas YA correctas y
-    # ya revisadas por separado: caja exacta (`_sports_capital_en_free_
-    # usdc()`, usada hasta hoy solo en la reconstrucción histórica) y
-    # valor de mercado real de posiciones (`_sports_positions_value_
-    # actual()`, nueva).
+    # el dashboard de cripto): esta wallet on-chain es COMPARTIDA con
+    # sports (mismo mecanismo usado para el bankroll operativo de Kelly/
+    # circuit breaker de cripto vía live_stake.bankroll_actual(), que lee
+    # `total` de este mismo snapshot -- no solo el dashboard). 03-Sep
+    # noche: sustituido `live_stake._capital_ajeno_en_wallet_compartida()`
+    # (bug real, doble resta del stake abierto + coste en vez de valor de
+    # mercado) por las dos piezas correctas: caja exacta
+    # (`_sports_capital_en_free_usdc()`) y valor de mercado real
+    # (`_sports_positions_value_actual()`). 15-Sep: extendido a weather
+    # (primer depósito real, 6€) con el mismo patrón exacto -- petición
+    # explícita de Javi el mismo día ("que te quede claro para que no
+    # mezcles nada, la recarga es solo para weather").
+    # /code-review 15-Sep, hallazgo real: un try/except COMPARTIDO entre
+    # sports y weather permitía que un fallo de weather silenciara
+    # también el ajuste de sports ya calculado con éxito (capital_ajeno_
+    # cash/pos se ponían a 0.0 enteros) -- sports habría vuelto a
+    # colarse en el balance de cripto por un error de weather, el mismo
+    # bug de fondo que este mecanismo existe para evitar. Cada fuente
+    # falla de forma independiente, mismo criterio fail-safe-por-fuente
+    # que ya usa `_sports_positions_value_actual()` por posición.
     try:
-        capital_ajeno_cash = _sports_capital_en_free_usdc(datetime.now(timezone.utc))
+        cash_sports = _sports_capital_en_free_usdc(datetime.now(timezone.utc))
     except Exception:
-        capital_ajeno_cash = 0.0
+        cash_sports = 0.0
     try:
-        capital_ajeno_pos = _sports_positions_value_actual(wallet, posiciones_wallet)
+        cash_weather = _weather_capital_en_free_usdc(datetime.now(timezone.utc))
     except Exception:
-        capital_ajeno_pos = 0.0
+        cash_weather = 0.0
+    capital_ajeno_cash = cash_sports + cash_weather
+    try:
+        pos_sports = _sports_positions_value_actual(wallet, posiciones_wallet)
+    except Exception:
+        pos_sports = 0.0
+    try:
+        pos_weather = _weather_positions_value_actual(wallet, posiciones_wallet)
+    except Exception:
+        pos_weather = 0.0
+    capital_ajeno_pos = pos_sports + pos_weather
     if capital_ajeno_cash or capital_ajeno_pos:
         free = round(free - capital_ajeno_cash, 4)
         # `pos` NO se toca aquí a propósito (/code-review 03-Sep, hallazgo
