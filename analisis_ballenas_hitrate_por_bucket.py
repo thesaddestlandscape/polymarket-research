@@ -41,6 +41,13 @@ from pathlib import Path
 REPO = Path(__file__).resolve().parent
 sys.path.insert(0, str(REPO))
 
+import shadow_postmortem as sp  # noqa: E402 -- reusa es_pre_twap/TWAP_MARCOS_AFECTADOS
+
+# ballenas_timing_history.csv usa "5m"/"15m"/"60m"/"240m"/"weekly";
+# TWAP_MARCOS_AFECTADOS usa "5min"/"15min"/"240min" -- mapeo necesario
+# para poder reusar es_pre_twap() sin reimplementar la comparación.
+_MARCO_A_TWAP = {"5m": "5min", "15m": "15min", "60m": "60min", "240m": "240min"}
+
 IN = REPO / "data" / "shadow" / "ballenas_timing_history.csv"
 OUT = REPO / "data" / "shadow" / "ballenas_hitrate_por_bucket.json"
 STEP = 0.05
@@ -54,9 +61,23 @@ def _bucket(p: float) -> float:
 def main() -> int:
     grupos = defaultdict(lambda: [0, 0])  # (activo,marco,bucket) -> [n, hits_yes]
     total = 0
+    excluidas_twap = 0
     with open(IN, encoding="utf-8") as f:
         for r in csv.DictReader(f):
             total += 1
+            marco_r = r.get("marco", "?")
+            # 15-Sep (/code-review propio antes de confiar en los
+            # resultados): "240min" está en TWAP_MARCOS_AFECTADOS (cambio
+            # 07/13-Ago) -- sin este filtro, hallazgos aparentemente
+            # espectaculares en 240min podían ser artefacto de mezclar
+            # dos regímenes de resolución distintos, mismo hueco que ya
+            # se cerró en el resto del proyecto (gate_bucket_propio.py/
+            # kelly_precio_gate.py/live_trade.py::_clv_tupla). "weekly" no
+            # está en la lista -- no se excluye.
+            marco_twap = _MARCO_A_TWAP.get(marco_r, marco_r)
+            if sp.es_pre_twap(marco_twap, r.get("ts_trade", "")):
+                excluidas_twap += 1
+                continue
             try:
                 precio = float(r["precio"])
             except (TypeError, ValueError):
@@ -89,7 +110,8 @@ def main() -> int:
     tmp.write_text(json.dumps(resultado, indent=1, ensure_ascii=False, sort_keys=True), encoding="utf-8")
     tmp.replace(OUT)
 
-    print(f"[analisis_ballenas_hitrate_por_bucket] {total} filas leídas, "
+    print(f"[analisis_ballenas_hitrate_por_bucket] {total} filas leídas "
+          f"({excluidas_twap} excluidas por pre-TWAP en marcos afectados), "
           f"{len(grupos)} combos (activo,marco,bucket), {n_confirmados} con n>={N_MIN} escritos")
     return 0
 
