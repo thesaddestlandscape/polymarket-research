@@ -153,8 +153,74 @@ HARD_FLOOR_S = 5.0        # margen de seguridad antes del cierre del mercado
 REFRESCO_CTX_S = 20.0     # misma cadencia que gbm_late_15min_executor.py
 STAKE_REF_EUR = 1.05      # mismo suelo que el resto del sistema, para la consulta de profundidad
 
+# 15-Sep (petición explícita Javi, tras confirmar que 53/55 buckets de
+# esta familia tienen g_kelly negativo en el subconjunto fillable
+# medido en el instante de DETECCIÓN -- ver idea_momentum_ibs_ballena_
+# familia_espejismo_confirmado_15sep): "revisa el filtro de consenso,
+# porque igual podemos añadir micro-latencia u otra cosa que la salve".
+# _profundidad_al_origen() solo mide una vez, en detección -- mismo
+# hueco que P24 (wallet_mirror) ya encontró y corrigió el 03-Ago para
+# otra familia. Aquí se añade la MISMA segunda consulta (patrón ya
+# probado: candidata9_bot_consenso_reactivo_fase0.py, bot_wallets_gate_
+# bucket_fase0.py, order_flow_5m_reactivo_fase0.py, todos con el mismo
+# valor 3.0s) pero como hilo secundario DESPUÉS de disparar() -- nunca
+# retrasa la decisión/envío real, solo mide qué pasó unos segundos
+# después para saber si el problema de fill-ability es del instante
+# exacto de detección o persiste con margen de reacción real.
+SEGUNDA_CONSULTA_ESPERA_S = 3.0
+_OUT_REACTIVO = DIR_SHADOW / "momentum_ibs_ballena_reactivo_fase0.csv"
+_CAMPOS_REACTIVO = [
+    "ts_deteccion_utc", "activo", "marco", "strategy", "direccion", "py_deteccion",
+    "mejor_ask_deteccion", "profundidad_eur_deteccion", "ratio_vs_stake_deteccion",
+    "mejor_ask_decision", "profundidad_eur_decision", "ratio_vs_stake_decision",
+    "degradacion_ratio_pct", "market_id",
+]
+_lock_reactivo = threading.Lock()
+
 _session = requests.Session()
 _ctx_cache = {"ts": 0.0, "precios_intraday": []}
+
+
+def _registrar_reactivo(fila: dict) -> None:
+    with _lock_reactivo:
+        nuevo = not _OUT_REACTIVO.exists()
+        with open(_OUT_REACTIVO, "a", newline="", encoding="utf-8") as f:
+            w = csv.DictWriter(f, fieldnames=_CAMPOS_REACTIVO)
+            if nuevo:
+                w.writeheader()
+            w.writerow({k: fila.get(k, "") for k in _CAMPOS_REACTIVO})
+
+
+def _segunda_consulta_async(activo: str, ventana_min: int, strategy: str, direccion: str,
+                             py: float, mercado: dict, profundidad_deteccion: dict) -> None:
+    """100% observación -- nunca toca disparar()/dinero real, solo mide
+    la MISMA oportunidad unos segundos más tarde (mismo patrón P24 ya
+    probado en 4 familias distintas del proyecto) y persiste ambas
+    lecturas para poder comparar. Corre en su propio hilo daemon, no
+    bloquea hilo_activo ni retrasa la siguiente ventana."""
+    try:
+        time.sleep(SEGUNDA_CONSULTA_ESPERA_S)
+        profundidad_decision = _profundidad_al_origen(direccion, py, mercado)
+        ratio_det = profundidad_deteccion.get("ratio_vs_stake")
+        ratio_dec = profundidad_decision.get("ratio_vs_stake")
+        degradacion = None
+        if isinstance(ratio_det, (int, float)) and ratio_det and isinstance(ratio_dec, (int, float)):
+            degradacion = round(100.0 * (ratio_dec - ratio_det) / ratio_det, 2)
+        _registrar_reactivo({
+            "ts_deteccion_utc": datetime.now(timezone.utc).isoformat(timespec="seconds"),
+            "activo": activo, "marco": f"{ventana_min}min", "strategy": strategy,
+            "direccion": direccion, "py_deteccion": py,
+            "mejor_ask_deteccion": profundidad_deteccion.get("mejor_ask", ""),
+            "profundidad_eur_deteccion": profundidad_deteccion.get("profundidad_eur", ""),
+            "ratio_vs_stake_deteccion": ratio_det if ratio_det is not None else "",
+            "mejor_ask_decision": profundidad_decision.get("mejor_ask", ""),
+            "profundidad_eur_decision": profundidad_decision.get("profundidad_eur", ""),
+            "ratio_vs_stake_decision": ratio_dec if ratio_dec is not None else "",
+            "degradacion_ratio_pct": degradacion if degradacion is not None else "",
+            "market_id": mercado.get("market_id", ""),
+        })
+    except Exception as e:
+        log(f"segunda consulta reactivo falló: {e}", activo)
 
 
 def log(msg: str, tag: str = "") -> None:
@@ -456,6 +522,13 @@ def watch_window(activo: str, ventana_min: int, fn_senal, strategy: str, mercado
                               restante_s, profundidad, gbm_conf)
         disparar(activo, ventana_min, mercado, strategy, py_edge, prob_yes, direccion, restante_s,
                  bot_consenso_lado=resultado["features"].get("bot_consenso_lado"))
+        # 15-Sep: segunda consulta 100% observacional, en hilo aparte --
+        # ya se decidió/disparó arriba, esto solo mide qué pasó 3s después
+        # para diagnosticar fill-ability, nunca puede retrasar disparar()
+        # ni la siguiente ventana (ver docstring de _segunda_consulta_async).
+        threading.Thread(target=_segunda_consulta_async,
+                          args=(activo, ventana_min, strategy, direccion, py_edge, mercado, profundidad),
+                          daemon=True).start()
         return True  # una señal por ventana es suficiente, mismo criterio que GBM
 
 
