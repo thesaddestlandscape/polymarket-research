@@ -48,7 +48,7 @@ import json
 import math
 import sys
 import zlib
-from collections import defaultdict
+from collections import Counter, defaultdict
 from pathlib import Path
 
 import numpy as np
@@ -98,7 +98,7 @@ def pnl_neto(ask, acierto):
 
 
 def cargar_filas():
-    """clave de grupo: (arquetipo, activo, marco) -> [(ts, ask, pnl), ...].
+    """clave de grupo: (arquetipo, activo, marco) -> [(ts, ask, pnl, wallet), ...].
     Solo filas resueltas (outcome_real presente), con ask real capturado
     (mejor_ask_deteccion no vacío -- si _fillability_mirror falló, no hay
     ask real que usar, la fila no aporta a PnL, solo a fill-ability) Y con
@@ -132,7 +132,7 @@ def cargar_filas():
             acierto = 1 if r.get("outcome_real") == r.get("lado_wallet") else 0
             pnl = pnl_neto(ask, acierto)
             clave = (r.get("arquetipo", "?"), r.get("activo", "?"), marco)
-            grupos[clave].append((r["timestamp_utc"], ask, pnl))
+            grupos[clave].append((r["timestamp_utc"], ask, pnl, r.get("wallet", "")))
     return grupos
 
 
@@ -253,6 +253,13 @@ def _cargar_pnl_real_por_bucket() -> dict:
     return {k: dict(v) for k, v in out.items()}
 
 
+UMBRAL_CONCENTRACION_MAX = 0.30  # 15-Sep: mismo umbral de alarma que el resto
+# del proyecto (ver feedback_conectar_todo_a_todo_minar_pasta_02ago, checklist
+# de promoción pt.31-Jul) -- hallazgo real que motivó esto: SNIPER#XRP#
+# 5min[0.20,0.25) tenía 75,1% de concentración en una sola wallet, encontrado
+# a mano y no por ningún mecanismo automático.
+
+
 def _degradar(veredicto_crudo, entrada, clave_str, b, pnl_real_por_bucket):
     """14-Sep: vetos de payout asimétrico (Kelly g(f=10%)<=0) y verdad-de-
     suelo (trades REALES ya negativos en este bucket exacto, n_real>=2) --
@@ -260,7 +267,15 @@ def _degradar(veredicto_crudo, entrada, clave_str, b, pnl_real_por_bucket):
     portado tal cual para que bot_wallets (SNIPER/DISPERSO/WEEKLY_*) deje
     de ser la única familia de gate sin este veto (hueco señalado en
     project_checkpoint_sesion_12sep_piso_absoluto_microbuckets). Solo
-    puede DEGRADAR, nunca promover."""
+    puede DEGRADAR, nunca promover.
+
+    15-Sep, añadido veto de concentración de wallet: si una sola wallet
+    genera más del UMBRAL_CONCENTRACION_MAX de las señales del bucket, el
+    "edge" puede ser el comportamiento de una wallet concreta (que puede
+    dejar de operar, cambiar de patrón, o ser ruido de una sola fuente),
+    no una ineficiencia sistémica del mercado -- mismo espíritu que
+    analisis_sports_wallet_mirror_concentracion.py, pero aquí degrada el
+    veredicto en línea en vez de solo reportarlo aparte."""
     nota_payout = ""
     g_kelly = entrada.get("g_kelly_f10")
     if veredicto_crudo == "bueno_confirmado" and g_kelly is not None and g_kelly <= 0:
@@ -273,7 +288,12 @@ def _degradar(veredicto_crudo, entrada, clave_str, b, pnl_real_por_bucket):
         if media_real < 0:
             veredicto_crudo = "malo_confirmado"
             nota_real = f" [degradado: {len(pnls_reales)} trades REALES pnl_medio={media_real:+.3f}€<0]"
-    return veredicto_crudo, nota_payout, nota_real, g_kelly
+    nota_concentracion = ""
+    concentracion = entrada.get("concentracion_top1_wallet")
+    if veredicto_crudo == "bueno_confirmado" and concentracion is not None and concentracion > UMBRAL_CONCENTRACION_MAX:
+        veredicto_crudo = "malo_confirmado"
+        nota_concentracion = f" [degradado: concentración top1_wallet={concentracion:.1%}>{UMBRAL_CONCENTRACION_MAX:.0%}]"
+    return veredicto_crudo, nota_payout, nota_real, nota_concentracion, g_kelly
 
 
 def _cargar_historial_abs_previo(out_path):
@@ -333,16 +353,25 @@ def main():
             }
             continue
         por_bucket = defaultdict(list)
-        for ts, ask, pnl in filas:
-            por_bucket[bucket(ask)].append((ts, pnl))
+        for ts, ask, pnl, wallet in filas:
+            por_bucket[bucket(ask)].append((ts, pnl, wallet))
 
         tabla = {}
         for b in sorted(por_bucket):
             dentro = por_bucket[b]
-            fuera = [(ts, pnl) for bb, fs in por_bucket.items() if bb != b for ts, pnl in fs]
+            fuera = [(ts, pnl) for bb, fs in por_bucket.items() if bb != b for ts, pnl, _w in fs]
             n_d = len(dentro)
-            pnl_d = [pnl for _, pnl in dentro]
+            pnl_d = [pnl for _, pnl, _w in dentro]
             media_d = sum(pnl_d) / n_d
+            # 15-Sep (petición explícita Javi, tras encontrar a mano
+            # SNIPER#XRP#5min[0.20,0.25) con 75,1% de concentración en una
+            # sola wallet -- "nadie lo habría visto sin que yo lo pidiera
+            # explícitamente"): concentración automática, mismo espíritu
+            # que analisis_sports_wallet_mirror_concentracion.py pero
+            # calculado en línea aquí (no un script aparte) para que
+            # DEGRADE el veredicto directamente, no solo lo reporte.
+            _conteo_wallets = Counter(w for _, _, w in dentro if w)
+            concentracion_top1 = (max(_conteo_wallets.values()) / n_d) if (_conteo_wallets and n_d) else None
             # Semilla de historial_crudo -- si este bucket no sobrevive más
             # abajo (BH-FDR/piso), esta entrada por defecto es la que queda
             # escrita, y sin la semilla perdía el historial acumulado sin
@@ -352,6 +381,7 @@ def main():
             g_kelly = sum(math.log(1 + F_KELLY * x) for x in pnl_d) / n_d if n_d > 0 else None
             entrada = {"n": n_d, "pnl_medio": round(media_d, 4),
                        "g_kelly_f10": round(g_kelly, 5) if g_kelly is not None else None,
+                       "concentracion_top1_wallet": round(concentracion_top1, 4) if concentracion_top1 is not None else None,
                        "shuffle_p": None, "split_half": None, "veredicto": "sin_concluir",
                        "historial_crudo": historial_semilla}
             tabla[f"{b:.2f}"] = entrada
@@ -366,8 +396,8 @@ def main():
                 m1, m2 = dentro_sorted[:mid], dentro_sorted[mid:]
                 split_half_abs = None
                 if len(m1) >= 5 and len(m2) >= 5:
-                    m1_abs = sum(pnl for _, pnl in m1) / len(m1)
-                    m2_abs = sum(pnl for _, pnl in m2) / len(m2)
+                    m1_abs = sum(pnl for _, pnl, _w in m1) / len(m1)
+                    m2_abs = sum(pnl for _, pnl, _w in m2) / len(m2)
                     split_half_abs = [round(m1_abs, 4), round(m2_abs, 4)]
                     entrada["split_half_absoluto"] = split_half_abs
                 candidatos_abs.append({"clave_str": clave_str, "bucket": f"{b:.2f}",
@@ -381,8 +411,8 @@ def main():
                 m1, m2 = dentro_sorted[:mid], dentro_sorted[mid:]
                 if len(m1) >= 5 and len(m2) >= 5:
                     media_fuera = sum(pnl_f) / len(pnl_f)
-                    d1 = sum(pnl for _, pnl in m1) / len(m1) - media_fuera
-                    d2 = sum(pnl for _, pnl in m2) / len(m2) - media_fuera
+                    d1 = sum(pnl for _, pnl, _w in m1) / len(m1) - media_fuera
+                    d2 = sum(pnl for _, pnl, _w in m2) / len(m2) - media_fuera
                     entrada["split_half"] = [round(d1, 4), round(d2, 4)]
                     consistente = (d1 < 0 and d2 < 0) or (d1 > 0 and d2 > 0)
                     if consistente:
@@ -412,7 +442,7 @@ def main():
             veredicto_crudo = "bueno_confirmado"
         else:
             continue
-        veredicto_crudo, nota_payout, nota_real, g_kelly = _degradar(
+        veredicto_crudo, nota_payout, nota_real, nota_concentracion, g_kelly = _degradar(
             veredicto_crudo, p["entrada"], p["clave_str"], p["bucket"], pnl_real_por_bucket)
         p["entrada"]["veredicto_crudo_hoy"] = veredicto_crudo
         # 10-Sep: 2 de los últimos 3 días (incluido hoy), asimétrico --
@@ -429,7 +459,7 @@ def main():
         veredictos_nuevos.append(
             f"{marca} {p['clave_str']} [{p['bucket']},{float(p['bucket'])+STEP:.2f}) "
             f"n={p['entrada']['n']} pnl_medio={p['entrada']['pnl_medio']:+.3f} "
-            f"g_kelly={g_kelly:+.5f} p={p['p']:.4f} {veredicto}{nota_payout}{nota_real}"
+            f"g_kelly={g_kelly:+.5f} p={p['p']:.4f} {veredicto}{nota_payout}{nota_real}{nota_concentracion}"
         )
 
     # 12-Sep, vía absoluta (decisión explícita Javi, ver UMBRAL_ABSOLUTO_EUR
@@ -440,7 +470,7 @@ def main():
         candidatos_abs, agrupador_fn=lambda clave_str: tuple(clave_str.split("#")[1:]))
     for c in rescatados:
         b = c["bucket"]
-        veredicto_crudo_abs, nota_payout, nota_real, g_kelly = _degradar(
+        veredicto_crudo_abs, nota_payout, nota_real, nota_concentracion, g_kelly = _degradar(
             "bueno_confirmado", c["entrada"], c["clave_str"], b, pnl_real_por_bucket)
         historial_bucket = historial_abs_previo.get(c["clave_str"], {}).get(b)
         veredicto, c["entrada"]["historial_crudo_abs"] = veredicto_con_tolerancia(
@@ -461,7 +491,7 @@ def main():
         veredictos_nuevos.append(
             f"{marca} [vía absoluta] {c['clave_str']} [{b},{float(b)+STEP:.2f}) "
             f"n={c['entrada']['n']} pnl_medio={c['entrada']['pnl_medio']:+.3f} "
-            f"g_kelly={g_kelly:+.5f} p_abs={c['p_valor_abs']:.4f} {veredicto}{nota_payout}{nota_real}"
+            f"g_kelly={g_kelly:+.5f} p_abs={c['p_valor_abs']:.4f} {veredicto}{nota_payout}{nota_real}{nota_concentracion}"
         )
 
     print(f"\n{len(veredictos_nuevos)} bucket(s) con veredicto tras BH-FDR:")
