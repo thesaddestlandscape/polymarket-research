@@ -344,7 +344,17 @@ async def _correr_una_conexion(wallets: dict, vistos: set, wallets_bucket: dict)
                     except (TypeError, ValueError):
                         lag_s = None
                 precio_ref = price if info["tipo"] == "SEGUIR" else round(1.0 - price, 6)
-                fill = _fillability_mirror(condition_id, mirror_idx, precio_ref)
+                # 15-Sep (/code-review, hallazgo real): este requests.get()
+                # bloqueante (timeout=10) vivía sin to_thread() desde su
+                # creación porque antes casi nunca se alcanzaba (el filtro
+                # de frescura de más arriba dejaba pasar ~1 match cada
+                # varios minutos). Al arreglar ese catch-22 el mismo día
+                # (ver comentario en main_ws()), este `match` pasó a
+                # disparar decenas de veces por minuto -- sin to_thread()
+                # cada llamada podía congelar el loop del websocket entero
+                # (ping/pong y recv() incluidos) hasta 10s. Mismo patrón ya
+                # usado más abajo (re-chequeo justo antes de dinero real).
+                fill = await asyncio.to_thread(_fillability_mirror, condition_id, mirror_idx, precio_ref)
                 mejor_ask = fill.get("mejor_ask")
                 if info["tipo"] == "SEGUIR" and isinstance(mejor_ask, (int, float)):
                     cumple_filtro_precio = int(mejor_ask >= UMBRAL_PRECIO_SEGUIR)
@@ -657,18 +667,35 @@ def resolver_pendientes() -> int:
 
 
 async def main_ws() -> None:
-    # 04-Sep: wallets_operativas_recientes(), NO cargar_wallets_validadas()
-    # -- este proceso toca dinero real (DRY_RUN=False para LoL#SEGUIR),
-    # exige además rendimiento reciente no degradado, mismo criterio que
-    # cripto (wallet_mirror_executor_dryrun.py, 13-Ago). to_thread() por
-    # consistencia con cripto (evita bloquear ping/websocket mientras
-    # recalcula), aunque el volumen de sports es mucho menor.
-    wallets = await asyncio.to_thread(wallets_operativas_recientes)
-    wallets_bucket = await asyncio.to_thread(wallets_operativas_recientes_por_bucket, wallets)
-    _log(f"wallets validadas: {len(wallets)} combos frescos "
-         f"({len(wallets_bucket)} combinaciones wallet+bucket con edge reciente) (SEGUIR="
-         f"{sum(1 for v in wallets.values() if v['tipo']=='SEGUIR')}, "
-         f"FADE={sum(1 for v in wallets.values() if v['tipo']=='FADE')})")
+    # 15-Sep, fix real de un catch-22 encontrado auditando por qué NFL (y
+    # de hecho TODO sports salvo 1 wallet de Tennis) llevaba desde el
+    # 04-Sep sin generar apenas filas nuevas en wallet_mirror_sniper_dry_
+    # run.csv: `wallets_operativas_recientes()` exige >=N_RECIENTE_OPERAR
+    # trades PROPIOS ya resueltos en ese mismo CSV para admitir a una
+    # wallet a ser observada -- pero el CSV solo crece observando. Con
+    # ese filtro puesto en la DETECCIÓN (no solo en la decisión de dinero
+    # real), una wallet sin historial nunca puede empezar a acumularlo:
+    # se auto-estrangula. Medido en vivo (15-Sep): de 3345 combos
+    # (wallet,categoria) validados, 3139 (93,8%) tenían CERO filas de
+    # historial propio -- nunca habían sido observados ni una vez desde
+    # el 04-Sep -- y solo 1 combo total (Tennis) seguía pasando el filtro.
+    # Cripto NUNCA tuvo este problema porque wallet_mirror_tracker.py usa
+    # la versión SIN filtrar (cargar_wallets_validadas(), la propia de
+    # este fichero, línea ~152) para detección/logging, reservando
+    # wallets_operativas_recientes()/_por_bucket() SOLO para la decisión
+    # de dinero real (ver su docstring: "NO usar para detección/logging").
+    # Aquí se replica el mismo patrón: se detecta/loguea con el universo
+    # COMPLETO (sin exigir evidencia que solo se puede generar observando),
+    # y el guardián de dinero real (wallet_aprueba_bucket() más abajo,
+    # línea ~389) sigue exigiendo evidencia reciente igual que antes --
+    # ahora evaluada sobre el universo completo (wallets_admitidas=None),
+    # no solo sobre el subconjunto ya estrangulado.
+    wallets = await asyncio.to_thread(cargar_wallets_validadas)
+    wallets_bucket = await asyncio.to_thread(wallets_operativas_recientes_por_bucket, None)
+    frescas = await asyncio.to_thread(wallets_operativas_recientes)
+    _log(f"wallets validadas: {len(wallets)} combos totales (detección), "
+         f"{len(frescas)} con evidencia reciente propia, "
+         f"{len(wallets_bucket)} combinaciones wallet+bucket con edge reciente (real)")
     vistos = _vistos_cargar()
     ultimo_refresco = time.time()
     while True:
@@ -680,11 +707,11 @@ async def main_ws() -> None:
             _log(f"Error inesperado ({type(e).__name__}: {e}) — reintentando en {RECONNECT_ESPERA_S}s")
         _vistos_guardar(vistos)
         if time.time() - ultimo_refresco >= REFRESCO_WALLETS_S:
-            wallets = await asyncio.to_thread(wallets_operativas_recientes)
-            wallets_bucket = await asyncio.to_thread(wallets_operativas_recientes_por_bucket, wallets)
+            wallets = await asyncio.to_thread(cargar_wallets_validadas)
+            wallets_bucket = await asyncio.to_thread(wallets_operativas_recientes_por_bucket, None)
             ultimo_refresco = time.time()
-            _log(f"wallets validadas refrescadas: {len(wallets)} combos "
-                 f"({len(wallets_bucket)} combinaciones wallet+bucket)")
+            _log(f"wallets validadas refrescadas: {len(wallets)} combos totales "
+                 f"({len(wallets_bucket)} combinaciones wallet+bucket con edge reciente, real)")
         await asyncio.sleep(RECONNECT_ESPERA_S)
 
 
