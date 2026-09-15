@@ -310,10 +310,13 @@ def _procesar_fila(row: dict, wallets: set, arquetipos: dict, vistos: dict) -> d
     veredicto = _gate_veredicto(arquetipo, activo, marco, b)
 
     # Simulación de stake real (mismo camino que un ejecutor live real,
-    # pero DRY_RUN -- nunca se envía). ic_proxy conservador: usamos el
-    # hit-rate confirmado del bucket como proxy de IC (mismo patrón que
-    # wallet_mirror_executor_dryrun.py/momentum_ibs_ballena_executor.py).
-    ic_proxy = 0.15  # conservador -- no hay IC real para señales de wallet
+    # pero DRY_RUN -- nunca se envía). 15-Sep: antes ic_proxy=0.15 fijo
+    # ("conservador -- no hay IC real para señales de wallet") -- ahora
+    # edge real medido por micro-bucket (mismo patrón portado desde
+    # candidata9_gate_bucket.py::edge_estimado, remedido a diario por
+    # analisis_bot_wallets_edge_medido_real.py), con 0.15 como fallback
+    # SOLO si el bucket aprobado todavía no tiene n suficiente hoy.
+    ic_proxy = _bwgb.edge_estimado(arquetipo, activo, marco, precio)
     stake_sim = 0.0
     try:
         r_stake = calcular_stake(ic_proxy, strategy="DISPERSED_BOT", subtype=f"{activo}#{marco}",

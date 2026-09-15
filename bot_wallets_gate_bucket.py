@@ -110,8 +110,54 @@ BUCKETS_APROBADOS_REAL = {
 }
 
 
+# 15-Sep (petición explícita Javi, "masterizar" SNIPER/DISPERSO): el
+# ejecutor real (dispersed_bot_executor_dryrun.py) usaba un edge FIJO
+# inventado (ic_proxy=0.15, "conservador -- no hay IC real para señales
+# de wallet") tanto para el tamaño de la posición (Kelly) como para el
+# presupuesto de requote -- mismo hueco que CANDIDATA9 tenía hasta hoy
+# mismo (ver candidata9_gate_bucket.py::edge_estimado, mismo patrón
+# portado aquí sin duplicar la idea). Semilla vacía a propósito -- se
+# llena remidiendo con datos reales (analisis_bot_wallets_edge_medido_
+# real.py), nunca a mano con un número inventado.
+EDGE_MEDIDO_REAL: dict = {}
+EDGE_FALLBACK_CONSERVADOR = 0.15  # mismo valor que el ic_proxy fijo de antes, ahora solo fallback
+EDGE_JSON_PATH = REPO / "data" / "shadow" / "bot_wallets_edge_medido_real.json"
+_edge_cache: dict = {"mtime": None, "datos": {}}
+
+
 def _bucket(precio: float) -> float:
     return round(math.floor(precio / GATE_STEP + 1e-9) * GATE_STEP, 4)
+
+
+def _edge_medido_vivo(arquetipo: str, activo: str, marco: str, b: float) -> float | None:
+    """Lee data/shadow/bot_wallets_edge_medido_real.json (mtime-cached).
+    None si no existe/está corrupto/el bucket no aparece -- el caller cae
+    a EDGE_FALLBACK_CONSERVADOR, nunca a "sin protección"."""
+    try:
+        st = EDGE_JSON_PATH.stat()
+    except OSError:
+        return None
+    if _edge_cache["mtime"] != st.st_mtime:
+        try:
+            _edge_cache["datos"] = json.loads(EDGE_JSON_PATH.read_text(encoding="utf-8"))
+            _edge_cache["mtime"] = st.st_mtime
+        except Exception:
+            return None
+    clave = f"{arquetipo}#{activo}#{marco}#{b:.2f}"
+    valor = _edge_cache["datos"].get(clave)
+    return float(valor) if valor is not None else None
+
+
+def edge_estimado(arquetipo: str, activo: str, marco: str, ask: float) -> float:
+    """Edge real medido para el bucket exacto -- JSON vivo (remedido a
+    diario) primero, si no existe cae al dict estático (vacío hoy,
+    reservado para semillas manuales futuras), si tampoco hay nada,
+    fallback conservador (mismo valor que el ic_proxy fijo de antes)."""
+    b = _bucket(ask)
+    vivo = _edge_medido_vivo(arquetipo, activo, marco, b)
+    if vivo is not None:
+        return vivo
+    return EDGE_MEDIDO_REAL.get((arquetipo, activo, marco, b), EDGE_FALLBACK_CONSERVADOR)
 
 
 def _gate_veredicto_dict(arquetipo: str, activo: str, marco: str, precio: float) -> dict:
