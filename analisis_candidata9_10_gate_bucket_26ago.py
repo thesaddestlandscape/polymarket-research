@@ -355,7 +355,7 @@ def main():
             veredicto = "bueno_confirmado"
         else:
             continue
-        veredicto_crudo, nota_payout, nota_real, g_kelly = _degradar(
+        veredicto_crudo, nota_payout, nota_real, nota_concentracion, g_kelly = _degradar(
             veredicto, p["entrada"], p["tupla_str"], p["bucket"], pnl_real_por_bucket)
         p["entrada"]["veredicto_crudo_hoy"] = veredicto_crudo
         historial_bucket = historial_previo.get(p["tupla_str"], {}).get(p["bucket"])
@@ -369,7 +369,7 @@ def main():
         veredictos_nuevos.append(
             f"{marca} {p['tupla_str']} [{b},{float(b)+STEP:.2f}) n={p['entrada']['n']} "
             f"pnl_medio={p['entrada']['pnl_medio']:+.3f} g_kelly={g_kelly:+.5f} "
-            f"p={p['p']:.4f} {veredicto}{nota_payout}{nota_real}"
+            f"p={p['p']:.4f} {veredicto}{nota_payout}{nota_real}{nota_concentracion}"
         )
 
     # 12-Sep, vía absoluta (decisión explícita Javi, ver UMBRAL_ABSOLUTO_EUR
@@ -380,7 +380,7 @@ def main():
         candidatos_abs, agrupador_fn=lambda tupla_str: (_familia(tupla_str), tupla_str.split("#")[1]))
     for c in rescatados:
         b = c["bucket"]
-        veredicto_crudo_abs, nota_payout, nota_real, g_kelly = _degradar(
+        veredicto_crudo_abs, nota_payout, nota_real, nota_concentracion, g_kelly = _degradar(
             "bueno_confirmado", c["entrada"], c["clave_str"], b, pnl_real_por_bucket)
         historial_bucket = historial_abs_previo.get(c["clave_str"], {}).get(b)
         veredicto, c["entrada"]["historial_crudo_abs"] = veredicto_con_tolerancia(
@@ -403,7 +403,7 @@ def main():
         veredictos_nuevos.append(
             f"{marca} [vía absoluta] {c['clave_str']} [{b},{float(b)+STEP:.2f}) n={c['entrada']['n']} "
             f"pnl_medio={c['entrada']['pnl_medio']:+.3f} g_kelly={g_kelly:+.5f} "
-            f"p_abs={c['p_valor_abs']:.4f} {veredicto}{nota_payout}{nota_real}"
+            f"p_abs={c['p_valor_abs']:.4f} {veredicto}{nota_payout}{nota_real}{nota_concentracion}"
         )
 
     print(f"\n{len(veredictos_nuevos)} bucket(s) con veredicto tras BH-FDR:")
