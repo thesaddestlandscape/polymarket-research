@@ -24,7 +24,7 @@
   "historial_crudo": [
    "malo_confirmado"
   ],
-  "fecha_historial": "2026-09-14",
+  "fecha_historial": "2026-09-15",
   "veredicto": "malo_confirmado"
  },
  "DISPERSO#ETH#5min": {
@@ -32,11 +32,11 @@
   "hi": 0.05,
   "n": 323,
   "pnl_medio": -0.6874,
-  "diff_vs_resto": -0.6468,
+  "diff_vs_resto": -0.6466,
   "p_valor": 0.0,
   "split_half_diff": [
-   -0.6216,
-   -0.6719
+   -0.6213,
+   -0.6717
   ],
   "split_half_ok": true,
   "pnl_medio_loo": -0.8311,
@@ -52,35 +52,35 @@
   "historial_crudo": [
    "malo_confirmado"
   ],
-  "fecha_historial": "2026-09-14",
+  "fecha_historial": "2026-09-15",
   "veredicto": "malo_confirmado"
  },
  "SNIPER#BTC#5min": {
   "lo": 0.0,
   "hi": 0.05,
-  "n": 254,
-  "pnl_medio": -0.7859,
-  "diff_vs_resto": -0.7618,
+  "n": 255,
+  "pnl_medio": -0.7867,
+  "diff_vs_resto": -0.7632,
   "p_valor": 0.0,
   "split_half_diff": [
-   -0.7923,
-   -0.7313
+   -0.7928,
+   -0.7337
   ],
   "split_half_ok": true,
-  "pnl_medio_loo": -0.9078,
+  "pnl_medio_loo": -0.9082,
   "robusto_loo": true,
   "ci90_bootstrap": [
    -1.0,
-   -0.5104
+   -0.5124
   ],
   "robusto_bootstrap": true,
   "n_posiciones_buscadas": 96,
-  "g_kelly_f10": -0.09445,
+  "g_kelly_f10": -0.09449,
   "veredicto_crudo_hoy": "malo_confirmado",
   "historial_crudo": [
    "malo_confirmado"
   ],
-  "fecha_historial": "2026-09-14",
+  "fecha_historial": "2026-09-15",
   "veredicto": "malo_confirmado"
  },
  "DISPERSO#BNB#5min": {
@@ -88,11 +88,11 @@
   "hi": 0.05,
   "n": 47,
   "pnl_medio": -1.0,
-  "diff_vs_resto": -0.946,
+  "diff_vs_resto": -0.945,
   "p_valor": 0.0,
   "split_half_diff": [
-   -0.946,
-   -0.946
+   -0.945,
+   -0.945
   ],
   "split_half_ok": true,
   "pnl_medio_loo": -1.0,
@@ -108,7 +108,7 @@
   "historial_crudo": [
    "malo_confirmado"
   ],
-  "fecha_historial": "2026-09-14",
+  "fecha_historial": "2026-09-15",
   "veredicto": "malo_confirmado"
  },
  "SNIPER#XRP#5min": {
@@ -136,19 +136,19 @@
   "historial_crudo": [
    "malo_confirmado"
   ],
-  "fecha_historial": "2026-09-14",
+  "fecha_historial": "2026-09-15",
   "veredicto": "malo_confirmado"
  },
  "DISPERSO#DOGE#5min": {
   "lo": 0.01,
   "hi": 0.06,
-  "n": 48,
+  "n": 49,
   "pnl_medio": -1.0,
-  "diff_vs_resto": -0.9273,
+  "diff_vs_resto": -0.9286,
   "p_valor": 0.0,
   "split_half_diff": [
-   -0.9273,
-   -0.9273
+   -0.9286,
+   -0.9286
   ],
   "split_half_ok": true,
   "pnl_medio_loo": -1.0,
@@ -164,7 +164,7 @@
   "historial_crudo": [
    "malo_confirmado"
   ],
-  "fecha_historial": "2026-09-14",
+  "fecha_historial": "2026-09-15",
   "veredicto": "malo_confirmado"
  },
  "SNIPER#SOL#15min": {
@@ -192,7 +192,7 @@
   "historial_crudo": [
    "malo_confirmado"
   ],
-  "fecha_historial": "2026-09-14",
+  "fecha_historial": "2026-09-15",
   "veredicto": "malo_confirmado"
  },
  "SNIPER#BTC#15min": {
@@ -200,11 +200,11 @@
   "hi": 0.05,
   "n": 72,
   "pnl_medio": -1.0,
-  "diff_vs_resto": -0.9912,
+  "diff_vs_resto": -0.9923,
   "p_valor": 0.0,
   "split_half_diff": [
-   -0.9912,
-   -0.9912
+   -0.9923,
+   -0.9923
   ],
   "split_half_ok": true,
   "pnl_medio_loo": -1.0,
@@ -220,35 +220,35 @@
   "historial_crudo": [
    "malo_confirmado"
   ],
-  "fecha_historial": "2026-09-14",
+  "fecha_historial": "2026-09-15",
   "veredicto": "malo_confirmado"
  },
  "SNIPER#ETH#5min": {
   "lo": 0.1,
   "hi": 0.15,
-  "n": 241,
-  "pnl_medio": -0.522,
-  "diff_vs_resto": -0.4932,
-  "p_valor": 0.017,
+  "n": 243,
+  "pnl_medio": -0.5259,
+  "diff_vs_resto": -0.497,
+  "p_valor": 0.014,
   "split_half_diff": [
-   -0.6252,
-   -0.3622
+   -0.628,
+   -0.3671
   ],
   "split_half_ok": true,
-  "pnl_medio_loo": -0.559,
+  "pnl_medio_loo": -0.5627,
   "robusto_loo": true,
   "ci90_bootstrap": [
-   -0.7003,
-   -0.3212
+   -0.705,
+   -0.3308
   ],
   "robusto_bootstrap": true,
   "n_posiciones_buscadas": 96,
-  "g_kelly_f10": -0.06556,
+  "g_kelly_f10": -0.06596,
   "veredicto_crudo_hoy": "malo_confirmado",
   "historial_crudo": [
    "malo_confirmado"
   ],
-  "fecha_historial": "2026-09-14",
+  "fecha_historial": "2026-09-15",
   "veredicto": "malo_confirmado"
  },
  "SNIPER#ETH#15min": {
@@ -256,11 +256,11 @@
   "hi": 0.06,
   "n": 41,
   "pnl_medio": -1.0,
-  "diff_vs_resto": -0.9695,
+  "diff_vs_resto": -0.9705,
   "p_valor": 0.0,
   "split_half_diff": [
-   -0.9695,
-   -0.9695
+   -0.9705,
+   -0.9705
   ],
   "split_half_ok": true,
   "pnl_medio_loo": -1.0,
@@ -276,7 +276,7 @@
   "historial_crudo": [
    "malo_confirmado"
   ],
-  "fecha_historial": "2026-09-14",
+  "fecha_historial": "2026-09-15",
   "veredicto": "malo_confirmado"
  },
  "SNIPER#BNB#5min": {
@@ -284,11 +284,11 @@
   "hi": 0.05,
   "n": 40,
   "pnl_medio": -1.0,
-  "diff_vs_resto": -0.9437,
+  "diff_vs_resto": -0.9435,
   "p_valor": 0.0025,
   "split_half_diff": [
-   -0.9437,
-   -0.9437
+   -0.9435,
+   -0.9435
   ],
   "split_half_ok": true,
   "pnl_medio_loo": -1.0,
@@ -304,7 +304,7 @@
   "historial_crudo": [
    "malo_confirmado"
   ],
-  "fecha_historial": "2026-09-14",
+  "fecha_historial": "2026-09-15",
   "veredicto": "malo_confirmado"
  }
 }
