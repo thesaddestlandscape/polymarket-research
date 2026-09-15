@@ -46,8 +46,13 @@ def main() -> int:
     # crecen sin límite), llevaba 41+ ejecuciones consecutivas fallando
     # (cron horario) sin que nadie lo notara -- el JSON que el ejecutor real
     # de WALLET_MIRROR lee llevaba desde las 01:28 sin regenerarse.
+    # 15-Sep: volvió a fallar a los 1200s (medido en vivo: ~1220s real bajo
+    # carga del VPS, wallet_mirror_executor_dryrun.csv ya en 400k+ filas
+    # sin límite -- mismo patrón de crecimiento que el resto de gates).
+    # Subido a 2400s, mismo margen relativo que vigia_candidata9_10_gate_
+    # bucket_26ago.py (1800->2700 el mismo día).
     r = subprocess.run([sys.executable, str(REPO / "analisis_wallet_mirror_gate_bucket_10ago.py")],
-                        capture_output=True, text=True, timeout=1200, cwd=str(REPO))
+                        capture_output=True, text=True, timeout=2400, cwd=str(REPO))
     if r.returncode != 0:
         print(f"ERROR ejecutando analisis_wallet_mirror_gate_bucket_10ago.py: {r.stderr[-2000:]}")
         return 1
