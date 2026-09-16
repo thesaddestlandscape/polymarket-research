@@ -308,6 +308,7 @@ def main():
             entrada = {"n": n_d, "pnl_medio": round(media_d, 4),
                        "g_kelly_f10": round(g_kelly, 5) if g_kelly is not None else None,
                        "diff_vs_resto": round(media_d - (sum(pnl_f) / len(pnl_f)), 4) if pnl_f else None,
+                       "tercio3_n": 0, "tercio3_pnl_medio": None,
                        "ballenas_hit_rate_yes": ballenas["hit_rate_yes"], "ballenas_n": ballenas["n"],
                        "ballenas_coincide": ballenas["coincide"],
                        "shuffle_p": None, "split_half_diff": None,
@@ -327,6 +328,24 @@ def main():
                 entrada["ci90_bootstrap_absoluto"] = [round(ci_lo90, 4), round(ci_hi90, 4)]
                 entrada["p_valor_abs"] = round(p_valor_abs, 4)
                 dentro_sorted = sorted(dentro, key=lambda x: x[0])
+                # 16-Sep (ver docstring de _degradar() -- criterio de
+                # tendencia reciente, caso real que lo motivó: CANDIDATA9_
+                # BOT_CONSENSO#BNB#5min[0.25) pasaba el bootstrap CI90%
+                # limpio pero decaía a negativo en el último tercio.
+                # /code-review: reusa dentro_sorted en vez de ordenar dos
+                # veces -- la primera versión ordenaba para TODOS los
+                # buckets, incluso por debajo de N_MIN, inflando runtime).
+                _k_tend = n_d // 3
+                # /code-review 16-Sep (hallazgo real, mismo fix en los 3
+                # ficheros): dentro_sorted[2*_k_tend:] dejaba caer el resto de
+                # la división en el tercio3, ensanchando la ventana "reciente"
+                # más allá de 1/3 para n no múltiplo de 3. Toma exactamente
+                # los últimos _k_tend elementos -- definición estable.
+                _tercio3 = dentro_sorted[n_d - _k_tend:] if _k_tend > 0 else []
+                tercio3_n = len(_tercio3)
+                if tercio3_n >= 5:
+                    entrada["tercio3_n"] = tercio3_n
+                    entrada["tercio3_pnl_medio"] = round(sum(pnl for _, pnl in _tercio3) / tercio3_n, 4)
                 mid = n_d // 2
                 m1, m2 = dentro_sorted[:mid], dentro_sorted[mid:]
                 split_half_abs = None
@@ -382,7 +401,7 @@ def main():
             veredicto = "bueno_confirmado"
         else:
             continue
-        veredicto_crudo, nota_payout, nota_real, nota_concentracion, g_kelly = _degradar(
+        veredicto_crudo, nota_payout, nota_real, nota_concentracion, nota_tendencia, g_kelly = _degradar(
             veredicto, p["entrada"], p["tupla_str"], p["bucket"], pnl_real_por_bucket)
         p["entrada"]["veredicto_crudo_hoy"] = veredicto_crudo
         historial_bucket = historial_previo.get(p["tupla_str"], {}).get(p["bucket"])
@@ -396,7 +415,7 @@ def main():
         veredictos_nuevos.append(
             f"{marca} {p['tupla_str']} [{b},{float(b)+STEP:.2f}) n={p['entrada']['n']} "
             f"pnl_medio={p['entrada']['pnl_medio']:+.3f} g_kelly={g_kelly:+.5f} "
-            f"p={p['p']:.4f} {veredicto}{nota_payout}{nota_real}{nota_concentracion}"
+            f"p={p['p']:.4f} {veredicto}{nota_payout}{nota_real}{nota_concentracion}{nota_tendencia}"
         )
 
     # 12-Sep, vía absoluta (decisión explícita Javi, ver UMBRAL_ABSOLUTO_EUR
@@ -407,7 +426,7 @@ def main():
         candidatos_abs, agrupador_fn=lambda tupla_str: (_familia(tupla_str), tupla_str.split("#")[1]))
     for c in rescatados:
         b = c["bucket"]
-        veredicto_crudo_abs, nota_payout, nota_real, nota_concentracion, g_kelly = _degradar(
+        veredicto_crudo_abs, nota_payout, nota_real, nota_concentracion, nota_tendencia, g_kelly = _degradar(
             "bueno_confirmado", c["entrada"], c["clave_str"], b, pnl_real_por_bucket)
         historial_bucket = historial_abs_previo.get(c["clave_str"], {}).get(b)
         veredicto, c["entrada"]["historial_crudo_abs"] = veredicto_con_tolerancia(
@@ -430,7 +449,7 @@ def main():
         veredictos_nuevos.append(
             f"{marca} [vía absoluta] {c['clave_str']} [{b},{float(b)+STEP:.2f}) n={c['entrada']['n']} "
             f"pnl_medio={c['entrada']['pnl_medio']:+.3f} g_kelly={g_kelly:+.5f} "
-            f"p_abs={c['p_valor_abs']:.4f} {veredicto}{nota_payout}{nota_real}{nota_concentracion}"
+            f"p_abs={c['p_valor_abs']:.4f} {veredicto}{nota_payout}{nota_real}{nota_concentracion}{nota_tendencia}"
         )
 
     print(f"\n{len(veredictos_nuevos)} bucket(s) con veredicto tras BH-FDR:")

@@ -285,7 +285,27 @@ def _degradar(veredicto_crudo, entrada, clave_str, b, pnl_real_por_bucket):
     dejar de operar, cambiar de patrón, o ser ruido de una sola fuente),
     no una ineficiencia sistémica del mercado -- mismo espíritu que
     analisis_sports_wallet_mirror_concentracion.py, pero aquí degrada el
-    veredicto en línea en vez de solo reportarlo aparte."""
+    veredicto en línea en vez de solo reportarlo aparte.
+
+    16-Sep, añadido veto de TENDENCIA RECIENTE (petición explícita Javi,
+    "todo lo que nos sirva para evitar pérdidas... siempre y cuando
+    cumpla con todos los criterios y el rigor"): el bootstrap CI90%
+    absoluto ya exigido para "bueno_confirmado" (ver los 2 callers de
+    este módulo) remuestrea sobre TODA la muestra y no detecta una
+    tendencia monótona dentro de ella si la media global sigue siendo
+    sólida -- caso real que lo motivó, CANDIDATA9_BOT_CONSENSO#BNB#5min
+    [0.25,0.30): n=56, ci90_bootstrap_absoluto=[+0.127,+0.890] (pasaba
+    limpio), pero desagregado por terciles cronológicos daba
+    -0,03€/+0,55€/-0,13€ -- el último tercio (última semana) ya
+    negativo, invisible al bootstrap porque los 2 tercios anteriores
+    (sobre todo el primero, +1,20€) lo diluían. `entrada` trae
+    "tercio3_pnl_medio"/"tercio3_n" (calculados por el caller, que tiene
+    el `dentro` ordenado por tiempo -- este módulo no conoce la forma
+    exacta de esas tuplas por familia, 2/3/4 elementos según el archivo)
+    -- si el último tercio (n>=5) ya está por debajo de UMBRAL_ABSOLUTO_
+    EUR (mismo piso que el resto del proyecto, no un umbral nuevo),
+    degrada. Ausente/None (caller no lo calculó, o n<5) -> el check se
+    salta sin tocar el veredicto, fail-neutral, nunca fail-open."""
     nota_payout = ""
     g_kelly = entrada.get("g_kelly_f10")
     if veredicto_crudo == "bueno_confirmado" and g_kelly is not None and g_kelly <= 0:
@@ -303,7 +323,15 @@ def _degradar(veredicto_crudo, entrada, clave_str, b, pnl_real_por_bucket):
     if veredicto_crudo == "bueno_confirmado" and concentracion is not None and concentracion > UMBRAL_CONCENTRACION_MAX:
         veredicto_crudo = "malo_confirmado"
         nota_concentracion = f" [degradado: concentración top1_wallet={concentracion:.1%}>{UMBRAL_CONCENTRACION_MAX:.0%}]"
-    return veredicto_crudo, nota_payout, nota_real, nota_concentracion, g_kelly
+    nota_tendencia = ""
+    tercio3_n = entrada.get("tercio3_n") or 0
+    tercio3_pnl = entrada.get("tercio3_pnl_medio")
+    if (veredicto_crudo == "bueno_confirmado" and tercio3_n >= 5
+            and tercio3_pnl is not None and tercio3_pnl < UMBRAL_ABSOLUTO_EUR):
+        veredicto_crudo = "malo_confirmado"
+        nota_tendencia = (f" [degradado: tendencia reciente último_tercio "
+                           f"n={tercio3_n} pnl_medio={tercio3_pnl:+.3f}€<{UMBRAL_ABSOLUTO_EUR}]")
+    return veredicto_crudo, nota_payout, nota_real, nota_concentracion, nota_tendencia, g_kelly
 
 
 def _cargar_historial_abs_previo(out_path):
@@ -401,6 +429,7 @@ def main():
             entrada = {"n": n_d, "pnl_medio": round(media_d, 4),
                        "g_kelly_f10": round(g_kelly, 5) if g_kelly is not None else None,
                        "concentracion_top1_wallet": round(concentracion_top1, 4) if concentracion_top1 is not None else None,
+                       "tercio3_n": 0, "tercio3_pnl_medio": None,
                        "ballenas_hit_rate_yes": ballenas["hit_rate_yes"], "ballenas_n": ballenas["n"],
                        "ballenas_coincide": ballenas["coincide"],
                        "shuffle_p": None, "split_half": None, "veredicto": "sin_concluir",
@@ -411,6 +440,27 @@ def main():
                 # en analisis_gate_bucket_propio_28jul.py): vía absoluta,
                 # independiente de "fuera".
                 dentro_sorted = sorted(dentro, key=lambda x: x[0])
+                # 16-Sep (ver docstring de _degradar() -- criterio de
+                # tendencia reciente), reusa el mismo dentro_sorted de
+                # arriba en vez de ordenar dos veces (16-Sep, /code-review:
+                # la primera versión ordenaba SIEMPRE, incluso para buckets
+                # por debajo de N_MIN que nunca pueden confirmar -- con
+                # buckets de miles de filas eso duplicaba trabajo real,
+                # llevó el runtime de wallet_mirror de varios minutos a
+                # 28min, cerca del timeout de 2400s). n>=5 para no juzgar
+                # una racha corta -- mismo mínimo que split_half ya usa.
+                _k_tend = n_d // 3
+                # /code-review 16-Sep (hallazgo real): dentro_sorted[2*_k_tend:]
+                # dejaba caer el resto de la división en el tercio3, ensanchando
+                # la ventana "reciente" más allá de 1/3 para n no múltiplo de 3
+                # (ej. n=17 -> 7 filas, 41% en vez de ~33%). Toma exactamente los
+                # últimos _k_tend elementos -- el resto queda fuera de los 3
+                # tercios, definición estable que no crece con el resto.
+                _tercio3 = dentro_sorted[n_d - _k_tend:] if _k_tend > 0 else []
+                tercio3_n = len(_tercio3)
+                if tercio3_n >= 5:
+                    entrada["tercio3_n"] = tercio3_n
+                    entrada["tercio3_pnl_medio"] = round(sum(pnl for _, pnl, _w in _tercio3) / tercio3_n, 4)
                 _, _, p_valor_abs = bootstrap_absoluto(pnl_d, seed_key=f"abs#{clave_str}#{b:.2f}")
                 entrada["p_valor_abs"] = round(p_valor_abs, 4)
                 mid = n_d // 2
@@ -463,7 +513,7 @@ def main():
             veredicto_crudo = "bueno_confirmado"
         else:
             continue
-        veredicto_crudo, nota_payout, nota_real, nota_concentracion, g_kelly = _degradar(
+        veredicto_crudo, nota_payout, nota_real, nota_concentracion, nota_tendencia, g_kelly = _degradar(
             veredicto_crudo, p["entrada"], p["clave_str"], p["bucket"], pnl_real_por_bucket)
         p["entrada"]["veredicto_crudo_hoy"] = veredicto_crudo
         # 10-Sep: 2 de los últimos 3 días (incluido hoy), asimétrico --
@@ -480,7 +530,7 @@ def main():
         veredictos_nuevos.append(
             f"{marca} {p['clave_str']} [{p['bucket']},{float(p['bucket'])+STEP:.2f}) "
             f"n={p['entrada']['n']} pnl_medio={p['entrada']['pnl_medio']:+.3f} "
-            f"g_kelly={g_kelly:+.5f} p={p['p']:.4f} {veredicto}{nota_payout}{nota_real}{nota_concentracion}"
+            f"g_kelly={g_kelly:+.5f} p={p['p']:.4f} {veredicto}{nota_payout}{nota_real}{nota_concentracion}{nota_tendencia}"
         )
 
     # 12-Sep, vía absoluta (decisión explícita Javi, ver UMBRAL_ABSOLUTO_EUR
@@ -491,7 +541,7 @@ def main():
         candidatos_abs, agrupador_fn=lambda clave_str: tuple(clave_str.split("#")[1:]))
     for c in rescatados:
         b = c["bucket"]
-        veredicto_crudo_abs, nota_payout, nota_real, nota_concentracion, g_kelly = _degradar(
+        veredicto_crudo_abs, nota_payout, nota_real, nota_concentracion, nota_tendencia, g_kelly = _degradar(
             "bueno_confirmado", c["entrada"], c["clave_str"], b, pnl_real_por_bucket)
         historial_bucket = historial_abs_previo.get(c["clave_str"], {}).get(b)
         veredicto, c["entrada"]["historial_crudo_abs"] = veredicto_con_tolerancia(
@@ -512,7 +562,7 @@ def main():
         veredictos_nuevos.append(
             f"{marca} [vía absoluta] {c['clave_str']} [{b},{float(b)+STEP:.2f}) "
             f"n={c['entrada']['n']} pnl_medio={c['entrada']['pnl_medio']:+.3f} "
-            f"g_kelly={g_kelly:+.5f} p_abs={c['p_valor_abs']:.4f} {veredicto}{nota_payout}{nota_real}{nota_concentracion}"
+            f"g_kelly={g_kelly:+.5f} p_abs={c['p_valor_abs']:.4f} {veredicto}{nota_payout}{nota_real}{nota_concentracion}{nota_tendencia}"
         )
 
     print(f"\n{len(veredictos_nuevos)} bucket(s) con veredicto tras BH-FDR:")

@@ -139,16 +139,17 @@ def main() -> int:
                             if info["lo"] <= ask < info["hi"]]
         pnl_real_ventana = {p["clave_str"]: {f"{info['lo']:.2f}": reales_en_rango}} if reales_en_rango else {}
         # 16-Sep (hallazgo real, mismo barrido del fix de arriba):
-        # _degradar() devuelve 5 valores (crudo, payout, real,
-        # concentracion, g_kelly) desde que el veto de concentración se
-        # añadió el 15-Sep -- desempaquetar en 4 nombres crasheaba aquí
-        # también. `info` no trae concentracion_top1_wallet (evaluar_tupla,
-        # ventana fina, no lo calcula), así que el veto de concentración
-        # queda inerte de forma segura (entrada.get(...) es None dentro de
-        # _degradar -- ni degrada ni promueve). g_kelly reescribe la misma
-        # variable ya calculada en la línea ~119 con idéntico valor (viene
-        # de info["g_kelly_f10"], que _degradar solo relee).
-        veredicto_crudo, nota_payout, nota_real, _nota_concentracion, g_kelly = _degradar(
+        # _degradar() devuelve 6 valores (crudo, payout, real,
+        # concentracion, tendencia, g_kelly) -- concentracion y tendencia
+        # añadidas el 15/16-Sep -- desempaquetar en menos nombres crasheaba
+        # aquí. `info` no trae concentracion_top1_wallet NI tercio3_n/
+        # tercio3_pnl_medio (evaluar_tupla, ventana fina, no los calcula),
+        # así que ambos vetos quedan inertes de forma segura (entrada.get()
+        # es None dentro de _degradar -- ni degradan ni promueven).
+        # g_kelly reescribe la misma variable ya calculada en la línea
+        # ~119 con idéntico valor (viene de info["g_kelly_f10"], que
+        # _degradar solo relee).
+        veredicto_crudo, nota_payout, nota_real, _nota_concentracion, _nota_tendencia, g_kelly = _degradar(
             veredicto_crudo, info, p["clave_str"],
             f"{info['lo']:.2f}", pnl_real_ventana)
         info["veredicto_crudo_hoy"] = veredicto_crudo
