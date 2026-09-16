@@ -1,5 +1,5 @@
 {
- "ts": "2026-09-16T12:31:17+00:00",
+ "ts": "2026-09-16T12:40:07+00:00",
  "wallet": "0xB6eDe3A699f73cbe7f8A221c2cdAcEbFdf02028b",
  "free_usdc": 25.1444,
  "positions_value": 2.7436,
@@ -49,8 +49,8 @@
    "rendimiento_pct": 57.5
   }
  ],
- "pusd_onchain": 30.9819,
- "pusd_no_reflejado_en_collateral": null,
+ "pusd_onchain": 32.6754,
+ "pusd_no_reflejado_en_collateral": 1.6935,
  "daily_real": [
   {
    "date": "2026-07-08",
