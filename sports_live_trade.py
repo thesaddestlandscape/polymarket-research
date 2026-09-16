@@ -208,8 +208,17 @@ def ejecutar_orden_token(token_id: str, precio: float, stake_eur: float,
         # fallback usa precio_limite_fok (precio real solicitado), no
         # `precio` (mejor_ask pre-ensanche) -- mismo fix que en cripto.
         filled_price = float(trade_real.get("price", precio_limite_fok))
-        fee_rate_bps = trade_real.get("fee_rate_bps") or 0
-        fee = float(fee_rate_bps) / 10000 * stake_eur if fee_rate_bps else 0.0
+        # /code-review 16-Sep (hallazgo real, verificado con datos: los 7
+        # trades reales de sports en trades.csv tienen fee_eur="0.0"):
+        # trade_real.get("fee_rate_bps") viene de get_trades(), documentado
+        # ya en el lado de VENTA de este mismo fichero (línea ~344) como
+        # NO fiable -- devuelve "0" incluso en fills que sí pagaron fee
+        # real. La fuente fiable es resp.get("feeRateBps") (post_order),
+        # mismo campo que ya usa la venta. `_verificar_fill_real` ya
+        # confirmó arriba que el fill es real -- una vez confirmado, el
+        # feeRateBps firmado en la orden es válido (no depende de si casó,
+        # es parte de la orden misma).
+        fee = float(resp.get("feeRateBps", 0)) / 10000 * stake_eur
         slip_real = round(filled_price - precio, 4)
 
         log(f"  ✅ Orden ejecutada y VERIFICADA: token={token_id} market={market_id_log or '?'} "
@@ -237,6 +246,141 @@ def ejecutar_orden_token(token_id: str, precio: float, stake_eur: float,
         )
         return {"ok": False, "no_fill": False, "order_id": None,
                 "entry_price": entry_price, "fee_eur": 0.0, "error": err_str}
+
+
+def ejecutar_venta_temprana(market_id: str, direction: int, entry_price: float,
+                             stake_eur: float, contexto: dict | None = None) -> dict:
+    """16-Sep (petición explícita Javi: "diseñar la venta de posiciones si
+    vemos que vamos a palmar, como hemos hecho en cripto -- el trade que va
+    a ganar se queda, el que va a perder se vende intentando sacarle
+    beneficio"). Vende anticipadamente la posición (market_id, direction)
+    comprada a entry_price/stake_eur. Mismo patrón EXACTO que live_trade.py
+    ::_ejecutar_venta_temprana (cripto, ya endurecido con meses de uso),
+    reusando sus piezas de bajo nivel agnósticas de mercado
+    (_get_clob_client, _consultar_libro_venta, _verificar_fill_real,
+    MIN_SHARES_CLOB_LIMIT) -- NO se reimplementa esa mecánica.
+
+    Adaptado a la convención de sports: `direction` es el ÍNDICE del
+    outcome (0/1), no BUY_YES/BUY_NO -- el token_id se resuelve vía
+    sports_wallet_mirror_sniper._tokens_para_condition() (mismo mecanismo
+    que ya usa el lado de compra de este fichero), NUNCA con
+    _crypto_lt._get_token_ids() (esa función espera el market_id NUMÉRICO
+    interno de Gamma que usa cripto -- sports guarda el condition_id
+    hexadecimal en esa columna, mismo hallazgo real que motivó el fix del
+    endpoint en sports_smart_exit_logger.py el mismo día).
+
+    Devuelve siempre {"ok": ...} -- nunca lanza; el caller deja la
+    posición OPEN sin cambios si ok=False (fail-closed, igual que cripto).
+
+    contexto={"categoria","tipo"} solo para logging/Telegram, no cambia
+    la lógica de ejecución."""
+    ctx = contexto or {}
+    try:
+        if entry_price <= 0 or stake_eur <= 0:
+            return {"ok": False, "error": "entry_price/stake_eur inválidos"}
+        import sports_wallet_mirror_sniper as _swms
+        from py_clob_client_v2 import MarketOrderArgsV2, OrderType
+
+        tokens = _swms._tokens_para_condition(market_id)
+        if not tokens or direction not in (0, 1):
+            return {"ok": False, "error": "no se pudieron resolver los tokens del mercado"}
+        token_id = tokens[direction]
+        shares = stake_eur / entry_price
+
+        libro = _crypto_lt._consultar_libro_venta(token_id, _crypto_lt.MIN_SHARES_CLOB_LIMIT)
+        if not libro.get("ok"):
+            log(f"  ⛔ Smart-exit sports: libro no consultable ({libro.get('error')}) "
+                f"-- no se vende, sigue OPEN")
+            return {"ok": False, "no_fill": True, "error": libro.get("error")}
+
+        min_order_size = libro["min_order_size"]
+        notional_usd = shares * libro["mejor_bid"]
+        if shares < min_order_size or notional_usd < MIN_ORDEN_CLOB_USD:
+            log(f"  ⛔ Smart-exit sports: shares={shares:.3f} (min={min_order_size}) "
+                f"notional=${notional_usd:.2f} (min=${MIN_ORDEN_CLOB_USD:.2f}) -- no se vende, sigue OPEN")
+            return {"ok": False, "no_fill": True, "shares_insuficientes": True,
+                    "error": f"shares {shares:.3f} < min_order_size {min_order_size} "
+                             f"o notional ${notional_usd:.2f} < ${MIN_ORDEN_CLOB_USD:.2f}"}
+
+        client = _crypto_lt._get_clob_client()
+        _marcar_orden_en_curso(market_id, str(direction))
+        try:
+            # Mismo patrón de reintento por precisión decimal que el lado
+            # de compra de este fichero y que la venta de cripto -- solo
+            # hacia abajo (nunca pedir vender más shares de las que hay).
+            intentos_shares = [round(shares, 4), round(shares - 0.0005, 4)]
+            intentos_shares = [s for s in intentos_shares if s > 0]
+            resp = None
+            for intento, amt in enumerate(intentos_shares):
+                order_args = MarketOrderArgsV2(token_id=token_id, amount=amt, side="SELL", price=0)
+                try:
+                    signed_order = client.create_market_order(order_args)
+                    resp = client.post_order(signed_order, OrderType.FOK)
+                    shares = amt
+                    if intento > 0:
+                        log(f"  ⚠️ venta aceptada en reintento {intento} con shares={amt:.4f}")
+                    break
+                except Exception as e_intento:
+                    if "invalid amounts" not in str(e_intento) or intento == len(intentos_shares) - 1:
+                        raise
+                    log(f"  ⚠️ 'invalid amounts' con shares={amt:.4f}, reintentando...")
+            if resp is None:
+                raise RuntimeError("no se pudo construir una orden de venta con amounts válidos")
+        finally:
+            _limpiar_orden_en_curso()
+
+        order_id = resp.get("orderID") or resp.get("id") or str(resp)
+
+        # Verificación real contra get_trades() antes de dar la venta por
+        # buena -- mismo fix real que ya corrigió el trade fantasma del
+        # 31-Ago en el lado de compra (01-Sep) y en cripto (15-Sep).
+        ts_envio_venta = datetime.now(timezone.utc).timestamp()
+        trade_real = _verificar_fill_real(client, market_id, order_id, ts_envio_venta)
+        if trade_real is None:
+            log(f"  ⛔ Smart-exit sports: orden de venta aceptada (order_id={order_id}) pero SIN "
+                f"evidencia de fill real -- fail-closed, sigue OPEN, no se registra venta fantasma")
+            enviar_telegram(
+                f"⚽ SPORTS\n⚠️ *Smart-exit: orden de venta sin fill confirmado* (posible fantasma)\n"
+                f"market={market_id} direction={direction} order_id={order_id}\n"
+                f"Posición sigue OPEN -- revisar manualmente.",
+                bot="sports",
+            )
+            return {"ok": False, "no_fill": False, "sin_fill_confirmado": True,
+                    "error": "orden de venta aceptada por la API pero sin evidencia de fill real en get_trades()"}
+
+        filled_price = float(trade_real.get("price", libro.get("mejor_bid", 0)))
+        valor_venta_eur = filled_price * shares
+        # feeRateBps de resp (post_order), no de trade_real (get_trades()) --
+        # mismo hallazgo 15-Sep documentado en live_trade.py: get_trades()
+        # devuelve fee_rate_bps="0" incluso en fills que sí pagaron fee real.
+        fee = float(resp.get("feeRateBps", 0)) / 10000 * valor_venta_eur
+        pnl_neto = valor_venta_eur - stake_eur - fee
+
+        log(f"  🔴 Smart-exit sports EJECUTADO y VERIFICADO: {market_id}/{direction} "
+            f"shares={shares:.3f} precio_venta={filled_price:.4f} "
+            f"pnl_neto={pnl_neto:+.2f}€ order_id={order_id}")
+        enviar_telegram(
+            f"⚽ SPORTS\n🔴 *Smart-exit ejecutado* (categoria={ctx.get('categoria','?')} "
+            f"tipo={ctx.get('tipo','?')})\nmarket={market_id} direction={direction}\n"
+            f"precio_venta={filled_price:.4f} pnl_neto={pnl_neto:+.2f}€\norder_id={order_id}",
+            bot="sports",
+        )
+        return {
+            "ok": True, "order_id": order_id, "exit_price": filled_price,
+            "valor_venta_eur": round(valor_venta_eur, 4),
+            "fee_eur": round(fee, 4), "pnl_neto_eur": round(pnl_neto, 4),
+        }
+    except Exception as e:
+        err = str(e)
+        if "couldn't be fully filled" in err or "FOK" in err:
+            log(f"  ⚠️ Smart-exit sports FOK kill (sin liquidez a ese precio) -- sigue OPEN: {e}")
+            return {"ok": False, "no_fill": True, "order_id": None, "error": err}
+        log(f"  ❌ Error en venta anticipada sports -- sigue OPEN: {e}")
+        enviar_telegram(
+            f"⚽ SPORTS\n❌ *Smart-exit venta ERROR*\nmarket={market_id} direction={direction}\n{err}",
+            bot="sports",
+        )
+        return {"ok": False, "no_fill": False, "order_id": None, "error": err}
 
 
 def registrar_trade(row: dict) -> None:

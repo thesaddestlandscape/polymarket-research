@@ -63,6 +63,7 @@ import sports_wallet_mirror_sniper
 import sports_activity_ws
 import sports_resolve  # 27-Ago noche: resuelve trades reales OPEN, ver docstring del módulo
 import sports_spread_observer_fase0  # 02-Sep: observador FASE 0 de spread/rewards, TODO sports (no solo tenis), ver docstring del módulo
+import sports_smart_exit_logger_persistente  # 16-Sep: PASO 1 de Smart Exit sports, solo lectura, ver su docstring
 
 # (modulo, fichero_log_propio -- EXACTO el que ya usaba la screen individual,
 #  nombre_funcion_log_a_reemplazar, coroutine_a_lanzar)
@@ -75,6 +76,13 @@ PROCESOS = [
      lambda: sports_resolve.main_async(60)),
     (sports_spread_observer_fase0, "sports_spread_observer_fase0.log", "_log",
      lambda: sports_spread_observer_fase0.main_async()),
+    # 16-Sep: sports_smart_exit_logger_persistente.main() es SÍNCRONO (mismo
+    # patrón que smart_exit_logger_persistente.py en cripto, un bucle
+    # infinito con time.sleep interno) -- asyncio.to_thread() lo ejecuta en
+    # un hilo de verdad sin bloquear el loop de eventos de las demás
+    # coroutines, sin tocar _correr()/el resto del patrón de este fichero.
+    (sports_smart_exit_logger_persistente, "sports_smart_exit_logger.log", "_log",
+     lambda: asyncio.to_thread(sports_smart_exit_logger_persistente.main)),
 ]
 
 
