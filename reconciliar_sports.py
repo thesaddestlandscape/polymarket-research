@@ -103,7 +103,25 @@ def main() -> int:
         deposito_cripto = 0.0
     modelo_cripto = deposito_cripto + pnl_cripto
 
-    sports_implicado_wallet = snap["total_bruto"] - modelo_cripto
+    # 16-Sep (bug real encontrado con datos: TE saltó +5,81€ el mismo día
+    # del primer depósito real de weather, 6€, 15-Sep) -- `total_bruto` es
+    # la wallet compartida COMPLETA, sin restar NINGÚN capital ajeno (ver
+    # comentario en live_balance.py::fetch_balance_real()). Restar solo
+    # `modelo_cripto` deja el capital de weather colado dentro de
+    # `sports_implicado_wallet`, disparando una alerta falsa de sports
+    # cada vez que weather deposita/gana/pierde. Igual que sports, weather
+    # se aísla por diferencia (fail-closed a 0.0 si la fuente falla, nunca
+    # debe tumbar la reconciliación de sports por un fallo de weather).
+    from datetime import datetime as _dt, timezone as _tz
+    try:
+        capital_weather = (
+            __import__("live_balance")._weather_capital_en_free_usdc(_dt.now(_tz.utc))
+            + __import__("live_balance")._weather_positions_value_actual(snap.get("wallet"))
+        )
+    except Exception:
+        capital_weather = 0.0
+
+    sports_implicado_wallet = snap["total_bruto"] - modelo_cripto - capital_weather
     te = sports_implicado_wallet - sports_modelo
 
     filas = [f for f in _cargar_historial() if f["date"] != hoy]
@@ -128,8 +146,16 @@ def main() -> int:
           f"{' ⚠️ ALERTA' if alerta else ''}")
 
     if alerta:
+        # 16-Sep (bug real encontrado en el mismo barrido que el de arriba):
+        # el sentido del mensaje debe leerse del NIVEL de `te` (implicado
+        # vs modelo AHORA), no del signo de `delta` (cuánto cambió hoy) --
+        # con ambos coincidiendo en signo el bug era invisible, pero un
+        # día con delta y te de signo distinto habría dado el diagnóstico
+        # exactamente al revés. te = implicado - modelo: te>0 -> el modelo
+        # cree tener MENOS que la wallet real; te<0 -> el modelo cree tener
+        # MÁS (posible doble conteo/fantasma).
         sentido = ("el ledger de sports cree tener MENOS de lo que la wallet real implica "
-                   "(trade real no registrado, o resolución con PnL mal calculado)" if delta < 0 else
+                   "(trade real no registrado, o resolución con PnL mal calculado)" if te >= 0 else
                    "el ledger de sports cree tener MÁS de lo que la wallet real implica "
                    "(posible doble conteo o trade fantasma)")
         enviar_telegram(
