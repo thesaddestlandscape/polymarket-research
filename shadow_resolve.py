@@ -1154,7 +1154,29 @@ def _check_salidas_tempranas_bajo_lock(LIVE_CSV: Path, ts: str, umbral: float, h
         # expresiones casi idénticas (aquí y en el bloque de TP) que podían
         # desincronizarse si una se editaba sin la otra.
         es_longshot = direction == "BUY_YES" and entry_p < longshot_entry_max
-        es_candidata_longshot = tp_activo and es_longshot
+        # 16-Sep noche (petición explícita Javi, "dale, todo lo que nos sirva
+        # para evitar pérdidas y ganar más es bienvenido siempre y cuando
+        # cumpla con todos los criterios y el rigor"): overlay TP extendido a
+        # BUY_NO barato (mismo umbral 0.45€/entry<0.53€ que BUY_YES) -- pnl
+        # validado independientemente con smart_exit_prices.csv (fórmula
+        # EXACTA de esta función, no aproximada): n=67, split-half por
+        # terciles CRECIENTE (no decae: -0.03€/+11.57€/+38.64€, la mitad
+        # "plana" original era solo la 1ª semana de julio, régimen anterior
+        # al sistema de hoy, no una degradación reciente), robusto a
+        # outliers (quitando los 2 trades más grandes siguen sumando
+        # +24.46€ sobre 65), bootstrap CI90% del delta por trade=[0.26,1.32]
+        # NO cruza cero. Ver idea_smart_exit_buyno_barato_confirmado_16sep.
+        #
+        # El corte de 60s (deja correr si toca con <60s restantes, vende si
+        # toca con >=60s) SOLO se aplica a BUY_YES (es_longshot, no
+        # es_longshot_no) -- para BUY_NO el mismo patrón direccional aparece
+        # en los touches de TP (80% gana real si <60s vs 44% si >=60s) pero
+        # con n=10, por debajo del N_MIN=15 del proyecto para concluir nada.
+        # Hasta que crezca ese n, BUY_NO vende SIEMPRE que toca TP, sin
+        # dejarlo correr -- más conservador que BUY_YES, nunca al revés.
+        es_longshot_no = direction == "BUY_NO" and entry_p < longshot_entry_max
+        es_favorito_barato = es_longshot or es_longshot_no
+        es_candidata_longshot = tp_activo and es_favorito_barato
         if opt_in_activo:
             clave_tupla = f"{t.get('strategy', '')}#{t.get('subtype', '')}"
             if clave_tupla in por_tupla:
@@ -1228,15 +1250,14 @@ def _check_salidas_tempranas_bajo_lock(LIVE_CSV: Path, ts: str, umbral: float, h
         # al de antes de este cambio salvo por qué tuplas se evalúan.
         motivo_salida = None
         if tp_activo_efectivo:
-            # es_longshot exige BUY_YES -- analisis_smart_exit.py::_es_longshot()
-            # (la función que produjo la calibración n=36/delta+26.86€) filtra
-            # por direction=="BUY_YES" ADEMÁS de entry_price<longshot_entry_max;
-            # un BUY_NO barato es un favorito YES caro, dinámica de mercado
-            # distinta, nunca se validó el umbral de TP ahí. Sin este filtro de
-            # dirección, un BUY_NO#0.40 habría heredado el umbral longshot
-            # (0.45) sin ninguna evidencia detrás. (es_longshot calculado una
-            # sola vez más arriba, en la línea ~1156, y reusado aquí.)
-            umbral_tp_efectivo = tp_umbral_longshot if es_longshot else tp_umbral
+            # es_favorito_barato = es_longshot (BUY_YES) OR es_longshot_no
+            # (BUY_NO), ambos con entry_price<longshot_entry_max -- 16-Sep
+            # noche, BUY_NO barato ya validado independientemente (ver
+            # comentario en es_longshot_no más arriba). Un BUY_YES/BUY_NO
+            # con entry_price>=longshot_entry_max sigue usando el umbral
+            # general (tp_umbral, 0.70 hoy, de hecho inerte -- ver nota
+            # _take_profit_activo_flip_nota_2026-09-16 en config_live.json).
+            umbral_tp_efectivo = tp_umbral_longshot if es_favorito_barato else tp_umbral
             disparar_tp = p_lado >= umbral_tp_efectivo
             if es_longshot and disparar_tp:
                 # 16-Sep (idea_smart_exit_longshot_tiempo_confirmado_16sep,
