@@ -379,7 +379,7 @@ def main():
                 # los últimos _k_tend elementos -- definición estable.
                 _tercio3 = dentro_sorted[n_d - _k_tend:] if _k_tend > 0 else []
                 tercio3_n = len(_tercio3)
-                if tercio3_n >= 5:
+                if tercio3_n >= 15:
                     entrada["tercio3_n"] = tercio3_n
                     entrada["tercio3_pnl_medio"] = round(sum(pnl for _, pnl, _w in _tercio3) / tercio3_n, 4)
                 _, _, p_valor_abs = bootstrap_absoluto(pnl_d, seed_key=f"abs#{clave_str}#{b:.2f}")
@@ -465,7 +465,10 @@ def main():
         nota_tendencia = ""
         tercio3_n = entrada.get("tercio3_n") or 0
         tercio3_pnl = entrada.get("tercio3_pnl_medio")
-        if (veredicto_crudo == "bueno_confirmado" and tercio3_n >= 5
+        # 16-Sep tarde (mismo fix que analisis_bot_wallets_gate_bucket_25ago.py):
+        # n>=5 permitía degradar con una racha de solo 5 trades, por debajo
+        # del estándar n>=15 del resto del proyecto.
+        if (veredicto_crudo == "bueno_confirmado" and tercio3_n >= 15
                 and tercio3_pnl is not None and tercio3_pnl < UMBRAL_ABSOLUTO_EUR):
             veredicto_crudo = "malo_confirmado"
             nota_tendencia = (f" [degradado: tendencia reciente último_tercio "

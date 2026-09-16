@@ -89,13 +89,23 @@ activar, no solo listados):
   2. Whitelist real: la tupla sintética exacta
      ("SNIPER#BTC#5min#BUY_Up"/"...#BUY_Down") tiene que estar en
      `pares_permitidos_live` -- verificado explícitamente, no asumido.
-  3. `permitido_real()` -- el micro-bucket exacto tiene que estar en
-     `BUCKETS_APROBADOS_REAL` (solo [0.25,0.30) hoy) ADEMÁS de la
-     whitelist -- ver (b) arriba.
-  4. `veredicto == "bueno_confirmado"` en caliente (`bot_wallets_gate_
-     bucket.json`, recalculado cada fila) -- si el autoaprendizaje
-     retira la confirmación, deja de disparar aunque siga en
-     `BUCKETS_APROBADOS_REAL`.
+  3. `permitido_real()` -- 16-Sep: ya NO consulta ninguna whitelist
+     manual por bucket (`BUCKETS_APROBADOS_REAL` retirada, petición
+     explícita Javi: "cuando salga un micro-bucket bueno confirmado
+     tiene que abrirse automáticamente"). Exige, automático y en
+     caliente: (a) `veredicto == "bueno_confirmado"` vigente en
+     `bot_wallets_gate_bucket.json` -- si el autoaprendizaje retira la
+     confirmación, deja de disparar solo, y reabre solo si reconfirma;
+     (b) fill-ability real medida contra el propio ejecutor
+     (`dispersed_bot_executor_dryrun.csv`) con n>=15 -- un bucket nunca
+     llega a operar real sin esa evidencia fresca, ni siquiera si la
+     tolerancia histórica "arrastra" un bueno_confirmado de días
+     anteriores a este fix; (c) edge medido en vivo para el bucket
+     exacto (`bot_wallets_edge_medido_real.json`) -- nunca opera sobre
+     el fallback genérico. Ver docstring de `permitido_real()` en
+     `bot_wallets_gate_bucket.py` para el detalle completo.
+  4. (fusionado con el 3 -- el veredicto en caliente YA es parte de
+     `permitido_real()` desde el 16-Sep, no una capa aparte.)
   5. Re-chequeo post-requote y multi-lectura antes de firmar en
      `live_trade.py::_ejecutar_orden_polymarket`, vía
      `bot_wallets_gate_bucket.evaluar_para_recheck()` (registrado en
@@ -106,10 +116,10 @@ activar, no solo listados):
      `REQUOTE_EDGE_MIN`) activo, no se salta (mismo bug ya corregido en
      WALLET_MIRROR 06-Ago y CANDIDATA9_BOT_CONSENSO 08-Sep).
 
-Resto de arquetipos/buckets de esta familia (17 candidatos más
-detectados a 08-Sep) siguen SOLO en observación -- ninguno en
-`pares_permitidos_live` ni en `BUCKETS_APROBADOS_REAL`, el guardián 2/3
-los bloquea igual que antes.
+Resto de arquetipos/buckets de esta familia siguen SOLO en observación
+mientras no estén en `pares_permitidos_live` -- el guardián 2 los
+bloquea igual que antes (16-Sep: el guardián 3 ya no depende de una
+whitelist manual por bucket, ver arriba).
 
 NO se replica el veto CLV (`lt._clv_tupla`) que sí usan los ejecutores
 hermanos -- ese veto lee `results.csv` por `strategy=arquetipo`, pero
@@ -335,23 +345,27 @@ def _procesar_fila(row: dict, wallets: set, arquetipos: dict, vistos: dict) -> d
     decision = "DISPARARIA" if (veredicto == "bueno_confirmado" and sigue_fillable and not cb_bloquea) else "NO_dispara"
 
     # --- Tramo de envío real (07-Sep, petición explícita Javi; ACTIVO desde
-    # 08-Sep, DRY_RUN=False). Solo llega aquí de verdad si pasan los 6
-    # guardianes del docstring del módulo -- whitelist (guardián #2) y
-    # BUCKETS_APROBADOS_REAL (guardián #3) hoy solo dejan pasar
-    # SNIPER#BTC#5min[0.25,0.30), el resto del universo sigue bloqueado. ---
+    # 08-Sep, DRY_RUN=False). Solo llega aquí de verdad si pasan los guardianes
+    # del docstring del módulo -- whitelist (guardián #2) y permitido_real()
+    # (guardián #3, 16-Sep: veredicto+fill-ability+edge, sin whitelist manual)
+    # determinan qué buckets del universo pueden operar cada día. ---
     tupla_sintetica = f"{arquetipo}#{activo}#{marco}#BUY_{lado}"
     if not DRY_RUN and decision == "DISPARARIA":
         en_wl = _en_whitelist(tupla_sintetica)
         # 08-Sep: guardián adicional -- este gate confirma por (arquetipo,
         # activo,marco,bucket) SIN separar por dirección, así que estar en
         # pares_permitidos_live habilitaría CUALQUIER bucket bueno_confirmado
-        # de esa tupla, no solo el aprobado explícitamente por Javi (algunos
-        # buckets confirmados tienen g_kelly negativo, payout inverso -- ver
-        # bot_wallets_gate_bucket.py::BUCKETS_APROBADOS_REAL). permitido_real()
-        # exige el bucket exacto en esa lista, además del veredicto en caliente.
+        # de esa tupla, no solo el que de verdad tiene edge sano (algunos
+        # buckets confirmados tienen g_kelly negativo, payout inverso).
+        # 16-Sep: BUCKETS_APROBADOS_REAL (whitelist manual por bucket) se
+        # retiró de bot_wallets_gate_bucket.py::permitido_real() -- ahora
+        # exige, automático y sin aprobación manual: veredicto vigente
+        # bueno_confirmado, fill-ability real del ejecutor con n>=15, y
+        # edge medido en vivo para el bucket exacto (ver docstring de esa
+        # función para el detalle de las 3 capas).
         if en_wl and not _bwgb.permitido_real(arquetipo, activo, marco, precio):
-            log(f"  ⛔ {tupla_sintetica} bucket[{b:.2f}) no está en "
-                 f"BUCKETS_APROBADOS_REAL -- fail-closed, no se ejecuta")
+            log(f"  ⛔ {tupla_sintetica} bucket[{b:.2f}) no pasa permitido_real() "
+                 f"(veredicto/fill-ability/edge) -- fail-closed, no se ejecuta")
         elif not en_wl:
             log(f"  ⛔ {tupla_sintetica} no está en pares_permitidos_live -- "
                  f"fail-closed, no se ejecuta pese a DRY_RUN=False")

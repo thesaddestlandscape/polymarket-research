@@ -186,17 +186,60 @@ def edge_estimado(activo: str, marco: str, ask: float) -> float:
 
 
 def permitido_real(activo: str, marco: str, precio: float) -> bool:
-    """Capa adicional de aprobación explícita por micro-bucket para
-    DINERO REAL -- exige (a) el bucket exacto en BUCKETS_APROBADOS_REAL
-    Y (b) el gate estadístico siga bueno_confirmado en caliente (el
-    autoaprendizaje puede retirar la confirmación con más datos, en cuyo
-    caso deja de operar aunque siga en la lista de aprobados). Mismo
-    patrón exacto que bot_wallets_gate_bucket.py::permitido_real()."""
-    clave = (activo, marco)
-    aprobados = BUCKETS_APROBADOS_REAL.get(clave)
-    if not aprobados or _bucket(precio) not in aprobados:
+    """16-Sep tarde (petición explícita Javi: "cuando salga un micro-bucket
+    bueno confirmado tiene que abrirse automáticamente, no podemos estar
+    pendientes todo el rato" -- ampliado el mismo día, tras /code-review,
+    "esto tiene que ser así en todas las tuplas live... el sistema tiene
+    que ser inteligente para operar en cada momento en todos los micro-
+    buckets confirmados... si un micro-bucket pasa a sin_concluir o malo
+    confirmado, automáticamente no se opera ahí hasta que revierta y se
+    vuelva a abrir automáticamente"): quitada la capa BUCKETS_APROBADOS_
+    REAL -- era exactamente la tabla hardcodeada que CLAUDE.md prohíbe
+    desde 05-Ago, reintroducida aquí el 08/13/15-Sep porque en esa fecha
+    el generador del JSON todavía no vetaba por payout asimétrico
+    (g_kelly). Reemplazada por DOS checks automáticos, mismo patrón
+    exacto que bot_wallets_gate_bucket.py::permitido_real() (16-Sep,
+    portado tal cual, nunca duplicar el criterio), sin perder ninguna de
+    las dos protecciones que antes exigían aprobación manual:
+
+    (a) el gate diario (_degradar() compartido, analisis_bot_wallets_
+        gate_bucket_25ago.py, aplicado aquí desde analisis_candidata9_10_
+        gate_bucket_26ago.py) ya cubre payout asimétrico, concentración
+        de wallet, tendencia reciente Y, desde hoy, fill-ability real
+        medida automáticamente contra el propio ejecutor dry-run
+        (candidata9_bot_consenso_executor.csv, columna
+        sigue_fillable_en_decision) -- un bucket nunca llega a
+        bueno_confirmado por primera vez sin esa evidencia.
+    (b) edge_estimado() puede caer al fallback EDGE_FALLBACK_CONSERVADOR
+        si el bucket no tiene medición viva todavía -- aceptable para
+        `evaluar()`/dry-run, NUNCA para dinero real: exige edge remedido
+        en vivo hoy (analisis_candidata9_edge_medido_real.py ahora cubre
+        TODO bucket bueno_confirmado, no solo una lista pre-aprobada, se
+        cumple sola en el mismo ciclo cron en que el bucket se confirma).
+
+    Ambos checks se re-evalúan EN CALIENTE (mtime-cache) en cada llamada
+    -- si el gate diario degrada el bucket mañana, esta función deja de
+    operar ahí automáticamente, y reabre sola en cuanto reconfirme. La
+    protección por-trade (CLV, profundidad real, requote/abort) sigue
+    intacta más abajo en el pipeline, independiente de esta función."""
+    info = _gate_veredicto_dict(activo, marco, precio)
+    if info.get("veredicto") != "bueno_confirmado":
         return False
-    return _gate_veredicto_dict(activo, marco, precio).get("veredicto") == "bueno_confirmado"
+    # 16-Sep tarde (hallazgo real al probar el fix con datos reales, mismo
+    # día): la tolerancia histórica ("2 de los últimos 3 días") puede
+    # arrastrar un "bueno_confirmado" de días ANTERIORES a que este veto de
+    # fill-ability existiera, aunque HOY mismo _degradar() haya marcado
+    # fillable_n<15 -- caso real, CANDIDATA9_BOT_CONSENSO#BTC#5min[0.85,0.90)
+    # el mismo día de este cambio. Leer fillable_n directo del JSON (lo
+    # escribe _degradar() en la misma entrada) en vez de fiarse solo de
+    # `veredicto` cierra el hueco sin esperar 2-3 días a que la tolerancia
+    # se autolimpie -- fail-closed: ausente/None se trata como 0.
+    if (info.get("fillable_n") or 0) < 15:
+        return False
+    b = _bucket(precio)
+    if _edge_medido_vivo(activo, marco, b) is None and (activo, marco, b) not in EDGE_MEDIDO_REAL:
+        return False  # fail-closed: sin edge medido real para este bucket exacto, no operar sobre el fallback genérico
+    return True
 
 
 def _gate_veredicto_dict(activo: str, marco: str, precio: float) -> dict:

@@ -360,8 +360,13 @@ def _procesar_condition(condition_id: str, votos: list[dict], vistos_trigger: se
     # 10-Sep: capa adicional de aprobación explícita por micro-bucket,
     # igual que bot_wallets_gate_bucket.py -- `en_zona` (arriba) sigue sin
     # restringir, para que en_zona_confirmada siga auditando TODO el
-    # universo en el CSV (decisión Javi 26-Ago). Disparar de verdad exige
-    # además que el bucket exacto esté en BUCKETS_APROBADOS_REAL.
+    # universo en el CSV (decisión Javi 26-Ago).
+    # 16-Sep: BUCKETS_APROBADOS_REAL (whitelist manual por bucket) se
+    # retiró de candidata9_gate_bucket.py::permitido_real() -- ahora
+    # disparar de verdad exige, automático y sin aprobación manual:
+    # veredicto vigente bueno_confirmado, fill-ability real del ejecutor
+    # con n>=15, y edge medido en vivo para el bucket exacto (ver
+    # docstring de esa función para el detalle de las 3 capas).
     aprobado_real = bool(py_ref is not None and permitido_real(activo, marco, py_ref))
 
     ejecutado = False

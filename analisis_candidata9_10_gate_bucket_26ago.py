@@ -44,12 +44,14 @@ from analisis_gate_bucket_propio_28jul import (  # noqa: E402
 )
 from analisis_bot_wallets_gate_bucket_25ago import (  # noqa: E402
     _degradar, _cargar_pnl_real_crudo, _cargar_historial_abs_previo, F_KELLY,
+    _cargar_fillability_por_bucket,
 )
 from gate_confirmacion_historial import cargar_historial_previo, veredicto_con_tolerancia  # noqa: E402
 import ballenas_cross_check as bcc  # noqa: E402 -- refuerzo informativo, ver docstring del módulo
 
 IN_BOTS = REPO / "data/shadow/bot_wallets_gate_bucket_fase0.csv"
 OUT = REPO / "data/shadow/candidata9_10_gate_bucket.json"
+EXECUTOR_C9 = REPO / "data/shadow/candidata9_bot_consenso_executor.csv"
 
 ESTRATEGIAS_CANDIDATA9_10 = ("CANDIDATA9_BOT_CONSENSO", "CANDIDATA10_CROSSACTIVO")
 
@@ -234,6 +236,23 @@ def main():
     print(f"Tuplas (candidata9+10): {len(eventos)}")
     pnl_real_por_bucket = _pnl_real_por_bucket_desde_crudo(
         _cargar_pnl_real_crudo(ESTRATEGIAS_CANDIDATA9_10))
+    # 16-Sep tarde: fill-ability real SOLO existe para CANDIDATA9_BOT_CONSENSO
+    # (candidata9_bot_consenso_executor.py) -- CANDIDATA10_CROSSACTIVO no
+    # tiene ejecutor propio (exploratoria, fuera de pares_permitidos_live),
+    # así que nunca se le pasa este dict a _degradar() (ver bucle de abajo,
+    # fillability_por_bucket=None para ella -- fail-neutral, no fail-closed
+    # por un hueco de infraestructura que no le corresponde).
+    #
+    # /code-review 16-Sep (hallazgo real): eventos_candidata9() bucketiza
+    # con el ask de DETECCIÓN (mejor_ask_deteccion, de bot_wallets_gate_
+    # bucket_fase0.csv) -- usar aquí "ask_decision" (post-Kelly/circuit-
+    # breaker, ya movido por degradacion_ask_pct) mezclaba fill-ability de
+    # una población de precio distinta bajo la misma etiqueta de bucket.
+    # "ask_deteccion" es el campo equivalente en el propio ejecutor (mismo
+    # instante conceptual que mejor_ask_deteccion), alinea los dos lados.
+    fillability_c9 = _cargar_fillability_por_bucket(
+        EXECUTOR_C9, col_bucket="ask_deteccion", col_fill="sigue_fillable_en_decision",
+        arquetipo_fijo="CANDIDATA9_BOT_CONSENSO")
 
     # 15-Sep, petición explícita Javi ("que la confirmación de CANDIDATA9 sea
     # igual de exigente que la de SNIPER/DISPERSO"): esta familia SÍ está en
@@ -343,7 +362,7 @@ def main():
                 # los últimos _k_tend elementos -- definición estable.
                 _tercio3 = dentro_sorted[n_d - _k_tend:] if _k_tend > 0 else []
                 tercio3_n = len(_tercio3)
-                if tercio3_n >= 5:
+                if tercio3_n >= 15:
                     entrada["tercio3_n"] = tercio3_n
                     entrada["tercio3_pnl_medio"] = round(sum(pnl for _, pnl in _tercio3) / tercio3_n, 4)
                 mid = n_d // 2
@@ -401,8 +420,9 @@ def main():
             veredicto = "bueno_confirmado"
         else:
             continue
-        veredicto_crudo, nota_payout, nota_real, nota_concentracion, nota_tendencia, g_kelly = _degradar(
-            veredicto, p["entrada"], p["tupla_str"], p["bucket"], pnl_real_por_bucket)
+        fillability_arg = fillability_c9 if p["tupla_str"].startswith("CANDIDATA9_BOT_CONSENSO#") else None
+        veredicto_crudo, nota_payout, nota_real, nota_concentracion, nota_tendencia, nota_fill, g_kelly = _degradar(
+            veredicto, p["entrada"], p["tupla_str"], p["bucket"], pnl_real_por_bucket, fillability_arg)
         p["entrada"]["veredicto_crudo_hoy"] = veredicto_crudo
         historial_bucket = historial_previo.get(p["tupla_str"], {}).get(p["bucket"])
         veredicto, p["entrada"]["historial_crudo"] = veredicto_con_tolerancia(
@@ -415,7 +435,7 @@ def main():
         veredictos_nuevos.append(
             f"{marca} {p['tupla_str']} [{b},{float(b)+STEP:.2f}) n={p['entrada']['n']} "
             f"pnl_medio={p['entrada']['pnl_medio']:+.3f} g_kelly={g_kelly:+.5f} "
-            f"p={p['p']:.4f} {veredicto}{nota_payout}{nota_real}{nota_concentracion}{nota_tendencia}"
+            f"p={p['p']:.4f} {veredicto}{nota_payout}{nota_real}{nota_concentracion}{nota_tendencia}{nota_fill}"
         )
 
     # 12-Sep, vía absoluta (decisión explícita Javi, ver UMBRAL_ABSOLUTO_EUR
@@ -426,8 +446,9 @@ def main():
         candidatos_abs, agrupador_fn=lambda tupla_str: (_familia(tupla_str), tupla_str.split("#")[1]))
     for c in rescatados:
         b = c["bucket"]
-        veredicto_crudo_abs, nota_payout, nota_real, nota_concentracion, nota_tendencia, g_kelly = _degradar(
-            "bueno_confirmado", c["entrada"], c["clave_str"], b, pnl_real_por_bucket)
+        fillability_arg = fillability_c9 if c["clave_str"].startswith("CANDIDATA9_BOT_CONSENSO#") else None
+        veredicto_crudo_abs, nota_payout, nota_real, nota_concentracion, nota_tendencia, nota_fill, g_kelly = _degradar(
+            "bueno_confirmado", c["entrada"], c["clave_str"], b, pnl_real_por_bucket, fillability_arg)
         historial_bucket = historial_abs_previo.get(c["clave_str"], {}).get(b)
         veredicto, c["entrada"]["historial_crudo_abs"] = veredicto_con_tolerancia(
             veredicto_crudo_abs, historial_bucket)
@@ -449,7 +470,7 @@ def main():
         veredictos_nuevos.append(
             f"{marca} [vía absoluta] {c['clave_str']} [{b},{float(b)+STEP:.2f}) n={c['entrada']['n']} "
             f"pnl_medio={c['entrada']['pnl_medio']:+.3f} g_kelly={g_kelly:+.5f} "
-            f"p_abs={c['p_valor_abs']:.4f} {veredicto}{nota_payout}{nota_real}{nota_concentracion}{nota_tendencia}"
+            f"p_abs={c['p_valor_abs']:.4f} {veredicto}{nota_payout}{nota_real}{nota_concentracion}{nota_tendencia}{nota_fill}"
         )
 
     print(f"\n{len(veredictos_nuevos)} bucket(s) con veredicto tras BH-FDR:")

@@ -195,16 +195,56 @@ def evaluar(arquetipo: str, activo: str, marco: str, precio: float) -> dict:
 
 
 def permitido_real(arquetipo: str, activo: str, marco: str, precio: float) -> bool:
-    """Capa adicional de aprobación explícita por micro-bucket para
-    DINERO REAL -- exige (a) el bucket exacto en BUCKETS_APROBADOS_REAL
-    Y (b) el gate estadístico siga bueno_confirmado en caliente (el
-    autoaprendizaje puede retirar la confirmación con más datos, en cuyo
-    caso deja de operar aunque siga en la lista de aprobados)."""
-    clave = (arquetipo, activo, marco)
-    aprobados = BUCKETS_APROBADOS_REAL.get(clave)
-    if not aprobados or _bucket(precio) not in aprobados:
+    """16-Sep tarde (petición explícita Javi: "cuando salga un micro-bucket
+    bueno confirmado tiene que abrirse automáticamente, no podemos estar
+    pendientes todo el rato" -- ampliado el mismo día, tras /code-review,
+    "esto tiene que ser así en todas las tuplas live... el sistema tiene
+    que ser inteligente para operar en cada momento en todos los micro-
+    buckets confirmados... si un micro-bucket pasa a sin_concluir o malo
+    confirmado, automáticamente no se opera ahí hasta que revierta y se
+    vuelva a abrir automáticamente"): quitada la capa BUCKETS_APROBADOS_
+    REAL -- era la tabla hardcodeada que CLAUDE.md prohíbe desde 05-Ago,
+    necesaria en su día porque el generador del JSON no vetaba payout
+    asimétrico. Reemplazada por DOS checks automáticos, sin perder
+    ninguna de las dos protecciones que antes exigían aprobación manual:
+
+    (a) el gate diario (_degradar(), analisis_bot_wallets_gate_bucket_
+        25ago.py) ya cubre payout asimétrico (g_kelly), concentración de
+        wallet, tendencia reciente Y, desde hoy, fill-ability real
+        medida automáticamente contra el propio ejecutor dry-run
+        (dispersed_bot_executor_dryrun.csv) -- un bucket nunca llega a
+        bueno_confirmado por primera vez sin esa evidencia (ver
+        _cargar_fillability_por_bucket()/N_MIN_FILL en ese módulo).
+    (b) edge_estimado() puede caer al fallback EDGE_FALLBACK_CONSERVADOR
+        si el bucket no tiene medición viva todavía -- eso es aceptable
+        para `evaluar()` (dry-run/observación), pero NUNCA para dinero
+        real: exige que el bucket tenga un edge remedido en vivo hoy
+        (analisis_bot_wallets_edge_medido_real.py ahora cubre TODO
+        bucket bueno_confirmado, no solo una lista pre-aprobada, así que
+        esta condición se cumple sola en el mismo ciclo cron en que el
+        bucket se confirma por primera vez).
+
+    Ambos checks se re-evalúan EN CALIENTE (mtime-cache) en cada llamada
+    -- si el gate diario degrada el bucket a sin_concluir/malo_confirmado
+    mañana, esta función deja de operar ahí automáticamente, y vuelve a
+    abrirse sola en cuanto el veredicto reconfirme. La protección
+    por-trade (CLV, profundidad real, requote/abort) sigue intacta más
+    abajo en el pipeline, independiente de esto."""
+    info = _gate_veredicto_dict(arquetipo, activo, marco, precio)
+    if info.get("veredicto") != "bueno_confirmado":
         return False
-    return _gate_veredicto_dict(arquetipo, activo, marco, precio).get("veredicto") == "bueno_confirmado"
+    # 16-Sep tarde (mismo hallazgo real que candidata9_gate_bucket.py::
+    # permitido_real(), portado aquí): la tolerancia histórica puede
+    # arrastrar "bueno_confirmado" de antes de que este veto existiera
+    # aunque HOY fillable_n<15 -- leer el campo directo del JSON (lo
+    # escribe _degradar() en la misma entrada) cierra el hueco sin
+    # esperar 2-3 días. Fail-closed: ausente/None se trata como 0.
+    if (info.get("fillable_n") or 0) < 15:
+        return False
+    b = _bucket(precio)
+    if _edge_medido_vivo(arquetipo, activo, marco, b) is None and (arquetipo, activo, marco, b) not in EDGE_MEDIDO_REAL:
+        return False  # fail-closed: sin edge medido real para este bucket exacto, no operar sobre el fallback genérico
+    return True
 
 
 def evaluar_para_recheck(subtype: str, direction: str, py: float, contexto: dict) -> dict:

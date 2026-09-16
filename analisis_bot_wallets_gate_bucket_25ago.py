@@ -269,8 +269,63 @@ UMBRAL_CONCENTRACION_MAX = 0.40  # 16-Sep (subido de 0.30, decisión explícita
 # una sola wallet, encontrado a mano y no por ningún mecanismo automático
 # -- ese caso sigue vetado con el nuevo umbral, sin cambio.
 
+EXECUTOR_BOT_WALLETS = REPO / "data/shadow/dispersed_bot_executor_dryrun.csv"
+N_MIN_FILL = 15            # mismo mínimo que el resto del proyecto para concluir algo
+UMBRAL_FILLABLE_MIN = 0.30  # mismo umbral que el precedente manual de rechazo
+# (ETH#5min[0.55,0.60) descartado a mano el 13-Sep con fill-ability real
+# 28,2%, ver candidata9_gate_bucket.py -- nunca inventado, es el único
+# precedente cuantitativo que existía para "esto es demasiado bajo").
 
-def _degradar(veredicto_crudo, entrada, clave_str, b, pnl_real_por_bucket):
+
+def _cargar_fillability_por_bucket(path, col_activo="activo", col_marco="marco",
+                                    col_bucket="bucket_precio", col_fill="sigue_fillable",
+                                    col_arquetipo="arquetipo", arquetipo_fijo=None):
+    """{clave_str: {bucket_str: (fillable_n, fillable_ok)}} desde el propio
+    EJECUTOR dry-run (decisión REAL, segunda consulta al libro tras Kelly/
+    circuit-breakers -- no el observador de detección que alimenta
+    cargar_filas()/eventos_candidata9()). 16-Sep, petición explícita Javi
+    tras el /code-review que encontró que quitar BUCKETS_APROBADOS_REAL de
+    bot_wallets_gate_bucket.py/candidata9_gate_bucket.py perdía la
+    comprobación de fill-ability real que antes exigía aprobación manual
+    por bucket -- este loader generaliza AUTOMÁTICAMENTE lo que gate_
+    bucket_propio.py ya hace solo desde el 28-Ago (_veto_fillable()) y lo
+    que Wallet Mirror ya hace solo desde el día 1 (cargar_filas() en
+    analisis_wallet_mirror_gate_bucket_10ago.py solo cuenta filas con
+    sigue_fillable_en_decision=='1'): aquí el pnl/g_kelly del propio gate
+    viene del observador de DETECCIÓN (mucho más volumen, pero sin
+    resolver fill-ability real en el instante de decisión), así que la
+    fill-ability se mide aparte, sobre el ejecutor, y degrada/frena la
+    promoción en _degradar() más abajo -- nunca se mezclan las dos fuentes
+    en un solo cálculo de pnl.
+
+    Fail-safe: fichero ausente/corrupto -> {} (ningún bucket tiene
+    evidencia -> _degradar() lo trata como fillable_n=0, nunca como
+    "aprobado por defecto")."""
+    out = defaultdict(lambda: defaultdict(lambda: [0, 0]))  # [n, ok]
+    try:
+        with open(path, encoding="utf-8") as f:
+            for r in csv.DictReader(f):
+                activo = r.get(col_activo) or ""
+                marco = r.get(col_marco) or ""
+                b_raw = r.get(col_bucket) or ""
+                fill = r.get(col_fill)
+                arquetipo = arquetipo_fijo if arquetipo_fijo is not None else (r.get(col_arquetipo) or "")
+                if not (arquetipo and activo and marco and b_raw) or fill not in ("0", "1"):
+                    continue
+                try:
+                    b = bucket(float(b_raw))
+                except (TypeError, ValueError):
+                    continue
+                clave_str = f"{arquetipo}#{activo}#{marco}"
+                cont = out[clave_str][f"{b:.2f}"]
+                cont[0] += 1
+                cont[1] += int(fill)
+    except (OSError, csv.Error):
+        return {}
+    return {k: {bb: tuple(v) for bb, v in vv.items()} for k, vv in out.items()}
+
+
+def _degradar(veredicto_crudo, entrada, clave_str, b, pnl_real_por_bucket, fillability_por_bucket=None):
     """14-Sep: vetos de payout asimétrico (Kelly g(f=10%)<=0) y verdad-de-
     suelo (trades REALES ya negativos en este bucket exacto, n_real>=2) --
     mismo criterio EXACTO que analisis_wallet_mirror_gate_bucket_10ago.py,
@@ -305,7 +360,31 @@ def _degradar(veredicto_crudo, entrada, clave_str, b, pnl_real_por_bucket):
     -- si el último tercio (n>=5) ya está por debajo de UMBRAL_ABSOLUTO_
     EUR (mismo piso que el resto del proyecto, no un umbral nuevo),
     degrada. Ausente/None (caller no lo calculó, o n<5) -> el check se
-    salta sin tocar el veredicto, fail-neutral, nunca fail-open."""
+    salta sin tocar el veredicto, fail-neutral, nunca fail-open.
+
+    16-Sep tarde, añadido veto de FILL-ABILITY REAL (petición explícita
+    Javi, tras /code-review sobre la retirada de BUCKETS_APROBADOS_REAL
+    de bot_wallets_gate_bucket.py/candidata9_gate_bucket.py: "esto tiene
+    que ser así en todas las tuplas live... si un micro-bucket pasa a
+    sin_concluir o malo_confirmado, automáticamente no se opera ahí hasta
+    que revierta la situación y se vuelva a abrir automáticamente"):
+    generaliza a estas 2 familias el mismo automatismo que gate_bucket_
+    propio.py (_veto_fillable, 28-Ago) y Wallet Mirror (cargar_filas()
+    filtrando por sigue_fillable_en_decision) ya tienen desde antes, sin
+    depender de que Javi mida fill-ability a mano por bucket antes de
+    aprobar. `fillability_por_bucket` viene de _cargar_fillability_por_
+    bucket() sobre el propio ejecutor dry-run (decisión REAL, no el
+    observador de detección) -- (a) fillable_n<N_MIN_FILL: el bucket NUNCA
+    se promueve a bueno_confirmado por primera vez sin evidencia real de
+    que el libro sigue operable en el instante de decisión (degrada a
+    sin_concluir, no a malo_confirmado -- fail-neutral mientras se
+    acumula evidencia, nunca fail-open); (b) fillable_n>=N_MIN_FILL y
+    fillable_pct<UMBRAL_FILLABLE_MIN: degrada a malo_confirmado, mismo
+    precedente cuantitativo que motivó el rechazo manual de ETH#5min
+    [0.55,0.60) (28,2% fill-ability, ver candidata9_gate_bucket.py).
+    fillability_por_bucket=None (caller no lo pasó) -> el check se salta
+    sin tocar el veredicto, mismo fail-neutral que el resto de esta
+    función -- nunca usado en producción sin pasarlo explícito."""
     nota_payout = ""
     g_kelly = entrada.get("g_kelly_f10")
     if veredicto_crudo == "bueno_confirmado" and g_kelly is not None and g_kelly <= 0:
@@ -326,12 +405,32 @@ def _degradar(veredicto_crudo, entrada, clave_str, b, pnl_real_por_bucket):
     nota_tendencia = ""
     tercio3_n = entrada.get("tercio3_n") or 0
     tercio3_pnl = entrada.get("tercio3_pnl_medio")
-    if (veredicto_crudo == "bueno_confirmado" and tercio3_n >= 5
+    # 16-Sep tarde (petición explícita Javi, tras encontrar el umbral n>=5
+    # muy por debajo del estándar del proyecto): ninguna conclusión con
+    # n<15 (regla #2 del manual operativo, CLAUDE.md) -- n>=5 permitía
+    # degradar un bucket con años de historial bueno por una racha de solo
+    # 5 trades recientes. Subido a n>=15, mismo mínimo que shuffle/split-
+    # half ya exigen en el resto del proyecto.
+    if (veredicto_crudo == "bueno_confirmado" and tercio3_n >= 15
             and tercio3_pnl is not None and tercio3_pnl < UMBRAL_ABSOLUTO_EUR):
         veredicto_crudo = "malo_confirmado"
         nota_tendencia = (f" [degradado: tendencia reciente último_tercio "
                            f"n={tercio3_n} pnl_medio={tercio3_pnl:+.3f}€<{UMBRAL_ABSOLUTO_EUR}]")
-    return veredicto_crudo, nota_payout, nota_real, nota_concentracion, nota_tendencia, g_kelly
+    nota_fill = ""
+    if fillability_por_bucket is not None:
+        fill_n, fill_ok = fillability_por_bucket.get(clave_str, {}).get(b, (0, 0))
+        entrada["fillable_n"] = fill_n
+        entrada["fillable_pct"] = round(fill_ok / fill_n, 4) if fill_n else None
+        if veredicto_crudo == "bueno_confirmado":
+            if fill_n < N_MIN_FILL:
+                veredicto_crudo = "sin_concluir"
+                nota_fill = (f" [sin_concluir: fill-ability real del ejecutor n={fill_n}"
+                             f"<{N_MIN_FILL}, esperando más decisiones]")
+            elif fill_ok / fill_n < UMBRAL_FILLABLE_MIN:
+                veredicto_crudo = "malo_confirmado"
+                nota_fill = (f" [degradado: fill-ability real ejecutor {fill_ok/fill_n:.1%} "
+                             f"n={fill_n}<{UMBRAL_FILLABLE_MIN:.0%}]")
+    return veredicto_crudo, nota_payout, nota_real, nota_concentracion, nota_tendencia, nota_fill, g_kelly
 
 
 def _cargar_historial_abs_previo(out_path):
@@ -372,6 +471,18 @@ def main():
     historial_previo = cargar_historial_previo(OUT, anidado_por_bucket=True)
     historial_abs_previo = _cargar_historial_abs_previo(OUT)
     pnl_real_por_bucket = _cargar_pnl_real_por_bucket()
+    # /code-review 16-Sep (mismo hallazgo real corregido en
+    # analisis_candidata9_10_gate_bucket_26ago.py, mismo día): cargar_filas()
+    # de arriba bucketiza por "mejor_ask_deteccion" (ask de NUESTRO libro en
+    # el instante de detección, lo mismo que bot_wallets_gate_bucket_fase0.py
+    # captura vía fill.get("mejor_ask")) -- el default de esta función
+    # ("bucket_precio", columna del propio ejecutor) bucketiza en cambio por
+    # el PRECIO DE TRADE de la wallet copiada, una magnitud distinta.
+    # dispersed_bot_executor_dryrun.csv trae su propia columna
+    # "mejor_ask_deteccion" (misma fuente conceptual, fill.get("mejor_ask")
+    # de su propia consulta al libro) -- usarla alinea los dos lados.
+    fillability_por_bucket = _cargar_fillability_por_bucket(
+        EXECUTOR_BOT_WALLETS, col_bucket="mejor_ask_deteccion")
 
     resultado = {}
     pendientes = []
@@ -447,8 +558,10 @@ def main():
                 # por debajo de N_MIN que nunca pueden confirmar -- con
                 # buckets de miles de filas eso duplicaba trabajo real,
                 # llevó el runtime de wallet_mirror de varios minutos a
-                # 28min, cerca del timeout de 2400s). n>=5 para no juzgar
-                # una racha corta -- mismo mínimo que split_half ya usa.
+                # 28min, cerca del timeout de 2400s). n>=15 (subido de 5
+                # el 16-Sep tarde, ver _degradar()) para no juzgar una
+                # racha corta -- mismo mínimo que el resto del proyecto
+                # exige para concluir cualquier cosa.
                 _k_tend = n_d // 3
                 # /code-review 16-Sep (hallazgo real): dentro_sorted[2*_k_tend:]
                 # dejaba caer el resto de la división en el tercio3, ensanchando
@@ -458,7 +571,7 @@ def main():
                 # tercios, definición estable que no crece con el resto.
                 _tercio3 = dentro_sorted[n_d - _k_tend:] if _k_tend > 0 else []
                 tercio3_n = len(_tercio3)
-                if tercio3_n >= 5:
+                if tercio3_n >= 15:
                     entrada["tercio3_n"] = tercio3_n
                     entrada["tercio3_pnl_medio"] = round(sum(pnl for _, pnl, _w in _tercio3) / tercio3_n, 4)
                 _, _, p_valor_abs = bootstrap_absoluto(pnl_d, seed_key=f"abs#{clave_str}#{b:.2f}")
@@ -513,8 +626,9 @@ def main():
             veredicto_crudo = "bueno_confirmado"
         else:
             continue
-        veredicto_crudo, nota_payout, nota_real, nota_concentracion, nota_tendencia, g_kelly = _degradar(
-            veredicto_crudo, p["entrada"], p["clave_str"], p["bucket"], pnl_real_por_bucket)
+        veredicto_crudo, nota_payout, nota_real, nota_concentracion, nota_tendencia, nota_fill, g_kelly = _degradar(
+            veredicto_crudo, p["entrada"], p["clave_str"], p["bucket"], pnl_real_por_bucket,
+            fillability_por_bucket)
         p["entrada"]["veredicto_crudo_hoy"] = veredicto_crudo
         # 10-Sep: 2 de los últimos 3 días (incluido hoy), asimétrico --
         # "malo_confirmado" sigue inmediato. Mismo mecanismo que el resto
@@ -530,7 +644,7 @@ def main():
         veredictos_nuevos.append(
             f"{marca} {p['clave_str']} [{p['bucket']},{float(p['bucket'])+STEP:.2f}) "
             f"n={p['entrada']['n']} pnl_medio={p['entrada']['pnl_medio']:+.3f} "
-            f"g_kelly={g_kelly:+.5f} p={p['p']:.4f} {veredicto}{nota_payout}{nota_real}{nota_concentracion}{nota_tendencia}"
+            f"g_kelly={g_kelly:+.5f} p={p['p']:.4f} {veredicto}{nota_payout}{nota_real}{nota_concentracion}{nota_tendencia}{nota_fill}"
         )
 
     # 12-Sep, vía absoluta (decisión explícita Javi, ver UMBRAL_ABSOLUTO_EUR
@@ -541,8 +655,9 @@ def main():
         candidatos_abs, agrupador_fn=lambda clave_str: tuple(clave_str.split("#")[1:]))
     for c in rescatados:
         b = c["bucket"]
-        veredicto_crudo_abs, nota_payout, nota_real, nota_concentracion, nota_tendencia, g_kelly = _degradar(
-            "bueno_confirmado", c["entrada"], c["clave_str"], b, pnl_real_por_bucket)
+        veredicto_crudo_abs, nota_payout, nota_real, nota_concentracion, nota_tendencia, nota_fill, g_kelly = _degradar(
+            "bueno_confirmado", c["entrada"], c["clave_str"], b, pnl_real_por_bucket,
+            fillability_por_bucket)
         historial_bucket = historial_abs_previo.get(c["clave_str"], {}).get(b)
         veredicto, c["entrada"]["historial_crudo_abs"] = veredicto_con_tolerancia(
             veredicto_crudo_abs, historial_bucket)
@@ -562,7 +677,7 @@ def main():
         veredictos_nuevos.append(
             f"{marca} [vía absoluta] {c['clave_str']} [{b},{float(b)+STEP:.2f}) "
             f"n={c['entrada']['n']} pnl_medio={c['entrada']['pnl_medio']:+.3f} "
-            f"g_kelly={g_kelly:+.5f} p_abs={c['p_valor_abs']:.4f} {veredicto}{nota_payout}{nota_real}{nota_concentracion}{nota_tendencia}"
+            f"g_kelly={g_kelly:+.5f} p_abs={c['p_valor_abs']:.4f} {veredicto}{nota_payout}{nota_real}{nota_concentracion}{nota_tendencia}{nota_fill}"
         )
 
     print(f"\n{len(veredictos_nuevos)} bucket(s) con veredicto tras BH-FDR:")
