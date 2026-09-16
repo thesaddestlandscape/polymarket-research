@@ -78,6 +78,28 @@ from analisis_bot_wallets_gate_bucket_25ago import (  # noqa: E402
 from analisis_gate_bucket_propio_28jul import (  # noqa: E402
     UMBRAL_ABSOLUTO_EUR, bootstrap_absoluto,
 )
+
+
+def bootstrap_g_kelly(pnl_d, seed_key, f=F_KELLY, iters=2000):
+    """16-Sep (petición explícita Javi, 'en estadios tardíos de precio es
+    complicado batir el 0,10 [absoluto], con que nos asegure beneficios
+    cercanos al 100% de las veces podemos conformarnos'): en precios altos
+    (near-certainty) el payout por acierto es pequeño por diseño -- exigir
+    0,10€ absoluto penaliza injustamente un edge de bajo riesgo que SÍ
+    compone bien. g_kelly (log-growth, ya calculado como informativo) es
+    la métrica correcta ahí: pondera el riesgo real, no solo el € medio.
+    Mismo patrón de seed determinista (crc32 de seed_key) que
+    bootstrap_absoluto, nunca un RNG module-level compartido."""
+    rng = np.random.default_rng(zlib.crc32(seed_key.encode("utf-8")))
+    arr = np.asarray(pnl_d, dtype=np.float64)
+    n = len(arr)
+    resamples = arr[rng.integers(0, n, size=(iters, n))]
+    g = np.mean(np.log1p(f * resamples), axis=1)
+    g.sort()
+    ci_lo90 = float(g[int(0.05 * iters)])
+    ci_hi90 = float(g[int(0.95 * iters)])
+    p_g_no_positivo = float(np.mean(g <= 0))
+    return ci_lo90, ci_hi90, p_g_no_positivo
 from gate_confirmacion_historial import cargar_historial_previo, veredicto_con_tolerancia  # noqa: E402
 import shadow_postmortem as sp  # noqa: E402 -- reusa es_pre_twap
 
@@ -269,9 +291,30 @@ def main() -> int:
                     m1_abs = sum(pnl for _, pnl, _w, _a in m1) / len(m1)
                     m2_abs = sum(pnl for _, pnl, _w, _a in m2) / len(m2)
                     entrada["split_half_absoluto"] = [round(m1_abs, 4), round(m2_abs, 4)]
+
+                # Vía KELLY (16-Sep, petición explícita Javi) -- bootstrap
+                # de g_kelly(f=10%) en vez de € medio: no cruzar cero es el
+                # criterio correcto para un edge de bajo riesgo/payout
+                # pequeño (precio alto, near-certainty), que el umbral
+                # absoluto de 0,10€ penaliza injustamente por diseño.
+                ci_lo90_g, ci_hi90_g, p_g_no_pos = bootstrap_g_kelly(
+                    pnl_d, seed_key=f"gkelly#{clave_str}#{clave_celda}")
+                entrada["p_valor_g_kelly"] = round(p_g_no_pos, 4)
+                entrada["ci90_g_kelly"] = [round(ci_lo90_g, 5), round(ci_hi90_g, 5)]
+                split_half_g = None
+                if len(m1) >= 5 and len(m2) >= 5:
+                    g1 = sum(math.log(1 + F_KELLY * x) for x in pnl_d[:mid]) / mid
+                    g2 = sum(math.log(1 + F_KELLY * x) for x in pnl_d[mid:]) / (n_d - mid)
+                    split_half_g = [g1, g2]
+                    entrada["split_half_g_kelly"] = [round(g1, 5), round(g2, 5)]
+
+                if len(m1) >= 5 and len(m2) >= 5:
                     candidatos_abs.append({"clave_str": clave_str, "celda": clave_celda,
                                             "entrada": entrada, "p_valor_abs": p_valor_abs,
-                                            "split_half_abs": [m1_abs, m2_abs]})
+                                            "split_half_abs": [m1_abs, m2_abs],
+                                            "p_valor_g_kelly": p_g_no_pos,
+                                            "ci_lo90_g_kelly": ci_lo90_g,
+                                            "split_half_g_kelly": split_half_g})
         resultado[clave_str] = tabla
 
     # BH-FDR por marco (ya no por activo -- ver docstring de cargar_filas).
@@ -334,15 +377,33 @@ def main() -> int:
         p_valores = [candidatos_abs_pendientes[i]["p_valor_abs"] for i in indices]
         sobreviven_abs |= {indices[j] for j in bh_fdr_signif(p_valores, q=P_MAX)}
 
+    # Vía KELLY (16-Sep) -- MISMO patrón de BH-FDR por marco, pero sobre
+    # p_valor_g_kelly (H0: g_kelly<=0) en vez de p_valor_abs (H0: media<=
+    # 0,10€). Candidatos separados -- ver bootstrap_g_kelly() arriba.
+    sobreviven_gkelly = set()
+    for grupo, indices in por_grupo_abs.items():  # mismo agrupador (marco), reusado
+        p_valores_g = [candidatos_abs_pendientes[i]["p_valor_g_kelly"] for i in indices]
+        sobreviven_gkelly |= {indices[j] for j in bh_fdr_signif(p_valores_g, q=P_MAX)}
+
     for idx, c in enumerate(candidatos_abs_pendientes):
-        if idx not in sobreviven_abs:
+        via = None
+        if idx in sobreviven_abs:
+            media_abs = c["entrada"]["pnl_medio"]
+            m1_abs, m2_abs = c["split_half_abs"]
+            if media_abs > UMBRAL_ABSOLUTO_EUR and m1_abs > UMBRAL_ABSOLUTO_EUR and m2_abs > UMBRAL_ABSOLUTO_EUR:
+                via = "absoluta"
+        if via is None and idx in sobreviven_gkelly:
+            # H0 rechazada (p_g_no_pos<BH-FDR) + el propio CI90 no cruza
+            # cero + ambas mitades del split-half positivas -- 3 capas,
+            # ninguna sola es suficiente (mismo criterio que la vía
+            # absoluta: p-valor solo no basta sin comprobar la dirección
+            # y la estabilidad).
+            if (c["ci_lo90_g_kelly"] > 0 and c["split_half_g_kelly"] is not None
+                    and c["split_half_g_kelly"][0] > 0 and c["split_half_g_kelly"][1] > 0):
+                via = "kelly"
+        if via is None:
             continue
-        media_abs = c["entrada"]["pnl_medio"]
-        if media_abs <= UMBRAL_ABSOLUTO_EUR:
-            continue  # p_valor_abs bajo prueba H0:media<=umbral -- exige además que la media SUPERE el umbral
-        m1_abs, m2_abs = c["split_half_abs"]
-        if not (m1_abs > UMBRAL_ABSOLUTO_EUR and m2_abs > UMBRAL_ABSOLUTO_EUR):
-            continue  # split-half absoluto: AMBAS mitades por encima del umbral, no solo la media conjunta
+
         veredicto_crudo = "bueno_confirmado"
         conc = c["entrada"].get("concentracion_top1_wallet")
         nota_concentracion = ""
@@ -354,12 +415,16 @@ def main() -> int:
         veredicto, c["entrada"]["historial_crudo"] = veredicto_con_tolerancia(
             veredicto_crudo, historial_celda)
         c["entrada"]["veredicto"] = veredicto
-        c["entrada"]["via"] = "absoluta"
+        c["entrada"]["via"] = via
         if veredicto == "sin_concluir":
             continue
+        if via == "absoluta":
+            detalle = f"pnl_medio={c['entrada']['pnl_medio']:+.3f} p_abs={c['p_valor_abs']:.4f}"
+        else:
+            detalle = f"g_kelly={c['entrada']['g_kelly_f10']:+.5f} p_gkelly={c['p_valor_g_kelly']:.4f}"
         veredictos_nuevos.append(
             f"🟢 {c['clave_str']} celda[{c['celda']}] n={c['entrada']['n']} "
-            f"pnl_medio={media_abs:+.3f} p_abs={c['p_valor_abs']:.4f} {veredicto} (vía absoluta){nota_concentracion}"
+            f"{detalle} {veredicto} (vía {via}){nota_concentracion}"
         )
 
     OUT.write_text(json.dumps(resultado, indent=1, ensure_ascii=False), encoding="utf-8")
