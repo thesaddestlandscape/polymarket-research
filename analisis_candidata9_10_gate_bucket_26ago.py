@@ -30,7 +30,7 @@ import csv
 import json
 import math
 import sys
-from collections import defaultdict
+from collections import defaultdict, deque
 from datetime import datetime, timezone
 from pathlib import Path
 
@@ -151,7 +151,23 @@ def eventos_candidata10():
     v2_sinlookahead_26ago.py`), no una limitación estructural del
     mecanismo. Han pasado >2 semanas más de acumulación en
     bot_wallets_gate_bucket_fase0.csv desde entonces -- comprobar si
-    ahora hay n suficiente en más activos antes de descartarlos."""
+    ahora hay n suficiente en más activos antes de descartarlos.
+
+    16-Sep, fix de rendimiento (causa raíz real del timeout de
+    vigia_candidata9_10_gate_bucket, diagnosticado con conteo real de
+    iteraciones -- NO era ballenas_cross_check.consultar(), que ya
+    cachea por mtime): el bucle original comparaba cada trade de una
+    wallet contra TODOS sus trades previos (`trs_ts[:idx]`), O(k^2) por
+    wallet. Con wallets de hasta 24.321 trades, la suma de k^2 sobre las
+    wallets con >=2 activos medía 4.600 millones de iteraciones -- eso
+    explica el timeout incluso a 2700s. Reemplazado por una ventana
+    deslizante (deque) matemáticamente equivalente: como `trs_ts` ya
+    está ordenado por tiempo y la condición original exige
+    `(ts_i-ts_j).total_seconds()<=VENTANA_MIN_C10*60`, cualquier trade
+    que caiga fuera de esa ventana respecto a ts_i también caerá fuera
+    respecto a cualquier ts posterior (los timestamps solo crecen) -- se
+    puede purgar permanentemente del extremo antiguo sin cambiar el
+    resultado. O(k) amortizado por wallet."""
     filas = []
     with open(IN_BOTS, encoding="utf-8") as f:
         for r in csv.DictReader(f):
@@ -164,18 +180,20 @@ def eventos_candidata10():
         por_wallet[r["wallet"]].append(r)
 
     eventos = defaultdict(list)
+    ventana_s = VENTANA_MIN_C10 * 60
     for w, trs in por_wallet.items():
         if len({t["activo"] for t in trs}) < 2:
             continue
         trs_ts = sorted([(parse_ts(t["trade_timestamp"]), t) for t in trs], key=lambda x: x[0])
-        for idx, (ts_i, ti) in enumerate(trs_ts):
-            confirm = False
-            for ts_j, tj in trs_ts[:idx]:
-                if tj["activo"] == ti["activo"]:
-                    continue
-                if (ts_i - ts_j).total_seconds() <= VENTANA_MIN_C10 * 60 and tj["lado_wallet"] == ti["lado_wallet"]:
-                    confirm = True
-                    break
+        ventana = deque()  # (ts, activo, lado_wallet) de trades recientes (<=ventana_s)
+        for ts_i, ti in trs_ts:
+            while ventana and (ts_i - ventana[0][0]).total_seconds() > ventana_s:
+                ventana.popleft()
+            confirm = any(
+                activo != ti["activo"] and lado == ti["lado_wallet"]
+                for _, activo, lado in ventana
+            )
+            ventana.append((ts_i, ti["activo"], ti["lado_wallet"]))
             if not confirm:
                 continue
             ask = to_float(ti["mejor_ask_deteccion"])
