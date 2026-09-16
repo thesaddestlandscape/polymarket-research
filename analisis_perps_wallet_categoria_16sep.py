@@ -115,12 +115,26 @@ def main() -> int:
         if r.get("liquidation") == "True":
             continue  # liquidación forzosa distorsiona el pnl medio de una wallet que sí decide bien
         entry = _to_float(r.get("previous_entry_price"))
+        prev_size = _to_float(r.get("previous_size"))
+        # 16-Sep (hallazgo real, verificado empíricamente contra la propia
+        # API -- ver idea_perps_side_es_accion_no_posicion_16sep): `side`
+        # es la dirección de LA ACCIÓN de este fill (comprar/vender), NO la
+        # posición que se cierra. Como aquí solo se usan fills con `pnl`
+        # realizado (=siempre reduce/cierra una posición previa, nunca
+        # abre desde 0), la dirección REAL de la posición que generó ese
+        # pnl es el signo de `previous_size` -- confirmado 39.831/39.831
+        # casos de reducción parcial con `side` sistemáticamente OPUESTO
+        # al signo de `previous_size`. Usar `side` tal cual aquí habría
+        # invertido la dirección de TODAS las filas.
+        if prev_size is None or prev_size == 0:
+            continue  # sin posición previa registrada -- no se puede derivar dirección real, descartar
+        direccion_real = "long" if prev_size > 0 else "short"
         realizados.append({
             "wallet": r.get("address"), "instrumento": r.get("symbol"),
-            "direccion": r.get("side"), "pnl": pnl, "entry": entry,
+            "direccion": direccion_real, "pnl": pnl, "entry": entry,
             "taker": r.get("taker"),
         })
-    print(f"fills con pnl realizado (excluye liquidaciones/sin pnl): {len(realizados)}")
+    print(f"fills con pnl realizado (excluye liquidaciones/sin pnl/sin previous_size): {len(realizados)}")
 
     # (instrumento, direccion) -> por wallet -> [pnl,...]
     grupos = defaultdict(lambda: defaultdict(list))
