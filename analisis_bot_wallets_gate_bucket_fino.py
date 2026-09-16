@@ -114,7 +114,16 @@ def main() -> int:
         # [lo,hi), mismo F_KELLY importado del grid (antes duplicado como
         # literal 0.10, /code-review 14-Sep: se desincronizaría en
         # silencio si alguien tunea F_KELLY solo en el grid).
-        pnls_ventana = [pnl for ts, py, pnl in filas_por_clave[p["clave_str"]]
+        # 16-Sep (hallazgo real, script crasheando en TODAS las corridas
+        # desde que cargar_filas() pasó a devolver 4-tuplas con wallet,
+        # 15-Sep, para el veto de concentración -- ver su docstring):
+        # unpacking exacto de 3 elementos rompía con ValueError en cada
+        # ciclo. `evaluar_tupla()` (analisis_gate_bucket_fino.py) ya
+        # accede por índice (filas[i][0/1/2]), tolerante a la 4ª columna
+        # -- aquí se iguala con `*_` para ignorarla igual, sin tocar
+        # cargar_filas() (fuente compartida con analisis_bot_wallets_
+        # gate_bucket_25ago.py, que SÍ necesita el wallet).
+        pnls_ventana = [pnl for ts, py, pnl, *_ in filas_por_clave[p["clave_str"]]
                         if info["lo"] <= py < info["hi"]]
         g_kelly = (sum(math.log(1 + F_KELLY * x) for x in pnls_ventana) / len(pnls_ventana)
                    if pnls_ventana else None)
@@ -129,7 +138,17 @@ def main() -> int:
         reales_en_rango = [pnl for ask, pnl in pnl_real_crudo.get(p["clave_str"], [])
                             if info["lo"] <= ask < info["hi"]]
         pnl_real_ventana = {p["clave_str"]: {f"{info['lo']:.2f}": reales_en_rango}} if reales_en_rango else {}
-        veredicto_crudo, nota_payout, nota_real, _ = _degradar(
+        # 16-Sep (hallazgo real, mismo barrido del fix de arriba):
+        # _degradar() devuelve 5 valores (crudo, payout, real,
+        # concentracion, g_kelly) desde que el veto de concentración se
+        # añadió el 15-Sep -- desempaquetar en 4 nombres crasheaba aquí
+        # también. `info` no trae concentracion_top1_wallet (evaluar_tupla,
+        # ventana fina, no lo calcula), así que el veto de concentración
+        # queda inerte de forma segura (entrada.get(...) es None dentro de
+        # _degradar -- ni degrada ni promueve). g_kelly reescribe la misma
+        # variable ya calculada en la línea ~119 con idéntico valor (viene
+        # de info["g_kelly_f10"], que _degradar solo relee).
+        veredicto_crudo, nota_payout, nota_real, _nota_concentracion, g_kelly = _degradar(
             veredicto_crudo, info, p["clave_str"],
             f"{info['lo']:.2f}", pnl_real_ventana)
         info["veredicto_crudo_hoy"] = veredicto_crudo
