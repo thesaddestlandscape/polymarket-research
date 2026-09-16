@@ -1,0 +1,2550 @@
+{
+  "actualizado_utc": "2026-09-16T06:57:41+00:00",
+  "n_fills_totales": 80136,
+  "n_fills_con_pnl_realizado": 40886,
+  "n_min": 15,
+  "nota": "Primer corte (instrumento, direccion=long/short). Micro-bucket de precio de entrada (`entry`) NO desagregado todavia -- n insuficiente cruzando 3 variables con 1 semana de datos. Repetir cuando crezca.",
+  "grupos": [
+    {
+      "instrumento": "AAVE-USD",
+      "direccion": "short",
+      "n_wallets_n_min": 1,
+      "wallets": [
+        {
+          "wallet": "0x0034DC43DeACf5060035Db189A094568Dad45b7F",
+          "n": 224,
+          "pnl_medio": 5.3188,
+          "win_rate": 0.6473,
+          "ci90_lo": 3.7361,
+          "ci90_hi": 7.1031,
+          "cruza_cero": false,
+          "p_boot": 0.0,
+          "significativo_bh": true
+        }
+      ]
+    },
+    {
+      "instrumento": "ADA-USD",
+      "direccion": "long",
+      "n_wallets_n_min": 1,
+      "wallets": [
+        {
+          "wallet": "0x0034DC43DeACf5060035Db189A094568Dad45b7F",
+          "n": 347,
+          "pnl_medio": -3.5909,
+          "win_rate": 0.3256,
+          "ci90_lo": -4.7767,
+          "ci90_hi": -2.4831,
+          "cruza_cero": false,
+          "p_boot": 0.0,
+          "significativo_bh": true
+        }
+      ]
+    },
+    {
+      "instrumento": "ADA-USD",
+      "direccion": "short",
+      "n_wallets_n_min": 2,
+      "wallets": [
+        {
+          "wallet": "0x0034DC43DeACf5060035Db189A094568Dad45b7F",
+          "n": 28,
+          "pnl_medio": 3.4905,
+          "win_rate": 0.1429,
+          "ci90_lo": -1.2916,
+          "ci90_hi": 12.2434,
+          "cruza_cero": true,
+          "p_boot": 0.71,
+          "significativo_bh": false
+        },
+        {
+          "wallet": "0x9c6c85323Ae3E695bA36D17c86f3ec2242cF712A",
+          "n": 41,
+          "pnl_medio": 47.9276,
+          "win_rate": 1.0,
+          "ci90_lo": 40.3082,
+          "ci90_hi": 55.1706,
+          "cruza_cero": false,
+          "p_boot": 0.0,
+          "significativo_bh": true
+        }
+      ]
+    },
+    {
+      "instrumento": "ARM-USD",
+      "direccion": "long",
+      "n_wallets_n_min": 4,
+      "wallets": [
+        {
+          "wallet": "0x0034DC43DeACf5060035Db189A094568Dad45b7F",
+          "n": 28,
+          "pnl_medio": -0.1338,
+          "win_rate": 0.5714,
+          "ci90_lo": -0.5715,
+          "ci90_hi": 0.2251,
+          "cruza_cero": true,
+          "p_boot": 0.608,
+          "significativo_bh": false
+        },
+        {
+          "wallet": "0x8448d8263B6131d1a8eBE93EAC553804f60300Ec",
+          "n": 25,
+          "pnl_medio": 37.7728,
+          "win_rate": 0.04,
+          "ci90_lo": -5.9526,
+          "ci90_hi": 121.9661,
+          "cruza_cero": true,
+          "p_boot": 0.712,
+          "significativo_bh": false
+        },
+        {
+          "wallet": "0xB6287efe7A7702402dd8342963DBEfE51e44F2EB",
+          "n": 182,
+          "pnl_medio": 34.4211,
+          "win_rate": 0.7912,
+          "ci90_lo": 29.804,
+          "ci90_hi": 39.0072,
+          "cruza_cero": false,
+          "p_boot": 0.0,
+          "significativo_bh": true
+        },
+        {
+          "wallet": "0x2070F45C22E44a52CB42210d1112a0Bfb6A9A0c7",
+          "n": 77,
+          "pnl_medio": -0.0445,
+          "win_rate": 0.987,
+          "ci90_lo": -2.9231,
+          "ci90_hi": 1.5997,
+          "cruza_cero": true,
+          "p_boot": 0.956,
+          "significativo_bh": false
+        }
+      ]
+    },
+    {
+      "instrumento": "ARM-USD",
+      "direccion": "short",
+      "n_wallets_n_min": 2,
+      "wallets": [
+        {
+          "wallet": "0x4c4f4d655B77c4d1cB4343AF6c54c2Ec8f4022b4",
+          "n": 34,
+          "pnl_medio": 2.5383,
+          "win_rate": 0.0882,
+          "ci90_lo": -2.2258,
+          "ci90_hi": 8.7175,
+          "cruza_cero": true,
+          "p_boot": 0.467,
+          "significativo_bh": false
+        },
+        {
+          "wallet": "0x0034DC43DeACf5060035Db189A094568Dad45b7F",
+          "n": 25,
+          "pnl_medio": 3.0662,
+          "win_rate": 0.44,
+          "ci90_lo": -3.2678,
+          "ci90_hi": 9.6645,
+          "cruza_cero": true,
+          "p_boot": 0.462,
+          "significativo_bh": false
+        }
+      ]
+    },
+    {
+      "instrumento": "BRENTOIL-USD",
+      "direccion": "long",
+      "n_wallets_n_min": 4,
+      "wallets": [
+        {
+          "wallet": "0xB91a9C277b0d26A5ea763994152CB35AB725360E",
+          "n": 407,
+          "pnl_medio": 0.3356,
+          "win_rate": 0.2432,
+          "ci90_lo": -1.7808,
+          "ci90_hi": 3.0293,
+          "cruza_cero": true,
+          "p_boot": 0.954,
+          "significativo_bh": false
+        },
+        {
+          "wallet": "0x4A2479F81FC411ade23a50e2425786C248346936",
+          "n": 16,
+          "pnl_medio": -107.1545,
+          "win_rate": 0.5,
+          "ci90_lo": -272.322,
+          "ci90_hi": -0.5364,
+          "cruza_cero": false,
+          "p_boot": 0.097,
+          "significativo_bh": false
+        },
+        {
+          "wallet": "0x0034DC43DeACf5060035Db189A094568Dad45b7F",
+          "n": 817,
+          "pnl_medio": 0.604,
+          "win_rate": 0.5765,
+          "ci90_lo": -7.9012,
+          "ci90_hi": 8.3924,
+          "cruza_cero": true,
+          "p_boot": 0.841,
+          "significativo_bh": false
+        },
+        {
+          "wallet": "0x4c4f4d655B77c4d1cB4343AF6c54c2Ec8f4022b4",
+          "n": 311,
+          "pnl_medio": -0.6292,
+          "win_rate": 0.1929,
+          "ci90_lo": -0.8927,
+          "ci90_hi": -0.3248,
+          "cruza_cero": false,
+          "p_boot": 0.0,
+          "significativo_bh": true
+        }
+      ]
+    },
+    {
+      "instrumento": "BRENTOIL-USD",
+      "direccion": "short",
+      "n_wallets_n_min": 4,
+      "wallets": [
+        {
+          "wallet": "0xfc1B24B1749F71b797029C34F5fa30D528539107",
+          "n": 1333,
+          "pnl_medio": 41.1889,
+          "win_rate": 0.6902,
+          "ci90_lo": 34.3611,
+          "ci90_hi": 49.109,
+          "cruza_cero": false,
+          "p_boot": 0.0,
+          "significativo_bh": true
+        },
+        {
+          "wallet": "0xB91a9C277b0d26A5ea763994152CB35AB725360E",
+          "n": 161,
+          "pnl_medio": -15.9308,
+          "win_rate": 0.4658,
+          "ci90_lo": -23.0496,
+          "ci90_hi": -9.7105,
+          "cruza_cero": false,
+          "p_boot": 0.0,
+          "significativo_bh": true
+        },
+        {
+          "wallet": "0x0034DC43DeACf5060035Db189A094568Dad45b7F",
+          "n": 355,
+          "pnl_medio": -2.6451,
+          "win_rate": 0.4451,
+          "ci90_lo": -3.357,
+          "ci90_hi": -2.0066,
+          "cruza_cero": false,
+          "p_boot": 0.0,
+          "significativo_bh": true
+        },
+        {
+          "wallet": "0x4c4f4d655B77c4d1cB4343AF6c54c2Ec8f4022b4",
+          "n": 40,
+          "pnl_medio": 0.6659,
+          "win_rate": 1.0,
+          "ci90_lo": 0.5416,
+          "ci90_hi": 0.8229,
+          "cruza_cero": false,
+          "p_boot": 0.0,
+          "significativo_bh": true
+        }
+      ]
+    },
+    {
+      "instrumento": "BTC-USD",
+      "direccion": "long",
+      "n_wallets_n_min": 6,
+      "wallets": [
+        {
+          "wallet": "0x8448d8263B6131d1a8eBE93EAC553804f60300Ec",
+          "n": 60,
+          "pnl_medio": -0.1763,
+          "win_rate": 0.5833,
+          "ci90_lo": -3.7666,
+          "ci90_hi": 3.2153,
+          "cruza_cero": true,
+          "p_boot": 0.947,
+          "significativo_bh": false
+        },
+        {
+          "wallet": "0x2070F45C22E44a52CB42210d1112a0Bfb6A9A0c7",
+          "n": 305,
+          "pnl_medio": 0.9141,
+          "win_rate": 0.6525,
+          "ci90_lo": -0.3387,
+          "ci90_hi": 2.3235,
+          "cruza_cero": true,
+          "p_boot": 0.245,
+          "significativo_bh": false
+        },
+        {
+          "wallet": "0xB91a9C277b0d26A5ea763994152CB35AB725360E",
+          "n": 224,
+          "pnl_medio": 49.8839,
+          "win_rate": 0.9911,
+          "ci90_lo": 35.8393,
+          "ci90_hi": 66.6674,
+          "cruza_cero": false,
+          "p_boot": 0.0,
+          "significativo_bh": true
+        },
+        {
+          "wallet": "0x38DFb978E6Fe8470717d3930d1E28723abdEbE8F",
+          "n": 200,
+          "pnl_medio": -239.8536,
+          "win_rate": 0.0,
+          "ci90_lo": -278.5088,
+          "ci90_hi": -207.4141,
+          "cruza_cero": false,
+          "p_boot": 0.0,
+          "significativo_bh": true
+        },
+        {
+          "wallet": "0x0034DC43DeACf5060035Db189A094568Dad45b7F",
+          "n": 311,
+          "pnl_medio": 6.6062,
+          "win_rate": 0.4534,
+          "ci90_lo": -0.4925,
+          "ci90_hi": 15.2505,
+          "cruza_cero": true,
+          "p_boot": 0.137,
+          "significativo_bh": false
+        },
+        {
+          "wallet": "0x44a3E929C68Fe1441583549f64abC72E278E6E49",
+          "n": 46,
+          "pnl_medio": 233.0967,
+          "win_rate": 0.913,
+          "ci90_lo": 94.4245,
+          "ci90_hi": 389.337,
+          "cruza_cero": false,
+          "p_boot": 0.0,
+          "significativo_bh": true
+        }
+      ]
+    },
+    {
+      "instrumento": "BTC-USD",
+      "direccion": "short",
+      "n_wallets_n_min": 3,
+      "wallets": [
+        {
+          "wallet": "0x8448d8263B6131d1a8eBE93EAC553804f60300Ec",
+          "n": 64,
+          "pnl_medio": 0.5035,
+          "win_rate": 0.6094,
+          "ci90_lo": -4.3461,
+          "ci90_hi": 5.2807,
+          "cruza_cero": true,
+          "p_boot": 0.829,
+          "significativo_bh": false
+        },
+        {
+          "wallet": "0x2070F45C22E44a52CB42210d1112a0Bfb6A9A0c7",
+          "n": 189,
+          "pnl_medio": 0.5681,
+          "win_rate": 0.4921,
+          "ci90_lo": -0.3266,
+          "ci90_hi": 1.5094,
+          "cruza_cero": true,
+          "p_boot": 0.277,
+          "significativo_bh": false
+        },
+        {
+          "wallet": "0x0034DC43DeACf5060035Db189A094568Dad45b7F",
+          "n": 56,
+          "pnl_medio": -8.8803,
+          "win_rate": 0.1964,
+          "ci90_lo": -13.3427,
+          "ci90_hi": -4.6683,
+          "cruza_cero": false,
+          "p_boot": 0.0,
+          "significativo_bh": true
+        }
+      ]
+    },
+    {
+      "instrumento": "CASHCAT-USD",
+      "direccion": "long",
+      "n_wallets_n_min": 3,
+      "wallets": [
+        {
+          "wallet": "0x7930Ee98013FA1aEaC08872A88E677dc925aD132",
+          "n": 1044,
+          "pnl_medio": 1.0331,
+          "win_rate": 0.6312,
+          "ci90_lo": 0.6992,
+          "ci90_hi": 1.3682,
+          "cruza_cero": false,
+          "p_boot": 0.0,
+          "significativo_bh": true
+        },
+        {
+          "wallet": "0x0034DC43DeACf5060035Db189A094568Dad45b7F",
+          "n": 2203,
+          "pnl_medio": 0.2633,
+          "win_rate": 0.4798,
+          "ci90_lo": -0.0705,
+          "ci90_hi": 0.5769,
+          "cruza_cero": true,
+          "p_boot": 0.187,
+          "significativo_bh": false
+        },
+        {
+          "wallet": "0x4c4f4d655B77c4d1cB4343AF6c54c2Ec8f4022b4",
+          "n": 119,
+          "pnl_medio": -1.4245,
+          "win_rate": 0.5042,
+          "ci90_lo": -3.9291,
+          "ci90_hi": 0.8937,
+          "cruza_cero": true,
+          "p_boot": 0.328,
+          "significativo_bh": false
+        }
+      ]
+    },
+    {
+      "instrumento": "CASHCAT-USD",
+      "direccion": "short",
+      "n_wallets_n_min": 2,
+      "wallets": [
+        {
+          "wallet": "0x0034DC43DeACf5060035Db189A094568Dad45b7F",
+          "n": 263,
+          "pnl_medio": 0.0514,
+          "win_rate": 0.3422,
+          "ci90_lo": -0.8293,
+          "ci90_hi": 0.932,
+          "cruza_cero": true,
+          "p_boot": 0.922,
+          "significativo_bh": false
+        },
+        {
+          "wallet": "0x4c4f4d655B77c4d1cB4343AF6c54c2Ec8f4022b4",
+          "n": 139,
+          "pnl_medio": 1.8993,
+          "win_rate": 0.4532,
+          "ci90_lo": -1.1917,
+          "ci90_hi": 5.3306,
+          "cruza_cero": true,
+          "p_boot": 0.315,
+          "significativo_bh": false
+        }
+      ]
+    },
+    {
+      "instrumento": "CRCL-USD",
+      "direccion": "long",
+      "n_wallets_n_min": 2,
+      "wallets": [
+        {
+          "wallet": "0x4A2479F81FC411ade23a50e2425786C248346936",
+          "n": 26,
+          "pnl_medio": 211.0746,
+          "win_rate": 0.9231,
+          "ci90_lo": 88.0142,
+          "ci90_hi": 346.4237,
+          "cruza_cero": false,
+          "p_boot": 0.0,
+          "significativo_bh": true
+        },
+        {
+          "wallet": "0xD111a21BCc7dF8bB78497B06C7A2c114C3a9eBdC",
+          "n": 111,
+          "pnl_medio": 5.381,
+          "win_rate": 0.4685,
+          "ci90_lo": 2.1431,
+          "ci90_hi": 8.887,
+          "cruza_cero": false,
+          "p_boot": 0.002,
+          "significativo_bh": true
+        }
+      ]
+    },
+    {
+      "instrumento": "CRCL-USD",
+      "direccion": "short",
+      "n_wallets_n_min": 3,
+      "wallets": [
+        {
+          "wallet": "0x0034DC43DeACf5060035Db189A094568Dad45b7F",
+          "n": 334,
+          "pnl_medio": -5.3361,
+          "win_rate": 0.2844,
+          "ci90_lo": -8.449,
+          "ci90_hi": -2.6847,
+          "cruza_cero": false,
+          "p_boot": 0.0,
+          "significativo_bh": true
+        },
+        {
+          "wallet": "0xfc1B24B1749F71b797029C34F5fa30D528539107",
+          "n": 256,
+          "pnl_medio": 2.0433,
+          "win_rate": 0.2383,
+          "ci90_lo": -1.4023,
+          "ci90_hi": 5.7386,
+          "cruza_cero": true,
+          "p_boot": 0.331,
+          "significativo_bh": false
+        },
+        {
+          "wallet": "0xB91a9C277b0d26A5ea763994152CB35AB725360E",
+          "n": 156,
+          "pnl_medio": -30.947,
+          "win_rate": 0.2564,
+          "ci90_lo": -42.0056,
+          "ci90_hi": -20.814,
+          "cruza_cero": false,
+          "p_boot": 0.0,
+          "significativo_bh": true
+        }
+      ]
+    },
+    {
+      "instrumento": "CRWV-USD",
+      "direccion": "long",
+      "n_wallets_n_min": 1,
+      "wallets": [
+        {
+          "wallet": "0x0034DC43DeACf5060035Db189A094568Dad45b7F",
+          "n": 96,
+          "pnl_medio": -4.2504,
+          "win_rate": 0.0312,
+          "ci90_lo": -6.0543,
+          "ci90_hi": -2.6295,
+          "cruza_cero": false,
+          "p_boot": 0.0,
+          "significativo_bh": true
+        }
+      ]
+    },
+    {
+      "instrumento": "DOGE-USD",
+      "direccion": "short",
+      "n_wallets_n_min": 3,
+      "wallets": [
+        {
+          "wallet": "0x7930Ee98013FA1aEaC08872A88E677dc925aD132",
+          "n": 82,
+          "pnl_medio": 6.5094,
+          "win_rate": 0.7317,
+          "ci90_lo": 4.4792,
+          "ci90_hi": 8.6721,
+          "cruza_cero": false,
+          "p_boot": 0.0,
+          "significativo_bh": true
+        },
+        {
+          "wallet": "0x9c6c85323Ae3E695bA36D17c86f3ec2242cF712A",
+          "n": 20,
+          "pnl_medio": 20.3008,
+          "win_rate": 1.0,
+          "ci90_lo": 17.4678,
+          "ci90_hi": 23.1192,
+          "cruza_cero": false,
+          "p_boot": 0.0,
+          "significativo_bh": true
+        },
+        {
+          "wallet": "0xC914238Dde217bc37F768B9eE5F8FBF973aeD746",
+          "n": 56,
+          "pnl_medio": -4.276,
+          "win_rate": 0.1607,
+          "ci90_lo": -6.5184,
+          "ci90_hi": -2.0472,
+          "cruza_cero": false,
+          "p_boot": 0.002,
+          "significativo_bh": true
+        }
+      ]
+    },
+    {
+      "instrumento": "DRAM-USD",
+      "direccion": "long",
+      "n_wallets_n_min": 3,
+      "wallets": [
+        {
+          "wallet": "0x0034DC43DeACf5060035Db189A094568Dad45b7F",
+          "n": 309,
+          "pnl_medio": -1.7768,
+          "win_rate": 0.5016,
+          "ci90_lo": -2.9273,
+          "ci90_hi": -0.7049,
+          "cruza_cero": false,
+          "p_boot": 0.008,
+          "significativo_bh": true
+        },
+        {
+          "wallet": "0xB91a9C277b0d26A5ea763994152CB35AB725360E",
+          "n": 151,
+          "pnl_medio": -3.6169,
+          "win_rate": 0.1987,
+          "ci90_lo": -5.8754,
+          "ci90_hi": -1.158,
+          "cruza_cero": false,
+          "p_boot": 0.017,
+          "significativo_bh": true
+        },
+        {
+          "wallet": "0xD111a21BCc7dF8bB78497B06C7A2c114C3a9eBdC",
+          "n": 102,
+          "pnl_medio": -1.247,
+          "win_rate": 0.2647,
+          "ci90_lo": -3.0357,
+          "ci90_hi": 0.7487,
+          "cruza_cero": true,
+          "p_boot": 0.277,
+          "significativo_bh": false
+        }
+      ]
+    },
+    {
+      "instrumento": "DRAM-USD",
+      "direccion": "short",
+      "n_wallets_n_min": 4,
+      "wallets": [
+        {
+          "wallet": "0x0034DC43DeACf5060035Db189A094568Dad45b7F",
+          "n": 43,
+          "pnl_medio": -3.6043,
+          "win_rate": 0.4651,
+          "ci90_lo": -9.5388,
+          "ci90_hi": 1.0256,
+          "cruza_cero": true,
+          "p_boot": 0.225,
+          "significativo_bh": false
+        },
+        {
+          "wallet": "0xB91a9C277b0d26A5ea763994152CB35AB725360E",
+          "n": 88,
+          "pnl_medio": -4.9725,
+          "win_rate": 0.3523,
+          "ci90_lo": -7.7217,
+          "ci90_hi": -2.3536,
+          "cruza_cero": false,
+          "p_boot": 0.002,
+          "significativo_bh": true
+        },
+        {
+          "wallet": "0xD111a21BCc7dF8bB78497B06C7A2c114C3a9eBdC",
+          "n": 181,
+          "pnl_medio": -3.0457,
+          "win_rate": 0.7845,
+          "ci90_lo": -4.8447,
+          "ci90_hi": -1.2509,
+          "cruza_cero": false,
+          "p_boot": 0.003,
+          "significativo_bh": true
+        },
+        {
+          "wallet": "0x7930Ee98013FA1aEaC08872A88E677dc925aD132",
+          "n": 31,
+          "pnl_medio": -90.082,
+          "win_rate": 0.0,
+          "ci90_lo": -124.4445,
+          "ci90_hi": -58.4906,
+          "cruza_cero": false,
+          "p_boot": 0.0,
+          "significativo_bh": true
+        }
+      ]
+    },
+    {
+      "instrumento": "ETH-USD",
+      "direccion": "long",
+      "n_wallets_n_min": 3,
+      "wallets": [
+        {
+          "wallet": "0x2070F45C22E44a52CB42210d1112a0Bfb6A9A0c7",
+          "n": 294,
+          "pnl_medio": 0.947,
+          "win_rate": 0.5986,
+          "ci90_lo": -0.2922,
+          "ci90_hi": 2.2178,
+          "cruza_cero": true,
+          "p_boot": 0.206,
+          "significativo_bh": false
+        },
+        {
+          "wallet": "0xC914238Dde217bc37F768B9eE5F8FBF973aeD746",
+          "n": 16,
+          "pnl_medio": 0.6971,
+          "win_rate": 0.875,
+          "ci90_lo": 0.134,
+          "ci90_hi": 1.6549,
+          "cruza_cero": false,
+          "p_boot": 0.0,
+          "significativo_bh": true
+        },
+        {
+          "wallet": "0x8448d8263B6131d1a8eBE93EAC553804f60300Ec",
+          "n": 72,
+          "pnl_medio": 4.7454,
+          "win_rate": 0.6806,
+          "ci90_lo": -0.6842,
+          "ci90_hi": 11.9757,
+          "cruza_cero": true,
+          "p_boot": 0.187,
+          "significativo_bh": false
+        }
+      ]
+    },
+    {
+      "instrumento": "ETH-USD",
+      "direccion": "short",
+      "n_wallets_n_min": 7,
+      "wallets": [
+        {
+          "wallet": "0x2070F45C22E44a52CB42210d1112a0Bfb6A9A0c7",
+          "n": 307,
+          "pnl_medio": -0.3373,
+          "win_rate": 0.4332,
+          "ci90_lo": -1.1374,
+          "ci90_hi": 0.451,
+          "cruza_cero": true,
+          "p_boot": 0.507,
+          "significativo_bh": false
+        },
+        {
+          "wallet": "0x38DFb978E6Fe8470717d3930d1E28723abdEbE8F",
+          "n": 200,
+          "pnl_medio": 277.103,
+          "win_rate": 1.0,
+          "ci90_lo": 235.4344,
+          "ci90_hi": 321.3272,
+          "cruza_cero": false,
+          "p_boot": 0.0,
+          "significativo_bh": true
+        },
+        {
+          "wallet": "0x8448d8263B6131d1a8eBE93EAC553804f60300Ec",
+          "n": 152,
+          "pnl_medio": 4.977,
+          "win_rate": 0.7368,
+          "ci90_lo": -3.8522,
+          "ci90_hi": 17.0143,
+          "cruza_cero": true,
+          "p_boot": 0.422,
+          "significativo_bh": false
+        },
+        {
+          "wallet": "0xC914238Dde217bc37F768B9eE5F8FBF973aeD746",
+          "n": 26,
+          "pnl_medio": 0.8741,
+          "win_rate": 0.7692,
+          "ci90_lo": -0.0019,
+          "ci90_hi": 2.4808,
+          "cruza_cero": true,
+          "p_boot": 0.105,
+          "significativo_bh": false
+        },
+        {
+          "wallet": "0xB91a9C277b0d26A5ea763994152CB35AB725360E",
+          "n": 77,
+          "pnl_medio": 363.6277,
+          "win_rate": 1.0,
+          "ci90_lo": 269.1295,
+          "ci90_hi": 467.8026,
+          "cruza_cero": false,
+          "p_boot": 0.0,
+          "significativo_bh": true
+        },
+        {
+          "wallet": "0xD285Df4Ae3ED22E53308EbA5371c4D1C4849706b",
+          "n": 33,
+          "pnl_medio": 1.3262,
+          "win_rate": 0.5152,
+          "ci90_lo": 0.5857,
+          "ci90_hi": 2.1304,
+          "cruza_cero": false,
+          "p_boot": 0.001,
+          "significativo_bh": true
+        },
+        {
+          "wallet": "0x0034DC43DeACf5060035Db189A094568Dad45b7F",
+          "n": 138,
+          "pnl_medio": -61.3269,
+          "win_rate": 0.0,
+          "ci90_lo": -85.188,
+          "ci90_hi": -41.7211,
+          "cruza_cero": false,
+          "p_boot": 0.0,
+          "significativo_bh": true
+        }
+      ]
+    },
+    {
+      "instrumento": "HOOD-USD",
+      "direccion": "long",
+      "n_wallets_n_min": 4,
+      "wallets": [
+        {
+          "wallet": "0x0034DC43DeACf5060035Db189A094568Dad45b7F",
+          "n": 414,
+          "pnl_medio": 0.1454,
+          "win_rate": 0.6715,
+          "ci90_lo": 0.0652,
+          "ci90_hi": 0.2302,
+          "cruza_cero": false,
+          "p_boot": 0.002,
+          "significativo_bh": true
+        },
+        {
+          "wallet": "0xB91a9C277b0d26A5ea763994152CB35AB725360E",
+          "n": 34,
+          "pnl_medio": -0.4252,
+          "win_rate": 0.5588,
+          "ci90_lo": -0.7877,
+          "ci90_hi": -0.1075,
+          "cruza_cero": false,
+          "p_boot": 0.02,
+          "significativo_bh": true
+        },
+        {
+          "wallet": "0x8448d8263B6131d1a8eBE93EAC553804f60300Ec",
+          "n": 46,
+          "pnl_medio": 4.505,
+          "win_rate": 0.7609,
+          "ci90_lo": 3.3107,
+          "ci90_hi": 5.7559,
+          "cruza_cero": false,
+          "p_boot": 0.0,
+          "significativo_bh": true
+        },
+        {
+          "wallet": "0xD111a21BCc7dF8bB78497B06C7A2c114C3a9eBdC",
+          "n": 120,
+          "pnl_medio": -0.1072,
+          "win_rate": 0.6,
+          "ci90_lo": -0.2924,
+          "ci90_hi": 0.0501,
+          "cruza_cero": true,
+          "p_boot": 0.313,
+          "significativo_bh": false
+        }
+      ]
+    },
+    {
+      "instrumento": "HOOD-USD",
+      "direccion": "short",
+      "n_wallets_n_min": 4,
+      "wallets": [
+        {
+          "wallet": "0x0034DC43DeACf5060035Db189A094568Dad45b7F",
+          "n": 172,
+          "pnl_medio": -0.0939,
+          "win_rate": 0.3372,
+          "ci90_lo": -0.2423,
+          "ci90_hi": 0.057,
+          "cruza_cero": true,
+          "p_boot": 0.294,
+          "significativo_bh": false
+        },
+        {
+          "wallet": "0xC914238Dde217bc37F768B9eE5F8FBF973aeD746",
+          "n": 142,
+          "pnl_medio": 7.4789,
+          "win_rate": 0.9789,
+          "ci90_lo": 5.2349,
+          "ci90_hi": 10.0402,
+          "cruza_cero": false,
+          "p_boot": 0.0,
+          "significativo_bh": true
+        },
+        {
+          "wallet": "0xB91a9C277b0d26A5ea763994152CB35AB725360E",
+          "n": 700,
+          "pnl_medio": -0.3428,
+          "win_rate": 0.4229,
+          "ci90_lo": -0.5384,
+          "ci90_hi": -0.1721,
+          "cruza_cero": false,
+          "p_boot": 0.001,
+          "significativo_bh": true
+        },
+        {
+          "wallet": "0xB6287efe7A7702402dd8342963DBEfE51e44F2EB",
+          "n": 258,
+          "pnl_medio": -7.8721,
+          "win_rate": 0.155,
+          "ci90_lo": -9.409,
+          "ci90_hi": -6.1961,
+          "cruza_cero": false,
+          "p_boot": 0.0,
+          "significativo_bh": true
+        }
+      ]
+    },
+    {
+      "instrumento": "HYPE-USD",
+      "direccion": "long",
+      "n_wallets_n_min": 5,
+      "wallets": [
+        {
+          "wallet": "0x4c4f4d655B77c4d1cB4343AF6c54c2Ec8f4022b4",
+          "n": 252,
+          "pnl_medio": -0.4905,
+          "win_rate": 0.4365,
+          "ci90_lo": -0.8562,
+          "ci90_hi": -0.1421,
+          "cruza_cero": false,
+          "p_boot": 0.021,
+          "significativo_bh": true
+        },
+        {
+          "wallet": "0x8448d8263B6131d1a8eBE93EAC553804f60300Ec",
+          "n": 148,
+          "pnl_medio": 4.0118,
+          "win_rate": 0.6014,
+          "ci90_lo": -1.6891,
+          "ci90_hi": 9.9361,
+          "cruza_cero": true,
+          "p_boot": 0.274,
+          "significativo_bh": false
+        },
+        {
+          "wallet": "0x2070F45C22E44a52CB42210d1112a0Bfb6A9A0c7",
+          "n": 242,
+          "pnl_medio": 4.5446,
+          "win_rate": 0.624,
+          "ci90_lo": 1.5365,
+          "ci90_hi": 7.4899,
+          "cruza_cero": false,
+          "p_boot": 0.008,
+          "significativo_bh": true
+        },
+        {
+          "wallet": "0x0034DC43DeACf5060035Db189A094568Dad45b7F",
+          "n": 634,
+          "pnl_medio": 5.6137,
+          "win_rate": 0.7997,
+          "ci90_lo": 2.9012,
+          "ci90_hi": 8.3409,
+          "cruza_cero": false,
+          "p_boot": 0.001,
+          "significativo_bh": true
+        },
+        {
+          "wallet": "0xB6287efe7A7702402dd8342963DBEfE51e44F2EB",
+          "n": 1436,
+          "pnl_medio": 3.8738,
+          "win_rate": 0.6532,
+          "ci90_lo": 0.5558,
+          "ci90_hi": 7.3342,
+          "cruza_cero": false,
+          "p_boot": 0.057,
+          "significativo_bh": true
+        }
+      ]
+    },
+    {
+      "instrumento": "HYPE-USD",
+      "direccion": "short",
+      "n_wallets_n_min": 5,
+      "wallets": [
+        {
+          "wallet": "0x8448d8263B6131d1a8eBE93EAC553804f60300Ec",
+          "n": 172,
+          "pnl_medio": 5.4623,
+          "win_rate": 0.75,
+          "ci90_lo": -1.5692,
+          "ci90_hi": 14.1085,
+          "cruza_cero": true,
+          "p_boot": 0.242,
+          "significativo_bh": false
+        },
+        {
+          "wallet": "0x2070F45C22E44a52CB42210d1112a0Bfb6A9A0c7",
+          "n": 416,
+          "pnl_medio": -3.6399,
+          "win_rate": 0.2788,
+          "ci90_lo": -5.8081,
+          "ci90_hi": -1.5662,
+          "cruza_cero": false,
+          "p_boot": 0.005,
+          "significativo_bh": true
+        },
+        {
+          "wallet": "0xC914238Dde217bc37F768B9eE5F8FBF973aeD746",
+          "n": 27,
+          "pnl_medio": -3.1303,
+          "win_rate": 0.037,
+          "ci90_lo": -5.1255,
+          "ci90_hi": -1.5224,
+          "cruza_cero": false,
+          "p_boot": 0.0,
+          "significativo_bh": true
+        },
+        {
+          "wallet": "0x4c4f4d655B77c4d1cB4343AF6c54c2Ec8f4022b4",
+          "n": 241,
+          "pnl_medio": 0.0703,
+          "win_rate": 0.444,
+          "ci90_lo": -0.6071,
+          "ci90_hi": 0.8616,
+          "cruza_cero": true,
+          "p_boot": 0.865,
+          "significativo_bh": false
+        },
+        {
+          "wallet": "0x0034DC43DeACf5060035Db189A094568Dad45b7F",
+          "n": 1070,
+          "pnl_medio": -1.6804,
+          "win_rate": 0.4168,
+          "ci90_lo": -4.6915,
+          "ci90_hi": 1.1617,
+          "cruza_cero": true,
+          "p_boot": 0.35,
+          "significativo_bh": false
+        }
+      ]
+    },
+    {
+      "instrumento": "INTC-USD",
+      "direccion": "long",
+      "n_wallets_n_min": 3,
+      "wallets": [
+        {
+          "wallet": "0x0034DC43DeACf5060035Db189A094568Dad45b7F",
+          "n": 130,
+          "pnl_medio": -0.0406,
+          "win_rate": 0.2231,
+          "ci90_lo": -0.8425,
+          "ci90_hi": 0.8548,
+          "cruza_cero": true,
+          "p_boot": 0.888,
+          "significativo_bh": false
+        },
+        {
+          "wallet": "0x2070F45C22E44a52CB42210d1112a0Bfb6A9A0c7",
+          "n": 50,
+          "pnl_medio": 11.043,
+          "win_rate": 0.98,
+          "ci90_lo": 2.8997,
+          "ci90_hi": 19.2672,
+          "cruza_cero": false,
+          "p_boot": 0.025,
+          "significativo_bh": true
+        },
+        {
+          "wallet": "0xC914238Dde217bc37F768B9eE5F8FBF973aeD746",
+          "n": 31,
+          "pnl_medio": -0.3722,
+          "win_rate": 0.0968,
+          "ci90_lo": -0.4739,
+          "ci90_hi": -0.2801,
+          "cruza_cero": false,
+          "p_boot": 0.0,
+          "significativo_bh": true
+        }
+      ]
+    },
+    {
+      "instrumento": "INTC-USD",
+      "direccion": "short",
+      "n_wallets_n_min": 2,
+      "wallets": [
+        {
+          "wallet": "0x0034DC43DeACf5060035Db189A094568Dad45b7F",
+          "n": 88,
+          "pnl_medio": -1.1169,
+          "win_rate": 0.5455,
+          "ci90_lo": -3.0156,
+          "ci90_hi": 0.7209,
+          "cruza_cero": true,
+          "p_boot": 0.363,
+          "significativo_bh": false
+        },
+        {
+          "wallet": "0x2070F45C22E44a52CB42210d1112a0Bfb6A9A0c7",
+          "n": 20,
+          "pnl_medio": 12.216,
+          "win_rate": 0.3,
+          "ci90_lo": -25.0058,
+          "ci90_hi": 61.4918,
+          "cruza_cero": true,
+          "p_boot": 0.838,
+          "significativo_bh": false
+        }
+      ]
+    },
+    {
+      "instrumento": "LIT-USD",
+      "direccion": "long",
+      "n_wallets_n_min": 2,
+      "wallets": [
+        {
+          "wallet": "0x0034DC43DeACf5060035Db189A094568Dad45b7F",
+          "n": 294,
+          "pnl_medio": 11.7827,
+          "win_rate": 0.915,
+          "ci90_lo": 7.0408,
+          "ci90_hi": 16.9995,
+          "cruza_cero": false,
+          "p_boot": 0.0,
+          "significativo_bh": true
+        },
+        {
+          "wallet": "0xfc1B24B1749F71b797029C34F5fa30D528539107",
+          "n": 70,
+          "pnl_medio": -245.6928,
+          "win_rate": 0.1714,
+          "ci90_lo": -351.8818,
+          "ci90_hi": -146.8742,
+          "cruza_cero": false,
+          "p_boot": 0.0,
+          "significativo_bh": true
+        }
+      ]
+    },
+    {
+      "instrumento": "LIT-USD",
+      "direccion": "short",
+      "n_wallets_n_min": 3,
+      "wallets": [
+        {
+          "wallet": "0xC914238Dde217bc37F768B9eE5F8FBF973aeD746",
+          "n": 91,
+          "pnl_medio": 2.0783,
+          "win_rate": 0.4835,
+          "ci90_lo": 0.4543,
+          "ci90_hi": 4.0613,
+          "cruza_cero": false,
+          "p_boot": 0.024,
+          "significativo_bh": true
+        },
+        {
+          "wallet": "0x5B61EB45bD64D4904e76F69A9f165D7415606926",
+          "n": 35,
+          "pnl_medio": -187.2365,
+          "win_rate": 0.0,
+          "ci90_lo": -229.2456,
+          "ci90_hi": -148.0707,
+          "cruza_cero": false,
+          "p_boot": 0.0,
+          "significativo_bh": true
+        },
+        {
+          "wallet": "0x0034DC43DeACf5060035Db189A094568Dad45b7F",
+          "n": 282,
+          "pnl_medio": 0.1348,
+          "win_rate": 0.5213,
+          "ci90_lo": -1.5376,
+          "ci90_hi": 1.7351,
+          "cruza_cero": true,
+          "p_boot": 0.897,
+          "significativo_bh": false
+        }
+      ]
+    },
+    {
+      "instrumento": "META-USD",
+      "direccion": "long",
+      "n_wallets_n_min": 4,
+      "wallets": [
+        {
+          "wallet": "0x0034DC43DeACf5060035Db189A094568Dad45b7F",
+          "n": 139,
+          "pnl_medio": -1.6602,
+          "win_rate": 0.2374,
+          "ci90_lo": -2.4344,
+          "ci90_hi": -0.9778,
+          "cruza_cero": false,
+          "p_boot": 0.0,
+          "significativo_bh": true
+        },
+        {
+          "wallet": "0xfc1B24B1749F71b797029C34F5fa30D528539107",
+          "n": 95,
+          "pnl_medio": -130.31,
+          "win_rate": 0.1368,
+          "ci90_lo": -178.2955,
+          "ci90_hi": -85.9796,
+          "cruza_cero": false,
+          "p_boot": 0.0,
+          "significativo_bh": true
+        },
+        {
+          "wallet": "0xB91a9C277b0d26A5ea763994152CB35AB725360E",
+          "n": 17,
+          "pnl_medio": -2.7838,
+          "win_rate": 0.4118,
+          "ci90_lo": -7.399,
+          "ci90_hi": -0.1281,
+          "cruza_cero": false,
+          "p_boot": 0.029,
+          "significativo_bh": true
+        },
+        {
+          "wallet": "0xD111a21BCc7dF8bB78497B06C7A2c114C3a9eBdC",
+          "n": 62,
+          "pnl_medio": 1.1958,
+          "win_rate": 0.9839,
+          "ci90_lo": 0.6209,
+          "ci90_hi": 1.8599,
+          "cruza_cero": false,
+          "p_boot": 0.001,
+          "significativo_bh": true
+        }
+      ]
+    },
+    {
+      "instrumento": "META-USD",
+      "direccion": "short",
+      "n_wallets_n_min": 4,
+      "wallets": [
+        {
+          "wallet": "0x0034DC43DeACf5060035Db189A094568Dad45b7F",
+          "n": 335,
+          "pnl_medio": -1.9827,
+          "win_rate": 0.4627,
+          "ci90_lo": -3.1271,
+          "ci90_hi": -0.8193,
+          "cruza_cero": false,
+          "p_boot": 0.001,
+          "significativo_bh": true
+        },
+        {
+          "wallet": "0x2070F45C22E44a52CB42210d1112a0Bfb6A9A0c7",
+          "n": 16,
+          "pnl_medio": 23.4616,
+          "win_rate": 1.0,
+          "ci90_lo": 10.7418,
+          "ci90_hi": 37.8826,
+          "cruza_cero": false,
+          "p_boot": 0.0,
+          "significativo_bh": true
+        },
+        {
+          "wallet": "0xB91a9C277b0d26A5ea763994152CB35AB725360E",
+          "n": 181,
+          "pnl_medio": -0.2574,
+          "win_rate": 0.442,
+          "ci90_lo": -1.6353,
+          "ci90_hi": 1.6905,
+          "cruza_cero": true,
+          "p_boot": 0.725,
+          "significativo_bh": false
+        },
+        {
+          "wallet": "0x8448d8263B6131d1a8eBE93EAC553804f60300Ec",
+          "n": 25,
+          "pnl_medio": -0.799,
+          "win_rate": 0.84,
+          "ci90_lo": -2.6897,
+          "ci90_hi": 0.2043,
+          "cruza_cero": true,
+          "p_boot": 0.689,
+          "significativo_bh": false
+        }
+      ]
+    },
+    {
+      "instrumento": "MSFT-USD",
+      "direccion": "short",
+      "n_wallets_n_min": 1,
+      "wallets": [
+        {
+          "wallet": "0x0034DC43DeACf5060035Db189A094568Dad45b7F",
+          "n": 207,
+          "pnl_medio": -0.7113,
+          "win_rate": 0.7585,
+          "ci90_lo": -1.4291,
+          "ci90_hi": -0.1364,
+          "cruza_cero": false,
+          "p_boot": 0.034,
+          "significativo_bh": true
+        }
+      ]
+    },
+    {
+      "instrumento": "MSTR-USD",
+      "direccion": "long",
+      "n_wallets_n_min": 1,
+      "wallets": [
+        {
+          "wallet": "0x0034DC43DeACf5060035Db189A094568Dad45b7F",
+          "n": 19,
+          "pnl_medio": 1.3874,
+          "win_rate": 0.8947,
+          "ci90_lo": -0.4683,
+          "ci90_hi": 4.1337,
+          "cruza_cero": true,
+          "p_boot": 0.292,
+          "significativo_bh": false
+        }
+      ]
+    },
+    {
+      "instrumento": "MSTR-USD",
+      "direccion": "short",
+      "n_wallets_n_min": 2,
+      "wallets": [
+        {
+          "wallet": "0x0034DC43DeACf5060035Db189A094568Dad45b7F",
+          "n": 52,
+          "pnl_medio": 14.8471,
+          "win_rate": 0.7115,
+          "ci90_lo": 1.4899,
+          "ci90_hi": 30.2128,
+          "cruza_cero": false,
+          "p_boot": 0.052,
+          "significativo_bh": true
+        },
+        {
+          "wallet": "0xB91a9C277b0d26A5ea763994152CB35AB725360E",
+          "n": 40,
+          "pnl_medio": 2.6606,
+          "win_rate": 0.925,
+          "ci90_lo": 0.7035,
+          "ci90_hi": 5.3575,
+          "cruza_cero": false,
+          "p_boot": 0.007,
+          "significativo_bh": true
+        }
+      ]
+    },
+    {
+      "instrumento": "NAS100-USD",
+      "direccion": "long",
+      "n_wallets_n_min": 3,
+      "wallets": [
+        {
+          "wallet": "0x4A2479F81FC411ade23a50e2425786C248346936",
+          "n": 19,
+          "pnl_medio": -0.0602,
+          "win_rate": 0.1579,
+          "ci90_lo": -6.0089,
+          "ci90_hi": 9.3633,
+          "cruza_cero": true,
+          "p_boot": 0.928,
+          "significativo_bh": false
+        },
+        {
+          "wallet": "0xFAd25C3098FCb4F2Ad68039204A4011261824ce6",
+          "n": 425,
+          "pnl_medio": 7.4993,
+          "win_rate": 0.6094,
+          "ci90_lo": 4.8411,
+          "ci90_hi": 10.5609,
+          "cruza_cero": false,
+          "p_boot": 0.0,
+          "significativo_bh": true
+        },
+        {
+          "wallet": "0x2070F45C22E44a52CB42210d1112a0Bfb6A9A0c7",
+          "n": 34,
+          "pnl_medio": -9.1732,
+          "win_rate": 0.2353,
+          "ci90_lo": -20.9978,
+          "ci90_hi": -0.1487,
+          "cruza_cero": false,
+          "p_boot": 0.085,
+          "significativo_bh": false
+        }
+      ]
+    },
+    {
+      "instrumento": "NAS100-USD",
+      "direccion": "short",
+      "n_wallets_n_min": 4,
+      "wallets": [
+        {
+          "wallet": "0x4c4f4d655B77c4d1cB4343AF6c54c2Ec8f4022b4",
+          "n": 618,
+          "pnl_medio": -0.297,
+          "win_rate": 0.4806,
+          "ci90_lo": -0.7126,
+          "ci90_hi": 0.1132,
+          "cruza_cero": true,
+          "p_boot": 0.229,
+          "significativo_bh": false
+        },
+        {
+          "wallet": "0x2070F45C22E44a52CB42210d1112a0Bfb6A9A0c7",
+          "n": 26,
+          "pnl_medio": -3.7759,
+          "win_rate": 0.8077,
+          "ci90_lo": -17.2006,
+          "ci90_hi": 4.6709,
+          "cruza_cero": true,
+          "p_boot": 0.703,
+          "significativo_bh": false
+        },
+        {
+          "wallet": "0xFAd25C3098FCb4F2Ad68039204A4011261824ce6",
+          "n": 24,
+          "pnl_medio": 6.9408,
+          "win_rate": 0.5833,
+          "ci90_lo": -1.0505,
+          "ci90_hi": 14.6762,
+          "cruza_cero": true,
+          "p_boot": 0.155,
+          "significativo_bh": false
+        },
+        {
+          "wallet": "0x0034DC43DeACf5060035Db189A094568Dad45b7F",
+          "n": 41,
+          "pnl_medio": -1.1647,
+          "win_rate": 0.5122,
+          "ci90_lo": -3.3751,
+          "ci90_hi": 0.8068,
+          "cruza_cero": true,
+          "p_boot": 0.354,
+          "significativo_bh": false
+        }
+      ]
+    },
+    {
+      "instrumento": "NEAR-USD",
+      "direccion": "long",
+      "n_wallets_n_min": 4,
+      "wallets": [
+        {
+          "wallet": "0x8448d8263B6131d1a8eBE93EAC553804f60300Ec",
+          "n": 96,
+          "pnl_medio": 1.8504,
+          "win_rate": 0.6458,
+          "ci90_lo": -1.5505,
+          "ci90_hi": 4.9201,
+          "cruza_cero": true,
+          "p_boot": 0.321,
+          "significativo_bh": false
+        },
+        {
+          "wallet": "0xB6287efe7A7702402dd8342963DBEfE51e44F2EB",
+          "n": 715,
+          "pnl_medio": 0.2985,
+          "win_rate": 0.5524,
+          "ci90_lo": -0.0476,
+          "ci90_hi": 0.6783,
+          "cruza_cero": true,
+          "p_boot": 0.164,
+          "significativo_bh": false
+        },
+        {
+          "wallet": "0xC914238Dde217bc37F768B9eE5F8FBF973aeD746",
+          "n": 50,
+          "pnl_medio": 0.2591,
+          "win_rate": 0.86,
+          "ci90_lo": 0.1169,
+          "ci90_hi": 0.4684,
+          "cruza_cero": false,
+          "p_boot": 0.001,
+          "significativo_bh": true
+        },
+        {
+          "wallet": "0x0034DC43DeACf5060035Db189A094568Dad45b7F",
+          "n": 507,
+          "pnl_medio": -1.6551,
+          "win_rate": 0.5286,
+          "ci90_lo": -2.5522,
+          "ci90_hi": -0.7775,
+          "cruza_cero": false,
+          "p_boot": 0.001,
+          "significativo_bh": true
+        }
+      ]
+    },
+    {
+      "instrumento": "NEAR-USD",
+      "direccion": "short",
+      "n_wallets_n_min": 2,
+      "wallets": [
+        {
+          "wallet": "0xC914238Dde217bc37F768B9eE5F8FBF973aeD746",
+          "n": 288,
+          "pnl_medio": 12.9221,
+          "win_rate": 0.9236,
+          "ci90_lo": 10.9874,
+          "ci90_hi": 14.8816,
+          "cruza_cero": false,
+          "p_boot": 0.0,
+          "significativo_bh": true
+        },
+        {
+          "wallet": "0x8448d8263B6131d1a8eBE93EAC553804f60300Ec",
+          "n": 63,
+          "pnl_medio": 12.2996,
+          "win_rate": 0.3968,
+          "ci90_lo": 0.7574,
+          "ci90_hi": 25.7482,
+          "cruza_cero": false,
+          "p_boot": 0.077,
+          "significativo_bh": true
+        }
+      ]
+    },
+    {
+      "instrumento": "ORCL-USD",
+      "direccion": "long",
+      "n_wallets_n_min": 5,
+      "wallets": [
+        {
+          "wallet": "0x0034DC43DeACf5060035Db189A094568Dad45b7F",
+          "n": 139,
+          "pnl_medio": 11.8182,
+          "win_rate": 0.9856,
+          "ci90_lo": 8.5607,
+          "ci90_hi": 15.3603,
+          "cruza_cero": false,
+          "p_boot": 0.0,
+          "significativo_bh": true
+        },
+        {
+          "wallet": "0xC914238Dde217bc37F768B9eE5F8FBF973aeD746",
+          "n": 38,
+          "pnl_medio": 1.3284,
+          "win_rate": 0.7632,
+          "ci90_lo": 0.3229,
+          "ci90_hi": 2.5076,
+          "cruza_cero": false,
+          "p_boot": 0.031,
+          "significativo_bh": true
+        },
+        {
+          "wallet": "0x4A2479F81FC411ade23a50e2425786C248346936",
+          "n": 18,
+          "pnl_medio": -30.1385,
+          "win_rate": 0.2222,
+          "ci90_lo": -116.4558,
+          "ci90_hi": 42.6681,
+          "cruza_cero": true,
+          "p_boot": 0.541,
+          "significativo_bh": false
+        },
+        {
+          "wallet": "0xB91a9C277b0d26A5ea763994152CB35AB725360E",
+          "n": 47,
+          "pnl_medio": 0.4396,
+          "win_rate": 0.5745,
+          "ci90_lo": -0.1349,
+          "ci90_hi": 1.0834,
+          "cruza_cero": true,
+          "p_boot": 0.223,
+          "significativo_bh": false
+        },
+        {
+          "wallet": "0xD111a21BCc7dF8bB78497B06C7A2c114C3a9eBdC",
+          "n": 179,
+          "pnl_medio": 5.4586,
+          "win_rate": 0.8827,
+          "ci90_lo": 3.4051,
+          "ci90_hi": 7.6423,
+          "cruza_cero": false,
+          "p_boot": 0.0,
+          "significativo_bh": true
+        }
+      ]
+    },
+    {
+      "instrumento": "ORCL-USD",
+      "direccion": "short",
+      "n_wallets_n_min": 2,
+      "wallets": [
+        {
+          "wallet": "0x0034DC43DeACf5060035Db189A094568Dad45b7F",
+          "n": 75,
+          "pnl_medio": 0.6206,
+          "win_rate": 0.4,
+          "ci90_lo": -0.1949,
+          "ci90_hi": 1.4846,
+          "cruza_cero": true,
+          "p_boot": 0.205,
+          "significativo_bh": false
+        },
+        {
+          "wallet": "0xFAd25C3098FCb4F2Ad68039204A4011261824ce6",
+          "n": 51,
+          "pnl_medio": -74.8972,
+          "win_rate": 0.098,
+          "ci90_lo": -84.9458,
+          "ci90_hi": -65.006,
+          "cruza_cero": false,
+          "p_boot": 0.0,
+          "significativo_bh": true
+        }
+      ]
+    },
+    {
+      "instrumento": "PLTR-USD",
+      "direccion": "long",
+      "n_wallets_n_min": 1,
+      "wallets": [
+        {
+          "wallet": "0xfc1B24B1749F71b797029C34F5fa30D528539107",
+          "n": 34,
+          "pnl_medio": 6.8356,
+          "win_rate": 0.7059,
+          "ci90_lo": -2.9044,
+          "ci90_hi": 22.0453,
+          "cruza_cero": true,
+          "p_boot": 0.484,
+          "significativo_bh": false
+        }
+      ]
+    },
+    {
+      "instrumento": "PLTR-USD",
+      "direccion": "short",
+      "n_wallets_n_min": 2,
+      "wallets": [
+        {
+          "wallet": "0x0034DC43DeACf5060035Db189A094568Dad45b7F",
+          "n": 168,
+          "pnl_medio": -1.1545,
+          "win_rate": 0.1845,
+          "ci90_lo": -1.8742,
+          "ci90_hi": -0.5776,
+          "cruza_cero": false,
+          "p_boot": 0.0,
+          "significativo_bh": true
+        },
+        {
+          "wallet": "0xfc1B24B1749F71b797029C34F5fa30D528539107",
+          "n": 80,
+          "pnl_medio": 1.1269,
+          "win_rate": 0.4875,
+          "ci90_lo": 0.551,
+          "ci90_hi": 1.7517,
+          "cruza_cero": false,
+          "p_boot": 0.0,
+          "significativo_bh": true
+        }
+      ]
+    },
+    {
+      "instrumento": "PUMP-USD",
+      "direccion": "long",
+      "n_wallets_n_min": 2,
+      "wallets": [
+        {
+          "wallet": "0x0034DC43DeACf5060035Db189A094568Dad45b7F",
+          "n": 267,
+          "pnl_medio": 3.5547,
+          "win_rate": 0.5955,
+          "ci90_lo": 1.9788,
+          "ci90_hi": 5.2116,
+          "cruza_cero": false,
+          "p_boot": 0.0,
+          "significativo_bh": true
+        },
+        {
+          "wallet": "0xFAd25C3098FCb4F2Ad68039204A4011261824ce6",
+          "n": 245,
+          "pnl_medio": 44.805,
+          "win_rate": 0.8,
+          "ci90_lo": 34.0418,
+          "ci90_hi": 56.7673,
+          "cruza_cero": false,
+          "p_boot": 0.0,
+          "significativo_bh": true
+        }
+      ]
+    },
+    {
+      "instrumento": "PUMP-USD",
+      "direccion": "short",
+      "n_wallets_n_min": 3,
+      "wallets": [
+        {
+          "wallet": "0x9c6c85323Ae3E695bA36D17c86f3ec2242cF712A",
+          "n": 18,
+          "pnl_medio": 76.7297,
+          "win_rate": 1.0,
+          "ci90_lo": 61.1158,
+          "ci90_hi": 91.3231,
+          "cruza_cero": false,
+          "p_boot": 0.0,
+          "significativo_bh": true
+        },
+        {
+          "wallet": "0xC914238Dde217bc37F768B9eE5F8FBF973aeD746",
+          "n": 262,
+          "pnl_medio": 17.5651,
+          "win_rate": 0.8092,
+          "ci90_lo": 15.0836,
+          "ci90_hi": 20.1003,
+          "cruza_cero": false,
+          "p_boot": 0.0,
+          "significativo_bh": true
+        },
+        {
+          "wallet": "0x0034DC43DeACf5060035Db189A094568Dad45b7F",
+          "n": 785,
+          "pnl_medio": -3.0335,
+          "win_rate": 0.442,
+          "ci90_lo": -4.4987,
+          "ci90_hi": -1.6498,
+          "cruza_cero": false,
+          "p_boot": 0.0,
+          "significativo_bh": true
+        }
+      ]
+    },
+    {
+      "instrumento": "SILVER-USD",
+      "direccion": "long",
+      "n_wallets_n_min": 1,
+      "wallets": [
+        {
+          "wallet": "0x0034DC43DeACf5060035Db189A094568Dad45b7F",
+          "n": 188,
+          "pnl_medio": -1.8411,
+          "win_rate": 0.7766,
+          "ci90_lo": -6.6899,
+          "ci90_hi": 2.809,
+          "cruza_cero": true,
+          "p_boot": 0.558,
+          "significativo_bh": false
+        }
+      ]
+    },
+    {
+      "instrumento": "SILVER-USD",
+      "direccion": "short",
+      "n_wallets_n_min": 2,
+      "wallets": [
+        {
+          "wallet": "0x0034DC43DeACf5060035Db189A094568Dad45b7F",
+          "n": 201,
+          "pnl_medio": -4.7238,
+          "win_rate": 0.5771,
+          "ci90_lo": -10.1529,
+          "ci90_hi": -0.8949,
+          "cruza_cero": false,
+          "p_boot": 0.008,
+          "significativo_bh": true
+        },
+        {
+          "wallet": "0x7930Ee98013FA1aEaC08872A88E677dc925aD132",
+          "n": 286,
+          "pnl_medio": -4.2007,
+          "win_rate": 0.3566,
+          "ci90_lo": -9.8802,
+          "ci90_hi": 1.772,
+          "cruza_cero": true,
+          "p_boot": 0.226,
+          "significativo_bh": false
+        }
+      ]
+    },
+    {
+      "instrumento": "SKHY-USD",
+      "direccion": "long",
+      "n_wallets_n_min": 2,
+      "wallets": [
+        {
+          "wallet": "0x0034DC43DeACf5060035Db189A094568Dad45b7F",
+          "n": 32,
+          "pnl_medio": 5.2554,
+          "win_rate": 0.6875,
+          "ci90_lo": 1.1953,
+          "ci90_hi": 11.2597,
+          "cruza_cero": false,
+          "p_boot": 0.0,
+          "significativo_bh": true
+        },
+        {
+          "wallet": "0xB6287efe7A7702402dd8342963DBEfE51e44F2EB",
+          "n": 17,
+          "pnl_medio": -0.049,
+          "win_rate": 0.0,
+          "ci90_lo": -0.055,
+          "ci90_hi": -0.0427,
+          "cruza_cero": false,
+          "p_boot": 0.0,
+          "significativo_bh": true
+        }
+      ]
+    },
+    {
+      "instrumento": "SKHYNIX-USD",
+      "direccion": "long",
+      "n_wallets_n_min": 5,
+      "wallets": [
+        {
+          "wallet": "0x0034DC43DeACf5060035Db189A094568Dad45b7F",
+          "n": 244,
+          "pnl_medio": 3.5133,
+          "win_rate": 0.6311,
+          "ci90_lo": 1.2611,
+          "ci90_hi": 6.1129,
+          "cruza_cero": false,
+          "p_boot": 0.002,
+          "significativo_bh": true
+        },
+        {
+          "wallet": "0x7930Ee98013FA1aEaC08872A88E677dc925aD132",
+          "n": 67,
+          "pnl_medio": 0.7501,
+          "win_rate": 0.7164,
+          "ci90_lo": -0.3746,
+          "ci90_hi": 1.9979,
+          "cruza_cero": true,
+          "p_boot": 0.306,
+          "significativo_bh": false
+        },
+        {
+          "wallet": "0x2070F45C22E44a52CB42210d1112a0Bfb6A9A0c7",
+          "n": 35,
+          "pnl_medio": 69.2563,
+          "win_rate": 0.8,
+          "ci90_lo": 24.2486,
+          "ci90_hi": 121.9229,
+          "cruza_cero": false,
+          "p_boot": 0.001,
+          "significativo_bh": true
+        },
+        {
+          "wallet": "0xB91a9C277b0d26A5ea763994152CB35AB725360E",
+          "n": 62,
+          "pnl_medio": 6.2623,
+          "win_rate": 0.371,
+          "ci90_lo": 1.4829,
+          "ci90_hi": 11.6026,
+          "cruza_cero": false,
+          "p_boot": 0.026,
+          "significativo_bh": true
+        },
+        {
+          "wallet": "0xD111a21BCc7dF8bB78497B06C7A2c114C3a9eBdC",
+          "n": 29,
+          "pnl_medio": 7.4015,
+          "win_rate": 0.5172,
+          "ci90_lo": -1.1976,
+          "ci90_hi": 16.1694,
+          "cruza_cero": true,
+          "p_boot": 0.168,
+          "significativo_bh": false
+        }
+      ]
+    },
+    {
+      "instrumento": "SKHYNIX-USD",
+      "direccion": "short",
+      "n_wallets_n_min": 4,
+      "wallets": [
+        {
+          "wallet": "0x0034DC43DeACf5060035Db189A094568Dad45b7F",
+          "n": 94,
+          "pnl_medio": -10.2012,
+          "win_rate": 0.0106,
+          "ci90_lo": -18.1932,
+          "ci90_hi": -3.7123,
+          "cruza_cero": false,
+          "p_boot": 0.001,
+          "significativo_bh": true
+        },
+        {
+          "wallet": "0xB91a9C277b0d26A5ea763994152CB35AB725360E",
+          "n": 146,
+          "pnl_medio": -0.2192,
+          "win_rate": 0.6849,
+          "ci90_lo": -1.8381,
+          "ci90_hi": 0.9642,
+          "cruza_cero": true,
+          "p_boot": 0.889,
+          "significativo_bh": false
+        },
+        {
+          "wallet": "0x7930Ee98013FA1aEaC08872A88E677dc925aD132",
+          "n": 61,
+          "pnl_medio": -57.1655,
+          "win_rate": 0.1803,
+          "ci90_lo": -80.6376,
+          "ci90_hi": -36.3926,
+          "cruza_cero": false,
+          "p_boot": 0.0,
+          "significativo_bh": true
+        },
+        {
+          "wallet": "0xD111a21BCc7dF8bB78497B06C7A2c114C3a9eBdC",
+          "n": 119,
+          "pnl_medio": -0.3031,
+          "win_rate": 0.6218,
+          "ci90_lo": -0.9374,
+          "ci90_hi": 0.2384,
+          "cruza_cero": true,
+          "p_boot": 0.431,
+          "significativo_bh": false
+        }
+      ]
+    },
+    {
+      "instrumento": "SOL-USD",
+      "direccion": "long",
+      "n_wallets_n_min": 4,
+      "wallets": [
+        {
+          "wallet": "0x8448d8263B6131d1a8eBE93EAC553804f60300Ec",
+          "n": 71,
+          "pnl_medio": -5.0934,
+          "win_rate": 0.2676,
+          "ci90_lo": -11.076,
+          "ci90_hi": 0.8467,
+          "cruza_cero": true,
+          "p_boot": 0.149,
+          "significativo_bh": false
+        },
+        {
+          "wallet": "0x2070F45C22E44a52CB42210d1112a0Bfb6A9A0c7",
+          "n": 246,
+          "pnl_medio": 4.8805,
+          "win_rate": 0.7317,
+          "ci90_lo": 2.4445,
+          "ci90_hi": 7.8122,
+          "cruza_cero": false,
+          "p_boot": 0.0,
+          "significativo_bh": true
+        },
+        {
+          "wallet": "0xfc1B24B1749F71b797029C34F5fa30D528539107",
+          "n": 349,
+          "pnl_medio": 13.4454,
+          "win_rate": 0.4842,
+          "ci90_lo": 3.0065,
+          "ci90_hi": 23.6948,
+          "cruza_cero": false,
+          "p_boot": 0.04,
+          "significativo_bh": true
+        },
+        {
+          "wallet": "0x4c4f4d655B77c4d1cB4343AF6c54c2Ec8f4022b4",
+          "n": 408,
+          "pnl_medio": -2.2071,
+          "win_rate": 0.2328,
+          "ci90_lo": -2.8227,
+          "ci90_hi": -1.6395,
+          "cruza_cero": false,
+          "p_boot": 0.0,
+          "significativo_bh": true
+        }
+      ]
+    },
+    {
+      "instrumento": "SOL-USD",
+      "direccion": "short",
+      "n_wallets_n_min": 4,
+      "wallets": [
+        {
+          "wallet": "0x8448d8263B6131d1a8eBE93EAC553804f60300Ec",
+          "n": 196,
+          "pnl_medio": 0.5409,
+          "win_rate": 0.6735,
+          "ci90_lo": 0.0747,
+          "ci90_hi": 1.0368,
+          "cruza_cero": false,
+          "p_boot": 0.057,
+          "significativo_bh": true
+        },
+        {
+          "wallet": "0x2070F45C22E44a52CB42210d1112a0Bfb6A9A0c7",
+          "n": 221,
+          "pnl_medio": 1.6212,
+          "win_rate": 0.7647,
+          "ci90_lo": 1.0743,
+          "ci90_hi": 2.2026,
+          "cruza_cero": false,
+          "p_boot": 0.0,
+          "significativo_bh": true
+        },
+        {
+          "wallet": "0xC914238Dde217bc37F768B9eE5F8FBF973aeD746",
+          "n": 20,
+          "pnl_medio": -4.9477,
+          "win_rate": 0.05,
+          "ci90_lo": -7.6808,
+          "ci90_hi": -2.5558,
+          "cruza_cero": false,
+          "p_boot": 0.0,
+          "significativo_bh": true
+        },
+        {
+          "wallet": "0x4c4f4d655B77c4d1cB4343AF6c54c2Ec8f4022b4",
+          "n": 825,
+          "pnl_medio": -0.9577,
+          "win_rate": 0.337,
+          "ci90_lo": -1.3884,
+          "ci90_hi": -0.589,
+          "cruza_cero": false,
+          "p_boot": 0.0,
+          "significativo_bh": true
+        }
+      ]
+    },
+    {
+      "instrumento": "SP500-USD",
+      "direccion": "long",
+      "n_wallets_n_min": 7,
+      "wallets": [
+        {
+          "wallet": "0x4A2479F81FC411ade23a50e2425786C248346936",
+          "n": 27,
+          "pnl_medio": 2.2806,
+          "win_rate": 0.8519,
+          "ci90_lo": 0.5199,
+          "ci90_hi": 4.2031,
+          "cruza_cero": false,
+          "p_boot": 0.024,
+          "significativo_bh": true
+        },
+        {
+          "wallet": "0xfc1B24B1749F71b797029C34F5fa30D528539107",
+          "n": 561,
+          "pnl_medio": 2.2483,
+          "win_rate": 0.6613,
+          "ci90_lo": 1.9119,
+          "ci90_hi": 2.5806,
+          "cruza_cero": false,
+          "p_boot": 0.0,
+          "significativo_bh": true
+        },
+        {
+          "wallet": "0x0034DC43DeACf5060035Db189A094568Dad45b7F",
+          "n": 185,
+          "pnl_medio": 20.1524,
+          "win_rate": 0.8649,
+          "ci90_lo": 13.6463,
+          "ci90_hi": 27.342,
+          "cruza_cero": false,
+          "p_boot": 0.0,
+          "significativo_bh": true
+        },
+        {
+          "wallet": "0x2070F45C22E44a52CB42210d1112a0Bfb6A9A0c7",
+          "n": 59,
+          "pnl_medio": 6.1747,
+          "win_rate": 0.8136,
+          "ci90_lo": 1.2577,
+          "ci90_hi": 14.7282,
+          "cruza_cero": false,
+          "p_boot": 0.0,
+          "significativo_bh": true
+        },
+        {
+          "wallet": "0x4c4f4d655B77c4d1cB4343AF6c54c2Ec8f4022b4",
+          "n": 41,
+          "pnl_medio": 2.3522,
+          "win_rate": 0.8537,
+          "ci90_lo": 1.5818,
+          "ci90_hi": 3.2662,
+          "cruza_cero": false,
+          "p_boot": 0.0,
+          "significativo_bh": true
+        },
+        {
+          "wallet": "0x8448d8263B6131d1a8eBE93EAC553804f60300Ec",
+          "n": 25,
+          "pnl_medio": -2.0671,
+          "win_rate": 0.04,
+          "ci90_lo": -3.6147,
+          "ci90_hi": -0.6351,
+          "cruza_cero": false,
+          "p_boot": 0.006,
+          "significativo_bh": true
+        },
+        {
+          "wallet": "0xD285Df4Ae3ED22E53308EbA5371c4D1C4849706b",
+          "n": 218,
+          "pnl_medio": 4.0592,
+          "win_rate": 0.5459,
+          "ci90_lo": 3.2184,
+          "ci90_hi": 4.984,
+          "cruza_cero": false,
+          "p_boot": 0.0,
+          "significativo_bh": true
+        }
+      ]
+    },
+    {
+      "instrumento": "SP500-USD",
+      "direccion": "short",
+      "n_wallets_n_min": 6,
+      "wallets": [
+        {
+          "wallet": "0x4A2479F81FC411ade23a50e2425786C248346936",
+          "n": 46,
+          "pnl_medio": -10.7639,
+          "win_rate": 0.0,
+          "ci90_lo": -16.786,
+          "ci90_hi": -5.4167,
+          "cruza_cero": false,
+          "p_boot": 0.0,
+          "significativo_bh": true
+        },
+        {
+          "wallet": "0xfc1B24B1749F71b797029C34F5fa30D528539107",
+          "n": 195,
+          "pnl_medio": -0.7126,
+          "win_rate": 0.4667,
+          "ci90_lo": -1.3427,
+          "ci90_hi": -0.1193,
+          "cruza_cero": false,
+          "p_boot": 0.058,
+          "significativo_bh": false
+        },
+        {
+          "wallet": "0x4c4f4d655B77c4d1cB4343AF6c54c2Ec8f4022b4",
+          "n": 156,
+          "pnl_medio": 0.0404,
+          "win_rate": 0.5192,
+          "ci90_lo": -0.3464,
+          "ci90_hi": 0.4508,
+          "cruza_cero": true,
+          "p_boot": 0.871,
+          "significativo_bh": false
+        },
+        {
+          "wallet": "0x2070F45C22E44a52CB42210d1112a0Bfb6A9A0c7",
+          "n": 25,
+          "pnl_medio": -8.0596,
+          "win_rate": 0.28,
+          "ci90_lo": -18.7475,
+          "ci90_hi": 0.1418,
+          "cruza_cero": true,
+          "p_boot": 0.113,
+          "significativo_bh": false
+        },
+        {
+          "wallet": "0x0034DC43DeACf5060035Db189A094568Dad45b7F",
+          "n": 57,
+          "pnl_medio": 1.5645,
+          "win_rate": 0.3684,
+          "ci90_lo": -0.7681,
+          "ci90_hi": 4.1602,
+          "cruza_cero": true,
+          "p_boot": 0.317,
+          "significativo_bh": false
+        },
+        {
+          "wallet": "0xC914238Dde217bc37F768B9eE5F8FBF973aeD746",
+          "n": 16,
+          "pnl_medio": -0.1936,
+          "win_rate": 0.75,
+          "ci90_lo": -0.5588,
+          "ci90_hi": 0.1322,
+          "cruza_cero": true,
+          "p_boot": 0.361,
+          "significativo_bh": false
+        }
+      ]
+    },
+    {
+      "instrumento": "SPCX-USD",
+      "direccion": "long",
+      "n_wallets_n_min": 1,
+      "wallets": [
+        {
+          "wallet": "0xFAd25C3098FCb4F2Ad68039204A4011261824ce6",
+          "n": 106,
+          "pnl_medio": 14.4568,
+          "win_rate": 0.6887,
+          "ci90_lo": -0.9149,
+          "ci90_hi": 29.5639,
+          "cruza_cero": true,
+          "p_boot": 0.125,
+          "significativo_bh": false
+        }
+      ]
+    },
+    {
+      "instrumento": "SUI-USD",
+      "direccion": "long",
+      "n_wallets_n_min": 2,
+      "wallets": [
+        {
+          "wallet": "0x0034DC43DeACf5060035Db189A094568Dad45b7F",
+          "n": 772,
+          "pnl_medio": -0.6684,
+          "win_rate": 0.4585,
+          "ci90_lo": -1.1018,
+          "ci90_hi": -0.2152,
+          "cruza_cero": false,
+          "p_boot": 0.013,
+          "significativo_bh": true
+        },
+        {
+          "wallet": "0xC914238Dde217bc37F768B9eE5F8FBF973aeD746",
+          "n": 79,
+          "pnl_medio": 5.3791,
+          "win_rate": 0.7848,
+          "ci90_lo": 2.9483,
+          "ci90_hi": 8.138,
+          "cruza_cero": false,
+          "p_boot": 0.0,
+          "significativo_bh": true
+        }
+      ]
+    },
+    {
+      "instrumento": "SUI-USD",
+      "direccion": "short",
+      "n_wallets_n_min": 2,
+      "wallets": [
+        {
+          "wallet": "0xfc1B24B1749F71b797029C34F5fa30D528539107",
+          "n": 185,
+          "pnl_medio": 0.409,
+          "win_rate": 0.5027,
+          "ci90_lo": -0.5676,
+          "ci90_hi": 1.3473,
+          "cruza_cero": true,
+          "p_boot": 0.539,
+          "significativo_bh": false
+        },
+        {
+          "wallet": "0x8448d8263B6131d1a8eBE93EAC553804f60300Ec",
+          "n": 35,
+          "pnl_medio": 2.0477,
+          "win_rate": 0.8857,
+          "ci90_lo": 1.1402,
+          "ci90_hi": 3.036,
+          "cruza_cero": false,
+          "p_boot": 0.0,
+          "significativo_bh": true
+        }
+      ]
+    },
+    {
+      "instrumento": "TAO-USD",
+      "direccion": "long",
+      "n_wallets_n_min": 1,
+      "wallets": [
+        {
+          "wallet": "0x0034DC43DeACf5060035Db189A094568Dad45b7F",
+          "n": 298,
+          "pnl_medio": -1.2016,
+          "win_rate": 0.1779,
+          "ci90_lo": -2.0024,
+          "ci90_hi": -0.3615,
+          "cruza_cero": false,
+          "p_boot": 0.026,
+          "significativo_bh": true
+        }
+      ]
+    },
+    {
+      "instrumento": "TAO-USD",
+      "direccion": "short",
+      "n_wallets_n_min": 1,
+      "wallets": [
+        {
+          "wallet": "0xC914238Dde217bc37F768B9eE5F8FBF973aeD746",
+          "n": 83,
+          "pnl_medio": -3.4768,
+          "win_rate": 0.4578,
+          "ci90_lo": -7.7891,
+          "ci90_hi": 0.2405,
+          "cruza_cero": true,
+          "p_boot": 0.131,
+          "significativo_bh": false
+        }
+      ]
+    },
+    {
+      "instrumento": "UNI-USD",
+      "direccion": "long",
+      "n_wallets_n_min": 1,
+      "wallets": [
+        {
+          "wallet": "0x0034DC43DeACf5060035Db189A094568Dad45b7F",
+          "n": 693,
+          "pnl_medio": -0.2802,
+          "win_rate": 0.4964,
+          "ci90_lo": -1.0418,
+          "ci90_hi": 0.4194,
+          "cruza_cero": true,
+          "p_boot": 0.57,
+          "significativo_bh": false
+        }
+      ]
+    },
+    {
+      "instrumento": "UNI-USD",
+      "direccion": "short",
+      "n_wallets_n_min": 2,
+      "wallets": [
+        {
+          "wallet": "0x8448d8263B6131d1a8eBE93EAC553804f60300Ec",
+          "n": 37,
+          "pnl_medio": 11.3083,
+          "win_rate": 0.8108,
+          "ci90_lo": 3.237,
+          "ci90_hi": 20.3703,
+          "cruza_cero": false,
+          "p_boot": 0.019,
+          "significativo_bh": true
+        },
+        {
+          "wallet": "0xfc1B24B1749F71b797029C34F5fa30D528539107",
+          "n": 127,
+          "pnl_medio": 2.5458,
+          "win_rate": 0.6299,
+          "ci90_lo": -0.3754,
+          "ci90_hi": 5.654,
+          "cruza_cero": true,
+          "p_boot": 0.142,
+          "significativo_bh": false
+        }
+      ]
+    },
+    {
+      "instrumento": "VVV-USD",
+      "direccion": "long",
+      "n_wallets_n_min": 1,
+      "wallets": [
+        {
+          "wallet": "0x0034DC43DeACf5060035Db189A094568Dad45b7F",
+          "n": 325,
+          "pnl_medio": -0.4184,
+          "win_rate": 0.5938,
+          "ci90_lo": -1.3023,
+          "ci90_hi": 0.392,
+          "cruza_cero": true,
+          "p_boot": 0.383,
+          "significativo_bh": false
+        }
+      ]
+    },
+    {
+      "instrumento": "VVV-USD",
+      "direccion": "short",
+      "n_wallets_n_min": 3,
+      "wallets": [
+        {
+          "wallet": "0x0034DC43DeACf5060035Db189A094568Dad45b7F",
+          "n": 252,
+          "pnl_medio": 1.0844,
+          "win_rate": 0.6032,
+          "ci90_lo": 0.2904,
+          "ci90_hi": 1.8613,
+          "cruza_cero": false,
+          "p_boot": 0.028,
+          "significativo_bh": true
+        },
+        {
+          "wallet": "0xC914238Dde217bc37F768B9eE5F8FBF973aeD746",
+          "n": 138,
+          "pnl_medio": -3.7462,
+          "win_rate": 0.3188,
+          "ci90_lo": -5.8448,
+          "ci90_hi": -1.9855,
+          "cruza_cero": false,
+          "p_boot": 0.0,
+          "significativo_bh": true
+        },
+        {
+          "wallet": "0xFAd25C3098FCb4F2Ad68039204A4011261824ce6",
+          "n": 584,
+          "pnl_medio": 1.4065,
+          "win_rate": 0.6164,
+          "ci90_lo": 0.709,
+          "ci90_hi": 2.1169,
+          "cruza_cero": false,
+          "p_boot": 0.0,
+          "significativo_bh": true
+        }
+      ]
+    },
+    {
+      "instrumento": "WTIOIL-USD",
+      "direccion": "long",
+      "n_wallets_n_min": 2,
+      "wallets": [
+        {
+          "wallet": "0x0034DC43DeACf5060035Db189A094568Dad45b7F",
+          "n": 161,
+          "pnl_medio": -17.7675,
+          "win_rate": 0.5839,
+          "ci90_lo": -37.8402,
+          "ci90_hi": -0.563,
+          "cruza_cero": false,
+          "p_boot": 0.086,
+          "significativo_bh": true
+        },
+        {
+          "wallet": "0xfc1B24B1749F71b797029C34F5fa30D528539107",
+          "n": 156,
+          "pnl_medio": -3.1271,
+          "win_rate": 0.4487,
+          "ci90_lo": -5.0655,
+          "ci90_hi": -1.3273,
+          "cruza_cero": false,
+          "p_boot": 0.001,
+          "significativo_bh": true
+        }
+      ]
+    },
+    {
+      "instrumento": "WTIOIL-USD",
+      "direccion": "short",
+      "n_wallets_n_min": 4,
+      "wallets": [
+        {
+          "wallet": "0xa5dD645f2367C990e7d993E46F28870Bd5812E4f",
+          "n": 58,
+          "pnl_medio": 305.8597,
+          "win_rate": 0.8793,
+          "ci90_lo": 195.5499,
+          "ci90_hi": 439.7249,
+          "cruza_cero": false,
+          "p_boot": 0.0,
+          "significativo_bh": true
+        },
+        {
+          "wallet": "0xfc1B24B1749F71b797029C34F5fa30D528539107",
+          "n": 1050,
+          "pnl_medio": 26.0168,
+          "win_rate": 0.5867,
+          "ci90_lo": 19.8393,
+          "ci90_hi": 32.3788,
+          "cruza_cero": false,
+          "p_boot": 0.0,
+          "significativo_bh": true
+        },
+        {
+          "wallet": "0x0034DC43DeACf5060035Db189A094568Dad45b7F",
+          "n": 470,
+          "pnl_medio": 8.8292,
+          "win_rate": 0.7149,
+          "ci90_lo": 6.061,
+          "ci90_hi": 11.6221,
+          "cruza_cero": false,
+          "p_boot": 0.0,
+          "significativo_bh": true
+        },
+        {
+          "wallet": "0x4c4f4d655B77c4d1cB4343AF6c54c2Ec8f4022b4",
+          "n": 1031,
+          "pnl_medio": -4.177,
+          "win_rate": 0.4675,
+          "ci90_lo": -7.7105,
+          "ci90_hi": -1.2085,
+          "cruza_cero": false,
+          "p_boot": 0.002,
+          "significativo_bh": true
+        }
+      ]
+    },
+    {
+      "instrumento": "ZEC-USD",
+      "direccion": "long",
+      "n_wallets_n_min": 1,
+      "wallets": [
+        {
+          "wallet": "0x0034DC43DeACf5060035Db189A094568Dad45b7F",
+          "n": 98,
+          "pnl_medio": 6.1105,
+          "win_rate": 0.6837,
+          "ci90_lo": 1.1,
+          "ci90_hi": 11.0632,
+          "cruza_cero": false,
+          "p_boot": 0.05,
+          "significativo_bh": true
+        }
+      ]
+    },
+    {
+      "instrumento": "ZEC-USD",
+      "direccion": "short",
+      "n_wallets_n_min": 3,
+      "wallets": [
+        {
+          "wallet": "0x0034DC43DeACf5060035Db189A094568Dad45b7F",
+          "n": 406,
+          "pnl_medio": 21.6554,
+          "win_rate": 0.633,
+          "ci90_lo": 11.3854,
+          "ci90_hi": 32.4827,
+          "cruza_cero": false,
+          "p_boot": 0.0,
+          "significativo_bh": true
+        },
+        {
+          "wallet": "0x9c6c85323Ae3E695bA36D17c86f3ec2242cF712A",
+          "n": 16,
+          "pnl_medio": 645.9177,
+          "win_rate": 1.0,
+          "ci90_lo": 344.6405,
+          "ci90_hi": 1163.355,
+          "cruza_cero": false,
+          "p_boot": 0.0,
+          "significativo_bh": true
+        },
+        {
+          "wallet": "0xC914238Dde217bc37F768B9eE5F8FBF973aeD746",
+          "n": 65,
+          "pnl_medio": 44.7215,
+          "win_rate": 1.0,
+          "ci90_lo": 32.3099,
+          "ci90_hi": 58.2043,
+          "cruza_cero": false,
+          "p_boot": 0.0,
+          "significativo_bh": true
+        }
+      ]
+    },
+    {
+      "instrumento": "ZRO-USD",
+      "direccion": "long",
+      "n_wallets_n_min": 2,
+      "wallets": [
+        {
+          "wallet": "0x8448d8263B6131d1a8eBE93EAC553804f60300Ec",
+          "n": 16,
+          "pnl_medio": -6.962,
+          "win_rate": 0.3125,
+          "ci90_lo": -13.0583,
+          "ci90_hi": -1.9695,
+          "cruza_cero": false,
+          "p_boot": 0.0,
+          "significativo_bh": true
+        },
+        {
+          "wallet": "0x0034DC43DeACf5060035Db189A094568Dad45b7F",
+          "n": 169,
+          "pnl_medio": -9.3655,
+          "win_rate": 0.0237,
+          "ci90_lo": -11.4534,
+          "ci90_hi": -7.478,
+          "cruza_cero": false,
+          "p_boot": 0.0,
+          "significativo_bh": true
+        }
+      ]
+    },
+    {
+      "instrumento": "ZRO-USD",
+      "direccion": "short",
+      "n_wallets_n_min": 2,
+      "wallets": [
+        {
+          "wallet": "0xC914238Dde217bc37F768B9eE5F8FBF973aeD746",
+          "n": 32,
+          "pnl_medio": 1.5985,
+          "win_rate": 0.375,
+          "ci90_lo": -8.8702,
+          "ci90_hi": 11.511,
+          "cruza_cero": true,
+          "p_boot": 0.79,
+          "significativo_bh": false
+        },
+        {
+          "wallet": "0xFAd25C3098FCb4F2Ad68039204A4011261824ce6",
+          "n": 51,
+          "pnl_medio": 3.9361,
+          "win_rate": 0.9804,
+          "ci90_lo": 2.6266,
+          "ci90_hi": 5.3559,
+          "cruza_cero": false,
+          "p_boot": 0.0,
+          "significativo_bh": true
+        }
+      ]
+    }
+  ]
+}
