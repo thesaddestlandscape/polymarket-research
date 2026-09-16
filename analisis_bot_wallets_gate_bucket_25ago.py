@@ -254,11 +254,20 @@ def _cargar_pnl_real_por_bucket() -> dict:
     return {k: dict(v) for k, v in out.items()}
 
 
-UMBRAL_CONCENTRACION_MAX = 0.30  # 15-Sep: mismo umbral de alarma que el resto
-# del proyecto (ver feedback_conectar_todo_a_todo_minar_pasta_02ago, checklist
-# de promoción pt.31-Jul) -- hallazgo real que motivó esto: SNIPER#XRP#
-# 5min[0.20,0.25) tenía 75,1% de concentración en una sola wallet, encontrado
-# a mano y no por ningún mecanismo automático.
+UMBRAL_CONCENTRACION_MAX = 0.40  # 16-Sep (subido de 0.30, decisión explícita
+# Javi): el 0,30 original no venía de un consenso del proyecto (verificado
+# 16-Sep -- es el ÚNICO gate con degradación automática por concentración,
+# los demás como analisis_sports_wallet_mirror_concentracion.py solo
+# reportan, no degradan). Cuantificado ANTES de subir: exactamente 4
+# buckets con estadística limpia (g_kelly>0, shuffle_p<=0,007) liberados
+# hoy -- DISPERSO#ETH#240min[0.25) n=15, DISPERSO#BTC#60min[0.10) n=34,
+# SNIPER#SOL#15min[0.15) n=16, DISPERSO#DOGE#15min[0.15) n=49. Los casos
+# de dominancia real de una wallet (SNIPER#XRP#5min[0.20) 65,5%,
+# SNIPER#SOL#5min[0.05) 71,3%) siguen bloqueados igual a 40% -- el umbral
+# sigue protegiendo justo lo que debe. Hallazgo original que motivó el
+# 0,30 (15-Sep): SNIPER#XRP#5min[0.20,0.25) con 75,1% de concentración en
+# una sola wallet, encontrado a mano y no por ningún mecanismo automático
+# -- ese caso sigue vetado con el nuevo umbral, sin cambio.
 
 
 def _degradar(veredicto_crudo, entrada, clave_str, b, pnl_real_por_bucket):
