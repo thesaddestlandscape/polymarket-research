@@ -1,6 +1,6 @@
 {
  "STREAK_MOM_5M": {
-  "ic_bayes_familia": 0.0203,
+  "ic_bayes_familia": 0.0207,
   "n_tuplas_fuertes": 2,
   "pnl_fiel_combinado_eur": 100.51,
   "tuplas": [
@@ -34,19 +34,19 @@
   ]
  },
  "UPDOWN_GBM_15M_TARDIO": {
-  "ic_bayes_familia": -0.0477,
+  "ic_bayes_familia": -0.0474,
   "n_tuplas_fuertes": 1,
-  "pnl_fiel_combinado_eur": 23.76,
+  "pnl_fiel_combinado_eur": 23.81,
   "tuplas": [
    {
     "k": "UPDOWN_GBM_15M_TARDIO#XRP#15min#BUY_YES",
-    "pnl_fiel_eur_sin_suelo": 23.7636,
+    "pnl_fiel_eur_sin_suelo": 23.8055,
     "n_ejecutado": 223
    }
   ]
  },
  "UPDOWN_GBM": {
-  "ic_bayes_familia": 0.0293,
+  "ic_bayes_familia": 0.0294,
   "n_tuplas_fuertes": 1,
   "pnl_fiel_combinado_eur": 16.36,
   "tuplas": [
