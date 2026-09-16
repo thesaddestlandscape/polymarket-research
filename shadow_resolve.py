@@ -1048,6 +1048,7 @@ def _check_salidas_tempranas(ts: str):
         tp_umbral   = float(sl_cfg.get("take_profit_umbral_precio", 0.70))
         tp_umbral_longshot = float(sl_cfg.get("take_profit_umbral_precio_longshot", 0.45))
         longshot_entry_max = float(sl_cfg.get("longshot_entry_price_max", 0.53))
+        tp_longshot_corte_seg = float(sl_cfg.get("take_profit_longshot_corte_seg", 60.0))
     except (TypeError, ValueError):
         return
 
@@ -1069,6 +1070,7 @@ def _check_salidas_tempranas(ts: str):
             LIVE_CSV, ts, umbral, haircut,
             tp_activo=tp_activo, tp_umbral=tp_umbral,
             tp_umbral_longshot=tp_umbral_longshot, longshot_entry_max=longshot_entry_max,
+            tp_longshot_corte_seg=tp_longshot_corte_seg,
             por_tupla=por_tupla, opt_in_activo=opt_in_activo)
     finally:
         fcntl.flock(lock_f, fcntl.LOCK_UN)
@@ -1079,6 +1081,7 @@ def _check_salidas_tempranas_bajo_lock(LIVE_CSV: Path, ts: str, umbral: float, h
                                         tp_activo: bool = False, tp_umbral: float = 0.70,
                                         tp_umbral_longshot: float = 0.45,
                                         longshot_entry_max: float = 0.53,
+                                        tp_longshot_corte_seg: float = 60.0,
                                         por_tupla: dict | None = None,
                                         opt_in_activo: bool = False):
     """Cuerpo real de _check_salidas_tempranas, ejecutado con el lock de
@@ -1136,12 +1139,35 @@ def _check_salidas_tempranas_bajo_lock(LIVE_CSV: Path, ts: str, umbral: float, h
         # nunca hereda el umbral global.
         umbral_efectivo = umbral
         tp_activo_efectivo = tp_activo
+        # 16-Sep (petición explícita Javi, hallazgo Smart Exit LONGSHOT
+        # tiempo-condicionado -- ver idea_smart_exit_longshot_tiempo_
+        # confirmado_16sep e idea_smart_exit_longshot_corte60s_optimo_16sep):
+        # el overlay LONGSHOT (BUY_YES, entry_price<longshot_entry_max) es
+        # por PRECIO+DIRECCIÓN, cruza TODAS las estrategias -- no encaja en
+        # `por_tupla` (que es por STRATEGY#SUBTYPE, pensado para casos como
+        # WALLET_MIRROR#BTC#15min). Se evalúa como una vía INDEPENDIENTE del
+        # opt-in por tupla: una posición longshot-elegible pasa aunque su
+        # tupla no esté en `por_tupla`, sin tocar ni ampliar la protección ya
+        # aprobada de WALLET_MIRROR#BTC#15min (que sigue exactamente igual).
+        # es_longshot calculado UNA sola vez aquí y reusado más abajo (en el
+        # chequeo de TP) -- /code-review 16-Sep, hallazgo real: existían dos
+        # expresiones casi idénticas (aquí y en el bloque de TP) que podían
+        # desincronizarse si una se editaba sin la otra.
+        es_longshot = direction == "BUY_YES" and entry_p < longshot_entry_max
+        es_candidata_longshot = tp_activo and es_longshot
         if opt_in_activo:
             clave_tupla = f"{t.get('strategy', '')}#{t.get('subtype', '')}"
-            if clave_tupla not in por_tupla:
+            if clave_tupla in por_tupla:
+                umbral_efectivo = por_tupla[clave_tupla]
+                tp_activo_efectivo = False  # opt-in de hoy es solo stop-loss, nunca TP sin verificación propia
+            elif es_candidata_longshot:
+                # fuera de por_tupla pero elegible para el overlay longshot:
+                # usa los umbrales de NIVEL SUPERIOR (umbral/tp_activo), no
+                # hereda nada de por_tupla -- SL=umbral (0.30€, población
+                # validada), TP=tp_activo (gate maestro ya exige True).
+                pass
+            else:
                 continue
-            umbral_efectivo = por_tupla[clave_tupla]
-            tp_activo_efectivo = False  # opt-in de hoy es solo stop-loss, nunca TP sin verificación propia
 
         mercado = mercados.get(mid)
         if not mercado:
@@ -1162,8 +1188,10 @@ def _check_salidas_tempranas_bajo_lock(LIVE_CSV: Path, ts: str, umbral: float, h
         # si se agota y el trade sigue OPEN, Smart Exit retoma la protección.
         end_str = mercado.get("endDate") or t.get("end_date", "")
         end_dt = _parsear_end_date(end_str)
+        seg_restante = None  # 16-Sep: segundos hasta el cierre, solo para el overlay longshot
         if end_dt is not None:
             segundos_desde_cierre = (ahora_local - end_dt).total_seconds()
+            seg_restante = -segundos_desde_cierre
             if 0 <= segundos_desde_cierre < GRACIA_RESOLUCION_NORMAL_SEGUNDOS:
                 continue  # end_date pasó hace poco -- se le da margen a la resolución normal
             # si no: end_date aún no ha pasado (sigue vivo, se protege como
@@ -1206,10 +1234,39 @@ def _check_salidas_tempranas_bajo_lock(LIVE_CSV: Path, ts: str, umbral: float, h
             # un BUY_NO barato es un favorito YES caro, dinámica de mercado
             # distinta, nunca se validó el umbral de TP ahí. Sin este filtro de
             # dirección, un BUY_NO#0.40 habría heredado el umbral longshot
-            # (0.45) sin ninguna evidencia detrás.
-            es_longshot = direction == "BUY_YES" and entry_p < longshot_entry_max
+            # (0.45) sin ninguna evidencia detrás. (es_longshot calculado una
+            # sola vez más arriba, en la línea ~1156, y reusado aquí.)
             umbral_tp_efectivo = tp_umbral_longshot if es_longshot else tp_umbral
-            if p_lado >= umbral_tp_efectivo:
+            disparar_tp = p_lado >= umbral_tp_efectivo
+            if es_longshot and disparar_tp:
+                # 16-Sep (idea_smart_exit_longshot_tiempo_confirmado_16sep,
+                # idea_smart_exit_longshot_corte60s_optimo_16sep): tocar el
+                # umbral con POCO tiempo restante (<tp_longshot_corte_seg,
+                # calibrado a 60s con datos reales) es casi siempre un
+                # ganador ya decidido (100% de 55 casos históricos, n=55,
+                # split-half 27/27 y 28/28 sin ni un perdedor) -- vender ahí
+                # deja dinero sobre la mesa. Tocarlo con >=60s restantes SÍ
+                # revierte con frecuencia (71,8% de 71 casos habría perdido
+                # si se aguanta) -- vender ahí protege de verdad.
+                #
+                # /code-review 16-Sep (hallazgo real, corregido aquí):
+                # `seg_restante` también es negativo (y cada vez MÁS negativo)
+                # para una posición OPEN "atascada" mucho DESPUÉS de su cierre
+                # (el caso que el comentario de más arriba, líneas ~1178-1185,
+                # llama "algo se atascó -- se retoma la protección"). Sin el
+                # `>= 0` de abajo, esas posiciones atascadas tenían
+                # `seg_restante <= -300` (siempre < 60), así que el TP quedaba
+                # desactivado PARA SIEMPRE en ellas -- justo lo contrario de
+                # "retomar la protección". El corte de 60s solo tiene sentido
+                # ANTES del cierre nominal (seg_restante>=0); pasado el cierre,
+                # el TP se comporta como antes de esta pieza (dispara sin
+                # condición de tiempo, máxima protección). Sin `seg_restante`
+                # (mercado sin end_date fiable) también se mantiene el
+                # comportamiento sin condición -- fail-closed hacia MÁS
+                # protección, nunca hacia menos.
+                if seg_restante is not None and 0 <= seg_restante < tp_longshot_corte_seg:
+                    disparar_tp = False
+            if disparar_tp:
                 motivo_salida = "take_profit"
         if motivo_salida is None:
             if pnl_ajustado <= -umbral_efectivo:
