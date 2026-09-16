@@ -12867,3 +12867,10 @@ timestamp_utc,condition_id,market_slug,activo,marco,lado_mayoria,n_votos_trigger
 2026-09-15T23:55:30+00:00,0x32de22b250093dd82ec69e4de2b047f9f21d4a5b32e3f7585a6ca29f1e849248,eth-updown-5m-1789516500,ETH,5min,Up,2,0.5054545454545455,0.0,0.57,0.0,0.55,-3.51,0,1,1,0,bucket_no_aprobado_para_real
 2026-09-15T23:55:48+00:00,0x928d57a93055e8f2a0d0544e83908ba84e4d915da1bb463d74f882fa4b7f4a4e,sol-updown-5m-1789516500,SOL,5min,Up,3,0.42,0.0,0.56,0.0,0.56,0.0,0,0,1,0,fuera_de_zona_confirmada
 2026-09-15T23:56:19+00:00,0xbd344b965c6d88b44ed104c4543d8dd81c6a497c8dde7f08e4dbbaf2114cac3d,xrp-updown-5m-1789516500,XRP,5min,Down,3,0.51,0.0,0.58,0.0,0.58,0.0,0,0,0,0,fuera_de_zona_confirmada
+2026-09-15T23:59:54+00:00,0xaf59e0e79a3e6ab5279b4950b9f9b8ca6ecf37c619dfef609fb654e2ccc07e0a,eth-updown-5m-1789516800,ETH,5min,Up,2,0.48,178.9,0.37,279.7,0.38,2.7,1,0,1,0,fuera_de_zona_confirmada
+2026-09-16T00:00:03+00:00,0xc8f37cfd70903796ff69919719b99b69fab30937012ceb5f644e29a044d6bd03,btc-updown-5m-1789516800,BTC,5min,Up,3,0.48,0.0,0.54,0.0,0.61,12.96,0,0,1,0,fuera_de_zona_confirmada
+2026-09-16T00:00:13+00:00,0xbb77333bd7e64d787b60ae43b112cf7b8e3b2b066d89b8f8d9097ed2194b1db6,btc-updown-15m-1789516800,BTC,15min,Down,2,0.46,0.0,0.5,0.0,0.51,2.0,0,1,1,0,no_fillable_en_decision
+2026-09-16T00:00:27+00:00,0x177b3b45aea31584f808b758781a4464f1772657e4dbb6495d58b9dc96ac244b,xrp-updown-5m-1789516800,XRP,5min,Down,2,0.58,0.0,0.65,0.0,0.65,0.0,0,0,0,0,fuera_de_zona_confirmada
+2026-09-16T00:00:30+00:00,0xbd056d572ab2be97f754fd60f995f3d4095c5791408f72049fea43c96d87d24e,sol-updown-5m-1789516800,SOL,5min,Down,3,0.5599999707189558,80.8,0.51,0.0,0.6,17.65,0,0,1,0,fuera_de_zona_confirmada
+2026-09-16T00:01:02+00:00,0x4b4536d58e5673c99d4ca976b4a0a221a61c6a3158c96caeb77191346e3f7a96,eth-updown-15m-1789516800,ETH,15min,Down,2,0.53,0.0,0.56,63.5,0.54,-3.57,1,1,1,0,no_fill: gate post-requote (CANDIDATA9_BOT_CONSENSO#ETH#15min#BUY_NO): py_actual=0.5100 veredicto=malo_confirmado
+2026-09-16T00:02:59+00:00,0x0a3c925ed340c903732bdc128603c21fd2b7051e1b06f6c26b3a97887d57b91f,sol-updown-15m-1789516800,SOL,15min,Down,2,0.57,563.7,0.51,604.4,0.47,-7.84,1,0,0,0,fuera_de_zona_confirmada
