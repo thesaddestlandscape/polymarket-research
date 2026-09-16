@@ -444,7 +444,7 @@ def _normalizar_pred(row: dict) -> dict:
     return row
 
 
-def cargar_predicciones_index() -> dict:
+def cargar_predicciones_index(dias: int = 10) -> dict:
     """18-Ago: lectura tolerante por FICHERO (mismo fix y mismo motivo que
     shadow_resolve.py::cargar_predicciones_pendientes() -- desde el
     desacoplo de run_fast_mantenimiento.sh, shadow_predict.py (proceso
@@ -452,7 +452,45 @@ def cargar_predicciones_index() -> dict:
     predictions_HOY.csv.write() justo cuando este proceso lo lee.
     csv_lectura_tolerante reintenta una vez tras 0.5s antes de saltar el
     fichero y reportarlo como fallo persistente (no silenciado para
-    siempre como "probable concurrencia", ver /code-review del mismo día)."""
+    siempre como "probable concurrencia", ver /code-review del mismo día).
+
+    16-Sep (prioritario, petición explícita Javi el 15-Sep -- barrido de
+    salud durante la crisis RAM/OOM real de ese dia: `sorted(DIR_SHADOW.
+    glob("predictions_*.csv"))` sin acotar releia TODO el historico desde
+    23-Jun (600-700MB/dia hoy) en CADA ciclo, sin ventana ni throttle --
+    mismo perfil de crecimiento sin limite que ya causo el incidente de
+    04-Ago (calcular_params() O(n^2)-ish). Acotado al mismo patron YA
+    usado por el hermano de esta funcion (linea ~2562, con cache propia) --
+    aqui sin cache porque esta version es mas barata (solo strategy+
+    market_id+decision, no reparsea features por fila).
+
+    dias=10 elegido con datos reales de HOY, no adivinado: el consumidor
+    real (`perdidas_nuevas` en main(), solo predicciones NUEVAS sin
+    procesar) necesita casi siempre 1-2 dias (`ya_procesadas` ya cubre el
+    resto); el consumidor mas exigente (`_extraer_features()` sobre TODO
+    el historico via `aprender_patrones_causales()`/`generar_performance()`)
+    ya usa PRIMERO la columna `features` propia de cada fila de results.csv
+    (rellena desde 24-Jun) y solo cae a `pred` como fallback -- muestreado
+    570.914 filas de results.csv (20%): solo 0.1% tiene `features` vacio, y
+    el 100% de esas son de HACE MAS DE 9 DIAS (periodo anterior a la
+    columna `features`), nunca de datos recientes. 10 dias cubre con margen
+    el marco mas largo (weekly, ~7 dias prediccion->resolucion) + ese fallback
+    historico marginal (0.1%, ya sin cobertura util de todas formas -- eran
+    predicciones de antes de que existiera la columna que se intenta usar
+    como fallback).
+
+    ⚠️ Tradeoff aceptado (hallazgo /code-review 16-Sep): `clasificar_causa()`
+    en main() consulta este indice DIRECTAMENTE (sin el fallback a la
+    columna `features` que si tiene `_extraer_features()`) para reclasificar
+    perdidas de `perdidas_nuevas`. Si `ya_procesadas` alguna vez vuelve vacio
+    por corrupcion/perdida del indice (ya paso una vez, 17-Ago, ver
+    `cargar_ya_postmortem()`), TODO el historico de perdidas se reclasifica
+    de golpe y cualquier perdida de hace >10 dias recibe pred=None -- la
+    funcion no crashea (ya maneja pred=None), solo degrada la etiqueta
+    `causa_perdida` a menos precisa para ese backlog viejo en ese escenario
+    raro de recuperacion. Diagnostico, no dinero real ni gate de decision --
+    tradeoff aceptado a cambio de no releer 600-700MB/dia sin limite en cada
+    ciclo normal."""
     index = {}
 
     def _parsear(arch: Path) -> dict:
@@ -466,7 +504,8 @@ def cargar_predicciones_index() -> dict:
                         idx_local[clave] = row
         return idx_local
 
-    for arch in sorted(DIR_SHADOW.glob("predictions_*.csv")):
+    archivos = sorted(DIR_SHADOW.glob("predictions_*.csv"))[-(dias + 2):]
+    for arch in archivos:
         idx_arch = leer_csv_tolerante(arch, _parsear, log_fn=print)
         if idx_arch:
             for clave, row in idx_arch.items():
