@@ -1,19 +1,147 @@
 {
-  "timestamp_utc": "2026-09-15T07:57:01+00:00",
+  "timestamp_utc": "2026-09-16T07:57:02+00:00",
   "pipeline": {
-    "n_ciclos_resolve_postmortem": 5,
-    "resolve_postmortem_p50_s": 106.6,
-    "resolve_postmortem_p95_s": 538.7,
-    "resolve_postmortem_max_s": 538.7,
+    "n_ciclos_resolve_postmortem": 133,
+    "resolve_postmortem_p50_s": 132.8,
+    "resolve_postmortem_p95_s": 409.6,
+    "resolve_postmortem_max_s": 545.1,
     "resolve_postmortem_duraciones_s": [
-      423.0,
-      538.7,
+      148.5,
+      93.9,
+      234.7,
+      460.8,
+      102.5,
+      128.1,
+      199.4,
+      172.0,
+      167.8,
       99.5,
-      101.9,
-      106.6
+      290.2,
+      101.7,
+      131.3,
+      172.3,
+      164.5,
+      145.7,
+      315.5,
+      95.4,
+      97.2,
+      98.0,
+      209.8,
+      170.5,
+      446.6,
+      173.4,
+      141.8,
+      113.2,
+      153.6,
+      123.0,
+      414.9,
+      96.0,
+      122.7,
+      105.8,
+      160.5,
+      104.9,
+      113.9,
+      314.9,
+      131.7,
+      105.8,
+      137.3,
+      107.0,
+      104.4,
+      335.2,
+      114.4,
+      120.8,
+      317.1,
+      115.2,
+      108.9,
+      354.2,
+      110.7,
+      141.5,
+      292.9,
+      102.6,
+      108.5,
+      302.0,
+      102.9,
+      108.8,
+      164.4,
+      145.5,
+      105.7,
+      351.2,
+      196.6,
+      144.5,
+      140.1,
+      101.8,
+      103.5,
+      109.3,
+      375.5,
+      107.7,
+      194.2,
+      167.5,
+      130.9,
+      106.5,
+      163.6,
+      315.5,
+      180.6,
+      109.2,
+      119.6,
+      155.1,
+      145.1,
+      545.1,
+      219.7,
+      132.8,
+      116.2,
+      126.9,
+      100.5,
+      358.9,
+      275.0,
+      160.1,
+      167.3,
+      116.4,
+      119.1,
+      296.5,
+      156.5,
+      104.0,
+      132.8,
+      120.8,
+      99.8,
+      296.1,
+      130.2,
+      107.1,
+      104.0,
+      128.9,
+      107.7,
+      109.1,
+      402.0,
+      108.5,
+      109.6,
+      107.6,
+      163.4,
+      150.4,
+      137.1,
+      296.0,
+      112.1,
+      112.7,
+      125.9,
+      118.9,
+      409.6,
+      335.4,
+      107.1,
+      106.6,
+      116.9,
+      126.2,
+      149.5,
+      460.9,
+      231.7,
+      122.5,
+      140.1,
+      150.1,
+      202.7,
+      513.0,
+      136.0,
+      121.0,
+      179.8
     ],
-    "n_ciclos_live_trade": 273,
-    "hueco_live_trade_max_s": 106.0
+    "n_ciclos_live_trade": 4536,
+    "hueco_live_trade_max_s": 100.0
   },
   "procesos_colgados": [],
   "deploy": {
@@ -23,159 +151,63 @@
     ]
   },
   "disco": {
-    "pct_usado": 85.0,
-    "gb_libres": 11.19,
+    "pct_usado": 88.0,
+    "gb_libres": 9.11,
     "git_gb": 0.0,
-    "data_gb": 29.17,
-    "datalogs_gb": 4.79
+    "data_gb": 30.73,
+    "datalogs_gb": 4.82
   },
   "ram": {
     "ram_total_gb": 7.56,
-    "ram_disponible_gb": 2.91,
-    "ram_pct_libre": 38.5
+    "ram_disponible_gb": 0.94,
+    "ram_pct_libre": 12.5
   },
   "integridad_datos": {
     "trades_abiertos_atascados": [],
-    "n_trades_total": 653,
-    "n_results_total": 556568
+    "n_trades_total": 689,
+    "n_results_total": 571700
   },
   "integridad_datos_sports": {
     "trades_abiertos_atascados": [],
-    "n_trades_total": 5
+    "n_trades_total": 6
   },
   "carga_sistema": {
-    "load1": 10.5,
-    "load5": 9.93,
-    "load15": 10.65,
+    "load1": 10.37,
+    "load5": 10.7,
+    "load15": 10.75,
     "nproc": 4,
-    "ratio5": 2.48,
+    "ratio5": 2.67,
     "n_procesos_total": 232
   },
   "oom_kills": {
-    "n_oom_kills_24h": 16,
+    "n_oom_kills_24h": 1,
     "eventos": [
       {
-        "ts": "Sep 14 11:30:41",
-        "pid": "1756010",
+        "ts": "Sep 15 12:30:18",
+        "pid": "2112428",
         "nombre": "python",
-        "rss_mb": 376.9
-      },
-      {
-        "ts": "Sep 14 13:00:16",
-        "pid": "1775192",
-        "nombre": "python",
-        "rss_mb": 432.1
-      },
-      {
-        "ts": "Sep 14 14:26:04",
-        "pid": "1795634",
-        "nombre": "python",
-        "rss_mb": 364.3
-      },
-      {
-        "ts": "Sep 14 14:30:30",
-        "pid": "1794898",
-        "nombre": "python",
-        "rss_mb": 2436.2
-      },
-      {
-        "ts": "Sep 14 19:01:00",
-        "pid": "1865782",
-        "nombre": "python",
-        "rss_mb": 1009.1
-      },
-      {
-        "ts": "Sep 15 00:32:59",
-        "pid": "1937428",
-        "nombre": "python",
-        "rss_mb": 2098.3
-      },
-      {
-        "ts": "Sep 15 00:35:35",
-        "pid": "1937829",
-        "nombre": "python",
-        "rss_mb": 2126.4
-      },
-      {
-        "ts": "Sep 15 00:37:51",
-        "pid": "1938419",
-        "nombre": "python",
-        "rss_mb": 2114.0
-      },
-      {
-        "ts": "Sep 15 00:40:42",
-        "pid": "1936674",
-        "nombre": "python",
-        "rss_mb": 2716.3
-      },
-      {
-        "ts": "Sep 15 04:52:26",
-        "pid": "2004163",
-        "nombre": "python",
-        "rss_mb": 1081.1
-      },
-      {
-        "ts": "Sep 15 05:01:12",
-        "pid": "2003538",
-        "nombre": "python",
-        "rss_mb": 1038.6
-      },
-      {
-        "ts": "Sep 15 06:17:28",
-        "pid": "2024296",
-        "nombre": "python",
-        "rss_mb": 1561.3
-      },
-      {
-        "ts": "Sep 15 06:23:31",
-        "pid": "2025740",
-        "nombre": "python",
-        "rss_mb": 2202.4
-      },
-      {
-        "ts": "Sep 15 06:30:53",
-        "pid": "2026739",
-        "nombre": "python",
-        "rss_mb": 1801.4
-      },
-      {
-        "ts": "Sep 15 07:04:26",
-        "pid": "2033891",
-        "nombre": "python",
-        "rss_mb": 830.8
-      },
-      {
-        "ts": "Sep 15 07:06:04",
-        "pid": "2033290",
-        "nombre": "python3",
-        "rss_mb": 1052.7
+        "rss_mb": 2155.2
       }
     ]
   },
   "git_push": {
-    "commits_sin_pushear": 0
+    "commits_sin_pushear": 1
   },
   "vigias_rotos": {
-    "n_vigias_rotos": 2,
+    "n_vigias_rotos": 1,
     "vigias": [
       {
         "log": "vigia_candidata9_10_gate_bucket.log",
-        "mtime_utc": "2026-09-15T07:31:02+00:00",
+        "mtime_utc": "2026-09-15T08:03:02+00:00",
         "ultima_linea_fallo": "subprocess.TimeoutExpired: Command '['nice', '-n', '15', '/root/polymarket-research/.venv/bin/python', '/root/polymarket-research/analisis_candidata9_10_gate_bucket_26ago.py']' timed out after 1800 se"
-      },
-      {
-        "log": "vigia_gate_bucket_wallet_mirror.log",
-        "mtime_utc": "2026-09-15T06:24:18+00:00",
-        "ultima_linea_fallo": "[vigias_frecuentes_fase0] 🚨 vigia_gate_bucket_wallet_mirror murió: TimeoutExpired: Command '['/root/polymarket-research/.venv/bin/python', '/root/polymarket-research/analisis_wallet_mirror_gate_bucket"
       }
     ]
   },
   "anomalias": [
-    "⏱️ ciclo resolve+postmortem tardó 539s (umbral 120s)",
+    "⏱️ ciclo resolve+postmortem tardó 545s (umbral 120s)",
     "⚠️ screens STALE (código en disco != código cargado): ejeclive",
-    "💀 16 OOM-kill(s) del kernel en 24h: python(pid 1756010, 376.9MB), python(pid 1775192, 432.1MB), python(pid 1795634, 364.3MB), python(pid 1794898, 2436.2MB), python(pid 1865782, 1009.1MB), python(pid 1937428, 2098.3MB), python(pid 1937829, 2126.4MB), python(pid 1938419, 2114.0MB), python(pid 1936674, 2716.3MB), python(pid 2004163, 1081.1MB), python(pid 2003538, 1038.6MB), python(pid 2024296, 1561.3MB), python(pid 2025740, 2202.4MB), python(pid 2026739, 1801.4MB), python(pid 2033891, 830.8MB), python3(pid 2033290, 1052.7MB)",
-    "🚨 vigía roto: vigia_candidata9_10_gate_bucket.log (última ejecución falló, mtime 2026-09-15T07:31:02+00:00) -- subprocess.TimeoutExpired: Command '['nice', '-n', '15', '/root/polymarket-research/.venv/bin/python', '/root/polymarket-research/analisis_candidata9_10_gate_bucket_26ago.py']' timed out after 1800 se",
-    "🚨 vigía roto: vigia_gate_bucket_wallet_mirror.log (última ejecución falló, mtime 2026-09-15T06:24:18+00:00) -- [vigias_frecuentes_fase0] 🚨 vigia_gate_bucket_wallet_mirror murió: TimeoutExpired: Command '['/root/polymarket-research/.venv/bin/python', '/root/polymarket-research/analisis_wallet_mirror_gate_bucket"
+    "💀 1 OOM-kill(s) del kernel en 24h: python(pid 2112428, 2155.2MB)",
+    "🚨 vigía roto: vigia_candidata9_10_gate_bucket.log (última ejecución falló, mtime 2026-09-15T08:03:02+00:00) -- subprocess.TimeoutExpired: Command '['nice', '-n', '15', '/root/polymarket-research/.venv/bin/python', '/root/polymarket-research/analisis_candidata9_10_gate_bucket_26ago.py']' timed out after 1800 se"
   ],
   "estado": "ANOMALIA"
 }
