@@ -22,7 +22,8 @@
     "activo": false,
     "sl_umbral_perdida_eur": 0.30,
     "tp_umbral_precio": 0.85,
-    "tp_corte_tiempo_seg": 60
+    "tp_corte_tiempo_seg": 60,
+    "longshot_entry_price_max": 0.53
   },
   "riesgo": {
     "half_kelly": true,
