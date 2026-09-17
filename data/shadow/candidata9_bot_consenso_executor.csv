@@ -15654,3 +15654,8 @@ timestamp_utc,condition_id,market_slug,activo,marco,lado_mayoria,n_votos_trigger
 2026-09-17T15:26:00+00:00,0x50d905dc8df71c9aa8fae3bbeaf7bbfe6c10cb580c886dc3226f0e9822a994f3,eth-updown-5m-1789658700,ETH,5min,Up,4,0.66,0.0,0.8,0.0,0.73,-8.75,0,0,1,0,fuera_de_zona_confirmada
 2026-09-17T15:26:24+00:00,0x7f7783f2239f2a48b167b6c2ff0276b6b18a6ce72aeefddb82bd7db5ada0b6aa,sol-updown-5m-1789658700,SOL,5min,Up,3,0.62,108.1,0.62,119.3,0.63,1.61,1,0,1,0,fuera_de_zona_confirmada
 2026-09-17T15:26:58+00:00,0x283a03910d5078922e8879e8a7f4ca7020d1c6638d1d9a3fd7ffba4788c35025,xrp-updown-5m-1789658700,XRP,5min,Up,2,0.6400000378947329,470.7,0.37,465.1,0.33,-10.81,1,0,0,0,fuera_de_zona_confirmada
+2026-09-17T15:27:22+00:00,0x8a582feb5574bcdde1615b41b00e24e1210d1168f08f3dd98db7808630fa799f,bnb-updown-15m-1789658100,BNB,15min,Up,2,0.26,2.0,0.26,2.0,0.26,0.0,0,0,0,0,fuera_de_zona_confirmada
+2026-09-17T15:30:10+00:00,0xb0165e153dd7cb5d5f4da9028ee86c0ae31117730c68841b778f83252fede511,sol-updown-5m-1789659000,SOL,5min,Down,2,0.45,118.5,0.31,239.3,0.33,6.45,1,0,1,0,fuera_de_zona_confirmada
+2026-09-17T15:31:19+00:00,0x3eafe63e7f8ed2300266f6a10b45d57a724155b7fd9fb11b927970a2514ff3db,eth-updown-5m-1789659000,ETH,5min,Up,2,0.56,629.2,0.52,702.3,0.52,0.0,1,1,1,0,veto CLV: clv_medio=-0.0891 (n=35)
+2026-09-17T15:32:04+00:00,0xcfdc94da5a473599a363a76c0afb65234e60f318fc90fd473730a885baefa43e,btc-updown-5m-1789659000,BTC,5min,Down,3,0.5,6116.8,0.21,6136.0,0.21,0.0,1,1,1,0,no_fill: gate post-requote (CANDIDATA9_BOT_CONSENSO#BTC#5min#BUY_NO): py_actual=0.8400 veredicto=malo_confirmado
+2026-09-17T15:32:12+00:00,0x691f187893635b860bdd0468995ccee7f167330fcec28e1b2d18f969c58bd0da,xrp-updown-5m-1789659000,XRP,5min,Up,3,0.53,0.0,0.83,0.0,0.79,-4.82,0,0,0,0,fuera_de_zona_confirmada
