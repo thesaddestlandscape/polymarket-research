@@ -1,4 +1,4 @@
-# Estado del bot — 2026-09-17 18:26 UTC
+# Estado del bot — 2026-09-17 18:34 UTC
 
 ## Live — dinero real (on-chain)
 | | |
@@ -17,7 +17,7 @@
 | P&L sim compuesto | 🟢 +63652.32 $ (ficción Kelly: +250206% s/ operativo) |
 | P&L sim hoy (2026-09-17) | 🟢 +1394.71 $ |
 | Operaciones resueltas | 593252 (338410 WIN / 254842 LOSS) — 57.0% |
-| Señales abiertas | 292112 |
+| Señales abiertas | 292844 |
 
 ## Estrategias (visión global)
 
@@ -37,9 +37,9 @@
 | MOMENTUM_IBS_15M_BALLENA | 22998 | 48.9% | -0.011 | 📈 madura (+0.04) | +1004.64$ | 0.50$ | ⚠️ IC negativo |
 | UPDOWN_GBM_IBS_ALTO | 835 | 78.6% | +0.285 | ➡️ estable | +647.89$ | 2.00$ | ✅ activa |
 | GBM_LATE_60M | 1315 | 56.7% | +0.067 | 📈 madura (+0.11) | +594.82$ | 0.67$ | ✅ activa |
-| LEADLAG_BTC_XRP_15M | 1792 | 59.0% | +0.090 | 📈 madura (+0.04) | +444.79$ | 1.07$ | ✅ activa |
+| LEADLAG_BTC_XRP_15M | 1792 | 59.0% | +0.090 | 📈 madura (+0.04) | +444.79$ | 1.06$ | ✅ activa |
 | ORDER_FLOW_5M | 2617 | 55.1% | +0.051 | 📈 madura (+0.08) | +359.68$ | 1.12$ | ✅ activa |
-| FAVORITO_CONFIRMADO_5MIN_BAJALATENCIA | 18775 | 62.4% | +0.124 | ➡️ estable | +321.00$ | 1.25$ | ✅ activa |
+| FAVORITO_CONFIRMADO_5MIN_BAJALATENCIA | 18775 | 62.4% | +0.124 | ➡️ estable | +321.00$ | 1.24$ | ✅ activa |
 | UPDOWN_GBM_15M_CROSS_WINDOW_SPREAD | 715 | 82.7% | +0.326 | 📈 madura (+0.07) | +182.53$ | 2.00$ | ✅ activa |
 | RESOLUTION_SNIPER | 205 | 90.2% | +0.399 | 📈 madura (+0.06) | +153.07$ | 2.00$ | ✅ activa |
 | GBM_LATE_60M_PYCONFIRMADO | 614 | 55.5% | +0.055 | ➡️ estable | +118.63$ | 0.55$ | ✅ activa |
@@ -87,22 +87,22 @@
 
 ## Calidad de datos
 
-✅ **OK** — última verificación 2026-09-17T18:26 UTC
+✅ **OK** — última verificación 2026-09-17T18:34 UTC
 
 | Asset | Precio | Age | Alertas |
 |---|---|---|---|
-| ✅ BTC | $76,679.40 | 0.2min |  |
-| ✅ ETH | $2,459.22 | 0.2min |  |
-| ✅ SOL | $101.29 | 0.2min |  |
+| ✅ BTC | $76,677.93 | 0.2min |  |
+| ✅ ETH | $2,457.39 | 0.2min |  |
+| ✅ SOL | $101.22 | 0.2min |  |
 | ✅ XRP | $1.30 | 0.2min |  |
 
 **Cross-source** (binance, coinbase, kraken):
 
 | Asset | Consenso | Fuente | Estado |
 |---|---|---|---|
-| BTC | $76,679.40 | consenso |  |
-| ETH | $2,459.22 | consenso |  |
-| SOL | $101.29 | consenso |  |
+| BTC | $76,677.93 | consenso |  |
+| ETH | $2,457.47 | consenso |  |
+| SOL | $101.27 | consenso |  |
 | XRP | $1.30 | consenso |  |
 
 ---
