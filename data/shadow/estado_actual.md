@@ -1,4 +1,4 @@
-# Estado del bot — 2026-09-17 06:41 UTC
+# Estado del bot — 2026-09-17 06:47 UTC
 
 ## Live — dinero real (on-chain)
 | | |
@@ -13,11 +13,11 @@
 ## Shadow — MODELO SIMULADO (no cobrable)
 | | |
 |---|---|
-| P&L fiel (stake fijo 1$) | +15380.28 $ |
-| P&L sim compuesto | 🟢 +62625.89 $ (ficción Kelly: +246171% s/ operativo) |
-| P&L sim hoy (2026-09-17) | 🟢 +368.28 $ |
-| Operaciones resueltas | 585961 (334167 WIN / 251794 LOSS) — 57.0% |
-| Señales abiertas | 229072 |
+| P&L fiel (stake fijo 1$) | +15385.37 $ |
+| P&L sim compuesto | 🟢 +62631.23 $ (ficción Kelly: +246192% s/ operativo) |
+| P&L sim hoy (2026-09-17) | 🟢 +373.62 $ |
+| Operaciones resueltas | 585986 (334186 WIN / 251800 LOSS) — 57.0% |
+| Señales abiertas | 229762 |
 
 ## Estrategias (visión global)
 
@@ -27,19 +27,19 @@
 | GBM_LATE_15M_ESPACIO_ATR | 30986 | 59.3% | +0.093 | ➡️ estable | +15445.62$ | 0.78$ | ✅ activa |
 | GBM_LATE_15M | 32545 | 58.5% | +0.085 | ➡️ estable | +13185.55$ | 0.75$ | ✅ activa |
 | GBM_LATE_15M_MULTIHORIZONTE | 16735 | 67.0% | +0.170 | ➡️ estable | +12240.74$ | 1.69$ | ✅ activa |
-| CANDIDATA10_CONFIRMACION_CRUZADA | 12923 | 46.0% | -0.040 | 📈 madura (+0.07) | +4220.13$ | 0.50$ | ⚠️ IC negativo |
+| CANDIDATA10_CONFIRMACION_CRUZADA | 12925 | 46.0% | -0.040 | 📈 madura (+0.07) | +4219.86$ | 0.50$ | ⚠️ IC negativo |
 | UPDOWN_GBM_15M_TARDIO | 12723 | 51.0% | +0.010 | 📉 agota (-0.08) | +3755.56$ | 0.50$ | ✅ activa |
 | GBM_LATE_5M | 7902 | 60.8% | +0.108 | 📈 madura (+0.08) | +3356.13$ | 1.41$ | ✅ activa |
-| UPDOWN_GBM | 30588 | 53.4% | +0.034 | ➡️ estable | +2018.39$ | 0.50$ | ✅ activa |
+| UPDOWN_GBM | 30589 | 53.4% | +0.034 | ➡️ estable | +2018.87$ | 0.50$ | ✅ activa |
 | GBM_LATE_15M_PYCONFIRMADO | 4615 | 61.9% | +0.119 | 📈 madura (+0.06) | +1798.22$ | 1.25$ | ✅ activa |
-| MOMENTUM_IBS_5M_BALLENA | 58373 | 42.7% | -0.073 | ➡️ estable | +1166.09$ | 0.50$ | ⚠️ IC negativo |
+| MOMENTUM_IBS_5M_BALLENA | 58379 | 42.7% | -0.073 | ➡️ estable | +1165.69$ | 0.50$ | ⚠️ IC negativo |
 | WEEKLY_PRICE | 1949 | 80.5% | +0.304 | 📈 madura (+0.04) | +1002.88$ | 2.00$ | ✅ activa |
 | MOMENTUM_IBS_15M_BALLENA | 22594 | 48.8% | -0.012 | 📈 madura (+0.04) | +962.70$ | 0.50$ | ⚠️ IC negativo |
 | UPDOWN_GBM_IBS_ALTO | 826 | 78.5% | +0.284 | ➡️ estable | +639.87$ | 2.00$ | ✅ activa |
 | GBM_LATE_60M | 1294 | 56.6% | +0.066 | 📈 madura (+0.11) | +554.41$ | 0.66$ | ✅ activa |
 | LEADLAG_BTC_XRP_15M | 1762 | 59.0% | +0.090 | 📈 madura (+0.04) | +435.50$ | 1.06$ | ✅ activa |
 | ORDER_FLOW_5M | 2606 | 55.0% | +0.050 | 📈 madura (+0.08) | +354.32$ | 1.12$ | ✅ activa |
-| FAVORITO_CONFIRMADO_5MIN_BAJALATENCIA | 18537 | 62.4% | +0.124 | ➡️ estable | +328.23$ | 1.25$ | ✅ activa |
+| FAVORITO_CONFIRMADO_5MIN_BAJALATENCIA | 18538 | 62.4% | +0.124 | ➡️ estable | +327.16$ | 1.25$ | ✅ activa |
 | UPDOWN_GBM_15M_CROSS_WINDOW_SPREAD | 706 | 82.6% | +0.325 | 📈 madura (+0.06) | +179.76$ | 2.00$ | ✅ activa |
 | RESOLUTION_SNIPER | 200 | 90.0% | +0.396 | 📈 madura (+0.06) | +147.29$ | 2.00$ | ✅ activa |
 | GBM_LATE_60M_PYCONFIRMADO | 608 | 55.6% | +0.056 | ➡️ estable | +113.22$ | 0.56$ | ✅ activa |
@@ -69,40 +69,40 @@
 | UPDOWN_OU_5M | 1078 | 36.3% | -0.137 | 📈 madura (+0.06) | -150.73$ | 0.50$ | ⚠️ IC negativo |
 | CANDIDATA9_BOT_CONSENSO | 1109 | 39.1% | -0.108 | ➡️ estable | -170.39$ | 0.50$ | ⚠️ IC negativo |
 | MOMENTUM_IBS_15M | 13376 | 48.9% | -0.011 | ➡️ estable | -184.87$ | 0.50$ | ⚠️ IC negativo |
-| FAVORITO_CONFIRMADO_DEPTH_FASE0 | 27534 | 59.8% | +0.098 | ➡️ estable | -830.13$ | 0.98$ | ✅ activa |
+| FAVORITO_CONFIRMADO_DEPTH_FASE0 | 27536 | 59.8% | +0.098 | ➡️ estable | -828.61$ | 0.98$ | ✅ activa |
 | FAVORITO_CONFIRMADO_15MIN_ALTACONVICCION | 13842 | 69.1% | +0.191 | ➡️ estable | -947.97$ | 1.90$ | ✅ activa |
-| BALLENAS_TARDIAS | 28674 | 41.3% | -0.087 | ➡️ estable | -4385.06$ | 0.50$ | ⚠️ IC negativo |
-| FAVORITO_CONFIRMADO_5MIN_ALTACONVICCION | 58976 | 69.5% | +0.195 | ➡️ estable | -4854.32$ | 1.95$ | ✅ activa |
-| FAVORITO_CONFIRMADO | 108539 | 61.2% | +0.112 | ➡️ estable | -5143.92$ | 1.13$ | ✅ activa |
+| BALLENAS_TARDIAS | 28675 | 41.3% | -0.087 | ➡️ estable | -4384.71$ | 0.50$ | ⚠️ IC negativo |
+| FAVORITO_CONFIRMADO_5MIN_ALTACONVICCION | 58982 | 69.5% | +0.195 | ➡️ estable | -4852.16$ | 1.95$ | ✅ activa |
+| FAVORITO_CONFIRMADO | 108545 | 61.2% | +0.112 | ➡️ estable | -5141.33$ | 1.13$ | ✅ activa |
 
 ## Últimas 5 resoluciones
 
 | Timestamp | Estrategia | Mercado | Resultado | PNL |
 |---|---|---|---|---|
-| 2026-09-17T06:40 | CANDIDATA10_CONFIRMACION_CRUZADA#BTC#5min | … | ✅ WIN | +0.14$ |
-| 2026-09-17T06:37 | BALLENAS_TARDIAS#BNB#5min | … | ✅ WIN | +0.18$ |
-| 2026-09-17T06:37 | BALLENAS_TARDIAS#ETH#5min | … | ✅ WIN | +0.14$ |
-| 2026-09-17T06:37 | BALLENAS_TARDIAS#SOL#5min | … | ✅ WIN | +0.15$ |
-| 2026-09-17T06:37 | MOMENTUM_IBS_5M_BALLENA#BTC#5min | … | ❌ LOSS | -1.07$ |
+| 2026-09-17T06:45 | FAVORITO_CONFIRMADO_5MIN_ALTACONVICCION#XRP#5min | … | ✅ WIN | +0.43$ |
+| 2026-09-17T06:45 | CANDIDATA10_CONFIRMACION_CRUZADA#BTC#5min | … | ✅ WIN | +0.80$ |
+| 2026-09-17T06:45 | MOMENTUM_IBS_5M_BALLENA#XRP#5min | … | ✅ WIN | +0.87$ |
+| 2026-09-17T06:45 | FAVORITO_CONFIRMADO#XRP#5min | … | ❌ LOSS | -1.07$ |
+| 2026-09-17T06:45 | FAVORITO_CONFIRMADO_5MIN_BAJALATENCIA#XRP#5min | … | ❌ LOSS | -1.07$ |
 
 ## Calidad de datos
 
-✅ **OK** — última verificación 2026-09-17T06:41 UTC | rechazos 1h: 1 (rango=0, spike=0)
+✅ **OK** — última verificación 2026-09-17T06:46 UTC | rechazos 1h: 1 (rango=0, spike=0)
 
 | Asset | Precio | Age | Alertas |
 |---|---|---|---|
-| ✅ BTC | $76,472.01 | 0.1min |  |
-| ✅ ETH | $2,442.07 | 0.1min |  |
-| ✅ SOL | $99.88 | 0.1min |  |
+| ✅ BTC | $76,478.68 | 0.1min |  |
+| ✅ ETH | $2,442.57 | 0.1min |  |
+| ✅ SOL | $99.97 | 0.1min |  |
 | ✅ XRP | $1.30 | 0.1min |  |
 
 **Cross-source** (binance, coinbase, kraken):
 
 | Asset | Consenso | Fuente | Estado |
 |---|---|---|---|
-| BTC | $76,474.20 | consenso |  |
-| ETH | $2,442.14 | consenso |  |
-| SOL | $99.73 | consenso |  |
+| BTC | $76,483.80 | consenso |  |
+| ETH | $2,442.72 | consenso |  |
+| SOL | $99.83 | consenso |  |
 | XRP | $1.30 | consenso |  |
 
 **Alertas activas:**
