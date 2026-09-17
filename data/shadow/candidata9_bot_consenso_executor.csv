@@ -14957,3 +14957,13 @@ timestamp_utc,condition_id,market_slug,activo,marco,lado_mayoria,n_votos_trigger
 2026-09-17T06:00:29+00:00,0xa31acf07768f2be4d0982e2e94ff94b6292e8f15d1c24a1cae7be5fa4af061c5,bitcoin-up-or-down-september-17-2026-2am-et,BTC,60min,Down,2,0.51,0.0,0.55,0.0,0.55,0.0,0,0,0,0,fuera_de_zona_confirmada
 2026-09-17T06:01:03+00:00,0xc0e11851eed0b9fa4af65df50725f163a2faf868ff4048961b2aa81c36307aa8,bnb-updown-5m-1789624800,BNB,5min,Up,2,0.34,0.0,0.41,0.0,0.55,34.15,0,0,0,0,fuera_de_zona_confirmada
 2026-09-17T06:01:12+00:00,0x9c36df9a43277119d2c3db611c369fddd2630adcdacb8bb06339b7fc5c6ea651,xrp-updown-5m-1789624800,XRP,5min,Up,2,0.43,0.0,0.59,0.0,0.59,0.0,0,0,0,0,fuera_de_zona_confirmada
+2026-09-17T06:02:27+00:00,0xc88f9e3f5a95b451bd0cbbfefd8126b6c323efb088198387e67a45f2d484aadb,doge-updown-5m-1789624800,DOGE,5min,Up,2,0.35,0.0,0.56,0.0,0.75,33.93,0,0,0,0,fuera_de_zona_confirmada
+2026-09-17T06:02:35+00:00,0x45dbbc7800f6e5da84ea1d640e1919331ab5e8d178aa3a7fed85a2b6b49b6d00,eth-updown-15m-1789624800,ETH,15min,Up,2,0.58,0.0,0.61,0.0,0.62,1.64,0,0,0,0,fuera_de_zona_confirmada
+2026-09-17T06:04:14+00:00,0xec4fa9e7e9c69adcae6ee67aad2c5d73d97eab68d5c88082563861a5ade7fd21,xrp-updown-15m-1789624800,XRP,15min,Down,2,0.25,25.9,0.24,30.7,0.24,0.0,1,0,0,0,fuera_de_zona_confirmada
+2026-09-17T06:04:58+00:00,0xb9c7c466f66bd6bfbd1036aeafafc3752cc847ec416743361191aa1619730213,eth-updown-5m-1789625100,ETH,5min,Up,2,0.52,120.4,0.51,89.9,0.52,1.96,1,1,0,0,tupla_no_en_pares_permitidos_live
+2026-09-17T06:05:16+00:00,0xb6300217418b669eee0c3e86497f3aacaa930e97cf9ee012a540cc77af95852a,xrp-updown-5m-1789625100,XRP,5min,Down,2,0.51,2.5,0.53,2.5,0.53,0.0,0,0,0,0,fuera_de_zona_confirmada
+2026-09-17T06:05:19+00:00,0xf8033ce0f75d49c798ab9ae2312acc80a4a00f35bcc6edc08c084b88149ed745,btc-updown-5m-1789625100,BTC,5min,Down,4,0.5,1465.3,0.45,2785.1,0.4,-11.11,1,1,0,0,tupla_no_en_pares_permitidos_live
+2026-09-17T06:05:28+00:00,0xdeb63ff98366ba76e50c75a50caac7638b19c98e06fc9e5fe31eb3ae6dff0f55,btc-updown-15m-1789624800,BTC,15min,Down,8,0.55,6777.7,0.21,7408.2,0.2,-4.76,1,0,0,0,fuera_de_zona_confirmada
+2026-09-17T06:05:31+00:00,0x7f9b8604157a12e82c5a028c239447be9df1b1cdf6bf0d4af8039c1b3f5b8381,sol-updown-5m-1789625100,SOL,5min,Down,3,0.5,180.4,0.46,263.8,0.41,-10.87,1,0,0,0,fuera_de_zona_confirmada
+2026-09-17T06:06:26+00:00,0xbdc7626287482ae3d4d04644c6e3845f4e466fddcd2b8febd1a8d6c849691222,bnb-updown-5m-1789625100,BNB,5min,Up,2,0.33,0.0,0.8,0.0,0.76,-5.0,0,0,0,0,fuera_de_zona_confirmada
+2026-09-17T06:07:56+00:00,0xcbc0ba6adad8ae2403977645170c428b9208254d75f3cfbff678dffaca7fc227,doge-updown-5m-1789625100,DOGE,5min,Up,2,0.45,113.1,0.14,70.9,0.16,14.29,1,0,0,0,fuera_de_zona_confirmada
