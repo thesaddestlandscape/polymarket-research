@@ -5138,5 +5138,254 @@
       "🚨 vigía roto: vigia_candidata9_10_gate_bucket.log (última ejecución falló, mtime 2026-09-15T08:03:02+00:00) -- subprocess.TimeoutExpired: Command '['nice', '-n', '15', '/root/polymarket-research/.venv/bin/python', '/root/polymarket-research/analisis_candidata9_10_gate_bucket_26ago.py']' timed out after 1800 se"
     ],
     "estado": "ANOMALIA"
+  },
+  {
+    "timestamp_utc": "2026-09-17T07:57:01+00:00",
+    "pipeline": {
+      "n_ciclos_resolve_postmortem": 131,
+      "resolve_postmortem_p50_s": 165.2,
+      "resolve_postmortem_p95_s": 382.3,
+      "resolve_postmortem_max_s": 586.7,
+      "resolve_postmortem_duraciones_s": [
+        254.3,
+        142.9,
+        326.4,
+        203.0,
+        119.1,
+        108.6,
+        119.5,
+        470.1,
+        586.7,
+        267.1,
+        156.1,
+        189.9,
+        180.1,
+        166.6,
+        345.6,
+        174.3,
+        219.9,
+        138.1,
+        138.9,
+        150.8,
+        338.2,
+        134.4,
+        118.9,
+        132.7,
+        266.4,
+        151.7,
+        404.1,
+        214.4,
+        143.8,
+        145.0,
+        212.9,
+        186.5,
+        380.1,
+        135.5,
+        121.5,
+        134.5,
+        121.0,
+        206.6,
+        389.1,
+        147.6,
+        125.1,
+        134.4,
+        120.6,
+        192.9,
+        446.3,
+        263.1,
+        115.0,
+        144.1,
+        117.0,
+        179.6,
+        359.4,
+        137.7,
+        139.7,
+        201.1,
+        190.8,
+        167.0,
+        149.9,
+        528.0,
+        128.8,
+        145.0,
+        256.3,
+        208.1,
+        144.2,
+        360.1,
+        192.9,
+        245.8,
+        151.5,
+        165.2,
+        120.2,
+        333.2,
+        123.6,
+        117.0,
+        154.3,
+        362.6,
+        129.1,
+        359.4,
+        156.7,
+        141.4,
+        180.5,
+        268.3,
+        166.0,
+        382.3,
+        231.1,
+        228.0,
+        116.0,
+        179.0,
+        131.6,
+        322.3,
+        133.9,
+        122.8,
+        212.4,
+        153.3,
+        117.5,
+        317.9,
+        117.6,
+        117.0,
+        121.7,
+        330.8,
+        122.3,
+        327.9,
+        119.9,
+        118.4,
+        120.9,
+        181.7,
+        224.4,
+        119.3,
+        360.6,
+        217.4,
+        118.4,
+        148.2,
+        146.6,
+        132.1,
+        147.7,
+        329.1,
+        187.3,
+        325.0,
+        124.5,
+        136.4,
+        130.1,
+        142.9,
+        357.3,
+        172.4,
+        237.0,
+        142.0,
+        125.3,
+        188.3,
+        365.9,
+        169.9,
+        135.8,
+        277.9,
+        199.7
+      ],
+      "n_ciclos_live_trade": 4338,
+      "hueco_live_trade_max_s": 101.0
+    },
+    "procesos_colgados": [],
+    "deploy": {
+      "n_screens": 15,
+      "stale": []
+    },
+    "disco": {
+      "pct_usado": 89.0,
+      "gb_libres": 8.22,
+      "git_gb": 0.0,
+      "data_gb": 31.31,
+      "datalogs_gb": 4.88
+    },
+    "ram": {
+      "ram_total_gb": 7.56,
+      "ram_disponible_gb": 4.7,
+      "ram_pct_libre": 62.2
+    },
+    "integridad_datos": {
+      "trades_abiertos_atascados": [],
+      "n_trades_total": 700,
+      "n_results_total": 586753
+    },
+    "integridad_datos_sports": {
+      "trades_abiertos_atascados": [],
+      "n_trades_total": 8
+    },
+    "carga_sistema": {
+      "load1": 4.02,
+      "load5": 4.76,
+      "load15": 5.8,
+      "nproc": 4,
+      "ratio5": 1.19,
+      "n_procesos_total": 225
+    },
+    "oom_kills": {
+      "n_oom_kills_24h": 9,
+      "eventos": [
+        {
+          "ts": "Sep 16 09:30:19",
+          "pid": "2455862",
+          "nombre": "python",
+          "rss_mb": 1699.8
+        },
+        {
+          "ts": "Sep 16 11:00:19",
+          "pid": "2478554",
+          "nombre": "python",
+          "rss_mb": 1359.7
+        },
+        {
+          "ts": "Sep 16 12:28:33",
+          "pid": "2498461",
+          "nombre": "python",
+          "rss_mb": 3641.0
+        },
+        {
+          "ts": "Sep 16 15:00:22",
+          "pid": "2542394",
+          "nombre": "python",
+          "rss_mb": 1653.1
+        },
+        {
+          "ts": "Sep 16 18:00:19",
+          "pid": "2581787",
+          "nombre": "python",
+          "rss_mb": 2603.6
+        },
+        {
+          "ts": "Sep 16 19:01:01",
+          "pid": "2592232",
+          "nombre": "python",
+          "rss_mb": 524.7
+        },
+        {
+          "ts": "Sep 16 20:01:04",
+          "pid": "2618693",
+          "nombre": "python",
+          "rss_mb": 1274.6
+        },
+        {
+          "ts": "Sep 17 00:40:09",
+          "pid": "2695436",
+          "nombre": "python",
+          "rss_mb": 3700.1
+        },
+        {
+          "ts": "Sep 17 06:23:23",
+          "pid": "2790870",
+          "nombre": "python",
+          "rss_mb": 3628.0
+        }
+      ]
+    },
+    "git_push": {
+      "commits_sin_pushear": 1
+    },
+    "vigias_rotos": {
+      "n_vigias_rotos": 0,
+      "vigias": []
+    },
+    "anomalias": [
+      "⏱️ ciclo resolve+postmortem tardó 587s (umbral 120s)",
+      "💀 9 OOM-kill(s) del kernel en 24h: python(pid 2455862, 1699.8MB), python(pid 2478554, 1359.7MB), python(pid 2498461, 3641.0MB), python(pid 2542394, 1653.1MB), python(pid 2581787, 2603.6MB), python(pid 2592232, 524.7MB), python(pid 2618693, 1274.6MB), python(pid 2695436, 3700.1MB), python(pid 2790870, 3628.0MB)"
+    ],
+    "estado": "ANOMALIA"
   }
 ]
