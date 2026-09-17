@@ -15659,3 +15659,10 @@ timestamp_utc,condition_id,market_slug,activo,marco,lado_mayoria,n_votos_trigger
 2026-09-17T15:31:19+00:00,0x3eafe63e7f8ed2300266f6a10b45d57a724155b7fd9fb11b927970a2514ff3db,eth-updown-5m-1789659000,ETH,5min,Up,2,0.56,629.2,0.52,702.3,0.52,0.0,1,1,1,0,veto CLV: clv_medio=-0.0891 (n=35)
 2026-09-17T15:32:04+00:00,0xcfdc94da5a473599a363a76c0afb65234e60f318fc90fd473730a885baefa43e,btc-updown-5m-1789659000,BTC,5min,Down,3,0.5,6116.8,0.21,6136.0,0.21,0.0,1,1,1,0,no_fill: gate post-requote (CANDIDATA9_BOT_CONSENSO#BTC#5min#BUY_NO): py_actual=0.8400 veredicto=malo_confirmado
 2026-09-17T15:32:12+00:00,0x691f187893635b860bdd0468995ccee7f167330fcec28e1b2d18f969c58bd0da,xrp-updown-5m-1789659000,XRP,5min,Up,3,0.53,0.0,0.83,0.0,0.79,-4.82,0,0,0,0,fuera_de_zona_confirmada
+2026-09-17T15:34:14+00:00,0x52c71e7acab8c470e6c057a340f490aea3745804ad890b92d9e0f3a006726177,bnb-updown-5m-1789659000,BNB,5min,Down,2,0.12,10.7,0.08,5.9,0.1,25.0,1,0,0,0,fuera_de_zona_confirmada
+2026-09-17T15:34:23+00:00,0x3997a470a7ca9df12597994b01db226d1841aa9c7d2dafd6e20cd75e212b000a,btc-updown-15m-1789659000,BTC,15min,Up,6,0.5,0.0,0.69,0.0,0.69,0.0,0,0,1,0,fuera_de_zona_confirmada
+2026-09-17T15:35:13+00:00,0x9759c5a23724100191f79e255843646c26ed8541c6ef967de8b0590991ea0511,eth-updown-5m-1789659300,ETH,5min,Up,2,0.5,0.0,0.56,0.0,0.63,12.5,0,0,1,0,fuera_de_zona_confirmada
+2026-09-17T15:35:16+00:00,0xea4b379efde5d42fc6d24c71d065dd6ab9e76e9a28cab50d414394455fa8ef0e,btc-updown-5m-1789659300,BTC,5min,Down,4,0.5099999972432433,4236.8,0.35,4412.5,0.36,2.86,1,0,1,0,fuera_de_zona_confirmada
+2026-09-17T15:35:24+00:00,0xcc614648638b1abb70984b2128cbebbc02a4ff92ba5ab16dbf10766fb9d01eab,eth-updown-15m-1789659000,ETH,15min,Down,3,0.45,1199.6,0.19,875.1,0.15,-21.05,1,0,1,0,fuera_de_zona_confirmada
+2026-09-17T15:35:33+00:00,0xd95754006b23a0debc45d547eceaff154934581ddecbb116c98711c94fcae473,sol-updown-5m-1789659300,SOL,5min,Up,2,0.64,0.0,0.7,0.0,0.73,4.29,0,0,1,0,fuera_de_zona_confirmada
+2026-09-17T15:38:31+00:00,0x11d095f9b83769c587753f3c73ed93b970fbfda26bdb609f55f3ba0c05294432,bnb-updown-5m-1789659300,BNB,5min,Down,2,0.52,394.0,0.01,392.6,0.01,0.0,1,0,0,0,fuera_de_zona_confirmada
