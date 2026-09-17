@@ -31,11 +31,11 @@
   "hi": 0.17,
   "n": 50,
   "pnl_medio": -0.6149,
-  "diff_vs_resto": -0.4926,
-  "p_valor": 0.001,
+  "diff_vs_resto": -0.4934,
+  "p_valor": 0.002,
   "split_half_diff": [
-   -0.8776,
-   -0.1075
+   -0.8785,
+   -0.1084
   ],
   "split_half_ok": true,
   "pnl_medio_loo": -0.7441,
@@ -278,7 +278,7 @@
   "p_valor": 0.0,
   "split_half_diff": [
    -0.9921,
-   -0.6904
+   -0.6905
   ],
   "split_half_ok": true,
   "pnl_medio_loo": -1.0,
