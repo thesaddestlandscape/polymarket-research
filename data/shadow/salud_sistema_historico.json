@@ -5387,5 +5387,286 @@
       "💀 9 OOM-kill(s) del kernel en 24h: python(pid 2455862, 1699.8MB), python(pid 2478554, 1359.7MB), python(pid 2498461, 3641.0MB), python(pid 2542394, 1653.1MB), python(pid 2581787, 2603.6MB), python(pid 2592232, 524.7MB), python(pid 2618693, 1274.6MB), python(pid 2695436, 3700.1MB), python(pid 2790870, 3628.0MB)"
     ],
     "estado": "ANOMALIA"
+  },
+  {
+    "timestamp_utc": "2026-09-18T07:57:01+00:00",
+    "pipeline": {
+      "n_ciclos_resolve_postmortem": 132,
+      "resolve_postmortem_p50_s": 162.1,
+      "resolve_postmortem_p95_s": 470.7,
+      "resolve_postmortem_max_s": 669.1,
+      "resolve_postmortem_duraciones_s": [
+        122.3,
+        337.0,
+        163.7,
+        154.2,
+        138.9,
+        168.2,
+        126.3,
+        350.7,
+        218.5,
+        145.2,
+        136.0,
+        175.0,
+        134.5,
+        521.5,
+        182.7,
+        139.8,
+        126.1,
+        127.1,
+        147.4,
+        127.2,
+        669.1,
+        262.4,
+        184.9,
+        149.8,
+        142.4,
+        132.5,
+        536.7,
+        130.5,
+        235.3,
+        164.1,
+        147.7,
+        134.1,
+        463.0,
+        135.8,
+        145.8,
+        258.5,
+        140.6,
+        141.4,
+        501.4,
+        139.5,
+        132.1,
+        151.8,
+        235.0,
+        277.4,
+        488.9,
+        181.4,
+        164.7,
+        130.1,
+        128.8,
+        139.0,
+        657.9,
+        139.2,
+        135.2,
+        148.5,
+        131.0,
+        152.7,
+        282.4,
+        436.8,
+        178.4,
+        136.8,
+        167.7,
+        128.5,
+        183.6,
+        146.8,
+        390.8,
+        153.3,
+        132.7,
+        190.8,
+        166.3,
+        133.3,
+        387.5,
+        179.7,
+        198.3,
+        255.4,
+        311.2,
+        150.1,
+        363.0,
+        141.2,
+        147.1,
+        184.7,
+        226.5,
+        137.6,
+        470.7,
+        258.3,
+        137.6,
+        165.7,
+        172.1,
+        162.1,
+        222.7,
+        396.8,
+        275.5,
+        132.3,
+        185.8,
+        132.4,
+        133.8,
+        335.3,
+        143.2,
+        199.6,
+        172.7,
+        133.0,
+        148.9,
+        357.6,
+        131.6,
+        138.4,
+        370.7,
+        137.6,
+        163.8,
+        400.8,
+        132.4,
+        141.6,
+        171.5,
+        147.9,
+        153.7,
+        366.4,
+        135.2,
+        361.6,
+        184.9,
+        137.2,
+        202.4,
+        364.2,
+        146.8,
+        138.0,
+        274.8,
+        187.0,
+        144.1,
+        157.1,
+        412.2,
+        163.0,
+        383.1,
+        145.2,
+        142.7,
+        151.4
+      ],
+      "n_ciclos_live_trade": 4567,
+      "hueco_live_trade_max_s": 99.0
+    },
+    "procesos_colgados": [],
+    "deploy": {
+      "n_screens": 15,
+      "stale": []
+    },
+    "disco": {
+      "pct_usado": 91.0,
+      "gb_libres": 6.75,
+      "git_gb": 0.0,
+      "data_gb": 32.3,
+      "datalogs_gb": 4.91
+    },
+    "ram": {
+      "ram_total_gb": 7.56,
+      "ram_disponible_gb": 4.35,
+      "ram_pct_libre": 57.5
+    },
+    "integridad_datos": {
+      "trades_abiertos_atascados": [],
+      "n_trades_total": 706,
+      "n_results_total": 601768
+    },
+    "integridad_datos_sports": {
+      "trades_abiertos_atascados": [],
+      "n_trades_total": 11
+    },
+    "carga_sistema": {
+      "load1": 4.38,
+      "load5": 4.57,
+      "load15": 5.4,
+      "nproc": 4,
+      "ratio5": 1.14,
+      "n_procesos_total": 225
+    },
+    "oom_kills": {
+      "n_oom_kills_24h": 14,
+      "eventos": [
+        {
+          "ts": "Sep 17 09:00:41",
+          "pid": "2831438",
+          "nombre": "python",
+          "rss_mb": 1725.0
+        },
+        {
+          "ts": "Sep 17 13:10:39",
+          "pid": "2894553",
+          "nombre": "python",
+          "rss_mb": 2975.9
+        },
+        {
+          "ts": "Sep 17 16:00:50",
+          "pid": "2935005",
+          "nombre": "python",
+          "rss_mb": 1149.3
+        },
+        {
+          "ts": "Sep 17 17:15:14",
+          "pid": "2956684",
+          "nombre": "python",
+          "rss_mb": 3227.7
+        },
+        {
+          "ts": "Sep 17 18:27:40",
+          "pid": "2974034",
+          "nombre": "python",
+          "rss_mb": 2188.6
+        },
+        {
+          "ts": "Sep 17 19:45:36",
+          "pid": "2994673",
+          "nombre": "python",
+          "rss_mb": 1774.4
+        },
+        {
+          "ts": "Sep 17 23:10:03",
+          "pid": "3042954",
+          "nombre": "python",
+          "rss_mb": 3123.1
+        },
+        {
+          "ts": "Sep 18 00:27:01",
+          "pid": "3063137",
+          "nombre": "python",
+          "rss_mb": 3811.5
+        },
+        {
+          "ts": "Sep 18 03:00:20",
+          "pid": "3105113",
+          "nombre": "python",
+          "rss_mb": 2344.2
+        },
+        {
+          "ts": "Sep 18 03:40:03",
+          "pid": "3117392",
+          "nombre": "python",
+          "rss_mb": 2708.9
+        },
+        {
+          "ts": "Sep 18 05:00:58",
+          "pid": "3136412",
+          "nombre": "python",
+          "rss_mb": 1948.2
+        },
+        {
+          "ts": "Sep 18 06:14:15",
+          "pid": "3155336",
+          "nombre": "python",
+          "rss_mb": 3581.7
+        },
+        {
+          "ts": "Sep 18 06:30:37",
+          "pid": "3157220",
+          "nombre": "python",
+          "rss_mb": 26.6
+        },
+        {
+          "ts": "Sep 18 07:23:35",
+          "pid": "3172898",
+          "nombre": "python",
+          "rss_mb": 3407.6
+        }
+      ]
+    },
+    "git_push": {
+      "commits_sin_pushear": 0
+    },
+    "vigias_rotos": {
+      "n_vigias_rotos": 0,
+      "vigias": []
+    },
+    "anomalias": [
+      "⏱️ ciclo resolve+postmortem tardó 669s (umbral 120s)",
+      "💾 disco al 91% (6.75GB libres)",
+      "💀 14 OOM-kill(s) del kernel en 24h: python(pid 2831438, 1725.0MB), python(pid 2894553, 2975.9MB), python(pid 2935005, 1149.3MB), python(pid 2956684, 3227.7MB), python(pid 2974034, 2188.6MB), python(pid 2994673, 1774.4MB), python(pid 3042954, 3123.1MB), python(pid 3063137, 3811.5MB), python(pid 3105113, 2344.2MB), python(pid 3117392, 2708.9MB), python(pid 3136412, 1948.2MB), python(pid 3155336, 3581.7MB), python(pid 3157220, 26.6MB), python(pid 3172898, 3407.6MB)"
+    ],
+    "estado": "ANOMALIA"
   }
 ]
