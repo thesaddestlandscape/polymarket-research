@@ -17,14 +17,14 @@
   ]
  },
  "LIQUIDACIONES_5M": {
-  "ic_bayes_familia": -0.0032,
+  "ic_bayes_familia": -0.0035,
   "n_tuplas_fuertes": 2,
-  "pnl_fiel_combinado_eur": 36.19,
+  "pnl_fiel_combinado_eur": 35.18,
   "tuplas": [
    {
     "k": "LIQUIDACIONES_5M#ETH#5min#BUY_YES",
-    "pnl_fiel_eur_sin_suelo": 19.9933,
-    "n_ejecutado": 158
+    "pnl_fiel_eur_sin_suelo": 18.9863,
+    "n_ejecutado": 159
    },
    {
     "k": "LIQUIDACIONES_5M#BTC#5min#BUY_NO",
@@ -34,49 +34,49 @@
   ]
  },
  "UPDOWN_GBM_15M_TARDIO": {
-  "ic_bayes_familia": -0.0457,
+  "ic_bayes_familia": -0.0458,
   "n_tuplas_fuertes": 1,
-  "pnl_fiel_combinado_eur": 20.57,
+  "pnl_fiel_combinado_eur": 18.62,
   "tuplas": [
    {
     "k": "UPDOWN_GBM_15M_TARDIO#XRP#15min#BUY_YES",
-    "pnl_fiel_eur_sin_suelo": 20.5666,
-    "n_ejecutado": 231
-   }
-  ]
- },
- "STRUCT_NO_15M": {
-  "ic_bayes_familia": 0.014,
-  "n_tuplas_fuertes": 1,
-  "pnl_fiel_combinado_eur": 18.12,
-  "tuplas": [
-   {
-    "k": "STRUCT_NO_15M#ETH#15min#BUY_NO",
-    "pnl_fiel_eur_sin_suelo": 18.1236,
-    "n_ejecutado": 974
+    "pnl_fiel_eur_sin_suelo": 18.6184,
+    "n_ejecutado": 232
    }
   ]
  },
  "UPDOWN_GBM": {
-  "ic_bayes_familia": 0.03,
+  "ic_bayes_familia": 0.0299,
   "n_tuplas_fuertes": 1,
-  "pnl_fiel_combinado_eur": 16.44,
+  "pnl_fiel_combinado_eur": 17.47,
   "tuplas": [
    {
     "k": "UPDOWN_GBM#BTC#5min#BUY_NO",
-    "pnl_fiel_eur_sin_suelo": 16.4379,
-    "n_ejecutado": 458
+    "pnl_fiel_eur_sin_suelo": 17.4704,
+    "n_ejecutado": 459
+   }
+  ]
+ },
+ "STRUCT_NO_15M": {
+  "ic_bayes_familia": 0.0141,
+  "n_tuplas_fuertes": 1,
+  "pnl_fiel_combinado_eur": 17.01,
+  "tuplas": [
+   {
+    "k": "STRUCT_NO_15M#ETH#15min#BUY_NO",
+    "pnl_fiel_eur_sin_suelo": 17.0149,
+    "n_ejecutado": 977
    }
   ]
  },
  "GBM_LATE_60M_PYCONFIRMADO": {
-  "ic_bayes_familia": 0.055,
+  "ic_bayes_familia": 0.0557,
   "n_tuplas_fuertes": 1,
-  "pnl_fiel_combinado_eur": 16.32,
+  "pnl_fiel_combinado_eur": 16.37,
   "tuplas": [
    {
     "k": "GBM_LATE_60M_PYCONFIRMADO#SOL#60min#BUY_YES",
-    "pnl_fiel_eur_sin_suelo": 16.323,
+    "pnl_fiel_eur_sin_suelo": 16.368,
     "n_ejecutado": 14
    }
   ]
