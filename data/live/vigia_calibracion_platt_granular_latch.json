@@ -1306,5 +1306,13 @@
   "PRICE_TARGET_GBM#BTC": {
     "n": 200,
     "confirmado": false
+  },
+  "FAVORITO_CONFIRMADO#SOL#240min": {
+    "n": 206,
+    "confirmado": false
+  },
+  "PRICE_TARGET_GBM_FADE#BTC#atexpiry": {
+    "n": 201,
+    "confirmado": true
   }
 }
