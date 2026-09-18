@@ -319,16 +319,6 @@
   ],
   "n_suficiente_para_concluir": false
  },
- "0xda770326bd091d26f816917aa83a6baff668683f": {
-  "n": 5,
-  "pnl_total_eur": 1.8497,
-  "pnl_medio_eur": 0.3699,
-  "hit_rate": 0.8,
-  "fuentes": [
-   "sports"
-  ],
-  "n_suficiente_para_concluir": false
- },
  "0xd84d9b476074d0dbbbdf43546e7a1a4922837b8a": {
   "n": 1,
   "pnl_total_eur": 1.9015,
@@ -336,6 +326,16 @@
   "hit_rate": 1.0,
   "fuentes": [
    "cripto"
+  ],
+  "n_suficiente_para_concluir": false
+ },
+ "0xda770326bd091d26f816917aa83a6baff668683f": {
+  "n": 6,
+  "pnl_total_eur": 2.521,
+  "pnl_medio_eur": 0.4202,
+  "hit_rate": 0.8333,
+  "fuentes": [
+   "sports"
   ],
   "n_suficiente_para_concluir": false
  }
