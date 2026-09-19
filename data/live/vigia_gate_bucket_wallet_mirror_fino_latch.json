@@ -92,11 +92,11 @@
   "hi": 0.26,
   "n": 115,
   "pnl_medio": -0.4202,
-  "diff_vs_resto": -0.3982,
+  "diff_vs_resto": -0.3964,
   "p_valor": 0.0005,
   "split_half_diff": [
-   -0.5334,
-   -0.2654
+   -0.5315,
+   -0.2635
   ],
   "split_half_ok": true,
   "pnl_medio_loo": -0.4546,
@@ -151,20 +151,20 @@
  "SEGUIR#ETH#15min#0": {
   "lo": 0.13,
   "hi": 0.18,
-  "n": 87,
-  "pnl_medio": -0.6277,
-  "diff_vs_resto": -0.5873,
+  "n": 89,
+  "pnl_medio": -0.636,
+  "diff_vs_resto": -0.5963,
   "p_valor": 0.0,
   "split_half_diff": [
-   -0.6474,
-   -0.5286
+   -0.5025,
+   -0.6879
   ],
   "split_half_ok": true,
-  "pnl_medio_loo": -0.7014,
+  "pnl_medio_loo": -0.7082,
   "robusto_loo": true,
   "ci90_bootstrap": [
-   -0.8592,
-   -0.3325
+   -0.8623,
+   -0.3607
   ],
   "robusto_bootstrap": true,
   "n_posiciones_buscadas": 90,
@@ -180,11 +180,11 @@
   "hi": 0.25,
   "n": 50,
   "pnl_medio": 0.5464,
-  "diff_vs_resto": 0.5433,
-  "p_valor": 0.017,
+  "diff_vs_resto": 0.5413,
+  "p_valor": 0.0155,
   "split_half_diff": [
-   0.5658,
-   0.5208
+   0.5637,
+   0.5188
   ],
   "split_half_ok": true,
   "pnl_medio_loo": 0.4816,
@@ -209,11 +209,11 @@
   "hi": 0.51,
   "n": 80,
   "pnl_medio": 0.2914,
-  "diff_vs_resto": 0.2692,
-  "p_valor": 0.0135,
+  "diff_vs_resto": 0.2779,
+  "p_valor": 0.0085,
   "split_half_diff": [
-   0.1122,
-   0.4261
+   0.1209,
+   0.4349
   ],
   "split_half_ok": true,
   "pnl_medio_loo": 0.3077,
@@ -322,20 +322,20 @@
  "SEGUIR#BTC#5min#0": {
   "lo": 0.0,
   "hi": 0.05,
-  "n": 4569,
-  "pnl_medio": -0.6175,
-  "diff_vs_resto": -0.588,
+  "n": 4571,
+  "pnl_medio": -0.6176,
+  "diff_vs_resto": -0.5877,
   "p_valor": 0.0,
   "split_half_diff": [
-   -0.6814,
-   -0.4947
+   -0.681,
+   -0.4944
   ],
   "split_half_ok": true,
-  "pnl_medio_loo": -0.6378,
+  "pnl_medio_loo": -0.6379,
   "robusto_loo": true,
   "ci90_bootstrap": [
-   -0.7059,
-   -0.5257
+   -0.7009,
+   -0.5293
   ],
   "robusto_bootstrap": true,
   "n_posiciones_buscadas": 96,
@@ -351,11 +351,11 @@
   "hi": 0.06,
   "n": 216,
   "pnl_medio": -0.8562,
-  "diff_vs_resto": -0.8493,
+  "diff_vs_resto": -0.8486,
   "p_valor": 0.0,
   "split_half_diff": [
-   -0.9932,
-   -0.7055
+   -0.9924,
+   -0.7047
   ],
   "split_half_ok": true,
   "pnl_medio_loo": -1.0,
@@ -378,11 +378,11 @@
   "hi": 0.29,
   "n": 40,
   "pnl_medio": -0.5315,
-  "diff_vs_resto": -0.6067,
-  "p_valor": 0.014,
+  "diff_vs_resto": -0.6122,
+  "p_valor": 0.017,
   "split_half_diff": [
-   -0.505,
-   -0.7084
+   -0.5105,
+   -0.7139
   ],
   "split_half_ok": true,
   "pnl_medio_loo": -0.6206,
@@ -403,13 +403,13 @@
  "SEGUIR#ETH#5min#0": {
   "lo": 0.01,
   "hi": 0.06,
-  "n": 107,
+  "n": 108,
   "pnl_medio": -1.0,
-  "diff_vs_resto": -0.9863,
+  "diff_vs_resto": -0.9843,
   "p_valor": 0.0,
   "split_half_diff": [
-   -0.9863,
-   -0.9863
+   -0.9843,
+   -0.9843
   ],
   "split_half_ok": true,
   "pnl_medio_loo": -1.0,
