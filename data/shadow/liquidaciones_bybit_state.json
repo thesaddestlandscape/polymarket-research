@@ -1,5 +1,5 @@
 {
- "generado_utc": "2026-09-20T19:28:57+00:00",
+ "generado_utc": "2026-09-20T19:34:28+00:00",
  "fuente": "bybit",
  "BNB": {
   "2min": {
@@ -35,22 +35,22 @@
    "imbalance": null
   },
   "5min": {
-   "usd_long": 0.0,
+   "usd_long": 18157.55,
    "usd_short": 0.0,
-   "n": 0,
-   "imbalance": null
+   "n": 3,
+   "imbalance": -1.0
   },
   "15min": {
-   "usd_long": 0.0,
+   "usd_long": 18320.2,
    "usd_short": 0.0,
-   "n": 0,
-   "imbalance": null
+   "n": 4,
+   "imbalance": -1.0
   },
   "60min": {
-   "usd_long": 652.42,
+   "usd_long": 18320.2,
    "usd_short": 2020.63,
-   "n": 2,
-   "imbalance": 0.5119
+   "n": 5,
+   "imbalance": -0.8013
   }
  },
  "DOGE": {
@@ -87,22 +87,22 @@
    "imbalance": null
   },
   "5min": {
-   "usd_long": 0.0,
+   "usd_long": 14230.9,
    "usd_short": 0.0,
-   "n": 0,
-   "imbalance": null
+   "n": 4,
+   "imbalance": -1.0
   },
   "15min": {
-   "usd_long": 0.0,
+   "usd_long": 14230.9,
    "usd_short": 0.0,
-   "n": 0,
-   "imbalance": null
+   "n": 4,
+   "imbalance": -1.0
   },
   "60min": {
-   "usd_long": 211.67,
+   "usd_long": 14230.9,
    "usd_short": 2643.65,
-   "n": 4,
-   "imbalance": 0.8517
+   "n": 6,
+   "imbalance": -0.6867
   }
  },
  "SOL": {
@@ -113,22 +113,22 @@
    "imbalance": null
   },
   "5min": {
-   "usd_long": 0.0,
+   "usd_long": 22.11,
    "usd_short": 0.0,
-   "n": 0,
-   "imbalance": null
+   "n": 1,
+   "imbalance": -1.0
   },
   "15min": {
-   "usd_long": 0.0,
+   "usd_long": 22.11,
    "usd_short": 0.0,
-   "n": 0,
-   "imbalance": null
+   "n": 1,
+   "imbalance": -1.0
   },
   "60min": {
-   "usd_long": 1523.52,
+   "usd_long": 1545.63,
    "usd_short": 22157.09,
-   "n": 12,
-   "imbalance": 0.8713
+   "n": 13,
+   "imbalance": 0.8696
   }
  },
  "XRP": {
@@ -159,10 +159,10 @@
  },
  "lag_bybit_ws": {
   "ventana_min": 5,
-  "n_muestras": 0,
-  "ultimo_lag_s": null,
-  "max_lag_s": null,
-  "media_lag_s": null,
+  "n_muestras": 8,
+  "ultimo_lag_s": 0.51,
+  "max_lag_s": 0.6,
+  "media_lag_s": 0.33,
   "umbral_alerta_s": 5.0
  }
 }
