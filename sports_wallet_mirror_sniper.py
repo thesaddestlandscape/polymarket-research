@@ -537,6 +537,40 @@ async def _correr_una_conexion(wallets: dict, vistos: set, wallets_bucket: dict)
                                                 tokens_orden[mirror_idx], mejor_ask, stake_sim,
                                                 market_id_log=condition_id, techo_precio=techo_precio)
                                             _log(f"  {'EJECUTADO' if resultado.get('ok') else 'ERROR'}: {resultado}")
+                                        # 20-Sep (hallazgo real, dinero real: 2 fills fantasma
+                                        # de ~1,05€ cada uno quedaron 18-20h sin registrar --
+                                        # `sin_fill_confirmado` significa que la API aceptó la
+                                        # orden pero el poll de _verificar_fill_real no encontró
+                                        # evidencia a tiempo (indexado lento, no que no hubo
+                                        # fill real -- verificado con get_trades() horas después:
+                                        # AMBAS habían ejecutado de verdad). El bloque de abajo
+                                        # (ok=True) es el único que registraba nada -- este caso
+                                        # se perdía en silencio, invisible para bankroll_actual()/
+                                        # circuit breakers/reconciliar_fill_fantasma.py (que solo
+                                        # puede reconciliar una fila que exista). Mismo patrón ya
+                                        # arreglado en cripto (14-Sep, notas_error_con_order_id())
+                                        # nunca replicado aquí -- se registra una fila ERROR con
+                                        # el order_id en notas para que reconciliar_fill_fantasma.py
+                                        # (extendido hoy a data/sports/trades.csv) la reconcilie sola.
+                                        if (resultado is not None and not resultado.get("ok")
+                                                and resultado.get("no_fill") and resultado.get("order_id")):
+                                            _trade.registrar_trade({
+                                                "timestamp_utc": datetime.now(timezone.utc).isoformat(timespec="seconds"),
+                                                "market_id": condition_id,
+                                                "question": payload.get("slug", ""),
+                                                "end_date": _end_date_para_condition(condition_id),
+                                                "categoria": categoria, "tipo": info["tipo"],
+                                                "direction": str(mirror_idx),
+                                                "stake_eur": 0, "entry_price": resultado.get("entry_price", mejor_ask),
+                                                "edge_neto": edge_frac,
+                                                "status": "ERROR",
+                                                "close_timestamp": "", "exit_price": "",
+                                                "outcome_real": "", "fee_eur": 0.0,
+                                                "pnl_bruto_eur": "", "pnl_neto_eur": "",
+                                                "slip_real": "",
+                                                "notas": (f"wallet_mirror wallet={wallet} sin evidencia de fill real "
+                                                          f"order_id={resultado.get('order_id')}"),
+                                            })
                                         if resultado is not None and resultado.get("ok"):
                                             # 27-Ago noche: sin esto, un trade real se enviaba
                                             # pero NUNCA se registraba -- bankroll_actual()/

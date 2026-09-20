@@ -44,35 +44,67 @@ from pathlib import Path
 REPO = Path(__file__).resolve().parent
 sys.path.insert(0, str(REPO))
 
-TRADES_PATH = REPO / "data/live/trades.csv"
-# Mismo lock que _registrar_trade() en live_trade.py (TRADES_LOCK_PATH) --
-# este script hace un read-modify-write completo del fichero, no un simple
-# append; sin el mismo flock, una escritura de live_trade.py justo entre mi
-# lectura y mi escritura se perdería (yo reescribiría el fichero con la
-# versión vieja que leí, sin su fila nueva). Ruta duplicada a propósito
-# (ver mismo criterio que FEE_RATE_TAKER_CRYPTO en shadow_pnl_fiel.py --
-# importar live_trade.py aquí traería credenciales/requests innecesarios).
-TRADES_LOCK_PATH = REPO / "data/live/.trades_lock"
+# 20-Sep (hallazgo real: 2 fills fantasma de sports, ~1,05€ cada uno,
+# quedaron 18-20h sin registrar -- sports_wallet_mirror_sniper.py solo
+# registraba en trades.csv cuando ok=True, así que el caso "sin_fill_
+# confirmado" ni siquiera dejaba una fila que reconciliar; corregido ahí
+# aparte). Este script cubría solo cripto -- se generaliza a una lista de
+# ledgers, cada uno con su propio lock (mismo criterio que ya usa
+# reconciliar_sports.py para no mezclar ficheros/dinero de cripto y sports,
+# CLAUDE.md "no mezclar"). Sports comparte la MISMA wallet on-chain que
+# cripto (no tiene wallet propia, ver reconciliar_sports.py) -- el criterio
+# de match (maker_address==wallet, TAKER, taker_order_id==order_id) es
+# idéntico, solo cambia qué fichero se lee/escribe y que market_id en
+# sports YA es el condition_id completo (no pasa por market_id_resolver,
+# que es una tabla de cripto para IDs numéricos cortos -- pasarlo por ahí
+# sería un no-op que además ensucia el índice de resolución de cripto).
+LEDGERS = [
+    {
+        "nombre": "cripto",
+        "trades_path": REPO / "data/live/trades.csv",
+        # Mismo lock que _registrar_trade() en live_trade.py (TRADES_LOCK_PATH) --
+        # este script hace un read-modify-write completo del fichero, no un simple
+        # append; sin el mismo flock, una escritura de live_trade.py justo entre mi
+        # lectura y mi escritura se perdería (yo reescribiría el fichero con la
+        # versión vieja que leí, sin su fila nueva). Ruta duplicada a propósito
+        # (ver mismo criterio que FEE_RATE_TAKER_CRYPTO en shadow_pnl_fiel.py --
+        # importar live_trade.py aquí traería credenciales/requests innecesarios).
+        "lock_path": REPO / "data/live/.trades_lock",
+        "usar_resolver": True,
+        "fee_rate": 0.07,
+    },
+    {
+        "nombre": "sports",
+        "trades_path": REPO / "data/sports/trades.csv",
+        "lock_path": REPO / "data/sports/.trades_lock",  # mismo TRADES_LOCK_PATH que sports_live_trade.py
+        "usar_resolver": False,
+        # sports usa feeSchedule.rate=0.05, NO 0.07 (verificado 26-Ago
+        # contra gamma-api, ver CLAUDE.md/analisis_sports_wallet_mirror_
+        # gate_bucket_26ago.py) -- usar el de cripto aquí habría sobre-
+        # estimado el fee (y por tanto infravalorado el pnl) de cualquier
+        # trade ganador de sports que se reconciliara por esta vía.
+        "fee_rate": 0.05,
+    },
+]
 MIN_ESPERA_MIN = 10  # margen generoso sobre el indexado real observado (~26min en el incidente, pero
                       # ese fue el peor caso visto una vez -- 10min ya es 130x el poll original de 4.5s)
-FEE_RATE_TAKER_CRYPTO = 0.07
 
 FIRMA_RE = re.compile(r"order_id=(0x[0-9a-fA-F]+)")
 
 
-def _cargar_filas():
-    with open(TRADES_PATH, encoding="utf-8", newline="") as f:
+def _cargar_filas(trades_path: Path):
+    with open(trades_path, encoding="utf-8", newline="") as f:
         rows = list(csv.reader(f))
     return rows[0], rows[1:]
 
 
-def _guardar_filas(header, filas):
-    tmp = str(TRADES_PATH) + ".tmp"
+def _guardar_filas(trades_path: Path, header, filas):
+    tmp = str(trades_path) + ".tmp"
     with open(tmp, "w", encoding="utf-8", newline="") as f:
         w = csv.writer(f)
         w.writerow(header)
         w.writerows(filas)
-    os.replace(tmp, TRADES_PATH)
+    os.replace(tmp, trades_path)
 
 
 def _cliente():
@@ -101,18 +133,24 @@ def _buscar_fill_real(client, condition_id: str, order_id: str, wallet: str) -> 
     return None
 
 
-def main() -> int:
+def _reconciliar_ledger(ledger: dict, wallet: str) -> int:
     from shadow_digest import enviar_telegram
     import market_id_resolver
 
-    header, filas = _cargar_filas()
+    nombre = ledger["nombre"]
+    trades_path = ledger["trades_path"]
+    lock_path = ledger["lock_path"]
+    usar_resolver = ledger["usar_resolver"]
+    fee_rate = ledger["fee_rate"]
+    bot = "sports" if nombre == "sports" else "cripto"
+
+    if not trades_path.exists():
+        print(f"[reconciliar_fill_fantasma][{nombre}] {trades_path} no existe todavía, se salta")
+        return 0
+
+    header, filas = _cargar_filas(trades_path)
     idx = {h: i for i, h in enumerate(header)}
     ahora = datetime.now(timezone.utc)
-    wallet = (os.getenv("POLY_DEPOSIT_WALLET") or "").lower()
-    if not wallet:
-        from dotenv import load_dotenv
-        load_dotenv(REPO / "data/live/.env")
-        wallet = (os.getenv("POLY_DEPOSIT_WALLET") or "").lower()
 
     candidatas = []
     for i, r in enumerate(filas):
@@ -135,11 +173,11 @@ def main() -> int:
         candidatas.append((i, r, m.group(1), ts))
 
     if not candidatas:
-        print("[reconciliar_fill_fantasma] 0 filas candidatas (ERROR+sin evidencia de fill+order_id, "
+        print(f"[reconciliar_fill_fantasma][{nombre}] 0 filas candidatas (ERROR+sin evidencia de fill+order_id, "
               "fuera del margen de indexado)")
         return 0
 
-    print(f"[reconciliar_fill_fantasma] {len(candidatas)} fila(s) candidata(s)")
+    print(f"[reconciliar_fill_fantasma][{nombre}] {len(candidatas)} fila(s) candidata(s)")
     # Fase 1 (SIN lock): toda la parte lenta (llamadas de red a la API de
     # Polymarket) vive aquí -- mantener el lock de trades.csv durante
     # segundos de I/O de red bloquearía innecesariamente los appends del
@@ -151,9 +189,13 @@ def main() -> int:
     client = None
     for i, r, order_id, ts in candidatas:
         mid = r[idx["market_id"]]
-        condition_id = market_id_resolver.resolver(mid)
+        # sports: market_id YA es el condition_id completo (verificado
+        # 20-Sep contra la API real) -- market_id_resolver es una tabla de
+        # cripto para IDs numéricos cortos, pasar un condition_id por ahí
+        # sería un no-op que además ensucia su índice de resolución.
+        condition_id = market_id_resolver.resolver(mid) if usar_resolver else mid
         if not condition_id:
-            print(f"[reconciliar_fill_fantasma] {mid}: sin condition_id resoluble, se reintenta otro ciclo")
+            print(f"[reconciliar_fill_fantasma][{nombre}] {mid}: sin condition_id resoluble, se reintenta otro ciclo")
             continue
         if client is None:
             client = _cliente()
@@ -162,7 +204,7 @@ def main() -> int:
             # Sin evidencia tras un margen generoso -- se marca revisada para no
             # reintentar cada ciclo; el ERROR original queda como definitivo.
             actualizaciones[(mid, order_id)] = {"notas_extra": " revisado_sin_fill=1"}
-            print(f"[reconciliar_fill_fantasma] {mid} order_id={order_id}: SIN fill tras "
+            print(f"[reconciliar_fill_fantasma][{nombre}] {mid} order_id={order_id}: SIN fill tras "
                   f"{(datetime.now(timezone.utc)-ts).total_seconds()/60:.0f}min -- ERROR confirmado, no reintenta más")
             continue
 
@@ -191,7 +233,7 @@ def main() -> int:
                 upd["exit_price"] = str(precio_final)
                 upd["outcome_real"] = "1" if ganado else "0"
                 if ganado:
-                    fee = FEE_RATE_TAKER_CRYPTO * precio_fill * (1 - precio_fill) * (stake_real / max(precio_fill, 0.01))
+                    fee = fee_rate * precio_fill * (1 - precio_fill) * (stake_real / max(precio_fill, 0.01))
                     pnl = stake_real * (1.0 / max(precio_fill, 0.01) - 1.0) - fee
                 else:
                     fee = 0.0
@@ -211,10 +253,10 @@ def main() -> int:
                         f"(trade_id={trade_id} tx={tx_hash} size={size}@{precio_fill}). "
                         f"Antes ERROR/stake=0 por indexado lento del poll original. " + aviso_extra)
         actualizaciones[(mid, order_id)] = upd
-        print(f"[reconciliar_fill_fantasma] {mid} order_id={order_id}: fill real encontrado, "
+        print(f"[reconciliar_fill_fantasma][{nombre}] {mid} order_id={order_id}: fill real encontrado, "
               f"stake_real={stake_real:.2f}€ (se aplicará en Fase 2)")
         actualizaciones[(mid, order_id)]["_telegram"] = (
-            f"🔧 *Reconciliación automática: fill fantasma corregido*\n"
+            f"🔧 *Reconciliación automática: fill fantasma corregido* ({nombre})\n"
             f"market={mid} order_id={order_id}\n"
             f"Stake real: {stake_real:.2f}€ @ {precio_fill:.4f}\n"
             f"{aviso_extra}\n"
@@ -224,16 +266,17 @@ def main() -> int:
     if not actualizaciones:
         return 0
 
-    # Fase 2 (CON lock, misma ruta que _registrar_trade en live_trade.py):
-    # relee el fichero FRESCO (puede haber cambiado desde la Fase 1) y
-    # localiza cada fila por (market_id, order_id) en `notas`, no por el
-    # índice de la Fase 1 -- robusto a filas nuevas insertadas mientras
-    # tanto por el fast loop.
+    # Fase 2 (CON lock, misma ruta que _registrar_trade en live_trade.py/
+    # sports_live_trade.py::registrar_trade): relee el fichero FRESCO
+    # (puede haber cambiado desde la Fase 1) y localiza cada fila por
+    # (market_id, order_id) en `notas`, no por el índice de la Fase 1 --
+    # robusto a filas nuevas insertadas mientras tanto por el loop dueño
+    # de este ledger.
     cambios = 0
-    with open(TRADES_LOCK_PATH, "w") as lock_f:
+    with open(lock_path, "w") as lock_f:
         fcntl.flock(lock_f, fcntl.LOCK_EX)
         try:
-            header2, filas2 = _cargar_filas()
+            header2, filas2 = _cargar_filas(trades_path)
             idx2 = {h: i for i, h in enumerate(header2)}
             for j, r2 in enumerate(filas2):
                 if len(r2) <= idx2["notas"] or r2[idx2["status"]] != "ERROR":
@@ -254,15 +297,30 @@ def main() -> int:
                 filas2[j] = r2
                 cambios += 1
             if cambios:
-                _guardar_filas(header2, filas2)
+                _guardar_filas(trades_path, header2, filas2)
         finally:
             fcntl.flock(lock_f, fcntl.LOCK_UN)
 
     if cambios:
-        print(f"[reconciliar_fill_fantasma] {cambios} fila(s) actualizada(s) en trades.csv (Fase 2, con lock)")
+        print(f"[reconciliar_fill_fantasma][{nombre}] {cambios} fila(s) actualizada(s) en trades.csv (Fase 2, con lock)")
         for upd in actualizaciones.values():
             if "_telegram" in upd:
-                enviar_telegram(upd["_telegram"])
+                enviar_telegram(upd["_telegram"], bot=bot)
+    return cambios
+
+
+def main() -> int:
+    wallet = (os.getenv("POLY_DEPOSIT_WALLET") or "").lower()
+    if not wallet:
+        from dotenv import load_dotenv
+        load_dotenv(REPO / "data/live/.env")
+        wallet = (os.getenv("POLY_DEPOSIT_WALLET") or "").lower()
+
+    for ledger in LEDGERS:
+        try:
+            _reconciliar_ledger(ledger, wallet)
+        except Exception as e:
+            print(f"[reconciliar_fill_fantasma][{ledger['nombre']}] ERROR {type(e).__name__}: {e}")
     return 0
 
 
