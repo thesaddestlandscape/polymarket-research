@@ -154,9 +154,9 @@
   "n": 117,
   "pnl_medio": -0.5481,
   "diff_vs_resto": -0.5057,
-  "p_valor": 0.0005,
+  "p_valor": 0.002,
   "split_half_diff": [
-   -0.3443,
+   -0.3444,
    -0.6643
   ],
   "split_half_ok": true,
@@ -203,13 +203,6 @@
   ],
   "fecha_historial": "2026-09-20",
   "veredicto": "bueno_confirmado"
- },
- "SEGUIR#BNB#15min#0": {
-  "veredicto": "sin_concluir",
-  "historial_crudo": [
-   "bueno_confirmado"
-  ],
-  "fecha_historial": null
  },
  "SEGUIR#XRP#240min#0": {
   "lo": 0.95,
@@ -328,20 +321,20 @@
  "SEGUIR#BTC#5min#0": {
   "lo": 0.0,
   "hi": 0.05,
-  "n": 4604,
-  "pnl_medio": -0.6204,
-  "diff_vs_resto": -0.5905,
+  "n": 4605,
+  "pnl_medio": -0.6205,
+  "diff_vs_resto": -0.5903,
   "p_valor": 0.0,
   "split_half_diff": [
-   -0.6832,
-   -0.4978
+   -0.683,
+   -0.4977
   ],
   "split_half_ok": true,
-  "pnl_medio_loo": -0.6405,
+  "pnl_medio_loo": -0.6406,
   "robusto_loo": true,
   "ci90_bootstrap": [
-   -0.7047,
-   -0.5327
+   -0.7065,
+   -0.5311
   ],
   "robusto_bootstrap": true,
   "n_posiciones_buscadas": 96,
@@ -355,12 +348,12 @@
  "SEGUIR#BTC#5min#1": {
   "lo": 0.01,
   "hi": 0.06,
-  "n": 229,
-  "pnl_medio": -0.8643,
-  "diff_vs_resto": -0.8574,
+  "n": 230,
+  "pnl_medio": -0.8649,
+  "diff_vs_resto": -0.8579,
   "p_valor": 0.0,
   "split_half_diff": [
-   -0.9931,
+   -0.993,
    -0.7229
   ],
   "split_half_ok": true,
@@ -368,7 +361,7 @@
   "robusto_loo": true,
   "ci90_bootstrap": [
    -1.0,
-   -0.593
+   -0.5947
   ],
   "robusto_bootstrap": true,
   "n_posiciones_buscadas": 96,
@@ -411,11 +404,11 @@
   "hi": 0.06,
   "n": 117,
   "pnl_medio": -1.0,
-  "diff_vs_resto": -0.9884,
+  "diff_vs_resto": -0.9892,
   "p_valor": 0.0,
   "split_half_diff": [
-   -0.9884,
-   -0.9884
+   -0.9892,
+   -0.9892
   ],
   "split_half_ok": true,
   "pnl_medio_loo": -1.0,
@@ -441,6 +434,12 @@
    "bueno_confirmado"
   ],
   "fecha_historial": null
+ },
+ "SEGUIR#BNB#15min#0": {
+  "veredicto": "sin_concluir",
+  "historial_crudo": [
+   "bueno_confirmado"
+  ]
  },
  "SEGUIR#ETH#15min#1": {
   "veredicto": "sin_concluir",
