@@ -1,12 +1,12 @@
 {
- "ts": "2026-09-19T08:05:05+00:00",
+ "ts": "2026-09-20T08:50:04+00:00",
  "wallet": "0xB6eDe3A699f73cbe7f8A221c2cdAcEbFdf02028b",
- "free_usdc": 19.5109,
- "positions_value": 0.8159,
- "total": 19.511,
- "total_bruto": 31.378,
+ "free_usdc": 16.7547,
+ "positions_value": 3.6095,
+ "total": 16.7549,
+ "total_bruto": 28.8713,
  "deposito_inicial": 80.71,
- "pnl_real": -61.199,
+ "pnl_real": -63.9551,
  "pnl_por_deposito": [
   {
    "fecha": "2026-06-29",
@@ -44,12 +44,12 @@
    "fecha": "2026-09-03",
    "eur": 10.0,
    "nota": "Quinta recarga (petici\u00f3n expl\u00edcita Javi, 03-Sep ~14:00 UTC, \u00edntegramente para CRYPTO). 10 USDC nuevos + 5.8805 USDC remanente del per\u00edodo 4 (balance_real.json justo antes del dep\u00f3sito, ts 13:54:46Z) = ~15.88 USDC de capital disponible al inicio del per\u00edodo 5. Confirmado on-chain v\u00eda live_balance.py: free_usdc pas\u00f3 de 4.145 a 14.145 (exacto +10.0) entre el fetch de las 13:54 y el de las 14:16 UTC.",
-   "pnl_ledger": 0.232,
-   "n_trades": 177,
-   "rendimiento_pct": 2.3
+   "pnl_ledger": -1.9636,
+   "n_trades": 179,
+   "rendimiento_pct": -19.6
   }
  ],
- "pusd_onchain": 30.5621,
+ "pusd_onchain": 25.2618,
  "pusd_no_reflejado_en_collateral": null,
  "daily_real": [
   {
@@ -346,9 +346,13 @@
   },
   {
    "date": "2026-09-19",
-   "pnl": 0.0
+   "pnl": -0.49
+  },
+  {
+   "date": "2026-09-20",
+   "pnl": -2.27
   }
  ],
- "pnl_hoy_real": 0.0,
- "pnl_7d_real": -8.36
+ "pnl_hoy_real": -2.27,
+ "pnl_7d_real": -13.48
 }

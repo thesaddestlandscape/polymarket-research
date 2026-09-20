@@ -120,6 +120,9 @@ data/live/libro_snapshots.csv
 # GitHub del 07-Sep. Puramente regenerable (se reconstruye solo del CSV
 # de origen si se borra), cero pérdida real.
 data/shadow/_predicciones_recientes_cache/
+# 19-Sep: mismo motivo, caché gemelo nuevo en shadow_resolve.py
+# (cargar_predicciones_pendientes) -- puramente regenerable.
+data/shadow/_predicciones_pendientes_cache/
 
 # 03-Sep (bug real encontrado en el barrido de esta sesión): el commit
 # `6bc3ceb39a` (02-Sep) decía en su mensaje "gitignorado hacia delante"
@@ -144,3 +147,10 @@ data/shadow/sports_spread_fase0_*.csv.gz
 # script (verificado) -- mismo patrón "cache rolling sin backup dedicado"
 # que dispersed_bot_executor_dryrun.csv arriba.
 data/shadow/ladder_arb_weather_fase0.csv
+# 19-Sep: vigia_tamano_ficheros_git.py cruzó el umbral warning (50MB) con
+# data/shadow/resolution_sniper_precierre_curva_cierre_fase0.csv (51.7MB).
+# FASE 0 solo observación (curva de profundidad pre-cierre, screen
+# curvacierre), sin otro lector aparte de su propio script (verificado) --
+# mismo patrón "cache rolling sin backup dedicado" que los de arriba.
+data/shadow/resolution_sniper_precierre_curva_cierre_fase0.csv
+data/shadow/resolution_sniper_freeze_estado_fase0.csv

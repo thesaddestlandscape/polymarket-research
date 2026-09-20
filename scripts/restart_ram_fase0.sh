@@ -20,8 +20,18 @@
 # restart). Ambas screens ya corren con nice -n 10 desde el incidente de
 # CPU del 05-Ago.
 #
-# Horario: 03:20 UTC, después de comprimir_data_historica.sh (03:00) y
-# backup_results_csv.sh (03:05), antes de la ventana horaria live de Asia
+# 19-Sep (barrido de salud: 17 OOM-kills/24h, disco 93%, ciclo resolve+
+# postmortem 624s): con una sola pasada diaria, observadores_fase0 ya
+# volvía a 962MB RSS en <5h desde el restart de las 03:20 (vs 665MB
+# reportado el 09-Sep con más margen horario) -- la reacumulación es más
+# rápida de lo que cubre un solo restart/día. Añadida una segunda pasada
+# a las 15:20 UTC (12h de separación) como mitigación adicional, mismo
+# mecanismo, mismas 2 screens, sin tocar dinero real. Sigue sin ser el
+# fix de fondo -- ver rediseño pendiente abajo.
+#
+# Horario: 03:20 y 15:20 UTC. La de 03:20 sigue después de
+# comprimir_data_historica.sh (03:00) y backup_results_csv.sh (03:05),
+# antes de la ventana horaria live de Asia
 # (04:00-05:00 UTC / 06:00-07:00 Madrid) -- franja sin trading activo
 # conocido en ninguna estrategia con ventana horaria.
 set -uo pipefail

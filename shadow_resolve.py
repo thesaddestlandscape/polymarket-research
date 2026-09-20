@@ -75,6 +75,10 @@ YA_RESUELTAS_CACHE_TXT = DIR_SHADOW / "ya_resueltas_cache.txt"
 YA_RESUELTAS_CHECKPOINT = DIR_SHADOW / "ya_resueltas_checkpoint.json"
 ACCURACY_PATH = DIR_SHADOW / "strategy_accuracy.csv"
 CONFIRM_STATE_PATH = DIR_SHADOW / "resolucion_confirmacion_state.json"
+PRED_PENDIENTES_CACHE_DIR = DIR_SHADOW / "_predicciones_pendientes_cache"
+PRED_PENDIENTES_DIAS = 10  # mismo valor y misma justificación que
+# shadow_postmortem.py::cargar_predicciones_index (16-Sep): cubre con
+# margen el marco más largo (weekly, ~7 días predicción→resolución).
 # 21-Jul (code-review pendiente desde 15-Jul, idea_shadow_resolve_cierre_prematuro):
 # margen mínimo que un outcome cerca de 1.0/0.0 debe verse ESTABLE antes de
 # aceptarse como definitivo. Cubre el caso real de un mercado resuelto 1min
@@ -200,6 +204,117 @@ def _normalizar_pred(row: dict) -> dict:
     return row
 
 
+def _escribir_json_gz_atomico(path: Path, texto: str) -> None:
+    """Mismo patrón que shadow_postmortem.py::_escribir_json_atomico
+    (temp-file + os.replace, atómico dentro del mismo filesystem) +
+    gzip -- 19-Sep, /code-review de esta misma sesión: la primera versión
+    sin comprimir escribía ~1.7GB en data/shadow/_predicciones_pendientes_cache
+    con el disco ya al 93-95% (solo 3.9GB libres tras construir el caché sin
+    comprimir), justo el tipo de incidente que ya obligó a apretar
+    DIAS_BORRAR tres veces este mes. gzip nivel 6 sobre JSON de texto
+    reduce ~4-5x."""
+    import gzip
+    tmp = path.with_suffix(path.suffix + f".tmp{os.getpid()}")
+    with gzip.open(tmp, "wt", encoding="utf-8", compresslevel=6) as f:
+        f.write(texto)
+    os.replace(tmp, path)
+
+
+def _leer_json_gz(path: Path) -> dict:
+    import gzip
+    with gzip.open(path, "rt", encoding="utf-8") as f:
+        return json.loads(f.read())
+
+
+def _parsear_predicciones_pendientes_archivo(arch: Path) -> list | None:
+    """None = fallo persistente de lectura (leer_csv_tolerante ya reintentó
+    una vez); [] = fichero leído OK pero sin filas BUY_YES/BUY_NO. La
+    distinción importa para el caché de abajo -- /code-review 19-Sep,
+    hallazgo real: coercionar None a [] aquí escondía un fallo de lectura
+    como "vacío genuino", y como el caché solo mira (mtime,size) (que no
+    cambian en un fichero de un día ya cerrado), ese [] quedaba cacheado
+    PARA SIEMPRE -- predicciones reales de ese día dejarían de resolverse/
+    cerrar trades live en silencio."""
+    def _parsear(a: str) -> list:
+        filas = []
+        with open(a, encoding="utf-8") as f:
+            for row in csv.DictReader(f):
+                if row.get("decision", "SKIP") in ("BUY_YES", "BUY_NO"):
+                    filas.append(_normalizar_pred(row))
+        return filas
+    return leer_csv_tolerante(arch, _parsear, log_fn=print)
+
+
+def _cargar_predicciones_pendientes_archivo_cacheado(arch: Path) -> list:
+    """19-Sep (barrido de salud: ciclo resolve+postmortem 624s, 17 OOM-kills
+    en 24h, disco al 93%): esta función releía y re-parseaba con
+    csv.DictReader TODOS los predictions_YYYY-MM-DD.csv EN CADA CICLO
+    (~20s), 9 días / 5.2GB -- el mismo patrón exacto que
+    shadow_postmortem.py::cargar_predicciones_index()/
+    _cargar_predicciones_archivo_cacheado() ya diagnosticó y arregló el
+    16-Sep y el 08-Sep respectivamente en el fichero hermano, nunca
+    mirroreado aquí. Los ficheros de días YA CERRADOS son inmutables
+    (predictions_HOY.csv es el único que crece) -- cachear en disco el
+    parseo por fichero, keyed por (mtime,size), evita repetir el trabajo
+    caro (CSV completo) para los días viejos en cada ciclo nuevo. Mismo
+    patrón fail-safe que cargar_ya_resueltas()/el caché gemelo de
+    postmortem: cualquier duda invalida y reparsea entero, nunca usa un
+    caché potencialmente desalineado.
+
+    /code-review: esta función alimenta directamente el cierre de trades
+    REALES (_cerrar_trades_live vía main()) -- el caché solo debe ahorrar
+    TRABAJO, nunca cambiar qué predicciones se consideran pendientes.
+    Verificado antes de desplegar: mismo conjunto de filas devuelto con y
+    sin caché (comparación exhaustiva sobre los 9 ficheros existentes)."""
+    PRED_PENDIENTES_CACHE_DIR.mkdir(exist_ok=True)
+    cache_path = PRED_PENDIENTES_CACHE_DIR / f"{arch.name}.json.gz"
+    try:
+        st = arch.stat()
+    except OSError:
+        return []
+    if cache_path.exists():
+        try:
+            cached = _leer_json_gz(cache_path)
+            if cached.get("mtime") == st.st_mtime and cached.get("size") == st.st_size:
+                return cached["filas"]
+        except Exception:
+            pass  # caché corrupto/desalineado -- fail-safe, reparsear entero
+    filas = _parsear_predicciones_pendientes_archivo(arch)
+    if filas is None:
+        # Fallo persistente de lectura -- NUNCA cachear (ver docstring de
+        # _parsear_predicciones_pendientes_archivo). Se reintenta desde cero
+        # en el próximo ciclo, mismo comportamiento que el código sin caché.
+        return []
+    try:
+        _escribir_json_gz_atomico(
+            cache_path,
+            json.dumps({"mtime": st.st_mtime, "size": st.st_size, "filas": filas}, ensure_ascii=False),
+        )
+    except Exception:
+        pass  # cache best-effort -- si no se puede escribir, solo se pierde el ahorro, no la corrección
+    return filas
+
+
+def _purgar_cache_pendientes_fuera_de_ventana(archivos_ventana: list) -> None:
+    """Mismo motivo y mismo patrón que
+    shadow_postmortem.py::_purgar_cache_predicciones_fuera_de_ventana
+    (/code-review 08-Sep): sin esto, cada CSV cerrado se cachea para
+    siempre en disco aunque salga de la ventana de PRED_PENDIENTES_DIAS
+    al día siguiente."""
+    if not PRED_PENDIENTES_CACHE_DIR.exists():
+        return
+    nombres_en_ventana = {f"{Path(a).name}.json.gz" for a in archivos_ventana}
+    try:
+        for cache_file in PRED_PENDIENTES_CACHE_DIR.glob("predictions_*.csv.json.gz"):
+            if cache_file.name not in nombres_en_ventana:
+                try:
+                    cache_file.unlink()
+                except OSError:
+                    pass
+    except Exception:
+        pass
+
+
 def cargar_predicciones_pendientes() -> list:
     """Carga todas las predicciones que tengan decision != SKIP.
 
@@ -215,20 +330,17 @@ def cargar_predicciones_pendientes() -> list:
     csv_lectura_tolerante reintenta una vez tras 0.5s (una carrera de una
     sola fila se cura sola en ese margen) y solo entonces se salta el
     fichero, reportándolo como fallo persistente real (no oculto como
-    "probable concurrencia" para siempre, ver /code-review del mismo día)."""
-    archivos = sorted(glob.glob(str(DIR_SHADOW / "predictions_*.csv")))
+    "probable concurrencia" para siempre, ver /code-review del mismo día).
+
+    19-Sep: acotado a PRED_PENDIENTES_DIAS + caché en disco por fichero
+    (ver _cargar_predicciones_pendientes_archivo_cacheado) -- antes releía
+    TODO el histórico (9 días/5.2GB) sin límite ni caché en cada ciclo."""
+    archivos = sorted(glob.glob(str(DIR_SHADOW / "predictions_*.csv")))[-(PRED_PENDIENTES_DIAS + 2):]
+    _purgar_cache_pendientes_fuera_de_ventana(archivos)
     pendientes = []
 
-    def _parsear(arch: str) -> list:
-        filas = []
-        with open(arch, encoding="utf-8") as f:
-            for row in csv.DictReader(f):
-                if row.get("decision", "SKIP") in ("BUY_YES", "BUY_NO"):
-                    filas.append(_normalizar_pred(row))
-        return filas
-
     for arch in archivos:
-        filas = leer_csv_tolerante(Path(arch), _parsear, log_fn=print)
+        filas = _cargar_predicciones_pendientes_archivo_cacheado(Path(arch))
         if filas:
             pendientes.extend(filas)
     return pendientes

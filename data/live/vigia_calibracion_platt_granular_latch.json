@@ -1314,5 +1314,25 @@
   "PRICE_TARGET_GBM_FADE#BTC#atexpiry": {
     "n": 201,
     "confirmado": true
+  },
+  "PRICE_TARGET_GBM_FADE#ETH": {
+    "n": 212,
+    "confirmado": true
+  },
+  "STREAK_FADE_15M#DOGE": {
+    "n": 208,
+    "confirmado": false
+  },
+  "STREAK_FADE_15M#DOGE#15min": {
+    "n": 208,
+    "confirmado": false
+  },
+  "UPDOWN_GBM_15M_CROSS_WINDOW_SPREAD#ETH": {
+    "n": 204,
+    "confirmado": false
+  },
+  "UPDOWN_GBM_15M_CROSS_WINDOW_SPREAD#ETH#15min": {
+    "n": 204,
+    "confirmado": false
   }
 }
