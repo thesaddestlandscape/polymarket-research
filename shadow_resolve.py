@@ -315,7 +315,20 @@ def _purgar_cache_pendientes_fuera_de_ventana(archivos_ventana: list) -> None:
         pass
 
 
-def cargar_predicciones_pendientes() -> list:
+def _end_date_mas_de_2h_futuro(end_str: str, ahora: datetime) -> bool:
+    """Corte único (>7200s en el futuro) usado por el cargador Y por _resolver_bajo_lock."""
+    if not end_str:
+        return False
+    try:
+        end_dt = datetime.fromisoformat(end_str.replace("Z", "+00:00"))
+        if end_dt.tzinfo is None:
+            end_dt = end_dt.replace(tzinfo=timezone.utc)
+        return (end_dt - ahora).total_seconds() > 7200
+    except Exception:
+        return False
+
+
+def cargar_predicciones_pendientes(ya_resueltas: "set | None" = None) -> list:
     """Carga todas las predicciones que tengan decision != SKIP.
 
     18-Ago: lectura tolerante por FICHERO (no por fila -- un CSV con una
@@ -338,11 +351,33 @@ def cargar_predicciones_pendientes() -> list:
     archivos = sorted(glob.glob(str(DIR_SHADOW / "predictions_*.csv")))[-(PRED_PENDIENTES_DIAS + 2):]
     _purgar_cache_pendientes_fuera_de_ventana(archivos)
     pendientes = []
+    ahora_carga = datetime.now(timezone.utc)
 
     for arch in archivos:
         filas = _cargar_predicciones_pendientes_archivo_cacheado(Path(arch))
+        if filas and ya_resueltas:
+            # 20-Sep (RSS 3.2GB, OOM-kills, load 9.6): acumular las filas BUY
+            # de los 10 días como dicts con features JSON eran GBs residentes,
+            # y _resolver_bajo_lock descarta enseguida todo lo ya resuelto
+            # (`clave in ya_resueltas`, misma clave exacta). Filtrar aquí,
+            # fichero a fichero, deja vivo un solo día completo a la vez.
+            # Mismo conjunto final que antes: candidatas() aplicaba este
+            # mismo descarte con la misma clave (strategy, market_id, decision).
+            filas = [f for f in filas
+                     if (f.get("strategy", ""), f.get("market_id", ""), f.get("decision", ""))
+                     not in ya_resueltas]
+        if filas:
+            # Medido 20-Sep sobre 2 días: 207k filas pendientes, solo 533 claves
+            # únicas, 207.028 con end_date >2h en el futuro (una fila por ciclo
+            # de 20s de mercados largos). _resolver_bajo_lock las descarta con
+            # este mismo corte (>7200s) -- se re-leen cada ciclo, así que
+            # filtrarlas al cargar no pierde ninguna: entrarán en cuanto su
+            # end_date caiga dentro de las 2h. end_date ilegible => se conserva
+            # (igual que el `except: pass` de allí).
+            filas = [f for f in filas if not _end_date_mas_de_2h_futuro(f.get("end_date", ""), ahora_carga)]
         if filas:
             pendientes.extend(filas)
+        filas = None  # liberar este día antes de cargar el siguiente (pico = 1 día, no 2)
     return pendientes
 
 
@@ -916,8 +951,8 @@ def _resolver_bajo_lock(ts: str) -> None:
     main() para el motivo. Separado en función propia para no anidar todo
     el cuerpo dentro de un try/finally (mismo patrón que
     _check_salidas_tempranas/_check_salidas_tempranas_bajo_lock)."""
-    pendientes = cargar_predicciones_pendientes()
     ya_resueltas = cargar_ya_resueltas()
+    pendientes = cargar_predicciones_pendientes(ya_resueltas)
     estado_confirmacion = _cargar_estado_confirmacion()
     # Copia para comparar al final y no escribir el fichero si no cambió nada
     # este ciclo (code-review 21-Jul: evitar I/O sin motivo cada ~20s).
@@ -939,16 +974,8 @@ def _resolver_bajo_lock(ts: str) -> None:
         clave = (pred.get("strategy", ""), pred.get("market_id", ""), pred.get("decision", ""))
         if clave in ya_resueltas:
             continue
-        end_str = pred.get("end_date", "")
-        if end_str:
-            try:
-                end_dt = datetime.fromisoformat(end_str.replace("Z", "+00:00"))
-                if end_dt.tzinfo is None:
-                    end_dt = end_dt.replace(tzinfo=timezone.utc)
-                if (end_dt - ahora).total_seconds() > 7200:
-                    continue
-            except Exception:
-                pass
+        if _end_date_mas_de_2h_futuro(pred.get("end_date", ""), ahora):
+            continue  # mismo corte que aplica ya el cargador (una sola fuente)
         candidatas.append(pred)
 
     # Obtener IDs únicos y descargar en paralelo (throttled)

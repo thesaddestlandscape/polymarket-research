@@ -15,10 +15,28 @@ import glob
 import os
 import requests as _requests
 from datetime import datetime, timezone
+from zoneinfo import ZoneInfo
 from pathlib import Path
 
 from data_quality import leer_estado_calidad
 from csv_lectura_tolerante import leer_csv_tolerante
+
+
+_MADRID = ZoneInfo("Europe/Madrid")
+
+
+def _cerrado_hoy_madrid(ts_utc, ahora_utc):
+    """True si close_timestamp (ISO UTC) cae en el mismo día Madrid que ahora.
+    Mismo criterio de día que live_balance.pnl_hoy_real: antes se comparaba en
+    UTC y un trade cerrado 23:50Z (=01:50 Madrid) salía "0 cerrados hoy" con su
+    PnL ya contado en "PnL hoy" (20-Sep)."""
+    try:
+        t = datetime.fromisoformat((ts_utc or "").replace("Z", "+00:00"))
+        if t.tzinfo is None:
+            t = t.replace(tzinfo=timezone.utc)
+        return t.astimezone(_MADRID).date() == ahora_utc.astimezone(_MADRID).date()
+    except Exception:
+        return False
 
 DIR_SHADOW   = Path("data/shadow")
 RESULTS_PATH = DIR_SHADOW / "results.csv"
@@ -462,7 +480,7 @@ def _telegram_periodico(ahora):
                         if r.get("status") == "CLOSED"]
             n_live_total = len(cerrados)
             n_live_hoy   = sum(1 for r in cerrados
-                               if (r.get("close_timestamp", "") or "").startswith(hoy))
+                               if _cerrado_hoy_madrid(r.get("close_timestamp", ""), ahora))
             w_live_total = sum(1 for r in cerrados
                                if float(r.get("pnl_neto_eur") or 0) > 0)
             # fees reales pagados (fix 08-Jul) -- coste de verdad, antes invisible
@@ -556,7 +574,7 @@ def _telegram_periodico(ahora):
                            if r.get("status") == "CLOSED"]
             n_sp_total = len(cerrados_sp)
             n_sp_hoy = sum(1 for r in cerrados_sp
-                           if (r.get("close_timestamp", "") or "").startswith(hoy))
+                           if _cerrado_hoy_madrid(r.get("close_timestamp", ""), ahora))
             w_sp_total = sum(1 for r in cerrados_sp if float(r.get("pnl_neto_eur") or 0) > 0)
 
         if n_sp_total:
@@ -606,7 +624,7 @@ def _telegram_periodico(ahora):
                            if r.get("status") == "CLOSED"]
             n_we_total = len(cerrados_we)
             n_we_hoy = sum(1 for r in cerrados_we
-                           if (r.get("close_timestamp", "") or "").startswith(hoy))
+                           if _cerrado_hoy_madrid(r.get("close_timestamp", ""), ahora))
             w_we_total = sum(1 for r in cerrados_we if float(r.get("pnl_neto_eur") or 0) > 0)
             pnl_we_total = sum(float(r.get("pnl_neto_eur") or 0) for r in cerrados_we)
         bkr_we = depositos_we + pnl_we_total  # mismo criterio que weather_live_stake.bankroll_actual()
