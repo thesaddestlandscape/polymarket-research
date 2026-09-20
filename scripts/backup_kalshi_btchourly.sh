@@ -43,9 +43,16 @@ for SRC in "$SRC_DIR"/kalshi_btchourly_*.csv; do
   gzip -c "$SRC" > "${DEST}.tmp"
   if cmp -s <(zcat "${DEST}.tmp") "$SRC"; then
     mv "${DEST}.tmp" "$DEST"
-    echo "$(date -u) OK: backup verificado -> $DEST ($(du -h "$DEST" | cut -f1))"
+    # 20-Sep (barrido de salud, disco al 95%): el script nunca borraba el
+    # original tras respaldarlo -- 32 días acumulados sin podar, 2,8GB en
+    # disco raíz. Ninguna estrategia/análisis lee kalshi_btchourly más allá
+    # del día actual (verificado: solo fetch_kalshi_btc.py y 2 análisis
+    # puntuales ya cerrados lo tocan) -- borrar el original una vez
+    # verificado el backup es seguro, mismo patrón que comprimir_data_historica.sh.
+    rm -f "$SRC"
+    echo "$(date -u) OK: backup verificado y original borrado -> $DEST ($(du -h "$DEST" | cut -f1))"
   else
-    echo "$(date -u) ERROR: verificación de integridad falló para $FECHA, backup DESCARTADO"
+    echo "$(date -u) ERROR: verificación de integridad falló para $FECHA, backup DESCARTADO, original CONSERVADO"
     rm -f "${DEST}.tmp"
   fi
 done

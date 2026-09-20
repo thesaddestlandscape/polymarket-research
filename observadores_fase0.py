@@ -113,6 +113,7 @@ import libro_multinivel_fase0
 import gbm_late_reactivo_fase0
 import momentum_ibs_reactivo_fase0
 import candidata9_bot_consenso_reactivo_fase0
+import bot_consenso_amplio_fase0
 import candidata10_confirmacion_cruzada_reactivo_fase0
 import order_flow_5m_reactivo_fase0
 import huecos_extremos_fase0
@@ -148,6 +149,7 @@ OBSERVADORES = [
     (gbm_late_reactivo_fase0, "gbm_late_reactivo_fase0.log", "_log"),
     (momentum_ibs_reactivo_fase0, "momentum_ibs_reactivo_fase0.log", "_log"),
     (candidata9_bot_consenso_reactivo_fase0, "candidata9_bot_consenso_reactivo_fase0.log", "_log"),
+    (bot_consenso_amplio_fase0, "bot_consenso_amplio_fase0.log", "_log"),
     (candidata10_confirmacion_cruzada_reactivo_fase0, "candidata10_confirmacion_cruzada_reactivo_fase0.log", "_log"),
     (order_flow_5m_reactivo_fase0, "order_flow_5m_reactivo_fase0.log", "_log"),
     # 31-Ago: 4 huecos de cobertura [0.95,1.00) encontrados en
