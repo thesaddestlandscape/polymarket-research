@@ -21,7 +21,7 @@
  "BTC#240m#fade": "confirmado_forward",
  "SOL#5m#follow": "refutado_forward",
  "BTC#weekly#fade": "refutado_forward",
- "ETH#15m#follow": "refutado_forward",
+ "ETH#15m#follow": "confirmado_forward_fragil",
  "ETH#60m#fade": "confirmado_forward",
  "SOL#weekly#follow": "refutado_forward"
 }
