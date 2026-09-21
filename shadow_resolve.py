@@ -504,6 +504,49 @@ def cargar_ya_resueltas() -> set:
     return ya
 
 
+def _es_condition_id_hex(market_id: str) -> bool:
+    """condition_id de 32 bytes (0x + 64 hex). Algunos productores
+    (ORDER_FLOW_5M_REACTIVO, 21-Sep) escriben ese ID en `market_id` en vez del
+    ID numerico interno de gamma."""
+    if not isinstance(market_id, str) or len(market_id) != 66 or not market_id.startswith("0x"):
+        return False
+    try:
+        int(market_id[2:], 16)
+        return True
+    except ValueError:
+        return False
+
+
+def _estado_mercado_por_condition_id(cid: str) -> dict | None:
+    """21-Sep (hallazgo real): /markets/{condition_id} responde 422 SIEMPRE,
+    asi que esas predicciones no se resolvian nunca y se reintentaban x3 en
+    cada ciclo (377 IDs distintos, ~1.1k llamadas/ciclo desperdiciadas). Hace
+    falta el endpoint plural `condition_ids`; sin filtro solo devuelve
+    mercados NO cerrados, asi que si viene vacio se reintenta con closed=true
+    (mismo patron que sports_wallet_mirror_sniper.outcome_por_condition_id).
+    Fail-closed: cualquier error/respuesta vacia -> None (sigue pendiente)."""
+    for extra in ({}, {"closed": "true"}):
+        for intento in range(3):
+            try:
+                r = requests.get("https://gamma-api.polymarket.com/markets", timeout=TIMEOUT,
+                                 params={"condition_ids": cid, **extra})
+                if r.status_code == 429:
+                    if intento < 2:
+                        time.sleep(2 ** intento)
+                        continue
+                    print(f"  Error consultando {cid}: 429 rate-limit agotado tras 3 intentos")
+                    break
+                r.raise_for_status()
+                for m in r.json():
+                    if str(m.get("conditionId") or m.get("condition_id") or "").lower() == cid.lower():
+                        return m
+                break  # respuesta valida pero vacia -> probar el siguiente filtro
+            except Exception as e:
+                if intento == 2:
+                    print(f"  Error consultando {cid}: {type(e).__name__}: {e}")
+    return None
+
+
 def estado_mercado(market_id: str) -> dict | None:
     """
     Consulta el estado actual del mercado en Polymarket. Reintenta en 429.
@@ -517,6 +560,8 @@ def estado_mercado(market_id: str) -> dict | None:
     resolver en el momento de detectarlo), con riesgo directo de dejar
     trades live en status=OPEN para siempre.
     """
+    if _es_condition_id_hex(market_id):
+        return _estado_mercado_por_condition_id(market_id)
     url = f"https://gamma-api.polymarket.com/markets/{market_id}"
     for intento in range(3):
         try:
