@@ -1,7 +1,33 @@
 {
- "generado_utc": "2026-09-21T20:40:16+00:00",
+ "generado_utc": "2026-09-21T20:49:08+00:00",
  "fuente": "bybit",
  "BNB": {
+  "2min": {
+   "usd_long": 872.53,
+   "usd_short": 0.0,
+   "n": 1,
+   "imbalance": -1.0
+  },
+  "5min": {
+   "usd_long": 872.53,
+   "usd_short": 0.0,
+   "n": 1,
+   "imbalance": -1.0
+  },
+  "15min": {
+   "usd_long": 872.53,
+   "usd_short": 366.71,
+   "n": 2,
+   "imbalance": -0.4082
+  },
+  "60min": {
+   "usd_long": 1657.26,
+   "usd_short": 366.71,
+   "n": 5,
+   "imbalance": -0.6376
+  }
+ },
+ "BTC": {
   "2min": {
    "usd_long": 0.0,
    "usd_short": 0.0,
@@ -10,47 +36,21 @@
   },
   "5min": {
    "usd_long": 0.0,
-   "usd_short": 366.71,
-   "n": 1,
-   "imbalance": 1.0
+   "usd_short": 0.0,
+   "n": 0,
+   "imbalance": null
   },
   "15min": {
-   "usd_long": 340.58,
-   "usd_short": 366.71,
-   "n": 2,
-   "imbalance": 0.0369
-  },
-  "60min": {
-   "usd_long": 784.73,
-   "usd_short": 366.71,
+   "usd_long": 0.0,
+   "usd_short": 11181.74,
    "n": 4,
-   "imbalance": -0.363
-  }
- },
- "BTC": {
-  "2min": {
-   "usd_long": 0.0,
-   "usd_short": 1212.74,
-   "n": 2,
    "imbalance": 1.0
-  },
-  "5min": {
-   "usd_long": 0.0,
-   "usd_short": 1212.74,
-   "n": 2,
-   "imbalance": 1.0
-  },
-  "15min": {
-   "usd_long": 6241103.95,
-   "usd_short": 27400.91,
-   "n": 396,
-   "imbalance": -0.9913
   },
   "60min": {
    "usd_long": 7728843.47,
-   "usd_short": 39295.21,
-   "n": 558,
-   "imbalance": -0.9899
+   "usd_short": 27573.44,
+   "n": 556,
+   "imbalance": -0.9929
   }
  },
  "DOGE": {
@@ -62,21 +62,21 @@
   },
   "5min": {
    "usd_long": 0.0,
+   "usd_short": 0.0,
+   "n": 0,
+   "imbalance": null
+  },
+  "15min": {
+   "usd_long": 0.0,
    "usd_short": 984.2,
    "n": 1,
    "imbalance": 1.0
   },
-  "15min": {
-   "usd_long": 86.92,
-   "usd_short": 3114.61,
-   "n": 5,
-   "imbalance": 0.9457
-  },
   "60min": {
    "usd_long": 94317.35,
-   "usd_short": 4114.74,
-   "n": 38,
-   "imbalance": -0.9164
+   "usd_short": 3114.61,
+   "n": 35,
+   "imbalance": -0.9361
   }
  },
  "ETH": {
@@ -88,21 +88,21 @@
   },
   "5min": {
    "usd_long": 0.0,
-   "usd_short": 555.44,
+   "usd_short": 83.17,
    "n": 2,
    "imbalance": 1.0
   },
   "15min": {
-   "usd_long": 852849.6,
-   "usd_short": 13327.58,
-   "n": 50,
-   "imbalance": -0.9692
+   "usd_long": 0.0,
+   "usd_short": 15658.53,
+   "n": 8,
+   "imbalance": 1.0
   },
   "60min": {
    "usd_long": 2709464.38,
-   "usd_short": 13382.68,
-   "n": 303,
-   "imbalance": -0.9902
+   "usd_short": 15658.53,
+   "n": 307,
+   "imbalance": -0.9885
   }
  },
  "SOL": {
@@ -114,55 +114,55 @@
   },
   "5min": {
    "usd_long": 0.0,
-   "usd_short": 0.0,
-   "n": 0,
-   "imbalance": null
+   "usd_short": 212.06,
+   "n": 1,
+   "imbalance": 1.0
   },
   "15min": {
-   "usd_long": 5164.47,
-   "usd_short": 413.86,
-   "n": 9,
-   "imbalance": -0.8516
+   "usd_long": 0.0,
+   "usd_short": 212.06,
+   "n": 1,
+   "imbalance": 1.0
   },
   "60min": {
    "usd_long": 251030.97,
-   "usd_short": 413.86,
-   "n": 84,
-   "imbalance": -0.9967
+   "usd_short": 625.91,
+   "n": 85,
+   "imbalance": -0.995
   }
  },
  "XRP": {
   "2min": {
-   "usd_long": 66630.96,
+   "usd_long": 523.15,
    "usd_short": 0.0,
-   "n": 9,
+   "n": 6,
    "imbalance": -1.0
   },
   "5min": {
-   "usd_long": 66630.96,
-   "usd_short": 106.61,
-   "n": 10,
-   "imbalance": -0.9968
+   "usd_long": 523.15,
+   "usd_short": 0.0,
+   "n": 6,
+   "imbalance": -1.0
   },
   "15min": {
-   "usd_long": 182354.61,
+   "usd_long": 67763.47,
    "usd_short": 106.61,
-   "n": 29,
-   "imbalance": -0.9988
+   "n": 19,
+   "imbalance": -0.9969
   },
   "60min": {
-   "usd_long": 428331.48,
+   "usd_long": 428480.88,
    "usd_short": 106.61,
-   "n": 72,
+   "n": 80,
    "imbalance": -0.9995
   }
  },
  "lag_bybit_ws": {
   "ventana_min": 5,
-  "n_muestras": 16,
-  "ultimo_lag_s": 0.32,
-  "max_lag_s": 0.56,
-  "media_lag_s": 0.36,
+  "n_muestras": 10,
+  "ultimo_lag_s": 0.21,
+  "max_lag_s": 0.43,
+  "media_lag_s": 0.26,
   "umbral_alerta_s": 5.0
  }
 }
