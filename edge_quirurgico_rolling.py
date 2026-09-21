@@ -54,6 +54,9 @@ CACHE_TRAIN = REPO / "data" / "shadow" / "_cache_edge_quirurgico_train.pkl"
 HISTORIAL_DIAS = 60         # rotacion: no crece sin limite
 SNAPSHOT_MIN_HORAS = 12     # como mucho ~2 snapshots/dia en el historial
 BOOT_ITERS = 1000
+# cobertura (21-Sep, Javi: "extenderlo a todo el universo sniper/disperso"): minimo para que pueda existir
+# una ventana de >=N_MIN_VENTANA filas distinta del total. Antes 160 dejaba fuera 60min/240min/weekly.
+N_MIN_TRAIN = 2 * Q.N_MIN_VENTANA
 
 
 class DatosTruncados(RuntimeError):
@@ -135,12 +138,13 @@ def generar() -> dict:
         prev_total = None
     if prev_total and n_filas_total < 0.9 * prev_total:
         raise DatosTruncados(f"filas {n_filas_total} < 90% de la corrida previa ({prev_total}): lectura a medias")
-    operables, observacion = [], []
+    operables, observacion, descartadas = [], [], []
     n_tuplas = 0
     for fam, activo, marco, grande, filas in fuentes:
         train = [f for f in filas if str(f[0])[:19] < cutoff]
         test = [f for f in filas if str(f[0])[:19] >= cutoff]
-        if len(train) < Q.N_MIN_TUPLA * 2:
+        if len(train) < N_MIN_TRAIN:
+            descartadas.append((_clave(fam, activo, marco, grande), len(train)))
             continue
         n_tuplas += 1
         ck = _clave(fam, activo, marco, grande)
@@ -177,6 +181,8 @@ def generar() -> dict:
            "forward_dias": FORWARD_DIAS, "cutoff": cutoff, "n_forward_min": N_FORWARD_MIN,
            "piso_eur": PISO_EUR, "n_tuplas_evaluadas": n_tuplas, "n_filas_total": n_filas_total,
            "n_zonas_operables": len(operables), "n_zonas_en_observacion": len(observacion),
+           "cobertura": {"total_tuplas_con_datos": len(fuentes), "evaluadas": n_tuplas,
+                         "descartadas_n_train_insuficiente": sorted(descartadas, key=lambda t: -t[1])},
            "zonas_operables": operables, "zonas_en_observacion": observacion}
     res["n_zonas_operables_estrictas"] = sum(1 for z in operables if z.get("forward_ok_estricto"))
     prev_ts = ""
