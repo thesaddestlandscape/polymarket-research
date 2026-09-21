@@ -43,7 +43,10 @@ porque este gate no separa por bucket en la whitelist genérica.
 """
 import json
 import math
+import time
 from pathlib import Path
+
+from gate_frescura import esta_fresco, avisar_obsoleto, MAX_ANTIGUEDAD_DIARIO_S
 
 REPO = Path(__file__).resolve().parent
 GATE_PATH = REPO / "data" / "shadow" / "bot_wallets_gate_bucket.json"
@@ -137,6 +140,9 @@ def _edge_medido_vivo(arquetipo: str, activo: str, marco: str, b: float) -> floa
         st = EDGE_JSON_PATH.stat()
     except OSError:
         return None
+    if time.time() - st.st_mtime > MAX_ANTIGUEDAD_DIARIO_S:
+        avisar_obsoleto(EDGE_JSON_PATH)  # visible: sin esto el fallback conservador seria silencioso
+        return None  # 21-Sep: edge medido obsoleto -> como si no existiera (permitido_real lo trata fail-closed)
     if _edge_cache["mtime"] != st.st_mtime:
         try:
             _edge_cache["datos"] = json.loads(EDGE_JSON_PATH.read_text(encoding="utf-8"))
@@ -230,6 +236,12 @@ def permitido_real(arquetipo: str, activo: str, marco: str, precio: float) -> bo
     abrirse sola en cuanto el veredicto reconfirme. La protección
     por-trade (CLV, profundidad real, requote/abort) sigue intacta más
     abajo en el pipeline, independiente de esto."""
+    # 21-Sep (hueco encontrado, aprobado por Javi): este gate NO tenia limite de edad -- si el vigia
+    # diario fallaba, se operaba con veredictos viejos indefinidamente. Fail-closed (gate_frescura.py).
+    # Cubre TAMBIEN evaluar_para_recheck() (delega aqui). `evaluar()` (tracking dry-run) no se toca.
+    if not esta_fresco(GATE_PATH):
+        avisar_obsoleto(GATE_PATH)
+        return False
     info = _gate_veredicto_dict(arquetipo, activo, marco, precio)
     if info.get("veredicto") != "bueno_confirmado":
         return False

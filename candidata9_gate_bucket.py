@@ -23,7 +23,10 @@ expone el veredicto ya calculado con la firma que live_trade.py espera.
 """
 import json
 import math
+import time
 from pathlib import Path
+
+from gate_frescura import esta_fresco, avisar_obsoleto, MAX_ANTIGUEDAD_DIARIO_S
 
 REPO = Path(__file__).resolve().parent
 GATE_PATH = REPO / "data" / "shadow" / "candidata9_10_gate_bucket.json"
@@ -163,6 +166,9 @@ def _edge_medido_vivo(activo: str, marco: str, b: float) -> float | None:
         st = EDGE_JSON_PATH.stat()
     except OSError:
         return None
+    if time.time() - st.st_mtime > MAX_ANTIGUEDAD_DIARIO_S:
+        avisar_obsoleto(EDGE_JSON_PATH)  # visible: sin esto el fallback conservador seria silencioso
+        return None  # 21-Sep: edge medido obsoleto -> como si no existiera
     if _edge_cache["mtime"] != st.st_mtime:
         try:
             _edge_cache["datos"] = json.loads(EDGE_JSON_PATH.read_text(encoding="utf-8"))
@@ -222,6 +228,10 @@ def permitido_real(activo: str, marco: str, precio: float) -> bool:
     operar ahí automáticamente, y reabre sola en cuanto reconfirme. La
     protección por-trade (CLV, profundidad real, requote/abort) sigue
     intacta más abajo en el pipeline, independiente de esta función."""
+    # 21-Sep: guardia de antiguedad fail-closed (mismo hueco que bot_wallets_gate_bucket.py), ver gate_frescura.py
+    if not esta_fresco(GATE_PATH):
+        avisar_obsoleto(GATE_PATH)
+        return False
     info = _gate_veredicto_dict(activo, marco, precio)
     if info.get("veredicto") != "bueno_confirmado":
         return False

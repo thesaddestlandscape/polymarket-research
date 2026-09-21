@@ -421,6 +421,17 @@ _PATRON_FALLO_VIGIA = re.compile(
 )
 
 
+def medir_gates_obsoletos() -> dict:
+    """21-Sep: JSON de gates que deciden dinero real con mas antiguedad que su maximo (o ausentes).
+    Las guardias de gate_frescura.py ya BLOQUEAN el trade (fail-closed); esto lo hace VISIBLE."""
+    try:
+        from gate_frescura import informe_gates
+        malos = informe_gates()
+    except Exception as e:  # el informe de salud nunca debe caerse por esto
+        return {"n_gates_obsoletos": 0, "gates": [], "error": f"{type(e).__name__}: {e}"}
+    return {"n_gates_obsoletos": len(malos), "gates": malos}
+
+
 def medir_vigias_rotos() -> dict:
     """07-Sep, petición explícita Javi tras encontrar EN EL MISMO DÍA 3
     vigías distintos (vigia_gate_bucket_propio.py, vigia_gate_calibracion.py,
@@ -509,6 +520,7 @@ def main() -> int:
         "oom_kills": medir_oom_kills(),
         "git_push": medir_git_push_lag(),
         "vigias_rotos": medir_vigias_rotos(),
+        "gates_obsoletos": medir_gates_obsoletos(),
     }
 
     # Comparación contra ayer (histórico persistido) -- ver docstring:
@@ -577,6 +589,15 @@ def main() -> int:
         anomalias.append(f"📡 git push atascado: {gp['commits_sin_pushear']} commits locales "
                           f"sin llegar a GitHub (umbral {UMBRAL_PUSH_LAG_COMMITS}) -- riesgo de "
                           f"pérdida si el VPS cae")
+
+    go = reporte.get("gates_obsoletos", {})
+    for g in go.get("gates", []):
+        if g.get("nota"):
+            anomalias.append(f"⚠️ {g['nota']}")
+            continue
+        anomalias.append(f"⛔ gate OBSOLETO (el ejecutor real NO opera con él): {g['gate']} "
+                         f"{'ausente' if g['antiguedad_h'] is None else str(g['antiguedad_h']) + 'h'} "
+                         f"(máx {g['maximo_h']}h)")
 
     vr = reporte["vigias_rotos"]
     if vr.get("n_vigias_rotos"):
