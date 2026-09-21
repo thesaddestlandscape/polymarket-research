@@ -6321,5 +6321,341 @@
       "📡 git push atascado: 198 commits locales sin llegar a GitHub (umbral 15) -- riesgo de pérdida si el VPS cae"
     ],
     "estado": "ANOMALIA"
+  },
+  {
+    "timestamp_utc": "2026-09-21T07:57:01+00:00",
+    "pipeline": {
+      "n_ciclos_resolve_postmortem": 131,
+      "resolve_postmortem_p50_s": 175.6,
+      "resolve_postmortem_p95_s": 545.9,
+      "resolve_postmortem_max_s": 680.4,
+      "resolve_postmortem_duraciones_s": [
+        152.7,
+        436.0,
+        353.2,
+        264.9,
+        654.5,
+        175.5,
+        198.9,
+        484.1,
+        136.7,
+        198.5,
+        150.6,
+        423.1,
+        166.9,
+        219.4,
+        177.5,
+        137.4,
+        128.1,
+        131.5,
+        389.8,
+        146.8,
+        329.5,
+        217.0,
+        159.2,
+        150.6,
+        154.4,
+        374.9,
+        169.1,
+        277.3,
+        183.6,
+        220.1,
+        225.7,
+        408.1,
+        152.7,
+        319.8,
+        162.2,
+        197.1,
+        157.9,
+        448.1,
+        169.9,
+        264.6,
+        154.4,
+        189.8,
+        230.3,
+        545.9,
+        174.4,
+        274.7,
+        148.6,
+        188.8,
+        152.1,
+        178.9,
+        472.4,
+        293.0,
+        195.3,
+        145.5,
+        160.7,
+        163.0,
+        146.3,
+        605.3,
+        175.6,
+        203.5,
+        157.4,
+        159.8,
+        154.1,
+        623.6,
+        140.2,
+        153.1,
+        198.9,
+        167.0,
+        159.4,
+        638.2,
+        162.1,
+        149.5,
+        172.6,
+        272.1,
+        141.2,
+        610.5,
+        243.9,
+        171.3,
+        229.0,
+        192.8,
+        207.1,
+        680.4,
+        205.3,
+        168.4,
+        203.0,
+        155.3,
+        199.5,
+        540.2,
+        185.9,
+        202.4,
+        139.0,
+        166.4,
+        174.8,
+        498.5,
+        133.4,
+        179.0,
+        134.5,
+        157.3,
+        133.6,
+        170.2,
+        365.6,
+        162.5,
+        160.7,
+        135.3,
+        139.7,
+        215.2,
+        149.8,
+        525.1,
+        226.9,
+        136.7,
+        157.1,
+        232.2,
+        140.4,
+        377.0,
+        174.1,
+        142.3,
+        150.8,
+        251.6,
+        163.1,
+        418.4,
+        145.0,
+        192.6,
+        168.3,
+        260.7,
+        148.4,
+        419.9,
+        148.2,
+        166.4,
+        199.3,
+        419.7,
+        156.9
+      ],
+      "n_ciclos_live_trade": 4693,
+      "hueco_live_trade_max_s": 113.0
+    },
+    "procesos_colgados": [],
+    "deploy": {
+      "n_screens": 15,
+      "stale": []
+    },
+    "disco": {
+      "pct_usado": 89.0,
+      "gb_libres": 8.48,
+      "git_gb": 0.0,
+      "data_gb": 33.18,
+      "datalogs_gb": 4.81
+    },
+    "ram": {
+      "ram_total_gb": 7.56,
+      "ram_disponible_gb": 3.67,
+      "ram_pct_libre": 48.5
+    },
+    "integridad_datos": {
+      "trades_abiertos_atascados": [],
+      "n_trades_total": 717,
+      "n_results_total": 646723
+    },
+    "integridad_datos_sports": {
+      "trades_abiertos_atascados": [
+        {
+          "market_id": "0x0876648d1f122b660ce50725b1d752dcf039ddd9c18f7581e2b2d765b0d86f8e",
+          "categoria": "CS",
+          "tipo": "FADE",
+          "minutos_desde_cierre": 1077.1
+        },
+        {
+          "market_id": "0x4184dda1425f3f7c57cdbffa4b6ced40b6d4e78077a9aabec5a53f6f1d06e4a5",
+          "categoria": "CS",
+          "tipo": "FADE",
+          "minutos_desde_cierre": 1197.1
+        }
+      ],
+      "n_trades_total": 19
+    },
+    "carga_sistema": {
+      "load1": 4.03,
+      "load5": 5.45,
+      "load15": 6.84,
+      "nproc": 4,
+      "ratio5": 1.36,
+      "n_procesos_total": 220
+    },
+    "oom_kills": {
+      "n_oom_kills_24h": 21,
+      "eventos": [
+        {
+          "ts": "Sep 20 08:27:31",
+          "pid": "2170507",
+          "nombre": "python3",
+          "rss_mb": 877.2
+        },
+        {
+          "ts": "Sep 20 09:00:18",
+          "pid": "3889112",
+          "nombre": "python",
+          "rss_mb": 2349.7
+        },
+        {
+          "ts": "Sep 20 09:30:23",
+          "pid": "3896640",
+          "nombre": "python",
+          "rss_mb": 1756.0
+        },
+        {
+          "ts": "Sep 20 12:00:25",
+          "pid": "3937203",
+          "nombre": "python",
+          "rss_mb": 1936.6
+        },
+        {
+          "ts": "Sep 20 13:00:42",
+          "pid": "3944744",
+          "nombre": "python",
+          "rss_mb": 505.9
+        },
+        {
+          "ts": "Sep 20 15:01:04",
+          "pid": "3979588",
+          "nombre": "python",
+          "rss_mb": 1357.4
+        },
+        {
+          "ts": "Sep 20 16:01:05",
+          "pid": "3991842",
+          "nombre": "python",
+          "rss_mb": 2204.7
+        },
+        {
+          "ts": "Sep 20 17:31:17",
+          "pid": "4020367",
+          "nombre": "python",
+          "rss_mb": 1048.0
+        },
+        {
+          "ts": "Sep 20 18:30:09",
+          "pid": "4033019",
+          "nombre": "python",
+          "rss_mb": 213.1
+        },
+        {
+          "ts": "Sep 20 19:00:14",
+          "pid": "4040467",
+          "nombre": "python",
+          "rss_mb": 2207.5
+        },
+        {
+          "ts": "Sep 20 20:10:34",
+          "pid": "4057507",
+          "nombre": "python",
+          "rss_mb": 1530.7
+        },
+        {
+          "ts": "Sep 20 21:30:07",
+          "pid": "4076870",
+          "nombre": "python",
+          "rss_mb": 1982.2
+        },
+        {
+          "ts": "Sep 20 23:00:41",
+          "pid": "3848846",
+          "nombre": "python",
+          "rss_mb": 21.4
+        },
+        {
+          "ts": "Sep 20 23:10:11",
+          "pid": "4099417",
+          "nombre": "python",
+          "rss_mb": 2451.8
+        },
+        {
+          "ts": "Sep 21 00:21:06",
+          "pid": "4115935",
+          "nombre": "python",
+          "rss_mb": 2484.2
+        },
+        {
+          "ts": "Sep 21 01:30:41",
+          "pid": "4135286",
+          "nombre": "python",
+          "rss_mb": 1411.7
+        },
+        {
+          "ts": "Sep 21 02:40:46",
+          "pid": "4153941",
+          "nombre": "python",
+          "rss_mb": 2816.1
+        },
+        {
+          "ts": "Sep 21 05:00:14",
+          "pid": "4193019",
+          "nombre": "python",
+          "rss_mb": 2154.2
+        },
+        {
+          "ts": "Sep 21 06:20:29",
+          "pid": "17732",
+          "nombre": "python",
+          "rss_mb": 2273.5
+        },
+        {
+          "ts": "Sep 21 06:30:46",
+          "pid": "18793",
+          "nombre": "python",
+          "rss_mb": 51.7
+        },
+        {
+          "ts": "Sep 21 07:41:31",
+          "pid": "38160",
+          "nombre": "python",
+          "rss_mb": 3153.4
+        }
+      ]
+    },
+    "git_push": {
+      "commits_sin_pushear": 0
+    },
+    "vigias_rotos": {
+      "n_vigias_rotos": 0,
+      "vigias": []
+    },
+    "anomalias": [
+      "⏱️ ciclo resolve+postmortem tardó 680s (umbral 120s)",
+      "⛔ trade SPORTS real OPEN sin cerrar 1077min tras su cierre: CS#FADE (0x0876648d1f122b660ce50725b1d752dcf039ddd9c18f7581e2b2d765b0d86f8e)",
+      "⛔ trade SPORTS real OPEN sin cerrar 1197min tras su cierre: CS#FADE (0x4184dda1425f3f7c57cdbffa4b6ced40b6d4e78077a9aabec5a53f6f1d06e4a5)",
+      "💀 21 OOM-kill(s) del kernel en 24h: python3(pid 2170507, 877.2MB), python(pid 3889112, 2349.7MB), python(pid 3896640, 1756.0MB), python(pid 3937203, 1936.6MB), python(pid 3944744, 505.9MB), python(pid 3979588, 1357.4MB), python(pid 3991842, 2204.7MB), python(pid 4020367, 1048.0MB), python(pid 4033019, 213.1MB), python(pid 4040467, 2207.5MB), python(pid 4057507, 1530.7MB), python(pid 4076870, 1982.2MB), python(pid 3848846, 21.4MB), python(pid 4099417, 2451.8MB), python(pid 4115935, 2484.2MB), python(pid 4135286, 1411.7MB), python(pid 4153941, 2816.1MB), python(pid 4193019, 2154.2MB), python(pid 17732, 2273.5MB), python(pid 18793, 51.7MB), python(pid 38160, 3153.4MB)"
+    ],
+    "estado": "ANOMALIA"
   }
 ]
