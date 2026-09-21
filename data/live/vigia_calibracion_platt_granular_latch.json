@@ -1334,5 +1334,13 @@
   "UPDOWN_GBM_15M_CROSS_WINDOW_SPREAD#ETH#15min": {
     "n": 204,
     "confirmado": false
+  },
+  "GBM_LATE_60M_PYCONFIRMADO#SOL": {
+    "n": 201,
+    "confirmado": false
+  },
+  "GBM_LATE_60M_PYCONFIRMADO#SOL#60min": {
+    "n": 201,
+    "confirmado": false
   }
 }
