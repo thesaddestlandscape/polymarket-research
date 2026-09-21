@@ -1,14 +1,160 @@
 {
- "generado_utc": "2026-09-21T16:23:20+00:00",
+ "generado_utc": "2026-09-21T16:31:17+00:00",
  "modo": "lectura (no consumido por evaluar())",
  "forward_dias": 7,
  "cutoff": "2026-09-14T00:00:00",
  "n_forward_min": 15,
  "piso_eur": 0.1,
- "n_tuplas_evaluadas": 58,
- "n_filas_total": 537677,
+ "n_tuplas_evaluadas": 72,
+ "n_filas_total": 537806,
  "n_zonas_operables": 10,
  "n_zonas_en_observacion": 44,
+ "cobertura": {
+  "total_tuplas_con_datos": 107,
+  "evaluadas": 72,
+  "descartadas_n_train_insuficiente": [
+   [
+    "WALLET_MIRROR#BNB#15min#g1",
+    57
+   ],
+   [
+    "WALLET_MIRROR#BNB#240min#g0",
+    53
+   ],
+   [
+    "DISPERSO#XRP#60min",
+    47
+   ],
+   [
+    "WALLET_MIRROR#ETH#240min#g0",
+    47
+   ],
+   [
+    "WALLET_MIRROR#SOL#60min#g0",
+    46
+   ],
+   [
+    "WALLET_MIRROR#SOL#60min#g1",
+    38
+   ],
+   [
+    "SNIPER#ETH#60min",
+    33
+   ],
+   [
+    "WEEKLY_TEMPRANO##",
+    32
+   ],
+   [
+    "WALLET_MIRROR#ETH#60min#g1",
+    31
+   ],
+   [
+    "WALLET_MIRROR#ETH#240min#g1",
+    15
+   ],
+   [
+    "WEEKLY_TARDIO##",
+    13
+   ],
+   [
+    "WEEKLY_TEMPRANO#BTC#240min",
+    11
+   ],
+   [
+    "SNIPER#BTC#240min",
+    11
+   ],
+   [
+    "SNIPER#ETH#240min",
+    10
+   ],
+   [
+    "WALLET_MIRROR#XRP#240min#g1",
+    10
+   ],
+   [
+    "DISPERSO#DOGE#60min",
+    8
+   ],
+   [
+    "SNIPER#BNB#240min",
+    7
+   ],
+   [
+    "SNIPER#BNB#60min",
+    6
+   ],
+   [
+    "?#SOL#5min",
+    5
+   ],
+   [
+    "?#ETH#5min",
+    5
+   ],
+   [
+    "?#BTC#15min",
+    5
+   ],
+   [
+    "WEEKLY_TEMPRANO#ETH#240min",
+    4
+   ],
+   [
+    "WEEKLY_TEMPRANO#SOL#240min",
+    3
+   ],
+   [
+    "SNIPER#XRP#60min",
+    3
+   ],
+   [
+    "?#DOGE#5min",
+    3
+   ],
+   [
+    "WEEKLY_TEMPRANO#XRP#240min",
+    2
+   ],
+   [
+    "?#XRP#5min",
+    2
+   ],
+   [
+    "WALLET_MIRROR#DOGE#240min#g0",
+    2
+   ],
+   [
+    "SNIPER#DOGE#60min",
+    1
+   ],
+   [
+    "SNIPER#XRP#240min",
+    1
+   ],
+   [
+    "SNIPER#DOGE#240min",
+    1
+   ],
+   [
+    "SNIPER#SOL#60min",
+    1
+   ],
+   [
+    "WEEKLY_TEMPRANO#DOGE#5min",
+    0
+   ],
+   [
+    "WEEKLY_TEMPRANO#BNB#5min",
+    0
+   ],
+   [
+    "?#BNB#5min",
+    0
+   ]
+  ]
+ },
  "zonas_operables": [
   {
    "tupla": "DISPERSO#BTC#15min",
@@ -664,33 +810,6 @@
    "forward_ok_estricto": false
   },
   {
-   "tupla": "SNIPER#BTC#5min",
-   "familia": "SNIPER",
-   "activo": "BTC",
-   "marco": "5min",
-   "grande": null,
-   "estado_config": "LIVE",
-   "ancho": 0.02,
-   "lo": 0.26,
-   "hi": 0.28,
-   "n_train": 237,
-   "pnl_train": 0.2383,
-   "n_dias_train": 20,
-   "pnl_sin_2_mejores_dias": 0.1479,
-   "wallets": 26,
-   "top1_wallet": 0.186,
-   "p_max_train": 0.006,
-   "n_forward": 219,
-   "pnl_forward": -0.0196,
-   "hit_forward": 0.274,
-   "forward_ok": false,
-   "forward_ic90": [
-    -0.1849,
-    0.1606
-   ],
-   "forward_ok_estricto": false
-  },
-  {
    "tupla": "WALLET_MIRROR#SOL#15min#g0",
    "familia": "WALLET_MIRROR",
    "activo": "SOL",
@@ -714,6 +833,33 @@
    "forward_ic90": [
     -0.2672,
     0.2204
+   ],
+   "forward_ok_estricto": false
+  },
+  {
+   "tupla": "SNIPER#BTC#5min",
+   "familia": "SNIPER",
+   "activo": "BTC",
+   "marco": "5min",
+   "grande": null,
+   "estado_config": "LIVE",
+   "ancho": 0.02,
+   "lo": 0.26,
+   "hi": 0.28,
+   "n_train": 237,
+   "pnl_train": 0.2383,
+   "n_dias_train": 20,
+   "pnl_sin_2_mejores_dias": 0.1479,
+   "wallets": 26,
+   "top1_wallet": 0.186,
+   "p_max_train": 0.006,
+   "n_forward": 220,
+   "pnl_forward": -0.0241,
+   "hit_forward": 0.273,
+   "forward_ok": false,
+   "forward_ic90": [
+    -0.2058,
+    0.1423
    ],
    "forward_ok_estricto": false
   },
@@ -815,13 +961,13 @@
    "wallets": 30,
    "top1_wallet": 0.186,
    "p_max_train": 0.006,
-   "n_forward": 354,
-   "pnl_forward": -0.0965,
-   "hit_forward": 0.257,
+   "n_forward": 355,
+   "pnl_forward": -0.099,
+   "hit_forward": 0.256,
    "forward_ok": false,
    "forward_ic90": [
-    -0.2289,
-    0.0493
+    -0.2311,
+    0.0337
    ],
    "forward_ok_estricto": false
   },
@@ -880,33 +1026,6 @@
    "forward_ok_estricto": false
   },
   {
-   "tupla": "DISPERSO#ETH#15min",
-   "familia": "DISPERSO",
-   "activo": "ETH",
-   "marco": "15min",
-   "grande": null,
-   "estado_config": "dormida/sin config",
-   "ancho": 0.05,
-   "lo": 0.07,
-   "hi": 0.12,
-   "n_train": 118,
-   "pnl_train": 0.3657,
-   "n_dias_train": 21,
-   "pnl_sin_2_mejores_dias": 0.1126,
-   "wallets": 17,
-   "top1_wallet": 0.212,
-   "p_max_train": 0.01,
-   "n_forward": 34,
-   "pnl_forward": -0.1297,
-   "hit_forward": 0.088,
-   "forward_ok": false,
-   "forward_ic90": [
-    -1.0,
-    0.7157
-   ],
-   "forward_ok_estricto": false
-  },
-  {
    "tupla": "SNIPER#BTC#15min",
    "familia": "SNIPER",
    "activo": "BTC",
@@ -940,6 +1059,33 @@
    "marco": "15min",
    "grande": null,
    "estado_config": "dormida/sin config",
+   "ancho": 0.05,
+   "lo": 0.07,
+   "hi": 0.12,
+   "n_train": 118,
+   "pnl_train": 0.3657,
+   "n_dias_train": 21,
+   "pnl_sin_2_mejores_dias": 0.1126,
+   "wallets": 17,
+   "top1_wallet": 0.212,
+   "p_max_train": 0.01,
+   "n_forward": 35,
+   "pnl_forward": -0.1546,
+   "hit_forward": 0.086,
+   "forward_ok": false,
+   "forward_ic90": [
+    -0.7564,
+    0.6908
+   ],
+   "forward_ok_estricto": false
+  },
+  {
+   "tupla": "DISPERSO#ETH#15min",
+   "familia": "DISPERSO",
+   "activo": "ETH",
+   "marco": "15min",
+   "grande": null,
+   "estado_config": "dormida/sin config",
    "ancho": 0.02,
    "lo": 0.11,
    "hi": 0.13,
@@ -950,9 +1096,9 @@
    "wallets": 14,
    "top1_wallet": 0.229,
    "p_max_train": 0.146,
-   "n_forward": 10,
-   "pnl_forward": -0.1475,
-   "hit_forward": 0.1,
+   "n_forward": 11,
+   "pnl_forward": -0.225,
+   "hit_forward": 0.091,
    "forward_ok": false,
    "forward_ic90": null,
    "forward_ok_estricto": false
@@ -1253,7 +1399,7 @@
    "wallets": 12,
    "top1_wallet": 0.182,
    "p_max_train": 0.004,
-   "n_forward": 17,
+   "n_forward": 18,
    "pnl_forward": -1.0,
    "hit_forward": 0.0,
    "forward_ok": false,
