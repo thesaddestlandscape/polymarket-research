@@ -19,6 +19,7 @@ import math
 import random
 import re
 import os
+import time
 import hashlib
 from collections import Counter
 from datetime import datetime, timedelta, timezone
@@ -3262,6 +3263,18 @@ def actualizar_ev_kelly_historico(performance: list):
           f"(pred={fila['edge_pred_ponderado']:+.4f} real={fila['edge_real_ponderado']:+.4f})")
 
 
+_T_FASE = [time.perf_counter()]
+
+
+def _fase(nombre: str) -> None:
+    """21-Sep (rediseno etapa 2): tiempo por fase de main() -- solo print, sin
+    efecto sobre resultados. Sirve para decidir CON DATOS que agregado merece
+    hacerse incremental en vez de adivinarlo."""
+    ahora = time.perf_counter()
+    print(f"  ⏱ fase[{nombre}]: {ahora - _T_FASE[0]:.1f}s")
+    _T_FASE[0] = ahora
+
+
 _MARCADORES_CONFLICTO = ("<<<<<<<", ">>>>>>>", "=======")
 
 
@@ -3398,6 +3411,7 @@ def main():
             pass
 
     resultados = cargar_results(_rows_results)
+    _fase("lectura+dedup")
     # 21-Ago: libera el texto crudo (~190MB+ y creciendo ~3.2MB/día) y la
     # lista de filas ya consumida -- ningún consumidor posterior los usa
     # (cargar_results_dedup ya devolvió las mismas filas deduplicadas en
@@ -3420,9 +3434,11 @@ def main():
     # real (CLAUDE.md pt.18, 04-Ago: postmortem colgado >10min bloqueando
     # resolve/señales nuevas con dinero real abierto).
     resultados_twap_safe = _excluir_pre_twap(resultados)
+    _fase("excluir_pre_twap")
 
     pred_index    = cargar_predicciones_index()
     ya_procesadas = cargar_ya_postmortem()
+    _fase("pred_index+ya_postmortem")
 
     perdidas_nuevas = []
     for r in resultados:
@@ -3441,6 +3457,7 @@ def main():
     print(f"  Resultados totales: {len(resultados)}")
     print(f"  Aciertos: {aciertos_total} | Pérdidas: {len(perdidas_total)}")
     print(f"  Pérdidas nuevas a diagnosticar: {len(perdidas_nuevas)}")
+    _fase("bucle perdidas nuevas")
 
     if perdidas_nuevas:
         nuevo    = not POSTMORTEM_PATH.exists()
@@ -3492,6 +3509,7 @@ def main():
         return filas
 
     todos_con_causa = _con_causa(resultados)
+    _fase("_con_causa (todas las perdidas)")
     # 11-Ago (/code-review, hallazgo real): calcular_params (IC/filtros/
     # patrones -> strategy_params.json) filtra la lista YA anotada
     # (todos_con_causa) en vez de volver a llamar a _con_causa() sobre
@@ -3540,6 +3558,7 @@ def main():
     # ~400k filas y otra lista de tamaño ~histórico completo viva a la vez --
     # mismo patrón que los fixes de 11-Ago/21-Ago/03-Sep en esta función,
     # cero cambio de valores calculados.
+    _fase("preparacion (causas/twap/index)")
     params = calcular_params(
         _gbp.filtrar_filas_zona_confirmada(resultados_twap_safe, pares_live))
 
@@ -3554,12 +3573,14 @@ def main():
     # (mismo valor -- reusado, no recalculado, para no arriesgar que el
     # umbral de 3600s se cruce a mitad de un mismo ciclo y quede
     # inconsistente con el vaciado de "features" que ya se aplicó).
+    _fase("calcular_params")
     if corre_patrones_causales:
         patrones = aprender_patrones_causales(resultados_twap_safe, pred_index)
         _marcar_patrones_causales_ejecutado()
     else:
         patrones = {}
 
+    _fase("aprender_patrones_causales")
     n_filtros  = sum(len(v["filtros_causales"])  for v in patrones.values())
     n_patrones = sum(len(v["patrones_ganadores"]) for v in patrones.values())
 
@@ -3681,10 +3702,12 @@ def main():
         print(f"    [{estado}] {s:35s}  n={p['n']:>3}  edge≥{p['edge_minimo']:.2f}  {p['motivo']}")
 
     # Performance completo
+    _fase("ajustes+escritura params")
     performance = generar_performance(todos_con_causa, pred_index)
     guardar_performance(performance)
     actualizar_ev_kelly_historico(performance)
 
+    _fase("performance")
     print(f"\n  Ranking de estrategias por P&L:")
     for p in performance:
         pf_str = f"{p['profit_factor']:.2f}" if p["profit_factor"] < 99 else "∞"
@@ -3743,6 +3766,7 @@ def main():
     except Exception as e:
         print(f"  [WARN] hypothesis_tracker: {e}")
 
+    _fase("state+hipotesis+resto")
     print(f"[{ts}] === Fin postmortem ===")
 
 
