@@ -1,14 +1,14 @@
 {
- "generado_utc": "2026-09-21T16:31:17+00:00",
+ "generado_utc": "2026-09-21T19:20:32+00:00",
  "modo": "lectura (no consumido por evaluar())",
  "forward_dias": 7,
  "cutoff": "2026-09-14T00:00:00",
  "n_forward_min": 15,
  "piso_eur": 0.1,
  "n_tuplas_evaluadas": 72,
- "n_filas_total": 537806,
- "n_zonas_operables": 10,
- "n_zonas_en_observacion": 44,
+ "n_filas_total": 540393,
+ "n_zonas_operables": 12,
+ "n_zonas_en_observacion": 42,
  "cobertura": {
   "total_tuplas_con_datos": 107,
   "evaluadas": 72,
@@ -163,6 +163,33 @@
    "marco": "15min",
    "grande": null,
    "estado_config": "LIVE",
+   "ancho": 0.01,
+   "lo": 0.18,
+   "hi": 0.19,
+   "n_train": 58,
+   "pnl_train": 0.7155,
+   "n_dias_train": 19,
+   "pnl_sin_2_mejores_dias": 0.1142,
+   "wallets": 21,
+   "top1_wallet": 0.241,
+   "p_max_train": 0.01,
+   "n_forward": 15,
+   "pnl_forward": 0.7456,
+   "hit_forward": 0.333,
+   "forward_ok": true,
+   "forward_ic90": [
+    -0.3018,
+    1.7929
+   ],
+   "forward_ok_estricto": false
+  },
+  {
+   "tupla": "DISPERSO#BTC#15min",
+   "familia": "DISPERSO",
+   "activo": "BTC",
+   "marco": "15min",
+   "grande": null,
+   "estado_config": "LIVE",
    "ancho": 0.02,
    "lo": 0.18,
    "hi": 0.2,
@@ -173,15 +200,15 @@
    "wallets": 28,
    "top1_wallet": 0.194,
    "p_max_train": 0.004,
-   "n_forward": 32,
-   "pnl_forward": 0.5855,
-   "hit_forward": 0.312,
+   "n_forward": 35,
+   "pnl_forward": 0.741,
+   "hit_forward": 0.343,
    "forward_ok": true,
    "forward_ic90": [
-    -0.0521,
-    1.3612
+    0.1503,
+    1.3395
    ],
-   "forward_ok_estricto": false
+   "forward_ok_estricto": true
   },
   {
    "tupla": "SNIPER#BTC#15min",
@@ -211,6 +238,33 @@
    "forward_ok_estricto": false
   },
   {
+   "tupla": "DISPERSO#ETH#5min",
+   "familia": "DISPERSO",
+   "activo": "ETH",
+   "marco": "5min",
+   "grande": null,
+   "estado_config": "dormida/sin config",
+   "ancho": 0.03,
+   "lo": 0.12,
+   "hi": 0.15,
+   "n_train": 168,
+   "pnl_train": 0.2753,
+   "n_dias_train": 21,
+   "pnl_sin_2_mejores_dias": 0.1512,
+   "wallets": 14,
+   "top1_wallet": 0.196,
+   "p_max_train": 0.05,
+   "n_forward": 60,
+   "pnl_forward": 0.5609,
+   "hit_forward": 0.217,
+   "forward_ok": true,
+   "forward_ic90": [
+    -0.0524,
+    1.2211
+   ],
+   "forward_ok_estricto": false
+  },
+  {
    "tupla": "DISPERSO#BTC#5min",
    "familia": "DISPERSO",
    "activo": "BTC",
@@ -227,13 +281,13 @@
    "wallets": 24,
    "top1_wallet": 0.122,
    "p_max_train": 0.34,
-   "n_forward": 75,
-   "pnl_forward": 0.578,
-   "hit_forward": 0.4,
+   "n_forward": 76,
+   "pnl_forward": 0.5572,
+   "hit_forward": 0.395,
    "forward_ok": true,
    "forward_ic90": [
-    0.2098,
-    0.9462
+    0.1939,
+    0.9206
    ],
    "forward_ok_estricto": true
   },
@@ -254,40 +308,13 @@
    "wallets": 13,
    "top1_wallet": 0.204,
    "p_max_train": 0.028,
-   "n_forward": 45,
-   "pnl_forward": 0.5599,
-   "hit_forward": 0.222,
+   "n_forward": 46,
+   "pnl_forward": 0.526,
+   "hit_forward": 0.217,
    "forward_ok": true,
    "forward_ic90": [
-    -0.2087,
-    1.3171
-   ],
-   "forward_ok_estricto": false
-  },
-  {
-   "tupla": "DISPERSO#ETH#5min",
-   "familia": "DISPERSO",
-   "activo": "ETH",
-   "marco": "5min",
-   "grande": null,
-   "estado_config": "dormida/sin config",
-   "ancho": 0.03,
-   "lo": 0.12,
-   "hi": 0.15,
-   "n_train": 168,
-   "pnl_train": 0.2753,
-   "n_dias_train": 21,
-   "pnl_sin_2_mejores_dias": 0.1512,
-   "wallets": 14,
-   "top1_wallet": 0.196,
-   "p_max_train": 0.05,
-   "n_forward": 58,
-   "pnl_forward": 0.4799,
-   "hit_forward": 0.207,
-   "forward_ok": true,
-   "forward_ic90": [
-    -0.1428,
-    1.1232
+    -0.1022,
+    1.289
    ],
    "forward_ok_estricto": false
   },
@@ -308,13 +335,13 @@
    "wallets": 16,
    "top1_wallet": 0.3,
    "p_max_train": 0.062,
-   "n_forward": 22,
-   "pnl_forward": 0.4281,
-   "hit_forward": 0.727,
+   "n_forward": 26,
+   "pnl_forward": 0.437,
+   "hit_forward": 0.731,
    "forward_ok": true,
    "forward_ic90": [
-    0.1543,
-    0.7036
+    0.1357,
+    0.734
    ],
    "forward_ok_estricto": true
   },
@@ -400,6 +427,33 @@
    "forward_ok_estricto": false
   },
   {
+   "tupla": "WALLET_MIRROR#BTC#15min#g1",
+   "familia": "WALLET_MIRROR",
+   "activo": "BTC",
+   "marco": "15min",
+   "grande": "1",
+   "estado_config": "LIVE",
+   "ancho": 0.02,
+   "lo": 0.37,
+   "hi": 0.39,
+   "n_train": 125,
+   "pnl_train": 0.2226,
+   "n_dias_train": 18,
+   "pnl_sin_2_mejores_dias": 0.1642,
+   "wallets": 42,
+   "top1_wallet": 0.232,
+   "p_max_train": 0.076,
+   "n_forward": 38,
+   "pnl_forward": 0.1401,
+   "hit_forward": 0.447,
+   "forward_ok": true,
+   "forward_ic90": [
+    -0.1946,
+    0.4766
+   ],
+   "forward_ok_estricto": false
+  },
+  {
    "tupla": "SNIPER#BTC#5min",
    "familia": "SNIPER",
    "activo": "BTC",
@@ -448,30 +502,6 @@
    "n_forward": 10,
    "pnl_forward": 0.6622,
    "hit_forward": 0.3,
-   "forward_ok": false,
-   "forward_ic90": null,
-   "forward_ok_estricto": false
-  },
-  {
-   "tupla": "DISPERSO#BTC#15min",
-   "familia": "DISPERSO",
-   "activo": "BTC",
-   "marco": "15min",
-   "grande": null,
-   "estado_config": "LIVE",
-   "ancho": 0.01,
-   "lo": 0.18,
-   "hi": 0.19,
-   "n_train": 58,
-   "pnl_train": 0.7155,
-   "n_dias_train": 19,
-   "pnl_sin_2_mejores_dias": 0.1142,
-   "wallets": 21,
-   "top1_wallet": 0.241,
-   "p_max_train": 0.01,
-   "n_forward": 13,
-   "pnl_forward": 0.6113,
-   "hit_forward": 0.308,
    "forward_ok": false,
    "forward_ic90": null,
    "forward_ok_estricto": false
@@ -597,6 +627,33 @@
    "forward_ok_estricto": false
   },
   {
+   "tupla": "WALLET_MIRROR#BTC#15min#g1",
+   "familia": "WALLET_MIRROR",
+   "activo": "BTC",
+   "marco": "15min",
+   "grande": "1",
+   "estado_config": "LIVE",
+   "ancho": 0.03,
+   "lo": 0.37,
+   "hi": 0.4,
+   "n_train": 179,
+   "pnl_train": 0.2515,
+   "n_dias_train": 22,
+   "pnl_sin_2_mejores_dias": 0.1869,
+   "wallets": 51,
+   "top1_wallet": 0.212,
+   "p_max_train": 0.026,
+   "n_forward": 51,
+   "pnl_forward": 0.0901,
+   "hit_forward": 0.431,
+   "forward_ok": false,
+   "forward_ic90": [
+    -0.2037,
+    0.3814
+   ],
+   "forward_ok_estricto": false
+  },
+  {
    "tupla": "WALLET_MIRROR#SOL#15min#g0",
    "familia": "WALLET_MIRROR",
    "activo": "SOL",
@@ -651,33 +708,6 @@
    "forward_ok_estricto": false
   },
   {
-   "tupla": "WALLET_MIRROR#ETH#5min#g0",
-   "familia": "WALLET_MIRROR",
-   "activo": "ETH",
-   "marco": "5min",
-   "grande": "0",
-   "estado_config": "LIVE",
-   "ancho": 0.02,
-   "lo": 0.6,
-   "hi": 0.62,
-   "n_train": 73,
-   "pnl_train": 0.1675,
-   "n_dias_train": 22,
-   "pnl_sin_2_mejores_dias": 0.1247,
-   "wallets": 17,
-   "top1_wallet": 0.315,
-   "p_max_train": 0.004,
-   "n_forward": 71,
-   "pnl_forward": 0.0627,
-   "hit_forward": 0.662,
-   "forward_ok": false,
-   "forward_ic90": [
-    -0.0742,
-    0.2185
-   ],
-   "forward_ok_estricto": false
-  },
-  {
    "tupla": "DISPERSO#DOGE#5min",
    "familia": "DISPERSO",
    "activo": "DOGE",
@@ -702,6 +732,33 @@
    "forward_ok_estricto": false
   },
   {
+   "tupla": "WALLET_MIRROR#ETH#5min#g0",
+   "familia": "WALLET_MIRROR",
+   "activo": "ETH",
+   "marco": "5min",
+   "grande": "0",
+   "estado_config": "LIVE",
+   "ancho": 0.02,
+   "lo": 0.6,
+   "hi": 0.62,
+   "n_train": 73,
+   "pnl_train": 0.1675,
+   "n_dias_train": 22,
+   "pnl_sin_2_mejores_dias": 0.1247,
+   "wallets": 17,
+   "top1_wallet": 0.315,
+   "p_max_train": 0.004,
+   "n_forward": 81,
+   "pnl_forward": 0.0103,
+   "hit_forward": 0.63,
+   "forward_ok": false,
+   "forward_ic90": [
+    -0.1288,
+    0.1484
+   ],
+   "forward_ok_estricto": false
+  },
+  {
    "tupla": "WALLET_MIRROR#ETH#15min#g1",
    "familia": "WALLET_MIRROR",
    "activo": "ETH",
@@ -718,94 +775,13 @@
    "wallets": 19,
    "top1_wallet": 0.324,
    "p_max_train": 0.098,
-   "n_forward": 57,
-   "pnl_forward": 0.0163,
-   "hit_forward": 0.649,
+   "n_forward": 60,
+   "pnl_forward": -0.0092,
+   "hit_forward": 0.633,
    "forward_ok": false,
    "forward_ic90": [
-    -0.1475,
-    0.1753
-   ],
-   "forward_ok_estricto": false
-  },
-  {
-   "tupla": "DISPERSO#DOGE#5min",
-   "familia": "DISPERSO",
-   "activo": "DOGE",
-   "marco": "5min",
-   "grande": null,
-   "estado_config": "dormida/sin config",
-   "ancho": 0.02,
-   "lo": 0.15,
-   "hi": 0.17,
-   "n_train": 55,
-   "pnl_train": 0.3187,
-   "n_dias_train": 19,
-   "pnl_sin_2_mejores_dias": 0.1574,
-   "wallets": 9,
-   "top1_wallet": 0.273,
-   "p_max_train": 0.152,
-   "n_forward": 36,
-   "pnl_forward": 0.0019,
-   "hit_forward": 0.167,
-   "forward_ok": false,
-   "forward_ic90": [
-    -0.6517,
-    0.6663
-   ],
-   "forward_ok_estricto": false
-  },
-  {
-   "tupla": "WALLET_MIRROR#BTC#15min#g1",
-   "familia": "WALLET_MIRROR",
-   "activo": "BTC",
-   "marco": "15min",
-   "grande": "1",
-   "estado_config": "LIVE",
-   "ancho": 0.02,
-   "lo": 0.37,
-   "hi": 0.39,
-   "n_train": 125,
-   "pnl_train": 0.2226,
-   "n_dias_train": 18,
-   "pnl_sin_2_mejores_dias": 0.1642,
-   "wallets": 42,
-   "top1_wallet": 0.232,
-   "p_max_train": 0.076,
-   "n_forward": 33,
-   "pnl_forward": 0.0017,
-   "hit_forward": 0.394,
-   "forward_ok": false,
-   "forward_ic90": [
-    -0.3094,
-    0.3169
-   ],
-   "forward_ok_estricto": false
-  },
-  {
-   "tupla": "WALLET_MIRROR#BTC#15min#g1",
-   "familia": "WALLET_MIRROR",
-   "activo": "BTC",
-   "marco": "15min",
-   "grande": "1",
-   "estado_config": "LIVE",
-   "ancho": 0.03,
-   "lo": 0.37,
-   "hi": 0.4,
-   "n_train": 179,
-   "pnl_train": 0.2515,
-   "n_dias_train": 22,
-   "pnl_sin_2_mejores_dias": 0.1869,
-   "wallets": 51,
-   "top1_wallet": 0.212,
-   "p_max_train": 0.026,
-   "n_forward": 46,
-   "pnl_forward": -0.0146,
-   "hit_forward": 0.391,
-   "forward_ok": false,
-   "forward_ic90": [
-    -0.2939,
-    0.2619
+    -0.1678,
+    0.1495
    ],
    "forward_ok_estricto": false
   },
@@ -837,6 +813,33 @@
    "forward_ok_estricto": false
   },
   {
+   "tupla": "DISPERSO#DOGE#5min",
+   "familia": "DISPERSO",
+   "activo": "DOGE",
+   "marco": "5min",
+   "grande": null,
+   "estado_config": "dormida/sin config",
+   "ancho": 0.02,
+   "lo": 0.15,
+   "hi": 0.17,
+   "n_train": 55,
+   "pnl_train": 0.3187,
+   "n_dias_train": 19,
+   "pnl_sin_2_mejores_dias": 0.1574,
+   "wallets": 9,
+   "top1_wallet": 0.273,
+   "p_max_train": 0.152,
+   "n_forward": 37,
+   "pnl_forward": -0.0251,
+   "hit_forward": 0.162,
+   "forward_ok": false,
+   "forward_ic90": [
+    -0.523,
+    0.6213
+   ],
+   "forward_ok_estricto": false
+  },
+  {
    "tupla": "SNIPER#BTC#5min",
    "familia": "SNIPER",
    "activo": "BTC",
@@ -853,13 +856,13 @@
    "wallets": 26,
    "top1_wallet": 0.186,
    "p_max_train": 0.006,
-   "n_forward": 220,
-   "pnl_forward": -0.0241,
-   "hit_forward": 0.273,
+   "n_forward": 221,
+   "pnl_forward": -0.0285,
+   "hit_forward": 0.271,
    "forward_ok": false,
    "forward_ic90": [
-    -0.2058,
-    0.1423
+    -0.2046,
+    0.1459
    ],
    "forward_ok_estricto": false
   },
@@ -907,13 +910,13 @@
    "wallets": 8,
    "top1_wallet": 0.244,
    "p_max_train": 0.29,
-   "n_forward": 19,
-   "pnl_forward": -0.081,
-   "hit_forward": 0.789,
+   "n_forward": 20,
+   "pnl_forward": -0.0687,
+   "hit_forward": 0.8,
    "forward_ok": false,
    "forward_ic90": [
-    -0.2648,
-    0.1028
+    -0.2433,
+    0.1059
    ],
    "forward_ok_estricto": false
   },
@@ -961,13 +964,13 @@
    "wallets": 30,
    "top1_wallet": 0.186,
    "p_max_train": 0.006,
-   "n_forward": 355,
-   "pnl_forward": -0.099,
-   "hit_forward": 0.256,
+   "n_forward": 357,
+   "pnl_forward": -0.0946,
+   "hit_forward": 0.258,
    "forward_ok": false,
    "forward_ic90": [
-    -0.2311,
-    0.0337
+    -0.2249,
+    0.0395
    ],
    "forward_ok_estricto": false
   },
@@ -1069,13 +1072,13 @@
    "wallets": 17,
    "top1_wallet": 0.212,
    "p_max_train": 0.01,
-   "n_forward": 35,
-   "pnl_forward": -0.1546,
-   "hit_forward": 0.086,
+   "n_forward": 36,
+   "pnl_forward": -0.1781,
+   "hit_forward": 0.083,
    "forward_ok": false,
    "forward_ic90": [
-    -0.7564,
-    0.6908
+    -0.7632,
+    0.6439
    ],
    "forward_ok_estricto": false
   },
@@ -1270,13 +1273,13 @@
    "wallets": 62,
    "top1_wallet": 0.236,
    "p_max_train": 0.0,
-   "n_forward": 108,
-   "pnl_forward": -0.4801,
-   "hit_forward": 0.065,
+   "n_forward": 118,
+   "pnl_forward": -0.5242,
+   "hit_forward": 0.059,
    "forward_ok": false,
    "forward_ic90": [
-    -0.7763,
-    -0.1774
+    -0.7952,
+    -0.2047
    ],
    "forward_ok_estricto": false
   },
@@ -1321,13 +1324,13 @@
    "wallets": 45,
    "top1_wallet": 0.206,
    "p_max_train": 0.0,
-   "n_forward": 63,
-   "pnl_forward": -0.7294,
-   "hit_forward": 0.032,
+   "n_forward": 67,
+   "pnl_forward": -0.7455,
+   "hit_forward": 0.03,
    "forward_ok": false,
    "forward_ic90": [
     -1.0,
-    -0.3234
+    -0.3638
    ],
    "forward_ok_estricto": false
   },
@@ -1554,6 +1557,6 @@
    "forward_ok_estricto": false
   }
  ],
- "n_zonas_operables_estrictas": 2,
+ "n_zonas_operables_estrictas": 3,
  "ultimo_snapshot_historial": "2026-09-21T16:19:24+00:00"
 }
