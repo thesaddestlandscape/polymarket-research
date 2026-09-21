@@ -41,7 +41,8 @@ from pathlib import Path
 REPO = Path(__file__).resolve().parent
 sys.path.insert(0, str(REPO))
 
-from sports_wallet_mirror_sniper import outcome_por_condition_id  # noqa: E402
+import requests  # noqa: E402
+from sports_wallet_mirror_sniper import outcome_por_condition_id, GAMMA_API  # noqa: E402
 from sports_smart_exit_logger import fetch as _fetch_mkt, outcome_prices as _outcome_prices, parse_dt as _parse_dt  # noqa: E402
 from shadow_digest import enviar_telegram  # noqa: E402 -- bot="sports", solo para el aviso de discrepancia de abajo
 
@@ -51,6 +52,35 @@ CONFIG_PATH = REPO / "data/sports/config_live_sports.json"
 FEE = 0.05
 MAX_CIDS_POR_CICLO = 20
 HAIRCUT_VENTA = 0.06  # mismo valor que cripto (analisis_smart_exit.py) -- ~2-3c de spread + fee de venta, provisional hasta calibrar con datos propios de sports
+
+
+VOID_IDX = -1  # 21-Sep: centinela "mercado anulado 50-50" en el dict de outcomes
+
+
+def es_void_5050(cid: str) -> bool:
+    """21-Sep (hallazgo real, 2 trades CS FADE OPEN 18h+ tras cierre):
+    outcome_por_condition_id() solo devuelve indice si un precio ~1.0; un
+    mercado que UMA resuelve 50-50 (partido sin resultado valido) queda con
+    outcomePrices [0.5,0.5] y el trade se quedaba OPEN para siempre (el
+    canje on-chain SI ocurre solo, a 0.5/share -- solo el libro quedaba
+    desfasado). Fail-closed: exige closed + umaResolutionStatus=='resolved'
+    + AMBOS precios ~0.5; ante cualquier duda/error -> False (sigue OPEN)."""
+    try:
+        r = requests.get(f"{GAMMA_API}/markets", timeout=15,
+                         params={"condition_ids": cid, "closed": "true"})
+        r.raise_for_status()
+        data = r.json()
+    except Exception:
+        return False
+    for m in data:
+        if (m.get("conditionId") or m.get("condition_id")) != cid:
+            continue
+        if not m.get("closed") or m.get("umaResolutionStatus") != "resolved":
+            continue
+        pr = _outcome_prices(m)
+        if pr and len(pr) == 2 and all(abs(x - 0.5) < 0.01 for x in pr):
+            return True
+    return False
 
 
 def _log(msg: str) -> None:
@@ -91,12 +121,23 @@ def resolver_una_pasada() -> int:
         return 0
 
     cids = sorted({r["market_id"] for r in abiertas if r.get("market_id")})[:MAX_CIDS_POR_CICLO]
+    # 21-Sep (/code-review): es_void_5050() cuesta 1 llamada HTTP extra -- solo
+    # para cids con end_date YA vencido (un mercado aun no vencido no puede
+    # estar anulado 50-50), no para los ~20 abiertos de cada pasada.
+    _ahora = datetime.now(timezone.utc)
+    vencidos = set()
+    for r in abiertas:
+        _te = _parse_dt(r.get("end_date"))
+        if _te is not None and _te < _ahora:
+            vencidos.add(r.get("market_id"))
 
     # Consulta de red (lenta) -- SIN mantener el lock, para no bloquear
     # registrar_trade() más de lo necesario.
     outcomes: dict[str, int] = {}
     for cid in cids:
         idx = outcome_por_condition_id(cid)
+        if idx is None and cid in vencidos and es_void_5050(cid):
+            idx = VOID_IDX
         if idx is not None:
             outcomes[cid] = idx
     if not outcomes:
@@ -127,8 +168,13 @@ def resolver_una_pasada() -> int:
                 _log(f"  ⚠️ fila con datos incompletos para {r.get('market_id')}, no se resuelve")
                 continue
 
+            es_void = idx_real == VOID_IDX
             acierto = int(idx_real == direction_idx)
-            if acierto:
+            if es_void:
+                # 50-50: cada share se canjea a 0.5 (verificado on-chain 20-Sep,
+                # REDEEM 0.8333 = 1.05/0.63*0.5) -> pnl = stake*(0.5/entry - 1)
+                pnl_bruto = stake_eur * (0.5 / entry_price - 1.0) if entry_price > 0 else -stake_eur
+            elif acierto:
                 gross_win = (1.0 - entry_price) / entry_price if entry_price > 0 else 0.0
                 pnl_bruto = gross_win * stake_eur
             else:
@@ -137,13 +183,13 @@ def resolver_una_pasada() -> int:
 
             r["status"] = "CLOSED"
             r["close_timestamp"] = datetime.now(timezone.utc).isoformat(timespec="seconds")
-            r["exit_price"] = "1.0" if acierto else "0.0"
-            r["outcome_real"] = str(idx_real)
+            r["exit_price"] = "0.5" if es_void else ("1.0" if acierto else "0.0")
+            r["outcome_real"] = "void" if es_void else str(idx_real)
             r["pnl_bruto_eur"] = round(pnl_bruto, 4)
             r["pnl_neto_eur"] = round(pnl_neto, 4)
             n_resueltas += 1
             _log(f"  ✅ resuelto {r['market_id']} categoria={r.get('categoria')} tipo={r.get('tipo')} "
-                 f"acierto={acierto} pnl_neto={pnl_neto:+.3f}€")
+                 f"acierto={'void' if es_void else acierto} pnl_neto={pnl_neto:+.3f}€")
 
         if n_resueltas:
             with open(TRADES, "w", newline="", encoding="utf-8") as f:
