@@ -1,5 +1,5 @@
 {
- "generado_utc": "2026-09-21T18:40:15+00:00",
+ "generado_utc": "2026-09-21T18:43:46+00:00",
  "fuente": "bybit",
  "BNB": {
   "2min": {
@@ -55,28 +55,28 @@
  },
  "DOGE": {
   "2min": {
-   "usd_long": 0.0,
+   "usd_long": 8863.04,
    "usd_short": 0.0,
-   "n": 0,
-   "imbalance": null
+   "n": 4,
+   "imbalance": -1.0
   },
   "5min": {
-   "usd_long": 0.0,
+   "usd_long": 24584.56,
    "usd_short": 0.0,
-   "n": 0,
-   "imbalance": null
+   "n": 10,
+   "imbalance": -1.0
   },
   "15min": {
-   "usd_long": 0.0,
+   "usd_long": 24584.56,
    "usd_short": 0.0,
-   "n": 0,
-   "imbalance": null
+   "n": 10,
+   "imbalance": -1.0
   },
   "60min": {
-   "usd_long": 83705.27,
+   "usd_long": 108289.83,
    "usd_short": 8514.88,
-   "n": 17,
-   "imbalance": -0.8153
+   "n": 27,
+   "imbalance": -0.8542
   }
  },
  "ETH": {
@@ -94,9 +94,9 @@
   },
   "15min": {
    "usd_long": 0.0,
-   "usd_short": 136.97,
-   "n": 1,
-   "imbalance": 1.0
+   "usd_short": 0.0,
+   "n": 0,
+   "imbalance": null
   },
   "60min": {
    "usd_long": 6072.93,
@@ -107,10 +107,10 @@
  },
  "SOL": {
   "2min": {
-   "usd_long": 47.2,
+   "usd_long": 0.0,
    "usd_short": 0.0,
-   "n": 1,
-   "imbalance": -1.0
+   "n": 0,
+   "imbalance": null
   },
   "5min": {
    "usd_long": 47.2,
@@ -133,10 +133,10 @@
  },
  "XRP": {
   "2min": {
-   "usd_long": 4682.65,
+   "usd_long": 0.0,
    "usd_short": 0.0,
-   "n": 1,
-   "imbalance": -1.0
+   "n": 0,
+   "imbalance": null
   },
   "5min": {
    "usd_long": 4682.65,
@@ -145,10 +145,10 @@
    "imbalance": -1.0
   },
   "15min": {
-   "usd_long": 60123.73,
+   "usd_long": 4682.65,
    "usd_short": 13049.01,
-   "n": 17,
-   "imbalance": -0.6433
+   "n": 3,
+   "imbalance": 0.4718
   },
   "60min": {
    "usd_long": 121217.13,
@@ -159,10 +159,10 @@
  },
  "lag_bybit_ws": {
   "ventana_min": 5,
-  "n_muestras": 2,
-  "ultimo_lag_s": 0.53,
+  "n_muestras": 12,
+  "ultimo_lag_s": 0.37,
   "max_lag_s": 0.53,
-  "media_lag_s": 0.34,
+  "media_lag_s": 0.29,
   "umbral_alerta_s": 5.0
  }
 }
