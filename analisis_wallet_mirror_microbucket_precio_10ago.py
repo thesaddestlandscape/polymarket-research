@@ -36,6 +36,8 @@ from pathlib import Path
 
 import numpy as np
 
+from shuffle_chunked import diffs_permutacion
+
 REPO = Path(__file__).resolve().parent
 EXECUTOR = REPO / "data/shadow/wallet_mirror_executor_dryrun.csv"
 SNIPER = REPO / "data/shadow/wallet_mirror_sniper_dry_run.csv"
@@ -98,11 +100,9 @@ def shuffle_test(a, b, iters=ITERS):
     diff_real = a.mean() - b.mean()
     todos = np.concatenate([a, b])
     n = na + nb
-    idx = _rng.random((iters, n)).argsort(axis=1)
-    permutado = todos[idx]
-    media_a = permutado[:, :na].mean(axis=1)
-    media_b = permutado[:, na:].mean(axis=1)
-    diffs = media_a - media_b
+    # 21-Sep: por bloques (shuffle_chunked.py) -- 3 matrices iters x n a la vez
+    # causaban OOM; resultado bit-identico (verificado).
+    diffs = diffs_permutacion(_rng, todos, na, iters)
     p_valor = float(np.mean(np.abs(diffs) >= abs(diff_real)))
     return float(diff_real), p_valor
 

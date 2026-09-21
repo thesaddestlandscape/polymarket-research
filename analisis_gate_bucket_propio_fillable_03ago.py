@@ -43,6 +43,8 @@ from pathlib import Path
 
 import numpy as np
 
+from shuffle_chunked import diffs_permutacion
+
 # 28-Ago: reusa la MISMA fórmula de retorno normalizado que analisis_log_
 # growth.py (Kelly g(f), CLAUDE.md pt.14/P28) -- NUNCA reimplementarla
 # aparte, el payout asimétrico es la misma cicatriz de siempre (hit-rate
@@ -260,11 +262,9 @@ def shuffle_test(a, b, iters=ITERS):
     diff_real = a.mean() - b.mean()
     todos = np.concatenate([a, b])
     n = na + nb
-    idx = _rng.random((iters, n)).argsort(axis=1)
-    permutado = todos[idx]
-    media_a = permutado[:, :na].mean(axis=1)
-    media_b = permutado[:, na:].mean(axis=1)
-    diffs = media_a - media_b
+    # 21-Sep: por bloques (shuffle_chunked.py) -- 3 matrices iters x n a la vez
+    # causaban OOM; resultado bit-identico (verificado).
+    diffs = diffs_permutacion(_rng, todos, na, iters)
     p_valor = float(np.mean(np.abs(diffs) >= abs(diff_real)))
     return float(diff_real), p_valor
 
