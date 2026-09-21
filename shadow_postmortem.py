@@ -136,7 +136,8 @@ def cargar_results(rows=None) -> list:
     return cargar_results_dedup(RESULTS_PATH, rows=rows)
 
 
-def _verificar_integridad(content: str = None, rows: list = None) -> list[tuple[str, str]]:
+def _verificar_integridad(content: str = None, rows: list = None,
+                          conflict_markers: bool = None) -> list[tuple[str, str]]:
     """Grader independiente: valida results.csv antes de que el postmortem lo procese.
 
     Devuelve (clave_estable, mensaje) en vez de solo el mensaje (21-Jul,
@@ -155,13 +156,24 @@ def _verificar_integridad(content: str = None, rows: list = None) -> list[tuple[
     filas esta relectura duplicada contribuía a la degradación medida por
     vigia_pipeline_latencia.py, aviso Telegram 21:03 hora Madrid)."""
     alertas = []
-    if content is None:
+    if conflict_markers is not None:
+        # 21-Sep: el llamante (main) ya leyo results.csv en streaming y
+        # escaneo los marcadores linea a linea -- no hace falta el texto
+        # completo (562MB) en memoria.
         if not RESULTS_PATH.exists():
             return [("results_csv_no_existe", "results.csv no existe")]
-        content = RESULTS_PATH.read_text(encoding="utf-8")
-    elif not RESULTS_PATH.exists():
-        return [("results_csv_no_existe", "results.csv no existe")]
-    if any(m in content for m in ["<<<<<<<", ">>>>>>>", "======="]):
+        hay_marcadores = conflict_markers
+        if rows is None:
+            raise ValueError("_verificar_integridad: conflict_markers requiere rows (sin content que releer)")
+    else:
+        if content is None:
+            if not RESULTS_PATH.exists():
+                return [("results_csv_no_existe", "results.csv no existe")]
+            content = RESULTS_PATH.read_text(encoding="utf-8")
+        elif not RESULTS_PATH.exists():
+            return [("results_csv_no_existe", "results.csv no existe")]
+        hay_marcadores = any(m in content for m in ["<<<<<<<", ">>>>>>>", "======="])
+    if hay_marcadores:
         alertas.append(("conflict_markers", "CONFLICT MARKERS en results.csv — git rebase incompleto"))
     if rows is None:
         rows = list(csv.DictReader(content.splitlines()))
@@ -3250,6 +3262,40 @@ def actualizar_ev_kelly_historico(performance: list):
           f"(pred={fila['edge_pred_ponderado']:+.4f} real={fila['edge_real_ponderado']:+.4f})")
 
 
+_MARCADORES_CONFLICTO = ("<<<<<<<", ">>>>>>>", "=======")
+
+
+def _leer_results_streaming(vaciar_features: bool = False):
+    """21-Sep (rediseno etapa 1, causa raiz OOM/swap, ver
+    project_rediseno_calcular_params_prioritario_20sep): lee results.csv en
+    streaming en vez de read_text()+splitlines() -- esas dos copias del
+    fichero completo (562MB c/u a 21-Sep) vivian a la vez antes de parsear
+    ni una fila. Devuelve (rows, hay_marcadores_de_conflicto).
+
+    Equivalencia EXACTA con el camino anterior (verificada sobre el
+    results.csv real 21-Sep: 0 separadores que splitlines trate distinto de
+    la iteracion de fichero, 0 CR sueltos, filas == lineas-1 => sin saltos
+    embebidos): mismos dicts, mismo orden. `vaciar_features` reproduce el
+    blanqueo de la columna que main() hacia DESPUES de cargar, pero aqui la
+    cadena grande no llega a estar residente para las ~650k filas."""
+    marcadores = False
+    rows = []
+
+    def _lineas(f):
+        nonlocal marcadores
+        for linea in f:
+            if not marcadores and any(m in linea for m in _MARCADORES_CONFLICTO):
+                marcadores = True
+            yield linea
+
+    with open(RESULTS_PATH, encoding="utf-8") as f:
+        for r in csv.DictReader(_lineas(f)):
+            if vaciar_features and "features" in r:
+                r["features"] = ""
+            rows.append(r)
+    return rows, marcadores
+
+
 def _debe_correr_patrones_causales() -> bool:
     """True si ha pasado PATRONES_CAUSALES_MIN_INTERVAL_S desde el último
     run real de aprender_patrones_causales() (no desde el último ciclo de
@@ -3299,26 +3345,17 @@ def main():
     # antes _verificar_integridad() y cargar_results() releían/reparseaban el
     # fichero completo cada una, doble coste sobre ~156MB/200k filas y
     # creciendo -- ver docstrings arriba).
-    _content_results = RESULTS_PATH.read_text(encoding="utf-8") if RESULTS_PATH.exists() else None
-    _rows_results = list(csv.DictReader(_content_results.splitlines())) if _content_results is not None else None
-    # 13-Sep (barrido de salud, swap/RAM crítico -- causa raíz aplazada
-    # desde 05/08/09-Sep, ver project_dia_dedicado_rediseno_postmortem_11sep):
-    # "features" es el 65% del contenido de cada fila (medido: 390 de 600
-    # chars/fila de media) y el ÚNICO consumidor es aprender_patrones_
-    # causales() (vía _extraer_features(), único call site en todo el
-    # fichero) -- que YA está throttleado a 1x/hora desde el 05-Sep. En los
-    # ~5 de cada 6 ciclos donde NO va a correr, esa columna se parseaba y se
-    # mantenía viva en memoria para TODAS las ~480k filas sin que nada la
-    # leyera. Decidir el throttle AQUÍ (antes, no solo en el call site de
-    # más abajo) y vaciar la columna en los ciclos que la saltan corta el
-    # contenido de `_rows_results`/`resultados`/`resultados_twap_safe`
-    # aproximadamente a un tercio en esos ciclos -- sin tocar ninguna lógica
-    # de agregación/dedup/IC, cero riesgo de alterar un resultado calculado.
+    # 21-Sep: lectura en streaming (ver _leer_results_streaming) -- el texto
+    # completo ya no se materializa. El throttle de patrones causales se
+    # decide ANTES de leer (solo lee un JSON de estado) para vaciar la
+    # columna `features` fila a fila al parsear, no despues (motivo: 13-Sep, features es el 65% de cada fila).
     corre_patrones_causales = _debe_correr_patrones_causales()
-    if not corre_patrones_causales and _rows_results:
-        for _r in _rows_results:
-            _r["features"] = ""
-    alertas = _verificar_integridad(_content_results, _rows_results)
+    if RESULTS_PATH.exists():
+        _rows_results, _hay_marcadores = _leer_results_streaming(vaciar_features=not corre_patrones_causales)
+    else:
+        _rows_results, _hay_marcadores = None, False
+    alertas = _verificar_integridad(None, _rows_results,
+                                    conflict_markers=_hay_marcadores if _rows_results is not None else None)
     if alertas:
         for _, msg_a in alertas:
             print(f"  [ALERTA INTEGRIDAD] {msg_a}")
@@ -3369,7 +3406,7 @@ def main():
     # `resultados_twap_safe`, y ese pico (1.48GB RSS medido hoy, VPS de
     # 3.7GB con ~15 procesos concurrentes) es lo que dispara la anomalía
     # de CPU/swap de analisis_diario_salud_sistema.py (CLAUDE.md pt.18).
-    del _content_results, _rows_results
+    del _rows_results
     if not resultados:
         print("  Sin resultados aún — nada que analizar.")
         print(f"[{ts}] === Fin postmortem ===")
