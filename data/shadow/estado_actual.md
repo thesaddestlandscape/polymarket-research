@@ -1,4 +1,4 @@
-# Estado del bot — 2026-09-21 19:28 UTC
+# Estado del bot — 2026-09-21 19:35 UTC
 
 ## Live — dinero real (on-chain)
 | | |
@@ -13,11 +13,11 @@
 ## Shadow — MODELO SIMULADO (no cobrable)
 | | |
 |---|---|
-| P&L fiel (stake fijo 1$) | +18575.81 $ |
-| P&L sim compuesto | 🟢 +72230.02 $ (ficción Kelly: +283923% s/ operativo) |
-| P&L sim hoy (2026-09-21) | 🟢 +1776.24 $ |
-| Operaciones resueltas | 654339 (373114 WIN / 281225 LOSS) — 57.0% |
-| Señales abiertas | 303126 |
+| P&L fiel (stake fijo 1$) | +18576.74 $ |
+| P&L sim compuesto | 🟢 +72230.51 $ (ficción Kelly: +283925% s/ operativo) |
+| P&L sim hoy (2026-09-21) | 🟢 +1776.73 $ |
+| Operaciones resueltas | 654340 (373115 WIN / 281225 LOSS) — 57.0% |
+| Señales abiertas | 303890 |
 
 ## Estrategias (visión global)
 
@@ -32,7 +32,7 @@
 | GBM_LATE_5M | 8410 | 61.2% | +0.112 | 📈 madura (+0.08) | +3692.10$ | 1.43$ | ✅ activa |
 | UPDOWN_GBM | 36762 | 53.4% | +0.034 | ➡️ estable | +2468.62$ | 0.50$ | ✅ activa |
 | GBM_LATE_15M_PYCONFIRMADO | 5047 | 61.6% | +0.116 | 📈 madura (+0.04) | +1954.88$ | 1.22$ | ✅ activa |
-| MOMENTUM_IBS_5M_BALLENA | 66968 | 42.7% | -0.073 | ➡️ estable | +1510.27$ | 0.50$ | ⚠️ IC negativo |
+| MOMENTUM_IBS_5M_BALLENA | 66969 | 42.7% | -0.073 | ➡️ estable | +1510.76$ | 0.50$ | ⚠️ IC negativo |
 | MOMENTUM_IBS_15M_BALLENA | 26232 | 49.2% | -0.008 | 📈 madura (+0.04) | +1148.60$ | 0.50$ | ⚠️ IC negativo |
 | WEEKLY_PRICE | 2223 | 80.1% | +0.300 | ➡️ estable | +1106.87$ | 2.00$ | ✅ activa |
 | UPDOWN_GBM_IBS_ALTO | 932 | 79.0% | +0.289 | ➡️ estable | +733.18$ | 2.00$ | ✅ activa |
@@ -80,30 +80,30 @@
 
 | Timestamp | Estrategia | Mercado | Resultado | PNL |
 |---|---|---|---|---|
+| 2026-09-21T19:29 | MOMENTUM_IBS_5M_BALLENA#DOGE#5min | Dogecoin Up or Down - September 21, 3:20PM-3:25PM … | ✅ WIN | +0.49$ |
 | 2026-09-21T19:26 | LIQUIDACIONES_5M#ETH#5min | Ethereum Up or Down - September 21, 3:20PM-3:25PM … | ❌ LOSS | -0.51$ |
 | 2026-09-21T19:26 | BALLENAS_TARDIAS#DOGE#5min | … | ❌ LOSS | -1.07$ |
 | 2026-09-21T19:26 | MOMENTUM_IBS_5M_BALLENA#BNB#5min | … | ✅ WIN | +1.85$ |
 | 2026-09-21T19:26 | MOMENTUM_IBS_5M_BALLENA#DOGE#5min | … | ❌ LOSS | -1.07$ |
-| 2026-09-21T19:26 | BALLENAS_TARDIAS#ETH#5min | … | ❌ LOSS | -1.07$ |
 
 ## Calidad de datos
 
-✅ **OK** — última verificación 2026-09-21T19:28 UTC
+✅ **OK** — última verificación 2026-09-21T19:34 UTC
 
 | Asset | Precio | Age | Alertas |
 |---|---|---|---|
-| ✅ BTC | $86,300.43 | 0.1min |  |
-| ✅ ETH | $2,766.39 | 0.1min |  |
-| ✅ SOL | $117.87 | 0.1min |  |
-| ✅ XRP | $1.50 | 0.1min |  |
+| ✅ BTC | $86,594.15 | 0.2min |  |
+| ✅ ETH | $2,767.57 | 0.2min |  |
+| ✅ SOL | $118.43 | 0.2min |  |
+| ✅ XRP | $1.51 | 0.2min |  |
 
 **Cross-source** (binance, coinbase, kraken):
 
 | Asset | Consenso | Fuente | Estado |
 |---|---|---|---|
-| BTC | $86,303.30 | consenso |  |
-| ETH | $2,765.76 | consenso |  |
-| SOL | $117.87 | consenso |  |
+| BTC | $86,601.70 | consenso |  |
+| ETH | $2,771.34 | consenso |  |
+| SOL | $118.18 | consenso |  |
 | XRP | $1.50 | consenso |  |
 
 ---
