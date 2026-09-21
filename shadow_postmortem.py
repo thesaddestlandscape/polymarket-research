@@ -19,6 +19,7 @@ import math
 import random
 import re
 import os
+import pickle
 import time
 import hashlib
 from collections import Counter
@@ -457,6 +458,72 @@ def _normalizar_pred(row: dict) -> dict:
     return row
 
 
+_PRED_INDEX_CACHE_VERSION = 1
+_PRED_INDEX_CACHE_MIN_INACTIVO_S = 900
+
+
+def _pred_index_cache_path(arch: Path) -> Path:
+    # Nombre `_cache_*.pkl` a proposito: ya esta cubierto por .gitignore
+    # (data/shadow/_cache_*.pkl) -- el batch de git NUNCA debe subir esto
+    # (incidente 20-Sep: cache sin ignorar >100MB atasco el push).
+    return DIR_SHADOW / f"_cache_pred_index_{arch.stem}.pkl"
+
+
+def _idx_pred_archivo_cacheado(arch: Path, parsear) -> dict:
+    """21-Sep (rediseno etapa 2, medido: pred_index = 94-101s de ~175s por
+    ciclo): cada predictions_YYYY-MM-DD.csv pesa ~590MB pero solo aporta
+    ~15k claves BUY unicas (~15MB en pickle). Un dia cerrado no cambia, asi
+    que su indice parcial se cachea por fichero, validado por (tamano,
+    mtime_ns) -- si el fichero cambia (el de hoy, o una escritura tardia en
+    el limite de dia) la validacion falla y se reparsea. El indice devuelto
+    es EXACTAMENTE el que produciria `parsear` (mismas filas, mismo orden):
+    el cache guarda idx_local tal cual. Fail-open: cualquier problema de
+    lectura/escritura del cache -> se reparsea, comportamiento previo.
+    `st` se toma ANTES de parsear: si el fichero crece durante el parseo el
+    cache queda con un (tamano, mtime) que no coincidira la proxima vez y
+    simplemente se descarta."""
+    cache_path = _pred_index_cache_path(arch)
+    try:
+        st = arch.stat()
+        firma = (st.st_size, st.st_mtime_ns)
+    except OSError:
+        firma = None
+    if firma is not None:
+        try:
+            with open(cache_path, "rb") as f:
+                d = pickle.load(f)
+            if (d.get("v") == _PRED_INDEX_CACHE_VERSION and d.get("firma") == firma
+                    and isinstance(d.get("idx"), dict)):
+                return d["idx"]
+        except Exception:
+            pass
+    idx = leer_csv_tolerante(arch, parsear, log_fn=print)
+    # /code-review 21-Sep: un fichero tocado hace <15min sigue activo (el de
+    # hoy) -- su firma cambiaria en el siguiente ciclo, asi que guardarlo
+    # seria I/O de ~15MB desperdiciado en cada ciclo.
+    activo = firma is not None and (time.time() - firma[1] / 1e9) < _PRED_INDEX_CACHE_MIN_INACTIVO_S
+    if idx and firma is not None and not activo:
+        try:
+            tmp = cache_path.with_name(cache_path.stem + ".tmp.pkl")
+            with open(tmp, "wb") as f:
+                pickle.dump({"v": _PRED_INDEX_CACHE_VERSION, "firma": firma, "idx": idx}, f, protocol=4)
+            os.replace(tmp, cache_path)
+        except Exception as e:
+            print(f"  [aviso pred_index] no se pudo escribir cache de {arch.name}: {e}")
+    return idx
+
+
+def _purgar_cache_pred_index(archivos_vigentes: list) -> None:
+    """Borra caches de dias que ya salieron de la ventana (evita crecer sin limite)."""
+    try:
+        vigentes = {_pred_index_cache_path(a).name for a in archivos_vigentes}
+        for c in DIR_SHADOW.glob("_cache_pred_index_*.pkl"):
+            if c.name not in vigentes:
+                c.unlink(missing_ok=True)
+    except Exception:
+        pass
+
+
 def cargar_predicciones_index(dias: int = 10) -> dict:
     """18-Ago: lectura tolerante por FICHERO (mismo fix y mismo motivo que
     shadow_resolve.py::cargar_predicciones_pendientes() -- desde el
@@ -519,11 +586,12 @@ def cargar_predicciones_index(dias: int = 10) -> dict:
 
     archivos = sorted(DIR_SHADOW.glob("predictions_*.csv"))[-(dias + 2):]
     for arch in archivos:
-        idx_arch = leer_csv_tolerante(arch, _parsear, log_fn=print)
+        idx_arch = _idx_pred_archivo_cacheado(arch, _parsear)
         if idx_arch:
             for clave, row in idx_arch.items():
                 if clave not in index:
                     index[clave] = row
+    _purgar_cache_pred_index(archivos)
     return index
 
 
