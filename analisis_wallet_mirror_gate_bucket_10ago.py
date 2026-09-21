@@ -66,6 +66,7 @@ from pathlib import Path
 import numpy as np
 
 from shuffle_chunked import diffs_permutacion
+from gate_dias_independientes import robustez_dias, ENFORCE as DIAS_ENFORCE, K_MEJORES_DIAS, PISO_EUR as PISO_DIAS_EUR
 
 from gate_confirmacion_historial import (
     cargar_historial_previo, cargar_fecha_historial_previo, veredicto_con_tolerancia_diario,
@@ -365,6 +366,12 @@ def main():
                 # compararse. dentro_sorted se reusa más abajo también para
                 # el split-half relativo si hay `fuera`.
                 dentro_sorted = sorted(dentro, key=lambda x: x[0])
+                # 21-Sep (aprobado por Javi): robustez por DIAS INDEPENDIENTES, ver
+                # gate_dias_independientes.py -- solo alimenta _degradar().
+                _rob = robustez_dias([(_ts, _p) for _ts, _p, _w in dentro_sorted])
+                entrada["n_dias"] = _rob["n_dias"]
+                entrada["pnl_sin_mejores_dias"] = _rob["pnl_sin_mejores"]
+                entrada["robusto_dias"] = _rob["robusto"]
                 # 16-Sep (ver docstring de _degradar() más abajo -- criterio
                 # de tendencia reciente. /code-review: reusa dentro_sorted
                 # en vez de ordenar dos veces -- la primera versión ordenaba
@@ -474,6 +481,12 @@ def main():
             veredicto_crudo = "malo_confirmado"
             nota_tendencia = (f" [degradado: tendencia reciente último_tercio "
                                f"n={tercio3_n} pnl_medio={tercio3_pnl:+.3f}€<{UMBRAL_ABSOLUTO_EUR}]")
+        if (DIAS_ENFORCE and veredicto_crudo == "bueno_confirmado"
+                and entrada.get("robusto_dias") is not True):
+            veredicto_crudo = "sin_concluir"
+            nota_tendencia += (f" [sin_concluir: no robusto por dias -- sin los {K_MEJORES_DIAS} mejores dias "
+                               f"pnl_medio={entrada.get('pnl_sin_mejores_dias')} (<{PISO_DIAS_EUR}) "
+                               f"n_dias={entrada.get('n_dias')}]")
         return veredicto_crudo, nota_payout, nota_real, nota_concentracion, nota_tendencia, g_kelly
 
     veredictos_nuevos = []

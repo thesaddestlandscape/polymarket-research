@@ -23,6 +23,7 @@ import os
 from pathlib import Path
 
 from analisis_wallet_mirror_gate_bucket_10ago import cargar_filas
+from gate_dias_independientes import ENFORCE as DIAS_ENFORCE
 from analisis_gate_bucket_fino import evaluar_tupla, bh_fdr_signif, P_MAX
 from gate_confirmacion_historial import (
     cargar_historial_previo, cargar_fecha_historial_previo,
@@ -106,7 +107,8 @@ def main() -> int:
         info = p["info"]
         if p["diff"] < 0:
             veredicto_crudo = "malo_confirmado"
-        elif info["pnl_medio"] >= 0 and info["n"] >= N_MIN_WALLET_MIRROR:
+        elif (info["pnl_medio"] >= 0 and info["n"] >= N_MIN_WALLET_MIRROR
+              and (not DIAS_ENFORCE or info.get("robusto_dias") is True)):
             veredicto_crudo = "bueno_confirmado"
         else:
             _preservar_historial(p["clave_str"])

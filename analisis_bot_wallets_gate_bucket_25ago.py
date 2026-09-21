@@ -53,6 +53,8 @@ from pathlib import Path
 
 import numpy as np
 
+from gate_dias_independientes import robustez_dias, ENFORCE as DIAS_ENFORCE, K_MEJORES_DIAS, PISO_EUR as PISO_DIAS_EUR
+
 from gate_confirmacion_historial import cargar_historial_previo, veredicto_con_tolerancia
 
 REPO = Path(__file__).resolve().parent
@@ -416,6 +418,12 @@ def _degradar(veredicto_crudo, entrada, clave_str, b, pnl_real_por_bucket, filla
         veredicto_crudo = "malo_confirmado"
         nota_tendencia = (f" [degradado: tendencia reciente último_tercio "
                            f"n={tercio3_n} pnl_medio={tercio3_pnl:+.3f}€<{UMBRAL_ABSOLUTO_EUR}]")
+    if (DIAS_ENFORCE and veredicto_crudo == "bueno_confirmado"
+            and entrada.get("robusto_dias") is not True):
+        veredicto_crudo = "sin_concluir"
+        nota_tendencia += (f" [sin_concluir: no robusto por dias -- sin los {K_MEJORES_DIAS} mejores dias "
+                           f"pnl_medio={entrada.get('pnl_sin_mejores_dias')} (<{PISO_DIAS_EUR}) "
+                           f"n_dias={entrada.get('n_dias')}]")
     nota_fill = ""
     if fillability_por_bucket is not None:
         fill_n, fill_ok = fillability_por_bucket.get(clave_str, {}).get(b, (0, 0))
@@ -551,6 +559,12 @@ def main():
                 # en analisis_gate_bucket_propio_28jul.py): vía absoluta,
                 # independiente de "fuera".
                 dentro_sorted = sorted(dentro, key=lambda x: x[0])
+                # 21-Sep (aprobado por Javi): robustez por DIAS INDEPENDIENTES, ver
+                # gate_dias_independientes.py -- solo alimenta _degradar().
+                _rob = robustez_dias([(_ts, _p) for _ts, _p, _w in dentro_sorted])
+                entrada["n_dias"] = _rob["n_dias"]
+                entrada["pnl_sin_mejores_dias"] = _rob["pnl_sin_mejores"]
+                entrada["robusto_dias"] = _rob["robusto"]
                 # 16-Sep (ver docstring de _degradar() -- criterio de
                 # tendencia reciente), reusa el mismo dentro_sorted de
                 # arriba en vez de ordenar dos veces (16-Sep, /code-review:

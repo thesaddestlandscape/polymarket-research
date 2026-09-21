@@ -44,6 +44,8 @@ from pathlib import Path
 
 import numpy as np
 
+from gate_dias_independientes import robustez_dias
+
 from gate_confirmacion_historial import (
     cargar_historial_previo, veredicto_con_tolerancia, sembrar_no_confirmados,
 )
@@ -214,7 +216,13 @@ def evaluar_tupla(filas, seed_key: str):
         split_half_diff = [round(float(d1), 4), round(float(d2), 4)]
         consistente = (d1 < 0 and d2 < 0) or (d1 > 0 and d2 > 0)
 
+    # 21-Sep (aprobado por Javi): robustez por DIAS INDEPENDIENTES de la ventana
+    # ganadora, ver gate_dias_independientes.py. Solo publica; quien decide
+    # el veredicto (finos de WALLET_MIRROR / bot_wallets) la aplica.
+    _rob = robustez_dias(ts_py_pnl)
     return {
+        "n_dias": _rob["n_dias"], "pnl_sin_mejores_dias": _rob["pnl_sin_mejores"],
+        "robusto_dias": _rob["robusto"],
         "lo": lo, "hi": hi, "n": n_v, "pnl_medio": round(pnl_medio, 4),
         "diff_vs_resto": round(float(diff_real), 4), "p_valor": round(p_valor, 4),
         "split_half_diff": split_half_diff, "split_half_ok": bool(consistente),
