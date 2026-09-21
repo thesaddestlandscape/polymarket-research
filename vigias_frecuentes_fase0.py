@@ -117,6 +117,7 @@ from wallet_mirror_executor_dryrun import (
 # anteriores (sin trabajo real a nivel de módulo, solo sys.path.insert
 # idempotente / anotación de tipo sin llamada / asignaciones puras).
 import smart_money_tracker
+import vigia_edge_quirurgico  # 21-Sep: carril "quirurgico", subproceso (ver su docstring)
 import sports_wallet_mirror_sniper as _swms
 
 
@@ -262,6 +263,9 @@ TAREAS = [
     # 20-Ago: 2 más, cadencia EXACTA de sus crons retirados (*/20 * * * * = 1200s)
     ("smart_money_tracker", smart_money_tracker.main, "smart_money.log", 1200),
     ("sports_wallet_mirror_sniper_resolver", _resolver_sports_wallet_mirror_sniper, "sports_wallet_mirror_resolver.log", 1200),
+    # 21-Sep (aprobado por Javi): zonas finas de precio (0,01-0,05) con validacion FORWARD rodante,
+    # MODO LECTURA -- nada lo consume todavia. Cada 3h, carril propio (subproceso ~5-8 min).
+    ("vigia_edge_quirurgico", vigia_edge_quirurgico.main, "vigia_edge_quirurgico.log", 10800),
 ]
 
 TICK_S = 20.0
@@ -290,6 +294,7 @@ CARRILES_APARTE = {
     "grid": ["vigia_gate_bucket_wallet_mirror"],
     "fino": ["vigia_gate_bucket_wallet_mirror_fino"],
     "pesado": ["vigia_causal_vs_fillable", "smart_money_tracker", "shadow_pnl_fiel"],
+    "quirurgico": ["vigia_edge_quirurgico"],   # 21-Sep: zonas finas, modo lectura
 }
 
 # Ultima ejecucion por tarea, persistida: un reinicio del proceso (watchdog,
@@ -447,7 +452,7 @@ def ejecutar(tareas: list, parar: threading.Event = None) -> None:
 def main() -> int:
     LOGS.mkdir(parents=True, exist_ok=True)
     print(f"[vigias_frecuentes_fase0] arrancando scheduler con {len(TAREAS)} tareas "
-          f"(4 carriles, ver CARRILES_APARTE; tick={TICK_S:.0f}s)", flush=True)
+          f"({len(CARRILES_APARTE) + 1} carriles, ver CARRILES_APARTE; tick={TICK_S:.0f}s)", flush=True)
     ejecutar(TAREAS)
     return 0
 
