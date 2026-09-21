@@ -62,6 +62,9 @@ Corre en screen propia:
   screen -dmS vigiasfreq bash -c "cd /root/polymarket-research && nice -n 10 .venv/bin/python vigias_frecuentes_fase0.py >> logs/vigias_frecuentes_fase0.log 2>&1"
 """
 import contextlib
+import threading
+import os
+import json
 import csv
 import sys
 import time
@@ -263,37 +266,189 @@ TAREAS = [
 
 TICK_S = 20.0
 
+# 21-Sep (orden explicita Javi: "si" al rediseno, tras medir que este
+# scheduler ejecutaba las 31 tareas EN SERIE en un solo hilo): una tarea larga
+# frenaba a todas las demas. Medido en el log: vigia_gate_bucket_wallet_mirror
+# (grid) media 321s / max 2401s, vigia_causal_vs_fillable media 511s / max
+# 1775s, smart_money_tracker 189s, shadow_pnl_fiel 63s/max 456s. Consecuencia
+# real: el fino de WALLET_MIRROR (caduca a las 2h15 en wallet_mirror_gate_
+# bucket.py::MAX_ANTIGUEDAD_S) no corrio a las 13:55 porque el grid ocupaba
+# el bucle -> con ambos caducados el ejecutor real queda fail-closed sin operar.
+#
+# Ahora hay 4 CARRILES. Dentro de cada carril las tareas siguen siendo
+# SECUENCIALES (mismo criterio original: sin picos simultaneos y, sobre todo,
+# los resolvers de wallet mirror parchean atributos globales de
+# wallet_mirror_tracker y NO pueden solaparse entre si). Solo se separan las
+# tareas que no comparten estado con el resto:
+#   grid  : vigia_gate_bucket_wallet_mirror        (lanza subprocess propio)
+#   fino  : vigia_gate_bucket_wallet_mirror_fino   (lanza subprocess propio)
+#   pesado: las 3 tareas largas restantes (se bloquean solo entre si)
+#   principal: todo lo demas (hilo principal)
+# Pico de concurrencia: 4 tareas a la vez (antes 1). El grid vive en un
+# subprocess de ~0.8GB tras el fix de shuffle_chunked.py (antes 4.7GB).
+CARRILES_APARTE = {
+    "grid": ["vigia_gate_bucket_wallet_mirror"],
+    "fino": ["vigia_gate_bucket_wallet_mirror_fino"],
+    "pesado": ["vigia_causal_vs_fillable", "smart_money_tracker", "shadow_pnl_fiel"],
+}
 
-def _correr_uno(nombre: str, fn, nombre_log: str) -> None:
+# Ultima ejecucion por tarea, persistida: un reinicio del proceso (watchdog,
+# restart diario) ya no pone todo a 0 y lanza las 31 tareas a la vez. Nombre
+# cubierto por .gitignore (data/shadow/_cache_vigiasfreq_*.json).
+ESTADO_PATH = REPO / "data" / "shadow" / "_cache_vigiasfreq_ultima_ejecucion.json"
+_estado_lock = threading.Lock()
+REINTENTO_FALLO_S = 300  # tras un fallo se reintenta en 5min, no tras el intervalo completo
+_NOMBRES_CARRIL_APARTE = {n for ns in CARRILES_APARTE.values() for n in ns}
+
+
+class _EnrutadorSalida:
+    """Sustituye a sys.stdout/sys.stderr: cada hilo escribe en SU fichero de
+    log mientras ejecuta una tarea (contextlib.redirect_stdout cambia el
+    stream GLOBAL y con varios hilos mezclaria los logs de tareas distintas)."""
+
+    def __init__(self, original):
+        self._orig = original
+        self._local = threading.local()
+
+    def destino(self, f):
+        self._local.f = f
+
+    def write(self, texto):
+        return (getattr(self._local, "f", None) or self._orig).write(texto)
+
+    def flush(self):
+        try:
+            (getattr(self._local, "f", None) or self._orig).flush()
+        except Exception:
+            pass
+
+    def __getattr__(self, nombre):
+        return getattr(self._orig, nombre)
+
+
+_SALIDA = {"out": None, "err": None}
+
+
+def _instalar_enrutador() -> None:
+    if _SALIDA["out"] is None:
+        _SALIDA["out"] = _EnrutadorSalida(sys.stdout)
+        _SALIDA["err"] = _EnrutadorSalida(sys.stderr)
+        sys.stdout, sys.stderr = _SALIDA["out"], _SALIDA["err"]
+
+
+def _correr_uno(nombre: str, fn, nombre_log: str) -> bool:
+    """Devuelve True si la tarea termino bien. Fallo = excepcion, o, SOLO para
+    las tareas de CARRILES_APARTE (cuyo main() devuelve 0/1 por convencion),
+    un retorno distinto de 0 (/code-review 21-Sep: un fallo no debe contar como
+    ejecucion normal -- el fino caduca a las 2h15 y esperar 3600s lo deja
+    fail-closed)."""
+    _instalar_enrutador()  # idempotente; permite llamar a _correr_uno sin pasar por ejecutar()
     path = LOGS / nombre_log
     t0 = time.time()
+    ok = True
     with open(path, "a", encoding="utf-8") as f:
-        with contextlib.redirect_stdout(f), contextlib.redirect_stderr(f):
-            try:
-                fn()
-            except SystemExit:
-                pass  # algunos main() hacen return/sys.exit implícito vía código de salida
-            except Exception as e:
-                print(f"[vigias_frecuentes_fase0] 🚨 {nombre} murió: "
-                      f"{type(e).__name__}: {e}", flush=True)
+        _SALIDA["out"].destino(f)
+        _SALIDA["err"].destino(f)
+        try:
+            ret = fn()
+            if nombre in _NOMBRES_CARRIL_APARTE and isinstance(ret, int) and ret != 0:
+                ok = False
+        except SystemExit as e:
+            # algunos main() hacen return/sys.exit implícito vía código de salida;
+            # en las tareas de carril aparte un exit != 0 SI es fallo (/code-review 21-Sep)
+            if nombre in _NOMBRES_CARRIL_APARTE and e.code not in (None, 0):
+                ok = False
+        except Exception as e:
+            ok = False
+            print(f"[vigias_frecuentes_fase0] 🚨 {nombre} murió: "
+                  f"{type(e).__name__}: {e}", flush=True)
+        finally:
+            _SALIDA["out"].destino(None)
+            _SALIDA["err"].destino(None)
     dt = time.time() - t0
-    print(f"[vigias_frecuentes_fase0] {nombre} terminado en {dt:.1f}s", flush=True)
+    print(f"[vigias_frecuentes_fase0] {nombre} terminado en {dt:.1f}s"
+          + ("" if ok else " (FALLO -- reintento en %ds)" % REINTENTO_FALLO_S), flush=True)
+    return ok
+
+
+def _cargar_estado() -> dict:
+    try:
+        d = json.loads(ESTADO_PATH.read_text(encoding="utf-8"))
+        return {k: float(v) for k, v in d.items()}
+    except Exception:
+        return {}
+
+
+def _marcar_ejecutada(ultima: dict, nombre: str, intervalo: float, ok: bool) -> None:
+    """Muta `ultima` y persiste BAJO EL MISMO LOCK (varios carriles escriben
+    claves distintas: sin lock, json.dumps podia lanzar 'dictionary changed
+    size during iteration' y el except lo tragaba). Tras un fallo se deja la
+    marca de forma que la tarea venza en REINTENTO_FALLO_S."""
+    with _estado_lock:
+        ahora = time.time()
+        ultima[nombre] = ahora if ok else ahora - max(0.0, intervalo - REINTENTO_FALLO_S)
+        try:
+            tmp = ESTADO_PATH.with_name(ESTADO_PATH.stem + ".tmp.json")
+            tmp.write_text(json.dumps(dict(ultima)), encoding="utf-8")
+            os.replace(tmp, ESTADO_PATH)
+        except Exception as e:
+            print(f"[vigias_frecuentes_fase0] aviso: no se pudo persistir el estado ({e})", flush=True)
+
+
+def _bucle_carril(carril: str, tareas: list, ultima: dict, parar: threading.Event) -> None:
+    """Bucle de un carril: tareas en serie dentro del carril, cada una con su
+    intervalo. `ultima` es compartido (dict, escrituras de claves distintas
+    por carril) y se persiste tras cada ejecucion."""
+    while not parar.is_set():
+        try:
+            ahora = time.time()
+            for nombre, fn, nombre_log, intervalo in tareas:
+                if parar.is_set():
+                    return
+                if ahora - ultima.get(nombre, 0.0) >= intervalo:
+                    ok = _correr_uno(nombre, fn, nombre_log)
+                    _marcar_ejecutada(ultima, nombre, intervalo, ok)
+                    parar.wait(1.0)  # pequeño respiro entre tareas, no golpear APIs externas a la vez
+        except Exception as e:  # un fallo del propio bucle no debe matar el carril
+            print(f"[vigias_frecuentes_fase0] 🚨 carril {carril} fallo interno: "
+                  f"{type(e).__name__}: {e} -- reintenta en 60s", flush=True)
+            parar.wait(60.0)
+            continue
+        parar.wait(TICK_S)
+
+
+def _repartir_carriles(tareas: list) -> dict:
+    aparte = {n for ns in CARRILES_APARTE.values() for n in ns}
+    carriles = {c: [t for t in tareas if t[0] in ns] for c, ns in CARRILES_APARTE.items()}
+    carriles["principal"] = [t for t in tareas if t[0] not in aparte]
+    return carriles
+
+
+def ejecutar(tareas: list, parar: threading.Event = None) -> None:
+    """Arranca los carriles: los apartes en hilos daemon, `principal` en el
+    hilo llamante. Con `parar` (Event) se puede detener limpiamente (tests)."""
+    parar = parar or threading.Event()
+    _instalar_enrutador()
+    ultima = _cargar_estado()
+    carriles = _repartir_carriles(tareas)
+    hilos = []
+    for carril, ts in carriles.items():
+        if carril == "principal" or not ts:
+            continue
+        h = threading.Thread(target=_bucle_carril, args=(carril, ts, ultima, parar),
+                             name=f"carril-{carril}", daemon=True)
+        h.start()
+        hilos.append(h)
+    print(f"[vigias_frecuentes_fase0] carriles: "
+          + ", ".join(f"{c}={len(ts)}" for c, ts in carriles.items()), flush=True)
+    _bucle_carril("principal", carriles["principal"], ultima, parar)
 
 
 def main() -> int:
     LOGS.mkdir(parents=True, exist_ok=True)
     print(f"[vigias_frecuentes_fase0] arrancando scheduler con {len(TAREAS)} tareas "
-          f"(antes ~130 arranques de intérprete/hora dispersos, ahora 1 proceso, "
-          f"tick={TICK_S:.0f}s)", flush=True)
-    ultima_ejecucion = {nombre: 0.0 for nombre, *_ in TAREAS}
-    while True:
-        ahora = time.time()
-        for nombre, fn, nombre_log, intervalo in TAREAS:
-            if ahora - ultima_ejecucion[nombre] >= intervalo:
-                _correr_uno(nombre, fn, nombre_log)
-                ultima_ejecucion[nombre] = time.time()
-                time.sleep(1.0)  # pequeño respiro entre tareas, no golpear APIs externas a la vez
-        time.sleep(TICK_S)
+          f"(4 carriles, ver CARRILES_APARTE; tick={TICK_S:.0f}s)", flush=True)
+    ejecutar(TAREAS)
     return 0
 
 

@@ -56,6 +56,7 @@ pares_permitidos_live (tupla sintética, ver wallet_mirror_executor_dryrun.py).
 """
 import csv
 import json
+import os
 import math
 import sys
 import zlib
@@ -576,8 +577,13 @@ def main():
         for linea in veredictos_pendientes_confirmacion:
             print(f"  {linea}")
 
-    with open(OUT, "w", encoding="utf-8") as f:
+    # 21-Sep: escritura atomica -- el ejecutor real (y los kill switches) leen
+    # este JSON en paralelo; json.dump directo sobre OUT deja una ventana con
+    # el fichero truncado.
+    _tmp = OUT.with_name(f"{OUT.name}.{os.getpid()}.tmp")
+    with open(_tmp, "w", encoding="utf-8") as f:
         json.dump(resultado, f, indent=2, ensure_ascii=False)
+    os.replace(_tmp, OUT)
     print(f"\nGuardado en {OUT}")
 
 

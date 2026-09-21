@@ -19,6 +19,7 @@ reimplementar el rigor). Solo lectura -- no toca ningún gate real ni
 pares_permitidos_live.
 """
 import json
+import os
 from pathlib import Path
 
 from analisis_wallet_mirror_gate_bucket_10ago import cargar_filas
@@ -152,8 +153,13 @@ def main() -> int:
     # de perderlo.
     sembrar_no_confirmados(historial_previo, salida_final)
 
-    with open(OUT, "w", encoding="utf-8") as f:
+    # 21-Sep: escritura atomica -- el ejecutor real (y los kill switches) leen
+    # este JSON en paralelo; json.dump directo sobre OUT deja una ventana con
+    # el fichero truncado.
+    _tmp = OUT.with_name(f"{OUT.name}.{os.getpid()}.tmp")
+    with open(_tmp, "w", encoding="utf-8") as f:
         json.dump(salida_final, f, indent=2, ensure_ascii=False)
+    os.replace(_tmp, OUT)
     print(f"\nGuardado en {OUT} ({len(salida_final)} claves con veredicto)")
     return 0
 
