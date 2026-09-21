@@ -1,20 +1,20 @@
 {
-  "timestamp_utc": "2026-09-20T22:10:08+00:00",
+  "timestamp_utc": "2026-09-21T00:10:10+00:00",
   "tuplas_maduras": [],
   "tuplas_inmaduras": [
     {
       "tupla": "SNIPER#BTC#15min#BUY_Up",
-      "dias_historial": 6,
+      "dias_historial": 7,
       "n": 7
     },
     {
       "tupla": "SNIPER#BTC#15min#BUY_Down",
-      "dias_historial": 6,
-      "n": 5
+      "dias_historial": 7,
+      "n": 7
     },
     {
       "tupla": "WALLET_MIRROR#BTC#60min#BUY_Up",
-      "dias_historial": 20,
+      "dias_historial": 21,
       "n": 1
     },
     {
@@ -24,22 +24,22 @@
     },
     {
       "tupla": "WALLET_MIRROR#ETH#5min#BUY_Up",
-      "dias_historial": 17,
+      "dias_historial": 18,
       "n": 2
     },
     {
       "tupla": "WALLET_MIRROR#ETH#5min#BUY_Down",
-      "dias_historial": 17,
+      "dias_historial": 18,
       "n": 1
     },
     {
       "tupla": "WALLET_MIRROR#BTC#15min#BUY_Up",
-      "dias_historial": 39,
+      "dias_historial": 40,
       "n": 35
     },
     {
       "tupla": "WALLET_MIRROR#BTC#15min#BUY_Down",
-      "dias_historial": 38,
+      "dias_historial": 39,
       "n": 22
     },
     {
@@ -54,42 +54,42 @@
     },
     {
       "tupla": "WALLET_MIRROR#ETH#15min#BUY_Up",
-      "dias_historial": 18,
+      "dias_historial": 19,
       "n": 4
     },
     {
       "tupla": "WALLET_MIRROR#ETH#15min#BUY_Down",
-      "dias_historial": 18,
+      "dias_historial": 19,
       "n": 1
     },
     {
       "tupla": "WALLET_MIRROR#BTC#5min#BUY_Up",
-      "dias_historial": 40,
+      "dias_historial": 41,
       "n": 4
     },
     {
       "tupla": "WALLET_MIRROR#BTC#5min#BUY_Down",
-      "dias_historial": 39,
+      "dias_historial": 40,
       "n": 7
     },
     {
       "tupla": "SNIPER#BTC#5min#BUY_Up",
-      "dias_historial": 12,
+      "dias_historial": 13,
       "n": 8
     },
     {
       "tupla": "SNIPER#BTC#5min#BUY_Down",
-      "dias_historial": 12,
+      "dias_historial": 13,
       "n": 5
     },
     {
       "tupla": "DISPERSO#BTC#15min#BUY_Up",
-      "dias_historial": 10,
+      "dias_historial": 11,
       "n": 40
     },
     {
       "tupla": "DISPERSO#BTC#15min#BUY_Down",
-      "dias_historial": 9,
+      "dias_historial": 10,
       "n": 34
     },
     {
@@ -109,7 +109,7 @@
     },
     {
       "tupla": "SNIPER#ETH#15min#BUY_Down",
-      "dias_historial": 5,
+      "dias_historial": 6,
       "n": 3
     }
   ]
