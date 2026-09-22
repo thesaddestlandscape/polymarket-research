@@ -118,6 +118,7 @@ from wallet_mirror_executor_dryrun import (
 # idempotente / anotación de tipo sin llamada / asignaciones puras).
 import smart_money_tracker
 import vigia_edge_quirurgico  # 21-Sep: carril "quirurgico", subproceso (ver su docstring)
+import vigia_buscador_edge_perdido  # 22-Sep: carril "buscador", subproceso (ver su docstring)
 import sports_wallet_mirror_sniper as _swms
 
 
@@ -266,6 +267,12 @@ TAREAS = [
     # 21-Sep (aprobado por Javi): zonas finas de precio (0,01-0,05) con validacion FORWARD rodante,
     # MODO LECTURA -- nada lo consume todavia. Cada 3h, carril propio (subproceso ~5-8 min).
     ("vigia_edge_quirurgico", vigia_edge_quirurgico.main, "vigia_edge_quirurgico.log", 10800),
+    # 22-Sep (directiva Javi 21-Sep, CLAUDE.md pt.24): busca en que dimension
+    # (hora/dia semana, mas fases futuras) sigue vivo el edge de una tupla
+    # live degradada. MODO LECTURA. Cadencia mas larga que quirurgico (6h):
+    # solo corre trabajo real cuando hay tuplas degradadas, barato en reposo.
+    ("vigia_buscador_edge_perdido", vigia_buscador_edge_perdido.main,
+     "vigia_buscador_edge_perdido.log", 21600),
 ]
 
 TICK_S = 20.0
@@ -295,6 +302,7 @@ CARRILES_APARTE = {
     "fino": ["vigia_gate_bucket_wallet_mirror_fino"],
     "pesado": ["vigia_causal_vs_fillable", "smart_money_tracker", "shadow_pnl_fiel"],
     "quirurgico": ["vigia_edge_quirurgico"],   # 21-Sep: zonas finas, modo lectura
+    "buscador": ["vigia_buscador_edge_perdido"],   # 22-Sep: edge perdido, modo lectura
 }
 
 # Ultima ejecucion por tarea, persistida: un reinicio del proceso (watchdog,
