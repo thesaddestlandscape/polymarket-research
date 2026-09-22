@@ -103,17 +103,36 @@ def pnl_neto(ask, acierto):
 def cargar_filas():
     """clave de grupo: (arquetipo, activo, marco) -> [(ts, ask, pnl, wallet), ...].
     Solo filas resueltas (outcome_real presente), con ask real capturado
-    (mejor_ask_deteccion no vacío -- si _fillability_mirror falló, no hay
-    ask real que usar, la fila no aporta a PnL, solo a fill-ability) Y con
-    ratio_vs_stake_deteccion>=RATIO_MIN (31-Ago -- ver docstring del
-    módulo: un ask capturado no implica libro con profundidad real, mismo
-    hueco ya corregido para Wallet Mirror el 10-Ago)."""
+    Y con ratio>=RATIO_MIN (31-Ago -- ver docstring del módulo: un ask
+    capturado no implica libro con profundidad real).
+
+    22-Sep (petición explícita Javi, "cierra ese hueco" -- hallazgo real:
+    esta función usaba `mejor_ask_deteccion`/`ratio_vs_stake_deteccion`
+    -- el ask del instante en que la wallet ejecutó, ANTES de que
+    `bot_wallets_gate_bucket_fase0.py` haga su propia segunda consulta al
+    libro SEGUNDA_CONSULTA_ESPERA_S=3.0s después (ver ese módulo,
+    `mejor_ask_decision`/`ratio_vs_stake_decision`/`sigue_fillable_
+    decision`, capturados desde el 25-Ago pero NUNCA usados aquí) -- ese
+    dato de decisión ya existe en el mismo fichero, más cercano al precio
+    que de verdad se pagaría, y esta función lo ignoraba. Mismo criterio
+    que Wallet Mirror ya aplica desde el día 1 (analisis_wallet_mirror_
+    gate_bucket_10ago.py::cargar_filas() solo cuenta sigue_fillable_en_
+    decision=='1'). Verificado con datos reales antes de aplicar (ver
+    memoria idea_fix_deteccion_a_decision_bot_wallets_22sep): n cae de
+    forma esperada (menos filas sobreviven la 2ª consulta que la 1ª), sin
+    invertir el signo de ningún bucket bueno_confirmado con n suficiente.
+    `_cargar_fillability_por_bucket()` (más abajo, lee el EJECUTOR real,
+    no este observador) sigue siendo una fuente INDEPENDIENTE -- no se
+    toca, sigue degradando aparte."""
     grupos = defaultdict(list)
     with open(IN, encoding="utf-8") as f:
         for r in csv.DictReader(f):
             if not r.get("outcome_real"):
                 continue
-            ask_raw = r.get("mejor_ask_deteccion", "")
+            # sigue_fillable_decision ya es exactamente ratio_dec>=RATIO_MIN
+            # (ver bot_wallets_gate_bucket_fase0.py) -- el check de ratio de
+            # abajo es equivalente, no hace falta duplicarlo aquí.
+            ask_raw = r.get("mejor_ask_decision", "")
             if not ask_raw:
                 continue
             try:
@@ -122,7 +141,7 @@ def cargar_filas():
                 continue
             if not (0.0 < ask < 1.0):
                 continue
-            ratio_raw = r.get("ratio_vs_stake_deteccion", "")
+            ratio_raw = r.get("ratio_vs_stake_decision", "")
             try:
                 ratio = float(ratio_raw) if ratio_raw else None
             except (TypeError, ValueError):
