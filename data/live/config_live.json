@@ -251,10 +251,10 @@
         "_obsoleta_31ago": "SUPERSEDIDA 2026-08-31: mismo motivo que bankroll_minimo_usa_solo_real_override arriba -- verificar_circuit_breaker() ya usa bkr real directo de forma permanente para freno 3. Registro historico, no renovar."
       },
       "freno_diario_pct_override": {
-        "fecha": "2026-09-15",
+        "fecha": "2026-09-22",
         "pct": 0.4,
-        "_nota": "15-Sep (mismo patrón día-a-día ya aprobado por Javi 28/29/31-Ago): freno 2 disparó a las 06:58 UTC con caída diaria 30.3% (bkr_ini_dia=37.71€ -> bkr=26.30€, -11.41€) tras una madrugada mala (racha de 5 pérdidas ya reabierta a las 05:39, más 1 pérdida SNIPER adicional -1.68€ a las 06:42 que cruzó el 30%). Bankroll real sano (26.30€), muy lejos del suelo (1€) -- es caída acumulada del día, no riesgo de deadlock de sizing. Decisión explícita de Javi (15-Sep, vía AskUserQuestion): reabrir con 0.40 para intentar recuperar hoy. Autoexpira solo mañana (el código solo aplica el override si fecha==hoy Madrid) salvo que se renueve con datos frescos -- revisar en la próxima sesión si sigue haciendo falta.",
-        "_valor_anterior": "sin override activo (30-31-Ago fue el último, ya expirado)"
+        "_nota": "22-Sep (mismo patrón día-a-día ya aprobado 28/29/31-Ago, 15-Sep): tras reabrir el freno de racha (8L seguidas de SNIPER#BTC#15min, ver _racha_reapertura_2026-09-22_sniper15min_nota) el colchón real del freno diario (30%) quedaba en solo ~1,05-1,4€ (bkr_inicio_día=20,14€, pnl_día=-4,99€) -- básicamente 1 pérdida más de cualquier estrategia volvía a parar el bot, sin dar tiempo real a que RESOLUTION_SNIPER_NAIVE (recién promocionada, n=0 real) tuviera oportunidad de disparar. Decisión explícita de Javi (22-Sep, vía AskUserQuestion, 'darle más cuello para que opere'): subir a 0.40, mismo valor que el 15-Sep. Colchón nuevo ≈3,4€ (~3 pérdidas de stake real 1,05-1,17€ antes de parar). Autoexpira solo mañana (el código solo aplica el override si fecha==hoy Madrid) salvo que se renueve con datos frescos -- revisar en la próxima sesión si sigue haciendo falta.",
+        "_valor_anterior": "0.4 del 2026-09-15 (ya expirado, revalidado hoy con motivo nuevo)"
       },
       "_racha_nota": "2026-07-03: freno 4 — N pérdidas CLOSED consecutivas (día Madrid) → para el día. Una racha es firma de fallo sistemático, no varianza (03-Jul: 4 pérdidas en 5min, -6.54€, los frenos en € no la cortaron). Sigue activo el 04-Jul: 4 pérdidas seguidas (-4.20€ con stake 1.05) paran el DÍA aunque el bankroll (~4.30€) no haya tocado el suelo de 3€ — protección contra fallo sistemático, decisión distinta al suelo. racha_vigente_desde eliminada 03-Jul al pasar el día (era solo para excluir las pérdidas previas a la reapertura de ese día).",
       "max_perdidas_consecutivas": 4,
