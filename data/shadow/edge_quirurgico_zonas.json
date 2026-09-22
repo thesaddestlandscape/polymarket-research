@@ -1,12 +1,12 @@
 {
- "generado_utc": "2026-09-22T07:37:27+00:00",
+ "generado_utc": "2026-09-22T07:41:19+00:00",
  "modo": "lectura (no consumido por evaluar())",
  "forward_dias": 7,
  "cutoff": "2026-09-15T00:00:00",
  "n_forward_min": 15,
  "piso_eur": 0.1,
  "n_tuplas_evaluadas": 363,
- "n_filas_total": 946398,
+ "n_filas_total": 946469,
  "n_zonas_operables": 243,
  "n_zonas_en_observacion": 252,
  "cobertura": {
@@ -2149,6 +2149,34 @@
    "forward_ok_estricto": true
   },
   {
+   "tupla": "GBM_LATE_15M_ESPACIO_ATR#BNB#15min#BUY_NO",
+   "familia": "GBM_LATE_15M_ESPACIO_ATR",
+   "activo": "BNB",
+   "marco": "15min",
+   "grande": null,
+   "decision": "BUY_NO",
+   "estado_config": "candidata",
+   "ancho": 0.01,
+   "lo": 0.5,
+   "hi": 0.51,
+   "n_train": 81,
+   "pnl_train": 0.7096,
+   "n_dias_train": 24,
+   "pnl_sin_2_mejores_dias": 0.6207,
+   "wallets": 0,
+   "top1_wallet": null,
+   "p_max_train": 0.992,
+   "n_forward": 17,
+   "pnl_forward": 0.5118,
+   "hit_forward": 0.765,
+   "forward_ok": true,
+   "forward_ic90": [
+    0.1588,
+    0.8647
+   ],
+   "forward_ok_estricto": true
+  },
+  {
    "tupla": "UPDOWN_GBM_15M_TARDIO#ETH#15min#BUY_NO",
    "familia": "UPDOWN_GBM_15M_TARDIO",
    "activo": "ETH",
@@ -2369,34 +2397,6 @@
    "forward_ic90": [
     0.0741,
     0.8876
-   ],
-   "forward_ok_estricto": true
-  },
-  {
-   "tupla": "GBM_LATE_15M_ESPACIO_ATR#BNB#15min#BUY_NO",
-   "familia": "GBM_LATE_15M_ESPACIO_ATR",
-   "activo": "BNB",
-   "marco": "15min",
-   "grande": null,
-   "decision": "BUY_NO",
-   "estado_config": "candidata",
-   "ancho": 0.01,
-   "lo": 0.5,
-   "hi": 0.51,
-   "n_train": 81,
-   "pnl_train": 0.7096,
-   "n_dias_train": 24,
-   "pnl_sin_2_mejores_dias": 0.6207,
-   "wallets": 0,
-   "top1_wallet": null,
-   "p_max_train": 0.992,
-   "n_forward": 16,
-   "pnl_forward": 0.4825,
-   "hit_forward": 0.75,
-   "forward_ok": true,
-   "forward_ic90": [
-    0.1063,
-    0.8575
    ],
    "forward_ok_estricto": true
   },
