@@ -1,8 +1,8 @@
 {
  "STREAK_MOM_5M": {
-  "ic_bayes_familia": 0.0223,
+  "ic_bayes_familia": 0.0226,
   "n_tuplas_fuertes": 2,
-  "pnl_fiel_combinado_eur": 104.57,
+  "pnl_fiel_combinado_eur": 104.5,
   "tuplas": [
    {
     "k": "STREAK_MOM_5M#DOGE#5min#BUY_NO",
@@ -11,13 +11,13 @@
    },
    {
     "k": "STREAK_MOM_5M#XRP#5min#BUY_NO",
-    "pnl_fiel_eur_sin_suelo": 44.3167,
+    "pnl_fiel_eur_sin_suelo": 44.2422,
     "n_ejecutado": 175
    }
   ]
  },
  "UPDOWN_GBM": {
-  "ic_bayes_familia": 0.0307,
+  "ic_bayes_familia": 0.0305,
   "n_tuplas_fuertes": 2,
   "pnl_fiel_combinado_eur": 62.71,
   "tuplas": [
@@ -34,13 +34,13 @@
   ]
  },
  "LIQUIDACIONES_5M": {
-  "ic_bayes_familia": 0.0055,
+  "ic_bayes_familia": 0.0057,
   "n_tuplas_fuertes": 2,
-  "pnl_fiel_combinado_eur": 50.75,
+  "pnl_fiel_combinado_eur": 51.02,
   "tuplas": [
    {
     "k": "LIQUIDACIONES_5M#ETH#5min#BUY_YES",
-    "pnl_fiel_eur_sin_suelo": 34.5619,
+    "pnl_fiel_eur_sin_suelo": 34.8253,
     "n_ejecutado": 180
    },
    {
@@ -51,14 +51,26 @@
   ]
  },
  "MOMENTUM_IBS_5M_FADE": {
-  "ic_bayes_familia": -0.0234,
+  "ic_bayes_familia": -0.0232,
   "n_tuplas_fuertes": 1,
-  "pnl_fiel_combinado_eur": 30.39,
+  "pnl_fiel_combinado_eur": 30.2,
   "tuplas": [
    {
     "k": "MOMENTUM_IBS_5M_FADE#BTC#5min#BUY_NO",
-    "pnl_fiel_eur_sin_suelo": 30.3932,
+    "pnl_fiel_eur_sin_suelo": 30.1957,
     "n_ejecutado": 163
+   }
+  ]
+ },
+ "STREAK_FADE_5M": {
+  "ic_bayes_familia": -0.0229,
+  "n_tuplas_fuertes": 1,
+  "pnl_fiel_combinado_eur": 21.9,
+  "tuplas": [
+   {
+    "k": "STREAK_FADE_5M#XRP#5min#BUY_YES",
+    "pnl_fiel_eur_sin_suelo": 21.899,
+    "n_ejecutado": 180
    }
   ]
  },
@@ -71,18 +83,6 @@
     "k": "GBM_LATE_60M_PYCONFIRMADO#SOL#60min#BUY_YES",
     "pnl_fiel_eur_sin_suelo": 17.1229,
     "n_ejecutado": 15
-   }
-  ]
- },
- "STREAK_FADE_5M": {
-  "ic_bayes_familia": -0.0231,
-  "n_tuplas_fuertes": 1,
-  "pnl_fiel_combinado_eur": 16.51,
-  "tuplas": [
-   {
-    "k": "STREAK_FADE_5M#XRP#5min#BUY_YES",
-    "pnl_fiel_eur_sin_suelo": 16.5074,
-    "n_ejecutado": 178
    }
   ]
  }
