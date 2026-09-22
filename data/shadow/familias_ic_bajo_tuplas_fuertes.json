@@ -1,8 +1,8 @@
 {
  "STREAK_MOM_5M": {
-  "ic_bayes_familia": 0.0223,
+  "ic_bayes_familia": 0.0222,
   "n_tuplas_fuertes": 2,
-  "pnl_fiel_combinado_eur": 105.07,
+  "pnl_fiel_combinado_eur": 105.12,
   "tuplas": [
    {
     "k": "STREAK_MOM_5M#DOGE#5min#BUY_NO",
@@ -11,37 +11,37 @@
    },
    {
     "k": "STREAK_MOM_5M#XRP#5min#BUY_NO",
-    "pnl_fiel_eur_sin_suelo": 44.8181,
+    "pnl_fiel_eur_sin_suelo": 44.869,
     "n_ejecutado": 172
    }
   ]
  },
  "UPDOWN_GBM": {
-  "ic_bayes_familia": 0.0305,
+  "ic_bayes_familia": 0.0306,
   "n_tuplas_fuertes": 2,
-  "pnl_fiel_combinado_eur": 65.0,
+  "pnl_fiel_combinado_eur": 62.9,
   "tuplas": [
    {
     "k": "UPDOWN_GBM#BTC#5min#BUY_NO",
-    "pnl_fiel_eur_sin_suelo": 37.0712,
-    "n_ejecutado": 527
+    "pnl_fiel_eur_sin_suelo": 36.0212,
+    "n_ejecutado": 528
    },
    {
     "k": "UPDOWN_GBM#ETH#60min#BUY_YES",
-    "pnl_fiel_eur_sin_suelo": 27.9319,
-    "n_ejecutado": 255
+    "pnl_fiel_eur_sin_suelo": 26.8819,
+    "n_ejecutado": 256
    }
   ]
  },
  "LIQUIDACIONES_5M": {
-  "ic_bayes_familia": 0.007,
+  "ic_bayes_familia": 0.0067,
   "n_tuplas_fuertes": 2,
-  "pnl_fiel_combinado_eur": 52.32,
+  "pnl_fiel_combinado_eur": 50.54,
   "tuplas": [
    {
     "k": "LIQUIDACIONES_5M#ETH#5min#BUY_YES",
-    "pnl_fiel_eur_sin_suelo": 36.1274,
-    "n_ejecutado": 179
+    "pnl_fiel_eur_sin_suelo": 34.3445,
+    "n_ejecutado": 180
    },
    {
     "k": "LIQUIDACIONES_5M#BTC#5min#BUY_NO",
@@ -71,6 +71,30 @@
     "k": "GBM_LATE_60M_PYCONFIRMADO#SOL#60min#BUY_YES",
     "pnl_fiel_eur_sin_suelo": 17.1229,
     "n_ejecutado": 15
+   }
+  ]
+ },
+ "UPDOWN_GBM_15M_TARDIO": {
+  "ic_bayes_familia": -0.0431,
+  "n_tuplas_fuertes": 1,
+  "pnl_fiel_combinado_eur": 16.53,
+  "tuplas": [
+   {
+    "k": "UPDOWN_GBM_15M_TARDIO#XRP#15min#BUY_NO",
+    "pnl_fiel_eur_sin_suelo": 16.529,
+    "n_ejecutado": 455
+   }
+  ]
+ },
+ "STREAK_FADE_5M": {
+  "ic_bayes_familia": -0.0236,
+  "n_tuplas_fuertes": 1,
+  "pnl_fiel_combinado_eur": 16.51,
+  "tuplas": [
+   {
+    "k": "STREAK_FADE_5M#XRP#5min#BUY_YES",
+    "pnl_fiel_eur_sin_suelo": 16.5074,
+    "n_ejecutado": 178
    }
   ]
  }
