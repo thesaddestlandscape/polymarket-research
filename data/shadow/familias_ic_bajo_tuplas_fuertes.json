@@ -34,7 +34,7 @@
   ]
  },
  "LIQUIDACIONES_5M": {
-  "ic_bayes_familia": 0.0069,
+  "ic_bayes_familia": 0.0061,
   "n_tuplas_fuertes": 2,
   "pnl_fiel_combinado_eur": 51.1,
   "tuplas": [
@@ -87,7 +87,7 @@
   ]
  },
  "UPDOWN_GBM_15M_TARDIO": {
-  "ic_bayes_familia": -0.0432,
+  "ic_bayes_familia": -0.043,
   "n_tuplas_fuertes": 1,
   "pnl_fiel_combinado_eur": 15.46,
   "tuplas": [
