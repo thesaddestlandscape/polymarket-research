@@ -74,11 +74,11 @@
   "hi": 0.06,
   "n": 71,
   "pnl_medio": -1.0,
-  "diff_vs_resto": -0.9581,
+  "diff_vs_resto": -0.9573,
   "p_valor": 0.0,
   "split_half_diff": [
-   -0.9581,
-   -0.9581
+   -0.9573,
+   -0.9573
   ],
   "split_half_ok": true,
   "pnl_medio_loo": -1.0,
@@ -134,11 +134,11 @@
   "hi": 0.61,
   "n": 65,
   "pnl_medio": -0.3407,
-  "diff_vs_resto": -0.3521,
-  "p_valor": 0.0205,
+  "diff_vs_resto": -0.3513,
+  "p_valor": 0.0175,
   "split_half_diff": [
-   -0.3422,
-   -0.3617
+   -0.3414,
+   -0.3609
   ],
   "split_half_ok": true,
   "pnl_medio_loo": -0.3574,
@@ -299,11 +299,11 @@
   "hi": 0.05,
   "n": 5032,
   "pnl_medio": -0.648,
-  "diff_vs_resto": -0.6137,
+  "diff_vs_resto": -0.6135,
   "p_valor": 0.0,
   "split_half_diff": [
-   -0.6291,
-   -0.5982
+   -0.629,
+   -0.5981
   ],
   "split_half_ok": true,
   "pnl_medio_loo": -0.6665,
@@ -332,7 +332,7 @@
   "diff_vs_resto": -0.8943,
   "p_valor": 0.0,
   "split_half_diff": [
-   -0.7938,
+   -0.7937,
    -0.9942
   ],
   "split_half_ok": true,
@@ -353,24 +353,24 @@
  },
  "SEGUIR#SOL#5min#0": {
   "n_dias": 11,
-  "pnl_sin_mejores_dias": -0.8374,
+  "pnl_sin_mejores_dias": -0.8449,
   "robusto_dias": false,
   "lo": 0.25,
   "hi": 0.3,
-  "n": 46,
-  "pnl_medio": -0.6962,
-  "diff_vs_resto": -0.7594,
-  "p_valor": 0.016,
+  "n": 48,
+  "pnl_medio": -0.7089,
+  "diff_vs_resto": -0.7719,
+  "p_valor": 0.008,
   "split_half_diff": [
-   -0.7678,
-   -0.7509
+   -0.7801,
+   -0.7638
   ],
   "split_half_ok": true,
-  "pnl_medio_loo": -0.7737,
+  "pnl_medio_loo": -0.7833,
   "robusto_loo": true,
   "ci90_bootstrap": [
-   -0.9236,
-   -0.4551
+   -0.9268,
+   -0.472
   ],
   "robusto_bootstrap": true,
   "n_posiciones_buscadas": 73,
