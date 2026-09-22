@@ -40,6 +40,8 @@ import csv
 import glob
 import json
 import sys
+from bisect import bisect_left
+from collections import defaultdict
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
@@ -131,26 +133,39 @@ def _ultimo_precio_por_instrumento() -> dict:
     return precios
 
 
-def _precio_en_horizonte(instrument_id: str, ts_objetivo: str) -> tuple:
-    """Primer snapshot con timestamp_utc >= ts_objetivo para ese instrumento
-    (recorre todos los ficheros diarios relevantes). None si no hay ninguno
-    todavía (horizonte aún no alcanzado)."""
-    mejor = None
+def _indice_precios_por_instrumento() -> dict:
+    """instrument_id -> [(ts, price), ...] ordenado, UNA sola pasada por
+    todos los ficheros de mercado. /code-review 22-Sep: la versión anterior
+    (_precio_en_horizonte) re-escaneaba TODOS los CSV de mercado por cada
+    señal sin resolver -- O(n_señales x n_filas_mercado), mismo patrón de
+    timeout por crecimiento ya visto 3 veces en este proyecto (vigia_gate_
+    bucket_propio/calibracion/wallet_mirror, CLAUDE.md pt.18)."""
+    idx = defaultdict(list)
     for arch in sorted(glob.glob(GLOB_MARKET)):
         with open(arch, encoding="utf-8") as f:
             for r in csv.DictReader(f):
-                if r.get("instrument_id") != instrument_id:
-                    continue
+                inst = r.get("instrument_id", "")
                 ts = r.get("timestamp_utc", "")
-                if ts < ts_objetivo:
-                    continue
                 try:
                     p = float(r.get("open_price") or "")
                 except (TypeError, ValueError):
                     continue
-                if mejor is None or ts < mejor[0]:
-                    mejor = (ts, p)
-    return mejor
+                idx[inst].append((ts, p))
+    for inst in idx:
+        idx[inst].sort(key=lambda x: x[0])
+    return idx
+
+
+def _precio_en_horizonte(indice: dict, instrument_id: str, ts_objetivo: str) -> tuple:
+    """Primer (ts, price) con ts >= ts_objetivo para ese instrumento, vía
+    bisect sobre el índice ya construido. None si el horizonte aún no se
+    alcanzó en los datos capturados."""
+    serie = indice.get(instrument_id)
+    if not serie:
+        return None
+    tss = [x[0] for x in serie]
+    i = bisect_left(tss, ts_objetivo)
+    return serie[i] if i < len(serie) else None
 
 
 def _cargar_out() -> list:
@@ -243,16 +258,19 @@ def resolver() -> int:
     if not filas:
         print("[perps_consenso_dryrun --resolver] sin datos")
         return 0
+    pendientes = [f for f in filas if f["resuelto"] != "1"]
+    if not pendientes:
+        print("[perps_consenso_dryrun --resolver] nada pendiente")
+        return 0
+    indice = _indice_precios_por_instrumento()
     ahora = datetime.now(timezone.utc)
     n_resueltas = 0
-    for f in filas:
-        if f["resuelto"] == "1":
-            continue
+    for f in pendientes:
         ts_senal = datetime.fromisoformat(f["ts_senal"])
         objetivo = ts_senal + timedelta(hours=HORIZONTE_H)
         if ahora < objetivo:
             continue
-        r = _precio_en_horizonte(f["instrument_id"], objetivo.isoformat(timespec="seconds"))
+        r = _precio_en_horizonte(indice, f["instrument_id"], objetivo.isoformat(timespec="seconds"))
         if r is None:
             continue
         ts_salida, precio_salida = r
@@ -263,7 +281,9 @@ def resolver() -> int:
             ret = precio_salida / entrada - 1
         else:
             ret = entrada / precio_salida - 1
-        ret_neto = ret - FEE_TAKER  # sin funding, ver limitaciones del docstring
+        # /code-review 22-Sep: round-trip real paga 2 fees taker (entrada +
+        # salida), no 1 -- ambos fills son taker en el modelo de este script.
+        ret_neto = ret - 2 * FEE_TAKER  # sin funding, ver limitaciones del docstring
         horas_reales = (datetime.fromisoformat(ts_salida) - ts_senal).total_seconds() / 3600
         f.update({"ts_resuelto": ts_salida, "precio_salida": precio_salida,
                   "horas_reales": round(horas_reales, 2),

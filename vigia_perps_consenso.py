@@ -36,7 +36,10 @@ def _texto_actualizacion(antes: dict, ahora: dict) -> str:
     ]
     for campo, etiqueta in campos:
         v0, v1 = antes.get(campo), ahora.get(campo)
-        if v0 is None:
+        # /code-review 22-Sep: v1 puede faltar (esquema de STATS cambiado
+        # entre versiones, escritura parcial) -- degradar sin crashear,
+        # nunca perder la corrida entera por un campo nuevo/renombrado.
+        if v0 is None or v1 is None:
             continue
         delta = v1 - v0
         if delta != 0:
