@@ -11,11 +11,15 @@ el join market_id -> outcome_real). Segmentado por (activo,marco)
 
 Método (ventana rodante, mismo espíritu que edge_quirurgico_rolling.py):
 sobre el subconjunto FILLABLE (ratio_implicita_vs_stake>=5x, el mismo
-filtro que usa el ejecutor real), compara los últimos FORWARD_DIAS con
-TODO lo anterior. Degradado = ventana reciente con n>=N_MIN y (pnl_medio
-reciente<=PISO_EUR O wilson90lo reciente < ask_medio reciente, es decir
-el hit-rate real ya no cubre ni el breakeven implícito). Latch por
-(activo,marco): solo avisa por Telegram en la TRANSICIÓN ok->degradado o
+filtro que usa el ejecutor real), compara los últimos FORWARD_DIAS
+("recientes") con TODO lo anterior ("baseline"). Degradado = ventana
+reciente con n>=N_MIN y CUALQUIERA de: (a) pnl_medio reciente<=PISO_EUR;
+(b) wilson90lo reciente < ask_medio reciente (el hit-rate real ya no
+cubre ni el breakeven implícito); (c) pnl_medio reciente cae por debajo
+de la MITAD del pnl_medio del baseline con baseline n>=N_MIN (declive
+relativo claro aunque siga nominalmente positivo y por encima de
+breakeven -- lo que (a)/(b) solos no detectan). Latch por (activo,marco):
+solo avisa por Telegram en la TRANSICIÓN ok->degradado o
 degradado->recuperado, nunca repite el mismo estado (mismo patrón que
 vigia_gate_bucket_propio.py/vigia_log_growth.py).
 
@@ -79,6 +83,7 @@ def main() -> int:
     for (activo, marco), fs in sorted(grupos.items()):
         clave = f"{activo}#{marco}"
         recientes = [f for f in fs if f["ts"][:10] >= cutoff_ini]
+        anteriores = [f for f in fs if f["ts"][:10] < cutoff_ini]
         n_rec = len(recientes)
         if n_rec < N_MIN:
             resumen[clave] = {"estado": "n_insuficiente", "n_reciente": n_rec}
@@ -88,18 +93,32 @@ def main() -> int:
         pnl_rec = sum(f["pnl"] for f in recientes) / n_rec
         ask_medio_rec = sum(f["ask"] for f in recientes) / n_rec
         wl_rec = wilson_lower(hits_rec, n_rec)
-        degradado = pnl_rec <= PISO_EUR or wl_rec < ask_medio_rec
+        n_base = len(anteriores)
+        pnl_base = (sum(f["pnl"] for f in anteriores) / n_base) if n_base >= N_MIN else None
+        declive_relativo = (
+            pnl_base is not None and pnl_base > 0 and pnl_rec < pnl_base * 0.5
+        )
+        degradado = pnl_rec <= PISO_EUR or wl_rec < ask_medio_rec or declive_relativo
         estado = "degradado" if degradado else "ok"
         resumen[clave] = {
             "estado": estado, "n_reciente": n_rec, "hit_reciente": round(hits_rec / n_rec, 3),
             "wilson90lo_reciente": round(wl_rec, 3), "ask_medio_reciente": round(ask_medio_rec, 3),
             "pnl_medio_reciente": round(pnl_rec, 4), "dias_ventana": f"{cutoff_ini}..{cutoff}",
+            "n_baseline": n_base, "pnl_medio_baseline": round(pnl_base, 4) if pnl_base is not None else None,
+            "declive_relativo": declive_relativo,
         }
         estado_previo = latch_previo.get(clave, "ok")
         if estado != estado_previo:
             if estado == "degradado":
+                motivos = []
+                if pnl_rec <= PISO_EUR:
+                    motivos.append("pnl_medio<=0")
+                if wl_rec < ask_medio_rec:
+                    motivos.append("wilson90lo<breakeven")
+                if declive_relativo:
+                    motivos.append(f"pnl cae >50% vs baseline ({pnl_base:+.3f}€, n={n_base})")
                 avisos.append(
-                    f"🔻 {clave} DEGRADADO: n={n_rec} hit={hits_rec/n_rec:.1%} "
+                    f"🔻 {clave} DEGRADADO [{', '.join(motivos)}]: n={n_rec} hit={hits_rec/n_rec:.1%} "
                     f"wilson90lo={wl_rec:.3f} (breakeven implícito ~{ask_medio_rec:.3f}) "
                     f"pnl/tr={pnl_rec:+.3f}€ (ventana {cutoff_ini}..{cutoff})"
                 )
@@ -132,4 +151,8 @@ def main() -> int:
 
 
 if __name__ == "__main__":
-    sys.exit(main())
+    try:
+        sys.exit(main())
+    except Exception as e:
+        print(f"[vigia_resolution_sniper_naive_degradacion] ERROR {type(e).__name__}: {e}")
+        sys.exit(0)

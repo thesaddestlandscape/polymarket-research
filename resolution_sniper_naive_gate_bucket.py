@@ -49,18 +49,37 @@ STEP = 0.05
 # ya mezcla ambas por construcción) -- se sella el rango completo
 # [0.05,0.95) para las dos direcciones de cada uno de los 6 activos.
 #
-# 15min NO se sella aquí -- el gate de dirección (9/12 combos, ver
-# resolution_sniper_naive_depth_fase0.py) nunca se cruzó CON profundidad
-# verificada por activo (n hoy: BTC=37, ETH=29, SOL=28, XRP=28, DOGE=28,
-# BNB=12, ninguno >=40), y el desglose exacto de cuáles de los 9/12 son
-# 15min no está documentado por activo -- sellar aquí sería asumir, no
-# confirmar (CLAUDE.md pt.17: nunca agregado). Queda sin_concluir hasta que
-# una sesión futura repita el gate riguroso específico de 15min por activo.
+# 22-Sep: 15min sellado con el MISMO patrón -- re-corrida del gate con un
+# mes de datos frescos (n=1.302 fillable en 15min, ask real min=0.05
+# max=0.95, mismo rango de cobertura que 5min) confirma 12/12 combos
+# (activo,marco) también en 15min: agregado n=243-362 por activo,
+# hit=87.6%-96.7%, wilson90lo=0.840-0.946, pnl/tr=+0.60€ a +0.86€,
+# p_shuffle=0.0000 en los 6. Desagregado por dirección (Up/Down): n=60-362,
+# hit=78.9%-100.0%, sin ningún subgrupo por debajo de breakeven -- ver
+# _pares_resolutionsnipernaive_15min_promocion_nota_2026-09-22 en
+# config_live.json para el detalle completo. HALLAZGO REAL el mismo día
+# (decisión explícita Javi, "confirmo"): 15min llevaba en
+# pares_permitidos_live+COMBOS_CONFIRMADOS sin este sello -- el ejecutor
+# exige bueno_confirmado antes de disparar (fail-closed), así que 15min
+# estaba INERTE (sin_concluir siempre) pese a estar "activada" en
+# whitelist+código. Este sello es lo que realmente la habilita a operar.
+# Vigilada desde hoy por vigia_resolution_sniper_naive_degradacion.py
+# (ventana rodante 7 días, avisa por Telegram si el margen se degrada) --
+# si algún (activo,15min) empieza a fallar de verdad, usar el override de
+# emergencia (OVERRIDE_PATH) para vetarlo sin tocar código.
 _ACTIVOS_5MIN_CONFIRMADOS = ("BTC", "ETH", "SOL", "XRP", "DOGE", "BNB")
+_ACTIVOS_15MIN_CONFIRMADOS = ("BTC", "ETH", "SOL", "XRP", "DOGE", "BNB")
 _ZONAS_VALIDADAS_EXTERNAMENTE_ESTATICAS = {
-    f"{activo}#5min#{direccion}": [(0.05, 0.95)]
-    for activo in _ACTIVOS_5MIN_CONFIRMADOS
-    for direccion in ("Up", "Down")
+    **{
+        f"{activo}#5min#{direccion}": [(0.05, 0.95)]
+        for activo in _ACTIVOS_5MIN_CONFIRMADOS
+        for direccion in ("Up", "Down")
+    },
+    **{
+        f"{activo}#15min#{direccion}": [(0.05, 0.95)]
+        for activo in _ACTIVOS_15MIN_CONFIRMADOS
+        for direccion in ("Up", "Down")
+    },
 }
 
 _cache = {"mtime": None, "data": {}}
