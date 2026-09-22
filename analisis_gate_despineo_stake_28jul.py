@@ -24,6 +24,8 @@ from pathlib import Path
 
 import numpy as np
 
+from shuffle_chunked import corr_permutacion_chunked
+
 REPO = Path(__file__).resolve().parent
 TRADES_CSV = REPO / "data/live/trades.csv"
 OUT_JSON = REPO / "data/shadow/gate_despineo_stake.json"
@@ -62,16 +64,9 @@ def correlacion_shuffle(stakes, aciertos, iters=ITERS):
     if stakes.std() == 0 or aciertos.std() == 0:
         return 0.0, 1.0  # sin varianza (todos el mismo stake o todos ganan/pierden) -- no concluyente
     corr_real = float(np.corrcoef(stakes, aciertos)[0, 1])
-    n = len(stakes)
-    idx = _rng.random((iters, n)).argsort(axis=1)
-    aciertos_perm = aciertos[idx]
-    # corr vectorizada: cov(stake, acierto_perm) / (std_stake * std_acierto_perm)
-    stakes_c = stakes - stakes.mean()
-    aciertos_perm_c = aciertos_perm - aciertos_perm.mean(axis=1, keepdims=True)
-    cov = (stakes_c[None, :] * aciertos_perm_c).sum(axis=1)
-    std_prod = stakes_c.std() * aciertos_perm_c.std(axis=1) * n
-    with np.errstate(divide="ignore", invalid="ignore"):
-        corr_perm = np.where(std_prod > 0, cov / std_prod, 0.0)
+    # 21-Sep: por bloques (shuffle_chunked.py) -- una sola matriz iters x n
+    # causaba OOM con n grande; resultado bit-identico (verificado).
+    corr_perm = corr_permutacion_chunked(_rng, stakes, aciertos, iters)
     p = float((np.abs(corr_perm) >= abs(corr_real)).mean())
     return corr_real, p
 

@@ -46,6 +46,7 @@ from kelly_precio_gate import _familia  # noqa: E402
 from analisis_gate_bucket_propio_28jul import (  # noqa: E402
     cargar_tuplas_live, cargar_filas, bucket, N_MIN,
 )
+from shuffle_chunked import t_permutacion_chunked
 
 REPO = Path(__file__).resolve().parent
 GATE_ACTUAL = REPO / "data" / "shadow" / "gate_bucket_propio.json"
@@ -70,20 +71,9 @@ def permutar_t_vectorizado(dentro: np.ndarray, fuera: np.ndarray, b: int) -> np.
     """B réplicas del t-estadístico bajo H0 (etiqueta dentro/fuera no
     importa), vectorizado (mismo patrón que shuffle_test en
     analisis_gate_bucket_propio_28jul.py)."""
-    n_d, n_f = len(dentro), len(fuera)
-    pool = np.concatenate([dentro, fuera])
-    n = n_d + n_f
-    idx = _rng.random((b, n)).argsort(axis=1)
-    permutado = pool[idx]
-    grupo_d = permutado[:, :n_d]
-    grupo_f = permutado[:, n_d:]
-    media_d = grupo_d.mean(axis=1)
-    media_f = grupo_f.mean(axis=1)
-    var_d = grupo_d.var(axis=1, ddof=1) if n_d > 1 else np.zeros(b)
-    var_f = grupo_f.var(axis=1, ddof=1) if n_f > 1 else np.zeros(b)
-    se = np.sqrt(var_d / n_d + var_f / n_f)
-    se[se == 0] = np.nan
-    return (media_d - media_f) / se
+    # 21-Sep: por bloques (shuffle_chunked.py) -- una sola matriz b x n
+    # causaba OOM con n grande; resultado bit-identico (verificado).
+    return t_permutacion_chunked(_rng, dentro, fuera, b)
 
 
 def main() -> int:

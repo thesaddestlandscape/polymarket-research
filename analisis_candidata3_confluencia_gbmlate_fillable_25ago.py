@@ -36,6 +36,8 @@ from pathlib import Path
 
 import numpy as np
 
+from shuffle_chunked import diffs_permutacion
+
 REPO = Path(__file__).resolve().parent
 sys.path.insert(0, str(REPO))
 from libro_snapshots_prioridad import prio as _prio  # noqa: E402
@@ -63,9 +65,9 @@ def shuffle_test(a, b, seed_key, iters=5000):
     na, nb = len(a), len(b)
     diff_real = a.mean() - b.mean()
     todos = np.concatenate([a, b])
-    idx = rng.random((iters, na + nb)).argsort(axis=1)
-    perm = todos[idx]
-    diffs = perm[:, :na].mean(axis=1) - perm[:, na:].mean(axis=1)
+    # 21-Sep: por bloques (shuffle_chunked.py) -- una sola matriz iters x n
+    # causaba OOM con n grande; resultado bit-identico (verificado).
+    diffs = diffs_permutacion(rng, todos, na, iters)
     p = float(np.mean(np.abs(diffs) >= abs(diff_real)))
     return float(diff_real), p
 
