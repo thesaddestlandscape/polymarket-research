@@ -38,6 +38,7 @@ de Perps configurada, no toca dinero. Ver [[project_perps_estado_y_plan_22sep]].
 """
 import csv
 import glob
+import json
 import sys
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
@@ -47,6 +48,7 @@ sys.path.insert(0, str(REPO))
 from perps_rastreador_posiciones import cargar_fills, segmentar_posiciones  # noqa: E402
 
 OUT = REPO / "data/shadow/perps_consenso_dryrun.csv"
+STATS = REPO / "data/shadow/perps_consenso_stats.json"
 GLOB_MARKET = str(REPO / "data/shadow/polymarket_perps_market_*.csv")
 
 MIN_POSICIONES = 3       # posiciones CERRADAS mínimas para cualificar una wallet
@@ -219,6 +221,20 @@ def generar_senales() -> int:
         _guardar_out(existentes + nuevas)
     else:
         print("[perps_consenso_dryrun] sin señales nuevas")
+
+    # 22-Sep: snapshot de estado para vigia_perps_consenso.py -- así el
+    # aviso de Telegram ("cada vez que haya una actualización de datos")
+    # puede reportar deltas sin tener que releer todos los CSV otra vez.
+    n_fills = sum(len(fills) for fills in grupos.values())
+    STATS.write_text(json.dumps({
+        "generado_utc": ahora, "n_fills": n_fills,
+        "n_wallets_con_posiciones": len({p["address"] for p in posiciones_full}),
+        "n_posiciones_total": len(posiciones_full),
+        "n_posiciones_cerradas": sum(1 for p in posiciones_full if not p["abierta"]),
+        "n_cualificadas": len(cualificadas),
+        "n_instrumentos_con_consenso_parcial": len(consenso),
+        "n_senales_nuevas": len(nuevas),
+    }, ensure_ascii=False, indent=1), encoding="utf-8")
     return 0
 
 
