@@ -70,6 +70,7 @@ lock nuevo entre procesos, mismo criterio de riesgo ya aceptado.
 Corre en screen propia:
   screen -dmS gbmlate15m bash -c "cd /root/polymarket-research && .venv/bin/python gbm_late_15min_executor.py >> logs/gbm_late_15min_executor.log 2>&1"
 """
+import asyncio
 import json
 import threading
 import time
@@ -77,6 +78,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 
 import requests
+import websockets
 
 import live_trade as lt
 from live_guard import puede_operar_live
@@ -94,6 +96,26 @@ from shadow_predict import (
     GBM_LATE_15M_SOL_HORAS_BUENAS_UTC,
     GBM_LATE_15M_SOL_PY_MIN,
     GBM_LATE_ESPACIO_K,
+)
+# 22-Sep: SOLO se importan las CONSTANTES (URL del websocket, mapeo de
+# símbolos, umbral de drift, duración de ventana) de gbm_late_reactivo_fase0.py
+# (FASE 0, corriendo desde 25-Ago en la screen "observadores") -- esas cuatro
+# sí están garantizadas idénticas, cero riesgo de divergencia porque es el
+# mismo objeto en memoria. /code-review 22-Sep (hallazgo real, corregido aquí):
+# la LÓGICA de ventana/referencia/drift (_procesar_tick_reactivo más abajo) NO
+# reutiliza la función _procesar_tick() de gbm_late_reactivo_fase0.py -- es una
+# copia deliberadamente más simple (sin el resto de features/CSV que esa
+# función también calcula), así que SÍ puede divergir si alguien corrige algo
+# en _procesar_tick() sin replicarlo aquí. Riesgo acotado porque esta copia
+# solo decide CUÁNDO despertar el poll (ver más abajo), nunca la decisión de
+# comprar/vender -- un gate barato desalineado en el peor caso hace que se
+# tarde hasta POLL_INTERVAL_S en reaccionar (el comportamiento de HOY), nunca
+# un error de ejecución.
+from gbm_late_reactivo_fase0 import (
+    WS_URL as _WS_URL_REACTIVO,
+    _SYM_A_ACTIVO as _SYM_A_ACTIVO_REACTIVO,
+    DUR_S as _DUR_S_REACTIVO,
+    DRIFT_MIN_PCT as _DRIFT_MIN_PCT_REACTIVO,
 )
 
 DIR = Path(__file__).resolve().parent
@@ -120,6 +142,12 @@ ACTIVOS = ("ETH", "SOL", "XRP", "BTC", "BNB")  # 07-Ago: BNB añadida -- solo pa
 DRY_RUN = True  # 04-Ago v1 -- ver docstring, NO cambiar sin revisión + aprobación explícita + /code-review.
 
 POLL_INTERVAL_S = 2.0    # ventana más ancha (9min) que el resto de ejecutores -- no hace falta 1-1.5s
+# techo de espera entre polls -- desde 22-Sep, watch_window() casi nunca espera
+# los 2s enteros: el hilo reactivo (ver hilo_reactivo_watchdog) lo despierta
+# antes en cuanto el precio cruza el umbral de drift, así que en la práctica
+# la latencia real hasta el siguiente poll es la del tick (~145ms medido en
+# gbm_late_reactivo_fase0.py), no este valor -- este sigue siendo el techo
+# de seguridad si el websocket reactivo se cae.
 HARD_FLOOR_S = 5.0       # margen de seguridad antes del cierre del mercado
 REFRESCO_CTX_S = 20.0    # cadencia de recarga de precios_intraday/spot -- mismo orden que el propio
 # fichero de precios (capturado cada ciclo del fast loop, ~20-100s), no hace falta releerlo cada poll
@@ -153,6 +181,14 @@ _session = requests.Session()
 _orden_lock = threading.Lock()
 _pares_live_cache = {"mtime": None, "set": set()}
 _ctx_cache = {"ts": 0.0, "precios_intraday": [], "spot": {}}
+
+# 22-Sep: despertador reactivo -- ver docstring de _procesar_tick_reactivo.
+# Cubre unión de ACTIVOS y ACTIVOS_ESPACIO_ATR (mismos 5 activos hoy, pero
+# sin asumirlo si algún día divergen).
+_WAKE_ACTIVOS = set(ACTIVOS) | set(ACTIVOS_ESPACIO_ATR)
+_wake_events: dict[str, threading.Event] = {a: threading.Event() for a in _WAKE_ACTIVOS}
+_ultimo_wake_ts: dict[str, float] = {}
+_WAKE_COOLDOWN_S = 1.0  # máx 1 despertar/seg por activo -- evita martillear el libro si el precio oscila sobre el umbral
 
 
 def log(msg: str, activo: str = "") -> None:
@@ -455,6 +491,117 @@ def _registrar_prediccion(mercado: dict, activo: str, resultado: dict, direccion
         log(f"aviso: no se pudo registrar predicción para postmortem: {e}", activo)
 
 
+class _RefTickLigero:
+    __slots__ = ("ts_end", "ref")
+
+    def __init__(self):
+        self.ts_end = None
+        self.ref = None
+
+
+def _procesar_tick_reactivo(activo: str, precio: float, estado: dict) -> None:
+    """22-Sep, petición explícita Javi ("soluciona la selección adversa de
+    fondo en todo el arquetipo A"): verificado con 4 semanas de datos de
+    gbm_late_reactivo_fase0.py que restringir la ejecución al instante
+    exacto del cruce de drift (websocket spot Binance, ~145ms de latencia
+    real medida) sube la fill-ability real de ~0,1% (sondeo a 2s) a 17,8%
+    (n=17.297), con edge que sobrevive dentro del subconjunto fillable
+    (n=3.070 cruzado con results.csv: hit=52,4%, pnl_medio=+0,307€/trade,
+    bootstrap CI90%=[0,254,0,361], split-half estable, positivo en las 6
+    monedas). Ver memoria project_arquetipo_a_reactivo_conectado_22sep.
+
+    /code-review 22-Sep: esta función es una COPIA deliberadamente más
+    simple de gbm_late_reactivo_fase0.py::_procesar_tick() (sin book-query,
+    sin bot_consenso, sin Kalshi, sin CSV) -- NO llama a esa función, así
+    que puede divergir si alguien corrige la lógica de ventana/referencia/
+    drift allí sin replicarlo aquí. Riesgo acotado: esto solo decide CUÁNDO
+    despertar el poll, nunca la decisión de comprar/vender.
+
+    Esta función es SOLO un gate barato (comparación en memoria, sin
+    consultar el libro) que despierta antes de tiempo el poll de
+    watch_window() -- reduce la espera de hasta POLL_INTERVAL_S=2,0s a la
+    latencia real del tick. La evaluación y la decisión de disparar
+    siguen siendo 100% las de _s_gbm_late()/watch_window() -- esta
+    función nunca decide comprar ni vender nada, solo cuándo volver a
+    mirar. Si esto falla o el websocket se cae, watch_window() sigue
+    funcionando exactamente igual que antes de este cambio (ver
+    hilo_reactivo_watchdog): fail-safe por diseño, degrada a la latencia
+    de siempre, nunca bloquea ni empeora el comportamiento previo."""
+    if activo not in _wake_events:
+        return
+    now = time.time()
+    ts_end = (int(now) // _DUR_S_REACTIVO + 1) * _DUR_S_REACTIVO
+    e = estado.setdefault(activo, _RefTickLigero())
+    if e.ts_end != ts_end:
+        e.ts_end = ts_end
+        e.ref = precio
+        return
+    if e.ref is None or e.ref <= 0:
+        e.ref = precio
+        return
+    drift_pct = (precio / e.ref - 1) * 100
+    if abs(drift_pct) < _DRIFT_MIN_PCT_REACTIVO:
+        return
+    ultimo = _ultimo_wake_ts.get(activo, 0.0)
+    if now - ultimo < _WAKE_COOLDOWN_S:
+        return
+    _ultimo_wake_ts[activo] = now
+    _wake_events[activo].set()
+
+
+async def _consumir_websocket_reactivo() -> None:
+    estado: dict = {}
+    while True:
+        try:
+            async with websockets.connect(_WS_URL_REACTIVO, ping_interval=20, ping_timeout=20) as ws:
+                log("websocket reactivo conectado")
+                async for raw in ws:
+                    try:
+                        msg = json.loads(raw)
+                        data = msg.get("data", {})
+                        sym = data.get("s", "").lower()
+                        activo = _SYM_A_ACTIVO_REACTIVO.get(sym)
+                        if not activo:
+                            continue
+                        precio = float(data.get("p", 0))
+                        if precio <= 0:
+                            continue
+                        _procesar_tick_reactivo(activo, precio, estado)
+                    except Exception as ex:
+                        log(f"error procesando tick reactivo: {type(ex).__name__}: {ex}")
+        except Exception as ex:
+            log(f"websocket reactivo perdido ({type(ex).__name__}: {ex}) -- reconectando en 5s")
+            await asyncio.sleep(5)
+
+
+def hilo_reactivo_watchdog() -> None:
+    """Corre el consumidor async en su propio hilo -- aislado del resto
+    del ejecutor: si esto muere o el websocket falla repetidamente,
+    watch_window() sigue operando con el poll de 2s de siempre (ver
+    docstring de _procesar_tick_reactivo).
+
+    /code-review 22-Sep: esto abre una conexión websocket INDEPENDIENTE a
+    los mismos 6 streams aggTrade de Binance que ya consume por su cuenta
+    gbm_late_reactivo_fase0.py (proceso separado, screen "observadores")
+    -- mismo patrón de redundancia que el triple websocket cripto/sports/
+    weather ya detectado y deliberadamente deprioritizado el 27-Ago
+    (idea_ronda3_evidente_y_profundo_27ago: impacto de CPU/carga bajo,
+    "lo resolvemos más adelante"). Decisión consciente aquí, no descuido:
+    consumir la conexión de gbm_late_reactivo_fase0.py por IPC entre
+    screens (fichero/socket compartido) añadiría una dependencia entre
+    dos procesos que hoy son independientes -- si "observadores" se cae,
+    este ejecutor NO debe perder su gate reactivo. El coste (una conexión
+    TCP más al mismo stream público) es bajo; no consolidar mientras el
+    CPU/RAM del VPS no lo exija (mismo criterio que la decisión de
+    27-Ago)."""
+    while True:
+        try:
+            asyncio.run(_consumir_websocket_reactivo())
+        except Exception as ex:
+            log(f"hilo reactivo murió: {type(ex).__name__}: {ex} -- reintenta en 5s")
+            time.sleep(5)
+
+
 def watch_window(activo: str, mercado: dict) -> bool:
     """Vigila un mercado {activo}#15min concreto -- entra en juego en
     cuanto restante_min cae dentro de [GBM_LATE_15M_REST_MIN_LO,
@@ -497,7 +644,8 @@ def watch_window(activo: str, mercado: dict) -> bool:
         py = libro.get("best_ask") if libro else None
         if py is None:
             contadores["sin_dato"] += 1
-            time.sleep(POLL_INTERVAL_S)
+            _wake_events[activo].wait(timeout=POLL_INTERVAL_S)
+            _wake_events[activo].clear()
             continue
 
         market_full = dict(mercado)
@@ -555,7 +703,8 @@ def watch_window(activo: str, mercado: dict) -> bool:
 
         if hubo_confirmacion:
             return True
-        time.sleep(POLL_INTERVAL_S)
+        _wake_events[activo].wait(timeout=POLL_INTERVAL_S)
+        _wake_events[activo].clear()
 
 
 def disparar(activo: str, mercado: dict, py: float, prob_yes: float, direccion: str,
@@ -703,6 +852,9 @@ def main():
     for h in hilos:
         h.start()
 
+    hilo_reactivo = threading.Thread(target=hilo_reactivo_watchdog, daemon=True, name="_reactivo")
+    hilo_reactivo.start()
+
     ciclos_firehose_no_sano = 0
     while True:
         time.sleep(30)
@@ -713,6 +865,11 @@ def main():
                 nuevo = threading.Thread(target=hilo_activo, args=(activo,), daemon=True, name=activo)
                 nuevo.start()
                 hilos[i] = nuevo
+        if not hilo_reactivo.is_alive():
+            log("hilo reactivo (websocket) murió inesperadamente -- reiniciando (el ejecutor sigue "
+                "operando con el poll de 2s mientras tanto)")
+            hilo_reactivo = threading.Thread(target=hilo_reactivo_watchdog, daemon=True, name="_reactivo")
+            hilo_reactivo.start()
 
         if _fc.esta_sano():
             ciclos_firehose_no_sano = 0
