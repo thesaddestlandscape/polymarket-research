@@ -1,17 +1,7 @@
 {
-  "timestamp_utc": "2026-09-22T12:10:16+00:00",
+  "timestamp_utc": "2026-09-22T14:10:09+00:00",
   "tuplas_maduras": [],
   "tuplas_inmaduras": [
-    {
-      "tupla": "SNIPER#BTC#15min#BUY_Up",
-      "dias_historial": 8,
-      "n": 12
-    },
-    {
-      "tupla": "SNIPER#BTC#15min#BUY_Down",
-      "dias_historial": 8,
-      "n": 9
-    },
     {
       "tupla": "WALLET_MIRROR#BTC#60min#BUY_Up",
       "dias_historial": 22,
@@ -111,6 +101,126 @@
       "tupla": "SNIPER#ETH#15min#BUY_Down",
       "dias_historial": 7,
       "n": 3
+    },
+    {
+      "tupla": "RESOLUTION_SNIPER_NAIVE#BTC#5min#BUY_Up",
+      "dias_historial": 0,
+      "n": 0
+    },
+    {
+      "tupla": "RESOLUTION_SNIPER_NAIVE#BTC#5min#BUY_Down",
+      "dias_historial": 0,
+      "n": 0
+    },
+    {
+      "tupla": "RESOLUTION_SNIPER_NAIVE#ETH#5min#BUY_Up",
+      "dias_historial": 0,
+      "n": 0
+    },
+    {
+      "tupla": "RESOLUTION_SNIPER_NAIVE#ETH#5min#BUY_Down",
+      "dias_historial": 0,
+      "n": 0
+    },
+    {
+      "tupla": "RESOLUTION_SNIPER_NAIVE#SOL#5min#BUY_Up",
+      "dias_historial": 0,
+      "n": 0
+    },
+    {
+      "tupla": "RESOLUTION_SNIPER_NAIVE#SOL#5min#BUY_Down",
+      "dias_historial": 0,
+      "n": 0
+    },
+    {
+      "tupla": "RESOLUTION_SNIPER_NAIVE#XRP#5min#BUY_Up",
+      "dias_historial": 0,
+      "n": 0
+    },
+    {
+      "tupla": "RESOLUTION_SNIPER_NAIVE#XRP#5min#BUY_Down",
+      "dias_historial": 0,
+      "n": 0
+    },
+    {
+      "tupla": "RESOLUTION_SNIPER_NAIVE#DOGE#5min#BUY_Up",
+      "dias_historial": 0,
+      "n": 0
+    },
+    {
+      "tupla": "RESOLUTION_SNIPER_NAIVE#DOGE#5min#BUY_Down",
+      "dias_historial": 0,
+      "n": 0
+    },
+    {
+      "tupla": "RESOLUTION_SNIPER_NAIVE#BNB#5min#BUY_Up",
+      "dias_historial": 0,
+      "n": 0
+    },
+    {
+      "tupla": "RESOLUTION_SNIPER_NAIVE#BNB#5min#BUY_Down",
+      "dias_historial": 0,
+      "n": 0
+    },
+    {
+      "tupla": "RESOLUTION_SNIPER_NAIVE#BTC#15min#BUY_Up",
+      "dias_historial": 0,
+      "n": 0
+    },
+    {
+      "tupla": "RESOLUTION_SNIPER_NAIVE#BTC#15min#BUY_Down",
+      "dias_historial": 0,
+      "n": 0
+    },
+    {
+      "tupla": "RESOLUTION_SNIPER_NAIVE#ETH#15min#BUY_Up",
+      "dias_historial": 0,
+      "n": 0
+    },
+    {
+      "tupla": "RESOLUTION_SNIPER_NAIVE#ETH#15min#BUY_Down",
+      "dias_historial": 0,
+      "n": 0
+    },
+    {
+      "tupla": "RESOLUTION_SNIPER_NAIVE#SOL#15min#BUY_Up",
+      "dias_historial": 0,
+      "n": 0
+    },
+    {
+      "tupla": "RESOLUTION_SNIPER_NAIVE#SOL#15min#BUY_Down",
+      "dias_historial": 0,
+      "n": 0
+    },
+    {
+      "tupla": "RESOLUTION_SNIPER_NAIVE#XRP#15min#BUY_Up",
+      "dias_historial": 0,
+      "n": 0
+    },
+    {
+      "tupla": "RESOLUTION_SNIPER_NAIVE#XRP#15min#BUY_Down",
+      "dias_historial": 0,
+      "n": 0
+    },
+    {
+      "tupla": "RESOLUTION_SNIPER_NAIVE#DOGE#15min#BUY_Up",
+      "dias_historial": 0,
+      "n": 0
+    },
+    {
+      "tupla": "RESOLUTION_SNIPER_NAIVE#DOGE#15min#BUY_Down",
+      "dias_historial": 0,
+      "n": 0
+    },
+    {
+      "tupla": "RESOLUTION_SNIPER_NAIVE#BNB#15min#BUY_Up",
+      "dias_historial": 0,
+      "n": 0
+    },
+    {
+      "tupla": "RESOLUTION_SNIPER_NAIVE#BNB#15min#BUY_Down",
+      "dias_historial": 0,
+      "n": 0
     }
   ]
 }
