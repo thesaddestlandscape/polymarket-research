@@ -119,6 +119,7 @@ from wallet_mirror_executor_dryrun import (
 import smart_money_tracker
 import vigia_edge_quirurgico  # 21-Sep: carril "quirurgico", subproceso (ver su docstring)
 import vigia_buscador_edge_perdido  # 22-Sep: carril "buscador", subproceso (ver su docstring)
+import vigia_perps_consenso  # 22-Sep: carril "perps", subproceso, DRY-RUN puro (ver su docstring)
 import sports_wallet_mirror_sniper as _swms
 
 
@@ -273,6 +274,11 @@ TAREAS = [
     # solo corre trabajo real cuando hay tuplas degradadas, barato en reposo.
     ("vigia_buscador_edge_perdido", vigia_buscador_edge_perdido.main,
      "vigia_buscador_edge_perdido.log", 21600),
+    # 22-Sep (PLAN 22-Sep paso 2, directiva Javi 21-Sep): consenso de wallets
+    # para Perps, MODO DRY-RUN puro (sin cuenta, sin credenciales, nunca
+    # envía nada). Cadencia 3h -- el dato fuente (fetch_polymarket_perps_
+    # wallet_fills.py) ya es horario, no hace falta más frecuencia.
+    ("vigia_perps_consenso", vigia_perps_consenso.main, "vigia_perps_consenso.log", 10800),
 ]
 
 TICK_S = 20.0
@@ -303,6 +309,7 @@ CARRILES_APARTE = {
     "pesado": ["vigia_causal_vs_fillable", "smart_money_tracker", "shadow_pnl_fiel"],
     "quirurgico": ["vigia_edge_quirurgico"],   # 21-Sep: zonas finas, modo lectura
     "buscador": ["vigia_buscador_edge_perdido"],   # 22-Sep: edge perdido, modo lectura
+    "perps": ["vigia_perps_consenso"],   # 22-Sep: consenso Perps, DRY-RUN puro
 }
 
 # Ultima ejecucion por tarea, persistida: un reinicio del proceso (watchdog,
