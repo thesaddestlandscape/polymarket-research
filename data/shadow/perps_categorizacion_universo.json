@@ -1,22 +1,22 @@
 {
- "generado_utc": "2026-09-21T00:25:05+00:00",
+ "generado_utc": "2026-09-22T00:25:02+00:00",
  "p95_notional_por_categoria": {
-  "crypto_major": 11340.31,
-  "index": 9997.27,
-  "equity": 7495.13,
-  "commodity": 10075.33,
-  "crypto_memecoin": 4522.81
+  "crypto_major": 10202.1,
+  "index": 9993.22,
+  "equity": 7479.82,
+  "commodity": 10088.96,
+  "crypto_memecoin": 4368.9
  },
  "wallets": {
   "0x4c4f4d655B77c4d1cB4343AF6c54c2Ec8f4022b4": {
-   "n_total_fills": 12901,
-   "notional_total": 14891707.46,
+   "n_total_fills": 13745,
+   "notional_total": 15641422.81,
    "categoria_dominante": "crypto_major",
-   "pct_notional_dominante": 34.3,
+   "pct_notional_dominante": 36.1,
    "es_especialista_nicho": false,
    "n_liquidaciones_propias": 0,
    "pct_taker": 96.8,
-   "n_grandes_jugadas": 262,
+   "n_grandes_jugadas": 269,
    "grandes_jugadas_top5": [
     {
      "notional": 95556.21,
@@ -56,14 +56,14 @@
    ]
   },
   "0x8448d8263B6131d1a8eBE93EAC553804f60300Ec": {
-   "n_total_fills": 3914,
-   "notional_total": 14216492.13,
+   "n_total_fills": 4568,
+   "notional_total": 15770988.18,
    "categoria_dominante": "crypto_major",
-   "pct_notional_dominante": 78.6,
+   "pct_notional_dominante": 79.9,
    "es_especialista_nicho": true,
    "n_liquidaciones_propias": 0,
-   "pct_taker": 23.3,
-   "n_grandes_jugadas": 420,
+   "pct_taker": 22.0,
+   "n_grandes_jugadas": 477,
    "grandes_jugadas_top5": [
     {
      "notional": 91852.2,
@@ -103,14 +103,14 @@
    ]
   },
   "0xa5dD645f2367C990e7d993E46F28870Bd5812E4f": {
-   "n_total_fills": 818,
-   "notional_total": 5465084.97,
+   "n_total_fills": 843,
+   "notional_total": 5623813.78,
    "categoria_dominante": "equity",
-   "pct_notional_dominante": 48.5,
+   "pct_notional_dominante": 47.2,
    "es_especialista_nicho": false,
    "n_liquidaciones_propias": 0,
-   "pct_taker": 81.9,
-   "n_grandes_jugadas": 165,
+   "pct_taker": 81.4,
+   "n_grandes_jugadas": 175,
    "grandes_jugadas_top5": [
     {
      "notional": 41177.44,
@@ -150,14 +150,14 @@
    ]
   },
   "0x2070F45C22E44a52CB42210d1112a0Bfb6A9A0c7": {
-   "n_total_fills": 7267,
-   "notional_total": 20919409.62,
+   "n_total_fills": 8143,
+   "notional_total": 23055187.54,
    "categoria_dominante": "crypto_major",
-   "pct_notional_dominante": 72.9,
+   "pct_notional_dominante": 75.1,
    "es_especialista_nicho": true,
    "n_liquidaciones_propias": 0,
-   "pct_taker": 3.2,
-   "n_grandes_jugadas": 837,
+   "pct_taker": 2.8,
+   "n_grandes_jugadas": 990,
    "grandes_jugadas_top5": [
     {
      "notional": 99989.51,
@@ -197,14 +197,14 @@
    ]
   },
   "0x0034DC43DeACf5060035Db189A094568Dad45b7F": {
-   "n_total_fills": 56233,
-   "notional_total": 105579011.21,
+   "n_total_fills": 65507,
+   "notional_total": 118642867.7,
    "categoria_dominante": "crypto_major",
-   "pct_notional_dominante": 59.6,
+   "pct_notional_dominante": 62.6,
    "es_especialista_nicho": false,
    "n_liquidaciones_propias": 0,
-   "pct_taker": 33.5,
-   "n_grandes_jugadas": 2295,
+   "pct_taker": 32.8,
+   "n_grandes_jugadas": 2670,
    "grandes_jugadas_top5": [
     {
      "notional": 134818.13,
@@ -244,10 +244,10 @@
    ]
   },
   "0x9c6c85323Ae3E695bA36D17c86f3ec2242cF712A": {
-   "n_total_fills": 677,
-   "notional_total": 579881.25,
+   "n_total_fills": 723,
+   "notional_total": 709923.74,
    "categoria_dominante": "crypto_major",
-   "pct_notional_dominante": 79.4,
+   "pct_notional_dominante": 82.0,
    "es_especialista_nicho": true,
    "n_liquidaciones_propias": 0,
    "pct_taker": 100.0,
@@ -277,25 +277,25 @@
    ]
   },
   "0xC914238Dde217bc37F768B9eE5F8FBF973aeD746": {
-   "n_total_fills": 7606,
-   "notional_total": 711372.1,
+   "n_total_fills": 8806,
+   "notional_total": 787155.74,
    "categoria_dominante": "crypto_major",
    "pct_notional_dominante": 54.0,
    "es_especialista_nicho": false,
    "n_liquidaciones_propias": 0,
-   "pct_taker": 90.5,
+   "pct_taker": 90.8,
    "n_grandes_jugadas": 0,
    "grandes_jugadas_top5": []
   },
   "0x4A2479F81FC411ade23a50e2425786C248346936": {
-   "n_total_fills": 696,
-   "notional_total": 5180030.37,
+   "n_total_fills": 729,
+   "notional_total": 5293477.05,
    "categoria_dominante": "equity",
-   "pct_notional_dominante": 56.5,
+   "pct_notional_dominante": 55.6,
    "es_especialista_nicho": false,
    "n_liquidaciones_propias": 0,
-   "pct_taker": 14.2,
-   "n_grandes_jugadas": 163,
+   "pct_taker": 13.9,
+   "n_grandes_jugadas": 166,
    "grandes_jugadas_top5": [
     {
      "notional": 130361.74,
@@ -335,14 +335,14 @@
    ]
   },
   "0xfc1B24B1749F71b797029C34F5fa30D528539107": {
-   "n_total_fills": 12856,
-   "notional_total": 32069366.83,
+   "n_total_fills": 13303,
+   "notional_total": 33242453.28,
    "categoria_dominante": "commodity",
-   "pct_notional_dominante": 51.8,
+   "pct_notional_dominante": 50.1,
    "es_especialista_nicho": false,
    "n_liquidaciones_propias": 0,
-   "pct_taker": 82.7,
-   "n_grandes_jugadas": 686,
+   "pct_taker": 82.2,
+   "n_grandes_jugadas": 725,
    "grandes_jugadas_top5": [
     {
      "notional": 130361.74,
@@ -448,14 +448,14 @@
    ]
   },
   "0xB91a9C277b0d26A5ea763994152CB35AB725360E": {
-   "n_total_fills": 6340,
-   "notional_total": 14754495.94,
+   "n_total_fills": 6560,
+   "notional_total": 15048480.66,
    "categoria_dominante": "equity",
-   "pct_notional_dominante": 33.0,
+   "pct_notional_dominante": 34.3,
    "es_especialista_nicho": false,
    "n_liquidaciones_propias": 0,
-   "pct_taker": 88.3,
-   "n_grandes_jugadas": 348,
+   "pct_taker": 88.7,
+   "n_grandes_jugadas": 358,
    "grandes_jugadas_top5": [
     {
      "notional": 120020.14,
@@ -513,7 +513,7 @@
    "es_especialista_nicho": false,
    "n_liquidaciones_propias": 0,
    "pct_taker": 72.2,
-   "n_grandes_jugadas": 49,
+   "n_grandes_jugadas": 52,
    "grandes_jugadas_top5": [
     {
      "notional": 99848.49,
@@ -564,13 +564,13 @@
    "grandes_jugadas_top5": []
   },
   "0x7930Ee98013FA1aEaC08872A88E677dc925aD132": {
-   "n_total_fills": 2987,
-   "notional_total": 5000919.91,
+   "n_total_fills": 3080,
+   "notional_total": 5062444.83,
    "categoria_dominante": "commodity",
-   "pct_notional_dominante": 63.9,
+   "pct_notional_dominante": 63.1,
    "es_especialista_nicho": false,
    "n_liquidaciones_propias": 0,
-   "pct_taker": 81.1,
+   "pct_taker": 81.7,
    "n_grandes_jugadas": 140,
    "grandes_jugadas_top5": [
     {
@@ -611,14 +611,14 @@
    ]
   },
   "0xB6287efe7A7702402dd8342963DBEfE51e44F2EB": {
-   "n_total_fills": 8485,
-   "notional_total": 18028955.96,
+   "n_total_fills": 9430,
+   "notional_total": 19668650.78,
    "categoria_dominante": "crypto_major",
-   "pct_notional_dominante": 89.8,
+   "pct_notional_dominante": 90.7,
    "es_especialista_nicho": true,
    "n_liquidaciones_propias": 0,
-   "pct_taker": 89.0,
-   "n_grandes_jugadas": 630,
+   "pct_taker": 89.5,
+   "n_grandes_jugadas": 740,
    "grandes_jugadas_top5": [
     {
      "notional": 103038.01,
@@ -642,18 +642,18 @@
      "pnl": "0"
     },
     {
+     "notional": 70060.76,
+     "categoria": "crypto_major",
+     "symbol": "HYPE-USD",
+     "ts": "2026-09-21T13:26:39+00:00",
+     "pnl": "-825.0343709125477853885520144"
+    },
+    {
      "notional": 69960.33,
      "categoria": "crypto_major",
      "symbol": "HYPE-USD",
      "ts": "2026-09-10T17:12:53+00:00",
      "pnl": "-150.39552451834265366481991359"
-    },
-    {
-     "notional": 60509.2,
-     "categoria": "crypto_major",
-     "symbol": "HYPE-USD",
-     "ts": "2026-09-18T10:31:15+00:00",
-     "pnl": "0"
     }
    ]
   },
@@ -665,7 +665,7 @@
    "es_especialista_nicho": false,
    "n_liquidaciones_propias": 0,
    "pct_taker": 86.3,
-   "n_grandes_jugadas": 288,
+   "n_grandes_jugadas": 293,
    "grandes_jugadas_top5": [
     {
      "notional": 115339.48,
@@ -731,7 +731,7 @@
    "es_especialista_nicho": false,
    "n_liquidaciones_propias": 0,
    "pct_taker": 84.0,
-   "n_grandes_jugadas": 238,
+   "n_grandes_jugadas": 254,
    "grandes_jugadas_top5": [
     {
      "notional": 136991.95,
@@ -898,7 +898,7 @@
    "es_especialista_nicho": true,
    "n_liquidaciones_propias": 0,
    "pct_taker": 7.2,
-   "n_grandes_jugadas": 15,
+   "n_grandes_jugadas": 16,
    "grandes_jugadas_top5": [
     {
      "notional": 57848.35,
@@ -938,15 +938,29 @@
    ]
   },
   "0x33b63A54A4183C8BdE1C324069fF4e3CA03E95CD": {
-   "n_total_fills": 633,
-   "notional_total": 837158.49,
+   "n_total_fills": 1219,
+   "notional_total": 1555598.17,
    "categoria_dominante": "crypto_major",
    "pct_notional_dominante": 100.0,
    "es_especialista_nicho": true,
    "n_liquidaciones_propias": 0,
-   "pct_taker": 93.8,
-   "n_grandes_jugadas": 13,
+   "pct_taker": 93.9,
+   "n_grandes_jugadas": 33,
    "grandes_jugadas_top5": [
+    {
+     "notional": 35204.08,
+     "categoria": "crypto_major",
+     "symbol": "XPL-USD",
+     "ts": "2026-09-21T02:51:57+00:00",
+     "pnl": "-6.477434"
+    },
+    {
+     "notional": 28025.74,
+     "categoria": "crypto_major",
+     "symbol": "XPL-USD",
+     "ts": "2026-09-21T02:51:57+00:00",
+     "pnl": "0"
+    },
     {
      "notional": 28002.08,
      "categoria": "crypto_major",
@@ -955,40 +969,26 @@
      "pnl": "12.914986937533857988515371998"
     },
     {
-     "notional": 25009.02,
+     "notional": 25081.4,
      "categoria": "crypto_major",
      "symbol": "XPL-USD",
-     "ts": "2026-09-20T18:17:39+00:00",
+     "ts": "2026-09-21T11:24:22+00:00",
      "pnl": "0"
     },
     {
-     "notional": 23315.42,
+     "notional": 25062.76,
      "categoria": "crypto_major",
      "symbol": "XPL-USD",
-     "ts": "2026-09-20T18:17:39+00:00",
-     "pnl": "0"
-    },
-    {
-     "notional": 21104.58,
-     "categoria": "crypto_major",
-     "symbol": "XPL-USD",
-     "ts": "2026-09-20T17:07:19+00:00",
-     "pnl": "-189.10536193026707658965108061"
-    },
-    {
-     "notional": 19863.23,
-     "categoria": "crypto_major",
-     "symbol": "XPL-USD",
-     "ts": "2026-09-20T13:22:32+00:00",
+     "ts": "2026-09-21T09:12:24+00:00",
      "pnl": "0"
     }
    ]
   },
   "0x059E90484026c6BB3d4cc6dEe64DB2CCF29D891f": {
-   "n_total_fills": 1044,
-   "notional_total": 271017.62,
+   "n_total_fills": 1494,
+   "notional_total": 387901.98,
    "categoria_dominante": "crypto_major",
-   "pct_notional_dominante": 95.4,
+   "pct_notional_dominante": 95.9,
    "es_especialista_nicho": true,
    "n_liquidaciones_propias": 0,
    "pct_taker": 0.0,
@@ -1005,6 +1005,100 @@
    "pct_taker": 42.9,
    "n_grandes_jugadas": 0,
    "grandes_jugadas_top5": []
+  },
+  "0x3d0a1716D5FaF302cB38f69A1f873bEC0320E577": {
+   "n_total_fills": 862,
+   "notional_total": 1060191.63,
+   "categoria_dominante": "crypto_major",
+   "pct_notional_dominante": 100.0,
+   "es_especialista_nicho": true,
+   "n_liquidaciones_propias": 0,
+   "pct_taker": 92.5,
+   "n_grandes_jugadas": 19,
+   "grandes_jugadas_top5": [
+    {
+     "notional": 20350.85,
+     "categoria": "crypto_major",
+     "symbol": "XPL-USD",
+     "ts": "2026-09-21T14:18:13+00:00",
+     "pnl": "0"
+    },
+    {
+     "notional": 19672.64,
+     "categoria": "crypto_major",
+     "symbol": "XPL-USD",
+     "ts": "2026-09-21T16:56:58+00:00",
+     "pnl": "-242.63146477993263443682328098"
+    },
+    {
+     "notional": 16901.9,
+     "categoria": "crypto_major",
+     "symbol": "KAITO-USD",
+     "ts": "2026-09-21T12:02:50+00:00",
+     "pnl": "0.313445"
+    },
+    {
+     "notional": 16253.79,
+     "categoria": "crypto_major",
+     "symbol": "XPL-USD",
+     "ts": "2026-09-21T11:06:59+00:00",
+     "pnl": "785.11609944883757440418626510"
+    },
+    {
+     "notional": 15001.38,
+     "categoria": "crypto_major",
+     "symbol": "XPL-USD",
+     "ts": "2026-09-21T09:14:05+00:00",
+     "pnl": "0"
+    }
+   ]
+  },
+  "0x823C6B20c03F2E962Da20a0024624473E7ca53A4": {
+   "n_total_fills": 165,
+   "notional_total": 255692.37,
+   "categoria_dominante": "crypto_major",
+   "pct_notional_dominante": 100.0,
+   "es_especialista_nicho": true,
+   "n_liquidaciones_propias": 0,
+   "pct_taker": 4.2,
+   "n_grandes_jugadas": 8,
+   "grandes_jugadas_top5": [
+    {
+     "notional": 29070.0,
+     "categoria": "crypto_major",
+     "symbol": "SOL-USD",
+     "ts": "2026-09-18T19:29:01+00:00",
+     "pnl": "3617.3826105680644704071921769"
+    },
+    {
+     "notional": 25320.83,
+     "categoria": "crypto_major",
+     "symbol": "SOL-USD",
+     "ts": "2026-09-21T13:20:32+00:00",
+     "pnl": "3878.7499976558102334622471508"
+    },
+    {
+     "notional": 19317.29,
+     "categoria": "crypto_major",
+     "symbol": "SOL-USD",
+     "ts": "2026-09-14T06:00:37+00:00",
+     "pnl": "-72.197244"
+    },
+    {
+     "notional": 13182.82,
+     "categoria": "crypto_major",
+     "symbol": "SOL-USD",
+     "ts": "2026-09-14T13:04:43+00:00",
+     "pnl": "0"
+    },
+    {
+     "notional": 12550.98,
+     "categoria": "crypto_major",
+     "symbol": "SOL-USD",
+     "ts": "2026-09-15T18:59:55+00:00",
+     "pnl": "0"
+    }
+   ]
   }
  }
 }
