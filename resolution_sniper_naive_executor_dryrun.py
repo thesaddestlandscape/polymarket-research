@@ -41,14 +41,14 @@ que wallet_mirror_executor_dryrun.py):
      estar en `pares_permitidos_live` hasta que Javi la añada a mano
      (verificado explícitamente vía `_en_whitelist`, no asumido) -- no es
      una estrategia que shadow_predict.py reconozca.
-  3. Activar esto de verdad exige, en este orden: (a) n>=40 en ESTE csv
-     por combo (mide degradación con latencia real, YA CUMPLIDO 5min:
-     n=125, 99.2% sigue fillable) -- 15min sigue sin cumplirlo, ver más
-     abajo; (b) /code-review adversarial de este mismo diff -- toca el
-     camino de envío de orden, mismo criterio que cualquier cambio en
+  3. Activar de verdad exige, en este orden: (a) n>=40 en ESTE csv por
+     combo (mide degradación con latencia real); (b) /code-review
+     adversarial del diff que amplía COMBOS_CONFIRMADOS -- toca el camino
+     de envío de orden, mismo criterio que cualquier cambio en
      live_trade.py; (c) decisión explícita de Javi para añadir la tupla
-     EXACTA (activo+marco+dirección) a `pares_permitidos_live`; (d) flip
-     manual de `DRY_RUN` a False. Ninguno de los cuatro ha pasado todavía.
+     EXACTA (activo+marco+dirección) a `pares_permitidos_live`. `DRY_RUN`
+     ya está en `False` desde el 25-Ago (aprobado entonces) -- el único
+     guardián real hoy es la whitelist (c) + COMBOS_CONFIRMADOS.
 
 25-Ago, P34 FASE 2 (ingeniería, petición explícita Javi "adelante,
 constrúyelo"): se añade el tramo de decisión completo (whitelist,
@@ -56,22 +56,27 @@ constrúyelo"): se añade el tramo de decisión completo (whitelist,
 `resolution_sniper_naive_gate_bucket.evaluar()` fail-closed, techo de
 correlación, circuit breaker) y el TRAMO de envío de orden real
 (`lt._ejecutar_orden_polymarket`) -- mismo patrón exacto que
-wallet_mirror_executor_dryrun.py (P24 FASE 2). `DRY_RUN` sigue en `True`:
-el propósito de este cambio es dejar el código listo y revisado, no
-activarlo hoy.
+wallet_mirror_executor_dryrun.py (P24 FASE 2). Mismo día, `DRY_RUN` pasa
+a `False` tras revisión manual (bloqueado en la práctica por la whitelist
+vacía hasta que Javi decida promocionar una tupla).
 
 Parametrizado por marco desde el diseño (petición explícita Javi 25-Ago:
 "lo vamos a hacer también para 15 y 60 minutos") -- `COMBOS_CONFIRMADOS`
-es el único punto que decide qué (activo,marco) se mide y, más adelante,
-qué puede llegar a operar dinero real; añadir 15min por activo es solo
-ampliar ese set cuando cada uno cruce su propio n>=40 de profundidad
-(hoy: BTC=37, ETH=29, SOL=28, XRP=28, DOGE=28, BNB=12, ninguno cruza
-todavía -- CLAUDE.md pt.17, nunca en bloque). 60min queda FUERA de este
+es el único punto que decide qué (activo,marco) se mide y qué puede
+llegar a operar dinero real. 22-Sep: ampliado a 5min+15min (12 combos)
+tras re-correr el gate riguroso completo con un mes de datos acumulado
+(n=6.404 fillable, 14x el original de 19-Ago) -- 12/12 combos pasan
+Wilson90+shuffle+split-half+BH-FDR, también desagregado por activo x
+dirección x marco sin excepción (ver _pares_resolutionsnipernaive_5min_
+promocion_nota_2026-09-22 / _15min_promocion_nota_2026-09-22 en
+config_live.json para el detalle completo). 60min queda FUERA de este
 fichero por completo -- no tiene ni observador de profundidad propio ni
 slug determinista en gamma-api, es trabajo de una sesión futura (ver
 project_pendiente_resolution_sniper_naive_60min_25ago).
 
-NO coloca, cancela ni modifica ninguna orden real mientras DRY_RUN=True.
+NO coloca, cancela ni modifica ninguna orden real salvo que la tupla
+exacta esté en `pares_permitidos_live` -- fail-closed por whitelist,
+independiente de `DRY_RUN`.
 """
 import csv
 import json
@@ -93,16 +98,21 @@ DRY_RUN = False  # 25-Ago: activado con aprobación explícita de Javi tras revi
 # completa (sin /code-review, por presupuesto de tokens) -- guardianes #2 (whitelist real)
 # y #3 (gate_bucket fail-closed, ahora con recheck post-requote correcto, ver
 # idea_wallet_mirror_recheck_postrequote_fuente_equivocada_25ago) siguen en pie. Restringido
-# a los 6 combos 5min confirmados (COMBOS_CONFIRMADOS) -- 15min/60min NUNCA entran aquí
-# hasta que crucen su propio gate.
+# a los 12 combos 5min+15min confirmados (COMBOS_CONFIRMADOS) -- 60min NUNCA entra aquí
+# hasta que cruce su propio gate.
 
-# Los combos que se MIDEN (fillability post-latencia, este script). Solo
-# 5min tiene hoy gate riguroso + profundidad real confirmada (19-Ago).
-# 15min entra aquí activo por activo en cuanto cruce su propio n>=40 de
-# profundidad -- NO añadir los 6 en bloque (CLAUDE.md pt.17). 60min no
-# entra en este fichero, ver docstring.
+# Los combos que se MIDEN (fillability post-latencia, este script). 22-Sep:
+# 15min añadido tras re-correr el gate riguroso completo con el mes de datos
+# acumulado desde el 19-Ago (n=6.404 fillable, 14x el original) -- 12/12
+# combos (activo,marco) pasan Wilson90+shuffle+split-half+BH-FDR, TAMBIÉN
+# desagregado por activo x dirección (Up/Down) x marco sin excepción, ver
+# _pares_resolutionsnipernaive_15min_promocion_nota_2026-09-22 en
+# config_live.json para el detalle completo. 60min no entra en este
+# fichero, ver docstring.
 COMBOS_CONFIRMADOS = {("BTC", "5min"), ("ETH", "5min"), ("SOL", "5min"),
-                      ("XRP", "5min"), ("DOGE", "5min"), ("BNB", "5min")}
+                      ("XRP", "5min"), ("DOGE", "5min"), ("BNB", "5min"),
+                      ("BTC", "15min"), ("ETH", "15min"), ("SOL", "15min"),
+                      ("XRP", "15min"), ("DOGE", "15min"), ("BNB", "15min")}
 
 RATIO_FILLABLE_MIN = 5.0
 ASK_MIN, ASK_MAX = 0.05, 0.95
@@ -170,9 +180,10 @@ def evaluar(asset: str, marco: str, slug: str, market_id: str, condition_id: str
             token_impl: str, ratio_deteccion, libro_fn, token_yes: str, token_no: str):
     """Se llama desde resolution_sniper_fade_depth_fase0.py::observar_ventana
     justo después de medir la profundidad de detección. Solo actúa sobre los
-    6 combos confirmados y cuando la detección YA era fillable -- si no lo
-    era en detección, no puede mejorar esperando (mismo hallazgo que P22,
-    refutado 04-Ago: esperar no rescata señales, degrada)."""
+    combos en COMBOS_CONFIRMADOS (12 desde 22-Sep: 6 monedas x {5min,15min})
+    y cuando la detección YA era fillable -- si no lo era en detección, no
+    puede mejorar esperando (mismo hallazgo que P22, refutado 04-Ago: esperar
+    no rescata señales, degrada)."""
     if (asset, marco) not in COMBOS_CONFIRMADOS:
         return
     if ratio_deteccion is None or ratio_deteccion < RATIO_FILLABLE_MIN:
