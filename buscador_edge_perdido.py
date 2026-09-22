@@ -68,6 +68,7 @@ data/shadow/buscador_edge_perdido.json (tupla degradada -> por dimensión,
 lista de buckets candidatos con evidencia) + Telegram (latch, solo
 hallazgos NUEVOS) vía vigia_buscador_edge_perdido.py.
 """
+import csv
 import json
 import sys
 from collections import defaultdict
@@ -83,10 +84,113 @@ from analisis_gate_bucket_propio_28jul import (  # noqa: E402
 )
 from gate_dias_independientes import robustez_dias  # noqa: E402
 from shuffle_chunked import diffs_permutacion  # noqa: E402
+import shadow_postmortem as sp  # noqa: E402 -- reusa es_pre_twap
 
 CONFIG_LIVE = REPO / "data/live/config_live.json"
 LATCH_DEGRADACION = REPO / "data/live/vigia_degradacion_live_latch.json"
 OUT = REPO / "data/shadow/buscador_edge_perdido.json"
+
+# FASE 1B (22-Sep): loader directo para la familia P-GALLINA. No reusa
+# analisis_bot_wallets_gate_bucket_25ago.py::cargar_filas() ni analisis_
+# wallet_mirror_gate_bucket_10ago.py::cargar_filas() porque esas funciones
+# COLAPSAN ambas direcciones (Up/Down) en una sola clave (arquetipo,activo,
+# marco) -- pares_permitidos_live SÍ separa por dirección (...#BUY_Up vs
+# #BUY_Down), así que hace falta filtrar por lado aquí, no reagrupar después.
+BW_FASE0 = REPO / "data/shadow/bot_wallets_gate_bucket_fase0.csv"
+WM_EXECUTOR = REPO / "data/shadow/wallet_mirror_executor_dryrun.csv"
+FEE_PGALLINA = 0.07
+RATIO_MIN_PGALLINA = 5.0
+
+
+def _pnl_neto_pgallina(ask: float, acierto: bool) -> float:
+    gross_win = (1 - ask) / ask
+    return gross_win * (1 - FEE_PGALLINA) if acierto else -1.0
+
+
+def _cargar_filas_pgallina(tupla_str: str) -> list[tuple]:
+    """Devuelve [(ts, py, pnl), ...] para una tupla de la familia P-GALLINA,
+    en la MISMA forma que cargar_filas() de results.csv (así _sweep_dimension
+    no necesita saber de qué familia viene la tupla). Usa el precio de
+    DECISIÓN (ask_decision/mejor_ask_decision), no el de detección -- es el
+    que de verdad se paga (mismo criterio ya aplicado a candidata9, ver
+    feedback_gate_debe_usar_precio_decision_no_deteccion_10sep). El gate
+    canónico (`analisis_bot_wallets_gate_bucket_25ago.py`) TODAVÍA usa
+    detección para bot_wallets -- es un hueco conocido y sin cerrar ahí, NO
+    reproducirlo aquí a propósito. Consecuencia esperada y aceptada: la
+    población de este buscador puede no coincidir 1:1 con la del gate
+    canónico para la misma tupla."""
+    if tupla_str.startswith("WALLET_MIRROR#"):
+        if not WM_EXECUTOR.exists():
+            return []
+        filas = []
+        with open(WM_EXECUTOR, encoding="utf-8") as f:
+            for r in csv.DictReader(f):
+                if r.get("tupla_sintetica") != tupla_str:
+                    continue
+                if not r.get("outcome_real"):
+                    continue
+                if r.get("sigue_fillable_en_decision") != "1":
+                    continue
+                ask_raw = r.get("ask_decision", "")
+                if not ask_raw:
+                    continue
+                try:
+                    ask = float(ask_raw)
+                except (TypeError, ValueError):
+                    continue
+                if not (0.0 < ask < 1.0):
+                    continue
+                marco = r.get("marco", "?")
+                ts = r.get("resolved_ts") or r.get("trade_timestamp", "")
+                if sp.es_pre_twap(marco, ts):
+                    continue
+                if r.get("acierto") not in ("0", "1"):
+                    continue
+                pnl = _pnl_neto_pgallina(ask, r["acierto"] == "1")
+                filas.append((ts, ask, pnl))
+        return filas
+
+    partes = tupla_str.split("#")
+    if len(partes) != 4 or not partes[3].startswith("BUY_"):
+        return []
+    arquetipo, activo, marco, decision = partes
+    lado = decision[len("BUY_"):]
+    if not BW_FASE0.exists():
+        return []
+    filas = []
+    with open(BW_FASE0, encoding="utf-8") as f:
+        for r in csv.DictReader(f):
+            if (r.get("arquetipo") != arquetipo or r.get("activo") != activo
+                    or r.get("marco") != marco or r.get("lado_wallet") != lado):
+                continue
+            if not r.get("outcome_real"):
+                continue
+            if r.get("sigue_fillable_decision") != "1":
+                continue
+            ask_raw = r.get("mejor_ask_decision", "")
+            if not ask_raw:
+                continue
+            try:
+                ask = float(ask_raw)
+            except (TypeError, ValueError):
+                continue
+            if not (0.0 < ask < 1.0):
+                continue
+            ratio_raw = r.get("ratio_vs_stake_decision", "")
+            try:
+                ratio = float(ratio_raw) if ratio_raw else None
+            except (TypeError, ValueError):
+                ratio = None
+            if ratio is None or ratio < RATIO_MIN_PGALLINA:
+                continue
+            ts = r.get("resolved_ts") or r.get("trade_timestamp", "")
+            if sp.es_pre_twap(marco, ts):
+                continue
+            if r.get("acierto") not in ("0", "1"):
+                continue
+            pnl = _pnl_neto_pgallina(ask, r["acierto"] == "1")
+            filas.append((ts, ask, pnl))
+    return filas
 
 FORWARD_DIAS = 7          # mismo horizonte que edge_quirurgico_rolling.py
 N_FORWARD_MIN = 15
@@ -201,25 +305,17 @@ DIMENSIONES_PENDIENTES = [
     "cruce_cross_activo", "tamano_trade",
 ]
 
-# 22-Sep, hallazgo real durante el diseño: `pares_permitidos_live` mezcla dos
-# familias de tuplas con esquemas de datos TOTALMENTE distintos. Las
-# estrategias "clasicas" (GBM_LATE, FAVORITO_CONFIRMADO, BALLENAS_TARDIAS,
+# FASE 1B (22-Sep, ver _cargar_filas_pgallina arriba): `pares_permitidos_live`
+# mezcla dos familias de tuplas con esquemas de datos totalmente distintos.
+# Las "clasicas" (GBM_LATE, FAVORITO_CONFIRMADO, BALLENAS_TARDIAS,
 # RESOLUTION_SNIPER, CANDIDATA9/10, MOMENTUM_IBS...) logean en results.csv
-# via shadow_predict.py -- esas SI las cubre cargar_filas() de arriba. Pero
-# HOY la mayoria de pares_permitidos_live (23/23 al diseñar esto) son la
-# familia P-GALLINA (SNIPER/DISPERSO/WALLET_MIRROR/WEEKLY_TEMPRANO/
-# WEEKLY_TARDIO#activo#marco#BUY_Up|BUY_Down) -- esas viven en
-# bot_wallets_gate_bucket_fase0.csv / wallet_mirror_executor_dryrun.csv
-# (leidas por analisis_bot_wallets_gate_bucket_25ago.py::cargar_filas() /
-# analisis_wallet_mirror_gate_bucket_10ago.py::cargar_filas(), con claves de
-# grupo y forma de tupla (ts,val,pnl,...) distintas -- el mismo motor de
-# edge_quirurgico_rolling.py ya resuelve ese mapeo). Migrar ese mapeo aqui es
-# FASE 1B, sin implementar todavia (no fingir cobertura que no existe --
-# CLAUDE.md "claves de features fantasma"). V1 se limita a la familia de
-# results.csv y lo dice explicitamente en la salida por cada tupla que no
-# pueda resolver.
-_PREFIJOS_SIN_LOADER = ("SNIPER#", "DISPERSO#", "WALLET_MIRROR#",
-                        "WEEKLY_TEMPRANO#", "WEEKLY_TARDIO#")
+# via shadow_predict.py. La familia P-GALLINA (SNIPER/DISPERSO/WALLET_MIRROR/
+# WEEKLY_TEMPRANO/WEEKLY_TARDIO#activo#marco#BUY_Up|BUY_Down) -- hoy la
+# mayoria de pares_permitidos_live -- vive en bot_wallets_gate_bucket_fase0.
+# csv / wallet_mirror_executor_dryrun.csv, ya cubierta por
+# _cargar_filas_pgallina().
+_PREFIJOS_PGALLINA = ("SNIPER#", "DISPERSO#", "WALLET_MIRROR#",
+                      "WEEKLY_TEMPRANO#", "WEEKLY_TARDIO#")
 
 
 def main() -> int:
@@ -229,13 +325,6 @@ def main() -> int:
     degradadas = _tuplas_degradadas()
     print(f"[buscador_edge_perdido] tuplas degradadas (live + negativo=true): {len(degradadas)}")
 
-    sin_loader = [t for t in degradadas if t.startswith(_PREFIJOS_SIN_LOADER)]
-    con_loader = [t for t in degradadas if t not in sin_loader]
-    if sin_loader:
-        print(f"[buscador_edge_perdido] ⚠️ {len(sin_loader)} degradadas son familia "
-              f"P-GALLINA (SNIPER/DISPERSO/WALLET_MIRROR/WEEKLY_*) -- loader FASE 1B "
-              f"pendiente, no evaluadas todavia: {sin_loader}")
-
     if not degradadas:
         salida = {"generado_utc": ahora.isoformat(timespec="seconds"), "cutoff": cutoff,
                    "n_tuplas_degradadas": 0, "tuplas": {},
@@ -243,14 +332,16 @@ def main() -> int:
         OUT.write_text(json.dumps(salida, ensure_ascii=False, indent=1), encoding="utf-8")
         return 0
 
-    tuplas_live_todas = cargar_tuplas_live()
-    filas_por_tupla = cargar_filas(tuplas_live_todas)
+    pgallina = [t for t in degradadas if t.startswith(_PREFIJOS_PGALLINA)]
+    clasicas = [t for t in degradadas if t not in pgallina]
 
-    resultado = {t: {"n_filas": 0, "dimensiones": {}, "sin_loader": True,
-                      "motivo": "familia P-GALLINA, loader FASE 1B pendiente"}
-                 for t in sin_loader}
-    for tupla_str in con_loader:
-        filas = filas_por_tupla.get(tupla_str, [])
+    tuplas_live_todas = cargar_tuplas_live()
+    filas_clasicas = cargar_filas(tuplas_live_todas)
+
+    resultado = {}
+    for tupla_str in degradadas:
+        filas = (_cargar_filas_pgallina(tupla_str) if tupla_str in pgallina
+                 else filas_clasicas.get(tupla_str, []))
         if not filas:
             resultado[tupla_str] = {"n_filas": 0, "dimensiones": {}}
             continue
