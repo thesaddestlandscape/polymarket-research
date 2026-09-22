@@ -19,7 +19,7 @@ La primera ejecucion (sin latch) inicializa el estado en silencio y solo envia e
 import json
 import subprocess
 import sys
-from collections import defaultdict
+from collections import Counter, defaultdict
 from datetime import datetime, timezone
 from pathlib import Path
 
@@ -92,9 +92,15 @@ def _cambios(actual: dict, latch: dict) -> tuple[list, dict]:
     return avisos, {**latch, "confirmado": confirmado, "pendiente": pendiente}
 
 
+TOP_N_CAMBIOS = 40  # 22-Sep: mismo motivo que TOP_N_RESUMEN -- universo 25x
+# más grande desde hoy, un dia con muchos cambios reales no debe generar un
+# mensaje gigante.
+
+
 def _texto_cambios(avisos: list, zonas_json: dict) -> str:
     lin = ["🔬 Edge quirúrgico — cambios en micro-buckets (validación forward 7d):"]
-    for k, viejo, nuevo in sorted(avisos, key=lambda a: a[0]):
+    ordenados = sorted(avisos, key=lambda a: a[0])
+    for k, viejo, nuevo in ordenados[:TOP_N_CAMBIOS]:
         icono = {"fuera": "⚪", "operable": "🟢", "estricta": "🟢🟢"}
         if nuevo == "fuera":
             lin.append(f"🔴 SALE ({viejo}): {_etiqueta(k, zonas_json)}")
@@ -104,7 +110,15 @@ def _texto_cambios(avisos: list, zonas_json: dict) -> str:
             lin.append(f"🟢🟢 SUBE a estricta (IC90>0): {_etiqueta(k, zonas_json)}")
         else:
             lin.append(f"🟡 BAJA a operable (pierde IC90>0): {_etiqueta(k, zonas_json)}")
+    if len(ordenados) > TOP_N_CAMBIOS:
+        lin.append(f"… +{len(ordenados) - TOP_N_CAMBIOS} cambio(s) más en el JSON")
     return "\n".join(lin)
+
+
+TOP_N_RESUMEN = 30  # 22-Sep: tras extender a TODO el universo (results.csv
+# incluido) el nº de zonas operables paso de ~14 a >200 -- listar todas cada
+# dia inundaria el Telegram. Se lista el top N por pnl_forward + desglose
+# por familia; el JSON completo sigue teniendo TODAS las zonas.
 
 
 def _texto_resumen(zonas_json: dict, estados: dict) -> str:
@@ -112,21 +126,29 @@ def _texto_resumen(zonas_json: dict, estados: dict) -> str:
     pers = _persistencia()
     cob = zonas_json.get("cobertura", {})
     desc = cob.get("descartadas_n_train_insuficiente", [])
+    zs = zonas_json.get("zonas_operables", [])
+    por_familia = Counter(z.get("familia", "?") for z in zs)
+    resumen_familias = ", ".join(f"{fam}={n}" for fam, n in por_familia.most_common(8))
     lin = [f"🔬 Edge quirúrgico — resumen diario ({zonas_json.get('generado_utc', '?')[:16]} UTC)",
            f"cobertura: {cob.get('evaluadas', zonas_json.get('n_tuplas_evaluadas'))}/{cob.get('total_tuplas_con_datos', '?')} "
-           f"tuplas SNIPER/DISPERSO/WEEKLY/WALLET_MIRROR con datos suficientes"
+           f"tuplas con datos suficientes (universo completo: clásicas results.csv + "
+           f"SNIPER/DISPERSO/WEEKLY/WALLET_MIRROR)"
            + (f" ({len(desc)} sin n: " + ", ".join(f"{t}={n}" for t, n in desc[:4]) + ("…" if len(desc) > 4 else "") + ")" if desc else ""),
            f"zonas operables: {len(estados)} (estrictas IC90>0: {n_est}) | en observación: {zonas_json.get('n_zonas_en_observacion')}",
-           "modo LECTURA: nada de esto opera todavía."]
-    zs = zonas_json.get("zonas_operables", [])
-    for z in sorted(zs, key=lambda z: (not z.get("forward_ok_estricto"), -(z.get("pnl_forward") or 0))):
+           f"por familia (top 8): {resumen_familias}" if por_familia else "",
+           "modo LECTURA: nada de esto opera todavía.",
+           f"Top {TOP_N_RESUMEN} por pnl_forward (ver JSON completo para el resto):"]
+    ordenadas = sorted(zs, key=lambda z: (not z.get("forward_ok_estricto"), -(z.get("pnl_forward") or 0)))
+    for z in ordenadas[:TOP_N_RESUMEN]:
         k = _clave(z)
         lin.append(f"{'🟢🟢' if z.get('forward_ok_estricto') else '🟢'} {_etiqueta(k, zonas_json)} "
                    f"| días operable: {pers.get(k, 1)}")
+    if len(ordenadas) > TOP_N_RESUMEN:
+        lin.append(f"… +{len(ordenadas) - TOP_N_RESUMEN} zona(s) más en el JSON")
     persist = sorted([(d, k) for k, d in pers.items() if d >= 2], reverse=True)[:5]
     if persist:
         lin.append("Persistentes (≥2 días): " + "; ".join(f"{k.split('|')[0]} {k.split('|')[1]} ({d}d)" for d, k in persist))
-    return "\n".join(lin)
+    return "\n".join(l for l in lin if l)
 
 
 def _enviar_partido(enviar, texto: str, limite: int = 3500) -> bool:

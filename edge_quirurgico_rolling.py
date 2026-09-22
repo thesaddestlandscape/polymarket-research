@@ -63,8 +63,9 @@ class DatosTruncados(RuntimeError):
     pass
 
 
-def _clave(fam, activo, marco, grande):
-    return f"{fam}#{activo}#{marco}" + (f"#g{grande}" if grande is not None else "")
+def _clave(fam, activo, marco, grande, decision=None):
+    sufijo = f"#g{grande}" if grande is not None else (f"#{decision}" if decision else "")
+    return f"{fam}#{activo}#{marco}{sufijo}"
 
 
 def _ic90_bootstrap(pnls, seed_key):
@@ -125,13 +126,19 @@ def generar() -> dict:
     cache_nuevo = {"cutoff": cutoff, "tuplas": {}}
     reusar = cache_prev.get("cutoff") == cutoff
     est = Q._estado_config()
-    fuentes = [(arq, a, m, None, filas) for (arq, a, m), filas in Q.B.cargar_filas().items()]
-    fuentes += [("WALLET_MIRROR", a, m, g, filas) for (_t, a, m, g), filas in Q.W.cargar_filas().items()]
+    fuentes = [(arq, a, m, None, None, filas) for (arq, a, m), filas in Q.B.cargar_filas().items()]
+    fuentes += [("WALLET_MIRROR", a, m, g, None, filas) for (_t, a, m, g), filas in Q.W.cargar_filas().items()]
+    # 22-Sep (petición explícita Javi: extender a TODAS las estrategias que
+    # han estado en live y candidatos_evaluacion_live, no solo P-GALLINA):
+    # familia "clásica" vía results.csv, mismo loader TWAP-safe que gate_
+    # bucket_propio.py. Sin identidad de wallet (ver Q._evaluar_tupla) --
+    # el check de concentración se salta automáticamente para esta familia.
+    fuentes += [(s, a, m, None, d, filas) for (s, a, m, d), filas in Q.cargar_filas_clasicas().items()]
     # Guardia de integridad: los resolvers de wallet_mirror/bot_wallets REESCRIBEN los CSV de origen
     # (no atomico) y una lectura a medias da un dataset truncado (visto 21-Sep 16:20: 52 tuplas vs 58
     # en la corrida anterior). Si el total de filas cae >10% frente a la corrida previa se descarta
     # este resultado (no se sobrescribe nada) y el vigia reintenta en 300 s.
-    n_filas_total = sum(len(f) for *_, f in fuentes)
+    n_filas_total = sum(len(f) for *_r, f in fuentes)
     try:
         prev_total = json.loads(OUT.read_text(encoding="utf-8")).get("n_filas_total")
     except Exception:
@@ -140,14 +147,14 @@ def generar() -> dict:
         raise DatosTruncados(f"filas {n_filas_total} < 90% de la corrida previa ({prev_total}): lectura a medias")
     operables, observacion, descartadas = [], [], []
     n_tuplas = 0
-    for fam, activo, marco, grande, filas in fuentes:
+    for fam, activo, marco, grande, decision, filas in fuentes:
         train = [f for f in filas if str(f[0])[:19] < cutoff]
         test = [f for f in filas if str(f[0])[:19] >= cutoff]
         if len(train) < N_MIN_TRAIN:
-            descartadas.append((_clave(fam, activo, marco, grande), len(train)))
+            descartadas.append((_clave(fam, activo, marco, grande, decision), len(train)))
             continue
         n_tuplas += 1
-        ck = _clave(fam, activo, marco, grande)
+        ck = _clave(fam, activo, marco, grande, decision)
         previo = cache_prev.get("tuplas", {}).get(ck) if reusar else None
         if previo is not None and previo["n_train"] == len(train):
             ventanas = previo["ventanas"]            # mismo train -> mismo resultado (determinista)
@@ -158,8 +165,8 @@ def generar() -> dict:
             pnls = [f[2] for f in test if w["lo"] <= f[1] < w["hi"]]
             n_te = len(pnls)
             pnl_te = float(np.mean(pnls)) if pnls else None
-            z = {"tupla": _clave(fam, activo, marco, grande), "familia": fam, "activo": activo,
-                 "marco": marco, "grande": grande,
+            z = {"tupla": ck, "familia": fam, "activo": activo,
+                 "marco": marco, "grande": grande, "decision": decision,
                  "estado_config": est.get(f"{fam}#{activo}#{marco}", "dormida/sin config"),
                  "ancho": w["ancho"], "lo": w["lo"], "hi": w["hi"],
                  "n_train": w["n"], "pnl_train": w["pnl_medio"], "n_dias_train": w["n_dias"],
