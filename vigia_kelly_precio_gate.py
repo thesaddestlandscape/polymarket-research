@@ -31,7 +31,13 @@ def main() -> int:
 
     r = subprocess.run(
         [sys.executable, str(REPO / "analisis_kelly_precio_gate_29jul.py")],
-        capture_output=True, text=True, timeout=180, cwd=str(REPO),
+        capture_output=True, text=True, timeout=900, cwd=str(REPO),
+        # 22-Sep: 180s era insuficiente -- medido en real 22-Sep: ~300s con
+        # results.csv en 662k filas (creciendo). Mismo patrón de timeout fijo
+        # sin margen de crecimiento ya visto 3 veces (vigia_gate_bucket_propio/
+        # calibracion/wallet_mirror, CLAUDE.md pt.18) -- margen generoso (3x)
+        # en vez de ajustar al milímetro, para no repetir el mismo fallo cada
+        # pocas semanas según crezcan los datos.
     )
     if r.returncode != 0:
         print(f"ERROR ejecutando analisis_kelly_precio_gate_29jul.py: {r.stderr[-2000:]}")
