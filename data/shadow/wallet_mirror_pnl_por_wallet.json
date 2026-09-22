@@ -330,13 +330,13 @@
   "n_suficiente_para_concluir": false
  },
  "0xda770326bd091d26f816917aa83a6baff668683f": {
-  "n": 14,
-  "pnl_total_eur": 4.2865,
-  "pnl_medio_eur": 0.3062,
-  "hit_rate": 0.7143,
+  "n": 15,
+  "pnl_total_eur": 3.2365,
+  "pnl_medio_eur": 0.2158,
+  "hit_rate": 0.6667,
   "fuentes": [
    "sports"
   ],
-  "n_suficiente_para_concluir": false
+  "n_suficiente_para_concluir": true
  }
 }
