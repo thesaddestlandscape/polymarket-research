@@ -108,6 +108,7 @@ import candidatas_sin_fillability_depth_fase0
 # ballenas_executor_15min.py el 20-Ago).
 import favorito_confirmado_depth_fase0
 import favorito_confirmado_60_240min_depth_fase0
+import liquidaciones_depth_fase0
 import ballenas_confirmadas_15m_buyno_depth_fase0
 import libro_multinivel_fase0
 import gbm_late_reactivo_fase0
@@ -141,6 +142,7 @@ OBSERVADORES = [
     (resolution_sniper_fade_depth_fase0, "resolution_sniper_fade_depth_fase0.log", "_log"),
     (favorito_confirmado_depth_fase0, "favorito_confirmado_depth_fase0.log", "log"),
     (favorito_confirmado_60_240min_depth_fase0, "favorito_confirmado_60_240min_depth_fase0.log", "log"),
+    (liquidaciones_depth_fase0, "liquidaciones_depth_fase0.log", "log"),
     (ballenas_confirmadas_15m_buyno_depth_fase0, "ballenas_confirmadas_15m_buyno_depth_fase0.log", "log"),
     (bot_wallets_gate_bucket_fase0, "bot_wallets_gate_bucket_fase0.log", "_log"),
     (momentum_ibs_15m_depth_fase0, "momentum_ibs_15m_depth_fase0.log", "_log"),
