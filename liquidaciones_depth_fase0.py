@@ -1,36 +1,54 @@
 #!/usr/bin/env python3
 """
 liquidaciones_depth_fase0.py -- FASE 0 (SOLO OBSERVACIÓN) de profundidad
-real en baja latencia para LIQUIDACIONES_5M#ETH#5min#BUY_YES, zona
-[0.47,0.49) -- petición explícita Javi 22-Sep, tras el hallazgo del edge
-quirúrgico universal (train n=44 +0,255€ -> fwd n=18 +0,709€, fill-ability
-33,9% medida con el observador genérico de detección, ver CLAUDE.md pt.20
-"LIQUIDACIONES_5M/60M -- pendiente de instrumentar fill-ability").
+real en baja latencia para TODA la familia LIQUIDACIONES_5M/15M/60M
+(6 monedas x 3 marcos x 2 direcciones) -- petición explícita Javi 22-Sep:
+"ponle el requote y baja latencia a todas las estrategias y a todos los
+dry_run que lo necesiten". Generaliza la versión inicial (solo ETH#5min
+#BUY_YES[0.47,0.49)) tras auditar el resto del universo Arquetipo B y
+confirmar que YA tenía cobertura (FAVORITO_CONFIRMADO*, BALLENAS_TARDIAS/
+CONFIRMADAS_15M, WALLET_MIRROR, SNIPER/DISPERSO/WEEKLY_*, MOMENTUM_IBS_*_
+BALLENA -- todos con ejecutor/segunda-consulta propia ya construidos).
+LIQUIDACIONES era el único hueco real (CLAUDE.md pt.20, pendiente desde
+27-Ago).
 
 Mismo patrón EXACTO que favorito_confirmado_depth_fase0.py (no
 reinventar) -- la diferencia es la condición de disparo: FAVORITO_
-CONFIRMADO dispara por un umbral de PRECIO fijo; LIQUIDACIONES_5M
-dispara por una condición COMPUESTA (replica _s_liquidaciones de
-shadow_predict.py, ventana_min=5/lookback=2min/minutos_min_abierto=1.0,
-ver ese módulo -- no reimplementar la fórmula del imbalance aparte, solo
-leer el mismo JSON que ya escribe fetch_binance_liquidations.py/screen
-liqs):
-  1. imbalance del lookback 2min disponible (n>=1) y su signo implica
-     BUY_YES (imbalance>0 -> p_yes=0.5+imbalance*0.5>0.5).
-  2. minutos_vividos>=1.0 (mismo piso que la estrategia real).
-  3. precio YES (ask público) dentro de la zona objetivo [0.47,0.49) --
-     más estrecho que el LIQUIDACIONES_LAG_MAX=0.12 genérico de la
-     estrategia real, es justo la zona que confirmó el quirúrgico.
+CONFIRMADO dispara por un umbral de PRECIO fijo; LIQUIDACIONES dispara
+por una condición COMPUESTA que replica _s_liquidaciones de shadow_
+predict.py EXACTAMENTE (no reimplementar la fórmula del imbalance
+aparte, solo leer el mismo JSON que ya escribe fetch_binance_
+liquidations.py/screen liqs):
+  1. imbalance del lookback correspondiente disponible (n>=1) y su signo
+     implica la dirección (imbalance>0 -> BUY_YES, <0 -> BUY_NO).
+  2. minutos_vividos >= minutos_min_abierto (mismo piso que la estrategia
+     real, distinto por marco: 5min=1.0, 15min=1.5, 60min=5.0).
+  3. |precio YES - 0.5| <= LIQUIDACIONES_LAG_MAX=0.12 -- MISMO filtro que
+     la estrategia real (no una zona más estrecha inventada aquí): se
+     observa el rango completo donde la estrategia real consideraría
+     operar, para que el gate_bucket_propio de esta familia pueda
+     confirmar/descartar CUALQUIER micro-bucket con datos reales, no solo
+     el que el quirúrgico ya encontró.
 
-En el PRIMER instante en que las 3 condiciones se cumplen a la vez,
-consulta profundidad real del lado YES (lt._consultar_profundidad_libro,
-solo lectura, nunca ordena). Escribe con STRATEGY sintética
-"LIQUIDACIONES_DEPTH_FASE0" (nunca puede estar en pares_permitidos_live,
-mismo aislamiento que FAVORITO_CONFIRMADO_DEPTH_FASE0/WALLET_MIRROR --
-no contamina el aprendizaje causal ni gate_bucket_propio de la familia
-real LIQUIDACIONES_5M).
+⚠️ Un thread por (activo, marco) cubre AMBAS direcciones a la vez (mismo
+mercado/libro, evita duplicar consultas a la API) -- 18 threads en total
+(6 monedas x 3 marcos), no 36.
 
-NO coloca, cancela ni modifica ninguna orden real.
+En el PRIMER instante en que las 3 condiciones se cumplen a la vez para
+CADA dirección, consulta profundidad real del lado correspondiente
+(lt._consultar_profundidad_libro, solo lectura, nunca ordena). Escribe
+con STRATEGY sintética "LIQUIDACIONES_DEPTH_FASE0" (nunca puede estar en
+pares_permitidos_live, mismo aislamiento que FAVORITO_CONFIRMADO_DEPTH_
+FASE0/WALLET_MIRROR -- no contamina el aprendizaje causal ni gate_bucket_
+propio de la familia real LIQUIDACIONES_5M/15M/60M).
+
+⚠️ NO coloca, cancela ni modifica ninguna orden real, y esto NO cambia el
+principio de fondo del proyecto: cualquier ejecutor REAL que llegue a
+construirse sobre esta familia en el futuro tiene que exigir
+gate_bucket_propio.evaluar()=="bueno_confirmado" fail-closed antes de
+disparar -- exactamente igual que ballenas_executor_15min.py/momentum_
+ibs_ballena_executor.py ya hacen hoy (verificado en código, 22-Sep). No
+se entra nunca a un precio fuera de un micro-bucket confirmado en vivo.
 
 Se fusiona en observadores_fase0.py (screen "observadores") -- NUNCA
 lanzar una screen suelta para este script.
@@ -57,10 +75,11 @@ CLOB_BOOK_URL = "https://clob.polymarket.com/book"
 
 STRATEGY = "LIQUIDACIONES_DEPTH_FASE0"  # sintética, nunca en pares_permitidos_live
 
-# (activo, ventana_min, direccion, lookback, minutos_min_abierto, zona_lo, zona_hi)
-TUPLAS = [
-    ("ETH", 5, "BUY_YES", "2min", 1.0, 0.47, 0.49),
-]
+ACTIVOS = ["BTC", "ETH", "SOL", "XRP", "DOGE", "BNB"]
+# (ventana_min, lookback, minutos_min_abierto) -- MISMOS valores exactos que
+# s_liquidaciones_5min/15min/60min en shadow_predict.py, no reinventar.
+MARCOS = [(5, "2min", 1.0), (15, "5min", 1.5), (60, "15min", 5.0)]
+LIQUIDACIONES_LAG_MAX = 0.12  # idéntico a shadow_predict.py::LIQUIDACIONES_LAG_MAX
 
 NUDGE = 0.06
 POLL_INTERVAL_S = 1.0
@@ -198,13 +217,49 @@ def _registrar_prediccion(activo: str, ventana_min: int, direccion: str, mercado
         log(f"aviso: no se pudo registrar predicción: {e}", activo, ventana_min, direccion)
 
 
-def watch_window(activo: str, ventana_min: int, direccion: str, lookback: str,
-                  minutos_min_abierto: float, zona_lo: float, zona_hi: float,
+def _procesar_direccion(activo: str, ventana_min: int, direccion: str, mercado: dict,
+                         py: float, imbalance: float, n_liq: int, restante: float,
+                         ts_start: float, now: float) -> None:
+    ts_deteccion = datetime.now(timezone.utc).isoformat(timespec="seconds")
+    lag_apertura_s = now - ts_start
+    token_lado = mercado["yes_token"] if direccion == "BUY_YES" else mercado["no_token"]
+    precio_lado = py if direccion == "BUY_YES" else round(1.0 - py, 6)
+    prob_yes = min(0.97, py + NUDGE) if direccion == "BUY_YES" else max(0.03, py - NUDGE)
+
+    try:
+        prof = lt._consultar_profundidad_libro(None, token_lado, precio_lado, STAKE_REFERENCIA_EUR)
+    except Exception:
+        prof = None
+
+    log(f"[{mercado['market_id']}] CONFIRMADO py={py:.3f} imbalance={imbalance:+.3f} "
+        f"lag_apertura={lag_apertura_s:.1f}s restante={restante:.1f}s "
+        f"ratio={prof.get('ratio_vs_stake') if prof and prof.get('ok') else None}",
+        activo, ventana_min, direccion)
+
+    _vistos.add(f"{mercado['market_id']}|{direccion}")
+    _escribir_auditoria({
+        "ts_deteccion_utc": ts_deteccion,
+        "market_id": mercado["market_id"],
+        "activo": activo, "ventana_min": ventana_min, "direccion": direccion,
+        "lag_apertura_s": round(lag_apertura_s, 2),
+        "restante_s": round(restante, 1),
+        "py_ask_yes": round(py, 4),
+        "imbalance": round(imbalance, 4),
+        "liq_n": n_liq,
+        "profundidad_ratio": prof.get("ratio_vs_stake") if prof and prof.get("ok") else "",
+        "profundidad_ask": prof.get("mejor_ask") if prof and prof.get("ok") else "",
+    })
+    _registrar_prediccion(activo, ventana_min, direccion, mercado, py, prob_yes,
+                          restante, lag_apertura_s, prof)
+
+
+def watch_window(activo: str, ventana_min: int, lookback: str, minutos_min_abierto: float,
                   ts_end: int) -> None:
+    """Cubre BUY_YES y BUY_NO a la vez -- mismo mercado, mismo libro."""
     ts_start = ts_end - ventana_min * 60
     mercado = None
-    n_polls = 0
-    while True:
+    pendientes = {"BUY_YES", "BUY_NO"}
+    while pendientes:
         now = time.time()
         restante = ts_end - now
         if restante < HARD_FLOOR_S:
@@ -215,7 +270,9 @@ def watch_window(activo: str, ventana_min: int, direccion: str, lookback: str,
             if mercado is None:
                 time.sleep(POLL_INTERVAL_S)
                 continue
-            if f"{mercado['market_id']}|{direccion}" in _vistos:
+            pendientes = {d for d in ("BUY_YES", "BUY_NO")
+                         if f"{mercado['market_id']}|{d}" not in _vistos}
+            if not pendientes:
                 return
 
         minutos_vividos = ventana_min - restante / 60.0
@@ -223,16 +280,13 @@ def watch_window(activo: str, ventana_min: int, direccion: str, lookback: str,
             time.sleep(POLL_INTERVAL_S)
             continue
 
-        estado = _cargar_liquidaciones().get(activo, {})
-        datos = estado.get(lookback)
-        n_polls += 1
+        datos = _cargar_liquidaciones().get(activo, {}).get(lookback)
         if not datos or datos.get("imbalance") is None or datos.get("n", 0) < 1:
             time.sleep(POLL_INTERVAL_S)
             continue
         imbalance = datos["imbalance"]
-        # direccion fija BUY_YES en TUPLAS -- imbalance>0 implica p_yes>0.5
-        # (misma formula que _s_liquidaciones: p_yes=0.5+imbalance*0.5).
-        if (direccion == "BUY_YES" and imbalance <= 0) or (direccion == "BUY_NO" and imbalance >= 0):
+        direccion_implicada = "BUY_YES" if imbalance > 0 else ("BUY_NO" if imbalance < 0 else None)
+        if direccion_implicada is None or direccion_implicada not in pendientes:
             time.sleep(POLL_INTERVAL_S)
             continue
 
@@ -242,58 +296,25 @@ def watch_window(activo: str, ventana_min: int, direccion: str, lookback: str,
             time.sleep(POLL_INTERVAL_S)
             continue
 
-        cruza = zona_lo <= py < zona_hi
-        if cruza:
-            ts_deteccion = datetime.now(timezone.utc).isoformat(timespec="seconds")
-            lag_apertura_s = now - ts_start
-            token_lado = mercado["yes_token"] if direccion == "BUY_YES" else mercado["no_token"]
-            precio_lado = py if direccion == "BUY_YES" else round(1.0 - py, 6)
-            prob_yes = min(0.97, py + NUDGE) if direccion == "BUY_YES" else max(0.03, py - NUDGE)
-
-            try:
-                prof = lt._consultar_profundidad_libro(None, token_lado, precio_lado,
-                                                        STAKE_REFERENCIA_EUR)
-            except Exception:
-                prof = None
-
-            log(f"[{mercado['market_id']}] CONFIRMADO py={py:.3f} imbalance={imbalance:+.3f} "
-                f"lag_apertura={lag_apertura_s:.1f}s restante={restante:.1f}s "
-                f"ratio={prof.get('ratio_vs_stake') if prof and prof.get('ok') else None} "
-                f"({n_polls} polls)", activo, ventana_min, direccion)
-
-            _vistos.add(f"{mercado['market_id']}|{direccion}")
-            _escribir_auditoria({
-                "ts_deteccion_utc": ts_deteccion,
-                "market_id": mercado["market_id"],
-                "activo": activo, "ventana_min": ventana_min, "direccion": direccion,
-                "lag_apertura_s": round(lag_apertura_s, 2),
-                "restante_s": round(restante, 1),
-                "py_ask_yes": round(py, 4),
-                "imbalance": round(imbalance, 4),
-                "liq_n": datos["n"],
-                "profundidad_ratio": prof.get("ratio_vs_stake") if prof and prof.get("ok") else "",
-                "profundidad_ask": prof.get("mejor_ask") if prof and prof.get("ok") else "",
-            })
-            _registrar_prediccion(activo, ventana_min, direccion, mercado, py, prob_yes,
-                                   restante, lag_apertura_s, prof)
-            return
+        if abs(py - 0.5) <= LIQUIDACIONES_LAG_MAX:
+            _procesar_direccion(activo, ventana_min, direccion_implicada, mercado, py,
+                               imbalance, datos["n"], restante, ts_start, now)
+            pendientes.discard(direccion_implicada)
 
         time.sleep(POLL_INTERVAL_S)
 
 
-def hilo_tupla(activo: str, ventana_min: int, direccion: str, lookback: str,
-               minutos_min_abierto: float, zona_lo: float, zona_hi: float) -> None:
-    log("hilo arrancado", activo, ventana_min, direccion)
+def hilo_marco(activo: str, ventana_min: int, lookback: str, minutos_min_abierto: float) -> None:
+    log("hilo arrancado", activo, ventana_min)
     while True:
         try:
             now = time.time()
             paso_s = ventana_min * 60
             ts_end = (int(now) // paso_s + 1) * paso_s
-            watch_window(activo, ventana_min, direccion, lookback, minutos_min_abierto,
-                        zona_lo, zona_hi, ts_end)
+            watch_window(activo, ventana_min, lookback, minutos_min_abierto, ts_end)
             time.sleep(max(1, ts_end + 2 - time.time()))
         except Exception as e:
-            log(f"error en hilo: {e} -- reintenta en 5s", activo, ventana_min, direccion)
+            log(f"error en hilo: {e} -- reintenta en 5s", activo, ventana_min)
             time.sleep(5)
 
 
@@ -301,15 +322,18 @@ def main():
     global _vistos
     _vistos = _cargar_vistos()
     DIR_SHADOW.mkdir(parents=True, exist_ok=True)
-    log(f"arrancado -- {len(TUPLAS)} tuplas: {TUPLAS}")
+    n_hilos = len(ACTIVOS) * len(MARCOS)
+    log(f"arrancado -- {n_hilos} hilos ({len(ACTIVOS)} monedas x {len(MARCOS)} marcos, "
+        f"ambas direcciones por hilo)")
     hilos = []
-    for activo, ventana_min, direccion, lookback, minutos_min_abierto, zona_lo, zona_hi in TUPLAS:
-        t = threading.Thread(target=hilo_tupla,
-                             args=(activo, ventana_min, direccion, lookback,
-                                   minutos_min_abierto, zona_lo, zona_hi), daemon=True)
-        t.start()
-        hilos.append(t)
-        time.sleep(0.5)
+    for activo in ACTIVOS:
+        for ventana_min, lookback, minutos_min_abierto in MARCOS:
+            t = threading.Thread(target=hilo_marco,
+                                 args=(activo, ventana_min, lookback, minutos_min_abierto),
+                                 daemon=True)
+            t.start()
+            hilos.append(t)
+            time.sleep(0.3)
     while True:
         time.sleep(3600)
 
