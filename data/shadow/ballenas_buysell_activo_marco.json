@@ -1,180 +1,188 @@
 {
-  "generado_utc": "2026-09-21T06:03:28.072504+00:00",
-  "n_wallets_analizadas": 24,
+  "generado_utc": "2026-09-22T06:03:32.665009+00:00",
+  "n_wallets_analizadas": 27,
   "resumen_por_activo_marco": {
     "BTC#5min": {
-      "n_wallets_distintas": 11,
-      "n_roundtrips": 1681,
-      "pnl_total_realizado": 20264.67,
-      "pnl_por_roundtrip": 12.0551,
+      "n_wallets_distintas": 13,
+      "n_roundtrips": 1871,
+      "pnl_total_realizado": 25518.06,
+      "pnl_por_roundtrip": 13.6387,
       "hit_rate": 0.734,
-      "volumen_usd": 109536.3,
-      "gap_mediana_s": 119,
-      "gap_p25_s": 69,
-      "gap_p75_s": 183
+      "volumen_usd": 130214.8,
+      "gap_mediana_s": 118,
+      "gap_p25_s": 67,
+      "gap_p75_s": 178
     },
     "BTC#15min": {
-      "n_wallets_distintas": 8,
-      "n_roundtrips": 503,
-      "pnl_total_realizado": 4060.23,
-      "pnl_por_roundtrip": 8.072,
-      "hit_rate": 0.664,
-      "volumen_usd": 9881.9,
-      "gap_mediana_s": 136,
-      "gap_p25_s": 35,
-      "gap_p75_s": 329
-    },
-    "SOL#15min": {
-      "n_wallets_distintas": 5,
-      "n_roundtrips": 197,
-      "pnl_total_realizado": -87.94,
-      "pnl_por_roundtrip": -0.4464,
-      "hit_rate": 0.244,
-      "volumen_usd": 358.1,
-      "gap_mediana_s": 80,
-      "gap_p25_s": 38,
-      "gap_p75_s": 174
-    },
-    "ETH#5min": {
-      "n_wallets_distintas": 7,
-      "n_roundtrips": 174,
-      "pnl_total_realizado": 567.34,
-      "pnl_por_roundtrip": 3.2605,
-      "hit_rate": 0.672,
-      "volumen_usd": 1427.5,
-      "gap_mediana_s": 56,
-      "gap_p25_s": 23,
-      "gap_p75_s": 122
+      "n_wallets_distintas": 9,
+      "n_roundtrips": 546,
+      "pnl_total_realizado": 323.34,
+      "pnl_por_roundtrip": 0.5922,
+      "hit_rate": 0.463,
+      "volumen_usd": 23399.2,
+      "gap_mediana_s": 181,
+      "gap_p25_s": 76,
+      "gap_p75_s": 360
     },
     "ETH#15min": {
       "n_wallets_distintas": 5,
-      "n_roundtrips": 156,
-      "pnl_total_realizado": 89.33,
-      "pnl_por_roundtrip": 0.5726,
-      "hit_rate": 0.641,
-      "volumen_usd": 593.5,
-      "gap_mediana_s": 156,
-      "gap_p25_s": 72,
-      "gap_p75_s": 375
+      "n_roundtrips": 227,
+      "pnl_total_realizado": -124.24,
+      "pnl_por_roundtrip": -0.5473,
+      "hit_rate": 0.595,
+      "volumen_usd": 649.3,
+      "gap_mediana_s": 44,
+      "gap_p25_s": 20,
+      "gap_p75_s": 105
     },
     "XRP#5min": {
-      "n_wallets_distintas": 3,
-      "n_roundtrips": 139,
-      "pnl_total_realizado": 55.91,
-      "pnl_por_roundtrip": 0.4022,
-      "hit_rate": 0.655,
-      "volumen_usd": 514.8,
-      "gap_mediana_s": 62,
-      "gap_p25_s": 31,
-      "gap_p75_s": 119
+      "n_wallets_distintas": 6,
+      "n_roundtrips": 164,
+      "pnl_total_realizado": 46.67,
+      "pnl_por_roundtrip": 0.2846,
+      "hit_rate": 0.659,
+      "volumen_usd": 901.4,
+      "gap_mediana_s": 71,
+      "gap_p25_s": 33,
+      "gap_p75_s": 120
+    },
+    "XRP#15min": {
+      "n_wallets_distintas": 4,
+      "n_roundtrips": 154,
+      "pnl_total_realizado": -33.91,
+      "pnl_por_roundtrip": -0.2202,
+      "hit_rate": 0.448,
+      "volumen_usd": 355.6,
+      "gap_mediana_s": 68,
+      "gap_p25_s": 18,
+      "gap_p75_s": 214
     },
     "SOL#5min": {
       "n_wallets_distintas": 5,
-      "n_roundtrips": 109,
-      "pnl_total_realizado": 1.02,
-      "pnl_por_roundtrip": 0.0093,
-      "hit_rate": 0.495,
-      "volumen_usd": 350.2,
+      "n_roundtrips": 119,
+      "pnl_total_realizado": -82.57,
+      "pnl_por_roundtrip": -0.6939,
+      "hit_rate": 0.513,
+      "volumen_usd": 357.8,
       "gap_mediana_s": 53,
-      "gap_p25_s": 24,
-      "gap_p75_s": 87
+      "gap_p25_s": 18,
+      "gap_p75_s": 123
     },
-    "XRP#15min": {
+    "SOL#15min": {
       "n_wallets_distintas": 3,
-      "n_roundtrips": 64,
-      "pnl_total_realizado": -27.32,
-      "pnl_por_roundtrip": -0.4269,
-      "hit_rate": 0.297,
-      "volumen_usd": 147.1,
-      "gap_mediana_s": 113,
-      "gap_p25_s": 73,
-      "gap_p75_s": 282
+      "n_roundtrips": 117,
+      "pnl_total_realizado": -19.35,
+      "pnl_por_roundtrip": -0.1654,
+      "hit_rate": 0.573,
+      "volumen_usd": 282.1,
+      "gap_mediana_s": 102,
+      "gap_p25_s": 32,
+      "gap_p75_s": 234
     },
-    "DOGE#5min": {
-      "n_wallets_distintas": 3,
-      "n_roundtrips": 36,
-      "pnl_total_realizado": 34.62,
-      "pnl_por_roundtrip": 0.9618,
-      "hit_rate": 0.389,
-      "volumen_usd": 202.7,
-      "gap_mediana_s": 89,
-      "gap_p25_s": 40,
-      "gap_p75_s": 121
-    },
-    "BNB#5min": {
-      "n_wallets_distintas": 5,
-      "n_roundtrips": 33,
-      "pnl_total_realizado": 14.55,
-      "pnl_por_roundtrip": 0.4409,
-      "hit_rate": 0.545,
-      "volumen_usd": 125.8,
-      "gap_mediana_s": 91,
-      "gap_p25_s": 54,
-      "gap_p75_s": 106
+    "ETH#5min": {
+      "n_wallets_distintas": 7,
+      "n_roundtrips": 112,
+      "pnl_total_realizado": -52.11,
+      "pnl_por_roundtrip": -0.4652,
+      "hit_rate": 0.571,
+      "volumen_usd": 655.9,
+      "gap_mediana_s": 84,
+      "gap_p25_s": 41,
+      "gap_p75_s": 153
     },
     "DOGE#15min": {
+      "n_wallets_distintas": 3,
+      "n_roundtrips": 45,
+      "pnl_total_realizado": -87.45,
+      "pnl_por_roundtrip": -1.9433,
+      "hit_rate": 0.244,
+      "volumen_usd": 127.2,
+      "gap_mediana_s": 57,
+      "gap_p25_s": 23,
+      "gap_p75_s": 222
+    },
+    "DOGE#5min": {
       "n_wallets_distintas": 2,
-      "n_roundtrips": 28,
-      "pnl_total_realizado": -12.6,
-      "pnl_por_roundtrip": -0.4499,
-      "hit_rate": 0.036,
-      "volumen_usd": 69.3,
-      "gap_mediana_s": 45,
+      "n_roundtrips": 23,
+      "pnl_total_realizado": 2.24,
+      "pnl_por_roundtrip": 0.0975,
+      "hit_rate": 0.522,
+      "volumen_usd": 226.7,
+      "gap_mediana_s": 41,
       "gap_p25_s": 18,
-      "gap_p75_s": 68
+      "gap_p75_s": 70
+    },
+    "BNB#5min": {
+      "n_wallets_distintas": 2,
+      "n_roundtrips": 23,
+      "pnl_total_realizado": 17.32,
+      "pnl_por_roundtrip": 0.7529,
+      "hit_rate": 0.435,
+      "volumen_usd": 90.4,
+      "gap_mediana_s": 75,
+      "gap_p25_s": 29,
+      "gap_p75_s": 110
     },
     "BNB#15min": {
       "n_wallets_distintas": 3,
-      "n_roundtrips": 16,
-      "pnl_total_realizado": -9.51,
-      "pnl_por_roundtrip": -0.5942,
-      "hit_rate": 0.312,
-      "volumen_usd": 46.1,
-      "gap_mediana_s": 204,
-      "gap_p25_s": 22,
-      "gap_p75_s": 401
+      "n_roundtrips": 13,
+      "pnl_total_realizado": -15.91,
+      "pnl_por_roundtrip": -1.224,
+      "hit_rate": 0.308,
+      "volumen_usd": 31.5,
+      "gap_mediana_s": 54,
+      "gap_p25_s": 21,
+      "gap_p75_s": 57
     }
   },
   "detalle_wallets": {
     "0xfea31bc088000ff909be1dfd8d0e3f2c7ef2d227": {
       "nombre": "ndb1",
-      "pnl_ventana_diaria": 5759579.91,
+      "pnl_ventana_diaria": 3934485.0700000003,
       "por_activo_marco": {}
     },
     "0x22e4248bdb066f65c9f11cd66cdd3719a28eef1c": {
       "nombre": "ProfessionalPunter",
-      "pnl_ventana_diaria": 1126223.37,
+      "pnl_ventana_diaria": 1013686.64,
       "por_activo_marco": {}
     },
     "0xc6dd722558dbfbd8fa780efcbe819ed8c6604b9f": {
       "nombre": "tourists",
-      "pnl_ventana_diaria": 630274.9,
-      "por_activo_marco": {}
-    },
-    "0x93fb8127a1b21a112b11af936361225df0563e4a": {
-      "nombre": "LlamaLoco0000",
-      "pnl_ventana_diaria": 488297.83,
-      "por_activo_marco": {}
-    },
-    "0x7523cafcee7bcf2db9a79d80e0d79b88a9a54c4c": {
-      "nombre": "DonaldinhoTrumpito",
-      "pnl_ventana_diaria": 352088.92,
-      "por_activo_marco": {}
-    },
-    "0x6916cc00aa1c3e75ecf4081df7cae7d2f3592fd4": {
-      "nombre": "x6916Cc00AA1c3e75ECf4081DF7caE7D2f3592fd4",
-      "pnl_ventana_diaria": 340581.23,
+      "pnl_ventana_diaria": 851910.01,
       "por_activo_marco": {}
     },
     "0xb87532a1a04c654700aa8153b3a95675ac4f4b16": {
       "nombre": "En11006",
-      "pnl_ventana_diaria": 261582.34000000003,
+      "pnl_ventana_diaria": 407896.68000000005,
+      "por_activo_marco": {}
+    },
+    "0x6916cc00aa1c3e75ecf4081df7cae7d2f3592fd4": {
+      "nombre": "x6916Cc00AA1c3e75ECf4081DF7caE7D2f3592fd4",
+      "pnl_ventana_diaria": 396930.83999999997,
       "por_activo_marco": {}
     },
     "0x6c8b154ddf173760ac3916af5504d1f1f2ae645c": {
-      "nombre": "0x6c8b154d",
-      "pnl_ventana_diaria": 133766.67,
+      "nombre": "0x6c8b154ddf173760ac3916af5504d1f1f2ae645c",
+      "pnl_ventana_diaria": 94833.76,
       "por_activo_marco": {
+        "BTC#5min": {
+          "n_roundtrips": 20,
+          "pnl_realizado": 23.01,
+          "hit_rate": 0.7,
+          "volumen_usd": 123.0
+        },
+        "XRP#5min": {
+          "n_roundtrips": 1,
+          "pnl_realizado": 0.38,
+          "hit_rate": 1.0,
+          "volumen_usd": 5.4
+        },
+        "BTC#15min": {
+          "n_roundtrips": 1,
+          "pnl_realizado": 0.11,
+          "hit_rate": 1.0,
+          "volumen_usd": 5.1
+        },
         "ETH#15min": {
           "n_roundtrips": 1,
           "pnl_realizado": -4.68,
@@ -186,12 +194,6 @@
           "pnl_realizado": -3.33,
           "hit_rate": 0.0,
           "volumen_usd": 6.7
-        },
-        "BTC#5min": {
-          "n_roundtrips": 18,
-          "pnl_realizado": 28.71,
-          "hit_rate": 0.722,
-          "volumen_usd": 117.7
         },
         "ETH#5min": {
           "n_roundtrips": 2,
@@ -224,22 +226,16 @@
           "volumen_usd": 27.6
         },
         "BNB#5min": {
-          "n_roundtrips": 5,
-          "pnl_realizado": 0.5,
-          "hit_rate": 0.6,
-          "volumen_usd": 19.2
+          "n_roundtrips": 2,
+          "pnl_realizado": -2.88,
+          "hit_rate": 0.0,
+          "volumen_usd": 5.9
         },
         "SOL#5min": {
-          "n_roundtrips": 4,
-          "pnl_realizado": -1.01,
-          "hit_rate": 0.75,
-          "volumen_usd": 24.0
-        },
-        "BTC#15min": {
           "n_roundtrips": 2,
-          "pnl_realizado": 22.13,
-          "hit_rate": 1.0,
-          "volumen_usd": 34.6
+          "pnl_realizado": -1.81,
+          "hit_rate": 0.5,
+          "volumen_usd": 13.2
         }
       }
     },
@@ -247,89 +243,71 @@
       "nombre": "ByteBadger92",
       "pnl_ventana_diaria": 92194.89,
       "por_activo_marco": {
-        "XRP#15min": {
-          "n_roundtrips": 62,
-          "pnl_realizado": -18.05,
-          "hit_rate": 0.306,
-          "volumen_usd": 138.5
-        },
-        "ETH#5min": {
-          "n_roundtrips": 66,
-          "pnl_realizado": 26.49,
-          "hit_rate": 0.909,
-          "volumen_usd": 125.8
-        },
         "SOL#15min": {
-          "n_roundtrips": 185,
-          "pnl_realizado": -108.62,
-          "hit_rate": 0.227,
-          "volumen_usd": 283.5
-        },
-        "XRP#5min": {
-          "n_roundtrips": 38,
-          "pnl_realizado": 12.23,
-          "hit_rate": 0.632,
-          "volumen_usd": 83.3
+          "n_roundtrips": 113,
+          "pnl_realizado": -18.52,
+          "hit_rate": 0.575,
+          "volumen_usd": 261.7
         },
         "BTC#15min": {
-          "n_roundtrips": 208,
-          "pnl_realizado": -8.91,
-          "hit_rate": 0.49,
-          "volumen_usd": 461.2
+          "n_roundtrips": 128,
+          "pnl_realizado": -60.69,
+          "hit_rate": 0.273,
+          "volumen_usd": 263.3
         },
         "ETH#15min": {
-          "n_roundtrips": 116,
-          "pnl_realizado": 30.23,
-          "hit_rate": 0.707,
-          "volumen_usd": 221.5
+          "n_roundtrips": 197,
+          "pnl_realizado": 36.41,
+          "hit_rate": 0.645,
+          "volumen_usd": 496.1
         },
-        "BTC#5min": {
-          "n_roundtrips": 47,
-          "pnl_realizado": 79.78,
-          "hit_rate": 0.915,
-          "volumen_usd": 143.3
+        "XRP#15min": {
+          "n_roundtrips": 135,
+          "pnl_realizado": -26.86,
+          "hit_rate": 0.437,
+          "volumen_usd": 302.0
         },
         "SOL#5min": {
-          "n_roundtrips": 37,
-          "pnl_realizado": -1.95,
-          "hit_rate": 0.432,
-          "volumen_usd": 67.2
+          "n_roundtrips": 59,
+          "pnl_realizado": 6.22,
+          "hit_rate": 0.593,
+          "volumen_usd": 127.9
+        },
+        "BTC#5min": {
+          "n_roundtrips": 32,
+          "pnl_realizado": 19.97,
+          "hit_rate": 0.844,
+          "volumen_usd": 98.4
+        },
+        "ETH#5min": {
+          "n_roundtrips": 38,
+          "pnl_realizado": 2.7,
+          "hit_rate": 0.658,
+          "volumen_usd": 63.9
+        },
+        "XRP#5min": {
+          "n_roundtrips": 34,
+          "pnl_realizado": 20.33,
+          "hit_rate": 0.706,
+          "volumen_usd": 72.5
         }
       }
     },
-    "0x9e3ed7b661a903fc97afcf49e0f014ebe869f882": {
-      "nombre": "0x9e3ed7b661a903fc97afcf49e0f014ebe869f882-1783406009396",
-      "pnl_ventana_diaria": 82776.11,
+    "0xf893bba14f456745c660347044b18e51fd1b7920": {
+      "nombre": "ZZZLY",
+      "pnl_ventana_diaria": 48578.84,
       "por_activo_marco": {
         "BTC#15min": {
-          "n_roundtrips": 11,
-          "pnl_realizado": -90.67,
-          "hit_rate": 0.727,
-          "volumen_usd": 34.5
+          "n_roundtrips": 56,
+          "pnl_realizado": -635.28,
+          "hit_rate": 0.393,
+          "volumen_usd": 15828.3
         },
         "BTC#5min": {
-          "n_roundtrips": 70,
-          "pnl_realizado": 129.13,
-          "hit_rate": 0.7,
-          "volumen_usd": 1051.1
-        },
-        "ETH#5min": {
-          "n_roundtrips": 26,
-          "pnl_realizado": 167.47,
-          "hit_rate": 0.654,
-          "volumen_usd": 383.4
-        },
-        "BNB#15min": {
           "n_roundtrips": 1,
-          "pnl_realizado": 5.79,
-          "hit_rate": 1.0,
-          "volumen_usd": 11.9
-        },
-        "BNB#5min": {
-          "n_roundtrips": 1,
-          "pnl_realizado": 0.94,
-          "hit_rate": 1.0,
-          "volumen_usd": 1.8
+          "pnl_realizado": -12.68,
+          "hit_rate": 0.0,
+          "volumen_usd": 860.6
         }
       }
     },
@@ -338,47 +316,78 @@
       "pnl_ventana_diaria": 45894.92,
       "por_activo_marco": {
         "BTC#5min": {
-          "n_roundtrips": 81,
-          "pnl_realizado": 174.18,
-          "hit_rate": 0.642,
-          "volumen_usd": 1163.7
+          "n_roundtrips": 157,
+          "pnl_realizado": -139.37,
+          "hit_rate": 0.688,
+          "volumen_usd": 2706.7
         },
         "ETH#15min": {
-          "n_roundtrips": 1,
-          "pnl_realizado": -18.03,
-          "hit_rate": 0.0,
-          "volumen_usd": 0.7
+          "n_roundtrips": 4,
+          "pnl_realizado": 12.24,
+          "hit_rate": 1.0,
+          "volumen_usd": 21.7
         },
         "ETH#5min": {
-          "n_roundtrips": 19,
-          "pnl_realizado": 68.13,
-          "hit_rate": 0.474,
-          "volumen_usd": 180.4
-        },
-        "SOL#15min": {
-          "n_roundtrips": 3,
-          "pnl_realizado": -0.37,
-          "hit_rate": 0.0,
-          "volumen_usd": 3.6
+          "n_roundtrips": 17,
+          "pnl_realizado": 68.5,
+          "hit_rate": 0.765,
+          "volumen_usd": 260.4
         },
         "BTC#15min": {
-          "n_roundtrips": 4,
-          "pnl_realizado": 41.87,
-          "hit_rate": 1.0,
-          "volumen_usd": 67.1
+          "n_roundtrips": 35,
+          "pnl_realizado": 34.06,
+          "hit_rate": 0.686,
+          "volumen_usd": 144.5
         },
-        "BNB#5min": {
-          "n_roundtrips": 2,
-          "pnl_realizado": 4.26,
+        "XRP#5min": {
+          "n_roundtrips": 1,
+          "pnl_realizado": 1.44,
           "hit_rate": 1.0,
-          "volumen_usd": 10.0
+          "volumen_usd": 17.1
         }
       }
     },
-    "0x1465b79bff7992bc703e1aafb3683b1089647072": {
-      "nombre": "JnStrtPrdctnMrkts",
-      "pnl_ventana_diaria": 41162.759999999995,
-      "por_activo_marco": {}
+    "0x664a25f165a0150ce687410470f3352f5783fc5f": {
+      "nombre": "itsonlyamatteroftime",
+      "pnl_ventana_diaria": 42913.14,
+      "por_activo_marco": {
+        "DOGE#15min": {
+          "n_roundtrips": 13,
+          "pnl_realizado": -51.94,
+          "hit_rate": 0.769,
+          "volumen_usd": 37.2
+        },
+        "BTC#15min": {
+          "n_roundtrips": 120,
+          "pnl_realizado": -1582.9,
+          "hit_rate": 0.158,
+          "volumen_usd": 1680.7
+        },
+        "ETH#15min": {
+          "n_roundtrips": 7,
+          "pnl_realizado": -31.86,
+          "hit_rate": 0.571,
+          "volumen_usd": 41.3
+        },
+        "XRP#15min": {
+          "n_roundtrips": 10,
+          "pnl_realizado": 12.18,
+          "hit_rate": 1.0,
+          "volumen_usd": 28.2
+        },
+        "BNB#15min": {
+          "n_roundtrips": 1,
+          "pnl_realizado": -0.05,
+          "hit_rate": 0.0,
+          "volumen_usd": 2.0
+        },
+        "SOL#15min": {
+          "n_roundtrips": 3,
+          "pnl_realizado": -0.73,
+          "hit_rate": 0.667,
+          "volumen_usd": 10.5
+        }
+      }
     },
     "0x1a3459bf964bcb3ff37cb5d3d220735a3ba7ba5e": {
       "nombre": "YXiaoGod",
@@ -392,27 +401,50 @@
         }
       }
     },
-    "0x664a25f165a0150ce687410470f3352f5783fc5f": {
-      "nombre": "itsonlyamatteroftime",
-      "pnl_ventana_diaria": 33397.49,
+    "0x2476c35c4b70cbb0d0cdf8d4e5332a3c51718436": {
+      "nombre": "beheo123",
+      "pnl_ventana_diaria": 39271.92,
       "por_activo_marco": {
-        "BTC#15min": {
-          "n_roundtrips": 109,
-          "pnl_realizado": 1514.32,
-          "hit_rate": 0.917,
-          "volumen_usd": 4279.7
-        },
-        "SOL#15min": {
+        "BTC#5min": {
           "n_roundtrips": 6,
-          "pnl_realizado": 28.17,
-          "hit_rate": 1.0,
-          "volumen_usd": 54.1
+          "pnl_realizado": 268.91,
+          "hit_rate": 0.833,
+          "volumen_usd": 768.9
+        }
+      }
+    },
+    "0xafe65d1671a61dfaab2b463257450ec7f1fe8192": {
+      "nombre": "TOWERCAPITAL",
+      "pnl_ventana_diaria": 36226.47,
+      "por_activo_marco": {}
+    },
+    "0x9e3ed7b661a903fc97afcf49e0f014ebe869f882": {
+      "nombre": "0x9e3ed7b661a903fc97afcf49e0f014ebe869f882-1783406009396",
+      "pnl_ventana_diaria": 33407.689999999995,
+      "por_activo_marco": {
+        "BTC#5min": {
+          "n_roundtrips": 175,
+          "pnl_realizado": -574.24,
+          "hit_rate": 0.571,
+          "volumen_usd": 3279.9
         },
-        "ETH#15min": {
-          "n_roundtrips": 17,
-          "pnl_realizado": 141.13,
+        "BTC#15min": {
+          "n_roundtrips": 39,
+          "pnl_realizado": 59.37,
+          "hit_rate": 0.744,
+          "volumen_usd": 165.4
+        },
+        "ETH#5min": {
+          "n_roundtrips": 12,
+          "pnl_realizado": 43.02,
+          "hit_rate": 0.667,
+          "volumen_usd": 142.7
+        },
+        "XRP#5min": {
+          "n_roundtrips": 1,
+          "pnl_realizado": 0.32,
           "hit_rate": 1.0,
-          "volumen_usd": 292.9
+          "volumen_usd": 2.2
         }
       }
     },
@@ -421,63 +453,85 @@
       "pnl_ventana_diaria": 29895.7,
       "por_activo_marco": {}
     },
+    "0xd1436fd149ffe4ec20f385ecf91b55e54a8f83ec": {
+      "nombre": "0xD1436fd149ffE4EC20F385ECF91B55E54a8f83Ec-1762509323867",
+      "pnl_ventana_diaria": 24090.63,
+      "por_activo_marco": {}
+    },
     "0xdfddd5c3b996c4176d72c3ca7859f10a7c825585": {
       "nombre": "thismonth",
-      "pnl_ventana_diaria": 9039.63,
+      "pnl_ventana_diaria": 21813.48,
       "por_activo_marco": {
         "BTC#5min": {
-          "n_roundtrips": 66,
-          "pnl_realizado": 1315.82,
+          "n_roundtrips": 70,
+          "pnl_realizado": 1497.65,
           "hit_rate": 1.0,
-          "volumen_usd": 2122.4
+          "volumen_usd": 2454.3
         },
         "BTC#15min": {
-          "n_roundtrips": 103,
-          "pnl_realizado": 2660.46,
-          "hit_rate": 0.951,
-          "volumen_usd": 4595.8
+          "n_roundtrips": 111,
+          "pnl_realizado": 2822.29,
+          "hit_rate": 0.955,
+          "volumen_usd": 4907.6
+        }
+      }
+    },
+    "0xb6fef4c2c436ab8bbf07d017952e851dcf717394": {
+      "nombre": "0xb6fef4c2",
+      "pnl_ventana_diaria": 10122.080000000002,
+      "por_activo_marco": {}
+    },
+    "0x55be75bc445f94853dded6e897bde25a9c126c65": {
+      "nombre": "nano-banana-slop",
+      "pnl_ventana_diaria": 7159.37,
+      "por_activo_marco": {
+        "BTC#5min": {
+          "n_roundtrips": 40,
+          "pnl_realizado": -14.26,
+          "hit_rate": 0.4,
+          "volumen_usd": 121.9
         }
       }
     },
     "0xe3eeb127d5763a6e4ad597f773f9d259c94d5176": {
       "nombre": "sin_nombre_e3ee",
-      "pnl_ventana_diaria": 6604.87,
+      "pnl_ventana_diaria": 6932.29,
       "por_activo_marco": {
         "BNB#5min": {
-          "n_roundtrips": 20,
-          "pnl_realizado": 35.01,
-          "hit_rate": 0.6,
-          "volumen_usd": 91.2
-        },
-        "XRP#5min": {
-          "n_roundtrips": 50,
-          "pnl_realizado": 110.24,
-          "hit_rate": 0.88,
-          "volumen_usd": 242.6
-        },
-        "BTC#5min": {
-          "n_roundtrips": 81,
-          "pnl_realizado": 106.7,
-          "hit_rate": 0.543,
-          "volumen_usd": 1783.6
-        },
-        "ETH#5min": {
-          "n_roundtrips": 7,
-          "pnl_realizado": -11.68,
-          "hit_rate": 0.0,
-          "volumen_usd": 3.8
+          "n_roundtrips": 21,
+          "pnl_realizado": 20.2,
+          "hit_rate": 0.476,
+          "volumen_usd": 84.6
         },
         "DOGE#5min": {
-          "n_roundtrips": 27,
-          "pnl_realizado": 45.46,
-          "hit_rate": 0.519,
-          "volumen_usd": 190.5
+          "n_roundtrips": 20,
+          "pnl_realizado": 2.34,
+          "hit_rate": 0.6,
+          "volumen_usd": 216.8
+        },
+        "XRP#5min": {
+          "n_roundtrips": 41,
+          "pnl_realizado": 24.79,
+          "hit_rate": 0.732,
+          "volumen_usd": 362.2
+        },
+        "BTC#5min": {
+          "n_roundtrips": 34,
+          "pnl_realizado": 3.24,
+          "hit_rate": 0.559,
+          "volumen_usd": 1582.2
+        },
+        "ETH#5min": {
+          "n_roundtrips": 4,
+          "pnl_realizado": -5.33,
+          "hit_rate": 0.0,
+          "volumen_usd": 1.6
         },
         "SOL#5min": {
-          "n_roundtrips": 5,
-          "pnl_realizado": 15.46,
-          "hit_rate": 1.0,
-          "volumen_usd": 27.0
+          "n_roundtrips": 3,
+          "pnl_realizado": -27.48,
+          "hit_rate": 0.333,
+          "volumen_usd": 5.4
         }
       }
     },
@@ -486,46 +540,10 @@
       "pnl_ventana_diaria": 3959.53,
       "por_activo_marco": {
         "BTC#5min": {
-          "n_roundtrips": 1195,
-          "pnl_realizado": 18612.88,
-          "hit_rate": 0.792,
-          "volumen_usd": 102624.2
-        }
-      }
-    },
-    "0x20d2309cd92b797ae7ca175ed828ed8a27fbe29d": {
-      "nombre": "sin_nombre_20d2",
-      "pnl_ventana_diaria": 1903.5099999999998,
-      "por_activo_marco": {
-        "SOL#5min": {
-          "n_roundtrips": 61,
-          "pnl_realizado": -0.38,
-          "hit_rate": 0.492,
-          "volumen_usd": 229.2
-        },
-        "BTC#15min": {
-          "n_roundtrips": 40,
-          "pnl_realizado": -21.17,
-          "hit_rate": 0.5,
-          "volumen_usd": 337.7
-        },
-        "XRP#5min": {
-          "n_roundtrips": 51,
-          "pnl_realizado": -66.56,
-          "hit_rate": 0.451,
-          "volumen_usd": 188.9
-        },
-        "BTC#5min": {
-          "n_roundtrips": 56,
-          "pnl_realizado": -139.41,
-          "hit_rate": 0.196,
-          "volumen_usd": 373.1
-        },
-        "ETH#5min": {
-          "n_roundtrips": 43,
-          "pnl_realizado": 374.99,
-          "hit_rate": 0.581,
-          "volumen_usd": 673.0
+          "n_roundtrips": 1231,
+          "pnl_realizado": 24702.29,
+          "hit_rate": 0.795,
+          "volumen_usd": 117470.9
         }
       }
     },
@@ -533,6 +551,42 @@
       "nombre": "iagoWFLD",
       "pnl_ventana_diaria": 1567.13,
       "por_activo_marco": {}
+    },
+    "0x20d2309cd92b797ae7ca175ed828ed8a27fbe29d": {
+      "nombre": "sin_nombre_20d2",
+      "pnl_ventana_diaria": 1454.32,
+      "por_activo_marco": {
+        "XRP#5min": {
+          "n_roundtrips": 86,
+          "pnl_realizado": -0.59,
+          "hit_rate": 0.593,
+          "volumen_usd": 442.0
+        },
+        "ETH#5min": {
+          "n_roundtrips": 38,
+          "pnl_realizado": -61.29,
+          "hit_rate": 0.474,
+          "volumen_usd": 163.8
+        },
+        "BTC#5min": {
+          "n_roundtrips": 57,
+          "pnl_realizado": -221.65,
+          "hit_rate": 0.474,
+          "volumen_usd": 674.2
+        },
+        "BTC#15min": {
+          "n_roundtrips": 40,
+          "pnl_realizado": -28.63,
+          "hit_rate": 0.425,
+          "volumen_usd": 259.5
+        },
+        "SOL#5min": {
+          "n_roundtrips": 54,
+          "pnl_realizado": -56.17,
+          "hit_rate": 0.444,
+          "volumen_usd": 210.8
+        }
+      }
     },
     "0x36f4c21a7ed49120c9e19966df5b0f658166ab1e": {
       "nombre": "snoozer",
@@ -546,13 +600,13 @@
     },
     "0xcd30457c790d8b35a08bcf3f894ad6bb52bc2dd0": {
       "nombre": "0xcd30457c",
-      "pnl_ventana_diaria": 399.4599999999996,
+      "pnl_ventana_diaria": 240.1199999999999,
       "por_activo_marco": {
         "BTC#5min": {
-          "n_roundtrips": 22,
-          "pnl_realizado": -10.03,
-          "hit_rate": 0.273,
-          "volumen_usd": 35.5
+          "n_roundtrips": 17,
+          "pnl_realizado": -7.44,
+          "hit_rate": 0.412,
+          "volumen_usd": 28.8
         }
       }
     },
@@ -560,71 +614,47 @@
       "nombre": "suspiciouslyLucky",
       "pnl_ventana_diaria": 25.379999999999995,
       "por_activo_marco": {
-        "BTC#5min": {
-          "n_roundtrips": 14,
-          "pnl_realizado": -5.72,
-          "hit_rate": 0.214,
-          "volumen_usd": 76.5
-        },
-        "ETH#5min": {
-          "n_roundtrips": 11,
-          "pnl_realizado": -12.26,
-          "hit_rate": 0.545,
-          "volumen_usd": 46.8
-        },
-        "ETH#15min": {
-          "n_roundtrips": 21,
-          "pnl_realizado": -59.32,
-          "hit_rate": 0.048,
-          "volumen_usd": 53.2
-        },
-        "DOGE#5min": {
-          "n_roundtrips": 6,
-          "pnl_realizado": -10.74,
+        "DOGE#15min": {
+          "n_roundtrips": 9,
+          "pnl_realizado": -28.69,
           "hit_rate": 0.0,
-          "volumen_usd": 2.3
+          "volumen_usd": 25.9
         },
         "BTC#15min": {
-          "n_roundtrips": 26,
-          "pnl_realizado": -57.79,
+          "n_roundtrips": 16,
+          "pnl_realizado": -284.99,
           "hit_rate": 0.0,
-          "volumen_usd": 71.3
+          "volumen_usd": 144.7
         },
-        "SOL#15min": {
-          "n_roundtrips": 2,
-          "pnl_realizado": -7.02,
+        "ETH#15min": {
+          "n_roundtrips": 18,
+          "pnl_realizado": -136.34,
           "hit_rate": 0.0,
-          "volumen_usd": 7.0
-        },
-        "XRP#15min": {
-          "n_roundtrips": 1,
-          "pnl_realizado": -5.94,
-          "hit_rate": 0.0,
-          "volumen_usd": 2.0
+          "volumen_usd": 65.0
         },
         "BNB#15min": {
-          "n_roundtrips": 6,
-          "pnl_realizado": -12.94,
+          "n_roundtrips": 3,
+          "pnl_realizado": -13.5,
           "hit_rate": 0.0,
-          "volumen_usd": 6.5
+          "volumen_usd": 1.8
         },
-        "DOGE#15min": {
-          "n_roundtrips": 5,
-          "pnl_realizado": -5.79,
+        "ETH#5min": {
+          "n_roundtrips": 1,
+          "pnl_realizado": -53.91,
           "hit_rate": 0.0,
-          "volumen_usd": 5.1
+          "volumen_usd": 9.3
         },
-        "BNB#5min": {
-          "n_roundtrips": 5,
-          "pnl_realizado": -26.17,
+        "XRP#15min": {
+          "n_roundtrips": 8,
+          "pnl_realizado": -15.9,
           "hit_rate": 0.0,
-          "volumen_usd": 3.5
+          "volumen_usd": 18.7
         },
         "SOL#5min": {
-          "n_roundtrips": 2,
-          "pnl_realizado": -11.1,
+          "n_roundtrips": 1,
+          "pnl_realizado": -3.33,
           "hit_rate": 0.0,
-          "volumen_usd": 2.9
+          "volumen_usd": 0.6
         }
       }
     }
