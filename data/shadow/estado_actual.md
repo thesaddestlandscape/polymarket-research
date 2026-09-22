@@ -1,4 +1,4 @@
-# Estado del bot — 2026-09-22 04:52 UTC
+# Estado del bot — 2026-09-22 04:58 UTC
 
 ## Live — dinero real (on-chain)
 | | |
@@ -13,11 +13,11 @@
 ## Shadow — MODELO SIMULADO (no cobrable)
 | | |
 |---|---|
-| P&L fiel (stake fijo 1$) | +18747.54 $ |
-| P&L sim compuesto | 🟢 +72875.82 $ (ficción Kelly: +286462% s/ operativo) |
-| P&L sim hoy (2026-09-22) | 🟢 +345.92 $ |
-| Operaciones resueltas | 660334 (376466 WIN / 283868 LOSS) — 57.0% |
-| Señales abiertas | 217165 |
+| P&L fiel (stake fijo 1$) | +18748.56 $ |
+| P&L sim compuesto | 🟢 +72875.58 $ (ficción Kelly: +286461% s/ operativo) |
+| P&L sim hoy (2026-09-22) | 🟢 +345.68 $ |
+| Operaciones resueltas | 660347 (376474 WIN / 283873 LOSS) — 57.0% |
+| Señales abiertas | 218166 |
 
 ## Estrategias (visión global)
 
@@ -27,12 +27,12 @@
 | GBM_LATE_15M_ESPACIO_ATR | 34592 | 59.6% | +0.096 | ➡️ estable | +17882.03$ | 0.83$ | ✅ activa |
 | GBM_LATE_15M | 35893 | 58.8% | +0.088 | ➡️ estable | +15152.12$ | 0.81$ | ✅ activa |
 | GBM_LATE_15M_MULTIHORIZONTE | 19355 | 66.9% | +0.169 | ➡️ estable | +14281.95$ | 1.68$ | ✅ activa |
-| CANDIDATA10_CONFIRMACION_CRUZADA | 16290 | 46.9% | -0.031 | 📈 madura (+0.06) | +4125.55$ | 0.50$ | ⚠️ IC negativo |
+| CANDIDATA10_CONFIRMACION_CRUZADA | 16291 | 46.9% | -0.031 | 📈 madura (+0.06) | +4126.58$ | 0.50$ | ⚠️ IC negativo |
 | UPDOWN_GBM_15M_TARDIO | 14365 | 50.7% | +0.007 | 📉 agota (-0.07) | +4073.99$ | 0.50$ | ✅ activa |
 | GBM_LATE_5M | 8447 | 61.2% | +0.112 | 📈 madura (+0.08) | +3718.50$ | 1.43$ | ✅ activa |
-| UPDOWN_GBM | 37350 | 53.4% | +0.034 | ➡️ estable | +2516.63$ | 0.50$ | ✅ activa |
+| UPDOWN_GBM | 37352 | 53.4% | +0.034 | ➡️ estable | +2517.69$ | 0.50$ | ✅ activa |
 | GBM_LATE_15M_PYCONFIRMADO | 5100 | 61.6% | +0.116 | 📈 madura (+0.04) | +1972.78$ | 1.22$ | ✅ activa |
-| MOMENTUM_IBS_5M_BALLENA | 67729 | 42.7% | -0.073 | ➡️ estable | +1565.36$ | 0.50$ | ⚠️ IC negativo |
+| MOMENTUM_IBS_5M_BALLENA | 67733 | 42.7% | -0.073 | ➡️ estable | +1562.64$ | 0.50$ | ⚠️ IC negativo |
 | MOMENTUM_IBS_15M_BALLENA | 26561 | 49.1% | -0.009 | 📈 madura (+0.04) | +1144.54$ | 0.50$ | ⚠️ IC negativo |
 | WEEKLY_PRICE | 2223 | 80.1% | +0.300 | ➡️ estable | +1106.87$ | 2.00$ | ✅ activa |
 | UPDOWN_GBM_IBS_ALTO | 939 | 78.8% | +0.287 | ➡️ estable | +730.44$ | 2.00$ | ✅ activa |
@@ -41,7 +41,7 @@
 | ORDER_FLOW_5M | 2695 | 55.1% | +0.051 | 📈 madura (+0.08) | +373.39$ | 1.08$ | ✅ activa |
 | RESOLUTION_SNIPER | 265 | 92.1% | +0.418 | 📈 madura (+0.07) | +211.36$ | 2.00$ | ✅ activa |
 | UPDOWN_GBM_15M_CROSS_WINDOW_SPREAD | 797 | 82.9% | +0.329 | 📈 madura (+0.06) | +211.23$ | 2.00$ | ✅ activa |
-| FAVORITO_CONFIRMADO_5MIN_BAJALATENCIA | 20877 | 61.9% | +0.119 | ➡️ estable | +180.30$ | 1.19$ | ✅ activa |
+| FAVORITO_CONFIRMADO_5MIN_BAJALATENCIA | 20878 | 61.9% | +0.119 | ➡️ estable | +181.07$ | 1.19$ | ✅ activa |
 | GBM_LATE_60M_PYCONFIRMADO | 649 | 55.8% | +0.058 | 📈 madura (+0.04) | +124.03$ | 0.58$ | ✅ activa |
 | BALLENAS_CONFIRMADAS_15M | 2957 | 56.6% | +0.066 | 📉 agota (-0.05) | +117.11$ | 0.91$ | ✅ activa |
 | STREAK_MOM_5M | 7848 | 51.8% | +0.018 | ➡️ estable | +74.97$ | 0.50$ | ✅ activa |
@@ -70,40 +70,40 @@
 | UPDOWN_OU_5M | 1095 | 36.5% | -0.134 | 📈 madura (+0.05) | -149.08$ | 0.50$ | ⚠️ IC negativo |
 | CANDIDATA9_BOT_CONSENSO | 1431 | 39.8% | -0.102 | ➡️ estable | -183.93$ | 0.50$ | ⚠️ IC negativo |
 | MOMENTUM_IBS_15M | 14163 | 48.8% | -0.012 | ➡️ estable | -210.17$ | 0.50$ | ⚠️ IC negativo |
-| FAVORITO_CONFIRMADO_DEPTH_FASE0 | 32592 | 59.7% | +0.097 | ➡️ estable | -1015.14$ | 0.98$ | ✅ activa |
+| FAVORITO_CONFIRMADO_DEPTH_FASE0 | 32593 | 59.7% | +0.097 | ➡️ estable | -1014.64$ | 0.98$ | ✅ activa |
 | FAVORITO_CONFIRMADO_15MIN_ALTACONVICCION | 15562 | 69.3% | +0.193 | ➡️ estable | -1022.30$ | 1.92$ | ✅ activa |
-| BALLENAS_TARDIAS | 31761 | 41.8% | -0.082 | ➡️ estable | -4460.32$ | 0.50$ | ⚠️ IC negativo |
+| BALLENAS_TARDIAS | 31762 | 41.8% | -0.082 | ➡️ estable | -4461.39$ | 0.50$ | ⚠️ IC negativo |
 | FAVORITO_CONFIRMADO_5MIN_ALTACONVICCION | 64991 | 69.8% | +0.198 | ➡️ estable | -5109.21$ | 1.98$ | ✅ activa |
-| FAVORITO_CONFIRMADO | 119054 | 61.1% | +0.111 | ➡️ estable | -5655.61$ | 1.13$ | ✅ activa |
+| FAVORITO_CONFIRMADO | 119057 | 61.1% | +0.111 | ➡️ estable | -5655.41$ | 1.13$ | ✅ activa |
 
 ## Últimas 5 resoluciones
 
 | Timestamp | Estrategia | Mercado | Resultado | PNL |
 |---|---|---|---|---|
-| 2026-09-22T04:51 | FAVORITO_CONFIRMADO_DEPTH_FASE0#SOL#5min | … | ❌ LOSS | -1.07$ |
-| 2026-09-22T04:51 | BALLENAS_TARDIAS#SOL#5min | … | ❌ LOSS | -1.07$ |
-| 2026-09-22T04:51 | UPDOWN_GBM#SOL#5min | Solana Up or Down - September 22, 12:45AM-12:50AM … | ✅ WIN | +0.50$ |
-| 2026-09-22T04:51 | FAVORITO_CONFIRMADO#SOL#5min | … | ✅ WIN | +0.54$ |
-| 2026-09-22T04:51 | MOMENTUM_IBS_5M_BALLENA#SOL#5min | Solana Up or Down - September 22, 12:45AM-12:50AM … | ✅ WIN | +0.50$ |
+| 2026-09-22T04:53 | BALLENAS_TARDIAS#DOGE#5min | … | ❌ LOSS | -1.07$ |
+| 2026-09-22T04:53 | MOMENTUM_IBS_5M_BALLENA#SOL#5min | … | ❌ LOSS | -1.07$ |
+| 2026-09-22T04:53 | UPDOWN_GBM#BNB#5min | BNB Up or Down - September 22, 12:45AM-12:50AM ET… | ✅ WIN | +0.56$ |
+| 2026-09-22T04:53 | MOMENTUM_IBS_5M_BALLENA#BNB#5min | … | ❌ LOSS | -1.07$ |
+| 2026-09-22T04:53 | MOMENTUM_IBS_5M_BALLENA#BTC#5min | … | ❌ LOSS | -1.07$ |
 
 ## Calidad de datos
 
-✅ **OK** — última verificación 2026-09-22T04:52 UTC | rechazos 1h: 1 (rango=0, spike=0)
+✅ **OK** — última verificación 2026-09-22T04:58 UTC | rechazos 1h: 1 (rango=0, spike=0)
 
 | Asset | Precio | Age | Alertas |
 |---|---|---|---|
-| ✅ BTC | $85,478.79 | 0.1min |  |
-| ✅ ETH | $2,728.26 | 0.1min |  |
-| ✅ SOL | $116.48 | 0.1min |  |
+| ✅ BTC | $85,436.00 | 0.1min |  |
+| ✅ ETH | $2,727.83 | 0.1min |  |
+| ✅ SOL | $116.35 | 0.1min |  |
 | ✅ XRP | $1.51 | 0.1min |  |
 
 **Cross-source** (binance, coinbase, kraken):
 
 | Asset | Consenso | Fuente | Estado |
 |---|---|---|---|
-| BTC | $85,482.60 | consenso |  |
-| ETH | $2,729.19 | consenso |  |
-| SOL | $116.48 | consenso |  |
+| BTC | $85,427.10 | consenso |  |
+| ETH | $2,727.09 | consenso |  |
+| SOL | $116.30 | consenso |  |
 | XRP | $1.51 | consenso |  |
 
 **Alertas activas:**
