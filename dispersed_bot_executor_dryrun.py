@@ -405,7 +405,17 @@ def _procesar_fila(row: dict, wallets: set, arquetipos: dict, vistos: dict) -> d
         else:
             puede_ventana, motivo_ventana = True, ""
             try:
-                puede_ventana, motivo_ventana = puede_operar_live(arquetipo, f"{activo}#{marco}")
+                if via_zona:
+                    # 23-Sep (decisión Javi, mismo criterio que el precierre): las zonas forward NO usan
+                    # ventanas horarias para acumular los trades del Stage 0; SÍ el switch global.
+                    # /code-review: fuera de ventana el freno de ventana (Freno 3) no actúa; protegen el
+                    # freno diario, la racha de 4 pérdidas y el kill-switch de cada zona (<=3€ peor caso).
+                    # Misma exposición aceptada para el precierre.
+                    import live_guard as _lg
+                    puede_ventana = _lg.switch_activo()
+                    motivo_ventana = "" if puede_ventana else "switch_OFF"
+                else:
+                    puede_ventana, motivo_ventana = puede_operar_live(arquetipo, f"{activo}#{marco}")
             except Exception:
                 puede_ventana = False
             if not puede_ventana:
