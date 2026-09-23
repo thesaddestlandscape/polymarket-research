@@ -170,3 +170,7 @@ data/shadow/resolution_sniper_freeze_estado_fase0.csv
 # 21-Sep: ultima ejecucion por tarea del scheduler vigiasfreq (cambia cada pocos minutos)
 data/shadow/_cache_vigiasfreq_*.json
 data/shadow/*.json.*.tmp
+
+# 23-Sep Perps: historial completo por wallet (fetch_polymarket_perps_fills_full.py), regenerable, puede pesar cientos de MB
+data/shadow/perps_fills_full/
+data/shadow/perps_fills_full_state.json
