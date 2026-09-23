@@ -364,3 +364,7 @@ timestamp_utc,ts_end,marco,dry_run,activo,direccion_implicita,ask_implicita,n_ra
 2026-09-23T18:30:00.131+00:00,1790188200,5min,False,BTC,Down,,0,,,,,4847364,False,no_fillable_ask=None_ratio=0.0,0.0,,,53.5,,,,,,,,RESOLUTION_SNIPER_NAIVE,
 2026-09-23T18:30:00.131+00:00,1790188200,5min,False,DOGE,Up,,0,,,,,4847365,False,no_fillable_ask=None_ratio=0.0,0.0,,,61.4,,,,,,,,RESOLUTION_SNIPER_NAIVE,
 2026-09-23T18:30:00.131+00:00,1790188200,5min,False,BNB,Up,,0,,,,,4847361,False,no_fillable_ask=None_ratio=0.0,0.0,,,59.2,,,,,,,,RESOLUTION_SNIPER_NAIVE,
+2026-09-23T18:39:58.256+00:00,1790188800,5min,False,SOL,Down,0.01,0,False,False,False,ninguno_confirma,4847511,False,sin_rafaga_n=0,80.0,0.01,,203.3,,,,,,,,RESOLUTION_SNIPER_PRECIERRE,
+2026-09-23T18:39:58.260+00:00,1790188800,5min,False,DOGE,Down,,0,,,,,4847515,False,sin_ask,,,,196.9,,,,,,,,RESOLUTION_SNIPER_PRECIERRE,
+2026-09-23T18:40:00.078+00:00,1790188800,5min,False,SOL,Down,0.01,0,,,,,4847511,False,no_fillable_ask=0.01_ratio=80.6,80.6,0.01,,75.9,,,,,,,,RESOLUTION_SNIPER_NAIVE,
+2026-09-23T18:40:00.079+00:00,1790188800,5min,False,DOGE,Down,,0,,,,,4847515,False,no_fillable_ask=None_ratio=0.0,0.0,,,60.1,,,,,,,,RESOLUTION_SNIPER_NAIVE,
