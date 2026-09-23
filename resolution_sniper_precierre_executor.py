@@ -87,14 +87,29 @@ import live_stake
 import resolution_sniper_precierre_gate as gate
 import resolution_sniper_naive_executor_dryrun as _naive_viejo   # COMBOS_CONFIRMADOS / _veto_clv
 import resolution_sniper_naive_gate_bucket as rsngb
-from resolution_sniper_observer import ASSETS, mercado_slot, token_ids, _TAIL
+from resolution_sniper_observer import ASSETS, mercado_slot, token_ids, _TAIL, resolver_universo
 
 REPO = Path(__file__).resolve().parent
 # 23-Sep: marcos en paralelo. (dur_s, marco_tag, subtype_suffix, ask_min_disparo)
 MARCOS = {
     "5min": (300, "5m", "5min", 0.20),    # 5min: ask<0,20 pierde (n=54, -0,14/tr)
     "15min": (900, "15m", "15min", 0.05),
+    # 23-Sep (petición Javi: "mete 60 minutos en dry-run con todas las monedas"): SOLO DRY_RUN
+    # (MARCOS_SOLO_DRY_RUN, además no hay tuplas 60min en la whitelist). Retro (resolution_sniper_obs,
+    # ask real -2s, ráfaga>=2): n=25, 9 cierres, 6/6 días, +0,86 €/tr -- n insuficiente para live.
+    # Polymarket SOLO ofrece hourly Up/Down de BTC/ETH/SOL hoy (verificado 23-Sep: XRP/DOGE/BNB sin
+    # mercado 2026; los slugs "{x}-up-or-down-..." que responden son de 2025, cerrados). Sin slug
+    # determinista -> descubrimiento por universo (resolver_universo), marco_tag None.
+    "60min": (3600, None, "60min", 0.05),
 }
+# Marcos que NUNCA envían aunque DRY_RUN=False: corte antes del POST en _firmar_enviar_registrar,
+# sin reserva de hueco en _despachar (ni liberación), pools propios; además sin tuplas en whitelist.
+MARCOS_SOLO_DRY_RUN = {"60min"}
+# monedas con mercado en cada marco (por defecto ASSETS). 60min: solo BTC/ETH/SOL existen hoy -- buscar
+# las demás en el universo era lento (preparar() 69s medido) y siempre vacío.
+MONEDAS_POR_MARCO = {"60min": ["BTC", "ETH", "SOL"]}
+# precálculo por marco: el descubrimiento de universo (60min) tarda ~11s la 1ª vez (luego caché)
+PRECALCULO_ANTES_POR_MARCO_S = {"60min": 60}
 ASK_RAFAGA_MIN = 0.05       # banda con la que se CUENTAN monedas para la ráfaga (la validada)
 ASK_MAX = 0.80              # >=0,80 ya descontado (validado 23-Sep y guarda RSN 22-Sep)
 MIN_MONEDAS_RAFAGA = 2
@@ -128,6 +143,9 @@ _POOL_LIBROS = ThreadPoolExecutor(max_workers=6, thread_name_prefix="libro_preci
 # 23-Sep (techo >1): pool propio para los envíos -- cada envío bloquea en _verificar_fill_real
 # (hasta ~4,5s); en serie, la 2ª orden saldría con el mercado ya cerrado.
 _POOL_ENVIOS = ThreadPoolExecutor(max_workers=6, thread_name_prefix="envio_precierre")
+# pools SEPARADOS para los marcos solo dry-run (60min): nunca compiten con los reales de 5/15min
+_POOL_LIBROS_DRY = ThreadPoolExecutor(max_workers=3, thread_name_prefix="libro_precierre_dry")
+_POOL_ENVIOS_DRY = ThreadPoolExecutor(max_workers=3, thread_name_prefix="envio_precierre_dry")
 
 
 def _liberar_disparo(ts_end: int, direction: str, stake_eur: float) -> None:
@@ -162,30 +180,34 @@ def _despachar(resultados: list, ts_end: int) -> None:
     candidatos = [r for r in resultados if r.get("_envio")]
     lanzar = []
     for r in candidatos:
-        if DRY_RUN:
-            lanzar.append(r)
+        if DRY_RUN or r.get("marco") in MARCOS_SOLO_DRY_RUN:
+            lanzar.append(r)   # dry-run: sin reserva (nunca llega a POST, ver _firmar_enviar_registrar)
             continue
         if len(lanzar) >= MAX_DISPAROS_POR_VENTANA:
             r["gate_confirmado"], r["gate_motivo"] = False, "tope_disparos_ventana"
             continue
         ok, motivo = _reservar_disparo(ts_end, r["_dir"], float(r.get("stake_eur") or 0), r["_guardas"])
         if ok:
+            r["_reservado"] = True   # SOLO lo reservado se puede liberar (/code-review 23-Sep, 60min)
             lanzar.append(r)
         else:
             r["gate_confirmado"], r["gate_motivo"] = False, motivo
     def _fila(r: dict, extra: str = "") -> dict:
         c = dict(r)   # copia atómica (C) -- nunca iterar el dict que un hilo aún puede escribir
-        for k in ("_envio", "_dir", "_guardas"):
+        for k in ("_envio", "_dir", "_guardas", "_reservado"):
             c.pop(k, None)
         if extra:
             c["gate_motivo"] = f"{c.get('gate_motivo', '')}|{extra}"
         _append_csv({"timestamp_utc": datetime.now(timezone.utc).isoformat(timespec="milliseconds"),
-                     "ts_end": ts_end, "dry_run": DRY_RUN, **c})
+                     "ts_end": ts_end, **c,
+                     "dry_run": DRY_RUN or c.get("marco") in MARCOS_SOLO_DRY_RUN})
 
     def _al_terminar(r: dict, f) -> None:
         # /code-review 23-Sep: el envío falló ANTES del POST (firma, reloj, CB, marca en disco) ->
         # liberar su hueco para que el naive de T+0 (u otro) pueda usarlo.
-        if not DRY_RUN and not r.get("disparado"):
+        # /code-review 23-Sep: liberar SOLO si este resultado reservó hueco (un dry-run de 60min,
+        # que comparte ts_end con 5/15min cada hora, nunca reserva y jamás debe liberar huecos reales).
+        if r.get("_reservado") and not r.get("disparado"):
             _liberar_disparo(ts_end, r["_dir"], float(r.get("stake_eur") or 0))
         err = f.exception()
         _fila(r, f"envio_excepcion:{type(err).__name__}" if err else "")
@@ -198,13 +220,14 @@ def _despachar(resultados: list, ts_end: int) -> None:
         if id(r) not in ids_lanzados:
             _fila(r)
     for r in lanzar:
-        _POOL_ENVIOS.submit(r["_envio"]).add_done_callback(lambda f, r=r: _al_terminar(r, f))
+        pool = _POOL_ENVIOS_DRY if r.get("marco") in MARCOS_SOLO_DRY_RUN else _POOL_ENVIOS
+        pool.submit(r["_envio"]).add_done_callback(lambda f, r=r: _al_terminar(r, f))
 MAX_ESPERA_LECTURAS_S = 0.9   # lecturas que no llegan en 0,9s (desde T-2s) se descartan
 MIN_MARGEN_PRECIERRE_S = 0.3  # si tras preparar() queda menos que esto hasta T-2s, ventana perdida
 MARGEN_MIN_POST_S = 0.5       # nunca enviar la orden a menos de 0,5s del cierre nominal
 # 23-Sep (checklist pre-live): prob. de acierto CONSERVADORA para el Kelly de calcular_stake --
 # cota baja del hit validado con ráfaga (15min 93,7% n=426, 5min 87,0% n=1285), no la media.
-P_ACIERTO_CONSERVADORA = {"5min": 0.84, "15min": 0.90}
+P_ACIERTO_CONSERVADORA = {"5min": 0.84, "15min": 0.90, "60min": 0.90}   # 60min: 25/25 retro, cota prudente
 
 # ---- 23-Sep: camino rápido RESOLUTION_SNIPER_NAIVE (petición explícita Javi: "tiene que enviar
 # entre 0 y 3 segs después del cierre, arregla la latencia... a milisegundos"). El ejecutor viejo
@@ -385,11 +408,21 @@ class _Precalculo:
         ts_start = ts_end - self.dur_s
         self._precalcular_guardas()
         self.mercados = {}
-        for activo in ASSETS:
-            _slug, mkt = mercado_slot(activo, self.marco_tag, ts_start)
-            if not mkt:
-                continue
-            token_yes, token_no = token_ids(mkt)
+        for activo in MONEDAS_POR_MARCO.get(self.marco, ASSETS):
+            if self.marco_tag is None:
+                # 60min: descubrimiento por universo (sin slug determinista), mismo mecanismo que
+                # el observer; normaliza al formato de mercado_slot.
+                u = resolver_universo(self.dur_s // 60, activo, ts_start, ts_end)
+                if not u:
+                    continue
+                mkt = {"id": u["market_id"], "question": "", "conditionId": u["condition_id"],
+                       "endDate": datetime.fromtimestamp(ts_end, timezone.utc).isoformat()}
+                token_yes, token_no = u["token_yes"], u["token_no"]
+            else:
+                _slug, mkt = mercado_slot(activo, self.marco_tag, ts_start)
+                if not mkt:
+                    continue
+                token_yes, token_no = token_ids(mkt)
             if not token_yes or not token_no:
                 continue
             ref_open = _TAIL.precio_en(activo, ts_start) or _TAIL.precio_en(activo, ts_start + 2)
@@ -641,10 +674,11 @@ def _firmar_enviar_registrar(pre: "_Precalculo", m: dict, activo: str, direction
         return resultado
     resultado["t_firma_ms"] = round(t_firma_ms, 1)
 
-    if DRY_RUN:
+    if DRY_RUN or pre.marco in MARCOS_SOLO_DRY_RUN:
         resultado["disparado"] = False
+        resultado["dry_run"] = True   # la fila CSV refleja el dry-run por marco (60min)
         _log(f"[DRY-RUN] {strategy} {pre.marco} {activo} {direction} ask={ask} {notas_base} "
-             f"t_lectura={t_lectura_ms:.0f}ms t_firma={t_firma_ms:.0f}ms -- NO se envía (DRY_RUN=True)")
+             f"t_lectura={t_lectura_ms:.0f}ms t_firma={t_firma_ms:.0f}ms -- NO se envía (dry-run)")
         return resultado
 
     # ---- Solo alcanzable con DRY_RUN=False, tras /code-review + aprobación explícita de Javi ----
@@ -891,7 +925,9 @@ def _instante_critico(pre: _Precalculo, lectura: dict, n_rafaga: int, ts_end: in
     else:
         ok_whitelist, motivo_whitelist = True, "ok"
     resultado["whitelist_ok"] = ok_whitelist
-    if not DRY_RUN and not ok_whitelist:
+    # 60min (MARCOS_SOLO_DRY_RUN): no se bloquea aquí para que el dry-run llegue a firmar y medir;
+    # nunca envía (corte en _firmar_enviar_registrar) ni reserva/libera huecos (_despachar).
+    if not DRY_RUN and not ok_whitelist and pre.marco not in MARCOS_SOLO_DRY_RUN:
         resultado["gate_confirmado"] = False
         resultado["gate_motivo"] = f"no_permitido:{motivo_whitelist}"
         return resultado
@@ -1049,7 +1085,10 @@ def procesar_ventana(pre: _Precalculo, ts_end: int) -> None:
         time.sleep(espera)
     # Fase A en paralelo, con tope de espera: una lectura colgada no arrastra a las demás
     # más allá del cierre (/code-review 23-Sep).
-    futuros = {_POOL_LIBROS.submit(_leer, pre, a): a for a in ASSETS}
+    # /code-review 23-Sep: 60min con su propio pool y solo sus monedas -- no compite a :00 con las
+    # lecturas reales de 5/15min (MAX_ESPERA_LECTURAS_S las descartaría).
+    pool_libros = _POOL_LIBROS_DRY if pre.marco in MARCOS_SOLO_DRY_RUN else _POOL_LIBROS
+    futuros = {pool_libros.submit(_leer, pre, a): a for a in MONEDAS_POR_MARCO.get(pre.marco, ASSETS)}
     hechos, pendientes = wait(futuros, timeout=MAX_ESPERA_LECTURAS_S)
     lecturas = []
     for f in hechos:
@@ -1072,7 +1111,8 @@ def procesar_ventana(pre: _Precalculo, ts_end: int) -> None:
     _despachar(resultados, ts_end)   # escribe las filas (las de envío, al terminar cada envío)
     for a in tarde:
         _append_csv({"timestamp_utc": datetime.now(timezone.utc).isoformat(timespec="milliseconds"),
-                      "ts_end": ts_end, "dry_run": DRY_RUN, "marco": pre.marco, "activo": a,
+                      "ts_end": ts_end, "dry_run": DRY_RUN or pre.marco in MARCOS_SOLO_DRY_RUN,
+                      "marco": pre.marco, "activo": a,
                       "n_rafaga": n_rafaga, "gate_confirmado": False, "gate_motivo": "lectura_tarde"})
 
 
@@ -1081,7 +1121,7 @@ def _bucle_marco(marco: str) -> None:
     dur_s = pre.dur_s
     while True:
         try:
-            if not DRY_RUN:
+            if not DRY_RUN and marco not in MARCOS_SOLO_DRY_RUN:   # 60min dry-run: medir siempre
                 # switch global (sin ventana: el precierre ignora ventanas; el naive las comprueba
                 # por su cuenta en _instante_naive)
                 ok_switch = live_guard.switch_activo()
@@ -1095,7 +1135,7 @@ def _bucle_marco(marco: str) -> None:
                     continue
             now = time.time()
             ts_end = (int(now) // dur_s + 1) * dur_s
-            objetivo_precalculo = ts_end + OFFSET_S - PRECALCULO_ANTES_S
+            objetivo_precalculo = ts_end + OFFSET_S - PRECALCULO_ANTES_POR_MARCO_S.get(marco, PRECALCULO_ANTES_S)
             # /code-review 04-Sep, hallazgo real: bucle hasta estar realmente
             # cerca de T-12s (un solo sleep(min(margen,30)) precalculaba minutos antes).
             while True:
