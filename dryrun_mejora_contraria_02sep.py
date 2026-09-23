@@ -40,6 +40,7 @@ Uso:
   .venv/bin/python dryrun_mejora_contraria_02sep.py --resolver # cron, rellena outcomes
 """
 import csv
+from escritura_atomica import escribir_csv_atomico  # 23-Sep, ver ese módulo
 import sys
 import time
 from datetime import datetime, timezone
@@ -178,10 +179,8 @@ def modo_resolver() -> None:
             n_actualizados += 1
 
     if n_actualizados:
-        with open(OUT, "w", newline="", encoding="utf-8") as f:
-            w = csv.DictWriter(f, fieldnames=COLUMNS)
-            w.writeheader()
-            w.writerows(filas)
+        # 23-Sep: atómico (ver escritura_atomica.py -- incidente WM executor CSV truncado)
+        escribir_csv_atomico(OUT, COLUMNS, filas)
     _log(f"resueltas {n_actualizados} filas nuevas ({len(pendientes) - n_actualizados} siguen pendientes)")
 
     # resumen rápido, separado por habria_operado

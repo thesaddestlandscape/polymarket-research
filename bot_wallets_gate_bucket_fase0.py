@@ -32,6 +32,7 @@ restante_min mediana), recalculada una vez al arrancar desde
 ballenas_timing_history.csv.
 """
 import csv
+from escritura_atomica import escribir_csv_atomico  # 23-Sep, ver ese módulo
 import json
 import fcntl
 import math
@@ -151,10 +152,7 @@ def _migrar_cabecera_si_hace_falta() -> None:
                 return  # otro proceso ya migró mientras esperábamos el lock
             with open(OUT, newline="", encoding="utf-8") as f:
                 filas = list(csv.DictReader(f))
-            with open(OUT, "w", newline="", encoding="utf-8") as f:
-                w = csv.DictWriter(f, fieldnames=COLUMNS)
-                w.writeheader()
-                w.writerows(filas)
+            escribir_csv_atomico(OUT, COLUMNS, filas)   # 23-Sep: atómico
             _log(f"cabecera migrada a schema con precio de decisión ({len(filas)} filas preservadas)")
         finally:
             fcntl.flock(lock_f, fcntl.LOCK_UN)
@@ -366,10 +364,8 @@ def resolver_pendientes() -> int:
                 r["resolved_ts"] = datetime.now(timezone.utc).isoformat(timespec="seconds")
                 resueltas += 1
             if resueltas:
-                with open(OUT, "w", newline="", encoding="utf-8") as f:
-                    w = csv.DictWriter(f, fieldnames=COLUMNS)
-                    w.writeheader()
-                    w.writerows(filas)
+                # 23-Sep: atómico (ver escritura_atomica.py -- incidente WM executor CSV truncado)
+                escribir_csv_atomico(OUT, COLUMNS, filas)
             return resueltas
         finally:
             fcntl.flock(lock_f, fcntl.LOCK_UN)

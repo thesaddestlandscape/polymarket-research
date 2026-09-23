@@ -34,6 +34,7 @@ Resolución periódica (cron, no en el loop en vivo):
 import argparse
 import asyncio
 import csv
+from escritura_atomica import escribir_csv_atomico  # 23-Sep, ver ese módulo
 import fcntl
 import json
 import sys
@@ -690,10 +691,8 @@ def resolver_pendientes() -> int:
             r["resolved_ts"] = datetime.now(timezone.utc).isoformat(timespec="seconds")
             resueltas += 1
         if resueltas:
-            with open(OUT, "w", newline="", encoding="utf-8") as f:
-                w = csv.DictWriter(f, fieldnames=COLUMNS)
-                w.writeheader()
-                w.writerows(filas)
+            # 23-Sep: atómico (ver escritura_atomica.py -- incidente WM executor CSV truncado)
+            escribir_csv_atomico(OUT, COLUMNS, filas)
         return resueltas
     finally:
         fcntl.flock(lock_f, fcntl.LOCK_UN)

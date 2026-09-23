@@ -40,6 +40,7 @@ esto es un catch-up sobre un CSV que ya se está escribiendo solo, no una
 decisión en tiempo real todavía).
 """
 import csv
+from escritura_atomica import escribir_csv_atomico  # 23-Sep, ver ese módulo
 import fcntl
 import io
 import json
@@ -1013,10 +1014,9 @@ def resolver_pendientes() -> int:
                 r["resolved_ts"] = datetime.now(timezone.utc).isoformat(timespec="seconds")
                 resueltas += 1
             if resueltas:
-                with open(OUT, "w", newline="", encoding="utf-8") as f:
-                    w = csv.DictWriter(f, fieldnames=COLUMNS)
-                    w.writeheader()
-                    w.writerows(filas)
+                # 23-Sep: atómico -- un OOM-kill a mitad de open(OUT,"w") truncó este CSV
+                # (15 días perdidos), ver escritura_atomica.py.
+                escribir_csv_atomico(OUT, COLUMNS, filas)
             return resueltas
         finally:
             fcntl.flock(lock_f, fcntl.LOCK_UN)
