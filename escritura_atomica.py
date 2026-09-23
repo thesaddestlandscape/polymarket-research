@@ -33,6 +33,36 @@ def _limpiar_tmp_huerfanos(ruta: Path) -> None:
             continue
 
 
+def reescribir_csv_streaming(ruta, fieldnames, transformar) -> int:
+    """23-Sep (causa raíz OOM-kills): reescribe un CSV FILA A FILA, sin cargarlo entero en memoria
+    (los resolvers hacían list(csv.DictReader) de ficheros de 70-230 MB -> picos de 2-3 GB cada
+    10 min). `transformar(fila_dict) -> bool` modifica la fila en sitio y devuelve True si cambió.
+    Mismo contrato que el patrón anterior: DictWriter(fieldnames) (fila con claves fuera de
+    fieldnames -> ValueError, igual que antes), y SOLO se reemplaza el fichero si alguna fila
+    cambió. Atómico (tmp + fsync + os.replace). Devuelve el nº de filas modificadas."""
+    ruta = Path(ruta)
+    _limpiar_tmp_huerfanos(ruta)
+    tmp = ruta.with_name(f"{ruta.name}.tmp{os.getpid()}")
+    n = 0
+    try:
+        with open(ruta, newline="", encoding="utf-8") as src, \
+                open(tmp, "w", newline="", encoding="utf-8") as dst:
+            w = csv.DictWriter(dst, fieldnames=fieldnames)
+            w.writeheader()
+            for fila in csv.DictReader(src):
+                if transformar(fila):
+                    n += 1
+                w.writerow(fila)
+            dst.flush()
+            os.fsync(dst.fileno())
+        if n:
+            os.replace(tmp, ruta)
+    finally:
+        if tmp.exists():
+            tmp.unlink()
+    return n
+
+
 def escribir_csv_atomico(ruta, fieldnames, filas) -> None:
     ruta = Path(ruta)
     _limpiar_tmp_huerfanos(ruta)

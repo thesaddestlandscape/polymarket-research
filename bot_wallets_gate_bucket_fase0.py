@@ -32,7 +32,7 @@ restante_min mediana), recalculada una vez al arrancar desde
 ballenas_timing_history.csv.
 """
 import csv
-from escritura_atomica import escribir_csv_atomico  # 23-Sep, ver ese módulo
+from escritura_atomica import escribir_csv_atomico, reescribir_csv_streaming  # 23-Sep, ver ese módulo
 import json
 import fcntl
 import math
@@ -332,11 +332,11 @@ def resolver_pendientes() -> int:
     añadió filas mientras tanto)."""
     if not OUT.exists():
         return 0
+    # 23-Sep (causa raíz OOM-kills, medido 2,1 GB de pico cada 10 min): primera pasada en
+    # STREAMING -- solo se guardan los slugs pendientes, nunca el fichero entero en memoria.
     with open(OUT, newline="", encoding="utf-8") as f:
-        filas = list(csv.DictReader(f))
-
-    slugs_pendientes = sorted({r["market_slug"] for r in filas
-                                if not r.get("outcome_real") and r.get("market_slug")})
+        slugs_pendientes = sorted({r["market_slug"] for r in csv.DictReader(f)
+                                    if not r.get("outcome_real") and r.get("market_slug")})
     outcomes_por_slug = {}
     for slug in slugs_pendientes[:MAX_SLUGS_POR_CICLO]:
         outcome = outcome_por_slug(slug)
@@ -350,23 +350,21 @@ def resolver_pendientes() -> int:
     try:
         fcntl.flock(lock_f, fcntl.LOCK_EX)
         try:
-            with open(OUT, newline="", encoding="utf-8") as f:
-                filas = list(csv.DictReader(f))
-            resueltas = 0
-            for r in filas:
+            ahora = datetime.now(timezone.utc).isoformat(timespec="seconds")
+
+            def _resolver(r: dict) -> bool:
                 if r.get("outcome_real"):
-                    continue
+                    return False
                 outcome = outcomes_por_slug.get(r.get("market_slug"))
                 if outcome is None:
-                    continue
+                    return False
                 r["outcome_real"] = outcome
                 r["acierto"] = "1" if outcome == r.get("lado_wallet") else "0"
-                r["resolved_ts"] = datetime.now(timezone.utc).isoformat(timespec="seconds")
-                resueltas += 1
-            if resueltas:
-                # 23-Sep: atómico (ver escritura_atomica.py -- incidente WM executor CSV truncado)
-                escribir_csv_atomico(OUT, COLUMNS, filas)
-            return resueltas
+                r["resolved_ts"] = ahora
+                return True
+            # 23-Sep: segunda pasada en STREAMING + atómica (ver escritura_atomica.py): relee
+            # fresco bajo el lock, igual que antes, pero fila a fila.
+            return reescribir_csv_streaming(OUT, COLUMNS, _resolver)
         finally:
             fcntl.flock(lock_f, fcntl.LOCK_UN)
     finally:
