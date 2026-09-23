@@ -54,9 +54,30 @@ grid+fino, fail-closed si no hay evidencia de ESE offset exacto. A
 activos se evalúan igual (nunca se hardcodea una tabla de zonas, ver F5
 en project_lecciones_aprendidas_estrategias) y confirmarán solos en
 cuanto n crezca lo suficiente.
+
+23-Sep (validación con ask REAL de libro, memoria
+idea_precierre_rafaga_multimoneda_validado_23sep, aprobado por Javi "ok,
+adelante" -- sigue DRY_RUN=True): el criterio de decisión pasa a ser el
+DETECTOR DE RÁFAGA, no el gate por activo (que solo tiene evidencia de 5min,
+no distingue marco y confirma 5/212 claves -- se sigue evaluando y
+registrando como `gate_legacy_*`, solo informativo):
+  - fase A: se leen EN PARALELO los libros de las 6 monedas en el instante
+    objetivo (dirección implícita Chainlink vs ref_open, ask del lado);
+  - n_rafaga = monedas con dirección y ask en [ASK_RAFAGA_MIN, ASK_MAX);
+  - dispara solo si n_rafaga >= MIN_MONEDAS_RAFAGA, ask en la banda de su
+    marco y profundidad >= MIN_RATIO_PROFUNDIDAD.
+Evidencia (offset -2s, 1€, fee 0,07·(1-p), outcome Chainlink): 5min n=1341
++0,63/tr 15/23 días+ (peor día -15,6€); 15min n=426 +0,89/tr 13/14 días+;
+sin la guarda (1 moneda) los días tranquilos pierden. En 5min ask<0,20
+pierde (n=54) -> banda propia por marco. Corre 5min y 15min en hilos
+paralelos (misma cola Chainlink). 60min: n=25, no incluido todavía.
+Pendiente de decisión de Javi antes de DRY_RUN=False: techo de correlación
+en ráfaga (MAX_DISPAROS_POR_VENTANA) y sizing (peor día 5min -15,6€ a 1€).
 """
 import csv
+import threading
 import time
+from concurrent.futures import ThreadPoolExecutor, wait
 from datetime import datetime, timezone
 from pathlib import Path
 
@@ -67,9 +88,25 @@ import resolution_sniper_precierre_gate as gate
 from resolution_sniper_observer import ASSETS, mercado_slot, token_ids, _TAIL
 
 REPO = Path(__file__).resolve().parent
-DUR_S = 300
-MARCO_TAG = "5m"
-SUBTYPE_SUFFIX = "5min"
+# 23-Sep: marcos en paralelo. (dur_s, marco_tag, subtype_suffix, ask_min_disparo)
+MARCOS = {
+    "5min": (300, "5m", "5min", 0.20),    # 5min: ask<0,20 pierde (n=54, -0,14/tr)
+    "15min": (900, "15m", "15min", 0.05),
+}
+ASK_RAFAGA_MIN = 0.05       # banda con la que se CUENTAN monedas para la ráfaga (la validada)
+ASK_MAX = 0.80              # >=0,80 ya descontado (validado 23-Sep y guarda RSN 22-Sep)
+MIN_MONEDAS_RAFAGA = 2
+MAX_DISPAROS_POR_VENTANA = 1  # conservador hasta decisión de Javi sobre techo de correlación
+# /code-review 23-Sep: tope COMPARTIDO entre marcos por instante de cierre (a :00/:15/:30/:45
+# cierran 5min y 15min a la vez, mismo movimiento Chainlink -> órdenes correlacionadas).
+_disparos_por_cierre: dict = {}
+_disparos_lock = threading.Lock()
+# /code-review 23-Sep: un solo pool para ambos marcos (<=6 lecturas concurrentes: el pool de
+# conexiones de la sesión HTTP compartida es 10; 12 simultáneas abrían TLS nuevo en el
+# instante crítico) y tope de espera de las lecturas de fase A.
+_POOL_LIBROS = ThreadPoolExecutor(max_workers=6, thread_name_prefix="libro_precierre")
+MAX_ESPERA_LECTURAS_S = 0.9   # lecturas que no llegan en 0,9s (desde T-2s) se descartan
+MIN_MARGEN_PRECIERRE_S = 0.3  # si tras preparar() queda menos que esto hasta T-2s, ventana perdida
 OFFSET_S = -2                # medido y elegido 03-Sep -- ver docstring arriba
 STAKE_EUR = 1.05             # suelo CLOB, mismo criterio que la prueba controlada del 02-Sep
 MIN_RATIO_PROFUNDIDAD = 5.0  # mismo umbral que el resto del proyecto
@@ -77,9 +114,12 @@ PRECALCULO_ANTES_S = 12      # arrancar precálculo con margen sobre el instante
 DRY_RUN = True                # 04-Sep: construcción inicial -- ver docstring arriba.
 STRATEGY = "RESOLUTION_SNIPER_PRECIERRE"
 
-OUT_LOG = REPO / "data" / "shadow" / "resolution_sniper_precierre_executor_dryrun.csv"
+# 23-Sep: fichero nuevo (esquema con marco/ráfaga); el viejo queda como histórico.
+OUT_LOG = REPO / "data" / "shadow" / "resolution_sniper_precierre_executor_v2.csv"
 _CAMPOS = [
-    "timestamp_utc", "ts_end", "dry_run", "activo", "direccion_implicita", "ask_implicita",
+    "timestamp_utc", "ts_end", "marco", "dry_run", "activo", "direccion_implicita", "ask_implicita",
+    "n_rafaga", "rafaga_ok", "en_banda", "gate_legacy_confirmado", "gate_legacy_motivo",
+    "market_id",
     "gate_confirmado", "gate_motivo", "ratio_vs_stake", "vwap_fill_estimado",
     "whitelist_ok",  # 09-Sep, ver checklist de 6 categorías
     "t_lectura_ms", "t_firma_ms", "t_total_ms", "disparado", "order_ok", "order_error",
@@ -90,7 +130,15 @@ def _log(msg: str) -> None:
     print(f"[{datetime.now(timezone.utc).isoformat(timespec='seconds')}] {msg}", flush=True)
 
 
+_csv_lock = threading.Lock()
+
+
 def _append_csv(row: dict) -> None:
+    with _csv_lock:
+        _append_csv_sin_lock(row)
+
+
+def _append_csv_sin_lock(row: dict) -> None:
     nuevo = not OUT_LOG.exists()
     with open(OUT_LOG, "a", newline="", encoding="utf-8") as f:
         w = csv.DictWriter(f, fieldnames=_CAMPOS)
@@ -105,17 +153,19 @@ class _Precalculo:
     cliente CLOB calentado (paga aquí los 193-278ms de la PRIMERA firma,
     nunca en el disparo)."""
 
-    def __init__(self):
+    def __init__(self, marco: str):
+        self.marco = marco
+        self.dur_s, self.marco_tag, self.subtype_suffix, self.ask_min = MARCOS[marco]
         self.ts_end = None
         self.mercados = {}
         self.client = None
 
     def preparar(self, ts_end: int) -> None:
         self.ts_end = ts_end
-        ts_start = ts_end - DUR_S
+        ts_start = ts_end - self.dur_s
         self.mercados = {}
         for activo in ASSETS:
-            _slug, mkt = mercado_slot(activo, MARCO_TAG, ts_start)
+            _slug, mkt = mercado_slot(activo, self.marco_tag, ts_start)
             if not mkt:
                 continue
             token_yes, token_no = token_ids(mkt)
@@ -200,10 +250,9 @@ def _profundidad_correcta(token_id: str, stake_eur: float) -> dict:
     }
 
 
-def _instante_critico(pre: _Precalculo, activo: str) -> dict | None:
-    """El camino crítico de verdad: 1 lectura de libro + gate en memoria +
-    firma (+ POST solo si DRY_RUN=False). None si este activo no tiene
-    mercado resuelto o precio Chainlink todavía."""
+def _leer(pre: _Precalculo, activo: str) -> dict | None:
+    """Fase A (paralela entre monedas): dirección implícita Chainlink + UNA
+    lectura de libro del lado implícito. None si no hay mercado/precio."""
     m = pre.mercados.get(activo)
     if not m or m["ref_open"] is None or m["ref_open"] <= 0:
         return None
@@ -217,7 +266,6 @@ def _instante_critico(pre: _Precalculo, activo: str) -> dict | None:
         dir_impl = "Down"
     else:
         return None
-    direction = "BUY_YES" if dir_impl == "Up" else "BUY_NO"
     token_id = m["token_yes"] if dir_impl == "Up" else m["token_no"]
 
     # ÚNICA lectura de libro del instante crítico (~61ms mediana, /book
@@ -227,7 +275,41 @@ def _instante_critico(pre: _Precalculo, activo: str) -> dict | None:
     t0 = time.perf_counter()
     depth = _profundidad_correcta(token_id, STAKE_EUR)
     t_lectura_ms = (time.perf_counter() - t0) * 1000
-    base = {"activo": activo, "direccion_implicita": dir_impl, "t_lectura_ms": round(t_lectura_ms, 1)}
+    return {"activo": activo, "direccion_implicita": dir_impl, "token_id": token_id,
+            "t_lectura_ms": round(t_lectura_ms, 1), "depth": depth,
+            "market_id": m["market_id"]}
+
+
+def _cuenta_para_rafaga(lectura: dict | None) -> bool:
+    if not lectura or not lectura["depth"].get("ok"):
+        return False
+    ask = lectura["depth"].get("mejor_ask")
+    return ask is not None and ASK_RAFAGA_MIN <= ask < ASK_MAX
+
+
+def _reservar_disparo(ts_end: int) -> bool:
+    """Tope compartido entre hilos/marcos por instante de cierre (ver _disparos_por_cierre)."""
+    with _disparos_lock:
+        for k in [k for k in _disparos_por_cierre if k < ts_end - 3600]:
+            del _disparos_por_cierre[k]
+        if _disparos_por_cierre.get(ts_end, 0) >= MAX_DISPAROS_POR_VENTANA:
+            return False
+        _disparos_por_cierre[ts_end] = _disparos_por_cierre.get(ts_end, 0) + 1
+        return True
+
+
+def _instante_critico(pre: _Precalculo, lectura: dict, n_rafaga: int, ts_end: int) -> dict:
+    """Fase B: decisión + firma (+ POST solo si DRY_RUN=False) para UNA moneda
+    ya leída en fase A. Criterio 23-Sep: ráfaga + banda de ask + profundidad."""
+    activo = lectura["activo"]
+    m = pre.mercados[activo]
+    dir_impl = lectura["direccion_implicita"]
+    direction = "BUY_YES" if dir_impl == "Up" else "BUY_NO"
+    token_id = lectura["token_id"]
+    depth = lectura["depth"]
+    t_lectura_ms = lectura["t_lectura_ms"]
+    base = {"activo": activo, "direccion_implicita": dir_impl, "t_lectura_ms": t_lectura_ms,
+            "marco": pre.marco, "n_rafaga": n_rafaga, "market_id": lectura["market_id"]}
     if not depth.get("ok"):
         return {**base, "gate_confirmado": False, "gate_motivo": "sin_libro"}
 
@@ -235,19 +317,33 @@ def _instante_critico(pre: _Precalculo, activo: str) -> dict | None:
     if ask is None:
         return {**base, "gate_confirmado": False, "gate_motivo": "sin_ask"}
 
+    # gate por activo (legacy, solo 5min, no distingue marco): solo informativo desde 23-Sep
     veredicto = gate.evaluar(activo, ask, OFFSET_S)
     ratio = depth.get("ratio_vs_stake")
+    rafaga_ok = n_rafaga >= MIN_MONEDAS_RAFAGA
+    en_banda = pre.ask_min <= ask < ASK_MAX
     resultado = {
-        **base, "ask_implicita": ask,
-        "gate_confirmado": veredicto["confirmado"], "gate_motivo": veredicto["motivo"],
+        **base, "ask_implicita": ask, "rafaga_ok": rafaga_ok, "en_banda": en_banda,
+        "gate_legacy_confirmado": veredicto["confirmado"], "gate_legacy_motivo": veredicto["motivo"],
+        "gate_confirmado": False, "gate_motivo": "",
         "ratio_vs_stake": ratio, "vwap_fill_estimado": depth.get("vwap_fill_estimado"),
     }
-    if not veredicto["confirmado"]:
+    if not rafaga_ok:
+        resultado["gate_motivo"] = f"sin_rafaga_n={n_rafaga}"
+        return resultado
+    if not en_banda:
+        resultado["gate_motivo"] = f"fuera_banda_ask={ask}"
         return resultado
     if ratio is None or ratio < MIN_RATIO_PROFUNDIDAD:
-        resultado["gate_confirmado"] = False
         resultado["gate_motivo"] = f"profundidad_insuficiente_ratio={ratio}"
         return resultado
+    # DRY_RUN: sin tope -- se registran TODAS las monedas de la ráfaga (lo validado es la
+    # ráfaga entera, /code-review 23-Sep). Live: tope compartido entre marcos.
+    if not DRY_RUN and not _reservar_disparo(ts_end):
+        resultado["gate_motivo"] = "tope_disparos_ventana"
+        return resultado
+    resultado["gate_confirmado"] = True
+    resultado["gate_motivo"] = f"rafaga_n={n_rafaga}"
     # 09-Sep (checklist de 6 categorías, hallazgo real): main() llamaba a
     # live_guard.puede_operar_live() SIN strategy/subtype -- con strategy=""
     # (falsy), la comprobación `if strategy and not estrategia_permitida(...)`
@@ -271,7 +367,7 @@ def _instante_critico(pre: _Precalculo, activo: str) -> dict | None:
     # prefijo nunca habría coincidido con una futura entrada real en
     # pares_permitidos_live -- fail-closed (no es un riesgo de dinero),
     # pero habría bloqueado la promoción para siempre en silencio.
-    subtype_whitelist = f"{activo}#{SUBTYPE_SUFFIX}"
+    subtype_whitelist = f"{activo}#{pre.subtype_suffix}"
     ok_whitelist, motivo_whitelist = live_guard.puede_operar_live(STRATEGY, subtype_whitelist)
     resultado["whitelist_ok"] = ok_whitelist
     if not DRY_RUN and not ok_whitelist:
@@ -284,7 +380,11 @@ def _instante_critico(pre: _Precalculo, activo: str) -> dict | None:
         return resultado
 
     from py_clob_client_v2 import MarketOrderArgsV2, OrderType
-    precio_orden = ask if dir_impl == "Up" else round(1.0 - ask, 6)
+    # 23-Sep fix: `ask` ya es el mejor ask del TOKEN comprado (YES o NO) y la
+    # convención de trades.csv es entry_price = precio del token comprado; el
+    # antiguo `1.0 - ask` para Down registraba entrada/slip erróneos si faltaba
+    # trade_real (latente, DRY_RUN).
+    precio_orden = ask
     t1 = time.perf_counter()
     try:
         args = MarketOrderArgsV2(token_id=token_id, amount=STAKE_EUR, side="BUY", price=ask)
@@ -298,12 +398,22 @@ def _instante_critico(pre: _Precalculo, activo: str) -> dict | None:
 
     if DRY_RUN:
         resultado["disparado"] = False
-        _log(f"[DRY-RUN] {activo} {direction} ask={ask} gate={veredicto['motivo']} "
+        _log(f"[DRY-RUN] {pre.marco} {activo} {direction} ask={ask} rafaga_n={n_rafaga} "
              f"ratio={ratio} t_lectura={t_lectura_ms:.0f}ms t_firma={t_firma_ms:.0f}ms "
              f"-- NO se envía (DRY_RUN=True)")
         return resultado
 
     # ---- Solo alcanzable con DRY_RUN=False, tras /code-review + aprobación explícita de Javi ----
+    # /code-review 23-Sep: re-chequeo del circuit breaker JUSTO antes de enviar (el del bucle
+    # puede tener hasta ~15 min en el hilo de 15min) -- mismo fix que dispersed 07-Sep.
+    try:
+        cb_disparado, cb_motivo = live_stake.verificar_circuit_breaker()
+    except Exception as e:
+        cb_disparado, cb_motivo = True, f"error_verificando:{e}"   # fail-closed
+    if cb_disparado:
+        resultado["gate_confirmado"] = False
+        resultado["gate_motivo"] = f"circuit_breaker:{cb_motivo}"
+        return resultado
     t2 = time.perf_counter()
     try:
         resp = pre.client.post_order(signed, OrderType.FOK)
@@ -364,14 +474,14 @@ def _instante_critico(pre: _Precalculo, activo: str) -> dict | None:
     if resp is not None:
         filled_price = float(trade_real.get("price", precio_orden)) if trade_real else precio_orden
         fee_rate_bps = (trade_real.get("fee_rate_bps") if trade_real else None) or 0
-        notas = (f"RESOLUTION_SNIPER_PRECIERRE offset={OFFSET_S}s gate={veredicto['motivo']} "
+        notas = (f"RESOLUTION_SNIPER_PRECIERRE {pre.marco} offset={OFFSET_S}s rafaga_n={n_rafaga} "
                  f"t_total={resultado['t_total_ms']}ms")
         if sin_fill_confirmado:
             notas += " | sin_fill_confirmado=1 (revisar manualmente)"
         trade = {
             "timestamp_utc": datetime.now(timezone.utc).isoformat(timespec="seconds"),
             "market_id": m["market_id"], "question": m["question"], "end_date": m["end_date"],
-            "strategy": STRATEGY, "subtype": f"{activo}#{SUBTYPE_SUFFIX}", "direction": direction,
+            "strategy": STRATEGY, "subtype": f"{activo}#{pre.subtype_suffix}", "direction": direction,
             "stake_eur": STAKE_EUR, "entry_price": filled_price,
             "signal_ask": round(ask, 4), "slip_real": round(filled_price - precio_orden, 4),
             "ic_modelo": "", "edge_neto": "", "conviction_score": "", "kelly_recomendado": STAKE_EUR,
@@ -388,24 +498,44 @@ def _instante_critico(pre: _Precalculo, activo: str) -> dict | None:
 def procesar_ventana(pre: _Precalculo, ts_end: int) -> None:
     objetivo = ts_end + OFFSET_S
     espera = objetivo - time.time()
+    if espera < -0.2:
+        _log(f"[{pre.marco}] ventana {ts_end} perdida: llegamos {-espera:.2f}s tarde a T{OFFSET_S}s")
+        return
     if espera > 0:
         time.sleep(espera)
-    for activo in ASSETS:
-        r = _instante_critico(pre, activo)
-        if r is None:
+    # Fase A en paralelo, con tope de espera: una lectura colgada no arrastra a las demás
+    # más allá del cierre (/code-review 23-Sep).
+    futuros = {_POOL_LIBROS.submit(_leer, pre, a): a for a in ASSETS}
+    hechos, pendientes = wait(futuros, timeout=MAX_ESPERA_LECTURAS_S)
+    lecturas = []
+    for f in hechos:
+        try:
+            l = f.result()
+        except Exception as e:
+            _log(f"[{pre.marco}] lectura {futuros[f]} falló: {type(e).__name__}: {e}")
             continue
-        _append_csv({"timestamp_utc": datetime.now(timezone.utc).isoformat(timespec="seconds"),
+        if l is not None:
+            lecturas.append(l)
+    tarde = [futuros[f] for f in pendientes]
+    if time.time() > ts_end - 0.3:
+        _log(f"[{pre.marco}] ventana {ts_end}: lecturas terminaron a <0,3s del cierre -- no se decide")
+        return
+    n_rafaga = sum(1 for l in lecturas if _cuenta_para_rafaga(l))
+    # live: el tope se lo lleva la moneda con más profundidad (no el orden de ASSETS)
+    lecturas.sort(key=lambda l: -(l["depth"].get("ratio_vs_stake") or 0))
+    for lectura in lecturas:
+        r = _instante_critico(pre, lectura, n_rafaga, ts_end)
+        _append_csv({"timestamp_utc": datetime.now(timezone.utc).isoformat(timespec="milliseconds"),
                       "ts_end": ts_end, "dry_run": DRY_RUN, **r})
-        if r.get("disparado"):
-            break  # un solo intento por ventana, mismo criterio que el resto del proyecto
+    for a in tarde:
+        _append_csv({"timestamp_utc": datetime.now(timezone.utc).isoformat(timespec="milliseconds"),
+                      "ts_end": ts_end, "dry_run": DRY_RUN, "marco": pre.marco, "activo": a,
+                      "n_rafaga": n_rafaga, "gate_confirmado": False, "gate_motivo": "lectura_tarde"})
 
 
-def main() -> None:
-    _TAIL.arrancar()
-    time.sleep(2)
-    _log(f"resolution_sniper_precierre_executor arrancado -- DRY_RUN={DRY_RUN} "
-         f"offset={OFFSET_S}s stake={STAKE_EUR}€ activos={ASSETS}")
-    pre = _Precalculo()
+def _bucle_marco(marco: str) -> None:
+    pre = _Precalculo(marco)
+    dur_s = pre.dur_s
     while True:
         try:
             if not DRY_RUN:
@@ -415,36 +545,56 @@ def main() -> None:
                     continue
                 disparado_cb, motivo_cb = live_stake.verificar_circuit_breaker()
                 if disparado_cb:
-                    _log(f"circuit breaker disparado: {motivo_cb} -- en espera")
+                    _log(f"[{marco}] circuit breaker disparado: {motivo_cb} -- en espera")
                     time.sleep(5)
                     continue
             now = time.time()
-            ts_end = (int(now) // DUR_S + 1) * DUR_S
+            ts_end = (int(now) // dur_s + 1) * dur_s
             objetivo_precalculo = ts_end + OFFSET_S - PRECALCULO_ANTES_S
-            # /code-review 04-Sep, hallazgo real: un solo sleep(min(margen,30))
-            # dormía como mucho 30s y luego arrancaba pre.preparar() de
-            # inmediato aunque quedaran minutos de margen -- el precálculo
-            # se ejecutaba varios minutos antes de T-12s, no justo antes
-            # como dice el diseño. Bucle hasta estar realmente cerca.
+            # /code-review 04-Sep, hallazgo real: bucle hasta estar realmente
+            # cerca de T-12s (un solo sleep(min(margen,30)) precalculaba minutos antes).
             while True:
                 margen = objetivo_precalculo - time.time()
                 if margen <= 0:
                     break
                 time.sleep(min(margen, 30))
+            if ts_end + OFFSET_S - time.time() < 1.0:
+                # llegamos tarde a esta ventana (arranque/pausa): dormir hasta que pase el cierre
+                # (/code-review 23-Sep: sin sleep era un busy-spin de hasta ~3s)
+                time.sleep(max(0.5, ts_end + 1 - time.time()))
+                continue
             pre.preparar(ts_end)
+            if ts_end + OFFSET_S - time.time() < MIN_MARGEN_PRECIERRE_S:
+                _log(f"[{marco}] preparar() tardó demasiado para {ts_end} -- ventana perdida")
+                time.sleep(max(0.5, ts_end + 1 - time.time()))
+                continue
             procesar_ventana(pre, ts_end)
             resto = ts_end + max(OFFSET_S, 0) + 3 - time.time()
             if resto > 0:
                 time.sleep(min(resto, 30))
         except Exception as e:
-            # /code-review 04-Sep, hallazgo real: sin este guardián, una
-            # excepción de red/parseo en cualquier punto del ciclo (lectura
-            # de libro, import de py_clob_client_v2, escritura del CSV)
-            # tumbaba el proceso entero -- mismo criterio que el resto de
-            # ejecutores persistentes del proyecto (ballenas_executor_5min.py
-            # etc.), que sobreviven un ciclo malo y reintentan el siguiente.
-            _log(f"error en ciclo principal ({type(e).__name__}: {e}) -- se reintenta en el siguiente ciclo")
+            # /code-review 04-Sep: un ciclo malo no tumba el proceso, se reintenta
+            _log(f"[{marco}] error en ciclo principal ({type(e).__name__}: {e}) -- se reintenta")
             time.sleep(5)
+
+
+def main() -> None:
+    _TAIL.arrancar()
+    time.sleep(2)
+    _log(f"resolution_sniper_precierre_executor arrancado -- DRY_RUN={DRY_RUN} "
+         f"offset={OFFSET_S}s stake={STAKE_EUR}€ activos={ASSETS} marcos={list(MARCOS)} "
+         f"criterio=rafaga>={MIN_MONEDAS_RAFAGA} ask<{ASK_MAX}")
+    hilos = {}
+    while True:
+        for marco in MARCOS:
+            h = hilos.get(marco)
+            if h is None or not h.is_alive():
+                if h is not None:
+                    _log(f"[{marco}] hilo murió -- se relanza")
+                h = threading.Thread(target=_bucle_marco, args=(marco,), daemon=True, name=f"precierre_{marco}")
+                h.start()
+                hilos[marco] = h
+        time.sleep(30)
 
 
 if __name__ == "__main__":
