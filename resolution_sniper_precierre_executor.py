@@ -107,6 +107,10 @@ _disparos_lock = threading.Lock()
 _POOL_LIBROS = ThreadPoolExecutor(max_workers=6, thread_name_prefix="libro_precierre")
 MAX_ESPERA_LECTURAS_S = 0.9   # lecturas que no llegan en 0,9s (desde T-2s) se descartan
 MIN_MARGEN_PRECIERRE_S = 0.3  # si tras preparar() queda menos que esto hasta T-2s, ventana perdida
+MARGEN_MIN_POST_S = 0.5       # nunca enviar la orden a menos de 0,5s del cierre nominal
+# 23-Sep (checklist pre-live): prob. de acierto CONSERVADORA para el Kelly de calcular_stake --
+# cota baja del hit validado con ráfaga (15min 93,7% n=426, 5min 87,0% n=1285), no la media.
+P_ACIERTO_CONSERVADORA = {"5min": 0.84, "15min": 0.90}
 OFFSET_S = -2                # medido y elegido 03-Sep -- ver docstring arriba
 STAKE_EUR = 1.05             # suelo CLOB, mismo criterio que la prueba controlada del 02-Sep
 MIN_RATIO_PROFUNDIDAD = 5.0  # mismo umbral que el resto del proyecto
@@ -123,6 +127,7 @@ _CAMPOS = [
     "gate_confirmado", "gate_motivo", "ratio_vs_stake", "vwap_fill_estimado",
     "whitelist_ok",  # 09-Sep, ver checklist de 6 categorías
     "t_lectura_ms", "t_firma_ms", "t_total_ms", "disparado", "order_ok", "order_error",
+    "stake_eur", "t_guardas_ms",   # 23-Sep, al FINAL (ver _rotar_si_cabecera_distinta)
 ]
 
 
@@ -138,7 +143,27 @@ def _append_csv(row: dict) -> None:
         _append_csv_sin_lock(row)
 
 
+_cabecera_verificada = False
+
+
+def _rotar_si_cabecera_distinta() -> None:
+    """/code-review 23-Sep: si el CSV existente tiene otra cabecera, las filas nuevas quedarían
+    desalineadas en silencio -- se renombra a *_prev_<ts>.csv y se empieza uno nuevo."""
+    if not OUT_LOG.exists() or OUT_LOG.stat().st_size == 0:
+        return
+    with open(OUT_LOG, encoding="utf-8") as f:
+        cab = f.readline().strip().split(",")
+    if cab != _CAMPOS:
+        destino = OUT_LOG.with_name(f"{OUT_LOG.stem}_prev_{int(time.time())}.csv")
+        OUT_LOG.rename(destino)
+        _log(f"CSV con cabecera distinta rotado a {destino.name}")
+
+
 def _append_csv_sin_lock(row: dict) -> None:
+    global _cabecera_verificada
+    if not _cabecera_verificada:
+        _rotar_si_cabecera_distinta()
+        _cabecera_verificada = True
     nuevo = not OUT_LOG.exists()
     with open(OUT_LOG, "a", newline="", encoding="utf-8") as f:
         w = csv.DictWriter(f, fieldnames=_CAMPOS)
@@ -157,12 +182,21 @@ class _Precalculo:
         self.marco = marco
         self.dur_s, self.marco_tag, self.subtype_suffix, self.ask_min = MARCOS[marco]
         self.ts_end = None
+        self.guardas = {"ok": False, "motivo": "sin_precalculo"}
+        self.stake_ref = STAKE_EUR
         self.mercados = {}
         self.client = None
+
+    def _precalcular_guardas(self) -> None:
+        self.guardas = _guardas_precalculadas(self)
+        stakes = [float(i.get("stake_eur") or 0) for i in self.guardas.get("stake", {}).values()
+                  if i.get("viable")]
+        self.stake_ref = max(stakes) if stakes else STAKE_EUR
 
     def preparar(self, ts_end: int) -> None:
         self.ts_end = ts_end
         ts_start = ts_end - self.dur_s
+        self._precalcular_guardas()
         self.mercados = {}
         for activo in ASSETS:
             _slug, mkt = mercado_slot(activo, self.marco_tag, ts_start)
@@ -195,6 +229,31 @@ class _Precalculo:
                     MarketOrderArgsV2(token_id=primer_token, amount=STAKE_EUR, side="BUY", price=0.01))
             except Exception as e:
                 _log(f"aviso: no se pudo calentar la firma ({e})")
+
+
+def _guardas_precalculadas(pre) -> dict:
+    """/code-review 23-Sep: todo lo que lee ficheros (trades.csv, config, bankroll) se resuelve
+    en el PRECÁLCULO (T-12s), nunca en la ventana crítica de T-2s. Fail-closed: cualquier error
+    deja las guardas bloqueando. Riesgo aceptado: ~10s de antigüedad; el CB se re-chequea igual
+    antes del POST y hay un límite de reloj duro (MARGEN_MIN_POST_S)."""
+    g = {"ok": False, "motivo": "sin_precalculo", "ya_operados": set(), "abiertas": {},
+         "max_correl": 2, "stake": {}}
+    try:
+        g["ya_operados"] = lt._ya_operados_hoy()
+        g["max_correl"] = lt._cargar_config().get("riesgo", {}).get("max_posiciones_abiertas_misma_direccion", 2)
+        for d in ("BUY_YES", "BUY_NO"):
+            g["abiertas"][d] = lt._posiciones_abiertas_misma_direccion(d)
+            # Kelly con ask de referencia 0,50 (mediana validada); el stake queda capado por
+            # max_pct_bankroll/max_stake en cualquier caso -- lo que importa aquí es freno/bankroll.
+            p_ok = P_ACIERTO_CONSERVADORA[pre.marco]
+            ic = max(0.0, (p_ok - 0.5) / 0.5)
+            info = live_stake.calcular_stake(ic, STRATEGY, f"BTC#{pre.subtype_suffix}", direction=d,
+                                             precio_entrada=0.5)
+            g["stake"][d] = info
+        g["ok"], g["motivo"] = True, ""
+    except Exception as e:
+        g["motivo"] = f"error_precalculo:{type(e).__name__}:{e}"
+    return g
 
 
 def _profundidad_correcta(token_id: str, stake_eur: float) -> dict:
@@ -273,7 +332,7 @@ def _leer(pre: _Precalculo, activo: str) -> dict | None:
     # por qué no se usa live_trade._consultar_profundidad_libro aquí
     # directamente (habría que pasarle un precio_entrada adivinado).
     t0 = time.perf_counter()
-    depth = _profundidad_correcta(token_id, STAKE_EUR)
+    depth = _profundidad_correcta(token_id, pre.stake_ref)
     t_lectura_ms = (time.perf_counter() - t0) * 1000
     return {"activo": activo, "direccion_implicita": dir_impl, "token_id": token_id,
             "t_lectura_ms": round(t_lectura_ms, 1), "depth": depth,
@@ -337,6 +396,30 @@ def _instante_critico(pre: _Precalculo, lectura: dict, n_rafaga: int, ts_end: in
     if ratio is None or ratio < MIN_RATIO_PROFUNDIDAD:
         resultado["gate_motivo"] = f"profundidad_insuficiente_ratio={ratio}"
         return resultado
+    # ---- 23-Sep, checklist pre-live: mismas guardas estructurales que el resto de
+    # ejecutores live (dispersed/wallet_mirror). Se evalúan también en DRY_RUN para
+    # medir cuántas veces habrían bloqueado (el motivo queda en el CSV).
+    t_g0 = time.perf_counter()
+    g = pre.guardas
+    if not g.get("ok"):
+        resultado["gate_motivo"] = f"guardas:{g.get('motivo')}"
+        return resultado
+    if m["market_id"] in g["ya_operados"]:
+        resultado["gate_motivo"] = "ya_operado"
+        return resultado
+    if g["abiertas"].get(direction, 99) >= g["max_correl"]:
+        resultado["gate_motivo"] = f"techo_correlacion_{direction}"
+        return resultado
+    stake_info = g["stake"].get(direction) or {}
+    if not stake_info.get("viable") or float(stake_info.get("stake_eur") or 0) < 1.0:
+        resultado["gate_motivo"] = f"stake_no_viable:{stake_info.get('motivo')}"
+        return resultado
+    stake_eur = float(stake_info["stake_eur"])
+    resultado["stake_eur"] = stake_eur
+    if depth.get("profundidad_eur") is not None and depth["profundidad_eur"] < MIN_RATIO_PROFUNDIDAD * stake_eur:
+        resultado["gate_motivo"] = f"profundidad_insuficiente_para_stake={stake_eur}"
+        return resultado
+    resultado["t_guardas_ms"] = round((time.perf_counter() - t_g0) * 1000, 2)
     # DRY_RUN: sin tope -- se registran TODAS las monedas de la ráfaga (lo validado es la
     # ráfaga entera, /code-review 23-Sep). Live: tope compartido entre marcos.
     if not DRY_RUN and not _reservar_disparo(ts_end):
@@ -369,6 +452,10 @@ def _instante_critico(pre: _Precalculo, lectura: dict, n_rafaga: int, ts_end: in
     # pero habría bloqueado la promoción para siempre en silencio.
     subtype_whitelist = f"{activo}#{pre.subtype_suffix}"
     ok_whitelist, motivo_whitelist = live_guard.puede_operar_live(STRATEGY, subtype_whitelist)
+    # 23-Sep: puede_operar_live sin dirección deja pasar CUALQUIER dirección si una está en la
+    # whitelist -- exigir además la tupla EXACTA con dirección (fail-closed).
+    if ok_whitelist and not live_guard.estrategia_permitida(STRATEGY, subtype_whitelist, direction=direction):
+        ok_whitelist, motivo_whitelist = False, f"{STRATEGY}#{subtype_whitelist}#{direction} no está en lista de permitidos"
     resultado["whitelist_ok"] = ok_whitelist
     if not DRY_RUN and not ok_whitelist:
         resultado["gate_confirmado"] = False
@@ -387,7 +474,7 @@ def _instante_critico(pre: _Precalculo, lectura: dict, n_rafaga: int, ts_end: in
     precio_orden = ask
     t1 = time.perf_counter()
     try:
-        args = MarketOrderArgsV2(token_id=token_id, amount=STAKE_EUR, side="BUY", price=ask)
+        args = MarketOrderArgsV2(token_id=token_id, amount=stake_eur, side="BUY", price=ask)
         signed = pre.client.create_market_order(args)
         t_firma_ms = (time.perf_counter() - t1) * 1000
     except Exception as e:
@@ -404,6 +491,12 @@ def _instante_critico(pre: _Precalculo, lectura: dict, n_rafaga: int, ts_end: in
         return resultado
 
     # ---- Solo alcanzable con DRY_RUN=False, tras /code-review + aprobación explícita de Javi ----
+    # /code-review 23-Sep: límite de reloj DURO -- si ya no queda margen hasta el cierre, no se
+    # envía (el libro cierra en endDate exacto: "trading is disabled", ver RSN naive).
+    if time.time() > pre.ts_end - MARGEN_MIN_POST_S:
+        resultado["gate_confirmado"] = False
+        resultado["gate_motivo"] = "sin_margen_reloj_antes_post"
+        return resultado
     # /code-review 23-Sep: re-chequeo del circuit breaker JUSTO antes de enviar (el del bucle
     # puede tener hasta ~15 min en el hilo de 15min) -- mismo fix que dispersed 07-Sep.
     try:
@@ -423,7 +516,7 @@ def _instante_critico(pre: _Precalculo, lectura: dict, n_rafaga: int, ts_end: in
     t_post_ms = (time.perf_counter() - t2) * 1000
     resultado["disparado"] = True
     resultado["order_error"] = error
-    resultado["t_total_ms"] = round(t_lectura_ms + t_firma_ms + t_post_ms, 1)
+    resultado["t_total_ms"] = round(t_lectura_ms + (resultado.get("t_guardas_ms") or 0) + t_firma_ms + t_post_ms, 1)
 
     # 15-Sep (hallazgo real, barrido de salud pedido por Javi: "no quiero
     # un trade fantasma en ningún repo"): `ok=True` en cuanto post_order()
@@ -482,12 +575,12 @@ def _instante_critico(pre: _Precalculo, lectura: dict, n_rafaga: int, ts_end: in
             "timestamp_utc": datetime.now(timezone.utc).isoformat(timespec="seconds"),
             "market_id": m["market_id"], "question": m["question"], "end_date": m["end_date"],
             "strategy": STRATEGY, "subtype": f"{activo}#{pre.subtype_suffix}", "direction": direction,
-            "stake_eur": STAKE_EUR, "entry_price": filled_price,
+            "stake_eur": stake_eur, "entry_price": filled_price,
             "signal_ask": round(ask, 4), "slip_real": round(filled_price - precio_orden, 4),
-            "ic_modelo": "", "edge_neto": "", "conviction_score": "", "kelly_recomendado": STAKE_EUR,
+            "ic_modelo": "", "edge_neto": "", "conviction_score": "", "kelly_recomendado": stake_eur,
             "status": "OPEN" if ok else "ERROR",
             "close_timestamp": "", "exit_price": "", "outcome_real": "",
-            "fee_eur": round(float(fee_rate_bps) / 10000 * STAKE_EUR, 4) if fee_rate_bps else 0.0,
+            "fee_eur": round(float(fee_rate_bps) / 10000 * stake_eur, 4) if fee_rate_bps else 0.0,
             "pnl_bruto_eur": "", "pnl_neto_eur": "",
             "notas": notas,
         }
