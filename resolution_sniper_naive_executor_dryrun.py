@@ -96,6 +96,21 @@ CONFIG_LIVE = REPO / "data" / "live" / "config_live.json"
 OUT = DIR_SHADOW / "resolution_sniper_naive_executor_dryrun.csv"
 
 DRY_RUN = False  # 25-Ago: activado con aprobación explícita de Javi tras revisión manual
+# 23-Sep (petición explícita Javi: enviar 0-3s tras el cierre): cuando es True, el envío real pasa
+# al camino rápido de resolution_sniper_precierre_executor.py (NAIVE_CAMINO_RAPIDO_ACTIVO, T+0s,
+# envío ~0,3-0,5s). Este ejecutor decidía a T+4,1s de mediana y llegaba con el libro cerrado.
+# Sigue observando/registrando igual. /code-review 23-Sep: interruptor ÚNICO compartido con el
+# camino rápido -- clave de config_live.json (leída en cada decisión, sin flags a sincronizar).
+CLAVE_CONFIG_CAMINO_RAPIDO = "resolution_sniper_naive_camino_rapido"
+
+
+def _envio_delegado_camino_rapido() -> bool:
+    """True -> no enviar desde aquí. Si la config no se puede leer, True (fail-closed: mejor
+    no enviar desde ningún lado que arriesgar doble orden; el camino rápido también se para)."""
+    try:
+        return lt._cargar_config().get(CLAVE_CONFIG_CAMINO_RAPIDO) is True
+    except Exception:
+        return True
 # completa (sin /code-review, por presupuesto de tokens) -- guardianes #2 (whitelist real)
 # y #3 (gate_bucket fail-closed, ahora con recheck post-requote correcto, ver
 # idea_wallet_mirror_recheck_postrequote_fuente_equivocada_25ago) siguen en pie. Restringido
@@ -335,7 +350,10 @@ def evaluar(asset: str, marco: str, slug: str, market_id: str, condition_id: str
     # (whitelist) y #3 (gate_bucket fail-closed) siguen en pie: esta tupla
     # nunca opera hasta que Javi la añada a mano a pares_permitidos_live Y
     # el gate_bucket confirme bueno_confirmado para el bucket exacto. ---
-    if not DRY_RUN:
+    if not DRY_RUN and _envio_delegado_camino_rapido():
+        _log("  ↪ envío real delegado al camino rápido (resolution_sniper_precierre_executor.py, "
+             "T+0s) -- este tramo solo mide")
+    elif not DRY_RUN:
         if not en_wl:
             _log(f"  ⛔ {tupla_sintetica} no está en pares_permitidos_live -- "
                  f"fail-closed, no se ejecuta pese a DRY_RUN=False")

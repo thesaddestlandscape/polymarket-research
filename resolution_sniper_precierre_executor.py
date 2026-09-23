@@ -85,6 +85,8 @@ import live_trade as lt
 import live_guard
 import live_stake
 import resolution_sniper_precierre_gate as gate
+import resolution_sniper_naive_executor_dryrun as _naive_viejo   # COMBOS_CONFIRMADOS / _veto_clv
+import resolution_sniper_naive_gate_bucket as rsngb
 from resolution_sniper_observer import ASSETS, mercado_slot, token_ids, _TAIL
 
 REPO = Path(__file__).resolve().parent
@@ -101,6 +103,9 @@ MAX_DISPAROS_POR_VENTANA = 1  # conservador hasta decisión de Javi sobre techo 
 # cierran 5min y 15min a la vez, mismo movimiento Chainlink -> órdenes correlacionadas).
 _disparos_por_cierre: dict = {}
 _disparos_lock = threading.Lock()
+# 23-Sep: mercados con orden enviada por ESTE proceso (precierre o naive) -- las guardas de
+# ya_operados se precalculan en T-12s y no verían un disparo de T-2s; esto sí.
+_mercados_enviados: set = set()
 # /code-review 23-Sep: un solo pool para ambos marcos (<=6 lecturas concurrentes: el pool de
 # conexiones de la sesión HTTP compartida es 10; 12 simultáneas abrían TLS nuevo en el
 # instante crítico) y tope de espera de las lecturas de fase A.
@@ -111,11 +116,99 @@ MARGEN_MIN_POST_S = 0.5       # nunca enviar la orden a menos de 0,5s del cierre
 # 23-Sep (checklist pre-live): prob. de acierto CONSERVADORA para el Kelly de calcular_stake --
 # cota baja del hit validado con ráfaga (15min 93,7% n=426, 5min 87,0% n=1285), no la media.
 P_ACIERTO_CONSERVADORA = {"5min": 0.84, "15min": 0.90}
+
+# ---- 23-Sep: camino rápido RESOLUTION_SNIPER_NAIVE (petición explícita Javi: "tiene que enviar
+# entre 0 y 3 segs después del cierre, arregla la latencia... a milisegundos"). El ejecutor viejo
+# (resolution_sniper_naive_executor_dryrun.py vía observadores) decidía a T+4,1s de mediana y
+# enviaba por _ejecutar_orden_polymarket (~1,5-2s más): llegaba con el libro ya cerrado ("trading
+# is disabled", 59/59 el 01-Sep, enviadas a T+14s). Aquí: precálculo en T-12s, libros de las 6
+# monedas en paralelo a T+0, quórum de ráfaga de golpe (sin esperar a otros hilos), firma caliente
+# y POST FOK directo -> envío ~T+0,3-0,5s. Mismos gates que el viejo: combos confirmados,
+# whitelist exacta BUY_Up/BUY_Down, ventana horaria, >=2 monedas fillable, ask<0,80, micro-bucket
+# bueno_confirmado (rsngb), veto CLV, correlación, stake/freno, idempotencia.
+# Interruptor ÚNICO compartido por ambos procesos (/code-review 23-Sep): clave de config_live.json
+# "resolution_sniper_naive_camino_rapido" (True -> este proceso envía a T+0 y el ejecutor viejo
+# delega). Leída en cada precálculo aquí y en cada decisión allí: nunca dos flags a sincronizar.
+CLAVE_CONFIG_CAMINO_RAPIDO = "resolution_sniper_naive_camino_rapido"
+
+
+def naive_camino_rapido_activo(cfg: dict | None = None) -> bool:
+    try:
+        cfg = cfg if cfg is not None else lt._cargar_config()
+        return cfg.get(CLAVE_CONFIG_CAMINO_RAPIDO) is True
+    except Exception:
+        return False   # sin config legible: el camino rápido NO opera
+STRATEGY_NAIVE = "RESOLUTION_SNIPER_NAIVE"
+NAIVE_OFFSET_S = 0.0
+NAIVE_MAX_ENVIO_S = 2.5          # nunca enviar después de T+2,5s (Javi: 0-3s)
+NAIVE_ASK_MIN, NAIVE_ASK_MAX_DET, NAIVE_ASK_MAX_OPERAR = 0.05, 0.95, 0.80
+NAIVE_RATIO_MIN = 5.0
+NAIVE_MIN_MONEDAS = 2
+NAIVE_IC_PROXY = 0.15            # mismo ic_proxy que el ejecutor viejo para calcular_stake
+# CLV: _veto_clv resetea la caché y tarda ~8,4s por llamada (medido 23-Sep) -- inasumible en el
+# precálculo de T-12s. Se refresca en un hilo aparte; fail-closed si falta o está viejo.
+CLV_REFRESCO_S = 600
+CLV_MAX_EDAD_S = 1800
+# /code-review 23-Sep: el refresco (~6-8s de CPU con el GIL) solo arranca lejos de cualquier
+# cierre de 5min (ts%300 en esta franja), nunca solapando T-12s..T+3s.
+CLV_FRANJA_SEGURA = (15, 240)
+_clv_estado = {"ts": 0.0, "ok": False, "filas": {}}
+_clv_lock = threading.Lock()
+
+
+def _refrescar_clv_una_vez() -> None:
+    """Carga UNA vez el CLV (misma fuente/filtros que lt._clv_tupla) y guarda solo las filas de
+    las tuplas NAIVE, para evaluar por micro-bucket en caliente sin tocar disco a T+0."""
+    lt._CLV_CACHE = None
+    lt._clv_tupla(STRATEGY_NAIVE, "BTC#5min", "BUY_YES")   # fuerza la carga
+    cache = lt._CLV_CACHE or {}
+    filas = {}
+    for (activo, marco) in _naive_viejo.COMBOS_CONFIRMADOS:
+        for d in ("BUY_YES", "BUY_NO"):
+            k = f"{STRATEGY_NAIVE}#{activo}#{marco}#{d}"
+            filas[k] = list(cache.get(k, []))
+    with _clv_lock:
+        # fail-closed (/code-review): _clv_tupla traga errores de lectura y deja la caché vacía;
+        # una caché vacía NO es "sin veto", es "no sé" -> ok=False veta todo.
+        _clv_estado["ok"] = len(cache) > 0
+        _clv_estado["filas"] = filas
+        _clv_estado["ts"] = time.time()
+
+
+def _hilo_clv() -> None:
+    while True:
+        try:
+            if naive_camino_rapido_activo():
+                while not (CLV_FRANJA_SEGURA[0] <= time.time() % 300 <= CLV_FRANJA_SEGURA[1]):
+                    time.sleep(1)
+                _refrescar_clv_una_vez()
+        except Exception as e:
+            _log(f"refresco CLV falló ({type(e).__name__}: {e}) -- se mantiene el anterior (o veto por edad)")
+        time.sleep(CLV_REFRESCO_S)
+
+
+def _clv_veta(activo: str, marco: str, direction: str, py_yes: float) -> bool:
+    """True = vetar. Mismo criterio que lt._clv_tupla(py=...) (11-Ago: por micro-bucket del precio
+    YES, convención de results.csv). Fail-closed: sin carga válida o con más de CLV_MAX_EDAD_S."""
+    with _clv_lock:
+        if not _clv_estado["ok"] or time.time() - _clv_estado["ts"] > CLV_MAX_EDAD_S:
+            return True
+        filas = _clv_estado["filas"].get(f"{STRATEGY_NAIVE}#{activo}#{marco}#{direction}", [])
+    b = lt._clv_bucket(py_yes)
+    vals = [clv for precio, clv in filas if precio is not None and lt._clv_bucket(precio) == b]
+    return bool(len(vals) >= lt.CLV_VETO_MIN_N and sum(vals) / len(vals) < 0)
 OFFSET_S = -2                # medido y elegido 03-Sep -- ver docstring arriba
 STAKE_EUR = 1.05             # suelo CLOB, mismo criterio que la prueba controlada del 02-Sep
 MIN_RATIO_PROFUNDIDAD = 5.0  # mismo umbral que el resto del proyecto
 PRECALCULO_ANTES_S = 12      # arrancar precálculo con margen sobre el instante objetivo
-DRY_RUN = True                # 04-Sep: construcción inicial -- ver docstring arriba.
+# 23-Sep: DRY_RUN=False con aprobación EXPLÍCITA de Javi ("3 - ok", "vamos, venga") tras
+# checklist pre-live + /code-review medium. Tuplas: 5min+15min x 6 monedas x 2 direcciones.
+DRY_RUN = False
+# 23-Sep (decisión explícita Javi: "para este caso en concreto puedes quitar los filtros
+# horarios"): SOLO el PRECIERRE ignora las ventanas horarias (21% del PnL retro 15min y 36% del
+# 5min caían fuera). Se mantienen switch, whitelist exacta, CB/freno diario, correlación.
+# El camino rápido NAIVE (abajo) SÍ respeta ventanas, igual que su ejecutor original.
+IGNORAR_VENTANAS_HORARIAS = True
 STRATEGY = "RESOLUTION_SNIPER_PRECIERRE"
 
 # 23-Sep: fichero nuevo (esquema con marco/ráfaga); el viejo queda como histórico.
@@ -128,6 +221,7 @@ _CAMPOS = [
     "whitelist_ok",  # 09-Sep, ver checklist de 6 categorías
     "t_lectura_ms", "t_firma_ms", "t_total_ms", "disparado", "order_ok", "order_error",
     "stake_eur", "t_guardas_ms",   # 23-Sep, al FINAL (ver _rotar_si_cabecera_distinta)
+    "estrategia", "t_envio_rel_cierre_s",
 ]
 
 
@@ -252,7 +346,24 @@ def _guardas_precalculadas(pre) -> dict:
             g["stake"][d] = info
         g["ok"], g["motivo"] = True, ""
     except Exception as e:
+        g["ok"] = False   # fail-closed: ninguna guarda a medias
         g["motivo"] = f"error_precalculo:{type(e).__name__}:{e}"
+    # --- naive: SEPARADO (/code-review 23-Sep) -- un fallo aquí bloquea SOLO al naive, nunca al
+    # precierre; y solo se calcula si el camino rápido está activo (no alarga preparar() si no).
+    g["naive_ok"], g["naive_motivo"] = False, "camino_rapido_inactivo"
+    try:
+        cfg = lt._cargar_config()
+        if naive_camino_rapido_activo(cfg):
+            g["naive_stake"] = {}
+            for activo in ASSETS:
+                if (activo, pre.marco) not in _naive_viejo.COMBOS_CONFIRMADOS:
+                    continue
+                for d in ("BUY_YES", "BUY_NO"):
+                    g["naive_stake"][(activo, d)] = live_stake.calcular_stake(
+                        NAIVE_IC_PROXY, STRATEGY_NAIVE, f"{activo}#{pre.subtype_suffix}", direction=d)
+            g["naive_ok"], g["naive_motivo"] = True, ""
+    except Exception as e:
+        g["naive_ok"], g["naive_motivo"] = False, f"error_precalculo_naive:{type(e).__name__}:{e}"
     return g
 
 
@@ -357,115 +468,12 @@ def _reservar_disparo(ts_end: int) -> bool:
         return True
 
 
-def _instante_critico(pre: _Precalculo, lectura: dict, n_rafaga: int, ts_end: int) -> dict:
-    """Fase B: decisión + firma (+ POST solo si DRY_RUN=False) para UNA moneda
-    ya leída en fase A. Criterio 23-Sep: ráfaga + banda de ask + profundidad."""
-    activo = lectura["activo"]
-    m = pre.mercados[activo]
-    dir_impl = lectura["direccion_implicita"]
-    direction = "BUY_YES" if dir_impl == "Up" else "BUY_NO"
-    token_id = lectura["token_id"]
-    depth = lectura["depth"]
-    t_lectura_ms = lectura["t_lectura_ms"]
-    base = {"activo": activo, "direccion_implicita": dir_impl, "t_lectura_ms": t_lectura_ms,
-            "marco": pre.marco, "n_rafaga": n_rafaga, "market_id": lectura["market_id"]}
-    if not depth.get("ok"):
-        return {**base, "gate_confirmado": False, "gate_motivo": "sin_libro"}
-
-    ask = depth.get("mejor_ask")
-    if ask is None:
-        return {**base, "gate_confirmado": False, "gate_motivo": "sin_ask"}
-
-    # gate por activo (legacy, solo 5min, no distingue marco): solo informativo desde 23-Sep
-    veredicto = gate.evaluar(activo, ask, OFFSET_S)
-    ratio = depth.get("ratio_vs_stake")
-    rafaga_ok = n_rafaga >= MIN_MONEDAS_RAFAGA
-    en_banda = pre.ask_min <= ask < ASK_MAX
-    resultado = {
-        **base, "ask_implicita": ask, "rafaga_ok": rafaga_ok, "en_banda": en_banda,
-        "gate_legacy_confirmado": veredicto["confirmado"], "gate_legacy_motivo": veredicto["motivo"],
-        "gate_confirmado": False, "gate_motivo": "",
-        "ratio_vs_stake": ratio, "vwap_fill_estimado": depth.get("vwap_fill_estimado"),
-    }
-    if not rafaga_ok:
-        resultado["gate_motivo"] = f"sin_rafaga_n={n_rafaga}"
-        return resultado
-    if not en_banda:
-        resultado["gate_motivo"] = f"fuera_banda_ask={ask}"
-        return resultado
-    if ratio is None or ratio < MIN_RATIO_PROFUNDIDAD:
-        resultado["gate_motivo"] = f"profundidad_insuficiente_ratio={ratio}"
-        return resultado
-    # ---- 23-Sep, checklist pre-live: mismas guardas estructurales que el resto de
-    # ejecutores live (dispersed/wallet_mirror). Se evalúan también en DRY_RUN para
-    # medir cuántas veces habrían bloqueado (el motivo queda en el CSV).
-    t_g0 = time.perf_counter()
-    g = pre.guardas
-    if not g.get("ok"):
-        resultado["gate_motivo"] = f"guardas:{g.get('motivo')}"
-        return resultado
-    if m["market_id"] in g["ya_operados"]:
-        resultado["gate_motivo"] = "ya_operado"
-        return resultado
-    if g["abiertas"].get(direction, 99) >= g["max_correl"]:
-        resultado["gate_motivo"] = f"techo_correlacion_{direction}"
-        return resultado
-    stake_info = g["stake"].get(direction) or {}
-    if not stake_info.get("viable") or float(stake_info.get("stake_eur") or 0) < 1.0:
-        resultado["gate_motivo"] = f"stake_no_viable:{stake_info.get('motivo')}"
-        return resultado
-    stake_eur = float(stake_info["stake_eur"])
-    resultado["stake_eur"] = stake_eur
-    if depth.get("profundidad_eur") is not None and depth["profundidad_eur"] < MIN_RATIO_PROFUNDIDAD * stake_eur:
-        resultado["gate_motivo"] = f"profundidad_insuficiente_para_stake={stake_eur}"
-        return resultado
-    resultado["t_guardas_ms"] = round((time.perf_counter() - t_g0) * 1000, 2)
-    # DRY_RUN: sin tope -- se registran TODAS las monedas de la ráfaga (lo validado es la
-    # ráfaga entera, /code-review 23-Sep). Live: tope compartido entre marcos.
-    if not DRY_RUN and not _reservar_disparo(ts_end):
-        resultado["gate_motivo"] = "tope_disparos_ventana"
-        return resultado
-    resultado["gate_confirmado"] = True
-    resultado["gate_motivo"] = f"rafaga_n={n_rafaga}"
-    # 09-Sep (checklist de 6 categorías, hallazgo real): main() llamaba a
-    # live_guard.puede_operar_live() SIN strategy/subtype -- con strategy=""
-    # (falsy), la comprobación `if strategy and not estrategia_permitida(...)`
-    # de live_guard.py nunca se evalúa, así que pares_permitidos_live queda
-    # sin comprobar del todo. El docstring del módulo (líneas 30-31) decía
-    # explícitamente que esto era intencional ("el flag de módulo gobierna
-    # con independencia de pares_permitidos_live") -- pero rompe la doble
-    # protección que exige el resto del proyecto para código de dinero real
-    # (WALLET_MIRROR cripto/weather, sports: SIEMPRE dos guardias
-    # independientes, para que un DRY_RUN=False accidental no baste solo).
-    # Solo se APLICA como bloqueo con DRY_RUN=False -- con DRY_RUN=True esta
-    # tupla nunca está en pares_permitidos_live (a propósito, no promovida
-    # todavía), y bloquear aquí también en DRY_RUN mataría el propósito
-    # explícito del modo (medir el camino crítico completo, incluida la
-    # firma real, sin gastar dinero -- ver docstring del módulo). Se sigue
-    # auditando SIEMPRE en el CSV (whitelist_ok), solo con DRY_RUN=True.
-    # /code-review 09-Sep, hallazgo real: "sniper" no es el subtype real --
-    # el registro de trades (más abajo) usa f"{activo}#{SUBTYPE_SUFFIX}"
-    # ("BTC#5min"), igual que el resto del proyecto (ballenas_executor_*,
-    # wallet_mirror_executor_dryrun.py, config_live.json). Con "sniper" el
-    # prefijo nunca habría coincidido con una futura entrada real en
-    # pares_permitidos_live -- fail-closed (no es un riesgo de dinero),
-    # pero habría bloqueado la promoción para siempre en silencio.
-    subtype_whitelist = f"{activo}#{pre.subtype_suffix}"
-    ok_whitelist, motivo_whitelist = live_guard.puede_operar_live(STRATEGY, subtype_whitelist)
-    # 23-Sep: puede_operar_live sin dirección deja pasar CUALQUIER dirección si una está en la
-    # whitelist -- exigir además la tupla EXACTA con dirección (fail-closed).
-    if ok_whitelist and not live_guard.estrategia_permitida(STRATEGY, subtype_whitelist, direction=direction):
-        ok_whitelist, motivo_whitelist = False, f"{STRATEGY}#{subtype_whitelist}#{direction} no está en lista de permitidos"
-    resultado["whitelist_ok"] = ok_whitelist
-    if not DRY_RUN and not ok_whitelist:
-        resultado["gate_confirmado"] = False
-        resultado["gate_motivo"] = f"no_permitido:{motivo_whitelist}"
-        return resultado
-    if pre.client is None:
-        resultado["gate_confirmado"] = False
-        resultado["gate_motivo"] = "sin_cliente_clob"
-        return resultado
-
+def _firmar_enviar_registrar(pre: "_Precalculo", m: dict, activo: str, direction: str, token_id: str,
+                             ask: float, stake_eur: float, strategy: str, notas_base: str,
+                             resultado: dict, limite_envio_ts: float, t_lectura_ms: float) -> dict:
+    """23-Sep: tramo firma -> [DRY_RUN corta aquí] -> límite de reloj -> CB -> POST FOK ->
+    verificación de fill real -> registro, COMPARTIDO por PRECIERRE (T-2s) y el camino rápido
+    NAIVE (T+0s). Extraído sin cambios de lógica de _instante_critico (antes inline)."""
     from py_clob_client_v2 import MarketOrderArgsV2, OrderType
     # 23-Sep fix: `ask` ya es el mejor ask del TOKEN comprado (YES o NO) y la
     # convención de trades.csv es entry_price = precio del token comprado; el
@@ -485,15 +493,14 @@ def _instante_critico(pre: _Precalculo, lectura: dict, n_rafaga: int, ts_end: in
 
     if DRY_RUN:
         resultado["disparado"] = False
-        _log(f"[DRY-RUN] {pre.marco} {activo} {direction} ask={ask} rafaga_n={n_rafaga} "
-             f"ratio={ratio} t_lectura={t_lectura_ms:.0f}ms t_firma={t_firma_ms:.0f}ms "
-             f"-- NO se envía (DRY_RUN=True)")
+        _log(f"[DRY-RUN] {strategy} {pre.marco} {activo} {direction} ask={ask} {notas_base} "
+             f"t_lectura={t_lectura_ms:.0f}ms t_firma={t_firma_ms:.0f}ms -- NO se envía (DRY_RUN=True)")
         return resultado
 
     # ---- Solo alcanzable con DRY_RUN=False, tras /code-review + aprobación explícita de Javi ----
     # /code-review 23-Sep: límite de reloj DURO -- si ya no queda margen hasta el cierre, no se
     # envía (el libro cierra en endDate exacto: "trading is disabled", ver RSN naive).
-    if time.time() > pre.ts_end - MARGEN_MIN_POST_S:
+    if time.time() > limite_envio_ts:
         resultado["gate_confirmado"] = False
         resultado["gate_motivo"] = "sin_margen_reloj_antes_post"
         return resultado
@@ -507,6 +514,13 @@ def _instante_critico(pre: _Precalculo, lectura: dict, n_rafaga: int, ts_end: in
         resultado["gate_confirmado"] = False
         resultado["gate_motivo"] = f"circuit_breaker:{cb_motivo}"
         return resultado
+    # /code-review 23-Sep: el hueco de disparo (compartido precierre+naive por cierre) se reserva
+    # AQUÍ, tras whitelist/switch/cliente/reloj/CB -- antes el precierre lo consumía aunque luego
+    # fallara la whitelist, dejando sin hueco al naive en las mismas ráfagas.
+    if not _reservar_disparo(pre.ts_end):
+        resultado["gate_confirmado"] = False
+        resultado["gate_motivo"] = "tope_disparos_ventana"
+        return resultado
     t2 = time.perf_counter()
     try:
         resp = pre.client.post_order(signed, OrderType.FOK)
@@ -514,6 +528,11 @@ def _instante_critico(pre: _Precalculo, lectura: dict, n_rafaga: int, ts_end: in
     except Exception as e:
         resp, ok, error = None, False, str(e)
     t_post_ms = (time.perf_counter() - t2) * 1000
+    resultado["t_envio_rel_cierre_s"] = round(time.time() - pre.ts_end, 3)
+    # /code-review 23-Sep: marcar SIEMPRE tras intentar el POST -- una excepción (timeout) puede
+    # ocultar una orden que sí llegó al exchange; sin saberlo, nunca reenviar al mismo mercado.
+    with _disparos_lock:
+        _mercados_enviados.add(m["market_id"])
     resultado["disparado"] = True
     resultado["order_error"] = error
     resultado["t_total_ms"] = round(t_lectura_ms + (resultado.get("t_guardas_ms") or 0) + t_firma_ms + t_post_ms, 1)
@@ -550,12 +569,12 @@ def _instante_critico(pre: _Precalculo, lectura: dict, n_rafaga: int, ts_end: in
             _log(f"  ⛔ {activo} {direction} orden aceptada (order_id={order_id}) pero SIN evidencia "
                  f"de fill real -- fail-closed, se registra como ERROR (no OPEN)")
             lt.enviar_telegram(
-                f"⚠️ RESOLUTION_SNIPER_PRECIERRE\nOrden aceptada pero sin fill confirmado (posible fantasma)\n"
+                f"⚠️ {strategy}\nOrden aceptada pero sin fill confirmado (posible fantasma)\n"
                 f"activo={activo} direction={direction} order_id={order_id}\n"
                 f"Registrada como ERROR (no OPEN) -- revisar manualmente contra get_trades()/Polygonscan."
             )
     resultado["order_ok"] = ok
-    _log(f"ORDEN REAL {activo} {direction} ask={ask} -> ok={ok} resp={str(resp)[:120]} "
+    _log(f"ORDEN REAL {strategy} {pre.marco} {activo} {direction} ask={ask} t_envio_rel={resultado['t_envio_rel_cierre_s']}s -> ok={ok} resp={str(resp)[:120]} "
          f"t_lectura={t_lectura_ms:.0f}ms t_firma={t_firma_ms:.0f}ms t_post={t_post_ms:.0f}ms "
          f"error={error}")
 
@@ -567,14 +586,14 @@ def _instante_critico(pre: _Precalculo, lectura: dict, n_rafaga: int, ts_end: in
     if resp is not None:
         filled_price = float(trade_real.get("price", precio_orden)) if trade_real else precio_orden
         fee_rate_bps = (trade_real.get("fee_rate_bps") if trade_real else None) or 0
-        notas = (f"RESOLUTION_SNIPER_PRECIERRE {pre.marco} offset={OFFSET_S}s rafaga_n={n_rafaga} "
+        notas = (f"{strategy} {pre.marco} {notas_base} t_envio_rel={resultado['t_envio_rel_cierre_s']}s "
                  f"t_total={resultado['t_total_ms']}ms")
         if sin_fill_confirmado:
             notas += " | sin_fill_confirmado=1 (revisar manualmente)"
         trade = {
             "timestamp_utc": datetime.now(timezone.utc).isoformat(timespec="seconds"),
             "market_id": m["market_id"], "question": m["question"], "end_date": m["end_date"],
-            "strategy": STRATEGY, "subtype": f"{activo}#{pre.subtype_suffix}", "direction": direction,
+            "strategy": strategy, "subtype": f"{activo}#{pre.subtype_suffix}", "direction": direction,
             "stake_eur": stake_eur, "entry_price": filled_price,
             "signal_ask": round(ask, 4), "slip_real": round(filled_price - precio_orden, 4),
             "ic_modelo": "", "edge_neto": "", "conviction_score": "", "kelly_recomendado": stake_eur,
@@ -586,6 +605,257 @@ def _instante_critico(pre: _Precalculo, lectura: dict, n_rafaga: int, ts_end: in
         }
         lt._registrar_trade(trade)
     return resultado
+
+
+def _instante_critico(pre: _Precalculo, lectura: dict, n_rafaga: int, ts_end: int) -> dict:
+    """Fase B: decisión + firma (+ POST solo si DRY_RUN=False) para UNA moneda
+    ya leída en fase A. Criterio 23-Sep: ráfaga + banda de ask + profundidad."""
+    activo = lectura["activo"]
+    m = pre.mercados[activo]
+    dir_impl = lectura["direccion_implicita"]
+    direction = "BUY_YES" if dir_impl == "Up" else "BUY_NO"
+    token_id = lectura["token_id"]
+    depth = lectura["depth"]
+    t_lectura_ms = lectura["t_lectura_ms"]
+    base = {"activo": activo, "direccion_implicita": dir_impl, "t_lectura_ms": t_lectura_ms,
+            "marco": pre.marco, "n_rafaga": n_rafaga, "market_id": lectura["market_id"],
+            "estrategia": STRATEGY}
+    if not depth.get("ok"):
+        return {**base, "gate_confirmado": False, "gate_motivo": "sin_libro"}
+
+    ask = depth.get("mejor_ask")
+    if ask is None:
+        return {**base, "gate_confirmado": False, "gate_motivo": "sin_ask"}
+
+    # gate por activo (legacy, solo 5min, no distingue marco): solo informativo desde 23-Sep
+    veredicto = gate.evaluar(activo, ask, OFFSET_S)
+    ratio = depth.get("ratio_vs_stake")
+    rafaga_ok = n_rafaga >= MIN_MONEDAS_RAFAGA
+    en_banda = pre.ask_min <= ask < ASK_MAX
+    resultado = {
+        **base, "ask_implicita": ask, "rafaga_ok": rafaga_ok, "en_banda": en_banda,
+        "gate_legacy_confirmado": veredicto["confirmado"], "gate_legacy_motivo": veredicto["motivo"],
+        "gate_confirmado": False, "gate_motivo": "",
+        "ratio_vs_stake": ratio, "vwap_fill_estimado": depth.get("vwap_fill_estimado"),
+    }
+    if not rafaga_ok:
+        resultado["gate_motivo"] = f"sin_rafaga_n={n_rafaga}"
+        return resultado
+    if not en_banda:
+        resultado["gate_motivo"] = f"fuera_banda_ask={ask}"
+        return resultado
+    if ratio is None or ratio < MIN_RATIO_PROFUNDIDAD:
+        resultado["gate_motivo"] = f"profundidad_insuficiente_ratio={ratio}"
+        return resultado
+    # ---- 23-Sep, checklist pre-live: mismas guardas estructurales que el resto de
+    # ejecutores live (dispersed/wallet_mirror). Se evalúan también en DRY_RUN para
+    # medir cuántas veces habrían bloqueado (el motivo queda en el CSV).
+    t_g0 = time.perf_counter()
+    g = pre.guardas
+    if not g.get("ok"):
+        resultado["gate_motivo"] = f"guardas:{g.get('motivo')}"
+        return resultado
+    if m["market_id"] in g["ya_operados"] or m["market_id"] in _mercados_enviados:
+        resultado["gate_motivo"] = "ya_operado"
+        return resultado
+    if g["abiertas"].get(direction, 99) >= g["max_correl"]:
+        resultado["gate_motivo"] = f"techo_correlacion_{direction}"
+        return resultado
+    stake_info = g["stake"].get(direction) or {}
+    if not stake_info.get("viable") or float(stake_info.get("stake_eur") or 0) < 1.0:
+        resultado["gate_motivo"] = f"stake_no_viable:{stake_info.get('motivo')}"
+        return resultado
+    stake_eur = float(stake_info["stake_eur"])
+    resultado["stake_eur"] = stake_eur
+    if depth.get("profundidad_eur") is not None and depth["profundidad_eur"] < MIN_RATIO_PROFUNDIDAD * stake_eur:
+        resultado["gate_motivo"] = f"profundidad_insuficiente_para_stake={stake_eur}"
+        return resultado
+    resultado["t_guardas_ms"] = round((time.perf_counter() - t_g0) * 1000, 2)
+    # DRY_RUN: sin tope -- se registran TODAS las monedas de la ráfaga (lo validado es la
+    # ráfaga entera, /code-review 23-Sep). Live: tope compartido entre marcos.
+    resultado["gate_confirmado"] = True
+    resultado["gate_motivo"] = f"rafaga_n={n_rafaga}"
+    # 09-Sep (checklist de 6 categorías, hallazgo real): main() llamaba a
+    # live_guard.puede_operar_live() SIN strategy/subtype -- con strategy=""
+    # (falsy), la comprobación `if strategy and not estrategia_permitida(...)`
+    # de live_guard.py nunca se evalúa, así que pares_permitidos_live queda
+    # sin comprobar del todo. El docstring del módulo (líneas 30-31) decía
+    # explícitamente que esto era intencional ("el flag de módulo gobierna
+    # con independencia de pares_permitidos_live") -- pero rompe la doble
+    # protección que exige el resto del proyecto para código de dinero real
+    # (WALLET_MIRROR cripto/weather, sports: SIEMPRE dos guardias
+    # independientes, para que un DRY_RUN=False accidental no baste solo).
+    # Solo se APLICA como bloqueo con DRY_RUN=False -- con DRY_RUN=True esta
+    # tupla nunca está en pares_permitidos_live (a propósito, no promovida
+    # todavía), y bloquear aquí también en DRY_RUN mataría el propósito
+    # explícito del modo (medir el camino crítico completo, incluida la
+    # firma real, sin gastar dinero -- ver docstring del módulo). Se sigue
+    # auditando SIEMPRE en el CSV (whitelist_ok), solo con DRY_RUN=True.
+    # /code-review 09-Sep, hallazgo real: "sniper" no es el subtype real --
+    # el registro de trades (más abajo) usa f"{activo}#{SUBTYPE_SUFFIX}"
+    # ("BTC#5min"), igual que el resto del proyecto (ballenas_executor_*,
+    # wallet_mirror_executor_dryrun.py, config_live.json). Con "sniper" el
+    # prefijo nunca habría coincidido con una futura entrada real en
+    # pares_permitidos_live -- fail-closed (no es un riesgo de dinero),
+    # pero habría bloqueado la promoción para siempre en silencio.
+    subtype_whitelist = f"{activo}#{pre.subtype_suffix}"
+    if IGNORAR_VENTANAS_HORARIAS:
+        # switch + whitelist (la de dirección exacta va justo debajo), SIN ventana horaria
+        if not live_guard.switch_activo():
+            ok_whitelist, motivo_whitelist = False, "switch_OFF"
+        elif not live_guard.estrategia_permitida(STRATEGY, subtype_whitelist):
+            ok_whitelist, motivo_whitelist = False, f"{STRATEGY}#{subtype_whitelist} no está en lista de permitidos"
+        else:
+            ok_whitelist, motivo_whitelist = True, "ok_sin_ventana"
+    else:
+        ok_whitelist, motivo_whitelist = live_guard.puede_operar_live(STRATEGY, subtype_whitelist)
+    # 23-Sep: puede_operar_live sin dirección deja pasar CUALQUIER dirección si una está en la
+    # whitelist -- exigir además la tupla EXACTA con dirección (fail-closed).
+    if ok_whitelist and not live_guard.estrategia_permitida(STRATEGY, subtype_whitelist, direction=direction):
+        ok_whitelist, motivo_whitelist = False, f"{STRATEGY}#{subtype_whitelist}#{direction} no está en lista de permitidos"
+    resultado["whitelist_ok"] = ok_whitelist
+    if not DRY_RUN and not ok_whitelist:
+        resultado["gate_confirmado"] = False
+        resultado["gate_motivo"] = f"no_permitido:{motivo_whitelist}"
+        return resultado
+    if pre.client is None:
+        resultado["gate_confirmado"] = False
+        resultado["gate_motivo"] = "sin_cliente_clob"
+        return resultado
+
+    return _firmar_enviar_registrar(pre, m, activo, direction, token_id, ask, stake_eur, STRATEGY,
+                                    f"offset={OFFSET_S}s rafaga_n={n_rafaga}", resultado,
+                                    pre.ts_end - MARGEN_MIN_POST_S, t_lectura_ms)
+
+
+def _naive_fillable(l: dict | None) -> bool:
+    """Mismo criterio de 'detección fillable' que el ejecutor viejo/análisis (ask en
+    [0,05,0,95] y ratio>=5x) -- es lo que cuenta para el quórum de >=2 monedas."""
+    if not l or not l["depth"].get("ok"):
+        return False
+    ask, ratio = l["depth"].get("mejor_ask"), l["depth"].get("ratio_vs_stake")
+    return (ask is not None and NAIVE_ASK_MIN <= ask <= NAIVE_ASK_MAX_DET
+            and ratio is not None and ratio >= NAIVE_RATIO_MIN)
+
+
+def _instante_naive(pre: _Precalculo, lectura: dict, n_det: int, ts_end: int) -> dict:
+    """Decisión NAIVE para una moneda ya leída a T+0 (sin I/O de disco: todo precalculado)."""
+    activo = lectura["activo"]
+    m = pre.mercados[activo]
+    dir_impl = lectura["direccion_implicita"]
+    direction = "BUY_YES" if dir_impl == "Up" else "BUY_NO"
+    depth = lectura["depth"]
+    ask = depth.get("mejor_ask")
+    ratio = depth.get("ratio_vs_stake")
+    sub = f"{activo}#{pre.subtype_suffix}"
+    r = {"activo": activo, "direccion_implicita": dir_impl, "t_lectura_ms": lectura["t_lectura_ms"],
+         "marco": pre.marco, "n_rafaga": n_det, "market_id": lectura["market_id"],
+         "estrategia": STRATEGY_NAIVE, "ask_implicita": ask, "ratio_vs_stake": ratio,
+         "vwap_fill_estimado": depth.get("vwap_fill_estimado"),
+         "gate_confirmado": False, "gate_motivo": ""}
+
+    def _no(motivo: str) -> dict:
+        r["gate_motivo"] = motivo
+        return r
+
+    t_g0 = time.perf_counter()
+    g = pre.guardas
+    if not g.get("ok"):
+        return _no(f"guardas:{g.get('motivo')}")
+    if not g.get("naive_ok"):
+        return _no(f"guardas_naive:{g.get('naive_motivo')}")
+    if (activo, pre.marco) not in _naive_viejo.COMBOS_CONFIRMADOS:
+        return _no("combo_no_confirmado")
+    if not _naive_fillable(lectura):
+        return _no(f"no_fillable_ask={ask}_ratio={ratio}")
+    r["rafaga_ok"] = n_det >= NAIVE_MIN_MONEDAS
+    if not r["rafaga_ok"]:
+        return _no(f"deteccion_aislada_n={n_det}")
+    r["en_banda"] = ask < NAIVE_ASK_MAX_OPERAR
+    if not r["en_banda"]:
+        return _no(f"ask>={NAIVE_ASK_MAX_OPERAR}")
+    gb = rsngb.evaluar(activo, pre.marco, dir_impl, ask)
+    r["gate_legacy_motivo"] = f"rsngb={gb.get('veredicto')}"
+    if gb.get("veredicto") != "bueno_confirmado":
+        return _no(f"micro_bucket={gb.get('veredicto')}")
+    py_yes = ask if dir_impl == "Up" else round(1.0 - ask, 6)   # convención results.csv (precio YES)
+    if _clv_veta(activo, pre.marco, direction, py_yes):
+        return _no("veto_clv")
+    if m["market_id"] in g["ya_operados"] or m["market_id"] in _mercados_enviados:
+        return _no("ya_operado")
+    if g["abiertas"].get(direction, 99) >= g["max_correl"]:
+        return _no(f"techo_correlacion_{direction}")
+    stake_info = g["naive_stake"].get((activo, direction)) or {}
+    if not stake_info.get("viable") or float(stake_info.get("stake_eur") or 0) < 1.0:
+        return _no(f"stake_no_viable:{stake_info.get('motivo')}")
+    stake_eur = float(stake_info["stake_eur"])
+    r["stake_eur"] = stake_eur
+    if depth.get("profundidad_eur") is None or depth["profundidad_eur"] < NAIVE_RATIO_MIN * stake_eur:
+        return _no(f"profundidad_insuficiente_para_stake={stake_eur}")
+    # /code-review 23-Sep: switch, whitelist exacta y ventana EN VIVO (no la foto de T-12s) --
+    # un /off o una retirada de la whitelist tiene efecto hasta el último instante.
+    try:
+        cfg_vivo = lt._cargar_config()
+        tupla = f"{STRATEGY_NAIVE}#{sub}#BUY_{dir_impl}"
+        r["whitelist_ok"] = tupla in set(cfg_vivo.get("pares_permitidos_live", []))
+        switch_ok = live_guard.switch_activo()
+        en_ventana, _mv = live_guard.en_ventana_horaria(cfg_vivo)
+        rapido_ok = naive_camino_rapido_activo(cfg_vivo)
+    except Exception as e:
+        return _no(f"error_guardas_vivo:{type(e).__name__}")
+    if not rapido_ok:
+        return _no("camino_rapido_desactivado")
+    if not DRY_RUN and not switch_ok:
+        return _no("switch_OFF")
+    if not DRY_RUN and not r["whitelist_ok"]:
+        return _no(f"no_permitido:{tupla}")
+    if not en_ventana:
+        return _no("fuera_ventana_horaria")
+    r["t_guardas_ms"] = round((time.perf_counter() - t_g0) * 1000, 2)
+    if pre.client is None:
+        return _no("sin_cliente_clob")
+    r["gate_confirmado"] = True
+    r["gate_motivo"] = f"naive_monedas={n_det}"
+    return _firmar_enviar_registrar(pre, m, activo, direction, lectura["token_id"], ask, stake_eur,
+                                    STRATEGY_NAIVE, f"offset=+{NAIVE_OFFSET_S}s monedas={n_det}", r,
+                                    ts_end + NAIVE_MAX_ENVIO_S, lectura["t_lectura_ms"])
+
+
+def procesar_ventana_naive(pre: _Precalculo, ts_end: int) -> None:
+    """T+0: 6 libros en paralelo, quórum de ráfaga de golpe, decisión y envío por moneda."""
+    objetivo = ts_end + NAIVE_OFFSET_S
+    espera = objetivo - time.time()
+    if espera < -1.0:
+        _log(f"[{pre.marco}] naive {ts_end}: llegamos {-espera:.2f}s tarde -- no se evalúa")
+        return
+    if espera > 0:
+        time.sleep(espera)
+    futuros = {_POOL_LIBROS.submit(_leer, pre, a): a for a in ASSETS
+               if (a, pre.marco) in _naive_viejo.COMBOS_CONFIRMADOS}
+    hechos, pendientes = wait(futuros, timeout=MAX_ESPERA_LECTURAS_S)
+    lecturas = []
+    for f in hechos:
+        try:
+            l = f.result()
+        except Exception as e:
+            _log(f"[{pre.marco}] naive lectura {futuros[f]} falló: {type(e).__name__}: {e}")
+            continue
+        if l is not None:
+            lecturas.append(l)
+    if time.time() > ts_end + NAIVE_MAX_ENVIO_S - 0.3:
+        _log(f"[{pre.marco}] naive {ts_end}: lecturas tardías -- no se decide")
+        return
+    n_det = sum(1 for l in lecturas if _naive_fillable(l))
+    lecturas.sort(key=lambda l: -(l["depth"].get("ratio_vs_stake") or 0))
+    for lectura in lecturas:
+        r = _instante_naive(pre, lectura, n_det, ts_end)
+        _append_csv({"timestamp_utc": datetime.now(timezone.utc).isoformat(timespec="milliseconds"),
+                      "ts_end": ts_end, "dry_run": DRY_RUN, **r})
+    for f in pendientes:
+        _append_csv({"timestamp_utc": datetime.now(timezone.utc).isoformat(timespec="milliseconds"),
+                      "ts_end": ts_end, "dry_run": DRY_RUN, "marco": pre.marco, "activo": futuros[f],
+                      "estrategia": STRATEGY_NAIVE, "n_rafaga": n_det, "gate_confirmado": False,
+                      "gate_motivo": "lectura_tarde"})
 
 
 def procesar_ventana(pre: _Precalculo, ts_end: int) -> None:
@@ -632,7 +902,9 @@ def _bucle_marco(marco: str) -> None:
     while True:
         try:
             if not DRY_RUN:
-                ok_switch, motivo = live_guard.puede_operar_live()
+                # switch global (sin ventana: el precierre ignora ventanas; el naive las comprueba
+                # por su cuenta en _instante_naive)
+                ok_switch = live_guard.switch_activo()
                 if not ok_switch:
                     time.sleep(5)
                     continue
@@ -662,7 +934,9 @@ def _bucle_marco(marco: str) -> None:
                 time.sleep(max(0.5, ts_end + 1 - time.time()))
                 continue
             procesar_ventana(pre, ts_end)
-            resto = ts_end + max(OFFSET_S, 0) + 3 - time.time()
+            if pre.guardas.get("naive_ok"):   # = clave de config activa en el precálculo de esta ventana
+                procesar_ventana_naive(pre, ts_end)
+            resto =ts_end + max(OFFSET_S, 0) + 3 - time.time()
             if resto > 0:
                 time.sleep(min(resto, 30))
         except Exception as e:
@@ -678,7 +952,11 @@ def main() -> None:
          f"offset={OFFSET_S}s stake={STAKE_EUR}€ activos={ASSETS} marcos={list(MARCOS)} "
          f"criterio=rafaga>={MIN_MONEDAS_RAFAGA} ask<{ASK_MAX}")
     hilos = {}
+    hilo_clv = None
     while True:
+        if hilo_clv is None or not hilo_clv.is_alive():
+            hilo_clv = threading.Thread(target=_hilo_clv, daemon=True, name="precierre_clv")
+            hilo_clv.start()
         for marco in MARCOS:
             h = hilos.get(marco)
             if h is None or not h.is_alive():
