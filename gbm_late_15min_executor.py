@@ -746,7 +746,12 @@ def watch_window(activo: str, mercado: dict) -> bool:
                 f"d={resultado['features']['d_gbm']} ({n_polls} polls)", activo)
             _registrar_prediccion(mercado, activo, resultado, direccion, n_total_lado, restante_s,
                                   strategy=strategy)
-            _registrar_confirmacion_fillability(mercado, activo, strategy, direccion, restante_s, py_edge)
+            # Hilo aparte (code-review medium 23-Sep): la consulta /book (hasta 5s de timeout)
+            # NO puede frenar disparar() -- la medida sigue siendo del instante CONFIRMADO
+            # (el hilo arranca ya), y restante_s se captura por valor.
+            threading.Thread(target=_registrar_confirmacion_fillability,
+                             args=(dict(mercado), activo, strategy, direccion, restante_s, py_edge),
+                             daemon=True, name="_confirm_fill").start()
             disparar(activo, mercado, py_edge, prob_yes_dir, direccion, restante_s, strategy=strategy)
             hubo_confirmacion = True
 
