@@ -71,6 +71,7 @@ Corre en screen propia:
   screen -dmS gbmlate15m bash -c "cd /root/polymarket-research && .venv/bin/python gbm_late_15min_executor.py >> logs/gbm_late_15min_executor.log 2>&1"
 """
 import asyncio
+import csv
 import json
 import threading
 import time
@@ -602,6 +603,53 @@ def hilo_reactivo_watchdog() -> None:
             time.sleep(5)
 
 
+# 23-Sep (pendiente #4 checkpoint 22-Sep, tras refutar el +0,307EUR/tr como look-ahead):
+# medir ask + profundidad REAL del lado que se compraría EN el instante en que la
+# variante confirma (sin join posterior, sin look-ahead) -- se registra antes de
+# disparar(), así queda anotado aunque whitelist/ventana/circuit breaker lo
+# bloqueen después. PURAMENTE observacional (una consulta de libro extra en DRY_RUN,
+# nunca altera la decisión). Outcome se cruza después por market_id.
+_CONF_CSV = DIR / "data/shadow/gbm_late_confirmado_fillability_fase0.csv"
+_CONF_CAMPOS = ["ts_utc", "market_id", "end_date", "strategy", "activo", "direccion", "restante_s",
+                "py_yes_edge", "ask_lado", "depth_shares_ask_mas2c", "depth_usd_ask_mas2c",
+                "ratio_vs_stake", "stake_ref_eur", "lat_libro_ms"]
+_conf_lock = threading.Lock()
+_STAKE_REF_EUR = 1.05  # stake pineado actual, solo para el ratio de referencia
+
+
+def _registrar_confirmacion_fillability(mercado: dict, activo: str, strategy: str, direccion: str,
+                                        restante_s: float, py_edge: float) -> None:
+    try:
+        token = mercado["yes_token"] if direccion == "BUY_YES" else mercado["no_token"]
+        t0 = time.time()
+        r = _session.get(f"{CLOB}/book", params={"token_id": token}, timeout=5)
+        lat_ms = (time.time() - t0) * 1000
+        ask_lado, depth_sh, depth_usd = "", "", ""
+        if r.status_code == 200:
+            asks = sorted((float(a["price"]), float(a["size"])) for a in (r.json().get("asks") or []))
+            if asks:
+                ask_lado = asks[0][0]
+                nivel = [(p, sz) for p, sz in asks if p <= ask_lado + 0.02]
+                depth_sh = round(sum(sz for _, sz in nivel), 2)
+                depth_usd = round(sum(p * sz for p, sz in nivel), 2)
+        ratio = round(depth_usd / _STAKE_REF_EUR, 2) if depth_usd != "" else ""
+        fila = {"ts_utc": datetime.now(timezone.utc).isoformat(timespec="milliseconds"),
+                "market_id": mercado["market_id"], "end_date": mercado.get("end_date", ""),
+                "strategy": strategy, "activo": activo, "direccion": direccion,
+                "restante_s": round(restante_s, 1), "py_yes_edge": round(py_edge, 4),
+                "ask_lado": ask_lado, "depth_shares_ask_mas2c": depth_sh, "depth_usd_ask_mas2c": depth_usd,
+                "ratio_vs_stake": ratio, "stake_ref_eur": _STAKE_REF_EUR, "lat_libro_ms": round(lat_ms)}
+        with _conf_lock:
+            nuevo = not _CONF_CSV.exists() or _CONF_CSV.stat().st_size == 0
+            with open(_CONF_CSV, "a", newline="", encoding="utf-8") as f:
+                w = csv.DictWriter(f, fieldnames=_CONF_CAMPOS)
+                if nuevo:
+                    w.writeheader()
+                w.writerow(fila)
+    except Exception as ex:
+        log(f"  fillability_confirmacion no registrada: {type(ex).__name__}: {ex}", activo)
+
+
 def watch_window(activo: str, mercado: dict) -> bool:
     """Vigila un mercado {activo}#15min concreto -- entra en juego en
     cuanto restante_min cae dentro de [GBM_LATE_15M_REST_MIN_LO,
@@ -698,6 +746,7 @@ def watch_window(activo: str, mercado: dict) -> bool:
                 f"d={resultado['features']['d_gbm']} ({n_polls} polls)", activo)
             _registrar_prediccion(mercado, activo, resultado, direccion, n_total_lado, restante_s,
                                   strategy=strategy)
+            _registrar_confirmacion_fillability(mercado, activo, strategy, direccion, restante_s, py_edge)
             disparar(activo, mercado, py_edge, prob_yes_dir, direccion, restante_s, strategy=strategy)
             hubo_confirmacion = True
 
