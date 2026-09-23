@@ -88,6 +88,14 @@ data/shadow/dispersed_bot_executor_dryrun.csv
 # El patrón cubre CUALQUIER fecha (no solo hoy) -- cada día es un fichero
 # nuevo que cruzará el mismo umbral por su cuenta.
 data/sports/activity_ws_*.csv
+# 23-Sep: comprimir_data_historica.sh empezó a rotar estos ficheros a .gz
+# (ver commit "fix(disco): rotar data/sports/activity_ws_*.csv") -- el
+# patrón de arriba solo cubría .csv, así que los .gz nuevos (nunca habían
+# existido antes en este directorio) se colaron sin ignorar. Ya cruzaron
+# el umbral warning (50-75MB, vigia_tamano_ficheros_git.py) -- mismo motivo
+# exacto que el bloque de arriba, backup real vive en scripts/
+# backup_activity_ws_sports.sh (volumen externo), no en git.
+data/sports/activity_ws_*.csv.gz
 data/prices/kalshi_btchourly_*.csv
 # 01-Sep: mismo motivo que results.csv (línea 38) -- predictions_YYYY-MM-DD.csv
 # creció a 210MB+ en un solo día (features JSON por predicción, todas las
