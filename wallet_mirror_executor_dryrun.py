@@ -72,6 +72,8 @@ from live_guard import puede_operar_live  # noqa: E402
 from live_stake import calcular_stake, bloquear_por_circuit_breaker  # noqa: E402
 import wallet_mirror_gate_bucket as wmgb  # noqa: E402
 
+ASK_MAX_REAL = 0.80  # 23-Sep, tope duro de entrada solo-real (payout inverso)
+
 DIR_SHADOW = REPO / "data" / "shadow"
 CONFIG_LIVE = REPO / "data" / "live" / "config_live.json"
 OUT = DIR_SHADOW / "wallet_mirror_executor_dryrun.csv"
@@ -419,6 +421,11 @@ async def _correr_una_conexion(wallets: dict, vistos: dict, wallets_bucket: dict
                         elif gate_bp["veredicto"] != "bueno_confirmado":
                             _log(f"  ⛔ veto micro-bucket (solo opera en bueno_confirmado): "
                                  f"veredicto={gate_bp['veredicto']} -- no se ejecuta")
+                        elif float(ask_ref) >= ASK_MAX_REAL:
+                            # 23-Sep (propuesta #1, opción b, Javi): payout
+                            # inverso por encima de 0,80 -- ver
+                            # bot_wallets_gate_bucket.PRECIO_MAX_REAL.
+                            _log(f"  ⛔ entrada {ask_ref}>={ASK_MAX_REAL} (payout inverso) -- no se ejecuta")
                         elif not aprueba_bucket:
                             _log(f"  ⛔ wallet {w[:10]}... sin edge reciente confirmado en este "
                                  f"micro-bucket de precio (ask={ask_ref}) -- no se ejecuta")
@@ -483,7 +490,8 @@ async def _correr_una_conexion(wallets: dict, vistos: dict, wallets_bucket: dict
                                               # los necesita para consultar wallet_mirror_gate_bucket.py
                                               # (el gate PROPIO) en vez de cualquier fuente distinta.
                                               "tupla_sintetica": tupla_sintetica,
-                                              "jugada_grande": bool(ratio_size is not None and ratio_size >= 2.0)})
+                                              "jugada_grande": bool(ratio_size is not None and ratio_size >= 2.0),
+                                              "precio_max_token": ASK_MAX_REAL})
                                 _log(f"  🚨 ORDEN REAL enviada ({tupla_sintetica}): {resultado}")
                                 # 11-Ago: cablear ledger+Telegram en el
                                 # camino de éxito -- ANTES de este fix, un

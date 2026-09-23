@@ -2488,6 +2488,20 @@ def _ejecutar_orden_polymarket(market_id: str, direction: str,
                     "order_id": None, "entry_price": entry_price,
                     "fee_eur": 0.0, "error": f"requote: {motivo_rq}",
                 }
+            # 23-Sep (propuesta #1, Javi): techo de precio opcional por
+            # caller (contexto["precio_max_token"]) -- el re-quote puede
+            # subir el precio por encima del tope que el caller validó.
+            # Sin la clave, comportamiento idéntico al anterior.
+            _pmax = (contexto or {}).get("precio_max_token")
+            if _pmax is not None and precio >= float(_pmax):
+                log(f"  ⛔ precio post-requote {precio:.4f} >= techo del caller {float(_pmax):.2f} -- no se opera")
+                _registrar_snapshot_libro("veto_techo_precio", market_id, direction,
+                                          precio_plan, stake_eur, depth, contexto)
+                return {
+                    "ok": False, "no_fill": True, "veto_techo_precio": True,
+                    "order_id": None, "entry_price": entry_price,
+                    "fee_eur": 0.0, "error": f"techo precio caller {_pmax}",
+                }
 
         # Re-chequeo de gate_bucket_propio con el precio REAL post-requote
         # (18-Ago, petición explícita Javi tras un hallazgo real: señal
@@ -2905,6 +2919,10 @@ def _ejecutar_orden_polymarket(market_id: str, direction: str,
             # contaminar ningún chequeo de gate/py_actual ya hecho arriba
             # con este precio, más pesimista por diseño.
             precio_limite_fok = _techo_precio_fok(precio, edge_vivo, techo_verificado)
+            _pmax_fok = (contexto or {}).get("precio_max_token")
+            if _pmax_fok is not None:
+                # 23-Sep: el FOK nunca barre niveles por encima del techo del caller.
+                precio_limite_fok = min(precio_limite_fok, round(float(_pmax_fok) - 0.001, 3))
             if precio_limite_fok > precio:
                 log(f"  📈 Límite FOK ensanchado {precio:.4f}→{precio_limite_fok:.4f} "
                     f"(edge_vivo={edge_vivo}, margen sobre REQUOTE_EDGE_MIN={REQUOTE_EDGE_MIN}) "

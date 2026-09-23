@@ -200,6 +200,9 @@ def evaluar(arquetipo: str, activo: str, marco: str, precio: float) -> dict:
     return _gate_veredicto_dict(arquetipo, activo, marco, precio)
 
 
+PRECIO_MAX_REAL = 0.80
+
+
 def permitido_real(arquetipo: str, activo: str, marco: str, precio: float) -> bool:
     """16-Sep tarde (petición explícita Javi: "cuando salga un micro-bucket
     bueno confirmado tiene que abrirse automáticamente, no podemos estar
@@ -241,6 +244,16 @@ def permitido_real(arquetipo: str, activo: str, marco: str, precio: float) -> bo
     # Cubre TAMBIEN evaluar_para_recheck() (delega aqui). `evaluar()` (tracking dry-run) no se toca.
     if not esta_fresco(GATE_PATH):
         avisar_obsoleto(GATE_PATH)
+        return False
+    # 23-Sep (propuesta #1, opción b aprobada por Javi): tope duro de entrada.
+    # Por encima de 0,80 el payout es inverso (ganar ~+0,2 / perder ~-1,05);
+    # en live Sep, WALLET_MIRROR/DISPERSO a 0,80-0,94 perdieron. Hoy ningún
+    # bucket >=0,75 está en bueno_confirmado -- es cinturón por si el gate
+    # autoaprendiente lo reabre. Solo real; evaluar() (dry-run) no se toca.
+    try:
+        if precio is None or float(precio) >= PRECIO_MAX_REAL:
+            return False
+    except (TypeError, ValueError):
         return False
     info = _gate_veredicto_dict(arquetipo, activo, marco, precio)
     if info.get("veredicto") != "bueno_confirmado":

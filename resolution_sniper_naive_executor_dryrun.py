@@ -384,7 +384,8 @@ def evaluar(asset: str, marco: str, slug: str, market_id: str, condition_id: str
                 market_id, direction, float(stake_dryrun), precio_orden_yes,
                 edge_dir=edge_dir,
                 contexto={"strategy": "RESOLUTION_SNIPER_NAIVE", "subtype": f"{asset}#{marco}",
-                          "tupla_sintetica": tupla_sintetica})
+                          "tupla_sintetica": tupla_sintetica,
+                          "precio_max_token": ASK_MAX_OPERAR})
             _log(f"  🚨 ORDEN REAL enviada ({tupla_sintetica}): {resultado}")
             if resultado.get("no_fill"):
                 # /code-review 23-Sep: sin posición -> liberar para que el

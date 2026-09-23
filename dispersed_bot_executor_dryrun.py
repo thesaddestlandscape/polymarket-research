@@ -403,6 +403,11 @@ def _procesar_fila(row: dict, wallets: set, arquetipos: dict, vistos: dict) -> d
                         pass
                     elif fill.get("mejor_ask") in (None, "") or not (float(stake_sim or 0) > 0):
                         log("  ⛔ precio/stake sin resolver -- fail-closed, no se ejecuta")
+                    elif float(fill["mejor_ask"]) >= _bwgb.PRECIO_MAX_REAL:
+                        # /code-review 23-Sep: permitido_real() mira el precio de
+                        # la wallet copiada; la orden sale al mejor_ask actual.
+                        log(f"  ⛔ mejor_ask {fill['mejor_ask']}>={_bwgb.PRECIO_MAX_REAL} "
+                            f"(payout inverso) -- no se ejecuta")
                     else:
                         ask_f = float(fill["mejor_ask"])
                         precio_orden_yes = ask_f if direction == "BUY_YES" else round(1.0 - ask_f, 6)
@@ -415,7 +420,8 @@ def _procesar_fila(row: dict, wallets: set, arquetipos: dict, vistos: dict) -> d
                             market_id, direction, float(stake_sim), precio_orden_yes,
                             edge_dir=ic_proxy,
                             contexto={"strategy": arquetipo, "subtype": f"{activo}#{marco}",
-                                      "tupla_sintetica": tupla_sintetica})
+                                      "tupla_sintetica": tupla_sintetica,
+                                      "precio_max_token": _bwgb.PRECIO_MAX_REAL})
                         log(f"  🚨 ORDEN REAL enviada ({tupla_sintetica}): {resultado}")
                         if not resultado.get("no_fill"):
                             trade = {

@@ -25,6 +25,8 @@ PRIORIDAD = ["ejecutada", "fok_kill",
              # queda corto.
              "sin_fill_confirmado",
              "post_only_mode", "abort_requote",
+             # 23-Sep: techo de precio del caller (contexto precio_max_token)
+             "veto_techo_precio",
              "abort_gate_bucket_postrequote",
              "veto_profundidad", "veto_sin_datos", "veto_ballenas_debil",
              "no_viable_stake", "veto_discrepancia_tuplas", "fuera_ventana",
