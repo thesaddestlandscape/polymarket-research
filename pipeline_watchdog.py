@@ -52,6 +52,22 @@ DIR_BINANCE = REPO / "data" / "binance"
 CHECK_INTERVAL     = 120   # segundos entre ciclos
 MAX_PRED_SILENCE   = 300   # sin actualizar predictions → alerta
 MAX_POSTMORTEM_MB  = 50    # MB máx postmortem.csv
+# 23-Sep: cooldown para el auto-restart por "deploy obsoleto" (ver sección 2b
+# del bucle principal). Antes, cada commit que tocaba CUALQUIERA de los
+# módulos importados transitivamente por una screen fusionada (ej.
+# "observadores", 71 módulos, 33+ hilos) disparaba un restart completo de
+# TODOS sus hilos en el siguiente ciclo (120s) -- verificado con
+# logs/watchdog.log: "observadores" se reinició 310 veces en ~6 semanas,
+# con ráfagas de hasta 32/día durante sesiones de desarrollo activo (varios
+# commits en pocos minutos). Cada restart corta websockets en vivo
+# (firehose_cache reconecta cada vez) y pierde el estado en memoria de
+# TODOS los hilos, incluidos los que no cambiaron -- incluida la ventana de
+# detección de RESOLUTION_SNIPER_NAIVE (dinero real, DRY_RUN=False, vive
+# dentro de "observadores" pese a no estar en NO_AUTO_RESTART_DINERO_REAL).
+# Este cooldown NO relaja la garantía de frescura (el código sigue
+# recogiéndose, como mucho COOLDOWN_STALE_RESTART_S más tarde) -- solo
+# coalesce ráfagas de commits en un único restart en vez de uno por commit.
+COOLDOWN_STALE_RESTART_S = 600   # 10 min mínimo entre restarts por staleness de la MISMA screen
 MAX_LOG_MB         = 80    # MB máx por log antes de rotar (05-Sep: bajado de 200 a 80 —
 # disco al 93%, 13 logs de ejecutores/vigías habían crecido a 95-155MB sin rotar
 # nunca por quedarse justo debajo del umbral viejo; fix_log_size() ya cubre TODOS
@@ -840,6 +856,7 @@ def main():
     consecutivos_silencio = 0
     screens_caidas_count: dict[str, int] = {}
     stale_deploy_alertado: set = set()
+    stale_restart_ultimo: dict[str, float] = {}  # screen -> time.time() del último restart por staleness
     ciclo = 0
 
     while True:
@@ -964,7 +981,21 @@ def main():
 
             stale_todas = {n for n, v in estado_deploy.items() if v == "STALE"}
             stale_dinero_real = stale_todas & NO_AUTO_RESTART_DINERO_REAL
-            stale_ahora = stale_todas - NO_AUTO_RESTART_DINERO_REAL
+            stale_ahora_bruto = stale_todas - NO_AUTO_RESTART_DINERO_REAL
+            # Cooldown anti-restart-storm (ver COOLDOWN_STALE_RESTART_S arriba):
+            # una screen que se reinició hace menos de N segundos por esta misma
+            # vía NO se vuelve a reiniciar aunque siga/vuelva a estar STALE --
+            # coalesce ráfagas de commits en un único restart posterior.
+            ahora_ts = time.time()
+            stale_en_cooldown = {
+                n for n in stale_ahora_bruto
+                if ahora_ts - stale_restart_ultimo.get(n, 0) < COOLDOWN_STALE_RESTART_S
+            }
+            stale_ahora = stale_ahora_bruto - stale_en_cooldown
+            for n in stale_en_cooldown:
+                restante = COOLDOWN_STALE_RESTART_S - (ahora_ts - stale_restart_ultimo[n])
+                log(f"  ⏸ {n} sigue STALE pero en cooldown anti-restart-storm "
+                    f"({restante:.0f}s restantes) -- se pospone el reinicio")
             reiniciadas, fallidas = [], []
             for name in stale_ahora:
                 log(f"⚠ DEPLOY OBSOLETO: {name} — auto-reiniciando")
@@ -983,6 +1014,14 @@ def main():
                 except Exception as e:
                     fallidas.append(name)
                     log(f"  🚨 error reiniciando {name}: {e}")
+            # /code-review 23-Sep: el cooldown solo se arma tras un reinicio
+            # QUE FUNCIONÓ -- si `verify_deploy.py --restart` falla o hace
+            # timeout (name en `fallidas`), la screen sigue genuinamente
+            # STALE/rota y debe reintentarse en el siguiente ciclo (~120s),
+            # no quedar silenciada hasta 10 min (invertiría el propósito del
+            # cooldown: coalescer ráfagas de commits, no tapar un fallo real).
+            for name in reiniciadas:
+                stale_restart_ultimo[name] = ahora_ts
 
             nuevos = (stale_ahora | stale_dinero_real) - stale_deploy_alertado
             if nuevos:
