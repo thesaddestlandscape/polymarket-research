@@ -26,12 +26,20 @@ vigia_gate_bucket_propio.py/vigia_log_growth.py).
 MODO LECTURA. No toca gate_bucket, whitelist ni ejecutor -- solo avisa.
 """
 import json
+import os
 import sys
 from collections import defaultdict
 from pathlib import Path
 
 REPO = Path(__file__).resolve().parent
 sys.path.insert(0, str(REPO))
+# 23-Sep: el cron (`25 * * * *`) invoca este script sin `cd` previo -- cwd
+# por defecto de cron es HOME (/root), no el repo. analisis_gate_riguroso_
+# resolution_sniper_naive_depth_19ago.py usa rutas relativas sin anclar
+# (NAIVE_CSV = "data/shadow/..."), así que sin este chdir fallaba con
+# FileNotFoundError buscando /root/data/shadow/... en vez del repo real
+# (hallazgo real 23-Sep, aviso de Telegram "vigía roto").
+os.chdir(REPO)
 
 from analisis_gate_riguroso_resolution_sniper_naive_depth_19ago import (  # noqa: E402
     cargar_naive, wilson_lower, RATIO_FILLABLE_MIN,
