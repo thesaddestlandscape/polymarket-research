@@ -98,7 +98,13 @@ MARCOS = {
 ASK_RAFAGA_MIN = 0.05       # banda con la que se CUENTAN monedas para la ráfaga (la validada)
 ASK_MAX = 0.80              # >=0,80 ya descontado (validado 23-Sep y guarda RSN 22-Sep)
 MIN_MONEDAS_RAFAGA = 2
-MAX_DISPAROS_POR_VENTANA = 1  # conservador hasta decisión de Javi sobre techo de correlación
+# 23-Sep (decisión Javi: "probamos con 2 y lo vamos subiendo poco a poco cuando tengamos más
+# pnl"): hasta 2 órdenes por cierre, enviadas EN PARALELO (las 2 de más profundidad). Retro
+# (ask real, 1€): techo 1 -> 15min +77,6€/5min +155,5€; techo 6 -> +378,7€/+856,9€ (peor
+# cierre -2,1€/-6,2€). Cada orden adicional respeta además, en la MISMA reserva atómica, el
+# techo de correlación (abiertas+enviadas en este cierre, misma dirección) y el margen del
+# freno diario (stakes de este cierre descontados) -- ver _reservar_disparo.
+MAX_DISPAROS_POR_VENTANA = 2
 # /code-review 23-Sep: tope COMPARTIDO entre marcos por instante de cierre (a :00/:15/:30/:45
 # cierran 5min y 15min a la vez, mismo movimiento Chainlink -> órdenes correlacionadas).
 _disparos_por_cierre: dict = {}
@@ -119,6 +125,80 @@ def _marcar_enviado_disco(market_id: str) -> None:
 # conexiones de la sesión HTTP compartida es 10; 12 simultáneas abrían TLS nuevo en el
 # instante crítico) y tope de espera de las lecturas de fase A.
 _POOL_LIBROS = ThreadPoolExecutor(max_workers=6, thread_name_prefix="libro_precierre")
+# 23-Sep (techo >1): pool propio para los envíos -- cada envío bloquea en _verificar_fill_real
+# (hasta ~4,5s); en serie, la 2ª orden saldría con el mercado ya cerrado.
+_POOL_ENVIOS = ThreadPoolExecutor(max_workers=6, thread_name_prefix="envio_precierre")
+
+
+def _liberar_disparo(ts_end: int, direction: str, stake_eur: float) -> None:
+    """Deshace una reserva de _reservar_disparo cuyo envío no llegó a hacer POST."""
+    with _disparos_lock:
+        e = _disparos_por_cierre.get(ts_end)
+        if not e or e["n"] <= 0:
+            return
+        e["n"] -= 1
+        e["dir"][direction] = max(0, e["dir"].get(direction, 0) - 1)
+        e["stake"] = max(0.0, e["stake"] - stake_eur)
+
+
+def _foto_vivo() -> dict:
+    """/code-review 23-Sep (latencia): UNA lectura en vivo por ventana de config (whitelist,
+    interruptor naive, ventana) + switch, compartida por todas las monedas del instante."""
+    try:
+        cfg = lt._cargar_config()
+        en_v, _m = live_guard.en_ventana_horaria(cfg)
+        return {"pares": set(cfg.get("pares_permitidos_live", [])), "switch": live_guard.switch_activo(),
+                "en_ventana": en_v, "rapido": naive_camino_rapido_activo(cfg)}
+    except Exception as e:
+        return {"error": f"{type(e).__name__}"}
+
+
+def _despachar(resultados: list, ts_end: int) -> None:
+    """Recibe los resultados de decisión (ordenados por prioridad). Los que traen `_envio`
+    (pasaron todas las guardas) reservan hueco EN ORDEN (_reservar_disparo: techo, correlación,
+    freno diario) y los reservados se lanzan EN PARALELO sin esperarlos. /code-review 23-Sep:
+    si la reserva rechaza un candidato, el hueco pasa al siguiente; si un envío falla antes del
+    POST, su hueco se libera. Escribe el CSV con COPIAS (las filas de envío, al terminar)."""
+    candidatos = [r for r in resultados if r.get("_envio")]
+    lanzar = []
+    for r in candidatos:
+        if DRY_RUN:
+            lanzar.append(r)
+            continue
+        if len(lanzar) >= MAX_DISPAROS_POR_VENTANA:
+            r["gate_confirmado"], r["gate_motivo"] = False, "tope_disparos_ventana"
+            continue
+        ok, motivo = _reservar_disparo(ts_end, r["_dir"], float(r.get("stake_eur") or 0), r["_guardas"])
+        if ok:
+            lanzar.append(r)
+        else:
+            r["gate_confirmado"], r["gate_motivo"] = False, motivo
+    def _fila(r: dict, extra: str = "") -> dict:
+        c = dict(r)   # copia atómica (C) -- nunca iterar el dict que un hilo aún puede escribir
+        for k in ("_envio", "_dir", "_guardas"):
+            c.pop(k, None)
+        if extra:
+            c["gate_motivo"] = f"{c.get('gate_motivo', '')}|{extra}"
+        _append_csv({"timestamp_utc": datetime.now(timezone.utc).isoformat(timespec="milliseconds"),
+                     "ts_end": ts_end, "dry_run": DRY_RUN, **c})
+
+    def _al_terminar(r: dict, f) -> None:
+        # /code-review 23-Sep: el envío falló ANTES del POST (firma, reloj, CB, marca en disco) ->
+        # liberar su hueco para que el naive de T+0 (u otro) pueda usarlo.
+        if not DRY_RUN and not r.get("disparado"):
+            _liberar_disparo(ts_end, r["_dir"], float(r.get("stake_eur") or 0))
+        err = f.exception()
+        _fila(r, f"envio_excepcion:{type(err).__name__}" if err else "")
+
+    # /code-review 23-Sep: NO se espera a los envíos (cada uno bloquea en _verificar_fill_real
+    # hasta ~4,5s y retrasaba al naive del mismo cierre): la fila de cada envío se escribe al
+    # terminar (callback); las no lanzadas se escriben ya.
+    ids_lanzados = {id(r) for r in lanzar}
+    for r in resultados:
+        if id(r) not in ids_lanzados:
+            _fila(r)
+    for r in lanzar:
+        _POOL_ENVIOS.submit(r["_envio"]).add_done_callback(lambda f, r=r: _al_terminar(r, f))
 MAX_ESPERA_LECTURAS_S = 0.9   # lecturas que no llegan en 0,9s (desde T-2s) se descartan
 MIN_MARGEN_PRECIERRE_S = 0.3  # si tras preparar() queda menos que esto hasta T-2s, ventana perdida
 MARGEN_MIN_POST_S = 0.5       # nunca enviar la orden a menos de 0,5s del cierre nominal
@@ -289,6 +369,7 @@ class _Precalculo:
         self.dur_s, self.marco_tag, self.subtype_suffix, self.ask_min = MARCOS[marco]
         self.ts_end = None
         self.guardas = {"ok": False, "motivo": "sin_precalculo"}
+        self.vivo = None   # foto en vivo por ventana (_foto_vivo), se toma al empezar a decidir
         self.stake_ref = STAKE_EUR
         self.mercados = {}
         self.client = None
@@ -356,6 +437,17 @@ def _guardas_precalculadas(pre) -> dict:
             info = live_stake.calcular_stake(ic, STRATEGY, f"BTC#{pre.subtype_suffix}", direction=d,
                                              precio_entrada=0.5)
             g["stake"][d] = info
+        # margen del freno diario / suelo de bankroll -- MISMA fórmula que calcular_stake (freno
+        # prospectivo): lo que aún se puede perder hoy contando los stakes ya abiertos. Se descuenta
+        # en memoria por cada orden reservada en el cierre (_reservar_disparo).
+        cfg_m = lt._cargar_config()
+        bkr_ini = live_stake.bankroll_inicio_dia()
+        abiertos_eur = live_stake.stakes_abiertos_total()
+        if bkr_ini <= 0:
+            raise ValueError("bankroll_inicio_dia<=0")
+        g["margen_dia"] = min(
+            bkr_ini * live_stake.freno_diario_pct_hoy(cfg_m) + live_stake.pnl_live_hoy() - abiertos_eur,
+            live_stake.bankroll_actual() - live_stake.bankroll_minimo_eur_hoy(cfg_m) - abiertos_eur)
         g["ok"], g["motivo"] = True, ""
     except Exception as e:
         g["ok"] = False   # fail-closed: ninguna guarda a medias
@@ -498,15 +590,32 @@ def _cuenta_para_rafaga(lectura: dict | None) -> bool:
     return ask is not None and ASK_RAFAGA_MIN <= ask < ASK_MAX
 
 
-def _reservar_disparo(ts_end: int) -> bool:
-    """Tope compartido entre hilos/marcos por instante de cierre (ver _disparos_por_cierre)."""
+def _reservar_disparo(ts_end: int, direction: str, stake_eur: float, g: dict) -> tuple[bool, str]:
+    """Reserva ATÓMICA por instante de cierre (compartida entre hilos, marcos y estrategias
+    precierre/naive). Comprueba a la vez: (1) techo de disparos MAX_DISPAROS_POR_VENTANA;
+    (2) techo de correlación: abiertas en esa dirección (foto T-12s) + ya reservadas en este
+    cierre en esa dirección < max_posiciones_abiertas_misma_direccion; (3) freno diario: suma de
+    stakes reservados en este cierre + este <= margen_dia (mismo cálculo que calcular_stake, foto
+    T-12s). Fail-closed si falta cualquier dato."""
     with _disparos_lock:
         for k in [k for k in _disparos_por_cierre if k < ts_end - 3600]:
             del _disparos_por_cierre[k]
-        if _disparos_por_cierre.get(ts_end, 0) >= MAX_DISPAROS_POR_VENTANA:
-            return False
-        _disparos_por_cierre[ts_end] = _disparos_por_cierre.get(ts_end, 0) + 1
-        return True
+        e = _disparos_por_cierre.setdefault(ts_end, {"n": 0, "dir": {}, "stake": 0.0})
+        if e["n"] >= MAX_DISPAROS_POR_VENTANA:
+            return False, "tope_disparos_ventana"
+        abiertas = g.get("abiertas", {}).get(direction)
+        max_correl = g.get("max_correl")
+        margen = g.get("margen_dia")
+        if abiertas is None or max_correl is None or margen is None:
+            return False, "reserva_sin_datos"
+        if abiertas + e["dir"].get(direction, 0) >= max_correl:
+            return False, f"techo_correlacion_{direction}_en_cierre"
+        if e["stake"] + stake_eur > margen + 0.005:   # calcular_stake redondea a 2 decimales
+            return False, f"freno_diario_margen={margen:.2f}_usado={e['stake']:.2f}"
+        e["n"] += 1
+        e["dir"][direction] = e["dir"].get(direction, 0) + 1
+        e["stake"] += stake_eur
+        return True, ""
 
 
 def _firmar_enviar_registrar(pre: "_Precalculo", m: dict, activo: str, direction: str, token_id: str,
@@ -555,13 +664,8 @@ def _firmar_enviar_registrar(pre: "_Precalculo", m: dict, activo: str, direction
         resultado["gate_confirmado"] = False
         resultado["gate_motivo"] = f"circuit_breaker:{cb_motivo}"
         return resultado
-    # /code-review 23-Sep: el hueco de disparo (compartido precierre+naive por cierre) se reserva
-    # AQUÍ, tras whitelist/switch/cliente/reloj/CB -- antes el precierre lo consumía aunque luego
-    # fallara la whitelist, dejando sin hueco al naive en las mismas ráfagas.
-    if not _reservar_disparo(pre.ts_end):
-        resultado["gate_confirmado"] = False
-        resultado["gate_motivo"] = "tope_disparos_ventana"
-        return resultado
+    # (La reserva del hueco -- techo/correlación/freno -- la hace _despachar ANTES de lanzar este
+    # envío, en orden de prioridad; con DRY_RUN=False nunca se llega aquí sin reserva.)
     # /code-review 23-Sep: el CB y la reserva leen ficheros (20-130ms con carga) -- último
     # chequeo de reloj JUSTO antes del POST.
     if time.time() > limite_envio_ts:
@@ -754,20 +858,21 @@ def _instante_critico(pre: _Precalculo, lectura: dict, n_rafaga: int, ts_end: in
     # pares_permitidos_live -- fail-closed (no es un riesgo de dinero),
     # pero habría bloqueado la promoción para siempre en silencio.
     subtype_whitelist = f"{activo}#{pre.subtype_suffix}"
-    if IGNORAR_VENTANAS_HORARIAS:
-        # switch + whitelist (la de dirección exacta va justo debajo), SIN ventana horaria
-        if not live_guard.switch_activo():
-            ok_whitelist, motivo_whitelist = False, "switch_OFF"
-        elif not live_guard.estrategia_permitida(STRATEGY, subtype_whitelist):
-            ok_whitelist, motivo_whitelist = False, f"{STRATEGY}#{subtype_whitelist} no está en lista de permitidos"
-        else:
-            ok_whitelist, motivo_whitelist = True, "ok_sin_ventana"
+    # /code-review 23-Sep (latencia): switch + whitelist EXACTA con dirección (+ ventana si no se
+    # ignora) desde UNA foto en vivo por ventana (pre.vivo, tomada al empezar a decidir), no 3
+    # lecturas de disco por moneda. Fail-closed si la foto falló.
+    v = pre.vivo or {"error": "sin_foto"}
+    tupla_exacta = f"{STRATEGY}#{subtype_whitelist}#{direction}"
+    if v.get("error"):
+        ok_whitelist, motivo_whitelist = False, f"foto_vivo:{v['error']}"
+    elif not v["switch"]:
+        ok_whitelist, motivo_whitelist = False, "switch_OFF"
+    elif tupla_exacta not in v["pares"]:
+        ok_whitelist, motivo_whitelist = False, f"{tupla_exacta} no está en lista de permitidos"
+    elif not IGNORAR_VENTANAS_HORARIAS and not v["en_ventana"]:
+        ok_whitelist, motivo_whitelist = False, "fuera_ventana_horaria"
     else:
-        ok_whitelist, motivo_whitelist = live_guard.puede_operar_live(STRATEGY, subtype_whitelist)
-    # 23-Sep: puede_operar_live sin dirección deja pasar CUALQUIER dirección si una está en la
-    # whitelist -- exigir además la tupla EXACTA con dirección (fail-closed).
-    if ok_whitelist and not live_guard.estrategia_permitida(STRATEGY, subtype_whitelist, direction=direction):
-        ok_whitelist, motivo_whitelist = False, f"{STRATEGY}#{subtype_whitelist}#{direction} no está en lista de permitidos"
+        ok_whitelist, motivo_whitelist = True, "ok"
     resultado["whitelist_ok"] = ok_whitelist
     if not DRY_RUN and not ok_whitelist:
         resultado["gate_confirmado"] = False
@@ -778,9 +883,14 @@ def _instante_critico(pre: _Precalculo, lectura: dict, n_rafaga: int, ts_end: in
         resultado["gate_motivo"] = "sin_cliente_clob"
         return resultado
 
-    return _firmar_enviar_registrar(pre, m, activo, direction, token_id, ask, stake_eur, STRATEGY,
-                                    f"offset={OFFSET_S}s rafaga_n={n_rafaga}", resultado,
-                                    pre.ts_end - MARGEN_MIN_POST_S, t_lectura_ms)
+    # 23-Sep (techo >1): no se envía aquí -- se devuelve el envío preparado para que
+    # _despachar reserve hueco en orden de prioridad y lance a la vez los reservados.
+    resultado["_dir"], resultado["_guardas"] = direction, pre.guardas
+    resultado["_envio"] = lambda: _firmar_enviar_registrar(
+        pre, m, activo, direction, token_id, ask, stake_eur, STRATEGY,
+        f"offset={OFFSET_S}s rafaga_n={n_rafaga}", resultado,
+        pre.ts_end - MARGEN_MIN_POST_S, t_lectura_ms)
+    return resultado
 
 
 def _naive_fillable(l: dict | None) -> bool:
@@ -849,15 +959,12 @@ def _instante_naive(pre: _Precalculo, lectura: dict, n_det: int, ts_end: int) ->
         return _no(f"profundidad_insuficiente_para_stake={stake_eur}")
     # /code-review 23-Sep: switch, whitelist exacta y ventana EN VIVO (no la foto de T-12s) --
     # un /off o una retirada de la whitelist tiene efecto hasta el último instante.
-    try:
-        cfg_vivo = lt._cargar_config()
-        tupla = f"{STRATEGY_NAIVE}#{sub}#BUY_{dir_impl}"
-        r["whitelist_ok"] = tupla in set(cfg_vivo.get("pares_permitidos_live", []))
-        switch_ok = live_guard.switch_activo()
-        en_ventana, _mv = live_guard.en_ventana_horaria(cfg_vivo)
-        rapido_ok = naive_camino_rapido_activo(cfg_vivo)
-    except Exception as e:
-        return _no(f"error_guardas_vivo:{type(e).__name__}")
+    v = pre.vivo or {"error": "sin_foto"}   # UNA foto en vivo por ventana (ver _foto_vivo)
+    if v.get("error"):
+        return _no(f"error_guardas_vivo:{v['error']}")
+    tupla = f"{STRATEGY_NAIVE}#{sub}#BUY_{dir_impl}"
+    r["whitelist_ok"] = tupla in v["pares"]
+    switch_ok, en_ventana, rapido_ok = v["switch"], v["en_ventana"], v["rapido"]
     if not rapido_ok:
         return _no("camino_rapido_desactivado")
     if not DRY_RUN and not switch_ok:
@@ -871,9 +978,12 @@ def _instante_naive(pre: _Precalculo, lectura: dict, n_det: int, ts_end: int) ->
         return _no("sin_cliente_clob")
     r["gate_confirmado"] = True
     r["gate_motivo"] = f"naive_monedas={n_det}"
-    return _firmar_enviar_registrar(pre, m, activo, direction, lectura["token_id"], ask, stake_eur,
-                                    STRATEGY_NAIVE, f"offset=+{NAIVE_OFFSET_S}s monedas={n_det}", r,
-                                    ts_end + NAIVE_MAX_ENVIO_S, lectura["t_lectura_ms"])
+    r["_dir"], r["_guardas"] = direction, pre.guardas
+    r["_envio"] = lambda: _firmar_enviar_registrar(
+        pre, m, activo, direction, lectura["token_id"], ask, stake_eur,
+        STRATEGY_NAIVE, f"offset=+{NAIVE_OFFSET_S}s monedas={n_det}", r,
+        ts_end + NAIVE_MAX_ENVIO_S, lectura["t_lectura_ms"])
+    return r
 
 
 def procesar_ventana_naive(pre: _Precalculo, ts_end: int) -> None:
@@ -902,10 +1012,9 @@ def procesar_ventana_naive(pre: _Precalculo, ts_end: int) -> None:
         return
     n_det = sum(1 for l in lecturas if _naive_fillable(l))
     lecturas.sort(key=lambda l: -(l["depth"].get("ratio_vs_stake") or 0))
-    for lectura in lecturas:
-        r = _instante_naive(pre, lectura, n_det, ts_end)
-        _append_csv({"timestamp_utc": datetime.now(timezone.utc).isoformat(timespec="milliseconds"),
-                      "ts_end": ts_end, "dry_run": DRY_RUN, **r})
+    pre.vivo = _foto_vivo()
+    resultados = [_instante_naive(pre, lectura, n_det, ts_end) for lectura in lecturas]
+    _despachar(resultados, ts_end)   # escribe las filas (las de envío, al terminar cada envío)
     for f in pendientes:
         _append_csv({"timestamp_utc": datetime.now(timezone.utc).isoformat(timespec="milliseconds"),
                       "ts_end": ts_end, "dry_run": DRY_RUN, "marco": pre.marco, "activo": futuros[f],
@@ -941,10 +1050,9 @@ def procesar_ventana(pre: _Precalculo, ts_end: int) -> None:
     n_rafaga = sum(1 for l in lecturas if _cuenta_para_rafaga(l))
     # live: el tope se lo lleva la moneda con más profundidad (no el orden de ASSETS)
     lecturas.sort(key=lambda l: -(l["depth"].get("ratio_vs_stake") or 0))
-    for lectura in lecturas:
-        r = _instante_critico(pre, lectura, n_rafaga, ts_end)
-        _append_csv({"timestamp_utc": datetime.now(timezone.utc).isoformat(timespec="milliseconds"),
-                      "ts_end": ts_end, "dry_run": DRY_RUN, **r})
+    pre.vivo = _foto_vivo()
+    resultados = [_instante_critico(pre, lectura, n_rafaga, ts_end) for lectura in lecturas]
+    _despachar(resultados, ts_end)   # escribe las filas (las de envío, al terminar cada envío)
     for a in tarde:
         _append_csv({"timestamp_utc": datetime.now(timezone.utc).isoformat(timespec="milliseconds"),
                       "ts_end": ts_end, "dry_run": DRY_RUN, "marco": pre.marco, "activo": a,
