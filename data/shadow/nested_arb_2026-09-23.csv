@@ -1,0 +1,4 @@
+timestamp_utc,activo,nesting,combo,coste,profit_min_pct,gap_opens_pct,depth_usd,restante_s,ask_leg1,ask_leg2,o_inner,o_outer,o_inner_chainlink,o_outer_chainlink,inner_slug,outer_slug
+2026-09-23T00:12:51+00:00,BTC,5min15m,YESout+NOin,1.03,-3.0,0.0685,15.14,128,0.99,0.04,86235.055,86176.0,86229.91590458863,86153.55971246884,btc-updown-5m-1790122200,btc-updown-15m-1790121600
+2026-09-23T00:12:52+00:00,ETH,5min15m,YESout+NOin,1.0,0.0,0.0719,4.82,127,0.97,0.03,2754.65,2752.67,2751.9699165327975,2750.363228750856,eth-updown-5m-1790122200,eth-updown-15m-1790121600
+2026-09-23T00:12:52+00:00,SOL,5min15m,NOout+YESin,1.04,-4.0,-0.0337,0.4,127,0.05,0.99,118.51,118.55,118.49120915428843,118.41590168660645,sol-updown-5m-1790122200,sol-updown-15m-1790121600
