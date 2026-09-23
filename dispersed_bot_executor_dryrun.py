@@ -151,6 +151,7 @@ from live_stake import calcular_stake, bloquear_por_circuit_breaker  # noqa: E40
 import live_trade as lt  # noqa: E402
 from live_guard import puede_operar_live  # noqa: E402
 import bot_wallets_gate_bucket as _bwgb  # noqa: E402
+import zonas_forward_pgallina as _zf  # noqa: E402 -- 23-Sep, fuente aditiva Stage 0 (ver ese módulo)
 
 DRY_RUN = False  # 08-Sep, aprobación explícita Javi -- SOLO SNIPER#BTC#5min[0.25,0.30) puede ejecutar de verdad (ver guardianes 2-3 en el docstring)
 
@@ -318,6 +319,21 @@ def _procesar_fila(row: dict, wallets: set, arquetipos: dict, vistos: dict) -> d
     sigue_fillable = bool(ratio is not None and ratio >= 5.0)
 
     veredicto = _gate_veredicto(arquetipo, activo, marco, b)
+    # 23-Sep (Javi: "Sí, me parece bien", Stage 0): fuente ADITIVA -- zonas forward-validadas por ASK
+    # (zonas_forward_pgallina.py, kill-switch propio sobre trades reales). Solo abre el rango de ask
+    # exacto; todas las demás guardas (whitelist, ventana, correlación, CB, techo 0,80) siguen igual.
+    tupla_sintetica = f"{arquetipo}#{activo}#{marco}#BUY_{lado}"
+    zona_ok, techo_zona = (_zf.permitido(tupla_sintetica, fill.get("mejor_ask"))
+                           if fill.get("ok") else (False, None))
+    if zona_ok:
+        # /code-review 23-Sep: una fuente aditiva nunca pisa un malo_confirmado del gate, ni del bucket
+        # del precio de la wallet ni del bucket del ask donde se opera.
+        try:
+            v_ask = _gate_veredicto(arquetipo, activo, marco, _bucket(float(fill.get("mejor_ask"))))
+        except (TypeError, ValueError):
+            v_ask = "malo_confirmado"
+        if veredicto == "malo_confirmado" or v_ask == "malo_confirmado":
+            zona_ok = False
 
     # Simulación de stake real (mismo camino que un ejecutor live real,
     # pero DRY_RUN -- nunca se envía). 15-Sep: antes ic_proxy=0.15 fijo
@@ -342,7 +358,8 @@ def _procesar_fila(row: dict, wallets: set, arquetipos: dict, vistos: dict) -> d
     except Exception:
         pass
 
-    decision = "DISPARARIA" if (veredicto == "bueno_confirmado" and sigue_fillable and not cb_bloquea) else "NO_dispara"
+    decision = ("DISPARARIA" if ((veredicto == "bueno_confirmado" or zona_ok) and sigue_fillable and not cb_bloquea)
+                else "NO_dispara")
 
     # --- Tramo de envío real (07-Sep, petición explícita Javi; ACTIVO desde
     # 08-Sep, DRY_RUN=False). Solo llega aquí de verdad si pasan los guardianes
@@ -352,6 +369,22 @@ def _procesar_fila(row: dict, wallets: set, arquetipos: dict, vistos: dict) -> d
     tupla_sintetica = f"{arquetipo}#{activo}#{marco}#BUY_{lado}"
     if not DRY_RUN and decision == "DISPARARIA":
         en_wl = _en_whitelist(tupla_sintetica)
+        # 23-Sep: la zona forward es alternativa a permitido_real(), nunca a las demás guardas.
+        # /code-review 23-Sep: tuplas que están en la whitelist SOLO por su zona no abren por el gate
+        # (no distingue lado ni rango de ask): solo por la zona, con su kill-switch.
+        via_gate = bool(en_wl and not _zf.solo_zona(tupla_sintetica)
+                        and _bwgb.permitido_real(arquetipo, activo, marco, precio))
+        via_zona = bool(en_wl and not via_gate and zona_ok)
+        if via_zona and _zf.edge(tupla_sintetica) is not None:
+            # stake y edge del re-quote con el edge MEDIDO de la zona, no el fallback genérico 0,15
+            ic_proxy = _zf.edge(tupla_sintetica)
+            try:
+                stake_sim = calcular_stake(ic_proxy, strategy="DISPERSED_BOT", subtype=f"{activo}#{marco}",
+                                           direction="BUY_YES" if lado == "Up" else "BUY_NO",
+                                           precio_entrada=float(fill.get("mejor_ask"))).get("stake_eur", 0.0)
+            except Exception as e:
+                log(f"WARN calcular_stake (zona) falló: {e}")
+                stake_sim = 0.0   # fail-closed: sin stake no se envía (check de más abajo)
         # 08-Sep: guardián adicional -- este gate confirma por (arquetipo,
         # activo,marco,bucket) SIN separar por dirección, así que estar en
         # pares_permitidos_live habilitaría CUALQUIER bucket bueno_confirmado
@@ -363,7 +396,7 @@ def _procesar_fila(row: dict, wallets: set, arquetipos: dict, vistos: dict) -> d
         # bueno_confirmado, fill-ability real del ejecutor con n>=15, y
         # edge medido en vivo para el bucket exacto (ver docstring de esa
         # función para el detalle de las 3 capas).
-        if en_wl and not _bwgb.permitido_real(arquetipo, activo, marco, precio):
+        if en_wl and not (via_gate or via_zona):
             log(f"  ⛔ {tupla_sintetica} bucket[{b:.2f}) no pasa permitido_real() "
                  f"(veredicto/fill-ability/edge) -- fail-closed, no se ejecuta")
         elif not en_wl:
@@ -421,7 +454,10 @@ def _procesar_fila(row: dict, wallets: set, arquetipos: dict, vistos: dict) -> d
                             edge_dir=ic_proxy,
                             contexto={"strategy": arquetipo, "subtype": f"{activo}#{marco}",
                                       "tupla_sintetica": tupla_sintetica,
-                                      "precio_max_token": _bwgb.PRECIO_MAX_REAL})
+                                      # zona forward: techo = límite superior de la zona (el re-quote
+                                      # aborta si el precio sale de la zona por arriba al ejecutar)
+                                      "precio_max_token": (min(_bwgb.PRECIO_MAX_REAL, techo_zona)
+                                                           if via_zona and techo_zona else _bwgb.PRECIO_MAX_REAL)})
                         log(f"  🚨 ORDEN REAL enviada ({tupla_sintetica}): {resultado}")
                         if not resultado.get("no_fill"):
                             trade = {
@@ -441,6 +477,7 @@ def _procesar_fila(row: dict, wallets: set, arquetipos: dict, vistos: dict) -> d
                                 "fee_eur": resultado.get("fee_eur", 0),
                                 "pnl_bruto_eur": "", "pnl_neto_eur": "",
                                 "notas": (f"dispersed_bot wallet={w} arquetipo={arquetipo}"
+                                          + (" zona_forward=1" if via_zona else "")
                                           if resultado.get("ok") else lt.notas_error_con_order_id(resultado)),
                             }
                             lt._registrar_trade(trade)

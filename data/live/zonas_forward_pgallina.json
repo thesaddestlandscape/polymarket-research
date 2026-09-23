@@ -3,9 +3,11 @@
  "zonas": [
   {"tupla": "DISPERSO#BTC#5min#BUY_Up", "lo": 0.75, "hi": 0.80, "modo": "live", "desde": "2026-09-23T21:00:00",
    "evidencia": "fwd n=144 +0,121/tr IC90 [+0,05,+0,19] (ask detección); train n=174 +0,084",
+   "edge": 0.08, "solo_zona": true,
    "kill": {"n_min": 20, "pnl_media_min": 0.0, "perdida_max_eur": 3.0}},
   {"tupla": "SNIPER#ETH#5min#BUY_Down", "lo": 0.70, "hi": 0.75, "modo": "live", "desde": "2026-09-23T21:00:00",
    "evidencia": "fwd n=69 +0,099/tr IC90 [-0,01,+0,21] (ask detección); por ask decisión +0,125 IC90 [+0,01,+0,24]",
+   "edge": 0.05, "solo_zona": true,
    "kill": {"n_min": 20, "pnl_media_min": 0.0, "perdida_max_eur": 3.0}},
   {"tupla": "SNIPER#BTC#15min#BUY_Down", "lo": 0.10, "hi": 0.15, "modo": "dry_run", "desde": "2026-09-23T21:00:00", "evidencia": "fwd n=27 +0,935 IC90 [+0,04,+2,06] (lotería)"},
   {"tupla": "SNIPER#BNB#5min#BUY_Down", "lo": 0.30, "hi": 0.35, "modo": "dry_run", "desde": "2026-09-23T21:00:00", "evidencia": "fwd n=30 +0,317 IC90 [-0,09,+0,82]"},
