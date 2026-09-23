@@ -10,9 +10,11 @@ Visible en GitHub en tiempo real. Muestra:
 También envía un resumen compacto por Telegram cada TELEGRAM_INTERVALO_MIN minutos.
 """
 import csv
+import io
 import json
 import glob
 import os
+import time
 import requests as _requests
 from datetime import datetime, timezone
 from zoneinfo import ZoneInfo
@@ -43,6 +45,7 @@ RESULTS_PATH = DIR_SHADOW / "results.csv"
 PARAMS_PATH  = DIR_SHADOW / "strategy_params.json"
 OUTPUT_MD    = DIR_SHADOW / "estado_actual.md"
 LAST_TG_PATH = DIR_SHADOW / "_last_telegram_update.ts"
+CACHE_INCREMENTAL_PATH = DIR_SHADOW / "_cache_resumen_incremental.json"
 
 TELEGRAM_INTERVALO_MIN = 60   # enviar resumen cada N minutos
 
@@ -50,12 +53,433 @@ CAPITAL_OPERATIVO = 25.44   # depósito real operativo (actualizado 2026-06-30)
 DEPOSITO_TOTAL    = 30.0
 RESERVA           = 4.56
 
+# 23-Sep: días de resueltos a mantener en el índice rodante que alimenta
+# "abiertas" (señales pendientes) -- solo hace falta cubrir las predicciones
+# vivas en archivos_pred ([-2:] días de predictions_*.csv), 4 días da margen
+# de sobra sin arrastrar historial completo.
+RESUELTOS_VENTANA_DIAS = 4
 
-def cargar_csv(path):
-    if not Path(path).exists():
-        return []
-    with open(path, encoding="utf-8") as f:
-        return list(csv.DictReader(f))
+# 23-Sep (/code-review, 9ª pasada): tope duro absoluto de resueltos_recientes,
+# independiente de la poda por fecha -- red de seguridad si algún día
+# prediction_timestamp viniera roto en masa (con _es_reciente en fail-open,
+# una fila ilegible ya NO se excluye de la poda por fecha, así que sin este
+# tope el crecimiento volvería a ser sin límite en ese escenario).
+RESUELTOS_HARD_CAP = 20000
+
+# 23-Sep (/code-review, hallazgo #2): tope por estrategia base del historial
+# cronológico que alimenta _tendencia() -- sin esto crecía sin límite y se
+# serializaba entero en JSON cada ciclo, reintroduciendo el mismo coste
+# O(n_total)/ciclo que este rediseño existe para eliminar. 1000 da hasta
+# 500/500 en el split-half, de sobra por encima del mínimo n>=30 que exige
+# _tendencia() -- cambia la semántica de "tendencia de toda la vida" a
+# "tendencia reciente" (últimas 1000 resoluciones), aviso explícito, no
+# silencioso.
+CRONOLOGICO_MAX_POR_BASE = 1000
+
+# 23-Sep (/code-review, 4ª pasada): tamaño de chunk para la lectura binaria
+# incremental -- evita materializar de golpe TODO el bloque pendiente en una
+# reconstrucción en frío (cache borrado/corrupto, deploy nuevo, header
+# cambiado), que sería tan grande como results.csv completo (cientos de MB).
+CHUNK_BYTES = 8 * 1024 * 1024
+
+# 23-Sep (/code-review, 7ª pasada): techo de escalada para _corte_seguro
+# cuando un chunk no tiene ningún '\n' fuera de comillas -- cubre un campo
+# citado legítimo grande sin volver a arriesgar el patrón de OOM (64MB sigue
+# siendo muy por debajo del fichero completo, 587MB+). Si ni así se
+# encuentra un corte seguro, se asume fila corrupta y se fuerza un corte
+# crudo (ver aviso "🚨🚨 sin cierre de comillas").
+CORTE_SEGURO_MAX_BYTES = 8 * CHUNK_BYTES
+
+
+def _cache_incremental_vacio():
+    return {
+        "byte_offset": 0,
+        "pnl_total": 0.0,
+        "pnl_fiel_total": 0.0,
+        "n_total": 0,
+        "n_win": 0,
+        "pnl_hoy_fecha": "",
+        "pnl_hoy_sum": 0.0,
+        "por_base": {},   # {strategy: {n, win, pnl, cronologico:[[ts,acierto],...]}}
+        "ultimas": [],    # últimas N filas crudas (campos mínimos), más reciente al final
+        "resueltos_recientes": [],  # [[prediction_timestamp, strategy, market_id], ...]
+    }
+
+
+def _cargar_cache_incremental() -> dict:
+    """Fail-open: cualquier problema (fichero ausente/corrupto, offset mayor
+    que el tamaño real de results.csv -- teóricamente imposible bajo el
+    invariante APPEND-ONLY verificado con grep, pero un cache corrupto/
+    manipulado a mano sí podría guardar un offset inválido) -> cache vacío,
+    se reconstruye entero en el siguiente ciclo (mismo criterio que
+    _idx_pred_archivo_cacheado en shadow_postmortem.py)."""
+    try:
+        cache = json.loads(CACHE_INCREMENTAL_PATH.read_text(encoding="utf-8"))
+        tam_actual = RESULTS_PATH.stat().st_size if RESULTS_PATH.exists() else 0
+        if cache.get("byte_offset", 0) > tam_actual:
+            return _cache_incremental_vacio()
+        return cache
+    except Exception:
+        return _cache_incremental_vacio()
+
+
+def _guardar_cache_incremental(cache: dict) -> None:
+    try:
+        tmp = CACHE_INCREMENTAL_PATH.with_suffix(".tmp.json")
+        tmp.write_text(json.dumps(cache), encoding="utf-8")
+        os.replace(tmp, CACHE_INCREMENTAL_PATH)
+    except Exception as e:
+        print(f"  [aviso cache_resumen] no se pudo escribir cache: {e}")
+
+
+def _corte_seguro(chunk: bytes) -> int:
+    """Índice del último '\\n' en `chunk` que NO cae dentro de un campo CSV
+    entrecomillado (ver /code-review 23-Sep, 5ª pasada, en el docstring de
+    _actualizar_cache_incremental). -1 si no hay ningún corte seguro."""
+    pos = chunk.rfind(b"\n")
+    while pos != -1:
+        if chunk[:pos + 1].count(b'"') % 2 == 0:
+            return pos
+        pos = chunk.rfind(b"\n", 0, pos)
+    return -1
+
+
+def _actualizar_cache_incremental(hoy: str, ahora: datetime) -> dict:
+    """23-Sep (rediseño, causa raíz de 14 OOM-kills/24h -- ver
+    project_rediseno_shadow_resumen_prioritario_23sep): antes, main() hacía
+    `resultados = list(csv.DictReader(...))` de TODO results.csv (666k filas,
+    560MB+) en CADA ciclo (~20-60s vía run_fast_mantenimiento.sh), materializando
+    ~1,5GB de dicts Python que competían por RAM con live_trade.py/shadow_
+    resumen.py mismos, disparando el OOM-killer del kernel. results.csv es
+    estrictamente APPEND-ONLY (mismo invariante que shadow_resolve.py:414
+    documenta y explota tras verificar con grep que ningún script lo abre en
+    modo escritura no-append -- no existe ningún proceso de dedup/reescritura
+    real sobre este fichero, verificado antes de escribir esto) -- este cache
+    guarda un offset de bytes + agregados
+    ya reducidos (sumas/contadores, nunca la fila cruda completa salvo
+    `ultimas`/`resueltos_recientes`, ambos acotados) y en cada ciclo solo
+    parsea las líneas NUEVAS desde el offset, actualizando los agregados in
+    situ. Coste por ciclo pasa de O(n_total) a O(filas_nuevas) -- normalmente
+    0-5 filas entre ciclos de 20-60s.
+
+    /code-review 23-Sep, 2 hallazgos corregidos:
+    (1) leer en modo texto y calcular `len(linea.encode('utf-8'))` para el
+    offset desincroniza si el fichero tiene CRLF (confirmado real en
+    results.csv) -- universal-newline strippea el '\\r' antes de medir,
+    subcontando 1 byte/línea, y el offset guardado deja de apuntar a un
+    límite de línea real. Mismo bug que shadow_resolve.py ya evita abriendo
+    en 'rb' y calculando el offset sobre bytes crudos -- se replica ese
+    patrón aquí en vez de reinventar uno nuevo (decisión ladder CLAUDE.md).
+    (2) `cronologico` sin tope crecía para siempre y se serializaba/
+    deserializaba en JSON cada ciclo -- volvía a ser O(n_total) por ciclo
+    (ahora vía JSON, no vía CSV), el mismo patrón que este cambio existe
+    para eliminar. Acotado a CRONOLOGICO_MAX_POR_BASE por estrategia
+    (recorte por delante, se queda con las más recientes) -- sigue siendo
+    ampliamente suficiente para el split-half de _tendencia() (exige n>=30,
+    aquí quedan hasta 1000/500-500), pero cambia su semántica de "primera
+    mitad de TODO el historial vs segunda mitad" a "primera mitad de las
+    últimas 1000 vs segunda mitad" -- tendencia reciente, no de toda la
+    vida. Aviso explícito para Javi, no un cambio silencioso.
+
+    /code-review 23-Sep (2ª pasada), 3 hallazgos más corregidos:
+    (1) `fieldnames` cacheado nunca se revalidaba contra la cabecera ACTUAL
+    del fichero -- si results.csv ganara/reordenara una columna con
+    offset>0, csv.DictReader seguiría zipeando con el orden viejo sin
+    lanzar ningún error (silenciosamente mal, el caso exacto que CLAUDE.md
+    pide parar y surfacear). shadow_resolve.py, el patrón que este código
+    dice replicar, SÍ relee la cabecera cada vez y invalida su caché si no
+    coincide -- aquí faltaba ese paso, añadido ahora (header_actual se lee
+    siempre, barato, una sola línea).
+    (2) import de `_pnl_realista` movido fuera del bucle -- estaba dentro,
+    ejecutándose una vez por fila (irrelevante en ciclos normales de 0-5
+    filas nuevas, pero carísimo en la reconstrucción inicial de 666k filas)."""
+    cache = _cargar_cache_incremental()
+    cache_modificado = False
+    if cache.get("pnl_hoy_fecha") != hoy:
+        cache["pnl_hoy_fecha"] = hoy
+        cache["pnl_hoy_sum"] = 0.0
+        # /code-review 23-Sep (7ª pasada): sin este reseteo diario,
+        # filas_corruptas/pnl_fiel_errores eran contadores DE TODA LA VIDA --
+        # una sola fila mala de hace meses seguiría mostrando "⚠️ 1 fila(s)
+        # corrupta(s)" en el markdown/Telegram para siempre, sin poder saber
+        # si el problema es de hoy o arqueología. El aviso por print() en el
+        # momento del fallo (va a logs/fast.log) sigue siendo permanente y
+        # correcto -- este contador es solo el indicador "¿hoy hay algo roto?".
+        cache["filas_corruptas"] = 0
+        cache["pnl_fiel_errores"] = 0
+        cache_modificado = True
+
+    if not RESULTS_PATH.exists():
+        return cache
+
+    size_actual = RESULTS_PATH.stat().st_size
+    offset_inicial = cache.get("byte_offset", 0)
+    offset = offset_inicial
+    fieldnames = cache.get("fieldnames")
+
+    # /code-review 23-Sep (2ª pasada): releer SIEMPRE la cabecera actual (una
+    # línea, barato) y compararla contra la cacheada -- mismo patrón exacto
+    # que shadow_resolve.py::cargar_ya_resueltas (header_previo==header_actual)
+    # para el mismo invariante. Sin esto, si results.csv ganara/reordenara una
+    # columna con offset>0, csv.DictReader seguiría zipeando contra el orden
+    # viejo sin lanzar ningún error -- mal silenciosamente, nunca detectado.
+    with open(RESULTS_PATH, "rb") as f:
+        header_bytes = f.readline()
+    if not header_bytes:
+        return cache
+    fieldnames_actual = next(csv.reader([header_bytes.decode("utf-8", errors="replace")]))
+
+    cache_invalido = (
+        (offset > 0 and not fieldnames)
+        or (offset > 0 and fieldnames != fieldnames_actual)
+    )
+    if cache_invalido:
+        # Cache no fiable (formato viejo/corrupto, o el header cambió de
+        # verdad) -- reconstruir desde cero en vez de arriesgar un doble
+        # conteo o columnas desplazadas. Mismo criterio que
+        # _cargar_cache_incremental cuando byte_offset > tamaño del fichero.
+        # /code-review 23-Sep (3ª pasada): _cache_incremental_vacio() resetea
+        # pnl_hoy_fecha a "" -- sin re-ponerlo a `hoy` aquí, main() reportaría
+        # pnl_hoy=0.0 este ciclo Y el siguiente (el check de arriba, "" != hoy,
+        # volvería a disparar y pisar pnl_hoy_sum ANTES de que este mismo
+        # ciclo termine de reconstruirlo), perdiendo silenciosamente el PnL
+        # de hoy en el dashboard/Telegram hasta el cambio de día.
+        cache = _cache_incremental_vacio()
+        cache["pnl_hoy_fecha"] = hoy
+        offset = 0
+        cache_modificado = True
+
+    por_base = cache.setdefault("por_base", {})
+    ultimas = cache.setdefault("ultimas", [])
+    resueltos = cache.setdefault("resueltos_recientes", [])
+
+    if offset == 0:
+        fieldnames = fieldnames_actual
+        offset = len(header_bytes)
+        cache["fieldnames"] = fieldnames
+
+    def _es_reciente(ts_pred: str, cutoff: float) -> bool:
+        """/code-review 23-Sep (9ª pasada, revierte la 6ª): fail-OPEN (True)
+        de nuevo -- la 6ª pasada lo puso en fail-closed para evitar fuga de
+        memoria con timestamps ilegibles, pero eso introdujo una regresión
+        real: una fila YA resuelta con prediction_timestamp roto se excluía
+        de resueltos_recientes PARA SIEMPRE (el offset ya avanzó sobre ella,
+        no se puede reprocesar) y `abiertas` la mostraba como "señal abierta"
+        indefinidamente aunque ya estuviera cerrada -- el código viejo (match
+        por tupla exacta, sin fecha) nunca tenía este problema. La fuga de
+        memoria real se corta ahora con RESUELTOS_HARD_CAP (tope duro por
+        cantidad, no por fecha) como red de seguridad -- las dos cosas a la
+        vez: no se pierde información por incertidumbre, y no puede crecer
+        sin límite aunque las fechas vengan todas rotas."""
+        try:
+            t = datetime.fromisoformat((ts_pred or "").replace("Z", "+00:00"))
+            if t.tzinfo is None:
+                t = t.replace(tzinfo=timezone.utc)
+            return t.timestamp() >= cutoff
+        except Exception:
+            return True
+
+    def _podar_resueltos(lista: list) -> list:
+        """Filtro por fecha + tope duro (RESUELTOS_HARD_CAP) -- devuelve una
+        lista NUEVA, nunca muta `lista` in situ. /code-review 23-Sep (9ª
+        pasada): el checkpoint periódico reasignaba `cache["resueltos_
+        recientes"]` a esta lista podada pero NUNCA reasignaba la variable
+        local `resueltos` que el bucle sigue usando para `.append()` --
+        durante una reconstrucción en frío, `resueltos` crecía sin límite
+        real (666k+ filas) pese a que el checkpoint "parecía" podarlo. Ahora
+        el resultado de esta función se reasigna a AMBOS."""
+        podada = [x for x in lista if _es_reciente(x[0], cutoff)]
+        if len(podada) > RESUELTOS_HARD_CAP:
+            podada = podada[-RESUELTOS_HARD_CAP:]
+        return podada
+
+    # /code-review 23-Sep (8ª pasada): un único `cutoff`, calculado una vez
+    # aquí (antes había un `cutoff_final` redundante al final del todo,
+    # recalculado a partir de los mismos `ahora`/RESUELTOS_VENTANA_DIAS que
+    # nunca cambian dentro de esta llamada -- siempre daba el mismo valor).
+    cutoff = ahora.timestamp() - RESUELTOS_VENTANA_DIAS * 86400
+
+    if offset < size_actual:
+        from dashboard_server import _pnl_realista  # /code-review: fuera del bucle, no por fila
+        # /code-review 23-Sep (4ª pasada), 3 hallazgos de "reconstrucción en
+        # frío" corregidos (deploy nuevo, cache borrado/corrupto, o header
+        # cambiado -- offset=0 sobre 666k+ filas):
+        # (1) `f.read(size_actual - offset)` de una sola vez volvía a
+        # materializar el fichero pendiente ENTERO (cientos de MB) -- el
+        # mismo patrón de OOM que este rediseño existe para eliminar, solo
+        # que en la reconstrucción en frío en vez de en cada ciclo normal.
+        # Ahora se lee en CHUNK_BYTES trozos, nunca más de eso en memoria.
+        # /code-review 23-Sep (6ª pasada): checkpoint periódico durante una
+        # reconstrucción en frío (666k+ filas puede tardar bastante) -- sin
+        # esto, un kill a mitad de camino (watchdog, OOM en otro proceso,
+        # deploy) perdía TODO el progreso y volvía a empezar desde 0, mismo
+        # patrón "pasada larga sin puntos de control" que el incidente de
+        # shadow_postmortem.py que motivó este rediseño.
+        CHECKPOINT_INTERVAL_S = 5
+        t_ultimo_checkpoint = time.time()
+        with open(RESULTS_PATH, "rb") as f:
+            f.seek(offset)
+            pos = offset
+            while pos < size_actual:
+                chunk = f.read(min(CHUNK_BYTES, size_actual - pos))
+                if not chunk:
+                    break
+                # /code-review 23-Sep (5ª pasada): cortar en el último '\n'
+                # crudo no es CSV-aware -- si algún campo (ej. `question`)
+                # tuviera algún día un salto de línea embebido dentro de
+                # comillas, el corte partiría ese campo en dos filas mal
+                # formadas sin lanzar ninguna excepción (comprobado hoy:
+                # results.csv no tiene ninguna fila así, pero nada impide que
+                # aparezca en el futuro). _corte_seguro cuenta comillas dobles
+                # hasta cada candidato a '\n' -- un conteo impar significa que
+                # ese salto cae DENTRO de un campo citado, y retrocede al
+                # anterior.
+                #
+                # /code-review 23-Sep (7ª pasada): esta misma heurística
+                # puede quedarse en LIVELOCK PERMANENTE si una fila queda
+                # truncada con un número impar de comillas -- ej. shadow_
+                # resolve.py matado a mitad de un writerow() (el propio
+                # incidente de OOM-kills que motivó este rediseño). Sin
+                # escape, _corte_seguro devolvería -1 para siempre y el
+                # offset nunca volvería a avanzar, en silencio. Escalada
+                # acotada: si no hay corte seguro, ampliar la ventana leída
+                # hasta CORTE_SEGURO_MAX_BYTES: si un campo citado legítimo
+                # cierra ahí, se recupera solo; si no cierra nunca (fila
+                # realmente corrupta), se rinde y fuerza un corte crudo
+                # (ignora comillas) gritando el problema -- Fail Loud en vez
+                # de congelarse silenciosamente.
+                ultimo_nl = _corte_seguro(chunk)
+                bloque_forzado = False
+                while ultimo_nl == -1 and pos + len(chunk) < size_actual \
+                        and len(chunk) < CORTE_SEGURO_MAX_BYTES:
+                    extra = f.read(min(CHUNK_BYTES, size_actual - pos - len(chunk),
+                                        CORTE_SEGURO_MAX_BYTES - len(chunk)))
+                    if not extra:
+                        break
+                    chunk += extra
+                    ultimo_nl = _corte_seguro(chunk)
+                if ultimo_nl == -1:
+                    ultimo_nl_crudo = chunk.rfind(b"\n")
+                    if ultimo_nl_crudo == -1:
+                        # de verdad ni una línea completa (chunk pequeño al
+                        # final del fichero) -- se deja para el próximo ciclo.
+                        break
+                    cache["cortes_forzados"] = cache.get("cortes_forzados", 0) + 1
+                    print(f"  🚨🚨 [cache_resumen] sin cierre de comillas tras {len(chunk)} "
+                          f"bytes en offset={pos} -- posible fila corrupta en results.csv "
+                          f"(revisar a mano). Usando corte crudo para no bloquear el resto "
+                          f"del historial para siempre.")
+                    ultimo_nl = ultimo_nl_crudo
+                    # /code-review 23-Sep (9ª pasada): un corte crudo puede
+                    # desalinear columnas de las filas de ESTE bloque sin que
+                    # csv.DictReader ni el try/except de acierto/pnl_neto lo
+                    # detecten (si el valor desplazado por casualidad castea
+                    # a int/float, se suma a pnl_total/n_total EN SILENCIO --
+                    # envenenamiento de datos, no solo pérdida de fila). Se
+                    # marcan TODAS las filas de este bloque como sospechosas
+                    # en filas_corruptas -- se siguen contando (mejor esfuerzo,
+                    # no se descarta el bloque entero), pero queda visible.
+                    bloque_forzado = True
+                texto_util = chunk[:ultimo_nl + 1]
+                texto = texto_util.decode("utf-8", errors="replace")
+                for r in csv.DictReader(io.StringIO(texto), fieldnames=fieldnames):
+                    if bloque_forzado:
+                        cache["filas_corruptas"] = cache.get("filas_corruptas", 0) + 1
+                    strat = r.get("strategy", "?")
+                    sub   = r.get("subtype", "")
+                    # Una fila con acierto/pnl_neto ilegible se descarta para
+                    # siempre (el offset ya avanzó sobre sus bytes, no se
+                    # puede reprocesar) -- el código viejo, en cambio, hacía
+                    # crashear TODO el script con esa misma fila (Fail Loud).
+                    # Aquí no se puede reproducir ese crash sin tirar abajo
+                    # el resumen/Telegram en cada ciclo hasta que alguien
+                    # arregle la fila a mano, así que en su lugar se cuenta y
+                    # se grita por print (va a logs/fast.log, visible) --
+                    # "silencioso" es lo prohibido, no "no crashea".
+                    try:
+                        acierto = int(r.get("acierto", 0) or 0)
+                        pnl = float(r.get("pnl_neto", 0) or 0)
+                    except Exception as e:
+                        cache["filas_corruptas"] = cache.get("filas_corruptas", 0) + 1
+                        print(f"  🚨 [cache_resumen] fila descartada (acierto/pnl_neto ilegible): "
+                              f"{type(e).__name__}: {e} -- strategy={strat} market_id={r.get('market_id','')}")
+                        continue
+                    ts_res = r.get("resolution_timestamp", "") or ""
+
+                    cache["pnl_total"] = cache.get("pnl_total", 0.0) + pnl
+                    cache["n_total"] = cache.get("n_total", 0) + 1
+                    cache["n_win"] = cache.get("n_win", 0) + acierto
+                    if ts_res[:10] == hoy:
+                        cache["pnl_hoy_sum"] = cache.get("pnl_hoy_sum", 0.0) + pnl
+
+                    try:
+                        v_fiel = _pnl_realista(r)
+                        if v_fiel is not None:
+                            cache["pnl_fiel_total"] = cache.get("pnl_fiel_total", 0.0) + v_fiel
+                    except Exception as e:
+                        # Antes un fallo aquí tumbaba TODO el cálculo de
+                        # pnl_fiel (try/except envolvía el sum() completo) y
+                        # el markdown mostraba "⚠️ error" -- visible. Ahora es
+                        # por fila, así que hay que gritarlo explícito en vez
+                        # de tragárselo -- se cuenta en el cache (visible en
+                        # el propio JSON) y se imprime, no en silencio.
+                        cache["pnl_fiel_errores"] = cache.get("pnl_fiel_errores", 0) + 1
+                        print(f"  🚨 [cache_resumen] _pnl_realista() falló en una fila: "
+                              f"{type(e).__name__}: {e} -- strategy={strat} market_id={r.get('market_id','')}")
+
+                    base = por_base.setdefault(strat, {"n": 0, "win": 0, "pnl": 0.0, "cronologico": []})
+                    base["n"] += 1
+                    base["win"] += acierto
+                    base["pnl"] += pnl
+                    base["cronologico"].append([ts_res, acierto])
+                    # (2) recorte por lotes, no fila a fila: `del lista[:-N]`
+                    # es O(len) -- recortar en cada fila una vez superado el
+                    # tope convierte una reconstrucción en frío (100k+ filas
+                    # en una sola estrategia) en decenas de millones de
+                    # desplazamientos de lista. Se deja crecer hasta 2x el
+                    # tope y ENTONCES se recorta de golpe -- mismo resultado
+                    # final, coste amortizado.
+                    if len(base["cronologico"]) > CRONOLOGICO_MAX_POR_BASE * 2:
+                        del base["cronologico"][:-CRONOLOGICO_MAX_POR_BASE]
+
+                    ultimas.append({
+                        "resolution_timestamp": ts_res, "strategy": strat, "subtype": sub,
+                        "question": r.get("question", ""), "acierto": r.get("acierto", "0"),
+                        "pnl_neto": r.get("pnl_neto", "0"),
+                    })
+                    del ultimas[:-5]
+
+                    # (3) filtrar por recencia AQUÍ, antes de acumular -- no
+                    # después de haber acumulado las 666k+ filas de una
+                    # reconstrucción en frío y podar al final (memoria
+                    # transitoria O(n_total) que el resto de este rediseño
+                    # evita expresamente).
+                    ts_pred = r.get("prediction_timestamp", "")
+                    if _es_reciente(ts_pred, cutoff):
+                        resueltos.append([ts_pred, strat, r.get("market_id", "")])
+
+                pos += len(texto_util)
+                f.seek(pos)
+                if time.time() - t_ultimo_checkpoint >= CHECKPOINT_INTERVAL_S:
+                    resueltos = _podar_resueltos(resueltos)
+                    cache["byte_offset"] = pos
+                    cache["resueltos_recientes"] = resueltos
+                    _guardar_cache_incremental(cache)
+                    t_ultimo_checkpoint = time.time()
+            offset = pos
+
+    cache["byte_offset"] = offset
+    cache["resueltos_recientes"] = _podar_resueltos(resueltos)
+
+    # /code-review 23-Sep (8ª pasada): guardar solo si algo cambió de verdad
+    # -- antes se reescribía el cache ENTERO (ya ~6MB reales: 54 estrategias
+    # x hasta 1000 cronologico + resueltos_recientes) en CADA ciclo de
+    # 20-60s aunque no hubiera ni una fila nueva (el caso normal), ~26GB/día
+    # de I/O de escritura evitable. `cache_modificado` cubre rollover de día/
+    # invalidación; `offset != offset_inicial` cubre filas nuevas procesadas.
+    if cache_modificado or offset != offset_inicial:
+        _guardar_cache_incremental(cache)
+    return cache
 
 
 def cargar_params():
@@ -70,52 +494,35 @@ def main():
     ahora = datetime.now(timezone.utc)
     hoy   = ahora.strftime("%Y-%m-%d")
 
-    resultados = cargar_csv(RESULTS_PATH)
+    # 23-Sep: cache incremental en vez de `resultados = cargar_csv(RESULTS_PATH)`
+    # (todo el histórico, 666k+ filas, ~1,5GB de dicts en CADA ciclo de 20-60s --
+    # causa raíz de 14 OOM-kills/24h, ver _actualizar_cache_incremental()).
+    # `por_strat` y `_stats_directas()` (más abajo en el fichero) se
+    # calculaban pero nunca se consumían -- dead code eliminado junto con
+    # este cambio, no arrastrado al cache.
+    cache      = _actualizar_cache_incremental(hoy, ahora)
     params     = cargar_params()
 
     # ── Bankroll ──────────────────────────────────────────────────────────────
-    pnl_total = sum(float(r.get("pnl_neto", 0)) for r in resultados)
+    pnl_total = cache["pnl_total"]
     bankroll  = CAPITAL_OPERATIVO + pnl_total
     roi_op    = pnl_total / CAPITAL_OPERATIVO * 100
     roi_dep   = pnl_total / DEPOSITO_TOTAL    * 100
 
-    # P&L del día de hoy
-    pnl_hoy = sum(
-        float(r.get("pnl_neto", 0)) for r in resultados
-        if (r.get("resolution_timestamp", "") or "")[:10] == hoy
-    )
+    # P&L del día de hoy (ya acotado a `hoy` dentro del cache)
+    pnl_hoy = cache["pnl_hoy_sum"] if cache.get("pnl_hoy_fecha") == hoy else 0.0
 
-    # ── Stats por estrategia (subtipo más específico disponible) ──────────────
-    from collections import defaultdict
-    por_strat = defaultdict(lambda: {"n": 0, "win": 0, "pnl": 0.0})
-    for r in resultados:
-        key = r.get("strategy", "?")
-        sub = r.get("subtype", "")
-        if sub:
-            key = f"{key}#{sub}"
-        por_strat[key]["n"]   += 1
-        por_strat[key]["win"] += int(r.get("acierto", 0))
-        por_strat[key]["pnl"] += float(r.get("pnl_neto", 0))
-
-    # Agrupar también a nivel estrategia base
-    por_base = defaultdict(lambda: {"n": 0, "win": 0, "pnl": 0.0, "cronologico": []})
-    for r in resultados:
-        key = r.get("strategy", "?")
-        por_base[key]["n"]   += 1
-        por_base[key]["win"] += int(r.get("acierto", 0))
-        por_base[key]["pnl"] += float(r.get("pnl_neto", 0))
-        por_base[key]["cronologico"].append(
-            (r.get("resolution_timestamp", ""), int(r.get("acierto", 0)))
-        )
+    # Agrupado a nivel estrategia base (ya acumulado incrementalmente)
+    por_base = cache["por_base"]
 
     # ── Últimas 5 resoluciones ────────────────────────────────────────────────
-    ultimas = resultados[-5:] if resultados else []
+    ultimas = cache["ultimas"]
 
     # ── Señales abiertas (predicciones no resueltas) ──────────────────────────
-    resueltos_ids = set(
-        (r.get("prediction_timestamp",""), r.get("strategy",""), r.get("market_id",""))
-        for r in resultados
-    )
+    # Ventana rodante (RESUELTOS_VENTANA_DIAS) en vez de todo el histórico --
+    # archivos_pred solo mira los últimos 2 días de predictions_*.csv, así
+    # que una resolución de hace semanas nunca puede casar con nada de ahí.
+    resueltos_ids = set(tuple(x) for x in cache["resueltos_recientes"])
     # 18-Ago: lectura tolerante por FICHERO -- mismo fix que shadow_resolve.py::
     # cargar_predicciones_pendientes()/shadow_postmortem.py::
     # cargar_predicciones_index(), mismo motivo (shadow_predict.py, proceso
@@ -145,8 +552,8 @@ def main():
 
     # ── Construir Markdown ────────────────────────────────────────────────────
     ts = ahora.strftime("%Y-%m-%d %H:%M UTC")
-    n_total = len(resultados)
-    n_win   = sum(int(r.get("acierto", 0)) for r in resultados)
+    n_total = cache["n_total"]
+    n_win   = cache["n_win"]
     wr_g    = n_win / n_total * 100 if n_total else 0
 
     signo_pnl    = "+" if pnl_total >= 0 else ""
@@ -190,11 +597,16 @@ def main():
 
     # PnL fiel: stake fijo 1$ + slippage, sin compounding — misma función que el
     # dashboard. Cota superior: no modela fill-ability (~8%, selección adversa).
+    # 23-Sep: acumulado incrementalmente dentro de _actualizar_cache_incremental
+    # (misma _pnl_realista, sumada fila a fila conforme llegan, no en un solo
+    # pase sobre todo el histórico).
     try:
-        from dashboard_server import _pnl_realista
-        pnl_fiel = sum(v for v in (_pnl_realista(r) for r in resultados)
-                       if v is not None)
-        fiel_row = f"| P&L fiel (stake fijo 1$) | {pnl_fiel:+.2f} $ |"
+        pnl_fiel = cache["pnl_fiel_total"]
+        n_err_fiel = cache.get("pnl_fiel_errores", 0)
+        n_err_filas = cache.get("filas_corruptas", 0)
+        aviso = (f" ⚠️ {n_err_fiel} fila(s) con error" if n_err_fiel else "")
+        aviso += (f" ⚠️ {n_err_filas} fila(s) corrupta(s)" if n_err_filas else "")
+        fiel_row = f"| P&L fiel (stake fijo 1$) | {pnl_fiel:+.2f} $ {aviso}|"
     except Exception:
         fiel_row = "| P&L fiel (stake fijo 1$) | ⚠️ error |"
 
@@ -230,6 +642,13 @@ def main():
         confianza = min(1.0, n / 20)
         ic_ef = ic * confianza
         tendencia = _tendencia(d["cronologico"])
+        # /code-review 23-Sep (9ª pasada): CRONOLOGICO_MAX_POR_BASE cambia la
+        # semántica de _tendencia() de "toda la vida" a "recientes" para
+        # cualquier estrategia con n>tope -- antes ese aviso solo vivía en un
+        # comentario de código que Javi nunca lee; ahora se ve en la propia
+        # tabla, que es lo que de verdad se consulta cada sesión.
+        if n > CRONOLOGICO_MAX_POR_BASE:
+            tendencia += " (últ. 1000)"
 
         sp = params.get(s, {})
         activa = sp.get("activa", True)
@@ -374,57 +793,6 @@ def _tendencia(cronologico):
 def _esc(s):
     """Escapa _ y * para Markdown v1 de Telegram."""
     return s.replace('_', '\\_').replace('*', '\\*')
-
-
-def _stats_directas(resultados):
-    """Calcula stats curadas directamente de results.csv, sin ruido de params."""
-    from collections import defaultdict
-
-    PAIR_BL   = {'Ethereum', 'XRP', 'Dogecoin', 'BNB', 'Binance'}
-    GBM_KEYS  = {
-        'BTC#15min':  ('UPDOWN_GBM', '15min', 'BTC'),
-        'SOL#15min':  ('UPDOWN_GBM', '15min', 'SOL'),
-        'ETH#15min':  ('UPDOWN_GBM', '15min', 'ETH'),
-        'BTC#60min':  ('UPDOWN_GBM', '60min', 'BTC'),
-        'ETH#60min':  ('UPDOWN_GBM', '60min', 'ETH'),
-        'SOL#60min':  ('UPDOWN_GBM', '60min', 'SOL'),
-    }
-
-    gbm = defaultdict(lambda: {'n': 0, 'win': 0, 'pnl': 0.0})
-    of_btc_sol = {'n': 0, 'win': 0, 'pnl': 0.0}
-    buyno_15min = {'n': 0, 'win': 0, 'pnl': 0.0}
-    buyyes_60min = {'n': 0, 'win': 0, 'pnl': 0.0}
-
-    for r in resultados:
-        strat = r.get('strategy', '')
-        sub   = r.get('subtype', '')
-        dec   = r.get('decision', '')
-        q     = r.get('question', '')
-        w     = int(r.get('acierto', 0))
-        pnl   = float(r.get('pnl_neto', 0))
-
-        if strat == 'UPDOWN_GBM':
-            parts = sub.split('#')  # e.g. BTC#15min
-            if len(parts) == 2:
-                pair, window = parts[0], parts[1]
-                key = f'{pair}#{window}'
-                if key in GBM_KEYS:
-                    gbm[key]['n']   += 1
-                    gbm[key]['win'] += w
-                    gbm[key]['pnl'] += pnl
-                    # Split BUY_NO / BUY_YES
-                    if window == '15min' and dec == 'BUY_NO':
-                        buyno_15min['n'] += 1; buyno_15min['win'] += w; buyno_15min['pnl'] += pnl
-                    if window == '60min' and dec == 'BUY_YES':
-                        buyyes_60min['n'] += 1; buyyes_60min['win'] += w; buyyes_60min['pnl'] += pnl
-
-        elif strat == 'ORDER_FLOW_5M':
-            if not any(p in q for p in PAIR_BL):
-                of_btc_sol['n']   += 1
-                of_btc_sol['win'] += w
-                of_btc_sol['pnl'] += pnl
-
-    return gbm, of_btc_sol, buyno_15min, buyyes_60min
 
 
 def _telegram_periodico(ahora):
