@@ -40,6 +40,11 @@ LATCH = REPO / "data/live/vigia_degradacion_live_latch.json"
 
 VENTANA_RECIENTE = 30
 UMBRAL_RECUPERACION = 0.05  # €/trade — por encima de esto se resetea el latch
+VENTANA_RECIENTE_MIN = 10  # n_ult mínimo para el check de media (antes literal "10")
+# 23-Sep: mismo umbral que el freno de racha global ya aceptado en el proyecto
+# (live_stake.py/live_trade.py, circuit breaker de 4 pérdidas consecutivas) --
+# vía rápida para degradaciones violentas que nunca llegan a VENTANA_RECIENTE_MIN.
+RACHA_NEGATIVA_N = 4
 
 # Fail-safe (13-Jul, propuesta #4 lista puntos ciegos): si config_live.json no
 # se puede leer, monitorizar las tuplas conocidas de HOY en vez de vigilar la
@@ -218,10 +223,33 @@ def main() -> int:
                 "var_ult30": round(var_ult, 4) if var_ult is not None else "",
             })
 
-            if n_ult < 10 or pnl_ult is None:
-                continue  # ventana reciente demasiado corta para fiarse
-
             ya_alertado = latch.get(clave, {}).get("negativo", False)
+
+            # 23-Sep (petición explícita Javi, tras el caso SNIPER#BTC#15min:
+            # 8 pérdidas reales seguidas 20→22-Sep, pausado A MANO porque este
+            # vigía -- cadencia diaria + n_ult>=10 -- nunca llegó a marcarlo
+            # antes de la pausa manual): vía RÁPIDA adicional, independiente
+            # del check de abajo -- si las últimas RACHA_NEGATIVA_N operaciones
+            # reales son TODAS pérdidas, marca negativo=true YA, sin esperar a
+            # n_ult>=10. Mismo umbral (4) que el freno de racha global de
+            # live_stake.py/live_trade.py (circuit breaker ya aceptado en el
+            # proyecto) -- no se inventa un número nuevo. Runs ahora por cron
+            # horario (antes diario) para que esta vía rápida sirva de algo en
+            # una degradación violenta de un solo día.
+            if n_tot >= RACHA_NEGATIVA_N:
+                ultimas_n = filas[-RACHA_NEGATIVA_N:]
+                if all(pnl < 0 for _, pnl, _ in ultimas_n) and not ya_alertado:
+                    avisos.append(
+                        f"{clave}: RACHA de {RACHA_NEGATIVA_N} pérdidas reales seguidas "
+                        f"(vía rápida, no esperó a n_ult>={VENTANA_RECIENTE_MIN}) -- "
+                        f"últimas pnl/trade: {[round(p,3) for _, p, _ in ultimas_n]}"
+                    )
+                    latch.setdefault(clave, {})["negativo"] = True
+                    ya_alertado = True
+
+            if n_ult < VENTANA_RECIENTE_MIN or pnl_ult is None:
+                continue  # ventana reciente demasiado corta para el check de media (la vía rápida de arriba ya corrió)
+
             if pnl_ult < 0 and not ya_alertado:
                 avisos.append(
                     f"{clave}: últimos {n_ult} ejecutados hit={hit_ult:.1f}% "
