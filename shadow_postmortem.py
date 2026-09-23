@@ -458,7 +458,18 @@ def _normalizar_pred(row: dict) -> dict:
     return row
 
 
-_PRED_INDEX_CACHE_VERSION = 1
+# 23-Sep (OOM, medido: pred_index = +500 MB por ciclo): el índice solo guarda los campos que el
+# postmortem lee de una predicción (clasificar_causa, _extraer_features, generar_performance --
+# verificado por grep, ningún otro consumidor). Solo claves PRESENTES en la fila, así
+# pred.get(k, defecto) se comporta exactamente igual que con la fila completa.
+_CAMPOS_PRED_INDEX = ("edge_bruto", "edge_neto", "horas_a_vencimiento", "subtype", "features", "razon")
+
+
+def _proyectar_pred(row: dict) -> dict:
+    return {k: row[k] for k in _CAMPOS_PRED_INDEX if k in row}
+
+
+_PRED_INDEX_CACHE_VERSION = 2   # 23-Sep: v2 = filas proyectadas (_proyectar_pred); v1 se convierte
 _PRED_INDEX_CACHE_MIN_INACTIVO_S = 900
 
 
@@ -495,6 +506,19 @@ def _idx_pred_archivo_cacheado(arch: Path, parsear) -> dict:
             if (d.get("v") == _PRED_INDEX_CACHE_VERSION and d.get("firma") == firma
                     and isinstance(d.get("idx"), dict)):
                 return d["idx"]
+            # 23-Sep: caché v1 (filas completas) válida -> se proyecta y se reescribe como v2 sin
+            # reparsear el CSV (~590 MB/día); mismo resultado que reparsear con _proyectar_pred.
+            if (d.get("v") == 1 and d.get("firma") == firma and isinstance(d.get("idx"), dict)):
+                idx = {k: _proyectar_pred(v) for k, v in d["idx"].items()}
+                del d
+                try:
+                    tmp = cache_path.with_name(cache_path.stem + ".tmp.pkl")
+                    with open(tmp, "wb") as f:
+                        pickle.dump({"v": _PRED_INDEX_CACHE_VERSION, "firma": firma, "idx": idx}, f, protocol=4)
+                    os.replace(tmp, cache_path)
+                except Exception as e:
+                    print(f"  [aviso pred_index] no se pudo convertir cache v1 de {arch.name}: {e}")
+                return idx
         except Exception:
             pass
     idx = leer_csv_tolerante(arch, parsear, log_fn=print)
@@ -581,7 +605,7 @@ def cargar_predicciones_index(dias: int = 10) -> dict:
                     row = _normalizar_pred(row)
                     clave = (row["strategy"], row["market_id"], row["decision"])
                     if clave not in idx_local:
-                        idx_local[clave] = row
+                        idx_local[clave] = _proyectar_pred(row)
         return idx_local
 
     archivos = sorted(DIR_SHADOW.glob("predictions_*.csv"))[-(dias + 2):]
@@ -3435,12 +3459,24 @@ def _leer_results_streaming(vaciar_features: bool = False):
                 marcadores = True
             yield linea
 
+    # 23-Sep (OOM, medido: la carga = ~955 MB de 686k dicts): los VALORES se repiten muchísimo
+    # (strategy 53 distintos, decision 2, pnl_neto ~2.400, question/end_date ~1 por mercado...).
+    # Compartir la misma cadena para valores iguales (mismo contenido -> misma semántica, == y
+    # hash idénticos) ahorra cientos de MB. Excluidos los casi-únicos (no compensan) y features.
+    compartidas = {}
     with open(RESULTS_PATH, encoding="utf-8") as f:
         for r in csv.DictReader(_lineas(f)):
             if vaciar_features and "features" in r:
                 r["features"] = ""
+            for k, v in r.items():
+                if k in _CAMPOS_NO_COMPARTIR or v is None or type(v) is not str:
+                    continue
+                r[k] = compartidas.setdefault(v, v)
             rows.append(r)
     return rows, marcadores
+
+
+_CAMPOS_NO_COMPARTIR = {"features", "prediction_timestamp", "market_id"}
 
 
 def _debe_correr_patrones_causales() -> bool:
