@@ -1342,5 +1342,25 @@
   "GBM_LATE_60M_PYCONFIRMADO#SOL#60min": {
     "n": 201,
     "confirmado": false
+  },
+  "LIQUIDACIONES_5M#BTC": {
+    "n": 205,
+    "confirmado": true
+  },
+  "LIQUIDACIONES_5M#BTC#5min": {
+    "n": 205,
+    "confirmado": true
+  },
+  "PRICE_TARGET_GBM#BTC#atexpiry": {
+    "n": 201,
+    "confirmado": false
+  },
+  "PRICE_TARGET_GBM_FADE#ETH#atexpiry": {
+    "n": 203,
+    "confirmado": true
+  },
+  "UPDOWN_GBM#XRP#240min": {
+    "n": 211,
+    "confirmado": false
   }
 }
