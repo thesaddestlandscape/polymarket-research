@@ -1211,7 +1211,16 @@ def calcular_params(resultados: list) -> dict:
         # calcula aparte, fuera del hot path -- ver
         # analisis_calibracion_platt_granular.py.
         if "#" not in s:
+            _t_cal = time.perf_counter()
             calib, cache_entry_nuevo = _fit_calibracion_prob(calib_pairs.get(s, []), calib_cache.get(s))
+            # 23-Sep (etapa 3, diagnostico): solo print, sin efecto sobre resultados --
+            # decidir con datos por que calcular_params tarda 50-70s con cache de folds.
+            _dt_cal = time.perf_counter() - _t_cal
+            if _dt_cal > 1.0:
+                _ce = calib_cache.get(s) or {}
+                print(f"  ⏱ calib[{s}]: {_dt_cal:.1f}s n={len(calib_pairs.get(s, []))} "
+                      f"cache_prev_n={_ce.get('n_procesado')} cache_nuevo_n="
+                      f"{(cache_entry_nuevo or {}).get('n_procesado')}")
             if cache_entry_nuevo is not None:
                 calib_cache[s] = cache_entry_nuevo
             elif s in calib_cache:
