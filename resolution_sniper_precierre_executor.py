@@ -763,6 +763,23 @@ def _firmar_enviar_registrar(pre: "_Precalculo", m: dict, activo: str, direction
             "notas": notas,
         }
         lt._registrar_trade(trade)
+    # 23-Sep (petición Javi): aviso de CADA orden real, ejecutada o rechazada -- fuera del camino
+    # crítico (el POST ya salió). Un fallo de Telegram nunca afecta a la orden ni al registro.
+    try:
+        if ok:
+            lt.enviar_telegram(
+                f"🎯 *Orden live ejecutada ({strategy})*\n"
+                f"{strategy}#{activo}#{pre.subtype_suffix}#{direction}\n"
+                f"Precio fill: {filled_price:.4f} (ask {ask:.4f})  |  Stake: {stake_eur:.2f}$\n"
+                f"Envío T{resultado['t_envio_rel_cierre_s']:+.3f}s respecto al cierre  |  {notas_base}")
+        elif not sin_fill_confirmado:
+            lt.enviar_telegram(
+                f"❌ *Orden live NO ejecutada ({strategy})*\n"
+                f"{strategy}#{activo}#{pre.subtype_suffix}#{direction} ask={ask:.4f}\n"
+                f"Envío T{resultado['t_envio_rel_cierre_s']:+.3f}s respecto al cierre\n"
+                f"{str(error)[:200]}")
+    except Exception as e:
+        _log(f"  aviso Telegram falló ({type(e).__name__}: {e}) -- la orden no se ve afectada")
     return resultado
 
 
