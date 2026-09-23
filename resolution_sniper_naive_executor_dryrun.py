@@ -104,6 +104,22 @@ DRY_RUN = False  # 25-Ago: activado con aprobación explícita de Javi tras revi
 CLAVE_CONFIG_CAMINO_RAPIDO = "resolution_sniper_naive_camino_rapido"
 
 
+RUTA_MARCAS_CAMINO_RAPIDO = Path(__file__).resolve().parent / "data" / "live" / "precierre_mercados_enviados.txt"
+
+
+def _marcado_por_camino_rapido(market_id: str) -> bool:
+    """/code-review 23-Sep: True si resolution_sniper_precierre_executor.py (otro proceso) ya
+    intentó una orden en este mercado. Fail-closed: si el fichero existe pero no se puede leer,
+    True (no arriesgar doble orden)."""
+    if not RUTA_MARCAS_CAMINO_RAPIDO.exists():
+        return False
+    try:
+        with open(RUTA_MARCAS_CAMINO_RAPIDO, encoding="utf-8") as f:
+            return any(linea.strip() == str(market_id) for linea in f)
+    except Exception:
+        return True
+
+
 def _envio_delegado_camino_rapido() -> bool:
     """True -> no enviar desde aquí. Si la config no se puede leer, True (fail-closed: mejor
     no enviar desde ningún lado que arriesgar doble orden; el camino rápido también se para)."""
@@ -386,6 +402,9 @@ def evaluar(asset: str, marco: str, slug: str, market_id: str, condition_id: str
             pass
         elif ask_ref in (None, "") or stake_dryrun in (None, "") or not (float(stake_dryrun or 0) > 0):
             _log("  ⛔ precio/stake sin resolver -- fail-closed, no se ejecuta")
+        elif _marcado_por_camino_rapido(market_id):
+            _log(f"  ⛔ mercado {market_id} ya intentado por resolution_sniper_precierre_executor.py "
+                 f"(marca en disco) -- idempotencia entre procesos, no se ejecuta")
         elif not _reservar_mercado(market_id):
             _log(f"  ⛔ mercado {market_id} ya operado/reservado (u trades.csv ilegible) "
                  f"-- idempotencia, no se ejecuta")

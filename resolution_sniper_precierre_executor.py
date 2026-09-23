@@ -106,6 +106,15 @@ _disparos_lock = threading.Lock()
 # 23-Sep: mercados con orden enviada por ESTE proceso (precierre o naive) -- las guardas de
 # ya_operados se precalculan en T-12s y no verían un disparo de T-2s; esto sí.
 _mercados_enviados: set = set()
+# Marca compartida ENTRE PROCESOS (lo lee resolution_sniper_naive_executor_dryrun.py antes de
+# enviar): una línea market_id por orden intentada. Append atómico de una línea, sin lock.
+RUTA_MARCAS_ENVIO = REPO / "data" / "live" / "precierre_mercados_enviados.txt"
+
+
+def _marcar_enviado_disco(market_id: str) -> None:
+    with open(RUTA_MARCAS_ENVIO, "a", encoding="utf-8") as f:
+        f.write(f"{market_id}\n")
+        f.flush()
 # /code-review 23-Sep: un solo pool para ambos marcos (<=6 lecturas concurrentes: el pool de
 # conexiones de la sesión HTTP compartida es 10; 12 simultáneas abrían TLS nuevo en el
 # instante crítico) y tope de espera de las lecturas de fase A.
@@ -182,6 +191,9 @@ def _hilo_clv() -> None:
                 while not (CLV_FRANJA_SEGURA[0] <= time.time() % 300 <= CLV_FRANJA_SEGURA[1]):
                     time.sleep(1)
                 _refrescar_clv_una_vez()
+            else:
+                time.sleep(30)   # /code-review: interruptor apagado -> reintentar pronto, no 10 min
+                continue
         except Exception as e:
             _log(f"refresco CLV falló ({type(e).__name__}: {e}) -- se mantiene el anterior (o veto por edad)")
         time.sleep(CLV_REFRESCO_S)
@@ -420,16 +432,39 @@ def _profundidad_correcta(token_id: str, stake_eur: float) -> dict:
     }
 
 
-def _leer(pre: _Precalculo, activo: str) -> dict | None:
+CHAINLINK_MAX_EDAD_S = 2.0      # /code-review 23-Sep: nunca decidir con un precio más viejo
+NAIVE_ESPERA_TICK_POST_S = 1.2  # naive: espera como mucho esto un tick con ts >= cierre
+
+
+def _ultimo_tick(activo: str):
+    """(ts_epoch, precio) del último tick Chainlink de la cola compartida, o None. Se lee la
+    estructura interna de _TAIL (bajo su lock) para tener la marca de tiempo -- precio_ultimo()
+    no la devuelve y es un módulo compartido que no se toca aquí."""
+    with _TAIL._lock:
+        dq = _TAIL._buf.get(activo)
+        return dq[-1] if dq else None
+
+
+def _leer(pre: _Precalculo, activo: str, ts_min: float | None = None) -> dict | None:
     """Fase A (paralela entre monedas): dirección implícita Chainlink + UNA
-    lectura de libro del lado implícito. None si no hay mercado/precio."""
+    lectura de libro del lado implícito. None si no hay mercado/precio.
+    /code-review 23-Sep: precio con frescura verificada (<= CHAINLINK_MAX_EDAD_S) y, si se pasa
+    ts_min (naive), SOLO un tick con ts >= ts_min (precio del cierre, no el previo)."""
     m = pre.mercados.get(activo)
     if not m or m["ref_open"] is None or m["ref_open"] <= 0:
         return None
 
-    precio_actual = _TAIL.precio_ultimo(activo)
-    if precio_actual is None:
+    tick = _ultimo_tick(activo)
+    if ts_min is not None:
+        limite = time.time() + NAIVE_ESPERA_TICK_POST_S
+        while (tick is None or tick[0] < ts_min) and time.time() < limite:
+            time.sleep(0.02)
+            tick = _ultimo_tick(activo)
+        if tick is None or tick[0] < ts_min:
+            return None
+    if tick is None or time.time() - tick[0] > CHAINLINK_MAX_EDAD_S:
         return None
+    precio_actual = tick[1]
     if precio_actual > m["ref_open"]:
         dir_impl = "Up"
     elif precio_actual < m["ref_open"]:
@@ -520,6 +555,20 @@ def _firmar_enviar_registrar(pre: "_Precalculo", m: dict, activo: str, direction
     if not _reservar_disparo(pre.ts_end):
         resultado["gate_confirmado"] = False
         resultado["gate_motivo"] = "tope_disparos_ventana"
+        return resultado
+    # /code-review 23-Sep: el CB y la reserva leen ficheros (20-130ms con carga) -- último
+    # chequeo de reloj JUSTO antes del POST.
+    if time.time() > limite_envio_ts:
+        resultado["gate_confirmado"] = False
+        resultado["gate_motivo"] = "sin_margen_reloj_antes_post"
+        return resultado
+    # /code-review 23-Sep: marca EN DISCO antes del POST para que el ejecutor naive viejo (otro
+    # proceso) no envíe una segunda orden al mismo mercado mientras trades.csv aún no la refleja.
+    try:
+        _marcar_enviado_disco(m["market_id"])
+    except Exception as e:
+        resultado["gate_confirmado"] = False
+        resultado["gate_motivo"] = f"error_marca_disco:{type(e).__name__}"   # fail-closed
         return resultado
     t2 = time.perf_counter()
     try:
@@ -830,9 +879,9 @@ def procesar_ventana_naive(pre: _Precalculo, ts_end: int) -> None:
         return
     if espera > 0:
         time.sleep(espera)
-    futuros = {_POOL_LIBROS.submit(_leer, pre, a): a for a in ASSETS
+    futuros = {_POOL_LIBROS.submit(_leer, pre, a, ts_end): a for a in ASSETS
                if (a, pre.marco) in _naive_viejo.COMBOS_CONFIRMADOS}
-    hechos, pendientes = wait(futuros, timeout=MAX_ESPERA_LECTURAS_S)
+    hechos, pendientes = wait(futuros, timeout=NAIVE_ESPERA_TICK_POST_S + MAX_ESPERA_LECTURAS_S)
     lecturas = []
     for f in hechos:
         try:
