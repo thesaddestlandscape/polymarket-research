@@ -3397,7 +3397,15 @@ def _fase(nombre: str) -> None:
     efecto sobre resultados. Sirve para decidir CON DATOS que agregado merece
     hacerse incremental en vez de adivinarlo."""
     ahora = time.perf_counter()
-    print(f"  ⏱ fase[{nombre}]: {ahora - _T_FASE[0]:.1f}s")
+    # 23-Sep: + memoria (RSS actual y pico) por fase -- solo print, para atacar el pico de ~2,2 GB
+    try:
+        _st = open("/proc/self/status").read()
+        _rss = int(_st.split("VmRSS:")[1].split()[0]) // 1024
+        _hwm = int(_st.split("VmHWM:")[1].split()[0]) // 1024
+        _mem = f" rss={_rss}MB pico={_hwm}MB"
+    except Exception:
+        _mem = ""
+    print(f"  ⏱ fase[{nombre}]: {ahora - _T_FASE[0]:.1f}s{_mem}")
     _T_FASE[0] = ahora
 
 
