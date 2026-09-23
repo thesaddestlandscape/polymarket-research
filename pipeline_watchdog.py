@@ -147,7 +147,14 @@ SCREEN_RESTART = {
     # solo tumbaba al suyo) -- a cambio de ~75% menos conexiones/CPU. Ver
     # executores_live_consolidado.py y project_consolidacion_4_ejecutores_
     # pendiente_corte_10ago en memoria.
-    "ejeclive": f"cd {REPO} && .venv/bin/python executores_live_consolidado.py >> logs/ejecutores_live_consolidado.log 2>&1",
+    # 23-Sep: choom -n -500 protege el proceso de dinero real frente al
+    # OOM-killer del kernel (baja su oom_score_adj, no cambia prioridad de
+    # CPU) -- el sistema corre habitualmente con RAM/swap al límite (etapa 3
+    # de shadow_postmortem::calcular_params pendiente, ver
+    # project_rediseno_calcular_params_prioritario_20sep) y antes ejeclive
+    # tenía la misma prioridad de kill que cualquier script de análisis
+    # desechable. Solo protección de SO, cero cambios de lógica de trading.
+    "ejeclive": f"cd {REPO} && choom -n -500 -- .venv/bin/python executores_live_consolidado.py >> logs/ejecutores_live_consolidado.log 2>&1",
     # ejecdryrun (06-Ago): consolida 7 ejecutores DRY_RUN de baja latencia
     # (ballenas_15m, fav15mexec, fav60mexec, gbmlate15m, updowngbmtardio,
     # walletmirror, wmexec -- historial completo de cada uno en sus propios
