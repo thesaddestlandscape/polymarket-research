@@ -93,10 +93,24 @@ def _leer_dry_run_vivo_filas() -> list:
     except OSError:
         return []
     if _cache_dry_run_vivo["mtime"] != mtime:
+        # 23-Sep (causa raíz de OOM-kills, medido): antes list(csv.DictReader(f)) guardaba las
+        # 630k filas COMPLETAS (25 columnas) -> 1,4 GB retenidos para siempre en caché (y pico de
+        # 2,7 GB en wallets_operativas_recientes, cada 30 min y en cada arranque del ejecutor).
+        # Los ÚNICOS consumidores (_historial_reciente_wallet_mirror y ..._por_bucket) solo usan
+        # _CAMPOS_DRY_RUN_VIVO y descartan las filas sin acierto resuelto -> se guarda solo eso.
+        filas = []
         with open(DRY_RUN_VIVO, encoding="utf-8") as f:
-            _cache_dry_run_vivo["filas"] = list(csv.DictReader(f))
+            for r in csv.DictReader(f):
+                if r.get("acierto") not in ("0", "1"):
+                    continue
+                filas.append({k: r.get(k, "") for k in _CAMPOS_DRY_RUN_VIVO})
+        _cache_dry_run_vivo["filas"] = filas
         _cache_dry_run_vivo["mtime"] = mtime
     return _cache_dry_run_vivo["filas"]
+
+
+_CAMPOS_DRY_RUN_VIVO = ("acierto", "tipo", "wallet", "activo", "marco", "condition_id",
+                        "trade_timestamp", "mejor_ask_deteccion")
 
 
 def _acierto_wallet_desde_fila_dry_run(row: dict) -> int | None:
