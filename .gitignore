@@ -44,6 +44,10 @@ data/shadow/results.csv
 # dato perdido -- calibracion_prob sigue viniendo de results.csv, nunca de
 # este caché en sí). No necesita historial de git ni backup dedicado.
 data/shadow/calibracion_folds_cache.json
+# 23-Sep: caché incremental de shadow_resumen.py (offset+agregados sobre
+# results.csv, ver _actualizar_cache_incremental) -- regenerable desde cero,
+# no necesita historial de git ni backup.
+data/shadow/_cache_resumen_incremental.json
 # 07-Sep: mismo motivo exacto que la línea anterior -- caché incremental
 # por offset de bytes de shadow_resolve.py::cargar_ya_resueltas() (evita
 # releer results.csv completo cada ciclo de resolve). Crece ~1 línea por
