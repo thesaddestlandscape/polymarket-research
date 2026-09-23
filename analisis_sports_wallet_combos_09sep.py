@@ -34,6 +34,7 @@ Solo lectura, no toca produccion. Salida: data/shadow/sports_wallet_combos_09sep
 """
 import csv
 import glob
+import gzip
 import json
 import random
 import statistics
@@ -56,11 +57,13 @@ N_SHUFFLE = 2000
 def cargar_trades():
     """[(wallet, event_slug, condition_id, market_slug, categoria, outcome,
     price, ts, usd)] BUY only, dedupe por transaction_hash."""
-    files = sorted(glob.glob(str(DIR_SPORTS / "activity_ws_*.csv")))
+    # 23-Sep: *.csv* -- activity_ws_*.csv ahora rota a .gz (comprimir_data_historica.sh)
+    files = sorted(glob.glob(str(DIR_SPORTS / "activity_ws_*.csv*")))
     vistos = set()
     out = []
     for fn in files:
-        with open(fn, newline="", encoding="utf-8") as f:
+        opener = gzip.open if fn.endswith(".gz") else open
+        with opener(fn, "rt", newline="", encoding="utf-8") as f:
             for r in csv.DictReader(f):
                 h = r.get("transaction_hash", "")
                 if h and h in vistos:

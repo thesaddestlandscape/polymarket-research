@@ -32,6 +32,7 @@ data/shadow/sports_crossmercado_eventos.json
 """
 import csv
 import glob
+import gzip
 import json
 import math
 import random
@@ -56,11 +57,13 @@ def parse_ts(s):
 
 
 def cargar_filas(dias=15):
-    archivos = sorted(glob.glob(str(REPO / "data" / "sports" / "activity_ws_*.csv")))[-dias:]
+    # 23-Sep: *.csv* -- activity_ws_*.csv ahora rota a .gz (comprimir_data_historica.sh)
+    archivos = sorted(glob.glob(str(REPO / "data" / "sports" / "activity_ws_*.csv*")))[-dias:]
     por_evento = defaultdict(lambda: defaultdict(list))  # event_slug -> market_slug -> [(ts, price)]
     n_rows = 0
     for fn in archivos:
-        with open(fn, encoding="utf-8") as f:
+        opener = gzip.open if fn.endswith(".gz") else open
+        with opener(fn, "rt", encoding="utf-8") as f:
             for r in csv.DictReader(f):
                 ts = parse_ts(r.get("timestamp_utc", ""))
                 try:

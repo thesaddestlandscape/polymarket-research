@@ -116,6 +116,20 @@ comprimir_dir data/prices "chainlink_*.csv"
 # días y por tanto NO se pueden comprimir sin romper el resolver (dejarían
 # de verse señales pendientes, mismo bug que el digest de GitHub Actions).
 comprimir_dir data/shadow "sports_spread_fase0_*.csv"
+# 23-Sep (barrido de disco, 92% usado, 6.2GB libres): data/sports/activity_ws_*.csv
+# (firehose sports, sports_activity_ws.py) NUNCA estaba en esta rotación --
+# backup_activity_ws_sports.sh solo copia una versión comprimida al volumen
+# externo, nunca toca/borra el original en disco raíz. Acumulaba sin límite:
+# 4.3GB+ en 17 días (06..22-Sep) sin comprimir. DIAS_MANTENER=3 es seguro:
+# vigia_sports_categoria_sin_clasificar.py solo lee HOY+AYER (1 día), y los
+# lectores de historial completo (sports_wallet_edge_tracker.py::
+# cargar_trades_completo, analisis_sports_wallet_combos_09sep.py,
+# analisis_sports_crossmercado_eventos.py) se actualizaron el mismo día para
+# leer *.csv* con gzip transparente (mismo patrón que cargar_trades_whale()
+# ya usaba). analisis_wallets_crossdominio_01sep.py (rutas de fecha
+# hardcodeadas, sin glob) es un análisis puntual ya no ejecutable tal cual
+# desde antes de este cambio -- no está en cron, no se toca.
+comprimir_dir data/sports "activity_ws_*.csv"
 
 cd /root/polymarket-research-datalogs
 comprimir_dir . "polymarket_activity_*.csv" "$CUTOFF_COMPRIMIR_DATALOGS"
@@ -132,6 +146,7 @@ borrar_gz_antiguos data/wallets "positions_*.csv"
 borrar_gz_antiguos data/trades "*.csv"
 borrar_gz_antiguos data/prices "chainlink_*.csv"
 borrar_gz_antiguos data/shadow "sports_spread_fase0_*.csv"
+borrar_gz_antiguos data/sports "activity_ws_*.csv"
 
 cd /root/polymarket-research-datalogs
 borrar_gz_antiguos . "polymarket_activity_*.csv"

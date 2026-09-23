@@ -262,10 +262,16 @@ def cargar_trades_completo(vistos_hash: set):
     histórica. Mismo formato de fila que cargar_trades_whale(), dedupe
     cruzado por transaction_hash (un trade whale puede aparecer en AMBAS
     fuentes)."""
-    files = sorted(glob.glob(str(DIR_SPORTS / "activity_ws_*.csv")))
+    # 23-Sep: *.csv* (no solo *.csv) -- comprimir_data_historica.sh ahora
+    # rota activity_ws_*.csv a .gz igual que el resto de directorios de
+    # data/ (antes se acumulaba sin límite en disco, 4.3GB+ el 23-Sep,
+    # ver feedback_disco_activity_ws_sports_sin_rotar_23sep). Mismo patrón
+    # gzip-transparente que cargar_trades_whale() unas líneas arriba.
+    files = sorted(glob.glob(str(DIR_SPORTS / "activity_ws_*.csv*")))
     out = []
     for path in files:
-        with open(path, newline="", encoding="utf-8") as f:
+        opener = gzip.open if path.endswith(".gz") else open
+        with opener(path, "rt", newline="", encoding="utf-8") as f:
             for r in csv.DictReader(f):
                 h = r.get("transaction_hash", "")
                 if h in vistos_hash:
