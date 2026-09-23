@@ -145,6 +145,7 @@
  "GBM_LATE_15M#SOL#15min": [
   "drift_60min|abs_gt|0.461|BUY_YES",
   "hora_utc|lt|17.0|BUY_YES",
+  "ibs_20min|gt|0.2571|BUY_NO",
   "ibs_20min|gt|0.2576|BUY_NO",
   "ibs_20min|gt|0.2581|BUY_NO",
   "ibs_20min|gt|0.2597|BUY_NO",
