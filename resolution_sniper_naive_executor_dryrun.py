@@ -80,6 +80,7 @@ independiente de `DRY_RUN`.
 """
 import csv
 import json
+import threading
 import time
 from datetime import datetime, timezone
 from pathlib import Path
@@ -118,6 +119,62 @@ RATIO_FILLABLE_MIN = 5.0
 ASK_MIN, ASK_MAX = 0.05, 0.95
 DECISION_LATENCY_S = 0.3  # latencia realista simulada del resto del pipeline
 STAKE_REF_EUR = 1.05  # mismo suelo que el resto del sistema
+
+# 23-Sep (aprobado Javi, propuesta #10): guarda de RÉGIMEN. El edge vive en
+# eventos en los que el libro de Polymarket se queda atascado tras el cierre
+# en VARIAS monedas a la vez; una detección aislada suele ser un cierre
+# ambiguo donde la dirección implícita falla. Sobre depth_fase0 (fillable,
+# mercados únicos, 19-Ago..23-Sep): 1 moneda en el cierre n=114 pnl/tr -0,414
+# hit 37% (71 de los 76 mercados de días tranquilos); >=2 monedas n=1580
+# +0,602 hit 90%, 11/11 días positivos, sin 4 mejores días +0,48. Además,
+# ask>=0,80 pierde incluso dentro de ráfaga (n=362, ~-0,07/tr): >=2 monedas
+# y ask<0,80 -> n=1218 +0,802, sin 2 mejores días +0,84.
+MIN_MONEDAS_SIMULTANEAS = 2
+ESPERA_MONEDAS_MAX_S = 1.2
+ASK_MAX_OPERAR = 0.80
+_DETECCIONES_CIERRE: dict = {}
+_DETECCIONES_LOCK = threading.Lock()
+
+
+def _registrar_deteccion(marco: str, ts_end, asset: str) -> None:
+    """Registra una detección fillable (mismo criterio que el análisis:
+    ratio>=RATIO_FILLABLE_MIN y ask en [ASK_MIN,ASK_MAX]) para el cierre
+    (marco, ts_end). Poda entradas de más de 1h."""
+    with _DETECCIONES_LOCK:
+        _DETECCIONES_CIERRE.setdefault((marco, int(ts_end)), set()).add(asset)
+        limite = time.time() - 3600
+        for k in [k for k in _DETECCIONES_CIERRE if k[1] < limite]:
+            del _DETECCIONES_CIERRE[k]
+
+
+def _n_monedas_cierre(marco: str, ts_end) -> int:
+    with _DETECCIONES_LOCK:
+        return len(_DETECCIONES_CIERRE.get((marco, int(ts_end)), ()))
+
+
+# 23-Sep: idempotencia por mercado. evaluar() se llama una vez por offset
+# (0-3s) y _ejecutar_orden_polymarket no deduplica -- sin esto, en una ráfaga
+# el mismo mercado podía recibir hasta 4 órdenes reales. Reserva atómica en
+# memoria + trades.csv (cubre reinicios del proceso). Fail-closed: si
+# trades.csv no se puede leer, no se reserva.
+_MERCADOS_RESERVADOS: set = set()
+_RESERVA_LOCK = threading.Lock()
+
+
+def _reservar_mercado(market_id: str) -> bool:
+    if not market_id:
+        return False
+    with _RESERVA_LOCK:
+        if market_id in _MERCADOS_RESERVADOS:
+            return False
+        try:
+            if market_id in lt._ya_operados_hoy():
+                _MERCADOS_RESERVADOS.add(market_id)
+                return False
+        except Exception:
+            return False
+        _MERCADOS_RESERVADOS.add(market_id)
+        return True
 
 COLUMNS = [
     "timestamp_utc", "activo", "marco", "slug", "market_id", "condition_id",
@@ -191,7 +248,18 @@ def evaluar(asset: str, marco: str, slug: str, market_id: str, condition_id: str
     if ask_impl is None or not (ASK_MIN <= ask_impl <= ASK_MAX):
         return
 
+    _registrar_deteccion(marco, ts_end, asset)
     time.sleep(DECISION_LATENCY_S)
+    # /code-review 23-Sep: cada hilo hace libro()+2 consultas de profundidad
+    # antes de registrar, así que 0,3s no bastan para ver a las demás monedas
+    # del mismo cierre. Sondear hasta ESPERA_MONEDAS_MAX_S y salir en cuanto
+    # haya quorum -- solo retrasa a la primera moneda de una ráfaga; una
+    # detección aislada espera y se rechaza igual.
+    limite_espera = time.time() + ESPERA_MONEDAS_MAX_S - DECISION_LATENCY_S
+    n_monedas = _n_monedas_cierre(marco, ts_end)
+    while n_monedas < MIN_MONEDAS_SIMULTANEAS and time.time() < limite_espera:
+        time.sleep(0.05)
+        n_monedas = _n_monedas_cierre(marco, ts_end)
 
     ask_yes2, ask_no2, _, _ = libro_fn(token_yes, token_no)
     ask_decision = ask_yes2 if direccion_impl == "Up" else ask_no2
@@ -260,7 +328,7 @@ def evaluar(asset: str, marco: str, slug: str, market_id: str, condition_id: str
          f"deteccion={ask_impl}(ratio={ratio_deteccion}) "
          f"decision={ask_decision}(ratio={ratio_decision}) "
          f"sigue_fillable={sigue_fillable} en_whitelist_real={en_wl} "
-         f"gate={gate_bp.get('veredicto')}")
+         f"gate={gate_bp.get('veredicto')} monedas_cierre={n_monedas}")
 
     # --- P34 FASE 2 -- tramo de envío real. Inalcanzable con DRY_RUN=True
     # (guardián #1). Si algún día se pone DRY_RUN=False, los guardianes #2
@@ -273,6 +341,12 @@ def evaluar(asset: str, marco: str, slug: str, market_id: str, condition_id: str
                  f"fail-closed, no se ejecuta pese a DRY_RUN=False")
         elif not sigue_fillable:
             _log("  no sigue fillable en decisión -- no se ejecuta")
+        elif n_monedas < MIN_MONEDAS_SIMULTANEAS:
+            _log(f"  ⛔ detección aislada ({n_monedas} moneda(s) en este cierre, mínimo "
+                 f"{MIN_MONEDAS_SIMULTANEAS}) -- régimen tranquilo, no se ejecuta")
+        elif ask_impl >= ASK_MAX_OPERAR or (ask_decision is not None and ask_decision >= ASK_MAX_OPERAR):
+            _log(f"  ⛔ ask>={ASK_MAX_OPERAR} (deteccion={ask_impl}, decision={ask_decision}) "
+                 f"-- payout inverso, no se ejecuta")
         elif puede_ventana is not True:
             # /code-review 25-Ago: `is not True` (no `is False`) -- None
             # (puede_operar_live lanzó excepción, ej. config_live.json a
@@ -294,6 +368,9 @@ def evaluar(asset: str, marco: str, slug: str, market_id: str, condition_id: str
             pass
         elif ask_ref in (None, "") or stake_dryrun in (None, "") or not (float(stake_dryrun or 0) > 0):
             _log("  ⛔ precio/stake sin resolver -- fail-closed, no se ejecuta")
+        elif not _reservar_mercado(market_id):
+            _log(f"  ⛔ mercado {market_id} ya operado/reservado (u trades.csv ilegible) "
+                 f"-- idempotencia, no se ejecuta")
         else:
             ask_ref_f = float(ask_ref)
             precio_orden_yes = ask_ref_f if direction == "BUY_YES" else round(1.0 - ask_ref_f, 6)
@@ -309,7 +386,13 @@ def evaluar(asset: str, marco: str, slug: str, market_id: str, condition_id: str
                 contexto={"strategy": "RESOLUTION_SNIPER_NAIVE", "subtype": f"{asset}#{marco}",
                           "tupla_sintetica": tupla_sintetica})
             _log(f"  🚨 ORDEN REAL enviada ({tupla_sintetica}): {resultado}")
-            if not resultado.get("no_fill"):
+            if resultado.get("no_fill"):
+                # /code-review 23-Sep: sin posición -> liberar para que el
+                # offset siguiente pueda reintentar. Excepción arriba = no se
+                # sabe si la orden salió -> la reserva se mantiene (fail-closed).
+                with _RESERVA_LOCK:
+                    _MERCADOS_RESERVADOS.discard(market_id)
+            else:
                 end_date_real = datetime.fromtimestamp(int(ts_end), timezone.utc).isoformat()
                 trade = {
                     "timestamp_utc": datetime.now(timezone.utc).isoformat(timespec="seconds"),
