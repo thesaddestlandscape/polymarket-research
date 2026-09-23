@@ -11,3 +11,4 @@ timestamp_utc,modo,ts_end,activo,ronda,offset_objetivo_s,t_envio_rel_s,t_resp_re
 2026-09-23T14:59:41.236+00:00,real,1790175600,BTC,0,-3.0,-2.9999,-2.89,109.9,1,,0x8c7e3e8170084db0e9ccf861a2836d736fc015935c078dedc0a13c1ade1a6805,1,79.1,yes,0.98
 2026-09-23T15:04:41.251+00:00,real,1790175900,BTC,1,-2.0,-1.9999,-1.8509,149.0,1,,0xcc96704360f1d07fb5473239edaa84fcfa09daf5e2234149d147fc3d0552c80d,1,103.1,yes,0.94
 2026-09-23T15:14:40.996+00:00,real,1790176500,BTC,3,-1.0,-0.9996,-0.8582,141.5,0,"PolyApiException: PolyApiException[status_code=400, error_message={'error': 'invalid amount for a marketable BUY order ($0.05), min size: $1'}]",,,,no,0.61
+2026-09-23T15:24:41.037+00:00,real,1790177100,BTC,5,0.0,0.0003,0.1873,187.0,1,,0xf32cb7a5ce3f0058391cbc726918670b13ca79f47d37e1b1f56df5331e039f8c,1,78.5,no,0.61
