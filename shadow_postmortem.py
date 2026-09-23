@@ -1787,6 +1787,26 @@ _BASE_FAVORITO_BAJALATENCIA = [
     ("ballena_activa_n", "gt", "lt"),  # 17-Ago, punto 2 calibracion vs mercado (project_calibracion_vs_mercado_5puntos_17ago)
 ]
 
+# LIQUIDACIONES_DEPTH_FASE0 (23-Sep, vigia_cobertura_feature_rules.py:
+# n=447/3d, activos BNB/BTC/DOGE/ETH/SOL/XRP, 0 aprendizaje causal).
+# Observador de profundidad de liquidaciones Binance (28-Jul, screen
+# `liqs`/`fetchers_fase0.py`, solo observación) -- mismo patrón que
+# FAVORITO_CONFIRMADO_5MIN_BAJALATENCIA de arriba, features reducidas
+# propias (liquidaciones_depth_fase0.py::_registrar_prediccion, no llama a
+# _libro_calidad, sin libro_spread/libro_liquidez). Cubre 5/15/60min
+# (MARCOS en liquidaciones_depth_fase0.py) aunque hoy solo 5/15min tienen
+# volumen real -- 60min se añade igual, sin coste, para cuando acumule.
+_BASE_LIQUIDACIONES_DEPTH_FASE0 = [
+    ("py_entrada",        "gt", "lt"),
+    ("py_entrada",        "lt", "gt"),
+    ("restante_min",      "gt", "lt"),
+    ("restante_min",      "lt", "gt"),
+    ("hora_utc",          "lt", "gt"),
+    ("hora_utc",          "gt", "lt"),
+    ("lag_apertura_s",    "gt", "lt"),
+    ("profundidad_ratio", "lt", "gt"),
+]
+
 # CANDIDATA9_BOT_CONSENSO (09-Sep, vigia_cobertura_feature_rules.py: n=58/3d,
 # activos BNB/BTC/ETH, 0 aprendizaje causal). Ejecutor de baja latencia
 # sintético (candidata9_bot_consenso_reactivo_fase0.py, solo observación,
@@ -2240,6 +2260,26 @@ FEATURE_RULES = {
     "CANDIDATA9_BOT_CONSENSO#ETH#5min":  _BASE_CANDIDATA9_BOT_CONSENSO,
     "CANDIDATA9_BOT_CONSENSO#ETH#15min": _BASE_CANDIDATA9_BOT_CONSENSO,
     "CANDIDATA9_BOT_CONSENSO#BNB#5min":  _BASE_CANDIDATA9_BOT_CONSENSO,
+
+    "LIQUIDACIONES_DEPTH_FASE0":            _BASE_LIQUIDACIONES_DEPTH_FASE0,
+    "LIQUIDACIONES_DEPTH_FASE0#BNB#5min":   _BASE_LIQUIDACIONES_DEPTH_FASE0,
+    "LIQUIDACIONES_DEPTH_FASE0#BTC#5min":   _BASE_LIQUIDACIONES_DEPTH_FASE0,
+    "LIQUIDACIONES_DEPTH_FASE0#DOGE#5min":  _BASE_LIQUIDACIONES_DEPTH_FASE0,
+    "LIQUIDACIONES_DEPTH_FASE0#ETH#5min":   _BASE_LIQUIDACIONES_DEPTH_FASE0,
+    "LIQUIDACIONES_DEPTH_FASE0#SOL#5min":   _BASE_LIQUIDACIONES_DEPTH_FASE0,
+    "LIQUIDACIONES_DEPTH_FASE0#XRP#5min":   _BASE_LIQUIDACIONES_DEPTH_FASE0,
+    "LIQUIDACIONES_DEPTH_FASE0#BNB#15min":  _BASE_LIQUIDACIONES_DEPTH_FASE0,
+    "LIQUIDACIONES_DEPTH_FASE0#BTC#15min":  _BASE_LIQUIDACIONES_DEPTH_FASE0,
+    "LIQUIDACIONES_DEPTH_FASE0#DOGE#15min": _BASE_LIQUIDACIONES_DEPTH_FASE0,
+    "LIQUIDACIONES_DEPTH_FASE0#ETH#15min":  _BASE_LIQUIDACIONES_DEPTH_FASE0,
+    "LIQUIDACIONES_DEPTH_FASE0#SOL#15min":  _BASE_LIQUIDACIONES_DEPTH_FASE0,
+    "LIQUIDACIONES_DEPTH_FASE0#XRP#15min":  _BASE_LIQUIDACIONES_DEPTH_FASE0,
+    "LIQUIDACIONES_DEPTH_FASE0#BNB#60min":  _BASE_LIQUIDACIONES_DEPTH_FASE0,
+    "LIQUIDACIONES_DEPTH_FASE0#BTC#60min":  _BASE_LIQUIDACIONES_DEPTH_FASE0,
+    "LIQUIDACIONES_DEPTH_FASE0#DOGE#60min": _BASE_LIQUIDACIONES_DEPTH_FASE0,
+    "LIQUIDACIONES_DEPTH_FASE0#ETH#60min":  _BASE_LIQUIDACIONES_DEPTH_FASE0,
+    "LIQUIDACIONES_DEPTH_FASE0#SOL#60min":  _BASE_LIQUIDACIONES_DEPTH_FASE0,
+    "LIQUIDACIONES_DEPTH_FASE0#XRP#60min":  _BASE_LIQUIDACIONES_DEPTH_FASE0,
 }
 
 TWAP_MARCOS_AFECTADOS = {"5min", "15min", "240min"}
