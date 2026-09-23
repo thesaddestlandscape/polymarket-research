@@ -433,7 +433,13 @@ def _profundidad_correcta(token_id: str, stake_eur: float) -> dict:
 
 
 CHAINLINK_MAX_EDAD_S = 2.0      # /code-review 23-Sep: nunca decidir con un precio más viejo
-NAIVE_ESPERA_TICK_POST_S = 1.2  # naive: espera como mucho esto un tick con ts >= cierre
+# naive: espera como mucho esto un tick con ts >= cierre - NAIVE_TICK_ANTES_CIERRE_S. Medido
+# 23-Sep 16:55: el tick POSTERIOR al cierre llega a ~T+1,1s por la cola (fichero, poll 0,3s) y
+# en BNB ni llegó en 1,2s -> retrasaba el envío ~1s. El edge a offset 0 está validado con el
+# último tick disponible en T+0 (resolution_sniper_obs), así que basta un tick FRESCO del último
+# 1,5s (protege igual contra websocket colgado: nunca un precio de más de 1,5s antes del cierre).
+NAIVE_ESPERA_TICK_POST_S = 0.3
+NAIVE_TICK_ANTES_CIERRE_S = 1.5
 
 
 def _ultimo_tick(activo: str):
@@ -879,7 +885,7 @@ def procesar_ventana_naive(pre: _Precalculo, ts_end: int) -> None:
         return
     if espera > 0:
         time.sleep(espera)
-    futuros = {_POOL_LIBROS.submit(_leer, pre, a, ts_end): a for a in ASSETS
+    futuros = {_POOL_LIBROS.submit(_leer, pre, a, ts_end - NAIVE_TICK_ANTES_CIERRE_S): a for a in ASSETS
                if (a, pre.marco) in _naive_viejo.COMBOS_CONFIRMADOS}
     hechos, pendientes = wait(futuros, timeout=NAIVE_ESPERA_TICK_POST_S + MAX_ESPERA_LECTURAS_S)
     lecturas = []
