@@ -1,67 +1,67 @@
 {
-  "generado_utc": "2026-09-01T18:31:17+00:00",
-  "n_eventos_totales": 5978,
-  "n_eventos_usados_leadlag": 927,
+  "generado_utc": "2026-09-23T08:49:29+00:00",
+  "n_eventos_totales": 13421,
+  "n_eventos_usados_leadlag": 38,
   "leadlag_por_lag_bins5min": {
     "-3": {
-      "n": 15174,
-      "n_eventos": 917,
-      "r": 0.007,
-      "p_shuffle": 0.3736,
+      "n": 119,
+      "n_eventos": 35,
+      "r": -0.0905,
+      "p_shuffle": 0.3037,
       "veredicto": "sin_concluir"
     },
     "-2": {
-      "n": 15632,
-      "n_eventos": 916,
-      "r": -0.0201,
-      "p_shuffle": 0.011,
-      "veredicto": "confirmado"
+      "n": 130,
+      "n_eventos": 36,
+      "r": 0.0842,
+      "p_shuffle": 0.3167,
+      "veredicto": "sin_concluir"
     },
     "-1": {
-      "n": 16212,
-      "n_eventos": 917,
-      "r": 0.0264,
-      "p_shuffle": 0.002,
-      "veredicto": "confirmado"
+      "n": 132,
+      "n_eventos": 38,
+      "r": -0.0027,
+      "p_shuffle": 0.974,
+      "veredicto": "sin_concluir"
     },
     "0": {
-      "n": 16677,
-      "n_eventos": 917,
-      "r": 0.015,
-      "p_shuffle": 0.0539,
+      "n": 127,
+      "n_eventos": 37,
+      "r": 0.0337,
+      "p_shuffle": 0.6993,
       "veredicto": "sin_concluir"
     },
     "1": {
-      "n": 16246,
-      "n_eventos": 918,
-      "r": -0.0011,
-      "p_shuffle": 0.9031,
+      "n": 119,
+      "n_eventos": 35,
+      "r": -0.1066,
+      "p_shuffle": 0.2208,
       "veredicto": "sin_concluir"
     },
     "2": {
-      "n": 15662,
-      "n_eventos": 917,
-      "r": 0.0076,
-      "p_shuffle": 0.3327,
+      "n": 108,
+      "n_eventos": 36,
+      "r": 0.0064,
+      "p_shuffle": 0.9421,
       "veredicto": "sin_concluir"
     },
     "3": {
-      "n": 15262,
-      "n_eventos": 912,
-      "r": 0.0029,
-      "p_shuffle": 0.7143,
+      "n": 97,
+      "n_eventos": 36,
+      "r": 0.0735,
+      "p_shuffle": 0.4555,
       "veredicto": "sin_concluir"
     }
   },
   "arb_suma_complementaria": {
-    "n": 32727,
-    "pct_snapshots_explotables_tras_fee": 43.77,
-    "media_desviacion_suma_vs_1": 0.0637,
+    "n": 1988,
+    "pct_snapshots_explotables_tras_fee": 45.47,
+    "media_desviacion_suma_vs_1": 0.0101,
     "ci90_bootstrap": [
-      0.0597,
-      0.0679
+      -0.0088,
+      0.0305
     ],
-    "veredicto": "confirmado_en_precio_no_en_libro",
+    "veredicto": "sin_concluir",
     "nota": "precio de último trade, NO profundidad/ask real de libro -- mismo patrón refutado 2x en cripto (Box Builder, Spread-Harvest Maker) al comprobar libro real. No accionable sin ese paso."
   }
 }
