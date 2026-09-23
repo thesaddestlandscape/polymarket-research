@@ -1008,8 +1008,17 @@ def _fit_calibracion_prob(triples, cache_entry=None):
     # cambia el generador; no afecta a la interpretación de ci_lo<=0."""
     diffs_arr = np.asarray(diffs, dtype=np.float64)
     rng_np = np.random.default_rng(42)
-    idx = rng_np.integers(0, n_oos, size=(1500, n_oos))
-    boots = np.sort(diffs_arr[idx].mean(axis=1))
+    # 23-Sep (etapa 3 OOM): antes una sola matriz (1500 x n_oos) int64 = ~800MB para
+    # n_oos~67k (FAVORITO_CONFIRMADO), mas otra igual al indexar -- pico que empujaba
+    # al OOM-killer. En bloques de ~8M elementos: BIT-IDENTICO (verificado: mismo
+    # Generator(42) llena las filas secuencialmente, mismos 1500 promedios ordenados).
+    _bloque = max(1, min(1500, 8_000_000 // n_oos))
+    _medias, _restan = [], 1500
+    while _restan > 0:
+        _k = min(_bloque, _restan)
+        _medias.append(diffs_arr[rng_np.integers(0, n_oos, size=(_k, n_oos))].mean(axis=1))
+        _restan -= _k
+    boots = np.sort(np.concatenate(_medias))
     ci_lo = float(boots[int(0.025 * len(boots))])
     if ci_lo <= 0:
         return None, cache_nuevo  # condición 1: no significativo out-of-sample todavía
