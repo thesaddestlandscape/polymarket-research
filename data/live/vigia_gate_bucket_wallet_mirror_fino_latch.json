@@ -65,11 +65,11 @@
   "hi": 0.38,
   "n": 43,
   "pnl_medio": -0.4972,
-  "diff_vs_resto": -0.5061,
+  "diff_vs_resto": -0.5042,
   "p_valor": 0.0,
   "split_half_diff": [
-   -0.4928,
-   -0.5188
+   -0.4909,
+   -0.5169
   ],
   "split_half_ok": true,
   "pnl_medio_loo": -0.554,
@@ -125,25 +125,25 @@
   "fecha_historial": "2026-09-22"
  },
  "SEGUIR#BTC#15min#1": {
-  "n_dias": 15,
-  "pnl_sin_mejores_dias": -0.8252,
+  "n_dias": 16,
+  "pnl_sin_mejores_dias": -0.7673,
   "robusto_dias": false,
   "lo": 0.26,
   "hi": 0.31,
-  "n": 65,
-  "pnl_medio": -0.5686,
-  "diff_vs_resto": -0.5594,
-  "p_valor": 0.0,
+  "n": 66,
+  "pnl_medio": -0.5199,
+  "diff_vs_resto": -0.5066,
+  "p_valor": 0.001,
   "split_half_diff": [
-   -0.1146,
-   -0.9908
+   -0.1371,
+   -0.8762
   ],
   "split_half_ok": true,
-  "pnl_medio_loo": -0.6189,
+  "pnl_medio_loo": -0.5686,
   "robusto_loo": true,
   "ci90_bootstrap": [
-   -0.7852,
-   -0.342
+   -0.7371,
+   -0.2531
   ],
   "robusto_bootstrap": true,
   "n_posiciones_buscadas": 73,
@@ -185,25 +185,25 @@
   "veredicto": "malo_confirmado"
  },
  "SEGUIR#BTC#15min#0": {
-  "n_dias": 17,
+  "n_dias": 18,
   "pnl_sin_mejores_dias": -1.0,
   "robusto_dias": false,
   "lo": 0.0,
   "hi": 0.05,
-  "n": 70,
-  "pnl_medio": -0.6669,
-  "diff_vs_resto": -0.6164,
+  "n": 75,
+  "pnl_medio": -0.6891,
+  "diff_vs_resto": -0.637,
   "p_valor": 0.0005,
   "split_half_diff": [
-   -0.2833,
-   -0.9496
+   -0.3176,
+   -0.9479
   ],
   "split_half_ok": true,
   "pnl_medio_loo": -1.0,
   "robusto_loo": true,
   "ci90_bootstrap": [
    -1.0,
-   -0.0006
+   -0.0672
   ],
   "robusto_bootstrap": true,
   "n_posiciones_buscadas": 96,
@@ -283,7 +283,7 @@
   "p_valor": 0.0,
   "split_half_diff": [
    -0.9825,
-   -0.2884
+   -0.2885
   ],
   "split_half_ok": true,
   "pnl_medio_loo": -0.691,
@@ -309,11 +309,11 @@
   "hi": 0.06,
   "n": 111,
   "pnl_medio": -1.0,
-  "diff_vs_resto": -0.9862,
+  "diff_vs_resto": -0.9868,
   "p_valor": 0.0,
   "split_half_diff": [
-   -0.9862,
-   -0.9862
+   -0.9868,
+   -0.9868
   ],
   "split_half_ok": true,
   "pnl_medio_loo": -1.0,
@@ -331,13 +331,14 @@
   "fecha_historial": "2026-09-23",
   "veredicto": "malo_confirmado"
  },
- "SEGUIR#DOGE#15min#0": {
+ "SEGUIR#SOL#5min#0": {
   "veredicto": "sin_concluir",
   "historial_crudo": [
    "malo_confirmado"
-  ]
+  ],
+  "fecha_historial": null
  },
- "SEGUIR#SOL#5min#0": {
+ "SEGUIR#DOGE#15min#0": {
   "veredicto": "sin_concluir",
   "historial_crudo": [
    "malo_confirmado"
