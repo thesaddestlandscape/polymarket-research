@@ -84,33 +84,50 @@ def _tuplas_live() -> list:
         return _FALLBACK_TUPLAS
 
 
-def _shadow_ic(strategy: str, subtype: str, direccion: str):
+# 23-Sep (incidente CPU load 29/4 cores): antes _shadow_ic/_pnls_shadow releían
+# results.csv ENTERO (591MB, 678k filas) una vez por tupla live y otra por cada
+# una de las ~409 candidatas -> >45 min por corrida con cron horario = CPU al
+# 70% permanente. Ahora UNA sola pasada acumula todo lo necesario por clave.
+# Semántica idéntica: mismo filtro pre-TWAP + zona confirmada (15-Ago, ver nota
+# en _indexar_shadow); _shadow_ic no exige pnl_neto, _pnls_shadow sí.
+_IDX = {}
+
+
+def _indexar_shadow(claves: set) -> None:
     # 15-Ago (/code-review, tras el fix del estado absorbente de
-    # gate_bucket_propio en shadow_predict.py): este vigía siempre se llama
-    # con una tupla YA en pares_permitidos_live (ver _tuplas_live()) -- desde
-    # el fix, results.csv trae también sus zonas de precio no confirmadas
-    # (antes suprimidas del todo), que nunca fueron ni serán candidatas de
-    # ejecución real. Sin filtrarlas, el "shadow_ic" de este vigía (la
-    # comparación base contra el hit real ejecutado) dejaría de reflejar lo
-    # que la tupla realmente opera -- justo la métrica que este vigía existe
-    # para vigilar.
+    # gate_bucket_propio en shadow_predict.py): filtrar_filas_zona_confirmada
+    # excluye, solo para tuplas YA en pares_permitidos_live, las zonas de
+    # precio no confirmadas (nunca fueron ni serán candidatas de ejecución
+    # real); sin él el "shadow_ic" dejaría de reflejar lo que la tupla opera.
+    # Para candidatas (no en pares_permitidos_live) el filtro no actúa.
     pares_live, pares_live_ok = _gbp.cargar_pares_live_fail_closed()
     if not pares_live_ok:
         print("[vigia_degradacion_live] \u26a0\ufe0f config_live.json ilegible -- filtro de zona confirmada NO se aplica este ciclo")
-    marco = subtype.rsplit("#", 1)[-1] if "#" in subtype else subtype
-    n, hits = 0, 0
+    _IDX.clear()
+    for c in claves:
+        _IDX[c] = {"n": 0, "hits": 0, "pnls": []}
     with open(RESULTS, encoding="utf-8") as f:
         for r in csv.DictReader(f):
-            if (r.get("strategy") == strategy and r.get("subtype") == subtype
-                    and r.get("decision") == direccion
-                    and not es_pre_twap(marco, r.get("prediction_timestamp", ""))
-                    and _gbp.filtrar_filas_zona_confirmada([r], pares_live)):
-                n += 1
-                hits += int(r.get("acierto") or 0)
-    if n == 0:
+            clave = (r.get("strategy"), r.get("subtype"), r.get("decision"))
+            acc = _IDX.get(clave)
+            if acc is None:
+                continue
+            marco = clave[1].rsplit("#", 1)[-1] if "#" in clave[1] else clave[1]
+            if es_pre_twap(marco, r.get("prediction_timestamp", "")):
+                continue
+            if not _gbp.filtrar_filas_zona_confirmada([r], pares_live):
+                continue
+            acc["n"] += 1
+            acc["hits"] += int(r.get("acierto") or 0)
+            if r.get("pnl_neto") not in ("", None):
+                acc["pnls"].append((r.get("resolution_timestamp", ""), float(r["pnl_neto"])))
+
+
+def _shadow_ic(strategy: str, subtype: str, direccion: str):
+    acc = _IDX.get((strategy, subtype, direccion))
+    if not acc or acc["n"] == 0:
         return 0, None
-    ic = (hits + 1) / (n + 2) - 0.5
-    return n, ic
+    return acc["n"], (acc["hits"] + 1) / (acc["n"] + 2) - 0.5
 
 
 def _tuplas_candidatas() -> list:
@@ -128,25 +145,10 @@ def _tuplas_candidatas() -> list:
 
 
 def _pnls_shadow(strategy: str, subtype: str, direccion: str):
-    # 15-Ago: mismo filtro de zona confirmada que _shadow_ic, ver esa nota.
-    # Esta función también se llama para candidatas (_tuplas_candidatas(),
-    # nunca en pares_permitidos_live) -- pasar el set REAL de tuplas live
-    # (no la propia tupla) para que el filtro solo actúe cuando de verdad
-    # aplica, dejando a las candidatas acumular evidencia sin restringir.
-    pares_live, pares_live_ok = _gbp.cargar_pares_live_fail_closed()
-    if not pares_live_ok:
-        print("[vigia_degradacion_live] \u26a0\ufe0f config_live.json ilegible -- filtro de zona confirmada NO se aplica este ciclo")
-    marco = subtype.rsplit("#", 1)[-1] if "#" in subtype else subtype
-    pnls = []
-    with open(RESULTS, encoding="utf-8") as f:
-        for r in csv.DictReader(f):
-            if (r.get("strategy") == strategy and r.get("subtype") == subtype
-                    and r.get("decision") == direccion and r.get("pnl_neto") not in ("", None)
-                    and not es_pre_twap(marco, r.get("prediction_timestamp", ""))
-                    and _gbp.filtrar_filas_zona_confirmada([r], pares_live)):
-                pnls.append((r.get("resolution_timestamp", ""), float(r["pnl_neto"])))
-    pnls.sort(key=lambda x: x[0])
-    return [p for _, p in pnls]
+    acc = _IDX.get((strategy, subtype, direccion))
+    if not acc:
+        return []
+    return [p for _, p in sorted(acc["pnls"], key=lambda x: x[0])]
 
 
 def _ejecutado_real(strategy: str, subtype: str, direccion: str):
@@ -177,6 +179,7 @@ def main() -> int:
         latch = {}
 
     fecha = datetime.now(timezone.utc).date().isoformat()
+    _indexar_shadow({(st_, f"{a}#{d}", di) for st_, a, d, di in _tuplas_live() + _tuplas_candidatas()})
     nuevo_archivo = not OUT.exists() or OUT.stat().st_size == 0
     avisos = []
 
