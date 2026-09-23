@@ -1,6 +1,6 @@
 {
- "generado_hasta": "2026-09-22",
- "ventana": "2026-09-16..2026-09-22",
+ "generado_hasta": "2026-09-23",
+ "ventana": "2026-09-17..2026-09-23",
  "resumen": {
   "BNB#15min": {
    "estado": "n_insuficiente",
@@ -12,27 +12,27 @@
   },
   "BNB#5min": {
    "estado": "ok",
-   "n_reciente": 54,
-   "hit_reciente": 0.796,
-   "wilson90lo_reciente": 0.693,
-   "ask_medio_reciente": 0.538,
-   "pnl_medio_reciente": 0.5516,
-   "dias_ventana": "2026-09-16..2026-09-22",
-   "n_baseline": 622,
-   "pnl_medio_baseline": 0.5998,
+   "n_reciente": 52,
+   "hit_reciente": 0.827,
+   "wilson90lo_reciente": 0.725,
+   "ask_medio_reciente": 0.526,
+   "pnl_medio_reciente": 0.6132,
+   "dias_ventana": "2026-09-17..2026-09-23",
+   "n_baseline": 624,
+   "pnl_medio_baseline": 0.5945,
    "declive_relativo": false
   },
   "BTC#15min": {
-   "estado": "ok",
-   "n_reciente": 26,
-   "hit_reciente": 0.923,
-   "wilson90lo_reciente": 0.792,
-   "ask_medio_reciente": 0.641,
-   "pnl_medio_reciente": 0.4392,
-   "dias_ventana": "2026-09-16..2026-09-22",
+   "estado": "degradado",
+   "n_reciente": 27,
+   "hit_reciente": 0.889,
+   "wilson90lo_reciente": 0.752,
+   "ask_medio_reciente": 0.634,
+   "pnl_medio_reciente": 0.384,
+   "dias_ventana": "2026-09-17..2026-09-23",
    "n_baseline": 243,
    "pnl_medio_baseline": 0.8514,
-   "declive_relativo": false
+   "declive_relativo": true
   },
   "BTC#240min": {
    "estado": "n_insuficiente",
@@ -40,19 +40,19 @@
   },
   "BTC#5min": {
    "estado": "ok",
-   "n_reciente": 80,
-   "hit_reciente": 0.938,
-   "wilson90lo_reciente": 0.877,
-   "ask_medio_reciente": 0.629,
-   "pnl_medio_reciente": 0.6356,
-   "dias_ventana": "2026-09-16..2026-09-22",
-   "n_baseline": 937,
-   "pnl_medio_baseline": 0.754,
+   "n_reciente": 79,
+   "hit_reciente": 0.949,
+   "wilson90lo_reciente": 0.892,
+   "ask_medio_reciente": 0.631,
+   "pnl_medio_reciente": 0.6569,
+   "dias_ventana": "2026-09-17..2026-09-23",
+   "n_baseline": 938,
+   "pnl_medio_baseline": 0.752,
    "declive_relativo": false
   },
   "DOGE#15min": {
    "estado": "n_insuficiente",
-   "n_reciente": 13
+   "n_reciente": 11
   },
   "DOGE#240min": {
    "estado": "n_insuficiente",
@@ -60,14 +60,14 @@
   },
   "DOGE#5min": {
    "estado": "ok",
-   "n_reciente": 51,
-   "hit_reciente": 0.863,
-   "wilson90lo_reciente": 0.765,
-   "ask_medio_reciente": 0.527,
-   "pnl_medio_reciente": 0.6624,
-   "dias_ventana": "2026-09-16..2026-09-22",
-   "n_baseline": 623,
-   "pnl_medio_baseline": 0.6625,
+   "n_reciente": 50,
+   "hit_reciente": 0.88,
+   "wilson90lo_reciente": 0.784,
+   "ask_medio_reciente": 0.526,
+   "pnl_medio_reciente": 0.6967,
+   "dias_ventana": "2026-09-17..2026-09-23",
+   "n_baseline": 624,
+   "pnl_medio_baseline": 0.6597,
    "declive_relativo": false
   },
   "ETH#15min": {
@@ -77,7 +77,7 @@
    "wilson90lo_reciente": 0.76,
    "ask_medio_reciente": 0.839,
    "pnl_medio_reciente": 0.1187,
-   "dias_ventana": "2026-09-16..2026-09-22",
+   "dias_ventana": "2026-09-17..2026-09-23",
    "n_baseline": 242,
    "pnl_medio_baseline": 0.7933,
    "declive_relativo": true
@@ -93,7 +93,7 @@
    "wilson90lo_reciente": 0.793,
    "ask_medio_reciente": 0.799,
    "pnl_medio_reciente": 0.1642,
-   "dias_ventana": "2026-09-16..2026-09-22",
+   "dias_ventana": "2026-09-17..2026-09-23",
    "n_baseline": 651,
    "pnl_medio_baseline": 0.6009,
    "declive_relativo": true
@@ -113,7 +113,7 @@
    "wilson90lo_reciente": 0.754,
    "ask_medio_reciente": 0.787,
    "pnl_medio_reciente": 0.0896,
-   "dias_ventana": "2026-09-16..2026-09-22",
+   "dias_ventana": "2026-09-17..2026-09-23",
    "n_baseline": 862,
    "pnl_medio_baseline": 0.423,
    "declive_relativo": true
@@ -125,7 +125,7 @@
    "wilson90lo_reciente": 0.875,
    "ask_medio_reciente": 0.822,
    "pnl_medio_reciente": 0.2538,
-   "dias_ventana": "2026-09-16..2026-09-22",
+   "dias_ventana": "2026-09-17..2026-09-23",
    "n_baseline": 204,
    "pnl_medio_baseline": 0.8381,
    "declive_relativo": true
@@ -141,7 +141,7 @@
    "wilson90lo_reciente": 0.777,
    "ask_medio_reciente": 0.776,
    "pnl_medio_reciente": 0.1193,
-   "dias_ventana": "2026-09-16..2026-09-22",
+   "dias_ventana": "2026-09-17..2026-09-23",
    "n_baseline": 800,
    "pnl_medio_baseline": 0.4696,
    "declive_relativo": true
