@@ -1347,6 +1347,18 @@ def _twap_actual(activo: str, fin_epoch: float):
     return (m * transcurrido + spot * resto) / (transcurrido + resto), resto
 
 
+def _camino_oraculo(activo: str, t0: float, t1: float) -> list:
+    """[(datetime, precio)] de ticks Chainlink (hora del oráculo) en [t0, t1] -- mismo formato que
+    el camino de precios_data, para features que deben usar la MISMA fuente que ref TWAP."""
+    import bisect
+    ser = _cargar_ticks_oraculo().get(activo)
+    if not ser:
+        return []
+    xs, ys = ser
+    i, j = bisect.bisect_left(xs, t0), bisect.bisect_right(xs, t1)
+    return [(datetime.fromtimestamp(xs[k], timezone.utc), ys[k]) for k in range(i, j)]
+
+
 def _t_efectivo_twap_h(resto_s: float) -> float:
     """Horizonte (horas) con la varianza del PROMEDIO final: si quedan >60 s,
     Var = sigma^2 (resto - 40 s); dentro del último minuto, sigma^2 resto^3 / (3*60^2)."""
@@ -1759,7 +1771,7 @@ def _max_min_dia_anterior(activo, now_utc):
     return _CACHE_MAXMIN_DIA_ANTERIOR["datos"].get(activo)
 
 
-def _calcular_retest_pct(activo, window_start, now_utc, ref, spot, precios_data):
+def _calcular_retest_pct(activo, window_start, now_utc, ref, spot, precios_data, camino=None):
     """% de retroceso desde el máximo alejamiento (en la dirección del
     movimiento final) antes del instante actual — ver
     analisis_retest_gbm_late.py (13-Jul, idea_retest_gbm_late_15m_13jul):
@@ -1772,8 +1784,11 @@ def _calcular_retest_pct(activo, window_start, now_utc, ref, spot, precios_data)
     + /code-review (CLAUDE.md, código que toca dinero real)."""
     if not ref or ref <= 0 or not spot or spot <= 0:
         return None
-    camino = [(ts, p[activo]) for ts, p in precios_data
-              if activo in p and window_start <= ts <= now_utc]
+    # 24-Sep: parámetro camino explícito (ticks Chainlink) cuando ref/spot son Chainlink -- antes el
+    # recorrido era Binance/Kraken contra una ref Chainlink (fuentes mezcladas).
+    if camino is None:
+        camino = [(ts, p[activo]) for ts, p in precios_data
+                  if activo in p and window_start <= ts <= now_utc]
     if len(camino) < 4:
         return None
     signo_final = 1 if spot > ref else -1
@@ -2598,8 +2613,11 @@ def s_updown_gbm(market, ctx, strategy_name: str = "UPDOWN_GBM"):
     # volumen. Shadow-only: se loguea, el postmortem decide si filtra/boostea.
     # Fail-closed: sin VWAP (fetch falló o Kraken fallback) → no se añade.
     _vwap = ctx.get("vwap_sesion", {}).get(activo)
-    if _vwap and spot and _vwap > 0:
-        features["dist_vwap_pct"] = round((spot - _vwap) / _vwap * 100, 4)
+    # 24-Sep: la VWAP es de Binance (ponderada por volumen, Chainlink no tiene volumen) -> se
+    # compara con el spot de consenso (misma fuente), no con la variable spot (Chainlink desde el 18-Ago).
+    _spot_vwap = ctx.get("spot_prices", {}).get(activo) or _cargar_spot().get(activo)
+    if _vwap and _spot_vwap and _vwap > 0:
+        features["dist_vwap_pct"] = round((_spot_vwap - _vwap) / _vwap * 100, 4)
     # poly_drift_5obs: drift del precio YES DENTRO de Polymarket en últimas 5 obs (~5min).
     # Negativo → el mercado interno está vendiendo YES (demanda NO). Positivo → demanda YES.
     # Si poly_drift y nuestra predicción coinciden → señal reforzada (cross-confirmation).
@@ -2622,8 +2640,10 @@ def s_updown_gbm(market, ctx, strategy_name: str = "UPDOWN_GBM"):
     # con más volumen del sistema (ver comentario 30-Jul más abajo) —
     # el hallazgo del 07-Ago (retest_pct==0 gana en 22/37 combos GBM_LATE)
     # podría replicar aquí con muchísimo más n. Solo LOGUEA.
+    _ahora_rt = datetime.now(timezone.utc)
     features["retest_pct"] = _calcular_retest_pct(
-        activo, ref_time, datetime.now(timezone.utc), ref, spot, precios_data)
+        activo, ref_time, _ahora_rt, ref, spot, precios_data,
+        camino=(_camino_oraculo(activo, ref_time.timestamp(), _ahora_rt.timestamp()) if ref_es_twap else None))
     # logit_edge (Shaw & Dalen 2025 — BS-P): edge en espacio logit.
     # logit(p_modelo) - logit(p_mercado) es más estable que la diferencia en probabilidad
     # cerca de los extremos (p→0 o p→1) y captura el edge multiplicativo real.
@@ -4868,11 +4888,24 @@ def _s_gbm_late(market, ctx, ventana_min, rest_lo, rest_hi, espacio_k=None):
     # (postmortem IC_bucket) y H-CUSTOM-GBMLATE-ANCHURA-MERCADO.
     spot_map = _cargar_spot()
     otros_rets = []
+    _ticks_or = _cargar_ticks_oraculo() if ref_es_twap else {}
     for otro in GBM_LATE_15M_PARES:
         if otro == activo:
             continue
-        spot_otro = spot_map.get(otro)
-        ref_otro = _precio_en(otro, window_start, precios_data, tol_min=3)
+        if ref_es_twap:
+            # 24-Sep: misma fuente que la ref propia (Chainlink: último tick vs TWAP de apertura)
+            _ser = _ticks_or.get(otro)
+            spot_otro = None
+            if _ser and _ser[0]:
+                _t_last = _ser[0][-1]
+                # /code-review: tick posterior a la apertura y fresco; si no, se omite la moneda
+                if (_t_last >= window_start.timestamp()
+                        and now_utc.timestamp() - _t_last <= _TWAP_STALE_S):
+                    spot_otro = _ser[1][-1]
+            ref_otro = _twap_ref_apertura(otro, window_start.timestamp())
+        else:
+            spot_otro = spot_map.get(otro)
+            ref_otro = _precio_en(otro, window_start, precios_data, tol_min=3)
         if not spot_otro or spot_otro <= 0 or not ref_otro or ref_otro <= 0:
             continue
         otros_rets.append(spot_otro / ref_otro - 1)
@@ -4981,7 +5014,9 @@ def _s_gbm_late(market, ctx, ventana_min, rest_lo, rest_hi, espacio_k=None):
 
     # retest_pct (13-Jul, ver analisis_retest_gbm_late.py / _calcular_retest_pct):
     # solo logueo, no cambia edge ni decisión — ver docstring del helper.
-    retest_pct = _calcular_retest_pct(activo, window_start, now_utc, ref, spot, precios_data)
+    retest_pct = _calcular_retest_pct(
+        activo, window_start, now_utc, ref, spot, precios_data,
+        camino=(_camino_oraculo(activo, window_start.timestamp(), now_utc.timestamp()) if ref_es_twap else None))
 
     # gap_sigma_implicita (P19, 22-Jul): ver _gap_sigma_implicita — solo logueo.
     gap_sigma_implicita = _gap_sigma_implicita(d, sigma_h, py)
