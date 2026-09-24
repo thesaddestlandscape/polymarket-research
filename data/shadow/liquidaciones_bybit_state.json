@@ -1,5 +1,5 @@
 {
- "generado_utc": "2026-09-24T10:21:08+00:00",
+ "generado_utc": "2026-09-24T10:26:19+00:00",
  "fuente": "bybit",
  "BNB": {
   "2min": {
@@ -48,8 +48,8 @@
   },
   "60min": {
    "usd_long": 6429.74,
-   "usd_short": 1882213.58,
-   "n": 222,
+   "usd_short": 1877729.84,
+   "n": 220,
    "imbalance": 0.9932
   }
  },
@@ -88,20 +88,20 @@
   },
   "5min": {
    "usd_long": 0.0,
-   "usd_short": 0.0,
-   "n": 0,
-   "imbalance": null
+   "usd_short": 4302.51,
+   "n": 6,
+   "imbalance": 1.0
   },
   "15min": {
    "usd_long": 370.44,
-   "usd_short": 8534.08,
-   "n": 3,
-   "imbalance": 0.9168
+   "usd_short": 11707.37,
+   "n": 8,
+   "imbalance": 0.9387
   },
   "60min": {
    "usd_long": 662.03,
-   "usd_short": 1023435.19,
-   "n": 114,
+   "usd_short": 1008068.86,
+   "n": 113,
    "imbalance": 0.9987
   }
  },
@@ -114,35 +114,35 @@
   },
   "5min": {
    "usd_long": 0.0,
-   "usd_short": 0.0,
-   "n": 0,
-   "imbalance": null
+   "usd_short": 3371.7,
+   "n": 1,
+   "imbalance": 1.0
   },
   "15min": {
    "usd_long": 0.0,
-   "usd_short": 1581.78,
-   "n": 3,
+   "usd_short": 3371.7,
+   "n": 1,
    "imbalance": 1.0
   },
   "60min": {
    "usd_long": 0.0,
-   "usd_short": 162597.18,
-   "n": 54,
+   "usd_short": 165968.88,
+   "n": 55,
    "imbalance": 1.0
   }
  },
  "XRP": {
   "2min": {
    "usd_long": 0.0,
-   "usd_short": 5809.6,
-   "n": 1,
-   "imbalance": 1.0
+   "usd_short": 0.0,
+   "n": 0,
+   "imbalance": null
   },
   "5min": {
    "usd_long": 0.0,
-   "usd_short": 5809.6,
-   "n": 1,
-   "imbalance": 1.0
+   "usd_short": 0.0,
+   "n": 0,
+   "imbalance": null
   },
   "15min": {
    "usd_long": 0.0,
@@ -152,17 +152,17 @@
   },
   "60min": {
    "usd_long": 233.67,
-   "usd_short": 405067.59,
-   "n": 78,
+   "usd_short": 403090.06,
+   "n": 74,
    "imbalance": 0.9988
   }
  },
  "lag_bybit_ws": {
   "ventana_min": 5,
-  "n_muestras": 1,
-  "ultimo_lag_s": 0.32,
-  "max_lag_s": 0.32,
-  "media_lag_s": 0.32,
+  "n_muestras": 7,
+  "ultimo_lag_s": 0.3,
+  "max_lag_s": 0.57,
+  "media_lag_s": 0.3,
   "umbral_alerta_s": 5.0
  }
 }
