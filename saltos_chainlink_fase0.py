@@ -37,7 +37,9 @@ MARCOS = {"5m": 300, "15m": 900}
 SALTO = 0.08
 CADA_S = 0.25
 STAKE = 1.05
-CAMPOS = ["ts_utc", "activo", "marco", "slug", "market_id", "ini", "fin", "resto_s", "p_justo", "p_justo_prev",
+FUENTE = "polybolt"   # 24-Sep: PolyBolt spot = mismo precio/marca que Chainlink, ~1,2 s antes que RTDS
+POLL_S = 0.05
+CAMPOS = ["fuente", "ts_utc", "activo", "marco", "slug", "market_id", "ini", "fin", "resto_s", "p_justo", "p_justo_prev",
           "direccion", "ref_twap", "spot", "edad_tick_s", "ask", "profundidad_eur", "ratio_vs_stake",
           "vwap_fill", "fill_completo", "lat_libro_ms", "error"]
 _lock = threading.Lock()
@@ -58,7 +60,59 @@ def _escribir(fila):
             w.writerow(fila)
 
 
+class _PolyBoltTail:
+    """Cola en memoria del canal spot de PolyBolt (data/prices/polybolt_YYYY-MM-DD.csv, que
+    fetch_polybolt_prices.py escribe por mensaje). Sondeo cada POLL_S; hora = recepción."""
+    def __init__(self, ventana_s=1200):
+        self.buf = {a: deque() for a in ACTIVOS}
+        self.lock = threading.Lock()
+        self.ventana_s, self._pos, self._arch = ventana_s, 0, None
+
+    def _loop(self):
+        while True:
+            try:
+                arch = REPO / "data" / "prices" / f"polybolt_{datetime.now(timezone.utc):%Y-%m-%d}.csv"
+                if arch != self._arch:
+                    self._arch, self._pos = arch, (arch.stat().st_size if arch.exists() else 0)
+                if arch.exists():
+                    with open(arch, encoding="utf-8") as f:
+                        f.seek(self._pos)
+                        lineas = f.readlines()
+                        if lineas and not lineas[-1].endswith("\n"):
+                            lineas = lineas[:-1]          # línea a medio escribir: se relee
+                        self._pos += sum(len(x.encode("utf-8")) for x in lineas)
+                    lim = time.time() - self.ventana_s
+                    with self.lock:
+                        for ln in lineas:
+                            pt = ln.rstrip("\n").split(",")
+                            if len(pt) < 6 or pt[2] != "spot" or pt[5] != "0" or pt[1] not in self.buf:
+                                continue
+                            try:
+                                self.buf[pt[1]].append((datetime.fromisoformat(pt[0]).timestamp(), float(pt[3])))
+                            except ValueError:
+                                continue
+                        for dq in self.buf.values():
+                            while dq and dq[0][0] < lim:
+                                dq.popleft()
+            except Exception as e:
+                _log(f"[polybolt_tail] error: {e}")
+            time.sleep(POLL_S)
+
+    def arrancar(self):
+        threading.Thread(target=self._loop, daemon=True).start()
+
+
+_PB = _PolyBoltTail()
+
+
 def _ticks(activo, ventana_s=1200):
+    if FUENTE == "polybolt":
+        with _PB.lock:
+            return list(_PB.buf.get(activo, ()))
+    return _ticks_rtds(activo, ventana_s)
+
+
+def _ticks_rtds(activo, ventana_s=1200):
     """Solo los últimos `ventana_s` segundos de la cola (la cola guarda ~4 h: copiarla entera
     4 veces/s por moneda sería CPU tirada)."""
     lim = time.time() - ventana_s
@@ -151,7 +205,13 @@ def _leer_y_registrar(fila, activo, marco_tag, ini, direccion):
 
 
 def main():
-    _log(f"saltos_chainlink_fase0 arrancado (SALTO={SALTO}, solo observación)")
+    if FUENTE == "polybolt":
+        _PB.arrancar()
+        viejo = OUT.with_name("saltos_chainlink_fase0_rtds_v1.csv")
+        if OUT.exists() and not viejo.exists() and "fuente" not in OUT.read_text(encoding="utf-8").split("\n", 1)[0]:
+            OUT.rename(viejo)                              # cabecera nueva: no mezclar
+        time.sleep(3)
+    _log(f"saltos_chainlink_fase0 arrancado (SALTO={SALTO}, fuente={FUENTE}, solo observación)")
     hist = {}      # (activo, marco, ini) -> deque[(t, p)]
     sig = {}       # activo -> (t_calc, sigma)
     ult_ev = {}    # (activo, marco, ini) -> t
@@ -183,7 +243,7 @@ def main():
                 ult_ev[k] = ahora
                 direccion = "Up" if p > p_prev else "Down"
                 fila = {c: "" for c in CAMPOS}
-                fila.update({"ts_utc": datetime.now(timezone.utc).isoformat(timespec="milliseconds"),
+                fila.update({"fuente": FUENTE, "ts_utc": datetime.now(timezone.utc).isoformat(timespec="milliseconds"),
                              "activo": activo, "marco": tag, "ini": ini, "fin": fin,
                              "resto_s": round(fin - ahora, 1), "p_justo": round(p, 4),
                              "p_justo_prev": round(p_prev, 4), "direccion": direccion,

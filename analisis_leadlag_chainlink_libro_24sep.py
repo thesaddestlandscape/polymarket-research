@@ -54,7 +54,32 @@ def phi(x):
     return 0.5 * (1 + math.erf(x / math.sqrt(2)))
 
 
+def polybolt(dia):
+    """Canal spot de PolyBolt (mismo precio y marca que Chainlink, llega ~1,2 s ANTES que RTDS,
+    medido 24-Sep): hora de RECEPCIÓN = cuándo lo sabríamos con esta fuente."""
+    s = defaultdict(lambda: ([], []))
+    for p in (REPO / f"data/prices/polybolt_{dia}.csv", REPO / f"data/prices/polybolt_{dia}.csv.gz"):
+        if not p.exists():
+            continue
+        with abrir(p) as f:
+            for r in csv.DictReader(f):
+                if r.get("canal") != "spot" or r.get("snapshot") != "0":
+                    continue
+                try:
+                    s[r["asset"]][0].append(ts(r["timestamp_utc"]))
+                    s[r["asset"]][1].append(float(r["value"]))
+                except (ValueError, KeyError):
+                    continue
+    out = {}
+    for a, (xs, ys) in s.items():
+        o = sorted(zip(xs, ys))
+        out[a] = ([x for x, _ in o], [y for _, y in o])
+    return out
+
+
 def chainlink(dia):
+    if CL_TS == "polybolt":
+        return polybolt(dia)
     s = defaultdict(lambda: ([], []))
     for p in (REPO / f"data/prices/chainlink_{dia}.csv", REPO / f"data/prices/chainlink_{dia}.csv.gz"):
         if not p.exists():
@@ -218,7 +243,7 @@ def main():
         if d["n"] >= 20:
             print(g.ljust(12), f"n={d['n']} acierto={d['acierto']:.0%} lag½={d['lag_mitad_mediana_s']}s",
                   " ".join(f"L{L}:{d[f'L{L}']['pnl_tr']:+.3f}@{d[f'L{L}']['entry_medio']:.2f}" for L in LAGS if f"L{L}" in d))
-    out = REPO / f"data/shadow/leadlag_chainlink_libro_{dia}{'_oraculo' if CL_TS == 'oraculo' else ''}.json"
+    out = REPO / f"data/shadow/leadlag_chainlink_libro_{dia}{'_' + CL_TS if CL_TS != 'recepcion' else ''}.json"
     out.write_text(json.dumps({"dia": dia, "salto": SALTO, "grupos": res}, indent=1), encoding="utf-8")
     print(f"-> {out}")
 
