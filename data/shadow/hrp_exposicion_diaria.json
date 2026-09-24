@@ -1,5 +1,5 @@
 {
-  "timestamp_utc": "2026-09-24T10:10:12+00:00",
+  "timestamp_utc": "2026-09-24T12:10:10+00:00",
   "tuplas_maduras": [],
   "tuplas_inmaduras": [
     {
@@ -230,7 +230,7 @@
     {
       "tupla": "RESOLUTION_SNIPER_PRECIERRE#BTC#5min#BUY_NO",
       "dias_historial": 0,
-      "n": 0
+      "n": 1
     },
     {
       "tupla": "RESOLUTION_SNIPER_PRECIERRE#ETH#5min#BUY_YES",
@@ -339,6 +339,11 @@
     },
     {
       "tupla": "RESOLUTION_SNIPER_PRECIERRE#BNB#15min#BUY_NO",
+      "dias_historial": 0,
+      "n": 0
+    },
+    {
+      "tupla": "DISPERSO#DOGE#5min#BUY_Up",
       "dias_historial": 0,
       "n": 0
     }
