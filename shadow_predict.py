@@ -1257,6 +1257,108 @@ def _cargar_ticks_chainlink_recientes(ventana_s: float = 180.0) -> dict:
     return resultado
 
 
+# 24-Sep (OK Javi: "atácalo ahora"): REGLA REAL de resolución de los up/down 5/15min =
+# TWAP60 Chainlink al cierre vs TWAP60 Chainlink en la apertura, en las 6 monedas (99,0-99,8 %,
+# analisis_precierre_twap_multidia_24sep.py; DOGE/BNB incluidas, contra lo que suponía
+# _TWAP_ACTIVOS_OFICIALES). Los modelos usaban ref = consenso Binance/Kraken más cercano a la
+# apertura (±3 min) y "spot" = media de los últimos 60 s (precio retrasado). Con la regla
+# correcta la dirección mejora 5min T-60s 79,8->92,0 %, T-120s 72,9->83,2 %, 15min T-60s
+# 89,1->96,2 % (analisis_ref_twap_modelos_shadow_24sep.py, 7 días, n=12k/4k). Hora del ORÁCULO
+# (ws_timestamp_ms). Si falta cualquier dato, los callers vuelven al cálculo de siempre.
+_TICKS_ORACULO_CACHE = {"clave": None, "ts_leido": 0.0, "ticks": {}}
+_TWAP_TAIL_BYTES = 3_000_000   # ~20+ min de las 6 monedas (15min + 60 s de margen)
+
+
+def _cargar_ticks_oraculo() -> dict:
+    """{activo: ([epoch_oraculo...], [precio...])} de la cola de chainlink_HOY.csv (hora del
+    oráculo, columna ws_timestamp_ms). TTL corto, mismo patrón que _cargar_ticks_chainlink_recientes."""
+    import bisect as _bisect  # noqa: F401 (usado por los consumidores vía el mismo módulo)
+    fecha = datetime.now(timezone.utc).strftime("%Y-%m-%d")
+    ahora = datetime.now(timezone.utc).timestamp()
+    if (_TICKS_ORACULO_CACHE["clave"] == fecha
+            and ahora - _TICKS_ORACULO_CACHE["ts_leido"] < _TICKS_CHAINLINK_TTL_S):
+        return _TICKS_ORACULO_CACHE["ticks"]
+    res = {}
+    try:
+        path = DIR_DATA / "prices" / f"chainlink_{fecha}.csv"
+        tam = path.stat().st_size
+        with open(path, "rb") as f:
+            f.seek(max(0, tam - _TWAP_TAIL_BYTES))
+            lineas = f.read().decode("utf-8", errors="ignore").splitlines()[1:]
+        tmp = defaultdict(list)
+        for linea in lineas:
+            partes = linea.split(",")
+            if len(partes) < 4:
+                continue
+            try:
+                t = int(partes[3]) / 1000.0
+                pr = float(partes[2])
+            except (ValueError, IndexError):
+                continue
+            if pr > 0:
+                tmp[partes[1]].append((t, pr))
+        for a, pts in tmp.items():
+            pts.sort()
+            res[a] = ([t for t, _ in pts], [p for _, p in pts])
+    except (OSError, FileNotFoundError):
+        res = {}
+    _TICKS_ORACULO_CACHE.update({"clave": fecha, "ts_leido": ahora, "ticks": res})
+    return res
+
+
+def _media_oraculo(activo: str, t0: float, t1: float):
+    import bisect
+    ser = _cargar_ticks_oraculo().get(activo)
+    if not ser:
+        return None, 0
+    xs, ys = ser
+    i, j = bisect.bisect_left(xs, t0), bisect.bisect_right(xs, t1)
+    return (sum(ys[i:j]) / (j - i), j - i) if j > i else (None, 0)
+
+
+def _twap_ref_apertura(activo: str, inicio_epoch: float) -> float | None:
+    """TWAP60 Chainlink en [inicio-60, inicio] (la referencia REAL del mercado). None si <20 ticks
+    o si el oráculo aún no ha pasado el instante de apertura (ventana futura/en curso: TWAP
+    incompleto -> el caller usa el cálculo viejo)."""
+    ser = _cargar_ticks_oraculo().get(activo)
+    if not ser or not ser[0] or ser[0][-1] < inicio_epoch:
+        return None
+    m, n = _media_oraculo(activo, inicio_epoch - 60.0, inicio_epoch)
+    return m if m is not None and n >= 20 else None
+
+
+def _twap_actual(activo: str, fin_epoch: float):
+    """(estimación del TWAP60 final, segundos restantes). Con >60 s: último spot (martingala);
+    dentro del último minuto: media ya conocida + spot para el resto. None si datos viejos/escasos."""
+    ser = _cargar_ticks_oraculo().get(activo)
+    if not ser or not ser[0]:
+        return None
+    t_ult, spot = ser[0][-1], ser[1][-1]
+    if datetime.now(timezone.utc).timestamp() - t_ult > _TWAP_STALE_S:
+        return None
+    t_hasta = min(t_ult, fin_epoch)
+    resto = max(0.0, fin_epoch - t_hasta)
+    if resto > 60.0:
+        return spot, resto
+    m, n = _media_oraculo(activo, fin_epoch - 60.0, t_hasta)
+    if m is None or n < 10:
+        return None
+    transcurrido = max(0.0, t_hasta - (fin_epoch - 60.0))   # /code-review: pesos en SEGUNDOS, no ticks
+    return (m * transcurrido + spot * resto) / (transcurrido + resto), resto
+
+
+def _t_efectivo_twap_h(resto_s: float) -> float:
+    """Horizonte (horas) con la varianza del PROMEDIO final: si quedan >60 s,
+    Var = sigma^2 (resto - 40 s); dentro del último minuto, sigma^2 resto^3 / (3*60^2)."""
+    if resto_s > 60.0:
+        t = resto_s - 40.0
+    else:
+        t = resto_s ** 3 / (3.0 * 3600.0)
+    # /code-review: suelo de 15 s = error de medida entre nuestro TWAP (ticks a 1 s, hora del
+    # oráculo redondeada) y el oficial (0,2-1 % de discrepancias, concentradas en photo finish).
+    return max(t, 15.0) / 3600.0
+
+
 def _precio_twap(activo: str) -> float | None:
     """TWAP real (media ponderada por tiempo entre ticks consecutivos,
     mismo método que analisis_regimen_twap_chainlink_09ago.py) de los
@@ -2299,6 +2401,15 @@ def s_updown_gbm(market, ctx, strategy_name: str = "UPDOWN_GBM"):
         tol_min  = max(2, ventana_min // 2)
 
     ref = _precio_en(activo, ref_time, precios_data, tol_min)
+    ref_es_twap = 0
+    T_modelo_h = T_h   # /code-review: T_h conserva su significado (tiempo restante, cortes y features)
+    if tipo == "slot" and ventana_min in (5, 15):
+        _ref_tw = _twap_ref_apertura(activo, ref_time.timestamp())
+        _act = _twap_actual(activo, end_dt.timestamp()) if _ref_tw else None
+        if _ref_tw and _act:
+            ref, spot, T_modelo_h = _ref_tw, _act[0], _t_efectivo_twap_h(_act[1])
+            ref_es_twap = 1
+            spot_es_twap = 1 if _act[1] <= 60.0 else 0   # /code-review: refleja el camino real
     if ref is None:
         return None
 
@@ -2349,7 +2460,7 @@ def s_updown_gbm(market, ctx, strategy_name: str = "UPDOWN_GBM"):
     except Exception:
         _kalman_mu_h = None
 
-    p_up = _gbm_p_up(spot, ref, sigma_h, T_h, mu_h=mu_h)
+    p_up = _gbm_p_up(spot, ref, sigma_h, T_modelo_h, mu_h=mu_h)
     if p_up is None:
         return None
 
@@ -2445,6 +2556,8 @@ def s_updown_gbm(market, ctx, strategy_name: str = "UPDOWN_GBM"):
     features = {
         "pct_spot_vs_ref": round(pct, 4),
         "spot_es_twap":    spot_es_twap,
+        "ref_es_twap":     ref_es_twap,
+        "T_eff_h":         round(T_modelo_h, 6),
         "sigma_h":         round(sigma_h, 6),
         "T_h":             round(T_h, 4),
         "hora_utc":        datetime.now(timezone.utc).hour,
@@ -4703,15 +4816,24 @@ def _s_gbm_late(market, ctx, ventana_min, rest_lo, rest_hi, espacio_k=None):
     # si esto importa en la práctica antes de acometer el rediseño.
     window_start = end_dt - timedelta(minutes=ventana_min)
     ref = _precio_en(activo, window_start, precios_data, tol_min=3)
+    T_rem_h = restante_min / 60.0
+    T_modelo_h = T_rem_h   # /code-review: T_rem_h sigue alimentando features/meta_score sin cambio
+    ref_es_twap = 0
+    if ventana_min in (5, 15):
+        _ref_tw = _twap_ref_apertura(activo, window_start.timestamp())
+        _act = _twap_actual(activo, end_dt.timestamp()) if _ref_tw else None
+        if _ref_tw and _act:
+            ref, spot, T_modelo_h = _ref_tw, _act[0], _t_efectivo_twap_h(_act[1])
+            ref_es_twap = 1
+            spot_es_twap = 1 if _act[1] <= 60.0 else 0
     if ref is None or ref <= 0:
         return None
 
     sigma_h = _estimar_vol_h(activo, precios_data, n_min=20) or 0.02
-    T_rem_h = restante_min / 60.0
     # P(cierre > apertura de ventana) con lo ya movido como ventaja:
     # d = ln(spot/ref) / (sigma * sqrt(T_restante))
     import math
-    denom = sigma_h * math.sqrt(max(T_rem_h, 1e-6))
+    denom = sigma_h * math.sqrt(max(T_modelo_h, 1e-6))
     if denom <= 0:
         return None
     d = math.log(spot / ref) / denom
@@ -4885,6 +5007,8 @@ def _s_gbm_late(market, ctx, ventana_min, rest_lo, rest_hi, espacio_k=None):
         "features": {
             "drift_ventana_pct":   round(drift_ventana * 100, 4),
             "spot_es_twap":        spot_es_twap,
+            "ref_es_twap":         ref_es_twap,
+            "T_eff_h":             round(T_modelo_h, 6),
             "restante_min":        round(restante_min, 2),
             "T_h":                 round(T_rem_h, 4),
             "sigma_h":             round(sigma_h, 5),
