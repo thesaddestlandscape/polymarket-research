@@ -39,6 +39,7 @@ Corre en screen propio (igual que pfinish):
 import asyncio
 import csv
 import json
+import time
 from datetime import datetime, timezone
 from pathlib import Path
 
@@ -78,7 +79,12 @@ def _archivo_hoy() -> Path:
     return DIR_PRICES / f"chainlink_{fecha}.csv"
 
 
-def _escribir_tick(asset: str, price: float, ws_ts_ms: int) -> None:
+# 24-Sep: epoch del último tick escrito DESDE RTDS -- lo lee el hilo de PolyBolt
+# (mismo proceso fetchers_fase0.py) para activar el failover si RTDS calla.
+ULTIMO_TICK_RTDS_TS = 0.0
+
+
+def _escribir_tick(asset: str, price: float, ws_ts_ms: int, source: str = "chainlink") -> None:
     """Abre-escribe-cierra en CADA tick (22-Jul, bug fix -- ver memoria
     idea_bug_chainlink_fd_huerfano_git_22jul). Antes mantenía un file handle
     abierto entre ticks (reabierto solo al detectar rotación de día por
@@ -109,7 +115,7 @@ def _escribir_tick(asset: str, price: float, ws_ts_ms: int) -> None:
         if nuevo:
             w.writerow(["timestamp_utc", "asset", "price_usd", "ws_timestamp_ms", "source"])
         ts = datetime.now(timezone.utc).isoformat(timespec="milliseconds")
-        w.writerow([ts, asset, price, ws_ts_ms, "chainlink"])
+        w.writerow([ts, asset, price, ws_ts_ms, source])
 
 
 async def _mantener_ping(ws):
@@ -157,6 +163,8 @@ async def _correr_una_conexion() -> None:
                     continue
                 ws_ts_ms = payload.get("timestamp") or msg.get("timestamp")
                 _escribir_tick(asset, price, ws_ts_ms)
+                global ULTIMO_TICK_RTDS_TS
+                ULTIMO_TICK_RTDS_TS = time.time()
                 n_ticks += 1
                 if n_ticks % 500 == 0:
                     _log(f"{n_ticks} ticks recibidos en esta conexión")

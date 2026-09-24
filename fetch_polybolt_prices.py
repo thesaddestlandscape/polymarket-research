@@ -30,6 +30,7 @@ import asyncio
 import csv
 import json
 import random
+import time
 from datetime import datetime, timezone
 from pathlib import Path
 
@@ -43,6 +44,18 @@ ENV = REPO / "data" / "live" / ".env"
 WS_URL = "wss://ws-live-v2.polymarket.com/ws"
 SIMBOLOS = ["btcusd", "ethusd", "solusd", "xrpusd", "dogeusd", "bnbusd"]
 CANALES = {"price.crypto": "spot", "price.crypto.twap": "twap60"}
+# 24-Sep, failover de Chainlink (Javi: "no correr ni un riesgo"): RTDS
+# `crypto_prices_chainlink` se retirará sin fecha fija y ~20 consumidores leen
+# data/prices/chainlink_YYYY-MM-DD.csv. Si fetch_chainlink_prices.py (mismo
+# proceso fetchers_fase0.py) lleva > FALLBACK_TRAS_S sin tick RTDS, este hilo
+# escribe su spot `price.crypto` (sucesor oficial de ese topic, docs de
+# migración) en ESE MISMO CSV con source=polybolt_fallback, y avisa por
+# Telegram al entrar y al salir. Solo se activa si fetchers_fase0 lo habilita
+# (FALLBACK_CHAINLINK=True), nunca al ejecutar este módulo suelto.
+FALLBACK_CHAINLINK = False
+FALLBACK_TRAS_S = 20
+_T_ARRANQUE = time.time()
+_en_fallback = False
 RECV_TIMEOUT_S = 30          # mismo criterio que fetch_chainlink_prices.py (cuelgue silencioso 28-Jul)
 RECONNECT_ESPERA_S = 5
 ESPERA_FALLO_DURO_S = 300    # 4001 auth / 4008 policy: docs "do not blindly reconnect"
@@ -95,6 +108,34 @@ def _filas_de(msg: dict) -> list:
     return filas
 
 
+def _avisar(texto: str) -> None:
+    try:
+        from shadow_digest import enviar_telegram
+        enviar_telegram(texto)
+    except Exception as e:
+        _log(f"(no se pudo avisar por Telegram: {e})")
+
+
+def _failover_chainlink(filas: list) -> None:
+    global _en_fallback
+    import fetch_chainlink_prices as fcp
+    ultimo = fcp.ULTIMO_TICK_RTDS_TS or _T_ARRANQUE
+    callado = time.time() - ultimo
+    if callado > FALLBACK_TRAS_S:
+        if not _en_fallback:
+            _en_fallback = True
+            _log(f"🚨 FAILOVER: RTDS Chainlink sin ticks {callado:.0f}s -- escribiendo PolyBolt en chainlink_*.csv")
+            _avisar(f"🚨 Chainlink RTDS sin ticks {callado:.0f}s: FAILOVER a PolyBolt activo "
+                    f"(chainlink_*.csv sigue alimentado, source=polybolt_fallback). Revisar RTDS.")
+        for _, asset, canal, v, ev_ts, _snap in filas:
+            if canal == "spot":
+                fcp._escribir_tick(asset, v, ev_ts, source="polybolt_fallback")
+    elif _en_fallback:
+        _en_fallback = False
+        _log("✅ RTDS Chainlink ha vuelto -- failover desactivado")
+        _avisar("✅ Chainlink RTDS ha vuelto: failover PolyBolt desactivado.")
+
+
 class _FalloDuro(Exception):
     pass
 
@@ -123,7 +164,10 @@ async def _correr_una_conexion(cred: dict) -> None:
                 continue
             if msg.get("dropped"):
                 _log(f"⚠️ el servidor reporta {msg['dropped']} frames perdidos en {msg.get('channel')}")
-            _escribir(_filas_de(msg))
+            filas = _filas_de(msg)
+            _escribir(filas)
+            if FALLBACK_CHAINLINK and filas and not filas[0][5]:
+                _failover_chainlink(filas)
             n += 1
             if n % 5000 == 0:
                 _log(f"{n} mensajes en esta conexión")

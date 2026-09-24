@@ -68,6 +68,7 @@ import fetch_libro_book_ws  # 01-Sep: 6º fetcher, websocket oficial del CLOB
 # ver docstring del módulo (CLAUDE.md pt.21b propuesta #1, footprint pre-trade)
 import fetch_polybolt_prices  # 24-Sep: 7º fetcher, PolyBolt (price.crypto + TWAP60
 # oficial de resolución) -- sustituto de crypto_prices_chainlink de RTDS (legacy)
+fetch_polybolt_prices.FALLBACK_CHAINLINK = True  # failover si RTDS Chainlink calla (ver el módulo)
 
 # (modulo, fichero_log_propio -- EXACTO el que ya usaba pipeline_watchdog.SCREEN_RESTART,
 #  nombre_funcion_log_a_reemplazar, es_async)
