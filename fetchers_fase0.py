@@ -67,6 +67,7 @@ import fetch_libro_book_ws  # 01-Sep: 6º fetcher, websocket oficial del CLOB
 # (wss://ws-subscriptions-clob.polymarket.com/ws/market), push no polling --
 # ver docstring del módulo (CLAUDE.md pt.21b propuesta #1, footprint pre-trade)
 import fetch_polybolt_prices  # 24-Sep: 7º fetcher, PolyBolt (price.crypto + TWAP60
+import fetch_binance_bookticker  # 24-Sep: 8º fetcher, bookTicker Binance a 100 ms (lead sobre Chainlink en BTC/ETH)
 # oficial de resolución) -- sustituto de crypto_prices_chainlink de RTDS (legacy)
 fetch_polybolt_prices.FALLBACK_CHAINLINK = True  # failover si RTDS Chainlink calla (ver el módulo)
 
@@ -80,6 +81,9 @@ FETCHERS = [
     (fetch_kalshi_btc, "kalshi_btc15m.log", "_log", False),
     (fetch_libro_book_ws, "libro_book_ws.log", "_log", True),
     (fetch_polybolt_prices, "polybolt.log", "_log", True),
+    # 24-Sep (Javi: adelantarse en BTC/ETH): mid bookTicker Binance a 100 ms -> datalogs, para medir
+    # el lead de Binance sobre Chainlink y sobre los trades de Polymarket. Solo captura.
+    (fetch_binance_bookticker, "binance_bookticker.log", "_log", True),
 ]
 
 
