@@ -200,3 +200,5 @@ data/**/*_vistos.json
 data/shadow/postmortem_procesadas.json
 data/shadow/informe_bot.xlsx
 data/sports/*.metodo_*
+data/sports/combos_outcomes_cache.json
+data/sports/wallets_combos_24sep.json
