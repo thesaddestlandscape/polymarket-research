@@ -37,6 +37,7 @@ ACTIVOS = {"BTC", "ETH", "SOL", "XRP", "DOGE", "BNB"}
 SALTO = 0.08
 LAGS = (0, 0.5, 1, 2, 5, 10, 30)
 FEE = 0.07
+CL_TS = __import__("os").environ.get("CL_TS", "recepcion")
 csv.field_size_limit(10_000_000)
 
 
@@ -61,7 +62,10 @@ def chainlink(dia):
         with abrir(p) as f:
             for r in csv.DictReader(f):
                 try:
-                    s[r["asset"]][0].append(ts(r["timestamp_utc"]))
+                    # CL_TS=oraculo: hora del ORÁCULO (ws_timestamp_ms, ~1,4 s antes que la recepción
+                    # RTDS) = techo de lo que daría adelantarse a Chainlink (p. ej. con Binance).
+                    t_cl = (int(r["ws_timestamp_ms"]) / 1000 if CL_TS == "oraculo" else ts(r["timestamp_utc"]))
+                    s[r["asset"]][0].append(t_cl)
                     s[r["asset"]][1].append(float(r["price_usd"]))
                 except (ValueError, KeyError):
                     continue
@@ -214,7 +218,7 @@ def main():
         if d["n"] >= 20:
             print(g.ljust(12), f"n={d['n']} acierto={d['acierto']:.0%} lag½={d['lag_mitad_mediana_s']}s",
                   " ".join(f"L{L}:{d[f'L{L}']['pnl_tr']:+.3f}@{d[f'L{L}']['entry_medio']:.2f}" for L in LAGS if f"L{L}" in d))
-    out = REPO / f"data/shadow/leadlag_chainlink_libro_{dia}.json"
+    out = REPO / f"data/shadow/leadlag_chainlink_libro_{dia}{'_oraculo' if CL_TS == 'oraculo' else ''}.json"
     out.write_text(json.dumps({"dia": dia, "salto": SALTO, "grupos": res}, indent=1), encoding="utf-8")
     print(f"-> {out}")
 
