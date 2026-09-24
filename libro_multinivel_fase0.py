@@ -267,7 +267,7 @@ def main() -> None:
                     _log(f"resueltas: {n}")
             except Exception as e:
                 _log(f"resolver_pendientes error: {type(e).__name__}: {e}")
-            time.sleep(60)
+            time.sleep(300)  # 24-Sep: 60->300s, relee+reescribe 35MB por ciclo (py-spy, load 13/4 cores); observacional, sin prisa
 
 
 if __name__ == "__main__":

@@ -35,6 +35,7 @@ Corre en screen propio (mismo patrón que chainlink/liqs):
 
 import csv
 import json
+import threading
 import time
 from datetime import datetime, timezone
 from pathlib import Path
@@ -96,6 +97,81 @@ def _archivo_hoy() -> Path:
 _UNIVERSO_CACHE: dict = {"ts": 0.0, "fecha": "", "data": {}}
 _UNIVERSO_CACHE_TTL_S = 15.0
 
+# Lectura INCREMENTAL (24-Sep): con TTL 15s el CSV de hoy (483MB / 1,04M
+# filas a las 17:40 UTC) se seguía reanalizando ENTERO cada 15s en cada
+# proceso consumidor (ejecutores live/dry-run 60min, observadores...) y,
+# al caducar la caché, desde varios hilos a la vez -- py-spy 24-Sep lo dio
+# como consumidor dominante de 3 de los 4 procesos más pesados (load5
+# 13-18 en 4 cores). capture_markets.py solo APENDIZA (y renombra el
+# fichero si cambia la cabecera), así que basta con recordar el offset en
+# bytes y parsear solo las líneas nuevas. Verificado que el CSV no tiene
+# saltos de línea embebidos en campos (nº líneas == nº registros), así que
+# cortar en el último '\n' completo es seguro. Mismo resultado: el último
+# registro válido de cada market_id manda; la caducidad (edt<=ahora) se
+# aplica al devolver. Reset completo si cambia la fecha, el inodo o el
+# fichero encoge. El cerrojo evita que N hilos relean a la vez.
+_UNIVERSO_LOCK = threading.Lock()
+_UNIVERSO_INC: dict = {"fecha": "", "ino": None, "offset": 0, "cab": None, "mercados": {}}
+
+
+_UNIVERSO_BLOQUE_BYTES = 8 * 1024 * 1024  # lectura por bloques: RAM acotada también en la lectura en frío
+
+
+def _universo_leer_nuevas(archivo: Path, fecha: str) -> None:
+    """Actualiza _UNIVERSO_INC["mercados"] con las líneas añadidas desde la
+    última lectura. Llamar con _UNIVERSO_LOCK tomado. Lee por bloques de
+    8MB (la primera lectura del día recorre el fichero entero: nunca cargarlo
+    de golpe, /code-review 24-Sep) y separa SOLO por b"\n" (splitlines()
+    cortaría también por U+2028/\x0b/... que csv.writer no entrecomilla)."""
+    st = archivo.stat()
+    inc = _UNIVERSO_INC
+    if inc["fecha"] != fecha or inc["ino"] != st.st_ino or st.st_size < inc["offset"]:
+        inc.update({"fecha": fecha, "ino": st.st_ino, "offset": 0, "cab": None, "mercados": {}})
+    if st.st_size == inc["offset"]:
+        return
+    cab = inc["cab"]
+    # Se acumula aparte y el offset solo avanza si TODO el tramo se parsea
+    # bien: si csv lanza (p.ej. NUL), la excepción sube al llamador como
+    # antes y el tramo se reintenta entero, sin perder filas en silencio.
+    mercados = {}
+    consumido = 0
+    resto = b""
+    with open(archivo, "rb") as f:
+        f.seek(inc["offset"])
+        pendiente = st.st_size - inc["offset"]
+        while pendiente > 0:
+            trozo = f.read(min(_UNIVERSO_BLOQUE_BYTES, pendiente))
+            if not trozo:
+                break
+            pendiente -= len(trozo)
+            partes = (resto + trozo).split(b"\n")
+            resto = partes.pop()  # línea incompleta (o b"" si acaba en \n)
+            consumido += sum(len(x) + 1 for x in partes)
+            lineas = [x.rstrip(b"\r").decode("utf-8", errors="replace") for x in partes]
+            if cab is None and lineas:
+                cab = next(csv.reader([lineas[0]]))
+                lineas = lineas[1:]
+            for vals in csv.reader(lineas):
+                r = dict(zip(cab, vals))
+                question = r.get("question") or ""
+                tipo, vent = _parse_updown_tipo(question)
+                if tipo not in ("slot", "hourly") or vent not in MARCOS_TRACKEADOS:
+                    continue
+                activo = identificar_activo(question)
+                if activo not in ACTIVOS:
+                    continue
+                end_date = r.get("end_date") or ""
+                try:
+                    edt = datetime.fromisoformat(end_date.replace("Z", "+00:00"))
+                    if edt.tzinfo is None:
+                        edt = edt.replace(tzinfo=timezone.utc)
+                except Exception:
+                    continue
+                mercados[r.get("market_id", "")] = (activo, f"{vent}min", r.get("condition_id", ""), edt)
+    inc["cab"] = cab
+    inc["mercados"].update(mercados)
+    inc["offset"] += consumido
+
 
 def _universo_activo() -> dict:
     """{market_id: (activo, marco_str, condition_id, end_date)} desde el CSV
@@ -104,39 +180,24 @@ def _universo_activo() -> dict:
     identificar_activo, mismas funciones que usa shadow_predict.py) -- no
     por slug, ver nota arriba sobre por qué el slug no sirve para 60min."""
     fecha = datetime.now(timezone.utc).strftime("%Y-%m-%d")
-    ahora_ts = time.time()
     if (_UNIVERSO_CACHE["fecha"] == fecha
-            and ahora_ts - _UNIVERSO_CACHE["ts"] < _UNIVERSO_CACHE_TTL_S):
+            and time.time() - _UNIVERSO_CACHE["ts"] < _UNIVERSO_CACHE_TTL_S):
         return _UNIVERSO_CACHE["data"]
-
-    archivo = DIR_MARKETS / f"{fecha}.csv"
-    if not archivo.exists():
-        return {}
-    ahora = datetime.now(timezone.utc)
-    universo = {}
-    with open(archivo, encoding="utf-8") as f:
-        for r in csv.DictReader(f):
-            question = r.get("question") or ""
-            tipo, vent = _parse_updown_tipo(question)
-            if tipo not in ("slot", "hourly") or vent not in MARCOS_TRACKEADOS:
-                continue
-            activo = identificar_activo(question)
-            if activo not in ACTIVOS:
-                continue
-            end_date = r.get("end_date") or ""
-            try:
-                edt = datetime.fromisoformat(end_date.replace("Z", "+00:00"))
-                if edt.tzinfo is None:
-                    edt = edt.replace(tzinfo=timezone.utc)
-            except Exception:
-                continue
-            if edt <= ahora:
-                continue
-            universo[r.get("market_id", "")] = (activo, f"{vent}min", r.get("condition_id", ""), edt)
-    _UNIVERSO_CACHE["ts"] = ahora_ts
-    _UNIVERSO_CACHE["fecha"] = fecha
-    _UNIVERSO_CACHE["data"] = universo
-    return universo
+    with _UNIVERSO_LOCK:
+        ahora_ts = time.time()
+        if (_UNIVERSO_CACHE["fecha"] == fecha
+                and ahora_ts - _UNIVERSO_CACHE["ts"] < _UNIVERSO_CACHE_TTL_S):
+            return _UNIVERSO_CACHE["data"]  # otro hilo acaba de refrescar
+        archivo = DIR_MARKETS / f"{fecha}.csv"
+        if not archivo.exists():
+            return {}
+        _universo_leer_nuevas(archivo, fecha)
+        ahora = datetime.now(timezone.utc)
+        universo = {mid: v for mid, v in _UNIVERSO_INC["mercados"].items() if v[3] > ahora}
+        _UNIVERSO_CACHE["ts"] = ahora_ts
+        _UNIVERSO_CACHE["fecha"] = fecha
+        _UNIVERSO_CACHE["data"] = universo
+        return universo
 
 
 def _mejor_ask(book: dict | None) -> float | None:
