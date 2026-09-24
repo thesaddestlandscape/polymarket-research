@@ -34,7 +34,7 @@ NO coloca, cancela ni modifica ninguna orden real. Se fusiona en
 observadores_fase0.py (screen "observadores"), nunca screen suelta.
 """
 import csv
-from escritura_atomica import escribir_csv_atomico  # 23-Sep, ver ese módulo
+from escritura_atomica import reescribir_csv_streaming  # 23-Sep/24-Sep, ver ese módulo
 import json
 import sys
 import time
@@ -192,10 +192,11 @@ def resolver_pendientes() -> int:
     """Mismo patrón que wallet_mirror_tracker.py/bot_wallets_gate_bucket_fase0.py."""
     if not OUT.exists():
         return 0
+    # 24-Sep: streaming (antes list(csv.DictReader) de ~35MB = +211MB de pico
+    # en observadores_fase0, dos veces por ciclo). Mismo resultado.
     with open(OUT, newline="", encoding="utf-8") as f:
-        filas = list(csv.DictReader(f))
-    slugs_pendientes = sorted({r["slug"] for r in filas
-                                if not r.get("outcome_real") and r.get("slug")})
+        slugs_pendientes = sorted({r["slug"] for r in csv.DictReader(f)
+                                    if not r.get("outcome_real") and r.get("slug")})
     outcomes_por_slug = {}
     for slug in slugs_pendientes[:MAX_SLUGS_POR_CICLO]:
         outcome = outcome_por_slug(slug)
@@ -209,22 +210,20 @@ def resolver_pendientes() -> int:
     try:
         fcntl.flock(lock_f, fcntl.LOCK_EX)
         try:
-            with open(OUT, newline="", encoding="utf-8") as f:
-                filas = list(csv.DictReader(f))
-            resueltas = 0
-            for r in filas:
+            ts_res = datetime.now(timezone.utc).isoformat(timespec="seconds")
+
+            def _resolver(r):
                 if r.get("outcome_real"):
-                    continue
+                    return False
                 outcome = outcomes_por_slug.get(r.get("slug"))
                 if outcome is None:
-                    continue
+                    return False
                 r["outcome_real"] = outcome
-                r["resolved_ts"] = datetime.now(timezone.utc).isoformat(timespec="seconds")
-                resueltas += 1
-            if resueltas:
-                # 23-Sep: atómico (ver escritura_atomica.py -- incidente WM executor CSV truncado)
-                escribir_csv_atomico(OUT, COLUMNS, filas)
-            return resueltas
+                r["resolved_ts"] = ts_res
+                return True
+            # 24-Sep: fila a fila, atómico y solo reemplaza si algo cambió
+            # (escritura_atomica.reescribir_csv_streaming, mismo contrato).
+            return reescribir_csv_streaming(OUT, COLUMNS, _resolver)
         finally:
             fcntl.flock(lock_f, fcntl.LOCK_UN)
     finally:
