@@ -33,10 +33,16 @@ CUTOFF = "2026-09-24T08:00:00"
 OUT = REPO / "data/sports/fade_extremas_forward.json"
 LATCH = REPO / "data/live/vigia_sports_fade_extremas_forward_latch.json"
 
+# (filtro, cutoff propio): cada hipótesis se mide solo DESPUÉS de haberse formulado.
 HIPOTESIS = {
-    "H1_peores_todas": lambda u: u["tramo"] == "<=-40pp",
-    "H2_malas_ask_020_030": lambda u: u["tramo"] == "(-20,-10]" and 0.20 <= u["ask"] < 0.30,
-    "H3_peores_longshot_ask_lt_050": lambda u: u["tramo"] == "<=-40pp" and u["ask"] < 0.50,
+    "H1_peores_todas": (lambda u: u["tramo"] == "<=-40pp", CUTOFF),
+    "H2_malas_ask_020_030": (lambda u: u["tramo"] == "(-20,-10]" and 0.20 <= u["ask"] < 0.30, CUTOFF),
+    "H3_peores_longshot_ask_lt_050": (lambda u: u["tramo"] == "<=-40pp" and u["ask"] < 0.50, CUTOFF),
+    # 24-Sep 08:40, tras el backfill del resolver (18.549 -> 122.339 resueltas):
+    # retrospectivo UFC#FADE n=123/16 días +0,225 €/tr CI90d [+0,057,+0,450];
+    # epl-otros#FADE n=264 pero solo 5 días. 97 combos mirados -> solo forward.
+    "H4_ufc_fade": (lambda u: u["cat"] == "UFC", "2026-09-24T08:40:00"),
+    "H5_epl_otros_fade": (lambda u: u["cat"] == "epl-otros", "2026-09-24T08:40:00"),
 }
 
 
@@ -55,14 +61,14 @@ def veredicto(d: dict) -> str:
 
 
 def main() -> int:
-    us = [u for u in base.cargar() if u["ts"] >= CUTOFF]
+    us = [u for u in base.cargar() if u["ts"] >= min(c for _, c in HIPOTESIS.values())]
     for u in us:
         u["pnl"] = base.payout_win(u["ask"]) if u["acierto"] else -base.STAKE
         u["tramo"] = base.tramo(u["edge"])
-    us = [u for u in us if u["tramo"]]
     res = {}
-    for i, (nombre, filtro) in enumerate(HIPOTESIS.items()):
-        d = base.resumen(nombre, [u for u in us if filtro(u)], 500 + i)
+    for i, (nombre, (filtro, corte)) in enumerate(HIPOTESIS.items()):
+        d = base.resumen(nombre, [u for u in us if u["ts"] >= corte and filtro(u)], 500 + i)
+        d["cutoff"] = corte
         d["veredicto"] = veredicto(d)
         res[nombre] = d
     salida = {"actualizado_utc": datetime.now(timezone.utc).isoformat(timespec="seconds"),

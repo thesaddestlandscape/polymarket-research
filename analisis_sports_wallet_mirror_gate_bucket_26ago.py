@@ -80,8 +80,12 @@ def wilson_lo(p: float, n: int, z: float = Z90) -> float:
 
 
 def binom_sf(k: int, n: int, p: float) -> float:
+    """P(X>=k), X~Binomial(n,p). 24-Sep: scipy (cola en espacio log) -- la suma
+    exacta con comb(n,i) desbordaba a float (OverflowError) con n>~1000, mismo
+    fallo ya arreglado el 07-Sep en analisis_fade_regimen_arquetipoA.py."""
+    from scipy.stats import binom
     p = min(max(p, 1e-9), 1 - 1e-9)
-    return sum(comb(n, i) * p ** i * (1 - p) ** (n - i) for i in range(k, n + 1))
+    return float(binom.sf(k - 1, n, p))
 
 
 def payout_win(precio: float) -> float:
