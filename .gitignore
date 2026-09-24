@@ -119,6 +119,7 @@ data/shadow/predictions_*.csv
 # packs no se libera con esto solo (necesitaría repack/filter-repo aparte).
 data/shadow/bot_wallets_gate_bucket_fase0.csv
 data/shadow/wallet_mirror_executor_dryrun.csv
+data/shadow/wallet_mirror_executor_dryrun_reconstruido_08_22sep.csv
 data/shadow/favorito_confirmado_senal_contraria_fase0.csv
 data/shadow/p22_cola_posicion_fase0.csv
 data/live/libro_snapshots.csv
