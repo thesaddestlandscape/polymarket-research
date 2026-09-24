@@ -171,6 +171,10 @@ class _ChainlinkTail:
     # (epoch,float) por tick de websocket, 6 activos).
     def __init__(self, ventana_s: int = 15000):
         self._buf = {a: deque() for a in ASSETS}  # asset -> deque[(epoch, price)]
+        # 24-Sep (/code-review precierre TWAP): buffer PARALELO con la hora del ORÁCULO
+        # (ws_timestamp_ms), no la de recepción (~1,4 s de retraso). Solo lo leen las funciones
+        # TWAP del precierre; _buf y precio_en() no cambian para el resto de consumidores.
+        self._buf_oracle = {a: deque() for a in ASSETS}  # asset -> deque[(epoch_oraculo, price)]
         self._ventana_s = ventana_s
         self._lock = threading.Lock()
         self._pos = 0
@@ -210,6 +214,15 @@ class _ChainlinkTail:
                                 dq.append((ts, price))
                                 while dq and dq[0][0] < ahora - self._ventana_s:
                                     dq.popleft()
+                                try:
+                                    ts_or = int(partes[3]) / 1000.0
+                                except (ValueError, IndexError):
+                                    ts_or = None
+                                if ts_or:
+                                    dqo = self._buf_oracle[asset]
+                                    dqo.append((ts_or, price))
+                                    while dqo and dqo[0][0] < ahora - self._ventana_s:
+                                        dqo.popleft()
             except Exception as e:
                 _log(f"[chainlink_tail] error: {e}")
             time.sleep(0.3)

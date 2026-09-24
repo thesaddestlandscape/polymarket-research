@@ -312,7 +312,26 @@ def _clv_veta(activo: str, marco: str, direction: str, py_yes: float) -> bool:
     b = lt._clv_bucket(py_yes)
     vals = [clv for precio, clv in filas if precio is not None and lt._clv_bucket(precio) == b]
     return bool(len(vals) >= lt.CLV_VETO_MIN_N and sum(vals) / len(vals) < 0)
-OFFSET_S = -2                # medido y elegido 03-Sep -- ver docstring arriba
+# 24-Sep (Javi: "soluciona esto para que puedan operar"): a T-2s el lado ganador ya no tiene
+# asks (0,14-0,21 % de lecturas) y los asks residuales eran trampas -- el mercado se resuelve por
+# TWAP60 al cierre vs TWAP60 en la apertura (verificado: 99,3 % 5min / 99,6 % 15min en 10 días,
+# analisis_precierre_twap_multidia_24sep.py), NO por spot vs spot de apertura como asumía este
+# ejecutor. Modo nuevo: disparo a T-45s, dirección = TWAP PROYECTADO al cierre (media de ticks ya
+# conocidos en [fin-60, ahora] + spot actual para el resto) vs TWAP de apertura, sin exigir
+# ráfaga, ask real en [ASK_TWAP_MIN, ASK_TWAP_MAX). Validación 10 días, asks frescos <=10 s,
+# 5min T-45s: acierto 95,7 %, EV +0,21 EUR/EUR (n=718, 9/10 días+); banda 0,25-0,65 ~+0,38.
+OFFSET_S = -45
+MODO_TWAP = True
+# Banda validada (asks frescos <=10 s): 5min T-45 tramo 0,25-0,65 ~+0,38 EUR/EUR (n~205);
+# 15min T-45 n=84 +0,32 (7/10 días+), con asks de <=25 s n=770 +0,46 (10/10). >=0,70: EV~0.
+ASK_TWAP_MIN, ASK_TWAP_MAX = 0.25, 0.65
+TWAP_N_MIN_TICKS = 20                    # ticks mínimos en [inicio-60, inicio] para fiarse del TWAP de apertura
+TWAP_N_MIN_CIERRE = 10                   # ticks mínimos ya transcurridos en [fin-60, ahora] (/code-review)
+TWAP_DESDE_PATH = REPO / "data" / "live" / "precierre_twap_desde.txt"   # arranque real del modo (kill-switch)
+TWAP_ERROR_VIGENTE_S = 1800              # filas ERROR cuentan como abiertas solo 30 min (luego las reconcilia
+                                         # reconciliar_fill_fantasma.py o eran fantasmas sin dinero)
+TWAP_KILL_N, TWAP_KILL_EUR = 20, 5.0     # n>=20 reales con media<0, o suma <= -5 EUR -> se cierra (latch)
+TWAP_KILL_LATCH = REPO / "data" / "live" / "precierre_twap_kill.json"
 STAKE_EUR = 1.05             # suelo CLOB, mismo criterio que la prueba controlada del 02-Sep
 MIN_RATIO_PROFUNDIDAD = 5.0  # mismo umbral que el resto del proyecto
 PRECALCULO_ANTES_S = 12      # arrancar precálculo con margen sobre el instante objetivo
@@ -426,7 +445,9 @@ class _Precalculo:
             if not token_yes or not token_no:
                 continue
             ref_open = _TAIL.precio_en(activo, ts_start) or _TAIL.precio_en(activo, ts_start + 2)
+            ref_twap, n_twap = _media_tail(activo, ts_start - 60, ts_start)
             self.mercados[activo] = {
+                "ref_twap": ref_twap if n_twap >= TWAP_N_MIN_TICKS else None,
                 "market_id": mkt.get("id", ""), "question": mkt.get("question", ""),
                 "end_date": mkt.get("endDate", ""),
                 "token_yes": token_yes, "token_no": token_no, "ref_open": ref_open,
@@ -576,6 +597,109 @@ def _ultimo_tick(activo: str):
         return dq[-1] if dq else None
 
 
+def _media_tail(activo: str, t0: float, t1: float):
+    """(media, n) de los ticks Chainlink con hora del ORÁCULO en [t0, t1] (/code-review: la
+    validación usa ws_timestamp_ms, no la hora de recepción)."""
+    with _TAIL._lock:
+        dq = list(_TAIL._buf_oracle.get(activo, ()))
+    vals = [p for t, p in dq if t0 <= t <= t1]
+    return (sum(vals) / len(vals), len(vals)) if vals else (None, 0)
+
+
+def _ultimo_oracle(activo: str):
+    with _TAIL._lock:
+        dq = _TAIL._buf_oracle.get(activo)
+        return dq[-1] if dq else None
+
+
+def _twap_proyectado(activo: str, ts_end: float):
+    """TWAP60 al cierre proyectado, en tiempo del ORÁCULO: media de ticks de [ts_end-60, t_ult] +
+    último spot para los segundos que faltan desde t_ult (idéntico a la validación multi-día).
+    None si el último tick es viejo o faltan ticks en el tramo ya transcurrido (fail-closed)."""
+    ult = _ultimo_oracle(activo)
+    if ult is None or time.time() - ult[0] > CHAINLINK_MAX_EDAD_S + 2.0:
+        return None
+    t_ult, spot = ult
+    m, n = _media_tail(activo, ts_end - 60, t_ult)
+    resto = max(0.0, min(60.0, ts_end - t_ult))
+    if resto >= 60.0:
+        return spot
+    if m is None or n < TWAP_N_MIN_CIERRE:
+        return None
+    return (m * n + spot * resto) / (n + resto)
+
+
+def _twap_desde() -> str:
+    """Instante real de arranque del modo TWAP (persistente). Se crea la primera vez."""
+    try:
+        if TWAP_DESDE_PATH.exists():
+            return TWAP_DESDE_PATH.read_text(encoding="utf-8").strip()
+        v = datetime.now(timezone.utc).isoformat(timespec="seconds")
+        TWAP_DESDE_PATH.write_text(v, encoding="utf-8")
+        return v
+    except Exception:
+        return "1970-01-01T00:00:00"   # fail-closed: cuenta TODOS los trades de la estrategia
+
+
+def _kill_twap() -> tuple[bool, str]:
+    """(matado, motivo) del modo TWAP. Latch persistente; fail-closed si el latch es ilegible
+    o trades.csv no se puede leer."""
+    import json
+    if TWAP_KILL_LATCH.exists():
+        try:
+            d = json.loads(TWAP_KILL_LATCH.read_text(encoding="utf-8"))
+            if not isinstance(d, dict) or d.get("matado"):
+                return True, (d or {}).get("motivo", "latch") if isinstance(d, dict) else "latch_corrupto"
+        except Exception:
+            return True, "latch_ilegible"
+    pnls, abiertos = [], 0.0
+    desde = _twap_desde()
+    ahora = time.time()
+    try:
+        with open(lt.TRADES_CSV, encoding="utf-8") as f:
+            for r in csv.DictReader(f):
+                if r.get("strategy") != STRATEGY or (r.get("timestamp_utc") or "") < desde:
+                    continue
+                st = r.get("status")
+                if st == "CLOSED":
+                    try:
+                        pnls.append(float(r["pnl_neto_eur"]))
+                    except (KeyError, TypeError, ValueError):
+                        pnls.append(-(float(r.get("stake_eur") or 0) or STAKE_EUR))
+                elif st == "OPEN":
+                    abiertos += float(r.get("stake_eur") or 0) or STAKE_EUR
+                elif st == "ERROR":
+                    try:
+                        dt = datetime.fromisoformat(r["timestamp_utc"])
+                        if dt.tzinfo is None:
+                            dt = dt.replace(tzinfo=timezone.utc)   # /code-review: sin zona = UTC
+                        edad = ahora - dt.timestamp()
+                    except (KeyError, ValueError):
+                        edad = 0.0   # ilegible: se cuenta (fail-closed)
+                    if edad <= TWAP_ERROR_VIGENTE_S:
+                        abiertos += float(r.get("stake_eur") or 0) or STAKE_EUR
+    except Exception:
+        return True, "trades_ilegible"
+    motivo = ""
+    if len(pnls) >= TWAP_KILL_N and sum(pnls) / len(pnls) < 0:
+        motivo = f"media {sum(pnls)/len(pnls):+.3f} en n={len(pnls)} reales"
+    elif sum(pnls) - abiertos <= -TWAP_KILL_EUR:
+        motivo = f"peor caso {sum(pnls) - abiertos:+.2f} EUR (cerrados n={len(pnls)}, abiertos {abiertos:.2f})"
+    if motivo:
+        try:
+            tmp = TWAP_KILL_LATCH.with_name(TWAP_KILL_LATCH.name + ".tmp")
+            tmp.write_text(json.dumps({"matado": True, "motivo": motivo,
+                                       "ts": datetime.now(timezone.utc).isoformat(timespec="seconds")}), encoding="utf-8")
+            import os
+            os.replace(tmp, TWAP_KILL_LATCH)
+            from shadow_digest import enviar_telegram
+            enviar_telegram(f"🛑 PRECIERRE modo TWAP CERRADO por kill-switch: {motivo}")
+        except Exception:
+            pass
+        return True, motivo
+    return False, ""
+
+
 def _leer(pre: _Precalculo, activo: str, ts_min: float | None = None) -> dict | None:
     """Fase A (paralela entre monedas): dirección implícita Chainlink + UNA
     lectura de libro del lado implícito. None si no hay mercado/precio.
@@ -596,9 +720,20 @@ def _leer(pre: _Precalculo, activo: str, ts_min: float | None = None) -> dict | 
     if tick is None or time.time() - tick[0] > CHAINLINK_MAX_EDAD_S:
         return None
     precio_actual = tick[1]
-    if precio_actual > m["ref_open"]:
+    if MODO_TWAP and ts_min is None:
+        # precierre modo TWAP: regla real de resolución (TWAP fin vs TWAP apertura)
+        if m.get("ref_twap") is None:
+            return None
+        proy = _twap_proyectado(activo, pre.ts_end)
+        if proy is None:
+            return None
+        ref = m["ref_twap"]
+        precio_actual = proy
+    else:
+        ref = m["ref_open"]
+    if precio_actual > ref:
         dir_impl = "Up"
-    elif precio_actual < m["ref_open"]:
+    elif precio_actual < ref:
         dir_impl = "Down"
     else:
         return None
@@ -840,8 +975,12 @@ def _instante_critico(pre: _Precalculo, lectura: dict, n_rafaga: int, ts_end: in
     # gate por activo (legacy, solo 5min, no distingue marco): solo informativo desde 23-Sep
     veredicto = gate.evaluar(activo, ask, OFFSET_S)
     ratio = depth.get("ratio_vs_stake")
-    rafaga_ok = n_rafaga >= MIN_MONEDAS_RAFAGA
-    en_banda = pre.ask_min <= ask < ASK_MAX
+    if MODO_TWAP:
+        rafaga_ok = True   # modo TWAP: cada moneda por su cuenta (lo validado es por mercado)
+        en_banda = ASK_TWAP_MIN <= ask < ASK_TWAP_MAX
+    else:
+        rafaga_ok = n_rafaga >= MIN_MONEDAS_RAFAGA
+        en_banda = pre.ask_min <= ask < ASK_MAX
     resultado = {
         **base, "ask_implicita": ask, "rafaga_ok": rafaga_ok, "en_banda": en_banda,
         "gate_legacy_confirmado": veredicto["confirmado"], "gate_legacy_motivo": veredicto["motivo"],
@@ -883,8 +1022,13 @@ def _instante_critico(pre: _Precalculo, lectura: dict, n_rafaga: int, ts_end: in
     resultado["t_guardas_ms"] = round((time.perf_counter() - t_g0) * 1000, 2)
     # DRY_RUN: sin tope -- se registran TODAS las monedas de la ráfaga (lo validado es la
     # ráfaga entera, /code-review 23-Sep). Live: tope compartido entre marcos.
+    if MODO_TWAP:
+        matado, motivo_kill = _kill_twap()
+        if matado:
+            resultado["gate_motivo"] = f"kill_twap:{motivo_kill}"
+            return resultado
     resultado["gate_confirmado"] = True
-    resultado["gate_motivo"] = f"rafaga_n={n_rafaga}"
+    resultado["gate_motivo"] = "twap_proy" if MODO_TWAP else f"rafaga_n={n_rafaga}"
     # 09-Sep (checklist de 6 categorías, hallazgo real): main() llamaba a
     # live_guard.puede_operar_live() SIN strategy/subtype -- con strategy=""
     # (falsy), la comprobación `if strategy and not estrategia_permitida(...)`
@@ -941,7 +1085,7 @@ def _instante_critico(pre: _Precalculo, lectura: dict, n_rafaga: int, ts_end: in
     resultado["_dir"], resultado["_guardas"] = direction, pre.guardas
     resultado["_envio"] = lambda: _firmar_enviar_registrar(
         pre, m, activo, direction, token_id, ask, stake_eur, STRATEGY,
-        f"offset={OFFSET_S}s rafaga_n={n_rafaga}", resultado,
+        (f"modo=twap_proy offset={OFFSET_S}s" if MODO_TWAP else f"offset={OFFSET_S}s rafaga_n={n_rafaga}"), resultado,
         pre.ts_end - MARGEN_MIN_POST_S, t_lectura_ms)
     return resultado
 
@@ -1154,6 +1298,12 @@ def _bucle_marco(marco: str) -> None:
                 time.sleep(max(0.5, ts_end + 1 - time.time()))
                 continue
             procesar_ventana(pre, ts_end)
+            # /code-review 24-Sep: con el precierre a T-45s las guardas tendrían ~57 s al llegar el
+            # naive (T+0,1s) -- se recalculan a T-PRECALCULO_ANTES_S, misma antigüedad que antes.
+            espera_g = ts_end - PRECALCULO_ANTES_S - time.time()
+            if espera_g > 0:
+                time.sleep(espera_g)
+            pre._precalcular_guardas()
             if pre.guardas.get("naive_ok"):   # = clave de config activa en el precálculo de esta ventana
                 procesar_ventana_naive(pre, ts_end)
             resto =ts_end + max(OFFSET_S, 0) + 3 - time.time()
@@ -1170,7 +1320,8 @@ def main() -> None:
     time.sleep(2)
     _log(f"resolution_sniper_precierre_executor arrancado -- DRY_RUN={DRY_RUN} "
          f"offset={OFFSET_S}s stake={STAKE_EUR}€ activos={ASSETS} marcos={list(MARCOS)} "
-         f"criterio=rafaga>={MIN_MONEDAS_RAFAGA} ask<{ASK_MAX}")
+         + (f"modo=TWAP_proy ask[{ASK_TWAP_MIN},{ASK_TWAP_MAX})" if MODO_TWAP
+            else f"criterio=rafaga>={MIN_MONEDAS_RAFAGA} ask<{ASK_MAX}"))
     hilos = {}
     hilo_clv = None
     while True:
