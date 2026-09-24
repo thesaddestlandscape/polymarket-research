@@ -1,0 +1,75 @@
+{
+ "actualizado_utc": "2026-09-24T10:49:12+00:00",
+ "criterio": {
+  "N_MIN": 60,
+  "FRAC_DIAS": 0.6,
+  "TOP_MAX": 0.3
+ },
+ "radar": {
+  "Tennis#FADE#0.60": {
+   "n": 205,
+   "dias": 24,
+   "frac_dias_pos": 0.667,
+   "top_wallet": 0.127,
+   "n_wallets": 51,
+   "pnl_medio": 0.0841,
+   "medias_tramos": [
+    0.165,
+    0.0758,
+    0.0124
+   ]
+  },
+  "CS#SEGUIR#0.65": {
+   "n": 266,
+   "dias": 30,
+   "frac_dias_pos": 0.6,
+   "top_wallet": 0.135,
+   "n_wallets": 77,
+   "pnl_medio": 0.0662,
+   "medias_tramos": [
+    0.0563,
+    0.0919,
+    0.0507
+   ]
+  },
+  "Tennis#SEGUIR#0.60": {
+   "n": 208,
+   "dias": 25,
+   "frac_dias_pos": 0.68,
+   "top_wallet": 0.096,
+   "n_wallets": 52,
+   "pnl_medio": 0.1024,
+   "medias_tramos": [
+    0.1814,
+    0.0825,
+    0.044
+   ]
+  },
+  "LoL#SEGUIR#0.45": {
+   "n": 117,
+   "dias": 26,
+   "frac_dias_pos": 0.615,
+   "top_wallet": 0.094,
+   "n_wallets": 71,
+   "pnl_medio": 0.0783,
+   "medias_tramos": [
+    0.1909,
+    0.0162,
+    0.0278
+   ]
+  },
+  "CS#FADE#0.65": {
+   "n": 284,
+   "dias": 31,
+   "frac_dias_pos": 0.71,
+   "top_wallet": 0.077,
+   "n_wallets": 84,
+   "pnl_medio": 0.1625,
+   "medias_tramos": [
+    0.1658,
+    0.1674,
+    0.1544
+   ]
+  }
+ }
+}
