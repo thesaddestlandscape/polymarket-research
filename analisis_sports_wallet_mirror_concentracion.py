@@ -64,18 +64,13 @@ def _buckets_confirmados() -> list[dict]:
 
 
 def analizar(categoria: str, tipo: str, lo: float, hi: float) -> dict | None:
-    filas = []
-    with open(DRY_RUN, encoding="utf-8") as f:
-        for r in csv.DictReader(f):
-            if r.get("categoria") != categoria or r.get("tipo") != tipo:
-                continue
-            try:
-                ask = float(r["mejor_ask_mirror"])
-            except (TypeError, ValueError, KeyError):
-                continue
-            if not (lo <= ask < hi):
-                continue
-            filas.append(r)
+    # /code-review 24-Sep: mismas unidades que confirmaron el bucket (primer
+    # disparo fillable por mercado-lado), no filas por fill -- si no, los
+    # fills repetidos diluyen la cuota real de la wallet más rápida.
+    from analisis_sports_wallet_mirror_gate_bucket_26ago import cargar_unidades_independientes
+    filas = [r for r in cargar_unidades_independientes()
+             if r.get("categoria") == categoria and r.get("tipo") == tipo
+             and lo <= float(r["mejor_ask_mirror"]) < hi]
     n = len(filas)
     if n == 0:
         return None

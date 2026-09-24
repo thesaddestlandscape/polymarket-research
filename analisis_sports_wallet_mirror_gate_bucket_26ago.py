@@ -92,9 +92,15 @@ def payout_win(precio: float) -> float:
     return STAKE * (1 - precio) / precio - STAKE * FEE * (1 - precio)
 
 
-def main() -> int:
-    historial_previo = cargar_historial_previo(OUT_PATH, anidado_por_bucket=True)
-    grupos = defaultdict(list)
+def cargar_unidades_independientes() -> list:
+    """24-Sep (fallo de método, orden de Javi): el dry-run tiene UNA FILA POR FILL
+    de cada wallet -- varias wallets/fills sobre el mismo mercado inflaban n
+    (Soccer-epl#SEGUIR fino n=68 = 10 mercados; mismo error que la regla 3b de
+    cripto). Unidad = PRIMER disparo fillable (ratio>=RATIO_MIN, ask en
+    (0.01,0.99), resuelto) por (condition_id, mirror_outcome_index, tipo): una
+    apuesta por mercado-lado, como operaría el ejecutor real. Fuente única para
+    el grid y el fino (analisis_sports_wallet_mirror_gate_bucket_fino.py)."""
+    primeras = {}
     with open(DRY_RUN, encoding="utf-8") as f:
         for row in csv.DictReader(f):
             if row.get("acierto") not in ("0", "1"):
@@ -104,10 +110,38 @@ def main() -> int:
                 ask = float(row["mejor_ask_mirror"])
             except (TypeError, ValueError, KeyError):
                 continue
-            if ratio < RATIO_MIN:
+            if ratio < RATIO_MIN or not (0.01 < ask < 0.99):
                 continue
-            if not (0.01 < ask < 0.99):
-                continue
+            k = (row.get("condition_id"), row.get("mirror_outcome_index"), row.get("tipo"))
+            if k not in primeras or row.get("timestamp_utc", "") < primeras[k].get("timestamp_utc", ""):
+                primeras[k] = row
+    return list(primeras.values())
+
+
+# /code-review 24-Sep: el historial_crudo guardado (2 de 3 días "bueno" ->
+# confirmado) se calculó con la n vieja por FILAS. Al cambiar a unidades
+# independientes se descarta UNA vez (marcador aparte, sin tocar el esquema del
+# JSON que leen sports_wallet_mirror_gate_bucket.py/sports_live_guard.py).
+METODO_N = "unidades_mercado_v1"
+
+
+def historial_valido(ruta_json: Path, anidado: bool) -> dict:
+    marcador = ruta_json.with_name(ruta_json.name + f".metodo_{METODO_N}")
+    if not marcador.exists():
+        return {}
+    return cargar_historial_previo(ruta_json, anidado_por_bucket=anidado)
+
+
+def marcar_metodo(ruta_json: Path) -> None:
+    ruta_json.with_name(ruta_json.name + f".metodo_{METODO_N}").touch()
+
+
+def main() -> int:
+    historial_previo = historial_valido(OUT_PATH, anidado=True)
+    grupos = defaultdict(list)
+    if True:  # (bloque conservado para no reindentar el cuerpo histórico)
+        for row in cargar_unidades_independientes():
+            ask = float(row["mejor_ask_mirror"])
             key = (row["categoria"], row["tipo"], bucket(ask))
             acierto = int(row["acierto"])
             pnl = payout_win(ask) if acierto == 1 else -STAKE
@@ -311,6 +345,7 @@ def main() -> int:
               f"p_abs={c['p_valor_abs']:.4f} {veredicto}")
 
     OUT_PATH.write_text(json.dumps(salida, ensure_ascii=False, indent=1), encoding="utf-8")
+    marcar_metodo(OUT_PATH)
     print(f"Categorías#tipo con datos: {len(salida)}")
     print(f"Tests con n>={N_MIN}: {m}")
     print(f"bueno_confirmado (BH-FDR): {n_confirmados_buenos} | malo_confirmado: {n_confirmados_malos}")

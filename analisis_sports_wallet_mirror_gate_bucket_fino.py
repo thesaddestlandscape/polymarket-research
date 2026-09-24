@@ -58,18 +58,13 @@ def payout_win(ask: float) -> float:
 
 
 def cargar_filas() -> dict:
+    # 24-Sep: unidad = mercado-lado independiente, no fill (ver
+    # cargar_unidades_independientes() en el grid, fuente única).
+    from analisis_sports_wallet_mirror_gate_bucket_26ago import cargar_unidades_independientes
     grupos = defaultdict(list)
-    with open(DRY_RUN, encoding="utf-8") as f:
-        for row in csv.DictReader(f):
-            if row.get("acierto") not in ("0", "1"):
-                continue
-            try:
-                ratio = float(row["ratio_vs_stake_mirror"])
-                ask = float(row["mejor_ask_mirror"])
-            except (TypeError, ValueError, KeyError):
-                continue
-            if ratio < RATIO_MIN or not (0.01 < ask < 0.99):
-                continue
+    if True:
+        for row in cargar_unidades_independientes():
+            ask = float(row["mejor_ask_mirror"])
             acierto = int(row["acierto"])
             pnl = payout_win(ask) if acierto == 1 else -STAKE
             ts = row.get("resolved_ts") or row.get("timestamp_utc", "")
@@ -81,7 +76,8 @@ def cargar_filas() -> dict:
 def main() -> int:
     grupos = cargar_filas()
     print(f"Combos (categoria,tipo): {len(grupos)}")
-    historial_previo = cargar_historial_previo(OUT, anidado_por_bucket=False)
+    from analisis_sports_wallet_mirror_gate_bucket_26ago import historial_valido, marcar_metodo
+    historial_previo = historial_valido(OUT, anidado=False)  # /code-review 24-Sep, ver el grid
     salida = {}
 
     def _preservar_historial(tupla_str: str) -> None:
@@ -181,6 +177,7 @@ def main() -> int:
     sembrar_no_confirmados(historial_previo, salida)
 
     OUT.write_text(json.dumps(salida, ensure_ascii=False, indent=1), encoding="utf-8")
+    marcar_metodo(OUT)
     print(f"Guardado en {OUT}")
     return 0
 
