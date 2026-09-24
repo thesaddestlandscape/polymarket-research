@@ -30,6 +30,8 @@ import time
 import pandas as pd
 import requests
 
+from csv_incremental import LectorIncremental
+
 BASE = os.path.dirname(os.path.abspath(__file__))
 MARKETS_GLOB = os.path.join(BASE, "data", "markets", "*.csv")
 MARKETS_GLOB_GZ = os.path.join(BASE, "data", "markets", "*.csv.gz")
@@ -136,6 +138,7 @@ def resolver_lote(market_ids: list[str], usar_api_fallback: bool = True,
 
 _INVERSO_CACHE = {"mtime": None, "mapa": {}}
 _HOY_CACHE = {"mtime": None, "mapa": {}}
+_LECTOR_HOY = LectorIncremental()
 
 
 def _indice_inverso() -> dict:
@@ -171,12 +174,25 @@ def _indice_inverso_hoy() -> dict:
     except OSError:
         return {}
     if _HOY_CACHE["mtime"] != mtime:
+        # 24-Sep: antes pd.read_csv del fichero ENTERO (~486MB a media tarde) en
+        # cada cambio de mtime (capture_markets apendiza ~cada minuto) -- py-spy:
+        # el mayor consumidor de observadores_fase0. Ahora solo lo añadido
+        # (csv_incremental.py); mismo mapa: última fila por condition_id manda,
+        # filas sin market_id/condition_id se ignoran (= dropna de antes).
+        mapa = _HOY_CACHE["mapa"]
+
+        def _fila(cab, vals, _m=mapa):
+            i_m, i_c = cab.get("market_id"), cab.get("condition_id")
+            if i_m is None or i_c is None or len(vals) <= max(i_m, i_c):
+                return
+            mid, cid = vals[i_m], vals[i_c]
+            if mid and cid:
+                _m[cid] = mid
+
         try:
-            df = pd.read_csv(path, usecols=["market_id", "condition_id"], dtype=str)
+            _LECTOR_HOY.leer(path, _fila, al_reset=mapa.clear)
         except Exception:
             return _HOY_CACHE["mapa"]
-        df = df.dropna(subset=["market_id", "condition_id"])
-        _HOY_CACHE["mapa"] = dict(zip(df["condition_id"], df["market_id"]))
         _HOY_CACHE["mtime"] = mtime
     return _HOY_CACHE["mapa"]
 
