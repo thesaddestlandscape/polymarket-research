@@ -189,3 +189,13 @@ data/**/*.tmp_*
 data/**/.tmp*
 # 24-Sep: PolyBolt spot+TWAP60, ~70 MB/día -- fuera de git (se comprime en disco)
 data/prices/polybolt_*
+# 24-Sep: estado de rotación del resolver sports (cambia cada ciclo, ~1 MB)
+data/sports/wallet_mirror_sniper_resolver_checked.json
+# 24-Sep: estado interno regenerable reescrito EN SITIO (truncate+write) cada pocos
+# segundos. Trackeado en git causaba (1) SIGBUS en `git add` (git hace mmap de
+# ficheros >32 KB; si otro proceso lo trunca mientras lo hashea, git muere sin
+# limpiar .git/index.lock -- causa del lock huérfano silencioso, rc=135 cazado
+# 08:10:42) y (2) ~50 MB de churn por lote de commit (add ~5 s, push ~25-30 s).
+data/**/*_vistos.json
+data/shadow/postmortem_procesadas.json
+data/shadow/informe_bot.xlsx

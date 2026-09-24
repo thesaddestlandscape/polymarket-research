@@ -118,6 +118,15 @@ _add_rc=0
 _trace2="$REPO_DIR/logs/.git_add_trace2.$$"
 rm -f "$_trace2"
 GIT_TRACE2_PERF="$_trace2" git add "${ADD_PATHS[@]}" >> "$LOG" 2>&1 || _add_rc=$?
+# rc>128 = git muerto por señal (135 = SIGBUS: fichero truncado en sitio por
+# otro proceso mientras git lo leía por mmap). Lock fuera y UN reintento, para
+# no perder el lote entero por una carrera puntual.
+if [ "$_add_rc" -gt 128 ]; then
+    log "  ⚠️ git add murió por señal (rc=$_add_rc) -- limpiando lock y reintentando una vez"
+    if [ -f .git/index.lock ] && ! fuser .git/index.lock >/dev/null 2>&1; then rm -f .git/index.lock; fi
+    _add_rc=0
+    git add "${ADD_PATHS[@]}" >> "$LOG" 2>&1 || _add_rc=$?
+fi
 _t_add1=$(now_ms)
 log "  ⏱ git add: $((_t_add1 - _t_add0))ms (rc=$_add_rc)"
 # 24-Sep: ~20 locks huérfanos/día, TODOS creados por este mismo `git add`
