@@ -1,10 +1,18 @@
 {
-  "actualizado_utc": "2026-09-24T08:26:54+00:00",
+  "actualizado_utc": "2026-09-24T12:20:09+00:00",
   "cutoff": "2026-09-24T08:00:00",
-  "n_unidades_fade_forward": 0,
+  "n_unidades_fade_forward": 29,
   "hipotesis": {
     "H1_peores_todas": {
-      "n": 0,
+      "n_unidades": 1,
+      "n_dias": 1,
+      "n_wallets": 1,
+      "top_wallet_pct": 1.0,
+      "hit": 1.0,
+      "ask_medio": 0.57,
+      "wilson90lo": 0.2698,
+      "pnl_medio": 0.7329,
+      "exceso_hit_vs_ask_pp": 43.0,
       "cutoff": "2026-09-24T08:00:00",
       "veredicto": "sin_concluir"
     },
