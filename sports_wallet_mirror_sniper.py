@@ -37,6 +37,7 @@ import csv
 from escritura_atomica import escribir_csv_atomico  # 23-Sep, ver ese módulo
 import fcntl
 import json
+import os
 import sys
 import time
 from datetime import datetime, timezone
@@ -108,7 +109,11 @@ RECONNECT_ESPERA_S = 5
 RECV_TIMEOUT_S = 30
 
 REFRESCO_WALLETS_S = 1800
-MAX_CIDS_POR_CICLO = 60
+MAX_CIDS_POR_CICLO = 1500  # 24-Sep: antes 60 (ver resolver_pendientes)
+BATCH_CIDS = 20            # condition_ids por petición a gamma (mismo límite práctico que sports_wallet_edge_tracker.py)
+RESOLVER_CHECKED = DIR_SPORTS / "wallet_mirror_sniper_resolver_checked.json"
+RESOLVER_MAX_SEG = 150     # /code-review 24-Sep: tope de reloj -- corre en el carril "principal"
+                           # de vigias_frecuentes_fase0.py (compartido con el resolver WM cripto)
 
 # 19-Ago: hallazgo real sobre las primeras 177 señales resueltas (petición
 # Javi, "por qué palmamos si las wallets minan pasta") -- mirrorear TODO
@@ -659,19 +664,84 @@ def outcome_por_condition_id(cid: str):
     return None
 
 
+def _outcomes_por_lote(cids: list) -> dict | None:
+    """{condition_id: índice ganador} para los cids de `cids` ya resueltos
+    (una sola petición a gamma, hasta BATCH_CIDS ids). Mismo criterio que
+    outcome_por_condition_id(): closed y un precio ~1.0. None si la petición
+    falla (el lote NO cuenta como consultado)."""
+    try:
+        r = requests.get(f"{GAMMA_API}/markets", timeout=20,
+                         params=[("condition_ids", c) for c in cids] + [("closed", "true")])
+        r.raise_for_status()
+        data = r.json()
+    except Exception as e:
+        _log(f"resolver: lote de {len(cids)} cids falló ({type(e).__name__}: {e})")
+        return None
+    out = {}
+    for m in data:
+        mcid = m.get("conditionId") or m.get("condition_id")
+        if mcid not in cids or not m.get("closed"):
+            continue
+        try:
+            precios = json.loads(m["outcomePrices"]) if isinstance(m.get("outcomePrices"), str) else m.get("outcomePrices")
+            precios = [float(p) for p in precios]
+        except Exception:
+            continue
+        for idx, p in enumerate(precios):
+            if abs(p - 1.0) < 0.01:
+                out[mcid] = idx
+                break
+    return out
+
+
 def resolver_pendientes() -> int:
+    """24-Sep: antes `sorted(cids)[:60]` cada 20 min -- con 24.176 cids
+    pendientes, los 60 primeros por orden ALFABÉTICO (casi siempre futuros
+    que tardan meses) se consultaban una y otra vez y el resto NUNCA: 65-96 %
+    de las señales de partidos ya jugados hace >7 días seguían sin resolver,
+    dejando sin n a todos los gates de sports. Ahora: lotes de BATCH_CIDS por
+    petición, rotación persistente (nunca consultados primero, por señal más
+    antigua; luego los consultados hace más tiempo), hasta MAX_CIDS_POR_CICLO."""
     if not OUT.exists():
         return 0
     with open(OUT, newline="", encoding="utf-8") as f:
         filas = list(csv.DictReader(f))
-    cids_pendientes = sorted({r["condition_id"] for r in filas
-                               if not r.get("outcome_real_index") and r.get("condition_id")})
+    primera = {}
+    for r in filas:
+        cid = r.get("condition_id")
+        if cid and not r.get("outcome_real_index"):
+            ts = r.get("timestamp_utc", "")
+            if cid not in primera or ts < primera[cid]:
+                primera[cid] = ts
+    try:
+        checked = json.loads(RESOLVER_CHECKED.read_text()) if RESOLVER_CHECKED.exists() else {}
+    except Exception:
+        checked = {}
+    checked = {c: t for c, t in checked.items() if c in primera}  # poda los ya resueltos
+    cola = sorted(primera, key=lambda c: (checked.get(c, 0.0), primera[c]))[:MAX_CIDS_POR_CICLO]
     outcomes = {}
-    for cid in cids_pendientes[:MAX_CIDS_POR_CICLO]:
-        idx = outcome_por_condition_id(cid)
-        if idx is not None:
-            outcomes[cid] = idx
+    t0 = time.time()
+    consultados = 0
+    for i in range(0, len(cola), BATCH_CIDS):
+        if time.time() - t0 > RESOLVER_MAX_SEG:
+            _log(f"resolver: tope de {RESOLVER_MAX_SEG}s alcanzado, sigue el próximo ciclo")
+            break
+        lote = cola[i:i + BATCH_CIDS]
+        res = _outcomes_por_lote(lote)
+        if res is not None:  # fallo de red/5xx/429: el lote conserva su prioridad
+            outcomes.update(res)
+            ahora = time.time()
+            for c in lote:
+                checked[c] = ahora
+            consultados += len(lote)
         time.sleep(0.3)
+    try:
+        tmp = RESOLVER_CHECKED.with_name(RESOLVER_CHECKED.name + ".tmp")
+        tmp.write_text(json.dumps(checked), encoding="utf-8")
+        os.replace(tmp, RESOLVER_CHECKED)
+    except Exception as e:
+        _log(f"aviso: no se pudo guardar {RESOLVER_CHECKED.name}: {e}")
+    _log(f"resolver: {len(primera)} cids pendientes, consultados {consultados}, resueltos {len(outcomes)}")
     if not outcomes:
         return 0
     lock_f = open(OUT_LOCK, "w")
