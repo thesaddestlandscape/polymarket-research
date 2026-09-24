@@ -49,6 +49,7 @@ N_FORWARD_MIN = 15
 PISO_EUR = Q.PISO_EUR
 OUT = REPO / "data" / "shadow" / "edge_quirurgico_zonas.json"
 HISTORIAL = REPO / "data" / "shadow" / "edge_quirurgico_historial.jsonl"
+RECHAZOS = REPO / "data" / "shadow" / "edge_quirurgico_rechazos.json"   # 24-Sep: descartes seguidos por caída de filas
 # nombre `_cache_*.pkl` = ya cubierto por .gitignore
 CACHE_TRAIN = REPO / "data" / "shadow" / "_cache_edge_quirurgico_train.pkl"
 HISTORIAL_DIAS = 60         # rotacion: no crece sin limite
@@ -144,7 +145,27 @@ def generar() -> dict:
     except Exception:
         prev_total = None
     if prev_total and n_filas_total < 0.9 * prev_total:
-        raise DatosTruncados(f"filas {n_filas_total} < 90% de la corrida previa ({prev_total}): lectura a medias")
+        # 24-Sep: sin salida, esta guarda era un estado absorbente. El truncado REAL de
+        # wallet_mirror_executor_dryrun.csv (OOM 23-Sep 06:01, 15 días perdidos para siempre)
+        # dejó el total por debajo del 90 % de forma permanente -> 300+ corridas descartadas
+        # seguidas y el JSON congelado. Una lectura a medias es puntual; una pérdida permanente
+        # se repite con un recuento estable o creciente. Tras 3 descartes seguidos que no
+        # bajan (±2 %) se acepta la nueva base (queda en el log).
+        try:
+            rech = json.loads(RECHAZOS.read_text(encoding="utf-8")).get("totales", [])
+        except Exception:
+            rech = []
+        rech = (rech + [n_filas_total])[-3:]
+        estable = len(rech) == 3 and all(b >= a * 0.98 for a, b in zip(rech, rech[1:]))
+        if not estable:
+            _escribir_atomico(RECHAZOS, json.dumps({"totales": rech, "prev_total": prev_total}))
+            raise DatosTruncados(f"filas {n_filas_total} < 90% de la corrida previa ({prev_total}): lectura a medias")
+        print(f"AVISO: caída de filas persistente ({prev_total} -> {n_filas_total}, 3 descartes estables {rech}): "
+              f"se acepta como nueva base (pérdida permanente de datos de origen, no lectura a medias)")
+    try:
+        RECHAZOS.unlink()
+    except FileNotFoundError:
+        pass
     operables, observacion, descartadas = [], [], []
     n_tuplas = 0
     for fam, activo, marco, grande, decision, filas in fuentes:
