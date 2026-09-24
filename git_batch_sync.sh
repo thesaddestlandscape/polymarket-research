@@ -91,9 +91,22 @@ if [ -d .git/rebase-merge ] || [ -d .git/rebase-apply ]; then
 fi
 
 _t_add0=$(now_ms)
-git add "${ADD_PATHS[@]}" >> "$LOG" 2>&1 || true
+_add_rc=0
+git add "${ADD_PATHS[@]}" >> "$LOG" 2>&1 || _add_rc=$?
 _t_add1=$(now_ms)
-log "  ⏱ git add: $((_t_add1 - _t_add0))ms"
+log "  ⏱ git add: $((_t_add1 - _t_add0))ms (rc=$_add_rc)"
+# 24-Sep: ~20 locks huérfanos/día, TODOS creados por este mismo `git add`
+# (5/5 incidentes cuadran al segundo con "git add: ~1s" + ningún commit),
+# sin OOM-kill, segfault ni mensaje de bash en fast.log. El watchdog tardaba
+# 3-8 min en limpiarlo (umbral 180s, cron 5min) y durante ese tiempo TODOS
+# los ciclos de commit fallaban. Tenemos git_ops.lock (nadie más del
+# pipeline muta el índice ahora mismo), así que si el lock sigue ahí y
+# ningún proceso lo tiene abierto, es huérfano de NUESTRO add: se registra
+# (rc + tamaño) para diagnosticar la causa raíz y se limpia al momento.
+if [ -f .git/index.lock ] && ! fuser .git/index.lock >/dev/null 2>&1; then
+    log "  🚨 git add (rc=$_add_rc) dejó .git/index.lock HUÉRFANO ($(stat -c %s .git/index.lock 2>/dev/null)B) -- eliminado en origen"
+    rm -f .git/index.lock
+fi
 
 if ! git diff --cached --quiet 2>/dev/null; then
     N_STAGED=$(git diff --cached --name-only 2>/dev/null | wc -l)

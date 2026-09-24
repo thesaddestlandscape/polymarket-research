@@ -209,71 +209,87 @@ def clasificar(title, event_slug=""):
     return f"{liga}-otros"
 
 
-def cargar_trades_whale(vistos: set | None = None):
-    """[(wallet, condition_id, categoria, outcome, price, ts, usd), ...]
-    dedupe por transaction_hash. `vistos` opcional (18-Ago) -- compartido
-    con cargar_trades_completo() para dedupe CRUZADO entre las dos
-    fuentes (un trade whale puede aparecer en ambas)."""
+def _clave_tx(h: str):
+    """24-Sep: dedupe por transaction_hash con 64 bits (int) en vez del string
+    de 66 chars -- el set de ~4M hashes era ~600 MB. Colisión despreciable
+    (~4M^2/2^65). Mismo comportamiento que antes para hashes vacíos/raros
+    (se deduplican por su string literal, incluido "")."""
+    if len(h) >= 18 and h[:2] == "0x":
+        try:
+            return int(h[2:18], 16)
+        except ValueError:
+            pass
+    return h
+
+
+def _acumular(agg: dict, wallet, cid, cat, outcome, price):
+    """24-Sep (OOM-kill cada corrida desde 21-Sep, 5,7 GB): en vez de una
+    lista de ~4M dicts (+ copia {**t} de otros 3,4M), se agrega en streaming
+    por (wallet, categoria, condition_id, outcome) -> [n, suma_precio].
+    Es todo lo que main() necesita (n/hit/precio_medio por wallet×categoria,
+    conteos por categoria/especialista, set de condition_ids)."""
+    k = (sys.intern(wallet), sys.intern(cat), sys.intern(cid), sys.intern(outcome))
+    v = agg.get(k)
+    if v is None:
+        agg[k] = [1, price]
+    else:
+        v[0] += 1
+        v[1] += price
+
+
+def cargar_trades_whale(vistos: set, agg: dict) -> int:
+    """Acumula en `agg` los trades whale-tier (ver _acumular); devuelve cuántos
+    se clasificaron. Dedupe por transaction_hash; `vistos` compartido con
+    cargar_trades_completo() para dedupe CRUZADO entre las dos fuentes (un
+    trade whale puede aparecer en ambas, 18-Ago)."""
     files = sorted(glob.glob(f"{DATALOGS}/polymarket_activity_*.csv*"))
-    if vistos is None:
-        vistos = set()
-    out = []
+    n = 0
     for path in files:
         opener = gzip.open if path.endswith(".gz") else open
         with opener(path, "rt") as f:
             for r in csv.DictReader(f):
                 if r.get("activo"):
                     continue
-                h = r.get("transaction_hash", "")
+                h = _clave_tx(r.get("transaction_hash", ""))
                 if h in vistos:
                     continue
                 vistos.add(h)
                 if (r.get("side") or "").strip().upper() != "BUY":
                     continue
-                title = r.get("title", "")
-                cat = clasificar(title, r.get("event_slug", ""))
+                cat = clasificar(r.get("title", ""), r.get("event_slug", ""))
                 if cat is None:
                     continue
                 try:
                     price = float(r["price"])
-                    usd = float(r.get("usd_value") or 0)
                 except (ValueError, KeyError):
                     continue
                 if not (0 < price < 1):
                     continue
-                outcome = (r.get("outcome") or "").strip().lower()
-                out.append({
-                    "wallet": r["wallet"].lower(), "condition_id": r["condition_id"],
-                    "categoria": cat, "outcome": outcome, "price": price,
-                    "ts": r.get("timestamp_utc", ""), "usd": usd,
-                })
-    return out
+                _acumular(agg, r["wallet"].lower(), r["condition_id"], cat,
+                          (r.get("outcome") or "").strip().lower(), price)
+                n += 1
+    return n
 
 
-def cargar_trades_completo(vistos_hash: set):
+def cargar_trades_completo(vistos_hash: set, agg: dict) -> int:
     """18-Ago (tarde, petición explícita Javi tras el repaso a fondo del
     sniper): cargar_trades_whale() solo veía trades >=$1000 del firehose
     COMPARTIDO de cripto (filtro whale de fetch_polymarket_activity_ws.py)
     -- la inmensa mayoría de actividad sports/esports (trades pequeños)
     nunca llegaba ahí, sesgando el descubrimiento hacia generalistas de
-    alto volumen. sports_activity_ws.py (mismo día, conexión propia sin
-    ese filtro) ya lleva acumulando -- se fusiona aquí con el histórico
-    whale (21 días) para ampliar cobertura sin perder profundidad
-    histórica. Mismo formato de fila que cargar_trades_whale(), dedupe
-    cruzado por transaction_hash (un trade whale puede aparecer en AMBAS
-    fuentes)."""
+    alto volumen. sports_activity_ws.py (conexión propia sin ese filtro) se
+    fusiona aquí con el histórico whale, dedupe cruzado por
+    transaction_hash. 24-Sep: acumula en `agg` (streaming), ver _acumular."""
     # 23-Sep: *.csv* (no solo *.csv) -- comprimir_data_historica.sh ahora
     # rota activity_ws_*.csv a .gz igual que el resto de directorios de
-    # data/ (antes se acumulaba sin límite en disco, 4.3GB+ el 23-Sep,
-    # ver feedback_disco_activity_ws_sports_sin_rotar_23sep). Mismo patrón
-    # gzip-transparente que cargar_trades_whale() unas líneas arriba.
+    # data/ (ver feedback_disco_activity_ws_sports_sin_rotar_23sep).
     files = sorted(glob.glob(str(DIR_SPORTS / "activity_ws_*.csv*")))
-    out = []
+    n = 0
     for path in files:
         opener = gzip.open if path.endswith(".gz") else open
         with opener(path, "rt", newline="", encoding="utf-8") as f:
             for r in csv.DictReader(f):
-                h = r.get("transaction_hash", "")
+                h = _clave_tx(r.get("transaction_hash", ""))
                 if h in vistos_hash:
                     continue
                 vistos_hash.add(h)
@@ -284,18 +300,14 @@ def cargar_trades_completo(vistos_hash: set):
                     continue
                 try:
                     price = float(r["price"])
-                    usd = float(r.get("usd_value") or 0)
                 except (ValueError, KeyError):
                     continue
                 if not (0 < price < 1):
                     continue
-                outcome = (r.get("outcome") or "").strip().lower()
-                out.append({
-                    "wallet": r["wallet"].lower(), "condition_id": r["condition_id"],
-                    "categoria": cat, "outcome": outcome, "price": price,
-                    "ts": r.get("timestamp_utc", ""), "usd": usd,
-                })
-    return out
+                _acumular(agg, r["wallet"].lower(), r["condition_id"], cat,
+                          (r.get("outcome") or "").strip().lower(), price)
+                n += 1
+    return n
 
 
 def resolver_outcomes(condition_ids):
@@ -371,59 +383,70 @@ def _benjamini_hochberg(pvals, fdr=FDR):
 def main():
     print("Cargando trades whale-tier de 21 dias de firehose (histórico)...")
     vistos = set()
-    trades = cargar_trades_whale(vistos)
-    print(f"trades whale-tier clasificados: {len(trades)}")
+    agg = {}
+    n_whale = cargar_trades_whale(vistos, agg)
+    print(f"trades whale-tier clasificados: {n_whale}")
     print("Cargando trades completos de sports_activity_ws.py (sin filtro whale)...")
-    trades_completo = cargar_trades_completo(vistos)
-    print(f"trades adicionales (no-whale) clasificados: {len(trades_completo)}")
-    trades = trades + trades_completo
-    print(f"total combinado: {len(trades)}")
-    por_cat = Counter(t["categoria"] for t in trades)
+    n_completo = cargar_trades_completo(vistos, agg)
+    del vistos  # ya no hace falta (era el mayor consumidor tras la lista de trades)
+    print(f"trades adicionales (no-whale) clasificados: {n_completo}")
+    n_trades = n_whale + n_completo
+    print(f"total combinado: {n_trades} ({len(agg)} claves agregadas wallet×cat×mercado×outcome)")
+    por_cat = Counter()
+    for (_w, cat, _c, _o), (n, _sp) in agg.items():
+        por_cat[cat] += n
     print("por categoria:", dict(por_cat))
 
     print("\nResolviendo outcomes via gamma-api...")
-    outcomes = resolver_outcomes([t["condition_id"] for t in trades])
+    outcomes = resolver_outcomes({k[2] for k in agg})
     print(f"mercados resueltos: {len(outcomes)}")
 
-    filas = []
-    for t in trades:
-        oc = outcomes.get(t["condition_id"])
+    # (cat, wallet) -> [n, aciertos, suma_precio] solo sobre trades resueltos
+    res_cat_wallet = defaultdict(lambda: [0, 0, 0.0])
+    n_resueltos = 0
+    for (w, cat, cid, outcome), (n, sp) in agg.items():
+        oc = outcomes.get(cid)
         if oc is None:
             continue
-        acierto = 1 if t["outcome"] == oc else 0
-        filas.append({**t, "acierto": acierto})
-    print(f"trades con outcome resuelto: {len(filas)}")
-    if not filas:
+        v = res_cat_wallet[(cat, w)]
+        v[0] += n
+        v[1] += n if outcome == oc else 0
+        v[2] += sp
+        n_resueltos += n
+    print(f"trades con outcome resuelto: {n_resueltos}")
+    if not n_resueltos:
         return
 
     # A) especialistas: >=80% de actividad (todas, no solo resueltas) en 1 categoria
     por_wallet_cat_n = defaultdict(Counter)
-    for t in trades:
-        por_wallet_cat_n[t["wallet"]][t["categoria"]] += 1
+    for (w, cat, _c, _o), (n, _sp) in agg.items():
+        por_wallet_cat_n[w][cat] += n
+    del agg
     especialistas = {}
     for w, cats in por_wallet_cat_n.items():
         total = sum(cats.values())
         top_cat, top_n = cats.most_common(1)[0]
         if total >= 5 and top_n / total >= 0.8:
             especialistas[w] = (top_cat, top_n, total)
+    del por_wallet_cat_n
     print(f"\nwallets especialistas (>=80% en 1 categoria, n>=5): {len(especialistas)}")
 
     # B) edge por (wallet, categoria), BH-FDR DENTRO de cada categoria
     print("\n=== EDGE VALIDADO POR WALLET x CATEGORIA (BH-FDR por categoria) ===")
-    por_cat_wallet = defaultdict(lambda: defaultdict(list))
-    for f in filas:
-        por_cat_wallet[f["categoria"]][f["wallet"]].append(f)
+    por_cat_wallet = defaultdict(dict)
+    for (cat, w), v in res_cat_wallet.items():
+        por_cat_wallet[cat][w] = v
+    del res_cat_wallet
 
     todas_significativas = []
     for cat, por_wallet in sorted(por_cat_wallet.items()):
-        candidatas = {w: fs for w, fs in por_wallet.items() if len(fs) >= N_MIN}
+        candidatas = {w: v for w, v in por_wallet.items() if v[0] >= N_MIN}
         if not candidatas:
             continue
         filas_cat = []
-        for w, fs in candidatas.items():
-            n = len(fs)
-            hit = sum(f["acierto"] for f in fs) / n
-            precio_medio = sum(f["price"] for f in fs) / n
+        for w, (n, aciertos, suma_precio) in candidatas.items():
+            hit = aciertos / n
+            precio_medio = suma_precio / n
             seed = (hash((cat, w)) ^ n) & 0xFFFFFFFF
             p = _shuffle_pvalue(n, precio_medio, hit, seed)
             filas_cat.append({"categoria": cat, "wallet": w, "n": n, "hit": round(hit, 4),
@@ -448,8 +471,8 @@ def main():
     salida = {
         "actualizado_utc": datetime.now(timezone.utc).isoformat(timespec="seconds"),
         "ventana_dias": 21,
-        "n_trades_whale_clasificados": len(trades),
-        "n_trades_resueltos": len(filas),
+        "n_trades_whale_clasificados": n_trades,
+        "n_trades_resueltos": n_resueltos,
         "n_wallets_especialistas": len(especialistas),
         "por_categoria_n_trades": dict(por_cat),
         "wallets_validadas": [
