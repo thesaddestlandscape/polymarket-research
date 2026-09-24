@@ -120,6 +120,7 @@ import order_flow_5m_reactivo_fase0
 import huecos_extremos_fase0
 import resolution_sniper_precierre_depth_fase0
 import momentum_ibs_ballena_botconsenso_dryrun_fase0
+import saltos_chainlink_fase0
 
 # (modulo, fichero_log_propio -- EXACTO el que ya usaba pipeline_watchdog.SCREEN_RESTART, nombre_funcion_log_a_reemplazar)
 OBSERVADORES = [
@@ -173,6 +174,11 @@ OBSERVADORES = [
     # sobrevivieron rigor completo (ver docstring del módulo) -- petición
     # explícita Javi de dejarlo corriendo unos días antes de decidir.
     (momentum_ibs_ballena_botconsenso_dryrun_fase0, "momentum_ibs_ballena_botconsenso_dryrun_fase0.log", "_log"),
+    # 24-Sep (A3 "ganarles al entrar", Javi): saltos del precio justo Chainlink/TWAP -> ask REAL del
+    # libro en ese instante. Lead-lag de 4 días: el mercado tarda ~5 s en incorporar el salto
+    # (analisis_leadlag_chainlink_libro_24sep.py). Usa el _TAIL que ya arranca
+    # resolution_sniper_observer (no arranca otro). Solo lectura.
+    (saltos_chainlink_fase0, "saltos_chainlink_fase0.log", "_log"),
 ]
 
 
