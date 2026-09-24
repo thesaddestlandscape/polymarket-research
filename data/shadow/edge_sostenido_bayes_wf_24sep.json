@@ -1,0 +1,75 @@
+{
+ "dias_evaluados": [
+  "2026-09-17",
+  "2026-09-18",
+  "2026-09-19",
+  "2026-09-20",
+  "2026-09-21",
+  "2026-09-22",
+  "2026-09-23",
+  "2026-09-24"
+ ],
+ "n_unidades": 48374,
+ "criterios": {
+  "TODO": {
+   "trades": 25241,
+   "trades_dia": 3155.1,
+   "pnl_total": -1281.25,
+   "pnl_trade": -0.0508,
+   "pnl_dia_medio": -160.156,
+   "ci90_pnl_dia": [
+    -209.07,
+    -118.127
+   ],
+   "dias_positivos": "0/8"
+  },
+  "ESTRICTO": {
+   "trades": 439,
+   "trades_dia": 54.9,
+   "pnl_total": -24.36,
+   "pnl_trade": -0.0555,
+   "pnl_dia_medio": -3.045,
+   "ci90_pnl_dia": [
+    -5.677,
+    -0.195
+   ],
+   "dias_positivos": "2/8"
+  },
+  "BAYES_T_p0.7": {
+   "trades": 1906,
+   "trades_dia": 238.2,
+   "pnl_total": -43.6,
+   "pnl_trade": -0.0229,
+   "pnl_dia_medio": -5.449,
+   "ci90_pnl_dia": [
+    -12.321,
+    0.56
+   ],
+   "dias_positivos": "2/8"
+  },
+  "BAYES_T_p0.8": {
+   "trades": 848,
+   "trades_dia": 106.0,
+   "pnl_total": -12.32,
+   "pnl_trade": -0.0145,
+   "pnl_dia_medio": -1.54,
+   "ci90_pnl_dia": [
+    -11.361,
+    8.149
+   ],
+   "dias_positivos": "3/8"
+  },
+  "BAYES_T_p0.9": {
+   "trades": 305,
+   "trades_dia": 38.1,
+   "pnl_total": -45.62,
+   "pnl_trade": -0.1496,
+   "pnl_dia_medio": -5.702,
+   "ci90_pnl_dia": [
+    -12.352,
+    1.629
+   ],
+   "dias_positivos": "2/8"
+  }
+ }
+}
