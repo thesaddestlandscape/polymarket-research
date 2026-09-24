@@ -38,6 +38,7 @@ CSV de 295MB). Con TTL, se reparsea como mucho una vez por ventana,
 independientemente de cuántas escrituras haya de por medio.
 """
 import csv
+import threading
 import time
 from datetime import datetime, timezone
 from pathlib import Path
@@ -60,6 +61,70 @@ CACHE_TTL_S = 20.0
 
 _cache = {"ts": 0.0, "fecha": None, "index": {}}
 
+# Lectura INCREMENTAL (24-Sep, mismo patrón que fetch_libro_ambos_lados.
+# _universo_activo): predictions_HOY.csv pesa ~520MB a media tarde y se
+# releía ENTERO cada 20s desde cada hilo de momentum_ibs_ballena_executor
+# (py-spy 24-Sep: 1861/2199 muestras del proceso ejeclive, dinero real).
+# shadow_predict.py solo APENDIZA a este fichero (ningún proceso lo reescribe),
+# así que basta con recordar el offset en bytes y parsear lo añadido. El índice
+# es una unión mercado->decisiones que solo crece: resultado idéntico al de la
+# relectura completa. Reset si cambia la fecha/inodo o el fichero encoge.
+# Bloques de 8MB (RAM acotada en la lectura en frío) y corte SOLO por b"\n".
+_BLOQUE_BYTES = 8 * 1024 * 1024
+_lock = threading.Lock()
+_inc = {"fecha": None, "ino": None, "offset": 0, "cab": None, "index": {}}
+
+
+def _leer_nuevas(path: Path, fecha: str) -> None:
+    """Llamar con _lock tomado. Si algo lanza, el offset no avanza y el
+    tramo se reintenta entero en la siguiente llamada."""
+    st = path.stat()
+    if _inc["fecha"] != fecha or _inc["ino"] != st.st_ino or st.st_size < _inc["offset"]:
+        _inc.update({"fecha": fecha, "ino": st.st_ino, "offset": 0, "cab": None, "index": {}})
+    if st.st_size == _inc["offset"]:
+        return
+    cab = _inc["cab"]
+    nuevos: dict[str, set] = {}
+    consumido = 0
+    resto = b""
+    with open(path, "rb") as f:
+        f.seek(_inc["offset"])
+        pendiente = st.st_size - _inc["offset"]
+        while pendiente > 0:
+            trozo = f.read(min(_BLOQUE_BYTES, pendiente))
+            if not trozo:
+                break
+            pendiente -= len(trozo)
+            partes = (resto + trozo).split(b"\n")
+            resto = partes.pop()
+            consumido += sum(len(x) + 1 for x in partes)
+            lineas = [x.rstrip(b"\r").decode("utf-8", errors="replace") for x in partes]
+            if cab is None and lineas:
+                cab = next(csv.reader([lineas[0]]))
+                lineas = lineas[1:]
+            if cab is None:
+                continue
+            i_s, i_m, i_d = cab.index("strategy"), cab.index("market_id"), cab.index("decision")
+            for vals in csv.reader(lineas):
+                if len(vals) <= max(i_s, i_m, i_d):
+                    continue
+                if vals[i_s] not in GBM_STRATEGIES:
+                    continue
+                mid, dec = vals[i_m], vals[i_d]
+                # "SKIP" (estrategia disparó pero decidió no operar) NO es una
+                # dirección real -- results.csv (base del análisis retrospectivo
+                # del 19-Ago) nunca lo incluye, así que aquí tampoco cuenta.
+                if not mid or dec not in ("BUY_YES", "BUY_NO"):
+                    continue
+                nuevos.setdefault(mid, set()).add(dec)
+    _inc["cab"] = cab
+    idx = _inc["index"]
+    for mid, decs in nuevos.items():
+        # set NUEVO (no mutar en sitio): otros hilos pueden estar iterando el
+        # set que devolvió index.get() en evaluar() fuera del cerrojo.
+        idx[mid] = idx.get(mid, set()) | decs
+    _inc["offset"] += consumido
+
 
 def _archivo_hoy() -> tuple[Path, str]:
     fecha = datetime.now(timezone.utc).strftime("%Y-%m-%d")
@@ -67,34 +132,26 @@ def _archivo_hoy() -> tuple[Path, str]:
 
 
 def _index_actualizado() -> dict:
-    ahora = time.time()
-    _, fecha = _archivo_hoy()
-    if _cache["fecha"] == fecha and ahora - _cache["ts"] < CACHE_TTL_S:
+    path, fecha = _archivo_hoy()
+    if _cache["fecha"] == fecha and time.time() - _cache["ts"] < CACHE_TTL_S:
         return _cache["index"]
-    path = DIR_SHADOW / f"predictions_{fecha}.csv"
-    index: dict[str, set] = {}
-    try:
-        with open(path, encoding="utf-8") as f:
-            for r in csv.DictReader(f):
-                s = r.get("strategy")
-                if s not in GBM_STRATEGIES:
-                    continue
-                mid = r.get("market_id")
-                dec = r.get("decision")
-                # "SKIP" (estrategia disparó pero decidió no operar) NO es una
-                # dirección real -- results.csv (base del análisis retrospectivo
-                # del 19-Ago) nunca lo incluye, así que aquí tampoco cuenta.
-                if not mid or dec not in ("BUY_YES", "BUY_NO"):
-                    continue
-                index.setdefault(mid, set()).add(dec)
-    except OSError:
-        return _cache["index"]  # fichero de hoy aún no existe -- fail-open al último caché
-    except Exception:
-        return _cache["index"]  # fail-open a la última versión cacheada, puramente informacional
-    _cache["ts"] = ahora
-    _cache["fecha"] = fecha
-    _cache["index"] = index
-    return index
+    with _lock:
+        ahora = time.time()
+        if _cache["fecha"] == fecha and ahora - _cache["ts"] < CACHE_TTL_S:
+            return _cache["index"]  # otro hilo acaba de refrescar
+        try:
+            _leer_nuevas(path, fecha)
+        except Exception:
+            # OSError = fichero de hoy aún no existe; cualquier otro = fail-open
+            # (puramente informacional). ts se actualiza también aquí: sin eso un
+            # error persistente haría que CADA evaluar() de cada hilo reintentase
+            # bajo el cerrojo, saltándose el TTL (/code-review 24-Sep).
+            _cache["ts"] = ahora
+            return _cache["index"]
+        _cache["ts"] = ahora
+        _cache["fecha"] = fecha
+        _cache["index"] = _inc["index"]
+        return _cache["index"]
 
 
 def evaluar(market_id: str, decision_propia: str) -> dict:
