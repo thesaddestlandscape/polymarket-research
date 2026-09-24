@@ -251,8 +251,9 @@
         "_obsoleta_31ago": "SUPERSEDIDA 2026-08-31: mismo motivo que bankroll_minimo_usa_solo_real_override arriba -- verificar_circuit_breaker() ya usa bkr real directo de forma permanente para freno 3. Registro historico, no renovar."
       },
       "freno_diario_pct_override": {
-        "fecha": "2026-09-22",
+        "fecha": "2026-09-24",
         "pct": 0.4,
+        "_nota_2026-09-24": "24-Sep (petición explícita Javi, junto con la sexta recarga de 10 USDC: 'levanta el freno de override para que pueda operar con normalidad'). El freno diario 30% ya había disparado hoy (caída 30.3%, 14.03→9.78€, aviso Telegram). Mismo valor 0.40 que 15-Sep/22-Sep. Autoexpira solo mañana (fecha==hoy Madrid).",
         "_nota": "22-Sep (mismo patrón día-a-día ya aprobado 28/29/31-Ago, 15-Sep): tras reabrir el freno de racha (8L seguidas de SNIPER#BTC#15min, ver _racha_reapertura_2026-09-22_sniper15min_nota) el colchón real del freno diario (30%) quedaba en solo ~1,05-1,4€ (bkr_inicio_día=20,14€, pnl_día=-4,99€) -- básicamente 1 pérdida más de cualquier estrategia volvía a parar el bot, sin dar tiempo real a que RESOLUTION_SNIPER_NAIVE (recién promocionada, n=0 real) tuviera oportunidad de disparar. Decisión explícita de Javi (22-Sep, vía AskUserQuestion, 'darle más cuello para que opere'): subir a 0.40, mismo valor que el 15-Sep. Colchón nuevo ≈3,4€ (~3 pérdidas de stake real 1,05-1,17€ antes de parar). Autoexpira solo mañana (el código solo aplica el override si fecha==hoy Madrid) salvo que se renueve con datos frescos -- revisar en la próxima sesión si sigue haciendo falta.",
         "_valor_anterior": "0.4 del 2026-09-15 (ya expirado, revalidado hoy con motivo nuevo)"
       },
@@ -913,6 +914,11 @@
       "fecha": "2026-09-03",
       "eur": 10.0,
       "nota": "Quinta recarga (petición explícita Javi, 03-Sep ~14:00 UTC, íntegramente para CRYPTO). 10 USDC nuevos + 5.8805 USDC remanente del período 4 (balance_real.json justo antes del depósito, ts 13:54:46Z) = ~15.88 USDC de capital disponible al inicio del período 5. Confirmado on-chain vía live_balance.py: free_usdc pasó de 4.145 a 14.145 (exacto +10.0) entre el fetch de las 13:54 y el de las 14:16 UTC."
+    },
+    {
+      "fecha": "2026-09-24",
+      "eur": 10.0,
+      "nota": "Sexta recarga (petición explícita Javi, 24-Sep ~14:00 UTC, íntegramente para CRYPTO). 10 USDC nuevos + 10.81 USDC remanente del período 5 (balance_real.json total cripto neto, ts 14:00:13Z) = ~20.81 USDC de capital disponible al inicio del período 6. Confirmado: pUSD on-chain 32.3977 = colateral CLOB 32.3977 a las ~14:05 UTC (a las 14:00 el colateral aún marcaba 22.40, pusd_no_reflejado_en_collateral=10.0 exacto)."
     }
   ],
   "_candidatos_extremo_090_29jul_nota": "29-Jul: FAVORITO_CONFIRMADO_60MIN_EXTREMO (BTC/ETH/SOL) y FAVORITO_CONFIRMADO_15MIN_EXTREMO (6 activos) -- umbral py>=0.90, cola extrema que ni FAVORITO_CONFIRMADO ni las variantes ALTACONVICCION (umbral 0.70) llegan a registrar por el mismo motivo (dedup por (strategy,market_id), una sola fila por mercado). Hueco medido en analisis_franja_milimetrica_ballenas.py: [0.90,1.00) con ballenas hit 90-99.9% (miles de eventos) y shadow_n=0-14 en TODOS los buckets pese al fix de ALTACONVICCION del 28-Jul. Puramente shadow, NO en pares_permitidos_live, cero dinero real. Añadidas a candidatos_evaluacion_live para que también acumulen fill-ability real desde cero (mismo patrón que las 2 ALTACONVICCION anteriores).",
