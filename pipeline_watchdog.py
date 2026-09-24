@@ -607,7 +607,7 @@ def check_results_growing():
 # ──────────────────────────────────────────────────────────────────────────────
 # FIX A: UnboundLocalError — variable usada antes de asignarse (dead code)
 # ──────────────────────────────────────────────────────────────────────────────
-def fix_unbound_local(tb: str) -> bool:
+def fix_unbound_local(tb: str):  # Path del script tocado, o False
     m = re.search(r"cannot access local variable '(\w+)' where it is not associated", tb)
     if not m:
         return False
@@ -677,7 +677,7 @@ def fix_unbound_local(tb: str) -> bool:
 
     backup.unlink(missing_ok=True)
     log(f"  [FIX-A] ✅ Fix aplicado y verificado en {script_path.name}")
-    return True
+    return script_path
 
 
 # ──────────────────────────────────────────────────────────────────────────────
@@ -730,35 +730,80 @@ def fix_log_size() -> bool:
 # ──────────────────────────────────────────────────────────────────────────────
 # GIT: commit y push del fix
 # ──────────────────────────────────────────────────────────────────────────────
-def commit_fix(descripcion: str) -> bool:
-    try:
-        subprocess.run(["git", "-C", str(REPO), "add", "-A"],
-                       timeout=10, check=True, capture_output=True)
-        r = subprocess.run(["git", "-C", str(REPO), "diff", "--cached", "--quiet"],
-                           timeout=5, capture_output=True)
-        if r.returncode == 0:
-            return False
+GIT_OPS_LOCK = REPO / "data" / "shadow" / "git_ops.lock"
 
-        subprocess.run(
-            ["git", "-C", str(REPO), "commit", "-m", f"fix(watchdog): {descripcion}"],
-            timeout=15, check=True, capture_output=True
-        )
-        subprocess.run(
-            ["git", "-C", str(REPO), "fetch", "origin"],
-            timeout=30, capture_output=True
-        )
-        subprocess.run(
-            ["git", "-C", str(REPO), "merge", "origin/main", "-X", "ours", "--no-edit"],
-            timeout=30, capture_output=True
-        )
-        subprocess.run(
-            ["git", "-C", str(REPO), "push", "origin", "main"],
-            timeout=60, check=True, capture_output=True
-        )
-        log(f"  [GIT] ✅ fix(watchdog): {descripcion}")
+
+def _git(args: list, timeout: int) -> subprocess.CompletedProcess:
+    """git con timeout SIN dejar .git/index.lock huérfano (24-Sep).
+    subprocess.run(timeout=) mata con SIGKILL y git no puede limpiar su lock:
+    si vence, se mata, se espera y se borra el lock SOLO si nadie lo tiene
+    abierto (fuser) -- mismo criterio que watchdog_fast.sh/git_batch_sync.sh.
+    Lanza TimeoutExpired igual que subprocess.run para que el caller lo trate."""
+    p = subprocess.Popen(["git", "-C", str(REPO), *args],
+                         stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+    try:
+        out, err = p.communicate(timeout=timeout)
+    except subprocess.TimeoutExpired:
+        p.kill()
+        p.wait()
+        lock = REPO / ".git" / "index.lock"
+        if lock.exists() and subprocess.run(["fuser", str(lock)],
+                                            capture_output=True).returncode != 0:
+            lock.unlink(missing_ok=True)
+            log("  [GIT] index.lock dejado por git matado por timeout -- eliminado")
+        raise
+    return subprocess.CompletedProcess(p.args, p.returncode, out, err)
+
+
+def commit_fix(descripcion: str, rutas: list) -> bool:
+    """Commit LOCAL de un auto-fix, limitado a `rutas` (24-Sep, reescrito):
+    - antes `git add -A` metía en el commit TODO el árbol (código a medio
+      editar, basura sin trackear) -- y FIX-B lo usaba para postmortem.csv,
+      que está gitignorado: los 12 "✅" del 17-Ago eran commits de otra cosa;
+    - antes no tomaba git_ops.lock (lo usan git_batch_sync.sh y
+      git_maintenance_incremental.sh) y su timeout=10 del add mataba git con
+      SIGKILL -> index.lock huérfano;
+    - antes hacía fetch + merge -X ours + push por su cuenta sobre el árbol de
+      producción. Ahora solo commitea: el push lo hace git_batch_sync.sh en su
+      siguiente lote (~5 min), con su propia recuperación de divergencias."""
+    import fcntl
+    rel = []
+    for r in rutas:
+        try:
+            rel.append(str(Path(r).resolve().relative_to(REPO.resolve())))
+        except ValueError:
+            log(f"  [GIT] ruta fuera del repo, no se commitea: {r}")
+    if not rel:
+        return False
+    try:
+        with open(GIT_OPS_LOCK, "a") as fl:
+            limite = time.time() + 120
+            while True:
+                try:
+                    fcntl.flock(fl, fcntl.LOCK_EX | fcntl.LOCK_NB)
+                    break
+                except BlockingIOError:
+                    if time.time() > limite:
+                        log("  [GIT] git_ops.lock ocupado >120s -- fix aplicado en disco, commit pendiente")
+                        return False
+                    time.sleep(2)
+            # --ignore-missing no aplica a add; -A con pathspec registra también borrados.
+            # Rutas gitignoradas (ej. postmortem.csv) -> nada que commitear.
+            tracked = _git(["ls-files", "--", *rel], timeout=60).stdout.split()
+            candidatos = [x for x in rel if x in tracked or (REPO / x).exists()]
+            if not candidatos:
+                return False
+            _git(["add", "-A", "--", *candidatos], timeout=120)
+            if _git(["diff", "--cached", "--quiet", "--", *candidatos], timeout=60).returncode == 0:
+                return False
+            r = _git(["commit", "-m", f"fix(watchdog): {descripcion}", "--", *candidatos], timeout=120)
+            if r.returncode != 0:
+                log(f"  [GIT] commit falló: {(r.stderr or r.stdout).strip()[:200]}")
+                return False
+        log(f"  [GIT] ✅ fix(watchdog): {descripcion} ({', '.join(candidatos)}) -- push en el próximo lote")
         return True
     except Exception as e:
-        log(f"  [GIT] Error en commit/push: {e}")
+        log(f"  [GIT] Error en commit: {e}")
         return False
 
 
@@ -1087,8 +1132,9 @@ def main():
                             "FIX-A NO se aplica a ciegas, requiere revisión manual")
                     else:
                         log("🔴 UnboundLocalError en fast.log → aplicando FIX-A")
-                        if fix_unbound_local(tb):
-                            commit_fix("UnboundLocalError eliminado (dead code)")
+                        ruta_fix = fix_unbound_local(tb)
+                        if ruta_fix:
+                            commit_fix("UnboundLocalError eliminado (dead code)", [ruta_fix])
                             consecutivos_silencio = 0
                         else:
                             log("  FIX-A no aplicable automáticamente — requiere revisión manual")
@@ -1131,7 +1177,8 @@ def main():
 
             # ── 4. postmortem.csv bloat ───────────────────────────────────────
             if fix_postmortem_bloat():
-                commit_fix("postmortem.csv bloat eliminado")
+                # gitignorado: commit_fix no commitea nada (antes add -A metía otra cosa)
+                commit_fix("postmortem.csv bloat eliminado", [DIR_SHADOW / "postmortem.csv"])
 
             # ── 5. fast.log rotación ──────────────────────────────────────────
             fix_log_size()

@@ -92,7 +92,11 @@ fi
 
 _t_add0=$(now_ms)
 _add_rc=0
-git add "${ADD_PATHS[@]}" >> "$LOG" 2>&1 || _add_rc=$?
+# Diagnóstico de la causa raíz (24-Sep): trace2 de git SOLO para este add
+# (fases, hijos, exit/signal). Se conserva únicamente si deja lock huérfano.
+_trace2="$REPO_DIR/logs/.git_add_trace2.$$"
+rm -f "$_trace2"
+GIT_TRACE2_PERF="$_trace2" git add "${ADD_PATHS[@]}" >> "$LOG" 2>&1 || _add_rc=$?
 _t_add1=$(now_ms)
 log "  ⏱ git add: $((_t_add1 - _t_add0))ms (rc=$_add_rc)"
 # 24-Sep: ~20 locks huérfanos/día, TODOS creados por este mismo `git add`
@@ -106,7 +110,10 @@ log "  ⏱ git add: $((_t_add1 - _t_add0))ms (rc=$_add_rc)"
 if [ -f .git/index.lock ] && ! fuser .git/index.lock >/dev/null 2>&1; then
     log "  🚨 git add (rc=$_add_rc) dejó .git/index.lock HUÉRFANO ($(stat -c %s .git/index.lock 2>/dev/null)B) -- eliminado en origen"
     rm -f .git/index.lock
+    _dest="$REPO_DIR/logs/git_add_huerfano_$(date -u +%Y%m%dT%H%M%SZ).trace2"
+    mv -f "$_trace2" "$_dest" 2>/dev/null && log "  🔎 trace2 del add guardado en $_dest"
 fi
+rm -f "$_trace2"
 
 if ! git diff --cached --quiet 2>/dev/null; then
     N_STAGED=$(git diff --cached --name-only 2>/dev/null | wc -l)
