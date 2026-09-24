@@ -1,19 +1,8 @@
 {
- "generado_utc": "2026-09-24T13:01:41+00:00",
- "forward_dias": 7,
+ "generado_utc": "2026-09-24T19:02:34+00:00",
  "cutoff": "2026-09-17T00:00:00",
- "n_forward_min": 15,
- "piso_eur": 0.1,
- "n_tuplas_degradadas": 1,
- "tuplas": {
-  "BALLENAS_TARDIAS#DOGE#5min#BUY_YES": {
-   "n_filas": 3466,
-   "dimensiones": {
-    "hora_utc": [],
-    "dia_semana": []
-   }
-  }
- },
+ "n_tuplas_degradadas": 0,
+ "tuplas": {},
  "dimensiones_pendientes": [
   "wallet_subset",
   "latencia_entrada",
