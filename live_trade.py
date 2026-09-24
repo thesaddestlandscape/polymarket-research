@@ -31,6 +31,7 @@ from live_stake import (calcular_stake, bankroll_actual, verificar_circuit_break
 from shadow_digest import enviar_telegram
 from live_balance import actualizar_balance_real, cargar_balance_real
 import ballenas_firehose_cache
+from csv_incremental import LectorIncremental
 import gate_bucket_propio as _gbp
 import wallet_mirror_gate_bucket as _wmgb
 import resolution_sniper_naive_gate_bucket as _rsngb
@@ -876,18 +877,42 @@ def _posiciones_abiertas_misma_direccion(direction: str) -> int:
     return n
 
 
+# 24-Sep (py-spy, load 13-18/4 cores): cada ciclo del fast loop llamaba a esta
+# función 2-3 veces (main + _snapshots_por_lista por cada lista) y cada llamada
+# releía ENTERO predictions_HOY.csv (~520MB a media tarde). run_fast.sh lanza
+# live_trade.py hasta 4 veces por ciclo (proceso nuevo cada vez): 8-12 lecturas
+# completas por ciclo -> 4 (una por proceso). Lectura incremental DENTRO del proceso (csv_incremental.py, mismo
+# helper ya revisado): la 1ª llamada lee todo, las siguientes solo lo añadido
+# desde entonces -> cada llamada sigue viendo el fichero tal y como está en
+# ese instante (misma semántica, ninguna señal llega más tarde). Filas dict
+# como DictReader (columnas que falten -> ausentes, .get() da None igual).
+_PRED_HOY_LECTOR = LectorIncremental()
+_PRED_HOY_ROWS: list = []
+
+
 def _cargar_predicciones_hoy() -> list:
     """Carga las predicciones de hoy con decision BUY_YES o BUY_NO."""
     hoy  = datetime.now(timezone.utc).strftime("%Y-%m-%d")
     path = DIR_SHADOW / f"predictions_{hoy}.csv"
     if not path.exists():
         return []
-    rows = []
-    with open(path, encoding="utf-8") as f:
-        for row in csv.DictReader(f):
-            if row.get("decision") in ("BUY_YES", "BUY_NO"):
-                rows.append(row)
-    return rows
+    nuevas = []
+
+    def _fila(cab, vals):
+        nombres = _fila.nombres
+        if nombres is None or len(nombres) != len(cab):
+            nombres = _fila.nombres = sorted(cab, key=cab.get)
+        row = dict(zip(nombres, vals))
+        if row.get("decision") in ("BUY_YES", "BUY_NO"):
+            nuevas.append(row)
+    _fila.nombres = None
+
+    # Si leer() lanza, el offset no avanza: se propaga igual que antes (la
+    # lectura completa también lanzaba) y en la siguiente llamada se reintenta
+    # el tramo entero; `nuevas` de un intento fallido se descarta.
+    _PRED_HOY_LECTOR.leer(path, _fila, al_reset=_PRED_HOY_ROWS.clear)
+    _PRED_HOY_ROWS.extend(nuevas)
+    return list(_PRED_HOY_ROWS)
 
 
 def _feature_match(feat_val, cond, umbral):
