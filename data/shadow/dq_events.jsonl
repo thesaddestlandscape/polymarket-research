@@ -150232,3 +150232,10 @@
 {"ts": "2026-09-24T16:05:00+00:00", "sym": "BNB", "value": 0.0244, "reason": "cambio_fuente coingecko->binance"}
 {"ts": "2026-09-24T16:07:00+00:00", "sym": "DOGE", "value": 0.0189, "reason": "cambio_fuente coingecko->binance"}
 {"ts": "2026-09-24T16:07:00+00:00", "sym": "BNB", "value": 0.0244, "reason": "cambio_fuente coingecko->binance"}
+{"ts": "2026-09-24T16:13:50+00:00", "sym": "DOGE", "value": 0.1261, "reason": "cambio_fuente coingecko->binance"}
+{"ts": "2026-09-24T16:13:50+00:00", "sym": "BNB", "value": 0.027, "reason": "cambio_fuente coingecko->binance"}
+{"ts": "2026-09-24T16:15:52+00:00", "sym": "DOGE", "value": 0.8682, "reason": "cambio_fuente coingecko->binance"}
+{"ts": "2026-09-24T16:15:52+00:00", "sym": "BNB", "value": 0.2811, "reason": "cambio_fuente coingecko->binance"}
+{"ts": "2026-09-24T16:16:58+00:00", "sym": "ETH", "value": 2688.415, "reason": "cross_source_warn coinbase=2688.4150 vs mediana=2681.7225 (0.50%)"}
+{"ts": "2026-09-24T16:16:58+00:00", "sym": "SOL", "value": 117.01, "reason": "cross_source_warn coinbase=117.0100 vs mediana=116.6950 (0.54%)"}
+{"ts": "2026-09-24T16:16:58+00:00", "sym": "XRP", "value": 1.5229, "reason": "cross_source_warn coinbase=1.5229 vs mediana=1.5164 (0.85%)"}
