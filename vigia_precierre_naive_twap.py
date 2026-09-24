@@ -74,6 +74,24 @@ def main() -> int:
                 lineas.append(f"{est.replace('RESOLUTION_SNIPER_', '')} {marco}: n={n} acierto="
                               f"{'-' if hit is None else f'{hit:.0%}'} pnl={sum(pnls):+.2f}€ "
                               f"({'-' if not n else f'{sum(pnls)/n:+.3f}'}/tr) abiertos={d['abiertos']}")
+            # 24-Sep (sustituye a vigia_resolution_sniper_naive_degradacion.py, que medía el
+            # naive VIEJO post-cierre): desglose por moneda (CLAUDE.md pt.17), misma alerta.
+            por_activo = defaultdict(list)
+            for r in cerr:
+                try:
+                    por_activo[(r.get("subtype") or "?").split("#")[0]].append(float(r["pnl_neto_eur"]))
+                except (KeyError, ValueError):
+                    pass
+            d["por_activo"] = {}
+            for act, ps in sorted(por_activo.items()):
+                h = sum(p > 0 for p in ps) / len(ps)
+                d["por_activo"][act] = {"n": len(ps), "acierto": round(h, 3), "pnl_total": round(sum(ps), 2)}
+                if esperado.get(marco) and len(ps) >= 20 and h < esperado[marco] - 0.10:
+                    alertas.append(f"⚠️ {est} {act}#{marco}: acierto real {h:.0%} (n={len(ps)}) "
+                                   f"vs esperado {esperado[marco]:.0%}")
+            if por_activo:
+                lineas.append("   " + " | ".join(f"{a} n={v['n']} {v['acierto']:.0%} {v['pnl_total']:+.2f}€"
+                                              for a, v in d["por_activo"].items()))
         if info["kill"].get("matado"):
             alertas.append(f"🛑 {est} kill-switch ACTIVO: {info['kill'].get('motivo')}")
         informe[est] = info
