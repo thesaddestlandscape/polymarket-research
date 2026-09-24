@@ -1362,5 +1362,17 @@
   "UPDOWN_GBM#XRP#240min": {
     "n": 211,
     "confirmado": false
+  },
+  "LIQUIDACIONES_DEPTH_FASE0#BTC": {
+    "n": 215,
+    "confirmado": false
+  },
+  "UPDOWN_OU_5M#BTC": {
+    "n": 202,
+    "confirmado": false
+  },
+  "UPDOWN_OU_5M#BTC#5min": {
+    "n": 202,
+    "confirmado": false
   }
 }
