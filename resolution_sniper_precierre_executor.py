@@ -336,6 +336,14 @@ ASK_TWAP_MIN, ASK_TWAP_MAX = 0.25, 0.65
 TWAP_N_MIN_TICKS = 20                    # ticks mínimos en [inicio-60, inicio] para fiarse del TWAP de apertura
 TWAP_N_MIN_CIERRE = 10                   # ticks mínimos ya transcurridos en [fin-60, ahora] (/code-review)
 TWAP_DESDE_PATH = REPO / "data" / "live" / "precierre_twap_desde.txt"   # arranque real del modo (kill-switch)
+# 24-Sep (OK Javi "dale a exigir z>=1"): filtro de margen. Las 2 pérdidas del 24-Sep 12:15 eran
+# photo finish (SOL +0,45 pb, DOGE +0,06 pb a T-44 s). z = |ln(proy/ref)| / (vol_1s * sqrt(var del
+# promedio restante)). Validado 10 días, 5min T-45, asks frescos [0,25,0,65): z<0,5 acierto 55 %
+# EV +0,06; z>=1 n=55 acierto 81-100 % EV +0,99 EUR/EUR. Naive (T+0, sin validar): mismo z con
+# suelo de varianza de 15 s (error de medida vs TWAP oficial en empates).
+Z_MIN_TWAP = 1.0
+Z_VOL_VENTANA_S = 300
+Z_VAR_SUELO_NAIVE_S = 15.0
 TWAP_ERROR_VIGENTE_S = 1800              # filas ERROR cuentan como abiertas solo 30 min (luego las reconcilia
                                          # reconciliar_fill_fantasma.py o eran fantasmas sin dinero)
 TWAP_KILL_N, TWAP_KILL_EUR = 20, 5.0     # n>=20 reales con media<0, o suma <= -5 EUR -> se cierra (latch)
@@ -363,7 +371,7 @@ _CAMPOS = [
     "whitelist_ok",  # 09-Sep, ver checklist de 6 categorías
     "t_lectura_ms", "t_firma_ms", "t_total_ms", "disparado", "order_ok", "order_error",
     "stake_eur", "t_guardas_ms",   # 23-Sep, al FINAL (ver _rotar_si_cabecera_distinta)
-    "estrategia", "t_envio_rel_cierre_s",
+    "estrategia", "t_envio_rel_cierre_s", "z_twap",
 ]
 
 
@@ -638,6 +646,34 @@ def _twap_proyectado(activo: str, ts_end: float):
     return (m * n + spot * resto) / (n + resto)
 
 
+def _z_margen(activo: str, ts_end: float, proy: float, ref: float, suelo_var_s: float = 0.0):
+    """z-score del margen del TWAP proyectado frente a la referencia (misma fórmula que la
+    validación). None si no hay ticks suficientes para la volatilidad (fail-closed en el caller)."""
+    import math
+    ult = _ultimo_oracle(activo)
+    if ult is None or proy <= 0 or ref <= 0:
+        return None
+    t_hasta = min(ult[0], ts_end)
+    precios = []
+    with _TAIL._lock:   # /code-review: recorrer desde el final, sin copiar el buffer entero (~15k ticks)
+        for t, p in reversed(_TAIL._buf_oracle.get(activo, ())):
+            if t < t_hasta - Z_VOL_VENTANA_S:
+                break
+            if t <= t_hasta and p > 0:
+                precios.append(p)
+    precios.reverse()
+    if len(precios) < 60:
+        return None
+    rets = [math.log(b / a) for a, b in zip(precios, precios[1:])]
+    media = sum(rets) / len(rets)
+    vol = math.sqrt(sum((r - media) ** 2 for r in rets) / len(rets))
+    resto = max(0.0, min(60.0, ts_end - t_hasta))
+    var_s = max((resto / 60.0) ** 2 * resto / 3.0, suelo_var_s)
+    if vol <= 0 or var_s <= 0:
+        return None
+    return abs(math.log(proy / ref)) / (vol * math.sqrt(var_s))
+
+
 def _twap_desde(path=None) -> str:
     """Instante real de arranque del modo TWAP (persistente). Se crea la primera vez."""
     path = path or TWAP_DESDE_PATH
@@ -741,8 +777,11 @@ def _leer(pre: _Precalculo, activo: str, ts_min: float | None = None) -> dict | 
             return None
         ref = m["ref_twap"]
         precio_actual = proy
+        z_twap = _z_margen(activo, pre.ts_end, proy, ref,
+                           Z_VAR_SUELO_NAIVE_S if ts_min is not None else 0.0)
     else:
         ref = m["ref_open"]
+        z_twap = None
     if precio_actual > ref:
         dir_impl = "Up"
     elif precio_actual < ref:
@@ -760,7 +799,7 @@ def _leer(pre: _Precalculo, activo: str, ts_min: float | None = None) -> dict | 
     t_lectura_ms = (time.perf_counter() - t0) * 1000
     return {"activo": activo, "direccion_implicita": dir_impl, "token_id": token_id,
             "t_lectura_ms": round(t_lectura_ms, 1), "depth": depth,
-            "market_id": m["market_id"]}
+            "market_id": m["market_id"], "z_twap": z_twap}
 
 
 def _cuenta_para_rafaga(lectura: dict | None) -> bool:
@@ -976,7 +1015,7 @@ def _instante_critico(pre: _Precalculo, lectura: dict, n_rafaga: int, ts_end: in
     t_lectura_ms = lectura["t_lectura_ms"]
     base = {"activo": activo, "direccion_implicita": dir_impl, "t_lectura_ms": t_lectura_ms,
             "marco": pre.marco, "n_rafaga": n_rafaga, "market_id": lectura["market_id"],
-            "estrategia": STRATEGY}
+            "estrategia": STRATEGY, "z_twap": lectura.get("z_twap")}
     if not depth.get("ok"):
         return {**base, "gate_confirmado": False, "gate_motivo": "sin_libro"}
 
@@ -1005,6 +1044,11 @@ def _instante_critico(pre: _Precalculo, lectura: dict, n_rafaga: int, ts_end: in
     if not en_banda:
         resultado["gate_motivo"] = f"fuera_banda_ask={ask}"
         return resultado
+    if MODO_TWAP:
+        z = lectura.get("z_twap")
+        if z is None or z < Z_MIN_TWAP:
+            resultado["gate_motivo"] = f"z_bajo={None if z is None else round(z, 2)}"
+            return resultado
     if ratio is None or ratio < MIN_RATIO_PROFUNDIDAD:
         resultado["gate_motivo"] = f"profundidad_insuficiente_ratio={ratio}"
         return resultado
@@ -1125,6 +1169,7 @@ def _instante_naive(pre: _Precalculo, lectura: dict, n_det: int, ts_end: int) ->
     r = {"activo": activo, "direccion_implicita": dir_impl, "t_lectura_ms": lectura["t_lectura_ms"],
          "marco": pre.marco, "n_rafaga": n_det, "market_id": lectura["market_id"],
          "estrategia": STRATEGY_NAIVE, "ask_implicita": ask, "ratio_vs_stake": ratio,
+         "z_twap": lectura.get("z_twap"),
          "vwap_fill_estimado": depth.get("vwap_fill_estimado"),
          "gate_confirmado": False, "gate_motivo": ""}
 
@@ -1150,6 +1195,10 @@ def _instante_naive(pre: _Precalculo, lectura: dict, n_det: int, ts_end: int) ->
     r["en_banda"] = ask < NAIVE_ASK_MAX_OPERAR
     if not r["en_banda"]:
         return _no(f"ask>={NAIVE_ASK_MAX_OPERAR}")
+    if MODO_TWAP:
+        z = lectura.get("z_twap")
+        if z is None or z < Z_MIN_TWAP:
+            return _no(f"z_bajo={None if z is None else round(z, 2)}")
     if MODO_TWAP:
         # /code-review: calculado UNA vez por ventana antes de T+0 (procesar_ventana_naive), sin I/O aquí
         matado, motivo_kill = getattr(pre, "naive_kill", (True, "sin_calcular"))
