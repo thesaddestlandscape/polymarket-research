@@ -66,6 +66,8 @@ import fetch_kalshi_btc  # 19-Ago: 5º fetcher, REST polling público sin
 import fetch_libro_book_ws  # 01-Sep: 6º fetcher, websocket oficial del CLOB
 # (wss://ws-subscriptions-clob.polymarket.com/ws/market), push no polling --
 # ver docstring del módulo (CLAUDE.md pt.21b propuesta #1, footprint pre-trade)
+import fetch_polybolt_prices  # 24-Sep: 7º fetcher, PolyBolt (price.crypto + TWAP60
+# oficial de resolución) -- sustituto de crypto_prices_chainlink de RTDS (legacy)
 
 # (modulo, fichero_log_propio -- EXACTO el que ya usaba pipeline_watchdog.SCREEN_RESTART,
 #  nombre_funcion_log_a_reemplazar, es_async)
@@ -76,6 +78,7 @@ FETCHERS = [
     (fetch_polymarket_activity_ws, "polymarket_activity.log", "_log", True),
     (fetch_kalshi_btc, "kalshi_btc15m.log", "_log", False),
     (fetch_libro_book_ws, "libro_book_ws.log", "_log", True),
+    (fetch_polybolt_prices, "polybolt.log", "_log", True),
 ]
 
 

@@ -106,6 +106,8 @@ comprimir_dir data/trades "*.csv"
 # añadir: data/prices/*.csv SIN prefijo (klines) NO se toca, dashboard_
 # server sí lee hasta 7 días de esos -- se rompería con DIAS_MANTENER=5.
 comprimir_dir data/prices "chainlink_*.csv"
+# 24-Sep: PolyBolt (fetch_polybolt_prices.py), ~70 MB/día, sin lectores todavía
+comprimir_dir data/prices "polybolt_*.csv"
 # 11-Sep (barrido de salud, disco a 94%/5GB libres, git empezó a fallar por
 # "No space left on device"): sports_spread_fase0_*.csv (sports_spread_
 # observer_fase0.py) nunca se había añadido a esta rotación -- crecía sin

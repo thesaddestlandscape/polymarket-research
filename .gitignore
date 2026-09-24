@@ -187,3 +187,5 @@ data/**/*.tmp[0-9]*
 data/**/*.tmp.*
 data/**/*.tmp_*
 data/**/.tmp*
+# 24-Sep: PolyBolt spot+TWAP60, ~70 MB/día -- fuera de git (se comprime en disco)
+data/prices/polybolt_*
