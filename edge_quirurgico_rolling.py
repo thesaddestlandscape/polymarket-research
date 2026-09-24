@@ -202,6 +202,15 @@ def generar() -> dict:
                 z["forward_ok_estricto"] = bool(z["forward_ok"] and lo_b > 0)
             else:
                 z["forward_ic90"], z["forward_ok_estricto"] = None, False
+            # 24-Sep (C5): la familia clásica (results.csv, única con `decision`) se mide al
+            # precio_yes_mercado de la señal, que va desfasado: la auditoría con ask real
+            # posterior (analisis_auditoria_twap_estrategias_24sep.py, 290.685 señales) da
+            # €/tr ≈0 o negativo donde results.csv marca +0,3/+0,7. Sus zonas no son
+            # ejecutables -> siempre a observación, marcadas, nunca "operables".
+            if decision is not None:
+                z["precio_medido"] = "senal_results_csv_desfasado"
+                z["forward_ok_precio_senal"], z["forward_ok"] = z["forward_ok"], False
+                z["forward_ok_estricto"] = False
             (operables if z["forward_ok"] else observacion).append(z)
     operables.sort(key=lambda z: -(z["pnl_forward"] or 0))
     observacion.sort(key=lambda z: -(z["pnl_forward"] if z["pnl_forward"] is not None else -9))
