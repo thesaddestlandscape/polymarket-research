@@ -177,3 +177,13 @@ data/shadow/perps_fills_full_state.json
 
 # 23-Sep: temporales de escritura_atomica.py (se limpian solos si el proceso muere)
 *.csv.tmp[0-9]*
+# 24-Sep: temporales de escritura atómica en data/ (tmp + os.replace). `git add
+# data/shadow/` los veía durante el recorrido y, si el escritor los renombraba
+# antes del stat, git moría con "fatal: unable to stat ...tmp" (rc=128) y ese
+# lote de commit se perdía. Patrones vistos en el código: *.json.tmp, *.tmp,
+# *.tmp.json, *.tmp.pkl, *.csv.tmp<pid>, *.csv.tmp_backfill, .tmp_ballenas_*.
+data/**/*.tmp
+data/**/*.tmp[0-9]*
+data/**/*.tmp.*
+data/**/*.tmp_*
+data/**/.tmp*
