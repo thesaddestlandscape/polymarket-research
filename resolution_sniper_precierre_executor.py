@@ -252,7 +252,15 @@ def naive_camino_rapido_activo(cfg: dict | None = None) -> bool:
         return False   # sin config legible: el camino rápido NO opera
 STRATEGY_NAIVE = "RESOLUTION_SNIPER_NAIVE"
 NAIVE_OFFSET_S = 0.0
-NAIVE_MAX_ENVIO_S = 2.5          # nunca enviar después de T+2,5s (Javi: 0-3s)
+# 24-Sep: el corte REAL del exchange está en ~+1,5 s tras el cierre (sondeo post-only aceptado a
+# +0,19 s; accepting_orders=True hasta +1,5 s mediana en 15.702 ventanas; las 59/59 órdenes naive
+# rechazadas eran a >=+2 s). Límite de envío +1,2 s.
+NAIVE_MAX_ENVIO_S = 1.2
+# 24-Sep: NAIVE con regla TWAP (ver MODO_TWAP): solo 5min (lo validado con curva_cierre 9-24 Sep:
+# ask del ganador en [0,05,0,80) a T-1..+0,5 s, n~130, EV positivo; [0,80,0,97) EV -0,04).
+NAIVE_TWAP_MARCOS = {"5min"}
+NAIVE_TWAP_KILL_LATCH_NAME = "naive_twap_kill.json"
+NAIVE_TWAP_DESDE_NAME = "naive_twap_desde.txt"
 NAIVE_ASK_MIN, NAIVE_ASK_MAX_DET, NAIVE_ASK_MAX_OPERAR = 0.05, 0.95, 0.80
 NAIVE_RATIO_MIN = 5.0
 NAIVE_MIN_MONEDAS = 2
@@ -620,8 +628,9 @@ def _twap_proyectado(activo: str, ts_end: float):
     if ult is None or time.time() - ult[0] > CHAINLINK_MAX_EDAD_S + 2.0:
         return None
     t_ult, spot = ult
-    m, n = _media_tail(activo, ts_end - 60, t_ult)
-    resto = max(0.0, min(60.0, ts_end - t_ult))
+    t_hasta = min(t_ult, ts_end)   # /code-review: nunca ticks posteriores al cierre (naive a T+0)
+    m, n = _media_tail(activo, ts_end - 60, t_hasta)
+    resto = max(0.0, min(60.0, ts_end - t_hasta))
     if resto >= 60.0:
         return spot
     if m is None or n < TWAP_N_MIN_CIERRE:
@@ -629,36 +638,39 @@ def _twap_proyectado(activo: str, ts_end: float):
     return (m * n + spot * resto) / (n + resto)
 
 
-def _twap_desde() -> str:
+def _twap_desde(path=None) -> str:
     """Instante real de arranque del modo TWAP (persistente). Se crea la primera vez."""
+    path = path or TWAP_DESDE_PATH
     try:
-        if TWAP_DESDE_PATH.exists():
-            return TWAP_DESDE_PATH.read_text(encoding="utf-8").strip()
+        if path.exists():
+            return path.read_text(encoding="utf-8").strip()
         v = datetime.now(timezone.utc).isoformat(timespec="seconds")
-        TWAP_DESDE_PATH.write_text(v, encoding="utf-8")
+        path.write_text(v, encoding="utf-8")
         return v
     except Exception:
         return "1970-01-01T00:00:00"   # fail-closed: cuenta TODOS los trades de la estrategia
 
 
-def _kill_twap() -> tuple[bool, str]:
-    """(matado, motivo) del modo TWAP. Latch persistente; fail-closed si el latch es ilegible
-    o trades.csv no se puede leer."""
+def _kill_twap(strategy: str = None, latch=None, desde_path=None, etiqueta: str = "PRECIERRE") -> tuple[bool, str]:
+    """(matado, motivo) del modo TWAP de `strategy` (por defecto el precierre). Latch persistente;
+    fail-closed si el latch es ilegible o trades.csv no se puede leer."""
     import json
-    if TWAP_KILL_LATCH.exists():
+    strategy = strategy or STRATEGY
+    TWAP_KILL_LATCH_ = latch or TWAP_KILL_LATCH
+    desde = _twap_desde(desde_path or TWAP_DESDE_PATH)
+    if TWAP_KILL_LATCH_.exists():
         try:
-            d = json.loads(TWAP_KILL_LATCH.read_text(encoding="utf-8"))
+            d = json.loads(TWAP_KILL_LATCH_.read_text(encoding="utf-8"))
             if not isinstance(d, dict) or d.get("matado"):
                 return True, (d or {}).get("motivo", "latch") if isinstance(d, dict) else "latch_corrupto"
         except Exception:
             return True, "latch_ilegible"
     pnls, abiertos = [], 0.0
-    desde = _twap_desde()
     ahora = time.time()
     try:
         with open(lt.TRADES_CSV, encoding="utf-8") as f:
             for r in csv.DictReader(f):
-                if r.get("strategy") != STRATEGY or (r.get("timestamp_utc") or "") < desde:
+                if r.get("strategy") != strategy or (r.get("timestamp_utc") or "") < desde:
                     continue
                 st = r.get("status")
                 if st == "CLOSED":
@@ -687,13 +699,13 @@ def _kill_twap() -> tuple[bool, str]:
         motivo = f"peor caso {sum(pnls) - abiertos:+.2f} EUR (cerrados n={len(pnls)}, abiertos {abiertos:.2f})"
     if motivo:
         try:
-            tmp = TWAP_KILL_LATCH.with_name(TWAP_KILL_LATCH.name + ".tmp")
+            tmp = TWAP_KILL_LATCH_.with_name(TWAP_KILL_LATCH_.name + ".tmp")
             tmp.write_text(json.dumps({"matado": True, "motivo": motivo,
                                        "ts": datetime.now(timezone.utc).isoformat(timespec="seconds")}), encoding="utf-8")
             import os
-            os.replace(tmp, TWAP_KILL_LATCH)
+            os.replace(tmp, TWAP_KILL_LATCH_)
             from shadow_digest import enviar_telegram
-            enviar_telegram(f"🛑 PRECIERRE modo TWAP CERRADO por kill-switch: {motivo}")
+            enviar_telegram(f"🛑 {etiqueta} modo TWAP CERRADO por kill-switch: {motivo}")
         except Exception:
             pass
         return True, motivo
@@ -710,7 +722,7 @@ def _leer(pre: _Precalculo, activo: str, ts_min: float | None = None) -> dict | 
         return None
 
     tick = _ultimo_tick(activo)
-    if ts_min is not None:
+    if ts_min is not None and not MODO_TWAP:   # modo TWAP: la dirección sale del TWAP, no del tick post-cierre
         limite = time.time() + NAIVE_ESPERA_TICK_POST_S
         while (tick is None or tick[0] < ts_min) and time.time() < limite:
             time.sleep(0.02)
@@ -720,8 +732,8 @@ def _leer(pre: _Precalculo, activo: str, ts_min: float | None = None) -> dict | 
     if tick is None or time.time() - tick[0] > CHAINLINK_MAX_EDAD_S:
         return None
     precio_actual = tick[1]
-    if MODO_TWAP and ts_min is None:
-        # precierre modo TWAP: regla real de resolución (TWAP fin vs TWAP apertura)
+    if MODO_TWAP:
+        # modo TWAP (precierre y naive): regla real de resolución (TWAP fin vs TWAP apertura)
         if m.get("ref_twap") is None:
             return None
         proy = _twap_proyectado(activo, pre.ts_end)
@@ -1126,23 +1138,31 @@ def _instante_naive(pre: _Precalculo, lectura: dict, n_det: int, ts_end: int) ->
         return _no(f"guardas:{g.get('motivo')}")
     if not g.get("naive_ok"):
         return _no(f"guardas_naive:{g.get('naive_motivo')}")
-    if (activo, pre.marco) not in _naive_viejo.COMBOS_CONFIRMADOS:
+    if not MODO_TWAP and (activo, pre.marco) not in _naive_viejo.COMBOS_CONFIRMADOS:
         return _no("combo_no_confirmado")
     if not _naive_fillable(lectura):
         return _no(f"no_fillable_ask={ask}_ratio={ratio}")
-    r["rafaga_ok"] = n_det >= NAIVE_MIN_MONEDAS
+    # 24-Sep: en modo TWAP no se exige quórum (validación por mercado) y no aplican combos, gate
+    # rsngb ni CLV: salen de historia con la dirección SPOT (regla equivocada, 89 %).
+    r["rafaga_ok"] = MODO_TWAP or n_det >= NAIVE_MIN_MONEDAS
     if not r["rafaga_ok"]:
         return _no(f"deteccion_aislada_n={n_det}")
     r["en_banda"] = ask < NAIVE_ASK_MAX_OPERAR
     if not r["en_banda"]:
         return _no(f"ask>={NAIVE_ASK_MAX_OPERAR}")
-    gb = rsngb.evaluar(activo, pre.marco, dir_impl, ask)
-    r["gate_legacy_motivo"] = f"rsngb={gb.get('veredicto')}"
-    if gb.get("veredicto") != "bueno_confirmado":
-        return _no(f"micro_bucket={gb.get('veredicto')}")
-    py_yes = ask if dir_impl == "Up" else round(1.0 - ask, 6)   # convención results.csv (precio YES)
-    if _clv_veta(activo, pre.marco, direction, py_yes):
-        return _no("veto_clv")
+    if MODO_TWAP:
+        # /code-review: calculado UNA vez por ventana antes de T+0 (procesar_ventana_naive), sin I/O aquí
+        matado, motivo_kill = getattr(pre, "naive_kill", (True, "sin_calcular"))
+        if matado:
+            return _no(f"kill_twap:{motivo_kill}")
+    else:
+        gb = rsngb.evaluar(activo, pre.marco, dir_impl, ask)
+        r["gate_legacy_motivo"] = f"rsngb={gb.get('veredicto')}"
+        if gb.get("veredicto") != "bueno_confirmado":
+            return _no(f"micro_bucket={gb.get('veredicto')}")
+        py_yes = ask if dir_impl == "Up" else round(1.0 - ask, 6)   # convención results.csv (precio YES)
+        if _clv_veta(activo, pre.marco, direction, py_yes):
+            return _no("veto_clv")
     if m["market_id"] in g["ya_operados"] or m["market_id"] in _mercados_enviados:
         return _no("ya_operado")
     if g["abiertas"].get(direction, 99) >= g["max_correl"]:
@@ -1174,17 +1194,30 @@ def _instante_naive(pre: _Precalculo, lectura: dict, n_det: int, ts_end: int) ->
     if pre.client is None:
         return _no("sin_cliente_clob")
     r["gate_confirmado"] = True
-    r["gate_motivo"] = f"naive_monedas={n_det}"
+    r["gate_motivo"] = "naive_twap" if MODO_TWAP else f"naive_monedas={n_det}"
     r["_dir"], r["_guardas"] = direction, pre.guardas
     r["_envio"] = lambda: _firmar_enviar_registrar(
         pre, m, activo, direction, lectura["token_id"], ask, stake_eur,
-        STRATEGY_NAIVE, f"offset=+{NAIVE_OFFSET_S}s monedas={n_det}", r,
+        STRATEGY_NAIVE, (f"modo=twap offset=+{NAIVE_OFFSET_S}s" if MODO_TWAP
+                         else f"offset=+{NAIVE_OFFSET_S}s monedas={n_det}"), r,
         ts_end + NAIVE_MAX_ENVIO_S, lectura["t_lectura_ms"])
     return r
 
 
 def procesar_ventana_naive(pre: _Precalculo, ts_end: int) -> None:
     """T+0: 6 libros en paralelo, quórum de ráfaga de golpe, decisión y envío por moneda."""
+    if MODO_TWAP and pre.marco not in NAIVE_TWAP_MARCOS:
+        # /code-review: dejar rastro (tuplas en whitelist pero marco no validado para la regla TWAP)
+        _append_csv({"timestamp_utc": datetime.now(timezone.utc).isoformat(timespec="milliseconds"),
+                     "ts_end": ts_end, "dry_run": DRY_RUN, "marco": pre.marco, "activo": "*",
+                     "estrategia": STRATEGY_NAIVE, "gate_confirmado": False,
+                     "gate_motivo": "naive_twap_marco_no_validado"})
+        return
+    if MODO_TWAP:
+        # /code-review: kill-switch del naive una vez por ventana y ANTES de dormir hasta T+0
+        # (lee trades.csv; fuera del camino crítico)
+        pre.naive_kill = _kill_twap(STRATEGY_NAIVE, REPO / "data" / "live" / NAIVE_TWAP_KILL_LATCH_NAME,
+                                    REPO / "data" / "live" / NAIVE_TWAP_DESDE_NAME, "NAIVE")
     objetivo = ts_end + NAIVE_OFFSET_S
     espera = objetivo - time.time()
     if espera < -1.0:
@@ -1193,7 +1226,7 @@ def procesar_ventana_naive(pre: _Precalculo, ts_end: int) -> None:
     if espera > 0:
         time.sleep(espera)
     futuros = {_POOL_LIBROS.submit(_leer, pre, a, ts_end - NAIVE_TICK_ANTES_CIERRE_S): a for a in ASSETS
-               if (a, pre.marco) in _naive_viejo.COMBOS_CONFIRMADOS}
+               if MODO_TWAP or (a, pre.marco) in _naive_viejo.COMBOS_CONFIRMADOS}
     hechos, pendientes = wait(futuros, timeout=NAIVE_ESPERA_TICK_POST_S + MAX_ESPERA_LECTURAS_S)
     lecturas = []
     for f in hechos:
