@@ -120,16 +120,43 @@ def resolver_una_pasada() -> int:
     if not abiertas:
         return 0
 
-    cids = sorted({r["market_id"] for r in abiertas if r.get("market_id")})[:MAX_CIDS_POR_CICLO]
     # 21-Sep (/code-review): es_void_5050() cuesta 1 llamada HTTP extra -- solo
     # para cids con end_date YA vencido (un mercado aun no vencido no puede
     # estar anulado 50-50), no para los ~20 abiertos de cada pasada.
     _ahora = datetime.now(timezone.utc)
     vencidos = set()
+    fin_por_cid = {}
     for r in abiertas:
         _te = _parse_dt(r.get("end_date"))
-        if _te is not None and _te < _ahora:
-            vencidos.add(r.get("market_id"))
+        cid = r.get("market_id")
+        if _te is not None and cid:
+            fin_por_cid[cid] = min(_te, fin_por_cid.get(cid, _te))
+            if _te < _ahora:
+                vencidos.add(cid)
+    # 24-Sep: antes sorted(cids)[:MAX] -- orden ALFABÉTICO: con >MAX abiertos,
+    # los mismos MAX se consultaban siempre y el resto nunca (mismo fallo que
+    # dejó sin resolver el 65-96 % del dry-run de sports). Ahora dos grupos con
+    # rotación propia cada 10 min (sin estado): vencidos (fin más antiguo
+    # primero) y NO vencidos / sin end_date, que también pueden resolverse
+    # (/code-review: 13 de 23 trades reales cerraron ANTES de su end_date). Los
+    # no vencidos tienen reservado >=1/4 de las plazas, así una cola de vencidos
+    # atascados (disputa/anulación) nunca los deja sin consultar.
+    _lejano = datetime.max.replace(tzinfo=timezone.utc)
+    todos = {r["market_id"] for r in abiertas if r.get("market_id")}
+    venc = sorted(vencidos & todos, key=lambda c: fin_por_cid.get(c, _lejano))
+    resto = sorted(todos - vencidos, key=lambda c: fin_por_cid.get(c, _lejano))
+    turno = int(time.time() // 600)
+
+    def _rotar(lista: list, k: int) -> list:
+        if len(lista) <= k:
+            return lista
+        d = (turno * k) % len(lista)
+        return (lista[d:] + lista[:d])[:k]
+
+    plazas_resto = min(len(resto), max(1, MAX_CIDS_POR_CICLO // 4))
+    elegidos_venc = _rotar(venc, MAX_CIDS_POR_CICLO - plazas_resto)
+    elegidos_resto = _rotar(resto, MAX_CIDS_POR_CICLO - len(elegidos_venc))
+    cids = elegidos_venc + elegidos_resto
 
     # Consulta de red (lenta) -- SIN mantener el lock, para no bloquear
     # registrar_trade() más de lo necesario.

@@ -19,6 +19,7 @@ análisis. Solo lectura de gamma-api + escritura de este CSV -- no toca
 config_live.json, no ejecuta nada, no toca dinero.
 """
 import csv
+from escritura_atomica import escribir_csv_atomico
 import fcntl
 import sys
 from pathlib import Path
@@ -112,10 +113,10 @@ def main():
                     r["resolved_ts"] = datetime.now(timezone.utc).isoformat(timespec="seconds")
                     resueltas_ahora += 1
                 if resueltas_ahora:
-                    with open(TRACKER, "w", newline="", encoding="utf-8") as f:
-                        w = csv.DictWriter(f, fieldnames=list(filas[0].keys()))
-                        w.writeheader()
-                        w.writerows(filas)
+                    # 24-Sep: atómico (tmp+fsync+os.replace). Reescribir EN SITIO truncaba el
+                    # fichero mientras `git add` lo leía por mmap -> SIGBUS -> .git/index.lock
+                    # huérfano. El ejecutor abre en "a" en cada escritura bajo el mismo lock.
+                    escribir_csv_atomico(TRACKER, list(filas[0].keys()), filas)
             finally:
                 fcntl.flock(lock_f, fcntl.LOCK_UN)
         finally:
