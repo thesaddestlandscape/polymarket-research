@@ -268,6 +268,7 @@ def main():
                 a = ask_tras(L[mid][tok], t) if tok else None
                 pa = pnl1(a, ac) if a else None
             filas.append({"st": st, "act": act, "marco": marco, "dia": dia, "t": t, "ac": ac,
+                          "dec": dec, "bpy": f"{int(py / 0.05 + 1e-9) * 0.05:.2f}",
                           "pm": pnl1(entry, ac), "pa": pa,
                           "coinc": (None if e is None else e[0] == dec),
                           "z": None if e is None else e[1],
@@ -277,6 +278,9 @@ def main():
         del cl, L
     grupos = defaultdict(list)
     for x in filas:
+        # 24-Sep (Javi: "¿nos pasa en más estrategias?"): mismo micro-bucket que gate_bucket_propio
+        # (precio_yes_mercado, paso 0,05) para cruzar sus bueno_confirmado con el ask real.
+        grupos[("BUCKET", f"{x['st']}#{x['act']}#{x['marco']}#{x['dec']}", x["bpy"])].append(x)
         base = (x["st"], x["act"], x["marco"])
         grupos[base + ("TODO",)].append(x)
         if x["coinc"] is None:
