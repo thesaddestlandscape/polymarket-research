@@ -71,9 +71,9 @@ CAMPOS_VIGILADOS = ["description", "resolutionSource", "feeSchedule",
 def _log(msg: str) -> None:
     ts = datetime.now(timezone.utc).isoformat(timespec="seconds")
     line = f"[{ts}] {msg}"
+    # 24-Sep: solo stdout -- el cron ya redirige stdout a LOG; escribir
+    # además en LOG duplicaba cada línea.
     print(line, flush=True)
-    with open(LOG, "a", encoding="utf-8") as f:
-        f.write(line + "\n")
 
 
 def _limpiar_html(html: str) -> str:
@@ -107,6 +107,26 @@ def _extraer_cuerpo_changelog(texto: str) -> str:
     return "\n".join(lineas)
 
 
+_CABECERA_RE = re.compile(
+    r"^(?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)[a-z]* \d{1,2}, \d{4}\b.*$")
+
+
+def _parsear_entradas(cuerpo: str) -> dict:
+    """{cabecera: [líneas]} -- cada entrada del changelog empieza por una
+    línea 'Mon D, YYYY Título'. Se ignoran separadores sueltos (​)."""
+    entradas, actual = {}, None
+    for l in cuerpo.splitlines():
+        l = l.strip().strip("\u200b").strip()
+        if not l:
+            continue
+        if _CABECERA_RE.match(l):
+            actual = l
+            entradas.setdefault(actual, [])
+        elif actual:
+            entradas[actual].append(l)
+    return entradas
+
+
 def revisar_changelog_oficial() -> dict | None:
     """Devuelve {'cambio': bool, 'nuevo_fragmento': str|None} o None si
     falla la petición (best-effort, no crítico -- la fuente B cubre el
@@ -136,22 +156,31 @@ def revisar_changelog_oficial() -> dict | None:
     texto_anterior = anterior.get("texto", "")
 
     resultado = {"cambio": False, "nuevo_fragmento": None}
-    if hash_anterior is not None and hash_anterior != hash_actual:
-        # nuevo contenido: las entradas son fecha-primero (más reciente
-        # arriba) -- el fragmento nuevo es lo que aparece ANTES del punto
-        # donde el texto vuelve a coincidir con el snapshot anterior.
-        import difflib
-        sm = difflib.SequenceMatcher(None, texto_anterior, cuerpo)
-        bloques_nuevos = []
-        for tag, i1, i2, j1, j2 in sm.get_opcodes():
-            if tag in ("insert", "replace"):
-                bloques_nuevos.append(cuerpo[j1:j2])
-        fragmento = "\n".join(b.strip() for b in bloques_nuevos if b.strip())
-        resultado["cambio"] = True
-        resultado["nuevo_fragmento"] = fragmento[:2000]
+    # 24-Sep: diff POR ENTRADA (cabecera "Mon D, YYYY título"), no difflib
+    # sobre la página entera. Antes: 6 avisos con fragmentos reciclados y
+    # troceados (16-24 Sep) por re-renderizados de la página, y la subida
+    # del taker delay a 150ms (añadida como LÍNEA dentro de la entrada
+    # "Sep 4 Data API v2", no como entrada nueva) llegó mezclada con texto
+    # viejo. Ahora solo avisa de entradas nuevas o de líneas nuevas dentro
+    # de una entrada existente, con su cabecera.
+    entradas = _parsear_entradas(cuerpo)
+    previas = anterior.get("entradas") or _parsear_entradas(texto_anterior)
+    if hash_anterior is not None and hash_anterior != hash_actual and previas:
+        trozos = []
+        for cab, lineas in entradas.items():
+            if cab not in previas:
+                trozos.append("🆕 " + cab + "\n" + "\n".join(lineas))
+            else:
+                vistas = set(previas[cab])
+                nuevas = [l for l in lineas if l not in vistas]
+                if nuevas:
+                    trozos.append("✏️ " + cab + " (líneas añadidas):\n" + "\n".join(nuevas))
+        if trozos:
+            resultado["cambio"] = True
+            resultado["nuevo_fragmento"] = "\n\n".join(trozos)[:3000]
 
     CHANGELOG_STATE.write_text(json.dumps({
-        "hash": hash_actual, "texto": cuerpo,
+        "hash": hash_actual, "texto": cuerpo, "entradas": entradas,
         "actualizado": datetime.now(timezone.utc).isoformat(timespec="seconds"),
         "primera_vez": hash_anterior is None,
     }, ensure_ascii=False, indent=2), encoding="utf-8")

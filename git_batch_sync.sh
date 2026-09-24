@@ -90,6 +90,27 @@ if [ -d .git/rebase-merge ] || [ -d .git/rebase-apply ]; then
     fi
 fi
 
+# 24-Sep: una sola ruta/patrón sin coincidencias hace que `git add` aborte
+# ENTERO (fatal: pathspec ... did not match, rc=128) -- el lote slow llevaba
+# 1.996 fallos seguidos por "data/wallets/leaderboard_*.csv" (los leaderboards
+# pasaron a .csv.gz y data/wallets/ está gitignorado). Se descartan las rutas
+# que git no ve (ni trackeadas ni nuevas no ignoradas); un fichero trackeado
+# borrado sigue saliendo en --cached, así que su borrado se commitea igual.
+_add_ok=()
+for _p in "${ADD_PATHS[@]}"; do
+    # visión de GIT, no del disco: un patrón que solo coincide con ficheros
+    # gitignorados también hace abortar el add (caso real leaderboard_*.csv)
+    if [ -n "$(git ls-files --cached --others --exclude-standard -- "$_p" 2>/dev/null | head -1)" ]; then
+        _add_ok+=("$_p")
+    else
+        log "  ⚠️ ruta sin coincidencias, se omite del git add: $_p"
+    fi
+done
+ADD_PATHS=("${_add_ok[@]}")
+if [ "${#ADD_PATHS[@]}" -eq 0 ]; then
+    log "  ⚠️ ninguna ruta del lote existe -- nada que añadir"
+    exit 0
+fi
 _t_add0=$(now_ms)
 _add_rc=0
 # Diagnóstico de la causa raíz (24-Sep): trace2 de git SOLO para este add
