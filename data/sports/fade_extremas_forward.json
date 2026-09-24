@@ -1,18 +1,31 @@
 {
-  "actualizado_utc": "2026-09-24T07:43:14+00:00",
+  "actualizado_utc": "2026-09-24T08:26:54+00:00",
   "cutoff": "2026-09-24T08:00:00",
   "n_unidades_fade_forward": 0,
   "hipotesis": {
     "H1_peores_todas": {
       "n": 0,
+      "cutoff": "2026-09-24T08:00:00",
       "veredicto": "sin_concluir"
     },
     "H2_malas_ask_020_030": {
       "n": 0,
+      "cutoff": "2026-09-24T08:00:00",
       "veredicto": "sin_concluir"
     },
     "H3_peores_longshot_ask_lt_050": {
       "n": 0,
+      "cutoff": "2026-09-24T08:00:00",
+      "veredicto": "sin_concluir"
+    },
+    "H4_ufc_fade": {
+      "n": 0,
+      "cutoff": "2026-09-24T08:40:00",
+      "veredicto": "sin_concluir"
+    },
+    "H5_epl_otros_fade": {
+      "n": 0,
+      "cutoff": "2026-09-24T08:40:00",
       "veredicto": "sin_concluir"
     }
   }
