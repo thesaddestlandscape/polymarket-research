@@ -27741,3 +27741,11 @@ timestamp_utc,condition_id,market_slug,activo,marco,lado_mayoria,n_votos_trigger
 2026-09-24T17:23:05+00:00,0xcf696b0f5e50ec28b944a8143064def4e25ce6f05c1e0db09b9c3fe1c95868b0,sol-updown-15m-1790270100,SOL,15min,Up,2,0.62,614.3,0.18,440.4,0.19,5.56,1,0,0,0,fuera_de_zona_confirmada
 2026-09-24T17:25:11+00:00,0x0621e9a8bffdecf8e0ea3954a55f059b950a0864ddf67de03596d4e4afc20b25,btc-updown-5m-1790270700,BTC,5min,Up,4,0.42,1998.5,0.38,33.5,0.44,15.79,1,0,0,0,fuera_de_zona_confirmada
 2026-09-24T17:25:20+00:00,0x35cec58dc670bd8c89ab78ca60082ed80e251453323f4ae04b9cdca2c458cb4c,bitcoin-up-or-down-september-24-2026-1pm-et,BTC,60min,Down,5,0.5400001730692418,0.0,0.77,0.0,0.77,0.0,0,0,0,0,fuera_de_zona_confirmada
+2026-09-24T17:25:44+00:00,0x846cc4c12f5d059fcdbea19f1934b24c830a831a55c5de8f2035dd708f703fe4,xrp-updown-5m-1790270700,XRP,5min,Up,2,0.5,0.0,0.65,0.0,0.66,1.54,0,0,0,0,fuera_de_zona_confirmada
+2026-09-24T17:25:48+00:00,0x9f72fe92d9d4b8bc95de059203a5457a1f00d26d0b7e0b7a9f299d3f0ae26ad2,bnb-updown-5m-1790270700,BNB,5min,Down,2,0.45,19.6,0.46,27.4,0.42,-8.7,1,0,0,0,fuera_de_zona_confirmada
+2026-09-24T17:25:51+00:00,0xad33902427a95ee765e984a9677cddab2a9b597b08f8876d29d66b9a79ba8141,sol-updown-5m-1790270700,SOL,5min,Up,2,0.49,449.2,0.43,408.9,0.42,-2.33,1,0,0,0,fuera_de_zona_confirmada
+2026-09-24T17:25:59+00:00,0x0f9c1cabd4b368dce7c9cdf56436db3236c5a56ff69f2d2467f5d4394c7a7433,ethereum-up-or-down-september-24-2026-1pm-et,ETH,60min,Down,3,0.51,0.0,0.78,0.0,0.79,1.28,0,0,0,0,fuera_de_zona_confirmada
+2026-09-24T17:26:08+00:00,0x7a82e33a8aaf51863a9a705dbec9618a7787da911fbc013a1605a212dc450295,eth-updown-5m-1790270700,ETH,5min,Down,5,0.48,0.0,0.65,0.0,0.57,-12.31,0,0,0,0,fuera_de_zona_confirmada
+2026-09-24T17:26:57+00:00,0x38ba9ab2753b8d7bba9adef458c2b642b18902d4e52ea1f271e5fa4716437ebc,bnb-updown-15m-1790270100,BNB,15min,Down,2,0.63,0.0,0.95,0.0,0.94,-1.05,0,0,0,0,fuera_de_zona_confirmada
+2026-09-24T17:27:15+00:00,0xd1dc57f3db2e5ffac2d3c5311991d76589094a7ad306650418fb106f739f6c2b,doge-updown-15m-1790270100,DOGE,15min,Up,2,0.91,745.2,0.93,578.1,0.9,-3.23,1,0,0,0,fuera_de_zona_confirmada
+2026-09-24T17:28:14+00:00,0x6b9c0d83313cbce7753c02ed03e5c81e1e3303537ec3703326a6479652fcc861,xrp-updown-15m-1790270100,XRP,15min,Up,4,0.59,0.0,,0.0,,,0,0,0,0,fuera_de_zona_confirmada
