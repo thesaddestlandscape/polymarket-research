@@ -5,7 +5,7 @@ modo TWAP (24-Sep, petición Javi: "vigila diariamente esto").
 Para cada estrategia (RESOLUTION_SNIPER_PRECIERRE, RESOLUTION_SNIPER_NAIVE) y
 marco (5min/15min), sobre los trades REALES desde el arranque de su modo TWAP
 (data/live/precierre_twap_desde.txt / naive_twap_desde.txt):
-  - n cerrados, acierto (esperado ~95 % precierre 5min; 15min con evidencia más
+  - n cerrados, acierto (esperado ~85 % precierre 5min en su banda con z>=1; 15min con evidencia más
     floja: n=84, +0,32 EUR/EUR, 7/10 días), PnL total y por trade, abiertos.
   - estado del kill-switch (latch).
   - embudo de decisiones de las últimas 24 h (gate_motivo del CSV del ejecutor).
@@ -30,7 +30,10 @@ DECISIONES = REPO / "data" / "shadow" / "resolution_sniper_precierre_executor_v2
 OUT = LIVE / "vigia_precierre_naive_twap.json"
 MODOS = {
     "RESOLUTION_SNIPER_PRECIERRE": (LIVE / "precierre_twap_desde.txt", LIVE / "precierre_twap_kill.json",
-                                    {"5min": 0.95, "15min": 0.95}),
+                                    # 24-Sep: 0.95 era el acierto GLOBAL a T-45s; en la banda operada
+                                    # (ask [0.25,0.65), filtro z>=1) el backtest da z1-1.5 81%, z>=1.5 92-100%
+                                    # (n=55, 10 días) -> ~0.85. Con 0.95 alertaría en falso.
+                                    {"5min": 0.85, "15min": 0.85}),
     "RESOLUTION_SNIPER_NAIVE": (LIVE / "naive_twap_desde.txt", LIVE / "naive_twap_kill.json",
                                 {"5min": 0.85}),
 }
