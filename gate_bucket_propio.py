@@ -78,6 +78,20 @@ _cache = {"mtime": None, "data": {}}
 _cache_fino = {"mtime": None, "data": {}}
 _cache_fillable = {"mtime": None, "data": {}}
 _cache_botconsenso = {"mtime": None, "data": {}}
+# 24-Sep (Javi: "que cuente el ask real... dale a las tres y soluciónalo"): 4º veto, ASK REAL.
+# gate_bucket_propio.json se mide a precio_yes_mercado (precio de la SEÑAL, desfasado): el cruce
+# del 24-Sep (analisis_cruce_bueno_confirmado_ask_real_24sep.py) dio que de 49 bueno_confirmado
+# solo 4 sobreviven al ask real posterior; 38 caen (los de 0,95 con +5/+18 EUR/tr eran artefacto).
+# Fuente única: ask_real_por_senal.py (cron diario) -> gate_bucket_ask_real.json. Ver _veto_ask_real().
+DATA_PATH_ASK_REAL = _REPO / "data/shadow/gate_bucket_ask_real.json"
+_cache_ask_real = {"mtime": None, "data": {}}
+ASK_REAL_MAX_ANTIGUEDAD_S = 36 * 3600   # cron diario + margen
+ASK_REAL_N_MIN = 15
+ASK_REAL_PISO_EUR = 0.10                # = UMBRAL_ABSOLUTO_EUR / PISO_EUR del resto de gates
+ASK_REAL_MARCOS = ("5min", "15min", "60min")   # los que cubre ask_real_por_senal.py
+ASK_REAL_ACTIVOS = ("BTC", "ETH", "SOL", "XRP", "DOGE", "BNB")
+# Tienen su propio gate con ask real medido en el instante del cierre (no por results.csv).
+ASK_REAL_EXCLUIDAS = ("RESOLUTION_SNIPER_PRECIERRE", "RESOLUTION_SNIPER_NAIVE")
 _cache_cfg = {"mtime": None, "activo": False}
 _cache_override = {"mtime": None, "data": {}}
 
@@ -388,6 +402,71 @@ def _bot_consenso_coincide(tupla_str: str, bot_consenso_lado):
     return None
 
 
+def _cargar_ask_real():
+    """dict {"buckets": {tupla: {bucket: {...}}}, ...} o None si falta, está corrupto o es más viejo
+    que ASK_REAL_MAX_ANTIGUEDAD_S. None = SIN EVIDENCIA -> _veto_ask_real() es fail-closed."""
+    try:
+        mtime = DATA_PATH_ASK_REAL.stat().st_mtime
+    except OSError:
+        return None
+    if time.time() - mtime > ASK_REAL_MAX_ANTIGUEDAD_S:
+        return None
+    if _cache_ask_real["mtime"] != mtime:
+        try:
+            _cache_ask_real["data"] = json.loads(DATA_PATH_ASK_REAL.read_text(encoding="utf-8"))
+            _cache_ask_real["mtime"] = mtime
+        except Exception:
+            return None
+    return _cache_ask_real["data"] or None
+
+
+def _en_universo_ask_real(tupla_str: str) -> bool:
+    partes = tupla_str.split("#")
+    if len(partes) != 4:
+        return False
+    estrategia, activo, marco, direccion = partes
+    return (direccion in ("BUY_YES", "BUY_NO") and marco in ASK_REAL_MARCOS and activo in ASK_REAL_ACTIVOS
+            and estrategia not in ASK_REAL_EXCLUIDAS)
+
+
+def _veto_ask_real(tupla_str: str, py: float, resultado: dict) -> dict:
+    """4º veto (24-Sep): un bueno_confirmado solo sobrevive si el MISMO micro-bucket, medido al ASK
+    REAL posterior a la señal (gate_bucket_ask_real.json), da >= ASK_REAL_PISO_EUR por trade con
+    n >= ASK_REAL_N_MIN y el IC90 bootstrap por DÍAS por encima de cero. Solo DEGRADA.
+    Fail-closed dentro de su universo (tuplas BUY_YES/BUY_NO 5/15/60min de las 6 monedas medidas
+    sobre results.csv): sin JSON fresco, sin entrada o n insuficiente -> sin_concluir (los
+    ejecutores live exigen bueno_confirmado, así que no operan). EV al ask < 0 con el IC90 por días
+    entero negativo -> malo_confirmado; cualquier otro caso por debajo del listón -> sin_concluir. Fuera del universo (WALLET_MIRROR/SNIPER/DISPERSO con BUY_Up/Down, precierre/
+    naive, WEEKLY, 240min) no toca nada: esas familias ya se miden con ask real en su propio gate."""
+    if resultado.get("veredicto") != "bueno_confirmado" or not _en_universo_ask_real(tupla_str):
+        return resultado
+    b_str = f"{bucket(py):.2f}"
+    datos = _cargar_ask_real()
+
+    def _degradar(veredicto, motivo):
+        return {"veredicto": veredicto,
+                "detalle": {"origen": "veto_ask_real_24sep", "motivo": motivo,
+                            "detalle_original": resultado.get("detalle")}}
+
+    if datos is None:
+        return _degradar("sin_concluir", "sin gate_bucket_ask_real.json fresco -- sin evidencia al ask real")
+    e = (datos.get("buckets") or {}).get(tupla_str, {}).get(b_str)
+    if not e or (e.get("n_ask") or 0) < ASK_REAL_N_MIN:
+        n = (e or {}).get("n_ask", 0)
+        return _degradar("sin_concluir", f"ask real insuficiente en {b_str} (n={n} < {ASK_REAL_N_MIN})")
+    ev, ic = e.get("eur_ask"), e.get("ic90_dias")
+    if ev is None:
+        return _degradar("sin_concluir", "ask real sin EV calculado")
+    if ev < 0 and ic and ic[1] < 0:
+        # /code-review: malo_confirmado solo con el IC90 por días entero por debajo de cero
+        return _degradar("malo_confirmado", f"al ask real {ev:+.3f} EUR/tr (n={e['n_ask']}, IC90 días {ic}) "
+                                            f"-- el edge era del precio de señal desfasado")
+    if ev < ASK_REAL_PISO_EUR or not ic or ic[0] <= 0:
+        return _degradar("sin_concluir", f"al ask real {ev:+.3f} EUR/tr (n={e['n_ask']}, IC90 días {ic}) "
+                                         f"-- no alcanza +{ASK_REAL_PISO_EUR:.2f} con IC90>0")
+    return resultado
+
+
 def _veto_fillable(tupla_str: str, py: float, resultado: dict) -> dict:
     """Último paso de evaluar(): si el resultado es "bueno_confirmado"
     (venga del propio gate_bucket_propio.json, de zonas_finas o de
@@ -638,7 +717,10 @@ def evaluar_sin_override(tupla_str: str, py: float, bot_consenso_lado=None) -> d
     reabriendo overrides con un diagnóstico falso -- mismo patrón exacto
     que el bug de "sin override" que motivó separar esta función el
     24-Ago, ahora aplicado al veto nuevo."""
-    return _veto_fillable(tupla_str, py, _evaluar_sin_override_ni_veto(tupla_str, py, bot_consenso_lado))
+    # 24-Sep: el veto de ask real va DESPUÉS del de fill-ability (ambos solo degradan; si
+    # fill-ability ya lo bajó a malo, el de ask real no lo toca).
+    return _veto_ask_real(tupla_str, py,
+                          _veto_fillable(tupla_str, py, _evaluar_sin_override_ni_veto(tupla_str, py, bot_consenso_lado)))
 
 
 def _evaluar_sin_override_ni_veto(tupla_str: str, py: float, bot_consenso_lado=None) -> dict:

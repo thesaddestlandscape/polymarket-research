@@ -14,6 +14,7 @@ el barrido). live_stake.py::_kelly_precio_factor() es el único caller.
 """
 import json
 import math
+import time
 from pathlib import Path
 
 DATA_PATH = Path("data/shadow/kelly_precio_gate.json")
@@ -54,10 +55,19 @@ def _familia(strategy: str) -> str:
     return strategy
 
 
+MAX_ANTIGUEDAD_S = 48 * 3600   # 24-Sep: se regenera a diario (06:57 + merge 08:48)
+
+
 def _cargar() -> dict:
+    """24-Sep (/code-review): guardián de frescura. Si kelly_precio_gate.json tiene más de
+    MAX_ANTIGUEDAD_S (p. ej. analisis_kelly_precio_gate_29jul.py abortó por no tener ask real
+    fresco), se devuelve {} -> evaluar() da None -> factor 1,0 (neutro) en live_stake. Nunca se
+    sigue escalando el stake con una tabla vieja."""
     try:
         mtime = DATA_PATH.stat().st_mtime
     except OSError:
+        return {}
+    if time.time() - mtime > MAX_ANTIGUEDAD_S:
         return {}
     if _cache["mtime"] != mtime:
         try:

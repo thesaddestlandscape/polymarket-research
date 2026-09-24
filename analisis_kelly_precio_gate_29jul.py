@@ -44,6 +44,7 @@ no hay cron todavía, correr a mano antes de confiar en un factor viejo.
 """
 import csv
 import json
+import sys
 import math
 from collections import defaultdict
 from datetime import datetime, timezone
@@ -51,6 +52,7 @@ from pathlib import Path
 
 import numpy as np
 
+import ask_real
 from shuffle_chunked import diffs_permutacion
 
 from kelly_precio_gate import _familia
@@ -121,6 +123,12 @@ def cargar_filas(tuplas):
     familia."""
     out = defaultdict(list)  # (familia, activo#marco) -> [(ts, py, pnl, acierto)]
     n_excluidas_pre_twap = 0
+    # 24-Sep (Javi: "que cuente el ask real"): precio de entrada = ASK REAL posterior a la señal
+    # (ask_real.py, fuente única) y pnl a 1 EUR a ese ask. Antes: precio_yes_mercado (precio de la
+    # señal, desfasado: inflaba +0,3/+0,7 EUR/tr) y pnl_neto (escala de stake Kelly). Filas sin ask
+    # verificado se descartan; sin mapa fresco no se genera nada (fail-closed, ver main()).
+    mapa_ask = ask_real.cargar_mapa() or {}
+    n_sin_ask = 0
     with open(RESULTS, encoding="utf-8") as f:
         for row in csv.DictReader(f):
             if row.get("acierto") not in ("0", "1"):
@@ -138,17 +146,16 @@ def cargar_filas(tuplas):
                 if ts_dt < corte:
                     n_excluidas_pre_twap += 1
                     continue
-            try:
-                py = float(row["precio_yes_mercado"])
-                pnl = float(row["pnl_neto"])
-            except Exception:
+            ask = mapa_ask.get((row["strategy"], row.get("market_id", ""), row["decision"]))
+            if ask is None:
+                n_sin_ask += 1
                 continue
-            if row["decision"] == "BUY_NO":
-                py = 1 - py
-            py = min(0.999, max(0.001, py))
+            py = min(0.999, max(0.001, ask))      # ya es el precio del token de la decisión
             acierto = int(row["acierto"])
+            pnl = ask_real.pnl_1eur(py, bool(acierto))
             fam = _familia(row["strategy"])
             out[(fam, row["subtype"])].append((row.get("prediction_timestamp", ""), py, pnl, acierto))
+    print(f"[cargar_filas] {n_sin_ask} filas sin ask real verificado descartadas (solo cuenta el ask real)")
     if n_excluidas_pre_twap:
         print(f"[cargar_filas] {n_excluidas_pre_twap} filas pre-TWAP (antes de "
               f"{FECHA_CAMBIO_TWAP.date()}) excluidas en marcos afectados "
@@ -195,6 +202,12 @@ def wilson_ci(k, n, z=1.645):
 
 
 def main():
+    if ask_real.cargar_mapa() is None:
+        # fail-closed: sin ask real fresco NO se regenera; el JSON viejo caduca a las 48 h por el
+        # guardián de frescura de kelly_precio_gate._cargar() -> factor neutro, nunca precio desfasado.
+        print("ABORTADO: sin data/shadow/ask_real_por_senal.csv fresco -- no se genera kelly_precio_gate.json",
+              file=sys.stderr)
+        sys.exit(2)
     universo = cargar_universo()
     filas_por_grupo = cargar_filas(universo)
     print(f"Grupos (familia, activo#marco): {list(filas_por_grupo.keys())}")

@@ -25,6 +25,8 @@ junto al gate estándar (IC>=0.08, n>=40). NO es cron, NO toca dinero,
 NO escribe nada -- solo lee results.csv/config_live.json.
 """
 import csv
+
+import ask_real
 import json
 import math
 import sys
@@ -54,11 +56,20 @@ N_MIN = 15       # regla del proyecto: ninguna conclusión con n<15
 _DECISIONES_NO = {"BUY_NO", "BUY_Down"}
 
 
-def _retorno(row: dict) -> float:
-    p = float(row["precio_yes_mercado"])
-    p = min(0.99, max(0.01, p))
-    if row["decision"] in _DECISIONES_NO:
-        p = 1 - p
+def _retorno(row: dict, ask: float | None = None) -> float:
+    """Retorno por 1 $ de la fila. 24-Sep: con `ask` (ASK REAL posterior a la señal, ask_real.py,
+    ya en el lado de la decisión) se usa ese precio -- es lo que hace gate(). Sin `ask` se mantiene
+    EXACTAMENTE el comportamiento previo (precio_yes_mercado, invertido para BUY_NO/BUY_Down): lo
+    siguen usando con 1 argumento analisis_gate_bucket_propio_fillable_03ago.py (ya le pasa el
+    mejor_ask del libro como precio_yes_mercado) y analisis_log_growth_por_bucket_23jul.py
+    (/code-review 24-Sep: cambiar la firma los rompía)."""
+    if ask is not None:
+        p = min(0.99, max(0.01, ask))
+    else:
+        p = float(row["precio_yes_mercado"])
+        p = min(0.99, max(0.01, p))
+        if row["decision"] in _DECISIONES_NO:
+            p = 1 - p
     if row["acierto"] == "1":
         return (1 - p) / p - SLIPPAGE
     return -1 - SLIPPAGE
@@ -86,10 +97,18 @@ def gate(strategy: str, subtype: str, decision: str, f: float = 0.10) -> dict:
     if not pares_live_ok:
         print("[analisis_log_growth] \u26a0\ufe0f config_live.json ilegible -- filtro de zona confirmada NO se aplica este ciclo")
     filas = _gbp.filtrar_filas_zona_confirmada(filas, pares_live)
+    # 24-Sep (Javi: "que cuente el ask real"): solo filas con ask real verificado; sin mapa fresco
+    # no hay veredicto (n=0 + aviso), nunca con el precio de señal desfasado.
+    mapa = ask_real.cargar_mapa()
+    if mapa is None:
+        return {"n": 0, "sin_ask_real": True}
+    con_ask = [(r, mapa.get((r["strategy"], r.get("market_id", ""), r["decision"]))) for r in filas]
+    filas_ask = [(r, a) for r, a in con_ask if a is not None]
+    filas = [r for r, _ in filas_ask]
     n = len(filas)
     if n == 0:
         return {"n": 0}
-    rs = [_retorno(r) for r in filas]
+    rs = [_retorno(r, a) for r, a in filas_ask]
     hit = 100 * sum(1 for r in filas if r["acierto"] == "1") / n
     ev = sum(rs) / n
     g = sum(math.log(1 + f * x) for x in rs) / n

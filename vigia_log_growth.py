@@ -196,8 +196,13 @@ def main() -> int:
         if latch.get(tupla, {}).get("avisado"):
             continue
         r = gate(strategy, subtype, decision, f)
-        if r.get("n", 0) == 0:
-            r = _gate_trades_reales(strategy, subtype, decision, f)
+        # 24-Sep (/code-review): gate() ya solo cuenta filas con ASK REAL (últimos 21 días); con
+        # n<N_MIN se recurre también a los trades reales y se usa la fuente con más n -- antes solo
+        # con n==0, y una tupla con pocas filas de ask se quedaba muda para el aviso de payout inverso.
+        if r.get("n", 0) < N_MIN:
+            rr = _gate_trades_reales(strategy, subtype, decision, f)
+            if rr.get("n", 0) > r.get("n", 0):
+                r = rr
         fuente_tag = f" [{r['fuente']}]" if r.get("fuente") else ""
         if _evaluar_y_avisar(tupla, r, fuente_tag):
             cambiado = True
