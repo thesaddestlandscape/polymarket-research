@@ -1,0 +1,162 @@
+{
+ "params": {
+  "P_SEL": 0.8,
+  "FWD_N": 20,
+  "FWD_DIAS": 5,
+  "KILL_N": 20,
+  "KILL_EUR": 3.0,
+  "H_DIAS": 7.0
+ },
+ "sports": {
+  "dias_evaluados": 27,
+  "promovidas": 17,
+  "matadas": 12,
+  "eventos": [
+   "2026-09-03 PROMOCIÓN ('CS', 'FADE', 0.6) fwd n=68 días=5 media=+0.025",
+   "2026-09-03 PROMOCIÓN ('Tennis', 'SEGUIR', 0.6) fwd n=30 días=5 media=+0.227",
+   "2026-09-03 PROMOCIÓN ('CS', 'FADE', 0.65) fwd n=80 días=5 media=+0.189",
+   "2026-09-04 KILL ('CS', 'FADE', 0.65) live n=20 suma=-0.58",
+   "2026-09-05 KILL ('CS', 'FADE', 0.6) live n=20 suma=-2.61",
+   "2026-09-08 PROMOCIÓN ('LoL', 'SEGUIR', 0.45) fwd n=20 días=6 media=+0.043",
+   "2026-09-15 KILL ('LoL', 'SEGUIR', 0.45) live n=12 suma=-3.64",
+   "2026-09-15 KILL ('Tennis', 'SEGUIR', 0.6) live n=46 suma=-0.01",
+   "2026-09-16 PROMOCIÓN ('Tennis', 'SEGUIR', 0.55) fwd n=57 días=6 media=+0.007",
+   "2026-09-17 PROMOCIÓN ('CS', 'SEGUIR', 0.45) fwd n=85 días=12 media=+0.019",
+   "2026-09-17 PROMOCIÓN ('CS', 'SEGUIR', 0.55) fwd n=92 días=13 media=+0.017",
+   "2026-09-17 PROMOCIÓN ('Tennis', 'FADE', 0.75) fwd n=54 días=5 media=+0.075",
+   "2026-09-17 PROMOCIÓN ('Tennis', 'FADE', 0.55) fwd n=40 días=5 media=+0.261",
+   "2026-09-17 KILL ('Tennis', 'SEGUIR', 0.55) live n=20 suma=-0.68",
+   "2026-09-17 KILL ('Tennis', 'FADE', 0.75) live n=20 suma=-1.88",
+   "2026-09-17 KILL ('CS', 'SEGUIR', 0.45) live n=14 suma=-3.57",
+   "2026-09-17 KILL ('Tennis', 'FADE', 0.55) live n=20 suma=-1.23",
+   "2026-09-18 KILL ('CS', 'SEGUIR', 0.55) live n=30 suma=-0.58",
+   "2026-09-20 PROMOCIÓN ('CS', 'FADE', 0.15) fwd n=20 días=10 media=+0.193",
+   "2026-09-21 PROMOCIÓN ('Dota', 'SEGUIR', 0.3) fwd n=20 días=10 media=+0.085",
+   "2026-09-21 PROMOCIÓN ('Dota', 'FADE', 0.6) fwd n=20 días=9 media=+0.033",
+   "2026-09-21 KILL ('Dota', 'FADE', 0.6) live n=3 suma=-3.00",
+   "2026-09-22 PROMOCIÓN ('MLB', 'SEGUIR', 0.3) fwd n=46 días=6 media=+0.023",
+   "2026-09-22 KILL ('CS', 'FADE', 0.15) live n=3 suma=-3.00",
+   "2026-09-23 PROMOCIÓN ('CS', 'SEGUIR', 0.35) fwd n=54 días=6 media=+0.030",
+   "2026-09-24 PROMOCIÓN ('MLB', 'FADE', 0.35) fwd n=111 días=7 media=+0.060",
+   "2026-09-24 PROMOCIÓN ('MLB', 'FADE', 0.2) fwd n=28 días=5 media=+0.637",
+   "2026-09-24 PROMOCIÓN ('MLB', 'SEGUIR', 0.25) fwd n=28 días=5 media=+0.065",
+   "2026-09-24 KILL ('MLB', 'SEGUIR', 0.3) live n=22 suma=-1.00"
+  ],
+  "criterios": {
+   "TODO": {
+    "trades": 30486,
+    "trades_dia": 1129.1,
+    "pnl_total": -1051.4,
+    "pnl_trade": -0.0345,
+    "ci90_pnl_dia": [
+     -54.83,
+     -24.86
+    ],
+    "dias_pos": "2/27"
+   },
+   "SELECTOR_DIRECTO": {
+    "trades": 1117,
+    "trades_dia": 41.4,
+    "pnl_total": -42.56,
+    "pnl_trade": -0.0381,
+    "ci90_pnl_dia": [
+     -4.52,
+     1.25
+    ],
+    "dias_pos": "12/27"
+   },
+   "ESTRICTO": {
+    "trades": 0,
+    "trades_dia": 0.0,
+    "pnl_total": 0,
+    "pnl_trade": null,
+    "ci90_pnl_dia": [
+     0.0,
+     0.0
+    ],
+    "dias_pos": "0/27"
+   },
+   "PROMO_FORWARD": {
+    "trades": 263,
+    "trades_dia": 9.7,
+    "pnl_total": -22.36,
+    "pnl_trade": -0.085,
+    "ci90_pnl_dia": [
+     -1.73,
+     0.01
+    ],
+    "dias_pos": "7/27"
+   }
+  }
+ },
+ "bots": {
+  "dias_evaluados": 8,
+  "promovidas": 12,
+  "matadas": 5,
+  "eventos": [
+   "2026-09-22 PROMOCIÓN ('DISPERSO', 'BNB', '5min', 'Up', 0.25) fwd n=21 días=5 media=+0.163",
+   "2026-09-22 PROMOCIÓN ('DISPERSO', 'BTC', '5min', 'Down', 0.25) fwd n=40 días=5 media=+0.128",
+   "2026-09-22 PROMOCIÓN ('DISPERSO', 'ETH', '15min', 'Down', 0.35) fwd n=22 días=5 media=+0.031",
+   "2026-09-23 PROMOCIÓN ('DISPERSO', 'ETH', '5min', 'Up', 0.15) fwd n=22 días=6 media=+0.697",
+   "2026-09-23 PROMOCIÓN ('SNIPER', 'DOGE', '5min', 'Up', 0.05) fwd n=24 días=5 media=+0.531",
+   "2026-09-23 PROMOCIÓN ('SNIPER', 'DOGE', '5min', 'Down', 0.1) fwd n=36 días=6 media=+0.006",
+   "2026-09-23 PROMOCIÓN ('SNIPER', 'DOGE', '5min', 'Down', 0.2) fwd n=26 días=6 media=+0.319",
+   "2026-09-23 PROMOCIÓN ('SNIPER', 'BTC', '15min', 'Down', 0.5) fwd n=34 días=5 media=+0.105",
+   "2026-09-23 PROMOCIÓN ('SNIPER', 'BNB', '5min', 'Down', 0.05) fwd n=20 días=5 media=+1.387",
+   "2026-09-23 PROMOCIÓN ('SNIPER', 'ETH', '5min', 'Down', 0.4) fwd n=56 días=5 media=+0.306",
+   "2026-09-23 PROMOCIÓN ('DISPERSO', 'DOGE', '5min', 'Up', 0.3) fwd n=35 días=5 media=+0.017",
+   "2026-09-23 KILL ('SNIPER', 'DOGE', '5min', 'Down', 0.1) live n=3 suma=-3.00",
+   "2026-09-23 KILL ('DISPERSO', 'BNB', '5min', 'Up', 0.25) live n=7 suma=-3.35",
+   "2026-09-23 KILL ('DISPERSO', 'ETH', '5min', 'Up', 0.15) live n=3 suma=-3.00",
+   "2026-09-23 KILL ('SNIPER', 'DOGE', '5min', 'Down', 0.2) live n=3 suma=-3.00",
+   "2026-09-24 PROMOCIÓN ('?', 'BTC', '5min', 'Up', 0.55) fwd n=30 días=5 media=+0.141",
+   "2026-09-24 KILL ('SNIPER', 'DOGE', '5min', 'Up', 0.05) live n=3 suma=-3.00"
+  ],
+  "criterios": {
+   "TODO": {
+    "trades": 25269,
+    "trades_dia": 3158.6,
+    "pnl_total": -1276.54,
+    "pnl_trade": -0.0505,
+    "ci90_pnl_dia": [
+     -211.86,
+     -115.68
+    ],
+    "dias_pos": "0/8"
+   },
+   "SELECTOR_DIRECTO": {
+    "trades": 849,
+    "trades_dia": 106.1,
+    "pnl_total": -11.67,
+    "pnl_trade": -0.0138,
+    "ci90_pnl_dia": [
+     -10.82,
+     8.33
+    ],
+    "dias_pos": "3/8"
+   },
+   "ESTRICTO": {
+    "trades": 440,
+    "trades_dia": 55.0,
+    "pnl_total": -25.36,
+    "pnl_trade": -0.0576,
+    "ci90_pnl_dia": [
+     -5.77,
+     -0.33
+    ],
+    "dias_pos": "2/8"
+   },
+   "PROMO_FORWARD": {
+    "trades": 95,
+    "trades_dia": 11.9,
+    "pnl_total": -6.39,
+    "pnl_trade": -0.0673,
+    "ci90_pnl_dia": [
+     -2.97,
+     0.58
+    ],
+    "dias_pos": "2/8"
+   }
+  }
+ }
+}
