@@ -14,11 +14,11 @@
   "hi": 0.05,
   "n": 309,
   "pnl_medio": -0.6227,
-  "diff_vs_resto": -0.5739,
+  "diff_vs_resto": -0.5742,
   "p_valor": 0.0,
   "split_half_diff": [
-   -0.7999,
-   -0.3495
+   -0.8001,
+   -0.3498
   ],
   "split_half_ok": true,
   "pnl_medio_loo": -0.6971,
@@ -39,28 +39,28 @@
  },
  "SNIPER#ETH#5min": {
   "n_dias": 15,
-  "pnl_sin_mejores_dias": -0.779,
+  "pnl_sin_mejores_dias": -0.781,
   "robusto_dias": false,
   "lo": 0.0,
   "hi": 0.05,
-  "n": 226,
-  "pnl_medio": -0.6562,
-  "diff_vs_resto": -0.6248,
+  "n": 228,
+  "pnl_medio": -0.6592,
+  "diff_vs_resto": -0.6271,
   "p_valor": 0.0,
   "split_half_diff": [
-   -0.2809,
-   -0.9686
+   -0.2862,
+   -0.9679
   ],
   "split_half_ok": true,
-  "pnl_medio_loo": -0.7927,
+  "pnl_medio_loo": -0.7945,
   "robusto_loo": true,
   "ci90_bootstrap": [
    -1.0,
-   -0.278
+   -0.3183
   ],
   "robusto_bootstrap": true,
   "n_posiciones_buscadas": 96,
-  "g_kelly_f10": -0.08744,
+  "g_kelly_f10": -0.0876,
   "veredicto_crudo_hoy": "malo_confirmado",
   "historial_crudo": [
    "malo_confirmado"
@@ -83,11 +83,11 @@
   "hi": 0.05,
   "n": 47,
   "pnl_medio": -1.0,
-  "diff_vs_resto": -0.9541,
-  "p_valor": 0.0,
+  "diff_vs_resto": -0.9537,
+  "p_valor": 0.0005,
   "split_half_diff": [
-   -0.9541,
-   -0.9541
+   -0.9537,
+   -0.9537
   ],
   "split_half_ok": true,
   "pnl_medio_loo": -1.0,
@@ -142,11 +142,11 @@
   "hi": 0.06,
   "n": 101,
   "pnl_medio": -1.0,
-  "diff_vs_resto": -0.9475,
+  "diff_vs_resto": -0.9476,
   "p_valor": 0.0,
   "split_half_diff": [
-   -0.9475,
-   -0.9475
+   -0.9476,
+   -0.9476
   ],
   "split_half_ok": true,
   "pnl_medio_loo": -1.0,
@@ -173,11 +173,11 @@
   "hi": 0.14,
   "n": 48,
   "pnl_medio": -0.6272,
-  "diff_vs_resto": -0.5968,
-  "p_valor": 0.026,
+  "diff_vs_resto": -0.5974,
+  "p_valor": 0.0235,
   "split_half_diff": [
-   -0.6144,
-   -0.5791
+   -0.6151,
+   -0.5798
   ],
   "split_half_ok": true,
   "pnl_medio_loo": -0.8186,
@@ -211,11 +211,11 @@
   "hi": 0.05,
   "n": 63,
   "pnl_medio": -1.0,
-  "diff_vs_resto": -0.9403,
+  "diff_vs_resto": -0.9373,
   "p_valor": 0.0,
   "split_half_diff": [
-   -0.9403,
-   -0.9403
+   -0.9373,
+   -0.9373
   ],
   "split_half_ok": true,
   "pnl_medio_loo": -1.0,
@@ -240,8 +240,7 @@
    "bueno_confirmado",
    "bueno_confirmado",
    "bueno_confirmado"
-  ],
-  "fecha_historial": null
+  ]
  },
  "SNIPER#DOGE#5min": {
   "veredicto": "sin_concluir",
