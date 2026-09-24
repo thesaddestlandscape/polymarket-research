@@ -1,5 +1,5 @@
 {
- "generado_utc": "2026-09-24T07:00:32+00:00",
+ "generado_utc": "2026-09-24T13:01:41+00:00",
  "forward_dias": 7,
  "cutoff": "2026-09-17T00:00:00",
  "n_forward_min": 15,
@@ -7,7 +7,7 @@
  "n_tuplas_degradadas": 1,
  "tuplas": {
   "BALLENAS_TARDIAS#DOGE#5min#BUY_YES": {
-   "n_filas": 3458,
+   "n_filas": 3466,
    "dimensiones": {
     "hora_utc": [],
     "dia_semana": []
