@@ -10,6 +10,16 @@
     "pnl_media_min": 0.0,
     "perdida_max_eur": 3.0
    }
+  },
+  "CS#FADE#0.65": {
+   "modo": "live",
+   "desde": "2026-09-24T11:30:00",
+   "motivo": "24-Sep, OK Javi ('las dos en live'). Celda más estable de sports: n=284 mercados, 31 días (22 positivos), 84 wallets (top 7,7%), +0,165/+0,156/+0,159 EUR/tr en 3 tramos, grid completo n=267 +0,124 mitades +0,17/+0,08 g>0 p_bh=0,09.",
+   "kill": {
+    "n_min": 20,
+    "pnl_media_min": 0.0,
+    "perdida_max_eur": 3.0
+   }
   }
  }
 }
