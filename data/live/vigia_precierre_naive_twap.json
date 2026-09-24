@@ -6,12 +6,29 @@
   },
   "marcos": {
    "5min": {
-    "n_cerrados": 0,
-    "acierto": null,
-    "pnl_total": 0,
-    "pnl_trade": null,
+    "n_cerrados": 5,
+    "acierto": 0.2,
+    "pnl_total": -5.08,
+    "pnl_trade": -1.016,
     "abiertos": 0,
-    "esperado": 0.95
+    "esperado": 0.95,
+    "por_activo": {
+     "BNB": {
+      "n": 2,
+      "acierto": 0.5,
+      "pnl_total": -0.35
+     },
+     "DOGE": {
+      "n": 1,
+      "acierto": 0.0,
+      "pnl_total": -1.65
+     },
+     "SOL": {
+      "n": 2,
+      "acierto": 0.0,
+      "pnl_total": -3.08
+     }
+    }
    },
    "15min": {
     "n_cerrados": 0,
@@ -19,12 +36,13 @@
     "pnl_total": 0,
     "pnl_trade": null,
     "abiertos": 0,
-    "esperado": 0.95
+    "esperado": 0.95,
+    "por_activo": {}
    }
   }
  },
  "RESOLUTION_SNIPER_NAIVE": {
-  "desde": null,
+  "desde": "2026-09-24T11:44:48+00:00",
   "kill": {
    "matado": false
   },
@@ -35,7 +53,8 @@
     "pnl_total": 0,
     "pnl_trade": null,
     "abiertos": 0,
-    "esperado": 0.85
+    "esperado": 0.85,
+    "por_activo": {}
    },
    "15min": {
     "n_cerrados": 0,
@@ -43,43 +62,36 @@
     "pnl_total": 0,
     "pnl_trade": null,
     "abiertos": 0,
-    "esperado": null
+    "esperado": null,
+    "por_activo": {}
    }
   }
  },
  "embudo_24h": {
-  "RESOLUTION_SNIPER_PRECIERRE|15min": {
-   "sin_ask": 414,
-   "sin_rafaga_n": 30,
-   "fuera_banda_ask": 3,
-   "sin_libro": 2
-  },
   "RESOLUTION_SNIPER_PRECIERRE|5min": {
-   "sin_ask": 1180,
-   "sin_rafaga_n": 157,
-   "sin_libro": 7,
-   "fuera_banda_ask": 7,
+   "sin_ask": 108,
+   "fuera_banda_ask": 59,
+   "z_bajo": 6,
    "twap_proy": 1
   },
   "RESOLUTION_SNIPER_NAIVE|5min": {
-   "no_fillable_ask": 1318,
-   "deteccion_aislada_n": 2
-  },
-  "RESOLUTION_SNIPER_NAIVE|15min": {
-   "no_fillable_ask": 437,
-   "deteccion_aislada_n": 1
-  },
-  "|60min": {
-   "": 1
+   "no_fillable_ask": 168
   },
   "RESOLUTION_SNIPER_PRECIERRE|60min": {
-   "sin_ask": 42,
-   "sin_rafaga_n": 3
+   "sin_ask": 5,
+   "fuera_banda_ask": 4
   },
-  "|15min": {
-   "lectura_tarde": 1
+  "RESOLUTION_SNIPER_PRECIERRE|15min": {
+   "sin_ask": 53,
+   "fuera_banda_ask": 7
+  },
+  "RESOLUTION_SNIPER_NAIVE|60min": {
+   "naive_twap_marco_no_validado": 3
+  },
+  "RESOLUTION_SNIPER_NAIVE|15min": {
+   "naive_twap_marco_no_validado": 9
   }
  },
  "dias_polybolt": 1,
- "actualizado_utc": "2026-09-24T11:42:46+00:00"
+ "actualizado_utc": "2026-09-24T15:14:38+00:00"
 }
