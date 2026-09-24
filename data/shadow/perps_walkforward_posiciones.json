@@ -1,0 +1,20 @@
+{
+ "generado_utc": "2026-09-24T17:50:26+00:00",
+ "n_wallets_validas": 32,
+ "n_posiciones": 4733,
+ "cadena_rota_pct": 7.23,
+ "corte": "2026-09-17",
+ "n_elegibles": 12,
+ "n_elegidas": 4,
+ "test_n_pos": 1027,
+ "test_n_wallets": 4,
+ "test_dias": 7,
+ "test_media_ret": 0.0001,
+ "test_hit": 0.43,
+ "test_ic90_cluster": [
+  -0.00073,
+  0.01589
+ ],
+ "placebo_p": 0.5857,
+ "media_ret_no_elegidas_test": 0.00128
+}
