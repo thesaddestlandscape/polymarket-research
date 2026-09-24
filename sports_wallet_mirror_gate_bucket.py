@@ -33,6 +33,15 @@ _REPO = Path(__file__).resolve().parent
 DATA_PATH = _REPO / "data/sports/wallet_mirror_gate_bucket.json"
 DATA_PATH_FINO = _REPO / "data/sports/wallet_mirror_gate_bucket_fino.json"
 OVERRIDE_PATH = _REPO / "data/sports/wallet_mirror_gate_bucket_override.json"
+# 24-Sep (decisión explícita Javi, marco "punto medio": operar con stake mínimo
+# y kill-switch en vez de exigir bueno_confirmado por micro-bucket). Aprobación
+# MANUAL por bucket: solo levanta sin_concluir (nunca malo_confirmado ni el
+# override de emergencia), exige grid fresco con el bucket presente y que el
+# grid no apunte ya en contra (pnl_medio<0 con n>=_CONFLUENCIA_N_MIN), y lleva
+# kill-switch propio sobre los trades REALES de sports desde `desde`.
+APROBACIONES_PATH = _REPO / "data/sports/wallet_mirror_aprobaciones_manuales.json"
+APROBACIONES_KILL = _REPO / "data/sports/wallet_mirror_aprobaciones_kill.json"
+TRADES_SPORTS = _REPO / "data/sports/trades.csv"
 STEP = 0.05
 
 # 01-Sep: guardián de frescura + confluencia suave, mismo patrón aplicado
@@ -136,7 +145,121 @@ def evaluar(categoria: str, tipo: str, ask: float) -> dict:
             "detalle": {"origen": "override_emergencia", "motivo": ov.get("motivo", "sin motivo registrado"),
                         "desde": ov.get("desde")},
         }
-    return evaluar_sin_override(categoria, tipo, ask)
+    r = evaluar_sin_override(categoria, tipo, ask)
+    if r.get("veredicto") == "sin_concluir":
+        aprob = _aprobacion_vigente(clave_str, b_str, r.get("detalle"))
+        if aprob is not None:
+            return {"veredicto": "bueno_confirmado",
+                    "detalle": {"origen": "aprobacion_manual", "motivo": aprob.get("motivo", ""),
+                                "desde": aprob.get("desde")}}
+    return r
+
+
+def _trades_reales_bucket(categoria: str, tipo: str, b: float, desde: str):
+    """(pnls_cerrados, stakes_abiertos) de trades REALES de sports de esa
+    categoría/tipo con entry_price en el bucket b, desde `desde`. Un CLOSED
+    sin pnl cuenta como stake perdido (fail-closed, mismo criterio que
+    zonas_forward_pgallina.py)."""
+    import csv
+    cerrados, abiertos = [], []
+    try:
+        with open(TRADES_SPORTS, encoding="utf-8") as f:
+            for t in csv.DictReader(f):
+                if (t.get("categoria") != categoria or t.get("tipo") != tipo
+                        or (t.get("timestamp_utc") or "") < desde):
+                    continue
+                # /code-review: se aprueba por ASK pero el fill puede caer en el
+                # borde superior (techo = bucket+STEP) o saltar de bucket en el
+                # re-check -- se cuentan con margen (sobrecontar = matar antes,
+                # dirección segura). Sin precio legible: se cuenta también.
+                try:
+                    ep = float(t.get("entry_price"))
+                    if not (b - 0.01 - 1e-9 <= ep <= b + STEP + 0.01 + 1e-9):
+                        continue
+                except (TypeError, ValueError):
+                    pass
+                try:
+                    stake = float(t.get("stake_eur") or 0) or 1.05
+                except ValueError:
+                    stake = 1.05
+                # /code-review: ERROR = orden aceptada sin fill visto a tiempo;
+                # el 20-Sep resultaron fills reales -> cuenta como stake perdido.
+                if t.get("status") in ("OPEN", "ERROR"):
+                    abiertos.append(stake)
+                elif t.get("status") == "CLOSED":
+                    try:
+                        cerrados.append(float(t["pnl_neto_eur"]))
+                    except (KeyError, TypeError, ValueError):
+                        cerrados.append(-stake)
+    except OSError:
+        return None, None
+    return cerrados, abiertos
+
+
+def _aprobacion_vigente(clave_str: str, b_str: str, detalle_grid) -> dict | None:
+    """Aprobación manual activa y NO matada para clave#bucket, o None.
+    Fail-closed ante CUALQUIER error (/code-review: un valor mal formado no
+    puede tumbar el sniper entero, solo cerrar esta aprobación)."""
+    try:
+        return _aprobacion_vigente_inner(clave_str, b_str, detalle_grid)
+    except Exception:
+        return None
+
+
+def _aprobacion_vigente_inner(clave_str: str, b_str: str, detalle_grid) -> dict | None:
+    try:
+        d = json.loads(APROBACIONES_PATH.read_text(encoding="utf-8"))
+    except Exception:
+        return None
+    a = (d.get("aprobaciones") or {}).get(f"{clave_str}#{b_str}")
+    if not a or a.get("modo") != "live" or not a.get("desde"):
+        return None
+    if not detalle_grid:
+        return None  # grid obsoleto o sin el bucket: no se abre a ciegas
+    n_grid = detalle_grid.get("n") or 0
+    pnl_grid = detalle_grid.get("pnl_medio")
+    if pnl_grid is None or (n_grid >= _CONFLUENCIA_N_MIN and pnl_grid < 0):
+        return None
+    # /code-review: fichero ausente = ningún kill todavía; presente pero
+    # ilegible/corrupto = se trata como MATADA (nunca reabrir a ciegas).
+    if APROBACIONES_KILL.exists():
+        try:
+            kills = json.loads(APROBACIONES_KILL.read_text(encoding="utf-8"))
+            if not isinstance(kills, dict):
+                return None
+        except Exception:
+            return None
+    else:
+        kills = {}
+    clave_ap = f"{clave_str}#{b_str}"
+    if kills.get(clave_ap, {}).get("matada"):
+        return None
+    categoria, tipo = clave_str.split("#", 1)
+    pnls, abiertos = _trades_reales_bucket(categoria, tipo, float(b_str), a["desde"])
+    if pnls is None:
+        return None
+    k = a.get("kill") or {}
+    peor = sum(pnls) - sum(abiertos)
+    motivo = ""
+    if len(pnls) >= k.get("n_min", 20) and sum(pnls) / len(pnls) < k.get("pnl_media_min", 0.0):
+        motivo = f"media {sum(pnls)/len(pnls):+.3f} en n={len(pnls)} reales"
+    elif peor <= -abs(k.get("perdida_max_eur", 3.0)):
+        motivo = f"peor caso {peor:+.2f} EUR (cerrados {sum(pnls):+.2f} n={len(pnls)}, abiertos {len(abiertos)})"
+    if motivo:
+        kills[clave_ap] = {"matada": True, "motivo": motivo,
+                           "ts": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())}
+        try:
+            tmp = APROBACIONES_KILL.with_name(APROBACIONES_KILL.name + ".tmp")
+            tmp.write_text(json.dumps(kills, ensure_ascii=False, indent=1), encoding="utf-8")
+            import os
+            os.replace(tmp, APROBACIONES_KILL)  # atómico (/code-review)
+            from shadow_digest import enviar_telegram
+            enviar_telegram(f"🛑 Aprobación manual sports CERRADA por kill-switch: {clave_ap} -- {motivo}",
+                            bot="sports")
+        except Exception:
+            pass
+        return None
+    return a
 
 
 def techo_confirmado(categoria: str, tipo: str, ask: float, resultado_evaluar: dict) -> float | None:

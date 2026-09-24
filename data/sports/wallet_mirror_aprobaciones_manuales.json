@@ -1,0 +1,15 @@
+{
+ "_nota": "24-Sep, decisión explícita Javi (marco 'punto medio'). Aprobación manual por bucket del gate sports wallet mirror: levanta SOLO sin_concluir; kill-switch propio sobre trades reales desde 'desde'. Ver sports_wallet_mirror_gate_bucket.py::_aprobacion_vigente.",
+ "aprobaciones": {
+  "CS#SEGUIR#0.45": {
+   "modo": "live",
+   "desde": "2026-09-24T11:00:00",
+   "motivo": "Datos completos tras arreglar el resolver (24-Sep): n=706 mercados, +0,10 EUR/merc, mitades +0,11/+0,10, p_bh=0,058; con datos sesgados era bueno_confirmado y ya operaba en real.",
+   "kill": {
+    "n_min": 20,
+    "pnl_media_min": 0.0,
+    "perdida_max_eur": 3.0
+   }
+  }
+ }
+}
