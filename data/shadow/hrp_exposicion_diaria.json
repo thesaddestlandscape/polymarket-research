@@ -1,5 +1,5 @@
 {
-  "timestamp_utc": "2026-09-24T12:10:10+00:00",
+  "timestamp_utc": "2026-09-24T14:10:11+00:00",
   "tuplas_maduras": [],
   "tuplas_inmaduras": [
     {
@@ -245,12 +245,12 @@
     {
       "tupla": "RESOLUTION_SNIPER_PRECIERRE#SOL#5min#BUY_YES",
       "dias_historial": 0,
-      "n": 0
+      "n": 1
     },
     {
       "tupla": "RESOLUTION_SNIPER_PRECIERRE#SOL#5min#BUY_NO",
       "dias_historial": 0,
-      "n": 0
+      "n": 1
     },
     {
       "tupla": "RESOLUTION_SNIPER_PRECIERRE#XRP#5min#BUY_YES",
@@ -265,7 +265,7 @@
     {
       "tupla": "RESOLUTION_SNIPER_PRECIERRE#DOGE#5min#BUY_YES",
       "dias_historial": 0,
-      "n": 0
+      "n": 1
     },
     {
       "tupla": "RESOLUTION_SNIPER_PRECIERRE#DOGE#5min#BUY_NO",
@@ -275,12 +275,12 @@
     {
       "tupla": "RESOLUTION_SNIPER_PRECIERRE#BNB#5min#BUY_YES",
       "dias_historial": 0,
-      "n": 0
+      "n": 1
     },
     {
       "tupla": "RESOLUTION_SNIPER_PRECIERRE#BNB#5min#BUY_NO",
       "dias_historial": 0,
-      "n": 0
+      "n": 1
     },
     {
       "tupla": "RESOLUTION_SNIPER_PRECIERRE#BTC#15min#BUY_YES",
