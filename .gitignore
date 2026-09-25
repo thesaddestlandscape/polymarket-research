@@ -204,3 +204,8 @@ data/sports/*.metodo_*
 data/sports/combos_outcomes_cache.json
 data/sports/wallets_combos_24sep.json
 data/shadow/ask_real_por_senal.csv
+# 25-Sep: vigia_tamano_ficheros_git cruzó warning (50MB) con data/sports/wallet_mirror_sniper_dry_run.csv
+# (56MB, ~3,3MB/día -> bloqueo GitHub 100MB en ~13 días). Mismo patrón que data/shadow/wallet_mirror_sniper_dry_run.csv:
+# dataset histórico de análisis, no cache -> backup diario 03:15 UTC en scripts/backup_sports_wallet_mirror_sniper_dry_run.sh
+# (volumen dedicado, 14 días). git rm --cached aplicado; el histórico ya en packs no se libera con esto solo.
+data/sports/wallet_mirror_sniper_dry_run.csv
