@@ -125,6 +125,7 @@ import resolution_sniper_precierre_depth_fase0
 import momentum_ibs_ballena_botconsenso_dryrun_fase0
 import saltos_chainlink_fase0
 import binance_jump_leadlag_fase0  # 25-Sep: A3b, salto de Binance -> libro Polymarket a ms (solo observación)
+import wallet_first_buy_follow_fase0  # 25-Sep: seguir wallets 'primera compra' (ask real a 0,3/1/3 s), solo observación
 
 # (modulo, fichero_log_propio -- EXACTO el que ya usaba pipeline_watchdog.SCREEN_RESTART, nombre_funcion_log_a_reemplazar)
 OBSERVADORES = [
@@ -184,6 +185,7 @@ OBSERVADORES = [
     # resolution_sniper_observer (no arranca otro). Solo lectura.
     (saltos_chainlink_fase0, "saltos_chainlink_fase0.log", "_log"),
     (binance_jump_leadlag_fase0, "binance_jump_leadlag_fase0.log", "_log"),
+    (wallet_first_buy_follow_fase0, "wallet_first_buy_follow_fase0.log", "_log"),
 ]
 
 

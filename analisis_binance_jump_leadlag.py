@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""analisis_binance_jump_leadlag.py -- lee data/shadow/binance_jump_leadlag_fase0.csv (observador
+"""analisis_binance_jump_leadlag.py -- lee /root/polymarket-research-datalogs/binance_jump_leadlag_fase0.csv (observador
 binance_jump_leadlag_fase0.py) y mide, por moneda x marco y offset de entrada (0,3/0,6/1,0 s tras el
 salto de Binance), con el ASK REAL leído y profundidad >=5x stake:
   - reprecio ya descontado: ask(offset) - ask(0)   [en céntimos]
@@ -12,7 +12,7 @@ import csv, json, random, sys, time
 from collections import defaultdict
 from pathlib import Path
 REPO = Path(__file__).resolve().parent
-CSV = REPO / "data/shadow/binance_jump_leadlag_fase0.csv"
+CSV = Path("/root/polymarket-research-datalogs/binance_jump_leadlag_fase0.csv")
 CACHE = REPO / "data/shadow/binance_jump_leadlag_outcomes.json"
 FEE = 0.07
 ENTRADAS = [0.3, 0.6, 1.0]
