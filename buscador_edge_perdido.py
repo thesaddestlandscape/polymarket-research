@@ -69,6 +69,7 @@ lista de buckets candidatos con evidencia) + Telegram (latch, solo
 hallazgos NUEVOS) vía vigia_buscador_edge_perdido.py.
 """
 import csv
+import wm_ejecutor_csv  # 25-Sep: lector unificado principal+reconstruido (solo análisis)
 import json
 import sys
 from collections import defaultdict
@@ -123,8 +124,8 @@ def _cargar_filas_pgallina(tupla_str: str) -> list[tuple]:
         if not WM_EXECUTOR.exists():
             return []
         filas = []
-        with open(WM_EXECUTOR, encoding="utf-8") as f:
-            for r in csv.DictReader(f):
+        if True:  # lectura unificada principal+reconstruido (25-Sep), ver wm_ejecutor_csv.py
+            for r in wm_ejecutor_csv.iter_filas(WM_EXECUTOR):
                 if r.get("tupla_sintetica") != tupla_str:
                     continue
                 if not r.get("outcome_real"):

@@ -20,6 +20,7 @@ sigue_fillable_en_decision=1) + outcome real (wallet_mirror_sniper_dry_run.csv)
 + filtro TWAP (shadow_postmortem.es_pre_twap). Solo lectura.
 """
 import csv
+import wm_ejecutor_csv  # 25-Sep: lector unificado principal+reconstruido (solo análisis)
 import glob
 import math
 import sys
@@ -182,8 +183,8 @@ def main():
 
     print("Cargando executor (ask real, filtrado sigue_fillable_en_decision=1, post-TWAP)...")
     filas = []
-    with open(EXECUTOR, encoding="utf-8") as f:
-        for r in csv.DictReader(f):
+    if True:  # lectura unificada principal+reconstruido (25-Sep), ver wm_ejecutor_csv.py
+        for r in wm_ejecutor_csv.iter_filas(EXECUTOR):
             if r.get("sigue_fillable_en_decision") != "1":
                 continue
             activo = r.get("activo")

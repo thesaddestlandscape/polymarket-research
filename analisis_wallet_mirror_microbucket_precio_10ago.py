@@ -30,6 +30,7 @@ Solo lectura -- no toca ningún gate real, no genera ninguna tupla
 WALLET_MIRROR en pares_permitidos_live.
 """
 import csv
+import wm_ejecutor_csv  # 25-Sep: lector unificado principal+reconstruido (solo análisis)
 import math
 from collections import defaultdict
 from pathlib import Path
@@ -73,8 +74,8 @@ def cargar_outcomes():
 def cargar_filas(tipo):
     outcomes = cargar_outcomes()
     filas = defaultdict(list)  # activo -> [(ts, ask, pnl, grande), ...]
-    with open(EXECUTOR, encoding="utf-8") as f:
-        for r in csv.DictReader(f):
+    if True:  # lectura unificada principal+reconstruido (25-Sep), ver wm_ejecutor_csv.py
+        for r in wm_ejecutor_csv.iter_filas(EXECUTOR):
             if r.get("tipo") != tipo or r.get("sigue_fillable_en_decision") != "1":
                 continue
             clave = (r["wallet"], r["market_slug"], r["trade_timestamp"])
