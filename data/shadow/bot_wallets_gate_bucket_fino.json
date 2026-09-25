@@ -45,11 +45,11 @@
     "hi": 0.05,
     "n": 238,
     "pnl_medio": -0.6735,
-    "diff_vs_resto": -0.6362,
+    "diff_vs_resto": -0.636,
     "p_valor": 0.0,
     "split_half_diff": [
-      -0.3097,
-      -0.9627
+      -0.3095,
+      -0.9626
     ],
     "split_half_ok": true,
     "pnl_medio_loo": -0.8032,
@@ -83,11 +83,11 @@
     "hi": 0.05,
     "n": 48,
     "pnl_medio": -1.0,
-    "diff_vs_resto": -0.9515,
+    "diff_vs_resto": -0.9517,
     "p_valor": 0.0,
     "split_half_diff": [
-      -0.9515,
-      -0.9515
+      -0.9517,
+      -0.9517
     ],
     "split_half_ok": true,
     "pnl_medio_loo": -1.0,
@@ -128,11 +128,11 @@
     "hi": 0.37,
     "n": 44,
     "pnl_medio": -0.482,
-    "diff_vs_resto": -0.499,
-    "p_valor": 0.049,
+    "diff_vs_resto": -0.4981,
+    "p_valor": 0.0485,
     "split_half_diff": [
-      -0.2475,
-      -0.7504
+      -0.2466,
+      -0.7496
     ],
     "split_half_ok": true,
     "pnl_medio_loo": -0.5391,
@@ -159,11 +159,11 @@
     "hi": 0.06,
     "n": 103,
     "pnl_medio": -1.0,
-    "diff_vs_resto": -0.9464,
+    "diff_vs_resto": -0.9454,
     "p_valor": 0.0,
     "split_half_diff": [
-      -0.9464,
-      -0.9464
+      -0.9454,
+      -0.9454
     ],
     "split_half_ok": true,
     "pnl_medio_loo": -1.0,
@@ -190,11 +190,11 @@
     "hi": 0.14,
     "n": 48,
     "pnl_medio": -0.6272,
-    "diff_vs_resto": -0.5949,
-    "p_valor": 0.0185,
+    "diff_vs_resto": -0.5965,
+    "p_valor": 0.0155,
     "split_half_diff": [
-      -0.6125,
-      -0.5773
+      -0.6141,
+      -0.5789
     ],
     "split_half_ok": true,
     "pnl_medio_loo": -0.8186,
@@ -228,11 +228,11 @@
     "hi": 0.05,
     "n": 63,
     "pnl_medio": -1.0,
-    "diff_vs_resto": -0.9411,
+    "diff_vs_resto": -0.9407,
     "p_valor": 0.0,
     "split_half_diff": [
-      -0.9411,
-      -0.9411
+      -0.9407,
+      -0.9407
     ],
     "split_half_ok": true,
     "pnl_medio_loo": -1.0,
@@ -242,7 +242,7 @@
       -1.0
     ],
     "robusto_bootstrap": true,
-    "n_posiciones_buscadas": 51,
+    "n_posiciones_buscadas": 53,
     "g_kelly_f10": -0.10536,
     "veredicto_crudo_hoy": "malo_confirmado",
     "historial_crudo": [
@@ -251,18 +251,19 @@
     "fecha_historial": "2026-09-25",
     "veredicto": "malo_confirmado"
   },
-  "SNIPER#BNB#5min": {
-    "veredicto": "sin_concluir",
-    "historial_crudo": [
-      "malo_confirmado"
-    ]
-  },
   "?#BTC#5min": {
     "veredicto": "sin_concluir",
     "historial_crudo": [
       "bueno_confirmado",
       "bueno_confirmado",
       "bueno_confirmado"
+    ],
+    "fecha_historial": null
+  },
+  "SNIPER#BNB#5min": {
+    "veredicto": "sin_concluir",
+    "historial_crudo": [
+      "malo_confirmado"
     ]
   },
   "SNIPER#DOGE#5min": {
