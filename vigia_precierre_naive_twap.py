@@ -28,6 +28,26 @@ LIVE = REPO / "data" / "live"
 TRADES = LIVE / "trades.csv"
 DECISIONES = REPO / "data" / "shadow" / "resolution_sniper_precierre_executor_v2.csv"
 OUT = LIVE / "vigia_precierre_naive_twap.json"
+# 25-Sep (Javi "ok"): variantes de z/banda del PRECIERRE medidas HACIA ADELANTE sin arriesgar dinero.
+# El barrido de 10 días (15-24 Sep) fue in-sample (z>=1 y banda [0,25-0,65) salieron de esos mismos
+# días): 5min z>=1 5,6/día EV +1,02; z>=0,5 9,6/día +0,76; banda a 0,75 8,5/día +0,77; a 0,85
+# 16/día +0,46; ancha 42,7/día +0,26. Aquí cada variante se evalúa sobre las decisiones REALES
+# del ejecutor (ask y z de ese instante, profundidad >=5x stake) resueltas por gamma-api, desde
+# FORWARD_DESDE. Se decide con n>=N_DECISION forward por variante y marco, nunca antes.
+FORWARD_DESDE = "2026-09-25T00:00:00"
+N_DECISION = 40
+FEE = 0.07
+MIN_RATIO = 5.0
+VARIANTES = [  # (nombre, z_min, ask_lo, ask_hi)
+    ("V0_actual z>=1 [0.25,0.65)", 1.0, 0.25, 0.65),
+    ("V1 z>=0.5 [0.25,0.65)", 0.5, 0.25, 0.65),
+    ("V2 z>=1 [0.25,0.75)", 1.0, 0.25, 0.75),
+    ("V3 z>=1 [0.25,0.85)", 1.0, 0.25, 0.85),
+    ("V4 z>=0.5 [0.25,0.75)", 0.5, 0.25, 0.75),
+    ("V5 z>=1 [0.05,0.95)", 1.0, 0.05, 0.95),
+]
+OUTCOMES_CACHE = LIVE / "precierre_variantes_outcomes.json"
+
 MODOS = {
     "RESOLUTION_SNIPER_PRECIERRE": (LIVE / "precierre_twap_desde.txt", LIVE / "precierre_twap_kill.json",
                                     # 24-Sep: 0.95 era el acierto GLOBAL a T-45s; en la banda operada
@@ -44,6 +64,83 @@ def _leer(p: Path, defecto=None):
         return p.read_text(encoding="utf-8").strip()
     except Exception:
         return defecto
+
+
+def _resolver_outcomes(mids: list) -> dict:
+    """market_id -> nombre del outcome ganador ("Up"/"Down"), solo mercados ya cerrados (gamma-api).
+    Cachea solo los resueltos; los pendientes se reintentan al día siguiente. Fail-soft: sin red
+    devuelve lo cacheado."""
+    import time
+    try:
+        cache = json.loads(OUTCOMES_CACHE.read_text(encoding="utf-8"))
+    except Exception:
+        cache = {}
+    pend = [m for m in mids if m not in cache]
+    try:
+        import requests
+        for i in range(0, len(pend), 20):
+            lote = pend[i:i + 20]
+            try:
+                r = requests.get("https://gamma-api.polymarket.com/markets",
+                                 params=[("id", m) for m in lote] + [("closed", "true")], timeout=20)
+                for m in r.json():
+                    outs = json.loads(m["outcomes"]) if isinstance(m["outcomes"], str) else m["outcomes"]
+                    pr = [float(x) for x in (json.loads(m["outcomePrices"]) if isinstance(m["outcomePrices"], str)
+                                             else m["outcomePrices"])]
+                    if max(pr) >= 0.99:
+                        cache[str(m["id"])] = outs[pr.index(max(pr))]
+            except Exception:
+                continue
+            time.sleep(0.2)
+        OUTCOMES_CACHE.write_text(json.dumps(cache), encoding="utf-8")
+    except Exception:
+        pass
+    return cache
+
+
+def _variantes_forward() -> tuple[dict, list]:
+    """Evalúa VARIANTES sobre las decisiones reales del PRECIERRE desde FORWARD_DESDE. Devuelve
+    (json_por_variante, líneas_para_telegram). Una fila por (market_id, activo); ask y z son los del
+    instante de decisión; solo cuentan filas con profundidad >= MIN_RATIO x stake."""
+    filas = {}
+    try:
+        for r in csv.DictReader(open(DECISIONES, encoding="utf-8")):
+            if (r.get("estrategia") != "RESOLUTION_SNIPER_PRECIERRE" or r.get("dry_run") != "False"
+                    or r.get("marco") not in ("5min", "15min")
+                    or (r.get("timestamp_utc") or "") < FORWARD_DESDE):
+                continue
+            try:
+                ask, z, ratio = float(r["ask_implicita"]), float(r["z_twap"]), float(r["ratio_vs_stake"])
+            except (KeyError, TypeError, ValueError):
+                continue   # sin ask / z / profundidad: no ejecutable, no cuenta
+            if ratio < MIN_RATIO or r.get("direccion_implicita") not in ("Up", "Down"):
+                continue
+            filas[(r["market_id"], r["activo"])] = (r["marco"], r["activo"], r["timestamp_utc"][:10],
+                                                     r["direccion_implicita"], ask, z, r["market_id"])
+    except OSError:
+        return {}, ["variantes: sin CSV de decisiones"]
+    ganador = _resolver_outcomes(sorted({f[6] for f in filas.values()}))
+    out, lineas = {}, []
+    dias_fwd = len({f[2] for f in filas.values()}) or 1
+    for marco in ("5min", "15min"):
+        lineas.append(f"· variantes forward {marco} (desde {FORWARD_DESDE[:10]}, {dias_fwd} día(s) con datos):")
+        for nombre, zmin, lo, hi in VARIANTES:
+            evs, aciertos, dias, por_act = [], 0, set(), defaultdict(list)
+            for m, act, dia, dr, ask, z, mid in filas.values():
+                if m != marco or z < zmin or not (lo <= ask < hi) or mid not in ganador:
+                    continue
+                ac = ganador[mid] == dr
+                ev = ((1 - ask) / ask - FEE * (1 - ask)) if ac else -1.0
+                evs.append(ev); aciertos += ac; dias.add(dia); por_act[act].append(ev)
+            n = len(evs)
+            out[f"{marco}|{nombre}"] = {
+                "n": n, "dias": len(dias), "acierto": round(aciertos / n, 3) if n else None,
+                "ev_por_eur": round(sum(evs) / n, 3) if n else None,
+                "por_activo": {a: {"n": len(v), "ev_por_eur": round(sum(v) / len(v), 3)} for a, v in sorted(por_act.items())}}
+            marca = f"✅ n>={N_DECISION}: decidir" if n >= N_DECISION else f"acumulando ({n}/{N_DECISION})"
+            lineas.append(f"   {nombre}: n={n} acierto={'-' if not n else f'{aciertos/n:.0%}'} "
+                          f"EV/€={'-' if not n else f'{sum(evs)/n:+.2f}'} {marca}")
+    return out, lineas
 
 
 def main() -> int:
@@ -114,11 +211,16 @@ def main() -> int:
     if dias_pb >= 7:
         alertas.append(f"📅 PolyBolt ya tiene {dias_pb} días: toca revalidar offset (T-30/-45/-60) y banda por moneda "
                        f"con el TWAP oficial (analisis_precierre_twap_ventana_24sep.py)")
+    try:
+        informe["variantes_forward"], lineas_var = _variantes_forward()
+    except Exception as e:   # el resumen diario nunca debe caerse por esta sección
+        informe["variantes_forward"], lineas_var = {}, [f"variantes forward: error {type(e).__name__}: {e}"]
     informe["actualizado_utc"] = ahora.isoformat(timespec="seconds")
     OUT.write_text(json.dumps(informe, indent=1, ensure_ascii=False), encoding="utf-8")
     msg = ["📊 PRECIERRE/NAIVE modo TWAP -- resumen diario"] + (lineas or ["sin trades reales todavía"])
     for k, v in informe["embudo_24h"].items():
         msg.append(f"· 24h {k}: " + ", ".join(f"{m}={c}" for m, c in list(v.items())[:5]))
+    msg += lineas_var
     msg += alertas
     print("\n".join(msg))
     try:
