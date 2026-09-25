@@ -118,14 +118,14 @@ def _podar_historial(ahora: datetime) -> None:
 
 
 WM_RECON = REPO / "data/shadow/wallet_mirror_executor_dryrun_reconstruido_08_22sep.csv"
-WM_RECON_HASTA = "2026-09-22"   # el CSV principal cubre desde el 23-Sep (truncado por el OOM del 23-Sep 06:01)
+WM_RECON_HASTA_TS = "2026-09-23T06:03:00"   # el principal empieza el 23-Sep 06:03:48 (OOM 23-Sep 06:01): del reconstruido solo entra lo anterior
 
 
 def _filas_wm_unificadas() -> dict:
     """25-Sep (Javi "sí"): WALLET_MIRROR con el CSV principal MÁS el reconstruido 08-22 Sep. El
     principal perdió 15 días en el OOM del 23-Sep; sin esto los forward de 24-25 Sep salían con n=1
     (WM ETH#15min g1 [0,48-0,51) marcada "3 días operable" por datos parciales). Mismo loader
-    (Q.W.cargar_filas) sobre ambos ficheros; del reconstruido solo entran filas <= WM_RECON_HASTA
+    (Q.W.cargar_filas) sobre ambos ficheros; del reconstruido solo entran filas anteriores a WM_RECON_HASTA_TS
     (evita duplicar el solape) y se deduplica por fila exacta."""
     base = Q.W.cargar_filas()
     if not WM_RECON.exists():
@@ -134,13 +134,16 @@ def _filas_wm_unificadas() -> dict:
     try:
         Q.W.EXECUTOR = WM_RECON
         rec = Q.W.cargar_filas()
+    except Exception as e:            # fichero corrupto/a medias: se ignora (= comportamiento anterior)
+        print(f"AVISO: reconstruido WM ilegible ({type(e).__name__}: {e}), se usa solo el CSV principal")
+        return base
     finally:
         Q.W.EXECUTOR = orig
     for k, v in rec.items():
         dst = base.setdefault(k, [])
         vistos = set(dst)
         for f in v:
-            if str(f[0])[:10] <= WM_RECON_HASTA and f not in vistos:
+            if str(f[0])[:19] < WM_RECON_HASTA_TS and f not in vistos:
                 dst.append(f)
     return base
 
