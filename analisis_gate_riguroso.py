@@ -30,9 +30,11 @@ No sustituye N_BUCKET_MIN=15 / n>=40 IC>=0.08 (CLAUDE.md) — es una capa
 adicional de lectura antes de proponer una promoción. No escribe nada.
 Correr desde la raíz del repo:  python3 analisis_gate_riguroso.py
 """
-import csv, json, os, random, math, sys
+import csv, json, os, math, sys
 from collections import defaultdict
 from pathlib import Path
+
+import numpy as np
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import shadow_postmortem as sp  # noqa: E402 — reusa _ic_bayes/_shuffle_pvalue/_benjamini_hochberg (20-Jul, evita 3 copias casi idénticas del mismo test)
@@ -127,11 +129,10 @@ def pnl_bootstrap(rows, n_boot=N_SHUFFLE, seed=42):
     # determinidad (semilla fija), pero el flujo aleatorio es el de numpy PCG64, no el de Mersenne
     # Twister: los CI cambian en ~1/sqrt(n_boot) y un veredicto EXACTAMENTE en el límite puede voltear
     # una vez (ver analisis de equivalencia del commit). Por bloques para acotar la RAM (n grande).
-    import numpy as np
     arr = np.asarray(pnls, dtype=np.float64)
     rng = np.random.default_rng(seed)
     medias_boot = np.empty(n_boot, dtype=np.float64)
-    bloque = max(1, 4_000_000 // n)
+    bloque = max(1, 1_000_000 // n)   # ~16 MB de temporales por bloque (OOM-kills históricos)
     for i in range(0, n_boot, bloque):
         k = min(bloque, n_boot - i)
         medias_boot[i:i + k] = arr[rng.integers(0, n, size=(k, n))].mean(axis=1)

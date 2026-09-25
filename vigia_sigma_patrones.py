@@ -84,7 +84,10 @@ def _discrimina(f: dict, tipo: str) -> bool:
     if lift < (MIN_LIFT_PATRON if tipo == "patron" else MIN_GAP_FILTRO):
         return False
     p = f.get("p_shuffle")
-    return p is None or p < P_SHUFFLE_MAX
+    try:
+        return p is not None and float(p) < P_SHUFFLE_MAX   # fail-closed: sin test de permutación no se avisa
+    except (TypeError, ValueError):
+        return False
 
 
 def main() -> int:
@@ -118,6 +121,18 @@ def main() -> int:
     nuevos_avisar = []
     total_sigma = 0
     sin_lift = 0
+    if not es_primera_ejecucion and not latch.get("_migrado_latch_n40_25sep"):
+        # Migración única (/code-review 25-Sep): el latch viejo guardaba en mudo patrones con n<40
+        # (27 en el latch real) que ya nunca podían avisar al madurar. Se sacan los que hoy siguen
+        # con n<40; el resto del historial latcheado no se toca (no reenvía lo ya avisado).
+        for clave, entry in estrategias.items():
+            if not isinstance(entry, dict):
+                continue
+            for tipo, campo in (("filtro", "filtros_causales"), ("patron", "patrones_ganadores")):
+                for f in entry.get(campo, []) or []:
+                    if (f.get("feature") or "").startswith("sigma_") and _n_de(f, tipo) < GATE_N_AVISO:
+                        vistos.discard(_firma(clave, tipo, f))
+        latch["_migrado_latch_n40_25sep"] = True
     for clave, entry in estrategias.items():
         if not isinstance(entry, dict):
             continue
@@ -136,11 +151,11 @@ def main() -> int:
                     # reevalúa cada ciclo y solo avisa la primera vez que supere el listón.
                     sin_lift += 1
                     continue
-                if not es_primera_ejecucion and 15 <= n < GATE_N_AVISO:
-                    continue  # 25-Sep: sin latchear hasta n>=40 (antes se latcheaba mudo y nunca avisaba)
+                if not es_primera_ejecucion and n < GATE_N_AVISO:
+                    # 25-Sep: sin latchear hasta n>=40 (antes se latcheaba mudo -- incluido n<15 -- y
+                    # el patrón nunca avisaba al madurar, /code-review).
+                    continue
                 vistos.add(firma)
-                if n < 15:
-                    continue  # por debajo del propio umbral del postmortem, ruido
                 tupla_live = f"{clave}#{f.get('direccion')}"
                 es_live = tupla_live in pares_live
                 nuevos_avisar.append((clave, tipo, f, n, es_live))
