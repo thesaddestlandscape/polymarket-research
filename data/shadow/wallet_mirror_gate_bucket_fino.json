@@ -30,11 +30,11 @@
     "hi": 0.38,
     "n": 47,
     "pnl_medio": -0.4239,
-    "diff_vs_resto": -0.4237,
+    "diff_vs_resto": -0.4238,
     "p_valor": 0.0005,
     "split_half_diff": [
-      -0.2976,
-      -0.5445
+      -0.2977,
+      -0.5446
     ],
     "split_half_ok": true,
     "pnl_medio_loo": -0.4742,
@@ -90,25 +90,25 @@
     "fecha_historial": "2026-09-22"
   },
   "SEGUIR#BTC#15min#1": {
-    "n_dias": 17,
-    "pnl_sin_mejores_dias": -0.7784,
+    "n_dias": 18,
+    "pnl_sin_mejores_dias": -0.7818,
     "robusto_dias": false,
     "lo": 0.26,
     "hi": 0.31,
-    "n": 69,
-    "pnl_medio": -0.5408,
-    "diff_vs_resto": -0.5325,
-    "p_valor": 0.0,
+    "n": 70,
+    "pnl_medio": -0.5473,
+    "diff_vs_resto": -0.5395,
+    "p_valor": 0.001,
     "split_half_diff": [
-      -0.167,
-      -0.8875
+      -0.1911,
+      -0.888
     ],
     "split_half_ok": true,
-    "pnl_medio_loo": -0.5877,
+    "pnl_medio_loo": -0.5936,
     "robusto_loo": true,
     "ci90_bootstrap": [
-      -0.7505,
-      -0.2913
+      -0.7594,
+      -0.2978
     ],
     "robusto_bootstrap": true,
     "n_posiciones_buscadas": 74,
@@ -157,11 +157,11 @@
     "hi": 0.19,
     "n": 44,
     "pnl_medio": -0.7551,
-    "diff_vs_resto": -0.7275,
+    "diff_vs_resto": -0.7291,
     "p_valor": 0.0,
     "split_half_diff": [
-      -0.7344,
-      -0.7206
+      -0.736,
+      -0.7222
     ],
     "split_half_ok": true,
     "pnl_medio_loo": -0.8782,
@@ -245,6 +245,13 @@
     "fecha_historial": "2026-09-25",
     "veredicto": "malo_confirmado"
   },
+  "SEGUIR#ETH#5min#0": {
+    "veredicto": "sin_concluir",
+    "historial_crudo": [
+      "malo_confirmado"
+    ],
+    "fecha_historial": null
+  },
   "SEGUIR#BNB#5min#0": {
     "veredicto": "sin_concluir",
     "historial_crudo": [
@@ -296,12 +303,6 @@
     ]
   },
   "SEGUIR#DOGE#15min#0": {
-    "veredicto": "sin_concluir",
-    "historial_crudo": [
-      "malo_confirmado"
-    ]
-  },
-  "SEGUIR#ETH#5min#0": {
     "veredicto": "sin_concluir",
     "historial_crudo": [
       "malo_confirmado"
