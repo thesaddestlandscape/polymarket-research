@@ -73,7 +73,10 @@ import photo_finish_logger
 import favorito_ultimosegundo_5min
 import punto_confirmacion_logger
 import resolution_sniper_observer
-import p22_cola_posicion_fase0
+# p22_cola_posicion_fase0 -- DESACTIVADO 25-Sep (Javi: 'apaga'): P22 REFUTADO 04-Ago
+# (selección adversa, n=7530, idea_p22_refutado_seleccion_adversa_confirmada_04ago); 187k filas
+# de CPU/disco sin uso. El módulo sigue en el repo (otros scripts lo importan como helper).
+# import p22_cola_posicion_fase0
 # box_builder_fase0 -- DESACTIVADO 19-Ago (médico del proyecto, barrido CPU):
 # estrategia REFUTADA 04-Ago (0/62 = 0.0% profundidad ejecutable en ambos
 # lados, ver idea_box_builder_refutado_profundidad_cero_04ago), pero seguía
@@ -128,7 +131,7 @@ OBSERVADORES = [
     (favorito_ultimosegundo_5min, "favorito_ultimosegundo.log", "_log"),
     (punto_confirmacion_logger, "punto_confirmacion.log", "_log"),
     (resolution_sniper_observer, "resolution_sniper_observer.log", "_log"),
-    (p22_cola_posicion_fase0, "p22_cola_posicion_fase0.log", "_log"),
+    # (p22_cola_posicion_fase0, "p22_cola_posicion_fase0.log", "_log"),  -- desactivado 25-Sep, ver import
     # (box_builder_fase0, "box_builder_fase0.log", "log"),  -- desactivado, ver nota en el import de arriba
     (sol5min_contrario_fase0, "sol5min_contrario_fase0.log", "log"),
     (xrp15min_contrario_fase0, "xrp15min_contrario_fase0.log", "log"),
