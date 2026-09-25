@@ -117,6 +117,34 @@ def _podar_historial(ahora: datetime) -> None:
     _escribir_atomico(HISTORIAL, "\n".join(mantener) + ("\n" if mantener else ""))
 
 
+WM_RECON = REPO / "data/shadow/wallet_mirror_executor_dryrun_reconstruido_08_22sep.csv"
+WM_RECON_HASTA = "2026-09-22"   # el CSV principal cubre desde el 23-Sep (truncado por el OOM del 23-Sep 06:01)
+
+
+def _filas_wm_unificadas() -> dict:
+    """25-Sep (Javi "sí"): WALLET_MIRROR con el CSV principal MÁS el reconstruido 08-22 Sep. El
+    principal perdió 15 días en el OOM del 23-Sep; sin esto los forward de 24-25 Sep salían con n=1
+    (WM ETH#15min g1 [0,48-0,51) marcada "3 días operable" por datos parciales). Mismo loader
+    (Q.W.cargar_filas) sobre ambos ficheros; del reconstruido solo entran filas <= WM_RECON_HASTA
+    (evita duplicar el solape) y se deduplica por fila exacta."""
+    base = Q.W.cargar_filas()
+    if not WM_RECON.exists():
+        return base
+    orig = Q.W.EXECUTOR
+    try:
+        Q.W.EXECUTOR = WM_RECON
+        rec = Q.W.cargar_filas()
+    finally:
+        Q.W.EXECUTOR = orig
+    for k, v in rec.items():
+        dst = base.setdefault(k, [])
+        vistos = set(dst)
+        for f in v:
+            if str(f[0])[:10] <= WM_RECON_HASTA and f not in vistos:
+                dst.append(f)
+    return base
+
+
 def generar() -> dict:
     ahora = datetime.now(timezone.utc)
     # cutoff a MEDIANOCHE UTC de hace FORWARD_DIAS dias: el conjunto de entrenamiento solo cambia una
@@ -128,7 +156,7 @@ def generar() -> dict:
     reusar = cache_prev.get("cutoff") == cutoff
     est = Q._estado_config()
     fuentes = [(arq, a, m, None, None, filas) for (arq, a, m), filas in Q.B.cargar_filas().items()]
-    fuentes += [("WALLET_MIRROR", a, m, g, None, filas) for (_t, a, m, g), filas in Q.W.cargar_filas().items()]
+    fuentes += [("WALLET_MIRROR", a, m, g, None, filas) for (_t, a, m, g), filas in _filas_wm_unificadas().items()]
     # 22-Sep (petición explícita Javi: extender a TODAS las estrategias que
     # han estado en live y candidatos_evaluacion_live, no solo P-GALLINA):
     # familia "clásica" vía results.csv, mismo loader TWAP-safe que gate_
