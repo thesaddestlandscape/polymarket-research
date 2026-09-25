@@ -70,6 +70,7 @@ SUFIJOS_INFRA = ("_logger.py", "_observer.py", "_executor.py", "_executor_btc15m
 # confirmar con `grep <script> run_fast.sh/run_slow.sh`, nunca a ciegas.
 EXCEPCIONES_C = {
     "fetch_binance_klines.py",  # invocado en run_fast.sh:43 cada ciclo
+    "fetch_polymarket_perps_fills_full.py",  # backfill ONE-SHOT (23-Sep, 44/44 wallets completo); se lanza a mano
 }
 
 # Screens vivas conocidas y legítimas que a propósito NO están en
@@ -77,6 +78,8 @@ EXCEPCIONES_C = {
 # no aporta (el propio guardián no se vigila a sí mismo).
 EXCEPCIONES_FANTASMA = {
     "watchdog",  # pipeline_watchdog.py -- ver docstring del propio script
+    # repo independiente /root/polymarket-weather (CLAUDE.md prohíbe mezclar); su watchdog es el de aquí
+    "dash-weather", "weather-consensus", "weather-mirror", "weather-ws",
 }
 
 
@@ -159,7 +162,16 @@ def _modulos_fusionados(en_screen: dict[str, str], cron_map: dict[str, str] | No
     motivó _modulos_fusionados() el 05-Ago, ahora también para cron."""
     entries = set(en_screen.values()) | set((cron_map or {}).keys())
     fusionados = set()
-    for entry in entries:
+    # 25-Sep: cierre transitivo -- smart_exit_logger.py lo importa
+    # smart_exit_logger_persistente.py, que a su vez está fusionado en
+    # observadores; sin esto salía como huérfano (falso positivo).
+    cola = list(entries)
+    vistos = set()
+    while cola:
+        entry = cola.pop()
+        if entry in vistos:
+            continue
+        vistos.add(entry)
         ruta = REPO / entry
         if not ruta.exists():
             continue
@@ -173,6 +185,7 @@ def _modulos_fusionados(en_screen: dict[str, str], cron_map: dict[str, str] | No
                     candidato = f"{alias.name}.py"
                     if candidato != entry and (REPO / candidato).exists():
                         fusionados.add(candidato)
+                        cola.append(candidato)
     return fusionados
 
 

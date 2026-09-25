@@ -98,6 +98,12 @@ SCREENS = {
     # persistente propio vía nested_arb_loop.py (ver su docstring).
     "nestedarb": {"entry": "nested_arb_loop.py",
                    "probe": "log:logs/nested_arb_loop.log:arrancando"},
+    # freezeestado (15-Sep) y dryrunmc (02-Sep): screens de solo observación/dry-run
+    # que corrían sin declarar (barrido 25-Sep, inventario_sistema A2) -- si caían,
+    # nadie las reiniciaba. Sin dinero real.
+    "freezeestado": {"entry": "resolution_sniper_freeze_estado_fase0.py",
+                     "probe": "log:logs/resolution_sniper_freeze_estado_fase0.log:arrancado"},
+    "dryrunmc": {"entry": "dryrun_mejora_contraria_02sep.py"},  # sin probe: no loguea al arrancar
     # Solo se vigila el .sh (sus hijos python son proceso fresco cada ciclo).
     "fast":    {"entry": "run_fast.sh", "shallow": True, "no_restart": True},
     "slow":    {"entry": "run_slow.sh", "shallow": True, "no_restart": True},
