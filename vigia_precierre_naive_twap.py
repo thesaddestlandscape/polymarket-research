@@ -143,6 +143,66 @@ def _variantes_forward() -> tuple[dict, list]:
     return out, lineas
 
 
+MULTIOFFSET = Path("/root/polymarket-research-datalogs/precierre_multioffset_fase0.csv")
+MO_DESDE = "2026-09-25T09:00:00"
+MO_BANDA = (0.25, 0.85)
+
+
+def _multioffset_forward() -> tuple[dict, list]:
+    """EV al ASK REAL por instante de disparo del precierre (observador precierre_multioffset_fase0,
+    25-Sep): mismas decisiones que el ejecutor a cada offset T-120..T-10 s (z verificado idéntico al
+    ejecutor a T-45: 18/18 misma dirección, dif. de z 0,0). Solo cuentan lecturas con ask en la banda
+    [0,25-0,85), z>=umbral y profundidad >=5x stake. 'Primer disparo' = el offset más temprano que
+    cumple por (mercado, moneda): lo que ganaría un ejecutor multi-instante. Backtest previo (in-sample,
+    ask <=10 s): 5min primer disparo 339/día EV +0,089 (10/10 días). Decidir con n>=40 y >=3 días."""
+    try:
+        filas = [r for r in csv.DictReader(open(MULTIOFFSET, encoding="utf-8")) if r["ts_utc"] >= MO_DESDE]
+    except OSError:
+        return {}, ["multi-offset: sin CSV todavía"]
+    datos = []
+    for r in filas:
+        try:
+            ask, z, ratio, off = float(r["ask"]), float(r["z"]), float(r["ratio_vs_stake"]), int(float(r["offset_s"]))
+        except (TypeError, ValueError):
+            continue
+        if r["error"] or ratio < MIN_RATIO or r["direccion"] not in ("Up", "Down") or not (0.05 <= ask < 0.95):
+            continue
+        datos.append({"m": r["marco"], "act": r["activo"], "mid": r["market_id"], "off": off, "z": z, "ask": ask,
+                      "dir": r["direccion"], "dia": r["ts_utc"][:10]})
+    if not filas:
+        return {}, ["multi-offset: sin filas"]
+    t0, t1 = filas[0]["ts_utc"], filas[-1]["ts_utc"]
+    dias = max(1.0, (datetime.fromisoformat(t1) - datetime.fromisoformat(t0)).total_seconds() / 86400)
+    gan = _resolver_outcomes(sorted({d["mid"] for d in datos}))
+    out, lineas = {}, [f"· multi-offset forward ({t0[:16]}→{t1[:16]}, {dias:.1f} días, {len(filas)} lecturas, banda "
+                       f"[{MO_BANDA[0]},{MO_BANDA[1]}), profundidad>=5x):"]
+
+    def stats(rows):
+        v = [((1 - d["ask"]) / d["ask"] - FEE * (1 - d["ask"])) if gan[d["mid"]] == d["dir"] else -1.0
+             for d in rows if d["mid"] in gan]
+        return (len(v), round(sum(v) / len(v), 3), round(sum(gan[d["mid"]] == d["dir"] for d in rows if d["mid"] in gan) / len(v), 2)) if v else None
+
+    for marco in ("5m", "15m"):
+        for zmin in (1.0, 0.5):
+            base = [d for d in datos if d["m"] == marco and d["z"] >= zmin and MO_BANDA[0] <= d["ask"] < MO_BANDA[1]]
+            porof = {}
+            for off in (-120, -90, -60, -45, -30, -20, -10):
+                st = stats([d for d in base if d["off"] == off])
+                porof[off] = st
+            primero = {}
+            for d in sorted(base, key=lambda x: x["off"]):
+                primero.setdefault((d["mid"], d["act"]), d)
+            sp = stats(list(primero.values()))
+            out[f"{marco}|z>={zmin}"] = {"por_offset": {str(o): x for o, x in porof.items()}, "primer_disparo": sp,
+                                          "n_lecturas_cumplen": len(base)}
+            fila = " ".join(f"T{o}:{x[0]}/{x[1]:+.2f}" for o, x in porof.items() if x)
+            lineas.append(f"   {marco} z>={zmin}: [n/EV€ por offset] {fila or '-'}")
+            if sp:
+                marca = "✅ n>=40" if sp[0] >= 40 and dias >= 3 else "acumulando"
+                lineas.append(f"      primer disparo: n={sp[0]} ({sp[0]/dias:.0f}/día) acierto={sp[2]:.0%} EV/€={sp[1]:+.2f} {marca}")
+    return out, lineas
+
+
 def main() -> int:
     ahora = datetime.now(timezone.utc)
     informe, lineas, alertas = {}, [], []
@@ -215,12 +275,17 @@ def main() -> int:
         informe["variantes_forward"], lineas_var = _variantes_forward()
     except Exception as e:   # el resumen diario nunca debe caerse por esta sección
         informe["variantes_forward"], lineas_var = {}, [f"variantes forward: error {type(e).__name__}: {e}"]
+    try:
+        informe["multioffset_forward"], lineas_mo = _multioffset_forward()
+    except Exception as e:
+        informe["multioffset_forward"], lineas_mo = {}, [f"multi-offset: error {type(e).__name__}: {e}"]
     informe["actualizado_utc"] = ahora.isoformat(timespec="seconds")
     OUT.write_text(json.dumps(informe, indent=1, ensure_ascii=False), encoding="utf-8")
     msg = ["📊 PRECIERRE/NAIVE modo TWAP -- resumen diario"] + (lineas or ["sin trades reales todavía"])
     for k, v in informe["embudo_24h"].items():
         msg.append(f"· 24h {k}: " + ", ".join(f"{m}={c}" for m, c in list(v.items())[:5]))
     msg += lineas_var
+    msg += lineas_mo
     msg += alertas
     print("\n".join(msg))
     try:
