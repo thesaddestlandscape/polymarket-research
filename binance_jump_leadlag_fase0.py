@@ -18,7 +18,7 @@ lado del salto en los offsets OFFSETS_S (0 = "antes", luego 0,3/0,6/1/2/4 s) y r
 profundidad y latencia real. Después (analisis_binance_jump_leadlag.py) se resuelve el resultado
 oficial y se calcula el EV al ask REAL entrando en cada offset (retener a resolución) y el markout
 (bid a +4 s - ask de entrada). Solo cuenta lo medido aquí, con la latencia de esta máquina.
--> data/shadow/binance_jump_leadlag_fase0.csv
+-> /root/polymarket-research-datalogs/binance_jump_leadlag_fase0.csv (fuera de git)
 """
 import asyncio
 import csv
@@ -35,7 +35,7 @@ import live_trade as lt
 from resolution_sniper_observer import _CACHE_MKT, mercado_slot, token_ids
 
 REPO = Path(__file__).resolve().parent
-OUT = REPO / "data" / "shadow" / "binance_jump_leadlag_fase0.csv"
+OUT = Path("/root/polymarket-research-datalogs") / "binance_jump_leadlag_fase0.csv"   # fuera de git (~2-5 MB/día)
 SIMBOLOS = {"BTCUSDT": "BTC", "ETHUSDT": "ETH", "SOLUSDT": "SOL", "XRPUSDT": "XRP",
             "DOGEUSDT": "DOGE", "BNBUSDT": "BNB"}
 WS_URL = "wss://stream.binance.com:9443/stream?streams=" + "/".join(f"{s.lower()}@bookTicker" for s in SIMBOLOS)
