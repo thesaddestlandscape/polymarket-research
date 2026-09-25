@@ -124,6 +124,7 @@ import huecos_extremos_fase0
 import resolution_sniper_precierre_depth_fase0
 import momentum_ibs_ballena_botconsenso_dryrun_fase0
 import saltos_chainlink_fase0
+import binance_jump_leadlag_fase0  # 25-Sep: A3b, salto de Binance -> libro Polymarket a ms (solo observación)
 
 # (modulo, fichero_log_propio -- EXACTO el que ya usaba pipeline_watchdog.SCREEN_RESTART, nombre_funcion_log_a_reemplazar)
 OBSERVADORES = [
@@ -182,6 +183,7 @@ OBSERVADORES = [
     # (analisis_leadlag_chainlink_libro_24sep.py). Usa el _TAIL que ya arranca
     # resolution_sniper_observer (no arranca otro). Solo lectura.
     (saltos_chainlink_fase0, "saltos_chainlink_fase0.log", "_log"),
+    (binance_jump_leadlag_fase0, "binance_jump_leadlag_fase0.log", "_log"),
 ]
 
 
