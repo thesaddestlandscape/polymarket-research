@@ -1,6 +1,6 @@
 {
  "STREAK_MOM_5M": {
-  "ic_bayes_familia": 0.0237,
+  "ic_bayes_familia": 0.0239,
   "n_tuplas_fuertes": 2,
   "pnl_fiel_combinado_eur": 94.66,
   "tuplas": [
@@ -17,7 +17,7 @@
   ]
  },
  "UPDOWN_GBM": {
-  "ic_bayes_familia": 0.0307,
+  "ic_bayes_familia": 0.0308,
   "n_tuplas_fuertes": 2,
   "pnl_fiel_combinado_eur": 51.19,
   "tuplas": [
@@ -34,7 +34,7 @@
   ]
  },
  "LIQUIDACIONES_5M": {
-  "ic_bayes_familia": 0.0073,
+  "ic_bayes_familia": 0.0075,
   "n_tuplas_fuertes": 2,
   "pnl_fiel_combinado_eur": 44.71,
   "tuplas": [
@@ -63,7 +63,7 @@
   ]
  },
  "UPDOWN_GBM_15M_TARDIO": {
-  "ic_bayes_familia": -0.0384,
+  "ic_bayes_familia": -0.038,
   "n_tuplas_fuertes": 1,
   "pnl_fiel_combinado_eur": 20.15,
   "tuplas": [
