@@ -37,6 +37,14 @@ PARAMS = REPO / "data/shadow/strategy_params.json"
 CONFIG_LIVE = REPO / "data/live/config_live.json"
 LATCH = REPO / "data/live/vigia_sigma_patrones_latch.json"
 GATE_N_AVISO = 40
+# 25-Sep (Javi "hazlo"): un patrón solo avisa si DISCRIMINA. El IC de un patrón_ganador que apenas
+# supera el ic_base de su propia estrategia no informa (hallazgo 25-Sep: en
+# UPDOWN_GBM_15M_CROSS_WINDOW_SPREAD#BTC tanto sigma_h>0,0048 como sigma_h<0,0044 daban IC~+0,35 con
+# ic_base +0,345 -- patrones opuestos "ganan" a la vez porque el IC es el nivel base, no la feature).
+# Mediana del lift de los 182 patrones sigma con n>=40 = +0,03; p90 = +0,095.
+MIN_LIFT_PATRON = 0.05     # ic_patron - ic_base
+MIN_GAP_FILTRO = 0.10      # ic_bueno - ic_malo (separación entre lo que el filtro corta y lo que deja)
+P_SHUFFLE_MAX = 0.05
 
 
 def _firma(clave: str, tipo: str, f: dict) -> str:
@@ -56,6 +64,30 @@ def _n_de(f: dict, tipo: str) -> int:
 
 def _ic_de(f: dict, tipo: str) -> float | None:
     return f.get("ic_patron") if tipo == "patron" else f.get("ic_malo")
+
+
+def _lift(f: dict, tipo: str) -> float | None:
+    """Poder discriminante del patrón/filtro, o None si el postmortem no guardó lo necesario
+    (fail-closed: sin dato no se avisa, se reevalúa en el siguiente ciclo)."""
+    try:
+        if tipo == "patron":
+            return float(f["ic_patron"]) - float(f["ic_base"])
+        return float(f["ic_bueno"]) - float(f["ic_malo"])
+    except (KeyError, TypeError, ValueError):
+        return None
+
+
+def _discrimina(f: dict, tipo: str) -> bool:
+    lift = _lift(f, tipo)
+    if lift is None:
+        return False
+    if lift < (MIN_LIFT_PATRON if tipo == "patron" else MIN_GAP_FILTRO):
+        return False
+    p = f.get("p_shuffle")
+    try:
+        return p is not None and float(p) < P_SHUFFLE_MAX   # fail-closed: sin test de permutación no se avisa
+    except (TypeError, ValueError):
+        return False
 
 
 def main() -> int:
@@ -88,6 +120,19 @@ def main() -> int:
 
     nuevos_avisar = []
     total_sigma = 0
+    sin_lift = 0
+    if not es_primera_ejecucion and not latch.get("_migrado_latch_n40_25sep"):
+        # Migración única (/code-review 25-Sep): el latch viejo guardaba en mudo patrones con n<40
+        # (27 en el latch real) que ya nunca podían avisar al madurar. Se sacan los que hoy siguen
+        # con n<40; el resto del historial latcheado no se toca (no reenvía lo ya avisado).
+        for clave, entry in estrategias.items():
+            if not isinstance(entry, dict):
+                continue
+            for tipo, campo in (("filtro", "filtros_causales"), ("patron", "patrones_ganadores")):
+                for f in entry.get(campo, []) or []:
+                    if (f.get("feature") or "").startswith("sigma_") and _n_de(f, tipo) < GATE_N_AVISO:
+                        vistos.discard(_firma(clave, tipo, f))
+        latch["_migrado_latch_n40_25sep"] = True
     for clave, entry in estrategias.items():
         if not isinstance(entry, dict):
             continue
@@ -100,16 +145,23 @@ def main() -> int:
                 firma = _firma(clave, tipo, f)
                 if firma in vistos:
                     continue
-                vistos.add(firma)
                 n = _n_de(f, tipo)
-                if n < 15:
-                    continue  # por debajo del propio umbral del postmortem, ruido
+                if not es_primera_ejecucion and n >= GATE_N_AVISO and not _discrimina(f, tipo):
+                    # 25-Sep: no se latchea -- puede ganar poder discriminante cuando crezca n; se
+                    # reevalúa cada ciclo y solo avisa la primera vez que supere el listón.
+                    sin_lift += 1
+                    continue
+                if not es_primera_ejecucion and n < GATE_N_AVISO:
+                    # 25-Sep: sin latchear hasta n>=40 (antes se latcheaba mudo -- incluido n<15 -- y
+                    # el patrón nunca avisaba al madurar, /code-review).
+                    continue
+                vistos.add(firma)
                 tupla_live = f"{clave}#{f.get('direccion')}"
                 es_live = tupla_live in pares_live
                 nuevos_avisar.append((clave, tipo, f, n, es_live))
 
     print(f"[vigia_sigma_patrones] claves_totales={len(estrategias)} "
-          f"entradas_sigma_vistas={total_sigma} nuevas={len(nuevos_avisar)} "
+          f"entradas_sigma_vistas={total_sigma} nuevas={len(nuevos_avisar)} sin_lift_no_avisadas={sin_lift} "
           f"primera_ejecucion={es_primera_ejecucion}")
 
     # Primera ejecución: sembrar el latch en silencio (evita aluvión con el
@@ -123,7 +175,8 @@ def main() -> int:
             msg = (
                 f"🔎 VIGÍA sigma_*: nuevo {tipo} en {clave}\n"
                 f"feature={f.get('feature')} {f.get('condicion')} {f.get('umbral')} "
-                f"dir={f.get('direccion')} ic={ic:+.4f} n={n}\n"
+                f"dir={f.get('direccion')} ic={ic:+.4f} n={n} "
+                f"{'lift vs ic_base' if tipo == 'patron' else 'gap bueno-malo'}={_lift(f, tipo):+.3f}\n"
                 f"{etiqueta}\n"
                 f"Antes de promocionar: permutación + split temporal + coherencia "
                 f"cross-asset (mismo rigor que sigma_ewma_delta_pct#ETH 13-Jul)."

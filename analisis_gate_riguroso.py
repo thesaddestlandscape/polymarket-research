@@ -30,9 +30,11 @@ No sustituye N_BUCKET_MIN=15 / n>=40 IC>=0.08 (CLAUDE.md) — es una capa
 adicional de lectura antes de proponer una promoción. No escribe nada.
 Correr desde la raíz del repo:  python3 analisis_gate_riguroso.py
 """
-import csv, json, os, random, math, sys
+import csv, json, os, math, sys
 from collections import defaultdict
 from pathlib import Path
+
+import numpy as np
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import shadow_postmortem as sp  # noqa: E402 — reusa _ic_bayes/_shuffle_pvalue/_benjamini_hochberg (20-Jul, evita 3 copias casi idénticas del mismo test)
@@ -120,15 +122,24 @@ def pnl_bootstrap(rows, n_boot=N_SHUFFLE, seed=42):
     if n == 0:
         return None
     media = sum(pnls) / n
-    rnd = random.Random(seed)
-    medias_boot = []
-    for _ in range(n_boot):
-        muestra = [pnls[rnd.randrange(n)] for _ in range(n)]
-        medias_boot.append(sum(muestra) / n)
+    # 25-Sep: vectorizado con numpy. La versión anterior (random.Random + list comprehension, n_boot×n
+    # tiradas en Python puro) era el 100% del tiempo (py-spy 90 s, 8841/8843 muestras) del ciclo
+    # horario de hypothesis_tracker._eval_kelly_hora: 250-300 s bloqueando resolve/postmortem.
+    # Mismo estadístico (media de remuestreos con reemplazo, percentiles 5/95, fracción ≤0) y misma
+    # determinidad (semilla fija), pero el flujo aleatorio es el de numpy PCG64, no el de Mersenne
+    # Twister: los CI cambian en ~1/sqrt(n_boot) y un veredicto EXACTAMENTE en el límite puede voltear
+    # una vez (ver analisis de equivalencia del commit). Por bloques para acotar la RAM (n grande).
+    arr = np.asarray(pnls, dtype=np.float64)
+    rng = np.random.default_rng(seed)
+    medias_boot = np.empty(n_boot, dtype=np.float64)
+    bloque = max(1, 1_000_000 // n)   # ~16 MB de temporales por bloque (OOM-kills históricos)
+    for i in range(0, n_boot, bloque):
+        k = min(bloque, n_boot - i)
+        medias_boot[i:i + k] = arr[rng.integers(0, n, size=(k, n))].mean(axis=1)
     medias_boot.sort()
-    lo = medias_boot[int(0.05 * n_boot)]
-    hi = medias_boot[int(0.95 * n_boot) - 1]
-    p_boot = sum(1 for m in medias_boot if m <= 0) / n_boot
+    lo = float(medias_boot[int(0.05 * n_boot)])
+    hi = float(medias_boot[int(0.95 * n_boot) - 1])
+    p_boot = float((medias_boot <= 0).sum()) / n_boot
     return media, lo, hi, p_boot
 
 

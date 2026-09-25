@@ -802,6 +802,19 @@ def _leer(pre: _Precalculo, activo: str, ts_min: float | None = None) -> dict | 
             "market_id": m["market_id"], "z_twap": z_twap}
 
 
+def _z_nota(lectura: dict | None) -> str:
+    """25-Sep (Javi: 'nos va a servir para filtrar super bien'): deja el z de margen con el que se
+    decidió la orden en `notas` de trades.csv (` z=1.83`, ` z=na` si no hay), para poder segmentar
+    después el PnL real por z. Solo texto: no interviene en ninguna decisión ni puede lanzar."""
+    try:
+        z = (lectura or {}).get("z_twap")
+        if z is None or z != z:   # None o NaN
+            return " z=na"
+        return f" z={float(z):.2f}"
+    except (TypeError, ValueError):
+        return " z=na"
+
+
 def _cuenta_para_rafaga(lectura: dict | None) -> bool:
     if not lectura or not lectura["depth"].get("ok"):
         return False
@@ -1141,7 +1154,7 @@ def _instante_critico(pre: _Precalculo, lectura: dict, n_rafaga: int, ts_end: in
     resultado["_dir"], resultado["_guardas"] = direction, pre.guardas
     resultado["_envio"] = lambda: _firmar_enviar_registrar(
         pre, m, activo, direction, token_id, ask, stake_eur, STRATEGY,
-        (f"modo=twap_proy offset={OFFSET_S}s" if MODO_TWAP else f"offset={OFFSET_S}s rafaga_n={n_rafaga}"), resultado,
+        (f"modo=twap_proy offset={OFFSET_S}s{_z_nota(lectura)}" if MODO_TWAP else f"offset={OFFSET_S}s rafaga_n={n_rafaga}{_z_nota(lectura)}"), resultado,
         pre.ts_end - MARGEN_MIN_POST_S, t_lectura_ms)
     return resultado
 
@@ -1247,8 +1260,8 @@ def _instante_naive(pre: _Precalculo, lectura: dict, n_det: int, ts_end: int) ->
     r["_dir"], r["_guardas"] = direction, pre.guardas
     r["_envio"] = lambda: _firmar_enviar_registrar(
         pre, m, activo, direction, lectura["token_id"], ask, stake_eur,
-        STRATEGY_NAIVE, (f"modo=twap offset=+{NAIVE_OFFSET_S}s" if MODO_TWAP
-                         else f"offset=+{NAIVE_OFFSET_S}s monedas={n_det}"), r,
+        STRATEGY_NAIVE, (f"modo=twap offset=+{NAIVE_OFFSET_S}s{_z_nota(lectura)}" if MODO_TWAP
+                         else f"offset=+{NAIVE_OFFSET_S}s monedas={n_det}{_z_nota(lectura)}"), r,
         ts_end + NAIVE_MAX_ENVIO_S, lectura["t_lectura_ms"])
     return r
 
