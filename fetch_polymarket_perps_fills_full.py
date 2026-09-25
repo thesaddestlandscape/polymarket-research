@@ -78,6 +78,14 @@ def _watchlist() -> list:
                         direcciones.setdefault(a.lower(), a)
         except OSError:
             continue
+    # 25-Sep: watchlist AMPLIADA (top-200 cuentas de los leaderboards por apariciones/PnL, 849 distintas vistas;
+    # solo 41 tenian backfill) -> potencia para el consenso por categoria (project_perps_pendientes_25sep #2).
+    try:
+        import json as _json
+        for a in _json.loads((DIR_SHADOW / "perps_watchlist_ampliada.json").read_text()):
+            direcciones.setdefault(a.lower(), a)
+    except Exception:
+        pass
     return sorted(direcciones.values())
 
 

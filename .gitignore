@@ -209,3 +209,5 @@ data/shadow/ask_real_por_senal.csv
 # dataset histórico de análisis, no cache -> backup diario 03:15 UTC en scripts/backup_sports_wallet_mirror_sniper_dry_run.sh
 # (volumen dedicado, 14 días). git rm --cached aplicado; el histórico ya en packs no se libera con esto solo.
 data/sports/wallet_mirror_sniper_dry_run.csv
+data/shadow/perps_precios_1m/
+data/shadow/perps_klines_1h/
