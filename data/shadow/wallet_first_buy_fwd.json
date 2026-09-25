@@ -1,0 +1,130 @@
+{
+ "actualizado_utc": "2026-09-25T08:27:37+00:00",
+ "ultimo_dia": {
+  "dia": "2026-09-24",
+  "train_dias": [
+   "2026-09-23",
+   "2026-09-22",
+   "2026-09-21"
+  ],
+  "wallets_train_n>=15": 6071,
+  "seleccionadas": 135,
+  "eventos_dia_total": 323615,
+  "test": {
+   "0.3": {
+    "n": 5535,
+    "ev": 0.1041,
+    "t_iid": 4.1,
+    "n_mercados": 614,
+    "t_cluster_mercado": 1.73,
+    "wallets": 124,
+    "top5_share": 0.71,
+    "ev_sin_top5": 0.0364,
+    "t_cluster_sin_top5": 0.22
+   },
+   "1.0": {
+    "n": 5432,
+    "ev": 0.1075,
+    "t_iid": 4.09,
+    "n_mercados": 614,
+    "t_cluster_mercado": 1.6,
+    "wallets": 124,
+    "top5_share": 0.78,
+    "ev_sin_top5": 0.0293,
+    "t_cluster_sin_top5": 0.59
+   },
+   "3.0": {
+    "n": 5061,
+    "ev": 0.0727,
+    "t_iid": 2.81,
+    "n_mercados": 612,
+    "t_cluster_mercado": 1.19,
+    "wallets": 124,
+    "top5_share": 0.91,
+    "ev_sin_top5": 0.0083,
+    "t_cluster_sin_top5": 0.14
+   }
+  }
+ },
+ "pool": {
+  "dias_test": 3,
+  "por_L": {
+   "0.3": {
+    "n": 14181,
+    "ev": 0.1158,
+    "t_iid": 7.09,
+    "n_mercados": 1899,
+    "t_cluster_mercado": 3.67,
+    "wallets": 193,
+    "top5_share": 0.77,
+    "ev_sin_top5": 0.035,
+    "t_cluster_sin_top5": 2.07
+   },
+   "1.0": {
+    "n": 13878,
+    "ev": 0.1249,
+    "t_iid": 7.32,
+    "n_mercados": 1895,
+    "t_cluster_mercado": 3.67,
+    "wallets": 193,
+    "top5_share": 0.7,
+    "ev_sin_top5": 0.0519,
+    "t_cluster_sin_top5": 2.51
+   },
+   "3.0": {
+    "n": 13004,
+    "ev": 0.1137,
+    "t_iid": 6.43,
+    "n_mercados": 1880,
+    "t_cluster_mercado": 3.17,
+    "wallets": 193,
+    "top5_share": 0.71,
+    "ev_sin_top5": 0.0468,
+    "t_cluster_sin_top5": 2.02
+   }
+  },
+  "por_precio_L1": {
+   "0.0": {
+    "n": 984,
+    "ev": 1.183
+   },
+   "0.1": {
+    "n": 1022,
+    "ev": 0.489
+   },
+   "0.2": {
+    "n": 1101,
+    "ev": 0.224
+   },
+   "0.3": {
+    "n": 1287,
+    "ev": 0.173
+   },
+   "0.4": {
+    "n": 1536,
+    "ev": -0.008
+   },
+   "0.5": {
+    "n": 1587,
+    "ev": -0.074
+   },
+   "0.6": {
+    "n": 1207,
+    "ev": -0.1
+   },
+   "0.7": {
+    "n": 1135,
+    "ev": -0.071
+   },
+   "0.8": {
+    "n": 1544,
+    "ev": -0.05
+   },
+   "0.9": {
+    "n": 2475,
+    "ev": 0.003
+   }
+  }
+ },
+ "veredicto": "CANDIDATA robusta (revisar + checklist)"
+}
