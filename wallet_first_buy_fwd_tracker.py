@@ -220,8 +220,12 @@ def ejecutar(dia, enviar=True):
     robusto = bool(s1 and dias_test >= VEREDICTO_MIN_DIAS and s1["t_cluster_mercado"] >= VEREDICTO_T_CLUSTER
                    and (s1["ev_sin_top5"] or -1) >= VEREDICTO_EX_TOP5 and s1["n_mercados"] >= VEREDICTO_MERCADOS
                    and (s1["t_cluster_sin_top5"] or -9) >= VEREDICTO_T_SIN_TOP5)
+    # Composición del efecto (hallazgo 25-Sep: todo el EV vive en pf<0,3; con pf>=0,3 el EV es ~-0,02):
+    def _sub(cond):
+        return _stats([r for r in pool if r.get("pf_1.0") is not None and cond(r["pf_1.0"])], LSEL)
+    comp = {"longshot_pf<0.3": _sub(lambda p: p < 0.3), "resto_pf>=0.3": _sub(lambda p: p >= 0.3)}
     informe = {"actualizado_utc": datetime.now(timezone.utc).isoformat(timespec="seconds"), "ultimo_dia": dia_res,
-               "pool": {"dias_test": dias_test, "por_L": pool_res, "por_precio_L1": _por_precio(pool)},
+               "pool": {"dias_test": dias_test, "por_L": pool_res, "por_precio_L1": _por_precio(pool), "composicion_L1": comp},
                "veredicto": "CANDIDATA robusta (revisar + checklist)" if robusto else "NO robusta (cluster-t/ex-top5/n_mercados/dias)"}
     OUT.write_text(json.dumps(informe, indent=1, ensure_ascii=False))
     # Watchlist para el día SIGUIENTE (selección congelada con los TRAIN_DIAS días que acaban en `dia`,
@@ -247,6 +251,8 @@ def ejecutar(dia, enviar=True):
            f"pool {dias_test} día(s) test: n={s1 and s1['n']} mercados={s1 and s1['n_mercados']} EV/€={s1 and s1['ev']} "
            f"t_cluster={s1 and s1['t_cluster_mercado']} top5={s1 and s1['top5_share']} sin_top5={s1 and s1['ev_sin_top5']} "
            f"(t_cluster sin_top5={s1 and s1['t_cluster_sin_top5']})",
+           f"composición L=1s: longshot(pf<0.3) EV/€={(comp['longshot_pf<0.3'] or {}).get('ev')} t_cl_sin_top5={(comp['longshot_pf<0.3'] or {}).get('t_cluster_sin_top5')} | "
+           f"resto(pf>=0.3) EV/€={(comp['resto_pf>=0.3'] or {}).get('ev')}",
            f"veredicto: {informe['veredicto']}"]
     print("\n".join(msg))
     if enviar:
@@ -267,6 +273,10 @@ def main():
         while d0 <= d1:
             ejecutar(d0.isoformat(), enviar=False)
             d0 += timedelta(days=1)
+        return 0
+    if "--sin-telegram" in a:
+        dia = a[a.index("--dia") + 1] if "--dia" in a else (datetime.now(timezone.utc).date() - timedelta(days=1)).isoformat()
+        ejecutar(dia, enviar=False)
         return 0
     dia = a[a.index("--dia") + 1] if "--dia" in a else (datetime.now(timezone.utc).date() - timedelta(days=1)).isoformat()
     ejecutar(dia)
