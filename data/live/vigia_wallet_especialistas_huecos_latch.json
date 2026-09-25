@@ -1,1 +1,17 @@
-{}
+{
+ "0x5695f7337e08fd5d2f223cc56109de76d3e760e9#BNB#15m": {
+  "wallet": "0x5695f7337e08fd5d2f223cc56109de76d3e760e9",
+  "activo": "BNB",
+  "marco": "15m",
+  "n": 150,
+  "concentracion": 1.0,
+  "hit": 0.7533,
+  "edge_pp": 16.393,
+  "precio_medio": 0.5894,
+  "cobertura_propia_n": 0,
+  "cobertura_propia_ic_bayes": null,
+  "primera_vez_visto": "2026-09-25T06:33:02+00:00",
+  "ultima_vez_visto": "2026-09-25T06:33:02+00:00",
+  "g_kelly": 0.022785
+ }
+}
