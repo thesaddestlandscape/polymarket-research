@@ -1,5 +1,5 @@
 {
- "actualizado_utc": "2026-09-25T08:27:37+00:00",
+ "actualizado_utc": "2026-09-25T08:36:43+00:00",
  "ultimo_dia": {
   "dia": "2026-09-24",
   "train_dias": [
@@ -123,6 +123,30 @@
    "0.9": {
     "n": 2475,
     "ev": 0.003
+   }
+  },
+  "composicion_L1": {
+   "longshot_pf<0.3": {
+    "n": 3107,
+    "ev": 0.6151,
+    "t_iid": 8.72,
+    "n_mercados": 1377,
+    "t_cluster_mercado": 4.05,
+    "wallets": 67,
+    "top5_share": 0.67,
+    "ev_sin_top5": 0.381,
+    "t_cluster_sin_top5": 3.3
+   },
+   "resto_pf>=0.3": {
+    "n": 10771,
+    "ev": -0.0165,
+    "t_iid": -2.12,
+    "n_mercados": 1840,
+    "t_cluster_mercado": -1.07,
+    "wallets": 191,
+    "top5_share": null,
+    "ev_sin_top5": -0.0213,
+    "t_cluster_sin_top5": -1.31
    }
   }
  },
