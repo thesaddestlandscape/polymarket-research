@@ -1,20 +1,11 @@
 {
-  "timestamp_utc": "2026-09-25T06:19:03+00:00",
+  "timestamp_utc": "2026-09-25T07:57:01+00:00",
   "pipeline": {
     "n_ciclos_resolve_postmortem": 137,
-    "resolve_postmortem_p50_s": 79.6,
-    "resolve_postmortem_p95_s": 369.4,
+    "resolve_postmortem_p50_s": 79.8,
+    "resolve_postmortem_p95_s": 357.4,
     "resolve_postmortem_max_s": 613.7,
     "resolve_postmortem_duraciones_s": [
-      428.8,
-      164.0,
-      69.3,
-      68.4,
-      72.5,
-      71.9,
-      63.8,
-      461.3,
-      68.7,
       97.2,
       69.1,
       74.2,
@@ -142,9 +133,18 @@
       149.6,
       85.3,
       89.1,
-      74.2
+      74.2,
+      91.1,
+      75.2,
+      524.1,
+      72.5,
+      76.2,
+      65.3,
+      78.3,
+      101.1,
+      166.1
     ],
-    "n_ciclos_live_trade": 4636,
+    "n_ciclos_live_trade": 4708,
     "hueco_live_trade_max_s": 84.0
   },
   "procesos_colgados": [],
@@ -153,33 +153,33 @@
     "stale": []
   },
   "disco": {
-    "pct_usado": 87.0,
-    "gb_libres": 9.59,
+    "pct_usado": 88.0,
+    "gb_libres": 9.31,
     "git_gb": 0.0,
-    "data_gb": 32.16,
-    "datalogs_gb": 4.91
+    "data_gb": 32.36,
+    "datalogs_gb": 4.96
   },
   "ram": {
     "ram_total_gb": 7.56,
-    "ram_disponible_gb": 3.24,
-    "ram_pct_libre": 42.9
+    "ram_disponible_gb": 5.38,
+    "ram_pct_libre": 71.1
   },
   "integridad_datos": {
     "trades_abiertos_atascados": [],
     "n_trades_total": 727,
-    "n_results_total": 708510
+    "n_results_total": 709611
   },
   "integridad_datos_sports": {
     "trades_abiertos_atascados": [],
     "n_trades_total": 30
   },
   "carga_sistema": {
-    "load1": 7.36,
-    "load5": 6.56,
-    "load15": 6.0,
+    "load1": 3.06,
+    "load5": 4.28,
+    "load15": 4.81,
     "nproc": 4,
-    "ratio5": 1.64,
-    "n_procesos_total": 244
+    "ratio5": 1.07,
+    "n_procesos_total": 233
   },
   "oom_kills": {
     "n_oom_kills_24h": 0,

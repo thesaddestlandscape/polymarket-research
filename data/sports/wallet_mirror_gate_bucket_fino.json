@@ -1,82 +1,28 @@
 {
- "Valorant#SEGUIR": {
-  "veredicto": "sin_concluir",
-  "historial_crudo": [
-   "bueno_confirmado",
-   "bueno_confirmado",
-   "bueno_confirmado"
-  ]
- },
- "epl-ganador#SEGUIR": {
-  "veredicto": "sin_concluir",
-  "historial_crudo": [
-   "malo_confirmado"
-  ]
- },
- "fl1-ganador#SEGUIR": {
-  "veredicto": "sin_concluir",
-  "historial_crudo": [
-   "bueno_confirmado",
-   "bueno_confirmado",
-   "bueno_confirmado"
-  ]
- },
  "CS#SEGUIR": {
-  "n_dias": 19,
-  "pnl_sin_mejores_dias": -0.1262,
+  "n_dias": 14,
+  "pnl_sin_mejores_dias": -0.5176,
   "robusto_dias": false,
-  "lo": 0.22,
-  "hi": 0.27,
-  "n": 50,
-  "pnl_medio": 0.7657,
-  "diff_vs_resto": 0.7775,
-  "p_valor": 0.0,
+  "lo": 0.17,
+  "hi": 0.22,
+  "n": 73,
+  "pnl_medio": -0.4728,
+  "diff_vs_resto": -0.4454,
+  "p_valor": 0.012,
   "split_half_diff": [
-   1.3898,
-   0.1651
+   -0.5851,
+   -0.3095
   ],
   "split_half_ok": true,
-  "pnl_medio_loo": 0.7098,
+  "pnl_medio_loo": -0.5466,
   "robusto_loo": true,
   "ci90_bootstrap": [
-   0.2994,
-   1.2464
+   -0.7412,
+   -0.1552
   ],
   "robusto_bootstrap": true,
-  "n_posiciones_buscadas": 76,
-  "g_kelly_f10": 0.0568,
-  "veredicto_crudo_hoy": "bueno_confirmado",
-  "historial_crudo": [
-   "bueno_confirmado",
-   "bueno_confirmado",
-   "bueno_confirmado"
-  ],
-  "veredicto": "bueno_confirmado"
- },
- "LoL#SEGUIR": {
-  "n_dias": 17,
-  "pnl_sin_mejores_dias": -0.7683,
-  "robusto_dias": false,
-  "lo": 0.22,
-  "hi": 0.27,
-  "n": 59,
-  "pnl_medio": -0.5134,
-  "diff_vs_resto": -0.5201,
-  "p_valor": 0.018,
-  "split_half_diff": [
-   -0.4459,
-   -0.5919
-  ],
-  "split_half_ok": true,
-  "pnl_medio_loo": -0.5827,
-  "robusto_loo": true,
-  "ci90_bootstrap": [
-   -0.7891,
-   -0.2181
-  ],
-  "robusto_bootstrap": true,
-  "n_posiciones_buscadas": 65,
-  "g_kelly_f10": -0.06083,
+  "n_posiciones_buscadas": 82,
+  "g_kelly_f10": -0.06454,
   "veredicto_crudo_hoy": "malo_confirmado",
   "historial_crudo": [
    "malo_confirmado"
@@ -84,109 +30,33 @@
   "veredicto": "malo_confirmado"
  },
  "Tennis#SEGUIR": {
-  "veredicto": "sin_concluir",
-  "historial_crudo": [
-   "bueno_confirmado",
-   "bueno_confirmado",
-   "bueno_confirmado"
-  ]
- },
- "CS#FADE": {
   "n_dias": 15,
-  "pnl_sin_mejores_dias": -0.8724,
+  "pnl_sin_mejores_dias": -0.6963,
   "robusto_dias": false,
-  "lo": 0.17,
-  "hi": 0.22,
-  "n": 41,
-  "pnl_medio": -0.5271,
-  "diff_vs_resto": -0.5637,
-  "p_valor": 0.0015,
+  "lo": 0.11,
+  "hi": 0.16,
+  "n": 69,
+  "pnl_medio": -0.7051,
+  "diff_vs_resto": -0.6883,
+  "p_valor": 0.004,
   "split_half_diff": [
-   -0.7755,
-   -0.362
+   -0.7884,
+   -0.5911
   ],
   "split_half_ok": true,
-  "pnl_medio_loo": -0.6458,
+  "pnl_medio_loo": -0.8052,
   "robusto_loo": true,
   "ci90_bootstrap": [
-   -0.8848,
-   -0.1449
+   -0.904,
+   -0.4102
   ],
   "robusto_bootstrap": true,
-  "n_posiciones_buscadas": 79,
-  "g_kelly_f10": -0.04595,
+  "n_posiciones_buscadas": 95,
+  "g_kelly_f10": -0.08094,
   "veredicto_crudo_hoy": "malo_confirmado",
   "historial_crudo": [
    "malo_confirmado"
   ],
   "veredicto": "malo_confirmado"
- },
- "LoL#FADE": {
-  "n_dias": 16,
-  "pnl_sin_mejores_dias": -0.7797,
-  "robusto_dias": false,
-  "lo": 0.28,
-  "hi": 0.33,
-  "n": 64,
-  "pnl_medio": -0.6332,
-  "diff_vs_resto": -0.5862,
-  "p_valor": 0.0005,
-  "split_half_diff": [
-   -0.5331,
-   -0.6393
-  ],
-  "split_half_ok": true,
-  "pnl_medio_loo": -0.6835,
-  "robusto_loo": true,
-  "ci90_bootstrap": [
-   -0.8434,
-   -0.4125
-  ],
-  "robusto_bootstrap": true,
-  "n_posiciones_buscadas": 62,
-  "g_kelly_f10": -0.07073,
-  "veredicto_crudo_hoy": "malo_confirmado",
-  "historial_crudo": [
-   "malo_confirmado"
-  ],
-  "veredicto": "malo_confirmado"
- },
- "Dota#SEGUIR": {
-  "veredicto": "sin_concluir",
-  "historial_crudo": [
-   "malo_confirmado"
-  ]
- },
- "Dota#FADE": {
-  "n_dias": 12,
-  "pnl_sin_mejores_dias": 0.0697,
-  "robusto_dias": false,
-  "lo": 0.44,
-  "hi": 0.49,
-  "n": 43,
-  "pnl_medio": 0.3464,
-  "diff_vs_resto": 0.5422,
-  "p_valor": 0.0,
-  "split_half_diff": [
-   0.3975,
-   0.6803
-  ],
-  "split_half_ok": true,
-  "pnl_medio_loo": 0.3785,
-  "robusto_loo": true,
-  "ci90_bootstrap": [
-   0.088,
-   0.6015
-  ],
-  "robusto_bootstrap": true,
-  "n_posiciones_buscadas": 5,
-  "g_kelly_f10": 0.02881,
-  "veredicto_crudo_hoy": "bueno_confirmado",
-  "historial_crudo": [
-   "bueno_confirmado",
-   "bueno_confirmado",
-   "bueno_confirmado"
-  ],
-  "veredicto": "bueno_confirmado"
  }
 }
