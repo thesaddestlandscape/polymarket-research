@@ -42,10 +42,11 @@ def _resolver(mids):
     return cache
 
 
-def main():
+def calcular(desde="0000"):
+    """Devuelve (n_eventos, n_con_resultado, celdas) con celdas[(activo,marco,offset)] = dict."""
     ev = defaultdict(dict)
     for r in csv.DictReader(open(CSV, encoding="utf-8")):
-        if r["ts_evento"] < DESDE or r["error"]:
+        if r["ts_evento"] < desde or r["error"]:
             continue
         try:
             ev[(r["ts_evento"], r["activo"], r["marco"], r["market_id"], r["direccion"])][float(r["offset_s"])] = (
@@ -53,7 +54,6 @@ def main():
         except (TypeError, ValueError):
             continue
     ganador = _resolver(sorted({k[3] for k in ev}))
-    print(f"eventos (evento x mercado) {len(ev)}; con resultado {sum(k[3] in ganador for k in ev)}")
     filas = defaultdict(list)
     for (t, act, marco, mid, dr), o in ev.items():
         if 0.0 not in o or 4.0 not in o:
@@ -69,22 +69,34 @@ def main():
             ev_hold = None if g is None else (((1 - ask) / ask * (1 - FEE)) if g == dr else -1.0)
             filas[(act, marco, e)].append((t[:10], ask - o[0.0][0], mk, ev_hold))
             filas[("TODAS", marco, e)].append((t[:10], ask - o[0.0][0], mk, ev_hold))
-    print("celda (moneda,marco,offset s) | n | ya descontado Δask(c) | markout bid(+4s)-ask (c) | n_res EV/€ hold | IC90 días")
-    for k in sorted(filas):
-        v = filas[k]
-        n = len(v); d = sum(x[1] for x in v) / n * 100; mk = sum(x[2] for x in v) / n * 100
+    celdas = {}
+    for k, v in filas.items():
+        n = len(v)
+        c = {"n": n, "descontado_c": round(sum(x[1] for x in v) / n * 100, 1),
+             "markout_c": round(sum(x[2] for x in v) / n * 100, 1), "n_res": 0, "ev": None, "ic90_lo": None, "dias": 0}
         res = [x for x in v if x[3] is not None]
         if res:
-            m = sum(x[3] for x in res) / len(res)
             by = defaultdict(list)
-            for x in res: by[x[0]].append(x[3])
+            for x in res:
+                by[x[0]].append(x[3])
             dl = list(by.values()); random.seed(1); bs = []
             for _ in range(400):
-                s = [y for a in random.choices(dl, k=len(dl)) for y in a]; bs.append(sum(s) / len(s))
-            bs.sort(); ic = f"[{bs[20]:+.2f},{bs[380]:+.2f}] días={len(dl)}"
-            print(f"{k} | {n} | {d:+.1f} | {mk:+.1f} | {len(res)} {m:+.3f} | {ic}")
-        else:
-            print(f"{k} | {n} | {d:+.1f} | {mk:+.1f} | sin resultados aún")
+                sm = [y for a in random.choices(dl, k=len(dl)) for y in a]; bs.append(sum(sm) / len(sm))
+            bs.sort()
+            c.update({"n_res": len(res), "ev": round(sum(x[3] for x in res) / len(res), 3),
+                      "ic90_lo": round(bs[20], 3), "dias": len(dl)})
+        celdas[k] = c
+    return len(ev), sum(k[3] in ganador for k in ev), celdas
+
+
+def main():
+    n_ev, n_res, celdas = calcular(DESDE)
+    print(f"eventos (evento x mercado) {n_ev}; con resultado {n_res}")
+    print("celda (moneda,marco,offset s) | n | ya descontado Δask(c) | markout bid(+4s)-ask (c) | n_res EV/€ hold | IC90 días lo")
+    for k in sorted(celdas):
+        c = celdas[k]
+        print(f"{k} | {c['n']} | {c['descontado_c']:+.1f} | {c['markout_c']:+.1f} | "
+              f"{c['n_res']} {c['ev'] if c['ev'] is not None else '-'} | {c['ic90_lo'] if c['ic90_lo'] is not None else '-'} días={c['dias']}")
 
 
 if __name__ == "__main__":
