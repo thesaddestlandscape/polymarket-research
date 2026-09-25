@@ -14,11 +14,11 @@
     "hi": 0.05,
     "n": 310,
     "pnl_medio": -0.6239,
-    "diff_vs_resto": -0.5752,
+    "diff_vs_resto": -0.5755,
     "p_valor": 0.0,
     "split_half_diff": [
-      -0.8009,
-      -0.3495
+      -0.8012,
+      -0.3498
     ],
     "split_half_ok": true,
     "pnl_medio_loo": -0.6981,
@@ -45,11 +45,11 @@
     "hi": 0.05,
     "n": 228,
     "pnl_medio": -0.6592,
-    "diff_vs_resto": -0.626,
+    "diff_vs_resto": -0.6258,
     "p_valor": 0.0,
     "split_half_diff": [
-      -0.2852,
-      -0.9669
+      -0.285,
+      -0.9666
     ],
     "split_half_ok": true,
     "pnl_medio_loo": -0.7945,
@@ -83,11 +83,11 @@
     "hi": 0.05,
     "n": 47,
     "pnl_medio": -1.0,
-    "diff_vs_resto": -0.9533,
+    "diff_vs_resto": -0.9537,
     "p_valor": 0.0,
     "split_half_diff": [
-      -0.9533,
-      -0.9533
+      -0.9537,
+      -0.9537
     ],
     "split_half_ok": true,
     "pnl_medio_loo": -1.0,
@@ -142,11 +142,11 @@
     "hi": 0.06,
     "n": 101,
     "pnl_medio": -1.0,
-    "diff_vs_resto": -0.9474,
+    "diff_vs_resto": -0.947,
     "p_valor": 0.0,
     "split_half_diff": [
-      -0.9474,
-      -0.9474
+      -0.947,
+      -0.947
     ],
     "split_half_ok": true,
     "pnl_medio_loo": -1.0,
@@ -173,11 +173,11 @@
     "hi": 0.14,
     "n": 48,
     "pnl_medio": -0.6272,
-    "diff_vs_resto": -0.5995,
+    "diff_vs_resto": -0.5997,
     "p_valor": 0.0205,
     "split_half_diff": [
-      -0.6171,
-      -0.5819
+      -0.6173,
+      -0.5821
     ],
     "split_half_ok": true,
     "pnl_medio_loo": -0.8186,
@@ -211,11 +211,11 @@
     "hi": 0.05,
     "n": 63,
     "pnl_medio": -1.0,
-    "diff_vs_resto": -0.9394,
+    "diff_vs_resto": -0.9419,
     "p_valor": 0.0,
     "split_half_diff": [
-      -0.9394,
-      -0.9394
+      -0.9419,
+      -0.9419
     ],
     "split_half_ok": true,
     "pnl_medio_loo": -1.0,
@@ -225,7 +225,7 @@
       -1.0
     ],
     "robusto_bootstrap": true,
-    "n_posiciones_buscadas": 50,
+    "n_posiciones_buscadas": 51,
     "g_kelly_f10": -0.10536,
     "veredicto_crudo_hoy": "malo_confirmado",
     "historial_crudo": [
@@ -240,8 +240,7 @@
       "bueno_confirmado",
       "bueno_confirmado",
       "bueno_confirmado"
-    ],
-    "fecha_historial": null
+    ]
   },
   "SNIPER#DOGE#5min": {
     "veredicto": "sin_concluir",
