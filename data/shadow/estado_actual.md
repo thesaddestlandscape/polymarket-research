@@ -1,4 +1,4 @@
-# Estado del bot — 2026-09-25 07:23 UTC
+# Estado del bot — 2026-09-25 07:29 UTC
 
 ## Live — dinero real (on-chain)
 | | |
@@ -13,11 +13,11 @@
 ## Shadow — MODELO SIMULADO (no cobrable)
 | | |
 |---|---|
-| P&L fiel (stake fijo 1$) | +20846.40 $ |
-| P&L sim compuesto | 🟢 +79307.92 $ (ficción Kelly: +311745% s/ operativo) |
-| P&L sim hoy (2026-09-25) | 🟢 +716.16 $ |
-| Operaciones resueltas | 709942 (404463 WIN / 305479 LOSS) — 57.0% |
-| Señales abiertas | 255033 |
+| P&L fiel (stake fijo 1$) | +20849.87 $ |
+| P&L sim compuesto | 🟢 +79310.97 $ (ficción Kelly: +311757% s/ operativo) |
+| P&L sim hoy (2026-09-25) | 🟢 +719.21 $ |
+| Operaciones resueltas | 709990 (404495 WIN / 305495 LOSS) — 57.0% |
+| Señales abiertas | 255954 |
 
 ## Estrategias (visión global)
 
@@ -28,16 +28,16 @@
 | GBM_LATE_15M | 38032 | 58.9% | +0.089 | ➡️ estable (últ. 1000) | +16310.48$ | 0.83$ | ✅ activa |
 | GBM_LATE_15M_MULTIHORIZONTE | 21012 | 66.9% | +0.169 | 📈 madura (+0.03) (últ. 1000) | +15645.11$ | 1.68$ | ✅ activa |
 | UPDOWN_GBM_15M_TARDIO | 15540 | 50.7% | +0.007 | 📈 madura (+0.05) (últ. 1000) | +4369.07$ | 0.50$ | ✅ activa |
-| GBM_LATE_5M | 8980 | 61.8% | +0.118 | 📈 madura (+0.07) (últ. 1000) | +4177.42$ | 1.48$ | ✅ activa |
-| CANDIDATA10_CONFIRMACION_CRUZADA | 18470 | 47.2% | -0.028 | ➡️ estable (últ. 1000) | +4014.01$ | 0.50$ | ⚠️ IC negativo |
-| UPDOWN_GBM | 41887 | 53.3% | +0.033 | 📈 madura (+0.06) (últ. 1000) | +2811.85$ | 0.50$ | ✅ activa |
-| GBM_LATE_15M_PYCONFIRMADO | 5642 | 62.3% | +0.123 | 📈 madura (+0.07) (últ. 1000) | +2322.95$ | 1.28$ | ✅ activa |
-| MOMENTUM_IBS_5M_BALLENA | 73890 | 42.7% | -0.073 | ➡️ estable (últ. 1000) | +1740.36$ | 0.50$ | ⚠️ IC negativo |
+| GBM_LATE_5M | 8983 | 61.8% | +0.118 | 📈 madura (+0.07) (últ. 1000) | +4175.26$ | 1.48$ | ✅ activa |
+| CANDIDATA10_CONFIRMACION_CRUZADA | 18473 | 47.2% | -0.028 | ➡️ estable (últ. 1000) | +4012.74$ | 0.50$ | ⚠️ IC negativo |
+| UPDOWN_GBM | 41894 | 53.3% | +0.033 | 📈 madura (+0.06) (últ. 1000) | +2813.24$ | 0.50$ | ✅ activa |
+| GBM_LATE_15M_PYCONFIRMADO | 5642 | 62.3% | +0.123 | 📈 madura (+0.07) (últ. 1000) | +2322.95$ | 1.29$ | ✅ activa |
+| MOMENTUM_IBS_5M_BALLENA | 73899 | 42.7% | -0.073 | ➡️ estable (últ. 1000) | +1734.82$ | 0.50$ | ⚠️ IC negativo |
 | MOMENTUM_IBS_15M_BALLENA | 29150 | 49.4% | -0.006 | ➡️ estable (últ. 1000) | +1324.60$ | 0.50$ | ⚠️ IC negativo |
 | WEEKLY_PRICE | 2381 | 80.0% | +0.300 | 📉 agota (-0.03) (últ. 1000) | +1197.95$ | 2.00$ | ✅ activa |
 | UPDOWN_GBM_IBS_ALTO | 998 | 79.4% | +0.293 | ➡️ estable | +788.84$ | 2.00$ | ✅ activa |
 | GBM_LATE_60M | 1745 | 56.8% | +0.068 | 📉 agota (-0.04) (últ. 1000) | +735.59$ | 0.68$ | ✅ activa |
-| LEADLAG_BTC_XRP_15M | 2289 | 58.8% | +0.088 | ➡️ estable (últ. 1000) | +540.18$ | 1.00$ | ✅ activa |
+| LEADLAG_BTC_XRP_15M | 2289 | 58.8% | +0.088 | ➡️ estable (últ. 1000) | +540.18$ | 1.01$ | ✅ activa |
 | ORDER_FLOW_5M | 2741 | 55.0% | +0.050 | ➡️ estable (últ. 1000) | +375.11$ | 1.05$ | ✅ activa |
 | UPDOWN_GBM_15M_CROSS_WINDOW_SPREAD | 839 | 83.3% | +0.332 | 📈 madura (+0.06) | +231.16$ | 2.00$ | ✅ activa |
 | RESOLUTION_SNIPER | 291 | 91.4% | +0.411 | 📈 madura (+0.03) | +222.45$ | 2.00$ | ✅ activa |
@@ -53,7 +53,7 @@
 | FAVORITO_CONFIRMADO_60MIN_EXTREMO | 648 | 93.8% | +0.437 | 📈 madura (+0.04) | -1.60$ | 2.00$ | ✅ activa |
 | MOMENTUM_IBS_5M | 3345 | 50.4% | +0.004 | ➡️ estable (últ. 1000) | -2.91$ | 0.50$ | ✅ activa |
 | STREAK_FADE_60M | 73 | 43.8% | -0.060 | 📉 agota (-0.06) | -7.39$ | 0.50$ | ⚠️ IC negativo |
-| LIQUIDACIONES_5M | 2139 | 49.6% | -0.004 | ➡️ estable (últ. 1000) | -10.36$ | 0.50$ | ⚠️ IC negativo |
+| LIQUIDACIONES_5M | 2140 | 49.6% | -0.004 | ➡️ estable (últ. 1000) | -9.86$ | 0.50$ | ⚠️ IC negativo |
 | SMART_FLOW_1H | 29 | 20.7% | -0.274 | — | -13.82$ | 0.00$ | 🚫 desactivada |
 | FAVORITO_CONFIRMADO_60MIN_ALTACONVICCION | 1481 | 79.0% | +0.290 | ➡️ estable (últ. 1000) | -17.41$ | 2.00$ | ✅ activa |
 | FAVORITO_CONFIRMADO_15MIN_EXTREMO | 785 | 93.1% | +0.430 | ➡️ estable | -20.37$ | 2.00$ | ✅ activa |
@@ -66,46 +66,46 @@
 | PRICE_TARGET_GBM | 568 | 39.6% | -0.104 | 📈 madura (+0.10) | -43.94$ | 0.50$ | ⚠️ IC negativo |
 | ORDER_FLOW_5M_REACTIVO | 492 | 43.5% | -0.065 | 📉 agota (-0.07) | -62.58$ | 0.50$ | ⚠️ IC negativo |
 | FAVORITO_CONFIRMADO_SOL_ALTACONVICCION | 1395 | 75.3% | +0.252 | 📉 agota (-0.07) (últ. 1000) | -96.68$ | 2.00$ | ✅ activa |
-| MOMENTUM_IBS_5M_FADE | 7627 | 47.6% | -0.024 | 📈 madura (+0.09) (últ. 1000) | -120.76$ | 0.50$ | ⚠️ IC negativo |
+| MOMENTUM_IBS_5M_FADE | 7629 | 47.6% | -0.024 | 📈 madura (+0.09) (últ. 1000) | -121.78$ | 0.50$ | ⚠️ IC negativo |
 | STREAK_FADE_5M | 3225 | 48.0% | -0.020 | ➡️ estable (últ. 1000) | -126.43$ | 0.50$ | ⚠️ IC negativo |
 | MOMENTUM_IBS_15M_FADE | 5850 | 44.2% | -0.058 | 📈 madura (+0.04) (últ. 1000) | -137.03$ | 0.50$ | ⚠️ IC negativo |
 | UPDOWN_OU_5M | 1116 | 36.4% | -0.136 | 📈 madura (+0.04) (últ. 1000) | -152.09$ | 0.50$ | ⚠️ IC negativo |
 | CANDIDATA9_BOT_CONSENSO | 1480 | 39.7% | -0.103 | ➡️ estable (últ. 1000) | -190.83$ | 0.50$ | ⚠️ IC negativo |
 | MOMENTUM_IBS_15M | 14419 | 48.9% | -0.011 | 📈 madura (+0.05) (últ. 1000) | -203.36$ | 0.50$ | ⚠️ IC negativo |
-| FAVORITO_CONFIRMADO_DEPTH_FASE0 | 35942 | 59.7% | +0.097 | 📈 madura (+0.04) (últ. 1000) | -1117.04$ | 0.97$ | ✅ activa |
+| FAVORITO_CONFIRMADO_DEPTH_FASE0 | 35945 | 59.7% | +0.097 | 📈 madura (+0.04) (últ. 1000) | -1114.66$ | 0.97$ | ✅ activa |
 | FAVORITO_CONFIRMADO_15MIN_ALTACONVICCION | 16630 | 69.2% | +0.192 | 📉 agota (-0.06) (últ. 1000) | -1123.78$ | 1.91$ | ✅ activa |
-| BALLENAS_TARDIAS | 33577 | 41.7% | -0.083 | 📈 madura (+0.21) (últ. 1000) | -4654.40$ | 0.50$ | ⚠️ IC negativo |
-| FAVORITO_CONFIRMADO_5MIN_ALTACONVICCION | 68893 | 69.7% | +0.197 | ➡️ estable (últ. 1000) | -5443.85$ | 1.97$ | ✅ activa |
-| FAVORITO_CONFIRMADO | 125802 | 61.1% | +0.111 | ➡️ estable (últ. 1000) | -6004.91$ | 1.12$ | ✅ activa |
+| BALLENAS_TARDIAS | 33579 | 41.7% | -0.083 | 📈 madura (+0.22) (últ. 1000) | -4653.97$ | 0.50$ | ⚠️ IC negativo |
+| FAVORITO_CONFIRMADO_5MIN_ALTACONVICCION | 68902 | 69.7% | +0.197 | 📈 madura (+0.03) (últ. 1000) | -5440.25$ | 1.97$ | ✅ activa |
+| FAVORITO_CONFIRMADO | 125811 | 61.1% | +0.111 | ➡️ estable (últ. 1000) | -6000.16$ | 1.12$ | ✅ activa |
 
 ## Últimas 5 resoluciones
 
 | Timestamp | Estrategia | Mercado | Resultado | PNL |
 |---|---|---|---|---|
-| 2026-09-25T07:22 | GBM_LATE_5M#SOL#5min | Solana Up or Down - September 25, 3:15AM-3:20AM ET… | ✅ WIN | +0.58$ |
-| 2026-09-25T07:22 | BALLENAS_TARDIAS#XRP#5min | … | ✅ WIN | +0.12$ |
-| 2026-09-25T07:22 | FAVORITO_CONFIRMADO_5MIN_ALTACONVICCION#XRP#5min | … | ✅ WIN | +0.33$ |
-| 2026-09-25T07:22 | BALLENAS_TARDIAS#SOL#5min | … | ✅ WIN | +0.24$ |
-| 2026-09-25T07:22 | FAVORITO_CONFIRMADO_5MIN_ALTACONVICCION#SOL#5min | … | ✅ WIN | +0.41$ |
+| 2026-09-25T07:27 | MOMENTUM_IBS_5M_FADE#SOL#5min | Solana Up or Down - September 25, 3:20AM-3:25AM ET… | ❌ LOSS | -0.51$ |
+| 2026-09-25T07:27 | GBM_LATE_5M#SOL#5min | Solana Up or Down - September 25, 3:20AM-3:25AM ET… | ❌ LOSS | -2.04$ |
+| 2026-09-25T07:27 | MOMENTUM_IBS_5M_FADE#BTC#5min | Bitcoin Up or Down - September 25, 3:20AM-3:25AM E… | ❌ LOSS | -0.51$ |
+| 2026-09-25T07:27 | GBM_LATE_5M#BTC#5min | Bitcoin Up or Down - September 25, 3:20AM-3:25AM E… | ❌ LOSS | -2.04$ |
+| 2026-09-25T07:27 | LIQUIDACIONES_5M#XRP#5min | XRP Up or Down - September 25, 3:20AM-3:25AM ET… | ✅ WIN | +0.50$ |
 
 ## Calidad de datos
 
-✅ **OK** — última verificación 2026-09-25T07:22 UTC
+✅ **OK** — última verificación 2026-09-25T07:28 UTC
 
 | Asset | Precio | Age | Alertas |
 |---|---|---|---|
-| ✅ BTC | $83,940.49 | 0.1min |  |
-| ✅ ETH | $2,675.70 | 0.1min |  |
-| ✅ SOL | $116.42 | 0.1min |  |
+| ✅ BTC | $83,980.49 | 0.1min |  |
+| ✅ ETH | $2,676.74 | 0.1min |  |
+| ✅ SOL | $116.55 | 0.1min |  |
 | ✅ XRP | $1.54 | 0.1min |  |
 
 **Cross-source** (binance, coinbase, kraken):
 
 | Asset | Consenso | Fuente | Estado |
 |---|---|---|---|
-| BTC | $83,940.49 | consenso |  |
-| ETH | $2,675.53 | consenso |  |
-| SOL | $116.31 | consenso |  |
+| BTC | $83,980.49 | consenso |  |
+| ETH | $2,676.74 | consenso |  |
+| SOL | $116.46 | consenso |  |
 | XRP | $1.54 | consenso |  |
 
 ---
