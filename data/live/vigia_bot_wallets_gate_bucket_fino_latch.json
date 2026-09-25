@@ -43,24 +43,24 @@
   "robusto_dias": false,
   "lo": 0.0,
   "hi": 0.05,
-  "n": 237,
-  "pnl_medio": -0.6721,
-  "diff_vs_resto": -0.6346,
+  "n": 238,
+  "pnl_medio": -0.6735,
+  "diff_vs_resto": -0.6362,
   "p_valor": 0.0,
   "split_half_diff": [
-   -0.3039,
-   -0.9625
+   -0.3097,
+   -0.9627
   ],
   "split_half_ok": true,
-  "pnl_medio_loo": -0.8024,
+  "pnl_medio_loo": -0.8032,
   "robusto_loo": true,
   "ci90_bootstrap": [
    -1.0,
-   -0.3115
+   -0.347
   ],
   "robusto_bootstrap": true,
   "n_posiciones_buscadas": 96,
-  "g_kelly_f10": -0.08827,
+  "g_kelly_f10": -0.08834,
   "veredicto_crudo_hoy": "malo_confirmado",
   "historial_crudo": [
    "malo_confirmado"
@@ -83,11 +83,11 @@
   "hi": 0.05,
   "n": 48,
   "pnl_medio": -1.0,
-  "diff_vs_resto": -0.9534,
+  "diff_vs_resto": -0.9525,
   "p_valor": 0.0,
   "split_half_diff": [
-   -0.9534,
-   -0.9534
+   -0.9525,
+   -0.9525
   ],
   "split_half_ok": true,
   "pnl_medio_loo": -1.0,
@@ -112,13 +112,6 @@
    "malo_confirmado"
   ],
   "fecha_historial": null
- },
- "SNIPER#BNB#5min": {
-  "veredicto": "sin_concluir",
-  "historial_crudo": [
-   "malo_confirmado"
-  ],
-  "fecha_historial": "2026-09-22"
  },
  "DISPERSO#BTC#240min": {
   "veredicto": "sin_concluir",
@@ -159,18 +152,18 @@
   "veredicto": "malo_confirmado"
  },
  "DISPERSO#BTC#15min": {
-  "n_dias": 14,
+  "n_dias": 15,
   "pnl_sin_mejores_dias": -1.0,
   "robusto_dias": false,
   "lo": 0.01,
   "hi": 0.06,
-  "n": 101,
+  "n": 102,
   "pnl_medio": -1.0,
-  "diff_vs_resto": -0.9462,
+  "diff_vs_resto": -0.9468,
   "p_valor": 0.0,
   "split_half_diff": [
-   -0.9462,
-   -0.9462
+   -0.9468,
+   -0.9468
   ],
   "split_half_ok": true,
   "pnl_medio_loo": -1.0,
@@ -197,11 +190,11 @@
   "hi": 0.14,
   "n": 48,
   "pnl_medio": -0.6272,
-  "diff_vs_resto": -0.5942,
-  "p_valor": 0.0185,
+  "diff_vs_resto": -0.5953,
+  "p_valor": 0.02,
   "split_half_diff": [
-   -0.6118,
-   -0.5765
+   -0.613,
+   -0.5777
   ],
   "split_half_ok": true,
   "pnl_medio_loo": -0.8186,
@@ -235,11 +228,11 @@
   "hi": 0.05,
   "n": 63,
   "pnl_medio": -1.0,
-  "diff_vs_resto": -0.9434,
+  "diff_vs_resto": -0.9404,
   "p_valor": 0.0,
   "split_half_diff": [
-   -0.9434,
-   -0.9434
+   -0.9404,
+   -0.9404
   ],
   "split_half_ok": true,
   "pnl_medio_loo": -1.0,
@@ -257,6 +250,12 @@
   ],
   "fecha_historial": "2026-09-25",
   "veredicto": "malo_confirmado"
+ },
+ "SNIPER#BNB#5min": {
+  "veredicto": "sin_concluir",
+  "historial_crudo": [
+   "malo_confirmado"
+  ]
  },
  "?#BTC#5min": {
   "veredicto": "sin_concluir",
