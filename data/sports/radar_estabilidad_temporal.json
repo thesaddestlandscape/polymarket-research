@@ -1,100 +1,61 @@
 {
- "actualizado_utc": "2026-09-25T08:10:11+00:00",
+ "actualizado_utc": "2026-09-26T08:10:08+00:00",
  "criterio": {
   "N_MIN": 60,
   "FRAC_DIAS": 0.6,
   "TOP_MAX": 0.3
  },
  "radar": {
-  "Tennis#FADE#0.60": {
-   "n": 215,
-   "dias": 25,
-   "frac_dias_pos": 0.64,
-   "top_wallet": 0.121,
-   "n_wallets": 53,
-   "pnl_medio": 0.0783,
-   "medias_tramos": [
-    0.1375,
-    0.0764,
-    0.0224
-   ]
-  },
-  "CS#SEGUIR#0.65": {
-   "n": 286,
-   "dias": 31,
-   "frac_dias_pos": 0.613,
-   "top_wallet": 0.126,
-   "n_wallets": 81,
-   "pnl_medio": 0.0789,
-   "medias_tramos": [
-    0.0891,
-    0.0732,
-    0.0746
-   ]
-  },
-  "CS#SEGUIR#0.70": {
-   "n": 208,
-   "dias": 30,
-   "frac_dias_pos": 0.633,
-   "top_wallet": 0.125,
-   "n_wallets": 73,
-   "pnl_medio": 0.0471,
-   "medias_tramos": [
-    0.0585,
-    0.0212,
-    0.0615
-   ]
-  },
   "LoL#SEGUIR#0.45": {
-   "n": 118,
-   "dias": 27,
-   "frac_dias_pos": 0.63,
-   "top_wallet": 0.093,
-   "n_wallets": 71,
-   "pnl_medio": 0.087,
+   "n": 119,
+   "dias": 28,
+   "frac_dias_pos": 0.643,
+   "top_wallet": 0.092,
+   "n_wallets": 72,
+   "pnl_medio": 0.0963,
    "medias_tramos": [
     0.1909,
     0.0162,
-    0.0547
+    0.0825
    ]
   },
   "CS#FADE#0.65": {
-   "n": 310,
-   "dias": 33,
-   "frac_dias_pos": 0.727,
-   "top_wallet": 0.087,
-   "n_wallets": 87,
-   "pnl_medio": 0.1656,
+   "n": 329,
+   "dias": 34,
+   "frac_dias_pos": 0.735,
+   "top_wallet": 0.088,
+   "n_wallets": 92,
+   "pnl_medio": 0.1655,
    "medias_tramos": [
-    0.1928,
-    0.1369,
-    0.1671
+    0.2098,
+    0.1428,
+    0.1443
    ]
   },
-  "Dota#FADE#0.45": {
-   "n": 83,
-   "dias": 20,
-   "frac_dias_pos": 0.6,
-   "top_wallet": 0.133,
-   "n_wallets": 35,
-   "pnl_medio": 0.0731,
+  "CS#FADE#0.75": {
+   "n": 191,
+   "dias": 32,
+   "frac_dias_pos": 0.625,
+   "top_wallet": 0.188,
+   "n_wallets": 57,
+   "pnl_medio": 0.0476,
    "medias_tramos": [
-    0.1053,
-    0.1036,
-    0.0148
+    0.1107,
+    0.0232,
+    0.0101
    ]
   },
   "Dota#SEGUIR#0.40": {
-   "n": 61,
-   "dias": 19,
-   "frac_dias_pos": 0.737,
-   "top_wallet": 0.131,
-   "n_wallets": 33,
-   "pnl_medio": 0.1375,
+   "n": 66,
+   "dias": 20,
+   "frac_dias_pos": 0.75,
+   "top_wallet": 0.121,
+   "n_wallets": 35,
+   "pnl_medio": 0.1915,
    "medias_tramos": [
-    0.0884,
-    0.2007,
-    0.124
+    0.2087,
+    0.1934,
+    0.1723
    ]
   }
  }
