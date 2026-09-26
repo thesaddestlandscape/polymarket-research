@@ -1,28 +1,28 @@
 {
  "CS#SEGUIR": {
-  "n_dias": 14,
-  "pnl_sin_mejores_dias": -0.5176,
+  "n_dias": 16,
+  "pnl_sin_mejores_dias": -0.531,
   "robusto_dias": false,
   "lo": 0.17,
   "hi": 0.22,
-  "n": 73,
-  "pnl_medio": -0.4728,
-  "diff_vs_resto": -0.4454,
-  "p_valor": 0.012,
+  "n": 79,
+  "pnl_medio": -0.443,
+  "diff_vs_resto": -0.4154,
+  "p_valor": 0.02,
   "split_half_diff": [
-   -0.5851,
-   -0.3095
+   -0.6147,
+   -0.2212
   ],
   "split_half_ok": true,
-  "pnl_medio_loo": -0.5466,
+  "pnl_medio_loo": -0.5108,
   "robusto_loo": true,
   "ci90_bootstrap": [
-   -0.7412,
-   -0.1552
+   -0.7036,
+   -0.1494
   ],
   "robusto_bootstrap": true,
-  "n_posiciones_buscadas": 82,
-  "g_kelly_f10": -0.06454,
+  "n_posiciones_buscadas": 83,
+  "g_kelly_f10": -0.05911,
   "veredicto_crudo_hoy": "malo_confirmado",
   "historial_crudo": [
    "malo_confirmado"
@@ -31,32 +31,62 @@
  },
  "Tennis#SEGUIR": {
   "n_dias": 15,
-  "pnl_sin_mejores_dias": -0.6963,
+  "pnl_sin_mejores_dias": -0.7051,
   "robusto_dias": false,
   "lo": 0.11,
   "hi": 0.16,
-  "n": 69,
-  "pnl_medio": -0.7051,
-  "diff_vs_resto": -0.6883,
+  "n": 71,
+  "pnl_medio": -0.7134,
+  "diff_vs_resto": -0.6969,
   "p_valor": 0.004,
   "split_half_diff": [
-   -0.7884,
-   -0.5911
+   -0.7943,
+   -0.6023
   ],
   "split_half_ok": true,
-  "pnl_medio_loo": -0.8052,
+  "pnl_medio_loo": -0.8107,
   "robusto_loo": true,
   "ci90_bootstrap": [
-   -0.904,
-   -0.4102
+   -1.0,
+   -0.4268
   ],
   "robusto_bootstrap": true,
   "n_posiciones_buscadas": 95,
-  "g_kelly_f10": -0.08094,
+  "g_kelly_f10": -0.08163,
   "veredicto_crudo_hoy": "malo_confirmado",
   "historial_crudo": [
    "malo_confirmado"
   ],
   "veredicto": "malo_confirmado"
+ },
+ "MLB#FADE": {
+  "n_dias": 3,
+  "pnl_sin_mejores_dias": null,
+  "robusto_dias": false,
+  "lo": 0.17,
+  "hi": 0.22,
+  "n": 45,
+  "pnl_medio": 0.6196,
+  "diff_vs_resto": 0.6525,
+  "p_valor": 0.001,
+  "split_half_diff": [
+   1.2126,
+   0.1166
+  ],
+  "split_half_ok": true,
+  "pnl_medio_loo": 0.5236,
+  "robusto_loo": true,
+  "ci90_bootstrap": [
+   0.0705,
+   1.1925
+  ],
+  "robusto_bootstrap": true,
+  "n_posiciones_buscadas": 64,
+  "g_kelly_f10": 0.03338,
+  "veredicto_crudo_hoy": "bueno_confirmado",
+  "historial_crudo": [
+   "bueno_confirmado"
+  ],
+  "veredicto": "sin_concluir"
  }
 }
