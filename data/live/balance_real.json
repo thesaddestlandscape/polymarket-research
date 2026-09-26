@@ -1,5 +1,5 @@
 {
- "ts": "2026-09-26T21:55:03+00:00",
+ "ts": "2026-09-26T22:00:11+00:00",
  "wallet": "0xB6eDe3A699f73cbe7f8A221c2cdAcEbFdf02028b",
  "free_usdc": 22.7638,
  "positions_value": 1.0579,
@@ -383,8 +383,12 @@
   {
    "date": "2026-09-26",
    "pnl": 4.11
+  },
+  {
+   "date": "2026-09-27",
+   "pnl": -0.0
   }
  ],
- "pnl_hoy_real": 4.11,
- "pnl_7d_real": -6.74
+ "pnl_hoy_real": -0.0,
+ "pnl_7d_real": -8.35
 }
