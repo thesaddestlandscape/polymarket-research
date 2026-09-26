@@ -31092,3 +31092,10 @@ timestamp_utc,condition_id,market_slug,activo,marco,lado_mayoria,n_votos_trigger
 2026-09-26T22:45:20+00:00,0x289c5eb390164b6650ef0c2eb82394ff1f9c10e45f68fc9828a15cc7a9ce06a9,sol-updown-5m-1790462700,SOL,5min,Down,3,0.44,0.0,0.61,0.0,0.6,-1.64,0,0,0,0,fuera_de_zona_confirmada
 2026-09-26T22:45:28+00:00,0xaa999db6d58fe4a348d999ea557834326862daeddb6f9dd878d6fc736c1217b2,btc-updown-5m-1790462700,BTC,5min,Down,3,0.64,36.5,0.66,0.0,0.68,3.03,0,0,0,0,fuera_de_zona_confirmada
 2026-09-26T22:45:37+00:00,0x5b8df4a64566d590a66061a8103e93bb089cc28c78f0d33b83af715acfa6cd80,btc-updown-15m-1790462700,BTC,15min,Down,2,0.54,0.0,0.59,0.0,0.59,0.0,0,0,0,0,fuera_de_zona_confirmada
+2026-09-26T22:45:55+00:00,0xcf57ca09961bf65d9927c6756ca35faf11fee6b4259acd05fd80c3c0e4fa6a11,xrp-updown-5m-1790462700,XRP,5min,Up,2,0.675,78.1,0.65,69.3,0.68,4.62,1,0,0,0,fuera_de_zona_confirmada
+2026-09-26T22:46:08+00:00,0xca16f8f55eca763719efd2ef5067ae6f420e4a79bffcb355c32967889ad0a872,eth-updown-5m-1790462700,ETH,5min,Up,2,0.53,438.7,0.49,507.4,0.49,0.0,1,0,0,0,fuera_de_zona_confirmada
+2026-09-26T22:48:23+00:00,0xb1c6bd7c3f96cfabffa59195726df5b0386f38029c6e49d062bf82c7b1323308,solana-up-or-down-september-26-2026-6pm-et,SOL,60min,Up,2,0.8100000081196578,36.6,0.13,44.0,0.15,15.38,1,0,0,0,fuera_de_zona_confirmada
+2026-09-26T22:50:02+00:00,0x7793a6f2e22dce49c3676727814ab6c2127506ff9abcea8d62a9bc09b3afdabc,btc-updown-5m-1790463000,BTC,5min,Up,2,0.5,0.0,0.57,0.0,0.57,0.0,0,0,0,0,fuera_de_zona_confirmada
+2026-09-26T22:50:50+00:00,0x1efa1421ce08e7422390b1467221341548fc8dc147b4ac584ce5c953eedcca8d,xrp-updown-5m-1790463000,XRP,5min,Up,2,0.51,0.0,0.55,0.0,0.56,1.82,0,0,0,0,fuera_de_zona_confirmada
+2026-09-26T22:50:58+00:00,0x8459609ceb734ee6a10ff4e9f6f85daf0fffe8b26f60843addff20e30d404aed,eth-updown-15m-1790462700,ETH,15min,Down,2,0.4800002118519617,509.2,0.17,480.3,0.17,0.0,1,0,0,0,fuera_de_zona_confirmada
+2026-09-26T22:51:01+00:00,0x1ebe1e2c4178dcfd10c3c1b2a0c8360ae3f9c5e334ca38818e30315e4d6b77db,eth-updown-5m-1790463000,ETH,5min,Up,3,0.55,0.0,0.77,0.0,0.67,-12.99,0,0,0,0,fuera_de_zona_confirmada
