@@ -17,7 +17,7 @@
   ]
  },
  "UPDOWN_GBM": {
-  "ic_bayes_familia": 0.0313,
+  "ic_bayes_familia": 0.0314,
   "n_tuplas_fuertes": 2,
   "pnl_fiel_combinado_eur": 50.14,
   "tuplas": [
@@ -63,7 +63,7 @@
   ]
  },
  "UPDOWN_GBM_15M_TARDIO": {
-  "ic_bayes_familia": -0.0382,
+  "ic_bayes_familia": -0.0383,
   "n_tuplas_fuertes": 1,
   "pnl_fiel_combinado_eur": 19.29,
   "tuplas": [
@@ -75,7 +75,7 @@
   ]
  },
  "STRUCT_NO_15M": {
-  "ic_bayes_familia": 0.0139,
+  "ic_bayes_familia": 0.014,
   "n_tuplas_fuertes": 1,
   "pnl_fiel_combinado_eur": 15.74,
   "tuplas": [
