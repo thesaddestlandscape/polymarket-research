@@ -14,11 +14,11 @@
   "hi": 0.05,
   "n": 345,
   "pnl_medio": -0.662,
-  "diff_vs_resto": -0.6166,
+  "diff_vs_resto": -0.6169,
   "p_valor": 0.0,
   "split_half_diff": [
-   -0.819,
-   -0.4154
+   -0.8193,
+   -0.4157
   ],
   "split_half_ok": true,
   "pnl_medio_loo": -0.7288,
@@ -83,11 +83,11 @@
   "hi": 0.31,
   "n": 40,
   "pnl_medio": -0.4801,
-  "diff_vs_resto": -0.476,
-  "p_valor": 0.011,
+  "diff_vs_resto": -0.4783,
+  "p_valor": 0.013,
   "split_half_diff": [
-   -0.6616,
-   -0.2903
+   -0.6639,
+   -0.2926
   ],
   "split_half_ok": true,
   "pnl_medio_loo": -0.5603,
@@ -157,7 +157,7 @@
   "robusto_dias": false,
   "lo": 0.01,
   "hi": 0.06,
-  "n": 106,
+  "n": 107,
   "pnl_medio": -1.0,
   "diff_vs_resto": -0.9447,
   "p_valor": 0.0,
@@ -199,11 +199,11 @@
   "hi": 0.14,
   "n": 51,
   "pnl_medio": -0.6491,
-  "diff_vs_resto": -0.6169,
-  "p_valor": 0.009,
+  "diff_vs_resto": -0.6172,
+  "p_valor": 0.011,
   "split_half_diff": [
-   -0.6268,
-   -0.6074
+   -0.6271,
+   -0.6077
   ],
   "split_half_ok": true,
   "pnl_medio_loo": -0.8295,
@@ -237,11 +237,11 @@
   "hi": 0.05,
   "n": 63,
   "pnl_medio": -1.0,
-  "diff_vs_resto": -0.9426,
+  "diff_vs_resto": -0.9428,
   "p_valor": 0.0,
   "split_half_diff": [
-   -0.9426,
-   -0.9426
+   -0.9428,
+   -0.9428
   ],
   "split_half_ok": true,
   "pnl_medio_loo": -1.0,
@@ -251,7 +251,7 @@
    -1.0
   ],
   "robusto_bootstrap": true,
-  "n_posiciones_buscadas": 57,
+  "n_posiciones_buscadas": 58,
   "g_kelly_f10": -0.10536,
   "veredicto_crudo_hoy": "malo_confirmado",
   "historial_crudo": [
