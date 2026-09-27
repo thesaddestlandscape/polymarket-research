@@ -1,8 +1,8 @@
 {
  "STREAK_MOM_5M": {
-  "ic_bayes_familia": 0.0258,
+  "ic_bayes_familia": 0.0257,
   "n_tuplas_fuertes": 2,
-  "pnl_fiel_combinado_eur": 92.23,
+  "pnl_fiel_combinado_eur": 92.33,
   "tuplas": [
    {
     "k": "STREAK_MOM_5M#DOGE#5min#BUY_NO",
@@ -11,7 +11,7 @@
    },
    {
     "k": "STREAK_MOM_5M#XRP#5min#BUY_NO",
-    "pnl_fiel_eur_sin_suelo": 34.3156,
+    "pnl_fiel_eur_sin_suelo": 34.421,
     "n_ejecutado": 194
    }
   ]
@@ -34,7 +34,7 @@
   ]
  },
  "LIQUIDACIONES_5M": {
-  "ic_bayes_familia": 0.0099,
+  "ic_bayes_familia": 0.0102,
   "n_tuplas_fuertes": 2,
   "pnl_fiel_combinado_eur": 44.22,
   "tuplas": [
