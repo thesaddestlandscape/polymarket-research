@@ -1426,5 +1426,13 @@
   "PRICE_TARGET_GBM#ETH": {
     "n": 202,
     "confirmado": false
+  },
+  "LIQUIDACIONES_DEPTH_FASE0#BTC#15min": {
+    "n": 208,
+    "confirmado": false
+  },
+  "LIQUIDACIONES_DEPTH_FASE0#XRP#15min": {
+    "n": 204,
+    "confirmado": false
   }
 }
