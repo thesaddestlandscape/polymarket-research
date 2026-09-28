@@ -24,6 +24,7 @@ import gzip
 import json
 import math
 import os
+import random
 import re
 import statistics
 import sys
@@ -192,6 +193,82 @@ def _por_precio(rows, campo):
         if p is not None and PF_LO <= p < PF_HI:
             g[f"{int(p * 10) / 10:.1f}"].append(_pnl(p, r["ac"]))
     return {k: {"n": len(v), "ev": round(sum(v) / len(v), 3)} for k, v in sorted(g.items()) if len(v) >= 20}
+
+
+def _por_dia(rows, campo):
+    """{dia: [pnl, ...]} -- solo filas con `campo` válido en rango, EXACTAMENTE
+    el mismo universo que _stats(rows, campo) usa (mismo filtro PF_LO<=x<PF_HI),
+    para que días/bootstrap/split-half nunca cuenten un universo distinto al de
+    ev/t_cluster de la misma llamada."""
+    por_dia = collections.defaultdict(list)
+    for r in rows:
+        p = r.get(campo)
+        if p is not None and PF_LO <= p < PF_HI:
+            por_dia[r["_dia"]].append(_pnl(p, r["ac"]))
+    return por_dia
+
+
+def _bootstrap_ic90_dias(por_dia: dict, iters: int = 1000, seed: int = 5) -> list | None:
+    """IC90 bootstrap por DÍAS (nunca por fila -- evita pseudo-replicación
+    dentro del mismo día), mismo patrón que vigia_saltos_ask_real.py::resumen().
+    None si hay <2 días (bootstrap sin sentido con tan poca base)."""
+    dias_vals = list(por_dia.values())
+    if len(dias_vals) < 2:
+        return None
+    rng = random.Random(seed)
+    medias = []
+    for _ in range(iters):
+        muestra = [rng.choice(dias_vals) for _ in dias_vals]
+        todos = [x for dv in muestra for x in dv]
+        if todos:
+            medias.append(sum(todos) / len(todos))
+    if not medias:
+        return None
+    medias.sort()
+    lo = medias[int(len(medias) * 0.05)]
+    hi = medias[min(int(len(medias) * 0.95), len(medias) - 1)]
+    return [round(lo, 4), round(hi, 4)]
+
+
+def _split_half_dias(por_dia: dict) -> list | None:
+    """[ev_mitad1, ev_mitad2] ordenando los días cronológicamente y partiendo
+    por la mitad -- None si hay <2 días. Mismo criterio que robustez_dias()
+    en el resto del proyecto: una racha buena escondida en 1-2 días dentro de
+    un agregado más largo no debe pasar por robusta."""
+    dias_ord = sorted(por_dia)
+    if len(dias_ord) < 2:
+        return None
+    corte = len(dias_ord) // 2
+    m1 = [x for d in dias_ord[:corte] for x in por_dia[d]]
+    m2 = [x for d in dias_ord[corte:] for x in por_dia[d]]
+    if not m1 or not m2:
+        return None
+    return [round(sum(m1) / len(m1), 4), round(sum(m2) / len(m2), 4)]
+
+
+def _gate(rows, campo) -> dict:
+    """Gate riguroso ÚNICO, reusado igual para el agregado y para cada
+    segmento (longshot/resto) -- mismos umbrales VEREDICTO_* siempre, nunca
+    una vara más floja para un sub-corte. Añade lo que _stats() no cubre:
+    días independientes, bootstrap IC90 por días y split-half por días
+    (mismo nivel de rigor que el resto del proyecto exige antes de hablar
+    de "candidata", CLAUDE.md: n>=40, IC90 bootstrap por días>0, ambas
+    mitades>0)."""
+    s = _stats(rows, campo)
+    por_dia = _por_dia(rows, campo)
+    dias = len(por_dia)
+    ic90 = _bootstrap_ic90_dias(por_dia)
+    mitades = _split_half_dias(por_dia)
+    robusto = bool(
+        s and s["n"] >= VEREDICTO_N_ASK_REAL_MIN and dias >= VEREDICTO_MIN_DIAS
+        and s["n_mercados"] >= VEREDICTO_MERCADOS
+        and s["t_cluster_mercado"] >= VEREDICTO_T_CLUSTER
+        and (s["ev_sin_top5"] or -1) >= VEREDICTO_EX_TOP5
+        and (s["t_cluster_sin_top5"] or -9) >= VEREDICTO_T_SIN_TOP5
+        and ic90 is not None and ic90[0] > 0
+        and mitades is not None and mitades[0] > 0 and mitades[1] > 0
+    )
+    return {**(s or {"n": 0}), "dias": dias, "ic90_dias": ic90, "mitades_dias": mitades, "robusto": robusto}
 
 
 # 28-Sep (hallazgo real, Javi cruzando a mano el digest del 27-Sep contra el
@@ -366,35 +443,33 @@ def ejecutar(dia, enviar=True):
     idx_ask_real = _cargar_indice_ask_real(claves_necesarias)
     _anotar_ask_real(pool, idx_ask_real, "ask_real_1.0")
     n_con_ask_real = sum(1 for r in pool if r.get("ask_real_1.0") is not None)
-    dias_ask_real = len({r["_dia"] for r in pool if r.get("ask_real_1.0") is not None})
-    s1_real = _stats(pool, "ask_real_1.0")
-    # /code-review 28-Sep, hallazgo real: esta versión se había quedado sin comprobar
-    # n_mercados>=VEREDICTO_MERCADOS (300) pese a que el comentario de arriba decía
-    # que nunca se saltaba -- y usaba n_con_ask_real (rango 0.01-0.99, más ancho) en
-    # vez de s1_real["n"] (rango PF_LO-PF_HI, el que de verdad alimenta las stats de
-    # abajo) para el piso VEREDICTO_N_ASK_REAL_MIN. Con el rango ya unificado arriba
-    # ambos "n" deberían coincidir siempre; usar s1_real["n"] de todas formas por ser
-    # la fuente de verdad exacta de lo que se está gateando.
-    robusto = bool(s1_real and s1_real["n"] >= VEREDICTO_N_ASK_REAL_MIN and dias_ask_real >= VEREDICTO_MIN_DIAS
-                   and s1_real["n_mercados"] >= VEREDICTO_MERCADOS
-                   and s1_real["t_cluster_mercado"] >= VEREDICTO_T_CLUSTER
-                   and (s1_real["ev_sin_top5"] or -1) >= VEREDICTO_EX_TOP5
-                   and (s1_real["t_cluster_sin_top5"] or -9) >= VEREDICTO_T_SIN_TOP5)
-    # Composición del efecto, TAMBIÉN al ask real -- el proxy pf_1.0 solo se usa para
-    # SEGMENTAR (longshot vs resto), nunca para calcular el EV de cada segmento.
-    def _sub(cond):
-        return _stats([r for r in pool if r.get("pf_1.0") is not None and cond(r["pf_1.0"])], "ask_real_1.0")
-    comp = {"longshot_pf<0.3": _sub(lambda p: p < 0.3), "resto_pf>=0.3": _sub(lambda p: p >= 0.3)}
-    if not s1_real or n_con_ask_real < VEREDICTO_N_ASK_REAL_MIN:
-        veredicto = f"SIN COBERTURA SUFICIENTE de ask real (n={n_con_ask_real}, mínimo {VEREDICTO_N_ASK_REAL_MIN}) -- no se puede fiar el proxy pf_1.0, esperar más días de wallet_first_buy_follow_fase0.py"
-    elif robusto:
-        veredicto = "CANDIDATA robusta AL ASK REAL (revisar + checklist)"
+
+    # 28-Sep (petición explícita Javi, "resuélvelo ya"): el veredicto agregado mezclaba
+    # longshot(pf<0.3) y resto(pf>=0.3), que van en direcciones opuestas -- un segmento
+    # bueno puede quedar enterrado por uno malo (o viceversa) en el número agregado. Se
+    # aplica el MISMO gate riguroso (_gate(), umbrales VEREDICTO_* sin excepción) al
+    # agregado Y a cada segmento por separado -- nunca una vara más floja para el
+    # sub-corte, y con bootstrap IC90 por días + split-half por días añadidos (antes
+    # solo t_cluster/ex-top5, sin ese nivel extra de rigor).
+    gate_agregado = _gate(pool, "ask_real_1.0")
+    gate_longshot = _gate([r for r in pool if r.get("pf_1.0") is not None and r["pf_1.0"] < 0.3], "ask_real_1.0")
+    gate_resto = _gate([r for r in pool if r.get("pf_1.0") is not None and r["pf_1.0"] >= 0.3], "ask_real_1.0")
+    comp = {"longshot_pf<0.3": gate_longshot, "resto_pf>=0.3": gate_resto}
+
+    if gate_agregado["n"] < VEREDICTO_N_ASK_REAL_MIN:
+        veredicto = f"SIN COBERTURA SUFICIENTE de ask real (n={n_con_ask_real}, mínimo {VEREDICTO_N_ASK_REAL_MIN}) -- esperar más días de wallet_first_buy_follow_fase0.py"
     else:
-        veredicto = "NO robusta al ask real (cluster-t/ex-top5/dias/n)"
+        partes = [f"agregado {'CANDIDATA robusta' if gate_agregado['robusto'] else 'NO robusta'}"]
+        for nombre, g in (("longshot(pf<0.3)", gate_longshot), ("resto(pf>=0.3)", gate_resto)):
+            if g["n"] >= VEREDICTO_N_ASK_REAL_MIN:
+                partes.append(f"{nombre} {'CANDIDATA robusta' if g['robusto'] else 'no robusta'} "
+                              f"(n={g['n']}, dias={g['dias']}, t_cl={g.get('t_cluster_mercado')}, "
+                              f"IC90={g.get('ic90_dias')})")
+        veredicto = " | ".join(partes)
     informe = {"actualizado_utc": datetime.now(timezone.utc).isoformat(timespec="seconds"), "ultimo_dia": dia_res,
                "pool": {"dias_test": dias_test, "por_L_proxy_pf": pool_res, "por_precio_L1_proxy": _por_precio(pool, "pf_1.0"),
                         "composicion_L1_ask_real": comp,
-                        "ask_real": {"n_fillable": n_con_ask_real, "dias_con_datos": dias_ask_real, "stats": s1_real}},
+                        "ask_real": {"n_fillable": n_con_ask_real, "gate_agregado": gate_agregado}},
                "veredicto": veredicto}
     OUT.write_text(json.dumps(informe, indent=1, ensure_ascii=False))
     # Watchlist para el día SIGUIENTE (selección congelada con los TRAIN_DIAS días que acaban en `dia`,
@@ -413,21 +488,27 @@ def ejecutar(dia, enviar=True):
     except Exception as e:
         print(f"(watchlist no escrita: {e})")
     with open(HIST, "a", encoding="utf-8") as f:
-        f.write(json.dumps({"dia": dia, "ultimo_dia": dia_res, "pool_ask_real": s1_real,
+        f.write(json.dumps({"dia": dia, "ultimo_dia": dia_res, "gate_agregado": gate_agregado,
+                            "gate_longshot": gate_longshot, "gate_resto": gate_resto,
                             "pool_proxy_pf1_informativo": pool_res.get(str(LSEL)),
                             "veredicto": veredicto}, ensure_ascii=False) + "\n")
     t1_proxy = dia_res["test"][str(LSEL)] or {}
     msg = [f"🐋 Wallets 'primera compra' -- forward {dia} (sel. con {len(usados)} días previos: {len(sel)} wallets)",
-           f"cobertura ask real: {n_con_ask_real} señales fillable en {dias_ask_real} día(s) "
+           f"cobertura ask real: {n_con_ask_real} señales fillable en {gate_agregado['dias']} día(s) "
            f"(de {len(pool)} en el pool, {dias_test} días de test -- el resto sin match/no fillable en "
            f"wallet_first_buy_follow_fase0.py)"]
-    if s1_real:
-        msg.append(f"AL ASK REAL: n={s1_real['n']} mercados={s1_real['n_mercados']} EV/€={s1_real['ev']} "
-                   f"t_cluster={s1_real['t_cluster_mercado']} top5={s1_real['top5_share']} "
-                   f"sin_top5={s1_real['ev_sin_top5']} (t_cluster sin_top5={s1_real['t_cluster_sin_top5']})")
-        msg.append(f"composición AL ASK REAL: longshot(pf<0.3) EV/€={(comp['longshot_pf<0.3'] or {}).get('ev')} "
-                   f"n={(comp['longshot_pf<0.3'] or {}).get('n')} | resto(pf>=0.3) EV/€={(comp['resto_pf>=0.3'] or {}).get('ev')} "
-                   f"n={(comp['resto_pf>=0.3'] or {}).get('n')}")
+    if gate_agregado["n"]:
+        msg.append(f"AGREGADO al ask real: n={gate_agregado['n']} mercados={gate_agregado['n_mercados']} "
+                   f"EV/€={gate_agregado['ev']} t_cluster={gate_agregado['t_cluster_mercado']} "
+                   f"top5={gate_agregado['top5_share']} sin_top5={gate_agregado['ev_sin_top5']} "
+                   f"IC90_dias={gate_agregado['ic90_dias']} -> {'CANDIDATA' if gate_agregado['robusto'] else 'no robusto'}")
+        for nombre, g in (("longshot(pf<0.3)", gate_longshot), ("resto(pf>=0.3)", gate_resto)):
+            if not g["n"]:
+                msg.append(f"  {nombre}: sin señales")
+                continue
+            msg.append(f"  {nombre}: n={g['n']} EV/€={g.get('ev')} dias={g['dias']} t_cluster={g.get('t_cluster_mercado')} "
+                       f"sin_top5={g.get('ev_sin_top5')} IC90_dias={g.get('ic90_dias')} mitades={g.get('mitades_dias')} "
+                       f"-> {'CANDIDATA robusta' if g['robusto'] else 'no robusta'}")
     else:
         msg.append("AL ASK REAL: sin datos suficientes todavía")
     msg.append(f"(informativo, NUNCA decide el veredicto -- precio de trade, no ask real) proxy pf_1.0 pool: "
