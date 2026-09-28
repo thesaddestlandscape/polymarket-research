@@ -1,1898 +1,1898 @@
 {
  "BNB#15m#0.00": {
-  "hit_rate_yes": 0.0095,
-  "n": 842
+  "hit_rate_yes": 0.005,
+  "n": 797
  },
  "BNB#15m#0.05": {
-  "hit_rate_yes": 0.0792,
-  "n": 606
+  "hit_rate_yes": 0.0587,
+  "n": 562
  },
  "BNB#15m#0.10": {
-  "hit_rate_yes": 0.1585,
-  "n": 751
+  "hit_rate_yes": 0.1565,
+  "n": 722
  },
  "BNB#15m#0.15": {
-  "hit_rate_yes": 0.1593,
-  "n": 835
+  "hit_rate_yes": 0.1606,
+  "n": 791
  },
  "BNB#15m#0.20": {
-  "hit_rate_yes": 0.1754,
-  "n": 1209
+  "hit_rate_yes": 0.2201,
+  "n": 1163
  },
  "BNB#15m#0.25": {
-  "hit_rate_yes": 0.225,
-  "n": 1080
+  "hit_rate_yes": 0.2527,
+  "n": 1017
  },
  "BNB#15m#0.30": {
-  "hit_rate_yes": 0.2982,
-  "n": 1043
+  "hit_rate_yes": 0.3141,
+  "n": 990
  },
  "BNB#15m#0.35": {
-  "hit_rate_yes": 0.3429,
-  "n": 1009
+  "hit_rate_yes": 0.3723,
+  "n": 1002
  },
  "BNB#15m#0.40": {
-  "hit_rate_yes": 0.3599,
-  "n": 1003
+  "hit_rate_yes": 0.362,
+  "n": 978
  },
  "BNB#15m#0.45": {
-  "hit_rate_yes": 0.3939,
-  "n": 1084
+  "hit_rate_yes": 0.4206,
+  "n": 1096
  },
  "BNB#15m#0.50": {
-  "hit_rate_yes": 0.5252,
-  "n": 1230
+  "hit_rate_yes": 0.5149,
+  "n": 1212
  },
  "BNB#15m#0.55": {
-  "hit_rate_yes": 0.5801,
-  "n": 1193
+  "hit_rate_yes": 0.538,
+  "n": 1078
  },
  "BNB#15m#0.60": {
-  "hit_rate_yes": 0.5304,
-  "n": 969
+  "hit_rate_yes": 0.5287,
+  "n": 974
  },
  "BNB#15m#0.65": {
-  "hit_rate_yes": 0.6295,
-  "n": 1023
+  "hit_rate_yes": 0.6095,
+  "n": 1037
  },
  "BNB#15m#0.70": {
-  "hit_rate_yes": 0.7104,
-  "n": 1029
+  "hit_rate_yes": 0.7019,
+  "n": 1023
  },
  "BNB#15m#0.75": {
-  "hit_rate_yes": 0.7591,
-  "n": 992
+  "hit_rate_yes": 0.6783,
+  "n": 1035
  },
  "BNB#15m#0.80": {
-  "hit_rate_yes": 0.865,
-  "n": 763
+  "hit_rate_yes": 0.8198,
+  "n": 849
  },
  "BNB#15m#0.85": {
-  "hit_rate_yes": 0.8589,
-  "n": 652
+  "hit_rate_yes": 0.842,
+  "n": 696
  },
  "BNB#15m#0.90": {
-  "hit_rate_yes": 0.9559,
-  "n": 590
+  "hit_rate_yes": 0.9329,
+  "n": 566
  },
  "BNB#15m#0.95": {
-  "hit_rate_yes": 0.988,
-  "n": 915
+  "hit_rate_yes": 0.9831,
+  "n": 830
  },
  "BNB#240m#0.00": {
-  "hit_rate_yes": 0.005,
-  "n": 403
+  "hit_rate_yes": 0.0048,
+  "n": 417
  },
  "BNB#240m#0.05": {
-  "hit_rate_yes": 0.0606,
-  "n": 66
+  "hit_rate_yes": 0.0984,
+  "n": 61
  },
  "BNB#240m#0.10": {
-  "hit_rate_yes": 0.092,
+  "hit_rate_yes": 0.1034,
   "n": 87
  },
  "BNB#240m#0.15": {
-  "hit_rate_yes": 0.1864,
-  "n": 59
+  "hit_rate_yes": 0.1774,
+  "n": 62
  },
  "BNB#240m#0.20": {
-  "hit_rate_yes": 0.2034,
+  "hit_rate_yes": 0.2373,
   "n": 59
  },
  "BNB#240m#0.25": {
-  "hit_rate_yes": 0.2917,
-  "n": 48
+  "hit_rate_yes": 0.3191,
+  "n": 47
  },
  "BNB#240m#0.30": {
-  "hit_rate_yes": 0.1633,
-  "n": 49
+  "hit_rate_yes": 0.2,
+  "n": 45
  },
  "BNB#240m#0.35": {
   "hit_rate_yes": 0.3167,
   "n": 60
  },
  "BNB#240m#0.40": {
-  "hit_rate_yes": 0.1754,
-  "n": 57
+  "hit_rate_yes": 0.2143,
+  "n": 56
  },
  "BNB#240m#0.45": {
-  "hit_rate_yes": 0.41,
-  "n": 100
+  "hit_rate_yes": 0.4257,
+  "n": 101
  },
  "BNB#240m#0.50": {
-  "hit_rate_yes": 0.6071,
-  "n": 84
- },
- "BNB#240m#0.55": {
-  "hit_rate_yes": 0.52,
-  "n": 50
- },
- "BNB#240m#0.60": {
-  "hit_rate_yes": 0.6269,
-  "n": 67
- },
- "BNB#240m#0.65": {
-  "hit_rate_yes": 0.6463,
+  "hit_rate_yes": 0.622,
   "n": 82
  },
+ "BNB#240m#0.55": {
+  "hit_rate_yes": 0.4894,
+  "n": 47
+ },
+ "BNB#240m#0.60": {
+  "hit_rate_yes": 0.6346,
+  "n": 52
+ },
+ "BNB#240m#0.65": {
+  "hit_rate_yes": 0.6429,
+  "n": 70
+ },
  "BNB#240m#0.70": {
-  "hit_rate_yes": 0.596,
-  "n": 99
+  "hit_rate_yes": 0.5909,
+  "n": 88
  },
  "BNB#240m#0.75": {
-  "hit_rate_yes": 0.7368,
-  "n": 114
+  "hit_rate_yes": 0.7212,
+  "n": 104
  },
  "BNB#240m#0.80": {
-  "hit_rate_yes": 0.8404,
-  "n": 94
+  "hit_rate_yes": 0.8427,
+  "n": 89
  },
  "BNB#240m#0.85": {
-  "hit_rate_yes": 0.9245,
-  "n": 53
+  "hit_rate_yes": 0.9216,
+  "n": 51
  },
  "BNB#240m#0.90": {
-  "hit_rate_yes": 0.9143,
-  "n": 105
+  "hit_rate_yes": 0.9043,
+  "n": 94
  },
  "BNB#240m#0.95": {
-  "hit_rate_yes": 0.9614,
-  "n": 440
- },
- "BNB#5m#0.00": {
-  "hit_rate_yes": 0.0117,
-  "n": 944
- },
- "BNB#5m#0.05": {
-  "hit_rate_yes": 0.0253,
-  "n": 395
- },
- "BNB#5m#0.10": {
-  "hit_rate_yes": 0.0704,
-  "n": 270
- },
- "BNB#5m#0.15": {
-  "hit_rate_yes": 0.1461,
-  "n": 267
- },
- "BNB#5m#0.20": {
-  "hit_rate_yes": 0.1816,
-  "n": 347
- },
- "BNB#5m#0.25": {
-  "hit_rate_yes": 0.2346,
-  "n": 341
- },
- "BNB#5m#0.30": {
-  "hit_rate_yes": 0.2735,
-  "n": 373
- },
- "BNB#5m#0.35": {
-  "hit_rate_yes": 0.3799,
-  "n": 358
- },
- "BNB#5m#0.40": {
-  "hit_rate_yes": 0.455,
+  "hit_rate_yes": 0.9607,
   "n": 433
  },
+ "BNB#5m#0.00": {
+  "hit_rate_yes": 0.0094,
+  "n": 847
+ },
+ "BNB#5m#0.05": {
+  "hit_rate_yes": 0.0291,
+  "n": 413
+ },
+ "BNB#5m#0.10": {
+  "hit_rate_yes": 0.0861,
+  "n": 267
+ },
+ "BNB#5m#0.15": {
+  "hit_rate_yes": 0.1554,
+  "n": 296
+ },
+ "BNB#5m#0.20": {
+  "hit_rate_yes": 0.2325,
+  "n": 400
+ },
+ "BNB#5m#0.25": {
+  "hit_rate_yes": 0.2548,
+  "n": 420
+ },
+ "BNB#5m#0.30": {
+  "hit_rate_yes": 0.2316,
+  "n": 380
+ },
+ "BNB#5m#0.35": {
+  "hit_rate_yes": 0.3577,
+  "n": 369
+ },
+ "BNB#5m#0.40": {
+  "hit_rate_yes": 0.3409,
+  "n": 399
+ },
  "BNB#5m#0.45": {
-  "hit_rate_yes": 0.4236,
-  "n": 484
+  "hit_rate_yes": 0.352,
+  "n": 375
  },
  "BNB#5m#0.50": {
-  "hit_rate_yes": 0.5175,
-  "n": 429
+  "hit_rate_yes": 0.4308,
+  "n": 383
  },
  "BNB#5m#0.55": {
-  "hit_rate_yes": 0.5622,
-  "n": 386
+  "hit_rate_yes": 0.503,
+  "n": 338
  },
  "BNB#5m#0.60": {
-  "hit_rate_yes": 0.6412,
-  "n": 340
+  "hit_rate_yes": 0.5887,
+  "n": 372
  },
  "BNB#5m#0.65": {
-  "hit_rate_yes": 0.7805,
-  "n": 401
+  "hit_rate_yes": 0.7328,
+  "n": 348
  },
  "BNB#5m#0.70": {
-  "hit_rate_yes": 0.7939,
-  "n": 393
+  "hit_rate_yes": 0.752,
+  "n": 375
  },
  "BNB#5m#0.75": {
-  "hit_rate_yes": 0.822,
-  "n": 354
+  "hit_rate_yes": 0.7349,
+  "n": 298
  },
  "BNB#5m#0.80": {
-  "hit_rate_yes": 0.8286,
-  "n": 391
+  "hit_rate_yes": 0.773,
+  "n": 304
  },
  "BNB#5m#0.85": {
-  "hit_rate_yes": 0.9091,
-  "n": 330
+  "hit_rate_yes": 0.8595,
+  "n": 299
  },
  "BNB#5m#0.90": {
-  "hit_rate_yes": 0.9254,
-  "n": 389
+  "hit_rate_yes": 0.9361,
+  "n": 313
  },
  "BNB#5m#0.95": {
-  "hit_rate_yes": 0.9823,
-  "n": 1075
+  "hit_rate_yes": 1.0,
+  "n": 747
  },
  "BTC#15m#0.00": {
-  "hit_rate_yes": 0.0016,
-  "n": 14992
+  "hit_rate_yes": 0.0078,
+  "n": 15225
  },
  "BTC#15m#0.05": {
-  "hit_rate_yes": 0.0259,
-  "n": 16313
+  "hit_rate_yes": 0.0393,
+  "n": 16528
  },
  "BTC#15m#0.10": {
-  "hit_rate_yes": 0.0754,
-  "n": 14344
+  "hit_rate_yes": 0.0965,
+  "n": 14659
  },
  "BTC#15m#0.15": {
-  "hit_rate_yes": 0.1853,
-  "n": 12642
+  "hit_rate_yes": 0.2016,
+  "n": 13475
  },
  "BTC#15m#0.20": {
-  "hit_rate_yes": 0.226,
-  "n": 15246
+  "hit_rate_yes": 0.2225,
+  "n": 16249
  },
  "BTC#15m#0.25": {
-  "hit_rate_yes": 0.2776,
-  "n": 15813
+  "hit_rate_yes": 0.3096,
+  "n": 17651
  },
  "BTC#15m#0.30": {
-  "hit_rate_yes": 0.3097,
-  "n": 15940
+  "hit_rate_yes": 0.3253,
+  "n": 17715
  },
  "BTC#15m#0.35": {
-  "hit_rate_yes": 0.3415,
-  "n": 16393
+  "hit_rate_yes": 0.3194,
+  "n": 17468
  },
  "BTC#15m#0.40": {
-  "hit_rate_yes": 0.3596,
-  "n": 19073
+  "hit_rate_yes": 0.3508,
+  "n": 18944
  },
  "BTC#15m#0.45": {
-  "hit_rate_yes": 0.3776,
-  "n": 25064
+  "hit_rate_yes": 0.371,
+  "n": 24457
  },
  "BTC#15m#0.50": {
-  "hit_rate_yes": 0.4508,
-  "n": 28533
+  "hit_rate_yes": 0.4506,
+  "n": 28364
  },
  "BTC#15m#0.55": {
-  "hit_rate_yes": 0.5923,
-  "n": 21479
+  "hit_rate_yes": 0.6292,
+  "n": 22197
  },
  "BTC#15m#0.60": {
-  "hit_rate_yes": 0.6285,
-  "n": 18047
+  "hit_rate_yes": 0.6478,
+  "n": 21200
  },
  "BTC#15m#0.65": {
-  "hit_rate_yes": 0.6522,
-  "n": 16807
+  "hit_rate_yes": 0.6973,
+  "n": 18750
  },
  "BTC#15m#0.70": {
-  "hit_rate_yes": 0.74,
-  "n": 16163
+  "hit_rate_yes": 0.7729,
+  "n": 17361
  },
  "BTC#15m#0.75": {
-  "hit_rate_yes": 0.7621,
-  "n": 13768
+  "hit_rate_yes": 0.8111,
+  "n": 15439
  },
  "BTC#15m#0.80": {
-  "hit_rate_yes": 0.8382,
-  "n": 13971
+  "hit_rate_yes": 0.8612,
+  "n": 13782
  },
  "BTC#15m#0.85": {
-  "hit_rate_yes": 0.8862,
-  "n": 14665
+  "hit_rate_yes": 0.9163,
+  "n": 14369
  },
  "BTC#15m#0.90": {
-  "hit_rate_yes": 0.9306,
-  "n": 16055
+  "hit_rate_yes": 0.9528,
+  "n": 16388
  },
  "BTC#15m#0.95": {
-  "hit_rate_yes": 0.9791,
-  "n": 17572
+  "hit_rate_yes": 0.978,
+  "n": 18241
  },
  "BTC#240m#0.00": {
   "hit_rate_yes": 0.005,
-  "n": 2002
+  "n": 2012
  },
  "BTC#240m#0.05": {
-  "hit_rate_yes": 0.0329,
-  "n": 1308
+  "hit_rate_yes": 0.0303,
+  "n": 1420
  },
  "BTC#240m#0.10": {
-  "hit_rate_yes": 0.0646,
-  "n": 1656
+  "hit_rate_yes": 0.0652,
+  "n": 1641
  },
  "BTC#240m#0.15": {
-  "hit_rate_yes": 0.1461,
-  "n": 1670
+  "hit_rate_yes": 0.1468,
+  "n": 1662
  },
  "BTC#240m#0.20": {
-  "hit_rate_yes": 0.2487,
-  "n": 1990
+  "hit_rate_yes": 0.2462,
+  "n": 2019
  },
  "BTC#240m#0.25": {
-  "hit_rate_yes": 0.2665,
-  "n": 2514
+  "hit_rate_yes": 0.2614,
+  "n": 2540
  },
  "BTC#240m#0.30": {
-  "hit_rate_yes": 0.3119,
-  "n": 2735
+  "hit_rate_yes": 0.3099,
+  "n": 2733
  },
  "BTC#240m#0.35": {
-  "hit_rate_yes": 0.4372,
-  "n": 3566
+  "hit_rate_yes": 0.4319,
+  "n": 3575
  },
  "BTC#240m#0.40": {
-  "hit_rate_yes": 0.4314,
-  "n": 3547
+  "hit_rate_yes": 0.4238,
+  "n": 3582
  },
  "BTC#240m#0.45": {
-  "hit_rate_yes": 0.4422,
-  "n": 3548
+  "hit_rate_yes": 0.4266,
+  "n": 3439
  },
  "BTC#240m#0.50": {
-  "hit_rate_yes": 0.5313,
-  "n": 4092
+  "hit_rate_yes": 0.5261,
+  "n": 4060
  },
  "BTC#240m#0.55": {
-  "hit_rate_yes": 0.5871,
-  "n": 3701
+  "hit_rate_yes": 0.57,
+  "n": 3735
  },
  "BTC#240m#0.60": {
-  "hit_rate_yes": 0.6698,
-  "n": 3895
+  "hit_rate_yes": 0.6693,
+  "n": 3774
  },
  "BTC#240m#0.65": {
-  "hit_rate_yes": 0.7354,
-  "n": 3790
+  "hit_rate_yes": 0.7334,
+  "n": 3691
  },
  "BTC#240m#0.70": {
-  "hit_rate_yes": 0.7985,
-  "n": 3568
+  "hit_rate_yes": 0.8002,
+  "n": 3474
  },
  "BTC#240m#0.75": {
-  "hit_rate_yes": 0.8006,
-  "n": 2537
+  "hit_rate_yes": 0.8093,
+  "n": 2517
  },
  "BTC#240m#0.80": {
-  "hit_rate_yes": 0.7954,
-  "n": 2195
+  "hit_rate_yes": 0.7952,
+  "n": 2222
  },
  "BTC#240m#0.85": {
-  "hit_rate_yes": 0.8656,
-  "n": 2068
+  "hit_rate_yes": 0.8593,
+  "n": 1976
  },
  "BTC#240m#0.90": {
-  "hit_rate_yes": 0.919,
-  "n": 1519
+  "hit_rate_yes": 0.9143,
+  "n": 1435
  },
  "BTC#240m#0.95": {
-  "hit_rate_yes": 0.9668,
-  "n": 2077
+  "hit_rate_yes": 0.9661,
+  "n": 2038
  },
  "BTC#5m#0.00": {
-  "hit_rate_yes": 0.0137,
-  "n": 19848
+  "hit_rate_yes": 0.0184,
+  "n": 20256
  },
  "BTC#5m#0.05": {
-  "hit_rate_yes": 0.078,
-  "n": 15010
+  "hit_rate_yes": 0.0583,
+  "n": 16111
  },
  "BTC#5m#0.10": {
-  "hit_rate_yes": 0.1359,
-  "n": 11498
+  "hit_rate_yes": 0.0878,
+  "n": 11719
  },
  "BTC#5m#0.15": {
-  "hit_rate_yes": 0.1501,
-  "n": 12273
+  "hit_rate_yes": 0.1149,
+  "n": 10139
  },
  "BTC#5m#0.20": {
-  "hit_rate_yes": 0.1818,
-  "n": 12230
+  "hit_rate_yes": 0.152,
+  "n": 11766
  },
  "BTC#5m#0.25": {
-  "hit_rate_yes": 0.235,
-  "n": 13513
+  "hit_rate_yes": 0.1861,
+  "n": 12168
  },
  "BTC#5m#0.30": {
-  "hit_rate_yes": 0.3119,
-  "n": 15299
+  "hit_rate_yes": 0.2633,
+  "n": 12909
  },
  "BTC#5m#0.35": {
-  "hit_rate_yes": 0.3478,
-  "n": 15689
+  "hit_rate_yes": 0.2981,
+  "n": 13328
  },
  "BTC#5m#0.40": {
-  "hit_rate_yes": 0.3851,
-  "n": 15437
+  "hit_rate_yes": 0.3379,
+  "n": 14003
  },
  "BTC#5m#0.45": {
-  "hit_rate_yes": 0.4853,
-  "n": 19786
+  "hit_rate_yes": 0.4247,
+  "n": 17488
  },
  "BTC#5m#0.50": {
-  "hit_rate_yes": 0.569,
-  "n": 24278
+  "hit_rate_yes": 0.5095,
+  "n": 20291
  },
  "BTC#5m#0.55": {
-  "hit_rate_yes": 0.6067,
-  "n": 16198
+  "hit_rate_yes": 0.5519,
+  "n": 14389
  },
  "BTC#5m#0.60": {
-  "hit_rate_yes": 0.6504,
-  "n": 15035
+  "hit_rate_yes": 0.6176,
+  "n": 13070
  },
  "BTC#5m#0.65": {
-  "hit_rate_yes": 0.6658,
-  "n": 14612
+  "hit_rate_yes": 0.6737,
+  "n": 11944
  },
  "BTC#5m#0.70": {
-  "hit_rate_yes": 0.7209,
-  "n": 14685
+  "hit_rate_yes": 0.7139,
+  "n": 11689
  },
  "BTC#5m#0.75": {
-  "hit_rate_yes": 0.8067,
-  "n": 12684
+  "hit_rate_yes": 0.7835,
+  "n": 10910
  },
  "BTC#5m#0.80": {
-  "hit_rate_yes": 0.8683,
-  "n": 13398
+  "hit_rate_yes": 0.8636,
+  "n": 10816
  },
  "BTC#5m#0.85": {
-  "hit_rate_yes": 0.9043,
-  "n": 11984
+  "hit_rate_yes": 0.9004,
+  "n": 9806
  },
  "BTC#5m#0.90": {
-  "hit_rate_yes": 0.9468,
-  "n": 14893
+  "hit_rate_yes": 0.9295,
+  "n": 12745
  },
  "BTC#5m#0.95": {
-  "hit_rate_yes": 0.9816,
-  "n": 25098
+  "hit_rate_yes": 0.9755,
+  "n": 21852
  },
  "BTC#60m#0.00": {
-  "hit_rate_yes": 0.0329,
-  "n": 6626
+  "hit_rate_yes": 0.011,
+  "n": 6642
  },
  "BTC#60m#0.05": {
-  "hit_rate_yes": 0.0633,
-  "n": 4357
+  "hit_rate_yes": 0.045,
+  "n": 4492
  },
  "BTC#60m#0.10": {
-  "hit_rate_yes": 0.1702,
-  "n": 5118
+  "hit_rate_yes": 0.1512,
+  "n": 5329
  },
  "BTC#60m#0.15": {
-  "hit_rate_yes": 0.2558,
-  "n": 5478
+  "hit_rate_yes": 0.2336,
+  "n": 5707
  },
  "BTC#60m#0.20": {
-  "hit_rate_yes": 0.2949,
-  "n": 6151
+  "hit_rate_yes": 0.2908,
+  "n": 6489
  },
  "BTC#60m#0.25": {
-  "hit_rate_yes": 0.3412,
-  "n": 6885
+  "hit_rate_yes": 0.3325,
+  "n": 7347
  },
  "BTC#60m#0.30": {
-  "hit_rate_yes": 0.3827,
-  "n": 7813
+  "hit_rate_yes": 0.3734,
+  "n": 8103
  },
  "BTC#60m#0.35": {
-  "hit_rate_yes": 0.407,
-  "n": 8270
+  "hit_rate_yes": 0.3832,
+  "n": 8478
  },
  "BTC#60m#0.40": {
-  "hit_rate_yes": 0.4349,
-  "n": 11120
+  "hit_rate_yes": 0.4078,
+  "n": 12051
  },
  "BTC#60m#0.45": {
-  "hit_rate_yes": 0.5017,
-  "n": 12863
+  "hit_rate_yes": 0.478,
+  "n": 13391
  },
  "BTC#60m#0.50": {
-  "hit_rate_yes": 0.5631,
-  "n": 13916
+  "hit_rate_yes": 0.5452,
+  "n": 14119
  },
  "BTC#60m#0.55": {
-  "hit_rate_yes": 0.6171,
-  "n": 11232
+  "hit_rate_yes": 0.6007,
+  "n": 11496
  },
  "BTC#60m#0.60": {
-  "hit_rate_yes": 0.623,
-  "n": 9336
+  "hit_rate_yes": 0.632,
+  "n": 9217
  },
  "BTC#60m#0.65": {
-  "hit_rate_yes": 0.6708,
-  "n": 8871
+  "hit_rate_yes": 0.6794,
+  "n": 8884
  },
  "BTC#60m#0.70": {
-  "hit_rate_yes": 0.7129,
-  "n": 7977
+  "hit_rate_yes": 0.7167,
+  "n": 7918
  },
  "BTC#60m#0.75": {
-  "hit_rate_yes": 0.7382,
-  "n": 7224
+  "hit_rate_yes": 0.7383,
+  "n": 7349
  },
  "BTC#60m#0.80": {
-  "hit_rate_yes": 0.7876,
-  "n": 6531
+  "hit_rate_yes": 0.7934,
+  "n": 6689
  },
  "BTC#60m#0.85": {
-  "hit_rate_yes": 0.8922,
-  "n": 5760
+  "hit_rate_yes": 0.8829,
+  "n": 5926
  },
  "BTC#60m#0.90": {
-  "hit_rate_yes": 0.948,
-  "n": 5331
+  "hit_rate_yes": 0.9327,
+  "n": 5628
  },
  "BTC#60m#0.95": {
-  "hit_rate_yes": 0.9868,
-  "n": 7797
+  "hit_rate_yes": 0.9902,
+  "n": 7429
  },
  "BTC#weekly#0.00": {
-  "hit_rate_yes": 0.0555,
-  "n": 90265
+  "hit_rate_yes": 0.0554,
+  "n": 90563
  },
  "BTC#weekly#0.05": {
-  "hit_rate_yes": 0.1311,
-  "n": 20308
+  "hit_rate_yes": 0.1324,
+  "n": 20118
  },
  "BTC#weekly#0.10": {
-  "hit_rate_yes": 0.1617,
-  "n": 12897
+  "hit_rate_yes": 0.1644,
+  "n": 12589
  },
  "BTC#weekly#0.15": {
-  "hit_rate_yes": 0.2134,
-  "n": 9952
+  "hit_rate_yes": 0.2129,
+  "n": 9750
  },
  "BTC#weekly#0.20": {
-  "hit_rate_yes": 0.3036,
-  "n": 8257
+  "hit_rate_yes": 0.3027,
+  "n": 8200
  },
  "BTC#weekly#0.25": {
-  "hit_rate_yes": 0.3777,
-  "n": 6635
+  "hit_rate_yes": 0.376,
+  "n": 6540
  },
  "BTC#weekly#0.30": {
-  "hit_rate_yes": 0.4015,
-  "n": 5815
+  "hit_rate_yes": 0.3934,
+  "n": 5826
  },
  "BTC#weekly#0.35": {
-  "hit_rate_yes": 0.4674,
-  "n": 5139
+  "hit_rate_yes": 0.4697,
+  "n": 5054
  },
  "BTC#weekly#0.40": {
-  "hit_rate_yes": 0.5259,
-  "n": 4904
+  "hit_rate_yes": 0.534,
+  "n": 4805
  },
  "BTC#weekly#0.45": {
-  "hit_rate_yes": 0.5455,
-  "n": 4821
+  "hit_rate_yes": 0.5518,
+  "n": 4752
  },
  "BTC#weekly#0.50": {
-  "hit_rate_yes": 0.54,
-  "n": 4176
+  "hit_rate_yes": 0.5494,
+  "n": 4126
  },
  "BTC#weekly#0.55": {
-  "hit_rate_yes": 0.5872,
-  "n": 4174
+  "hit_rate_yes": 0.5946,
+  "n": 4139
  },
  "BTC#weekly#0.60": {
-  "hit_rate_yes": 0.6749,
-  "n": 4801
+  "hit_rate_yes": 0.6783,
+  "n": 4794
  },
  "BTC#weekly#0.65": {
-  "hit_rate_yes": 0.6841,
-  "n": 5340
+  "hit_rate_yes": 0.6995,
+  "n": 5252
  },
  "BTC#weekly#0.70": {
-  "hit_rate_yes": 0.7233,
-  "n": 5764
+  "hit_rate_yes": 0.7493,
+  "n": 5637
  },
  "BTC#weekly#0.75": {
-  "hit_rate_yes": 0.8113,
-  "n": 7031
+  "hit_rate_yes": 0.8312,
+  "n": 6927
  },
  "BTC#weekly#0.80": {
-  "hit_rate_yes": 0.8676,
-  "n": 8479
+  "hit_rate_yes": 0.879,
+  "n": 8391
  },
  "BTC#weekly#0.85": {
-  "hit_rate_yes": 0.9357,
-  "n": 11667
+  "hit_rate_yes": 0.9387,
+  "n": 11445
  },
  "BTC#weekly#0.90": {
   "hit_rate_yes": 0.9788,
-  "n": 15199
+  "n": 15062
  },
  "BTC#weekly#0.95": {
-  "hit_rate_yes": 0.9975,
-  "n": 75995
+  "hit_rate_yes": 0.9974,
+  "n": 74586
  },
  "DOGE#15m#0.00": {
-  "hit_rate_yes": 0.0159,
-  "n": 1256
+  "hit_rate_yes": 0.0137,
+  "n": 1091
  },
  "DOGE#15m#0.05": {
-  "hit_rate_yes": 0.0871,
-  "n": 987
+  "hit_rate_yes": 0.096,
+  "n": 948
  },
  "DOGE#15m#0.10": {
-  "hit_rate_yes": 0.1221,
-  "n": 1073
+  "hit_rate_yes": 0.1368,
+  "n": 1089
  },
  "DOGE#15m#0.15": {
-  "hit_rate_yes": 0.1656,
-  "n": 1069
+  "hit_rate_yes": 0.1748,
+  "n": 1064
  },
  "DOGE#15m#0.20": {
-  "hit_rate_yes": 0.2188,
-  "n": 1129
+  "hit_rate_yes": 0.2027,
+  "n": 1194
  },
  "DOGE#15m#0.25": {
-  "hit_rate_yes": 0.2769,
-  "n": 993
+  "hit_rate_yes": 0.2587,
+  "n": 1036
  },
  "DOGE#15m#0.30": {
-  "hit_rate_yes": 0.3279,
-  "n": 918
+  "hit_rate_yes": 0.3088,
+  "n": 897
  },
  "DOGE#15m#0.35": {
-  "hit_rate_yes": 0.4644,
-  "n": 801
+  "hit_rate_yes": 0.4118,
+  "n": 777
  },
  "DOGE#15m#0.40": {
-  "hit_rate_yes": 0.4253,
-  "n": 964
+  "hit_rate_yes": 0.4055,
+  "n": 878
  },
  "DOGE#15m#0.45": {
-  "hit_rate_yes": 0.507,
-  "n": 1493
+  "hit_rate_yes": 0.4687,
+  "n": 1342
  },
  "DOGE#15m#0.50": {
-  "hit_rate_yes": 0.53,
-  "n": 1302
+  "hit_rate_yes": 0.5102,
+  "n": 1274
  },
  "DOGE#15m#0.55": {
-  "hit_rate_yes": 0.5423,
-  "n": 1005
+  "hit_rate_yes": 0.5155,
+  "n": 871
  },
  "DOGE#15m#0.60": {
-  "hit_rate_yes": 0.6035,
-  "n": 1034
+  "hit_rate_yes": 0.5542,
+  "n": 987
  },
  "DOGE#15m#0.65": {
-  "hit_rate_yes": 0.6708,
-  "n": 1361
+  "hit_rate_yes": 0.6371,
+  "n": 1174
  },
  "DOGE#15m#0.70": {
-  "hit_rate_yes": 0.7228,
-  "n": 1551
+  "hit_rate_yes": 0.705,
+  "n": 1454
  },
  "DOGE#15m#0.75": {
-  "hit_rate_yes": 0.7512,
-  "n": 1809
+  "hit_rate_yes": 0.736,
+  "n": 1655
  },
  "DOGE#15m#0.80": {
-  "hit_rate_yes": 0.7745,
-  "n": 1885
+  "hit_rate_yes": 0.767,
+  "n": 1725
  },
  "DOGE#15m#0.85": {
-  "hit_rate_yes": 0.7834,
-  "n": 1916
+  "hit_rate_yes": 0.7999,
+  "n": 1789
  },
  "DOGE#15m#0.90": {
-  "hit_rate_yes": 0.8759,
-  "n": 2023
+  "hit_rate_yes": 0.8836,
+  "n": 1856
  },
  "DOGE#15m#0.95": {
-  "hit_rate_yes": 0.9653,
-  "n": 1587
+  "hit_rate_yes": 0.9681,
+  "n": 1347
  },
  "DOGE#240m#0.00": {
   "hit_rate_yes": 0.0,
-  "n": 328
+  "n": 331
  },
  "DOGE#240m#0.05": {
   "hit_rate_yes": 0.0,
-  "n": 59
+  "n": 58
  },
  "DOGE#240m#0.10": {
-  "hit_rate_yes": 0.0962,
-  "n": 52
+  "hit_rate_yes": 0.0,
+  "n": 48
  },
  "DOGE#240m#0.35": {
-  "hit_rate_yes": 0.2051,
-  "n": 39
+  "hit_rate_yes": 0.2286,
+  "n": 35
  },
  "DOGE#240m#0.40": {
-  "hit_rate_yes": 0.4074,
+  "hit_rate_yes": 0.3889,
   "n": 54
  },
  "DOGE#240m#0.45": {
-  "hit_rate_yes": 0.6263,
-  "n": 99
+  "hit_rate_yes": 0.6392,
+  "n": 97
  },
  "DOGE#240m#0.50": {
-  "hit_rate_yes": 0.5942,
-  "n": 69
+  "hit_rate_yes": 0.5522,
+  "n": 67
  },
  "DOGE#240m#0.55": {
   "hit_rate_yes": 0.3429,
   "n": 35
  },
  "DOGE#240m#0.65": {
-  "hit_rate_yes": 0.7568,
-  "n": 37
- },
- "DOGE#240m#0.70": {
-  "hit_rate_yes": 0.5581,
-  "n": 43
- },
- "DOGE#240m#0.80": {
-  "hit_rate_yes": 0.8,
+  "hit_rate_yes": 0.7429,
   "n": 35
  },
- "DOGE#240m#0.85": {
-  "hit_rate_yes": 0.9677,
-  "n": 31
+ "DOGE#240m#0.70": {
+  "hit_rate_yes": 0.5366,
+  "n": 41
+ },
+ "DOGE#240m#0.75": {
+  "hit_rate_yes": 0.6562,
+  "n": 32
+ },
+ "DOGE#240m#0.80": {
+  "hit_rate_yes": 0.7879,
+  "n": 33
  },
  "DOGE#240m#0.90": {
-  "hit_rate_yes": 0.9789,
-  "n": 95
+  "hit_rate_yes": 0.9778,
+  "n": 90
  },
  "DOGE#240m#0.95": {
-  "hit_rate_yes": 0.9584,
-  "n": 385
+  "hit_rate_yes": 0.9517,
+  "n": 331
  },
  "DOGE#5m#0.00": {
-  "hit_rate_yes": 0.0344,
-  "n": 1191
+  "hit_rate_yes": 0.0293,
+  "n": 1092
  },
  "DOGE#5m#0.05": {
-  "hit_rate_yes": 0.0945,
-  "n": 614
+  "hit_rate_yes": 0.1055,
+  "n": 493
  },
  "DOGE#5m#0.10": {
-  "hit_rate_yes": 0.1222,
-  "n": 491
+  "hit_rate_yes": 0.1439,
+  "n": 396
  },
  "DOGE#5m#0.15": {
-  "hit_rate_yes": 0.139,
-  "n": 374
+  "hit_rate_yes": 0.1585,
+  "n": 347
  },
  "DOGE#5m#0.20": {
-  "hit_rate_yes": 0.2178,
-  "n": 404
+  "hit_rate_yes": 0.245,
+  "n": 347
  },
  "DOGE#5m#0.25": {
-  "hit_rate_yes": 0.2452,
-  "n": 314
+  "hit_rate_yes": 0.2625,
+  "n": 320
  },
  "DOGE#5m#0.30": {
-  "hit_rate_yes": 0.3295,
-  "n": 352
+  "hit_rate_yes": 0.3314,
+  "n": 344
  },
  "DOGE#5m#0.35": {
-  "hit_rate_yes": 0.3276,
-  "n": 290
+  "hit_rate_yes": 0.3255,
+  "n": 255
  },
  "DOGE#5m#0.40": {
-  "hit_rate_yes": 0.4067,
-  "n": 327
+  "hit_rate_yes": 0.4367,
+  "n": 245
  },
  "DOGE#5m#0.45": {
-  "hit_rate_yes": 0.4294,
-  "n": 333
+  "hit_rate_yes": 0.4567,
+  "n": 254
  },
  "DOGE#5m#0.50": {
-  "hit_rate_yes": 0.5014,
-  "n": 351
+  "hit_rate_yes": 0.5455,
+  "n": 308
  },
  "DOGE#5m#0.55": {
-  "hit_rate_yes": 0.5405,
-  "n": 296
+  "hit_rate_yes": 0.536,
+  "n": 222
  },
  "DOGE#5m#0.60": {
-  "hit_rate_yes": 0.5829,
-  "n": 374
+  "hit_rate_yes": 0.5798,
+  "n": 307
  },
  "DOGE#5m#0.65": {
-  "hit_rate_yes": 0.616,
-  "n": 375
+  "hit_rate_yes": 0.6307,
+  "n": 306
  },
  "DOGE#5m#0.70": {
-  "hit_rate_yes": 0.6704,
-  "n": 358
+  "hit_rate_yes": 0.6273,
+  "n": 271
  },
  "DOGE#5m#0.75": {
-  "hit_rate_yes": 0.6893,
-  "n": 428
+  "hit_rate_yes": 0.6746,
+  "n": 378
  },
  "DOGE#5m#0.80": {
-  "hit_rate_yes": 0.7898,
-  "n": 528
+  "hit_rate_yes": 0.7511,
+  "n": 458
  },
  "DOGE#5m#0.85": {
-  "hit_rate_yes": 0.8791,
-  "n": 579
+  "hit_rate_yes": 0.884,
+  "n": 474
  },
  "DOGE#5m#0.90": {
-  "hit_rate_yes": 0.9163,
-  "n": 669
+  "hit_rate_yes": 0.9244,
+  "n": 595
  },
  "DOGE#5m#0.95": {
   "hit_rate_yes": 0.9793,
-  "n": 1206
+  "n": 1016
  },
  "ETH#15m#0.00": {
-  "hit_rate_yes": 0.0157,
-  "n": 3382
+  "hit_rate_yes": 0.0189,
+  "n": 3221
  },
  "ETH#15m#0.05": {
-  "hit_rate_yes": 0.0586,
-  "n": 3550
+  "hit_rate_yes": 0.0663,
+  "n": 3501
  },
  "ETH#15m#0.10": {
-  "hit_rate_yes": 0.115,
-  "n": 4001
+  "hit_rate_yes": 0.112,
+  "n": 4349
  },
  "ETH#15m#0.15": {
-  "hit_rate_yes": 0.1847,
-  "n": 3584
+  "hit_rate_yes": 0.1755,
+  "n": 3784
  },
  "ETH#15m#0.20": {
-  "hit_rate_yes": 0.2265,
-  "n": 4098
+  "hit_rate_yes": 0.2231,
+  "n": 4120
  },
  "ETH#15m#0.25": {
-  "hit_rate_yes": 0.2701,
-  "n": 3998
+  "hit_rate_yes": 0.2736,
+  "n": 3893
  },
  "ETH#15m#0.30": {
-  "hit_rate_yes": 0.3054,
-  "n": 3837
+  "hit_rate_yes": 0.3191,
+  "n": 3660
  },
  "ETH#15m#0.35": {
-  "hit_rate_yes": 0.365,
-  "n": 3937
+  "hit_rate_yes": 0.3548,
+  "n": 3825
  },
  "ETH#15m#0.40": {
-  "hit_rate_yes": 0.409,
-  "n": 4462
+  "hit_rate_yes": 0.4114,
+  "n": 4315
  },
  "ETH#15m#0.45": {
-  "hit_rate_yes": 0.4306,
-  "n": 5934
+  "hit_rate_yes": 0.4234,
+  "n": 5846
  },
  "ETH#15m#0.50": {
-  "hit_rate_yes": 0.5498,
-  "n": 6852
+  "hit_rate_yes": 0.5313,
+  "n": 6733
  },
  "ETH#15m#0.55": {
-  "hit_rate_yes": 0.5895,
-  "n": 4599
+  "hit_rate_yes": 0.5689,
+  "n": 4386
  },
  "ETH#15m#0.60": {
-  "hit_rate_yes": 0.6353,
-  "n": 4354
+  "hit_rate_yes": 0.6152,
+  "n": 3893
  },
  "ETH#15m#0.65": {
-  "hit_rate_yes": 0.7188,
-  "n": 4029
+  "hit_rate_yes": 0.7003,
+  "n": 3560
  },
  "ETH#15m#0.70": {
-  "hit_rate_yes": 0.7863,
-  "n": 3908
+  "hit_rate_yes": 0.7562,
+  "n": 3487
  },
  "ETH#15m#0.75": {
-  "hit_rate_yes": 0.811,
-  "n": 3736
+  "hit_rate_yes": 0.7871,
+  "n": 3448
  },
  "ETH#15m#0.80": {
-  "hit_rate_yes": 0.8566,
-  "n": 3396
+  "hit_rate_yes": 0.833,
+  "n": 3383
  },
  "ETH#15m#0.85": {
-  "hit_rate_yes": 0.9002,
-  "n": 4010
+  "hit_rate_yes": 0.8848,
+  "n": 3759
  },
  "ETH#15m#0.90": {
-  "hit_rate_yes": 0.9281,
-  "n": 4007
+  "hit_rate_yes": 0.9155,
+  "n": 3528
  },
  "ETH#15m#0.95": {
-  "hit_rate_yes": 0.9787,
-  "n": 4372
+  "hit_rate_yes": 0.9731,
+  "n": 4095
  },
  "ETH#240m#0.00": {
   "hit_rate_yes": 0.0,
-  "n": 1220
+  "n": 1250
  },
  "ETH#240m#0.05": {
-  "hit_rate_yes": 0.0472,
-  "n": 572
+  "hit_rate_yes": 0.0462,
+  "n": 585
  },
  "ETH#240m#0.10": {
-  "hit_rate_yes": 0.0462,
-  "n": 390
+  "hit_rate_yes": 0.0421,
+  "n": 428
  },
  "ETH#240m#0.15": {
-  "hit_rate_yes": 0.1343,
-  "n": 469
+  "hit_rate_yes": 0.1257,
+  "n": 501
  },
  "ETH#240m#0.20": {
-  "hit_rate_yes": 0.1431,
-  "n": 496
+  "hit_rate_yes": 0.1317,
+  "n": 539
  },
  "ETH#240m#0.25": {
-  "hit_rate_yes": 0.1593,
-  "n": 615
+  "hit_rate_yes": 0.1492,
+  "n": 657
  },
  "ETH#240m#0.30": {
-  "hit_rate_yes": 0.278,
-  "n": 644
+  "hit_rate_yes": 0.2632,
+  "n": 680
  },
  "ETH#240m#0.35": {
-  "hit_rate_yes": 0.284,
-  "n": 898
+  "hit_rate_yes": 0.2756,
+  "n": 918
  },
  "ETH#240m#0.40": {
-  "hit_rate_yes": 0.3651,
-  "n": 1008
+  "hit_rate_yes": 0.3627,
+  "n": 1020
  },
  "ETH#240m#0.45": {
-  "hit_rate_yes": 0.4352,
-  "n": 1188
+  "hit_rate_yes": 0.4255,
+  "n": 1147
  },
  "ETH#240m#0.50": {
-  "hit_rate_yes": 0.5556,
-  "n": 1512
+  "hit_rate_yes": 0.5494,
+  "n": 1447
  },
  "ETH#240m#0.55": {
-  "hit_rate_yes": 0.5143,
-  "n": 1223
+  "hit_rate_yes": 0.5067,
+  "n": 1196
  },
  "ETH#240m#0.60": {
-  "hit_rate_yes": 0.6586,
-  "n": 1195
+  "hit_rate_yes": 0.6456,
+  "n": 1185
  },
  "ETH#240m#0.65": {
-  "hit_rate_yes": 0.6876,
-  "n": 877
+  "hit_rate_yes": 0.6811,
+  "n": 875
  },
  "ETH#240m#0.70": {
-  "hit_rate_yes": 0.7317,
-  "n": 738
+  "hit_rate_yes": 0.7451,
+  "n": 714
  },
  "ETH#240m#0.75": {
-  "hit_rate_yes": 0.8075,
-  "n": 748
+  "hit_rate_yes": 0.8157,
+  "n": 727
  },
  "ETH#240m#0.80": {
-  "hit_rate_yes": 0.9067,
-  "n": 815
+  "hit_rate_yes": 0.9173,
+  "n": 786
  },
  "ETH#240m#0.85": {
-  "hit_rate_yes": 0.9065,
-  "n": 995
+  "hit_rate_yes": 0.9171,
+  "n": 965
  },
  "ETH#240m#0.90": {
-  "hit_rate_yes": 0.9517,
-  "n": 808
+  "hit_rate_yes": 0.9509,
+  "n": 795
  },
  "ETH#240m#0.95": {
-  "hit_rate_yes": 0.9949,
-  "n": 1368
+  "hit_rate_yes": 0.9946,
+  "n": 1301
  },
  "ETH#5m#0.00": {
-  "hit_rate_yes": 0.0311,
-  "n": 4145
+  "hit_rate_yes": 0.0405,
+  "n": 4400
  },
  "ETH#5m#0.05": {
-  "hit_rate_yes": 0.0417,
-  "n": 2325
+  "hit_rate_yes": 0.0578,
+  "n": 2664
  },
  "ETH#5m#0.10": {
-  "hit_rate_yes": 0.08,
-  "n": 2464
+  "hit_rate_yes": 0.0734,
+  "n": 2506
  },
  "ETH#5m#0.15": {
-  "hit_rate_yes": 0.1295,
-  "n": 2355
+  "hit_rate_yes": 0.1383,
+  "n": 2379
  },
  "ETH#5m#0.20": {
-  "hit_rate_yes": 0.1579,
-  "n": 2185
- },
- "ETH#5m#0.25": {
-  "hit_rate_yes": 0.2465,
-  "n": 2471
- },
- "ETH#5m#0.30": {
-  "hit_rate_yes": 0.3109,
-  "n": 2332
- },
- "ETH#5m#0.35": {
-  "hit_rate_yes": 0.3383,
-  "n": 2489
- },
- "ETH#5m#0.40": {
-  "hit_rate_yes": 0.4361,
-  "n": 2589
- },
- "ETH#5m#0.45": {
-  "hit_rate_yes": 0.4645,
-  "n": 3778
- },
- "ETH#5m#0.50": {
-  "hit_rate_yes": 0.5004,
-  "n": 4257
- },
- "ETH#5m#0.55": {
-  "hit_rate_yes": 0.5996,
-  "n": 2835
- },
- "ETH#5m#0.60": {
-  "hit_rate_yes": 0.5816,
-  "n": 2679
- },
- "ETH#5m#0.65": {
-  "hit_rate_yes": 0.6253,
-  "n": 2482
- },
- "ETH#5m#0.70": {
-  "hit_rate_yes": 0.7033,
-  "n": 2457
- },
- "ETH#5m#0.75": {
-  "hit_rate_yes": 0.776,
-  "n": 2214
- },
- "ETH#5m#0.80": {
-  "hit_rate_yes": 0.842,
-  "n": 2190
- },
- "ETH#5m#0.85": {
-  "hit_rate_yes": 0.9145,
-  "n": 2338
- },
- "ETH#5m#0.90": {
-  "hit_rate_yes": 0.9259,
-  "n": 2012
- },
- "ETH#5m#0.95": {
-  "hit_rate_yes": 0.9971,
-  "n": 4089
- },
- "ETH#60m#0.00": {
-  "hit_rate_yes": 0.0285,
-  "n": 3298
- },
- "ETH#60m#0.05": {
-  "hit_rate_yes": 0.0961,
-  "n": 1603
- },
- "ETH#60m#0.10": {
-  "hit_rate_yes": 0.1343,
-  "n": 1437
- },
- "ETH#60m#0.15": {
-  "hit_rate_yes": 0.2204,
-  "n": 1402
- },
- "ETH#60m#0.20": {
-  "hit_rate_yes": 0.2804,
-  "n": 1751
- },
- "ETH#60m#0.25": {
-  "hit_rate_yes": 0.4276,
-  "n": 2037
- },
- "ETH#60m#0.30": {
-  "hit_rate_yes": 0.4172,
-  "n": 2040
- },
- "ETH#60m#0.35": {
-  "hit_rate_yes": 0.4227,
-  "n": 2127
- },
- "ETH#60m#0.40": {
-  "hit_rate_yes": 0.4306,
-  "n": 3855
- },
- "ETH#60m#0.45": {
-  "hit_rate_yes": 0.4613,
-  "n": 3848
- },
- "ETH#60m#0.50": {
-  "hit_rate_yes": 0.5684,
-  "n": 3160
- },
- "ETH#60m#0.55": {
-  "hit_rate_yes": 0.5956,
-  "n": 2824
- },
- "ETH#60m#0.60": {
-  "hit_rate_yes": 0.6131,
-  "n": 2528
- },
- "ETH#60m#0.65": {
-  "hit_rate_yes": 0.6978,
-  "n": 2032
- },
- "ETH#60m#0.70": {
-  "hit_rate_yes": 0.7223,
-  "n": 2377
- },
- "ETH#60m#0.75": {
-  "hit_rate_yes": 0.7691,
-  "n": 1923
- },
- "ETH#60m#0.80": {
-  "hit_rate_yes": 0.8204,
-  "n": 1715
- },
- "ETH#60m#0.85": {
-  "hit_rate_yes": 0.9003,
-  "n": 1554
- },
- "ETH#60m#0.90": {
-  "hit_rate_yes": 0.9232,
-  "n": 1940
- },
- "ETH#60m#0.95": {
-  "hit_rate_yes": 0.9871,
-  "n": 4120
- },
- "ETH#weekly#0.00": {
-  "hit_rate_yes": 0.0296,
-  "n": 37375
- },
- "ETH#weekly#0.05": {
-  "hit_rate_yes": 0.0755,
-  "n": 8857
- },
- "ETH#weekly#0.10": {
-  "hit_rate_yes": 0.168,
-  "n": 5202
- },
- "ETH#weekly#0.15": {
-  "hit_rate_yes": 0.2437,
-  "n": 3714
- },
- "ETH#weekly#0.20": {
-  "hit_rate_yes": 0.2939,
-  "n": 3273
- },
- "ETH#weekly#0.25": {
-  "hit_rate_yes": 0.3451,
-  "n": 2680
- },
- "ETH#weekly#0.30": {
-  "hit_rate_yes": 0.3851,
-  "n": 2150
- },
- "ETH#weekly#0.35": {
-  "hit_rate_yes": 0.3488,
-  "n": 1921
- },
- "ETH#weekly#0.40": {
-  "hit_rate_yes": 0.5171,
-  "n": 1868
- },
- "ETH#weekly#0.45": {
-  "hit_rate_yes": 0.4946,
+  "hit_rate_yes": 0.1521,
   "n": 2222
  },
- "ETH#weekly#0.50": {
-  "hit_rate_yes": 0.3459,
-  "n": 1691
+ "ETH#5m#0.25": {
+  "hit_rate_yes": 0.2155,
+  "n": 2125
  },
- "ETH#weekly#0.55": {
-  "hit_rate_yes": 0.4702,
-  "n": 1427
+ "ETH#5m#0.30": {
+  "hit_rate_yes": 0.2728,
+  "n": 2174
  },
- "ETH#weekly#0.60": {
-  "hit_rate_yes": 0.5742,
-  "n": 1409
+ "ETH#5m#0.35": {
+  "hit_rate_yes": 0.2903,
+  "n": 2518
  },
- "ETH#weekly#0.65": {
-  "hit_rate_yes": 0.5736,
-  "n": 1440
+ "ETH#5m#0.40": {
+  "hit_rate_yes": 0.3873,
+  "n": 2587
  },
- "ETH#weekly#0.70": {
-  "hit_rate_yes": 0.5971,
-  "n": 1978
+ "ETH#5m#0.45": {
+  "hit_rate_yes": 0.4449,
+  "n": 3704
  },
- "ETH#weekly#0.75": {
-  "hit_rate_yes": 0.7389,
-  "n": 1930
+ "ETH#5m#0.50": {
+  "hit_rate_yes": 0.5045,
+  "n": 4246
  },
- "ETH#weekly#0.80": {
-  "hit_rate_yes": 0.8195,
-  "n": 2427
+ "ETH#5m#0.55": {
+  "hit_rate_yes": 0.558,
+  "n": 2717
  },
- "ETH#weekly#0.85": {
-  "hit_rate_yes": 0.8739,
-  "n": 3195
+ "ETH#5m#0.60": {
+  "hit_rate_yes": 0.5324,
+  "n": 2579
  },
- "ETH#weekly#0.90": {
-  "hit_rate_yes": 0.9647,
-  "n": 4846
+ "ETH#5m#0.65": {
+  "hit_rate_yes": 0.6197,
+  "n": 2343
  },
- "ETH#weekly#0.95": {
-  "hit_rate_yes": 0.998,
-  "n": 26092
+ "ETH#5m#0.70": {
+  "hit_rate_yes": 0.6775,
+  "n": 2115
  },
- "SOL#15m#0.00": {
-  "hit_rate_yes": 0.0113,
+ "ETH#5m#0.75": {
+  "hit_rate_yes": 0.7313,
+  "n": 2095
+ },
+ "ETH#5m#0.80": {
+  "hit_rate_yes": 0.8513,
+  "n": 1970
+ },
+ "ETH#5m#0.85": {
+  "hit_rate_yes": 0.9313,
+  "n": 2344
+ },
+ "ETH#5m#0.90": {
+  "hit_rate_yes": 0.9433,
   "n": 2030
  },
+ "ETH#5m#0.95": {
+  "hit_rate_yes": 0.9976,
+  "n": 4105
+ },
+ "ETH#60m#0.00": {
+  "hit_rate_yes": 0.0029,
+  "n": 3423
+ },
+ "ETH#60m#0.05": {
+  "hit_rate_yes": 0.0407,
+  "n": 1571
+ },
+ "ETH#60m#0.10": {
+  "hit_rate_yes": 0.0794,
+  "n": 1587
+ },
+ "ETH#60m#0.15": {
+  "hit_rate_yes": 0.1801,
+  "n": 1488
+ },
+ "ETH#60m#0.20": {
+  "hit_rate_yes": 0.2362,
+  "n": 1981
+ },
+ "ETH#60m#0.25": {
+  "hit_rate_yes": 0.366,
+  "n": 2172
+ },
+ "ETH#60m#0.30": {
+  "hit_rate_yes": 0.402,
+  "n": 2271
+ },
+ "ETH#60m#0.35": {
+  "hit_rate_yes": 0.4044,
+  "n": 2260
+ },
+ "ETH#60m#0.40": {
+  "hit_rate_yes": 0.3761,
+  "n": 4837
+ },
+ "ETH#60m#0.45": {
+  "hit_rate_yes": 0.4376,
+  "n": 4111
+ },
+ "ETH#60m#0.50": {
+  "hit_rate_yes": 0.5301,
+  "n": 3337
+ },
+ "ETH#60m#0.55": {
+  "hit_rate_yes": 0.5583,
+  "n": 2871
+ },
+ "ETH#60m#0.60": {
+  "hit_rate_yes": 0.5717,
+  "n": 2643
+ },
+ "ETH#60m#0.65": {
+  "hit_rate_yes": 0.6742,
+  "n": 2066
+ },
+ "ETH#60m#0.70": {
+  "hit_rate_yes": 0.724,
+  "n": 2283
+ },
+ "ETH#60m#0.75": {
+  "hit_rate_yes": 0.7639,
+  "n": 1813
+ },
+ "ETH#60m#0.80": {
+  "hit_rate_yes": 0.8052,
+  "n": 1663
+ },
+ "ETH#60m#0.85": {
+  "hit_rate_yes": 0.8776,
+  "n": 1471
+ },
+ "ETH#60m#0.90": {
+  "hit_rate_yes": 0.9155,
+  "n": 1716
+ },
+ "ETH#60m#0.95": {
+  "hit_rate_yes": 0.9821,
+  "n": 3956
+ },
+ "ETH#weekly#0.00": {
+  "hit_rate_yes": 0.0297,
+  "n": 37335
+ },
+ "ETH#weekly#0.05": {
+  "hit_rate_yes": 0.075,
+  "n": 8919
+ },
+ "ETH#weekly#0.10": {
+  "hit_rate_yes": 0.1695,
+  "n": 5180
+ },
+ "ETH#weekly#0.15": {
+  "hit_rate_yes": 0.2436,
+  "n": 3715
+ },
+ "ETH#weekly#0.20": {
+  "hit_rate_yes": 0.3022,
+  "n": 3197
+ },
+ "ETH#weekly#0.25": {
+  "hit_rate_yes": 0.348,
+  "n": 2655
+ },
+ "ETH#weekly#0.30": {
+  "hit_rate_yes": 0.3806,
+  "n": 2173
+ },
+ "ETH#weekly#0.35": {
+  "hit_rate_yes": 0.348,
+  "n": 1928
+ },
+ "ETH#weekly#0.40": {
+  "hit_rate_yes": 0.5129,
+  "n": 1858
+ },
+ "ETH#weekly#0.45": {
+  "hit_rate_yes": 0.4937,
+  "n": 2208
+ },
+ "ETH#weekly#0.50": {
+  "hit_rate_yes": 0.3413,
+  "n": 1670
+ },
+ "ETH#weekly#0.55": {
+  "hit_rate_yes": 0.4678,
+  "n": 1398
+ },
+ "ETH#weekly#0.60": {
+  "hit_rate_yes": 0.5747,
+  "n": 1378
+ },
+ "ETH#weekly#0.65": {
+  "hit_rate_yes": 0.5719,
+  "n": 1432
+ },
+ "ETH#weekly#0.70": {
+  "hit_rate_yes": 0.5963,
+  "n": 1989
+ },
+ "ETH#weekly#0.75": {
+  "hit_rate_yes": 0.7282,
+  "n": 1939
+ },
+ "ETH#weekly#0.80": {
+  "hit_rate_yes": 0.8101,
+  "n": 2422
+ },
+ "ETH#weekly#0.85": {
+  "hit_rate_yes": 0.8728,
+  "n": 3191
+ },
+ "ETH#weekly#0.90": {
+  "hit_rate_yes": 0.9645,
+  "n": 4819
+ },
+ "ETH#weekly#0.95": {
+  "hit_rate_yes": 0.9979,
+  "n": 25665
+ },
+ "SOL#15m#0.00": {
+  "hit_rate_yes": 0.0048,
+  "n": 2070
+ },
  "SOL#15m#0.05": {
-  "hit_rate_yes": 0.0449,
-  "n": 1936
+  "hit_rate_yes": 0.0331,
+  "n": 1963
  },
  "SOL#15m#0.10": {
-  "hit_rate_yes": 0.1036,
-  "n": 1872
+  "hit_rate_yes": 0.091,
+  "n": 1966
  },
  "SOL#15m#0.15": {
-  "hit_rate_yes": 0.162,
-  "n": 1531
+  "hit_rate_yes": 0.1759,
+  "n": 1563
  },
  "SOL#15m#0.20": {
-  "hit_rate_yes": 0.2147,
+  "hit_rate_yes": 0.211,
   "n": 1877
  },
  "SOL#15m#0.25": {
-  "hit_rate_yes": 0.2994,
-  "n": 1847
+  "hit_rate_yes": 0.2977,
+  "n": 1851
  },
  "SOL#15m#0.30": {
-  "hit_rate_yes": 0.3119,
-  "n": 1786
+  "hit_rate_yes": 0.3048,
+  "n": 1703
  },
  "SOL#15m#0.35": {
-  "hit_rate_yes": 0.3716,
-  "n": 1784
+  "hit_rate_yes": 0.3675,
+  "n": 1744
  },
  "SOL#15m#0.40": {
-  "hit_rate_yes": 0.4487,
-  "n": 1814
+  "hit_rate_yes": 0.429,
+  "n": 1690
  },
  "SOL#15m#0.45": {
-  "hit_rate_yes": 0.481,
-  "n": 2445
+  "hit_rate_yes": 0.4699,
+  "n": 2273
  },
  "SOL#15m#0.50": {
-  "hit_rate_yes": 0.5486,
-  "n": 2749
+  "hit_rate_yes": 0.511,
+  "n": 2681
  },
  "SOL#15m#0.55": {
-  "hit_rate_yes": 0.5987,
-  "n": 1864
+  "hit_rate_yes": 0.5654,
+  "n": 1666
  },
  "SOL#15m#0.60": {
-  "hit_rate_yes": 0.7,
-  "n": 2033
+  "hit_rate_yes": 0.6725,
+  "n": 1838
  },
  "SOL#15m#0.65": {
-  "hit_rate_yes": 0.7129,
-  "n": 2083
+  "hit_rate_yes": 0.6802,
+  "n": 1817
  },
  "SOL#15m#0.70": {
-  "hit_rate_yes": 0.6946,
-  "n": 2168
+  "hit_rate_yes": 0.6523,
+  "n": 1996
  },
  "SOL#15m#0.75": {
-  "hit_rate_yes": 0.7511,
-  "n": 2133
+  "hit_rate_yes": 0.7288,
+  "n": 2139
  },
  "SOL#15m#0.80": {
-  "hit_rate_yes": 0.8561,
-  "n": 2154
+  "hit_rate_yes": 0.8337,
+  "n": 2068
  },
  "SOL#15m#0.85": {
-  "hit_rate_yes": 0.864,
-  "n": 2529
+  "hit_rate_yes": 0.8578,
+  "n": 2398
  },
  "SOL#15m#0.90": {
-  "hit_rate_yes": 0.8828,
-  "n": 2424
+  "hit_rate_yes": 0.8654,
+  "n": 2332
  },
  "SOL#15m#0.95": {
-  "hit_rate_yes": 0.9724,
-  "n": 2680
+  "hit_rate_yes": 0.9586,
+  "n": 2632
  },
  "SOL#240m#0.00": {
   "hit_rate_yes": 0.009,
-  "n": 999
+  "n": 997
  },
  "SOL#240m#0.05": {
-  "hit_rate_yes": 0.0163,
-  "n": 246
+  "hit_rate_yes": 0.0165,
+  "n": 242
  },
  "SOL#240m#0.10": {
-  "hit_rate_yes": 0.0707,
-  "n": 184
+  "hit_rate_yes": 0.0734,
+  "n": 177
  },
  "SOL#240m#0.15": {
-  "hit_rate_yes": 0.1835,
-  "n": 158
+  "hit_rate_yes": 0.1648,
+  "n": 176
  },
  "SOL#240m#0.20": {
-  "hit_rate_yes": 0.2892,
-  "n": 204
+  "hit_rate_yes": 0.281,
+  "n": 210
  },
  "SOL#240m#0.25": {
-  "hit_rate_yes": 0.291,
+  "hit_rate_yes": 0.2869,
   "n": 244
  },
  "SOL#240m#0.30": {
-  "hit_rate_yes": 0.3904,
-  "n": 251
- },
- "SOL#240m#0.35": {
-  "hit_rate_yes": 0.3763,
-  "n": 194
- },
- "SOL#240m#0.40": {
-  "hit_rate_yes": 0.4065,
-  "n": 246
- },
- "SOL#240m#0.45": {
-  "hit_rate_yes": 0.5697,
-  "n": 402
- },
- "SOL#240m#0.50": {
-  "hit_rate_yes": 0.5491,
-  "n": 346
- },
- "SOL#240m#0.55": {
-  "hit_rate_yes": 0.6318,
-  "n": 239
- },
- "SOL#240m#0.60": {
-  "hit_rate_yes": 0.6839,
-  "n": 310
- },
- "SOL#240m#0.65": {
-  "hit_rate_yes": 0.6818,
-  "n": 286
- },
- "SOL#240m#0.70": {
-  "hit_rate_yes": 0.7868,
-  "n": 333
- },
- "SOL#240m#0.75": {
-  "hit_rate_yes": 0.8041,
+  "hit_rate_yes": 0.3837,
   "n": 245
  },
+ "SOL#240m#0.35": {
+  "hit_rate_yes": 0.3791,
+  "n": 182
+ },
+ "SOL#240m#0.40": {
+  "hit_rate_yes": 0.3974,
+  "n": 234
+ },
+ "SOL#240m#0.45": {
+  "hit_rate_yes": 0.5799,
+  "n": 388
+ },
+ "SOL#240m#0.50": {
+  "hit_rate_yes": 0.5549,
+  "n": 328
+ },
+ "SOL#240m#0.55": {
+  "hit_rate_yes": 0.6398,
+  "n": 236
+ },
+ "SOL#240m#0.60": {
+  "hit_rate_yes": 0.6949,
+  "n": 295
+ },
+ "SOL#240m#0.65": {
+  "hit_rate_yes": 0.654,
+  "n": 289
+ },
+ "SOL#240m#0.70": {
+  "hit_rate_yes": 0.7988,
+  "n": 323
+ },
+ "SOL#240m#0.75": {
+  "hit_rate_yes": 0.8026,
+  "n": 228
+ },
  "SOL#240m#0.80": {
-  "hit_rate_yes": 0.8548,
-  "n": 241
+  "hit_rate_yes": 0.8541,
+  "n": 233
  },
  "SOL#240m#0.85": {
-  "hit_rate_yes": 0.9231,
-  "n": 208
+  "hit_rate_yes": 0.9394,
+  "n": 198
  },
  "SOL#240m#0.90": {
-  "hit_rate_yes": 0.9375,
-  "n": 224
+  "hit_rate_yes": 0.9575,
+  "n": 212
  },
  "SOL#240m#0.95": {
   "hit_rate_yes": 1.0,
-  "n": 1121
+  "n": 1072
  },
  "SOL#5m#0.00": {
-  "hit_rate_yes": 0.0264,
-  "n": 1933
+  "hit_rate_yes": 0.0069,
+  "n": 1897
  },
  "SOL#5m#0.05": {
-  "hit_rate_yes": 0.0628,
-  "n": 940
+  "hit_rate_yes": 0.0472,
+  "n": 1018
  },
  "SOL#5m#0.10": {
-  "hit_rate_yes": 0.151,
-  "n": 927
+  "hit_rate_yes": 0.1228,
+  "n": 1083
  },
  "SOL#5m#0.15": {
-  "hit_rate_yes": 0.1853,
-  "n": 1047
+  "hit_rate_yes": 0.1826,
+  "n": 1128
  },
  "SOL#5m#0.20": {
-  "hit_rate_yes": 0.2376,
-  "n": 1107
+  "hit_rate_yes": 0.2429,
+  "n": 1099
  },
  "SOL#5m#0.25": {
-  "hit_rate_yes": 0.3047,
-  "n": 1188
+  "hit_rate_yes": 0.259,
+  "n": 1201
  },
  "SOL#5m#0.30": {
-  "hit_rate_yes": 0.377,
-  "n": 1228
+  "hit_rate_yes": 0.2943,
+  "n": 1196
  },
  "SOL#5m#0.35": {
-  "hit_rate_yes": 0.4091,
-  "n": 1029
+  "hit_rate_yes": 0.3548,
+  "n": 1054
  },
  "SOL#5m#0.40": {
-  "hit_rate_yes": 0.438,
-  "n": 1057
+  "hit_rate_yes": 0.4,
+  "n": 940
  },
  "SOL#5m#0.45": {
-  "hit_rate_yes": 0.4941,
-  "n": 1532
+  "hit_rate_yes": 0.4572,
+  "n": 1402
  },
  "SOL#5m#0.50": {
-  "hit_rate_yes": 0.4979,
-  "n": 1693
+  "hit_rate_yes": 0.464,
+  "n": 1459
  },
  "SOL#5m#0.55": {
-  "hit_rate_yes": 0.5609,
-  "n": 993
+  "hit_rate_yes": 0.5522,
+  "n": 949
  },
  "SOL#5m#0.60": {
-  "hit_rate_yes": 0.5648,
-  "n": 1057
+  "hit_rate_yes": 0.5766,
+  "n": 999
  },
  "SOL#5m#0.65": {
-  "hit_rate_yes": 0.6792,
-  "n": 1116
+  "hit_rate_yes": 0.6879,
+  "n": 1144
  },
  "SOL#5m#0.70": {
-  "hit_rate_yes": 0.7177,
-  "n": 1084
+  "hit_rate_yes": 0.727,
+  "n": 1150
  },
  "SOL#5m#0.75": {
-  "hit_rate_yes": 0.8242,
-  "n": 1115
+  "hit_rate_yes": 0.8089,
+  "n": 1214
  },
  "SOL#5m#0.80": {
-  "hit_rate_yes": 0.8697,
-  "n": 1174
+  "hit_rate_yes": 0.8354,
+  "n": 1209
  },
  "SOL#5m#0.85": {
-  "hit_rate_yes": 0.9112,
-  "n": 1183
+  "hit_rate_yes": 0.8554,
+  "n": 1224
  },
  "SOL#5m#0.90": {
-  "hit_rate_yes": 0.9426,
-  "n": 1132
+  "hit_rate_yes": 0.9103,
+  "n": 1204
  },
  "SOL#5m#0.95": {
-  "hit_rate_yes": 0.9851,
-  "n": 2415
+  "hit_rate_yes": 0.9618,
+  "n": 2590
  },
  "SOL#60m#0.00": {
-  "hit_rate_yes": 0.0254,
-  "n": 983
+  "hit_rate_yes": 0.001,
+  "n": 1023
  },
  "SOL#60m#0.05": {
-  "hit_rate_yes": 0.047,
-  "n": 298
+  "hit_rate_yes": 0.0097,
+  "n": 308
  },
  "SOL#60m#0.10": {
-  "hit_rate_yes": 0.1215,
-  "n": 181
+  "hit_rate_yes": 0.0769,
+  "n": 195
  },
  "SOL#60m#0.15": {
-  "hit_rate_yes": 0.251,
-  "n": 243
+  "hit_rate_yes": 0.1532,
+  "n": 248
  },
  "SOL#60m#0.20": {
-  "hit_rate_yes": 0.2867,
-  "n": 286
+  "hit_rate_yes": 0.2326,
+  "n": 288
  },
  "SOL#60m#0.25": {
-  "hit_rate_yes": 0.2552,
-  "n": 239
+  "hit_rate_yes": 0.2036,
+  "n": 221
  },
  "SOL#60m#0.30": {
-  "hit_rate_yes": 0.2923,
-  "n": 349
+  "hit_rate_yes": 0.2168,
+  "n": 309
  },
  "SOL#60m#0.35": {
-  "hit_rate_yes": 0.3911,
-  "n": 271
+  "hit_rate_yes": 0.3508,
+  "n": 248
  },
  "SOL#60m#0.40": {
-  "hit_rate_yes": 0.5906,
-  "n": 381
+  "hit_rate_yes": 0.5762,
+  "n": 328
  },
  "SOL#60m#0.45": {
-  "hit_rate_yes": 0.5247,
-  "n": 526
+  "hit_rate_yes": 0.4699,
+  "n": 432
  },
  "SOL#60m#0.50": {
-  "hit_rate_yes": 0.5313,
-  "n": 527
+  "hit_rate_yes": 0.4956,
+  "n": 563
  },
  "SOL#60m#0.55": {
-  "hit_rate_yes": 0.6192,
-  "n": 646
+  "hit_rate_yes": 0.6049,
+  "n": 653
  },
  "SOL#60m#0.60": {
-  "hit_rate_yes": 0.6801,
-  "n": 272
+  "hit_rate_yes": 0.6174,
+  "n": 264
  },
  "SOL#60m#0.65": {
-  "hit_rate_yes": 0.6731,
-  "n": 260
+  "hit_rate_yes": 0.6087,
+  "n": 276
  },
  "SOL#60m#0.70": {
-  "hit_rate_yes": 0.7183,
-  "n": 323
+  "hit_rate_yes": 0.6566,
+  "n": 332
  },
  "SOL#60m#0.75": {
-  "hit_rate_yes": 0.7299,
-  "n": 311
+  "hit_rate_yes": 0.6586,
+  "n": 290
  },
  "SOL#60m#0.80": {
-  "hit_rate_yes": 0.7297,
-  "n": 296
+  "hit_rate_yes": 0.7072,
+  "n": 263
  },
  "SOL#60m#0.85": {
-  "hit_rate_yes": 0.8762,
-  "n": 323
+  "hit_rate_yes": 0.8517,
+  "n": 290
  },
  "SOL#60m#0.90": {
-  "hit_rate_yes": 0.8768,
-  "n": 349
+  "hit_rate_yes": 0.8706,
+  "n": 309
  },
  "SOL#60m#0.95": {
-  "hit_rate_yes": 0.98,
-  "n": 1302
+  "hit_rate_yes": 0.9786,
+  "n": 1216
  },
  "SOL#weekly#0.00": {
-  "hit_rate_yes": 0.0345,
-  "n": 12279
+  "hit_rate_yes": 0.0358,
+  "n": 11852
  },
  "SOL#weekly#0.05": {
-  "hit_rate_yes": 0.048,
-  "n": 2752
+  "hit_rate_yes": 0.0483,
+  "n": 2732
  },
  "SOL#weekly#0.10": {
-  "hit_rate_yes": 0.4209,
-  "n": 1984
+  "hit_rate_yes": 0.4241,
+  "n": 1969
  },
  "SOL#weekly#0.15": {
-  "hit_rate_yes": 0.3407,
-  "n": 1218
+  "hit_rate_yes": 0.341,
+  "n": 1217
  },
  "SOL#weekly#0.20": {
-  "hit_rate_yes": 0.5313,
-  "n": 1803
+  "hit_rate_yes": 0.5301,
+  "n": 1809
  },
  "SOL#weekly#0.25": {
   "hit_rate_yes": 0.272,
   "n": 669
  },
  "SOL#weekly#0.30": {
-  "hit_rate_yes": 0.3148,
-  "n": 413
+  "hit_rate_yes": 0.3213,
+  "n": 417
  },
  "SOL#weekly#0.35": {
   "hit_rate_yes": 0.2233,
   "n": 309
  },
  "SOL#weekly#0.40": {
-  "hit_rate_yes": 0.4108,
-  "n": 314
+  "hit_rate_yes": 0.4114,
+  "n": 316
  },
  "SOL#weekly#0.45": {
-  "hit_rate_yes": 0.5786,
-  "n": 140
+  "hit_rate_yes": 0.5704,
+  "n": 142
  },
  "SOL#weekly#0.50": {
-  "hit_rate_yes": 0.5,
-  "n": 180
+  "hit_rate_yes": 0.5027,
+  "n": 183
  },
  "SOL#weekly#0.55": {
-  "hit_rate_yes": 0.7273,
-  "n": 121
+  "hit_rate_yes": 0.7302,
+  "n": 126
  },
  "SOL#weekly#0.60": {
-  "hit_rate_yes": 0.7212,
-  "n": 104
+  "hit_rate_yes": 0.7264,
+  "n": 106
  },
  "SOL#weekly#0.65": {
-  "hit_rate_yes": 0.6866,
-  "n": 134
+  "hit_rate_yes": 0.7,
+  "n": 140
  },
  "SOL#weekly#0.70": {
   "hit_rate_yes": 0.9638,
-  "n": 911
+  "n": 912
  },
  "SOL#weekly#0.75": {
-  "hit_rate_yes": 0.9718,
-  "n": 673
+  "hit_rate_yes": 0.972,
+  "n": 678
  },
  "SOL#weekly#0.80": {
   "hit_rate_yes": 0.9679,
-  "n": 1090
+  "n": 1089
  },
  "SOL#weekly#0.85": {
-  "hit_rate_yes": 0.9774,
-  "n": 574
+  "hit_rate_yes": 0.9771,
+  "n": 568
  },
  "SOL#weekly#0.90": {
   "hit_rate_yes": 0.9771,
-  "n": 1179
+  "n": 1180
  },
  "SOL#weekly#0.95": {
-  "hit_rate_yes": 0.9768,
-  "n": 4650
+  "hit_rate_yes": 0.9765,
+  "n": 4597
  },
  "XRP#15m#0.00": {
-  "hit_rate_yes": 0.0082,
-  "n": 2191
+  "hit_rate_yes": 0.0085,
+  "n": 2111
  },
  "XRP#15m#0.05": {
-  "hit_rate_yes": 0.0346,
-  "n": 1590
+  "hit_rate_yes": 0.0359,
+  "n": 1587
  },
  "XRP#15m#0.10": {
-  "hit_rate_yes": 0.0929,
-  "n": 1765
+  "hit_rate_yes": 0.1076,
+  "n": 1812
  },
  "XRP#15m#0.15": {
-  "hit_rate_yes": 0.1103,
-  "n": 1804
+  "hit_rate_yes": 0.143,
+  "n": 1811
  },
  "XRP#15m#0.20": {
-  "hit_rate_yes": 0.1458,
-  "n": 2017
+  "hit_rate_yes": 0.1552,
+  "n": 1927
  },
  "XRP#15m#0.25": {
-  "hit_rate_yes": 0.2224,
-  "n": 1709
+  "hit_rate_yes": 0.2306,
+  "n": 1626
  },
  "XRP#15m#0.30": {
-  "hit_rate_yes": 0.2774,
-  "n": 1658
+  "hit_rate_yes": 0.2885,
+  "n": 1553
  },
  "XRP#15m#0.35": {
-  "hit_rate_yes": 0.3086,
-  "n": 1737
+  "hit_rate_yes": 0.3135,
+  "n": 1643
  },
  "XRP#15m#0.40": {
-  "hit_rate_yes": 0.4006,
-  "n": 1630
+  "hit_rate_yes": 0.399,
+  "n": 1559
  },
  "XRP#15m#0.45": {
-  "hit_rate_yes": 0.465,
-  "n": 1888
+  "hit_rate_yes": 0.4593,
+  "n": 1792
  },
  "XRP#15m#0.50": {
-  "hit_rate_yes": 0.528,
-  "n": 2358
+  "hit_rate_yes": 0.5145,
+  "n": 2338
  },
  "XRP#15m#0.55": {
-  "hit_rate_yes": 0.5822,
-  "n": 1692
+  "hit_rate_yes": 0.5303,
+  "n": 1516
  },
  "XRP#15m#0.60": {
-  "hit_rate_yes": 0.5871,
-  "n": 1906
+  "hit_rate_yes": 0.5529,
+  "n": 1673
  },
  "XRP#15m#0.65": {
-  "hit_rate_yes": 0.6638,
-  "n": 1734
+  "hit_rate_yes": 0.6458,
+  "n": 1601
  },
  "XRP#15m#0.70": {
-  "hit_rate_yes": 0.7271,
-  "n": 2122
+  "hit_rate_yes": 0.7182,
+  "n": 1902
  },
  "XRP#15m#0.75": {
-  "hit_rate_yes": 0.778,
-  "n": 2167
+  "hit_rate_yes": 0.7474,
+  "n": 2039
  },
  "XRP#15m#0.80": {
-  "hit_rate_yes": 0.849,
-  "n": 1994
+  "hit_rate_yes": 0.8381,
+  "n": 1872
  },
  "XRP#15m#0.85": {
-  "hit_rate_yes": 0.8606,
-  "n": 2081
+  "hit_rate_yes": 0.8492,
+  "n": 1923
  },
  "XRP#15m#0.90": {
-  "hit_rate_yes": 0.9018,
-  "n": 1905
+  "hit_rate_yes": 0.8717,
+  "n": 1722
  },
  "XRP#15m#0.95": {
-  "hit_rate_yes": 0.9878,
-  "n": 2704
+  "hit_rate_yes": 0.986,
+  "n": 2422
  },
  "XRP#240m#0.00": {
-  "hit_rate_yes": 0.0026,
-  "n": 1920
+  "hit_rate_yes": 0.0032,
+  "n": 1862
  },
  "XRP#240m#0.05": {
-  "hit_rate_yes": 0.0109,
-  "n": 368
+  "hit_rate_yes": 0.0137,
+  "n": 366
  },
  "XRP#240m#0.10": {
-  "hit_rate_yes": 0.0364,
-  "n": 165
+  "hit_rate_yes": 0.0599,
+  "n": 167
  },
  "XRP#240m#0.15": {
-  "hit_rate_yes": 0.0897,
-  "n": 156
+  "hit_rate_yes": 0.1146,
+  "n": 157
  },
  "XRP#240m#0.20": {
-  "hit_rate_yes": 0.1361,
-  "n": 191
+  "hit_rate_yes": 0.1436,
+  "n": 188
  },
  "XRP#240m#0.25": {
-  "hit_rate_yes": 0.1515,
-  "n": 132
+  "hit_rate_yes": 0.1746,
+  "n": 126
  },
  "XRP#240m#0.30": {
-  "hit_rate_yes": 0.1765,
-  "n": 153
+  "hit_rate_yes": 0.1812,
+  "n": 149
  },
  "XRP#240m#0.35": {
-  "hit_rate_yes": 0.26,
-  "n": 150
+  "hit_rate_yes": 0.2721,
+  "n": 147
  },
  "XRP#240m#0.40": {
-  "hit_rate_yes": 0.2381,
-  "n": 168
+  "hit_rate_yes": 0.2515,
+  "n": 163
  },
  "XRP#240m#0.45": {
-  "hit_rate_yes": 0.3966,
-  "n": 174
- },
- "XRP#240m#0.50": {
-  "hit_rate_yes": 0.402,
-  "n": 199
- },
- "XRP#240m#0.55": {
-  "hit_rate_yes": 0.5561,
-  "n": 187
- },
- "XRP#240m#0.60": {
-  "hit_rate_yes": 0.5568,
+  "hit_rate_yes": 0.4091,
   "n": 176
  },
+ "XRP#240m#0.50": {
+  "hit_rate_yes": 0.4091,
+  "n": 198
+ },
+ "XRP#240m#0.55": {
+  "hit_rate_yes": 0.5753,
+  "n": 186
+ },
+ "XRP#240m#0.60": {
+  "hit_rate_yes": 0.5902,
+  "n": 183
+ },
  "XRP#240m#0.65": {
-  "hit_rate_yes": 0.5694,
-  "n": 144
+  "hit_rate_yes": 0.6014,
+  "n": 143
  },
  "XRP#240m#0.70": {
-  "hit_rate_yes": 0.6429,
+  "hit_rate_yes": 0.65,
   "n": 140
  },
  "XRP#240m#0.75": {
-  "hit_rate_yes": 0.712,
-  "n": 125
+  "hit_rate_yes": 0.748,
+  "n": 123
  },
  "XRP#240m#0.80": {
-  "hit_rate_yes": 0.75,
-  "n": 120
+  "hit_rate_yes": 0.7184,
+  "n": 103
  },
  "XRP#240m#0.85": {
-  "hit_rate_yes": 0.9103,
-  "n": 145
+  "hit_rate_yes": 0.9259,
+  "n": 135
  },
  "XRP#240m#0.90": {
-  "hit_rate_yes": 0.9844,
-  "n": 192
+  "hit_rate_yes": 0.9838,
+  "n": 185
  },
  "XRP#240m#0.95": {
   "hit_rate_yes": 0.9993,
-  "n": 1391
+  "n": 1346
  },
  "XRP#5m#0.00": {
-  "hit_rate_yes": 0.007,
-  "n": 2132
+  "hit_rate_yes": 0.0085,
+  "n": 2248
  },
  "XRP#5m#0.05": {
-  "hit_rate_yes": 0.056,
-  "n": 822
+  "hit_rate_yes": 0.043,
+  "n": 837
  },
  "XRP#5m#0.10": {
-  "hit_rate_yes": 0.1798,
-  "n": 801
+  "hit_rate_yes": 0.0976,
+  "n": 738
  },
  "XRP#5m#0.15": {
-  "hit_rate_yes": 0.2019,
-  "n": 926
+  "hit_rate_yes": 0.1958,
+  "n": 771
  },
  "XRP#5m#0.20": {
-  "hit_rate_yes": 0.2069,
-  "n": 875
+  "hit_rate_yes": 0.1981,
+  "n": 752
  },
  "XRP#5m#0.25": {
-  "hit_rate_yes": 0.2794,
-  "n": 705
+  "hit_rate_yes": 0.1842,
+  "n": 673
  },
  "XRP#5m#0.30": {
-  "hit_rate_yes": 0.2982,
-  "n": 815
+  "hit_rate_yes": 0.2174,
+  "n": 736
  },
  "XRP#5m#0.35": {
-  "hit_rate_yes": 0.3635,
-  "n": 839
+  "hit_rate_yes": 0.2892,
+  "n": 809
  },
  "XRP#5m#0.40": {
-  "hit_rate_yes": 0.4268,
-  "n": 785
+  "hit_rate_yes": 0.3228,
+  "n": 697
  },
  "XRP#5m#0.45": {
-  "hit_rate_yes": 0.4769,
-  "n": 1061
+  "hit_rate_yes": 0.4179,
+  "n": 907
  },
  "XRP#5m#0.50": {
-  "hit_rate_yes": 0.5491,
-  "n": 1304
+  "hit_rate_yes": 0.5038,
+  "n": 1187
  },
  "XRP#5m#0.55": {
-  "hit_rate_yes": 0.5677,
-  "n": 731
+  "hit_rate_yes": 0.4914,
+  "n": 637
  },
  "XRP#5m#0.60": {
-  "hit_rate_yes": 0.6921,
-  "n": 721
+  "hit_rate_yes": 0.5824,
+  "n": 716
  },
  "XRP#5m#0.65": {
-  "hit_rate_yes": 0.7033,
-  "n": 910
+  "hit_rate_yes": 0.637,
+  "n": 741
  },
  "XRP#5m#0.70": {
-  "hit_rate_yes": 0.6944,
-  "n": 877
+  "hit_rate_yes": 0.6832,
+  "n": 745
  },
  "XRP#5m#0.75": {
-  "hit_rate_yes": 0.7915,
-  "n": 844
+  "hit_rate_yes": 0.7297,
+  "n": 740
  },
  "XRP#5m#0.80": {
-  "hit_rate_yes": 0.8428,
-  "n": 808
+  "hit_rate_yes": 0.7929,
+  "n": 787
  },
  "XRP#5m#0.85": {
-  "hit_rate_yes": 0.8686,
-  "n": 860
+  "hit_rate_yes": 0.826,
+  "n": 753
  },
  "XRP#5m#0.90": {
-  "hit_rate_yes": 0.9487,
-  "n": 1014
+  "hit_rate_yes": 0.9364,
+  "n": 849
  },
  "XRP#5m#0.95": {
-  "hit_rate_yes": 0.9832,
-  "n": 2324
+  "hit_rate_yes": 0.9862,
+  "n": 2102
  }
 }
