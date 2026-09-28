@@ -1434,5 +1434,25 @@
   "LIQUIDACIONES_DEPTH_FASE0#XRP#15min": {
     "n": 204,
     "confirmado": false
+  },
+  "LIQUIDACIONES_DEPTH_FASE0#ETH#5min": {
+    "n": 231,
+    "confirmado": false
+  },
+  "LIQUIDACIONES_DEPTH_FASE0#SOL#15min": {
+    "n": 207,
+    "confirmado": false
+  },
+  "LIQUIDACIONES_DEPTH_FASE0#SOL#5min": {
+    "n": 205,
+    "confirmado": false
+  },
+  "RESOLUTION_SNIPER#SOL": {
+    "n": 207,
+    "confirmado": false
+  },
+  "RESOLUTION_SNIPER#SOL#sniper": {
+    "n": 207,
+    "confirmado": false
   }
 }
