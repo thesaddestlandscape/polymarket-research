@@ -1,5 +1,5 @@
 {
- "actualizado_utc": "2026-09-28T17:59:38+00:00",
+ "actualizado_utc": "2026-09-28T19:34:31+00:00",
  "grietas": [
   {
    "nombre": "precierre_naive_twap",
@@ -10,10 +10,10 @@
   {
    "nombre": "nested_arb_chainlink_vs_binance",
    "estado": "investigando",
-   "n_cerradas_total": 637,
+   "n_cerradas_total": 189,
    "n_con_chainlink_bruto": 189,
    "n_usado_en_gate": 189,
-   "cobertura_chainlink_pct": 29.7,
+   "cobertura_chainlink_pct": 100.0,
    "tasa_rotura_acuerdo": 0.439,
    "n_acuerdo": 66,
    "ic90_dias_acuerdo": [
@@ -26,8 +26,34 @@
     0.437,
     0.576
    ],
-   "evidencia": "señal débil en la dirección esperada (desacuerdo -> más rotura), muestra pequeña y sesgada",
-   "accion": "diagnosticar por qué solo 30% de las cerradas tiene chainlink poblado antes de fiarse de esto"
+   "por_activo": {
+    "BTC": {
+     "tasa_acuerdo": 0.26,
+     "n_acuerdo": 19,
+     "tasa_desacuerdo": 0.25,
+     "n_desacuerdo": 36
+    },
+    "ETH": {
+     "tasa_acuerdo": 0.35,
+     "n_acuerdo": 17,
+     "tasa_desacuerdo": 0.55,
+     "n_desacuerdo": 33
+    },
+    "XRP": {
+     "tasa_acuerdo": 0.62,
+     "n_acuerdo": 13,
+     "tasa_desacuerdo": 0.65,
+     "n_desacuerdo": 43
+    },
+    "SOL": {
+     "tasa_acuerdo": 0.59,
+     "n_acuerdo": 17,
+     "tasa_desacuerdo": 0.64,
+     "n_desacuerdo": 11
+    }
+   },
+   "evidencia": "señal débil en agregado; desagregado por activo: ETH muestra la mayor diferencia (35% vs 55% rotura, n=17/33) -- resto plano/sin diferencia clara",
+   "accion": "vigilar específicamente ETH conforme crezca n -- cobertura ya resuelta (100% desde 19-Ago), dejar acumular"
   },
   {
    "nombre": "resolution_freeze_instante_exacto",
