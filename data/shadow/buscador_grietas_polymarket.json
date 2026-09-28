@@ -1,5 +1,5 @@
 {
- "actualizado_utc": "2026-09-28T17:55:36+00:00",
+ "actualizado_utc": "2026-09-28T17:59:38+00:00",
  "grietas": [
   {
    "nombre": "precierre_naive_twap",
@@ -11,13 +11,14 @@
    "nombre": "nested_arb_chainlink_vs_binance",
    "estado": "investigando",
    "n_cerradas_total": 637,
-   "n_con_chainlink": 189,
+   "n_con_chainlink_bruto": 189,
+   "n_usado_en_gate": 189,
    "cobertura_chainlink_pct": 29.7,
    "tasa_rotura_acuerdo": 0.439,
    "n_acuerdo": 66,
    "ic90_dias_acuerdo": [
-    0.351,
-    0.529
+    0.3509,
+    0.5286
    ],
    "tasa_rotura_desacuerdo": 0.504,
    "n_desacuerdo": 123,
