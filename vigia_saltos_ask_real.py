@@ -91,6 +91,13 @@ def pnl(precio, gana):
     return (1 - precio) / precio * (1 - FEE) if gana else -1.0
 
 
+def es_fillable(ratio, ask) -> bool:
+    """/code-review 28-Sep: extraído para que vigia_a3_candidata_diaria.py (y cualquier
+    otro consumidor) NO reimplemente este mismo predicado -- mismo riesgo de divergencia
+    silenciosa ya corregido hoy con bootstrap_dias.py/cargar_resueltos()."""
+    return ratio >= RATIO_MIN and 0.01 < ask < 0.99
+
+
 def resumen(xs, clave):
     n = len(xs)
     if not n:
@@ -114,14 +121,23 @@ def resumen(xs, clave):
     return out
 
 
-def main() -> int:
+def cargar_resueltos(fuente_filtro: str = "polybolt") -> tuple:
+    """(28-Sep, /code-review: extraído de main() para que vigia_a3_candidata_
+    diaria.py NO reimplemente este mismo bucle resolver/filtrar -- el riesgo
+    de divergencia silenciosa es el mismo que ya se corrigió hoy con
+    bootstrap_dias.py). Devuelve (filas_resueltas, pendientes, sin_libro,
+    fuente_res) -- filas_resueltas es una lista de dicts con los campos
+    COMUNES que cualquier consumidor necesita (ini, fin, activo, marco, dia,
+    direccion, slug, t, ask, ratio, ganador, gana, p_justo); cada consumidor
+    calcula encima lo que le sea propio (pnl, ventaja, vwap...)."""
     filas = []
     if SALTOS.exists():
         with open(SALTOS, encoding="utf-8", newline="") as f:
-            filas = [r for r in csv.DictReader(f) if r.get("fuente") == "polybolt"]
+            filas = [r for r in csv.DictReader(f) if r.get("fuente") == fuente_filtro]
     dias = sorted({_dia(int(r["fin"])) for r in filas if r.get("fin")} | {_dia(int(r["ini"])) for r in filas if r.get("ini")})
     tw, cl = cargar_twap(dias), cargar_chainlink(dias)
     ahora = datetime.now(timezone.utc).timestamp()
+    n_filas_totales = len(filas)
     xs, pendientes, sin_libro, fuente_res = [], 0, 0, defaultdict(int)
     for r in filas:
         try:
@@ -148,9 +164,20 @@ def main() -> int:
         fuente_res[fres] += 1
         gana = ganador == r["direccion"]
         p = float(r["p_justo"])
-        p_lado = p if r["direccion"] == "Up" else 1 - p
-        xs.append({"activo": r["activo"], "marco": r["marco"], "dia": _dia(fin), "t": r["ts_utc"], "gana": gana,
-                   "fillable": ratio >= RATIO_MIN and 0.01 < ask < 0.99, "ventaja": p_lado - ask,
+        xs.append({"activo": r["activo"], "marco": r["marco"], "dia": _dia(fin), "t": r["ts_utc"],
+                   "ini": ini, "fin": fin, "slug": r.get("slug"), "direccion": r["direccion"],
+                   "ganador": ganador, "gana": gana, "p_justo": p, "ask": ask, "ratio": ratio, "vwap_fill": vw})
+    return xs, pendientes, sin_libro, fuente_res, n_filas_totales
+
+
+def main() -> int:
+    xs_base, pendientes, sin_libro, fuente_res, n_filas_totales = cargar_resueltos()
+    xs = []
+    for x in xs_base:
+        ask, vw, gana = x["ask"], x["vwap_fill"], x["gana"]
+        p_lado = x["p_justo"] if x["direccion"] == "Up" else 1 - x["p_justo"]
+        xs.append({"activo": x["activo"], "marco": x["marco"], "dia": x["dia"], "t": x["t"], "gana": gana,
+                   "fillable": es_fillable(x["ratio"], ask), "ventaja": p_lado - ask,
                    "px_ask": ask, "px_vwap": vw, "ask": pnl(ask, gana), "vwap": pnl(vw, gana)})
     fill = [x for x in xs if x["fillable"]]
     grupos = defaultdict(list)
@@ -166,12 +193,12 @@ def main() -> int:
                     and rv["ev"] >= 0.10 and rv.get("ic90_dias", [0])[0] > 0 and min(rv.get("mitades", [0])) > 0)
         res[g] = {"al_ask": ra, "al_vwap": rv, "candidata": cand}
     salida = {"actualizado_utc": datetime.now(timezone.utc).isoformat(timespec="seconds"),
-              "saltos_polybolt": len(filas), "resueltos": len(xs), "fillables": len(fill),
+              "saltos_polybolt": n_filas_totales, "resueltos": len(xs), "fillables": len(fill),
               "pendientes": pendientes, "sin_libro": sin_libro, "resolucion": dict(fuente_res), "grupos": res}
     OUT.write_text(json.dumps(salida, indent=1, ensure_ascii=False), encoding="utf-8")
 
     msg = ["⚡ A3 ganarles al entrar -- EV al ASK REAL (fuente PolyBolt)",
-           f"saltos {len(filas)} | resueltos {len(xs)} | fillables {len(fill)} | pendientes {pendientes}"]
+           f"saltos {n_filas_totales} | resueltos {len(xs)} | fillables {len(fill)} | pendientes {pendientes}"]
     t = res.get("TOTAL")
     if t and t["al_vwap"]:
         a, v = t["al_ask"], t["al_vwap"]

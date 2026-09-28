@@ -24,6 +24,7 @@ propio, pendiente de decidir cadencia con Javi)."""
 import collections
 import csv
 import json
+import random
 import sys
 from datetime import datetime, timezone
 from pathlib import Path
@@ -76,6 +77,16 @@ def _grieta_nested_arb_chainlink_vs_binance() -> dict:
     con_cl = [r for r in cerradas if r.get("o_inner_chainlink") and r.get("o_outer_chainlink")]
 
     por_dia_acuerdo, por_dia_desacuerdo = collections.defaultdict(list), collections.defaultdict(list)
+    # 28-Sep (CLAUDE.md pt.17, "desagregar SIEMPRE por moneda"): acuerdo/desacuerdo
+    # por activo, no solo el agregado -- verificado con datos reales que el
+    # agregado esconde diferencias reales por moneda (ETH: 35% vs 55%; BTC/XRP:
+    # planos, sin diferencia). /code-review 28-Sep (2ª ronda), hallazgo real:
+    # agrupar solo por activo mezcla ventanas de nesting ESTRUCTURALMENTE
+    # distintas (5min15m vs 15min60m, horizontes temporales muy diferentes) --
+    # CLAUDE.md pt.17 exige desagregar por moneda Y marco temporal siempre, sin
+    # excepción (el mismo error ya causó el bug real de kelly_precio_gate 29-Jul
+    # mezclando monedas bajo un bucket de precio). Clave compuesta activo#nesting.
+    por_activo = collections.defaultdict(lambda: {"acuerdo": [], "desacuerdo": []})
     for r in con_cl:
         try:
             oi, oo = float(r["o_inner"]), float(r["o_outer"])
@@ -84,10 +95,22 @@ def _grieta_nested_arb_chainlink_vs_binance() -> dict:
             continue
         rotura = 1.0 if r["garantia_ok"] == "0" else 0.0
         dia = r["ts_entrada"][:10]
+        clave = f"{r['activo']}#{r.get('nesting') or 'sin_nesting'}"
+        act = por_activo[clave]
         if (oi >= oo) == (oic >= ooc):
             por_dia_acuerdo[dia].append(rotura)
+            act["acuerdo"].append(rotura)
         else:
             por_dia_desacuerdo[dia].append(rotura)
+            act["desacuerdo"].append(rotura)
+
+    por_activo_pct = {}
+    for act, d in por_activo.items():
+        na, nd = len(d["acuerdo"]), len(d["desacuerdo"])
+        por_activo_pct[act] = {
+            "tasa_acuerdo": round(sum(d["acuerdo"]) / na, 2) if na else None, "n_acuerdo": na,
+            "tasa_desacuerdo": round(sum(d["desacuerdo"]) / nd, 2) if nd else None, "n_desacuerdo": nd,
+        }
 
     n_acuerdo = sum(len(v) for v in por_dia_acuerdo.values())
     n_desacuerdo = sum(len(v) for v in por_dia_desacuerdo.values())
@@ -99,14 +122,75 @@ def _grieta_nested_arb_chainlink_vs_binance() -> dict:
     ic_desacuerdo = _bootstrap_ic90_dias(por_dia_desacuerdo)
     tasa_a = round(sum(x for v in por_dia_acuerdo.values() for x in v) / n_acuerdo, 3) if n_acuerdo else None
     tasa_d = round(sum(x for v in por_dia_desacuerdo.values() for x in v) / n_desacuerdo, 3) if n_desacuerdo else None
+
+    # /code-review 28-Sep, hallazgo real: evidencia/accion tenían los números de HOY escritos a
+    # mano ("35% vs 55%, n=17/33") -- esta función corre cada sesión/cron y por_activo_pct SÍ se
+    # recalcula, pero el texto se quedaba congelado en el snapshot de hoy para siempre. Generado
+    # dinámicamente: el grupo activo#nesting con mayor diferencia |desacuerdo-acuerdo| entre los
+    # que tienen ambos lados con n>=15 (piso mínimo del proyecto, CLAUDE.md manual operativo
+    # pt.2 -- "ninguna conclusión de estrategia con n<15"; NUNCA promocionable sin n>=40/lado).
+    # /code-review 28-Sep (3ª ronda), hallazgo real: elegir el argmax entre ~8 grupos sin corregir
+    # por múltiples comparaciones reproduce el mismo patrón que `analisis_gate_bucket_fino.py` ya
+    # tuvo que corregir con max-statistic (una ventana significativa a shuffle simple p=0.0073 no
+    # sobrevivió la corrección, p=0.262) -- aquí se aplica el mismo principio: permutar las
+    # etiquetas acuerdo/desacuerdo DENTRO de cada grupo (preservando n_acuerdo/n_desacuerdo) y
+    # comparar la diferencia máxima observada contra la distribución de máximos permutados.
+    PISO_N_DESTACAR, PROMOCION_N = 15, 40
+    elegibles = {act: d for act, d in por_activo_pct.items()
+                 if d["n_acuerdo"] >= PISO_N_DESTACAR and d["n_desacuerdo"] >= PISO_N_DESTACAR}
+    activo_destacado, diff_max = None, -1.0
+    for act, d in elegibles.items():
+        diff = abs(d["tasa_desacuerdo"] - d["tasa_acuerdo"])
+        if diff > diff_max:
+            activo_destacado, diff_max = act, diff
+
+    def _max_stat_pvalue(n_iter: int = 2000) -> float | None:
+        if not elegibles:
+            return None
+        rng = random.Random(7)
+        pooled = {act: por_activo[act]["acuerdo"] + por_activo[act]["desacuerdo"] for act in elegibles}
+        n_mayor_igual = 0
+        for _ in range(n_iter):
+            max_diff_perm = 0.0
+            for act in elegibles:
+                vals = pooled[act][:]
+                rng.shuffle(vals)
+                na = elegibles[act]["n_acuerdo"]
+                a_perm, d_perm = vals[:na], vals[na:]
+                diff_perm = abs(sum(d_perm) / len(d_perm) - sum(a_perm) / len(a_perm))
+                max_diff_perm = max(max_diff_perm, diff_perm)
+            if max_diff_perm >= diff_max:
+                n_mayor_igual += 1
+        return round(n_mayor_igual / n_iter, 4)
+
+    p_max_stat = _max_stat_pvalue() if activo_destacado else None
+    if activo_destacado:
+        d = por_activo_pct[activo_destacado]
+        n_min_lado = min(d["n_acuerdo"], d["n_desacuerdo"])
+        signif = p_max_stat is not None and p_max_stat < 0.05
+        caveat = (f" -- p_max_stat={p_max_stat} {'(pasa max-statistic)' if signif else '⚠️ NO sobrevive corrección max-statistic, probable ruido'}"
+                  + ("" if n_min_lado >= PROMOCION_N else " -- ⚠️ además n<40/lado, exploratorio"))
+        evidencia = (f"señal débil en agregado; desagregado por activo#nesting: {activo_destacado} muestra la mayor "
+                     f"diferencia ({d['tasa_acuerdo']:.0%} vs {d['tasa_desacuerdo']:.0%} rotura, "
+                     f"n={d['n_acuerdo']}/{d['n_desacuerdo']}){caveat} -- resto plano/sin diferencia clara")
+        accion = (f"vigilar específicamente {activo_destacado} conforme crezca n (objetivo n>=40/lado antes de proponer nada)"
+                  if signif else f"NO actuar sobre {activo_destacado} todavía (no sobrevive max-statistic) -- dejar acumular más n y repetir")
+        accion += " -- cobertura ya resuelta (100% desde 19-Ago)"
+    else:
+        evidencia = f"señal débil en agregado; sin n suficiente por activo#nesting todavía (piso n>={PISO_N_DESTACAR} por lado) para destacar ninguno"
+        accion = "dejar acumular más días -- cobertura ya resuelta (100% desde 19-Ago)"
+
     return {
         "nombre": "nested_arb_chainlink_vs_binance", "estado": "investigando",
         "n_cerradas_total": len(cerradas), "n_con_chainlink_bruto": len(con_cl), "n_usado_en_gate": n_usado,
         "cobertura_chainlink_pct": round(100 * len(con_cl) / len(cerradas), 1) if cerradas else None,
         "tasa_rotura_acuerdo": tasa_a, "n_acuerdo": n_acuerdo, "ic90_dias_acuerdo": ic_acuerdo,
         "tasa_rotura_desacuerdo": tasa_d, "n_desacuerdo": n_desacuerdo, "ic90_dias_desacuerdo": ic_desacuerdo,
-        "evidencia": "señal débil en la dirección esperada (desacuerdo -> más rotura); cobertura ya completa (100%), solo falta más n con el tiempo",
-        "accion": "cobertura ya diagnosticada y resuelta (100% desde 19-Ago) -- dejar acumular más días, señal débil con n actual",
+        "por_activo": por_activo_pct,
+        "activo_destacado": activo_destacado,
+        "p_max_stat": p_max_stat,
+        "evidencia": evidencia,
+        "accion": accion,
     }
 
 
