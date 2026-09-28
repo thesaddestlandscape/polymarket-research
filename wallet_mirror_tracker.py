@@ -658,10 +658,23 @@ def leer_activity_incremental(checkpoint_path: Path, dias: int = 2):
             size_actual = path.stat().st_size
         except OSError:
             continue
-        with open(path, encoding="utf-8") as f:
-            header_actual = f.readline().rstrip("\n")
+        # 28-Sep (/code-review, hallazgo real tras bajar POLL_S 5s->0,5s en
+        # dispersed_bot_executor_dryrun.py, 10x más llamadas): sin datos
+        # nuevos (tamaño = último checkpoint), reabrir el fichero solo para
+        # releer la cabecera era coste fijo por llamada que ahora corre 10x
+        # más seguido. Un fichero append-only (único escritor, fetch_
+        # polymarket_activity_ws.py) con el mismo tamaño que el checkpoint
+        # no puede tener cabecera distinta salvo truncado/rotación externa
+        # -- y una rotación real cambia de fichero (nombre con fecha), no
+        # trunca el mismo path al mismo tamaño exacto. Salta la apertura
+        # entera (y dedja el entry tal cual, sin tocar checkpoints_nuevos)
+        # cuando no hay bytes nuevos.
         entry = checkpoints.get(clave) or {}
         offset_previo = entry.get("offset_bytes")
+        if isinstance(offset_previo, int) and offset_previo == size_actual and entry.get("header"):
+            continue
+        with open(path, encoding="utf-8") as f:
+            header_actual = f.readline().rstrip("\n")
         usar_checkpoint = (
             isinstance(offset_previo, int)
             and 0 <= offset_previo <= size_actual
@@ -695,6 +708,8 @@ def leer_activity_incremental(checkpoint_path: Path, dias: int = 2):
                         yield dict(zip(fieldnames, fila))
                 offset_final = f.tell() - len(sobrante)
         checkpoints_nuevos[clave] = {"offset_bytes": offset_final, "header": header_actual}
+    if checkpoints_nuevos == checkpoints:
+        return   # nada cambió en ningún fichero -- sin escritura de checkpoint (mismo hallazgo de arriba)
     try:
         tmp = checkpoint_path.with_suffix(".json.tmp")
         tmp.write_text(json.dumps(checkpoints_nuevos), encoding="utf-8")

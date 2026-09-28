@@ -163,7 +163,23 @@ ACTIVITY_CHECKPOINT_PATH = DIR_SHADOW / "dispersed_bot_executor_dryrun_activity_
 BOTS_PATH = DIR_SHADOW / "bot_wallets_universo_25ago.json"
 HIST = DIR_SHADOW / "ballenas_timing_history.csv"
 
-POLL_S = 5
+POLL_S = 0.5
+# 28-Sep (petición explícita Javi: "velocidad de detección y requote es la
+# clave de todo... si tienen que tener micro-latencia... que así sea"):
+# bajado de 5s -- este es el único de los 7 ejecutores live (precierre/
+# naive/wallet_mirror/ballenas/favorito/dispersed_bot) que detecta por
+# POLLING de disco en vez de push directo (websocket). Con 5s, una wallet
+# operando en la ventana [ASK_RAFAGA_MIN..] podía tardar hasta 5000ms en
+# ser vista, frente a wallet_mirror_executor_dryrun.py (websocket puro,
+# ~0ms). leer_activity_incremental() (wallet_mirror_tracker.py) ya es
+# barato a este ritmo -- rediseñado 07-Sep a lectura por offset de bytes
+# en bloques de 8MB, exactamente para poder sostener polling frecuente sin
+# repetir el incidente de CPU/OOM que motivó ese rediseño (releer el
+# fichero completo en cada ciclo). Verificado antes de bajarlo: carga
+# actual 4,1-4,9/4 núcleos (ratio ~1,0-1,2x, lejos del umbral de alarma
+# 3x sostenido). El requote real (_decidir_requote/_techo_precio_fok) ya
+# ocurre en live_trade.py::_ejecutar_orden_polymarket, sin cambios aquí --
+# este ajuste solo acorta el tiempo hasta llegar a esa llamada.
 STEP_BUCKET = 0.05
 UMBRAL_SNIPER_MIN = 5.0
 
