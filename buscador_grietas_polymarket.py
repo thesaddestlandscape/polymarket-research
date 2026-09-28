@@ -48,20 +48,31 @@ def _grieta_nested_arb_chainlink_vs_binance() -> dict:
     ORDEN relativo de o_inner vs o_outer, la garantía matemática se apoya
     en el precio equivocado y rompe con más frecuencia.
 
-    Primer resultado (28-Sep, n=189/637 cerradas con chainlink poblado --
-    subconjunto sesgado, rotura base 48,1% vs 29,4% global, NO representativo
-    todavía): acuerdo Binance/Chainlink en el orden -> rotura 43,9% (n=66);
-    desacuerdo -> rotura 50,4% (n=123). Señal en la dirección esperada pero
-    débil y sobre una muestra pequeña y sesgada -- NO concluyente. Motivo
-    real de la cobertura parcial (189/637) sin diagnosticar todavía --
-    pendiente: por qué solo el 30% de las filas cerradas tienen chainlink
-    poblado pese a haber 40 días de datos disponibles."""
+    Primer resultado (28-Sep, n=189/637 cerradas con chainlink poblado):
+    acuerdo Binance/Chainlink en el orden -> rotura 43,9% (n=66); desacuerdo
+    -> rotura 50,4% (n=123). Señal en la dirección esperada pero débil --
+    NO concluyente con este n.
+
+    28-Sep, MISMO DÍA, diagnóstico de cobertura RESUELTO (no era un bug):
+    189/189 (100%) de las filas cerradas con fecha >=19-Ago tienen chainlink
+    poblado -- el 30% global venía de mezclar con ~450 filas de JULIO,
+    anteriores a que esta columna existiera (añadida 19-Ago). n=189 YA ES
+    la muestra completa disponible desde que la funcionalidad existe, no un
+    subconjunto sesgado -- el resultado débil de arriba es la lectura
+    correcta con los datos de hoy, simplemente falta que pasen más días
+    para tener más n."""
     if not NESTED_ARB_SIM.exists():
         return {"nombre": "nested_arb_chainlink_vs_binance", "estado": "pendiente_diseno",
                 "evidencia": "nested_arb_sim.csv no existe todavía", "accion": "esperar a que el scanner acumule"}
     with open(NESTED_ARB_SIM, encoding="utf-8") as f:
         rows = list(csv.DictReader(f))
-    cerradas = [r for r in rows if r.get("garantia_ok") in ("0", "1")]
+    # 28-Sep: cobertura_chainlink_pct se mide SOLO sobre filas >=19-Ago (cuando la
+    # columna empezó a existir) -- mezclar con julio infla artificialmente el
+    # denominador y hace parecer "baja cobertura" lo que en realidad es 100%
+    # desde que la funcionalidad existe (diagnóstico ya resuelto, ver docstring).
+    FECHA_INICIO_CHAINLINK = "2026-08-19"
+    cerradas = [r for r in rows if r.get("garantia_ok") in ("0", "1")
+                and r.get("ts_entrada", "") >= FECHA_INICIO_CHAINLINK]
     con_cl = [r for r in cerradas if r.get("o_inner_chainlink") and r.get("o_outer_chainlink")]
 
     por_dia_acuerdo, por_dia_desacuerdo = collections.defaultdict(list), collections.defaultdict(list)
@@ -94,8 +105,8 @@ def _grieta_nested_arb_chainlink_vs_binance() -> dict:
         "cobertura_chainlink_pct": round(100 * len(con_cl) / len(cerradas), 1) if cerradas else None,
         "tasa_rotura_acuerdo": tasa_a, "n_acuerdo": n_acuerdo, "ic90_dias_acuerdo": ic_acuerdo,
         "tasa_rotura_desacuerdo": tasa_d, "n_desacuerdo": n_desacuerdo, "ic90_dias_desacuerdo": ic_desacuerdo,
-        "evidencia": "señal débil en la dirección esperada (desacuerdo -> más rotura), muestra pequeña y sesgada",
-        "accion": "diagnosticar por qué solo 30% de las cerradas tiene chainlink poblado antes de fiarse de esto",
+        "evidencia": "señal débil en la dirección esperada (desacuerdo -> más rotura); cobertura ya completa (100%), solo falta más n con el tiempo",
+        "accion": "cobertura ya diagnosticada y resuelta (100% desde 19-Ago) -- dejar acumular más días, señal débil con n actual",
     }
 
 
