@@ -124,7 +124,12 @@ def cargar_fade_rows() -> dict:
 
 
 def cargar_libro_collapsado(strategies_interes: set) -> dict:
-    """(strategy,subtype,direction) -> {market_id: (ratio_vs_stake, motivo)}"""
+    """(strategy,subtype,direction) -> {market_id: ratio_vs_stake}
+
+    28-Sep (barrido de salud, OOM real): guardar la fila CSV completa
+    (13 columnas) por cada (key,market_id) mientras se colapsa gastaba
+    ~860MB de más -- solo hace falta ratio_vs_stake, retener eso en vez
+    de la fila entera evita esa copia sin cambiar el resultado."""
     best = {}
     with open(LIBRO_PATH) as f:
         r = csv.DictReader(f)
@@ -135,36 +140,48 @@ def cargar_libro_collapsado(strategies_interes: set) -> dict:
             mid = row["market_id"]
             p = prio(row["motivo"])
             cur = best.get((key, mid))
-            if cur is None or p < cur[0]:
-                best[(key, mid)] = (p, row)
+            if cur is not None and p >= cur[0]:
+                continue
+            try:
+                ratio = float(row["ratio_vs_stake"])
+            except (TypeError, ValueError):
+                ratio = 0.0
+            best[(key, mid)] = (p, ratio)
     out = defaultdict(dict)
-    for (key, mid), (p, row) in best.items():
-        try:
-            ratio = float(row["ratio_vs_stake"])
-        except (TypeError, ValueError):
-            ratio = 0.0
+    for (key, mid), (p, ratio) in best.items():
         out[key][mid] = ratio
     return out
 
 
-def cargar_results(strategies_interes: set) -> dict:
-    """(strategy,subtype,decision) -> {market_id: (acierto, pnl_neto, features_dict)}"""
+def cargar_results(strategies_interes: set, market_ids_interes: set) -> dict:
+    """(strategy,subtype,decision) -> {market_id: (acierto, pnl_neto, features_raw_str)}
+
+    28-Sep (barrido de salud, OOM real): results.csv ya pesa 665MB/759k
+    filas -- cargar TODO el histórico de cada estrategia de interés (con
+    json.loads de features fila a fila) mató el proceso por OOM-kill del
+    kernel (mismo patrón ya resuelto en shadow_resumen/postmortem/wallet_
+    mirror). Dos mitigaciones: (1) filtrar por los market_id que de
+    verdad aparecen en fade_depth_universal_fase0.csv/libro_snapshots.csv
+    en vez de todo el histórico -- ayuda poco aquí porque esta familia
+    cubre casi todas las estrategias/mercados; (2) NO parsear el JSON de
+    features aquí -- se guarda el string crudo y solo se parsea en
+    evaluar_grupo() para el subconjunto pequeño de filas que de verdad
+    entran en la evaluación de fade (los filtros de régimen), en vez de
+    para las ~670k filas coincidentes que nunca se llegan a usar."""
     out = defaultdict(dict)
     with open(RESULTS_PATH) as f:
         r = csv.DictReader(f)
         for row in r:
             if row["strategy"] not in strategies_interes:
                 continue
+            if row["market_id"] not in market_ids_interes:
+                continue
             acierto = row.get("acierto")
             pnl = row.get("pnl_neto")
             if acierto in ("", None) or pnl in ("", None):
                 continue
             key = (row["strategy"], row["subtype"], row["decision"])
-            try:
-                feat = json.loads(row["features"]) if row["features"] else {}
-            except Exception:
-                feat = {}
-            out[key][row["market_id"]] = (int(float(acierto)), float(pnl), feat)
+            out[key][row["market_id"]] = (int(float(acierto)), float(pnl), row.get("features") or "")
     return out
 
 
@@ -187,11 +204,15 @@ def evaluar_grupo(fade_rows: list, res_orig: dict) -> dict | None:
         mid = row["market_id"]
         if mid not in res_orig:
             continue
-        acierto_orig, _pnl_orig, feat = res_orig[mid]
+        acierto_orig, _pnl_orig, feat_raw = res_orig[mid]
         try:
             p_fade = float(row["precio_contrario"])
         except (TypeError, ValueError):
             continue
+        try:
+            feat = json.loads(feat_raw) if feat_raw else {}
+        except Exception:
+            feat = {}
         acierto_fade = 1 - acierto_orig
         pnl_fade = payout_win(p_fade) if acierto_fade == 1 else -STAKE
         items.append((acierto_fade, pnl_fade, p_fade, row["evento_timestamp_utc"], feat))
@@ -226,8 +247,14 @@ def main() -> int:
     print("Cargando libro_snapshots.csv (colapsado)...")
     libro = cargar_libro_collapsado(strategies)
 
-    print("Cargando results.csv (puede tardar)...")
-    resultados = cargar_results(strategies)
+    market_ids_interes = set()
+    for rows in fade_grupos.values():
+        market_ids_interes.update(row["market_id"] for row in rows)
+    for mids in libro.values():
+        market_ids_interes.update(mids.keys())
+
+    print(f"Cargando results.csv (filtrado a {len(market_ids_interes)} market_id de interés)...")
+    resultados = cargar_results(strategies, market_ids_interes)
 
     salida = {}
     n_negativos = 0
