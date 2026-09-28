@@ -50,8 +50,21 @@ HOY_PATH = DIR_SHADOW / "salud_sistema_diaria.json"
 
 # Umbrales absolutos, además de la comparación contra histórico -- ver
 # docstring del módulo: ambos criterios importan, no solo uno.
-UMBRAL_CICLO_LENTO_S = 120  # resolve+postmortem tardando más de esto es
-# anómalo por sí solo (el incidente de hoy: 10+ min vs ~20s normal)
+UMBRAL_CICLO_LENTO_S = 400  # 28-Sep (barrido de salud, hallazgo real): el
+# valor original (120s) se fijó antes del rediseño del 18-Ago que desacopló
+# shadow_postmortem.py del loop de resolve y lo throttleó a como mucho una
+# vez cada POSTMORTEM_MIN_INTERVAL_S=600s (run_fast_mantenimiento.sh) --
+# desde entonces esa pasada completa tarda 180-335s POR DISEÑO (documentado
+# en el propio run_fast_mantenimiento.sh, crece con results.csv), no es un
+# cuelgue. Con el umbral en 120s, resolve_postmortem_max_s (el máximo del
+# día) lo cruza CADA día sin excepción -- falso positivo crónico que se
+# mezclaba con anomalías reales de verdad (ej. el aviso del 28-Sep, 335s,
+# junto al OOM real de analisis_fade_regimen_arquetipoA.py). La regresión
+# de verdad (un ciclo que empieza a tardar mucho más que su propia línea
+# base histórica, no solo más que un número fijo) ya la cubre el chequeo de
+# abajo (p50 hoy > 3x p50 de ayer). 400s da margen sobre el máximo
+# legítimo observado (334.9s, 28-Sep) sin acercarse al incidente real que
+# motivó este check (04-Ago, >10min/600s+).
 UMBRAL_PROCESO_COLGADO_S = 180  # un script de un solo ciclo (postmortem/
 # resolve/predict/live_trade) vivo más de esto probablemente está atascado
 UMBRAL_DISCO_LIBRE_PCT = 10.0
