@@ -1,5 +1,5 @@
 {
- "actualizado_utc": "2026-09-28T16:01:43+00:00",
+ "actualizado_utc": "2026-09-28T17:29:08+00:00",
  "ultimo_dia": {
   "dia": "2026-09-27",
   "train_dias": [
@@ -135,7 +135,17 @@
     "wallets": 69,
     "top5_share": 0.65,
     "ev_sin_top5": 0.2904,
-    "t_cluster_sin_top5": 2.14
+    "t_cluster_sin_top5": 2.14,
+    "dias": 3,
+    "ic90_dias": [
+     0.2605,
+     0.4233
+    ],
+    "mitades_dias": [
+     0.4607,
+     0.2783
+    ],
+    "robusto": false
    },
    "resto_pf>=0.3": {
     "n": 7748,
@@ -146,13 +156,22 @@
     "wallets": 219,
     "top5_share": null,
     "ev_sin_top5": -0.0251,
-    "t_cluster_sin_top5": -1.73
+    "t_cluster_sin_top5": -1.73,
+    "dias": 3,
+    "ic90_dias": [
+     -0.0192,
+     -0.0134
+    ],
+    "mitades_dias": [
+     -0.0129,
+     -0.0179
+    ],
+    "robusto": false
    }
   },
   "ask_real": {
    "n_fillable": 12602,
-   "dias_con_datos": 3,
-   "stats": {
+   "gate_agregado": {
     "n": 12602,
     "ev": 0.0175,
     "t_iid": 1.57,
@@ -161,9 +180,19 @@
     "wallets": 223,
     "top5_share": 0.72,
     "ev_sin_top5": 0.006,
-    "t_cluster_sin_top5": -0.42
+    "t_cluster_sin_top5": -0.42,
+    "dias": 3,
+    "ic90_dias": [
+     0.0033,
+     0.035
+    ],
+    "mitades_dias": [
+     0.0454,
+     0.0058
+    ],
+    "robusto": false
    }
   }
  },
- "veredicto": "NO robusta al ask real (cluster-t/ex-top5/dias/n)"
+ "veredicto": "agregado NO robusta | longshot(pf<0.3) no robusta (n=1268, dias=3, t_cl=1.81, IC90=[0.2605, 0.4233]) | resto(pf>=0.3) no robusta (n=7748, dias=3, t_cl=-1.47, IC90=[-0.0192, -0.0134])"
 }
