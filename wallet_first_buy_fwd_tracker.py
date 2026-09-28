@@ -24,12 +24,16 @@ import gzip
 import json
 import math
 import os
-import random
 import re
 import statistics
 import sys
 from datetime import date, datetime, timedelta, timezone
 from pathlib import Path
+
+from bootstrap_dias import bootstrap_ic90_dias as _bootstrap_ic90_dias  # noqa: E402
+# /code-review 28-Sep: extraído a bootstrap_dias.py -- esta misma función vivía
+# duplicada byte a byte en buscador_grietas_polymarket.py, riesgo real de que un
+# fix al percentil se aplicara en una copia y no en la otra.
 
 REPO = Path(__file__).resolve().parent
 DATALOGS = Path("/root/polymarket-research-datalogs")
@@ -207,27 +211,6 @@ def _por_dia(rows, campo):
             por_dia[r["_dia"]].append(_pnl(p, r["ac"]))
     return por_dia
 
-
-def _bootstrap_ic90_dias(por_dia: dict, iters: int = 1000, seed: int = 5) -> list | None:
-    """IC90 bootstrap por DÍAS (nunca por fila -- evita pseudo-replicación
-    dentro del mismo día), mismo patrón que vigia_saltos_ask_real.py::resumen().
-    None si hay <2 días (bootstrap sin sentido con tan poca base)."""
-    dias_vals = list(por_dia.values())
-    if len(dias_vals) < 2:
-        return None
-    rng = random.Random(seed)
-    medias = []
-    for _ in range(iters):
-        muestra = [rng.choice(dias_vals) for _ in dias_vals]
-        todos = [x for dv in muestra for x in dv]
-        if todos:
-            medias.append(sum(todos) / len(todos))
-    if not medias:
-        return None
-    medias.sort()
-    lo = medias[int(len(medias) * 0.05)]
-    hi = medias[min(int(len(medias) * 0.95), len(medias) - 1)]
-    return [round(lo, 4), round(hi, 4)]
 
 
 def _split_half_dias(por_dia: dict) -> list | None:
