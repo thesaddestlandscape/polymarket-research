@@ -346,11 +346,16 @@ TWAP_DESDE_PATH = REPO / "data" / "live" / "precierre_twap_desde.txt"   # arranq
 # n=9 con z logueado en notas), el mismo umbral z>=1.0 ya NO reproduce el 81-100% de la
 # validación del 24-Sep -- z medio en las WIN=2,43 vs LOSS=1,26, y las 3 pérdidas de hoy
 # (z=1,05/1,26/1,70) caen justo en la zona marginal que el umbral de 1.0 deja pasar. Subido a
-# 1.5 (n=9 -> n=4, acierto 56%->75%, pnl histórico +3,62€->+4,22€ en la misma muestra) --
-# n pequeño, por debajo del mínimo de 15 que exige el manual del proyecto para una conclusión
-# firme, pero la dirección es consistente y mecánicamente sensata (z más alto = más confianza
-# real en la proyección TWAP). Revisar con más n en próximas sesiones, no asumir cerrado.
-Z_MIN_TWAP = 1.5
+# 1.5 (n=9 -> n=4, acierto 56%->75%, pnl histórico +3,62€->+4,22€ en la misma muestra).
+# 28-Sep, MISMO DÍA, segunda subida (petición explícita Javi, "sube el umbral para alcanzar
+# estos números: 1,8-2,0 -> n=3, 100%, +6,27€"): ⚠️ n=3 es la muestra más pequeña de todas las
+# probadas hoy -- CASI ANECDÓTICO, no una confirmación. Una sola pérdida adicional en ese rango
+# lo tumbaría de 100% a 75% al instante. Aplicado como decisión consciente de Javi (avisado
+# explícitamente del n antes de aprobar), NO como conclusión estadística -- sigue siendo la
+# MISMA excepción a CLAUDE.md ("ninguna conclusión con n<15") que la subida a 1.5, ahora más
+# extrema. Revisar en cuanto haya más trades reales con z logueado -- con n tan bajo, el primer
+# resultado nuevo puede cambiar la lectura por completo.
+Z_MIN_TWAP = 1.8
 Z_VOL_VENTANA_S = 300
 Z_VAR_SUELO_NAIVE_S = 15.0
 TWAP_ERROR_VIGENTE_S = 1800              # filas ERROR cuentan como abiertas solo 30 min (luego las reconcilia
