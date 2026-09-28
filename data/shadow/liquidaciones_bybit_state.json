@@ -1,5 +1,5 @@
 {
- "generado_utc": "2026-09-28T06:38:53+00:00",
+ "generado_utc": "2026-09-28T06:44:34+00:00",
  "fuente": "bybit",
  "BNB": {
   "2min": {
@@ -22,9 +22,9 @@
   },
   "60min": {
    "usd_long": 0.0,
-   "usd_short": 2889.65,
-   "n": 2,
-   "imbalance": 1.0
+   "usd_short": 0.0,
+   "n": 0,
+   "imbalance": null
   }
  },
  "BTC": {
@@ -42,15 +42,15 @@
   },
   "15min": {
    "usd_long": 0.0,
-   "usd_short": 3145.66,
-   "n": 1,
-   "imbalance": 1.0
+   "usd_short": 0.0,
+   "n": 0,
+   "imbalance": null
   },
   "60min": {
-   "usd_long": 2919.47,
-   "usd_short": 324086.34,
-   "n": 50,
-   "imbalance": 0.9821
+   "usd_long": 1669.57,
+   "usd_short": 3145.66,
+   "n": 4,
+   "imbalance": 0.3065
   }
  },
  "DOGE": {
@@ -74,8 +74,8 @@
   },
   "60min": {
    "usd_long": 0.0,
-   "usd_short": 2101.27,
-   "n": 3,
+   "usd_short": 12.67,
+   "n": 1,
    "imbalance": 1.0
   }
  },
@@ -94,15 +94,15 @@
   },
   "15min": {
    "usd_long": 0.0,
-   "usd_short": 1767.05,
+   "usd_short": 422.17,
    "n": 1,
    "imbalance": 1.0
   },
   "60min": {
-   "usd_long": 26052.64,
-   "usd_short": 131401.63,
-   "n": 14,
-   "imbalance": 0.6691
+   "usd_long": 14237.31,
+   "usd_short": 2189.22,
+   "n": 3,
+   "imbalance": -0.7335
   }
  },
  "SOL": {
@@ -120,15 +120,15 @@
   },
   "15min": {
    "usd_long": 0.0,
-   "usd_short": 36094.52,
-   "n": 8,
+   "usd_short": 4035.74,
+   "n": 1,
    "imbalance": 1.0
   },
   "60min": {
-   "usd_long": 478.24,
-   "usd_short": 41393.34,
-   "n": 20,
-   "imbalance": 0.9772
+   "usd_long": 95.85,
+   "usd_short": 39770.85,
+   "n": 11,
+   "imbalance": 0.9952
   }
  },
  "XRP": {
@@ -145,16 +145,16 @@
    "imbalance": null
   },
   "15min": {
-   "usd_long": 208.81,
+   "usd_long": 0.0,
    "usd_short": 0.0,
-   "n": 1,
-   "imbalance": -1.0
+   "n": 0,
+   "imbalance": null
   },
   "60min": {
-   "usd_long": 321.68,
-   "usd_short": 14661.75,
-   "n": 9,
-   "imbalance": 0.9571
+   "usd_long": 208.81,
+   "usd_short": 5352.85,
+   "n": 2,
+   "imbalance": 0.9249
   }
  },
  "lag_bybit_ws": {
