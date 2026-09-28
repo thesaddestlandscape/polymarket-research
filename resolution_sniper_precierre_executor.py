@@ -862,9 +862,33 @@ def _firmar_enviar_registrar(pre: "_Precalculo", m: dict, activo: str, direction
     # antiguo `1.0 - ask` para Down registraba entrada/slip erróneos si faltaba
     # trade_real (latente, DRY_RUN).
     precio_orden = ask
+    # 28-Sep (hallazgo real: FOK kill en producción, RESOLUTION_SNIPER_PRECIERRE
+    # #SOL#5min#BUY_NO ask=0.49, "order couldn't be fully filled") -- esta orden
+    # se enviaba con `price=ask` EXACTO (el mejor_ask leído en el instante de
+    # decisión), un limit-buy que solo puede casar contra ventas EN ese nivel
+    # exacto. Entre la lectura y el POST pasan decenas de ms (firma + guardas +
+    # reserva de hueco + reloj) -- de sobra para que el libro se mueva un tick y
+    # mate el FOK aunque hubiera liquidez real un nivel más arriba. Mismo bug ya
+    # diagnosticado y arreglado en live_trade.py::_techo_precio_fok (01-Sep,
+    # verificado con 56 fok_kill reales: 100% con profundidad agregada de sobra,
+    # matados solo por el límite de precio) -- este ejecutor nunca lo heredó.
+    # Verificado 28-Sep contra el histórico real de este ejecutor: 3/10 órdenes
+    # PRECIERRE reales (24..28-Sep) murieron por FOK kill (30%).
+    # `_profundidad_correcta()` YA confirmó profundidad_eur>=MIN_RATIO_PROFUNDIDAD
+    # *stake_eur dentro de la banda techo=mejor_ask*1.05 antes de llegar aquí (es
+    # el mismo gate que exige `_instante_critico`) -- ensanchar el límite del FOK
+    # hasta ese mismo techo YA verificado deja al CLOB barrer un nivel peor sin
+    # matar la orden, sin asumir ninguna profundidad no comprobada. Tope duro en
+    # ASK_MAX (0,80): nunca comprar por encima del techo de precio que la propia
+    # estrategia tiene validado como banda operativa.
+    precio_limite_fok = min(round(ask * 1.05, 4), ASK_MAX)
+    if precio_limite_fok > ask:
+        _log(f"  📈 Límite FOK ensanchado {ask:.4f}→{precio_limite_fok:.4f} "
+             f"(banda de profundidad ya verificada, techo={ASK_MAX})")
+    resultado["precio_limite_fok"] = precio_limite_fok
     t1 = time.perf_counter()
     try:
-        args = MarketOrderArgsV2(token_id=token_id, amount=stake_eur, side="BUY", price=ask)
+        args = MarketOrderArgsV2(token_id=token_id, amount=stake_eur, side="BUY", price=precio_limite_fok)
         signed = pre.client.create_market_order(args)
         t_firma_ms = (time.perf_counter() - t1) * 1000
     except Exception as e:
@@ -914,11 +938,28 @@ def _firmar_enviar_registrar(pre: "_Precalculo", m: dict, activo: str, direction
         resultado["gate_motivo"] = f"error_marca_disco:{type(e).__name__}"   # fail-closed
         return resultado
     t2 = time.perf_counter()
-    try:
-        resp = pre.client.post_order(signed, OrderType.FOK)
-        ok, error = True, None
-    except Exception as e:
-        resp, ok, error = None, False, str(e)
+    # 28-Sep (hallazgo real: RESOLUTION_SNIPER_NAIVE#BTC#5min#BUY_NO, 27-Sep
+    # 04:05 UTC, único intento real de NAIVE hasta hoy -- bloqueado por
+    # status_code=425 "order manager not ready, please retry"). A diferencia
+    # del FOK kill (400, libro real, no reintentar con el mismo precio), un
+    # 425 es el propio backend de Polymarket diciendo explícitamente que
+    # reintentemos -- no es un fallo de mercado. Un solo reintento inmediato
+    # (sin backoff: el margen hasta el cierre ya es de milisegundos), solo
+    # para 425, respetando siempre el límite de reloj ya establecido más
+    # arriba -- nunca se envía una segunda orden si ya no queda margen.
+    resp, ok, error = None, False, None
+    for _intento in range(2):
+        try:
+            resp = pre.client.post_order(signed, OrderType.FOK)
+            ok, error = True, None
+            break
+        except Exception as e:
+            resp, ok, error = None, False, str(e)
+            status = getattr(e, "status_code", None)
+            if status == 425 and _intento == 0 and time.time() <= limite_envio_ts:
+                _log(f"  ⚠️  status_code=425 (order manager not ready) -- reintentando de inmediato")
+                continue
+            break
     t_post_ms = (time.perf_counter() - t2) * 1000
     resultado["t_envio_rel_cierre_s"] = round(time.time() - pre.ts_end, 3)
     # /code-review 23-Sep: marcar SIEMPRE tras intentar el POST -- una excepción (timeout) puede
