@@ -113,11 +113,26 @@ comprimir_dir data/prices "polybolt_*.csv"
 # observer_fase0.py) nunca se había añadido a esta rotación -- crecía sin
 # control, 2-2.3GB/día, 5 días acumulados = ~11GB. Verificado antes de
 # añadir: SOLO el propio writer lo toca (siempre al fichero de HOY, nunca
-# lee días pasados) -- a diferencia de predictions_*.csv/results.csv, que
-# shadow_resolve.py/shadow_postmortem.py sí escanean con glob sin límite de
-# días y por tanto NO se pueden comprimir sin romper el resolver (dejarían
-# de verse señales pendientes, mismo bug que el digest de GitHub Actions).
+# lee días pasados) -- a diferencia de predictions_*.csv/results.csv (ver
+# más abajo), que sí se escanean con glob de varios días.
 comprimir_dir data/shadow "sports_spread_fase0_*.csv"
+# 28-Sep (barrido de salud, disco a 91-93%, 5.6-7.6GB libres): predictions_
+# *.csv (data/shadow, ~650MB/día) llevaba 18 días SIN rotar -- 11GB. El
+# comentario que decía "shadow_resolve.py/shadow_postmortem.py escanean sin
+# límite de días" estaba DESACTUALIZADO -- ambos ya acotan a
+# sorted(glob(...))[-(dias+2):] con dias=10 (PRED_PENDIENTES_DIAS), o sea 12
+# días como mucho; shadow_resumen.py acota a 2 días. El único lector que SÍ
+# era unbounded, shadow_digest.py::pendientes_por_horizonte() (cron diario
+# 20:00 UTC, escaneaba TODO + results.csv completo cada día -- mismo patrón
+# de OOM que mató analisis_fade_regimen_arquetipoA.py hoy), se acotó el
+# mismo día a 18 días Y se le enseñó a leer .csv.gz de forma transparente
+# (mismo patrón que sports_wallet_edge_tracker.py::cargar_trades_whale) --
+# así el cutoff de compresión puede ser el mínimo real (12 días, resolve/
+# postmortem) sin dejar a digest sin datos en el tramo 12-18 días. Scripts
+# de análisis puntual (no cron) que globean sin límite quedan sin tocar a
+# propósito -- mismo criterio ya aplicado a analisis_wallets_crossdominio_
+# 01sep.py.
+comprimir_dir data/shadow "predictions_*.csv" "$(date -u -d "-12 days" +%Y-%m-%d)"
 # 23-Sep (barrido de disco, 92% usado, 6.2GB libres): data/sports/activity_ws_*.csv
 # (firehose sports, sports_activity_ws.py) NUNCA estaba en esta rotación --
 # backup_activity_ws_sports.sh solo copia una versión comprimida al volumen

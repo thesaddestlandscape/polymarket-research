@@ -105,6 +105,10 @@ data/prices/kalshi_btchourly_*.csv
 # pérdida real (results.csv ya captura el resumen persistente). Sin backup
 # dedicado necesario.
 data/shadow/predictions_*.csv
+# 28-Sep: comprimir_data_historica.sh empezó a rotar predictions_*.csv a
+# .gz (12 días) -- mismo motivo que la línea de arriba, los .gz (30-45MB
+# cada uno) tampoco necesitan estar en git.
+data/shadow/predictions_*.csv.gz
 
 # 11-Sep (barrido de salud -- disco del volumen dedicado de git a 0 bytes
 # libres 7,5h seguidas, git commit/rm --cached empezando a fallar con "No

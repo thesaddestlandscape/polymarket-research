@@ -28,6 +28,7 @@ stdout pero no envía nada (no falla).
 
 import csv
 import glob
+import gzip
 import os
 from collections import defaultdict
 from datetime import datetime, timezone, timedelta
@@ -148,8 +149,23 @@ def horas_a(end_date: str) -> float | None:
 
 
 def pendientes_por_horizonte() -> dict:
-    """Cuenta predicciones operables aún no resueltas, por horizonte temporal."""
-    archivos = sorted(glob.glob(str(DIR_SHADOW / "predictions_*.csv")))
+    """Cuenta predicciones operables aún no resueltas, por horizonte temporal.
+
+    28-Sep (barrido de salud): el glob era SIN acotar -- escaneaba TODO
+    predictions_*.csv (11GB/18 días y creciendo, ~650MB/día) cada día a las
+    20:00 UTC vía cron, además de results.csv completo (665MB) para
+    `pendientes_ids`. Los propios buckets que calcula ("<24h","1-7d","7-14d",
+    "vencidas_sin_resolver") nunca necesitan más de 14 días de historia --
+    acotar a los últimos 18 días (margen sobre 14) evita un OOM dormido
+    (mismo patrón que mató analisis_fade_regimen_arquetipoA.py hoy) sin
+    cambiar ningún resultado de los buckets. Lee .csv y .csv.gz por igual
+    (comprimir_data_historica.sh empieza a rotar predictions_*.csv más
+    allá de 12 días desde hoy, mismo patrón gzip-transparente que
+    sports_wallet_edge_tracker.py::cargar_trades_whale ya usaba)."""
+    archivos = sorted(
+        glob.glob(str(DIR_SHADOW / "predictions_*.csv"))
+        + glob.glob(str(DIR_SHADOW / "predictions_*.csv.gz"))
+    )[-18:]
     pendientes_ids = set()
     if RESULTS_PATH.exists():
         with open(RESULTS_PATH, encoding="utf-8") as f:
@@ -160,7 +176,8 @@ def pendientes_por_horizonte() -> dict:
 
     buckets = {"<24h": 0, "1-7d": 0, "7-14d": 0, "vencidas_sin_resolver": 0}
     for arch in archivos:
-        with open(arch, encoding="utf-8") as f:
+        opener = gzip.open if arch.endswith(".gz") else open
+        with opener(arch, "rt", encoding="utf-8") as f:
             for row in csv.DictReader(f):
                 if row.get("decision", "SKIP") == "SKIP":
                     continue
