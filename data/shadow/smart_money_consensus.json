@@ -1,38 +1,45 @@
 {
+  "BTC": {
+    "smart_money_consensus": -0.0819,
+    "n_trades_smart": 769,
+    "n_wallets_smart": 10,
+    "smart_money_consensus_ponderado": -0.133,
+    "n_wallets_smart_ponderado": 10
+  },
   "SOL": {
-    "smart_money_consensus": 0.125,
-    "n_trades_smart": 32,
-    "n_wallets_smart": 3,
-    "smart_money_consensus_ponderado": 0.1675,
-    "n_wallets_smart_ponderado": 3
+    "smart_money_consensus": 0.028,
+    "n_trades_smart": 107,
+    "n_wallets_smart": 4,
+    "smart_money_consensus_ponderado": 0.0308,
+    "n_wallets_smart_ponderado": 4
   },
   "ETH": {
-    "smart_money_consensus": 0.2381,
-    "n_trades_smart": 63,
-    "n_wallets_smart": 3,
-    "smart_money_consensus_ponderado": 0.382,
-    "n_wallets_smart_ponderado": 3
-  },
-  "XRP": {
-    "smart_money_consensus": 0.1905,
-    "n_trades_smart": 42,
-    "n_wallets_smart": 3,
-    "smart_money_consensus_ponderado": 0.2676,
-    "n_wallets_smart_ponderado": 3
-  },
-  "BTC": {
-    "smart_money_consensus": -0.0155,
-    "n_trades_smart": 386,
-    "n_wallets_smart": 8,
-    "smart_money_consensus_ponderado": 0.0666,
-    "n_wallets_smart_ponderado": 8
+    "smart_money_consensus": -0.0679,
+    "n_trades_smart": 221,
+    "n_wallets_smart": 4,
+    "smart_money_consensus_ponderado": -0.2111,
+    "n_wallets_smart_ponderado": 4
   },
   "BNB": {
-    "smart_money_consensus": 1.0,
-    "n_trades_smart": 1,
+    "smart_money_consensus": -0.6667,
+    "n_trades_smart": 6,
+    "n_wallets_smart": 2,
+    "smart_money_consensus_ponderado": -0.48,
+    "n_wallets_smart_ponderado": 2
+  },
+  "XRP": {
+    "smart_money_consensus": 0.6667,
+    "n_trades_smart": 6,
     "n_wallets_smart": 1,
-    "smart_money_consensus_ponderado": 1.0,
+    "smart_money_consensus_ponderado": -0.5552,
     "n_wallets_smart_ponderado": 1
   },
-  "_actualizado": "2026-09-28T07:11:58+00:00"
+  "DOGE": {
+    "smart_money_consensus": -1.0,
+    "n_trades_smart": 1,
+    "n_wallets_smart": 1,
+    "smart_money_consensus_ponderado": -1.0,
+    "n_wallets_smart_ponderado": 1
+  },
+  "_actualizado": "2026-09-28T07:34:42+00:00"
 }
