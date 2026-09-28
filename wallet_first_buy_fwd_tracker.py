@@ -42,6 +42,11 @@ TRAIN_DIAS, MIN_N, T_MIN = 3, 15, 2.0
 PF_LO, PF_HI = 0.03, 0.97
 VEREDICTO_MIN_DIAS, VEREDICTO_T_CLUSTER, VEREDICTO_EX_TOP5, VEREDICTO_MERCADOS = 3, 2.5, 0.03, 300
 VEREDICTO_T_SIN_TOP5 = 2.0   # t por clúster de mercado del EV SIN las 5 mejores wallets ex post
+# 28-Sep: mismos umbrales que el resto del proyecto (n>=15 mínimo absoluto de CLAUDE.md,
+# n>=40 estándar de promoción) -- la cobertura de ask real es MUCHO menor que la del proxy
+# (el observador solo lleva corriendo desde 25-Sep), así que el piso de n es más bajo que
+# VEREDICTO_MERCADOS, pero nunca se salta.
+VEREDICTO_N_ASK_REAL_MIN = 40
 
 
 def _ts(s):
@@ -117,8 +122,8 @@ def procesar_dia(dia):
             pf[L] = None
             if i < len(ts_) and ts_[i] - (t + L) <= 3 and ts_[i] < end - 5:
                 pf[L] = ups[i] if o == "Up" else 1 - ups[i]
-        filas.append({"wallet": w, "slug": k, "activo": act, "marco": marco, "tte": round(tte, 1), "usd": round(u, 2),
-                      "ac": win[k] == o, "p_paid": p, **{f"pf_{L}": pf[L] for L in LS}})
+        filas.append({"wallet": w, "slug": k, "outcome": o, "activo": act, "marco": marco, "tte": round(tte, 1),
+                      "usd": round(u, 2), "ac": win[k] == o, "p_paid": p, **{f"pf_{L}": pf[L] for L in LS}})
     return filas
 
 
@@ -154,8 +159,8 @@ def _seleccion(dia):
     return sel, usados, sum(1 for a in tot.values() if a[0] >= MIN_N)
 
 
-def _stats(rows, L):
-    v = [(_pnl(r[f"pf_{L}"], r["ac"]), r) for r in rows if r.get(f"pf_{L}") is not None and PF_LO <= r[f"pf_{L}"] < PF_HI]
+def _stats(rows, campo):
+    v = [(_pnl(r[campo], r["ac"]), r) for r in rows if r.get(campo) is not None and PF_LO <= r[campo] < PF_HI]
     if not v:
         return None
     e = [x for x, _ in v]
@@ -180,13 +185,150 @@ def _stats(rows, L):
             "t_cluster_sin_top5": round(_tstat(mm_r), 2) if mm_r else None}
 
 
-def _por_precio(rows, L=LSEL):
+def _por_precio(rows, campo):
     g = collections.defaultdict(list)
     for r in rows:
-        p = r.get(f"pf_{L}")
+        p = r.get(campo)
         if p is not None and PF_LO <= p < PF_HI:
             g[f"{int(p * 10) / 10:.1f}"].append(_pnl(p, r["ac"]))
     return {k: {"n": len(v), "ev": round(sum(v) / len(v), 3)} for k, v in sorted(g.items()) if len(v) >= 20}
+
+
+# 28-Sep (hallazgo real, Javi cruzando a mano el digest del 27-Sep contra el
+# ask real): el veredicto y el mensaje de Telegram se calculaban SOLO con
+# pf_1.0 -- el precio del siguiente trade tras 1s, un PROXY, nunca el ask
+# real del libro. Verificado con datos reales (pool 22-27-Sep, cruzado
+# contra wallet_first_buy_follow_fase0.py, el observador que SÍ lee el
+# libro real con profundidad): el resultado se INVIERTE casi del todo --
+# longshot(pf<0.3), que el proxy daba como el foco entero del edge
+# (EV/€=+0.60), da EV/€=-0.08 al ask real (n=1.542, y 66% de esas señales
+# ni siquiera tienen ask fillable); resto(pf>=0.3), que el proxy descartaba
+# como plano (-0.007), da EV/€=+0.11 al ask real (n=9.302, hit=69%, 3/3
+# días con datos positivos, 227 wallets, top5 solo 28.6% del volumen, sigue
+# positivo sin ellas +0.034). Mismo patrón ya visto en A3 (arquetipo A: el
+# proxy de precio infla justo donde la selección adversa es peor). Fix:
+# el veredicto y los números que van a Telegram usan SIEMPRE el ask real
+# cuando hay cobertura -- nunca el proxy pf_1.0 para decidir nada, aunque
+# siga registrado como dato secundario/informativo.
+FOLLOW_ASK_REAL = DATALOGS / "wallet_first_buy_follow_fase0.csv"
+RATIO_MIN_ASK = 5.0
+# /code-review 28-Sep: offset_s en wallet_first_buy_follow_fase0.csv es SIEMPRE una de las
+# constantes fijas {0.3, 1.0, 3.0} (la propia variable de bucle de ese observador, nunca un
+# tiempo medido con jitter real) -- este tope no absorbe "jitter", corta exactamente entre
+# el poll de 1.0s (distancia 0) y los de 0.3s/3.0s (distancia 0.7/2.0) cuando el de 1.0s
+# falta, para que min(...) nunca los confunda en silencio.
+MAX_DESVIO_OFFSET_S = 0.5
+
+
+def _clave(wallet: str, slug: str, outcome) -> tuple | None:
+    """Clave de join wallet+mercado+LADO -- nunca solo (wallet,slug).
+    /code-review 28-Sep, hallazgo real y grave, verificado contra datos
+    reales: 18.979/51.505 (36,8%) de las claves (wallet,slug) en
+    wallet_first_buy_follow_fase0.csv tienen compras en AMBOS lados
+    (Up y Down) del mismo mercado -- sin `outcome` en la clave, el ask
+    del lado EQUIVOCADO podía asignarse en silencio a una fila (ej. Down
+    a 0,02 asignado a un evento que era realmente Up a 0,98), corrompiendo
+    exactamente el número que este fix existe para arreglar. `outcome`
+    ausente (filas legacy de antes de este fix, test_*.csv sin esa
+    columna) -> None, fail-closed, esa fila nunca hace match."""
+    if not outcome:
+        return None
+    return (wallet, slug, outcome)
+
+
+def _cargar_indice_ask_real(claves_necesarias: set) -> dict:
+    """(wallet, slug, outcome) -> [(offset_s, ask, ratio_vs_stake), ...]
+    desde wallet_first_buy_follow_fase0.py (observador en tiempo real,
+    SOLO cubre wallets que ya estaban en watchlist.json el día que se
+    observaron -- no hay backfill posible para días anteriores a que este
+    observador arrancara, 25-Sep).
+
+    /code-review 28-Sep, hallazgo real: la primera versión decía en el
+    docstring "no crece sin límite como results.csv" -- FALSO, según el
+    propio docstring de wallet_first_buy_follow_fase0.py crece ~11MB/día
+    sin rotación, mismo patrón que ya causó incidentes reales en este
+    proyecto (results.csv, sports activity_ws_*.csv). Fix aplicado: filtra
+    desde la primera línea a `claves_necesarias` (las (wallet,slug,outcome)
+    que realmente aparecen en el pool de este run, unos pocos miles) --
+    nunca MATERIALIZA filas de wallets/mercados irrelevantes en memoria,
+    igual que el patrón ya aplicado hoy mismo en analisis_fade_regimen_
+    arquetipoA.py y buscador_edge_perdido.py.
+
+    /code-review 28-Sep, segunda ronda, riesgo ACEPTADO y documentado (no
+    resuelto): el filtro de arriba acota la MEMORIA, no el TIEMPO de
+    lectura -- csv.DictReader recorre el fichero entero línea a línea en
+    cada corrida diaria, y como ese fichero crece ~11MB/día sin rotación,
+    el coste de I/O de esta corrida crece igual, sin límite, con el
+    tiempo. Hoy (38MB/4 días) tarda segundos, aceptable para un cron
+    diario -- pero la rotación real (fichero por día, o backfill con
+    fecha en el nombre) le corresponde a wallet_first_buy_follow_fase0.py,
+    no a este lector -- cambiar esa pieza sin verificar todos sus
+    consumidores no compensa el ahorro de unos segundos hoy. Vigilar el
+    tamaño del fichero cada barrido de salud (ya cubierto por el chequeo
+    genérico de disco) y atajarlo ahí si empieza a doler de verdad."""
+    idx = collections.defaultdict(list)
+    if not claves_necesarias or not FOLLOW_ASK_REAL.exists():
+        return idx
+    with open(FOLLOW_ASK_REAL, encoding="utf-8", newline="") as f:
+        for r in csv.DictReader(f):
+            clave = _clave(r["wallet"], r["slug"], r.get("outcome"))
+            if clave is None or clave not in claves_necesarias:
+                continue
+            try:
+                off = float(r["offset_s"])
+            except (ValueError, KeyError, TypeError):
+                continue
+            idx[clave].append((off, r.get("ask"), r.get("ratio_vs_stake")))
+    return idx
+
+
+def _anotar_ask_real(rows: list, idx: dict, campo: str = "ask_real_1.0") -> None:
+    """Añade `campo` a cada fila de `rows` IN-PLACE: el ask real fillable
+    del MISMO lado (wallet,slug,outcome) más cercano a LSEL=1.0 s (dentro
+    de MAX_DESVIO_OFFSET_S), o None si no hay match/no es fillable/el más
+    cercano está demasiado lejos/falta outcome -- fail-closed, nunca cae
+    de vuelta al proxy pf_1.0 en silencio, nunca mezcla el lado Up con el
+    Down, y nunca etiqueta un ask de 0.3s o 3.0s como si fuera el de 1.0s.
+
+    /code-review 28-Sep, decisión deliberada tras verificar los datos:
+    SOLO se mira la lectura más cercana a 1.0s, nunca se cae a la de 0.3s
+    o 3.0s si la de 1.0s no es fillable (ratio_vs_stake<5) -- aunque esa
+    otra SÍ lo fuera. Verificado que esto pasa en 3.888/70.913 claves
+    (5,5%), y el 87% de esos casos es libro insuficiente justo en el
+    segundo 1 (recuperado a 0,3s o 3s) -- NO fallo técnico. Se decide NO
+    rellenar con el ask de otro instante a propósito: es el MISMO
+    criterio que ya usa todo el proyecto (veto_profundidad, ratio_vs_
+    stake>=5 en cada ejecutor) -- un libro insuficiente en el momento
+    exacto es una señal real de iliquidez, no un hueco a tapar con el
+    precio de otro segundo. Rellenar aquí reintroduciría precisamente el
+    tipo de mezcla de instantes que el propio MAX_DESVIO_OFFSET_S existe
+    para evitar."""
+    for r in rows:
+        r[campo] = None
+        clave = _clave(r.get("wallet"), r.get("slug"), r.get("outcome"))
+        if clave is None:
+            continue
+        cands = idx.get(clave)
+        if not cands:
+            continue
+        off, ask, ratio = min(cands, key=lambda c: abs(c[0] - LSEL))
+        if abs(off - LSEL) > MAX_DESVIO_OFFSET_S:
+            continue
+        try:
+            ask_f, ratio_f = float(ask), float(ratio or 0)
+        except (TypeError, ValueError):
+            continue
+        # /code-review 28-Sep, hallazgo real: este rango (0.01,0.99) era más ancho que
+        # [PF_LO,PF_HI)=[0.03,0.97) que usan _stats/_por_precio -- n_con_ask_real (conteo
+        # de cobertura) podía incluir filas que _stats() excluía después, dos "n" distintos
+        # sin reconciliar en el mismo mensaje. Mismo rango aquí que en _stats -- una sola
+        # definición de "fillable y en rango válido", nunca dos.
+        # /code-review 28-Sep: PF_LO<=x<PF_HI (semiabierto), IDÉNTICO a _stats()/_por_precio()
+        # -- con "<" estricto en el extremo bajo se rechazaba un ask exactamente en PF_LO
+        # (0,03) que _stats() sí habría aceptado, rompiendo la "única definición" que
+        # este mismo fix afirma tener.
+        if ratio_f >= RATIO_MIN_ASK and PF_LO <= ask_f < PF_HI:
+            r[campo] = ask_f
 
 
 def ejecutar(dia, enviar=True):
@@ -198,35 +340,62 @@ def ejecutar(dia, enviar=True):
     sel, usados, n_train_w = _seleccion(dia)          # selección con datos ANTERIORES a `dia` (congelada)
     (DIR / f"agg_{dia}.json").write_text(json.dumps(_agregados(filas)))
     test = [r for r in filas if r["wallet"] in sel]
-    campos = ["wallet", "slug", "activo", "marco", "tte", "usd", "ac", "p_paid"] + [f"pf_{L}" for L in LS]
+    campos = ["wallet", "slug", "outcome", "activo", "marco", "tte", "usd", "ac", "p_paid"] + [f"pf_{L}" for L in LS]
     with open(DIR / f"test_{dia}.csv", "w", newline="", encoding="utf-8") as f:
         w = csv.DictWriter(f, fieldnames=campos)
         w.writeheader()
         for r in test:
             w.writerow({c: r[c] for c in campos})
     dia_res = {"dia": dia, "train_dias": usados, "wallets_train_n>=15": n_train_w, "seleccionadas": len(sel),
-               "eventos_dia_total": len(filas), "test": {str(L): _stats(test, L) for L in LS}}
+               "eventos_dia_total": len(filas), "test": {str(L): _stats(test, f"pf_{L}") for L in LS}}
     pool = []
     for f in sorted(DIR.glob("test_*.csv")):
+        dia_fichero = f.stem[len("test_"):]   # test_YYYY-MM-DD.csv -- un fichero = un día exacto
         for r in csv.DictReader(open(f, encoding="utf-8")):
             for L in LS:
                 r[f"pf_{L}"] = float(r[f"pf_{L}"]) if r[f"pf_{L}"] != "" else None
             r["ac"] = r["ac"] == "True"
+            r["_dia"] = dia_fichero
             pool.append(r)
     dias_test = \
         sum(1 for f in DIR.glob("test_*.csv") if f.stat().st_size > 200)   # solo días con wallets seleccionadas
-    pool_res = {str(L): _stats(pool, L) for L in LS}
-    s1 = pool_res[str(LSEL)]
-    robusto = bool(s1 and dias_test >= VEREDICTO_MIN_DIAS and s1["t_cluster_mercado"] >= VEREDICTO_T_CLUSTER
-                   and (s1["ev_sin_top5"] or -1) >= VEREDICTO_EX_TOP5 and s1["n_mercados"] >= VEREDICTO_MERCADOS
-                   and (s1["t_cluster_sin_top5"] or -9) >= VEREDICTO_T_SIN_TOP5)
-    # Composición del efecto (hallazgo 25-Sep: todo el EV vive en pf<0,3; con pf>=0,3 el EV es ~-0,02):
+    pool_res = {str(L): _stats(pool, f"pf_{L}") for L in LS}   # proxy pf -- informativo, NUNCA decide el veredicto
+
+    # Ask real (ver docstring de _anotar_ask_real): fuente de verdad para el veredicto y Telegram.
+    claves_necesarias = {c for r in pool if (c := _clave(r.get("wallet"), r.get("slug"), r.get("outcome"))) is not None}
+    idx_ask_real = _cargar_indice_ask_real(claves_necesarias)
+    _anotar_ask_real(pool, idx_ask_real, "ask_real_1.0")
+    n_con_ask_real = sum(1 for r in pool if r.get("ask_real_1.0") is not None)
+    dias_ask_real = len({r["_dia"] for r in pool if r.get("ask_real_1.0") is not None})
+    s1_real = _stats(pool, "ask_real_1.0")
+    # /code-review 28-Sep, hallazgo real: esta versión se había quedado sin comprobar
+    # n_mercados>=VEREDICTO_MERCADOS (300) pese a que el comentario de arriba decía
+    # que nunca se saltaba -- y usaba n_con_ask_real (rango 0.01-0.99, más ancho) en
+    # vez de s1_real["n"] (rango PF_LO-PF_HI, el que de verdad alimenta las stats de
+    # abajo) para el piso VEREDICTO_N_ASK_REAL_MIN. Con el rango ya unificado arriba
+    # ambos "n" deberían coincidir siempre; usar s1_real["n"] de todas formas por ser
+    # la fuente de verdad exacta de lo que se está gateando.
+    robusto = bool(s1_real and s1_real["n"] >= VEREDICTO_N_ASK_REAL_MIN and dias_ask_real >= VEREDICTO_MIN_DIAS
+                   and s1_real["n_mercados"] >= VEREDICTO_MERCADOS
+                   and s1_real["t_cluster_mercado"] >= VEREDICTO_T_CLUSTER
+                   and (s1_real["ev_sin_top5"] or -1) >= VEREDICTO_EX_TOP5
+                   and (s1_real["t_cluster_sin_top5"] or -9) >= VEREDICTO_T_SIN_TOP5)
+    # Composición del efecto, TAMBIÉN al ask real -- el proxy pf_1.0 solo se usa para
+    # SEGMENTAR (longshot vs resto), nunca para calcular el EV de cada segmento.
     def _sub(cond):
-        return _stats([r for r in pool if r.get("pf_1.0") is not None and cond(r["pf_1.0"])], LSEL)
+        return _stats([r for r in pool if r.get("pf_1.0") is not None and cond(r["pf_1.0"])], "ask_real_1.0")
     comp = {"longshot_pf<0.3": _sub(lambda p: p < 0.3), "resto_pf>=0.3": _sub(lambda p: p >= 0.3)}
+    if not s1_real or n_con_ask_real < VEREDICTO_N_ASK_REAL_MIN:
+        veredicto = f"SIN COBERTURA SUFICIENTE de ask real (n={n_con_ask_real}, mínimo {VEREDICTO_N_ASK_REAL_MIN}) -- no se puede fiar el proxy pf_1.0, esperar más días de wallet_first_buy_follow_fase0.py"
+    elif robusto:
+        veredicto = "CANDIDATA robusta AL ASK REAL (revisar + checklist)"
+    else:
+        veredicto = "NO robusta al ask real (cluster-t/ex-top5/dias/n)"
     informe = {"actualizado_utc": datetime.now(timezone.utc).isoformat(timespec="seconds"), "ultimo_dia": dia_res,
-               "pool": {"dias_test": dias_test, "por_L": pool_res, "por_precio_L1": _por_precio(pool), "composicion_L1": comp},
-               "veredicto": "CANDIDATA robusta (revisar + checklist)" if robusto else "NO robusta (cluster-t/ex-top5/n_mercados/dias)"}
+               "pool": {"dias_test": dias_test, "por_L_proxy_pf": pool_res, "por_precio_L1_proxy": _por_precio(pool, "pf_1.0"),
+                        "composicion_L1_ask_real": comp,
+                        "ask_real": {"n_fillable": n_con_ask_real, "dias_con_datos": dias_ask_real, "stats": s1_real}},
+               "veredicto": veredicto}
     OUT.write_text(json.dumps(informe, indent=1, ensure_ascii=False))
     # Watchlist para el día SIGUIENTE (selección congelada con los TRAIN_DIAS días que acaban en `dia`,
     # incluido): la lee wallet_first_buy_follow_fase0.py (observador en tiempo real).
@@ -244,16 +413,27 @@ def ejecutar(dia, enviar=True):
     except Exception as e:
         print(f"(watchlist no escrita: {e})")
     with open(HIST, "a", encoding="utf-8") as f:
-        f.write(json.dumps({"dia": dia, "ultimo_dia": dia_res, "pool_L1": s1, "veredicto": informe["veredicto"]}, ensure_ascii=False) + "\n")
-    t1 = dia_res["test"][str(LSEL)] or {}
+        f.write(json.dumps({"dia": dia, "ultimo_dia": dia_res, "pool_ask_real": s1_real,
+                            "pool_proxy_pf1_informativo": pool_res.get(str(LSEL)),
+                            "veredicto": veredicto}, ensure_ascii=False) + "\n")
+    t1_proxy = dia_res["test"][str(LSEL)] or {}
     msg = [f"🐋 Wallets 'primera compra' -- forward {dia} (sel. con {len(usados)} días previos: {len(sel)} wallets)",
-           f"día: n={t1.get('n')} EV/€(L=1s)={t1.get('ev')} t_cluster={t1.get('t_cluster_mercado')} sin top5={t1.get('ev_sin_top5')}",
-           f"pool {dias_test} día(s) test: n={s1 and s1['n']} mercados={s1 and s1['n_mercados']} EV/€={s1 and s1['ev']} "
-           f"t_cluster={s1 and s1['t_cluster_mercado']} top5={s1 and s1['top5_share']} sin_top5={s1 and s1['ev_sin_top5']} "
-           f"(t_cluster sin_top5={s1 and s1['t_cluster_sin_top5']})",
-           f"composición L=1s: longshot(pf<0.3) EV/€={(comp['longshot_pf<0.3'] or {}).get('ev')} t_cl_sin_top5={(comp['longshot_pf<0.3'] or {}).get('t_cluster_sin_top5')} | "
-           f"resto(pf>=0.3) EV/€={(comp['resto_pf>=0.3'] or {}).get('ev')}",
-           f"veredicto: {informe['veredicto']}"]
+           f"cobertura ask real: {n_con_ask_real} señales fillable en {dias_ask_real} día(s) "
+           f"(de {len(pool)} en el pool, {dias_test} días de test -- el resto sin match/no fillable en "
+           f"wallet_first_buy_follow_fase0.py)"]
+    if s1_real:
+        msg.append(f"AL ASK REAL: n={s1_real['n']} mercados={s1_real['n_mercados']} EV/€={s1_real['ev']} "
+                   f"t_cluster={s1_real['t_cluster_mercado']} top5={s1_real['top5_share']} "
+                   f"sin_top5={s1_real['ev_sin_top5']} (t_cluster sin_top5={s1_real['t_cluster_sin_top5']})")
+        msg.append(f"composición AL ASK REAL: longshot(pf<0.3) EV/€={(comp['longshot_pf<0.3'] or {}).get('ev')} "
+                   f"n={(comp['longshot_pf<0.3'] or {}).get('n')} | resto(pf>=0.3) EV/€={(comp['resto_pf>=0.3'] or {}).get('ev')} "
+                   f"n={(comp['resto_pf>=0.3'] or {}).get('n')}")
+    else:
+        msg.append("AL ASK REAL: sin datos suficientes todavía")
+    msg.append(f"(informativo, NUNCA decide el veredicto -- precio de trade, no ask real) proxy pf_1.0 pool: "
+               f"n={pool_res[str(LSEL)] and pool_res[str(LSEL)]['n']} EV/€={pool_res[str(LSEL)] and pool_res[str(LSEL)]['ev']} "
+               f"| día {dia}: n={t1_proxy.get('n')} EV/€={t1_proxy.get('ev')}")
+    msg.append(f"veredicto: {veredicto}")
     print("\n".join(msg))
     if enviar:
         try:
