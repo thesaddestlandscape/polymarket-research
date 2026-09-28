@@ -1,10 +1,10 @@
 {
-  "timestamp_utc": "2026-09-28T04:01:13+00:00",
-  "bankroll_sim": 86392.28,
-  "pnl_total": 86372.28,
-  "n_ops": 753287,
+  "timestamp_utc": "2026-09-28T04:10:48+00:00",
+  "bankroll_sim": 86397.44,
+  "pnl_total": 86377.44,
+  "n_ops": 753490,
   "win_rate": 0.5705,
-  "estrategias_activas": 592,
+  "estrategias_activas": 595,
   "desactivadas": [
     "SMART_FLOW_1H",
     "PRICE_TARGET_GBM#BTC#atexpiry",
@@ -16,27 +16,24 @@
     "GBM_LATE_60M_FADE#BTC",
     "GBM_LATE_60M_FADE#ETH#60min",
     "GBM_LATE_60M_FADE#ETH",
-    "PRICE_TARGET_GBM_FADE",
     "PRICE_TARGET_GBM_FADE#ETH#atexpiry",
     "PRICE_TARGET_GBM_FADE#ETH",
     "PRICE_TARGET_GBM_FADE#atexpiry",
-    "PRICE_TARGET_GBM_FADE#BTC",
     "FAVORITO_CONFIRMADO_15MIN_ALTACONVICCION#SOL#15min",
     "FAVORITO_CONFIRMADO_15MIN_ALTACONVICCION#SOL",
     "FAVORITO_CONFIRMADO#BNB#240min",
-    "PRICE_TARGET_GBM_FADE#BTC#reach",
     "FAVORITO_CONFIRMADO#DOGE#240min"
   ],
   "top3_ic": [
     {
       "k": "RESOLUTION_SNIPER#SOL#sniper",
-      "ic": 0.4653,
-      "n": 200
+      "ic": 0.4665,
+      "n": 207
     },
     {
       "k": "RESOLUTION_SNIPER#SOL",
-      "ic": 0.4653,
-      "n": 200
+      "ic": 0.4665,
+      "n": 207
     },
     {
       "k": "FAVORITO_CONFIRMADO_15MIN_EXTREMO#BTC#15min",
