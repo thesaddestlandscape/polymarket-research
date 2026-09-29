@@ -34103,3 +34103,11 @@ timestamp_utc,condition_id,market_slug,activo,marco,lado_mayoria,n_votos_trigger
 2026-09-29T02:10:39+00:00,0x1a0476fe95a8f41ba27cd41269e728aeee0e1bac98d36cc16a8ebf9b69bc788b,xrp-updown-5m-1790647800,XRP,5min,Down,2,0.52,80.2,0.5,0.0,0.61,22.0,0,0,0,0,fuera_de_zona_confirmada
 2026-09-29T02:11:03+00:00,0x3f548a96c639fc4895e5b6969e7f20eaeaa722bfcf9417cb96f7ad17d0d08b8b,eth-updown-5m-1790647800,ETH,5min,Up,2,0.35,226.1,0.31,223.4,0.31,0.0,1,0,0,0,fuera_de_zona_confirmada
 2026-09-29T02:14:04+00:00,0x7525277afe43f1e8181fea60faa6595acb02e825d5d71e0b72353fc29c2d8c01,eth-updown-15m-1790647200,ETH,15min,Down,2,0.49,0.0,0.96,0.0,0.997,3.85,0,0,0,0,fuera_de_zona_confirmada
+2026-09-29T02:15:07+00:00,0xe31cca47edf33fe73113e4a23aa9fe562558167e1fa438ec388bb7eb37937d44,btc-updown-5m-1790648100,BTC,5min,Down,3,0.5,0.0,0.64,0.0,0.6,-6.25,0,0,0,0,fuera_de_zona_confirmada
+2026-09-29T02:15:15+00:00,0x918a28b4edd17e7d6967c74ba2b33715be42e3c64e42c6cd686d1d1b2a88919b,eth-updown-5m-1790648100,ETH,5min,Down,4,0.5,0.0,0.63,0.0,0.65,3.17,0,0,0,0,fuera_de_zona_confirmada
+2026-09-29T02:15:19+00:00,0xf9e2d3c226bdd9b32ea1aef3bb8a28e8734c9fe90be7032ddd377ee97b3b3f16,btc-updown-15m-1790648100,BTC,15min,Down,2,0.5,0.0,0.57,181.9,0.5,-12.28,1,1,0,0,tupla_no_en_pares_permitidos_live
+2026-09-29T02:15:42+00:00,0x1ec819ec2e20d46098c53da67637e9fc77c63c9eb2745e15807d9a6cc8653ac4,eth-updown-15m-1790648100,ETH,15min,Down,2,0.49,0.0,0.55,0.0,0.57,3.64,0,0,0,0,fuera_de_zona_confirmada
+2026-09-29T02:16:05+00:00,0xd8bc39dfc59196ca641a062198e2573e1f20bf6d0d6ca2286a352c016840109c,doge-updown-15m-1790648100,DOGE,15min,Up,2,0.5299998077451678,0.0,0.63,0.0,0.65,3.17,0,0,0,0,fuera_de_zona_confirmada
+2026-09-29T02:16:54+00:00,0x81e8ed5bce3245ebc861aeb1582f210b79bd1bbb4bdb3d2bf14a3d7fbee8b4ad,doge-updown-5m-1790648100,DOGE,5min,Down,2,0.6,559.0,0.32,361.2,0.42,31.25,1,0,0,0,fuera_de_zona_confirmada
+2026-09-29T02:17:52+00:00,0xccab61417a5837876ccac8d6bcfef0776f137756ac1ffd42239cf481e3da7995,sol-updown-5m-1790648100,SOL,5min,Down,4,0.54,0.0,0.85,0.0,0.73,-14.12,0,0,0,0,fuera_de_zona_confirmada
+2026-09-29T02:18:00+00:00,0x3620b7c539e0e2ccfde0eafa24c5389be5241abe2d048d6b9b10da4e2f02d11e,xrp-updown-5m-1790648100,XRP,5min,Down,2,0.56,29.3,0.57,0.0,0.6,5.26,0,0,0,0,fuera_de_zona_confirmada
