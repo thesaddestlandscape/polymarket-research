@@ -34,11 +34,12 @@ sys.path.insert(0, str(REPO))
 WS_URL = "wss://ws-subscriptions-clob.polymarket.com/ws/market"
 REFRESCO_S = 30
 HIST_MAX = 3000            # eventos por token (>= varios minutos a ritmo alto)
-RECV_TIMEOUT_S = 30
+RECV_TIMEOUT_S = 1.0       # corto: las suscripciones on-demand (pedir) se atienden en <=1 s
 
 _LIB = {}                  # token -> {"bids": {p: s}, "asks": {p: s}}
 _HIST = {}                 # token -> deque[(t_ms, bb, ba, i1, i5, i10, dask5)]
 _LOCK = threading.Lock()
+_EXTRA = {}                # token -> expiración (epoch s): tokens pedidos on-demand por otros módulos (suscripción inmediata)
 _ULT = {}                  # token -> t_ms del último registro (muestreo mínimo entre registros)
 MUESTREO_MS = 100
 _ESTADO = {"iniciado": False, "n_tokens": 0, "n_eventos": 0, "ultimo_evento_ms": 0}
@@ -83,6 +84,15 @@ def en(token, t_ms):
     t, bb, ba, i1, i5, i10, d5 = arr[i]
     return {"t_ms": t, "edad_ms": t_ms - t, "best_bid": bb, "best_ask": ba, "imb1": i1, "imb5": i5, "imb10": i10,
             "depth_ask5_usd": d5}
+
+
+def pedir(tokens, ttl_s=900):
+    """Pide seguimiento ms de tokens arbitrarios (p.ej. mercado de un evento recién detectado). Se suscribe en
+    <=1 s y se da de baja solo al expirar. Idempotente."""
+    exp = time.time() + ttl_s
+    for t in tokens:
+        if t:
+            _EXTRA[t] = max(_EXTRA.get(t, 0), exp)
 
 
 def estado():
@@ -154,9 +164,20 @@ async def _sesion(filtro_marcos):
                 raw = await asyncio.wait_for(ws.recv(), RECV_TIMEOUT_S)
             except asyncio.TimeoutError:
                 raw = None
+            # tokens on-demand: alta inmediata, baja al expirar
+            ahora_s = time.time()
+            add_x = [t for t, e in _EXTRA.items() if e > ahora_s and t not in suscritos]
+            if add_x:
+                await ws.send(json.dumps({"assets_ids": add_x, "operation": "subscribe"}))
+                for t in add_x:
+                    _LIB.setdefault(t, {"bids": {}, "asks": {}})
+                suscritos.update(add_x)
             if time.time() >= prox:
                 prox = time.time() + REFRESCO_S
+                for t in [t for t, e in _EXTRA.items() if e <= ahora_s]:
+                    _EXTRA.pop(t, None)
                 nuevos = await asyncio.get_running_loop().run_in_executor(None, _tokens_universo, filtro_marcos)
+                nuevos = list(set(nuevos) | set(_EXTRA))
                 add = [t for t in nuevos if t not in suscritos]
                 if add:
                     await ws.send(json.dumps({"assets_ids": add, "operation": "subscribe"}))

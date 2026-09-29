@@ -64,6 +64,31 @@ def main():
                     L.append(f"🚨 FALLÓ: {_limpio(r['question'])[:70]} (lado {r['lado_ganador']} → final {r['lado_final']})")
         else:
             L.append("Aún sin resoluciones con desenlace conocido (mide el acierto real del lado ganador).")
+        ws = REPO / "data/shadow/ya_decidido_ws_fase0.csv"
+        if ws.exists():
+            W = list(csv.DictReader(open(ws, encoding="utf-8")))
+            mk = {}
+            for r in W:
+                mk.setdefault((r["market_id"], r["token"]), {})[int(r["offset_s"])] = r
+            movs, quietos, n = [], 0, 0
+            for (mid, tk), d in mk.items():
+                if tk != "YES":
+                    continue
+                def mid_px(o):
+                    r = d.get(o)
+                    b, a = (_f(r["best_bid"]), _f(r["best_ask"])) if r else (None, None)
+                    return (a + b) / 2 if a is not None and b is not None else None
+                antes, d10, d600 = mid_px(-5), mid_px(10), mid_px(600)
+                if antes is None or d10 is None:
+                    continue
+                n += 1
+                movs.append(abs(d10 - antes))
+                if d600 is not None and 0.05 < d600 < 0.95:
+                    quietos += 1
+            if n:
+                L.append(f"⏱ Micro-latencia del hecho (libro por WS, ms): {n} mercados de eventos seguidos alrededor de su endDate; "
+                         f"|Δmid| entre T-5s y T+10s: mediana {st.median(movs):.3f}, {sum(m > 0.20 for m in movs)}/{n} repreciaron >20c en 10 s; "
+                         f"{quietos}/{n} aún entre 0,05-0,95 a +600 s (sin asentar).")
         L.append("Gate para pensar en ejecutor: n>=40 resueltos, acierto >=99 %, capacidad y tiempo de asentado útiles; hoy solo observación.")
         msg = "\n".join(L)
     print(msg)

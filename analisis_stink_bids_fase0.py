@@ -44,7 +44,7 @@ def evaluar():
     out.update({"usd_evento_mediana": round(st.median(usd), 2) if usd else None,
                 "desviacion_mediana": round(st.median(dev), 3) if dev else None,
                 "depth_bid_cerca_mediana": round(st.median(dcerca), 2) if dcerca else None})
-    for d in (60, 300, 1800):
+    for d in (1, 3, 10, 30, 60, 300, 1800):
         gan, cl, eur = [], defaultdict(list), []
         for e in evs:
             s = seg.get(e["event_id"], {}).get(d)

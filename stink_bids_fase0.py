@@ -39,6 +39,9 @@ from pathlib import Path
 
 import requests
 
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+import libro_estado_ws as LE  # 29-Sep: libro L2 por WS con histórico ms (principio micro-latencia)
+
 REPO = Path(__file__).resolve().parent
 DATALOGS = Path("/root/polymarket-research-datalogs")
 DIR_SHADOW = REPO / "data" / "shadow"
@@ -52,7 +55,8 @@ N_PREVIOS_MIN = 3
 DEV_MIN = 0.05
 USD_MIN = 1.0
 PRECIO_MIN, PRECIO_MAX = 0.05, 0.95
-SEGUIMIENTO_S = (60, 300, 1800)
+SEGUIMIENTO_S = (1, 3, 10, 30, 60, 300, 1800)   # <=30 s desde el libro WS (ms, requote); >30 s REST con profundidad
+SEG_WS_MAX_S = 30
 POLL_S = 1.0
 TOKEN_TTL_S = 6 * 3600
 
@@ -184,6 +188,8 @@ def _consultar_evento(ev: dict, est: Estado, vistos: set):
     tok = _token(ev["condition_id"], ev["outcome"])
     if not tok:
         return None
+    LE.pedir([tok], 400)          # suscripción WS inmediata: seguimiento ms del requote del libro
+    ev["_tok"] = tok
     bids, asks = _libro(tok)
     if bids is None:
         return None
@@ -203,7 +209,7 @@ def _consultar_evento(ev: dict, est: Estado, vistos: set):
     ev["n_niveles_bid"], ev["n_niveles_ask"] = len(bids), len(asks)
     vistos.add(ev["event_id"])
     for d in SEGUIMIENTO_S:
-        est.pendientes.append((time.time() + d, ev["event_id"], d, ev["condition_id"], ev["outcome"], p))
+        est.pendientes.append((time.time() + d, ev["event_id"], d, ev["condition_id"], ev["outcome"], p, tok))
     est.pendientes.sort()
     return ev
 
@@ -212,10 +218,17 @@ def _seguimientos(est: Estado):
     ahora = time.time()
     filas = []
     while est.pendientes and est.pendientes[0][0] <= ahora:
-        _, eid, d, cond, outcome, p = est.pendientes.pop(0)
-        tok = _token(cond, outcome)
-        bids, asks = _libro(tok) if tok else (None, None)
+        _, eid, d, cond, outcome, p, tok = est.pendientes.pop(0)
         ult = est.ultimo.get((cond, outcome))
+        if d <= SEG_WS_MAX_S:
+            e = LE.en(tok, int(time.time() * 1000))
+            filas.append({"event_id": eid, "delta_s": d, "ts_utc": datetime.now(timezone.utc).isoformat(timespec="seconds"),
+                          "best_bid": "" if not e or e["best_bid"] is None else e["best_bid"],
+                          "best_ask": "" if not e or e["best_ask"] is None else e["best_ask"],
+                          "ultimo_trade": ult[1] if ult else "", "bid_size_top": "",
+                          "depth_bid_cerca_evento_usd": "", })
+            continue
+        bids, asks = _libro(tok) if tok else (None, None)
         filas.append({"event_id": eid, "delta_s": d, "ts_utc": datetime.now(timezone.utc).isoformat(timespec="seconds"),
                       "best_bid": bids[0][0] if bids else "", "best_ask": asks[0][0] if asks else "",
                       "ultimo_trade": ult[1] if ult else "", "bid_size_top": bids[0][1] if bids else "",
@@ -225,6 +238,7 @@ def _seguimientos(est: Estado):
 
 def main() -> None:
     _log("arrancado -- eventos stink (SELL >=5c bajo mediana 10 min) en mercados no updown, libro real + seguimiento")
+    LE.iniciar(("15min",))
     est = Estado()
     vistos = _cargar_vistos()
     archivo = _archivo()
