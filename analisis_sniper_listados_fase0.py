@@ -79,10 +79,45 @@ def _finales(cids):
             if j and j[0].get("closed"):
                 pr = [float(x) for x in json.loads(j[0]["outcomePrices"])]
                 if pr and max(pr) > 0.99:
-                    fin[c] = 1 if pr[0] > 0.99 else 0   # YES ganó
+                    fin[c] = (1 if pr[0] > 0.99 else 0, j[0].get("endDate", ""))   # (YES ganó, endDate)
         except Exception:
             continue
     return fin
+
+
+EVT = REPO / "data/shadow/sniper_listados_fase0_eventos.csv"
+
+
+def _eventos_ms(L):
+    """Latencia de listado y tiempo (ms desde el listado) hasta la primera cotización: cualquier libro,
+    dos lados, y 'útil' (spread<=0,20), por mercado de escalera cripto con seguimiento WS."""
+    if not EVT.exists():
+        return {}
+    por = defaultdict(list)
+    for r in csv.DictReader(open(EVT, encoding="utf-8")):
+        por[r["market_id"]].append(r)
+    primero, dos, util, semilla = [], [], [], []
+    for mid, ev in por.items():
+        ev.sort(key=lambda r: int(r["edad_ms"]))
+        primero.append(int(ev[0]["edad_ms"]))
+        hecho_dos = hecho_util = False
+        for r in ev:
+            bb, ba = _f(r["best_bid"]), _f(r["best_ask"])
+            if bb is None or ba is None or ba <= bb:
+                continue
+            if not hecho_dos:
+                dos.append(int(r["edad_ms"]))
+                semilla.append(ba - bb)
+                hecho_dos = True
+            if not hecho_util and ba - bb <= 0.20:
+                util.append(int(r["edad_ms"]))
+                hecho_util = True
+    lat = [int(r["latencia_ms"]) for r in L.values() if r.get("latencia_ms") not in ("", None)]
+    med = lambda v: round(st.median(v)) if v else None
+    return {"mercados_ms": len(por), "latencia_deteccion_ms_mediana": med(lat),
+            "primer_evento_ms_mediana": med(primero), "primera_cotizacion_dos_lados_ms_mediana": med(dos),
+            "n_dos_lados": len(dos), "primera_util_spread_le_20c_ms_mediana": med(util), "n_util": len(util),
+            "spread_semilla_mediano": round(st.median(semilla), 3) if semilla else None}
 
 
 def evaluar():
@@ -103,6 +138,7 @@ def evaluar():
         sp = [_f(x["best_ask"]) - _f(x["best_bid"]) for x in dos]
         out["disp"][off] = {"n": len(xs), "frac_dos_lados": round(len(dos) / len(xs), 3) if xs else None,
                             "spread_mediano": round(st.median(sp), 3) if sp else None}
+    out["ms"] = _eventos_ms(L)
     # (b) escaleras cripto: precio justo y EV
     esc = [x for x in seg if L.get(x["market_id"], {}).get("categoria") == "cripto_escalera"
            and _f(x["spot"]) and _f(L[x["market_id"]]["strike"])]
@@ -122,7 +158,10 @@ def evaluar():
         if c not in fin:
             continue
         t = _ts(x["ts_utc"])
-        Tmin = (_ts(m["end_date"]) - t) / 60
+        end = m["end_date"] or fin[c][1]
+        if not end:
+            continue
+        Tmin = (_ts(end) - t) / 60
         if Tmin <= 1:
             continue
         sg = _vol_1m(*kl[m["activo"]], t)
@@ -132,7 +171,7 @@ def evaluar():
         fair = _phi(math.log(S_ / K) / (sg * math.sqrt(Tmin)))
         bid, ask = _f(x["best_bid"]), _f(x["best_ask"])
         dia = x["ts_utc"][:10]
-        yes = fin[c]
+        yes = fin[c][0]
         if ask is not None and 0.02 < ask < 0.98 and fair - ask >= MARGEN:
             ev = (yes - ask) - FEE * ask * (1 - ask)
             filas[(int(x["offset_obj_s"]), "compra YES")].append((dia, ev / ask))

@@ -22,6 +22,13 @@ def main():
         for off, d in r["disp"].items():
             sp = "n/d" if d["spread_mediano"] is None else f"{d['spread_mediano']:.2f}"
             L.append(f"· +{off // 60} min tras el listado: n={d['n']}, cotización a dos lados {d['frac_dos_lados']:.0%}, spread mediano {sp}")
+        ms = r.get("ms") or {}
+        if ms:
+            L.append(f"⏱ Micro-latencia (escaleras cripto seguidas por WS, n={ms['mercados_ms']}): detección del listado "
+                     f"{ms['latencia_deteccion_ms_mediana']} ms; primer evento de libro {ms['primer_evento_ms_mediana']} ms; "
+                     f"1ª cotización a dos lados {ms['primera_cotizacion_dos_lados_ms_mediana']} ms (n={ms['n_dos_lados']}, "
+                     f"spread semilla {ms['spread_semilla_mediano']}); 1ª cotización útil (spread<=20c) "
+                     f"{ms['primera_util_spread_le_20c_ms_mediana']} ms (n={ms['n_util']}) tras el listado.")
         ev = r.get("ev") or {}
         if ev:
             L.append("Escaleras cripto, EV por € vs precio justo (vol realizada, margen 5c, desenlace final):")
