@@ -1,0 +1,7 @@
+{
+ "_nota": "29-Sep, ronda1 #7 (sniper datos macro). Cada evento: fuente oficial que cambia en el instante de la publicación. statcan_wds: POST getDataFromVectorsAndLatestNPeriods devuelve 409 'The product is not released yet' hasta la publicación y 200 con datos justo después -> el propio código HTTP es el disparador. Añadir eventos a mano al listar mercados de datos (ya_decidido_ws_fase0 los detecta).",
+ "eventos": [
+  {"nombre": "Canada GDP MoM Jul-2026", "when_utc": "2026-09-29T12:30:00Z", "tipo": "statcan_wds", "vector": 65201210,
+   "mercado_regex": "Canada's GDP growth rate MoM in July 2026", "decimales": 1}
+ ]
+}
