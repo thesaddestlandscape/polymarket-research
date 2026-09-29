@@ -127,6 +127,7 @@ import saltos_chainlink_fase0
 import binance_jump_leadlag_fase0  # 25-Sep: A3b, salto de Binance -> libro Polymarket a ms (solo observación)
 import wallet_first_buy_follow_fase0  # 25-Sep: seguir wallets 'primera compra' (ask real a 0,3/1/3 s), solo observación
 import precierre_multioffset_fase0  # 25-Sep: precierre a T-120..-10 (ask real por offset), solo observación
+import stink_bids_fase0  # 29-Sep: ronda3 #1, eventos stink (SELL >=5c bajo mediana) en mercados no updown con libro real, solo observación
 import gbm_late_imbalance_fase0  # 29-Sep: ronda2 #9, imbalance del libro al detectar señales REALES GBM_LATE (solo observación)
 import desfase_twap_apertura_fase0  # 29-Sep: ronda1 #2, desfase TWAP60 pre-apertura vs libro ambos lados
 import mean_reversion_penny_clipper_fase0  # 29-Sep: 2 hipotesis de AutoPilotPM (lectura de codigo publico,
@@ -199,6 +200,7 @@ OBSERVADORES = [
     (mean_reversion_penny_clipper_fase0, "mean_reversion_penny_clipper_fase0.log", "_log"),
     (desfase_twap_apertura_fase0, "desfase_twap_apertura_fase0.log", "_log"),
     (gbm_late_imbalance_fase0, "gbm_late_imbalance_fase0.log", "_log"),
+    (stink_bids_fase0, "stink_bids_fase0.log", "_log"),
 ]
 
 
