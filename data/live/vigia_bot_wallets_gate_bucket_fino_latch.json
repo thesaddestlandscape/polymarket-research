@@ -114,11 +114,11 @@
   "hi": 0.05,
   "n": 43,
   "pnl_medio": -1.0,
-  "diff_vs_resto": -0.942,
+  "diff_vs_resto": -0.9422,
   "p_valor": 0.0,
   "split_half_diff": [
-   -0.942,
-   -0.942
+   -0.9422,
+   -0.9422
   ],
   "split_half_ok": true,
   "pnl_medio_loo": -1.0,
@@ -137,30 +137,37 @@
   "fecha_historial": "2026-09-29",
   "veredicto": "malo_confirmado"
  },
+ "DISPERSO#BTC#240min": {
+  "veredicto": "sin_concluir",
+  "historial_crudo": [
+   "malo_confirmado"
+  ],
+  "fecha_historial": null
+ },
  "DISPERSO#BTC#60min": {
-  "n_dias": 18,
-  "pnl_sin_mejores_dias": -0.7522,
+  "n_dias": 19,
+  "pnl_sin_mejores_dias": -0.6736,
   "robusto_dias": false,
-  "lo": 0.31,
-  "hi": 0.36,
-  "n": 57,
-  "pnl_medio": -0.5463,
-  "diff_vs_resto": -0.5399,
-  "p_valor": 0.037,
+  "lo": 0.3,
+  "hi": 0.35,
+  "n": 46,
+  "pnl_medio": -0.5563,
+  "diff_vs_resto": -0.5471,
+  "p_valor": 0.0355,
   "split_half_diff": [
-   -0.2859,
-   -0.7851
+   -0.3662,
+   -0.7279
   ],
   "split_half_ok": true,
-  "pnl_medio_loo": -0.593,
+  "pnl_medio_loo": -0.6147,
   "robusto_loo": true,
   "ci90_bootstrap": [
-   -0.7509,
-   -0.2955
+   -0.8078,
+   -0.2938
   ],
   "robusto_bootstrap": true,
   "n_posiciones_buscadas": 50,
-  "g_kelly_f10": -0.06161,
+  "g_kelly_f10": -0.06266,
   "veredicto_crudo_hoy": "malo_confirmado",
   "historial_crudo": [
    "malo_confirmado"
@@ -176,10 +183,10 @@
   "hi": 0.06,
   "n": 127,
   "pnl_medio": -0.8164,
-  "diff_vs_resto": -0.7599,
+  "diff_vs_resto": -0.76,
   "p_valor": 0.0,
   "split_half_diff": [
-   -0.9435,
+   -0.9436,
    -0.5792
   ],
   "split_half_ok": true,
@@ -238,11 +245,11 @@
   "hi": 0.14,
   "n": 54,
   "pnl_medio": -0.6686,
-  "diff_vs_resto": -0.625,
-  "p_valor": 0.006,
+  "diff_vs_resto": -0.6258,
+  "p_valor": 0.0055,
   "split_half_diff": [
-   -0.6407,
-   -0.6094
+   -0.6415,
+   -0.6102
   ],
   "split_half_ok": true,
   "pnl_medio_loo": -0.8392,
@@ -329,12 +336,6 @@
   ],
   "fecha_historial": "2026-09-29",
   "veredicto": "malo_confirmado"
- },
- "DISPERSO#BTC#240min": {
-  "veredicto": "sin_concluir",
-  "historial_crudo": [
-   "malo_confirmado"
-  ]
  },
  "DISPERSO#DOGE#5min": {
   "veredicto": "sin_concluir",
