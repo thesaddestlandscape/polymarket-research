@@ -65,6 +65,7 @@ DIR_SHADOW = REPO / "data" / "shadow"
 OUT = DIR_SHADOW / "sniper_listados_fase0.csv"
 OUT_SEG = DIR_SHADOW / "sniper_listados_fase0_seguimiento.csv"
 VISTOS = DIR_SHADOW / "sniper_listados_fase0_vistos.json"
+CONTEO = DIR_SHADOW / "sniper_listados_fase0_conteo.json"   # 29-Sep (disco): los listados que no son escaleras solo se CUENTAN, no se escriben fila a fila
 PEND = DIR_SHADOW / "sniper_listados_fase0_pend.json"   # escaleras en seguimiento: sobrevive a reinicios de observadores
 
 WS_URL = "wss://ws-subscriptions-clob.polymarket.com/ws/market"
@@ -264,6 +265,18 @@ async def _on_nuevo(e, t_recv, ws, estado):
         if str(o).lower() == "yes":
             yes_idx = i
     cat = _clasificar(q, slug)
+    if cat != "cripto_escalera":
+        try:
+            c = json.loads(CONTEO.read_text(encoding="utf-8")) if CONTEO.exists() else {}
+        except Exception:
+            c = {}
+        dia = datetime.fromtimestamp(t_recv / 1000, timezone.utc).strftime("%Y-%m-%d")
+        c.setdefault(dia, {})
+        c[dia][cat] = c[dia].get(cat, 0) + 1
+        for d in sorted(c)[:-14]:
+            c.pop(d, None)                       # solo 14 días
+        CONTEO.write_text(json.dumps(c), encoding="utf-8")
+        return
     t_ev = int(e.get("timestamp") or t_recv)
     act = _activo(q)
     fs = e.get("fee_schedule") or {}

@@ -129,6 +129,11 @@ def evaluar():
     for r in L.values():
         out["por_categoria"][r["categoria"]] += 1
     out["por_categoria"] = dict(out["por_categoria"])
+    cn = REPO / "data/shadow/sniper_listados_fase0_conteo.json"
+    if cn.exists():                                  # listados no-escalera: solo contados (ahorro de disco)
+        for dia, d in json.loads(cn.read_text(encoding="utf-8")).items():
+            for k, v in d.items():
+                out["por_categoria"][k] = out["por_categoria"].get(k, 0) + v
     # (a) disponibilidad por edad objetivo
     por_off = defaultdict(list)
     for s in seg:
