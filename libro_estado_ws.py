@@ -40,6 +40,8 @@ _LIB = {}                  # token -> {"bids": {p: s}, "asks": {p: s}}
 _HIST = {}                 # token -> deque[(t_ms, bb, ba, i1, i5, i10, dask5)]
 _LOCK = threading.Lock()
 _EXTRA = {}                # token -> expiración (epoch s): tokens pedidos on-demand por otros módulos (suscripción inmediata)
+_TRADES = {}               # token -> deque[(t_ms, price, side, size)] de last_trade_price (29-Sep, requote/maker sim)
+_MARCOS = {}               # marco -> conjunto de activos permitidos (None = todos); unión de todos los llamantes
 _ULT = {}                  # token -> t_ms del último registro (muestreo mínimo entre registros)
 MUESTREO_MS = 100
 _ESTADO = {"iniciado": False, "n_tokens": 0, "n_eventos": 0, "ultimo_evento_ms": 0}
@@ -95,16 +97,29 @@ def pedir(tokens, ttl_s=900):
             _EXTRA[t] = max(_EXTRA.get(t, 0), exp)
 
 
+def trades(token, t0_ms, t1_ms):
+    with _LOCK:
+        d = list(_TRADES.get(token, ()))
+    return [x for x in d if t0_ms <= x[0] <= t1_ms]
+
+
+def hist_rango(token, t0_ms, t1_ms):
+    with _LOCK:
+        h = list(_HIST.get(token, ()))
+    return [x for x in h if t0_ms <= x[0] <= t1_ms]
+
+
 def estado():
     return dict(_ESTADO)
 
 
-def _tokens_universo(filtro_marcos):
+def _tokens_universo(filtro_marcos=None):
     import live_trade as lt
     from fetch_libro_ambos_lados import _universo_activo
     out = []
     for mid, (activo, marco, _cid, _edt) in _universo_activo().items():
-        if marco not in filtro_marcos:
+        permitidos = _MARCOS.get(marco, "no")
+        if permitidos == "no" or (permitidos is not None and activo not in permitidos):
             continue
         try:
             yes, no, _ = lt._get_token_ids(mid)
@@ -116,6 +131,16 @@ def _tokens_universo(filtro_marcos):
 
 def _aplicar(msg):
     t_ev = int(msg.get("timestamp") or time.time() * 1000)
+    if msg.get("event_type") == "last_trade_price":
+        tk = msg.get("asset_id")
+        if tk in _LIB:
+            try:
+                with _LOCK:
+                    _TRADES.setdefault(tk, deque(maxlen=500)).append((t_ev, float(msg["price"]), msg.get("side"),
+                                                                     float(msg.get("size") or 0)))
+            except (KeyError, TypeError, ValueError):
+                pass
+        return
     if "price_changes" in msg:
         tocados = set()
         for pc in msg["price_changes"]:
@@ -193,6 +218,7 @@ async def _sesion(filtro_marcos):
                         _LIB.pop(t, None)
                         with _LOCK:
                             _HIST.pop(t, None)
+                            _TRADES.pop(t, None)
             if not raw:
                 continue
             try:
@@ -213,7 +239,15 @@ def _hilo(filtro_marcos):
         time.sleep(5)
 
 
-def iniciar(filtro_marcos=("15min",)):
+def iniciar(filtro_marcos=("15min",), activos=None):
+    """Idempotente y ACUMULATIVO: cada llamante añade sus marcos (activos=None -> todos)."""
+    for m in filtro_marcos:
+        if m in _MARCOS and _MARCOS[m] is None:
+            continue
+        if activos is None:
+            _MARCOS[m] = None
+        else:
+            _MARCOS[m] = set(_MARCOS.get(m) or ()) | set(activos)
     if _ESTADO["iniciado"]:
         return
     _ESTADO["iniciado"] = True

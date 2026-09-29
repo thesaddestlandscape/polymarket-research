@@ -127,6 +127,9 @@ import saltos_chainlink_fase0
 import binance_jump_leadlag_fase0  # 25-Sep: A3b, salto de Binance -> libro Polymarket a ms (solo observación)
 import wallet_first_buy_follow_fase0  # 25-Sep: seguir wallets 'primera compra' (ask real a 0,3/1/3 s), solo observación
 import precierre_multioffset_fase0  # 25-Sep: precierre a T-120..-10 (ask real por offset), solo observación
+import wallets_nuevas_fase0  # 29-Sep: ronda2 #2 wallets nuevas con apuesta grande, ask real copiable a +0..300 s
+import precierre_libro_ms_fase0  # 29-Sep: ronda1 #4 pelicula ms del libro+trades en los ultimos 100 s de cada up/down 5m/15m (maker con requote)
+import escaleras_cierre_ws_fase0  # 29-Sep: ronda2 #8 precierre en escaleras cripto, libro WS ms T-60..+60 s
 import ya_decidido_ws_fase0  # 29-Sep: ronda3 #5 con micro-latencia, linea temporal del libro por WS (ms) alrededor de endDate de mercados de eventos
 import sniper_listados_fase0  # 29-Sep: ronda3 #7, mercados recién listados (escaleras cripto): libro a +1/5/15/30/60 min, solo observación
 import stink_bids_fase0  # 29-Sep: ronda3 #1, eventos stink (SELL >=5c bajo mediana) en mercados no updown con libro real, solo observación
@@ -205,6 +208,9 @@ OBSERVADORES = [
     (stink_bids_fase0, "stink_bids_fase0.log", "_log"),
     (sniper_listados_fase0, "sniper_listados_fase0.log", "_log"),
     (ya_decidido_ws_fase0, "ya_decidido_ws_fase0.log", "_log"),
+    (escaleras_cierre_ws_fase0, "escaleras_cierre_ws_fase0.log", "_log"),
+    (precierre_libro_ms_fase0, "precierre_libro_ms_fase0.log", "_log"),
+    (wallets_nuevas_fase0, "wallets_nuevas_fase0.log", "_log"),
 ]
 
 
