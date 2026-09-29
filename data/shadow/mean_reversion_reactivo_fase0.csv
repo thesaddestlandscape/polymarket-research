@@ -1,0 +1,3 @@
+timestamp_utc,activo,marco,condition_id,ts_end,ts_trigger_ms,ts_consulta_libro_ms,latencia_ms,price_yes,decision,round_age_s,restante_min,spot_move_pct,mejor_ask,mejor_bid,profundidad_eur,ratio_vs_stake,n_niveles,imbalance_top1,imbalance_top5,outcome_real,resolved_ts
+2026-09-29T07:32:00.208+00:00,BTC,5min,0xb2f3dea8a5c6946de4cf0330df40be183c3af786dbd5f36c06731e3658dcce81,1790667300,1790667119000,1790667120143,1143,0.3,BUY_YES,120.1,3.0,0.029,0.38,0.37,0.0,0.0,62,-0.6678,-0.5387,,
+2026-09-29T07:32:00.280+00:00,ETH,5min,0x72d27232150c7cff2ab93105b2e44f05b76ee010a59c0c7bc768f89606d300b3,1790667300,1790667120000,1790667120225,225,0.2,BUY_YES,120.2,3.0,0.0321,0.2,0.19,24.52,23.4,80,-0.9216,-0.0317,,
