@@ -34,10 +34,8 @@ def outcomes(market_ids):
     return out
 
 
-def main():
-    ap = argparse.ArgumentParser()
-    ap.add_argument("--min-n", type=int, default=40)
-    a = ap.parse_args()
+def evaluar(min_n=40, out_print=print):
+    """Devuelve dict resumen y, ademas, imprime via out_print la tabla completa."""
     rows = list(csv.DictReader(open(IN, encoding="utf-8")))
     rows.sort(key=lambda x: x["ts_deteccion_utc"])
     out = outcomes({x["market_id"] for x in rows})
@@ -52,7 +50,9 @@ def main():
             continue
         U.setdefault((x["market_id"], x["strategy"]), x)
     U = list(U.values())
-    print(f"filas={len(rows)} con resultado y fillable={len(U)}")
+    resumen = {"filas": len(rows), "unidades": len(U), "dias": len({x["ts_deteccion_utc"][:10] for x in rows}),
+               "terciles": [], "celdas_decisivas": []}
+    out_print(f"filas={len(rows)} con resultado y fillable={len(U)}")
 
     def win(x):
         return (x["decision"] == "BUY_YES") == (out[x["market_id"]] == "YES")
@@ -70,15 +70,20 @@ def main():
         b = sorted(st.mean([v for k in random.choices(g, k=len(g)) for v in k]) for _ in range(2000))
         return b[100], b[1900], len(g)
 
-    def rep(n, s):
+    def rep(n, s, tercil=None, celda=None):
         if len(s) < 15:
-            print(f"{n:48s} n={len(s)} (<15)")
+            out_print(f"{n:48s} n={len(s)} (<15)")
             return
         lo, hi, nd = ic(s)
-        tag = "" if len(s) >= a.min_n and nd >= 10 else " [exploratorio]"
-        print(f"{n:48s} n={len(s):4d} hit={sum(win(x) for x in s)/len(s):.3f} "
-              f"ask={st.mean(float(x['mejor_ask']) for x in s):.3f} EV/EUR={st.mean(map(pnl, s)):+.3f} "
-              f"IC90d[{lo:+.3f},{hi:+.3f}] dias={nd}{tag}")
+        decisiva = len(s) >= min_n and nd >= 10
+        ev = st.mean(map(pnl, s))
+        out_print(f"{n:48s} n={len(s):4d} hit={sum(win(x) for x in s)/len(s):.3f} "
+                  f"ask={st.mean(float(x['mejor_ask']) for x in s):.3f} EV/EUR={ev:+.3f} "
+                  f"IC90d[{lo:+.3f},{hi:+.3f}] dias={nd}{'' if decisiva else ' [exploratorio]'}")
+        if tercil is not None and celda is None:
+            resumen["terciles"].append((n.strip(), len(s), ev, lo, hi, nd))
+        if celda is not None and decisiva and (lo > 0 or hi < 0):
+            resumen["celdas_decisivas"].append((n.strip(), len(s), ev, lo, hi, nd))
 
     rep("TODAS", U)
     celdas = defaultdict(list)
@@ -89,13 +94,21 @@ def main():
         if len(v) < 45:
             continue
         q = [v[len(v) // 3], v[2 * len(v) // 3]]
-        print(f"-- {f} cortes globales {[round(z, 3) for z in q]}")
+        out_print(f"-- {f} cortes globales {[round(z, 3) for z in q]}")
         for n, lo, hi in (("bajo", -9, q[0]), ("medio", q[0], q[1]), ("alto", q[1], 9)):
-            rep(f"  {f} {n}", [x for x in U if lo <= float(x[f]) < hi])
+            rep(f"  {f} {n}", [x for x in U if lo <= float(x[f]) < hi], tercil=True)
             for k, s in sorted(celdas.items()):
                 sub = [x for x in s if lo <= float(x[f]) < hi]
                 if len(sub) >= 15:
-                    rep(f"    {k[0]}#{k[1]} {f} {n}", sub)
+                    rep(f"    {k[0]}#{k[1]} {f} {n}", sub, celda=True)
+    return resumen
+
+
+def main():
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--min-n", type=int, default=40)
+    a = ap.parse_args()
+    evaluar(a.min_n)
 
 
 if __name__ == "__main__":
