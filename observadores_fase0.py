@@ -127,6 +127,8 @@ import saltos_chainlink_fase0
 import binance_jump_leadlag_fase0  # 25-Sep: A3b, salto de Binance -> libro Polymarket a ms (solo observación)
 import wallet_first_buy_follow_fase0  # 25-Sep: seguir wallets 'primera compra' (ask real a 0,3/1/3 s), solo observación
 import precierre_multioffset_fase0  # 25-Sep: precierre a T-120..-10 (ask real por offset), solo observación
+import colas_escaleras_ws_fase0  # 29-Sep: ronda2 #6 colas de escaleras horarias, bid/ask+tamaños T-30..+60 s (datalogs gz)
+import escaleras_arbitraje_ms_fase0  # 29-Sep: ronda3 #2 violaciones transitorias de monotonia entre strikes (50 ms), libro WS
 import barreras_touch_ms_fase0  # 29-Sep: ronda2 #5 barreras 'hit', cruce de strike por aggTrade Binance (ms) vs libro del YES por WS
 import macro_release_ms_fase0  # 29-Sep: ronda1 #7 sniper datos macro, sondeo de fuente oficial a ~120 ms desde T-3 s (Statistics Canada WDS)
 import wallets_nuevas_fase0  # 29-Sep: ronda2 #2 wallets nuevas con apuesta grande, ask real copiable a +0..300 s
@@ -215,6 +217,8 @@ OBSERVADORES = [
     (wallets_nuevas_fase0, "wallets_nuevas_fase0.log", "_log"),
     (macro_release_ms_fase0, "macro_release_ms_fase0.log", "_log"),
     (barreras_touch_ms_fase0, "barreras_touch_ms_fase0.log", "_log"),
+    (escaleras_arbitraje_ms_fase0, "escaleras_arbitraje_ms_fase0.log", "_log"),
+    (colas_escaleras_ws_fase0, "colas_escaleras_ws_fase0.log", "_log"),
 ]
 
 

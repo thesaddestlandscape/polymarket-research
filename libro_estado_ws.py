@@ -42,6 +42,7 @@ _LOCK = threading.Lock()
 _EXTRA = {}                # token -> expiración (epoch s): tokens pedidos on-demand por otros módulos (suscripción inmediata)
 _TRADES = {}               # token -> deque[(t_ms, price, side, size)] de last_trade_price (29-Sep, requote/maker sim)
 _MARCOS = {}               # marco -> conjunto de activos permitidos (None = todos); unión de todos los llamantes
+_TOP = {}                  # token -> (t_ms, best_bid, bid_size, best_ask, ask_size): último estado O(1) (detectores de alta frecuencia)
 _ULT = {}                  # token -> t_ms del último registro (muestreo mínimo entre registros)
 MUESTREO_MS = 100
 _ESTADO = {"iniciado": False, "n_tokens": 0, "n_eventos": 0, "ultimo_evento_ms": 0}
@@ -67,8 +68,10 @@ def _registrar(token, t_ms):
     bb = bids[0][0] if bids else None
     ba = asks[0][0] if asks else None
     dask5 = round(sum(p * s for p, s in asks[:5]), 2)
+    _TOP[token] = (t_ms, bb, bids[0][1] if bids else None, ba, asks[0][1] if asks else None)
     h = _HIST.setdefault(token, deque(maxlen=HIST_MAX))
-    h.append((t_ms, bb, ba, _imb(bids, asks, 1), _imb(bids, asks, 5), _imb(bids, asks, 10), dask5))
+    h.append((t_ms, bb, ba, _imb(bids, asks, 1), _imb(bids, asks, 5), _imb(bids, asks, 10), dask5,
+              bids[0][1] if bids else None, asks[0][1] if asks else None))
     _ESTADO["n_eventos"] += 1
     _ESTADO["ultimo_evento_ms"] = t_ms
 
@@ -83,9 +86,9 @@ def en(token, t_ms):
     i = bisect_right([x[0] for x in arr], t_ms) - 1
     if i < 0:
         return None
-    t, bb, ba, i1, i5, i10, d5 = arr[i]
+    t, bb, ba, i1, i5, i10, d5, bbs, bas = arr[i]
     return {"t_ms": t, "edad_ms": t_ms - t, "best_bid": bb, "best_ask": ba, "imb1": i1, "imb5": i5, "imb10": i10,
-            "depth_ask5_usd": d5}
+            "depth_ask5_usd": d5, "bid_size": bbs, "ask_size": bas}
 
 
 def pedir(tokens, ttl_s=900):
@@ -107,6 +110,11 @@ def hist_rango(token, t0_ms, t1_ms):
     with _LOCK:
         h = list(_HIST.get(token, ()))
     return [x for x in h if t0_ms <= x[0] <= t1_ms]
+
+
+def ultimo(token):
+    """(t_ms, best_bid, bid_size, best_ask, ask_size) más reciente del token, O(1). None si sin datos."""
+    return _TOP.get(token)
 
 
 def estado():
@@ -219,6 +227,7 @@ async def _sesion(filtro_marcos):
                         with _LOCK:
                             _HIST.pop(t, None)
                             _TRADES.pop(t, None)
+                            _TOP.pop(t, None)
             if not raw:
                 continue
             try:

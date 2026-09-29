@@ -49,6 +49,32 @@ def main():
         L.append("Gate: n>=30 cruces con ask<0,97 a +250 ms antes de pensar en un ejecutor con envío de baja latencia.")
     else:
         L.append("Barreras: aún sin cruces (strikes a <=2 % del spot; suelen tardar horas).")
+    a = REPO / "data/shadow/escaleras_arbitraje_ms_fase0.csv"
+    if a.exists():
+        R = list(csv.DictReader(open(a, encoding="utf-8")))
+        neto = [_f(r["edge_neto_max"]) for r in R if _f(r["edge_neto_max"]) is not None]
+        dur = [_f(r["duracion_ms"]) for r in R if _f(r["duracion_ms"]) is not None]
+        L.append(f"Arbitraje de monotonía entre strikes (50 ms): {len(R)} episodios; duración mediana "
+                 f"{st.median(dur):.0f} ms; edge bruto máx {max(_f(r['edge_bruto_max']) for r in R):.3f}; "
+                 f"{sum(n > 0 for n in neto)} con edge NETO de fee >0; tamaño ejecutable máx {max(_f(r['size_min_max']) or 0 for r in R):.0f} acciones.")
+    else:
+        L.append("Arbitraje de monotonía entre strikes: sin episodios (edge bruto >=0,5c) todavía.")
+    import glob, gzip
+    fc = sorted(glob.glob("/root/polymarket-research-datalogs/colas_escaleras_ws_*.csv.gz"))
+    if fc:
+        C = []
+        for f_ in fc[-3:]:
+            C += list(csv.DictReader(gzip.open(f_, "rt", encoding="utf-8")))
+        por = defaultdict(list)
+        for r in C:
+            if r["token"] == "YES" and _f(r["best_bid"]) is not None:
+                por[int(r["offset_s"])].append(r)
+        for off in (-900, -300, -60):
+            v = por.get(off, [])
+            if v:
+                bids = [_f(r["best_bid"]) for r in v]
+                L.append(f"Colas horarias (strikes 1-6 % del spot) a {off // 60:+d} min: n={len(v)}, bid YES mediano {st.median(bids):.3f}, "
+                         f"{sum(b >= 0.02 for b in bids)}/{len(v)} con bid>=2c (comprar NO a <=0,98 posible)")
     msg = "\n".join(L)
     print(msg)
     try:

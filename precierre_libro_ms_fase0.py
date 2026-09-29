@@ -64,7 +64,7 @@ def _volcar(mid, activo, marco, end_ts, yes, no):
     ini, fin = int((end_ts - ANTES_S) * 1000), int((end_ts + DESPUES_S) * 1000)
     filas = []
     prev = None
-    for (t, bb, ba, i1, i5, i10, d5) in LE.hist_rango(yes, ini, fin):   # el libro del NO es el espejo del YES (bids<->asks a 1-p): solo se guarda el YES
+    for (t, bb, ba, i1, i5, i10, d5, _bbs, _bas) in LE.hist_rango(yes, ini, fin):   # el libro del NO es el espejo del YES (bids<->asks a 1-p): solo se guarda el YES
         if True:
             lado = "YES"
             if (bb, ba) == prev:
