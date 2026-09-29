@@ -27,6 +27,21 @@ el mismo aviso cada ciclo; se limpia sola cuando la anomalía se resuelve).
 
 Cron sugerido: cada hora, en :20 (no coincide con live_balance :00/:15/:30/:45
 ni con reconciliar 05:50).
+
+29-Sep (bug real encontrado y arreglado, ver `data/live/reconciliacion_posiciones.csv`
+filas 11-12 y 13-57): sports y weather comparten la MISMA wallet on-chain que
+cripto (POLY_DEPOSIT_WALLET, sin wallet propia -- mismo hecho que ya documenta
+`reconciliar_fill_fantasma.py`), pero este script solo leía `data/live/trades.csv`
+de cripto. Cualquier posición real de sports/weather con valor aparecía en
+`data-api/positions` (que es por wallet, no por ledger) y, al no encontrarse en
+el trades.csv de cripto, se marcaba como POSICION_FANTASMA en falso -- 31 avisos
+de Telegram en 31h por un trade real de weather (Guangzhou) que SÍ estaba
+correctamente registrado en `/root/polymarket-weather/data/live/trades.csv`.
+Arreglado leyendo también esos dos ledgers: a diferencia de cripto (market_id
+numérico, requiere `mapear_condition_a_market` vía gamma), sports y weather ya
+usan el `condition_id` completo (0x...) como `market_id` en su propio trades.csv
+(ver comentario equivalente en `reconciliar_fill_fantasma.py`), así que se
+indexan directamente por `conditionId` sin pasar por el mapeo de cripto.
 """
 import csv
 import glob
@@ -45,6 +60,14 @@ HIST_PATH = DIR_LIVE / "reconciliacion_posiciones.csv"
 NOTIF_PATH = DIR_LIVE / "posiciones_notificadas.json"
 MARKETS_GLOB = str(BASE / "data" / "markets" / "*.csv")
 DATA_API = "https://data-api.polymarket.com"
+
+# Otros ledgers que comparten la misma wallet on-chain (ver docstring 29-Sep).
+# Su trades.csv indexa por condition_id directamente -- no necesitan
+# mapear_condition_a_market (eso solo resuelve el market_id numérico de cripto).
+OTROS_LEDGERS = [
+    {"nombre": "sports", "trades_path": BASE / "data" / "sports" / "trades.csv"},
+    {"nombre": "weather", "trades_path": Path("/root/polymarket-weather/data/live/trades.csv")},
+]
 
 UMBRAL_DUST = 0.05        # $ por debajo de esto se ignora (redondeo/residuo sin valor)
 UMBRAL_CANJE_MIN = 90     # minutos tras CLOSED antes de alertar canje atascado
@@ -99,6 +122,22 @@ def cargar_trades() -> list[dict]:
         return list(csv.DictReader(f))
 
 
+def cargar_otros_trades_por_cid() -> dict:
+    """sports + weather, indexados por condition_id (== su market_id)."""
+    por_cid = {}
+    for ledger in OTROS_LEDGERS:
+        path = ledger["trades_path"]
+        if not path.exists():
+            continue
+        with open(path, encoding="utf-8") as f:
+            for r in csv.DictReader(f):
+                cid = r.get("market_id", "")
+                if not cid:
+                    continue
+                por_cid.setdefault(cid, []).append(r)
+    return por_cid
+
+
 def cargar_notificadas() -> dict:
     try:
         return json.loads(NOTIF_PATH.read_text()) if NOTIF_PATH.exists() else {}
@@ -141,6 +180,7 @@ def main() -> int:
     trades_por_mid = {}
     for r in trades:
         trades_por_mid.setdefault(r.get("market_id", ""), []).append(r)
+    otros_por_cid = cargar_otros_trades_por_cid()
 
     anomalias = []
 
@@ -150,6 +190,10 @@ def main() -> int:
         mid = mapa_cid_mid.get(cid)
         valor = float(p.get("currentValue") or 0)
         filas_mid = trades_por_mid.get(mid, []) if mid else []
+        if not filas_mid:
+            # no está en cripto -- puede ser sports/weather (mismo wallet,
+            # su trades.csv usa el condition_id como market_id directamente)
+            filas_mid = otros_por_cid.get(cid, [])
 
         if not filas_mid:
             anomalias.append({
@@ -172,7 +216,7 @@ def main() -> int:
             if edad_min is not None and edad_min > UMBRAL_CANJE_MIN:
                 anomalias.append({
                     "tipo": "CANJE_ATASCADO",
-                    "market_id": mid,
+                    "market_id": mid or f"cid:{cid[:12]}…",
                     "detalle": f"{p.get('title','?')} CLOSED hace {edad_min:.0f}min, "
                                f"CLOB aún muestra valor=${valor:.2f}",
                 })
