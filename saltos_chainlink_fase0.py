@@ -41,7 +41,15 @@ FUENTE = "polybolt"   # 24-Sep: PolyBolt spot = mismo precio/marca que Chainlink
 POLL_S = 0.05
 CAMPOS = ["fuente", "ts_utc", "activo", "marco", "slug", "market_id", "ini", "fin", "resto_s", "p_justo", "p_justo_prev",
           "direccion", "ref_twap", "spot", "edad_tick_s", "ask", "profundidad_eur", "ratio_vs_stake",
-          "vwap_fill", "fill_completo", "lat_libro_ms", "error"]
+          "vwap_fill", "fill_completo", "lat_libro_ms", "error",
+          # 29-Sep (idea_10_estrategias_ronda1_28sep #8, "fade de sobrerreacción al salto"): el
+          # lado del salto (arriba) mide MOMENTUM -- comprar la dirección del salto dio -0,065€/tr
+          # n=25.774 (analisis_leadlag_chainlink_libro_24sep.py). Para testear el FADE (comprar el
+          # lado CONTRARIO, apostando a que el salto es ruido) hace falta el ask real del otro
+          # lado en el MISMO instante -- no se puede derivar del lado del salto (spread+profundidad
+          # son asimétricos). Mismo patrón de _profundidad() replicado sobre el token contrario.
+          "ask_contrario", "profundidad_eur_contrario", "ratio_vs_stake_contrario",
+          "vwap_fill_contrario", "fill_completo_contrario"]
 _lock = threading.Lock()
 _pool = ThreadPoolExecutor(max_workers=4)
 
@@ -188,6 +196,7 @@ def _leer_y_registrar(fila, activo, marco_tag, ini, direccion):
             fila["market_id"] = mkt.get("id", "")
             ty, tn = token_ids(mkt)
             tok = ty if direccion == "Up" else tn
+            tok_contrario = tn if direccion == "Up" else ty
             if not tok:
                 fila["error"] = "sin_token"
             else:
@@ -198,6 +207,14 @@ def _leer_y_registrar(fila, activo, marco_tag, ini, direccion):
                     fila.update({"ask": d.get("mejor_ask"), "profundidad_eur": d.get("profundidad_eur"),
                                  "ratio_vs_stake": d.get("ratio_vs_stake"), "vwap_fill": d.get("vwap_fill_estimado"),
                                  "fill_completo": d.get("fill_completo_en_niveles")})
+                if tok_contrario:
+                    dc = _profundidad(tok_contrario, STAKE)
+                    if dc.get("ok"):
+                        fila.update({"ask_contrario": dc.get("mejor_ask"),
+                                     "profundidad_eur_contrario": dc.get("profundidad_eur"),
+                                     "ratio_vs_stake_contrario": dc.get("ratio_vs_stake"),
+                                     "vwap_fill_contrario": dc.get("vwap_fill_estimado"),
+                                     "fill_completo_contrario": dc.get("fill_completo_en_niveles")})
     except Exception as e:
         fila["error"] = f"{type(e).__name__}: {e}"[:120]
     fila["lat_libro_ms"] = round((time.perf_counter() - t0) * 1000)
@@ -210,6 +227,13 @@ def main():
         viejo = OUT.with_name("saltos_chainlink_fase0_rtds_v1.csv")
         if OUT.exists() and not viejo.exists() and "fuente" not in OUT.read_text(encoding="utf-8").split("\n", 1)[0]:
             OUT.rename(viejo)                              # cabecera nueva: no mezclar
+        # 29-Sep: cabecera ampliada con ask_contrario/etc (fade del salto, ver CAMPOS) --
+        # mismo criterio, archivar en vez de mezclar columnas nuevas en un CSV con cabecera vieja.
+        viejo_sin_contrario = OUT.with_name("saltos_chainlink_fase0_sin_contrario_hasta_29sep.csv")
+        if OUT.exists() and not viejo_sin_contrario.exists():
+            cabecera_actual = OUT.read_text(encoding="utf-8").split("\n", 1)[0]
+            if "ask_contrario" not in cabecera_actual:
+                OUT.rename(viejo_sin_contrario)
         time.sleep(3)
     _log(f"saltos_chainlink_fase0 arrancado (SALTO={SALTO}, fuente={FUENTE}, solo observación)")
     hist = {}      # (activo, marco, ini) -> deque[(t, p)]
