@@ -88,11 +88,11 @@
     "hi": 0.2,
     "n": 44,
     "pnl_medio": -0.5085,
-    "diff_vs_resto": -0.6665,
-    "p_valor": 0.0005,
+    "diff_vs_resto": -0.6658,
+    "p_valor": 0.0,
     "split_half_diff": [
-      -0.6942,
-      -0.6387
+      -0.6935,
+      -0.638
     ],
     "split_half_ok": true,
     "pnl_medio_loo": -0.6339,
@@ -155,11 +155,11 @@
     "hi": 0.5,
     "n": 50,
     "pnl_medio": -0.3503,
-    "diff_vs_resto": -0.401,
-    "p_valor": 0.0025,
+    "diff_vs_resto": -0.4031,
+    "p_valor": 0.0015,
     "split_half_diff": [
-      -0.2336,
-      -0.5684
+      -0.2357,
+      -0.5705
     ],
     "split_half_ok": true,
     "pnl_medio_loo": -0.3807,
@@ -185,11 +185,11 @@
     "hi": 0.18,
     "n": 40,
     "pnl_medio": -0.8615,
-    "diff_vs_resto": -0.8382,
+    "diff_vs_resto": -0.8385,
     "p_valor": 0.0,
     "split_half_diff": [
-      -0.9768,
-      -0.6997
+      -0.977,
+      -0.7
     ],
     "split_half_ok": true,
     "pnl_medio_loo": -1.0,
@@ -305,24 +305,24 @@
   },
   "SEGUIR#BTC#5min#0": {
     "n_dias": 27,
-    "pnl_sin_mejores_dias": -0.7488,
+    "pnl_sin_mejores_dias": -0.7493,
     "robusto_dias": false,
     "lo": 0.0,
     "hi": 0.05,
-    "n": 3407,
-    "pnl_medio": -0.5283,
-    "diff_vs_resto": -0.5156,
+    "n": 3413,
+    "pnl_medio": -0.5291,
+    "diff_vs_resto": -0.5164,
     "p_valor": 0.0,
     "split_half_diff": [
-      -0.9874,
-      -0.0442
+      -0.9873,
+      -0.0458
     ],
     "split_half_ok": true,
-    "pnl_medio_loo": -0.5555,
+    "pnl_medio_loo": -0.5562,
     "robusto_loo": true,
     "ci90_bootstrap": [
-      -0.6581,
-      -0.3826
+      -0.6588,
+      -0.379
     ],
     "robusto_bootstrap": true,
     "n_posiciones_buscadas": 96,
@@ -341,11 +341,11 @@
     "hi": 0.05,
     "n": 228,
     "pnl_medio": -1.0,
-    "diff_vs_resto": -0.9911,
+    "diff_vs_resto": -0.9919,
     "p_valor": 0.0,
     "split_half_diff": [
-      -0.9911,
-      -0.9911
+      -0.9919,
+      -0.9919
     ],
     "split_half_ok": true,
     "pnl_medio_loo": -1.0,
