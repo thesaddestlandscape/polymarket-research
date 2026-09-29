@@ -35,6 +35,8 @@ from pathlib import Path
 REPO = Path(__file__).resolve().parent
 CONFIG_LIVE = REPO / "data/live/config_live.json"
 PNL_FIEL = REPO / "data/shadow/pnl_fiel_por_estrategia.json"
+MICROBUCKETS = REPO / "data/shadow/microbuckets_ask_real_sostenidos.json"
+MB_FORWARD = REPO / "data/shadow/microbuckets_forward.json"
 LOG_GROWTH_LATCH = REPO / "data/live/vigia_log_growth_latch.json"
 BUSCADOR = REPO / "data/shadow/buscador_edge_perdido.json"
 OUT = REPO / "data/shadow/director_200k.json"
@@ -81,6 +83,34 @@ def seccion_pnl_fiel_sin_conectar(vivos: set) -> list[dict]:
                        + (" -- ANTES verificar features reales (protocolo pt.2)" if strategy in SOSPECHOSAS_INTEGRIDAD else ""),
         })
     out.sort(key=lambda x: -x["pnl_fiel_eur_sin_suelo"])
+    return out[:TOP_N]
+
+
+def seccion_edge_real_sin_conectar(vivos: set) -> list[dict]:
+    """29-Sep (Javi: "no de shadow, necesitamos reales"): micro-buckets con edge SOSTENIDO al ASK REAL
+    (analisis_microbuckets_ask_real_sostenidos.py: n>=40, EV>=+0.10, IC90 por días>0, >=60 % días
+    positivos, ambas mitades>0) de tuplas que NO están en pares_permitidos_live, con fill-ability real
+    del libro y el veredicto FORWARD (vigia_microbuckets_forward.py). Sustituye a pnl_fiel (simulación
+    nocional) como cabecera del informe."""
+    d = _cargar(MICROBUCKETS)
+    if not d:
+        return []
+    fw = {(i["tupla"], i["bucket"]): i for i in (_cargar(MB_FORWARD) or {}).get("items", [])}
+    out = []
+    for c in d.get("candidatas", []):
+        if not c.get("base_sin_bh") or c["tupla"] in vivos:
+            continue
+        f = fw.get((c["tupla"], c["bucket"]), {})
+        strategy = c["tupla"].split("#")[0]
+        out.append({
+            "tupla": c["tupla"], "bucket": c["bucket"], "n": c["n"], "ev_eur": c["ev_eur"],
+            "ic90_dias": c["ic90_dias"], "dias_pos": c["dias_pos"], "dias": c["dias"],
+            "fill_libro_real": c.get("fill_libro_real"), "bh_ok": c.get("bh_ok"),
+            "forward": f.get("veredicto", "sin_watchlist"), "n_fwd": f.get("n_fwd"), "ev_fwd": f.get("ev_fwd"),
+            "sospechosa_integridad": strategy in SOSPECHOSAS_INTEGRIDAD,
+            "accion": "vigilar FORWARD; promoción solo con forward confirmado + checklist 6 categorías + /code-review + OK Javi",
+        })
+    out.sort(key=lambda x: (x["forward"] != "confirmado_forward", -x["ev_eur"]))
     return out[:TOP_N]
 
 
@@ -134,25 +164,31 @@ def main() -> int:
         vivos = set()
 
     pnl_fiel_secc = seccion_pnl_fiel_sin_conectar(vivos)
+    edge_real_secc = seccion_edge_real_sin_conectar(vivos)
     payout_secc = seccion_payout_inverso_sin_decidir(vivos)
     buscador_secc = seccion_buscador_edge_perdido()
 
     salida = {
         "generado_utc": ahora.isoformat(timespec="seconds"),
         "n_tuplas_live_hoy": len(vivos),
-        "pnl_fiel_sin_conectar_top": pnl_fiel_secc,
+        "edge_real_sin_conectar_top": edge_real_secc,
+        "pnl_fiel_sin_conectar_top": pnl_fiel_secc,  # SOLO SIMULACION nocional, no accionable, no va a Telegram
         "pnl_fiel_sin_conectar_suma_top": round(sum(x["pnl_fiel_eur_sin_suelo"] for x in pnl_fiel_secc), 2),
         "payout_inverso_sin_decidir": payout_secc,
         "buscador_edge_perdido_forward_ok": buscador_secc,
         "caveats": [
-            "pnl_fiel: no modela CLV/discrepancia entre tuplas/streak_cooldown/abort_requote/fok_kill (ver cabecera shadow_pnl_fiel.py) -- orientativo con n bajo",
+            "pnl_fiel es SIMULACION nocional (no cobrable); la cabecera accionable es edge_real_sin_conectar_top (ask real). pnl_fiel: no modela CLV/discrepancia entre tuplas/streak_cooldown/abort_requote/fok_kill (ver cabecera shadow_pnl_fiel.py) -- orientativo con n bajo",
             "ninguna fila de este informe es una promoción -- checklist de 6 categorías + /code-review + OK Javi sigue siendo obligatorio",
         ],
     }
     OUT.write_text(json.dumps(salida, ensure_ascii=False, indent=1), encoding="utf-8")
 
     print(f"[director_200k] {len(vivos)} tuplas live hoy")
-    print(f"\n== PARTE B: edge propio sin conectar (pnl_fiel real, top {TOP_N}) ==")
+    print(f"\n== PARTE B: edge REAL (ask real, sostenido) sin conectar ({len(edge_real_secc)}) ==")
+    for x in edge_real_secc:
+        print(f"  {x['tupla']}[{x['bucket']}] n={x['n']} EV={x['ev_eur']:+.3f} dias+={x['dias_pos']}/{x['dias']} "
+              f"fill={x['fill_libro_real']} forward={x['forward']}")
+    print(f"\n== (solo simulación, no accionable) pnl_fiel nocional, top {TOP_N} ==")
     for x in pnl_fiel_secc:
         flag = " ⚠️ SOSPECHOSA (ver protocolo pt.2)" if x["sospechosa_integridad"] else ""
         print(f"  {x['tupla']}: +{x['pnl_fiel_eur_sin_suelo']}€ (n={x['n_ejecutado']}, "

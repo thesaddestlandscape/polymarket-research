@@ -57,14 +57,17 @@ def _texto_parte_b(d: dict) -> list[str]:
     lin = ["\n🧭 PARTE B -- dirigir y masterizar nuestras propias estrategias (director_200k)"]
     lin.append(f"  {d.get('n_tuplas_live_hoy', '?')} tuplas live hoy")
 
-    pf = d.get("pnl_fiel_sin_conectar_top", [])
-    lin.append(f"\n  💰 Edge propio sin conectar ({len(pf)} candidatas, n≥15, top {TOP_TELEGRAM}):")
-    if not pf:
-        lin.append("    (ninguna)")
-    for x in pf[:TOP_TELEGRAM]:
+    er = d.get("edge_real_sin_conectar_top", [])
+    lin.append(f"\n  💰 Edge REAL al ask real, sostenido, sin conectar ({len(er)} micro-buckets; NO simulación):")
+    if not er:
+        lin.append("    (ninguno)")
+    for x in er[:TOP_TELEGRAM]:
         flag = " ⚠️sospechosa" if x.get("sospechosa_integridad") else ""
-        lin.append(f"    {x['tupla']}: +{x['pnl_fiel_eur_sin_suelo']}€ (n={x['n_ejecutado']}, "
-                   f"fill={x['fill_rate']}){flag}")
+        fw = x.get("forward", "?")
+        nfw = f" n={x['n_fwd']}" if x.get("n_fwd") is not None else ""
+        lin.append(f"    {x['tupla'].replace('_', ' ')} [{x['bucket']}]: EV {x['ev_eur']:+.2f}/€ n={x['n']} "
+                   f"días+ {x['dias_pos']}/{x['dias']} fill {x.get('fill_libro_real')} → forward {fw}{nfw}{flag}")
+    lin.append("    (1.066 buckets mirados: ninguno pasa BH-FDR; solo cuentan si el FORWARD confirma)")
 
     pi = d.get("payout_inverso_sin_decidir", [])
     lin.append(f"\n  ⚠️ Payout inverso live sin decidir: {len(pi)}")
