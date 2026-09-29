@@ -37,6 +37,7 @@ REPO = Path(__file__).resolve().parent
 sys.path.insert(0, str(REPO))
 
 import live_trade as lt  # noqa: E402
+import libro_estado_ws as LE  # noqa: E402  -- libro L2 por WS con histórico ms (29-Sep, principio micro-latencia)
 from libro_multinivel_fase0 import _imbalance, _slope  # noqa: E402
 
 DIR_SHADOW = REPO / "data" / "shadow"
@@ -53,7 +54,10 @@ COLUMNS = ["ts_deteccion_utc", "ts_prediccion_utc", "lag_deteccion_s", "market_i
            "prob_yes_modelo", "edge_neto", "horas_a_vencimiento",
            "mejor_ask", "profundidad_eur", "ratio_vs_stake", "n_niveles_ask",
            "n_niveles_bid", "imbalance_top1", "imbalance_top5", "imbalance_top10",
-           "slope_ask", "slope_bid"]
+           "slope_ask", "slope_bid",
+           # 29-Sep (principio micro-latencia): libro por WS con histórico ms -> imbalance EN EL INSTANTE de la señal
+           "fuente", "ts_prediccion_ms", "imb1_senal", "imb5_senal", "imb10_senal", "edad_ms_senal",
+           "best_bid_senal", "best_ask_senal", "edad_ms_deteccion"]
 
 
 def _log(msg: str) -> None:
@@ -132,6 +136,13 @@ def _procesar_fila(row: dict, vistos: set) -> dict | None:
         return None
     precio_entrada = py if decision == "BUY_YES" else (1.0 - py)
 
+    ahora_ms = int(time.time() * 1000)
+    try:
+        ts_pred_ms = int(datetime.fromisoformat(row["timestamp_utc"].replace("Z", "+00:00")).timestamp() * 1000)
+    except Exception:
+        ts_pred_ms = None
+    ws_det = LE.en(token_id, ahora_ms)
+    ws_sen = LE.en(token_id, ts_pred_ms) if ts_pred_ms else None
     ok, asks, bids = _libro(token_id, precio_entrada)
     if not ok:
         return None
@@ -160,11 +171,17 @@ def _procesar_fila(row: dict, vistos: set) -> dict | None:
         "imbalance_top10": _imbalance(asks, bids, 10),
         "slope_ask": _slope(asks) if asks else "",
         "slope_bid": _slope(bids) if bids else "",
+        "fuente": "ws+rest" if ws_sen else "rest", "ts_prediccion_ms": ts_pred_ms or "",
+        "imb1_senal": ws_sen["imb1"] if ws_sen else "", "imb5_senal": ws_sen["imb5"] if ws_sen else "",
+        "imb10_senal": ws_sen["imb10"] if ws_sen else "", "edad_ms_senal": ws_sen["edad_ms"] if ws_sen else "",
+        "best_bid_senal": ws_sen["best_bid"] if ws_sen else "", "best_ask_senal": ws_sen["best_ask"] if ws_sen else "",
+        "edad_ms_deteccion": ws_det["edad_ms"] if ws_det else "",
     }
 
 
 def main() -> None:
-    _log("arrancado -- señales GBM_LATE*/UPDOWN_GBM_15M_TARDIO, imbalance del libro al detectar")
+    _log("arrancado -- señales GBM_LATE*/UPDOWN_GBM_15M_TARDIO, imbalance del libro al detectar + en el ms de la señal (WS 15min)")
+    LE.iniciar(("15min",))
     vistos = _vistos_cargar()
     archivo_actual = _archivo_hoy()
     posicion = 0

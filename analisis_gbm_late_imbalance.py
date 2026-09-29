@@ -38,6 +38,13 @@ def evaluar(min_n=40, out_print=print):
     """Devuelve dict resumen y, ademas, imprime via out_print la tabla completa."""
     rows = list(csv.DictReader(open(IN, encoding="utf-8")))
     rows.sort(key=lambda x: x["ts_deteccion_utc"])
+    # 29-Sep (principio micro-latencia): si hay libro WS con histórico ms, el imbalance relevante es el del
+    # INSTANTE de la señal (imb*_senal), no el de la consulta REST posterior.
+    n_ws = 0
+    for x in rows:
+        if x.get("imb5_senal") not in (None, "", "None"):
+            n_ws += 1
+            x["imbalance_top1"], x["imbalance_top5"], x["imbalance_top10"] = x["imb1_senal"], x["imb5_senal"], x["imb10_senal"]
     out = outcomes({x["market_id"] for x in rows})
     U = {}
     for x in rows:
@@ -50,7 +57,7 @@ def evaluar(min_n=40, out_print=print):
             continue
         U.setdefault((x["market_id"], x["strategy"]), x)
     U = list(U.values())
-    resumen = {"filas": len(rows), "unidades": len(U), "dias": len({x["ts_deteccion_utc"][:10] for x in rows}),
+    resumen = {"filas_ws_senal": n_ws, "filas": len(rows), "unidades": len(U), "dias": len({x["ts_deteccion_utc"][:10] for x in rows}),
                "terciles": [], "celdas_decisivas": []}
     out_print(f"filas={len(rows)} con resultado y fillable={len(U)}")
 

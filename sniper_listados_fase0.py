@@ -65,6 +65,7 @@ DIR_SHADOW = REPO / "data" / "shadow"
 OUT = DIR_SHADOW / "sniper_listados_fase0.csv"
 OUT_SEG = DIR_SHADOW / "sniper_listados_fase0_seguimiento.csv"
 VISTOS = DIR_SHADOW / "sniper_listados_fase0_vistos.json"
+PEND = DIR_SHADOW / "sniper_listados_fase0_pend.json"   # escaleras en seguimiento: sobrevive a reinicios de observadores
 
 WS_URL = "wss://ws-subscriptions-clob.polymarket.com/ws/market"
 VENTANA_MS_S = 120           # eventos del libro con timestamp ms durante los primeros N s
@@ -171,6 +172,36 @@ def _foto(m_info, offset_obj):
 
 
 
+def _pend_guardar(estado):
+    try:
+        PEND.write_text(json.dumps({m: {k: v for k, v in i.items()} for m, i in estado["seguidos"].items()}), encoding="utf-8")
+    except Exception:
+        pass
+
+
+async def _reanudar(ws, estado):
+    """Tras un reinicio: re-suscribe y reprograma las fotos de las escaleras aún dentro de su hora de seguimiento."""
+    try:
+        prev = json.loads(PEND.read_text(encoding="utf-8"))
+    except Exception:
+        return
+    ahora = time.time()
+    for mid, info in prev.items():
+        if info.get("hasta", 0) < ahora:
+            continue
+        estado["seguidos"][mid] = info
+        for tk in info["toks"]:
+            estado["por_token"][tk] = info
+        await ws.send(json.dumps({"assets_ids": list(info["toks"]), "operation": "subscribe"}))
+        for off in OFFSETS_S:
+            due = info["t0_ms"] / 1000 + off
+            if due + 60 < ahora:
+                continue                       # foto ya vencida hace >1 min: se descarta, no se falsea la edad
+            asyncio.get_running_loop().call_later(max(0.0, due - ahora),
+                                                  lambda i=info, o=off: asyncio.ensure_future(_foto_async(i, o)))
+    _log(f"reanudadas {len(estado['seguidos'])} escaleras tras reinicio")
+
+
 def _clasificar(q, slug):
     cat = clasificar(q, slug) or (
         "cripto_escalera" if re.search(r"above|reach|dip", q, re.I) and _activo(q) else "otros")
@@ -189,6 +220,9 @@ async def _sesion(estado):
     async with websockets.connect(WS_URL, ping_interval=20, ping_timeout=20) as ws:
         await ws.send(json.dumps({"type": "market", "assets_ids": [], "custom_feature_enabled": True}))
         _log("WS conectado, escuchando new_market")
+        if not estado.get("reanudado"):
+            estado["reanudado"] = True
+            await _reanudar(ws, estado)
         while True:
             try:
                 raw = await asyncio.wait_for(ws.recv(), RECV_TIMEOUT_S)
@@ -247,6 +281,7 @@ async def _on_nuevo(e, t_recv, ws, estado):
             "created": datetime.fromtimestamp(t_ev / 1000, timezone.utc).isoformat(), "activo": act,
             "t0_ms": t_ev, "toks": list(toks), "hasta": time.time() + SEGUIMIENTO_MAX_S}
     estado["seguidos"][mid] = info
+    _pend_guardar(estado)
     for tk in toks:
         estado["por_token"][tk] = info
     await ws.send(json.dumps({"assets_ids": list(toks), "operation": "subscribe"}))
@@ -292,6 +327,8 @@ def _limpiar(estado, ws):
         for tk in info["toks"]:
             estado["por_token"].pop(tk, None)
         asyncio.ensure_future(ws.send(json.dumps({"assets_ids": info["toks"], "operation": "unsubscribe"})))
+    if caducados:
+        _pend_guardar(estado)
 
 
 def main():
