@@ -1,48 +1,47 @@
 {
- "actualizado_utc": "2026-09-30T07:52:23+00:00",
+ "actualizado_utc": "2026-09-30T11:15:15+00:00",
  "ultimo_dia": {
-  "dia": "2026-09-29",
+  "dia": "2026-09-23",
   "train_dias": [
-   "2026-09-28",
-   "2026-09-27",
-   "2026-09-26"
+   "2026-09-22",
+   "2026-09-21"
   ],
-  "wallets_train_n>=15": 5473,
-  "seleccionadas": 113,
-  "eventos_dia_total": 317093,
+  "wallets_train_n>=15": 5488,
+  "seleccionadas": 114,
+  "eventos_dia_total": 514181,
   "test": {
    "0.3": {
-    "n": 6860,
-    "ev": 0.0914,
-    "t_iid": 4.23,
-    "n_mercados": 659,
-    "t_cluster_mercado": 1.96,
-    "wallets": 99,
-    "top5_share": 0.61,
-    "ev_sin_top5": 0.0492,
-    "t_cluster_sin_top5": 1.33
+    "n": 3107,
+    "ev": 0.011,
+    "t_iid": 0.55,
+    "n_mercados": 921,
+    "t_cluster_mercado": -0.55,
+    "wallets": 103,
+    "top5_share": 1.21,
+    "ev_sin_top5": -0.0028,
+    "t_cluster_sin_top5": -1.5
    },
    "1.0": {
-    "n": 6802,
-    "ev": 0.1051,
-    "t_iid": 4.52,
-    "n_mercados": 657,
-    "t_cluster_mercado": 2.31,
-    "wallets": 98,
-    "top5_share": 0.59,
-    "ev_sin_top5": 0.0601,
-    "t_cluster_sin_top5": 1.38
+    "n": 3120,
+    "ev": 0.0255,
+    "t_iid": 1.26,
+    "n_mercados": 913,
+    "t_cluster_mercado": 0.47,
+    "wallets": 104,
+    "top5_share": 0.98,
+    "ev_sin_top5": 0.0007,
+    "t_cluster_sin_top5": -1.58
    },
    "3.0": {
-    "n": 6446,
-    "ev": 0.0924,
-    "t_iid": 4.16,
-    "n_mercados": 652,
-    "t_cluster_mercado": 2.17,
-    "wallets": 98,
-    "top5_share": 0.64,
-    "ev_sin_top5": 0.0442,
-    "t_cluster_sin_top5": 1.31
+    "n": 2913,
+    "ev": 0.0202,
+    "t_iid": 0.84,
+    "n_mercados": 893,
+    "t_cluster_mercado": 0.14,
+    "wallets": 104,
+    "top5_share": 1.46,
+    "ev_sin_top5": -0.0114,
+    "t_cluster_sin_top5": -2.5
    }
   }
  },
@@ -50,79 +49,79 @@
   "dias_test": 8,
   "por_L_proxy_pf": {
    "0.3": {
-    "n": 39255,
-    "ev": 0.1015,
-    "t_iid": 11.06,
-    "n_mercados": 4897,
-    "t_cluster_mercado": 5.65,
-    "wallets": 495,
-    "top5_share": 0.53,
-    "ev_sin_top5": 0.0604,
-    "t_cluster_sin_top5": 5.11
+    "n": 37011,
+    "ev": 0.079,
+    "t_iid": 9.2,
+    "n_mercados": 5287,
+    "t_cluster_mercado": 3.83,
+    "wallets": 533,
+    "top5_share": 0.52,
+    "ev_sin_top5": 0.047,
+    "t_cluster_sin_top5": 3.97
    },
    "1.0": {
-    "n": 38517,
-    "ev": 0.1097,
-    "t_iid": 11.51,
-    "n_mercados": 4880,
-    "t_cluster_mercado": 5.76,
-    "wallets": 493,
-    "top5_share": 0.54,
-    "ev_sin_top5": 0.0647,
-    "t_cluster_sin_top5": 5.04
+    "n": 36424,
+    "ev": 0.0861,
+    "t_iid": 9.7,
+    "n_mercados": 5243,
+    "t_cluster_mercado": 4.51,
+    "wallets": 531,
+    "top5_share": 0.52,
+    "ev_sin_top5": 0.051,
+    "t_cluster_sin_top5": 4.24
    },
    "3.0": {
-    "n": 36114,
-    "ev": 0.0934,
-    "t_iid": 9.91,
-    "n_mercados": 4839,
-    "t_cluster_mercado": 4.67,
-    "wallets": 491,
-    "top5_share": 0.52,
-    "ev_sin_top5": 0.0571,
-    "t_cluster_sin_top5": 4.47
+    "n": 34153,
+    "ev": 0.0686,
+    "t_iid": 7.97,
+    "n_mercados": 5157,
+    "t_cluster_mercado": 3.32,
+    "wallets": 529,
+    "top5_share": 0.51,
+    "ev_sin_top5": 0.0425,
+    "t_cluster_sin_top5": 3.38
    }
   },
   "por_precio_L1_proxy": {
    "0.0": {
-    "n": 2058,
-    "ev": 1.383
+    "n": 1548,
+    "ev": 1.352
    },
    "0.1": {
-    "n": 2558,
-    "ev": 0.468
+    "n": 2117,
+    "ev": 0.416
    },
    "0.2": {
-    "n": 2718,
-    "ev": 0.25
+    "n": 2307,
+    "ev": 0.24
    },
    "0.3": {
-    "n": 3660,
-    "ev": 0.139
+    "n": 3176,
+    "ev": 0.113
    },
    "0.4": {
-    "n": 4632,
-    "ev": 0.003
+    "n": 4232,
+    "ev": 0.007
    },
    "0.5": {
-    "n": 4941,
-    "ev": -0.038
+    "n": 4574,
+    "ev": -0.025
    },
    "0.6": {
-    "n": 3493,
-    "ev": -0.075
+    "n": 3184,
+    "ev": -0.06
    },
    "0.7": {
-    "n": 3362,
-    "ev": -0.079
+    "n": 3219,
+    "ev": -0.068
    },
    "0.8": {
-    "n": 4417,
-    "ev": -0.051
+    "n": 4744,
+    "ev": -0.038
    },
    "0.9": {
-    "n": 6678,
-    "ev": -0.012
+    "n": 7323,
+    "ev": -0.01
    }
   },
   "composicion_L1_ask_real": {
