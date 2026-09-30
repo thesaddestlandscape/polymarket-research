@@ -8,6 +8,8 @@ Gamma, solo condition_id -- ver mean_reversion_penny_clipper_fase0.py).
 Cron sugerido: cada 5min (mismo orden que otros resolvers de FASE 0).
 """
 import csv
+import fcntl
+import json
 import sys
 import time
 from datetime import datetime, timezone
@@ -46,72 +48,103 @@ def _log(msg: str) -> None:
     print(f"[{datetime.now(timezone.utc).isoformat(timespec='seconds')}] {msg}", flush=True)
 
 
+def _desenlace(m: dict):
+    pr = m.get("outcomePrices")
+    pr = json.loads(pr) if isinstance(pr, str) else pr
+    if pr and len(pr) >= 2:
+        if float(pr[0]) >= 0.999:
+            return "Up"
+        if float(pr[1]) >= 0.999:
+            return "Down"
+    return None
+
+
+def precargar_desenlaces(cids, lote: int = 40) -> None:
+    """Rellena _CACHE por lotes. 30-Sep: gamma-api NO devuelve mercados CERRADOS por `condition_ids` a secas
+    (hay que pedir `closed=true`); sin eso solo se resolvía lo que se pillaba en el hueco entre resolución y
+    cierre (307 de 12.802 filas en el dry-run de longshot) y la muestra resuelta quedaba sesgada."""
+    pend = [c for c in dict.fromkeys(cids) if c and c not in _CACHE]
+    for k in range(0, len(pend), lote):
+        trozo = pend[k:k + lote]
+        for extra in ({"closed": "true"}, {}):
+            try:
+                r = _SESSION.get(f"{GAMMA}/markets", timeout=15,
+                                 params=[("condition_ids", c) for c in trozo] + [("limit", str(len(trozo)))] + list(extra.items()))
+                if r.status_code != 200:
+                    continue
+                for m in r.json() or []:
+                    out = _desenlace(m)
+                    if out and m.get("conditionId"):
+                        _CACHE[m["conditionId"]] = out
+            except Exception:
+                continue
+
+
 def outcome_oficial_por_cid(cid: str):
-    if cid in _CACHE:
-        return _CACHE[cid]
-    out = None
+    if cid not in _CACHE:
+        precargar_desenlaces([cid])
+    return _CACHE.get(cid)
+
+
+def reescribir_con_candado(path: Path, lock_path: Path, columnas: list, resolver_filas) -> None:
+    """Lee, resuelve y reescribe bajo el MISMO flock que usa el escritor: sin él, una fila añadida entre la
+    lectura y el replace se perdía. La consulta a gamma va ANTES (fuera del candado) vía precargar_desenlaces."""
+    lock_f = open(lock_path, "w")
     try:
-        r = _SESSION.get(f"{GAMMA}/markets", params={"condition_ids": cid}, timeout=8)
-        if r.status_code == 200:
-            data = r.json()
-            m = data[0] if data else {}
-            pr = m.get("outcomePrices")
-            import json as _json
-            pr = _json.loads(pr) if isinstance(pr, str) else pr
-            if pr and len(pr) >= 2:
-                if float(pr[0]) >= 0.999:
-                    out = "Up"
-                elif float(pr[1]) >= 0.999:
-                    out = "Down"
-    except Exception:
-        pass
-    if out:
-        _CACHE[cid] = out
-    return out
-
-
-def resolver_fichero(path: Path, columnas: list) -> None:
-    if not path.exists():
-        return
-    with open(path, encoding="utf-8") as f:
-        reader = csv.DictReader(f)
-        if reader.fieldnames != columnas:
-            _log(f"⚠️ {path.name} cabecera inesperada ({reader.fieldnames}) -- saltado")
+        fcntl.flock(lock_f, fcntl.LOCK_EX)
+        with open(path, encoding="utf-8") as f:
+            reader = csv.DictReader(f)
+            if reader.fieldnames != columnas:
+                _log(f"⚠️ {path.name} cabecera inesperada ({reader.fieldnames}) -- saltado")
+                return
+            rows = list(reader)
+        if not resolver_filas(rows):
             return
-        rows = list(reader)
-    ahora = time.time()
-    cambiado = False
-    pendientes_por_cid: dict = {}
-    for r in rows:
-        if r.get("outcome_real") or not r.get("condition_id"):
-            continue
-        pendientes_por_cid.setdefault(r["condition_id"], []).append(r)
-    for cid, filas in pendientes_por_cid.items():
-        try:
-            ts_end = float(filas[0]["ts_end"])
-        except (ValueError, IndexError):
-            continue
-        if ahora - ts_end < RESOLVE_DELAY_S:
-            continue
-        out = outcome_oficial_por_cid(cid)
-        if not out:
-            continue
-        # decision es "BUY_YES"/"BUY_NO"; outcome oficial es "Up"/"Down" --
-        # el mercado en si es un Up/Down, "Up" == YES gana.
-        outcome_real_yesno = "YES" if out == "Up" else "NO"
-        for r in filas:
-            r["outcome_real"] = outcome_real_yesno
-            r["resolved_ts"] = datetime.now(timezone.utc).isoformat(timespec="seconds")
-            cambiado = True
-    if cambiado:
         tmp = path.with_suffix(".tmp")
         with open(tmp, "w", newline="", encoding="utf-8") as f:
             w = csv.DictWriter(f, fieldnames=columnas)
             w.writeheader()
             w.writerows(rows)
         tmp.replace(path)
-        n_res = sum(1 for r in rows if r.get("outcome_real"))
-        _log(f"{path.name}: {n_res}/{len(rows)} resueltas")
+        _log(f"{path.name}: {sum(1 for r in rows if r.get('outcome_real'))}/{len(rows)} resueltas")
+    finally:
+        fcntl.flock(lock_f, fcntl.LOCK_UN)
+        lock_f.close()
+
+
+def _cids_vencidos(path: Path, fin_de) -> list:
+    """condition_id sin desenlace cuya ronda acabó hace más de RESOLVE_DELAY_S (lectura sin candado, solo para
+    saber qué pedir a gamma)."""
+    ahora, cids = time.time(), []
+    with open(path, encoding="utf-8") as f:
+        for r in csv.DictReader(f):
+            if r.get("outcome_real") or not r.get("condition_id"):
+                continue
+            try:
+                if ahora - fin_de(r) >= RESOLVE_DELAY_S:
+                    cids.append(r["condition_id"])
+            except Exception:
+                continue
+    return cids
+
+
+def resolver_fichero(path: Path, columnas: list) -> None:
+    if not path.exists():
+        return
+    precargar_desenlaces(_cids_vencidos(path, lambda r: float(r["ts_end"])))
+
+    def _resolver(rows) -> bool:
+        cambiado = False
+        for r in rows:
+            out = None if r.get("outcome_real") else _CACHE.get(r.get("condition_id"))
+            if out:
+                # decision es "BUY_YES"/"BUY_NO"; el desenlace oficial es "Up"/"Down" ("Up" == YES gana)
+                r["outcome_real"] = "YES" if out == "Up" else "NO"
+                r["resolved_ts"] = datetime.now(timezone.utc).isoformat(timespec="seconds")
+                cambiado = True
+        return cambiado
+
+    reescribir_con_candado(path, Path(str(path) + ".lock"), columnas, _resolver)
 
 
 def main():

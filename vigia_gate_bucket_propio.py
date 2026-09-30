@@ -59,7 +59,7 @@ def main() -> int:
     # shadow_postmortem.py del mismo día -- aquí el fix mínimo seguro es
     # margen de timeout, no reescribir el análisis.
     r = subprocess.run([sys.executable, str(REPO / "analisis_gate_bucket_propio_28jul.py")],
-                        capture_output=True, text=True, timeout=300, cwd=str(REPO))
+                        capture_output=True, text=True, timeout=900, cwd=str(REPO))
     if r.returncode != 0:
         print(f"ERROR ejecutando analisis_gate_bucket_propio_28jul.py: {r.stderr[-2000:]}")
         return 1
@@ -83,7 +83,7 @@ def main() -> int:
     # degradar (malo_confirmado ya es la alarma final).
     r_fill = subprocess.run(
         [sys.executable, str(REPO / "analisis_gate_bucket_propio_fillable_03ago.py")],
-        capture_output=True, text=True, timeout=300, cwd=str(REPO))  # 07-Sep: mismo motivo, margen de sobra
+        capture_output=True, text=True, timeout=900, cwd=str(REPO))  # 07-Sep: mismo motivo, margen de sobra
     if r_fill.returncode != 0:
         print(f"⚠️ ERROR ejecutando analisis_gate_bucket_propio_fillable_03ago.py "
               f"(la alerta sigue sin la nota de fill-ability): {r_fill.stderr[-1000:]}")

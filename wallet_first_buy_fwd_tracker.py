@@ -40,6 +40,7 @@ DATALOGS = Path("/root/polymarket-research-datalogs")
 DIR = REPO / "data" / "shadow" / "wallet_first_buy"
 OUT = REPO / "data" / "shadow" / "wallet_first_buy_fwd.json"
 HIST = REPO / "data" / "shadow" / "wallet_first_buy_fwd_historial.jsonl"
+CACHE_DESENLACES = DIR / "desenlaces_oficiales.json"
 FEE = 0.07
 LS = [0.3, 1.0, 3.0]
 LSEL = 1.0
@@ -78,9 +79,49 @@ def _abrir_dia(dia):
     return gzip.open(f, "rt", encoding="utf-8", errors="replace", newline="") if f.exists() else None
 
 
+def _desenlaces_oficiales(slugs) -> dict:
+    """slug -> "Up"/"Down" oficial (gamma-api, `closed=true`: sin ese parámetro gamma no devuelve mercados
+    cerrados), con caché en disco. Fail-soft: lo que no se consiga se queda sin desenlace oficial."""
+    import requests
+    cache = {}
+    try:
+        cache = json.loads(CACHE_DESENLACES.read_text())
+    except Exception:
+        pass
+    pend = [s for s in dict.fromkeys(slugs) if s not in cache]
+    ses = requests.Session()
+    for k in range(0, len(pend), 40):
+        trozo = pend[k:k + 40]
+        try:
+            r = ses.get("https://gamma-api.polymarket.com/markets", timeout=20,
+                        params=[("slug", s) for s in trozo] + [("closed", "true"), ("limit", "40")])
+            for m in r.json() or []:
+                pr = m.get("outcomePrices")
+                pr = json.loads(pr) if isinstance(pr, str) else pr
+                if pr and len(pr) >= 2 and float(pr[0]) >= 0.999:
+                    cache[m["slug"]] = "Up"
+                elif pr and len(pr) >= 2 and float(pr[1]) >= 0.999:
+                    cache[m["slug"]] = "Down"
+        except Exception as e:
+            print(f"⚠️ desenlaces oficiales: lote {k // 40} falló ({type(e).__name__})", flush=True)
+    if pend:
+        corte = datetime.now(timezone.utc).timestamp() - 20 * 86400      # poda: fuera mercados de hace >20 días
+        cache = {s: o for s, o in cache.items() if int(s.rsplit("-", 1)[-1]) >= corte}
+        tmp = CACHE_DESENLACES.with_name(CACHE_DESENLACES.name + f".tmp{os.getpid()}")
+        tmp.write_text(json.dumps(cache))
+        tmp.replace(CACHE_DESENLACES)
+    return cache
+
+
 def procesar_dia(dia):
-    """Eventos de primera compra del día con precio de seguimiento a cada L y ganador inferido de
-    los trades finales del mercado (>=3 trades en los últimos 20 s, mediana de p_Up)."""
+    """Eventos de primera compra del día con precio de seguimiento a cada L y ganador OFICIAL del mercado.
+
+    30-Sep, sesgo de supervivencia cazado: el ganador se infería de los trades finales (>=3 trades en los
+    últimos 20 s, mediana de p_Up) y, si no había 3, el mercado ENTERO se descartaba. Los mercados sin trades al
+    final son los que ya estaban decididos, que es donde el longshot pierde: 25-29 Sep, mismas wallets y mismo
+    ask real, longshot dentro del pool +0,32 por € (n=3.525) y fuera −0,31 (n=9.107); todas juntas −0,13
+    (6/6 días <=0). El "longshot CANDIDATA robusta +0,37" era ese filtro. Ahora manda el desenlace oficial y la
+    inferencia por trades solo rellena lo que gamma no devuelva."""
     fh = _abrir_dia(dia)
     if fh is None:
         return None
@@ -115,6 +156,11 @@ def procesar_dia(dia):
         late = sorted(b for a, b, _ in v if a >= end - 20)
         win[k] = None if len(late) < 3 else ("Up" if late[len(late) // 2] > 0.5 else "Down" if late[len(late) // 2] < 0.5 else None)
         ser[k] = ([a for a, _, _ in v], [b for _, b, _ in v], end)
+    ofi = _desenlaces_oficiales({k for (k, _, _) in first})
+    n_inf = sum(1 for k in win if k not in ofi and win[k] is not None)
+    win = {k: ofi.get(k, win[k]) for k in win}
+    print(f"{dia}: {len(win)} mercados, {sum(1 for k in win if k in ofi)} con desenlace oficial, "
+          f"{n_inf} solo inferidos, {sum(1 for v in win.values() if v is None)} sin desenlace", flush=True)
     filas = []
     for (k, w, o), (t, p, u, act, marco) in first.items():
         ts_, ups, end = ser[k]
