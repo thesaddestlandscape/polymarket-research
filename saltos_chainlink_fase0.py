@@ -37,7 +37,7 @@ MARCOS = {"5m": 300, "15m": 900}
 SALTO = 0.08
 CADA_S = 0.25
 STAKE = 1.05
-FUENTE = "polybolt"   # 24-Sep: PolyBolt spot = mismo precio/marca que Chainlink, ~1,2 s antes que RTDS
+FUENTE = "polybolt"   # OJO (30-Sep): PolyBolt spot es PYTH, no Chainlink (campo source); difiere 0,2-0,5 bps de mediana. Los "saltos" que mide este observador son de Pyth.
 POLL_S = 0.05
 CAMPOS = ["fuente", "ts_utc", "activo", "marco", "slug", "market_id", "ini", "fin", "resto_s", "p_justo", "p_justo_prev",
           "direccion", "ref_twap", "spot", "edad_tick_s", "ask", "profundidad_eur", "ratio_vs_stake",

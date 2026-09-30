@@ -335,6 +335,14 @@ MODO_TWAP = True
 ASK_TWAP_MIN, ASK_TWAP_MAX = 0.25, 0.65
 TWAP_N_MIN_TICKS = 20                    # ticks mínimos en [inicio-60, inicio] para fiarse del TWAP de apertura
 TWAP_N_MIN_CIERRE = 10                   # ticks mínimos ya transcurridos en [fin-60, ahora] (/code-review)
+# 30-Sep (/code-review del filtro de polybolt_fallback): además de un mínimo de ticks se exige
+# COBERTURA de la ventana. Sin las filas de fallback, un silencio de RTDS deja un hueco entero y
+# un TWAP con 20 de 60 ticks salía de menos de media ventana. Espaciado real medido: 99,9 % de
+# los ticks a <=3 s del anterior. Con un hueco mayor que esto, el TWAP no se da por válido.
+# 10 s y no 5 s: medido el 29-Sep, 5 s dejaba sin operar el 10,1 % de los mercados de 5 min y
+# 10 s el 2,1 %; un hueco de <=10 s en una media de 60 s mete un error menor que el sesgo de
+# Pyth que se está quitando (+0,1/+0,4 bps).
+TWAP_HUECO_MAX_S = 10.0
 TWAP_DESDE_PATH = REPO / "data" / "live" / "precierre_twap_desde.txt"   # arranque real del modo (kill-switch)
 # 24-Sep (OK Javi "dale a exigir z>=1"): filtro de margen. Las 2 pérdidas del 24-Sep 12:15 eran
 # photo finish (SOL +0,45 pb, DOGE +0,06 pb a T-44 s). z = |ln(proy/ref)| / (vol_1s * sqrt(var del
@@ -477,7 +485,8 @@ class _Precalculo:
             ref_open = _TAIL.precio_en(activo, ts_start) or _TAIL.precio_en(activo, ts_start + 2)
             ref_twap, n_twap = _media_tail(activo, ts_start - 60, ts_start)
             self.mercados[activo] = {
-                "ref_twap": ref_twap if n_twap >= TWAP_N_MIN_TICKS else None,
+                "ref_twap": ref_twap if (n_twap >= TWAP_N_MIN_TICKS and _hueco_max_tail(
+                    activo, ts_start - 60, ts_start) <= TWAP_HUECO_MAX_S) else None,
                 "market_id": mkt.get("id", ""), "question": mkt.get("question", ""),
                 "end_date": mkt.get("endDate", ""),
                 "token_yes": token_yes, "token_no": token_no, "ref_open": ref_open,
@@ -636,6 +645,26 @@ def _media_tail(activo: str, t0: float, t1: float):
     return (sum(vals) / len(vals), len(vals)) if vals else (None, 0)
 
 
+def _hueco_max_tail(activo: str, t0: float, t1: float) -> float:
+    """Mayor intervalo sin ticks (hora del ORÁCULO) dentro de [t0, t1], contando los bordes
+    (t0 -> primer tick y último tick -> t1). Sin ticks en el tramo: t1 - t0."""
+    ts = []
+    with _TAIL._lock:   # desde el final y cortando al salir de la ventana, como _z_margen
+        for t, _ in reversed(_TAIL._buf_oracle.get(activo, ())):
+            if t < t0:
+                break
+            if t <= t1:
+                ts.append(t)
+    ts.reverse()
+    if not ts:
+        return max(0.0, t1 - t0)
+    hueco = max(ts[0] - t0, t1 - ts[-1])
+    for a, b in zip(ts, ts[1:]):
+        if b - a > hueco:
+            hueco = b - a
+    return hueco
+
+
 def _ultimo_oracle(activo: str):
     with _TAIL._lock:
         dq = _TAIL._buf_oracle.get(activo)
@@ -657,6 +686,8 @@ def _twap_proyectado(activo: str, ts_end: float):
         return spot
     if m is None or n < TWAP_N_MIN_CIERRE:
         return None
+    if _hueco_max_tail(activo, ts_end - 60, t_hasta) > TWAP_HUECO_MAX_S:
+        return None   # ventana de cierre con hueco: fail-closed (ver TWAP_HUECO_MAX_S)
     return (m * n + spot * resto) / (n + resto)
 
 
@@ -1465,8 +1496,58 @@ def _bucle_marco(marco: str) -> None:
             time.sleep(5)
 
 
+SILENCIO_CHAINLINK_AVISO_S = 60.0   # ráfagas normales de silencio de RTDS: mediana 15 s, máx 52 s
+
+
+def _hilo_vigia_chainlink() -> None:
+    """30-Sep (/code-review + OK Javi): este ejecutor ignora las filas polybolt_fallback, así que
+    si RTDS Chainlink calla (o se retira) deja de operar SIN error. Este hilo lo hace visible:
+    log + Telegram cuando un activo lleva más de SILENCIO_CHAINLINK_AVISO_S sin tick Chainlink
+    real, y otro cuando vuelve. Por activo (una sola moneda callada también deja de operar) y
+    con latch en memoria: un aviso por episodio. Un activo sin NINGÚN tick en la cola cuenta su
+    silencio desde el arranque del hilo (caso: arranque con RTDS ya caído o retirado). Solo
+    informa, no decide nada."""
+    t_arranque = time.time()
+    callados: set = set()
+    while True:
+        try:
+            ahora = time.time()
+            nuevos, vueltos = [], []
+            for a in ASSETS:
+                tick = _ultimo_tick(a)
+                edad = ahora - (tick[0] if tick is not None else t_arranque)
+                if edad > SILENCIO_CHAINLINK_AVISO_S and a not in callados:
+                    callados.add(a)
+                    nuevos.append(f"{a} ({edad:.0f}s)")
+                elif tick is not None and edad <= CHAINLINK_MAX_EDAD_S and a in callados:
+                    callados.discard(a)
+                    vueltos.append(a)
+            if nuevos:
+                txt = (f"🚨 PRECIERRE/NAIVE: sin tick Chainlink real en {', '.join(nuevos)}. Esos activos no "
+                       f"operan (el ejecutor ignora el fallback Pyth de PolyBolt). Revisar RTDS.")
+            elif vueltos:
+                txt = (f"✅ PRECIERRE/NAIVE: ticks Chainlink reales de vuelta en {', '.join(vueltos)}."
+                       + (f" Siguen callados: {', '.join(sorted(callados))}." if callados else " Todos operativos."))
+            else:
+                txt = None
+            if txt:
+                _log(txt)
+                try:
+                    lt.enviar_telegram(txt)
+                except Exception as e:
+                    _log(f"(no se pudo avisar por Telegram: {e})")
+        except Exception as e:
+            _log(f"[vigia_chainlink] error ({type(e).__name__}: {e})")
+        time.sleep(5)
+
+
 def main() -> None:
+    # 30-Sep (OK Javi): este proceso decide con dinero real -> solo ticks Chainlink de verdad.
+    # Las filas `polybolt_fallback` de chainlink_*.csv son Pyth; sin ellas, en un silencio de
+    # RTDS no hay tick fresco y las guardas de frescura existentes ya bloquean (fail-closed).
+    _TAIL.excluir_fuentes = frozenset({"polybolt_fallback"})
     _TAIL.arrancar()
+    threading.Thread(target=_hilo_vigia_chainlink, daemon=True, name="precierre_vigia_chainlink").start()
     time.sleep(2)
     _log(f"resolution_sniper_precierre_executor arrancado -- DRY_RUN={DRY_RUN} "
          f"offset={OFFSET_S}s stake={STAKE_EUR}€ activos={ASSETS} marcos={list(MARCOS)} "

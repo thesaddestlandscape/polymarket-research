@@ -179,6 +179,11 @@ class _ChainlinkTail:
         self._lock = threading.Lock()
         self._pos = 0
         self._archivo_actual = None
+        # 30-Sep: fuentes (5ª columna `source` del CSV) a IGNORAR. Vacío por defecto = todo
+        # igual que antes para los observadores. El ejecutor de precierre (dinero real) pone
+        # {"polybolt_fallback"}: esas filas son precio PYTH (no Chainlink, sesgo +0,1/+0,4 bps)
+        # que el failover de fetch_polybolt_prices.py escribe cuando RTDS calla.
+        self.excluir_fuentes = frozenset()
 
     def _archivo_hoy(self) -> Path:
         return DIR_PRICES / f"chainlink_{datetime.now(timezone.utc).strftime('%Y-%m-%d')}.csv"
@@ -204,6 +209,8 @@ class _ChainlinkTail:
                                     continue
                                 asset = partes[1]
                                 if asset not in self._buf:
+                                    continue
+                                if self.excluir_fuentes and len(partes) > 4 and partes[4] in self.excluir_fuentes:
                                     continue
                                 try:
                                     ts = datetime.fromisoformat(partes[0]).timestamp()
