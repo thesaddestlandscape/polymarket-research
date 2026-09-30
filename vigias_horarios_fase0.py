@@ -74,6 +74,7 @@ import vigia_log_growth
 import vigia_boost_eth15_ballenas
 import vigia_pipeline_latencia
 import vigia_resumen_alertas_horario
+import vigia_loggers_silenciosos  # 30-Sep: ficheros de datos que dejan de crecer (hueco WM 8-22 Sep)
 
 # (modulo, fichero_log_propio -- EXACTO el que ya usaba su entrada de cron)
 VIGIAS = [
@@ -95,6 +96,7 @@ VIGIAS = [
     (vigia_log_growth, "vigia_log_growth.log"),
     (vigia_boost_eth15_ballenas, "vigia_boost_eth15_ballenas.log"),
     (vigia_pipeline_latencia, "vigia_pipeline_latencia.log"),
+    (vigia_loggers_silenciosos, "vigia_loggers_silenciosos.log"),
     (vigia_resumen_alertas_horario, "vigia_resumen_alertas_horario.log"),
 ]
 

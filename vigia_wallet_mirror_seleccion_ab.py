@@ -15,7 +15,7 @@ La selección de cada día usa solo días anteriores (walk-forward); los criteri
 antes de mirar ningún resultado y no se retocan. Comisión: 7 % x (1 - precio) por euro, gane o pierda.
 Limitación: solo entran wallets que el método histórico ya valida (son las únicas que el dry-run registra); las
 que ganan ahora y no están validadas se miden aparte en la familia TOMADORA (seleccion_tomadores_persistentes.py).
-Hueco de datos 08-22 Sep (el dry-run no registró); los días sin 3 días previos con datos no se miden.
+El hueco 08-22 Sep del dry-run se cubre con el CSV reconstruido (ver _cargar); esos días van marcados.
 
 Solo observación: no cambia qué wallets opera nadie. Salida: data/shadow/wallet_mirror_seleccion_ab.json.
 Cron diario 07:44 con --telegram.  Veredicto a favor de B = >=10 días medidos, EV(B) - EV(noB) con IC90 por días >0
@@ -33,6 +33,8 @@ from pathlib import Path
 REPO = Path(__file__).resolve().parent
 sys.path.insert(0, str(REPO))
 SRC = REPO / "data" / "shadow" / "wallet_mirror_executor_dryrun.csv"
+SRC_RECONSTRUIDO = REPO / "data" / "shadow" / "wallet_mirror_executor_dryrun_reconstruido_08_22sep.csv"
+DIAS_RECONSTRUIDOS = set()
 OUT = REPO / "data" / "shadow" / "wallet_mirror_seleccion_ab.json"
 FEE = 0.07
 VENTANA, N_MIN, DIAS_MIN, FRAC_DIAS_POS = 7, 15, 3, 0.60        # FIJADOS 30-Sep, no tocar
@@ -40,9 +42,21 @@ GATE_DIAS, GATE_EV = 10, 0.10
 
 
 def _cargar() -> dict:
-    """dia -> [(clave, marco, pnl)] con señales ejecutables y resueltas."""
+    """dia -> [(clave, marco, pnl)] con señales ejecutables y resueltas. El hueco 08-22 Sep del dry-run se rellena
+    con el CSV reconstruido (reconstruir_wallet_mirror_executor_08_22sep.py; validado en el solape 23-24 Sep:
+    precisión 0,81, cobertura 0,86, acierto 0,766 vs 0,783), SOLO en los días que el original no tiene."""
+    por_dia = _leer(SRC)
+    if SRC_RECONSTRUIDO.exists():
+        for dia, filas in _leer(SRC_RECONSTRUIDO).items():
+            if dia not in por_dia:
+                por_dia[dia] = filas
+                DIAS_RECONSTRUIDOS.add(dia)
+    return por_dia
+
+
+def _leer(ruta: Path) -> dict:
     por_dia = defaultdict(list)
-    with open(SRC, encoding="utf-8", errors="replace", newline="") as f:
+    with open(ruta, encoding="utf-8", errors="replace", newline="") as f:
         for r in csv.DictReader(f):
             if r.get("acierto") not in ("0", "1") or r.get("sigue_fillable_en_decision") != "1":
                 continue
@@ -135,7 +149,7 @@ def main() -> int:
                  "B mejor que noB pero sin edge suficiente" if dif and dif[0] > 0 else "sin diferencia demostrada")
     salida = {"generado_utc": datetime.now(timezone.utc).isoformat(timespec="seconds"),
               "criterio_B": f"ventana {VENTANA} d, n>={N_MIN}, >={DIAS_MIN} días con datos, >={FRAC_DIAS_POS:.0%} días +, EV neto>0 (fijado 30-Sep)",
-              "dias_medidos": len(detalle), "resumen": res, "desde_23sep": rec, "ic90_diferencia_B_menos_noB": dif,
+              "dias_medidos": len(detalle), "dias_reconstruidos": sorted(DIAS_RECONSTRUIDOS), "resumen": res, "desde_23sep": rec, "ic90_diferencia_B_menos_noB": dif,
               "veredicto": veredicto, "por_dia": detalle}
     tmp = OUT.with_name(OUT.name + f".tmp{os.getpid()}")
     tmp.write_text(json.dumps(salida, indent=1, ensure_ascii=False), encoding="utf-8")
@@ -144,7 +158,7 @@ def main() -> int:
     def _l(nombre, r):
         return (f"{nombre}: n={r['n']} días={r['dias']} EV {r['ev']:+.4f} por € IC90 {r['ic90']} ({r['dias_positivos']}/{r['dias']} días +)"
                 if r.get("n") else f"{nombre}: sin datos")
-    lineas = [f"🪞 Wallet Mirror, ¿con qué vara elegir wallets? ({len(detalle)} días medidos, al ask real, neto de comisión)",
+    lineas = [f"🪞 Wallet Mirror, ¿con qué vara elegir wallets? ({len(detalle)} días medidos, {len(DIAS_RECONSTRUIDOS)} de ellos reconstruidos; al ask real, neto de comisión)",
               _l("A  todas las validadas por histórico", res["A"]["todos"]),
               _l("B  ventana móvil 7 d neta >0", b),
               _l("noB el resto", res["noB"]["todos"]),

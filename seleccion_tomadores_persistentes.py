@@ -178,6 +178,37 @@ def seleccionar(acc: dict) -> dict:
     return sel
 
 
+CAND_N_MIN, CAND_MERC_MIN, CAND_MAX = 200, 100, 350
+HIST_UNIVERSO = DIR_SHADOW / "tomadores_universo_hist"
+
+
+def seleccionar_candidatas(acc: dict, excluir: set) -> dict:
+    """30-Sep (Javi: "si solo hay wallets que el método ya valida, no van a entrar nunca nuevas"): universo AMPLIO
+    de ventana móvil para que el observador mida al ask real también a wallets que ningún método ha validado aún.
+    Criterio deliberadamente laxo (actividad sistemática y neto de fee >0 en la ventana, sin exigir agresividad ni
+    días positivos): aquí no se decide nada, solo se captura. Tope CAND_MAX por volumen para acotar consultas de libro."""
+    cand = {}
+    for w, a in acc.items():
+        if w in excluir or a["n"] < CAND_N_MIN or a["merc"] < CAND_MERC_MIN or a["cl"] < COB_MIN * a["vol"] or a["cl"] <= 0:
+            continue
+        neto = a["pnl"] - a["fee"]
+        if neto > 0:
+            cand[w] = dict(n=a["n"], vol=round(a["vol"]), neto=round(neto, 2), neto_pct_vol=round(neto / a["vol"] * 100, 2),
+                           agresiva_pct=round(a["agr"] / a["cl"] * 100), mercados=a["merc"],
+                           precio_medio=round(a["pv"] / a["vol"], 3), dias_positivos=f"{a['dpos']}/{a['nd']}", grupo="candidata")
+    return dict(sorted(cand.items(), key=lambda kv: -kv[1]["vol"])[:CAND_MAX])
+
+
+def _grupos_del_dia(dia: str) -> dict:
+    """wallet -> grupo según el universo vigente ese día (histórico fechado). Sin histórico (antes del 30-Sep) todo
+    lo capturado era del universo estricto."""
+    try:
+        fs = sorted(f for f in HIST_UNIVERSO.glob("*.json") if f.stem <= dia)
+        return json.loads(fs[-1].read_text(encoding="utf-8")) if fs else {}
+    except Exception:
+        return {}
+
+
 def dias_cerrados(n: int) -> list:
     hoy = datetime.now(timezone.utc).date()
     return [(hoy - timedelta(days=k)).strftime("%Y-%m-%d") for k in range(n, 0, -1)]
@@ -201,11 +232,14 @@ def copia_con_latencia_real() -> dict:
     celdas, total = defaultdict(lambda: defaultdict(list)), defaultdict(list)
     wallets_celda, lags, dias = defaultdict(lambda: defaultdict(int)), [], set()
     micro, micro_w, micro_m = defaultdict(lambda: defaultdict(list)), defaultdict(lambda: defaultdict(int)), defaultdict(set)
+    cmicro, cmicro_w, cmicro_m = defaultdict(lambda: defaultdict(list)), defaultdict(lambda: defaultdict(int)), defaultdict(set)
+    ctotal, cwallet = defaultdict(list), defaultdict(lambda: defaultdict(list))
     for p in sorted(DATALOGS.glob("tomadores_persistentes_fase0_*.csv*")):
         dia = p.name.split("_")[-1][:10]
         out = _desenlaces(dia)
         if not out:
             continue
+        grupos = _grupos_del_dia(dia)
         with _abrir(p) as f:
             for r in csv.DictReader(f):
                 g = out.get(r.get("market_slug", ""))
@@ -217,6 +251,16 @@ def copia_con_latencia_real() -> dict:
                     continue
                 ac = 1 if r["lado"] == g else 0
                 pnl = ac / a - 1 - FEE * (1 - a)
+                if grupos.get(r["wallet"], "persistente") == "candidata":
+                    # universo amplio: rejilla propia, nunca mezclada con las persistentes
+                    b5 = int(a * 20 + 1e-9) / 20
+                    k5 = (r["activo"], r["marco"], f"{b5:.2f}")
+                    cmicro[k5][dia].append(pnl)
+                    cmicro_w[k5][r["wallet"]] += 1
+                    cmicro_m[k5].add(r.get("market_slug", ""))
+                    ctotal[dia].append(pnl)
+                    cwallet[r["wallet"]][dia].append(pnl)
+                    continue
                 b = int(a * 10) / 10
                 for clave in (f"{r['marco']}|TODOS|[{b:.1f},{b + 0.1:.1f})", f"{r['marco']}|{r['activo']}|[{b:.1f},{b + 0.1:.1f})"):
                     celdas[clave][dia].append(pnl)
@@ -245,13 +289,29 @@ def copia_con_latencia_real() -> dict:
     lags.sort()
     return dict(dias=sorted(dias), n=len(x), ev=round(sum(x) / len(x), 4) if x else None, ic90=_ic90_por_dias(total),
                 lag_ms_mediana=lags[len(lags) // 2] if lags else None, celdas=res,
-                microbuckets=_microbuckets(micro, micro_w, micro_m))
+                microbuckets=_microbuckets(micro, micro_w, micro_m),
+                candidatas=_resumen_candidatas(ctotal, cwallet, _microbuckets(cmicro, cmicro_w, cmicro_m, familia="CANDIDATA")))
+
+
+def _resumen_candidatas(ctotal: dict, cwallet: dict, mb: dict) -> dict:
+    """Universo amplio al ask real: total, rejilla de 5c y cuántas wallets llevan EV>0 con n>=15 (las que podrían
+    "entrar" por méritos medidos a NUESTRO precio, no al suyo)."""
+    x = [v for d in ctotal.values() for v in d]
+    buenas = {}
+    for w, pd in cwallet.items():
+        v = [y for d in pd.values() for y in d]
+        if len(v) >= MB_N_SEGUIR and sum(v) > 0:
+            buenas[w] = dict(n=len(v), dias=len(pd), ev=round(sum(v) / len(v), 4),
+                             dias_positivos=sum(1 for d in pd.values() if sum(d) > 0))
+    return dict(n=len(x), dias=len(ctotal), wallets=len(cwallet), ev=round(sum(x) / len(x), 4) if x else None,
+                ic90=_ic90_por_dias(ctotal), wallets_ev_positivo=dict(sorted(buenas.items(), key=lambda kv: -kv[1]["n"])[:60]),
+                microbuckets=mb)
 
 
 MB_N, MB_DIAS, MB_EV, MB_TOP, MB_N_SEGUIR = 40, 10, 0.10, 30, 15
 
 
-def _microbuckets(micro: dict, micro_w: dict, micro_m: dict) -> dict:
+def _microbuckets(micro: dict, micro_w: dict, micro_m: dict, familia: str = "TOMADORA") -> dict:
     """Familia de observación TOMADORA#<moneda>#<marco>, bucket de 5c del ask real. NO es una tupla live: nada de
     aquí abre dinero real. Confirmado = n>=40, >=10 días, EV>=+0,10, IC90 por días >0, wallet top <=30 %, las dos
     mitades de días >0 y crecimiento compuesto g(f=10 %) >0. Al lado, el veredicto del MISMO bucket en el gate de
@@ -275,7 +335,7 @@ def _microbuckets(micro: dict, micro_w: dict, micro_m: dict) -> dict:
         mitades = [round(sum(h) / len(h), 4) if h else None for h in (h1, h2)]
         ok = (len(x) >= MB_N and len(ds) >= MB_DIAS and ev >= MB_EV and ic is not None and ic[0] > 0 and top <= MB_TOP
               and all(m is not None and m > 0 for m in mitades) and g > 0)
-        out[f"TOMADORA#{activo}#{marco}|{b5}"] = dict(
+        out[f"{familia}#{activo}#{marco}|{b5}"] = dict(
             n=len(x), dias=len(ds), mercados=len(micro_m[(activo, marco, b5)]), ev=round(ev, 4), ic90=ic,
             wallet_top_pct=top, mitades=mitades, g10=round(g, 5),
             estado="confirmado" if ok else "en_seguimiento" if ev > 0 else "negativo",
@@ -311,16 +371,28 @@ def main() -> int:
         return 1
     orden = sorted(perfiles)
     ventana = orden[-VENTANA_DIAS:]
-    sel = seleccionar(combinar({d: perfiles[d] for d in ventana}))
+    acc_ventana = combinar({d: perfiles[d] for d in ventana})
+    sel = seleccionar(acc_ventana)
+    cand = seleccionar_candidatas(acc_ventana, set(sel))
     try:
-        previo = set(json.loads(UNIVERSO.read_text()).get("wallets", {}))
+        previo = {w for w, v in json.loads(UNIVERSO.read_text()).get("wallets", {}).items() if v.get("grupo") != "candidata"}
     except Exception:
         previo = set()
     entran, salen = sorted(set(sel) - previo), sorted(previo - set(sel))
-    UNIVERSO.write_text(json.dumps({
+    # el observador (tomadores_persistentes_fase0.py) sigue TODAS las claves de "wallets": persistentes + candidatas
+    hoy = datetime.now(timezone.utc).date().isoformat()
+    tmp = UNIVERSO.with_name(UNIVERSO.name + ".tmp")
+    tmp.write_text(json.dumps({
         "generado_utc": datetime.now(timezone.utc).isoformat(timespec="seconds"), "ventana": ventana,
         "criterio": f">={N_MIN} fills, >={MERC_MIN} mercados, >={AGR_MIN:.0f}% agresiva, neto de fee >0, >={DIAS_POS_MIN}/{VENTANA_DIAS} días positivos",
-        "wallets": sel}, indent=1), encoding="utf-8")
+        "criterio_candidatas": f">={CAND_N_MIN} fills, >={CAND_MERC_MIN} mercados, neto de fee >0 en la ventana; tope {CAND_MAX} por volumen",
+        "n_persistentes": len(sel), "n_candidatas": len(cand),
+        "wallets": {**{w: {**v, "grupo": "persistente"} for w, v in sel.items()}, **cand}}, indent=1), encoding="utf-8")
+    tmp.replace(UNIVERSO)
+    HIST_UNIVERSO.mkdir(parents=True, exist_ok=True)
+    (HIST_UNIVERSO / f"{hoy}.json").write_text(json.dumps({**{w: "persistente" for w in sel}, **{w: "candidata" for w in cand}}))
+    for viejo in sorted(HIST_UNIVERSO.glob("*.json"))[:-60]:
+        viejo.unlink()
     # validación forward: seleccionar con los VENTANA_DIAS anteriores a D, medir en D
     fwd = []
     for i in range(VENTANA_DIAS, len(orden)):
@@ -367,6 +439,12 @@ def main() -> int:
                           f"top={c['wallet_top_pct']}% | gate agosto: SNIPER {v['SNIPER'] or '-'}, DISPERSO {v['DISPERSO'] or '-'}")
         if conf:
             lineas.append("  Un confirmado NO opera solo: checklist de 6 categorías + /code-review + OK de Javi.")
+        ca = copia.get("candidatas") or {}
+        if ca.get("n"):
+            cmb = ca["microbuckets"]
+            lineas.append(f"Universo AMPLIO (candidatas sin validar, {ca['wallets']} wallets con señal, {ca['dias']} días): n={ca['n']} EV {ca['ev']:+.4f} por €"
+                          + (f" IC90 {ca['ic90']}" if ca["ic90"] else "") + f" | wallets con EV>0 y n≥{MB_N_SEGUIR}: {len(ca['wallets_ev_positivo'])}"
+                          f" | micro-buckets confirmados {sum(1 for c in cmb.values() if c['estado'] == 'confirmado')}, con EV>0 {sum(1 for c in cmb.values() if c['estado'] == 'en_seguimiento')}")
     else:
         lineas.append("Copia al ask real: el observador aún no tiene días cerrados con desenlace.")
     print("\n".join(lineas))
