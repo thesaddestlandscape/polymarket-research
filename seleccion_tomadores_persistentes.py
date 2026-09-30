@@ -30,6 +30,7 @@ import bisect
 import csv
 import gzip
 import json
+import math
 import random
 import sys
 from collections import defaultdict
@@ -199,6 +200,7 @@ def copia_con_latencia_real() -> dict:
     """EV de copiar, con la captura del observador (ask real en el instante de detección)."""
     celdas, total = defaultdict(lambda: defaultdict(list)), defaultdict(list)
     wallets_celda, lags, dias = defaultdict(lambda: defaultdict(int)), [], set()
+    micro, micro_w, micro_m = defaultdict(lambda: defaultdict(list)), defaultdict(lambda: defaultdict(int)), defaultdict(set)
     for p in sorted(DATALOGS.glob("tomadores_persistentes_fase0_*.csv*")):
         dia = p.name.split("_")[-1][:10]
         out = _desenlaces(dia)
@@ -219,6 +221,13 @@ def copia_con_latencia_real() -> dict:
                 for clave in (f"{r['marco']}|TODOS|[{b:.1f},{b + 0.1:.1f})", f"{r['marco']}|{r['activo']}|[{b:.1f},{b + 0.1:.1f})"):
                     celdas[clave][dia].append(pnl)
                     wallets_celda[clave][r["wallet"]] += 1
+                # micro-bucket de 5c por moneda x marco (30-Sep, Javi): la misma rejilla que el gate de SNIPER/DISPERSO,
+                # para ver si las wallets que ganan AHORA respaldan buckets que el universo fijo de agosto tiene cerrados
+                b5 = int(a * 20 + 1e-9) / 20
+                k5 = (r["activo"], r["marco"], f"{b5:.2f}")
+                micro[k5][dia].append(pnl)
+                micro_w[k5][r["wallet"]] += 1
+                micro_m[k5].add(r.get("market_slug", ""))
                 total[dia].append(pnl)
                 dias.add(dia)
                 try:
@@ -235,7 +244,44 @@ def copia_con_latencia_real() -> dict:
     x = [v for d in total.values() for v in d]
     lags.sort()
     return dict(dias=sorted(dias), n=len(x), ev=round(sum(x) / len(x), 4) if x else None, ic90=_ic90_por_dias(total),
-                lag_ms_mediana=lags[len(lags) // 2] if lags else None, celdas=res)
+                lag_ms_mediana=lags[len(lags) // 2] if lags else None, celdas=res,
+                microbuckets=_microbuckets(micro, micro_w, micro_m))
+
+
+MB_N, MB_DIAS, MB_EV, MB_TOP, MB_N_SEGUIR = 40, 10, 0.10, 30, 15
+
+
+def _microbuckets(micro: dict, micro_w: dict, micro_m: dict) -> dict:
+    """Familia de observación TOMADORA#<moneda>#<marco>, bucket de 5c del ask real. NO es una tupla live: nada de
+    aquí abre dinero real. Confirmado = n>=40, >=10 días, EV>=+0,10, IC90 por días >0, wallet top <=30 %, las dos
+    mitades de días >0 y crecimiento compuesto g(f=10 %) >0. Al lado, el veredicto del MISMO bucket en el gate de
+    SNIPER/DISPERSO (universo fijo de agosto)."""
+    try:
+        viejo = json.loads((DIR_SHADOW / "bot_wallets_gate_bucket.json").read_text(encoding="utf-8"))
+    except Exception:
+        viejo = {}
+    out = {}
+    for (activo, marco, b5), pd in micro.items():
+        x = [v for d in pd.values() for v in d]
+        if len(x) < MB_N_SEGUIR:
+            continue
+        ds = sorted(pd)
+        mitad = len(ds) // 2
+        h1 = [v for d in ds[:mitad] for v in pd[d]]
+        h2 = [v for d in ds[mitad:] for v in pd[d]]
+        ev, ic = sum(x) / len(x), _ic90_por_dias(pd)
+        top = round(100 * max(micro_w[(activo, marco, b5)].values()) / len(x))
+        g = sum(math.log(max(1e-9, 1 + 0.10 * v)) for v in x) / len(x)
+        mitades = [round(sum(h) / len(h), 4) if h else None for h in (h1, h2)]
+        ok = (len(x) >= MB_N and len(ds) >= MB_DIAS and ev >= MB_EV and ic is not None and ic[0] > 0 and top <= MB_TOP
+              and all(m is not None and m > 0 for m in mitades) and g > 0)
+        out[f"TOMADORA#{activo}#{marco}|{b5}"] = dict(
+            n=len(x), dias=len(ds), mercados=len(micro_m[(activo, marco, b5)]), ev=round(ev, 4), ic90=ic,
+            wallet_top_pct=top, mitades=mitades, g10=round(g, 5),
+            estado="confirmado" if ok else "en_seguimiento" if ev > 0 else "negativo",
+            gate_universo_agosto={arq: ((viejo.get(f"{arq}#{activo}#{marco}") or {}).get(b5) or {}).get("veredicto")
+                                  for arq in ("SNIPER", "DISPERSO")})
+    return out
 
 
 def mantenimiento_observador() -> None:
@@ -310,6 +356,17 @@ def main() -> int:
                       f"EV {copia['ev']:+.4f} por €" + (f", IC90 {copia['ic90']}" if copia["ic90"] else ""))
         buenas = [(k, c) for k, c in copia["celdas"].items() if c["ev"] >= 0.10 and c["ic90"] and c["ic90"][0] > 0 and c["dias"] >= 10 and c["wallet_top_pct"] <= 30]
         lineas.append(f"Celdas que pasan el gate (n≥40, ≥10 días, EV≥+0,10, IC90>0, wallet top≤30 %): {len(buenas)}" + "".join(f"\n  {k}: EV {c['ev']:+.3f} n={c['n']}" for k, c in buenas[:6]))
+        mb = copia.get("microbuckets") or {}
+        conf = [(k, c) for k, c in mb.items() if c["estado"] == "confirmado"]
+        seg = sorted(((k, c) for k, c in mb.items() if c["estado"] == "en_seguimiento"), key=lambda kc: -kc[1]["ev"] * min(1, kc[1]["n"] / MB_N))
+        lineas.append(f"Micro-buckets de 5c (familia TOMADORA, solo observación; {len(mb)} con n≥{MB_N_SEGUIR} mirados): "
+                      f"confirmados {len(conf)}, con EV>0 {len(seg)}, negativos {sum(1 for c in mb.values() if c['estado'] == 'negativo')}")
+        for k, c in (conf + seg)[:6]:
+            v = c["gate_universo_agosto"]
+            lineas.append(f"  {'✅' if c['estado'] == 'confirmado' else '·'} {k}: EV {c['ev']:+.3f} n={c['n']} días={c['dias']} IC90={c['ic90']} "
+                          f"top={c['wallet_top_pct']}% | gate agosto: SNIPER {v['SNIPER'] or '-'}, DISPERSO {v['DISPERSO'] or '-'}")
+        if conf:
+            lineas.append("  Un confirmado NO opera solo: checklist de 6 categorías + /code-review + OK de Javi.")
     else:
         lineas.append("Copia al ask real: el observador aún no tiene días cerrados con desenlace.")
     print("\n".join(lineas))
