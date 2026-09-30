@@ -1,0 +1,58 @@
+{
+ "generado_utc": "2026-09-30T09:54:34+00:00",
+ "corte": "2026-09-30T10:00:00",
+ "offset_s": 0.6,
+ "hipotesis": {
+  "H1 5m valor>=0,10": {
+   "antes_del_corte": {
+    "n": 1038,
+    "dias": 6,
+    "ev": 0.0598,
+    "ic90": [
+     -0.0211,
+     0.1802
+    ],
+    "dias_positivos": 3
+   },
+   "forward": {
+    "n": 0
+   },
+   "activo_top_pct": 0,
+   "confirmada": false
+  },
+  "H2 5m valor>=0,20": {
+   "antes_del_corte": {
+    "n": 290,
+    "dias": 6,
+    "ev": 0.1415,
+    "ic90": [
+     0.0061,
+     0.2165
+    ],
+    "dias_positivos": 4
+   },
+   "forward": {
+    "n": 0
+   },
+   "activo_top_pct": 0,
+   "confirmada": false
+  },
+  "H3 15m valor>=0,03": {
+   "antes_del_corte": {
+    "n": 262,
+    "dias": 6,
+    "ev": 0.2501,
+    "ic90": [
+     -0.0774,
+     0.512
+    ],
+    "dias_positivos": 3
+   },
+   "forward": {
+    "n": 0
+   },
+   "activo_top_pct": 0,
+   "confirmada": false
+  }
+ }
+}
