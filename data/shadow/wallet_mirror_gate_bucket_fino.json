@@ -51,11 +51,11 @@
     "hi": 0.29,
     "n": 73,
     "pnl_medio": -0.7,
-    "diff_vs_resto": -0.587,
-    "p_valor": 0.0,
+    "diff_vs_resto": -0.5828,
+    "p_valor": 0.001,
     "split_half_diff": [
-      -0.5789,
-      -0.5949
+      -0.5747,
+      -0.5907
     ],
     "split_half_ok": true,
     "pnl_medio_loo": -0.7484,
@@ -88,11 +88,11 @@
     "hi": 0.2,
     "n": 44,
     "pnl_medio": -0.5085,
-    "diff_vs_resto": -0.6623,
-    "p_valor": 0.0015,
+    "diff_vs_resto": -0.6619,
+    "p_valor": 0.002,
     "split_half_diff": [
-      -0.6901,
-      -0.6346
+      -0.6897,
+      -0.6342
     ],
     "split_half_ok": true,
     "pnl_medio_loo": -0.6339,
@@ -185,11 +185,11 @@
     "hi": 0.18,
     "n": 40,
     "pnl_medio": -0.8615,
-    "diff_vs_resto": -0.8382,
+    "diff_vs_resto": -0.8383,
     "p_valor": 0.0,
     "split_half_diff": [
-      -0.9767,
-      -0.6997
+      -0.9768,
+      -0.6998
     ],
     "split_half_ok": true,
     "pnl_medio_loo": -1.0,
@@ -282,24 +282,24 @@
   },
   "SEGUIR#BTC#5min#0": {
     "n_dias": 27,
-    "pnl_sin_mejores_dias": -0.757,
+    "pnl_sin_mejores_dias": -0.7572,
     "robusto_dias": false,
     "lo": 0.0,
     "hi": 0.05,
-    "n": 3516,
-    "pnl_medio": -0.5429,
-    "diff_vs_resto": -0.5285,
+    "n": 3520,
+    "pnl_medio": -0.5434,
+    "diff_vs_resto": -0.5293,
     "p_valor": 0.0,
     "split_half_diff": [
-      -0.9856,
-      -0.0713
+      -0.9859,
+      -0.0727
     ],
     "split_half_ok": true,
-    "pnl_medio_loo": -0.5692,
+    "pnl_medio_loo": -0.5697,
     "robusto_loo": true,
     "ci90_bootstrap": [
-      -0.6732,
-      -0.4017
+      -0.6778,
+      -0.4024
     ],
     "robusto_bootstrap": true,
     "n_posiciones_buscadas": 96,
@@ -318,11 +318,11 @@
     "hi": 0.05,
     "n": 234,
     "pnl_medio": -1.0,
-    "diff_vs_resto": -0.9928,
+    "diff_vs_resto": -0.994,
     "p_valor": 0.0,
     "split_half_diff": [
-      -0.9928,
-      -0.9928
+      -0.994,
+      -0.994
     ],
     "split_half_ok": true,
     "pnl_medio_loo": -1.0,
