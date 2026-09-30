@@ -162,6 +162,7 @@ Cada línea es un error real del proyecto. Antes de concluir, promocionar, refut
 **Medición y precio**
 - `results.csv` mide al precio de la SEÑAL: de 49 `bueno_confirmado` solo 4 sobrevivían al ask real. Medir siempre con `ask_real.py`.
 - Look-ahead, tres veces: precio final del mercado como entrada; snapshot de libro posterior a la decisión (el +0,307 €/tr del reactivo GBM, 22-Sep); último trade en lugar de ask (A3 "+0,2/+0,7 €/tr" → negativo al ask real).
+- Precio de trades posteriores como proxy del ask tras un salto de Binance: OPTIMISTA (backtest +2,6/+13,9 % por € vs −6 % al ask real a +0,3 s). Tras un salto el ask sube 1,3-3,6c en <300 ms; lo que se imprime son fills sobre órdenes viejas. Y Polymarket aplica un taker delay de 150 ms: con ~250 ms de camino de orden llegamos a ~400 ms. Todo edge que exija comprar en <300 ms tras un evento público está cerrado para un tomador.
 - Un prior tomado del último trade puede estar rancio (A3b: el "+22-30c a 4 s" era eso; con libro real el ask ya se movió a +0,3 s).
 - Agrupar eventos por activo en vez de por `slug` de mercado, o usar `ts_epoch` = apertura de la ventana en vez del timestamp real, fabricó un EV positivo falso (A3 BTC+Up segundo salto).
 - Backtest in-sample ≠ forward: precierre multi-instante +0,089 in-sample → +0,01 forward; ventanas finas elegidas con todos los datos, solo 37 % positivas fuera de muestra; los micro-buckets no persisten solos. Lo único que ha mantenido el signo en walk-forward es la estabilidad temporal (positivo en todos los tramos + días independientes).
