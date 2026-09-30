@@ -373,6 +373,8 @@ TWAP_KILL_LATCH = REPO / "data" / "live" / "precierre_twap_kill.json"
 STAKE_EUR = 1.05             # suelo CLOB, mismo criterio que la prueba controlada del 02-Sep
 MIN_RATIO_PROFUNDIDAD = 5.0  # mismo umbral que el resto del proyecto
 PRECALCULO_ANTES_S = 12      # arrancar precálculo con margen sobre el instante objetivo
+CALENTAR_FIRMA_MAX_S = 1.5   # espera máxima al calentamiento de mercados en preparar() (dura ~77 ms; máx. medido 182 ms)
+CALENTAR_MARGEN_FIN_S = 6.0  # no se lanza ningún GET de calentamiento a menos de esto del instante objetivo
 # 23-Sep: DRY_RUN=False con aprobación EXPLÍCITA de Javi ("3 - ok", "vamos, venga") tras
 # checklist pre-live + /code-review medium. Tuplas: 5min+15min x 6 monedas x 2 direcciones.
 DRY_RUN = False
@@ -453,6 +455,7 @@ class _Precalculo:
         self.stake_ref = STAKE_EUR
         self.mercados = {}
         self.client = None
+        self._pool_calentar = ThreadPoolExecutor(max_workers=len(ASSETS), thread_name_prefix=f"calentar_{marco}")
 
     def _precalcular_guardas(self) -> None:
         self.guardas = _guardas_precalculadas(self)
@@ -499,14 +502,59 @@ class _Precalculo:
                 _log(f"aviso: no se pudo crear cliente CLOB ({e})")
                 self.client = None
         if self.client is not None and self.mercados:
+            # 30-Sep (OK Javi; /code-review medium x2): calentar TODOS los mercados de la ventana, no solo
+            # el primero. Medido en los 25 disparos reales: firma 15,9 ms con el mercado calentado (BTC, el
+            # único que se calentaba) frente a 152,6 ms en frío (las otras 5 monedas): −137 ms. La firma en
+            # frío hace 2 GET (markets-by-token + clob-markets, ~55 ms cada uno).
+            # Cómo: UN GET por mercado (get_clob_market_info, que cachea tick/neg_risk/fee de los DOS
+            # tokens), todos lanzados A LA VEZ (un worker por mercado: ninguno espera en cola, así que
+            # ninguno puede EMPEZAR tarde). No firma nada: no existe orden de descarte que enviar.
+            # Rezagados: un GET no se reintenta (helpers.get), pero el timeout de httpx es de 5 s POR FASE,
+            # no total: con el CLOB degradado un hilo puede seguir vivo en el instante crítico. Coste medido
+            # de ese solape (6 GET en vuelo por la misma conexión HTTP/2): +3,5 ms en otra petición. Los
+            # mercados que no terminen en CALENTAR_FIRMA_MAX_S quedan fríos y su disparo paga los 2 GET
+            # como hasta hoy cualquier mercado que no fuera el primero. No cambia ninguna decisión.
+            # Pool propio por marco: un marco lento (60min dry-run) no deja sin workers a los reales.
+            primero_colgado = False
+            try:
+                limite = ts_end + OFFSET_S - CALENTAR_MARGEN_FIN_S
+                cids = [m["condition_id"] for m in self.mercados.values() if m.get("condition_id")]
+
+                def _calentar(cid: str) -> bool:
+                    if time.time() >= limite:    # nunca arrancar un GET pegado al instante crítico
+                        return False
+                    self.client.get_clob_market_info(cid)
+                    return True
+
+                t0 = time.perf_counter()
+                futs = [self._pool_calentar.submit(_calentar, c) for c in cids]
+                hechos, pend = wait(futs, timeout=max(0.0, min(CALENTAR_FIRMA_MAX_S, limite - time.time())))
+                errores = [f.exception() for f in hechos if f.exception() is not None]
+                for f in pend:
+                    f.cancel()
+                # /code-review 2ª pasada: si el GET del PRIMER mercado sigue colgado, la firma de descarte
+                # de abajo repetiría en frío sus 2 GET sin tope y podría costar la ventana.
+                cid_primero = next(iter(self.mercados.values())).get("condition_id")
+                primero_colgado = any(f in pend for f, c in zip(futs, cids) if c == cid_primero)
+                if pend or errores or len(cids) < len(self.mercados) or not all(f.result() for f in hechos if f.exception() is None):
+                    n_ok = sum(1 for f in hechos if f.exception() is None and f.result())
+                    _log(f"[{self.marco}] mercados calentados {n_ok}/{len(self.mercados)} "
+                         f"({(time.perf_counter() - t0) * 1000:.0f} ms; sin terminar {len(pend)}, con error "
+                         f"{len(errores)}{': ' + repr(errores[0]) if errores else ''})")
+            except Exception as e:
+                _log(f"aviso: no se pudo calentar los mercados ({e})")
             try:
                 from py_clob_client_v2 import MarketOrderArgsV2
                 primer_token = next(iter(self.mercados.values()))["token_yes"]
-                # firma de descarte a precio absurdo (nunca se envía) --
-                # paga aquí el coste de la PRIMERA firma (fetch tick_size/
-                # neg_risk), fuera del camino crítico.
-                self.client.create_market_order(
-                    MarketOrderArgsV2(token_id=primer_token, amount=STAKE_EUR, side="BUY", price=0.01))
+                # firma de descarte a precio absurdo (nunca se envía), igual que antes del 30-Sep: paga
+                # aquí la PRIMERA firma del proceso (versión del CLOB, imports); con el mercado ya en
+                # caché no hace ningún GET. Se salta solo si el CLOB no contestó al calentamiento del
+                # primer mercado (ese disparo iría en frío, como hoy el resto de monedas).
+                if primero_colgado:
+                    _log(f"[{self.marco}] CLOB lento: se omite la firma de descarte en esta ventana")
+                else:
+                    self.client.create_market_order(
+                        MarketOrderArgsV2(token_id=primer_token, amount=STAKE_EUR, side="BUY", price=0.01))
             except Exception as e:
                 _log(f"aviso: no se pudo calentar la firma ({e})")
 

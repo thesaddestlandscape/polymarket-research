@@ -83,6 +83,8 @@ Petición explícita de Javi (17-Jul, reforzada muchas veces). En cada conexión
     - **`precierre_libro_ms_fase0.py`** → `/root/polymarket-research-datalogs/precierre_libro_ms_YYYY-MM-DD.csv.gz` (retención 5 d); simulación `analisis_precierre_maker_ms.py` (maker con cancelación a 300 ms): re-correr con ≥3-5 días (30-Sep, 1,5 días: selección adversa también en ms, relleno acierta 33-82 % vs 87-100 % sin relleno).
     - **`wallets_nuevas_fase0.py`** + `vigia_wallets_nuevas_diario.py` (09:10) → `wallets_nuevas_fase0*.csv`, `wallets_nuevas_conocidas.json`; `analisis_wallets_nuevas_fase0.py`.
     - **Sniper macro**: `macro_release_fast_fase0.py <evento.json>` (eventos en datalogs `macro_fast/eventos/`, salida `macro_fast/<nombre>_{fuente.jsonl,libro.csv}`; un cron de un solo uso por evento) mide a qué ms tenemos el dato en la web del organismo frente al repreciado del libro. bea.gov: Varnish cachea 60 s y `?x=` da 301 → sondear con cabecera `Cookie` (pass al origen). bls.gov: 403 sin cabeceras de navegador completas; acepta `?x=`. ISM: login+captcha, no tocar. `macro_release_ms_fase0.py` (StatCan WDS, +38,9 s) queda como referencia lenta. `project_sniper_macro_fuente_rapida_30sep`.
+    - **Maker con cancelación rápida — seguimiento DIARIO (Javi 30-Sep)**: `analisis_precierre_maker_ms.py` sobre `precierre_libro_ms_*.csv.gz`; reportar cada sesión relleno vs sin relleno y EV por celda; concluye con ≥5 días (desde 02-Oct).
+    - **Sports CS [0,65-0,70)**: re-correr `s3.py` (datalogs `analisis_persistente_30sep/alpha_mining_30sep/`) y reportar el tramo ≥24-Sep de `CS#FADE` y los trades reales. **Fee de sports: 5 %×(1−p) solo en ganadoras.** `project_sports_cs_banda_065_y_kill_30sep`.
     - **`barreras_touch_ms_fase0.py`** → `barreras_touch_ms_fase0.csv`.
     - **`escaleras_arbitraje_ms_fase0.py`** → `escaleras_arbitraje_ms_fase0.csv`; **`colas_escaleras_ws_fase0.py`** → datalogs `colas_escaleras_ws_YYYY-MM-DD.csv.gz` (14 d); `escaleras_cierre_ws_fase0.py`; vigía `vigia_macro_barreras_diario.py` (09:15). Análisis: `analisis_colas_escaleras_fase0.py` y `analisis_escaleras_cierre_fase0.py` (30-Sep, ambas REFUTADAS con libro real: 0-2 % de las colas tienen bid; el favorito no tiene ask <0,995 en el 98-100 % desde T-60 s).
     - **`gbm_late_imbalance_fase0.py`** + `vigia_gbm_late_imbalance_diario.py` (08:35) → `gbm_late_imbalance_fase0.csv` (preferir `imb*_senal`); `analisis_gbm_late_imbalance.py`; n≥40 por celda, ≥10 días.
@@ -177,6 +179,7 @@ Cada línea es un error real del proyecto. Antes de concluir, promocionar, refut
 - La regla real de resolución es TWAP60 de cierre vs TWAP60 de apertura (Chainlink), no spot vs spot (88-95 % de coincidencia) ni klines Binance/Kraken (en gaps estrechos invierten el orden: roturas de garantía del nested arb).
 - Fee: cripto 0,07, sports 0,05 (F1 0,03). No copiar el fee entre repos/modelos; usar el fee real del mercado.
 - `gross_win=(1-p)/p`, nunca `(1-p)`.
+- Marca de tiempo equivocada = fuga: los ticks Chainlink RTDS se reciben 1,36 s (p90 1,78) después de su `ws_timestamp_ms` → en toda reconstrucción filtrar por `timestamp_utc` de recepción (H2 5m z≥3: +0,43 → +0,26). Y `ask_real_por_senal.csv` mide el ask desde `prediction_timestamp`, anterior a la decisión real: optimista cuando el precio sigue subiendo (GBM_LATE_5M#BTC +0,10 con el mismo signo en TRAIN/VAL/HOLD → −0,006 con el ask de `libro_snapshots.csv` ≥5x). Una señal de ciclo se confirma contra `libro_snapshots.csv` colapsado por `market_id`.
 
 **Estadística**
 - n pequeño que parece señal y se evapora: wallets nuevas (+0,034 con n=369 → nada con n=1.910); `SNIPER#BTC#15min[0.10,0.15)` (gate n=49 bueno, verificación independiente n=13 con g negativo).
@@ -190,6 +193,7 @@ Cada línea es un error real del proyecto. Antes de concluir, promocionar, refut
 - gamma-api NO devuelve mercados CERRADOS por `slug` ni por `condition_ids` salvo con `closed=true`: un observador estuvo un día escribiendo 10.143 resoluciones sin desenlace por eso. Y un "ganador obvio" con ask disponible no es tan obvio (ya decidido: 99,7 % de acierto en general, 90,9 % donde había ask comprable).
 - Join aproximado entre fuentes crea señales falsas (P26: 27,4 % vs 15,2 % desapareció con join exacto).
 - Muestra sesgada por un proceso en inanición (resolver de sports: 3 buckets "reales" eran sesgo; A3 × ballenas con cobertura del 17 %); resolver del gate de bot wallets con cola ALFABÉTICA y tope de 150 → desde el 28-Sep ETH 0 de 6.673 filas resueltas, SOL 0, XRP 0 (34 % en total; 123.632 filas recuperadas el 30-Sep con `resolver_bot_wallets_gate_bucket_lote.py`). Un resolver con tope debe ordenar por fecha y no puede atascarse en slugs irresolubles; auditar la cobertura por ACTIVO y por día.
+- PnL concentrado en 1-2 episodios: H2 (n=212, p=0,0002 por filas) queda en EV +0,003 sin sus 2 mejores días; TWAP-z 15m +3,8 % en 6 días y −0,7 % en los 15 anteriores (n=828). Reportar siempre EV sin los 2 mejores días y validar hacia atrás con `rows_z2` (`project_alpha_mining_rescate_30sep`) antes de congelar una hipótesis del precierre.
 - Un resultado espectacular es, primero, un bug: `shadow_pnl_fiel` +13.148 $ era un estado absorbente (real −2.637,94 €).
 
 **Fill-ability y selección adversa**
@@ -233,6 +237,7 @@ Cada línea es un error real del proyecto. Antes de concluir, promocionar, refut
 - Recalcular a mano algo que un proceso ya mantiene en vivo (`ballenas_observer.py`): mirar el inventario antes.
 - Proponer como "nuevo" algo que ya está en el pipeline; declarar muerta una idea sin agotar el toolkit; refutar con la fuente de fill-ability equivocada.
 - Perps: los fills no son unidades independientes (363 cierres por apertura); la API da 429 con 360 consultas/hora.
+- Kill-switch por pérdida fija sin mirar la varianza del pago: `CS#FADE#0.65` (acierto 77 % a 0,67, gana +0,52 y pierde −1,05) tenía kill a −3 € y salta por azar el 28 % de las veces en 60 trades aunque el edge sea real. Dimensionar todo kill simulando su tasa de falso disparo con el acierto y el precio medidos.
 - Mercados "ya decididos": un solo fallo es −100 %; hace falta acierto ≥99 % medido, no supuesto.
 
 **Test de humo para un modelo nuevo** (si respondes mal alguna, relee este manual antes de tocar nada):
