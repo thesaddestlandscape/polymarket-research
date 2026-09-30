@@ -1,5 +1,5 @@
 {
- "generado_utc": "2026-09-30T09:35:26+00:00",
+ "generado_utc": "2026-09-30T09:41:28+00:00",
  "fuente": "bybit",
  "BNB": {
   "2min": {
@@ -9,10 +9,10 @@
    "imbalance": null
   },
   "5min": {
-   "usd_long": 46.27,
+   "usd_long": 0.0,
    "usd_short": 0.0,
-   "n": 1,
-   "imbalance": -1.0
+   "n": 0,
+   "imbalance": null
   },
   "15min": {
    "usd_long": 46.27,
@@ -35,15 +35,15 @@
    "imbalance": null
   },
   "5min": {
-   "usd_long": 326315.54,
+   "usd_long": 0.0,
    "usd_short": 0.0,
-   "n": 33,
-   "imbalance": -1.0
+   "n": 0,
+   "imbalance": null
   },
   "15min": {
-   "usd_long": 433384.93,
+   "usd_long": 419421.94,
    "usd_short": 0.0,
-   "n": 41,
+   "n": 36,
    "imbalance": -1.0
   },
   "60min": {
@@ -87,15 +87,15 @@
    "imbalance": null
   },
   "5min": {
-   "usd_long": 53523.95,
+   "usd_long": 0.0,
    "usd_short": 0.0,
-   "n": 16,
-   "imbalance": -1.0
+   "n": 0,
+   "imbalance": null
   },
   "15min": {
-   "usd_long": 107648.59,
+   "usd_long": 56543.51,
    "usd_short": 0.0,
-   "n": 34,
+   "n": 23,
    "imbalance": -1.0
   },
   "60min": {
@@ -107,16 +107,16 @@
  },
  "SOL": {
   "2min": {
-   "usd_long": 1287.35,
+   "usd_long": 0.0,
    "usd_short": 0.0,
-   "n": 2,
-   "imbalance": -1.0
+   "n": 0,
+   "imbalance": null
   },
   "5min": {
-   "usd_long": 4796.54,
+   "usd_long": 0.0,
    "usd_short": 0.0,
-   "n": 8,
-   "imbalance": -1.0
+   "n": 0,
+   "imbalance": null
   },
   "15min": {
    "usd_long": 5011.97,
@@ -139,15 +139,15 @@
    "imbalance": null
   },
   "5min": {
-   "usd_long": 4051.59,
+   "usd_long": 0.0,
    "usd_short": 0.0,
-   "n": 4,
-   "imbalance": -1.0
+   "n": 0,
+   "imbalance": null
   },
   "15min": {
-   "usd_long": 17477.65,
+   "usd_long": 16641.6,
    "usd_short": 0.0,
-   "n": 10,
+   "n": 7,
    "imbalance": -1.0
   },
   "60min": {
@@ -159,10 +159,10 @@
  },
  "lag_bybit_ws": {
   "ventana_min": 5,
-  "n_muestras": 62,
-  "ultimo_lag_s": 0.42,
-  "max_lag_s": 0.58,
-  "media_lag_s": 0.38,
+  "n_muestras": 0,
+  "ultimo_lag_s": null,
+  "max_lag_s": null,
+  "media_lag_s": null,
   "umbral_alerta_s": 5.0
  }
 }
