@@ -1,0 +1,834 @@
+{
+ "generado_utc": "2026-09-30T09:23:36+00:00",
+ "ventana": [
+  "2026-09-24",
+  "2026-09-25",
+  "2026-09-26",
+  "2026-09-27",
+  "2026-09-28",
+  "2026-09-29"
+ ],
+ "criterio": ">=500 fills, >=200 mercados, >=70% agresiva, neto de fee >0, >=5/6 d\u00edas positivos",
+ "wallets": {
+  "0x1b58d3de60d7f9e1aefdc9449e8d3733ea096f11": {
+   "n": 1003,
+   "vol": 8896,
+   "neto": 929.48,
+   "neto_pct_vol": 10.45,
+   "agresiva_pct": 75,
+   "mercados": 710,
+   "precio_medio": 0.581,
+   "dias_positivos": "6/6"
+  },
+  "0x2ed94d1a460379292d2e3b46f2cf7d94b033f271": {
+   "n": 18150,
+   "vol": 350018,
+   "neto": 3651.24,
+   "neto_pct_vol": 1.04,
+   "agresiva_pct": 78,
+   "mercados": 3278,
+   "precio_medio": 0.72,
+   "dias_positivos": "6/6"
+  },
+  "0xeebde7a0e019a63e6b476eb425505b7b3e6eba30": {
+   "n": 18603,
+   "vol": 364887,
+   "neto": 3636.63,
+   "neto_pct_vol": 1.0,
+   "agresiva_pct": 77,
+   "mercados": 3204,
+   "precio_medio": 0.721,
+   "dias_positivos": "6/6"
+  },
+  "0xdf6539d1fadb951a02a999d31a72e0cd7fd9c36d": {
+   "n": 4646,
+   "vol": 19000,
+   "neto": 193.92,
+   "neto_pct_vol": 1.02,
+   "agresiva_pct": 74,
+   "mercados": 998,
+   "precio_medio": 0.606,
+   "dias_positivos": "6/6"
+  },
+  "0x576b0696fd5a9225d66fd9500fd98f5be10b0cab": {
+   "n": 61541,
+   "vol": 355728,
+   "neto": 4004.49,
+   "neto_pct_vol": 1.13,
+   "agresiva_pct": 75,
+   "mercados": 11000,
+   "precio_medio": 0.694,
+   "dias_positivos": "5/6"
+  },
+  "0x19b3823092892c026517fd0ff58df4889abe0b9b": {
+   "n": 19420,
+   "vol": 257756,
+   "neto": 6043.51,
+   "neto_pct_vol": 2.34,
+   "agresiva_pct": 76,
+   "mercados": 1677,
+   "precio_medio": 0.69,
+   "dias_positivos": "6/6"
+  },
+  "0x75cc3b63a2f2423085e10706c78b494017b93ce1": {
+   "n": 18855,
+   "vol": 117425,
+   "neto": 4055.38,
+   "neto_pct_vol": 3.45,
+   "agresiva_pct": 86,
+   "mercados": 6333,
+   "precio_medio": 0.785,
+   "dias_positivos": "6/6"
+  },
+  "0x2977a92b98ac2713b952dd51c0e031e6adab4eb0": {
+   "n": 2358,
+   "vol": 11173,
+   "neto": 184.2,
+   "neto_pct_vol": 1.65,
+   "agresiva_pct": 90,
+   "mercados": 1054,
+   "precio_medio": 0.659,
+   "dias_positivos": "5/6"
+  },
+  "0x2c6dd8343d5926fa2d3779303bd238c2f8ee1a7f": {
+   "n": 817,
+   "vol": 814,
+   "neto": 42.4,
+   "neto_pct_vol": 5.21,
+   "agresiva_pct": 85,
+   "mercados": 624,
+   "precio_medio": 0.671,
+   "dias_positivos": "6/6"
+  },
+  "0x20d2309cd92b797ae7ca175ed828ed8a27fbe29d": {
+   "n": 15754,
+   "vol": 237455,
+   "neto": 5500.94,
+   "neto_pct_vol": 2.32,
+   "agresiva_pct": 80,
+   "mercados": 6020,
+   "precio_medio": 0.76,
+   "dias_positivos": "6/6"
+  },
+  "0xd9013df863c1ba932780857b020dfdeacedf8e14": {
+   "n": 1795,
+   "vol": 41754,
+   "neto": 3804.76,
+   "neto_pct_vol": 9.11,
+   "agresiva_pct": 87,
+   "mercados": 1340,
+   "precio_medio": 0.69,
+   "dias_positivos": "6/6"
+  },
+  "0xb55fa1296e6ec55d0ce53d93b9237389f11764d4": {
+   "n": 66111,
+   "vol": 1152252,
+   "neto": 2566.8,
+   "neto_pct_vol": 0.22,
+   "agresiva_pct": 74,
+   "mercados": 5109,
+   "precio_medio": 0.633,
+   "dias_positivos": "6/6"
+  },
+  "0x52f08a7b0d6993340d5f7262c073d0d80b390699": {
+   "n": 825,
+   "vol": 824,
+   "neto": 41.32,
+   "neto_pct_vol": 5.02,
+   "agresiva_pct": 86,
+   "mercados": 635,
+   "precio_medio": 0.671,
+   "dias_positivos": "5/6"
+  },
+  "0x5e2b9261b0c4f697b55bf921ff2bc227183d9101": {
+   "n": 20668,
+   "vol": 122019,
+   "neto": 4511.6,
+   "neto_pct_vol": 3.7,
+   "agresiva_pct": 83,
+   "mercados": 6098,
+   "precio_medio": 0.794,
+   "dias_positivos": "6/6"
+  },
+  "0x267d44d5527e490fb5b3d616125a0381ebebbc1e": {
+   "n": 747,
+   "vol": 744,
+   "neto": 23.71,
+   "neto_pct_vol": 3.19,
+   "agresiva_pct": 86,
+   "mercados": 579,
+   "precio_medio": 0.687,
+   "dias_positivos": "5/6"
+  },
+  "0x5d4aba8ad45bb5eab3499a0294b42da5d1e455d3": {
+   "n": 15625,
+   "vol": 79103,
+   "neto": 3775.12,
+   "neto_pct_vol": 4.77,
+   "agresiva_pct": 84,
+   "mercados": 6617,
+   "precio_medio": 0.771,
+   "dias_positivos": "6/6"
+  },
+  "0x640c62e644c428efeff9c81e73f2b2c0d9125f1c": {
+   "n": 559,
+   "vol": 1676,
+   "neto": 63.73,
+   "neto_pct_vol": 3.8,
+   "agresiva_pct": 88,
+   "mercados": 559,
+   "precio_medio": 0.803,
+   "dias_positivos": "6/6"
+  },
+  "0x424eb20fcd25113e3b98f42522a54580350b263b": {
+   "n": 2220,
+   "vol": 66785,
+   "neto": 3226.6,
+   "neto_pct_vol": 4.83,
+   "agresiva_pct": 86,
+   "mercados": 1694,
+   "precio_medio": 0.727,
+   "dias_positivos": "5/6"
+  },
+  "0x20c93453ab5da9386892140e83638a46b8b6e915": {
+   "n": 4800,
+   "vol": 54142,
+   "neto": 21.61,
+   "neto_pct_vol": 0.04,
+   "agresiva_pct": 72,
+   "mercados": 2394,
+   "precio_medio": 0.677,
+   "dias_positivos": "5/6"
+  },
+  "0x355d54242b1fcbc20e6bb3f8d94a1ccaaf5d1c50": {
+   "n": 43248,
+   "vol": 244448,
+   "neto": 2046.38,
+   "neto_pct_vol": 0.84,
+   "agresiva_pct": 77,
+   "mercados": 4281,
+   "precio_medio": 0.857,
+   "dias_positivos": "5/6"
+  },
+  "0xb79eb036bac67768d07575c059b3c642a5c518b8": {
+   "n": 909,
+   "vol": 61226,
+   "neto": 695.07,
+   "neto_pct_vol": 1.14,
+   "agresiva_pct": 94,
+   "mercados": 816,
+   "precio_medio": 0.972,
+   "dias_positivos": "5/6"
+  },
+  "0x12c36e9dafe4fb336d53bcfb85f778b147d31ba8": {
+   "n": 958,
+   "vol": 40185,
+   "neto": 432.17,
+   "neto_pct_vol": 1.08,
+   "agresiva_pct": 91,
+   "mercados": 767,
+   "precio_medio": 0.97,
+   "dias_positivos": "5/6"
+  },
+  "0x720babbde4ee159d8735ee09a1e35c4bdb46d2cd": {
+   "n": 3043,
+   "vol": 34363,
+   "neto": 213.8,
+   "neto_pct_vol": 0.62,
+   "agresiva_pct": 79,
+   "mercados": 362,
+   "precio_medio": 0.966,
+   "dias_positivos": "5/6"
+  },
+  "0xfc369971792d08e095da0f6fdb23fa927c60ce29": {
+   "n": 3587,
+   "vol": 642696,
+   "neto": 2084.94,
+   "neto_pct_vol": 0.32,
+   "agresiva_pct": 97,
+   "mercados": 1877,
+   "precio_medio": 0.988,
+   "dias_positivos": "5/6"
+  },
+  "0x48ac40fc545cf327edd5365435c3a9f385614a7e": {
+   "n": 7767,
+   "vol": 1257006,
+   "neto": 7747.13,
+   "neto_pct_vol": 0.62,
+   "agresiva_pct": 95,
+   "mercados": 2013,
+   "precio_medio": 0.983,
+   "dias_positivos": "5/6"
+  },
+  "0x440bfa4f9bc2fa011018d2d52fdce66aec196570": {
+   "n": 2240,
+   "vol": 11222,
+   "neto": 5.78,
+   "neto_pct_vol": 0.05,
+   "agresiva_pct": 96,
+   "mercados": 2193,
+   "precio_medio": 0.985,
+   "dias_positivos": "5/6"
+  },
+  "0x73e40b377cf4ac7034d0afaf66abb58f3424fb79": {
+   "n": 2474,
+   "vol": 129548,
+   "neto": 687.49,
+   "neto_pct_vol": 0.53,
+   "agresiva_pct": 98,
+   "mercados": 1529,
+   "precio_medio": 0.982,
+   "dias_positivos": "6/6"
+  },
+  "0x34a494fe9a7751d20d0381b93853f1f138957fa4": {
+   "n": 1319,
+   "vol": 6280,
+   "neto": 109.8,
+   "neto_pct_vol": 1.75,
+   "agresiva_pct": 88,
+   "mercados": 635,
+   "precio_medio": 0.977,
+   "dias_positivos": "6/6"
+  },
+  "0xd43edfda55410c630b19a92bc40f145c1eee37fe": {
+   "n": 2951,
+   "vol": 105810,
+   "neto": 180.89,
+   "neto_pct_vol": 0.17,
+   "agresiva_pct": 96,
+   "mercados": 2508,
+   "precio_medio": 0.99,
+   "dias_positivos": "5/6"
+  },
+  "0xe3e5ffc0af38b8bf866652bb0569f405b6a8e362": {
+   "n": 864,
+   "vol": 2319,
+   "neto": 58.32,
+   "neto_pct_vol": 2.51,
+   "agresiva_pct": 94,
+   "mercados": 864,
+   "precio_medio": 0.535,
+   "dias_positivos": "5/6"
+  },
+  "0xe8d68fd271ad704a55f9bb0e4fc6276ee9adc964": {
+   "n": 3880,
+   "vol": 67834,
+   "neto": 4969.57,
+   "neto_pct_vol": 7.33,
+   "agresiva_pct": 72,
+   "mercados": 2154,
+   "precio_medio": 0.485,
+   "dias_positivos": "6/6"
+  },
+  "0x8fda356b89c6bfeb1df008a45749d153da590a28": {
+   "n": 1035,
+   "vol": 1034,
+   "neto": 0.18,
+   "neto_pct_vol": 0.02,
+   "agresiva_pct": 91,
+   "mercados": 1035,
+   "precio_medio": 0.795,
+   "dias_positivos": "5/6"
+  },
+  "0x361528e242bc6cc789ac8da6fd5cb98046178fdf": {
+   "n": 4180,
+   "vol": 104930,
+   "neto": 5372.13,
+   "neto_pct_vol": 5.12,
+   "agresiva_pct": 84,
+   "mercados": 2875,
+   "precio_medio": 0.742,
+   "dias_positivos": "5/6"
+  },
+  "0xc87ad64315a4a0dcedfb90cb830a73f1c9252ddd": {
+   "n": 501,
+   "vol": 1678,
+   "neto": 167.81,
+   "neto_pct_vol": 10.0,
+   "agresiva_pct": 85,
+   "mercados": 372,
+   "precio_medio": 0.704,
+   "dias_positivos": "5/6"
+  },
+  "0x0d0ebc17486ff271254f5648322e813c5ef44b47": {
+   "n": 2095,
+   "vol": 2095,
+   "neto": 97.72,
+   "neto_pct_vol": 4.66,
+   "agresiva_pct": 83,
+   "mercados": 938,
+   "precio_medio": 0.533,
+   "dias_positivos": "5/6"
+  },
+  "0x03512a9086a34576f82c8434f8552eb3256766cf": {
+   "n": 10106,
+   "vol": 13156,
+   "neto": 151.7,
+   "neto_pct_vol": 1.15,
+   "agresiva_pct": 92,
+   "mercados": 754,
+   "precio_medio": 0.953,
+   "dias_positivos": "5/6"
+  },
+  "0x881f273d5e061ff221146d5a51cc8add1f2ae773": {
+   "n": 10113,
+   "vol": 13169,
+   "neto": 151.18,
+   "neto_pct_vol": 1.15,
+   "agresiva_pct": 92,
+   "mercados": 753,
+   "precio_medio": 0.953,
+   "dias_positivos": "5/6"
+  },
+  "0x6b14096b2adad7da689b326d0a2fba4179b890e6": {
+   "n": 10041,
+   "vol": 10863,
+   "neto": 122.06,
+   "neto_pct_vol": 1.12,
+   "agresiva_pct": 92,
+   "mercados": 753,
+   "precio_medio": 0.953,
+   "dias_positivos": "5/6"
+  },
+  "0xe815a79b5acf78e174609ddeadb1da25ede1d7cb": {
+   "n": 955,
+   "vol": 115556,
+   "neto": 267.86,
+   "neto_pct_vol": 0.23,
+   "agresiva_pct": 87,
+   "mercados": 894,
+   "precio_medio": 0.968,
+   "dias_positivos": "5/6"
+  },
+  "0xdfce30b7bd3cd14652485acb2f5cdc3458275425": {
+   "n": 1237,
+   "vol": 35091,
+   "neto": 520.52,
+   "neto_pct_vol": 1.48,
+   "agresiva_pct": 90,
+   "mercados": 498,
+   "precio_medio": 0.962,
+   "dias_positivos": "5/6"
+  },
+  "0x790637b693a2b3d77b42d14326e99eb6d706dbb5": {
+   "n": 1005,
+   "vol": 5932,
+   "neto": 37.28,
+   "neto_pct_vol": 0.63,
+   "agresiva_pct": 78,
+   "mercados": 1003,
+   "precio_medio": 0.886,
+   "dias_positivos": "5/6"
+  },
+  "0x09b7c7435bd14ab7cfed0be0e796c2363816d0e2": {
+   "n": 8810,
+   "vol": 80752,
+   "neto": 1527.1,
+   "neto_pct_vol": 1.89,
+   "agresiva_pct": 76,
+   "mercados": 2683,
+   "precio_medio": 0.946,
+   "dias_positivos": "6/6"
+  },
+  "0x5f6d133cd13cb3f72be3911bfb3373fc8890976f": {
+   "n": 3027,
+   "vol": 208449,
+   "neto": 1877.47,
+   "neto_pct_vol": 0.9,
+   "agresiva_pct": 88,
+   "mercados": 2305,
+   "precio_medio": 0.964,
+   "dias_positivos": "5/6"
+  },
+  "0xf3ce251f9c4ae0f3940a9f32de5dd1a1d05b8bc6": {
+   "n": 508,
+   "vol": 11162,
+   "neto": 188.22,
+   "neto_pct_vol": 1.69,
+   "agresiva_pct": 82,
+   "mercados": 326,
+   "precio_medio": 0.474,
+   "dias_positivos": "5/6"
+  },
+  "0xaa5e4a81393aee32ec7da3c596291c5d259ac88b": {
+   "n": 1005,
+   "vol": 6239,
+   "neto": 79.09,
+   "neto_pct_vol": 1.27,
+   "agresiva_pct": 77,
+   "mercados": 979,
+   "precio_medio": 0.868,
+   "dias_positivos": "5/6"
+  },
+  "0x1a80c37798935774f92fa2f376f0a4e4a7e83b26": {
+   "n": 8813,
+   "vol": 341396,
+   "neto": 651.2,
+   "neto_pct_vol": 0.19,
+   "agresiva_pct": 92,
+   "mercados": 1364,
+   "precio_medio": 0.983,
+   "dias_positivos": "5/6"
+  },
+  "0xbeb4400ab92eb72bb54086569c2dbc0ad22dda45": {
+   "n": 2416,
+   "vol": 20932,
+   "neto": 57.79,
+   "neto_pct_vol": 0.28,
+   "agresiva_pct": 88,
+   "mercados": 977,
+   "precio_medio": 0.97,
+   "dias_positivos": "5/6"
+  },
+  "0x26a3f582e638ca1e03d73cb94b2ba4cb058ddfa5": {
+   "n": 2054,
+   "vol": 9625,
+   "neto": 52.59,
+   "neto_pct_vol": 0.55,
+   "agresiva_pct": 84,
+   "mercados": 1000,
+   "precio_medio": 0.966,
+   "dias_positivos": "5/6"
+  },
+  "0x8dbeabb5961fd2fb28647b7bcadec1bef6d288f8": {
+   "n": 2071,
+   "vol": 13225,
+   "neto": 226.62,
+   "neto_pct_vol": 1.71,
+   "agresiva_pct": 83,
+   "mercados": 1153,
+   "precio_medio": 0.966,
+   "dias_positivos": "6/6"
+  },
+  "0x722d1f8ebe107ad7f24530b56e019da7dbdd46c5": {
+   "n": 1980,
+   "vol": 11723,
+   "neto": 160.6,
+   "neto_pct_vol": 1.37,
+   "agresiva_pct": 85,
+   "mercados": 1120,
+   "precio_medio": 0.965,
+   "dias_positivos": "6/6"
+  },
+  "0xd44567cde98386545333fd1b68927137e7573ae4": {
+   "n": 599,
+   "vol": 1258,
+   "neto": 149.88,
+   "neto_pct_vol": 11.92,
+   "agresiva_pct": 95,
+   "mercados": 498,
+   "precio_medio": 0.518,
+   "dias_positivos": "5/6"
+  },
+  "0x32986a1236042773d2c6dc8f5bd73ee83b429fe8": {
+   "n": 1257,
+   "vol": 1447,
+   "neto": 26.41,
+   "neto_pct_vol": 1.83,
+   "agresiva_pct": 80,
+   "mercados": 961,
+   "precio_medio": 0.931,
+   "dias_positivos": "6/6"
+  },
+  "0x65e13cdcdfe7590eb1d03047e569762e7655677c": {
+   "n": 1346,
+   "vol": 7589,
+   "neto": 1378.58,
+   "neto_pct_vol": 18.17,
+   "agresiva_pct": 73,
+   "mercados": 200,
+   "precio_medio": 0.547,
+   "dias_positivos": "6/6"
+  },
+  "0xaef68b9bbd746ffe4e582a687cf8a21f1c44134f": {
+   "n": 4645,
+   "vol": 171600,
+   "neto": 348.9,
+   "neto_pct_vol": 0.2,
+   "agresiva_pct": 75,
+   "mercados": 1442,
+   "precio_medio": 0.97,
+   "dias_positivos": "5/6"
+  },
+  "0x6bef4ccbadd3892ecdbb0cc186b8db8966f251ca": {
+   "n": 522,
+   "vol": 73149,
+   "neto": 710.4,
+   "neto_pct_vol": 0.97,
+   "agresiva_pct": 89,
+   "mercados": 210,
+   "precio_medio": 0.984,
+   "dias_positivos": "5/6"
+  },
+  "0xab9cc6506b9c921df72c74f65234e93fe7b9ccf3": {
+   "n": 678,
+   "vol": 3148,
+   "neto": 42.35,
+   "neto_pct_vol": 1.35,
+   "agresiva_pct": 78,
+   "mercados": 427,
+   "precio_medio": 0.939,
+   "dias_positivos": "5/6"
+  },
+  "0x10accf4078530e8215b012f249b063dcbef7c09a": {
+   "n": 995,
+   "vol": 42960,
+   "neto": 255.24,
+   "neto_pct_vol": 0.59,
+   "agresiva_pct": 87,
+   "mercados": 988,
+   "precio_medio": 0.919,
+   "dias_positivos": "5/6"
+  },
+  "0xdedb2b0408ef73b0e74edc1147b008a7369c2529": {
+   "n": 543,
+   "vol": 49915,
+   "neto": 288.14,
+   "neto_pct_vol": 0.58,
+   "agresiva_pct": 94,
+   "mercados": 485,
+   "precio_medio": 0.988,
+   "dias_positivos": "6/6"
+  },
+  "0xbd0d0c4bfc88dad382674c9d5ae483dae8261fb4": {
+   "n": 556,
+   "vol": 53896,
+   "neto": 1333.78,
+   "neto_pct_vol": 2.47,
+   "agresiva_pct": 92,
+   "mercados": 217,
+   "precio_medio": 0.635,
+   "dias_positivos": "6/6"
+  },
+  "0xce1b18152de43444de80a8b847d1dba1df3a2af8": {
+   "n": 588,
+   "vol": 2940,
+   "neto": 24.74,
+   "neto_pct_vol": 0.84,
+   "agresiva_pct": 96,
+   "mercados": 588,
+   "precio_medio": 0.962,
+   "dias_positivos": "5/6"
+  },
+  "0x91f0dab64f4b78603c1ee0b88e18c91f8821fd78": {
+   "n": 1643,
+   "vol": 2488,
+   "neto": 284.4,
+   "neto_pct_vol": 11.43,
+   "agresiva_pct": 70,
+   "mercados": 717,
+   "precio_medio": 0.563,
+   "dias_positivos": "6/6"
+  },
+  "0x037b8d4a5ce2717fd35c0434c9932b82c3219182": {
+   "n": 7927,
+   "vol": 31366,
+   "neto": 2869.76,
+   "neto_pct_vol": 9.15,
+   "agresiva_pct": 74,
+   "mercados": 431,
+   "precio_medio": 0.714,
+   "dias_positivos": "6/6"
+  },
+  "0xfc10e4788cbdf6fcfc700e98de1ce6a65c921c00": {
+   "n": 836,
+   "vol": 4075,
+   "neto": 668.77,
+   "neto_pct_vol": 16.41,
+   "agresiva_pct": 81,
+   "mercados": 677,
+   "precio_medio": 0.522,
+   "dias_positivos": "6/6"
+  },
+  "0x1291d54f413af53b53fba5ea2b226b1947fe7419": {
+   "n": 817,
+   "vol": 2915,
+   "neto": 324.18,
+   "neto_pct_vol": 11.12,
+   "agresiva_pct": 74,
+   "mercados": 704,
+   "precio_medio": 0.515,
+   "dias_positivos": "6/6"
+  },
+  "0x4144bf7b5b02eab2f5829bd0a832f8cf1313c906": {
+   "n": 2229,
+   "vol": 35164,
+   "neto": 113.37,
+   "neto_pct_vol": 0.32,
+   "agresiva_pct": 72,
+   "mercados": 719,
+   "precio_medio": 0.836,
+   "dias_positivos": "5/6"
+  },
+  "0x99aeaa3d7e395cf8b0d09fd6410da89e65763cc9": {
+   "n": 3094,
+   "vol": 23102,
+   "neto": 443.0,
+   "neto_pct_vol": 1.92,
+   "agresiva_pct": 79,
+   "mercados": 680,
+   "precio_medio": 0.879,
+   "dias_positivos": "5/6"
+  },
+  "0x4126b16f087dddc677e382b3d6f74b356237d579": {
+   "n": 1002,
+   "vol": 4433,
+   "neto": 129.15,
+   "neto_pct_vol": 2.91,
+   "agresiva_pct": 75,
+   "mercados": 236,
+   "precio_medio": 0.846,
+   "dias_positivos": "5/6"
+  },
+  "0x3efbbecec8c98853be5e866a4e3b07f1d2834682": {
+   "n": 586,
+   "vol": 3288,
+   "neto": 100.96,
+   "neto_pct_vol": 3.07,
+   "agresiva_pct": 78,
+   "mercados": 436,
+   "precio_medio": 0.82,
+   "dias_positivos": "5/6"
+  },
+  "0x2b7d2c356b3f1c858c4cf0152b2c4692dfee33db": {
+   "n": 875,
+   "vol": 2817,
+   "neto": 128.31,
+   "neto_pct_vol": 4.56,
+   "agresiva_pct": 87,
+   "mercados": 249,
+   "precio_medio": 0.723,
+   "dias_positivos": "6/6"
+  },
+  "0x0b1bc25849c106c74a8b67dec077f9a09279a70b": {
+   "n": 2057,
+   "vol": 10401,
+   "neto": 120.7,
+   "neto_pct_vol": 1.16,
+   "agresiva_pct": 78,
+   "mercados": 355,
+   "precio_medio": 0.884,
+   "dias_positivos": "6/6"
+  },
+  "0x7ae4a31adc0fb0226ac84f1febabea6b8daf0d4b": {
+   "n": 502,
+   "vol": 16455,
+   "neto": 109.15,
+   "neto_pct_vol": 0.66,
+   "agresiva_pct": 70,
+   "mercados": 206,
+   "precio_medio": 0.882,
+   "dias_positivos": "5/6"
+  },
+  "0x562a11bcd7354ea82a09ed803cb1739d60862ad4": {
+   "n": 3117,
+   "vol": 27723,
+   "neto": 22.95,
+   "neto_pct_vol": 0.08,
+   "agresiva_pct": 98,
+   "mercados": 940,
+   "precio_medio": 0.979,
+   "dias_positivos": "5/6"
+  },
+  "0xd1317ca0ad097764319394a2673cfbfefe592ee7": {
+   "n": 1009,
+   "vol": 64374,
+   "neto": 543.82,
+   "neto_pct_vol": 0.84,
+   "agresiva_pct": 91,
+   "mercados": 356,
+   "precio_medio": 0.944,
+   "dias_positivos": "5/6"
+  },
+  "0xb3df483638baac2efcad02d65c9d9002cee2463d": {
+   "n": 1333,
+   "vol": 13568,
+   "neto": 271.53,
+   "neto_pct_vol": 2.0,
+   "agresiva_pct": 77,
+   "mercados": 508,
+   "precio_medio": 0.945,
+   "dias_positivos": "5/5"
+  },
+  "0xea5929609487194dc9ce00871e2b5d1e5f48f29d": {
+   "n": 1632,
+   "vol": 8169,
+   "neto": 450.92,
+   "neto_pct_vol": 5.52,
+   "agresiva_pct": 75,
+   "mercados": 234,
+   "precio_medio": 0.835,
+   "dias_positivos": "5/6"
+  },
+  "0xe64fefc3552125df3480e3c20fb55aaafb607d13": {
+   "n": 508,
+   "vol": 26603,
+   "neto": 2365.53,
+   "neto_pct_vol": 8.89,
+   "agresiva_pct": 79,
+   "mercados": 285,
+   "precio_medio": 0.73,
+   "dias_positivos": "5/5"
+  },
+  "0x762d2469ddfe50755fb96ddc54df72ae4b4d964c": {
+   "n": 4620,
+   "vol": 124601,
+   "neto": 781.2,
+   "neto_pct_vol": 0.63,
+   "agresiva_pct": 77,
+   "mercados": 1560,
+   "precio_medio": 0.966,
+   "dias_positivos": "5/6"
+  },
+  "0x4d7fb17d715dc03927d722db007198d7be156fb9": {
+   "n": 3426,
+   "vol": 7397,
+   "neto": 111.35,
+   "neto_pct_vol": 1.51,
+   "agresiva_pct": 72,
+   "mercados": 1343,
+   "precio_medio": 0.601,
+   "dias_positivos": "5/6"
+  },
+  "0x040ad8ef62b111e76b21576efd1a9c0807b5118d": {
+   "n": 655,
+   "vol": 3700,
+   "neto": 218.94,
+   "neto_pct_vol": 5.92,
+   "agresiva_pct": 97,
+   "mercados": 468,
+   "precio_medio": 0.525,
+   "dias_positivos": "5/6"
+  },
+  "0xcb71551d8722d39565e9b5d0a2d7db6d23a719f7": {
+   "n": 4502,
+   "vol": 11681,
+   "neto": 41.04,
+   "neto_pct_vol": 0.35,
+   "agresiva_pct": 72,
+   "mercados": 1262,
+   "precio_medio": 0.769,
+   "dias_positivos": "5/6"
+  },
+  "0xba679ab701e6162cc2c932b8b498124f47394727": {
+   "n": 1853,
+   "vol": 49936,
+   "neto": 3184.83,
+   "neto_pct_vol": 6.38,
+   "agresiva_pct": 84,
+   "mercados": 1417,
+   "precio_medio": 0.715,
+   "dias_positivos": "5/6"
+  },
+  "0x54f4a773ef9238e5961b8c83a232ae06d998c0ad": {
+   "n": 1004,
+   "vol": 906,
+   "neto": 16.4,
+   "neto_pct_vol": 1.81,
+   "agresiva_pct": 79,
+   "mercados": 1003,
+   "precio_medio": 0.842,
+   "dias_positivos": "5/5"
+  }
+ }
+}
