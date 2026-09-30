@@ -136,12 +136,17 @@ def _resolutions(cid):
 
 
 def _final(cid):
-    try:
-        j = _S.get(f"{GAMMA}/markets", params={"condition_ids": cid}, timeout=15).json()
-        if j:
-            return j[0]
-    except Exception:
-        pass
+    """Mercado por condition_id, esté cerrado o no. 30-Sep (bug real): gamma NO devuelve los
+    mercados cerrados con `condition_ids` a secas -- hay que pedir `closed=true`. Sin eso esta
+    función devolvía None para TODO mercado asentado y las 10.143 filas `resuelto` escritas hasta
+    hoy salieron sin desenlace ni acierto (la métrica que decide el gate nunca se midió)."""
+    for extra in ({"closed": "true"}, {}):
+        try:
+            j = _S.get(f"{GAMMA}/markets", params={"condition_ids": cid, **extra}, timeout=15).json()
+            if isinstance(j, list) and j:
+                return j[0]
+        except Exception:
+            pass
     return None
 
 
