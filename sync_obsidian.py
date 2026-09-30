@@ -26,6 +26,7 @@ No toca nada del pipeline fast/slow — corre por su cron propio
 import csv
 import json
 import subprocess
+import sys
 from collections import defaultdict
 from datetime import datetime, timezone
 from pathlib import Path
@@ -58,11 +59,41 @@ def cargar_json(path, default):
         return default
 
 
-def cargar_results():
+_COLS_RESULTS = ("strategy", "subtype", "decision", "prediction_timestamp", "acierto", "pnl_neto")
+
+
+def cargar_results(hipotesis=()):
+    """Carga en streaming solo lo que evaluar_hipotesis() usa.
+
+    30-Sep: list(csv.DictReader) sobre results.csv (690 MB) llegaba a 1,6 GB cada 15 min
+    y el OOM-killer mataba este proceso. Se conservan únicamente las filas cuyo strategy
+    encaja con algún strategy_prefix de las hipótesis, las 6 columnas usadas y, de
+    `features`, solo las claves que alguna hipótesis filtra. Mismo resultado, otra memoria.
+    """
     if not RESULTS_PATH.exists():
         return []
+    filtros = [h.get("filtro", {}) for h in hipotesis]
+    prefijos = tuple({f["strategy_prefix"] for f in filtros if f.get("strategy_prefix")})
+    todas = any(not f.get("strategy_prefix") for f in filtros)
+    feats = {f["feature"] for f in filtros if f.get("feature")}
+    rows = []
     with open(RESULTS_PATH, encoding="utf-8") as f:
-        return list(csv.DictReader(f))
+        for r in csv.DictReader(f):
+            st = r.get("strategy") or ""
+            if not (todas or st.startswith(prefijos)):
+                continue
+            fila = {c: sys.intern(r.get(c) or "") for c in _COLS_RESULTS}
+            crudo = r.get("features") or "{}"
+            if feats and any(ft in crudo for ft in feats):
+                try:
+                    d = json.loads(crudo)
+                    fila["features"] = json.dumps({k: d[k] for k in feats if k in d})
+                except (json.JSONDecodeError, TypeError, AttributeError):
+                    fila["features"] = ""
+            else:
+                fila["features"] = "{}" if crudo.lstrip().startswith("{") else ""
+            rows.append(fila)
+    return rows
 
 
 def ic(w, n):
@@ -287,7 +318,7 @@ def main():
     params_raw = cargar_json(PARAMS_PATH, {})
     params = params_raw.get("estrategias", params_raw)
     hipotesis = cargar_json(HIPOTESIS_PATH, {}).get("hipotesis", [])
-    rows = cargar_results()
+    rows = cargar_results(hipotesis)
     ts = datetime.now(timezone.utc).isoformat(timespec="seconds")
 
     # Evaluar hipótesis y resolver su target una vez

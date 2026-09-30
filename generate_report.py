@@ -20,6 +20,7 @@ Ficheros de entrada:
 Salida: data/shadow/informe_bot.xlsx
 """
 import csv
+import sys
 import glob
 from datetime import datetime, timezone, timedelta
 from pathlib import Path
@@ -155,11 +156,14 @@ def cargar_csv(path, excluir_columnas=()):
     with open(path, encoding="utf-8") as f:
         if not excluir_columnas:
             return list(csv.DictReader(f))
+        # 30-Sep (OOM-kills diarios, pico 1,8 GB): además de soltar columnas, se internan
+        # los valores -- strategy/subtype/decision/end_date/question se repiten cientos de
+        # miles de veces y cada fila guardaba su propia copia. Mismos valores, menos memoria.
         filas = []
         for row in csv.DictReader(f):
             for col in excluir_columnas:
                 row.pop(col, None)
-            filas.append(row)
+            filas.append({k: (sys.intern(v) if type(v) is str else v) for k, v in row.items()})
         return filas
 
 
@@ -1095,7 +1099,9 @@ def main():
 
     init_live_csvs()
 
-    shadow_res    = cargar_csv(SHADOW_RESULTS, excluir_columnas=("features",))
+    # 30-Sep: además de features, 5 columnas que ninguna hoja lee (verificado con grep).
+    shadow_res    = cargar_csv(SHADOW_RESULTS, excluir_columnas=(
+        "features", "prob_yes_modelo", "edge_direccional", "brier_score", "clv", "log_loss"))
     shadow_perf   = cargar_csv(SHADOW_PERFORMANCE)
     strategy_params = cargar_strategy_params()
     shadow_ab     = cargar_shadow_abiertas(shadow_res)

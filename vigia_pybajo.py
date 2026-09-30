@@ -23,7 +23,18 @@ def main() -> int:
     import hypothesis_tracker as ht
     from shadow_digest import enviar_telegram
 
-    rows = ht._load_results()
+    # 30-Sep (OOM: este vigía cargaba results.csv entero, +1,2 GB a las :00 de cada hora, justo
+    # cuando el postmortem hace su fase pesada). El subset de abajo solo usa strategy ==
+    # "GBM_LATE_15M" y la clave de dedup incluye strategy, así que filtrar antes de
+    # deduplicar da exactamente las mismas filas.
+    import csv
+    from resultados_dedup import cargar_results_dedup
+    try:
+        with open(ht.RESULTS_CSV, encoding="utf-8") as f:
+            rows = cargar_results_dedup(rows=(r for r in csv.DictReader(f)
+                                              if r.get("strategy") == "GBM_LATE_15M"))
+    except FileNotFoundError:
+        rows = []
     defs = ht._cargar_hipotesis_custom()
     hdef = next((d for d in defs if d.get("id") == HID), None)
     if hdef is None:

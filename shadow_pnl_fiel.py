@@ -57,6 +57,7 @@ Limitaciones documentadas (no ocultas):
 import argparse
 import csv
 import json
+import sys
 from collections import defaultdict
 from datetime import datetime, timezone, timedelta
 from pathlib import Path
@@ -150,6 +151,9 @@ def ic_para(strategy: str, subtype: str, decision: str, params: dict):
     return None
 
 
+_CAMPOS_LIBRO = ("ratio_vs_stake", "mejor_ask", "precio_plan")
+
+
 def construir_indice_libro(root: Path) -> dict:
     """(strategy, market_id, direction) -> fila de libro_snapshots.csv,
     prefiriendo motivo='ejecutada' (fill real) > 'candidato_evaluacion' >
@@ -180,7 +184,8 @@ def construir_indice_libro(root: Path) -> dict:
             pr = prioridad[motivo]
             actual = indice.get(key)
             if actual is None or pr < actual[0]:
-                indice[key] = (pr, row)
+                # 30-Sep (OOM): solo los 3 campos que lee simular_tupla(), no la fila entera.
+                indice[key] = (pr, {c: row.get(c) for c in _CAMPOS_LIBRO})
     return {k: v[1] for k, v in indice.items()}
 
 
@@ -197,9 +202,16 @@ def cargar_resultados_por_tupla(root: Path) -> dict:
             ts = parse_ts(row.get("prediction_timestamp", ""))
             if ts is None:
                 continue
-            row["_ts"] = ts
             tupla = f"{strategy}#{subtype}#{decision}"
-            por_tupla[tupla].append(row)
+            # 30-Sep (OOM, +1,7 GB cada 30 min en vigiasfreq): antes se retenía la fila completa
+            # (20 columnas, incluido el JSON de features) de las ~786k señales. simular_tupla()
+            # solo lee estos campos.
+            por_tupla[tupla].append({
+                "strategy": sys.intern(strategy), "subtype": sys.intern(subtype),
+                "decision": sys.intern(decision), "_ts": ts,
+                "market_id": row["market_id"], "acierto": row.get("acierto"),
+                "resolution_timestamp": row["resolution_timestamp"],
+            })
     for tupla in por_tupla:
         por_tupla[tupla].sort(key=lambda r: r["_ts"])
     return por_tupla

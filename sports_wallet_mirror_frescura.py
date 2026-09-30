@@ -42,7 +42,7 @@ DRY_RUN_VIVO = DIR_SPORTS / "wallet_mirror_sniper_dry_run.csv"
 _cache_dry_run_vivo = {"mtime": None, "filas": None}
 
 
-def _leer_dry_run_vivo_filas() -> list:
+def _leer_dry_run_vivo_filas():
     """Lee wallet_mirror_sniper_dry_run.csv UNA vez, cacheado por mtime --
     mismo motivo/patrón que wallet_mirror_tracker.py (cripto, /code-review
     04-Sep): _historial_reciente() y _historial_reciente_por_bucket() lo
@@ -50,12 +50,25 @@ def _leer_dry_run_vivo_filas() -> list:
     try:
         mtime = DRY_RUN_VIVO.stat().st_mtime
     except OSError:
-        return []
+        return iter(())
     if _cache_dry_run_vivo["mtime"] != mtime:
+        # 30-Sep (OOM): antes list(csv.DictReader(f)) retenía todas las columnas de todas las
+        # filas. Los dos consumidores descartan las filas sin acierto resuelto y solo leen
+        # _CAMPOS_DRY_RUN_VIVO: se guarda una tupla por fila resuelta y se devuelve un
+        # generador de dicts con esas mismas claves/valores (mismo patrón que cripto).
+        filas = []
         with open(DRY_RUN_VIVO, encoding="utf-8") as f:
-            _cache_dry_run_vivo["filas"] = list(csv.DictReader(f))
+            for r in csv.DictReader(f):
+                if r.get("acierto") not in ("0", "1"):
+                    continue
+                filas.append(tuple(r.get(k, "") for k in _CAMPOS_DRY_RUN_VIVO))
+        _cache_dry_run_vivo["filas"] = filas
         _cache_dry_run_vivo["mtime"] = mtime
-    return _cache_dry_run_vivo["filas"]
+    return (dict(zip(_CAMPOS_DRY_RUN_VIVO, t)) for t in _cache_dry_run_vivo["filas"])
+
+
+_CAMPOS_DRY_RUN_VIVO = ("acierto", "wallet", "tipo", "categoria", "condition_id",
+                        "trade_timestamp", "mejor_ask_mirror")
 
 N_RECIENTE_OPERAR = 15             # mismo valor de partida que cripto (wallet_mirror_tracker.py)
 MARGEN_DEGRADACION_PP_OPERAR = 15  # mismo criterio que cripto

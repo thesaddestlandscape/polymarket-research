@@ -2789,8 +2789,28 @@ def _cargar_predicciones_recientes_por_estrategia(dias: int = COBERTURA_RECIENTE
                 # Ficheros recorridos en orden cronológico (sorted arriba) --
                 # sobrescribir aquí ya implementa "el fichero más reciente
                 # gana" para el mismo (clave, mid) repetido entre días.
-                idx.setdefault(clave, {})[mid] = (dec_efectiva, feats)
+                # 30-Sep (OOM: este índice cargaba ~0,9 GB -- todas las features de todas las
+                # claves de 9 días). Los dos únicos consumidores (_candidatos_recientes_feature
+                # y _podar_filtros_por_cobertura_union) solo consultan claves de FEATURE_RULES
+                # y solo leen feats.get(f) para features de los specs de esa clave: se guardan
+                # solo esas (mismos valores) y se omiten las claves que nadie consulta. El nº de
+                # observaciones por clave y su orden no cambian.
+                nec = _feats_recientes_necesarias(clave)
+                if nec is None:
+                    continue
+                idx.setdefault(clave, {})[mid] = (dec_efectiva,
+                                                  {k: feats[k] for k in nec if k in feats})
     return {clave: list(por_mercado.values()) for clave, por_mercado in idx.items()}
+
+
+@lru_cache(maxsize=None)
+def _feats_recientes_necesarias(clave: str):
+    """Features que los specs de FEATURE_RULES leen para `clave`; None si no es una clave de
+    FEATURE_RULES (nadie consulta el índice de recientes por ella)."""
+    specs = FEATURE_RULES.get(clave)
+    if specs is None:
+        return None
+    return tuple({f for f, _, _ in specs})
 
 
 @lru_cache(maxsize=None)
@@ -2954,6 +2974,13 @@ def aprender_patrones_causales(resultados: list, pred_index: dict) -> dict:
     _indice: dict[str, dict[str, list]] = {
         k: {"BUY_YES": [], "BUY_NO": []} for k in _claves_feature_rules
     }
+    # 30-Sep (OOM-kills diarios: esta fase subía el proceso de 1,5 a 3,9 GB una vez por hora):
+    # feats trae las 30-50 features de la fila, pero más abajo solo se lee f[feature] para
+    # las features de feature_specs del strat_key. Se guarda por strat_key un dict con SOLO
+    # esas claves (mismo valor, mismo "feature in f") -- len(datos), sum(aciertos) y vals
+    # no cambian. Un dict por lista de specs distinta (varios strat_keys comparten la misma).
+    _feats_necesarias = {k: (id(specs), tuple({f for f, _, _ in specs}))
+                         for k, specs in FEATURE_RULES.items()}
     for r in resultados:
         s   = r.get("strategy", "")
         sub = r.get("subtype", "")
@@ -2982,6 +3009,7 @@ def aprender_patrones_causales(resultados: list, pred_index: dict) -> dict:
         feats = _extraer_features(r, pred)
         if not feats:
             continue
+        _reducidos = {}
         for strat_key in posibles:
             # 05-Sep (barrido de salud, swap/OOM crítico): antes se guardaba
             # la fila `r` COMPLETA (~15-20 columnas incl. el JSON crudo de
@@ -2994,7 +3022,11 @@ def aprender_patrones_causales(resultados: list, pred_index: dict) -> dict:
             # reduce el tamaño de esta estructura (la misma que el fix del
             # 28-Ago ya identificó como el pico de RSS real) varias veces sin
             # tocar ni un valor calculado.
-            _indice[strat_key][dec].append((int(r.get("acierto", 0)), feats))
+            _id_specs, _nec = _feats_necesarias[strat_key]
+            _f = _reducidos.get(_id_specs)
+            if _f is None:
+                _f = _reducidos[_id_specs] = {k: feats[k] for k in _nec if k in feats}
+            _indice[strat_key][dec].append((int(r.get("acierto", 0)), _f))
 
     for strat_key, feature_specs in FEATURE_RULES.items():
         # .pop() en vez de indexar: libera el bucket de este strat_key del

@@ -78,7 +78,7 @@ HIST_BALLENAS = DIR_SHADOW / "ballenas_timing_history.csv"
 _cache_dry_run_vivo = {"mtime": None, "filas": None}
 
 
-def _leer_dry_run_vivo_filas() -> list:
+def _leer_dry_run_vivo_filas():
     """Lee wallet_mirror_sniper_dry_run.csv UNA vez, cacheado por mtime
     (04-Sep, /code-review: _historial_reciente_wallet_mirror() y
     _historial_reciente_wallet_mirror_por_bucket() lo leían cada una por
@@ -98,19 +98,26 @@ def _leer_dry_run_vivo_filas() -> list:
         # 2,7 GB en wallets_operativas_recientes, cada 30 min y en cada arranque del ejecutor).
         # Los ÚNICOS consumidores (_historial_reciente_wallet_mirror y ..._por_bucket) solo usan
         # _CAMPOS_DRY_RUN_VIVO y descartan las filas sin acierto resuelto -> se guarda solo eso.
+        # 30-Sep (OOM-kills diarios, el ejecutor llegaba a 1,7 GB): un dict por fila seguía
+        # reteniendo ~700 MB en caché. Se guarda una tupla por fila con las cadenas repetidas
+        # internadas y se devuelve un generador de dicts con las MISMAS claves/valores -- los
+        # dos consumidores solo iteran y hacen row.get(), su resultado no cambia.
         filas = []
         with open(DRY_RUN_VIVO, encoding="utf-8") as f:
             for r in csv.DictReader(f):
                 if r.get("acierto") not in ("0", "1"):
                     continue
-                filas.append({k: r.get(k, "") for k in _CAMPOS_DRY_RUN_VIVO})
+                filas.append(tuple(sys.intern(r.get(k, "") or "") if k in _CAMPOS_INTERNADOS
+                                   else (r.get(k, "") or "") for k in _CAMPOS_DRY_RUN_VIVO))
         _cache_dry_run_vivo["filas"] = filas
         _cache_dry_run_vivo["mtime"] = mtime
-    return _cache_dry_run_vivo["filas"]
+    return (dict(zip(_CAMPOS_DRY_RUN_VIVO, t)) for t in _cache_dry_run_vivo["filas"])
 
 
 _CAMPOS_DRY_RUN_VIVO = ("acierto", "tipo", "wallet", "activo", "marco", "condition_id",
                         "trade_timestamp", "mejor_ask_deteccion")
+_CAMPOS_INTERNADOS = frozenset(("acierto", "tipo", "wallet", "activo", "marco", "condition_id",
+                                "mejor_ask_deteccion"))
 
 
 def _acierto_wallet_desde_fila_dry_run(row: dict) -> int | None:
