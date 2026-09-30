@@ -12,11 +12,12 @@ Retrospectivo con fotos de 1-2 min (analisis_valor_relativo_5m_15m.py, 10-30 Sep
 13/21 días): prometedor pero sin demostrar, porque las dos fotos distaban hasta 20 s. Este observador lo mide con
 los dos libros en el MISMO milisegundo (libro_estado_ws, top de libro O(1)).
 
-Cada CADA_S, en los últimos 300 s de cada ventana de 15 min y para cada moneda, registra:
+Pares medidos (PARES): 5m>15m, 5m>4h y 15m>4h; las columnas "15"/"5" son el tramo LARGO y el CORTO del par.
+Cada CADA_S, en el último tramo corto de cada ventana larga y para cada moneda, registra:
   - una fila base cada BASE_S (para conocer la distribución del margen), y
   - una fila de evento (como mucho una por segundo) mientras margen = bid5(lado) - ask15(lado) >= MARGEN_EVENTO,
 con tamaños, antigüedad de cada top, referencias, y también la pata inversa (lado contrario: bid15 - ask5).
-Salida: /root/polymarket-research-datalogs/valor_relativo_anidado_YYYY-MM-DD.csv (gz al día siguiente, 21 días).
+Salida: /root/polymarket-research-datalogs/valor_relativo_anidado_v2_YYYY-MM-DD.csv (gz al día siguiente, 21 días).
 NO envía ni simula órdenes. El desenlace se cruza después con resolution_sniper_obs.
 """
 import csv
@@ -34,8 +35,12 @@ from resolution_sniper_observer import ASSETS, _TAIL, mercado_slot, token_ids
 DATALOGS = Path("/root/polymarket-research-datalogs")
 CADA_S, BASE_S, MARGEN_EVENTO, GAP_MIN_BPS = 0.25, 10.0, 0.02, 1.0
 RETENCION_DIAS = 21
+# (corto, segundos, largo, segundos): el corto es el último tramo del largo y cierran a la vez. 30-Sep: añadidos los
+# pares con 4 h (misma regla TWAP de Chainlink; los de 60 min NO entran: resuelven con la vela 1H de Binance).
+PARES = [("5m", 300, "15m", 900), ("5m", 300, "4h", 14400), ("15m", 900, "4h", 14400)]
+PREFIJO = "valor_relativo_anidado_v2"
 TWAP_N_MIN = 20
-CAMPOS = ["ts_ms", "tipo", "activo", "fin", "resto_s", "market15", "market5", "ref15", "ref5", "gap_bps", "lado",
+CAMPOS = ["ts_ms", "tipo", "par", "activo", "fin", "resto_s", "market15", "market5", "ref15", "ref5", "gap_bps", "lado",
           "ask15", "ask15_size", "edad15_ms", "bid5", "bid5_size", "edad5_ms", "margen",
           "bid15", "ask5", "inv_ask5", "inv_ask5_size", "inv_bid15", "inv_margen"]
 _lock = threading.Lock()
@@ -53,7 +58,7 @@ def _ref(activo, ini):
 
 
 def _escribir(fila):
-    ruta = DATALOGS / f"valor_relativo_anidado_{datetime.now(timezone.utc):%Y-%m-%d}.csv"
+    ruta = DATALOGS / f"{PREFIJO}_{datetime.now(timezone.utc):%Y-%m-%d}.csv"
     with _lock:
         nuevo = not ruta.exists()
         with open(ruta, "a", newline="", encoding="utf-8") as f:
@@ -65,12 +70,12 @@ def _escribir(fila):
 
 def _mantenimiento():
     hoy = f"{datetime.now(timezone.utc):%Y-%m-%d}"
-    for f in DATALOGS.glob("valor_relativo_anidado_*.csv"):
+    for f in DATALOGS.glob(f"{PREFIJO}_*.csv"):
         if hoy not in f.name:
             with open(f, "rb") as a, gzip.open(str(f) + ".gz", "wb") as b:
                 shutil.copyfileobj(a, b)
             f.unlink()
-    for f in DATALOGS.glob("valor_relativo_anidado_*.csv.gz"):
+    for f in DATALOGS.glob(f"{PREFIJO}_*.csv.gz"):
         if time.time() - f.stat().st_mtime > RETENCION_DIAS * 86400:
             f.unlink()
 
@@ -90,57 +95,56 @@ def main():
             if ahora - t_mant > 3600:
                 t_mant = ahora
                 _mantenimiento()
-            ini15 = int(ahora // 900) * 900
-            fin = ini15 + 900
-            ini5 = fin - 300
-            if not (ini5 + 5 <= ahora <= fin - 8):
-                time.sleep(CADA_S)
-                continue
-            for activo in ASSETS:
-                k = (activo, fin)
-                if k not in refs:
-                    r15, r5 = _ref(activo, ini15), _ref(activo, ini5)
-                    if r15 is None or r5 is None:
-                        continue
-                    refs[k] = (r15, r5)
-                r15, r5 = refs[k]
-                gap = (r5 / r15 - 1) * 1e4
-                if abs(gap) < GAP_MIN_BPS:
+            for corto, d_corto, largo, d_largo in PARES:
+                ini_l = int(ahora // d_largo) * d_largo
+                fin = ini_l + d_largo
+                ini_c = fin - d_corto
+                if not (ini_c + 5 <= ahora <= fin - 8):
                     continue
-                if k not in toks:
-                    _, m15 = mercado_slot(activo, "15m", ini15)
-                    _, m5 = mercado_slot(activo, "5m", ini5)
-                    if not m15 or not m5:
+                par = f"{corto}>{largo}"
+                for activo in ASSETS:
+                    k = (par, fin, activo)
+                    if k not in refs:
+                        r_l, r_c = _ref(activo, ini_l), _ref(activo, ini_c)
+                        if r_l is None or r_c is None:
+                            continue
+                        refs[k] = (r_l, r_c)
+                    r15, r5 = refs[k]                       # r15 = referencia del largo, r5 = del corto
+                    gap = (r5 / r15 - 1) * 1e4
+                    if abs(gap) < GAP_MIN_BPS:
                         continue
-                    toks[k] = (token_ids(m15), token_ids(m5), m15.get("id", ""), m5.get("id", ""))
-                (y15, n15), (y5, n5), id15, id5 = toks[k]
-                up = gap > 0                                    # ref15 < ref5: Up5 => Up15 ; al revés: Down5 => Down15
-                t15, b15, _, a15, a15s = _top(y15 if up else n15)       # pata barata candidata: lado implicado en 15 min
-                t5, b5, b5s, a5, _ = _top(y5 if up else n5)
-                # pata inversa (contrarrecíproco): el lado contrario de 15 min implica el contrario de 5 min
-                _, ib15, _, _, _ = _top(n15 if up else y15)
-                _, _, _, ia5, ia5s = _top(n5 if up else y5)
-                if a15 is None or b5 is None or not a15 or not b5:
-                    margen = None
-                else:
-                    margen = round(b5 - a15, 4)
-                inv = round(ib15 - ia5, 4) if ib15 and ia5 else None
-                ahora_ms = int(time.time() * 1000)
-                evento = (margen is not None and margen >= MARGEN_EVENTO) or (inv is not None and inv >= MARGEN_EVENTO)
-                if evento and ahora - ult_ev.get(k, 0) >= 1.0:
-                    ult_ev[k] = ahora
-                    tipo = "evento"
-                elif ahora - ult_base.get(k, 0) >= BASE_S:
-                    ult_base[k] = ahora
-                    tipo = "base"
-                else:
-                    continue
-                _escribir({"ts_ms": ahora_ms, "tipo": tipo, "activo": activo, "fin": fin, "resto_s": round(fin - ahora, 2),
-                           "market15": id15, "market5": id5, "ref15": r15, "ref5": r5, "gap_bps": round(gap, 2),
-                           "lado": "Up" if up else "Down", "ask15": a15, "ask15_size": a15s,
-                           "edad15_ms": ahora_ms - t15 if t15 else "", "bid5": b5, "bid5_size": b5s,
-                           "edad5_ms": ahora_ms - t5 if t5 else "", "margen": margen, "bid15": b15, "ask5": a5,
-                           "inv_ask5": ia5, "inv_ask5_size": ia5s, "inv_bid15": ib15, "inv_margen": inv})
+                    if k not in toks:
+                        _, m15 = mercado_slot(activo, largo, ini_l)
+                        _, m5 = mercado_slot(activo, corto, ini_c)
+                        if not m15 or not m5:
+                            continue
+                        toks[k] = (token_ids(m15), token_ids(m5), m15.get("id", ""), m5.get("id", ""))
+                        if largo == "4h":                   # el universo del WS no trae 4 h: se piden a demanda
+                            LE.pedir([t for t in toks[k][0] if t], ttl_s=d_corto + 120)
+                    (y15, n15), (y5, n5), id15, id5 = toks[k]
+                    up = gap > 0                            # ref_largo < ref_corto: Up corto => Up largo ; al revés con Down
+                    t15, b15, _, a15, a15s = _top(y15 if up else n15)
+                    t5, b5, b5s, a5, _ = _top(y5 if up else n5)
+                    _, ib15, _, _, _ = _top(n15 if up else y15)     # pata inversa (contrarrecíproco)
+                    _, _, _, ia5, ia5s = _top(n5 if up else y5)
+                    margen = round(b5 - a15, 4) if a15 and b5 else None
+                    inv = round(ib15 - ia5, 4) if ib15 and ia5 else None
+                    ahora_ms = int(time.time() * 1000)
+                    evento = (margen is not None and margen >= MARGEN_EVENTO) or (inv is not None and inv >= MARGEN_EVENTO)
+                    if evento and ahora - ult_ev.get(k, 0) >= 1.0:
+                        ult_ev[k] = ahora
+                        tipo = "evento"
+                    elif ahora - ult_base.get(k, 0) >= BASE_S:
+                        ult_base[k] = ahora
+                        tipo = "base"
+                    else:
+                        continue
+                    _escribir({"ts_ms": ahora_ms, "tipo": tipo, "par": par, "activo": activo, "fin": fin,
+                               "resto_s": round(fin - ahora, 2), "market15": id15, "market5": id5, "ref15": r15, "ref5": r5,
+                               "gap_bps": round(gap, 2), "lado": "Up" if up else "Down", "ask15": a15, "ask15_size": a15s,
+                               "edad15_ms": ahora_ms - t15 if t15 else "", "bid5": b5, "bid5_size": b5s,
+                               "edad5_ms": ahora_ms - t5 if t5 else "", "margen": margen, "bid15": b15, "ask5": a5,
+                               "inv_ask5": ia5, "inv_ask5_size": ia5s, "inv_bid15": ib15, "inv_margen": inv})
             if len(refs) > 500:
                 for d in (refs, toks, ult_base, ult_ev):
                     for kk in [kk for kk in d if kk[1] < ahora - 3600]:

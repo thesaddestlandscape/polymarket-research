@@ -27,8 +27,9 @@ import live_trade as lt
 from resolution_sniper_observer import ASSETS, _TAIL, mercado_slot, token_ids
 
 OUT = Path("/root/polymarket-research-datalogs") / "precierre_multioffset_fase0.csv"
-MARCOS = {"5m": 300, "15m": 900}
+MARCOS = {"5m": 300, "15m": 900, "4h": 14400}   # 30-Sep: 4 h (misma regla TWAP Chainlink, 6 cierres al día, menos bots)
 OFFSETS = [-120, -90, -60, -45, -30, -20, -10]
+OFFSETS_EXTRA = {"4h": [-600, -300, -180]}      # los marcos largos se miran también antes
 TOLERANCIA_S = 1.0             # si el bucle llega tarde a un offset más de esto, se descarta ese punto
 CADA_S = 0.2
 STAKE = 1.05
@@ -36,9 +37,13 @@ CHAINLINK_MAX_EDAD_S = 10.0
 TWAP_N_MIN_TICKS, TWAP_N_MIN_CIERRE = 20, 10
 Z_VOL_VENTANA_S = 300
 CAMPOS = ["ts_utc", "activo", "marco", "slug", "market_id", "offset_s", "resto_s", "z", "proy", "ref_twap",
-          "direccion", "ask", "bid", "profundidad_eur", "ratio_vs_stake", "lat_libro_ms", "error"]
+          "direccion", "ask", "bid", "profundidad_eur", "ratio_vs_stake", "lat_libro_ms", "error",
+          # 30-Sep (Javi: "necesitamos datos reales y fieles, no optimistas"): libro REAL del lado CONTRARIO al que
+          # marca el TWAP, leído en paralelo en el mismo instante. Antes solo podía estimarse como 1 - bid.
+          "ask_contrario", "bid_contrario", "profundidad_contrario_eur", "ratio_contrario", "lat_contrario_ms"]
 _lock = threading.Lock()
 _pool = ThreadPoolExecutor(max_workers=6)
+_pool_c = ThreadPoolExecutor(max_workers=6, thread_name_prefix="multioffset_contrario")
 
 
 def _log(msg):
@@ -53,6 +58,24 @@ def _escribir(fila):
             if nuevo:
                 w.writeheader()
             w.writerow(fila)
+
+
+def _migrar_cabecera():
+    """Si el CSV existe con la cabecera antigua, lo reescribe con las columnas nuevas vacías (una sola vez)."""
+    if not OUT.exists():
+        return
+    with open(OUT, encoding="utf-8", newline="") as f:
+        cab = next(csv.reader(f), None)
+    if cab == CAMPOS:
+        return
+    tmp = OUT.with_name(OUT.name + ".migrando")
+    with _lock, open(OUT, encoding="utf-8", errors="replace", newline="") as f, open(tmp, "w", newline="", encoding="utf-8") as g:
+        w = csv.DictWriter(g, fieldnames=CAMPOS, extrasaction="ignore")
+        w.writeheader()
+        for r in csv.DictReader(f):
+            w.writerow({c: r.get(c, "") for c in CAMPOS})
+    tmp.replace(OUT)
+    _log(f"cabecera migrada a {len(CAMPOS)} columnas")
 
 
 def _ultimo(activo):
@@ -121,6 +144,12 @@ def _libro(token_id):
     return ask, bid, round(prof, 2), round(prof / STAKE, 1), ""
 
 
+def _libro_cronometrado(token_id):
+    t = time.perf_counter()
+    r = _libro(token_id)
+    return r, round((time.perf_counter() - t) * 1000)
+
+
 def _punto(activo, tag, ini, fin, off):
     fila = {c: "" for c in CAMPOS}
     fila.update({"ts_utc": datetime.now(timezone.utc).isoformat(timespec="milliseconds"), "activo": activo,
@@ -149,17 +178,28 @@ def _punto(activo, tag, ini, fin, off):
         if not tok:
             fila["error"] = "sin_token"
             return _escribir(fila)
+        tok_c = tn if direccion == "Up" else ty
         t = time.perf_counter()
+        fut_c = _pool_c.submit(_libro_cronometrado, tok_c) if tok_c else None     # en paralelo: mismo instante
         ask, bid, prof, ratio, err = _libro(tok)
         fila.update({"ask": ask, "bid": bid, "profundidad_eur": prof, "ratio_vs_stake": ratio,
                      "lat_libro_ms": round((time.perf_counter() - t) * 1000), "error": err})
+        if fut_c is not None:
+            try:
+                (ask_c, bid_c, prof_c, ratio_c, err_c), lat_c = fut_c.result(timeout=5)
+                if not err_c:
+                    fila.update({"ask_contrario": ask_c, "bid_contrario": bid_c, "profundidad_contrario_eur": prof_c,
+                                 "ratio_contrario": ratio_c, "lat_contrario_ms": lat_c})
+            except Exception:
+                pass
     except Exception as e:
         fila["error"] = f"{type(e).__name__}: {e}"[:120]
     _escribir(fila)
 
 
 def main():
-    _log(f"precierre_multioffset_fase0 arrancado (offsets {OFFSETS}, solo observación)")
+    _migrar_cabecera()
+    _log(f"precierre_multioffset_fase0 arrancado (marcos {list(MARCOS)}, offsets {OFFSETS}, con lado contrario real; solo observación)")
     hechos = set()
     while True:
         ahora = time.time()
@@ -167,7 +207,7 @@ def main():
             for tag, dur in MARCOS.items():
                 ini = int(ahora // dur) * dur
                 fin = ini + dur
-                for off in OFFSETS:
+                for off in OFFSETS_EXTRA.get(tag, []) + OFFSETS:
                     k = (activo, tag, ini, off)
                     objetivo = fin + off
                     if k in hechos or ahora < objetivo:
