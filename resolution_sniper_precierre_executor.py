@@ -1031,6 +1031,7 @@ def _firmar_enviar_registrar(pre: "_Precalculo", m: dict, activo: str, direction
         resultado["gate_motivo"] = f"error_marca_disco:{type(e).__name__}"   # fail-closed
         return resultado
     t2 = time.perf_counter()
+    t_prepost_ms = (t2 - t1) * 1000 - t_firma_ms   # 30-Sep: tramo firma->POST (CB, reloj, marca en disco), antes sin medir
     # 28-Sep (hallazgo real: RESOLUTION_SNIPER_NAIVE#BTC#5min#BUY_NO, 27-Sep
     # 04:05 UTC, único intento real de NAIVE hasta hoy -- bloqueado por
     # status_code=425 "order manager not ready, please retry"). A diferencia
@@ -1054,6 +1055,11 @@ def _firmar_enviar_registrar(pre: "_Precalculo", m: dict, activo: str, direction
                 continue
             break
     t_post_ms = (time.perf_counter() - t2) * 1000
+    try:   # 30-Sep: solo log (sin columna: no rota el CSV); nunca puede impedir el registro de una orden ya enviada
+        _log(f"  ⏱ latencia {strategy} {activo}: lectura={t_lectura_ms:.0f}ms firma={t_firma_ms:.0f}ms "
+             f"firma->POST={t_prepost_ms:.0f}ms POST={t_post_ms:.0f}ms")
+    except Exception:
+        pass
     resultado["t_envio_rel_cierre_s"] = round(time.time() - pre.ts_end, 3)
     # /code-review 23-Sep: marcar SIEMPRE tras intentar el POST -- una excepción (timeout) puede
     # ocultar una orden que sí llegó al exchange; sin saberlo, nunca reenviar al mismo mercado.
