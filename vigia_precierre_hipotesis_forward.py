@@ -15,6 +15,8 @@ por mercado (el primer instante que cumple).
   H3 Z CRECE 15m   : 15 min, a T-60, z >= 1, ask [0,65, 0,95) y z mayor que en T-90 (mismo lado). Antes: +0,074 (n=80).
   H4 TWAP 15m      : 15 min, T-90..T-45, z >= 1, ask [0,65, 0,95). Antes: +0,038 (n=607, 6/6 días).
   H5 TWAP 15m noche: H4 solo entre las 18 y las 24 UTC. Antes: +0,078 (n=146).
+  H7 CONFLUENCIA   : H4 cuando además una tomadora persistente o candidata ya compró ese mismo lado en ese mercado
+                     (observador tomadores_persistentes_fase0, datos desde el 30-Sep); H7b = H4 sin esa compra (control).
   H6 TWAP 4h       : 4 h, T-600..T-45, z >= 1, ask [0,65, 0,95). Sin datos previos (mercado añadido el 30-Sep).
 
 Confirmada = n>=40, >=10 días, IC90 por días > 0. Para dinero real además EV >= +0,10 por € (regla del proyecto),
@@ -64,6 +66,21 @@ def main() -> int:
     for x in filas:
         x["acuerdo"] = sum(1 for y in inst[(x["m"], x["off"], x["fin"])] if y is not x and y["dir"] == x["dir"] and y["z"] >= 1)
 
+    # compras de tomadoras persistentes/candidatas por mercado (observador a ~250 ms): slug -> [(ts, lado)]
+    tom = collections.defaultdict(list)
+    for f in sorted(Path("/root/polymarket-research-datalogs").glob("tomadores_persistentes_fase0_*.csv*")):
+        try:
+            import gzip
+            fh = gzip.open(f, "rt", encoding="utf-8", newline="") if f.name.endswith(".gz") else open(f, encoding="utf-8", newline="")
+            with fh:
+                for r in csv.DictReader(fh):
+                    tom[r.get("market_slug", "")].append((r.get("ts_deteccion_utc", ""), r.get("lado", "")))
+        except Exception as e:
+            print(f"(tomadoras: {f.name}: {type(e).__name__})")
+
+    def con_tomadora(x):
+        return any(lado == x["dir"] and t < x["ts"] for t, lado in tom.get(x["slug"], ()))
+
     def ok_twap(x, lo, hi):
         return x["a"] is not None and lo <= x["a"] < hi and x["rt"] >= 5
 
@@ -77,6 +94,10 @@ def main() -> int:
         ("H3 Z CRECE 15m", "15m", (-60,), False, h3),
         ("H4 TWAP 15m", "15m", (-90, -60, -45), False, lambda x: x["z"] >= 1 and ok_twap(x, 0.65, 0.95)),
         ("H5 TWAP 15m 18-24 UTC", "15m", (-90, -60, -45), False, lambda x: x["z"] >= 1 and ok_twap(x, 0.65, 0.95) and x["hora"] >= 18),
+        ("H7 TWAP 15m + tomadora mismo lado", "15m", (-90, -60, -45), False,
+         lambda x: x["z"] >= 1 and ok_twap(x, 0.65, 0.95) and con_tomadora(x)),
+        ("H7b TWAP 15m SIN tomadora (control)", "15m", (-90, -60, -45), False,
+         lambda x: x["z"] >= 1 and ok_twap(x, 0.65, 0.95) and not con_tomadora(x)),
         ("H6 TWAP 4h", "4h", (-600, -300, -180, -120, -90, -60, -45), False, lambda x: x["z"] >= 1 and ok_twap(x, 0.65, 0.95)),
     ]
     res, lineas = {}, [f"🧊 Hipótesis congeladas del precierre (corte {CORTE}Z; solo cuenta el forward)"]
