@@ -165,6 +165,7 @@ Cada línea es un error real del proyecto. Antes de concluir, promocionar, refut
 - Backtest in-sample ≠ forward: precierre multi-instante +0,089 in-sample → +0,01 forward; ventanas finas elegidas con todos los datos, solo 37 % positivas fuera de muestra; los micro-buckets no persisten solos. Lo único que ha mantenido el signo en walk-forward es la estabilidad temporal (positivo en todos los tramos + días independientes).
 - Precio medio ≠ BID/ASK ejecutable (colas de escaleras, stink bids): medir al lado que de verdad se cruza.
 - Una medición con latencia de segundos no refuta una idea de velocidad; y a la inversa, un edge medido con snapshots de 10-20 s no demuestra que sea capturable.
+- PolyBolt `price.crypto` (nuestro canal `spot` en `polybolt_*.csv`) es de **Pyth**, no de Chainlink (campo `source`; 0 % de coincidencias exactas, mediana 0,2-0,5 bps, máx 45 bps). Solo `twap60` es Chainlink. El failover de `fetch_polybolt_prices.py` escribe ese spot Pyth en `chainlink_*.csv` con `source=polybolt_fallback`: filtrarlo antes de medir o decidir algo que dependa del oráculo de resolución.
 - La regla real de resolución es TWAP60 de cierre vs TWAP60 de apertura (Chainlink), no spot vs spot (88-95 % de coincidencia) ni klines Binance/Kraken (en gaps estrechos invierten el orden: roturas de garantía del nested arb).
 - Fee: cripto 0,07, sports 0,05 (F1 0,03). No copiar el fee entre repos/modelos; usar el fee real del mercado.
 - `gross_win=(1-p)/p`, nunca `(1-p)`.

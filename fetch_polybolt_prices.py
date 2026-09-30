@@ -82,7 +82,7 @@ def _escribir(filas: list) -> None:
     with open(archivo, "a", newline="", encoding="utf-8") as f:
         w = csv.writer(f)
         if f.tell() == 0:
-            w.writerow(["timestamp_utc", "asset", "canal", "value", "event_ts_ms", "snapshot"])
+            w.writerow(["timestamp_utc", "asset", "canal", "value", "event_ts_ms", "snapshot", "source"])
         w.writerows(filas)
 
 
@@ -93,6 +93,9 @@ def _filas_de(msg: dict) -> list:
         return []
     ahora = datetime.now(timezone.utc).isoformat(timespec="milliseconds")
     snap = 1 if msg.get("snapshot") else 0
+    # 30-Sep: `source` = proveedor del precio (changelog PolyBolt 29-Sep). En un snapshot
+    # viene una vez por lote (payload); en un update, en el propio punto.
+    src_lote = payload.get("source") or ""
     puntos = payload.get("data") if snap and isinstance(payload.get("data"), list) else [payload]
     filas = []
     for p in puntos:
@@ -104,8 +107,39 @@ def _filas_de(msg: dict) -> list:
             v = float(v)
         except (TypeError, ValueError):
             continue
-        filas.append([ahora, asset, canal, v, p.get("timestamp"), snap])
+        src = p.get("source") or src_lote
+        _vigilar_proveedor(canal, asset, src)
+        filas.append([ahora, asset, canal, v, p.get("timestamp"), snap, src])
     return filas
+
+
+# 30-Sep (hallazgo real): el canal `price.crypto` (nuestro "spot") lo sirve PYTH, no
+# Chainlink -- el código lo daba por "el mismo precio que Chainlink" (0 % de coincidencias
+# exactas en 4 días, mediana 0,2-0,5 bps, máx 45 bps). `price.crypto.twap` ("twap60") SÍ es
+# Chainlink y es con lo que se valida la resolución. Se vigila el proveedor por (canal,
+# activo): aviso si no es el esperado o si cambia (puede cambiar entre conexiones).
+PROVEEDOR_ESPERADO = {"spot": "pyth", "twap60": "chainlink"}
+_proveedor_visto: dict = {}
+_proveedor_aviso_ts: dict = {}
+
+
+def _vigilar_proveedor(canal: str, asset: str, src: str) -> None:
+    if not src:
+        return
+    clave = (canal, asset)
+    previo = _proveedor_visto.get(clave)
+    if previo == src:
+        return
+    _proveedor_visto[clave] = src
+    esperado = PROVEEDOR_ESPERADO.get(canal)
+    if previo is None and src == esperado:
+        return
+    txt = (f"PolyBolt {canal} {asset}: proveedor {previo or '(primera lectura)'} -> {src}"
+           f" (esperado {esperado})")
+    _log(f"⚠️ {txt}")
+    if time.time() - _proveedor_aviso_ts.get(clave, 0.0) >= 3600:   # máx. 1 Telegram/hora por (canal, activo)
+        _proveedor_aviso_ts[clave] = time.time()
+        _avisar(f"⚠️ {txt}. Si es twap60, la validación de resolución ya no es Chainlink: revisar.")
 
 
 def _avisar(texto: str) -> None:
@@ -127,7 +161,7 @@ def _failover_chainlink(filas: list) -> None:
             _log(f"🚨 FAILOVER: RTDS Chainlink sin ticks {callado:.0f}s -- escribiendo PolyBolt en chainlink_*.csv")
             _avisar(f"🚨 Chainlink RTDS sin ticks {callado:.0f}s: FAILOVER a PolyBolt activo "
                     f"(chainlink_*.csv sigue alimentado, source=polybolt_fallback). Revisar RTDS.")
-        for _, asset, canal, v, ev_ts, _snap in filas:
+        for _, asset, canal, v, ev_ts, _snap, _src in filas:
             if canal == "spot":
                 fcp._escribir_tick(asset, v, ev_ts, source="polybolt_fallback")
     elif _en_fallback:

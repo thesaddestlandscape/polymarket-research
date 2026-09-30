@@ -216,6 +216,35 @@ def _listar_eventos_abiertos(max_paginas: int = 8) -> list:
     return eventos
 
 
+_PASO_MARCO_S = {"5min": 300, "15min": 900, "240min": 14400}
+
+
+def _market_id_ventana_actual(marco_slug_prefix: str, marco: str) -> str | None:
+    """30-Sep: el mercado de la ventana EN CURSO, por slug determinista
+    (<prefijo>-<epoch de apertura alineado al marco>). Motivo: el muestreo
+    anterior cogía el primer evento abierto con ese prefijo, que puede ser
+    un mercado prelistado a futuro aún sin configurar (rewards 0/0) -- dio
+    una falsa alarma "rewardsMinSize 50 -> 0" en BTC#5min cuando los 36
+    mercados en curso/siguientes seguían en 50/4.5. None si el marco no
+    tiene slug determinista (60min) o la consulta falla: el llamante cae
+    al muestreo antiguo."""
+    paso = _PASO_MARCO_S.get(marco)
+    if not paso:
+        return None
+    ahora = int(datetime.now(timezone.utc).timestamp())
+    slug = f"{marco_slug_prefix}-{ahora - ahora % paso}"
+    try:
+        r = requests.get(f"{GAMMA}/markets", params={"slug": slug}, headers=H, timeout=TIMEOUT)
+        r.raise_for_status()
+        d = r.json()
+    except Exception as e:
+        _log(f"WARN slug de ventana actual {slug} falló: {type(e).__name__}: {e}")
+        return None
+    if isinstance(d, list) and d and d[0].get("id"):
+        return d[0]["id"]
+    return None
+
+
 def _buscar_market_id(activo: str, marco_slug_prefix: str, marco: str) -> str | None:
     """Busca el market_id de un mercado ABIERTO representativo con ese
     prefijo de slug de evento. Verificado 09-Ago: 5min/15min/240min usan
@@ -224,6 +253,9 @@ def _buscar_market_id(activo: str, marco_slug_prefix: str, marco: str) -> str | 
     slugs distintos, NO una duración calculable desde startDate/endDate
     del evento (startDate ahí es cuándo se LISTÓ el mercado, no la
     apertura de la ventana -- descartado como heurística tras probarlo)."""
+    mid = _market_id_ventana_actual(marco_slug_prefix, marco)
+    if mid is not None:
+        return mid
     eventos = _listar_eventos_abiertos()
     if not eventos:
         _log(f"WARN sin eventos abiertos disponibles para {activo}#{marco}")
