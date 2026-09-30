@@ -24,11 +24,29 @@ REGISTRO = REPO / "data/shadow/gates_pendientes.json"
 RESULTS = REPO / "data/shadow/results.csv"
 
 
-def _cargar_resultados():
-    # 13-Jul: deduplicado por (strategy, market_id, decision) — ver
-    # resultados_dedup.py, mismo fix que shadow_postmortem.cargar_results.
-    from resultados_dedup import cargar_results_dedup
-    return cargar_results_dedup(RESULTS)
+_CAMPOS = ("strategy", "market_id", "decision", "subtype", "prediction_timestamp", "resolution_timestamp",
+           "acierto", "pnl_neto")
+
+
+def _cargar_resultados(estrategias: set):
+    """Misma deduplicación que resultados_dedup.cargar_results_dedup (clave strategy+market_id+decision, se queda la
+    de resolution_timestamp más antiguo), pero en STREAMING, solo las estrategias de los gates pendientes y solo
+    los campos que usan _cumple/_stats. 30-Sep: cargar results.csv entero (690 MB) eran 1,8 GB de pico cada hora
+    dentro de vigias_horarios_fase0 (OOM-kill 29-Sep 18:01). La dedup es por clave que incluye la estrategia, así
+    que filtrar antes por estrategia da exactamente las mismas filas."""
+    import csv
+    vistas = {}
+    if not RESULTS.exists() or not estrategias:
+        return []
+    with open(RESULTS, encoding="utf-8") as f:
+        for r in csv.DictReader(f):
+            if r.get("strategy") not in estrategias:
+                continue
+            clave = (r.get("strategy", ""), r.get("market_id", ""), r.get("decision", ""))
+            actual = vistas.get(clave)
+            if actual is None or r.get("resolution_timestamp", "") < actual.get("resolution_timestamp", ""):
+                vistas[clave] = {c: r.get(c, "") for c in _CAMPOS}
+    return list(vistas.values())
 
 
 def _cumple(row, gate):
@@ -84,7 +102,7 @@ def main() -> int:
         print("[vigia_gates] registro vacío")
         return 0
 
-    rows = _cargar_resultados()
+    rows = _cargar_resultados({g.get("strategy") for g in gates if not g.get("avisado")})
     avisos = []
     cambios = False
 
