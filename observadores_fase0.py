@@ -141,6 +141,7 @@ import sniper_listados_fase0  # 29-Sep: ronda3 #7, mercados recién listados (es
 import stink_bids_fase0  # 29-Sep: ronda3 #1, eventos stink (SELL >=5c bajo mediana) en mercados no updown con libro real, solo observación
 import gbm_late_imbalance_fase0  # 29-Sep: ronda2 #9, imbalance del libro al detectar señales REALES GBM_LATE (solo observación)
 import desfase_twap_apertura_fase0  # 29-Sep: ronda1 #2, desfase TWAP60 pre-apertura vs libro ambos lados
+import penny_clipper_ws_fase0  # 30-Sep: Penny Clipper disparado por trades del WS del CLOB (latencia ~0,1 s vs ~0,9 s RTDS); solo observación
 import mean_reversion_penny_clipper_fase0  # 29-Sep: 2 hipotesis de AutoPilotPM (lectura de codigo publico,
 # nunca instalado/ejecutado) validadas en backtest retrospectivo (results.csv, edge +1-3pp Mean Reversion,
 # +2-18pp Penny Clipper por bucket Wilson90). Mean Reversion es reactiva (doble websocket RTDS+Binance,
@@ -210,6 +211,7 @@ OBSERVADORES = [
     (wallet_first_buy_follow_fase0, "wallet_first_buy_follow_fase0.log", "_log"),
     (precierre_multioffset_fase0, "precierre_multioffset_fase0.log", "_log"),
     (mean_reversion_penny_clipper_fase0, "mean_reversion_penny_clipper_fase0.log", "_log"),
+    (penny_clipper_ws_fase0, "penny_clipper_ws_fase0.log", "_log"),
     (desfase_twap_apertura_fase0, "desfase_twap_apertura_fase0.log", "_log"),
     (gbm_late_imbalance_fase0, "gbm_late_imbalance_fase0.log", "_log"),
     (stink_bids_fase0, "stink_bids_fase0.log", "_log"),

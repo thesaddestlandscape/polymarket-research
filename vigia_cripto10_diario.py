@@ -12,6 +12,9 @@ Reglas CONGELADAS antes de ver su forward (no se retocan; contexto en datalogs a
   #7  Maker protegido por wallets líderes: data/shadow/maker_protegido_wallets.json (maker_protegido_wallets.py, cron propio).
   #8  Salto de Binance -> libros de OTRAS monedas 5m/15m (binance_jump_cruzado): comprar el lado del salto al ask a +0,6 s.
   #9  Salto -> marcos 1 h / 4 h de la MISMA moneda, idem.   Para ambos: % de libros quietos entre +0 y +0,6 s.
+  #11 Penny Clipper RÁPIDO (penny_clipper_ws_fase0, disparo por trades del WS del CLOB, ~0,1 s): comprar el token al ask del
+        libro en memoria a +0 / 0,5 / 1 / 2 s desde la detección (curva de decaimiento); profundidad >=5x stake.
+        Antes del corte, con el disparo por RTDS: lectura <500 ms +8,6 % (n=395), 500-1000 −4,7 %, >1 s −9,8 %.
   #10 Up/Down DIARIO (updown_diario_fase0): primer instante con <=10 min restantes y valor = prob_justa - ask >= 0,10.
 Gate común para proponer algo con dinero: n>=40, >=5 días (10 en #4-#5), EV>=+0,10 por €, IC90 por días >0 -> y aun así
 checklist de 6 categorías + /code-review + OK de Javi. Comisión cripto 7 % x (1 - p) por € (maker: 0).
@@ -229,11 +232,38 @@ def s10():
     return {"valor>=0,10 a <=10 min": _res(pd), "dias_observados": dias_obs, "disparos": len(unidades)}
 
 
+def s11():
+    filas = []
+    for p in sorted(glob.glob(str(DATALOGS / "penny_clipper_ws_*.csv.gz"))):
+        with gzip.open(p, "rt", encoding="utf-8", newline="") as fh:
+            filas += list(csv.DictReader(fh))
+    gan = _resolver_ids({r["market_id"] for r in filas}) if filas else {}
+    pd = {o: defaultdict(list) for o in ("0.0", "0.5", "1.0", "2.0")}
+    lat = sorted(int(r["lat_deteccion_ms"]) for r in filas if r.get("lat_deteccion_ms"))
+    for r in filas:
+        o = gan.get(str(r["market_id"]))
+        if o not in ("Up", "Down"):
+            continue
+        win = (r["decision"] == "BUY_YES") == (o == "Up")
+        for off in pd:
+            try:
+                a, sz = float(r[f"ask_{off}"]), float(r[f"ask_size_{off}"] or 0)
+            except (ValueError, KeyError):
+                continue
+            if 0.03 <= a < 0.97 and a * sz >= 5 * 1.05:
+                pd[off][r["ts_deteccion_utc"][:10]].append(_pnl(win, a))
+    out = {f"entrada +{o} s": _res(v) for o, v in pd.items()}
+    out["latencia_deteccion_p50_ms"] = lat[len(lat) // 2] if lat else None
+    out["disparos"] = len(filas)
+    return out
+
+
 def main() -> int:
     informe, lin = {}, ["🧪 Cripto10 — seguimiento diario (estrategias 4-10; las 1-3 en el vigía de valor tras salto)"]
     for nombre, fn in (("#4 PRECIERRE banda alta", s4), ("#5 PRECIERRE veto recotización +0,5 s", s5),
                        ("#6 maker con cancelación ms", s6), ("#7 maker protegido por líderes", s7),
-                       ("#8/#9 salto -> otras monedas y 1h/4h", s8_9), ("#10 Up/Down diario", s10)):
+                       ("#8/#9 salto -> otras monedas y 1h/4h", s8_9), ("#10 Up/Down diario", s10),
+                       ("#11 Penny Clipper rápido (WS)", s11)):
         try:
             r = fn()
         except Exception as e:
