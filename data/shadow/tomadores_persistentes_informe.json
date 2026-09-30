@@ -1,90 +1,7 @@
 {
- "generado_utc": "2026-09-30T09:23:36+00:00",
+ "generado_utc": "2026-09-30T12:21:09+00:00",
  "universo_n": 82,
- "entran": [
-  "0x03512a9086a34576f82c8434f8552eb3256766cf",
-  "0x037b8d4a5ce2717fd35c0434c9932b82c3219182",
-  "0x040ad8ef62b111e76b21576efd1a9c0807b5118d",
-  "0x09b7c7435bd14ab7cfed0be0e796c2363816d0e2",
-  "0x0b1bc25849c106c74a8b67dec077f9a09279a70b",
-  "0x0d0ebc17486ff271254f5648322e813c5ef44b47",
-  "0x10accf4078530e8215b012f249b063dcbef7c09a",
-  "0x1291d54f413af53b53fba5ea2b226b1947fe7419",
-  "0x12c36e9dafe4fb336d53bcfb85f778b147d31ba8",
-  "0x19b3823092892c026517fd0ff58df4889abe0b9b",
-  "0x1a80c37798935774f92fa2f376f0a4e4a7e83b26",
-  "0x1b58d3de60d7f9e1aefdc9449e8d3733ea096f11",
-  "0x20c93453ab5da9386892140e83638a46b8b6e915",
-  "0x20d2309cd92b797ae7ca175ed828ed8a27fbe29d",
-  "0x267d44d5527e490fb5b3d616125a0381ebebbc1e",
-  "0x26a3f582e638ca1e03d73cb94b2ba4cb058ddfa5",
-  "0x2977a92b98ac2713b952dd51c0e031e6adab4eb0",
-  "0x2b7d2c356b3f1c858c4cf0152b2c4692dfee33db",
-  "0x2c6dd8343d5926fa2d3779303bd238c2f8ee1a7f",
-  "0x2ed94d1a460379292d2e3b46f2cf7d94b033f271",
-  "0x32986a1236042773d2c6dc8f5bd73ee83b429fe8",
-  "0x34a494fe9a7751d20d0381b93853f1f138957fa4",
-  "0x355d54242b1fcbc20e6bb3f8d94a1ccaaf5d1c50",
-  "0x361528e242bc6cc789ac8da6fd5cb98046178fdf",
-  "0x3efbbecec8c98853be5e866a4e3b07f1d2834682",
-  "0x4126b16f087dddc677e382b3d6f74b356237d579",
-  "0x4144bf7b5b02eab2f5829bd0a832f8cf1313c906",
-  "0x424eb20fcd25113e3b98f42522a54580350b263b",
-  "0x440bfa4f9bc2fa011018d2d52fdce66aec196570",
-  "0x48ac40fc545cf327edd5365435c3a9f385614a7e",
-  "0x4d7fb17d715dc03927d722db007198d7be156fb9",
-  "0x52f08a7b0d6993340d5f7262c073d0d80b390699",
-  "0x54f4a773ef9238e5961b8c83a232ae06d998c0ad",
-  "0x562a11bcd7354ea82a09ed803cb1739d60862ad4",
-  "0x576b0696fd5a9225d66fd9500fd98f5be10b0cab",
-  "0x5d4aba8ad45bb5eab3499a0294b42da5d1e455d3",
-  "0x5e2b9261b0c4f697b55bf921ff2bc227183d9101",
-  "0x5f6d133cd13cb3f72be3911bfb3373fc8890976f",
-  "0x640c62e644c428efeff9c81e73f2b2c0d9125f1c",
-  "0x65e13cdcdfe7590eb1d03047e569762e7655677c",
-  "0x6b14096b2adad7da689b326d0a2fba4179b890e6",
-  "0x6bef4ccbadd3892ecdbb0cc186b8db8966f251ca",
-  "0x720babbde4ee159d8735ee09a1e35c4bdb46d2cd",
-  "0x722d1f8ebe107ad7f24530b56e019da7dbdd46c5",
-  "0x73e40b377cf4ac7034d0afaf66abb58f3424fb79",
-  "0x75cc3b63a2f2423085e10706c78b494017b93ce1",
-  "0x762d2469ddfe50755fb96ddc54df72ae4b4d964c",
-  "0x790637b693a2b3d77b42d14326e99eb6d706dbb5",
-  "0x7ae4a31adc0fb0226ac84f1febabea6b8daf0d4b",
-  "0x881f273d5e061ff221146d5a51cc8add1f2ae773",
-  "0x8dbeabb5961fd2fb28647b7bcadec1bef6d288f8",
-  "0x8fda356b89c6bfeb1df008a45749d153da590a28",
-  "0x91f0dab64f4b78603c1ee0b88e18c91f8821fd78",
-  "0x99aeaa3d7e395cf8b0d09fd6410da89e65763cc9",
-  "0xaa5e4a81393aee32ec7da3c596291c5d259ac88b",
-  "0xab9cc6506b9c921df72c74f65234e93fe7b9ccf3",
-  "0xaef68b9bbd746ffe4e582a687cf8a21f1c44134f",
-  "0xb3df483638baac2efcad02d65c9d9002cee2463d",
-  "0xb55fa1296e6ec55d0ce53d93b9237389f11764d4",
-  "0xb79eb036bac67768d07575c059b3c642a5c518b8",
-  "0xba679ab701e6162cc2c932b8b498124f47394727",
-  "0xbd0d0c4bfc88dad382674c9d5ae483dae8261fb4",
-  "0xbeb4400ab92eb72bb54086569c2dbc0ad22dda45",
-  "0xc87ad64315a4a0dcedfb90cb830a73f1c9252ddd",
-  "0xcb71551d8722d39565e9b5d0a2d7db6d23a719f7",
-  "0xce1b18152de43444de80a8b847d1dba1df3a2af8",
-  "0xd1317ca0ad097764319394a2673cfbfefe592ee7",
-  "0xd43edfda55410c630b19a92bc40f145c1eee37fe",
-  "0xd44567cde98386545333fd1b68927137e7573ae4",
-  "0xd9013df863c1ba932780857b020dfdeacedf8e14",
-  "0xdedb2b0408ef73b0e74edc1147b008a7369c2529",
-  "0xdf6539d1fadb951a02a999d31a72e0cd7fd9c36d",
-  "0xdfce30b7bd3cd14652485acb2f5cdc3458275425",
-  "0xe3e5ffc0af38b8bf866652bb0569f405b6a8e362",
-  "0xe64fefc3552125df3480e3c20fb55aaafb607d13",
-  "0xe815a79b5acf78e174609ddeadb1da25ede1d7cb",
-  "0xe8d68fd271ad704a55f9bb0e4fc6276ee9adc964",
-  "0xea5929609487194dc9ce00871e2b5d1e5f48f29d",
-  "0xeebde7a0e019a63e6b476eb425505b7b3e6eba30",
-  "0xf3ce251f9c4ae0f3940a9f32de5dd1a1d05b8bc6",
-  "0xfc10e4788cbdf6fcfc700e98de1ce6a65c921c00",
-  "0xfc369971792d08e095da0f6fdb23fa927c60ce29"
- ],
+ "entran": [],
  "salen": [],
  "forward_propio": [
   {
@@ -137,11 +54,411 @@
   }
  ],
  "copia_latencia_real": {
-  "dias": [],
-  "n": 0,
-  "ev": null,
+  "dias": [
+   "2026-09-30"
+  ],
+  "n": 1045,
+  "ev": 0.0162,
   "ic90": null,
-  "lag_ms_mediana": null,
-  "celdas": {}
+  "lag_ms_mediana": 257.0,
+  "celdas": {
+   "5min|TODOS|[0.7,0.8)": {
+    "n": 128,
+    "dias": 1,
+    "ev": 0.0522,
+    "ic90": null,
+    "wallet_top_pct": 19
+   },
+   "5min|BTC|[0.7,0.8)": {
+    "n": 69,
+    "dias": 1,
+    "ev": 0.0184,
+    "ic90": null,
+    "wallet_top_pct": 12
+   },
+   "5min|TODOS|[0.6,0.7)": {
+    "n": 85,
+    "dias": 1,
+    "ev": 0.1334,
+    "ic90": null,
+    "wallet_top_pct": 25
+   },
+   "5min|TODOS|[0.8,0.9)": {
+    "n": 118,
+    "dias": 1,
+    "ev": -0.0048,
+    "ic90": null,
+    "wallet_top_pct": 13
+   },
+   "5min|BTC|[0.8,0.9)": {
+    "n": 67,
+    "dias": 1,
+    "ev": -0.0359,
+    "ic90": null,
+    "wallet_top_pct": 13
+   },
+   "5min|BTC|[0.6,0.7)": {
+    "n": 47,
+    "dias": 1,
+    "ev": 0.1649,
+    "ic90": null,
+    "wallet_top_pct": 11
+   },
+   "5min|TODOS|[0.5,0.6)": {
+    "n": 189,
+    "dias": 1,
+    "ev": 0.0381,
+    "ic90": null,
+    "wallet_top_pct": 11
+   },
+   "5min|ETH|[0.5,0.6)": {
+    "n": 61,
+    "dias": 1,
+    "ev": 0.0541,
+    "ic90": null,
+    "wallet_top_pct": 15
+   },
+   "15min|TODOS|[0.5,0.6)": {
+    "n": 67,
+    "dias": 1,
+    "ev": -0.0831,
+    "ic90": null,
+    "wallet_top_pct": 36
+   },
+   "5min|TODOS|[0.4,0.5)": {
+    "n": 70,
+    "dias": 1,
+    "ev": -0.1668,
+    "ic90": null,
+    "wallet_top_pct": 17
+   },
+   "5min|BTC|[0.4,0.5)": {
+    "n": 42,
+    "dias": 1,
+    "ev": 0.0493,
+    "ic90": null,
+    "wallet_top_pct": 19
+   },
+   "5min|BTC|[0.5,0.6)": {
+    "n": 97,
+    "dias": 1,
+    "ev": 0.0618,
+    "ic90": null,
+    "wallet_top_pct": 13
+   },
+   "5min|TODOS|[0.9,1.0)": {
+    "n": 137,
+    "dias": 1,
+    "ev": 0.0639,
+    "ic90": null,
+    "wallet_top_pct": 9
+   },
+   "5min|BTC|[0.9,1.0)": {
+    "n": 74,
+    "dias": 1,
+    "ev": 0.0649,
+    "ic90": null,
+    "wallet_top_pct": 12
+   }
+  },
+  "microbuckets": {
+   "TOMADORA#BTC#5min|0.75": {
+    "n": 30,
+    "dias": 1,
+    "mercados": 18,
+    "ev": -0.0152,
+    "ic90": null,
+    "wallet_top_pct": 20,
+    "mitades": [
+     null,
+     -0.0152
+    ],
+    "g10": -0.00313,
+    "estado": "negativo",
+    "gate_universo_agosto": {
+     "SNIPER": "sin_concluir",
+     "DISPERSO": "sin_concluir"
+    }
+   },
+   "TOMADORA#BTC#5min|0.80": {
+    "n": 37,
+    "dias": 1,
+    "mercados": 21,
+    "ev": -0.0205,
+    "ic90": null,
+    "wallet_top_pct": 16,
+    "mitades": [
+     null,
+     -0.0205
+    ],
+    "g10": -0.00327,
+    "estado": "negativo",
+    "gate_universo_agosto": {
+     "SNIPER": "sin_concluir",
+     "DISPERSO": "sin_concluir"
+    }
+   },
+   "TOMADORA#BTC#5min|0.60": {
+    "n": 27,
+    "dias": 1,
+    "mercados": 17,
+    "ev": 0.108,
+    "ic90": null,
+    "wallet_top_pct": 11,
+    "mitades": [
+     null,
+     0.108
+    ],
+    "g10": 0.00796,
+    "estado": "en_seguimiento",
+    "gate_universo_agosto": {
+     "SNIPER": "sin_concluir",
+     "DISPERSO": "sin_concluir"
+    }
+   },
+   "TOMADORA#BTC#5min|0.85": {
+    "n": 30,
+    "dias": 1,
+    "mercados": 19,
+    "ev": -0.0549,
+    "ic90": null,
+    "wallet_top_pct": 10,
+    "mitades": [
+     null,
+     -0.0549
+    ],
+    "g10": -0.00648,
+    "estado": "negativo",
+    "gate_universo_agosto": {
+     "SNIPER": "sin_concluir",
+     "DISPERSO": "sin_concluir"
+    }
+   },
+   "TOMADORA#ETH#5min|0.50": {
+    "n": 49,
+    "dias": 1,
+    "mercados": 26,
+    "ev": 0.0294,
+    "ic90": null,
+    "wallet_top_pct": 18,
+    "mitades": [
+     null,
+     0.0294
+    ],
+    "g10": -0.00173,
+    "estado": "en_seguimiento",
+    "gate_universo_agosto": {
+     "SNIPER": "sin_concluir",
+     "DISPERSO": "sin_concluir"
+    }
+   },
+   "TOMADORA#BTC#15min|0.50": {
+    "n": 22,
+    "dias": 1,
+    "mercados": 9,
+    "ev": -0.0715,
+    "ic90": null,
+    "wallet_top_pct": 14,
+    "mitades": [
+     null,
+     -0.0715
+    ],
+    "g10": -0.0119,
+    "estado": "negativo",
+    "gate_universo_agosto": {
+     "SNIPER": "sin_concluir",
+     "DISPERSO": "sin_concluir"
+    }
+   },
+   "TOMADORA#BTC#5min|0.45": {
+    "n": 27,
+    "dias": 1,
+    "mercados": 15,
+    "ev": 0.2132,
+    "ic90": null,
+    "wallet_top_pct": 22,
+    "mitades": [
+     null,
+     0.2132
+    ],
+    "g10": 0.01578,
+    "estado": "en_seguimiento",
+    "gate_universo_agosto": {
+     "SNIPER": "sin_concluir",
+     "DISPERSO": "sin_concluir"
+    }
+   },
+   "TOMADORA#BTC#5min|0.55": {
+    "n": 31,
+    "dias": 1,
+    "mercados": 15,
+    "ev": 0.2124,
+    "ic90": null,
+    "wallet_top_pct": 19,
+    "mitades": [
+     null,
+     0.2124
+    ],
+    "g10": 0.01782,
+    "estado": "en_seguimiento",
+    "gate_universo_agosto": {
+     "SNIPER": "sin_concluir",
+     "DISPERSO": "sin_concluir"
+    }
+   },
+   "TOMADORA#ETH#5min|0.75": {
+    "n": 18,
+    "dias": 1,
+    "mercados": 10,
+    "ev": 0.1433,
+    "ic90": null,
+    "wallet_top_pct": 33,
+    "mitades": [
+     null,
+     0.1433
+    ],
+    "g10": 0.01335,
+    "estado": "en_seguimiento",
+    "gate_universo_agosto": {
+     "SNIPER": "sin_concluir",
+     "DISPERSO": "sin_concluir"
+    }
+   },
+   "TOMADORA#BTC#5min|0.90": {
+    "n": 74,
+    "dias": 1,
+    "mercados": 25,
+    "ev": 0.0649,
+    "ic90": null,
+    "wallet_top_pct": 12,
+    "mitades": [
+     null,
+     0.0649
+    ],
+    "g10": 0.00639,
+    "estado": "en_seguimiento",
+    "gate_universo_agosto": {
+     "SNIPER": "sin_concluir",
+     "DISPERSO": "sin_concluir"
+    }
+   },
+   "TOMADORA#BTC#5min|0.50": {
+    "n": 66,
+    "dias": 1,
+    "mercados": 27,
+    "ev": -0.009,
+    "ic90": null,
+    "wallet_top_pct": 15,
+    "mitades": [
+     null,
+     -0.009
+    ],
+    "g10": -0.00562,
+    "estado": "negativo",
+    "gate_universo_agosto": {
+     "SNIPER": "sin_concluir",
+     "DISPERSO": "sin_concluir"
+    }
+   },
+   "TOMADORA#BTC#5min|0.40": {
+    "n": 15,
+    "dias": 1,
+    "mercados": 9,
+    "ev": -0.2456,
+    "ic90": null,
+    "wallet_top_pct": 20,
+    "mitades": [
+     null,
+     -0.2456
+    ],
+    "g10": -0.03121,
+    "estado": "negativo",
+    "gate_universo_agosto": {
+     "SNIPER": "sin_concluir",
+     "DISPERSO": "sin_concluir"
+    }
+   },
+   "TOMADORA#BTC#5min|0.70": {
+    "n": 39,
+    "dias": 1,
+    "mercados": 22,
+    "ev": 0.0442,
+    "ic90": null,
+    "wallet_top_pct": 10,
+    "mitades": [
+     null,
+     0.0442
+    ],
+    "g10": 0.00264,
+    "estado": "en_seguimiento",
+    "gate_universo_agosto": {
+     "SNIPER": "sin_concluir",
+     "DISPERSO": "sin_concluir"
+    }
+   },
+   "TOMADORA#BTC#5min|0.65": {
+    "n": 20,
+    "dias": 1,
+    "mercados": 14,
+    "ev": 0.2417,
+    "ic90": null,
+    "wallet_top_pct": 15,
+    "mitades": [
+     null,
+     0.2417
+    ],
+    "g10": 0.02243,
+    "estado": "en_seguimiento",
+    "gate_universo_agosto": {
+     "SNIPER": "sin_concluir",
+     "DISPERSO": "sin_concluir"
+    }
+   },
+   "TOMADORA#ETH#5min|0.90": {
+    "n": 35,
+    "dias": 1,
+    "mercados": 22,
+    "ev": 0.0807,
+    "ic90": null,
+    "wallet_top_pct": 23,
+    "mitades": [
+     null,
+     0.0807
+    ],
+    "g10": 0.00803,
+    "estado": "en_seguimiento",
+    "gate_universo_agosto": {
+     "SNIPER": "sin_concluir",
+     "DISPERSO": "sin_concluir"
+    }
+   },
+   "TOMADORA#BTC#15min|0.45": {
+    "n": 19,
+    "dias": 1,
+    "mercados": 8,
+    "ev": 0.9931,
+    "ic90": null,
+    "wallet_top_pct": 21,
+    "mitades": [
+     null,
+     0.9931
+    ],
+    "g10": 0.09359,
+    "estado": "en_seguimiento",
+    "gate_universo_agosto": {
+     "SNIPER": "sin_concluir",
+     "DISPERSO": "sin_concluir"
+    }
+   }
+  },
+  "candidatas": {
+   "n": 0,
+   "dias": 0,
+   "wallets": 0,
+   "ev": null,
+   "ic90": null,
+   "wallets_ev_positivo": {},
+   "microbuckets": {}
+  }
  }
 }
