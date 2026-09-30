@@ -117,6 +117,26 @@ def _evento(activo, t0, ret):
                 "activo": activo, "marco": tag, "slug": slug, "market_id": mkt.get("id", ""),
                 "resto_s": round(resto, 1), "direccion": direccion, "ret_1s": round(ret, 6)}
         _pool.submit(_muestrear, base, tok, t0)
+    try:    # 30-Sep: #8/#9 del programa cripto10 -- otras monedas y marcos 1h/4h por WebSocket (sin REST). Nunca rompe esto.
+        import binance_jump_cruzado_fase0 as JC
+        JC.evento(activo, t0, ret, {a: _ret_1s(a, t0) for a in _ticks})
+    except Exception as e:
+        _log(f"cruzado falló: {type(e).__name__}: {e}")
+
+
+def _ret_1s(activo, t):
+    """Retorno de Binance en ~1 s de la moneda `activo` hasta t (mismo criterio que _procesar); None si no hay ticks."""
+    dq = list(_ticks.get(activo) or ())
+    if not dq:
+        return None
+    ref = None
+    for tt, mm in dq:
+        if t - tt >= 1.0:
+            ref = mm
+        else:
+            break
+    mid = dq[-1][1]
+    return round(math.log(mid / ref), 6) if ref and mid > 0 else None
 
 
 def _procesar(activo, mid, t):

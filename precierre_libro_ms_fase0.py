@@ -28,7 +28,7 @@ sys.path.insert(0, str(REPO))
 import libro_estado_ws as LE  # noqa: E402
 
 DATALOGS = Path("/root/polymarket-research-datalogs")
-RETENCION_DIAS = 5           # 29-Sep (Javi: "no podemos permitir" el consumo de disco, raíz al 88 %): gz diario + borrado > 5 días
+RETENCION_DIAS = 30          # 30-Sep: 5 -> 30 días (OK Javi "ok a 2"; ~1,5 MB/día gz, validar estrategias 5-7 de cripto10). 29-Sep (Javi: "no podemos permitir" el consumo de disco, raíz al 88 %): gz diario + borrado > 5 días
 _ULT_LIMPIEZA = [0.0]
 ACTIVOS = {"BTC", "ETH", "SOL", "XRP"}
 ANTES_S, DESPUES_S, ESPERA_S = 70, 3, 8      # ventana mínima: el precierre vive en los últimos ~60 s
