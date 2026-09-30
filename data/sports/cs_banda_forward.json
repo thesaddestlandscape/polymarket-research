@@ -1,0 +1,34 @@
+{
+ "generado_utc": "2026-09-30T15:56:18+00:00",
+ "corte": "2026-09-30T16:00",
+ "hipotesis": {
+  "A CS#FADE [0,65-0,70) (LIVE)": {
+   "n": 0,
+   "veredicto": "sin_datos"
+  },
+  "B CS [0,65-0,70) cualquier disparo": {
+   "n": 0,
+   "veredicto": "sin_datos"
+  },
+  "C CS partido [0,65-0,70)": {
+   "n": 0,
+   "veredicto": "sin_datos"
+  },
+  "D CS partido [0,60-0,80)": {
+   "n": 0,
+   "veredicto": "sin_datos"
+  },
+  "M maker vende longshot [0,30-0,40)": {
+   "n": 0,
+   "veredicto": "sin_datos"
+  }
+ },
+ "real_cs_fade": {
+  "desde": "2026-09-30T15:26:45",
+  "n": 0,
+  "aciertos": 0,
+  "pnl_eur": 0,
+  "abiertos": 0,
+  "tope_kill_eur": -6.0
+ }
+}
