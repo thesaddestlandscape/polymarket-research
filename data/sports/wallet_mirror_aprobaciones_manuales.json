@@ -13,13 +13,14 @@
   },
   "CS#FADE#0.65": {
    "modo": "live",
-   "desde": "2026-09-24T11:30:00",
+   "desde": "2026-09-30T15:26:45",
    "motivo": "24-Sep, OK Javi ('las dos en live'). Celda más estable de sports: n=284 mercados, 31 días (22 positivos), 84 wallets (top 7,7%), +0,165/+0,156/+0,159 EUR/tr en 3 tramos, grid completo n=267 +0,124 mitades +0,17/+0,08 g>0 p_bh=0,09.",
    "kill": {
-    "n_min": 20,
-    "pnl_media_min": 0.0,
-    "perdida_max_eur": 3.0
-   }
+    "n_min": 30,
+    "pnl_media_min": -0.05,
+    "perdida_max_eur": 6.0
+   },
+   "motivo_reactivacion_30sep": "30-Sep, OK Javi ('1-si'). Reactivada tras kill del 26-Sep (peor caso -3,15 EUR, n=11). Antes: {\"desde\": \"2026-09-24T11:30:00\", \"kill\": {\"n_min\": 20, \"pnl_media_min\": 0.0, \"perdida_max_eur\": 3.0}}. Evidencia: unidades independientes n=460, 39 dias, acierto 77,0% a ask 0,673, EV +13,2% IC90 (+0,084,+0,178); tramo >=24-Sep +13,4% (n=104). El kill de -3 EUR saltaba por azar ~33-40% en 60 trades con ese edge; con n_min=30, media<-0,05, tope -6 EUR: 9-13% de falso disparo, 88% de deteccion si el acierto real fuera 60%. 'desde' se reinicia a la reactivacion: el tope de -6 EUR es presupuesto NUEVO (los -3,15 EUR previos ya estan perdidos)."
   }
  }
 }
