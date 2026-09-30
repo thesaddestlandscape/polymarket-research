@@ -40,7 +40,14 @@ OUT = REPO / "data" / "shadow" / "vigia_valor_tras_salto_forward.json"
 CORTE = "2026-09-30T10:00:00"
 OFFSET = 0.6
 FEE = 0.07
-HIPOTESIS = {"H1 5m valor>=0,10": ("5m", 0.10), "H2 5m valor>=0,20": ("5m", 0.20), "H3 15m valor>=0,03": ("15m", 0.03)}
+HIPOTESIS = {"H1 5m valor>=0,10": ("5m", 0.10), "H2 5m valor>=0,20": ("5m", 0.20), "H3 15m valor>=0,03": ("15m", 0.03),
+             "H4 5m valor>=0,10 solo en RAFAGA": ("5m", 0.10)}
+# H4 (30-Sep 18:05Z, programa cripto10): mismo H1 pero solo si en los 600 s ANTERIORES al salto el observador registró
+# >= RAFAGA_MIN saltos entre TODAS las monedas (régimen medido antes de operar). Antes de su corte: TRAIN/VAL/holdout
+# +0,119/+0,160/+0,319 (n=267/357/178), sin las 2 mejores horas +0,086; fuera de ráfaga negativo en los tres. Pocas horas
+# independientes: solo cuenta el forward desde CORTE_POR_HIPOTESIS. Datalogs analisis_persistente_30sep/cripto10_30sep/.
+RAFAGA_MIN, RAFAGA_S = 40, 600
+CORTE_POR_HIPOTESIS = {"H4 5m valor>=0,10 solo en RAFAGA": "2026-09-30T18:10:00"}
 
 
 def _phi(x: float) -> float:
@@ -66,9 +73,13 @@ def _cargar_binance(dias: set) -> dict:
 
 
 def main() -> int:
-    filas = []
+    filas, todos_t = [], set()
     with open(J.CSV, encoding="utf-8") as f:
         for r in csv.DictReader(f):
+            try:
+                todos_t.add(datetime.fromisoformat(r["ts_evento"]).timestamp())
+            except (ValueError, TypeError, KeyError):
+                pass
             if r.get("error") or not r.get("ask"):
                 continue
             try:
@@ -104,6 +115,7 @@ def main() -> int:
             sig[k] = (st.pstdev(rs) / math.sqrt(5)) if len(rs) >= 30 else None
         return sig[k]
 
+    todos_l = sorted(todos_t)
     res = {h: {"antes": defaultdict(list), "forward": defaultdict(list)} for h in HIPOTESIS}
     activos = {h: defaultdict(int) for h in HIPOTESIS}
     for ts_ev, t, act, marco, mkt, dr, a, resto in filas:
@@ -117,8 +129,11 @@ def main() -> int:
         z = (1 if dr == "Up" else -1) * math.log(m0 / mo) / (s1 * math.sqrt(resto))
         valor = _phi(z) - a
         pnl = (1 if dr == o else 0) / a - 1 - FEE * (1 - a)
-        tramo = "forward" if ts_ev[:19] >= CORTE else "antes"
+        n_rafaga = bisect.bisect_left(todos_l, t) - bisect.bisect_left(todos_l, t - RAFAGA_S)
         for h, (mc, umbral) in HIPOTESIS.items():
+            tramo = "forward" if ts_ev[:19] >= CORTE_POR_HIPOTESIS.get(h, CORTE) else "antes"
+            if "RAFAGA" in h and n_rafaga < RAFAGA_MIN:
+                continue
             if marco == mc and valor >= umbral:
                 res[h][tramo][ts_ev[:10]].append(pnl)
                 if tramo == "forward":
