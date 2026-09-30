@@ -52,6 +52,7 @@ import live_trade as lt
 import ballenas_firehose_cache as _fc
 from shadow_predict import (
     _banda_confirmada_ballenas,
+    _banda_confirmada_ballenas_en_precio,
     BALLENAS_CONFIRMADAS_ACTIVOS,
     BALLENAS_CONFIRMADAS_BANDA_NO_LO,
     BALLENAS_CONFIRMADAS_BANDA_NO_HI,
@@ -186,6 +187,19 @@ def _registrar_prediccion(activo: str, mercado: dict, py: float, precio_no: floa
 
 
 def watch_window(activo: str, ts_end: int) -> None:
+    """30-Sep: cada salida sin disparo cuenta su motivo y se loguea UNA vez al cerrar la ventana (antes el hilo
+    callaba en 7 sitios distintos y estuvo 6 semanas sin escribir una fila sin que nadie lo viera)."""
+    motivos = {}
+    try:
+        _vigilar(activo, ts_end, motivos)
+    finally:
+        if motivos:
+            log(f"ventana {ts_end} sin disparo -- motivos {dict(sorted(motivos.items(), key=lambda kv: -kv[1]))}", activo)
+
+
+def _vigilar(activo: str, ts_end: int, motivos: dict) -> None:
+    def _m(k):
+        motivos[k] = motivos.get(k, 0) + 1
     ts_start = ts_end - VENTANA_MIN * 60
     mercado = None
     n_polls = 0
@@ -198,6 +212,7 @@ def watch_window(activo: str, ts_end: int) -> None:
         if mercado is None:
             mercado = resolver_mercado(activo, ts_start)
             if mercado is None:
+                _m("sin_mercado")
                 time.sleep(POLL_INTERVAL_S)
                 continue
             if mercado["market_id"] in _vistos:
@@ -207,16 +222,34 @@ def watch_window(activo: str, ts_end: int) -> None:
         n_polls += 1
         py = libro.get("best_ask") if libro else None
         if py is None:
+            _m("sin_libro")
             time.sleep(POLL_INTERVAL_S)
             continue
         precio_no = round(1.0 - py, 6)
         if not (BALLENAS_CONFIRMADAS_BANDA_NO_LO <= precio_no < BALLENAS_CONFIRMADAS_BANDA_NO_HI):
+            _m("fuera_de_banda_no")
             time.sleep(POLL_INTERVAL_S)
             continue
+
+        # 30-Sep (bug: el observador no escribió NINGUNA fila desde el 19-Ago): la banda ancha [0,3-0,7) nunca
+        # coincide con las bandas estrechas de ballenas_observer, así que _banda_confirmada_ballenas devolvía
+        # siempre None. Mismo fix y mismo ORDEN que s_ballenas_confirmadas_15m (shadow_predict.py, 01-Sep):
+        # banda exacta -> si no, la banda ESTRECHA que contiene el precio del lado NO -> realinear los límites
+        # a esa banda ANTES de contar trades (sin realinear se contarían trades de una sub-banda no confirmada).
+        banda_info = _banda_confirmada_ballenas(activo, "15m", BALLENAS_CONFIRMADAS_BANDA_NO_LO,
+                                                 BALLENAS_CONFIRMADAS_BANDA_NO_HI)
+        if banda_info is None:
+            banda_info = _banda_confirmada_ballenas_en_precio(activo, "15m", precio_no)
+        if banda_info is None:
+            _m("banda_no_confirmada")
+            time.sleep(POLL_INTERVAL_S)
+            continue
+        banda_lo, banda_hi = banda_info["banda_lo"], banda_info["banda_hi"]
 
         # Mismo cálculo EXACTO que s_ballenas_confirmadas_15m (shadow_predict.py).
         trades = _fc.leer_snapshot_reciente(mercado["condition_id"])
         if not trades:
+            _m("sin_trades_de_ballena_en_snapshot")
             time.sleep(POLL_INTERVAL_S)
             continue
         n_no = n_yes = n_no_total = n_yes_total = 0
@@ -235,7 +268,7 @@ def watch_window(activo: str, ts_end: int) -> None:
                 n_no_total += 1
             else:
                 n_yes_total += 1
-            if not (BALLENAS_CONFIRMADAS_BANDA_NO_LO <= precio_t < BALLENAS_CONFIRMADAS_BANDA_NO_HI):
+            if not (banda_lo <= precio_t < banda_hi):
                 continue
             if outcome_t in ("down", "no"):
                 n_no += 1
@@ -243,16 +276,16 @@ def watch_window(activo: str, ts_end: int) -> None:
                 n_yes += 1
         n = n_no + n_yes
         if n < BALLENAS_CONFIRMADAS_MIN_TRADES:
+            _m("pocos_trades_en_banda")
             time.sleep(POLL_INTERVAL_S)
             continue
         pct_no = n_no / n
-        if pct_no < BALLENAS_CONFIRMADAS_UMBRAL_PCT or n_no_total < BALLENAS_CONFIRMADAS_UMBRAL_VOLUMEN:
+        if pct_no < BALLENAS_CONFIRMADAS_UMBRAL_PCT:
+            _m("concentracion_baja")
             time.sleep(POLL_INTERVAL_S)
             continue
-
-        banda_info = _banda_confirmada_ballenas(activo, "15m", BALLENAS_CONFIRMADAS_BANDA_NO_LO,
-                                                 BALLENAS_CONFIRMADAS_BANDA_NO_HI)
-        if banda_info is None:
+        if n_no_total < BALLENAS_CONFIRMADAS_UMBRAL_VOLUMEN:
+            _m("volumen_bajo")
             time.sleep(POLL_INTERVAL_S)
             continue
 
