@@ -183,12 +183,24 @@ def _aplicar(msg):
 
 async def _sesion(filtro_marcos):
     suscritos = set()
-    async with websockets.connect(WS_URL, ping_interval=20, ping_timeout=20, open_timeout=10) as ws:
-        toks = await asyncio.get_running_loop().run_in_executor(None, _tokens_universo, filtro_marcos)
+    # max_queue=None: si este hilo se retrasa (GIL, 40 hilos en la screen) los mensajes se acumulan en memoria en
+    # vez de frenar el socket; con la cola por defecto el servidor cortaba con 1013 "slow consumer".
+    async with websockets.connect(WS_URL, ping_interval=20, ping_timeout=20, open_timeout=10, max_queue=None) as ws:
+        loop = asyncio.get_running_loop()
+        toks = await loop.run_in_executor(None, _tokens_universo, filtro_marcos)
         await ws.send(json.dumps({"type": "market", "assets_ids": toks}))
         suscritos.update(toks)
         for t in toks:
             _LIB.setdefault(t, {"bids": {}, "asks": {}})
+        # 30-Sep, fuga: tras una reconexión `suscritos` nace vacío y los tokens de la sesión anterior que ya no
+        # están en el universo nunca pasaban por la baja de más abajo -> _HIST (hasta 3.000 muestras por token)
+        # crecía ~90 MB/h hasta el OOM. Al conectar se tira todo lo que no esté en el universo ni pedido on-demand.
+        vivos = set(toks) | set(_EXTRA)
+        with _LOCK:
+            for d in (_LIB, _HIST, _TRADES, _TOP, _ULT):
+                for t in [t for t in d if t not in vivos]:
+                    d.pop(t, None)
+        refresco = None
         _ESTADO["n_tokens"] = len(suscritos)
         _log(f"conectado, {len(toks)} tokens ({','.join(filtro_marcos)})")
         prox = time.time() + REFRESCO_S
@@ -205,11 +217,24 @@ async def _sesion(filtro_marcos):
                 for t in add_x:
                     _LIB.setdefault(t, {"bids": {}, "asks": {}})
                 suscritos.update(add_x)
-            if time.time() >= prox:
+            # 30-Sep: el refresco del universo (REST, varios segundos) se esperaba AQUÍ dentro, sin leer el socket:
+            # cada 30 s el servidor nos cortaba por "slow consumer" (~1.000 caídas en 10 h, huecos de >5 s en el
+            # histórico ms). Ahora corre en segundo plano y se recoge cuando termina; el recv no se detiene nunca.
+            if refresco is None and time.time() >= prox:
                 prox = time.time() + REFRESCO_S
+                refresco = loop.run_in_executor(None, _tokens_universo, filtro_marcos)
+            if refresco is not None and refresco.done():
+                try:
+                    nuevos = refresco.result()
+                except Exception as e:
+                    _log(f"refresco de universo falló: {type(e).__name__}: {e}")
+                    nuevos = None
+                refresco = None
+            else:
+                nuevos = None
+            if nuevos is not None:
                 for t in [t for t, e in _EXTRA.items() if e <= ahora_s]:
                     _EXTRA.pop(t, None)
-                nuevos = await asyncio.get_running_loop().run_in_executor(None, _tokens_universo, filtro_marcos)
                 nuevos = list(set(nuevos) | set(_EXTRA))
                 add = [t for t in nuevos if t not in suscritos]
                 if add:
@@ -228,6 +253,7 @@ async def _sesion(filtro_marcos):
                             _HIST.pop(t, None)
                             _TRADES.pop(t, None)
                             _TOP.pop(t, None)
+                            _ULT.pop(t, None)
             if not raw:
                 continue
             try:

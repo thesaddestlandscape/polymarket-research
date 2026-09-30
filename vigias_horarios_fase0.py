@@ -42,6 +42,8 @@ Corre vía cron (un solo disparo, sustituye los 19 minutos dispersos):
   0 * * * * flock -n /tmp/vigias_horarios_fase0.lock /root/polymarket-research/.venv/bin/python /root/polymarket-research/vigias_horarios_fase0.py >> /root/polymarket-research/logs/vigias_horarios_fase0.log 2>&1
 """
 import contextlib
+import ctypes
+import gc
 import sys
 import time
 from pathlib import Path
@@ -113,7 +115,31 @@ def _correr_uno(mod, nombre_log: str) -> None:
                 print(f"[vigias_horarios_fase0] 🚨 {mod.__name__} murió: "
                       f"{type(e).__name__}: {e}", flush=True)
     dt = time.time() - t0
-    print(f"[vigias_horarios_fase0] {mod.__name__} terminado en {dt:.1f}s", flush=True)
+    pico = _mem_mb("VmHWM")
+    # 30-Sep: el proceso llegaba a 1,6-1,7 GB y el kernel lo mató (OOM 29-Sep 18:01). Se mide el pico de CADA
+    # vigía (VmHWM se reinicia entre uno y otro) y se devuelve la memoria al sistema antes del siguiente, para
+    # que el pico del proceso sea el del vigía más pesado y no la suma de lo que dejan todos.
+    gc.collect()
+    try:
+        ctypes.CDLL("libc.so.6").malloc_trim(0)
+    except Exception:
+        pass
+    try:
+        Path("/proc/self/clear_refs").write_text("5")
+    except Exception:
+        pass
+    print(f"[vigias_horarios_fase0] {mod.__name__} terminado en {dt:.1f}s "
+          f"(pico {pico:.0f} MB, queda {_mem_mb('VmRSS'):.0f} MB)", flush=True)
+
+
+def _mem_mb(campo: str) -> float:
+    try:
+        for linea in open("/proc/self/status"):
+            if linea.startswith(campo + ":"):
+                return int(linea.split()[1]) / 1024
+    except Exception:
+        pass
+    return 0.0
 
 
 def main() -> int:
