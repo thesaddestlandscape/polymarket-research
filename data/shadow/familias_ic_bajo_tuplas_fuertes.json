@@ -1,29 +1,29 @@
 {
  "STREAK_MOM_5M": {
-  "ic_bayes_familia": 0.0214,
+  "ic_bayes_familia": 0.0216,
   "n_tuplas_fuertes": 2,
-  "pnl_fiel_combinado_eur": 88.88,
+  "pnl_fiel_combinado_eur": 88.99,
   "tuplas": [
    {
     "k": "STREAK_MOM_5M#DOGE#5min#BUY_NO",
-    "pnl_fiel_eur_sin_suelo": 54.4309,
+    "pnl_fiel_eur_sin_suelo": 54.3642,
     "n_ejecutado": 270
    },
    {
     "k": "STREAK_MOM_5M#XRP#5min#BUY_NO",
-    "pnl_fiel_eur_sin_suelo": 34.4493,
+    "pnl_fiel_eur_sin_suelo": 34.6274,
     "n_ejecutado": 205
    }
   ]
  },
  "LIQUIDACIONES_5M": {
-  "ic_bayes_familia": 0.0124,
+  "ic_bayes_familia": 0.0128,
   "n_tuplas_fuertes": 2,
-  "pnl_fiel_combinado_eur": 39.71,
+  "pnl_fiel_combinado_eur": 39.78,
   "tuplas": [
    {
     "k": "LIQUIDACIONES_5M#ETH#5min#BUY_YES",
-    "pnl_fiel_eur_sin_suelo": 22.242,
+    "pnl_fiel_eur_sin_suelo": 22.3175,
     "n_ejecutado": 219
    },
    {
@@ -34,26 +34,26 @@
   ]
  },
  "UPDOWN_GBM": {
-  "ic_bayes_familia": 0.036,
+  "ic_bayes_familia": 0.0359,
   "n_tuplas_fuertes": 1,
-  "pnl_fiel_combinado_eur": 38.07,
+  "pnl_fiel_combinado_eur": 35.67,
   "tuplas": [
    {
     "k": "UPDOWN_GBM#BTC#5min#BUY_NO",
-    "pnl_fiel_eur_sin_suelo": 38.0715,
-    "n_ejecutado": 642
+    "pnl_fiel_eur_sin_suelo": 35.6687,
+    "n_ejecutado": 644
    }
   ]
  },
  "STRUCT_NO_15M": {
-  "ic_bayes_familia": 0.0134,
+  "ic_bayes_familia": 0.0136,
   "n_tuplas_fuertes": 2,
-  "pnl_fiel_combinado_eur": 30.91,
+  "pnl_fiel_combinado_eur": 32.89,
   "tuplas": [
    {
     "k": "STRUCT_NO_15M#BTC#15min#BUY_NO",
-    "pnl_fiel_eur_sin_suelo": 15.8573,
-    "n_ejecutado": 1154
+    "pnl_fiel_eur_sin_suelo": 17.84,
+    "n_ejecutado": 1156
    },
    {
     "k": "STRUCT_NO_15M#ETH#15min#BUY_NO",
@@ -75,14 +75,14 @@
   ]
  },
  "UPDOWN_GBM_15M_TARDIO": {
-  "ic_bayes_familia": -0.0343,
+  "ic_bayes_familia": -0.0344,
   "n_tuplas_fuertes": 1,
-  "pnl_fiel_combinado_eur": 21.6,
+  "pnl_fiel_combinado_eur": 21.98,
   "tuplas": [
    {
     "k": "UPDOWN_GBM_15M_TARDIO#XRP#15min#BUY_NO",
-    "pnl_fiel_eur_sin_suelo": 21.5985,
-    "n_ejecutado": 527
+    "pnl_fiel_eur_sin_suelo": 21.9815,
+    "n_ejecutado": 529
    }
   ]
  }
