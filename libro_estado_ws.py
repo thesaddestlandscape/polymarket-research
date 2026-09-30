@@ -17,6 +17,7 @@ Solo lectura, sin órdenes. Universo = mercados abiertos de los marcos pedidos
 suscripciones incrementales (sin reconectar, sin huecos).
 """
 import asyncio
+import collections
 import json
 import sys
 import threading
@@ -45,6 +46,7 @@ _MARCOS = {}               # marco -> conjunto de activos permitidos (None = tod
 _TOP = {}                  # token -> (t_ms, best_bid, bid_size, best_ask, ask_size): último estado O(1) (detectores de alta frecuencia)
 _ULT = {}                  # token -> t_ms del último registro (muestreo mínimo entre registros)
 MUESTREO_MS = 100
+SUB_TROZO, SUB_PAUSA_S = 20, 0.25   # alta de tokens en trozos (ver _sesion)
 _ESTADO = {"iniciado": False, "n_tokens": 0, "n_eventos": 0, "ultimo_evento_ms": 0}
 
 
@@ -188,7 +190,12 @@ async def _sesion(filtro_marcos):
     async with websockets.connect(WS_URL, ping_interval=20, ping_timeout=20, open_timeout=10, max_queue=None) as ws:
         loop = asyncio.get_running_loop()
         toks = await loop.run_in_executor(None, _tokens_universo, filtro_marcos)
-        await ws.send(json.dumps({"type": "market", "assets_ids": toks}))
+        # 30-Sep: suscribir 150+ tokens de golpe hace que el servidor mande todas las fotos del libro en una ráfaga,
+        # llene SU buffer de envío y corte con 1013 "slow consumer" (caídas a 1-25 s de conectar, ~100 por hora,
+        # con el hilo ocioso en select: no era lentitud nuestra). Se suscribe en trozos de SUB_TROZO, uno cada
+        # SUB_PAUSA_S, leyendo el socket entre medias; lo mismo para las altas on-demand y las del refresco.
+        cola_sub, t_sub = collections.deque(toks[SUB_TROZO:]), time.time()
+        await ws.send(json.dumps({"type": "market", "assets_ids": toks[:SUB_TROZO]}))
         suscritos.update(toks)
         for t in toks:
             _LIB.setdefault(t, {"bids": {}, "asks": {}})
@@ -213,10 +220,16 @@ async def _sesion(filtro_marcos):
             ahora_s = time.time()
             add_x = [t for t, e in _EXTRA.items() if e > ahora_s and t not in suscritos]
             if add_x:
-                await ws.send(json.dumps({"assets_ids": add_x, "operation": "subscribe"}))
+                cola_sub.extendleft(reversed(add_x))      # on-demand por delante: se atienden en el siguiente trozo
                 for t in add_x:
                     _LIB.setdefault(t, {"bids": {}, "asks": {}})
                 suscritos.update(add_x)
+            if cola_sub and time.time() - t_sub >= SUB_PAUSA_S:
+                trozo = [cola_sub.popleft() for _ in range(min(SUB_TROZO, len(cola_sub)))]
+                trozo = [t for t in trozo if t in suscritos]          # por si se dio de baja mientras esperaba
+                if trozo:
+                    await ws.send(json.dumps({"assets_ids": trozo, "operation": "subscribe"}))
+                t_sub = time.time()
             # 30-Sep: el refresco del universo (REST, varios segundos) se esperaba AQUÍ dentro, sin leer el socket:
             # cada 30 s el servidor nos cortaba por "slow consumer" (~1.000 caídas en 10 h, huecos de >5 s en el
             # histórico ms). Ahora corre en segundo plano y se recoge cuando termina; el recv no se detiene nunca.
@@ -238,7 +251,7 @@ async def _sesion(filtro_marcos):
                 nuevos = list(set(nuevos) | set(_EXTRA))
                 add = [t for t in nuevos if t not in suscritos]
                 if add:
-                    await ws.send(json.dumps({"assets_ids": add, "operation": "subscribe"}))
+                    cola_sub.extend(add)
                     for t in add:
                         _LIB.setdefault(t, {"bids": {}, "asks": {}})
                     suscritos.update(add)
