@@ -132,6 +132,7 @@ import colas_escaleras_ws_fase0  # 29-Sep: ronda2 #6 colas de escaleras horarias
 import escaleras_arbitraje_ms_fase0  # 29-Sep: ronda3 #2 violaciones transitorias de monotonia entre strikes (50 ms), libro WS
 import barreras_touch_ms_fase0  # 29-Sep: ronda2 #5 barreras 'hit', cruce de strike por aggTrade Binance (ms) vs libro del YES por WS
 import macro_release_ms_fase0  # 29-Sep: ronda1 #7 sniper datos macro, sondeo de fuente oficial a ~120 ms desde T-3 s (Statistics Canada WDS)
+import valor_relativo_anidado_fase0  # 30-Sep: el 5 min (eficiente) como precio justo del 15 min que cierra a la vez; ambos libros en el mismo ms
 import wallets_nuevas_fase0  # 29-Sep: ronda2 #2 wallets nuevas con apuesta grande, ask real copiable a +0..300 s
 import precierre_libro_ms_fase0  # 29-Sep: ronda1 #4 pelicula ms del libro+trades en los ultimos 100 s de cada up/down 5m/15m (maker con requote)
 import escaleras_cierre_ws_fase0  # 29-Sep: ronda2 #8 precierre en escaleras cripto, libro WS ms T-60..+60 s
@@ -221,6 +222,7 @@ OBSERVADORES = [
     (barreras_touch_ms_fase0, "barreras_touch_ms_fase0.log", "_log"),
     (escaleras_arbitraje_ms_fase0, "escaleras_arbitraje_ms_fase0.log", "_log"),
     (colas_escaleras_ws_fase0, "colas_escaleras_ws_fase0.log", "_log"),
+    (valor_relativo_anidado_fase0, "valor_relativo_anidado_fase0.log", "_log"),
 ]
 
 
