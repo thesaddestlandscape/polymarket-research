@@ -1,153 +1,79 @@
 {
- "generado_utc": "2026-09-30T08:00:01+00:00",
+ "generado_utc": "2026-10-01T08:00:02+00:00",
  "buckets": {
-  "Tennis#FADE[0.08,0.13)#ventana_fina": {
-   "n_senales": 46,
-   "n_wallets_distintas": 27,
-   "n_mercados_distintos": 46,
+  "Tennis#FADE[0.06,0.11)#ventana_fina": {
+   "n_senales": 44,
+   "n_wallets_distintas": 26,
+   "n_mercados_distintos": 44,
    "top5_wallets": [
     {
-     "wallet": "0x35e701f088b6ef25fff6b902769c1cd8b85f8331",
+     "wallet": "0xf0680621c349997c8a65f610eaf83cb230a3849c",
      "n": 5,
-     "pct": 10.9
+     "pct": 11.4
     },
     {
      "wallet": "0x6a7b4ef59745f19c280da45add5d1a5a8e9ca65c",
-     "n": 5,
-     "pct": 10.9
+     "n": 4,
+     "pct": 9.1
     },
     {
-     "wallet": "0x2c335066fe58fe9237c3d3dc7b275c2a034a0563",
+     "wallet": "0x35e701f088b6ef25fff6b902769c1cd8b85f8331",
      "n": 3,
-     "pct": 6.5
+     "pct": 6.8
+    },
+    {
+     "wallet": "0x55b9e6a1dcca2defb01636ba41e9f76a0883a814",
+     "n": 3,
+     "pct": 6.8
     },
     {
      "wallet": "0xa9f5e5c9c761a0c7d692ba479028f778a5dd937f",
      "n": 3,
-     "pct": 6.5
-    },
-    {
-     "wallet": "0xd3e775abc3c974c4868bdbe384f8bf067135bf64",
-     "n": 3,
-     "pct": 6.5
+     "pct": 6.8
     }
    ],
-   "top1_wallet_pct": 10.9,
-   "top1_mercado_pct": 2.2,
+   "top1_wallet_pct": 11.4,
+   "top1_mercado_pct": 2.3,
    "alerta_wallet": false,
    "alerta_mercado": false,
    "veredicto_gate": "malo_confirmado"
   },
   "Tennis#SEGUIR[0.09,0.14)#ventana_fina": {
-   "n_senales": 85,
-   "n_wallets_distintas": 36,
-   "n_mercados_distintos": 85,
+   "n_senales": 88,
+   "n_wallets_distintas": 37,
+   "n_mercados_distintos": 88,
    "top5_wallets": [
     {
      "wallet": "0x952718df56ab7955e0a0121a9e47fa8f52b6888b",
      "n": 14,
-     "pct": 16.5
+     "pct": 15.9
     },
     {
      "wallet": "0xc4fe817476491890086330a639ac417d51bf601f",
-     "n": 12,
-     "pct": 14.1
+     "n": 13,
+     "pct": 14.8
     },
     {
      "wallet": "0x84cfffc3f16dcc353094de30d4a45226eccd2f63",
      "n": 8,
-     "pct": 9.4
+     "pct": 9.1
     },
     {
      "wallet": "0xdc41c39b95453c943174f369926018f6963bdd7e",
      "n": 6,
-     "pct": 7.1
+     "pct": 6.8
     },
     {
      "wallet": "0xdbdd45150249e229eb4ca8aa48a30dca21faa5de",
      "n": 4,
-     "pct": 4.7
+     "pct": 4.5
     }
    ],
-   "top1_wallet_pct": 16.5,
-   "top1_mercado_pct": 1.2,
+   "top1_wallet_pct": 15.9,
+   "top1_mercado_pct": 1.1,
    "alerta_wallet": false,
    "alerta_mercado": false,
    "veredicto_gate": "malo_confirmado"
-  },
-  "Dota#SEGUIR[0.36,0.41)#ventana_fina": {
-   "n_senales": 63,
-   "n_wallets_distintas": 34,
-   "n_mercados_distintos": 63,
-   "top5_wallets": [
-    {
-     "wallet": "0x904ed7c7820a434ea9b11e7333ed69190d850bec",
-     "n": 8,
-     "pct": 12.7
-    },
-    {
-     "wallet": "0x028602e5b0909dd7864f884f899ff287a72cf61d",
-     "n": 6,
-     "pct": 9.5
-    },
-    {
-     "wallet": "0xd3b034d7bfb2473fb252d0414646d9786bac329e",
-     "n": 4,
-     "pct": 6.3
-    },
-    {
-     "wallet": "0xc9f4bec86118be62d973fd53004efca8fed8c1e4",
-     "n": 3,
-     "pct": 4.8
-    },
-    {
-     "wallet": "0xafc0789fac261e60ab4c1a8d119ed15c254034b2",
-     "n": 3,
-     "pct": 4.8
-    }
-   ],
-   "top1_wallet_pct": 12.7,
-   "top1_mercado_pct": 1.6,
-   "alerta_wallet": false,
-   "alerta_mercado": false,
-   "veredicto_gate": "sin_concluir"
-  },
-  "MLB#FADE[0.17,0.22)#ventana_fina": {
-   "n_senales": 37,
-   "n_wallets_distintas": 11,
-   "n_mercados_distintos": 37,
-   "top5_wallets": [
-    {
-     "wallet": "0x4f29e103339919c4baaea2a60195cf1c8bb27a7e",
-     "n": 15,
-     "pct": 40.5
-    },
-    {
-     "wallet": "0xfe787d2da716d60e8acff57fb87eb13cd4d10319",
-     "n": 9,
-     "pct": 24.3
-    },
-    {
-     "wallet": "0x49c5845733fd0b83d2ae67bfc1baf9d2e3093de7",
-     "n": 4,
-     "pct": 10.8
-    },
-    {
-     "wallet": "0x6d3c5bd13984b2de47c3a88ddc455309aab3d294",
-     "n": 2,
-     "pct": 5.4
-    },
-    {
-     "wallet": "0xa0f21e6d351baa9185716b5c00c2925ed9621848",
-     "n": 1,
-     "pct": 2.7
-    }
-   ],
-   "top1_wallet_pct": 40.5,
-   "top1_mercado_pct": 2.7,
-   "alerta_wallet": true,
-   "alerta_mercado": false,
-   "veredicto_gate": "bueno_confirmado"
   }
  }
 }
