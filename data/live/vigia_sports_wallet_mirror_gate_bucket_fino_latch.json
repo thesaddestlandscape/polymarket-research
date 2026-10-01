@@ -1,28 +1,28 @@
 {
  "Tennis#FADE": {
-  "n_dias": 9,
+  "n_dias": 10,
   "pnl_sin_mejores_dias": -1.0,
   "robusto_dias": false,
-  "lo": 0.08,
-  "hi": 0.13,
-  "n": 46,
-  "pnl_medio": -0.8198,
-  "diff_vs_resto": -0.7987,
-  "p_valor": 0.0015,
+  "lo": 0.06,
+  "hi": 0.11,
+  "n": 44,
+  "pnl_medio": -0.6854,
+  "diff_vs_resto": -0.6578,
+  "p_valor": 0.0045,
   "split_half_diff": [
-   -0.9789,
-   -0.6185
+   -0.3432,
+   -0.9724
   ],
   "split_half_ok": true,
   "pnl_medio_loo": -1.0,
   "robusto_loo": true,
   "ci90_bootstrap": [
    -1.0,
-   -0.4594
+   -0.0562
   ],
   "robusto_bootstrap": true,
-  "n_posiciones_buscadas": 92,
-  "g_kelly_f10": -0.09117,
+  "n_posiciones_buscadas": 94,
+  "g_kelly_f10": -0.08419,
   "veredicto_crudo_hoy": "malo_confirmado",
   "historial_crudo": [
    "malo_confirmado"
@@ -30,29 +30,29 @@
   "veredicto": "malo_confirmado"
  },
  "Tennis#SEGUIR": {
-  "n_dias": 19,
-  "pnl_sin_mejores_dias": -0.8634,
+  "n_dias": 20,
+  "pnl_sin_mejores_dias": -0.8667,
   "robusto_dias": false,
   "lo": 0.09,
   "hi": 0.14,
-  "n": 85,
-  "pnl_medio": -0.7527,
-  "diff_vs_resto": -0.7381,
-  "p_valor": 0.0015,
+  "n": 88,
+  "pnl_medio": -0.6669,
+  "diff_vs_resto": -0.6512,
+  "p_valor": 0.0035,
   "split_half_diff": [
-   -0.485,
-   -0.9854
+   -0.5065,
+   -0.7958
   ],
   "split_half_ok": true,
-  "pnl_medio_loo": -0.8815,
+  "pnl_medio_loo": -0.7903,
   "robusto_loo": true,
   "ci90_bootstrap": [
    -1.0,
-   -0.4013
+   -0.3212
   ],
   "robusto_bootstrap": true,
   "n_posiciones_buscadas": 95,
-  "g_kelly_f10": -0.08716,
+  "g_kelly_f10": -0.08037,
   "veredicto_crudo_hoy": "malo_confirmado",
   "historial_crudo": [
    "malo_confirmado"
@@ -60,66 +60,18 @@
   "veredicto": "malo_confirmado"
  },
  "Dota#SEGUIR": {
-  "n_dias": 13,
-  "pnl_sin_mejores_dias": 0.4205,
-  "robusto_dias": true,
-  "lo": 0.36,
-  "hi": 0.41,
-  "n": 63,
-  "pnl_medio": 0.3796,
-  "diff_vs_resto": 0.4563,
-  "p_valor": 0.0415,
-  "split_half_diff": [
-   0.3884,
-   0.5222
-  ],
-  "split_half_ok": true,
-  "pnl_medio_loo": 0.4019,
-  "robusto_loo": true,
-  "ci90_bootstrap": [
-   0.1283,
-   0.6545
-  ],
-  "robusto_bootstrap": true,
-  "n_posiciones_buscadas": 55,
-  "g_kelly_f10": 0.02955,
-  "veredicto_crudo_hoy": "bueno_confirmado",
+  "veredicto": "sin_concluir",
   "historial_crudo": [
    "bueno_confirmado"
-  ],
-  "veredicto": "sin_concluir"
+  ]
  },
  "MLB#FADE": {
-  "n_dias": 5,
-  "pnl_sin_mejores_dias": null,
-  "robusto_dias": false,
-  "lo": 0.17,
-  "hi": 0.22,
-  "n": 52,
-  "pnl_medio": 0.4924,
-  "diff_vs_resto": 0.5213,
-  "p_valor": 0.0055,
-  "split_half_diff": [
-   0.8733,
-   0.1693
-  ],
-  "split_half_ok": true,
-  "pnl_medio_loo": 0.4071,
-  "robusto_loo": true,
-  "ci90_bootstrap": [
-   0.0195,
-   0.9981
-  ],
-  "robusto_bootstrap": true,
-  "n_posiciones_buscadas": 66,
-  "g_kelly_f10": 0.02604,
-  "veredicto_crudo_hoy": "bueno_confirmado",
+  "veredicto": "sin_concluir",
   "historial_crudo": [
    "bueno_confirmado",
    "bueno_confirmado",
    "bueno_confirmado"
-  ],
-  "veredicto": "bueno_confirmado"
+  ]
  },
  "CS#SEGUIR": {
   "veredicto": "sin_concluir",
