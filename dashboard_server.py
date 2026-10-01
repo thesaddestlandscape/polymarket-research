@@ -187,12 +187,62 @@ def _pnl_realista(r):
 
 # ─── Carga de datos ──────────────────────────────────────────────────────────
 
+class _FilaResult:
+    """01-Oct (swap 7,1 GB, este proceso con 1,4 GB en swap y 5 MB en RAM):
+    load_results() hacía list(csv.DictReader(results.csv)) -- 708 MB, 802k
+    filas como dicts completos -- en cada recálculo (CACHE_TTL 20 s), y
+    Python no devuelve esa memoria al sistema. Solo se usan estas columnas;
+    get() mantiene la interfaz r.get(k, default) de todo compute_data()."""
+    __slots__ = ("resolution_timestamp", "strategy", "subtype", "decision",
+                 "pnl_neto", "acierto", "precio_yes_mercado")
+
+    def get(self, k, default=None):
+        v = getattr(self, k, None)
+        return default if v is None else v
+
+
+_RESULTS_FILAS: list = []
+_RESULTS_LECTOR = None
+
+
+def _num(v, tipo):
+    try:
+        return tipo(v) if v not in ("", None) else None
+    except (TypeError, ValueError):
+        return None
+
+
 def load_results():
+    """Lectura INCREMENTAL (results.csv es append-only, ver shadow_resolve.py):
+    solo parsea lo añadido desde la última llamada; reset si cambia el inodo
+    o el fichero encoge (csv_incremental)."""
+    global _RESULTS_LECTOR
     if not RESULTS_CSV.exists():
         return []
-    rows = list(csv.DictReader(open(RESULTS_CSV, encoding="utf-8")))
-    rows.sort(key=lambda r: r.get("resolution_timestamp", ""))
-    return rows
+    if _RESULTS_LECTOR is None:
+        from csv_incremental import LectorIncremental
+        _RESULTS_LECTOR = LectorIncremental()
+    nuevas = []
+
+    def _fila(ci, vals):
+        def c(k):
+            i = ci.get(k)
+            return vals[i] if i is not None and i < len(vals) else ""
+        f = _FilaResult()
+        f.resolution_timestamp = c("resolution_timestamp")
+        f.strategy = sys.intern(c("strategy"))
+        f.subtype = sys.intern(c("subtype"))
+        f.decision = sys.intern(c("decision"))
+        f.pnl_neto = _num(c("pnl_neto"), float)
+        f.acierto = _num(c("acierto"), int)
+        f.precio_yes_mercado = _num(c("precio_yes_mercado"), float)
+        nuevas.append(f)
+
+    _RESULTS_LECTOR.leer(RESULTS_CSV, _fila, al_reset=_RESULTS_FILAS.clear)
+    if nuevas:
+        _RESULTS_FILAS.extend(nuevas)
+        _RESULTS_FILAS.sort(key=lambda r: r.resolution_timestamp)
+    return _RESULTS_FILAS
 
 def load_prices():
     """Precios BTC/ETH/SOL de los últimos 7 días.
