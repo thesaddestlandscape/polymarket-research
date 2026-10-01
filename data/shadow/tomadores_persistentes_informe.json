@@ -1,17 +1,71 @@
 {
- "generado_utc": "2026-09-30T12:21:09+00:00",
- "universo_n": 82,
- "entran": [],
- "salen": [],
+ "generado_utc": "2026-10-01T07:17:26+00:00",
+ "universo_n": 84,
+ "entran": [
+  "0x19277bf626a454d28939a4f2e2e7b142c3abc627",
+  "0x1f19c48aee80ec95396d91f0d21ac249b8a7f57a",
+  "0x328114447fd7af7db4e809c9f457c1b52f9c8bc8",
+  "0x3a6fe0c555a212e0ed67a97daeb803a485e742b6",
+  "0x4228048ea2f8f571ff2777cc32baee584c5134cb",
+  "0x456b9a5a43515747add1a859520fcb204de538d3",
+  "0x49591bfd7c214b3303605ee3de99d4bfa7c6c56f",
+  "0x4bd361245bdc06c67e93474b1b599d916ff3ca6d",
+  "0x6538e9576e873df90b2ef166792ca2b703bc5f9e",
+  "0x7399fe3ecdc1ac708b418448101d0475d1f9ef2e",
+  "0x797f51dbff69ca70d0fbf87993176d0d788f37e8",
+  "0x828b32d58d6624b0716f8f8661cbef5529cba12b",
+  "0x8ed24359b18815418dbf36e5c822cdac106e163a",
+  "0x9b6f7013be0c5a2c8dc98e8b6a84347467c77fb9",
+  "0x9bc26c0f313009cc780f08338a61d9682506a248",
+  "0xa330174e35074aeec03213d5ec2a9899c5779d33",
+  "0xa5550ee1af80b326c3c0e19f8ebb554baf63f286",
+  "0xab66b9a09149b8f631b0cc3ecab6345f36946c76",
+  "0xb1d30490fa2ec8dc55591e8c71d3d64b6e0fc279",
+  "0xb67b4eb1674ff796f70528f70b969f202123e739",
+  "0xbf2493489de1a0f2f47962c6bed5befc5e5407cb",
+  "0xc1738962d79dd64d372ba0077d8943d54c94618c",
+  "0xd9725a9c14350fa56e3072f559f6f9ef6fd48e8b",
+  "0xdb38fb21a926b7c06422efb824638b5820db70a7",
+  "0xdc3f46236700a2c7e89e2b952a123cd757ad4fa0",
+  "0xe154f3d8a1bc2db6fa50b26c1e6b6cd0feb30fdd",
+  "0xe1fc20cd9e864b73126f2a2f61c0736eec316067",
+  "0xe593ed212d5c7032b84ec499cd942c9df06ab944",
+  "0xeba7be146396301075344bb2d477f2ffdba92d1f",
+  "0xebb28df43258f6aa915f0e9d865075ff935163ed",
+  "0xf27d40745542dc871e127acff3a1c9d3910d9a88"
+ ],
+ "salen": [
+  "0x0d0ebc17486ff271254f5648322e813c5ef44b47",
+  "0x2977a92b98ac2713b952dd51c0e031e6adab4eb0",
+  "0x355d54242b1fcbc20e6bb3f8d94a1ccaaf5d1c50",
+  "0x3efbbecec8c98853be5e866a4e3b07f1d2834682",
+  "0x4126b16f087dddc677e382b3d6f74b356237d579",
+  "0x4144bf7b5b02eab2f5829bd0a832f8cf1313c906",
+  "0x424eb20fcd25113e3b98f42522a54580350b263b",
+  "0x440bfa4f9bc2fa011018d2d52fdce66aec196570",
+  "0x4d7fb17d715dc03927d722db007198d7be156fb9",
+  "0x562a11bcd7354ea82a09ed803cb1739d60862ad4",
+  "0x5f6d133cd13cb3f72be3911bfb3373fc8890976f",
+  "0x65e13cdcdfe7590eb1d03047e569762e7655677c",
+  "0x6bef4ccbadd3892ecdbb0cc186b8db8966f251ca",
+  "0x762d2469ddfe50755fb96ddc54df72ae4b4d964c",
+  "0x790637b693a2b3d77b42d14326e99eb6d706dbb5",
+  "0x7ae4a31adc0fb0226ac84f1febabea6b8daf0d4b",
+  "0x8fda356b89c6bfeb1df008a45749d153da590a28",
+  "0x99aeaa3d7e395cf8b0d09fd6410da89e65763cc9",
+  "0xaa5e4a81393aee32ec7da3c596291c5d259ac88b",
+  "0xb55fa1296e6ec55d0ce53d93b9237389f11764d4",
+  "0xbd0d0c4bfc88dad382674c9d5ae483dae8261fb4",
+  "0xbeb4400ab92eb72bb54086569c2dbc0ad22dda45",
+  "0xc87ad64315a4a0dcedfb90cb830a73f1c9252ddd",
+  "0xcb71551d8722d39565e9b5d0a2d7db6d23a719f7",
+  "0xd43edfda55410c630b19a92bc40f145c1eee37fe",
+  "0xdfce30b7bd3cd14652485acb2f5cdc3458275425",
+  "0xe3e5ffc0af38b8bf866652bb0569f405b6a8e362",
+  "0xe64fefc3552125df3480e3c20fb55aaafb607d13",
+  "0xf3ce251f9c4ae0f3940a9f32de5dd1a1d05b8bc6"
+ ],
  "forward_propio": [
-  {
-   "dia": "2026-09-24",
-   "seleccionadas": 66,
-   "activas": 65,
-   "neto_pct_vol": -0.41,
-   "neto_usd": -3268,
-   "repiten_pct": 48
-  },
   {
    "dia": "2026-09-25",
    "seleccionadas": 60,
@@ -51,129 +105,545 @@
    "neto_pct_vol": -0.62,
    "neto_usd": -8993,
    "repiten_pct": 35
+  },
+  {
+   "dia": "2026-09-30",
+   "seleccionadas": 82,
+   "activas": 80,
+   "neto_pct_vol": 0.09,
+   "neto_usd": 1501,
+   "repiten_pct": 61
   }
  ],
  "copia_latencia_real": {
   "dias": [
-   "2026-09-30"
+   "2026-09-30",
+   "2026-10-01"
   ],
-  "n": 1045,
-  "ev": 0.0162,
+  "n": 9019,
+  "ev": -0.0321,
   "ic90": null,
-  "lag_ms_mediana": 257.0,
+  "lag_ms_mediana": 259.0,
   "celdas": {
    "5min|TODOS|[0.7,0.8)": {
-    "n": 128,
-    "dias": 1,
-    "ev": 0.0522,
+    "n": 831,
+    "dias": 2,
+    "ev": 0.0011,
     "ic90": null,
-    "wallet_top_pct": 19
+    "wallet_top_pct": 11
    },
    "5min|BTC|[0.7,0.8)": {
-    "n": 69,
-    "dias": 1,
-    "ev": 0.0184,
-    "ic90": null,
-    "wallet_top_pct": 12
-   },
-   "5min|TODOS|[0.6,0.7)": {
-    "n": 85,
-    "dias": 1,
-    "ev": 0.1334,
-    "ic90": null,
-    "wallet_top_pct": 25
-   },
-   "5min|TODOS|[0.8,0.9)": {
-    "n": 118,
-    "dias": 1,
-    "ev": -0.0048,
-    "ic90": null,
-    "wallet_top_pct": 13
-   },
-   "5min|BTC|[0.8,0.9)": {
-    "n": 67,
-    "dias": 1,
-    "ev": -0.0359,
-    "ic90": null,
-    "wallet_top_pct": 13
-   },
-   "5min|BTC|[0.6,0.7)": {
-    "n": 47,
-    "dias": 1,
-    "ev": 0.1649,
-    "ic90": null,
-    "wallet_top_pct": 11
-   },
-   "5min|TODOS|[0.5,0.6)": {
-    "n": 189,
-    "dias": 1,
-    "ev": 0.0381,
-    "ic90": null,
-    "wallet_top_pct": 11
-   },
-   "5min|ETH|[0.5,0.6)": {
-    "n": 61,
-    "dias": 1,
-    "ev": 0.0541,
-    "ic90": null,
-    "wallet_top_pct": 15
-   },
-   "15min|TODOS|[0.5,0.6)": {
-    "n": 67,
-    "dias": 1,
-    "ev": -0.0831,
-    "ic90": null,
-    "wallet_top_pct": 36
-   },
-   "5min|TODOS|[0.4,0.5)": {
-    "n": 70,
-    "dias": 1,
-    "ev": -0.1668,
-    "ic90": null,
-    "wallet_top_pct": 17
-   },
-   "5min|BTC|[0.4,0.5)": {
-    "n": 42,
-    "dias": 1,
-    "ev": 0.0493,
-    "ic90": null,
-    "wallet_top_pct": 19
-   },
-   "5min|BTC|[0.5,0.6)": {
-    "n": 97,
-    "dias": 1,
-    "ev": 0.0618,
-    "ic90": null,
-    "wallet_top_pct": 13
-   },
-   "5min|TODOS|[0.9,1.0)": {
-    "n": 137,
-    "dias": 1,
-    "ev": 0.0639,
+    "n": 440,
+    "dias": 2,
+    "ev": 0.0217,
     "ic90": null,
     "wallet_top_pct": 9
    },
+   "5min|TODOS|[0.6,0.7)": {
+    "n": 844,
+    "dias": 2,
+    "ev": -0.0252,
+    "ic90": null,
+    "wallet_top_pct": 11
+   },
+   "5min|ETH|[0.6,0.7)": {
+    "n": 177,
+    "dias": 2,
+    "ev": -0.001,
+    "ic90": null,
+    "wallet_top_pct": 16
+   },
+   "5min|TODOS|[0.8,0.9)": {
+    "n": 1013,
+    "dias": 2,
+    "ev": -0.022,
+    "ic90": null,
+    "wallet_top_pct": 11
+   },
+   "5min|XRP|[0.8,0.9)": {
+    "n": 67,
+    "dias": 2,
+    "ev": -0.0265,
+    "ic90": null,
+    "wallet_top_pct": 36
+   },
+   "5min|BTC|[0.8,0.9)": {
+    "n": 577,
+    "dias": 2,
+    "ev": -0.0241,
+    "ic90": null,
+    "wallet_top_pct": 19
+   },
+   "5min|BTC|[0.6,0.7)": {
+    "n": 505,
+    "dias": 2,
+    "ev": -0.0144,
+    "ic90": null,
+    "wallet_top_pct": 9
+   },
+   "5min|TODOS|[0.5,0.6)": {
+    "n": 1539,
+    "dias": 2,
+    "ev": -0.0703,
+    "ic90": null,
+    "wallet_top_pct": 6
+   },
+   "5min|ETH|[0.5,0.6)": {
+    "n": 432,
+    "dias": 2,
+    "ev": -0.1139,
+    "ic90": null,
+    "wallet_top_pct": 10
+   },
+   "5min|TODOS|[0.2,0.3)": {
+    "n": 381,
+    "dias": 2,
+    "ev": 0.0225,
+    "ic90": null,
+    "wallet_top_pct": 15
+   },
+   "5min|SOL|[0.2,0.3)": {
+    "n": 54,
+    "dias": 2,
+    "ev": 0.587,
+    "ic90": null,
+    "wallet_top_pct": 22
+   },
+   "15min|TODOS|[0.5,0.6)": {
+    "n": 611,
+    "dias": 2,
+    "ev": -0.0454,
+    "ic90": null,
+    "wallet_top_pct": 20
+   },
+   "15min|ETH|[0.5,0.6)": {
+    "n": 181,
+    "dias": 2,
+    "ev": -0.1185,
+    "ic90": null,
+    "wallet_top_pct": 26
+   },
+   "15min|BTC|[0.5,0.6)": {
+    "n": 292,
+    "dias": 2,
+    "ev": -0.0519,
+    "ic90": null,
+    "wallet_top_pct": 9
+   },
+   "5min|TODOS|[0.4,0.5)": {
+    "n": 875,
+    "dias": 2,
+    "ev": -0.0705,
+    "ic90": null,
+    "wallet_top_pct": 10
+   },
+   "5min|BTC|[0.4,0.5)": {
+    "n": 576,
+    "dias": 2,
+    "ev": 0.0165,
+    "ic90": null,
+    "wallet_top_pct": 8
+   },
+   "5min|ETH|[0.4,0.5)": {
+    "n": 170,
+    "dias": 2,
+    "ev": -0.2466,
+    "ic90": null,
+    "wallet_top_pct": 11
+   },
+   "5min|BTC|[0.5,0.6)": {
+    "n": 901,
+    "dias": 2,
+    "ev": -0.0376,
+    "ic90": null,
+    "wallet_top_pct": 7
+   },
+   "15min|TODOS|[0.4,0.5)": {
+    "n": 308,
+    "dias": 2,
+    "ev": 0.1293,
+    "ic90": null,
+    "wallet_top_pct": 19
+   },
+   "15min|ETH|[0.4,0.5)": {
+    "n": 73,
+    "dias": 2,
+    "ev": 0.4106,
+    "ic90": null,
+    "wallet_top_pct": 23
+   },
+   "15min|TODOS|[0.6,0.7)": {
+    "n": 212,
+    "dias": 2,
+    "ev": -0.0055,
+    "ic90": null,
+    "wallet_top_pct": 20
+   },
+   "15min|ETH|[0.6,0.7)": {
+    "n": 43,
+    "dias": 2,
+    "ev": 0.1471,
+    "ic90": null,
+    "wallet_top_pct": 33
+   },
+   "5min|ETH|[0.7,0.8)": {
+    "n": 217,
+    "dias": 2,
+    "ev": -0.0004,
+    "ic90": null,
+    "wallet_top_pct": 19
+   },
+   "15min|BTC|[0.6,0.7)": {
+    "n": 121,
+    "dias": 2,
+    "ev": -0.1115,
+    "ic90": null,
+    "wallet_top_pct": 16
+   },
+   "5min|XRP|[0.7,0.8)": {
+    "n": 47,
+    "dias": 2,
+    "ev": 0.0023,
+    "ic90": null,
+    "wallet_top_pct": 34
+   },
+   "15min|TODOS|[0.3,0.4)": {
+    "n": 103,
+    "dias": 2,
+    "ev": 0.1401,
+    "ic90": null,
+    "wallet_top_pct": 27
+   },
+   "5min|TODOS|[0.1,0.2)": {
+    "n": 286,
+    "dias": 2,
+    "ev": -0.0726,
+    "ic90": null,
+    "wallet_top_pct": 21
+   },
+   "5min|SOL|[0.1,0.2)": {
+    "n": 57,
+    "dias": 2,
+    "ev": 0.3853,
+    "ic90": null,
+    "wallet_top_pct": 26
+   },
+   "15min|TODOS|[0.7,0.8)": {
+    "n": 164,
+    "dias": 2,
+    "ev": -0.1272,
+    "ic90": null,
+    "wallet_top_pct": 18
+   },
+   "15min|BTC|[0.7,0.8)": {
+    "n": 110,
+    "dias": 2,
+    "ev": -0.1314,
+    "ic90": null,
+    "wallet_top_pct": 17
+   },
+   "5min|TODOS|[0.9,1.0)": {
+    "n": 967,
+    "dias": 2,
+    "ev": -0.0154,
+    "ic90": null,
+    "wallet_top_pct": 8
+   },
+   "5min|SOL|[0.9,1.0)": {
+    "n": 91,
+    "dias": 2,
+    "ev": -0.1106,
+    "ic90": null,
+    "wallet_top_pct": 23
+   },
+   "15min|TODOS|[0.2,0.3)": {
+    "n": 95,
+    "dias": 2,
+    "ev": -0.2825,
+    "ic90": null,
+    "wallet_top_pct": 18
+   },
    "5min|BTC|[0.9,1.0)": {
-    "n": 74,
-    "dias": 1,
-    "ev": 0.0649,
+    "n": 476,
+    "dias": 2,
+    "ev": -0.0072,
+    "ic90": null,
+    "wallet_top_pct": 11
+   },
+   "15min|TODOS|[0.8,0.9)": {
+    "n": 135,
+    "dias": 2,
+    "ev": -0.0102,
+    "ic90": null,
+    "wallet_top_pct": 17
+   },
+   "15min|BTC|[0.8,0.9)": {
+    "n": 66,
+    "dias": 2,
+    "ev": -0.0425,
+    "ic90": null,
+    "wallet_top_pct": 21
+   },
+   "15min|TODOS|[0.9,1.0)": {
+    "n": 75,
+    "dias": 2,
+    "ev": 0.0819,
+    "ic90": null,
+    "wallet_top_pct": 32
+   },
+   "5min|XRP|[0.5,0.6)": {
+    "n": 43,
+    "dias": 2,
+    "ev": -0.5182,
+    "ic90": null,
+    "wallet_top_pct": 23
+   },
+   "5min|ETH|[0.8,0.9)": {
+    "n": 238,
+    "dias": 2,
+    "ev": -0.0072,
+    "ic90": null,
+    "wallet_top_pct": 20
+   },
+   "5min|ETH|[0.9,1.0)": {
+    "n": 274,
+    "dias": 2,
+    "ev": -0.0173,
+    "ic90": null,
+    "wallet_top_pct": 23
+   },
+   "15min|BTC|[0.4,0.5)": {
+    "n": 167,
+    "dias": 2,
+    "ev": 0.1366,
+    "ic90": null,
+    "wallet_top_pct": 15
+   },
+   "15min|SOL|[0.5,0.6)": {
+    "n": 53,
+    "dias": 2,
+    "ev": 0.1146,
+    "ic90": null,
+    "wallet_top_pct": 40
+   },
+   "5min|SOL|[0.5,0.6)": {
+    "n": 76,
+    "dias": 2,
+    "ev": -0.0269,
+    "ic90": null,
+    "wallet_top_pct": 24
+   },
+   "5min|TODOS|[0.3,0.4)": {
+    "n": 413,
+    "dias": 2,
+    "ev": 0.0675,
+    "ic90": null,
+    "wallet_top_pct": 18
+   },
+   "5min|BTC|[0.3,0.4)": {
+    "n": 228,
+    "dias": 2,
+    "ev": 0.0312,
+    "ic90": null,
+    "wallet_top_pct": 8
+   },
+   "5min|XRP|[0.9,1.0)": {
+    "n": 90,
+    "dias": 2,
+    "ev": 0.0296,
+    "ic90": null,
+    "wallet_top_pct": 39
+   },
+   "5min|ETH|[0.1,0.2)": {
+    "n": 56,
+    "dias": 2,
+    "ev": -0.4792,
+    "ic90": null,
+    "wallet_top_pct": 32
+   },
+   "5min|TODOS|[0.0,0.1)": {
+    "n": 93,
+    "dias": 2,
+    "ev": -0.6127,
+    "ic90": null,
+    "wallet_top_pct": 31
+   },
+   "5min|SOL|[0.6,0.7)": {
+    "n": 68,
+    "dias": 2,
+    "ev": -0.0958,
+    "ic90": null,
+    "wallet_top_pct": 26
+   },
+   "5min|XRP|[0.6,0.7)": {
+    "n": 49,
+    "dias": 2,
+    "ev": -0.2099,
+    "ic90": null,
+    "wallet_top_pct": 27
+   },
+   "5min|SOL|[0.3,0.4)": {
+    "n": 43,
+    "dias": 2,
+    "ev": -0.1401,
+    "ic90": null,
+    "wallet_top_pct": 33
+   },
+   "5min|BNB|[0.5,0.6)": {
+    "n": 43,
+    "dias": 2,
+    "ev": -0.1144,
+    "ic90": null,
+    "wallet_top_pct": 47
+   },
+   "5min|SOL|[0.8,0.9)": {
+    "n": 97,
+    "dias": 2,
+    "ev": -0.0224,
+    "ic90": null,
+    "wallet_top_pct": 24
+   },
+   "5min|ETH|[0.3,0.4)": {
+    "n": 72,
+    "dias": 2,
+    "ev": 0.1098,
+    "ic90": null,
+    "wallet_top_pct": 17
+   },
+   "5min|DOGE|[0.5,0.6)": {
+    "n": 44,
+    "dias": 2,
+    "ev": 0.0926,
+    "ic90": null,
+    "wallet_top_pct": 41
+   },
+   "5min|SOL|[0.7,0.8)": {
+    "n": 90,
+    "dias": 2,
+    "ev": -0.0198,
+    "ic90": null,
+    "wallet_top_pct": 27
+   },
+   "5min|XRP|[0.2,0.3)": {
+    "n": 68,
+    "dias": 2,
+    "ev": -0.3055,
+    "ic90": null,
+    "wallet_top_pct": 31
+   },
+   "5min|XRP|[0.1,0.2)": {
+    "n": 55,
+    "dias": 2,
+    "ev": -0.4034,
+    "ic90": null,
+    "wallet_top_pct": 31
+   },
+   "5min|XRP|[0.4,0.5)": {
+    "n": 55,
+    "dias": 2,
+    "ev": -0.1391,
+    "ic90": null,
+    "wallet_top_pct": 35
+   },
+   "15min|TODOS|[0.1,0.2)": {
+    "n": 60,
+    "dias": 2,
+    "ev": 0.1904,
+    "ic90": null,
+    "wallet_top_pct": 38
+   },
+   "5min|BTC|[0.2,0.3)": {
+    "n": 174,
+    "dias": 2,
+    "ev": -0.2123,
+    "ic90": null,
+    "wallet_top_pct": 11
+   },
+   "5min|ETH|[0.2,0.3)": {
+    "n": 69,
+    "dias": 2,
+    "ev": 0.2725,
+    "ic90": null,
+    "wallet_top_pct": 22
+   },
+   "5min|SOL|[0.4,0.5)": {
+    "n": 44,
+    "dias": 2,
+    "ev": -0.351,
+    "ic90": null,
+    "wallet_top_pct": 30
+   },
+   "5min|BTC|[0.1,0.2)": {
+    "n": 98,
+    "dias": 2,
+    "ev": -0.1784,
+    "ic90": null,
+    "wallet_top_pct": 12
+   },
+   "15min|XRP|[0.5,0.6)": {
+    "n": 40,
+    "dias": 2,
+    "ev": 0.194,
+    "ic90": null,
+    "wallet_top_pct": 55
+   },
+   "15min|BTC|[0.3,0.4)": {
+    "n": 40,
+    "dias": 2,
+    "ev": 0.368,
     "ic90": null,
     "wallet_top_pct": 12
    }
   },
   "microbuckets": {
    "TOMADORA#BTC#5min|0.75": {
-    "n": 30,
-    "dias": 1,
-    "mercados": 18,
-    "ev": -0.0152,
+    "n": 205,
+    "dias": 2,
+    "mercados": 116,
+    "ev": 0.0761,
     "ic90": null,
-    "wallet_top_pct": 20,
+    "wallet_top_pct": 12,
     "mitades": [
-     null,
-     -0.0152
+     0.0941,
+     0.0412
     ],
-    "g10": -0.00313,
+    "g10": 0.00638,
+    "estado": "en_seguimiento",
+    "gate_universo_agosto": {
+     "SNIPER": "sin_concluir",
+     "DISPERSO": "sin_concluir"
+    }
+   },
+   "TOMADORA#ETH#5min|0.65": {
+    "n": 98,
+    "dias": 2,
+    "mercados": 69,
+    "ev": 0.0052,
+    "ic90": null,
+    "wallet_top_pct": 17,
+    "mitades": [
+     0.0231,
+     -0.0208
+    ],
+    "g10": -0.00191,
+    "estado": "en_seguimiento",
+    "gate_universo_agosto": {
+     "SNIPER": "sin_concluir",
+     "DISPERSO": "sin_concluir"
+    }
+   },
+   "TOMADORA#XRP#5min|0.85": {
+    "n": 43,
+    "dias": 2,
+    "mercados": 34,
+    "ev": -0.0718,
+    "ic90": null,
+    "wallet_top_pct": 33,
+    "mitades": [
+     -0.0855,
+     -0.0401
+    ],
+    "g10": -0.00828,
     "estado": "negativo",
     "gate_universo_agosto": {
      "SNIPER": "sin_concluir",
@@ -181,17 +651,17 @@
     }
    },
    "TOMADORA#BTC#5min|0.80": {
-    "n": 37,
-    "dias": 1,
-    "mercados": 21,
-    "ev": -0.0205,
+    "n": 321,
+    "dias": 2,
+    "mercados": 155,
+    "ev": -0.0223,
     "ic90": null,
-    "wallet_top_pct": 16,
+    "wallet_top_pct": 21,
     "mitades": [
-     null,
-     -0.0205
+     0.0136,
+     -0.0665
     ],
-    "g10": -0.00327,
+    "g10": -0.00343,
     "estado": "negativo",
     "gate_universo_agosto": {
      "SNIPER": "sin_concluir",
@@ -199,17 +669,53 @@
     }
    },
    "TOMADORA#BTC#5min|0.60": {
-    "n": 27,
-    "dias": 1,
-    "mercados": 17,
-    "ev": 0.108,
+    "n": 247,
+    "dias": 2,
+    "mercados": 135,
+    "ev": -0.0093,
     "ic90": null,
-    "wallet_top_pct": 11,
+    "wallet_top_pct": 7,
     "mitades": [
-     null,
-     0.108
+     -0.0668,
+     0.0392
     ],
-    "g10": 0.00796,
+    "g10": -0.00406,
+    "estado": "negativo",
+    "gate_universo_agosto": {
+     "SNIPER": "sin_concluir",
+     "DISPERSO": "sin_concluir"
+    }
+   },
+   "TOMADORA#ETH#5min|0.55": {
+    "n": 111,
+    "dias": 2,
+    "mercados": 81,
+    "ev": -0.2637,
+    "ic90": null,
+    "wallet_top_pct": 14,
+    "mitades": [
+     -0.2844,
+     -0.2297
+    ],
+    "g10": -0.03075,
+    "estado": "negativo",
+    "gate_universo_agosto": {
+     "SNIPER": "sin_concluir",
+     "DISPERSO": "sin_concluir"
+    }
+   },
+   "TOMADORA#SOL#5min|0.25": {
+    "n": 26,
+    "dias": 2,
+    "mercados": 20,
+    "ev": 0.3647,
+    "ic90": null,
+    "wallet_top_pct": 27,
+    "mitades": [
+     0.2428,
+     0.5951
+    ],
+    "g10": 0.02144,
     "estado": "en_seguimiento",
     "gate_universo_agosto": {
      "SNIPER": "sin_concluir",
@@ -217,17 +723,53 @@
     }
    },
    "TOMADORA#BTC#5min|0.85": {
-    "n": 30,
-    "dias": 1,
-    "mercados": 19,
-    "ev": -0.0549,
+    "n": 256,
+    "dias": 2,
+    "mercados": 138,
+    "ev": -0.0263,
     "ic90": null,
-    "wallet_top_pct": 10,
+    "wallet_top_pct": 18,
     "mitades": [
-     null,
-     -0.0549
+     0.0195,
+     -0.0956
     ],
-    "g10": -0.00648,
+    "g10": -0.00351,
+    "estado": "negativo",
+    "gate_universo_agosto": {
+     "SNIPER": "sin_concluir",
+     "DISPERSO": "sin_concluir"
+    }
+   },
+   "TOMADORA#DOGE#15min|0.50": {
+    "n": 26,
+    "dias": 2,
+    "mercados": 24,
+    "ev": 0.0599,
+    "ic90": null,
+    "wallet_top_pct": 46,
+    "mitades": [
+     0.0192,
+     0.1514
+    ],
+    "g10": 0.00154,
+    "estado": "en_seguimiento",
+    "gate_universo_agosto": {
+     "SNIPER": "sin_concluir",
+     "DISPERSO": "sin_concluir"
+    }
+   },
+   "TOMADORA#ETH#15min|0.55": {
+    "n": 35,
+    "dias": 2,
+    "mercados": 25,
+    "ev": -0.0729,
+    "ic90": null,
+    "wallet_top_pct": 14,
+    "mitades": [
+     -0.1466,
+     -0.0109
+    ],
+    "g10": -0.0113,
     "estado": "negativo",
     "gate_universo_agosto": {
      "SNIPER": "sin_concluir",
@@ -235,35 +777,35 @@
     }
    },
    "TOMADORA#ETH#5min|0.50": {
-    "n": 49,
-    "dias": 1,
-    "mercados": 26,
-    "ev": 0.0294,
+    "n": 321,
+    "dias": 2,
+    "mercados": 175,
+    "ev": -0.0621,
     "ic90": null,
-    "wallet_top_pct": 18,
+    "wallet_top_pct": 9,
     "mitades": [
-     null,
-     0.0294
+     -0.1069,
+     0.009
     ],
-    "g10": -0.00173,
-    "estado": "en_seguimiento",
+    "g10": -0.01096,
+    "estado": "negativo",
     "gate_universo_agosto": {
      "SNIPER": "sin_concluir",
      "DISPERSO": "sin_concluir"
     }
    },
    "TOMADORA#BTC#15min|0.50": {
-    "n": 22,
-    "dias": 1,
-    "mercados": 9,
-    "ev": -0.0715,
+    "n": 218,
+    "dias": 2,
+    "mercados": 74,
+    "ev": -0.0926,
     "ic90": null,
-    "wallet_top_pct": 14,
+    "wallet_top_pct": 10,
     "mitades": [
-     null,
-     -0.0715
+     -0.1062,
+     -0.0749
     ],
-    "g10": -0.0119,
+    "g10": -0.01408,
     "estado": "negativo",
     "gate_universo_agosto": {
      "SNIPER": "sin_concluir",
@@ -271,35 +813,89 @@
     }
    },
    "TOMADORA#BTC#5min|0.45": {
-    "n": 27,
-    "dias": 1,
-    "mercados": 15,
-    "ev": 0.2132,
+    "n": 384,
+    "dias": 2,
+    "mercados": 166,
+    "ev": -0.0514,
     "ic90": null,
-    "wallet_top_pct": 22,
+    "wallet_top_pct": 9,
     "mitades": [
-     null,
-     0.2132
+     -0.0647,
+     -0.039
     ],
-    "g10": 0.01578,
-    "estado": "en_seguimiento",
+    "g10": -0.01076,
+    "estado": "negativo",
+    "gate_universo_agosto": {
+     "SNIPER": "sin_concluir",
+     "DISPERSO": "sin_concluir"
+    }
+   },
+   "TOMADORA#ETH#5min|0.45": {
+    "n": 122,
+    "dias": 2,
+    "mercados": 81,
+    "ev": -0.2641,
+    "ic90": null,
+    "wallet_top_pct": 13,
+    "mitades": [
+     -0.1704,
+     -0.3901
+    ],
+    "g10": -0.03199,
+    "estado": "negativo",
     "gate_universo_agosto": {
      "SNIPER": "sin_concluir",
      "DISPERSO": "sin_concluir"
     }
    },
    "TOMADORA#BTC#5min|0.55": {
-    "n": 31,
-    "dias": 1,
-    "mercados": 15,
-    "ev": 0.2124,
+    "n": 280,
+    "dias": 2,
+    "mercados": 130,
+    "ev": 0.0112,
     "ic90": null,
-    "wallet_top_pct": 19,
+    "wallet_top_pct": 8,
     "mitades": [
-     null,
-     0.2124
+     -0.0386,
+     0.0497
     ],
-    "g10": 0.01782,
+    "g10": -0.00269,
+    "estado": "en_seguimiento",
+    "gate_universo_agosto": {
+     "SNIPER": "sin_concluir",
+     "DISPERSO": "sin_concluir"
+    }
+   },
+   "TOMADORA#ETH#15min|0.45": {
+    "n": 41,
+    "dias": 2,
+    "mercados": 23,
+    "ev": 0.5733,
+    "ic90": null,
+    "wallet_top_pct": 24,
+    "mitades": [
+     0.1387,
+     0.8515
+    ],
+    "g10": 0.0517,
+    "estado": "en_seguimiento",
+    "gate_universo_agosto": {
+     "SNIPER": "sin_concluir",
+     "DISPERSO": "sin_concluir"
+    }
+   },
+   "TOMADORA#ETH#15min|0.60": {
+    "n": 28,
+    "dias": 2,
+    "mercados": 22,
+    "ev": 0.1355,
+    "ic90": null,
+    "wallet_top_pct": 32,
+    "mitades": [
+     -0.0932,
+     0.3071
+    ],
+    "g10": 0.0107,
     "estado": "en_seguimiento",
     "gate_universo_agosto": {
      "SNIPER": "sin_concluir",
@@ -307,35 +903,215 @@
     }
    },
    "TOMADORA#ETH#5min|0.75": {
-    "n": 18,
-    "dias": 1,
-    "mercados": 10,
-    "ev": 0.1433,
+    "n": 115,
+    "dias": 2,
+    "mercados": 76,
+    "ev": 0.0607,
     "ic90": null,
-    "wallet_top_pct": 33,
+    "wallet_top_pct": 18,
     "mitades": [
-     null,
-     0.1433
+     0.1102,
+     0.0085
     ],
-    "g10": 0.01335,
+    "g10": 0.00476,
     "estado": "en_seguimiento",
     "gate_universo_agosto": {
      "SNIPER": "sin_concluir",
      "DISPERSO": "sin_concluir"
     }
    },
-   "TOMADORA#BTC#5min|0.90": {
-    "n": 74,
-    "dias": 1,
-    "mercados": 25,
-    "ev": 0.0649,
+   "TOMADORA#BTC#15min|0.60": {
+    "n": 49,
+    "dias": 2,
+    "mercados": 33,
+    "ev": -0.0778,
     "ic90": null,
-    "wallet_top_pct": 12,
+    "wallet_top_pct": 16,
     "mitades": [
-     null,
-     0.0649
+     -0.0244,
+     -0.1783
     ],
-    "g10": 0.00639,
+    "g10": -0.01104,
+    "estado": "negativo",
+    "gate_universo_agosto": {
+     "SNIPER": "sin_concluir",
+     "DISPERSO": "malo_confirmado"
+    }
+   },
+   "TOMADORA#XRP#5min|0.75": {
+    "n": 31,
+    "dias": 2,
+    "mercados": 25,
+    "ev": -0.0947,
+    "ic90": null,
+    "wallet_top_pct": 32,
+    "mitades": [
+     -0.1131,
+     -0.0418
+    ],
+    "g10": -0.01135,
+    "estado": "negativo",
+    "gate_universo_agosto": {
+     "SNIPER": "sin_concluir",
+     "DISPERSO": "sin_concluir"
+    }
+   },
+   "TOMADORA#SOL#5min|0.15": {
+    "n": 26,
+    "dias": 2,
+    "mercados": 22,
+    "ev": 0.3523,
+    "ic90": null,
+    "wallet_top_pct": 27,
+    "mitades": [
+     0.1228,
+     0.7195
+    ],
+    "g10": 0.00822,
+    "estado": "en_seguimiento",
+    "gate_universo_agosto": {
+     "SNIPER": "sin_concluir",
+     "DISPERSO": "sin_concluir"
+    }
+   },
+   "TOMADORA#BTC#15min|0.70": {
+    "n": 67,
+    "dias": 2,
+    "mercados": 39,
+    "ev": -0.1683,
+    "ic90": null,
+    "wallet_top_pct": 15,
+    "mitades": [
+     -0.0671,
+     -0.301
+    ],
+    "g10": -0.01941,
+    "estado": "negativo",
+    "gate_universo_agosto": {
+     "SNIPER": "sin_concluir",
+     "DISPERSO": "sin_concluir"
+    }
+   },
+   "TOMADORA#ETH#15min|0.65": {
+    "n": 15,
+    "dias": 2,
+    "mercados": 13,
+    "ev": 0.1686,
+    "ic90": null,
+    "wallet_top_pct": 33,
+    "mitades": [
+     0.0244,
+     0.4571
+    ],
+    "g10": 0.01489,
+    "estado": "en_seguimiento",
+    "gate_universo_agosto": {
+     "SNIPER": "sin_concluir",
+     "DISPERSO": "sin_concluir"
+    }
+   },
+   "TOMADORA#SOL#5min|0.90": {
+    "n": 91,
+    "dias": 2,
+    "mercados": 67,
+    "ev": -0.1106,
+    "ic90": null,
+    "wallet_top_pct": 23,
+    "mitades": [
+     -0.1206,
+     -0.0771
+    ],
+    "g10": -0.01204,
+    "estado": "negativo",
+    "gate_universo_agosto": {
+     "SNIPER": "sin_concluir",
+     "DISPERSO": "sin_concluir"
+    }
+   },
+   "TOMADORA#BTC#15min|0.25": {
+    "n": 26,
+    "dias": 2,
+    "mercados": 20,
+    "ev": -0.327,
+    "ic90": null,
+    "wallet_top_pct": 19,
+    "mitades": [
+     -0.5877,
+     0.09
+    ],
+    "g10": -0.04355,
+    "estado": "negativo",
+    "gate_universo_agosto": {
+     "SNIPER": "sin_concluir",
+     "DISPERSO": "sin_concluir"
+    }
+   },
+   "TOMADORA#BTC#5min|0.90": {
+    "n": 476,
+    "dias": 2,
+    "mercados": 168,
+    "ev": -0.0072,
+    "ic90": null,
+    "wallet_top_pct": 11,
+    "mitades": [
+     0.0287,
+     -0.0762
+    ],
+    "g10": -0.00117,
+    "estado": "negativo",
+    "gate_universo_agosto": {
+     "SNIPER": "sin_concluir",
+     "DISPERSO": "sin_concluir"
+    }
+   },
+   "TOMADORA#BTC#15min|0.85": {
+    "n": 33,
+    "dias": 2,
+    "mercados": 23,
+    "ev": -0.0007,
+    "ic90": null,
+    "wallet_top_pct": 18,
+    "mitades": [
+     -0.0594,
+     0.1343
+    ],
+    "g10": -0.00082,
+    "estado": "negativo",
+    "gate_universo_agosto": {
+     "SNIPER": "sin_concluir",
+     "DISPERSO": "sin_concluir"
+    }
+   },
+   "TOMADORA#BTC#15min|0.90": {
+    "n": 29,
+    "dias": 2,
+    "mercados": 19,
+    "ev": 0.0844,
+    "ic90": null,
+    "wallet_top_pct": 28,
+    "mitades": [
+     0.0843,
+     0.0845
+    ],
+    "g10": 0.0084,
+    "estado": "en_seguimiento",
+    "gate_universo_agosto": {
+     "SNIPER": "sin_concluir",
+     "DISPERSO": "sin_concluir"
+    }
+   },
+   "TOMADORA#ETH#15min|0.90": {
+    "n": 23,
+    "dias": 2,
+    "mercados": 20,
+    "ev": 0.0759,
+    "ic90": null,
+    "wallet_top_pct": 35,
+    "mitades": [
+     0.0833,
+     0.0662
+    ],
+    "g10": 0.00756,
     "estado": "en_seguimiento",
     "gate_universo_agosto": {
      "SNIPER": "sin_concluir",
@@ -343,17 +1119,17 @@
     }
    },
    "TOMADORA#BTC#5min|0.50": {
-    "n": 66,
-    "dias": 1,
-    "mercados": 27,
-    "ev": -0.009,
+    "n": 621,
+    "dias": 2,
+    "mercados": 211,
+    "ev": -0.0596,
     "ic90": null,
-    "wallet_top_pct": 15,
+    "wallet_top_pct": 9,
     "mitades": [
-     null,
-     -0.009
+     -0.0351,
+     -0.0812
     ],
-    "g10": -0.00562,
+    "g10": -0.01077,
     "estado": "negativo",
     "gate_universo_agosto": {
      "SNIPER": "sin_concluir",
@@ -361,17 +1137,53 @@
     }
    },
    "TOMADORA#BTC#5min|0.40": {
-    "n": 15,
-    "dias": 1,
-    "mercados": 9,
-    "ev": -0.2456,
+    "n": 192,
+    "dias": 2,
+    "mercados": 108,
+    "ev": 0.1523,
     "ic90": null,
-    "wallet_top_pct": 20,
+    "wallet_top_pct": 8,
     "mitades": [
-     null,
-     -0.2456
+     0.1264,
+     0.1878
     ],
-    "g10": -0.03121,
+    "g10": 0.00829,
+    "estado": "en_seguimiento",
+    "gate_universo_agosto": {
+     "SNIPER": "sin_concluir",
+     "DISPERSO": "sin_concluir"
+    }
+   },
+   "TOMADORA#ETH#5min|0.40": {
+    "n": 48,
+    "dias": 2,
+    "mercados": 39,
+    "ev": -0.2023,
+    "ic90": null,
+    "wallet_top_pct": 12,
+    "mitades": [
+     -0.4011,
+     0.0326
+    ],
+    "g10": -0.02687,
+    "estado": "negativo",
+    "gate_universo_agosto": {
+     "SNIPER": "sin_concluir",
+     "DISPERSO": "sin_concluir"
+    }
+   },
+   "TOMADORA#XRP#5min|0.50": {
+    "n": 24,
+    "dias": 2,
+    "mercados": 23,
+    "ev": -0.5507,
+    "ic90": null,
+    "wallet_top_pct": 38,
+    "mitades": [
+     -0.7187,
+     -0.3827
+    ],
+    "g10": -0.06033,
     "estado": "negativo",
     "gate_universo_agosto": {
      "SNIPER": "sin_concluir",
@@ -379,35 +1191,53 @@
     }
    },
    "TOMADORA#BTC#5min|0.70": {
-    "n": 39,
-    "dias": 1,
-    "mercados": 22,
-    "ev": 0.0442,
+    "n": 235,
+    "dias": 2,
+    "mercados": 123,
+    "ev": -0.0258,
     "ic90": null,
-    "wallet_top_pct": 10,
+    "wallet_top_pct": 8,
     "mitades": [
-     null,
-     0.0442
+     0.0215,
+     -0.0897
     ],
-    "g10": 0.00264,
-    "estado": "en_seguimiento",
+    "g10": -0.00466,
+    "estado": "negativo",
     "gate_universo_agosto": {
      "SNIPER": "sin_concluir",
      "DISPERSO": "sin_concluir"
     }
    },
    "TOMADORA#BTC#5min|0.65": {
-    "n": 20,
-    "dias": 1,
-    "mercados": 14,
-    "ev": 0.2417,
+    "n": 258,
+    "dias": 2,
+    "mercados": 137,
+    "ev": -0.0193,
     "ic90": null,
-    "wallet_top_pct": 15,
+    "wallet_top_pct": 10,
     "mitades": [
-     null,
-     0.2417
+     -0.0163,
+     -0.0219
     ],
-    "g10": 0.02243,
+    "g10": -0.00451,
+    "estado": "negativo",
+    "gate_universo_agosto": {
+     "SNIPER": "sin_concluir",
+     "DISPERSO": "sin_concluir"
+    }
+   },
+   "TOMADORA#ETH#5min|0.85": {
+    "n": 133,
+    "dias": 2,
+    "mercados": 90,
+    "ev": 0.0073,
+    "ic90": null,
+    "wallet_top_pct": 19,
+    "mitades": [
+     -0.0175,
+     0.0472
+    ],
+    "g10": 3e-05,
     "estado": "en_seguimiento",
     "gate_universo_agosto": {
      "SNIPER": "sin_concluir",
@@ -415,36 +1245,1206 @@
     }
    },
    "TOMADORA#ETH#5min|0.90": {
-    "n": 35,
-    "dias": 1,
-    "mercados": 22,
-    "ev": 0.0807,
+    "n": 274,
+    "dias": 2,
+    "mercados": 160,
+    "ev": -0.0173,
     "ic90": null,
     "wallet_top_pct": 23,
     "mitades": [
-     null,
-     0.0807
+     -0.0136,
+     -0.0262
     ],
-    "g10": 0.00803,
-    "estado": "en_seguimiento",
+    "g10": -0.00226,
+    "estado": "negativo",
     "gate_universo_agosto": {
      "SNIPER": "sin_concluir",
      "DISPERSO": "sin_concluir"
     }
    },
    "TOMADORA#BTC#15min|0.45": {
-    "n": 19,
-    "dias": 1,
-    "mercados": 8,
-    "ev": 0.9931,
+    "n": 131,
+    "dias": 2,
+    "mercados": 56,
+    "ev": 0.116,
+    "ic90": null,
+    "wallet_top_pct": 17,
+    "mitades": [
+     0.1567,
+     0.0648
+    ],
+    "g10": 0.00594,
+    "estado": "en_seguimiento",
+    "gate_universo_agosto": {
+     "SNIPER": "sin_concluir",
+     "DISPERSO": "sin_concluir"
+    }
+   },
+   "TOMADORA#SOL#15min|0.50": {
+    "n": 44,
+    "dias": 2,
+    "mercados": 33,
+    "ev": 0.0696,
+    "ic90": null,
+    "wallet_top_pct": 48,
+    "mitades": [
+     0.2746,
+     -0.2001
+    ],
+    "g10": 0.00227,
+    "estado": "en_seguimiento",
+    "gate_universo_agosto": {
+     "SNIPER": "sin_concluir",
+     "DISPERSO": "sin_concluir"
+    }
+   },
+   "TOMADORA#SOL#5min|0.50": {
+    "n": 44,
+    "dias": 2,
+    "mercados": 40,
+    "ev": 0.0234,
+    "ic90": null,
+    "wallet_top_pct": 30,
+    "mitades": [
+     -0.0668,
+     0.1315
+    ],
+    "g10": -0.00238,
+    "estado": "en_seguimiento",
+    "gate_universo_agosto": {
+     "SNIPER": "sin_concluir",
+     "DISPERSO": "sin_concluir"
+    }
+   },
+   "TOMADORA#BTC#5min|0.35": {
+    "n": 131,
+    "dias": 2,
+    "mercados": 81,
+    "ev": 0.0919,
+    "ic90": null,
+    "wallet_top_pct": 8,
+    "mitades": [
+     0.1235,
+     0.0608
+    ],
+    "g10": 0.00055,
+    "estado": "en_seguimiento",
+    "gate_universo_agosto": {
+     "SNIPER": "sin_concluir",
+     "DISPERSO": "sin_concluir"
+    }
+   },
+   "TOMADORA#XRP#5min|0.90": {
+    "n": 90,
+    "dias": 2,
+    "mercados": 69,
+    "ev": 0.0296,
+    "ic90": null,
+    "wallet_top_pct": 39,
+    "mitades": [
+     0.0327,
+     0.0256
+    ],
+    "g10": 0.00269,
+    "estado": "en_seguimiento",
+    "gate_universo_agosto": {
+     "SNIPER": "sin_concluir",
+     "DISPERSO": "sin_concluir"
+    }
+   },
+   "TOMADORA#ETH#5min|0.70": {
+    "n": 102,
+    "dias": 2,
+    "mercados": 75,
+    "ev": -0.0692,
+    "ic90": null,
+    "wallet_top_pct": 20,
+    "mitades": [
+     -0.0856,
+     -0.0474
+    ],
+    "g10": -0.00912,
+    "estado": "negativo",
+    "gate_universo_agosto": {
+     "SNIPER": "sin_concluir",
+     "DISPERSO": "sin_concluir"
+    }
+   },
+   "TOMADORA#ETH#5min|0.15": {
+    "n": 34,
+    "dias": 2,
+    "mercados": 30,
+    "ev": -0.7486,
+    "ic90": null,
+    "wallet_top_pct": 32,
+    "mitades": [
+     -0.8388,
+     -0.5321
+    ],
+    "g10": -0.08463,
+    "estado": "negativo",
+    "gate_universo_agosto": {
+     "SNIPER": "sin_concluir",
+     "DISPERSO": "sin_concluir"
+    }
+   },
+   "TOMADORA#XRP#5min|0.05": {
+    "n": 20,
+    "dias": 2,
+    "mercados": 15,
+    "ev": -1.065,
+    "ic90": null,
+    "wallet_top_pct": 35,
+    "mitades": [
+     -1.0648,
+     -1.0652
+    ],
+    "g10": -0.11261,
+    "estado": "negativo",
+    "gate_universo_agosto": {
+     "SNIPER": "malo_confirmado",
+     "DISPERSO": "sin_concluir"
+    }
+   },
+   "TOMADORA#BTC#15min|0.75": {
+    "n": 43,
+    "dias": 2,
+    "mercados": 34,
+    "ev": -0.0739,
     "ic90": null,
     "wallet_top_pct": 21,
     "mitades": [
-     null,
-     0.9931
+     -0.0767,
+     -0.0686
     ],
-    "g10": 0.09359,
+    "g10": -0.00924,
+    "estado": "negativo",
+    "gate_universo_agosto": {
+     "SNIPER": "sin_concluir",
+     "DISPERSO": "sin_concluir"
+    }
+   },
+   "TOMADORA#SOL#5min|0.65": {
+    "n": 35,
+    "dias": 2,
+    "mercados": 31,
+    "ev": 0.0404,
+    "ic90": null,
+    "wallet_top_pct": 20,
+    "mitades": [
+     0.0736,
+     0.0156
+    ],
+    "g10": 0.00168,
     "estado": "en_seguimiento",
+    "gate_universo_agosto": {
+     "SNIPER": "sin_concluir",
+     "DISPERSO": "sin_concluir"
+    }
+   },
+   "TOMADORA#XRP#5min|0.60": {
+    "n": 22,
+    "dias": 2,
+    "mercados": 19,
+    "ev": -0.3641,
+    "ic90": null,
+    "wallet_top_pct": 32,
+    "mitades": [
+     -0.3458,
+     -0.4804
+    ],
+    "g10": -0.04045,
+    "estado": "negativo",
+    "gate_universo_agosto": {
+     "SNIPER": "sin_concluir",
+     "DISPERSO": "sin_concluir"
+    }
+   },
+   "TOMADORA#XRP#5min|0.30": {
+    "n": 18,
+    "dias": 2,
+    "mercados": 17,
+    "ev": 0.1377,
+    "ic90": null,
+    "wallet_top_pct": 39,
+    "mitades": [
+     0.266,
+     -0.3114
+    ],
+    "g10": 0.00327,
+    "estado": "en_seguimiento",
+    "gate_universo_agosto": {
+     "SNIPER": "sin_concluir",
+     "DISPERSO": "sin_concluir"
+    }
+   },
+   "TOMADORA#BTC#5min|0.30": {
+    "n": 97,
+    "dias": 2,
+    "mercados": 74,
+    "ev": -0.0508,
+    "ic90": null,
+    "wallet_top_pct": 8,
+    "mitades": [
+     -0.1607,
+     0.0484
+    ],
+    "g10": -0.01515,
+    "estado": "negativo",
+    "gate_universo_agosto": {
+     "SNIPER": "sin_concluir",
+     "DISPERSO": "sin_concluir"
+    }
+   },
+   "TOMADORA#SOL#5min|0.30": {
+    "n": 23,
+    "dias": 2,
+    "mercados": 18,
+    "ev": -0.3884,
+    "ic90": null,
+    "wallet_top_pct": 17,
+    "mitades": [
+     -0.6854,
+     0.4533
+    ],
+    "g10": -0.04724,
+    "estado": "negativo",
+    "gate_universo_agosto": {
+     "SNIPER": "sin_concluir",
+     "DISPERSO": "sin_concluir"
+    }
+   },
+   "TOMADORA#BNB#5min|0.55": {
+    "n": 20,
+    "dias": 2,
+    "mercados": 18,
+    "ev": -0.2208,
+    "ic90": null,
+    "wallet_top_pct": 50,
+    "mitades": [
+     -0.6799,
+     -0.0678
+    ],
+    "g10": -0.02649,
+    "estado": "negativo",
+    "gate_universo_agosto": {
+     "SNIPER": "sin_concluir",
+     "DISPERSO": "sin_concluir"
+    }
+   },
+   "TOMADORA#SOL#5min|0.80": {
+    "n": 42,
+    "dias": 2,
+    "mercados": 37,
+    "ev": 0.0915,
+    "ic90": null,
+    "wallet_top_pct": 24,
+    "mitades": [
+     0.117,
+     0.0456
+    ],
+    "g10": 0.00843,
+    "estado": "en_seguimiento",
+    "gate_universo_agosto": {
+     "SNIPER": "sin_concluir",
+     "DISPERSO": "sin_concluir"
+    }
+   },
+   "TOMADORA#SOL#5min|0.20": {
+    "n": 28,
+    "dias": 2,
+    "mercados": 24,
+    "ev": 0.7934,
+    "ic90": null,
+    "wallet_top_pct": 21,
+    "mitades": [
+     0.9028,
+     0.6672
+    ],
+    "g10": 0.05711,
+    "estado": "en_seguimiento",
+    "gate_universo_agosto": {
+     "SNIPER": "sin_concluir",
+     "DISPERSO": "malo_confirmado"
+    }
+   },
+   "TOMADORA#BTC#15min|0.65": {
+    "n": 72,
+    "dias": 2,
+    "mercados": 41,
+    "ev": -0.1345,
+    "ic90": null,
+    "wallet_top_pct": 18,
+    "mitades": [
+     -0.0574,
+     -0.2487
+    ],
+    "g10": -0.01634,
+    "estado": "negativo",
+    "gate_universo_agosto": {
+     "SNIPER": "sin_concluir",
+     "DISPERSO": "sin_concluir"
+    }
+   },
+   "TOMADORA#ETH#5min|0.30": {
+    "n": 37,
+    "dias": 2,
+    "mercados": 31,
+    "ev": 0.4834,
+    "ic90": null,
+    "wallet_top_pct": 19,
+    "mitades": [
+     0.611,
+     0.3488
+    ],
+    "g10": 0.03586,
+    "estado": "en_seguimiento",
+    "gate_universo_agosto": {
+     "SNIPER": "sin_concluir",
+     "DISPERSO": "sin_concluir"
+    }
+   },
+   "TOMADORA#DOGE#5min|0.50": {
+    "n": 38,
+    "dias": 2,
+    "mercados": 36,
+    "ev": 0.0851,
+    "ic90": null,
+    "wallet_top_pct": 42,
+    "mitades": [
+     0.048,
+     0.4
+    ],
+    "g10": 0.00388,
+    "estado": "en_seguimiento",
+    "gate_universo_agosto": {
+     "SNIPER": "sin_concluir",
+     "DISPERSO": "sin_concluir"
+    }
+   },
+   "TOMADORA#ETH#15min|0.50": {
+    "n": 146,
+    "dias": 2,
+    "mercados": 70,
+    "ev": -0.1294,
+    "ic90": null,
+    "wallet_top_pct": 31,
+    "mitades": [
+     -0.1084,
+     -0.1642
+    ],
+    "g10": -0.0177,
+    "estado": "negativo",
+    "gate_universo_agosto": {
+     "SNIPER": "sin_concluir",
+     "DISPERSO": "sin_concluir"
+    }
+   },
+   "TOMADORA#XRP#5min|0.55": {
+    "n": 19,
+    "dias": 2,
+    "mercados": 13,
+    "ev": -0.4772,
+    "ic90": null,
+    "wallet_top_pct": 37,
+    "mitades": [
+     -0.3547,
+     -0.7427
+    ],
+    "g10": -0.05241,
+    "estado": "negativo",
+    "gate_universo_agosto": {
+     "SNIPER": "sin_concluir",
+     "DISPERSO": "sin_concluir"
+    }
+   },
+   "TOMADORA#SOL#5min|0.70": {
+    "n": 44,
+    "dias": 2,
+    "mercados": 35,
+    "ev": -0.1622,
+    "ic90": null,
+    "wallet_top_pct": 34,
+    "mitades": [
+     0.0462,
+     -0.3525
+    ],
+    "g10": -0.0188,
+    "estado": "negativo",
+    "gate_universo_agosto": {
+     "SNIPER": "sin_concluir",
+     "DISPERSO": "sin_concluir"
+    }
+   },
+   "TOMADORA#SOL#5min|0.85": {
+    "n": 55,
+    "dias": 2,
+    "mercados": 45,
+    "ev": -0.1095,
+    "ic90": null,
+    "wallet_top_pct": 36,
+    "mitades": [
+     -0.0932,
+     -0.1492
+    ],
+    "g10": -0.01222,
+    "estado": "negativo",
+    "gate_universo_agosto": {
+     "SNIPER": "sin_concluir",
+     "DISPERSO": "sin_concluir"
+    }
+   },
+   "TOMADORA#ETH#5min|0.80": {
+    "n": 105,
+    "dias": 2,
+    "mercados": 67,
+    "ev": -0.0256,
+    "ic90": null,
+    "wallet_top_pct": 21,
+    "mitades": [
+     -0.0734,
+     0.0408
+    ],
+    "g10": -0.00378,
+    "estado": "negativo",
+    "gate_universo_agosto": {
+     "SNIPER": "sin_concluir",
+     "DISPERSO": "sin_concluir"
+    }
+   },
+   "TOMADORA#XRP#5min|0.20": {
+    "n": 44,
+    "dias": 2,
+    "mercados": 27,
+    "ev": -0.5109,
+    "ic90": null,
+    "wallet_top_pct": 32,
+    "mitades": [
+     -0.2642,
+     -0.8354
+    ],
+    "g10": -0.06279,
+    "estado": "negativo",
+    "gate_universo_agosto": {
+     "SNIPER": "sin_concluir",
+     "DISPERSO": "sin_concluir"
+    }
+   },
+   "TOMADORA#XRP#5min|0.15": {
+    "n": 31,
+    "dias": 2,
+    "mercados": 24,
+    "ev": -0.1241,
+    "ic90": null,
+    "wallet_top_pct": 32,
+    "mitades": [
+     -0.2838,
+     0.3352
+    ],
+    "g10": -0.03141,
+    "estado": "negativo",
+    "gate_universo_agosto": {
+     "SNIPER": "sin_concluir",
+     "DISPERSO": "sin_concluir"
+    }
+   },
+   "TOMADORA#BTC#15min|0.80": {
+    "n": 33,
+    "dias": 2,
+    "mercados": 23,
+    "ev": -0.0843,
+    "ic90": null,
+    "wallet_top_pct": 24,
+    "mitades": [
+     -0.071,
+     -0.1334
+    ],
+    "g10": -0.00993,
+    "estado": "negativo",
+    "gate_universo_agosto": {
+     "SNIPER": "sin_concluir",
+     "DISPERSO": "sin_concluir"
+    }
+   },
+   "TOMADORA#ETH#5min|0.35": {
+    "n": 35,
+    "dias": 2,
+    "mercados": 29,
+    "ev": -0.2852,
+    "ic90": null,
+    "wallet_top_pct": 23,
+    "mitades": [
+     -0.4713,
+     0.0715
+    ],
+    "g10": -0.03607,
+    "estado": "negativo",
+    "gate_universo_agosto": {
+     "SNIPER": "sin_concluir",
+     "DISPERSO": "sin_concluir"
+    }
+   },
+   "TOMADORA#DOGE#5min|0.90": {
+    "n": 26,
+    "dias": 2,
+    "mercados": 23,
+    "ev": -0.0024,
+    "ic90": null,
+    "wallet_top_pct": 19,
+    "mitades": [
+     0.0856,
+     -0.1051
+    ],
+    "g10": -0.00069,
+    "estado": "negativo",
+    "gate_universo_agosto": {
+     "SNIPER": "sin_concluir",
+     "DISPERSO": "sin_concluir"
+    }
+   },
+   "TOMADORA#XRP#5min|0.80": {
+    "n": 24,
+    "dias": 2,
+    "mercados": 24,
+    "ev": 0.0547,
+    "ic90": null,
+    "wallet_top_pct": 42,
+    "mitades": [
+     0.0662,
+     0.0268
+    ],
+    "g10": 0.0046,
+    "estado": "en_seguimiento",
+    "gate_universo_agosto": {
+     "SNIPER": "sin_concluir",
+     "DISPERSO": "sin_concluir"
+    }
+   },
+   "TOMADORA#XRP#5min|0.40": {
+    "n": 26,
+    "dias": 2,
+    "mercados": 19,
+    "ev": 0.1359,
+    "ic90": null,
+    "wallet_top_pct": 27,
+    "mitades": [
+     0.1263,
+     0.1575
+    ],
+    "g10": 0.0067,
+    "estado": "en_seguimiento",
+    "gate_universo_agosto": {
+     "SNIPER": "sin_concluir",
+     "DISPERSO": "sin_concluir"
+    }
+   },
+   "TOMADORA#XRP#5min|0.65": {
+    "n": 27,
+    "dias": 2,
+    "mercados": 23,
+    "ev": -0.0843,
+    "ic90": null,
+    "wallet_top_pct": 26,
+    "mitades": [
+     -0.1168,
+     0.1026
+    ],
+    "g10": -0.01118,
+    "estado": "negativo",
+    "gate_universo_agosto": {
+     "SNIPER": "sin_concluir",
+     "DISPERSO": "sin_concluir"
+    }
+   },
+   "TOMADORA#XRP#5min|0.35": {
+    "n": 21,
+    "dias": 2,
+    "mercados": 15,
+    "ev": 0.5472,
+    "ic90": null,
+    "wallet_top_pct": 24,
+    "mitades": [
+     0.3366,
+     0.6769
+    ],
+    "g10": 0.04443,
+    "estado": "en_seguimiento",
+    "gate_universo_agosto": {
+     "SNIPER": "sin_concluir",
+     "DISPERSO": "sin_concluir"
+    }
+   },
+   "TOMADORA#SOL#5min|0.75": {
+    "n": 46,
+    "dias": 2,
+    "mercados": 34,
+    "ev": 0.1163,
+    "ic90": null,
+    "wallet_top_pct": 20,
+    "mitades": [
+     0.0744,
+     0.1662
+    ],
+    "g10": 0.01056,
+    "estado": "en_seguimiento",
+    "gate_universo_agosto": {
+     "SNIPER": "sin_concluir",
+     "DISPERSO": "sin_concluir"
+    }
+   },
+   "TOMADORA#XRP#5min|0.10": {
+    "n": 24,
+    "dias": 2,
+    "mercados": 17,
+    "ev": -0.7641,
+    "ic90": null,
+    "wallet_top_pct": 29,
+    "mitades": [
+     -0.4122,
+     -1.0619
+    ],
+    "g10": -0.08778,
+    "estado": "negativo",
+    "gate_universo_agosto": {
+     "SNIPER": "sin_concluir",
+     "DISPERSO": "sin_concluir"
+    }
+   },
+   "TOMADORA#BTC#5min|0.25": {
+    "n": 98,
+    "dias": 2,
+    "mercados": 71,
+    "ev": 0.0145,
+    "ic90": null,
+    "wallet_top_pct": 9,
+    "mitades": [
+     -0.039,
+     0.0581
+    ],
+    "g10": -0.01154,
+    "estado": "en_seguimiento",
+    "gate_universo_agosto": {
+     "SNIPER": "sin_concluir",
+     "DISPERSO": "sin_concluir"
+    }
+   },
+   "TOMADORA#BTC#15min|0.40": {
+    "n": 36,
+    "dias": 2,
+    "mercados": 29,
+    "ev": 0.2113,
+    "ic90": null,
+    "wallet_top_pct": 11,
+    "mitades": [
+     0.2135,
+     0.2083
+    ],
+    "g10": 0.01408,
+    "estado": "en_seguimiento",
+    "gate_universo_agosto": {
+     "SNIPER": "sin_concluir",
+     "DISPERSO": "sin_concluir"
+    }
+   },
+   "TOMADORA#ETH#5min|0.25": {
+    "n": 35,
+    "dias": 2,
+    "mercados": 27,
+    "ev": -0.1949,
+    "ic90": null,
+    "wallet_top_pct": 26,
+    "mitades": [
+     0.0691,
+     -0.5469
+    ],
+    "g10": -0.03116,
+    "estado": "negativo",
+    "gate_universo_agosto": {
+     "SNIPER": "sin_concluir",
+     "DISPERSO": "sin_concluir"
+    }
+   },
+   "TOMADORA#BTC#5min|0.05": {
+    "n": 33,
+    "dias": 2,
+    "mercados": 27,
+    "ev": -1.0652,
+    "ic90": null,
+    "wallet_top_pct": 18,
+    "mitades": [
+     -1.0655,
+     -1.0649
+    ],
+    "g10": -0.11263,
+    "estado": "negativo",
+    "gate_universo_agosto": {
+     "SNIPER": "sin_concluir",
+     "DISPERSO": "sin_concluir"
+    }
+   },
+   "TOMADORA#BTC#5min|0.20": {
+    "n": 76,
+    "dias": 2,
+    "mercados": 50,
+    "ev": -0.5048,
+    "ic90": null,
+    "wallet_top_pct": 13,
+    "mitades": [
+     -0.6503,
+     -0.3806
+    ],
+    "g10": -0.06199,
+    "estado": "negativo",
+    "gate_universo_agosto": {
+     "SNIPER": "sin_concluir",
+     "DISPERSO": "sin_concluir"
+    }
+   },
+   "TOMADORA#BTC#15min|0.55": {
+    "n": 74,
+    "dias": 2,
+    "mercados": 40,
+    "ev": 0.0679,
+    "ic90": null,
+    "wallet_top_pct": 12,
+    "mitades": [
+     0.2015,
+     -0.0396
+    ],
+    "g10": 0.00302,
+    "estado": "en_seguimiento",
+    "gate_universo_agosto": {
+     "SNIPER": "sin_concluir",
+     "DISPERSO": "sin_concluir"
+    }
+   },
+   "TOMADORA#SOL#5min|0.60": {
+    "n": 33,
+    "dias": 2,
+    "mercados": 29,
+    "ev": -0.2402,
+    "ic90": null,
+    "wallet_top_pct": 33,
+    "mitades": [
+     -0.4116,
+     0.0596
+    ],
+    "g10": -0.02777,
+    "estado": "negativo",
+    "gate_universo_agosto": {
+     "SNIPER": "sin_concluir",
+     "DISPERSO": "sin_concluir"
+    }
+   },
+   "TOMADORA#SOL#5min|0.40": {
+    "n": 18,
+    "dias": 2,
+    "mercados": 14,
+    "ev": -0.6616,
+    "ic90": null,
+    "wallet_top_pct": 28,
+    "mitades": [
+     -0.7157,
+     -0.6272
+    ],
+    "g10": -0.07219,
+    "estado": "negativo",
+    "gate_universo_agosto": {
+     "SNIPER": "sin_concluir",
+     "DISPERSO": "sin_concluir"
+    }
+   },
+   "TOMADORA#BTC#5min|0.10": {
+    "n": 39,
+    "dias": 2,
+    "mercados": 29,
+    "ev": -0.0165,
+    "ic90": null,
+    "wallet_top_pct": 15,
+    "mitades": [
+     0.7757,
+     -0.6956
+    ],
+    "g10": -0.02933,
+    "estado": "negativo",
+    "gate_universo_agosto": {
+     "SNIPER": "sin_concluir",
+     "DISPERSO": "sin_concluir"
+    }
+   },
+   "TOMADORA#ETH#15min|0.80": {
+    "n": 16,
+    "dias": 2,
+    "mercados": 15,
+    "ev": -0.0961,
+    "ic90": null,
+    "wallet_top_pct": 25,
+    "mitades": [
+     -0.1068,
+     -0.0854
+    ],
+    "g10": -0.01115,
+    "estado": "negativo",
+    "gate_universo_agosto": {
+     "SNIPER": "sin_concluir",
+     "DISPERSO": "sin_concluir"
+    }
+   },
+   "TOMADORA#SOL#5min|0.35": {
+    "n": 20,
+    "dias": 2,
+    "mercados": 19,
+    "ev": 0.1454,
+    "ic90": null,
+    "wallet_top_pct": 50,
+    "mitades": [
+     0.0013,
+     0.5778
+    ],
+    "g10": 0.00608,
+    "estado": "en_seguimiento",
+    "gate_universo_agosto": {
+     "SNIPER": "sin_concluir",
+     "DISPERSO": "sin_concluir"
+    }
+   },
+   "TOMADORA#XRP#5min|0.45": {
+    "n": 29,
+    "dias": 2,
+    "mercados": 23,
+    "ev": -0.3856,
+    "ic90": null,
+    "wallet_top_pct": 41,
+    "mitades": [
+     -0.5938,
+     0.0099
+    ],
+    "g10": -0.04419,
+    "estado": "negativo",
+    "gate_universo_agosto": {
+     "SNIPER": "sin_concluir",
+     "DISPERSO": "sin_concluir"
+    }
+   },
+   "TOMADORA#ETH#5min|0.60": {
+    "n": 79,
+    "dias": 2,
+    "mercados": 59,
+    "ev": -0.0087,
+    "ic90": null,
+    "wallet_top_pct": 20,
+    "mitades": [
+     0.0277,
+     -0.0786
+    ],
+    "g10": -0.00398,
+    "estado": "negativo",
+    "gate_universo_agosto": {
+     "SNIPER": "sin_concluir",
+     "DISPERSO": "sin_concluir"
+    }
+   },
+   "TOMADORA#SOL#5min|0.45": {
+    "n": 26,
+    "dias": 2,
+    "mercados": 23,
+    "ev": -0.136,
+    "ic90": null,
+    "wallet_top_pct": 31,
+    "mitades": [
+     -0.1896,
+     -0.1025
+    ],
+    "g10": -0.01931,
+    "estado": "negativo",
+    "gate_universo_agosto": {
+     "SNIPER": "sin_concluir",
+     "DISPERSO": "sin_concluir"
+    }
+   },
+   "TOMADORA#SOL#5min|0.55": {
+    "n": 32,
+    "dias": 2,
+    "mercados": 29,
+    "ev": -0.096,
+    "ic90": null,
+    "wallet_top_pct": 25,
+    "mitades": [
+     -0.0172,
+     -0.2463
+    ],
+    "g10": -0.01362,
+    "estado": "negativo",
+    "gate_universo_agosto": {
+     "SNIPER": "sin_concluir",
+     "DISPERSO": "sin_concluir"
+    }
+   },
+   "TOMADORA#ETH#5min|0.05": {
+    "n": 21,
+    "dias": 2,
+    "mercados": 15,
+    "ev": 0.2578,
+    "ic90": null,
+    "wallet_top_pct": 48,
+    "mitades": [
+     1.4605,
+     -1.0651
+    ],
+    "g10": -0.024,
+    "estado": "en_seguimiento",
+    "gate_universo_agosto": {
+     "SNIPER": "sin_concluir",
+     "DISPERSO": "sin_concluir"
+    }
+   },
+   "TOMADORA#XRP#15min|0.50": {
+    "n": 33,
+    "dias": 2,
+    "mercados": 29,
+    "ev": 0.1336,
+    "ic90": null,
+    "wallet_top_pct": 67,
+    "mitades": [
+     0.2068,
+     0.0558
+    ],
+    "g10": 0.00882,
+    "estado": "en_seguimiento",
+    "gate_universo_agosto": {
+     "SNIPER": "sin_concluir",
+     "DISPERSO": "sin_concluir"
+    }
+   },
+   "TOMADORA#BNB#5min|0.50": {
+    "n": 23,
+    "dias": 2,
+    "mercados": 23,
+    "ev": -0.0218,
+    "ic90": null,
+    "wallet_top_pct": 43,
+    "mitades": [
+     0.1308,
+     -0.308
+    ],
+    "g10": -0.00695,
+    "estado": "negativo",
+    "gate_universo_agosto": {
+     "SNIPER": "sin_concluir",
+     "DISPERSO": "sin_concluir"
+    }
+   },
+   "TOMADORA#XRP#5min|0.25": {
+    "n": 24,
+    "dias": 2,
+    "mercados": 14,
+    "ev": 0.071,
+    "ic90": null,
+    "wallet_top_pct": 29,
+    "mitades": [
+     0.7125,
+     -0.6871
+    ],
+    "g10": -0.00676,
+    "estado": "en_seguimiento",
+    "gate_universo_agosto": {
+     "SNIPER": "sin_concluir",
+     "DISPERSO": "sin_concluir"
+    }
+   },
+   "TOMADORA#BTC#15min|0.35": {
+    "n": 24,
+    "dias": 2,
+    "mercados": 19,
+    "ev": 0.5536,
+    "ic90": null,
+    "wallet_top_pct": 17,
+    "mitades": [
+     0.2498,
+     0.6549
+    ],
+    "g10": 0.04536,
+    "estado": "en_seguimiento",
+    "gate_universo_agosto": {
+     "SNIPER": "sin_concluir",
+     "DISPERSO": "sin_concluir"
+    }
+   },
+   "TOMADORA#SOL#5min|0.10": {
+    "n": 31,
+    "dias": 2,
+    "mercados": 20,
+    "ev": 0.4129,
+    "ic90": null,
+    "wallet_top_pct": 26,
+    "mitades": [
+     1.9851,
+     -1.0611
+    ],
+    "g10": 0.00704,
+    "estado": "en_seguimiento",
+    "gate_universo_agosto": {
+     "SNIPER": "sin_concluir",
+     "DISPERSO": "sin_concluir"
+    }
+   },
+   "TOMADORA#XRP#5min|0.70": {
+    "n": 16,
+    "dias": 2,
+    "mercados": 14,
+    "ev": 0.1903,
+    "ic90": null,
+    "wallet_top_pct": 38,
+    "mitades": [
+     0.162,
+     0.3884
+    ],
+    "g10": 0.01777,
+    "estado": "en_seguimiento",
+    "gate_universo_agosto": {
+     "SNIPER": "sin_concluir",
+     "DISPERSO": "sin_concluir"
+    }
+   },
+   "TOMADORA#BTC#5min|0.15": {
+    "n": 59,
+    "dias": 2,
+    "mercados": 44,
+    "ev": -0.2855,
+    "ic90": null,
+    "wallet_top_pct": 10,
+    "mitades": [
+     -0.5192,
+     -0.0267
+    ],
+    "g10": -0.04502,
+    "estado": "negativo",
+    "gate_universo_agosto": {
+     "SNIPER": "sin_concluir",
+     "DISPERSO": "sin_concluir"
+    }
+   },
+   "TOMADORA#ETH#5min|0.20": {
+    "n": 34,
+    "dias": 2,
+    "mercados": 26,
+    "ev": 0.7537,
+    "ic90": null,
+    "wallet_top_pct": 18,
+    "mitades": [
+     0.9749,
+     0.3965
+    ],
+    "g10": 0.05073,
+    "estado": "en_seguimiento",
+    "gate_universo_agosto": {
+     "SNIPER": "sin_concluir",
+     "DISPERSO": "sin_concluir"
+    }
+   },
+   "TOMADORA#SOL#5min|0.05": {
+    "n": 18,
+    "dias": 2,
+    "mercados": 14,
+    "ev": -0.2712,
+    "ic90": null,
+    "wallet_top_pct": 33,
+    "mitades": [
+     -1.065,
+     0.9761
+    ],
+    "g10": -0.05953,
+    "estado": "negativo",
+    "gate_universo_agosto": {
+     "SNIPER": "sin_concluir",
+     "DISPERSO": "sin_concluir"
+    }
+   },
+   "TOMADORA#ETH#15min|0.40": {
+    "n": 32,
+    "dias": 2,
+    "mercados": 20,
+    "ev": 0.2021,
+    "ic90": null,
+    "wallet_top_pct": 22,
+    "mitades": [
+     0.4876,
+     0.0525
+    ],
+    "g10": 0.01334,
+    "estado": "en_seguimiento",
+    "gate_universo_agosto": {
+     "SNIPER": "sin_concluir",
+     "DISPERSO": "sin_concluir"
+    }
+   },
+   "TOMADORA#ETH#5min|0.10": {
+    "n": 22,
+    "dias": 2,
+    "mercados": 18,
+    "ev": -0.0629,
+    "ic90": null,
+    "wallet_top_pct": 32,
+    "mitades": [
+     0.1744,
+     -0.3476
+    ],
+    "g10": -0.03066,
+    "estado": "negativo",
+    "gate_universo_agosto": {
+     "SNIPER": "sin_concluir",
+     "DISPERSO": "sin_concluir"
+    }
+   },
+   "TOMADORA#BTC#15min|0.30": {
+    "n": 16,
+    "dias": 2,
+    "mercados": 12,
+    "ev": 0.0896,
+    "ic90": null,
+    "wallet_top_pct": 19,
+    "mitades": [
+     0.7179,
+     -0.196
+    ],
+    "g10": -0.00129,
+    "estado": "en_seguimiento",
+    "gate_universo_agosto": {
+     "SNIPER": "sin_concluir",
+     "DISPERSO": "sin_concluir"
+    }
+   },
+   "TOMADORA#BNB#5min|0.60": {
+    "n": 20,
+    "dias": 2,
+    "mercados": 20,
+    "ev": 0.1222,
+    "ic90": null,
+    "wallet_top_pct": 85,
+    "mitades": [
+     0.0574,
+     0.1336
+    ],
+    "g10": 0.00924,
+    "estado": "en_seguimiento",
+    "gate_universo_agosto": {
+     "SNIPER": "sin_concluir",
+     "DISPERSO": "sin_concluir"
+    }
+   },
+   "TOMADORA#ETH#15min|0.30": {
+    "n": 18,
+    "dias": 2,
+    "mercados": 13,
+    "ev": -0.3572,
+    "ic90": null,
+    "wallet_top_pct": 22,
+    "mitades": [
+     -0.6151,
+     -0.1932
+    ],
+    "g10": -0.04449,
+    "estado": "negativo",
     "gate_universo_agosto": {
      "SNIPER": "sin_concluir",
      "DISPERSO": "sin_concluir"
@@ -452,13 +2452,3525 @@
    }
   },
   "candidatas": {
-   "n": 0,
-   "dias": 0,
-   "wallets": 0,
-   "ev": null,
+   "n": 25408,
+   "dias": 2,
+   "wallets": 301,
+   "ev": -0.0409,
    "ic90": null,
-   "wallets_ev_positivo": {},
-   "microbuckets": {}
+   "wallets_ev_positivo": {
+    "0x41e2e1ccf1e4940029af02259a31c6b89b9fa354": {
+     "n": 442,
+     "dias": 2,
+     "ev": 0.0186,
+     "dias_positivos": 1
+    },
+    "0x11a5aaec1210d033bf203c1725b13e979bcc5868": {
+     "n": 344,
+     "dias": 1,
+     "ev": 0.0489,
+     "dias_positivos": 1
+    },
+    "0x885278f0e304bc2d53f805af2ab779cb6011c569": {
+     "n": 277,
+     "dias": 2,
+     "ev": 0.0317,
+     "dias_positivos": 1
+    },
+    "0x502b532f55778c0985846dc53a9bc71eb4f33b15": {
+     "n": 274,
+     "dias": 2,
+     "ev": 0.0163,
+     "dias_positivos": 1
+    },
+    "0x31393e2f8333d4a6e2e31ca6424defe8b6cb9e2e": {
+     "n": 250,
+     "dias": 2,
+     "ev": 0.0068,
+     "dias_positivos": 1
+    },
+    "0x3725d52f3c252e8374999cc8617292ea2608ad88": {
+     "n": 217,
+     "dias": 2,
+     "ev": 0.077,
+     "dias_positivos": 1
+    },
+    "0xc2ad03f79ca3f3c17d8c7de2612ce0c89b7d40ed": {
+     "n": 210,
+     "dias": 2,
+     "ev": 0.0641,
+     "dias_positivos": 2
+    },
+    "0xa62ff3d3d2fe4456523c567441acb512f0ba9e04": {
+     "n": 203,
+     "dias": 2,
+     "ev": 0.0277,
+     "dias_positivos": 1
+    },
+    "0x77b2a944f148660b76691f10819892d002c524bd": {
+     "n": 195,
+     "dias": 2,
+     "ev": 0.1887,
+     "dias_positivos": 2
+    },
+    "0xdf4c6a942bd95bf903d6066b4ba7051e6f914f22": {
+     "n": 192,
+     "dias": 2,
+     "ev": 0.0707,
+     "dias_positivos": 2
+    },
+    "0x41b109e75dc24ac94e1cb47facf89d7401cf5fc0": {
+     "n": 192,
+     "dias": 2,
+     "ev": 0.0239,
+     "dias_positivos": 1
+    },
+    "0xc0176130731377d7d601304271f5a713384a7242": {
+     "n": 187,
+     "dias": 2,
+     "ev": 0.0054,
+     "dias_positivos": 1
+    },
+    "0xa868b5a627cddb9c1ae68d5c423cc6fe7b7f3bf9": {
+     "n": 178,
+     "dias": 2,
+     "ev": 0.0854,
+     "dias_positivos": 2
+    },
+    "0x7e97ef6953c5456a0d85d5bdfa207515d57a9ddf": {
+     "n": 163,
+     "dias": 2,
+     "ev": 0.0879,
+     "dias_positivos": 2
+    },
+    "0xdc83649c7ee9cd7985b75ac7be356b179dec9f07": {
+     "n": 145,
+     "dias": 2,
+     "ev": 0.0663,
+     "dias_positivos": 2
+    },
+    "0x70412cbf28288d47ece30002be45efff5d2d5c73": {
+     "n": 139,
+     "dias": 2,
+     "ev": 0.0059,
+     "dias_positivos": 1
+    },
+    "0x86b14772a4da70f3e6d5eee06933ebef143efc87": {
+     "n": 135,
+     "dias": 2,
+     "ev": 0.0472,
+     "dias_positivos": 2
+    },
+    "0xc53375ff94e96100f2b30a4b5775db35218d69a9": {
+     "n": 126,
+     "dias": 2,
+     "ev": 0.1298,
+     "dias_positivos": 2
+    },
+    "0x1ec4b5da72c7f956d4b6e0a5def23338a1431294": {
+     "n": 124,
+     "dias": 2,
+     "ev": 0.1196,
+     "dias_positivos": 1
+    },
+    "0x8f34e45fe06d6fad7d9d9d2738859a4022c02f50": {
+     "n": 121,
+     "dias": 1,
+     "ev": 0.0453,
+     "dias_positivos": 1
+    },
+    "0xc6e3fec2e1a29e7a03e1f2d57f4e4eee39dc8b84": {
+     "n": 120,
+     "dias": 2,
+     "ev": 0.1148,
+     "dias_positivos": 2
+    },
+    "0x0ca4e9d27ff826a109ecbf74754fb66b93f277a6": {
+     "n": 117,
+     "dias": 2,
+     "ev": 0.0951,
+     "dias_positivos": 1
+    },
+    "0x3048d65321be3497164cdfc2996f94f98a2e7537": {
+     "n": 115,
+     "dias": 2,
+     "ev": 0.0699,
+     "dias_positivos": 2
+    },
+    "0x21d0a97aac03917e752857a551bbe5103a00e8d7": {
+     "n": 115,
+     "dias": 2,
+     "ev": 0.0389,
+     "dias_positivos": 1
+    },
+    "0x47f606ca2cfd1fed2a9e0845c2ac4c90e861b482": {
+     "n": 113,
+     "dias": 2,
+     "ev": 0.0088,
+     "dias_positivos": 1
+    },
+    "0x60c20ca0901f9d55992913064686b1b4112b4746": {
+     "n": 105,
+     "dias": 2,
+     "ev": 0.0046,
+     "dias_positivos": 1
+    },
+    "0x9020ed1a82a40ca9d4174f085b62619aba115f4b": {
+     "n": 104,
+     "dias": 2,
+     "ev": 0.0379,
+     "dias_positivos": 1
+    },
+    "0x747f091ffcddb28176e7564b79a817b28f9f1990": {
+     "n": 102,
+     "dias": 2,
+     "ev": 0.0028,
+     "dias_positivos": 1
+    },
+    "0x5ef754523418513f16b18faa94170931ad732a9e": {
+     "n": 98,
+     "dias": 2,
+     "ev": 0.1506,
+     "dias_positivos": 1
+    },
+    "0x2bd7e167beddafb58a54805da5a45cac08117d93": {
+     "n": 97,
+     "dias": 2,
+     "ev": 0.0339,
+     "dias_positivos": 2
+    },
+    "0x9f144f50f5eba5f46a639d9ce19ee80d6fdfba6c": {
+     "n": 91,
+     "dias": 2,
+     "ev": 0.0002,
+     "dias_positivos": 1
+    },
+    "0x80eff2fa787245085025ac061febd6d5f578e019": {
+     "n": 87,
+     "dias": 1,
+     "ev": 0.1335,
+     "dias_positivos": 1
+    },
+    "0xd9a33f3a5b69d169bec1bf10ecdca127740f0de6": {
+     "n": 84,
+     "dias": 2,
+     "ev": 0.0501,
+     "dias_positivos": 2
+    },
+    "0x9412cdfc1e3171e1aabb013d0f494986445d0cd0": {
+     "n": 79,
+     "dias": 2,
+     "ev": 0.0353,
+     "dias_positivos": 1
+    },
+    "0x1486fcee55a48b0206a988108ef8adc5b8cc28f5": {
+     "n": 79,
+     "dias": 2,
+     "ev": 0.3073,
+     "dias_positivos": 2
+    },
+    "0x36b8a2f9b9e85f623fccffedeb24ee551d554ee0": {
+     "n": 75,
+     "dias": 2,
+     "ev": 0.0555,
+     "dias_positivos": 1
+    },
+    "0xdf7930e89a2c47560165331863c31deca0733dcd": {
+     "n": 70,
+     "dias": 1,
+     "ev": 0.0336,
+     "dias_positivos": 1
+    },
+    "0x0eafa5f60abf7f08d72aae711af474d48ff41f76": {
+     "n": 70,
+     "dias": 2,
+     "ev": 0.038,
+     "dias_positivos": 1
+    },
+    "0x50421cc4cd0f184f346f4eb1d66e29656aaff296": {
+     "n": 65,
+     "dias": 2,
+     "ev": 0.1298,
+     "dias_positivos": 2
+    },
+    "0x2903c7dc01c98c8e332d11e9b0f08740bdd55906": {
+     "n": 63,
+     "dias": 1,
+     "ev": 0.0511,
+     "dias_positivos": 1
+    },
+    "0x1365e90db3cb171d647b542ecc53f40dd8434eec": {
+     "n": 59,
+     "dias": 2,
+     "ev": 0.1365,
+     "dias_positivos": 1
+    },
+    "0x64e36dbc2c24cf1031e50f51fb36952415d7b275": {
+     "n": 59,
+     "dias": 2,
+     "ev": 0.0094,
+     "dias_positivos": 1
+    },
+    "0x93cf055a0fa6b579905e5d2ded86c714b0e8760e": {
+     "n": 56,
+     "dias": 2,
+     "ev": 0.0031,
+     "dias_positivos": 1
+    },
+    "0xb26fe7b3bdf427ff515674dd49b0238a15732eb3": {
+     "n": 51,
+     "dias": 2,
+     "ev": 0.2687,
+     "dias_positivos": 2
+    },
+    "0xb8c40cfb12b96a2c69b84b82ef2d8414c3469099": {
+     "n": 50,
+     "dias": 2,
+     "ev": 0.2024,
+     "dias_positivos": 2
+    },
+    "0x337b7fca244bf2ef3272469ee02a2bd541097e26": {
+     "n": 48,
+     "dias": 2,
+     "ev": 0.1779,
+     "dias_positivos": 2
+    },
+    "0x74c8d69115faf6a3b5e3482f736080385f709962": {
+     "n": 43,
+     "dias": 2,
+     "ev": 0.1084,
+     "dias_positivos": 2
+    },
+    "0x84d0a541047751465c7df8fdea5cfb8b1119035a": {
+     "n": 43,
+     "dias": 2,
+     "ev": 0.1091,
+     "dias_positivos": 2
+    },
+    "0x420070799e1dcd91b6a576ad917febdf35dd7d69": {
+     "n": 42,
+     "dias": 1,
+     "ev": 0.0177,
+     "dias_positivos": 1
+    },
+    "0xab03f377164c3726d498e56f7a9398cd8eb74494": {
+     "n": 40,
+     "dias": 2,
+     "ev": 0.2241,
+     "dias_positivos": 1
+    },
+    "0x0389362a989f33544316fae92f8e60337bc2e5f7": {
+     "n": 40,
+     "dias": 2,
+     "ev": 0.3426,
+     "dias_positivos": 2
+    },
+    "0xd599c86561120ce15296ee2670292602e3d0a894": {
+     "n": 39,
+     "dias": 2,
+     "ev": 0.1271,
+     "dias_positivos": 1
+    },
+    "0xd4678091a52ba143548dd7e7d6ab62b1d9d6d5eb": {
+     "n": 39,
+     "dias": 2,
+     "ev": 0.0201,
+     "dias_positivos": 2
+    },
+    "0x344f3b43711f48770930ce731d934df3b2999dec": {
+     "n": 36,
+     "dias": 2,
+     "ev": 0.3305,
+     "dias_positivos": 2
+    },
+    "0x12c2782b74d3b2a051b55be2e5167970ace01381": {
+     "n": 36,
+     "dias": 2,
+     "ev": 0.2651,
+     "dias_positivos": 1
+    },
+    "0xe1a5d4b65d66f4d592778a0163fbf0b4ab1e9786": {
+     "n": 35,
+     "dias": 2,
+     "ev": 0.1603,
+     "dias_positivos": 2
+    },
+    "0xc4e21390f8357e33f6692c3cfc4979592de8fef6": {
+     "n": 34,
+     "dias": 2,
+     "ev": 0.0681,
+     "dias_positivos": 1
+    },
+    "0x12463232ae8befe8179b6be38cc7c5002a822324": {
+     "n": 33,
+     "dias": 2,
+     "ev": 0.4102,
+     "dias_positivos": 2
+    },
+    "0xae3985e1b18b258e940365d8140fec972516ff04": {
+     "n": 31,
+     "dias": 2,
+     "ev": 0.3649,
+     "dias_positivos": 2
+    },
+    "0xa5767fea34380c29b676dba0e2e9ea43302cac6b": {
+     "n": 30,
+     "dias": 2,
+     "ev": 0.1696,
+     "dias_positivos": 2
+    }
+   },
+   "microbuckets": {
+    "CANDIDATA#XRP#5min|0.20": {
+     "n": 23,
+     "dias": 2,
+     "mercados": 23,
+     "ev": 0.1351,
+     "ic90": null,
+     "wallet_top_pct": 26,
+     "mitades": [
+      0.0874,
+      0.2441
+     ],
+     "g10": -0.00403,
+     "estado": "en_seguimiento",
+     "gate_universo_agosto": {
+      "SNIPER": "sin_concluir",
+      "DISPERSO": "sin_concluir"
+     }
+    },
+    "CANDIDATA#BTC#5min|0.60": {
+     "n": 698,
+     "dias": 2,
+     "mercados": 179,
+     "ev": -0.0854,
+     "ic90": null,
+     "wallet_top_pct": 3,
+     "mitades": [
+      -0.109,
+      -0.0423
+     ],
+     "g10": -0.01187,
+     "estado": "negativo",
+     "gate_universo_agosto": {
+      "SNIPER": "sin_concluir",
+      "DISPERSO": "sin_concluir"
+     }
+    },
+    "CANDIDATA#BTC#5min|0.35": {
+     "n": 658,
+     "dias": 2,
+     "mercados": 168,
+     "ev": 0.1325,
+     "ic90": null,
+     "wallet_top_pct": 3,
+     "mitades": [
+      0.2849,
+      -0.1246
+     ],
+     "g10": 0.00459,
+     "estado": "en_seguimiento",
+     "gate_universo_agosto": {
+      "SNIPER": "sin_concluir",
+      "DISPERSO": "sin_concluir"
+     }
+    },
+    "CANDIDATA#BTC#15min|0.20": {
+     "n": 83,
+     "dias": 2,
+     "mercados": 33,
+     "ev": 0.1445,
+     "ic90": null,
+     "wallet_top_pct": 8,
+     "mitades": [
+      0.0911,
+      0.2048
+     ],
+     "g10": -0.00301,
+     "estado": "en_seguimiento",
+     "gate_universo_agosto": {
+      "SNIPER": "sin_concluir",
+      "DISPERSO": "sin_concluir"
+     }
+    },
+    "CANDIDATA#BTC#5min|0.30": {
+     "n": 507,
+     "dias": 2,
+     "mercados": 163,
+     "ev": 0.1036,
+     "ic90": null,
+     "wallet_top_pct": 3,
+     "mitades": [
+      0.0815,
+      0.1434
+     ],
+     "g10": -0.00029,
+     "estado": "en_seguimiento",
+     "gate_universo_agosto": {
+      "SNIPER": "sin_concluir",
+      "DISPERSO": "sin_concluir"
+     }
+    },
+    "CANDIDATA#BTC#15min|0.80": {
+     "n": 106,
+     "dias": 2,
+     "mercados": 50,
+     "ev": -0.0441,
+     "ic90": null,
+     "wallet_top_pct": 23,
+     "mitades": [
+      -0.0927,
+      0.0466
+     ],
+     "g10": -0.00572,
+     "estado": "negativo",
+     "gate_universo_agosto": {
+      "SNIPER": "sin_concluir",
+      "DISPERSO": "sin_concluir"
+     }
+    },
+    "CANDIDATA#ETH#5min|0.35": {
+     "n": 232,
+     "dias": 2,
+     "mercados": 121,
+     "ev": 0.0635,
+     "ic90": null,
+     "wallet_top_pct": 8,
+     "mitades": [
+      0.0775,
+      0.025
+     ],
+     "g10": -0.00208,
+     "estado": "en_seguimiento",
+     "gate_universo_agosto": {
+      "SNIPER": "sin_concluir",
+      "DISPERSO": "sin_concluir"
+     }
+    },
+    "CANDIDATA#ETH#5min|0.65": {
+     "n": 241,
+     "dias": 2,
+     "mercados": 114,
+     "ev": -0.068,
+     "ic90": null,
+     "wallet_top_pct": 8,
+     "mitades": [
+      -0.0606,
+      -0.0871
+     ],
+     "g10": -0.00952,
+     "estado": "negativo",
+     "gate_universo_agosto": {
+      "SNIPER": "sin_concluir",
+      "DISPERSO": "sin_concluir"
+     }
+    },
+    "CANDIDATA#SOL#5min|0.70": {
+     "n": 151,
+     "dias": 2,
+     "mercados": 90,
+     "ev": -0.0581,
+     "ic90": null,
+     "wallet_top_pct": 13,
+     "mitades": [
+      -0.0968,
+      0.0568
+     ],
+     "g10": -0.00803,
+     "estado": "negativo",
+     "gate_universo_agosto": {
+      "SNIPER": "sin_concluir",
+      "DISPERSO": "sin_concluir"
+     }
+    },
+    "CANDIDATA#BTC#5min|0.75": {
+     "n": 510,
+     "dias": 2,
+     "mercados": 153,
+     "ev": 0.0178,
+     "ic90": null,
+     "wallet_top_pct": 3,
+     "mitades": [
+      0.039,
+      -0.0131
+     ],
+     "g10": 0.00034,
+     "estado": "en_seguimiento",
+     "gate_universo_agosto": {
+      "SNIPER": "sin_concluir",
+      "DISPERSO": "sin_concluir"
+     }
+    },
+    "CANDIDATA#BTC#5min|0.25": {
+     "n": 438,
+     "dias": 2,
+     "mercados": 141,
+     "ev": 0.0081,
+     "ic90": null,
+     "wallet_top_pct": 4,
+     "mitades": [
+      0.0374,
+      -0.039
+     ],
+     "g10": -0.01207,
+     "estado": "en_seguimiento",
+     "gate_universo_agosto": {
+      "SNIPER": "sin_concluir",
+      "DISPERSO": "sin_concluir"
+     }
+    },
+    "CANDIDATA#ETH#5min|0.30": {
+     "n": 196,
+     "dias": 2,
+     "mercados": 106,
+     "ev": 0.0462,
+     "ic90": null,
+     "wallet_top_pct": 7,
+     "mitades": [
+      0.1071,
+      -0.1182
+     ],
+     "g10": -0.00581,
+     "estado": "en_seguimiento",
+     "gate_universo_agosto": {
+      "SNIPER": "sin_concluir",
+      "DISPERSO": "sin_concluir"
+     }
+    },
+    "CANDIDATA#ETH#5min|0.70": {
+     "n": 203,
+     "dias": 2,
+     "mercados": 111,
+     "ev": -0.0836,
+     "ic90": null,
+     "wallet_top_pct": 7,
+     "mitades": [
+      -0.0909,
+      -0.0679
+     ],
+     "g10": -0.01062,
+     "estado": "negativo",
+     "gate_universo_agosto": {
+      "SNIPER": "sin_concluir",
+      "DISPERSO": "sin_concluir"
+     }
+    },
+    "CANDIDATA#BTC#5min|0.65": {
+     "n": 808,
+     "dias": 2,
+     "mercados": 178,
+     "ev": -0.0521,
+     "ic90": null,
+     "wallet_top_pct": 3,
+     "mitades": [
+      -0.051,
+      -0.0537
+     ],
+     "g10": -0.00789,
+     "estado": "negativo",
+     "gate_universo_agosto": {
+      "SNIPER": "sin_concluir",
+      "DISPERSO": "sin_concluir"
+     }
+    },
+    "CANDIDATA#BTC#5min|0.55": {
+     "n": 994,
+     "dias": 2,
+     "mercados": 197,
+     "ev": 0.0143,
+     "ic90": null,
+     "wallet_top_pct": 7,
+     "mitades": [
+      0.018,
+      0.0079
+     ],
+     "g10": -0.00239,
+     "estado": "en_seguimiento",
+     "gate_universo_agosto": {
+      "SNIPER": "sin_concluir",
+      "DISPERSO": "sin_concluir"
+     }
+    },
+    "CANDIDATA#DOGE#5min|0.75": {
+     "n": 41,
+     "dias": 2,
+     "mercados": 34,
+     "ev": -0.1938,
+     "ic90": null,
+     "wallet_top_pct": 24,
+     "mitades": [
+      -0.1655,
+      -0.2945
+     ],
+     "g10": -0.02165,
+     "estado": "negativo",
+     "gate_universo_agosto": {
+      "SNIPER": "sin_concluir",
+      "DISPERSO": "sin_concluir"
+     }
+    },
+    "CANDIDATA#BTC#5min|0.50": {
+     "n": 2250,
+     "dias": 2,
+     "mercados": 223,
+     "ev": -0.0645,
+     "ic90": null,
+     "wallet_top_pct": 9,
+     "mitades": [
+      -0.0887,
+      -0.0039
+     ],
+     "g10": -0.01129,
+     "estado": "negativo",
+     "gate_universo_agosto": {
+      "SNIPER": "sin_concluir",
+      "DISPERSO": "sin_concluir"
+     }
+    },
+    "CANDIDATA#ETH#5min|0.50": {
+     "n": 553,
+     "dias": 2,
+     "mercados": 196,
+     "ev": -0.096,
+     "ic90": null,
+     "wallet_top_pct": 21,
+     "mitades": [
+      -0.1595,
+      0.0223
+     ],
+     "g10": -0.01446,
+     "estado": "negativo",
+     "gate_universo_agosto": {
+      "SNIPER": "sin_concluir",
+      "DISPERSO": "sin_concluir"
+     }
+    },
+    "CANDIDATA#BTC#5min|0.40": {
+     "n": 865,
+     "dias": 2,
+     "mercados": 188,
+     "ev": -0.1438,
+     "ic90": null,
+     "wallet_top_pct": 3,
+     "mitades": [
+      -0.1532,
+      -0.1267
+     ],
+     "g10": -0.02109,
+     "estado": "negativo",
+     "gate_universo_agosto": {
+      "SNIPER": "sin_concluir",
+      "DISPERSO": "sin_concluir"
+     }
+    },
+    "CANDIDATA#BNB#5min|0.70": {
+     "n": 48,
+     "dias": 2,
+     "mercados": 40,
+     "ev": -0.2385,
+     "ic90": null,
+     "wallet_top_pct": 15,
+     "mitades": [
+      -0.1844,
+      -0.384
+     ],
+     "g10": -0.02667,
+     "estado": "negativo",
+     "gate_universo_agosto": {
+      "SNIPER": "sin_concluir",
+      "DISPERSO": "sin_concluir"
+     }
+    },
+    "CANDIDATA#SOL#5min|0.55": {
+     "n": 144,
+     "dias": 2,
+     "mercados": 86,
+     "ev": 0.0306,
+     "ic90": null,
+     "wallet_top_pct": 10,
+     "mitades": [
+      0.0473,
+      -0.005
+     ],
+     "g10": -0.00072,
+     "estado": "en_seguimiento",
+     "gate_universo_agosto": {
+      "SNIPER": "sin_concluir",
+      "DISPERSO": "sin_concluir"
+     }
+    },
+    "CANDIDATA#ETH#5min|0.55": {
+     "n": 244,
+     "dias": 2,
+     "mercados": 115,
+     "ev": -0.0826,
+     "ic90": null,
+     "wallet_top_pct": 7,
+     "mitades": [
+      -0.1325,
+      0.0367
+     ],
+     "g10": -0.01223,
+     "estado": "negativo",
+     "gate_universo_agosto": {
+      "SNIPER": "sin_concluir",
+      "DISPERSO": "sin_concluir"
+     }
+    },
+    "CANDIDATA#ETH#15min|0.15": {
+     "n": 18,
+     "dias": 2,
+     "mercados": 14,
+     "ev": -0.4184,
+     "ic90": null,
+     "wallet_top_pct": 11,
+     "mitades": [
+      -0.1723,
+      -1.0584
+     ],
+     "g10": -0.05667,
+     "estado": "negativo",
+     "gate_universo_agosto": {
+      "SNIPER": "sin_concluir",
+      "DISPERSO": "sin_concluir"
+     }
+    },
+    "CANDIDATA#BTC#5min|0.70": {
+     "n": 641,
+     "dias": 2,
+     "mercados": 170,
+     "ev": -0.0688,
+     "ic90": null,
+     "wallet_top_pct": 3,
+     "mitades": [
+      -0.0678,
+      -0.0707
+     ],
+     "g10": -0.0091,
+     "estado": "negativo",
+     "gate_universo_agosto": {
+      "SNIPER": "sin_concluir",
+      "DISPERSO": "sin_concluir"
+     }
+    },
+    "CANDIDATA#BTC#15min|0.60": {
+     "n": 118,
+     "dias": 2,
+     "mercados": 47,
+     "ev": -0.1668,
+     "ic90": null,
+     "wallet_top_pct": 10,
+     "mitades": [
+      -0.1688,
+      -0.1611
+     ],
+     "g10": -0.0202,
+     "estado": "negativo",
+     "gate_universo_agosto": {
+      "SNIPER": "sin_concluir",
+      "DISPERSO": "malo_confirmado"
+     }
+    },
+    "CANDIDATA#XRP#5min|0.55": {
+     "n": 79,
+     "dias": 2,
+     "mercados": 58,
+     "ev": 0.1744,
+     "ic90": null,
+     "wallet_top_pct": 14,
+     "mitades": [
+      0.1463,
+      0.2632
+     ],
+     "g10": 0.01389,
+     "estado": "en_seguimiento",
+     "gate_universo_agosto": {
+      "SNIPER": "sin_concluir",
+      "DISPERSO": "sin_concluir"
+     }
+    },
+    "CANDIDATA#XRP#5min|0.75": {
+     "n": 69,
+     "dias": 2,
+     "mercados": 53,
+     "ev": -0.0547,
+     "ic90": null,
+     "wallet_top_pct": 19,
+     "mitades": [
+      -0.0761,
+      0.0221
+     ],
+     "g10": -0.00721,
+     "estado": "negativo",
+     "gate_universo_agosto": {
+      "SNIPER": "sin_concluir",
+      "DISPERSO": "sin_concluir"
+     }
+    },
+    "CANDIDATA#SOL#5min|0.75": {
+     "n": 97,
+     "dias": 2,
+     "mercados": 70,
+     "ev": 0.0162,
+     "ic90": null,
+     "wallet_top_pct": 15,
+     "mitades": [
+      -0.0274,
+      0.135
+     ],
+     "g10": 0.00016,
+     "estado": "en_seguimiento",
+     "gate_universo_agosto": {
+      "SNIPER": "sin_concluir",
+      "DISPERSO": "sin_concluir"
+     }
+    },
+    "CANDIDATA#BTC#5min|0.80": {
+     "n": 638,
+     "dias": 2,
+     "mercados": 167,
+     "ev": 0.0332,
+     "ic90": null,
+     "wallet_top_pct": 7,
+     "mitades": [
+      0.0618,
+      -0.0291
+     ],
+     "g10": 0.00235,
+     "estado": "en_seguimiento",
+     "gate_universo_agosto": {
+      "SNIPER": "sin_concluir",
+      "DISPERSO": "sin_concluir"
+     }
+    },
+    "CANDIDATA#SOL#5min|0.85": {
+     "n": 94,
+     "dias": 2,
+     "mercados": 69,
+     "ev": -0.139,
+     "ic90": null,
+     "wallet_top_pct": 11,
+     "mitades": [
+      -0.1647,
+      -0.0935
+     ],
+     "g10": -0.01531,
+     "estado": "negativo",
+     "gate_universo_agosto": {
+      "SNIPER": "sin_concluir",
+      "DISPERSO": "sin_concluir"
+     }
+    },
+    "CANDIDATA#BTC#5min|0.90": {
+     "n": 717,
+     "dias": 2,
+     "mercados": 178,
+     "ev": 0.0168,
+     "ic90": null,
+     "wallet_top_pct": 8,
+     "mitades": [
+      0.0312,
+      -0.01
+     ],
+     "g10": 0.00133,
+     "estado": "en_seguimiento",
+     "gate_universo_agosto": {
+      "SNIPER": "sin_concluir",
+      "DISPERSO": "sin_concluir"
+     }
+    },
+    "CANDIDATA#BTC#15min|0.50": {
+     "n": 304,
+     "dias": 2,
+     "mercados": 67,
+     "ev": -0.0533,
+     "ic90": null,
+     "wallet_top_pct": 7,
+     "mitades": [
+      -0.0877,
+      0.0237
+     ],
+     "g10": -0.01011,
+     "estado": "negativo",
+     "gate_universo_agosto": {
+      "SNIPER": "sin_concluir",
+      "DISPERSO": "sin_concluir"
+     }
+    },
+    "CANDIDATA#ETH#15min|0.35": {
+     "n": 34,
+     "dias": 2,
+     "mercados": 27,
+     "ev": -0.0849,
+     "ic90": null,
+     "wallet_top_pct": 15,
+     "mitades": [
+      -0.0968,
+      -0.0599
+     ],
+     "g10": -0.01674,
+     "estado": "negativo",
+     "gate_universo_agosto": {
+      "SNIPER": "sin_concluir",
+      "DISPERSO": "sin_concluir"
+     }
+    },
+    "CANDIDATA#ETH#5min|0.85": {
+     "n": 201,
+     "dias": 2,
+     "mercados": 116,
+     "ev": 0.0453,
+     "ic90": null,
+     "wallet_top_pct": 15,
+     "mitades": [
+      0.0127,
+      0.0758
+     ],
+     "g10": 0.00398,
+     "estado": "en_seguimiento",
+     "gate_universo_agosto": {
+      "SNIPER": "sin_concluir",
+      "DISPERSO": "sin_concluir"
+     }
+    },
+    "CANDIDATA#ETH#5min|0.10": {
+     "n": 67,
+     "dias": 2,
+     "mercados": 53,
+     "ev": -0.2621,
+     "ic90": null,
+     "wallet_top_pct": 12,
+     "mitades": [
+      0.0316,
+      -1.0617
+     ],
+     "g10": -0.05033,
+     "estado": "negativo",
+     "gate_universo_agosto": {
+      "SNIPER": "sin_concluir",
+      "DISPERSO": "sin_concluir"
+     }
+    },
+    "CANDIDATA#BTC#15min|0.40": {
+     "n": 143,
+     "dias": 2,
+     "mercados": 53,
+     "ev": 0.1264,
+     "ic90": null,
+     "wallet_top_pct": 6,
+     "mitades": [
+      0.2081,
+      -0.0044
+     ],
+     "g10": 0.0056,
+     "estado": "en_seguimiento",
+     "gate_universo_agosto": {
+      "SNIPER": "sin_concluir",
+      "DISPERSO": "sin_concluir"
+     }
+    },
+    "CANDIDATA#ETH#5min|0.90": {
+     "n": 225,
+     "dias": 2,
+     "mercados": 122,
+     "ev": -0.0298,
+     "ic90": null,
+     "wallet_top_pct": 27,
+     "mitades": [
+      -0.0515,
+      -0.0036
+     ],
+     "g10": -0.00356,
+     "estado": "negativo",
+     "gate_universo_agosto": {
+      "SNIPER": "sin_concluir",
+      "DISPERSO": "sin_concluir"
+     }
+    },
+    "CANDIDATA#ETH#5min|0.05": {
+     "n": 97,
+     "dias": 2,
+     "mercados": 71,
+     "ev": -0.7789,
+     "ic90": null,
+     "wallet_top_pct": 13,
+     "mitades": [
+      -0.6627,
+      -1.0652
+     ],
+     "g10": -0.09345,
+     "estado": "negativo",
+     "gate_universo_agosto": {
+      "SNIPER": "sin_concluir",
+      "DISPERSO": "sin_concluir"
+     }
+    },
+    "CANDIDATA#SOL#5min|0.90": {
+     "n": 95,
+     "dias": 2,
+     "mercados": 56,
+     "ev": -0.0371,
+     "ic90": null,
+     "wallet_top_pct": 9,
+     "mitades": [
+      -0.0481,
+      -0.0078
+     ],
+     "g10": -0.0043,
+     "estado": "negativo",
+     "gate_universo_agosto": {
+      "SNIPER": "sin_concluir",
+      "DISPERSO": "sin_concluir"
+     }
+    },
+    "CANDIDATA#SOL#5min|0.05": {
+     "n": 27,
+     "dias": 2,
+     "mercados": 25,
+     "ev": 0.2209,
+     "ic90": null,
+     "wallet_top_pct": 30,
+     "mitades": [
+      0.5884,
+      -1.0652
+     ],
+     "g10": -0.02036,
+     "estado": "en_seguimiento",
+     "gate_universo_agosto": {
+      "SNIPER": "sin_concluir",
+      "DISPERSO": "sin_concluir"
+     }
+    },
+    "CANDIDATA#ETH#15min|0.45": {
+     "n": 149,
+     "dias": 2,
+     "mercados": 54,
+     "ev": 0.0163,
+     "ic90": null,
+     "wallet_top_pct": 16,
+     "mitades": [
+      -0.1043,
+      0.2624
+     ],
+     "g10": -0.00401,
+     "estado": "en_seguimiento",
+     "gate_universo_agosto": {
+      "SNIPER": "sin_concluir",
+      "DISPERSO": "sin_concluir"
+     }
+    },
+    "CANDIDATA#BTC#15min|0.75": {
+     "n": 117,
+     "dias": 2,
+     "mercados": 51,
+     "ev": -0.0149,
+     "ic90": null,
+     "wallet_top_pct": 10,
+     "mitades": [
+      0.0133,
+      -0.0468
+     ],
+     "g10": -0.00308,
+     "estado": "negativo",
+     "gate_universo_agosto": {
+      "SNIPER": "sin_concluir",
+      "DISPERSO": "sin_concluir"
+     }
+    },
+    "CANDIDATA#XRP#15min|0.20": {
+     "n": 19,
+     "dias": 2,
+     "mercados": 16,
+     "ev": 0.8875,
+     "ic90": null,
+     "wallet_top_pct": 21,
+     "mitades": [
+      -0.0998,
+      1.9845
+     ],
+     "g10": 0.06358,
+     "estado": "en_seguimiento",
+     "gate_universo_agosto": {
+      "SNIPER": "malo_confirmado",
+      "DISPERSO": "malo_confirmado"
+     }
+    },
+    "CANDIDATA#DOGE#15min|0.75": {
+     "n": 17,
+     "dias": 2,
+     "mercados": 14,
+     "ev": -0.2499,
+     "ic90": null,
+     "wallet_top_pct": 35,
+     "mitades": [
+      0.0525,
+      -0.8044
+     ],
+     "g10": -0.02751,
+     "estado": "negativo",
+     "gate_universo_agosto": {
+      "SNIPER": "sin_concluir",
+      "DISPERSO": "sin_concluir"
+     }
+    },
+    "CANDIDATA#ETH#15min|0.55": {
+     "n": 72,
+     "dias": 2,
+     "mercados": 39,
+     "ev": -0.079,
+     "ic90": null,
+     "wallet_top_pct": 14,
+     "mitades": [
+      -0.1104,
+      -0.0161
+     ],
+     "g10": -0.01188,
+     "estado": "negativo",
+     "gate_universo_agosto": {
+      "SNIPER": "sin_concluir",
+      "DISPERSO": "sin_concluir"
+     }
+    },
+    "CANDIDATA#ETH#15min|0.40": {
+     "n": 74,
+     "dias": 2,
+     "mercados": 34,
+     "ev": 0.194,
+     "ic90": null,
+     "wallet_top_pct": 11,
+     "mitades": [
+      0.1644,
+      0.2309
+     ],
+     "g10": 0.01253,
+     "estado": "en_seguimiento",
+     "gate_universo_agosto": {
+      "SNIPER": "sin_concluir",
+      "DISPERSO": "sin_concluir"
+     }
+    },
+    "CANDIDATA#DOGE#5min|0.85": {
+     "n": 55,
+     "dias": 2,
+     "mercados": 43,
+     "ev": -0.1773,
+     "ic90": null,
+     "wallet_top_pct": 24,
+     "mitades": [
+      -0.2337,
+      -0.0268
+     ],
+     "g10": -0.01928,
+     "estado": "negativo",
+     "gate_universo_agosto": {
+      "SNIPER": "sin_concluir",
+      "DISPERSO": "sin_concluir"
+     }
+    },
+    "CANDIDATA#SOL#15min|0.60": {
+     "n": 22,
+     "dias": 2,
+     "mercados": 17,
+     "ev": 0.0698,
+     "ic90": null,
+     "wallet_top_pct": 32,
+     "mitades": [
+      0.0775,
+      0.0493
+     ],
+     "g10": 0.00407,
+     "estado": "en_seguimiento",
+     "gate_universo_agosto": {
+      "SNIPER": "sin_concluir",
+      "DISPERSO": "sin_concluir"
+     }
+    },
+    "CANDIDATA#BTC#15min|0.25": {
+     "n": 74,
+     "dias": 2,
+     "mercados": 32,
+     "ev": -0.2113,
+     "ic90": null,
+     "wallet_top_pct": 8,
+     "mitades": [
+      -0.4308,
+      0.1708
+     ],
+     "g10": -0.03239,
+     "estado": "negativo",
+     "gate_universo_agosto": {
+      "SNIPER": "sin_concluir",
+      "DISPERSO": "sin_concluir"
+     }
+    },
+    "CANDIDATA#DOGE#5min|0.30": {
+     "n": 23,
+     "dias": 2,
+     "mercados": 19,
+     "ev": 0.5684,
+     "ic90": null,
+     "wallet_top_pct": 26,
+     "mitades": [
+      0.6418,
+      -1.0462
+     ],
+     "g10": 0.04434,
+     "estado": "en_seguimiento",
+     "gate_universo_agosto": {
+      "SNIPER": "sin_concluir",
+      "DISPERSO": "sin_concluir"
+     }
+    },
+    "CANDIDATA#XRP#15min|0.90": {
+     "n": 37,
+     "dias": 2,
+     "mercados": 24,
+     "ev": -0.066,
+     "ic90": null,
+     "wallet_top_pct": 22,
+     "mitades": [
+      -0.1507,
+      -0.0144
+     ],
+     "g10": -0.00736,
+     "estado": "negativo",
+     "gate_universo_agosto": {
+      "SNIPER": "sin_concluir",
+      "DISPERSO": "sin_concluir"
+     }
+    },
+    "CANDIDATA#BTC#15min|0.35": {
+     "n": 105,
+     "dias": 2,
+     "mercados": 46,
+     "ev": -0.2423,
+     "ic90": null,
+     "wallet_top_pct": 8,
+     "mitades": [
+      -0.3881,
+      0.0045
+     ],
+     "g10": -0.03209,
+     "estado": "negativo",
+     "gate_universo_agosto": {
+      "SNIPER": "sin_concluir",
+      "DISPERSO": "sin_concluir"
+     }
+    },
+    "CANDIDATA#BNB#5min|0.20": {
+     "n": 17,
+     "dias": 2,
+     "mercados": 17,
+     "ev": -0.5418,
+     "ic90": null,
+     "wallet_top_pct": 24,
+     "mitades": [
+      -0.6375,
+      -0.4051
+     ],
+     "g10": -0.06475,
+     "estado": "negativo",
+     "gate_universo_agosto": {
+      "SNIPER": "sin_concluir",
+      "DISPERSO": "sin_concluir"
+     }
+    },
+    "CANDIDATA#BTC#5min|0.45": {
+     "n": 1451,
+     "dias": 2,
+     "mercados": 206,
+     "ev": -0.0137,
+     "ic90": null,
+     "wallet_top_pct": 4,
+     "mitades": [
+      -0.0284,
+      0.0275
+     ],
+     "g10": -0.00697,
+     "estado": "negativo",
+     "gate_universo_agosto": {
+      "SNIPER": "sin_concluir",
+      "DISPERSO": "sin_concluir"
+     }
+    },
+    "CANDIDATA#SOL#15min|0.35": {
+     "n": 16,
+     "dias": 2,
+     "mercados": 15,
+     "ev": -0.3943,
+     "ic90": null,
+     "wallet_top_pct": 25,
+     "mitades": [
+      -0.2442,
+      -1.0446
+     ],
+     "g10": -0.04657,
+     "estado": "negativo",
+     "gate_universo_agosto": {
+      "SNIPER": "sin_concluir",
+      "DISPERSO": "sin_concluir"
+     }
+    },
+    "CANDIDATA#DOGE#5min|0.50": {
+     "n": 47,
+     "dias": 2,
+     "mercados": 38,
+     "ev": 0.001,
+     "ic90": null,
+     "wallet_top_pct": 19,
+     "mitades": [
+      0.0561,
+      -0.1163
+     ],
+     "g10": -0.00467,
+     "estado": "en_seguimiento",
+     "gate_universo_agosto": {
+      "SNIPER": "sin_concluir",
+      "DISPERSO": "sin_concluir"
+     }
+    },
+    "CANDIDATA#BTC#15min|0.70": {
+     "n": 123,
+     "dias": 2,
+     "mercados": 47,
+     "ev": -0.1037,
+     "ic90": null,
+     "wallet_top_pct": 15,
+     "mitades": [
+      0.0772,
+      -0.3133
+     ],
+     "g10": -0.01273,
+     "estado": "negativo",
+     "gate_universo_agosto": {
+      "SNIPER": "sin_concluir",
+      "DISPERSO": "sin_concluir"
+     }
+    },
+    "CANDIDATA#ETH#5min|0.60": {
+     "n": 270,
+     "dias": 2,
+     "mercados": 115,
+     "ev": -0.0361,
+     "ic90": null,
+     "wallet_top_pct": 11,
+     "mitades": [
+      -0.0085,
+      -0.103
+     ],
+     "g10": -0.00681,
+     "estado": "negativo",
+     "gate_universo_agosto": {
+      "SNIPER": "sin_concluir",
+      "DISPERSO": "sin_concluir"
+     }
+    },
+    "CANDIDATA#XRP#5min|0.60": {
+     "n": 72,
+     "dias": 2,
+     "mercados": 56,
+     "ev": -0.1756,
+     "ic90": null,
+     "wallet_top_pct": 22,
+     "mitades": [
+      -0.1895,
+      -0.151
+     ],
+     "g10": -0.02111,
+     "estado": "negativo",
+     "gate_universo_agosto": {
+      "SNIPER": "sin_concluir",
+      "DISPERSO": "sin_concluir"
+     }
+    },
+    "CANDIDATA#DOGE#5min|0.55": {
+     "n": 39,
+     "dias": 2,
+     "mercados": 33,
+     "ev": 0.1869,
+     "ic90": null,
+     "wallet_top_pct": 31,
+     "mitades": [
+      0.1958,
+      0.157
+     ],
+     "g10": 0.01518,
+     "estado": "en_seguimiento",
+     "gate_universo_agosto": {
+      "SNIPER": "sin_concluir",
+      "DISPERSO": "sin_concluir"
+     }
+    },
+    "CANDIDATA#ETH#5min|0.25": {
+     "n": 176,
+     "dias": 2,
+     "mercados": 104,
+     "ev": 0.2564,
+     "ic90": null,
+     "wallet_top_pct": 8,
+     "mitades": [
+      0.0832,
+      0.6373
+     ],
+     "g10": 0.01113,
+     "estado": "en_seguimiento",
+     "gate_universo_agosto": {
+      "SNIPER": "sin_concluir",
+      "DISPERSO": "sin_concluir"
+     }
+    },
+    "CANDIDATA#BTC#5min|0.20": {
+     "n": 410,
+     "dias": 2,
+     "mercados": 141,
+     "ev": -0.3462,
+     "ic90": null,
+     "wallet_top_pct": 4,
+     "mitades": [
+      -0.4694,
+      -0.1857
+     ],
+     "g10": -0.04743,
+     "estado": "negativo",
+     "gate_universo_agosto": {
+      "SNIPER": "sin_concluir",
+      "DISPERSO": "sin_concluir"
+     }
+    },
+    "CANDIDATA#SOL#5min|0.25": {
+     "n": 74,
+     "dias": 2,
+     "mercados": 53,
+     "ev": 0.0286,
+     "ic90": null,
+     "wallet_top_pct": 27,
+     "mitades": [
+      -0.1298,
+      0.2483
+     ],
+     "g10": -0.00982,
+     "estado": "en_seguimiento",
+     "gate_universo_agosto": {
+      "SNIPER": "sin_concluir",
+      "DISPERSO": "sin_concluir"
+     }
+    },
+    "CANDIDATA#ETH#5min|0.20": {
+     "n": 140,
+     "dias": 2,
+     "mercados": 87,
+     "ev": 0.074,
+     "ic90": null,
+     "wallet_top_pct": 9,
+     "mitades": [
+      -0.0415,
+      0.2818
+     ],
+     "g10": -0.00935,
+     "estado": "en_seguimiento",
+     "gate_universo_agosto": {
+      "SNIPER": "sin_concluir",
+      "DISPERSO": "sin_concluir"
+     }
+    },
+    "CANDIDATA#BTC#15min|0.15": {
+     "n": 40,
+     "dias": 2,
+     "mercados": 25,
+     "ev": -0.6069,
+     "ic90": null,
+     "wallet_top_pct": 15,
+     "mitades": [
+      -0.8178,
+      -0.2152
+     ],
+     "g10": -0.07327,
+     "estado": "negativo",
+     "gate_universo_agosto": {
+      "SNIPER": "sin_concluir",
+      "DISPERSO": "sin_concluir"
+     }
+    },
+    "CANDIDATA#BNB#5min|0.75": {
+     "n": 33,
+     "dias": 2,
+     "mercados": 27,
+     "ev": 0.0892,
+     "ic90": null,
+     "wallet_top_pct": 18,
+     "mitades": [
+      -0.0003,
+      0.1965
+     ],
+     "g10": 0.00773,
+     "estado": "en_seguimiento",
+     "gate_universo_agosto": {
+      "SNIPER": "sin_concluir",
+      "DISPERSO": "sin_concluir"
+     }
+    },
+    "CANDIDATA#BNB#5min|0.80": {
+     "n": 36,
+     "dias": 2,
+     "mercados": 27,
+     "ev": 0.1055,
+     "ic90": null,
+     "wallet_top_pct": 17,
+     "mitades": [
+      0.121,
+      0.0514
+     ],
+     "g10": 0.0099,
+     "estado": "en_seguimiento",
+     "gate_universo_agosto": {
+      "SNIPER": "sin_concluir",
+      "DISPERSO": "sin_concluir"
+     }
+    },
+    "CANDIDATA#BTC#15min|0.90": {
+     "n": 81,
+     "dias": 2,
+     "mercados": 41,
+     "ev": 0.0537,
+     "ic90": null,
+     "wallet_top_pct": 32,
+     "mitades": [
+      0.0536,
+      0.0538
+     ],
+     "g10": 0.0052,
+     "estado": "en_seguimiento",
+     "gate_universo_agosto": {
+      "SNIPER": "sin_concluir",
+      "DISPERSO": "sin_concluir"
+     }
+    },
+    "CANDIDATA#BTC#5min|0.10": {
+     "n": 242,
+     "dias": 2,
+     "mercados": 112,
+     "ev": 0.2596,
+     "ic90": null,
+     "wallet_top_pct": 11,
+     "mitades": [
+      0.2304,
+      0.3098
+     ],
+     "g10": -0.0069,
+     "estado": "en_seguimiento",
+     "gate_universo_agosto": {
+      "SNIPER": "sin_concluir",
+      "DISPERSO": "sin_concluir"
+     }
+    },
+    "CANDIDATA#XRP#5min|0.35": {
+     "n": 50,
+     "dias": 2,
+     "mercados": 43,
+     "ev": 0.0944,
+     "ic90": null,
+     "wallet_top_pct": 24,
+     "mitades": [
+      0.2765,
+      -0.5514
+     ],
+     "g10": 0.00076,
+     "estado": "en_seguimiento",
+     "gate_universo_agosto": {
+      "SNIPER": "sin_concluir",
+      "DISPERSO": "sin_concluir"
+     }
+    },
+    "CANDIDATA#ETH#5min|0.45": {
+     "n": 406,
+     "dias": 2,
+     "mercados": 156,
+     "ev": 0.0317,
+     "ic90": null,
+     "wallet_top_pct": 15,
+     "mitades": [
+      0.0812,
+      -0.0615
+     ],
+     "g10": -0.0024,
+     "estado": "en_seguimiento",
+     "gate_universo_agosto": {
+      "SNIPER": "sin_concluir",
+      "DISPERSO": "sin_concluir"
+     }
+    },
+    "CANDIDATA#XRP#5min|0.65": {
+     "n": 81,
+     "dias": 2,
+     "mercados": 57,
+     "ev": -0.1923,
+     "ic90": null,
+     "wallet_top_pct": 21,
+     "mitades": [
+      -0.2863,
+      0.0944
+     ],
+     "g10": -0.02233,
+     "estado": "negativo",
+     "gate_universo_agosto": {
+      "SNIPER": "sin_concluir",
+      "DISPERSO": "sin_concluir"
+     }
+    },
+    "CANDIDATA#ETH#15min|0.80": {
+     "n": 55,
+     "dias": 2,
+     "mercados": 35,
+     "ev": 0.011,
+     "ic90": null,
+     "wallet_top_pct": 22,
+     "mitades": [
+      -0.026,
+      0.1191
+     ],
+     "g10": 1e-05,
+     "estado": "en_seguimiento",
+     "gate_universo_agosto": {
+      "SNIPER": "sin_concluir",
+      "DISPERSO": "sin_concluir"
+     }
+    },
+    "CANDIDATA#BNB#5min|0.40": {
+     "n": 47,
+     "dias": 2,
+     "mercados": 40,
+     "ev": -0.0948,
+     "ic90": null,
+     "wallet_top_pct": 23,
+     "mitades": [
+      -0.0821,
+      -0.128
+     ],
+     "g10": -0.0161,
+     "estado": "negativo",
+     "gate_universo_agosto": {
+      "SNIPER": "sin_concluir",
+      "DISPERSO": "sin_concluir"
+     }
+    },
+    "CANDIDATA#SOL#15min|0.90": {
+     "n": 35,
+     "dias": 2,
+     "mercados": 23,
+     "ev": 0.048,
+     "ic90": null,
+     "wallet_top_pct": 29,
+     "mitades": [
+      0.032,
+      0.0788
+     ],
+     "g10": 0.00462,
+     "estado": "en_seguimiento",
+     "gate_universo_agosto": {
+      "SNIPER": "sin_concluir",
+      "DISPERSO": "sin_concluir"
+     }
+    },
+    "CANDIDATA#ETH#15min|0.90": {
+     "n": 48,
+     "dias": 2,
+     "mercados": 29,
+     "ev": -0.0563,
+     "ic90": null,
+     "wallet_top_pct": 15,
+     "mitades": [
+      -0.0833,
+      -0.0216
+     ],
+     "g10": -0.00634,
+     "estado": "negativo",
+     "gate_universo_agosto": {
+      "SNIPER": "sin_concluir",
+      "DISPERSO": "sin_concluir"
+     }
+    },
+    "CANDIDATA#ETH#5min|0.15": {
+     "n": 102,
+     "dias": 2,
+     "mercados": 74,
+     "ev": 0.1356,
+     "ic90": null,
+     "wallet_top_pct": 15,
+     "mitades": [
+      0.1787,
+      0.0159
+     ],
+     "g10": -0.00902,
+     "estado": "en_seguimiento",
+     "gate_universo_agosto": {
+      "SNIPER": "sin_concluir",
+      "DISPERSO": "sin_concluir"
+     }
+    },
+    "CANDIDATA#ETH#5min|0.80": {
+     "n": 196,
+     "dias": 2,
+     "mercados": 112,
+     "ev": 0.0147,
+     "ic90": null,
+     "wallet_top_pct": 14,
+     "mitades": [
+      0.0778,
+      -0.147
+     ],
+     "g10": 0.00042,
+     "estado": "en_seguimiento",
+     "gate_universo_agosto": {
+      "SNIPER": "sin_concluir",
+      "DISPERSO": "sin_concluir"
+     }
+    },
+    "CANDIDATA#BTC#5min|0.15": {
+     "n": 264,
+     "dias": 2,
+     "mercados": 106,
+     "ev": -0.1596,
+     "ic90": null,
+     "wallet_top_pct": 6,
+     "mitades": [
+      -0.2612,
+      0.0402
+     ],
+     "g10": -0.03527,
+     "estado": "negativo",
+     "gate_universo_agosto": {
+      "SNIPER": "sin_concluir",
+      "DISPERSO": "sin_concluir"
+     }
+    },
+    "CANDIDATA#BTC#5min|0.05": {
+     "n": 272,
+     "dias": 2,
+     "mercados": 133,
+     "ev": -0.3871,
+     "ic90": null,
+     "wallet_top_pct": 18,
+     "mitades": [
+      -0.9579,
+      1.4305
+     ],
+     "g10": -0.06772,
+     "estado": "negativo",
+     "gate_universo_agosto": {
+      "SNIPER": "sin_concluir",
+      "DISPERSO": "sin_concluir"
+     }
+    },
+    "CANDIDATA#SOL#15min|0.65": {
+     "n": 24,
+     "dias": 2,
+     "mercados": 16,
+     "ev": 0.105,
+     "ic90": null,
+     "wallet_top_pct": 21,
+     "mitades": [
+      0.2009,
+      -0.0868
+     ],
+     "g10": 0.00825,
+     "estado": "en_seguimiento",
+     "gate_universo_agosto": {
+      "SNIPER": "sin_concluir",
+      "DISPERSO": "sin_concluir"
+     }
+    },
+    "CANDIDATA#SOL#5min|0.65": {
+     "n": 147,
+     "dias": 2,
+     "mercados": 85,
+     "ev": -0.2527,
+     "ic90": null,
+     "wallet_top_pct": 13,
+     "mitades": [
+      -0.2697,
+      -0.2127
+     ],
+     "g10": -0.02853,
+     "estado": "negativo",
+     "gate_universo_agosto": {
+      "SNIPER": "sin_concluir",
+      "DISPERSO": "sin_concluir"
+     }
+    },
+    "CANDIDATA#SOL#5min|0.40": {
+     "n": 113,
+     "dias": 2,
+     "mercados": 80,
+     "ev": -0.0898,
+     "ic90": null,
+     "wallet_top_pct": 12,
+     "mitades": [
+      -0.0196,
+      -0.24
+     ],
+     "g10": -0.01581,
+     "estado": "negativo",
+     "gate_universo_agosto": {
+      "SNIPER": "sin_concluir",
+      "DISPERSO": "sin_concluir"
+     }
+    },
+    "CANDIDATA#DOGE#5min|0.80": {
+     "n": 29,
+     "dias": 2,
+     "mercados": 27,
+     "ev": 0.038,
+     "ic90": null,
+     "wallet_top_pct": 28,
+     "mitades": [
+      0.0925,
+      -0.1332
+     ],
+     "g10": 0.00286,
+     "estado": "en_seguimiento",
+     "gate_universo_agosto": {
+      "SNIPER": "sin_concluir",
+      "DISPERSO": "sin_concluir"
+     }
+    },
+    "CANDIDATA#SOL#5min|0.45": {
+     "n": 138,
+     "dias": 2,
+     "mercados": 85,
+     "ev": 0.1234,
+     "ic90": null,
+     "wallet_top_pct": 14,
+     "mitades": [
+      0.1836,
+      -0.0538
+     ],
+     "g10": 0.00663,
+     "estado": "en_seguimiento",
+     "gate_universo_agosto": {
+      "SNIPER": "sin_concluir",
+      "DISPERSO": "sin_concluir"
+     }
+    },
+    "CANDIDATA#SOL#5min|0.15": {
+     "n": 49,
+     "dias": 2,
+     "mercados": 40,
+     "ev": 0.6638,
+     "ic90": null,
+     "wallet_top_pct": 12,
+     "mitades": [
+      0.1227,
+      1.5957
+     ],
+     "g10": 0.0352,
+     "estado": "en_seguimiento",
+     "gate_universo_agosto": {
+      "SNIPER": "sin_concluir",
+      "DISPERSO": "sin_concluir"
+     }
+    },
+    "CANDIDATA#DOGE#5min|0.15": {
+     "n": 28,
+     "dias": 2,
+     "mercados": 25,
+     "ev": 0.221,
+     "ic90": null,
+     "wallet_top_pct": 25,
+     "mitades": [
+      -0.0142,
+      1.303
+     ],
+     "g10": -0.00234,
+     "estado": "en_seguimiento",
+     "gate_universo_agosto": {
+      "SNIPER": "sin_concluir",
+      "DISPERSO": "sin_concluir"
+     }
+    },
+    "CANDIDATA#SOL#15min|0.50": {
+     "n": 46,
+     "dias": 2,
+     "mercados": 27,
+     "ev": 0.0586,
+     "ic90": null,
+     "wallet_top_pct": 20,
+     "mitades": [
+      0.0573,
+      0.0658
+     ],
+     "g10": 0.0012,
+     "estado": "en_seguimiento",
+     "gate_universo_agosto": {
+      "SNIPER": "sin_concluir",
+      "DISPERSO": "sin_concluir"
+     }
+    },
+    "CANDIDATA#SOL#15min|0.30": {
+     "n": 27,
+     "dias": 2,
+     "mercados": 20,
+     "ev": -0.5878,
+     "ic90": null,
+     "wallet_top_pct": 30,
+     "mitades": [
+      -0.4222,
+      -0.7948
+     ],
+     "g10": -0.06656,
+     "estado": "negativo",
+     "gate_universo_agosto": {
+      "SNIPER": "sin_concluir",
+      "DISPERSO": "sin_concluir"
+     }
+    },
+    "CANDIDATA#ETH#15min|0.50": {
+     "n": 131,
+     "dias": 2,
+     "mercados": 53,
+     "ev": 0.083,
+     "ic90": null,
+     "wallet_top_pct": 29,
+     "mitades": [
+      0.0773,
+      0.0959
+     ],
+     "g10": 0.00357,
+     "estado": "en_seguimiento",
+     "gate_universo_agosto": {
+      "SNIPER": "sin_concluir",
+      "DISPERSO": "sin_concluir"
+     }
+    },
+    "CANDIDATA#BNB#5min|0.55": {
+     "n": 104,
+     "dias": 2,
+     "mercados": 70,
+     "ev": -0.0111,
+     "ic90": null,
+     "wallet_top_pct": 20,
+     "mitades": [
+      0.0503,
+      -0.1374
+     ],
+     "g10": -0.00502,
+     "estado": "negativo",
+     "gate_universo_agosto": {
+      "SNIPER": "sin_concluir",
+      "DISPERSO": "sin_concluir"
+     }
+    },
+    "CANDIDATA#SOL#5min|0.20": {
+     "n": 81,
+     "dias": 2,
+     "mercados": 61,
+     "ev": 0.4266,
+     "ic90": null,
+     "wallet_top_pct": 17,
+     "mitades": [
+      0.511,
+      0.2004
+     ],
+     "g10": 0.02292,
+     "estado": "en_seguimiento",
+     "gate_universo_agosto": {
+      "SNIPER": "sin_concluir",
+      "DISPERSO": "malo_confirmado"
+     }
+    },
+    "CANDIDATA#BNB#5min|0.45": {
+     "n": 57,
+     "dias": 2,
+     "mercados": 47,
+     "ev": 0.0775,
+     "ic90": null,
+     "wallet_top_pct": 25,
+     "mitades": [
+      -0.0898,
+      0.4711
+     ],
+     "g10": 0.00213,
+     "estado": "en_seguimiento",
+     "gate_universo_agosto": {
+      "SNIPER": "sin_concluir",
+      "DISPERSO": "sin_concluir"
+     }
+    },
+    "CANDIDATA#ETH#5min|0.75": {
+     "n": 180,
+     "dias": 2,
+     "mercados": 107,
+     "ev": -0.0729,
+     "ic90": null,
+     "wallet_top_pct": 7,
+     "mitades": [
+      -0.0719,
+      -0.0743
+     ],
+     "g10": -0.00908,
+     "estado": "negativo",
+     "gate_universo_agosto": {
+      "SNIPER": "sin_concluir",
+      "DISPERSO": "sin_concluir"
+     }
+    },
+    "CANDIDATA#XRP#15min|0.55": {
+     "n": 25,
+     "dias": 2,
+     "mercados": 17,
+     "ev": -0.3306,
+     "ic90": null,
+     "wallet_top_pct": 24,
+     "mitades": [
+      -0.2552,
+      -0.5244
+     ],
+     "g10": -0.03746,
+     "estado": "negativo",
+     "gate_universo_agosto": {
+      "SNIPER": "sin_concluir",
+      "DISPERSO": "sin_concluir"
+     }
+    },
+    "CANDIDATA#ETH#15min|0.65": {
+     "n": 40,
+     "dias": 2,
+     "mercados": 21,
+     "ev": -0.0213,
+     "ic90": null,
+     "wallet_top_pct": 12,
+     "mitades": [
+      -0.1738,
+      0.3346
+     ],
+     "g10": -0.00465,
+     "estado": "negativo",
+     "gate_universo_agosto": {
+      "SNIPER": "sin_concluir",
+      "DISPERSO": "sin_concluir"
+     }
+    },
+    "CANDIDATA#BNB#15min|0.50": {
+     "n": 22,
+     "dias": 2,
+     "mercados": 19,
+     "ev": -0.1705,
+     "ic90": null,
+     "wallet_top_pct": 23,
+     "mitades": [
+      -0.0292,
+      -0.4731
+     ],
+     "g10": -0.02179,
+     "estado": "negativo",
+     "gate_universo_agosto": {
+      "SNIPER": "sin_concluir",
+      "DISPERSO": "sin_concluir"
+     }
+    },
+    "CANDIDATA#SOL#15min|0.45": {
+     "n": 45,
+     "dias": 2,
+     "mercados": 31,
+     "ev": -0.4151,
+     "ic90": null,
+     "wallet_top_pct": 16,
+     "mitades": [
+      -0.2434,
+      -0.7585
+     ],
+     "g10": -0.04729,
+     "estado": "negativo",
+     "gate_universo_agosto": {
+      "SNIPER": "sin_concluir",
+      "DISPERSO": "sin_concluir"
+     }
+    },
+    "CANDIDATA#DOGE#5min|0.45": {
+     "n": 33,
+     "dias": 2,
+     "mercados": 28,
+     "ev": 0.3075,
+     "ic90": null,
+     "wallet_top_pct": 18,
+     "mitades": [
+      0.2923,
+      0.3479
+     ],
+     "g10": 0.0252,
+     "estado": "en_seguimiento",
+     "gate_universo_agosto": {
+      "SNIPER": "sin_concluir",
+      "DISPERSO": "sin_concluir"
+     }
+    },
+    "CANDIDATA#SOL#5min|0.35": {
+     "n": 97,
+     "dias": 2,
+     "mercados": 72,
+     "ev": -0.2103,
+     "ic90": null,
+     "wallet_top_pct": 13,
+     "mitades": [
+      -0.2811,
+      -0.052
+     ],
+     "g10": -0.02889,
+     "estado": "negativo",
+     "gate_universo_agosto": {
+      "SNIPER": "sin_concluir",
+      "DISPERSO": "sin_concluir"
+     }
+    },
+    "CANDIDATA#ETH#15min|0.60": {
+     "n": 49,
+     "dias": 2,
+     "mercados": 27,
+     "ev": -0.2345,
+     "ic90": null,
+     "wallet_top_pct": 12,
+     "mitades": [
+      -0.3385,
+      0.0257
+     ],
+     "g10": -0.02716,
+     "estado": "negativo",
+     "gate_universo_agosto": {
+      "SNIPER": "sin_concluir",
+      "DISPERSO": "sin_concluir"
+     }
+    },
+    "CANDIDATA#XRP#5min|0.45": {
+     "n": 84,
+     "dias": 2,
+     "mercados": 54,
+     "ev": -0.3155,
+     "ic90": null,
+     "wallet_top_pct": 19,
+     "mitades": [
+      -0.2898,
+      -0.444
+     ],
+     "g10": -0.03713,
+     "estado": "negativo",
+     "gate_universo_agosto": {
+      "SNIPER": "sin_concluir",
+      "DISPERSO": "sin_concluir"
+     }
+    },
+    "CANDIDATA#ETH#15min|0.30": {
+     "n": 33,
+     "dias": 2,
+     "mercados": 23,
+     "ev": -0.1814,
+     "ic90": null,
+     "wallet_top_pct": 12,
+     "mitades": [
+      -0.0765,
+      -0.5708
+     ],
+     "g10": -0.02787,
+     "estado": "negativo",
+     "gate_universo_agosto": {
+      "SNIPER": "sin_concluir",
+      "DISPERSO": "sin_concluir"
+     }
+    },
+    "CANDIDATA#ETH#15min|0.25": {
+     "n": 34,
+     "dias": 2,
+     "mercados": 22,
+     "ev": -0.0722,
+     "ic90": null,
+     "wallet_top_pct": 18,
+     "mitades": [
+      -0.1615,
+      0.0721
+     ],
+     "g10": -0.01952,
+     "estado": "negativo",
+     "gate_universo_agosto": {
+      "SNIPER": "sin_concluir",
+      "DISPERSO": "sin_concluir"
+     }
+    },
+    "CANDIDATA#XRP#15min|0.25": {
+     "n": 18,
+     "dias": 2,
+     "mercados": 14,
+     "ev": -0.6675,
+     "ic90": null,
+     "wallet_top_pct": 28,
+     "mitades": [
+      -0.8208,
+      0.099
+     ],
+     "g10": -0.0748,
+     "estado": "negativo",
+     "gate_universo_agosto": {
+      "SNIPER": "sin_concluir",
+      "DISPERSO": "sin_concluir"
+     }
+    },
+    "CANDIDATA#BTC#15min|0.30": {
+     "n": 98,
+     "dias": 2,
+     "mercados": 46,
+     "ev": -0.2304,
+     "ic90": null,
+     "wallet_top_pct": 11,
+     "mitades": [
+      -0.3697,
+      0.0204
+     ],
+     "g10": -0.03223,
+     "estado": "negativo",
+     "gate_universo_agosto": {
+      "SNIPER": "sin_concluir",
+      "DISPERSO": "sin_concluir"
+     }
+    },
+    "CANDIDATA#XRP#5min|0.15": {
+     "n": 31,
+     "dias": 2,
+     "mercados": 29,
+     "ev": -0.7182,
+     "ic90": null,
+     "wallet_top_pct": 23,
+     "mitades": [
+      -0.6192,
+      -1.0578
+     ],
+     "g10": -0.08195,
+     "estado": "negativo",
+     "gate_universo_agosto": {
+      "SNIPER": "sin_concluir",
+      "DISPERSO": "sin_concluir"
+     }
+    },
+    "CANDIDATA#XRP#15min|0.65": {
+     "n": 31,
+     "dias": 2,
+     "mercados": 21,
+     "ev": -0.2497,
+     "ic90": null,
+     "wallet_top_pct": 29,
+     "mitades": [
+      -0.1107,
+      -0.442
+     ],
+     "g10": -0.02825,
+     "estado": "negativo",
+     "gate_universo_agosto": {
+      "SNIPER": "sin_concluir",
+      "DISPERSO": "sin_concluir"
+     }
+    },
+    "CANDIDATA#DOGE#5min|0.65": {
+     "n": 30,
+     "dias": 2,
+     "mercados": 26,
+     "ev": 0.1238,
+     "ic90": null,
+     "wallet_top_pct": 27,
+     "mitades": [
+      0.1,
+      0.1713
+     ],
+     "g10": 0.01023,
+     "estado": "en_seguimiento",
+     "gate_universo_agosto": {
+      "SNIPER": "sin_concluir",
+      "DISPERSO": "sin_concluir"
+     }
+    },
+    "CANDIDATA#BNB#15min|0.60": {
+     "n": 18,
+     "dias": 2,
+     "mercados": 15,
+     "ev": 0.2987,
+     "ic90": null,
+     "wallet_top_pct": 33,
+     "mitades": [
+      0.2466,
+      0.3637
+     ],
+     "g10": 0.02764,
+     "estado": "en_seguimiento",
+     "gate_universo_agosto": {
+      "SNIPER": "sin_concluir",
+      "DISPERSO": "sin_concluir"
+     }
+    },
+    "CANDIDATA#ETH#15min|0.20": {
+     "n": 22,
+     "dias": 2,
+     "mercados": 14,
+     "ev": -0.6591,
+     "ic90": null,
+     "wallet_top_pct": 18,
+     "mitades": [
+      -1.0543,
+      0.0326
+     ],
+     "g10": -0.07541,
+     "estado": "negativo",
+     "gate_universo_agosto": {
+      "SNIPER": "malo_confirmado",
+      "DISPERSO": "sin_concluir"
+     }
+    },
+    "CANDIDATA#BNB#5min|0.15": {
+     "n": 15,
+     "dias": 2,
+     "mercados": 15,
+     "ev": -1.058,
+     "ic90": null,
+     "wallet_top_pct": 20,
+     "mitades": [
+      -1.0578,
+      -1.0592
+     ],
+     "g10": -0.11182,
+     "estado": "negativo",
+     "gate_universo_agosto": {
+      "SNIPER": "sin_concluir",
+      "DISPERSO": "sin_concluir"
+     }
+    },
+    "CANDIDATA#ETH#15min|0.10": {
+     "n": 16,
+     "dias": 2,
+     "mercados": 13,
+     "ev": -0.5808,
+     "ic90": null,
+     "wallet_top_pct": 19,
+     "mitades": [
+      -0.5119,
+      -1.0625
+     ],
+     "g10": -0.07342,
+     "estado": "negativo",
+     "gate_universo_agosto": {
+      "SNIPER": "sin_concluir",
+      "DISPERSO": "sin_concluir"
+     }
+    },
+    "CANDIDATA#SOL#5min|0.50": {
+     "n": 283,
+     "dias": 2,
+     "mercados": 144,
+     "ev": -0.0379,
+     "ic90": null,
+     "wallet_top_pct": 26,
+     "mitades": [
+      -0.0563,
+      0.0122
+     ],
+     "g10": -0.0086,
+     "estado": "negativo",
+     "gate_universo_agosto": {
+      "SNIPER": "sin_concluir",
+      "DISPERSO": "sin_concluir"
+     }
+    },
+    "CANDIDATA#XRP#15min|0.50": {
+     "n": 36,
+     "dias": 2,
+     "mercados": 23,
+     "ev": -0.2237,
+     "ic90": null,
+     "wallet_top_pct": 28,
+     "mitades": [
+      -0.2311,
+      -0.1932
+     ],
+     "g10": -0.02735,
+     "estado": "negativo",
+     "gate_universo_agosto": {
+      "SNIPER": "sin_concluir",
+      "DISPERSO": "sin_concluir"
+     }
+    },
+    "CANDIDATA#BTC#15min|0.85": {
+     "n": 74,
+     "dias": 2,
+     "mercados": 37,
+     "ev": 0.0518,
+     "ic90": null,
+     "wallet_top_pct": 12,
+     "mitades": [
+      -0.0157,
+      0.1156
+     ],
+     "g10": 0.00464,
+     "estado": "en_seguimiento",
+     "gate_universo_agosto": {
+      "SNIPER": "sin_concluir",
+      "DISPERSO": "sin_concluir"
+     }
+    },
+    "CANDIDATA#DOGE#15min|0.90": {
+     "n": 23,
+     "dias": 2,
+     "mercados": 22,
+     "ev": -0.0628,
+     "ic90": null,
+     "wallet_top_pct": 35,
+     "mitades": [
+      -0.0884,
+      -0.0296
+     ],
+     "g10": -0.00702,
+     "estado": "negativo",
+     "gate_universo_agosto": {
+      "SNIPER": "sin_concluir",
+      "DISPERSO": "sin_concluir"
+     }
+    },
+    "CANDIDATA#XRP#5min|0.50": {
+     "n": 75,
+     "dias": 2,
+     "mercados": 52,
+     "ev": -0.1948,
+     "ic90": null,
+     "wallet_top_pct": 15,
+     "mitades": [
+      -0.2308,
+      -0.1135
+     ],
+     "g10": -0.02429,
+     "estado": "negativo",
+     "gate_universo_agosto": {
+      "SNIPER": "sin_concluir",
+      "DISPERSO": "sin_concluir"
+     }
+    },
+    "CANDIDATA#BNB#5min|0.65": {
+     "n": 66,
+     "dias": 2,
+     "mercados": 49,
+     "ev": -0.092,
+     "ic90": null,
+     "wallet_top_pct": 20,
+     "mitades": [
+      -0.0154,
+      -0.4746
+     ],
+     "g10": -0.01201,
+     "estado": "negativo",
+     "gate_universo_agosto": {
+      "SNIPER": "sin_concluir",
+      "DISPERSO": "sin_concluir"
+     }
+    },
+    "CANDIDATA#XRP#5min|0.70": {
+     "n": 50,
+     "dias": 2,
+     "mercados": 41,
+     "ev": -0.134,
+     "ic90": null,
+     "wallet_top_pct": 22,
+     "mitades": [
+      -0.2618,
+      0.0744
+     ],
+     "g10": -0.01583,
+     "estado": "negativo",
+     "gate_universo_agosto": {
+      "SNIPER": "sin_concluir",
+      "DISPERSO": "sin_concluir"
+     }
+    },
+    "CANDIDATA#SOL#5min|0.30": {
+     "n": 117,
+     "dias": 2,
+     "mercados": 85,
+     "ev": -0.0407,
+     "ic90": null,
+     "wallet_top_pct": 18,
+     "mitades": [
+      -0.2341,
+      0.2803
+     ],
+     "g10": -0.0141,
+     "estado": "negativo",
+     "gate_universo_agosto": {
+      "SNIPER": "sin_concluir",
+      "DISPERSO": "sin_concluir"
+     }
+    },
+    "CANDIDATA#BNB#5min|0.85": {
+     "n": 28,
+     "dias": 2,
+     "mercados": 20,
+     "ev": 0.0609,
+     "ic90": null,
+     "wallet_top_pct": 21,
+     "mitades": [
+      0.0498,
+      0.1533
+     ],
+     "g10": 0.0056,
+     "estado": "en_seguimiento",
+     "gate_universo_agosto": {
+      "SNIPER": "sin_concluir",
+      "DISPERSO": "sin_concluir"
+     }
+    },
+    "CANDIDATA#SOL#5min|0.80": {
+     "n": 104,
+     "dias": 2,
+     "mercados": 77,
+     "ev": -0.1215,
+     "ic90": null,
+     "wallet_top_pct": 15,
+     "mitades": [
+      -0.0939,
+      -0.155
+     ],
+     "g10": -0.01379,
+     "estado": "negativo",
+     "gate_universo_agosto": {
+      "SNIPER": "sin_concluir",
+      "DISPERSO": "sin_concluir"
+     }
+    },
+    "CANDIDATA#XRP#5min|0.30": {
+     "n": 43,
+     "dias": 2,
+     "mercados": 38,
+     "ev": -0.197,
+     "ic90": null,
+     "wallet_top_pct": 21,
+     "mitades": [
+      -0.1916,
+      -0.2129
+     ],
+     "g10": -0.0289,
+     "estado": "negativo",
+     "gate_universo_agosto": {
+      "SNIPER": "sin_concluir",
+      "DISPERSO": "sin_concluir"
+     }
+    },
+    "CANDIDATA#DOGE#5min|0.35": {
+     "n": 19,
+     "dias": 2,
+     "mercados": 16,
+     "ev": -0.4824,
+     "ic90": null,
+     "wallet_top_pct": 21,
+     "mitades": [
+      -0.5129,
+      -0.3681
+     ],
+     "g10": -0.05537,
+     "estado": "negativo",
+     "gate_universo_agosto": {
+      "SNIPER": "sin_concluir",
+      "DISPERSO": "sin_concluir"
+     }
+    },
+    "CANDIDATA#BNB#5min|0.60": {
+     "n": 102,
+     "dias": 2,
+     "mercados": 74,
+     "ev": 0.0262,
+     "ic90": null,
+     "wallet_top_pct": 18,
+     "mitades": [
+      0.0416,
+      -0.0125
+     ],
+     "g10": -0.0005,
+     "estado": "en_seguimiento",
+     "gate_universo_agosto": {
+      "SNIPER": "sin_concluir",
+      "DISPERSO": "sin_concluir"
+     }
+    },
+    "CANDIDATA#XRP#5min|0.25": {
+     "n": 32,
+     "dias": 2,
+     "mercados": 28,
+     "ev": 0.3591,
+     "ic90": null,
+     "wallet_top_pct": 16,
+     "mitades": [
+      0.6614,
+      -0.306
+     ],
+     "g10": 0.02045,
+     "estado": "en_seguimiento",
+     "gate_universo_agosto": {
+      "SNIPER": "sin_concluir",
+      "DISPERSO": "sin_concluir"
+     }
+    },
+    "CANDIDATA#DOGE#5min|0.70": {
+     "n": 38,
+     "dias": 2,
+     "mercados": 28,
+     "ev": -0.029,
+     "ic90": null,
+     "wallet_top_pct": 26,
+     "mitades": [
+      -0.0459,
+      -0.0032
+     ],
+     "g10": -0.00501,
+     "estado": "negativo",
+     "gate_universo_agosto": {
+      "SNIPER": "sin_concluir",
+      "DISPERSO": "sin_concluir"
+     }
+    },
+    "CANDIDATA#BTC#5min|0.85": {
+     "n": 569,
+     "dias": 2,
+     "mercados": 158,
+     "ev": -0.0311,
+     "ic90": null,
+     "wallet_top_pct": 5,
+     "mitades": [
+      -0.0345,
+      -0.0253
+     ],
+     "g10": -0.004,
+     "estado": "negativo",
+     "gate_universo_agosto": {
+      "SNIPER": "sin_concluir",
+      "DISPERSO": "sin_concluir"
+     }
+    },
+    "CANDIDATA#BTC#15min|0.45": {
+     "n": 231,
+     "dias": 2,
+     "mercados": 62,
+     "ev": 0.038,
+     "ic90": null,
+     "wallet_top_pct": 6,
+     "mitades": [
+      0.0759,
+      -0.0349
+     ],
+     "g10": -0.00184,
+     "estado": "en_seguimiento",
+     "gate_universo_agosto": {
+      "SNIPER": "sin_concluir",
+      "DISPERSO": "sin_concluir"
+     }
+    },
+    "CANDIDATA#ETH#5min|0.40": {
+     "n": 258,
+     "dias": 2,
+     "mercados": 125,
+     "ev": -0.0296,
+     "ic90": null,
+     "wallet_top_pct": 7,
+     "mitades": [
+      0.0271,
+      -0.1761
+     ],
+     "g10": -0.00988,
+     "estado": "negativo",
+     "gate_universo_agosto": {
+      "SNIPER": "sin_concluir",
+      "DISPERSO": "sin_concluir"
+     }
+    },
+    "CANDIDATA#BTC#15min|0.55": {
+     "n": 184,
+     "dias": 2,
+     "mercados": 56,
+     "ev": -0.1273,
+     "ic90": null,
+     "wallet_top_pct": 5,
+     "mitades": [
+      -0.0025,
+      -0.3213
+     ],
+     "g10": -0.01684,
+     "estado": "negativo",
+     "gate_universo_agosto": {
+      "SNIPER": "sin_concluir",
+      "DISPERSO": "sin_concluir"
+     }
+    },
+    "CANDIDATA#SOL#15min|0.55": {
+     "n": 23,
+     "dias": 2,
+     "mercados": 15,
+     "ev": 0.0467,
+     "ic90": null,
+     "wallet_top_pct": 26,
+     "mitades": [
+      0.1457,
+      -0.3097
+     ],
+     "g10": 0.00085,
+     "estado": "en_seguimiento",
+     "gate_universo_agosto": {
+      "SNIPER": "sin_concluir",
+      "DISPERSO": "sin_concluir"
+     }
+    },
+    "CANDIDATA#XRP#15min|0.45": {
+     "n": 22,
+     "dias": 2,
+     "mercados": 17,
+     "ev": 0.0195,
+     "ic90": null,
+     "wallet_top_pct": 23,
+     "mitades": [
+      0.1252,
+      -1.0374
+     ],
+     "g10": -0.00365,
+     "estado": "en_seguimiento",
+     "gate_universo_agosto": {
+      "SNIPER": "sin_concluir",
+      "DISPERSO": "sin_concluir"
+     }
+    },
+    "CANDIDATA#SOL#15min|0.40": {
+     "n": 36,
+     "dias": 2,
+     "mercados": 25,
+     "ev": -0.1734,
+     "ic90": null,
+     "wallet_top_pct": 22,
+     "mitades": [
+      -0.0651,
+      -0.4983
+     ],
+     "g10": -0.02413,
+     "estado": "negativo",
+     "gate_universo_agosto": {
+      "SNIPER": "sin_concluir",
+      "DISPERSO": "sin_concluir"
+     }
+    },
+    "CANDIDATA#XRP#15min|0.60": {
+     "n": 17,
+     "dias": 2,
+     "mercados": 12,
+     "ev": 0.1914,
+     "ic90": null,
+     "wallet_top_pct": 29,
+     "mitades": [
+      0.1426,
+      0.2809
+     ],
+     "g10": 0.01663,
+     "estado": "en_seguimiento",
+     "gate_universo_agosto": {
+      "SNIPER": "sin_concluir",
+      "DISPERSO": "sin_concluir"
+     }
+    },
+    "CANDIDATA#BNB#15min|0.65": {
+     "n": 15,
+     "dias": 2,
+     "mercados": 12,
+     "ev": -0.0165,
+     "ic90": null,
+     "wallet_top_pct": 33,
+     "mitades": [
+      0.4894,
+      -0.7753
+     ],
+     "g10": -0.0043,
+     "estado": "negativo",
+     "gate_universo_agosto": {
+      "SNIPER": "sin_concluir",
+      "DISPERSO": "sin_concluir"
+     }
+    },
+    "CANDIDATA#DOGE#5min|0.60": {
+     "n": 43,
+     "dias": 2,
+     "mercados": 36,
+     "ev": -0.0152,
+     "ic90": null,
+     "wallet_top_pct": 37,
+     "mitades": [
+      0.0229,
+      -0.059
+     ],
+     "g10": -0.00466,
+     "estado": "negativo",
+     "gate_universo_agosto": {
+      "SNIPER": "sin_concluir",
+      "DISPERSO": "sin_concluir"
+     }
+    },
+    "CANDIDATA#XRP#5min|0.85": {
+     "n": 54,
+     "dias": 2,
+     "mercados": 43,
+     "ev": -0.0754,
+     "ic90": null,
+     "wallet_top_pct": 26,
+     "mitades": [
+      -0.0222,
+      -0.1817
+     ],
+     "g10": -0.00863,
+     "estado": "negativo",
+     "gate_universo_agosto": {
+      "SNIPER": "sin_concluir",
+      "DISPERSO": "sin_concluir"
+     }
+    },
+    "CANDIDATA#XRP#5min|0.40": {
+     "n": 37,
+     "dias": 2,
+     "mercados": 32,
+     "ev": -0.0082,
+     "ic90": null,
+     "wallet_top_pct": 16,
+     "mitades": [
+      0.2671,
+      -0.4118
+     ],
+     "g10": -0.00773,
+     "estado": "negativo",
+     "gate_universo_agosto": {
+      "SNIPER": "sin_concluir",
+      "DISPERSO": "sin_concluir"
+     }
+    },
+    "CANDIDATA#BNB#5min|0.90": {
+     "n": 28,
+     "dias": 2,
+     "mercados": 19,
+     "ev": -0.1085,
+     "ic90": null,
+     "wallet_top_pct": 25,
+     "mitades": [
+      -0.2487,
+      0.013
+     ],
+     "g10": -0.01185,
+     "estado": "negativo",
+     "gate_universo_agosto": {
+      "SNIPER": "sin_concluir",
+      "DISPERSO": "sin_concluir"
+     }
+    },
+    "CANDIDATA#XRP#15min|0.30": {
+     "n": 22,
+     "dias": 2,
+     "mercados": 15,
+     "ev": 0.5253,
+     "ic90": null,
+     "wallet_top_pct": 18,
+     "mitades": [
+      0.5287,
+      0.5162
+     ],
+     "g10": 0.03988,
+     "estado": "en_seguimiento",
+     "gate_universo_agosto": {
+      "SNIPER": "sin_concluir",
+      "DISPERSO": "sin_concluir"
+     }
+    },
+    "CANDIDATA#BTC#15min|0.10": {
+     "n": 31,
+     "dias": 2,
+     "mercados": 17,
+     "ev": -0.2553,
+     "ic90": null,
+     "wallet_top_pct": 10,
+     "mitades": [
+      0.6054,
+      -0.6652
+     ],
+     "g10": -0.0485,
+     "estado": "negativo",
+     "gate_universo_agosto": {
+      "SNIPER": "sin_concluir",
+      "DISPERSO": "sin_concluir"
+     }
+    },
+    "CANDIDATA#SOL#5min|0.60": {
+     "n": 136,
+     "dias": 2,
+     "mercados": 90,
+     "ev": -0.0291,
+     "ic90": null,
+     "wallet_top_pct": 11,
+     "mitades": [
+      -0.0573,
+      0.0225
+     ],
+     "g10": -0.00611,
+     "estado": "negativo",
+     "gate_universo_agosto": {
+      "SNIPER": "sin_concluir",
+      "DISPERSO": "sin_concluir"
+     }
+    },
+    "CANDIDATA#DOGE#5min|0.20": {
+     "n": 29,
+     "dias": 2,
+     "mercados": 24,
+     "ev": -0.7099,
+     "ic90": null,
+     "wallet_top_pct": 34,
+     "mitades": [
+      -0.6547,
+      -1.055
+     ],
+     "g10": -0.08084,
+     "estado": "negativo",
+     "gate_universo_agosto": {
+      "SNIPER": "sin_concluir",
+      "DISPERSO": "sin_concluir"
+     }
+    },
+    "CANDIDATA#ETH#15min|0.85": {
+     "n": 42,
+     "dias": 2,
+     "mercados": 27,
+     "ev": 0.1163,
+     "ic90": null,
+     "wallet_top_pct": 21,
+     "mitades": [
+      0.1084,
+      0.1385
+     ],
+     "g10": 0.0114,
+     "estado": "en_seguimiento",
+     "gate_universo_agosto": {
+      "SNIPER": "sin_concluir",
+      "DISPERSO": "sin_concluir"
+     }
+    },
+    "CANDIDATA#SOL#5min|0.10": {
+     "n": 52,
+     "dias": 2,
+     "mercados": 45,
+     "ev": 0.4142,
+     "ic90": null,
+     "wallet_top_pct": 19,
+     "mitades": [
+      1.0307,
+      -0.6565
+     ],
+     "g10": 0.00344,
+     "estado": "en_seguimiento",
+     "gate_universo_agosto": {
+      "SNIPER": "sin_concluir",
+      "DISPERSO": "sin_concluir"
+     }
+    },
+    "CANDIDATA#BNB#5min|0.35": {
+     "n": 37,
+     "dias": 2,
+     "mercados": 32,
+     "ev": 0.494,
+     "ic90": null,
+     "wallet_top_pct": 24,
+     "mitades": [
+      0.5526,
+      0.2815
+     ],
+     "g10": 0.03974,
+     "estado": "en_seguimiento",
+     "gate_universo_agosto": {
+      "SNIPER": "sin_concluir",
+      "DISPERSO": "sin_concluir"
+     }
+    },
+    "CANDIDATA#BNB#5min|0.50": {
+     "n": 69,
+     "dias": 2,
+     "mercados": 44,
+     "ev": -0.0596,
+     "ic90": null,
+     "wallet_top_pct": 20,
+     "mitades": [
+      0.0338,
+      -0.2347
+     ],
+     "g10": -0.01067,
+     "estado": "negativo",
+     "gate_universo_agosto": {
+      "SNIPER": "sin_concluir",
+      "DISPERSO": "sin_concluir"
+     }
+    },
+    "CANDIDATA#XRP#5min|0.90": {
+     "n": 80,
+     "dias": 2,
+     "mercados": 51,
+     "ev": -0.0454,
+     "ic90": null,
+     "wallet_top_pct": 15,
+     "mitades": [
+      -0.0245,
+      -0.0866
+     ],
+     "g10": -0.00518,
+     "estado": "negativo",
+     "gate_universo_agosto": {
+      "SNIPER": "sin_concluir",
+      "DISPERSO": "sin_concluir"
+     }
+    },
+    "CANDIDATA#DOGE#5min|0.90": {
+     "n": 63,
+     "dias": 2,
+     "mercados": 51,
+     "ev": 0.0431,
+     "ic90": null,
+     "wallet_top_pct": 25,
+     "mitades": [
+      0.0411,
+      0.0448
+     ],
+     "g10": 0.0041,
+     "estado": "en_seguimiento",
+     "gate_universo_agosto": {
+      "SNIPER": "sin_concluir",
+      "DISPERSO": "sin_concluir"
+     }
+    },
+    "CANDIDATA#SOL#15min|0.80": {
+     "n": 41,
+     "dias": 2,
+     "mercados": 30,
+     "ev": 0.0263,
+     "ic90": null,
+     "wallet_top_pct": 29,
+     "mitades": [
+      -0.0191,
+      0.0789
+     ],
+     "g10": 0.00165,
+     "estado": "en_seguimiento",
+     "gate_universo_agosto": {
+      "SNIPER": "sin_concluir",
+      "DISPERSO": "sin_concluir"
+     }
+    },
+    "CANDIDATA#BTC#15min|0.05": {
+     "n": 43,
+     "dias": 2,
+     "mercados": 18,
+     "ev": -0.8063,
+     "ic90": null,
+     "wallet_top_pct": 9,
+     "mitades": [
+      -0.3705,
+      -1.0645
+     ],
+     "g10": -0.09378,
+     "estado": "negativo",
+     "gate_universo_agosto": {
+      "SNIPER": "sin_concluir",
+      "DISPERSO": "malo_confirmado"
+     }
+    },
+    "CANDIDATA#XRP#15min|0.75": {
+     "n": 36,
+     "dias": 2,
+     "mercados": 27,
+     "ev": -0.0782,
+     "ic90": null,
+     "wallet_top_pct": 17,
+     "mitades": [
+      -0.007,
+      -0.2041
+     ],
+     "g10": -0.00964,
+     "estado": "negativo",
+     "gate_universo_agosto": {
+      "SNIPER": "sin_concluir",
+      "DISPERSO": "sin_concluir"
+     }
+    },
+    "CANDIDATA#XRP#15min|0.40": {
+     "n": 19,
+     "dias": 2,
+     "mercados": 16,
+     "ev": 0.3282,
+     "ic90": null,
+     "wallet_top_pct": 32,
+     "mitades": [
+      0.7338,
+      0.0332
+     ],
+     "g10": 0.02569,
+     "estado": "en_seguimiento",
+     "gate_universo_agosto": {
+      "SNIPER": "sin_concluir",
+      "DISPERSO": "sin_concluir"
+     }
+    },
+    "CANDIDATA#BNB#5min|0.25": {
+     "n": 25,
+     "dias": 2,
+     "mercados": 20,
+     "ev": -0.0444,
+     "ic90": null,
+     "wallet_top_pct": 28,
+     "mitades": [
+      0.3061,
+      -0.6675
+     ],
+     "g10": -0.0165,
+     "estado": "negativo",
+     "gate_universo_agosto": {
+      "SNIPER": "sin_concluir",
+      "DISPERSO": "sin_concluir"
+     }
+    },
+    "CANDIDATA#XRP#15min|0.80": {
+     "n": 44,
+     "dias": 2,
+     "mercados": 29,
+     "ev": -0.1275,
+     "ic90": null,
+     "wallet_top_pct": 23,
+     "mitades": [
+      -0.0998,
+      -0.1505
+     ],
+     "g10": -0.0144,
+     "estado": "negativo",
+     "gate_universo_agosto": {
+      "SNIPER": "sin_concluir",
+      "DISPERSO": "sin_concluir"
+     }
+    },
+    "CANDIDATA#BTC#15min|0.65": {
+     "n": 105,
+     "dias": 2,
+     "mercados": 44,
+     "ev": -0.108,
+     "ic90": null,
+     "wallet_top_pct": 10,
+     "mitades": [
+      0.1575,
+      -0.4762
+     ],
+     "g10": -0.01368,
+     "estado": "negativo",
+     "gate_universo_agosto": {
+      "SNIPER": "sin_concluir",
+      "DISPERSO": "sin_concluir"
+     }
+    },
+    "CANDIDATA#DOGE#5min|0.40": {
+     "n": 30,
+     "dias": 2,
+     "mercados": 25,
+     "ev": -0.1773,
+     "ic90": null,
+     "wallet_top_pct": 20,
+     "mitades": [
+      -0.2458,
+      0.0967
+     ],
+     "g10": -0.02435,
+     "estado": "negativo",
+     "gate_universo_agosto": {
+      "SNIPER": "sin_concluir",
+      "DISPERSO": "sin_concluir"
+     }
+    },
+    "CANDIDATA#BNB#5min|0.30": {
+     "n": 23,
+     "dias": 2,
+     "mercados": 21,
+     "ev": 0.3559,
+     "ic90": null,
+     "wallet_top_pct": 26,
+     "mitades": [
+      0.2079,
+      0.8888
+     ],
+     "g10": 0.0232,
+     "estado": "en_seguimiento",
+     "gate_universo_agosto": {
+      "SNIPER": "sin_concluir",
+      "DISPERSO": "sin_concluir"
+     }
+    },
+    "CANDIDATA#XRP#5min|0.80": {
+     "n": 46,
+     "dias": 2,
+     "mercados": 34,
+     "ev": -0.0256,
+     "ic90": null,
+     "wallet_top_pct": 15,
+     "mitades": [
+      0.0049,
+      -0.1228
+     ],
+     "g10": -0.00382,
+     "estado": "negativo",
+     "gate_universo_agosto": {
+      "SNIPER": "sin_concluir",
+      "DISPERSO": "sin_concluir"
+     }
+    },
+    "CANDIDATA#XRP#15min|0.85": {
+     "n": 31,
+     "dias": 2,
+     "mercados": 20,
+     "ev": -0.0448,
+     "ic90": null,
+     "wallet_top_pct": 39,
+     "mitades": [
+      -0.2112,
+      0.0754
+     ],
+     "g10": -0.00544,
+     "estado": "negativo",
+     "gate_universo_agosto": {
+      "SNIPER": "sin_concluir",
+      "DISPERSO": "sin_concluir"
+     }
+    },
+    "CANDIDATA#ETH#15min|0.75": {
+     "n": 28,
+     "dias": 2,
+     "mercados": 20,
+     "ev": 0.0028,
+     "ic90": null,
+     "wallet_top_pct": 29,
+     "mitades": [
+      -0.0564,
+      0.1279
+     ],
+     "g10": -0.00121,
+     "estado": "en_seguimiento",
+     "gate_universo_agosto": {
+      "SNIPER": "sin_concluir",
+      "DISPERSO": "sin_concluir"
+     }
+    },
+    "CANDIDATA#SOL#15min|0.85": {
+     "n": 32,
+     "dias": 2,
+     "mercados": 21,
+     "ev": 0.0719,
+     "ic90": null,
+     "wallet_top_pct": 25,
+     "mitades": [
+      0.1389,
+      0.0198
+     ],
+     "g10": 0.00675,
+     "estado": "en_seguimiento",
+     "gate_universo_agosto": {
+      "SNIPER": "sin_concluir",
+      "DISPERSO": "sin_concluir"
+     }
+    },
+    "CANDIDATA#XRP#5min|0.05": {
+     "n": 19,
+     "dias": 2,
+     "mercados": 18,
+     "ev": 1.0967,
+     "ic90": null,
+     "wallet_top_pct": 21,
+     "mitades": [
+      2.0944,
+      -1.065
+     ],
+     "g10": 0.03398,
+     "estado": "en_seguimiento",
+     "gate_universo_agosto": {
+      "SNIPER": "malo_confirmado",
+      "DISPERSO": "sin_concluir"
+     }
+    },
+    "CANDIDATA#ETH#15min|0.70": {
+     "n": 22,
+     "dias": 2,
+     "mercados": 16,
+     "ev": 0.1213,
+     "ic90": null,
+     "wallet_top_pct": 14,
+     "mitades": [
+      -0.0608,
+      0.3843
+     ],
+     "g10": 0.01055,
+     "estado": "en_seguimiento",
+     "gate_universo_agosto": {
+      "SNIPER": "sin_concluir",
+      "DISPERSO": "sin_concluir"
+     }
+    },
+    "CANDIDATA#BNB#15min|0.75": {
+     "n": 15,
+     "dias": 2,
+     "mercados": 12,
+     "ev": 0.1941,
+     "ic90": null,
+     "wallet_top_pct": 20,
+     "mitades": [
+      0.2829,
+      0.0608
+     ],
+     "g10": 0.01868,
+     "estado": "en_seguimiento",
+     "gate_universo_agosto": {
+      "SNIPER": "sin_concluir",
+      "DISPERSO": "sin_concluir"
+     }
+    },
+    "CANDIDATA#XRP#15min|0.70": {
+     "n": 33,
+     "dias": 2,
+     "mercados": 21,
+     "ev": -0.0091,
+     "ic90": null,
+     "wallet_top_pct": 18,
+     "mitades": [
+      0.0386,
+      -0.1583
+     ],
+     "g10": -0.00292,
+     "estado": "negativo",
+     "gate_universo_agosto": {
+      "SNIPER": "sin_concluir",
+      "DISPERSO": "sin_concluir"
+     }
+    },
+    "CANDIDATA#BNB#15min|0.55": {
+     "n": 20,
+     "dias": 2,
+     "mercados": 14,
+     "ev": 0.1172,
+     "ic90": null,
+     "wallet_top_pct": 30,
+     "mitades": [
+      0.1579,
+      0.0561
+     ],
+     "g10": 0.00804,
+     "estado": "en_seguimiento",
+     "gate_universo_agosto": {
+      "SNIPER": "sin_concluir",
+      "DISPERSO": "sin_concluir"
+     }
+    },
+    "CANDIDATA#SOL#15min|0.25": {
+     "n": 15,
+     "dias": 2,
+     "mercados": 12,
+     "ev": 0.1575,
+     "ic90": null,
+     "wallet_top_pct": 33,
+     "mitades": [
+      0.5801,
+      -0.4765
+     ],
+     "g10": 0.00231,
+     "estado": "en_seguimiento",
+     "gate_universo_agosto": {
+      "SNIPER": "sin_concluir",
+      "DISPERSO": "sin_concluir"
+     }
+    },
+    "CANDIDATA#XRP#15min|0.35": {
+     "n": 20,
+     "dias": 2,
+     "mercados": 14,
+     "ev": -0.3526,
+     "ic90": null,
+     "wallet_top_pct": 15,
+     "mitades": [
+      -0.2394,
+      -0.6166
+     ],
+     "g10": -0.043,
+     "estado": "negativo",
+     "gate_universo_agosto": {
+      "SNIPER": "sin_concluir",
+      "DISPERSO": "sin_concluir"
+     }
+    },
+    "CANDIDATA#DOGE#5min|0.25": {
+     "n": 27,
+     "dias": 2,
+     "mercados": 23,
+     "ev": -0.3645,
+     "ic90": null,
+     "wallet_top_pct": 22,
+     "mitades": [
+      -0.1241,
+      -1.0516
+     ],
+     "g10": -0.04689,
+     "estado": "negativo",
+     "gate_universo_agosto": {
+      "SNIPER": "sin_concluir",
+      "DISPERSO": "sin_concluir"
+     }
+    },
+    "CANDIDATA#SOL#15min|0.75": {
+     "n": 25,
+     "dias": 2,
+     "mercados": 18,
+     "ev": 0.022,
+     "ic90": null,
+     "wallet_top_pct": 20,
+     "mitades": [
+      0.1397,
+      -0.2806
+     ],
+     "g10": 0.00078,
+     "estado": "en_seguimiento",
+     "gate_universo_agosto": {
+      "SNIPER": "sin_concluir",
+      "DISPERSO": "sin_concluir"
+     }
+    },
+    "CANDIDATA#DOGE#15min|0.80": {
+     "n": 15,
+     "dias": 2,
+     "mercados": 11,
+     "ev": 0.123,
+     "ic90": null,
+     "wallet_top_pct": 27,
+     "mitades": [
+      0.1054,
+      0.193
+     ],
+     "g10": 0.01174,
+     "estado": "en_seguimiento",
+     "gate_universo_agosto": {
+      "SNIPER": "sin_concluir",
+      "DISPERSO": "sin_concluir"
+     }
+    },
+    "CANDIDATA#BNB#15min|0.90": {
+     "n": 17,
+     "dias": 2,
+     "mercados": 11,
+     "ev": -0.0457,
+     "ic90": null,
+     "wallet_top_pct": 41,
+     "mitades": [
+      0.0928,
+      -0.0884
+     ],
+     "g10": -0.00524,
+     "estado": "negativo",
+     "gate_universo_agosto": {
+      "SNIPER": "sin_concluir",
+      "DISPERSO": "sin_concluir"
+     }
+    }
+   }
   }
  }
 }
