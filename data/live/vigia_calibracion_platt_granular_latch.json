@@ -1458,5 +1458,21 @@
   "LIQUIDACIONES_DEPTH_FASE0#ETH#15min": {
     "n": 245,
     "confirmado": false
+  },
+  "LIQUIDACIONES_DEPTH_FASE0#DOGE#5min": {
+    "n": 208,
+    "confirmado": false
+  },
+  "ORDER_FLOW_5M_REACTIVO#ETH": {
+    "n": 200,
+    "confirmado": false
+  },
+  "ORDER_FLOW_5M_REACTIVO#ETH#5min": {
+    "n": 200,
+    "confirmado": false
+  },
+  "PRICE_TARGET_GBM_FADE#SOL": {
+    "n": 201,
+    "confirmado": true
   }
 }
