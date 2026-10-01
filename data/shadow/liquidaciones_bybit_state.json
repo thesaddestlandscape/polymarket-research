@@ -1,5 +1,5 @@
 {
- "generado_utc": "2026-10-01T16:40:37+00:00",
+ "generado_utc": "2026-10-01T16:45:58+00:00",
  "fuente": "bybit",
  "BNB": {
   "2min": {
@@ -35,10 +35,10 @@
    "imbalance": null
   },
   "5min": {
-   "usd_long": 42009.09,
-   "usd_short": 1260.02,
-   "n": 12,
-   "imbalance": -0.9418
+   "usd_long": 0.0,
+   "usd_short": 0.0,
+   "n": 0,
+   "imbalance": null
   },
   "15min": {
    "usd_long": 92682.8,
@@ -62,9 +62,9 @@
   },
   "5min": {
    "usd_long": 0.0,
-   "usd_short": 131.48,
-   "n": 1,
-   "imbalance": 1.0
+   "usd_short": 0.0,
+   "n": 0,
+   "imbalance": null
   },
   "15min": {
    "usd_long": 0.0,
@@ -74,8 +74,8 @@
   },
   "60min": {
    "usd_long": 0.0,
-   "usd_short": 267.97,
-   "n": 2,
+   "usd_short": 131.48,
+   "n": 1,
    "imbalance": 1.0
   }
  },
@@ -87,10 +87,10 @@
    "imbalance": null
   },
   "5min": {
-   "usd_long": 16125.4,
-   "usd_short": 2324.2,
-   "n": 4,
-   "imbalance": -0.748
+   "usd_long": 0.0,
+   "usd_short": 0.0,
+   "n": 0,
+   "imbalance": null
   },
   "15min": {
    "usd_long": 16287.35,
@@ -100,9 +100,9 @@
   },
   "60min": {
    "usd_long": 16395.11,
-   "usd_short": 42282.85,
-   "n": 7,
-   "imbalance": 0.4412
+   "usd_short": 2324.2,
+   "n": 6,
+   "imbalance": -0.7517
   }
  },
  "SOL": {
@@ -113,10 +113,10 @@
    "imbalance": null
   },
   "5min": {
-   "usd_long": 27809.6,
-   "usd_short": 5408.35,
-   "n": 5,
-   "imbalance": -0.6744
+   "usd_long": 0.0,
+   "usd_short": 0.0,
+   "n": 0,
+   "imbalance": null
   },
   "15min": {
    "usd_long": 27809.6,
@@ -140,9 +140,9 @@
   },
   "5min": {
    "usd_long": 0.0,
-   "usd_short": 5.75,
-   "n": 1,
-   "imbalance": 1.0
+   "usd_short": 0.0,
+   "n": 0,
+   "imbalance": null
   },
   "15min": {
    "usd_long": 0.0,
@@ -159,10 +159,10 @@
  },
  "lag_bybit_ws": {
   "ventana_min": 5,
-  "n_muestras": 23,
-  "ultimo_lag_s": 0.2,
-  "max_lag_s": 0.59,
-  "media_lag_s": 0.3,
+  "n_muestras": 0,
+  "ultimo_lag_s": null,
+  "max_lag_s": null,
+  "media_lag_s": null,
   "umbral_alerta_s": 5.0
  }
 }
