@@ -163408,3 +163408,14 @@
 {"ts": "2026-10-01T14:01:29+00:00", "sym": "BNB", "value": 0.1442, "reason": "cambio_fuente coingecko->binance"}
 {"ts": "2026-10-01T14:02:50+00:00", "sym": "DOGE", "value": 0.2623, "reason": "cambio_fuente coingecko->binance"}
 {"ts": "2026-10-01T14:02:50+00:00", "sym": "BNB", "value": 0.0156, "reason": "cambio_fuente coingecko->binance"}
+{"ts": "2026-10-01T14:04:03+00:00", "sym": "DOGE", "value": 0.0159, "reason": "cambio_fuente coingecko->binance"}
+{"ts": "2026-10-01T14:04:03+00:00", "sym": "BNB", "value": 0.0286, "reason": "cambio_fuente coingecko->binance"}
+{"ts": "2026-10-01T14:05:22+00:00", "sym": "DOGE", "value": 0.4189, "reason": "cambio_fuente coingecko->binance"}
+{"ts": "2026-10-01T14:05:22+00:00", "sym": "BNB", "value": 0.0715, "reason": "cambio_fuente coingecko->binance"}
+{"ts": "2026-10-01T14:06:37+00:00", "sym": "DOGE", "value": 0.1793, "reason": "cambio_fuente coingecko->binance"}
+{"ts": "2026-10-01T14:06:37+00:00", "sym": "BNB", "value": 0.0494, "reason": "cambio_fuente coingecko->binance"}
+{"ts": "2026-10-01T14:07:50+00:00", "sym": "DOGE", "value": 0.0743, "reason": "cambio_fuente coingecko->binance"}
+{"ts": "2026-10-01T14:07:50+00:00", "sym": "BNB", "value": 0.0494, "reason": "cambio_fuente coingecko->binance"}
+{"ts": "2026-10-01T14:09:05+00:00", "sym": "DOGE", "value": 0.1381, "reason": "cambio_fuente coingecko->binance"}
+{"ts": "2026-10-01T14:09:05+00:00", "sym": "BNB", "value": 0.0936, "reason": "cambio_fuente coingecko->binance"}
+{"ts": "2026-10-01T14:09:52+00:00", "sym": "XRP", "value": 1.48, "reason": "cross_source_warn coingecko=1.4800 vs mediana=1.4843 (0.58%)"}
