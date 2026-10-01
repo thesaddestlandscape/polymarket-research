@@ -70,6 +70,7 @@ def _etiqueta(k: tuple) -> str:
 def _persistencia_por_dia() -> dict:
     """clave_zona -> {fecha: forward_ok bool}, solo familias B."""
     por_zona = collections.defaultdict(dict)
+    fechas_tupla = collections.defaultdict(set)
     if not HISTORIAL.exists():
         return por_zona
     for linea in HISTORIAL.read_text(encoding="utf-8").splitlines():
@@ -80,6 +81,16 @@ def _persistencia_por_dia() -> dict:
         if r.get("familia") not in FAMILIAS_B:
             continue
         por_zona[_clave_zona(r)][r["fecha"]] = bool(r.get("forward_ok"))
+        fechas_tupla[r["tupla"]].add(r["fecha"])
+    # 01-Oct (bug real: SNIPER#BTC#5min [0.16,0.17) anunciada como "3 días
+    # CONSECUTIVOS" con lecturas 28-Sep, 30-Sep y 01-Oct -- el 29-Sep el
+    # generador SÍ corrió para esa tupla pero no eligió esa ventana en train,
+    # así que la zona no era operable ese día). Un día con historial de la
+    # tupla en el que la zona no aparece cuenta como NO operable y rompe la
+    # racha; antes simplemente se saltaba.
+    for k, dias in por_zona.items():
+        for fecha in fechas_tupla[k[0]]:
+            dias.setdefault(fecha, False)
     return por_zona
 
 

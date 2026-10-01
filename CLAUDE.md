@@ -232,6 +232,7 @@ Cada línea es un error real del proyecto. Antes de concluir, promocionar, refut
 
 **Operación e infraestructura**
 - Vigías con latch cuya firma incluye un valor recalculado cada ciclo → spam (737 avisos en 5 días), dos veces.
+- Racha de "N días consecutivos" que salta los días en que la zona no aparece: el vigía quirúrgico B anunció SNIPER#BTC#5min [0,16-0,17) con 3 días seguidos (28, 30 y 01) cuando el 29-Sep no era operable (01-Oct). Ausente un día en que el generador corrió = día malo.
 - Vigías con timeout fijo mueren al crecer los datos; uno bloqueó el gate de un ejecutor REAL durante horas. Un vigía que compara contra la clave equivocada nunca detecta nada: probarlo con un cambio simulado antes de fiarse.
 - Avisos de Telegram enviados una vez y nunca atendidos (tuplas en payout inverso sangrando semanas). Loggers acumulando 23 días sin que nadie mirase su criterio ya cumplido.
 - Screens sin registrar en watchdog/`verify_deploy` no se reinician si caen.
