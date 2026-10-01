@@ -55,17 +55,36 @@ def _etiqueta(k: str, zonas_json: dict) -> str:
 
 
 def _persistencia() -> dict:
-    """{clave: dias distintos en que estuvo operable} desde el historial."""
-    por_dia = defaultdict(set)
+    """{clave: racha ACTUAL de días consecutivos operable} desde el historial.
+    01-Oct (bug real: "Persistentes (≥2 días)" contaba días operables de TODA
+    la historia -- WALLET_MIRROR#ETH#15min#g1 0.03 y #BTC#5min#g1 0.02 salían
+    con "3d" por días buenos del 21-25 Sep, con el forward de hoy negativo).
+    Hacia atrás desde la última lectura de la tupla; un día con historial de
+    la tupla en el que la zona no aparece o no es operable corta la racha
+    (mismo criterio que vigia_quirurgico_arquetipo_b._racha_actual)."""
+    ok_por_dia = defaultdict(dict)
+    fechas_tupla = defaultdict(set)
     if HISTORIAL.exists():
         for linea in HISTORIAL.read_text(encoding="utf-8").splitlines():
             try:
                 r = json.loads(linea)
             except Exception:
                 continue
-            if r.get("forward_ok"):
-                por_dia[f"{r['tupla']}|{r['ancho']}|{r['lo']}|{r['hi']}"].add(r["fecha"])
-    return {k: len(v) for k, v in por_dia.items()}
+            fechas_tupla[r["tupla"]].add(r["fecha"])
+            k = f"{r['tupla']}|{r['ancho']}|{r['lo']}|{r['hi']}"
+            # varias lecturas el mismo día: manda la última (orden del fichero)
+            ok_por_dia[k][r["fecha"]] = bool(r.get("forward_ok"))
+    rachas = {}
+    for k, dias in ok_por_dia.items():
+        racha = 0
+        for fecha in sorted(fechas_tupla[k.split("|")[0]], reverse=True):
+            if dias.get(fecha):
+                racha += 1
+            else:
+                break
+        if racha:
+            rachas[k] = racha
+    return rachas
 
 
 def _cambios(actual: dict, latch: dict) -> tuple[list, dict]:
@@ -142,12 +161,12 @@ def _texto_resumen(zonas_json: dict, estados: dict) -> str:
     for z in ordenadas[:TOP_N_RESUMEN]:
         k = _clave(z)
         lin.append(f"{'🟢🟢' if z.get('forward_ok_estricto') else '🟢'} {_etiqueta(k, zonas_json)} "
-                   f"| días operable: {pers.get(k, 1)}")
+                   f"| racha: {pers.get(k, 1)}d")
     if len(ordenadas) > TOP_N_RESUMEN:
         lin.append(f"… +{len(ordenadas) - TOP_N_RESUMEN} zona(s) más en el JSON")
     persist = sorted([(d, k) for k, d in pers.items() if d >= 2], reverse=True)[:5]
     if persist:
-        lin.append("Persistentes (≥2 días): " + "; ".join(f"{k.split('|')[0]} {k.split('|')[1]} ({d}d)" for d, k in persist))
+        lin.append("Persistentes (racha actual ≥2 días seguidos): " + "; ".join(f"{k.split('|')[0]} {k.split('|')[1]} ({d}d)" for d, k in persist))
     return "\n".join(l for l in lin if l)
 
 
