@@ -53,7 +53,8 @@ def _log(msg):
 def _ref(activo, ini):
     with _TAIL._lock:
         dq = list(_TAIL._buf_oracle.get(activo, ()))
-    v = [p for t, p in dq if ini - 60 <= t <= ini and p > 0]
+    # 02-Oct: ventana OFICIAL del twap60 de apertura = [ini-62, ini-3] (antes [ini-60, ini]).
+    v = [p for t, p in dq if ini - 62 <= t <= ini - 3 and p > 0]
     return (sum(v) / len(v)) if len(v) >= TWAP_N_MIN else None
 
 

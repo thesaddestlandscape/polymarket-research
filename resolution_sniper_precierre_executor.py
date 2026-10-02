@@ -333,8 +333,8 @@ MODO_TWAP = True
 # Banda validada (asks frescos <=10 s): 5min T-45 tramo 0,25-0,65 ~+0,38 EUR/EUR (n~205);
 # 15min T-45 n=84 +0,32 (7/10 días+), con asks de <=25 s n=770 +0,46 (10/10). >=0,70: EV~0.
 ASK_TWAP_MIN, ASK_TWAP_MAX = 0.25, 0.65
-TWAP_N_MIN_TICKS = 20                    # ticks mínimos en [inicio-60, inicio] para fiarse del TWAP de apertura
-TWAP_N_MIN_CIERRE = 10                   # ticks mínimos ya transcurridos en [fin-60, ahora] (/code-review)
+TWAP_N_MIN_TICKS = 20                    # ticks mínimos en [inicio-62, inicio-3] para fiarse del TWAP de apertura
+TWAP_N_MIN_CIERRE = 10                   # ticks mínimos ya transcurridos en [fin-62, ahora] (/code-review)
 # 30-Sep (/code-review del filtro de polybolt_fallback): además de un mínimo de ticks se exige
 # COBERTURA de la ventana. Sin las filas de fallback, un silencio de RTDS deja un hueco entero y
 # un TWAP con 20 de 60 ticks salía de menos de media ventana. Espaciado real medido: 99,9 % de
@@ -343,6 +343,14 @@ TWAP_N_MIN_CIERRE = 10                   # ticks mínimos ya transcurridos en [f
 # 10 s el 2,1 %; un hueco de <=10 s en una media de 60 s mete un error menor que el sesgo de
 # Pyth que se está quitando (+0,1/+0,4 bps).
 TWAP_HUECO_MAX_S = 10.0
+# 02-Oct (OK Javi): el twap60 OFICIAL (el que resuelve) del segundo e es la media de los ticks
+# RTDS de [e-62, e-3] por ws_timestamp, no de [e-60, e]. Medido: ajuste 4,6e-4 bps; con 12 días
+# de desenlaces oficiales (20-Sep..01-Oct) la reconstrucción alineada falla 37 de 19.970 mercados
+# 5min a T+0 frente a 139 con [e-60, e] (15min 10 vs 30); a T-45 casi igual. Solo se alinean
+# las MEDIAS (referencia y proyección); la varianza de _z_margen se deja como estaba para no
+# mover la calibración de Z_MIN_TWAP. Memoria project_twap60_ventana_desplazada_3s_02oct.
+TWAP_VENTANA_DESDE_S = 62.0              # la ventana del TWAP60 de un instante e es [e-62, e-3]
+TWAP_VENTANA_HASTA_S = 3.0
 TWAP_DESDE_PATH = REPO / "data" / "live" / "precierre_twap_desde.txt"   # arranque real del modo (kill-switch)
 # 24-Sep (OK Javi "dale a exigir z>=1"): filtro de margen. Las 2 pérdidas del 24-Sep 12:15 eran
 # photo finish (SOL +0,45 pb, DOGE +0,06 pb a T-44 s). z = |ln(proy/ref)| / (vol_1s * sqrt(var del
@@ -486,10 +494,11 @@ class _Precalculo:
             if not token_yes or not token_no:
                 continue
             ref_open = _TAIL.precio_en(activo, ts_start) or _TAIL.precio_en(activo, ts_start + 2)
-            ref_twap, n_twap = _media_tail(activo, ts_start - 60, ts_start)
+            ref_t0, ref_t1 = ts_start - TWAP_VENTANA_DESDE_S, ts_start - TWAP_VENTANA_HASTA_S
+            ref_twap, n_twap = _media_tail(activo, ref_t0, ref_t1)
             self.mercados[activo] = {
                 "ref_twap": ref_twap if (n_twap >= TWAP_N_MIN_TICKS and _hueco_max_tail(
-                    activo, ts_start - 60, ts_start) <= TWAP_HUECO_MAX_S) else None,
+                    activo, ref_t0, ref_t1) <= TWAP_HUECO_MAX_S) else None,
                 "market_id": mkt.get("id", ""), "question": mkt.get("question", ""),
                 "end_date": mkt.get("endDate", ""),
                 "token_yes": token_yes, "token_no": token_no, "ref_open": ref_open,
@@ -720,21 +729,23 @@ def _ultimo_oracle(activo: str):
 
 
 def _twap_proyectado(activo: str, ts_end: float):
-    """TWAP60 al cierre proyectado, en tiempo del ORÁCULO: media de ticks de [ts_end-60, t_ult] +
-    último spot para los segundos que faltan desde t_ult (idéntico a la validación multi-día).
-    None si el último tick es viejo o faltan ticks en el tramo ya transcurrido (fail-closed)."""
+    """TWAP60 al cierre proyectado, en tiempo del ORÁCULO: media de ticks de [ts_end-62, t_ult] +
+    último spot para los segundos que faltan desde t_ult hasta ts_end-3 (ventana oficial, ver
+    TWAP_VENTANA_DESDE_S). None si el último tick es viejo o faltan ticks en el tramo ya
+    transcurrido (fail-closed)."""
     ult = _ultimo_oracle(activo)
     if ult is None or time.time() - ult[0] > CHAINLINK_MAX_EDAD_S + 2.0:
         return None
     t_ult, spot = ult
-    t_hasta = min(t_ult, ts_end)   # /code-review: nunca ticks posteriores al cierre (naive a T+0)
-    m, n = _media_tail(activo, ts_end - 60, t_hasta)
-    resto = max(0.0, min(60.0, ts_end - t_hasta))
+    v0, v1 = ts_end - TWAP_VENTANA_DESDE_S, ts_end - TWAP_VENTANA_HASTA_S
+    t_hasta = min(t_ult, v1)   # /code-review: nunca ticks posteriores al final de la ventana
+    m, n = _media_tail(activo, v0, t_hasta)
+    resto = max(0.0, min(60.0, v1 - t_hasta))
     if resto >= 60.0:
         return spot
     if m is None or n < TWAP_N_MIN_CIERRE:
         return None
-    if _hueco_max_tail(activo, ts_end - 60, t_hasta) > TWAP_HUECO_MAX_S:
+    if _hueco_max_tail(activo, v0, t_hasta) > TWAP_HUECO_MAX_S:
         return None   # ventana de cierre con hueco: fail-closed (ver TWAP_HUECO_MAX_S)
     return (m * n + spot * resto) / (n + resto)
 

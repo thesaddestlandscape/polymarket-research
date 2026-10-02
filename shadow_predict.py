@@ -1316,14 +1316,23 @@ def _media_oraculo(activo: str, t0: float, t1: float):
     return (sum(ys[i:j]) / (j - i), j - i) if j > i else (None, 0)
 
 
+# 02-Oct (OK Javi): el twap60 OFICIAL de un instante e es la media de los ticks RTDS de
+# [e-62, e-3] (ws_timestamp), no [e-60, e]: alineada, la reconstrucción falla 37 de 19.970
+# mercados 5min a T+0 frente a 139 (12 días). Se alinean solo las MEDIAS; los segundos restantes
+# que devuelve _twap_actual (varianza T_h y spot_es_twap) no cambian. Memoria
+# project_twap60_ventana_desplazada_3s_02oct; mismo cambio en resolution_sniper_precierre_executor.
+_TWAP_VENTANA_DESDE_S = 62.0
+_TWAP_VENTANA_HASTA_S = 3.0
+
+
 def _twap_ref_apertura(activo: str, inicio_epoch: float) -> float | None:
-    """TWAP60 Chainlink en [inicio-60, inicio] (la referencia REAL del mercado). None si <20 ticks
+    """TWAP60 Chainlink en [inicio-62, inicio-3] (la referencia REAL del mercado). None si <20 ticks
     o si el oráculo aún no ha pasado el instante de apertura (ventana futura/en curso: TWAP
     incompleto -> el caller usa el cálculo viejo)."""
     ser = _cargar_ticks_oraculo().get(activo)
     if not ser or not ser[0] or ser[0][-1] < inicio_epoch:
         return None
-    m, n = _media_oraculo(activo, inicio_epoch - 60.0, inicio_epoch)
+    m, n = _media_oraculo(activo, inicio_epoch - _TWAP_VENTANA_DESDE_S, inicio_epoch - _TWAP_VENTANA_HASTA_S)
     return m if m is not None and n >= 20 else None
 
 
@@ -1337,14 +1346,19 @@ def _twap_actual(activo: str, fin_epoch: float):
     if datetime.now(timezone.utc).timestamp() - t_ult > _TWAP_STALE_S:
         return None
     t_hasta = min(t_ult, fin_epoch)
-    resto = max(0.0, fin_epoch - t_hasta)
+    resto = max(0.0, fin_epoch - t_hasta)   # se devuelve tal cual (varianza/feature, sin cambios)
     if resto > 60.0:
         return spot, resto
-    m, n = _media_oraculo(activo, fin_epoch - 60.0, t_hasta)
+    v0, v1 = fin_epoch - _TWAP_VENTANA_DESDE_S, fin_epoch - _TWAP_VENTANA_HASTA_S
+    t_hasta_v = min(t_ult, v1)
+    resto_v = max(0.0, v1 - t_hasta_v)
+    if resto_v >= 60.0:
+        return spot, resto
+    m, n = _media_oraculo(activo, v0, t_hasta_v)
     if m is None or n < 10:
         return None
-    transcurrido = max(0.0, t_hasta - (fin_epoch - 60.0))   # /code-review: pesos en SEGUNDOS, no ticks
-    return (m * transcurrido + spot * resto) / (transcurrido + resto), resto
+    transcurrido = max(0.0, t_hasta_v - v0)   # /code-review: pesos en SEGUNDOS, no ticks
+    return (m * transcurrido + spot * resto_v) / (transcurrido + resto_v), resto
 
 
 def _camino_oraculo(activo: str, t0: float, t1: float) -> list:

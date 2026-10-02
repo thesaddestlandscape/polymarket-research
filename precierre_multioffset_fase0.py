@@ -40,7 +40,12 @@ CAMPOS = ["ts_utc", "activo", "marco", "slug", "market_id", "offset_s", "resto_s
           "direccion", "ask", "bid", "profundidad_eur", "ratio_vs_stake", "lat_libro_ms", "error",
           # 30-Sep (Javi: "necesitamos datos reales y fieles, no optimistas"): libro REAL del lado CONTRARIO al que
           # marca el TWAP, leído en paralelo en el mismo instante. Antes solo podía estimarse como 1 - bid.
-          "ask_contrario", "bid_contrario", "profundidad_contrario_eur", "ratio_contrario", "lat_contrario_ms"]
+          "ask_contrario", "bid_contrario", "profundidad_contrario_eur", "ratio_contrario", "lat_contrario_ms",
+          # 02-Oct (OK Javi): el ejecutor live usa desde hoy la ventana OFICIAL del twap60, [e-62, e-3]
+          # (no [e-60, e]). Columnas _v2 = lo que decide el live (medias alineadas, misma varianza de z).
+          # Las columnas viejas NO cambian: las hipótesis H1-H6 están congeladas sobre ellas.
+          "proy_v2", "ref_twap_v2", "z_v2", "direccion_v2"]
+VENTANA_DESDE_S, VENTANA_HASTA_S = 62.0, 3.0
 _lock = threading.Lock()
 _pool = ThreadPoolExecutor(max_workers=6)
 _pool_c = ThreadPoolExecutor(max_workers=6, thread_name_prefix="multioffset_contrario")
@@ -107,6 +112,23 @@ def _proy(activo, fin):
     return (m * n + spot * resto) / (n + resto), t_hasta, resto
 
 
+def _proy_v2(activo, fin):
+    """Como _proy pero con la ventana oficial [fin-62, fin-3] (mismo cálculo que el ejecutor)."""
+    ult = _ultimo(activo)
+    if ult is None or time.time() - ult[0] > CHAINLINK_MAX_EDAD_S + 2.0:
+        return None
+    t_ult, spot = ult
+    v0, v1 = fin - VENTANA_DESDE_S, fin - VENTANA_HASTA_S
+    t_hasta = min(t_ult, v1)
+    m, n = _media(activo, v0, t_hasta)
+    resto = max(0.0, min(60.0, v1 - t_hasta))
+    if resto >= 60.0:
+        return spot
+    if m is None or n < TWAP_N_MIN_CIERRE:
+        return None
+    return (m * n + spot * resto) / (n + resto)
+
+
 def _z(activo, proy, ref, t_hasta, resto):
     if proy is None or proy <= 0 or ref is None or ref <= 0 or t_hasta is None:
         return None
@@ -163,6 +185,12 @@ def _punto(activo, tag, ini, fin, off):
         z = _z(activo, proy, ref, t_hasta, resto) if proy is not None else None
         fila.update({"resto_s": round(fin - time.time(), 2), "proy": proy, "ref_twap": ref,
                      "z": None if z is None else round(z, 4)})
+        ref2, n_ref2 = _media(activo, ini - VENTANA_DESDE_S, ini - VENTANA_HASTA_S)
+        proy2 = _proy_v2(activo, fin)
+        if ref2 is not None and n_ref2 >= TWAP_N_MIN_TICKS and proy2 is not None and proy2 != ref2:
+            z2 = _z(activo, proy2, ref2, t_hasta, resto)   # misma varianza que el live (sin alinear)
+            fila.update({"proy_v2": proy2, "ref_twap_v2": ref2, "z_v2": None if z2 is None else round(z2, 4),
+                         "direccion_v2": "Up" if proy2 > ref2 else "Down"})
         if proy is None or proy == ref:
             fila["error"] = "sin_proy_o_empate"
             return _escribir(fila)

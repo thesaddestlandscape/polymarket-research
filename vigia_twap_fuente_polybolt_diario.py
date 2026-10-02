@@ -46,6 +46,7 @@ MARGENES_BPS = (0, 1, 2, 4)
 N_MIN_REF = 50        # ticks/segundos mínimos en la ventana de 60 s de la referencia
 N_MIN_PROY = 10       # ídem en el tramo ya transcurrido de la ventana de cierre
 RETRASO_OFICIAL_S = 2
+VENTANA_DESDE_S, VENTANA_HASTA_S = 62, 3   # twap60 oficial de e = media RTDS [e-62, e-3] (02-Oct)
 METODOS_PB = ("polybolt", "polybolt_t60a", "polybolt_s30")  # el twap60 oficial del segundo t llega ~1,3 s después (p99 2,0 s)
 
 
@@ -126,14 +127,21 @@ def _evaluar_dia(dia: str):
         v = [py[(a, s)] for s in range(int(t0), int(t1) + 1) if (a, s) in py]
         return (sum(v) / len(v), len(v), v[-1]) if v else (None, 0, None)
 
+    # 02-Oct: ventana oficial del twap60 de e = [e-62, e-3] (ver VENTANA_*); el ejecutor y
+    # shadow_predict se alinearon el mismo día. Se alinean la proyección y la referencia de
+    # TODOS los métodos; la ventana del SESGO no: `polybolt` la sigue midiendo en [t-60, t] y
+    # `polybolt_t60a` en [t-62, t-3] (esa es justo la diferencia entre ambos). Días cacheados
+    # antes del cambio: recalcular con --recalcular para no mezclar definiciones en el gate.
     def proy(media, a, e, off):
-        m, n, sp = media(a, e - 60, e - off)
+        hasta = min(e - VENTANA_HASTA_S, e - off)
+        m, n, sp = media(a, e - VENTANA_DESDE_S, hasta)
         if n < N_MIN_PROY:
             return None
-        return (m * n + sp * off) / (n + off)
+        resto = (e - VENTANA_HASTA_S) - hasta
+        return (m * n + sp * resto) / (n + resto)
 
     def hoy(a, e, dur, off):
-        ref, n, _ = media_cl(a, e - dur - 60, e - dur)
+        ref, n, _ = media_cl(a, e - dur - VENTANA_DESDE_S, e - dur - VENTANA_HASTA_S)
         if n < N_MIN_REF:
             return None
         p = proy(media_cl, a, e, off)
