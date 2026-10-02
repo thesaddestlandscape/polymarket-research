@@ -39250,3 +39250,10 @@ timestamp_utc,condition_id,market_slug,activo,marco,lado_mayoria,n_votos_trigger
 2026-10-02T13:55:07+00:00,0xbbbb56fe75adcb7dfa81da6fdb3c0e0b6acc52ab4d7a9b2534f41f2c72812203,xrp-updown-5m-1790949000,XRP,5min,Down,5,0.49,3271.0,0.01,3270.1,0.01,0.0,1,0,0,0,fuera_de_zona_confirmada
 2026-10-02T13:55:15+00:00,0x5b1b39e750f65c50ad7785500d36c1ff5c14a1fc26a870eaef4d21d0b523ac0e,btc-updown-5m-1790949300,BTC,5min,Down,5,0.4800000207999992,0.0,0.74,0.0,0.79,6.76,0,0,0,0,fuera_de_zona_confirmada
 2026-10-02T13:57:50+00:00,0x7673dcdfd5ed18786199ebaf67c5e0e01f7a12dee4c49a5e9fbafb7171886091,eth-updown-5m-1790949300,ETH,5min,Down,5,0.56,0.0,0.85,0.0,0.78,-8.24,0,0,0,0,fuera_de_zona_confirmada
+2026-10-02T14:00:11+00:00,0xfd25a2dcd06cc93fb5508ce7c3d9b71f4d20f44141d14aa8e75c72b314742caf,btc-updown-5m-1790949600,BTC,5min,Down,4,0.64,4015.5,0.61,386.1,0.64,4.92,1,0,0,0,fuera_de_zona_confirmada
+2026-10-02T14:00:24+00:00,0xcf398b88c90590061f163af1e98c819e6e2c3c858c58ba18af9e409f5805d4b8,btc-updown-15m-1790949600,BTC,15min,Down,3,0.49,0.0,0.57,0.0,0.61,7.02,0,0,0,0,fuera_de_zona_confirmada
+2026-10-02T14:00:27+00:00,0xd400d32ff34e691ac22d10449d131ac886b858d22dea8f5c9b8820c2a2f1f5f7,sol-updown-5m-1790949600,SOL,5min,Down,3,0.49,0.0,0.62,0.0,0.7,12.9,0,0,0,0,fuera_de_zona_confirmada
+2026-10-02T14:00:35+00:00,0xd2a98963b685ba649b3af148995c43a76c692a385567164045fab1317bc98a8f,eth-updown-5m-1790949600,ETH,5min,Down,4,0.47,0.0,0.71,0.0,0.72,1.41,0,0,0,0,fuera_de_zona_confirmada
+2026-10-02T14:01:09+00:00,0xc681b2e44a38ee9c3917a09c8772dd82ba55e6647ce59585fd55fb047c2c650b,bitcoin-up-or-down-october-2-2026-10am-et,BTC,60min,Down,7,0.5,834.5,0.48,866.2,0.47,-2.08,1,0,0,0,fuera_de_zona_confirmada
+2026-10-02T14:02:08+00:00,0x3a1867b1c13b52562673aa0d709c655f1cef0e748bb16fff11df4bfadf53d107,ethereum-up-or-down-october-2-2026-10am-et,ETH,60min,Down,2,0.44,60.7,0.44,60.7,0.45,2.27,1,0,0,0,fuera_de_zona_confirmada
+2026-10-02T14:05:08+00:00,0x6c5506843fec5906351e511022ab09d09ac45d3df3dc3b3ed15b38a72234b2e9,btc-updown-5m-1790949900,BTC,5min,Up,2,0.66,9.6,0.69,0.0,0.71,2.9,0,0,0,0,fuera_de_zona_confirmada
