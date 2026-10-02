@@ -28,6 +28,25 @@ def _f(x):
         return None
 
 
+def _desenlaces(cids) -> dict:
+    """{condition_id: {outcome: precio}} SOLO de mercados cerrados (gamma exige closed=true para
+    devolver cerrados por condition_ids). 02-Oct: sin esto, los eventos cuyo mercado se había
+    resuelto antes de +delta (sin libro -> sin bid) se caían de la muestra: 70 de 192, media -19,9c,
+    20/70 ganaban. Con ellos la salida a +1800 s pasa de +9,8c (IC90>0) a +2,4c (IC90 cruza 0)."""
+    import json
+    import requests
+    out, cids = {}, sorted(c for c in cids if c)
+    for i in range(0, len(cids), 20):
+        try:
+            r = requests.get("https://gamma-api.polymarket.com/markets", timeout=20,
+                             params=[("condition_ids", c) for c in cids[i:i + 20]] + [("closed", "true"), ("limit", 100)])
+            for m in r.json():
+                out[m["conditionId"]] = dict(zip(json.loads(m["outcomes"]), [float(x) for x in json.loads(m["outcomePrices"])]))
+        except Exception:
+            continue
+    return out
+
+
 def evaluar():
     if not EV.exists():
         return {"n_eventos": 0}
@@ -44,13 +63,17 @@ def evaluar():
     out.update({"usd_evento_mediana": round(st.median(usd), 2) if usd else None,
                 "desviacion_mediana": round(st.median(dev), 3) if dev else None,
                 "depth_bid_cerca_mediana": round(st.median(dcerca), 2) if dcerca else None})
+    resueltos = _desenlaces({e["condition_id"] for e in evs})
     for d in (1, 3, 10, 30, 60, 300, 1800):
-        gan, cl, eur = [], defaultdict(list), []
+        gan, cl, eur, n_resuelto = [], defaultdict(list), [], 0
         for e in evs:
             s = seg.get(e["event_id"], {}).get(d)
-            if not s:
-                continue
-            bid, p = _f(s["best_bid"]), _f(e["precio_evento"])
+            bid, p = _f((s or {}).get("best_bid")), _f(e["precio_evento"])
+            if bid is None:
+                # mercado ya resuelto (sin libro): vale su desenlace oficial, nunca se descarta
+                v = resueltos.get(e["condition_id"], {}).get(e.get("outcome"))
+                if v is not None and (v > 0.98 or v < 0.02):
+                    bid, n_resuelto = float(round(v)), n_resuelto + 1
             if bid is None or not p:
                 continue
             g = bid - p
@@ -69,7 +92,7 @@ def evaluar():
                                "frac_pos": round(sum(x > 0 for x in gan) / len(gan), 2),
                                "ic90_clusters_c": [round(100 * b[50], 1), round(100 * b[950], 1)],
                                "eur_por_evento": round(st.mean(eur), 3),
-                               "eur_total": round(sum(eur), 2)}
+                               "eur_total": round(sum(eur), 2), "n_valorados_por_desenlace": n_resuelto}
     return out
 
 

@@ -34,6 +34,7 @@ para correr cada inicio de sesión (protocolo CLAUDE.md punto 9) y ver cómo
 crece n en cada bucket día a día antes de decidir cortar nada.
 """
 import csv
+import ask_real
 import json
 import sys
 from collections import defaultdict, Counter
@@ -194,6 +195,44 @@ def cargar_real():
     return out
 
 
+# 02-Oct (Javi): el pnl/trade de results.csv es al precio de la SEÑAL con stake Kelly (de 49
+# bueno_confirmado del gate propio solo 4 sobrevivían al ask real). Cada bucket que pasa el gate se
+# mide también al ASK REAL (ask_real.py, fuente canónica: ask del token justo tras la señal, primera
+# señal por strategy+market_id+decision, 21 días) con el criterio del 4º veto: n>=15, EV>=+0,10 €/€
+# e IC90 bootstrap por DÍAS >0. Solo "robusto + ask_ok" es accionable.
+ASK_N_MIN, ASK_EV_MIN = 15, 0.10
+
+
+def ask_real_bucket(filas, mapa):
+    import random
+    if not mapa:
+        return {"n": 0, "veredicto": "sin_mapa"}
+    por_dia, vistos = defaultdict(list), set()
+    for r in filas:
+        k = (r["strategy"], r["market_id"], r["decision"])
+        if k in vistos or k not in mapa:
+            continue
+        vistos.add(k)
+        por_dia[r.get("prediction_timestamp", "")[:10]].append(ask_real.pnl_1eur(mapa[k], r["acierto"] == "1"))
+    vals = [v for vs in por_dia.values() for v in vs]
+    if not vals:
+        return {"n": 0, "veredicto": "sin_datos"}
+    ev, ic = sum(vals) / len(vals), None
+    dias = list(por_dia.values())
+    if len(dias) >= 3:
+        rnd = random.Random(7)
+        bs = sorted(sum(sum(x) for x in m) / sum(len(x) for x in m)
+                    for m in ([rnd.choice(dias) for _ in dias] for _ in range(1000)))
+        ic = [round(bs[50], 3), round(bs[950], 3)]
+    if len(vals) >= ASK_N_MIN and ic and ic[0] > 0 and ev >= ASK_EV_MIN:
+        ver = "ask_ok"
+    elif len(vals) >= ASK_N_MIN and ic and ic[1] < 0:
+        ver = "ask_negativo"
+    else:
+        ver = "ask_sin_concluir"
+    return {"n": len(vals), "dias": len(por_dia), "ev_eur": round(ev, 3), "ic90_dias": ic, "veredicto": ver}
+
+
 def split_half(rows):
     filas = sorted(rows, key=lambda r: r.get("prediction_timestamp", ""))
     mid = len(filas) // 2
@@ -204,6 +243,9 @@ def main():
     ballenas = cargar_ballenas()
     shadow_filas = cargar_shadow_filas()
     real = cargar_real()
+    mapa_ask = ask_real.cargar_mapa()
+    if mapa_ask is None:
+        print("⚠️ ask_real_por_senal.csv falta o tiene >36 h: los buckets salen SIN verificación al ask real")
 
     # (strategy,subtype,decision) -> bucket fino -> filas
     shadow_buckets = defaultdict(lambda: defaultdict(list))
@@ -289,13 +331,18 @@ def main():
                                            round(pnl2, 3) if pnl2 is not None else None],
                         "robusto_split_half": robusto,
                         "ballenas_hit": round(ab / nb * 100, 1) if nb else None, "ballenas_n": nb,
+                        "ask_real": ask_real_bucket(filas, mapa_ask),
                     }
+                    fila["accionable"] = bool(robusto and fila["ask_real"]["veredicto"] == "ask_ok")
                     buenos.append(fila)
                     (robustos if robusto else fragiles).append((strat, sub, dec, fila))
                 if buenos:
                     print(f"  {strat}#{sub}#{dec} (n_total={n_total}):")
                     for fila in buenos:
                         marca = "✅ ROBUSTO" if fila["robusto_split_half"] else "⚠️  frágil (no sobrevive split-half)"
+                        a = fila["ask_real"]
+                        marca += (f" | ask real n={a['n']} EV/€={a.get('ev_eur')} IC90días={a.get('ic90_dias')} "
+                                  f"→ {'💰 ACCIONABLE' if fila['accionable'] else a['veredicto']}")
                         sh = fila["split_half_pnl"]
                         print(f"    {fila['bucket']} n={fila['n']:4d} hit={fila['hit']:5.1f}% "
                               f"pnl/trade={fila['pnl_media']:+.3f} CI90%={fila['pnl_ci90']} "
@@ -303,10 +350,16 @@ def main():
                     resultado[f"{strat}#{sub}#{dec}"] = buenos
 
     print(f"\n\n{'='*110}")
-    print(f"RESUMEN — {len(robustos)} bucket(s) ROBUSTO(S) (gate OK + split-half positivo ambas mitades):")
+    acc = [x for x in robustos if x[3]["accionable"]]
+    neg = [x for x in robustos if x[3]["ask_real"]["veredicto"] == "ask_negativo"]
+    print(f"RESUMEN — {len(robustos)} bucket(s) ROBUSTO(S) en results.csv (precio de señal); al ASK REAL: "
+          f"{len(acc)} accionables, {len(neg)} negativos, {len(robustos) - len(acc) - len(neg)} sin concluir")
     print(f"{'='*110}")
-    for strat, sub, dec, fila in robustos:
-        print(f"  {strat}#{sub}#{dec} {fila['bucket']} n={fila['n']} pnl/trade={fila['pnl_media']:+.3f}")
+    for strat, sub, dec, fila in sorted(robustos, key=lambda x: -(x[3]['ask_real'].get('ev_eur') or -9)):
+        a = fila["ask_real"]
+        print(f"  {strat}#{sub}#{dec} {fila['bucket']} n={fila['n']} pnl/trade(señal)={fila['pnl_media']:+.3f} | "
+              f"ask real n={a['n']} EV/€={a.get('ev_eur')} IC90días={a.get('ic90_dias')} → "
+              f"{'💰 ACCIONABLE' if fila['accionable'] else a['veredicto']}")
 
     print(f"\n{len(fragiles)} bucket(s) pasan gate en muestra completa pero NO split-half (no accionar):")
     for strat, sub, dec, fila in fragiles:
