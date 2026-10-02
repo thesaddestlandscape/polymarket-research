@@ -1,19 +1,19 @@
 {
- "actualizado_utc": "2026-10-01T08:04:35+00:00",
+ "actualizado_utc": "2026-10-02T08:04:30+00:00",
  "candidata": "segundo_salto_BTC_Up",
  "resumen": {
-  "n": 237,
-  "dias": 3,
-  "acierto": 0.637,
-  "precio_medio": 0.661,
-  "ev": -0.067,
+  "n": 366,
+  "dias": 4,
+  "acierto": 0.628,
+  "precio_medio": 0.658,
+  "ev": -0.087,
   "mitades": [
-   -0.185,
-   0.051
+   -0.103,
+   -0.072
   ],
   "ic90_dias": [
-   -0.12,
-   -0.001
+   -0.17,
+   -0.052
   ]
  }
 }
