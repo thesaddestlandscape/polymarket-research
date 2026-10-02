@@ -1474,5 +1474,17 @@
   "PRICE_TARGET_GBM_FADE#SOL": {
     "n": 201,
     "confirmado": true
+  },
+  "FAVORITO_CONFIRMADO_60_240MIN_DEPTH_FASE0#SOL": {
+    "n": 202,
+    "confirmado": false
+  },
+  "FAVORITO_CONFIRMADO_60_240MIN_DEPTH_FASE0#SOL#240min": {
+    "n": 202,
+    "confirmado": false
+  },
+  "LIQUIDACIONES_DEPTH_FASE0#DOGE#15min": {
+    "n": 209,
+    "confirmado": false
   }
 }
