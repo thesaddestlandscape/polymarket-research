@@ -139,7 +139,11 @@ def _vigilar_proveedor(canal: str, asset: str, src: str) -> None:
     _log(f"⚠️ {txt}")
     if time.time() - _proveedor_aviso_ts.get(clave, 0.0) >= 3600:   # máx. 1 Telegram/hora por (canal, activo)
         _proveedor_aviso_ts[clave] = time.time()
-        _avisar(f"⚠️ {txt}. Si es twap60, la validación de resolución ya no es Chainlink: revisar.")
+        if canal == "twap60":
+            _avisar(f"🚨 {txt}. El twap60 valida la resolución: si ya no es Chainlink, revisar YA.")
+        else:
+            _avisar(f"⚠️ {txt}. Spot: si no es pyth, el failover a chainlink_*.csv queda "
+                    f"desactivado (fail-closed) y el vigía TWAP solo-PolyBolt solo usa filas pyth.")
 
 
 def _avisar(texto: str) -> None:
@@ -161,13 +165,37 @@ def _failover_chainlink(filas: list) -> None:
             _log(f"🚨 FAILOVER: RTDS Chainlink sin ticks {callado:.0f}s -- escribiendo PolyBolt en chainlink_*.csv")
             _avisar(f"🚨 Chainlink RTDS sin ticks {callado:.0f}s: FAILOVER a PolyBolt activo "
                     f"(chainlink_*.csv sigue alimentado, source=polybolt_fallback). Revisar RTDS.")
-        for _, asset, canal, v, ev_ts, _snap, _src in filas:
-            if canal == "spot":
-                fcp._escribir_tick(asset, v, ev_ts, source="polybolt_fallback")
+        for _, asset, canal, v, ev_ts, _snap, src in filas:
+            if canal != "spot":
+                continue
+            # 02-Oct (aviso Telegram 02:53Z, tras un "server draining"): PolyBolt pasó el spot
+            # de `pyth` a `chainlink`, y esa serie NO es un spot: se ajusta a una media móvil
+            # de ~35 s de los ticks RTDS (BTC: mediana 0,10 bps contra la media de 35 s, 1,35
+            # bps contra el tick del mismo segundo; ~17 s de retraso). Meterla en chainlink_*.csv
+            # como tick fresco es peor que el hueco (shadow_predict no filtra `source`).
+            # Fail-closed: solo se escribe si el proveedor es uno de tiempo real conocido.
+            if src not in FALLBACK_PROVEEDORES_OK:
+                _fallback_omitido(asset, src)
+                continue
+            fcp._escribir_tick(asset, v, ev_ts, source="polybolt_fallback")
     elif _en_fallback:
         _en_fallback = False
         _log("✅ RTDS Chainlink ha vuelto -- failover desactivado")
         _avisar("✅ Chainlink RTDS ha vuelto: failover PolyBolt desactivado.")
+
+
+FALLBACK_PROVEEDORES_OK = frozenset({"pyth"})
+_fallback_omitido_ts: dict = {}
+
+
+def _fallback_omitido(asset: str, src: str) -> None:
+    if time.time() - _fallback_omitido_ts.get(asset, 0.0) < 3600:
+        return
+    _fallback_omitido_ts[asset] = time.time()
+    txt = (f"FAILOVER {asset}: NO se escribe en chainlink_*.csv: spot PolyBolt de proveedor "
+           f"'{src or '?'}' (serie suavizada/retrasada, no es tick en tiempo real). Hueco hasta que vuelva RTDS.")
+    _log(f"🚨 {txt}")
+    _avisar(f"🚨 {txt}")
 
 
 class _FalloDuro(Exception):

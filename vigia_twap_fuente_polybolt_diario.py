@@ -75,7 +75,13 @@ def _cargar_dia(dia: str):
                 v = float(r["value"])
             except (ValueError, TypeError, KeyError):
                 continue
-            (tw if r.get("canal") == "twap60" else py).setdefault(k, v)
+            if r.get("canal") == "twap60":
+                tw.setdefault(k, v)
+            elif (r.get("source") or "pyth") == "pyth":
+                # 02-Oct: desde las 02:53Z PolyBolt sirve el spot como `chainlink`, una serie
+                # suavizada (~media móvil 35 s, ~17 s de retraso) que el método solo-PolyBolt
+                # no puede usar. Solo filas pyth (las de antes del 30-Sep no traen `source`).
+                py.setdefault(k, v)
     ts, px = {}, {}
     with _abrir(p_cl) as f:
         for r in csv.DictReader(f):
