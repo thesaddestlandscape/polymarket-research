@@ -19,6 +19,7 @@ suscripciones incrementales (sin reconectar, sin huecos).
 import asyncio
 import collections
 import json
+import os
 import sys
 import threading
 import time
@@ -278,7 +279,21 @@ async def _sesion(filtro_marcos):
                     _aplicar(e)
 
 
+def subir_prioridad_hilo():
+    """02-Oct: los procesos de observación corren con nice 10 y, con la máquina a load 8-11 en 4 cores, el hilo que
+    lee el socket se quedaba sin turno -> el servidor cortaba (1013 "slow consumer" / ping vencido) ~60-85 veces por
+    hora, ~10 s de hueco cada una. Con el hilo a nice 0 (renice manual 14:09Z) las caídas pararon. Solo SUBE la
+    prioridad del hilo que llama (nunca la baja si ya está a 0 o negativa); sin permisos, no hace nada."""
+    try:
+        tid = threading.get_native_id()
+        if os.getpriority(os.PRIO_PROCESS, tid) > 0:
+            os.setpriority(os.PRIO_PROCESS, tid, 0)
+    except (OSError, AttributeError) as e:
+        _log(f"no se pudo subir la prioridad del hilo: {e}")
+
+
 def _hilo(filtro_marcos):
+    subir_prioridad_hilo()
     while True:
         try:
             asyncio.run(_sesion(filtro_marcos))

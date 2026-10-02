@@ -201,6 +201,8 @@ def _calentar():
 def main():
     _log(f"binance_jump_leadlag_fase0 arrancado (umbrales {UMBRAL}, offsets {OFFSETS_S}, solo observación)")
     threading.Thread(target=_calentar, daemon=True).start()
+    import libro_estado_ws
+    libro_estado_ws.subir_prioridad_hilo()   # 02-Oct: el lector del bookTicker tampoco puede quedarse sin turno (nice 10)
     asyncio.run(_ws())
 
 
