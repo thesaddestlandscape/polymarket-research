@@ -1,13 +1,13 @@
 {
  "STREAK_MOM_5M": {
-  "ic_bayes_familia": 0.0217,
+  "ic_bayes_familia": 0.0215,
   "n_tuplas_fuertes": 2,
-  "pnl_fiel_combinado_eur": 96.7,
+  "pnl_fiel_combinado_eur": 95.91,
   "tuplas": [
    {
     "k": "STREAK_MOM_5M#DOGE#5min#BUY_NO",
-    "pnl_fiel_eur_sin_suelo": 57.8083,
-    "n_ejecutado": 299
+    "pnl_fiel_eur_sin_suelo": 57.0237,
+    "n_ejecutado": 300
    },
    {
     "k": "STREAK_MOM_5M#XRP#5min#BUY_NO",
@@ -17,9 +17,9 @@
   ]
  },
  "LIQUIDACIONES_5M": {
-  "ic_bayes_familia": 0.0229,
+  "ic_bayes_familia": 0.0231,
   "n_tuplas_fuertes": 3,
-  "pnl_fiel_combinado_eur": 60.14,
+  "pnl_fiel_combinado_eur": 59.39,
   "tuplas": [
    {
     "k": "LIQUIDACIONES_5M#XRP#5min#BUY_YES",
@@ -33,20 +33,37 @@
    },
    {
     "k": "LIQUIDACIONES_5M#ETH#5min#BUY_YES",
-    "pnl_fiel_eur_sin_suelo": 17.2973,
-    "n_ejecutado": 231
+    "pnl_fiel_eur_sin_suelo": 16.5534,
+    "n_ejecutado": 232
+   }
+  ]
+ },
+ "STRUCT_NO_15M": {
+  "ic_bayes_familia": 0.0128,
+  "n_tuplas_fuertes": 2,
+  "pnl_fiel_combinado_eur": 36.09,
+  "tuplas": [
+   {
+    "k": "STRUCT_NO_15M#BTC#15min#BUY_NO",
+    "pnl_fiel_eur_sin_suelo": 20.7901,
+    "n_ejecutado": 1207
+   },
+   {
+    "k": "STRUCT_NO_15M#ETH#15min#BUY_NO",
+    "pnl_fiel_eur_sin_suelo": 15.2996,
+    "n_ejecutado": 1266
    }
   ]
  },
  "UPDOWN_GBM": {
   "ic_bayes_familia": 0.0387,
   "n_tuplas_fuertes": 1,
-  "pnl_fiel_combinado_eur": 24.15,
+  "pnl_fiel_combinado_eur": 24.94,
   "tuplas": [
    {
     "k": "UPDOWN_GBM#BTC#5min#BUY_NO",
-    "pnl_fiel_eur_sin_suelo": 24.1536,
-    "n_ejecutado": 695
+    "pnl_fiel_eur_sin_suelo": 24.9449,
+    "n_ejecutado": 696
    }
   ]
  },
@@ -71,18 +88,6 @@
     "k": "STREAK_FADE_5M#XRP#5min#BUY_YES",
     "pnl_fiel_eur_sin_suelo": 20.0428,
     "n_ejecutado": 212
-   }
-  ]
- },
- "STRUCT_NO_15M": {
-  "ic_bayes_familia": 0.0126,
-  "n_tuplas_fuertes": 1,
-  "pnl_fiel_combinado_eur": 19.84,
-  "tuplas": [
-   {
-    "k": "STRUCT_NO_15M#BTC#15min#BUY_NO",
-    "pnl_fiel_eur_sin_suelo": 19.8383,
-    "n_ejecutado": 1206
    }
   ]
  }
