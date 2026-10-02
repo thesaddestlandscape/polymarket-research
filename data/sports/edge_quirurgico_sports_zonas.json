@@ -1,632 +1,1384 @@
 {
- "generado_utc": "2026-10-01T08:54:01+00:00",
+ "generado_utc": "2026-10-02T08:54:01+00:00",
  "modo": "lectura (no consumido por evaluar())",
  "forward_dias": 7,
- "cutoff": "2026-09-24T00:00:00",
+ "cutoff": "2026-09-25T00:00:00",
  "n_forward_min": 15,
  "piso_eur": 0.1,
- "n_tuplas_evaluadas": 18,
- "n_filas_total": 137273,
- "n_zonas_operables": 2,
- "n_zonas_en_observacion": 18,
+ "n_tuplas_evaluadas": 84,
+ "n_filas_total": 144974,
+ "n_zonas_operables": 8,
+ "n_zonas_en_observacion": 21,
  "cobertura": {
-  "total_combos_con_datos": 540,
-  "evaluadas": 18,
+  "total_combos_con_datos": 542,
+  "evaluadas": 84,
   "descartadas_n_train_insuficiente": [
    [
-    "Soccer-fl1#SEGUIR",
-    77
-   ],
-   [
-    "Soccer-sea#SEGUIR",
-    70
-   ],
-   [
-    "Soccer-mls#SEGUIR",
-    66
-   ],
-   [
-    "Soccer-mls#FADE",
-    61
-   ],
-   [
-    "Soccer-sea#FADE",
-    58
-   ],
-   [
-    "lal-ganador#SEGUIR",
-    55
-   ],
-   [
-    "cfb-otros#SEGUIR",
-    53
-   ],
-   [
-    "epl-otros#SEGUIR",
-    51
-   ],
-   [
-    "Soccer-ucl#SEGUIR",
-    49
-   ],
-   [
-    "lal-otros#FADE",
-    48
-   ],
-   [
-    "UFC#FADE",
-    46
-   ],
-   [
-    "Soccer-fl1#FADE",
-    45
-   ],
-   [
-    "Soccer-ucl#FADE",
-    40
-   ],
-   [
-    "lal-ganador#FADE",
-    38
-   ],
-   [
-    "UFC#SEGUIR",
-    37
-   ],
-   [
-    "lal-otros#SEGUIR",
-    37
-   ],
-   [
-    "Soccer-elc#SEGUIR",
-    36
-   ],
-   [
-    "sea-ganador#FADE",
-    35
-   ],
-   [
-    "fl1-otros#SEGUIR",
-    33
-   ],
-   [
-    "Soccer-arg#FADE",
-    32
-   ],
-   [
-    "epl-otros#FADE",
-    31
-   ],
-   [
-    "Soccer-arg#SEGUIR",
-    30
-   ],
-   [
-    "Soccer-spl#SEGUIR",
-    29
-   ],
-   [
-    "Soccer-col#SEGUIR",
-    29
-   ],
-   [
-    "mls-otros#SEGUIR",
-    29
-   ],
-   [
-    "cfb-otros#FADE",
-    29
-   ],
-   [
-    "uel-otros#SEGUIR",
-    29
-   ],
-   [
-    "Soccer-col#FADE",
-    28
-   ],
-   [
-    "Soccer-mex#SEGUIR",
-    27
-   ],
-   [
-    "Soccer-mex#FADE",
-    24
+    "Soccer-uel#FADE",
+    78
    ],
    [
     "sea-ganador#SEGUIR",
-    23
-   ],
-   [
-    "Soccer-uel#FADE",
-    21
-   ],
-   [
-    "Soccer-tur#FADE",
-    21
-   ],
-   [
-    "Soccer-jap#FADE",
-    20
-   ],
-   [
-    "Soccer-lib#FADE",
-    19
-   ],
-   [
-    "Cricket#FADE",
-    18
-   ],
-   [
-    "Soccer-chi#FADE",
-    17
-   ],
-   [
-    "Soccer-el1#SEGUIR",
-    17
-   ],
-   [
-    "Soccer-kor#FADE",
-    16
-   ],
-   [
-    "epl-ganador#SEGUIR",
-    16
-   ],
-   [
-    "mex-ganador#SEGUIR",
-    16
-   ],
-   [
-    "arg-ganador#FADE",
-    16
-   ],
-   [
-    "tur-otros#SEGUIR",
-    16
-   ],
-   [
-    "fl1-otros#FADE",
-    16
-   ],
-   [
-    "efl-otros#FADE",
-    15
-   ],
-   [
-    "ukr1-otros#SEGUIR",
-    15
-   ],
-   [
-    "Soccer-elc#FADE",
-    14
-   ],
-   [
-    "Soccer-ere#FADE",
-    14
+    77
    ],
    [
     "Soccer-bra#SEGUIR",
-    14
+    76
    ],
    [
-    "Soccer-tur#SEGUIR",
-    14
+    "uel-ganador#FADE",
+    76
    ],
    [
-    "Soccer-bun#FADE",
-    14
+    "Cricket#FADE",
+    75
    ],
    [
-    "Soccer-bun#SEGUIR",
-    14
+    "fif-otros#FADE",
+    75
    ],
    [
-    "arg-otros#FADE",
-    14
+    "elc-otros#FADE",
+    74
    ],
    [
-    "mls-otros#FADE",
-    14
+    "Soccer-arg#SEGUIR",
+    73
    ],
    [
-    "Soccer-bra2#SEGUIR",
-    13
-   ],
-   [
-    "Soccer-lec#FADE",
-    13
-   ],
-   [
-    "Soccer-bra#FADE",
-    13
-   ],
-   [
-    "Soccer-uel#SEGUIR",
-    12
-   ],
-   [
-    "Cricket#SEGUIR",
-    12
-   ],
-   [
-    "Soccer-chi#SEGUIR",
-    12
-   ],
-   [
-    "Soccer-den#FADE",
-    12
-   ],
-   [
-    "pol-otros#FADE",
-    12
-   ],
-   [
-    "mex-otros#SEGUIR",
-    12
-   ],
-   [
-    "Soccer-kor#SEGUIR",
-    11
-   ],
-   [
-    "Soccer-col1#FADE",
-    11
-   ],
-   [
-    "mex-ganador#FADE",
-    11
-   ],
-   [
-    "Soccer-lib#SEGUIR",
-    10
-   ],
-   [
-    "Soccer-bel1#FADE",
-    10
-   ],
-   [
-    "Soccer-spl#FADE",
-    10
-   ],
-   [
-    "Soccer-egy1#FADE",
-    10
-   ],
-   [
-    "isl1-otros#FADE",
-    10
-   ],
-   [
-    "mex-otros#FADE",
-    10
-   ],
-   [
-    "uel-otros#FADE",
-    10
-   ],
-   [
-    "Soccer-argpn#FADE",
-    9
-   ],
-   [
-    "Soccer-argpn#SEGUIR",
-    9
-   ],
-   [
-    "elc-otros#SEGUIR",
-    9
-   ],
-   [
-    "bra-otros#FADE",
-    9
-   ],
-   [
-    "Soccer-lec#SEGUIR",
-    8
-   ],
-   [
-    "Soccer-col1#SEGUIR",
-    8
-   ],
-   [
-    "Soccer-pol#SEGUIR",
-    8
-   ],
-   [
-    "epl-ganador#FADE",
-    8
-   ],
-   [
-    "tur-ganador#SEGUIR",
-    8
-   ],
-   [
-    "nor-otros#FADE",
-    8
-   ],
-   [
-    "RocketLeague#SEGUIR",
-    8
-   ],
-   [
-    "Soccer-es2#FADE",
-    7
-   ],
-   [
-    "Soccer-el2#SEGUIR",
-    7
-   ],
-   [
-    "Soccer-ecu1#SEGUIR",
-    7
-   ],
-   [
-    "Soccer-ere#SEGUIR",
-    7
-   ],
-   [
-    "Soccer-swe#SEGUIR",
-    7
-   ],
-   [
-    "WNBA#SEGUIR",
-    7
-   ],
-   [
-    "nwsl-otros#FADE",
-    7
-   ],
-   [
-    "WNBA#FADE",
-    7
-   ],
-   [
-    "bun-otros#FADE",
-    7
-   ],
-   [
-    "Soccer-sud#SEGUIR",
-    6
-   ],
-   [
-    "Soccer-egy1#SEGUIR",
-    6
-   ],
-   [
-    "Soccer-rus#SEGUIR",
-    6
-   ],
-   [
-    "crint-otros#FADE",
-    6
-   ],
-   [
-    "elc-ganador#FADE",
-    6
-   ],
-   [
-    "bl2-otros#SEGUIR",
-    6
-   ],
-   [
-    "idn1-otros#SEGUIR",
-    6
-   ],
-   [
-    "kaz1-otros#FADE",
-    6
-   ],
-   [
-    "ukr1-otros#FADE",
-    6
-   ],
-   [
-    "aze1-otros#SEGUIR",
-    6
-   ],
-   [
-    "Soccer-clf#FADE",
-    5
-   ],
-   [
-    "Soccer-efl#SEGUIR",
-    5
-   ],
-   [
-    "Soccer-por#FADE",
-    5
-   ],
-   [
-    "Soccer-enl#FADE",
-    5
-   ],
-   [
-    "Soccer-cze1#FADE",
-    5
-   ],
-   [
-    "Soccer-fin1#SEGUIR",
-    5
-   ],
-   [
-    "Soccer-sui#SEGUIR",
-    5
-   ],
-   [
-    "Liga-spl#FADE",
-    5
-   ],
-   [
-    "tur-ganador#FADE",
-    5
-   ],
-   [
-    "swe2-otros#FADE",
-    5
-   ],
-   [
-    "arg-ganador#SEGUIR",
-    5
-   ],
-   [
-    "Soccer-grc#SEGUIR",
-    4
-   ],
-   [
-    "Soccer-uzb1#FADE",
-    4
-   ],
-   [
-    "Soccer-brco#FADE",
-    4
-   ],
-   [
-    "Soccer-chi1#SEGUIR",
-    4
-   ],
-   [
-    "Soccer-rou1#SEGUIR",
-    4
-   ],
-   [
-    "Soccer-itc#FADE",
-    4
-   ],
-   [
-    "Soccer-itc#SEGUIR",
-    4
-   ],
-   [
-    "Liga-den#SEGUIR",
-    4
-   ],
-   [
-    "Liga-lal#SEGUIR",
-    4
+    "uel-ganador#SEGUIR",
+    73
    ],
    [
     "isr-otros#FADE",
-    4
+    70
    ],
    [
-    "ned2-ganador#SEGUIR",
-    4
+    "tur-ganador#SEGUIR",
+    69
    ],
    [
-    "sea-otros#FADE",
-    4
+    "uslc-otros#FADE",
+    69
    ],
    [
-    "arg-otros#SEGUIR",
-    4
+    "por-otros#FADE",
+    66
    ],
    [
-    "Soccer-asean#FADE",
-    3
+    "jap-otros#FADE",
+    66
    ],
    [
-    "Soccer-col2#FADE",
-    3
+    "Soccer-spl#FADE",
+    64
    ],
    [
-    "Soccer-efl#FADE",
-    3
+    "jap-ganador#SEGUIR",
+    64
    ],
    [
-    "Soccer-nwsl#SEGUIR",
-    3
+    "fif-otros#SEGUIR",
+    63
    ],
    [
-    "Soccer-ja2#FADE",
-    3
-   ],
-   [
-    "Soccer-es2#SEGUIR",
-    3
-   ],
-   [
-    "Soccer-chi1#FADE",
-    3
-   ],
-   [
-    "Soccer-nwsl#FADE",
-    3
-   ],
-   [
-    "Soccer-jap#SEGUIR",
-    3
-   ],
-   [
-    "Soccer-sui#FADE",
-    3
-   ],
-   [
-    "Soccer-bl2#SEGUIR",
-    3
-   ],
-   [
-    "Liga-itc#FADE",
-    3
-   ],
-   [
-    "elc-ganador#SEGUIR",
-    3
-   ],
-   [
-    "idn1-ganador#FADE",
-    3
-   ],
-   [
-    "sui-otros#SEGUIR",
-    3
+    "Soccer-bra#FADE",
+    59
    ],
    [
     "setkamecz-otros#FADE",
-    3
+    59
    ],
    [
-    "lib-otros#SEGUIR",
-    3
+    "kaz1-otros#FADE",
+    59
+   ],
+   [
+    "ukr1-otros#FADE",
+    59
+   ],
+   [
+    "Soccer-tur#FADE",
+    58
+   ],
+   [
+    "el1-ganador#FADE",
+    57
+   ],
+   [
+    "swe2-otros#FADE",
+    57
+   ],
+   [
+    "argpn-otros#SEGUIR",
+    56
+   ],
+   [
+    "kor-otros#SEGUIR",
+    56
    ],
    [
     "swe-otros#SEGUIR",
-    3
+    55
    ],
    [
-    "gre1-otros#FADE",
-    3
+    "Cricket#SEGUIR",
+    53
    ],
    [
-    "ja2-otros#FADE",
-    3
+    "fl1-ganador#SEGUIR",
+    53
+   ],
+   [
+    "bra-otros#SEGUIR",
+    53
+   ],
+   [
+    "fl1-ganador#FADE",
+    52
+   ],
+   [
+    "Soccer-bun#SEGUIR",
+    51
+   ],
+   [
+    "por-ganador#FADE",
+    51
    ],
    [
     "bel1-otros#FADE",
-    3
+    50
    ],
    [
-    "aze1-otros#FADE",
-    3
+    "Soccer-bra2#SEGUIR",
+    49
+   ],
+   [
+    "crint-otros#FADE",
+    49
+   ],
+   [
+    "lva1-otros#FADE",
+    49
+   ],
+   [
+    "Soccer-uel#SEGUIR",
+    48
+   ],
+   [
+    "Soccer-lec#FADE",
+    48
+   ],
+   [
+    "Soccer-col1#FADE",
+    48
+   ],
+   [
+    "bun-ganador#SEGUIR",
+    48
+   ],
+   [
+    "RocketLeague#SEGUIR",
+    48
+   ],
+   [
+    "acle-otros#FADE",
+    47
+   ],
+   [
+    "Soccer-col1#SEGUIR",
+    46
+   ],
+   [
+    "Soccer-el1#SEGUIR",
+    46
+   ],
+   [
+    "Soccer-kor#FADE",
+    45
+   ],
+   [
+    "Soccer-ere#FADE",
+    45
+   ],
+   [
+    "argpn-otros#FADE",
+    45
+   ],
+   [
+    "el1-ganador#SEGUIR",
+    45
    ],
    [
     "per1-ganador#FADE",
-    3
+    45
    ],
    [
-    "bl2-otros#FADE",
-    3
+    "efa-otros#FADE",
+    45
+   ],
+   [
+    "Soccer-elc#FADE",
+    44
+   ],
+   [
+    "Soccer-bun#FADE",
+    44
+   ],
+   [
+    "por-ganador#SEGUIR",
+    44
+   ],
+   [
+    "idn1-otros#SEGUIR",
+    44
+   ],
+   [
+    "aze1-otros#SEGUIR",
+    44
+   ],
+   [
+    "irl1-otros#SEGUIR",
+    44
+   ],
+   [
+    "hr1-otros#SEGUIR",
+    44
+   ],
+   [
+    "Soccer-chi#FADE",
+    43
+   ],
+   [
+    "grc-otros#FADE",
+    43
+   ],
+   [
+    "bl2-ganador#FADE",
+    43
+   ],
+   [
+    "fr2-otros#SEGUIR",
+    43
+   ],
+   [
+    "kor-ganador#FADE",
+    43
+   ],
+   [
+    "Soccer-tur#SEGUIR",
+    42
+   ],
+   [
+    "argpn-ganador#SEGUIR",
+    42
+   ],
+   [
+    "NHL#SEGUIR",
+    42
+   ],
+   [
+    "pol-otros#SEGUIR",
+    41
+   ],
+   [
+    "efl-ganador#SEGUIR",
+    41
+   ],
+   [
+    "elc-ganador#SEGUIR",
+    40
+   ],
+   [
+    "lib-otros#SEGUIR",
+    40
+   ],
+   [
+    "ja2-otros#FADE",
+    40
+   ],
+   [
+    "sud-otros#FADE",
+    40
+   ],
+   [
+    "Soccer-por#FADE",
+    39
+   ],
+   [
+    "acle-ganador#SEGUIR",
+    39
+   ],
+   [
+    "tur-ganador#FADE",
+    39
    ],
    [
     "fr2-otros#FADE",
-    3
+    39
    ],
    [
-    "Boxing#SEGUIR",
-    3
+    "Soccer-es2#FADE",
+    38
+   ],
+   [
+    "bol1-ganador#FADE",
+    38
+   ],
+   [
+    "lib-otros#FADE",
+    38
+   ],
+   [
+    "uslc-otros#SEGUIR",
+    38
+   ],
+   [
+    "acle-ganador#FADE",
+    37
    ],
    [
     "nor2-otros#FADE",
+    37
+   ],
+   [
+    "col1-otros#FADE",
+    37
+   ],
+   [
+    "Soccer-egy1#FADE",
+    36
+   ],
+   [
+    "ere-otros#FADE",
+    36
+   ],
+   [
+    "bun-ganador#FADE",
+    36
+   ],
+   [
+    "Soccer-lib#FADE",
+    35
+   ],
+   [
+    "Soccer-lec#SEGUIR",
+    35
+   ],
+   [
+    "Boxing#SEGUIR",
+    34
+   ],
+   [
+    "Soccer-bel1#FADE",
+    33
+   ],
+   [
+    "Soccer-chi#SEGUIR",
+    33
+   ],
+   [
+    "por-otros#SEGUIR",
+    33
+   ],
+   [
+    "Soccer-den#FADE",
+    32
+   ],
+   [
+    "idn1-ganador#FADE",
+    32
+   ],
+   [
+    "isr-ganador#FADE",
+    31
+   ],
+   [
+    "aze1-otros#FADE",
+    31
+   ],
+   [
+    "Soccer-jap#SEGUIR",
+    30
+   ],
+   [
+    "bun-otros#SEGUIR",
+    30
+   ],
+   [
+    "nwsl-ganador#FADE",
+    30
+   ],
+   [
+    "nwsl-otros#SEGUIR",
+    30
+   ],
+   [
+    "Soccer-argpn#SEGUIR",
+    29
+   ],
+   [
+    "idn1-otros#FADE",
+    29
+   ],
+   [
+    "bel2-otros#SEGUIR",
+    29
+   ],
+   [
+    "Soccer-argpn#FADE",
+    28
+   ],
+   [
+    "Soccer-el2#SEGUIR",
+    28
+   ],
+   [
+    "Soccer-ere#SEGUIR",
+    28
+   ],
+   [
+    "swe2-otros#SEGUIR",
+    28
+   ],
+   [
+    "sui-otros#SEGUIR",
+    28
+   ],
+   [
+    "gre1-otros#FADE",
+    28
+   ],
+   [
+    "usl1-otros#FADE",
+    28
+   ],
+   [
+    "bl2-otros#FADE",
+    28
+   ],
+   [
+    "Soccer-brco#FADE",
+    27
+   ],
+   [
+    "Soccer-swe#SEGUIR",
+    27
+   ],
+   [
+    "den-ganador#SEGUIR",
+    27
+   ],
+   [
+    "Soccer-kor#SEGUIR",
+    26
+   ],
+   [
+    "bra-ganador#SEGUIR",
+    26
+   ],
+   [
+    "grc-otros#SEGUIR",
+    25
+   ],
+   [
+    "wsl-otros#FADE",
+    25
+   ],
+   [
+    "bra-ganador#FADE",
+    25
+   ],
+   [
+    "npb-otros#FADE",
+    25
+   ],
+   [
+    "ecu1-otros#FADE",
+    25
+   ],
+   [
+    "Soccer-ecu1#SEGUIR",
+    24
+   ],
+   [
+    "col1-otros#SEGUIR",
+    23
+   ],
+   [
+    "Soccer-egy1#SEGUIR",
+    22
+   ],
+   [
+    "Soccer-por#SEGUIR",
+    22
+   ],
+   [
+    "pol-ganador#SEGUIR",
+    22
+   ],
+   [
+    "swe2-ganador#SEGUIR",
+    21
+   ],
+   [
+    "ned2-ganador#SEGUIR",
+    21
+   ],
+   [
+    "fr2-ganador#FADE",
+    21
+   ],
+   [
+    "gtm-otros#SEGUIR",
+    21
+   ],
+   [
+    "idn2-otros#SEGUIR",
+    21
+   ],
+   [
+    "Soccer-nwsl#FADE",
+    20
+   ],
+   [
+    "Soccer-sui#SEGUIR",
+    20
+   ],
+   [
+    "Soccer-itc#SEGUIR",
+    20
+   ],
+   [
+    "pol-ganador#FADE",
+    20
+   ],
+   [
+    "Soccer-pol#SEGUIR",
+    19
+   ],
+   [
+    "kor-ganador#SEGUIR",
+    19
+   ],
+   [
+    "sui-otros#FADE",
+    19
+   ],
+   [
+    "enl-otros#SEGUIR",
+    19
+   ],
+   [
+    "tha1-ganador#SEGUIR",
+    19
+   ],
+   [
+    "nor-otros#SEGUIR",
+    19
+   ],
+   [
+    "Soccer-chi1#SEGUIR",
+    18
+   ],
+   [
+    "Soccer-itc#FADE",
+    18
+   ],
+   [
+    "el2-ganador#SEGUIR",
+    18
+   ],
+   [
+    "nirl1-otros#FADE",
+    18
+   ],
+   [
+    "setkameua-otros#FADE",
+    18
+   ],
+   [
+    "enl-otros#FADE",
+    18
+   ],
+   [
+    "gtm-ganador#SEGUIR",
+    18
+   ],
+   [
+    "crint-otros#SEGUIR",
+    18
+   ],
+   [
+    "enl-ganador#FADE",
+    17
+   ],
+   [
+    "scop-ganador#SEGUIR",
+    17
+   ],
+   [
+    "scop-ganador#FADE",
+    17
+   ],
+   [
+    "bra2-otros#SEGUIR",
+    17
+   ],
+   [
+    "chi2-ganador#FADE",
+    17
+   ],
+   [
+    "rou1-otros#FADE",
+    17
+   ],
+   [
+    "Soccer-brco#SEGUIR",
+    16
+   ],
+   [
+    "Soccer-rus#SEGUIR",
+    16
+   ],
+   [
+    "Soccer-enl#FADE",
+    16
+   ],
+   [
+    "Liga-tur2#FADE",
+    16
+   ],
+   [
+    "Liga-spl#FADE",
+    16
+   ],
+   [
+    "rou1-ganador#FADE",
+    16
+   ],
+   [
+    "efl-otros#SEGUIR",
+    16
+   ],
+   [
+    "RocketLeague#FADE",
+    16
+   ],
+   [
+    "bel1-otros#SEGUIR",
+    16
+   ],
+   [
+    "Soccer-lib#SEGUIR",
+    15
+   ],
+   [
+    "Soccer-col2#FADE",
+    15
+   ],
+   [
+    "Soccer-ja2#FADE",
+    15
+   ],
+   [
+    "Soccer-es2#SEGUIR",
+    15
+   ],
+   [
+    "Soccer-cze1#FADE",
+    15
+   ],
+   [
+    "kaz1-ganador#FADE",
+    15
+   ],
+   [
+    "bknbl-otros#FADE",
+    15
+   ],
+   [
+    "Soccer-chi1#FADE",
+    14
+   ],
+   [
+    "Liga-itc#FADE",
+    14
+   ],
+   [
+    "setkameua-otros#SEGUIR",
+    14
+   ],
+   [
+    "est1-ganador#FADE",
+    14
+   ],
+   [
+    "bra3-ganador#FADE",
+    14
+   ],
+   [
+    "fif-ganador#SEGUIR",
+    14
+   ],
+   [
+    "Soccer-efl#FADE",
+    13
+   ],
+   [
+    "Soccer-itsb#FADE",
+    13
+   ],
+   [
+    "Soccer-fin1#SEGUIR",
+    13
+   ],
+   [
+    "lib-ganador#SEGUIR",
+    13
+   ],
+   [
+    "kaz1-ganador#SEGUIR",
+    13
+   ],
+   [
+    "kaz1-otros#SEGUIR",
+    13
+   ],
+   [
+    "u20wwc-ganador#SEGUIR",
+    13
+   ],
+   [
+    "wsl-ganador#FADE",
+    13
+   ],
+   [
+    "Soccer-nwsl#SEGUIR",
+    12
+   ],
+   [
+    "Soccer-itsb#SEGUIR",
+    12
+   ],
+   [
+    "Soccer-sui#FADE",
+    12
+   ],
+   [
+    "Liga-sui#SEGUIR",
+    12
+   ],
+   [
+    "egy1-otros#SEGUIR",
+    12
+   ],
+   [
+    "uzb1-ganador#FADE",
+    12
+   ],
+   [
+    "chi2-ganador#SEGUIR",
+    12
+   ],
+   [
+    "srb-otros#SEGUIR",
+    12
+   ],
+   [
+    "canpl-otros#FADE",
+    12
+   ],
+   [
+    "hr1-otros#FADE",
+    12
+   ],
+   [
+    "den-otros#SEGUIR",
+    12
+   ],
+   [
+    "rou1-otros#SEGUIR",
+    12
+   ],
+   [
+    "NHL#FADE",
+    12
+   ],
+   [
+    "Soccer-efl#SEGUIR",
+    11
+   ],
+   [
+    "Soccer-nor2#FADE",
+    11
+   ],
+   [
+    "Liga-den#SEGUIR",
+    11
+   ],
+   [
+    "Liga-lal#SEGUIR",
+    11
+   ],
+   [
+    "ere-otros#SEGUIR",
+    11
+   ],
+   [
+    "bol1-otros#SEGUIR",
+    11
+   ],
+   [
+    "isl1-ganador#FADE",
+    11
+   ],
+   [
+    "ven1-ganador#SEGUIR",
+    11
+   ],
+   [
+    "ukr1-ganador#FADE",
+    11
+   ],
+   [
+    "ja2-otros#SEGUIR",
+    11
+   ],
+   [
+    "khl-otros#FADE",
+    11
+   ],
+   [
+    "bra2-ganador#FADE",
+    11
+   ],
+   [
+    "ecu1-otros#SEGUIR",
+    11
+   ],
+   [
+    "per1-otros#FADE",
+    11
+   ],
+   [
+    "idn1-ganador#SEGUIR",
+    11
+   ],
+   [
+    "tur-otros#FADE",
+    11
+   ],
+   [
+    "dota2-otros#SEGUIR",
+    11
+   ],
+   [
+    "Soccer-uzb1#FADE",
+    10
+   ],
+   [
+    "Soccer-hr1#FADE",
+    10
+   ],
+   [
+    "Soccer-tur2#FADE",
+    10
+   ],
+   [
+    "nwsl-ganador#SEGUIR",
+    10
+   ],
+   [
+    "ukr1-ganador#SEGUIR",
+    10
+   ],
+   [
+    "irl1-otros#FADE",
+    10
+   ],
+   [
+    "tur2-ganador#SEGUIR",
+    10
+   ],
+   [
+    "efa-ganador#FADE",
+    10
+   ],
+   [
+    "Soccer-grc#SEGUIR",
+    9
+   ],
+   [
+    "Soccer-rou1#SEGUIR",
+    9
+   ],
+   [
+    "Soccer-cze1#SEGUIR",
+    9
+   ],
+   [
+    "Soccer-ptc#FADE",
+    9
+   ],
+   [
+    "Soccer-uwcl#FADE",
+    9
+   ],
+   [
+    "egy1-otros#FADE",
+    9
+   ],
+   [
+    "chl2-otros#FADE",
+    9
+   ],
+   [
+    "khl-otros#SEGUIR",
+    9
+   ],
+   [
+    "ja2-ganador#SEGUIR",
+    9
+   ],
+   [
+    "ecu1-ganador#FADE",
+    9
+   ],
+   [
+    "dota2-otros#FADE",
+    9
+   ],
+   [
+    "fpd-otros#FADE",
+    9
+   ],
+   [
+    "lva1-otros#SEGUIR",
+    9
+   ],
+   [
+    "fif-ganador#FADE",
+    9
+   ],
+   [
+    "Soccer-sud#SEGUIR",
+    8
+   ],
+   [
+    "Soccer-bl2#SEGUIR",
+    8
+   ],
+   [
+    "fin1-otros#SEGUIR",
+    8
+   ],
+   [
+    "sud-otros#SEGUIR",
+    8
+   ],
+   [
+    "lib-ganador#FADE",
+    8
+   ],
+   [
+    "gtm-ganador#FADE",
+    8
+   ],
+   [
+    "ned2-otros#SEGUIR",
+    8
+   ],
+   [
+    "usl1-otros#SEGUIR",
+    8
+   ],
+   [
+    "bra3-ganador#SEGUIR",
+    8
+   ],
+   [
+    "itsb-ganador#FADE",
+    8
+   ],
+   [
+    "nor2-ganador#SEGUIR",
+    8
+   ],
+   [
+    "Soccer-asean#SEGUIR",
+    7
+   ],
+   [
+    "Soccer-argcopa#FADE",
+    7
+   ],
+   [
+    "Soccer-usl1#FADE",
+    7
+   ],
+   [
+    "F1#SEGUIR",
+    7
+   ],
+   [
+    "swe2-ganador#FADE",
+    7
+   ],
+   [
+    "aut-ganador#SEGUIR",
+    7
+   ],
+   [
+    "hr1-ganador#FADE",
+    7
+   ],
+   [
+    "es2-ganador#FADE",
+    7
+   ],
+   [
+    "fin1-ganador#FADE",
+    7
+   ],
+   [
+    "svk1-otros#SEGUIR",
+    7
+   ],
+   [
+    "es2-otros#SEGUIR",
+    7
+   ],
+   [
+    "bel1-ganador#SEGUIR",
+    7
+   ],
+   [
+    "mlbb-otros#FADE",
+    7
+   ],
+   [
+    "col2-ganador#FADE",
+    7
+   ],
+   [
+    "Soccer-clf#FADE",
+    6
+   ],
+   [
+    "Soccer-col2#SEGUIR",
+    6
+   ],
+   [
+    "Soccer-gtm#SEGUIR",
+    6
+   ],
+   [
+    "bul-ganador#SEGUIR",
+    6
+   ],
+   [
+    "u20wwc-otros#FADE",
+    6
+   ],
+   [
+    "RainbowSix#SEGUIR",
+    6
+   ],
+   [
+    "per1-ganador#SEGUIR",
+    6
+   ],
+   [
+    "den-ganador#FADE",
+    6
+   ],
+   [
+    "Boxing#FADE",
+    6
+   ],
+   [
+    "bl2-ganador#SEGUIR",
+    6
+   ],
+   [
+    "swe-ganador#SEGUIR",
+    6
+   ],
+   [
+    "Soccer-asean#FADE",
+    5
+   ],
+   [
+    "Soccer-uzb1#SEGUIR",
+    5
+   ],
+   [
+    "Soccer-pol#FADE",
+    5
+   ],
+   [
+    "Soccer-scop#SEGUIR",
+    5
+   ],
+   [
+    "Soccer-fr2#FADE",
+    5
+   ],
+   [
+    "Soccer-kaz1#FADE",
+    5
+   ],
+   [
+    "Soccer-nor#SEGUIR",
+    5
+   ],
+   [
+    "Soccer-enl#SEGUIR",
+    5
+   ],
+   [
+    "F1#FADE",
+    5
+   ],
+   [
+    "acle-otros#SEGUIR",
+    5
+   ],
+   [
+    "isr-otros#SEGUIR",
+    5
+   ],
+   [
+    "lva1-ganador#SEGUIR",
+    5
+   ],
+   [
+    "nirl1-ganador#FADE",
+    5
+   ],
+   [
+    "kbo-otros#FADE",
+    5
+   ],
+   [
+    "u20wwc-otros#SEGUIR",
+    5
+   ],
+   [
+    "ven1-ganador#FADE",
+    5
+   ],
+   [
+    "col2-ganador#SEGUIR",
+    5
+   ],
+   [
+    "RainbowSix#FADE",
+    5
+   ],
+   [
+    "Soccer-bol1#FADE",
+    4
+   ],
+   [
+    "Soccer-hun#SEGUIR",
+    4
+   ],
+   [
+    "Soccer-rus#FADE",
+    4
+   ],
+   [
+    "Soccer-swe2#FADE",
+    4
+   ],
+   [
+    "Soccer-el1#FADE",
+    4
+   ],
+   [
+    "Soccer-slo#SEGUIR",
+    4
+   ],
+   [
+    "Soccer-srb#FADE",
+    4
+   ],
+   [
+    "Liga-swe#SEGUIR",
+    4
+   ],
+   [
+    "Liga-kbo#FADE",
+    4
+   ],
+   [
+    "cricetpl-otros#FADE",
+    4
+   ],
+   [
+    "cricetpl-otros#SEGUIR",
+    4
+   ],
+   [
+    "bol1-ganador#SEGUIR",
+    4
+   ],
+   [
+    "hok-otros#SEGUIR",
+    4
+   ],
+   [
+    "npb-otros#SEGUIR",
+    4
+   ],
+   [
+    "sui-ganador#FADE",
+    4
+   ],
+   [
+    "irl1-ganador#SEGUIR",
+    4
+   ],
+   [
+    "ecu1-ganador#SEGUIR",
+    4
+   ],
+   [
+    "per1-otros#SEGUIR",
+    4
+   ],
+   [
+    "es2-ganador#SEGUIR",
+    4
+   ],
+   [
+    "fin1-ganador#SEGUIR",
+    4
+   ],
+   [
+    "kor2-otros#SEGUIR",
+    4
+   ],
+   [
+    "ltu1-otros#FADE",
+    4
+   ],
+   [
+    "rou1-ganador#SEGUIR",
+    4
+   ],
+   [
+    "bkbbl-otros#FADE",
+    4
+   ],
+   [
+    "conl-otros#SEGUIR",
+    4
+   ],
+   [
+    "modus-otros#SEGUIR",
+    4
+   ],
+   [
+    "Soccer-skc#SEGUIR",
+    3
+   ],
+   [
+    "Soccer-bra2#FADE",
+    3
+   ],
+   [
+    "Soccer-chl2#SEGUIR",
+    3
+   ],
+   [
+    "Soccer-fin1#FADE",
+    3
+   ],
+   [
+    "Soccer-uwcl#SEGUIR",
+    3
+   ],
+   [
+    "Soccer-scop#FADE",
+    3
+   ],
+   [
+    "Liga-dfb#FADE",
+    3
+   ],
+   [
+    "Soccer-ven1#SEGUIR",
+    3
+   ],
+   [
+    "Liga-sui#FADE",
+    3
+   ],
+   [
+    "Soccer-qat1#FADE",
+    3
+   ],
+   [
+    "chl2-otros#SEGUIR",
+    3
+   ],
+   [
+    "bra2-otros#FADE",
+    3
+   ],
+   [
+    "saf1-otros#FADE",
+    3
+   ],
+   [
+    "uslc-ganador#FADE",
+    3
+   ],
+   [
+    "uzb1-ganador#SEGUIR",
+    3
+   ],
+   [
+    "wsl-ganador#SEGUIR",
+    3
+   ],
+   [
+    "bul-otros#SEGUIR",
+    3
+   ],
+   [
+    "ned2-ganador#FADE",
+    3
+   ],
+   [
+    "col2-otros#SEGUIR",
+    3
+   ],
+   [
+    "bel2-otros#FADE",
+    3
+   ],
+   [
+    "kor2-ganador#FADE",
+    3
+   ],
+   [
+    "bkbbl-otros#SEGUIR",
+    3
+   ],
+   [
+    "uslc-ganador#SEGUIR",
+    3
+   ],
+   [
+    "u20wwc-ganador#FADE",
+    3
+   ],
+   [
+    "canpl-ganador#SEGUIR",
     3
    ],
    [
@@ -634,227 +1386,139 @@
     2
    ],
    [
-    "Soccer-hr1#FADE",
-    2
-   ],
-   [
-    "Soccer-argcopa#FADE",
-    2
-   ],
-   [
-    "Soccer-hun#SEGUIR",
-    2
-   ],
-   [
-    "Soccer-itsb#SEGUIR",
-    2
-   ],
-   [
-    "Soccer-pol#FADE",
-    2
-   ],
-   [
-    "Soccer-col2#SEGUIR",
-    2
-   ],
-   [
-    "Soccer-scop#SEGUIR",
-    2
-   ],
-   [
-    "Soccer-fr2#FADE",
-    2
-   ],
-   [
-    "Soccer-cze1#SEGUIR",
-    2
-   ],
-   [
-    "Soccer-slo#SEGUIR",
-    2
-   ],
-   [
-    "Soccer-gtm#SEGUIR",
-    2
-   ],
-   [
-    "Soccer-nor2#FADE",
-    2
-   ],
-   [
-    "Soccer-ptc#FADE",
-    2
-   ],
-   [
-    "F1#SEGUIR",
-    2
-   ],
-   [
-    "Soccer-srb#FADE",
-    2
-   ],
-   [
-    "Soccer-uwcl#FADE",
-    2
-   ],
-   [
-    "F1#FADE",
-    2
-   ],
-   [
-    "Liga-sui#SEGUIR",
-    2
-   ],
-   [
-    "Liga-tur2#FADE",
-    2
-   ],
-   [
-    "acle-ganador#FADE",
-    2
-   ],
-   [
-    "elc-otros#FADE",
-    2
-   ],
-   [
-    "egy1-otros#SEGUIR",
-    2
-   ],
-   [
-    "enl-ganador#FADE",
-    2
-   ],
-   [
-    "swe2-otros#SEGUIR",
-    2
-   ],
-   [
-    "grc-otros#FADE",
-    2
-   ],
-   [
-    "bun-ganador#SEGUIR",
-    2
-   ],
-   [
-    "por-ganador#FADE",
-    2
-   ],
-   [
-    "pol-otros#SEGUIR",
-    2
-   ],
-   [
-    "bun-otros#SEGUIR",
-    2
-   ],
-   [
-    "col1-ganador#SEGUIR",
-    2
-   ],
-   [
-    "nwsl-ganador#FADE",
-    2
-   ],
-   [
-    "por-otros#FADE",
-    2
-   ],
-   [
-    "fl1-ganador#SEGUIR",
-    2
-   ],
-   [
-    "argpn-ganador#SEGUIR",
-    2
-   ],
-   [
-    "wsl-otros#FADE",
-    2
-   ],
-   [
-    "lib-otros#FADE",
-    2
-   ],
-   [
-    "sud-otros#FADE",
-    2
-   ],
-   [
-    "ere-otros#FADE",
-    2
-   ],
-   [
-    "uslc-otros#SEGUIR",
-    2
-   ],
-   [
-    "ukr1-ganador#FADE",
-    2
-   ],
-   [
-    "gtm-ganador#SEGUIR",
-    2
-   ],
-   [
-    "hr1-otros#SEGUIR",
-    2
-   ],
-   [
-    "khl-otros#FADE",
-    2
-   ],
-   [
-    "kor-otros#SEGUIR",
-    2
-   ],
-   [
-    "idn2-otros#SEGUIR",
-    2
-   ],
-   [
-    "bel1-ganador#SEGUIR",
-    2
-   ],
-   [
-    "mlbb-otros#FADE",
-    2
-   ],
-   [
-    "bel1-otros#SEGUIR",
-    2
-   ],
-   [
-    "den-otros#SEGUIR",
-    2
-   ],
-   [
-    "rou1-otros#FADE",
-    2
-   ],
-   [
-    "Soccer-skc#SEGUIR",
-    1
-   ],
-   [
     "Soccer-sud#FADE",
+    2
+   ],
+   [
+    "Soccer-argcopa#SEGUIR",
+    2
+   ],
+   [
+    "Soccer-swe#FADE",
+    2
+   ],
+   [
+    "Soccer-per1#FADE",
+    2
+   ],
+   [
+    "Soccer-slo#FADE",
+    2
+   ],
+   [
+    "Soccer-fr2#SEGUIR",
+    2
+   ],
+   [
+    "Soccer-chfa#SEGUIR",
+    2
+   ],
+   [
+    "Soccer-nlc#FADE",
+    2
+   ],
+   [
+    "Soccer-bel1#SEGUIR",
+    2
+   ],
+   [
+    "Liga-bra#FADE",
+    2
+   ],
+   [
+    "Soccer-kor2#FADE",
+    2
+   ],
+   [
+    "Liga-tur2#SEGUIR",
+    2
+   ],
+   [
+    "lva1-ganador#FADE",
+    2
+   ],
+   [
+    "chl2-ganador#FADE",
+    2
+   ],
+   [
+    "chl2-ganador#SEGUIR",
+    2
+   ],
+   [
+    "ltu1-ganador#SEGUIR",
+    2
+   ],
+   [
+    "rus-ganador#FADE",
+    2
+   ],
+   [
+    "bol1-otros#FADE",
+    2
+   ],
+   [
+    "bkcl-otros#FADE",
+    2
+   ],
+   [
+    "aut-ganador#FADE",
+    2
+   ],
+   [
+    "kbo-otros#SEGUIR",
+    2
+   ],
+   [
+    "aze2-otros#FADE",
+    2
+   ],
+   [
+    "fr2-ganador#SEGUIR",
+    2
+   ],
+   [
+    "tha1-ganador#FADE",
+    2
+   ],
+   [
+    "sui-ganador#SEGUIR",
+    2
+   ],
+   [
+    "canpl-ganador#FADE",
+    2
+   ],
+   [
+    "uru1-otros#FADE",
+    2
+   ],
+   [
+    "conl-ganador#FADE",
+    2
+   ],
+   [
+    "shl-otros#FADE",
+    2
+   ],
+   [
+    "Soccer-qat1#SEGUIR",
     1
    ],
    [
-    "Soccer-bol1#FADE",
+    "Overwatch#FADE",
     1
    ],
    [
-    "Soccer-itsb#FADE",
+    "Soccer-bol1#SEGUIR",
     1
    ],
    [
-    "Soccer-brco#SEGUIR",
+    "Soccer-ned2#SEGUIR",
     1
    ],
    [
-    "Soccer-por#SEGUIR",
+    "Soccer-bul#SEGUIR",
     1
    ],
    [
@@ -862,27 +1526,11 @@
     1
    ],
    [
-    "Soccer-swe#FADE",
-    1
-   ],
-   [
-    "Soccer-swe2#FADE",
-    1
-   ],
-   [
-    "Soccer-el1#FADE",
-    1
-   ],
-   [
-    "Soccer-chl2#SEGUIR",
-    1
-   ],
-   [
     "Soccer-hr1#SEGUIR",
     1
    ],
    [
-    "Soccer-usl1#FADE",
+    "Soccer-den#SEGUIR",
     1
    ],
    [
@@ -890,23 +1538,27 @@
     1
    ],
    [
-    "Soccer-nor#SEGUIR",
+    "Soccer-svk1#FADE",
     1
    ],
    [
-    "Soccer-fin1#FADE",
+    "Soccer-lva1#FADE",
     1
    ],
    [
-    "Liga-dfb#FADE",
+    "Soccer-gre1#FADE",
     1
    ],
    [
-    "Soccer-bel1#SEGUIR",
+    "Soccer-gre1#SEGUIR",
     1
    ],
    [
-    "Soccer-ven1#SEGUIR",
+    "Soccer-dfb#SEGUIR",
+    1
+   ],
+   [
+    "Soccer-ven1#FADE",
     1
    ],
    [
@@ -914,955 +1566,59 @@
     1
    ],
    [
-    "Liga-tur2#SEGUIR",
-    1
-   ],
-   [
-    "Liga-sui#FADE",
-    1
-   ],
-   [
-    "Liga-kbo#FADE",
-    1
-   ],
-   [
-    "acle-ganador#SEGUIR",
-    1
-   ],
-   [
-    "el2-ganador#SEGUIR",
-    1
-   ],
-   [
-    "por-ganador#SEGUIR",
-    1
-   ],
-   [
-    "lib-ganador#SEGUIR",
-    1
-   ],
-   [
-    "egy1-otros#FADE",
-    1
-   ],
-   [
-    "bul-ganador#SEGUIR",
-    1
-   ],
-   [
-    "hok-otros#SEGUIR",
-    1
-   ],
-   [
-    "lva1-otros#FADE",
-    1
-   ],
-   [
-    "grc-otros#SEGUIR",
-    1
-   ],
-   [
-    "setkameua-otros#FADE",
-    1
-   ],
-   [
-    "argpn-otros#FADE",
-    1
-   ],
-   [
-    "argpn-otros#SEGUIR",
-    1
-   ],
-   [
-    "u20wwc-otros#SEGUIR",
-    1
-   ],
-   [
-    "usl1-otros#FADE",
-    1
-   ],
-   [
-    "kaz1-ganador#FADE",
-    1
-   ],
-   [
-    "sui-otros#FADE",
-    1
-   ],
-   [
-    "uslc-otros#FADE",
-    1
-   ],
-   [
-    "bra-ganador#FADE",
-    1
-   ],
-   [
-    "col1-ganador#FADE",
-    1
-   ],
-   [
-    "kaz1-otros#SEGUIR",
-    1
-   ],
-   [
-    "wsl-ganador#SEGUIR",
-    1
-   ],
-   [
-    "idn1-otros#FADE",
-    1
-   ],
-   [
-    "bra-ganador#SEGUIR",
-    1
-   ],
-   [
-    "RocketLeague#FADE",
-    1
-   ],
-   [
-    "srb-otros#SEGUIR",
-    1
-   ],
-   [
-    "irl1-otros#SEGUIR",
-    1
-   ],
-   [
-    "ja2-ganador#SEGUIR",
-    1
-   ],
-   [
-    "fl1-ganador#FADE",
-    1
-   ],
-   [
-    "enl-otros#SEGUIR",
-    1
-   ],
-   [
-    "bel2-otros#SEGUIR",
-    1
-   ],
-   [
-    "ukr1-ganador#SEGUIR",
-    1
-   ],
-   [
-    "bra3-ganador#FADE",
-    1
-   ],
-   [
-    "por-otros#SEGUIR",
-    1
-   ],
-   [
-    "gtm-otros#SEGUIR",
-    1
-   ],
-   [
-    "kor2-ganador#FADE",
-    1
-   ],
-   [
-    "bra3-ganador#SEGUIR",
-    1
-   ],
-   [
-    "ltu1-otros#FADE",
-    1
-   ],
-   [
-    "hr1-otros#FADE",
-    1
-   ],
-   [
-    "ven1-ganador#FADE",
-    1
-   ],
-   [
-    "NHL#SEGUIR",
-    1
-   ],
-   [
-    "dota2-otros#SEGUIR",
-    1
-   ],
-   [
-    "col2-ganador#FADE",
-    1
-   ],
-   [
-    "rou1-otros#SEGUIR",
-    1
-   ],
-   [
-    "RainbowSix#FADE",
-    1
-   ],
-   [
-    "Soccer-asean#SEGUIR",
-    0
-   ],
-   [
-    "Soccer-bra2#FADE",
-    0
-   ],
-   [
-    "Soccer-uzb1#SEGUIR",
-    0
-   ],
-   [
-    "Soccer-qat1#SEGUIR",
-    0
-   ],
-   [
-    "Overwatch#FADE",
-    0
-   ],
-   [
-    "Soccer-argcopa#SEGUIR",
-    0
-   ],
-   [
-    "Soccer-bol1#SEGUIR",
-    0
-   ],
-   [
-    "Soccer-ned2#SEGUIR",
-    0
-   ],
-   [
-    "Soccer-bul#SEGUIR",
-    0
-   ],
-   [
-    "Soccer-rus#FADE",
-    0
-   ],
-   [
-    "Soccer-den#SEGUIR",
-    0
-   ],
-   [
-    "Soccer-per1#FADE",
-    0
-   ],
-   [
-    "Soccer-kaz1#FADE",
-    0
-   ],
-   [
-    "Soccer-svk1#FADE",
-    0
-   ],
-   [
-    "Soccer-tur2#FADE",
-    0
-   ],
-   [
-    "Soccer-slo#FADE",
-    0
-   ],
-   [
-    "Soccer-lva1#FADE",
-    0
-   ],
-   [
-    "Soccer-enl#SEGUIR",
-    0
-   ],
-   [
-    "Soccer-gre1#FADE",
-    0
-   ],
-   [
-    "Soccer-gre1#SEGUIR",
-    0
-   ],
-   [
-    "Soccer-fr2#SEGUIR",
-    0
-   ],
-   [
-    "Soccer-uwcl#SEGUIR",
-    0
-   ],
-   [
-    "Soccer-dfb#SEGUIR",
-    0
-   ],
-   [
-    "Soccer-chfa#SEGUIR",
-    0
-   ],
-   [
-    "Soccer-nlc#FADE",
-    0
-   ],
-   [
-    "Soccer-scop#FADE",
-    0
-   ],
-   [
-    "Liga-bra#FADE",
-    0
-   ],
-   [
-    "Soccer-ven1#FADE",
-    0
-   ],
-   [
     "Soccer-uslc#FADE",
-    0
-   ],
-   [
-    "Soccer-kor2#FADE",
-    0
-   ],
-   [
-    "Soccer-qat1#FADE",
-    0
+    1
    ],
    [
     "Soccer-ecu1#FADE",
-    0
+    1
    ],
    [
     "Soccer-ukr1#SEGUIR",
-    0
-   ],
-   [
-    "Liga-swe#SEGUIR",
-    0
-   ],
-   [
-    "acle-otros#FADE",
-    0
-   ],
-   [
-    "isr-ganador#FADE",
-    0
-   ],
-   [
-    "ere-otros#SEGUIR",
-    0
-   ],
-   [
-    "acle-otros#SEGUIR",
-    0
-   ],
-   [
-    "pol-ganador#FADE",
-    0
-   ],
-   [
-    "bol1-ganador#FADE",
-    0
+    1
    ],
    [
     "ere-ganador#SEGUIR",
-    0
-   ],
-   [
-    "cricetpl-otros#FADE",
-    0
-   ],
-   [
-    "swe2-ganador#SEGUIR",
-    0
-   ],
-   [
-    "isr-otros#SEGUIR",
-    0
-   ],
-   [
-    "rou1-ganador#FADE",
-    0
-   ],
-   [
-    "lva1-ganador#SEGUIR",
-    0
-   ],
-   [
-    "kor-ganador#SEGUIR",
-    0
-   ],
-   [
-    "mls-ganador#SEGUIR",
-    0
-   ],
-   [
-    "swe2-ganador#FADE",
-    0
-   ],
-   [
-    "el1-ganador#FADE",
-    0
-   ],
-   [
-    "u20wwc-otros#FADE",
-    0
-   ],
-   [
-    "cricetpl-otros#SEGUIR",
-    0
-   ],
-   [
-    "lva1-ganador#FADE",
-    0
-   ],
-   [
-    "chl2-ganador#FADE",
-    0
-   ],
-   [
-    "mls-ganador#FADE",
-    0
-   ],
-   [
-    "nirl1-otros#FADE",
-    0
-   ],
-   [
-    "chl2-otros#SEGUIR",
-    0
-   ],
-   [
-    "aut-ganador#SEGUIR",
-    0
-   ],
-   [
-    "nirl1-ganador#FADE",
-    0
-   ],
-   [
-    "chl2-ganador#SEGUIR",
-    0
-   ],
-   [
-    "bol1-otros#SEGUIR",
-    0
-   ],
-   [
-    "isl1-ganador#FADE",
-    0
-   ],
-   [
-    "RainbowSix#SEGUIR",
-    0
-   ],
-   [
-    "chl2-otros#FADE",
-    0
-   ],
-   [
-    "bol1-ganador#SEGUIR",
-    0
-   ],
-   [
-    "sea-otros#SEGUIR",
-    0
-   ],
-   [
-    "setkameua-otros#SEGUIR",
-    0
-   ],
-   [
-    "bl2-ganador#FADE",
-    0
-   ],
-   [
-    "ltu1-ganador#SEGUIR",
-    0
-   ],
-   [
-    "fr2-otros#SEGUIR",
-    0
-   ],
-   [
-    "bra2-otros#FADE",
-    0
-   ],
-   [
-    "ven1-ganador#SEGUIR",
-    0
-   ],
-   [
-    "saf1-otros#FADE",
-    0
-   ],
-   [
-    "nwsl-ganador#SEGUIR",
-    0
-   ],
-   [
-    "npb-otros#SEGUIR",
-    0
-   ],
-   [
-    "scop-ganador#SEGUIR",
-    0
-   ],
-   [
-    "fin1-otros#SEGUIR",
-    0
-   ],
-   [
-    "scop-ganador#FADE",
-    0
-   ],
-   [
-    "den-ganador#SEGUIR",
-    0
-   ],
-   [
-    "efl-ganador#FADE",
-    0
-   ],
-   [
-    "efl-ganador#SEGUIR",
-    0
-   ],
-   [
-    "kbo-otros#FADE",
-    0
-   ],
-   [
-    "rus-ganador#FADE",
-    0
-   ],
-   [
-    "pol-ganador#SEGUIR",
-    0
-   ],
-   [
-    "est1-ganador#FADE",
-    0
-   ],
-   [
-    "enl-otros#FADE",
-    0
-   ],
-   [
-    "khl-otros#SEGUIR",
-    0
-   ],
-   [
-    "hr1-ganador#FADE",
-    0
-   ],
-   [
-    "el1-ganador#SEGUIR",
-    0
-   ],
-   [
-    "jap-otros#FADE",
-    0
-   ],
-   [
-    "sui-ganador#FADE",
-    0
-   ],
-   [
-    "nwsl-otros#SEGUIR",
-    0
-   ],
-   [
-    "uslc-ganador#FADE",
-    0
-   ],
-   [
-    "efl-otros#SEGUIR",
-    0
-   ],
-   [
-    "sud-otros#SEGUIR",
-    0
-   ],
-   [
-    "bra-otros#SEGUIR",
-    0
-   ],
-   [
-    "kor-ganador#FADE",
-    0
-   ],
-   [
-    "uzb1-ganador#SEGUIR",
-    0
-   ],
-   [
-    "uel-ganador#FADE",
-    0
-   ],
-   [
-    "col1-otros#SEGUIR",
-    0
-   ],
-   [
-    "uel-ganador#SEGUIR",
-    0
-   ],
-   [
-    "kaz1-ganador#SEGUIR",
-    0
-   ],
-   [
-    "npb-otros#FADE",
-    0
-   ],
-   [
-    "uzb1-ganador#FADE",
-    0
-   ],
-   [
-    "fr2-ganador#FADE",
-    0
-   ],
-   [
-    "chi2-ganador#SEGUIR",
-    0
+    1
    ],
    [
     "srb-ganador#SEGUIR",
-    0
+    1
    ],
    [
     "setkamecz-otros#SEGUIR",
-    0
-   ],
-   [
-    "jap-ganador#FADE",
-    0
-   ],
-   [
-    "lib-ganador#FADE",
-    0
-   ],
-   [
-    "u20wwc-ganador#SEGUIR",
-    0
-   ],
-   [
-    "bol1-otros#FADE",
-    0
-   ],
-   [
-    "bkcl-otros#FADE",
-    0
-   ],
-   [
-    "bun-ganador#FADE",
-    0
-   ],
-   [
-    "es2-ganador#FADE",
-    0
-   ],
-   [
-    "ja2-otros#SEGUIR",
-    0
-   ],
-   [
-    "per1-ganador#SEGUIR",
-    0
-   ],
-   [
-    "chi2-otros#SEGUIR",
-    0
-   ],
-   [
-    "aut-ganador#FADE",
-    0
-   ],
-   [
-    "den-ganador#FADE",
-    0
-   ],
-   [
-    "tha1-ganador#SEGUIR",
-    0
-   ],
-   [
-    "bra2-otros#SEGUIR",
-    0
-   ],
-   [
-    "kbo-otros#SEGUIR",
-    0
-   ],
-   [
-    "irl1-ganador#SEGUIR",
-    0
-   ],
-   [
-    "gtm-ganador#FADE",
-    0
-   ],
-   [
-    "aze2-otros#FADE",
-    0
+    1
    ],
    [
     "fin1-otros#FADE",
-    0
-   ],
-   [
-    "ecu1-ganador#FADE",
-    0
-   ],
-   [
-    "fin1-ganador#FADE",
-    0
-   ],
-   [
-    "ecu1-ganador#SEGUIR",
-    0
-   ],
-   [
-    "svk1-otros#SEGUIR",
-    0
-   ],
-   [
-    "bul-otros#SEGUIR",
-    0
-   ],
-   [
-    "fr2-ganador#SEGUIR",
-    0
-   ],
-   [
-    "irl1-otros#FADE",
-    0
-   ],
-   [
-    "ned2-otros#SEGUIR",
-    0
-   ],
-   [
-    "ned2-ganador#FADE",
-    0
-   ],
-   [
-    "jap-ganador#SEGUIR",
-    0
-   ],
-   [
-    "es2-otros#SEGUIR",
-    0
-   ],
-   [
-    "col2-otros#SEGUIR",
-    0
-   ],
-   [
-    "canpl-otros#FADE",
-    0
+    1
    ],
    [
     "canpl-otros#SEGUIR",
-    0
-   ],
-   [
-    "usl1-otros#SEGUIR",
-    0
+    1
    ],
    [
     "ven1-otros#SEGUIR",
-    0
-   ],
-   [
-    "bra2-ganador#FADE",
-    0
+    1
    ],
    [
     "uru1-ganador#SEGUIR",
-    0
-   ],
-   [
-    "Boxing#FADE",
-    0
-   ],
-   [
-    "ecu1-otros#SEGUIR",
-    0
-   ],
-   [
-    "bel2-otros#FADE",
-    0
-   ],
-   [
-    "per1-otros#SEGUIR",
-    0
-   ],
-   [
-    "per1-otros#FADE",
-    0
-   ],
-   [
-    "es2-ganador#SEGUIR",
-    0
-   ],
-   [
-    "idn1-ganador#SEGUIR",
-    0
-   ],
-   [
-    "bl2-ganador#SEGUIR",
-    0
-   ],
-   [
-    "fin1-ganador#SEGUIR",
-    0
-   ],
-   [
-    "swe-ganador#SEGUIR",
-    0
-   ],
-   [
-    "dota2-otros#FADE",
-    0
-   ],
-   [
-    "chi2-ganador#FADE",
-    0
-   ],
-   [
-    "itsb-ganador#FADE",
-    0
-   ],
-   [
-    "wsl-ganador#FADE",
-    0
+    1
    ],
    [
     "kor-otros#FADE",
-    0
-   ],
-   [
-    "tur2-ganador#SEGUIR",
-    0
-   ],
-   [
-    "fpd-otros#FADE",
-    0
-   ],
-   [
-    "kor2-otros#SEGUIR",
-    0
-   ],
-   [
-    "lva1-otros#SEGUIR",
-    0
-   ],
-   [
-    "tur-otros#FADE",
-    0
-   ],
-   [
-    "nor-otros#SEGUIR",
-    0
-   ],
-   [
-    "tha1-ganador#FADE",
-    0
-   ],
-   [
-    "bkbbl-otros#SEGUIR",
-    0
-   ],
-   [
-    "ecu1-otros#FADE",
-    0
-   ],
-   [
-    "col1-otros#FADE",
-    0
-   ],
-   [
-    "nor2-ganador#SEGUIR",
-    0
+    1
    ],
    [
     "nor-ganador#FADE",
-    0
+    1
    ],
    [
-    "sui-ganador#SEGUIR",
-    0
-   ],
-   [
-    "canpl-ganador#FADE",
-    0
-   ],
-   [
-    "rou1-ganador#SEGUIR",
-    0
-   ],
-   [
-    "bknbl-otros#FADE",
-    0
-   ],
-   [
-    "col2-ganador#SEGUIR",
-    0
-   ],
-   [
-    "crint-otros#SEGUIR",
-    0
-   ],
-   [
-    "uru1-otros#FADE",
-    0
+    "conl-ganador#SEGUIR",
+    1
    ],
    [
     "cfl-otros#FADE",
-    0
-   ],
-   [
-    "NHL#FADE",
-    0
-   ],
-   [
-    "efa-otros#FADE",
-    0
-   ],
-   [
-    "efa-ganador#FADE",
-    0
-   ],
-   [
-    "uslc-ganador#SEGUIR",
-    0
-   ],
-   [
-    "u20wwc-ganador#FADE",
-    0
-   ],
-   [
-    "canpl-ganador#SEGUIR",
-    0
-   ],
-   [
-    "bkbbl-otros#FADE",
-    0
-   ],
-   [
-    "fif-ganador#FADE",
-    0
-   ],
-   [
-    "conl-otros#SEGUIR",
-    0
-   ],
-   [
-    "fif-ganador#SEGUIR",
-    0
-   ],
-   [
-    "fif-otros#FADE",
     0
    ],
    [
@@ -1870,23 +1626,7 @@
     0
    ],
    [
-    "fif-otros#SEGUIR",
-    0
-   ],
-   [
     "conl-otros#FADE",
-    0
-   ],
-   [
-    "conl-ganador#SEGUIR",
-    0
-   ],
-   [
-    "conl-ganador#FADE",
-    0
-   ],
-   [
-    "modus-otros#SEGUIR",
     0
    ],
    [
@@ -1903,10 +1643,6 @@
    ],
    [
     "uru1-otros#SEGUIR",
-    0
-   ],
-   [
-    "shl-otros#FADE",
     0
    ],
    [
@@ -2100,10 +1836,143 @@
    [
     "snhl-otros#SEGUIR",
     0
+   ],
+   [
+    "snhl-otros#FADE",
+    0
+   ],
+   [
+    "modus-otros#FADE",
+    0
    ]
   ]
  },
  "zonas_operables": [
+  {
+   "tupla": "Dota#SEGUIR",
+   "categoria": "Dota",
+   "tipo": "SEGUIR",
+   "estado_config": "LIVE",
+   "ancho": 0.02,
+   "lo": 0.49,
+   "hi": 0.51,
+   "n_train": 126,
+   "pnl_train": 0.1702,
+   "n_dias_train": 10,
+   "pnl_sin_2_mejores_dias": 0.3504,
+   "wallets": 73,
+   "top1_wallet": 0.056,
+   "p_max_train": 0.436,
+   "n_forward": 47,
+   "pnl_forward": 0.3533,
+   "hit_forward": 0.681,
+   "forward_ok": true,
+   "forward_ic90": [
+    0.1389,
+    0.5651
+   ],
+   "forward_ok_estricto": true
+  },
+  {
+   "tupla": "MLB#SEGUIR",
+   "categoria": "MLB",
+   "tipo": "SEGUIR",
+   "estado_config": "candidata/dormida",
+   "ancho": 0.02,
+   "lo": 0.33,
+   "hi": 0.35,
+   "n_train": 154,
+   "pnl_train": 0.1994,
+   "n_dias_train": 8,
+   "pnl_sin_2_mejores_dias": 0.1638,
+   "wallets": 39,
+   "top1_wallet": 0.162,
+   "p_max_train": 0.058,
+   "n_forward": 48,
+   "pnl_forward": 0.344,
+   "hit_forward": 0.458,
+   "forward_ok": true,
+   "forward_ic90": [
+    0.0337,
+    0.7075
+   ],
+   "forward_ok_estricto": true
+  },
+  {
+   "tupla": "Dota#SEGUIR",
+   "categoria": "Dota",
+   "tipo": "SEGUIR",
+   "estado_config": "LIVE",
+   "ancho": 0.01,
+   "lo": 0.5,
+   "hi": 0.51,
+   "n_train": 68,
+   "pnl_train": 0.1903,
+   "n_dias_train": 7,
+   "pnl_sin_2_mejores_dias": 0.379,
+   "wallets": 46,
+   "top1_wallet": 0.044,
+   "p_max_train": 0.708,
+   "n_forward": 33,
+   "pnl_forward": 0.3167,
+   "hit_forward": 0.667,
+   "forward_ok": true,
+   "forward_ic90": [
+    0.0773,
+    0.5561
+   ],
+   "forward_ok_estricto": true
+  },
+  {
+   "tupla": "MLB#SEGUIR",
+   "categoria": "MLB",
+   "tipo": "SEGUIR",
+   "estado_config": "candidata/dormida",
+   "ancho": 0.05,
+   "lo": 0.31,
+   "hi": 0.36,
+   "n_train": 232,
+   "pnl_train": 0.2178,
+   "n_dias_train": 8,
+   "pnl_sin_2_mejores_dias": 0.1407,
+   "wallets": 44,
+   "top1_wallet": 0.203,
+   "p_max_train": 0.202,
+   "n_forward": 119,
+   "pnl_forward": 0.2856,
+   "hit_forward": 0.429,
+   "forward_ok": true,
+   "forward_ic90": [
+    0.0777,
+    0.4951
+   ],
+   "forward_ok_estricto": true
+  },
+  {
+   "tupla": "Tennis#SEGUIR",
+   "categoria": "Tennis",
+   "tipo": "SEGUIR",
+   "estado_config": "candidata/dormida",
+   "ancho": 0.01,
+   "lo": 0.27,
+   "hi": 0.28,
+   "n_train": 67,
+   "pnl_train": 0.4761,
+   "n_dias_train": 9,
+   "pnl_sin_2_mejores_dias": 0.8187,
+   "wallets": 42,
+   "top1_wallet": 0.06,
+   "p_max_train": 0.45,
+   "n_forward": 20,
+   "pnl_forward": 0.2835,
+   "hit_forward": 0.35,
+   "forward_ok": true,
+   "forward_ic90": [
+    -0.2666,
+    1.017
+   ],
+   "forward_ok_estricto": false
+  },
   {
    "tupla": "Tennis#SEGUIR",
    "categoria": "Tennis",
@@ -2112,22 +1981,47 @@
    "ancho": 0.02,
    "lo": 0.27,
    "hi": 0.29,
-   "n_train": 46,
-   "pnl_train": 0.6735,
-   "n_dias_train": 14,
-   "pnl_sin_2_mejores_dias": 0.3519,
-   "wallets": 31,
-   "top1_wallet": 0.13,
-   "p_max_train": 0.39,
-   "n_forward": 130,
-   "pnl_forward": 0.2502,
-   "hit_forward": 0.346,
+   "n_train": 196,
+   "pnl_train": 0.2291,
+   "n_dias_train": 15,
+   "pnl_sin_2_mejores_dias": 0.4854,
+   "wallets": 83,
+   "top1_wallet": 0.061,
+   "p_max_train": 0.0,
+   "n_forward": 41,
+   "pnl_forward": 0.2297,
+   "hit_forward": 0.341,
    "forward_ok": true,
    "forward_ic90": [
-    0.0255,
-    0.503
+    -0.2079,
+    0.6737
    ],
-   "forward_ok_estricto": true
+   "forward_ok_estricto": false
+  },
+  {
+   "tupla": "LoL#FADE",
+   "categoria": "LoL",
+   "tipo": "FADE",
+   "estado_config": "candidata/dormida",
+   "ancho": 0.01,
+   "lo": 0.44,
+   "hi": 0.45,
+   "n_train": 82,
+   "pnl_train": 0.2866,
+   "n_dias_train": 12,
+   "pnl_sin_2_mejores_dias": 0.1712,
+   "wallets": 57,
+   "top1_wallet": 0.049,
+   "p_max_train": 0.436,
+   "n_forward": 25,
+   "pnl_forward": 0.1673,
+   "hit_forward": 0.52,
+   "forward_ok": true,
+   "forward_ic90": [
+    -0.1919,
+    0.5264
+   ],
+   "forward_ok_estricto": false
   },
   {
    "tupla": "LoL#FADE",
@@ -2137,97 +2031,47 @@
    "ancho": 0.02,
    "lo": 0.43,
    "hi": 0.45,
-   "n_train": 60,
-   "pnl_train": 0.3269,
-   "n_dias_train": 15,
-   "pnl_sin_2_mejores_dias": 0.1341,
-   "wallets": 43,
-   "top1_wallet": 0.117,
-   "p_max_train": 0.094,
-   "n_forward": 195,
-   "pnl_forward": 0.1423,
-   "hit_forward": 0.503,
+   "n_train": 203,
+   "pnl_train": 0.176,
+   "n_dias_train": 16,
+   "pnl_sin_2_mejores_dias": 0.229,
+   "wallets": 104,
+   "top1_wallet": 0.059,
+   "p_max_train": 0.61,
+   "n_forward": 58,
+   "pnl_forward": 0.1368,
+   "hit_forward": 0.5,
    "forward_ok": true,
    "forward_ic90": [
-    0.0128,
-    0.2682
+    -0.099,
+    0.3762
    ],
-   "forward_ok_estricto": true
+   "forward_ok_estricto": false
   }
  ],
  "zonas_en_observacion": [
   {
-   "tupla": "Dota#SEGUIR",
-   "categoria": "Dota",
-   "tipo": "SEGUIR",
-   "estado_config": "LIVE",
-   "ancho": 0.05,
-   "lo": 0.46,
-   "hi": 0.51,
-   "n_train": 57,
-   "pnl_train": 0.3492,
-   "n_dias_train": 11,
-   "pnl_sin_2_mejores_dias": 0.2501,
-   "wallets": 46,
-   "top1_wallet": 0.053,
-   "p_max_train": 0.126,
-   "n_forward": 325,
-   "pnl_forward": 0.0875,
-   "hit_forward": 0.529,
-   "forward_ok": false,
-   "forward_ic90": [
-    -0.0102,
-    0.1838
-   ],
-   "forward_ok_estricto": false
-  },
-  {
-   "tupla": "Dota#SEGUIR",
-   "categoria": "Dota",
-   "tipo": "SEGUIR",
-   "estado_config": "LIVE",
+   "tupla": "LoL#FADE",
+   "categoria": "LoL",
+   "tipo": "FADE",
+   "estado_config": "candidata/dormida",
    "ancho": 0.03,
-   "lo": 0.48,
-   "hi": 0.51,
-   "n_train": 49,
-   "pnl_train": 0.4409,
-   "n_dias_train": 10,
-   "pnl_sin_2_mejores_dias": 0.4001,
-   "wallets": 40,
-   "top1_wallet": 0.061,
-   "p_max_train": 0.018,
-   "n_forward": 193,
-   "pnl_forward": 0.0596,
-   "hit_forward": 0.528,
+   "lo": 0.42,
+   "hi": 0.45,
+   "n_train": 295,
+   "pnl_train": 0.1361,
+   "n_dias_train": 20,
+   "pnl_sin_2_mejores_dias": 0.1451,
+   "wallets": 134,
+   "top1_wallet": 0.064,
+   "p_max_train": 0.71,
+   "n_forward": 87,
+   "pnl_forward": 0.0823,
+   "hit_forward": 0.471,
    "forward_ok": false,
    "forward_ic90": [
-    -0.0548,
-    0.1741
-   ],
-   "forward_ok_estricto": false
-  },
-  {
-   "tupla": "CS#SEGUIR",
-   "categoria": "CS",
-   "tipo": "SEGUIR",
-   "estado_config": "LIVE",
-   "ancho": 0.03,
-   "lo": 0.45,
-   "hi": 0.48,
-   "n_train": 77,
-   "pnl_train": 0.4769,
-   "n_dias_train": 19,
-   "pnl_sin_2_mejores_dias": 0.2985,
-   "wallets": 40,
-   "top1_wallet": 0.13,
-   "p_max_train": 0.0,
-   "n_forward": 531,
-   "pnl_forward": 0.0489,
-   "hit_forward": 0.488,
-   "forward_ok": false,
-   "forward_ic90": [
-    -0.0319,
-    0.1226
+    -0.1315,
+    0.2905
    ],
    "forward_ok_estricto": false
   },
@@ -2237,22 +2081,194 @@
    "tipo": "SEGUIR",
    "estado_config": "LIVE",
    "ancho": 0.02,
-   "lo": 0.45,
-   "hi": 0.47,
-   "n_train": 77,
-   "pnl_train": 0.4769,
-   "n_dias_train": 19,
-   "pnl_sin_2_mejores_dias": 0.2985,
+   "lo": 0.15,
+   "hi": 0.17,
+   "n_train": 53,
+   "pnl_train": 1.0776,
+   "n_dias_train": 7,
+   "pnl_sin_2_mejores_dias": 0.3248,
    "wallets": 40,
-   "top1_wallet": 0.13,
-   "p_max_train": 0.068,
-   "n_forward": 366,
-   "pnl_forward": 0.0337,
-   "hit_forward": 0.475,
+   "top1_wallet": 0.075,
+   "p_max_train": 0.0,
+   "n_forward": 12,
+   "pnl_forward": 0.0693,
+   "hit_forward": 0.167,
+   "forward_ok": false,
+   "forward_ic90": null,
+   "forward_ok_estricto": false
+  },
+  {
+   "tupla": "CS#FADE",
+   "categoria": "CS",
+   "tipo": "FADE",
+   "estado_config": "LIVE",
+   "ancho": 0.01,
+   "lo": 0.58,
+   "hi": 0.59,
+   "n_train": 206,
+   "pnl_train": 0.1161,
+   "n_dias_train": 12,
+   "pnl_sin_2_mejores_dias": 0.2774,
+   "wallets": 78,
+   "top1_wallet": 0.102,
+   "p_max_train": 0.572,
+   "n_forward": 75,
+   "pnl_forward": 0.0673,
+   "hit_forward": 0.627,
    "forward_ok": false,
    "forward_ic90": [
-    -0.0604,
-    0.1241
+    -0.069,
+    0.2263
+   ],
+   "forward_ok_estricto": false
+  },
+  {
+   "tupla": "Dota#FADE",
+   "categoria": "Dota",
+   "tipo": "FADE",
+   "estado_config": "LIVE",
+   "ancho": 0.05,
+   "lo": 0.79,
+   "hi": 0.84,
+   "n_train": 112,
+   "pnl_train": 0.1221,
+   "n_dias_train": 8,
+   "pnl_sin_2_mejores_dias": 0.2224,
+   "wallets": 48,
+   "top1_wallet": 0.107,
+   "p_max_train": 0.472,
+   "n_forward": 56,
+   "pnl_forward": 0.048,
+   "hit_forward": 0.857,
+   "forward_ok": false,
+   "forward_ic90": [
+    -0.0444,
+    0.1361
+   ],
+   "forward_ok_estricto": false
+  },
+  {
+   "tupla": "Valorant#SEGUIR",
+   "categoria": "Valorant",
+   "tipo": "SEGUIR",
+   "estado_config": "candidata/dormida",
+   "ancho": 0.03,
+   "lo": 0.54,
+   "hi": 0.57,
+   "n_train": 81,
+   "pnl_train": 0.3621,
+   "n_dias_train": 8,
+   "pnl_sin_2_mejores_dias": 0.1896,
+   "wallets": 38,
+   "top1_wallet": 0.099,
+   "p_max_train": 0.012,
+   "n_forward": 24,
+   "pnl_forward": 0.0436,
+   "hit_forward": 0.583,
+   "forward_ok": false,
+   "forward_ic90": [
+    -0.2531,
+    0.3402
+   ],
+   "forward_ok_estricto": false
+  },
+  {
+   "tupla": "CS#FADE",
+   "categoria": "CS",
+   "tipo": "FADE",
+   "estado_config": "LIVE",
+   "ancho": 0.03,
+   "lo": 0.65,
+   "hi": 0.68,
+   "n_train": 646,
+   "pnl_train": 0.1039,
+   "n_dias_train": 27,
+   "pnl_sin_2_mejores_dias": 0.1119,
+   "wallets": 161,
+   "top1_wallet": 0.062,
+   "p_max_train": 0.002,
+   "n_forward": 248,
+   "pnl_forward": 0.034,
+   "hit_forward": 0.69,
+   "forward_ok": false,
+   "forward_ic90": [
+    -0.0445,
+    0.1013
+   ],
+   "forward_ok_estricto": false
+  },
+  {
+   "tupla": "Valorant#SEGUIR",
+   "categoria": "Valorant",
+   "tipo": "SEGUIR",
+   "estado_config": "candidata/dormida",
+   "ancho": 0.05,
+   "lo": 0.52,
+   "hi": 0.57,
+   "n_train": 101,
+   "pnl_train": 0.3351,
+   "n_dias_train": 10,
+   "pnl_sin_2_mejores_dias": 0.3941,
+   "wallets": 41,
+   "top1_wallet": 0.099,
+   "p_max_train": 0.07,
+   "n_forward": 30,
+   "pnl_forward": 0.0212,
+   "hit_forward": 0.567,
+   "forward_ok": false,
+   "forward_ic90": [
+    -0.2293,
+    0.2797
+   ],
+   "forward_ok_estricto": false
+  },
+  {
+   "tupla": "CS#SEGUIR",
+   "categoria": "CS",
+   "tipo": "SEGUIR",
+   "estado_config": "LIVE",
+   "ancho": 0.05,
+   "lo": 0.44,
+   "hi": 0.49,
+   "n_train": 761,
+   "pnl_train": 0.1074,
+   "n_dias_train": 26,
+   "pnl_sin_2_mejores_dias": 0.1847,
+   "wallets": 209,
+   "top1_wallet": 0.054,
+   "p_max_train": 0.0,
+   "n_forward": 300,
+   "pnl_forward": 0.0145,
+   "hit_forward": 0.473,
+   "forward_ok": false,
+   "forward_ic90": [
+    -0.0822,
+    0.1207
+   ],
+   "forward_ok_estricto": false
+  },
+  {
+   "tupla": "LoL#SEGUIR",
+   "categoria": "LoL",
+   "tipo": "SEGUIR",
+   "estado_config": "candidata/dormida",
+   "ancho": 0.05,
+   "lo": 0.44,
+   "hi": 0.49,
+   "n_train": 589,
+   "pnl_train": 0.1005,
+   "n_dias_train": 27,
+   "pnl_sin_2_mejores_dias": 0.1333,
+   "wallets": 206,
+   "top1_wallet": 0.025,
+   "p_max_train": 0.0,
+   "n_forward": 202,
+   "pnl_forward": -0.0074,
+   "hit_forward": 0.46,
+   "forward_ok": false,
+   "forward_ic90": [
+    -0.1251,
+    0.1193
    ],
    "forward_ok_estricto": false
   },
@@ -2264,45 +2280,45 @@
    "ancho": 0.03,
    "lo": 0.27,
    "hi": 0.3,
-   "n_train": 63,
-   "pnl_train": 0.4837,
-   "n_dias_train": 17,
-   "pnl_sin_2_mejores_dias": 0.1153,
-   "wallets": 36,
-   "top1_wallet": 0.111,
-   "p_max_train": 0.858,
-   "n_forward": 208,
-   "pnl_forward": 0.0275,
-   "hit_forward": 0.288,
-   "forward_ok": false,
-   "forward_ic90": [
-    -0.1603,
-    0.2194
-   ],
-   "forward_ok_estricto": false
-  },
-  {
-   "tupla": "CS#SEGUIR",
-   "categoria": "CS",
-   "tipo": "SEGUIR",
-   "estado_config": "LIVE",
-   "ancho": 0.05,
-   "lo": 0.45,
-   "hi": 0.5,
-   "n_train": 126,
-   "pnl_train": 0.3714,
-   "n_dias_train": 23,
-   "pnl_sin_2_mejores_dias": 0.1382,
-   "wallets": 59,
-   "top1_wallet": 0.119,
+   "n_train": 261,
+   "pnl_train": 0.1631,
+   "n_dias_train": 18,
+   "pnl_sin_2_mejores_dias": 0.2966,
+   "wallets": 94,
+   "top1_wallet": 0.057,
    "p_max_train": 0.0,
-   "n_forward": 870,
-   "pnl_forward": 0.0266,
-   "hit_forward": 0.487,
+   "n_forward": 64,
+   "pnl_forward": -0.0522,
+   "hit_forward": 0.266,
    "forward_ok": false,
    "forward_ic90": [
-    -0.0303,
-    0.0859
+    -0.3799,
+    0.2892
+   ],
+   "forward_ok_estricto": false
+  },
+  {
+   "tupla": "Dota#SEGUIR",
+   "categoria": "Dota",
+   "tipo": "SEGUIR",
+   "estado_config": "LIVE",
+   "ancho": 0.03,
+   "lo": 0.42,
+   "hi": 0.45,
+   "n_train": 155,
+   "pnl_train": 0.1559,
+   "n_dias_train": 11,
+   "pnl_sin_2_mejores_dias": 0.1305,
+   "wallets": 78,
+   "top1_wallet": 0.052,
+   "p_max_train": 0.742,
+   "n_forward": 58,
+   "pnl_forward": -0.0831,
+   "hit_forward": 0.397,
+   "forward_ok": false,
+   "forward_ic90": [
+    -0.3228,
+    0.1592
    ],
    "forward_ok_estricto": false
   },
@@ -2312,47 +2328,22 @@
    "tipo": "FADE",
    "estado_config": "candidata/dormida",
    "ancho": 0.03,
-   "lo": 0.8,
-   "hi": 0.83,
-   "n_train": 43,
-   "pnl_train": 0.1323,
-   "n_dias_train": 17,
-   "pnl_sin_2_mejores_dias": 0.112,
-   "wallets": 27,
-   "top1_wallet": 0.14,
-   "p_max_train": 0.638,
-   "n_forward": 217,
-   "pnl_forward": 0.0159,
-   "hit_forward": 0.829,
+   "lo": 0.25,
+   "hi": 0.28,
+   "n_train": 112,
+   "pnl_train": 0.2999,
+   "n_dias_train": 13,
+   "pnl_sin_2_mejores_dias": 0.3865,
+   "wallets": 53,
+   "top1_wallet": 0.08,
+   "p_max_train": 0.09,
+   "n_forward": 62,
+   "pnl_forward": -0.0846,
+   "hit_forward": 0.242,
    "forward_ok": false,
    "forward_ic90": [
-    -0.0358,
-    0.0624
-   ],
-   "forward_ok_estricto": false
-  },
-  {
-   "tupla": "Tennis#FADE",
-   "categoria": "Tennis",
-   "tipo": "FADE",
-   "estado_config": "candidata/dormida",
-   "ancho": 0.05,
-   "lo": 0.77,
-   "hi": 0.82,
-   "n_train": 48,
-   "pnl_train": 0.1343,
-   "n_dias_train": 17,
-   "pnl_sin_2_mejores_dias": 0.1138,
-   "wallets": 30,
-   "top1_wallet": 0.146,
-   "p_max_train": 0.744,
-   "n_forward": 379,
-   "pnl_forward": 0.0105,
-   "hit_forward": 0.805,
-   "forward_ok": false,
-   "forward_ic90": [
-    -0.0323,
-    0.0532
+    -0.3944,
+    0.2774
    ],
    "forward_ok_estricto": false
   },
@@ -2361,48 +2352,198 @@
    "categoria": "LoL",
    "tipo": "SEGUIR",
    "estado_config": "candidata/dormida",
-   "ancho": 0.05,
-   "lo": 0.47,
-   "hi": 0.52,
-   "n_train": 108,
-   "pnl_train": 0.2344,
-   "n_dias_train": 22,
-   "pnl_sin_2_mejores_dias": 0.1378,
-   "wallets": 62,
-   "top1_wallet": 0.046,
-   "p_max_train": 0.192,
-   "n_forward": 660,
-   "pnl_forward": 0.008,
-   "hit_forward": 0.502,
-   "forward_ok": false,
-   "forward_ic90": [
-    -0.0578,
-    0.0738
-   ],
-   "forward_ok_estricto": false
-  },
-  {
-   "tupla": "LoL#SEGUIR",
-   "categoria": "LoL",
-   "tipo": "SEGUIR",
-   "estado_config": "candidata/dormida",
-   "ancho": 0.03,
+   "ancho": 0.01,
    "lo": 0.48,
-   "hi": 0.51,
-   "n_train": 73,
-   "pnl_train": 0.2663,
-   "n_dias_train": 18,
-   "pnl_sin_2_mejores_dias": 0.1032,
-   "wallets": 46,
-   "top1_wallet": 0.068,
-   "p_max_train": 0.526,
-   "n_forward": 397,
-   "pnl_forward": 0.0034,
-   "hit_forward": 0.499,
+   "hi": 0.49,
+   "n_train": 115,
+   "pnl_train": 0.1092,
+   "n_dias_train": 11,
+   "pnl_sin_2_mejores_dias": 0.2661,
+   "wallets": 84,
+   "top1_wallet": 0.026,
+   "p_max_train": 0.952,
+   "n_forward": 30,
+   "pnl_forward": -0.1085,
+   "hit_forward": 0.433,
    "forward_ok": false,
    "forward_ic90": [
-    -0.0788,
-    0.0881
+    -0.3828,
+    0.1658
+   ],
+   "forward_ok_estricto": false
+  },
+  {
+   "tupla": "Tennis#FADE",
+   "categoria": "Tennis",
+   "tipo": "FADE",
+   "estado_config": "candidata/dormida",
+   "ancho": 0.01,
+   "lo": 0.56,
+   "hi": 0.57,
+   "n_train": 148,
+   "pnl_train": 0.1348,
+   "n_dias_train": 13,
+   "pnl_sin_2_mejores_dias": 0.114,
+   "wallets": 56,
+   "top1_wallet": 0.128,
+   "p_max_train": 1.0,
+   "n_forward": 60,
+   "pnl_forward": -0.1181,
+   "hit_forward": 0.5,
+   "forward_ok": false,
+   "forward_ic90": [
+    -0.2945,
+    0.0582
+   ],
+   "forward_ok_estricto": false
+  },
+  {
+   "tupla": "Dota#FADE",
+   "categoria": "Dota",
+   "tipo": "FADE",
+   "estado_config": "LIVE",
+   "ancho": 0.03,
+   "lo": 0.44,
+   "hi": 0.47,
+   "n_train": 142,
+   "pnl_train": 0.1222,
+   "n_dias_train": 12,
+   "pnl_sin_2_mejores_dias": 0.2642,
+   "wallets": 68,
+   "top1_wallet": 0.077,
+   "p_max_train": 0.842,
+   "n_forward": 57,
+   "pnl_forward": -0.1466,
+   "hit_forward": 0.386,
+   "forward_ok": false,
+   "forward_ic90": [
+    -0.3794,
+    0.087
+   ],
+   "forward_ok_estricto": false
+  },
+  {
+   "tupla": "Dota#SEGUIR",
+   "categoria": "Dota",
+   "tipo": "SEGUIR",
+   "estado_config": "LIVE",
+   "ancho": 0.05,
+   "lo": 0.4,
+   "hi": 0.45,
+   "n_train": 256,
+   "pnl_train": 0.1194,
+   "n_dias_train": 15,
+   "pnl_sin_2_mejores_dias": 0.1753,
+   "wallets": 103,
+   "top1_wallet": 0.047,
+   "p_max_train": 0.714,
+   "n_forward": 110,
+   "pnl_forward": -0.1606,
+   "hit_forward": 0.355,
+   "forward_ok": false,
+   "forward_ic90": [
+    -0.3317,
+    0.0344
+   ],
+   "forward_ok_estricto": false
+  },
+  {
+   "tupla": "Tennis#FADE",
+   "categoria": "Tennis",
+   "tipo": "FADE",
+   "estado_config": "candidata/dormida",
+   "ancho": 0.05,
+   "lo": 0.24,
+   "hi": 0.29,
+   "n_train": 168,
+   "pnl_train": 0.2482,
+   "n_dias_train": 14,
+   "pnl_sin_2_mejores_dias": 0.8431,
+   "wallets": 66,
+   "top1_wallet": 0.065,
+   "p_max_train": 0.266,
+   "n_forward": 104,
+   "pnl_forward": -0.1821,
+   "hit_forward": 0.212,
+   "forward_ok": false,
+   "forward_ic90": [
+    -0.4407,
+    0.0814
+   ],
+   "forward_ok_estricto": false
+  },
+  {
+   "tupla": "MLB#SEGUIR",
+   "categoria": "MLB",
+   "tipo": "SEGUIR",
+   "estado_config": "candidata/dormida",
+   "ancho": 0.01,
+   "lo": 0.55,
+   "hi": 0.56,
+   "n_train": 136,
+   "pnl_train": 0.1484,
+   "n_dias_train": 7,
+   "pnl_sin_2_mejores_dias": 0.1187,
+   "wallets": 39,
+   "top1_wallet": 0.125,
+   "p_max_train": 0.014,
+   "n_forward": 60,
+   "pnl_forward": -0.1919,
+   "hit_forward": 0.45,
+   "forward_ok": false,
+   "forward_ic90": [
+    -0.4014,
+    0.0176
+   ],
+   "forward_ok_estricto": false
+  },
+  {
+   "tupla": "CS#SEGUIR",
+   "categoria": "CS",
+   "tipo": "SEGUIR",
+   "estado_config": "LIVE",
+   "ancho": 0.03,
+   "lo": 0.14,
+   "hi": 0.17,
+   "n_train": 71,
+   "pnl_train": 0.8509,
+   "n_dias_train": 10,
+   "pnl_sin_2_mejores_dias": 0.2476,
+   "wallets": 50,
+   "top1_wallet": 0.07,
+   "p_max_train": 0.0,
+   "n_forward": 16,
+   "pnl_forward": -0.198,
+   "hit_forward": 0.125,
+   "forward_ok": false,
+   "forward_ic90": [
+    -1.0,
+    0.63
+   ],
+   "forward_ok_estricto": false
+  },
+  {
+   "tupla": "Tennis#FADE",
+   "categoria": "Tennis",
+   "tipo": "FADE",
+   "estado_config": "candidata/dormida",
+   "ancho": 0.02,
+   "lo": 0.25,
+   "hi": 0.27,
+   "n_train": 77,
+   "pnl_train": 0.3669,
+   "n_dias_train": 8,
+   "pnl_sin_2_mejores_dias": 0.5343,
+   "wallets": 43,
+   "top1_wallet": 0.091,
+   "p_max_train": 0.556,
+   "n_forward": 43,
+   "pnl_forward": -0.2771,
+   "hit_forward": 0.186,
+   "forward_ok": false,
+   "forward_ic90": [
+    -0.6385,
+    0.0844
    ],
    "forward_ok_estricto": false
   },
@@ -2412,201 +2553,23 @@
    "tipo": "SEGUIR",
    "estado_config": "LIVE",
    "ancho": 0.01,
-   "lo": 0.46,
-   "hi": 0.47,
-   "n_train": 51,
-   "pnl_train": 0.6274,
-   "n_dias_train": 18,
-   "pnl_sin_2_mejores_dias": 0.3924,
-   "wallets": 32,
-   "top1_wallet": 0.137,
-   "p_max_train": 0.004,
-   "n_forward": 161,
-   "pnl_forward": -0.0132,
-   "hit_forward": 0.46,
+   "lo": 0.14,
+   "hi": 0.15,
+   "n_train": 50,
+   "pnl_train": 0.8833,
+   "n_dias_train": 9,
+   "pnl_sin_2_mejores_dias": 0.5249,
+   "wallets": 39,
+   "top1_wallet": 0.06,
+   "p_max_train": 0.0,
+   "n_forward": 4,
+   "pnl_forward": -1.0,
+   "hit_forward": 0.0,
    "forward_ok": false,
-   "forward_ic90": [
-    -0.1466,
-    0.1335
-   ],
-   "forward_ok_estricto": false
-  },
-  {
-   "tupla": "LoL#SEGUIR",
-   "categoria": "LoL",
-   "tipo": "SEGUIR",
-   "estado_config": "candidata/dormida",
-   "ancho": 0.02,
-   "lo": 0.48,
-   "hi": 0.5,
-   "n_train": 44,
-   "pnl_train": 0.293,
-   "n_dias_train": 15,
-   "pnl_sin_2_mejores_dias": 0.1012,
-   "wallets": 34,
-   "top1_wallet": 0.068,
-   "p_max_train": 0.498,
-   "n_forward": 241,
-   "pnl_forward": -0.019,
-   "hit_forward": 0.481,
-   "forward_ok": false,
-   "forward_ic90": [
-    -0.1286,
-    0.0903
-   ],
-   "forward_ok_estricto": false
-  },
-  {
-   "tupla": "CS#FADE",
-   "categoria": "CS",
-   "tipo": "FADE",
-   "estado_config": "LIVE",
-   "ancho": 0.03,
-   "lo": 0.6,
-   "hi": 0.63,
-   "n_train": 96,
-   "pnl_train": 0.1991,
-   "n_dias_train": 21,
-   "pnl_sin_2_mejores_dias": 0.1254,
-   "wallets": 54,
-   "top1_wallet": 0.062,
-   "p_max_train": 0.006,
-   "n_forward": 701,
-   "pnl_forward": -0.0312,
-   "hit_forward": 0.598,
-   "forward_ok": false,
-   "forward_ic90": [
-    -0.0792,
-    0.0151
-   ],
-   "forward_ok_estricto": false
-  },
-  {
-   "tupla": "Tennis#SEGUIR",
-   "categoria": "Tennis",
-   "tipo": "SEGUIR",
-   "estado_config": "candidata/dormida",
-   "ancho": 0.05,
-   "lo": 0.25,
-   "hi": 0.3,
-   "n_train": 77,
-   "pnl_train": 0.4002,
-   "n_dias_train": 21,
-   "pnl_sin_2_mejores_dias": 0.2675,
-   "wallets": 45,
-   "top1_wallet": 0.091,
-   "p_max_train": 0.606,
-   "n_forward": 369,
-   "pnl_forward": -0.0429,
-   "hit_forward": 0.26,
-   "forward_ok": false,
-   "forward_ic90": [
-    -0.1827,
-    0.0982
-   ],
-   "forward_ok_estricto": false
-  },
-  {
-   "tupla": "CS#FADE",
-   "categoria": "CS",
-   "tipo": "FADE",
-   "estado_config": "LIVE",
-   "ancho": 0.02,
-   "lo": 0.6,
-   "hi": 0.62,
-   "n_train": 63,
-   "pnl_train": 0.2452,
-   "n_dias_train": 18,
-   "pnl_sin_2_mejores_dias": 0.1705,
-   "wallets": 41,
-   "top1_wallet": 0.063,
-   "p_max_train": 0.082,
-   "n_forward": 497,
-   "pnl_forward": -0.0569,
-   "hit_forward": 0.577,
-   "forward_ok": false,
-   "forward_ic90": [
-    -0.1157,
-    -0.0001
-   ],
-   "forward_ok_estricto": false
-  },
-  {
-   "tupla": "LoL#FADE",
-   "categoria": "LoL",
-   "tipo": "FADE",
-   "estado_config": "candidata/dormida",
-   "ancho": 0.05,
-   "lo": 0.47,
-   "hi": 0.52,
-   "n_train": 92,
-   "pnl_train": 0.2073,
-   "n_dias_train": 21,
-   "pnl_sin_2_mejores_dias": 0.1263,
-   "wallets": 57,
-   "top1_wallet": 0.087,
-   "p_max_train": 0.136,
-   "n_forward": 444,
-   "pnl_forward": -0.0977,
-   "hit_forward": 0.446,
-   "forward_ok": false,
-   "forward_ic90": [
-    -0.1755,
-    -0.0179
-   ],
-   "forward_ok_estricto": false
-  },
-  {
-   "tupla": "LoL#FADE",
-   "categoria": "LoL",
-   "tipo": "FADE",
-   "estado_config": "candidata/dormida",
-   "ancho": 0.03,
-   "lo": 0.48,
-   "hi": 0.51,
-   "n_train": 44,
-   "pnl_train": 0.2875,
-   "n_dias_train": 17,
-   "pnl_sin_2_mejores_dias": 0.1606,
-   "wallets": 34,
-   "top1_wallet": 0.068,
-   "p_max_train": 0.168,
-   "n_forward": 273,
-   "pnl_forward": -0.1142,
-   "hit_forward": 0.44,
-   "forward_ok": false,
-   "forward_ic90": [
-    -0.2174,
-    -0.0174
-   ],
-   "forward_ok_estricto": false
-  },
-  {
-   "tupla": "LoL#SEGUIR",
-   "categoria": "LoL",
-   "tipo": "SEGUIR",
-   "estado_config": "candidata/dormida",
-   "ancho": 0.01,
-   "lo": 0.4,
-   "hi": 0.41,
-   "n_train": 58,
-   "pnl_train": 0.2246,
-   "n_dias_train": 19,
-   "pnl_sin_2_mejores_dias": 0.122,
-   "wallets": 44,
-   "top1_wallet": 0.069,
-   "p_max_train": 0.206,
-   "n_forward": 123,
-   "pnl_forward": -0.2369,
-   "hit_forward": 0.309,
-   "forward_ok": false,
-   "forward_ic90": [
-    -0.3976,
-    -0.0562
-   ],
+   "forward_ic90": null,
    "forward_ok_estricto": false
   }
  ],
- "n_zonas_operables_estrictas": 2,
- "ultimo_snapshot_historial": "2026-10-01T08:54:01+00:00"
+ "n_zonas_operables_estrictas": 4,
+ "ultimo_snapshot_historial": "2026-10-02T08:54:01+00:00"
 }
