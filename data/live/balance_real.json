@@ -1,12 +1,12 @@
 {
- "ts": "2026-10-02T17:40:06+00:00",
+ "ts": "2026-10-02T17:45:08+00:00",
  "wallet": "0xB6eDe3A699f73cbe7f8A221c2cdAcEbFdf02028b",
  "free_usdc": 22.005,
- "positions_value": 2.0697,
- "total": 22.0052,
- "total_bruto": 34.9544,
+ "positions_value": 1.6005,
+ "total": 22.0051,
+ "total_bruto": 34.4852,
  "deposito_inicial": 90.71,
- "pnl_real": -68.7048,
+ "pnl_real": -68.7049,
  "pnl_por_deposito": [
   {
    "fecha": "2026-06-29",
@@ -57,7 +57,7 @@
    "rendimiento_pct": -26.9
   }
  ],
- "pusd_onchain": null,
+ "pusd_onchain": 32.8847,
  "pusd_no_reflejado_en_collateral": null,
  "daily_real": [
   {
