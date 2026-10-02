@@ -381,6 +381,10 @@ TWAP_KILL_LATCH = REPO / "data" / "live" / "precierre_twap_kill.json"
 STAKE_EUR = 1.05             # suelo CLOB, mismo criterio que la prueba controlada del 02-Sep
 MIN_RATIO_PROFUNDIDAD = 5.0  # mismo umbral que el resto del proyecto
 PRECALCULO_ANTES_S = 12      # arrancar precálculo con margen sobre el instante objetivo
+CALENTAR_REINTENTO_S = 0.15  # pausa antes de reintentar los GET de calentamiento que fallaron (02-Oct)
+# /code-review: 5min y 15min fallan a la vez (:14/:29/:44/:59); con la misma pausa sus reintentos
+# volverían a coincidir en la conexión HTTP/2 compartida. Desfase por marco.
+CALENTAR_REINTENTO_DESFASE_S = {"5min": 0.0, "15min": 0.2, "60min": 0.4}
 CALENTAR_FIRMA_MAX_S = 1.5   # espera máxima al calentamiento de mercados en preparar() (dura ~77 ms; máx. medido 182 ms)
 CALENTAR_MARGEN_FIN_S = 6.0  # no se lanza ningún GET de calentamiento a menos de esto del instante objetivo
 # 23-Sep: DRY_RUN=False con aprobación EXPLÍCITA de Javi ("3 - ok", "vamos, venga") tras
@@ -541,15 +545,39 @@ class _Precalculo:
                 errores = [f.exception() for f in hechos if f.exception() is not None]
                 for f in pend:
                     f.cancel()
+                # 02-Oct (petición Javi): ~13 tandas/día fallaban ENTERAS con "[Errno 11] Resource temporarily
+                # unavailable" en 50-800 ms, casi siempre en :14/:29/:44/:59, cuando calientan a la vez 5min y
+                # 15min (12 GET simultáneos por la conexión HTTP/2 compartida del cliente). La firma de
+                # descarte, unos ms después, salía bien en 11 de 13: el fallo es de la tanda, no del CLOB.
+                # Un reintento de los que fallaron CON ERROR (no de los colgados), tras CALENTAR_REINTENTO_S,
+                # dentro del mismo presupuesto (CALENTAR_FIRMA_MAX_S desde t0 y nunca pasado `limite`).
+                fallidos = [c for f, c in zip(futs, cids) if f in hechos and f.exception() is not None]
+                n_reint, n_recup, futs_r, pend_r = 0, 0, [], set()
+                pausa = CALENTAR_REINTENTO_S + CALENTAR_REINTENTO_DESFASE_S.get(self.marco, 0.0)
+                restante = min(CALENTAR_FIRMA_MAX_S - (time.perf_counter() - t0), limite - time.time())
+                if fallidos and restante > pausa + 0.1:
+                    time.sleep(pausa)
+                    n_reint = len(fallidos)
+                    futs_r = [self._pool_calentar.submit(_calentar, c) for c in fallidos]
+                    hechos_r, pend_r = wait(futs_r, timeout=max(0.0, min(
+                        CALENTAR_FIRMA_MAX_S - (time.perf_counter() - t0), limite - time.time())))
+                    for f in pend_r:
+                        f.cancel()
+                    n_recup = sum(1 for f in hechos_r if f.exception() is None and f.result())
+                    if n_recup:
+                        _log(f"[{self.marco}] calentamiento: reintento recuperó {n_recup}/{n_reint} "
+                             f"({(time.perf_counter() - t0) * 1000:.0f} ms; 1er error {errores[0]!r})")
                 # /code-review 2ª pasada: si el GET del PRIMER mercado sigue colgado, la firma de descarte
                 # de abajo repetiría en frío sus 2 GET sin tope y podría costar la ventana.
                 cid_primero = next(iter(self.mercados.values())).get("condition_id")
-                primero_colgado = any(f in pend for f, c in zip(futs, cids) if c == cid_primero)
-                if pend or errores or len(cids) < len(self.mercados) or not all(f.result() for f in hechos if f.exception() is None):
-                    n_ok = sum(1 for f in hechos if f.exception() is None and f.result())
+                primero_colgado = (any(f in pend for f, c in zip(futs, cids) if c == cid_primero)
+                                   or any(f in pend_r for f, c in zip(futs_r, fallidos) if c == cid_primero))
+                n_ok = sum(1 for f in hechos if f.exception() is None and f.result()) + n_recup
+                if n_ok < len(self.mercados):
                     _log(f"[{self.marco}] mercados calentados {n_ok}/{len(self.mercados)} "
                          f"({(time.perf_counter() - t0) * 1000:.0f} ms; sin terminar {len(pend)}, con error "
-                         f"{len(errores)}{': ' + repr(errores[0]) if errores else ''})")
+                         f"{len(errores)}{': ' + repr(errores[0]) if errores else ''}; reintentados {n_reint}, "
+                         f"recuperados {n_recup}, reintentos sin terminar {len(pend_r)})")
             except Exception as e:
                 _log(f"aviso: no se pudo calentar los mercados ({e})")
             try:
