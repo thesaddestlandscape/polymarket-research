@@ -391,13 +391,15 @@ def _hilo_stdin():
 
 async def _sesion_hija(emisor):
     suscritos = set()
+    # esperar al primer conjunto deseado ANTES de conectar: el servidor cierra con 1008 "no subscribe received" si
+    # el socket queda abierto sin suscripción (el padre tarda ~35 s en su primer universo al arrancar observadores)
+    while True:
+        with _DES_LOCK:
+            ver, univ, extra = _DESEADOS["ver"], list(_DESEADOS["univ"]), list(_DESEADOS["extra"])
+        if ver and (univ or extra):
+            break
+        await asyncio.sleep(0.2)
     async with websockets.connect(WS_URL, ping_interval=20, ping_timeout=20, open_timeout=10, max_queue=None) as ws:
-        while True:                                 # esperar al primer conjunto deseado del padre
-            with _DES_LOCK:
-                ver, univ, extra = _DESEADOS["ver"], list(_DESEADOS["univ"]), list(_DESEADOS["extra"])
-            if ver:
-                break
-            await asyncio.sleep(0.2)
         toks = list(dict.fromkeys(extra + univ))   # on-demand por delante
         # 30-Sep: suscribir 150+ tokens de golpe hace que el servidor mande todas las fotos del libro en una ráfaga,
         # llene SU buffer de envío y corte con 1013. Se suscribe en trozos de SUB_TROZO, uno cada SUB_PAUSA_S,
