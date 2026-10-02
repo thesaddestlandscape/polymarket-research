@@ -9378,5 +9378,117 @@
     },
     "anomalias": [],
     "estado": "OK"
+  },
+  {
+    "timestamp_utc": "2026-10-02T07:57:01+00:00",
+    "pipeline": {
+      "n_ciclos_resolve_postmortem": 48,
+      "resolve_postmortem_p50_s": 93.8,
+      "resolve_postmortem_p95_s": 242.7,
+      "resolve_postmortem_max_s": 302.1,
+      "resolve_postmortem_duraciones_s": [
+        88.4,
+        99.2,
+        104.5,
+        239.6,
+        95.8,
+        85.7,
+        82.3,
+        79.7,
+        83.7,
+        207.5,
+        64.0,
+        93.8,
+        81.0,
+        91.6,
+        79.7,
+        212.7,
+        83.9,
+        110.7,
+        70.3,
+        74.4,
+        85.7,
+        190.8,
+        80.4,
+        69.9,
+        69.6,
+        93.0,
+        75.2,
+        249.1,
+        74.0,
+        90.2,
+        86.1,
+        93.9,
+        88.6,
+        227.6,
+        96.3,
+        98.3,
+        95.5,
+        83.1,
+        99.1,
+        105.5,
+        302.1,
+        101.6,
+        104.7,
+        105.6,
+        143.8,
+        105.5,
+        242.7,
+        69.1
+      ],
+      "n_ciclos_live_trade": 2129,
+      "hueco_live_trade_max_s": 61.0
+    },
+    "procesos_colgados": [],
+    "deploy": {
+      "n_screens": 17,
+      "stale": []
+    },
+    "disco": {
+      "pct_usado": 89.0,
+      "gb_libres": 8.12,
+      "git_gb": 0.0,
+      "data_gb": 31.19,
+      "datalogs_gb": 5.85
+    },
+    "ram": {
+      "ram_total_gb": 7.56,
+      "ram_disponible_gb": 4.88,
+      "ram_pct_libre": 64.5
+    },
+    "integridad_datos": {
+      "trades_abiertos_atascados": [],
+      "n_trades_total": 737,
+      "n_results_total": 818679
+    },
+    "integridad_datos_sports": {
+      "trades_abiertos_atascados": [],
+      "n_trades_total": 41
+    },
+    "carga_sistema": {
+      "load1": 4.0,
+      "load5": 4.66,
+      "load15": 6.12,
+      "nproc": 4,
+      "ratio5": 1.17,
+      "n_procesos_total": 236
+    },
+    "oom_kills": {
+      "n_oom_kills_24h": 0,
+      "eventos": []
+    },
+    "git_push": {
+      "commits_sin_pushear": 0
+    },
+    "vigias_rotos": {
+      "n_vigias_rotos": 0,
+      "vigias": []
+    },
+    "gates_obsoletos": {
+      "n_gates_obsoletos": 0,
+      "gates": []
+    },
+    "anomalias": [],
+    "estado": "OK"
   }
 ]
