@@ -118,32 +118,41 @@ def _filas_de(msg: dict) -> list:
 # exactas en 4 días, mediana 0,2-0,5 bps, máx 45 bps). `price.crypto.twap` ("twap60") SÍ es
 # Chainlink y es con lo que se valida la resolución. Se vigila el proveedor por (canal,
 # activo): aviso si no es el esperado o si cambia (puede cambiar entre conexiones).
-PROVEEDOR_ESPERADO = {"spot": "pyth", "twap60": "chainlink"}
-_proveedor_visto: dict = {}
+# 02-Oct: el spot se pide con los dos proveedores fijados (ver la suscripción). Si PolyBolt
+# no tiene el fijado, sirve el de por defecto ("fallback to default"): por eso, además de
+# avisar de un proveedor inesperado, se vigila que llegue pyth de cada activo.
+PROVEEDORES_SPOT = ("pyth", "chainlink")
+PROVEEDOR_ESPERADO = {"spot": set(PROVEEDORES_SPOT), "twap60": {"chainlink"}}
+PYTH_CALLADO_S = 120
 _proveedor_aviso_ts: dict = {}
+_ultimo_pyth: dict = {}
+_t_conexion = time.time()
+
+
+def _aviso_limitado(clave, txt: str, telegram: str) -> None:
+    _log(f"⚠️ {txt}")
+    if time.time() - _proveedor_aviso_ts.get(clave, 0.0) >= 3600:   # máx. 1 Telegram/hora por clave
+        _proveedor_aviso_ts[clave] = time.time()
+        _avisar(telegram)
 
 
 def _vigilar_proveedor(canal: str, asset: str, src: str) -> None:
     if not src:
         return
-    clave = (canal, asset)
-    previo = _proveedor_visto.get(clave)
-    if previo == src:
-        return
-    _proveedor_visto[clave] = src
-    esperado = PROVEEDOR_ESPERADO.get(canal)
-    if previo is None and src == esperado:
-        return
-    txt = (f"PolyBolt {canal} {asset}: proveedor {previo or '(primera lectura)'} -> {src}"
-           f" (esperado {esperado})")
-    _log(f"⚠️ {txt}")
-    if time.time() - _proveedor_aviso_ts.get(clave, 0.0) >= 3600:   # máx. 1 Telegram/hora por (canal, activo)
-        _proveedor_aviso_ts[clave] = time.time()
+    ahora = time.time()
+    if canal == "spot" and src == "pyth":
+        _ultimo_pyth[asset] = ahora
+    if src not in PROVEEDOR_ESPERADO.get(canal, ()):
+        txt = f"PolyBolt {canal} {asset}: proveedor inesperado {src} (esperado {sorted(PROVEEDOR_ESPERADO.get(canal, ()))})"
         if canal == "twap60":
-            _avisar(f"🚨 {txt}. El twap60 valida la resolución: si ya no es Chainlink, revisar YA.")
+            _aviso_limitado((canal, asset, "src"), txt, f"🚨 {txt}. El twap60 valida la resolución: revisar YA.")
         else:
-            _avisar(f"⚠️ {txt}. Spot: si no es pyth, el failover a chainlink_*.csv queda "
-                    f"desactivado (fail-closed) y el vigía TWAP solo-PolyBolt solo usa filas pyth.")
+            _aviso_limitado((canal, asset, "src"), txt, f"⚠️ {txt}.")
+    if canal == "spot" and ahora - max(_ultimo_pyth.get(asset, 0.0), _t_conexion) > PYTH_CALLADO_S:
+        txt = f"PolyBolt spot {asset}: sin filas pyth {PYTH_CALLADO_S}s pese a pedirlo (provider=pyth)"
+        _aviso_limitado(("spot", asset, "pyth"), txt,
+                        f"⚠️ {txt}. Sin pyth: failover a chainlink_*.csv desactivado (fail-closed) "
+                        f"y el método TWAP solo-PolyBolt sin entrada.")
 
 
 def _avisar(texto: str) -> None:
@@ -193,7 +202,7 @@ def _fallback_omitido(asset: str, src: str) -> None:
         return
     _fallback_omitido_ts[asset] = time.time()
     txt = (f"FAILOVER {asset}: NO se escribe en chainlink_*.csv: spot PolyBolt de proveedor "
-           f"'{src or '?'}' (serie suavizada/retrasada, no es tick en tiempo real). Hueco hasta que vuelva RTDS.")
+           f"'{src or '?'}' (media de 30 s, no es tick en tiempo real); falta pyth. Hueco hasta que vuelva RTDS.")
     _log(f"🚨 {txt}")
     _avisar(f"🚨 {txt}")
 
@@ -209,10 +218,17 @@ async def _correr_una_conexion(cred: dict) -> None:
         resp = json.loads(await asyncio.wait_for(ws.recv(), timeout=10))
         if resp.get("op") != "authed":
             raise _FalloDuro(f"auth rechazada: {str(resp)[:200]}")
-        subs = [{"channel": "price.crypto", "filter": {"symbol": s}} for s in SIMBOLOS]
+        # 02-Oct: el proveedor por defecto del spot pasó de pyth a chainlink (serie = media de
+        # [t-32, t-3] s de los ticks Chainlink, no un spot). `filter.provider` (changelog 29-Sep)
+        # fija cada proveedor; se piden LOS DOS y se distinguen por la columna `source`:
+        # pyth = nivel en tiempo real (~0,2 s), chainlink = medias exactas del oráculo.
+        subs = [{"channel": "price.crypto", "filter": {"symbol": s, "provider": prov}}
+                for s in SIMBOLOS for prov in PROVEEDORES_SPOT]
         subs += [{"channel": "price.crypto.twap", "filter": {"symbol": s, "window_seconds": 60}}
                  for s in SIMBOLOS]
         await ws.send(json.dumps({"op": "subscribe", "rid": "s1", "subscriptions": subs}))
+        global _t_conexion
+        _t_conexion = time.time()
         _log(f"Conectado a {WS_URL}, suscrito a {len(subs)} (canal,símbolo)")
         n = 0
         while True:

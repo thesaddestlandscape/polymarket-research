@@ -93,7 +93,10 @@ class _PolyBoltTail:
                     with self.lock:
                         for ln in lineas:
                             pt = ln.rstrip("\n").split(",")
-                            if len(pt) < 6 or pt[2] != "spot" or pt[5] != "0" or pt[1] not in self.buf:
+                            # 02-Oct: el CSV lleva dos spots (source pyth y chainlink = media
+                            # de 30 s); este observador usa solo pyth (sin columna = pre-30-Sep).
+                            if (len(pt) < 6 or pt[2] != "spot" or pt[5] != "0" or pt[1] not in self.buf
+                                    or (len(pt) > 6 and pt[6] not in ("pyth", ""))):
                                 continue
                             try:
                                 self.buf[pt[1]].append((datetime.fromisoformat(pt[0]).timestamp(), float(pt[3])))

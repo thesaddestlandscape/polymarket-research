@@ -51,6 +51,8 @@ def cargar_polybolt():
                 t = int(r["event_ts_ms"]) / 1000; v = float(r["value"])
             except (ValueError, TypeError):
                 continue
+            if r["canal"] == "spot" and (r.get("source") or "pyth") != "pyth":
+                continue          # 02-Oct: el spot `chainlink` es una media de 30 s, no un spot
             a, b = serie[r["asset"]][r["canal"]]
             a.append(t); b.append(v)
     for asset in serie:
