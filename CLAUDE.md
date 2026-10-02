@@ -246,6 +246,7 @@ Cada línea es un error real del proyecto. Antes de concluir, promocionar, refut
 - Disco: loggers sin rotación llevaron el disco al 100 %. `results.csv` fuera de git por el límite de 100 MB.
 - `index.lock` huérfano = `git add` del lote automático; no borrar, esperar.
 - Reiniciar `observadores` pierde el histórico ms en memoria y las fotos pendientes.
+- GIL: el WS del libro (`libro_estado_ws`, ~2.200 msgs/s en horario USA) dentro de `observadores` (~60 hilos) caía ~60/h por "slow consumer", con ~10 s de hueco por caída (≈15 % del histórico ms), mientras que un lector aislado no caía nunca (02-Oct). Antes de culpar al servidor, probar el lector aislado; ningún hilo de observadores hace trabajo O(buffer) por tick (momentum_ibs_reactivo se comía el 12,8 % de la CPU así).
 - Recalcular a mano algo que un proceso ya mantiene en vivo (`ballenas_observer.py`): mirar el inventario antes.
 - Proponer como "nuevo" algo que ya está en el pipeline; declarar muerta una idea sin agotar el toolkit; refutar con la fuente de fill-ability equivocada.
 - Perps: los fills no son unidades independientes (363 cierres por apertura); la API da 429 con 360 consultas/hora.
