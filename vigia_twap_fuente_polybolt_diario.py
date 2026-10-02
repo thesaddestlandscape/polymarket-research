@@ -45,7 +45,8 @@ INSTANTES = {"precierre_T-45": 45, "naive_T+0": 0}
 MARGENES_BPS = (0, 1, 2, 4)
 N_MIN_REF = 50        # ticks/segundos mínimos en la ventana de 60 s de la referencia
 N_MIN_PROY = 10       # ídem en el tramo ya transcurrido de la ventana de cierre
-RETRASO_OFICIAL_S = 2  # el twap60 oficial del segundo t llega ~1,3 s después (p99 2,0 s)
+RETRASO_OFICIAL_S = 2
+METODOS_PB = ("polybolt", "polybolt_t60a", "polybolt_s30")  # el twap60 oficial del segundo t llega ~1,3 s después (p99 2,0 s)
 
 
 def _abrir(p):
@@ -65,7 +66,7 @@ def _cargar_dia(dia: str):
     p_obs = _ruta("resolution_sniper_obs", dia, DIR_SHADOW)
     if not (p_pb and p_cl and p_obs):
         return None
-    tw, py = {}, {}
+    tw, py, s30 = {}, {}, {}
     with _abrir(p_pb) as f:
         for r in csv.DictReader(f):
             if r.get("snapshot") != "0":
@@ -82,6 +83,8 @@ def _cargar_dia(dia: str):
                 # suavizada (~media móvil 35 s, ~17 s de retraso) que el método solo-PolyBolt
                 # no puede usar. Solo filas pyth (las de antes del 30-Sep no traen `source`).
                 py.setdefault(k, v)
+            elif r.get("source") == "chainlink":
+                s30.setdefault(k, v)      # media EXACTA de los ticks Chainlink de [t-32, t-3] s
     ts, px = {}, {}
     with _abrir(p_cl) as f:
         for r in csv.DictReader(f):
@@ -103,14 +106,14 @@ def _cargar_dia(dia: str):
                     out[(r["activo"], r["marco"], int(r["ts_end"]))] = r["outcome_real"]
                 except (ValueError, KeyError):
                     continue
-    return tw, py, ts, px, out
+    return tw, py, s30, ts, px, out
 
 
 def _evaluar_dia(dia: str):
     datos = _cargar_dia(dia)
     if datos is None:
         return None
-    tw, py, ts, px, out = datos
+    tw, py, s30, ts, px, out = datos
 
     def media_cl(a, t0, t1):
         v = ts.get(a)
@@ -146,7 +149,37 @@ def _evaluar_dia(dia: str):
         p = proy(media_py, a, e, off)
         return None if p is None else (p - (mp - oficial), ref)
 
-    metodos = {"hoy": hoy, "polybolt": polybolt}
+    # 02-Oct, dos variantes fijadas ANTES de ver datos (mismo gate que `polybolt`):
+    #  polybolt_t60a: igual que `polybolt` pero con la media Pyth en la MISMA ventana que el
+    #    twap60 oficial (media de [t-62, t-3], medido 02-Oct); `polybolt` usa [t-60, t].
+    #  polybolt_s30: sesgo = media de 10 comparaciones exactas de 30 s (Pyth [t-32, t-3] contra
+    #    el spot `chainlink` de PolyBolt, que es la media de esos mismos ticks Chainlink),
+    #    t = tc, tc-10, ..., tc-90 (~2 min de sesgo).
+    def polybolt_t60a(a, e, dur, off):
+        ref = tw.get((a, e - dur))
+        t = e - off - RETRASO_OFICIAL_S
+        oficial = tw.get((a, t))
+        mp, n, _ = media_py(a, t - 62, t - 3)
+        if ref is None or oficial is None or n < N_MIN_REF:
+            return None
+        p = proy(media_py, a, e, off)
+        return None if p is None else (p - (mp - oficial), ref)
+
+    def polybolt_s30(a, e, dur, off):
+        ref = tw.get((a, e - dur))
+        tc = e - off - RETRASO_OFICIAL_S
+        sesgos = []
+        for t in range(tc - 90, tc + 1, 10):
+            cl30 = s30.get((a, t))
+            mp, n, _ = media_py(a, t - 32, t - 3)
+            if cl30 is not None and n >= 25:
+                sesgos.append(mp - cl30)
+        if ref is None or len(sesgos) < 6:
+            return None
+        p = proy(media_py, a, e, off)
+        return None if p is None else (p - sum(sesgos) / len(sesgos), ref)
+
+    metodos = {"hoy": hoy, "polybolt": polybolt, "polybolt_t60a": polybolt_t60a, "polybolt_s30": polybolt_s30}
     res = {}
     for (a, marco, e), o in out.items():
         dur = MARCOS[marco]
@@ -166,11 +199,13 @@ def _evaluar_dia(dia: str):
                             c = res.setdefault(clave, [0, 0])
                             c[0] += 1
                             c[1] += ok
-            if len(pares) == 2 and pares["hoy"][0] >= 2 and pares["polybolt"][0] >= 2:
-                c = res.setdefault(f"{inst}|{marco}|TODOS|pareado>=2bps", [0, 0, 0])   # n, solo_hoy_ok, solo_pb_ok
-                c[0] += 1
-                c[1] += int(pares["hoy"][1] and not pares["polybolt"][1])
-                c[2] += int(pares["polybolt"][1] and not pares["hoy"][1])
+            for nombre in METODOS_PB:
+                if "hoy" in pares and nombre in pares and pares["hoy"][0] >= 2 and pares[nombre][0] >= 2:
+                    suf = "" if nombre == "polybolt" else f"|{nombre}"
+                    c = res.setdefault(f"{inst}|{marco}|TODOS|pareado>=2bps{suf}", [0, 0, 0])   # n, solo_hoy_ok, solo_pb_ok
+                    c[0] += 1
+                    c[1] += int(pares["hoy"][1] and not pares[nombre][1])
+                    c[2] += int(pares[nombre][1] and not pares["hoy"][1])
     return {"n_mercados": len(out), "celdas": res}
 
 
@@ -191,10 +226,10 @@ def _agregar(por_dia: dict) -> dict:
     return tot
 
 
-def _ic90_dif_por_dias(por_dia: dict, inst: str, marco: str, u: int = 2):
-    """Bootstrap por DÍAS de (acierto polybolt - acierto hoy) en pp, margen >= u bps."""
+def _ic90_dif_por_dias(por_dia: dict, inst: str, marco: str, u: int = 2, metodo: str = "polybolt"):
+    """Bootstrap por DÍAS de (acierto `metodo` - acierto hoy) en pp, margen >= u bps."""
     dias = [d["celdas"] for d in por_dia.values()
-            if f"{inst}|{marco}|TODOS|hoy|{u}" in d["celdas"] and f"{inst}|{marco}|TODOS|polybolt|{u}" in d["celdas"]]
+            if f"{inst}|{marco}|TODOS|hoy|{u}" in d["celdas"] and f"{inst}|{marco}|TODOS|{metodo}|{u}" in d["celdas"]]
     if len(dias) < 3:
         return None
     rng = random.Random(42)
@@ -203,8 +238,8 @@ def _ic90_dif_por_dias(por_dia: dict, inst: str, marco: str, u: int = 2):
         m = [rng.choice(dias) for _ in dias]
         nh = sum(c[f"{inst}|{marco}|TODOS|hoy|{u}"][0] for c in m)
         kh = sum(c[f"{inst}|{marco}|TODOS|hoy|{u}"][1] for c in m)
-        npb = sum(c[f"{inst}|{marco}|TODOS|polybolt|{u}"][0] for c in m)
-        kpb = sum(c[f"{inst}|{marco}|TODOS|polybolt|{u}"][1] for c in m)
+        npb = sum(c[f"{inst}|{marco}|TODOS|{metodo}|{u}"][0] for c in m)
+        kpb = sum(c[f"{inst}|{marco}|TODOS|{metodo}|{u}"][1] for c in m)
         difs.append((kpb / npb - kh / nh) * 100)
     difs.sort()
     return round(difs[int(0.05 * len(difs))], 2), round(difs[int(0.95 * len(difs))], 2)
@@ -220,7 +255,7 @@ def main() -> int:
     for dia in _dias_disponibles():
         if dia == hoy_utc:
             continue                      # día en curso: incompleto, no se evalúa
-        if dia in previo:
+        if dia in previo and "--recalcular" not in sys.argv:
             por_dia[dia] = previo[dia]    # día cerrado ya calculado
             continue
         r = _evaluar_dia(dia)
@@ -232,14 +267,16 @@ def main() -> int:
     for inst in INSTANTES:
         for marco in MARCOS:
             fila = {}
-            for nombre in ("hoy", "polybolt"):
+            for nombre in ("hoy",) + METODOS_PB:
                 for u in MARGENES_BPS:
                     c = tot.get(f"{inst}|{marco}|TODOS|{nombre}|{u}")
                     if c and c[0]:
                         fila[f"{nombre}_>={u}bps"] = {"n": c[0], "acierto_pct": round(c[1] / c[0] * 100, 2)}
-            par = tot.get(f"{inst}|{marco}|TODOS|pareado>=2bps")
-            if par:
-                fila["pareado_>=2bps"] = {"n": par[0], "solo_hoy_acierta": par[1], "solo_polybolt_acierta": par[2]}
+            for nombre in METODOS_PB:
+                suf = "" if nombre == "polybolt" else f"|{nombre}"
+                par = tot.get(f"{inst}|{marco}|TODOS|pareado>=2bps{suf}")
+                if par:
+                    fila[f"pareado_>=2bps{suf}"] = {"n": par[0], "solo_hoy_acierta": par[1], f"solo_{nombre}_acierta": par[2]}
             ic = _ic90_dif_por_dias(por_dia, inst, marco)
             if ic:
                 fila["ic90_dif_pp_polybolt_menos_hoy_>=2bps"] = ic
@@ -248,6 +285,17 @@ def main() -> int:
             if h and p:
                 lineas.append(f"{inst} {marco} (margen≥2bps): hoy {h['acierto_pct']}% n={h['n']} | "
                               f"polybolt {p['acierto_pct']}% n={p['n']}" + (f" | IC90 dif {ic[0]}..{ic[1]} pp" if ic else ""))
+            for nombre in METODOS_PB[1:]:      # variantes 02-Oct: solo días con su serie
+                pv = fila.get(f"{nombre}_>=2bps")
+                if not pv:
+                    continue
+                icv = _ic90_dif_por_dias(por_dia, inst, marco, metodo=nombre)
+                if icv:
+                    fila[f"ic90_dif_pp_{nombre}_menos_hoy_>=2bps"] = icv
+                par = fila.get(f"pareado_>=2bps|{nombre}", {})
+                lineas.append(f"   └ {nombre}: {pv['acierto_pct']}% n={pv['n']}"
+                              + (f" | pareado: solo hoy {par.get('solo_hoy_acierta')} / solo {nombre} {par.get(f'solo_{nombre}_acierta')}" if par else "")
+                              + (f" | IC90 dif {icv[0]}..{icv[1]} pp" if icv else " | <3 días"))
     por_activo = {}
     for k, c in tot.items():
         inst, marco, activo, nombre, u = (k.split("|") + [""])[:5]
