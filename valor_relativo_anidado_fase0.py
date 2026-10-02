@@ -131,7 +131,11 @@ def main():
                     margen = round(b5 - a15, 4) if a15 and b5 else None
                     inv = round(ib15 - ia5, 4) if ib15 and ia5 else None
                     ahora_ms = int(time.time() * 1000)
-                    evento = (margen is not None and margen >= MARGEN_EVENTO) or (inv is not None and inv >= MARGEN_EVENTO)
+                    # 02-Oct: además del margen fijo, evento si el par de dos patas deja neto >0 con la fee REAL
+                    # (0,07*p*(1-p) por share; cerca de 0/1 la fee ~0). ask de la pata corta contraria = 1 - bid5.
+                    neto = (1 - a15 - (1 - b5) - 0.07 * a15 * (1 - a15) - 0.07 * b5 * (1 - b5)) if a15 and b5 else None
+                    evento = ((margen is not None and margen >= MARGEN_EVENTO) or (inv is not None and inv >= MARGEN_EVENTO)
+                              or (neto is not None and neto > 0))
                     if evento and ahora - ult_ev.get(k, 0) >= 1.0:
                         ult_ev[k] = ahora
                         tipo = "evento"

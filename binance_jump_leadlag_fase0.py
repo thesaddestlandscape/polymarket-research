@@ -31,6 +31,7 @@ from concurrent.futures import ThreadPoolExecutor
 from datetime import datetime, timezone
 from pathlib import Path
 
+import binance_movimiento_ask_fase0 as BM
 import live_trade as lt
 from resolution_sniper_observer import _CACHE_MKT, mercado_slot, token_ids
 
@@ -140,6 +141,10 @@ def _ret_1s(activo, t):
 
 
 def _procesar(activo, mid, t):
+    try:    # 02-Oct: movimientos de 1-3 bps al ask real (binance_movimiento_ask_fase0). Nunca rompe esto.
+        BM.tick(activo, mid, t)
+    except Exception:
+        pass
     dq = _ticks[activo]
     dq.append((t, mid))
     while dq and dq[0][0] < t - 2.5:

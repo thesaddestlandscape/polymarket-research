@@ -73,6 +73,8 @@ MARCOS = {
 UMBRAL = 0.7  # mismo que MOMENTUM_IBS_5M_UMBRAL/15M_UMBRAL
 STAKE_REF_EUR = 1.05
 BUFFER_MAX_MIN = 21  # cubre el lookback mas largo (20min) + margen
+EVAL_MIN_S = 0.1
+_ULT_EVAL: dict = {}
 
 WS_URL = "wss://stream.binance.com:9443/stream?streams=" + "/".join(
     f"{s}@aggTrade" for s in SYMBOLS.values())
@@ -179,6 +181,12 @@ async def _procesar_tick(activo: str, precio: float, ts_tick_ms: int,
         buf.popleft()
 
     now = time.time()
+    # 02-Oct: evaluar como mucho cada EVAL_MIN_S por moneda. Cada evaluación copia el buffer entero (21 min de ticks) y
+    # en cada tick era el 12,8 % de la CPU de observadores (py-spy), robando el GIL al WebSocket del libro. La señal es
+    # de drift/IBS a 7-20 min: 100 ms de retraso máximo no la cambia.
+    if now - _ULT_EVAL.get(activo, 0.0) < EVAL_MIN_S:
+        return
+    _ULT_EVAL[activo] = now
     ts_list = precios_list = None  # snapshot perezoso, se comparte entre marcos
     for marco, cfg in MARCOS.items():
         dur_s, lookback_min, marco_tag = cfg["dur_s"], cfg["lookback_min"], cfg["marco_tag"]

@@ -202,7 +202,7 @@ async def _sesion(filtro_marcos):
         # 30-Sep, fuga: tras una reconexión `suscritos` nace vacío y los tokens de la sesión anterior que ya no
         # están en el universo nunca pasaban por la baja de más abajo -> _HIST (hasta 3.000 muestras por token)
         # crecía ~90 MB/h hasta el OOM. Al conectar se tira todo lo que no esté en el universo ni pedido on-demand.
-        vivos = set(toks) | set(_EXTRA)
+        vivos = set(toks) | set(list(_EXTRA))
         with _LOCK:
             for d in (_LIB, _HIST, _TRADES, _TOP, _ULT):
                 for t in [t for t in d if t not in vivos]:
@@ -218,7 +218,7 @@ async def _sesion(filtro_marcos):
                 raw = None
             # tokens on-demand: alta inmediata, baja al expirar
             ahora_s = time.time()
-            add_x = [t for t, e in _EXTRA.items() if e > ahora_s and t not in suscritos]
+            add_x = [t for t, e in list(_EXTRA.items()) if e > ahora_s and t not in suscritos]
             if add_x:
                 cola_sub.extendleft(reversed(add_x))      # on-demand por delante: se atienden en el siguiente trozo
                 for t in add_x:
@@ -246,9 +246,9 @@ async def _sesion(filtro_marcos):
             else:
                 nuevos = None
             if nuevos is not None:
-                for t in [t for t, e in _EXTRA.items() if e <= ahora_s]:
+                for t in [t for t, e in list(_EXTRA.items()) if e <= ahora_s]:
                     _EXTRA.pop(t, None)
-                nuevos = list(set(nuevos) | set(_EXTRA))
+                nuevos = list(set(nuevos) | set(list(_EXTRA)))
                 add = [t for t in nuevos if t not in suscritos]
                 if add:
                     cola_sub.extend(add)
@@ -283,8 +283,8 @@ def _hilo(filtro_marcos):
         try:
             asyncio.run(_sesion(filtro_marcos))
         except Exception as e:
-            _log(f"sesión caída: {type(e).__name__}: {e}; reconecta en 5 s")
-        time.sleep(5)
+            _log(f"sesión caída: {type(e).__name__}: {e}; reconecta en 2 s")
+        time.sleep(2)   # 02-Oct: 5 -> 2 s (cada caída dejaba ~10 s de hueco en el histórico ms)
 
 
 def iniciar(filtro_marcos=("15min",), activos=None):

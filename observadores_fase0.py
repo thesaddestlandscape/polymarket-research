@@ -132,6 +132,8 @@ import colas_escaleras_ws_fase0  # 29-Sep: ronda2 #6 colas de escaleras horarias
 import escaleras_arbitraje_ms_fase0  # 29-Sep: ronda3 #2 violaciones transitorias de monotonia entre strikes (50 ms), libro WS
 import barreras_touch_ms_fase0  # 29-Sep: ronda2 #5 barreras 'hit', cruce de strike por aggTrade Binance (ms) vs libro del YES por WS
 import macro_release_ms_fase0  # 29-Sep: ronda1 #7 sniper datos macro, sondeo de fuente oficial a ~120 ms desde T-3 s (Statistics Canada WDS)
+import arbitraje_anidado_dryrun_fase0  # 02-Oct: dry-run arbitraje anidado 2 patas (mismo TWAP de cierre), FOK simulado a +latencia contra libro WS; sin órdenes
+import binance_movimiento_ask_fase0  # 02-Oct: movimientos Binance 1-3 bps -> ask real del libro WS a +0..2 s (enganchado al bookTicker de binance_jump_leadlag); sin órdenes
 import valor_relativo_anidado_fase0  # 30-Sep: el 5 min (eficiente) como precio justo del 15 min que cierra a la vez; ambos libros en el mismo ms
 import wallets_nuevas_fase0  # 29-Sep: ronda2 #2 wallets nuevas con apuesta grande, ask real copiable a +0..300 s
 import precierre_libro_ms_fase0  # 29-Sep: ronda1 #4 pelicula ms del libro+trades en los ultimos 100 s de cada up/down 5m/15m (maker con requote)
@@ -225,6 +227,8 @@ OBSERVADORES = [
     (escaleras_arbitraje_ms_fase0, "escaleras_arbitraje_ms_fase0.log", "_log"),
     (colas_escaleras_ws_fase0, "colas_escaleras_ws_fase0.log", "_log"),
     (valor_relativo_anidado_fase0, "valor_relativo_anidado_fase0.log", "_log"),
+    (arbitraje_anidado_dryrun_fase0, "arbitraje_anidado_dryrun_fase0.log", "_log"),
+    (binance_movimiento_ask_fase0, "binance_movimiento_ask_fase0.log", "_log"),
 ]
 
 
@@ -272,6 +276,10 @@ def _correr_observador(mod, nombre_log: str, nombre_fn_log: str) -> None:
 
 def main() -> int:
     LOGS.mkdir(parents=True, exist_ok=True)
+    # 02-Oct: con ~60 hilos, el hilo del WebSocket del libro (libro_estado_ws, ~2.200 msgs/s en horario USA) esperaba
+    # hasta 5 ms por el GIL en cada lectura y el servidor nos cortaba por "slow consumer" (~60 caídas/h, ~10 s de hueco
+    # cada una). Un lector aislado con los mismos tokens no cae nunca (3 min, 0 caídas). 5 ms -> 1 ms.
+    sys.setswitchinterval(0.001)
     print(f"[observadores_fase0] arrancando {len(OBSERVADORES)} observadores "
           f"en hilos separados (1 proceso, antes {len(OBSERVADORES)} procesos)", flush=True)
     hilos = {}
