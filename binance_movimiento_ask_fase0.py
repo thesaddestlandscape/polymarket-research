@@ -43,7 +43,7 @@ CAMPOS = (["ts_ms", "activo", "marco", "slug", "market_id", "resto_s", "direccio
            "mid_06", "mid_2", "ask_contrario_0"]
           + [f"{c}_{str(o).replace('.', '')}" for o in OFFSETS_S for c in ("ask", "ask_size", "bid", "edad_ms")])
 _lock = threading.Lock()
-_ticks = {}            # activo -> deque[(t, mid)] de ~4 s
+_ticks = {}            # activo -> [d1 (t-1,t], d3 (t-3,t-1], ref1, ref3]
 _ult = {}              # activo -> t del último evento
 _cola = []             # heap (t_lectura, seq, base, tok, tok_contrario, activo)
 _cond = threading.Condition()
@@ -56,9 +56,10 @@ def _log(msg):
 
 
 def _mid_en(activo, t):
-    """Último mid de Binance con tiempo <= t (None si no hay)."""
+    """Último mid de Binance con tiempo <= t (None si no hay). Solo al leer (raro): recorre ~3 s de ticks."""
     m = None
-    for tt, mm in list(_ticks.get(activo, ())):
+    d1, d3 = _ticks.get(activo, (None, None))[:2] if activo in _ticks else (None, None)
+    for tt, mm in (list(d3 or ()) + list(d1 or ())):
         if tt <= t:
             m = mm
         else:
@@ -70,21 +71,24 @@ def tick(activo, mid, t):
     """Llamado por binance_jump_leadlag_fase0._procesar en cada tick del bookTicker. Debe ser barato y no lanzar."""
     if not _arrancado[0]:
         return
-    dq = _ticks.setdefault(activo, deque())
-    dq.append((t, mid))
-    while dq and dq[0][0] < t - 4.0:
-        dq.popleft()
-    ref = None
-    for tt, mm in dq:
-        if t - tt >= 1.0:
-            ref = mm
-        else:
-            break
+    # O(1) amortizado (02-Oct, py-spy: recorrer 4 s de ticks en cada tick costaba ~4,5 % de la CPU de observadores):
+    # d1 = ticks de (t-1, t]; al envejecer pasan a d3 = (t-3, t-1]. ref1 = último que salió de d1, ref3 = de d3.
+    st = _ticks.get(activo)
+    if st is None:
+        st = _ticks[activo] = [deque(), deque(), None, None]
+    d1, d3 = st[0], st[1]
+    d1.append((t, mid))
+    while d1 and d1[0][0] <= t - 1.0:
+        x = d1.popleft()
+        st[2] = x[1]
+        d3.append(x)
+    while d3 and d3[0][0] <= t - 3.0:
+        st[3] = d3.popleft()[1]
+    ref, r3 = st[2], st[3]
     if not ref or mid <= 0 or abs(math.log(mid / ref)) < UMBRAL.get(activo, 1.0) or t - _ult.get(activo, -1e9) < DEDUP_S:
         return
     _ult[activo] = t
     ret = math.log(mid / ref)
-    r3 = dq[0][1] if t - dq[0][0] >= 2.9 else None
     direccion = "Up" if ret > 0 else "Down"
     for tag, dur in MARCOS.items():
         ini = int(t // dur) * dur
