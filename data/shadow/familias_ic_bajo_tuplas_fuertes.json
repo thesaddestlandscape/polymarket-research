@@ -1,12 +1,12 @@
 {
  "STREAK_MOM_5M": {
-  "ic_bayes_familia": 0.0215,
+  "ic_bayes_familia": 0.0217,
   "n_tuplas_fuertes": 2,
-  "pnl_fiel_combinado_eur": 97.33,
+  "pnl_fiel_combinado_eur": 97.53,
   "tuplas": [
    {
     "k": "STREAK_MOM_5M#DOGE#5min#BUY_NO",
-    "pnl_fiel_eur_sin_suelo": 57.6048,
+    "pnl_fiel_eur_sin_suelo": 57.8083,
     "n_ejecutado": 299
    },
    {
@@ -17,7 +17,7 @@
   ]
  },
  "LIQUIDACIONES_5M": {
-  "ic_bayes_familia": 0.0224,
+  "ic_bayes_familia": 0.0228,
   "n_tuplas_fuertes": 3,
   "pnl_fiel_combinado_eur": 60.44,
   "tuplas": [
@@ -39,13 +39,13 @@
   ]
  },
  "UPDOWN_GBM": {
-  "ic_bayes_familia": 0.0387,
+  "ic_bayes_familia": 0.0386,
   "n_tuplas_fuertes": 1,
-  "pnl_fiel_combinado_eur": 24.31,
+  "pnl_fiel_combinado_eur": 24.23,
   "tuplas": [
    {
     "k": "UPDOWN_GBM#BTC#5min#BUY_NO",
-    "pnl_fiel_eur_sin_suelo": 24.3126,
+    "pnl_fiel_eur_sin_suelo": 24.2336,
     "n_ejecutado": 695
    }
   ]
@@ -63,7 +63,7 @@
   ]
  },
  "STREAK_FADE_5M": {
-  "ic_bayes_familia": -0.0231,
+  "ic_bayes_familia": -0.0232,
   "n_tuplas_fuertes": 1,
   "pnl_fiel_combinado_eur": 20.04,
   "tuplas": [
@@ -75,14 +75,14 @@
   ]
  },
  "STRUCT_NO_15M": {
-  "ic_bayes_familia": 0.0124,
+  "ic_bayes_familia": 0.0125,
   "n_tuplas_fuertes": 1,
-  "pnl_fiel_combinado_eur": 17.86,
+  "pnl_fiel_combinado_eur": 19.84,
   "tuplas": [
    {
     "k": "STRUCT_NO_15M#BTC#15min#BUY_NO",
-    "pnl_fiel_eur_sin_suelo": 17.8557,
-    "n_ejecutado": 1204
+    "pnl_fiel_eur_sin_suelo": 19.8383,
+    "n_ejecutado": 1206
    }
   ]
  }
