@@ -29,6 +29,16 @@
   ],
   "n_suficiente_para_concluir": false
  },
+ "0x3c58ef422754ff22c7e806336feba0064d8b776b": {
+  "n": 2,
+  "pnl_total_eur": -2.1529,
+  "pnl_medio_eur": -1.0764,
+  "hit_rate": 0.0,
+  "fuentes": [
+   "cripto"
+  ],
+  "n_suficiente_para_concluir": false
+ },
  "0xf1ee4842fa0c7283632185e42577027452d4519c": {
   "n": 2,
   "pnl_total_eur": -2.1,
@@ -160,16 +170,6 @@
   "n_suficiente_para_concluir": false
  },
  "0x48ac40fc545cf327edd5365435c3a9f385614a7e": {
-  "n": 1,
-  "pnl_total_eur": -1.075,
-  "pnl_medio_eur": -1.075,
-  "hit_rate": 0.0,
-  "fuentes": [
-   "cripto"
-  ],
-  "n_suficiente_para_concluir": false
- },
- "0x3c58ef422754ff22c7e806336feba0064d8b776b": {
   "n": 1,
   "pnl_total_eur": -1.075,
   "pnl_medio_eur": -1.075,
