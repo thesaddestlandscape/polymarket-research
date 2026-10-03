@@ -1,12 +1,12 @@
 {
- "ts": "2026-10-03T22:25:15+00:00",
+ "ts": "2026-10-03T22:34:30+00:00",
  "wallet": "0xB6eDe3A699f73cbe7f8A221c2cdAcEbFdf02028b",
- "free_usdc": 21.284,
- "positions_value": 1.1025,
- "total": 21.2841,
- "total_bruto": 33.2662,
+ "free_usdc": 26.326,
+ "positions_value": 1.0996,
+ "total": 26.326,
+ "total_bruto": 38.3053,
  "deposito_inicial": 90.71,
- "pnl_real": -69.4259,
+ "pnl_real": -64.384,
  "pnl_por_deposito": [
   {
    "fecha": "2026-06-29",
@@ -52,9 +52,9 @@
    "fecha": "2026-09-24",
    "eur": 10.0,
    "nota": "Sexta recarga (petici\u00f3n expl\u00edcita Javi, 24-Sep ~14:00 UTC, \u00edntegramente para CRYPTO). 10 USDC nuevos + 10.81 USDC remanente del per\u00edodo 5 (balance_real.json total cripto neto, ts 14:00:13Z) = ~20.81 USDC de capital disponible al inicio del per\u00edodo 6. Confirmado: pUSD on-chain 32.3977 = colateral CLOB 32.3977 a las ~14:05 UTC (a las 14:00 el colateral a\u00fan marcaba 22.40, pusd_no_reflejado_en_collateral=10.0 exacto).",
-   "pnl_ledger": -3.4078,
-   "n_trades": 20,
-   "rendimiento_pct": -34.1
+   "pnl_ledger": 1.6343,
+   "n_trades": 21,
+   "rendimiento_pct": 16.3
   }
  ],
  "pusd_onchain": null,
@@ -414,9 +414,9 @@
   },
   {
    "date": "2026-10-04",
-   "pnl": -0.0
+   "pnl": 5.04
   }
  ],
- "pnl_hoy_real": -0.0,
- "pnl_7d_real": -1.48
+ "pnl_hoy_real": 5.04,
+ "pnl_7d_real": 3.56
 }
