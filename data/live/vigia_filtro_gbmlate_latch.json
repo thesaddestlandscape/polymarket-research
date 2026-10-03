@@ -146,6 +146,7 @@
   "drift_60min|abs_gt|0.461|BUY_YES",
   "hora_utc|lt|17.0|BUY_YES",
   "ibs_20min|gt|0.2391|BUY_NO",
+  "ibs_20min|gt|0.2396|BUY_NO",
   "ibs_20min|gt|0.2407|BUY_NO",
   "ibs_20min|gt|0.2411|BUY_NO",
   "ibs_20min|gt|0.2414|BUY_NO",
