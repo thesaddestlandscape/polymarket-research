@@ -109,20 +109,20 @@
   "robusto_dias": true,
   "lo": 0.09,
   "hi": 0.14,
-  "n": 57,
-  "pnl_medio": 1.111,
-  "diff_vs_resto": 0.9519,
+  "n": 58,
+  "pnl_medio": 1.0746,
+  "diff_vs_resto": 0.916,
   "p_valor": 0.0,
   "split_half_diff": [
-   0.6563,
-   1.2372
+   0.5943,
+   1.2377
   ],
   "split_half_ok": true,
-  "pnl_medio_loo": 0.9629,
+  "pnl_medio_loo": 0.9285,
   "robusto_loo": true,
   "ci90_bootstrap": [
-   0.382,
-   1.95
+   0.3063,
+   1.8967
   ],
   "robusto_bootstrap": true,
   "n_posiciones_buscadas": 89,
@@ -172,11 +172,11 @@
   "hi": 0.05,
   "n": 779,
   "pnl_medio": -0.8189,
-  "diff_vs_resto": -0.8842,
+  "diff_vs_resto": -0.8844,
   "p_valor": 0.0,
   "split_half_diff": [
-   -0.8855,
-   -0.8829
+   -0.8857,
+   -0.8831
   ],
   "split_half_ok": true,
   "pnl_medio_loo": -0.8494,
@@ -224,36 +224,6 @@
   ],
   "robusto_bootstrap": true,
   "n_posiciones_buscadas": 66,
-  "veredicto_crudo_hoy": "malo_confirmado",
-  "historial_crudo": [
-   "malo_confirmado"
-  ],
-  "fecha_historial": "2026-10-03",
-  "veredicto": "malo_confirmado"
- },
- "SEGUIR#ETH#15min#0": {
-  "n_dias": 17,
-  "pnl_sin_mejores_dias": -0.8709,
-  "robusto_dias": false,
-  "lo": 0.14,
-  "hi": 0.19,
-  "n": 54,
-  "pnl_medio": -0.6761,
-  "diff_vs_resto": -0.6461,
-  "p_valor": 0.0,
-  "split_half_diff": [
-   -0.776,
-   -0.5161
-  ],
-  "split_half_ok": true,
-  "pnl_medio_loo": -0.7967,
-  "robusto_loo": true,
-  "ci90_bootstrap": [
-   -1.0,
-   -0.3466
-  ],
-  "robusto_bootstrap": true,
-  "n_posiciones_buscadas": 84,
   "veredicto_crudo_hoy": "malo_confirmado",
   "historial_crudo": [
    "malo_confirmado"
@@ -333,7 +303,7 @@
   "hi": 0.05,
   "n": 4024,
   "pnl_medio": -0.6006,
-  "diff_vs_resto": -0.5862,
+  "diff_vs_resto": -0.5863,
   "p_valor": 0.0,
   "split_half_diff": [
    -0.8002,
@@ -432,6 +402,12 @@
   ],
   "fecha_historial": "2026-10-03",
   "veredicto": "bueno_confirmado"
+ },
+ "SEGUIR#ETH#15min#0": {
+  "veredicto": "sin_concluir",
+  "historial_crudo": [
+   "malo_confirmado"
+  ]
  },
  "SEGUIR#XRP#15min#0": {
   "veredicto": "sin_concluir",
