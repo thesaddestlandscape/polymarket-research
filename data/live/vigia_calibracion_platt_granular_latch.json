@@ -1486,5 +1486,21 @@
   "LIQUIDACIONES_DEPTH_FASE0#DOGE#15min": {
     "n": 209,
     "confirmado": false
+  },
+  "LIQUIDACIONES_5M#DOGE": {
+    "n": 201,
+    "confirmado": true
+  },
+  "LIQUIDACIONES_5M#DOGE#5min": {
+    "n": 201,
+    "confirmado": true
+  },
+  "STREAK_FADE_15M#XRP": {
+    "n": 201,
+    "confirmado": false
+  },
+  "STREAK_FADE_15M#XRP#15min": {
+    "n": 201,
+    "confirmado": false
   }
 }
