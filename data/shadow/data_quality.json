@@ -1,60 +1,60 @@
 {
-  "timestamp_utc": "2026-10-03T18:20:36+00:00",
+  "timestamp_utc": "2026-10-03T18:25:54+00:00",
   "estado_global": "OK",
   "alertas": [],
   "rechazos_1h": {
     "rango": 0,
     "spike": 0,
     "total": 0,
-    "cambio_fuente": 78,
+    "cambio_fuente": 80,
     "por_sym": {}
   },
   "assets": {
     "BTC": {
       "estado": "OK",
-      "n": 4331,
-      "age_seconds": 6.6,
-      "ultimo_precio": 84966.375,
+      "n": 4340,
+      "age_seconds": 4.3,
+      "ultimo_precio": 84950.0,
       "gaps": [],
       "alertas": []
     },
     "ETH": {
       "estado": "OK",
-      "n": 4331,
-      "age_seconds": 6.6,
-      "ultimo_precio": 2685.61,
+      "n": 4340,
+      "age_seconds": 4.3,
+      "ultimo_precio": 2685.85,
       "gaps": [],
       "alertas": []
     },
     "SOL": {
       "estado": "OK",
-      "n": 4331,
-      "age_seconds": 6.6,
-      "ultimo_precio": 119.81,
+      "n": 4340,
+      "age_seconds": 4.3,
+      "ultimo_precio": 119.77,
       "gaps": [],
       "alertas": []
     },
     "XRP": {
       "estado": "OK",
-      "n": 4331,
-      "age_seconds": 6.6,
-      "ultimo_precio": 1.4912,
+      "n": 4340,
+      "age_seconds": 4.3,
+      "ultimo_precio": 1.49,
       "gaps": [],
       "alertas": []
     }
   },
   "cross_source": {
-    "timestamp_utc": "2026-10-03T18:17:56+00:00",
+    "timestamp_utc": "2026-10-03T18:23:12+00:00",
     "fuentes_activas": [
       "binance",
       "coinbase",
       "kraken"
     ],
     "consenso": {
-      "BTC": 84966.6,
-      "ETH": 2685.7,
-      "SOL": 119.845,
-      "XRP": 1.492
+      "BTC": 84948.8,
+      "ETH": 2685.78,
+      "SOL": 119.77,
+      "XRP": 1.49074
     },
     "alertas": [],
     "bloqueados": []
