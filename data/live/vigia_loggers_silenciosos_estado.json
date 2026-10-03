@@ -1,50 +1,50 @@
 {
 "/root/polymarket-research/data/shadow/favorito_ultimosegundo.csv": {
 "primera_vez": 1790770965.8752604,
-"ultimo_mtime": 1791025505.9000583,
+"ultimo_mtime": 1791029090.1089315,
 "gap_max_h": 1.0,
 "avisado": false
 },
 "/root/polymarket-research/data/shadow/photo_finish.csv": {
 "primera_vez": 1790770965.8752604,
-"ultimo_mtime": 1791025507.449069,
-"gap_max_h": 1.0,
+"ultimo_mtime": 1791029088.5479207,
+"gap_max_h": 0.99,
 "avisado": false
 },
 "/root/polymarket-research/data/shadow/resolution_sniper_obs.csv": {
 "primera_vez": 1790770965.8752604,
-"ultimo_mtime": 1791025508.1380737,
-"gap_max_h": 1.0,
+"ultimo_mtime": 1791029072.8318117,
+"gap_max_h": 0.99,
 "avisado": false
 },
 "/root/polymarket-research/data/shadow/arb_scan.csv": {
 "primera_vez": 1790770965.8752604,
-"ultimo_mtime": 1791024720.1776714,
-"gap_max_h": 1.06,
+"ultimo_mtime": 1791028421.5802908,
+"gap_max_h": 1.04,
 "avisado": false
 },
 "/root/polymarket-research/data/shadow/combi_arb.csv": {
 "primera_vez": 1790770965.8752604,
-"ultimo_mtime": 1791024728.231342,
-"gap_max_h": 1.06,
+"ultimo_mtime": 1791028426.1177225,
+"gap_max_h": 1.04,
 "avisado": false
 },
 "/root/polymarket-research/data/shadow/resolution_sniper_precierre_curva_cierre_fase0.csv": {
 "primera_vez": 1790770965.8752604,
-"ultimo_mtime": 1791025501.0980253,
+"ultimo_mtime": 1791029093.1009521,
 "gap_max_h": 1.0,
 "avisado": false
 },
 "/root/polymarket-research/data/shadow/nested_arb.csv": {
 "primera_vez": 1790770965.8752604,
-"ultimo_mtime": 1791024993.8445468,
-"gap_max_h": 0.98,
+"ultimo_mtime": 1791028749.5445676,
+"gap_max_h": 1.04,
 "avisado": false
 },
 "/root/polymarket-research/data/shadow/punto_confirmacion.csv": {
 "primera_vez": 1790770965.8752604,
-"ultimo_mtime": 1791025505.531056,
-"gap_max_h": 1.03,
+"ultimo_mtime": 1791029041.585595,
+"gap_max_h": 1.01,
 "avisado": false
 },
 "/root/polymarket-research/data/shadow/weeklyprice_fade_depth_fase0.csv": {
@@ -55,68 +55,68 @@
 },
 "/root/polymarket-research/data/shadow/polymarket_perps_wallet_fills.csv": {
 "primera_vez": 1790770965.8752604,
-"ultimo_mtime": 1791022781.1033814,
+"ultimo_mtime": 1791026381.8471446,
 "gap_max_h": 1.0,
 "avisado": false
 },
 "/root/polymarket-research/data/shadow/binance_perp_cvd_oi.csv": {
 "primera_vez": 1790770965.8752604,
-"ultimo_mtime": 1791024996.6675663,
+"ultimo_mtime": 1791028732.4034486,
 "gap_max_h": 1.04,
 "avisado": false
 },
 "/root/polymarket-research/data/shadow/favorito_confirmado_senal_contraria_fase0.csv": {
 "primera_vez": 1790770965.8752604,
-"ultimo_mtime": 1791025462.2507591,
-"gap_max_h": 0.99,
+"ultimo_mtime": 1791029057.871708,
+"gap_max_h": 1.0,
 "avisado": false
 },
 "/root/polymarket-research/data/shadow/predictions.csv": {
 "primera_vez": 1790770965.8752604,
-"ultimo_mtime": 1791025519.4861515,
-"gap_max_h": 1.0,
+"ultimo_mtime": 1791029087.2439117,
+"gap_max_h": 0.99,
 "avisado": false
 },
 "/root/polymarket-research/data/shadow/polymarket_perps_leaderboard.csv": {
 "primera_vez": 1790770965.8752604,
-"ultimo_mtime": 1791025203.3879838,
+"ultimo_mtime": 1791028804.348948,
 "gap_max_h": 1.0,
 "avisado": false
 },
 "/root/polymarket-research/data/shadow/momentum_ibs_reactivo_fase0.csv": {
 "primera_vez": 1790770965.8752604,
-"ultimo_mtime": 1791025509.5840836,
-"gap_max_h": 1.0,
+"ultimo_mtime": 1791028868.8383956,
+"gap_max_h": 0.98,
 "avisado": false
 },
 "/root/polymarket-research/data/shadow/polymarket_perps_market.csv": {
 "primera_vez": 1790770965.8752604,
-"ultimo_mtime": 1791025203.5309849,
+"ultimo_mtime": 1791028802.3019338,
 "gap_max_h": 1.0,
 "avisado": false
 },
 "/root/polymarket-research/data/shadow/liquidaciones_bybit_eventos.csv": {
 "primera_vez": 1790770965.8752604,
-"ultimo_mtime": 1791024882.3437827,
-"gap_max_h": 1.43,
+"ultimo_mtime": 1791028706.0732658,
+"gap_max_h": 1.4,
 "avisado": false
 },
 "/root/polymarket-research/data/shadow/xrp15min_contrario_fase0.csv": {
 "primera_vez": 1790770965.8752604,
-"ultimo_mtime": 1791022509.7985222,
-"gap_max_h": 3.0,
+"ultimo_mtime": 1791028803.17694,
+"gap_max_h": 2.94,
 "avisado": false
 },
 "/root/polymarket-research/data/shadow/sports_spread_fase0.csv": {
 "primera_vez": 1790770965.8752604,
-"ultimo_mtime": 1791024941.1392188,
+"ultimo_mtime": 1791028566.495297,
 "gap_max_h": 1.01,
 "avisado": false
 },
 "/root/polymarket-research/data/shadow/huecos_extremos_fase0.csv": {
 "primera_vez": 1790770965.8752604,
-"ultimo_mtime": 1791025108.8453355,
-"gap_max_h": 1.02,
+"ultimo_mtime": 1791028730.4884353,
+"gap_max_h": 1.01,
 "avisado": false
 },
 "/root/polymarket-research/data/shadow/saltos_chainlink_fase0_sin_contrario_hasta_29sep.csv": {
@@ -133,32 +133,32 @@
 },
 "/root/polymarket-research/data/shadow/order_flow_5m_reactivo_fase0.csv": {
 "primera_vez": 1790770965.8752604,
-"ultimo_mtime": 1791024096.4693975,
-"gap_max_h": 3.33,
+"ultimo_mtime": 1791028747.3605523,
+"gap_max_h": 3.26,
 "avisado": false
 },
 "/root/polymarket-research/data/shadow/ya_decidido_ws_fase0.csv": {
 "primera_vez": 1790770965.8752604,
-"ultimo_mtime": 1791000620.0428479,
-"gap_max_h": 6.38,
+"ultimo_mtime": 1791027620.9911199,
+"gap_max_h": 7.5,
 "avisado": false
 },
 "/root/polymarket-research/data/shadow/favorito_confirmado_depth_fase0.csv": {
 "primera_vez": 1790770965.8752604,
-"ultimo_mtime": 1791025504.7460504,
-"gap_max_h": 1.01,
+"ultimo_mtime": 1791028819.2350514,
+"gap_max_h": 0.99,
 "avisado": false
 },
 "/root/polymarket-research/data/shadow/dryrun_mejora_contraria.csv": {
 "primera_vez": 1790770965.8752604,
-"ultimo_mtime": 1791024618.8569772,
-"gap_max_h": 1.65,
+"ultimo_mtime": 1791026111.778239,
+"gap_max_h": 1.62,
 "avisado": false
 },
 "/root/polymarket-research/data/shadow/sol5min_contrario_fase0.csv": {
 "primera_vez": 1790770965.8752604,
-"ultimo_mtime": 1791025503.664043,
-"gap_max_h": 1.05,
+"ultimo_mtime": 1791028501.6398466,
+"gap_max_h": 1.03,
 "avisado": false
 },
 "/root/polymarket-research/data/shadow/resolution_sniper_naive_executor_dryrun.csv": {
@@ -169,8 +169,8 @@
 },
 "/root/polymarket-research/data/shadow/nested_arb_duraciones.csv": {
 "primera_vez": 1790770965.8752604,
-"ultimo_mtime": 1791024579.3807068,
-"gap_max_h": 2.11,
+"ultimo_mtime": 1791027114.6102703,
+"gap_max_h": 2.07,
 "avisado": false
 },
 "/root/polymarket-research/data/shadow/macro_release_ms_fase0.csv": {
@@ -187,20 +187,20 @@
 },
 "/root/polymarket-research/data/shadow/ya_decidido_universal_fase0.csv": {
 "primera_vez": 1790770965.8752604,
-"ultimo_mtime": 1791025286.697555,
-"gap_max_h": 1.0,
+"ultimo_mtime": 1791028912.6636999,
+"gap_max_h": 1.01,
 "avisado": false
 },
 "/root/polymarket-research/data/shadow/favorito_confirmado_60_240min_depth_fase0.csv": {
 "primera_vez": 1790770965.8752604,
-"ultimo_mtime": 1791014341.970203,
-"gap_max_h": 3.61,
+"ultimo_mtime": 1791028743.7775276,
+"gap_max_h": 4.0,
 "avisado": false
 },
 "/root/polymarket-research/data/shadow/postmortem.csv": {
 "primera_vez": 1790770965.8752604,
-"ultimo_mtime": 1791025122.5304294,
-"gap_max_h": 1.03,
+"ultimo_mtime": 1791028912.371698,
+"gap_max_h": 1.05,
 "avisado": false
 },
 "/root/polymarket-research/data/shadow/robustez_diaria_historico.csv": {
@@ -211,38 +211,38 @@
 },
 "/root/polymarket-research/data/shadow/resolution_sniper_precierre_executor_v2.csv": {
 "primera_vez": 1790770965.8752604,
-"ultimo_mtime": 1791025500.0749269,
-"gap_max_h": 1.0,
+"ultimo_mtime": 1791029055.1398847,
+"gap_max_h": 0.99,
 "avisado": false
 },
 "/root/polymarket-research/data/shadow/strategy_accuracy.csv": {
 "primera_vez": 1790770965.8752604,
-"ultimo_mtime": 1791025467.7661564,
-"gap_max_h": 1.01,
+"ultimo_mtime": 1791029068.1347792,
+"gap_max_h": 1.0,
 "avisado": false
 },
 "/root/polymarket-research/data/shadow/gbm_late_imbalance_fase0.csv": {
 "primera_vez": 1790770965.8752604,
-"ultimo_mtime": 1791025469.4128082,
-"gap_max_h": 0.99,
+"ultimo_mtime": 1791029058.2137103,
+"gap_max_h": 1.0,
 "avisado": false
 },
 "/root/polymarket-research/data/shadow/negrisk_arb_fase0.csv": {
 "primera_vez": 1790770965.8752604,
-"ultimo_mtime": 1791025184.2698529,
-"gap_max_h": 1.18,
+"ultimo_mtime": 1791029035.5125527,
+"gap_max_h": 1.16,
 "avisado": false
 },
 "/root/polymarket-research/data/shadow/wallet_contraparte_shadow.csv": {
 "primera_vez": 1790770965.8752604,
-"ultimo_mtime": 1791025279.9255087,
-"gap_max_h": 4.79,
+"ultimo_mtime": 1791028869.4113996,
+"gap_max_h": 4.69,
 "avisado": false
 },
 "/root/polymarket-research/data/shadow/sniper_listados_fase0_eventos.csv": {
 "primera_vez": 1790770965.8752604,
-"ultimo_mtime": 1791024016.50304,
-"gap_max_h": 1.32,
+"ultimo_mtime": 1791027615.1157641,
+"gap_max_h": 1.29,
 "avisado": false
 },
 "/root/polymarket-research/data/shadow/resolution_sniper_naive_depth_fase0.csv": {
@@ -253,14 +253,14 @@
 },
 "/root/polymarket-research/data/shadow/wallet_mirror_executor_dryrun.csv": {
 "primera_vez": 1790770965.8752604,
-"ultimo_mtime": 1791025512.844106,
-"gap_max_h": 1.0,
+"ultimo_mtime": 1791029080.9628682,
+"gap_max_h": 0.99,
 "avisado": false
 },
 "/root/polymarket-research/data/shadow/fade_depth_universal_fase0.csv": {
 "primera_vez": 1790770965.8752604,
-"ultimo_mtime": 1791025511.3130956,
-"gap_max_h": 1.02,
+"ultimo_mtime": 1791029089.6369283,
+"gap_max_h": 1.0,
 "avisado": false
 },
 "/root/polymarket-research/data/shadow/bot_wallets_gate_bucket_historico.csv": {
@@ -271,50 +271,50 @@
 },
 "/root/polymarket-research/data/shadow/ladder_arb_weather_fase0.csv": {
 "primera_vez": 1790770965.8752604,
-"ultimo_mtime": 1791025206.737007,
+"ultimo_mtime": 1791028805.7719579,
 "gap_max_h": 1.0,
 "avisado": false
 },
 "/root/polymarket-research/data/shadow/sniper_listados_fase0.csv": {
 "primera_vez": 1790770965.8752604,
-"ultimo_mtime": 1791024016.4488492,
-"gap_max_h": 1.45,
+"ultimo_mtime": 1791027615.0331218,
+"gap_max_h": 1.42,
 "avisado": false
 },
 "/root/polymarket-research/data/shadow/favorito5min_bajalatencia_fase0.csv": {
 "primera_vez": 1790770965.8752604,
-"ultimo_mtime": 1791025212.7690482,
-"gap_max_h": 1.06,
+"ultimo_mtime": 1791028613.1591947,
+"gap_max_h": 1.04,
 "avisado": false
 },
 "/root/polymarket-research/data/shadow/stink_bids_fase0_seguimiento.csv": {
 "primera_vez": 1790770965.8752604,
-"ultimo_mtime": 1791025485.9389215,
-"gap_max_h": 3.07,
+"ultimo_mtime": 1791028011.5414464,
+"gap_max_h": 3.01,
 "avisado": false
 },
 "/root/polymarket-research/data/shadow/liquidaciones_depth_fase0.csv": {
 "primera_vez": 1790770965.8752604,
-"ultimo_mtime": 1791024891.3798447,
-"gap_max_h": 1.71,
+"ultimo_mtime": 1791027687.3042138,
+"gap_max_h": 1.68,
 "avisado": false
 },
 "/root/polymarket-research/data/shadow/maker_sim.csv": {
 "primera_vez": 1790770965.8752604,
-"ultimo_mtime": 1791025466.9597914,
-"gap_max_h": 1.01,
+"ultimo_mtime": 1791029007.8233604,
+"gap_max_h": 0.99,
 "avisado": false
 },
 "/root/polymarket-research/data/shadow/performance.csv": {
 "primera_vez": 1790770965.8752604,
-"ultimo_mtime": 1791025165.2939885,
-"gap_max_h": 1.03,
+"ultimo_mtime": 1791028967.0220773,
+"gap_max_h": 1.06,
 "avisado": false
 },
 "/root/polymarket-research/data/shadow/mean_reversion_reactivo_fase0.csv": {
 "primera_vez": 1790770965.8752604,
-"ultimo_mtime": 1791025502.8800375,
-"gap_max_h": 1.0,
+"ultimo_mtime": 1791029052.0276673,
+"gap_max_h": 0.99,
 "avisado": false
 },
 "/root/polymarket-research/data/shadow/supervivencia_breakers_historico.csv": {
@@ -337,20 +337,20 @@
 },
 "/root/polymarket-research/data/shadow/libro_multinivel_fase0.csv": {
 "primera_vez": 1790770965.8752604,
-"ultimo_mtime": 1791025505.3350544,
-"gap_max_h": 1.0,
+"ultimo_mtime": 1791029062.9767435,
+"gap_max_h": 0.99,
 "avisado": false
 },
 "/root/polymarket-research/data/shadow/cluster_wallets_fillability_fase0.csv": {
 "primera_vez": 1790770965.8752604,
-"ultimo_mtime": 1791025497.3109994,
+"ultimo_mtime": 1791029080.9128678,
 "gap_max_h": 1.0,
 "avisado": false
 },
 "/root/polymarket-research/data/shadow/ballenas_5min_dry_run.csv": {
 "primera_vez": 1790770965.8752604,
-"ultimo_mtime": 1791025306.34269,
-"gap_max_h": 1.01,
+"ultimo_mtime": 1791029089.8849301,
+"gap_max_h": 1.05,
 "avisado": false
 },
 "/root/polymarket-research/data/shadow/degradacion_live.csv": {
@@ -367,14 +367,14 @@
 },
 "/root/polymarket-research/data/shadow/sports_sniper_cierre_fase0.csv": {
 "primera_vez": 1790770965.8752604,
-"ultimo_mtime": 1791025260.043304,
-"gap_max_h": 1.0,
+"ultimo_mtime": 1791028813.2524867,
+"gap_max_h": 0.99,
 "avisado": false
 },
 "/root/polymarket-research/data/shadow/wallets_nuevas_fase0.csv": {
 "primera_vez": 1790770965.8752604,
-"ultimo_mtime": 1791024764.7259767,
-"gap_max_h": 1.55,
+"ultimo_mtime": 1791028874.6074357,
+"gap_max_h": 1.52,
 "avisado": false
 },
 "/root/polymarket-research/data/shadow/ask_real_por_senal.csv": {
@@ -385,8 +385,8 @@
 },
 "/root/polymarket-research/data/shadow/resolution_sniper_precierre_depth_fase0.csv": {
 "primera_vez": 1790770965.8752604,
-"ultimo_mtime": 1791024599.1028419,
-"gap_max_h": 1.15,
+"ultimo_mtime": 1791028799.1909122,
+"gap_max_h": 1.17,
 "avisado": false
 },
 "/root/polymarket-research/data/shadow/wallet_first_buy_longshot_executor_dryrun.csv": {
@@ -397,14 +397,14 @@
 },
 "/root/polymarket-research/data/shadow/bot_wallets_gate_bucket_fase0.csv": {
 "primera_vez": 1790770965.8752604,
-"ultimo_mtime": 1791025511.843099,
-"gap_max_h": 1.0,
+"ultimo_mtime": 1791029079.7158597,
+"gap_max_h": 0.99,
 "avisado": false
 },
 "/root/polymarket-research/data/shadow/ballenas_15min_dry_run.csv": {
 "primera_vez": 1790770965.8752604,
-"ultimo_mtime": 1791025437.7065907,
-"gap_max_h": 1.11,
+"ultimo_mtime": 1791028486.9097443,
+"gap_max_h": 1.09,
 "avisado": false
 },
 "/root/polymarket-research/data/shadow/candidata9_10_gate_bucket_historico.csv": {
@@ -421,20 +421,20 @@
 },
 "/root/polymarket-research/data/shadow/penny_clipper_fase0.csv": {
 "primera_vez": 1790770965.8752604,
-"ultimo_mtime": 1791025517.2481363,
-"gap_max_h": 1.0,
+"ultimo_mtime": 1791029080.8478675,
+"gap_max_h": 0.99,
 "avisado": false
 },
 "/root/polymarket-research/data/shadow/gbm_late_reactivo_fase0.csv": {
 "primera_vez": 1790770965.8752604,
-"ultimo_mtime": 1791025450.73668,
-"gap_max_h": 1.01,
+"ultimo_mtime": 1791028867.6373873,
+"gap_max_h": 0.99,
 "avisado": false
 },
 "/root/polymarket-research/data/shadow/momentum_ibs_ballena_reactivo_fase0.csv": {
 "primera_vez": 1790770965.8752604,
-"ultimo_mtime": 1791025514.9621205,
-"gap_max_h": 1.0,
+"ultimo_mtime": 1791029059.7907212,
+"gap_max_h": 0.98,
 "avisado": false
 },
 "/root/polymarket-research/data/shadow/ballenas_btc15m_adelantado_dry.csv": {
@@ -451,25 +451,25 @@
 },
 "/root/polymarket-research/data/shadow/desfase_twap_apertura_fase0.csv": {
 "primera_vez": 1790770965.8752604,
-"ultimo_mtime": 1791025505.836058,
-"gap_max_h": 1.0,
+"ultimo_mtime": 1791028809.5427978,
+"gap_max_h": 0.98,
 "avisado": false
 },
 "/root/polymarket-research/data/shadow/saltos_chainlink_fase0.csv": {
 "primera_vez": 1790770965.8752604,
-"ultimo_mtime": 1791025500.4130208,
-"gap_max_h": 1.0,
+"ultimo_mtime": 1791029068.424781,
+"gap_max_h": 0.99,
 "avisado": false
 },
 "/root/polymarket-research/data/shadow/p33_maker_fillability_fase0.csv": {
 "primera_vez": 1790770965.8752604,
-"ultimo_mtime": 1791025248.2052913,
-"gap_max_h": 0.99,
+"ultimo_mtime": 1791028889.9385421,
+"gap_max_h": 1.01,
 "avisado": false
 },
 "/root/polymarket-research/data/shadow/bot_consenso_amplio_fase0.csv": {
 "primera_vez": 1790770965.8752604,
-"ultimo_mtime": 1791025449.7326732,
+"ultimo_mtime": 1791029086.0069032,
 "gap_max_h": 1.01,
 "avisado": false
 },
@@ -481,55 +481,55 @@
 },
 "/root/polymarket-research/data/shadow/momentum_ibs_ballena_botconsenso_dryrun_fase0.csv": {
 "primera_vez": 1790770965.8752604,
-"ultimo_mtime": 1791024974.3734133,
-"gap_max_h": 4.82,
+"ultimo_mtime": 1791028446.8744664,
+"gap_max_h": 4.72,
 "avisado": false
 },
 "/root/polymarket-research/data/shadow/ballenas_veto_bypass.csv": {
 "primera_vez": 1790770965.8752604,
-"ultimo_mtime": 1791025000.5005925,
-"gap_max_h": 1.04,
+"ultimo_mtime": 1791028898.8216038,
+"gap_max_h": 1.08,
 "avisado": false
 },
 "/root/polymarket-research/data/shadow/ballenas_timing_history.csv": {
 "primera_vez": 1790770965.8752604,
-"ultimo_mtime": 1791022178.9112546,
-"gap_max_h": 1.26,
+"ultimo_mtime": 1791025763.6188257,
+"gap_max_h": 1.23,
 "avisado": false
 },
 "/root/polymarket-research/data/shadow/results.csv": {
 "primera_vez": 1790770965.8752604,
-"ultimo_mtime": 1791025467.7557967,
-"gap_max_h": 1.01,
+"ultimo_mtime": 1791029008.6553662,
+"gap_max_h": 0.99,
 "avisado": false
 },
 "/root/polymarket-research/data/shadow/wallets_nuevas_fase0_seguimiento.csv": {
 "primera_vez": 1790770965.8752604,
-"ultimo_mtime": 1791025064.869034,
-"gap_max_h": 1.55,
+"ultimo_mtime": 1791028934.7688534,
+"gap_max_h": 1.52,
 "avisado": false
 },
 "/root/polymarket-research/data/shadow/dispersed_bot_executor_dryrun.csv": {
 "primera_vez": 1790770965.8752604,
-"ultimo_mtime": 1791025520.0020382,
-"gap_max_h": 1.0,
+"ultimo_mtime": 1791029085.7739143,
+"gap_max_h": 0.99,
 "avisado": false
 },
 "/root/polymarket-research/data/shadow/candidata9_bot_consenso_executor.csv": {
 "primera_vez": 1790770965.8752604,
-"ultimo_mtime": 1791025509.1390805,
-"gap_max_h": 1.0,
+"ultimo_mtime": 1791029080.180863,
+"gap_max_h": 0.99,
 "avisado": false
 },
 "/root/polymarket-research/data/shadow/ev_kelly_historico.csv": {
 "primera_vez": 1790770965.8752604,
-"ultimo_mtime": 1791025165.3027227,
-"gap_max_h": 1.08,
+"ultimo_mtime": 1791028967.0310774,
+"gap_max_h": 1.06,
 "avisado": false
 },
 "/root/polymarket-research/data/shadow/sniper_listados_fase0_seguimiento.csv": {
 "primera_vez": 1790770965.8752604,
-"ultimo_mtime": 1791024916.9200196,
+"ultimo_mtime": 1791028516.3089485,
 "gap_max_h": 1.0,
 "avisado": false
 },
@@ -541,20 +541,20 @@
 },
 "/root/polymarket-research/data/shadow/gbm_late_confirmado_fillability_fase0.csv": {
 "primera_vez": 1790770965.8752604,
-"ultimo_mtime": 1791025468.0197985,
-"gap_max_h": 0.99,
+"ultimo_mtime": 1791028987.8482218,
+"gap_max_h": 0.98,
 "avisado": false
 },
 "/root/polymarket-research/data/shadow/candidata9_bot_consenso_reactivo_fase0.csv": {
 "primera_vez": 1790770965.8752604,
-"ultimo_mtime": 1791025509.05608,
-"gap_max_h": 1.0,
+"ultimo_mtime": 1791029077.8698468,
+"gap_max_h": 0.99,
 "avisado": false
 },
 "/root/polymarket-research/data/shadow/wallet_mirror_sniper_dry_run.csv": {
 "primera_vez": 1790770965.8752604,
-"ultimo_mtime": 1791025513.587111,
-"gap_max_h": 1.0,
+"ultimo_mtime": 1791029088.3129191,
+"gap_max_h": 0.99,
 "avisado": false
 },
 "/root/polymarket-research/data/shadow/gbm_late_imbalance_fase0_v1_rest.csv": {
@@ -565,26 +565,26 @@
 },
 "/root/polymarket-research/data/shadow/resolution_sniper_freeze_estado_fase0.csv": {
 "primera_vez": 1790770965.8752604,
-"ultimo_mtime": 1791025501.9410312,
+"ultimo_mtime": 1791029092.9659512,
 "gap_max_h": 1.0,
 "avisado": false
 },
 "/root/polymarket-research/data/shadow/candidata10_confirmacion_cruzada_reactivo_fase0.csv": {
 "primera_vez": 1790770965.8752604,
-"ultimo_mtime": 1791025447.200656,
-"gap_max_h": 0.98,
+"ultimo_mtime": 1791029087.244912,
+"gap_max_h": 1.01,
 "avisado": false
 },
 "/root/polymarket-research/data/shadow/candidatas_sin_fillability_depth_fase0.csv": {
 "primera_vez": 1790770965.8752604,
-"ultimo_mtime": 1791025464.307773,
-"gap_max_h": 0.99,
+"ultimo_mtime": 1791029062.8877428,
+"gap_max_h": 1.0,
 "avisado": false
 },
 "/root/polymarket-research/data/shadow/stink_bids_fase0.csv": {
 "primera_vez": 1790770965.8752604,
-"ultimo_mtime": 1791025425.7485087,
-"gap_max_h": 3.4,
+"ultimo_mtime": 1791027711.3583794,
+"gap_max_h": 3.33,
 "avisado": false
 },
 "/root/polymarket-research/data/shadow/escaleras_cierre_ws_fase0.csv": {
@@ -607,8 +607,8 @@
 },
 "/root/polymarket-research/data/sports/activity_ws.csv": {
 "primera_vez": 1790770965.8752604,
-"ultimo_mtime": 1791025521.015162,
-"gap_max_h": 1.0,
+"ultimo_mtime": 1791029092.75295,
+"gap_max_h": 0.99,
 "avisado": false
 },
 "/root/polymarket-research/data/sports/trades.csv": {
@@ -619,8 +619,8 @@
 },
 "/root/polymarket-research/data/sports/wallet_mirror_sniper_dry_run.csv": {
 "primera_vez": 1790770965.8752604,
-"ultimo_mtime": 1791025520.9131613,
-"gap_max_h": 1.0,
+"ultimo_mtime": 1791029062.8277423,
+"gap_max_h": 0.98,
 "avisado": false
 },
 "/root/polymarket-research/data/live/smart_exit_prices.csv": {
@@ -637,8 +637,8 @@
 },
 "/root/polymarket-research/data/live/balance_history.csv": {
 "primera_vez": 1790770965.8752604,
-"ultimo_mtime": 1791025507.6921022,
-"gap_max_h": 1.08,
+"ultimo_mtime": 1791028817.3560383,
+"gap_max_h": 1.06,
 "avisado": false
 },
 "/root/polymarket-research/data/live/reconciliacion_posiciones.csv": {
@@ -649,8 +649,8 @@
 },
 "/root/polymarket-research/data/live/libro_snapshots.csv": {
 "primera_vez": 1790770965.8752604,
-"ultimo_mtime": 1791025478.1409009,
-"gap_max_h": 0.99,
+"ultimo_mtime": 1791029069.4119537,
+"gap_max_h": 1.0,
 "avisado": false
 },
 "/root/polymarket-research/data/live/trades.csv": {
@@ -661,56 +661,56 @@
 },
 "/root/polymarket-research-datalogs/libro_ambos_lados.csv": {
 "primera_vez": 1790770965.8752604,
-"ultimo_mtime": 1791025506.850065,
-"gap_max_h": 1.0,
+"ultimo_mtime": 1791029056.3816977,
+"gap_max_h": 0.99,
 "avisado": false
 },
 "/root/polymarket-research-datalogs/polymarket_activity.csv": {
 "primera_vez": 1790770965.8752604,
-"ultimo_mtime": 1791025520.8201606,
-"gap_max_h": 1.0,
+"ultimo_mtime": 1791029090.9539375,
+"gap_max_h": 0.99,
 "avisado": false
 },
 "/root/polymarket-research-datalogs/libro_book_ws.csv": {
 "primera_vez": 1790770965.8752604,
-"ultimo_mtime": 1791025499.8130167,
-"gap_max_h": 1.0,
+"ultimo_mtime": 1791029078.1348486,
+"gap_max_h": 0.99,
 "avisado": false
 },
 "/root/polymarket-research-datalogs/binance_bookticker.csv": {
 "primera_vez": 1790770965.8752604,
-"ultimo_mtime": 1791025521.181163,
-"gap_max_h": 1.0,
+"ultimo_mtime": 1791029092.4259477,
+"gap_max_h": 0.99,
 "avisado": false
 },
 "/root/polymarket-research-datalogs/wallet_first_buy_follow_fase0.csv": {
 "primera_vez": 1790770965.8752604,
-"ultimo_mtime": 1791025491.4789596,
-"gap_max_h": 1.01,
+"ultimo_mtime": 1791029053.3966768,
+"gap_max_h": 0.99,
 "avisado": false
 },
 "/root/polymarket-research-datalogs/precierre_multioffset_fase0.csv": {
 "primera_vez": 1790770965.8752604,
-"ultimo_mtime": 1791025490.3129516,
+"ultimo_mtime": 1791029090.3497636,
 "gap_max_h": 1.0,
 "avisado": false
 },
 "/root/polymarket-research-datalogs/binance_jump_leadlag_fase0.csv": {
 "primera_vez": 1790770965.8752604,
-"ultimo_mtime": 1791024856.7252977,
-"gap_max_h": 1.46,
+"ultimo_mtime": 1791028753.0405917,
+"gap_max_h": 1.43,
 "avisado": false
 },
 "/root/polymarket-research-datalogs/perps_tickers.csv": {
 "primera_vez": 1790770965.8752604,
-"ultimo_mtime": 1791025502.3870342,
-"gap_max_h": 1.0,
+"ultimo_mtime": 1791028805.5889566,
+"gap_max_h": 0.98,
 "avisado": false
 },
 "/root/polymarket-research-datalogs/tomadores_persistentes_fase0.csv": {
 "primera_vez": 1790770965.8752604,
-"ultimo_mtime": 1791025520.0741556,
-"gap_max_h": 1.0,
+"ultimo_mtime": 1791029091.1389387,
+"gap_max_h": 0.99,
 "avisado": false
 },
 "/root/polymarket-research-datalogs/colas_escaleras_ws.csv": {
@@ -721,8 +721,8 @@
 },
 "/root/polymarket-research-datalogs/precierre_libro_ms.csv": {
 "primera_vez": 1790770965.8752604,
-"ultimo_mtime": 1791025510.2573233,
-"gap_max_h": 1.0,
+"ultimo_mtime": 1791028809.687985,
+"gap_max_h": 0.98,
 "avisado": false
 },
 "/root/polymarket-research-datalogs/valor_relativo_anidado.csv": {
@@ -739,38 +739,38 @@
 },
 "/root/polymarket-research-datalogs/valor_relativo_anidado_v2.csv": {
 "primera_vez": 1790777188.6734436,
-"ultimo_mtime": 1791025182.0551202,
+"ultimo_mtime": 1791028787.5758317,
 "gap_max_h": 1.0,
 "avisado": false
 },
 "/root/polymarket-research-datalogs/binance_jump_cruzado.csv": {
 "primera_vez": 1790798744.1664782,
-"ultimo_mtime": 1791025504.5850494,
-"gap_max_h": 1.64,
+"ultimo_mtime": 1791028855.0472999,
+"gap_max_h": 1.61,
 "avisado": false
 },
 "/root/polymarket-research-datalogs/penny_clipper_ws.csv": {
 "primera_vez": 1790798744.1664782,
-"ultimo_mtime": 1791025521.2131634,
-"gap_max_h": 1.01,
+"ultimo_mtime": 1791029035.253551,
+"gap_max_h": 0.99,
 "avisado": false
 },
 "/root/polymarket-research/data/shadow/ballenas_confirmadas_15m_buyno_depth_fase0.csv": {
 "primera_vez": 1790802356.2209914,
-"ultimo_mtime": 1791023835.883612,
-"gap_max_h": 3.57,
+"ultimo_mtime": 1791028172.7945638,
+"gap_max_h": 3.5,
 "avisado": false
 },
 "/root/polymarket-research-datalogs/binance_movimiento_ask.csv": {
 "primera_vez": 1790950137.1983075,
-"ultimo_mtime": 1791025501.5790288,
+"ultimo_mtime": 1791029089.438927,
 "gap_max_h": 1.0,
 "avisado": false
 },
 "/root/polymarket-research-datalogs/arbitraje_anidado_dryrun.csv": {
 "primera_vez": 1790960847.6295483,
-"ultimo_mtime": 1791023269.9827325,
-"gap_max_h": 4.38,
+"ultimo_mtime": 1791028653.4649005,
+"gap_max_h": 4.29,
 "avisado": false
 }
 }
