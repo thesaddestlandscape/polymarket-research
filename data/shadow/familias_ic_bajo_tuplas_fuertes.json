@@ -1,6 +1,6 @@
 {
  "STREAK_MOM_5M": {
-  "ic_bayes_familia": 0.0195,
+  "ic_bayes_familia": 0.0196,
   "n_tuplas_fuertes": 2,
   "pnl_fiel_combinado_eur": 92.48,
   "tuplas": [
@@ -65,11 +65,11 @@
  "UPDOWN_GBM": {
   "ic_bayes_familia": 0.0413,
   "n_tuplas_fuertes": 1,
-  "pnl_fiel_combinado_eur": 22.71,
+  "pnl_fiel_combinado_eur": 22.94,
   "tuplas": [
    {
     "k": "UPDOWN_GBM#BTC#5min#BUY_NO",
-    "pnl_fiel_eur_sin_suelo": 22.7127,
+    "pnl_fiel_eur_sin_suelo": 22.9359,
     "n_ejecutado": 733
    }
   ]
