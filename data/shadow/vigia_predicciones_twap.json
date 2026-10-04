@@ -1,5 +1,5 @@
 {
- "actualizado_utc": "2026-10-03T07:35:14+00:00",
+ "actualizado_utc": "2026-10-04T07:35:12+00:00",
  "cambio": "2026-09-24T12:00:00",
  "grupos": {
   "GBM_LATE_15M_PYCONFIRMADO|15min|VIEJA": {
@@ -143,132 +143,132 @@
    "n_fillable": 22
   },
   "GBM_LATE_5M|5min|NUEVA": {
-   "n": 1738,
-   "acierto": 0.7814,
-   "brier": 0.1614,
-   "pnl_1eur_mercado": 0.528,
-   "n_con_libro": 1507,
+   "n": 1835,
+   "acierto": 0.7831,
+   "brier": 0.1605,
+   "pnl_1eur_mercado": 0.5322,
+   "n_con_libro": 1595,
    "fillable_pct": 0.06,
-   "pnl_1eur_fillable": 0.1939,
-   "n_fillable": 91
+   "pnl_1eur_fillable": 0.1317,
+   "n_fillable": 96
   },
   "TODAS_GBM|5min|NUEVA": {
-   "n": 6658,
-   "acierto": 0.6741,
-   "brier": 0.2104,
-   "pnl_1eur_mercado": 0.3378,
-   "n_con_libro": 5746,
-   "fillable_pct": 0.139,
-   "pnl_1eur_fillable": -0.0244,
-   "n_fillable": 799
+   "n": 7602,
+   "acierto": 0.6784,
+   "brier": 0.2097,
+   "pnl_1eur_mercado": 0.346,
+   "n_con_libro": 6585,
+   "fillable_pct": 0.132,
+   "pnl_1eur_fillable": -0.0614,
+   "n_fillable": 870
   },
   "UPDOWN_GBM|5min|NUEVA": {
-   "n": 4920,
-   "acierto": 0.6362,
-   "brier": 0.2277,
-   "pnl_1eur_mercado": 0.2706,
-   "n_con_libro": 4239,
-   "fillable_pct": 0.167,
-   "pnl_1eur_fillable": -0.0524,
-   "n_fillable": 708
+   "n": 5767,
+   "acierto": 0.645,
+   "brier": 0.2254,
+   "pnl_1eur_mercado": 0.2868,
+   "n_con_libro": 4990,
+   "fillable_pct": 0.155,
+   "pnl_1eur_fillable": -0.0853,
+   "n_fillable": 774
   },
   "UPDOWN_GBM_15M_TARDIO|15min|NUEVA": {
-   "n": 2889,
-   "acierto": 0.5099,
-   "brier": 0.1926,
-   "pnl_1eur_mercado": 0.1795,
-   "n_con_libro": 2889,
-   "fillable_pct": 0.322,
-   "pnl_1eur_fillable": 0.061,
-   "n_fillable": 930
+   "n": 3211,
+   "acierto": 0.5036,
+   "brier": 0.1927,
+   "pnl_1eur_mercado": 0.1661,
+   "n_con_libro": 3211,
+   "fillable_pct": 0.327,
+   "pnl_1eur_fillable": 0.0435,
+   "n_fillable": 1049
   },
   "TODAS_GBM|15min|NUEVA": {
-   "n": 29630,
-   "acierto": 0.6394,
+   "n": 32668,
+   "acierto": 0.639,
    "brier": 0.1841,
-   "pnl_1eur_mercado": 0.3581,
-   "n_con_libro": 29488,
-   "fillable_pct": 0.163,
-   "pnl_1eur_fillable": 0.1597,
-   "n_fillable": 4804
+   "pnl_1eur_mercado": 0.3571,
+   "n_con_libro": 32526,
+   "fillable_pct": 0.164,
+   "pnl_1eur_fillable": 0.1645,
+   "n_fillable": 5329
   },
   "GBM_LATE_15M|15min|NUEVA": {
-   "n": 5825,
-   "acierto": 0.6091,
-   "brier": 0.1969,
-   "pnl_1eur_mercado": 0.3148,
-   "n_con_libro": 5825,
-   "fillable_pct": 0.194,
-   "pnl_1eur_fillable": 0.1016,
-   "n_fillable": 1128
+   "n": 6425,
+   "acierto": 0.6082,
+   "brier": 0.1968,
+   "pnl_1eur_mercado": 0.3139,
+   "n_con_libro": 6425,
+   "fillable_pct": 0.193,
+   "pnl_1eur_fillable": 0.1127,
+   "n_fillable": 1239
   },
   "GBM_LATE_15M_ESPACIO_ATR|15min|NUEVA": {
-   "n": 6644,
-   "acierto": 0.5959,
-   "brier": 0.1708,
-   "pnl_1eur_mercado": 0.3333,
-   "n_con_libro": 6644,
-   "fillable_pct": 0.243,
-   "pnl_1eur_fillable": 0.3521,
-   "n_fillable": 1616
+   "n": 7397,
+   "acierto": 0.5948,
+   "brier": 0.1728,
+   "pnl_1eur_mercado": 0.3385,
+   "n_con_libro": 7397,
+   "fillable_pct": 0.246,
+   "pnl_1eur_fillable": 0.3721,
+   "n_fillable": 1821
   },
   "GBM_LATE_15M_MULTIHORIZONTE|15min|NUEVA": {
-   "n": 4591,
-   "acierto": 0.6972,
-   "brier": 0.1837,
-   "pnl_1eur_mercado": 0.4525,
-   "n_con_libro": 4591,
-   "fillable_pct": 0.079,
-   "pnl_1eur_fillable": 0.111,
-   "n_fillable": 362
+   "n": 5035,
+   "acierto": 0.7005,
+   "brier": 0.1828,
+   "pnl_1eur_mercado": 0.4522,
+   "n_con_libro": 5035,
+   "fillable_pct": 0.076,
+   "pnl_1eur_fillable": 0.0883,
+   "n_fillable": 384
   },
   "GBM_LATE_15M_TARDIO|15min|NUEVA": {
-   "n": 5962,
-   "acierto": 0.6972,
-   "brier": 0.1795,
-   "pnl_1eur_mercado": 0.4366,
-   "n_con_libro": 5962,
-   "fillable_pct": 0.082,
-   "pnl_1eur_fillable": -0.0524,
-   "n_fillable": 490
+   "n": 6538,
+   "acierto": 0.6999,
+   "brier": 0.1787,
+   "pnl_1eur_mercado": 0.4369,
+   "n_con_libro": 6538,
+   "fillable_pct": 0.081,
+   "pnl_1eur_fillable": -0.0572,
+   "n_fillable": 532
   },
   "UPDOWN_GBM|15min|NUEVA": {
-   "n": 1682,
-   "acierto": 0.7111,
-   "brier": 0.1907,
-   "pnl_1eur_mercado": 0.4163,
-   "n_con_libro": 1682,
+   "n": 1893,
+   "acierto": 0.71,
+   "brier": 0.1901,
+   "pnl_1eur_mercado": 0.411,
+   "n_con_libro": 1893,
    "fillable_pct": 0.079,
-   "pnl_1eur_fillable": 0.2578,
-   "n_fillable": 133
+   "pnl_1eur_fillable": 0.2436,
+   "n_fillable": 149
   },
   "GBM_LATE_15M_PYCONFIRMADO|15min|NUEVA": {
-   "n": 1720,
-   "acierto": 0.6669,
-   "brier": 0.2002,
-   "pnl_1eur_mercado": 0.3146,
-   "n_con_libro": 1578,
-   "fillable_pct": 0.082,
-   "pnl_1eur_fillable": -0.1775,
-   "n_fillable": 130
+   "n": 1822,
+   "acierto": 0.6652,
+   "brier": 0.1997,
+   "pnl_1eur_mercado": 0.3104,
+   "n_con_libro": 1680,
+   "fillable_pct": 0.083,
+   "pnl_1eur_fillable": -0.192,
+   "n_fillable": 140
   },
   "UPDOWN_GBM_IBS_ALTO|15min|NUEVA": {
-   "n": 192,
-   "acierto": 0.7865,
-   "brier": 0.1373,
-   "pnl_1eur_mercado": 0.4667,
-   "n_con_libro": 192,
-   "fillable_pct": 0.047,
+   "n": 211,
+   "acierto": 0.7867,
+   "brier": 0.1372,
+   "pnl_1eur_mercado": 0.4586,
+   "n_con_libro": 211,
+   "fillable_pct": 0.043,
    "pnl_1eur_fillable": 0.2289,
    "n_fillable": 9
   },
   "UPDOWN_GBM_15M_CROSS_WINDOW_SPREAD|15min|NUEVA": {
-   "n": 118,
-   "acierto": 0.9407,
-   "brier": 0.0634,
-   "pnl_1eur_mercado": 0.2969,
-   "n_con_libro": 118,
-   "fillable_pct": 0.051,
+   "n": 129,
+   "acierto": 0.9457,
+   "brier": 0.0603,
+   "pnl_1eur_mercado": 0.2979,
+   "n_con_libro": 129,
+   "fillable_pct": 0.047,
    "pnl_1eur_fillable": -0.1589,
    "n_fillable": 6
   }
@@ -365,14 +365,24 @@
    "n_fillable": 721
   },
   "2026-10-03": {
-   "n": 1349,
-   "acierto": 0.6338,
-   "brier": 0.1895,
-   "pnl_1eur_mercado": 0.3243,
-   "n_con_libro": 1304,
-   "fillable_pct": 0.131,
-   "pnl_1eur_fillable": -0.0569,
-   "n_fillable": 171
+   "n": 4059,
+   "acierto": 0.6539,
+   "brier": 0.1851,
+   "pnl_1eur_mercado": 0.3529,
+   "n_con_libro": 3939,
+   "fillable_pct": 0.144,
+   "pnl_1eur_fillable": 0.1231,
+   "n_fillable": 566
+  },
+  "2026-10-04": {
+   "n": 1272,
+   "acierto": 0.6281,
+   "brier": 0.202,
+   "pnl_1eur_mercado": 0.3458,
+   "n_con_libro": 1242,
+   "fillable_pct": 0.162,
+   "pnl_1eur_fillable": -0.0185,
+   "n_fillable": 201
   }
  }
 }
