@@ -43232,3 +43232,10 @@ timestamp_utc,condition_id,market_slug,activo,marco,lado_mayoria,n_votos_trigger
 2026-10-05T14:00:28+00:00,0x0648e31d813bdd07bb9e8221fb835ee8cdc86ad451db7035c5cdcfb5a0402929,eth-updown-15m-1791208800,ETH,15min,Up,2,0.49,1726.0,0.39,2167.5,0.38,-2.56,1,0,0,0,fuera_de_zona_confirmada
 2026-10-05T14:01:23+00:00,0x0dbd05c35e238a8b13bf3b8e52f658e526525b383fcb9e3df08a7422187a9f66,eth-updown-5m-1791208800,ETH,5min,Down,2,0.84,1187.0,0.83,924.0,0.85,2.41,1,0,0,0,fuera_de_zona_confirmada
 2026-10-05T14:01:26+00:00,0xc75c5ae87aba61cb0077c0aade39d7bcfeebae57cdf8908d97e656e8464070fa,sol-updown-5m-1791208800,SOL,5min,Down,2,0.55,0.0,0.67,0.0,0.68,1.49,0,0,0,0,fuera_de_zona_confirmada
+2026-10-05T14:01:49+00:00,0x60cdda2a991e5433e9c90b8cb8db1cb16dba5f4a6bde9d7b0c6cd4115c36cc53,bnb-updown-15m-1791208800,BNB,15min,Up,2,0.42,0.0,0.64,0.0,0.62,-3.13,0,0,0,0,fuera_de_zona_confirmada
+2026-10-05T14:02:38+00:00,0xbeb0a1e2015dd3f32d84519399670880b459eaaee04cdf0dc915d1cf98a1ae7e,xrp-updown-5m-1791208800,XRP,5min,Down,2,0.4,23.7,0.41,40.4,0.41,0.0,1,0,0,0,fuera_de_zona_confirmada
+2026-10-05T14:03:32+00:00,0x2af971fbbd43708284755902c190e489098a4c59fba0f63ab4bf5ef42a41c30f,bnb-updown-5m-1791208800,BNB,5min,Up,2,0.13,0.0,0.86,0.0,0.89,3.49,0,0,0,0,fuera_de_zona_confirmada
+2026-10-05T14:04:15+00:00,0x4d2055c4819aa536a4ae3995c0ed4543c3aae380067c8e4484c0328c09748cf3,btc-updown-5m-1791209100,BTC,5min,Up,2,0.47,0.0,0.5,37.3,0.49,-2.0,1,0,0,0,fuera_de_zona_confirmada
+2026-10-05T14:05:04+00:00,0x1aeefd95c437a714b85d2abdb177cfe43a35eab4d2208dd6dc26e39cddb8c84c,eth-updown-5m-1791209100,ETH,5min,Up,2,0.49,173.3,0.49,2.4,0.51,4.08,0,0,0,0,fuera_de_zona_confirmada
+2026-10-05T14:05:48+00:00,0xd96da75206abe85217bbc0d9ad98394c2b7dfc824a8cf4fa6b303c25f68c8a66,sol-updown-5m-1791209100,SOL,5min,Up,3,0.42,0.0,0.51,0.0,0.56,9.8,0,0,0,0,fuera_de_zona_confirmada
+2026-10-05T14:07:32+00:00,0xbdefae3169201bf084f00960b6ced37f03b9e58e70e62d49a11ea3032dc82dcd,ethereum-up-or-down-october-5-2026-10am-et,ETH,60min,Up,2,0.48,0.0,0.57,0.0,0.61,7.02,0,0,0,0,fuera_de_zona_confirmada
