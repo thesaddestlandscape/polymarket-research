@@ -54,6 +54,7 @@ sys.path.insert(0, str(REPO))
 WS_URL = "wss://ws-subscriptions-clob.polymarket.com/ws/market"
 REFRESCO_S = 30
 HIST_MAX = 3000            # eventos por token (>= varios minutos a ritmo alto)
+PING_S = 10.0             # PING de texto que exige el canal de mercado del CLOB
 RECV_TIMEOUT_S = 0.25      # corto: las altas on-demand (pedir) se atienden en <=0,25 s
 MUESTREO_MS = 100
 SUB_TROZO, SUB_PAUSA_S = 20, 0.25   # alta de tokens en trozos (ver _una_sesion)
@@ -578,6 +579,7 @@ async def _una_sesion(k, emisor):
         # llene SU buffer de envío y corte con 1013. Se suscribe en trozos de SUB_TROZO, uno cada SUB_PAUSA_S,
         # leyendo el socket entre medias; lo mismo para las altas posteriores.
         cola_sub, t_sub = collections.deque(toks[SUB_TROZO:]), time.time()
+        t_ping = time.time()
         await ws.send(json.dumps({"type": "market", "assets_ids": toks[:SUB_TROZO]}))
         suscritos = set(toks)
         for t in toks:
@@ -612,7 +614,12 @@ async def _una_sesion(k, emisor):
                 if trozo:
                     await ws.send(json.dumps({"assets_ids": trozo, "operation": "subscribe"}))
                 t_sub = time.time()
-            if not raw:
+            # 05-Oct 16:40Z: con una conexión por moneda#marco, las tranquilas (60 min) caían con 1008 "no ping
+            # received" (~30/h): el canal de mercado exige un PING de texto cada 10 s; el ping de protocolo no basta.
+            if time.time() - t_ping >= PING_S:
+                await ws.send("PING")
+                t_ping = time.time()
+            if not raw or raw == "PONG":
                 continue
             _T_RECV[0] = int(time.time() * 1000)
             try:
