@@ -8,7 +8,7 @@ del arbitraje anidado de 2 patas"). Lee los CSV de arbitraje_anidado_dryrun_fase
   ninguna -> 0
 fee(p) = 0,07·p·(1−p) por share. Desenlace oficial por id de gamma (closed=true, caché de analisis_maker_cancelacion_binance).
 Se informa la cobertura de desenlaces, el reparto por día / moneda / par y el PnL sin el mejor día.
-Uso: python3 analisis_arbitraje_anidado_dryrun.py [--desde YYYY-MM-DD]
+Uso: python3 analisis_arbitraje_anidado_dryrun.py [--desde YYYY-MM-DD] [--reconfirmada]
 """
 import argparse
 import collections
@@ -38,15 +38,33 @@ def pago(pata, row, des):
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--desde", default="2000-01-01")
+    ap.add_argument("--reconfirmada", action="store_true", help="solo la 2ª detección (política del ejecutor)")
     a = ap.parse_args()
     filas = []
     for f in sorted(glob.glob(f"{DATALOGS}/arbitraje_anidado_dryrun_*.csv*")):
         op = gzip.open if f.endswith(".gz") else open
         with op(f, "rt") as fh:
             filas += list(csv.DictReader(fh))
-    prim = {}
+    grupos = {}
     for r in sorted(filas, key=lambda r: int(r["ts_ms"])):
-        prim.setdefault((r["par"], r["activo"], r["fin"], r["pata_A"]), r)
+        grupos.setdefault((r["par"], r["activo"], r["fin"], r["pata_A"]), []).append(r)
+    if a.reconfirmada:
+        # Replica EXACTA del ejecutor: Reconfirmador (2ª detección a 0,5-30 s, re-armado tras 30 s, un veto no consume
+        # la oportunidad) + veto_basico (neto>=0,01, shares en rejilla de céntimos >=5, nocional>=1$, >=5 s al cierre).
+        # Tamaño = el de la rejilla. No modela: kill, firma fría ni tick cambiado (vetos que solo existen en vivo).
+        from arbitraje_anidado_ejecucion import Reconfirmador, veto_basico
+        rc, prim = Reconfirmador(releer_ledger=False), {}
+        for r in sorted((r for rs in grupos.values() for r in rs), key=lambda r: int(r["ts_ms"])):
+            k, ts = (r["par"], r["activo"], r["fin"], r["pata_A"]), int(r["ts_ms"])
+            if not rc.candidata(k, ts):
+                continue
+            veto, sh = veto_basico(float(r["ask_A"]), float(r["ask_B"]), float(r["shares"]), float(r["resto_s"]))
+            if veto:
+                continue
+            rc.marcar(k, ts)
+            prim[k] = dict(r, shares=sh)
+    else:
+        prim = {k: rs[0] for k, rs in grupos.items()}
     ops = [r for r in prim.values()
            if datetime.fromtimestamp(int(r["ts_ms"]) / 1000, timezone.utc).strftime("%Y-%m-%d") >= a.desde]
     des = desenlaces([r["market_largo"] for r in ops] + [r["market_corto"] for r in ops])
