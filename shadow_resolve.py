@@ -29,6 +29,7 @@ from pathlib import Path
 import requests
 
 from csv_lectura_tolerante import leer_csv_tolerante
+import predicciones_archivos as _pa  # 05-Oct: predictions_*.csv o .csv.gz (disco)
 
 # Credenciales antes de leer POLY_DEPOSIT_WALLET en _fees_reales_recientes.
 # Fix 08-Jul (code-review): sin esto os.getenv devuelve None en producción
@@ -237,7 +238,7 @@ def _parsear_predicciones_pendientes_archivo(arch: Path) -> list | None:
     cerrar trades live en silencio."""
     def _parsear(a: str) -> list:
         filas = []
-        with open(a, encoding="utf-8") as f:
+        with _pa.abrir(a) as f:
             for row in csv.DictReader(f):
                 if row.get("decision", "SKIP") in ("BUY_YES", "BUY_NO"):
                     filas.append(_normalizar_pred(row))
@@ -267,9 +268,9 @@ def _cargar_predicciones_pendientes_archivo_cacheado(arch: Path) -> list:
     Verificado antes de desplegar: mismo conjunto de filas devuelto con y
     sin caché (comparación exhaustiva sobre los 9 ficheros existentes)."""
     PRED_PENDIENTES_CACHE_DIR.mkdir(exist_ok=True)
-    cache_path = PRED_PENDIENTES_CACHE_DIR / f"{arch.name}.json.gz"
+    cache_path = PRED_PENDIENTES_CACHE_DIR / f"{_pa.nombre_logico(arch)}.json.gz"
     try:
-        st = arch.stat()
+        st = _pa.stat_logico(arch)  # .gz comprimido por el cron: misma firma que el CSV
     except OSError:
         return []
     if cache_path.exists():
@@ -303,7 +304,7 @@ def _purgar_cache_pendientes_fuera_de_ventana(archivos_ventana: list) -> None:
     al día siguiente."""
     if not PRED_PENDIENTES_CACHE_DIR.exists():
         return
-    nombres_en_ventana = {f"{Path(a).name}.json.gz" for a in archivos_ventana}
+    nombres_en_ventana = {f"{_pa.nombre_logico(a)}.json.gz" for a in archivos_ventana}
     try:
         for cache_file in PRED_PENDIENTES_CACHE_DIR.glob("predictions_*.csv.json.gz"):
             if cache_file.name not in nombres_en_ventana:
@@ -348,7 +349,7 @@ def cargar_predicciones_pendientes(ya_resueltas: "set | None" = None) -> list:
     19-Sep: acotado a PRED_PENDIENTES_DIAS + caché en disco por fichero
     (ver _cargar_predicciones_pendientes_archivo_cacheado) -- antes releía
     TODO el histórico (9 días/5.2GB) sin límite ni caché en cada ciclo."""
-    archivos = sorted(glob.glob(str(DIR_SHADOW / "predictions_*.csv")))[-(PRED_PENDIENTES_DIAS + 2):]
+    archivos = _pa.listar(DIR_SHADOW)[-(PRED_PENDIENTES_DIAS + 2):]
     _purgar_cache_pendientes_fuera_de_ventana(archivos)
     pendientes = []
     ahora_carga = datetime.now(timezone.utc)

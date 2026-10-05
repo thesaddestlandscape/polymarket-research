@@ -27,6 +27,7 @@ paso APARTE, deliberado, pendiente de decisión). Salida:
 data/shadow/bot_wallets_concentracion.json.
 """
 import csv
+import csv_rotado  # 05-Oct: el CSV del ejecutor dispersed se rota a partes .gz (disco)
 import json
 import math
 import sys
@@ -79,7 +80,7 @@ def _indexar_dry_run() -> dict[tuple, list[dict]]:
     era demasiado lento (verificado: >2min sin terminar el primer
     bucket)."""
     idx: dict[tuple, list[dict]] = defaultdict(list)
-    with open(DRY_RUN, encoding="utf-8") as f:
+    with csv_rotado.abrir(DRY_RUN) as f:
         for r in csv.DictReader(f):
             try:
                 bp = float(r.get("bucket_precio", ""))

@@ -26,6 +26,8 @@ import json
 import sys
 from pathlib import Path
 
+import predicciones_archivos as _pa  # 05-Oct: días >3 comprimidos (.csv.gz)
+
 TRADES_PATH = Path("data/live/trades.csv")
 PRED_GLOB = "data/shadow/predictions_*.csv"
 
@@ -54,9 +56,9 @@ def cargar_trades(tupla_clave: str) -> list[dict]:
 def indice_predicciones(strategy: str, subtype: str, decision: str) -> dict:
     """market_id -> features dict, escaneando todos los predictions_*.csv."""
     idx = {}
-    for path in sorted(glob.glob(PRED_GLOB)):
+    for path in _pa.listar(Path(PRED_GLOB).parent):
         try:
-            with open(path, encoding="utf-8") as f:
+            with _pa.abrir(path) as f:
                 for row in csv.DictReader(f):
                     if (row.get("strategy") == strategy and row.get("subtype") == subtype
                             and row.get("decision") == decision):

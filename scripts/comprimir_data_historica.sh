@@ -47,7 +47,7 @@ DIAS_MANTENER_DATALOGS=3
 CUTOFF_COMPRIMIR_DATALOGS=$(date -u -d "-${DIAS_MANTENER_DATALOGS} days" +%Y-%m-%d)
 
 comprimir_dir() {
-  local dir="$1" patron="$2" cutoff="${3:-$CUTOFF_COMPRIMIR}"
+  local dir="$1" patron="$2" cutoff="${3:-$CUTOFF_COMPRIMIR}" preservar_mtime="${4:-}"
   for f in "$dir"/$patron; do
     [ -f "$f" ] || continue
     base=$(basename "$f")
@@ -65,6 +65,7 @@ comprimir_dir() {
     fi
     gzip -c "$f" > "${f}.gz.tmp"
     if cmp -s <(zcat "${f}.gz.tmp") "$f"; then
+      [ -n "$preservar_mtime" ] && touch -r "$f" "${f}.gz.tmp"
       mv "${f}.gz.tmp" "${f}.gz"
       rm "$f"
       echo "OK: $f -> ${f}.gz"
@@ -132,7 +133,16 @@ comprimir_dir data/shadow "sports_spread_fase0_*.csv"
 # de análisis puntual (no cron) que globean sin límite quedan sin tocar a
 # propósito -- mismo criterio ya aplicado a analisis_wallets_crossdominio_
 # 01sep.py.
-comprimir_dir data/shadow "predictions_*.csv" "$(date -u -d "-12 days" +%Y-%m-%d)"
+# 05-Oct (disco al 91 %, ~8,3 GB de predictions sin comprimir): cutoff 12 -> 3
+# días (quedan 4 planos: hoy + 3). shadow_resolve.py, shadow_postmortem.py,
+# vigia_ritmo_predicciones.py, vigia_cobertura_fillability.py y
+# conectar_infraestructura_candidato.py leen ya .csv.gz vía
+# predicciones_archivos.py; el resto lee hoy/ayer o [-3:] (generate_report,
+# shadow_digest, shadow_resumen) y shadow_digest ya leía .gz. "mtime" =
+# `touch -r`: el .gz conserva el mtime del CSV y predicciones_archivos.
+# stat_logico() da la misma firma (tamaño sin comprimir + mtime), así que las
+# cachés por fichero de resolve/postmortem no se invalidan al comprimir.
+comprimir_dir data/shadow "predictions_*.csv" "$(date -u -d "-3 days" +%Y-%m-%d)" mtime
 # 23-Sep (barrido de disco, 92% usado, 6.2GB libres): data/sports/activity_ws_*.csv
 # (firehose sports, sports_activity_ws.py) NUNCA estaba en esta rotación --
 # backup_activity_ws_sports.sh solo copia una versión comprimida al volumen
@@ -147,6 +157,12 @@ comprimir_dir data/shadow "predictions_*.csv" "$(date -u -d "-12 days" +%Y-%m-%d
 # hardcodeadas, sin glob) es un análisis puntual ya no ejecutable tal cual
 # desde antes de este cambio -- no está en cron, no se toca.
 comprimir_dir data/sports "activity_ws_*.csv"
+
+# 05-Oct (disco al 91 %): dispersed_bot_executor_dryrun.csv (append-only, 1,2 GB,
+# ~30 MB/día, sus lectores leen TODO el histórico) se rota a diario a partes
+# .csv.gz en datalogs/csv_rotados/ -- sin pérdida: los lectores lo abren con
+# csv_rotado.abrir() (partes + fichero vivo, mismas líneas en el mismo orden).
+nice -n 15 /usr/bin/python3 /root/polymarket-research/csv_rotado.py rotar data/shadow/dispersed_bot_executor_dryrun.csv || echo "ERROR rotando dispersed_bot_executor_dryrun.csv"
 
 cd /root/polymarket-research-datalogs
 comprimir_dir . "polymarket_activity_*.csv" "$CUTOFF_COMPRIMIR_DATALOGS"

@@ -31,6 +31,7 @@ import numpy as np
 
 import gate_bucket_propio as _gbp
 from csv_lectura_tolerante import leer_csv_tolerante
+import predicciones_archivos as _pa  # 05-Oct: predictions_*.csv o .csv.gz (disco)
 
 DIR_SHADOW      = Path("data/shadow")
 PRED_RECIENTES_CACHE_DIR = DIR_SHADOW / "_predicciones_recientes_cache"
@@ -477,7 +478,7 @@ def _pred_index_cache_path(arch: Path) -> Path:
     # Nombre `_cache_*.pkl` a proposito: ya esta cubierto por .gitignore
     # (data/shadow/_cache_*.pkl) -- el batch de git NUNCA debe subir esto
     # (incidente 20-Sep: cache sin ignorar >100MB atasco el push).
-    return DIR_SHADOW / f"_cache_pred_index_{arch.stem}.pkl"
+    return DIR_SHADOW / f"_cache_pred_index_{Path(_pa.nombre_logico(arch)).stem}.pkl"
 
 
 def _idx_pred_archivo_cacheado(arch: Path, parsear) -> dict:
@@ -495,7 +496,7 @@ def _idx_pred_archivo_cacheado(arch: Path, parsear) -> dict:
     simplemente se descarta."""
     cache_path = _pred_index_cache_path(arch)
     try:
-        st = arch.stat()
+        st = _pa.stat_logico(arch)  # .gz comprimido por el cron: misma firma que el CSV
         firma = (st.st_size, st.st_mtime_ns)
     except OSError:
         firma = None
@@ -599,7 +600,7 @@ def cargar_predicciones_index(dias: int = 10) -> dict:
 
     def _parsear(arch: Path) -> dict:
         idx_local = {}
-        with open(arch, encoding="utf-8") as f:
+        with _pa.abrir(arch) as f:
             for row in csv.DictReader(f):
                 if row.get("decision") in ("BUY_YES", "BUY_NO"):
                     row = _normalizar_pred(row)
@@ -608,7 +609,7 @@ def cargar_predicciones_index(dias: int = 10) -> dict:
                         idx_local[clave] = _proyectar_pred(row)
         return idx_local
 
-    archivos = sorted(DIR_SHADOW.glob("predictions_*.csv"))[-(dias + 2):]
+    archivos = _pa.listar(DIR_SHADOW)[-(dias + 2):]
     for arch in archivos:
         idx_arch = _idx_pred_archivo_cacheado(arch, _parsear)
         if idx_arch:
@@ -2635,7 +2636,7 @@ def _parsear_predicciones_archivo(arch: Path) -> dict:
     aplicado en feedback_desagregar_por_activo_siempre (no inflar el n
     con pseudo-réplicas)."""
     idx: dict[str, dict] = {}
-    with open(arch, encoding="utf-8") as f:
+    with _pa.abrir(arch) as f:
         for row in csv.DictReader(f):
             ts = row.get("timestamp_utc", "")
             dec = row.get("decision", "")
@@ -2692,9 +2693,9 @@ def _cargar_predicciones_archivo_cacheado(arch: Path) -> dict:
     debe ahorrar TRABAJO, nunca cambiar el resultado. Verificado bit a
     bit contra la versión sin caché antes de desplegar (ver commit)."""
     PRED_RECIENTES_CACHE_DIR.mkdir(exist_ok=True)
-    cache_path = PRED_RECIENTES_CACHE_DIR / f"{arch.name}.json"
+    cache_path = PRED_RECIENTES_CACHE_DIR / f"{_pa.nombre_logico(arch)}.json"
     try:
-        st = arch.stat()
+        st = _pa.stat_logico(arch)  # .gz comprimido por el cron: misma firma que el CSV
     except OSError:
         return {}
     if cache_path.exists():
@@ -2727,7 +2728,7 @@ def _purgar_cache_predicciones_fuera_de_ventana(archivos_ventana: list[Path]) ->
     entradas, no volver a parsear nada)."""
     if not PRED_RECIENTES_CACHE_DIR.exists():
         return
-    nombres_en_ventana = {f"{a.name}.json" for a in archivos_ventana}
+    nombres_en_ventana = {f"{_pa.nombre_logico(a)}.json" for a in archivos_ventana}
     try:
         for cache_file in PRED_RECIENTES_CACHE_DIR.glob("predictions_*.csv.json"):
             if cache_file.name not in nombres_en_ventana:
@@ -2763,7 +2764,7 @@ def _cargar_predicciones_recientes_por_estrategia(dias: int = COBERTURA_RECIENTE
     """
     corte = datetime.now(timezone.utc) - timedelta(days=dias)
     idx: dict[str, dict] = {}
-    archivos = sorted(DIR_SHADOW.glob("predictions_*.csv"))[-(dias + 2):]
+    archivos = _pa.listar(DIR_SHADOW)[-(dias + 2):]
     _purgar_cache_predicciones_fuera_de_ventana(archivos)
     for arch in archivos:
         try:

@@ -30,6 +30,8 @@ import sys
 from datetime import date, timedelta
 from pathlib import Path
 
+import predicciones_archivos as _pa  # 05-Oct: días >3 comprimidos (.csv.gz)
+
 REPO = Path(__file__).resolve().parent
 sys.path.insert(0, str(REPO))
 
@@ -42,12 +44,12 @@ RATIO_ALARMA = 0.15  # cae por debajo del 15% de su mediana -> aviso
 
 
 def _conteo_por_estrategia(fecha: date) -> dict:
-    f = DIR_SHADOW / f"predictions_{fecha.isoformat()}.csv"
-    if not f.exists():
+    f = _pa.ruta_dia(DIR_SHADOW, fecha.isoformat())
+    if f is None:
         return {}
     c: dict = {}
     try:
-        with open(f, encoding="utf-8") as fh:
+        with _pa.abrir(f) as fh:
             for row in csv.DictReader(fh):
                 s = row.get("strategy", "")
                 if s:

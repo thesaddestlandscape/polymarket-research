@@ -23,6 +23,7 @@ Puramente informativo -- no toca prob_yes/stake/pares_permitidos_live,
 dispersed_bot_executor_dryrun.py sigue DRY_RUN=True.
 """
 import csv
+import csv_rotado  # 05-Oct: el CSV del ejecutor dispersed se rota a partes .gz (disco)
 import json
 import math
 import sys
@@ -56,7 +57,7 @@ def _leer_dryrun():
     Single-pass, sin DictReader completo en memoria (284MB+ y creciendo)."""
     total = 0
     por_bucket = defaultdict(lambda: [0, 0])  # [n_total, n_dispararia]
-    with open(DRYRUN_CSV, encoding="utf-8") as f:
+    with csv_rotado.abrir(DRYRUN_CSV) as f:
         header = f.readline().rstrip("\n").split(",")
         idx = {h: i for i, h in enumerate(header)}
         i_arq, i_act, i_mar, i_buc, i_dec = (

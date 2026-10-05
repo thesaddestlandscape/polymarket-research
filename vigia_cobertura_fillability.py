@@ -25,6 +25,8 @@ import sys
 from collections import defaultdict
 from pathlib import Path
 
+import predicciones_archivos as _pa  # 05-Oct: días >3 comprimidos (.csv.gz)
+
 REPO = Path(__file__).resolve().parent
 sys.path.insert(0, str(REPO))
 
@@ -81,10 +83,10 @@ def _subtypes_reales(dias=7):
     hoy = datetime.now(timezone.utc).date()
     for delta in range(dias):
         fecha = (hoy - timedelta(days=delta)).isoformat()
-        path = REPO / f"data/shadow/predictions_{fecha}.csv"
-        if not path.exists():
+        path = _pa.ruta_dia(REPO / "data/shadow", fecha)
+        if path is None:
             continue
-        with open(path, encoding="utf-8") as f:
+        with _pa.abrir(path) as f:
             for row in csv.DictReader(f):
                 strat = row.get("strategy", "")
                 sub = row.get("subtype", "")

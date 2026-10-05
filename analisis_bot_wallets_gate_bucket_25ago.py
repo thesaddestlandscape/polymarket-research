@@ -44,6 +44,7 @@ mejoran en varios), pero DISPERSO#SOL#15min[0.50,0.55) SE INVIERTE
 n de sobra) -- exactamente el patrón que este fix existe para cazar.
 """
 import csv
+import csv_rotado  # 05-Oct: el CSV del ejecutor dispersed se rota a partes .gz (disco)
 import json
 import math
 import sys
@@ -324,7 +325,7 @@ def _cargar_fillability_por_bucket(path, col_activo="activo", col_marco="marco",
     "aprobado por defecto")."""
     out = defaultdict(lambda: defaultdict(lambda: [0, 0]))  # [n, ok]
     try:
-        with open(path, encoding="utf-8") as f:
+        with csv_rotado.abrir(path) as f:
             for r in csv.DictReader(f):
                 activo = r.get(col_activo) or ""
                 marco = r.get(col_marco) or ""

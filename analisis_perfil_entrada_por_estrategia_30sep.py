@@ -16,6 +16,8 @@ import bisect, csv, gzip, json, statistics as st, sys
 from collections import defaultdict
 from datetime import datetime
 from pathlib import Path
+
+import csv_rotado  # 05-Oct: el CSV del ejecutor dispersed se rota a partes .gz (disco)
 REPO = Path(__file__).resolve().parent; DATALOGS = Path("/root/polymarket-research-datalogs")
 VENT = [(-30, -10), (-10, -5), (-5, -2), (-2, -0.5), (0.5, 2), (2, 5), (5, 15), (15, 60)]
 def ab(p): return gzip.open(p, "rt", encoding="utf-8") if str(p).endswith(".gz") else open(p, encoding="utf-8")
@@ -49,7 +51,7 @@ def main():
             if not r["timestamp_utc"].startswith(dia) or r["market_slug"] not in out or r["sigue_fillable_en_decision"] != "1": continue
             try: ev[f"WALLET_MIRROR {r['tipo']}#{r['marco']}"].append((r["market_slug"], ts(r["timestamp_utc"]), r["mirror_lado"], float(r["ask_decision"])))
             except (ValueError, TypeError): continue
-    with open(REPO / "data/shadow/dispersed_bot_executor_dryrun.csv", encoding="utf-8") as f:
+    with csv_rotado.abrir(REPO / "data/shadow/dispersed_bot_executor_dryrun.csv") as f:
         for r in csv.DictReader(f):
             if not r["timestamp_utc"].startswith(dia) or r["market_slug"] not in out or r["sigue_fillable"] not in ("1", "True"): continue
             try: ev[f"{r['arquetipo']}#{r['marco']}"].append((r["market_slug"], ts(r["timestamp_utc"]), r["lado_wallet"], float(r["mejor_ask_deteccion"])))

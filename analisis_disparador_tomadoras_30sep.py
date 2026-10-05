@@ -14,6 +14,8 @@ import bisect, csv, gzip, json, statistics as st, sys
 from collections import defaultdict
 from datetime import datetime
 from pathlib import Path
+
+import csv_rotado  # 05-Oct: el CSV del ejecutor dispersed se rota a partes .gz (disco)
 REPO = Path(__file__).resolve().parent; DATALOGS = Path("/root/polymarket-research-datalogs")
 VENT = [(-10, -5), (-5, -3), (-3, -2), (-2, -1.5), (-1.5, -1), (-1, -0.5), (-0.5, 0), (0, 0.5), (0.5, 1), (1, 2), (2, 5)]
 def ab(p): return gzip.open(p, "rt", encoding="utf-8") if str(p).endswith(".gz") else open(p, encoding="utf-8")
@@ -51,7 +53,7 @@ def main():
             if r["timestamp_utc"].startswith(dia) and r["marco"] in ("5min", "15min") and r["sigue_fillable_en_decision"] == "1":
                 try: ev["NUESTRO Wallet Mirror (decisión)"].append((r["activo"], ts(r["timestamp_utc"]), r["mirror_lado"], float(r["ask_decision"])))
                 except (ValueError, TypeError): pass
-    with open(REPO / "data/shadow/dispersed_bot_executor_dryrun.csv", encoding="utf-8") as f:
+    with csv_rotado.abrir(REPO / "data/shadow/dispersed_bot_executor_dryrun.csv") as f:
         for r in csv.DictReader(f):
             if r["timestamp_utc"].startswith(dia) and r["marco"] in ("5min", "15min") and r["sigue_fillable"] in ("1", "True") and r["arquetipo"] in ("SNIPER", "DISPERSO"):
                 try: ev[f"NUESTRO {r['arquetipo']} (detección)"].append((r["activo"], ts(r["timestamp_utc"]), r["lado_wallet"], float(r["mejor_ask_deteccion"])))
