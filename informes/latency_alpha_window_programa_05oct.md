@@ -152,3 +152,10 @@ operaciones t del registro por token + precio + tamaño (±2 s) ⇒ cada operaci
 ¿señal previa?, ¿replicable el maker?, ¿pre-posición?, cuándo tomador, cuándo maker, cuándo ya posicionados, PnL por mecanismo,
 robustez) se responden con estas mediciones y el protocolo del §5. Primera lectura exploratoria (30 min): t1 mediana 147 ms,
 W_50 mediana 219 ms (p25 106, p75 376, p90 792), W_90 mediana 399 ms; 18 % de eventos con W_50 > 500 ms (candidatos a tomador selectivo).
+
+## 9. Frente 7 — rescate del TOMADOR en 5m/15m (Javi 05-Oct 16:20Z: "tenemos que ir a por él")
+Cerrado solo el tomador indiscriminado tras el salto. Pistas: 18 % de eventos con W_50 >500 ms; ~49 % de movimientos de 1 bps no
+mueven Polymarket ≥1c a 5 s. Vías (EV al ask real a recepción + nuestra cadena + 150 ms, desenlace oficial, causal):
+1) selectivo por clase de evento observable al decidir; 2) anticipado por precursores de Binance (orden antes de t0);
+3) segundo tramo; 4) cadena cruzada BTC → alts; 5) desglose de nuestra cadena (138 + decisión + POST 180-276 + 150) y valor de
+recortarla (órdenes prefirmadas, conexión abierta, VPS cerca del CLOB = decisión de Javi) leído sobre la curva de W.
