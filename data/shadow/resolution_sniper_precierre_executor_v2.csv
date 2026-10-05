@@ -45689,3 +45689,4 @@ timestamp_utc,ts_end,marco,dry_run,activo,direccion_implicita,ask_implicita,n_ra
 2026-10-05T14:29:15.176+00:00,1791210600,15min,False,DOGE,Down,,0,,,,,5281989,False,sin_ask,,,,110.1,,,,,,,,RESOLUTION_SNIPER_PRECIERRE,,26.03262631182521
 2026-10-05T14:29:15.179+00:00,1791210600,15min,False,ETH,Down,,0,,,,,5281991,False,sin_ask,,,,97.6,,,,,,,,RESOLUTION_SNIPER_PRECIERRE,,27.140372061975874
 2026-10-05T14:29:15.179+00:00,1791210600,5min,False,DOGE,Down,,0,,,,,5282327,False,sin_ask,,,,100.8,,,,,,,,RESOLUTION_SNIPER_PRECIERRE,,8.062388413037084
+2026-10-05T14:29:48.441+00:00,1791210600,15min,False,*,,,,,,,,,False,naive_twap_marco_no_validado,,,,,,,,,,,,RESOLUTION_SNIPER_NAIVE,,
