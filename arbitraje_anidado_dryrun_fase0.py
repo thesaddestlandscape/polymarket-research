@@ -43,7 +43,9 @@ RETENCION_DIAS = 30
 FEE = 0.07
 CADA_S = 0.05
 NETO_MIN = 0.0005
-LATENCIAS_S = [0.15, 0.4, 0.6, 1.0]
+# 05-Oct: + 200/250/300 ms. El taker delay de 150 ms del exchange hace inalcanzable L=150 para CUALQUIER tomador;
+# nuestra cadena mínima realista es ~200-260 ms (WS ~26 + firma + ida al CLOB ~30 + 150 de retraso).
+LATENCIAS_S = [0.15, 0.2, 0.25, 0.3, 0.4, 0.6, 1.0]
 LECTURA_S = 1.2
 MAX_SHARES, MIN_SHARES = 200.0, 5.0
 FIN_MARGEN_S = 3
@@ -72,6 +74,11 @@ def _escribir(fila):
     ruta = DATALOGS / f"{PREFIJO}_{datetime.now(timezone.utc):%Y-%m-%d}.csv"
     with _lock:
         nuevo = not ruta.exists()
+        if not nuevo:                              # cabecera de otra versión (cambio de LATENCIAS_S): apartar el fichero
+            with open(ruta, encoding="utf-8") as f:
+                if f.readline().strip().split(",") != CAMPOS:
+                    ruta.rename(ruta.with_name(ruta.stem + f"_v{int(time.time())}.csv"))
+                    nuevo = True
         with open(ruta, "a", newline="", encoding="utf-8") as f:
             w = csv.DictWriter(f, fieldnames=CAMPOS)
             if nuevo:
