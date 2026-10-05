@@ -249,17 +249,44 @@ def _entradas_de_archivo(archivo: Path) -> list:
         try:
             cached = json.loads(cache_path.read_text(encoding="utf-8"))
             if cached.get("firma") == firma:
-                return cached["entradas"]
+                if cached.get("dedup") == 1:
+                    return cached["entradas"]
+                # cache anterior al 05-Oct: se deduplica sin re-parsear el CSV
+                entradas = _dedup_primera_y_ultima(cached["entradas"])
+                _escribir_cache_universo(cache_path, firma, entradas, archivo.name)
+                return entradas
         except Exception:
             pass
-    entradas = _parsear_archivo_markets(archivo)
+    entradas = _dedup_primera_y_ultima(_parsear_archivo_markets(archivo))
+    _escribir_cache_universo(cache_path, firma, entradas, archivo.name)
+    return entradas
+
+
+def _dedup_primera_y_ultima(entradas: list) -> list:
+    """05-Oct (disco al 91 %): cada día de data/markets repite el mismo
+    mercado en cada snapshot -- 765.713 entradas, 3.096 distintas (~94 MB
+    de cache por día, 1,8 GB en total). Se conservan solo la PRIMERA y la
+    ÚLTIMA aparición de cada tupla, en su orden original: el plegado de
+    _universo_mercados_resueltos() da exactamente el mismo resultado (la
+    primera fila que pasa el filtro de fecha de un condition_id es primera
+    aparición de su tupla -> mismo orden de inserción; la última que pasa es
+    última aparición de su tupla -> mismo valor final)."""
+    primera, ultima = {}, {}
+    for i, e in enumerate(entradas):
+        t = tuple(e)
+        primera.setdefault(t, i)
+        ultima[t] = i
+    conservar = set(primera.values()) | set(ultima.values())
+    return [e for i, e in enumerate(entradas) if i in conservar]
+
+
+def _escribir_cache_universo(cache_path: Path, firma: str, entradas: list, nombre: str) -> None:
     try:
-        cache_path.write_text(json.dumps({"firma": firma, "entradas": entradas},
+        cache_path.write_text(json.dumps({"firma": firma, "dedup": 1, "entradas": entradas},
                                           ensure_ascii=False, separators=(",", ":")),
                                encoding="utf-8")
     except Exception as e:
-        print(f"  [warn] no se pudo cachear {archivo.name}: {e}")
-    return entradas
+        print(f"  [warn] no se pudo cachear {nombre}: {e}")
 
 
 def _universo_mercados_resueltos(ahora):
