@@ -192,3 +192,6 @@ borrar_gz_antiguos . "libro_book_ws_*.csv"
 
 echo "=== DONE ==="
 df -h / | tail -1
+# 05-Oct: hl_ctx_* (~3,5 MB/día) y hl_posiciones_* (~0,6 MB/día) de fetch_hyperliquid_perps.py, ya nacen en gz: 60 días.
+find /root/polymarket-research-datalogs -maxdepth 1 -name 'hl_ctx_*.csv.gz' -mtime +60 -print -delete
+find /root/polymarket-research-datalogs -maxdepth 1 -name 'hl_posiciones_*.csv.gz' -mtime +60 -print -delete
