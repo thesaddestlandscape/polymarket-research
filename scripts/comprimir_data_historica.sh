@@ -182,6 +182,8 @@ borrar_gz_antiguos data/shadow "sports_spread_fase0_*.csv"
 borrar_gz_antiguos data/sports "activity_ws_*.csv"
 
 cd /root/polymarket-research-datalogs
+# 05-Oct: maker_ms_*.csv.gz (registro ms de libro_estado_ws, ~240 MB/día, ya nace en gz): retención 7 días.
+find /root/polymarket-research-datalogs -maxdepth 1 -name 'maker_ms_*.csv.gz' -mtime +7 -print -delete
 borrar_gz_antiguos . "polymarket_activity_*.csv"
 borrar_gz_antiguos . "libro_ambos_lados_*.csv"
 borrar_gz_antiguos . "libro_book_ws_*.csv"

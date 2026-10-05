@@ -30,6 +30,8 @@ nunca. Ahora:
   con ~100 módulos).
 """
 import asyncio
+import gzip
+import queue
 import collections
 import json
 import os
@@ -54,8 +56,16 @@ REFRESCO_S = 30
 HIST_MAX = 3000            # eventos por token (>= varios minutos a ritmo alto)
 RECV_TIMEOUT_S = 0.25      # corto: las altas on-demand (pedir) se atienden en <=0,25 s
 MUESTREO_MS = 100
-SUB_TROZO, SUB_PAUSA_S = 20, 0.25   # alta de tokens en trozos (ver _sesion_hija)
+SUB_TROZO, SUB_PAUSA_S = 20, 0.25   # alta de tokens en trozos (ver _una_sesion)
 LOTE_S = 0.02              # el hijo agrupa registros y los manda cada 20 ms
+# 05-Oct (Javi: hacer explotable el hueco Binance -> Polymarket como MAKER que cancela antes que el tomador retrasado
+# 150 ms): registro de día completo en ms para simularlo. Lo escribe el HIJO (CPU propia, cero conexiones nuevas al
+# CLOB): h = top del libro (hora del exchange, muestreo MUESTREO_MS), t = TODAS las operaciones, b = mid de Binance
+# por hora de RECEPCIÓN (bookTicker spot no trae hora de evento; es el reloj con el que cancelaríamos), k = mapa
+# token -> moneda/marco/mercado/cierre/lado. gz diario fuera de git, retención en comprimir_data_historica.sh.
+REGISTRO_MS_DIR = Path(os.environ.get("LIBRO_WS_REGISTRO_DIR", "/root/polymarket-research-datalogs"))
+BINANCE_WS = "wss://stream.binance.com:9443/stream?streams=" + "/".join(
+    f"{s}@bookTicker" for s in ("btcusdt", "ethusdt", "solusdt", "xrpusdt", "dogeusdt", "bnbusdt"))
 
 _LIB = {}                  # (hijo) token -> {"bids": {p: s}, "asks": {p: s}}
 _ULT = {}                  # (hijo) token -> t_ms del último registro (muestreo mínimo entre registros)
@@ -157,13 +167,13 @@ def estado():
 # ----------------------------------------------------------------------------------------------- padre
 
 _HIJO = {"proc": None, "lock": threading.Lock()}
-_UNIVERSO = {"toks": None}
+_UNIVERSO = {"toks": None, "claves": {}, "meta": {}}
 
 
 def _tokens_universo(filtro_marcos=None):
     import live_trade as lt
     from fetch_libro_ambos_lados import _universo_activo
-    out = []
+    out, claves, meta = [], {}, {}
     for mid, (activo, marco, _cid, _edt) in _universo_activo().items():
         permitidos = _MARCOS.get(marco, "no")
         if permitidos == "no" or (permitidos is not None and activo not in permitidos):
@@ -173,6 +183,11 @@ def _tokens_universo(filtro_marcos=None):
         except Exception:
             continue
         out += [t for t in (yes, no) if t]
+        for t, lado in ((yes, "YES"), (no, "NO")):
+            if t:
+                claves[t] = f"{activo}#{marco}"
+                meta[t] = (activo, marco, str(mid), str(_edt), lado)
+    _UNIVERSO["claves"], _UNIVERSO["meta"] = claves, meta
     return out
 
 
@@ -188,7 +203,7 @@ def _enviar_deseados():
         if p is None or p.poll() is not None:
             return
         try:
-            p.stdin.write(_trama(("tokens", list(univ), extra)))
+            p.stdin.write(_trama(("tokens", list(univ), extra, dict(_UNIVERSO["claves"]), dict(_UNIVERSO["meta"]))))
             p.stdin.flush()
         except (BrokenPipeError, OSError, ValueError):
             pass
@@ -355,6 +370,12 @@ class _Emisor:
         if recs:
             with self.cv:
                 self.buf.extend(recs)
+            if _REGISTRO is not None:
+                for tipo, tk, r in recs:
+                    if tipo == "h":
+                        _REGISTRO.put(f"h,{r[0]},{tk},{r[1]},{r[2]},{r[7]},{r[8]},\n")
+                    else:
+                        _REGISTRO.put(f"t,{r[0]},{tk},{r[1]},{r[2]},{r[3]},,\n")
 
     def _loop(self):
         out = sys.stdout.buffer
@@ -370,7 +391,62 @@ class _Emisor:
                     os._exit(0)                     # el padre murió
 
 
-_DESEADOS = {"univ": [], "extra": [], "ver": 0}
+class _Registro:
+    """Hijo: escribe h/t/b/k a REGISTRO_MS_DIR/maker_ms_YYYY-MM-DD_<pid>.csv.gz: un fichero por arranque y día (un
+    corte brusco deja truncado el final del gzip; si se siguiera añadiendo al mismo fichero, lo posterior sería
+    ilegible). Los lectores leen todos los del día y toleran el final truncado (vuelco cada 5 s).
+    Hilo propio con cola acotada: si el disco va lento se DESCARTA (y se cuenta), nunca se frena la lectura del socket."""
+
+    def __init__(self):
+        self.q = queue.Queue(maxsize=200000)
+        self.descartes = 0
+        self.vistos = set()
+        threading.Thread(target=self._loop, daemon=True, name="registro_ms").start()
+
+    def put(self, linea):
+        try:
+            self.q.put_nowait(linea)
+        except queue.Full:
+            self.descartes += 1
+
+    def meta(self, meta):
+        for t, (a, m, mid, fin, lado) in meta.items():
+            if t not in self.vistos:
+                self.vistos.add(t)
+                self.put(f"k,{int(time.time() * 1000)},{t},{a},{m},{mid},{fin},{lado}\n")
+
+    def _loop(self):
+        dia, f, t_flush, desc_log = None, None, time.time(), 0
+        while True:
+            try:
+                linea = self.q.get(timeout=1.0)
+            except queue.Empty:
+                linea = None
+            hoy = datetime.now(timezone.utc).strftime("%Y-%m-%d")
+            try:
+                if hoy != dia:
+                    if f:
+                        f.close()
+                    dia = hoy
+                    ruta = REGISTRO_MS_DIR / f"maker_ms_{hoy}_{os.getpid()}.csv.gz"
+                    f = gzip.open(ruta, "wt", encoding="utf-8", compresslevel=5)
+                    f.write("tipo,t_ms,id,c1,c2,c3,c4,c5\n")
+                    self.vistos = set()        # el mapa k se repite en el fichero de cada día
+                if linea:
+                    f.write(linea)
+                if time.time() - t_flush > 5:
+                    f.flush()
+                    t_flush = time.time()
+                    if self.descartes != desc_log:
+                        _log(f"registro_ms: {self.descartes} líneas descartadas (cola llena)")
+                        desc_log = self.descartes
+            except Exception as e:
+                _log(f"registro_ms: {type(e).__name__}: {e}")
+                time.sleep(5)
+
+
+_REGISTRO = None
+_DESEADOS = {"univ": [], "extra": [], "claves": {}, "ver": 0}
 _DES_LOCK = threading.Lock()
 
 
@@ -386,61 +462,129 @@ def _hilo_stdin():
         if m[0] == "tokens":
             with _DES_LOCK:
                 _DESEADOS["univ"], _DESEADOS["extra"] = m[1], m[2]
+                _DESEADOS["claves"] = m[3] if len(m) > 3 else {}
+                if len(m) > 4:
+                    _REGISTRO.meta(m[4])
                 _DESEADOS["ver"] += 1
 
 
-async def _sesion_hija(emisor):
-    suscritos = set()
+# 05-Oct: UNA conexión por moneda#marco (+ "extra" para on-demand fuera del universo). Medido aislado (10 min, mismos
+# tokens, a la vez): 1 conexión ~13 caídas 1013 y ~40 % menos mensajes recibidos; 3/6 conexiones por hash de token
+# 10-12 caídas (los mercados en ventana viva -- ~10 mercados = 90 % de los price_changes -- caen juntos en un mismo
+# trozo); 4 grupos por peso 4 caídas; 15 conexiones por moneda#marco 0 caídas y flujo completo. El límite es el buffer
+# de envío del servidor POR CONEXIÓN, no nuestra lectura (Recv-Q ~0, RTT ~1,5 ms).
+_GRUPOS = {}               # (hijo) grupo -> lista ordenada de tokens deseados (on-demand primero)
+_GRUPOS_VER = {}           # (hijo) grupo -> versión (cambia cuando cambia su conjunto)
+
+
+def _calcular_grupos():
+    with _DES_LOCK:
+        ver, univ, extra, claves = (_DESEADOS["ver"], list(_DESEADOS["univ"]), list(_DESEADOS["extra"]),
+                                    dict(_DESEADOS["claves"]))
+    grupos = {}
+    for t in dict.fromkeys(extra + univ):            # on-demand por delante dentro de su grupo
+        grupos.setdefault(claves.get(t, "extra"), []).append(t)
+    return ver, grupos
+
+
+def _huerfano(t):
+    return not any(t in g for g in _GRUPOS.values())
+
+
+async def _gestor(emisor):
     # esperar al primer conjunto deseado ANTES de conectar: el servidor cierra con 1008 "no subscribe received" si
     # el socket queda abierto sin suscripción (el padre tarda ~35 s en su primer universo al arrancar observadores)
+    ver_vista, tareas = -1, {}
+    if _REGISTRO is not None:
+        tareas["__binance__"] = asyncio.create_task(_binance_registro())
     while True:
-        with _DES_LOCK:
-            ver, univ, extra = _DESEADOS["ver"], list(_DESEADOS["univ"]), list(_DESEADOS["extra"])
-        if ver and (univ or extra):
-            break
+        ver, grupos = _calcular_grupos()
+        if ver and ver != ver_vista:
+            ver_vista = ver
+            for k in list(_GRUPOS):
+                if k not in grupos:
+                    _GRUPOS.pop(k)
+                    _GRUPOS_VER[k] = _GRUPOS_VER.get(k, 0) + 1
+            for k, toks in grupos.items():
+                if _GRUPOS.get(k) != toks:
+                    _GRUPOS[k] = toks
+                    _GRUPOS_VER[k] = _GRUPOS_VER.get(k, 0) + 1
+            for t in [t for t in _LIB if _huerfano(t)]:
+                _LIB.pop(t, None)
+                _ULT.pop(t, None)
+        if _REGISTRO is not None and tareas["__binance__"].done():
+            tareas["__binance__"] = asyncio.create_task(_binance_registro())
+        for k in list(_GRUPOS):
+            if k not in tareas or tareas[k].done():
+                tareas[k] = asyncio.create_task(_sesion_grupo(k, emisor))
         await asyncio.sleep(0.2)
+
+
+async def _binance_registro():
+    """Mid de Binance (6 monedas) al registro cuando cambia, con hora de RECEPCIÓN en ms."""
+    ult = {}
+    while True:
+        try:
+            async with websockets.connect(BINANCE_WS, ping_interval=20, ping_timeout=20, max_queue=None) as ws:
+                _log("registro_ms: conectado a Binance bookTicker")
+                async for raw in ws:
+                    t_ms = int(time.time() * 1000)
+                    d = json.loads(raw).get("data") or {}
+                    s, b, a = d.get("s"), d.get("b"), d.get("a")
+                    if s and b and a and ult.get(s) != (b, a):
+                        ult[s] = (b, a)
+                        _REGISTRO.put(f"b,{t_ms},{s},{b},{a},{d.get('B')},{d.get('A')},\n")
+        except Exception as e:
+            _log(f"registro_ms: Binance caído: {type(e).__name__}: {e}; reconecta en 2 s")
+            await asyncio.sleep(2)
+
+
+async def _sesion_grupo(k, emisor):
+    while k in _GRUPOS:
+        try:
+            await _una_sesion(k, emisor)
+        except Exception as e:
+            _log(f"sesión caída [{k}]: {type(e).__name__}: {e}; reconecta en 2 s")
+            await asyncio.sleep(2)
+
+
+async def _una_sesion(k, emisor):
     async with websockets.connect(WS_URL, ping_interval=20, ping_timeout=20, open_timeout=10, max_queue=None) as ws:
-        toks = list(dict.fromkeys(extra + univ))   # on-demand por delante
+        toks, ver_aplicada = list(_GRUPOS.get(k, [])), _GRUPOS_VER.get(k)
+        if not toks:
+            return
         # 30-Sep: suscribir 150+ tokens de golpe hace que el servidor mande todas las fotos del libro en una ráfaga,
         # llene SU buffer de envío y corte con 1013. Se suscribe en trozos de SUB_TROZO, uno cada SUB_PAUSA_S,
         # leyendo el socket entre medias; lo mismo para las altas posteriores.
         cola_sub, t_sub = collections.deque(toks[SUB_TROZO:]), time.time()
         await ws.send(json.dumps({"type": "market", "assets_ids": toks[:SUB_TROZO]}))
-        suscritos.update(toks)
+        suscritos = set(toks)
         for t in toks:
             _LIB.setdefault(t, {"bids": {}, "asks": {}})
-        for t in [t for t in _LIB if t not in suscritos]:
-            _LIB.pop(t, None)
-            _ULT.pop(t, None)
-        _log(f"conectado, {len(toks)} tokens (lector en proceso separado, pid {os.getpid()})")
-        ver_aplicada = ver
+        _log(f"conectado [{k}], {len(toks)} tokens (lector en proceso separado, pid {os.getpid()})")
         while True:
             try:
                 raw = await asyncio.wait_for(ws.recv(), RECV_TIMEOUT_S)
             except asyncio.TimeoutError:
                 raw = None
-            with _DES_LOCK:
-                ver = _DESEADOS["ver"]
-                if ver != ver_aplicada:
-                    univ, extra = list(_DESEADOS["univ"]), list(_DESEADOS["extra"])
-            if ver != ver_aplicada:
-                ver_aplicada = ver
-                deseados = set(univ) | set(extra)
-                add_x = [t for t in extra if t not in suscritos]
-                add_u = [t for t in univ if t not in suscritos and t not in set(add_x)]
-                if add_x:
-                    cola_sub.extendleft(reversed(add_x))   # on-demand en el siguiente trozo
-                cola_sub.extend(add_u)
-                for t in add_x + add_u:
+            if _GRUPOS_VER.get(k) != ver_aplicada:
+                ver_aplicada = _GRUPOS_VER.get(k)
+                if k not in _GRUPOS:
+                    return                                  # grupo retirado: cerrar la conexión
+                deseados = _GRUPOS[k]
+                nuevos = [t for t in deseados if t not in suscritos]
+                cola_sub.extend(nuevos)
+                for t in nuevos:
                     _LIB.setdefault(t, {"bids": {}, "asks": {}})
-                suscritos.update(add_x + add_u)
-                viejos = [t for t in suscritos if t not in deseados]
+                suscritos.update(nuevos)
+                viejos = [t for t in suscritos if t not in set(deseados)]
                 if viejos:
                     await ws.send(json.dumps({"assets_ids": viejos, "operation": "unsubscribe"}))
                     for t in viejos:
                         suscritos.discard(t)
-                        _LIB.pop(t, None)
-                        _ULT.pop(t, None)
+                        if _huerfano(t):
+                            _LIB.pop(t, None)
+                            _ULT.pop(t, None)
             if cola_sub and time.time() - t_sub >= SUB_PAUSA_S:
                 trozo = [cola_sub.popleft() for _ in range(min(SUB_TROZO, len(cola_sub)))]
                 trozo = [t for t in trozo if t in suscritos]          # por si se dio de baja mientras esperaba
@@ -468,11 +612,16 @@ def _main_hijo():
             os.setpriority(os.PRIO_PROCESS, 0, 0)    # el padre corre a nice 10; el lector no
     except OSError as e:
         _log(f"no se pudo subir la prioridad del hijo: {e}")
+    global _REGISTRO
+    try:
+        _REGISTRO = _Registro()
+    except Exception as e:
+        _log(f"registro_ms desactivado: {type(e).__name__}: {e}")
     emisor = _Emisor()
     threading.Thread(target=_hilo_stdin, daemon=True, name="stdin").start()
     while True:
         try:
-            asyncio.run(_sesion_hija(emisor))
+            asyncio.run(_gestor(emisor))
         except Exception as e:
             _log(f"sesión caída: {type(e).__name__}: {e}; reconecta en 2 s")
         time.sleep(2)
