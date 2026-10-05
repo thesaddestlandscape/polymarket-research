@@ -7,29 +7,29 @@
     "fecha_historial": null
   },
   "SNIPER#BTC#5min": {
-    "n_dias": 25,
-    "pnl_sin_mejores_dias": -0.8065,
+    "n_dias": 26,
+    "pnl_sin_mejores_dias": -0.8077,
     "robusto_dias": false,
     "lo": 0.0,
     "hi": 0.05,
-    "n": 526,
-    "pnl_medio": -0.6749,
-    "diff_vs_resto": -0.6284,
+    "n": 529,
+    "pnl_medio": -0.6768,
+    "diff_vs_resto": -0.6302,
     "p_valor": 0.0,
     "split_half_diff": [
-      -0.5988,
-      -0.658
+      -0.6001,
+      -0.6602
     ],
     "split_half_ok": true,
-    "pnl_medio_loo": -0.7335,
+    "pnl_medio_loo": -0.735,
     "robusto_loo": true,
     "ci90_bootstrap": [
-      -0.867,
-      -0.4533
+      -0.8678,
+      -0.4564
     ],
     "robusto_bootstrap": true,
     "n_posiciones_buscadas": 96,
-    "g_kelly_f10": -0.08794,
+    "g_kelly_f10": -0.08804,
     "veredicto_crudo_hoy": "malo_confirmado",
     "historial_crudo": [
       "malo_confirmado"
@@ -39,28 +39,28 @@
   },
   "DISPERSO#BTC#5min": {
     "n_dias": 26,
-    "pnl_sin_mejores_dias": -0.3656,
+    "pnl_sin_mejores_dias": -0.369,
     "robusto_dias": false,
     "lo": 0.08,
     "hi": 0.13,
-    "n": 573,
-    "pnl_medio": -0.2928,
-    "diff_vs_resto": -0.234,
-    "p_valor": 0.043,
+    "n": 576,
+    "pnl_medio": -0.2965,
+    "diff_vs_resto": -0.2372,
+    "p_valor": 0.0345,
     "split_half_diff": [
-      -0.1421,
-      -0.3257
+      -0.1471,
+      -0.3273
     ],
     "split_half_ok": true,
-    "pnl_medio_loo": -0.312,
+    "pnl_medio_loo": -0.3156,
     "robusto_loo": true,
     "ci90_bootstrap": [
-      -0.4571,
-      -0.1139
+      -0.4605,
+      -0.125
     ],
     "robusto_bootstrap": true,
     "n_posiciones_buscadas": 96,
-    "g_kelly_f10": -0.05147,
+    "g_kelly_f10": -0.05175,
     "veredicto_crudo_hoy": "malo_confirmado",
     "historial_crudo": [
       "malo_confirmado"
@@ -76,11 +76,11 @@
     "hi": 0.06,
     "n": 186,
     "pnl_medio": -0.8746,
-    "diff_vs_resto": -0.8171,
+    "diff_vs_resto": -0.8162,
     "p_valor": 0.0,
     "split_half_diff": [
-      -0.6917,
-      -0.9425
+      -0.6909,
+      -0.9416
     ],
     "split_half_ok": true,
     "pnl_medio_loo": -1.0,
@@ -107,11 +107,11 @@
     "hi": 0.05,
     "n": 314,
     "pnl_medio": -0.4557,
-    "diff_vs_resto": -0.3977,
-    "p_valor": 0.001,
+    "diff_vs_resto": -0.3976,
+    "p_valor": 0.0,
     "split_half_diff": [
       -0.2491,
-      -0.5462
+      -0.5461
     ],
     "split_half_ok": true,
     "pnl_medio_loo": -0.5532,
@@ -138,11 +138,11 @@
     "hi": 0.05,
     "n": 330,
     "pnl_medio": -0.7645,
-    "diff_vs_resto": -0.7173,
+    "diff_vs_resto": -0.7168,
     "p_valor": 0.0,
     "split_half_diff": [
-      -0.4818,
-      -0.9527
+      -0.4814,
+      -0.9523
     ],
     "split_half_ok": true,
     "pnl_medio_loo": -0.8582,
@@ -170,7 +170,7 @@
     "n": 375,
     "pnl_medio": -0.6639,
     "diff_vs_resto": -0.6045,
-    "p_valor": 0.034,
+    "p_valor": 0.028,
     "split_half_diff": [
       -0.5578,
       -0.6509
@@ -200,11 +200,11 @@
     "hi": 0.25,
     "n": 41,
     "pnl_medio": -0.5057,
-    "diff_vs_resto": -0.4834,
-    "p_valor": 0.0105,
+    "diff_vs_resto": -0.4837,
+    "p_valor": 0.0085,
     "split_half_diff": [
-      -0.7805,
-      -0.2005
+      -0.7807,
+      -0.2008
     ],
     "split_half_ok": true,
     "pnl_medio_loo": -0.5971,
@@ -231,11 +231,11 @@
     "hi": 0.05,
     "n": 55,
     "pnl_medio": -1.0,
-    "diff_vs_resto": -0.9469,
+    "diff_vs_resto": -0.9468,
     "p_valor": 0.0,
     "split_half_diff": [
-      -0.9469,
-      -0.9469
+      -0.9468,
+      -0.9468
     ],
     "split_half_ok": true,
     "pnl_medio_loo": -1.0,
@@ -274,24 +274,24 @@
     "robusto_dias": false,
     "lo": 0.05,
     "hi": 0.1,
-    "n": 137,
-    "pnl_medio": -0.7628,
-    "diff_vs_resto": -0.6998,
+    "n": 138,
+    "pnl_medio": -0.7645,
+    "diff_vs_resto": -0.7017,
     "p_valor": 0.0,
     "split_half_diff": [
-      -0.4591,
-      -0.937
+      -0.4662,
+      -0.9372
     ],
     "split_half_ok": true,
-    "pnl_medio_loo": -0.847,
+    "pnl_medio_loo": -0.8481,
     "robusto_loo": true,
     "ci90_bootstrap": [
-      -0.9241,
-      -0.5255
+      -0.9246,
+      -0.5196
     ],
     "robusto_bootstrap": true,
     "n_posiciones_buscadas": 96,
-    "g_kelly_f10": -0.08807,
+    "g_kelly_f10": -0.08819,
     "veredicto_crudo_hoy": "malo_confirmado",
     "historial_crudo": [
       "malo_confirmado"
@@ -307,11 +307,11 @@
     "hi": 0.05,
     "n": 198,
     "pnl_medio": -0.8431,
-    "diff_vs_resto": -0.8569,
-    "p_valor": 0.0055,
+    "diff_vs_resto": -0.8571,
+    "p_valor": 0.003,
     "split_half_diff": [
-      -0.7,
-      -1.0139
+      -0.7002,
+      -1.014
     ],
     "split_half_ok": true,
     "pnl_medio_loo": -1.0,
@@ -338,11 +338,11 @@
     "hi": 0.05,
     "n": 264,
     "pnl_medio": -0.588,
-    "diff_vs_resto": -0.5082,
-    "p_valor": 0.005,
+    "diff_vs_resto": -0.5089,
+    "p_valor": 0.0065,
     "split_half_diff": [
-      -0.2729,
-      -0.7436
+      -0.2735,
+      -0.7443
     ],
     "split_half_ok": true,
     "pnl_medio_loo": -0.7045,
@@ -369,11 +369,11 @@
     "hi": 0.14,
     "n": 65,
     "pnl_medio": -0.6044,
-    "diff_vs_resto": -0.5612,
-    "p_valor": 0.012,
+    "diff_vs_resto": -0.561,
+    "p_valor": 0.0085,
     "split_half_diff": [
-      -0.6904,
-      -0.4359
+      -0.6902,
+      -0.4357
     ],
     "split_half_ok": true,
     "pnl_medio_loo": -0.7446,
@@ -400,11 +400,11 @@
     "hi": 0.22,
     "n": 142,
     "pnl_medio": -0.6029,
-    "diff_vs_resto": -0.5348,
-    "p_valor": 0.032,
+    "diff_vs_resto": -0.5352,
+    "p_valor": 0.0315,
     "split_half_diff": [
-      -0.4067,
-      -0.6628
+      -0.4072,
+      -0.6633
     ],
     "split_half_ok": true,
     "pnl_medio_loo": -0.6394,
@@ -425,28 +425,28 @@
   },
   "SNIPER#XRP#15min": {
     "n_dias": 25,
-    "pnl_sin_mejores_dias": -0.853,
+    "pnl_sin_mejores_dias": -0.8555,
     "robusto_dias": false,
     "lo": 0.09,
     "hi": 0.14,
-    "n": 68,
-    "pnl_medio": -0.528,
-    "diff_vs_resto": -0.4538,
-    "p_valor": 0.0085,
+    "n": 69,
+    "pnl_medio": -0.5349,
+    "diff_vs_resto": -0.4611,
+    "p_valor": 0.006,
     "split_half_diff": [
-      -0.675,
-      -0.2326
+      -0.6755,
+      -0.2528
     ],
     "split_half_ok": true,
-    "pnl_medio_loo": -0.6482,
+    "pnl_medio_loo": -0.6534,
     "robusto_loo": true,
     "ci90_bootstrap": [
-      -0.885,
-      -0.1536
+      -0.8765,
+      -0.1643
     ],
     "robusto_bootstrap": true,
     "n_posiciones_buscadas": 89,
-    "g_kelly_f10": -0.0679,
+    "g_kelly_f10": -0.06844,
     "veredicto_crudo_hoy": "malo_confirmado",
     "historial_crudo": [
       "malo_confirmado"
@@ -487,28 +487,28 @@
   },
   "?#BTC#5min": {
     "n_dias": 18,
-    "pnl_sin_mejores_dias": -0.6229,
+    "pnl_sin_mejores_dias": -0.6267,
     "robusto_dias": false,
     "lo": 0.15,
     "hi": 0.2,
-    "n": 111,
-    "pnl_medio": -0.5105,
-    "diff_vs_resto": -0.4836,
-    "p_valor": 0.0415,
+    "n": 112,
+    "pnl_medio": -0.5149,
+    "diff_vs_resto": -0.4873,
+    "p_valor": 0.04,
     "split_half_diff": [
-      -0.5855,
-      -0.3835
+      -0.5917,
+      -0.3828
     ],
     "split_half_ok": true,
-    "pnl_medio_loo": -0.5595,
+    "pnl_medio_loo": -0.5635,
     "robusto_loo": true,
     "ci90_bootstrap": [
-      -0.7491,
-      -0.2654
+      -0.7544,
+      -0.2695
     ],
     "robusto_bootstrap": true,
     "n_posiciones_buscadas": 73,
-    "g_kelly_f10": -0.06283,
+    "g_kelly_f10": -0.06321,
     "veredicto_crudo_hoy": "malo_confirmado",
     "historial_crudo": [
       "malo_confirmado"
