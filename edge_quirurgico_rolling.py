@@ -47,6 +47,18 @@ import analisis_edge_quirurgico_21sep as Q  # noqa: E402  (mismo motor de búsqu
 FORWARD_DIAS = 7
 N_FORWARD_MIN = 15
 PISO_EUR = Q.PISO_EUR
+# 05-Oct (Javi "ok"): `top1_wallet` es del TRAIN; SNIPER#SOL#15min [0,40-0,45) salía con 28,6 % y en
+# el forward UNA wallet era el 70 % (sin edge propio copiada a nuestro ask). forward_ok_estricto exige
+# además concentración del forward <= este tope (wallet top <=30 %, CLAUDE.md). forward_ok no cambia
+# (es la base de las rachas del historial).
+TOP1_WALLET_FORWARD_MAX = 0.30
+
+
+def _top1_wallet(wallets: list):
+    """Fracción de la wallet más repetida; None si no hay identidad de wallet (familia clásica)."""
+    if not wallets or all(w is None for w in wallets):
+        return None
+    return collections.Counter(wallets).most_common(1)[0][1] / len(wallets)
 OUT = REPO / "data" / "shadow" / "edge_quirurgico_zonas.json"
 HISTORIAL = REPO / "data" / "shadow" / "edge_quirurgico_historial.jsonl"
 RECHAZOS = REPO / "data" / "shadow" / "edge_quirurgico_rechazos.json"   # 24-Sep: descartes seguidos por caída de filas
@@ -215,6 +227,7 @@ def generar() -> dict:
         cache_nuevo["tuplas"][ck] = {"n_train": len(train), "ventanas": ventanas}
         for w in ventanas:
             pnls = [f[2] for f in test if w["lo"] <= f[1] < w["hi"]]
+            top1_fwd = _top1_wallet([f[3] for f in test if w["lo"] <= f[1] < w["hi"]])
             n_te = len(pnls)
             pnl_te = float(np.mean(pnls)) if pnls else None
             z = {"tupla": ck, "familia": fam, "activo": activo,
@@ -225,12 +238,14 @@ def generar() -> dict:
                  "pnl_sin_2_mejores_dias": w["pnl_sin_2_mejores_dias"], "wallets": w["wallets"],
                  "top1_wallet": w["top1_wallet"], "p_max_train": w["p_max"],
                  "n_forward": n_te, "pnl_forward": round(pnl_te, 4) if pnl_te is not None else None,
-                 "hit_forward": round(float(np.mean([1 if x > 0 else 0 for x in pnls])), 3) if pnls else None}
+                 "hit_forward": round(float(np.mean([1 if x > 0 else 0 for x in pnls])), 3) if pnls else None,
+                 "top1_wallet_forward": round(top1_fwd, 3) if top1_fwd is not None else None}
             z["forward_ok"] = bool(n_te >= N_FORWARD_MIN and pnl_te is not None and pnl_te >= PISO_EUR)
+            conc_ok = top1_fwd is None or top1_fwd <= TOP1_WALLET_FORWARD_MAX
             if n_te >= N_FORWARD_MIN:
                 lo_b, hi_b = _ic90_bootstrap(pnls, f"{z['tupla']}#{w['ancho']}#{w['lo']}#fwd")
                 z["forward_ic90"] = [round(lo_b, 4), round(hi_b, 4)]
-                z["forward_ok_estricto"] = bool(z["forward_ok"] and lo_b > 0)
+                z["forward_ok_estricto"] = bool(z["forward_ok"] and lo_b > 0 and conc_ok)
             else:
                 z["forward_ic90"], z["forward_ok_estricto"] = None, False
             # 24-Sep (C5): la familia clásica (results.csv, única con `decision`) se mide al
@@ -247,7 +262,8 @@ def generar() -> dict:
     observacion.sort(key=lambda z: -(z["pnl_forward"] if z["pnl_forward"] is not None else -9))
     res = {"generado_utc": ahora.isoformat(timespec="seconds"), "modo": "lectura (no consumido por evaluar())",
            "forward_dias": FORWARD_DIAS, "cutoff": cutoff, "n_forward_min": N_FORWARD_MIN,
-           "piso_eur": PISO_EUR, "n_tuplas_evaluadas": n_tuplas, "n_filas_total": n_filas_total,
+           "piso_eur": PISO_EUR, "top1_wallet_forward_max": TOP1_WALLET_FORWARD_MAX,
+           "n_tuplas_evaluadas": n_tuplas, "n_filas_total": n_filas_total,
            "n_zonas_operables": len(operables), "n_zonas_en_observacion": len(observacion),
            "cobertura": {"total_tuplas_con_datos": len(fuentes), "evaluadas": n_tuplas,
                          "descartadas_n_train_insuficiente": sorted(descartadas, key=lambda t: -t[1])},

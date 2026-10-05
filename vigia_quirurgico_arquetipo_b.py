@@ -67,6 +67,35 @@ def _etiqueta(k: tuple) -> str:
     return f"{tupla} w={ancho} [{lo:.2f},{hi:.2f})"
 
 
+def _info_forward() -> dict:
+    """clave_zona -> zona del último edge_quirurgico_zonas.json (operables + observación).
+    05-Oct: para mostrar en el aviso la concentración del FORWARD (top1_wallet_forward) y el
+    veredicto estricto -- una racha de forward_ok no mira quién genera el forward."""
+    try:
+        d = json.loads(ZONAS.read_text(encoding="utf-8"))
+    except Exception:
+        return {}
+    tope = d.get("top1_wallet_forward_max")
+    return {_clave_zona(z): {**z, "_tope": tope}
+            for z in d.get("zonas_operables", []) + d.get("zonas_en_observacion", [])}
+
+
+def _detalle_forward(z) -> tuple:
+    """(marca, texto) para una zona que cruza la racha. Fail-closed (/code-review 05-Oct): sin la
+    zona en zonas.json o sin tope publicado, la concentración del forward NO está comprobada -> ⚠️.
+    El tope sale del propio zonas.json (top1_wallet_forward_max), no se duplica aquí."""
+    if not z or z.get("_tope") is None:
+        return "⚠️", "concentración del forward SIN COMPROBAR (zona ausente en zonas.json) -- NO candidata"
+    top1 = z.get("top1_wallet_forward")
+    txt = (f"forward n={z.get('n_forward')} EV={z.get('pnl_forward')} IC90={z.get('forward_ic90')} "
+           f"top wallet forward={'n/d' if top1 is None else f'{top1:.0%}'}")
+    if top1 is not None and top1 > z["_tope"]:
+        return "⚠️", txt + f" -- CONCENTRADA (> {z['_tope']:.0%}) en una wallet, NO candidata"
+    if z.get("forward_ok_estricto"):
+        return "🟢🟢🟢", txt + " -- estricta"
+    return "🟢🟢🟢", txt + " -- no estricta (IC90 cruza 0)"
+
+
 def _persistencia_por_dia() -> dict:
     """clave_zona -> {fecha: forward_ok bool}, solo familias B."""
     por_zona = collections.defaultdict(dict)
@@ -139,8 +168,10 @@ def _texto_diario(por_zona: dict, latch: dict) -> tuple:
     if nuevas_racha_3:
         lin.append(f"\n🎯 {len(nuevas_racha_3)} zona(s) CRUZAN {N_DIAS_OBJETIVO} días consecutivos HOY -- "
                    f"candidatas a replantear el salto a live:")
+        info = _info_forward()
         for k in sorted(nuevas_racha_3):
-            lin.append(f"  🟢🟢🟢 {_etiqueta(k)} ({por_zona[k]})")
+            marca, detalle = _detalle_forward(info.get(k))
+            lin.append(f"  {marca} {_etiqueta(k)} ({por_zona[k]})\n      {detalle}")
     lin.append(f"\nTop zonas por racha actual (días consecutivos, no total histórico):")
     for k, racha, max_historico, fechas in activas[:20]:
         if racha >= N_DIAS_OBJETIVO:
