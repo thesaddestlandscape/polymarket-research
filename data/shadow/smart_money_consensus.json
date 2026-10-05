@@ -1,45 +1,38 @@
 {
   "BTC": {
-    "smart_money_consensus": 0.0161,
-    "n_trades_smart": 559,
-    "n_wallets_smart": 12,
-    "smart_money_consensus_ponderado": 0.0073,
-    "n_wallets_smart_ponderado": 12
-  },
-  "ETH": {
-    "smart_money_consensus": -0.0933,
-    "n_trades_smart": 225,
-    "n_wallets_smart": 7,
-    "smart_money_consensus_ponderado": 0.0459,
-    "n_wallets_smart_ponderado": 7
-  },
-  "BNB": {
-    "smart_money_consensus": 0.0,
-    "n_trades_smart": 4,
-    "n_wallets_smart": 2,
-    "smart_money_consensus_ponderado": 0.6627,
-    "n_wallets_smart_ponderado": 2
-  },
-  "XRP": {
-    "smart_money_consensus": -0.0286,
-    "n_trades_smart": 70,
-    "n_wallets_smart": 2,
-    "smart_money_consensus_ponderado": -0.1011,
-    "n_wallets_smart_ponderado": 2
+    "smart_money_consensus": 0.2148,
+    "n_trades_smart": 135,
+    "n_wallets_smart": 3,
+    "smart_money_consensus_ponderado": 0.2612,
+    "n_wallets_smart_ponderado": 3
   },
   "DOGE": {
-    "smart_money_consensus": -1.0,
-    "n_trades_smart": 2,
+    "smart_money_consensus": -0.3333,
+    "n_trades_smart": 6,
     "n_wallets_smart": 2,
-    "smart_money_consensus_ponderado": -1.0,
+    "smart_money_consensus_ponderado": -0.3349,
     "n_wallets_smart_ponderado": 2
   },
   "SOL": {
-    "smart_money_consensus": 0.3115,
-    "n_trades_smart": 122,
+    "smart_money_consensus": 0.3333,
+    "n_trades_smart": 3,
+    "n_wallets_smart": 1,
+    "smart_money_consensus_ponderado": 0.3333,
+    "n_wallets_smart_ponderado": 1
+  },
+  "XRP": {
+    "smart_money_consensus": 1.0,
+    "n_trades_smart": 1,
+    "n_wallets_smart": 1,
+    "smart_money_consensus_ponderado": 1.0,
+    "n_wallets_smart_ponderado": 1
+  },
+  "ETH": {
+    "smart_money_consensus": -0.1667,
+    "n_trades_smart": 12,
     "n_wallets_smart": 2,
-    "smart_money_consensus_ponderado": 0.2554,
+    "smart_money_consensus_ponderado": -0.0077,
     "n_wallets_smart_ponderado": 2
   },
-  "_actualizado": "2026-10-05T10:36:59+00:00"
+  "_actualizado": "2026-10-05T10:59:35+00:00"
 }
