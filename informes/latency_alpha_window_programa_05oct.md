@@ -124,3 +124,31 @@ de latencia (0, 10, 25, 50, 75, 100, 125, 150, 200, 250, 500 ms)**.
 - 07-08 Oct: M4 precursores (mecanismo 4), M5 P(fill) (mecanismos 2-3), M7/M8; primeras curvas con 2-3 días.
 - 09-10 Oct: estrés + fuera de muestra con ≥4-5 días; decidir los 1-2 mecanismos que pasan a dry-run ejecutor.
 - Si algo maker pasa con lat ≥200 ms: pedir OK para medir NUESTRA latencia de cancelación con órdenes mínimas (5 acciones).
+
+## 8. Misión 2 (Javi 05-Oct 16:05Z): QUIÉN captura la transición y cómo replicarlo
+Regla grabada: **L_taker (150 ms, mecanismo de Polymarket) ≠ W (ventana de mercado, a medir)**. Nunca "hay 150 ms, llegamos tarde".
+**Relojes (auditados 05-Oct)**: Binance T/E → recepción p50 138 ms (p90 165, p99 545); Polymarket exchange → recepción p50 26 ms
+(p1 17, p90 360, p99 1,5 s; nunca negativo ⇒ relojes coherentes, mínimo = red). chrony ±1 ms (cota 21 ms). ⇒ W se mide con
+hora de EXCHANGE en ambos lados; toda simulación de decisión usa hora de RECEPCIÓN (+ la cola de 360 ms-1,5 s de entrega).
+**Registro desde 16:06Z**: q = cada cambio de precio O tamaño del top (cancelación vs relleno cruzando con t) + recepción; t + recepción.
+**Quién (wallets)**: firehose `polymarket_activity_*.csv` (wallet, lado, precio, tamaño, hash; hora en s, ~0,9 s tarde) unido a las
+operaciones t del registro por token + precio + tamaño (±2 s) ⇒ cada operación con wallet y ms; por hash: maker vs tomador.
+**Mediciones nuevas**:
+- W_primer, W_25, W_50, W_75, W_90, W_95, W_FV (convergencia a Φ(z_Binance)), W_residual (residual estadísticamente nulo); distribución completa.
+- t0 = INICIO del movimiento (primer aggTrade de la racha), no su final; pre-alpha medido contra ese t0.
+- Microcronología por evento (t−500 … t+500 ms): bid, ask, spread, tamaños del top, mid, microprice, operaciones, cancelaciones
+  (caída de tamaño sin operación a ese precio), reposiciones.
+- Movimiento 2-3,6c: distribución P10…P99, dependencia del tamaño del movimiento de Binance, velocidad, sobrerreacción, reversión.
+- Stale Quote Window: t0 → cancelación/recotización del nivel obsoleto vs t0 → llegada del tomador (operación al precio viejo).
+  % de veces que el maker se salva, % expuesto, precio y PnL de cada lado.
+- Descomposición por evento: capturado por makers (cancelan/recotizan y luego rellenan mejor), por pre-posicionados (wallets con
+  entrada < t0 en el lado ganador), por tomadores rápidos (operaciones al precio viejo en [t0, t0+W] y su PnL), y no capturado.
+- Mapa de alpha por bucket (0-10 … 200-300 ms): Binance, Polymarket, mispricing, acción maker, acción tomador, PnL potencial.
+- P(quote tóxica en 100-200 ms | microestado Binance + Polymarket) → cancelar/mantener/mover.
+- EV por mecanismo condicionado al estado: tomador (solo si W esperado > L_taker + costes), maker informado vs maker sin Binance
+  (la diferencia = valor de la información de Binance), pre-posición, segundo tramo, no operar ⇒ argmax.
+- Cadena A → Binance → Polymarket: candidatos A = futuros/perpetuo de Binance, otros venues spot, otras monedas (BTC → alts).
+**Las 15 preguntas finales** (W, distribución, movimiento en W, parte atribuible a Binance, quién, ¿makers?, ¿pre-posicionados?,
+¿señal previa?, ¿replicable el maker?, ¿pre-posición?, cuándo tomador, cuándo maker, cuándo ya posicionados, PnL por mecanismo,
+robustez) se responden con estas mediciones y el protocolo del §5. Primera lectura exploratoria (30 min): t1 mediana 147 ms,
+W_50 mediana 219 ms (p25 106, p75 376, p90 792), W_90 mediana 399 ms; 18 % de eventos con W_50 > 500 ms (candidatos a tomador selectivo).

@@ -67,7 +67,7 @@ REGISTRO_MS_DIR = Path(os.environ.get("LIBRO_WS_REGISTRO_DIR", "/root/polymarket
 # 05-Oct noche (misión "monetizar la ventana Binance -> Polymarket"): además del bookTicker (sin hora de evento),
 # aggTrade trae T (hora de la operación) y E (hora del evento) del exchange -> t0 real y latencia de red por evento.
 # x = aggTrade (T, símbolo, precio, cantidad, comprador_es_maker, E, recepción); q = top de Polymarket SIN muestrear
-# (cada cambio de PRECIO del mejor bid/ask, con sus tamaños, hora del exchange): t1/t2 al ms. El top muestreado (h) se mantiene.
+# (cada cambio de precio o tamaño del mejor bid/ask, hora del exchange + recepción; t también lleva recepción): t1/t2 al ms. El top muestreado (h) se mantiene.
 _SIMB_BN = ("btcusdt", "ethusdt", "solusdt", "xrpusdt", "dogeusdt", "bnbusdt")
 BINANCE_WS = "wss://stream.binance.com:9443/stream?streams=" + "/".join(
     [f"{s}@bookTicker" for s in _SIMB_BN] + [f"{s}@aggTrade" for s in _SIMB_BN])
@@ -75,6 +75,7 @@ BINANCE_WS = "wss://stream.binance.com:9443/stream?streams=" + "/".join(
 _LIB = {}                  # (hijo) token -> {"bids": {p: s}, "asks": {p: s}}
 _ULT = {}                  # (hijo) token -> t_ms del último registro (muestreo mínimo entre registros)
 _TOPQ = {}                 # (hijo) token -> último top registrado sin muestrear (registro q)
+_T_RECV = [0]              # (hijo) hora local (ms) de recepción del mensaje WS en curso (registro q/t, auditoría de reloj)
 _HIST = {}                 # token -> deque[(t_ms, bb, ba, i1, i5, i10, dask5, bid_size, ask_size)]
 _LOCK = threading.Lock()
 _EXTRA = {}                # token -> expiración (epoch s): tokens pedidos on-demand por otros módulos (suscripción inmediata)
@@ -332,6 +333,8 @@ def _aplicar(msg, salida):
         if tk in _LIB:
             try:
                 salida.append(("t", tk, (t_ev, float(msg["price"]), msg.get("side"), float(msg.get("size") or 0))))
+                if _REGISTRO is not None:
+                    _REGISTRO.put(f"t,{t_ev},{tk},{msg.get('price')},{msg.get('side')},{msg.get('size')},{_T_RECV[0]},\n")
             except (KeyError, TypeError, ValueError):
                 pass
         return
@@ -358,9 +361,9 @@ def _aplicar(msg, salida):
                 bb = max((p for p, s in L["bids"].items() if s > 0), default=None)
                 ba = min((p for p, s in L["asks"].items() if s > 0), default=None)
                 top = (bb, ba, L["bids"].get(bb) if bb is not None else None, L["asks"].get(ba) if ba is not None else None)
-                if _TOPQ.get(tk) != top[:2]:            # solo cambios de PRECIO del top (con tamaños: ~1 GB/día)
-                    _TOPQ[tk] = top[:2]
-                    _REGISTRO.put(f"q,{t_ev},{tk},{top[0]},{top[1]},{top[2]},{top[3]},\n")
+                if _TOPQ.get(tk) != top:                # precio O tamaño del top (cancelación vs relleno; ~1 GB/día)
+                    _TOPQ[tk] = top
+                    _REGISTRO.put(f"q,{t_ev},{tk},{top[0]},{top[1]},{top[2]},{top[3]},{_T_RECV[0]}\n")
         for tk in tocados:
             if t_ev - _ULT.get(tk, 0) >= MUESTREO_MS:   # el libro se actualiza siempre; se muestrea el histórico
                 _ULT[tk] = t_ev
@@ -389,8 +392,6 @@ class _Emisor:
                 for tipo, tk, r in recs:
                     if tipo == "h":
                         _REGISTRO.put(f"h,{r[0]},{tk},{r[1]},{r[2]},{r[7]},{r[8]},\n")
-                    else:
-                        _REGISTRO.put(f"t,{r[0]},{tk},{r[1]},{r[2]},{r[3]},,\n")
 
     def _loop(self):
         out = sys.stdout.buffer
@@ -613,6 +614,7 @@ async def _una_sesion(k, emisor):
                 t_sub = time.time()
             if not raw:
                 continue
+            _T_RECV[0] = int(time.time() * 1000)
             try:
                 j = json.loads(raw)
             except Exception:
