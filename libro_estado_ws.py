@@ -64,11 +64,17 @@ LOTE_S = 0.02              # el hijo agrupa registros y los manda cada 20 ms
 # por hora de RECEPCIÓN (bookTicker spot no trae hora de evento; es el reloj con el que cancelaríamos), k = mapa
 # token -> moneda/marco/mercado/cierre/lado. gz diario fuera de git, retención en comprimir_data_historica.sh.
 REGISTRO_MS_DIR = Path(os.environ.get("LIBRO_WS_REGISTRO_DIR", "/root/polymarket-research-datalogs"))
+# 05-Oct noche (misión "monetizar la ventana Binance -> Polymarket"): además del bookTicker (sin hora de evento),
+# aggTrade trae T (hora de la operación) y E (hora del evento) del exchange -> t0 real y latencia de red por evento.
+# x = aggTrade (T, símbolo, precio, cantidad, comprador_es_maker, E, recepción); q = top de Polymarket SIN muestrear
+# (cada cambio de PRECIO del mejor bid/ask, con sus tamaños, hora del exchange): t1/t2 al ms. El top muestreado (h) se mantiene.
+_SIMB_BN = ("btcusdt", "ethusdt", "solusdt", "xrpusdt", "dogeusdt", "bnbusdt")
 BINANCE_WS = "wss://stream.binance.com:9443/stream?streams=" + "/".join(
-    f"{s}@bookTicker" for s in ("btcusdt", "ethusdt", "solusdt", "xrpusdt", "dogeusdt", "bnbusdt"))
+    [f"{s}@bookTicker" for s in _SIMB_BN] + [f"{s}@aggTrade" for s in _SIMB_BN])
 
 _LIB = {}                  # (hijo) token -> {"bids": {p: s}, "asks": {p: s}}
 _ULT = {}                  # (hijo) token -> t_ms del último registro (muestreo mínimo entre registros)
+_TOPQ = {}                 # (hijo) token -> último top registrado sin muestrear (registro q)
 _HIST = {}                 # token -> deque[(t_ms, bb, ba, i1, i5, i10, dask5, bid_size, ask_size)]
 _LOCK = threading.Lock()
 _EXTRA = {}                # token -> expiración (epoch s): tokens pedidos on-demand por otros módulos (suscripción inmediata)
@@ -346,6 +352,15 @@ def _aplicar(msg, salida):
             else:
                 L[lado][p] = s
             tocados.add(tk)
+        if _REGISTRO is not None:
+            for tk in tocados:
+                L = _LIB[tk]
+                bb = max((p for p, s in L["bids"].items() if s > 0), default=None)
+                ba = min((p for p, s in L["asks"].items() if s > 0), default=None)
+                top = (bb, ba, L["bids"].get(bb) if bb is not None else None, L["asks"].get(ba) if ba is not None else None)
+                if _TOPQ.get(tk) != top[:2]:            # solo cambios de PRECIO del top (con tamaños: ~1 GB/día)
+                    _TOPQ[tk] = top[:2]
+                    _REGISTRO.put(f"q,{t_ev},{tk},{top[0]},{top[1]},{top[2]},{top[3]},\n")
         for tk in tocados:
             if t_ev - _ULT.get(tk, 0) >= MUESTREO_MS:   # el libro se actualiza siempre; se muestrea el histórico
                 _ULT[tk] = t_ev
@@ -512,6 +527,7 @@ async def _gestor(emisor):
             for t in [t for t in _LIB if _huerfano(t)]:
                 _LIB.pop(t, None)
                 _ULT.pop(t, None)
+                _TOPQ.pop(t, None)
         if _REGISTRO is not None and tareas["__binance__"].done():
             tareas["__binance__"] = asyncio.create_task(_binance_registro())
         for k in list(_GRUPOS):
@@ -526,10 +542,14 @@ async def _binance_registro():
     while True:
         try:
             async with websockets.connect(BINANCE_WS, ping_interval=20, ping_timeout=20, max_queue=None) as ws:
-                _log("registro_ms: conectado a Binance bookTicker")
+                _log("registro_ms: conectado a Binance bookTicker + aggTrade")
                 async for raw in ws:
                     t_ms = int(time.time() * 1000)
                     d = json.loads(raw).get("data") or {}
+                    if d.get("e") == "aggTrade":
+                        _REGISTRO.put(f"x,{d.get('T')},{d.get('s')},{d.get('p')},{d.get('q')},{int(bool(d.get('m')))},"
+                                      f"{d.get('E')},{t_ms}\n")
+                        continue
                     s, b, a = d.get("s"), d.get("b"), d.get("a")
                     if s and b and a and ult.get(s) != (b, a):
                         ult[s] = (b, a)
