@@ -1,8 +1,8 @@
 {
  "STREAK_MOM_5M": {
-  "ic_bayes_familia": 0.0191,
+  "ic_bayes_familia": 0.019,
   "n_tuplas_fuertes": 2,
-  "pnl_fiel_combinado_eur": 93.57,
+  "pnl_fiel_combinado_eur": 98.61,
   "tuplas": [
    {
     "k": "STREAK_MOM_5M#DOGE#5min#BUY_NO",
@@ -11,20 +11,20 @@
    },
    {
     "k": "STREAK_MOM_5M#XRP#5min#BUY_NO",
-    "pnl_fiel_eur_sin_suelo": 37.6818,
-    "n_ejecutado": 228
+    "pnl_fiel_eur_sin_suelo": 42.7234,
+    "n_ejecutado": 229
    }
   ]
  },
  "STRUCT_NO_15M": {
   "ic_bayes_familia": 0.0131,
   "n_tuplas_fuertes": 2,
-  "pnl_fiel_combinado_eur": 62.2,
+  "pnl_fiel_combinado_eur": 61.15,
   "tuplas": [
    {
     "k": "STRUCT_NO_15M#BTC#15min#BUY_NO",
-    "pnl_fiel_eur_sin_suelo": 33.0661,
-    "n_ejecutado": 1269
+    "pnl_fiel_eur_sin_suelo": 32.0161,
+    "n_ejecutado": 1270
    },
    {
     "k": "STRUCT_NO_15M#ETH#15min#BUY_NO",
@@ -34,7 +34,7 @@
   ]
  },
  "LIQUIDACIONES_5M": {
-  "ic_bayes_familia": 0.0214,
+  "ic_bayes_familia": 0.0216,
   "n_tuplas_fuertes": 2,
   "pnl_fiel_combinado_eur": 50.04,
   "tuplas": [
@@ -53,7 +53,7 @@
  "UPDOWN_GBM": {
   "ic_bayes_familia": 0.0442,
   "n_tuplas_fuertes": 2,
-  "pnl_fiel_combinado_eur": 33.3,
+  "pnl_fiel_combinado_eur": 33.28,
   "tuplas": [
    {
     "k": "UPDOWN_GBM#BTC#5min#BUY_NO",
@@ -62,20 +62,20 @@
    },
    {
     "k": "UPDOWN_GBM#BTC#15min#BUY_NO",
-    "pnl_fiel_eur_sin_suelo": 16.2991,
+    "pnl_fiel_eur_sin_suelo": 16.2816,
     "n_ejecutado": 111
    }
   ]
  },
  "MOMENTUM_IBS_5M_FADE": {
-  "ic_bayes_familia": -0.0307,
+  "ic_bayes_familia": -0.0308,
   "n_tuplas_fuertes": 1,
-  "pnl_fiel_combinado_eur": 26.09,
+  "pnl_fiel_combinado_eur": 24.62,
   "tuplas": [
    {
     "k": "MOMENTUM_IBS_5M_FADE#BTC#5min#BUY_NO",
-    "pnl_fiel_eur_sin_suelo": 26.0855,
-    "n_ejecutado": 185
+    "pnl_fiel_eur_sin_suelo": 24.6204,
+    "n_ejecutado": 186
    }
   ]
  },
@@ -92,7 +92,7 @@
   ]
  },
  "UPDOWN_GBM_15M_TARDIO": {
-  "ic_bayes_familia": -0.0283,
+  "ic_bayes_familia": -0.0284,
   "n_tuplas_fuertes": 1,
   "pnl_fiel_combinado_eur": 17.88,
   "tuplas": [
