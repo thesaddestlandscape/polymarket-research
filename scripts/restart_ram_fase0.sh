@@ -37,7 +37,12 @@
 # arrancar (la segunda pasada sigue haciendo falta); vigiasfreq 156 MB a las
 # 11,5 h (ya no la necesita, se mantiene por simplicidad).
 #
-# Horario: 03:20 y 22:20 UTC. La de 03:20 sigue después de
+# 06-Oct (Javi: "no podemos asumir este riesgo" de 19 h sin pasada): tercera
+# pasada a las 10:20 UTC (12:20 Madrid, fuera de ventanas live) -> hueco máximo
+# 12 h, como antes; y guard_ram_fase0.py (cron */5, mismo flock) reinicia
+# observadores a cualquier hora si MemAvailable < 900 MB.
+#
+# Horario: 03:20, 10:20 y 22:20 UTC. La de 03:20 sigue después de
 # comprimir_data_historica.sh (03:00) y backup_results_csv.sh (03:05),
 # antes de la ventana horaria live de Asia
 # (04:00-05:00 UTC / 06:00-07:00 Madrid) -- franja sin trading activo
