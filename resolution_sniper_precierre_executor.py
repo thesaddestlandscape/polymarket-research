@@ -333,6 +333,21 @@ MODO_TWAP = True
 # Banda validada (asks frescos <=10 s): 5min T-45 tramo 0,25-0,65 ~+0,38 EUR/EUR (n~205);
 # 15min T-45 n=84 +0,32 (7/10 días+), con asks de <=25 s n=770 +0,46 (10/10). >=0,70: EV~0.
 ASK_TWAP_MIN, ASK_TWAP_MAX = 0.25, 0.65
+# 06-Oct (OK Javi, "ok, pero con z>=1,8"): en 15min el techo de ask sube a 0,85. Medido sobre
+# precierre_multioffset_fase0 (T-45, ask real fillable con ratio>=5x, fee 7 %, desenlace oficial
+# 100 %): 15min z>=1,8 ask[0,25-0,85) n=29, 29 cierres, 9 días, EV +0,253 EUR/EUR, IC90 por días
+# (+0,132, +0,341), sin los 2 mejores días +0,188, 8/9 días +; el tramo nuevo [0,65-0,85) n=24
+# EV +0,203 (IC90 +0,113, +0,270). [0,85-0,95) no aporta (+0,008) -> fuera. n=29 < 40: decisión
+# consciente de Javi, NO gate cumplido (18 celdas miradas para elegirla); protege el kill TWAP.
+# 5min no cambia (ahí no hay edge fuera de la banda). Memoria project_checkpoint_sesion_06oct.
+ASK_TWAP_MAX_POR_MARCO = {"5min": ASK_TWAP_MAX, "15min": 0.85}
+
+
+def _techo_precio_precierre(marco: str) -> float:
+    """Techo de precio de PRECIERRE en modo TWAP: el MISMO para la suma de profundidad
+    (_profundidad_correcta) y para el límite de la FOK (_firmar_enviar_registrar), para que el
+    gate de ratio>=5x nunca cuente niveles que la orden no puede alcanzar (/code-review 06-Oct)."""
+    return max(ASK_MAX, ASK_TWAP_MAX_POR_MARCO.get(marco, ASK_TWAP_MAX))
 TWAP_N_MIN_TICKS = 20                    # ticks mínimos en [inicio-62, inicio-3] para fiarse del TWAP de apertura
 TWAP_N_MIN_CIERRE = 10                   # ticks mínimos ya transcurridos en [fin-62, ahora] (/code-review)
 # 30-Sep (/code-review del filtro de polybolt_fallback): además de un mínimo de ticks se exige
@@ -649,7 +664,7 @@ def _guardas_precalculadas(pre) -> dict:
     return g
 
 
-def _profundidad_correcta(token_id: str, stake_eur: float) -> dict:
+def _profundidad_correcta(token_id: str, stake_eur: float, techo_max: float | None = None) -> dict:
     """Mismo cálculo que live_trade._consultar_profundidad_libro (téco =
     mejor_ask*1.05, banda real sobre el precio de entrada), pero SIN pasar
     un precio_entrada adivinado: aquí se lee el libro UNA sola vez y se
@@ -684,6 +699,8 @@ def _profundidad_correcta(token_id: str, stake_eur: float) -> dict:
         return {"ok": True, "mejor_ask": None, "profundidad_eur": 0.0, "n_niveles": len(asks),
                 "ratio_vs_stake": 0.0, "vwap_fill_estimado": None, "fill_completo_en_niveles": False}
     techo = mejor_ask * 1.05
+    if techo_max is not None:
+        techo = min(techo, techo_max)   # 06-Oct: no contar niveles por encima del límite de la FOK
     profundidad_eur = 0.0
     for lvl in asks:
         try:
@@ -927,7 +944,8 @@ def _leer(pre: _Precalculo, activo: str, ts_min: float | None = None) -> dict | 
     # por qué no se usa live_trade._consultar_profundidad_libro aquí
     # directamente (habría que pasarle un precio_entrada adivinado).
     t0 = time.perf_counter()
-    depth = _profundidad_correcta(token_id, pre.stake_ref)
+    techo_prof = _techo_precio_precierre(pre.marco) if (MODO_TWAP and ts_min is None) else None
+    depth = _profundidad_correcta(token_id, pre.stake_ref, techo_prof)
     t_lectura_ms = (time.perf_counter() - t0) * 1000
     return {"activo": activo, "direccion_implicita": dir_impl, "token_id": token_id,
             "t_lectura_ms": round(t_lectura_ms, 1), "depth": depth,
@@ -1013,10 +1031,21 @@ def _firmar_enviar_registrar(pre: "_Precalculo", m: dict, activo: str, direction
     # matar la orden, sin asumir ninguna profundidad no comprobada. Tope duro en
     # ASK_MAX (0,80): nunca comprar por encima del techo de precio que la propia
     # estrategia tiene validado como banda operativa.
-    precio_limite_fok = min(round(ask * 1.05, 4), ASK_MAX)
+    # 06-Oct: con la banda de 15min hasta 0,85 el techo fijo de 0,80 dejaría el límite POR DEBAJO
+    # del ask (FOK muerto siempre). Techo = el mayor entre ASK_MAX y el techo de banda del marco,
+    # solo para PRECIERRE en modo TWAP (NAIVE ya corta en NAIVE_ASK_MAX_OPERAR=0,80).
+    techo_fok = ASK_MAX
+    if MODO_TWAP and strategy == STRATEGY:
+        techo_fok = _techo_precio_precierre(pre.marco)
+    precio_limite_fok = min(round(ask * 1.05, 4), techo_fok)
+    if precio_limite_fok < ask:
+        # fail-closed: un límite por debajo del ask no puede casar; no se firma ni se envía
+        resultado["gate_confirmado"] = False
+        resultado["gate_motivo"] = f"techo_fok_bajo_ask={ask}>{techo_fok}"
+        return resultado
     if precio_limite_fok > ask:
         _log(f"  📈 Límite FOK ensanchado {ask:.4f}→{precio_limite_fok:.4f} "
-             f"(banda de profundidad ya verificada, techo={ASK_MAX})")
+             f"(banda de profundidad ya verificada, techo={techo_fok})")
     resultado["precio_limite_fok"] = precio_limite_fok
     t1 = time.perf_counter()
     try:
@@ -1220,7 +1249,7 @@ def _instante_critico(pre: _Precalculo, lectura: dict, n_rafaga: int, ts_end: in
     ratio = depth.get("ratio_vs_stake")
     if MODO_TWAP:
         rafaga_ok = True   # modo TWAP: cada moneda por su cuenta (lo validado es por mercado)
-        en_banda = ASK_TWAP_MIN <= ask < ASK_TWAP_MAX
+        en_banda = ASK_TWAP_MIN <= ask < ASK_TWAP_MAX_POR_MARCO.get(pre.marco, ASK_TWAP_MAX)
     else:
         rafaga_ok = n_rafaga >= MIN_MONEDAS_RAFAGA
         en_banda = pre.ask_min <= ask < ASK_MAX
@@ -1644,7 +1673,7 @@ def main() -> None:
     time.sleep(2)
     _log(f"resolution_sniper_precierre_executor arrancado -- DRY_RUN={DRY_RUN} "
          f"offset={OFFSET_S}s stake={STAKE_EUR}€ activos={ASSETS} marcos={list(MARCOS)} "
-         + (f"modo=TWAP_proy ask[{ASK_TWAP_MIN},{ASK_TWAP_MAX})" if MODO_TWAP
+         + (f"modo=TWAP_proy ask[{ASK_TWAP_MIN},{ASK_TWAP_MAX_POR_MARCO})" if MODO_TWAP
             else f"criterio=rafaga>={MIN_MONEDAS_RAFAGA} ask<{ASK_MAX}"))
     hilos = {}
     hilo_clv = None

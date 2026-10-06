@@ -45,6 +45,7 @@ VARIANTES = [  # (nombre, z_min, ask_lo, ask_hi)
     ("V3 z>=1 [0.25,0.85)", 1.0, 0.25, 0.85),
     ("V4 z>=0.5 [0.25,0.75)", 0.5, 0.25, 0.75),
     ("V5 z>=1 [0.05,0.95)", 1.0, 0.05, 0.95),
+    ("V6 z>=1.8 [0.25,0.85) (live 15m desde 06-Oct)", 1.8, 0.25, 0.85),
 ]
 OUTCOMES_CACHE = LIVE / "precierre_variantes_outcomes.json"
 
@@ -53,7 +54,11 @@ MODOS = {
                                     # 24-Sep: 0.95 era el acierto GLOBAL a T-45s; en la banda operada
                                     # (ask [0.25,0.65), filtro z>=1) el backtest da z1-1.5 81%, z>=1.5 92-100%
                                     # (n=55, 10 días) -> ~0.85. Con 0.95 alertaría en falso.
-                                    {"5min": 0.85, "15min": 0.85}),
+                                    # 06-Oct (/code-review banda 15m a 0,85): con entradas a 0,65-0,85
+                                    # el punto muerto es ~ask+fee (0,82 a ask 0,81); 0,85 dejaba pasar
+                                    # aciertos de 80-86 % que ya pierden. Medido z>=1,8 [0,65-0,85): 96 %
+                                    # (n=24) -> 0,92 (alerta <82 %). Además alerta por PnL medio <0.
+                                    {"5min": 0.85, "15min": 0.92}),
     "RESOLUTION_SNIPER_NAIVE": (LIVE / "naive_twap_desde.txt", LIVE / "naive_twap_kill.json",
                                 {"5min": 0.85}),
 }
@@ -230,6 +235,8 @@ def main() -> int:
             info["marcos"][marco] = d
             if esperado.get(marco) and n >= 20 and hit is not None and hit < esperado[marco] - 0.10:
                 alertas.append(f"⚠️ {est} {marco}: acierto real {hit:.0%} (n={n}) vs esperado {esperado[marco]:.0%}")
+            if n >= 10 and sum(pnls) / n < 0:
+                alertas.append(f"⚠️ {est} {marco}: PnL medio real {sum(pnls) / n:+.3f} €/tr < 0 (n={n}, acierto {hit:.0%})")
             if n or d["abiertos"]:
                 lineas.append(f"{est.replace('RESOLUTION_SNIPER_', '')} {marco}: n={n} acierto="
                               f"{'-' if hit is None else f'{hit:.0%}'} pnl={sum(pnls):+.2f}€ "
