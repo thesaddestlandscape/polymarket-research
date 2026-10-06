@@ -169,7 +169,9 @@ SCREEN_RESTART = {
     # DRY_RUN=False (SEGUIR#BTC#5min#grande, aprobado Javi) -- sacado de
     # "ejecdryrun" (exige DRY_RUN=True en todos sus módulos) a su propia
     # screen, dinero real, sin nice (mismo trato que ejeclive).
-    "walletmirror": f"cd {REPO} && .venv/bin/python wallet_mirror_executor_dryrun.py >> logs/wallet_mirror_executor.log 2>&1",
+    # 06-Oct (OK Javi): corría con oom_score_adj 0 -> choom -n -500 como
+    # ejeclive. Solo protección de SO, cero cambios de lógica de trading.
+    "walletmirror": f"cd {REPO} && choom -n -500 -- .venv/bin/python wallet_mirror_executor_dryrun.py >> logs/wallet_mirror_executor.log 2>&1",
     # precierre (05-Sep): resolution_sniper_precierre_executor.py, DRY_RUN=True
     # -- ejecutor de baja latencia con camino crítico propio (nunca pasa por
     # _ejecutar_orden_polymarket, ver docstring del propio módulo), presupuesto
