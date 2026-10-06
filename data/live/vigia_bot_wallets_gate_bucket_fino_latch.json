@@ -14,11 +14,11 @@
   "hi": 0.05,
   "n": 551,
   "pnl_medio": -0.6897,
-  "diff_vs_resto": -0.6431,
+  "diff_vs_resto": -0.6434,
   "p_valor": 0.0,
   "split_half_diff": [
-   -0.6142,
-   -0.6719
+   -0.6146,
+   -0.6722
   ],
   "split_half_ok": true,
   "pnl_medio_loo": -0.7456,
@@ -38,35 +38,11 @@
   "veredicto": "malo_confirmado"
  },
  "DISPERSO#BTC#5min": {
-  "n_dias": 27,
-  "pnl_sin_mejores_dias": -0.3744,
-  "robusto_dias": false,
-  "lo": 0.08,
-  "hi": 0.13,
-  "n": 611,
-  "pnl_medio": -0.3058,
-  "diff_vs_resto": -0.2473,
-  "p_valor": 0.03,
-  "split_half_diff": [
-   -0.1231,
-   -0.3711
-  ],
-  "split_half_ok": true,
-  "pnl_medio_loo": -0.3239,
-  "robusto_loo": true,
-  "ci90_bootstrap": [
-   -0.464,
-   -0.1332
-  ],
-  "robusto_bootstrap": true,
-  "n_posiciones_buscadas": 96,
-  "g_kelly_f10": -0.05248,
-  "veredicto_crudo_hoy": "malo_confirmado",
+  "veredicto": "sin_concluir",
   "historial_crudo": [
    "malo_confirmado"
   ],
-  "fecha_historial": "2026-10-06",
-  "veredicto": "malo_confirmado"
+  "fecha_historial": "2026-10-06"
  },
  "DISPERSO#SOL#5min": {
   "n_dias": 26,
@@ -76,11 +52,11 @@
   "hi": 0.06,
   "n": 201,
   "pnl_medio": -0.884,
-  "diff_vs_resto": -0.8262,
+  "diff_vs_resto": -0.8259,
   "p_valor": 0.0,
   "split_half_diff": [
-   -0.709,
-   -0.9422
+   -0.7088,
+   -0.942
   ],
   "split_half_ok": true,
   "pnl_medio_loo": -1.0,
@@ -107,11 +83,11 @@
   "hi": 0.05,
   "n": 333,
   "pnl_medio": -0.7666,
-  "diff_vs_resto": -0.7182,
+  "diff_vs_resto": -0.718,
   "p_valor": 0.0,
   "split_half_diff": [
-   -0.4835,
-   -0.9516
+   -0.4832,
+   -0.9513
   ],
   "split_half_ok": true,
   "pnl_medio_loo": -0.8595,
@@ -138,11 +114,11 @@
   "hi": 0.07,
   "n": 389,
   "pnl_medio": -0.676,
-  "diff_vs_resto": -0.6148,
-  "p_valor": 0.0235,
+  "diff_vs_resto": -0.6155,
+  "p_valor": 0.018,
   "split_half_diff": [
-   -0.5698,
-   -0.6595
+   -0.5705,
+   -0.6602
   ],
   "split_half_ok": true,
   "pnl_medio_loo": -0.7353,
@@ -169,11 +145,11 @@
   "hi": 0.05,
   "n": 192,
   "pnl_medio": -0.7167,
-  "diff_vs_resto": -0.6572,
+  "diff_vs_resto": -0.6583,
   "p_valor": 0.0005,
   "split_half_diff": [
-   -0.3739,
-   -0.9405
+   -0.375,
+   -0.9416
   ],
   "split_half_ok": true,
   "pnl_medio_loo": -0.8779,
@@ -208,7 +184,7 @@
   "n": 66,
   "pnl_medio": -0.5617,
   "diff_vs_resto": -0.538,
-  "p_valor": 0.041,
+  "p_valor": 0.0485,
   "split_half_diff": [
    -0.0997,
    -0.9763
@@ -238,11 +214,11 @@
   "hi": 0.05,
   "n": 55,
   "pnl_medio": -1.0,
-  "diff_vs_resto": -0.9464,
+  "diff_vs_resto": -0.9463,
   "p_valor": 0.0,
   "split_half_diff": [
-   -0.9464,
-   -0.9464
+   -0.9463,
+   -0.9463
   ],
   "split_half_ok": true,
   "pnl_medio_loo": -1.0,
@@ -269,11 +245,11 @@
   "hi": 0.1,
   "n": 152,
   "pnl_medio": -0.6408,
-  "diff_vs_resto": -0.5766,
+  "diff_vs_resto": -0.5769,
   "p_valor": 0.0,
   "split_half_diff": [
-   -0.5081,
-   -0.645
+   -0.5085,
+   -0.6454
   ],
   "split_half_ok": true,
   "pnl_medio_loo": -0.7159,
@@ -300,11 +276,11 @@
   "hi": 0.05,
   "n": 201,
   "pnl_medio": -0.8454,
-  "diff_vs_resto": -0.8538,
-  "p_valor": 0.0035,
+  "diff_vs_resto": -0.8567,
+  "p_valor": 0.004,
   "split_half_diff": [
-   -0.6976,
-   -1.0083
+   -0.7006,
+   -1.0113
   ],
   "split_half_ok": true,
   "pnl_medio_loo": -1.0,
@@ -331,11 +307,11 @@
   "hi": 0.05,
   "n": 265,
   "pnl_medio": -0.5895,
-  "diff_vs_resto": -0.506,
-  "p_valor": 0.0035,
+  "diff_vs_resto": -0.5059,
+  "p_valor": 0.0045,
   "split_half_diff": [
-   -0.2691,
-   -0.7412
+   -0.2689,
+   -0.741
   ],
   "split_half_ok": true,
   "pnl_medio_loo": -0.7056,
@@ -369,8 +345,8 @@
   "hi": 0.14,
   "n": 70,
   "pnl_medio": -0.5415,
-  "diff_vs_resto": -0.4653,
-  "p_valor": 0.0025,
+  "diff_vs_resto": -0.4654,
+  "p_valor": 0.0035,
   "split_half_diff": [
    -0.4367,
    -0.494
@@ -431,11 +407,11 @@
   "hi": 0.2,
   "n": 118,
   "pnl_medio": -0.5395,
-  "diff_vs_resto": -0.5101,
-  "p_valor": 0.0215,
+  "diff_vs_resto": -0.5097,
+  "p_valor": 0.021,
   "split_half_diff": [
-   -0.6093,
-   -0.411
+   -0.6088,
+   -0.4105
   ],
   "split_half_ok": true,
   "pnl_medio_loo": -0.5859,
