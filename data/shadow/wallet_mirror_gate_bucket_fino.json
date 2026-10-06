@@ -7,11 +7,11 @@
     "hi": 0.38,
     "n": 81,
     "pnl_medio": -0.4614,
-    "diff_vs_resto": -0.4638,
-    "p_valor": 0.0,
+    "diff_vs_resto": -0.4633,
+    "p_valor": 0.0005,
     "split_half_diff": [
-      -0.5987,
-      -0.3322
+      -0.5982,
+      -0.3317
     ],
     "split_half_ok": true,
     "pnl_medio_loo": -0.4907,
@@ -37,11 +37,11 @@
     "hi": 0.29,
     "n": 82,
     "pnl_medio": -0.7329,
-    "diff_vs_resto": -0.6127,
+    "diff_vs_resto": -0.6139,
     "p_valor": 0.0,
     "split_half_diff": [
-      -0.6092,
-      -0.6162
+      -0.6104,
+      -0.6173
     ],
     "split_half_ok": true,
     "pnl_medio_loo": -0.7764,
@@ -289,24 +289,24 @@
   },
   "SEGUIR#BTC#5min#0": {
     "n_dias": 34,
-    "pnl_sin_mejores_dias": -0.7637,
+    "pnl_sin_mejores_dias": -0.7638,
     "robusto_dias": false,
     "lo": 0.0,
     "hi": 0.05,
-    "n": 4499,
-    "pnl_medio": -0.5961,
-    "diff_vs_resto": -0.5805,
+    "n": 4502,
+    "pnl_medio": -0.5964,
+    "diff_vs_resto": -0.5804,
     "p_valor": 0.0,
     "split_half_diff": [
-      -0.6907,
-      -0.4704
+      -0.6906,
+      -0.4702
     ],
     "split_half_ok": true,
-    "pnl_medio_loo": -0.6167,
+    "pnl_medio_loo": -0.617,
     "robusto_loo": true,
     "ci90_bootstrap": [
-      -0.6979,
-      -0.4806
+      -0.6999,
+      -0.4826
     ],
     "robusto_bootstrap": true,
     "n_posiciones_buscadas": 96,
@@ -396,34 +396,11 @@
     "fecha_historial": null
   },
   "SEGUIR#XRP#5min#0": {
-    "n_dias": 12,
-    "pnl_sin_mejores_dias": -0.5,
-    "robusto_dias": false,
-    "lo": 0.51,
-    "hi": 0.56,
-    "n": 41,
-    "pnl_medio": -0.3813,
-    "diff_vs_resto": -0.4317,
-    "p_valor": 0.012,
-    "split_half_diff": [
-      -0.6852,
-      -0.1902
-    ],
-    "split_half_ok": true,
-    "pnl_medio_loo": -0.4131,
-    "robusto_loo": true,
-    "ci90_bootstrap": [
-      -0.6023,
-      -0.1579
-    ],
-    "robusto_bootstrap": true,
-    "n_posiciones_buscadas": 40,
-    "veredicto_crudo_hoy": "malo_confirmado",
+    "veredicto": "sin_concluir",
     "historial_crudo": [
       "malo_confirmado"
     ],
-    "fecha_historial": "2026-10-06",
-    "veredicto": "malo_confirmado"
+    "fecha_historial": "2026-10-06"
   },
   "SEGUIR#ETH#15min#1": {
     "veredicto": "sin_concluir",
