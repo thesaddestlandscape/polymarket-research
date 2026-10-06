@@ -179,7 +179,10 @@ SCREEN_RESTART = {
     # para validar antes de plantear DRY_RUN=False. Sin nice -- aunque hoy no
     # mueve dinero, su propósito es medir el peor caso de latencia real, y
     # nice reduciría prioridad justo en el instante que importa medir bien.
-    "precierre": f"cd {REPO} && .venv/bin/python resolution_sniper_precierre_executor.py >> logs/resolution_sniper_precierre_executor.log 2>&1",
+    # 06-Oct (OK Javi): hoy mueve dinero real (PRECIERRE/NAIVE live desde
+    # 24-Sep) y corría con oom_score_adj 0 -> choom -n -500 como ejeclive.
+    # Solo protección de SO, cero cambios de lógica de trading.
+    "precierre": f"cd {REPO} && choom -n -500 -- .venv/bin/python resolution_sniper_precierre_executor.py >> logs/resolution_sniper_precierre_executor.log 2>&1",
     # curvacierre (09-Sep): resolution_sniper_precierre_curva_cierre_fase0.py,
     # puro observador (nunca firma ni envía nada) -- nice sí aplica aquí,
     # a diferencia de precierre arriba (que sí mide latencia real de firma).
