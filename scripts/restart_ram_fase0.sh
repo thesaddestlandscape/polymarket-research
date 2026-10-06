@@ -29,7 +29,15 @@
 # mecanismo, mismas 2 screens, sin tocar dinero real. Sigue sin ser el
 # fix de fondo -- ver rediseño pendiente abajo.
 #
-# Horario: 03:20 y 15:20 UTC. La de 03:20 sigue después de
+# 06-Oct (OK Javi): la segunda pasada pasa de 15:20 a 22:20 UTC. A las 15:20
+# reiniciar observadores cortaba el histórico ms en memoria (libro_estado_ws,
+# registro maker_ms) en pleno horario USA. 22:20 UTC = 18:20 ET (bolsa USA
+# cerrada) y 00:20 Madrid, en el hueco entre las ventanas live L-V (fin 23:00,
+# siguiente 01:00). Medido ese día: observadores 973 MB a las 3 h de
+# arrancar (la segunda pasada sigue haciendo falta); vigiasfreq 156 MB a las
+# 11,5 h (ya no la necesita, se mantiene por simplicidad).
+#
+# Horario: 03:20 y 22:20 UTC. La de 03:20 sigue después de
 # comprimir_data_historica.sh (03:00) y backup_results_csv.sh (03:05),
 # antes de la ventana horaria live de Asia
 # (04:00-05:00 UTC / 06:00-07:00 Madrid) -- franja sin trading activo
