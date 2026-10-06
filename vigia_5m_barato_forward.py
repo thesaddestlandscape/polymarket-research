@@ -14,9 +14,10 @@ HIPÓTESIS CONGELADA (cambiarla = nueva VERSION + nuevo periodo fuera de muestra
   seguidos (re-armado); el siguiente es otro event_id. Métrica OFICIAL = PRIMER evento de cada (cierre, moneda).
   EJECUCIÓN VIRTUAL: orden de compra a precio límite p_lim = mayor precio de rejilla (0,01) con
   bid15(t0) - p - fee(p) >= 0,05; llega a t0 + L (oficial L = 215 ms; diagnóstico 150..300 y jitter). Se llena contra
-  el NIVEL 1 del libro del 5m a t0+L (último cambio con recepción <= t0+L): si ask <= p_lim, acciones = min(objetivo,
-  tamaño del nivel 1) al precio de ese ask. El registro solo graba el nivel 1: lo que no cabe en él es NO LLENADO
-  (nunca se supone un precio peor ni mejor). STAKE oficial 2 EUR -> acciones objetivo = max(5, 2/ask0).
+  el libro del 5m a t0+L (último cambio con recepción <= t0+L). v2: con las filas l (ask niveles 1-3) se recorren los
+  niveles con precio <= p_lim hasta el objetivo -> precio VWAP y acciones por nivel; lo que no cabe en los 3 niveles
+  es NO LLENADO. Sin filas l (antes del 06-Oct 11:54Z o huecos) se usa solo el nivel 1 (q) y se marca fuente=l1.
+  STAKE oficial 2 EUR -> acciones objetivo = max(5, 2/ask0).
   PnL = acciones_llenas x (pago oficial - precio - fee(precio)). Desenlace OFICIAL por id de mercado (gamma closed).
   Sin datos para reconstruir el ask a t0+L -> clase UNKNOWN (ni gana ni pierde).
 BENCHMARKS (misma maquinaria): B2 = regla espejo en el 15m (comprar el 15m del lado contrario a s cuando
@@ -47,7 +48,7 @@ SALIDA = DL / "vigia_5m_barato"
 PRICES = REPO / "data" / "prices"
 
 CONFIG = {
-    "version": 1,
+    "version": 3,
     "umbral_margen_neto": 0.05,
     "fee_tomador": 0.07,
     "stake_eur": 2.0,
@@ -63,6 +64,13 @@ CONFIG = {
     "gap_min_bps": 1.0,
     "control_cada_ms": 10000,
     "congelado_utc": "2026-10-06T12:00:00+00:00",
+    # v2 (06-Oct 12:05Z, antes de procesar ningún dato OOS de v1 -> v1 anulada sin observaciones): ejecución multinivel
+    # con las filas l del registro (ask niveles 1-3 de los 5m que cierran con un 15m, desde 06-Oct 11:54Z).
+    "niveles_libro": 3,
+    # v3 (06-Oct ~12:35Z, antes de datos OOS procesados por el cron -> v2 anulada sin observaciones): guarda de VALIDEZ:
+    # sin señal si cualquiera de las dos patas tiene el libro CRUZADO (bid > ask) en t0 (bid no real, p. ej. mensajes
+    # perdidos). El evento BTC_1791239400 del 05-Oct (+17,75 €/€) salió de un 15m cruzado (bid 0,11 > ask 0,10).
+    "descartar_libro_cruzado": True,
 }
 TRAMOS_PRECIO = [(0.0, 0.1), (0.1, 0.2), (0.2, 0.3), (0.3, 0.4), (0.4, 0.5), (0.5, 0.6), (0.6, 0.7), (0.7, 0.8),
                  (0.8, 0.9), (0.9, 1.0)]
@@ -182,25 +190,42 @@ def rasgos_libro(L, T, t, pref):
     return f
 
 
-def ejecutar(L, T, t0, lat, p_lim, acc_obj):
-    """Ejecución virtual a t0+lat contra el nivel 1 del 5m. -> dict con precio, acciones, clase causal."""
+def ejecutar(L, T, t0, lat, p_lim, acc_obj, N=None):
+    """Ejecución virtual a t0+lat contra el libro del 5m. N = serie de niveles ask (filas l): (t_recv, ((p, s), ...)).
+    -> dict con precio (VWAP), acciones, acciones por nivel, disponible <= p_lim, fuente y clase causal."""
     te = t0 + lat
     tq, q = L.en(te)
     if q is None or tq is None or te - tq > 60_000:
-        return {"clase": "UNKNOWN", "precio": None, "acciones": 0.0, "disp": None}
-    ask, asz = q[1], q[3]
+        return {"clase": "UNKNOWN", "precio": None, "acciones": 0.0, "disp": None, "niveles": "", "fuente": None}
     _, q0 = L.en(t0)
     ask0 = q0[1] if q0 else None
-    if ask is not None and p_lim is not None and ask <= p_lim + 1e-9:
-        acc = min(acc_obj, asz)
-        clase = "A_sigue_barato" if ask0 is not None and ask <= ask0 + 1e-9 else "D_otro_nivel_barato"
-        if acc < acc_obj:
+    niv, fuente = None, "l1"
+    if N is not None and N.t:
+        tn, n = N.en(te)
+        if n is not None and te - tn <= 60_000 and n and q[1] is not None and abs(n[0][0] - q[1]) < 1e-9:
+            niv, fuente = n, "l3"          # la fila l coincide con el nivel 1 vigente: se usan sus 3 niveles
+    if niv is None:
+        niv = ((q[1], q[3]),) if q[1] is not None else ()
+    ask = q[1]
+    if p_lim is not None and niv and niv[0][0] <= p_lim + 1e-9:
+        falta, coste, por = acc_obj, 0.0, []
+        disp = sum(sz for p, sz in niv if p <= p_lim + 1e-9)
+        for p, sz in niv:
+            if p > p_lim + 1e-9 or falta <= 0:
+                break
+            x = min(falta, sz)
+            por.append(round(x, 3))
+            coste += x * p
+            falta -= x
+        acc = acc_obj - falta
+        clase = "A_sigue_barato" if ask0 is not None and niv[0][0] <= ask0 + 1e-9 else "D_otro_nivel_barato"
+        if acc < acc_obj - 1e-9:
             clase += "_parcial"
-        return {"clase": clase, "precio": ask, "acciones": acc, "disp": asz}
-    # no ejecutable: ¿consumido o cancelado el nivel original?
+        return {"clase": clase, "precio": round(coste / acc, 5), "acciones": acc, "disp": disp,
+                "niveles": "/".join(map(str, por)), "fuente": fuente}
     consumido = any(t0 <= x[0] <= te and ask0 is not None and abs(x[1] - ask0) < 1e-9 for x in T)
     return {"clase": "C_consumido" if consumido else "B_cancelado_o_repreciado", "precio": ask, "acciones": 0.0,
-            "disp": asz}
+            "disp": 0.0, "niveles": "", "fuente": fuente}
 
 
 def procesar(dia):
@@ -214,6 +239,7 @@ def procesar(dia):
     tw = twap_refs([(d - timedelta(days=1)).isoformat(), dia])
     meta, idx = {}, collections.defaultdict(dict)
     libros, trades = collections.defaultdict(Libro), collections.defaultdict(list)
+    niveles = collections.defaultdict(Libro)
     binance = collections.defaultdict(list)
     calidad = collections.Counter()
     ult_t = {}
@@ -266,6 +292,16 @@ def procesar(dia):
                         trades[c[2]].append((tr, float(c[3]), c[4], float(c[5])))
                     except (ValueError, IndexError):
                         calidad["t_ilegible"] += 1
+                elif tp == "l":
+                    m = meta.get(c[2])
+                    if not m or not (t_lo <= m[3] <= t_hi + 900):
+                        continue
+                    try:
+                        tr = int(c[9])
+                        nv = tuple((float(c[i]), float(c[i + 1])) for i in (3, 5, 7) if c[i] not in ("", "None"))
+                        niveles[c[2]].add(tr, nv)
+                    except (ValueError, IndexError):
+                        calidad["l_ilegible"] += 1
                 elif tp == "x":
                     try:
                         binance[c[2]].append((int(c[7]), float(c[3]), float(c[4])))
@@ -273,7 +309,7 @@ def procesar(dia):
                         calidad["x_ilegible"] += 1
         except (EOFError, OSError) as e:
             calidad[f"fichero_truncado:{Path(f).name}"] += 1
-    for L in libros.values():
+    for L in list(libros.values()) + list(niveles.values()):
         o = sorted(range(len(L.t)), key=L.t.__getitem__)
         L.t = [L.t[i] for i in o]
         L.v = [L.v[i] for i in o]
@@ -338,6 +374,10 @@ def procesar(dia):
                 _, qo = Lo.en(t)
                 senal = (qc and qo and qc[1] is not None and qo[0] is not None and
                          margen(qo[0], qc[1]) >= CONFIG["umbral_margen_neto"])
+                if senal and CONFIG["descartar_libro_cruzado"] and (
+                        (qo[1] is not None and qo[0] > qo[1]) or (qc[0] is not None and qc[0] > qc[1])):
+                    calidad["senal_descartada_libro_cruzado"] += 1
+                    senal = False
                 if senal:
                     ult_senal = t
                     if activo:
@@ -360,16 +400,18 @@ def procesar(dia):
                     fila.update(rasgos_libro(Lo, trades.get(tok_o, []), t, "o"))
                     fila.update(bin_estado(mo, t))
                     for lat in CONFIG["latencias_diagnostico_ms"]:
-                        ex = ejecutar(Lc, trades.get(tok_c, []), t, lat, plim, acc_obj)
+                        ex = ejecutar(Lc, trades.get(tok_c, []), t, lat, plim, acc_obj, niveles.get(tok_c))
                         fila[f"L{lat}_clase"], fila[f"L{lat}_precio"] = ex["clase"], ex["precio"]
                         fila[f"L{lat}_acciones"], fila[f"L{lat}_disp_nivel1"] = round(ex["acciones"], 3), ex["disp"]
+                        fila[f"L{lat}_acciones_por_nivel"], fila[f"L{lat}_fuente_libro"] = ex["niveles"], ex["fuente"]
+                        fila[f"L{lat}_slippage_vs_t0"] = (round(ex["precio"] - ask0, 5) if ex["acciones"] > 0 else None)
                     lj = rng.choice(jit)
-                    ex = ejecutar(Lc, trades.get(tok_c, []), t, lj, plim, acc_obj)
+                    ex = ejecutar(Lc, trades.get(tok_c, []), t, lj, plim, acc_obj, niveles.get(tok_c))
                     fila["jitter_ms"], fila["jitter_clase"], fila["jitter_precio"] = lj, ex["clase"], ex["precio"]
                     fila["jitter_acciones"] = round(ex["acciones"], 3)
                     for sk in STAKES_CAP:
                         ex = ejecutar(Lc, trades.get(tok_c, []), t, CONFIG["latencia_oficial_ms"], plim,
-                                      max(CONFIG["min_acciones"], sk / ask0))
+                                      max(CONFIG["min_acciones"], sk / ask0), niveles.get(tok_c))
                         fila[f"cap{sk}_acciones"], fila[f"cap{sk}_precio"] = round(ex["acciones"], 3), ex["precio"]
                     eventos.append(fila)
                 elif activo and ult_senal is not None and t - ult_senal >= CONFIG["rearme_ms"]:
@@ -384,7 +426,7 @@ def procesar(dia):
                     continue
                 ask0 = qc[1]
                 acc_obj = max(CONFIG["min_acciones"], CONFIG["stake_eur"] / ask0)
-                ex = ejecutar(Lc, trades.get(tok_c, []), tc, CONFIG["latencia_oficial_ms"], 0.99, acc_obj)
+                ex = ejecutar(Lc, trades.get(tok_c, []), tc, CONFIG["latencia_oficial_ms"], 0.99, acc_obj, niveles.get(tok_c))
                 controles.append({"moneda": mo, "cierre": cie, "market_compra": meta[tok_c][2],
                                   "lado": "Up" if s == "YES" else "Down", "t": tc, "ask0": ask0,
                                   "margen_neto": margen(qo[0], ask0), "clase": ex["clase"], "precio": ex["precio"],

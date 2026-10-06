@@ -76,6 +76,7 @@ BINANCE_WS = "wss://stream.binance.com:9443/stream?streams=" + "/".join(
 _LIB = {}                  # (hijo) token -> {"bids": {p: s}, "asks": {p: s}}
 _ULT = {}                  # (hijo) token -> t_ms del último registro (muestreo mínimo entre registros)
 _TOPQ = {}                 # (hijo) token -> último top registrado sin muestrear (registro q)
+_L2Q = {}                  # (hijo) token -> últimos 3 niveles ask registrados (registro l)
 _T_RECV = [0]              # (hijo) hora local (ms) de recepción del mensaje WS en curso (registro q/t, auditoría de reloj)
 _HIST = {}                 # token -> deque[(t_ms, bb, ba, i1, i5, i10, dask5, bid_size, ask_size)]
 _LOCK = threading.Lock()
@@ -365,6 +366,13 @@ def _aplicar(msg, salida):
                 if _TOPQ.get(tk) != top:                # precio O tamaño del top (cancelación vs relleno; ~1 GB/día)
                     _TOPQ[tk] = top
                     _REGISTRO.put(f"q,{t_ev},{tk},{top[0]},{top[1]},{top[2]},{top[3]},{_T_RECV[0]}\n")
+                cie = _REGISTRO.l2.get(tk)
+                if cie is not None and (cie - 305) * 1000 <= t_ev <= cie * 1000:
+                    niv = tuple(sorted((p, s) for p, s in L["asks"].items() if s > 0)[:3])
+                    if _L2Q.get(tk) != niv:              # l = ask nivel 1..3 (precio, tamaño) + recepción
+                        _L2Q[tk] = niv
+                        cols = [str(x) for ps in niv for x in ps] + [""] * (6 - 2 * len(niv))
+                        _REGISTRO.put(f"l,{t_ev},{tk},{','.join(cols)},{_T_RECV[0]}\n")
         for tk in tocados:
             if t_ev - _ULT.get(tk, 0) >= MUESTREO_MS:   # el libro se actualiza siempre; se muestrea el histórico
                 _ULT[tk] = t_ev
@@ -418,6 +426,9 @@ class _Registro:
         self.q = queue.Queue(maxsize=200000)
         self.descartes = 0
         self.vistos = set()
+        # 06-Oct (OK Javi): niveles ask 1-3 (fila l) SOLO de los 5m que cierran con un 15m y SOLO en su último tramo,
+        # para que vigia_5m_barato_forward.py reconstruya el VWAP multinivel. token -> cierre (epoch s)
+        self.l2 = {}
         threading.Thread(target=self._loop, daemon=True, name="registro_ms").start()
 
     def put(self, linea):
@@ -428,6 +439,13 @@ class _Registro:
 
     def meta(self, meta):
         for t, (a, m, mid, fin, lado) in meta.items():
+            if m == "5min" and t not in self.l2:
+                try:
+                    cie = int(datetime.fromisoformat(str(fin)).timestamp())
+                    if cie % 900 == 0:
+                        self.l2[t] = cie
+                except (TypeError, ValueError):
+                    pass
             if t not in self.vistos:
                 self.vistos.add(t)
                 self.put(f"k,{int(time.time() * 1000)},{t},{a},{m},{mid},{fin},{lado}\n")
