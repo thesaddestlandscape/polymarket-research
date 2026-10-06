@@ -51,7 +51,7 @@ def concentracion(e):
 
 
 def evaluar(U, pred, thr, mask, etiqueta, pen=True):
-    sel = U[mask & (pred >= thr)].copy()
+    sel = U[mask & (pred >= thr) & U["e"].notna().values].copy()   # solo unidades con ask ejecutable
     sel = sel.sort_values("t").drop_duplicates(["mkt", "lado", "minuto"])
     if len(sel) < 5:
         return f"{etiqueta}: n={len(sel)}"
@@ -96,7 +96,7 @@ def bloque_ms(U, feats, nombre):
         md.fit(U.loc[mm, feats].astype(float), U.loc[mm, "e"])
         pr = md.predict(U[feats].astype(float))
         thr = np.quantile(pr[(Dm & (U["act"] != act)).values], 0.95)
-        sel = U[(Vm & (U["act"] == act)).values & (pr >= thr)].sort_values("t").drop_duplicates(["mkt", "lado", "minuto"])
+        sel = U[(Vm & (U["act"] == act) & U["e"].notna()).values & (pr >= thr)].sort_values("t").drop_duplicates(["mkt", "lado", "minuto"])
         if len(sel):
             tot_e += sel.e.sum()
             tot_r += sel.r.sum()
@@ -144,7 +144,7 @@ def main():
     mdl, pred = bloque_ms(U, feats, "ESCALA ms (+215 ms exacto, stake 2 €)")
     # capacidad de la regla top 5 % en VALID
     thr = np.quantile(pred[(U.per == "DISC").values], 0.95)
-    sel = U[(U.per == "VALID").values & (pred >= thr)].sort_values("t").drop_duplicates(["mkt", "lado", "minuto"])
+    sel = U[(U.per == "VALID").values & (pred >= thr) & U["e"].notna().values].sort_values("t").drop_duplicates(["mkt", "lado", "minuto"])
     caps = []
     for S in STAKES:
         e, r = euros(sel["ask"].values, sel["sz"].values, sel["win"].values, S)

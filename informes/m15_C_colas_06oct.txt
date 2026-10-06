@@ -1,0 +1,27 @@
+
+=== ESCALA ms (+215 ms exacto, stake 2 €): unidades DISC 383948 VALID 229818 | rasgos 17
+Concentración retrospectiva (DISC+VALID): n=570688 € total -30221.9 € positivo +517985.4 | top 1% (5706 uds): 25% del € positivo, media +22.870 | top 5% (28534 uds): 52% del € positivo, media +9.447 | top 10% (57068 uds): 69% del € positivo, media +6.228
+  VALID top 1% predicho: n=212 merc=90 € +201.0 EV/€ +0.510 IC90 bloques (-0.303,+1.443) | sin mejor bloque +0.099 sin top1% +0.153 sin top5% -0.492 sin BTC +0.467
+     PLACEBO top 1%: n=785 merc=141 € +319.5 EV/€ +0.259 IC90 bloques (-0.228,+0.799) | sin mejor bloque +0.091 sin top1% -0.064 sin top5% -0.628 sin BTC +0.241
+     INVERSIÓN (peor 1%): n=131 merc=77 € +153.2 EV/€ +0.567 IC90 bloques (-0.466,+1.757) | sin mejor bloque +0.036 sin top1% +0.206 sin top5% -0.806 sin BTC +0.354
+  VALID top 5% predicho: n=1012 merc=142 € +121.3 EV/€ +0.066 IC90 bloques (-0.254,+0.415) | sin mejor bloque -0.043 sin top1% -0.131 sin top5% -0.475 sin BTC +0.043
+     PLACEBO top 5%: n=1825 merc=144 € +190.2 EV/€ +0.057 IC90 bloques (-0.210,+0.353) | sin mejor bloque -0.040 sin top1% -0.174 sin top5% -0.436 sin BTC +0.026
+     INVERSIÓN (peor 5%): n=458 merc=119 € +247.5 EV/€ +0.268 IC90 bloques (-0.374,+0.990) | sin mejor bloque +0.013 sin top1% +0.007 sin top5% -0.600 sin BTC +0.188
+  VALID top 10% predicho: n=1655 merc=144 € -31.9 EV/€ -0.010 IC90 bloques (-0.233,+0.243) | sin mejor bloque -0.092 sin top1% -0.183 sin top5% -0.420 sin BTC -0.034
+     PLACEBO top 10%: n=2392 merc=144 € +38.3 EV/€ +0.009 IC90 bloques (-0.182,+0.219) | sin mejor bloque -0.062 sin top1% -0.181 sin top5% -0.391 sin BTC -0.015
+     INVERSIÓN (peor 10%): n=900 merc=144 € +57.6 EV/€ +0.033 IC90 bloques (-0.329,+0.424) | sin mejor bloque -0.104 sin top1% -0.215 sin top5% -0.553 sin BTC -0.019
+  LOMO top 5 %: EV/€ en las monedas dejadas fuera +0.111, monedas positivas 3/6
+  capacidad top 5 % VALID: 0.5€:+45.2€ (+0.087/€) 1€:+83.6€ (+0.083/€) 2€:+121.3€ (+0.066/€) 5€:+157.6€ (+0.042/€) 10€:+302.8€ (+0.051/€) 25€:+163.5€ (+0.016/€) 50€:-674.9€ (-0.050/€) 100€:-1599.0€ (-0.093/€)
+
+=== ESCALA MES (cota pesimista, stake 2 €; 'VALID' = PRUEBA 30-Sep..05-Oct, bloque = DÍA): unidades DISC 256394 VALID 124118 | rasgos 15
+Concentración retrospectiva (DISC+VALID): n=329188 € total -63487.5 € positivo +293872.9 | top 1% (3291 uds): 27% del € positivo, media +23.709 | top 5% (16459 uds): 53% del € positivo, media +9.503 | top 10% (32918 uds): 69% del € positivo, media +6.204
+  VALID top 1% predicho: n=516 merc=382 € -546.7 EV/€ -0.498 IC90 bloques (-0.751,-0.173) | sin mejor bloque -0.589 sin top1% -0.795 sin top5% -0.954 sin BTC -0.471
+     PLACEBO top 1%: n=806 merc=692 € -643.9 EV/€ -0.377 IC90 bloques (-0.584,-0.152) | sin mejor bloque -0.473 sin top1% -0.630 sin top5% -0.898 sin BTC -0.435
+     INVERSIÓN (peor 1%): n=150 merc=136 € -88.5 EV/€ -0.276 IC90 bloques (-1.000,+0.617) | sin mejor bloque -0.816 sin top1% -0.843 sin top5% -1.000 sin BTC -0.246
+  VALID top 5% predicho: n=3073 merc=1677 € -1860.0 EV/€ -0.288 IC90 bloques (-0.439,-0.110) | sin mejor bloque -0.357 sin top1% -0.495 sin top5% -0.704 sin BTC -0.327
+     PLACEBO top 5%: n=4387 merc=2394 € -1444.7 EV/€ -0.158 IC90 bloques (-0.265,-0.035) | sin mejor bloque -0.215 sin top1% -0.371 sin top5% -0.584 sin BTC -0.184
+     INVERSIÓN (peor 5%): n=2186 merc=1414 € -1488.7 EV/€ -0.319 IC90 bloques (-0.522,-0.146) | sin mejor bloque -0.399 sin top1% -0.719 sin top5% -1.000 sin BTC -0.327
+  VALID top 10% predicho: n=17267 merc=3269 € -2227.0 EV/€ -0.063 IC90 bloques (-0.084,-0.043) | sin mejor bloque -0.070 sin top1% -0.150 sin top5% -0.197 sin BTC -0.072
+     PLACEBO top 10%: n=17199 merc=3362 € -2469.8 EV/€ -0.070 IC90 bloques (-0.092,-0.047) | sin mejor bloque -0.081 sin top1% -0.172 sin top5% -0.233 sin BTC -0.078
+     INVERSIÓN (peor 10%): n=6428 merc=2660 € -4077.5 EV/€ -0.298 IC90 bloques (-0.461,-0.137) | sin mejor bloque -0.374 sin top1% -0.620 sin top5% -0.965 sin BTC -0.308
+  LOMO top 5 %: EV/€ en las monedas dejadas fuera -0.132, monedas positivas 0/6
