@@ -1,0 +1,23 @@
+umbrales DISC BTC: Binance 1 s P90 1.29 bps P99 3.26 | Chainlink tick P90 0.28 bps
+umbrales DISC ETH: Binance 1 s P90 5.09 bps P99 45.58 | Chainlink tick P90 0.36 bps
+umbrales DISC SOL: Binance 1 s P90 2.48 bps P99 10.77 | Chainlink tick P90 0.45 bps
+umbrales DISC XRP: Binance 1 s P90 2.00 bps P99 5.99 | Chainlink tick P90 0.57 bps
+umbrales DISC DOGE: Binance 1 s P90 4.17 bps P99 21.22 | Chainlink tick P90 0.65 bps
+umbrales DISC BNB: Binance 1 s P90 1.28 bps P99 5.22 | Chainlink tick P90 0.36 bps
+
+política          L  SH per   | merc    acc  $/merc   PnL/€  IC90 cierres $/merc sin mejor cierre | vs KEEP $/merc               IC90 | por moneda $/merc
+CANCEL_CL+BN_P90  150   5 DISC  |  240  17460  -1.502  -0.040 ( -2.183, -0.809)   -1.624 |         +3.491 ( +2.972, +3.947) | BNB:-2.58 BTC:-0.16 DOGE:-2.02 ETH:-0.22 SOL:-2.13 XRP:-1.89
+CANCEL_CL+BN_P90  150   5 FINAL |  163  11115  -0.960  -0.028 ( -1.688, -0.212)   -1.140 |         +3.095 ( +2.434, +3.749) | BNB:-2.05 BTC:+0.24 DOGE:+0.37 ETH:-1.14 SOL:-2.09 XRP:-1.08
+CANCEL_CL+BN_P90  150   5 VALID |  144   9900  -0.431  -0.012 ( -1.288, +0.510)   -0.688 |         +4.016 ( +3.349, +4.703) | BNB:+0.01 BTC:+0.36 DOGE:-1.06 ETH:-0.86 SOL:-0.28 XRP:-0.76
+CANCEL_CL+BN_P90  250   5 DISC  |  240  17535  -1.453  -0.039 ( -2.172, -0.766)   -1.578 |         +3.539 ( +3.024, +4.030) | BNB:-2.43 BTC:-0.15 DOGE:-1.97 ETH:-0.08 SOL:-2.19 XRP:-1.91
+CANCEL_CL+BN_P90  250   5 FINAL |  163  11185  -0.964  -0.028 ( -1.794, -0.278)   -1.159 |         +3.091 ( +2.435, +3.716) | BNB:-2.18 BTC:+0.40 DOGE:+0.13 ETH:-1.42 SOL:-1.93 XRP:-0.78
+CANCEL_CL+BN_P90  250   5 VALID |  144   9890  -0.467  -0.013 ( -1.283, +0.395)   -0.718 |         +3.980 ( +3.380, +4.596) | BNB:+0.16 BTC:+0.40 DOGE:-1.41 ETH:-0.89 SOL:-0.32 XRP:-0.75
+CANCEL_CL+BN_P90  275   5 DISC  |  240  17540  -1.450  -0.039 ( -2.162, -0.766)   -1.575 |         +3.542 ( +3.069, +4.048) | BNB:-2.42 BTC:-0.14 DOGE:-2.08 ETH:+0.00 SOL:-2.17 XRP:-1.89
+CANCEL_CL+BN_P90  275   5 FINAL |  163  11185  -0.947  -0.027 ( -1.739, -0.147)   -1.142 |         +3.107 ( +2.407, +3.751) | BNB:-2.14 BTC:+0.32 DOGE:-0.02 ETH:-1.41 SOL:-1.81 XRP:-0.61
+CANCEL_CL+BN_P90  275   5 VALID |  144   9895  -0.468  -0.013 ( -1.315, +0.439)   -0.711 |         +3.980 ( +3.369, +4.565) | BNB:+0.16 BTC:+0.42 DOGE:-1.49 ETH:-0.81 SOL:-0.27 XRP:-0.81
+CANCEL_CL+BN_P90  300   5 DISC  |  240  17535  -1.440  -0.039 ( -2.188, -0.733)   -1.567 |         +3.553 ( +3.057, +4.034) | BNB:-2.34 BTC:-0.12 DOGE:-2.08 ETH:-0.00 SOL:-2.17 XRP:-1.92
+CANCEL_CL+BN_P90  300   5 FINAL |  163  11200  -0.927  -0.027 ( -1.680, -0.139)   -1.121 |         +3.127 ( +2.436, +3.757) | BNB:-2.01 BTC:+0.32 DOGE:-0.02 ETH:-1.36 SOL:-1.72 XRP:-0.76
+CANCEL_CL+BN_P90  300   5 VALID |  144   9915  -0.440  -0.013 ( -1.318, +0.379)   -0.681 |         +4.007 ( +3.389, +4.617) | BNB:+0.36 BTC:+0.45 DOGE:-1.49 ETH:-0.87 SOL:-0.28 XRP:-0.81
+KEEP              0   5 DISC  |  240  21455  -4.992  -0.104 ( -5.527, -4.460)   -5.146 |         +0.000 ( +0.000, +0.000) | BNB:-7.60 BTC:-1.23 DOGE:-6.68 ETH:-3.07 SOL:-5.62 XRP:-5.76
+KEEP              0   5 FINAL |  163  14445  -4.054  -0.085 ( -4.573, -3.510)   -4.079 |         +0.000 ( +0.000, +0.000) | BNB:-6.28 BTC:-1.61 DOGE:-4.77 ETH:-2.56 SOL:-4.72 XRP:-4.45
+KEEP              0   5 VALID |  144  12210  -4.447  -0.097 ( -5.274, -3.665)   -4.693 |         +0.000 ( +0.000, +0.000) | BNB:-4.80 BTC:-0.80 DOGE:-6.30 ETH:-2.94 SOL:-6.80 XRP:-5.04

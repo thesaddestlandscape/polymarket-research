@@ -1,0 +1,34 @@
+A1 rellenos en el top (DISC+VALID; FINAL bloqueado): 80205 | mercados 384 | cierres 64 | DISC 57247 VALID 22958
+
+E[markout del maker por acción | edad del PRECIO de la cotización] (DISC+VALID, IC90 bootstrap de cierres)
+edad          n      mk_1     mk_25    mk_215   mk_1000   mk_5000  mk_30000    mk_res          IC90 res  P(tóx)
+<0,1s     13874   +0.0075   +0.0067   +0.0039   +0.0018   -0.0012   +0.0011   +0.0083 (-0.0319,+0.0427)   0.342
+0,1-1s    33671   +0.0057   +0.0052   +0.0034   +0.0018   -0.0001   +0.0035   +0.0186 (-0.0212,+0.0535)   0.311
+1-5s      22619   +0.0053   +0.0051   +0.0041   +0.0025   -0.0008   -0.0036   +0.0061 (-0.0374,+0.0461)   0.264
+5-30s      9472   +0.0051   +0.0047   +0.0035   +0.0023   -0.0017   -0.0012   -0.0076 (-0.0320,+0.0163)   0.211
+>30s        569   +0.0049   +0.0047   +0.0033   +0.0035   +0.0034   +0.0089   +0.0277 (-0.0076,+0.0675)   0.076
+
+Todos los horizontes (media, DISC+VALID): 1ms:+0.0058 5ms:+0.0058 10ms:+0.0057 25ms:+0.0054 50ms:+0.0049 100ms:+0.0044 215ms:+0.0037 250ms:+0.0035 500ms:+0.0029 1000ms:+0.0021 5000ms:-0.0006 30000ms:+0.0005 res:+0.0102
+
+¿Aporta la EDAD información incremental? (entrena DISC n=57247, mide VALID n=22958)
+  mk_5000  R²: controles -0.1093 | +edad -0.1199 | solo edad -0.0098 | mejora por la edad IC90 cierres (-0.0312,+0.0027)
+  mk_res   R²: controles -0.2399 | +edad -0.2400 | solo edad -0.0261 | mejora por la edad IC90 cierres (-0.0041,+0.0034)
+  toxico   −logloss: controles -0.5814 | +edad -0.5811 | solo edad -0.6070 | mejora por la edad IC90 cierres (-0.0022,+0.0029)
+
+A2 hazard de repricing del BID (rejilla 500 ms, DISC+VALID, n=1359360)
+  por b_edad:  1ms | 5ms | 10ms | 25ms | 50ms | 100ms | 215ms
+    <0,1s    n= 135378 0.0120 0.0594 0.1141 0.2635 0.3920 0.4974 0.6040
+    0,1-1s   n= 367096 0.0014 0.0071 0.0141 0.0361 0.0684 0.1219 0.2191
+    1-5s     n= 452515 0.0004 0.0023 0.0043 0.0110 0.0226 0.0439 0.0877
+    5-30s    n= 321356 0.0002 0.0007 0.0014 0.0037 0.0078 0.0155 0.0322
+    >30s     n=  83015 0.0000 0.0001 0.0002 0.0006 0.0013 0.0027 0.0060
+  por b_bn:  1ms | 5ms | 10ms | 25ms | 50ms | 100ms | 215ms
+    <0,5bps  n=1158334 0.0016 0.0080 0.0155 0.0371 0.0611 0.0924 0.1450
+    0,5-2    n= 183126 0.0027 0.0124 0.0241 0.0574 0.0952 0.1424 0.2136
+    2-5      n=  17056 0.0036 0.0202 0.0394 0.0900 0.1500 0.2210 0.3144
+    >5bps    n=    844 0.0083 0.0427 0.0628 0.1315 0.2263 0.3164 0.4064
+  señal previa de repricing a 215 ms: AUC VALID 0.840 (base 0.1488); top 1 % de la señal: P(repricing<=215ms) 0.891
+
+real	34m31.335s
+user	33m54.470s
+sys	0m35.324s
