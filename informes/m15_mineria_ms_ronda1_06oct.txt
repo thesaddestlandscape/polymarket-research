@@ -1,0 +1,90 @@
+LECTURA (06-Oct, ronda 1 sobre el registro ms, ~20 h, prueba = 06-Oct 04:23-12:29 UTC):
+- NO hay alpha robusta. Solo 1/71 hipótesis positiva en descubrimiento Y prueba Y > p95 de su control
+  (micro.agotamiento_ask_5s: +0,007 / +0,076) — por azar se esperan ~3,5 de 71.
+- ARTEFACTO DE DIRECCIÓN: en PRUEBA todas las calib.compra_yes_* son positivas y todas las compra_no_* negativas (al revés en
+  descubrimiento): el periodo de prueba cerró mayoritariamente Up. El modelo GBM (+0,168 YES / -0,159 NO) es lo mismo.
+- Un único corte temporal de 20 h queda dominado por la dirección del mercado: hace falta el MES (varios días de prueba,
+  desglose por día, IC por días) antes de concluir nada. Siguiente: minero adaptado a datalogs/m15mes/.
+
+filas 394170 | mercados 486 | desde 2026-10-05 16:15:05 hasta 2026-10-06 12:29:14 | corte DESCUBRIMIENTO/PRUEBA 2026-10-06 04:23:34.400000
+
+hipótesis evaluadas: 71
+hipótesis                              DESC ev_res     n | PRUEBA ev_res     n  merc    rt30    rt60 | control μ control p95 | sin mejor mercado | por moneda (prueba)
+calib.compra_yes_0.0                        -0.536   725 |        +0.469   403    98  -0.255  -0.203 |    +0.469      +0.469 | +0.248 | BNB:-1.00 BTC:+0.34 DOGE:+1.59 ETH:+0.67 SOL:+0.51 XRP:+0.85
+calib.compra_yes_0.1                        -0.353   808 |        +0.421   406   105  -0.149  -0.051 |    +0.421      +0.421 | +0.280 | BNB:-0.68 BTC:+0.61 DOGE:+0.73 ETH:+0.36 SOL:+0.17 XRP:+1.05
+fv.z_inv                                    -0.120   672 |        +0.318   401   122  -0.443  -0.183 |    +0.026      +0.112 | -0.304 | BNB:+3.94 BTC:+0.80 DOGE:-0.81 ETH:+0.64 SOL:-0.09 XRP:-1.00
+flujo.reversion_30s                         -0.075   860 |        +0.176   547    98  -0.145  -0.090 |    +0.008      +0.046 | -0.052 | BNB:+0.93 BTC:+0.27 DOGE:+0.47 ETH:-0.17 SOL:+0.17 XRP:-0.60
+calib.compra_yes_0.2                        -0.290   935 |        +0.158   560   122  -0.115  -0.057 |    +0.158      +0.158 | +0.102 | BNB:-0.24 BTC:+0.04 DOGE:+0.30 ETH:+0.29 SOL:+0.12 XRP:+0.28
+binance.reversion_30s                       -0.128  1583 |        +0.145  1103   179  -0.151  -0.085 |    -0.008      +0.036 | -0.001 | BNB:+0.15 BTC:+0.98 DOGE:-0.01 ETH:-0.30 SOL:-0.09 XRP:+0.33
+calib.compra_yes_0.4                        -0.145  1101 |        +0.133   837   176  -0.106  -0.075 |    +0.133      +0.133 | +0.115 | BNB:-0.08 BTC:+0.12 DOGE:+0.26 ETH:+0.12 SOL:+0.33 XRP:+0.01
+chainlink.reversion_30s                     -0.131  1537 |        +0.129  1057   180  -0.150  -0.092 |    -0.011      +0.027 | -0.021 | BNB:+0.10 BTC:+0.91 DOGE:-0.03 ETH:-0.31 SOL:-0.17 XRP:+0.38
+calib.compra_yes_0.5                        -0.099  1131 |        +0.127   808   177  -0.083  -0.062 |    +0.127      +0.127 | +0.113 | BNB:-0.03 BTC:+0.19 DOGE:+0.21 ETH:-0.00 SOL:+0.32 XRP:+0.07
+calib.compra_yes_0.3                        -0.228  1014 |        +0.107   731   148  -0.116  -0.082 |    +0.107      +0.107 | +0.080 | BNB:-0.15 BTC:+0.14 DOGE:+0.26 ETH:+0.06 SOL:+0.29 XRP:+0.02
+calib.compra_yes_0.6                        -0.109   967 |        +0.084   718   157  -0.063  -0.054 |    +0.084      +0.084 | +0.074 | BNB:-0.17 BTC:+0.07 DOGE:+0.18 ETH:+0.08 SOL:+0.25 XRP:+0.10
+micro.agotamiento_ask_5s                    +0.007  2057 |        +0.076  1279   188  -0.137  -0.090 |    +0.008      +0.042 | +0.024 | BNB:-0.19 BTC:+0.10 DOGE:+0.12 ETH:+0.23 SOL:+0.15 XRP:-0.10
+calib.compra_no_0.9                         +0.240   851 |        +0.061   620   126  -0.330  -0.192 |    +0.061      +0.061 | -0.314 | BNB:+1.15 BTC:+0.94 DOGE:-0.73 ETH:-0.13 SOL:-0.42 XRP:-0.21
+expira.impulso_tarde                        +0.054   135 |        +0.059    82    53  +0.012  +0.265 |    -0.066      +0.086 | +0.013 | BNB:-0.09 BTC:-0.07 DOGE:-0.33 ETH:+0.14 SOL:+0.25 XRP:+0.55
+flujo.intensidad_x_dir                      -0.029  2034 |        +0.047  1370   189  -0.084  -0.043 |    +0.004      +0.049 | -0.004 | BNB:+0.10 BTC:+0.03 DOGE:+0.03 ETH:+0.03 SOL:+0.01 XRP:+0.17
+binance.reversion_5s                        -0.157  2724 |        +0.043  1899   196  -0.148  -0.098 |    -0.001      +0.033 | -0.021 | BNB:+0.07 BTC:+0.37 DOGE:-0.05 ETH:-0.05 SOL:-0.09 XRP:+0.11
+binance.impulso_5s                          -0.020  2733 |        +0.041  1897   196  -0.062  -0.047 |    +0.015      +0.058 | +0.014 | BNB:+0.12 BTC:+0.16 DOGE:-0.00 ETH:+0.02 SOL:+0.03 XRP:-0.00
+chainlink.impulso_5s                        -0.040  2775 |        +0.040  1852   196  -0.071  -0.062 |    +0.008      +0.037 | +0.006 | BNB:+0.03 BTC:+0.11 DOGE:-0.00 ETH:-0.01 SOL:+0.01 XRP:+0.11
+flujo.compras_yes_5s                        -0.042  1612 |        +0.029  1034   175  -0.097  -0.054 |    +0.006      +0.030 | -0.062 | BNB:-0.34 BTC:+0.04 DOGE:-0.18 ETH:+0.02 SOL:+0.06 XRP:+0.28
+binance.impulso_1s                          -0.027  3493 |        +0.019  2347   198  -0.073  -0.053 |    -0.002      +0.018 | -0.007 | BNB:+0.14 BTC:+0.09 DOGE:-0.01 ETH:-0.12 SOL:-0.03 XRP:+0.08
+micro.imb_yes                               -0.016  2967 |        +0.016  1938   198  -0.066  -0.047 |    +0.012      +0.078 | -0.007 | BNB:+0.03 BTC:-0.02 DOGE:+0.03 ETH:-0.05 SOL:+0.10 XRP:+0.04
+micro.imb_no_inv                            -0.016  2967 |        +0.016  1938   198  -0.066  -0.047 |    +0.010      +0.044 | -0.007 | BNB:+0.03 BTC:-0.02 DOGE:+0.03 ETH:-0.05 SOL:+0.10 XRP:+0.04
+micro.imb_neto                              -0.016  2967 |        +0.016  1938   198  -0.066  -0.047 |    +0.002      +0.047 | -0.007 | BNB:+0.03 BTC:-0.02 DOGE:+0.03 ETH:-0.05 SOL:+0.10 XRP:+0.04
+micro.agotamiento_ask_yes_1s                -0.041  2780 |        +0.016  1806   196  -0.109  -0.078 |    -0.003      +0.034 | -0.019 | BNB:-0.14 BTC:-0.06 DOGE:+0.05 ETH:+0.16 SOL:+0.14 XRP:-0.07
+chainlink.reversion_5s                      -0.115  2766 |        +0.014  1858   196  -0.143  -0.105 |    +0.001      +0.050 | -0.058 | BNB:+0.05 BTC:+0.40 DOGE:-0.01 ETH:-0.14 SOL:-0.11 XRP:-0.01
+m5.adelanto_1s                              -0.047  3336 |        +0.014  2168   198  -0.073  -0.052 |    -0.001      +0.046 | -0.015 | BNB:+0.01 BTC:+0.08 DOGE:+0.01 ETH:-0.08 SOL:+0.01 XRP:+0.06
+secuencia.flujo_y_agotamiento               -0.073  1302 |        +0.013   865   144  -0.082  -0.066 |    +0.010      +0.045 | -0.087 | BNB:-0.32 BTC:+0.04 DOGE:-0.06 ETH:-0.10 SOL:-0.12 XRP:+0.43
+micro.suma_asks_baja                        -0.054  3428 |        +0.012  2256   198  -0.103  -0.085 |    -0.013      +0.022 | -0.013 | BNB:+0.01 BTC:+0.03 DOGE:-0.07 ETH:+0.13 SOL:-0.08 XRP:+0.07
+calib.compra_yes_0.7                        -0.105   879 |        +0.011   614   148  -0.046  -0.045 |    +0.011      +0.011 | +0.005 | BNB:-0.27 BTC:+0.02 DOGE:+0.09 ETH:+0.08 SOL:+0.07 XRP:+0.13
+flujo.reversion_1s                          -0.056  3204 |        +0.011  2097   198  -0.134  -0.087 |    -0.010      +0.029 | -0.041 | BNB:+0.03 BTC:+0.12 DOGE:-0.04 ETH:+0.04 SOL:-0.09 XRP:-0.04
+micro.edad_asimetrica                       -0.043  3385 |        +0.009  2247   198  -0.104  -0.081 |    +0.005      +0.040 | -0.023 | BNB:-0.06 BTC:+0.56 DOGE:+0.02 ETH:-0.04 SOL:-0.04 XRP:-0.03
+secuencia.cl_mueve_libro_quieto             -0.014  1901 |        +0.008  1317   196  -0.084  -0.087 |    +0.032      +0.069 | -0.017 | BNB:-0.03 BTC:+0.02 DOGE:+0.12 ETH:-0.11 SOL:-0.05 XRP:+0.08
+regimen.fv_vol_baja                         +0.009   935 |        +0.007   586   137  -0.081  -0.058 |    -0.020      +0.039 | -0.003 | BNB:+0.07 BTC:-0.05 DOGE:+0.04 ETH:-0.06 SOL:+0.23 XRP:-0.05
+precio.reversion_1s                         -0.081  3412 |        +0.006  2259   198  -0.116  -0.091 |    -0.004      +0.025 | -0.009 | BNB:-0.05 BTC:+0.06 DOGE:+0.00 ETH:+0.04 SOL:+0.01 XRP:-0.04
+flujo.compras_yes_1s                        -0.059  3221 |        +0.005  2109   198  -0.080  -0.068 |    +0.006      +0.051 | -0.017 | BNB:+0.03 BTC:-0.02 DOGE:+0.02 ETH:-0.05 SOL:-0.04 XRP:+0.13
+precio.aceleracion                          -0.051  3158 |        +0.000  2113   198  -0.094  -0.080 |    -0.002      +0.034 | -0.020 | BNB:-0.07 BTC:-0.03 DOGE:-0.03 ETH:-0.02 SOL:-0.09 XRP:+0.24
+precio.impulso_5s                           +0.007  2773 |        -0.001  1893   197  -0.090  -0.075 |    +0.002      +0.044 | -0.015 | BNB:-0.05 BTC:+0.10 DOGE:-0.04 ETH:+0.02 SOL:-0.03 XRP:-0.00
+m5.impulso_1s                               -0.017  3131 |        -0.003  2023   198  -0.081  -0.067 |    +0.010      +0.069 | -0.033 | BNB:+0.03 BTC:+0.15 DOGE:-0.04 ETH:-0.11 SOL:-0.05 XRP:-0.01
+m5.adelanto_5s                              -0.037  2562 |        -0.007  1673   198  -0.073  -0.042 |    -0.010      +0.016 | -0.036 | BNB:-0.03 BTC:+0.04 DOGE:-0.07 ETH:-0.04 SOL:-0.07 XRP:+0.13
+binance.reversion_1s                        -0.120  3485 |        -0.012  2341   198  -0.135  -0.109 |    -0.006      +0.045 | -0.050 | BNB:-0.10 BTC:+0.14 DOGE:-0.05 ETH:+0.07 SOL:-0.11 XRP:-0.01
+secuencia.m5_mueve_15_quieto                +0.026  1690 |        -0.013  1111   197  -0.090  -0.091 |    -0.002      +0.047 | -0.043 | BNB:-0.10 BTC:+0.03 DOGE:+0.02 ETH:+0.04 SOL:-0.10 XRP:-0.03
+micro.microprecio_no_inv                    -0.064  2861 |        -0.016  1818   196  -0.100  -0.070 |    -0.008      +0.036 | -0.041 | BNB:-0.06 BTC:-0.28 DOGE:-0.05 ETH:+0.12 SOL:+0.03 XRP:+0.00
+calib.compra_yes_0.8                        -0.089   772 |        -0.017   530   133  -0.028  -0.024 |    -0.017      -0.017 | -0.021 | BNB:-0.31 BTC:+0.06 DOGE:+0.06 ETH:-0.07 SOL:+0.03 XRP:+0.13
+micro.microprecio_yes                       -0.064  2860 |        -0.017  1818   196  -0.100  -0.070 |    +0.014      +0.079 | -0.042 | BNB:-0.06 BTC:-0.28 DOGE:-0.05 ETH:+0.12 SOL:+0.03 XRP:-0.00
+precio.impulso_1s                           -0.022  3412 |        -0.024  2259   198  -0.090  -0.072 |    +0.010      +0.046 | -0.056 | BNB:-0.01 BTC:+0.07 DOGE:-0.08 ETH:-0.01 SOL:-0.10 XRP:-0.02
+m5.impulso_5s                               +0.017  2598 |        -0.026  1665   198  -0.074  -0.056 |    -0.003      +0.034 | -0.044 | BNB:-0.04 BTC:+0.08 DOGE:-0.11 ETH:-0.03 SOL:-0.06 XRP:-0.01
+fv.z                                        -0.016   726 |        -0.027   424   123  -0.014  -0.017 |    +0.052      +0.109 | -0.028 | BNB:-0.08 BTC:-0.04 DOGE:-0.01 ETH:-0.04 SOL:-0.02 XRP:+0.01
+calib.compra_yes_0.9                        -0.053   850 |        -0.029   620   126  -0.016  -0.018 |    -0.029      -0.029 | -0.031 | BNB:-0.08 BTC:-0.05 DOGE:-0.02 ETH:-0.04 SOL:-0.00 XRP:-0.00
+fv.dist_ref                                 +0.039   608 |        -0.030   438    70  -0.019  -0.023 |    +0.039      +0.091 | -0.035 | BNB:-0.08 BTC:-0.05 DOGE:-0.06 ETH:+0.04 SOL:-0.02 XRP:-0.02
+binance.impulso_30s                         -0.095  1587 |        -0.033  1098   179  -0.042  -0.040 |    -0.001      +0.041 | -0.048 | BNB:-0.11 BTC:+0.03 DOGE:-0.07 ETH:-0.08 SOL:+0.06 XRP:-0.06
+flujo.reversion_5s                          -0.067  1609 |        -0.033  1033   175  -0.116  -0.081 |    -0.006      +0.037 | -0.080 | BNB:+0.14 BTC:+0.09 DOGE:+0.33 ETH:-0.20 SOL:-0.23 XRP:-0.14
+precio.aceleracion_inv                      -0.052  3159 |        -0.049  2113   198  -0.107  -0.093 |    +0.004      +0.032 | -0.060 | BNB:-0.01 BTC:-0.01 DOGE:-0.07 ETH:+0.05 SOL:+0.01 XRP:-0.28
+calib.compra_no_0.0                         +0.013   745 |        -0.054   412    98  -0.025  -0.021 |    -0.054      -0.054 | -0.056 | BNB:+0.04 BTC:-0.07 DOGE:-0.12 ETH:-0.05 SOL:-0.05 XRP:-0.09
+chainlink.impulso_30s                       -0.075  1537 |        -0.055  1052   180  -0.061  -0.057 |    -0.004      +0.024 | -0.064 | BNB:-0.09 BTC:-0.02 DOGE:-0.08 ETH:-0.11 SOL:+0.01 XRP:-0.08
+binance.adelanto_vs_libro                   -0.092  2597 |        -0.059  1789   196  -0.096  -0.075 |    +0.007      +0.053 | -0.069 | BNB:-0.05 BTC:-0.15 DOGE:-0.01 ETH:-0.12 SOL:-0.02 XRP:+0.00
+precio.reversion_5s                         -0.116  2773 |        -0.066  1894   197  -0.108  -0.089 |    -0.000      +0.058 | -0.082 | BNB:-0.02 BTC:-0.10 DOGE:-0.06 ETH:-0.04 SOL:-0.13 XRP:-0.04
+fv.misp                                     +0.048  1713 |        -0.066  1130   186  -0.102  -0.073 |    +0.003      +0.049 | -0.075 | BNB:+0.03 BTC:-0.05 DOGE:+0.01 ETH:-0.09 SOL:-0.07 XRP:-0.21
+fv.misp_ejecutable                          +0.048  1713 |        -0.066  1130   186  -0.102  -0.073 |    -0.001      +0.041 | -0.075 | BNB:+0.03 BTC:-0.05 DOGE:+0.01 ETH:-0.09 SOL:-0.07 XRP:-0.21
+chainlink.adelanto_vs_libro                 -0.114  2671 |        -0.072  1826   197  -0.107  -0.088 |    +0.010      +0.049 | -0.089 | BNB:-0.08 BTC:-0.14 DOGE:-0.03 ETH:-0.04 SOL:-0.14 XRP:-0.01
+calib.compra_no_0.1                         +0.041   808 |        -0.103   406   105  -0.045  -0.044 |    -0.103      -0.103 | -0.108 | BNB:+0.07 BTC:-0.12 DOGE:-0.16 ETH:-0.09 SOL:-0.05 XRP:-0.25
+expira.reversion_temprana                   -0.183   747 |        -0.107   469   192  -0.113  -0.103 |    -0.056      -0.018 | -0.117 | BNB:-0.11 BTC:-0.11 DOGE:-0.04 ETH:-0.24 SOL:-0.03 XRP:-0.11
+regimen.fv_vol_alta                         +0.057  1156 |        -0.108   795   135  -0.142  -0.132 |    -0.040      +0.027 | -0.152 | BNB:+0.04 BTC:-0.39 DOGE:+0.04 ETH:-0.16 SOL:-0.14 XRP:-0.21
+flujo.compras_yes_30s                       +0.028   867 |        -0.109   550    98  -0.073  -0.041 |    +0.006      +0.054 | -0.160 | BNB:-0.42 BTC:-0.08 DOGE:-0.60 ETH:-0.24 SOL:-0.16 XRP:+0.07
+calib.compra_no_0.2                         +0.047   935 |        -0.117   560   122  -0.069  -0.066 |    -0.117      -0.117 | -0.123 | BNB:-0.00 BTC:-0.05 DOGE:-0.17 ETH:-0.16 SOL:-0.12 XRP:-0.16
+calib.compra_no_0.8                         +0.193   772 |        -0.122   530   133  -0.222  -0.176 |    -0.122      -0.122 | -0.237 | BNB:+1.26 BTC:-0.48 DOGE:-0.43 ETH:+0.27 SOL:-0.23 XRP:-0.88
+calib.compra_no_0.3                         +0.059  1014 |        -0.142   731   148  -0.078  -0.079 |    -0.142      -0.142 | -0.149 | BNB:-0.01 BTC:-0.15 DOGE:-0.23 ETH:-0.09 SOL:-0.27 XRP:-0.09
+calib.compra_no_0.4                         +0.020  1101 |        -0.205   837   176  -0.089  -0.093 |    -0.205      -0.205 | -0.216 | BNB:-0.03 BTC:-0.20 DOGE:-0.32 ETH:-0.18 SOL:-0.37 XRP:-0.11
+calib.compra_no_0.7                         +0.125   879 |        -0.226   614   148  -0.172  -0.142 |    -0.226      -0.226 | -0.278 | BNB:+0.57 BTC:-0.24 DOGE:-0.40 ETH:-0.41 SOL:-0.38 XRP:-0.58
+calib.compra_no_0.5                         +0.003  1131 |        -0.248   808   177  -0.101  -0.108 |    -0.248      -0.248 | -0.265 | BNB:-0.05 BTC:-0.31 DOGE:-0.35 ETH:-0.09 SOL:-0.49 XRP:-0.18
+calib.compra_no_0.6                         +0.063   967 |        -0.282   718   157  -0.137  -0.129 |    -0.282      -0.282 | -0.307 | BNB:+0.15 BTC:-0.25 DOGE:-0.45 ETH:-0.27 SOL:-0.58 XRP:-0.32
+expira.fv_tarde                             -0.068   135 |        -0.306    86    58  -0.212  +0.241 |    -0.119      +0.009 | -0.347 | BNB:-0.40 BTC:+0.05 DOGE:-0.31 ETH:-0.07 SOL:-0.43 XRP:-0.89
+
+Positivas en DESCUBRIMIENTO y en PRUEBA y por encima del p95 de su control: 1 de 71
+   micro.agotamiento_ask_5s: desc +0.007 (n=2057) prueba +0.076 (n=1279, mercados 188)
+
+MODELO combinado (gradient boosting, entrenado SOLO en descubrimiento), comprar YES en su decil superior: PRUEBA ev_res +0.168 n=274 mercados=100 rt30 -0.062 rt60 -0.026 | por moneda {'BNB': np.float64(-0.147), 'BTC': np.float64(0.207), 'DOGE': np.float64(0.777), 'ETH': np.float64(-0.138), 'SOL': np.float64(0.201), 'XRP': np.float64(0.294)}
+
+MODELO combinado (gradient boosting, entrenado SOLO en descubrimiento), comprar NO en su decil superior: PRUEBA ev_res -0.159 n=316 mercados=107 rt30 -0.114 rt60 -0.046 | por moneda {'BNB': np.float64(0.758), 'BTC': np.float64(0.266), 'DOGE': np.float64(-0.62), 'ETH': np.float64(0.165), 'SOL': np.float64(-0.542), 'XRP': np.float64(-0.556)}
