@@ -48,6 +48,10 @@ VARIANTES = [  # (nombre, z_min, ask_lo, ask_hi)
     ("V6 z>=1.8 [0.25,0.85) (live 15m desde 06-Oct)", 1.8, 0.25, 0.85),
 ]
 OUTCOMES_CACHE = LIVE / "precierre_variantes_outcomes.json"
+# 06-Oct (OK Javi): el ejecutor lleva un kill SEPARADO para PRECIERRE 15min (-10 EUR, desde el despliegue de
+# la banda 0,25-0,85). Por marco: (desde, latch) que sustituyen a los de MODOS.
+KILL_POR_MARCO = {"RESOLUTION_SNIPER_PRECIERRE": {
+    "15min": (LIVE / "precierre_twap_desde_15min.txt", LIVE / "precierre_twap_kill_15min.json")}}
 
 MODOS = {
     "RESOLUTION_SNIPER_PRECIERRE": (LIVE / "precierre_twap_desde.txt", LIVE / "precierre_twap_kill.json",
@@ -217,8 +221,17 @@ def main() -> int:
         kill = _leer(p_kill)
         info = {"desde": desde, "kill": json.loads(kill) if kill else {"matado": False}, "marcos": {}}
         for marco in ("5min", "15min"):
-            ts = [r for r in filas if r.get("strategy") == est and desde and (r.get("timestamp_utc") or "") >= desde
-                  and (r.get("subtype") or "").endswith(marco)]
+            desde_m, kill_m = desde, None
+            if marco in KILL_POR_MARCO.get(est, {}):
+                p_desde_m, p_kill_m = KILL_POR_MARCO[est][marco]
+                desde_m = _leer(p_desde_m) or desde
+                txt = _leer(p_kill_m)
+                kill_m = json.loads(txt) if txt else {"matado": False}
+                if kill_m.get("matado"):
+                    alertas.append(f"🛑 {est} {marco} kill-switch ACTIVO: {kill_m.get('motivo')}")
+            # 06-Oct: comparar el marco exacto ("BTC#15min" -> "15min"); endswith("5min") casaba con 15min
+            ts = [r for r in filas if r.get("strategy") == est and desde_m and (r.get("timestamp_utc") or "") >= desde_m
+                  and (r.get("subtype") or "").split("#")[-1] == marco]
             cerr = [r for r in ts if r.get("status") == "CLOSED"]
             pnls = []
             for r in cerr:
@@ -231,7 +244,9 @@ def main() -> int:
             d = {"n_cerrados": n, "acierto": round(hit, 3) if hit is not None else None,
                  "pnl_total": round(sum(pnls), 2), "pnl_trade": round(sum(pnls) / n, 3) if n else None,
                  "abiertos": sum(1 for r in ts if r.get("status") in ("OPEN", "ERROR")),
-                 "esperado": esperado.get(marco)}
+                 "esperado": esperado.get(marco), "desde": desde_m}
+            if kill_m is not None:
+                d["kill"] = kill_m
             info["marcos"][marco] = d
             if esperado.get(marco) and n >= 20 and hit is not None and hit < esperado[marco] - 0.10:
                 alertas.append(f"⚠️ {est} {marco}: acierto real {hit:.0%} (n={n}) vs esperado {esperado[marco]:.0%}")

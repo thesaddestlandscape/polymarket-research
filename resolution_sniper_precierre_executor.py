@@ -393,6 +393,18 @@ TWAP_ERROR_VIGENTE_S = 1800              # filas ERROR cuentan como abiertas sol
                                          # reconciliar_fill_fantasma.py o eran fantasmas sin dinero)
 TWAP_KILL_N, TWAP_KILL_EUR = 20, 5.0     # n>=20 reales con media<0, o suma <= -5 EUR -> se cierra (latch)
 TWAP_KILL_LATCH = REPO / "data" / "live" / "precierre_twap_kill.json"
+# 06-Oct (OK Javi): kill de 15min SEPARADO del de 5min. Simulado (acierto 80-98 % x pago neto 0,18-0,25 x
+# 60-1000 trades, stake 2 EUR): la regla "n>=20 y media<0" se comprueba tras cada trade y mata en falso un
+# 35-39 % de las veces con edge real (+0,12 EUR/tr); -10 EUR solo: ~1,5 % falso, y sin edge corta el 86 %
+# a 250 trades perdiendo ~-9 EUR. 15min: solo -10 EUR acumulados (cerrados - abiertos) desde el despliegue
+# de la banda 0,25-0,85 (06-Oct 07:55:56Z), sin regla de media. 5min: ver abajo. Los kills técnicos
+# (latch/trades ilegible -> fail-closed) siguen en los dos.
+# 06-Oct 08:12Z (Javi): 5min también -5 EUR solo, SIN la regla de media, contando exclusivamente trades de
+# 5min desde su propio inicio (TWAP_DESDE_PATH, 25-Sep). 60min (DRY_RUN) comparte este latch pero no cuenta.
+TWAP_KILL_MARCOS_5 = ("5min",)
+TWAP_KILL_15_EUR = 10.0
+TWAP_KILL_LATCH_15 = REPO / "data" / "live" / "precierre_twap_kill_15min.json"
+TWAP_DESDE_PATH_15 = REPO / "data" / "live" / "precierre_twap_desde_15min.txt"
 STAKE_EUR = 1.05             # suelo CLOB, mismo criterio que la prueba controlada del 02-Sep
 MIN_RATIO_PROFUNDIDAD = 5.0  # mismo umbral que el resto del proyecto
 PRECALCULO_ANTES_S = 12      # arrancar precálculo con margen sobre el instante objetivo
@@ -836,9 +848,14 @@ def _twap_desde(path=None) -> str:
         return "1970-01-01T00:00:00"   # fail-closed: cuenta TODOS los trades de la estrategia
 
 
-def _kill_twap(strategy: str = None, latch=None, desde_path=None, etiqueta: str = "PRECIERRE") -> tuple[bool, str]:
+def _kill_twap(strategy: str = None, latch=None, desde_path=None, etiqueta: str = "PRECIERRE",
+               marcos: tuple | None = None, kill_eur: float = None, kill_n: int | None = -1) -> tuple[bool, str]:
     """(matado, motivo) del modo TWAP de `strategy` (por defecto el precierre). Latch persistente;
-    fail-closed si el latch es ilegible o trades.csv no se puede leer."""
+    fail-closed si el latch es ilegible o trades.csv no se puede leer.
+    06-Oct: `marcos` limita los trades contados al marco del subtype ("BTC#15min" -> "15min"; None = todos);
+    `kill_eur` (None = TWAP_KILL_EUR); `kill_n` (-1 = TWAP_KILL_N, None = sin regla de media)."""
+    kill_eur = TWAP_KILL_EUR if kill_eur is None else kill_eur
+    kill_n = TWAP_KILL_N if kill_n == -1 else kill_n
     import json
     strategy = strategy or STRATEGY
     TWAP_KILL_LATCH_ = latch or TWAP_KILL_LATCH
@@ -857,6 +874,11 @@ def _kill_twap(strategy: str = None, latch=None, desde_path=None, etiqueta: str 
             for r in csv.DictReader(f):
                 if r.get("strategy") != strategy or (r.get("timestamp_utc") or "") < desde:
                     continue
+                if marcos is not None:
+                    m_fila = (r.get("subtype") or "").split("#")[-1]
+                    # fail-closed (/code-review 06-Oct): un subtype sin marco reconocible cuenta en TODOS los kills
+                    if m_fila in MARCOS and m_fila not in marcos:
+                        continue
                 st = r.get("status")
                 if st == "CLOSED":
                     try:
@@ -878,9 +900,9 @@ def _kill_twap(strategy: str = None, latch=None, desde_path=None, etiqueta: str 
     except Exception:
         return True, "trades_ilegible"
     motivo = ""
-    if len(pnls) >= TWAP_KILL_N and sum(pnls) / len(pnls) < 0:
+    if kill_n is not None and len(pnls) >= kill_n and sum(pnls) / len(pnls) < 0:
         motivo = f"media {sum(pnls)/len(pnls):+.3f} en n={len(pnls)} reales"
-    elif sum(pnls) - abiertos <= -TWAP_KILL_EUR:
+    elif sum(pnls) - abiertos <= -kill_eur:
         motivo = f"peor caso {sum(pnls) - abiertos:+.2f} EUR (cerrados n={len(pnls)}, abiertos {abiertos:.2f})"
     if motivo:
         try:
@@ -1300,7 +1322,12 @@ def _instante_critico(pre: _Precalculo, lectura: dict, n_rafaga: int, ts_end: in
     # DRY_RUN: sin tope -- se registran TODAS las monedas de la ráfaga (lo validado es la
     # ráfaga entera, /code-review 23-Sep). Live: tope compartido entre marcos.
     if MODO_TWAP:
-        matado, motivo_kill = _kill_twap()
+        if pre.marco == "15min":
+            matado, motivo_kill = _kill_twap(latch=TWAP_KILL_LATCH_15, desde_path=TWAP_DESDE_PATH_15,
+                                             etiqueta="PRECIERRE 15min", marcos=("15min",),
+                                             kill_eur=TWAP_KILL_15_EUR, kill_n=None)
+        else:
+            matado, motivo_kill = _kill_twap(etiqueta="PRECIERRE 5min", marcos=TWAP_KILL_MARCOS_5, kill_n=None)
         if matado:
             resultado["gate_motivo"] = f"kill_twap:{motivo_kill}"
             return resultado
