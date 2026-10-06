@@ -1502,5 +1502,17 @@
   "STREAK_FADE_15M#XRP#15min": {
     "n": 201,
     "confirmado": false
+  },
+  "ORDER_FLOW_5M_REACTIVO#SOL": {
+    "n": 201,
+    "confirmado": false
+  },
+  "ORDER_FLOW_5M_REACTIVO#SOL#5min": {
+    "n": 201,
+    "confirmado": false
+  },
+  "PRICE_TARGET_GBM_FADE#SOL#atexpiry": {
+    "n": 202,
+    "confirmado": true
   }
 }
