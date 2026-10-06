@@ -124,8 +124,8 @@ def main():
                         preparar_par(c[3], cierre)
                     continue
                 if tp == "x":
-                    if len(c) > 6 and c[6]:
-                        bin_hist[c[2]].append((int(c[6]), float(c[3])))
+                    if len(c) > 7 and c[7]:
+                        bin_hist[c[2]].append((int(c[7]), float(c[3])))   # c[7] = recepción (c[6] es E de Binance)
                     continue
                 if tp == "t":
                     tok = c[2]
