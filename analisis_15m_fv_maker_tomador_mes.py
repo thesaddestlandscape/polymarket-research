@@ -21,8 +21,9 @@ Estrategias (U = 0,03 / 0,05 / 0,10 fijados ANTES; LAT = 250 / 1000 ms de envío
   MAKER_CONTRA  control: cuando FV_s − bid_s <= −U (el FV dice que ese lado está CARO); cancela al dejar de serlo.
   MAKER_SIEMPRE línea base sin información: siempre en el mejor bid de ambos lados, sin cancelar (debe perder).
   HIBRIDO       MAKER_INF; si la ventana termina sin relleno y en la foto siguiente FV_s − ask_s >= U, cruza al ask.
-  Relleno de un bid del lado s a precio b: operación cuyo tomador VENDE s (SELL s, o BUY del contrario a 1−p, por el
-  espejo del libro) con precio equivalente en s: OPT <= b (estamos en cabeza de cola); PES < b (la atravesó).
+  Relleno de un bid del lado s a precio b: fila del firehose "BUY s a p" (el dueño del bid consumido aparece siempre así;
+  el firehose mezcla filas de tomador y de maker, ver auditoria_15m_datos.py), agregada por tx: OPT p <= b (cabeza de
+  cola); PES p < b (la atravesó). Corregido el 06-Oct tras la auditoría (antes: venta tomadora de s o compra del contrario).
   5 acciones por relleno (o el tamaño de la operación si es menor), tope 50 por lado y mercado. Maker sin comisión y
   sin contar devoluciones. Solo entre inicio+5 s y cierre−10 s, precio en [0,05-0,95].
 Estadística: unidad = MERCADO (YES+NO); IC90 por bootstrap de DÍAS; sin los 2 mejores días; DESC (16-28 Sep) y PRUEBA
@@ -103,16 +104,23 @@ def leer_dia(d):
                     p, sz = float(r["price"]), float(r["size"] or 0)
                 except ValueError:
                     continue
+                # AUDITORÍA 06-Oct (auditoria_15m_datos.py): el firehose trae la fila del TOMADOR (35 %) y la de cada
+                # MAKER rellenado (65 %, con el lado del maker) y no hay forma fiable de distinguirlas sin on-chain.
+                # Regla sin identidad: cuando se consumen bids del lado s a p, el dueño de ese bid aparece SIEMPRE como
+                # "BUY s a p" (cruce normal o acuñación). Una compra tomadora de s a p <= nuestro bid solo es posible si
+                # el ask bajó hasta nuestro bid, y entonces también nos habría llenado. -> filas BUY, agregadas por tx.
+                if r["side"] != "BUY":
+                    continue
                 o = "YES" if r["outcome"] in ("Up", "Yes") else "NO"
-                otro = "NO" if o == "YES" else "YES"
-                if r["side"] == "SELL":
-                    vend[r["condition_id"]].append((t, o, p, sz))
-                elif r["side"] == "BUY":
-                    vend[r["condition_id"]].append((t, otro, 1 - p, sz))
+                vend[r["condition_id"]].append((t, o, round(p, 4), sz, r["transaction_hash"]))
         except (EOFError, OSError):
             pass
-    for v in vend.values():
-        v.sort()
+    for k, v in list(vend.items()):
+        agg = {}
+        for t, o, p, sz, tx in v:                       # una operación por (tx, lado, precio)
+            a = agg.setdefault((tx, o, p), [t, o, p, 0.0])
+            a[3] += sz
+        vend[k] = sorted(tuple(x) for x in agg.values())
     cl = collections.defaultdict(lambda: ([], []))
     for dd in ((date.fromisoformat(d) - timedelta(days=1)).isoformat(), d):
         fc = fich(PR, "chainlink", dd)
