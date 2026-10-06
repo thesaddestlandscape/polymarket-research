@@ -75,7 +75,7 @@ def leer(dias):
                 print(f"  aviso: {f.name} truncado ({type(e).__name__}); se usa lo leído", file=sys.stderr)
     for d in (libro, trades):
         for k in d:
-            d[k].sort()
+            d[k].sort(key=lambda x: x[0])  # solo por hora: un lado vacío del libro es None y no se compara
     binance = {}
     for s in bt:
         orden = sorted(range(len(bt[s])), key=bt[s].__getitem__)
@@ -182,6 +182,7 @@ def main():
     ap.add_argument("--desde", required=True)
     ap.add_argument("--hasta")
     ap.add_argument("--marco", default=None)
+    ap.add_argument("--parar-s", type=int, default=10, help="deja de cotizar N s antes del cierre")
     a = ap.parse_args()
     import datetime as dt
     d0 = dt.date.fromisoformat(a.desde)
@@ -214,7 +215,7 @@ def main():
             except ValueError:
                 continue
             dur = 300000 if marco == "5min" else 900000
-            t_ini, t_stop = t_fin - dur, t_fin - 10000
+            t_ini, t_stop = t_fin - dur, t_fin - a.parar_s * 1000
             sym = SIMBOLO.get(act)
             if sym not in binance:
                 continue

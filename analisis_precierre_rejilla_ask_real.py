@@ -16,6 +16,7 @@ import csv
 import json
 import random
 import sys
+import time
 from pathlib import Path
 
 import requests
@@ -34,18 +35,28 @@ def desenlaces(slugs) -> dict:
         c = {}
     pend = sorted(s for s in set(slugs) if s not in c)
     ses = requests.Session()
+    fallidos = 0
     for k in range(0, len(pend), 40):
-        try:
-            for m in ses.get("https://gamma-api.polymarket.com/markets", timeout=20,
-                             params=[("slug", s) for s in pend[k:k + 40]] + [("closed", "true"), ("limit", "40")]).json() or []:
-                pr = m.get("outcomePrices")
-                pr = json.loads(pr) if isinstance(pr, str) else pr
-                if pr and float(pr[0]) >= 0.999:
-                    c[m["slug"]] = "Up"
-                elif pr and float(pr[1]) >= 0.999:
-                    c[m["slug"]] = "Down"
-        except Exception as e:
-            print(f"lote {k // 40}: {type(e).__name__}", file=sys.stderr)
+        for intento in range(3):  # gamma devuelve a ratos HTML (límite de ritmo): reintentar con espera
+            try:
+                for m in ses.get("https://gamma-api.polymarket.com/markets", timeout=20,
+                                 params=[("slug", s) for s in pend[k:k + 40]] + [("closed", "true"), ("limit", "40")]).json() or []:
+                    pr = m.get("outcomePrices")
+                    pr = json.loads(pr) if isinstance(pr, str) else pr
+                    if pr and float(pr[0]) >= 0.999:
+                        c[m["slug"]] = "Up"
+                    elif pr and float(pr[1]) >= 0.999:
+                        c[m["slug"]] = "Down"
+                break
+            except Exception as e:
+                if intento == 2:
+                    fallidos += 1
+                    print(f"lote {k // 40}: {type(e).__name__} (3 intentos)", file=sys.stderr)
+                else:
+                    time.sleep(2 * (intento + 1))
+    if fallidos:
+        print(f"desenlaces: {fallidos} lotes sin respuesta de {-(-len(pend) // 40)}; se reintentan en la próxima ejecución",
+              file=sys.stderr)
     if pend:
         CACHE.write_text(json.dumps(c))
     return c
