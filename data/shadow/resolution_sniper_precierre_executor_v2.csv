@@ -54035,3 +54035,15 @@ timestamp_utc,ts_end,marco,dry_run,activo,direccion_implicita,ask_implicita,n_ra
 2026-10-07T16:30:00.430+00:00,1791390600,5min,False,BNB,Up,,0,,,,,5379396,False,no_fillable_ask=None_ratio=0.0,0.0,,,69.7,,,,,,,,RESOLUTION_SNIPER_NAIVE,,1.6704328872249208
 2026-10-07T16:30:00.430+00:00,1791390600,5min,False,BTC,Up,,0,,,,,5379395,False,no_fillable_ask=None_ratio=0.0,0.0,,,422.1,,,,,,,,RESOLUTION_SNIPER_NAIVE,,0.5472314740391989
 2026-10-07T16:30:00.430+00:00,1791390600,5min,False,XRP,Down,,0,,,,,5379394,False,no_fillable_ask=None_ratio=0.0,0.0,,,80.1,,,,,,,,RESOLUTION_SNIPER_NAIVE,,1.9796388822799749
+2026-10-07T16:34:16.376+00:00,1791390900,5min,False,SOL,,,0,,,,,,False,lectura_tarde,,,,,,,,,,,,,,
+2026-10-07T16:34:16.380+00:00,1791390900,5min,False,ETH,,,0,,,,,,False,lectura_tarde,,,,,,,,,,,,,,
+2026-10-07T16:34:16.380+00:00,1791390900,5min,False,XRP,,,0,,,,,,False,lectura_tarde,,,,,,,,,,,,,,
+2026-10-07T16:34:16.380+00:00,1791390900,5min,False,DOGE,,,0,,,,,,False,lectura_tarde,,,,,,,,,,,,,,
+2026-10-07T16:34:16.380+00:00,1791390900,5min,False,BNB,,,0,,,,,,False,lectura_tarde,,,,,,,,,,,,,,
+2026-10-07T16:34:16.380+00:00,1791390900,5min,False,BTC,,,0,,,,,,False,lectura_tarde,,,,,,,,,,,,,,
+2026-10-07T16:35:00.330+00:00,1791390900,5min,False,XRP,Up,,0,,,,,5379422,False,no_fillable_ask=None_ratio=0.0,0.0,,,77.6,,,,,,,,RESOLUTION_SNIPER_NAIVE,,3.896620293652777
+2026-10-07T16:35:00.330+00:00,1791390900,5min,False,DOGE,Up,,0,,,,,5379427,False,no_fillable_ask=None_ratio=0.0,0.0,,,310.9,,,,,,,,RESOLUTION_SNIPER_NAIVE,,3.810244557302108
+2026-10-07T16:35:00.330+00:00,1791390900,5min,False,ETH,Up,,0,,,,,5379417,False,no_fillable_ask=None_ratio=0.0,0.0,,,93.6,,,,,,,,RESOLUTION_SNIPER_NAIVE,,5.294157451735159
+2026-10-07T16:35:00.330+00:00,1791390900,5min,False,BNB,Up,,0,,,,,5379425,False,no_fillable_ask=None_ratio=0.0,0.0,,,58.2,,,,,,,,RESOLUTION_SNIPER_NAIVE,,8.232980951992806
+2026-10-07T16:35:00.330+00:00,1791390900,5min,False,SOL,Up,,0,,,,,5379418,False,no_fillable_ask=None_ratio=0.0,0.0,,,55.5,,,,,,,,RESOLUTION_SNIPER_NAIVE,,6.524100180645555
+2026-10-07T16:35:00.330+00:00,1791390900,5min,False,BTC,Up,,0,,,,,5379420,False,no_fillable_ask=None_ratio=0.0,0.0,,,59.9,,,,,,,,RESOLUTION_SNIPER_NAIVE,,3.7300635480145847
