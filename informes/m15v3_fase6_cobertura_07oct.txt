@@ -1,0 +1,17 @@
+MISIÓN 15M V3 FASE 6 — cubrir el relleno comprando el lado contrario al ask real (recepción), por ACCIÓN rellenada
+
+DISC: rellenos 10508 | MANTENER (resolución) -0.0606 IC90 (-0.0789,-0.0429)
+  ask contrario 1 s ANTES del relleno: media 0.5586; suma P + ask_pre media 1.0398
+  CUBRIR a +  0 ms: -0.0670 IC90 (-0.0730,-0.0617) | ask contrario 0.5763 (subió +0.0177 desde tf−1 s) | % pares con PnL>0 0.4%
+  CUBRIR a +100 ms: -0.0690 IC90 (-0.0740,-0.0636) | ask contrario 0.5783 (subió +0.0196 desde tf−1 s) | % pares con PnL>0 0.7%
+  CUBRIR a +250 ms: -0.0698 IC90 (-0.0750,-0.0645) | ask contrario 0.5792 (subió +0.0205 desde tf−1 s) | % pares con PnL>0 1.0%
+  CUBRIR a +500 ms: -0.0702 IC90 (-0.0755,-0.0647) | ask contrario 0.5795 (subió +0.0209 desde tf−1 s) | % pares con PnL>0 1.4%
+  por fase (cubrir +250 / mantener): T-900..600: -0.073/-0.056  T-600..300: -0.059/-0.040  T-300..70: -0.082/-0.094
+
+VALID: rellenos 5709 | MANTENER (resolución) -0.0565 IC90 (-0.0876,-0.0266)
+  ask contrario 1 s ANTES del relleno: media 0.5574; suma P + ask_pre media 1.0443
+  CUBRIR a +  0 ms: -0.0725 IC90 (-0.0792,-0.0660) | ask contrario 0.5760 (subió +0.0189 desde tf−1 s) | % pares con PnL>0 0.4%
+  CUBRIR a +100 ms: -0.0744 IC90 (-0.0825,-0.0666) | ask contrario 0.5779 (subió +0.0208 desde tf−1 s) | % pares con PnL>0 0.6%
+  CUBRIR a +250 ms: -0.0763 IC90 (-0.0839,-0.0676) | ask contrario 0.5798 (subió +0.0227 desde tf−1 s) | % pares con PnL>0 0.7%
+  CUBRIR a +500 ms: -0.0768 IC90 (-0.0857,-0.0681) | ask contrario 0.5803 (subió +0.0232 desde tf−1 s) | % pares con PnL>0 1.2%
+  por fase (cubrir +250 / mantener): T-900..600: -0.069/-0.047  T-600..300: -0.070/-0.077  T-300..70: -0.097/-0.036
