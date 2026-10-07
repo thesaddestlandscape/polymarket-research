@@ -44,5 +44,6 @@
 | 1h vela Binance / diario Up/Down / perps | NOT-15M | VIVA/captura | — | — | Fuera del TOP 10 15M |
 | Arbitraje matemático YES+NO / mint-merge (3,137) | 15M-DIRECT | REFUTADA | §17 libro espejo | — | No reabrir |
 | Pre-posición en la ventana siguiente (171-172) | 15M-DIRECT | BLOQUEADA → datos L2 incluyen la siguiente | — | — | Evaluar con L2 |
+| Cotización rancia en la APERTURA del 15m (+5..+30 s, |dist_ref| ≥ P90 DISC = 4,9 bps, mid 0,40-0,60) | 15M-DIRECT (taker selectivo) | REFUTADA | m15_maestro 06/07 Oct, ask real +215 ms, 1 por mercado: DISC +0,49 (n=11) → FINAL −0,08 (n=11), OOS2 −0,001 (n=51, IC90 ±0,24); a +215 ms el ask ya es 0,58 (el libro se reprecia antes de llegar) | sí (OOS2) | No reabrir |
 | Salto BTC → 15m de alts (101) | 15M-INFORMATIONAL | NO PROBADA en 15m (captura 30-Sep) | — | — | Tras el 15m>4h |
 | Flujo on-chain limpio (85,177-178,184) | 15M-INFORMATIONAL | BLOQUEADA (retención 4 d) | — | — | Diseñar captura larga |
