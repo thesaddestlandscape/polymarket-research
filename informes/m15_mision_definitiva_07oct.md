@@ -37,7 +37,7 @@ FALSAR → OPTIMIZAR → VALIDAR → MINAR.
 | 21 | Chainlink: llegada de ticks, frecuencia, desviación, vol, saltos, periodos rancios, discrepancia — INFORMATION/EVENT TIMING | **CUBIERTO**: FV Φ(z) peor calibrado que el mid (Brier 0,159 vs 0,155), sin info incremental; edad del tick Chainlink sin poder (ronda 3); cancelación del maker por tick CL+BN P90 (A3) mejora pero no positiva; curva plana (§5). |
 | 22 | CROSS-VENUE STATE (Binance + Chainlink + 5m + 15m + libro + flujo) | **CUBIERTO por §14** (estado combinado → EV maker ≈0 en el mejor caso, por no rellenar) y rondas 1-3 (tomador). Pendiente añadir L2 cuando haya captura. |
 | 23 | Event study exhaustivo (pre/evento/post: continuación, reversión, vacío, repricing, spread, cancelación maker, oportunidad taker) | **CUBIERTO por B (06-Oct)**: saltos Binance/Chainlink y vol: como tomador = placebo; el maker es tóxico tras saltos (evitable cancelando, alimenta A3). Sin liquidaciones (pendiente si aporta). |
-| 24 | Leg 1 / 2 / 3: cuál tiene mejor PnL neto capturable | pendiente |
+| 24 | Leg 1 / 2 / 3: cuál tiene mejor PnL neto capturable | **HECHO 07-Oct, sin edge** (`analisis_15m_s24_patas.py`, informe m15def_s24_patas_07oct.txt; 9.863 eventos |Δmid 1 s|>=3 c, ask real +215 ms, fee real, DISC/VALID/FINAL + OOS2 06-07 Oct): ida y vuelta 5 s −9/−12 %, 30 s −7/−11 % (IC<0 todos); a resolución continuar +0,4/−1/−3/−5 %, revertir −4/−8 %; continuar con Binance confirmando +1,5/+1/+2 % en 05-06 Oct pero −7 % (IC<0) en OOS2 = ruido. |
 | 25 | Tail alpha clasificada ANTES del resultado | pendiente |
 | 26 | Money-first mining (€ por operación/día/capital/hora/mercado) | pendiente |
 | 27 | EXECUTION OPPORTUNITY MODEL: P(oportunidad ejecutable | estado), E[€ | estado] | pendiente |
