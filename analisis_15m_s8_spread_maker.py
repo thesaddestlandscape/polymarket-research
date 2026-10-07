@@ -27,9 +27,10 @@ from analisis_15m_A_quote_age import periodo  # noqa: E402
 
 SH, MAX_SH, L = 5.0, 50.0, 40
 KS = (2, 3, 4)
+S9 = "--s9" in sys.argv          # §9 profundidad: variantes con muro / muro + desequilibrio (umbral P75 de DISC por moneda)
 
 
-def simular(te, tr, bb, ba, T_te, T_p, T_side, T_sz, t0, t1, k):
+def simular(te, tr, bb, ba, T_te, T_p, T_side, T_sz, t0, t1, k, bs=None, as_=None, muro=None, imb=False):
     """Puja propia dentro del spread de UN token. -> (acciones, coste, n_rellenos)."""
     # acciones de la puja: (t_efectivo, precio o None) decididas al RECIBIR cada cambio del libro
     acc_t, acc_p = [], []
@@ -38,7 +39,12 @@ def simular(te, tr, bb, ba, T_te, T_p, T_side, T_sz, t0, t1, k):
             break
         b, a = bb[i], ba[i]
         p = None
-        if np.isfinite(b) and np.isfinite(a) and a - b >= k / 100 - 1e-9:
+        ok_prof = True
+        if muro is not None:                   # §9: solo con un MURO detrás (tamaño del mejor bid >= P75 de DISC)
+            ok_prof = np.isfinite(bs[i]) and bs[i] >= muro
+            if imb:                            # y desequilibrio N1 a favor (bid >= ask en tamaño)
+                ok_prof = ok_prof and np.isfinite(as_[i]) and bs[i] >= as_[i]
+        if ok_prof and np.isfinite(b) and np.isfinite(a) and a - b >= k / 100 - 1e-9:
             p = round(float(b) + 0.01, 2)
             if not (0.05 <= p <= 0.95) or p >= a - 1e-9:
                 p = None
@@ -74,6 +80,13 @@ def main():
     toks = C["tokens"]
     des = desenlaces({k[2] for k in toks})
     bq = np.searchsorted(q["tok"], np.arange(len(toks) + 1))
+    global MURO
+    from analisis_15m_A_quote_age import DISC
+    d = (q["te"] >= DISC[0]) & (q["te"] < DISC[1]) & np.isfinite(q["bs"])
+    act_tok = np.array([t[1] for t in toks])
+    MURO = {a_: float(np.quantile(q["bs"][d & (act_tok[q["tok"]] == a_)], 0.75)) for a_ in set(act_tok)}
+    if S9:
+        print("umbral de muro (P75 DISC del tamaño del mejor bid): " + " ".join(f"{k}:{v:.0f}" for k, v in sorted(MURO.items())))
     bt = np.searchsorted(tt["tok"], np.arange(len(toks) + 1))
     filas = []
     for i, (tk, act, mid_, fin, lado) in enumerate(toks):
@@ -89,14 +102,18 @@ def main():
         T_side, T_sz = tt["side"][ta:tb], tt["sz"][ta:tb].astype(np.float64)
         t0, t1 = (fin - 900) * 1000 + 5000, fin * 1000 - 10_000
         gana = 1.0 if des[mid_] == lado else 0.0
-        for k in KS:
-            sh, coste, nrel = simular(te, tr, bb, ba, T_te, T_p, T_side, T_sz, t0, t1, k)
+        bs_, as__ = q["bs"][a:b].astype(np.float64), q["as_"][a:b].astype(np.float64)
+        variantes = [(k, None, False) for k in KS] if not S9 else \
+            [(f"{k}m", MURO[act], False) for k in (2, 3)] + [(f"{k}mi", MURO[act], True) for k in (2, 3)]
+        for kk, muro, imb in variantes:
+            k = int(str(kk)[0])
+            sh, coste, nrel = simular(te, tr, bb, ba, T_te, T_p, T_side, T_sz, t0, t1, k, bs_, as__, muro, imb)
             pm = coste / sh if sh else 0.0
             reb = 0.2 * 0.07 * pm * (1 - pm) * sh
-            filas.append((k, act, mid_, fin, lado, sh, coste, nrel, sh * gana - coste, sh * gana - coste + reb))
+            filas.append((kk, act, mid_, fin, lado, sh, coste, nrel, sh * gana - coste, sh * gana - coste + reb))
     R = pd.DataFrame(filas, columns=["k", "act", "mkt", "fin", "lado", "acc", "coste", "nrel", "pnl", "pnl_reb"])
     R["per"] = periodo((R["fin"].values - 450) * 1000)
-    R.to_parquet("/root/polymarket-research-datalogs/m15_ms_cache/s8_spread_maker.parquet")
+    R.to_parquet("/root/polymarket-research-datalogs/m15_ms_cache/s%s_spread_maker.parquet" % ("9" if S9 else "8"))
     rng = np.random.default_rng(8)
     # por mercado: YES+NO; pares completos = acciones emparejadas min(acc_yes, acc_no)
     P = R.pivot_table(index=["k", "per", "act", "mkt", "fin"], columns="lado",
@@ -109,7 +126,7 @@ def main():
     P["pnl_reb"] = sum(P[f"pnl_reb_{l}"] for l in lados)
     P = P.reset_index()
     print("§8 SPREAD_k: puja post-only en mejor bid + 1c mientras el spread de los demás >= k; L = 40 ms; SH = 5")
-    print(f"{'k':>2} {'per':5} | {'merc':>4} {'%c/relleno':>10} {'acc':>6} {'pares':>6} | {'$/merc':>7} {'+rebate':>8} "
+    print(f"{'k':>4} {'per':5} | {'merc':>4} {'%c/relleno':>10} {'acc':>6} {'pares':>6} | {'$/merc':>7} {'+rebate':>8} "
           f"{'IC90 cierres':>18} {'sin mejor':>9}")
     for (k, per), g in P.groupby(["k", "per"]):
         if per == "EMB":
@@ -119,7 +136,7 @@ def main():
         bs = [S[x].sum() / N[x].sum() for x in (rng.integers(0, len(S), len(S)) for _ in range(1000))]
         o = np.argsort(-S)
         sin = (S.sum() - S[o[0]]) / (N.sum() - N[o[0]])
-        print(f"{k:2} {per:5} | {len(g):4} {100 * (g.acc > 0).mean():9.0f}% {g.acc.sum():6.0f} {g.par.sum():6.0f} | "
+        print(f"{str(k):>4} {per:5} | {len(g):4} {100 * (g.acc > 0).mean():9.0f}% {g.acc.sum():6.0f} {g.par.sum():6.0f} | "
               f"{g.pnl.mean():+7.3f} {g.pnl_reb.mean():+8.3f} ({np.percentile(bs, 5):+.3f},{np.percentile(bs, 95):+.3f}) "
               f"{sin:+9.3f}")
     print("\nPor moneda (VALID+FINAL, $/mercado con rebate):")
