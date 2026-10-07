@@ -1,45 +1,45 @@
 {
-  "ETH": {
-    "smart_money_consensus": 0.3171,
-    "n_trades_smart": 41,
-    "n_wallets_smart": 4,
-    "smart_money_consensus_ponderado": 0.1821,
-    "n_wallets_smart_ponderado": 4
-  },
   "SOL": {
-    "smart_money_consensus": -0.3333,
-    "n_trades_smart": 9,
+    "smart_money_consensus": 0.1402,
+    "n_trades_smart": 107,
     "n_wallets_smart": 3,
-    "smart_money_consensus_ponderado": -0.2819,
+    "smart_money_consensus_ponderado": 0.129,
+    "n_wallets_smart_ponderado": 3
+  },
+  "XRP": {
+    "smart_money_consensus": -0.1333,
+    "n_trades_smart": 30,
+    "n_wallets_smart": 1,
+    "smart_money_consensus_ponderado": 0.0172,
+    "n_wallets_smart_ponderado": 1
+  },
+  "ETH": {
+    "smart_money_consensus": 0.2597,
+    "n_trades_smart": 154,
+    "n_wallets_smart": 3,
+    "smart_money_consensus_ponderado": 0.0594,
     "n_wallets_smart_ponderado": 3
   },
   "BTC": {
-    "smart_money_consensus": -0.0852,
-    "n_trades_smart": 223,
-    "n_wallets_smart": 5,
-    "smart_money_consensus_ponderado": -0.1141,
-    "n_wallets_smart_ponderado": 5
-  },
-  "XRP": {
-    "smart_money_consensus": -0.75,
-    "n_trades_smart": 8,
-    "n_wallets_smart": 2,
-    "smart_money_consensus_ponderado": -0.9824,
-    "n_wallets_smart_ponderado": 2
+    "smart_money_consensus": 0.0222,
+    "n_trades_smart": 1444,
+    "n_wallets_smart": 4,
+    "smart_money_consensus_ponderado": 0.0452,
+    "n_wallets_smart_ponderado": 4
   },
   "BNB": {
-    "smart_money_consensus": -1.0,
+    "smart_money_consensus": 1.0,
     "n_trades_smart": 1,
     "n_wallets_smart": 1,
-    "smart_money_consensus_ponderado": -1.0,
+    "smart_money_consensus_ponderado": 1.0,
     "n_wallets_smart_ponderado": 1
   },
   "DOGE": {
     "smart_money_consensus": -1.0,
-    "n_trades_smart": 3,
+    "n_trades_smart": 2,
     "n_wallets_smart": 1,
     "smart_money_consensus_ponderado": -1.0,
     "n_wallets_smart_ponderado": 1
   },
-  "_actualizado": "2026-10-07T02:12:27+00:00"
+  "_actualizado": "2026-10-07T02:35:05+00:00"
 }
