@@ -1,0 +1,37 @@
+GUARDA "precio mejoró" en live_trade._ejecutar_orden_polymarket (07-Oct, misión 15M V3, OK Javi para prepararla en dev)
+Pregunta de Javi: ¿cuántos trades reales se llenaron por debajo del ask de la decisión y cómo les fue?
+Datos: data/live/trades.csv (CLOSED con signal_ask y slip_real, 377 desde 28-Jul) × data/live/libro_snapshots.csv (motivo
+'ejecutada', mejor_ask al enviar; merge_asof ±30 s por market_id+direction: 346 emparejados, plan cuadra 93,9 %).
+En live_trade signal_ask = precio del PLAN de la señal; slip_real = relleno − plan.
+1) Relleno vs plan: MÁS BARATO (≤−0,5c) n=98 acierto 43,9 % −26,52 € (−0,233 €/€, IC90 (−0,434,−0,019)); IGUAL n=194 −0,035;
+   MÁS CARO n=85 −0,035. Dosis-respuesta monótona (≤−5c: 21 % de acierto, −0,63 €/€).
+2) Descomposición: (a) RE-QUOTE (ask al enviar vs plan): ask ≥1c por debajo n=73 acierto 37,0 % −37,28 € (−0,441 €/€);
+   igual n=200 −0,027; por encima n=73 +0,031. (b) VUELO (relleno vs ask al enviar): por debajo n=32 −6,88 € (efecto menor).
+   → el daño está en la rama de _decidir_requote "precio mejoró — antes el FOK moría aquí" (solo se cortaba si >10c).
+3) Robustez (sin PRECIERRE, que no pasa por esta función): permutación p=0,0002 (diferencia +0,430 €/€); 31 días distintos,
+   IC90 por días (−0,643,−0,231), 81 % de días en pérdida; sin los 2 mejores días −0,558; por mes jul −0,272 / ago −0,429 /
+   sep −0,508. Estrategias live hoy: SNIPER vetaría 4 (0 aciertos, −5,23 €), DISPERSO 2 (−1,46 €), WM 15 (−6,53 €).
+GUARDA: ask ≤ plan − 0,005 → no operar (abort_requote, error "requote_mejora: …"); fail-closed si ask/plan no numéricos o no
+finitos; fuera del bloque de edge_dir (todo caller). PRECIERRE no afectado (ejecutor propio; su muestra va al revés, n=9).
+
+V2 tras /code-review (07-Oct ~19:30Z), 9 hallazgos atendidos:
+- Desagregado por dirección: BUY_YES ask 0,5-2,5c bajo el plan n=30 −0,502 €/€, >2,5c n=17 −0,699, al plan n=127 +0,013;
+  BUY_NO efecto débil (n=26: −0,294 / −0,075) y FAVORITO_CONFIRMADO BUY_NO al revés (+0,229, n=11); además en los ejecutores
+  el plan de BUY_NO es 1 − ask YES (puja implícita del NO, no comparable con el ask del NO) → la guarda SOLO veta BUY_YES.
+- Helper único _veto_requote_mejora aplicado en la 1ª lectura del libro Y en la lectura fresca del re-chequeo antes de firmar.
+- Motivo propio abort_requote_mejora (dado de alta en libro_snapshots_prioridad.PRIORIDAD) para medir la guarda en forward.
+- Comparación redondeada (round(plan − ask, 4) >= 0,005): 0 fallos de frontera con ticks de 0,001.
+- Reintento de señales de ballenas APARCADAS exento (contexto reintento_aparcado): su plan tiene minutos.
+- Pendiente conocido (no se toca): en main() el plan es precio_yes_mercado de gamma (puede ser medio/último trade, y 0,5 si
+  falta la clave); umbral global sin desagregar por moneda×marco×bucket (n insuficiente: 47 casos BUY_YES) → se medirá en
+  forward con el motivo propio.
+
+DECISIÓN Javi (07-Oct ~19:00Z): opción (c) — NO vetar todavía; REGISTRO EN SOMBRA 1-2 semanas y decidir con datos.
+Motivos: la guarda V2 (stash en dev) se esquivaba re-disparando con el ask ya bajado como plan; BUY_NO sin evidencia; sin
+desagregar por moneda×marco×bucket (n=47 BUY_YES). Diseño final del registro (8 /code-review): envoltorio transparente de
+_ejecutar_orden_polymarket; filas por intento en memoria (inicial, snapshot:<motivo>, rechequeoN) volcadas con el desenlace;
+cero E/S en la ruta de la orden (cola + hilo escritor al importar, flock no bloqueante, atexit <= 0,5 s); pérdidas contadas
+y avisadas en el log. Fichero /root/polymarket-research-datalogs/requote_mejora_sombra_YYYY-MM-DD.csv (19 columnas).
+Despliegue programado 22:15Z (at job 25, script datalogs/deploy_07oct/deploy.sh con guardas de hash), coincidiendo con el
+restart_ram de 22:20Z. ANÁLISIS A HACER (1-2 semanas): por intento, primer plan por (mercado, dirección) para detectar
+re-disparos; tasa de bajada >= 1 tick por estrategia × moneda × marco × bucket; desenlace oficial de los que se habrían vetado.
