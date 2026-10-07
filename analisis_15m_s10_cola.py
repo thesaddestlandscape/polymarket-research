@@ -78,11 +78,17 @@ def virtuales(te, bb, ba, bs, as_, T_te, T_p, T_side, T_sz, ini, fin, gana):
             tf = fill[modo]
             fila[f"lleno_{modo}"] = tf is not None
             if tf is not None:
+                for h in (100, 215, 500, 1000, 2000):          # 07-Oct V3 Fase 1: curva post-relleno fina
+                    fila[f"mk{h}ms_{modo}"] = mid_en(te, bb, ba, tf + h) - P
+                fila[f"mid0_{modo}"] = mid_en(te, bb, ba, tf) - P   # mid en el instante del relleno (antes de movimiento)
                 fila[f"mk5_{modo}"] = mid_en(te, bb, ba, tf + 5000) - P
                 fila[f"mk30_{modo}"] = mid_en(te, bb, ba, tf + 30_000) - P
                 fila[f"res_{modo}"] = gana - P + reb
             else:
                 fila[f"mk5_{modo}"] = fila[f"mk30_{modo}"] = fila[f"res_{modo}"] = np.nan
+                for h in (100, 215, 500, 1000, 2000):
+                    fila[f"mk{h}ms_{modo}"] = np.nan
+                fila[f"mid0_{modo}"] = np.nan
         out.append(fila)
     return out
 
@@ -101,19 +107,24 @@ def main():
         a, b = bq[i], bq[i + 1]
         if b - a < 50:
             continue
-        te = q["te"][a:b]
-        bb, ba = q["bb"][a:b].astype(np.float64), q["ba"][a:b].astype(np.float64)
-        bs, as_ = q["bs"][a:b].astype(np.float64), q["as_"][a:b].astype(np.float64)
+        # 07-Oct (V3 Fase 0): --recepcion ordena libro y operaciones por NUESTRA hora de recepción (el timestamp del WS
+        # puede ir hasta ~470 ms por detrás del evento real: sello de lote), en vez de por el timestamp del exchange.
+        RX = "--recepcion" in sys.argv
+        oq = np.argsort(q["tr"][a:b], kind="stable") if RX else np.arange(b - a)
+        te = (q["tr"] if RX else q["te"])[a:b][oq]
+        bb, ba = q["bb"][a:b][oq].astype(np.float64), q["ba"][a:b][oq].astype(np.float64)
+        bs, as_ = q["bs"][a:b][oq].astype(np.float64), q["as_"][a:b][oq].astype(np.float64)
         ta, tb = bt[i], bt[i + 1]
-        T_te, T_p = tt["te"][ta:tb], tt["p"][ta:tb].astype(np.float64)
-        T_side, T_sz = tt["side"][ta:tb], tt["sz"][ta:tb].astype(np.float64)
+        ot = np.argsort(tt["tr"][ta:tb], kind="stable") if RX else np.arange(tb - ta)
+        T_te, T_p = (tt["tr"] if RX else tt["te"])[ta:tb][ot], tt["p"][ta:tb][ot].astype(np.float64)
+        T_side, T_sz = tt["side"][ta:tb][ot], tt["sz"][ta:tb][ot].astype(np.float64)
         gana = 1.0 if des[mid_] == lado else 0.0
         for f in virtuales(te, bb, ba, bs, as_, T_te, T_p, T_side, T_sz, (fin - 900) * 1000, fin * 1000, gana):
             f.update(act=act, mkt=mid_, fin=fin, lado=lado)
             filas.append(f)
     R = pd.DataFrame(filas)
     R["per"] = periodo(R["ts"].values)
-    R.to_parquet("/root/polymarket-research-datalogs/m15_ms_cache/s10_cola.parquet")
+    R.to_parquet("/root/polymarket-research-datalogs/m15_ms_cache/s10_cola%s.parquet" % ("_recepcion" if "--recepcion" in sys.argv else ""))
     disc = R[R.per == "DISC"]
     qs = {a_: np.quantile(g.Q0, [0.2, 0.4, 0.6, 0.8]) for a_, g in disc.groupby("act")}
     R["cola_q"] = [int(np.searchsorted(qs[a_], x)) for a_, x in zip(R.act, R.Q0)]
