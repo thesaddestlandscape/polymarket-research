@@ -11,6 +11,7 @@ Lectura: from m15_ms_cache import cargar; C = cargar()  (dict de arrays + C["tok
 """
 import io
 import json
+import os
 import subprocess
 import sys
 from datetime import datetime
@@ -20,8 +21,11 @@ import numpy as np
 import pandas as pd
 
 DL = Path("/root/polymarket-research-datalogs")
-OUT = DL / "m15_ms_cache"
-FILES = lambda: sorted(DL.glob("maker_ms_2026-10-0[56]_*.csv.gz"))
+# 07-Oct: M15_CACHE_DIR / M15_CACHE_GLOB permiten construir una caché de OTROS días (rastreo A3 con días nuevos) sin tocar
+# la caché original de la misión (05-06 Oct).
+OUT = Path(os.environ.get("M15_CACHE_DIR", str(DL / "m15_ms_cache")))
+ACTIVOS = set(filter(None, os.environ.get("M15_CACHE_ACTIVOS", "").split(",")))   # 07-Oct: p. ej. "BTC" (memoria)
+FILES = lambda: sorted(DL.glob(os.environ.get("M15_CACHE_GLOB", "maker_ms_2026-10-0[56]_*.csv.gz")))
 SIM = {"BTCUSDT": 0, "ETHUSDT": 1, "SOLUSDT": 2, "XRPUSDT": 3, "DOGEUSDT": 4, "BNBUSDT": 5}
 MON = ["BTC", "ETH", "SOL", "XRP", "DOGE", "BNB"]
 
@@ -42,7 +46,7 @@ def construir():
     for f in FILES():
         for ln in _grep(f, "k").decode().splitlines():
             r = ln.split(",")
-            if len(r) >= 8 and r[4] == "15min":
+            if len(r) >= 8 and r[4] == "15min" and (not ACTIVOS or r[3] in ACTIVOS):
                 toks[r[2]] = (r[3], r[5], int(datetime.fromisoformat(r[6]).timestamp()), r[7])
     lista = sorted(toks)
     idx = {t: i for i, t in enumerate(lista)}
@@ -64,7 +68,7 @@ def construir():
                 num = lambda c, dt: pd.to_numeric(ch[c], errors="coerce").to_numpy(dtype=dt, na_value=np.nan) \
                     if dt is np.float32 else pd.to_numeric(ch[c], errors="coerce").fillna(-1).to_numpy(dtype=dt)
                 if pref == "x":
-                    ch = ch[ch["sym"].isin(SIM)]
+                    ch = ch[ch["sym"].isin(SIM if not ACTIVOS else {f"{a}USDT" for a in ACTIVOS})]
                     if ch.empty:
                         continue
                     d = {"T": num("T", np.int64), "tr": num("tr", np.int64), "s": ch["sym"].map(SIM).to_numpy(np.int8),

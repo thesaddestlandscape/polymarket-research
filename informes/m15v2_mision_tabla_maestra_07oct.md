@@ -32,7 +32,7 @@
 |---|---|---|---|---|---|
 | Maker pasivo / dentro del spread / con muro / por cola (9,17,25-32,41) | 15M-DIRECT | REFUTADA | §8-10: markout −5,5/−6,2 c a 5 s; EV/orden −0,6/−1,0 c | VALID+FINAL+OOS | No reabrir |
 | Maker EV(estado) L1+Binance+CL (43-44,67) | 15M-INFORMATIONAL | REFUTADA | §14: Ridge ≈0 por no rellenar, GBM sobreajusta | VALID/FINAL | Reabrir solo con L2 |
-| Maker que cancela CL+BN / A2 (42,45) | 15M-INFORMATIONAL | REDUCCIÓN DE PÉRDIDAS (no alpha) | A3 −4,4 → −0,4 $/merc; BTC +0,72 sin n | parcial | Rastrear BTC con días nuevos (registro 14 d) |
+| Maker que cancela CL+BN / A2 (42,45) | 15M-INFORMATIONAL | REDUCCIÓN DE PÉRDIDAS (no alpha) | A3 −4,4 → −0,4 $/merc; BTC +0,72 en VALID+FINAL. **OOS 07-Oct** (regla y umbrales congelados, `analisis_15m_A3_politica_maker.py --nuevo`, 42 mercados BTC que cierran 06-Oct 16:15 → 07-Oct): KEEP −1,49, cancelar −0,21 (IC90 −0,80,+0,43) → BTC NO positivo fuera de muestra | sí (n=42) | Seguir acumulando días; no tratar como alpha |
 | Maker en ambas patas / maker A + taker B (57-58,64) | 15M-DIRECT | REFUTADA (estructural) | §16: par 3-4 %, pata suelta 24 % → −1,3/−2,1 c | VALID/FINAL | No reabrir |
 | Inventario de pares acuñados + venta maker con skew (59,62,139) | 15M-HYBRID | REFUTADA POR EQUIVALENCIA (INFERRED) | Con libro espejo (DOCUMENTED) vender YES del inventario al ask a = misma exposición que pujar NO a 1−a → es el maker en ambas patas de §16 (misma selección adversa ~6 c) | — | No reabrir salvo skew con información nueva (L2) |
 | Profundidad L2 (19-24) | 15M-INFORMATIONAL | BLOQUEADA POR DATOS | captura desde 07-Oct 09:05Z; cerca del cierre (imb5) REFUTADA | — | Evaluar con 3-5 días |
@@ -46,11 +46,11 @@
 | Pre-posición en la ventana siguiente (171-172) | 15M-DIRECT | BLOQUEADA → datos L2 incluyen la siguiente | — | — | Evaluar con L2 |
 | Cotización rancia en la APERTURA del 15m (+5..+30 s, |dist_ref| ≥ P90 DISC = 4,9 bps, mid 0,40-0,60) | 15M-DIRECT (taker selectivo) | REFUTADA | m15_maestro 06/07 Oct, ask real +215 ms, 1 por mercado: DISC +0,49 (n=11) → FINAL −0,08 (n=11), OOS2 −0,001 (n=51, IC90 ±0,24); a +215 ms el ask ya es 0,58 (el libro se reprecia antes de llegar) | sí (OOS2) | No reabrir |
 | Salto BTC → 15m de alts con su Binance quieto (101) | 15M-INFORMATIONAL | REFUTADA (taker y defensiva) | m15_maestro 06/07 Oct, BTC 1 s ≥ P99 DISC (1,4 bps), alt ≤ su mediana, ask real +215 ms: OOS2 n=503 resolución −0,16 (IC<0), ida y vuelta −10 %; el mid del 15m de la alt se mueve −0,9/+0,1 c en 5 s tras el salto → libros de alts NO rancios frente a BTC (tampoco sirve para cancelar: toxicidad típica ~6 c) | sí (OOS2) | No reabrir |
-| Flujo on-chain limpio (85,177-178,184) | 15M-INFORMATIONAL | BLOQUEADA (retención 4 d) | — | — | Diseñar captura larga |
+| Flujo on-chain limpio (85,177-178,184) | 15M-INFORMATIONAL | DESBLOQUEADO 07-Oct (`extraer_onchain_15m.py`, 30 d, cron 03:55; 06-Oct 606.887 rellenos 15m) | — | — | Analizar con ≥5 días: flujo tomador real por estado, quién captura |
 
 ## Estado v2 al cierre del 07-Oct
 Todo lo probable con los datos actuales en el 15M está falsado bajo estas condiciones (taker a +215 ms con fee real, maker con cola
 real y latencia medida, OOS2 06-07 Oct). Mecanismos vivos 15M: **PRECIERRE** (resolución, en real) · **A3 BTC** (reducción de
-pérdidas; rastrear para ver si BTC es positivo con días nuevos) · **profundidad L2** y **pre-posición en la ventana siguiente**
+pérdidas; OOS 07-Oct −0,21 $/merc n=42: no positivo) · **profundidad L2** y **pre-posición en la ventana siguiente**
 (bloqueados, captura desde 07-Oct 09:05Z) · **flujo on-chain limpio** (bloqueado, retención 4 d). La investigación continúa
 cuando entren esos datos.

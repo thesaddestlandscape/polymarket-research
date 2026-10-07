@@ -1,0 +1,17 @@
+umbrales DISC BTC: Binance 1 s P90 1.29 bps P99 3.26 | Chainlink tick P90 0.28 bps
+umbrales DISC ETH: Binance 1 s P90 5.09 bps P99 45.58 | Chainlink tick P90 0.36 bps
+umbrales DISC SOL: Binance 1 s P90 2.48 bps P99 10.77 | Chainlink tick P90 0.45 bps
+umbrales DISC XRP: Binance 1 s P90 2.00 bps P99 5.99 | Chainlink tick P90 0.57 bps
+umbrales DISC DOGE: Binance 1 s P90 4.17 bps P99 21.22 | Chainlink tick P90 0.65 bps
+umbrales DISC BNB: Binance 1 s P90 1.28 bps P99 5.22 | Chainlink tick P90 0.36 bps
+
+CURVA LATENCIA -> DINERO del maker que cancela (CL+BN P90), $/mercado; L = ms desde la RECEPCIÓN del dato
+pol                 L per   | merc    acc |  $/merc con rebate    IC90 cierres (rebate)
+CANCEL_CL+BN_P90  250 NUEVO |   42   4125 |  -0.520     -0.206 (-0.804,+0.430)
+KEEP                0 NUEVO |   42   4200 |  -1.814     -1.486 (-1.956,-1.007)
+
+Por moneda, VALID+FINAL, $/mercado con rebate:
+act                           BTC
+pol              L   per         
+CANCEL_CL+BN_P90 250 NUEVO -0.206
+KEEP             0   NUEVO -1.486

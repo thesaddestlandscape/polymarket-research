@@ -48,14 +48,16 @@ def senales(C, cl):
         k = np.searchsorted(T, T - 1000, side="right") - 1
         r = np.where(k >= 0, (P / P[np.clip(k, 0, None)] - 1) * 1e4, 0.0)
         d = (T >= DISC[0]) & (T < DISC[1])
-        bn = (T, r, np.quantile(np.abs(r[d]), 0.90), np.quantile(np.abs(r[d]), 0.99))
+        q90 = np.quantile(np.abs(r[d]), 0.90) if d.any() else np.nan      # 07-Oct: caché sin DISC (--nuevo) -> NaN,
+        q99 = np.quantile(np.abs(r[d]), 0.99) if d.any() else np.nan      # que main() sustituye por los umbrales fijos
+        bn = (T, r, q90, q99)
         clx = None
         if act in cl:
             ct = np.frombuffer(cl[act].t, dtype=np.int64)
             cp = np.frombuffer(cl[act].p, dtype=np.float64)
             rr = np.r_[0, (cp[1:] / cp[:-1] - 1) * 1e4]
             dd = (ct >= DISC[0]) & (ct < DISC[1])
-            clx = (ct, rr, np.quantile(np.abs(rr[dd]), 0.90))
+            clx = (ct, rr, np.quantile(np.abs(rr[dd]), 0.90) if dd.any() else np.nan)
         out[act] = (bn, clx)
     return out
 
@@ -137,13 +139,27 @@ def simular(te, bb, bs, cb, T_te, T_p, T_sz, t0, t1, SH, bloq, widen):
     return sh, coste
 
 
+# 07-Oct (misión 15M v2, rastreo de A3 BTC con días NUEVOS): --nuevo usa la caché M15_CACHE_DIR (días posteriores al
+# diseño), umbrales CONGELADOS publicados en informes/m15_A3_politica_maker_combo_06oct.txt (no se recalculan), la política
+# congelada CANCEL_CL+BN_P90 L=250 SH=5 frente a KEEP, y solo mercados que cierran tras el 06-Oct 16:15 UTC.
+NUEVO = "--nuevo" in sys.argv
+UMB_FIJOS = {"BTC": (1.29, 3.26, 0.28), "ETH": (5.09, 45.58, 0.36), "SOL": (2.48, 10.77, 0.45),
+             "XRP": (2.00, 5.99, 0.57), "DOGE": (4.17, 21.22, 0.65), "BNB": (1.28, 5.22, 0.36)}
+CORTE_NUEVO = 1791339300                 # 2026-10-06T16:15:00Z
+
+
 def main():
     C = cargar()
     q, tt = C["q"], C["t"]
     toks = C["tokens"]
     des = desenlaces({k[2] for k in toks})
-    cl = cargar_chainlink(["2026-10-05", "2026-10-06"])
+    cl = cargar_chainlink(["2026-10-06", "2026-10-07"] if NUEVO else ["2026-10-05", "2026-10-06"])
     S = senales(C, cl)
+    if NUEVO:                             # umbrales congelados del diseño, nunca recalculados con los días nuevos
+        for act, (b90, b99, c90) in UMB_FIJOS.items():
+            if act in S:
+                bn, clx = S[act]
+                S[act] = ((bn[0], bn[1], b90, b99), (clx[0], clx[1], c90) if clx else None)
     for act in MON:
         bn, clx = S[act]
         print(f"umbrales DISC {act}: Binance 1 s P90 {bn[2]:.2f} bps P99 {bn[3]:.2f} | Chainlink tick P90 "
@@ -155,7 +171,9 @@ def main():
         configs += [("CANCEL_BN_P90", "bn90", L, 5, False), ("CANCEL_BN_P99", "bn99", L, 5, False),
                     ("CANCEL_CL_P90", "cl90", L, 5, False)]
     configs += [("CANCEL_BN_P90", "bn90", 250, 25, False)]
-    if "--curva" in sys.argv:       # 07-Oct misión definitiva §5/§29: curva latencia->dinero del maker que cancela. La
+    if NUEVO:
+        configs = [("KEEP", None, 0, 5, False), ("CANCEL_CL+BN_P90", "combo", 250, 5, False)]
+    elif "--curva" in sys.argv:       # 07-Oct misión definitiva §5/§29: curva latencia->dinero del maker que cancela. La
         # cancelación medida con órdenes reales cuesta ~60 ms ida y vuelta (~30 ms de ida) + firma ~6 ms: L realista ~40 ms,
         # no 150-300 (A3 original usaba latencias de tomador). Misma regla CL+BN P90 de DISC, L de 0 a 300 ms.
         configs = [("KEEP", None, 0, 5, False)] + [("CANCEL_CL+BN_P90", "combo", L, 5, False)
@@ -168,6 +186,8 @@ def main():
     filas = []
     for i, (tk, act, mid_, fin, lado) in enumerate(toks):
         if mid_ not in des or act not in S:
+            continue
+        if NUEVO and fin < CORTE_NUEVO:
             continue
         a, b = bq[i], bq[i + 1]
         if b - a < 50:
@@ -213,10 +233,10 @@ def main():
             reb = 0.2 * 0.07 * pm * (1 - pm) * sh
             filas.append((nom, L, SH, act, mid_, fin, lado, sh, coste, sh * gana - coste, sh * gana - coste + reb))
     R = pd.DataFrame(filas, columns=["pol", "L", "SH", "act", "mkt", "fin", "lado", "acc", "coste", "pnl", "pnl_reb"])
-    R["per"] = periodo((R["fin"].values - 450) * 1000)
-    suf = ("_curva_neg" if "--neg" in sys.argv else "_curva") if "--curva" in sys.argv else "_combo" if "--combo" in sys.argv else ""
+    R["per"] = "NUEVO" if NUEVO else periodo((R["fin"].values - 450) * 1000)
+    suf = "_nuevo" if NUEVO else ("_curva_neg" if "--neg" in sys.argv else "_curva") if "--curva" in sys.argv else "_combo" if "--combo" in sys.argv else ""
     R.to_parquet("/root/polymarket-research-datalogs/m15_ms_cache/A3_politicas%s.parquet" % suf)
-    if "--curva" in sys.argv:
+    if "--curva" in sys.argv or NUEVO:
         curva(R)
         return
     informe(R)
@@ -237,7 +257,7 @@ def curva(R):
         print(f"{pol:16} {L:4} {per:5} | {len(g):4} {g.acc.sum():6.0f} | {g.pnl.mean():+7.3f} {g.pnl_reb.mean():+10.3f} "
               f"({np.percentile(bs, 5):+.3f},{np.percentile(bs, 95):+.3f})")
     print("\nPor moneda, VALID+FINAL, $/mercado con rebate:")
-    G = M[M.per.isin(["VALID", "FINAL"])].groupby(["pol", "L", "act"])["pnl_reb"].mean().unstack()
+    G = M[M.per.isin(["VALID", "FINAL", "NUEVO"])].groupby(["pol", "L", "per", "act"])["pnl_reb"].mean().unstack()
     print(G.round(3).to_string())
 
 
