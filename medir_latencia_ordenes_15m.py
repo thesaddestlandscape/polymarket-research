@@ -90,7 +90,11 @@ def _mercados_todos():
     """[(tok, outcome, otro_tok)] de los 15m vivos de las 6 monedas con margen (>=60 s abierto, >=150 s al cierre)."""
     out = []
     for m in ("btc", "eth", "sol", "xrp", "doge", "bnb"):
-        mk = mercado(m)
+        try:
+            mk = mercado(m)
+        except Exception as e:
+            log({"tipo": "gamma_error", "m": m, "e": str(e)[:120]})
+            continue
         if mk:
             (t0, o0), (t1, o1) = mk[2]
             out += [(t0, f"{m}:{o0}", t1), (t1, f"{m}:{o1}", t0)]
@@ -100,11 +104,19 @@ def _mercados_todos():
 def _elegir_t4(lados):
     """Nivel ESTABLE (mismo precio y tamaño en dos lecturas a 1 s) del mejor ask, banda 0,05-0,95; la profundidad
     incluye lo que casa por mint (bids del otro token a >= 1 - ask). Tamaño >= 3x eso, mínimo 1 $ y coste <= tope."""
-    l1 = {t: libro(t) for t, _, _ in lados}
+    def seguro(t):
+        try:
+            return libro(t)
+        except Exception as e:                      # libro ilegible: ese mercado NO se elige (fail-closed por mercado)
+            log({"tipo": "libro_error", "tok": t[:12], "e": f"{type(e).__name__}: {str(e)[:120]}"})
+            return None
+    l1 = {t: seguro(t) for t, _, _ in lados}
     time.sleep(1.0)
-    l2 = {t: libro(t) for t, _, _ in lados}
+    l2 = {t: seguro(t) for t, _, _ in lados}
     mejor = None
     for t, o_, otro in lados:
+        if not l1.get(t) or not l2.get(t) or not l2.get(otro):
+            continue
         a1, a2 = l1[t][1], l2[t][1]
         if not a1 or not a2 or a1[0] != a2[0]:
             continue
