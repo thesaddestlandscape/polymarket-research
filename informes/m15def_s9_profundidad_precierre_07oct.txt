@@ -1,0 +1,24 @@
+observaciones: 1614 | mercados 850 | días ['2026-09-29', '2026-09-30', '2026-10-01', '2026-10-02', '2026-10-03', '2026-10-04', '2026-10-05', '2026-10-06', '2026-10-07']
+
+H9a_imb5: umbral P80 DISC = +0.304
+   DISC: n=  146 cierres=  90 ask medio 0.416 acierto 0.384 | PnL/€ -0.2809 IC90 (-0.4890,-0.0433) | BASE mismo rango de precio n=528 PnL/€ -0.3273
+      T-60s n=  76 PnL/€ -0.3045
+      T-45s n=  42 PnL/€ -0.0135
+   TEST: n=  204 cierres= 142 ask medio 0.393 acierto 0.387 | PnL/€ +0.1783 IC90 (-0.1613,+0.5719) | BASE mismo rango de precio n=704 PnL/€ -0.0138
+      T-60s n= 100 PnL/€ +0.5610
+      T-45s n=  63 PnL/€ -0.0931
+      T-30s n=  41 PnL/€ -0.3378
+
+H9a_imb1: umbral P80 DISC = +0.454
+   DISC: n=  146 cierres= 108 ask medio 0.463 acierto 0.432 | PnL/€ -0.3303 IC90 (-0.4997,-0.1249) | BASE mismo rango de precio n=602 PnL/€ -0.3893
+      T-60s n=  85 PnL/€ -0.4478
+      T-45s n=  35 PnL/€ -0.1386
+   TEST: n=  229 cierres= 152 ask medio 0.402 acierto 0.345 | PnL/€ -0.0629 IC90 (-0.4166,+0.3617) | BASE mismo rango de precio n=739 PnL/€ +0.0147
+      T-60s n= 116 PnL/€ +0.0289
+      T-45s n=  66 PnL/€ -0.4159
+      T-30s n=  47 PnL/€ +0.2061
+
+INCREMENTAL (TEST): PnL/€ por tercil de imb5 DENTRO de cada tercil de imb1
+   imb1 tercil 0: imb5 t0: n= 161 +0.400 (acierto-ask +0.023) | imb5 t1: n=  57 -0.125 (acierto-ask -0.006) | imb5 t2: n=  46 -0.256 (acierto-ask +0.002)
+   imb1 tercil 1: imb5 t0: n=  85 -0.029 (acierto-ask -0.064) | imb5 t1: n= 105 +0.093 (acierto-ask +0.016) | imb5 t2: n=  77 +0.045 (acierto-ask +0.015)
+   imb1 tercil 2: imb5 t0: n=  76 -0.616 (acierto-ask -0.075) | imb5 t1: n= 106 -0.351 (acierto-ask -0.059) | imb5 t2: n= 175 +0.378 (acierto-ask -0.032)
