@@ -1,0 +1,21 @@
+MISIÓN 15M V3 FASE 2 — EV del maker por estado (relleno pesimista, resolución + rebate, por ORDEN colocada)
+
+1) Descomposición marginal en DISC (EV/orden, P(fill), EV|fill, mk5|fill):
+  fase  T-120..T-70   n=  1854 P(fill) 27.2% EV/orden -0.03798 EV|fill -0.1394 mk5|fill -0.1205
+  fase  T-300..T-120  n= 10995 P(fill) 22.8% EV/orden -0.01928 EV|fill -0.0845 mk5|fill -0.0601
+  fase  T-600..T-300  n= 25795 P(fill) 16.2% EV/orden -0.00645 EV|fill -0.0399 mk5|fill -0.0427
+  fase  T-900..T-600  n= 28246 P(fill) 11.8% EV/orden -0.00665 EV|fill -0.0564 mk5|fill -0.0574
+  spr   1c            n= 45759 P(fill) 20.5% EV/orden -0.01148 EV|fill -0.0561 mk5|fill -0.0522
+  spr   >=2c          n= 21131 P(fill)  5.4% EV/orden -0.00525 EV|fill -0.0972 mk5|fill -0.0792
+  imbc  ask>bid       n= 24164 P(fill) 17.7% EV/orden -0.01007 EV|fill -0.0569 mk5|fill -0.0524
+  imbc  equil         n= 18878 P(fill) 13.6% EV/orden -0.00875 EV|fill -0.0645 mk5|fill -0.0593
+  imbc  bid>ask       n= 23848 P(fill) 15.4% EV/orden -0.00956 EV|fill -0.0620 mk5|fill -0.0554
+  banda <.2           n= 10956 P(fill) 17.6% EV/orden -0.00230 EV|fill -0.0130 mk5|fill -0.0240
+  banda .2-.4         n= 14039 P(fill) 19.1% EV/orden -0.01279 EV|fill -0.0670 mk5|fill -0.0513
+  banda .4-.6         n= 15911 P(fill) 11.9% EV/orden -0.00878 EV|fill -0.0736 mk5|fill -0.0827
+  banda .6-.8         n= 13957 P(fill) 15.5% EV/orden -0.00850 EV|fill -0.0547 mk5|fill -0.0697
+  banda >.8           n= 12027 P(fill) 15.2% EV/orden -0.01441 EV|fill -0.0948 mk5|fill -0.0475
+
+2) Celdas DISC con >=40 rellenos miradas: 51; con EV>0 e IC90>0: 0 (esperables por azar ~2.6)
+
+3) FINAL (bloqueado, solo las 0 que pasan VALID):

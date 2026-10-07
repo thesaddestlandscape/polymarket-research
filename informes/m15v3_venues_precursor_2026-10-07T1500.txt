@@ -1,0 +1,21 @@
+MISIÓN 15M V3 — venue precursor de barridos BTC 15m. Captura leadlag_venues_2026-10-07T1500.csv.gz; ventana 30 min; órdenes tomadoras emparejadas 2182 de 2208; barridos 568 (26.0%); con desenlace 2182
+
+500 ms previos (recepción), retorno a favor del tomador >= 1 bp: % en barridos / no barridos / EV res|cond
+  binance   barr  7.2%  no  2.5%  EV res +0.1320 (n=82)
+  bitstamp  barr  9.2%  no  2.9%  EV res +0.1358 (n=99)
+  bybit     barr 11.1%  no  3.6%  EV res -0.0229 (n=121)
+  coinbase  barr 13.0%  no  5.5%  EV res +0.0187 (n=162)
+  kraken    barr 11.6%  no  2.7%  EV res +0.0275 (n=110)
+  okx       barr 14.3%  no  5.3%  EV res -0.0244 (n=166)
+  ALGUNO   barr 25.5%  no 12.0%
+  barridos SIN Binance >=1 bp (527): bitstamp 5.1%  bybit 5.1%  coinbase 8.5%  kraken 7.4%  okx 9.7%
+
+2000 ms previos (recepción), retorno a favor del tomador >= 1 bp: % en barridos / no barridos / EV res|cond
+  binance   barr 18.8%  no 15.2%  EV res -0.0299 (n=353)
+  bitstamp  barr 14.6%  no 10.3%  EV res +0.0227 (n=249)
+  bybit     barr 24.3%  no 13.5%  EV res -0.0389 (n=356)
+  coinbase  barr 31.3%  no 16.1%  EV res +0.0200 (n=438)
+  kraken    barr 23.1%  no 13.8%  EV res -0.0245 (n=354)
+  okx       barr 27.1%  no 16.5%  EV res -0.0480 (n=420)
+  ALGUNO   barr 40.5%  no 30.3%
+  barridos SIN Binance >=1 bp (461): bitstamp 3.7%  bybit 9.1%  coinbase 18.7%  kraken 10.2%  okx 13.0%
