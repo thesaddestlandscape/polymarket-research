@@ -22,9 +22,12 @@ project_p24_wallet_mirror_refutado_ask_real_10ago).
 
 Rigor idéntico al resto del proyecto: n>=15, shuffle test (bucket vs
 resto del mismo grupo), split-half cronológico, BH-FDR por (arquetipo,
-activo,marco). pnl_neto con la fórmula exacta (gross_win=(1-ask)/ask,
-fee 7%) -- mismo criterio que gate_bucket_propio.py/wallet_mirror_gate_
-bucket.py, nunca duplicar con una fórmula distinta.
+activo,marco). 07-Oct: el GATE (main) cuenta UNA observación por (mercado,
+lado, bucket) con la comisión REAL del tomador (cargar_filas_unidad +
+pnl_neto_real), igual que el gate de Wallet Mirror desde el 07-Oct.
+pnl_neto()/cargar_filas() conservan la fórmula vieja (7 % de la ganancia)
+porque las importan otros análisis/gates por fila (fino, candidata12,
+sniper_ventana...): armonizar la comisión de TODOS los gates está pendiente.
 
 Solo lectura, solo ESCRIBE data/shadow/bot_wallets_gate_bucket.json --
 no toca ningún gate real, estas tuplas no están en pares_permitidos_live
@@ -47,6 +50,7 @@ import csv
 import csv_rotado  # 05-Oct: el CSV del ejecutor dispersed se rota a partes .gz (disco)
 import json
 import math
+import os
 import sys
 import zlib
 from collections import Counter, defaultdict
@@ -94,6 +98,16 @@ MAX_N_SHUFFLE = 3000
 
 def bucket(p):
     return round(math.floor(p / STEP + 1e-9) * STEP, 4)
+
+
+# 07-Oct: versión del método del GATE (unidad + comisión). Si cambia, el historial 2-de-3-días previo no cuenta.
+METODO = "v2_mercado_lado_bucket_fee_real_07oct"
+METODO_PATH = REPO / "data/shadow/bot_wallets_gate_bucket_metodo.json"
+
+
+def pnl_neto_real(ask, acierto):
+    """PnL por € con la comisión REAL del tomador cripto: 0,07·p·(1−p) por acción en CADA compra (gane o pierda)."""
+    return (1.0 if acierto else 0.0) / (ask * (1 + FEE * (1 - ask))) - 1.0
 
 
 def pnl_neto(ask, acierto):
@@ -154,7 +168,8 @@ def cargar_filas(_crudas=None):
                 continue
             acierto = 1 if r.get("outcome_real") == r.get("lado_wallet") else 0
             if _crudas is not None:
-                _crudas.append((r, ask, acierto))
+                _crudas.append((r["timestamp_utc"], ask, acierto, r.get("wallet", ""), r.get("market_slug") or "",
+                                r.get("lado_wallet") or "", (r.get("arquetipo", "?"), r.get("activo", "?"), marco)))
                 continue
             pnl = pnl_neto(ask, acierto)
             clave = (r.get("arquetipo", "?"), r.get("activo", "?"), marco)
@@ -164,20 +179,17 @@ def cargar_filas(_crudas=None):
 
 def cargar_filas_unidad():
     """07-Oct (Javi: "soluciona: el quirúrgico mezcla la unidad nueva de WM con bot wallets por fill"): MISMOS filtros
-    que cargar_filas() (que NO cambia: es el gate de SNIPER/DISPERSO) pero con la unidad y la comisión del gate de
-    Wallet Mirror corregido el 07-Oct: UNA observación por (mercado, lado, bucket de 0,05) = la PRIMERA fila del bucket
+    que cargar_filas() (que conserva la unidad por fila para otros análisis) pero con la unidad y la comisión del gate
+    de Wallet Mirror corregido el 07-Oct (la usan main() de este gate y analisis_edge_quirurgico_21sep): UNA observación por (mercado, lado, bucket de 0,05) = la PRIMERA fila del bucket
     con SU ask; wallet = la de más filas en la unidad; comisión REAL del tomador 0,07·p·(1−p) en cada compra; filas sin
-    market_slug/lado y unidades con desenlace contradictorio se descartan. Solo la usa analisis_edge_quirurgico_21sep."""
+    market_slug/lado y unidades con desenlace contradictorio se descartan."""
     crudas = []
     cargar_filas(_crudas=crudas)
     unidades = defaultdict(list)
-    for r, ask, ac in crudas:
-        mercado, lado = r.get("market_slug") or "", r.get("lado_wallet") or ""
+    for ts, ask, ac, wallet, mercado, lado, clave in crudas:
         if not mercado or not lado:
             continue
-        clave = (r.get("arquetipo", "?"), r.get("activo", "?"), r.get("marco", "?"))
-        b = round(int(ask / 0.05 + 1e-9) * 0.05, 2)
-        unidades[(clave, mercado, lado, b)].append((r["timestamp_utc"], ask, ac, r.get("wallet", "")))
+        unidades[(clave, mercado, lado, bucket(ask))].append((ts, ask, ac, wallet))
     grupos = defaultdict(list)
     for (clave, _m, _l, _b), xs in unidades.items():
         if len({x[2] for x in xs}) > 1:
@@ -185,7 +197,7 @@ def cargar_filas_unidad():
         xs.sort()
         wallet = Counter(x[3] for x in xs).most_common(1)[0][0]
         ts, ask, ac = xs[0][0], xs[0][1], xs[0][2]
-        grupos[clave].append((ts, ask, (1.0 if ac else 0.0) / (ask * (1 + FEE * (1 - ask))) - 1.0, wallet))
+        grupos[clave].append((ts, ask, pnl_neto_real(ask, ac), wallet))
     for v in grupos.values():
         v.sort()
     return grupos
@@ -333,7 +345,7 @@ UMBRAL_FILLABLE_MIN = 0.30  # mismo umbral que el precedente manual de rechazo
 
 def _cargar_fillability_por_bucket(path, col_activo="activo", col_marco="marco",
                                     col_bucket="bucket_precio", col_fill="sigue_fillable",
-                                    col_arquetipo="arquetipo", arquetipo_fijo=None):
+                                    col_arquetipo="arquetipo", arquetipo_fijo=None, col_mercado=None, col_lado=None):
     """{clave_str: {bucket_str: (fillable_n, fillable_ok)}} desde el propio
     EJECUTOR dry-run (decisión REAL, segunda consulta al libro tras Kelly/
     circuit-breakers -- no el observador de detección que alimenta
@@ -355,7 +367,10 @@ def _cargar_fillability_por_bucket(path, col_activo="activo", col_marco="marco",
     Fail-safe: fichero ausente/corrupto -> {} (ningún bucket tiene
     evidencia -> _degradar() lo trata como fillable_n=0, nunca como
     "aprobado por defecto")."""
+    # 07-Oct (/code-review): con col_mercado/col_lado, UNA unidad por (mercado, lado, bucket) -- fillable si ALGUNA de
+    # sus filas (reintentos del ejecutor) lo fue --, coherente con la unidad del gate; sin ellos, por fila (candidata9).
     out = defaultdict(lambda: defaultdict(lambda: [0, 0]))  # [n, ok]
+    unidades_fill = {}
     try:
         with csv_rotado.abrir(path) as f:
             for r in csv.DictReader(f):
@@ -371,9 +386,20 @@ def _cargar_fillability_por_bucket(path, col_activo="activo", col_marco="marco",
                 except (TypeError, ValueError):
                     continue
                 clave_str = f"{arquetipo}#{activo}#{marco}"
+                if col_mercado and col_lado:
+                    m_, l_ = r.get(col_mercado) or "", r.get(col_lado) or ""
+                    if not m_ or not l_:
+                        continue
+                    k_ = (clave_str, f"{b:.2f}", m_, l_)
+                    unidades_fill[k_] = max(unidades_fill.get(k_, 0), int(fill))
+                    continue
                 cont = out[clave_str][f"{b:.2f}"]
                 cont[0] += 1
                 cont[1] += int(fill)
+        for (clave_str, bb, _m, _l), ok in unidades_fill.items():
+            cont = out[clave_str][bb]
+            cont[0] += 1
+            cont[1] += ok
     except (OSError, csv.Error):
         return {}
     return {k: {bb: tuple(v) for bb, v in vv.items()} for k, vv in out.items()}
@@ -514,7 +540,8 @@ def _cargar_historial_abs_previo(out_path):
 
 
 def main():
-    grupos = cargar_filas()
+    # 07-Oct: UNA observación por (mercado, lado, bucket) con fee real (antes cada fila del observador contaba).
+    grupos = cargar_filas_unidad()
     print(f"Grupos (arquetipo,activo,marco): {len(grupos)}")
     # 10-Sep, petición explícita Javi (SNIPER#BTC#5min[0.25,0.30] -- la
     # ÚNICA tupla de esta familia aprobada para dinero real, BUCKETS_
@@ -530,6 +557,18 @@ def main():
     # sí necesitó Wallet Mirror (ese corre horario).
     historial_previo = cargar_historial_previo(OUT, anidado_por_bucket=True)
     historial_abs_previo = _cargar_historial_abs_previo(OUT)
+    # 07-Oct: si el método cambió, el historial 2-de-3-días previo no cuenta. Si el fichero de método EXISTE pero no se
+    # puede leer, NO se borra el historial (evita un estado absorbente que lo borre en cada corrida).
+    try:
+        metodo_previo = json.loads(METODO_PATH.read_text(encoding="utf-8")).get("metodo")
+    except FileNotFoundError:
+        metodo_previo = None
+    except Exception as e:
+        print(f"⚠️ {METODO_PATH} ilegible ({e}): se conserva el historial")
+        metodo_previo = METODO
+    if metodo_previo != METODO:
+        print(f"método {metodo_previo} -> {METODO}: historial de tolerancia previo IGNORADO")
+        historial_previo, historial_abs_previo = {}, {}
     pnl_real_por_bucket = _cargar_pnl_real_por_bucket()
     # /code-review 16-Sep (mismo hallazgo real corregido en
     # analisis_candidata9_10_gate_bucket_26ago.py, mismo día): cargar_filas()
@@ -542,7 +581,7 @@ def main():
     # "mejor_ask_deteccion" (misma fuente conceptual, fill.get("mejor_ask")
     # de su propia consulta al libro) -- usarla alinea los dos lados.
     fillability_por_bucket = _cargar_fillability_por_bucket(
-        EXECUTOR_BOT_WALLETS, col_bucket="mejor_ask_deteccion")
+        EXECUTOR_BOT_WALLETS, col_bucket="mejor_ask_deteccion", col_mercado="market_slug", col_lado="lado_wallet")
 
     resultado = {}
     pendientes = []
@@ -696,6 +735,7 @@ def main():
             veredicto_crudo, p["entrada"], p["clave_str"], p["bucket"], pnl_real_por_bucket,
             fillability_por_bucket)
         p["entrada"]["veredicto_crudo_hoy"] = veredicto_crudo
+        p["entrada"]["notas_degradacion"] = (nota_payout + nota_real + nota_concentracion + nota_tendencia + nota_fill).strip()
         # 10-Sep: 2 de los últimos 3 días (incluido hoy), asimétrico --
         # "malo_confirmado" sigue inmediato. Mismo mecanismo que el resto
         # del proyecto desde el 01-Sep, ver comentario junto a
@@ -728,6 +768,7 @@ def main():
         veredicto, c["entrada"]["historial_crudo_abs"] = veredicto_con_tolerancia(
             veredicto_crudo_abs, historial_bucket)
         c["entrada"]["veredicto_crudo_hoy_abs"] = veredicto_crudo_abs
+        c["entrada"]["notas_degradacion_abs"] = (nota_payout + nota_real + nota_concentracion + nota_tendencia + nota_fill).strip()
         if veredicto == "sin_concluir":
             # NUNCA pisa el veredicto ya decidido por la vía relativa --
             # ver comentario en _cargar_historial_abs_previo. /code-review
@@ -750,8 +791,14 @@ def main():
     for linea in veredictos_nuevos:
         print(f"  {linea}")
 
-    with open(OUT, "w", encoding="utf-8") as f:
+    # 07-Oct: escritura atómica (el lector live bot_wallets_gate_bucket.py no puede ver un JSON a medias)
+    _tmp = OUT.with_name(f"{OUT.name}.{os.getpid()}.tmp")
+    with open(_tmp, "w", encoding="utf-8") as f:
         json.dump(resultado, f, indent=2, ensure_ascii=False)
+    os.replace(_tmp, OUT)
+    _tmpm = METODO_PATH.with_name(f"{METODO_PATH.name}.{os.getpid()}.tmp")
+    _tmpm.write_text(json.dumps({"metodo": METODO}), encoding="utf-8")
+    os.replace(_tmpm, METODO_PATH)
     print(f"\nGuardado en {OUT}")
 
 
