@@ -54,3 +54,6 @@ real y latencia medida, OOS2 06-07 Oct). Mecanismos vivos 15M: **PRECIERRE** (re
 pérdidas; OOS 07-Oct −0,21 $/merc n=42: no positivo) · **profundidad L2** y **pre-posición en la ventana siguiente**
 (bloqueados, captura desde 07-Oct 09:05Z) · **flujo on-chain limpio** (bloqueado, retención 4 d). La investigación continúa
 cuando entren esos datos.
+
+## Ideas emergentes
+- **Vía rápida separada** (Javi 07-Oct): feed por mercado caliente en proceso propio, órdenes prefirmadas, VPS junto al origen del CLOB. Construir solo si la Fase 0 V3 demuestra que el retraso es nuestro o un mecanismo lo necesita. Memoria `idea_via_rapida_separada_latencia_07oct`.
