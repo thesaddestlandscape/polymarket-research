@@ -186,6 +186,9 @@ cd /root/polymarket-research-datalogs
 find /root/polymarket-research-datalogs -maxdepth 1 -name 'maker_ms_*.csv.gz' -mtime +4 -print -delete
 # 05-Oct: onchain_fills_*.csv.gz (fetch_polymarket_fills_onchain.py, ~315 MB/día, maker/tomador explícitos): 4 días.
 find /root/polymarket-research-datalogs -maxdepth 1 -name 'onchain_fills_*.csv.gz' -mtime +4 -print -delete
+# 07-Oct: requote_mejora_sombra_*.csv (registro en sombra de live_trade, pocas filas/día): gz a 3 días, borrar a 120 días.
+comprimir_dir . "requote_mejora_sombra_*.csv" "$CUTOFF_COMPRIMIR_DATALOGS"
+find /root/polymarket-research-datalogs -maxdepth 1 -name 'requote_mejora_sombra_*.csv.gz' -mtime +120 -print -delete
 borrar_gz_antiguos . "polymarket_activity_*.csv"
 borrar_gz_antiguos . "libro_ambos_lados_*.csv"
 borrar_gz_antiguos . "libro_book_ws_*.csv"

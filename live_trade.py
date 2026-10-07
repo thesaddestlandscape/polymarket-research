@@ -17,6 +17,12 @@ import fcntl
 import json
 import math
 import os
+import atexit
+import io
+import itertools
+import queue
+import sys
+import threading
 import time
 import requests
 from collections import defaultdict
@@ -1495,6 +1501,8 @@ def _registrar_snapshot_libro(motivo: str, market_id: str, direction: str,
                               precio_plan, stake_eur, depth: dict | None,
                               contexto: dict | None = None) -> None:
     """
+    (07-Oct) Dentro de un intento abierto de _ejecutar_orden_polymarket, también anota la fila del registro en sombra
+    de requote_mejora y fija el motivo como desenlace provisional del intento.
     Dataset para el análisis maker (2026-07-03): estado del libro de CADA
     señal que llega a fase de ejecución, se ejecute o se aborte. Hallazgo que
     lo motiva: los fills taker aciertan 19% y las señales vetadas por
@@ -1502,6 +1510,13 @@ def _registrar_snapshot_libro(motivo: str, market_id: str, direction: str,
     anti-predictor y no quedaba registrada para las no ejecutadas. Cruzar
     con results.csv por market_id. Nunca lanza.
     """
+    try:                                            # 07-Oct: registro en sombra (solo dentro de un intento; nunca lanza)
+        _it = getattr(_SOMBRA_TL, "it", None)
+        if _it is not None:
+            _sombra_fila(f"snapshot:{motivo}", precio_plan, depth)
+            _it["motivo"] = motivo
+    except Exception:
+        pass
     try:
         ctx = contexto or {}
         d = depth or {}
@@ -1709,6 +1724,171 @@ MIN_ORDEN_CLOB_USD = 1.00  # el CLOB rechaza marketable BUY < $1 ("min size: 1")
 # bajo el mínimo con el nuevo stake.
 MIN_SHARES_CLOB_LIMIT = 5.0
 REQUOTE_DIVERGENCIA_MAX = 0.10  # |ask - plan| máx; más allá el modelo está desfasado
+# 07-Oct (misión 15M V3, Javi eligió la opción (c)): REGISTRO EN SOMBRA de la guarda candidata "precio mejoró" -- NO decide
+# nada. Dinero real 28-Jul..07-Oct: con el ask >= 1c por debajo del plan de la señal en el re-quote, n=73, -37,28 EUR
+# (-0,441 EUR/EUR, p=0,0002, 31 días); la guarda candidata (stash en dev, 2 /code-review) se esquivaba re-disparando con el
+# ask ya bajado como plan y no está desagregada por moneda×marco×bucket. Ciclo de vida ÚNICO por intento: el envoltorio
+# _ejecutar_orden_polymarket abre el intento (por hilo), cada _registrar_snapshot_libro DENTRO del intento añade una fila
+# (incluidos los vetos de profundidad), el re-chequeo añade la lectura fresca, y el finally vuelca TODO una vez con el
+# desenlace (último motivo o resultado devuelto). Fuera de un intento no se registra nada. Sin E/S antes del envío.
+# Fichero diario fuera de git; retención en scripts/comprimir_data_historica.sh. Informe:
+# informes/m15v3_guarda_requote_mejora_07oct.txt
+REQUOTE_MEJORA_SOMBRA_DIR = Path("/root/polymarket-research-datalogs")
+# precio_plan/mejor_ask/vwap_fill/bajada/precio_relleno en términos del TOKEN comprado; entry_caller_yes = entry_price que
+# pasó el caller (perspectiva YES). Las filas snapshot:* llevan el libro que se pasó al snapshot (tras un re-chequeo puede
+# ser la 1ª lectura): el libro fresco está en las filas rechequeoN.
+_SOMBRA_CAMPOS = ["ts_utc", "intento", "proceso", "market_id", "strategy", "subtype", "direction", "lectura",
+                  "precio_plan", "mejor_ask", "vwap_fill", "stake_eur", "entry_caller_yes", "edge_dir", "bajada",
+                  "motivo_final", "ok_final", "precio_relleno", "error_final"]
+# Cero E/S y cero esperas en la ruta de la orden (code-review 07-Oct): el finally del envoltorio solo hace put_nowait; el
+# hilo escritor arranca AL IMPORTAR; flock NO bloqueante con reintentos acotados; atexit espera como máximo 2 s en total
+# (incluida la fila que el hilo esté escribiendo) y nunca puede colgar la salida. Pérdidas (cola llena, sin hilo, error de
+# disco, SIGTERM/SIGKILL del watchdog: atexit no corre) se cuentan y se avisan en el log cada 100.
+_SOMBRA_COLA = queue.Queue(maxsize=5000)
+_SOMBRA_PERDIDAS = [0, 0]                  # [perdidas, avisadas]; solo se AVISA desde el hilo escritor / atexit
+_SOMBRA_LOCK = threading.Lock()
+_SOMBRA_PROC = os.path.basename((sys.argv or ["?"])[0] or "?")     # proceso que llama (ejeclive, ejecutor…)
+_SOMBRA_TL = threading.local()      # intento abierto en ESTE hilo (None fuera de _ejecutar_orden_polymarket)
+_SOMBRA_CONT = itertools.count()
+
+
+def _f4(x):
+    try:
+        v = float(x)
+        return f"{v:.4f}" if math.isfinite(v) else ""
+    except (TypeError, ValueError):
+        return ""
+
+
+def _sombra_fila(lectura, precio_plan, depth):
+    """Añade una lectura al intento abierto del hilo (si lo hay). Solo memoria; nunca lanza."""
+    try:
+        it = getattr(_SOMBRA_TL, "it", None)
+        if it is None:
+            return
+        d = depth or {}
+        plan, ask = _f4(precio_plan), _f4(d.get("mejor_ask"))
+        it["filas"].append([datetime.now(timezone.utc).isoformat(timespec="milliseconds"), lectura, plan, ask,
+                            _f4(d.get("vwap_fill_estimado")), f"{float(plan) - float(ask):.4f}" if plan and ask else ""])
+    except Exception:
+        pass
+
+
+def _sombra_contar(n=1):
+    """Ruta de la orden: solo suma (sin E/S). Nunca lanza."""
+    try:
+        with _SOMBRA_LOCK:
+            _SOMBRA_PERDIDAS[0] += n
+    except Exception:
+        pass
+
+
+def _sombra_avisar(e=None, n=0):
+    """Hilo escritor / atexit: suma y avisa en el log la 1ª pérdida y luego cada 100 (Fail Loud sin inundar)."""
+    try:
+        with _SOMBRA_LOCK:
+            _SOMBRA_PERDIDAS[0] += n
+            total, avisadas = _SOMBRA_PERDIDAS
+            if total == 0 or (avisadas and total - avisadas < 100):
+                return
+            _SOMBRA_PERDIDAS[1] = total
+        log(f"  ⚠️ registro en sombra requote_mejora: {total} intentos perdidos"
+            f"{f' ({type(e).__name__}: {e})' if e else ''} -- las órdenes no se ven afectadas")
+    except Exception:
+        pass
+
+
+def _sombra_escribir(dia, datos, limite):
+    """Append con flock NO bloqueante (reintenta hasta `limite`, epoch s), cabecera si vacío, repara línea cortada."""
+    ruta = REQUOTE_MEJORA_SOMBRA_DIR / f"requote_mejora_sombra_{dia}.csv"
+    fd = os.open(ruta, os.O_RDWR | os.O_APPEND | os.O_CREAT, 0o644)
+    try:
+        while True:
+            try:
+                fcntl.flock(fd, fcntl.LOCK_EX | fcntl.LOCK_NB)
+                break
+            except BlockingIOError:
+                if time.time() >= limite:
+                    raise TimeoutError("flock ocupado")
+                time.sleep(0.02)
+        tam = os.fstat(fd).st_size
+        if tam == 0:
+            cab = io.StringIO()
+            csv.writer(cab, lineterminator="\n").writerow(_SOMBRA_CAMPOS)
+            datos = cab.getvalue().encode() + datos
+        elif os.pread(fd, 1, tam - 1) != b"\n":
+            datos = b"\n" + datos              # una escritura anterior quedó a medias (disco lleno): no pegar filas
+        vista = memoryview(datos)
+        while vista:
+            n = os.write(fd, vista)
+            if n <= 0:
+                raise OSError("write devolvió 0 bytes")
+            vista = vista[n:]
+    finally:
+        os.close(fd)
+
+
+def _sombra_bucle():
+    while True:
+        dia, datos = _SOMBRA_COLA.get()
+        try:
+            _sombra_escribir(dia, datos, time.time() + 10)
+            _sombra_avisar()                    # avisa aquí las pérdidas contadas en la ruta de la orden
+        except Exception as e:
+            _sombra_avisar(e, 1)
+        finally:
+            _SOMBRA_COLA.task_done()
+
+
+def _sombra_vaciar_al_salir():
+    """atexit: espera a que el hilo termine lo encolado (incluida la fila en curso), máx. 0,5 s. Nunca cuelga."""
+    try:
+        fin = time.time() + 0.5
+        while _SOMBRA_COLA.unfinished_tasks and time.time() < fin:
+            time.sleep(0.01)
+        if _SOMBRA_COLA.unfinished_tasks:
+            _sombra_avisar(TimeoutError("salida con filas sin escribir"), _SOMBRA_COLA.unfinished_tasks)
+        else:
+            _sombra_avisar()
+    except Exception:
+        pass
+
+
+try:                                            # hilo escritor al importar: nada que arrancar en la ruta de la orden
+    threading.Thread(target=_sombra_bucle, daemon=True, name="sombra_requote_mejora").start()
+    atexit.register(_sombra_vaciar_al_salir)
+    _SOMBRA_ACTIVO = True
+except Exception:                               # sin hilo no se encola nada (las filas se cuentan como perdidas)
+    _SOMBRA_ACTIVO = False
+
+
+def _sombra_volcar(it, resultado):
+    """Encola las filas del intento con su desenlace. Solo memoria y sin bloqueo; nunca lanza."""
+    try:
+        if not it or not it["filas"]:
+            return
+        r = resultado if isinstance(resultado, dict) else {}
+        ctx = it["ctx"] or {}
+        ok = bool(r.get("ok"))
+        motivo = it["motivo"] or ("resultado_ok" if ok else "resultado_sin_snapshot")
+        if it.get("excepcion"):
+            motivo = f"{motivo}|resultado_desconocido"     # excepción tras el último snapshot: puede haber relleno real
+        elif not ok and r and not r.get("no_fill"):
+            motivo = f"{motivo}|posible_relleno"           # error de envío ambiguo (no_fill=False): puede haber casado
+        elif it["motivo"] and (it["motivo"] == "ejecutada") != ok:
+            motivo = f"{it['motivo']}|resultado_{'ok' if ok else 'fallo'}"   # el snapshot y el resultado no cuadran
+        error = str(r.get("error") or it.get("excepcion") or "")[:200]
+        buf = io.StringIO()
+        w = csv.writer(buf, lineterminator="\n")
+        for ts, lectura, plan, ask, vwap, baj in it["filas"]:
+            w.writerow([ts, it["id"], _SOMBRA_PROC, it["market_id"], ctx.get("strategy", ""), ctx.get("subtype", ""),
+                        it["direction"], lectura, plan, ask, vwap, _f4(it["stake"]), _f4(it["entry"]),
+                        _f4(it["edge_dir"]), baj, motivo, int(ok), _f4(r.get("entry_price")) if ok else "", error])
+        if not _SOMBRA_ACTIVO:
+            raise RuntimeError("hilo escritor no arrancó")
+        _SOMBRA_COLA.put_nowait((it["filas"][0][0][:10], buf.getvalue().encode()))   # día = el de la 1ª fila
+    except Exception:                           # incluye cola llena: se pierden esas filas, la orden sigue (solo se cuenta)
+        _sombra_contar()
 
 
 # ============================================================================
@@ -2343,6 +2523,42 @@ def _ejecutar_orden_polymarket(market_id: str, direction: str,
                                stake_eur: float, entry_price: float,
                                edge_dir: float | None = None,
                                contexto: dict | None = None) -> dict:
+    """07-Oct: envoltorio del registro en sombra de requote_mejora (ver REQUOTE_MEJORA_SOMBRA_DIR). Abre el intento del
+    hilo, delega TODA la lógica en _ejecutar_orden_polymarket_impl sin tocar argumentos ni resultado, y en el finally
+    vuelca el registro y cierra el intento. Los errores del registro se tragan; los de la orden se propagan igual."""
+    _prev = getattr(_SOMBRA_TL, "it", None)
+    _it = None
+    try:
+        _it = {"id": f"{os.getpid()}-{threading.get_ident()}-{next(_SOMBRA_CONT)}", "market_id": market_id,
+               "direction": direction, "stake": stake_eur, "entry": entry_price, "edge_dir": edge_dir,
+               "ctx": contexto, "filas": [], "motivo": None}
+        _SOMBRA_TL.it = _it
+    except Exception:
+        pass
+    _res = None
+    try:
+        _res = _ejecutar_orden_polymarket_impl(market_id, direction, stake_eur, entry_price,
+                                               edge_dir=edge_dir, contexto=contexto)
+        return _res
+    except BaseException as _e:                     # solo anota el tipo para el registro y RE-LANZA tal cual
+        try:
+            if _it is not None:
+                _it["excepcion"] = f"excepcion:{type(_e).__name__}: {_e}"
+        except Exception:
+            pass
+        raise
+    finally:
+        try:
+            _SOMBRA_TL.it = _prev
+        except Exception:
+            pass
+        _sombra_volcar(_it, _res)
+
+
+def _ejecutar_orden_polymarket_impl(market_id: str, direction: str,
+                                    stake_eur: float, entry_price: float,
+                                    edge_dir: float | None = None,
+                                    contexto: dict | None = None) -> dict:
     """Ejecuta orden real en Polymarket via CLOB API.
 
     edge_dir: edge neto A FAVOR de nuestra dirección (edge_neto de la
@@ -2463,6 +2679,7 @@ def _ejecutar_orden_polymarket(market_id: str, direction: str,
         # nunca se verificó, invalidando la premisa empírica del fix).
         techo_verificado = round(precio * 1.05, 6)
         depth = _consultar_profundidad_libro(None, token_id, precio, stake_eur)
+        _sombra_fila("inicial", precio_plan, depth)    # 07-Oct: registro en sombra, solo memoria
         if depth.get("ok"):
             log(f"  📊 Libro {market_id}/{direction}: mejor_ask={depth['mejor_ask']} "
                 f"profundidad≈{depth['profundidad_eur']:.2f}€ "
@@ -2750,6 +2967,7 @@ def _ejecutar_orden_polymarket(market_id: str, direction: str,
                 # que de verdad hay que validar/pagar.
                 _mejor_ask_fresh = (_depth_fresh.get("mejor_ask")
                                     if _depth_fresh.get("ok") else None)
+                _sombra_fila(f"rechequeo{_intento}", precio_plan, _depth_fresh)   # 07-Oct: solo memoria
                 _fill_completo = _depth_fresh.get("fill_completo_en_niveles", False)
                 if _ask_fresh is None or not _fill_completo:
                     log(f"  ⛔ Re-chequeo gate {_intento}/{_n_rechequeos}: sin datos de "
