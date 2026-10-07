@@ -19,7 +19,14 @@ SEGURIDAD (fail-closed):
     cancela cualquier T1 propio que siga vivo.
   - Aborta si no hay libro, si el ask del lado elegido sale de banda, si falta poco para el cierre o si el cliente falla.
   - No escribe en trades.csv ni en ningún ledger del sistema live. Las posiciones de T3 se dejan a resolución.
-Uso: python3 medir_latencia_ordenes_15m.py --t1 20 --t2 20 --t3 10 --confirmo-dinero-real
+  T4 FOK_KILL : (07-Oct, Javi: "tiene que haber una forma sin que nos cueste pasta") FOK BUY MARKETABLE al MEJOR ASK
+                exacto (nunca por encima: no puede barrer niveles) con tamaño >= 3x la profundidad de ese nivel -> entra
+                en el taker delay, se revalida, no puede llenarse ENTERA -> FOK muerta, 0 $. T4 − T2 = taker delay +
+                intento de casado. Riesgo residual: que la profundidad de ESE nivel se triplique en ~150 ms -> compra a
+                precio de mercado, <= MAX_EUR_T4 $. Guardas extra: nunca a <60 s de un cierre de 5m ni <10 s después
+                (precierre/naive live disparan ahí y la orden en vuelo retiene saldo).
+Uso: python3 medir_latencia_ordenes_15m.py --t1 20 --t2 20 --t4 20 [--t3 N] --moneda btc --confirmo-dinero-real
+     (T4 <= MAX_T4=30 órdenes, exposición acumulada <= MAX_EUR_T4 $; T3 cuesta dinero, solo con OK expreso)
      (sin --confirmo-dinero-real solo hace un ensayo en seco: elige mercado y lado, construye y firma, NO envía).
 """
 import argparse
@@ -40,8 +47,88 @@ LEDGER = Path("/root/polymarket-research-datalogs/medir_latencia_ordenes_15m_led
 CLOB = "https://clob.polymarket.com"
 WS = "wss://ws-subscriptions-clob.polymarket.com/ws/market"
 MAX_T3, MAX_EUR_T3 = 10, 20.0
+MAX_T4, MAX_EUR_T4, FACTOR_T4 = 30, 5.0, 3.0
 BANDA_T3 = (0.20, 0.45)          # 5 acciones x 0,20 = 1 $: mínimo del CLOB para una compra marketable
 SIZE = 5.0
+
+
+MIN_LIBRE_T4 = 15.0             # saldo libre mínimo antes de cada T4: deja >=10 $ a los ejecutores live
+BANDA_T4 = (0.05, 0.95)         # fuera de aquí el tick puede ser 0,001 (decimales del CLOB)
+
+
+def _lleno(resp):
+    if not isinstance(resp, dict):
+        return None
+    try:
+        return float(resp.get("takingAmount") or 0) or None    # acciones recibidas en una compra
+    except (TypeError, ValueError):
+        return None
+
+
+def _es_fok_kill(resp):
+    """True solo si la respuesta dice explícitamente que la FOK no pudo llenarse (no rechazos previos al delay)."""
+    t = str(resp).lower()
+    return any(k in t for k in ("fully filled", "fok", "couldn't be fully", "could not be fully", "not filled",
+                                "no orders found", "no match"))
+
+
+def _zona_5m():
+    f = time.time() % 300
+    return f > 240 or f < 10                  # precierre/naive de los 5m disparan ahí: no retener saldo
+
+
+def _saldo_libre():
+    try:
+        d = json.loads((REPO / "data/live/balance_real.json").read_text())
+        ts = datetime.fromisoformat(d["ts"]).timestamp()
+        return float(d["free_usdc"]) if time.time() - ts < 900 else None
+    except Exception:
+        return None
+
+
+def _mercados_todos():
+    """[(tok, outcome, otro_tok)] de los 15m vivos de las 6 monedas con margen (>=60 s abierto, >=150 s al cierre)."""
+    out = []
+    for m in ("btc", "eth", "sol", "xrp", "doge", "bnb"):
+        mk = mercado(m)
+        if mk:
+            (t0, o0), (t1, o1) = mk[2]
+            out += [(t0, f"{m}:{o0}", t1), (t1, f"{m}:{o1}", t0)]
+    return out
+
+
+def _elegir_t4(lados):
+    """Nivel ESTABLE (mismo precio y tamaño en dos lecturas a 1 s) del mejor ask, banda 0,05-0,95; la profundidad
+    incluye lo que casa por mint (bids del otro token a >= 1 - ask). Tamaño >= 3x eso, mínimo 1 $ y coste <= tope."""
+    l1 = {t: libro(t) for t, _, _ in lados}
+    time.sleep(1.0)
+    l2 = {t: libro(t) for t, _, _ in lados}
+    mejor = None
+    for t, o_, otro in lados:
+        a1, a2 = l1[t][1], l2[t][1]
+        if not a1 or not a2 or a1[0] != a2[0]:
+            continue
+        ask, prof = a2[0]
+        if not (BANDA_T4[0] <= ask <= BANDA_T4[1]):
+            continue
+        mint = sum(sz for p, sz in l2[otro][0] if p >= round(1 - ask, 4) - 1e-9)
+        prof_tot = prof + mint
+        tam = float(max(int(SIZE), int(FACTOR_T4 * prof_tot) + 1, int(1.0 / ask) + 1))
+        coste = ask * tam + 0.07 * ask * (1 - ask) * tam
+        if coste <= MAX_EUR_T4 and ask * tam >= 1.0 and (mejor is None or coste < mejor[5]):
+            mejor = (t, o_, ask, prof_tot, tam, coste)
+    return mejor
+
+
+def _trades_desde(cli, tok, t_s):
+    """Trades PROPIOS en ese token desde t_s-2 (None si la consulta falla -> se trata como posible relleno)."""
+    try:
+        from py_clob_client_v2.clob_types import TradeParams
+        tr = cli.get_trades(TradeParams(asset_id=tok, after=int(t_s) - 2), only_first_page=True)
+        return list(tr or [])
+    except Exception as e:
+        log({"tipo": "trades_error", "e": str(e)[:200]})
+        return None
 
 
 def log(ev):
@@ -145,12 +232,13 @@ def main():
     ap.add_argument("--t1", type=int, default=0)
     ap.add_argument("--t2", type=int, default=0)
     ap.add_argument("--t3", type=int, default=0)
+    ap.add_argument("--t4", type=int, default=0)
     ap.add_argument("--confirmo-dinero-real", action="store_true")
     ap.add_argument("--moneda", default="btc", choices=("btc", "eth", "sol", "xrp", "doge", "bnb"))
     a = ap.parse_args()
     real = a.confirmo_dinero_real
-    if a.t3 > MAX_T3:
-        sys.exit(f"t3 > {MAX_T3}")
+    if a.t3 > MAX_T3 or a.t4 > MAX_T4:
+        sys.exit(f"t3 > {MAX_T3} o t4 > {MAX_T4}")
     mk = mercado(a.moneda)
     if not mk:
         sys.exit("sin 15m vivo con margen (>=60 s desde apertura y >=150 s al cierre): reintentar en unos minutos")
@@ -169,7 +257,7 @@ def main():
     t0 = time.perf_counter()
     cli.create_order(OrderArgsV2(token_id=toks[0][0], price=0.01, size=SIZE, side="BUY"))
     print(f"   firma de calentamiento {(time.perf_counter() - t0) * 1000:.0f} ms")
-    R = {"t1_post": [], "t1_cancel": [], "t2_post": [], "t3_post": [], "t3_casado": [], "t3_recep": [], "firma": []}
+    R = {"t4_post_kill": [], "t1_post": [], "t1_cancel": [], "t2_post": [], "t3_post": [], "t3_casado": [], "t3_recep": [], "firma": []}
     mios, huerfanas = [], []
     t_inicio = time.time()
     try:
@@ -235,6 +323,66 @@ def main():
                 time.sleep(0.3)
         else:
             print(f"   T2 omitido: ask {ask2} < 0,10")
+        # ---- T4 FOK marketable que no puede llenarse entera (coste 0). Fail-closed: cualquier cosa que no sea un
+        # "FOK no llenada" verificable PARA T4 y se comprueba en /data/trades si nos llenaron.
+        n4, expuesto = 0, 0.0
+        while n4 < a.t4:
+            if fin - time.time() < 120:
+                print("   T4: poco tiempo al cierre, parada")
+                break
+            if _zona_5m():
+                time.sleep(1)
+                continue
+            libre = _saldo_libre()
+            if libre is None or libre < MIN_LIBRE_T4:
+                print(f"   T4: saldo libre {libre} < {MIN_LIBRE_T4} $ o balance_real.json viejo -> parada")
+                break
+            try:
+                elegido = _elegir_t4(_mercados_todos())
+            except Exception as e:
+                log({"tipo": "T4_error_libro", "e": str(e)[:200]})
+                print(f"   T4: error leyendo libros ({type(e).__name__}) -> parada")
+                break
+            if not elegido:
+                print("   T4: ningún nivel estable y fino (3x prof. + mint del otro lado <= 5 $ con comisión); espera 5 s")
+                time.sleep(5)
+                continue
+            tok4, out4, ask4, prof4, tam4, coste4 = elegido
+            if expuesto + coste4 > MAX_EUR_T4:
+                print("   T4: tope de exposición acumulada alcanzado -> parada")
+                break
+            o = cli.create_order(OrderArgsV2(token_id=tok4, price=ask4, size=tam4, side="BUY"))
+            n4 += 1
+            if not real:
+                print(f"   [seco] T4 {out4} ask {ask4} prof+mint {prof4} -> FOK {tam4} acciones ({coste4:.2f} $ con comisión)")
+                continue
+            if _zona_5m() or fin - time.time() < 120:      # re-chequeo JUSTO antes de enviar
+                n4 -= 1
+                continue
+            log({"tipo": "T4_intencion", "tok": tok4, "ask": ask4, "prof": prof4, "tam": tam4})
+            t_env_s = time.time()
+            t0 = time.perf_counter()
+            excepcion = False
+            try:
+                resp = cli.post_order(o, OrderType.FOK)
+            except Exception as e:
+                resp, excepcion = f"{type(e).__name__}: {e}", True
+            dt = (time.perf_counter() - t0) * 1000
+            lleno = _lleno(resp)
+            kill = (not lleno) and _es_fok_kill(resp)
+            log({"tipo": "T4_post", "resp": str(resp)[:400], "ms": dt, "lleno": lleno, "kill": kill})
+            print(f"   T4 {n4}: {out4} ask {ask4} prof+mint {prof4} FOK {tam4} -> {dt:.0f} ms | "
+                  f"{'KILL' if kill else 'NO-KILL'} | {str(resp)[:110]}")
+            time.sleep(1.5)                                  # deja pasar delay + casado antes de verificar
+            propios = _trades_desde(cli, tok4, t_env_s)
+            if propios is None or propios or lleno or not kill:
+                expuesto += coste4
+                log({"tipo": "T4_parada", "propios": str(propios)[:300], "lleno": lleno, "kill": kill, "exc": excepcion})
+                print(f"   ⚠ T4 parada: trades propios {propios if propios is None else len(propios)} | lleno {lleno} | "
+                      f"kill {kill} -> revisar ledger; posición (si la hay) a resolución")
+                break
+            R["t4_post_kill"].append(dt)
+            time.sleep(0.5)
         # ---- T3 FAK marketable
         if a.t3:
             pr = Prints([t for t, _ in toks]) if real else None
@@ -278,12 +426,7 @@ def main():
                 R["t3_post"].append((time.perf_counter() - t0) * 1000)
                 gastado += coste
                 log({"tipo": "T3_post", "resp": str(resp)[:300], "ms": R["t3_post"][-1], "t_envio_ms": t_env})
-                lleno = None
-                if isinstance(resp, dict):
-                    try:
-                        lleno = float(resp.get("takingAmount") or 0) or None   # acciones recibidas (BUY)
-                    except (TypeError, ValueError):
-                        lleno = None
+                lleno = _lleno(resp)
                 hit = pr.buscar(tok3, ask, t_env, lleno)
                 if hit and not hit[4]:
                     R["t3_casado"].append(hit[0] - t_env)
@@ -318,6 +461,9 @@ def main():
     print()
     for k, v in R.items():
         resumen(k, v)
+    if R["t4_post_kill"] and R["t2_post"]:
+        print(f"\nT4 − T2 (medianas) = taker delay + intento de casado ≈ "
+              f"{statistics.median(R['t4_post_kill']) - statistics.median(R['t2_post']):.0f} ms")
     print("\nNOTAS: t3_casado = hora del EXCHANGE del print − nuestro envío (red ida + validación + taker delay + casado; "
           "reloj chrony ±0,2 ms, reloj del exchange sin verificar); t3_post = respuesta del POST.")
 
