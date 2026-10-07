@@ -1,5 +1,5 @@
 {
- "generado_utc": "2026-10-07T09:55:56+00:00",
+ "generado_utc": "2026-10-07T10:01:30+00:00",
  "fuente": "bybit",
  "BNB": {
   "2min": {
@@ -30,20 +30,20 @@
  "BTC": {
   "2min": {
    "usd_long": 0.0,
-   "usd_short": 16436.99,
-   "n": 1,
-   "imbalance": 1.0
+   "usd_short": 0.0,
+   "n": 0,
+   "imbalance": null
   },
   "5min": {
    "usd_long": 0.0,
-   "usd_short": 16436.99,
-   "n": 1,
-   "imbalance": 1.0
+   "usd_short": 0.0,
+   "n": 0,
+   "imbalance": null
   },
   "15min": {
    "usd_long": 0.0,
-   "usd_short": 16603.67,
-   "n": 2,
+   "usd_short": 16436.99,
+   "n": 1,
    "imbalance": 1.0
   },
   "60min": {
@@ -82,26 +82,26 @@
  "ETH": {
   "2min": {
    "usd_long": 0.0,
-   "usd_short": 10963.58,
-   "n": 1,
-   "imbalance": 1.0
+   "usd_short": 0.0,
+   "n": 0,
+   "imbalance": null
   },
   "5min": {
    "usd_long": 0.0,
-   "usd_short": 10963.58,
+   "usd_short": 51.67,
    "n": 1,
    "imbalance": 1.0
   },
   "15min": {
    "usd_long": 0.0,
-   "usd_short": 10963.58,
-   "n": 1,
+   "usd_short": 11015.25,
+   "n": 2,
    "imbalance": 1.0
   },
   "60min": {
    "usd_long": 0.0,
-   "usd_short": 309983.68,
-   "n": 58,
+   "usd_short": 310035.34,
+   "n": 59,
    "imbalance": 1.0
   }
  },
@@ -126,23 +126,23 @@
   },
   "60min": {
    "usd_long": 0.0,
-   "usd_short": 18814.65,
-   "n": 21,
+   "usd_short": 18155.89,
+   "n": 19,
    "imbalance": 1.0
   }
  },
  "XRP": {
   "2min": {
    "usd_long": 0.0,
-   "usd_short": 3499.51,
-   "n": 1,
-   "imbalance": 1.0
+   "usd_short": 0.0,
+   "n": 0,
+   "imbalance": null
   },
   "5min": {
    "usd_long": 0.0,
-   "usd_short": 3499.51,
-   "n": 1,
-   "imbalance": 1.0
+   "usd_short": 0.0,
+   "n": 0,
+   "imbalance": null
   },
   "15min": {
    "usd_long": 0.0,
@@ -159,10 +159,10 @@
  },
  "lag_bybit_ws": {
   "ventana_min": 5,
-  "n_muestras": 3,
-  "ultimo_lag_s": 0.52,
-  "max_lag_s": 0.52,
-  "media_lag_s": 0.41,
+  "n_muestras": 1,
+  "ultimo_lag_s": 0.54,
+  "max_lag_s": 0.54,
+  "media_lag_s": 0.54,
   "umbral_alerta_s": 5.0
  }
 }
