@@ -1,0 +1,41 @@
+latencia_presupuesto_15m — 2026-10-07T06:57:37+00:00
+['Last offset     : +0.000001965 seconds', 'RMS offset      : 0.000203808 seconds']
+
+=== A. EVENTO -> RECEPCIÓN (ms) — maker_ms_2026-10-06_2415879.csv.gz ===
+   (gzip truncado al final: se usa lo leído)
+filas leídas 42,745,202
+Polymarket TOP del libro (q): recepción − hora del exchange
+   BNB#15min      n=   656724 P50    20.0  P90    55.0  P95    87.0  P99   222.0  máx   3970.0
+   BNB#5min       n=   612474 P50    20.0  P90    64.0  P95   100.0  P99   269.0  máx   3445.0
+   BTC#15min      n=  3961237 P50    25.0  P90   423.0  P95   771.0  P99  2126.0  máx   6720.0
+   BTC#5min       n=  8004322 P50    30.0  P90   881.0  P95  1642.0  P99  4692.0  máx  11092.0
+   DOGE#15min     n=   643119 P50    23.0  P90    54.0  P95    86.0  P99   287.0  máx   4011.0
+   DOGE#5min      n=   770596 P50    21.0  P90    67.0  P95   103.0  P99   251.0  máx   2469.0
+   ETH#15min      n=  1557777 P50    20.0  P90    95.0  P95   175.0  P99   503.0  máx   4441.0
+   ETH#5min       n=  2702880 P50    23.0  P90   134.0  P95   246.0  P99   651.0  máx   2125.0
+   SOL#15min      n=   969594 P50    20.0  P90    58.0  P95    94.0  P99   250.0  máx   1829.0
+   SOL#5min       n=  1726562 P50    20.0  P90    79.0  P95   130.0  P99   325.0  máx   2422.0
+   XRP#15min      n=   974583 P50    21.0  P90    60.0  P95    97.0  P99   250.0  máx   2277.0
+   XRP#5min       n=  1016166 P50    24.0  P90    88.0  P95   133.0  P99   313.0  máx   1304.0
+Polymarket OPERACIONES (t): recepción − hora del exchange
+   BNB#15min      n=     1711 P50    21.0  P90    54.0  P95    84.5  P99   219.0  máx   1334.0
+   BTC#15min      n=    41773 P50    23.0  P90   483.0  P95   865.4  P99  2698.2  máx   6686.0
+   DOGE#15min     n=     2261 P50    24.0  P90    55.0  P95    95.0  P99   229.4  máx   1829.0
+   ETH#15min      n=     9920 P50    23.0  P90   178.0  P95   324.0  P99   747.8  máx   3938.0
+   SOL#15min      n=     4115 P50    21.0  P90    62.0  P95   109.0  P99   366.6  máx   1485.0
+   XRP#15min      n=     3058 P50    22.0  P90    60.0  P95   110.3  P99   317.4  máx   1383.0
+15m (q) por hora UTC (congestión): P50 / P99
+   11:20/554 12:21/739 13:23/1102 14:24/2023 15:24/819 16:25/1875 17:20/586 18:20/1660 19:21/2205 20:21/1361 21:20/1034 22:21/1094
+Binance aggTrade: E − T (interno Binance) | recepción − E (red + socket)
+   BNBUSDT   E−T  n=    78178 P50     0.0  P90     1.0  P95     1.0  P99     9.0  máx    156.0
+             rec−E n=    78178 P50   130.0  P90   140.0  P95   154.1  P99   280.0  máx   1349.0
+   BTCUSDT   E−T  n=   445533 P50     0.0  P90     1.0  P95     2.0  P99     8.0  máx     64.0
+             rec−E n=   445533 P50   132.0  P90   145.0  P95   160.0  P99   283.0  máx   1478.0
+   DOGEUSDT  E−T  n=    52017 P50     0.0  P90     1.0  P95     1.0  P99     7.0  máx     61.0
+             rec−E n=    52017 P50   130.0  P90   141.0  P95   154.0  P99   302.7  máx   1526.0
+   ETHUSDT   E−T  n=   212785 P50     0.0  P90     1.0  P95     3.0  P99    11.0  máx    199.0
+             rec−E n=   212785 P50   132.0  P90   148.0  P95   165.0  P99   285.0  máx   1643.0
+   SOLUSDT   E−T  n=    66750 P50     0.0  P90     1.0  P95     1.0  P99     6.0  máx    197.0
+             rec−E n=    66750 P50   131.0  P90   142.0  P95   157.0  P99   279.0  máx   1094.0
+   XRPUSDT   E−T  n=    51023 P50     0.0  P90     1.0  P95     1.0  P99     8.0  máx     60.0
+             rec−E n=    51023 P50   131.0  P90   143.0  P95   162.0  P99   305.0  máx   1491.0
