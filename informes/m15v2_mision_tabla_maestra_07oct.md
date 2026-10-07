@@ -57,3 +57,9 @@ cuando entren esos datos.
 
 ## Ideas emergentes
 - **Vía rápida separada** (Javi 07-Oct): feed por mercado caliente en proceso propio, órdenes prefirmadas, VPS junto al origen del CLOB. Construir solo si la Fase 0 V3 demuestra que el retraso es nuestro o un mecanismo lo necesita. Memoria `idea_via_rapida_separada_latencia_07oct`.
+
+## V3 — Fase 0 (forense de observabilidad), 07-Oct
+- Lector WS aislado y mínimo vs producción, 110.016 mensajes del libro BTC 15m emparejados (12:51-13:06Z): red+servidor P50 42 / P90 603 / P99 1.698 ms, producción P50 65 / P90 601; pipeline propio P50 −3 ms → la cola NO la pone nuestro proceso. 2 conexiones (primera llegada) P90 371 ms; correlación entre conexiones 0,62.
+- **ANCLAS propias (10 GTC post-only a 0,01 + cancel, 0 $): en 4/10 el `timestamp` del WS que anuncia NUESTRA orden es 192-468 ms ANTERIOR a nuestro envío** → el timestamp NO es la hora del evento (OBSERVED; probable sello de inicio de lote). Recepción − envío: 47-103 ms (máx 317). El "P90 423-603 ms" está inflado por esta semántica.
+- CONSECUENCIA (V3 §9): las simulaciones que ordenan libro vs operaciones por ese timestamp (§10 cola, A3, §14) pueden tener el orden mal en ráfagas → NO se consideran falsadas hasta rehacerlas ordenando por RECEPCIÓN.
+- Pendiente: 14:05Z 4 lectores independientes + 40 anclas (horario USA); muestreo de sockets 14:00/19:00Z; otra región (VPS de prueba, decisión de Javi).
