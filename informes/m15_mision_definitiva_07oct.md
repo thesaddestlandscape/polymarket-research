@@ -47,8 +47,8 @@ FALSAR → OPTIMIZAR → VALIDAR → MINAR.
 | 31 | Soluciones de latencia con ANTES/DESPUÉS/P50/P95/P99/PnL desbloqueado | pendiente |
 | 32 | Pre-positioning para alfas con vida < latencia | pendiente |
 | 33 | ML solo si gana en PnL neto a reglas/umbrales/lineales/ligeros | transversal |
-| 34 | 200 hipótesis = 200 MECANISMOS económicamente distintos | pendiente |
-| 35 | 200 → 50 → 20 → TOP 10 (PnL neto, robustez, capacidad, latencia, capital, complejidad, riesgo) | pendiente |
+| 34 | 200 hipótesis = 200 MECANISMOS económicamente distintos | **HECHO 07-Oct**: `informes/m15_s34_s35_mecanismos_top10_07oct.md` (25 familias × 8, estado R/V/B/N con evidencia). Comprobado hoy: los 15m NO tienen rewards de liquidez activos (0 de 18.414 mercados con bote). |
+| 35 | 200 → 50 → 20 → TOP 10 (PnL neto, robustez, capacidad, latencia, capital, complejidad, riesgo) | **HECHO 07-Oct (mismo informe)**: TOP 10 = B2 pata 5m, PRECIERRE banda alta 15m, 1h vela Binance, diario Up/Down, cancelación A2, L2 como filtro, inventario de pares + skew, tomadoras persistentes, pre-posición ventana siguiente, salto BTC→alts. NINGUNO validado: todos a forward con gates. |
 | 36 | Discovery / Validation / OOS / Holdout / Paper forward; multiple testing, data snooping, PBO, DSR, permutación, bootstrap, Reality Check/SPA | transversal |
 | 37 | Leave-one-market-out (BTC, ETH, SOL, XRP, DOGE, principal fuera) | transversal |
 | 38 | Leave-one-regime-out (baja/alta/normal/shock/terminal) | transversal |
