@@ -1,0 +1,110 @@
+MISIÓN 15M V3 Fase 2 — maker de cola con cancelación por CROSS (05-06 Oct, recepción). Órdenes virtuales: 158991
+
+=== relleno PES ===
+ DISC  n= 66890 BASE P(fill) 15.7% EV/orden res -0.00952 IC90 (-0.01274,-0.00680) mk5/orden -0.00864
+   U=0.01 C= 75ms P(fill)  2.1% EV/orden res +0.00005 IC90 (-0.00083,+0.00097) mk5/orden -0.00047 | evitados  9071 (86.3%) EV|evitado res -0.0706 mk5 -0.0604 vs EV|resto res +0.0024
+   U=0.01 C=125ms P(fill)  2.2% EV/orden res -0.00005 IC90 (-0.00096,+0.00089) mk5/orden -0.00050 | evitados  9015 (85.8%) EV|evitado res -0.0703 mk5 -0.0605 vs EV|resto res -0.0021
+   U=0.01 C=250ms P(fill)  2.5% EV/orden res -0.00022 IC90 (-0.00113,+0.00077) mk5/orden -0.00063 | evitados  8869 (84.4%) EV|evitado res -0.0701 mk5 -0.0606 vs EV|resto res -0.0088
+   U=0.02 C= 75ms P(fill)  4.9% EV/orden res -0.00093 IC90 (-0.00260,+0.00067) mk5/orden -0.00120 | evitados  7258 (69.1%) EV|evitado res -0.0792 mk5 -0.0688 vs EV|resto res -0.0191
+   U=0.02 C=125ms P(fill)  4.9% EV/orden res -0.00086 IC90 (-0.00268,+0.00069) mk5/orden -0.00123 | evitados  7212 (68.6%) EV|evitado res -0.0802 mk5 -0.0689 vs EV|resto res -0.0175
+   U=0.02 C=250ms P(fill)  5.2% EV/orden res -0.00093 IC90 (-0.00280,+0.00091) mk5/orden -0.00140 | evitados  7019 (66.8%) EV|evitado res -0.0818 mk5 -0.0692 vs EV|resto res -0.0178
+   U=0.03 C= 75ms P(fill)  7.3% EV/orden res -0.00266 IC90 (-0.00481,-0.00048) mk5/orden -0.00217 | evitados  5630 (53.6%) EV|evitado res -0.0814 mk5 -0.0771 vs EV|resto res -0.0365
+   U=0.03 C=125ms P(fill)  7.4% EV/orden res -0.00274 IC90 (-0.00498,-0.00064) mk5/orden -0.00222 | evitados  5580 (53.1%) EV|evitado res -0.0812 mk5 -0.0773 vs EV|resto res -0.0372
+   U=0.03 C=250ms P(fill)  7.6% EV/orden res -0.00294 IC90 (-0.00484,-0.00058) mk5/orden -0.00240 | evitados  5398 (51.4%) EV|evitado res -0.0814 mk5 -0.0776 vs EV|resto res -0.0385
+ VALID n= 37418 BASE P(fill) 15.3% EV/orden res -0.00862 IC90 (-0.01336,-0.00401) mk5/orden -0.00917
+   U=0.01 C= 75ms P(fill)  2.0% EV/orden res -0.00020 IC90 (-0.00080,+0.00040) mk5/orden -0.00045 | evitados  4953 (86.8%) EV|evitado res -0.0636 mk5 -0.0661 vs EV|resto res -0.0098
+   U=0.01 C=125ms P(fill)  2.1% EV/orden res -0.00048 IC90 (-0.00117,+0.00017) mk5/orden -0.00056 | evitados  4906 (85.9%) EV|evitado res -0.0621 mk5 -0.0659 vs EV|resto res -0.0222
+   U=0.01 C=250ms P(fill)  2.4% EV/orden res -0.00036 IC90 (-0.00111,+0.00036) mk5/orden -0.00063 | evitados  4818 (84.4%) EV|evitado res -0.0641 mk5 -0.0666 vs EV|resto res -0.0151
+   U=0.02 C= 75ms P(fill)  4.4% EV/orden res -0.00009 IC90 (-0.00191,+0.00172) mk5/orden -0.00103 | evitados  4074 (71.4%) EV|evitado res -0.0783 mk5 -0.0750 vs EV|resto res -0.0020
+   U=0.02 C=125ms P(fill)  4.5% EV/orden res -0.00044 IC90 (-0.00230,+0.00157) mk5/orden -0.00119 | evitados  4009 (70.2%) EV|evitado res -0.0763 mk5 -0.0748 vs EV|resto res -0.0097
+   U=0.02 C=250ms P(fill)  4.8% EV/orden res -0.00082 IC90 (-0.00279,+0.00126) mk5/orden -0.00145 | evitados  3907 (68.4%) EV|evitado res -0.0747 mk5 -0.0742 vs EV|resto res -0.0170
+   U=0.03 C= 75ms P(fill)  6.9% EV/orden res -0.00261 IC90 (-0.00542,-0.00010) mk5/orden -0.00214 | evitados  3132 (54.9%) EV|evitado res -0.0717 mk5 -0.0844 vs EV|resto res -0.0379
+   U=0.03 C=125ms P(fill)  7.0% EV/orden res -0.00283 IC90 (-0.00572,-0.00023) mk5/orden -0.00238 | evitados  3085 (54.0%) EV|evitado res -0.0702 mk5 -0.0827 vs EV|resto res -0.0403
+   U=0.03 C=250ms P(fill)  7.3% EV/orden res -0.00367 IC90 (-0.00672,-0.00062) mk5/orden -0.00257 | evitados  2967 (52.0%) EV|evitado res -0.0624 mk5 -0.0837 vs EV|resto res -0.0501
+ FINAL n= 45159 BASE P(fill) 15.7% EV/orden res -0.00645 IC90 (-0.01264,+0.00031) mk5/orden -0.00964
+   U=0.01 C= 75ms P(fill)  1.2% EV/orden res -0.00004 IC90 (-0.00072,+0.00057) mk5/orden -0.00020 | evitados  6562 (92.4%) EV|evitado res -0.0441 mk5 -0.0654 vs EV|resto res -0.0036
+   U=0.01 C=125ms P(fill)  1.3% EV/orden res -0.00003 IC90 (-0.00065,+0.00071) mk5/orden -0.00022 | evitados  6526 (91.9%) EV|evitado res -0.0444 mk5 -0.0656 vs EV|resto res -0.0022
+   U=0.01 C=250ms P(fill)  1.5% EV/orden res -0.00015 IC90 (-0.00111,+0.00077) mk5/orden -0.00028 | evitados  6436 (90.6%) EV|evitado res -0.0442 mk5 -0.0661 vs EV|resto res -0.0105
+   U=0.02 C= 75ms P(fill)  2.7% EV/orden res -0.00006 IC90 (-0.00157,+0.00131) mk5/orden -0.00046 | evitados  5873 (82.7%) EV|evitado res -0.0491 mk5 -0.0710 vs EV|resto res -0.0023
+   U=0.02 C=125ms P(fill)  2.8% EV/orden res -0.00024 IC90 (-0.00164,+0.00127) mk5/orden -0.00048 | evitados  5826 (82.1%) EV|evitado res -0.0481 mk5 -0.0714 vs EV|resto res -0.0085
+   U=0.02 C=250ms P(fill)  3.1% EV/orden res -0.00050 IC90 (-0.00216,+0.00110) mk5/orden -0.00062 | evitados  5701 (80.3%) EV|evitado res -0.0471 mk5 -0.0719 vs EV|resto res -0.0162
+   U=0.03 C= 75ms P(fill)  4.8% EV/orden res -0.00058 IC90 (-0.00274,+0.00152) mk5/orden -0.00120 | evitados  4953 (69.8%) EV|evitado res -0.0535 mk5 -0.0774 vs EV|resto res -0.0123
+   U=0.03 C=125ms P(fill)  4.8% EV/orden res -0.00079 IC90 (-0.00286,+0.00137) mk5/orden -0.00122 | evitados  4925 (69.4%) EV|evitado res -0.0519 mk5 -0.0777 vs EV|resto res -0.0165
+   U=0.03 C=250ms P(fill)  5.0% EV/orden res -0.00102 IC90 (-0.00315,+0.00145) mk5/orden -0.00130 | evitados  4846 (68.3%) EV|evitado res -0.0506 mk5 -0.0783 vs EV|resto res -0.0205
+ TODO  n=158991 BASE P(fill) 15.5% EV/orden res -0.00875 IC90 (-0.01115,-0.00632) mk5/orden -0.00912
+   U=0.01 C= 75ms P(fill)  1.8% EV/orden res -0.00013 IC90 (-0.00062,+0.00034) mk5/orden -0.00037 | evitados 21810 (88.5%) EV|evitado res -0.0628 mk5 -0.0640 vs EV|resto res -0.0072
+   U=0.01 C=125ms P(fill)  1.9% EV/orden res -0.00023 IC90 (-0.00072,+0.00022) mk5/orden -0.00042 | evitados 21669 (87.9%) EV|evitado res -0.0625 mk5 -0.0641 vs EV|resto res -0.0125
+   U=0.01 C=250ms P(fill)  2.1% EV/orden res -0.00031 IC90 (-0.00082,+0.00027) mk5/orden -0.00051 | evitados 21331 (86.5%) EV|evitado res -0.0629 mk5 -0.0644 vs EV|resto res -0.0148
+   U=0.02 C= 75ms P(fill)  4.0% EV/orden res -0.00064 IC90 (-0.00153,+0.00035) mk5/orden -0.00091 | evitados 18282 (74.2%) EV|evitado res -0.0705 mk5 -0.0716 vs EV|resto res -0.0159
+   U=0.02 C=125ms P(fill)  4.1% EV/orden res -0.00072 IC90 (-0.00164,+0.00022) mk5/orden -0.00098 | evitados 18105 (73.4%) EV|evitado res -0.0705 mk5 -0.0718 vs EV|resto res -0.0175
+   U=0.02 C=250ms P(fill)  4.4% EV/orden res -0.00091 IC90 (-0.00209,+0.00001) mk5/orden -0.00115 | evitados 17677 (71.7%) EV|evitado res -0.0705 mk5 -0.0720 vs EV|resto res -0.0207
+   U=0.03 C= 75ms P(fill)  6.3% EV/orden res -0.00210 IC90 (-0.00346,-0.00087) mk5/orden -0.00183 | evitados 14640 (59.4%) EV|evitado res -0.0721 mk5 -0.0796 vs EV|resto res -0.0334
+   U=0.03 C=125ms P(fill)  6.4% EV/orden res -0.00221 IC90 (-0.00349,-0.00091) mk5/orden -0.00191 | evitados 14500 (58.8%) EV|evitado res -0.0717 mk5 -0.0794 vs EV|resto res -0.0345
+   U=0.03 C=250ms P(fill)  6.6% EV/orden res -0.00255 IC90 (-0.00387,-0.00109) mk5/orden -0.00206 | evitados 14118 (57.3%) EV|evitado res -0.0698 mk5 -0.0800 vs EV|resto res -0.0385
+
+=== relleno OPT ===
+ DISC  n= 66890 BASE P(fill) 15.9% EV/orden res -0.00940 IC90 (-0.01265,-0.00620) mk5/orden -0.00860
+   U=0.01 C= 75ms P(fill)  2.3% EV/orden res +0.00007 IC90 (-0.00084,+0.00089) mk5/orden -0.00047 | evitados  9104 (85.6%) EV|evitado res -0.0695 mk5 -0.0598 vs EV|resto res +0.0029
+   U=0.01 C=125ms P(fill)  2.4% EV/orden res -0.00001 IC90 (-0.00090,+0.00082) mk5/orden -0.00050 | evitados  9047 (85.0%) EV|evitado res -0.0694 mk5 -0.0600 vs EV|resto res -0.0006
+   U=0.01 C=250ms P(fill)  2.6% EV/orden res -0.00018 IC90 (-0.00143,+0.00089) mk5/orden -0.00063 | evitados  8895 (83.6%) EV|evitado res -0.0693 mk5 -0.0600 vs EV|resto res -0.0068
+   U=0.02 C= 75ms P(fill)  5.1% EV/orden res -0.00087 IC90 (-0.00249,+0.00067) mk5/orden -0.00120 | evitados  7261 (68.2%) EV|evitado res -0.0786 mk5 -0.0683 vs EV|resto res -0.0171
+   U=0.02 C=125ms P(fill)  5.1% EV/orden res -0.00078 IC90 (-0.00248,+0.00102) mk5/orden -0.00123 | evitados  7211 (67.8%) EV|evitado res -0.0800 mk5 -0.0685 vs EV|resto res -0.0151
+   U=0.02 C=250ms P(fill)  5.4% EV/orden res -0.00082 IC90 (-0.00262,+0.00129) mk5/orden -0.00140 | evitados  7014 (65.9%) EV|evitado res -0.0818 mk5 -0.0688 vs EV|resto res -0.0151
+   U=0.03 C= 75ms P(fill)  7.5% EV/orden res -0.00265 IC90 (-0.00463,-0.00048) mk5/orden -0.00217 | evitados  5639 (53.0%) EV|evitado res -0.0800 mk5 -0.0764 vs EV|resto res -0.0355
+   U=0.03 C=125ms P(fill)  7.6% EV/orden res -0.00268 IC90 (-0.00453,-0.00066) mk5/orden -0.00222 | evitados  5581 (52.4%) EV|evitado res -0.0805 mk5 -0.0767 vs EV|resto res -0.0355
+   U=0.03 C=250ms P(fill)  7.8% EV/orden res -0.00286 IC90 (-0.00462,-0.00062) mk5/orden -0.00240 | evitados  5392 (50.7%) EV|evitado res -0.0811 mk5 -0.0771 vs EV|resto res -0.0364
+ VALID n= 37418 BASE P(fill) 15.4% EV/orden res -0.00837 IC90 (-0.01269,-0.00327) mk5/orden -0.00912
+   U=0.01 C= 75ms P(fill)  2.2% EV/orden res -0.00017 IC90 (-0.00085,+0.00048) mk5/orden -0.00045 | evitados  4964 (86.0%) EV|evitado res -0.0618 mk5 -0.0657 vs EV|resto res -0.0078
+   U=0.01 C=125ms P(fill)  2.3% EV/orden res -0.00044 IC90 (-0.00116,+0.00030) mk5/orden -0.00056 | evitados  4915 (85.1%) EV|evitado res -0.0604 mk5 -0.0655 vs EV|resto res -0.0191
+   U=0.01 C=250ms P(fill)  2.5% EV/orden res -0.00032 IC90 (-0.00107,+0.00043) mk5/orden -0.00063 | evitados  4827 (83.6%) EV|evitado res -0.0624 mk5 -0.0661 vs EV|resto res -0.0127
+   U=0.02 C= 75ms P(fill)  4.5% EV/orden res +0.00002 IC90 (-0.00172,+0.00180) mk5/orden -0.00103 | evitados  4078 (70.6%) EV|evitado res -0.0770 mk5 -0.0745 vs EV|resto res +0.0004
+   U=0.02 C=125ms P(fill)  4.7% EV/orden res -0.00033 IC90 (-0.00242,+0.00177) mk5/orden -0.00118 | evitados  4013 (69.5%) EV|evitado res -0.0749 mk5 -0.0743 vs EV|resto res -0.0071
+   U=0.02 C=250ms P(fill)  5.0% EV/orden res -0.00071 IC90 (-0.00280,+0.00181) mk5/orden -0.00145 | evitados  3911 (67.7%) EV|evitado res -0.0733 mk5 -0.0737 vs EV|resto res -0.0143
+   U=0.03 C= 75ms P(fill)  7.1% EV/orden res -0.00239 IC90 (-0.00529,+0.00074) mk5/orden -0.00213 | evitados  3124 (54.1%) EV|evitado res -0.0716 mk5 -0.0841 vs EV|resto res -0.0338
+   U=0.03 C=125ms P(fill)  7.2% EV/orden res -0.00261 IC90 (-0.00562,+0.00044) mk5/orden -0.00237 | evitados  3077 (53.3%) EV|evitado res -0.0701 mk5 -0.0825 vs EV|resto res -0.0362
+   U=0.03 C=250ms P(fill)  7.5% EV/orden res -0.00348 IC90 (-0.00679,-0.00022) mk5/orden -0.00256 | evitados  2959 (51.3%) EV|evitado res -0.0618 mk5 -0.0834 vs EV|resto res -0.0463
+ FINAL n= 45159 BASE P(fill) 15.9% EV/orden res -0.00639 IC90 (-0.01285,-0.00046) mk5/orden -0.00958
+   U=0.01 C= 75ms P(fill)  1.3% EV/orden res -0.00003 IC90 (-0.00074,+0.00068) mk5/orden -0.00019 | evitados  6591 (91.8%) EV|evitado res -0.0435 mk5 -0.0647 vs EV|resto res -0.0024
+   U=0.01 C=125ms P(fill)  1.4% EV/orden res -0.00002 IC90 (-0.00072,+0.00069) mk5/orden -0.00021 | evitados  6552 (91.3%) EV|evitado res -0.0439 mk5 -0.0650 vs EV|resto res -0.0012
+   U=0.01 C=250ms P(fill)  1.6% EV/orden res -0.00016 IC90 (-0.00127,+0.00084) mk5/orden -0.00028 | evitados  6459 (90.0%) EV|evitado res -0.0436 mk5 -0.0654 vs EV|resto res -0.0098
+   U=0.02 C= 75ms P(fill)  2.9% EV/orden res +0.00003 IC90 (-0.00160,+0.00159) mk5/orden -0.00044 | evitados  5875 (81.9%) EV|evitado res -0.0493 mk5 -0.0706 vs EV|resto res +0.0009
+   U=0.02 C=125ms P(fill)  3.0% EV/orden res -0.00016 IC90 (-0.00188,+0.00129) mk5/orden -0.00047 | evitados  5829 (81.2%) EV|evitado res -0.0483 mk5 -0.0709 vs EV|resto res -0.0053
+   U=0.02 C=250ms P(fill)  3.3% EV/orden res -0.00045 IC90 (-0.00208,+0.00125) mk5/orden -0.00061 | evitados  5699 (79.4%) EV|evitado res -0.0470 mk5 -0.0715 vs EV|resto res -0.0139
+   U=0.03 C= 75ms P(fill)  4.9% EV/orden res -0.00054 IC90 (-0.00284,+0.00166) mk5/orden -0.00118 | evitados  4948 (68.9%) EV|evitado res -0.0533 mk5 -0.0772 vs EV|resto res -0.0110
+   U=0.03 C=125ms P(fill)  5.0% EV/orden res -0.00074 IC90 (-0.00296,+0.00161) mk5/orden -0.00120 | evitados  4919 (68.5%) EV|evitado res -0.0518 mk5 -0.0775 vs EV|resto res -0.0148
+   U=0.03 C=250ms P(fill)  5.2% EV/orden res -0.00097 IC90 (-0.00346,+0.00121) mk5/orden -0.00128 | evitados  4837 (67.4%) EV|evitado res -0.0505 mk5 -0.0780 vs EV|resto res -0.0188
+ TODO  n=158991 BASE P(fill) 15.7% EV/orden res -0.00862 IC90 (-0.01105,-0.00622) mk5/orden -0.00908
+   U=0.01 C= 75ms P(fill)  1.9% EV/orden res -0.00012 IC90 (-0.00065,+0.00035) mk5/orden -0.00037 | evitados 21889 (87.8%) EV|evitado res -0.0618 mk5 -0.0634 vs EV|resto res -0.0062
+   U=0.01 C=125ms P(fill)  2.0% EV/orden res -0.00022 IC90 (-0.00068,+0.00023) mk5/orden -0.00042 | evitados 21740 (87.2%) EV|evitado res -0.0614 mk5 -0.0635 vs EV|resto res -0.0109
+   U=0.01 C=250ms P(fill)  2.2% EV/orden res -0.00029 IC90 (-0.00083,+0.00034) mk5/orden -0.00051 | evitados 21392 (85.8%) EV|evitado res -0.0619 mk5 -0.0639 vs EV|resto res -0.0132
+   U=0.02 C= 75ms P(fill)  4.2% EV/orden res -0.00059 IC90 (-0.00152,+0.00043) mk5/orden -0.00091 | evitados 18290 (73.3%) EV|evitado res -0.0699 mk5 -0.0712 vs EV|resto res -0.0140
+   U=0.02 C=125ms P(fill)  4.3% EV/orden res -0.00066 IC90 (-0.00164,+0.00030) mk5/orden -0.00097 | evitados 18109 (72.6%) EV|evitado res -0.0699 mk5 -0.0714 vs EV|resto res -0.0154
+   U=0.02 C=250ms P(fill)  4.6% EV/orden res -0.00085 IC90 (-0.00203,+0.00014) mk5/orden -0.00115 | evitados 17672 (70.8%) EV|evitado res -0.0699 mk5 -0.0716 vs EV|resto res -0.0186
+   U=0.03 C= 75ms P(fill)  6.5% EV/orden res -0.00206 IC90 (-0.00331,-0.00073) mk5/orden -0.00182 | evitados 14635 (58.7%) EV|evitado res -0.0713 mk5 -0.0791 vs EV|resto res -0.0318
+   U=0.03 C=125ms P(fill)  6.6% EV/orden res -0.00214 IC90 (-0.00354,-0.00097) mk5/orden -0.00191 | evitados 14485 (58.1%) EV|evitado res -0.0711 mk5 -0.0790 vs EV|resto res -0.0326
+   U=0.03 C=250ms P(fill)  6.8% EV/orden res -0.00248 IC90 (-0.00389,-0.00109) mk5/orden -0.00205 | evitados 14093 (56.5%) EV|evitado res -0.0693 mk5 -0.0796 vs EV|resto res -0.0364
+
+por moneda (PES, U=0,02, C=125, TODO): EV|fill res base → con regla
+  BNB   rellenos   491→  130  EV|fill -0.1213 → +0.0748  EV/orden -0.00227 → +0.00037
+  BTC   rellenos 12335→ 3355  EV|fill -0.0538 → -0.0229  EV/orden -0.02435 → -0.00282
+  DOGE  rellenos   531→  110  EV|fill -0.0518 → -0.0871  EV/orden -0.00106 → -0.00037
+  ETH   rellenos  7973→ 2252  EV|fill -0.0510 → -0.0116  EV/orden -0.01522 → -0.00097
+  SOL   rellenos  2079→  457  EV|fill -0.0678 → -0.0082  EV/orden -0.00530 → -0.00014
+  XRP   rellenos  1245→  245  EV|fill -0.0735 → -0.0325  EV/orden -0.00350 → -0.00030
+
+=== PRUEBA JUSTA (07-Oct 17Z): la regla 'cancelar para siempre' es un VETO DEGENERADO (señal U=0,01 en el 95,1 % de las vidas de orden; retraso mediano señal→relleno 17,7 s). Ventana: la orden se aparta solo si la señal llega en [relleno−2000, relleno−C] ===
+ PES rellenos 24654 EV|fill -0.0564 mk5 -0.0590
+   U=0.01 C=75: apartados  2341 ( 9.5%) EV|apartado -0.0454 mk5 -0.0379 | EV|resto -0.0576 mk5 -0.0613
+   U=0.01 C=125: apartados  2200 ( 8.9%) EV|apartado -0.0407 mk5 -0.0371 | EV|resto -0.0579 mk5 -0.0612
+   U=0.02 C=75: apartados  2340 ( 9.5%) EV|apartado -0.0630 mk5 -0.0529 | EV|resto -0.0557 mk5 -0.0597
+   U=0.02 C=125: apartados  2163 ( 8.8%) EV|apartado -0.0619 mk5 -0.0527 | EV|resto -0.0559 mk5 -0.0597
+   U=0.03 C=75: apartados  2090 ( 8.5%) EV|apartado -0.0632 mk5 -0.0589 | EV|resto -0.0558 mk5 -0.0591
+   U=0.03 C=125: apartados  1950 ( 7.9%) EV|apartado -0.0595 mk5 -0.0565 | EV|resto -0.0561 mk5 -0.0593
+ OPT rellenos 24944 EV|fill -0.0550 mk5 -0.0580
+   U=0.01 C=75: apartados  2423 ( 9.7%) EV|apartado -0.0427 mk5 -0.0367 | EV|resto -0.0563 mk5 -0.0604
+   U=0.01 C=125: apartados  2274 ( 9.1%) EV|apartado -0.0384 mk5 -0.0359 | EV|resto -0.0566 mk5 -0.0603
+   U=0.02 C=75: apartados  2379 ( 9.5%) EV|apartado -0.0615 mk5 -0.0519 | EV|resto -0.0543 mk5 -0.0587
+   U=0.02 C=125: apartados  2198 ( 8.8%) EV|apartado -0.0611 mk5 -0.0517 | EV|resto -0.0544 mk5 -0.0587
+   U=0.03 C=75: apartados  2139 ( 8.6%) EV|apartado -0.0614 mk5 -0.0575 | EV|resto -0.0544 mk5 -0.0581
+   U=0.03 C=125: apartados  1989 ( 8.0%) EV|apartado -0.0595 mk5 -0.0552 | EV|resto -0.0546 mk5 -0.0583
+ NOTA: la señal 'cross' solo es la primera vez en la vida de la orden (tc); una señal posterior más cercana al relleno no se ve aquí → la ventana infra-cuenta apartados; aun así, los apartados NO son peores que el relleno medio → cross NO discrimina los rellenos malos.

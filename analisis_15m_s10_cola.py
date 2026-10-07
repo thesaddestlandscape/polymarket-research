@@ -77,6 +77,7 @@ def virtuales(te, bb, ba, bs, as_, T_te, T_p, T_side, T_sz, ini, fin, gana):
         for modo in ("pes", "opt"):
             tf = fill[modo]
             fila[f"lleno_{modo}"] = tf is not None
+            fila[f"tf_{modo}"] = tf if tf is not None else -1      # 07-Oct V3 Fase 2: hora del relleno (para cancelaciones)
             if tf is not None:
                 for h in (100, 215, 500, 1000, 2000):          # 07-Oct V3 Fase 1: curva post-relleno fina
                     fila[f"mk{h}ms_{modo}"] = mid_en(te, bb, ba, tf + h) - P

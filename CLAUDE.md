@@ -240,6 +240,7 @@ Cada línea es un error real del proyecto. Antes de concluir, promocionar, refut
 - Clave de feature que no existe → estrategia muerta en silencio (`GBM_LATE_15M_MULTIHORIZONTE`, con docstring que afirmaba lo contrario).
 - Estados absorbentes: 38/43 estrategias desactivadas sin poder acumular; `suelo_disparado` que nunca se resetea.
 - Filtros causales que pasan a cubrir el 85-100 % de los casos reales (17/104).
+- Simulador de maker con regla "cancelar para siempre si la señal X salta durante la vida de la orden": si X salta en casi todas las vidas (cross-moneda U=1c: 95 %), el "EV≈0" solo es no operar (P(fill) 15,5 %→1,8 %). Medir siempre la frecuencia de la señal y la prueba justa: apartar solo si llega en los ~2 s previos al relleno y comparar el EV de los apartados con el relleno medio (07-Oct: no discrimina).
 - Vocabulario distinto entre módulos: `BUY_Up/BUY_Down` invisible a código que solo conoce `BUY_YES/BUY_NO`.
 - Tablas hardcodeadas por ejecutor, producto cartesiano en la whitelist, decimales del CLOB, min size $1 y 5 shares, freno de ventana sin estado: todos escritos por un agente convencido de que estaban bien → `/code-review` siempre.
 - Dedup permanente `(wallet, mercado)` descartaba convicción repetida de wallets ya validadas.
