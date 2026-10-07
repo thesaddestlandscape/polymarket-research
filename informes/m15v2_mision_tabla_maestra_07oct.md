@@ -45,5 +45,12 @@
 | Arbitraje matemático YES+NO / mint-merge (3,137) | 15M-DIRECT | REFUTADA | §17 libro espejo | — | No reabrir |
 | Pre-posición en la ventana siguiente (171-172) | 15M-DIRECT | BLOQUEADA → datos L2 incluyen la siguiente | — | — | Evaluar con L2 |
 | Cotización rancia en la APERTURA del 15m (+5..+30 s, |dist_ref| ≥ P90 DISC = 4,9 bps, mid 0,40-0,60) | 15M-DIRECT (taker selectivo) | REFUTADA | m15_maestro 06/07 Oct, ask real +215 ms, 1 por mercado: DISC +0,49 (n=11) → FINAL −0,08 (n=11), OOS2 −0,001 (n=51, IC90 ±0,24); a +215 ms el ask ya es 0,58 (el libro se reprecia antes de llegar) | sí (OOS2) | No reabrir |
-| Salto BTC → 15m de alts (101) | 15M-INFORMATIONAL | NO PROBADA en 15m (captura 30-Sep) | — | — | Tras el 15m>4h |
+| Salto BTC → 15m de alts con su Binance quieto (101) | 15M-INFORMATIONAL | REFUTADA (taker y defensiva) | m15_maestro 06/07 Oct, BTC 1 s ≥ P99 DISC (1,4 bps), alt ≤ su mediana, ask real +215 ms: OOS2 n=503 resolución −0,16 (IC<0), ida y vuelta −10 %; el mid del 15m de la alt se mueve −0,9/+0,1 c en 5 s tras el salto → libros de alts NO rancios frente a BTC (tampoco sirve para cancelar: toxicidad típica ~6 c) | sí (OOS2) | No reabrir |
 | Flujo on-chain limpio (85,177-178,184) | 15M-INFORMATIONAL | BLOQUEADA (retención 4 d) | — | — | Diseñar captura larga |
+
+## Estado v2 al cierre del 07-Oct
+Todo lo probable con los datos actuales en el 15M está falsado bajo estas condiciones (taker a +215 ms con fee real, maker con cola
+real y latencia medida, OOS2 06-07 Oct). Mecanismos vivos 15M: **PRECIERRE** (resolución, en real) · **A3 BTC** (reducción de
+pérdidas; rastrear para ver si BTC es positivo con días nuevos) · **profundidad L2** y **pre-posición en la ventana siguiente**
+(bloqueados, captura desde 07-Oct 09:05Z) · **flujo on-chain limpio** (bloqueado, retención 4 d). La investigación continúa
+cuando entren esos datos.
