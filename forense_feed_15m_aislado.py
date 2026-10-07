@@ -10,6 +10,7 @@ import argparse
 import asyncio
 import gzip
 import json
+import os
 import time
 from datetime import datetime, timezone
 from pathlib import Path
@@ -31,11 +32,17 @@ def tokens(moneda):
     return out
 
 
-async def main(seg, moneda):
+async def main(seg, moneda, k):
     OUT.mkdir(parents=True, exist_ok=True)
-    f = gzip.open(OUT / f"aislado_{moneda}_{datetime.now(timezone.utc).strftime('%Y-%m-%dT%H%M')}.csv.gz", "wt")
-    f.write("recv_ms,ts_ex,tipo,token,precio,lado,tam,n_bytes\n")
+    f = gzip.open(OUT / f"aislado_{moneda}_k{k}_{datetime.now(timezone.utc).strftime('%Y-%m-%dT%H%M')}_{os.getpid()}.csv.gz", "wt")
+    f.write("recv_ms,ts_ex,tipo,token,precio,lado,tam,n_bytes,conn\n")
     fin = time.time() + seg
+    # 07-Oct: K conexiones en PARALELO a los mismos tokens (redundancia: ¿cuánto baja la cola con la primera llegada?)
+    await asyncio.gather(*(lector(f, fin, moneda, c) for c in range(k)))
+    f.close()
+
+
+async def lector(f, fin, moneda, conn):
     while time.time() < fin:
         toks = tokens(moneda)
         ventana = int(time.time() // 900)
@@ -59,20 +66,20 @@ async def main(seg, moneda):
                         et, ts = m.get("event_type"), m.get("timestamp")
                         if et == "price_change":
                             for pc in m.get("price_changes", []):
-                                f.write(f"{rec:.1f},{ts},pc,{pc.get('asset_id')},{pc.get('price')},{pc.get('side')},{pc.get('size')},{len(raw)}\n")
+                                f.write(f"{rec:.1f},{ts},pc,{pc.get('asset_id')},{pc.get('price')},{pc.get('side')},{pc.get('size')},{len(raw)},{conn}\n")
                         elif et == "last_trade_price":
-                            f.write(f"{rec:.1f},{ts},t,{m.get('asset_id')},{m.get('price')},{m.get('side')},{m.get('size')},{len(raw)}\n")
+                            f.write(f"{rec:.1f},{ts},t,{m.get('asset_id')},{m.get('price')},{m.get('side')},{m.get('size')},{len(raw)},{conn}\n")
                         elif et == "book":
-                            f.write(f"{rec:.1f},{ts},book,{m.get('asset_id')},,,,{len(raw)}\n")
+                            f.write(f"{rec:.1f},{ts},book,{m.get('asset_id')},,,,{len(raw)},{conn}\n")
         except Exception as e:
             print(f"reconecto: {type(e).__name__}: {e}", flush=True)
             await asyncio.sleep(1)
-    f.close()
 
 
 if __name__ == "__main__":
     ap = argparse.ArgumentParser()
     ap.add_argument("--seg", type=int, default=900)
     ap.add_argument("--moneda", default="btc")
+    ap.add_argument("--conexiones", type=int, default=1)
     a = ap.parse_args()
-    asyncio.run(main(a.seg, a.moneda))
+    asyncio.run(main(a.seg, a.moneda, a.conexiones))

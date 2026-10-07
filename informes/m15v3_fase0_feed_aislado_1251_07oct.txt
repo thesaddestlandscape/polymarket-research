@@ -1,0 +1,12 @@
+== LIBRO (price_change / q): aislado 517442 mensajes | producción 130788 | emparejados 110016
+   red+servidor (aislado − exchange) : n= 110016 P50    41.8 P90   602.8 P95   986.7 P99   1697.9 máx   2332.9
+   producción   (prod − exchange)    : n= 110016 P50    65.0 P90   601.0 P95   871.0 P99   1272.0 máx   2708.0
+   PIPELINE PROPIO (prod − aislado)  : n= 110016 P50    -2.9 P90   238.9 P95   406.3 P99    917.3 máx   2688.7
+   MÍNIMO de las 2 conexiones        : n= 110016 P50    30.5 P90   371.2 P95   605.3 P99   1150.0 máx   2008.0   <- redundancia: primera llegada
+   corr. del retraso entre conexiones: +0.619 (0 = independientes, 1 = mismo retraso)
+== OPERACIONES (last_trade_price / t): aislado 1001 mensajes | producción 1070 | emparejados 1001
+   red+servidor (aislado − exchange) : n=   1001 P50    41.4 P90  1020.3 P95  1490.2 P99   1820.4 máx   2127.5
+   producción   (prod − exchange)    : n=   1001 P50    74.0 P90   897.0 P95  1138.0 P99   1971.0 máx   2451.0
+   PIPELINE PROPIO (prod − aislado)  : n=   1001 P50    -5.2 P90   309.1 P95   540.4 P99   1104.4 máx   2431.7
+   MÍNIMO de las 2 conexiones        : n=   1001 P50    30.0 P90   570.0 P95  1053.0 P99   1532.0 máx   2007.0   <- redundancia: primera llegada
+   corr. del retraso entre conexiones: +0.675 (0 = independientes, 1 = mismo retraso)

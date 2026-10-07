@@ -74,6 +74,8 @@ def main(f_iso):
         print(f"   red+servidor (aislado − exchange) : {pct(ri)}")
         print(f"   producción   (prod − exchange)    : {pct(rp)}")
         print(f"   PIPELINE PROPIO (prod − aislado)  : {pct(rp - ri)}")
+        print(f"   MÍNIMO de las 2 conexiones        : {pct(np.minimum(rp, ri))}   <- redundancia: primera llegada")
+        print(f"   corr. del retraso entre conexiones: {np.corrcoef(ri, rp)[0, 1]:+.3f} (0 = independientes, 1 = mismo retraso)")
         solo_iso = len([k for k in I if k not in P])
         print(f"   mensajes que el aislado vio y producción NO registró: {solo_iso} ({100 * solo_iso / max(1, len(I)):.1f} %)")
         # ¿el retraso de cola es del servidor? ráfagas: lag aislado alto
