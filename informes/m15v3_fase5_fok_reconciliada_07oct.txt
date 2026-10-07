@@ -1,0 +1,19 @@
+MISIÓN 15M V3 FASE 5 — reconciliación de la FOK T4 que se llenó (07-Oct 08:55:33Z, XRP 15m Up, cierre 09:00Z)
+Fuentes: ledger medir_latencia_ordenes_15m_ledger.jsonl (T4_intencion/T4_post), on-chain onchain_fills_2026-10-07 (tx 0xc4f8330e…),
+registro ms maker_ms_2026-10-07_2771619 (q = top YES con sello del exchange y recepción; t = operaciones).
+
+Intención (08:55:33.335): libro REST leído ~1,5 s antes → ask 0,09 con 10 acciones; FOK de COMPRA por IMPORTE 2,79 $ (= 31 acc × 0,09,
+3× la profundidad) con límite 0,09, "no puede llenarse".
+Libro real (WS, recepción): el precio estaba cayendo. Ask 0,09 hasta ~32,5 s; 0,08 a 32,57; 0,07 a 32,74; 0,06 desde 32,807 (sello)
+/ 33,057 (recepción) con 18-66 acciones a 0,06. Es decir: 280 ms ANTES de enviar, nuestro propio WS ya mostraba ask 0,06 con
+≥60 acciones → 2,79 $ cabían de sobra.
+Casado: tamaño del ask 0,06 baja 60,07 → 13,57 (= 46,5) en sello 33,548; print t YES 0,06 BUY 46,5 sello 33,574 (recepción 33,598);
+respuesta del POST 33,691. Envío → casado ≈ 210-235 ms (coherente con el retraso FOK medido, 213 ms).
+On-chain (mismo tx): nuestro tomador compra 46,5 YES por 2,79 $ (0,06), comisión 0,18358 $; 4 patas maker: 2 compradores de NO a 0,94
+(13 + 18 acc, MINT), 1 vendedor de YES a 0,06 (13,27) y el mismo con otra compra de NO a 0,94 (2,23). El ask YES 0,06 es en su
+mayor parte el complemento de pujas de NO (el WS del token YES ya lo refleja).
+CAUSA: no hay fallo del exchange. Semántica: una FOK por IMPORTE con límite L consume TODO ask <= L; con el precio cayendo hacia el
+límite, el tamaño "imposible" deja de serlo. La decisión usó un libro REST de ~1,5 s cuando el WS propio ya mostraba el estado real.
+REGLAS: (1) ninguna medición "a coste 0" con órdenes marketable; para medir el retraso del tomador usar límites >= varios ticks por
+debajo del mejor ask DEL WS en el instante de envío o GTC post-only; (2) toda decisión de orden con el libro WS (libro_estado_ws),
+nunca REST; (3) el retraso envío→casado medido aquí (≈210-235 ms) confirma el de la FOK no marketable.
