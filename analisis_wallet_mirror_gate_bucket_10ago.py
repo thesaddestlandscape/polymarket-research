@@ -28,7 +28,8 @@ vs pnl_fuera del mismo (activo,marco,jugada_grande)), split-half
 cronológico, BH-FDR por (activo,marco,jugada_grande) -- mismo nivel de
 agrupación que la corrección por (familia,activo) del gate original.
 
-pnl_neto calculado con la fórmula exacta (gross_win=(1-ask)/ask, fee 7%)
+pnl_neto (07-Oct: comisión REAL del tomador 0,07·p·(1−p) en cada compra; antes 7 % de la ganancia
+solo en aciertos) por € arriesgado, una observación por (mercado, lado, bucket) -- ver cargar_filas(),
 sobre el ASK REAL de wallet_mirror_executor_dryrun.csv en el momento de
 decisión (no precio_wallet, aproximación optimista ya refutada hoy) +
 outcome real resuelto en el propio wallet_mirror_executor_dryrun.csv
@@ -100,9 +101,16 @@ def bucket(p):
     return round(math.floor(p / STEP + 1e-9) * STEP, 4)
 
 
+# 07-Oct: versión del método de la unidad/comisión. Si cambia, el historial de tolerancia (2 de 3 días) calculado con el
+# método anterior NO cuenta (fichero aparte para no alterar el JSON que leen los consumidores).
+METODO = "v2_mercado_lado_bucket_fee_real_07oct"
+METODO_PATH = REPO / "data/shadow/wallet_mirror_gate_bucket_metodo.json"
+
+
 def pnl_neto(ask, acierto):
-    gross_win = (1 - ask) / ask
-    return gross_win * (1 - FEE) if acierto else -1.0
+    """PnL por € arriesgado con la comisión REAL del tomador cripto (07-Oct): 0,07·p·(1−p) por acción en CADA compra
+    (gane o pierda) -> acciones por € = 1 / (p·(1 + FEE·(1−p))). Antes: 7 % de la ganancia y solo en aciertos."""
+    return (1.0 if acierto else 0.0) / (ask * (1 + FEE * (1 - ask))) - 1.0
 
 
 def cargar_filas():
@@ -120,8 +128,16 @@ def cargar_filas():
     resuelta por `wallet_mirror_executor_dryrun.py --resolver`) -- ya NO
     se cruza con wallet_mirror_sniper_dry_run.csv (ver docstring del
     módulo, población de wallets distinta, el join fallaba ~99.7%)."""
-    # clave de grupo: (tipo, activo, marco, jugada_grande) -> [(ts, ask, pnl), ...]
-    grupos = defaultdict(list)
+    # clave de grupo: (tipo, activo, marco, jugada_grande) -> [(ts, ask, pnl, wallet), ...]
+    # 07-Oct (Javi "arregla ese cargador", 2 pasadas de /code-review): UNA observación por (mercado, lado, bucket de
+    # STEP del ask) = la PRIMERA copia en ese bucket, con SU ask y SU pnl (sin promediar: promediar mezclaba buckets y por
+    # convexidad inflaba las ganadoras). Wallet = la que más copias tiene en la unidad (la dominante no se esconde si
+    # copia segunda). Antes cada fila contaba como observación independiente aunque compartiera mercado y desenlace:
+    # WM ETH 15m g0 [0,21-0,24) forward n=45 eran 14 mercado-lado; SEGUIR BTC 15m g0 [0,25) n=1.315 eran 139.
+    # Fail-closed: filas sin market_slug/mirror_lado se descartan; unidades con desenlace contradictorio se descartan.
+    # Up y Down del mismo mercado siguen siendo 2 observaciones (el ejecutor live compra ambos si los copia).
+    unidades = defaultdict(list)
+    n_sin_clave = 0
     with open(EXECUTOR, encoding="utf-8") as f:
         for r in csv.DictReader(f):
             if r.get("sigue_fillable_en_decision") != "1":
@@ -142,7 +158,26 @@ def cargar_filas():
             tipo = r.get("tipo", "?")
             activo = r.get("activo", "?")
             grande = "1" if r.get("es_jugada_grande") == "1" else "0"
-            grupos[(tipo, activo, marco, grande)].append((r["timestamp_utc"], ask, pnl, r.get("wallet", "")))
+            mercado, lado = r.get("market_slug") or "", r.get("mirror_lado") or ""
+            if not mercado or not lado:
+                n_sin_clave += 1
+                continue
+            unidades[((tipo, activo, marco, grande), mercado, lado, bucket(ask))].append(
+                (r["timestamp_utc"], ask, pnl, r.get("wallet", ""), ac))
+    grupos = defaultdict(list)
+    n_contradictorias = 0
+    for (clave, _m, _l, _b), xs in unidades.items():
+        if len({x[4] for x in xs}) > 1:
+            n_contradictorias += 1
+            continue
+        xs.sort()
+        wallet = Counter(x[3] for x in xs).most_common(1)[0][0]
+        grupos[clave].append((xs[0][0], xs[0][1], xs[0][2], wallet))
+    for v in grupos.values():
+        v.sort()                      # orden cronológico (split-half / forward de los consumidores)
+    if n_sin_clave or n_contradictorias:
+        print(f"⚠️ cargar_filas: {n_sin_clave} filas sin market_slug/mirror_lado y {n_contradictorias} unidades con "
+              f"desenlace contradictorio descartadas (fail-closed)")
     return grupos
 
 
@@ -278,6 +313,16 @@ def main():
     # veredicto_con_tolerancia_diario() para el detalle completo.
     fecha_historial_previo = cargar_fecha_historial_previo(OUT, anidado_por_bucket=True)
     historial_abs_previo, fecha_historial_abs_previo = _cargar_historial_abs_previo(OUT)
+    try:
+        metodo_previo = json.loads(METODO_PATH.read_text(encoding="utf-8")).get("metodo")
+    except Exception:
+        metodo_previo = None
+    if metodo_previo != METODO:
+        # 07-Oct (/code-review): el historial de días bueno/malo se calculó con otra unidad/comisión -> no cuenta para la
+        # regla de 2 de 3 días; el método nuevo tiene que confirmarse por sí mismo.
+        print(f"método {metodo_previo} -> {METODO}: historial de tolerancia previo IGNORADO")
+        historial_previo, fecha_historial_previo = {}, {}
+        historial_abs_previo, fecha_historial_abs_previo = {}, {}
     pnl_real_por_bucket = _cargar_pnl_real_por_bucket()
 
     resultado = {}  # "tipo#activo#marco#grande" -> {bucket_str: entrada}
@@ -325,7 +370,7 @@ def main():
             # WALLET_MIRROR tiene su propio gate separado porque nunca
             # escribe en results.csv, y ese gate propio se quedó sin la
             # actualización del 28-Ago. `pnl_d` aquí ya es el retorno neto
-            # por trade (fee 7% aplicado en pnl_neto() arriba, mismo
+            # por € (comisión real del tomador en pnl_neto() arriba, mismo
             # concepto que analisis_log_growth.py::_retorno()) -- misma
             # fórmula g(f)=mean(ln(1+f*x)), f=0.10 (F_KELLY, mismo default
             # que el resto del proyecto), NO reimplementa _retorno() porque
@@ -597,6 +642,10 @@ def main():
     with open(_tmp, "w", encoding="utf-8") as f:
         json.dump(resultado, f, indent=2, ensure_ascii=False)
     os.replace(_tmp, OUT)
+    try:
+        METODO_PATH.write_text(json.dumps({"metodo": METODO}), encoding="utf-8")
+    except Exception as e:
+        print(f"⚠️ no se pudo escribir {METODO_PATH}: {e}")
     print(f"\nGuardado en {OUT}")
 
 
