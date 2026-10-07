@@ -37,6 +37,7 @@ en sí, no se repite por cada clave nueva individual).
 """
 import json
 import subprocess
+import time
 import sys
 from pathlib import Path
 
@@ -57,11 +58,29 @@ def _es_relevante_live(clave: str, pares_live: set) -> bool:
     return any(p.startswith(prefijo) for p in pares_live)
 
 
+DUR_PATH = REPO / "data" / "live" / "vigia_calibracion_platt_granular_duracion.json"
+
+
 def main() -> int:
     from shadow_digest import enviar_telegram
 
-    r = subprocess.run([sys.executable, str(REPO / "analisis_calibracion_platt_granular.py")],
-                        capture_output=True, text=True, timeout=300, cwd=str(REPO))
+    # 07-Oct: timeout ADAPTATIVO (antes 300 s fijo con el análisis ya en 207 s -> murió el 07-Oct 06:24 con carga 12-14;
+    # trampa "vigía con timeout fijo muere al crecer los datos"): 3x la última duración real, mínimo 600 s.
+    try:
+        ultima = float(json.loads(DUR_PATH.read_text())["s"])
+    except Exception:
+        ultima = 300.0
+    t0 = time.time()
+    try:
+        r = subprocess.run(["nice", "-n", "10", sys.executable, str(REPO / "analisis_calibracion_platt_granular.py")],
+                           capture_output=True, text=True, timeout=max(600.0, 3 * ultima), cwd=str(REPO))
+    except subprocess.TimeoutExpired:
+        print(f"[vigia_calibracion_granular] TIMEOUT tras {max(600.0, 3 * ultima):.0f} s (última duración {ultima:.0f} s)")
+        return 1
+    try:
+        DUR_PATH.write_text(json.dumps({"s": round(time.time() - t0, 1)}))
+    except Exception:
+        pass
     if r.returncode != 0:
         print(f"[vigia_calibracion_granular] análisis falló: {r.stderr[-500:]}")
         return 1

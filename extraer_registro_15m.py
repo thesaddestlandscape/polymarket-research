@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 """extraer_registro_15m.py -- MISIÓN DEFINITIVA 15m (07-Oct): conserva más allá de la retención de 4 días del registro ms
 (maker_ms_*.csv.gz, ~1 GB/día) SOLO lo que necesita la misión 15m, para acumular días fuera de muestra:
-  k (mapa token -> activo/marco/mercado/cierre/lado), q y t de los tokens 15min, x (aggTrade Binance).
+  k (mapa token -> activo/marco/mercado/cierre/lado), q y t de los tokens 15min, x (aggTrade Binance) y h de los 15min
+  (muestreo 100 ms: t,bb,ba,imb1,imb5,imb10,dask5,bid_size,ask_size -> profundidad/pendiente para §7/§9).
 Formatos: ver libro_estado_ws.py / m15_ms_cache.py. Salida: datalogs/m15_registro/m15_registro_YYYY-MM-DD.csv.gz
 (fuera de git; retención RETENCION_DIAS). Un día ya extraído no se rehace salvo --forzar.
 Cron diario 03:45 UTC (día anterior completo, antes de que rote). Uso: python3 extraer_registro_15m.py [--dia D] [--forzar]
@@ -50,7 +51,7 @@ def extraer(dia, forzar=False):
                     for ln in fi:
                         n_in += 1
                         tp = ln[:2]
-                        if tp == "x," or ((tp == "q," or tp == "t,") and ln.split(",", 3)[2] in m15):
+                        if tp == "x," or ((tp in ("q,", "t,", "h,")) and ln.split(",", 3)[2] in m15):
                             fo.write(ln)
                             n_out += 1
                 except (EOFError, OSError):
