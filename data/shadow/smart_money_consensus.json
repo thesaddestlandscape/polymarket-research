@@ -1,38 +1,31 @@
 {
-  "BTC": {
-    "smart_money_consensus": 0.0055,
-    "n_trades_smart": 917,
-    "n_wallets_smart": 8,
-    "smart_money_consensus_ponderado": -0.045,
-    "n_wallets_smart_ponderado": 8
+  "SOL": {
+    "smart_money_consensus": -0.0115,
+    "n_trades_smart": 174,
+    "n_wallets_smart": 5,
+    "smart_money_consensus_ponderado": -0.105,
+    "n_wallets_smart_ponderado": 5
   },
-  "XRP": {
-    "smart_money_consensus": -0.2308,
-    "n_trades_smart": 13,
-    "n_wallets_smart": 2,
-    "smart_money_consensus_ponderado": 0.0779,
-    "n_wallets_smart_ponderado": 2
+  "BTC": {
+    "smart_money_consensus": -0.2747,
+    "n_trades_smart": 273,
+    "n_wallets_smart": 6,
+    "smart_money_consensus_ponderado": -0.2958,
+    "n_wallets_smart_ponderado": 6
   },
   "ETH": {
-    "smart_money_consensus": 0.1562,
-    "n_trades_smart": 64,
+    "smart_money_consensus": 0.0686,
+    "n_trades_smart": 204,
+    "n_wallets_smart": 6,
+    "smart_money_consensus_ponderado": 0.1207,
+    "n_wallets_smart_ponderado": 6
+  },
+  "XRP": {
+    "smart_money_consensus": -0.1264,
+    "n_trades_smart": 87,
     "n_wallets_smart": 3,
-    "smart_money_consensus_ponderado": 0.1329,
+    "smart_money_consensus_ponderado": -0.0642,
     "n_wallets_smart_ponderado": 3
-  },
-  "SOL": {
-    "smart_money_consensus": 0.2381,
-    "n_trades_smart": 21,
-    "n_wallets_smart": 1,
-    "smart_money_consensus_ponderado": 0.2936,
-    "n_wallets_smart_ponderado": 1
-  },
-  "BNB": {
-    "smart_money_consensus": -1.0,
-    "n_trades_smart": 1,
-    "n_wallets_smart": 1,
-    "smart_money_consensus_ponderado": -1.0,
-    "n_wallets_smart_ponderado": 1
   },
   "DOGE": {
     "smart_money_consensus": -1.0,
@@ -41,5 +34,12 @@
     "smart_money_consensus_ponderado": -1.0,
     "n_wallets_smart_ponderado": 1
   },
-  "_actualizado": "2026-10-07T14:39:38+00:00"
+  "BNB": {
+    "smart_money_consensus": 0.0,
+    "n_trades_smart": 2,
+    "n_wallets_smart": 2,
+    "smart_money_consensus_ponderado": -0.9145,
+    "n_wallets_smart_ponderado": 2
+  },
+  "_actualizado": "2026-10-07T15:03:02+00:00"
 }
