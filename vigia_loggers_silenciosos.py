@@ -14,8 +14,14 @@ Cómo funciona (coste: un stat por fichero, cada hora, dentro de vigias_horarios
   - Avisa por Telegram si una familia lleva callada más de max(3 h, 2 x su mayor hueco conocido) y ya tiene al
     menos 48 h de historial. Un aviso por episodio; al volver a escribir se rearma y lo dice.
   - Familia sin escribir 10 días: se da por retirada y sale del estado.
+  - 07-Oct: el olvido del mayor hueco es por TIEMPO (x0,98 por día), no por muestra: antes decaía x0,98 cada hora
+    con escrituras (~-40 %/día) y stink_bids (eventos, huecos nocturnos de 4,7 h) avisaba en falso con 2,5 h.
+  - 07-Oct: CONDICIONALES = loggers que solo escriben con posiciones OPEN (smart_exit_prices): sin OPEN en su
+    trades.csv el silencio es correcto, el reloj de silencio se reinicia y no se aprende ese hueco. Si no se puede
+    leer trades.csv se trata como "hay posiciones" (avisa: fail-loud).
 Estado: data/live/vigia_loggers_silenciosos_estado.json.  Uso manual: vigia_loggers_silenciosos.py [--sin-telegram]
 """
+import csv
 import glob
 import json
 import os
@@ -31,6 +37,8 @@ ESTADO = REPO / "data" / "live" / "vigia_loggers_silenciosos_estado.json"
 PATRONES = [str(REPO / "data/shadow/*.csv"), str(REPO / "data/sports/*.csv"), str(REPO / "data/live/*.csv"),
             "/root/polymarket-research-datalogs/*.csv", "/root/polymarket-research-datalogs/*.csv.gz"]
 MIN_H, FACTOR, HIST_MIN_H, RETIRO_DIAS, GAP_OLVIDO = 3.0, 2.0, 48.0, 10, 0.98
+CONDICIONALES = {str(REPO / "data/sports/smart_exit_prices.csv"): REPO / "data/sports/trades.csv",
+                 str(REPO / "data/live/smart_exit_prices.csv"): REPO / "data/live/trades.csv"}
 _FECHA = re.compile(r"[_-]?\d{4}-\d{2}-\d{2}")
 
 
@@ -51,6 +59,14 @@ def _familias() -> dict:
     return fam
 
 
+def _hay_open(trades: Path) -> bool:
+    try:
+        with open(trades, encoding="utf-8", newline="") as f:
+            return any(r.get("status") == "OPEN" for r in csv.DictReader(f))
+    except Exception:
+        return True
+
+
 def main() -> int:
     ahora = time.time()
     try:
@@ -64,10 +80,17 @@ def main() -> int:
             if ahora - mt < 2 * 86400:                     # solo se empieza a seguir lo que está vivo
                 est[clave] = {"primera_vez": ahora, "ultimo_mtime": mt, "gap_max_h": 0.0, "avisado": False}
             continue
+        if clave in CONDICIONALES and not _hay_open(CONDICIONALES[clave]):
+            e["ultimo_mtime"] = max(e["ultimo_mtime"], mt, ahora)   # sin posiciones: callar es lo correcto
+            e["avisado"] = False
+            e["gap_max_h"] = 0.0                                   # el ritmo se aprende solo con posiciones abiertas
+            continue
         if mt > e["ultimo_mtime"] + 1:
             gap = (mt - e["ultimo_mtime"]) / 3600
-            # el mayor hueco conocido decae despacio para adaptarse si el logger cambia de ritmo
-            e["gap_max_h"] = round(max(gap, e["gap_max_h"] * GAP_OLVIDO), 2)
+            # el mayor hueco conocido decae despacio (x GAP_OLVIDO por día) para adaptarse si el logger cambia de ritmo
+            dias = (ahora - e.get("ts_olvido", ahora)) / 86400
+            e["ts_olvido"] = ahora
+            e["gap_max_h"] = round(max(gap, e["gap_max_h"] * GAP_OLVIDO ** dias), 2)
             e["ultimo_mtime"] = mt
             if e.get("avisado"):
                 vuelven.append(f"· {os.path.relpath(clave, REPO) if clave.startswith(str(REPO)) else clave}: vuelve a escribir tras {gap:.1f} h")
