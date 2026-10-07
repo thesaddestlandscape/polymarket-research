@@ -1,0 +1,19 @@
+MISIÓN 15M V3 FASE 9 — reversión tras ventana grande, al ASK REAL del registro ms (05-06 Oct, 2 días)
+
+|mov previo| (5,15] bps: n=246 mercados | acierto de la reversión 0.488
+   compra a inicio-20 s: ask medio 0.519 (P25-P75 0.51-0.54) EV/acción -0.0468 n=245
+   compra a inicio-5 s: ask medio 0.519 (P25-P75 0.50-0.54) EV/acción -0.0463 n=245
+   compra a inicio+5 s: ask medio 0.510 (P25-P75 0.47-0.56) EV/acción -0.0372 n=245
+   compra a inicio+30 s: ask medio 0.495 (P25-P75 0.41-0.57) EV/acción -0.0221 n=245
+
+|mov previo| (15,30] bps: n=127 mercados | acierto de la reversión 0.480
+   compra a inicio-20 s: ask medio 0.522 (P25-P75 0.50-0.54) EV/acción -0.0397 n=122
+   compra a inicio-5 s: ask medio 0.519 (P25-P75 0.50-0.54) EV/acción -0.0366 n=122
+   compra a inicio+5 s: ask medio 0.512 (P25-P75 0.47-0.56) EV/acción -0.0293 n=122
+   compra a inicio+30 s: ask medio 0.508 (P25-P75 0.43-0.59) EV/acción -0.0244 n=122
+
+|mov previo| (30,1000000000.0] bps: n=48 mercados | acierto de la reversión 0.667
+   compra a inicio-20 s: ask medio 0.529 (P25-P75 0.52-0.54) EV/acción +0.1199 n=48
+   compra a inicio-5 s: ask medio 0.534 (P25-P75 0.52-0.55) EV/acción +0.1150 n=48
+   compra a inicio+5 s: ask medio 0.527 (P25-P75 0.49-0.57) EV/acción +0.1225 n=48
+   compra a inicio+30 s: ask medio 0.544 (P25-P75 0.48-0.59) EV/acción +0.1062 n=48

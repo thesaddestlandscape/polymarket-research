@@ -1,0 +1,58 @@
+MISIÓN 15M V3 FASE 9 (M1-M4) — ventanas 15m reconstruidas: 11802 (2026-09-17..2026-10-07, 21 días)
+Listón económico: acertar >= ~52,5 % comprando antes del inicio (ask ~0,505 + fee 1,75 c)
+
+M1 tasa base de Up por moneda:
+  BNB   P(Up) 0.503 IC90 días (0.488,0.519) n=1967
+  BTC   P(Up) 0.507 IC90 días (0.488,0.528) n=1967
+  DOGE  P(Up) 0.507 IC90 días (0.492,0.523) n=1967
+  ETH   P(Up) 0.506 IC90 días (0.489,0.523) n=1967
+  SOL   P(Up) 0.513 IC90 días (0.496,0.529) n=1967
+  XRP   P(Up) 0.506 IC90 días (0.492,0.523) n=1967
+
+M2 autocorrelación misma moneda (apuesta: repetir el desenlace previo / invertirlo):
+  BNB   P(repite) 0.496 IC90 días (0.475,0.517) n=1952
+  BTC   P(repite) 0.487 IC90 días (0.468,0.505) n=1952
+  DOGE  P(repite) 0.479 IC90 días (0.460,0.499) n=1952
+  ETH   P(repite) 0.488 IC90 días (0.469,0.508) n=1952
+  SOL   P(repite) 0.480 IC90 días (0.459,0.502) n=1952
+  XRP   P(repite) 0.466 IC90 días (0.450,0.482) n=1952
+  TODAS P(repite) 0.483 IC90 días (0.468,0.497) n=11712
+  por tamaño del movimiento previo (|ret| bps), todas las monedas:
+    (0,5] P(repite) 0.502 IC90 (0.484,0.521) n=2756
+    (5,15] P(repite) 0.495 IC90 (0.476,0.512) n=3940
+    (15,30] P(repite) 0.473 IC90 (0.449,0.498) n=2880
+    (30,1000000000.0] P(repite) 0.449 IC90 (0.425,0.473) n=2136
+
+M3 desenlace previo de BTC → ventana siguiente de cada alt (apuesta: misma dirección que BTC):
+  BNB   P(sigue a BTC) 0.496 IC90 (0.473,0.516) n=1952
+  DOGE  P(sigue a BTC) 0.475 IC90 (0.462,0.487) n=1952
+  ETH   P(sigue a BTC) 0.470 IC90 (0.451,0.490) n=1952
+  SOL   P(sigue a BTC) 0.481 IC90 (0.463,0.499) n=1952
+  XRP   P(sigue a BTC) 0.474 IC90 (0.459,0.488) n=1952
+  ALTS  P(sigue a BTC) 0.479 IC90 (0.465,0.493) n=9760
+
+M4 hora UTC (todas las monedas; 24 celdas → Bonferroni: señal solo si el IC al 99,6 % excluye 0,5):
+  00h P(Up) 0.510 IC99,6 (0.429,0.604) n=498
+  01h P(Up) 0.432 IC99,6 (0.333,0.550) n=474
+  02h P(Up) 0.472 IC99,6 (0.370,0.586) n=498
+  03h P(Up) 0.524 IC99,6 (0.399,0.637) n=504
+  04h P(Up) 0.469 IC99,6 (0.376,0.557) n=480
+  05h P(Up) 0.504 IC99,6 (0.359,0.651) n=504
+  06h P(Up) 0.522 IC99,6 (0.409,0.617) n=504
+  07h P(Up) 0.510 IC99,6 (0.419,0.613) n=492
+  08h P(Up) 0.549 IC99,6 (0.405,0.685) n=492
+  09h P(Up) 0.526 IC99,6 (0.409,0.625) n=504
+  10h P(Up) 0.573 IC99,6 (0.457,0.692) n=492
+  11h P(Up) 0.552 IC99,6 (0.466,0.651) n=504
+  12h P(Up) 0.516 IC99,6 (0.410,0.611) n=492
+  13h P(Up) 0.522 IC99,6 (0.411,0.637) n=504
+  14h P(Up) 0.437 IC99,6 (0.294,0.579) n=492
+  15h P(Up) 0.538 IC99,6 (0.401,0.669) n=504
+  16h P(Up) 0.506 IC99,6 (0.423,0.587) n=504
+  17h P(Up) 0.476 IC99,6 (0.375,0.573) n=504
+  18h P(Up) 0.506 IC99,6 (0.386,0.631) n=498
+  19h P(Up) 0.496 IC99,6 (0.381,0.601) n=450
+  20h P(Up) 0.483 IC99,6 (0.385,0.579) n=480
+  21h P(Up) 0.481 IC99,6 (0.372,0.583) n=468
+  22h P(Up) 0.573 IC99,6 (0.492,0.650) n=480
+  23h P(Up) 0.492 IC99,6 (0.388,0.588) n=480
