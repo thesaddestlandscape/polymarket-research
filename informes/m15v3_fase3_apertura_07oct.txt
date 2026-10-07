@@ -1,0 +1,18 @@
+MISIÓN 15M V3 FASE 3 — fase previa a la ventana (10 min antes del inicio), 05-06 Oct, registro ms por recepción
+mid YES en la fase previa (n=34980 fotos): P5/P25/P50/P75/P95 [0.48  0.495 0.5   0.505 0.515]; fracción con |mid−0,5| >= 0,03: 4.4%
+
+d=0.02: n=223 eventos, 86 cierres, 221 mercados | acierto 45.3% ask medio 0.470 | EV/acción -0.0346 IC90 cierres (-0.1050,+0.0334) | sin 2 mejores cierres -0.0576 | t antes del inicio mediana 30 s
+   por día: 2026-10-05: n=87 EV -0.0939  2026-10-06: n=136 EV +0.0034
+   por moneda: BNB: n=20 EV +0.174  BTC: n=53 EV -0.020  DOGE: n=35 EV -0.091  ETH: n=51 EV +0.040  SOL: n=28 EV -0.201  XRP: n=36 EV -0.093
+   por lado: NO: n=97 acierto 39% EV -0.097  YES: n=126 acierto 50% EV +0.014
+
+d=0.03: n=145 eventos, 65 cierres, 144 mercados | acierto 43.4% ask medio 0.460 | EV/acción -0.0427 IC90 cierres (-0.1277,+0.0419) | sin 2 mejores cierres -0.0755 | t antes del inicio mediana 20 s
+   por día: 2026-10-05: n=59 EV -0.1015  2026-10-06: n=86 EV -0.0024
+   por moneda: BNB: n=18 EV +0.142  BTC: n=30 EV -0.013  DOGE: n=16 EV -0.106  ETH: n=34 EV -0.005  SOL: n=19 EV -0.215  XRP: n=28 EV -0.086
+   por lado: NO: n=63 acierto 38% EV -0.099  YES: n=82 acierto 48% EV +0.000
+
+d=0.05: n=49 eventos, 32 cierres, 49 mercados | acierto 40.8% ask medio 0.438 | EV/acción -0.0470 IC90 cierres (-0.1715,+0.0836) | sin 2 mejores cierres -0.0992 | t antes del inicio mediana 10 s
+   por día: 2026-10-05: n=18 EV -0.1081  2026-10-06: n=31 EV -0.0115
+   por moneda: BNB: n=10 EV +0.148  BTC: n=5 EV -0.055  DOGE: n=2 EV +0.053  ETH: n=17 EV -0.041  SOL: n=6 EV -0.294  XRP: n=9 EV -0.127
+   por lado: NO: n=20 acierto 45% EV -0.010  YES: n=29 acierto 38% EV -0.073
+d=0.08: n=7 (insuficiente)
