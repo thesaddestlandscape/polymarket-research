@@ -1,0 +1,23 @@
+MISIÓN 15M V3 §24-26 precursores (05-06 Oct, órdenes tomadoras 15m emparejadas: 153442, barridos 35163)
+  Binance 500ms >=1bps                       en barridos  11.0%  en no-barridos   3.9%  EV res|precursor +0.0243 (n=8436)  PnL/$ +0.077
+  own >=1c                                   en barridos  50.4%  en no-barridos  23.0%  EV res|precursor +0.0026 (n=44887)  PnL/$ +0.032
+  own >=2c                                   en barridos  39.7%  en no-barridos  14.1%  EV res|precursor +0.0093 (n=30643)  PnL/$ +0.051
+  cross >=1c                                 en barridos  45.1%  en no-barridos  22.0%  EV res|precursor +0.0087 (n=41885)  PnL/$ +0.051
+  cross >=2c                                 en barridos  33.1%  en no-barridos  12.6%  EV res|precursor +0.0131 (n=26540)  PnL/$ +0.070
+  ALGUNO (bin>=1bps | own>=1c | cross>=1c)   en barridos  64.5%  en no-barridos  34.3%  EV res|precursor +0.0024 (n=63201)  PnL/$ +0.032
+
+EV a resolución y % barrido por cubo de 'cross' (otras monedas, mismo cierre, 2 s previos):
+  (-1.000,-0.020] n= 15026 %barr 15.1% EV res -0.0175 mk30 -0.0083 PnL/$ -0.016
+  (-0.020,-0.005] n= 20809 %barr 16.6% EV res -0.0083 mk30 -0.0006 PnL/$ -0.050
+  (-0.005,+0.005] n= 59480 %barr 16.4% EV res -0.0218 mk30 -0.0026 PnL/$ -0.010
+  (+0.005,+0.020] n= 29483 %barr 25.4% EV res -0.0058 mk30 +0.0042 PnL/$ +0.005
+  (+0.020,+1.000] n= 26540 %barr 43.8% EV res +0.0131 mk30 +0.0278 PnL/$ +0.070
+
+EV por cubo de 'own' (propio mercado, 2 s previos):
+  (-1.000,-0.020] n= 21903 %barr 18.0% EV res -0.0330 mk30 -0.0058 PnL/$ -0.064
+  (-0.020,-0.005] n= 18576 %barr 14.5% EV res -0.0122 mk30 -0.0005 PnL/$ -0.018
+  (-0.005,+0.005] n= 55296 %barr 15.3% EV res -0.0112 mk30 +0.0030 PnL/$ +0.003
+  (+0.005,+0.020] n= 25115 %barr 24.3% EV res -0.0083 mk30 +0.0028 PnL/$ +0.006
+  (+0.020,+1.000] n= 30643 %barr 45.5% EV res +0.0093 mk30 +0.0157 PnL/$ +0.051
+
+BARRIDOS SIN NINGÚN PRECURSOR visible: 12497 (35.5% de los barridos); EV res +0.0777, t_cierre mediana 269 s, tamaño mediano 4.6 $; top10 wallets 31.7% del volumen
