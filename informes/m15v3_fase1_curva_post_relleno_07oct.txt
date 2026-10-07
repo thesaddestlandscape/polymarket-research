@@ -1,0 +1,56 @@
+FASE 1 V3 — curva post-relleno maker (compra al mejor bid, cola pesimista), mid − precio en c, orden por RECEPCIÓN
+mid0 = mid en el instante del relleno (ya incluye medio spread a favor del maker)
+
+DISC n rellenos=10508 mercados=184
+   TODO      mid0:-4.97  mk100ms:-5.24  mk215ms:-5.35  mk500ms:-5.44  mk1000ms:-5.50  mk2000ms:-5.51  mk5:-5.51
+   BNB       n=  315 -6.41  -6.69  -6.61  -6.58  -6.85  -6.78  -8.19
+   BTC       n= 5609 -3.98  -4.21  -4.30  -4.40  -4.45  -4.40  -4.35
+   DOGE      n=  221 -9.57  -9.65  -9.75  -9.96  -9.95  -8.95  -9.15
+   ETH       n= 2981 -5.61  -5.95  -6.12  -6.28  -6.32  -6.47  -6.37
+   SOL       n=  877 -7.44  -7.96  -8.14  -8.04  -8.09  -8.17  -8.31
+   XRP       n=  505 -4.91  -5.00  -4.88  -4.79  -5.00  -5.28  -5.22
+
+VALID n rellenos=5709 mercados=109
+   TODO      mid0:-5.51  mk100ms:-5.80  mk215ms:-6.00  mk500ms:-6.09  mk1000ms:-6.05  mk2000ms:-6.03  mk5:-6.04
+   BNB       n=  134 -8.11  -8.39  -8.45  -8.42  -8.26  -8.29  -7.17
+   BTC       n= 2706 -4.93  -5.23  -5.48  -5.49  -5.51  -5.49  -5.63
+   DOGE      n=  107 -9.60  -9.58  -9.21  -9.32  -9.33  -9.19  -7.28
+   ETH       n= 2155 -5.46  -5.75  -6.00  -6.24  -6.20  -6.11  -5.92
+   SOL       n=  306 -8.29  -8.58  -8.47  -8.36  -7.91  -7.98  -8.99
+   XRP       n=  301 -5.76  -6.08  -6.07  -6.12  -6.02  -6.26  -6.61
+
+FINAL n rellenos=7100 mercados=122
+   TODO      mid0:-5.82  mk100ms:-5.98  mk215ms:-6.06  mk500ms:-6.17  mk1000ms:-6.17  mk2000ms:-6.13  mk5:-6.16
+   BNB       n=   31 -1.33  -1.10  -0.93  -0.86  -0.84  -0.64  -0.45
+   BTC       n= 3367 -4.79  -4.97  -5.09  -5.19  -5.18  -5.16  -5.36
+   DOGE      n=  187 -9.30  -9.27  -9.17  -8.85  -9.03  -8.52  -9.54
+   ETH       n= 2326 -5.93  -6.23  -6.32  -6.49  -6.47  -6.38  -6.21
+   SOL       n=  822 -7.49  -7.31  -7.34  -7.36  -7.30  -7.24  -7.04
+   XRP       n=  367 -9.46  -9.40  -9.31  -9.53  -9.84  -10.15  -10.04
+
+TODO n=24654: fracción del movimiento a 5 s (desde mid0) ya hecha a +100 ms: 0.00 (mediana, ruidosa)
+   cambio medio mid desde relleno a mk100ms  : -0.24 c  = 47% del de 5 s
+   cambio medio mid desde relleno a mk215ms  : -0.36 c  = 70% del de 5 s
+   cambio medio mid desde relleno a mk500ms  : -0.46 c  = 88% del de 5 s
+   cambio medio mid desde relleno a mk1000ms : -0.50 c  = 96% del de 5 s
+   cambio medio mid desde relleno a mk2000ms : -0.49 c  = 95% del de 5 s
+   cambio medio mid desde relleno a mk5      : -0.51 c  = 100% del de 5 s
+
+DISTRIBUCIÓN de mid0 (c) en el instante del relleno — ¿salto discreto o deriva?
+                    n   mid0    mk5  post    res    pct
+b                                                      
+(-100.0, -10.0]  4138 -17.57 -17.88 -0.37 -16.46  16.80
+(-10.0, -5.0]    4877  -7.16  -7.94 -0.78  -7.95  19.80
+(-5.0, -2.0]     6246  -3.36  -3.91 -0.55  -2.63  25.36
+(-2.0, -0.01]    6659  -0.98  -1.43 -0.44  -2.06  27.03
+(-0.01, 0.01]     549  -0.00  -1.08 -1.08  -0.16   2.23
+(0.01, 100.0]    2165   0.81   0.64 -0.17  -0.80   8.79
+
+El PnL a resolución (res, c/acción, incl. rebate) por tipo — ¿el que se llena SIN salto también pierde?
+
+CONCLUSIÓN FASE 1 (§11-12), OBSERVED, n=24.654 rellenos, 6 monedas, DISC/VALID/FINAL, orden por recepción:
+- La selección adversa es un SALTO DISCRETO SIMULTÁNEO al relleno, no una deriva posterior: en el instante del relleno el mid ya está
+  −5,0/−5,5/−5,8 c por debajo de nuestro precio; después solo se mueve −0,2 c a +100 ms y −0,5 c a 5 s (≈8 % del total).
+- 92 % de los rellenos llegan con el mid ya por debajo; 37 % con ≥5 c (salto medio −17,6 c en el 17 % peor). El salto NO revierte (mk5 ≈ mid0) → barrido informado.
+- Implicación: las estrategias post-relleno (V3 §36 C-F: cubrir/cancelar tras el relleno) solo pueden atacar ~0,5 c → no pagan spread+fee.
+  El dinero está ANTES del barrido: (a) predecir/cancelar antes del barrido, (b) mecanismo inverso §22: ser el que barre. Siguiente: identificar a los barredores on-chain.
