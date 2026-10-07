@@ -217,6 +217,9 @@ def cargar_resultados_por_tupla(root: Path) -> dict:
     return por_tupla
 
 
+from comision_cripto import pnl_por_euro  # noqa: E402  (07-Oct: fórmula única de comisión cripto)
+
+
 def simular_tupla(rows: list, config: dict, params: dict, indice_libro: dict,
                    bankroll_inicial: float, desde_ts: datetime | None = None,
                    periodos_off: list | None = None) -> dict:
@@ -347,9 +350,10 @@ def simular_tupla(rows: list, config: dict, params: dict, indice_libro: dict,
         except (ValueError, TypeError):
             pass
 
-        fee = FEE_RATE_TAKER_CRYPTO * precio_fill * (1 - precio_fill)
         acierto = row.get("acierto") == "1"
-        pnl = stake * (1.0 / precio_fill - 1.0) - fee if acierto else -stake
+        # 07-Oct (/code-review): la fee 0,07·p·(1−p) es POR ACCIÓN y se restaba UNA vez en vez de por las stake/p acciones
+        # compradas (error de unidades). Fórmula única: comision_cripto.pnl_por_euro.
+        pnl = stake * pnl_por_euro(precio_fill, acierto)
 
         if suelo_disparado:
             # Bankroll nocional real se queda congelado (mismo pnl_fiel_eur/

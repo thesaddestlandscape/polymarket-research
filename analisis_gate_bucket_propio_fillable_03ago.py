@@ -85,7 +85,7 @@ _F_KELLY = 0.10  # mismo default que analisis_log_growth.py/live
 # precio_yes_mercado de forma consistente con el resto del proyecto
 # (analisis_log_growth.py, vigilado en vivo) -- cambiar su base de precio
 # es un cambio de alcance mayor, no parte de esta corrección puntual.
-from shadow_pnl_fiel import cargar_config, ventana_en, parse_ts, FEE_RATE_TAKER_CRYPTO  # noqa: E402
+from shadow_pnl_fiel import cargar_config, ventana_en, parse_ts  # noqa: E402
 
 REPO = Path(__file__).resolve().parent
 RESULTS = str(REPO / "data/shadow/results.csv")
@@ -168,6 +168,9 @@ def es_accionable(motivo, ratio, es_live):
     return motivo == "candidato_evaluacion"
 
 
+from comision_cripto import pnl_por_euro  # noqa: E402  (07-Oct: fórmula única de comisión cripto)
+
+
 def cargar_filas_accionables(tuplas, config):
     claves = {(s, sub, d): (t, es_live) for s, sub, d, t, es_live in tuplas}
     by_key = colapsar_libro()
@@ -236,14 +239,16 @@ def cargar_filas_accionables(tuplas, config):
             if not (0.01 < precio_fill < 0.99):
                 continue
             acierto = row["acierto"] == "1"
-            fee = FEE_RATE_TAKER_CRYPTO * precio_fill * (1 - precio_fill)
             # 14-Sep: pnl a precio de EJECUCIÓN (mejor_ask del libro, lo que
             # de verdad se habría pagado) + fee 7% real ganador-only -- antes
             # era precio de DETECCIÓN (precio_yes_mercado) + slippage flat
             # 2% en toda fila. `precio_fill` ya está en la perspectiva
             # correcta del lado operado (indexado por `direction` en
             # colapsar_libro()), sin necesidad del 1-p de _pnl_normalizado.
-            pnl = (1.0 / precio_fill - 1.0) - fee if acierto else -1.0
+            # 07-Oct (/code-review): la fee 0,07·p·(1−p) es POR ACCIÓN y se restaba UNA vez de un pnl POR € (un € compra
+            # 1/p acciones: a p=0,10 restaba 0,006 en vez de ~0,063). Fórmula única: comision_cripto.pnl_por_euro. El
+            # bloque de comentarios de arriba (7 %, ganador-only) describe la fórmula anterior al 07-Oct.
+            pnl = pnl_por_euro(precio_fill, acierto)
             out[t].append((row.get("prediction_timestamp", ""), py, pnl, row["decision"], row["acierto"], en_ventana))
     if n_fuera_ventana:
         print(f"[cargar_filas_accionables] {n_fuera_ventana} señales accionables fuera de ventana "

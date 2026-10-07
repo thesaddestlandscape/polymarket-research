@@ -14,7 +14,7 @@ Fórmula: la fracción de retorno de una apuesta binaria NO depende del
 tamaño de la apuesta (se cancela), así que se deriva directo de
 precio_entrada + acierto (ver shadow_resolve.py:271-283, misma
 convención SLIPPAGE):
-  gana: r = (1-p)/p - SLIPPAGE      pierde: r = -1 - SLIPPAGE
+  (07-Oct) r = comision_cripto.pnl_por_euro(p, acierto) - SLIPPAGE  (antes: gana (1-p)/p - SLIPPAGE, sin comisión)
 Growth a una fracción de bankroll de referencia F (max_pct_bankroll del
 config, no el tamaño real -- así todas las tuplas son comparables aunque
 el stake esté pineado):
@@ -56,6 +56,9 @@ N_MIN = 15       # regla del proyecto: ninguna conclusión con n<15
 _DECISIONES_NO = {"BUY_NO", "BUY_Down"}
 
 
+from comision_cripto import pnl_por_euro  # noqa: E402  (07-Oct: fórmula única de comisión cripto)
+
+
 def _retorno(row: dict, ask: float | None = None) -> float:
     """Retorno por 1 $ de la fila. 24-Sep: con `ask` (ASK REAL posterior a la señal, ask_real.py,
     ya en el lado de la decisión) se usa ese precio -- es lo que hace gate(). Sin `ask` se mantiene
@@ -70,9 +73,8 @@ def _retorno(row: dict, ask: float | None = None) -> float:
         p = min(0.99, max(0.01, p))
         if row["decision"] in _DECISIONES_NO:
             p = 1 - p
-    if row["acierto"] == "1":
-        return (1 - p) / p - SLIPPAGE
-    return -1 - SLIPPAGE
+    # 07-Oct (/code-review): + comisión REAL del tomador (antes ninguna, solo slippage): fórmula única.
+    return pnl_por_euro(p, row["acierto"] == "1") - SLIPPAGE
 
 
 def gate(strategy: str, subtype: str, decision: str, f: float = 0.10) -> dict:

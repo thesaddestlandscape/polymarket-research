@@ -298,6 +298,9 @@ STAKE_NORMALIZADO_EUR = 1.0
 SLIPPAGE_NORMALIZADO = 0.02
 
 
+from comision_cripto import pnl_por_euro  # noqa: E402  (07-Oct: fórmula única de comisión cripto)
+
+
 def _pnl_normalizado(py, decision, acierto):
     try:
         py = float(py)
@@ -306,11 +309,9 @@ def _pnl_normalizado(py, decision, acierto):
     precio_entrada = min(0.99, max(0.01, py))
     if decision == "BUY_NO":
         precio_entrada = 1 - precio_entrada
-    stake = STAKE_NORMALIZADO_EUR
-    if acierto:
-        payout = stake / max(0.01, precio_entrada)
-        return (payout - stake) - SLIPPAGE_NORMALIZADO * stake
-    return -stake - SLIPPAGE_NORMALIZADO * stake
+    # 07-Oct (Javi: "unificar la comisión de todos los gates"): + comisión REAL del tomador cripto (antes ninguna: a
+    # p=0,1 cada acierto salía +0,57 €/€ más alto). Se mantiene el slippage normalizado aparte. stake = 1 €.
+    return pnl_por_euro(precio_entrada, acierto) - SLIPPAGE_NORMALIZADO * STAKE_NORMALIZADO_EUR
 
 
 def cargar_filas(tuplas):

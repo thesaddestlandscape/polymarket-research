@@ -48,6 +48,9 @@ def _precio_entrada(bucket_lo: float, decision: str) -> float:
 
 
 def main() -> None:
+    # 07-Oct: OBSOLETO. Invierte _pnl_normalizado asumiendo la fórmula SIN comisión; desde el 07-Oct gate_bucket_propio
+    # ya incluye la comisión real (comision_cripto.pnl_por_euro) y la inversión la contaría dos veces.
+    raise SystemExit("analisis_ev_fee_real_microbuckets_02sep.py: obsoleto desde 07-Oct (gate_bucket_propio ya incluye la comisión real)")
     d = json.loads((REPO / "data/shadow/gate_bucket_propio.json").read_text())
     filas = []
     for tupla_str, buckets in d.items():
