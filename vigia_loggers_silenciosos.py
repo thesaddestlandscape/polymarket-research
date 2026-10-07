@@ -19,6 +19,9 @@ Cómo funciona (coste: un stat por fichero, cada hora, dentro de vigias_horarios
   - 07-Oct: CONDICIONALES = loggers que solo escriben con posiciones OPEN (smart_exit_prices): sin OPEN en su
     trades.csv el silencio es correcto, el reloj de silencio se reinicia y no se aprende ese hueco. Si no se puede
     leer trades.csv se trata como "hay posiciones" (avisa: fail-loud).
+  - 07-Oct: COMPUERTAS de régimen: si el log compañero logs/<stem>.log está vivo (<30 min) y su última línea dice que
+    se salta la ventana (PATRONES_COMPUERTA), el silencio del CSV es correcto (xrp15min_contrario_fase0 con XRP#15m no
+    significativo en ballenas_timing_state.json).
 Estado: data/live/vigia_loggers_silenciosos_estado.json.  Uso manual: vigia_loggers_silenciosos.py [--sin-telegram]
 """
 import csv
@@ -39,6 +42,11 @@ PATRONES = [str(REPO / "data/shadow/*.csv"), str(REPO / "data/sports/*.csv"), st
 MIN_H, FACTOR, HIST_MIN_H, RETIRO_DIAS, GAP_OLVIDO = 3.0, 2.0, 48.0, 10, 0.98
 CONDICIONALES = {str(REPO / "data/sports/smart_exit_prices.csv"): REPO / "data/sports/trades.csv",
                  str(REPO / "data/live/smart_exit_prices.csv"): REPO / "data/live/trades.csv"}
+# 07-Oct: loggers con COMPUERTA de régimen (p. ej. xrp15min_contrario_fase0: solo observa si la calibración de ballenas
+# dice que XRP#15m es significativo). Su log compañero logs/<stem>.log sigue escribiendo el motivo de no disparo: si ese
+# log está vivo (< 30 min) y su ÚLTIMA línea dice que se salta, el silencio del CSV es correcto (como CONDICIONALES).
+# Si el log también calla -> se avisa (el hilo puede estar muerto).
+PATRONES_COMPUERTA = ("se salta ventana", "no significativo")
 _FECHA = re.compile(r"[_-]?\d{4}-\d{2}-\d{2}")
 
 
@@ -57,6 +65,19 @@ def _familias() -> dict:
             if mt > fam.get(clave, 0):
                 fam[clave] = mt
     return fam
+
+
+def _compuerta_cerrada(clave: str) -> bool:
+    log = REPO / "logs" / (_FECHA.sub("", os.path.basename(clave)).replace(".gz", "").rsplit(".", 1)[0] + ".log")
+    try:
+        if time.time() - os.path.getmtime(log) > 1800:
+            return False
+        with open(log, "rb") as f:
+            f.seek(max(0, os.path.getsize(log) - 2000))
+            ult = [x for x in f.read().decode("utf-8", "replace").splitlines() if x.strip()]
+        return bool(ult) and any(p in ult[-1] for p in PATRONES_COMPUERTA)
+    except OSError:
+        return False
 
 
 def _hay_open(trades: Path) -> bool:
@@ -80,7 +101,7 @@ def main() -> int:
             if ahora - mt < 2 * 86400:                     # solo se empieza a seguir lo que está vivo
                 est[clave] = {"primera_vez": ahora, "ultimo_mtime": mt, "gap_max_h": 0.0, "avisado": False}
             continue
-        if clave in CONDICIONALES and not _hay_open(CONDICIONALES[clave]):
+        if (clave in CONDICIONALES and not _hay_open(CONDICIONALES[clave])) or _compuerta_cerrada(clave):
             e["ultimo_mtime"] = max(e["ultimo_mtime"], mt, ahora)   # sin posiciones: callar es lo correcto
             e["avisado"] = False
             e["gap_max_h"] = 0.0                                   # el ritmo se aprende solo con posiciones abiertas
