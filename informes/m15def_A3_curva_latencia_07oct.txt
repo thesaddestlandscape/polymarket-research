@@ -1,0 +1,53 @@
+umbrales DISC BTC: Binance 1 s P90 1.29 bps P99 3.26 | Chainlink tick P90 0.28 bps
+umbrales DISC ETH: Binance 1 s P90 5.09 bps P99 45.58 | Chainlink tick P90 0.36 bps
+umbrales DISC SOL: Binance 1 s P90 2.48 bps P99 10.77 | Chainlink tick P90 0.45 bps
+umbrales DISC XRP: Binance 1 s P90 2.00 bps P99 5.99 | Chainlink tick P90 0.57 bps
+umbrales DISC DOGE: Binance 1 s P90 4.17 bps P99 21.22 | Chainlink tick P90 0.65 bps
+umbrales DISC BNB: Binance 1 s P90 1.28 bps P99 5.22 | Chainlink tick P90 0.36 bps
+
+CURVA LATENCIA -> DINERO del maker que cancela (CL+BN P90), $/mercado; L = ms desde la RECEPCIÓN del dato
+pol                 L per   | merc    acc |  $/merc con rebate    IC90 cierres (rebate)
+CANCEL_CL+BN_P90    0 DISC  |  240  17395 |  -1.415     -1.198 (-1.923,-0.457)
+CANCEL_CL+BN_P90    0 FINAL |  163  11065 |  -0.840     -0.628 (-1.319,+0.090)
+CANCEL_CL+BN_P90    0 VALID |  144   9855 |  -0.397     -0.187 (-1.035,+0.674)
+CANCEL_CL+BN_P90   25 DISC  |  240  17405 |  -1.419     -1.201 (-1.882,-0.474)
+CANCEL_CL+BN_P90   25 FINAL |  163  11060 |  -0.834     -0.622 (-1.315,+0.085)
+CANCEL_CL+BN_P90   25 VALID |  144   9865 |  -0.373     -0.163 (-1.016,+0.727)
+CANCEL_CL+BN_P90   50 DISC  |  240  17425 |  -1.405     -1.187 (-1.865,-0.450)
+CANCEL_CL+BN_P90   50 FINAL |  163  11075 |  -0.873     -0.660 (-1.359,+0.085)
+CANCEL_CL+BN_P90   50 VALID |  144   9875 |  -0.380     -0.170 (-1.052,+0.604)
+CANCEL_CL+BN_P90   75 DISC  |  240  17435 |  -1.429     -1.210 (-2.004,-0.526)
+CANCEL_CL+BN_P90   75 FINAL |  163  11090 |  -0.930     -0.717 (-1.390,-0.018)
+CANCEL_CL+BN_P90   75 VALID |  144   9895 |  -0.368     -0.157 (-0.986,+0.758)
+CANCEL_CL+BN_P90  100 DISC  |  240  17440 |  -1.429     -1.210 (-1.907,-0.548)
+CANCEL_CL+BN_P90  100 FINAL |  163  11105 |  -0.930     -0.717 (-1.453,-0.022)
+CANCEL_CL+BN_P90  100 VALID |  144   9900 |  -0.360     -0.149 (-1.030,+0.742)
+CANCEL_CL+BN_P90  150 DISC  |  240  17460 |  -1.502     -1.283 (-1.970,-0.603)
+CANCEL_CL+BN_P90  150 FINAL |  163  11115 |  -0.960     -0.746 (-1.450,-0.063)
+CANCEL_CL+BN_P90  150 VALID |  144   9900 |  -0.431     -0.221 (-1.112,+0.624)
+CANCEL_CL+BN_P90  200 DISC  |  240  17485 |  -1.476     -1.258 (-1.982,-0.616)
+CANCEL_CL+BN_P90  200 FINAL |  163  11150 |  -0.889     -0.675 (-1.413,+0.023)
+CANCEL_CL+BN_P90  200 VALID |  144   9910 |  -0.452     -0.241 (-1.079,+0.647)
+CANCEL_CL+BN_P90  250 DISC  |  240  17535 |  -1.453     -1.234 (-1.967,-0.531)
+CANCEL_CL+BN_P90  250 FINAL |  163  11185 |  -0.964     -0.749 (-1.506,-0.016)
+CANCEL_CL+BN_P90  250 VALID |  144   9890 |  -0.467     -0.257 (-1.068,+0.616)
+CANCEL_CL+BN_P90  300 DISC  |  240  17535 |  -1.440     -1.220 (-1.898,-0.545)
+CANCEL_CL+BN_P90  300 FINAL |  163  11200 |  -0.927     -0.712 (-1.462,-0.022)
+CANCEL_CL+BN_P90  300 VALID |  144   9915 |  -0.440     -0.229 (-1.049,+0.638)
+KEEP                0 DISC  |  240  21455 |  -4.992     -4.723 (-5.259,-4.195)
+KEEP                0 FINAL |  163  14445 |  -4.054     -3.770 (-4.297,-3.265)
+KEEP                0 VALID |  144  12210 |  -4.447     -4.189 (-5.016,-3.364)
+
+Por moneda, VALID+FINAL, $/mercado con rebate:
+act                     BNB    BTC   DOGE    ETH    SOL    XRP
+pol              L                                            
+CANCEL_CL+BN_P90 0   -0.736  0.724 -0.128 -0.759 -0.850 -0.771
+                 25  -0.736  0.721 -0.056 -0.733 -0.896 -0.733
+                 50  -0.758  0.723 -0.005 -0.736 -0.974 -0.824
+                 75  -0.798  0.724 -0.052 -0.747 -1.086 -0.763
+                 100 -0.817  0.731 -0.110 -0.710 -1.093 -0.702
+                 150 -0.947  0.624 -0.161 -0.711 -1.038 -0.762
+                 200 -1.029  0.663 -0.197 -0.749 -0.928 -0.581
+                 250 -0.943  0.729 -0.452 -0.874 -0.967 -0.595
+                 300 -0.756  0.708 -0.576 -0.830 -0.834 -0.618
+KEEP             0   -5.347 -0.893 -5.266 -2.416 -5.420 -4.486

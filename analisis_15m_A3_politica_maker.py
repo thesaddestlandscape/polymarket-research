@@ -155,7 +155,15 @@ def main():
         configs += [("CANCEL_BN_P90", "bn90", L, 5, False), ("CANCEL_BN_P99", "bn99", L, 5, False),
                     ("CANCEL_CL_P90", "cl90", L, 5, False)]
     configs += [("CANCEL_BN_P90", "bn90", 250, 25, False)]
-    if "--combo" in sys.argv:       # 2ª pasada (06-Oct): UNA combinación declarada antes: las dos señales protectoras
+    if "--curva" in sys.argv:       # 07-Oct misión definitiva §5/§29: curva latencia->dinero del maker que cancela. La
+        # cancelación medida con órdenes reales cuesta ~60 ms ida y vuelta (~30 ms de ida) + firma ~6 ms: L realista ~40 ms,
+        # no 150-300 (A3 original usaba latencias de tomador). Misma regla CL+BN P90 de DISC, L de 0 a 300 ms.
+        configs = [("KEEP", None, 0, 5, False)] + [("CANCEL_CL+BN_P90", "combo", L, 5, False)
+                                                   for L in ((-130, -100, -60, -30, 0) if "--neg" in sys.argv
+                                                             else (0, 25, 50, 75, 100, 150, 200, 250, 300))]
+        # --neg: L negativa = recibir la señal ANTES (cota superior del valor de un feed más rápido que Binance-Tokio,
+        # p. ej. Kraken/Bitstamp ~100 ms antes en Helsinki, SI se movieran a la vez que Binance; ver leadlag_venues_llegada)
+    elif "--combo" in sys.argv:       # 2ª pasada (06-Oct): UNA combinación declarada antes: las dos señales protectoras
         configs = [("KEEP", None, 0, 5, False)] + [("CANCEL_CL+BN_P90", "combo", L, 5, False) for L in (150, 250, 275, 300)]
     filas = []
     for i, (tk, act, mid_, fin, lado) in enumerate(toks):
@@ -199,11 +207,38 @@ def main():
                     continue
                 bl = bloqueos(clx[0], clx[1], clx[2], sentido, t0, t1, L)
             sh, coste = simular(te, bb, bs, cb, T_te, T_p, T_sz, t0, t1, SH, bl, nom == "WIDEN")
-            filas.append((nom, L, SH, act, mid_, fin, lado, sh, coste, sh * gana - coste))
-    R = pd.DataFrame(filas, columns=["pol", "L", "SH", "act", "mkt", "fin", "lado", "acc", "coste", "pnl"])
+            # rebate del maker (07-Oct, verificado en clob-markets: rebateRate 0.2 de la comisión 0,07·p·(1−p) del tomador
+            # que nos rellena); estimación con el precio medio de nuestros rellenos
+            pm = coste / sh if sh > 0 else 0.0
+            reb = 0.2 * 0.07 * pm * (1 - pm) * sh
+            filas.append((nom, L, SH, act, mid_, fin, lado, sh, coste, sh * gana - coste, sh * gana - coste + reb))
+    R = pd.DataFrame(filas, columns=["pol", "L", "SH", "act", "mkt", "fin", "lado", "acc", "coste", "pnl", "pnl_reb"])
     R["per"] = periodo((R["fin"].values - 450) * 1000)
-    R.to_parquet("/root/polymarket-research-datalogs/m15_ms_cache/A3_politicas%s.parquet" % ("_combo" if "--combo" in sys.argv else ""))
+    suf = ("_curva_neg" if "--neg" in sys.argv else "_curva") if "--curva" in sys.argv else "_combo" if "--combo" in sys.argv else ""
+    R.to_parquet("/root/polymarket-research-datalogs/m15_ms_cache/A3_politicas%s.parquet" % suf)
+    if "--curva" in sys.argv:
+        curva(R)
+        return
     informe(R)
+
+
+def curva(R):
+    """$/mercado (YES+NO) por L y periodo, sin y con rebate; IC90 bootstrap de CIERRES; por moneda en VALID+FINAL."""
+    rng = np.random.default_rng(3)
+    M = R.groupby(["pol", "L", "per", "mkt", "fin", "act"], as_index=False)[["acc", "pnl", "pnl_reb"]].sum()
+    print("\nCURVA LATENCIA -> DINERO del maker que cancela (CL+BN P90), $/mercado; L = ms desde la RECEPCIÓN del dato")
+    print(f"{'pol':16} {'L':>4} {'per':5} | {'merc':>4} {'acc':>6} | {'$/merc':>7} {'con rebate':>10} {'IC90 cierres (rebate)':>24}")
+    for (pol, L, per), g in M.groupby(["pol", "L", "per"]):
+        if per == "EMB":
+            continue
+        cie = g.groupby("fin")["pnl_reb"].agg(["sum", "count"])
+        S, N = cie["sum"].values, cie["count"].values
+        bs = [S[k].sum() / N[k].sum() for k in (rng.integers(0, len(S), len(S)) for _ in range(1000))]
+        print(f"{pol:16} {L:4} {per:5} | {len(g):4} {g.acc.sum():6.0f} | {g.pnl.mean():+7.3f} {g.pnl_reb.mean():+10.3f} "
+              f"({np.percentile(bs, 5):+.3f},{np.percentile(bs, 95):+.3f})")
+    print("\nPor moneda, VALID+FINAL, $/mercado con rebate:")
+    G = M[M.per.isin(["VALID", "FINAL"])].groupby(["pol", "L", "act"])["pnl_reb"].mean().unstack()
+    print(G.round(3).to_string())
 
 
 def informe(R):
