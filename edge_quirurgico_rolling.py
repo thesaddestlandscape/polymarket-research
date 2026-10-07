@@ -97,6 +97,9 @@ def _escribir_atomico(path: Path, texto: str) -> None:
     os.replace(tmp, path)
 
 
+METODO_UNIDAD = "v2_mercado_lado_bucket_fee_real_07oct"
+
+
 def _cargar_cache_train() -> dict:
     try:
         return pickle.loads(CACHE_TRAIN.read_bytes())
@@ -167,10 +170,13 @@ def generar() -> dict:
     # recalculan el lado forward (barato). Ventana forward efectiva: 7-8 dias.
     cutoff = (ahora - timedelta(days=FORWARD_DIAS)).strftime("%Y-%m-%dT00:00:00")
     cache_prev = _cargar_cache_train()
-    cache_nuevo = {"cutoff": cutoff, "tuplas": {}}
-    reusar = cache_prev.get("cutoff") == cutoff
+    # 07-Oct: la caché de train se invalida también si cambia el MÉTODO (unidad mercado-lado-bucket + fee real en WM y
+    # bot wallets): con solo el cutoff, el día del cambio reusaba el train calculado por fill.
+    cache_nuevo = {"cutoff": cutoff, "metodo": METODO_UNIDAD, "tuplas": {}}
+    reusar = cache_prev.get("cutoff") == cutoff and cache_prev.get("metodo") == METODO_UNIDAD
     est = Q._estado_config()
-    fuentes = [(arq, a, m, None, None, filas) for (arq, a, m), filas in Q.B.cargar_filas().items()]
+    # 07-Oct: bot wallets con la MISMA unidad y comisión que WM (cargar_filas_unidad); cargar_filas() sigue siendo el gate.
+    fuentes = [(arq, a, m, None, None, filas) for (arq, a, m), filas in Q.B.cargar_filas_unidad().items()]
     fuentes += [("WALLET_MIRROR", a, m, g, None, filas) for (_t, a, m, g), filas in _filas_wm_unificadas().items()]
     # 22-Sep (petición explícita Javi: extender a TODAS las estrategias que
     # han estado en live y candidatos_evaluacion_live, no solo P-GALLINA):
@@ -184,7 +190,9 @@ def generar() -> dict:
     # este resultado (no se sobrescribe nada) y el vigia reintenta en 300 s.
     n_filas_total = sum(len(f) for *_r, f in fuentes)
     try:
-        prev_total = json.loads(OUT.read_text(encoding="utf-8")).get("n_filas_total")
+        _prev = json.loads(OUT.read_text(encoding="utf-8"))
+        # 07-Oct: solo se compara con una corrida del MISMO método (el cambio de unidad baja n de forma legítima)
+        prev_total = _prev.get("n_filas_total") if _prev.get("metodo") == METODO_UNIDAD else None
     except Exception:
         prev_total = None
     if prev_total and n_filas_total < 0.9 * prev_total:
@@ -263,7 +271,7 @@ def generar() -> dict:
     res = {"generado_utc": ahora.isoformat(timespec="seconds"), "modo": "lectura (no consumido por evaluar())",
            "forward_dias": FORWARD_DIAS, "cutoff": cutoff, "n_forward_min": N_FORWARD_MIN,
            "piso_eur": PISO_EUR, "top1_wallet_forward_max": TOP1_WALLET_FORWARD_MAX,
-           "n_tuplas_evaluadas": n_tuplas, "n_filas_total": n_filas_total,
+           "n_tuplas_evaluadas": n_tuplas, "n_filas_total": n_filas_total, "metodo": METODO_UNIDAD,
            "n_zonas_operables": len(operables), "n_zonas_en_observacion": len(observacion),
            "cobertura": {"total_tuplas_con_datos": len(fuentes), "evaluadas": n_tuplas,
                          "descartadas_n_train_insuficiente": sorted(descartadas, key=lambda t: -t[1])},

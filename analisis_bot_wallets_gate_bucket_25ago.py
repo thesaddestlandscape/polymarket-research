@@ -101,7 +101,7 @@ def pnl_neto(ask, acierto):
     return gross_win * (1 - FEE) if acierto else -1.0
 
 
-def cargar_filas():
+def cargar_filas(_crudas=None):
     """clave de grupo: (arquetipo, activo, marco) -> [(ts, ask, pnl, wallet), ...].
     Solo filas resueltas (outcome_real presente), con ask real capturado
     Y con ratio>=RATIO_MIN (31-Ago -- ver docstring del módulo: un ask
@@ -153,9 +153,41 @@ def cargar_filas():
             if sp.es_pre_twap(marco, r.get("timestamp_utc", "")):
                 continue
             acierto = 1 if r.get("outcome_real") == r.get("lado_wallet") else 0
+            if _crudas is not None:
+                _crudas.append((r, ask, acierto))
+                continue
             pnl = pnl_neto(ask, acierto)
             clave = (r.get("arquetipo", "?"), r.get("activo", "?"), marco)
             grupos[clave].append((r["timestamp_utc"], ask, pnl, r.get("wallet", "")))
+    return grupos
+
+
+def cargar_filas_unidad():
+    """07-Oct (Javi: "soluciona: el quirúrgico mezcla la unidad nueva de WM con bot wallets por fill"): MISMOS filtros
+    que cargar_filas() (que NO cambia: es el gate de SNIPER/DISPERSO) pero con la unidad y la comisión del gate de
+    Wallet Mirror corregido el 07-Oct: UNA observación por (mercado, lado, bucket de 0,05) = la PRIMERA fila del bucket
+    con SU ask; wallet = la de más filas en la unidad; comisión REAL del tomador 0,07·p·(1−p) en cada compra; filas sin
+    market_slug/lado y unidades con desenlace contradictorio se descartan. Solo la usa analisis_edge_quirurgico_21sep."""
+    crudas = []
+    cargar_filas(_crudas=crudas)
+    unidades = defaultdict(list)
+    for r, ask, ac in crudas:
+        mercado, lado = r.get("market_slug") or "", r.get("lado_wallet") or ""
+        if not mercado or not lado:
+            continue
+        clave = (r.get("arquetipo", "?"), r.get("activo", "?"), r.get("marco", "?"))
+        b = round(int(ask / 0.05 + 1e-9) * 0.05, 2)
+        unidades[(clave, mercado, lado, b)].append((r["timestamp_utc"], ask, ac, r.get("wallet", "")))
+    grupos = defaultdict(list)
+    for (clave, _m, _l, _b), xs in unidades.items():
+        if len({x[2] for x in xs}) > 1:
+            continue
+        xs.sort()
+        wallet = Counter(x[3] for x in xs).most_common(1)[0][0]
+        ts, ask, ac = xs[0][0], xs[0][1], xs[0][2]
+        grupos[clave].append((ts, ask, (1.0 if ac else 0.0) / (ask * (1 + FEE * (1 - ask))) - 1.0, wallet))
+    for v in grupos.values():
+        v.sort()
     return grupos
 
 

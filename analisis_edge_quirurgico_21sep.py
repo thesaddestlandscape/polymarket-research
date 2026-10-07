@@ -178,7 +178,7 @@ def _estado_config():
 def main():
     est = _estado_config()
     resultados = []
-    grupos_bot = B.cargar_filas()
+    grupos_bot = B.cargar_filas_unidad()      # 07-Oct: misma unidad/fee que WM (ver B.cargar_filas_unidad)
     for (arq, activo, marco), filas in grupos_bot.items():
         for w in _evaluar_tupla(filas, f"{arq}#{activo}#{marco}"):
             resultados.append({"familia": arq, "activo": activo, "marco": marco, "grande": None,
@@ -195,10 +195,14 @@ def main():
                                "decision": decision, **w})
     for r in resultados:
         r["estado"] = est.get(f"{r['familia']}#{r['activo']}#{r['marco']}", "dormida/sin config")
-    # BH-FDR entre resultados por activo (mismo criterio del proyecto)
+    # BH-FDR entre resultados por activo (mismo criterio del proyecto). 07-Oct: familia de corrección = (activo, UNIDAD):
+    # WM y bot wallets cuentan una observación por mercado-lado-bucket con fee real; las clásicas (results.csv) cuentan
+    # por predicción a precio de señal -> no comparten el mismo reparto de p-valores.
+    familias_mercado = {"WALLET_MIRROR"} | {k[0] for k in grupos_bot}
     por_activo = collections.defaultdict(list)
     for i, r in enumerate(resultados):
-        por_activo[r["activo"]].append(i)
+        r["unidad"] = "mercado_lado_bucket" if r["familia"] in familias_mercado else "prediccion_results_csv"
+        por_activo[(r["activo"], r["unidad"])].append(i)
     for a, idx in por_activo.items():
         ps = [resultados[i]["p_max"] for i in idx]
         orden = sorted(range(len(ps)), key=lambda k: ps[k]); corte = -1
@@ -226,7 +230,7 @@ def forward():
     est = _estado_config()
     filas_out = []
     fuentes = []
-    for (arq, activo, marco), filas in B.cargar_filas().items():
+    for (arq, activo, marco), filas in B.cargar_filas_unidad().items():
         fuentes.append((arq, activo, marco, None, None, filas))
     for (tipo, activo, marco, grande), filas in W.cargar_filas().items():
         fuentes.append(("WALLET_MIRROR", activo, marco, grande, None, filas))
