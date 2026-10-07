@@ -47,7 +47,12 @@ from analisis_diario_salud_sistema import medir_ciclos_pipeline  # noqa: E402
 
 ESTADO_PATH = REPO / "data" / "shadow" / "vigia_pipeline_latencia_state.json"
 
-UMBRAL_CICLO_LENTO_S = 120  # mismo umbral que analisis_diario_salud_sistema.py
+# 07-Oct: 120 -> 250 s. Con 120 el 33 % de los ciclos NORMALES lo superaba (7 días, n=356: P50 106, P75 131, P90 174,
+# P95 230, P99 303): los ciclos pesados por diseño (aprender_patrones_causales 66-80 s + calcular_params 30-40 +
+# performance 15-17 + lectura 13-21) duran 145-200 s y con >=2 de ~5 ciclos/hora el vigía saltaba por azar ~54 % de las
+# horas (00:05 y 01:06 del 07-Oct sin nada anómalo). 250 = justo sobre el P95: falsa alarma ~2 %/hora; el ciclo real de
+# 575 s del 07-Oct 06:23 se sigue detectando. El chequeo diario mantiene su propio umbral de máximo.
+UMBRAL_CICLO_LENTO_S = 250
 MIN_OUTLIERS_PARA_AVISAR = 2  # 1 outlier aislado = ruido normal, no avisar
 VENTANA_MIN = 60
 
