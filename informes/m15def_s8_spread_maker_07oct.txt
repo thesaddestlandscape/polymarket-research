@@ -1,0 +1,23 @@
+§8 SPREAD_k: puja post-only en mejor bid + 1c mientras el spread de los demás >= k; L = 40 ms; SH = 5
+ k per   | merc %c/relleno    acc  pares |  $/merc  +rebate       IC90 cierres sin mejor
+ 2 DISC  |  240        49%   1121    189 |  -0.099   -0.086 (-0.403,+0.225)    -0.184
+ 2 FINAL |  163        47%    960    181 |  +0.109   +0.126 (-0.306,+0.581)    -0.055
+ 2 VALID |  144        45%    679    112 |  -0.099   -0.086 (-0.455,+0.326)    -0.246
+ 3 DISC  |  240        31%    682    114 |  -0.249   -0.241 (-0.492,-0.012)    -0.293
+ 3 FINAL |  163        30%    471     75 |  +0.048   +0.057 (-0.164,+0.283)    -0.025
+ 3 VALID |  144        32%    356     52 |  -0.064   -0.057 (-0.317,+0.196)    -0.156
+ 4 DISC  |  240        20%    332     46 |  -0.111   -0.107 (-0.230,+0.002)    -0.131
+ 4 FINAL |  163        21%    260     40 |  +0.051   +0.056 (-0.087,+0.188)    -0.000
+ 4 VALID |  144        18%    176     30 |  +0.069   +0.072 (-0.099,+0.263)    -0.018
+
+Por moneda (VALID+FINAL, $/mercado con rebate):
+act    BNB    BTC   DOGE    ETH    SOL    XRP
+k                                            
+2    0.056 -0.331  0.010  0.484 -0.099  0.030
+3    0.071 -0.613  0.013  0.395  0.061  0.087
+4    0.025 -0.127  0.030  0.262  0.144  0.043
+
+Descomposición (todas las k, VALID+FINAL): PnL de la parte EMPAREJADA (garantizada) vs patas sueltas
+   k=2: emparejado    -5.54 $ (293 pares) | resto (patas sueltas)    +9.12 $ | total    +3.58 $ en 307 mercados
+   k=3: emparejado    -1.73 $ (127 pares) | resto (patas sueltas)    +0.42 $ | total    -1.31 $ en 307 mercados
+   k=4: emparejado    -4.71 $ (69 pares) | resto (patas sueltas)   +22.95 $ | total   +18.24 $ en 307 mercados

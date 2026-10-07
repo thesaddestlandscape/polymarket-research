@@ -1,0 +1,25 @@
+captura 1200 s desde 2026-10-07T08:23:59+00:00
+filas 321094 -> /root/polymarket-research-datalogs/leadlag_venues_2026-10-07T0843.csv.gz
+
+1. recepción − hora de la fuente (ms; incluye el desfase de reloj de cada venue):
+   binance   n= 290752 P50   135.2 P90   215.1 P99   668.0
+   bitstamp  n=    507 P50    33.2 P90    53.6 P99   303.1
+   bybit     n=  22090 P50    94.0 P90   164.6 P99   409.5
+   coinbase  n=   3378 P50    59.6 P90   159.1 P99   424.7
+   kraken    n=   1764 P50    28.9 P90   110.9 P99   706.5
+   okx       n=   2603 P50   136.5 P90   278.6 P99   858.5
+
+2. Eventos de Binance spot (|ret 500 ms| >= 2 bps, con nuestro reloj): ms hasta que cada venue cruza el mismo umbral en la misma dirección (negativo = llegó ANTES que Binance)
+   eventos: 5
+   bitstamp  n=   3/5 mediana   +1525 ms | P25   +675 P75  +1888 | llega ANTES que Binance   33 %
+   bybit     n=   4/5 mediana    -100 ms | P25   -250 P75     +0 | llega ANTES que Binance   50 %
+   coinbase  n=   3/5 mediana    +275 ms | P25   +150 P75   +512 | llega ANTES que Binance    0 %
+   kraken    n=   2/5 mediana     +62 ms | P25   -106 P75   +231 | llega ANTES que Binance   50 %
+   okx       n=   5/5 mediana    -100 ms | P25   -150 P75    -50 | llega ANTES que Binance   80 %
+
+3. Correlación cruzada de retornos de 100 ms (rejilla 25 ms) frente a Binance: lag de máxima correlación (positivo = el venue va DETRÁS)
+   bitstamp  lag    +0 ms  corr 0.239
+   bybit     lag    +0 ms  corr 0.504
+   coinbase  lag    +0 ms  corr 0.234
+   kraken    lag    +0 ms  corr 0.164
+   okx       lag    +0 ms  corr 0.465
