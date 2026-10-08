@@ -1,0 +1,40 @@
+Híbridas direccionales — 15791 rellenos, días ['2026-10-05', '2026-10-06', '2026-10-07'] (EXTRACCIÓN 05-06, CONTRASTE 07)
+
+== 0xb970fb5c: mercados 197 (con ambos roles 130), PnL +5095 (maker +1162, tomador +3933), vol 68077
+   pata TOMADORA: REFUERZA 52%, CUBRE 40%, ABRE 8% | posición neta al cierre: acierto direccional 43.4% (n=196), |neto| P50 192 acc
+   [05-06 maker  ] n= 2448 PnL   +1892 PnL/vol +0.061 | precio P25/50/75 0.17/0.39/0.60 | T P50 310 | z_TWAP de la exposición P25/50/75 -1.61/-0.26/0.85 | z_spot P50 -0.25 | lead P50 -2.2 bps | %BUY 100%
+   [05-06 tomador] n=  302 PnL   +2778 PnL/vol +0.193 | precio P25/50/75 0.24/0.39/0.68 | T P50 255 | z_TWAP de la exposición P25/50/75 -1.69/-0.24/0.92 | z_spot P50 -0.23 | lead P50 -1.5 bps | %BUY 100%
+   [07 maker  ] n= 1300 PnL    -730 PnL/vol -0.044 | precio P25/50/75 0.21/0.38/0.64 | T P50 345 | z_TWAP de la exposición P25/50/75 -1.08/-0.32/0.51 | z_spot P50 -0.23 | lead P50 -1.2 bps | %BUY 100%
+   [07 tomador] n=  154 PnL   +1155 PnL/vol +0.195 | precio P25/50/75 0.29/0.42/0.72 | T P50 462 | z_TWAP de la exposición P25/50/75 -1.09/-0.25/0.79 | z_spot P50 -0.23 | lead P50 -2.0 bps | %BUY 99%
+   PnL por día: 2026-10-05 +2127, 2026-10-06 +2543, 2026-10-07 +425
+
+== 0x2ed94d1a: mercados 222 (con ambos roles 137), PnL +2132 (maker +280, tomador +1852), vol 71298
+   pata TOMADORA: REFUERZA 47%, CUBRE 38%, ABRE 15% | posición neta al cierre: acierto direccional 50.5% (n=222), |neto| P50 143 acc
+   [05-06 maker  ] n=  240 PnL     +71 PnL/vol +0.009 | precio P25/50/75 0.38/0.60/0.99 | T P50 324 | z_TWAP de la exposición P25/50/75 -2.76/-0.25/0.70 | z_spot P50 -0.24 | lead P50 -1.3 bps | %BUY 100%
+   [05-06 tomador] n=  814 PnL   +1089 PnL/vol +0.035 | precio P25/50/75 0.33/0.50/0.62 | T P50 541 | z_TWAP de la exposición P25/50/75 -2.21/-0.05/1.48 | z_spot P50 -0.05 | lead P50 -0.3 bps | %BUY 100%
+   [07 maker  ] n=  215 PnL    +209 PnL/vol +0.044 | precio P25/50/75 0.20/0.56/0.99 | T P50 297 | z_TWAP de la exposición P25/50/75 -2.27/-1.05/-0.05 | z_spot P50 -0.93 | lead P50 -3.2 bps | %BUY 100%
+   [07 tomador] n=  585 PnL    +763 PnL/vol +0.028 | precio P25/50/75 0.29/0.47/0.61 | T P50 530 | z_TWAP de la exposición P25/50/75 -2.53/-0.83/-0.06 | z_spot P50 -0.73 | lead P50 -2.4 bps | %BUY 100%
+   PnL por día: 2026-10-05 +572, 2026-10-06 +589, 2026-10-07 +972
+
+== 0x9d57c42e: mercados 377 (con ambos roles 351), PnL +1224 (maker +142, tomador +1082), vol 76956
+   pata TOMADORA: CUBRE 51%, REFUERZA 43%, ABRE 6% | posición neta al cierre: acierto direccional 40.9% (n=372), |neto| P50 20 acc
+   [05-06 maker  ] n= 2550 PnL    -166 PnL/vol -0.011 | precio P25/50/75 0.04/0.34/0.65 | T P50 348 | z_TWAP de la exposición P25/50/75 -1.40/-0.24/0.83 | z_spot P50 -0.24 | lead P50 -1.7 bps | %BUY 100%
+   [05-06 tomador] n= 1911 PnL    +297 PnL/vol +0.013 | precio P25/50/75 0.31/0.47/0.83 | T P50 562 | z_TWAP de la exposición P25/50/75 -1.41/-0.28/0.73 | z_spot P50 -0.27 | lead P50 -1.9 bps | %BUY 96%
+   [07 maker  ] n= 2325 PnL    +307 PnL/vol +0.025 | precio P25/50/75 0.02/0.29/0.57 | T P50 334 | z_TWAP de la exposición P25/50/75 -1.52/-0.37/0.71 | z_spot P50 -0.35 | lead P50 -1.3 bps | %BUY 100%
+   [07 tomador] n= 2104 PnL    +785 PnL/vol +0.030 | precio P25/50/75 0.34/0.53/0.87 | T P50 556 | z_TWAP de la exposición P25/50/75 -1.36/-0.32/0.61 | z_spot P50 -0.31 | lead P50 -1.1 bps | %BUY 95%
+   PnL por día: 2026-10-05 +67, 2026-10-06 +65, 2026-10-07 +1092
+
+== 0xb0c078c8: mercados 22 (con ambos roles 18), PnL +2576 (maker +765, tomador +1811), vol 5544
+   pata TOMADORA: REFUERZA 92%, CUBRE 4%, ABRE 3% | posición neta al cierre: acierto direccional 50.0% (n=22), |neto| P50 509 acc
+   [05-06 maker  ] n=   93 PnL    +709 PnL/vol +1.338 | precio P25/50/75 0.28/0.34/0.42 | T P50 170 | z_TWAP de la exposición P25/50/75 -1.19/-0.20/0.93 | z_spot P50 -0.19 | lead P50 -1.5 bps | %BUY 100%
+   [05-06 tomador] n=  465 PnL   +1798 PnL/vol +0.588 | precio P25/50/75 0.15/0.29/0.38 | T P50 250 | z_TWAP de la exposición P25/50/75 -1.39/-0.27/0.55 | z_spot P50 -0.26 | lead P50 -2.0 bps | %BUY 100%
+   [07 maker  ] n=   97 PnL     +55 PnL/vol +0.068 | precio P25/50/75 0.35/0.46/0.55 | T P50 323 | z_TWAP de la exposición P25/50/75 -1.09/0.18/0.86 | z_spot P50 0.17 | lead P50 0.9 bps | %BUY 100%
+   [07 tomador] n=  121 PnL     +13 PnL/vol +0.011 | precio P25/50/75 0.41/0.52/0.57 | T P50 329 | z_TWAP de la exposición P25/50/75 -0.89/-0.09/0.77 | z_spot P50 -0.09 | lead P50 -0.8 bps | %BUY 100%
+   PnL por día: 2026-10-05 +588, 2026-10-06 +1920, 2026-10-07 +68
+
+== 0x14cbd313: mercados 20 (con ambos roles 4), PnL +1025 (maker -61, tomador +1086), vol 3938
+   pata TOMADORA: ABRE 66%, REFUERZA 21%, CUBRE 14% | posición neta al cierre: acierto direccional 70.0% (n=20), |neto| P50 200 acc
+   [05-06 maker  ] n=   17 PnL    +126 PnL/vol +0.573 | precio P25/50/75 0.50/0.50/0.51 | T P50 917 | z_TWAP de la exposición P25/50/75 -0.09/1.00/1.01 | z_spot P50 0.96 | lead P50 6.5 bps | %BUY 100%
+   [05-06 tomador] n=   22 PnL    +465 PnL/vol +0.173 | precio P25/50/75 0.40/0.51/0.74 | T P50 647 | z_TWAP de la exposición P25/50/75 -1.44/-0.93/0.02 | z_spot P50 -0.90 | lead P50 -4.7 bps | %BUY 91%
+   [07 maker  ] n=   21 PnL    -187 PnL/vol -0.600 | precio P25/50/75 0.50/0.50/0.50 | T P50 891 | z_TWAP de la exposición P25/50/75 -1.39/0.44/4.48 | z_spot P50 0.42 | lead P50 2.6 bps | %BUY 100%
+   PnL por día: 2026-10-05 +229, 2026-10-06 +363, 2026-10-07 +434
