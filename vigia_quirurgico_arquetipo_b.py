@@ -43,6 +43,17 @@ REPO = Path(__file__).resolve().parent
 sys.path.insert(0, str(REPO))
 
 HISTORIAL = REPO / "data" / "shadow" / "edge_quirurgico_historial.jsonl"
+
+# 08-Oct (bug real: WALLET_MIRROR#BTC#5min#g0 [0,10-0,11) anunciada con "3 días CONSECUTIVOS" sumando el 06-Oct
+# evaluado con el método VIEJO (cada copia una observación, n_forward 106-123) y el 07/08-Oct con el NUEVO (unidad
+# mercado-lado-bucket con comisión real, n 25-30)): una racha solo cuenta lecturas del MISMO método que la vigente.
+# Filas sin "metodo" (antes del 08-Oct): v2 si su ts >= primera pasada v2 (07-Oct 13:09Z), si no "v1_legacy".
+METODO_VIGENTE = "v2_mercado_lado_bucket_fee_real_07oct"   # = edge_quirurgico_rolling.METODO_UNIDAD
+_CORTE_V2 = "2026-10-07T13:00"
+
+
+def _metodo_fila(r: dict) -> str:
+    return r.get("metodo") or (METODO_VIGENTE if (r.get("ts") or "") >= _CORTE_V2 else "v1_legacy")
 ZONAS = REPO / "data" / "shadow" / "edge_quirurgico_zonas.json"
 LATCH = REPO / "data" / "shadow" / "vigia_quirurgico_arquetipo_b_latch.json"
 
@@ -109,6 +120,8 @@ def _persistencia_por_dia() -> dict:
             continue
         if r.get("familia") not in FAMILIAS_B:
             continue
+        if _metodo_fila(r) != METODO_VIGENTE:
+            continue  # lectura de otro método: no comparable, no suma ni corta racha
         por_zona[_clave_zona(r)][r["fecha"]] = bool(r.get("forward_ok"))
         fechas_tupla[r["tupla"]].add(r["fecha"])
     # 01-Oct (bug real: SNIPER#BTC#5min [0.16,0.17) anunciada como "3 días

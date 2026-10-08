@@ -26,6 +26,17 @@ from pathlib import Path
 REPO = Path(__file__).resolve().parent
 ZONAS = REPO / "data" / "shadow" / "edge_quirurgico_zonas.json"
 HISTORIAL = REPO / "data" / "shadow" / "edge_quirurgico_historial.jsonl"
+
+# 08-Oct (bug real: WALLET_MIRROR#BTC#5min#g0 [0,10-0,11) anunciada con "3 días CONSECUTIVOS" sumando el 06-Oct
+# evaluado con el método VIEJO (cada copia una observación, n_forward 106-123) y el 07/08-Oct con el NUEVO (unidad
+# mercado-lado-bucket con comisión real, n 25-30)): una racha solo cuenta lecturas del MISMO método que la vigente.
+# Filas sin "metodo" (antes del 08-Oct): v2 si su ts >= primera pasada v2 (07-Oct 13:09Z), si no "v1_legacy".
+METODO_VIGENTE = "v2_mercado_lado_bucket_fee_real_07oct"   # = edge_quirurgico_rolling.METODO_UNIDAD
+_CORTE_V2 = "2026-10-07T13:00"
+
+
+def _metodo_fila(r: dict) -> str:
+    return r.get("metodo") or (METODO_VIGENTE if (r.get("ts") or "") >= _CORTE_V2 else "v1_legacy")
 LATCH = REPO / "data" / "shadow" / "edge_quirurgico_telegram_latch.json"
 HORA_RESUMEN_UTC = 7
 CORRIDAS_CONFIRMAR = 2
@@ -70,6 +81,8 @@ def _persistencia() -> dict:
                 r = json.loads(linea)
             except Exception:
                 continue
+            if _metodo_fila(r) != METODO_VIGENTE:
+                continue  # 08-Oct: lectura de otro método, no comparable
             fechas_tupla[r["tupla"]].add(r["fecha"])
             k = f"{r['tupla']}|{r['ancho']}|{r['lo']}|{r['hi']}"
             # varias lecturas el mismo día: manda la última (orden del fichero)

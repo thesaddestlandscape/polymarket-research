@@ -285,7 +285,7 @@ def generar() -> dict:
     if _snapshot_debido(prev_ts, ahora):
         with open(HISTORIAL, "a", encoding="utf-8") as f:
             for z in operables + observacion:
-                f.write(json.dumps({"ts": res["generado_utc"], "fecha": res["generado_utc"][:10], **z},
+                f.write(json.dumps({"ts": res["generado_utc"], "fecha": res["generado_utc"][:10], "metodo": METODO_UNIDAD, **z},
                                    ensure_ascii=False) + "\n")
         _podar_historial(ahora)
         res["ultimo_snapshot_historial"] = res["generado_utc"]
