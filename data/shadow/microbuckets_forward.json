@@ -1,6 +1,6 @@
 {
  "cutoff_utc": "2026-09-29T09:29:27+00:00",
- "generado_utc": "2026-10-07T08:50:22+00:00",
+ "generado_utc": "2026-10-08T08:50:27+00:00",
  "items": [
   {
    "tupla": "GBM_LATE_15M_MULTIHORIZONTE#ETH#15min#BUY_NO",
@@ -8,10 +8,10 @@
    "n_hist": 41,
    "ev_hist": 0.6267,
    "fill_libro_real": 0.42,
-   "n_fwd": 21,
-   "dias_fwd": 8,
-   "ev_fwd": 0.0008,
-   "ic_lo_fwd": -0.3828,
+   "n_fwd": 25,
+   "dias_fwd": 10,
+   "ev_fwd": 0.1361,
+   "ic_lo_fwd": -0.2541,
    "veredicto": "sin_concluir"
   },
   {
@@ -20,10 +20,10 @@
    "n_hist": 45,
    "ev_hist": 0.4318,
    "fill_libro_real": 0.35,
-   "n_fwd": 26,
-   "dias_fwd": 9,
-   "ev_fwd": 0.0516,
-   "ic_lo_fwd": -0.3958,
+   "n_fwd": 28,
+   "dias_fwd": 10,
+   "ev_fwd": 0.0258,
+   "ic_lo_fwd": -0.413,
    "veredicto": "sin_concluir"
   },
   {
@@ -32,10 +32,10 @@
    "n_hist": 44,
    "ev_hist": 0.3542,
    "fill_libro_real": null,
-   "n_fwd": 31,
-   "dias_fwd": 8,
-   "ev_fwd": -0.2179,
-   "ic_lo_fwd": -0.4472,
+   "n_fwd": 35,
+   "dias_fwd": 10,
+   "ev_fwd": -0.1284,
+   "ic_lo_fwd": -0.3897,
    "veredicto": "refutado_forward"
   },
   {
@@ -44,10 +44,10 @@
    "n_hist": 40,
    "ev_hist": 0.3379,
    "fill_libro_real": 0.307,
-   "n_fwd": 16,
-   "dias_fwd": 6,
-   "ev_fwd": -0.2247,
-   "ic_lo_fwd": -0.6908,
+   "n_fwd": 18,
+   "dias_fwd": 7,
+   "ev_fwd": -0.3109,
+   "ic_lo_fwd": -0.7973,
    "veredicto": "sin_concluir"
   },
   {
@@ -56,10 +56,10 @@
    "n_hist": 58,
    "ev_hist": 0.2717,
    "fill_libro_real": 0.218,
-   "n_fwd": 26,
+   "n_fwd": 27,
    "dias_fwd": 8,
-   "ev_fwd": -0.0735,
-   "ic_lo_fwd": -0.3176,
+   "ev_fwd": -0.1078,
+   "ic_lo_fwd": -0.3637,
    "veredicto": "refutado_forward"
   },
   {
@@ -68,10 +68,10 @@
    "n_hist": 82,
    "ev_hist": 0.2616,
    "fill_libro_real": 0.606,
-   "n_fwd": 63,
-   "dias_fwd": 6,
-   "ev_fwd": -0.2972,
-   "ic_lo_fwd": -0.4859,
+   "n_fwd": 82,
+   "dias_fwd": 7,
+   "ev_fwd": -0.2619,
+   "ic_lo_fwd": -0.4267,
    "veredicto": "refutado_forward"
   },
   {
@@ -80,10 +80,10 @@
    "n_hist": 114,
    "ev_hist": 0.2597,
    "fill_libro_real": 0.338,
-   "n_fwd": 58,
-   "dias_fwd": 9,
-   "ev_fwd": -0.2913,
-   "ic_lo_fwd": -0.602,
+   "n_fwd": 70,
+   "dias_fwd": 10,
+   "ev_fwd": -0.2849,
+   "ic_lo_fwd": -0.5291,
    "veredicto": "refutado_forward"
   },
   {
@@ -92,10 +92,10 @@
    "n_hist": 121,
    "ev_hist": 0.2135,
    "fill_libro_real": 0.413,
-   "n_fwd": 31,
-   "dias_fwd": 7,
-   "ev_fwd": -0.2606,
-   "ic_lo_fwd": -0.5215,
+   "n_fwd": 33,
+   "dias_fwd": 9,
+   "ev_fwd": -0.3054,
+   "ic_lo_fwd": -0.5559,
    "veredicto": "refutado_forward"
   },
   {
@@ -104,10 +104,10 @@
    "n_hist": 76,
    "ev_hist": 0.2029,
    "fill_libro_real": 0.274,
-   "n_fwd": 27,
-   "dias_fwd": 7,
-   "ev_fwd": -0.0221,
-   "ic_lo_fwd": -0.2483,
+   "n_fwd": 28,
+   "dias_fwd": 8,
+   "ev_fwd": -0.057,
+   "ic_lo_fwd": -0.3012,
    "veredicto": "refutado_forward"
   },
   {
@@ -116,10 +116,10 @@
    "n_hist": 62,
    "ev_hist": 0.1559,
    "fill_libro_real": 0.107,
-   "n_fwd": 25,
+   "n_fwd": 29,
    "dias_fwd": 9,
-   "ev_fwd": 0.1609,
-   "ic_lo_fwd": 0.0637,
+   "ev_fwd": 0.1331,
+   "ic_lo_fwd": 0.0451,
    "veredicto": "confirmado_forward"
   },
   {
@@ -128,9 +128,9 @@
    "n_hist": 89,
    "ev_hist": 0.1531,
    "fill_libro_real": 0.175,
-   "n_fwd": 0,
-   "dias_fwd": 0,
-   "ev_fwd": null,
+   "n_fwd": 2,
+   "dias_fwd": 1,
+   "ev_fwd": -0.2911,
    "ic_lo_fwd": null,
    "veredicto": "sin_concluir"
   },
@@ -140,10 +140,10 @@
    "n_hist": 94,
    "ev_hist": 0.1357,
    "fill_libro_real": null,
-   "n_fwd": 54,
-   "dias_fwd": 9,
-   "ev_fwd": -0.0531,
-   "ic_lo_fwd": -0.2195,
+   "n_fwd": 66,
+   "dias_fwd": 10,
+   "ev_fwd": -0.0597,
+   "ic_lo_fwd": -0.1949,
    "veredicto": "refutado_forward"
   },
   {
@@ -152,11 +152,11 @@
    "n_hist": 138,
    "ev_hist": 0.1217,
    "fill_libro_real": 0.607,
-   "n_fwd": 54,
-   "dias_fwd": 8,
-   "ev_fwd": -0.033,
-   "ic_lo_fwd": -0.21,
-   "veredicto": "refutado_forward"
+   "n_fwd": 62,
+   "dias_fwd": 9,
+   "ev_fwd": 0.0326,
+   "ic_lo_fwd": -0.1671,
+   "veredicto": "sin_concluir"
   },
   {
    "tupla": "GBM_LATE_15M_TARDIO#ETH#15min#BUY_NO",
@@ -164,10 +164,10 @@
    "n_hist": 115,
    "ev_hist": 0.1131,
    "fill_libro_real": 0.186,
-   "n_fwd": 54,
-   "dias_fwd": 7,
-   "ev_fwd": 0.016,
-   "ic_lo_fwd": -0.0863,
+   "n_fwd": 69,
+   "dias_fwd": 8,
+   "ev_fwd": 0.0324,
+   "ic_lo_fwd": -0.0552,
    "veredicto": "sin_concluir"
   },
   {
@@ -176,10 +176,10 @@
    "n_hist": 116,
    "ev_hist": 0.1042,
    "fill_libro_real": 0.628,
-   "n_fwd": 61,
-   "dias_fwd": 9,
-   "ev_fwd": -0.0651,
-   "ic_lo_fwd": -0.1631,
+   "n_fwd": 71,
+   "dias_fwd": 10,
+   "ev_fwd": -0.0054,
+   "ic_lo_fwd": -0.1164,
    "veredicto": "refutado_forward"
   }
  ]
