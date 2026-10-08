@@ -1,0 +1,46 @@
+Tres vías — rellenos on-chain 15m 2026-10-05..2026-10-07, wallets con volumen >= 3000 USDC: 410
+
+== MAKER: 101 wallets; PnL por día 2026-10-05 -14626 (reb 3119, vol 743k), 2026-10-06 -64366 (reb 6989, vol 1574k), 2026-10-07 +25065 (reb 6137, vol 1314k)
+   con actividad los 3 días: 90; PERSISTENTES (PnL > 0 los 3 días): 23 (26%; azar ≈ 12,5 %); su PnL/día medio +3581
+
+== TOMADOR: 172 wallets; PnL por día 2026-10-05 -9640 (reb 48, vol 509k), 2026-10-06 -15614 (reb 81, vol 1010k), 2026-10-07 -19173 (reb 78, vol 913k)
+   con actividad los 3 días: 137; PERSISTENTES (PnL > 0 los 3 días): 27 (20%; azar ≈ 12,5 %); su PnL/día medio +3146
+   persistentes (PnL total, PnL/vol, mercados, % mercados > 0, precio P50, T P50, tamaño P50, monedas):
+   0x3c58ef42 PnL   +1044 PnL/vol +0.073 merc  604 %merc>0 59% p50 0.57 T50 329 acc50 8 SOL 26%, BTC 26%, ETH 25%
+   0x1b58d3de PnL    +951 PnL/vol +0.066 merc  226 %merc>0 70% p50 0.72 T50 177 acc50 10 BTC 91%, ETH 8%, DOGE 1%
+   0x9c8f91bc PnL    +940 PnL/vol +0.035 merc  206 %merc>0 100% p50 0.96 T50 184 acc50 29 BTC 82%, BNB 5%, SOL 5%
+   0x828b32d5 PnL    +796 PnL/vol +0.062 merc  406 %merc>0 52% p50 0.49 T50 533 acc50 20 BTC 87%, ETH 13%
+   0x87c27351 PnL    +664 PnL/vol +0.196 merc   40 %merc>0 70% p50 0.68 T50 693 acc50 3 BTC 100%
+   0x20d2309c PnL    +620 PnL/vol +0.049 merc  201 %merc>0 61% p50 0.54 T50 499 acc50 35 BTC 100%
+   0xe6b1fd52 PnL    +566 PnL/vol +0.144 merc   35 %merc>0 63% p50 0.51 T50 1015 acc50 63 BTC 100%
+   0x7b32b637 PnL    +457 PnL/vol +0.099 merc  251 %merc>0 59% p50 0.46 T50 523 acc50 20 BTC 83%, ETH 17%
+   0xc0145123 PnL    +452 PnL/vol +0.111 merc  291 %merc>0 50% p50 0.46 T50 288 acc50 19 XRP 32%, DOGE 25%, BNB 17%
+   0xc88200ae PnL    +439 PnL/vol +0.096 merc  139 %merc>0 53% p50 0.51 T50 967 acc50 20 BTC 100%
+   0x6ed5ceab PnL    +377 PnL/vol +0.026 merc  411 %merc>0 51% p50 0.47 T50 481 acc50 16 BTC 51%, ETH 49%
+   0xc6accd5b PnL    +374 PnL/vol +0.009 merc  386 %merc>0 45% p50 0.46 T50 402 acc50 42 BTC 88%, ETH 12%
+   0x5e2b9261 PnL    +346 PnL/vol +0.040 merc  223 %merc>0 61% p50 0.68 T50 462 acc50 7 BTC 100%
+   0x75cc3b63 PnL    +222 PnL/vol +0.061 merc  220 %merc>0 71% p50 0.66 T50 462 acc50 6 BTC 100%
+   0x0ea46ce2 PnL    +199 PnL/vol +0.048 merc  136 %merc>0 53% p50 0.62 T50 459 acc50 19 BTC 100%
+   [persistentes] vol 239k PnL/vol +0.0395 | precio: (0.0, 0.1] 5%, (0.1, 0.3] 13%, (0.3, 0.5] 16%, (0.5, 0.7] 24%, (0.7, 0.9] 22%, (0.9, 0.97] 8%, (0.97, 1.0] 11% | T: (-100, 0] 0%, (0, 30] 1%, (30, 120] 20%, (120, 300] 24%, (300, 600] 28%, (600, 900] 25%, (900, 3000] 1%
+   [resto] vol 2193k PnL/vol -0.0246 | precio: (0.0, 0.1] 8%, (0.1, 0.3] 16%, (0.3, 0.5] 21%, (0.5, 0.7] 20%, (0.7, 0.9] 22%, (0.9, 0.97] 11%, (0.97, 1.0] 3% | T: (-100, 0] 0%, (0, 30] 1%, (30, 120] 18%, (120, 300] 29%, (300, 600] 29%, (600, 900] 21%, (900, 3000] 1%
+
+== HIBRIDO: 137 wallets; PnL por día 2026-10-05 +15274 (reb 998, vol 579k), 2026-10-06 -37454 (reb 1998, vol 1329k), 2026-10-07 +981 (reb 1886, vol 1199k)
+   con actividad los 3 días: 109; PERSISTENTES (PnL > 0 los 3 días): 20 (18%; azar ≈ 12,5 %); su PnL/día medio +6271
+   persistentes (PnL total, PnL/vol, mercados, % mercados > 0, precio P50, T P50, tamaño P50, monedas):
+   0xb970fb5c PnL   +5095 PnL/vol +0.075 merc  197 %merc>0 47% p50 0.39 T50 322 acc50 15 BTC 100%, DOGE 0%, ETH 0% | maker: vol 47745 PnL +1162 p50 0.38 T50 328 | tomador: vol 20331 PnL +3933 p50 0.41 T50 296 | mercados con ambos roles 130/197
+   0xb0c078c8 PnL   +2576 PnL/vol +0.465 merc   22 %merc>0 50% p50 0.35 T50 280 acc50 14 BTC 100% | maker: vol 1344 PnL +765 p50 0.40 T50 229 | tomador: vol 4200 PnL +1811 p50 0.33 T50 293 | mercados con ambos roles 18/22
+   0x2ed94d1a PnL   +2132 PnL/vol +0.030 merc  222 %merc>0 51% p50 0.50 T50 474 acc50 25 BTC 100% | maker: vol 12746 PnL +280 p50 0.60 T50 310 | tomador: vol 58552 PnL +1852 p50 0.49 T50 536 | mercados con ambos roles 137/222
+   0x44832d0d PnL   +1377 PnL/vol +0.116 merc   63 %merc>0 90% p50 0.87 T50 44 acc50 7 BTC 100% | maker: vol 2837 PnL +135 p50 0.93 T50 44 | tomador: vol 9048 PnL +1243 p50 0.84 T50 44 | mercados con ambos roles 50/63
+   0x5e8e7771 PnL   +1293 PnL/vol +0.183 merc  393 %merc>0 47% p50 0.26 T50 234 acc50 5 ETH 25%, SOL 22%, BTC 21% | maker: vol 5227 PnL +1226 p50 0.25 T50 242 | tomador: vol 1836 PnL +67 p50 0.93 T50 26 | mercados con ambos roles 22/393
+   0x9d57c42e PnL   +1224 PnL/vol +0.016 merc  377 %merc>0 50% p50 0.42 T50 452 acc50 10 BTC 85%, ETH 15% | maker: vol 28002 PnL +142 p50 0.32 T50 342 | tomador: vol 48953 PnL +1082 p50 0.50 T50 560 | mercados con ambos roles 351/377
+   0x48ac40fc PnL   +1183 PnL/vol +0.010 merc  260 %merc>0 82% p50 0.99 T50 88 acc50 48 BTC 91%, ETH 3%, XRP 3% | maker: vol 70631 PnL +710 p50 0.99 T50 57 | tomador: vol 45986 PnL +473 p50 0.80 T50 265 | mercados con ambos roles 56/260
+   0x14cbd313 PnL   +1025 PnL/vol +0.260 merc   20 %merc>0 60% p50 0.50 T50 883 acc50 51 BTC 100% | maker: vol 532 PnL -61 p50 0.50 T50 896 | tomador: vol 3406 PnL +1086 p50 0.49 T50 643 | mercados con ambos roles 4/20
+   0xee65685d PnL    +700 PnL/vol +0.006 merc  384 %merc>0 100% p50 1.00 T50 29 acc50 9 BTC 78%, ETH 9%, SOL 8% | maker: vol 94845 PnL +216 p50 1.00 T50 25 | tomador: vol 15077 PnL +485 p50 1.00 T50 42 | mercados con ambos roles 87/384
+   0x2277c18f PnL    +687 PnL/vol +0.015 merc   58 %merc>0 100% p50 0.99 T50 22 acc50 29 BTC 90%, SOL 5%, BNB 2% | maker: vol 40533 PnL +172 p50 0.99 T50 13 | tomador: vol 5202 PnL +516 p50 0.99 T50 29 | mercados con ambos roles 10/58
+   0xaad03b40 PnL    +357 PnL/vol +0.012 merc    8 %merc>0 100% p50 0.98 T50 325 acc50 71 BTC 100% | maker: vol 22454 PnL +271 p50 0.98 T50 325 | tomador: vol 6386 PnL +86 p50 0.98 T50 311 | mercados con ambos roles 6/8
+   0x12463232 PnL    +323 PnL/vol +0.054 merc  145 %merc>0 56% p50 0.32 T50 235 acc50 12 XRP 100% | maker: vol 3585 PnL +376 p50 0.24 T50 168 | tomador: vol 2380 PnL -53 p50 0.67 T50 583 | mercados con ambos roles 90/145
+   0x8589f6ef PnL    +227 PnL/vol +0.037 merc  243 %merc>0 44% p50 0.41 T50 501 acc50 6 BTC 68%, ETH 32% | maker: vol 4569 PnL +285 p50 0.41 T50 517 | tomador: vol 1544 PnL -58 p50 0.60 T50 461 | mercados con ambos roles 117/243
+   0xc5b9ca6c PnL    +173 PnL/vol +0.036 merc   57 %merc>0 95% p50 0.91 T50 52 acc50 10 BTC 100% | maker: vol 3453 PnL +51 p50 0.99 T50 76 | tomador: vol 1378 PnL +121 p50 0.89 T50 52 | mercados con ambos roles 4/57
+   0x6fc44ec4 PnL    +158 PnL/vol +0.010 merc    9 %merc>0 100% p50 0.99 T50 26 acc50 7 BTC 98%, SOL 2% | maker: vol 13597 PnL +137 p50 0.99 T50 26 | tomador: vol 2210 PnL +21 p50 0.99 T50 46 | mercados con ambos roles 3/9
+   [persistentes] vol 649k PnL/vol +0.0290 | precio: (0.0, 0.1] 12%, (0.1, 0.3] 20%, (0.3, 0.5] 21%, (0.5, 0.7] 13%, (0.7, 0.9] 14%, (0.9, 0.97] 6%, (0.97, 1.0] 13% | T: (-100, 0] 1%, (0, 30] 6%, (30, 120] 21%, (120, 300] 24%, (300, 600] 23%, (600, 900] 25%, (900, 3000] 1%
+   [resto] vol 2459k PnL/vol -0.0163 | precio: (0.0, 0.1] 10%, (0.1, 0.3] 18%, (0.3, 0.5] 23%, (0.5, 0.7] 21%, (0.7, 0.9] 18%, (0.9, 0.97] 6%, (0.97, 1.0] 3% | T: (-100, 0] 0%, (0, 30] 2%, (30, 120] 18%, (120, 300] 27%, (300, 600] 29%, (600, 900] 24%, (900, 3000] 0%

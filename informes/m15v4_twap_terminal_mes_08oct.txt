@@ -1,0 +1,68 @@
+Fotos terminales (10-120 s) 15m: 27956 de 11451 mercados, 20 días
+
+CALIBRACIÓN líder TWAP (todas las fotos): P(gana) vs ask por T × |z_TWAP|
+  T  (10, 30] z_tw  (0.0, 0.5]: n=   38 P=0.684 ask=0.663 gap=+0.021
+  T  (10, 30] z_tw  (2.0, 3.0]: n=   60 P=0.933 ask=0.889 gap=+0.044
+  T  (10, 30] z_tw  (3.0, 5.0]: n=   43 P=0.977 ask=0.914 gap=+0.063
+  T  (10, 30] z_tw (5.0, 1000000000.0]: n=   36 P=0.972 ask=0.776 gap=+0.197
+  T  (30, 60] z_tw  (0.0, 0.5]: n=  161 P=0.584 ask=0.592 gap=-0.008
+  T  (30, 60] z_tw  (0.5, 1.0]: n=  170 P=0.771 ask=0.775 gap=-0.004
+  T  (30, 60] z_tw  (1.0, 1.5]: n=  176 P=0.864 ask=0.827 gap=+0.036
+  T  (30, 60] z_tw  (1.5, 2.0]: n=  137 P=0.905 ask=0.886 gap=+0.019
+  T  (30, 60] z_tw  (2.0, 3.0]: n=  218 P=0.945 ask=0.937 gap=+0.008
+  T  (30, 60] z_tw  (3.0, 5.0]: n=  122 P=0.984 ask=0.944 gap=+0.040
+  T  (30, 60] z_tw (5.0, 1000000000.0]: n=   45 P=0.933 ask=0.928 gap=+0.006
+  T  (60, 90] z_tw  (0.0, 0.5]: n=  435 P=0.589 ask=0.595 gap=-0.006
+  T  (60, 90] z_tw  (0.5, 1.0]: n=  450 P=0.778 ask=0.745 gap=+0.033
+  T  (60, 90] z_tw  (1.0, 1.5]: n=  424 P=0.875 ask=0.841 gap=+0.034
+  T  (60, 90] z_tw  (1.5, 2.0]: n=  354 P=0.895 ask=0.903 gap=-0.008
+  T  (60, 90] z_tw  (2.0, 3.0]: n=  519 P=0.950 ask=0.937 gap=+0.013
+  T  (60, 90] z_tw  (3.0, 5.0]: n=  308 P=0.958 ask=0.952 gap=+0.006
+  T  (60, 90] z_tw (5.0, 1000000000.0]: n=   65 P=0.954 ask=0.902 gap=+0.052
+  T (90, 120] z_tw  (0.0, 0.5]: n=  503 P=0.557 ask=0.586 gap=-0.029
+  T (90, 120] z_tw  (0.5, 1.0]: n=  527 P=0.736 ask=0.735 gap=+0.001
+  T (90, 120] z_tw  (1.0, 1.5]: n=  521 P=0.835 ask=0.835 gap=+0.000
+  T (90, 120] z_tw  (1.5, 2.0]: n=  464 P=0.892 ask=0.903 gap=-0.010
+  T (90, 120] z_tw  (2.0, 3.0]: n=  641 P=0.941 ask=0.937 gap=+0.003
+  T (90, 120] z_tw  (3.0, 5.0]: n=  358 P=0.947 ask=0.953 gap=-0.006
+  T (90, 120] z_tw (5.0, 1000000000.0]: n=   68 P=0.926 ask=0.949 gap=-0.023
+
+MECANISMO: fotos con líder TWAP != líder spot (el spot ya cruzó la referencia, la media aún no)
+  discrepan OOS 16-24Sep: n=33 P(líder TWAP gana)=0.788 ask=0.713 gap=+0.075
+  discrepan 25Sep-07Oct: n=53 P(líder TWAP gana)=0.736 ask=0.720 gap=+0.016
+  coinciden OOS 16-24Sep: n=2285 P(líder TWAP gana)=0.828 ask=0.823 gap=+0.005
+  coinciden 25Sep-07Oct: n=4555 P(líder TWAP gana)=0.836 ask=0.829 gap=+0.007
+
+REGLAS CONGELADAS (primera foto por mercado):
+  R1 OOS 16-24Sep: n=610 días=7 (+3) acierto=0.790 ask=0.776 EV/acc=+0.0033 EV/€=-0.0001 IC90d=(-0.032,+0.030) sin2mej=-0.0280 top_mon=20%
+  R1 25Sep-07Oct: n=1183 días=13 (+8) acierto=0.806 ask=0.786 EV/acc=+0.0089 EV/€=+0.0136 IC90d=(-0.005,+0.032) sin2mej=+0.0054 top_mon=20%
+  R1 TODO: n=1793 días=20 (+11) acierto=0.801 ask=0.783 EV/acc=+0.0070 EV/€=+0.0089 IC90d=(-0.008,+0.024) sin2mej=+0.0019 top_mon=20%
+  R1 BNB: n=299 días=20 (+10) acierto=0.803 ask=0.788 EV/acc=+0.0034 EV/€=+0.0065 IC90d=(-0.070,+0.046) sin2mej=-0.0210 top_mon=100%
+  R1 BTC: n=366 días=20 (+12) acierto=0.814 ask=0.779 EV/acc=+0.0239 EV/€=+0.0308 IC90d=(-0.018,+0.075) sin2mej=+0.0102 top_mon=100%
+  R1 DOGE: n=260 días=20 (+10) acierto=0.792 ask=0.787 EV/acc=-0.0056 EV/€=-0.0094 IC90d=(-0.062,+0.048) sin2mej=-0.0360 top_mon=100%
+  R1 ETH: n=308 días=20 (+15) acierto=0.854 ask=0.788 EV/acc=+0.0553 EV/€=+0.0773 IC90d=(+0.043,+0.119) sin2mej=+0.0615 top_mon=100%
+  R1 SOL: n=284 días=20 (+11) acierto=0.775 ask=0.775 EV/acc=-0.0114 EV/€=-0.0162 IC90d=(-0.057,+0.036) sin2mej=-0.0366 top_mon=100%
+  R1 XRP: n=276 días=20 (+7) acierto=0.757 ask=0.781 EV/acc=-0.0345 EV/€=-0.0505 IC90d=(-0.110,+0.005) sin2mej=-0.0811 top_mon=100%
+  R1 ask [0.55,0.7]: n=447 días=20 (+13) acierto=0.664 ask=0.631 EV/acc=+0.0169 EV/€=+0.0238 IC90d=(-0.022,+0.090) sin2mej=-0.0021 top_mon=22%
+  R1 ask [0.7,0.8]: n=481 días=20 (+9) acierto=0.769 ask=0.752 EV/acc=+0.0043 EV/€=+0.0057 IC90d=(-0.025,+0.036) sin2mej=-0.0145 top_mon=21%
+  R1 ask [0.8,0.88]: n=576 días=20 (+12) acierto=0.861 ask=0.844 EV/acc=+0.0079 EV/€=+0.0096 IC90d=(-0.015,+0.035) sin2mej=-0.0007 top_mon=19%
+  R1 ask [0.88,0.92]: n=457 días=20 (+10) acierto=0.906 ask=0.901 EV/acc=-0.0009 EV/€=-0.0008 IC90d=(-0.020,+0.022) sin2mej=-0.0120 top_mon=20%
+  R1 T [20,45]: n=106 días=20 (+12) acierto=0.840 ask=0.799 EV/acc=+0.0300 EV/€=+0.0378 IC90d=(-0.020,+0.126) sin2mej=+0.0054 top_mon=24%
+  R1 T [45,70]: n=714 días=19 (+14) acierto=0.800 ask=0.789 EV/acc=+0.0000 EV/€=+0.0007 IC90d=(-0.016,+0.035) sin2mej=-0.0084 top_mon=22%
+  R1 T [70,90]: n=1018 días=20 (+12) acierto=0.800 ask=0.777 EV/acc=+0.0114 EV/€=+0.0143 IC90d=(-0.014,+0.047) sin2mej=+0.0035 top_mon=19%
+  R2 OOS 16-24Sep: n=309 días=7 (+5) acierto=0.883 ask=0.845 EV/acc=+0.0296 EV/€=+0.0387 IC90d=(-0.006,+0.071) sin2mej=+0.0166 top_mon=27%
+  R2 25Sep-07Oct: n=679 días=13 (+9) acierto=0.870 ask=0.839 EV/acc=+0.0224 EV/€=+0.0297 IC90d=(+0.005,+0.052) sin2mej=+0.0161 top_mon=24%
+  R2 TODO: n=988 días=20 (+14) acierto=0.874 ask=0.841 EV/acc=+0.0247 EV/€=+0.0325 IC90d=(+0.010,+0.051) sin2mej=+0.0236 top_mon=25%
+  R2 BNB: n=148 días=20 (+12) acierto=0.878 ask=0.843 EV/acc=+0.0265 EV/€=+0.0464 IC90d=(-0.103,+0.091) sin2mej=+0.0175 top_mon=100%
+  R2 BTC: n=248 días=20 (+14) acierto=0.875 ask=0.828 EV/acc=+0.0378 EV/€=+0.0487 IC90d=(-0.003,+0.097) sin2mej=+0.0348 top_mon=100%
+  R2 DOGE: n=125 días=20 (+15) acierto=0.880 ask=0.849 EV/acc=+0.0219 EV/€=+0.0302 IC90d=(-0.007,+0.100) sin2mej=+0.0115 top_mon=100%
+  R2 ETH: n=181 días=20 (+15) acierto=0.912 ask=0.849 EV/acc=+0.0544 EV/€=+0.0662 IC90d=(+0.024,+0.103) sin2mej=+0.0487 top_mon=100%
+  R2 SOL: n=142 días=20 (+8) acierto=0.838 ask=0.841 EV/acc=-0.0122 EV/€=-0.0237 IC90d=(-0.090,+0.021) sin2mej=-0.0624 top_mon=100%
+  R2 XRP: n=144 días=20 (+8) acierto=0.854 ask=0.844 EV/acc=+0.0017 EV/€=+0.0055 IC90d=(-0.035,+0.059) sin2mej=-0.0149 top_mon=100%
+  R2 ask [0.55,0.7]: n=68 días=19 (+12) acierto=0.721 ask=0.646 EV/acc=+0.0589 EV/€=+0.0964 IC90d=(-0.156,+0.214) sin2mej=+0.0347 top_mon=38%
+  R2 ask [0.7,0.8]: n=187 días=20 (+13) acierto=0.824 ask=0.759 EV/acc=+0.0514 EV/€=+0.0657 IC90d=(+0.002,+0.130) sin2mej=+0.0404 top_mon=30%
+  R2 ask [0.8,0.88]: n=420 días=20 (+13) acierto=0.881 ask=0.848 EV/acc=+0.0235 EV/€=+0.0282 IC90d=(-0.012,+0.071) sin2mej=+0.0160 top_mon=23%
+  R2 ask [0.88,0.92]: n=428 días=20 (+9) acierto=0.909 ask=0.901 EV/acc=+0.0016 EV/€=+0.0021 IC90d=(-0.021,+0.028) sin2mej=-0.0094 top_mon=22%
+  R2 T [20,45]: n=132 días=20 (+14) acierto=0.879 ask=0.838 EV/acc=+0.0321 EV/€=+0.0479 IC90d=(-0.035,+0.089) sin2mej=+0.0255 top_mon=26%
+  R2 T [45,70]: n=384 días=19 (+12) acierto=0.872 ask=0.840 EV/acc=+0.0237 EV/€=+0.0302 IC90d=(+0.001,+0.060) sin2mej=+0.0153 top_mon=28%
+  R2 T [70,90]: n=498 días=20 (+17) acierto=0.878 ask=0.843 EV/acc=+0.0256 EV/€=+0.0333 IC90d=(+0.022,+0.070) sin2mej=+0.0180 top_mon=22%

@@ -1,0 +1,60 @@
+Certeza terminal — compras p∈[0.8,0,995) T∈(3,300] s con estado TWAP: 108725 rellenos, 1260 mercados, días ['2026-10-05', '2026-10-06', '2026-10-07']
+
+===== EXTRACCIÓN 05-06: 68783 rellenos =====
+  persistentes: n=1553 merc=138 acierto=0.9939 p_med=0.975 PnL/acc=+0.0179 | z_TWAP P10/P50/P90 1.45/4.53/18.76 | z_spot P50 1.94 | lead P50 2.3 bps | T P50 45
+  resto: n=67230 merc=725 acierto=0.8650 p_med=0.920 PnL/acc=-0.0568 | z_TWAP P10/P50/P90 1.32/2.91/6.55 | z_spot P50 2.09 | lead P50 5.4 bps | T P50 124
+  SUPERFICIE a precio negociado (todos): z_TWAP del lado comprado × banda de precio -> acierto vs precio (ponderado por acciones), PnL/acc
+    z (-1000000000.0, 0.0] p    (0.8, 0.9]: n=  280 merc=  37 acierto=0.9486 precio=0.8500 PnL/acc=+0.0926
+    z   (0.0, 1.0] p    (0.8, 0.9]: n= 2179 merc= 201 acierto=0.8145 precio=0.8478 PnL/acc=-0.0391
+    z   (0.0, 1.0] p   (0.9, 0.95]: n=  294 merc=  47 acierto=0.9904 precio=0.9234 PnL/acc=+0.0640
+    z   (1.0, 2.0] p    (0.8, 0.9]: n= 9789 merc= 423 acierto=0.8124 precio=0.8541 PnL/acc=-0.0461
+    z   (1.0, 2.0] p   (0.9, 0.95]: n= 3462 merc= 330 acierto=0.8905 precio=0.9279 PnL/acc=-0.0401
+    z   (1.0, 2.0] p  (0.95, 0.97]: n=  783 merc= 127 acierto=0.9262 precio=0.9588 PnL/acc=-0.0342
+    z   (1.0, 2.0] p  (0.97, 0.99]: n=  293 merc=  58 acierto=0.9463 precio=0.9806 PnL/acc=-0.0349
+    z   (2.0, 3.0] p    (0.8, 0.9]: n= 6169 merc= 238 acierto=0.7855 precio=0.8607 PnL/acc=-0.0790
+    z   (2.0, 3.0] p   (0.9, 0.95]: n= 6592 merc= 376 acierto=0.9598 precio=0.9318 PnL/acc=+0.0258
+    z   (2.0, 3.0] p  (0.95, 0.97]: n= 2929 merc= 339 acierto=0.9475 precio=0.9609 PnL/acc=-0.0151
+    z   (2.0, 3.0] p  (0.97, 0.99]: n= 1183 merc= 245 acierto=0.9382 precio=0.9805 PnL/acc=-0.0431
+    z   (2.0, 3.0] p (0.99, 0.995]: n=   54 merc=  41 acierto=0.9884 precio=0.9902 PnL/acc=-0.0024
+    z   (3.0, 4.0] p    (0.8, 0.9]: n= 3392 merc=  75 acierto=0.7265 precio=0.8641 PnL/acc=-0.1406
+    z   (3.0, 4.0] p   (0.9, 0.95]: n= 2763 merc= 174 acierto=0.7997 precio=0.9325 PnL/acc=-0.1348
+    z   (3.0, 4.0] p  (0.95, 0.97]: n= 2170 merc= 259 acierto=0.9889 precio=0.9630 PnL/acc=+0.0246
+    z   (3.0, 4.0] p  (0.97, 0.99]: n= 2682 merc= 378 acierto=0.9924 precio=0.9854 PnL/acc=+0.0064
+    z   (3.0, 4.0] p (0.99, 0.995]: n=  188 merc= 100 acierto=0.9984 precio=0.9901 PnL/acc=+0.0077
+    z   (4.0, 6.0] p    (0.8, 0.9]: n= 3160 merc=  41 acierto=0.5307 precio=0.8651 PnL/acc=-0.3376
+    z   (4.0, 6.0] p   (0.9, 0.95]: n= 2716 merc=  86 acierto=0.7085 precio=0.9330 PnL/acc=-0.2265
+    z   (4.0, 6.0] p  (0.95, 0.97]: n= 2518 merc= 134 acierto=0.9486 precio=0.9634 PnL/acc=-0.0162
+    z   (4.0, 6.0] p  (0.97, 0.99]: n= 3636 merc= 421 acierto=0.9957 precio=0.9859 PnL/acc=+0.0092
+    z   (4.0, 6.0] p (0.99, 0.995]: n=  455 merc= 185 acierto=0.9925 precio=0.9904 PnL/acc=+0.0017
+    z (6.0, 1000000000.0] p   (0.9, 0.95]: n= 2157 merc=  22 acierto=0.8252 precio=0.9203 PnL/acc=-0.0973
+    z (6.0, 1000000000.0] p  (0.95, 0.97]: n= 1044 merc=  43 acierto=0.9002 precio=0.9637 PnL/acc=-0.0649
+    z (6.0, 1000000000.0] p  (0.97, 0.99]: n= 2592 merc= 220 acierto=0.9981 precio=0.9871 PnL/acc=+0.0106
+    z (6.0, 1000000000.0] p (0.99, 0.995]: n=  508 merc= 152 acierto=1.0000 precio=0.9908 PnL/acc=+0.0090
+
+===== CONTRASTE 07: 39942 rellenos =====
+  persistentes: n=922 merc=101 acierto=0.9938 p_med=0.978 PnL/acc=+0.0144 | z_TWAP P10/P50/P90 1.28/2.52/6.79 | z_spot P50 1.09 | lead P50 1.7 bps | T P50 45
+  resto: n=39020 merc=531 acierto=0.9480 p_med=0.933 PnL/acc=+0.0124 | z_TWAP P10/P50/P90 1.19/2.35/4.73 | z_spot P50 1.75 | lead P50 7.1 bps | T P50 134
+  SUPERFICIE a precio negociado (todos): z_TWAP del lado comprado × banda de precio -> acierto vs precio (ponderado por acciones), PnL/acc
+    z (-1000000000.0, 0.0] p    (0.8, 0.9]: n=  196 merc=  15 acierto=0.6557 precio=0.8430 PnL/acc=-0.1925
+    z   (0.0, 1.0] p    (0.8, 0.9]: n= 1780 merc= 158 acierto=0.8954 precio=0.8398 PnL/acc=+0.0487
+    z   (0.0, 1.0] p   (0.9, 0.95]: n=  244 merc=  28 acierto=0.7976 precio=0.9283 PnL/acc=-0.1332
+    z   (1.0, 2.0] p    (0.8, 0.9]: n= 8081 merc= 309 acierto=0.8749 precio=0.8583 PnL/acc=+0.0117
+    z   (1.0, 2.0] p   (0.9, 0.95]: n= 3026 merc= 268 acierto=0.9486 precio=0.9259 PnL/acc=+0.0197
+    z   (1.0, 2.0] p  (0.95, 0.97]: n=  494 merc= 115 acierto=0.9896 precio=0.9613 PnL/acc=+0.0264
+    z   (1.0, 2.0] p  (0.97, 0.99]: n=  153 merc=  40 acierto=1.0000 precio=0.9797 PnL/acc=+0.0198
+    z   (2.0, 3.0] p    (0.8, 0.9]: n= 2945 merc= 155 acierto=0.8745 precio=0.8720 PnL/acc=-0.0011
+    z   (2.0, 3.0] p   (0.9, 0.95]: n= 5195 merc= 282 acierto=0.9693 precio=0.9300 PnL/acc=+0.0373
+    z   (2.0, 3.0] p  (0.95, 0.97]: n= 2597 merc= 266 acierto=0.9723 precio=0.9618 PnL/acc=+0.0091
+    z   (2.0, 3.0] p  (0.97, 0.99]: n= 1283 merc= 236 acierto=0.9986 precio=0.9832 PnL/acc=+0.0147
+    z   (2.0, 3.0] p (0.99, 0.995]: n=   72 merc=  47 acierto=1.0000 precio=0.9903 PnL/acc=+0.0092
+    z   (3.0, 4.0] p    (0.8, 0.9]: n=  296 merc=  30 acierto=0.7713 precio=0.8680 PnL/acc=-0.0984
+    z   (3.0, 4.0] p   (0.9, 0.95]: n= 1720 merc= 104 acierto=0.9487 precio=0.9358 PnL/acc=+0.0112
+    z   (3.0, 4.0] p  (0.95, 0.97]: n= 1699 merc= 159 acierto=0.9901 precio=0.9630 PnL/acc=+0.0258
+    z   (3.0, 4.0] p  (0.97, 0.99]: n= 2352 merc= 324 acierto=0.9969 precio=0.9858 PnL/acc=+0.0106
+    z   (3.0, 4.0] p (0.99, 0.995]: n=  203 merc= 115 acierto=0.9996 precio=0.9901 PnL/acc=+0.0089
+    z   (4.0, 6.0] p   (0.9, 0.95]: n=  290 merc=  26 acierto=0.9229 precio=0.9318 PnL/acc=-0.0115
+    z   (4.0, 6.0] p  (0.95, 0.97]: n=  753 merc=  63 acierto=0.9697 precio=0.9633 PnL/acc=+0.0058
+    z   (4.0, 6.0] p  (0.97, 0.99]: n= 2746 merc= 282 acierto=0.9946 precio=0.9872 PnL/acc=+0.0070
+    z   (4.0, 6.0] p (0.99, 0.995]: n=  356 merc= 147 acierto=1.0000 precio=0.9903 PnL/acc=+0.0094
+    z (6.0, 1000000000.0] p  (0.97, 0.99]: n= 1076 merc= 150 acierto=0.9999 precio=0.9884 PnL/acc=+0.0111
+    z (6.0, 1000000000.0] p (0.99, 0.995]: n=  316 merc=  94 acierto=1.0000 precio=0.9907 PnL/acc=+0.0090

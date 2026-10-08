@@ -1,0 +1,11 @@
+(a) HOLDOUT ms 06-07 Oct: 125 señales R2 de 411 mercados
+  al ask de la decisión (t): n=125 días=2 (+2) acierto=0.872 precio=0.835 EV/acc=+0.0275 EV/€=+0.0320 top_mon=22%
+  rellenables a +215 ms (ask215 <= 0,92): 119/125; ask215 - ask: media -0.0009, P50 +0.0000
+  al ask REAL a +215 ms: n=119 días=2 (+2) acierto=0.874 precio=0.830 EV/acc=+0.0341 EV/€=+0.0385 top_mon=22%
+  profundidad nivel 1 a +215 ms (acciones): P25 8 P50 18 P75 51; en € P50 15.4
+
+(b) OBSERVADOR multi-offset 15m (libro WS 60-100 ms), 14 días
+  R2 todo: n=1428 días=14 (+7) acierto=0.842 precio=0.827 EV/acc=+0.0050 EV/€=+0.0050 top_mon=21%
+  R2 25Sep-01Oct: n=740 días=7 (+6) acierto=0.873 precio=0.834 EV/acc=+0.0296 EV/€=+0.0371 top_mon=19%
+  R2 02-07Oct: n=688 días=7 (+1) acierto=0.808 precio=0.820 EV/acc=-0.0215 EV/€=-0.0296 top_mon=22%
+  profundidad € del lado comprado: P25 39.6 P50 96.8 P75 216.6

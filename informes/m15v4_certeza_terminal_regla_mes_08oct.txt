@@ -1,0 +1,15 @@
+REGLA certeza terminal, mes 18-Sep..04-Oct: n=1451 mercados, días=17 (+11), acierto=0.9835, ask=0.9818
+  EV/acc=+0.0004  EV/€=+0.0004  IC90 por días=(-0.0048,+0.0071)  sin 2 mejores días=-0.0024
+  fallos: 24  (cada fallo cuesta ~0.98 acc; con acierto real p el EV/acc = p - ask - fee)
+   BNB: n=191 acierto=0.9843 EV/acc=-0.0036
+   BTC: n=364 acierto=0.9753 EV/acc=-0.0047
+   DOGE: n=196 acierto=0.9949 EV/acc=+0.0077
+   ETH: n=252 acierto=0.9841 EV/acc=+0.0035
+   SOL: n=215 acierto=0.9814 EV/acc=-0.0008
+   XRP: n=233 acierto=0.9871 EV/acc=+0.0034
+   ask [0.95,0.97]: n=304 acierto=0.9638 EV/acc=-0.0006
+   ask [0.97,0.99]: n=1279 acierto=0.9867 EV/acc=+0.0004
+   T [5,45]: n=175 acierto=0.9829 EV/acc=+0.0005
+   T [45,90]: n=636 acierto=0.9811 EV/acc=-0.0017
+   T [90,120]: n=658 acierto=0.9833 EV/acc=-0.0002
+  CONTROL sin z (misma banda/T): n=2796 acierto=0.9689 ask=0.9774 EV/acc=-0.0101

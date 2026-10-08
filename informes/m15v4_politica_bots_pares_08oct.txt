@@ -1,0 +1,89 @@
+Política de cosechadores de pares — días 2026-10-05,2026-10-06, activo BTC (solo EXTRACCIÓN)
+
+== 2903: 91 mercados, rellenos/merc P50 9, acciones/merc P50 311, tamaño/relleno P50 17.8 P90 60
+   inventario: max|I| P50 110 P90 409 acc; |I| medio P50 47; |I| final/acciones P50 0.000 P90 0.808
+   actividad: 1er relleno T P50 563 s, último T P50 123 s, duración P50 360 s
+   emparejado FIFO: retraso entre patas (ponderado por acciones) P25 2 s, P50 8 s, P75 27 s, P90 130 s; %acciones emparejadas en <=2 s (mismo bloque) 26.3%, <=10 s 55.3%
+   coste del par por acción: media 0.9739, P10 0.850, P50 0.970, P90 1.090; % pares > 1,00 29.4%
+     retraso (0,2] s: 26.3% de acciones, coste medio 0.9393
+     retraso (2,10] s: 29.1% de acciones, coste medio 0.9574
+     retraso (10,60] s: 29.4% de acciones, coste medio 1.0039
+     retraso (60,∞] s: 15.2% de acciones, coste medio 1.0073
+   reacción al desequilibrio |I| antes del relleno -> P(relleno del lado que empareja), tamaño mediano:
+     |I|    (-1.0, 0.5]: n=  304 P(empareja)=0.29 tamaño=30.0
+     |I|    (0.5, 10.0]: n=  224 P(empareja)=0.47 tamaño=10.0
+     |I|   (10.0, 30.0]: n=  419 P(empareja)=0.53 tamaño=13.2
+     |I|  (30.0, 100.0]: n= 1107 P(empareja)=0.49 tamaño=20.0
+     |I| (100.0, 300.0]: n= 1050 P(empareja)=0.43 tamaño=19.5
+     |I| (300.0, 1000000000.0]: n=  275 P(empareja)=0.49 tamaño=18.6
+   por fase (T s): (0, 60] n=371 |I|med=97; (60, 120] n=839 |I|med=80; (120, 300] n=1358 |I|med=80; (300, 600] n=507 |I|med=48; (600, 900] n=304 |I|med=60
+
+== f548: 116 mercados, rellenos/merc P50 19, acciones/merc P50 194, tamaño/relleno P50 10.0 P90 10
+   inventario: max|I| P50 42 P90 178 acc; |I| medio P50 20; |I| final/acciones P50 0.000 P90 0.437
+   actividad: 1er relleno T P50 804 s, último T P50 110 s, duración P50 623 s
+   emparejado FIFO: retraso entre patas (ponderado por acciones) P25 2 s, P50 7 s, P75 36 s, P90 99 s; %acciones emparejadas en <=2 s (mismo bloque) 33.7%, <=10 s 56.5%
+   coste del par por acción: media 0.9824, P10 0.882, P50 0.990, P90 1.080; % pares > 1,00 32.0%
+     retraso (0,2] s: 33.7% de acciones, coste medio 0.9780
+     retraso (2,10] s: 22.8% de acciones, coste medio 0.9899
+     retraso (10,60] s: 27.9% de acciones, coste medio 0.9731
+     retraso (60,∞] s: 15.6% de acciones, coste medio 0.9978
+   reacción al desequilibrio |I| antes del relleno -> P(relleno del lado que empareja), tamaño mediano:
+     |I|    (-1.0, 0.5]: n=  689 P(empareja)=0.33 tamaño=10.0
+     |I|    (0.5, 10.0]: n= 1133 P(empareja)=0.52 tamaño=10.0
+     |I|   (10.0, 30.0]: n= 1788 P(empareja)=0.43 tamaño=10.0
+     |I|  (30.0, 100.0]: n= 1974 P(empareja)=0.40 tamaño=10.0
+     |I| (100.0, 300.0]: n= 1017 P(empareja)=0.42 tamaño=10.0
+     |I| (300.0, 1000000000.0]: n=    2 P(empareja)=0.50 tamaño=40.0
+   por fase (T s): (0, 60] n=22 |I|med=29; (60, 120] n=958 |I|med=40; (120, 300] n=3396 |I|med=34; (300, 600] n=1417 |I|med=20; (600, 900] n=810 |I|med=10
+
+== 86b9: 116 mercados, rellenos/merc P50 20, acciones/merc P50 218, tamaño/relleno P50 10.0 P90 20
+   inventario: max|I| P50 41 P90 157 acc; |I| medio P50 18; |I| final/acciones P50 0.000 P90 0.083
+   actividad: 1er relleno T P50 806 s, último T P50 179 s, duración P50 605 s
+   emparejado FIFO: retraso entre patas (ponderado por acciones) P25 3 s, P50 15 s, P75 60 s, P90 142 s; %acciones emparejadas en <=2 s (mismo bloque) 19.6%, <=10 s 43.4%
+   coste del par por acción: media 0.9877, P10 0.880, P50 0.990, P90 1.070; % pares > 1,00 35.0%
+     retraso (0,2] s: 19.6% de acciones, coste medio 0.9905
+     retraso (2,10] s: 23.9% de acciones, coste medio 0.9850
+     retraso (10,60] s: 31.5% de acciones, coste medio 0.9878
+     retraso (60,∞] s: 25.0% de acciones, coste medio 0.9882
+   reacción al desequilibrio |I| antes del relleno -> P(relleno del lado que empareja), tamaño mediano:
+     |I|    (-1.0, 0.5]: n=  661 P(empareja)=0.37 tamaño=10.0
+     |I|    (0.5, 10.0]: n=  861 P(empareja)=0.54 tamaño=10.0
+     |I|   (10.0, 30.0]: n= 1240 P(empareja)=0.48 tamaño=10.0
+     |I|  (30.0, 100.0]: n= 1241 P(empareja)=0.39 tamaño=10.0
+     |I| (100.0, 300.0]: n=  412 P(empareja)=0.46 tamaño=10.0
+     |I| (300.0, 1000000000.0]: n=   21 P(empareja)=0.43 tamaño=13.9
+   por fase (T s): (60, 120] n=10 |I|med=15; (120, 300] n=1636 |I|med=22; (300, 600] n=1801 |I|med=20; (600, 900] n=989 |I|med=15
+
+== 81c9: 127 mercados, rellenos/merc P50 35, acciones/merc P50 426, tamaño/relleno P50 11.5 P90 25
+   inventario: max|I| P50 39 P90 66 acc; |I| medio P50 15; |I| final/acciones P50 0.012 P90 0.071
+   actividad: 1er relleno T P50 860 s, último T P50 92 s, duración P50 732 s
+   emparejado FIFO: retraso entre patas (ponderado por acciones) P25 2 s, P50 4 s, P75 18 s, P90 43 s; %acciones emparejadas en <=2 s (mismo bloque) 35.9%, <=10 s 64.5%
+   coste del par por acción: media 0.9996, P10 0.940, P50 1.000, P90 1.060; % pares > 1,00 38.3%
+     retraso (0,2] s: 35.9% de acciones, coste medio 0.9999
+     retraso (2,10] s: 28.5% de acciones, coste medio 0.9968
+     retraso (10,60] s: 29.3% de acciones, coste medio 0.9983
+     retraso (60,∞] s: 6.2% de acciones, coste medio 1.0176
+   reacción al desequilibrio |I| antes del relleno -> P(relleno del lado que empareja), tamaño mediano:
+     |I|    (-1.0, 0.5]: n= 1021 P(empareja)=0.29 tamaño=6.0
+     |I|    (0.5, 10.0]: n= 2580 P(empareja)=0.60 tamaño=5.7
+     |I|   (10.0, 30.0]: n= 2903 P(empareja)=0.64 tamaño=16.4
+     |I|  (30.0, 100.0]: n= 1170 P(empareja)=0.75 tamaño=22.0
+   por fase (T s): (0, 60] n=383 |I|med=15; (60, 120] n=993 |I|med=14; (120, 300] n=2814 |I|med=13; (300, 600] n=2171 |I|med=11; (600, 900] n=1313 |I|med=7
+
+== cfdd: 127 mercados, rellenos/merc P50 77, acciones/merc P50 1635, tamaño/relleno P50 12.9 P90 40
+   inventario: max|I| P50 313 P90 575 acc; |I| medio P50 110; |I| final/acciones P50 0.109 P90 0.339
+   actividad: 1er relleno T P50 891 s, último T P50 86 s, duración P50 801 s
+   emparejado FIFO: retraso entre patas (ponderado por acciones) P25 6 s, P50 25 s, P75 82 s, P90 149 s; %acciones emparejadas en <=2 s (mismo bloque) 13.3%, <=10 s 32.3%
+   coste del par por acción: media 0.9878, P10 0.860, P50 0.980, P90 1.110; % pares > 1,00 35.9%
+     retraso (0,2] s: 13.3% de acciones, coste medio 0.9836
+     retraso (2,10] s: 19.0% de acciones, coste medio 0.9874
+     retraso (10,60] s: 35.6% de acciones, coste medio 0.9902
+     retraso (60,∞] s: 32.0% de acciones, coste medio 0.9872
+   reacción al desequilibrio |I| antes del relleno -> P(relleno del lado que empareja), tamaño mediano:
+     |I|    (-1.0, 0.5]: n=  181 P(empareja)=0.13 tamaño=17.0
+     |I|    (0.5, 10.0]: n=  885 P(empareja)=0.46 tamaño=13.3
+     |I|   (10.0, 30.0]: n= 1838 P(empareja)=0.46 tamaño=11.4
+     |I|  (30.0, 100.0]: n= 5452 P(empareja)=0.48 tamaño=13.0
+     |I| (100.0, 300.0]: n= 7871 P(empareja)=0.47 tamaño=13.5
+     |I| (300.0, 1000000000.0]: n= 2827 P(empareja)=0.40 tamaño=11.5
+   por fase (T s): (0, 60] n=1758 |I|med=226; (60, 120] n=3270 |I|med=157; (120, 300] n=6022 |I|med=142; (300, 600] n=4931 |I|med=96; (600, 900] n=3034 |I|med=60; (900, 2000] n=39 |I|med=0

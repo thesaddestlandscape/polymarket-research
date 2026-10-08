@@ -1,0 +1,17 @@
+Cosechador de pares — 96 mercados 15m, días ['2026-10-05', '2026-10-06']; TAM 10.0, TOPE 30.0, paso 2000 ms, latencia 100 ms, T 840->60 s
+
+== A_1c_v2m3 conservador ==
+  TODAS merc=  96 rell/merc= 15.5 acc/merc= 154.6 emparejado=0.81 coste_par=0.9245 PnL_par/merc=+4.736 PnL_suelta/merc=-8.970 PnL/merc=-4.234 (días -3.55, -4.56) IC90d=(-4.56,-3.55) reb/merc=0.475 capital/merc=69.7
+  BTC   merc=  96 rell/merc= 15.5 acc/merc= 154.6 emparejado=0.81 coste_par=0.9245 PnL_par/merc=+4.736 PnL_suelta/merc=-8.970 PnL/merc=-4.234 (días -3.55, -4.56) IC90d=(-4.56,-3.55) reb/merc=0.475 capital/merc=69.7
+
+== A_1c_v2m5 conservador ==
+  TODAS merc=  96 rell/merc= 13.7 acc/merc= 136.9 emparejado=0.79 coste_par=0.9125 PnL_par/merc=+4.702 PnL_suelta/merc=-8.778 PnL/merc=-4.076 (días -4.17, -4.03) IC90d=(-4.17,-4.03) reb/merc=0.417 capital/merc=61.0
+  BTC   merc=  96 rell/merc= 13.7 acc/merc= 136.9 emparejado=0.79 coste_par=0.9125 PnL_par/merc=+4.702 PnL_suelta/merc=-8.778 PnL/merc=-4.076 (días -4.17, -4.03) IC90d=(-4.17,-4.03) reb/merc=0.417 capital/merc=61.0
+
+== D_2-8c_v2m3 conservador ==
+  TODAS merc=  96 rell/merc= 19.4 acc/merc= 194.3 emparejado=0.81 coste_par=0.9150 PnL_par/merc=+6.670 PnL_suelta/merc=-12.789 PnL/merc=-6.119 (días -2.25, -7.96) IC90d=(-7.96,-2.25) reb/merc=0.604 capital/merc=87.8
+  BTC   merc=  96 rell/merc= 19.4 acc/merc= 194.3 emparejado=0.81 coste_par=0.9150 PnL_par/merc=+6.670 PnL_suelta/merc=-12.789 PnL/merc=-6.119 (días -2.25, -7.96) IC90d=(-7.96,-2.25) reb/merc=0.604 capital/merc=87.8
+
+== D_2-8c_v2m5 conservador ==
+  TODAS merc=  96 rell/merc= 17.1 acc/merc= 170.6 emparejado=0.79 coste_par=0.9010 PnL_par/merc=+6.629 PnL_suelta/merc=-11.978 PnL/merc=-5.349 (días -2.65, -6.64) IC90d=(-6.64,-2.65) reb/merc=0.530 capital/merc=76.2
+  BTC   merc=  96 rell/merc= 17.1 acc/merc= 170.6 emparejado=0.79 coste_par=0.9010 PnL_par/merc=+6.629 PnL_suelta/merc=-11.978 PnL/merc=-5.349 (días -2.65, -6.64) IC90d=(-6.64,-2.65) reb/merc=0.530 capital/merc=76.2

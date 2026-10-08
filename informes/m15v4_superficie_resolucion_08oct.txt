@@ -1,0 +1,262 @@
+PARTE 1 — fotos del mes: 355225 filas-lado, 11466 mercados, 20 días (2026-09-16..2026-10-05); walk-forward desde el día 9
+
+SUPERVIVENCIA DEL LEAD (descriptiva, todo el mes; lado que va por delante): P(gana) vs ask medio de ese lado
+  T     0-10 lead   (0.0, 2.0]: n=     8 P(gana)=0.375 ask=0.386 gap=-0.011
+  T     0-10 lead   (2.0, 5.0]: n=     8 P(gana)=0.875 ask=0.660 gap=+0.215
+  T     0-10 lead (10.0, 20.0]: n=     1 P(gana)=1.000 ask=0.950 gap=+0.050
+  T    10-30 lead   (0.0, 2.0]: n=   161 P(gana)=0.658 ask=0.652 gap=+0.006
+  T    10-30 lead   (2.0, 5.0]: n=    24 P(gana)=0.625 ask=0.658 gap=-0.033
+  T    10-30 lead  (5.0, 10.0]: n=    15 P(gana)=0.867 ask=0.853 gap=+0.013
+  T    10-30 lead (10.0, 20.0]: n=     7 P(gana)=1.000 ask=0.783 gap=+0.217
+  T    10-30 lead (20.0, 40.0]: n=     2 P(gana)=1.000 ask=0.730 gap=+0.270
+  T    10-30 lead (40.0, 1000000000.0]: n=     6 P(gana)=1.000 ask=0.515 gap=+0.485
+  T    30-60 lead   (0.0, 2.0]: n=   550 P(gana)=0.765 ask=0.762 gap=+0.004
+  T    30-60 lead   (2.0, 5.0]: n=   241 P(gana)=0.892 ask=0.884 gap=+0.008
+  T    30-60 lead  (5.0, 10.0]: n=    50 P(gana)=0.920 ask=0.900 gap=+0.020
+  T    30-60 lead (10.0, 20.0]: n=     8 P(gana)=1.000 ask=0.941 gap=+0.059
+  T    30-60 lead (20.0, 40.0]: n=     5 P(gana)=1.000 ask=0.950 gap=+0.050
+  T    30-60 lead (40.0, 1000000000.0]: n=     1 P(gana)=1.000 ask=0.950 gap=+0.050
+  T   60-120 lead   (0.0, 2.0]: n=  1487 P(gana)=0.638 ask=0.663 gap=-0.024
+  T   60-120 lead   (2.0, 5.0]: n=  1680 P(gana)=0.845 ask=0.831 gap=+0.014
+  T   60-120 lead  (5.0, 10.0]: n=  1200 P(gana)=0.909 ask=0.899 gap=+0.010
+  T   60-120 lead (10.0, 20.0]: n=   393 P(gana)=0.934 ask=0.924 gap=+0.010
+  T   60-120 lead (20.0, 40.0]: n=    50 P(gana)=0.940 ask=0.927 gap=+0.013
+  T   60-120 lead (40.0, 1000000000.0]: n=     9 P(gana)=1.000 ask=0.617 gap=+0.383
+  T  120-300 lead   (0.0, 2.0]: n=  4318 P(gana)=0.601 ask=0.592 gap=+0.009
+  T  120-300 lead   (2.0, 5.0]: n=  6086 P(gana)=0.727 ask=0.744 gap=-0.016
+  T  120-300 lead  (5.0, 10.0]: n=  7687 P(gana)=0.836 ask=0.843 gap=-0.006
+  T  120-300 lead (10.0, 20.0]: n=  6428 P(gana)=0.907 ask=0.905 gap=+0.002
+  T  120-300 lead (20.0, 40.0]: n=  2019 P(gana)=0.939 ask=0.932 gap=+0.006
+  T  120-300 lead (40.0, 1000000000.0]: n=   200 P(gana)=0.955 ask=0.909 gap=+0.046
+  T  300-600 lead   (0.0, 2.0]: n=  8701 P(gana)=0.550 ask=0.558 gap=-0.008
+  T  300-600 lead   (2.0, 5.0]: n= 12091 P(gana)=0.647 ask=0.659 gap=-0.012
+  T  300-600 lead  (5.0, 10.0]: n= 15680 P(gana)=0.752 ask=0.758 gap=-0.007
+  T  300-600 lead (10.0, 20.0]: n= 17640 P(gana)=0.847 ask=0.844 gap=+0.003
+  T  300-600 lead (20.0, 40.0]: n=  9715 P(gana)=0.903 ask=0.899 gap=+0.003
+  T  300-600 lead (40.0, 1000000000.0]: n=  2183 P(gana)=0.935 ask=0.931 gap=+0.005
+  T  600-900 lead   (0.0, 2.0]: n= 16002 P(gana)=0.533 ask=0.541 gap=-0.008
+  T  600-900 lead   (2.0, 5.0]: n= 17326 P(gana)=0.595 ask=0.607 gap=-0.013
+  T  600-900 lead  (5.0, 10.0]: n= 17406 P(gana)=0.664 ask=0.680 gap=-0.016
+  T  600-900 lead (10.0, 20.0]: n= 14023 P(gana)=0.749 ask=0.755 gap=-0.006
+  T  600-900 lead (20.0, 40.0]: n=  6613 P(gana)=0.824 ask=0.829 gap=-0.005
+  T  600-900 lead (40.0, 1000000000.0]: n=  1596 P(gana)=0.888 ask=0.892 gap=-0.003
+
+OOS walk-forward: 12 días de prueba, 6888 mercados. Ejecución = ask de la FOTO (optimista).
+
+== M1 ==
+ umbral 0.00 TODOS  n=10590 merc= 5995 días=12 (+ 2) acierto=0.767 ask=0.774 edge_prev=+0.005 EV/acc=-0.0179 EV/€=-0.0270 IC90d=(-0.040,-0.014) sin2mej=-0.0366 top_mon=17% €/día@1acc=-15.82
+ umbral 0.03 TODOS    (sin señales)
+ umbral 0.05 TODOS    (sin señales)
+ umbral 0.10 TODOS    (sin señales)
+
+== M2 ==
+ umbral 0.00 TODOS  n=13381 merc= 6416 días=12 (+ 1) acierto=0.656 ask=0.663 edge_prev=+0.008 EV/acc=-0.0179 EV/€=-0.0571 IC90d=(-0.076,-0.036) sin2mej=-0.0736 top_mon=17% €/día@1acc=-20.01
+ umbral 0.03 TODOS  n=  256 merc=  249 días=12 (+ 8) acierto=0.789 ask=0.770 edge_prev=+0.050 EV/acc=+0.0074 EV/€=+0.0185 IC90d=(-0.005,+0.090) sin2mej=-0.0039 top_mon=19% €/día@1acc=+0.16
+    T    30-60 n=   53 merc=   53 días=11 (+ 8) acierto=0.849 ask=0.787 edge_prev=+0.079 EV/acc=+0.0508 EV/€=+0.0703 IC90d=(+0.061,+0.233) sin2mej=+0.0214 top_mon=23% €/día@1acc=+0.24
+    T   60-120 n=  203 merc=  202 días=12 (+ 7) acierto=0.773 ask=0.765 edge_prev=+0.042 EV/acc=-0.0039 EV/€=+0.0050 IC90d=(-0.024,+0.120) sin2mej=-0.0258 top_mon=19% €/día@1acc=-0.07
+ umbral 0.05 TODOS  n=   98 merc=   97 días=12 (+ 9) acierto=0.867 ask=0.763 edge_prev=+0.071 EV/acc=+0.0914 EV/€=+0.1194 IC90d=(+0.066,+0.216) sin2mej=+0.0809 top_mon=17% €/día@1acc=+0.75
+    T    30-60 n=   46 merc=   46 días=11 (+10) acierto=0.891 ask=0.775 edge_prev=+0.085 EV/acc=+0.1039 EV/€=+0.1336 IC90d=(+0.099,+0.241) sin2mej=+0.0986 top_mon=22% €/día@1acc=+0.43
+    T   60-120 n=   52 merc=   52 días= 9 (+ 6) acierto=0.846 ask=0.753 edge_prev=+0.058 EV/acc=+0.0802 EV/€=+0.1069 IC90d=(-0.034,+0.241) sin2mej=+0.0300 top_mon=19% €/día@1acc=+0.46
+ umbral 0.10 TODOS  n=   12 merc=   12 días= 6 (+ 5) acierto=0.833 ask=0.754 edge_prev=+0.109 EV/acc=+0.0663 EV/€=+0.0868 IC90d=(-0.352,+0.313) sin2mej=-0.0175 top_mon=33% €/día@1acc=+0.13
+
+== M3 ==
+ umbral 0.00 TODOS  n=31366 merc= 6883 días=12 (+ 1) acierto=0.398 ask=0.410 edge_prev=+0.049 EV/acc=-0.0250 EV/€=-0.1103 IC90d=(-0.150,-0.070) sin2mej=-0.1393 top_mon=17% €/día@1acc=-65.46
+ umbral 0.03 TODOS  n=23738 merc= 6857 días=12 (+ 2) acierto=0.371 ask=0.383 edge_prev=+0.075 EV/acc=-0.0243 EV/€=-0.1023 IC90d=(-0.154,-0.058) sin2mej=-0.1346 top_mon=18% €/día@1acc=-48.01
+    T    10-30 n=  108 merc=  108 días=11 (+ 0) acierto=0.056 ask=0.146 edge_prev=+0.248 EV/acc=-0.0980 EV/€=-0.8604 IC90d=(-1.007,-0.673) sin2mej=-0.8913 top_mon=26% €/día@1acc=-0.96
+    T    30-60 n=  380 merc=  380 días=12 (+ 2) acierto=0.255 ask=0.264 edge_prev=+0.141 EV/acc=-0.0174 EV/€=-0.2267 IC90d=(-0.578,-0.092) sin2mej=-0.5904 top_mon=29% €/día@1acc=-0.55
+    T   60-120 n= 1932 merc= 1842 días=12 (+ 1) acierto=0.319 ask=0.318 edge_prev=+0.109 EV/acc=-0.0085 EV/€=-0.1100 IC90d=(-0.280,-0.039) sin2mej=-0.2284 top_mon=22% €/día@1acc=-1.38
+    T  120-300 n= 5645 merc= 4782 días=12 (+ 2) acierto=0.332 ask=0.343 edge_prev=+0.081 EV/acc=-0.0214 EV/€=-0.1246 IC90d=(-0.201,-0.029) sin2mej=-0.1796 top_mon=19% €/día@1acc=-10.07
+    T  300-600 n= 8051 merc= 6394 días=12 (+ 2) acierto=0.391 ask=0.404 edge_prev=+0.070 EV/acc=-0.0247 EV/€=-0.1024 IC90d=(-0.165,-0.045) sin2mej=-0.1474 top_mon=17% €/día@1acc=-16.56
+    T  600-900 n= 7622 merc= 6213 días=12 (+ 3) acierto=0.401 ask=0.416 edge_prev=+0.062 EV/acc=-0.0292 EV/€=-0.0668 IC90d=(-0.105,-0.025) sin2mej=-0.0910 top_mon=17% €/día@1acc=-18.57
+ umbral 0.05 TODOS  n=18249 merc= 6659 días=12 (+ 2) acierto=0.361 ask=0.374 edge_prev=+0.095 EV/acc=-0.0252 EV/€=-0.0919 IC90d=(-0.137,-0.059) sin2mej=-0.1226 top_mon=19% €/día@1acc=-38.31
+    T    10-30 n=  105 merc=  105 días=11 (+ 0) acierto=0.057 ask=0.142 edge_prev=+0.254 EV/acc=-0.0927 EV/€=-0.8549 IC90d=(-1.005,-0.665) sin2mej=-0.8864 top_mon=26% €/día@1acc=-0.88
+    T    30-60 n=  295 merc=  295 días=12 (+ 4) acierto=0.278 ask=0.282 edge_prev=+0.170 EV/acc=-0.0135 EV/€=-0.1596 IC90d=(-0.491,+0.013) sin2mej=-0.5224 top_mon=30% €/día@1acc=-0.33
+    T   60-120 n= 1493 merc= 1434 días=12 (+ 6) acierto=0.344 ask=0.334 edge_prev=+0.131 EV/acc=+0.0003 EV/€=+0.0189 IC90d=(-0.181,+0.106) sin2mej=-0.1398 top_mon=24% €/día@1acc=+0.04
+    T  120-300 n= 4170 merc= 3719 días=12 (+ 3) acierto=0.342 ask=0.355 edge_prev=+0.103 EV/acc=-0.0239 EV/€=-0.1207 IC90d=(-0.185,-0.062) sin2mej=-0.1582 top_mon=20% €/día@1acc=-8.32
+    T  300-600 n= 6487 merc= 5593 días=12 (+ 2) acierto=0.382 ask=0.394 edge_prev=+0.087 EV/acc=-0.0249 EV/€=-0.0925 IC90d=(-0.156,-0.036) sin2mej=-0.1341 top_mon=18% €/día@1acc=-13.49
+    T  600-900 n= 5699 merc= 5095 días=12 (+ 2) acierto=0.364 ask=0.383 edge_prev=+0.081 EV/acc=-0.0324 EV/€=-0.0817 IC90d=(-0.131,-0.031) sin2mej=-0.1095 top_mon=17% €/día@1acc=-15.40
+ umbral 0.10 TODOS  n= 9450 merc= 4831 días=12 (+ 4) acierto=0.304 ask=0.310 edge_prev=+0.141 EV/acc=-0.0172 EV/€=-0.0754 IC90d=(-0.153,-0.023) sin2mej=-0.1236 top_mon=21% €/día@1acc=-13.58
+
+== M4 ==
+ umbral 0.00 TODOS  n=32847 merc= 6884 días=12 (+ 2) acierto=0.426 ask=0.436 edge_prev=+0.042 EV/acc=-0.0220 EV/€=-0.0918 IC90d=(-0.136,-0.046) sin2mej=-0.1253 top_mon=17% €/día@1acc=-60.14
+ umbral 0.03 TODOS  n=22969 merc= 6835 días=12 (+ 2) acierto=0.405 ask=0.414 edge_prev=+0.070 EV/acc=-0.0220 EV/€=-0.0828 IC90d=(-0.127,-0.041) sin2mej=-0.1130 top_mon=18% €/día@1acc=-42.13
+    T    10-30 n=   70 merc=   70 días= 6 (+ 0) acierto=0.086 ask=0.143 edge_prev=+0.239 EV/acc=-0.0642 EV/€=-0.7926 IC90d=(-0.962,-0.539) sin2mej=-0.8838 top_mon=24% €/día@1acc=-0.75
+    T    30-60 n=  355 merc=  355 días=12 (+ 3) acierto=0.279 ask=0.293 edge_prev=+0.137 EV/acc=-0.0234 EV/€=-0.2541 IC90d=(-0.528,-0.064) sin2mej=-0.5417 top_mon=27% €/día@1acc=-0.69
+    T   60-120 n= 1716 merc= 1615 días=12 (+ 5) acierto=0.372 ask=0.370 edge_prev=+0.108 EV/acc=-0.0082 EV/€=-0.0196 IC90d=(-0.191,+0.075) sin2mej=-0.1397 top_mon=22% €/día@1acc=-1.17
+    T  120-300 n= 5176 merc= 4232 días=12 (+ 3) acierto=0.376 ask=0.385 edge_prev=+0.076 EV/acc=-0.0197 EV/€=-0.1023 IC90d=(-0.161,-0.046) sin2mej=-0.1338 top_mon=19% €/día@1acc=-8.48
+    T  300-600 n= 8073 merc= 6137 días=12 (+ 2) acierto=0.424 ask=0.433 edge_prev=+0.064 EV/acc=-0.0206 EV/€=-0.0949 IC90d=(-0.154,-0.036) sin2mej=-0.1337 top_mon=17% €/día@1acc=-13.87
+    T  600-900 n= 7579 merc= 6044 días=12 (+ 3) acierto=0.420 ask=0.433 edge_prev=+0.058 EV/acc=-0.0278 EV/€=-0.0565 IC90d=(-0.097,-0.011) sin2mej=-0.0876 top_mon=18% €/día@1acc=-17.55
+ umbral 0.05 TODOS  n=16935 merc= 6567 días=12 (+ 3) acierto=0.381 ask=0.390 edge_prev=+0.089 EV/acc=-0.0214 EV/€=-0.0817 IC90d=(-0.137,-0.033) sin2mej=-0.1146 top_mon=19% €/día@1acc=-30.14
+    T    10-30 n=   66 merc=   66 días= 6 (+ 1) acierto=0.076 ask=0.130 edge_prev=+0.251 EV/acc=-0.0610 EV/€=-0.8021 IC90d=(-0.950,-0.449) sin2mej=-0.9053 top_mon=24% €/día@1acc=-0.67
+    T    30-60 n=  286 merc=  286 días=12 (+ 3) acierto=0.290 ask=0.299 edge_prev=+0.161 EV/acc=-0.0181 EV/€=-0.1378 IC90d=(-0.448,+0.079) sin2mej=-0.5077 top_mon=26% €/día@1acc=-0.43
+    T   60-120 n= 1394 merc= 1330 días=12 (+ 4) acierto=0.357 ask=0.350 edge_prev=+0.125 EV/acc=-0.0036 EV/€=+0.0082 IC90d=(-0.159,+0.091) sin2mej=-0.1423 top_mon=23% €/día@1acc=-0.41
+    T  120-300 n= 4012 merc= 3515 días=12 (+ 4) acierto=0.359 ask=0.365 edge_prev=+0.093 EV/acc=-0.0165 EV/€=-0.0738 IC90d=(-0.131,-0.012) sin2mej=-0.1102 top_mon=20% €/día@1acc=-5.53
+    T  300-600 n= 6008 merc= 5166 días=12 (+ 3) acierto=0.411 ask=0.419 edge_prev=+0.082 EV/acc=-0.0199 EV/€=-0.0922 IC90d=(-0.157,-0.033) sin2mej=-0.1312 top_mon=18% €/día@1acc=-9.96
+    T  600-900 n= 5169 merc= 4624 días=12 (+ 3) acierto=0.378 ask=0.395 edge_prev=+0.077 EV/acc=-0.0313 EV/€=-0.0876 IC90d=(-0.148,-0.023) sin2mej=-0.1267 top_mon=18% €/día@1acc=-13.47
+ umbral 0.10 TODOS  n= 6277 merc= 3888 días=12 (+ 3) acierto=0.335 ask=0.342 edge_prev=+0.142 EV/acc=-0.0189 EV/€=-0.0909 IC90d=(-0.164,-0.009) sin2mej=-0.1389 top_mon=23% €/día@1acc=-9.89
+
+== M4g ==
+ umbral 0.00 TODOS  n=29335 merc= 6882 días=12 (+ 3) acierto=0.428 ask=0.435 edge_prev=+0.036 EV/acc=-0.0193 EV/€=-0.0696 IC90d=(-0.113,-0.023) sin2mej=-0.0995 top_mon=18% €/día@1acc=-47.22
+ umbral 0.03 TODOS  n=17511 merc= 6512 días=12 (+ 4) acierto=0.406 ask=0.411 edge_prev=+0.065 EV/acc=-0.0173 EV/€=-0.0536 IC90d=(-0.106,+0.002) sin2mej=-0.0888 top_mon=19% €/día@1acc=-25.27
+    T    10-30 n=  125 merc=  125 días=11 (+ 0) acierto=0.136 ask=0.204 edge_prev=+0.238 EV/acc=-0.0762 EV/€=-0.7614 IC90d=(-0.946,-0.676) sin2mej=-0.8311 top_mon=23% €/día@1acc=-0.87
+    T    30-60 n=  382 merc=  382 días=12 (+ 3) acierto=0.178 ask=0.187 edge_prev=+0.132 EV/acc=-0.0173 EV/€=-0.2319 IC90d=(-0.605,-0.060) sin2mej=-0.5948 top_mon=29% €/día@1acc=-0.55
+    T   60-120 n= 1538 merc= 1479 días=12 (+ 5) acierto=0.347 ask=0.330 edge_prev=+0.096 EV/acc=+0.0064 EV/€=+0.0441 IC90d=(-0.135,+0.159) sin2mej=-0.0947 top_mon=24% €/día@1acc=+0.82
+    T  120-300 n= 3839 merc= 3470 días=12 (+ 5) acierto=0.354 ask=0.361 edge_prev=+0.071 EV/acc=-0.0179 EV/€=-0.0675 IC90d=(-0.150,+0.025) sin2mej=-0.1227 top_mon=21% €/día@1acc=-5.73
+    T  300-600 n= 5851 merc= 5080 días=12 (+ 4) acierto=0.445 ask=0.448 edge_prev=+0.057 EV/acc=-0.0146 EV/€=-0.0403 IC90d=(-0.101,+0.019) sin2mej=-0.0833 top_mon=18% €/día@1acc=-7.14
+    T  600-900 n= 5771 merc= 5017 días=12 (+ 2) acierto=0.437 ask=0.447 edge_prev=+0.054 EV/acc=-0.0249 EV/€=-0.0597 IC90d=(-0.101,-0.015) sin2mej=-0.0890 top_mon=18% €/día@1acc=-11.97
+ umbral 0.05 TODOS  n=11322 merc= 5429 días=12 (+ 4) acierto=0.381 ask=0.384 edge_prev=+0.087 EV/acc=-0.0154 EV/€=-0.0450 IC90d=(-0.097,+0.019) sin2mej=-0.1007 top_mon=21% €/día@1acc=-14.52
+    T    10-30 n=  118 merc=  118 días=11 (+ 0) acierto=0.127 ask=0.195 edge_prev=+0.250 EV/acc=-0.0760 EV/€=-0.7682 IC90d=(-0.959,-0.669) sin2mej=-0.8321 top_mon=25% €/día@1acc=-0.82
+    T    30-60 n=  328 merc=  328 días=12 (+ 4) acierto=0.171 ask=0.181 edge_prev=+0.148 EV/acc=-0.0181 EV/€=-0.2813 IC90d=(-0.582,-0.053) sin2mej=-0.5798 top_mon=30% €/día@1acc=-0.50
+    T   60-120 n= 1143 merc= 1112 días=12 (+ 7) acierto=0.346 ask=0.322 edge_prev=+0.116 EV/acc=+0.0136 EV/€=+0.1021 IC90d=(-0.146,+0.217) sin2mej=-0.0818 top_mon=25% €/día@1acc=+1.30
+    T  120-300 n= 2705 merc= 2535 días=12 (+ 4) acierto=0.336 ask=0.341 edge_prev=+0.091 EV/acc=-0.0169 EV/€=-0.0392 IC90d=(-0.156,+0.096) sin2mej=-0.1189 top_mon=23% €/día@1acc=-3.80
+    T  300-600 n= 3721 merc= 3434 días=12 (+ 3) acierto=0.426 ask=0.430 edge_prev=+0.077 EV/acc=-0.0159 EV/€=-0.0520 IC90d=(-0.118,+0.012) sin2mej=-0.1125 top_mon=20% €/día@1acc=-4.94
+    T  600-900 n= 3302 merc= 3143 días=12 (+ 3) acierto=0.410 ask=0.418 edge_prev=+0.073 EV/acc=-0.0215 EV/€=-0.0488 IC90d=(-0.100,+0.011) sin2mej=-0.0910 top_mon=19% €/día@1acc=-5.93
+ umbral 0.10 TODOS  n= 3400 merc= 2298 días=12 (+ 5) acierto=0.299 ask=0.306 edge_prev=+0.148 EV/acc=-0.0185 EV/€=-0.0718 IC90d=(-0.139,+0.010) sin2mej=-0.1626 top_mon=28% €/día@1acc=-5.23
+
+== M6 ==
+ umbral 0.00 TODOS  n=18611 merc= 6649 días=12 (+ 1) acierto=0.576 ask=0.586 edge_prev=+0.014 EV/acc=-0.0210 EV/€=-0.0644 IC90d=(-0.080,-0.043) sin2mej=-0.0751 top_mon=19% €/día@1acc=-32.61
+ umbral 0.03 TODOS  n= 3096 merc= 2126 días=12 (+ 1) acierto=0.457 ask=0.481 edge_prev=+0.051 EV/acc=-0.0368 EV/€=-0.0854 IC90d=(-0.123,-0.056) sin2mej=-0.0996 top_mon=23% €/día@1acc=-9.48
+    T    30-60 n=   28 merc=   28 días=11 (+ 6) acierto=0.786 ask=0.784 edge_prev=+0.041 EV/acc=-0.0096 EV/€=-0.0250 IC90d=(-0.207,+0.142) sin2mej=-0.0887 top_mon=29% €/día@1acc=-0.02
+    T   60-120 n=  192 merc=  189 días=12 (+ 3) acierto=0.677 ask=0.684 edge_prev=+0.042 EV/acc=-0.0191 EV/€=-0.0733 IC90d=(-0.120,+0.150) sin2mej=-0.1096 top_mon=25% €/día@1acc=-0.31
+    T  120-300 n=  483 merc=  471 días=12 (+ 3) acierto=0.327 ask=0.357 edge_prev=+0.051 EV/acc=-0.0408 EV/€=-0.2072 IC90d=(-0.416,-0.088) sin2mej=-0.3284 top_mon=34% €/día@1acc=-1.64
+    T  300-600 n=  872 merc=  828 días=12 (+ 1) acierto=0.491 ask=0.517 edge_prev=+0.050 EV/acc=-0.0377 EV/€=-0.0405 IC90d=(-0.234,-0.081) sin2mej=-0.1102 top_mon=22% €/día@1acc=-2.74
+    T  600-900 n= 1514 merc= 1395 días=12 (+ 4) acierto=0.443 ask=0.467 edge_prev=+0.052 EV/acc=-0.0391 EV/€=-0.0773 IC90d=(-0.136,-0.008) sin2mej=-0.1056 top_mon=21% €/día@1acc=-4.94
+ umbral 0.05 TODOS  n= 1302 merc=  980 días=12 (+ 5) acierto=0.429 ask=0.439 edge_prev=+0.073 EV/acc=-0.0233 EV/€=-0.0665 IC90d=(-0.097,+0.079) sin2mej=-0.1112 top_mon=31% €/día@1acc=-2.53
+    T   60-120 n=   38 merc=   38 días=11 (+ 7) acierto=0.711 ask=0.656 edge_prev=+0.062 EV/acc=+0.0411 EV/€=+0.1099 IC90d=(-0.109,+0.431) sin2mej=+0.0038 top_mon=24% €/día@1acc=+0.14
+    T  120-300 n=  220 merc=  214 días=11 (+ 6) acierto=0.314 ask=0.324 edge_prev=+0.072 EV/acc=-0.0228 EV/€=-0.1719 IC90d=(-0.281,+0.145) sin2mej=-0.3489 top_mon=42% €/día@1acc=-0.46
+    T  300-600 n=  373 merc=  357 días=11 (+ 1) acierto=0.421 ask=0.448 edge_prev=+0.073 EV/acc=-0.0407 EV/€=-0.1006 IC90d=(-0.396,-0.086) sin2mej=-0.1086 top_mon=30% €/día@1acc=-1.38
+    T  600-900 n=  665 merc=  619 días=12 (+ 5) acierto=0.451 ask=0.456 edge_prev=+0.075 EV/acc=-0.0199 EV/€=-0.0265 IC90d=(-0.114,+0.186) sin2mej=-0.0752 top_mon=29% €/día@1acc=-1.11
+ umbral 0.10 TODOS  n=  127 merc=  119 días=10 (+ 3) acierto=0.441 ask=0.473 edge_prev=+0.129 EV/acc=-0.0481 EV/€=-0.1212 IC90d=(-0.364,+0.170) sin2mej=-0.1871 top_mon=28% €/día@1acc=-0.61
+
+HOLDOUT ms 06-07 Oct (468 mercados): señal con el ask de t, compra al ask REAL a +215 ms (si sube y deja de cumplir el umbral: no se compra)
+ M1   umbral 0.03   (sin señales)
+ M1   umbral 0.05   (sin señales)
+ M1   umbral 0.10   (sin señales)
+ M2   umbral 0.03 n=   16 merc=   15 días= 2 (+ 1) acierto=0.812 ask=0.784 edge_prev=+0.066 EV/acc=+0.0163 EV/€=+0.0221 IC90d=(-0.005,+0.067) sin2mej=+nan top_mon=31% €/día@1acc=+0.13 prof_mediana=12 acc
+ M2   umbral 0.05 n=    8 merc=    8 días= 2 (+ 1) acierto=0.750 ask=0.769 edge_prev=+0.097 EV/acc=-0.0312 EV/€=-0.0355 IC90d=(-0.150,+0.033) sin2mej=+nan top_mon=38% €/día@1acc=-0.12 prof_mediana=20 acc
+ M2   umbral 0.10 n=    3 merc=    3 días= 2 (+ 2) acierto=1.000 ask=0.753 edge_prev=+0.108 EV/acc=+0.2337 EV/€=+0.3102 IC90d=(+0.307,+0.316) sin2mej=+nan top_mon=67% €/día@1acc=+0.35 prof_mediana=6 acc
+ M3   umbral 0.03 n= 2024 merc=  468 días= 2 (+ 0) acierto=0.361 ask=0.366 edge_prev=+0.066 EV/acc=-0.0176 EV/€=-0.0994 IC90d=(-0.155,-0.062) sin2mej=+nan top_mon=18% €/día@1acc=-17.80 prof_mediana=30 acc
+ M3   umbral 0.05 n= 1608 merc=  464 días= 2 (+ 0) acierto=0.358 ask=0.357 edge_prev=+0.087 EV/acc=-0.0121 EV/€=-0.1138 IC90d=(-0.143,-0.094) sin2mej=+nan top_mon=18% €/día@1acc=-9.69 prof_mediana=30 acc
+ M3   umbral 0.10 n=  896 merc=  400 días= 2 (+ 0) acierto=0.266 ask=0.266 edge_prev=+0.131 EV/acc=-0.0111 EV/€=-0.2299 IC90d=(-0.324,-0.160) sin2mej=+nan top_mon=20% €/día@1acc=-4.97 prof_mediana=30 acc
+ M4   umbral 0.03 n= 2073 merc=  468 días= 2 (+ 0) acierto=0.431 ask=0.430 edge_prev=+0.065 EV/acc=-0.0115 EV/€=-0.0758 IC90d=(-0.100,-0.059) sin2mej=+nan top_mon=19% €/día@1acc=-11.88 prof_mediana=29 acc
+ M4   umbral 0.05 n= 1666 merc=  463 días= 2 (+ 0) acierto=0.405 ask=0.395 edge_prev=+0.083 EV/acc=-0.0028 EV/€=-0.0859 IC90d=(-0.111,-0.069) sin2mej=+nan top_mon=19% €/día@1acc=-2.29 prof_mediana=26 acc
+ M4   umbral 0.10 n=  633 merc=  348 días= 2 (+ 0) acierto=0.351 ask=0.355 edge_prev=+0.139 EV/acc=-0.0161 EV/€=-0.0919 IC90d=(-0.165,-0.047) sin2mej=+nan top_mon=20% €/día@1acc=-5.09 prof_mediana=25 acc
+ M4g  umbral 0.03 n= 1601 merc=  458 días= 2 (+ 0) acierto=0.417 ask=0.422 edge_prev=+0.059 EV/acc=-0.0180 EV/€=-0.1125 IC90d=(-0.180,-0.066) sin2mej=+nan top_mon=19% €/día@1acc=-14.38 prof_mediana=25 acc
+ M4g  umbral 0.05 n= 1085 merc=  419 días= 2 (+ 0) acierto=0.407 ask=0.402 edge_prev=+0.082 EV/acc=-0.0069 EV/€=-0.1227 IC90d=(-0.146,-0.106) sin2mej=+nan top_mon=21% €/día@1acc=-3.74 prof_mediana=25 acc
+ M4g  umbral 0.10 n=  294 merc=  193 días= 2 (+ 0) acierto=0.408 ask=0.392 edge_prev=+0.148 EV/acc=+0.0030 EV/€=-0.1168 IC90d=(-0.164,-0.056) sin2mej=+nan top_mon=21% €/día@1acc=+0.44 prof_mediana=18 acc
+ M6   umbral 0.03 n=  113 merc=   81 días= 2 (+ 0) acierto=0.549 ask=0.615 edge_prev=+0.041 EV/acc=-0.0793 EV/€=-0.1808 IC90d=(-0.313,-0.060) sin2mej=+nan top_mon=23% €/día@1acc=-4.48 prof_mediana=25 acc
+ M6   umbral 0.05 n=   31 merc=   22 días= 2 (+ 1) acierto=0.419 ask=0.478 edge_prev=+0.062 EV/acc=-0.0733 EV/€=-0.2765 IC90d=(-0.821,+0.234) sin2mej=+nan top_mon=32% €/día@1acc=-1.14 prof_mediana=25 acc
+ M6   umbral 0.10 n=    4 merc=    4 días= 1 (+ 0) acierto=0.250 ask=0.405 edge_prev=+0.116 EV/acc=-0.1704 EV/€=-0.5952 IC90d=(+nan,+nan) sin2mej=+nan top_mon=25% €/día@1acc=-0.68 prof_mediana=27 acc
+
+PARTE 2 — TERMINAL (TWAP proyectado), 14940 filas-lado con ask comprable, 3579 mercados, 13 días (2026-09-25..2026-10-07); lado contrario solo desde 30-Sep
+Superficie terminal descriptiva: P(gana) vs ask medio por offset × lado × |z_TWAP|
+  off  -120 contrario |z|  (0.0, 1.0]: n=  316 P=0.440 ask=0.443 gap=-0.003
+  off  -120 contrario |z|  (1.0, 1.5]: n=  168 P=0.250 ask=0.319 gap=-0.069
+  off  -120 contrario |z|  (1.5, 2.0]: n=  174 P=0.282 ask=0.245 gap=+0.037
+  off  -120 contrario |z|  (2.0, 3.0]: n=  317 P=0.174 ask=0.173 gap=+0.000
+  off  -120 contrario |z|  (3.0, 5.0]: n=  596 P=0.106 ask=0.097 gap=+0.008
+  off  -120 contrario |z| (5.0, 1000000000.0]: n=  672 P=0.033 ask=0.053 gap=-0.020
+  off  -120 lider     |z|  (0.0, 1.0]: n=  550 P=0.575 ask=0.590 gap=-0.016
+  off  -120 lider     |z|  (1.0, 1.5]: n=  268 P=0.709 ask=0.713 gap=-0.004
+  off  -120 lider     |z|  (1.5, 2.0]: n=  289 P=0.761 ask=0.772 gap=-0.011
+  off  -120 lider     |z|  (2.0, 3.0]: n=  579 P=0.839 ask=0.849 gap=-0.010
+  off  -120 lider     |z|  (3.0, 5.0]: n=  818 P=0.903 ask=0.913 gap=-0.009
+  off  -120 lider     |z| (5.0, 1000000000.0]: n=  414 P=0.940 ask=0.939 gap=+0.001
+  off   -90 contrario |z|  (0.0, 1.0]: n=  326 P=0.331 ask=0.405 gap=-0.074
+  off   -90 contrario |z|  (1.0, 1.5]: n=  171 P=0.269 ask=0.278 gap=-0.009
+  off   -90 contrario |z|  (1.5, 2.0]: n=  162 P=0.191 ask=0.205 gap=-0.013
+  off   -90 contrario |z|  (2.0, 3.0]: n=  325 P=0.111 ask=0.131 gap=-0.020
+  off   -90 contrario |z|  (3.0, 5.0]: n=  474 P=0.057 ask=0.067 gap=-0.010
+  off   -90 contrario |z| (5.0, 1000000000.0]: n=  265 P=0.042 ask=0.050 gap=-0.009
+  off   -90 lider     |z|  (0.0, 1.0]: n=  548 P=0.673 ask=0.626 gap=+0.047
+  off   -90 lider     |z|  (1.0, 1.5]: n=  292 P=0.774 ask=0.763 gap=+0.011
+  off   -90 lider     |z|  (1.5, 2.0]: n=  293 P=0.843 ask=0.826 gap=+0.017
+  off   -90 lider     |z|  (2.0, 3.0]: n=  496 P=0.877 ask=0.882 gap=-0.005
+  off   -90 lider     |z|  (3.0, 5.0]: n=  496 P=0.946 ask=0.933 gap=+0.012
+  off   -90 lider     |z| (5.0, 1000000000.0]: n=  130 P=0.908 ask=0.936 gap=-0.028
+  off   -60 contrario |z|  (0.0, 1.0]: n=  337 P=0.273 ask=0.382 gap=-0.109
+  off   -60 contrario |z|  (1.0, 1.5]: n=  170 P=0.159 ask=0.208 gap=-0.049
+  off   -60 contrario |z|  (1.5, 2.0]: n=  149 P=0.067 ask=0.140 gap=-0.073
+  off   -60 contrario |z|  (2.0, 3.0]: n=  250 P=0.044 ask=0.083 gap=-0.039
+  off   -60 contrario |z|  (3.0, 5.0]: n=  176 P=0.068 ask=0.057 gap=+0.012
+  off   -60 contrario |z| (5.0, 1000000000.0]: n=   63 P=0.048 ask=0.068 gap=-0.020
+  off   -60 lider     |z|  (0.0, 1.0]: n=  563 P=0.709 ask=0.687 gap=+0.022
+  off   -60 lider     |z|  (1.0, 1.5]: n=  273 P=0.846 ask=0.839 gap=+0.007
+  off   -60 lider     |z|  (1.5, 2.0]: n=  214 P=0.925 ask=0.884 gap=+0.042
+  off   -60 lider     |z|  (2.0, 3.0]: n=  266 P=0.944 ask=0.922 gap=+0.021
+  off   -60 lider     |z|  (3.0, 5.0]: n=   98 P=0.898 ask=0.930 gap=-0.032
+  off   -45 contrario |z|  (0.0, 1.0]: n=  221 P=0.290 ask=0.380 gap=-0.090
+  off   -45 contrario |z|  (1.0, 1.5]: n=  122 P=0.139 ask=0.202 gap=-0.062
+  off   -45 contrario |z|  (1.5, 2.0]: n=   96 P=0.115 ask=0.130 gap=-0.016
+  off   -45 contrario |z|  (2.0, 3.0]: n=  167 P=0.030 ask=0.090 gap=-0.060
+  off   -45 contrario |z|  (3.0, 5.0]: n=  107 P=0.037 ask=0.068 gap=-0.030
+  off   -45 lider     |z|  (0.0, 1.0]: n=  377 P=0.708 ask=0.691 gap=+0.017
+  off   -45 lider     |z|  (1.0, 1.5]: n=  196 P=0.888 ask=0.859 gap=+0.029
+  off   -45 lider     |z|  (1.5, 2.0]: n=  138 P=0.913 ask=0.899 gap=+0.014
+  off   -45 lider     |z|  (2.0, 3.0]: n=  143 P=0.986 ask=0.914 gap=+0.072
+  off   -45 lider     |z|  (3.0, 5.0]: n=   52 P=0.923 ask=0.921 gap=+0.002
+  off   -30 contrario |z|  (0.0, 1.0]: n=  124 P=0.234 ask=0.366 gap=-0.132
+  off   -30 contrario |z|  (1.0, 1.5]: n=   69 P=0.130 ask=0.207 gap=-0.077
+  off   -30 contrario |z|  (1.5, 2.0]: n=   52 P=0.096 ask=0.151 gap=-0.055
+  off   -30 contrario |z|  (2.0, 3.0]: n=   77 P=0.039 ask=0.097 gap=-0.058
+  off   -30 contrario |z|  (3.0, 5.0]: n=   72 P=0.028 ask=0.106 gap=-0.078
+  off   -30 lider     |z|  (0.0, 1.0]: n=  200 P=0.740 ask=0.720 gap=+0.020
+  off   -30 lider     |z|  (1.0, 1.5]: n=   98 P=0.857 ask=0.858 gap=-0.000
+  off   -30 lider     |z|  (1.5, 2.0]: n=   70 P=0.886 ask=0.869 gap=+0.017
+  off   -30 lider     |z|  (2.0, 3.0]: n=   60 P=0.933 ask=0.917 gap=+0.017
+  off   -30 lider     |z|  (3.0, 5.0]: n=   38 P=0.947 ask=0.907 gap=+0.040
+  off   -20 contrario |z|  (0.0, 1.0]: n=   82 P=0.220 ask=0.386 gap=-0.166
+  off   -20 contrario |z|  (1.0, 1.5]: n=   32 P=0.031 ask=0.181 gap=-0.150
+  off   -20 contrario |z|  (2.0, 3.0]: n=   39 P=0.026 ask=0.124 gap=-0.098
+  off   -20 contrario |z|  (3.0, 5.0]: n=   39 P=0.000 ask=0.118 gap=-0.118
+  off   -20 contrario |z| (5.0, 1000000000.0]: n=   30 P=0.000 ask=0.136 gap=-0.136
+  off   -20 lider     |z|  (0.0, 1.0]: n=  123 P=0.756 ask=0.705 gap=+0.051
+  off   -20 lider     |z|  (1.0, 1.5]: n=   44 P=0.932 ask=0.867 gap=+0.065
+  off   -20 lider     |z|  (1.5, 2.0]: n=   33 P=0.939 ask=0.887 gap=+0.053
+  off   -10 lider     |z|  (0.0, 1.0]: n=   32 P=0.469 ask=0.613 gap=-0.145
+OOS walk-forward terminal: 8 días de prueba. Ejecución = ask leído por el observador (latencia del libro ~60-100 ms)
+ M1t  umbral 0.00 TODOS n= 3396 merc= 1639 días= 8 (+ 2) acierto=0.647 ask=0.661 edge_prev=+0.024 EV/acc=-0.0230 EV/€=-0.0342 IC90d=(-0.070,+0.018) sin2mej=-0.0640 top_mon=20% €/día@1acc=-9.75
+ M1t  umbral 0.03 TODOS n=  965 merc=  714 días= 8 (+ 3) acierto=0.563 ask=0.571 edge_prev=+0.055 EV/acc=-0.0206 EV/€=-0.0447 IC90d=(-0.083,+0.065) sin2mej=-0.0765 top_mon=20% €/día@1acc=-2.48
+    off  -120 lider     n=  112 merc=  112 días= 8 (+ 2) acierto=0.643 ask=0.631 edge_prev=+0.057 EV/acc=-0.0031 EV/€=-0.0033 IC90d=(-0.382,+0.060) sin2mej=-0.0712 top_mon=21% €/día@1acc=-0.04
+    off  -120 contrario n=  237 merc=  237 días= 8 (+ 3) acierto=0.224 ask=0.228 edge_prev=+0.065 EV/acc=-0.0145 EV/€=-0.0750 IC90d=(-0.197,+0.180) sin2mej=-0.2473 top_mon=20% €/día@1acc=-0.43
+    off   -90 lider     n=  187 merc=  187 días= 8 (+ 3) acierto=0.759 ask=0.747 edge_prev=+0.042 EV/acc=+0.0011 EV/€=+0.0243 IC90d=(-0.065,+0.256) sin2mej=-0.0237 top_mon=21% €/día@1acc=+0.02
+    off   -90 contrario n=   98 merc=   98 días= 7 (+ 2) acierto=0.337 ask=0.409 edge_prev=+0.077 EV/acc=-0.0882 EV/€=-0.1918 IC90d=(-0.342,+0.074) sin2mej=-0.3862 top_mon=26% €/día@1acc=-1.23
+    off   -60 lider     n=  112 merc=  112 días= 8 (+ 4) acierto=0.723 ask=0.696 edge_prev=+0.047 EV/acc=+0.0130 EV/€=+0.0283 IC90d=(-0.081,+0.128) sin2mej=-0.0390 top_mon=23% €/día@1acc=+0.18
+    off   -60 contrario n=   53 merc=   53 días= 7 (+ 1) acierto=0.340 ask=0.458 edge_prev=+0.048 EV/acc=-0.1319 EV/€=-0.2337 IC90d=(-0.534,-0.105) sin2mej=-0.3619 top_mon=28% €/día@1acc=-1.00
+    off   -45 lider     n=  101 merc=  101 días= 7 (+ 4) acierto=0.871 ask=0.860 edge_prev=+0.047 EV/acc=+0.0035 EV/€=+0.0083 IC90d=(-0.093,+0.047) sin2mej=-0.0383 top_mon=21% €/día@1acc=+0.05
+    off   -30 lider     n=   29 merc=   29 días= 8 (+ 4) acierto=0.862 ask=0.885 edge_prev=+0.042 EV/acc=-0.0302 EV/€=-0.0304 IC90d=(-0.137,+0.080) sin2mej=-0.0983 top_mon=24% €/día@1acc=-0.11
+    off   -20 lider     n=   30 merc=   30 días= 8 (+ 7) acierto=0.967 ask=0.915 edge_prev=+0.053 EV/acc=+0.0463 EV/€=+0.0506 IC90d=(+0.034,+0.085) sin2mej=+0.0218 top_mon=27% €/día@1acc=+0.17
+ M1t  umbral 0.05 TODOS n=  404 merc=  347 días= 8 (+ 3) acierto=0.463 ask=0.454 edge_prev=+0.078 EV/acc=-0.0038 EV/€=-0.0886 IC90d=(-0.120,+0.309) sin2mej=-0.1436 top_mon=21% €/día@1acc=-0.19
+ M1t  umbral 0.10 TODOS n=   84 merc=   76 días= 6 (+ 2) acierto=0.345 ask=0.339 edge_prev=+0.118 EV/acc=-0.0079 EV/€=-0.0976 IC90d=(-0.350,+0.014) sin2mej=-0.3249 top_mon=18% €/día@1acc=-0.11
+ M5   umbral 0.00 TODOS n= 4285 merc= 2023 días= 8 (+ 2) acierto=0.458 ask=0.445 edge_prev=+0.063 EV/acc=+0.0042 EV/€=-0.0666 IC90d=(-0.186,+0.023) sin2mej=-0.1265 top_mon=20% €/día@1acc=+2.27
+ M5   umbral 0.03 TODOS n= 2452 merc= 1401 días= 8 (+ 3) acierto=0.491 ask=0.468 edge_prev=+0.100 EV/acc=+0.0119 EV/€=-0.0013 IC90d=(-0.117,+0.087) sin2mej=-0.0980 top_mon=21% €/día@1acc=+3.66
+    off  -120 lider     n=  469 merc=  469 días= 8 (+ 3) acierto=0.680 ask=0.691 edge_prev=+0.095 EV/acc=-0.0241 EV/€=-0.0162 IC90d=(-0.063,+0.044) sin2mej=-0.0493 top_mon=27% €/día@1acc=-1.41
+    off  -120 contrario n=  436 merc=  436 días= 6 (+ 2) acierto=0.156 ask=0.135 edge_prev=+0.068 EV/acc=+0.0141 EV/€=-0.0877 IC90d=(-0.282,+0.257) sin2mej=-0.2250 top_mon=20% €/día@1acc=+1.02
+    off   -90 lider     n=  503 merc=  503 días= 8 (+ 5) acierto=0.720 ask=0.689 edge_prev=+0.108 EV/acc=+0.0171 EV/€=+0.0464 IC90d=(-0.002,+0.094) sin2mej=+0.0072 top_mon=22% €/día@1acc=+1.07
+    off   -90 contrario n=  185 merc=  185 días= 6 (+ 2) acierto=0.162 ask=0.135 edge_prev=+0.075 EV/acc=+0.0191 EV/€=+0.1549 IC90d=(-0.204,+0.486) sin2mej=-0.1441 top_mon=24% €/día@1acc=+0.59
+    off   -60 lider     n=  250 merc=  250 días= 8 (+ 6) acierto=0.700 ask=0.643 edge_prev=+0.142 EV/acc=+0.0428 EV/€=+0.0993 IC90d=(+0.043,+0.172) sin2mej=+0.0549 top_mon=32% €/día@1acc=+1.34
+    off   -60 contrario n=  194 merc=  194 días= 6 (+ 3) acierto=0.088 ask=0.092 edge_prev=+0.068 EV/acc=-0.0098 EV/€=-0.0394 IC90d=(-0.724,+0.351) sin2mej=-0.6978 top_mon=19% €/día@1acc=-0.32
+    off   -45 lider     n=  200 merc=  200 días= 8 (+ 5) acierto=0.775 ask=0.708 edge_prev=+0.132 EV/acc=+0.0548 EV/€=+0.1214 IC90d=(+0.031,+0.185) sin2mej=+0.0631 top_mon=24% €/día@1acc=+1.37
+    off   -45 contrario n=   68 merc=   68 días= 6 (+ 1) acierto=0.118 ask=0.136 edge_prev=+0.106 EV/acc=-0.0261 EV/€=-0.2834 IC90d=(-1.031,+0.381) sin2mej=-0.8110 top_mon=25% €/día@1acc=-0.30
+    off   -30 lider     n=   68 merc=   68 días= 8 (+ 6) acierto=0.676 ask=0.617 edge_prev=+0.151 EV/acc=+0.0452 EV/€=+0.1171 IC90d=(-0.084,+0.246) sin2mej=+0.0224 top_mon=24% €/día@1acc=+0.38
+    off   -30 contrario n=   45 merc=   45 días= 4 (+ 0) acierto=0.022 ask=0.082 edge_prev=+0.073 EV/acc=-0.0647 EV/€=-0.9584 IC90d=(-1.066,-0.913) sin2mej=-0.8882 top_mon=22% €/día@1acc=-0.73
+    off   -20 lider     n=   30 merc=   30 días= 4 (+ 2) acierto=0.767 ask=0.601 edge_prev=+0.203 EV/acc=+0.1520 EV/€=+0.2618 IC90d=(-0.827,+0.462) sin2mej=-0.6721 top_mon=27% €/día@1acc=+1.14
+ M5   umbral 0.05 TODOS n= 1650 merc= 1007 días= 8 (+ 5) acierto=0.542 ask=0.503 edge_prev=+0.129 EV/acc=+0.0269 EV/€=+0.0981 IC90d=(-0.013,+0.209) sin2mej=-0.0159 top_mon=23% €/día@1acc=+5.54
+ M5   umbral 0.10 TODOS n=  821 merc=  577 días= 8 (+ 5) acierto=0.523 ask=0.479 edge_prev=+0.187 EV/acc=+0.0298 EV/€=+0.1218 IC90d=(-0.034,+0.224) sin2mej=-0.0127 top_mon=25% €/día@1acc=+3.06
+ M5g  umbral 0.00 TODOS n= 5182 merc= 1909 días= 8 (+ 2) acierto=0.553 ask=0.555 edge_prev=+0.111 EV/acc=-0.0115 EV/€=-0.1337 IC90d=(-0.173,-0.001) sin2mej=-0.2097 top_mon=20% €/día@1acc=-7.46
+ M5g  umbral 0.03 TODOS n= 3134 merc= 1354 días= 8 (+ 4) acierto=0.432 ask=0.436 edge_prev=+0.174 EV/acc=-0.0147 EV/€=-0.2233 IC90d=(-0.238,+0.023) sin2mej=-0.2955 top_mon=20% €/día@1acc=-5.76
+    off  -120 lider     n=  349 merc=  349 días= 8 (+ 4) acierto=0.722 ask=0.723 edge_prev=+0.060 EV/acc=-0.0136 EV/€=-0.0101 IC90d=(-0.049,+0.113) sin2mej=-0.0386 top_mon=20% €/día@1acc=-0.59
+    off  -120 contrario n=  695 merc=  695 días= 8 (+ 3) acierto=0.165 ask=0.180 edge_prev=+0.250 EV/acc=-0.0236 EV/€=-0.2889 IC90d=(-0.289,+0.220) sin2mej=-0.3796 top_mon=18% €/día@1acc=-2.05
+    off   -90 lider     n=  431 merc=  431 días= 8 (+ 5) acierto=0.740 ask=0.718 edge_prev=+0.069 EV/acc=+0.0096 EV/€=+0.0259 IC90d=(-0.005,+0.113) sin2mej=-0.0164 top_mon=22% €/día@1acc=+0.52
+    off   -90 contrario n=  482 merc=  482 días= 8 (+ 2) acierto=0.164 ask=0.194 edge_prev=+0.279 EV/acc=-0.0393 EV/€=-0.4707 IC90d=(-0.492,-0.075) sin2mej=-0.5450 top_mon=17% €/día@1acc=-2.37
+    off   -60 lider     n=  233 merc=  233 días= 8 (+ 6) acierto=0.760 ask=0.714 edge_prev=+0.073 EV/acc=+0.0330 EV/€=+0.0857 IC90d=(+0.021,+0.171) sin2mej=+0.0184 top_mon=30% €/día@1acc=+0.96
+    off   -60 contrario n=  238 merc=  238 días= 8 (+ 1) acierto=0.088 ask=0.163 edge_prev=+0.301 EV/acc=-0.0828 EV/€=-0.7251 IC90d=(-0.977,+0.587) sin2mej=-0.7560 top_mon=18% €/día@1acc=-2.46
+    off   -45 lider     n=  295 merc=  295 días= 8 (+ 5) acierto=0.820 ask=0.786 edge_prev=+0.069 EV/acc=+0.0244 EV/€=+0.0579 IC90d=(-0.078,+0.107) sin2mej=-0.0032 top_mon=23% €/día@1acc=+0.90
+    off   -45 contrario n=  151 merc=  151 días= 7 (+ 2) acierto=0.113 ask=0.152 edge_prev=+0.301 EV/acc=-0.0472 EV/€=-0.5924 IC90d=(-0.863,+0.248) sin2mej=-0.6493 top_mon=19% €/día@1acc=-1.02
+    off   -30 lider     n=   86 merc=   86 días= 8 (+ 4) acierto=0.791 ask=0.775 edge_prev=+0.057 EV/acc=+0.0056 EV/€=+0.0289 IC90d=(-0.065,+0.106) sin2mej=-0.0663 top_mon=22% €/día@1acc=+0.06
+    off   -30 contrario n=   59 merc=   59 días= 3 (+ 0) acierto=0.051 ask=0.113 edge_prev=+0.235 EV/acc=-0.0686 EV/€=-0.8431 IC90d=(-1.013,-0.768) sin2mej=-0.9478 top_mon=22% €/día@1acc=-1.35
+    off   -20 lider     n=   49 merc=   49 días= 8 (+ 4) acierto=0.837 ask=0.703 edge_prev=+0.073 EV/acc=+0.1226 EV/€=+0.2387 IC90d=(-0.290,+0.286) sin2mej=-0.0132 top_mon=24% €/día@1acc=+0.75
+    off   -20 contrario n=   30 merc=   30 días= 3 (+ 1) acierto=0.100 ask=0.143 edge_prev=+0.197 EV/acc=-0.0510 EV/€=-0.4798 IC90d=(-0.831,+2.506) sin2mej=-1.0613 top_mon=30% €/día@1acc=-0.51
+    off   -10 lider     n=   24 merc=   24 días= 6 (+ 2) acierto=0.583 ask=0.555 edge_prev=+0.096 EV/acc=+0.0190 EV/€=-0.1744 IC90d=(-0.704,+0.075) sin2mej=-0.6684 top_mon=25% €/día@1acc=+0.08
+ M5g  umbral 0.05 TODOS n= 2309 merc= 1094 días= 8 (+ 4) acierto=0.345 ask=0.353 edge_prev=+0.223 EV/acc=-0.0178 EV/€=-0.2878 IC90d=(-0.254,+0.084) sin2mej=-0.3771 top_mon=20% €/día@1acc=-5.13
+ M5g  umbral 0.10 TODOS n= 1398 merc=  669 días= 8 (+ 2) acierto=0.176 ask=0.199 edge_prev=+0.321 EV/acc=-0.0319 EV/€=-0.4760 IC90d=(-0.368,+0.057) sin2mej=-0.5495 top_mon=18% €/día@1acc=-5.58

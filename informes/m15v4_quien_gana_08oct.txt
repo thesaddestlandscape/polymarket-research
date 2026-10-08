@@ -1,0 +1,118 @@
+Rellenos 15m on-chain 2026-10-05..2026-10-07: 1052369 filas, 1344 mercados, cobertura desenlace 100.0%
+
+1) PnL AGREGADO A RESOLUCIÓN por rol y día (USDC)
+                     filas          vol        pnl        fee    rebate  wallets  pnl_por_vol
+dia        rol                                                                               
+2026-10-05 maker    121847  1059680.323 -39269.919     75.511  4409.522      886       -0.037
+           tomador   63108   973364.883  17222.311  22047.608     0.000     1985        0.018
+2026-10-06 maker    291975  2305994.617 -50937.905    160.193  9721.003     1331       -0.022
+           tomador  157456  2157405.658   2332.888  48605.017     0.000     2973        0.001
+2026-10-07 maker    266276  1960502.709  14128.243    115.111  8634.406     1262        0.007
+           tomador  151707  1971909.752 -57300.271  43172.028     0.000     2927       -0.029
+
+2) MAKER: 1828 wallets; PnL total -76080; ganancias brutas de las ganadoras +114491; top10 ganadoras = 31% de ellas; top10 por volumen = 33% del volumen
+   top 15 por PnL:
+   0x6380366d días=2.0 n=   396 vol=     4329 PnL=   +8039 PnL/vol=+1.857 rebate_est=    34
+   0x3725d52f días=3.0 n=  1815 vol=    53346 PnL=   +4004 PnL/vol=+0.075 rebate_est=   289
+   0x32ed2e54 días=3.0 n=  2198 vol=    53181 PnL=   +3688 PnL/vol=+0.069 rebate_est=   289
+   0xa0e72d55 días=3.0 n= 14836 vol=   144144 PnL=   +3342 PnL/vol=+0.023 rebate_est=   541
+   0x9cbc68db días=3.0 n=   137 vol=     3096 PnL=   +2907 PnL/vol=+0.939 rebate_est=    26
+   0x99c31111 días=2.0 n=   132 vol=     2244 PnL=   +2784 PnL/vol=+1.240 rebate_est=    19
+   0xcfddfb6e días=3.0 n= 29016 vol=   241609 PnL=   +2662 PnL/vol=+0.011 rebate_est=  1226
+   0xc2ad03f7 días=3.0 n=  1915 vol=    49139 PnL=   +2556 PnL/vol=+0.052 rebate_est=   273
+   0x7ba6f3e0 días=1.0 n=    64 vol=     1636 PnL=   +2534 PnL/vol=+1.548 rebate_est=    13
+   0x074a3a0f días=3.0 n=   170 vol=     3315 PnL=   +2452 PnL/vol=+0.740 rebate_est=    27
+   0xbe6b5706 días=3.0 n=  5828 vol=    38159 PnL=   +2291 PnL/vol=+0.060 rebate_est=   190
+   0x2903c7dc días=3.0 n=  5308 vol=    67773 PnL=   +1869 PnL/vol=+0.028 rebate_est=   337
+   0x652318ac días=2.0 n=    51 vol=     1626 PnL=   +1712 PnL/vol=+1.053 rebate_est=    14
+   0xeca64724 días=3.0 n=  5917 vol=    38127 PnL=   +1701 PnL/vol=+0.045 rebate_est=   183
+   0x1f608308 días=1.0 n=    28 vol=      596 PnL=   +1537 PnL/vol=+2.579 rebate_est=     7
+   top 10 por VOLUMEN:
+   0x664a25f1 días=3.0 n= 14276 vol=   384803 PnL=  -65680 PnL/vol=-0.171 rebate_est=  1571
+   0xcfddfb6e días=3.0 n= 29016 vol=   241609 PnL=   +2662 PnL/vol=+0.011 rebate_est=  1226
+   0x48e5f228 días=3.0 n= 10843 vol=   211274 PnL=   -1141 PnL/vol=-0.005 rebate_est=   943
+   0xb945945d días=3.0 n= 25105 vol=   209333 PnL=    +488 PnL/vol=+0.002 rebate_est=  1058
+   0x758dac51 días=3.0 n= 21332 vol=   156373 PnL=    -873 PnL/vol=-0.006 rebate_est=   684
+   0xa0e72d55 días=3.0 n= 14836 vol=   144144 PnL=   +3342 PnL/vol=+0.023 rebate_est=   541
+   0xf8af03f1 días=3.0 n= 11806 vol=   115590 PnL=    +108 PnL/vol=+0.001 rebate_est=   307
+   0x764fd57b días=3.0 n= 16252 vol=   100519 PnL=     +29 PnL/vol=+0.000 rebate_est=   551
+   0x5e60d871 días=3.0 n=  4130 vol=    95835 PnL=   -7003 PnL/vol=-0.073 rebate_est=   435
+   0xee65685d días=3.0 n=   618 vol=    94845 PnL=    +216 PnL/vol=+0.002 rebate_est=     5
+   PERSISTENCIA 06→07 (107 wallets con ≥2.000 USDC ambos días): Spearman PnL/vol -0.120; positivas ambos días 42, negativas ambos 18, cambian 47
+   ganadoras ambos días: PnL 06 +10543, PnL 07 +9989
+
+2) TOMADOR: 4049 wallets; PnL total -37745; ganancias brutas de las ganadoras +261168; top10 ganadoras = 24% de ellas; top10 por volumen = 26% del volumen
+   top 15 por PnL:
+   0x2d2d2b32 días=3.0 n=   222 vol=    13685 PnL=  +10771 PnL/vol=+0.787 rebate_est=     0
+   0x4c8ed7ea días=3.0 n=   888 vol=    14883 PnL=   +8802 PnL/vol=+0.591 rebate_est=     0
+   0x85fc9f25 días=2.0 n=    65 vol=    18935 PnL=   +7735 PnL/vol=+0.408 rebate_est=     0
+   0x037b8d4a días=3.0 n=  3109 vol=    29363 PnL=   +7429 PnL/vol=+0.253 rebate_est=     0
+   0x84389cfc días=3.0 n=  1886 vol=    20291 PnL=   +6733 PnL/vol=+0.332 rebate_est=     0
+   0xe8ade1c6 días=3.0 n=    41 vol=    11815 PnL=   +4969 PnL/vol=+0.421 rebate_est=     0
+   0x276e5232 días=2.0 n=   171 vol=    13021 PnL=   +4392 PnL/vol=+0.337 rebate_est=     0
+   0x9cbc68db días=3.0 n=    49 vol=     6715 PnL=   +4127 PnL/vol=+0.615 rebate_est=     0
+   0xfcda969d días=3.0 n=   812 vol=    10808 PnL=   +4117 PnL/vol=+0.381 rebate_est=     0
+   0xb970fb5c días=3.0 n=   456 vol=    20331 PnL=   +3933 PnL/vol=+0.193 rebate_est=     0
+   0x074a3a0f días=3.0 n=    51 vol=     7153 PnL=   +3673 PnL/vol=+0.514 rebate_est=     0
+   0xc87836be días=3.0 n=  1138 vol=    15326 PnL=   +3551 PnL/vol=+0.232 rebate_est=     0
+   0x32ed2e54 días=3.0 n=   632 vol=    42449 PnL=   +3209 PnL/vol=+0.076 rebate_est=     0
+   0xc2ad03f7 días=3.0 n=   529 vol=    37352 PnL=   +3127 PnL/vol=+0.084 rebate_est=     0
+   0x5e60d871 días=3.0 n=  9363 vol=   149205 PnL=   +2985 PnL/vol=+0.020 rebate_est=     0
+   top 10 por VOLUMEN:
+   0xb55fa129 días=3.0 n= 11764 vol=   284127 PnL=   +2918 PnL/vol=+0.010 rebate_est=     0
+   0xd1ed1219 días=3.0 n= 12891 vol=   249370 PnL=  -28552 PnL/vol=-0.114 rebate_est=     0
+   0x5e60d871 días=3.0 n=  9363 vol=   149205 PnL=   +2985 PnL/vol=+0.020 rebate_est=     0
+   0x10d57bd3 días=3.0 n=  1607 vol=   130685 PnL=   -8778 PnL/vol=-0.067 rebate_est=     0
+   0x21f4c1a1 días=3.0 n=  5931 vol=   114104 PnL=   -1216 PnL/vol=-0.011 rebate_est=     0
+   0x6c158caf días=3.0 n=  3607 vol=   111605 PnL=   -1895 PnL/vol=-0.017 rebate_est=     0
+   0x01e86bfe días=3.0 n=  2995 vol=   103253 PnL=  -32343 PnL/vol=-0.313 rebate_est=     0
+   0x90e33303 días=3.0 n=  2411 vol=    80103 PnL=  -20408 PnL/vol=-0.255 rebate_est=     0
+   0xce25e214 días=3.0 n=  5290 vol=    62910 PnL=    +192 PnL/vol=+0.003 rebate_est=     0
+   0x576b0696 días=3.0 n=  1391 vol=    61607 PnL=    +490 PnL/vol=+0.008 rebate_est=     0
+   PERSISTENCIA 06→07 (117 wallets con ≥2.000 USDC ambos días): Spearman PnL/vol -0.450; positivas ambos días 28, negativas ambos 17, cambian 72
+   ganadoras ambos días: PnL 06 +9363, PnL 07 +12829
+
+3) PERFIL MAKERS (vol ≥2.000 USDC 06 y 07): ganadoras ambos días vs resto
+  GANADORAS ambos días: wallets=42 rellenos=145200 vol=1136645 PnL=+20533 PnL/vol=+0.0181 rebate_est=3803 | precio medio 0.500, P(p<0,2 o >0,8) 39%, rellenos T<120s 21%, T<300s 53%, mercados con ambos lados 54%, |posición neta| / acciones 0.39, tamaño mediano 7 acc
+  RESTO (≥2.000 ambos días): wallets=65 rellenos=308653 vol=2562813 PnL=-67584 PnL/vol=-0.0264 rebate_est=11865 | precio medio 0.484, P(p<0,2 o >0,8) 38%, rellenos T<120s 17%, T<300s 46%, mercados con ambos lados 61%, |posición neta| / acciones 0.35, tamaño mediano 8 acc
+
+4) PnL MAKER por fase del ciclo y banda de precio (todos los makers, 3 días)
+                                vol         pnl  pnl_vol
+T           p                                           
+(-60, 0]    (0.0, 0.1]      15.3818     -5.3818  -0.3499
+            (0.1, 0.3]       1.5000     -1.5000  -1.0000
+            (0.3, 0.5]      12.0915     17.4000   1.4390
+            (0.7, 0.9]     155.4145     15.9462   0.1026
+            (0.9, 1.0]   45610.6376    361.3608   0.0079
+(0, 30]     (0.0, 0.1]    1586.3562   -628.9847  -0.3965
+            (0.1, 0.3]    1972.5515   -614.2689  -0.3114
+            (0.3, 0.5]    1653.2288   -169.5291  -0.1025
+            (0.5, 0.7]    2136.1659     80.4531   0.0377
+            (0.7, 0.9]    5084.7954    608.0563   0.1196
+            (0.9, 1.0]  160388.1419   1143.5654   0.0071
+(30, 120]   (0.0, 0.1]   17766.1343   7332.0707   0.4127
+            (0.1, 0.3]   51953.7434  -2879.9797  -0.0554
+            (0.3, 0.5]   84267.0845   9184.2522   0.1090
+            (0.5, 0.7]  120522.4595   3869.0705   0.0321
+            (0.7, 0.9]  238020.7804 -24786.8644  -0.1041
+            (0.9, 1.0]  464750.6389  -5001.9813  -0.0108
+(120, 300]  (0.0, 0.1]   22754.3635   2132.2721   0.0937
+            (0.1, 0.3]   99151.0004  43295.4608   0.4367
+            (0.3, 0.5]  200925.8349  42139.1366   0.2097
+            (0.5, 0.7]  313878.9768 -95991.2861  -0.3058
+            (0.7, 0.9]  453364.0323 -62025.0090  -0.1368
+            (0.9, 1.0]  465953.3427  -5297.9045  -0.0114
+(300, 600]  (0.0, 0.1]   16509.3551  18182.1728   1.1013
+            (0.1, 0.3]  107869.6470  26341.4730   0.2442
+            (0.3, 0.5]  199969.2039   2080.6419   0.0104
+            (0.5, 0.7]  351292.1996  -9413.8884  -0.0268
+            (0.7, 0.9]  474822.4611 -35209.6590  -0.0742
+            (0.9, 1.0]  239761.4373 -10336.3535  -0.0431
+(600, 900]  (0.0, 0.1]    2267.0520  -1904.8125  -0.8402
+            (0.1, 0.3]   72487.4530  -8294.8085  -0.1144
+            (0.3, 0.5]  263103.3544   8088.3078   0.0307
+            (0.5, 0.7]  359619.1494  14260.2165   0.0397
+            (0.7, 0.9]  313562.0564   8558.9112   0.0273
+            (0.9, 1.0]   16589.9824   1182.4721   0.0713
+(900, 2000] (0.3, 0.5]  102969.9873  -2282.9598  -0.0222
+            (0.5, 0.7]   14162.6588    317.9222   0.0224
