@@ -79,8 +79,8 @@
         "takerOnly": true,
         "rebateRate": 0.2
       },
-      "rewardsMinSize": 0,
-      "rewardsMaxSpread": 0,
+      "rewardsMinSize": 50,
+      "rewardsMaxSpread": 4.5,
       "negRisk": false,
       "enableOrderBook": true
     },
