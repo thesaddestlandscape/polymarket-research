@@ -432,6 +432,10 @@ UMBRAL_VIGIA_STALE_H = 48  # log de vigía sin tocar en más de esto: puede
 _PATRON_FALLO_VIGIA = re.compile(
     r"TimeoutExpired|Traceback \(most recent call last\)|murió:|ERROR \w+Error"
 )
+_LINEA_TRACEBACK = re.compile(
+    r"\s|Traceback \(most recent call last\)|During handling|The above exception|Error in sys\.excepthook"
+    r"|Original exception was|[\w.]*(Error|Exception|Exit|Interrupt)\b"
+)
 
 
 def medir_gates_obsoletos() -> dict:
@@ -494,7 +498,12 @@ def medir_vigias_rotos() -> dict:
         idx_fallos = [i for i, l in enumerate(cola) if _PATRON_FALLO_VIGIA.search(l)]
         if idx_fallos:
             ultimo_fallo_idx = idx_fallos[-1]
-            hay_lineas_despues = any(l.strip() for l in cola[ultimo_fallo_idx + 1:])
+            # 08-Oct: el cuerpo del propio traceback (líneas "File ...", la
+            # excepción final, "Original exception was:" de apport) NO es
+            # señal de recuperación: vigia_5m_barato_forward.py murió 3 veces
+            # por MemoryError sin aparecer aquí. Solo cuentan líneas ajenas.
+            hay_lineas_despues = any(l.strip() and not _LINEA_TRACEBACK.match(l)
+                                     for l in cola[ultimo_fallo_idx + 1:])
             if not hay_lineas_despues:
                 rotos.append({
                     "log": path.name,

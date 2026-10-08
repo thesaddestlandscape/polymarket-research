@@ -23,11 +23,15 @@ HIPÓTESIS CONGELADA (cambiarla = nueva VERSION + nuevo periodo fuera de muestra
 BENCHMARKS (misma maquinaria): B2 = regla espejo en el 15m (comprar el 15m del lado contrario a s cuando
   bid5 - ask15 - fee >= 0,05); B3 = comprar el 5m del lado s cada 10 s sin umbral; B4 = control emparejado: mismas
   muestras de B3 con margen_neto < 0,01, misma moneda y tramo de precio de 5c, otra ventana (en el informe).
+v4 (08-Oct, OK Javi): MISMA regla, mismas salidas; solo cambia el ALMACENAMIENTO en memoria (series del libro en
+  columnas array en vez de una tupla por fila). v3 moría por MemoryError con las filas l (~10 M/día) y nunca procesó un
+  día OOS (0 observaciones invalidadas). Equivalencia v3 = v4 comprobada byte a byte sobre el mismo registro.
 Subcomandos: procesar --dia YYYY-MM-DD (eventos del día UTC) | informe [--telegram]. Cron diario (crontab).
 Salidas: /root/polymarket-research-datalogs/vigia_5m_barato/ (eventos_D.csv, controles_D.csv, calidad_D.csv,
   manifiesto.json con hash de config y código, informe.json, informe.txt).
 """
 import argparse
+from array import array
 import bisect
 import collections
 import csv
@@ -48,7 +52,7 @@ SALIDA = DL / "vigia_5m_barato"
 PRICES = REPO / "data" / "prices"
 
 CONFIG = {
-    "version": 3,
+    "version": 4,
     "umbral_margen_neto": 0.05,
     "fee_tomador": 0.07,
     "stake_eur": 2.0,
@@ -71,6 +75,9 @@ CONFIG = {
     # sin señal si cualquiera de las dos patas tiene el libro CRUZADO (bid > ask) en t0 (bid no real, p. ej. mensajes
     # perdidos). El evento BTC_1791239400 del 05-Oct (+17,75 €/€) salió de un 15m cruzado (bid 0,11 > ask 0,10).
     "descartar_libro_cruzado": True,
+    # v4 (08-Oct, antes de ninguna observación OOS procesada: v3 murió por memoria los 3 intentos): solo almacenamiento
+    # compacto (array por columna); regla, ejecución y salidas idénticas a v3 (verificado byte a byte).
+    "almacenamiento": "array_columnas",
 }
 TRAMOS_PRECIO = [(0.0, 0.1), (0.1, 0.2), (0.2, 0.3), (0.3, 0.4), (0.4, 0.5), (0.5, 0.6), (0.6, 0.7), (0.7, 0.8),
                  (0.8, 0.9), (0.9, 1.0)]
@@ -131,18 +138,71 @@ def twap_refs(dias):
     return tw
 
 
+_NAN = float("nan")
+
+
+class _Vista:
+    """L.v[i] -> la misma tupla que guardaba v3 (reconstruida desde las columnas)."""
+    def __init__(self, L):
+        self.L = L
+
+    def __len__(self):
+        return len(self.L.t)
+
+    def __getitem__(self, i):
+        if i < 0:
+            i += len(self.L.t)
+        if not 0 <= i < len(self.L.t):
+            raise IndexError(i)
+        return self.L.fila(i)
+
+
 class Libro:
-    """Serie del nivel 1 de un token con hora de recepción: (t, bid, ask, bid_sz, ask_sz, t_exch)."""
+    """Serie del nivel 1 de un token con hora de recepción: (t, bid, ask, bid_sz, ask_sz, t_exch).
+    v4: columnas array (48 B/fila) en vez de una tupla por fila (~250 B); None se guarda como NaN."""
     def __init__(self):
-        self.t, self.v = [], []
+        self.t, self.c, self.x = array("q"), array("d"), array("q")
+        self.v = _Vista(self)
 
     def add(self, t, fila):
         self.t.append(t)
-        self.v.append(fila)
+        self.c.extend(_NAN if z is None else z for z in fila[:4])
+        self.x.append(fila[4])
+
+    def fila(self, i):
+        b, a, bs, as_ = self.c[4 * i:4 * i + 4]
+        return (None if b != b else b, None if a != a else a, bs, as_, self.x[i])
+
+    def ordenar(self):
+        o = sorted(range(len(self.t)), key=self.t.__getitem__)       # estable, igual que v3
+        self.t = array("q", (self.t[i] for i in o))
+        c = self.c
+        self.c = array("d", (c[4 * i + k] for i in o for k in range(4)))
+        self.x = array("q", (self.x[i] for i in o))
 
     def en(self, t):
         i = bisect.bisect_right(self.t, t) - 1
-        return (self.t[i], self.v[i]) if i >= 0 else (None, None)
+        return (self.t[i], self.fila(i)) if i >= 0 else (None, None)
+
+
+class Niveles(Libro):
+    """Serie de niveles ask (filas l) de un token: (t, ((p, s), ...)) con hasta 3 niveles; precio ausente = NaN."""
+    def add(self, t, nv):
+        self.t.append(t)
+        r = [_NAN] * 6
+        for k, (p, sz) in enumerate(nv):
+            r[2 * k], r[2 * k + 1] = p, sz
+        self.c.extend(r)
+
+    def fila(self, i):
+        r = self.c[6 * i:6 * i + 6]
+        return tuple((r[k], r[k + 1]) for k in (0, 2, 4) if r[k] == r[k])
+
+    def ordenar(self):
+        o = sorted(range(len(self.t)), key=self.t.__getitem__)
+        self.t = array("q", (self.t[i] for i in o))
+        c = self.c
+        self.c = array("d", (c[6 * i + k] for i in o for k in range(6)))
 
 
 def rasgos_libro(L, T, t, pref):
@@ -239,7 +299,7 @@ def procesar(dia):
     tw = twap_refs([(d - timedelta(days=1)).isoformat(), dia])
     meta, idx = {}, collections.defaultdict(dict)
     libros, trades = collections.defaultdict(Libro), collections.defaultdict(list)
-    niveles = collections.defaultdict(Libro)
+    niveles = collections.defaultdict(Niveles)
     binance = collections.defaultdict(list)
     calidad = collections.Counter()
     ult_t = {}
@@ -310,9 +370,7 @@ def procesar(dia):
         except (EOFError, OSError) as e:
             calidad[f"fichero_truncado:{Path(f).name}"] += 1
     for L in list(libros.values()) + list(niveles.values()):
-        o = sorted(range(len(L.t)), key=L.t.__getitem__)
-        L.t = [L.t[i] for i in o]
-        L.v = [L.v[i] for i in o]
+        L.ordenar()
     for k in trades:
         trades[k].sort(key=lambda x: x[0])
     for k in binance:
