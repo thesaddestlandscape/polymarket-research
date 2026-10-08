@@ -30,6 +30,7 @@ propio/calibración que ya usan datos del día).
 """
 import hashlib
 import json
+import time
 import re
 import sys
 from datetime import datetime, timezone
@@ -219,6 +220,9 @@ def _listar_eventos_abiertos(max_paginas: int = 8) -> list:
 _PASO_MARCO_S = {"5min": 300, "15min": 900, "240min": 14400}
 
 
+_FALLO = object()   # 08-Oct: centinela "marco determinista pero la consulta falló"
+
+
 def _market_id_ventana_actual(marco_slug_prefix: str, marco: str) -> str | None:
     """30-Sep: el mercado de la ventana EN CURSO, por slug determinista
     (<prefijo>-<epoch de apertura alineado al marco>). Motivo: el muestreo
@@ -233,16 +237,23 @@ def _market_id_ventana_actual(marco_slug_prefix: str, marco: str) -> str | None:
         return None
     ahora = int(datetime.now(timezone.utc).timestamp())
     slug = f"{marco_slug_prefix}-{ahora - ahora % paso}"
-    try:
-        r = requests.get(f"{GAMMA}/markets", params={"slug": slug}, headers=H, timeout=TIMEOUT)
-        r.raise_for_status()
-        d = r.json()
-    except Exception as e:
-        _log(f"WARN slug de ventana actual {slug} falló: {type(e).__name__}: {e}")
-        return None
+    # 08-Oct: 429 de gamma en eth-updown-15m -> caía al muestreo antiguo, que cogió un mercado no equivalente
+    # (rewards 0/0) y dio la falsa alarma "ETH#15min rewardsMinSize 50 -> 0". Reintento con espera; si sigue
+    # fallando, _FALLO (el llamante SALTA el combo, nunca cae al muestreo antiguo en marcos deterministas).
+    for intento in range(4):
+        try:
+            r = requests.get(f"{GAMMA}/markets", params={"slug": slug}, headers=H, timeout=TIMEOUT)
+            r.raise_for_status()
+            d = r.json()
+            break
+        except Exception as e:
+            _log(f"WARN slug de ventana actual {slug} falló (intento {intento + 1}/4): {type(e).__name__}: {e}")
+            time.sleep(3 * (intento + 1))
+    else:
+        return _FALLO
     if isinstance(d, list) and d and d[0].get("id"):
         return d[0]["id"]
-    return None
+    return _FALLO
 
 
 def _buscar_market_id(activo: str, marco_slug_prefix: str, marco: str) -> str | None:
@@ -254,6 +265,8 @@ def _buscar_market_id(activo: str, marco_slug_prefix: str, marco: str) -> str | 
     del evento (startDate ahí es cuándo se LISTÓ el mercado, no la
     apertura de la ventana -- descartado como heurística tras probarlo)."""
     mid = _market_id_ventana_actual(marco_slug_prefix, marco)
+    if mid is _FALLO:
+        return None                                   # marco determinista sin respuesta fiable: saltar, no adivinar
     if mid is not None:
         return mid
     eventos = _listar_eventos_abiertos()
