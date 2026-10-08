@@ -28,6 +28,7 @@ consolidador de vigías de sports si/cuando exista uno con cadencia
 """
 import csv
 import json
+import os
 import sys
 from datetime import datetime, timezone
 from pathlib import Path
@@ -50,6 +51,14 @@ FEE = 0.05  # sports_fees_v3, NO 0.07 -- confirmado 26-Ago contra gamma-api
 # €<0 con n>=3" no distingue ruido de payout asimétrico de una señal
 # rota. Fix: test binomial de una cola contra el breakeven real.
 P_MAX_ALERTA = 0.15
+
+
+def _escribir_atomico(path: Path, texto: str) -> None:
+    """08-Oct (/code-review): tmp + os.replace; el sniper live lee el override y un JSON truncado se leería como
+    override vacío al reiniciar (fail-open)."""
+    tmp = path.with_name(path.name + f".tmp{os.getpid()}")
+    tmp.write_text(texto, encoding="utf-8")
+    os.replace(tmp, path)
 
 
 def _breakeven_hitrate(ask: float) -> float:
@@ -132,7 +141,7 @@ def main() -> int:
 
     if nuevos_override:
         override.update(nuevos_override)
-        OVERRIDE_PATH.write_text(json.dumps(override, ensure_ascii=False, indent=1))
+        _escribir_atomico(OVERRIDE_PATH, json.dumps(override, ensure_ascii=False, indent=1))
         print(f"[vigia_sports_micro_bucket_kill_switch_wallet_mirror] 🚨 override AUTOMÁTICO escrito para: "
               f"{list(nuevos_override.keys())}")
 
@@ -148,7 +157,7 @@ def main() -> int:
         )
         enviar_telegram(msg, bot="sports")
 
-    LATCH.write_text(json.dumps(vistos, ensure_ascii=False, indent=1))
+    _escribir_atomico(LATCH, json.dumps(vistos, ensure_ascii=False, indent=1))
     return 0
 
 
