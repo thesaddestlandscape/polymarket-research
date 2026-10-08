@@ -48,6 +48,14 @@ CONDICIONALES = {str(REPO / "data/sports/smart_exit_prices.csv"): REPO / "data/s
 # Si el log también calla -> se avisa (el hilo puede estar muerto).
 PATRONES_COMPUERTA = ("se salta ventana", "no significativo")
 _FECHA = re.compile(r"[_-]?\d{4}-\d{2}-\d{2}")
+# 08-Oct: sufijo de PID (maker_ms_<fecha>_<pid>) o de versión (arbitraje_anidado_dryrun_<fecha>_v<epoch>): es el MISMO
+# logger. Sin quitarlo, cada reinicio de observadores dejaba una familia huérfana que avisaba en falso ~48 h después.
+_SUFIJO_PROCESO = re.compile(r"_v?\d{6,}(?=\.csv)")
+# 08-Oct: loggers por EVENTOS con latido horario en su log ("N eventos en la última hora"): el silencio del CSV es
+# correcto si el log está vivo (< 2 h) y TODOS los latidos posteriores a la última escritura dicen 0 eventos. Si un
+# latido cuenta eventos y el CSV no crece, o el log calla, se avisa como siempre.
+EVENTOS = {"/root/polymarket-research-datalogs/arbitraje_anidado_dryrun.csv": REPO / "logs" / "arbitraje_anidado_dryrun_fase0.log"}
+_LATIDO = re.compile(r"^\[([^\]]+)\] (\d+) eventos en la última hora")
 
 
 def _familias() -> dict:
@@ -57,7 +65,7 @@ def _familias() -> dict:
             base = os.path.basename(f)
             if "_antes_" in base or "reconstruido" in base or base.endswith(".bak"):
                 continue
-            clave = os.path.join(os.path.dirname(f), _FECHA.sub("", base).replace(".gz", ""))
+            clave = os.path.join(os.path.dirname(f), _SUFIJO_PROCESO.sub("", _FECHA.sub("", base).replace(".gz", "")))
             try:
                 mt = os.path.getmtime(f)
             except OSError:
@@ -77,6 +85,22 @@ def _compuerta_cerrada(clave: str) -> bool:
             ult = [x for x in f.read().decode("utf-8", "replace").splitlines() if x.strip()]
         return bool(ult) and any(p in ult[-1] for p in PATRONES_COMPUERTA)
     except OSError:
+        return False
+
+
+def _sin_eventos(clave: str, ultimo_mtime: float) -> bool:
+    log = EVENTOS.get(clave)
+    try:
+        if log is None or time.time() - os.path.getmtime(log) > 7200:
+            return False
+        with open(log, "rb") as f:
+            f.seek(max(0, os.path.getsize(log) - 20000))
+            lineas = f.read().decode("utf-8", "replace").splitlines()
+        latidos = [(datetime.fromisoformat(m.group(1)).timestamp(), int(m.group(2)))
+                   for m in map(_LATIDO.match, lineas) if m]
+        posteriores = [n for ts, n in latidos if ts - 3600 > ultimo_mtime]   # ventana del latido = hora previa
+        return bool(posteriores) and all(n == 0 for n in posteriores)
+    except (OSError, ValueError):
         return False
 
 
@@ -117,6 +141,8 @@ def main() -> int:
                 vuelven.append(f"· {os.path.relpath(clave, REPO) if clave.startswith(str(REPO)) else clave}: vuelve a escribir tras {gap:.1f} h")
                 e["avisado"] = False
             continue
+        if _sin_eventos(clave, e["ultimo_mtime"]):
+            continue                                       # hilo vivo y sin episodios: callar es lo correcto
         callado = (ahora - e["ultimo_mtime"]) / 3600
         umbral = max(MIN_H, FACTOR * e["gap_max_h"])
         if callado > RETIRO_DIAS * 24:
@@ -125,7 +151,8 @@ def main() -> int:
             e["avisado"] = True
             avisos.append(f"· {os.path.relpath(clave, REPO) if clave.startswith(str(REPO)) else clave}: {callado:.1f} h sin escribir "
                           f"(su mayor hueco habitual: {e['gap_max_h']:.1f} h)")
-    for clave in [c for c in est if c not in _familias() and (ahora - est[c]["ultimo_mtime"]) > RETIRO_DIAS * 86400]:
+    vivas = _familias()
+    for clave in [c for c in est if c not in vivas]:     # 08-Oct: claves que ya no existen (p. ej. viejas por PID) fuera
         est.pop(clave, None)
     tmp = ESTADO.with_name(ESTADO.name + f".tmp{os.getpid()}")
     tmp.write_text(json.dumps(est, indent=0), encoding="utf-8")
