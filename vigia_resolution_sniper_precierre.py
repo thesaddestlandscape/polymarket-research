@@ -25,6 +25,7 @@ veredicto confirmado, no dispara).
 import json
 import subprocess
 import sys
+import time
 from pathlib import Path
 
 REPO = Path(__file__).resolve().parent
@@ -33,6 +34,7 @@ sys.path.insert(0, str(REPO))
 DATA_PATH = REPO / "data/shadow/resolution_sniper_precierre_gate_riguroso.json"
 LATCH = REPO / "data/live/vigia_resolution_sniper_precierre_latch.json"
 GENERADOR = REPO / "analisis_gate_riguroso_resolution_sniper_precierre_02sep.py"
+DUR_PATH = REPO / "data" / "live" / "vigia_resolution_sniper_precierre_duracion.json"
 
 
 def _claves_confirmadas(data: dict) -> dict:
@@ -48,8 +50,25 @@ def _claves_confirmadas(data: dict) -> dict:
 def main() -> int:
     from shadow_digest import enviar_telegram
 
-    r = subprocess.run([sys.executable, str(GENERADOR)], capture_output=True,
-                        text=True, timeout=120, cwd=str(REPO))
+    # 08-Oct: timeout ADAPTATIVO (antes 120 s fijo; murió el 08-Oct 07:14 al crecer resolution_sniper_obs_* a 330 MB con
+    # carga alta; trampa "vigía con timeout fijo muere al crecer los datos"): 3x la última duración real, mínimo 300 s,
+    # tope 3000 s (cron horario con flock -n). El JSON alimenta el gate fail-closed del ejecutor PRECIERRE (caduca a 30 h).
+    try:
+        ultima = float(json.loads(DUR_PATH.read_text())["s"])
+    except Exception:
+        ultima = 120.0
+    lim = min(3000.0, max(300.0, 3 * ultima))
+    t0 = time.time()
+    try:
+        r = subprocess.run(["nice", "-n", "10", sys.executable, str(GENERADOR)], capture_output=True,
+                           text=True, timeout=lim, cwd=str(REPO))
+    except subprocess.TimeoutExpired:
+        print(f"ERROR TimeoutExpired: {GENERADOR.name} tras {lim:.0f} s (última duración {ultima:.0f} s)")
+        return 1
+    try:
+        DUR_PATH.write_text(json.dumps({"s": round(time.time() - t0, 1)}))
+    except Exception:
+        pass
     if r.returncode != 0:
         print(f"ERROR ejecutando {GENERADOR.name}: {r.stderr[-2000:]}")
         return 1
