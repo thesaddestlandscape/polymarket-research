@@ -4,8 +4,8 @@
   k (mapa token -> activo/marco/mercado/cierre/lado), q y t de los tokens 15min, x (aggTrade Binance).
   (Las filas h NO se guardan: el hijo de libro_estado_ws solo escribe t,bb,ba,bs,as -- nivel 1 muestreado, redundante
   con q; la profundidad multinivel nunca se ha registrado en disco, ver libro_l2_15m_fase0.py.)
-Formatos: ver libro_estado_ws.py / m15_ms_cache.py. Salida: datalogs/m15_registro/m15_registro_YYYY-MM-DD.csv.gz
-(fuera de git; retención RETENCION_DIAS). Un día ya extraído no se rehace salvo --forzar.
+Formatos: ver libro_estado_ws.py / m15_ms_cache.py. Salida: VOLUMEN /mnt/HC_Volume_106538179/m15_registro/ (09-Oct, Javi:
+60 días como el 5m; datalogs/m15_registro es un enlace simbólico ahí). Retención y guarda de espacio: archivo_volumen.py. Un día ya extraído no se rehace salvo --forzar.
 Cron diario 03:45 UTC (día anterior completo, antes de que rote). Uso: python3 extraer_registro_15m.py [--dia D] [--forzar]
 """
 import argparse
@@ -14,9 +14,10 @@ import time
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
+from archivo_volumen import VOL, guarda, retencion
+
 DL = Path("/root/polymarket-research-datalogs")
-OUT = DL / "m15_registro"
-RETENCION_DIAS = 14
+OUT = VOL / "m15_registro"
 
 
 def extraer(dia, forzar=False):
@@ -69,11 +70,8 @@ def main():
     a = ap.parse_args()
     dia = a.dia or (datetime.now(timezone.utc) - timedelta(days=1)).strftime("%Y-%m-%d")
     extraer(dia, a.forzar)
-    lim = time.time() - RETENCION_DIAS * 86400
-    for f in OUT.glob("m15_registro_*.csv.gz"):
-        if f.stat().st_mtime < lim:
-            f.unlink()
-            print(f"retención: borrado {f.name}")
+    retencion("m15_registro")
+    guarda()
 
 
 if __name__ == "__main__":

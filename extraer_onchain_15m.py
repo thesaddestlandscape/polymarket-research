@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""extraer_onchain_15m.py -- MISIÓN 15M v2 (07-Oct): conserva 30 días de los rellenos ON-CHAIN de los mercados 15m.
+"""extraer_onchain_15m.py -- MISIÓN 15M v2 (07-Oct): conserva 60 días (09-Oct, antes 30; en el VOLUMEN /dev/sdb) de los rellenos ON-CHAIN de los mercados 15m.
 onchain_fills_YYYY-MM-DD.csv.gz (fetch_polymarket_fills_onchain.py, ~3,9 M filas/día, retención 4 d) trae cada relleno con
 MAKER y TOMADOR explícitos, lado, token, importes y comisión: la única fuente sin contaminar para flujo tomador, identidad
 de quien captura y comisión realmente cobrada. Aquí se guardan solo las filas de tokens 15m (mapa k de
@@ -12,10 +12,11 @@ import time
 from datetime import date, datetime, timedelta, timezone
 from pathlib import Path
 
+from archivo_volumen import VOL, guarda, retencion
+
 DL = Path("/root/polymarket-research-datalogs")
-REG = DL / "m15_registro"
-OUT = DL / "m15_onchain"
-RETENCION_DIAS = 30
+REG = VOL / "m15_registro"
+OUT = VOL / "m15_onchain"       # datalogs/m15_onchain es un enlace simbólico aquí
 
 
 def tokens_15m(dia):
@@ -76,10 +77,8 @@ def main():
     ap.add_argument("--forzar", action="store_true")
     a = ap.parse_args()
     extraer(a.dia or (datetime.now(timezone.utc) - timedelta(days=1)).strftime("%Y-%m-%d"), a.forzar)
-    lim = time.time() - RETENCION_DIAS * 86400
-    for f in OUT.glob("m15_onchain_*.csv.gz"):
-        if f.stat().st_mtime < lim:
-            f.unlink()
+    retencion("m15_onchain")
+    guarda()
 
 
 if __name__ == "__main__":

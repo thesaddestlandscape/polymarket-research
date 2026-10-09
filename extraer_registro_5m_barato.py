@@ -18,17 +18,17 @@ import argparse
 import gzip
 import json
 import os
-import shutil
 import time
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
+
+from archivo_volumen import guarda, retencion
 
 DL = Path("/root/polymarket-research-datalogs")
 # En el VOLUMEN /dev/sdb (el disco raíz está al 92 %; el volumen aloja también .git y backups: la guarda protege su
 # espacio libre).
 OUT = Path("/mnt/HC_Volume_106538179/registro_5m_barato")
 RETENCION_DIAS = 60
-LIBRE_MIN_GB = 8.0            # guarda del VOLUMEN (git vive ahí): por debajo, se borran los días MÁS ANTIGUOS y se avisa
 
 
 def _cierre(iso):
@@ -125,33 +125,8 @@ def main():
     a = ap.parse_args()
     dia = a.dia or (datetime.now(timezone.utc) - timedelta(days=1)).strftime("%Y-%m-%d")
     extraer(dia, a.forzar)
-    lim = time.time() - RETENCION_DIAS * 86400
-    for f in OUT.glob("maker_ms_*.csv.gz"):
-        if f.stat().st_mtime < lim:
-            f.unlink()
-            print(f"retención: borrado {f.name}")
-    guarda_disco()
-
-
-def guarda_disco():
-    """Si el disco baja de LIBRE_MIN_GB, borra días enteros del archivo empezando por el más antiguo (nunca el de
-    ayer) y avisa por Telegram: mejor perder el día más viejo que llenar el disco de producción."""
-    dias = sorted({f.name[9:19] for f in OUT.glob("maker_ms_*.csv.gz")})
-    borrados = []
-    while shutil.disk_usage(OUT).free / 1e9 < LIBRE_MIN_GB and len(dias) > 1:
-        d = dias.pop(0)
-        for f in OUT.glob(f"maker_ms_{d}_*.csv.gz"):
-            f.unlink()
-        borrados.append(d)
-    if borrados:
-        txt = (f"⚠️ Archivo vigía 5m barato: disco < {LIBRE_MIN_GB} GB libres, borrados días {', '.join(borrados)}. "
-               f"Quedan {len(dias)} días ({dias[0] if dias else '-'} en adelante). Liberar disco para retener más.")
-        print(txt)
-        try:
-            from shadow_digest import enviar_telegram
-            enviar_telegram(txt)
-        except Exception as e:
-            print(f"(Telegram falló: {e})")
+    retencion("registro_5m_barato", RETENCION_DIAS)
+    guarda()                    # 09-Oct: guarda ÚNICA para todos los archivos 60 d del volumen (5m + 15m)
 
 
 if __name__ == "__main__":

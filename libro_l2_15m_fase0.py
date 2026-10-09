@@ -5,7 +5,8 @@ Motivo: el registro ms (libro_estado_ws) solo guarda en disco el NIVEL 1 (filas 
 Cada ~1 s: UNA petición POST /books con los tokens de los 15m de las 6 monedas de la ventana VIVA y de la SIGUIENTE
 (pre-posición, §6A/§32). Escribe solo si el hash del libro cambió. Top N_NIVELES por lado, mejor primero.
 Fila: t_recepcion_ms,t_libro_ms(exchange),token,bids "p@s;p@s;...",asks "p@s;...";  mapa: fila M,t,token,moneda,
-inicio,cierre,lado. Salida datalogs/l2_15m/l2_15m_YYYY-MM-DD.csv.gz (miembros gzip anexados por minuto), retención 14 d.
+inicio,cierre,lado. Salida datalogs/l2_15m/l2_15m_YYYY-MM-DD.csv.gz (miembros gzip anexados por minuto), retención 60 d en el VOLUMEN /dev/sdb (09-Oct; datalogs/l2_15m es un enlace simbólico; guarda de espacio en los
+extractores diarios, archivo_volumen.py).
 Cron cada minuto: bucle de ~58 s con flock (sin screen). Uso: python3 libro_l2_15m_fase0.py [--seg 58]
 """
 import argparse
@@ -13,13 +14,13 @@ import gzip
 import json
 import time
 from datetime import datetime, timezone
-from pathlib import Path
 
 import requests
 
-OUT = Path("/root/polymarket-research-datalogs/l2_15m")
+from archivo_volumen import VOL, retencion
+
+OUT = VOL / "l2_15m"
 N_NIVELES = 10
-RETENCION_DIAS = 14
 MONEDAS = ("btc", "eth", "sol", "xrp", "doge", "bnb")
 S = requests.Session()
 
@@ -78,10 +79,7 @@ def main():
     dia = datetime.now(timezone.utc).strftime("%Y-%m-%d")
     with gzip.open(OUT / f"l2_15m_{dia}.csv.gz", "at", compresslevel=6) as f:
         f.writelines(lineas)
-    lim = time.time() - RETENCION_DIAS * 86400
-    for f in OUT.glob("l2_15m_*.csv.gz"):
-        if f.stat().st_mtime < lim:
-            f.unlink()
+    retencion("l2_15m")
 
 
 if __name__ == "__main__":
