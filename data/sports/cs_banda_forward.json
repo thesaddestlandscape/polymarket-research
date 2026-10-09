@@ -1,74 +1,74 @@
 {
- "generado_utc": "2026-10-08T08:12:06+00:00",
+ "generado_utc": "2026-10-09T08:12:11+00:00",
  "corte": "2026-09-30T16:00",
  "hipotesis": {
   "A CS#FADE [0,65-0,70) (LIVE)": {
-   "n": 107,
-   "dias": 9,
-   "acierto": 0.8131,
+   "n": 124,
+   "dias": 10,
+   "acierto": 0.7903,
    "precio_medio": 0.6669,
-   "ev": 0.2054,
+   "ev": 0.1713,
    "ic90": [
-    0.13,
-    0.2518
-   ],
-   "dias_positivos": 6,
-   "wallet_top_pct": 9,
-   "veredicto": "sin_concluir"
-  },
-  "B CS [0,65-0,70) cualquier disparo": {
-   "n": 122,
-   "dias": 9,
-   "acierto": 0.7787,
-   "precio_medio": 0.6673,
-   "ev": 0.1547,
-   "ic90": [
-    0.0743,
-    0.2224
-   ],
-   "dias_positivos": 6,
-   "wallet_top_pct": 8,
-   "veredicto": "sin_concluir"
-  },
-  "C CS partido [0,65-0,70)": {
-   "n": 49,
-   "dias": 8,
-   "acierto": 0.7755,
-   "precio_medio": 0.6676,
-   "ev": 0.1497,
-   "ic90": [
-    0.0151,
-    0.2508
+    0.0621,
+    0.2539
    ],
    "dias_positivos": 7,
-   "wallet_top_pct": 10,
+   "wallet_top_pct": 9,
+   "veredicto": "confirmada_forward"
+  },
+  "B CS [0,65-0,70) cualquier disparo": {
+   "n": 142,
+   "dias": 10,
+   "acierto": 0.7676,
+   "precio_medio": 0.6673,
+   "ev": 0.1377,
+   "ic90": [
+    0.0564,
+    0.2184
+   ],
+   "dias_positivos": 7,
+   "wallet_top_pct": 7,
+   "veredicto": "confirmada_forward"
+  },
+  "C CS partido [0,65-0,70)": {
+   "n": 56,
+   "dias": 9,
+   "acierto": 0.7679,
+   "precio_medio": 0.6673,
+   "ev": 0.139,
+   "ic90": [
+    0.0267,
+    0.2362
+   ],
+   "dias_positivos": 8,
+   "wallet_top_pct": 11,
    "veredicto": "sin_concluir"
   },
   "D CS partido [0,60-0,80)": {
-   "n": 161,
-   "dias": 8,
-   "acierto": 0.7267,
-   "precio_medio": 0.684,
-   "ev": 0.0521,
+   "n": 190,
+   "dias": 10,
+   "acierto": 0.7105,
+   "precio_medio": 0.683,
+   "ev": 0.0281,
    "ic90": [
-    -0.0098,
-    0.1152
+    -0.0422,
+    0.099
    ],
-   "dias_positivos": 5,
-   "wallet_top_pct": 9,
+   "dias_positivos": 6,
+   "wallet_top_pct": 12,
    "veredicto": "sin_concluir"
   },
   "M maker vende longshot [0,30-0,40)": {
-   "n": 659,
-   "dias": 9,
-   "acierto": 0.6646,
-   "precio_medio": 0.6498,
-   "ev": 0.0215,
+   "n": 744,
+   "dias": 10,
+   "acierto": 0.6532,
+   "precio_medio": 0.6499,
+   "ev": 0.0037,
    "ic90": [
-    -0.0143,
-    0.062
+    -0.0418,
+    0.0485
    ],
-   "dias_positivos": 5,
+   "dias_positivos": 6,
    "wallet_top_pct": 5,
    "veredicto": "sin_concluir"
   }
