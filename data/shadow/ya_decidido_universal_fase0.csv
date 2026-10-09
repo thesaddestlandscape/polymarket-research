@@ -187995,3 +187995,722 @@ timestamp_utc,evento,condition_id,question,end_date,horas_desde_fin,lado_ganador
 2026-10-09T04:30:04+00:00,resuelto,0xd7c6374d02b4218cebc14033851bea1c6a96955372c9dd3e68f277e93fad669d,Murilo: 3+ goals,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T02:30:07+00:00,2.0,No,1
 2026-10-09T04:30:04+00:00,resuelto,0x161d85748190486f26119a908d56804e454a1967b7eb2bb6d6dac30db8e74190,Nicolás Acevedo: Anytime Goalscorer,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T02:30:07+00:00,2.0,No,1
 2026-10-09T04:30:04+00:00,resuelto,0x82bddeec465c2456e0ded80571514047d84cc0091f326ef41b388092c54a741b,Gustavo Gómez: Anytime Goalscorer,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T02:30:07+00:00,2.0,No,1
+2026-10-09T04:40:04+00:00,cambio,0x5638daa0973125f518a59106f44e9d1415437ec5f3b152b501a5b18d21cbf3ac,Spread: Golden Knights (-1.5),2026-10-09T02:00:00+00:00,2.67,Maple Leafs,0.91,,,0.0,,posed,False,,,12789.830999,otros,2026-10-09T02:30:07+00:00,,,
+2026-10-09T04:40:04+00:00,cambio,0x6a43a9e0f05d1dc8edc77d1026e5945380734324f5c4ee29d79f55d9ba9c4f4b,Will the Labour Party candidate win 45-50% of the vote in the Holborn and St Pancras by-election?,2026-10-08T23:59:00+00:00,4.68,Yes,0.9585,0.997,0.003,1615.38,,posed,False,,,6880.810047000001,elecciones,2026-10-09T02:40:03+00:00,,,
+2026-10-09T04:40:04+00:00,visto,0xc4ac645a54f7b8a781468203a8302db2b2923289d4aa1be7dd1ea4682ec3fe0e,"Will Ukraine target Moscow on October 7, 2026?",2026-10-08T03:59:00+00:00,24.68,No,0.9995,,,0.0,,posed,False,,,15806.943802,geopolitica,2026-10-09T04:40:04+00:00,,,
+2026-10-09T04:40:04+00:00,visto,0x7b2ef96f8af451683b67586e400df117b4027147ea13ecfcdcd310196eeb96b9,Israel military action against Lebanon on October 7?,2026-10-08T03:59:00+00:00,24.68,Yes,0.9785,0.997,0.003,429.23,,posed,False,,,2487.5900629999996,geopolitica,2026-10-09T04:40:04+00:00,,,
+2026-10-09T04:40:04+00:00,visto,0xdd93c27e85a23b83771abb0727c03380ada3e99da7ddd69735a3d7dfd1a79588,Houthi military action against Saudi Arabia on October 7?,2026-10-08T03:59:00+00:00,24.68,Yes,0.92,0.99,0.0101,56.28,,posed,False,,,712.435807,otros,2026-10-09T04:40:04+00:00,,,
+2026-10-09T04:40:04+00:00,visto,0xaae1f65683e72f7f73e8b3b86b7f20a3a80f589c41be6b7402171ed3d1ca0bbf,Games Total: O/U 2.5,2026-10-08T03:00:00+00:00,25.67,Under,0.9105,,,0.0,disputed,disputed,True,2026-10-12T00:00:00Z,dvm_round_estimate,20916.575006,otros,2026-10-09T04:40:04+00:00,,,
+2026-10-09T04:40:04+00:00,visto,0xaf1d3c4480d74d0c248bb57e991372479f834e1a3923e0e4ec020563e97be473,Israel military action against Lebanon on October 6?,2026-10-07T03:59:00+00:00,48.68,No,0.9,0.92,0.087,39.68,,posed,False,,,5343.297078999999,geopolitica,2026-10-09T04:40:04+00:00,,,
+2026-10-09T04:40:04+00:00,visto,0x7f6536cd9c4f334d09d6631645eb509a9e2239917be7d52f57ee4d08c781625e,Houthi military action against Saudi Arabia on October 5?,2026-10-06T03:59:00+00:00,72.68,Yes,0.93,0.95,0.0526,285.5,,posed,False,,,1385.6128979999999,otros,2026-10-09T04:40:04+00:00,,,
+2026-10-09T04:40:04+00:00,visto,0x216498435fdf85053630537b7decdaf34b8d4468d3dd8da9e7dfa53083e78043,"Shipping targeted in Hormuz on October 5, 2026?",2026-10-06T03:59:00+00:00,72.68,Yes,0.95,0.98,0.0204,286.09,,posed,False,,,526.313912,geopolitica,2026-10-09T04:40:04+00:00,,,
+2026-10-09T04:40:04+00:00,visto,0xa7cbd1fd00f6b04a2e0a2e3906e21f23485adedbeba6d76a61d98bcc29d70170,Surigae makes landfall in Japan?,2026-10-06T03:59:00+00:00,72.68,No,0.997,0.999,0.001,454.93,,posed,False,,,8521.861694,otros,2026-10-09T04:40:04+00:00,,,
+2026-10-09T04:40:04+00:00,visto,0xcb497769b1fa2c2d141b60c700b3a44589028d06bb3927f05cb8d77313c065f6,Will Sol Zanetti be the next Premier of Quebec following the 2026 Quebec general election?,2026-10-06T03:59:00+00:00,72.68,No,0.9995,,,0.0,,posed,False,,,56119.94631199994,elecciones,2026-10-09T04:40:04+00:00,,,
+2026-10-09T04:40:04+00:00,visto,0xc7b0c43a506942c9a13b37330efa5bdfcc056acfc8da984f604da82f35505973,Will Éric Duhaime be the next Premier of Quebec following the 2026 Quebec general election?,2026-10-06T03:59:00+00:00,72.68,No,0.9975,,,0.0,,posed,False,,,53586.726599,elecciones,2026-10-09T04:40:04+00:00,,,
+2026-10-09T04:40:04+00:00,visto,0x61034413681fd41ffa301df1d1b9d530b0011ec756f526f9de7d21799b27c825,Will Paul St-Pierre Plamondon be the next Premier of Quebec following the 2026 Quebec general election?,2026-10-06T03:59:00+00:00,72.68,Yes,0.997,0.998,0.002,972.2,,posed,False,,,75636.768469,elecciones,2026-10-09T04:40:04+00:00,,,
+2026-10-09T04:40:04+00:00,visto,0xce9914e7ecc8e40350a68237ebbd5bc3b3233df935227714f6eed25cc220213a,Will Ruba Ghazal be the next Premier of Quebec following the 2026 Quebec general election?,2026-10-06T03:59:00+00:00,72.68,No,0.9995,,,0.0,,posed,False,,,40899.144689000015,elecciones,2026-10-09T04:40:04+00:00,,,
+2026-10-09T04:40:04+00:00,visto,0x5e459406c324de6bb2fb818ab9b8c4dba6149b48824fb45fc24ca521d77c08b4,Will Charles Milliard be the next Premier of Quebec following the 2026 Quebec general election?,2026-10-06T03:59:00+00:00,72.68,No,0.9985,,,0.0,,posed,False,,,25298.369746,elecciones,2026-10-09T04:40:04+00:00,,,
+2026-10-09T04:40:04+00:00,visto,0xa43974113a83acd2f2477e9561bc4a18baac2a3ff6afb087cd2e5662e19f9231,Will Christine Fréchette be the next Premier of Quebec following the 2026 Quebec general election?,2026-10-06T03:59:00+00:00,72.68,No,0.9985,0.999,0.001,3415.73,,posed,False,,,92074.92142400001,elecciones,2026-10-09T04:40:04+00:00,,,
+2026-10-09T04:40:04+00:00,visto,0x0b6aa768748d843dd14ddc58618e807e97fc1ed4ca9fd82f17cb2a4d8981df26,Will Bernard Drainville be the next Premier of Quebec following the 2026 Quebec general election?,2026-10-06T03:59:00+00:00,72.68,No,0.9995,,,0.0,,posed,False,,,63585.85366600002,elecciones,2026-10-09T04:40:04+00:00,,,
+2026-10-09T04:40:04+00:00,visto,0x340319a8af184a2f2f149241919dbc8c8669a718726e51eeaaca308d5eafa734,"Shipping targeted in Hormuz on October 4, 2026?",2026-10-05T03:59:00+00:00,96.68,Yes,0.9495,0.969,0.032,167.68,,posed,False,,,843.113207,geopolitica,2026-10-09T04:40:04+00:00,,,
+2026-10-09T04:40:04+00:00,visto,0x82e95ebf3ab6b0a78ed7fbc58e002a9994ef9272bbb35a9a52f2c0983d416b7c,Will Rodrigo Bolsonaro win the 2026 Rio Grande do Norte gubernatorial election?,2026-10-05T03:59:00+00:00,96.68,No,0.9995,,,0.0,,posed,False,,,670.73975,elecciones,2026-10-09T04:40:04+00:00,,,
+2026-10-09T04:40:04+00:00,visto,0x3e7681232021c7b0d42224f7fb5a087849d5eb01e246e6896185096f3f0e2288,Will Professor Roberio Paulino win the 2026 Rio Grande do Norte gubernatorial election?,2026-10-05T03:59:00+00:00,96.68,No,0.9995,,,0.0,,posed,False,,,698.27,elecciones,2026-10-09T04:40:04+00:00,,,
+2026-10-09T04:40:04+00:00,visto,0xe741586645924f2c377985565123ee88182f3d70766ce8a3a2140330387a873a,Will Henrique Lyra win the 2026 Rio Grande do Norte gubernatorial election?,2026-10-05T03:59:00+00:00,96.68,No,0.9995,,,0.0,,posed,False,,,583.6099999999999,elecciones,2026-10-09T04:40:04+00:00,,,
+2026-10-09T04:40:04+00:00,visto,0x7e95f8aeb65214aa96dbc7ab0bc7b82530a69f14da8c3ac149138a6eac658cc0,Will Dário Barbosa win the 2026 Rio Grande do Norte gubernatorial election?,2026-10-05T03:59:00+00:00,96.68,No,0.9995,,,0.0,,posed,False,,,574.69425,elecciones,2026-10-09T04:40:04+00:00,,,
+2026-10-09T04:40:04+00:00,visto,0x3715f6342f10f3a3765bb03fc751ebfcfc3617cea3a8c11a2c34dd724cc45a10,Will Carlos Jararaca win the 2026 Rio Grande do Norte gubernatorial election?,2026-10-05T03:59:00+00:00,96.68,No,0.9995,,,0.0,,posed,False,,,578.8297829999999,elecciones,2026-10-09T04:40:04+00:00,,,
+2026-10-09T04:40:04+00:00,visto,0xe65502948e3bb42f5c4931164960c6ae82b90388d409b05f0b083d802ed3f41e,Will Álvaro Dias win the 2026 Rio Grande do Norte gubernatorial election?,2026-10-05T03:59:00+00:00,96.68,No,0.9995,,,0.0,,posed,False,,,6265.625876,elecciones,2026-10-09T04:40:04+00:00,,,
+2026-10-09T04:40:04+00:00,visto,0x64da0550ba5c07b00286bbc280c59749b69b03f1612e08b802af5a60f1c27ca1,Will Professora Samara Mineiro win the 2026 Federal District gubernatorial election?,2026-10-05T03:59:00+00:00,96.68,No,0.9995,,,0.0,,posed,False,,,686.0400000000001,elecciones,2026-10-09T04:40:04+00:00,,,
+2026-10-09T04:40:04+00:00,visto,0xb4aa64122ecc92efd66185d7b20c3b8b803e4e9d2d91a6acd8a1f416a00bddc6,Will Professor Robson win the 2026 Federal District gubernatorial election?,2026-10-05T03:59:00+00:00,96.68,No,0.9995,,,0.0,,posed,False,,,884.444,elecciones,2026-10-09T04:40:04+00:00,,,
+2026-10-09T04:40:04+00:00,visto,0x5068ff9e29f5ef4e8375b2e769c6495b322303aeed081354c4ef5c631c44b6f2,Will Paula Belmonte win the 2026 Federal District gubernatorial election?,2026-10-05T03:59:00+00:00,96.68,No,0.9995,,,0.0,,posed,False,,,806.3040000000001,elecciones,2026-10-09T04:40:04+00:00,,,
+2026-10-09T04:40:04+00:00,visto,0x14c289921b2ad04e7fda692751b1401e7a2fcc78be114946cf9a5b6fcc993522,Will Leandro Grass win the 2026 Federal District gubernatorial election?,2026-10-05T03:59:00+00:00,96.68,No,0.987,0.994,0.006,1213.51,,posed,False,,,3929.8583249999997,elecciones,2026-10-09T04:40:04+00:00,,,
+2026-10-09T04:40:04+00:00,visto,0x1157d532357f7039601a690753cd1a95ecc788d3fc21d86e531a618d76306017,Will Kiko Caputo win the 2026 Federal District gubernatorial election?,2026-10-05T03:59:00+00:00,96.68,No,0.9995,,,0.0,,posed,False,,,675.4100000000001,elecciones,2026-10-09T04:40:04+00:00,,,
+2026-10-09T04:40:04+00:00,visto,0x7c48e897d0bf9877a776fcb0f024dde5e42d73420e2f6cbc7260d50ebe98fe08,Will Expedito Mendonça win the 2026 Federal District gubernatorial election?,2026-10-05T03:59:00+00:00,96.68,No,0.999,,,0.0,,posed,False,,,926.674,elecciones,2026-10-09T04:40:04+00:00,,,
+2026-10-09T04:40:04+00:00,visto,0xffa6ec7fbf5d12dc2031da6be89f30c3d416a4be5bd6b0dcd912668f712378a9,Will Elisson win the 2026 Federal District gubernatorial election?,2026-10-05T03:59:00+00:00,96.68,No,0.9975,,,0.0,,posed,False,,,979.4300000000001,elecciones,2026-10-09T04:40:04+00:00,,,
+2026-10-09T04:40:04+00:00,visto,0x1241b3fb1f45e9f581070ba95e822f52cc64680b18292a8c9289ce2bdd024cbd,Will Celina Leão win the 2026 Federal District gubernatorial election?,2026-10-05T03:59:00+00:00,96.68,Yes,0.985,0.989,0.0111,3992.99,,posed,False,,,16830.280423000004,elecciones,2026-10-09T04:40:04+00:00,,,
+2026-10-09T04:40:04+00:00,visto,0x3877cd4f8c3ba92351db2f3584a840fe5b1f15e296e7eef6d11726666343bafb,Will Cappelli win the 2026 Federal District gubernatorial election?,2026-10-05T03:59:00+00:00,96.68,No,0.9995,,,0.0,,posed,False,,,917.604,elecciones,2026-10-09T04:40:04+00:00,,,
+2026-10-09T04:40:04+00:00,visto,0xf56229a6f8d8fa7e8673c9c96df7256d11cd8c5c9062fa6fa168ba1bc9141ef5,Will Arruda win the 2026 Federal District gubernatorial election?,2026-10-05T03:59:00+00:00,96.68,No,0.9995,,,0.0,,posed,False,,,6993.481884000001,elecciones,2026-10-09T04:40:04+00:00,,,
+2026-10-09T04:40:04+00:00,visto,0x6b0819203d4550d963146a84431edaa08802c878497cf1cf6cf620285f6bb6cb,Will Subtenente Luiz Carlos win the 2026 Tocantins gubernatorial election?,2026-10-05T03:59:00+00:00,96.68,No,0.9995,,,0.0,,posed,False,,,1146.93,elecciones,2026-10-09T04:40:04+00:00,,,
+2026-10-09T04:40:04+00:00,visto,0x968fd9dbc10cb05c4584b2cfc58a49529f9ce451821dfc8ec6c93182becc407a,Will Prof. Witer Naves win the 2026 Tocantins gubernatorial election?,2026-10-05T03:59:00+00:00,96.68,No,0.9995,,,0.0,,posed,False,,,1514.8300000000002,elecciones,2026-10-09T04:40:04+00:00,,,
+2026-10-09T04:40:04+00:00,visto,0xcc5eef97bcc661651477059f11e4e6a57d8c762352d3d339fb706b13d320fd77,Will Laurez Moreira win the 2026 Tocantins gubernatorial election?,2026-10-05T03:59:00+00:00,96.68,No,0.9995,,,0.0,,posed,False,,,645.009,elecciones,2026-10-09T04:40:04+00:00,,,
+2026-10-09T04:40:04+00:00,visto,0x8d3d49486046370dba95590a205df6033d9551abee9cdb2d65cb604c084c290f,Will Du Pereira win the 2026 Tocantins gubernatorial election?,2026-10-05T03:59:00+00:00,96.68,No,0.9995,,,0.0,,posed,False,,,2641.6500000000005,elecciones,2026-10-09T04:40:04+00:00,,,
+2026-10-09T04:40:04+00:00,visto,0x93c1c73c8abb6e3c200bd8629fad36a060c3f042d7eec07ee3212b6ea87759ce,Will Ataides de Oliveira win the 2026 Tocantins gubernatorial election?,2026-10-05T03:59:00+00:00,96.68,No,0.9995,,,0.0,,posed,False,,,1719.73,elecciones,2026-10-09T04:40:04+00:00,,,
+2026-10-09T04:40:04+00:00,visto,0x8608dbb3f2361ef2374460ab5a63bfaea7ee9b535e9c89ed8ed2de7c9153bbfb,Will Roberto Cidade win the 2026 Amazonas gubernatorial election?,2026-10-05T03:59:00+00:00,96.68,No,0.9995,,,0.0,,posed,False,,,8489.792926999999,elecciones,2026-10-09T04:40:04+00:00,,,
+2026-10-09T04:40:04+00:00,visto,0xad86bcf7159b89f35edda14d9d74594349e1e6fc04c668026d1b27f033d93a15,Will Isael Munduruku win the 2026 Amazonas gubernatorial election?,2026-10-05T03:59:00+00:00,96.68,No,0.9995,,,0.0,,posed,False,,,1977.9415769999998,elecciones,2026-10-09T04:40:04+00:00,,,
+2026-10-09T04:40:04+00:00,visto,0x51149c4c87565f8ec3d5fc6b4bf35aabe1531ba9c6daa634500b842cd860aa3a,Will Gilberto Vasconcelos win the 2026 Amazonas gubernatorial election?,2026-10-05T03:59:00+00:00,96.68,No,0.9995,,,0.0,,posed,False,,,2248.755581,elecciones,2026-10-09T04:40:04+00:00,,,
+2026-10-09T04:40:04+00:00,visto,0x50311bbfb1c11ecba8a3ee7e4053cbda9c6075e2def0f24548c0e10d773e7efb,Will David Almeida win the 2026 Amazonas gubernatorial election?,2026-10-05T03:59:00+00:00,96.68,No,0.999,,,0.0,,posed,False,,,3930.8003150000004,elecciones,2026-10-09T04:40:04+00:00,,,
+2026-10-09T04:40:04+00:00,visto,0x00b29a11feebd69592c27b67e32d47fc5a9d4dfa44b0be92e19181b748589426,Will Cabo Daciolo win the 2026 Amazonas gubernatorial election?,2026-10-05T03:59:00+00:00,96.68,No,0.9995,,,0.0,,posed,False,,,2030.9260000000002,elecciones,2026-10-09T04:40:04+00:00,,,
+2026-10-09T04:40:04+00:00,visto,0xb8a774d0db55647d795ffd9050c9ce311999ed2c450d04fd82a4848001ac2f39,Will Tião Bocalom win the 2026 Acre gubernatorial election?,2026-10-05T03:59:00+00:00,96.68,No,0.998,,,0.0,,posed,False,,,1457.39,elecciones,2026-10-09T04:40:04+00:00,,,
+2026-10-09T04:40:04+00:00,visto,0x9ce34bcc7a1ea055ae15009673c927cbc2362376dfb2f787420c137f3b6493e8,Will Thor Dantas win the 2026 Acre gubernatorial election?,2026-10-05T03:59:00+00:00,96.68,No,0.9995,,,0.0,,posed,False,,,470.19,elecciones,2026-10-09T04:40:04+00:00,,,
+2026-10-09T04:40:04+00:00,visto,0xaa06d447b3ae5e98e0f3d3b182bde3520a58b744fd85bfdd6a68164597b47d90,Will Mailza Assis win the 2026 Acre gubernatorial election?,2026-10-05T03:59:00+00:00,96.68,Yes,0.9705,0.987,0.0132,149.05,,posed,False,,,32269.607089999994,elecciones,2026-10-09T04:40:04+00:00,,,
+2026-10-09T04:40:04+00:00,visto,0xd4eac6cb0f6b457c2f4f395fe4c4a234a87154b5c5a36059f2a7ebcfed4deb65,Will Eudo Raffael win the 2026 Acre gubernatorial election?,2026-10-05T03:59:00+00:00,96.68,No,0.9995,,,0.0,,posed,False,,,766.937271,elecciones,2026-10-09T04:40:04+00:00,,,
+2026-10-09T04:40:04+00:00,visto,0xe20c6f3d57379059286d4e20e32cd8100d97de5722b8b091dd49beb2ebad5071,Will Dr. Luisinho win the 2026 Acre gubernatorial election?,2026-10-05T03:59:00+00:00,96.68,No,0.9995,,,0.0,,posed,False,,,601.6099999999999,elecciones,2026-10-09T04:40:04+00:00,,,
+2026-10-09T04:40:04+00:00,visto,0x266938860633d58aca292dd362cb572da6ef0195fbebc4b45a6d31c695ca7fea,Will Alan Rick win the 2026 Acre gubernatorial election?,2026-10-05T03:59:00+00:00,96.68,No,0.99,0.999,0.001,3065.92,,posed,False,,,34244.929489,elecciones,2026-10-09T04:40:04+00:00,,,
+2026-10-09T04:40:04+00:00,visto,0x132583622a4443b24910918a01d9ff9cfe1bc75177fc8494bdebd39e0395296b,Will Eduardo Zans Loayza win the next Cusco mayoral elections?,2026-10-05T03:59:00+00:00,96.68,No,0.9995,,,0.0,,posed,False,,,324.98,elecciones,2026-10-09T04:40:04+00:00,,,
+2026-10-09T04:40:04+00:00,visto,0x86983d910a4c81fec6e4a2eb78b9749a181e6635354aca66946cdfdf315798c4,Will Federico Huamán Tapara win the next Cusco mayoral elections?,2026-10-05T03:59:00+00:00,96.68,No,0.949,0.998,0.002,131.01,,posed,False,,,549.4200000000001,elecciones,2026-10-09T04:40:04+00:00,,,
+2026-10-09T04:40:04+00:00,visto,0xf2b4a0cef37968ddd071835b0f49305ad69f818c8ec3084bc057d98668e27f9b,Will Albert Aníbal Arenas Yabar win the next Cusco mayoral elections?,2026-10-05T03:59:00+00:00,96.68,Yes,0.9395,0.993,0.007,1138.55,,posed,False,,,17736.625377,elecciones,2026-10-09T04:40:04+00:00,,,
+2026-10-09T04:40:04+00:00,visto,0x5b56e19153655efac9d4f3c45a4106149eb553dc15f0ee31d869abf2782108a7,Will William Peña Farfán win the next Cusco mayoral elections?,2026-10-05T03:59:00+00:00,96.68,No,0.9995,,,0.0,,posed,False,,,6325.1298560000005,elecciones,2026-10-09T04:40:04+00:00,,,
+2026-10-09T04:40:04+00:00,visto,0xe0ebbe6d1b6d95a75eb42c030c2a07f8747df72b775b70deae60cd68f1c6b1d7,Will Elizabeth Mónica Nieto Álvarez win the next Cusco mayoral elections?,2026-10-05T03:59:00+00:00,96.68,No,0.9995,,,0.0,,posed,False,,,311.92,elecciones,2026-10-09T04:40:04+00:00,,,
+2026-10-09T04:40:04+00:00,visto,0xe8c39a22e11f5b3c85ddf9054f7c71a9951d53c3fb55d6f33caaef8bdcb00ed1,Will Jesyka Guevara Villanueva win the next Cusco mayoral elections?,2026-10-05T03:59:00+00:00,96.68,No,0.9825,0.999,0.001,36.58,,posed,False,,,286.72,elecciones,2026-10-09T04:40:04+00:00,,,
+2026-10-09T04:40:04+00:00,visto,0x74de4a971891a3c6d64e500f8ed960b289f76ac0a7feb280e01c1d70fa44a654,Will Eulogio Tapia Deza win the next Cusco mayoral elections?,2026-10-05T03:59:00+00:00,96.68,No,0.9965,0.998,0.002,85.77,,posed,False,,,322.830776,elecciones,2026-10-09T04:40:04+00:00,,,
+2026-10-09T04:40:04+00:00,visto,0xbdc998d2a4e854372151bb6ba1d64acdb85fc9a24299bf7bf1f53d42d07ece72,Will Delfín Kennedy Quispe Ccalla win the next Cusco mayoral elections?,2026-10-05T03:59:00+00:00,96.68,No,0.9995,,,0.0,,posed,False,,,282.13300000000004,elecciones,2026-10-09T04:40:04+00:00,,,
+2026-10-09T04:40:04+00:00,visto,0x02837393d6b7ebd14c441b1d2888a8d7db7f31c035f8bff013900ab0137fde0a,Will Jorge Rogelio Vargas Febres win the next Cusco mayoral elections?,2026-10-05T03:59:00+00:00,96.68,No,0.9995,,,0.0,,posed,False,,,322.82000000000005,elecciones,2026-10-09T04:40:04+00:00,,,
+2026-10-09T04:40:04+00:00,visto,0x1a90731f59a909bd5a72b098ebd7f25b1e8f5afaee4ab47c41092389ce18816c,Will Víctor Vidal Pino Zambrano win the next Cusco mayoral elections?,2026-10-05T03:59:00+00:00,96.68,No,0.9985,0.999,0.001,10.81,,posed,False,,,336.62,elecciones,2026-10-09T04:40:04+00:00,,,
+2026-10-09T04:40:04+00:00,visto,0x2d6804b8ae153cb75e05f4508d3c4153a7ca7fbc80677bf2b67145659ae464a2,Will Iván Hurtado Villafuerte win the next Cusco mayoral elections?,2026-10-05T03:59:00+00:00,96.68,No,0.967,0.997,0.003,125.0,,posed,False,,,398.96,elecciones,2026-10-09T04:40:04+00:00,,,
+2026-10-09T04:40:04+00:00,visto,0x6f94ee518ab075e14f13601f12e31c3cc84b28bc17f8e9fac83e622977b0d07a,Will Sergio Sullca Condori win the next Cusco mayoral elections?,2026-10-05T03:59:00+00:00,96.68,No,0.9535,0.997,0.003,461.11,,posed,False,,,350.24,elecciones,2026-10-09T04:40:04+00:00,,,
+2026-10-09T04:40:04+00:00,visto,0x72127affd46e8cde5f73ca6dafeedf09ea9cf6fc063e6c576eb8e86c68f1aec5,Will Gabriela Paliza Romero win the next Cusco mayoral elections?,2026-10-05T03:59:00+00:00,96.68,No,0.9965,0.999,0.001,42.96,,posed,False,,,277.94977900000004,elecciones,2026-10-09T04:40:04+00:00,,,
+2026-10-09T04:40:04+00:00,visto,0xb2a4da1fa1cccde907ce862586b21ebbf96380dccefcf0370b6157a81bf04a6c,Will Jorge Luis Segura Ttito win the next Cusco mayoral elections?,2026-10-05T03:59:00+00:00,96.68,No,0.9885,0.999,0.001,34.73,,posed,False,,,273.72,elecciones,2026-10-09T04:40:04+00:00,,,
+2026-10-09T04:40:04+00:00,visto,0x580d7b693bccfb74741f819c3091a89ce0c02a0f2b62dddf4383f45a890cde26,Will Alfredo Álvarez Díaz win the next Arequipa mayoral elections?,2026-10-05T03:59:00+00:00,96.68,No,0.9995,,,0.0,,posed,False,,,348.19,elecciones,2026-10-09T04:40:04+00:00,,,
+2026-10-09T04:40:04+00:00,visto,0x1baa3959c2dfed5979fb46a7738118c3be6d5742b01729da4c370f90b9f0f00e,Will Lorenzo Filomeno Colque Arias win the next Arequipa mayoral elections?,2026-10-05T03:59:00+00:00,96.68,No,0.98,0.999,0.001,13.99,,posed,False,,,475.96750000000003,elecciones,2026-10-09T04:40:04+00:00,,,
+2026-10-09T04:40:04+00:00,visto,0x1c3c99868071eed99e8d39b2b94286b9de87643755bd278d5a182846580811c1,Will Ricardo Alfredo Ramírez del Villar Llosa win the next Arequipa mayoral elections?,2026-10-05T03:59:00+00:00,96.68,No,0.993,,,0.0,,posed,False,,,8971.306835,elecciones,2026-10-09T04:40:04+00:00,,,
+2026-10-09T04:40:04+00:00,visto,0xd005a057c25f46f33ee39ea83179994f5d1b4176e9cba19b7e6f78ed820bdb83,Will Tomás Job Delgado Zúñiga win the next Arequipa mayoral elections?,2026-10-05T03:59:00+00:00,96.68,No,0.9995,,,0.0,,posed,False,,,546.0300000000001,elecciones,2026-10-09T04:40:04+00:00,,,
+2026-10-09T04:40:04+00:00,visto,0xc7e8e8fd9680fe9e0e130499ec39dd1ad91c6f162c7c202471f7f98ffa3c606e,Will Ruccy Judith Oscco Polar win the next Arequipa mayoral elections?,2026-10-05T03:59:00+00:00,96.68,No,0.9985,0.999,0.001,2.88,,posed,False,,,523.316,elecciones,2026-10-09T04:40:04+00:00,,,
+2026-10-09T04:40:04+00:00,visto,0x776a71a68ca6c094cb4fc6644b0cebd0140e96e63004371f792af85ccadcbba6,Will Isidro Flores Sosa win the next Arequipa mayoral elections?,2026-10-05T03:59:00+00:00,96.68,No,0.9985,0.999,0.001,8.86,,posed,False,,,719.205,elecciones,2026-10-09T04:40:04+00:00,,,
+2026-10-09T04:40:04+00:00,visto,0x6ca8772f1561e679dcbec05476fc0aa1786e6d2459c69b5275c7cdab8a8681a1,Will Jorge Luis Reyes Luján Martínez win the next Arequipa mayoral elections?,2026-10-05T03:59:00+00:00,96.68,No,0.9995,,,0.0,,posed,False,,,595.33,elecciones,2026-10-09T04:40:04+00:00,,,
+2026-10-09T04:40:04+00:00,visto,0xafab60675bd44e5beb21bf5d7cb61b9030b754a8572ef94352b395dd48558ebd,Will Javier Antonio Onofre Ccama win the next Arequipa mayoral elections?,2026-10-05T03:59:00+00:00,96.68,No,0.9995,,,0.0,,posed,False,,,409.18500000000006,elecciones,2026-10-09T04:40:04+00:00,,,
+2026-10-09T04:40:04+00:00,resuelto,0x48d2d224a2133f96e42e942419cc3462cf2ac44dd76c10597ea62376d92deea4,Spread: Fluminense FC (-5.5),2026-10-09T00:30:00+00:00,,Coritiba FBC,,,,,,,,,,,,2026-10-09T00:30:04+00:00,4.17,Coritiba FBC,1
+2026-10-09T04:40:04+00:00,resuelto,0xad20ccdc01c134f8426fad30135ee6a0bace100d327c025c3c076fd06edb6ca9,Spread: Fluminense FC (-4.5),2026-10-09T00:30:00+00:00,,Coritiba FBC,,,,,,,,,,,,2026-10-09T00:30:04+00:00,4.17,Coritiba FBC,1
+2026-10-09T04:40:04+00:00,resuelto,0x3278147d304e5565e39f4c960886466f682f7578dcf0b84eb3669ce20cf951d2,Spread: Coritiba FBC (-3.5),2026-10-09T00:30:00+00:00,,Fluminense FC,,,,,,,,,,,,2026-10-09T00:30:04+00:00,4.17,Fluminense FC,1
+2026-10-09T04:40:04+00:00,resuelto,0xa1f77b884ab2d5c0adca949dd92c380fff9229cd0e8a0899bd9434bc28fb4a88,Spread: Fluminense FC (-3.5),2026-10-09T00:30:00+00:00,,Fluminense FC,,,,,,,,,,,,2026-10-09T00:30:04+00:00,4.17,Fluminense FC,1
+2026-10-09T04:40:04+00:00,resuelto,0x80bcf470e18e8765674bb253c6c6542a8f9fe96b497fabcc9d738e00d9d8d151,Spread: Coritiba FBC (-2.5),2026-10-09T00:30:00+00:00,,Fluminense FC,,,,,,,,,,,,2026-10-09T00:30:04+00:00,4.17,Fluminense FC,1
+2026-10-09T04:40:04+00:00,resuelto,0x3c60b94aed16b88ac449b951c57bc247b0e87d0fb682a953c14d58ef69f386f7,Spread: Coritiba FBC (-1.5),2026-10-09T00:30:00+00:00,,Fluminense FC,,,,,,,,,,,,2026-10-09T00:30:04+00:00,4.17,Fluminense FC,1
+2026-10-09T04:40:04+00:00,resuelto,0x81cf31ea909456d8791b40f30cb37b3fe25142a1102f555ba44d269f4c6f28f4,Spread: EC Bahia (-5.5),2026-10-09T00:30:00+00:00,,SE Palmeiras,,,,,,,,,,,,2026-10-09T00:30:04+00:00,4.17,SE Palmeiras,1
+2026-10-09T04:40:04+00:00,resuelto,0x39f6f5b9faa327754b3a0637b7f17ca78478364dbb243d325ad0c0cf30247110,Spread: SE Palmeiras (-5.5),2026-10-09T00:30:00+00:00,,EC Bahia,,,,,,,,,,,,2026-10-09T00:30:04+00:00,4.17,EC Bahia,1
+2026-10-09T04:40:04+00:00,resuelto,0xf0cec4926de2fbce06699723404192cc277eefb3a7ef5e0559dd1a1b0cd572dc,Spread: EC Bahia (-4.5),2026-10-09T00:30:00+00:00,,SE Palmeiras,,,,,,,,,,,,2026-10-09T00:30:04+00:00,4.17,SE Palmeiras,1
+2026-10-09T04:40:04+00:00,resuelto,0x1409bea0c5e88e7906327557a28af9674d8bfb5a1bb30c0f7083cff4f3b7bfaa,Spread: SE Palmeiras (-4.5),2026-10-09T00:30:00+00:00,,EC Bahia,,,,,,,,,,,,2026-10-09T00:30:04+00:00,4.17,EC Bahia,1
+2026-10-09T04:40:04+00:00,resuelto,0x8056ec914d5d75236c9a66ffaadaf6e2695d8b7e3e70784ec8f2a2aa6af3684b,Spread: EC Bahia (-3.5),2026-10-09T00:30:00+00:00,,SE Palmeiras,,,,,,,,,,,,2026-10-09T00:30:04+00:00,4.17,SE Palmeiras,1
+2026-10-09T04:40:04+00:00,resuelto,0x902197f9e8f9c927d8083d31d6990cd0130b8fa9a606bffb9d60464a51462762,Spread: SE Palmeiras (-3.5),2026-10-09T00:30:00+00:00,,EC Bahia,,,,,,,,,,,,2026-10-09T00:30:04+00:00,4.17,EC Bahia,1
+2026-10-09T04:40:04+00:00,resuelto,0x46b1c52b8a2c0d7c2fb2aec51c7188400a05b2ecebbda84e6c550c302b2cee4e,Spread: EC Bahia (-2.5),2026-10-09T00:30:00+00:00,,SE Palmeiras,,,,,,,,,,,,2026-10-09T00:30:04+00:00,4.17,SE Palmeiras,1
+2026-10-09T04:40:04+00:00,resuelto,0xe8d90e1bb284202a9edd89916c127ba9263a901a9cd9aa8d62d2944137e58c3f,Spread: EC Bahia (-1.5),2026-10-09T00:30:00+00:00,,SE Palmeiras,,,,,,,,,,,,2026-10-09T00:30:04+00:00,4.17,SE Palmeiras,1
+2026-10-09T04:40:04+00:00,resuelto,0xa6f2b7c8dd407e4075196fe963404e8e32719b09794e797da0d673d53d381767,Exact Score: SE Palmeiras 5 - 5 EC Bahia?,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T00:30:04+00:00,4.17,No,1
+2026-10-09T04:40:04+00:00,resuelto,0xf2c3d519d7b042c222a84d3f2db56d3edb54322734adfa44a461ab38bd336c13,Exact Score: SE Palmeiras 4 - 4 EC Bahia?,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T00:30:04+00:00,4.17,No,1
+2026-10-09T04:40:04+00:00,resuelto,0x6284af81cbb348080a119cdee5163ad9f917cc992245f8e3149ef608308eed0c,Exact Score: SE Palmeiras 5 - 2 EC Bahia?,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T00:30:04+00:00,4.17,No,1
+2026-10-09T04:40:04+00:00,resuelto,0xe72dfe91ab51d7435ba6e9ce031ceca4a44da31498e8bae093ffdd3b94dfae30,Exact Score: SE Palmeiras 4 - 3 EC Bahia?,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T00:30:04+00:00,4.17,No,1
+2026-10-09T04:40:04+00:00,resuelto,0x0ae994bf5ed50c9d231e278c79aa7fc8911e228e1de38929d1f7d1f96c53a54b,Exact Score: SE Palmeiras 3 - 4 EC Bahia?,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T00:30:04+00:00,4.17,No,1
+2026-10-09T04:40:04+00:00,resuelto,0x08d9d38558c85c096ab2a32a1e2977df14dd39b99e3f5ffc50c480ade1ea6c33,Exact Score: SE Palmeiras 2 - 5 EC Bahia?,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T00:30:04+00:00,4.17,No,1
+2026-10-09T04:40:04+00:00,resuelto,0x529aa89c88673b566a6d96f533c8bb95a446337b5dbbdeefc3dc73ee79bbb2b9,Exact Score: SE Palmeiras 5 - 1 EC Bahia?,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T00:30:04+00:00,4.17,No,1
+2026-10-09T04:40:04+00:00,resuelto,0xf21f7b072d3ca122d6d6ec286e6f2a487c527d47396ffba2e91753a3a1631307,Exact Score: SE Palmeiras 4 - 2 EC Bahia?,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T00:30:04+00:00,4.17,No,1
+2026-10-09T04:40:04+00:00,resuelto,0x41260bf72ba7a7263773efa11e6d462a45b0fe06a5b5bd933794baca47663c3f,Exact Score: SE Palmeiras 3 - 3 EC Bahia?,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T00:30:04+00:00,4.17,No,1
+2026-10-09T04:40:04+00:00,resuelto,0x1c17d55cd7515a8206182cf3d7ea8017f6907dbc2cc743ebce938bc807c526ff,Exact Score: SE Palmeiras 2 - 4 EC Bahia?,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T00:30:04+00:00,4.17,No,1
+2026-10-09T04:40:04+00:00,resuelto,0x15698dcb2e3d7acab9a6ab6b0ea68b613093c6deb3dcde08f114c3824e447536,Exact Score: SE Palmeiras 1 - 5 EC Bahia?,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T00:30:04+00:00,4.17,No,1
+2026-10-09T04:40:04+00:00,resuelto,0xe09a5642e24b0a6c8486a7ccbc8d16a6bd9451da94f700cebb8db465ab5f5e13,Exact Score: SE Palmeiras 5 - 0 EC Bahia?,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T00:30:04+00:00,4.17,No,1
+2026-10-09T04:40:04+00:00,resuelto,0x056049d28e6a599e9aa4a585b0be2eb9ef3456672b44d2a4b747a8e3733e5ab7,Exact Score: SE Palmeiras 4 - 1 EC Bahia?,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T00:30:04+00:00,4.17,No,1
+2026-10-09T04:40:04+00:00,resuelto,0xc295d4600c3711247318963dc5da3f30f6c4cb94d873f912f92b36d91783fc1e,Exact Score: SE Palmeiras 3 - 2 EC Bahia?,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T00:30:04+00:00,4.17,No,1
+2026-10-09T04:40:04+00:00,resuelto,0x7e380edb86cf6fc7b4ee897d6424ca53b778c14f28710bc3e0762b4213125336,Exact Score: SE Palmeiras 2 - 3 EC Bahia?,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T00:30:04+00:00,4.17,No,1
+2026-10-09T04:40:04+00:00,resuelto,0x2079b4ae8975545dd915bc4f12441bf86c65d81fac8598f117ca74afc70b7760,Exact Score: SE Palmeiras 1 - 4 EC Bahia?,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T00:30:04+00:00,4.17,No,1
+2026-10-09T04:40:04+00:00,resuelto,0xfe23ddb615974a09b035d0ea7ed331b43b5b885492508fb1ce5dd9f290e68b4a,Exact Score: SE Palmeiras 0 - 5 EC Bahia?,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T00:30:04+00:00,4.17,No,1
+2026-10-09T04:40:04+00:00,resuelto,0x52cfdca9c90e587dc311a4687e9be59bef124cbb8df5a4709cc0a027c94ac4f2,Exact Score: SE Palmeiras 4 - 0 EC Bahia?,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T00:30:04+00:00,4.17,No,1
+2026-10-09T04:40:04+00:00,resuelto,0xb5a6532aa10729cb46130863a69ee474642d9b1d32809a8cd1a191500e201f0c,Exact Score: SE Palmeiras 3 - 1 EC Bahia?,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T00:30:04+00:00,4.17,No,1
+2026-10-09T04:40:04+00:00,resuelto,0x9dfc0413611bca3e19553e2c11c28fe591d8c9016457ebe98e5e59e83a663675,Exact Score: SE Palmeiras 2 - 2 EC Bahia?,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T00:30:04+00:00,4.17,No,1
+2026-10-09T04:40:04+00:00,resuelto,0x27f4d63ee0d2ff986647f25dd7340b5fc102b039cb670b53582d2d8cb012d71e,Exact Score: SE Palmeiras 1 - 3 EC Bahia?,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T00:30:04+00:00,4.17,No,1
+2026-10-09T04:40:04+00:00,resuelto,0x9d1bdbb4a6d995c9516d44a92e4ad7bde7efddc534e924f8bddf773d435e792c,Exact Score: SE Palmeiras 0 - 4 EC Bahia?,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T00:30:04+00:00,4.17,No,1
+2026-10-09T04:40:04+00:00,resuelto,0xfb439ea566f830320c4d9e65f1ccde9a41b53ef9420bd42110b83bf9d5ad06cd,Exact Score: SE Palmeiras 3 - 0 EC Bahia?,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T00:30:04+00:00,4.17,No,1
+2026-10-09T04:40:04+00:00,resuelto,0x45bed5780a0f204cee4c9d0a3a0bb209ca31916f74ace464e8238fdd248f8205,Exact Score: SE Palmeiras 1 - 2 EC Bahia?,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T00:30:04+00:00,4.17,No,1
+2026-10-09T04:40:04+00:00,resuelto,0x1449306726ac5580a0a1959c5ee3ffb23d4c51d6527a2fc02d1cec8f17d5c626,Exact Score: SE Palmeiras 0 - 3 EC Bahia?,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T00:30:04+00:00,4.17,No,1
+2026-10-09T04:40:04+00:00,resuelto,0x3637ca1789da92893f01d637f7f460355312056da2cf115cb7ade4c73c0016be,Exact Score: SE Palmeiras 2 - 0 EC Bahia?,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T00:30:04+00:00,4.17,No,1
+2026-10-09T04:40:04+00:00,resuelto,0xb3ed1628c03d7c548add62d354810e9925a2146e677dfcd901131dcd8c89bb48,Exact Score: SE Palmeiras 0 - 2 EC Bahia?,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T00:30:04+00:00,4.17,No,1
+2026-10-09T04:40:04+00:00,resuelto,0x2b42c62722b97141823d0cfc1101a4726062b7c82de3e2296d29588ce3fbcabf,Exact Score: SE Palmeiras 1 - 0 EC Bahia?,2026-10-09T00:30:00+00:00,,Yes,,,,,,,,,,,,2026-10-09T00:30:04+00:00,4.17,Yes,1
+2026-10-09T04:40:04+00:00,resuelto,0xea2aee3468e1e84fb5afd258cd09c5e43209fa7125ada67c95514de12abb308d,Exact Score: SE Palmeiras 0 - 1 EC Bahia?,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T00:30:04+00:00,4.17,No,1
+2026-10-09T04:40:04+00:00,resuelto,0x1f1f5fcec61e2d5bb779d7023df462ef41506c531f2f2e69b3b680d6567e3731,Exact Score: SE Palmeiras 0 - 0 EC Bahia?,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T00:30:04+00:00,4.17,No,1
+2026-10-09T04:40:04+00:00,resuelto,0x648f4d68c86a87a09c35da85090478512658d0f23a5ff1134ff2633e104e9b7e,Exact Score: Fluminense FC 5 - 5 Coritiba FBC?,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T00:30:04+00:00,4.17,No,1
+2026-10-09T04:40:04+00:00,resuelto,0xd644ce10438a820390f8c20624495d69db8c8245df15751f27aeb1f76144206c,Exact Score: Fluminense FC 4 - 4 Coritiba FBC?,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T00:30:04+00:00,4.17,No,1
+2026-10-09T04:40:04+00:00,resuelto,0xd562bb517a7b2f24e16ee8fcbdbaaef4f5ab9a12f093b2574b8425ab9f75ab3d,Exact Score: Fluminense FC 5 - 2 Coritiba FBC?,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T00:30:04+00:00,4.17,No,1
+2026-10-09T04:40:04+00:00,resuelto,0x9997339f1035a32e25de82af016465609008d6be43c84080b850d34c89dc6a7f,Exact Score: Fluminense FC 4 - 3 Coritiba FBC?,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T00:30:04+00:00,4.17,No,1
+2026-10-09T04:40:04+00:00,resuelto,0xfedf507717eda190dd559bba549d5237ba77876b3ab9e1e182abb898b4e80dc2,Exact Score: Fluminense FC 3 - 4 Coritiba FBC?,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T00:30:04+00:00,4.17,No,1
+2026-10-09T04:40:04+00:00,resuelto,0xcd9d2f00c17f33f4fbc4c0f2a2a65d272fbecd0bafe47ad69078b81e800d5c10,Exact Score: Fluminense FC 2 - 5 Coritiba FBC?,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T00:30:04+00:00,4.17,No,1
+2026-10-09T04:40:04+00:00,resuelto,0x568eaca2d957afa79a424607b797a10d9f520ce9a4e0ea205cf09b76729bdd89,Exact Score: Fluminense FC 5 - 1 Coritiba FBC?,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T00:30:04+00:00,4.17,No,1
+2026-10-09T04:40:04+00:00,resuelto,0xc0100c79563c6411d98d13fb478a6ba6998c2721fa28ddd0912032442aaa9740,Exact Score: Fluminense FC 4 - 2 Coritiba FBC?,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T00:30:04+00:00,4.17,No,1
+2026-10-09T04:40:04+00:00,resuelto,0x40272f1623ee4b466b7f041ddd07ccd17512aa11deefaf35f17f3ca0b5a5af5c,Exact Score: Fluminense FC 3 - 3 Coritiba FBC?,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T00:30:04+00:00,4.17,No,1
+2026-10-09T04:40:04+00:00,resuelto,0xff9193e7a4bf599750b8b8e9eca018f48d27a4b7be0b4cbbfeb1959bee18c90c,Exact Score: Fluminense FC 2 - 4 Coritiba FBC?,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T00:30:04+00:00,4.17,No,1
+2026-10-09T04:40:04+00:00,resuelto,0xa7ee451eb7f1eef36c063641afee92c2e1b302059dc2553bf068d7fe30be033b,Exact Score: Fluminense FC 1 - 5 Coritiba FBC?,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T00:30:04+00:00,4.17,No,1
+2026-10-09T04:40:04+00:00,resuelto,0x05f66ace04b19515017dbc9a63f423dc0ef6b2cb7bb7387f646de181658e1797,Exact Score: Fluminense FC 5 - 0 Coritiba FBC?,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T00:30:04+00:00,4.17,No,1
+2026-10-09T04:40:04+00:00,resuelto,0xf7f619c94b08ace2b5688c368555e849a692b362b68f52feba6010e2b0d4740b,Exact Score: Fluminense FC 4 - 1 Coritiba FBC?,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T00:30:04+00:00,4.17,No,1
+2026-10-09T04:40:04+00:00,resuelto,0xc82025ee2157567143e88248cc12f7470fb57c586355c93d58d0b8e44fc2eb21,Exact Score: Fluminense FC 3 - 2 Coritiba FBC?,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T00:30:04+00:00,4.17,No,1
+2026-10-09T04:40:04+00:00,resuelto,0x2c13cfc1cf808c371364157392b124ba583cc0f4cae9ed8e9c8890441cb772f2,Exact Score: Fluminense FC 2 - 3 Coritiba FBC?,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T00:30:04+00:00,4.17,No,1
+2026-10-09T04:40:04+00:00,resuelto,0x3e384d3b80c918637873099fe2e9c7abcdb66ca7ceb6da8beaa1e673aec7647d,Exact Score: Fluminense FC 1 - 4 Coritiba FBC?,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T00:30:04+00:00,4.17,No,1
+2026-10-09T04:40:04+00:00,resuelto,0x35cd4b100ef9165817e50c0ef6296515dd9fd5cca2bd6f40d3969c661eb07111,Exact Score: Fluminense FC 0 - 5 Coritiba FBC?,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T00:30:04+00:00,4.17,No,1
+2026-10-09T04:40:04+00:00,resuelto,0xe58a418af4dd9bd419da375c26f02548e4d3eed2004da4f7da75850d9c8eb1ab,Exact Score: Fluminense FC 4 - 0 Coritiba FBC?,2026-10-09T00:30:00+00:00,,Yes,,,,,,,,,,,,2026-10-09T00:30:04+00:00,4.17,Yes,1
+2026-10-09T04:40:04+00:00,resuelto,0x6467cbcc7fd5f831980c0b98d78556c41c43d41b7194abb7867015bef13f53ea,Exact Score: Fluminense FC 3 - 1 Coritiba FBC?,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T00:30:04+00:00,4.17,No,1
+2026-10-09T04:40:04+00:00,resuelto,0xf1b2cdf0e79a5687d9decc1d5d797b2ecac5c74d0dec9bfb16c56f4a6dbb3220,Exact Score: Fluminense FC 2 - 2 Coritiba FBC?,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T00:30:04+00:00,4.17,No,1
+2026-10-09T04:40:04+00:00,resuelto,0x4cd81a556fca4d141a5c5f3fcf09a80f1bac31203b627d26bf5fc0ea7231a87c,Exact Score: Fluminense FC 1 - 3 Coritiba FBC?,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T00:30:04+00:00,4.17,No,1
+2026-10-09T04:40:04+00:00,resuelto,0x84f0b959d7516b202caeef817572e9253aff7662e07ae129585b91d50bb55582,Exact Score: Fluminense FC 0 - 4 Coritiba FBC?,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T00:30:04+00:00,4.17,No,1
+2026-10-09T04:40:04+00:00,resuelto,0x10a3e7c647d403b9a10a44c95da2acc4f34ed6bd5be7d848d5b61403ae637ec2,Exact Score: Fluminense FC 3 - 0 Coritiba FBC?,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T00:30:04+00:00,4.17,No,1
+2026-10-09T04:40:04+00:00,resuelto,0xf8685ef7fe05e40bfe1a9715da2bef918cedc892450d00b90f2a5a16bd63d6b4,Exact Score: Fluminense FC 1 - 2 Coritiba FBC?,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T00:30:04+00:00,4.17,No,1
+2026-10-09T04:40:04+00:00,resuelto,0x81118209257492d016a9b5cc9b3301caddc972d89a9ba923b9f0c1ae021bf9c8,Exact Score: Fluminense FC 0 - 3 Coritiba FBC?,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T00:30:04+00:00,4.17,No,1
+2026-10-09T04:40:04+00:00,resuelto,0x43cb931df13d0159850c56848602bf7f6fed624ebe7c0d593ff07b104123dd8c,Exact Score: Fluminense FC 1 - 1 Coritiba FBC?,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T00:30:04+00:00,4.17,No,1
+2026-10-09T04:40:04+00:00,resuelto,0x2c5ab7813a853edbe264cb8708b218d7dc3e6a634c059d48ffaa653e40cded58,Exact Score: Fluminense FC 0 - 2 Coritiba FBC?,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T00:30:04+00:00,4.17,No,1
+2026-10-09T04:40:04+00:00,resuelto,0xd52109d8acbec5a9d847efde15622e36419a660be6e4e39da2851af573a80fc8,Exact Score: Fluminense FC 0 - 1 Coritiba FBC?,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T00:30:04+00:00,4.17,No,1
+2026-10-09T04:40:04+00:00,resuelto,0x355d2bc02e05930a32e147b826424d588fadc126471de8669170026c8e748c79,Exact Score: Fluminense FC 0 - 0 Coritiba FBC?,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T00:30:04+00:00,4.17,No,1
+2026-10-09T04:40:04+00:00,resuelto,0x2634b40ae9fd51d391c79c7752711ec4452233759e1bed8ca4c48b5713c02c34,Exact Score: SE Palmeiras 1 - 1 EC Bahia?,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T00:40:04+00:00,4.0,No,1
+2026-10-09T04:40:04+00:00,resuelto,0x7122d0ce249d58205fb15b05996a060681e3b14db0ed1fc271506c7998e57102,EC Bahia leading at halftime?,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T00:40:04+00:00,4.0,No,1
+2026-10-09T04:40:04+00:00,resuelto,0xcab09d2c4f693c3c0ee6c25909aeb2a25dbc61cc2dabf410aa7c8122d376cf42,Coritiba FBC leading at halftime?,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T01:00:05+00:00,3.67,No,1
+2026-10-09T04:40:04+00:00,resuelto,0x5ab1764a374a0500a6eab870ba2a56453cfa8f09cfa7074a6a9b2673b6f3b5db,,2026-10-09T00:30:00+00:00,,Yes,,,,,,,,,,,,2026-10-09T01:10:04+00:00,3.5,,
+2026-10-09T04:40:04+00:00,resuelto,0xbef78a4ad156e5639954010d1ab4e09b5142d429bb660ee9a926a83c167bf5ba,,2026-10-09T00:30:00+00:00,,Yes,,,,,,,,,,,,2026-10-09T01:10:04+00:00,3.5,,
+2026-10-09T04:40:04+00:00,resuelto,0xd04dd824dc1c11858a65b7db9d524499ed212e426d1746ec37fc2c0e6674ce37,,2026-10-09T00:30:00+00:00,,Yes,,,,,,,,,,,,2026-10-09T01:10:04+00:00,3.5,,
+2026-10-09T04:40:04+00:00,resuelto,0x686e6a25809c6ab0d39c2946395a911de589e6b0a15c229d2b98d49d190c894e,,2026-10-09T00:30:00+00:00,,Yes,,,,,,,,,,,,2026-10-09T01:50:03+00:00,2.83,,
+2026-10-09T04:40:04+00:00,resuelto,0x9e7ef165642f55a9c8444c7a3b5ac6a8672cb1cbfdb4119880482cc078cffe16,,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T01:50:03+00:00,2.83,,
+2026-10-09T04:40:04+00:00,resuelto,0xc25effc8c572b732a658d0bfe53bc7365e7bf78cde7dc60008f8387aef7b6afd,,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T01:50:03+00:00,2.83,,
+2026-10-09T04:40:04+00:00,resuelto,0xcb29f0fe8c16d8701a9970f8e72c7296270152d39fd06ea643abad9e0f7b0bd4,,2026-10-09T00:30:00+00:00,,Fluminense FC,,,,,,,,,,,,2026-10-09T02:00:06+00:00,2.67,,
+2026-10-09T04:40:04+00:00,resuelto,0xcdab3aa275f7177d7ede312183ec4553f5f54b81985c0d459243df80ab0df947,,2026-10-09T00:30:00+00:00,,EC Bahia,,,,,,,,,,,,2026-10-09T02:00:06+00:00,2.67,,
+2026-10-09T04:40:04+00:00,resuelto,0x045d8b41f7a41d07938ec79d90998e75c1cabd32abaea76a6638385561da221a,,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T02:00:06+00:00,2.67,,
+2026-10-09T04:40:04+00:00,resuelto,0xe903e86407526e652df677537c04d36fd862497b410c96df9e22f47c55a6a2c6,,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T02:00:06+00:00,2.67,,
+2026-10-09T04:40:04+00:00,resuelto,0x94756d68c94972eb26da38f45e95bcef504b13dc36300e2fd86244a2c77e7c84,,2026-10-09T00:30:00+00:00,,Fluminense FC,,,,,,,,,,,,2026-10-09T02:20:06+00:00,2.33,,
+2026-10-09T04:40:04+00:00,resuelto,0xbb5d1b15f4571d92979e9e33eeba600dce767460dd22699f3f950fa2422760a8,,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T02:30:07+00:00,2.17,,
+2026-10-09T04:40:04+00:00,resuelto,0x9a659398c4ee7b4b455ad64b8e091d89a6f52c37b87697a52c9f87b9481c51d4,,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T02:30:07+00:00,2.17,,
+2026-10-09T04:40:04+00:00,resuelto,0xe839e57d907a2efcaec49d6ee062c8e4f54f3379d78beef209a8e21c79442288,,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T02:30:07+00:00,2.17,,
+2026-10-09T04:40:04+00:00,resuelto,0x6d8491cce77a7cf05e3fcef467a5f957b8b32a9c7f782d24d8596b267876788b,,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T02:30:07+00:00,2.17,,
+2026-10-09T04:40:04+00:00,resuelto,0x2aa48230a15f27a5cae5ed2bf2554699d66a86361ec79e7a8e7042a7ebab2657,,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T02:30:07+00:00,2.17,,
+2026-10-09T04:40:04+00:00,resuelto,0x5ec4f7f7df11418e367aa1eaa476c9278c14280f0603fa92eb2c32f132347c12,,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T02:30:07+00:00,2.17,,
+2026-10-09T04:40:04+00:00,resuelto,0x097157d0e7876666f74b739de10c1afac6ca48b6a46a3b673696098a69433ed5,,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T02:30:07+00:00,2.17,,
+2026-10-09T04:40:04+00:00,resuelto,0x25ba7b2c658934175f5a4be13d28a6c0c6e4559cbdd7fe048a732b6112f57d0d,,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T02:30:07+00:00,2.17,,
+2026-10-09T04:40:04+00:00,resuelto,0x6b90b96ff66d0d7976ca5d438b08a71ee17f7e2905574d849a5c71157f9abde1,,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T02:30:07+00:00,2.17,,
+2026-10-09T04:40:04+00:00,resuelto,0xd029d31c532d38b816e536168387666b6d6beac0dcce8d69ea95fa5bfcb18df3,,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T02:30:07+00:00,2.17,,
+2026-10-09T04:40:04+00:00,resuelto,0xf90ff77baefb39a9c7fa70a6eca267321be33121f5ccaaefc4d83842d5ab94c5,,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T02:30:07+00:00,2.17,,
+2026-10-09T04:40:04+00:00,resuelto,0x7a3b6dded7832ced3433134aace665849827c04d432855ae62a1fc64b793154d,Erick Pulga: 1+ goals + assists,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T02:30:07+00:00,2.17,No,1
+2026-10-09T04:40:04+00:00,resuelto,0x7e4baf56540538a9d00fa3056f466da2e23ba42b223b2eb2660fa470eab91aa1,Jean Lucas: 3+ goals + assists,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T02:30:07+00:00,2.17,No,1
+2026-10-09T04:40:04+00:00,resuelto,0x595a9e1c662d88d1c91a11c9dcd1de5b8b04e94e2446421566623c7c2e87ef91,Jean Lucas: 2+ goals + assists,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T02:30:07+00:00,2.17,No,1
+2026-10-09T04:40:04+00:00,resuelto,0x1c791dd403a5a2f093f304f113d559c4635b6fd42f8eedfa37c88163efa40440,,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T02:30:07+00:00,2.17,,
+2026-10-09T04:40:04+00:00,resuelto,0x379510188a6ab225abe4f1aa3bb9aa34131c8c8a524b8010098a2433d840e877,,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T02:30:07+00:00,2.17,,
+2026-10-09T04:40:04+00:00,resuelto,0xac3a288249aa2dbd8b6f13b54956389d0fbc0122161e688d80cce738041a06aa,,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T02:30:07+00:00,2.17,,
+2026-10-09T04:40:04+00:00,resuelto,0x13bebe23a89279eea2adacd90dfae38f1cd71da9d9950aa22de349d5cb68ec5b,,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T02:30:07+00:00,2.17,,
+2026-10-09T04:40:04+00:00,resuelto,0x49d46c164ca280bffa6b8debefa7f23fd555f44627e8e1ce7b59113859247be5,,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T02:30:07+00:00,2.17,,
+2026-10-09T04:40:04+00:00,resuelto,0xb4b3e5db38b8b9d3573099dd2865453b58e709aa7b5c27af1db5b81774a7d011,,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T02:30:07+00:00,2.17,,
+2026-10-09T04:40:04+00:00,resuelto,0x9407c3a50e42c75d7b988bb72d0fed5ffca3545b8a6fa9182338c5a82717691c,,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T02:30:07+00:00,2.17,,
+2026-10-09T04:40:04+00:00,resuelto,0xbed1c29c49bd426948d2085c8155b93326bbcce754593af456a1aa3edfee4cdc,,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T02:30:07+00:00,2.17,,
+2026-10-09T04:40:04+00:00,resuelto,0x213bb901bf54b9bcaf83d720a9c7519b962a136cea41f1d906e675a7bb70f5ad,,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T02:30:07+00:00,2.17,,
+2026-10-09T04:40:04+00:00,resuelto,0xd9ec44d14c8d1a9d6fe44bf0e799baaa958cb6ed3113988c733e78af01dea273,,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T02:30:07+00:00,2.17,,
+2026-10-09T04:40:04+00:00,resuelto,0x09fb6ee943e4098dab9c31329ec518da96eeba53a6f4d9ddb7ff4c7ebb859688,,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T02:30:07+00:00,2.17,,
+2026-10-09T04:40:04+00:00,resuelto,0xf26a9d18015e232b791eb28f4f757d97319a21a1b5c2c09ac7e26ad9c8723e9c,,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T02:30:07+00:00,2.17,,
+2026-10-09T04:40:04+00:00,resuelto,0xb20a459793cc80c32ac0eb0b3fd4951d1f4041a3d55000c3fab5755c5b0ae634,,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T02:30:07+00:00,2.17,,
+2026-10-09T04:40:04+00:00,resuelto,0x9d2bb4f8986e56cffc7046ffd4961a28c20d8e31eee5753045e0a8a8fc9aa345,,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T02:30:07+00:00,2.17,,
+2026-10-09T04:40:04+00:00,resuelto,0x06cde5687acc0e7858de80639eca39269708b54f7b428fc400007aab9b945a80,,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T02:30:07+00:00,2.17,,
+2026-10-09T04:40:04+00:00,resuelto,0x1b14c2b34598e6902f1e61f2310b7442370f78ab6a7c05796c1c38e0b5558a4b,,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T02:30:07+00:00,2.17,,
+2026-10-09T04:40:04+00:00,resuelto,0xef3fb23ff30cac9016625c02030c7ddb7db483284750ab840ed08237d4b6feef,,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T02:30:07+00:00,2.17,,
+2026-10-09T04:40:04+00:00,resuelto,0x80d7177073847e5c4ba072df8250fa5135e0365753342ba05a97e150a21ea95a,,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T02:30:07+00:00,2.17,,
+2026-10-09T04:40:04+00:00,resuelto,0x31e837f888b516cff2bb17987f5f5bcb6c0222974820b42cf9dc515a1bffe3b9,,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T02:30:07+00:00,2.17,,
+2026-10-09T04:40:04+00:00,resuelto,0xc4e63df07800680906da878111ee0b137893c845ef9c7a977a049bf8bd99c4aa,,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T02:30:07+00:00,2.17,,
+2026-10-09T04:40:04+00:00,resuelto,0x7b2ee596a64b3e2357d24096d39c9c2e7c2315c6e56585b733cbac87594f89b0,,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T02:30:07+00:00,2.17,,
+2026-10-09T04:40:04+00:00,resuelto,0xbf7d4b81daf5bbddb745fced2fbd8114cc3c934117463e14693c5a01a00fb0f8,,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T02:30:07+00:00,2.17,,
+2026-10-09T04:40:04+00:00,resuelto,0x01517369178c3fdafda7fde0de6b0902dd26ed4cee543f93db4d224b7815a258,,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T02:30:07+00:00,2.17,,
+2026-10-09T04:40:04+00:00,resuelto,0xed505053f6e3194efe7f51eb835e863bbf88695a1d3513000f731287d99e5431,,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T02:30:07+00:00,2.17,,
+2026-10-09T04:40:04+00:00,resuelto,0xc8a719194a5d0950251afdae6822f741b4d4fe7d164b295286d5d496a0e238a1,,2026-10-09T00:30:00+00:00,,Yes,,,,,,,,,,,,2026-10-09T02:30:07+00:00,2.17,,
+2026-10-09T04:40:04+00:00,resuelto,0x7f9664fbe7e04817e590d57384bace282ef94c3bd5209c2279e1f2860f242013,,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T02:30:07+00:00,2.17,,
+2026-10-09T04:40:04+00:00,resuelto,0x973f764d7de2673b55cb3922e871e230411a13839e357f684c6c98a24077ac03,,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T02:30:07+00:00,2.17,,
+2026-10-09T04:40:04+00:00,resuelto,0x884274cb89c3c3e186cba2ed5753f697c793c5a9dd0ad8f813907be31594d41b,,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T02:30:07+00:00,2.17,,
+2026-10-09T04:40:04+00:00,resuelto,0x2356e451329abecd54de9ae4b03d36c29e3dd33542881c12f0e3148f9666f1c8,,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T02:30:07+00:00,2.17,,
+2026-10-09T04:40:04+00:00,resuelto,0x4f5cc991fc1f9fb4a25f817ff83661bc9eae9a766753c8cc61bc6683d4282b72,,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T02:30:07+00:00,2.17,,
+2026-10-09T04:40:04+00:00,resuelto,0x982bd8e63b553841591326ff209111426b4cea22798bc4d64d7eddad023a5ed6,,2026-10-09T00:30:00+00:00,,Yes,,,,,,,,,,,,2026-10-09T02:30:07+00:00,2.17,,
+2026-10-09T04:40:04+00:00,resuelto,0x9e68b190735682e3f26ce30345bc934cfd332d052504b7f86bb49eef952046eb,,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T02:30:07+00:00,2.17,,
+2026-10-09T04:40:04+00:00,resuelto,0xcbf294daa8393c4e913b029b20c5dab8769c515f002f3f534f1244f9f52609d0,,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T02:30:07+00:00,2.17,,
+2026-10-09T04:40:04+00:00,resuelto,0x0274491c592ce10ee9cc6ec23120f43fe139698f8c89c259f9b85cccfbd5355c,,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T02:30:07+00:00,2.17,,
+2026-10-09T04:40:04+00:00,resuelto,0x585ca0121054770108e04b48e596eeb6d921b095be2566b0321f898fc65d69d6,,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T02:30:07+00:00,2.17,,
+2026-10-09T04:40:04+00:00,resuelto,0x17d0359b5cfa2c458ceabc4aa0e2054cc2c70b8e44b54d27b88e00c2f37ee90b,,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T02:30:07+00:00,2.17,,
+2026-10-09T04:40:04+00:00,resuelto,0x74fb7c6ebd1a4003cf105b73b1c5e6e7c4bd7716b40bb91e2d8b74d1c93d5183,,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T02:30:07+00:00,2.17,,
+2026-10-09T04:40:04+00:00,resuelto,0xe7056e7ba3ae474eae056474ab6d4570440f32be07cfd9b89f8649d328eafe99,,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T02:30:07+00:00,2.17,,
+2026-10-09T04:40:04+00:00,resuelto,0xe7efe6bd2e6ce5262ba821e9428c1cd4a1fc429d053588895d5b7463d4715ba7,,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T02:30:07+00:00,2.17,,
+2026-10-09T04:40:04+00:00,resuelto,0x1123193867f15654a56ffcdfd86138b3748bc6ea35cd8e6fae6b5fb35e5e2a32,,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T02:30:07+00:00,2.17,,
+2026-10-09T04:40:04+00:00,resuelto,0xcb7c33ddc7d85655490123606ffa542dd1a7eee2f2a6015ac23891e8f0f191f1,,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T02:30:07+00:00,2.17,,
+2026-10-09T04:40:04+00:00,resuelto,0x41d3b70a1d2fc2591584d41dcccfa30c89694916b2d0680e17fb73f2e3bf8ca6,,2026-10-09T00:30:00+00:00,,Yes,,,,,,,,,,,,2026-10-09T02:30:07+00:00,2.17,,
+2026-10-09T04:40:04+00:00,resuelto,0x6617f2438d6628f9bbed5cc0d6cce311eb2244ee8aef6ed3c13001781cdf6906,,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T02:30:07+00:00,2.17,,
+2026-10-09T04:40:04+00:00,resuelto,0x5b3fdaccc7eba3fbdc92c43d64e0cf6fd03f3aa2406e5e29751e8a86f4902c8c,,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T02:30:07+00:00,2.17,,
+2026-10-09T04:40:04+00:00,resuelto,0xfdc31741f7f647d6a4b2e7bf7eabd4170d6548af2cdc2f7ac84351736bf9c5b0,,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T02:30:07+00:00,2.17,,
+2026-10-09T04:40:04+00:00,resuelto,0xda70b5d4a07358157543794dc74f926cb77ab52e608c9131099ecc9ac7dd6e8a,,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T02:30:07+00:00,2.17,,
+2026-10-09T04:40:04+00:00,resuelto,0xf349294ddee62842beff67dcc2ea2aa24bd0e00a6fb13a74428ed667d2145f93,,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T02:30:07+00:00,2.17,,
+2026-10-09T04:40:04+00:00,resuelto,0xf0aff41ac1b8a0e93586a28c41cb85aca26c8cb02c0a24d56cef3cee2b6b6016,,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T02:30:07+00:00,2.17,,
+2026-10-09T04:40:04+00:00,resuelto,0x8ca4eb835235c039df2e65ecd8e222b84798decd05138e25fb4293350f139b0d,,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T02:30:07+00:00,2.17,,
+2026-10-09T04:40:04+00:00,resuelto,0x70a968cfa0e958f1fc8dc6fd1283512667163d00565e10b7808e14e01dfa6503,,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T02:30:07+00:00,2.17,,
+2026-10-09T04:40:04+00:00,resuelto,0x8b78ac0e0c957debc18075f9686527249dd578207acbd1f8ad17bbdbce13dcb2,,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T02:30:07+00:00,2.17,,
+2026-10-09T04:40:04+00:00,resuelto,0x8bf22fb4725e74d5f1fb474e2858cde08675630eef50dac7320b1da9f294be55,,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T02:30:07+00:00,2.17,,
+2026-10-09T04:40:04+00:00,resuelto,0x2e00f0e674e4a29085162b66dbe3b9067268a472f8a64bf1bf471c2397aeece1,,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T02:30:07+00:00,2.17,,
+2026-10-09T04:40:04+00:00,resuelto,0x9f0682686dbf4aeef0e5a7088ba506d9a001421a794275b974fcdfb58299bbc8,,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T02:30:07+00:00,2.17,,
+2026-10-09T04:40:04+00:00,resuelto,0x0bc008defec5784b772c651cda6da0196a90d4f1ee33e455ce0468b20fdb7a00,,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T02:30:07+00:00,2.17,,
+2026-10-09T04:40:04+00:00,resuelto,0x57b98584e2287fb334f4f3dfbe428a3d63a919b673f15abf8c377bcbfd4afedb,,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T02:30:07+00:00,2.17,,
+2026-10-09T04:40:04+00:00,resuelto,0xb2e900b060517cc95aae2b519c2bbad31a09856f137738326b09c8c91aead034,,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T02:30:07+00:00,2.17,,
+2026-10-09T04:40:04+00:00,resuelto,0x6c553139da9e2007e40c2ac098f1b82bc3b7df0b434b513a01f614c595c5fc6c,,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T02:30:07+00:00,2.17,,
+2026-10-09T04:40:04+00:00,resuelto,0x0b817e3ed8282f3497940da649f08207e1fe766337d868a88d5100f2223ea2ef,,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T02:30:07+00:00,2.17,,
+2026-10-09T04:40:04+00:00,resuelto,0xab760a6cf52e25079976c2850280ebde377d0a134e559c430864e135a4b33fc3,Alexander Barboza: 2+ goals,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T02:30:07+00:00,2.17,No,1
+2026-10-09T04:40:04+00:00,resuelto,0x200f971668f0197271a26a017110d23a60612587515b7d17f78a68be6e8d2eb5,Marlon Freitas: 3+ goals,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T02:30:07+00:00,2.17,No,1
+2026-10-09T04:40:04+00:00,resuelto,0xc721a7d7eedca18738c721ed09c5b8ae9ed88c11765fe3a14f664c12597b64ef,Murilo: 2+ goals,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T02:30:07+00:00,2.17,No,1
+2026-10-09T04:40:04+00:00,resuelto,0x072451d0a32e51b7055fa529c135ee78b3253b3dbb30a7ab4740183475cdaf86,Khellven: 3+ goals,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T02:30:07+00:00,2.17,No,1
+2026-10-09T04:40:04+00:00,resuelto,0x36eb75abbf674779bbf34651899928d63aacc2b6f06fa619df957792cf64d453,Khellven: 2+ goals,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T02:30:07+00:00,2.17,No,1
+2026-10-09T04:40:04+00:00,resuelto,0x36438476f3bfad7700201f19c3f6daef522108066dcbe424afc39c81ece7cb41,,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T02:30:07+00:00,2.17,,
+2026-10-09T04:40:04+00:00,resuelto,0x06162d1eb53d759b841d535c28f324e5c58c576796e1ff48ca97df081e7eb074,,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T02:30:07+00:00,2.17,,
+2026-10-09T04:40:04+00:00,resuelto,0x4ddf77c4b22c28f214e883fce03179dee35320cc31c9e5b4b3dcd2abc9bed7ff,,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T02:30:07+00:00,2.17,,
+2026-10-09T04:40:04+00:00,resuelto,0xdbdbee8e248eaadf0e1865329507c99b51d48177880220580df30e9384044a71,,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T02:30:07+00:00,2.17,,
+2026-10-09T04:40:04+00:00,resuelto,0xc92a4a6c16570308bb59ae91bbe55ab03b672d9d2ee9a50dc40ef1a69fc8d8f3,,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T02:30:07+00:00,2.17,,
+2026-10-09T04:40:04+00:00,resuelto,0xf593bde120c68368d4424a86b8857f50f6e7092a0aaf4327e4c17855c71e3f71,,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T02:30:07+00:00,2.17,,
+2026-10-09T04:40:04+00:00,resuelto,0xbd33fcbeb5e7acc533f8e0e107708c408de60856cffc04c94d95044523772711,,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T02:30:07+00:00,2.17,,
+2026-10-09T04:40:04+00:00,resuelto,0x7fe171a8830f164a69ced91d6f135df6b356ab4636b093df1721e73b57512663,,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T02:30:07+00:00,2.17,,
+2026-10-09T04:40:04+00:00,resuelto,0x2ec3e879b50295894268ff41572ea5d9746c895949b1eaf2c173970446234fda,,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T02:30:07+00:00,2.17,,
+2026-10-09T04:40:04+00:00,resuelto,0x379e3ec4eda11b1e37ac3ac0aadcdddd8492f26cd81faa76e5e2972275a2f999,,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T02:30:07+00:00,2.17,,
+2026-10-09T04:40:04+00:00,resuelto,0x2023027e87cc7182de477a41c84dcdce5dc2c684b6536162580534609af4a487,,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T02:30:07+00:00,2.17,,
+2026-10-09T04:40:04+00:00,resuelto,0x8e8a421f3a258e0d902c5ba38f4c03afd3e0f957162fe665a5f41d1d383106a8,,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T02:30:07+00:00,2.17,,
+2026-10-09T04:40:04+00:00,resuelto,0x3c7e8b1f710d194567909d3ab7d1b6c339bd9645496ea0b83421d4b4277a3bd4,,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T02:30:07+00:00,2.17,,
+2026-10-09T04:40:04+00:00,resuelto,0x40c2dadc1fab004da8be476d6934f276819a0c3f2685b03c0da356bfbe478887,,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T02:30:07+00:00,2.17,,
+2026-10-09T04:40:04+00:00,resuelto,0xf2b0be7b51018a45bebfd560ab29c0518fb965a9fdafb9be5e3bf0e552db5d36,,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T02:30:07+00:00,2.17,,
+2026-10-09T04:40:04+00:00,resuelto,0x724586520e0f96add3389c5c05813b3bc67086d6fd9fb6df047ce9cf65890b00,,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T02:30:07+00:00,2.17,,
+2026-10-09T04:40:04+00:00,resuelto,0xa02194a6ab70bc69bddde4e7ddbcccd990211e5f1552f3be4c74e444745b7793,,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T02:30:07+00:00,2.17,,
+2026-10-09T04:40:04+00:00,resuelto,0xf1e4aa24f031ee9caeee103673cf09cf80c289a3c815408bffba3fc86284a587,,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T02:30:07+00:00,2.17,,
+2026-10-09T04:40:04+00:00,resuelto,0x8cbc62d2c3b08a887b15ad659a580b3b7cae56df2b77b9b8c5f078363c311a70,,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T02:30:07+00:00,2.17,,
+2026-10-09T04:40:04+00:00,resuelto,0x3647b16969ccf753d67384326d0d139a0641236d2dd6f85adb95058d9c9d58e7,,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T02:30:07+00:00,2.17,,
+2026-10-09T04:40:04+00:00,resuelto,0x51e934005aa0f93f211d1940c8c3842f8bfb981173d8a55f0357dc39ca473e55,,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T02:30:07+00:00,2.17,,
+2026-10-09T04:40:04+00:00,resuelto,0x8841d5c523720a98d267bcc42249e9ac982cc2ef925c29cacb2ab09d7770a9e2,,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T02:30:07+00:00,2.17,,
+2026-10-09T04:40:04+00:00,resuelto,0x6972f8972553ad7f526a3e30c33bf3d075193c6171a4dd71a03694b43f566787,,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T02:30:07+00:00,2.17,,
+2026-10-09T04:40:04+00:00,resuelto,0xfa730bcae5e41ad84faabaaee2a00957cbc75241f45abe74a95dc0538fce3b64,,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T02:30:07+00:00,2.17,,
+2026-10-09T04:40:04+00:00,resuelto,0x6d209da9dba926db5671b8b7b4777f94ee4509e1fef7455fc2a24ac6bdd21432,,2026-10-09T00:30:00+00:00,,Fluminense FC,,,,,,,,,,,,2026-10-09T02:30:07+00:00,2.17,,
+2026-10-09T04:40:04+00:00,resuelto,0x469c5dc0f94557e45d843f885dd733bee4578a36db43c4a2830f86e43fada27f,,2026-10-09T00:30:00+00:00,,Fluminense FC,,,,,,,,,,,,2026-10-09T02:30:07+00:00,2.17,,
+2026-10-09T04:40:04+00:00,resuelto,0x3ff79a88405042a6135f8f48bce331a07731187a3ab5699249cb6482b9a02fa4,,2026-10-09T00:30:00+00:00,,EC Bahia,,,,,,,,,,,,2026-10-09T02:30:07+00:00,2.17,,
+2026-10-09T04:40:04+00:00,resuelto,0x4c8b82165055e5a5932cd2409a1443fea43afcb35e3cadb34989200df8208a60,,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T02:30:07+00:00,2.17,,
+2026-10-09T04:40:04+00:00,resuelto,0xb76cf27bbb75f2faee20c4b48b3b6b5bc018087ba4878fb83c4035db1bfec28b,,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T02:30:07+00:00,2.17,,
+2026-10-09T04:40:04+00:00,resuelto,0xd6865ee77fe131cd45261edb558d48c388d4bca7321469c391962f2fa540120e,,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T02:30:07+00:00,2.17,,
+2026-10-09T04:40:04+00:00,resuelto,0x271060f23955a76664d7667faf28cee6b4a3b21cf0f1ccad2cb87aef1efde41b,,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T02:30:07+00:00,2.17,,
+2026-10-09T04:40:04+00:00,resuelto,0x403f54291fe3ab3260b7bb1fc6b5ae8107f7a9dd17b1654b836a510ae00254e2,,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T02:30:07+00:00,2.17,,
+2026-10-09T04:40:04+00:00,resuelto,0x58b1cd2c1b73159c96c74915317f51f56e39d7b342e82b54835f67f5ec244640,,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T02:30:07+00:00,2.17,,
+2026-10-09T04:40:04+00:00,resuelto,0x399b53ac4e91d929c9cdb36c840c5e90f7c596e501c7b753f2025d8e8764f59d,,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T02:30:07+00:00,2.17,,
+2026-10-09T04:40:04+00:00,resuelto,0xed3c4b1c4fe0bdc1215387520e665e585473299abeceba221c348ed374585f31,,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T02:30:07+00:00,2.17,,
+2026-10-09T04:40:04+00:00,resuelto,0x738e892851c476227764794cbe389cf884823cee3e0e5922ec4909fd6892d938,,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T02:30:07+00:00,2.17,,
+2026-10-09T04:40:04+00:00,resuelto,0x126ff6f8c89f3040e5ff998593c69fc33c92e69908329ed0a6254a91d31085df,,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T02:30:07+00:00,2.17,,
+2026-10-09T04:40:04+00:00,resuelto,0x72a604abddd3c2f1c7b2e53c9c401c0bdf793ece4383cce0310e9b8e17e94501,Exact Score: Fluminense FC 5 - 3 Coritiba FBC?,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T02:30:07+00:00,2.17,No,1
+2026-10-09T04:40:04+00:00,resuelto,0xd005c68d443dfee315b3eddf5537592a627a0578038f8484c22338844b43aa02,Exact Score: Fluminense FC 3 - 5 Coritiba FBC?,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T02:30:07+00:00,2.17,No,1
+2026-10-09T04:40:04+00:00,resuelto,0x713a27d25ab827c312d6b488a635f1204f62c9cb40ab9aba4d2c811f4f65b7e9,Coritiba FBC to win the second half?,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T02:30:07+00:00,2.17,No,1
+2026-10-09T04:40:04+00:00,resuelto,0x320ab79dd9d0cbe3f2002f00de3a6077f0e8f0f0b34b852c07e6b916110a93b1,Fluminense FC to win the second half?,2026-10-09T00:30:00+00:00,,Yes,,,,,,,,,,,,2026-10-09T02:30:07+00:00,2.17,Yes,1
+2026-10-09T04:40:04+00:00,resuelto,0xb8f4f0c365b23c19434b2d6d3499711031b7c8d534acdefee72e09b732025190,Felipe Jonatan: 3+ goals + assists,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T02:40:03+00:00,2.0,No,1
+2026-10-09T04:40:04+00:00,resuelto,0xa4e3e2d033f909de6f44852c914c86ce89dfd372b02f7e9b8a775a592b904a26,Felipe Jonatan: 2+ goals + assists,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T02:40:03+00:00,2.0,No,1
+2026-10-09T04:40:04+00:00,resuelto,0xcf6ea92d5679daf7692fca49d3fe5f6ce64d2ad084c780b6b45de3aaed830905,Felipe Jonatan: 1+ goals + assists,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T02:40:03+00:00,2.0,No,1
+2026-10-09T04:40:04+00:00,resuelto,0xea15afe4e4776c65d7a4074cb44c4fd4590a90fc3dc1632c0854e464012d95d1,Breno: 3+ goals + assists,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T02:40:03+00:00,2.0,No,1
+2026-10-09T04:40:04+00:00,resuelto,0xe83ecbdf8849482c84638a41c1d117c7d8426533b13be3961f6b4030c1f39b96,Breno: 2+ goals + assists,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T02:40:03+00:00,2.0,No,1
+2026-10-09T04:40:04+00:00,resuelto,0xb79db205cf53686eab27db03cca4a6a427089d3f600ae557830798c26182fcf5,Breno: 1+ goals + assists,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T02:40:03+00:00,2.0,No,1
+2026-10-09T04:40:04+00:00,resuelto,0x51a005f6f55b4e71fe378d406ed92db8aa185214087c7775961ea8426472895d,,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T02:40:03+00:00,2.0,,
+2026-10-09T04:40:04+00:00,resuelto,0x66ff1c7dd39cb67d9e7d38dd667cc105b0c2408ff2029647cbb3cc6abf8e9188,,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T02:40:03+00:00,2.0,,
+2026-10-09T04:40:04+00:00,resuelto,0xfc4a36ddbfc26da358f2066065bf8c08cb02931cf7685887acdb329fa23faf9f,,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T02:40:03+00:00,2.0,,
+2026-10-09T04:40:04+00:00,resuelto,0x4b74538573507e89391009b1c756ab89152b96485ae39f4c31250cb7ff22fcc9,,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T02:40:03+00:00,2.0,,
+2026-10-09T04:40:04+00:00,resuelto,0x5ab86f0286761544d82c21144d0db4682554cf20a02f3d985cbc20db6e156cf1,,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T02:40:03+00:00,2.0,,
+2026-10-09T04:40:04+00:00,resuelto,0x710b374b7087265306fcdaf6b04025271798e12a6ce910dc53f5f23f04346e45,Sebastián Gómez: 1+ goals + assists,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T02:40:03+00:00,2.0,No,1
+2026-10-09T04:40:04+00:00,resuelto,0x4e37dff946f567fa8899d8c8ef15d981c1876b191fcf8f0ee75233d20c9c4c96,Bruno Melo: 3+ goals + assists,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T02:40:03+00:00,2.0,No,1
+2026-10-09T04:40:04+00:00,resuelto,0xa635347e00e1fe26a363421a6a269b09429789b0572db6bd72f2a3609ecc3a88,Bruno Melo: 2+ goals + assists,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T02:40:03+00:00,2.0,No,1
+2026-10-09T04:40:04+00:00,resuelto,0xc91b2d4f6041d3181166f5d28592e4e8b4e7fc2263119d70745019708932bc01,Bruno Melo: 1+ goals + assists,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T02:40:03+00:00,2.0,No,1
+2026-10-09T04:40:04+00:00,resuelto,0xeb36be21297872e3d1a5dc842f11441768b0af9173765c26ce2fb4a109028e98,Jacy: 3+ goals + assists,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T02:40:03+00:00,2.0,No,1
+2026-10-09T04:40:04+00:00,resuelto,0x4e5ddee5bd915f9891c54965d301114717fda0be5f83136ba93f259652ee87d5,Jacy: 2+ goals + assists,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T02:40:03+00:00,2.0,No,1
+2026-10-09T04:40:04+00:00,resuelto,0x5ba31308207bed9b224118891685234300716e7ae863837043a7dea2c2f7f6ad,Jacy: 1+ goals + assists,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T02:40:03+00:00,2.0,No,1
+2026-10-09T04:40:04+00:00,resuelto,0x025a11756cc2626bb8e40a641a8b1e034fe3b1f51ae7aa53017f07cde7a221b0,,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T02:40:03+00:00,2.0,,
+2026-10-09T04:40:04+00:00,resuelto,0xcbb6a190ccfaefa46e2990e35d9af262d97d48bd7f56756ba39541a780fb0dc1,,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T02:40:03+00:00,2.0,,
+2026-10-09T04:40:04+00:00,resuelto,0xf7b8fa013a27a44d91703cb2810c5298c4cac15f718b8e9f8d8efae497dcad1b,,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T02:40:03+00:00,2.0,,
+2026-10-09T04:40:04+00:00,resuelto,0xb8fd1af771e1cb8a887a73b290a3ecd97d30baf7fdf4c3a4a8df7ccbdbdc846f,,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T02:40:03+00:00,2.0,,
+2026-10-09T04:40:04+00:00,resuelto,0x2479c9e4adc6e8788547aae66dd6441f52bf273fedceaa8f65a95e1ffe86b11c,,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T02:40:03+00:00,2.0,,
+2026-10-09T04:40:04+00:00,resuelto,0xe2376cc13bf1bbf26387a76988c5a7626a7872d6b0db6bb2483f769498a8c572,,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T02:40:03+00:00,2.0,,
+2026-10-09T04:40:04+00:00,resuelto,0x41cebb999c74a298a3c411d34c0c92c4e94513b3df07c3f2a7ad57ab471800bb,,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T02:40:03+00:00,2.0,,
+2026-10-09T04:40:04+00:00,resuelto,0xebb4bedd941598b75eb3072120e7aca86aaaa36a85c0de6a74281236e83c5f06,,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T02:40:03+00:00,2.0,,
+2026-10-09T04:40:04+00:00,resuelto,0x978150caed7c39dafd2f03628e3cc1227fa1c75f1f0f7c21aa1f5ebb580dcc12,,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T02:40:03+00:00,2.0,,
+2026-10-09T04:40:04+00:00,resuelto,0x5c572d3509967fbc9de987de666a9751be6c4ea3fa0569394788c94ffda08c75,,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T02:40:03+00:00,2.0,,
+2026-10-09T04:40:04+00:00,resuelto,0xdd6cb0519895f6cc390fe202406443fa2733a9454dd7b4dba0cdbe8ed69f73dd,,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T02:40:03+00:00,2.0,,
+2026-10-09T04:40:04+00:00,resuelto,0xee914292f72c157812ccf327f8fb24aae4eeb1c606d6eea768c15bf41ea05fc8,,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T02:40:03+00:00,2.0,,
+2026-10-09T04:40:04+00:00,resuelto,0x9f51c6f601ef630b519b52d8cf8ca9c605168f0084488de96e578297a34d9c43,,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T02:40:03+00:00,2.0,,
+2026-10-09T04:40:04+00:00,resuelto,0xa3e64f83a5b9f2cc77b80910fab621ca080bc6d34409f5a5a620372f085e6a09,,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T02:40:03+00:00,2.0,,
+2026-10-09T04:40:04+00:00,resuelto,0x8fb451e602c7bae97b0518861dde124ded2fb2d2a7470299401d591e1064bef1,,2026-10-09T00:30:00+00:00,,Yes,,,,,,,,,,,,2026-10-09T02:40:03+00:00,2.0,,
+2026-10-09T04:40:04+00:00,resuelto,0xcf0bf0f2db5a97273de4ea0c84f2e6d0fbca339d51a1cd296712d35a31c28b5f,,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T02:40:03+00:00,2.0,,
+2026-10-09T04:40:04+00:00,resuelto,0x43fe9a9a711e887211037f3357100496aaec257e3b5574d6406390cae0926fa6,,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T02:40:03+00:00,2.0,,
+2026-10-09T04:40:04+00:00,resuelto,0x88b0fe0709de08fc2c2492bd0d7921b38cb6c9bab404d4de4b3037830f4885cc,,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T02:40:03+00:00,2.0,,
+2026-10-09T04:40:04+00:00,resuelto,0x18e0b8a898feb32921d2aae93556fafd15529a468c419bed697bb7c0da78fe44,,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T02:40:03+00:00,2.0,,
+2026-10-09T04:40:04+00:00,resuelto,0xf25ea776bc669ddd5d9e6f9c3657780bac53230710b33dfb735dc9b808ea0c7c,,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T02:40:03+00:00,2.0,,
+2026-10-09T04:40:04+00:00,resuelto,0xf9782f1a4d13e20f343021fd296e6e8e54073dad5efb52cc5a8fe3806ac25c9f,,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T02:40:03+00:00,2.0,,
+2026-10-09T04:40:04+00:00,resuelto,0x87ae93a8486d6a7bab76c4cb05bc5af2b846b0a37ec7fb8c9ebc31bb30da8c34,,2026-10-09T00:30:00+00:00,,Yes,,,,,,,,,,,,2026-10-09T02:40:03+00:00,2.0,,
+2026-10-09T04:40:04+00:00,resuelto,0x1ff43ecec88dac33921ea908a88ef0ce9de2d087c4d5362094f22c401e11a9cb,,2026-10-09T00:30:00+00:00,,Yes,,,,,,,,,,,,2026-10-09T02:40:03+00:00,2.0,,
+2026-10-09T04:40:04+00:00,resuelto,0x20ed4306db123b9905746f64a45c8c6520d7da1abff79cddd8d79529a4131966,,2026-10-09T00:30:00+00:00,,Yes,,,,,,,,,,,,2026-10-09T02:40:03+00:00,2.0,,
+2026-10-09T04:40:04+00:00,resuelto,0x775419be7857528d0fbb34a379ac370e8a1987f8dec12667031410b8cffd919f,Thiago Silva: 3+ goals + assists,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T02:40:03+00:00,2.0,No,1
+2026-10-09T04:40:04+00:00,resuelto,0x30735c23998223bbded892743a52ecf2ef1c760462ff25ec0774414060b69d1a,Thiago Silva: 2+ goals + assists,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T02:40:03+00:00,2.0,No,1
+2026-10-09T04:40:04+00:00,resuelto,0xde256a3d93cc0ef9584cf12fd7ffedacaf4f68433b138356ea8661f027b49ef7,Thiago Silva: 1+ goals + assists,2026-10-09T00:30:00+00:00,,Yes,,,,,,,,,,,,2026-10-09T02:40:03+00:00,2.0,Yes,1
+2026-10-09T04:40:04+00:00,resuelto,0xdbf0d5806e9ee6cc5be0e8ba3cab5abe229072253097abcbc01cb621dca6c5aa,Guga: 3+ goals + assists,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T02:40:03+00:00,2.0,No,1
+2026-10-09T04:40:04+00:00,resuelto,0x553410919413d0c0cece50c9f73f333f7f9a05ed4666998bf261c316dc73437d,Guga: 2+ goals + assists,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T02:40:03+00:00,2.0,No,1
+2026-10-09T04:40:04+00:00,resuelto,0x646a7f793d54eba36e0193d00968aaa1120370528bdfb27ab76107040f6b0496,Guga: 1+ goals + assists,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T02:40:03+00:00,2.0,No,1
+2026-10-09T04:40:04+00:00,resuelto,0x28ac256a4312e21a7d55307a64dbcd4d0ac0ff5df1daf73be122073049e5ed77,Kevin Serna: 3+ goals + assists,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T02:40:03+00:00,2.0,No,1
+2026-10-09T04:40:04+00:00,resuelto,0x45692497afd21ef0338df3beeb1cb834cad3324b12b00c8c5989e7b5fc0189ab,Kevin Serna: 2+ goals + assists,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T02:40:03+00:00,2.0,No,1
+2026-10-09T04:40:04+00:00,resuelto,0x786569ce618ae8a3ee9881cc8141bd9fb1ad5473dda1081b3428aa4cf5b05f30,,2026-10-09T00:30:00+00:00,,Yes,,,,,,,,,,,,2026-10-09T02:40:03+00:00,2.0,,
+2026-10-09T04:40:04+00:00,resuelto,0x1e3dc4ac0bd090175a8a2f166e839951ab29684f345afef253acc2415e06ef29,,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T02:40:03+00:00,2.0,,
+2026-10-09T04:40:04+00:00,resuelto,0x3d394be710bfaa3d6fed0dd84e9d943dc7d9f8e3a6c934e67f731e19e9f72f2a,,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T02:40:03+00:00,2.0,,
+2026-10-09T04:40:04+00:00,resuelto,0xb53bc523dee9f71027244dcdded65b33f09cc35e8404b597170162443f00d788,,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T02:40:03+00:00,2.0,,
+2026-10-09T04:40:04+00:00,resuelto,0x4c80a31df04d6111e43bcc99ddb41621930f8a364756e73cfec8c4b943c27d15,,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T02:40:03+00:00,2.0,,
+2026-10-09T04:40:04+00:00,resuelto,0x9f7d7f560fb649ab47920789a57a5dbb2ed840a8918b1d08a8f261505ee587fe,,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T02:40:03+00:00,2.0,,
+2026-10-09T04:40:04+00:00,resuelto,0x735ce9dbcf9f10f447db0a7d914ca59fcd2e908894d2ddad10cd7be8037764c4,,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T02:40:03+00:00,2.0,,
+2026-10-09T04:40:04+00:00,resuelto,0xe47d6540963e42138acc49edce390ffa473a356558d1292ff28b5b32ba031098,,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T02:40:03+00:00,2.0,,
+2026-10-09T04:40:04+00:00,resuelto,0x341bdb650d1335d85af0e24e5d3c3f620bb756469bacc783c5d3a1cdb553068a,,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T02:40:03+00:00,2.0,,
+2026-10-09T04:40:04+00:00,resuelto,0x723dd563b0bfc4665d3af14bc1247afbb59f048fbd1a190444a120f3760fa061,,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T02:40:03+00:00,2.0,,
+2026-10-09T04:40:04+00:00,resuelto,0x258b0d6f2c3fa26ead486c13c55a12fa4d1cb322719f28306c82cdc84ea0195b,,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T02:40:03+00:00,2.0,,
+2026-10-09T04:40:04+00:00,resuelto,0xf63a24a84d50e93a3fdaf0ef6615b2c88497d77af0418b24a9825c155883063a,,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T02:40:03+00:00,2.0,,
+2026-10-09T04:40:04+00:00,resuelto,0x46be002d2a3e115ed787eac1f809ae6972d44bcf1efadef6db5998cb57d1adf8,,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T02:40:03+00:00,2.0,,
+2026-10-09T04:40:04+00:00,resuelto,0x4521f6e4d780a22c251e380b3c009b1b9a7e4ba87c06ed05f746da098314d4d8,,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T02:40:03+00:00,2.0,,
+2026-10-09T04:40:04+00:00,resuelto,0x7ce6ff33cc63a79f66b8787eb8e937204264863baeb5891e4ce856ab3c4e5322,,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T02:40:03+00:00,2.0,,
+2026-10-09T04:40:04+00:00,resuelto,0xf134407117a6d03f2522c988b80bafcf3e18dfb6d3d204fb48cdf0fa76d59390,,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T02:40:03+00:00,2.0,,
+2026-10-09T04:40:04+00:00,resuelto,0x773a6314013ba6bc3d1cb22b82c189c99ae764fe5bf12d5acb296036ebda0b61,,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T02:40:03+00:00,2.0,,
+2026-10-09T04:40:04+00:00,resuelto,0x592d9dc5cdf3f169ff0a0c3a09b7b782d45a70a0f90cbf5357f67e2b6dcab199,Sebastián Gómez: 2+ assists,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T02:40:03+00:00,2.0,No,1
+2026-10-09T04:40:04+00:00,resuelto,0x1d0b25052fe18471bc9f5146a561f4a53652dc9a45c6543ac0810da6ce435814,Sebastián Gómez: 1+ assists,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T02:40:03+00:00,2.0,No,1
+2026-10-09T04:40:04+00:00,resuelto,0x96cf2af94e02202cab540e835b90881ce25a2ece2a536ead2d6a308fe00fa3d2,Bruno Melo: 3+ assists,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T02:40:03+00:00,2.0,No,1
+2026-10-09T04:40:04+00:00,resuelto,0xfbf3ac5e6c8f7f7b655649fa60b3b209c5aa414e7df220d75db6642d867add9e,Bruno Melo: 2+ assists,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T02:40:03+00:00,2.0,No,1
+2026-10-09T04:40:04+00:00,resuelto,0xaa5e63c6dfdbdb8e47afe07733227d1f4cb90bfeae88988980a991aedce0950a,Bruno Melo: 1+ assists,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T02:40:03+00:00,2.0,No,1
+2026-10-09T04:40:04+00:00,resuelto,0x2af9c34b990f55fde07d80779e1c3bb3f543a7cc36abdbc365274ea0acc02380,Jacy: 3+ assists,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T02:40:03+00:00,2.0,No,1
+2026-10-09T04:40:04+00:00,resuelto,0xfea6de2bdcf8ee5d53ef1ef21e98c94e5200975aff2ad9760978a6b8a481e510,Jacy: 2+ assists,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T02:40:03+00:00,2.0,No,1
+2026-10-09T04:40:04+00:00,resuelto,0xb2b5abb2067c9123202fa93d8a70442acd2acfcea052be2f1e5c0915cce2c82e,,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T02:40:03+00:00,2.0,,
+2026-10-09T04:40:04+00:00,resuelto,0x74829e8922eeb48c9c372d0b5ee5710c47589ba76178a491236bcd0c490df3b4,,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T02:40:03+00:00,2.0,,
+2026-10-09T04:40:04+00:00,resuelto,0xaa7872841dafd521bc8f72a65f9a75deb4c9b248ad77a7a521f3d36b795ea6ce,,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T02:40:03+00:00,2.0,,
+2026-10-09T04:40:04+00:00,resuelto,0x082897807b10dee7deeff1252bc2d7161865b0e7dac27355e982bbe1bb85e397,,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T02:40:03+00:00,2.0,,
+2026-10-09T04:40:04+00:00,resuelto,0x073d47691a3f3f8cbffee4b7da1f884c7208091999d8cb058dc446f4eb17c5f1,,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T02:40:03+00:00,2.0,,
+2026-10-09T04:40:04+00:00,resuelto,0xb72dce6884867be0129c68ce8b2150809e7fa343efcb69124623bd4ff86de1e0,,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T02:40:03+00:00,2.0,,
+2026-10-09T04:40:04+00:00,resuelto,0x2db22343d20a2fd8bc180412fbbd2f115f972e37f2237758d407bd0d0053a31d,,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T02:40:03+00:00,2.0,,
+2026-10-09T04:40:04+00:00,resuelto,0x54d21413cf0683bc703b1d6d4b607d604b57a4e91d32859a93a99b62b1656838,,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T02:40:03+00:00,2.0,,
+2026-10-09T04:40:04+00:00,resuelto,0x46768743d6a56c6aab5b34ae695540e781ffe982ccfed2eeeba1999e7659ee58,,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T02:40:03+00:00,2.0,,
+2026-10-09T04:40:04+00:00,resuelto,0x6f27e57340c526deb97632498c70a423e2c5bae29a6dfb1f3206f24e8acf7f67,,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T02:40:03+00:00,2.0,,
+2026-10-09T04:40:04+00:00,resuelto,0x035ef08207b207907b30acda64a072cd72f43d193846dbe1ba8d26f7e25bb3dc,,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T02:40:03+00:00,2.0,,
+2026-10-09T04:40:04+00:00,resuelto,0x9c24540c14f86bcc1dba97b92d1b75f19b5f12ff5c85f49dfdd391ef1fcf086d,,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T02:40:03+00:00,2.0,,
+2026-10-09T04:40:04+00:00,resuelto,0xaaf3faf0d1d3dee4e6c4d4824e1b848164b03a6d5efc31911a819203daa5cdb9,,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T02:40:03+00:00,2.0,,
+2026-10-09T04:40:04+00:00,resuelto,0xf6f29eacde760f6dcefe49711730d1ac70d6654da075772332088ffa5ec717d0,,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T02:40:03+00:00,2.0,,
+2026-10-09T04:40:04+00:00,resuelto,0xe6dec8e3deece279fe0a8e825633db1831d6d42a8957ec593f747aed6b717c32,,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T02:40:03+00:00,2.0,,
+2026-10-09T04:40:04+00:00,resuelto,0xa690bd09bf6ec63cae87fa761b681302813989252bb429979cd4c1fbf0342426,,2026-10-09T00:30:00+00:00,,Yes,,,,,,,,,,,,2026-10-09T02:40:03+00:00,2.0,,
+2026-10-09T04:40:04+00:00,resuelto,0xf593c4b635bd577e16f32c34ec9a3be2b8abd5c2ea205e511573aa5f0fe0eabd,,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T02:40:03+00:00,2.0,,
+2026-10-09T04:40:04+00:00,resuelto,0xc426413e27f67bd1c071520cda7d9ba53a6906eccbfd6df79e14dace96965d94,,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T02:40:03+00:00,2.0,,
+2026-10-09T04:40:04+00:00,resuelto,0xbaae4f002a3c055bc851d367e9bc15b5830fdcdc21a1edf3875d87fba9f85e3c,,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T02:40:03+00:00,2.0,,
+2026-10-09T04:40:04+00:00,resuelto,0xaa834b46328d2488cf2b14a95792c57dac5acd9a6ba24045830022643ec76cce,,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T02:40:03+00:00,2.0,,
+2026-10-09T04:40:04+00:00,resuelto,0xa696c3433a37acec9069cd5c640de3ba805db8aa216842fa52719cd425ccd660,,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T02:40:03+00:00,2.0,,
+2026-10-09T04:40:04+00:00,resuelto,0xce6c5f5ee7e5718e584e93f51eb0ad3a5e9b8f5a3b3b21fd7d0e3fe80fe9364f,,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T02:40:03+00:00,2.0,,
+2026-10-09T04:40:04+00:00,resuelto,0x64a5a947e737dd28dd36427629f4de1d85ddb49e947e68f88c3c06f1d01128af,,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T02:40:03+00:00,2.0,,
+2026-10-09T04:40:04+00:00,resuelto,0xbe198a7fe2fc397f6efea94af3d80a1760f648a4c930ec64f5c2f54fe2c497fc,,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T02:40:03+00:00,2.0,,
+2026-10-09T04:40:04+00:00,resuelto,0x06c1f3a190dc28ad07d453a5ad4cc996b4e1bf4df4fb13ce829728128a047bf2,,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T02:40:03+00:00,2.0,,
+2026-10-09T04:40:04+00:00,resuelto,0x4c4053a20efd78fb7d16164d8468554edf46f0f8af70516ac4b01b140dbea89e,,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T02:40:03+00:00,2.0,,
+2026-10-09T04:40:04+00:00,resuelto,0xf457293a6389a2f73930f5f1dd3f3efbba2b3f96c45712b1ab0da3b67f11f683,,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T02:40:03+00:00,2.0,,
+2026-10-09T04:40:04+00:00,resuelto,0xc8bafa7377af431b59ab323c87d10974a73e3b98e7e2ff0b90f469253766d629,,2026-10-09T00:30:00+00:00,,Yes,,,,,,,,,,,,2026-10-09T02:40:03+00:00,2.0,,
+2026-10-09T04:40:04+00:00,resuelto,0x43428ea69a761f2f108ebe5e3d18b5f6944abd13c70688209de37ee328ce5f25,,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T02:40:03+00:00,2.0,,
+2026-10-09T04:40:04+00:00,resuelto,0x408ca7392d1eb8e16907f5c0014b223d93ef1a734859642be984256cb1f20984,Guga: 2+ assists,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T02:40:03+00:00,2.0,No,1
+2026-10-09T04:40:04+00:00,resuelto,0xbc08c762457d8790ff25ca5e44f981579f99932a90f908898c7c41f13423ea5c,Guga: 1+ assists,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T02:40:03+00:00,2.0,No,1
+2026-10-09T04:40:04+00:00,resuelto,0x55ab6ba66b4317c0a0954ae7e308e79877d15f5368d01e043456d41e94a31cb6,Kevin Serna: 3+ assists,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T02:40:03+00:00,2.0,No,1
+2026-10-09T04:40:04+00:00,resuelto,0x622224f1e1c257088c34363b7838fa97f3cd4bc4e1138bf4d8b0ffc1cbabe512,Kevin Serna: 2+ assists,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T02:40:03+00:00,2.0,No,1
+2026-10-09T04:40:04+00:00,resuelto,0x6c913450f694522a41c5ed96869959118e9291552e7ed36b5b7417390c30e90d,Kevin Serna: 1+ assists,2026-10-09T00:30:00+00:00,,Yes,,,,,,,,,,,,2026-10-09T02:40:03+00:00,2.0,Yes,1
+2026-10-09T04:40:04+00:00,resuelto,0x43d2afda1d38fc1a2391694a228729628ea8b85b3509eb4157dccf4921338486,,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T02:40:03+00:00,2.0,,
+2026-10-09T04:40:04+00:00,resuelto,0x32752fa4f37395bdb67217a34c67ddf546a9fb85b4282ddaafbf53a3458f02da,,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T02:40:03+00:00,2.0,,
+2026-10-09T04:40:04+00:00,resuelto,0x41fa38e2457e767d0123bd36dc60a082ab7f6455a299ca7851d01466dc6a1231,,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T02:40:03+00:00,2.0,,
+2026-10-09T04:40:04+00:00,resuelto,0x814eef256e23bfacab3b10ebb36844fbfb661ca69d032babd4800c19783eb85d,,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T02:40:03+00:00,2.0,,
+2026-10-09T04:40:04+00:00,resuelto,0xf25a66f7274a43fdcb9d48d0e5cb0623112c81733c8f3abc0f3ddcf23e05bb77,,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T02:40:03+00:00,2.0,,
+2026-10-09T04:40:04+00:00,resuelto,0x67b7d0a546906b26bdf625d33f38f40fe31eac7fabb4f6022b80abdde78d7743,,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T02:40:03+00:00,2.0,,
+2026-10-09T04:40:04+00:00,resuelto,0xffb52778e4d9ec6f74b9b1327b70b6ba9b87ab1a6224a9927abcf361ca427b03,,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T02:40:03+00:00,2.0,,
+2026-10-09T04:40:04+00:00,resuelto,0xf5aa16ca432aa4d46b3cd54609024c242ed1eb2ff487fdbce9955598ee354fb8,,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T02:40:03+00:00,2.0,,
+2026-10-09T04:40:04+00:00,resuelto,0xdcdb4a17432e3087097901fea814df883b32290ee5e9fb2f3ae3691b4a719d9f,,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T02:40:03+00:00,2.0,,
+2026-10-09T04:40:04+00:00,resuelto,0x5b1f9da085ef1ee1abcaeadf6deeb827fcf6fc0632afdfc7b2eda110d7bd152b,,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T02:40:03+00:00,2.0,,
+2026-10-09T04:40:04+00:00,resuelto,0x97157a943f85d5f5207f60b6f1c3dbff9d02b0225ae4915cb74dd2460f5c7e0e,,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T02:40:03+00:00,2.0,,
+2026-10-09T04:40:04+00:00,resuelto,0xeae1fe798f29979ded9dddb94a57959456ca9d416542584380150b9602cfff1e,,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T02:40:03+00:00,2.0,,
+2026-10-09T04:40:04+00:00,resuelto,0x65e2ccb07f032a6363f56a43f0f542bd2847603820fac5ba732be469ab66b3a2,,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T02:40:03+00:00,2.0,,
+2026-10-09T04:40:04+00:00,resuelto,0x95f799b95a9d150f58cf2ff5001675661944d3134171ab0198423693ac4c05b2,,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T02:40:03+00:00,2.0,,
+2026-10-09T04:40:04+00:00,resuelto,0x808cfa84111c880339e8fb4be8f40136833d87993a54cb7942fd981e8d990962,,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T02:40:03+00:00,2.0,,
+2026-10-09T04:40:04+00:00,resuelto,0xc51ab23a6b11af9d80f724bdda9fa310be644c36be57eb9acafc7cb25b8899f6,,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T02:40:03+00:00,2.0,,
+2026-10-09T04:40:04+00:00,resuelto,0x30843221aabe104d7c82082b83d0a594f7e57f819de99ccd8ab23ff7e3b63c64,,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T02:40:03+00:00,2.0,,
+2026-10-09T04:40:04+00:00,resuelto,0xf0834aad98c73fc9f1272e745842648b4cb56b5fa39bb1db8a615f4b3373e93f,,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T02:40:03+00:00,2.0,,
+2026-10-09T04:40:04+00:00,resuelto,0x5f2ab1ee380acd729505ba88c62ccef71dc8f82ef0c3415e859179b6d07db8f5,,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T02:40:03+00:00,2.0,,
+2026-10-09T04:40:04+00:00,resuelto,0x6a8e2a3de4b9691976db25c63674aeb8fd9952407dd875a6cde7ea2c83c3dd59,,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T02:40:03+00:00,2.0,,
+2026-10-09T04:40:04+00:00,resuelto,0x12ad9d51ffb87febe6f2a1e9a50f55c9a2d9cb1afd4baebe42c7f23ba58cfdb1,,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T02:40:03+00:00,2.0,,
+2026-10-09T04:40:04+00:00,resuelto,0xbcc1627e4593f45db914f0e3f81db5ca877af69540447f5011956a623c87ddcf,,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T02:40:03+00:00,2.0,,
+2026-10-09T04:40:04+00:00,resuelto,0xc88b5f0eccf6bc5dcefc5d0fd729b90f6e57eef84eee9d8326d71f2b2c18b921,,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T02:40:03+00:00,2.0,,
+2026-10-09T04:40:04+00:00,resuelto,0x63a736ce7338985021b1d98ad25f42bc267cd38a52f5f5bd469baf6e5fd08bd5,,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T02:40:03+00:00,2.0,,
+2026-10-09T04:40:04+00:00,resuelto,0x02238f0885bd49ea636eb2943dcbd78be54ec5b4087d0f141638acfbf6f8ec6f,,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T02:40:03+00:00,2.0,,
+2026-10-09T04:40:04+00:00,resuelto,0x8ab6125dbfc9c07c378b4782b05c7d424abbc56720e735f927cedd3a2ac9a4e2,,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T02:40:03+00:00,2.0,,
+2026-10-09T04:40:04+00:00,resuelto,0x70a6b747c3ecaeaf8ebbfb83101d25e7d67ada70268bf3881f406323639ef3b5,,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T02:40:03+00:00,2.0,,
+2026-10-09T04:40:04+00:00,resuelto,0x2d00ca3cf7bb2b7397ca5d3883b96058970c7d5a9e8f2070d5b47bb0289dcdd5,,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T02:40:03+00:00,2.0,,
+2026-10-09T04:40:04+00:00,resuelto,0xf993aad8cf81453f0e1913611b3f4325d5fa96f06b4e84994452af517a9a5602,,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T02:40:03+00:00,2.0,,
+2026-10-09T04:40:04+00:00,resuelto,0x6928128b7ec809226212d29573ebf30218ad888adb5b058890e3c4974eed14da,,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T02:40:03+00:00,2.0,,
+2026-10-09T04:40:04+00:00,resuelto,0x442cb506c9d17cacb034d7d7d110e6f0ab8e5821554a6a02664ba2ef4f4194f1,,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T02:40:03+00:00,2.0,,
+2026-10-09T04:40:04+00:00,resuelto,0x1a27e60b4bb8007a0a361d2f9e2d5cf40dc319b8a30cd1e54d7f1fd7bad8548b,,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T02:40:03+00:00,2.0,,
+2026-10-09T04:40:04+00:00,resuelto,0x532e92782a66fd0f5204aa61589bed26f681b26700652400f549541cb7b17879,,2026-10-09T00:30:00+00:00,,Yes,,,,,,,,,,,,2026-10-09T02:40:03+00:00,2.0,,
+2026-10-09T04:40:04+00:00,resuelto,0x14aa7c545a649f923e221a1d299520a9d5e935bffc044e3933fb63afe3a8b3f8,,2026-10-09T00:30:00+00:00,,Yes,,,,,,,,,,,,2026-10-09T02:40:03+00:00,2.0,,
+2026-10-09T04:40:04+00:00,resuelto,0xab11f029d60d578e09a0f52117e95f1f761efc6d4a3f680b4edaae8b0a89aba0,,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T02:40:03+00:00,2.0,,
+2026-10-09T04:40:04+00:00,resuelto,0xe2060a2fd96d22055be0c3ad6fc2c5bd369254a0d606a74a5c1c3e35dc354736,Thiago Silva: 2+ goals,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T02:40:03+00:00,2.0,No,1
+2026-10-09T04:40:04+00:00,resuelto,0x88d735eac89dd865f46bf28d9b77588c3f5371564dd6a7539cf2328eaa05095f,Guga: 3+ goals,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T02:40:03+00:00,2.0,No,1
+2026-10-09T04:40:04+00:00,resuelto,0xde0c8e3e55b70a202e26a4a363a95572adc37ca01ab47248c156445fae0100d8,Guga: 2+ goals,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T02:40:03+00:00,2.0,No,1
+2026-10-09T04:40:04+00:00,resuelto,0x607fbc61e3277ef931a16c540b994913b897436f975494778540ac5a87cabc30,Kevin Serna: 3+ goals,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T02:40:03+00:00,2.0,No,1
+2026-10-09T04:40:04+00:00,resuelto,0x718274ec35bbfa9d62ebb23b3d0084c6d7cd9350a941ccefaee929ae1340bbd5,Kevin Serna: 2+ goals,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T02:40:03+00:00,2.0,No,1
+2026-10-09T04:40:04+00:00,resuelto,0x7983432e37d08367a66b1023fec0d50fa5944d918e645d412adcedf76536e2db,,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T02:40:03+00:00,2.0,,
+2026-10-09T04:40:04+00:00,resuelto,0x917609e80daf2c1ee8f504098d7045e3b44924694c3e55ece808af34b4b5e81a,,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T02:40:03+00:00,2.0,,
+2026-10-09T04:40:04+00:00,resuelto,0xe7d1ca9b487f211e3738b9f3ed97d0035edf0bd203d5c5e835272f479068e0b6,,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T02:40:03+00:00,2.0,,
+2026-10-09T04:40:04+00:00,resuelto,0x59350e200e24bd950fcf7d3a4f79e8a28dffbd9d4c3215459ebf4ff9f22f2aa6,,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T02:40:03+00:00,2.0,,
+2026-10-09T04:40:04+00:00,resuelto,0xd3eee9f3577ec9d2f6a6154e1fc0fd8fdc83661c4aee8cba61594f81e18dc1f9,,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T02:40:03+00:00,2.0,,
+2026-10-09T04:40:04+00:00,resuelto,0x8a5717d7a0c38ed29fc3ab4f2b7b3dc315b3b4733f2c7b602995081e91952a31,,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T02:40:03+00:00,2.0,,
+2026-10-09T04:40:04+00:00,resuelto,0x59682d0f0e9ca2dac0e320bbcc068a6e77e5de690061e1217a8784e22932cab6,,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T02:40:03+00:00,2.0,,
+2026-10-09T04:40:04+00:00,resuelto,0xdabf9d01eb188ae5ed1bbdccf0a9ca7989b287fe6e1858ab530a79c90d2af4f6,,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T02:40:03+00:00,2.0,,
+2026-10-09T04:40:04+00:00,resuelto,0xc6dfb2dfa43d544dade8ec2deb8820ba67d3d8e6a05102f0497ea1175b052743,,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T02:40:03+00:00,2.0,,
+2026-10-09T04:40:04+00:00,resuelto,0xbaa3220098fc233309671a126ed0c7486bfecfd34b81ba7bdf9e28af47268429,,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T02:40:03+00:00,2.0,,
+2026-10-09T04:40:04+00:00,resuelto,0x4273b732f5fac145df5fbed91eb5e516aa63979c1c5c6be62221c46a7fbc4071,,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T02:40:03+00:00,2.0,,
+2026-10-09T04:40:04+00:00,resuelto,0x6d54b673cf88ed5e24af071901054260c8be08800bf4a3deff158aeaf4eea11b,,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T02:40:03+00:00,2.0,,
+2026-10-09T04:40:04+00:00,resuelto,0xc9db4264b42f010ca4413a8c4d97c119970a02dd19adab699696b3ebc6e171af,,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T02:40:03+00:00,2.0,,
+2026-10-09T04:40:04+00:00,resuelto,0x612f669ad11d4e85492e8adc87df9544fa8b0402a98922f5a3f11590809ff523,,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T02:40:03+00:00,2.0,,
+2026-10-09T04:40:04+00:00,resuelto,0x0b83abf8a3be0f7de351a052224a84f7858ed1371e1cf9e9b6b0697a4583ae36,,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T02:40:03+00:00,2.0,,
+2026-10-09T04:40:04+00:00,resuelto,0x420b22642e982b44a05bbb39688d1bb923a6a13fe304869966575b4bf011725c,,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T02:40:03+00:00,2.0,,
+2026-10-09T04:40:04+00:00,resuelto,0x1a9737148169f61514c65498765b764bd4566cc16d0f1c218747a5be2832d6df,,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T02:40:03+00:00,2.0,,
+2026-10-09T04:40:04+00:00,resuelto,0x803b0917ed86a4c0521eb2d91394c8cade2e261c81593898af9e83b19b4d8105,,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T02:40:03+00:00,2.0,,
+2026-10-09T04:40:04+00:00,resuelto,0xd2e25bea94e0dba08254419fa414dcb17381ac813509cb532c775e376d050068,,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T02:40:03+00:00,2.0,,
+2026-10-09T04:40:04+00:00,resuelto,0xe166dc6b860b0e89eac6488660bdfc45c71baf89660b59c080397cd753e9460b,,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T02:40:03+00:00,2.0,,
+2026-10-09T04:40:04+00:00,resuelto,0xe14ed5ea08f165d834630f009994402ecbfee53b6d574250d30dd1412af0e9c5,,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T02:40:03+00:00,2.0,,
+2026-10-09T04:40:04+00:00,resuelto,0x15a6591c60906515dd095d28fb35d6a56dec81c805862089d1e11e535708da67,,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T02:40:03+00:00,2.0,,
+2026-10-09T04:40:04+00:00,resuelto,0xb7d91667ade206f41445d7d98d78add2ece032178ef360c05dd6976b7eb317a1,,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T02:40:03+00:00,2.0,,
+2026-10-09T04:40:04+00:00,resuelto,0xaa491bf45d41dad4e398bdf8ee32ab07cdfe1cafce35573465c8fd58b02d4b4f,,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T02:40:03+00:00,2.0,,
+2026-10-09T04:40:04+00:00,resuelto,0xefdb2634af0026f66abfd4ddc2b6c68a1b00c24891a4164a19239af0bed46799,,2026-10-09T00:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T02:40:03+00:00,2.0,,
+2026-10-09T04:40:04+00:00,resuelto,0x8f471479a894290d8231a70ff1747ade10dbead28991aaa45c231682a863a0c6,,2026-10-08T22:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T03:50:03+00:00,0.83,,
+2026-10-09T04:40:04+00:00,resuelto,0x0ac5b3a36560d557ba591d68e55477da3fdb4e3cae7aca5c4e1719929bf50c51,,2026-10-08T22:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T03:50:03+00:00,0.83,,
+2026-10-09T04:40:04+00:00,resuelto,0x4b2f98579651937f29ebb05f27150ebf98831c8732c4499a42909d22b3ebf72d,,2026-10-08T22:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T03:50:03+00:00,0.83,,
+2026-10-09T04:40:04+00:00,resuelto,0x0c505c02eafe23b06c82e5533a02bac4e2bf4cf19b570cd88a6c804d752ff369,,2026-10-08T22:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T03:50:03+00:00,0.83,,
+2026-10-09T04:40:04+00:00,resuelto,0x3827ab9cb5576a5dd6a4644bf6b2ab3c46359b717d1cffe928e0b14eaf75354b,,2026-10-08T22:30:00+00:00,,Yes,,,,,,,,,,,,2026-10-09T03:50:03+00:00,0.83,,
+2026-10-09T04:40:04+00:00,resuelto,0x9ab4470fdb3d63526da23b5820638862b8dce17ec76132f89b388d87d1ecc2d6,,2026-10-08T22:30:00+00:00,,Yes,,,,,,,,,,,,2026-10-09T03:50:03+00:00,0.83,,
+2026-10-09T04:40:04+00:00,resuelto,0x07db11a11de412b93cb37cd610807b85ba75f1b38190d24a3f9c072d5a28c610,,2026-10-08T22:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T03:50:03+00:00,0.83,,
+2026-10-09T04:40:04+00:00,resuelto,0xd3ed2a03424db0122abf40a4696b598aa1e7972a80ad6db65e700560bf4b82b0,,2026-10-08T22:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T03:50:03+00:00,0.83,,
+2026-10-09T04:40:04+00:00,resuelto,0xd77d709ae6943632a378c7004a225abb916497e604572d874dc40d86ac4b4a6f,,2026-10-08T22:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T03:50:03+00:00,0.83,,
+2026-10-09T04:40:04+00:00,resuelto,0xd59c79b776f6c7346073280678e1af2d6cabfb21f3b2c8a6942eb3a572af8ac4,,2026-10-08T22:30:00+00:00,,Yes,,,,,,,,,,,,2026-10-09T03:50:03+00:00,0.83,,
+2026-10-09T04:40:04+00:00,resuelto,0x037673629c28ecd4523be680adebc4ac53ba973b7084df9fe6939ff646291a6d,,2026-10-08T22:30:00+00:00,,Yes,,,,,,,,,,,,2026-10-09T03:50:03+00:00,0.83,,
+2026-10-09T04:40:04+00:00,resuelto,0x39b8b68238db84be3fff0de1371dc05e7b20002e9e7a75df77d87832fd30196e,,2026-10-08T22:30:00+00:00,,Yes,,,,,,,,,,,,2026-10-09T03:50:03+00:00,0.83,,
+2026-10-09T04:40:04+00:00,resuelto,0x5360897f90d0a47725fe3fdf96a026715a58f0a80c3bcee782d03e983b2ceb7d,,2026-10-08T22:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T03:50:03+00:00,0.83,,
+2026-10-09T04:40:04+00:00,resuelto,0x50d581b9c7bea330267e1c15fe4414190a618777d76a50e1120077cb10f1fdcd,,2026-10-08T22:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T03:50:03+00:00,0.83,,
+2026-10-09T04:40:04+00:00,resuelto,0x999eec3e620bb851d27c505df58c3921b6893d48c14b87bcff5fb114138b8aac,Jorginho: 2+ shots on target,2026-10-08T22:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T03:50:03+00:00,0.83,No,1
+2026-10-09T04:40:04+00:00,resuelto,0x683350750e660c1c32c3f04995c1ff9cadf6af2a637b9205374dc7285bf4729c,Jorginho: 1+ shots on target,2026-10-08T22:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T03:50:03+00:00,0.83,No,1
+2026-10-09T04:40:04+00:00,resuelto,0x8fc5d2e0a44da0353087e7275d425ca829f1505def68a0421143ad4abf4cb9fa,Léo Pereira: 4+ shots on target,2026-10-08T22:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T03:50:03+00:00,0.83,No,1
+2026-10-09T04:40:04+00:00,resuelto,0x829c3b049fbe8377ac1d157412db0f6d0f0eb352b4646a010dd3da025d8571c6,Léo Pereira: 3+ shots on target,2026-10-08T22:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T03:50:03+00:00,0.83,No,1
+2026-10-09T04:40:04+00:00,resuelto,0xb3d0ba3b040356a288ddc746a962574f597eda1e9acbdf75a43f2e16fcfb4c34,Léo Pereira: 2+ shots on target,2026-10-08T22:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T03:50:03+00:00,0.83,No,1
+2026-10-09T04:40:04+00:00,resuelto,0x833c74c55ea46283bfb6f1928b30c6027a7238dfdb2af2e5a3fb2f46ea5213f7,Léo Pereira: 1+ shots on target,2026-10-08T22:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T03:50:03+00:00,0.83,No,1
+2026-10-09T04:40:04+00:00,resuelto,0x04d4b708f5724fccb1255ec13ab7a10c22d8ac5e26809595b5d04514d617f800,,2026-10-08T22:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T03:50:03+00:00,0.83,,
+2026-10-09T04:40:04+00:00,resuelto,0x4c431c70c7b06213a7a6aea2c7b80ff0af70a6a324500efa644fa2b58a919503,,2026-10-08T22:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T03:50:03+00:00,0.83,,
+2026-10-09T04:40:04+00:00,resuelto,0x918992f8e460d83c049541f90528eefd7bf2d29ccc26f352ad06cea71df4965d,,2026-10-08T22:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T03:50:03+00:00,0.83,,
+2026-10-09T04:40:04+00:00,resuelto,0x14ccd2d910c36dbfd9aa9e5512855048f595b90ee0192f77d089d1d97441cd55,,2026-10-08T22:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T03:50:03+00:00,0.83,,
+2026-10-09T04:40:04+00:00,resuelto,0xd411a3272a01882d5a42fb2603a52e6982770b87b7d0d0583281311142fbd6fd,,2026-10-08T22:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T03:50:03+00:00,0.83,,
+2026-10-09T04:40:04+00:00,resuelto,0x9c98567f51a056dfacd69df10ad6fb0dfbc04fce900e98d1dd5c128e789cab13,,2026-10-08T22:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T03:50:03+00:00,0.83,,
+2026-10-09T04:40:04+00:00,resuelto,0xa8bed4989ee648a0e9659ee0d590c7429233f695b6684c46dc54877ae3e16c1f,,2026-10-08T22:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T03:50:03+00:00,0.83,,
+2026-10-09T04:40:04+00:00,resuelto,0x052acf95d4d9aa88f19353e9c45df4c5b9d153c3a93f2c241fd4f1803e915a43,,2026-10-08T22:30:00+00:00,,Yes,,,,,,,,,,,,2026-10-09T03:50:03+00:00,0.83,,
+2026-10-09T04:40:04+00:00,resuelto,0xc17764c12403fdef222f31acf5a725d72d2925826ac183faca93777f552dbe1c,,2026-10-08T22:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T03:50:03+00:00,0.83,,
+2026-10-09T04:40:04+00:00,resuelto,0x857e8fb1ec86a9be231032eab671893738f196ee86a2434b4efbea5116727783,,2026-10-08T22:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T03:50:03+00:00,0.83,,
+2026-10-09T04:40:04+00:00,resuelto,0x4b222aa94c29e167e8dcf6628f6e68371f52ea3298a5c0194a819880637dfbc0,,2026-10-08T22:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T03:50:03+00:00,0.83,,
+2026-10-09T04:40:04+00:00,resuelto,0x54928fac6c39fa8f1b3998472ba315845b0dd47086915ebedc7988704d2bfd90,,2026-10-08T22:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T03:50:03+00:00,0.83,,
+2026-10-09T04:40:04+00:00,resuelto,0x0b046f35ee4148653604f3d0cc09e4b6f232497930dfa289f42458e877752e54,,2026-10-08T22:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T03:50:03+00:00,0.83,,
+2026-10-09T04:40:04+00:00,resuelto,0x4119bee3c87f1f8cbde98efad33846493cb61cb49f58fe821fbde644b37aa30b,,2026-10-08T22:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T03:50:03+00:00,0.83,,
+2026-10-09T04:40:04+00:00,resuelto,0x67541acd2eb4a378b35b57b126c16b7c91636dfa63576e680a6cb9f03726eff2,,2026-10-08T22:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T03:50:03+00:00,0.83,,
+2026-10-09T04:40:04+00:00,resuelto,0xe2ef2c265ee41bf048b878d0a80a3af39ec96b5d0aef39dfd9cdbf75a90527b1,,2026-10-08T22:30:00+00:00,,Yes,,,,,,,,,,,,2026-10-09T03:50:03+00:00,0.83,,
+2026-10-09T04:40:04+00:00,resuelto,0x42510587bb0d41a0e11b3f36ad9cef7a55b4d61b6c96cdafe56a3529b8665bf0,,2026-10-08T22:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T03:50:03+00:00,0.83,,
+2026-10-09T04:40:04+00:00,resuelto,0x894a398bcec0c5af4c1da8e89bfc7c04bb9d2b9fbf85dfa59aad7f47ae4b0942,,2026-10-08T22:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T03:50:03+00:00,0.83,,
+2026-10-09T04:40:04+00:00,resuelto,0x09b26efa7db1506aec1093395039e5021f09000610ac7c912900a83a9b04a9ab,,2026-10-08T22:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T03:50:03+00:00,0.83,,
+2026-10-09T04:40:04+00:00,resuelto,0x3095bc49b76a07cc1fb20a924e1ce40599a2f5d946f560819f5653eaa6ad03e3,,2026-10-08T22:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T03:50:03+00:00,0.83,,
+2026-10-09T04:40:04+00:00,resuelto,0xdfd63c8cff4b2be9ec9c99550bfcfa566e7a06c4122b75ad1b3f1051e600c8f5,,2026-10-08T22:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T03:50:03+00:00,0.83,,
+2026-10-09T04:40:04+00:00,resuelto,0x0490ee6dffc3c03916aea7ed956cc84950b5708cea5f11c7517ce87b53cecee4,,2026-10-08T22:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T03:50:03+00:00,0.83,,
+2026-10-09T04:40:04+00:00,resuelto,0x51a0c2931ac385c08e66410642fbe9285572b5f1f8a823d1e930a0219d11a4e4,Samuel Lino: 1+ shots on target,2026-10-08T22:30:00+00:00,,Yes,,,,,,,,,,,,2026-10-09T03:50:03+00:00,0.83,Yes,1
+2026-10-09T04:40:04+00:00,resuelto,0xe72f9f82e73b9f5fb9a01aac5fee7b5ebf06b6ce84f9e26788494ff2bb1aa0a7,Jorge Carrascal: 4+ shots on target,2026-10-08T22:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T03:50:03+00:00,0.83,No,1
+2026-10-09T04:40:04+00:00,resuelto,0x2828e168f1b532f4e81b34d4ad08a4b7413470da5e1edd96c6deb255eaaee2fc,Jorge Carrascal: 3+ shots on target,2026-10-08T22:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T03:50:03+00:00,0.83,No,1
+2026-10-09T04:40:04+00:00,resuelto,0x04cecc53f44c63b1bcec0ea54d64e50dc5eb943aa3a009055ef904bad950b8b0,Jorge Carrascal: 2+ shots on target,2026-10-08T22:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T03:50:03+00:00,0.83,No,1
+2026-10-09T04:40:04+00:00,resuelto,0xc6b7c2a0fe3f84f1c91ae52552f62ab37936bc5491a230d88ec92ef154fb8664,Jorge Carrascal: 1+ shots on target,2026-10-08T22:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T03:50:03+00:00,0.83,No,1
+2026-10-09T04:40:04+00:00,resuelto,0x5c4c8d7c1cfd7dc3ec53a58018876f6f2d8ad3daa987ceceafde81c039e159b8,Lucas Paquetá: 4+ shots on target,2026-10-08T22:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T03:50:03+00:00,0.83,No,1
+2026-10-09T04:40:04+00:00,resuelto,0x902bd0cfff16d407101a2bcbc41eb0be2d946978df163eb08a4eaf1a82ca8617,,2026-10-08T22:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T03:50:03+00:00,0.83,,
+2026-10-09T04:40:04+00:00,resuelto,0x68dcd069b66003eb3c64e5f505db81296498ec68ae9fa0db55d86df27b5335e3,,2026-10-08T22:30:00+00:00,,Yes,,,,,,,,,,,,2026-10-09T03:50:03+00:00,0.83,,
+2026-10-09T04:40:04+00:00,resuelto,0x54a4eebc8d9a5995dda1bda0716cd86e77bb5f7b490cd0c9c23244240d31e37e,,2026-10-08T22:30:00+00:00,,Yes,,,,,,,,,,,,2026-10-09T03:50:03+00:00,0.83,,
+2026-10-09T04:40:04+00:00,resuelto,0x2600b2006b31d6fea74a2e80fe68ca7871d843351cfea1081b3f02cc140031bb,,2026-10-08T22:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T03:50:03+00:00,0.83,,
+2026-10-09T04:40:04+00:00,resuelto,0x339963f43dceba587da20b7c1759ae20a9f8eaf65edb479ce76caaaefa400734,,2026-10-08T22:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T03:50:03+00:00,0.83,,
+2026-10-09T04:40:04+00:00,resuelto,0x15771e52daa186b1c8ba379a4233eda147e90e1d3d8360f48643af13a2fcad1a,,2026-10-08T22:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T03:50:03+00:00,0.83,,
+2026-10-09T04:40:04+00:00,resuelto,0x039b5a4eff30c49df4d96de104449bd094af25a377c45ed8c64bf175ad989a27,,2026-10-08T22:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T03:50:03+00:00,0.83,,
+2026-10-09T04:40:04+00:00,resuelto,0x40620ec517be1dc0ef2218cc91099937c18cee3a5f3482903a3c97aa5a4f451f,,2026-10-08T22:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T03:50:03+00:00,0.83,,
+2026-10-09T04:40:04+00:00,resuelto,0x286320c2ca2b6552eb98b5e3214192ec69168ca82831d6cc5960ee366691ee73,,2026-10-08T22:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T03:50:03+00:00,0.83,,
+2026-10-09T04:40:04+00:00,resuelto,0x865e007c58c56d8eedf82538f17d8b69047c129944a9c23382f72df2855f6b3c,,2026-10-08T22:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T03:50:03+00:00,0.83,,
+2026-10-09T04:40:04+00:00,resuelto,0xcf89b5f2c402a233c0302a41b5265363dbb39dc7313cc4e8fa2be9bc14c2bf47,,2026-10-08T22:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T03:50:03+00:00,0.83,,
+2026-10-09T04:40:04+00:00,resuelto,0x438b19ab831d4bf79e0de23b7bf1be29180a9bb1c407289beb8edb38f177d978,,2026-10-08T22:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T03:50:03+00:00,0.83,,
+2026-10-09T04:40:04+00:00,resuelto,0xc439f77670ee780ab6b72a7b6802d8d5165f2cb83a1c6d291b22e36cb81cbb7b,,2026-10-08T22:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T03:50:03+00:00,0.83,,
+2026-10-09T04:40:04+00:00,resuelto,0xb6b173326be361f4eab84f870db021bbb2d2b45092a4af35432047ad910adae3,,2026-10-08T22:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T03:50:03+00:00,0.83,,
+2026-10-09T04:40:04+00:00,resuelto,0x01eaec9d0fef44bbfd315eb4da5f23606be52e328e75a3aa44513e524f89da6d,,2026-10-08T22:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T03:50:03+00:00,0.83,,
+2026-10-09T04:40:04+00:00,resuelto,0x3bf321ffc33f9f35932bc42bbd8d8f5dc265246cbe80a1c92e40c0bd95ddf1b1,,2026-10-08T22:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T03:50:03+00:00,0.83,,
+2026-10-09T04:40:04+00:00,resuelto,0x577617cbff7611a96bf45f536da4cfa6e1b0623f216cea643bfb590b810bfa4a,,2026-10-08T22:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T03:50:03+00:00,0.83,,
+2026-10-09T04:40:04+00:00,resuelto,0xcd0c1985683aa647a7583c8fce42250140dcf8381aef59b6ea43f25e0d570d78,,2026-10-08T22:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T03:50:03+00:00,0.83,,
+2026-10-09T04:40:04+00:00,resuelto,0x298b23f75b9aeeb056a333c32f4d54d01f72b892a719ad49b2240f21ab2ca526,,2026-10-08T22:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T03:50:03+00:00,0.83,,
+2026-10-09T04:40:04+00:00,resuelto,0xd05871199efe0d4bc911498bdb3255f30d670369800d797947305a51e28e8cb6,,2026-10-08T22:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T03:50:03+00:00,0.83,,
+2026-10-09T04:40:04+00:00,resuelto,0xd0f1b7fa267277b7db530de0ab0a8b7158b2139a582c41a43446ad95853069cf,,2026-10-08T22:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T03:50:03+00:00,0.83,,
+2026-10-09T04:40:04+00:00,resuelto,0xaf18a4c6ca96f566a4c6651a8a424f0f4463351294be46eff99c7e31857b7d31,,2026-10-08T22:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T03:50:03+00:00,0.83,,
+2026-10-09T04:40:04+00:00,resuelto,0x37a7108a3de5e7774fc821197e20bec2ca3253ccab6b02828a3b88385d4995ab,,2026-10-08T22:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T03:50:03+00:00,0.83,,
+2026-10-09T04:40:04+00:00,resuelto,0xbf70e0fb3c9fa974472aab05d18931e57aaad3fd5d8eb9b308e2b798535b641b,,2026-10-08T22:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T03:50:03+00:00,0.83,,
+2026-10-09T04:40:04+00:00,resuelto,0x43aa8dfe4b49d280e0e6eec127c0218cbe690d4f794ab945cce08f53e14d4623,,2026-10-08T22:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T03:50:03+00:00,0.83,,
+2026-10-09T04:40:04+00:00,resuelto,0x28454986c0575ca6c34023bbabbfabdb2db44b868f186f749c02d041138d2e41,,2026-10-08T22:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T03:50:03+00:00,0.83,,
+2026-10-09T04:40:04+00:00,resuelto,0x7078a5c6c01ffc2b5e29da6020c14e535efb00b04c12ffd15365875bc3d6f432,,2026-10-08T22:30:00+00:00,,Yes,,,,,,,,,,,,2026-10-09T03:50:03+00:00,0.83,,
+2026-10-09T04:40:04+00:00,resuelto,0xb2fcc769d94af1b00e5650a08d0eadf19b8572cb0e7d7bdcf9292e009d51407e,,2026-10-08T22:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T03:50:03+00:00,0.83,,
+2026-10-09T04:40:04+00:00,resuelto,0x2f405f248874cc3a718d5a59bd3837bc62fb4e257af7457478a80a1b4c764a12,,2026-10-08T22:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T03:50:03+00:00,0.83,,
+2026-10-09T04:40:04+00:00,resuelto,0xba6dc9738f6c09d151156d171265bed2d0bb6b2afb7ac74f09de1682eb51b16a,,2026-10-08T22:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T03:50:03+00:00,0.83,,
+2026-10-09T04:40:04+00:00,resuelto,0xfdf2ec393e033ea859a882280d6b746b0eb799dc5429e53b80308536ec81b44f,,2026-10-08T22:30:00+00:00,,Yes,,,,,,,,,,,,2026-10-09T03:50:03+00:00,0.83,,
+2026-10-09T04:40:04+00:00,resuelto,0xbc10cdca9764e8e8760038c9c41717aeb8671f890965f7c02b3cef36c917bfd3,,2026-10-08T22:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T03:50:03+00:00,0.83,,
+2026-10-09T04:40:04+00:00,resuelto,0xe081002f09b3c19be3bc108300b969b33617baa060c32bf6d4bcb5e76f400bb4,,2026-10-08T22:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T03:50:03+00:00,0.83,,
+2026-10-09T04:40:04+00:00,resuelto,0x0c5a42d1e2712140de6741545df8f5538b43120dd0a8651930275bd5cb964e03,,2026-10-08T22:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T03:50:03+00:00,0.83,,
+2026-10-09T04:40:04+00:00,resuelto,0xc2398c6dc5e49b52b29bdc2aa657e35bb709e006a99fb79a9f5cdcd3de8723e2,Willian Arão: 1+ shots on target,2026-10-08T22:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T03:50:03+00:00,0.83,No,1
+2026-10-09T04:40:04+00:00,resuelto,0x47429b21b1e9af5af1952d14e23734ef98ebf73b46117be83cd554d6f401a06a,Gabriel Bontempo: 4+ shots on target,2026-10-08T22:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T03:50:03+00:00,0.83,No,1
+2026-10-09T04:40:04+00:00,resuelto,0xe274cac937b7d482276dc741f939707bc65e80330a749c5c374190dddab16bdb,Gabriel Bontempo: 3+ shots on target,2026-10-08T22:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T03:50:03+00:00,0.83,No,1
+2026-10-09T04:40:04+00:00,resuelto,0x005b78e2a5616a0c8bf950ae3e38766c76accac57ac0a300423b5254ff2feddf,Gabriel Bontempo: 2+ shots on target,2026-10-08T22:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T03:50:03+00:00,0.83,No,1
+2026-10-09T04:40:04+00:00,resuelto,0x2af89a1ff93d92ca980e66d795be5160f1f50abb190684b494cb1a6800e9ba6c,Gabriel Bontempo: 1+ shots on target,2026-10-08T22:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T03:50:03+00:00,0.83,No,1
+2026-10-09T04:40:04+00:00,resuelto,0x7f5f1ca3828cb5a459be8622ba20cc1af979e3aaa124500f0d464e3bdd5b99d2,Gustavo Henrique: 4+ shots on target,2026-10-08T22:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T03:50:03+00:00,0.83,No,1
+2026-10-09T04:40:04+00:00,resuelto,0x896daf088e7d413be2d516284f6ddac7fec900c83ea74111cc2f0ce7335f1fe0,,2026-10-08T22:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T03:50:03+00:00,0.83,,
+2026-10-09T04:40:04+00:00,resuelto,0x3bfeac28e5fb43f1a15c9366b80c4bc65321049473727e146aad6afb68387622,,2026-10-08T22:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T03:50:03+00:00,0.83,,
+2026-10-09T04:40:04+00:00,resuelto,0xd3d8235c020dfa1454ca418c971495e6d0e9dbcfbc5f4f33d17df102daaa89d7,,2026-10-08T22:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T03:50:03+00:00,0.83,,
+2026-10-09T04:40:04+00:00,resuelto,0x1ea346cef1ab3becd1ca1661d011362a1597db77962bbd944ae8297c5328e720,,2026-10-08T22:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T03:50:03+00:00,0.83,,
+2026-10-09T04:40:04+00:00,resuelto,0xfcc7ca45607d96bd64c52079cda493ee6735d77891832a49032d071d44e605b6,,2026-10-08T22:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T03:50:03+00:00,0.83,,
+2026-10-09T04:40:04+00:00,resuelto,0x8a00cd43000e5486b1d3b27dae94b0a1c4e24c7f9ded3a078154b9dfee16ef5e,,2026-10-08T22:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T03:50:03+00:00,0.83,,
+2026-10-09T04:40:04+00:00,resuelto,0x8c755cf190f06260f89d544b034f29f50d924106dff11f55d6fe0b3ec7b3f821,,2026-10-08T22:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T03:50:03+00:00,0.83,,
+2026-10-09T04:40:04+00:00,resuelto,0xf8954630a712408f60dfcce6ab599a4cbde9d2f8288b2292957ec5939b34f466,,2026-10-08T22:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T03:50:03+00:00,0.83,,
+2026-10-09T04:40:04+00:00,resuelto,0x502afbcc584254e52c4a8a305e9937f553e46b8fb8a3e9514206f46ebf6ed4d4,,2026-10-08T22:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T03:50:03+00:00,0.83,,
+2026-10-09T04:40:04+00:00,resuelto,0xc9d6d7b36745c1f354fce1ad5083c5468124cc6207d30fcfca45e5fbf9ce666f,,2026-10-08T22:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T03:50:03+00:00,0.83,,
+2026-10-09T04:40:04+00:00,resuelto,0xd70d97e53004431c9d3b12b80a8a7bdf7b956641453bb3446dceb7fbb00b1658,,2026-10-08T22:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T03:50:03+00:00,0.83,,
+2026-10-09T04:40:04+00:00,resuelto,0xd6703e35cafa45ad807a8656b69fdfab215ee98d95a92d8bf7ad896d61bc5f22,,2026-10-08T22:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T03:50:03+00:00,0.83,,
+2026-10-09T04:40:04+00:00,resuelto,0xe6164d95af01e4e3044ed62a9b8949a3d848e5697a27820500030f6133bef809,,2026-10-08T22:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T03:50:03+00:00,0.83,,
+2026-10-09T04:40:04+00:00,resuelto,0x934551c2507b0e90c65647b43c93a4d591511a47f3251f79d87a57df7d7c55a9,,2026-10-08T22:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T03:50:03+00:00,0.83,,
+2026-10-09T04:40:04+00:00,resuelto,0x5eb640738d08bdb22b5aaa0e811fc63ef87474338ad0c731ee0d6b3743d9d72e,,2026-10-08T22:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T03:50:03+00:00,0.83,,
+2026-10-09T04:40:04+00:00,resuelto,0x6291323872cc774e609d70d9f66046a4a6b56138ca871498fe0cb061debb3a6f,,2026-10-08T22:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T03:50:03+00:00,0.83,,
+2026-10-09T04:40:04+00:00,resuelto,0x92d1d9044e26c4c1f99d3802f08c8bc9e1fe43ca784f1d26f1043c834e6ce243,,2026-10-08T22:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T03:50:03+00:00,0.83,,
+2026-10-09T04:40:04+00:00,resuelto,0x2f82808978575008877fd60dcaeea3dc9a8201cea224feb3b4352c95cef462fe,,2026-10-08T22:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T03:50:03+00:00,0.83,,
+2026-10-09T04:40:04+00:00,resuelto,0xc4a58027847616914ca421f4618007b24968f122adeb791db7c4956451633b93,,2026-10-08T22:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T03:50:03+00:00,0.83,,
+2026-10-09T04:40:04+00:00,resuelto,0x13849f5b701327ef18413f6503a6f3da8474e0e92f88c68ce7027c083748296f,,2026-10-08T22:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T03:50:03+00:00,0.83,,
+2026-10-09T04:40:04+00:00,resuelto,0x7e3e071863f086232889609e6012a393e925d72c2c6a85d359d77674c3c91c87,,2026-10-08T22:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T03:50:03+00:00,0.83,,
+2026-10-09T04:40:04+00:00,resuelto,0x72141ea5be20c279eb6934572f4123126267078b7766f93709edc87156693b00,,2026-10-08T22:30:00+00:00,,Yes,,,,,,,,,,,,2026-10-09T03:50:03+00:00,0.83,,
+2026-10-09T04:40:04+00:00,resuelto,0x6bd6db6adb2413bbacfdf472ab99643c90470fd9415a1b8f99eb468dead96ab4,,2026-10-08T22:30:00+00:00,,Yes,,,,,,,,,,,,2026-10-09T03:50:03+00:00,0.83,,
+2026-10-09T04:40:04+00:00,resuelto,0x6bd5d83e75fd4db8a1cfc0cceff1f479289268fccd9a7fd6d514642f137cde87,,2026-10-08T22:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T03:50:03+00:00,0.83,,
+2026-10-09T04:40:04+00:00,resuelto,0xe8d55f6e20186656900ead40a4ccb77731c20bb63c56f00c5f04f58dab3f0944,,2026-10-08T22:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T03:50:03+00:00,0.83,,
+2026-10-09T04:40:04+00:00,resuelto,0x74153169ccfef88d801d4eb3af7c3620b8b6fb95a042b65366f67c8116a6938f,,2026-10-08T22:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T03:50:03+00:00,0.83,,
+2026-10-09T04:40:04+00:00,resuelto,0xa5b5c1aa8e237ad25b69d9ef951aad6de14b821ce0e2765f309340205d7b2e76,,2026-10-08T22:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T03:50:03+00:00,0.83,,
+2026-10-09T04:40:04+00:00,resuelto,0xfbf8235a34a4fe80bc99c7b9db13189eef72122007c7cabb6f85d58031f8e78d,,2026-10-08T22:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T03:50:03+00:00,0.83,,
+2026-10-09T04:40:04+00:00,resuelto,0xda3a7445571303f878eb96d6493b177fdf9add66cb4dd4a6d6f1fc7cfed84812,,2026-10-08T22:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T03:50:03+00:00,0.83,,
+2026-10-09T04:40:04+00:00,resuelto,0x5eb1a85ace8d0a8ec7cf9631fb4a66051b652cbf6f5ca33cdf8098f8df02b83d,,2026-10-08T22:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T03:50:03+00:00,0.83,,
+2026-10-09T04:40:04+00:00,resuelto,0xa3e72e0ea0f8571e61337b387a254967cc64bd638feefd4d8a6d3e1e88004e43,,2026-10-08T22:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T03:50:03+00:00,0.83,,
+2026-10-09T04:40:04+00:00,resuelto,0x22691b97a71f9cd26e27642b3b1ddd6aecd00b62cb3bfe3f47fd825843fd6943,Pedro: 1+ shots,2026-10-08T22:30:00+00:00,,Yes,,,,,,,,,,,,2026-10-09T03:50:03+00:00,0.83,Yes,1
+2026-10-09T04:40:04+00:00,resuelto,0xaa4d88aba891d9c3e5db00189bddc052438564a63c163f7f7c1c479267dbab62,Emerson Royal: 5+ shots,2026-10-08T22:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T03:50:03+00:00,0.83,No,1
+2026-10-09T04:40:04+00:00,resuelto,0x2cfdd8b2634d62809ef9aa378afcaf6c08117dfead1b071b16fa37cbdb8f3a1d,Emerson Royal: 4+ shots,2026-10-08T22:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T03:50:03+00:00,0.83,No,1
+2026-10-09T04:40:04+00:00,resuelto,0xe46fe0b571363f158f73fb31b8d6a17ff17f552c853397fb716fbcb1584d0f43,Emerson Royal: 3+ shots,2026-10-08T22:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T03:50:03+00:00,0.83,No,1
+2026-10-09T04:40:04+00:00,resuelto,0x099044374d2c83e1409551a1b4606052069fd8be0030c6c9e39c58379919842a,Emerson Royal: 2+ shots,2026-10-08T22:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T03:50:03+00:00,0.83,No,1
+2026-10-09T04:40:04+00:00,resuelto,0x7998657ac2db35756ec51fee461a311d3d7a109c9cff72b64a5a90160f9148f9,Emerson Royal: 1+ shots,2026-10-08T22:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T03:50:03+00:00,0.83,No,1
+2026-10-09T04:40:04+00:00,resuelto,0x7c306a177ae308d8aef1705918e89222a079a4da5c7ae92ed03fcc558ba35318,Samuel Lino: 5+ shots,2026-10-08T22:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T03:50:03+00:00,0.83,No,1
+2026-10-09T04:40:04+00:00,resuelto,0x166b4c6131de11d70e174b2466801e146b8c62f05dd2bbd2f41dbda2beb340a8,,2026-10-08T22:30:00+00:00,,Yes,,,,,,,,,,,,2026-10-09T03:50:03+00:00,0.83,,
+2026-10-09T04:40:04+00:00,resuelto,0xb5ca6b373fc67f9afdf9fd4dad1b6e5c4a121e0c973afbd9703f687ab6ede998,,2026-10-08T22:30:00+00:00,,Yes,,,,,,,,,,,,2026-10-09T03:50:03+00:00,0.83,,
+2026-10-09T04:40:04+00:00,resuelto,0x41aaf1b384a27157872c9e23a2301d21790cefceb99b1e9d5fab072e64b7a03c,,2026-10-08T22:30:00+00:00,,Yes,,,,,,,,,,,,2026-10-09T03:50:03+00:00,0.83,,
+2026-10-09T04:40:04+00:00,resuelto,0xfed43816120c8d858913ad2364f40d46cdfe701073e2db9a2ea8aeda057b03d4,,2026-10-08T22:30:00+00:00,,Yes,,,,,,,,,,,,2026-10-09T03:50:03+00:00,0.83,,
+2026-10-09T04:40:04+00:00,resuelto,0x2983451f20b2d5d69b092c7db6c341980ea2e813764a1b1edcf40a7eda79ea3c,,2026-10-08T22:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T03:50:03+00:00,0.83,,
+2026-10-09T04:40:04+00:00,resuelto,0xd76ce32b2fa29f87c00a62f45799d9ad225fa90349c9e033456a5d12683d98ba,,2026-10-08T22:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T03:50:03+00:00,0.83,,
+2026-10-09T04:40:04+00:00,resuelto,0x22d0bee628724497e60cd20dd8884fbeabf5ca9810ffe8dfd880dd77ca8e4ddf,,2026-10-08T22:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T03:50:03+00:00,0.83,,
+2026-10-09T04:40:04+00:00,resuelto,0xe71a9900af59d17a78fb242d27d4394c849f1e5633d3a0415b3bfe1a88fd3d85,,2026-10-08T22:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T03:50:03+00:00,0.83,,
+2026-10-09T04:40:04+00:00,resuelto,0xeecd4fd38deead0a80e57df863c220a6801db88c091897f185bd1b5aae35943d,,2026-10-08T22:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T03:50:03+00:00,0.83,,
+2026-10-09T04:40:04+00:00,resuelto,0xa2393ad2de52737cc9c1ffc2c24d8f4dff0ae3855e369a90ec48830a221ad35b,,2026-10-08T22:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T03:50:03+00:00,0.83,,
+2026-10-09T04:40:04+00:00,resuelto,0x848f8a0af05809bc788bd2229d87a9c0a3b98d0622e63bf1c6febfaaa7970507,,2026-10-08T22:30:00+00:00,,Yes,,,,,,,,,,,,2026-10-09T03:50:03+00:00,0.83,,
+2026-10-09T04:40:04+00:00,resuelto,0xfd9ea7173a40c7251e9987739a7669f35077ea4c6db9ed41c91175a0158df2b6,,2026-10-08T22:30:00+00:00,,Yes,,,,,,,,,,,,2026-10-09T03:50:03+00:00,0.83,,
+2026-10-09T04:40:04+00:00,resuelto,0x759663278cb9089a55a5f4d98522012551484e2315d9c524583fa40559f71343,Lucas Paquetá: 1+ shots,2026-10-08T22:30:00+00:00,,Yes,,,,,,,,,,,,2026-10-09T03:50:03+00:00,0.83,Yes,1
+2026-10-09T04:40:04+00:00,resuelto,0x53c6228f8228e85609b36ca5e8ceb09e2f98461aea96d1ae771c296391b793d5,Lucas Veríssimo: 5+ shots,2026-10-08T22:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T03:50:03+00:00,0.83,No,1
+2026-10-09T04:40:04+00:00,resuelto,0xb0108d09b154e699b995d3756521287432194903156a2582e483dc9d5b3f2b32,Lucas Veríssimo: 4+ shots,2026-10-08T22:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T03:50:03+00:00,0.83,No,1
+2026-10-09T04:40:04+00:00,resuelto,0x91063b0f9b6459276cbc57f8526ad23fbe40dcdbedaf5ab32cf1680b4d2ab0c6,,2026-10-08T22:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T03:50:03+00:00,0.83,,
+2026-10-09T04:40:04+00:00,resuelto,0x4390bbe211d6d571b55d7d86c4fd852a7096a967b3a34c689bc0435dc7380621,,2026-10-08T22:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T03:50:03+00:00,0.83,,
+2026-10-09T04:40:04+00:00,resuelto,0xe75b2cd757cac1f1d3a2a283642410c42ce7237ce8a14ca56e8cf5959b0045e6,,2026-10-08T22:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T03:50:03+00:00,0.83,,
+2026-10-09T04:40:04+00:00,resuelto,0x73881d6646221e1f02eff4078df7b7dbe2d6bd58228513fd0d4451e102cf0858,,2026-10-08T22:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T03:50:03+00:00,0.83,,
+2026-10-09T04:40:04+00:00,resuelto,0xe17a3b764d737e5354b70a6dc7897318514d0d0a843851b6d56a975f78cfe120,,2026-10-08T22:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T03:50:03+00:00,0.83,,
+2026-10-09T04:40:04+00:00,resuelto,0xf712c59da162cde26a4f535d43f5cf93d9a52da7fb411d6fb052308c48730188,,2026-10-08T22:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T03:50:03+00:00,0.83,,
+2026-10-09T04:40:04+00:00,resuelto,0xa61379ebe56e9345520ea1b3883b05a2c9da1f58202c2f2eb649b8dae85ebb87,,2026-10-08T22:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T03:50:03+00:00,0.83,,
+2026-10-09T04:40:04+00:00,resuelto,0xb13c86d416e73cf54ad7f786537754ce3d047af59731ef82a4e3431adb4ed8f1,,2026-10-08T22:30:00+00:00,,Yes,,,,,,,,,,,,2026-10-09T03:50:03+00:00,0.83,,
+2026-10-09T04:40:04+00:00,resuelto,0xb06cac6f69f0e4e8bd0726842871f9e5fbec5d90b474d0c6833abf6f86042d85,,2026-10-08T22:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T03:50:03+00:00,0.83,,
+2026-10-09T04:40:04+00:00,resuelto,0x553f5ab18b110cc1ccc31b9a0133e7002ec3635d9f76670ce6f214c2f8de0ee1,,2026-10-08T22:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T03:50:03+00:00,0.83,,
+2026-10-09T04:40:04+00:00,resuelto,0xe5f77f283a236daaa9a7f61b9926d9272570ed65786031d86a0a69b46eadfc7b,,2026-10-08T22:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T03:50:03+00:00,0.83,,
+2026-10-09T04:40:04+00:00,resuelto,0xb1db2f2f042e6dae0be26fb0552ee74ce36290f4826e2bf80a6f95b0a3674d0a,,2026-10-08T22:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T03:50:03+00:00,0.83,,
+2026-10-09T04:40:04+00:00,resuelto,0x9000677dbf9881d5957c43a0879f5ddc5776c81bb6748c31910a849a63431795,,2026-10-08T22:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T03:50:03+00:00,0.83,,
+2026-10-09T04:40:04+00:00,resuelto,0x5c5be1bd1bf25d492be6a0c7cd0ad012c4abac65feb0322cc6c6516a5d7e38e4,,2026-10-08T22:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T03:50:03+00:00,0.83,,
+2026-10-09T04:40:04+00:00,resuelto,0xbe8b7ae5b15209d85cec581c5c50ded4b1ea70a059cbce4859d7a9f140113b55,,2026-10-08T22:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T03:50:03+00:00,0.83,,
+2026-10-09T04:40:04+00:00,resuelto,0x2ce3797f8eff9fbf33e7ac232df14bf6a5f26b9ef3e1740302c1ef4c71695279,,2026-10-08T22:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T03:50:03+00:00,0.83,,
+2026-10-09T04:40:04+00:00,resuelto,0xdcc38e8eabff832069ef02f04cf1f2a1a7d3deb51abc5eef97983b6d1f2e16fb,,2026-10-08T22:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T03:50:03+00:00,0.83,,
+2026-10-09T04:40:04+00:00,resuelto,0x4cd88cfbd8976cd34e7ae148d5ba5f3908ec8d1ae2813fd603145e90a15be45c,,2026-10-08T22:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T03:50:03+00:00,0.83,,
+2026-10-09T04:40:04+00:00,resuelto,0xe726b38646914bff9bd14ed1d3f69c53a7d585bfc292d5c34834026dbc6a771e,,2026-10-08T22:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T03:50:03+00:00,0.83,,
+2026-10-09T04:40:04+00:00,resuelto,0x21986a42f9c813e2ccd70643436a9ed214887c5e7ebb32b63700f6d10965b56d,,2026-10-08T22:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T03:50:03+00:00,0.83,,
+2026-10-09T04:40:04+00:00,resuelto,0x2e46d4698b0cd9bce23e36cb06c4bc6351abc4b4599413448e0e94854f884529,,2026-10-08T22:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T03:50:03+00:00,0.83,,
+2026-10-09T04:40:04+00:00,resuelto,0x5c2e440f0eb2e41c0e195e36862b832e5a14bf7d56ade72a27036d37f8fa4528,,2026-10-08T22:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T03:50:03+00:00,0.83,,
+2026-10-09T04:40:04+00:00,resuelto,0xffff986937c9ffc31b1a9e324d8528970222b95ffcd92eecd5a3a81fed2a0f15,,2026-10-08T22:30:00+00:00,,Yes,,,,,,,,,,,,2026-10-09T03:50:03+00:00,0.83,,
+2026-10-09T04:40:04+00:00,resuelto,0xaa0d331be8ad9e1c5e8fcdc857ebba0065e8f1897683a2a9d5c341acbcbf3fdc,,2026-10-08T22:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T03:50:03+00:00,0.83,,
+2026-10-09T04:40:04+00:00,resuelto,0x952c7e2e9854235b25a60ab092926d223218d7310de6fe87cce644a35ffb3c14,,2026-10-08T22:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T03:50:03+00:00,0.83,,
+2026-10-09T04:40:04+00:00,resuelto,0xfb80824afd86b2725a0c7829e72494e4b516cdc069e4f03b7a2221f48cc3108c,,2026-10-08T22:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T03:50:03+00:00,0.83,,
+2026-10-09T04:40:04+00:00,resuelto,0xa74e09ae7c2e8ec16af928e5db8b52c69103f7bddc5d54c4ba786ab924c6d967,,2026-10-08T22:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T03:50:03+00:00,0.83,,
+2026-10-09T04:40:04+00:00,resuelto,0x2b20562f6bdaffd341ffbf11b55c8f2b82d0eb34d3b52224dcb2e3bbb7c73fb5,,2026-10-08T22:30:00+00:00,,Yes,,,,,,,,,,,,2026-10-09T03:50:03+00:00,0.83,,
+2026-10-09T04:40:04+00:00,resuelto,0x927085775b3e70d4a693898470511add37be03f1ee6df0a8b103249a7af5373b,,2026-10-08T22:30:00+00:00,,Yes,,,,,,,,,,,,2026-10-09T03:50:03+00:00,0.83,,
+2026-10-09T04:40:04+00:00,resuelto,0x49d37684a5e50e3920d345d335a11264e4fa35e196388360201150f841e12a86,,2026-10-08T22:30:00+00:00,,Yes,,,,,,,,,,,,2026-10-09T03:50:03+00:00,0.83,,
+2026-10-09T04:40:04+00:00,resuelto,0x2120e4dcbbbb2340f3756f4f53b22d2a5913cbc9f64bb9b38f581a3c85ff16ad,,2026-10-08T22:30:00+00:00,,Yes,,,,,,,,,,,,2026-10-09T03:50:03+00:00,0.83,,
+2026-10-09T04:40:04+00:00,resuelto,0x088a0338e2116f4b9e32ec39452c19e0c66e33868fb5172e32e8edcf072b4fe6,,2026-10-08T22:30:00+00:00,,Yes,,,,,,,,,,,,2026-10-09T03:50:03+00:00,0.83,,
+2026-10-09T04:40:04+00:00,resuelto,0xbbe909126927036e86fd485344b870a9227b73c3173afaccaeaa52fda992f0b4,,2026-10-08T22:30:00+00:00,,Yes,,,,,,,,,,,,2026-10-09T03:50:03+00:00,0.83,,
+2026-10-09T04:40:04+00:00,resuelto,0x9124f9b62adf2ef4d445d9a58f121e691bc1e31e889b1c97a4576bbf54df6f8b,,2026-10-08T22:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T03:50:03+00:00,0.83,,
+2026-10-09T04:40:04+00:00,resuelto,0x5d5906ede84317c390a06ea9a43c465c853cd469c955280713cc24cedd9b2bed,,2026-10-08T22:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T03:50:03+00:00,0.83,,
+2026-10-09T04:40:04+00:00,resuelto,0x24820fd9578d5869bd2a4820355b6a5eac43331c33dcced36b8045f83b34f05f,,2026-10-08T22:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T03:50:03+00:00,0.83,,
+2026-10-09T04:40:04+00:00,resuelto,0x280771c59fc86ff93cb57be1f5bc5d822da04cd44d51b502659635e3562b5d13,,2026-10-08T22:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T03:50:03+00:00,0.83,,
+2026-10-09T04:40:04+00:00,resuelto,0x86ab805ac11a2aaf378725570f5a178227993a06492bc198b4e40bcea8dd1c75,,2026-10-08T22:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T03:50:03+00:00,0.83,,
+2026-10-09T04:40:04+00:00,resuelto,0x5a23bcc8e4efc0fafe5401c37a286dc326f017b87c9f8e093824edcd4f4da5a9,,2026-10-08T22:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T03:50:03+00:00,0.83,,
+2026-10-09T04:40:04+00:00,resuelto,0x3d0152be6be091241e764ecfde94aaedb55275936d12a5f72ad326f118527140,,2026-10-08T22:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T03:50:03+00:00,0.83,,
+2026-10-09T04:40:04+00:00,resuelto,0xd9f56a18483b27c8b9edb1b575124c877a16e0d1d58c61edb8356fb6e4a07284,,2026-10-08T22:30:00+00:00,,Yes,,,,,,,,,,,,2026-10-09T03:50:03+00:00,0.83,,
+2026-10-09T04:40:04+00:00,resuelto,0x5045bda4cba78cfab11a323f6e1b25ed55fc7d4e405784141c9e2c52035b2973,,2026-10-08T22:30:00+00:00,,Yes,,,,,,,,,,,,2026-10-09T03:50:03+00:00,0.83,,
+2026-10-09T04:40:04+00:00,resuelto,0xbd9747e450eaa1460036a7e408783226762ddbfeaad2e45662d703069a76a683,,2026-10-08T22:30:00+00:00,,Yes,,,,,,,,,,,,2026-10-09T03:50:03+00:00,0.83,,
+2026-10-09T04:40:04+00:00,resuelto,0xf7c1db6b1fe46d291a18a03558db666157fe0e1a71e9da74b0a3412d48ed30e9,,2026-10-08T22:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T03:50:03+00:00,0.83,,
+2026-10-09T04:40:04+00:00,resuelto,0xe07329adc90872c04b64fe7837f2ec55dab20865f5e4af73a66f138153eff601,,2026-10-08T22:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T03:50:03+00:00,0.83,,
+2026-10-09T04:40:04+00:00,resuelto,0xa5ee3851b3fa25642b8253e4c9f3e423210c95ef6cafc1c5fdcad7e18ca64900,,2026-10-08T22:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T03:50:03+00:00,0.83,,
+2026-10-09T04:40:04+00:00,resuelto,0x131177ae5280805cab5d4181856085e88d8e63b2762b26b744b6dd9967a36ae7,Gustavo Henrique: 2+ shots,2026-10-08T22:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T03:50:03+00:00,0.83,No,1
+2026-10-09T04:40:04+00:00,resuelto,0x7b6f4d4c0b82e723906a8c29275c1e94820febace8aa33507a3c5769aa51ed6e,Gustavo Henrique: 1+ shots,2026-10-08T22:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T03:50:03+00:00,0.83,No,1
+2026-10-09T04:40:04+00:00,resuelto,0xa37909a3a7b3ca0eb23b23ec1d474229d088e1b12100cfeadc82b574a8660d75,Jorginho: 2+ goals + assists,2026-10-08T22:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T03:50:03+00:00,0.83,No,1
+2026-10-09T04:40:04+00:00,resuelto,0xd04bf19c4207955088e75abbf4df7dc0f0f29aaf2d775cfc9759cf867f90e4ab,Jorginho: 1+ goals + assists,2026-10-08T22:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T03:50:03+00:00,0.83,No,1
+2026-10-09T04:40:04+00:00,resuelto,0xd44825c7a31ece27db8ce727f6f904a6d42207dadfb7a8dff056790b9a2fe222,Léo Pereira: 2+ goals + assists,2026-10-08T22:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T03:50:03+00:00,0.83,No,1
+2026-10-09T04:40:04+00:00,resuelto,0xca9bb36d745d46d5a8e46e96a2f9c64b7c6b87641193e7c07de18476b85ece42,Léo Pereira: 1+ goals + assists,2026-10-08T22:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T03:50:03+00:00,0.83,No,1
+2026-10-09T04:40:04+00:00,resuelto,0xf3347dd10c7add779f68e878ae60a635bc907fbf8640dbe78b03edb272d9beff,,2026-10-08T22:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T03:50:03+00:00,0.83,,
+2026-10-09T04:40:04+00:00,resuelto,0x899e86c3c97374ba17ac783a3cf0ff06630bd7f3bfeff7c0183ab1de7deef616,,2026-10-08T22:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T03:50:03+00:00,0.83,,
+2026-10-09T04:40:04+00:00,resuelto,0x7afa985406c74908f9b0c9460359b17945cd0becf370afed3af61386ce225ffe,,2026-10-08T22:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T03:50:03+00:00,0.83,,
+2026-10-09T04:40:04+00:00,resuelto,0x66871846902c18dc2a112aeecc4a5645e2fd7bcae306fb382b2122d9dbe362f6,,2026-10-08T22:30:00+00:00,,Yes,,,,,,,,,,,,2026-10-09T03:50:03+00:00,0.83,,
+2026-10-09T04:40:04+00:00,resuelto,0x40ec9b06cf762cc995ba3283cad5e0eb86ca5b677b58d3f567ff1b06017b3516,,2026-10-08T22:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T03:50:03+00:00,0.83,,
+2026-10-09T04:40:04+00:00,resuelto,0x820803730cda16dbb0c729e15756a3f61cd09e737f8bcd746b5d872bb614b9a7,,2026-10-08T22:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T03:50:03+00:00,0.83,,
+2026-10-09T04:40:04+00:00,resuelto,0x19f1a88897cde9bc2d8247f68cf9a382ac58bf6dd53663d0875709f08790e7da,,2026-10-08T22:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T03:50:03+00:00,0.83,,
+2026-10-09T04:40:04+00:00,resuelto,0x6f37209e30e03d358f4bb53350c3f9775562a6716de1cc142883ab0f645e644c,,2026-10-08T22:30:00+00:00,,Yes,,,,,,,,,,,,2026-10-09T03:50:03+00:00,0.83,,
+2026-10-09T04:40:04+00:00,resuelto,0xb95d23a1aa481927b9f76fe6d9f7bb98ef0cb9b549d42a046e46bf1e524489ca,,2026-10-08T22:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T03:50:03+00:00,0.83,,
+2026-10-09T04:40:04+00:00,resuelto,0xc7829cf7588246b800c4496d8292bc9f5cd126ccb750144133dee27dde4cbbce,,2026-10-08T22:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T03:50:03+00:00,0.83,,
+2026-10-09T04:40:04+00:00,resuelto,0x8805c96baf80a081232da053735a32627aea470f81df5d1beda1d12039382097,,2026-10-08T22:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T03:50:03+00:00,0.83,,
+2026-10-09T04:40:04+00:00,resuelto,0x19b2487a18f363c70c1cdb3800f576be4715b02f3bd8de767a642f24c674760f,,2026-10-08T22:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T03:50:03+00:00,0.83,,
+2026-10-09T04:40:04+00:00,resuelto,0x39181a691864fa405680bbdbd1f694456a6693e3a3f8915467fbec81dc28fbdf,,2026-10-08T22:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T03:50:03+00:00,0.83,,
+2026-10-09T04:40:04+00:00,resuelto,0x1cc60e8b8fedc52bc5b8ba5cbcb07f771c8f397521d10c23132c661ca9135db7,,2026-10-08T22:30:00+00:00,,Yes,,,,,,,,,,,,2026-10-09T03:50:03+00:00,0.83,,
+2026-10-09T04:40:04+00:00,resuelto,0x3afbcba5d533c3ac398811f0d22099589c810b8d3d73c1226fffe4d8757bd3b5,,2026-10-08T22:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T03:50:03+00:00,0.83,,
+2026-10-09T04:40:04+00:00,resuelto,0x54198a46092d1d75e632ab5f8254fa28fcb570b79fa49aabff52ec8b392c4c87,,2026-10-08T22:30:00+00:00,,Yes,,,,,,,,,,,,2026-10-09T03:50:03+00:00,0.83,,
+2026-10-09T04:40:04+00:00,resuelto,0x30f9681d6e552aa93b85121641cab6a6fb358fe369a96356900794952bc371af,,2026-10-08T22:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T03:50:03+00:00,0.83,,
+2026-10-09T04:40:04+00:00,resuelto,0x67ac6c2474cf6cb0a19ffaab73205e26850620877bf051044126b514d4990d2c,,2026-10-08T22:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T03:50:03+00:00,0.83,,
+2026-10-09T04:40:04+00:00,resuelto,0xf20c6d4b4410f1d813ff113529b133d323042caa2203d43e45c7a8dbfe645adb,,2026-10-08T22:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T03:50:03+00:00,0.83,,
+2026-10-09T04:40:04+00:00,resuelto,0xf869886ab0dd11112b93f360041af9a6213f60bf0f2bd486aebd1dffc3bc4d43,,2026-10-08T22:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T03:50:03+00:00,0.83,,
+2026-10-09T04:40:04+00:00,resuelto,0x20f048839f21aa66d4f5e95cae54bacba91440dd3338b860f151f2582ba7d731,Gonzalo Escobar: 1+ goals + assists,2026-10-08T22:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T03:50:03+00:00,0.83,No,1
+2026-10-09T04:40:04+00:00,resuelto,0xa2e1fb8ba9dfcd750eccca6b2019a73f404197c182dfeead1424f5b05651bccf,Christian Oliva: 2+ goals + assists,2026-10-08T22:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T03:50:03+00:00,0.83,No,1
+2026-10-09T04:40:04+00:00,resuelto,0xd73deb9bcf5a8bf8e1415a6739d3a166f2dc15aceef8f98fb552c0d6b86abcaa,Christian Oliva: 1+ goals + assists,2026-10-08T22:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T03:50:03+00:00,0.83,No,1
+2026-10-09T04:40:04+00:00,resuelto,0x0c5f748f124aebf76c4038064f4d3800948d150b364a6e8971c8ed90b64d5b18,Rodinei: 2+ goals + assists,2026-10-08T22:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T03:50:03+00:00,0.83,No,1
+2026-10-09T04:40:04+00:00,resuelto,0xfc806b9fcf7f9bf7a1f7dad1f884378ba2f480df11af29c2170f76d6f10273ec,Rodinei: 1+ goals + assists,2026-10-08T22:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T03:50:03+00:00,0.83,No,1
+2026-10-09T04:40:04+00:00,resuelto,0x0a11f5166be851c92c743170fbdf80ee990a16165828d807db59600dd605f28e,Álvaro Barreal: 2+ goals + assists,2026-10-08T22:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T03:50:03+00:00,0.83,No,1
+2026-10-09T04:40:04+00:00,resuelto,0x2630fe495743c2a65fc073004f48ae30821cdd589ba17649d39e17b392e11f05,,2026-10-08T22:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T03:50:03+00:00,0.83,,
+2026-10-09T04:40:04+00:00,resuelto,0xc308a27b8337f92f4adc1ac803f5c5f9b155d83bd7e8f6005dbdad253830b0d6,,2026-10-08T22:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T03:50:03+00:00,0.83,,
+2026-10-09T04:40:04+00:00,resuelto,0xb52ad769ced52c10ddec16ae02706f27073e8961c6226c60fa075ae0cf033520,,2026-10-08T22:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T03:50:03+00:00,0.83,,
+2026-10-09T04:40:04+00:00,resuelto,0x39b0f205688127afdc91b28b2e6a97dd3131ab259c2a4834f5050b85f9e5e1ea,,2026-10-08T22:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T03:50:03+00:00,0.83,,
+2026-10-09T04:40:04+00:00,resuelto,0xa744ae16e6d9ac4ba73095838b7cd2741fce08ab6803e25b859b380d78450552,,2026-10-08T22:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T03:50:03+00:00,0.83,,
+2026-10-09T04:40:04+00:00,resuelto,0xe083ed5a1930a528f9e1cf17fd7982a2b0cb75fb4f67fbd24dbc6bdd82a0e38e,,2026-10-08T22:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T03:50:03+00:00,0.83,,
+2026-10-09T04:40:04+00:00,resuelto,0xff09e9eb6b5fef2e417f6c9e1ca0bcb907bf75937427c580a61b00454913bd1c,,2026-10-08T22:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T03:50:03+00:00,0.83,,
+2026-10-09T04:40:04+00:00,resuelto,0xfbc5710a1f4cbde60faedd500aed92612fbe31e4768bdcb05d75ebc2894595cd,,2026-10-08T22:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T03:50:03+00:00,0.83,,
+2026-10-09T04:40:04+00:00,resuelto,0x46375da71fd0c3fd0c3040b8e66dc294d0bf342fd1ca4ecd245cc2c1a171ffb1,,2026-10-08T22:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T03:50:03+00:00,0.83,,
+2026-10-09T04:40:04+00:00,resuelto,0x330158310731b91219f9c9474541bedbc8252a4f33957c1578cf435623a82156,,2026-10-08T22:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T03:50:03+00:00,0.83,,
+2026-10-09T04:40:04+00:00,resuelto,0x7f343aeba1572b5ee5103cf22d2b0a6db16ce3701c30da90c88822034b1f54ae,,2026-10-08T22:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T03:50:03+00:00,0.83,,
+2026-10-09T04:40:04+00:00,resuelto,0x55f9cd0e0c70edcf4a767bbcdfcb9bd5fea973d8caf4cb8f31128e675241706d,,2026-10-08T22:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T03:50:03+00:00,0.83,,
+2026-10-09T04:40:04+00:00,resuelto,0xf220dc8e72c8e2addaf0c1332efcd827378cc844f64ead735728dffbfb5ccd19,,2026-10-08T22:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T03:50:03+00:00,0.83,,
+2026-10-09T04:40:04+00:00,resuelto,0xee181092ec87982eee3f6e87c36b03f86a44ed81f6062e18bc311ade59031f34,,2026-10-08T22:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T03:50:03+00:00,0.83,,
+2026-10-09T04:40:04+00:00,resuelto,0x7acc88f6e6da207e578cb1fe9c5f78c10efc7868bbcae69901561e7c0b8d7a27,,2026-10-08T22:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T03:50:03+00:00,0.83,,
+2026-10-09T04:40:04+00:00,resuelto,0xf1d3e2a52ea87e1ea6a3a96f8f398a496dff8597d1021467e1d9692f99fd2bc4,,2026-10-08T22:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T03:50:03+00:00,0.83,,
+2026-10-09T04:40:04+00:00,resuelto,0xbad938ef9ab5e3c94a66ee1bd734eee010874929d9aa3665e62d058402b30960,,2026-10-08T22:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T03:50:03+00:00,0.83,,
+2026-10-09T04:40:04+00:00,resuelto,0xa76f9909800cac7cb7673cac3f005c646352616a55fcafa3c24a34fcc603ee0a,,2026-10-08T22:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T03:50:03+00:00,0.83,,
+2026-10-09T04:40:04+00:00,resuelto,0x7522d5a4b5e4741d53dad1de9b06b14ccd1e1029975a7c6a556e3fbf48b02c59,,2026-10-08T22:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T03:50:03+00:00,0.83,,
+2026-10-09T04:40:04+00:00,resuelto,0x184386ed91a94336efeef929a74e6794d860483b893e2178d9ce0fe62437f7bd,,2026-10-08T22:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T03:50:03+00:00,0.83,,
+2026-10-09T04:40:04+00:00,resuelto,0xaf7459a4157b52a524c70a3698e2c97b5d28f9de6e9b7fef822a6749774585cf,,2026-10-08T22:30:00+00:00,,Yes,,,,,,,,,,,,2026-10-09T03:50:03+00:00,0.83,,
+2026-10-09T04:40:04+00:00,resuelto,0xa9a519b57c9171204183393e604ad8de86b6f5ac540c68aa4ffcd3fedea50113,,2026-10-08T22:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T03:50:03+00:00,0.83,,
+2026-10-09T04:40:04+00:00,resuelto,0xa67735a14d77532b4a0ae2e89a975c6c47cc08eef1983593854283d2cfd207f0,,2026-10-08T22:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T03:50:03+00:00,0.83,,
+2026-10-09T04:40:04+00:00,resuelto,0x6efc09e26b88ec7db028d8ba9391c7de2062c349e0c575a4701eaf9c7fee731a,,2026-10-08T22:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T03:50:03+00:00,0.83,,
+2026-10-09T04:40:04+00:00,resuelto,0x3e3da9cd8cec5f211c9e4b70757f5489d709d5cacb7aa4267bb96a0a9a3bb1ad,,2026-10-08T22:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T03:50:03+00:00,0.83,,
+2026-10-09T04:40:04+00:00,resuelto,0xd4a4cf469f942ad744c3672e4bc4cec802b3667026120aa92c632153577056ce,,2026-10-08T22:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T03:50:03+00:00,0.83,,
+2026-10-09T04:40:04+00:00,resuelto,0xcd49f2069f0d4b8e8b1da016e787967048771a28dc38221e0248fb44cd029ae2,,2026-10-08T22:30:00+00:00,,Yes,,,,,,,,,,,,2026-10-09T03:50:03+00:00,0.83,,
+2026-10-09T04:40:04+00:00,resuelto,0x69cd0569967256cd488c01bd29caa2fa73abb606e25356b412b7f3d889863eae,,2026-10-08T22:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T03:50:03+00:00,0.83,,
+2026-10-09T04:40:04+00:00,resuelto,0xb8130ed0d63ac292f57b3a2d7a185919ce71d6d12f10261c682df602dba18361,,2026-10-08T22:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T03:50:03+00:00,0.83,,
+2026-10-09T04:40:04+00:00,resuelto,0xacd444d89f3dba2cf42dd64429c3976ebd56324797e12db3f4c034c03472a3f7,,2026-10-08T22:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T03:50:03+00:00,0.83,,
+2026-10-09T04:40:04+00:00,resuelto,0x62489e8a169b10688a86bc81cbc1dbc35eec5755a8b9041eed7f8261e586e858,,2026-10-08T22:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T03:50:03+00:00,0.83,,
+2026-10-09T04:40:04+00:00,resuelto,0xf9659970034a855a66e158ee486ae0f892f812e71911a5af23aae79c50ce9132,,2026-10-08T22:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T03:50:03+00:00,0.83,,
+2026-10-09T04:40:04+00:00,resuelto,0x8d93f8a71ec22b5ae1d4c9e39d7aa146a3e46f69bcf2ef4850a16d076e154acc,,2026-10-08T22:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T03:50:03+00:00,0.83,,
+2026-10-09T04:40:04+00:00,resuelto,0xfb5d9458b90967ba88fdbd5811ee462aec23301eea35b9b8be8e4ce04ed9a807,Gonzalo Escobar: 2+ assists,2026-10-08T22:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T03:50:03+00:00,0.83,No,1
+2026-10-09T04:40:04+00:00,resuelto,0xe78e262217d40b4208c7c33b9f3ca5fd2cfcc8badcc0d5e39040ffab04d64a1b,Gonzalo Escobar: 1+ assists,2026-10-08T22:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T03:50:03+00:00,0.83,No,1
+2026-10-09T04:40:04+00:00,resuelto,0x791944dc3bd0fbe52a5594afd79c2384ee14aec5fcc6697bae92eb24a96c86ee,Christian Oliva: 2+ assists,2026-10-08T22:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T03:50:03+00:00,0.83,No,1
+2026-10-09T04:40:04+00:00,resuelto,0x04756d9b63081eb4ebb320e5db9dd975117b37b924ba147cb61c81b5f1c04f91,Christian Oliva: 1+ assists,2026-10-08T22:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T03:50:03+00:00,0.83,No,1
+2026-10-09T04:40:04+00:00,resuelto,0x2c19d7790256d45ea58a29d1eee145bd137d08dbae7bbf009af6232e8f157369,Rodinei: 2+ assists,2026-10-08T22:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T03:50:03+00:00,0.83,No,1
+2026-10-09T04:40:04+00:00,resuelto,0x80892576f29dcc61100c4fcaf2d43495bceff77f32c115c4f5c8922ccf268422,Rodinei: 1+ assists,2026-10-08T22:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T03:50:03+00:00,0.83,No,1
+2026-10-09T04:40:04+00:00,resuelto,0x39e870ff43d7360945c7a12da886af5c4a7a6b36c1a7b93998fc27078fac953e,Álvaro Barreal: 2+ assists,2026-10-08T22:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T03:50:03+00:00,0.83,No,1
+2026-10-09T04:40:04+00:00,resuelto,0xd16146291b7c86c87f087bf43e2a28f354b1cbef2f8c94f967a4d691768fdc96,Álvaro Barreal: 1+ assists,2026-10-08T22:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T03:50:03+00:00,0.83,No,1
+2026-10-09T04:40:04+00:00,resuelto,0x5be9d7e1ebe3da314e6ce6ce0946d7a4520f2c3b5deec14668a008ad5a456555,,2026-10-08T22:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T03:50:03+00:00,0.83,,
+2026-10-09T04:40:04+00:00,resuelto,0x65a3df9397e52dbf051d4be246ffc8105c7398315b9646bc7b553d5b98b8ebfd,,2026-10-08T22:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T03:50:03+00:00,0.83,,
+2026-10-09T04:40:04+00:00,resuelto,0x433f6ceb677576f048822eceee41f598d48c0476f7eeee5c946742709638ddaf,,2026-10-08T22:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T03:50:03+00:00,0.83,,
+2026-10-09T04:40:04+00:00,resuelto,0xc8df16e1d5fa0b09cc48e2bc83ef959d10a1840360d9776ecb309e65eaf7ed6b,,2026-10-08T22:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T03:50:03+00:00,0.83,,
+2026-10-09T04:40:04+00:00,resuelto,0xeefa7f2900b4a6f4f2ac0465bcad870018ef86475f7fdf515154165b9e835e00,,2026-10-08T22:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T03:50:03+00:00,0.83,,
+2026-10-09T04:40:04+00:00,resuelto,0xcdfcf2f665edd4f0f688b87053223f32eca0d6f1740019127c8b0ea320607d68,,2026-10-08T22:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T03:50:03+00:00,0.83,,
+2026-10-09T04:40:04+00:00,resuelto,0x237d529188f94032c165b7988e9ff4a1f1a40d6b59ac542e9dc2963231b7fdcd,,2026-10-08T22:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T03:50:03+00:00,0.83,,
+2026-10-09T04:40:04+00:00,resuelto,0xc021fb2868d00b64e41ce73e12407fe7785b2063dd249ad59a940201a0af65ca,,2026-10-08T22:30:00+00:00,,No,,,,,,,,,,,,2026-10-09T03:50:03+00:00,0.83,,
