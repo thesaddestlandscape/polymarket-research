@@ -1,0 +1,161 @@
+Rellenos 5m on-chain 2026-10-06..2026-10-08 (SOLO MAKERS, secciones 3-4): 2916396 filas, 5191 mercados resueltos de 5191 (cobertura desenlace 100.0%). Secciones 1-2: logs/mision5m_quien_gana.log (16:19Z)
+
+3) PERFIL MAKERS (vol ≥2.000 USDC TODOS los días): ganadoras todos los días vs resto
+  GANADORAS todos los días: wallets=79 rellenos=767065 vol=7350032 PnL=+115332 PnL/vol=+0.0157 rebate_est=27988 | precio medio 0.471, P(p<0,2 o >0,8) 41%, rellenos T<60s 13%, T<120s 35%, mercados con ambos lados 59%, |posición neta| / acciones 0.38, tamaño mediano 8 acc
+  RESTO (≥2.000 todos los días): wallets=205 rellenos=1492166 vol=12705610 PnL=+2440 PnL/vol=+0.0002 rebate_est=49297 | precio medio 0.483, P(p<0,2 o >0,8) 38%, rellenos T<60s 12%, T<120s 34%, mercados con ambos lados 50%, |posición neta| / acciones 0.49, tamaño mediano 6 acc
+
+3b) ESTRUCTURA de los 15 makers con más PnL (pares vs direccional): % mercados con ambos lados, |neto|/acciones, coste medio del par (precio medio YES + precio medio NO comprados, mercados con ambos lados)
+   0x502b532f PnL=   +7829 mercados= 1168 ambos_lados=41% |neto|/acc=0.83 coste_par_mediano=1.043 T<60s=10% act=BTC
+   0x3725d52f PnL=   +7517 mercados=  929 ambos_lados=27% |neto|/acc=0.67 coste_par_mediano=0.970 T<60s=21% act=BTC
+   0x32ed2e54 PnL=   +6628 mercados= 1027 ambos_lados=32% |neto|/acc=0.63 coste_par_mediano=0.978 T<60s=20% act=BTC
+   0x280e296e PnL=   +6238 mercados=  802 ambos_lados=69% |neto|/acc=0.45 coste_par_mediano=0.979 T<60s=12% act=BTC
+   0x21f4c1a1 PnL=   +5866 mercados=  699 ambos_lados=98% |neto|/acc=0.16 coste_par_mediano=0.938 T<60s=13% act=BTC
+   0xc2ad03f7 PnL=   +5817 mercados=  893 ambos_lados=28% |neto|/acc=0.65 coste_par_mediano=0.925 T<60s=30% act=BTC
+   0x0d2d845a PnL=   +5376 mercados=  686 ambos_lados=5% |neto|/acc=0.92 coste_par_mediano=0.976 T<60s=0% act=BTC
+   0xb129a54d PnL=   +5077 mercados=  800 ambos_lados=69% |neto|/acc=0.46 coste_par_mediano=0.975 T<60s=12% act=BTC
+   0x41e2e1cc PnL=   +4991 mercados=  864 ambos_lados=100% |neto|/acc=0.14 coste_par_mediano=0.989 T<60s=9% act=BTC
+   0xc53375ff PnL=   +4960 mercados=  833 ambos_lados=84% |neto|/acc=0.38 coste_par_mediano=1.017 T<60s=10% act=BTC
+   0xf3326d8f PnL=   +4845 mercados=  796 ambos_lados=69% |neto|/acc=0.46 coste_par_mediano=0.966 T<60s=13% act=BTC
+   0xb1d30490 PnL=   +4844 mercados= 1256 ambos_lados=0% |neto|/acc=1.00 coste_par_mediano=1.971 T<60s=58% act=BTC
+   0x34148c19 PnL=   +4838 mercados=    6 ambos_lados=17% |neto|/acc=0.85 coste_par_mediano=0.620 T<60s=50% act=BTC
+   0xee65685d PnL=   +4754 mercados= 1061 ambos_lados=6% |neto|/acc=0.96 coste_par_mediano=1.019 T<60s=12% act=BTC
+   0xaa1a4f31 PnL=   +4479 mercados=  856 ambos_lados=100% |neto|/acc=0.15 coste_par_mediano=0.939 T<60s=12% act=BTC
+
+4) PnL MAKER por fase del ciclo y banda de precio (todos los makers)
+                                 vol         pnl  pnl_vol
+T           p                                            
+(-60, 0]    (0.0, 0.1]  3.074737e+02    187.9079   0.6111
+            (0.1, 0.3]  4.236960e+02   -216.0859  -0.5100
+            (0.3, 0.5]  3.000255e+02    -15.7272  -0.0524
+            (0.5, 0.7]  5.168148e+02    174.7919   0.3382
+            (0.7, 0.9]  5.674737e+03    679.7676   0.1198
+            (0.9, 1.0]  9.445148e+05   3571.8730   0.0038
+(0, 15]     (0.0, 0.1]  4.493748e+03  -2013.0152  -0.4480
+            (0.1, 0.3]  5.599952e+03   -423.8126  -0.0757
+            (0.3, 0.5]  8.168020e+03    487.7802   0.0597
+            (0.5, 0.7]  1.050828e+04   -402.4113  -0.0383
+            (0.7, 0.9]  2.916846e+04   3108.0552   0.1066
+            (0.9, 1.0]  7.780360e+05   7210.4818   0.0093
+(15, 30]    (0.0, 0.1]  9.916756e+03  -2746.2059  -0.2769
+            (0.1, 0.3]  1.931326e+04   -661.0252  -0.0342
+            (0.3, 0.5]  1.747101e+04  -1067.5764  -0.0611
+            (0.5, 0.7]  2.710315e+04    163.9530   0.0060
+            (0.7, 0.9]  8.348952e+04    399.8929   0.0048
+            (0.9, 1.0]  8.742114e+05   7400.5333   0.0085
+(30, 60]    (0.0, 0.1]  4.633032e+04   5125.7522   0.1106
+            (0.1, 0.3]  9.980036e+04  12651.3300   0.1268
+            (0.3, 0.5]  1.258424e+05  -7449.0167  -0.0592
+            (0.5, 0.7]  1.973013e+05   4040.2776   0.0205
+            (0.7, 0.9]  4.342304e+05 -21425.3763  -0.0493
+            (0.9, 1.0]  2.100409e+06 -18675.0997  -0.0089
+(60, 120]   (0.0, 0.1]  9.430888e+04   6535.8611   0.0693
+            (0.1, 0.3]  2.694902e+05  24403.1095   0.0906
+            (0.3, 0.5]  3.811085e+05  14452.5482   0.0379
+            (0.5, 0.7]  5.497611e+05 -21388.5731  -0.0389
+            (0.7, 0.9]  1.151424e+06 -27800.9007  -0.0241
+            (0.9, 1.0]  2.533378e+06  15061.6286   0.0059
+(120, 200]  (0.0, 0.1]  7.512318e+04  -2621.0077  -0.0349
+            (0.1, 0.3]  3.674376e+05  68842.8669   0.1874
+            (0.3, 0.5]  6.224257e+05  32541.3314   0.0523
+            (0.5, 0.7]  9.177567e+05 -22918.3572  -0.0250
+            (0.7, 0.9]  1.665532e+06 -43639.7450  -0.0262
+            (0.9, 1.0]  1.196887e+06  -4374.4713  -0.0037
+(200, 300]  (0.0, 0.1]  2.315660e+04  14362.0930   0.6202
+            (0.1, 0.3]  3.886835e+05  42393.1827   0.1091
+            (0.3, 0.5]  1.513606e+06  21799.0705   0.0144
+            (0.5, 0.7]  2.086545e+06 -11266.1744  -0.0054
+            (0.7, 0.9]  1.661224e+06 -30088.8818  -0.0181
+            (0.9, 1.0]  2.359939e+05  -4985.7464  -0.0211
+(300, 2000] (0.0, 0.1]  7.100000e+00     -7.1000  -1.0000
+            (0.1, 0.3]  2.440868e+03   -611.5592  -0.2505
+            (0.3, 0.5]  1.011526e+06  18100.0214   0.0179
+            (0.5, 0.7]  3.244663e+05 -12937.4198  -0.0399
+            (0.7, 0.9]  3.150837e+03   -331.0745  -0.1051
+
+== Secciones 1-2 (ejecución completa 16:17-16:20Z, copiadas de logs/mision5m_quien_gana.log) ==
+Rellenos 5m on-chain 2026-10-06..2026-10-08: 4611739 filas, 5191 mercados resueltos de 5191 (cobertura desenlace 100.0%)
+
+1) PnL AGREGADO A RESOLUCIÓN por rol y día (USDC)
+                      filas          vol         pnl         fee     rebate  wallets  pnl_por_vol
+dia        rol                                                                                   
+2026-10-06 maker     931728  7325641.492   -7725.430     210.491  27533.625     3445       -0.001
+           tomador   529000  7310258.209 -129942.694  137668.124      0.000     7749       -0.018
+2026-10-07 maker     955949  7594999.932   46105.660     111.348  29263.903     3288        0.006
+           tomador   566458  7097084.736 -192425.177  146319.517      0.000     7702       -0.027
+2026-10-08 maker    1028719  8096819.130   29175.578     108.872  32985.178     3451        0.004
+           tomador   599885  8058905.242 -194101.468  164925.890      0.000     7788       -0.024
+
+1b) por activo (3 días): volumen, PnL maker / tomador
+             vol                  pnl          
+rol        maker     tomador    maker   tomador
+act                                            
+BNB     103642.0    114825.0   -755.0   -1111.0
+BTC   20033094.0  19194363.0  57236.0 -445617.0
+DOGE    164440.0    166651.0   1848.0   -4472.0
+ETH    1723185.0   1891288.0  12818.0  -49188.0
+SOL     729841.0    725429.0  -2747.0  -11716.0
+XRP     263258.0    373692.0   -845.0   -4365.0
+
+2) MAKER: 4849 wallets; PnL total +67556; ganancias brutas de las ganadoras +279112; top10 ganadoras = 22% de ellas; top10 por volumen = 19% del volumen
+   top 15 por PnL:
+   0x502b532f días=3.0 n=  10079 vol=    129413 PnL=    +7829 PnL/vol=+0.060 rebate_est=   716
+   0x3725d52f días=3.0 n=   4496 vol=    159313 PnL=    +7517 PnL/vol=+0.047 rebate_est=   758
+   0x32ed2e54 días=3.0 n=   5732 vol=    184320 PnL=    +6628 PnL/vol=+0.036 rebate_est=   892
+   0x280e296e días=3.0 n=  10431 vol=    155756 PnL=    +6238 PnL/vol=+0.040 rebate_est=   850
+   0x21f4c1a1 días=3.0 n=  78246 vol=    845519 PnL=    +5866 PnL/vol=+0.007 rebate_est=  4192
+   0xc2ad03f7 días=3.0 n=   4876 vol=    140910 PnL=    +5817 PnL/vol=+0.041 rebate_est=   726
+   0x0d2d845a días=3.0 n=   1991 vol=     58945 PnL=    +5376 PnL/vol=+0.091 rebate_est=   437
+   0xb129a54d días=3.0 n=  10246 vol=    150758 PnL=    +5077 PnL/vol=+0.034 rebate_est=   823
+   0x41e2e1cc días=3.0 n=  56981 vol=    374757 PnL=    +4991 PnL/vol=+0.013 rebate_est=  1901
+   0xc53375ff días=3.0 n=  12189 vol=     85158 PnL=    +4960 PnL/vol=+0.058 rebate_est=   498
+   0xf3326d8f días=3.0 n=  10167 vol=    155938 PnL=    +4845 PnL/vol=+0.031 rebate_est=   842
+   0xb1d30490 días=3.0 n=   4157 vol=    424198 PnL=    +4844 PnL/vol=+0.011 rebate_est=   175
+   0x34148c19 días=1.0 n=    359 vol=      7374 PnL=    +4838 PnL/vol=+0.656 rebate_est=    42
+   0xee65685d días=3.0 n=   7021 vol=    437018 PnL=    +4754 PnL/vol=+0.011 rebate_est=   289
+   0xaa1a4f31 días=3.0 n=  48644 vol=    393695 PnL=    +4479 PnL/vol=+0.011 rebate_est=  2044
+   top 10 por VOLUMEN:
+   0x21f4c1a1 días=3.0 n=  78246 vol=    845519 PnL=    +5866 PnL/vol=+0.007 rebate_est=  4192
+   0xee65685d días=3.0 n=   7021 vol=    437018 PnL=    +4754 PnL/vol=+0.011 rebate_est=   289
+   0xb1d30490 días=3.0 n=   4157 vol=    424198 PnL=    +4844 PnL/vol=+0.011 rebate_est=   175
+   0x9d57c42e días=3.0 n=  54466 vol=    402055 PnL=     -426 PnL/vol=-0.001 rebate_est=  2005
+   0x3884acd9 días=3.0 n=   1381 vol=    398799 PnL=     +498 PnL/vol=+0.001 rebate_est=    17
+   0x4c949794 días=3.0 n=  35764 vol=    397183 PnL=    -1737 PnL/vol=-0.004 rebate_est=  1863
+   0xaa1a4f31 días=3.0 n=  48644 vol=    393695 PnL=    +4479 PnL/vol=+0.011 rebate_est=  2044
+   0x41e2e1cc días=3.0 n=  56981 vol=    374757 PnL=    +4991 PnL/vol=+0.013 rebate_est=  1901
+   0xeba7be14 días=3.0 n=   4280 vol=    324110 PnL=     +874 PnL/vol=+0.003 rebate_est=    97
+   0x322b2e7c días=3.0 n=  49448 vol=    305514 PnL=     +878 PnL/vol=+0.003 rebate_est=  1593
+   PERSISTENCIA 10-06→10-07 (309 wallets ≥2.000 USDC ambos días): Spearman PnL/vol +0.075; positivas ambos 116, negativas ambos 65, cambian 128
+   PERSISTENCIA 10-07→10-08 (309 wallets ≥2.000 USDC ambos días): Spearman PnL/vol +0.073; positivas ambos 122, negativas ambos 61, cambian 126
+
+2) TOMADOR: 12697 wallets; PnL total -516469; ganancias brutas de las ganadoras +346356; top10 ganadoras = 28% de ellas; top10 por volumen = 17% del volumen
+   top 15 por PnL:
+   0x34148c19 días=1.0 n=     32 vol=     16186 PnL=   +27658 PnL/vol=+1.709 rebate_est=     0
+   0xbb4fe6e2 días=1.0 n=     15 vol=      5183 PnL=   +25186 PnL/vol=+4.860 rebate_est=     0
+   0xc53375ff días=3.0 n=  26847 vol=    547001 PnL=    +8417 PnL/vol=+0.015 rebate_est=     0
+   0x91c8829e días=1.0 n=     13 vol=      4701 PnL=    +7919 PnL/vol=+1.685 rebate_est=     0
+   0x6d019472 días=3.0 n=   7337 vol=     85587 PnL=    +6683 PnL/vol=+0.078 rebate_est=     0
+   0x9783f45c días=3.0 n=    643 vol=      6843 PnL=    +4863 PnL/vol=+0.711 rebate_est=     0
+   0xb1d30490 días=3.0 n=   2502 vol=    326315 PnL=    +4714 PnL/vol=+0.014 rebate_est=     0
+   0xb09fc1ff días=3.0 n=     66 vol=      9908 PnL=    +4578 PnL/vol=+0.462 rebate_est=     0
+   0x98a52de3 días=3.0 n=     30 vol=     34658 PnL=    +3863 PnL/vol=+0.111 rebate_est=     0
+   0x8640e584 días=2.0 n=     37 vol=     15184 PnL=    +3259 PnL/vol=+0.215 rebate_est=     0
+   0x08356cf3 días=3.0 n=    247 vol=      7988 PnL=    +3050 PnL/vol=+0.382 rebate_est=     0
+   0x129246be días=3.0 n=   1199 vol=     37830 PnL=    +3008 PnL/vol=+0.080 rebate_est=     0
+   0x167ef477 días=3.0 n=     22 vol=      9190 PnL=    +2976 PnL/vol=+0.324 rebate_est=     0
+   0xf363b411 días=3.0 n=    202 vol=    105998 PnL=    +2498 PnL/vol=+0.024 rebate_est=     0
+   0x404ea6b6 días=3.0 n=    258 vol=    162409 PnL=    +2467 PnL/vol=+0.015 rebate_est=     0
+   top 10 por VOLUMEN:
+   0x3048d653 días=3.0 n=  45767 vol=    851290 PnL=    -2884 PnL/vol=-0.003 rebate_est=     0
+   0x41e2e1cc días=3.0 n=  46047 vol=    684652 PnL=    -1782 PnL/vol=-0.003 rebate_est=     0
+   0xc53375ff días=3.0 n=  26847 vol=    547001 PnL=    +8417 PnL/vol=+0.015 rebate_est=     0
+   0x0ca4e9d2 días=3.0 n=  16025 vol=    362238 PnL=     -183 PnL/vol=-0.001 rebate_est=     0
+   0xb1d30490 días=3.0 n=   2502 vol=    326315 PnL=    +4714 PnL/vol=+0.014 rebate_est=     0
+   0x805b3a28 días=2.0 n=    207 vol=    265378 PnL=   -89443 PnL/vol=-0.337 rebate_est=     0
+   0xd84403ef días=3.0 n=  10028 vol=    241782 PnL=     -438 PnL/vol=-0.002 rebate_est=     0
+   0xc5e62509 días=3.0 n=   1093 vol=    227291 PnL=    -2162 PnL/vol=-0.010 rebate_est=     0
+   0x21f4c1a1 días=3.0 n=  24837 vol=    209525 PnL=    -4288 PnL/vol=-0.020 rebate_est=     0
+   0x9b6f7013 días=3.0 n=   1146 vol=    189501 PnL=     +554 PnL/vol=+0.003 rebate_est=     0
+   PERSISTENCIA 10-06→10-07 (332 wallets ≥2.000 USDC ambos días): Spearman PnL/vol +0.079; positivas ambos 82, negativas ambos 95, cambian 155
+   PERSISTENCIA 10-07→10-08 (332 wallets ≥2.000 USDC ambos días): Spearman PnL/vol -0.118; positivas ambos 82, negativas ambos 86, cambian 164
+
+3) PERFIL MAKERS (vol ≥2.000 USDC TODOS los días): ganadoras todos los días vs resto

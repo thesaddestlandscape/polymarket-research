@@ -1,0 +1,13 @@
+{
+  "id": "H5M-BARATO-MAKER-v1",
+  "congelada_utc": "2026-10-09T17:05:00Z",
+  "origen": "analisis_5m_v1_quien_gana seccion 4 (vista ANTES) + analisis_5m_v1_banda_barata_maker.py 06-08 Oct (in-sample)",
+  "regla": "Rellenos MAKER on-chain en mercados Up/Down 5m (todas las monedas) que COMPRAN un lado (venta maker de un token = compra del contrario a 1-p) a precio pagado pc en (0.10, 0.30] con T (segundos al cierre) en (60, 300].",
+  "unidad": "(mercado, lado comprado); EV/euro de la unidad = suma pnl / suma coste; EV de la celda = media de unidades",
+  "pnl": "a resolucion con desenlace OFICIAL (cobertura >= 99 %), SIN reembolso",
+  "in_sample_06_08": {"unidades": 6214, "ev_por_euro": 0.1377, "ic90_bootstrap_mercados": [0.1038, 0.1702], "dias": {"10-06": 0.129, "10-07": 0.079, "10-08": 0.202}, "btc": 0.255, "resto": 0.110, "control_favoritos_050_090": -0.145},
+  "forward": "solo dias >= 2026-10-09 (archivo m5_onchain del volumen)",
+  "confirmada_si": "forward con >= 5 dias, EV/euro >= +0.05, IC90 por DIAS > 0, sin BTC > 0, ningun dia > 40 % del PnL, y la misma celda medida tambien en el subconjunto de rellenos al FINAL de la cola (nuestra posicion realista) > 0",
+  "no_se_reajusta": "banda, fase y unidad fijas; cualquier cambio = v2 con forward nuevo",
+  "multiplicidad": "48 celdas miradas (rejilla fase x banda) antes de congelar"
+}
