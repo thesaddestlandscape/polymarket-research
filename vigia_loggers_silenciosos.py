@@ -75,6 +75,16 @@ def _familias() -> dict:
     return fam
 
 
+def _es_logger(clave: str, e: dict, mt: float) -> bool:
+    """09-Oct: solo es un LOGGER lo que se ha visto escribir al menos una vez DESPUÉS de empezar a seguirlo. Un
+    fichero escrito una sola vez y cerrado (dataset de un análisis puntual: m15_maestro_06oct.csv avisó a las 49 h de
+    su única escritura) no es un hueco de datos. Criterio directo: mtime POSTERIOR a la primera vez que se siguió (la
+    rama de compuerta reescribe ultimo_mtime con la hora actual y oculta las escrituras reales: xrp15min_contrario).
+    Estado anterior a este campo: gap_max_h > 0 implica escrituras vistas; los CONDICIONALES cuentan siempre."""
+    return (bool(e.get("escrituras")) or mt > e["primera_vez"] + 60 or e.get("gap_max_h", 0) > 0
+            or clave in CONDICIONALES)
+
+
 def _compuerta_cerrada(clave: str) -> bool:
     log = REPO / "logs" / (_FECHA.sub("", os.path.basename(clave)).replace(".gz", "").rsplit(".", 1)[0] + ".log")
     try:
@@ -123,11 +133,13 @@ def main() -> int:
         e = est.get(clave)
         if e is None:
             if ahora - mt < 2 * 86400:                     # solo se empieza a seguir lo que está vivo
-                est[clave] = {"primera_vez": ahora, "ultimo_mtime": mt, "gap_max_h": 0.0, "avisado": False}
+                est[clave] = {"primera_vez": ahora, "ultimo_mtime": mt, "gap_max_h": 0.0, "avisado": False,
+                              "escrituras": False}
             continue
         if (clave in CONDICIONALES and not _hay_open(CONDICIONALES[clave])) or _compuerta_cerrada(clave):
             e["ultimo_mtime"] = max(e["ultimo_mtime"], mt, ahora)   # sin posiciones: callar es lo correcto
             e["avisado"] = False
+            e["escrituras"] = True                 # 09-Oct: logger real (log compañero vivo / condicional): se vigila
             e["gap_max_h"] = 0.0                                   # el ritmo se aprende solo con posiciones abiertas
             continue
         if mt > e["ultimo_mtime"] + 1:
@@ -137,6 +149,7 @@ def main() -> int:
             e["ts_olvido"] = ahora
             e["gap_max_h"] = round(max(gap, e["gap_max_h"] * GAP_OLVIDO ** dias), 2)
             e["ultimo_mtime"] = mt
+            e["escrituras"] = True
             if e.get("avisado"):
                 vuelven.append(f"· {os.path.relpath(clave, REPO) if clave.startswith(str(REPO)) else clave}: vuelve a escribir tras {gap:.1f} h")
                 e["avisado"] = False
@@ -147,7 +160,8 @@ def main() -> int:
         umbral = max(MIN_H, FACTOR * e["gap_max_h"])
         if callado > RETIRO_DIAS * 24:
             est.pop(clave, None)
-        elif not e.get("avisado") and (ahora - e["primera_vez"]) / 3600 >= HIST_MIN_H and callado > umbral:
+        elif (not e.get("avisado") and (ahora - e["primera_vez"]) / 3600 >= HIST_MIN_H and callado > umbral
+              and _es_logger(clave, e, mt)):
             e["avisado"] = True
             avisos.append(f"· {os.path.relpath(clave, REPO) if clave.startswith(str(REPO)) else clave}: {callado:.1f} h sin escribir "
                           f"(su mayor hueco habitual: {e['gap_max_h']:.1f} h)")
