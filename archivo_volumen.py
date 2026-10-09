@@ -19,6 +19,8 @@ FAMILIAS = {                                    # carpeta del volumen -> patrón
     "m15_registro": "m15_registro_*.csv.gz",
     "m15_onchain": "m15_onchain_*.csv.gz",
     "l2_15m": "l2_15m_*.csv.gz",
+    "m5_registro": "m5_registro_*.csv.gz",      # 09-Oct, misión 5m
+    "m5_onchain": "m5_onchain_*.csv.gz",
 }
 _FECHA = re.compile(r"(\d{4}-\d{2}-\d{2})")
 
