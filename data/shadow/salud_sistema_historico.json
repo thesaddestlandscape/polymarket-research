@@ -10855,5 +10855,84 @@
       "💀 2 OOM-kill(s) del kernel en 24h: systemd(pid 3816816, 0.7MB), python(pid 3347112, 615.7MB)"
     ],
     "estado": "ANOMALIA"
+  },
+  {
+    "timestamp_utc": "2026-10-10T07:57:01+00:00",
+    "pipeline": {
+      "n_ciclos_resolve_postmortem": 5,
+      "resolve_postmortem_p50_s": 120.7,
+      "resolve_postmortem_p95_s": 147.5,
+      "resolve_postmortem_max_s": 147.5,
+      "resolve_postmortem_duraciones_s": [
+        120.7,
+        147.5,
+        134.6,
+        112.6,
+        99.9
+      ],
+      "n_ciclos_live_trade": 215,
+      "hueco_live_trade_max_s": 53.0
+    },
+    "procesos_colgados": [],
+    "deploy": {
+      "n_screens": 17,
+      "stale": []
+    },
+    "disco": {
+      "pct_usado": 92.0,
+      "gb_libres": 6.15,
+      "git_gb": 0.0,
+      "data_gb": 23.87,
+      "datalogs_gb": 14.23
+    },
+    "ram": {
+      "ram_total_gb": 7.56,
+      "ram_disponible_gb": 1.98,
+      "ram_pct_libre": 26.2
+    },
+    "integridad_datos": {
+      "trades_abiertos_atascados": [],
+      "n_trades_total": 747,
+      "n_results_total": 942706
+    },
+    "integridad_datos_sports": {
+      "trades_abiertos_atascados": [],
+      "n_trades_total": 42
+    },
+    "carga_sistema": {
+      "load1": 6.37,
+      "load5": 6.63,
+      "load15": 7.33,
+      "nproc": 4,
+      "ratio5": 1.66,
+      "n_procesos_total": 240
+    },
+    "oom_kills": {
+      "n_oom_kills_24h": 1,
+      "eventos": [
+        {
+          "ts": "Oct 09 08:09:33",
+          "pid": "3779298",
+          "nombre": "python",
+          "rss_mb": 735.5
+        }
+      ]
+    },
+    "git_push": {
+      "commits_sin_pushear": 0
+    },
+    "vigias_rotos": {
+      "n_vigias_rotos": 0,
+      "vigias": []
+    },
+    "gates_obsoletos": {
+      "n_gates_obsoletos": 0,
+      "gates": []
+    },
+    "anomalias": [
+      "💾 disco al 92% (6.15GB libres)",
+      "💀 1 OOM-kill(s) del kernel en 24h: python(pid 3779298, 735.5MB)"
+    ],
+    "estado": "ANOMALIA"
   }
 ]
