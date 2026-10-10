@@ -14,11 +14,11 @@
     "hi": 0.05,
     "n": 670,
     "pnl_medio": -0.7448,
-    "diff_vs_resto": -0.6972,
+    "diff_vs_resto": -0.6974,
     "p_valor": 0.0,
     "split_half_diff": [
-      -0.6043,
-      -0.79
+      -0.6045,
+      -0.7903
     ],
     "split_half_ok": true,
     "pnl_medio_loo": -0.7909,
@@ -45,11 +45,11 @@
     "hi": 0.06,
     "n": 243,
     "pnl_medio": -0.904,
-    "diff_vs_resto": -0.8483,
+    "diff_vs_resto": -0.8486,
     "p_valor": 0.0,
     "split_half_diff": [
-      -0.7516,
-      -0.9443
+      -0.7518,
+      -0.9445
     ],
     "split_half_ok": true,
     "pnl_medio_loo": -1.0,
@@ -76,11 +76,11 @@
     "hi": 0.05,
     "n": 349,
     "pnl_medio": -0.7773,
-    "diff_vs_resto": -0.7353,
+    "diff_vs_resto": -0.7355,
     "p_valor": 0.0,
     "split_half_diff": [
-      -0.5114,
-      -0.958
+      -0.5115,
+      -0.9582
     ],
     "split_half_ok": true,
     "pnl_medio_loo": -0.866,
@@ -107,11 +107,11 @@
     "hi": 0.07,
     "n": 429,
     "pnl_medio": -0.6083,
-    "diff_vs_resto": -0.549,
-    "p_valor": 0.0215,
+    "diff_vs_resto": -0.5493,
+    "p_valor": 0.025,
     "split_half_diff": [
-      -0.6062,
-      -0.4921
+      -0.6065,
+      -0.4924
     ],
     "split_half_ok": true,
     "pnl_medio_loo": -0.6619,
@@ -138,11 +138,11 @@
     "hi": 0.05,
     "n": 227,
     "pnl_medio": -0.7604,
-    "diff_vs_resto": -0.7044,
+    "diff_vs_resto": -0.705,
     "p_valor": 0.0,
     "split_half_diff": [
-      -0.4627,
-      -0.944
+      -0.4633,
+      -0.9446
     ],
     "split_half_ok": true,
     "pnl_medio_loo": -0.8968,
@@ -169,11 +169,11 @@
     "hi": 0.05,
     "n": 67,
     "pnl_medio": -1.0,
-    "diff_vs_resto": -0.946,
+    "diff_vs_resto": -0.9455,
     "p_valor": 0.0,
     "split_half_diff": [
-      -0.946,
-      -0.946
+      -0.9455,
+      -0.9455
     ],
     "split_half_ok": true,
     "pnl_medio_loo": -1.0,
@@ -200,11 +200,11 @@
     "hi": 0.1,
     "n": 183,
     "pnl_medio": -0.3867,
-    "diff_vs_resto": -0.3292,
-    "p_valor": 0.004,
+    "diff_vs_resto": -0.3293,
+    "p_valor": 0.005,
     "split_half_diff": [
-      -0.5853,
-      -0.0758
+      -0.5854,
+      -0.0759
     ],
     "split_half_ok": true,
     "pnl_medio_loo": -0.4859,
@@ -231,11 +231,11 @@
     "hi": 0.05,
     "n": 208,
     "pnl_medio": -0.8506,
-    "diff_vs_resto": -0.8588,
-    "p_valor": 0.002,
+    "diff_vs_resto": -0.8579,
+    "p_valor": 0.0015,
     "split_half_diff": [
-      -0.7094,
-      -1.0081
+      -0.7085,
+      -1.0072
     ],
     "split_half_ok": true,
     "pnl_medio_loo": -1.0,
@@ -256,28 +256,28 @@
   },
   "SNIPER#XRP#5min": {
     "n_dias": 31,
-    "pnl_sin_mejores_dias": -0.8185,
+    "pnl_sin_mejores_dias": -0.8192,
     "robusto_dias": false,
     "lo": 0.0,
     "hi": 0.05,
-    "n": 276,
-    "pnl_medio": -0.6059,
-    "diff_vs_resto": -0.5215,
+    "n": 277,
+    "pnl_medio": -0.6073,
+    "diff_vs_resto": -0.5233,
     "p_valor": 0.0035,
     "split_half_diff": [
-      -0.2963,
-      -0.7466
+      -0.2967,
+      -0.7482
     ],
     "split_half_ok": true,
-    "pnl_medio_loo": -0.7174,
+    "pnl_medio_loo": -0.7184,
     "robusto_loo": true,
     "ci90_bootstrap": [
-      -0.9155,
-      -0.2398
+      -0.9158,
+      -0.2426
     ],
     "robusto_bootstrap": true,
     "n_posiciones_buscadas": 96,
-    "g_kelly_f10": -0.08527,
+    "g_kelly_f10": -0.08535,
     "veredicto_crudo_hoy": "malo_confirmado",
     "historial_crudo": [
       "malo_confirmado"
@@ -325,11 +325,11 @@
     "hi": 0.06,
     "n": 48,
     "pnl_medio": -0.6756,
-    "diff_vs_resto": -0.6242,
-    "p_valor": 0.0045,
+    "diff_vs_resto": -0.624,
+    "p_valor": 0.0025,
     "split_half_diff": [
-      -0.2999,
-      -0.9486
+      -0.2996,
+      -0.9484
     ],
     "split_half_ok": true,
     "pnl_medio_loo": -1.0,
@@ -363,8 +363,8 @@
     "hi": 0.14,
     "n": 73,
     "pnl_medio": -0.5604,
-    "diff_vs_resto": -0.4898,
-    "p_valor": 0.0005,
+    "diff_vs_resto": -0.4897,
+    "p_valor": 0.002,
     "split_half_diff": [
       -0.4558,
       -0.5228
@@ -425,11 +425,11 @@
     "hi": 0.09,
     "n": 42,
     "pnl_medio": -1.0,
-    "diff_vs_resto": -0.9616,
+    "diff_vs_resto": -0.9621,
     "p_valor": 0.0,
     "split_half_diff": [
-      -0.9616,
-      -0.9616
+      -0.9621,
+      -0.9621
     ],
     "split_half_ok": true,
     "pnl_medio_loo": -1.0,
