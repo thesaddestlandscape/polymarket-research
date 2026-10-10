@@ -1,10 +1,10 @@
 {
-  "timestamp_utc": "2026-10-10T16:01:18+00:00",
-  "bankroll_sim": 116134.62,
-  "pnl_total": 116114.62,
-  "n_ops": 947270,
+  "timestamp_utc": "2026-10-10T16:12:28+00:00",
+  "bankroll_sim": 116156.9,
+  "pnl_total": 116136.9,
+  "n_ops": 947507,
   "win_rate": 0.5717,
-  "estrategias_activas": 601,
+  "estrategias_activas": 600,
   "desactivadas": [
     "SMART_FLOW_1H",
     "GBM_LATE_60M_FADE",
@@ -20,6 +20,7 @@
     "PRICE_TARGET_GBM_FADE#ETH",
     "PRICE_TARGET_GBM_FADE#atexpiry",
     "PRICE_TARGET_GBM_FADE#BTC#atexpiry",
+    "PRICE_TARGET_GBM_FADE#BTC",
     "FAVORITO_CONFIRMADO_15MIN_ALTACONVICCION#SOL#15min",
     "FAVORITO_CONFIRMADO_15MIN_ALTACONVICCION#SOL",
     "FAVORITO_CONFIRMADO#BNB#240min",
@@ -29,13 +30,13 @@
   "top3_ic": [
     {
       "k": "RESOLUTION_SNIPER#SOL#sniper",
-      "ic": 0.4565,
-      "n": 251
+      "ic": 0.4569,
+      "n": 253
     },
     {
       "k": "RESOLUTION_SNIPER#SOL",
-      "ic": 0.4565,
-      "n": 251
+      "ic": 0.4569,
+      "n": 253
     },
     {
       "k": "FAVORITO_CONFIRMADO_60MIN_EXTREMO#ETH#60min",
@@ -59,9 +60,9 @@
       "alerta_proxima": "n=608/400, CLV=-0.030/−0.030"
     },
     "of_decay": {
-      "clv_historico": 0.0657,
-      "clv_ult30": 0.198,
-      "decay_ratio": 3.01
+      "clv_historico": 0.0658,
+      "clv_ult30": 0.1985,
+      "decay_ratio": 3.02
     },
     "alertas": []
   }
