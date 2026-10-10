@@ -1,22 +1,22 @@
 {
- "generado_utc": "2026-10-09T00:25:03+00:00",
+ "generado_utc": "2026-10-10T00:25:03+00:00",
  "p95_notional_por_categoria": {
-  "crypto_major": 9121.76,
-  "index": 10004.27,
-  "equity": 8178.33,
-  "commodity": 9999.89,
-  "crypto_memecoin": 4408.89
+  "crypto_major": 8792.83,
+  "index": 10009.91,
+  "equity": 8000.72,
+  "commodity": 9999.8,
+  "crypto_memecoin": 4485.29
  },
  "wallets": {
   "0x4c4f4d655B77c4d1cB4343AF6c54c2Ec8f4022b4": {
-   "n_total_fills": 16188,
-   "notional_total": 20012366.19,
+   "n_total_fills": 16226,
+   "notional_total": 20096598.17,
    "categoria_dominante": "crypto_major",
-   "pct_notional_dominante": 37.3,
+   "pct_notional_dominante": 37.5,
    "es_especialista_nicho": false,
    "n_liquidaciones_propias": 0,
    "pct_taker": 97.2,
-   "n_grandes_jugadas": 336,
+   "n_grandes_jugadas": 342,
    "grandes_jugadas_top5": [
     {
      "notional": 101285.84,
@@ -56,14 +56,14 @@
    ]
   },
   "0x8448d8263B6131d1a8eBE93EAC553804f60300Ec": {
-   "n_total_fills": 8838,
-   "notional_total": 36586612.94,
+   "n_total_fills": 8932,
+   "notional_total": 37200782.43,
    "categoria_dominante": "crypto_major",
-   "pct_notional_dominante": 72.7,
+   "pct_notional_dominante": 71.9,
    "es_especialista_nicho": true,
    "n_liquidaciones_propias": 0,
    "pct_taker": 18.6,
-   "n_grandes_jugadas": 1210,
+   "n_grandes_jugadas": 1251,
    "grandes_jugadas_top5": [
     {
      "notional": 100863.45,
@@ -103,14 +103,14 @@
    ]
   },
   "0xa5dD645f2367C990e7d993E46F28870Bd5812E4f": {
-   "n_total_fills": 2063,
-   "notional_total": 10847174.66,
+   "n_total_fills": 2113,
+   "notional_total": 11006984.5,
    "categoria_dominante": "commodity",
-   "pct_notional_dominante": 53.2,
+   "pct_notional_dominante": 53.9,
    "es_especialista_nicho": false,
    "n_liquidaciones_propias": 0,
-   "pct_taker": 87.4,
-   "n_grandes_jugadas": 341,
+   "pct_taker": 87.7,
+   "n_grandes_jugadas": 346,
    "grandes_jugadas_top5": [
     {
      "notional": 41672.59,
@@ -150,14 +150,14 @@
    ]
   },
   "0x2070F45C22E44a52CB42210d1112a0Bfb6A9A0c7": {
-   "n_total_fills": 13398,
-   "notional_total": 48534302.72,
+   "n_total_fills": 13577,
+   "notional_total": 49428989.79,
    "categoria_dominante": "crypto_major",
-   "pct_notional_dominante": 70.7,
+   "pct_notional_dominante": 70.1,
    "es_especialista_nicho": true,
    "n_liquidaciones_propias": 0,
-   "pct_taker": 7.1,
-   "n_grandes_jugadas": 2036,
+   "pct_taker": 7.2,
+   "n_grandes_jugadas": 2103,
    "grandes_jugadas_top5": [
     {
      "notional": 101485.04,
@@ -204,7 +204,7 @@
    "es_especialista_nicho": false,
    "n_liquidaciones_propias": 0,
    "pct_taker": 32.8,
-   "n_grandes_jugadas": 2897,
+   "n_grandes_jugadas": 2942,
    "grandes_jugadas_top5": [
     {
      "notional": 134818.13,
@@ -291,10 +291,10 @@
    ]
   },
   "0xC914238Dde217bc37F768B9eE5F8FBF973aeD746": {
-   "n_total_fills": 17912,
-   "notional_total": 1926343.16,
+   "n_total_fills": 18146,
+   "notional_total": 1949287.15,
    "categoria_dominante": "crypto_major",
-   "pct_notional_dominante": 53.9,
+   "pct_notional_dominante": 53.7,
    "es_especialista_nicho": false,
    "n_liquidaciones_propias": 0,
    "pct_taker": 90.7,
@@ -349,14 +349,14 @@
    ]
   },
   "0xfc1B24B1749F71b797029C34F5fa30D528539107": {
-   "n_total_fills": 26424,
-   "notional_total": 51484339.15,
+   "n_total_fills": 27279,
+   "notional_total": 52602553.65,
    "categoria_dominante": "commodity",
-   "pct_notional_dominante": 48.3,
+   "pct_notional_dominante": 48.2,
    "es_especialista_nicho": false,
    "n_liquidaciones_propias": 0,
-   "pct_taker": 83.9,
-   "n_grandes_jugadas": 1080,
+   "pct_taker": 84.1,
+   "n_grandes_jugadas": 1099,
    "grandes_jugadas_top5": [
     {
      "notional": 130361.74,
@@ -469,7 +469,7 @@
    "es_especialista_nicho": false,
    "n_liquidaciones_propias": 0,
    "pct_taker": 88.4,
-   "n_grandes_jugadas": 439,
+   "n_grandes_jugadas": 443,
    "grandes_jugadas_top5": [
     {
      "notional": 120020.14,
@@ -527,7 +527,7 @@
    "es_especialista_nicho": true,
    "n_liquidaciones_propias": 0,
    "pct_taker": 57.5,
-   "n_grandes_jugadas": 427,
+   "n_grandes_jugadas": 459,
    "grandes_jugadas_top5": [
     {
      "notional": 195808.27,
@@ -593,14 +593,14 @@
    ]
   },
   "0x7930Ee98013FA1aEaC08872A88E677dc925aD132": {
-   "n_total_fills": 4592,
-   "notional_total": 7379066.58,
+   "n_total_fills": 4787,
+   "notional_total": 7517278.57,
    "categoria_dominante": "commodity",
-   "pct_notional_dominante": 64.5,
+   "pct_notional_dominante": 63.3,
    "es_especialista_nicho": false,
    "n_liquidaciones_propias": 0,
-   "pct_taker": 82.3,
-   "n_grandes_jugadas": 180,
+   "pct_taker": 81.7,
+   "n_grandes_jugadas": 181,
    "grandes_jugadas_top5": [
     {
      "notional": 141358.51,
@@ -640,14 +640,14 @@
    ]
   },
   "0xB6287efe7A7702402dd8342963DBEfE51e44F2EB": {
-   "n_total_fills": 10763,
-   "notional_total": 20875486.21,
+   "n_total_fills": 11746,
+   "notional_total": 21346195.01,
    "categoria_dominante": "crypto_major",
-   "pct_notional_dominante": 89.3,
+   "pct_notional_dominante": 88.8,
    "es_especialista_nicho": true,
    "n_liquidaciones_propias": 0,
-   "pct_taker": 90.7,
-   "n_grandes_jugadas": 815,
+   "pct_taker": 91.4,
+   "n_grandes_jugadas": 829,
    "grandes_jugadas_top5": [
     {
      "notional": 103038.01,
@@ -694,7 +694,7 @@
    "es_especialista_nicho": false,
    "n_liquidaciones_propias": 0,
    "pct_taker": 86.3,
-   "n_grandes_jugadas": 283,
+   "n_grandes_jugadas": 289,
    "grandes_jugadas_top5": [
     {
      "notional": 115339.48,
@@ -974,7 +974,7 @@
    "es_especialista_nicho": true,
    "n_liquidaciones_propias": 0,
    "pct_taker": 91.6,
-   "n_grandes_jugadas": 122,
+   "n_grandes_jugadas": 124,
    "grandes_jugadas_top5": [
     {
      "notional": 35204.08,
@@ -1072,14 +1072,14 @@
    "grandes_jugadas_top5": []
   },
   "0x3d0a1716D5FaF302cB38f69A1f873bEC0320E577": {
-   "n_total_fills": 9562,
-   "notional_total": 4974847.97,
+   "n_total_fills": 11291,
+   "notional_total": 5491082.94,
    "categoria_dominante": "crypto_major",
-   "pct_notional_dominante": 80.6,
+   "pct_notional_dominante": 82.4,
    "es_especialista_nicho": true,
    "n_liquidaciones_propias": 0,
-   "pct_taker": 99.1,
-   "n_grandes_jugadas": 27,
+   "pct_taker": 99.2,
+   "n_grandes_jugadas": 28,
    "grandes_jugadas_top5": [
     {
      "notional": 25005.38,
@@ -1119,14 +1119,14 @@
    ]
   },
   "0x823C6B20c03F2E962Da20a0024624473E7ca53A4": {
-   "n_total_fills": 1095,
-   "notional_total": 938523.9,
+   "n_total_fills": 1205,
+   "notional_total": 985014.63,
    "categoria_dominante": "crypto_major",
    "pct_notional_dominante": 100.0,
    "es_especialista_nicho": true,
    "n_liquidaciones_propias": 0,
    "pct_taker": 3.1,
-   "n_grandes_jugadas": 37,
+   "n_grandes_jugadas": 38,
    "grandes_jugadas_top5": [
     {
      "notional": 46711.18,
@@ -1213,8 +1213,8 @@
    ]
   },
   "0xE09d393649E354548191Ede76613433122B552aD": {
-   "n_total_fills": 343,
-   "notional_total": 121417.81,
+   "n_total_fills": 348,
+   "notional_total": 121597.74,
    "categoria_dominante": "crypto_major",
    "pct_notional_dominante": 83.5,
    "es_especialista_nicho": true,
@@ -1232,14 +1232,14 @@
    ]
   },
   "0xC699083c815b7F33B8c7f76ccdA1e19A250f5bCd": {
-   "n_total_fills": 11886,
-   "notional_total": 4348912.06,
+   "n_total_fills": 12285,
+   "notional_total": 4509637.97,
    "categoria_dominante": "crypto_major",
-   "pct_notional_dominante": 83.8,
+   "pct_notional_dominante": 83.4,
    "es_especialista_nicho": true,
    "n_liquidaciones_propias": 0,
    "pct_taker": 100.0,
-   "n_grandes_jugadas": 11,
+   "n_grandes_jugadas": 14,
    "grandes_jugadas_top5": [
     {
      "notional": 19478.11,
@@ -1333,7 +1333,7 @@
    "es_especialista_nicho": true,
    "n_liquidaciones_propias": 0,
    "pct_taker": 5.5,
-   "n_grandes_jugadas": 22,
+   "n_grandes_jugadas": 23,
    "grandes_jugadas_top5": [
     {
      "notional": 48574.49,
@@ -1380,7 +1380,7 @@
    "es_especialista_nicho": false,
    "n_liquidaciones_propias": 0,
    "pct_taker": 31.4,
-   "n_grandes_jugadas": 128,
+   "n_grandes_jugadas": 129,
    "grandes_jugadas_top5": [
     {
      "notional": 101315.94,
@@ -1420,14 +1420,14 @@
    ]
   },
   "0x25e649e875bBCA1CB511C9980da8e8010D6F2963": {
-   "n_total_fills": 282,
-   "notional_total": 2019808.87,
+   "n_total_fills": 440,
+   "notional_total": 2194486.97,
    "categoria_dominante": "crypto_memecoin",
-   "pct_notional_dominante": 100.0,
+   "pct_notional_dominante": 92.1,
    "es_especialista_nicho": true,
    "n_liquidaciones_propias": 0,
-   "pct_taker": 43.6,
-   "n_grandes_jugadas": 48,
+   "pct_taker": 33.0,
+   "n_grandes_jugadas": 50,
    "grandes_jugadas_top5": [
     {
      "notional": 127840.05,
@@ -1444,6 +1444,13 @@
      "pnl": "0"
     },
     {
+     "notional": 124314.5,
+     "categoria": "crypto_major",
+     "symbol": "ONDO-USD",
+     "ts": "2026-10-09T09:16:43+00:00",
+     "pnl": "17.378516536143697389778035622"
+    },
+    {
      "notional": 124034.9,
      "categoria": "crypto_memecoin",
      "symbol": "KPEPE-USD",
@@ -1456,13 +1463,6 @@
      "symbol": "KPEPE-USD",
      "ts": "2026-10-08T13:57:18+00:00",
      "pnl": "794.0651273093820495113631144"
-    },
-    {
-     "notional": 123998.93,
-     "categoria": "crypto_memecoin",
-     "symbol": "KPEPE-USD",
-     "ts": "2026-10-08T13:57:28+00:00",
-     "pnl": "793.9883466937071914520408012"
     }
    ]
   }
