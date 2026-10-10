@@ -1,6 +1,6 @@
 {
  "LIQUIDACIONES_5M": {
-  "ic_bayes_familia": 0.0194,
+  "ic_bayes_familia": 0.0196,
   "n_tuplas_fuertes": 3,
   "pnl_fiel_combinado_eur": 83.59,
   "tuplas": [
@@ -22,7 +22,7 @@
   ]
  },
  "STREAK_MOM_5M": {
-  "ic_bayes_familia": 0.0188,
+  "ic_bayes_familia": 0.0187,
   "n_tuplas_fuertes": 2,
   "pnl_fiel_combinado_eur": 75.4,
   "tuplas": [
@@ -39,13 +39,13 @@
   ]
  },
  "UPDOWN_GBM": {
-  "ic_bayes_familia": 0.0496,
+  "ic_bayes_familia": 0.0495,
   "n_tuplas_fuertes": 1,
-  "pnl_fiel_combinado_eur": 19.46,
+  "pnl_fiel_combinado_eur": 20.44,
   "tuplas": [
    {
     "k": "UPDOWN_GBM#BTC#15min#BUY_NO",
-    "pnl_fiel_eur_sin_suelo": 19.4579,
+    "pnl_fiel_eur_sin_suelo": 20.4369,
     "n_ejecutado": 109
    }
   ]
