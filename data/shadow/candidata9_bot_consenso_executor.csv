@@ -50310,3 +50310,6 @@ timestamp_utc,condition_id,market_slug,activo,marco,lado_mayoria,n_votos_trigger
 2026-10-10T18:49:36+00:00,0xe99c79769dab55302973b23b6e17ee4993a150dc9292c380e3d75964fd9c73bf,eth-updown-5m-1791658200,ETH,5min,Up,2,0.45,0.0,0.52,0.0,0.52,0.0,0,0,0,0,fuera_de_zona_confirmada
 2026-10-10T18:50:20+00:00,0x229b252b3e96be86398d747b3010e163a119f2577b339d17513fd8a2884280ee,btc-updown-5m-1791658200,BTC,5min,Down,2,0.37,24.4,0.37,0.0,0.4,8.11,0,0,0,0,fuera_de_zona_confirmada
 2026-10-10T18:50:43+00:00,0xd39edecf4266041ecdc91dd824b9acf76ca5a07e2e2e73e3ad6f37902b3c44a4,sol-updown-5m-1791658200,SOL,5min,Up,2,0.48,940.8,0.21,962.5,0.26,23.81,1,0,0,0,fuera_de_zona_confirmada
+2026-10-10T18:52:22+00:00,0x2419f1571a4764b3d93bdbda865363043ba66a81a47faa7c54c1d2c1a67bf0ed,xrp-updown-5m-1791658200,XRP,5min,Down,3,0.62,183.7,0.62,203.2,0.59,-4.84,1,0,0,0,fuera_de_zona_confirmada
+2026-10-10T18:55:20+00:00,0xa421169a3c9e2481a80a9dc1ccf2527ca479c14f13f6d7b7acb263f302d18599,btc-updown-5m-1791658500,BTC,5min,Down,2,0.49268,0.0,0.53,0.0,0.54,1.89,0,0,0,0,fuera_de_zona_confirmada
+2026-10-10T18:57:06+00:00,0x0789cb896f3becafc533f7f4fe795275bcc5e949527d91cd478e857f924098fe,eth-updown-5m-1791658500,ETH,5min,Up,3,0.46,0.0,0.61,0.0,0.6,-1.64,0,0,0,0,fuera_de_zona_confirmada
