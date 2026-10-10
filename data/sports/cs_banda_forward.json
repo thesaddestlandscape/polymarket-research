@@ -1,72 +1,72 @@
 {
- "generado_utc": "2026-10-09T08:12:11+00:00",
+ "generado_utc": "2026-10-10T08:12:09+00:00",
  "corte": "2026-09-30T16:00",
  "hipotesis": {
   "A CS#FADE [0,65-0,70) (LIVE)": {
-   "n": 124,
-   "dias": 10,
-   "acierto": 0.7903,
-   "precio_medio": 0.6669,
-   "ev": 0.1713,
+   "n": 137,
+   "dias": 11,
+   "acierto": 0.781,
+   "precio_medio": 0.6674,
+   "ev": 0.1572,
    "ic90": [
-    0.0621,
-    0.2539
+    0.0439,
+    0.2422
    ],
-   "dias_positivos": 7,
+   "dias_positivos": 8,
    "wallet_top_pct": 9,
    "veredicto": "confirmada_forward"
   },
   "B CS [0,65-0,70) cualquier disparo": {
-   "n": 142,
-   "dias": 10,
-   "acierto": 0.7676,
-   "precio_medio": 0.6673,
-   "ev": 0.1377,
+   "n": 162,
+   "dias": 11,
+   "acierto": 0.7531,
+   "precio_medio": 0.6682,
+   "ev": 0.1152,
    "ic90": [
-    0.0564,
-    0.2184
+    0.0338,
+    0.1936
    ],
    "dias_positivos": 7,
    "wallet_top_pct": 7,
    "veredicto": "confirmada_forward"
   },
   "C CS partido [0,65-0,70)": {
-   "n": 56,
-   "dias": 9,
-   "acierto": 0.7679,
-   "precio_medio": 0.6673,
-   "ev": 0.139,
+   "n": 59,
+   "dias": 11,
+   "acierto": 0.7627,
+   "precio_medio": 0.6676,
+   "ev": 0.13,
    "ic90": [
-    0.0267,
-    0.2362
+    0.0113,
+    0.2243
    ],
-   "dias_positivos": 8,
+   "dias_positivos": 9,
+   "wallet_top_pct": 12,
+   "veredicto": "confirmada_forward"
+  },
+  "D CS partido [0,60-0,80)": {
+   "n": 212,
+   "dias": 11,
+   "acierto": 0.7075,
+   "precio_medio": 0.6828,
+   "ev": 0.0227,
+   "ic90": [
+    -0.0387,
+    0.0813
+   ],
+   "dias_positivos": 5,
    "wallet_top_pct": 11,
    "veredicto": "sin_concluir"
   },
-  "D CS partido [0,60-0,80)": {
-   "n": 190,
-   "dias": 10,
-   "acierto": 0.7105,
-   "precio_medio": 0.683,
-   "ev": 0.0281,
-   "ic90": [
-    -0.0422,
-    0.099
-   ],
-   "dias_positivos": 6,
-   "wallet_top_pct": 12,
-   "veredicto": "sin_concluir"
-  },
   "M maker vende longshot [0,30-0,40)": {
-   "n": 744,
-   "dias": 10,
-   "acierto": 0.6532,
-   "precio_medio": 0.6499,
-   "ev": 0.0037,
+   "n": 835,
+   "dias": 11,
+   "acierto": 0.6515,
+   "precio_medio": 0.6501,
+   "ev": 0.0007,
    "ic90": [
-    -0.0418,
-    0.0485
+    -0.0431,
+    0.0428
    ],
    "dias_positivos": 6,
    "wallet_top_pct": 5,
