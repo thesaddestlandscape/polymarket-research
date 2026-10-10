@@ -1,6 +1,6 @@
 {
  "cutoff_utc": "2026-09-29T09:29:27+00:00",
- "generado_utc": "2026-10-09T08:50:19+00:00",
+ "generado_utc": "2026-10-10T08:50:15+00:00",
  "items": [
   {
    "tupla": "GBM_LATE_15M_MULTIHORIZONTE#ETH#15min#BUY_NO",
@@ -8,10 +8,10 @@
    "n_hist": 41,
    "ev_hist": 0.6267,
    "fill_libro_real": 0.42,
-   "n_fwd": 27,
-   "dias_fwd": 10,
-   "ev_fwd": 0.2111,
-   "ic_lo_fwd": -0.1737,
+   "n_fwd": 28,
+   "dias_fwd": 11,
+   "ev_fwd": 0.223,
+   "ic_lo_fwd": -0.1385,
    "veredicto": "sin_concluir"
   },
   {
@@ -32,10 +32,10 @@
    "n_hist": 44,
    "ev_hist": 0.3542,
    "fill_libro_real": null,
-   "n_fwd": 40,
-   "dias_fwd": 10,
-   "ev_fwd": -0.116,
-   "ic_lo_fwd": -0.3327,
+   "n_fwd": 43,
+   "dias_fwd": 11,
+   "ev_fwd": -0.1776,
+   "ic_lo_fwd": -0.3887,
    "veredicto": "refutado_forward"
   },
   {
@@ -44,11 +44,11 @@
    "n_hist": 40,
    "ev_hist": 0.3379,
    "fill_libro_real": 0.307,
-   "n_fwd": 18,
-   "dias_fwd": 7,
-   "ev_fwd": -0.3109,
-   "ic_lo_fwd": -0.7973,
-   "veredicto": "sin_concluir"
+   "n_fwd": 20,
+   "dias_fwd": 8,
+   "ev_fwd": -0.3235,
+   "ic_lo_fwd": -0.7087,
+   "veredicto": "refutado_forward"
   },
   {
    "tupla": "GBM_LATE_15M_MULTIHORIZONTE#SOL#15min#BUY_YES",
@@ -56,10 +56,10 @@
    "n_hist": 58,
    "ev_hist": 0.2717,
    "fill_libro_real": 0.218,
-   "n_fwd": 30,
+   "n_fwd": 32,
    "dias_fwd": 10,
-   "ev_fwd": -0.1564,
-   "ic_lo_fwd": -0.3908,
+   "ev_fwd": -0.2091,
+   "ic_lo_fwd": -0.4721,
    "veredicto": "refutado_forward"
   },
   {
@@ -68,10 +68,10 @@
    "n_hist": 82,
    "ev_hist": 0.2616,
    "fill_libro_real": 0.606,
-   "n_fwd": 95,
+   "n_fwd": 99,
    "dias_fwd": 8,
-   "ev_fwd": -0.2433,
-   "ic_lo_fwd": -0.3842,
+   "ev_fwd": -0.2322,
+   "ic_lo_fwd": -0.3726,
    "veredicto": "refutado_forward"
   },
   {
@@ -80,10 +80,10 @@
    "n_hist": 114,
    "ev_hist": 0.2597,
    "fill_libro_real": 0.338,
-   "n_fwd": 77,
-   "dias_fwd": 11,
-   "ev_fwd": -0.2552,
-   "ic_lo_fwd": -0.4831,
+   "n_fwd": 84,
+   "dias_fwd": 12,
+   "ev_fwd": -0.242,
+   "ic_lo_fwd": -0.4626,
    "veredicto": "refutado_forward"
   },
   {
@@ -92,10 +92,10 @@
    "n_hist": 121,
    "ev_hist": 0.2135,
    "fill_libro_real": 0.413,
-   "n_fwd": 37,
-   "dias_fwd": 10,
-   "ev_fwd": -0.1878,
-   "ic_lo_fwd": -0.4326,
+   "n_fwd": 48,
+   "dias_fwd": 11,
+   "ev_fwd": -0.1221,
+   "ic_lo_fwd": -0.4185,
    "veredicto": "refutado_forward"
   },
   {
@@ -104,10 +104,10 @@
    "n_hist": 76,
    "ev_hist": 0.2029,
    "fill_libro_real": 0.274,
-   "n_fwd": 32,
+   "n_fwd": 34,
    "dias_fwd": 10,
-   "ev_fwd": -0.1016,
-   "ic_lo_fwd": -0.3253,
+   "ev_fwd": -0.1545,
+   "ic_lo_fwd": -0.4094,
    "veredicto": "refutado_forward"
   },
   {
@@ -116,10 +116,10 @@
    "n_hist": 62,
    "ev_hist": 0.1559,
    "fill_libro_real": 0.107,
-   "n_fwd": 32,
+   "n_fwd": 36,
    "dias_fwd": 11,
-   "ev_fwd": 0.0783,
-   "ic_lo_fwd": -0.0428,
+   "ev_fwd": 0.0299,
+   "ic_lo_fwd": -0.1099,
    "veredicto": "sin_concluir"
   },
   {
@@ -140,11 +140,11 @@
    "n_hist": 94,
    "ev_hist": 0.1357,
    "fill_libro_real": null,
-   "n_fwd": 71,
-   "dias_fwd": 11,
-   "ev_fwd": -0.0332,
-   "ic_lo_fwd": -0.1671,
-   "veredicto": "refutado_forward"
+   "n_fwd": 83,
+   "dias_fwd": 12,
+   "ev_fwd": 0.0018,
+   "ic_lo_fwd": -0.129,
+   "veredicto": "sin_concluir"
   },
   {
    "tupla": "FAVORITO_CONFIRMADO#ETH#60min#BUY_NO",
@@ -152,11 +152,11 @@
    "n_hist": 138,
    "ev_hist": 0.1217,
    "fill_libro_real": 0.607,
-   "n_fwd": 67,
-   "dias_fwd": 9,
-   "ev_fwd": 0.0312,
-   "ic_lo_fwd": -0.1634,
-   "veredicto": "sin_concluir"
+   "n_fwd": 76,
+   "dias_fwd": 11,
+   "ev_fwd": -0.0013,
+   "ic_lo_fwd": -0.1758,
+   "veredicto": "refutado_forward"
   },
   {
    "tupla": "GBM_LATE_15M_TARDIO#ETH#15min#BUY_NO",
@@ -164,10 +164,10 @@
    "n_hist": 115,
    "ev_hist": 0.1131,
    "fill_libro_real": 0.186,
-   "n_fwd": 79,
-   "dias_fwd": 9,
-   "ev_fwd": 0.0452,
-   "ic_lo_fwd": -0.0325,
+   "n_fwd": 88,
+   "dias_fwd": 10,
+   "ev_fwd": 0.0226,
+   "ic_lo_fwd": -0.0637,
    "veredicto": "sin_concluir"
   },
   {
@@ -176,11 +176,11 @@
    "n_hist": 116,
    "ev_hist": 0.1042,
    "fill_libro_real": 0.628,
-   "n_fwd": 77,
+   "n_fwd": 80,
    "dias_fwd": 11,
-   "ev_fwd": 0.0081,
-   "ic_lo_fwd": -0.1109,
-   "veredicto": "sin_concluir"
+   "ev_fwd": -0.0109,
+   "ic_lo_fwd": -0.1388,
+   "veredicto": "refutado_forward"
   }
  ]
 }
