@@ -73,24 +73,24 @@
   },
   "SEGUIR#BTC#15min#0": {
     "n_dias": 32,
-    "pnl_sin_mejores_dias": 0.1606,
+    "pnl_sin_mejores_dias": 0.155,
     "robusto_dias": true,
     "lo": 0.03,
     "hi": 0.08,
-    "n": 241,
-    "pnl_medio": 0.7978,
-    "diff_vs_resto": 0.8122,
+    "n": 242,
+    "pnl_medio": 0.7904,
+    "diff_vs_resto": 0.8048,
     "p_valor": 0.0,
     "split_half_diff": [
-      0.4357,
+      0.424,
       1.1856
     ],
     "split_half_ok": true,
-    "pnl_medio_loo": 0.6752,
+    "pnl_medio_loo": 0.6683,
     "robusto_loo": true,
     "ci90_bootstrap": [
-      0.1937,
-      1.4332
+      0.1897,
+      1.4384
     ],
     "robusto_bootstrap": true,
     "n_posiciones_buscadas": 96,
@@ -150,11 +150,11 @@
     "hi": 0.19,
     "n": 56,
     "pnl_medio": -0.49,
-    "diff_vs_resto": -0.4777,
-    "p_valor": 0.014,
+    "diff_vs_resto": -0.4775,
+    "p_valor": 0.0175,
     "split_half_diff": [
-      -0.8,
-      -0.1553
+      -0.7998,
+      -0.1551
     ],
     "split_half_ok": true,
     "pnl_medio_loo": -0.5887,
@@ -198,11 +198,11 @@
     "hi": 0.05,
     "n": 766,
     "pnl_medio": -0.4294,
-    "diff_vs_resto": -0.4057,
+    "diff_vs_resto": -0.4056,
     "p_valor": 0.0,
     "split_half_diff": [
-      -0.528,
-      -0.2835
+      -0.5279,
+      -0.2834
     ],
     "split_half_ok": true,
     "pnl_medio_loo": -0.4898,
@@ -229,7 +229,7 @@
     "n": 131,
     "pnl_medio": -0.517,
     "diff_vs_resto": -0.5046,
-    "p_valor": 0.004,
+    "p_valor": 0.0015,
     "split_half_diff": [
       -0.5321,
       -0.4775
@@ -288,20 +288,20 @@
     "robusto_dias": false,
     "lo": 0.05,
     "hi": 0.1,
-    "n": 69,
-    "pnl_medio": -0.6784,
-    "diff_vs_resto": -0.6415,
-    "p_valor": 0.006,
+    "n": 70,
+    "pnl_medio": -0.683,
+    "diff_vs_resto": -0.6458,
+    "p_valor": 0.0055,
     "split_half_diff": [
-      -0.6558,
-      -0.6275
+      -0.6643,
+      -0.6272
     ],
     "split_half_ok": true,
-    "pnl_medio_loo": -0.8464,
+    "pnl_medio_loo": -0.8486,
     "robusto_loo": true,
     "ci90_bootstrap": [
       -1.0,
-      -0.3192
+      -0.2353
     ],
     "robusto_bootstrap": true,
     "n_posiciones_buscadas": 96,
