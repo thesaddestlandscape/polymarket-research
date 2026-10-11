@@ -1,4 +1,4 @@
-# Estado del bot — 2026-10-11 10:14 UTC
+# Estado del bot — 2026-10-11 10:19 UTC
 
 ## Live — dinero real (on-chain)
 | | |
@@ -13,39 +13,39 @@
 ## Shadow — MODELO SIMULADO (no cobrable)
 | | |
 |---|---|
-| P&L fiel (stake fijo 1$) | +36601.02 $ |
-| P&L sim compuesto | 🟢 +117768.00 $ (ficción Kelly: +462925% s/ operativo) |
-| P&L sim hoy (2026-10-11) | 🟢 +999.93 $ |
-| Operaciones resueltas | 958511 (548072 WIN / 410439 LOSS) — 57.2% |
-| Señales abiertas | 216801 |
+| P&L fiel (stake fijo 1$) | +36606.18 $ |
+| P&L sim compuesto | 🟢 +117779.04 $ (ficción Kelly: +462968% s/ operativo) |
+| P&L sim hoy (2026-10-11) | 🟢 +1010.97 $ |
+| Operaciones resueltas | 958567 (548098 WIN / 410469 LOSS) — 57.2% |
+| Señales abiertas | 217354 |
 
 ## Estrategias (visión global)
 
 | Estrategia | n | Win% | IC_efectivo | Tendencia | PNL | Apuesta | Estado |
 |---|---|---|---|---|---|---|---|
-| GBM_LATE_15M_TARDIO | 45953 | 66.3% | +0.163 | 📈 madura (+0.04) (últ. 1000) | +31730.56$ | 1.83$ | ✅ activa |
-| GBM_LATE_15M_ESPACIO_ATR | 48895 | 59.5% | +0.095 | 📉 agota (-0.04) (últ. 1000) | +25882.92$ | 0.86$ | ✅ activa |
-| GBM_LATE_15M_MULTIHORIZONTE | 29152 | 67.7% | +0.177 | 📈 madura (+0.05) (últ. 1000) | +22995.16$ | 1.77$ | ✅ activa |
-| GBM_LATE_15M | 48544 | 59.3% | +0.093 | ➡️ estable (últ. 1000) | +22399.76$ | 0.90$ | ✅ activa |
+| GBM_LATE_15M_TARDIO | 45956 | 66.3% | +0.163 | 📈 madura (+0.04) (últ. 1000) | +31728.44$ | 1.83$ | ✅ activa |
+| GBM_LATE_15M_ESPACIO_ATR | 48899 | 59.5% | +0.095 | 📉 agota (-0.03) (últ. 1000) | +25892.16$ | 0.86$ | ✅ activa |
+| GBM_LATE_15M_MULTIHORIZONTE | 29155 | 67.7% | +0.177 | 📈 madura (+0.05) (últ. 1000) | +22997.04$ | 1.77$ | ✅ activa |
+| GBM_LATE_15M | 48546 | 59.3% | +0.093 | ➡️ estable (últ. 1000) | +22399.68$ | 0.90$ | ✅ activa |
 | GBM_LATE_5M | 11957 | 65.8% | +0.158 | ➡️ estable (últ. 1000) | +7304.70$ | 1.87$ | ✅ activa |
 | UPDOWN_GBM | 70628 | 55.2% | +0.052 | ➡️ estable (últ. 1000) | +6280.18$ | 0.51$ | ✅ activa |
 | UPDOWN_GBM_15M_TARDIO | 21334 | 50.7% | +0.007 | 📉 agota (-0.04) (últ. 1000) | +6171.46$ | 0.50$ | ✅ activa |
 | GBM_LATE_15M_PYCONFIRMADO | 8205 | 63.4% | +0.134 | ➡️ estable (últ. 1000) | +3884.98$ | 1.39$ | ✅ activa |
-| CANDIDATA10_CONFIRMACION_CRUZADA | 29292 | 48.2% | -0.018 | ➡️ estable (últ. 1000) | +3581.95$ | 0.50$ | ⚠️ IC negativo |
-| MOMENTUM_IBS_15M_BALLENA | 42380 | 49.8% | -0.002 | ➡️ estable (últ. 1000) | +2021.44$ | 0.50$ | ⚠️ IC negativo |
-| MOMENTUM_IBS_5M_BALLENA | 105950 | 42.6% | -0.074 | ➡️ estable (últ. 1000) | +1672.54$ | 0.50$ | ⚠️ IC negativo |
+| CANDIDATA10_CONFIRMACION_CRUZADA | 29294 | 48.2% | -0.018 | ➡️ estable (últ. 1000) | +3582.31$ | 0.50$ | ⚠️ IC negativo |
+| MOMENTUM_IBS_15M_BALLENA | 42386 | 49.8% | -0.002 | ➡️ estable (últ. 1000) | +2026.78$ | 0.50$ | ⚠️ IC negativo |
+| MOMENTUM_IBS_5M_BALLENA | 105958 | 42.6% | -0.074 | ➡️ estable (últ. 1000) | +1679.68$ | 0.50$ | ⚠️ IC negativo |
 | WEEKLY_PRICE | 3156 | 80.6% | +0.306 | ➡️ estable (últ. 1000) | +1549.01$ | 2.00$ | ✅ activa |
 | UPDOWN_GBM_IBS_ALTO | 1358 | 78.9% | +0.288 | ➡️ estable (últ. 1000) | +1102.01$ | 2.00$ | ✅ activa |
 | GBM_LATE_60M | 2810 | 56.7% | +0.067 | 📉 agota (-0.03) (últ. 1000) | +958.00$ | 0.67$ | ✅ activa |
-| LEADLAG_BTC_XRP_15M | 3358 | 59.1% | +0.091 | 📉 agota (-0.06) (últ. 1000) | +768.79$ | 1.00$ | ✅ activa |
+| LEADLAG_BTC_XRP_15M | 3358 | 59.1% | +0.091 | 📉 agota (-0.06) (últ. 1000) | +768.79$ | 0.99$ | ✅ activa |
 | ORDER_FLOW_5M | 3081 | 56.3% | +0.063 | ➡️ estable (últ. 1000) | +584.32$ | 1.20$ | ✅ activa |
 | RESOLUTION_SNIPER | 409 | 89.7% | +0.395 | ➡️ estable | +375.27$ | 2.00$ | ✅ activa |
 | UPDOWN_GBM_15M_CROSS_WINDOW_SPREAD | 1039 | 84.9% | +0.348 | 📈 madura (+0.06) (últ. 1000) | +327.44$ | 2.00$ | ✅ activa |
 | GBM_LATE_60M_PYCONFIRMADO | 1272 | 58.7% | +0.087 | 📈 madura (+0.05) (últ. 1000) | +325.71$ | 0.86$ | ✅ activa |
-| FAVORITO_CONFIRMADO_5MIN_BAJALATENCIA | 30042 | 61.8% | +0.118 | ➡️ estable (últ. 1000) | +265.43$ | 1.18$ | ✅ activa |
+| FAVORITO_CONFIRMADO_5MIN_BAJALATENCIA | 30044 | 61.8% | +0.118 | ➡️ estable (últ. 1000) | +266.67$ | 1.18$ | ✅ activa |
 | BALLENAS_CONFIRMADAS_15M | 3380 | 56.9% | +0.069 | ➡️ estable (últ. 1000) | +155.94$ | 0.90$ | ✅ activa |
 | LATE_WINDOW_5MIN | 536 | 52.2% | +0.022 | 📈 madura (+0.13) | +113.01$ | 2.00$ | ✅ activa |
-| STREAK_MOM_5M | 10600 | 51.6% | +0.016 | ➡️ estable (últ. 1000) | +80.79$ | 0.50$ | ✅ activa |
+| STREAK_MOM_5M | 10603 | 51.6% | +0.016 | ➡️ estable (últ. 1000) | +79.26$ | 0.50$ | ✅ activa |
 | BALLENAS_CONFIRMADAS_15M_BUYNO_DEPTH_FASE0 | 380 | 50.5% | +0.005 | 📉 agota (-0.06) | +75.34$ | 0.50$ | ✅ activa |
 | LIQUIDACIONES_DEPTH_FASE0 | 6049 | 48.0% | -0.020 | 📈 madura (+0.04) (últ. 1000) | +72.36$ | 0.50$ | ⚠️ IC negativo |
 | STREAK_FADE_15M | 965 | 54.6% | +0.046 | ➡️ estable | +57.78$ | 0.50$ | ✅ activa |
@@ -73,40 +73,40 @@
 | MOMENTUM_IBS_5M_FADE | 8545 | 46.7% | -0.033 | ➡️ estable (últ. 1000) | -184.90$ | 0.50$ | ⚠️ IC negativo |
 | CANDIDATA9_BOT_CONSENSO | 1488 | 39.8% | -0.102 | ➡️ estable (últ. 1000) | -189.14$ | 0.50$ | ⚠️ IC negativo |
 | MOMENTUM_IBS_15M | 14666 | 48.8% | -0.012 | ➡️ estable (últ. 1000) | -217.20$ | 0.50$ | ⚠️ IC negativo |
-| FAVORITO_CONFIRMADO_DEPTH_FASE0 | 52403 | 60.0% | +0.100 | ➡️ estable (últ. 1000) | -1318.14$ | 1.00$ | ✅ activa |
-| FAVORITO_CONFIRMADO_15MIN_ALTACONVICCION | 22109 | 69.4% | +0.194 | ➡️ estable (últ. 1000) | -1426.45$ | 1.94$ | ✅ activa |
-| BALLENAS_TARDIAS | 41447 | 42.1% | -0.079 | ➡️ estable (últ. 1000) | -5544.79$ | 0.50$ | ⚠️ IC negativo |
-| FAVORITO_CONFIRMADO | 158948 | 61.3% | +0.113 | 📈 madura (+0.04) (últ. 1000) | -6623.29$ | 1.14$ | ✅ activa |
-| FAVORITO_CONFIRMADO_5MIN_ALTACONVICCION | 88384 | 69.9% | +0.199 | 📉 agota (-0.04) (últ. 1000) | -6631.28$ | 2.00$ | ✅ activa |
+| FAVORITO_CONFIRMADO_DEPTH_FASE0 | 52408 | 60.0% | +0.100 | ➡️ estable (últ. 1000) | -1316.42$ | 1.00$ | ✅ activa |
+| FAVORITO_CONFIRMADO_15MIN_ALTACONVICCION | 22111 | 69.4% | +0.194 | ➡️ estable (últ. 1000) | -1427.14$ | 1.94$ | ✅ activa |
+| BALLENAS_TARDIAS | 41450 | 42.1% | -0.079 | ➡️ estable (últ. 1000) | -5548.00$ | 0.50$ | ⚠️ IC negativo |
+| FAVORITO_CONFIRMADO | 158957 | 61.3% | +0.113 | 📈 madura (+0.03) (últ. 1000) | -6630.13$ | 1.14$ | ✅ activa |
+| FAVORITO_CONFIRMADO_5MIN_ALTACONVICCION | 88388 | 69.9% | +0.199 | 📉 agota (-0.03) (últ. 1000) | -6632.67$ | 2.00$ | ✅ activa |
 
 ## Últimas 5 resoluciones
 
 | Timestamp | Estrategia | Mercado | Resultado | PNL |
 |---|---|---|---|---|
-| 2026-10-11T10:13 | BALLENAS_TARDIAS#SOL#5min | … | ❌ LOSS | -1.07$ |
-| 2026-10-11T10:13 | FAVORITO_CONFIRMADO_5MIN_BAJALATENCIA#DOGE#5min | … | ✅ WIN | +0.31$ |
-| 2026-10-11T10:13 | GBM_LATE_5M#SOL#5min | Solana Up or Down - October 11, 6:05AM-6:10AM ET… | ❌ LOSS | -2.04$ |
-| 2026-10-11T10:13 | MOMENTUM_IBS_5M_FADE#XRP#5min | XRP Up or Down - October 11, 6:05AM-6:10AM ET… | ❌ LOSS | -0.51$ |
-| 2026-10-11T10:13 | UPDOWN_OU_5M#XRP#5min | XRP Up or Down - October 11, 6:05AM-6:10AM ET… | ❌ LOSS | -0.51$ |
+| 2026-10-11T10:18 | FAVORITO_CONFIRMADO_5MIN_BAJALATENCIA#XRP#5min | … | ✅ WIN | +0.50$ |
+| 2026-10-11T10:18 | FAVORITO_CONFIRMADO_5MIN_BAJALATENCIA#DOGE#5min | … | ✅ WIN | +0.74$ |
+| 2026-10-11T10:18 | STREAK_MOM_5M#XRP#5min | XRP Up or Down - October 11, 6:10AM-6:15AM ET… | ❌ LOSS | -0.51$ |
+| 2026-10-11T10:18 | MOMENTUM_IBS_5M_BALLENA#XRP#5min | … | ✅ WIN | +3.13$ |
+| 2026-10-11T10:18 | MOMENTUM_IBS_5M_BALLENA#DOGE#5min | … | ✅ WIN | +1.77$ |
 
 ## Calidad de datos
 
-✅ **OK** — última verificación 2026-10-11T10:13 UTC
+✅ **OK** — última verificación 2026-10-11T10:18 UTC
 
 | Asset | Precio | Age | Alertas |
 |---|---|---|---|
-| ✅ BTC | $82,972.04 | 0.1min |  |
-| ✅ ETH | $2,500.09 | 0.1min |  |
-| ✅ SOL | $109.51 | 0.1min |  |
+| ✅ BTC | $82,945.90 | 0.1min |  |
+| ✅ ETH | $2,499.30 | 0.1min |  |
+| ✅ SOL | $109.58 | 0.1min |  |
 | ✅ XRP | $1.39 | 0.1min |  |
 
 **Cross-source** (binance, coinbase, kraken):
 
 | Asset | Consenso | Fuente | Estado |
 |---|---|---|---|
-| BTC | $82,972.04 | consenso |  |
-| ETH | $2,500.27 | consenso |  |
-| SOL | $109.40 | consenso |  |
+| BTC | $82,950.50 | consenso |  |
+| ETH | $2,499.37 | consenso |  |
+| SOL | $109.41 | consenso |  |
 | XRP | $1.39 | consenso |  |
 
 ---
