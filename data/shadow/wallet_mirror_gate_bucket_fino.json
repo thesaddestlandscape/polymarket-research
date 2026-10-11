@@ -60,7 +60,7 @@
     "p_valor": 0.0,
     "split_half_diff": [
       0.3801,
-      1.1173
+      1.1174
     ],
     "split_half_ok": true,
     "pnl_medio_loo": 0.6147,
@@ -145,11 +145,11 @@
     "hi": 0.05,
     "n": 795,
     "pnl_medio": -0.4502,
-    "diff_vs_resto": -0.426,
+    "diff_vs_resto": -0.4257,
     "p_valor": 0.0,
     "split_half_diff": [
-      -0.5432,
-      -0.3091
+      -0.5429,
+      -0.3087
     ],
     "split_half_ok": true,
     "pnl_medio_loo": -0.5085,
@@ -207,11 +207,11 @@
     "hi": 0.1,
     "n": 72,
     "pnl_medio": -0.6918,
-    "diff_vs_resto": -0.6505,
-    "p_valor": 0.0055,
+    "diff_vs_resto": -0.6513,
+    "p_valor": 0.004,
     "split_half_diff": [
-      -0.6685,
-      -0.6324
+      -0.6693,
+      -0.6333
     ],
     "split_half_ok": true,
     "pnl_medio_loo": -0.8529,
