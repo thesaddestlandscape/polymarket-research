@@ -1,0 +1,103 @@
+Certeza terminal 5m — compras p∈[0.8,0.995) T∈(3,300] s: 1,630,089 rellenos, 10,324 mercados, desenlace oficial 100 % de los incluidos; estado TWAP disponible 100.0%
+Persistentes (PnL>0 en 06, 07 y 08 en este tramo, >=30 compras): 207 wallets
+
+===== EXTRACCIÓN 06-08: 835,156 rellenos, 5,182 mercados =====
+  persistentes tomador: n=26,050 merc=4,007 acierto=0.9929 p_med=0.978 PnL/acc=+0.0138 PnL=   +23281$ | z_TWAP P10/P50/P90 1.29/2.87/4.58 | T P50 84 s
+  persistentes maker  : n=21,823 merc=3,405 acierto=0.9903 p_med=0.978 PnL/acc=+0.0121 PnL=   +12757$ | z_TWAP P10/P50/P90 1.31/3.47/9.31 | T P50 63 s
+  resto        tomador: n=403,048 merc=5,172 acierto=0.9109 p_med=0.925 PnL/acc=-0.0186 PnL=  -143279$ | z_TWAP P10/P50/P90 0.95/1.94/3.63 | T P50 111 s
+  resto        maker  : n=384,235 merc=4,760 acierto=0.9157 p_med=0.925 PnL/acc=-0.0091 PnL=   -75745$ | z_TWAP P10/P50/P90 1.04/2.00/4.28 | T P50 117 s
+  SUPERFICIE (todos, con estado): z_TWAP del lado comprado × precio -> acierto, precio y PnL/acc (celdas con >=15 mercados)
+    z (-1000000000.0, 0.0] p    (0.8, 0.9]: merc=  358 acierto=0.8743 precio=0.8477 PnL/acc todos=+0.0217 tomador=-0.0254 (n tom 2912)
+    z (-1000000000.0, 0.0] p   (0.9, 0.95]: merc=  131 acierto=0.8728 precio=0.9274 PnL/acc todos=-0.0572 tomador=-0.1463 (n tom 766)
+    z (-1000000000.0, 0.0] p  (0.95, 0.97]: merc=   77 acierto=0.9968 precio=0.9628 PnL/acc todos=+0.0328 tomador=+0.0352 (n tom 360)
+    z (-1000000000.0, 0.0] p  (0.97, 0.99]: merc=   54 acierto=1.0000 precio=0.9834 PnL/acc todos=+0.0159 tomador=+0.0152 (n tom 509)
+    z   (0.0, 1.0] p    (0.8, 0.9]: merc=3,009 acierto=0.8050 precio=0.8426 PnL/acc todos=-0.0428 tomador=-0.0484 (n tom 30523)
+    z   (0.0, 1.0] p   (0.9, 0.95]: merc=  686 acierto=0.8625 precio=0.9243 PnL/acc todos=-0.0653 tomador=-0.0939 (n tom 4280)
+    z   (0.0, 1.0] p  (0.95, 0.97]: merc=  248 acierto=0.9901 precio=0.9613 PnL/acc todos=+0.0270 tomador=+0.0231 (n tom 1377)
+    z   (0.0, 1.0] p  (0.97, 0.99]: merc=  147 acierto=0.9216 precio=0.9835 PnL/acc todos=-0.0627 tomador=-0.0973 (n tom 785)
+    z   (0.0, 1.0] p (0.99, 0.995]: merc=   31 acierto=1.0000 precio=0.9900 PnL/acc todos=+0.0095 tomador=+0.0093 (n tom 40)
+    z   (1.0, 2.0] p    (0.8, 0.9]: merc=4,541 acierto=0.8267 precio=0.8537 PnL/acc todos=-0.0312 tomador=-0.0382 (n tom 108786)
+    z   (1.0, 2.0] p   (0.9, 0.95]: merc=3,507 acierto=0.9038 precio=0.9257 PnL/acc todos=-0.0248 tomador=-0.0297 (n tom 36114)
+    z   (1.0, 2.0] p  (0.95, 0.97]: merc=2,025 acierto=0.9517 precio=0.9616 PnL/acc todos=-0.0117 tomador=-0.0167 (n tom 11816)
+    z   (1.0, 2.0] p  (0.97, 0.99]: merc=1,162 acierto=0.9773 precio=0.9826 PnL/acc todos=-0.0062 tomador=-0.0088 (n tom 5773)
+    z   (1.0, 2.0] p (0.99, 0.995]: merc=  180 acierto=0.9965 precio=0.9900 PnL/acc todos=+0.0060 tomador=+0.0042 (n tom 243)
+    z   (2.0, 3.0] p    (0.8, 0.9]: merc=2,016 acierto=0.8658 precio=0.8697 PnL/acc todos=-0.0069 tomador=-0.0122 (n tom 23276)
+    z   (2.0, 3.0] p   (0.9, 0.95]: merc=3,180 acierto=0.9342 precio=0.9305 PnL/acc todos=+0.0015 tomador=-0.0036 (n tom 37832)
+    z   (2.0, 3.0] p  (0.95, 0.97]: merc=3,371 acierto=0.9601 precio=0.9627 PnL/acc todos=-0.0041 tomador=-0.0045 (n tom 31708)
+    z   (2.0, 3.0] p  (0.97, 0.99]: merc=3,404 acierto=0.9786 precio=0.9837 PnL/acc todos=-0.0059 tomador=+0.0028 (n tom 27481)
+    z   (2.0, 3.0] p (0.99, 0.995]: merc=  858 acierto=0.9981 precio=0.9903 PnL/acc todos=+0.0073 tomador=+0.0072 (n tom 1452)
+    z   (3.0, 4.0] p    (0.8, 0.9]: merc=  370 acierto=0.8603 precio=0.8714 PnL/acc todos=-0.0137 tomador=-0.0486 (n tom 2175)
+    z   (3.0, 4.0] p   (0.9, 0.95]: merc=1,009 acierto=0.9433 precio=0.9356 PnL/acc todos=+0.0060 tomador=+0.0069 (n tom 6863)
+    z   (3.0, 4.0] p  (0.95, 0.97]: merc=1,823 acierto=0.9707 precio=0.9643 PnL/acc todos=+0.0053 tomador=+0.0007 (n tom 13544)
+    z   (3.0, 4.0] p  (0.97, 0.99]: merc=3,757 acierto=0.9940 precio=0.9855 PnL/acc todos=+0.0079 tomador=+0.0063 (n tom 33650)
+    z   (3.0, 4.0] p (0.99, 0.995]: merc=1,489 acierto=0.9981 precio=0.9902 PnL/acc todos=+0.0075 tomador=+0.0067 (n tom 2405)
+    z   (4.0, 6.0] p    (0.8, 0.9]: merc=  129 acierto=0.8574 precio=0.8727 PnL/acc todos=-0.0184 tomador=-0.0175 (n tom 748)
+    z   (4.0, 6.0] p   (0.9, 0.95]: merc=  301 acierto=0.9703 precio=0.9341 PnL/acc todos=+0.0346 tomador=+0.0301 (n tom 1400)
+    z   (4.0, 6.0] p  (0.95, 0.97]: merc=  585 acierto=0.9925 precio=0.9654 PnL/acc todos=+0.0263 tomador=+0.0207 (n tom 2716)
+    z   (4.0, 6.0] p  (0.97, 0.99]: merc=2,850 acierto=0.9923 precio=0.9876 PnL/acc todos=+0.0043 tomador=+0.0055 (n tom 20699)
+    z   (4.0, 6.0] p (0.99, 0.995]: merc=1,600 acierto=0.9898 precio=0.9901 PnL/acc todos=-0.0006 tomador=+0.0056 (n tom 1837)
+    z (6.0, 1000000000.0] p    (0.8, 0.9]: merc=   42 acierto=0.7646 precio=0.8678 PnL/acc todos=-0.1046 tomador=-0.0467 (n tom 234)
+    z (6.0, 1000000000.0] p   (0.9, 0.95]: merc=   69 acierto=0.8717 precio=0.9323 PnL/acc todos=-0.0620 tomador=-0.0610 (n tom 492)
+    z (6.0, 1000000000.0] p  (0.95, 0.97]: merc=  106 acierto=0.8334 precio=0.9637 PnL/acc todos=-0.1308 tomador=-0.0219 (n tom 499)
+    z (6.0, 1000000000.0] p  (0.97, 0.99]: merc=1,688 acierto=0.9900 precio=0.9894 PnL/acc todos=+0.0005 tomador=+0.0059 (n tom 2776)
+    z (6.0, 1000000000.0] p (0.99, 0.995]: merc=1,027 acierto=0.9987 precio=0.9902 PnL/acc todos=+0.0085 tomador=+0.0092 (n tom 298)
+  POR FASE (todos): T × rol -> PnL/acc
+    T    (3, 30] maker  : merc=1,587 acierto=0.9862 precio=0.9758 PnL/acc=+0.0104
+    T    (3, 30] tomador: merc=  917 acierto=0.9652 precio=0.9594 PnL/acc=+0.0033
+    T   (30, 60] maker  : merc=2,488 acierto=0.9430 precio=0.9610 PnL/acc=-0.0179
+    T   (30, 60] tomador: merc=2,775 acierto=0.9462 precio=0.9549 PnL/acc=-0.0115
+    T  (60, 120] maker  : merc=3,509 acierto=0.9385 precio=0.9377 PnL/acc=+0.0008
+    T  (60, 120] tomador: merc=4,327 acierto=0.9418 precio=0.9473 PnL/acc=-0.0087
+    T (120, 300] maker  : merc=3,747 acierto=0.8787 precio=0.8910 PnL/acc=-0.0123
+    T (120, 300] tomador: merc=4,069 acierto=0.8908 precio=0.9055 PnL/acc=-0.0204
+
+===== CONTRASTE 09-11 (sin re-elegir): 794,933 rellenos, 5,142 mercados =====
+  persistentes tomador: n=21,762 merc=3,748 acierto=0.9753 p_med=0.978 PnL/acc=-0.0042 PnL=    -5177$ | z_TWAP P10/P50/P90 0.89/2.91/5.30 | T P50 63 s
+  persistentes maker  : n=20,431 merc=3,410 acierto=0.9729 p_med=0.978 PnL/acc=-0.0054 PnL=    -5130$ | z_TWAP P10/P50/P90 1.11/3.47/10.98 | T P50 56 s
+  resto        tomador: n=367,161 merc=5,083 acierto=0.9198 p_med=0.922 PnL/acc=-0.0073 PnL=   -49975$ | z_TWAP P10/P50/P90 0.70/1.97/4.02 | T P50 102 s
+  resto        maker  : n=385,579 merc=4,636 acierto=0.9191 p_med=0.921 PnL/acc=-0.0020 PnL=   -15220$ | z_TWAP P10/P50/P90 0.78/1.94/4.45 | T P50 114 s
+  SUPERFICIE (todos, con estado): z_TWAP del lado comprado × precio -> acierto, precio y PnL/acc (celdas con >=15 mercados)
+    z (-1000000000.0, 0.0] p    (0.8, 0.9]: merc=  492 acierto=0.7831 precio=0.8526 PnL/acc todos=-0.0737 tomador=-0.0917 (n tom 6344)
+    z (-1000000000.0, 0.0] p   (0.9, 0.95]: merc=  214 acierto=0.8812 precio=0.9266 PnL/acc todos=-0.0481 tomador=-0.0557 (n tom 2519)
+    z (-1000000000.0, 0.0] p  (0.95, 0.97]: merc=  113 acierto=0.9118 precio=0.9623 PnL/acc todos=-0.0520 tomador=-0.0741 (n tom 847)
+    z (-1000000000.0, 0.0] p  (0.97, 0.99]: merc=   81 acierto=0.9496 precio=0.9813 PnL/acc todos=-0.0327 tomador=-0.0247 (n tom 800)
+    z (-1000000000.0, 0.0] p (0.99, 0.995]: merc=   17 acierto=0.9817 precio=0.9900 PnL/acc todos=-0.0089 tomador=+0.0093 (n tom 24)
+    z   (0.0, 1.0] p    (0.8, 0.9]: merc=3,037 acierto=0.8442 precio=0.8455 PnL/acc todos=-0.0062 tomador=-0.0124 (n tom 37778)
+    z   (0.0, 1.0] p   (0.9, 0.95]: merc=  805 acierto=0.8980 precio=0.9246 PnL/acc todos=-0.0298 tomador=-0.0425 (n tom 7642)
+    z   (0.0, 1.0] p  (0.95, 0.97]: merc=  298 acierto=0.9064 precio=0.9614 PnL/acc todos=-0.0569 tomador=-0.0695 (n tom 2161)
+    z   (0.0, 1.0] p  (0.97, 0.99]: merc=  200 acierto=0.9964 precio=0.9817 PnL/acc todos=+0.0138 tomador=+0.0117 (n tom 1161)
+    z   (0.0, 1.0] p (0.99, 0.995]: merc=   35 acierto=1.0000 precio=0.9903 PnL/acc todos=+0.0092 tomador=+0.0093 (n tom 64)
+    z   (1.0, 2.0] p    (0.8, 0.9]: merc=4,362 acierto=0.8530 precio=0.8545 PnL/acc todos=-0.0054 tomador=-0.0119 (n tom 72252)
+    z   (1.0, 2.0] p   (0.9, 0.95]: merc=3,205 acierto=0.9320 precio=0.9271 PnL/acc todos=+0.0022 tomador=+0.0016 (n tom 31905)
+    z   (1.0, 2.0] p  (0.95, 0.97]: merc=1,780 acierto=0.9623 precio=0.9612 PnL/acc todos=-0.0007 tomador=-0.0068 (n tom 12725)
+    z   (1.0, 2.0] p  (0.97, 0.99]: merc=1,005 acierto=0.9835 precio=0.9814 PnL/acc todos=+0.0011 tomador=-0.0029 (n tom 6149)
+    z   (1.0, 2.0] p (0.99, 0.995]: merc=  150 acierto=0.9566 precio=0.9900 PnL/acc todos=-0.0339 tomador=-0.0478 (n tom 228)
+    z   (2.0, 3.0] p    (0.8, 0.9]: merc=1,993 acierto=0.8675 precio=0.8676 PnL/acc todos=-0.0030 tomador=-0.0042 (n tom 18493)
+    z   (2.0, 3.0] p   (0.9, 0.95]: merc=2,964 acierto=0.9358 precio=0.9312 PnL/acc todos=+0.0025 tomador=-0.0030 (n tom 27853)
+    z   (2.0, 3.0] p  (0.95, 0.97]: merc=2,992 acierto=0.9703 precio=0.9628 PnL/acc todos=+0.0060 tomador=+0.0047 (n tom 26350)
+    z   (2.0, 3.0] p  (0.97, 0.99]: merc=2,760 acierto=0.9749 precio=0.9828 PnL/acc todos=-0.0087 tomador=-0.0088 (n tom 24185)
+    z   (2.0, 3.0] p (0.99, 0.995]: merc=  652 acierto=0.9944 precio=0.9901 PnL/acc todos=+0.0038 tomador=+0.0054 (n tom 956)
+    z   (3.0, 4.0] p    (0.8, 0.9]: merc=  539 acierto=0.8514 precio=0.8702 PnL/acc todos=-0.0217 tomador=-0.0233 (n tom 3367)
+    z   (3.0, 4.0] p   (0.9, 0.95]: merc=1,153 acierto=0.9402 precio=0.9337 PnL/acc todos=+0.0048 tomador=+0.0027 (n tom 7583)
+    z   (3.0, 4.0] p  (0.95, 0.97]: merc=1,881 acierto=0.9597 precio=0.9642 PnL/acc todos=-0.0057 tomador=+0.0022 (n tom 13162)
+    z   (3.0, 4.0] p  (0.97, 0.99]: merc=3,172 acierto=0.9906 precio=0.9852 PnL/acc todos=+0.0048 tomador=+0.0037 (n tom 28755)
+    z   (3.0, 4.0] p (0.99, 0.995]: merc=1,091 acierto=0.9861 precio=0.9900 PnL/acc todos=-0.0044 tomador=-0.0069 (n tom 1565)
+    z   (4.0, 6.0] p    (0.8, 0.9]: merc=  180 acierto=0.6241 precio=0.8661 PnL/acc todos=-0.2447 tomador=-0.1642 (n tom 1163)
+    z   (4.0, 6.0] p   (0.9, 0.95]: merc=  413 acierto=0.9124 precio=0.9359 PnL/acc todos=-0.0249 tomador=-0.0166 (n tom 2768)
+    z   (4.0, 6.0] p  (0.95, 0.97]: merc=  779 acierto=0.9542 precio=0.9644 PnL/acc todos=-0.0112 tomador=-0.0013 (n tom 5301)
+    z   (4.0, 6.0] p  (0.97, 0.99]: merc=2,751 acierto=0.9841 precio=0.9868 PnL/acc todos=-0.0031 tomador=+0.0001 (n tom 22899)
+    z   (4.0, 6.0] p (0.99, 0.995]: merc=1,344 acierto=0.9876 precio=0.9901 PnL/acc todos=-0.0028 tomador=-0.0027 (n tom 1586)
+    z (6.0, 1000000000.0] p    (0.8, 0.9]: merc=   64 acierto=0.9148 precio=0.8568 PnL/acc todos=+0.0542 tomador=+0.0204 (n tom 559)
+    z (6.0, 1000000000.0] p   (0.9, 0.95]: merc=  116 acierto=0.9422 precio=0.9323 PnL/acc todos=+0.0080 tomador=-0.0260 (n tom 431)
+    z (6.0, 1000000000.0] p  (0.95, 0.97]: merc=  186 acierto=0.9752 precio=0.9653 PnL/acc todos=+0.0092 tomador=+0.0281 (n tom 721)
+    z (6.0, 1000000000.0] p  (0.97, 0.99]: merc=1,814 acierto=0.9888 precio=0.9888 PnL/acc todos=-0.0002 tomador=+0.0018 (n tom 6996)
+    z (6.0, 1000000000.0] p (0.99, 0.995]: merc=1,177 acierto=0.9940 precio=0.9901 PnL/acc todos=+0.0037 tomador=+0.0073 (n tom 608)
+  POR FASE (todos): T × rol -> PnL/acc
+    T    (3, 30] maker  : merc=1,647 acierto=0.9740 precio=0.9769 PnL/acc=-0.0028
+    T    (3, 30] tomador: merc=1,010 acierto=0.9654 precio=0.9662 PnL/acc=-0.0030
+    T   (30, 60] maker  : merc=2,422 acierto=0.9539 precio=0.9550 PnL/acc=-0.0011
+    T   (30, 60] tomador: merc=2,824 acierto=0.9537 precio=0.9535 PnL/acc=-0.0027
+    T  (60, 120] maker  : merc=3,395 acierto=0.9126 precio=0.9313 PnL/acc=-0.0187
+    T  (60, 120] tomador: merc=4,172 acierto=0.9343 precio=0.9431 PnL/acc=-0.0124
+    T (120, 300] maker  : merc=3,499 acierto=0.8974 precio=0.8867 PnL/acc=+0.0107
+    T (120, 300] tomador: merc=4,011 acierto=0.9003 precio=0.8987 PnL/acc=-0.0045

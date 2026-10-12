@@ -61,19 +61,18 @@ def compras_dia(d, tok):
 def main():
     dias = EXTR + CONT
     tok = mapa_tokens(dias, "5min")
-    X = pd.concat([compras_dia(d, tok) for d in dias], ignore_index=True)
-    print(f"compras p∈[{P_MIN},{P_MAX}) T∈(3,{T_MAX}]: {len(X):,}", file=sys.stderr, flush=True)
-    des = desenlaces(set(X.mkt.unique()))
-    X = X[X.mkt.isin(des.keys())].copy()
-    X["win"] = (X.lado == X.mkt.map(des)).astype(int)
     PB, RT = {}, collections.defaultdict(lambda: [0.0, 0])
     for d in ["2026-10-05"] + dias:
         refs_dia(d, PB, RT)
-    zt, zs = np.full(len(X), np.nan), np.full(len(X), np.nan)
-    for d in dias:
+    partes = []
+    for d in dias:   # 12-Oct: DÍA A DÍA (compras -> estado TWAP con los ticks de ese día -> liberar): el pico con los 6
+        # días cargados a la vez hizo saltar el guardián de RAM (MemAvailable 1.278 MB)
+        Xd = compras_dia(d, tok)
+        if not len(Xd):
+            continue
         tk = ticks_dia(d)
-        for i in np.flatnonzero((X.dia == d).values):
-            r = X.iloc[i]
+        zt, zs = np.full(len(Xd), np.nan), np.full(len(Xd), np.nan)
+        for i, r in enumerate(Xd.itertuples(index=False)):
             if r.act not in tk:
                 continue
             fin = int(r.fin)
@@ -84,10 +83,16 @@ def main():
             e = estado_twap(rv, ws, px, fin, int((r.ts_est - DESFASE_S) * 1000), ref)
             if e is None:
                 continue
-            s = 1 if r.lado == "YES" else -1
-            zt[i], zs[i] = s * e[1], s * e[2]
+            sg = 1 if r.lado == "YES" else -1
+            zt[i], zs[i] = sg * e[1], sg * e[2]
         del tk
-    X["z_tw"], X["z_sp"] = zt, zs
+        Xd["z_tw"], Xd["z_sp"] = zt, zs
+        partes.append(Xd.drop(columns=["ts_est", "fin"]))
+        print(f"{d}: {len(Xd):,} compras", file=sys.stderr, flush=True)
+    X = pd.concat(partes, ignore_index=True)
+    des = desenlaces(set(X.mkt.unique()))
+    X = X[X.mkt.isin(des.keys())].copy()
+    X["win"] = (X.lado == X.mkt.map(des)).astype(int)
     X["pnl_acc"] = X.win - X.p - np.where(X.rol == "tomador", fee(X.p), 0.0)
     X["pnl"] = X.pnl_acc * X.acc
     lin = []
