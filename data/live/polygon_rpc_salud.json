@@ -1,0 +1,105 @@
+{
+ "https://polygon-bor-rpc.publicnode.com": {
+  "cabeza": {
+   "ok": true,
+   "detalle": "",
+   "desde": 1791813561.3136537,
+   "ultimo_aviso": 0
+  },
+  "archivo": {
+   "ok": false,
+   "detalle": "RuntimeError: HTTP 403",
+   "desde": 1791813561.3136537,
+   "ultimo_aviso": 1791813561.3136537
+  },
+  "latest": {
+   "ok": true,
+   "detalle": "",
+   "desde": 1791813561.3136537,
+   "ultimo_aviso": 0
+  }
+ },
+ "https://polygon.drpc.org": {
+  "cabeza": {
+   "ok": true,
+   "detalle": "",
+   "desde": 1791813561.3136537,
+   "ultimo_aviso": 0
+  },
+  "archivo": {
+   "ok": true,
+   "detalle": "",
+   "desde": 1791813561.3136537,
+   "ultimo_aviso": 0
+  },
+  "latest": {
+   "ok": true,
+   "detalle": "",
+   "desde": 1791813561.3136537,
+   "ultimo_aviso": 0
+  }
+ },
+ "https://1rpc.io/matic": {
+  "cabeza": {
+   "ok": true,
+   "detalle": "",
+   "desde": 1791813561.3136537,
+   "ultimo_aviso": 0
+  },
+  "archivo": {
+   "ok": true,
+   "detalle": "",
+   "desde": 1791813561.3136537,
+   "ultimo_aviso": 0
+  },
+  "latest": {
+   "ok": true,
+   "detalle": "",
+   "desde": 1791813561.3136537,
+   "ultimo_aviso": 0
+  }
+ },
+ "https://gateway.tenderly.co/public/polygon": {
+  "cabeza": {
+   "ok": true,
+   "detalle": "",
+   "desde": 1791813561.3136537,
+   "ultimo_aviso": 0
+  },
+  "archivo": {
+   "ok": true,
+   "detalle": "",
+   "desde": 1791813561.3136537,
+   "ultimo_aviso": 0
+  },
+  "latest": {
+   "ok": true,
+   "detalle": "",
+   "desde": 1791813561.3136537,
+   "ultimo_aviso": 0
+  }
+ },
+ "https://rpc-mainnet.matic.quiknode.pro": {
+  "cabeza": {
+   "ok": true,
+   "detalle": "",
+   "desde": 1791813561.3136537,
+   "ultimo_aviso": 0
+  },
+  "archivo": {
+   "ok": true,
+   "detalle": "",
+   "desde": 1791813561.3136537,
+   "ultimo_aviso": 0
+  },
+  "latest": {
+   "ok": true,
+   "detalle": "",
+   "desde": 1791813561.3136537,
+   "ultimo_aviso": 0
+  }
+ },
+ "_criticos_ts": 0,
+ "_criticos": "",
+ "_actualizado_utc": "2026-10-12T13:59:21+00:00"
+}
