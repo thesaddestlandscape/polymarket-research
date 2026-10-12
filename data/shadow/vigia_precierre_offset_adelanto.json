@@ -1,0 +1,79 @@
+{
+ "actualizado_utc": "2026-10-12T13:42:25+00:00",
+ "fok_reales": {
+  "enviadas": 8,
+  "muertas": 5,
+  "muertas_resueltas": 5,
+  "muertas_que_ganarian": 4
+ },
+ "offsets": {
+  "5m#-47": {
+   "n": 0,
+   "pendientes": 0,
+   "dias": 0,
+   "acierto": null,
+   "ask_medio": null,
+   "ev_eur": null,
+   "ic90_cierre": null
+  },
+  "5m#-46": {
+   "n": 0,
+   "pendientes": 0,
+   "dias": 0,
+   "acierto": null,
+   "ask_medio": null,
+   "ev_eur": null,
+   "ic90_cierre": null
+  },
+  "5m#-45": {
+   "n": 0,
+   "pendientes": 0,
+   "dias": 0,
+   "acierto": null,
+   "ask_medio": null,
+   "ev_eur": null,
+   "ic90_cierre": null
+  },
+  "5m#emparejado": {
+   "senales_T45": 0,
+   "tambien_a_T47": 0,
+   "solo_a_T47": 0,
+   "comunes_resueltos": 0,
+   "dif_ev_T47_menos_T45": null
+  },
+  "15m#-47": {
+   "n": 0,
+   "pendientes": 0,
+   "dias": 0,
+   "acierto": null,
+   "ask_medio": null,
+   "ev_eur": null,
+   "ic90_cierre": null
+  },
+  "15m#-46": {
+   "n": 0,
+   "pendientes": 0,
+   "dias": 0,
+   "acierto": null,
+   "ask_medio": null,
+   "ev_eur": null,
+   "ic90_cierre": null
+  },
+  "15m#-45": {
+   "n": 0,
+   "pendientes": 0,
+   "dias": 0,
+   "acierto": null,
+   "ask_medio": null,
+   "ev_eur": null,
+   "ic90_cierre": null
+  },
+  "15m#emparejado": {
+   "senales_T45": 0,
+   "tambien_a_T47": 0,
+   "solo_a_T47": 0,
+   "comunes_resueltos": 0,
+   "dif_ev_T47_menos_T45": null
+  }
+ }
+}
