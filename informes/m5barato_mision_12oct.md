@@ -42,6 +42,8 @@ IC90 por cierre (−0,0/+2,21); con tope: 13 mercados, EV +0,985, sin BTC −1,0
 |---|---|---|---|
 | v4 primera señal | manifiesto vigía | TESTING (OOS desde 06-Oct) | +0,413 €/€ n=10, depende de 1 op; sin BTC −1,0 |
 | V2 todas las señales | af25ccdef65ef8a3 | FORWARD_PENDING (desde 12-Oct 16:00Z) | descubrimiento +0,985 (no cuenta) |
+| V3a v4 + H3a (Binance 5 s ≥ −1 bps) | 1f52fe9c3bd9790a | FORWARD_PENDING (desde 12-Oct 18:00Z) | descubrimiento 6 merc. EV +1,23 (no cuenta) |
+| V3b V2 + H3a | 1f52fe9c3bd9790a | FORWARD_PENDING (desde 12-Oct 18:00Z) | descubrimiento 9 merc. EV +1,61 IC90 día (+0,16,+2,97) (no cuenta) |
 | H6 maker anticipatorio valor relativo | `analisis_5m_barato_maker_sim.py` | NO ROBUSTA (viva, Javi: no se descarta) | 06-11 Oct: M0,05 −0,06/−0,08 €/€ (48-106 merc.); única celda + (M0,10 lag 0, +0,31, n=23) = la más optimista de 9, lag 100 −0,02, sin BTC −0,21; rellenos ~50 % acierto (selección adversa del maker); pasivo +0,005 |
 
 ## Siguientes experimentos (prioridad por valor económico esperado)
@@ -73,3 +75,13 @@ El valor de la señal solo existe para el TOMADOR MÁS RÁPIDO: un bid quieto en
 depende de pocas ventanas BTC muy baratas y profundas. Sola, esta estrategia no es ruta a 200k (548 €/día); como mucho, un
 componente si la latencia baja mucho (<100 ms, VPS junto al CLOB: decisión Javi) y si el forward confirma que esas
 ventanas BTC se repiten. Siguiente: forward V2 + vigilar frecuencia de ventanas BTC "muy baratas y profundas".
+
+## Pasos 5.1/6 — qué distingue a las perdedoras y filtro de deterioro (12-Oct 18:00Z)
+Variables en t0 (mediana, 51 eventos; 42 ganan / 9 pierden): Binance 5 s orientado al lado 0,0 vs **−2,2 bps**; operaciones
+Binance/s 3 vs **32**; velocidad del mid del 5m(s) −0,003 vs **−0,22**; antigüedad del bid del 15m 0 vs **147 ms**.
+Mecanismo: el 5m no está barato, el 15m (la cota) está RANCIO durante un movimiento de Binance en contra.
+H3a (Binance 5 s ≥ −1 bps, fail-closed) y H3b (bid15 ≤ 100 ms) evaluados en descubrimiento: H3a mejora todo (V2 L215 75→90 %,
+EV +1,28→+1,70, IC90 cierre +0,55/+2,62). Umbral elegido tras ver medianas → congelado como V3a/V3b
+(`vigia_5m_barato_v3_forward.py`, cron 05:10, Telegram) y solo cuenta el forward. Sin BTC a L215 casi no hay muestra (1 op).
+Pendiente: H3b como variante aparte si H3a se confirma; auditoría del pipeline de latencia (7.1); EV a la llegada con el
+registro ms (bid15 y ask5 a t0+L) para cuantificar cuánto del deterioro es visible antes de enviar.
