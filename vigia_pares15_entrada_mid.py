@@ -4,14 +4,13 @@ filtro de entrada; prompt de Javi 12-Oct). SOLO LECTURA: evalúa la regla sobre 
 (experimento_pares_cola_15m.py) con el libro del archivo m15_registro y el desenlace oficial.
 
 REGLA (congelada; cambiarla = V2 + nuevo periodo): en la apertura del 15m (t = cierre - 900 s + 2 s, hora de recepción),
-mid YES = (mejor bid + mejor ask)/2 del token YES. Se PARTICIPA en el mercado solo si |mid YES - 0,5| <= 0,02 y el libro
+mid YES = (mejor bid + mejor ask)/2 del token YES. Se PARTICIPA en el mercado solo si |mid YES - 0,5| <= corte y el libro
 de ambos tokens existe (si falta -> no se participa, fail-closed). La política de pujas no cambia (anclar/crear/mixta).
-Descubrimiento (09-10 Oct, 80 mercados, NO cuenta): 26 mercados pasan, 4 patas sueltas (vs 27/80), PnL +6,76 $
-(+0,26 $/merc), sin el mejor +3,86; positivo en SOL y BTC. Mecanismo: mercado que abre ya inclinado = información
+Descubrimiento (09-10 Oct, 80 mercados, NO cuenta): ver nota de variantes junto a CONFIG. Mecanismo: mercado que abre ya inclinado = información
 direccional presente -> se llena el lado perdedor; abierto equilibrado -> rellenos simétricos y pares completos.
 VALIDACIÓN: solo mercados con mercado_fin posterior a VALIDA_DESDE (ensayo 'crear' lanzado 12-Oct 14:59Z, NO mirado al
 fijar la regla). Necesita el archivo m15_registro del día (cron 03:45 del día siguiente).
-Uso: python3 vigia_pares15_entrada_mid.py [--desde ISO] [--hasta ISO]
+VARIANTES: V1a = 0,02 (incluye el borde), V1b = 0,015. Uso: python3 vigia_pares15_entrada_mid.py [--desde ISO] [--hasta ISO]
 """
 import argparse
 import collections
@@ -26,7 +25,10 @@ from analisis_experimento_pares_sim import ganadores  # noqa: E402
 from analisis_pares15_patas_sueltas import cargar_libros, cargar_mercados, libro_en, pnl_original  # noqa: E402
 
 CONFIG = {"nombre": "PAIR15_ENTRY_MID_V1", "congelado_utc": "2026-10-12T17:15:00+00:00", "t_entrada_s": 2,
-          "max_dist_mid": 0.02, "valida_desde": "2026-10-12T14:59:00"}
+          "variantes": {"V1a": 0.02, "V1b": 0.015}, "valida_desde": "2026-10-12T14:59:00"}
+# 12-Oct 17:25Z (ANTES de mirar la validación): el corte 0,02 es sensible al BORDE (5 mercados con |mid-0,5| = 0,02
+# exacto, perdedores: descubrimiento V1a ≤0,02 = 31 merc. +1,76 $, sin el mejor -1,14; V1b ≤0,015 = 26 merc. +6,76 $,
+# sin el mejor +3,86). Se validan LAS DOS (multiplicidad declarada: 2 variantes).
 HASH = hashlib.sha256(json.dumps(CONFIG, sort_keys=True).encode()).hexdigest()[:16]
 
 
@@ -45,12 +47,14 @@ def main():
         t = (m["cierre"] - 900 + CONFIG["t_entrada_s"]) * 1000
         y, n = libro_en(L, m["id"], "YES", t), libro_en(L, m["id"], "NO", t)
         ok_libro = y and n and None not in (y[0], y[1], n[0], n[1])
-        entra = bool(ok_libro) and abs((y[0] + y[1]) / 2 - 0.5) <= CONFIG["max_dist_mid"] + 1e-12
-        filas.append({"entra": entra, "sin_libro": not ok_libro, "pnl": o["pnl_par"] + o["pnl_res"], "moneda": m["moneda"],
+        dist = abs((y[0] + y[1]) / 2 - 0.5) if ok_libro else None
+        filas.append({"dist": dist, "sin_libro": not ok_libro, "pnl": o["pnl_par"] + o["pnl_res"], "moneda": m["moneda"],
                       "pol": m["pol"], "res": "par" if o["par"] >= 5 - 1e-9 else ("suelta" if o["lado_res"] else "nada")})
     print(f"{CONFIG['nombre']} (hash {HASH}) | periodo {a.desde} → {a.hasta} | mercados {len(filas)} (sin libro {sum(f['sin_libro'] for f in filas)})")
-    for nom, g in (("CON filtro (participa)", [f for f in filas if f["entra"]]), ("excluidos por el filtro", [f for f in filas if not f["entra"]]),
-                   ("SIN filtro (todos)", filas)):
+    grupos = [("SIN filtro (todos)", filas)]
+    for v, corte in CONFIG["variantes"].items():
+        grupos.append((f"{v} |mid-0,5|<={corte}", [f for f in filas if f["dist"] is not None and f["dist"] <= corte + 1e-9]))
+    for nom, g in grupos:
         if not g:
             print(f"  {nom}: 0")
             continue
