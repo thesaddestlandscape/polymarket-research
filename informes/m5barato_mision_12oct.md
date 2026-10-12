@@ -85,3 +85,18 @@ EV +1,28→+1,70, IC90 cierre +0,55/+2,62). Umbral elegido tras ver medianas →
 (`vigia_5m_barato_v3_forward.py`, cron 05:10, Telegram) y solo cuenta el forward. Sin BTC a L215 casi no hay muestra (1 op).
 Pendiente: H3b como variante aparte si H3a se confirma; auditoría del pipeline de latencia (7.1); EV a la llegada con el
 registro ms (bid15 y ask5 a t0+L) para cuantificar cuánto del deterioro es visible antes de enviar.
+
+## Paso 7.1 — Auditoría del pipeline de latencia (12-Oct 18:30Z)
+Medido con las 16 órdenes REALES de PRECIERRE con trazas (`⏱ latencia` del log; misma librería, mismo CLOB, FOK):
+| tramo | P50 | P90 | máx |
+|---|---|---|---|
+| lectura libro REST | 82 ms | 165 | 192 |
+| firma | 30 | 62 | 117 |
+| firma→POST (circuit breaker, reloj, marca en disco) | 53 | 104 | 115 |
+| POST (ida + taker delay 150 + casado + vuelta) | 290 | 347 | 364 |
+| **total decisión→respuesta** | **489** | 549 | 695 |
+Otras medidas: feed WS exchange→recepción P50 26 ms, P90 360, P99 1,5 s (05-Oct); GTC post-only 68 ms, cancelación 60 ms,
+FOK no marketable 213 ms (07-Oct). **La L=215 del vigía es OPTIMISTA para la infraestructura actual: llegaríamos al
+casado a ~420-450 ms.** Recortable sin mover el VPS: lectura REST (el libro ya llega por WS, −80), comprobaciones en
+memoria (−50), firma optimizada/precalentada (−20) → ~260-280 ms. Por debajo de ~250 ms solo con VPS junto al CLOB
+(decisión Javi). El vigía mide hasta L300 (v4 primera: EV +0,51, 11 ejec.; todas: +1,36, 21 ejec.); a 450 ms NO está medido.
