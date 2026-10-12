@@ -51,7 +51,6 @@ sys.path.insert(0, str(REPO))
 
 GAMMA = "https://gamma-api.polymarket.com"
 NEGRISK_ADAPTER = "0xd91E80cF2E7be2e162c6513ceD06f1dD0dA35296"
-RPC_URLS = ["https://polygon-bor-rpc.publicnode.com", "https://1rpc.io/matic"]
 SELECTOR_GET_FEE_BIPS = "0x2582cb5e"  # keccak256("getFeeBips(bytes32)")[:4], verificado 29-Sep
 
 N_MIN = 2
@@ -72,20 +71,14 @@ def _log(msg: str) -> None:
 
 
 def _get_fee_bips(market_id_hex: str) -> int | None:
+    # 12-Oct: failover común (polygon_rpc, grupo "latest"); antes lista propia de 2 RPCs
+    from polygon_rpc import hex_valido, llamar
     data = SELECTOR_GET_FEE_BIPS + market_id_hex[2:]
-    for rpc in RPC_URLS:
-        try:
-            r = _SESSION.post(rpc, json={
-                "jsonrpc": "2.0", "method": "eth_call",
-                "params": [{"to": NEGRISK_ADAPTER, "data": data}, "latest"], "id": 1,
-            }, timeout=8)
-            resp = r.json()
-            result = resp.get("result")
-            if result:
-                return int(result, 16)
-        except Exception:
-            continue
-    return None
+    try:
+        return int(llamar("eth_call", [{"to": NEGRISK_ADAPTER, "data": data}, "latest"], grupo="latest",
+                          intentos=1, timeout=(3, 8), plazo_total_s=20, validar=hex_valido, log=None), 16)
+    except Exception:
+        return None
 
 
 def _eventos_negrisk() -> list:

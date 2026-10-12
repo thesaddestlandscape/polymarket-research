@@ -45,9 +45,7 @@ REPO = Path(__file__).resolve().parent
 OUT = REPO / "data" / "shadow" / "taker_rebate_wv.json"
 PUSD_CONTRATO = "0xC011a7E12a19f7B1f670d46F03B03f3342E82DFB"
 PUSD_DECIMALS = 1_000_000  # 6 decimales, mismo estándar que USDC en Polygon
-# polygon-rpc.com empezó a exigir auth (401) -- verificado 02-Sep,
-# publicnode responde sin auth. Fail-soft de todas formas si cambia otra vez.
-POLYGON_RPC = "https://polygon-bor-rpc.publicnode.com"
+# 12-Oct: el saldo pUSD va por polygon_rpc.llamar (failover; lista en polygon_rpc_lista.json).
 PESO_CRYPTO = 2.3
 PESO_SPORTS = 1.0
 TIERS = [
@@ -96,16 +94,11 @@ def _saldo_pusd() -> float | None:
         return None
     wallet_padded = wallet.lower().replace("0x", "").rjust(64, "0")
     data = "0x70a08231" + wallet_padded
-    payload = {
-        "jsonrpc": "2.0", "id": 1, "method": "eth_call",
-        "params": [{"to": PUSD_CONTRATO, "data": data}, "latest"],
-    }
     try:
-        resp = requests.post(POLYGON_RPC, json=payload, timeout=10)
-        resp.raise_for_status()
-        result = resp.json().get("result")
-        if not result or result == "0x":
-            return None
+        # 12-Oct: failover común (polygon_rpc); antes un solo RPC fijo (publicnode)
+        from polygon_rpc import hex_valido, llamar
+        result = llamar("eth_call", [{"to": PUSD_CONTRATO, "data": data}, "latest"], grupo="latest",
+                        intentos=1, timeout=(3, 5), plazo_total_s=15, validar=hex_valido, log=None)
         return int(result, 16) / PUSD_DECIMALS
     except Exception as ex:
         print(f"[taker_rebate_tracker] aviso: no se pudo leer saldo pUSD ({type(ex).__name__}: {ex})")

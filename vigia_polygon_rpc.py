@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
-"""vigia_polygon_rpc.py -- cada hora prueba TODOS los RPCs de polygon_rpc.RPCS con las tres llamadas que usa el sistema
-(12-Oct, Javi: "tienes que asegurarte de que no nos rechacen peticiones nunca más"):
+"""vigia_polygon_rpc.py -- cada hora prueba TODOS los RPCs de polygon_rpc_lista.json con las tres llamadas que usa el sistema
+(12-Oct, Javi: "tienes que asegurarte de que no nos rechacen peticiones nunca más"). Prueba la UNIÓN de los grupos
+de polygon_rpc_lista.json:
   cabeza   eth_blockNumber (y que no vaya >50 bloques por detrás del mejor)          -> fetchers on-chain
   archivo  eth_getLogs de hace ~3,5 días en el exchange de Polymarket               -> recuperar huecos on-chain
   latest   eth_getBalance del exchange en "latest"                                   -> saldos (live_balance, rebates)
@@ -16,7 +17,7 @@ from pathlib import Path
 
 REPO = Path(__file__).resolve().parent
 sys.path.insert(0, str(REPO))
-from polygon_rpc import RPCS, llamar  # noqa: E402
+from polygon_rpc import error_lista, llamar, rpcs, todos  # noqa: E402
 
 EXCHANGE = "0xe111180000d2663c0091e4f400237545b87b996b"
 ESTADO = REPO / "data/live/polygon_rpc_salud.json"
@@ -29,7 +30,7 @@ MIN_SANOS = 2
 def _probar(url):
     r = {}
     try:
-        cab = int(llamar("eth_blockNumber", [], intentos=2, timeout=15, rpcs=[url], log=None), 16)
+        cab = int(llamar("eth_blockNumber", [], intentos=2, timeout=15, lista=[url], log=None), 16)
         r["cabeza"] = (True, cab)
     except Exception as e:
         r["cabeza"] = (False, f"{type(e).__name__}: {str(e)[:160]}")
@@ -39,12 +40,12 @@ def _probar(url):
         if cab is None:
             raise RuntimeError("sin cabeza")
         logs = llamar("eth_getLogs", [{"fromBlock": hex(ref), "toBlock": hex(ref + 2), "address": EXCHANGE}],
-                      intentos=2, timeout=30, rpcs=[url], log=None)
+                      intentos=2, timeout=30, lista=[url], log=None)
         r["archivo"] = (True, len(logs))
     except Exception as e:
         r["archivo"] = (False, f"{type(e).__name__}: {str(e)[:160]}")
     try:
-        llamar("eth_getBalance", [EXCHANGE, "latest"], intentos=2, timeout=15, rpcs=[url], log=None)
+        llamar("eth_getBalance", [EXCHANGE, "latest"], intentos=2, timeout=15, lista=[url], log=None)
         r["latest"] = (True, "ok")
     except Exception as e:
         r["latest"] = (False, f"{type(e).__name__}: {str(e)[:160]}")
@@ -52,7 +53,7 @@ def _probar(url):
 
 
 def main() -> int:
-    res = {u: _probar(u) for u in RPCS}
+    res = {u: _probar(u) for u in todos()}
     cabezas = [v["cabeza"][1] for v in res.values() if v["cabeza"][0]]
     mejor = max(cabezas) if cabezas else None
     for u, v in res.items():   # una cabeza muy retrasada cuenta como fallo de "cabeza"
@@ -77,8 +78,14 @@ def main() -> int:
                 e["ultimo_aviso"] = ahora
             nuevo[u][prueba] = e
     criticos = []
+    err = error_lista()
+    if err:
+        criticos.append(f"🚨 polygon_rpc_lista.json ilegible o incompleto ({err[:120]}): TODO el sistema usa la lista por defecto")
+    # /code-review 12-Oct: los sanos se cuentan DENTRO del grupo que usa cada prueba (cabeza la pide el fetch on-chain
+    # con el grupo archivo; latest, los saldos)
+    grupo_de = {"cabeza": set(rpcs("archivo")), "archivo": set(rpcs("archivo")), "latest": set(rpcs("latest"))}
     for prueba in ("cabeza", "archivo", "latest"):
-        sanos = [u for u in res if res[u][prueba][0]]
+        sanos = [u for u in res if res[u][prueba][0] and u in grupo_de[prueba]]
         if len(sanos) < MIN_SANOS:
             criticos.append(f"🚨 solo {len(sanos)} RPC(s) sanos para [{prueba}]: {', '.join(s.split('//')[1] for s in sanos) or 'NINGUNO'}")
     clave_crit = "|".join(criticos)
@@ -97,7 +104,7 @@ def main() -> int:
     print(f"[{nuevo['_actualizado_utc']}] cabeza/archivo/latest -> {resumen}")
     if avisos:
         msg = "🛰️ RPCs de Polygon (cabeza/archivo/latest)\n" + "\n".join(avisos) + \
-              "\nLista y failover: polygon_rpc.py. Estado: data/live/polygon_rpc_salud.json"
+              "\nLista: polygon_rpc_lista.json (editar NO reinicia nada). Estado: data/live/polygon_rpc_salud.json"
         print(msg)
         if "--telegram" in sys.argv:
             from shadow_digest import enviar_telegram

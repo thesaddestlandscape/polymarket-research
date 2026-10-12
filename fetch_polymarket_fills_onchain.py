@@ -30,26 +30,30 @@ REPO = Path(__file__).resolve().parent
 # atraso 0: cambio de política del nodo) y cada ejecución moría -> 3,5 días sin datos on-chain sin que nadie se enterase.
 # Failover centralizado en polygon_rpc.py (vigilado cada hora por vigia_polygon_rpc.py).
 sys.path.insert(0, str(REPO))
-from polygon_rpc import llamar  # noqa: E402  (lista de RPCS y failover: un solo sitio)
+from polygon_rpc import llamar  # noqa: E402  (failover; lista en polygon_rpc_lista.json)
 ATRASO_AVISO = 2400   # bloques (~1 h): aviso por Telegram si el cursor va más atrás que esto tras la ejecución
 EXCHANGE = "0xe111180000d2663c0091e4f400237545b87b996b"
 T_FILL = "0x" + keccak(text="OrderFilled(bytes32,address,address,uint8,uint256,uint256,uint256,uint256,bytes32,bytes32)").hex()
 T_MATCH = "0x" + keccak(text="OrdersMatched(bytes32,address,uint8,uint256,uint256,uint256)").hex()
 CHECKPOINT = REPO / "data/shadow/onchain_fills_checkpoint.json"
 DATALOGS = Path("/root/polymarket-research-datalogs")
-MARGEN = 5            # bloques de margen: el balanceador del nodo público a veces no tiene aún el último
+MARGEN = 60           # bloques (~2 min). /code-review 12-Oct: con failover un nodo algo retrasado podía responder [] a
+                      # getLogs y el checkpoint saltaba esos bloques; vigia_polygon_rpc marca caído a quien va >50 atrás
 TRAMO = 40            # bloques por eth_getLogs (~60 s de cadena, ~2.700 eventos)
 MAX_POR_RUN = 600     # bloques por ejecución (~15 min de cadena): ponerse al día sin pisar la siguiente
 INICIO_SIN_ESTADO = 200
 
 
-def rpc(metodo, params, intentos=3):
-    """12-Oct: failover centralizado en polygon_rpc.py (misma lista para todo el sistema, vigilada cada hora)."""
-    return llamar(metodo, params, intentos=intentos, log=lambda m: print(m, flush=True))
+def rpc(metodo, params, intentos=3, validar=None):
+    """12-Oct: failover centralizado en polygon_rpc.py (lista en polygon_rpc_lista.json, vigilada cada hora)."""
+    return llamar(metodo, params, grupo="archivo", intentos=intentos, validar=validar,
+                  log=lambda m: print(m, flush=True))
 
 
 def ts_bloque(n):
-    return int(rpc("eth_getBlockByNumber", [hex(n), False])["timestamp"], 16)
+    # null de un nodo que aún no tiene el bloque -> siguiente RPC (no TypeError fuera del failover)
+    return int(rpc("eth_getBlockByNumber", [hex(n), False],
+                   validar=lambda r: isinstance(r, dict) and bool(r.get("timestamp")))["timestamp"], 16)
 
 
 def main(max_por_run=MAX_POR_RUN):
@@ -68,7 +72,7 @@ def main(max_por_run=MAX_POR_RUN):
     while b <= hasta:
         e = min(hasta, b + TRAMO - 1)
         logs = rpc("eth_getLogs", [{"fromBlock": hex(b), "toBlock": hex(e), "address": EXCHANGE,
-                                    "topics": [[T_FILL, T_MATCH]]}])
+                                    "topics": [[T_FILL, T_MATCH]]}], validar=lambda r: isinstance(r, list))
         t_b, t_e = ts_bloque(b), ts_bloque(e)
         for lg in logs:
             bl = int(lg["blockNumber"], 16)

@@ -120,8 +120,8 @@ def _get_clob_client():
 
 
 def _saldo_pusd_onchain() -> float | None:
-    """Saldo pUSD real on-chain (mismo método que taker_rebate_tracker.py::
-    _saldo_pusd -- RPC directo a Polygon, balanceOf, sin librería web3).
+    """Saldo pUSD real on-chain (balanceOf vía polygon_rpc.llamar, igual que
+    taker_rebate_tracker.py::_saldo_pusd desde el 12-Oct).
 
     Origen (02-Sep, hallazgo de sesión): la API de balance del CLOB
     (`_free_usdc`, AssetType.COLLATERAL) reportó 9,60 USDC mientras el
@@ -135,21 +135,19 @@ def _saldo_pusd_onchain() -> float | None:
     próxima sesión, si ese saldo es realmente utilizable como margen de
     trading o si Polymarket tarda en reconciliarlo solo) -- fail-soft,
     nunca tumba el resto del balance si el RPC falla."""
-    import requests
     wallet = os.getenv("POLY_DEPOSIT_WALLET")
     if not wallet:
         return None
     pusd_contrato = "0xC011a7E12a19f7B1f670d46F03B03f3342E82DFB"
     selector = "0x70a08231" + wallet[2:].rjust(64, "0").lower()
     try:
-        r = requests.post(
-            "https://polygon-bor-rpc.publicnode.com",
-            json={"jsonrpc": "2.0", "id": 1, "method": "eth_call",
-                  "params": [{"to": pusd_contrato, "data": selector}, "latest"]},
-            timeout=10,
-        )
-        r.raise_for_status()
-        result = r.json().get("result")
+        # 12-Oct (Javi): failover del módulo común polygon_rpc (publicnode rechazó eth_getLogs el 09-Oct y dejó 3,5
+        # días sin on-chain). Antes: un RPC, timeout=10. Ahora: grupo "latest" de polygon_rpc_lista.json, un intento
+        # por RPC, timeout (2, 3) y plazo 6 s para EMPEZAR intentos -> peor caso ~11 s (plazo + el intento en vuelo),
+        # como antes. "0x" -> siguiente RPC. Sigue fail-soft (None) y solo informativo.
+        from polygon_rpc import hex_valido, llamar
+        result = llamar("eth_call", [{"to": pusd_contrato, "data": selector}, "latest"], grupo="latest",
+                        intentos=1, timeout=(2, 3), plazo_total_s=6, validar=hex_valido, log=None)
         if not result:
             return None
         return int(result, 16) / 1_000_000
