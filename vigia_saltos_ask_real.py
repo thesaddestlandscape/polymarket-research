@@ -16,6 +16,7 @@ Desglose moneda × marco (CLAUDE.md pt.17) + buckets de ventaja (p_justo del lad
 Candidata = n>=40 fillables, >=5 días, EV>=+0,10 al vwap, IC90 bootstrap por DÍAS > 0 y ambas
 mitades > 0 (con n>=20). Telegram SIEMPRE; JSON data/shadow/vigia_saltos_ask_real.json.
 """
+import bisect
 import csv
 import glob
 import gzip
@@ -41,8 +42,10 @@ def _dia(epoch):
     return datetime.fromtimestamp(epoch, timezone.utc).strftime("%Y-%m-%d")
 
 
-def cargar_twap(dias):
-    """{(activo, epoch_s): twap60 oficial PolyBolt}"""
+def cargar_twap(dias, claves=None):
+    """{(activo, epoch_s): twap60 oficial PolyBolt}. Con `claves` (set de (activo, epoch_s))
+    solo guarda esas: sin filtro el dict de ~18 días ocupaba >1 GB y, junto con
+    cargar_chainlink(), mató el proceso por OOM el 11 y el 12-Oct a las 08:09."""
     tw = {}
     for d in dias:
         for p in glob.glob(str(REPO / f"data/prices/polybolt_{d}.csv*")):
@@ -50,20 +53,27 @@ def cargar_twap(dias):
                 for r in csv.DictReader(f):
                     if r.get("canal") == "twap60":
                         try:
-                            tw[(r["asset"], int(r["event_ts_ms"]) // 1000)] = float(r["value"])
+                            k = (r["asset"], int(r["event_ts_ms"]) // 1000)
+                            if claves is None or k in claves:
+                                tw[k] = float(r["value"])
                         except (ValueError, KeyError, TypeError):
                             continue
     return tw
 
 
-def cargar_chainlink(dias):
+def cargar_chainlink(dias, segundos=None):
+    """{activo: [(t, precio)] ordenada}. Con `segundos` ({activo: set(epoch_s)}) solo guarda
+    los ticks cuyo segundo cae en alguna ventana pedida (12-Oct, OOM: ver cargar_twap)."""
     s = defaultdict(list)
     for d in dias:
         for p in glob.glob(str(REPO / f"data/prices/chainlink_{d}.csv*")):
             with _abrir(p) as f:
                 for r in csv.DictReader(f):
                     try:
-                        s[r["asset"]].append((int(r["ws_timestamp_ms"]) / 1000, float(r["price_usd"])))
+                        a, t = r["asset"], int(r["ws_timestamp_ms"]) / 1000
+                        if segundos is not None and int(t) not in segundos.get(a, ()):
+                            continue
+                        s[a].append((t, float(r["price_usd"])))
                     except (ValueError, KeyError, TypeError):
                         continue
     for a in s:
@@ -72,7 +82,9 @@ def cargar_chainlink(dias):
 
 
 def _media_cl(serie, t0, t1):
-    v = [p for t, p in serie if t0 <= t <= t1]
+    # serie ordenada por t: bisect en vez de recorrerla entera por cada salto (12-Oct)
+    i, j = bisect.bisect_left(serie, (t0, float("-inf"))), bisect.bisect_right(serie, (t1, float("inf")))
+    v = [p for _, p in serie[i:j]]
     return sum(v) / len(v) if len(v) >= 10 else None
 
 
@@ -135,8 +147,25 @@ def cargar_resueltos(fuente_filtro: str = "polybolt") -> tuple:
         with open(SALTOS, encoding="utf-8", newline="") as f:
             filas = [r for r in csv.DictReader(f) if r.get("fuente") == fuente_filtro]
     dias = sorted({_dia(int(r["fin"])) for r in filas if r.get("fin")} | {_dia(int(r["ini"])) for r in filas if r.get("ini")})
-    tw, cl = cargar_twap(dias), cargar_chainlink(dias)
     ahora = datetime.now(timezone.utc).timestamp()
+    # 12-Oct (OOM 11 y 12-Oct 08:09, 2,7 GB): cargar solo las claves/ventanas que se van a
+    # consultar. El resultado es idéntico al de cargar todo: resolver() solo mira estas.
+    ventanas = set()
+    for r in filas:
+        try:
+            ini, fin = int(r["ini"]), int(r["fin"])
+        except (ValueError, KeyError):
+            continue
+        if fin <= ahora - 90:
+            ventanas.add((r["activo"], ini, fin))
+    tw = cargar_twap(dias, {(a, e) for a, i, f in ventanas for e in (i, f)})
+    segundos = defaultdict(set)
+    for a, i, f in ventanas:
+        ta, tb = tw.get((a, i)), tw.get((a, f))
+        if ta is None or tb is None or ta == tb:  # irá al fallback de Chainlink
+            for e in (i, f):
+                segundos[a].update(range(e - 61, e + 1))
+    cl = cargar_chainlink(dias, segundos) if segundos else {}
     n_filas_totales = len(filas)
     xs, pendientes, sin_libro, fuente_res = [], 0, 0, defaultdict(int)
     for r in filas:

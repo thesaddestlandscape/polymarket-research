@@ -50,7 +50,9 @@ PATRONES_COMPUERTA = ("se salta ventana", "no significativo")
 _FECHA = re.compile(r"[_-]?\d{4}-\d{2}-\d{2}")
 # 08-Oct: sufijo de PID (maker_ms_<fecha>_<pid>) o de versión (arbitraje_anidado_dryrun_<fecha>_v<epoch>): es el MISMO
 # logger. Sin quitarlo, cada reinicio de observadores dejaba una familia huérfana que avisaba en falso ~48 h después.
-_SUFIJO_PROCESO = re.compile(r"_v?\d{6,}(?=\.csv)")
+# 12-Oct: tras el reinicio del VPS los PID son cortos (maker_ms_<fecha>_2928 avisó en falso a las 34,7 h): en
+# maker_ms se quita el PID tenga los dígitos que tenga; en el resto, solo sufijos de >=6 dígitos.
+_SUFIJO_PROCESO = re.compile(r"(?:_v?\d{6,}|(?<=^maker_ms)_\d+)(?=\.csv)")
 # 08-Oct: loggers por EVENTOS con latido horario en su log ("N eventos en la última hora"): el silencio del CSV es
 # correcto si el log está vivo (< 2 h) y TODOS los latidos posteriores a la última escritura dicen 0 eventos. Si un
 # latido cuenta eventos y el CSV no crece, o el log calla, se avisa como siempre.
