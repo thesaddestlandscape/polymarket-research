@@ -100,3 +100,11 @@ FOK no marketable 213 ms (07-Oct). **La L=215 del vigía es OPTIMISTA para la in
 casado a ~420-450 ms.** Recortable sin mover el VPS: lectura REST (el libro ya llega por WS, −80), comprobaciones en
 memoria (−50), firma optimizada/precalentada (−20) → ~260-280 ms. Por debajo de ~250 ms solo con VPS junto al CLOB
 (decisión Javi). El vigía mide hasta L300 (v4 primera: EV +0,51, 11 ejec.; todas: +1,36, 21 ejec.); a 450 ms NO está medido.
+
+## Paso 5 — EV a la llegada (12-Oct 19:00Z, `analisis_5m_barato_ev_llegada.py`, 51/51 eventos reconstruidos con el registro ms)
+Ejecutadas a 215 ms: ganadoras Δbid15 −0,07, Δask5 −0,00, margen a la llegada +0,04; **perdedoras Δbid15 −0,24, Δask5
+−0,07, margen −0,06**. A 450 ms igual (perdedoras: el bid15 cae en el 83-89 %). El 15m se reajusta MIENTRAS la orden viaja:
+confirma "cota rancia". Exigir margen ≥0,05 a la llegada daría 86 % de acierto, pero una FOK no puede reaccionar → el
+filtro debe usar información previa al envío (H3a, congelado en V3). **Idea nueva (pendiente OK Javi, requiere órdenes
+reales mínimas)**: ¿se puede CANCELAR una orden tomadora durante el taker delay de 150 ms? Si sí, cancelar al ver caer
+bid15 en los primeros ~100 ms. Informe: `informes/m5barato_ev_llegada_12oct.txt`.

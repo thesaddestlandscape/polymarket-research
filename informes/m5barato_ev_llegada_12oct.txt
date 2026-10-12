@@ -1,0 +1,24 @@
+2026-10-06: 2 eventos
+2026-10-07: 2 eventos
+2026-10-08: 3 eventos
+2026-10-09: 5 eventos
+2026-10-10: 24 eventos
+2026-10-11: 15 eventos
+eventos reconstruidos: 51 de 51
+
+== a t0+215 ms ==
+  ejecutadas a 215 (clase A/D)   ganan  n=18  Δbid15 medio -0.074 (cae en 72%)  Δask5 -0.002  margen a la llegada +0.038
+  ejecutadas a 215 (clase A/D)   pierden n= 6  Δbid15 medio -0.237 (cae en 67%)  Δask5 -0.065  margen a la llegada -0.058
+  todas                          ganan  n=42  Δbid15 medio -0.022 (cae en 55%)  Δask5 +0.085  margen a la llegada -0.016
+  todas                          pierden n= 9  Δbid15 medio -0.179 (cae en 67%)  Δask5 -0.020  margen a la llegada -0.065
+  si se exigiera margen >= 0.05 A LA LLEGADA (no ejecutable sin cancelar en vuelo): n=14 acierto 86%
+  si se exigiera margen >= 0.00 A LA LLEGADA (no ejecutable sin cancelar en vuelo): n=24 acierto 83%
+== a t0+450 ms ==
+  ejecutadas a 215 (clase A/D)   ganan  n=18  Δbid15 medio -0.097 (cae en 72%)  Δask5 +0.053  margen a la llegada -0.039
+  ejecutadas a 215 (clase A/D)   pierden n= 6  Δbid15 medio -0.220 (cae en 83%)  Δask5 -0.050  margen a la llegada -0.055
+  todas                          ganan  n=42  Δbid15 medio -0.030 (cae en 64%)  Δask5 +0.117  margen a la llegada -0.056
+  todas                          pierden n= 9  Δbid15 medio -0.171 (cae en 89%)  Δask5 -0.004  margen a la llegada -0.072
+  si se exigiera margen >= 0.05 A LA LLEGADA (no ejecutable sin cancelar en vuelo): n=10 acierto 80%
+  si se exigiera margen >= 0.00 A LA LLEGADA (no ejecutable sin cancelar en vuelo): n=15 acierto 87%
+
+Lectura: si las perdedoras muestran Δbid15 < 0 durante la latencia, el deterioro llega mientras la orden viaja; un tomador FOK no puede reaccionar -> el filtro tiene que usar información ANTERIOR al envío (H3a, Binance).
