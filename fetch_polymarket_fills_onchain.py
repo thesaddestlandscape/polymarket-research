@@ -26,12 +26,11 @@ import requests
 from eth_utils import keccak
 
 REPO = Path(__file__).resolve().parent
-RPC = "https://polygon-bor-rpc.publicnode.com"      # mismo que taker_rebate_tracker.py (polygon-rpc.com pide auth)
-# 12-Oct: publicnode responde "Archive requests require a personal token" en cuanto el cursor se queda unos miles de
-# bloques atrás. El 09-Oct 08:10 (racimo del OOM diario) se quedó atrás y desde entonces CADA ejecución pedía el mismo
-# bloque viejo y moría: estado absorbente, 3,5 días sin datos on-chain (vigía H5M, misión 15m/5m). Failover a RPCs
-# públicos que SÍ sirven eth_getLogs de archivo (probados 12-Oct con el bloque atascado: drpc, 1rpc, tenderly).
-RPCS = [RPC, "https://polygon.drpc.org", "https://1rpc.io/matic", "https://gateway.tenderly.co/public/polygon"]
+# 12-Oct: desde el 09-Oct 08:10 publicnode responde "Archive requests require a personal token" a eth_getLogs (con
+# atraso 0: cambio de política del nodo) y cada ejecución moría -> 3,5 días sin datos on-chain sin que nadie se enterase.
+# Failover centralizado en polygon_rpc.py (vigilado cada hora por vigia_polygon_rpc.py).
+sys.path.insert(0, str(REPO))
+from polygon_rpc import llamar  # noqa: E402  (lista de RPCS y failover: un solo sitio)
 ATRASO_AVISO = 2400   # bloques (~1 h): aviso por Telegram si el cursor va más atrás que esto tras la ejecución
 EXCHANGE = "0xe111180000d2663c0091e4f400237545b87b996b"
 T_FILL = "0x" + keccak(text="OrderFilled(bytes32,address,address,uint8,uint256,uint256,uint256,uint256,bytes32,bytes32)").hex()
@@ -45,23 +44,8 @@ INICIO_SIN_ESTADO = 200
 
 
 def rpc(metodo, params, intentos=3):
-    """Prueba los RPCS en orden; en cada uno, `intentos` reintentos salvo que pida token de archivo (pasa al siguiente)."""
-    ultimo_error = None
-    for url in RPCS:
-        for i in range(intentos):
-            try:
-                r = requests.post(url, json={"jsonrpc": "2.0", "id": 1, "method": metodo, "params": params}, timeout=60).json()
-                if "error" in r:
-                    raise RuntimeError(r["error"])
-                return r["result"]
-            except Exception as e:
-                ultimo_error = e
-                if "Archive requests" in str(e) or "personal token" in str(e):
-                    break
-                if i < intentos - 1:
-                    print(f"  reintento {metodo} ({url}): {type(e).__name__}: {str(e)[:150]}", flush=True)
-                    time.sleep(2 * (i + 1))
-    raise ultimo_error
+    """12-Oct: failover centralizado en polygon_rpc.py (misma lista para todo el sistema, vigilada cada hora)."""
+    return llamar(metodo, params, intentos=intentos, log=lambda m: print(m, flush=True))
 
 
 def ts_bloque(n):
