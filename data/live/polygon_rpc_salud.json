@@ -41,22 +41,22 @@
  },
  "https://1rpc.io/matic": {
   "cabeza": {
-   "ok": false,
-   "detalle": "ReadTimeout: HTTPSConnectionPool(host='1rpc.io', port=443): Read timed out. (read timeout=15)",
-   "desde": 1791833047.3687792,
-   "ultimo_aviso": 1791833047.3687792
+   "ok": true,
+   "detalle": "",
+   "desde": 1791840183.8671029,
+   "ultimo_aviso": 1791840183.8671029
   },
   "archivo": {
    "ok": false,
-   "detalle": "RuntimeError: sin cabeza",
+   "detalle": "RechazoPolitica: HTTP 403",
    "desde": 1791833047.3687792,
    "ultimo_aviso": 1791833047.3687792
   },
   "latest": {
-   "ok": false,
-   "detalle": "ReadTimeout: HTTPSConnectionPool(host='1rpc.io', port=443): Read timed out. (read timeout=15)",
-   "desde": 1791833047.3687792,
-   "ultimo_aviso": 1791833047.3687792
+   "ok": true,
+   "detalle": "",
+   "desde": 1791840183.8671029,
+   "ultimo_aviso": 1791840183.8671029
   }
  },
  "https://gateway.tenderly.co/public/polygon": {
@@ -101,5 +101,5 @@
  },
  "_criticos_ts": 0,
  "_criticos": "",
- "_actualizado_utc": "2026-10-12T20:24:08+00:00"
+ "_actualizado_utc": "2026-10-12T21:23:03+00:00"
 }
