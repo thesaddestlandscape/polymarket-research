@@ -43,24 +43,24 @@
   },
   "SEGUIR#BTC#15min#0": {
     "n_dias": 33,
-    "pnl_sin_mejores_dias": 0.2339,
+    "pnl_sin_mejores_dias": 0.2173,
     "robusto_dias": true,
     "lo": 0.03,
     "hi": 0.08,
-    "n": 254,
-    "pnl_medio": 0.8287,
-    "diff_vs_resto": 0.8438,
+    "n": 257,
+    "pnl_medio": 0.8073,
+    "diff_vs_resto": 0.8227,
     "p_valor": 0.0,
     "split_half_diff": [
-      0.3581,
-      1.3295
+      0.3478,
+      1.2939
     ],
     "split_half_ok": true,
-    "pnl_medio_loo": 0.7125,
+    "pnl_medio_loo": 0.6925,
     "robusto_loo": true,
     "ci90_bootstrap": [
-      0.2375,
-      1.4627
+      0.1924,
+      1.4745
     ],
     "robusto_bootstrap": true,
     "n_posiciones_buscadas": 96,
@@ -132,24 +132,24 @@
   },
   "SEGUIR#BTC#5min#0": {
     "n_dias": 40,
-    "pnl_sin_mejores_dias": -0.5721,
+    "pnl_sin_mejores_dias": -0.5733,
     "robusto_dias": false,
     "lo": 0.0,
     "hi": 0.05,
-    "n": 799,
-    "pnl_medio": -0.453,
-    "diff_vs_resto": -0.4281,
+    "n": 801,
+    "pnl_medio": -0.4544,
+    "diff_vs_resto": -0.4294,
     "p_valor": 0.0,
     "split_half_diff": [
-      -0.5447,
-      -0.3117
+      -0.5458,
+      -0.3133
     ],
     "split_half_ok": true,
-    "pnl_medio_loo": -0.5109,
+    "pnl_medio_loo": -0.5122,
     "robusto_loo": true,
     "ci90_bootstrap": [
-      -0.6874,
-      -0.199
+      -0.6882,
+      -0.201
     ],
     "robusto_bootstrap": true,
     "n_posiciones_buscadas": 96,
@@ -193,34 +193,11 @@
     "veredicto": "bueno_confirmado"
   },
   "SEGUIR#ETH#5min#0": {
-    "n_dias": 16,
-    "pnl_sin_mejores_dias": -1.0,
-    "robusto_dias": false,
-    "lo": 0.05,
-    "hi": 0.1,
-    "n": 72,
-    "pnl_medio": -0.6918,
-    "diff_vs_resto": -0.6507,
-    "p_valor": 0.0035,
-    "split_half_diff": [
-      -0.6687,
-      -0.6327
-    ],
-    "split_half_ok": true,
-    "pnl_medio_loo": -0.8529,
-    "robusto_loo": true,
-    "ci90_bootstrap": [
-      -1.0,
-      -0.3476
-    ],
-    "robusto_bootstrap": true,
-    "n_posiciones_buscadas": 96,
-    "veredicto_crudo_hoy": "malo_confirmado",
+    "veredicto": "sin_concluir",
     "historial_crudo": [
       "malo_confirmado"
     ],
-    "fecha_historial": "2026-10-12",
-    "veredicto": "malo_confirmado"
+    "fecha_historial": "2026-10-12"
   },
   "SEGUIR#BNB#5min#0": {
     "veredicto": "sin_concluir",
