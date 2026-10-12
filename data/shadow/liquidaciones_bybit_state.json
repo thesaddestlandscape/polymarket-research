@@ -1,5 +1,5 @@
 {
- "generado_utc": "2026-10-12T07:12:39+00:00",
+ "generado_utc": "2026-10-12T07:18:21+00:00",
  "fuente": "bybit",
  "BNB": {
   "2min": {
@@ -35,22 +35,22 @@
    "imbalance": null
   },
   "5min": {
-   "usd_long": 0.0,
+   "usd_long": 121399.31,
    "usd_short": 0.0,
-   "n": 0,
-   "imbalance": null
+   "n": 4,
+   "imbalance": -1.0
   },
   "15min": {
-   "usd_long": 0.0,
+   "usd_long": 121399.31,
    "usd_short": 0.0,
-   "n": 0,
-   "imbalance": null
+   "n": 4,
+   "imbalance": -1.0
   },
   "60min": {
-   "usd_long": 235851.01,
-   "usd_short": 250.35,
-   "n": 28,
-   "imbalance": -0.9979
+   "usd_long": 357250.32,
+   "usd_short": 0.0,
+   "n": 31,
+   "imbalance": -1.0
   }
  },
  "DOGE": {
@@ -87,21 +87,21 @@
    "imbalance": null
   },
   "5min": {
-   "usd_long": 0.0,
+   "usd_long": 373120.55,
    "usd_short": 0.0,
-   "n": 0,
-   "imbalance": null
+   "n": 17,
+   "imbalance": -1.0
   },
   "15min": {
-   "usd_long": 0.0,
+   "usd_long": 373120.55,
    "usd_short": 0.0,
-   "n": 0,
-   "imbalance": null
+   "n": 17,
+   "imbalance": -1.0
   },
   "60min": {
-   "usd_long": 134185.29,
+   "usd_long": 507305.84,
    "usd_short": 0.0,
-   "n": 24,
+   "n": 41,
    "imbalance": -1.0
   }
  },
@@ -113,22 +113,22 @@
    "imbalance": null
   },
   "5min": {
-   "usd_long": 0.0,
+   "usd_long": 3327.01,
    "usd_short": 0.0,
-   "n": 0,
-   "imbalance": null
+   "n": 2,
+   "imbalance": -1.0
   },
   "15min": {
-   "usd_long": 0.0,
+   "usd_long": 3327.01,
    "usd_short": 0.0,
-   "n": 0,
-   "imbalance": null
+   "n": 2,
+   "imbalance": -1.0
   },
   "60min": {
-   "usd_long": 385.02,
-   "usd_short": 2009.88,
-   "n": 2,
-   "imbalance": 0.6785
+   "usd_long": 3712.03,
+   "usd_short": 0.0,
+   "n": 3,
+   "imbalance": -1.0
   }
  },
  "XRP": {
@@ -159,10 +159,10 @@
  },
  "lag_bybit_ws": {
   "ventana_min": 5,
-  "n_muestras": 0,
-  "ultimo_lag_s": null,
-  "max_lag_s": null,
-  "media_lag_s": null,
+  "n_muestras": 23,
+  "ultimo_lag_s": 0.47,
+  "max_lag_s": 0.59,
+  "media_lag_s": 0.33,
   "umbral_alerta_s": 5.0
  }
 }
