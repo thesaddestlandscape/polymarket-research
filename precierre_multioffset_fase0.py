@@ -28,7 +28,9 @@ from resolution_sniper_observer import ASSETS, _TAIL, mercado_slot, token_ids
 
 OUT = Path("/root/polymarket-research-datalogs") / "precierre_multioffset_fase0.csv"
 MARCOS = {"5m": 300, "15m": 900, "4h": 14400}   # 30-Sep: 4 h (misma regla TWAP Chainlink, 6 cierres al día, menos bots)
-OFFSETS = [-120, -90, -60, -45, -30, -20, -10]
+# 12-Oct: +T-47/-46 (opción B de Javi para las FOK muertas de PRECIERRE): hay competidores que casan en T-44,8 s
+# (y en 15m en T-45,8 s); antes de adelantar el ejecutor hay que medir EV, z y libro real a esos instantes.
+OFFSETS = [-120, -90, -60, -47, -46, -45, -30, -20, -10]
 OFFSETS_EXTRA = {"4h": [-600, -300, -180]}      # los marcos largos se miran también antes
 TOLERANCIA_S = 1.0             # si el bucle llega tarde a un offset más de esto, se descarta ese punto
 CADA_S = 0.2
