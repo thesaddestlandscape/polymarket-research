@@ -42,6 +42,7 @@ IC90 por cierre (−0,0/+2,21); con tope: 13 mercados, EV +0,985, sin BTC −1,0
 |---|---|---|---|
 | v4 primera señal | manifiesto vigía | TESTING (OOS desde 06-Oct) | +0,413 €/€ n=10, depende de 1 op; sin BTC −1,0 |
 | V2 todas las señales | af25ccdef65ef8a3 | FORWARD_PENDING (desde 12-Oct 16:00Z) | descubrimiento +0,985 (no cuenta) |
+| H6 maker anticipatorio valor relativo | `analisis_5m_barato_maker_sim.py` | NO ROBUSTA (viva, Javi: no se descarta) | 06-11 Oct: M0,05 −0,06/−0,08 €/€ (48-106 merc.); única celda + (M0,10 lag 0, +0,31, n=23) = la más optimista de 9, lag 100 −0,02, sin BTC −0,21; rellenos ~50 % acierto (selección adversa del maker); pasivo +0,005 |
 
 ## Siguientes experimentos (prioridad por valor económico esperado)
 1. **H6 MAKER ANTICIPATORIO de valor relativo** (el más prometedor por la autopsia): tener YA puesto un bid en el 5m (lado s)
@@ -55,3 +56,6 @@ IC90 por cierre (−0,0/+2,21); con tope: 13 mercados, EV +0,985, sin BTC −1,0
    de ~250 ms reales (CLAUDE.md): valor bajo salvo vía maker o VPS junto al CLOB (decisión Javi).
 4. **Capacidad hacia 200k**: hoy ~2 ejecutables/día × 2 € → irrelevante; la cifra solo es discutible si H6 da EV>0 con
    fills/día y tamaño muy superiores. Se calcula con los fills del simulador, nunca con señales.
+
+## Resultado H6 (12-Oct 16:40Z)
+El valor de la señal solo existe para el TOMADOR MÁS RÁPIDO: un bid quieto en el umbral se llena ~50 % (quien cruza contra él sabe algo). Siguiente: valor económico de la latencia (profundidad al precio barato en t0 —columnas cap* del vigía—, señales/día, EV a L=100-150 ms) → ¿justifica VPS junto al CLOB (decisión Javi)? y distancia a 200k.
