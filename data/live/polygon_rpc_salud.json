@@ -8,7 +8,7 @@
   },
   "archivo": {
    "ok": false,
-   "detalle": "RuntimeError: HTTP 403",
+   "detalle": "RechazoPolitica: HTTP 403",
    "desde": 1791813561.3136537,
    "ultimo_aviso": 1791813561.3136537
   },
@@ -101,5 +101,5 @@
  },
  "_criticos_ts": 0,
  "_criticos": "",
- "_actualizado_utc": "2026-10-12T13:59:21+00:00"
+ "_actualizado_utc": "2026-10-12T14:23:04+00:00"
 }
