@@ -1,0 +1,136 @@
+{
+ "ORIGINAL": {
+  "total": -18.54,
+  "por_merc": -0.232,
+  "tipos": {
+   "original": 80
+  }
+ },
+ "A_TAKER m=0.00 L=300": {
+  "total": -18.54,
+  "por_merc": -0.232,
+  "tipos": {
+   "sigue_original": 77,
+   "sin_relleno": 3
+  }
+ },
+ "A_TAKER m=0.01 L=300": {
+  "total": -18.54,
+  "por_merc": -0.232,
+  "tipos": {
+   "sigue_original": 77,
+   "sin_relleno": 3
+  }
+ },
+ "A_TAKER m=0.02 L=300": {
+  "total": -18.54,
+  "por_merc": -0.232,
+  "tipos": {
+   "sigue_original": 77,
+   "sin_relleno": 3
+  }
+ },
+ "A_TAKER m=0.00 L=500": {
+  "total": -19.81,
+  "por_merc": -0.248,
+  "tipos": {
+   "sigue_original": 75,
+   "sin_relleno": 3,
+   "completa": 2
+  }
+ },
+ "A_TAKER m=0.01 L=500": {
+  "total": -19.77,
+  "por_merc": -0.247,
+  "tipos": {
+   "sigue_original": 76,
+   "sin_relleno": 3,
+   "completa": 1
+  }
+ },
+ "A_TAKER m=0.02 L=500": {
+  "total": -19.77,
+  "por_merc": -0.247,
+  "tipos": {
+   "sigue_original": 76,
+   "sin_relleno": 3,
+   "completa": 1
+  }
+ },
+ "A_TAKER m=0.00 L=1000": {
+  "total": -19.81,
+  "por_merc": -0.248,
+  "tipos": {
+   "sigue_original": 75,
+   "sin_relleno": 3,
+   "completa": 2
+  }
+ },
+ "A_TAKER m=0.01 L=1000": {
+  "total": -19.77,
+  "por_merc": -0.247,
+  "tipos": {
+   "sigue_original": 76,
+   "sin_relleno": 3,
+   "completa": 1
+  }
+ },
+ "A_TAKER m=0.02 L=1000": {
+  "total": -19.77,
+  "por_merc": -0.247,
+  "tipos": {
+   "sigue_original": 76,
+   "sin_relleno": 3,
+   "completa": 1
+  }
+ },
+ "B_SALIR L=300": {
+  "total": -17.02,
+  "por_merc": -0.213,
+  "tipos": {
+   "sale": 77,
+   "sin_relleno": 3
+  }
+ },
+ "B_SALIR L=500": {
+  "total": -15.83,
+  "por_merc": -0.198,
+  "tipos": {
+   "sale": 75,
+   "sin_relleno": 3,
+   "completa": 2
+  }
+ },
+ "B_SALIR L=1000": {
+  "total": -15.92,
+  "por_merc": -0.199,
+  "tipos": {
+   "sale": 75,
+   "sin_relleno": 3,
+   "completa": 2
+  }
+ },
+ "NO_OPERAR": {
+  "total": 0.0,
+  "por_merc": 0.0,
+  "tipos": {
+   "no": 80
+  }
+ },
+ "C_salir_tau2": -16.28,
+ "C_mantener_tau2": -23.75,
+ "C_salir_tau5": -18.63,
+ "C_mantener_tau5": -23.7,
+ "C_salir_tau10": -17.92,
+ "C_mantener_tau10": -21.1,
+ "C_salir_tau20": -19.45,
+ "C_mantener_tau20": -22.55,
+ "C_salir_tau30": -20.65,
+ "C_mantener_tau30": -28.3,
+ "C_salir_tau60": -17.57,
+ "C_mantener_tau60": -20.4,
+ "C_salir_tau120": -21.39,
+ "C_mantener_tau120": -24.7,
+ "C_salir_tau300": -25.16,
+ "C_mantener_tau300": -21.14
+}
