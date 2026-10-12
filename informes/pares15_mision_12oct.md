@@ -51,3 +51,11 @@ margen por par (~6c/acc) es menor que lo que cuesta la selección adversa más s
 | A PAIR15_TAKER_COMPLETE_V1 | REFUTED (estructural) | completa 1-2/77; −18,5/−19,8 $ |
 | B PAIR15_FAST_EXIT_V1 | TESTING (negativo) | −15,8 $ |
 | C PAIR15_HYBRID_V1 (τ) | TESTING (negativo) | mejor −16,3 $ (τ=2 s) |
+| **PAIR15_ENTRY_MID_V1** (participar solo si \|mid YES − 0,5\| ≤ 0,02 en la apertura) | FORWARD_PENDING (hash en `vigia_pares15_entrada_mid.py`, congelada 12-Oct 17:15Z) | descubrimiento 26/80 merc., 4 sueltas, +6,76 $ (+0,26/merc), sin el mejor +3,86; SOL y BTC + (no cuenta) |
+
+## Filtro de ENTRADA (12-Oct 17:15Z, `analisis_pares15_filtro_entrada.py`)
+En la apertura (T=898 s): spread YES 1 tick → 15 % sueltas, +0,06 $/merc; ≥4 ticks → 61 %, −0,47 (el "margen potencial"
+ancho es una trampa: libro poco competido). Spread de 1 tick ≈ casi solo BTC (confunde moneda). |mid YES − 0,5| ≤ 0,015
+→ 15 % sueltas, +0,26 $/merc. Binance (ret 60/300 s, operaciones) sin señal limpia. Congelada **PAIR15_ENTRY_MID_V1**
+(|mid − 0,5| ≤ 0,02) ANTES de mirar el ensayo 'crear' (desde 14:59Z) → validación cuando exista m15_registro del 12-Oct
+(cron 03:45 del 13-Oct): `python3 vigia_pares15_entrada_mid.py`.
