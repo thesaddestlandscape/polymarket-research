@@ -9720,3 +9720,5 @@ ts_utc,activo,slug,market_id,min_restantes,spot,ref,sigma_1m,z,prob_justa_up,ask
 2026-10-12T16:02:01+00:00,XRP,xrp-up-or-down-on-october-12-2026,5506792,-2.03,1.3802,1.4208,0.000975,,,0.001,,14.31,,0.999,0.0,613,
 2026-10-12T16:02:01+00:00,DOGE,dogecoin-up-or-down-on-october-12-2026,5506795,-2.03,0.08514,0.08705,0.001228,,,0.001,,8.45,,0.999,0.0,608,
 2026-10-12T16:02:01+00:00,BNB,bnb-up-or-down-on-october-12-2026,5506814,-2.03,747.34,754.43,0.000528,,,0.001,,13.68,,0.999,0.0,608,
+2026-10-12T17:42:01+00:00,DOGE,,,,,,,,,,,,,,,,JSONDecodeError: Expecting value: line 1 column 1 (char 0)
+2026-10-12T17:42:01+00:00,BNB,,,,,,,,,,,,,,,,JSONDecodeError: Expecting value: line 1 column 1 (char 0)
