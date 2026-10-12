@@ -1,43 +1,43 @@
 {
- "actualizado_utc": "2026-10-07T08:02:55+00:00",
- "saltos_polybolt": 81327,
- "resueltos": 80802,
- "fillables": 75848,
- "pendientes": 53,
- "sin_libro": 472,
+ "actualizado_utc": "2026-10-12T13:09:38+00:00",
+ "saltos_polybolt": 134426,
+ "resueltos": 133531,
+ "fillables": 125030,
+ "pendientes": 26,
+ "sin_libro": 869,
  "resolucion": {
-  "twap_polybolt": 78948,
-  "chainlink": 1854
+  "twap_polybolt": 130232,
+  "chainlink": 3299
  },
  "grupos": {
   "TOTAL": {
    "al_ask": {
-    "n": 75848,
-    "dias": 9,
-    "acierto": 0.585,
-    "precio_medio": 0.597,
-    "ev": -0.049,
+    "n": 125030,
+    "dias": 14,
+    "acierto": 0.587,
+    "precio_medio": 0.598,
+    "ev": -0.047,
     "mitades": [
-     -0.062,
-     -0.035
+     -0.053,
+     -0.042
     ],
     "ic90_dias": [
-     -0.057,
+     -0.055,
      -0.04
     ]
    },
    "al_vwap": {
-    "n": 75848,
-    "dias": 9,
-    "acierto": 0.585,
-    "precio_medio": 0.597,
-    "ev": -0.049,
+    "n": 125030,
+    "dias": 14,
+    "acierto": 0.587,
+    "precio_medio": 0.598,
+    "ev": -0.047,
     "mitades": [
-     -0.062,
-     -0.035
+     -0.053,
+     -0.042
     ],
     "ic90_dias": [
-     -0.057,
+     -0.055,
      -0.04
     ]
    },
@@ -45,528 +45,528 @@
   },
   "ETH#5m": {
    "al_ask": {
-    "n": 8621,
-    "dias": 9,
-    "acierto": 0.585,
-    "precio_medio": 0.595,
-    "ev": -0.064,
+    "n": 14352,
+    "dias": 14,
+    "acierto": 0.588,
+    "precio_medio": 0.594,
+    "ev": -0.048,
     "mitades": [
-     -0.071,
-     -0.058
+     -0.066,
+     -0.029
     ],
     "ic90_dias": [
-     -0.079,
-     -0.05
+     -0.064,
+     -0.032
     ]
    },
    "al_vwap": {
-    "n": 8621,
-    "dias": 9,
-    "acierto": 0.585,
-    "precio_medio": 0.595,
-    "ev": -0.064,
+    "n": 14352,
+    "dias": 14,
+    "acierto": 0.588,
+    "precio_medio": 0.594,
+    "ev": -0.048,
     "mitades": [
-     -0.071,
-     -0.058
+     -0.066,
+     -0.029
     ],
     "ic90_dias": [
-     -0.079,
-     -0.05
+     -0.064,
+     -0.032
     ]
    },
    "candidata": false
   },
   "ventaja ventaja<0": {
    "al_ask": {
-    "n": 47523,
-    "dias": 9,
-    "acierto": 0.537,
-    "precio_medio": 0.559,
-    "ev": -0.07,
+    "n": 79290,
+    "dias": 14,
+    "acierto": 0.547,
+    "precio_medio": 0.567,
+    "ev": -0.064,
     "mitades": [
-     -0.079,
-     -0.061
+     -0.074,
+     -0.054
     ],
     "ic90_dias": [
-     -0.083,
-     -0.057
+     -0.075,
+     -0.053
     ]
    },
    "al_vwap": {
-    "n": 47523,
-    "dias": 9,
-    "acierto": 0.537,
-    "precio_medio": 0.559,
-    "ev": -0.07,
+    "n": 79290,
+    "dias": 14,
+    "acierto": 0.547,
+    "precio_medio": 0.567,
+    "ev": -0.064,
     "mitades": [
-     -0.079,
-     -0.061
+     -0.074,
+     -0.054
     ],
     "ic90_dias": [
-     -0.083,
-     -0.057
+     -0.075,
+     -0.053
     ]
    },
    "candidata": false
   },
   "DOGE#5m": {
    "al_ask": {
-    "n": 8806,
-    "dias": 9,
-    "acierto": 0.584,
-    "precio_medio": 0.605,
-    "ev": -0.065,
+    "n": 14418,
+    "dias": 14,
+    "acierto": 0.586,
+    "precio_medio": 0.609,
+    "ev": -0.066,
     "mitades": [
-     -0.082,
-     -0.048
+     -0.067,
+     -0.066
     ],
     "ic90_dias": [
-     -0.083,
-     -0.043
+     -0.081,
+     -0.052
     ]
    },
    "al_vwap": {
-    "n": 8806,
-    "dias": 9,
-    "acierto": 0.584,
-    "precio_medio": 0.605,
-    "ev": -0.065,
+    "n": 14418,
+    "dias": 14,
+    "acierto": 0.586,
+    "precio_medio": 0.609,
+    "ev": -0.066,
     "mitades": [
-     -0.082,
-     -0.048
+     -0.067,
+     -0.066
     ],
     "ic90_dias": [
-     -0.083,
-     -0.043
+     -0.081,
+     -0.052
     ]
    },
    "candidata": false
   },
   "SOL#5m": {
    "al_ask": {
-    "n": 8333,
-    "dias": 9,
-    "acierto": 0.594,
-    "precio_medio": 0.605,
-    "ev": -0.047,
+    "n": 13840,
+    "dias": 14,
+    "acierto": 0.593,
+    "precio_medio": 0.606,
+    "ev": -0.049,
     "mitades": [
-     -0.067,
-     -0.026
+     -0.048,
+     -0.05
     ],
     "ic90_dias": [
-     -0.063,
-     -0.03
+     -0.06,
+     -0.038
     ]
    },
    "al_vwap": {
-    "n": 8333,
-    "dias": 9,
-    "acierto": 0.594,
-    "precio_medio": 0.605,
-    "ev": -0.047,
+    "n": 13840,
+    "dias": 14,
+    "acierto": 0.593,
+    "precio_medio": 0.606,
+    "ev": -0.049,
     "mitades": [
-     -0.067,
-     -0.026
+     -0.048,
+     -0.05
     ],
     "ic90_dias": [
-     -0.063,
-     -0.03
+     -0.06,
+     -0.038
     ]
    },
    "candidata": false
   },
   "XRP#5m": {
    "al_ask": {
-    "n": 8820,
-    "dias": 9,
-    "acierto": 0.592,
-    "precio_medio": 0.604,
-    "ev": -0.043,
+    "n": 14432,
+    "dias": 14,
+    "acierto": 0.596,
+    "precio_medio": 0.605,
+    "ev": -0.041,
     "mitades": [
-     -0.065,
-     -0.022
+     -0.053,
+     -0.029
     ],
     "ic90_dias": [
-     -0.066,
-     -0.025
+     -0.058,
+     -0.026
     ]
    },
    "al_vwap": {
-    "n": 8820,
-    "dias": 9,
-    "acierto": 0.592,
-    "precio_medio": 0.604,
-    "ev": -0.043,
+    "n": 14432,
+    "dias": 14,
+    "acierto": 0.596,
+    "precio_medio": 0.605,
+    "ev": -0.041,
     "mitades": [
-     -0.065,
-     -0.022
+     -0.053,
+     -0.029
     ],
     "ic90_dias": [
-     -0.066,
-     -0.025
+     -0.058,
+     -0.026
     ]
    },
    "candidata": false
   },
   "ventaja 0-0.05": {
    "al_ask": {
-    "n": 17603,
-    "dias": 9,
-    "acierto": 0.655,
-    "precio_medio": 0.655,
-    "ev": -0.023,
+    "n": 28543,
+    "dias": 14,
+    "acierto": 0.654,
+    "precio_medio": 0.654,
+    "ev": -0.022,
     "mitades": [
-     -0.03,
-     -0.017
+     -0.024,
+     -0.02
     ],
     "ic90_dias": [
-     -0.036,
-     -0.009
+     -0.032,
+     -0.013
     ]
    },
    "al_vwap": {
-    "n": 17603,
-    "dias": 9,
-    "acierto": 0.655,
-    "precio_medio": 0.655,
-    "ev": -0.023,
+    "n": 28543,
+    "dias": 14,
+    "acierto": 0.654,
+    "precio_medio": 0.654,
+    "ev": -0.022,
     "mitades": [
-     -0.03,
-     -0.017
+     -0.024,
+     -0.02
     ],
     "ic90_dias": [
-     -0.036,
-     -0.009
+     -0.032,
+     -0.013
     ]
    },
    "candidata": false
   },
   "BTC#5m": {
    "al_ask": {
-    "n": 7643,
-    "dias": 9,
-    "acierto": 0.6,
-    "precio_medio": 0.605,
-    "ev": -0.029,
+    "n": 12703,
+    "dias": 14,
+    "acierto": 0.599,
+    "precio_medio": 0.604,
+    "ev": -0.036,
     "mitades": [
-     -0.044,
-     -0.015
+     -0.032,
+     -0.039
     ],
     "ic90_dias": [
-     -0.043,
-     -0.016
+     -0.051,
+     -0.024
     ]
    },
    "al_vwap": {
-    "n": 7643,
-    "dias": 9,
-    "acierto": 0.6,
-    "precio_medio": 0.605,
-    "ev": -0.029,
+    "n": 12703,
+    "dias": 14,
+    "acierto": 0.599,
+    "precio_medio": 0.604,
+    "ev": -0.036,
     "mitades": [
-     -0.044,
-     -0.015
+     -0.032,
+     -0.039
     ],
     "ic90_dias": [
-     -0.043,
-     -0.016
+     -0.051,
+     -0.024
     ]
    },
    "candidata": false
   },
   "BNB#5m": {
    "al_ask": {
-    "n": 8124,
-    "dias": 9,
-    "acierto": 0.602,
-    "precio_medio": 0.623,
-    "ev": -0.07,
+    "n": 13521,
+    "dias": 14,
+    "acierto": 0.604,
+    "precio_medio": 0.626,
+    "ev": -0.064,
     "mitades": [
-     -0.076,
-     -0.064
+     -0.073,
+     -0.056
     ],
     "ic90_dias": [
-     -0.084,
-     -0.057
+     -0.078,
+     -0.051
     ]
    },
    "al_vwap": {
-    "n": 8124,
-    "dias": 9,
-    "acierto": 0.602,
-    "precio_medio": 0.623,
-    "ev": -0.07,
+    "n": 13521,
+    "dias": 14,
+    "acierto": 0.604,
+    "precio_medio": 0.626,
+    "ev": -0.064,
     "mitades": [
-     -0.076,
-     -0.064
+     -0.073,
+     -0.056
     ],
     "ic90_dias": [
-     -0.084,
-     -0.057
+     -0.078,
+     -0.051
     ]
    },
    "candidata": false
   },
   "BTC#15m": {
    "al_ask": {
-    "n": 4100,
-    "dias": 9,
-    "acierto": 0.569,
+    "n": 6729,
+    "dias": 14,
+    "acierto": 0.571,
     "precio_medio": 0.569,
     "ev": -0.026,
     "mitades": [
-     -0.06,
-     0.007
+     -0.026,
+     -0.027
     ],
     "ic90_dias": [
-     -0.048,
-     -0.003
+     -0.044,
+     -0.007
     ]
    },
    "al_vwap": {
-    "n": 4100,
-    "dias": 9,
-    "acierto": 0.569,
+    "n": 6729,
+    "dias": 14,
+    "acierto": 0.571,
     "precio_medio": 0.569,
-    "ev": -0.026,
+    "ev": -0.027,
     "mitades": [
-     -0.06,
-     0.007
+     -0.026,
+     -0.027
     ],
     "ic90_dias": [
-     -0.048,
-     -0.003
+     -0.044,
+     -0.007
     ]
    },
    "candidata": false
   },
   "ventaja >=0.10": {
    "al_ask": {
-    "n": 3625,
-    "dias": 9,
-    "acierto": 0.651,
-    "precio_medio": 0.635,
-    "ev": 0.003,
+    "n": 5764,
+    "dias": 14,
+    "acierto": 0.613,
+    "precio_medio": 0.602,
+    "ev": -0.019,
     "mitades": [
-     0.008,
-     -0.001
+     0.0,
+     -0.037
     ],
     "ic90_dias": [
-     -0.028,
-     0.036
+     -0.056,
+     0.013
     ]
    },
    "al_vwap": {
-    "n": 3625,
-    "dias": 9,
-    "acierto": 0.651,
-    "precio_medio": 0.635,
-    "ev": 0.003,
+    "n": 5764,
+    "dias": 14,
+    "acierto": 0.613,
+    "precio_medio": 0.602,
+    "ev": -0.019,
     "mitades": [
-     0.008,
-     -0.001
+     0.0,
+     -0.037
     ],
     "ic90_dias": [
-     -0.028,
-     0.036
+     -0.056,
+     0.013
     ]
    },
    "candidata": false
   },
   "ventaja 0.05-0.10": {
    "al_ask": {
-    "n": 7097,
-    "dias": 9,
-    "acierto": 0.701,
-    "precio_medio": 0.69,
-    "ev": 0.003,
+    "n": 11433,
+    "dias": 14,
+    "acierto": 0.687,
+    "precio_medio": 0.68,
+    "ev": -0.008,
     "mitades": [
-     -0.011,
-     0.017
+     0.003,
+     -0.019
     ],
     "ic90_dias": [
-     -0.018,
-     0.026
+     -0.023,
+     0.007
     ]
    },
    "al_vwap": {
-    "n": 7097,
-    "dias": 9,
-    "acierto": 0.701,
-    "precio_medio": 0.69,
-    "ev": 0.003,
+    "n": 11433,
+    "dias": 14,
+    "acierto": 0.687,
+    "precio_medio": 0.68,
+    "ev": -0.008,
     "mitades": [
-     -0.011,
-     0.017
+     0.003,
+     -0.019
     ],
     "ic90_dias": [
-     -0.018,
-     0.026
+     -0.023,
+     0.007
     ]
    },
    "candidata": false
   },
   "ETH#15m": {
    "al_ask": {
-    "n": 4445,
-    "dias": 9,
-    "acierto": 0.56,
-    "precio_medio": 0.571,
-    "ev": -0.05,
+    "n": 7187,
+    "dias": 14,
+    "acierto": 0.567,
+    "precio_medio": 0.574,
+    "ev": -0.049,
     "mitades": [
-     -0.034,
-     -0.066
+     -0.039,
+     -0.058
     ],
     "ic90_dias": [
-     -0.069,
-     -0.031
+     -0.063,
+     -0.033
     ]
    },
    "al_vwap": {
-    "n": 4445,
-    "dias": 9,
-    "acierto": 0.56,
-    "precio_medio": 0.571,
-    "ev": -0.05,
+    "n": 7187,
+    "dias": 14,
+    "acierto": 0.567,
+    "precio_medio": 0.574,
+    "ev": -0.049,
     "mitades": [
-     -0.034,
-     -0.066
+     -0.039,
+     -0.058
     ],
     "ic90_dias": [
-     -0.069,
-     -0.031
+     -0.063,
+     -0.033
     ]
    },
    "candidata": false
   },
   "XRP#15m": {
    "al_ask": {
-    "n": 4355,
-    "dias": 9,
-    "acierto": 0.569,
-    "precio_medio": 0.577,
-    "ev": -0.026,
+    "n": 7311,
+    "dias": 14,
+    "acierto": 0.567,
+    "precio_medio": 0.578,
+    "ev": -0.041,
     "mitades": [
-     -0.038,
-     -0.014
+     -0.032,
+     -0.05
     ],
     "ic90_dias": [
-     -0.051,
-     0.005
+     -0.061,
+     -0.02
     ]
    },
    "al_vwap": {
-    "n": 4355,
-    "dias": 9,
-    "acierto": 0.569,
-    "precio_medio": 0.577,
-    "ev": -0.026,
+    "n": 7311,
+    "dias": 14,
+    "acierto": 0.567,
+    "precio_medio": 0.578,
+    "ev": -0.041,
     "mitades": [
-     -0.038,
-     -0.014
+     -0.032,
+     -0.05
     ],
     "ic90_dias": [
-     -0.051,
-     0.005
+     -0.061,
+     -0.02
     ]
    },
    "candidata": false
   },
   "DOGE#15m": {
    "al_ask": {
-    "n": 4096,
-    "dias": 9,
-    "acierto": 0.585,
-    "precio_medio": 0.585,
-    "ev": -0.027,
+    "n": 6825,
+    "dias": 14,
+    "acierto": 0.584,
+    "precio_medio": 0.589,
+    "ev": -0.03,
     "mitades": [
-     -0.023,
-     -0.03
+     -0.03,
+     -0.029
     ],
     "ic90_dias": [
-     -0.053,
-     0.004
+     -0.047,
+     -0.012
     ]
    },
    "al_vwap": {
-    "n": 4096,
-    "dias": 9,
-    "acierto": 0.585,
-    "precio_medio": 0.585,
-    "ev": -0.027,
+    "n": 6825,
+    "dias": 14,
+    "acierto": 0.584,
+    "precio_medio": 0.589,
+    "ev": -0.03,
     "mitades": [
-     -0.023,
-     -0.031
+     -0.03,
+     -0.029
     ],
     "ic90_dias": [
-     -0.053,
-     0.004
+     -0.047,
+     -0.012
     ]
    },
    "candidata": false
   },
   "SOL#15m": {
    "al_ask": {
-    "n": 4405,
-    "dias": 9,
-    "acierto": 0.559,
-    "precio_medio": 0.576,
-    "ev": -0.063,
+    "n": 7252,
+    "dias": 14,
+    "acierto": 0.56,
+    "precio_medio": 0.577,
+    "ev": -0.062,
     "mitades": [
-     -0.082,
-     -0.044
+     -0.079,
+     -0.046
     ],
     "ic90_dias": [
-     -0.089,
-     -0.034
+     -0.081,
+     -0.045
     ]
    },
    "al_vwap": {
-    "n": 4405,
-    "dias": 9,
-    "acierto": 0.559,
-    "precio_medio": 0.576,
-    "ev": -0.063,
+    "n": 7252,
+    "dias": 14,
+    "acierto": 0.56,
+    "precio_medio": 0.577,
+    "ev": -0.062,
     "mitades": [
-     -0.082,
-     -0.044
+     -0.079,
+     -0.046
     ],
     "ic90_dias": [
-     -0.089,
-     -0.034
+     -0.081,
+     -0.045
     ]
    },
    "candidata": false
   },
   "BNB#15m": {
    "al_ask": {
-    "n": 4100,
-    "dias": 9,
-    "acierto": 0.584,
-    "precio_medio": 0.594,
-    "ev": -0.04,
+    "n": 6460,
+    "dias": 14,
+    "acierto": 0.593,
+    "precio_medio": 0.601,
+    "ev": -0.033,
     "mitades": [
-     -0.039,
-     -0.041
+     -0.047,
+     -0.019
     ],
     "ic90_dias": [
-     -0.06,
-     -0.019
+     -0.049,
+     -0.017
     ]
    },
    "al_vwap": {
-    "n": 4100,
-    "dias": 9,
-    "acierto": 0.584,
-    "precio_medio": 0.594,
-    "ev": -0.04,
+    "n": 6460,
+    "dias": 14,
+    "acierto": 0.593,
+    "precio_medio": 0.601,
+    "ev": -0.033,
     "mitades": [
-     -0.039,
-     -0.041
+     -0.047,
+     -0.019
     ],
     "ic90_dias": [
-     -0.06,
-     -0.019
+     -0.049,
+     -0.017
     ]
    },
    "candidata": false
