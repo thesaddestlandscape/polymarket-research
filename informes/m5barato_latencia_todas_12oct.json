@@ -1,0 +1,137 @@
+{
+ "senales": 51,
+ "dias": 6,
+ "por_latencia": {
+  "L0": {
+   "ejecutables": 51,
+   "pct": 1.0,
+   "acierto": 0.824,
+   "ev": 1.312,
+   "pnl": 168.81,
+   "pnl_dia": 28.14,
+   "ic90_cierre": [
+    0.828,
+    2.051
+   ],
+   "pnl_sin_mejor_op": 152.75
+  },
+  "L150": {
+   "ejecutables": 29,
+   "pct": 0.569,
+   "acierto": 0.793,
+   "ev": 1.176,
+   "pnl": 84.42,
+   "pnl_dia": 14.07,
+   "ic90_cierre": [
+    0.181,
+    2.07
+   ],
+   "pnl_sin_mejor_op": 68.36
+  },
+  "L175": {
+   "ejecutables": 26,
+   "pct": 0.51,
+   "acierto": 0.769,
+   "ev": 1.192,
+   "pnl": 76.23,
+   "pnl_dia": 12.71,
+   "ic90_cierre": [
+    0.057,
+    2.122
+   ],
+   "pnl_sin_mejor_op": 60.37
+  },
+  "L200": {
+   "ejecutables": 26,
+   "pct": 0.51,
+   "acierto": 0.769,
+   "ev": 1.228,
+   "pnl": 75.04,
+   "pnl_dia": 12.51,
+   "ic90_cierre": [
+    0.057,
+    2.128
+   ],
+   "pnl_sin_mejor_op": 59.18
+  },
+  "L215": {
+   "ejecutables": 24,
+   "pct": 0.471,
+   "acierto": 0.75,
+   "ev": 1.281,
+   "pnl": 70.95,
+   "pnl_dia": 11.83,
+   "ic90_cierre": [
+    -0.0,
+    2.209
+   ],
+   "pnl_sin_mejor_op": 55.09
+  },
+  "L225": {
+   "ejecutables": 23,
+   "pct": 0.451,
+   "acierto": 0.739,
+   "ev": 1.318,
+   "pnl": 68.99,
+   "pnl_dia": 11.5,
+   "ic90_cierre": [
+    -0.012,
+    2.251
+   ],
+   "pnl_sin_mejor_op": 53.12
+  },
+  "L250": {
+   "ejecutables": 23,
+   "pct": 0.451,
+   "acierto": 0.739,
+   "ev": 1.217,
+   "pnl": 66.61,
+   "pnl_dia": 11.1,
+   "ic90_cierre": [
+    -0.011,
+    2.105
+   ],
+   "pnl_sin_mejor_op": 50.75
+  },
+  "L275": {
+   "ejecutables": 21,
+   "pct": 0.412,
+   "acierto": 0.714,
+   "ev": 1.275,
+   "pnl": 63.2,
+   "pnl_dia": 10.53,
+   "ic90_cierre": [
+    -0.031,
+    2.264
+   ],
+   "pnl_sin_mejor_op": 47.33
+  },
+  "L300": {
+   "ejecutables": 21,
+   "pct": 0.412,
+   "acierto": 0.714,
+   "ev": 1.364,
+   "pnl": 65.68,
+   "pnl_dia": 10.95,
+   "ic90_cierre": [
+    0.041,
+    2.297
+   ],
+   "pnl_sin_mejor_op": 49.82
+  }
+ },
+ "profundidad_t0_nivel1_eur": {
+  "P25": 3.6,
+  "P50": 13.51,
+  "P75": 43.12,
+  "P90": 109.96,
+  "max": 304.33,
+  "suma": 2225.98
+ },
+ "techo_L0_todo_nivel1": {
+  "pnl": 4962.94,
+  "pnl_dia": 827.16,
+  "capital_por_dia": 386.74,
+  "ev": 2.139
+ }
+}

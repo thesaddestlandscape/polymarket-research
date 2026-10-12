@@ -59,3 +59,17 @@ IC90 por cierre (−0,0/+2,21); con tope: 13 mercados, EV +0,985, sin BTC −1,0
 
 ## Resultado H6 (12-Oct 16:40Z)
 El valor de la señal solo existe para el TOMADOR MÁS RÁPIDO: un bid quieto en el umbral se llena ~50 % (quien cruza contra él sabe algo). Siguiente: valor económico de la latencia (profundidad al precio barato en t0 —columnas cap* del vigía—, señales/día, EV a L=100-150 ms) → ¿justifica VPS junto al CLOB (decisión Javi)? y distancia a 200k.
+
+## Valor de la latencia (12-Oct 17:30Z, `analisis_5m_barato_latencia.py`, OOS 06-11 Oct, desenlace oficial 100 %)
+- Señales: 4,7/día (primera por cierre-moneda, 28 mercados en 6 días); 8,5/día contando re-armes (mismos 28 mercados).
+- Profundidad al precio barato en t0 (solo nivel 1): P50 7,7 € · P75 28 € · P90 99 € · máx 290 €.
+- Stake 2 €: L215 36 % ejecutable, EV +0,41, +1,6 €/día · L150 46 %, +0,58, +3,0 €/día (IC90 cruza 0) · L0 (contrafactual)
+  100 %, +1,15 (IC90 +0,67/+2,05), +13,3 €/día. L100 no medida (acotada entre L0 y L150).
+- Techo teórico (L0 y TODO el nivel 1, una compra por mercado): +218 €/día (~80 k€/año) — pero 61 % de UNA operación
+  (BTC a 0,11, +796 €); sin las 3 mejores +14 €/día; sin BTC −8,7 €/día. "Todas las señales" daba +827 €/día por DOBLE
+  CONTEO de la misma liquidez en re-armes (descartado).
+- Capacidad a L215 (vigía): stake 100 € → +653 € en 6 días, EV +0,83, pero sin el mejor día −0,19: la misma operación.
+**Lectura**: ser más rápido ayuda (L215→L150 duplica el PnL/día), pero a escala realista son unos euros al día; el techo
+depende de pocas ventanas BTC muy baratas y profundas. Sola, esta estrategia no es ruta a 200k (548 €/día); como mucho, un
+componente si la latencia baja mucho (<100 ms, VPS junto al CLOB: decisión Javi) y si el forward confirma que esas
+ventanas BTC se repiten. Siguiente: forward V2 + vigilar frecuencia de ventanas BTC "muy baratas y profundas".
