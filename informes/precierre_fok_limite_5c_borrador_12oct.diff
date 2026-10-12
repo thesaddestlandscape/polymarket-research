@@ -1,0 +1,33 @@
+diff --git a/resolution_sniper_precierre_executor.py b/resolution_sniper_precierre_executor.py
+index 6cc03d96f8..eca4142d84 100644
+--- a/resolution_sniper_precierre_executor.py
++++ b/resolution_sniper_precierre_executor.py
+@@ -341,6 +341,9 @@ ASK_TWAP_MIN, ASK_TWAP_MAX = 0.25, 0.65
+ # consciente de Javi, NO gate cumplido (18 celdas miradas para elegirla); protege el kill TWAP.
+ # 5min no cambia (ahí no hay edge fuera de la banda). Memoria project_checkpoint_sesion_06oct.
+ ASK_TWAP_MAX_POR_MARCO = {"5min": ASK_TWAP_MAX, "15min": 0.85}
++# 12-Oct: margen ABSOLUTO del límite de la FOK sobre el ask leído (ver _firmar_enviar_registrar)
++LIMITE_FOK_MARGEN_ABS = 0.05
++TICK_FOK = 0.01
+ 
+ 
+ def _techo_precio_precierre(marco: str) -> float:
+@@ -1060,6 +1063,18 @@ def _firmar_enviar_registrar(pre: "_Precalculo", m: dict, activo: str, direction
+     if MODO_TWAP and strategy == STRATEGY:
+         techo_fok = _techo_precio_precierre(pre.marco)
+     precio_limite_fok = min(round(ask * 1.05, 4), techo_fok)
++    if MODO_TWAP and strategy == STRATEGY:
++        # 12-Oct (Javi: "no nos podemos permitir perder operaciones que van a ganar"): del 10 al 12-Oct
++        # murieron 5 de 9 FOK reales y 4 de esas 5 habrían ganado. Registro ms: entre la lectura REST y
++        # el casado (~700 ms) el ask de NUESTRO lado sube (el mercado confirma el lado). El límite
++        # ask*1,05 lo redondea el cliente HACIA ABAJO al tick (0,39 -> 0,4095 -> 0,40): solo 1-3c de
++        # margen. Ahora ask + LIMITE_FOK_MARGEN_ABS (5c), con tope un tick por DEBAJO del techo de la
++        # banda validada del marco (5m < 0,65; 15m < 0,85): nunca se compra fuera de la banda. En los 5
++        # casos recupera los saltos de +4/+5c (BTC 5m y 15m, ganadoras) y sigue matando los de +23/+27c
++        # (incluido el ETH 15m perdedor).
++        techo_banda = round(ASK_TWAP_MAX_POR_MARCO.get(pre.marco, ASK_TWAP_MAX) - TICK_FOK, 4)
++        precio_limite_fok = min(max(precio_limite_fok, round(ask + LIMITE_FOK_MARGEN_ABS, 4)),
++                                techo_banda, techo_fok)
+     if precio_limite_fok < ask:
+         # fail-closed: un límite por debajo del ask no puede casar; no se firma ni se envía
+         resultado["gate_confirmado"] = False
