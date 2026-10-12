@@ -1,5 +1,5 @@
 {
- "_nota": "12-Oct: lista de RPCs públicos de Polygon, en orden de preferencia. Se lee en CADA llamada (polygon_rpc.py): editar este JSON NO reinicia ningún proceso. 'latest' = llamadas al estado actual (saldos, cabeza); 'archivo' = eth_getLogs de bloques viejos (publicnode pide token desde el 09-Oct). vigia_polygon_rpc.py prueba la unión cada hora.",
+ "_nota": "12-Oct: lista de RPCs públicos de Polygon, en orden de preferencia. Se lee en CADA llamada (polygon_rpc.py): editar este JSON NO reinicia ningún proceso. 'latest' = llamadas al estado actual (saldos, cabeza); 'archivo' = eth_getLogs de bloques viejos (publicnode pide token desde el 09-Oct). vigia_polygon_rpc.py prueba la unión cada hora. 12-Oct 16:35Z: 1rpc da 403/429 en archivo -> movido al final (sigue en la lista por si se recupera).",
  "latest": [
   "https://polygon-bor-rpc.publicnode.com",
   "https://polygon.drpc.org",
@@ -7,9 +7,9 @@
  ],
  "archivo": [
   "https://polygon.drpc.org",
-  "https://1rpc.io/matic",
   "https://gateway.tenderly.co/public/polygon",
   "https://rpc-mainnet.matic.quiknode.pro",
+  "https://1rpc.io/matic",
   "https://polygon-bor-rpc.publicnode.com"
  ]
 }
