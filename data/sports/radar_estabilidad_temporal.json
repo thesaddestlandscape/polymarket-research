@@ -1,5 +1,5 @@
 {
- "actualizado_utc": "2026-10-12T08:10:19+00:00",
+ "actualizado_utc": "2026-10-13T08:10:22+00:00",
  "criterio": {
   "N_MIN": 60,
   "FRAC_DIAS": 0.6,
@@ -7,94 +7,55 @@
  },
  "radar": {
   "LoL#SEGUIR#0.85": {
-   "n": 97,
-   "dias": 34,
-   "frac_dias_pos": 0.853,
-   "top_wallet": 0.082,
-   "n_wallets": 49,
-   "pnl_medio": 0.0758,
+   "n": 100,
+   "dias": 36,
+   "frac_dias_pos": 0.861,
+   "top_wallet": 0.1,
+   "n_wallets": 50,
+   "pnl_medio": 0.0773,
    "medias_tramos": [
-    0.04,
-    0.1103,
-    0.077
+    0.0435,
+    0.1105,
+    0.0778
    ]
   },
   "CS#SEGUIR#0.65": {
-   "n": 518,
+   "n": 524,
    "dias": 48,
-   "frac_dias_pos": 0.625,
-   "top_wallet": 0.1,
-   "n_wallets": 156,
-   "pnl_medio": 0.0721,
+   "frac_dias_pos": 0.646,
+   "top_wallet": 0.101,
+   "n_wallets": 157,
+   "pnl_medio": 0.0742,
    "medias_tramos": [
-    0.0819,
-    0.0894,
-    0.0455
-   ]
-  },
-  "LoL#SEGUIR#0.45": {
-   "n": 211,
-   "dias": 44,
-   "frac_dias_pos": 0.614,
-   "top_wallet": 0.057,
-   "n_wallets": 112,
-   "pnl_medio": 0.1093,
-   "medias_tramos": [
-    0.1397,
-    0.025,
-    0.1625
-   ]
-  },
-  "Dota#SEGUIR#0.35": {
-   "n": 78,
-   "dias": 30,
-   "frac_dias_pos": 0.633,
-   "top_wallet": 0.077,
-   "n_wallets": 48,
-   "pnl_medio": 0.2272,
-   "medias_tramos": [
-    0.0206,
-    0.2096,
-    0.4515
+    0.0777,
+    0.0934,
+    0.0516
    ]
   },
   "CS#FADE#0.65": {
-   "n": 548,
-   "dias": 50,
-   "frac_dias_pos": 0.7,
-   "top_wallet": 0.068,
-   "n_wallets": 145,
-   "pnl_medio": 0.1342,
+   "n": 558,
+   "dias": 51,
+   "frac_dias_pos": 0.706,
+   "top_wallet": 0.066,
+   "n_wallets": 148,
+   "pnl_medio": 0.1348,
    "medias_tramos": [
-    0.157,
-    0.1609,
-    0.0853
+    0.1634,
+    0.153,
+    0.0879
    ]
   },
   "Dota#FADE#0.45": {
-   "n": 122,
-   "dias": 33,
-   "frac_dias_pos": 0.606,
-   "top_wallet": 0.107,
-   "n_wallets": 51,
-   "pnl_medio": 0.0629,
-   "medias_tramos": [
-    0.0649,
-    0.0599,
-    0.0637
-   ]
-  },
-  "Dota#SEGUIR#0.40": {
-   "n": 107,
+   "n": 125,
    "dias": 34,
-   "frac_dias_pos": 0.647,
-   "top_wallet": 0.121,
-   "n_wallets": 53,
-   "pnl_medio": 0.0864,
+   "frac_dias_pos": 0.618,
+   "top_wallet": 0.104,
+   "n_wallets": 51,
+   "pnl_medio": 0.0871,
    "medias_tramos": [
-    0.1028,
-    0.144,
-    0.0165
+    0.0902,
+    0.032,
+    0.1367
    ]
   }
  }
