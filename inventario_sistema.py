@@ -76,6 +76,9 @@ EXCEPCIONES_C = {
     "vigia_ballenas_confirmadas_eth15m_ask_forward.py",  # candidata REFUTADA 02-Oct, se deja SIN cron a propósito (docstring)
     "vigia_5m_barato_desde_archivo.py",  # reproceso MANUAL de un día desde el archivo del volumen (--dia D)
     "vigia_pares15_entrada_mid.py",  # MANUAL: necesita el m15_registro del día siguiente (cron 03:45); se corre a mano
+    # APARCADO 13-Oct (Javi): grabadora de operaciones de perps (lead-lag vs Binance, punto H del 05-Oct), sin cron
+    # desde el 06-Oct. Se retoma cuando se resuelvan las tres líneas del foco (5m barato, pares 15m, misión 5m).
+    "fetch_polymarket_perps_trades_rec.py",
 }
 
 # Screens vivas conocidas y legítimas que a propósito NO están en
