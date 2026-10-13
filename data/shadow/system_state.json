@@ -1,8 +1,8 @@
 {
-  "timestamp_utc": "2026-10-13T02:57:25+00:00",
-  "bankroll_sim": 122175.65,
-  "pnl_total": 122155.65,
-  "n_ops": 982151,
+  "timestamp_utc": "2026-10-13T03:06:54+00:00",
+  "bankroll_sim": 122221.74,
+  "pnl_total": 122201.74,
+  "n_ops": 982289,
   "win_rate": 0.572,
   "estrategias_activas": 602,
   "desactivadas": [
@@ -40,8 +40,8 @@
     },
     {
       "k": "FAVORITO_CONFIRMADO_60MIN_EXTREMO#ETH#60min",
-      "ic": 0.4458,
-      "n": 404
+      "ic": 0.4459,
+      "n": 405
     }
   ],
   "brier_medio": 0.2311,
