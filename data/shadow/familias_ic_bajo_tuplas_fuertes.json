@@ -1,6 +1,6 @@
 {
  "LIQUIDACIONES_5M": {
-  "ic_bayes_familia": 0.019,
+  "ic_bayes_familia": 0.0194,
   "n_tuplas_fuertes": 3,
   "pnl_fiel_combinado_eur": 108.37,
   "tuplas": [
@@ -39,7 +39,7 @@
   ]
  },
  "UPDOWN_GBM": {
-  "ic_bayes_familia": 0.0519,
+  "ic_bayes_familia": 0.052,
   "n_tuplas_fuertes": 1,
   "pnl_fiel_combinado_eur": 26.51,
   "tuplas": [
