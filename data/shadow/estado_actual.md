@@ -1,11 +1,11 @@
-# Estado del bot — 2026-10-13 08:22 UTC
+# Estado del bot — 2026-10-13 08:28 UTC
 
 ## Live — dinero real (on-chain)
 | | |
 |---|---|
 | Total depositado | 90.71 $ |
-| Balance on-chain | **27.19 $** |
-| P&L real total | 🔴 **-63.52 $** |
+| Balance on-chain | **27.18 $** |
+| P&L real total | 🔴 **-63.53 $** |
 | P&L real hoy | -0.03 $ |
 | P&L real 7 días | +0.86 $ |
 | Fees pagados (real) | 26.56 $ |
@@ -13,11 +13,11 @@
 ## Shadow — MODELO SIMULADO (no cobrable)
 | | |
 |---|---|
-| P&L fiel (stake fijo 1$) | +38810.80 $ |
-| P&L sim compuesto | 🟢 +123120.24 $ (ficción Kelly: +483963% s/ operativo) |
-| P&L sim hoy (2026-10-13) | 🟢 +1223.84 $ |
-| Operaciones resueltas | 986183 (564166 WIN / 422017 LOSS) — 57.2% |
-| Señales abiertas | 201835 |
+| P&L fiel (stake fijo 1$) | +38812.66 $ |
+| P&L sim compuesto | 🟢 +123122.35 $ (ficción Kelly: +483971% s/ operativo) |
+| P&L sim hoy (2026-10-13) | 🟢 +1225.95 $ |
+| Operaciones resueltas | 986184 (564167 WIN / 422017 LOSS) — 57.2% |
+| Señales abiertas | 202514 |
 
 ## Estrategias (visión global)
 
@@ -33,7 +33,7 @@
 | GBM_LATE_15M_PYCONFIRMADO | 8470 | 63.2% | +0.132 | 📉 agota (-0.07) (últ. 1000) | +4000.00$ | 1.37$ | ✅ activa |
 | CANDIDATA10_CONFIRMACION_CRUZADA | 30501 | 48.2% | -0.018 | 📉 agota (-0.03) (últ. 1000) | +3560.09$ | 0.50$ | ⚠️ IC negativo |
 | MOMENTUM_IBS_15M_BALLENA | 43981 | 49.9% | -0.001 | ➡️ estable (últ. 1000) | +2156.52$ | 0.50$ | ⚠️ IC negativo |
-| MOMENTUM_IBS_5M_BALLENA | 109744 | 42.5% | -0.075 | ➡️ estable (últ. 1000) | +1648.72$ | 0.50$ | ⚠️ IC negativo |
+| MOMENTUM_IBS_5M_BALLENA | 109745 | 42.5% | -0.075 | ➡️ estable (últ. 1000) | +1650.84$ | 0.50$ | ⚠️ IC negativo |
 | WEEKLY_PRICE | 3287 | 80.3% | +0.303 | 📉 agota (-0.05) (últ. 1000) | +1584.37$ | 2.00$ | ✅ activa |
 | UPDOWN_GBM_IBS_ALTO | 1397 | 79.0% | +0.290 | ➡️ estable (últ. 1000) | +1148.54$ | 2.00$ | ✅ activa |
 | GBM_LATE_60M | 2947 | 57.0% | +0.070 | ➡️ estable (últ. 1000) | +1005.95$ | 0.70$ | ✅ activa |
@@ -83,15 +83,15 @@
 
 | Timestamp | Estrategia | Mercado | Resultado | PNL |
 |---|---|---|---|---|
+| 2026-10-13T08:25 | MOMENTUM_IBS_5M_BALLENA#BNB#5min | … | ✅ WIN | +2.11$ |
 | 2026-10-13T08:22 | MOMENTUM_IBS_5M_BALLENA#BTC#5min | … | ❌ LOSS | -1.07$ |
 | 2026-10-13T08:22 | STREAK_FADE_5M#XRP#5min | XRP Up or Down - October 13, 4:15AM-4:20AM ET… | ✅ WIN | +0.48$ |
 | 2026-10-13T08:22 | GBM_LATE_5M#BTC#5min | Bitcoin Up or Down - October 13, 4:15AM-4:20AM ET… | ✅ WIN | +1.92$ |
 | 2026-10-13T08:22 | LIQUIDACIONES_5M#BTC#5min | Bitcoin Up or Down - October 13, 4:15AM-4:20AM ET… | ❌ LOSS | -0.51$ |
-| 2026-10-13T08:22 | GBM_LATE_5M#SOL#5min | Solana Up or Down - October 13, 4:15AM-4:20AM ET… | ✅ WIN | +1.92$ |
 
 ## Calidad de datos
 
-✅ **OK** — última verificación 2026-10-13T08:22 UTC
+✅ **OK** — última verificación 2026-10-13T08:27 UTC
 
 | Asset | Precio | Age | Alertas |
 |---|---|---|---|
