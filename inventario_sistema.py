@@ -71,6 +71,11 @@ SUFIJOS_INFRA = ("_logger.py", "_observer.py", "_executor.py", "_executor_btc15m
 EXCEPCIONES_C = {
     "fetch_binance_klines.py",  # invocado en run_fast.sh:43 cada ciclo
     "fetch_polymarket_perps_fills_full.py",  # backfill ONE-SHOT (23-Sep, 44/44 wallets completo); se lanza a mano
+    # 13-Oct, verificados uno a uno (antes los tapaba una línea de cron comentada o el parser):
+    "vigia_resolution_sniper_naive_degradacion.py",  # RETIRADO 24-Sep (crontab comentado), sustituido por vigia_precierre_naive_twap.py
+    "vigia_ballenas_confirmadas_eth15m_ask_forward.py",  # candidata REFUTADA 02-Oct, se deja SIN cron a propósito (docstring)
+    "vigia_5m_barato_desde_archivo.py",  # reproceso MANUAL de un día desde el archivo del volumen (--dia D)
+    "vigia_pares15_entrada_mid.py",  # MANUAL: necesita el m15_registro del día siguiente (cron 03:45); se corre a mano
 }
 
 # Screens vivas conocidas y legítimas que a propósito NO están en
@@ -97,11 +102,18 @@ def _cron_scripts() -> dict[str, str]:
         salida = subprocess.run(["crontab", "-l"], capture_output=True, text=True, timeout=10).stdout
     except Exception:
         return {}
+    # 13-Oct: antes solo `re.search(r"/(x.py)")` -- exigía ruta absoluta y cogía UN script por línea, así que los crons
+    # `cd /root/polymarket-research && python vigia_x.py` o `bash -c "...; python x.py"` salían en (C) como "se me olvidó
+    # conectarlo" (8 falsos el 13-Oct: los vigías de 5m barato y pares 15m), y las líneas comentadas contaban como cron
+    # activo. Ahora: todos los .py de la línea, con o sin ruta; nunca líneas comentadas ni del repo de weather.
     out = {}
     for linea in salida.splitlines():
-        m = re.search(r"/([A-Za-z0-9_]+\.py)", linea)
-        if m:
-            out[m.group(1)] = linea.strip()
+        if linea.lstrip().startswith("#"):
+            continue
+        if "polymarket-weather" in linea and "polymarket-research" not in linea:
+            continue
+        for nombre in re.findall(r"(?<![A-Za-z0-9_.-])([A-Za-z0-9_]+\.py)\b", linea):
+            out.setdefault(nombre, linea.strip())
     return out
 
 
