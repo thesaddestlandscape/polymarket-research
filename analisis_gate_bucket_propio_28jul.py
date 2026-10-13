@@ -53,6 +53,7 @@ ballenas_banda_fina_gate).
 import csv
 import json
 import math
+import os
 import zlib
 from collections import defaultdict
 from datetime import datetime, timezone
@@ -62,7 +63,11 @@ import numpy as np
 
 from shuffle_chunked import diffs_permutacion
 
-from gate_confirmacion_historial import cargar_historial_previo, veredicto_con_tolerancia
+from gate_confirmacion_historial import (  # 13-Oct: días de calendario y corridas no decisivas
+    BUENO, SIN, cargar_estado_previo, veredicto_decidido, mantener_dos_vias, claves_sin_filas_hoy, aplicar_malos_de_hoy,
+    campos_historial, semilla,
+    entradas_sin_filas_hoy, ahora_utc,
+)
 from kelly_precio_gate import _familia
 
 REPO = Path(__file__).resolve().parent
@@ -370,7 +375,7 @@ def cargar_filas(tuplas):
 _rng = np.random.default_rng(42)
 
 
-def shuffle_test(a, b, iters=ITERS):
+def shuffle_test(a, b, iters=ITERS, seed_key=None):
     """Vectorizado con numpy -- la versión con random.shuffle en Python
     puro (O(n) por iteración con listas de miles de filas, cientos de
     tuplas/buckets) tardaba minutos en el barrido completo de
@@ -388,7 +393,12 @@ def shuffle_test(a, b, iters=ITERS):
     # la forma estándar de vectorizar "shuffle" por filas en numpy.
     # 21-Sep: por bloques (shuffle_chunked.py) -- 3 matrices iters x n a la vez
     # causaban OOM; resultado bit-identico (verificado).
-    diffs = diffs_permutacion(_rng, todos, na, iters)
+    # 13-Oct: con seed_key, generador PROPIO por llamada (hash estable del bucket), el mismo arreglo que WM/bot wallets
+    # tienen desde el 20-Ago: con el _rng compartido el p de un bucket dependía de cuántas llamadas lo precedían y el
+    # veredicto cambiaba entre corridas con los mismos datos (simulación 13-Oct: 21 malos distintos, p 0,027 vs 0,041).
+    # Sin seed_key (importadores antiguos) se mantiene el comportamiento previo.
+    rng = np.random.default_rng(zlib.crc32(seed_key.encode("utf-8"))) if seed_key is not None else _rng
+    diffs = diffs_permutacion(rng, todos, na, iters)
     p_valor = float(np.mean(np.abs(diffs) >= abs(diff_real)))
     return float(diff_real), p_valor
 
@@ -422,7 +432,9 @@ def main():
     filas_por_tupla = cargar_filas(tuplas)
     n_live = sum(1 for *_, es_live in tuplas if es_live)
     print(f"Tuplas a evaluar: {len(tuplas)} ({n_live} live, {len(tuplas) - n_live} candidatos)")
-    historial_previo = cargar_historial_previo(Path(OUT), anidado_por_bucket=True)
+    # 13-Oct: historial con MARCA por entrada y días de calendario (gate_confirmacion_historial, reglas 1-7).
+    AHORA = ahora_utc()
+    _estado = cargar_estado_previo(Path(OUT))
 
     # PASADA 1: calcular todos los buckets candidatos (n>=N_MIN, split-half
     # consistente) y acumular p-valores SIN decidir veredicto todavía --
@@ -438,11 +450,8 @@ def main():
             # tupla entera cae hoy por debajo de N_MIN, no perder el
             # historial_crudo de sus buckets individuales -- un día flojo a
             # nivel tupla no es un día MALO a nivel bucket.
-            historial_tupla = historial_previo.get(tupla_str, {})
-            resultado[tupla_str] = {
-                b: {"veredicto": "sin_concluir", "historial_crudo": hist}
-                for b, hist in historial_tupla.items() if hist
-            }
+            resultado[tupla_str] = {}
+            entradas_sin_filas_hoy(resultado[tupla_str], tupla_str, _estado, AHORA)
             continue
 
         por_bucket = defaultdict(list)
@@ -465,16 +474,15 @@ def main():
             # (no un día MALO, simplemente sin sobrevivir el corte de hoy)
             # borraba el progreso acumulado igual que el bug original que
             # este mismo fix del 01-Sep quería evitar.
-            historial_semilla = historial_previo.get(tupla_str, {}).get(f"{b:.2f}", [])
             entrada = {"n": n_d, "pnl_medio": round(media_d, 4),
                        "diff_vs_resto": round(media_d - (sum(pnl_f) / len(pnl_f)), 4) if pnl_f else None,
                        "shuffle_p": None, "split_half_diff": None,
                        "ci90_bootstrap_absoluto": None, "veredicto": "sin_concluir",
-                       "historial_crudo": historial_semilla}
+                       **semilla(_estado, tupla_str, f"{b:.2f}", AHORA)}
             tabla[f"{b:.2f}"] = entrada
 
             if n_d >= N_MIN and pnl_f:
-                diff, p_valor = shuffle_test(pnl_d, pnl_f)
+                diff, p_valor = shuffle_test(pnl_d, pnl_f, seed_key=f"{tupla_str}#{b:.2f}")
                 entrada["shuffle_p"] = round(p_valor, 4)
                 # 21-Ago (hallazgo real, BALLENAS_TARDIAS#BTC#15min#BUY_YES
                 # [0.20,0.25): n=50, shuffle_p=0.01 contra el RESTO de la
@@ -486,11 +494,9 @@ def main():
                 # términos ABSOLUTOS con confianza -- mismo hueco que ya se
                 # blindó el mismo día en gate_bucket_fino.py (LOO+bootstrap).
                 # Aquí basta el bootstrap CI90% absoluto del propio bucket.
-                pnl_d_arr = np.asarray(pnl_d, dtype=np.float64)
-                boots = pnl_d_arr[_rng.integers(0, n_d, size=(2000, n_d))].mean(axis=1)
-                boots.sort()
-                ci_lo90 = float(boots[int(0.05 * len(boots))])
-                ci_hi90 = float(boots[int(0.95 * len(boots))])
+                # 13-Oct: bootstrap_absoluto() del propio módulo (semilla por bucket); antes _rng compartido -> el IC y el
+                # p_abs de un bucket cambiaban entre corridas con los mismos datos.
+                ci_lo90, ci_hi90, p_abs_bucket = bootstrap_absoluto(pnl_d, seed_key=f"boot#{tupla_str}#{b:.2f}")
                 entrada["ci90_bootstrap_absoluto"] = [round(ci_lo90, 4), round(ci_hi90, 4)]
                 # 11-Sep (petición explícita Javi, ver p_valor_abs/pendientes_
                 # absolutos más abajo): p-valor bootstrap de una cola para
@@ -504,7 +510,7 @@ def main():
                 # UMBRAL_ABSOLUTO_EUR (decisión Javi, ver la constante) --
                 # ya no basta "gana dinero", exige "gana al menos lo que
                 # Javi pide de sobra para no ser ruido".
-                entrada["p_valor_abs"] = round(float(np.mean(boots <= UMBRAL_ABSOLUTO_EUR)), 4)
+                entrada["p_valor_abs"] = round(p_abs_bucket, 4)
                 dentro_sorted = sorted(dentro, key=lambda x: x[0])
                 mid = n_d // 2
                 m1, m2 = dentro_sorted[:mid], dentro_sorted[mid:]
@@ -521,7 +527,10 @@ def main():
                     m1_abs = sum(pnl for _, pnl in m1) / len(m1)
                     m2_abs = sum(pnl for _, pnl in m2) / len(m2)
                     entrada["split_half_absoluto"] = [round(m1_abs, 4), round(m2_abs, 4)]
+        entradas_sin_filas_hoy(tabla, tupla_str, _estado, AHORA)  # 13-Oct: no perder buckets sin filas hoy
         resultado[tupla_str] = tabla
+
+    claves_sin_filas_hoy(resultado, _estado, AHORA)  # 13-Oct: claves enteras sin filas hoy
 
     # PASADA 2: BH-FDR POR (FAMILIA, MONEDA) -- cada (arquetipo, activo)
     # corrige solo contra sus propios tests candidatos, no contra los de
@@ -589,9 +598,9 @@ def main():
         # día flojo reiniciaba a cero. Ahora exige 2 de los últimos 3 días
         # (incluido hoy) vía gate_confirmacion_historial.py, tolerando un
         # día suelto sin perder la evidencia ya acumulada.
-        historial_bucket = historial_previo.get(p["tupla_str"], {}).get(b)
-        veredicto_final, p["entrada"]["historial_crudo"] = veredicto_con_tolerancia(
-            veredicto_crudo, historial_bucket)
+        veredicto_final, _h, _m = veredicto_decidido(veredicto_crudo, p["entrada"]["historial_crudo"],
+                                                p["entrada"]["historial_fechas"], AHORA)
+        p["entrada"].update(campos_historial(_h, _m))
         if veredicto_final == "sin_concluir" and veredicto_crudo == "bueno_confirmado":
             veredictos_pendientes_confirmacion.append(
                 f"⏳ [{'LIVE' if p['es_live'] else 'candidato'}] {p['tupla_str']} "
@@ -601,8 +610,8 @@ def main():
             )
 
         p["entrada"]["veredicto"] = veredicto_final
-        if veredicto_final == "sin_concluir":
-            continue  # no listar como "veredicto nuevo" -- sigue pendiente, ver arriba
+        if veredicto_final == "sin_concluir" or (veredicto_final == "malo_confirmado" and veredicto_crudo != "malo_confirmado"):
+            continue  # pendiente, o malo arrastrado de una corrida anterior de hoy (no es veredicto nuevo)
         marca = "🔴" if veredicto_final == "malo_confirmado" else "🟢"
         etiqueta = "LIVE" if p["es_live"] else "candidato"
         veredictos_nuevos.append(
@@ -653,6 +662,21 @@ def main():
     # "consistente" antes de mirar si diff<0 o >=0) -- el filtro de "es
     # bueno de verdad" (piso absoluto) va DESPUÉS de sobrevivir BH-FDR,
     # nunca antes.
+    # 13-Oct: buckets que hoy NO se decidieron (no sobreviven al BH-FDR, split-half inconsistente o piso): tolerancia
+    # de 2 de 3 días de CALENDARIO, solo si ayer se publicaron bueno (gate_confirmacion_historial). Antes hacían
+    # `continue` y un solo día así tiraba un bueno, contra la regla del 01-Sep. Sin _degradar aquí: la guarda es el piso
+    # absoluto de la vía normal (pnl_medio>=0 y CI90 bootstrap > 0) y no ser hoy peor que el resto (split-half < 0).
+    def _piso_ci(tupla_str, b, e):                   # MISMO piso que la vía normal exige para dar bueno (arriba)
+        ci = e.get("ci90_bootstrap_absoluto")
+        return BUENO if (e["pnl_medio"] >= 0 and ci is not None and ci[0] > 0) else SIN
+
+    mantenidos = mantener_dos_vias(resultado, AHORA, N_MIN, _estado, pendientes, "tupla_str", _piso_ci, P_MAX, None,
+                                   "split_half_diff")
+    if mantenidos:
+        print(f"\n{len(mantenidos)} bucket(s) sin confirmación nueva hoy (tolerancia):")
+        for linea in mantenidos:
+            print(f"  {linea}")
+
     pendientes_abs = []
     for tupla_str, tabla in resultado.items():
         for b, entrada in tabla.items():
@@ -696,35 +720,33 @@ def main():
         # criterio ahora en toda la familia de gates de micro-bucket.
         if p["entrada"]["pnl_medio"] < UMBRAL_ABSOLUTO_EUR or ci is None or ci[0] <= 0:
             continue
-        p["entrada"]["veredicto_crudo_hoy"] = "bueno_confirmado"
-        p["entrada"]["via"] = "absoluta"
         b = p["bucket"]
-        # 11-Sep, primer despliegue de esta vía: NO reutilizar historial_
-        # crudo heredado de la vía normal (riesgo real detectado en
-        # revisión -- un bucket pudo tener 1-2 días de bueno_confirmado
-        # vía shuffle-vs-resto hace semanas, y esa historia NO acredita
-        # nada sobre ESTE test distinto, contra breakeven absoluto).
-        # Arrancar en blanco: exige sus propios 2-de-3 días desde hoy antes
-        # de exponerse a ejecutores live. Pendiente para /code-review:
-        # decidir si esta vía necesita namespace de historial propio
-        # (ej. sufijo "_abs" en la clave) en vez de arrancar en blanco
-        # cada vez que se re-audite este mecanismo.
-        veredicto_final, p["entrada"]["historial_crudo"] = veredicto_con_tolerancia(
-            "bueno_confirmado", None)
-        p["entrada"]["veredicto"] = veredicto_final
-        if veredicto_final == "sin_concluir":
-            continue
+        # 13-Oct: esta vía NUNCA pudo confirmar (arrancaba en blanco: veredicto_con_tolerancia("bueno", None) da
+        # sin_concluir) y además escribía veredicto=sin_concluir, via="absoluta" y ['bueno_confirmado'] en el historial
+        # RELATIVO: tapaba un malo_confirmado de la vía normal y contaminaba su tolerancia. Ahora no toca la entrada; solo
+        # deja constancia. Que pueda confirmar (namespace _abs + veredicto_dia) es decisión pendiente de Javi.
+        p["entrada"]["candidato_via_absoluta"] = True
         veredictos_nuevos_abs.append(
-            f"🟢 [vía absoluta] {p['tupla_str']} [{b},{float(b)+STEP:.2f}) n={p['entrada']['n']} "
-            f"pnl_medio={p['entrada']['pnl_medio']:+.3f} p_abs={p['p']:.4f} {veredicto_final}"
+            f"⏳ [vía absoluta, no confirma: decisión pendiente] {p['tupla_str']} [{b},{float(b)+STEP:.2f}) "
+            f"n={p['entrada']['n']} pnl_medio={p['entrada']['pnl_medio']:+.3f} p_abs={p['p']:.4f}"
         )
 
-    print(f"\n{len(veredictos_nuevos_abs)} bucket(s) con veredicto vía absoluta:")
+    print(f"\n{len(veredictos_nuevos_abs)} candidato(s) de la vía absoluta (no confirman, decisión pendiente):")
     for linea in veredictos_nuevos_abs:
         print(f"  {linea}")
 
-    with open(OUT, "w", encoding="utf-8") as f:
+    # 13-Oct: regla 4 en UN solo punto, después de todas las vías (gate_confirmacion_historial.aplicar_malos_de_hoy).
+    forzados = aplicar_malos_de_hoy(resultado, AHORA)
+    if forzados:
+        print(f"\n{len(forzados)} bucket(s) con un malo decidido HOY se siguen publicando malo_confirmado "
+              f"(tenían en esta corrida: {', '.join(f'{c} [{b}) {v}' for c, b, v in forzados[:20])})")
+
+    # 13-Oct: escritura atómica (los ejecutores live leen este JSON en paralelo; antes json.dump directo sobre OUT
+    # dejaba una ventana con el fichero a medias, mismo arreglo que WM 21-Sep y bot wallets 07-Oct).
+    _tmp = f"{OUT}.{os.getpid()}.tmp"
+    with open(_tmp, "w", encoding="utf-8") as f:
         json.dump(resultado, f, indent=2, ensure_ascii=False)
+    os.replace(_tmp, OUT)
     print(f"\nGuardado en {OUT}")
 
 

@@ -69,8 +69,10 @@ import numpy as np
 from shuffle_chunked import diffs_permutacion
 from gate_dias_independientes import robustez_dias, ENFORCE as DIAS_ENFORCE, K_MEJORES_DIAS, PISO_EUR as PISO_DIAS_EUR
 
-from gate_confirmacion_historial import (
-    cargar_historial_previo, cargar_fecha_historial_previo, veredicto_con_tolerancia_diario,
+from gate_confirmacion_historial import (  # 13-Oct: días de calendario y corridas no decisivas
+    BUENO, cargar_estado_previo, estado_vacio, veredicto_decidido, mantener_dos_vias, claves_sin_filas_hoy,
+    aplicar_malos_de_hoy,
+    campos_historial, semilla, entradas_sin_filas_hoy, ahora_utc,
 )
 
 REPO = Path(__file__).resolve().parent
@@ -271,48 +273,13 @@ def _cargar_pnl_real_por_bucket() -> dict:
     return {k: dict(v) for k, v in out.items()}
 
 
-def _cargar_historial_abs_previo(out_path):
-    """12-Sep (/code-review encontró el hueco: reusar historial_crudo/
-    fecha_historial de la vía relativa para la vía absoluta mezclaba dos
-    tests distintos en la MISMA ventana de tolerancia -- un bucket podía
-    quedar malo_confirmado por la vía relativa y luego "reconfirmarse"
-    bueno_confirmado con solo 2 días de rescate absoluto sin que la vía
-    relativa hubiera cambiado de opinión nunca). Namespace INDEPENDIENTE
-    (campos *_abs, mismo fichero de salida) para que la vía absoluta
-    acumule su propio historial de 2-de-3-días sin contaminar ni ser
-    contaminada por la vía relativa -- a diferencia de la PASADA 2.5 de
-    analisis_gate_bucket_propio_28jul.py (que arranca en blanco cada vez,
-    nunca acumula), esta SÍ persiste entre corridas."""
-    try:
-        with open(out_path, encoding="utf-8") as f:
-            data = json.load(f)
-    except Exception:
-        return {}, {}
-    hist, fecha = {}, {}
-    for clave_str, tabla in data.items():
-        if not isinstance(tabla, dict):
-            continue
-        hist[clave_str] = {b: v.get("historial_crudo_abs", [])
-                            for b, v in tabla.items() if isinstance(v, dict)}
-        fecha[clave_str] = {b: v.get("fecha_historial_abs")
-                             for b, v in tabla.items() if isinstance(v, dict)}
-    return hist, fecha
-
-
 def main():
     grupos = cargar_filas()
     print(f"Grupos (tipo,activo,marco,grande): {len(grupos)}")
-    historial_previo = cargar_historial_previo(OUT, anidado_por_bucket=True)
-    # 10-Sep: acompaña a historial_previo para veredicto_con_tolerancia_
-    # diario() -- este generador corre HORARIO (vigia_gate_bucket_wallet_
-    # mirror.py, vigias_frecuentes_fase0.py, 3600s), a diferencia de
-    # gate_bucket_propio.py (cron diario) del que se copió el mecanismo de
-    # tolerancia -- sin el wrapper diario, "2 de los últimos 3 días"
-    # (HISTORIAL_DIAS_VENTANA/REQUERIDOS) se diluye a "2 de las últimas 3
-    # HORAS". Ver gate_confirmacion_historial.py::
-    # veredicto_con_tolerancia_diario() para el detalle completo.
-    fecha_historial_previo = cargar_fecha_historial_previo(OUT, anidado_por_bucket=True)
-    historial_abs_previo, fecha_historial_abs_previo = _cargar_historial_abs_previo(OUT)
+    # 13-Oct: historial con MARCA por entrada y días de calendario (gate_confirmacion_historial, reglas 1-7),
+    # vías relativa y absoluta en una sola lectura.
+    AHORA = ahora_utc()
+    _estado = cargar_estado_previo(OUT)
     try:
         metodo_previo = json.loads(METODO_PATH.read_text(encoding="utf-8")).get("metodo")
     except Exception:
@@ -321,8 +288,7 @@ def main():
         # 07-Oct (/code-review): el historial de días bueno/malo se calculó con otra unidad/comisión -> no cuenta para la
         # regla de 2 de 3 días; el método nuevo tiene que confirmarse por sí mismo.
         print(f"método {metodo_previo} -> {METODO}: historial de tolerancia previo IGNORADO")
-        historial_previo, fecha_historial_previo = {}, {}
-        historial_abs_previo, fecha_historial_abs_previo = {}, {}
+        _estado = estado_vacio()
     pnl_real_por_bucket = _cargar_pnl_real_por_bucket()
 
     resultado = {}  # "tipo#activo#marco#grande" -> {bucket_str: entrada}
@@ -336,13 +302,8 @@ def main():
             # 28jul.py): no perder el historial_crudo de los buckets de
             # esta clave si hoy cae por debajo de N_MIN a nivel clave -- un
             # día flojo no es un día MALO a nivel bucket.
-            historial_clave = historial_previo.get(clave_str, {})
-            fecha_clave = fecha_historial_previo.get(clave_str, {})
-            resultado[clave_str] = {
-                b: {"veredicto": "sin_concluir", "historial_crudo": hist,
-                    "fecha_historial": fecha_clave.get(b)}
-                for b, hist in historial_clave.items() if hist
-            }
+            resultado[clave_str] = {}
+            entradas_sin_filas_hoy(resultado[clave_str], clave_str, _estado, AHORA)
             continue
         por_bucket = defaultdict(list)
         for ts, ask, pnl, wallet in filas:
@@ -382,14 +343,6 @@ def main():
             # bucket no sobrevive más abajo (BH-FDR/piso), esta entrada por
             # defecto es la que queda escrita, y sin la semilla perdía el
             # historial acumulado sin que hubiera pasado un día MALO.
-            historial_semilla = historial_previo.get(clave_str, {}).get(f"{b:.2f}", [])
-            # 10-Sep: semilla también de fecha_historial -- si este bucket
-            # sale de `pendientes` esta hora (pierde significancia en
-            # shuffle/BH-FDR) pero YA tenía una entrada de HOY (de una hora
-            # anterior), sin esto perdería la fecha y la próxima hora en que
-            # vuelva a ser significativo la contaría como "día nuevo" en vez
-            # de seguir colapsando dentro de hoy.
-            fecha_semilla = fecha_historial_previo.get(clave_str, {}).get(f"{b:.2f}")
             # 15-Sep (petición explícita Javi, "masterizar" pt.4, refuerzo
             # nunca veto): `ask` ya en perspectiva de decisión (el lado
             # SEGUIR), consultado como "BUY_YES" (misma convención que el
@@ -401,7 +354,7 @@ def main():
                        "ballenas_hit_rate_yes": ballenas["hit_rate_yes"], "ballenas_n": ballenas["n"],
                        "ballenas_coincide": ballenas["coincide"],
                        "shuffle_p": None, "split_half": None, "veredicto": "sin_concluir",
-                       "historial_crudo": historial_semilla, "fecha_historial": fecha_semilla}
+                       **semilla(_estado, clave_str, f"{b:.2f}", AHORA)}
             tabla[f"{b:.2f}"] = entrada
             if n_d >= N_MIN:
                 # 12-Sep (decisión explícita Javi, ver UMBRAL_ABSOLUTO_EUR
@@ -463,7 +416,10 @@ def main():
                     if consistente:
                         pendientes.append({"clave_str": clave_str, "bucket": f"{b:.2f}",
                                             "entrada": entrada, "p": p_valor, "diff": diff})
+        entradas_sin_filas_hoy(tabla, clave_str, _estado, AHORA)  # 13-Oct: no perder buckets sin filas hoy
         resultado[clave_str] = tabla
+
+    claves_sin_filas_hoy(resultado, _estado, AHORA)  # 13-Oct: claves enteras sin filas hoy
 
     # BH-FDR por (activo,marco,grande) -- mismo nivel de agrupación que
     # gate_bucket_propio.py usa por (familia,activo), aquí no hay familia
@@ -559,11 +515,10 @@ def main():
         # también bueno_confirmado (reset a 1 día flojo). Ahora exige 2 de
         # los últimos 3 días (incluido hoy) vía gate_confirmacion_historial.py.
         # 10-Sep: versión "diaria" del wrapper -- este generador corre
-        # horario, ver comentario junto a fecha_historial_previo arriba.
-        historial_bucket = historial_previo.get(p["clave_str"], {}).get(b)
-        fecha_bucket_previa = fecha_historial_previo.get(p["clave_str"], {}).get(b)
-        veredicto, p["entrada"]["historial_crudo"], p["entrada"]["fecha_historial"] = (
-            veredicto_con_tolerancia_diario(veredicto_crudo, historial_bucket, fecha_bucket_previa))
+        # horario; desde 13-Oct veredicto_dia() con marca por entrada (gate_confirmacion_historial).
+        veredicto, _h, _m = veredicto_decidido(veredicto_crudo, p["entrada"]["historial_crudo"],
+                                          p["entrada"]["historial_fechas"], AHORA)
+        p["entrada"].update(campos_historial(_h, _m))
         if veredicto == "sin_concluir" and veredicto_crudo == "bueno_confirmado":
             veredictos_pendientes_confirmacion.append(
                 f"⏳ {p['clave_str']} [{b},{float(b)+STEP:.2f}) n={p['entrada']['n']} "
@@ -572,8 +527,8 @@ def main():
             )
 
         p["entrada"]["veredicto"] = veredicto
-        if veredicto == "sin_concluir":
-            continue
+        if veredicto == "sin_concluir" or (veredicto == "malo_confirmado" and veredicto_crudo != "malo_confirmado"):
+            continue  # pendiente, o malo arrastrado de una corrida anterior de hoy (no es veredicto nuevo)
         marca = "🔴" if veredicto == "malo_confirmado" else "🟢"
         veredictos_nuevos.append(
             f"{marca} {p['clave_str']} [{b},{float(b)+STEP:.2f}) "
@@ -596,17 +551,14 @@ def main():
             "bueno_confirmado", c["entrada"], c["clave_str"], b)
         c["entrada"]["veredicto_crudo_hoy_abs"] = veredicto_crudo
         # Namespace INDEPENDIENTE de historial (historial_abs_previo/
-        # *_abs, ver _cargar_historial_abs_previo) -- /code-review 12-Sep:
+        # *_abs, cargar_estado_previo) -- /code-review 12-Sep:
         # reusar historial_crudo/fecha_historial de la vía relativa
         # contaminaba su ventana de tolerancia (un malo_confirmado
         # relativo podía "reconfirmarse" bueno con solo 2 días de rescate
         # absoluto, sin que la vía relativa hubiera cambiado de opinión).
-        historial_bucket = historial_abs_previo.get(c["clave_str"], {}).get(b)
-        fecha_bucket_previa = fecha_historial_abs_previo.get(c["clave_str"], {}).get(b)
-        veredicto, hist_abs, fecha_abs = veredicto_con_tolerancia_diario(
-            veredicto_crudo, historial_bucket, fecha_bucket_previa)
-        c["entrada"]["historial_crudo_abs"] = hist_abs
-        c["entrada"]["fecha_historial_abs"] = fecha_abs
+        veredicto, _h, _m = veredicto_decidido(veredicto_crudo, c["entrada"]["historial_crudo_abs"],
+                                          c["entrada"]["historial_fechas_abs"], AHORA)
+        c["entrada"].update(campos_historial(_h, _m, "_abs"))
         if veredicto == "sin_concluir":
             # NUNCA pisa el veredicto ya decidido por la vía relativa (que
             # puede ser malo_confirmado, sin_concluir o -- imposible aquí,
@@ -620,12 +572,24 @@ def main():
             continue
         c["entrada"]["veredicto"] = veredicto
         c["entrada"]["via"] = "absoluta"
+        if veredicto == "malo_confirmado" and veredicto_crudo != "malo_confirmado":
+            continue  # malo arrastrado de una corrida anterior de hoy (no es veredicto nuevo)
         marca = "🔴" if veredicto == "malo_confirmado" else "🟢"
         veredictos_nuevos.append(
             f"{marca} [vía absoluta] {c['clave_str']} [{b},{float(b)+STEP:.2f}) "
             f"n={c['entrada']['n']} pnl_medio={c['entrada']['pnl_medio']:+.3f} "
             f"g_kelly={g_kelly:+.5f} p_abs={c['p_valor_abs']:.4f} {veredicto}{nota_payout}{nota_real}{nota_concentracion}{nota_tendencia}"
         )
+
+    # 13-Oct: buckets que esta corrida NO decidió (no sobreviven al BH-FDR, split-half inconsistente...): tolerancia de
+    # 2 de 3 días de CALENDARIO con las guardas y el suelo de HOY, solo si la corrida anterior los publicó bueno
+    # (gate_confirmacion_historial.mantener_dos_vias). Antes hacían `continue` y un bueno parpadeaba a sin_concluir.
+    mantenidos = mantener_dos_vias(resultado, AHORA, N_MIN, _estado, pendientes, "clave_str",
+                                   lambda c, b, e: _degradar(BUENO, e, c, b)[0], P_MAX, UMBRAL_ABSOLUTO_EUR, "split_half")
+    if mantenidos:
+        print(f"\n{len(mantenidos)} bucket(s) sin confirmación nueva en esta corrida (tolerancia / guardas):")
+        for linea in mantenidos:
+            print(f"  {linea}")
 
     print(f"\n{len(veredictos_nuevos)} bucket(s) con veredicto tras BH-FDR:")
     for linea in veredictos_nuevos:
@@ -634,6 +598,12 @@ def main():
         print(f"\n{len(veredictos_pendientes_confirmacion)} bucket(s) pendientes de 2ª confirmación mañana:")
         for linea in veredictos_pendientes_confirmacion:
             print(f"  {linea}")
+
+    # 13-Oct: regla 4 en UN solo punto, después de todas las vías (gate_confirmacion_historial.aplicar_malos_de_hoy).
+    forzados = aplicar_malos_de_hoy(resultado, AHORA)
+    if forzados:
+        print(f"\n{len(forzados)} bucket(s) con un malo decidido HOY se siguen publicando malo_confirmado "
+              f"(tenían en esta corrida: {', '.join(f'{c} [{b}) {v}' for c, b, v in forzados[:20])})")
 
     # 21-Sep: escritura atomica -- el ejecutor real (y los kill switches) leen
     # este JSON en paralelo; json.dump directo sobre OUT deja una ventana con

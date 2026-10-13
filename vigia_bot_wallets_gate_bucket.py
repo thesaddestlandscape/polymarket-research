@@ -42,6 +42,8 @@ def _append_historico(nuevo: dict) -> None:
     filas = []
     for clave_str, tabla in nuevo.items():
         for b, info in tabla.items():
+            if info.get("sin_filas_hoy"):
+                continue  # 13-Oct: marcador sin datos hoy (historial conservado), no es una observación del día
             filas.append([hoy, clave_str, b, info.get("n"), info.get("pnl_medio"),
                           info.get("shuffle_p"), info.get("veredicto")])
     if not filas:
