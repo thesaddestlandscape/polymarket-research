@@ -1,0 +1,114 @@
+BTC 15m, mercados con algún relleno maker: DESC 225, FWD 484
+
+(a) SELECCIÓN: ¿qué mercados salta cada wallet? PnL de los OTROS cosechadores (W sin ella) en sus mercados vs en los que salta
+   0x2903c7dc DESC: toca 164/225 merc (73%) | otros en SUS merc PnL/merc-wallet +3.87 (n 807) vs en los que SALTA +3.68 (n 264)
+   0x2903c7dc FWD: toca 331/484 merc (68%) | otros en SUS merc PnL/merc-wallet +0.38 (n 1557) vs en los que SALTA -6.20 (n 701)
+   0xcfddfb6e DESC: toca 215/225 merc (96%) | otros en SUS merc PnL/merc-wallet +3.36 (n 983) vs en los que SALTA -0.12 (n 37)
+   0xcfddfb6e FWD: toca 450/484 merc (93%) | otros en SUS merc PnL/merc-wallet +1.73 (n 1995) vs en los que SALTA +0.43 (n 144)
+   0xb945945d DESC: toca 223/225 merc (99%) | otros en SUS merc PnL/merc-wallet +5.41 (n 1012) vs en los que SALTA +nan (n 0)
+   0xb945945d FWD: toca 475/484 merc (98%) | otros en SUS merc PnL/merc-wallet +1.33 (n 2089) vs en los que SALTA -1.83 (n 25)
+   0x758dac51 DESC: toca 223/225 merc (99%) | otros en SUS merc PnL/merc-wallet +6.04 (n 1012) vs en los que SALTA +nan (n 0)
+   0x758dac51 FWD: toca 480/484 merc (99%) | otros en SUS merc PnL/merc-wallet +0.42 (n 2107) vs en los que SALTA -19.20 (n 2)
+   0x86b9a88a DESC: toca 212/225 merc (94%) | otros en SUS merc PnL/merc-wallet +5.58 (n 988) vs en los que SALTA +0.47 (n 35)
+   0x86b9a88a FWD: toca 435/484 merc (90%) | otros en SUS merc PnL/merc-wallet -0.78 (n 1974) vs en los que SALTA +2.62 (n 180)
+   0x98b84283 DESC: toca 198/225 merc (88%) | otros en SUS merc PnL/merc-wallet +5.55 (n 942) vs en los que SALTA +0.71 (n 95)
+   0x98b84283 FWD: toca 418/484 merc (86%) | otros en SUS merc PnL/merc-wallet -0.20 (n 1928) vs en los que SALTA -3.86 (n 243)
+
+(b) CUÁNDO y DÓNDE: rellenos maker por fase y banda, PnL/acción (FWD)
+  0x2903c7dc:
+                              acc        pnl  pnl_acc    %acc
+T          p                                                 
+(0, 60]    (0.0, 0.2]  23124.4210  -444.7852  -0.0192  0.0494
+           (0.6, 0.8]   5768.6543   297.6819   0.0516  0.0123
+           (0.8, 1.0]  10730.1717   517.1639   0.0482  0.0229
+(60, 120]  (0.0, 0.2]  26329.2503  2536.2926   0.0963  0.0562
+           (0.2, 0.4]  22156.7920  5157.1184   0.2328  0.0473
+           (0.4, 0.6]  18496.1168   -87.6849  -0.0047  0.0395
+           (0.6, 0.8]  16602.5135 -3197.3819  -0.1926  0.0355
+           (0.8, 1.0]  19575.2676 -1005.3088  -0.0514  0.0418
+(120, 300] (0.0, 0.2]  29429.9757   523.1708   0.0178  0.0629
+           (0.2, 0.4]  22017.5449   539.7653   0.0245  0.0470
+           (0.4, 0.6]  22621.9781  -637.5346  -0.0282  0.0483
+           (0.6, 0.8]  20078.3520  -491.9818  -0.0245  0.0429
+           (0.8, 1.0]  24994.2099  -583.4950  -0.0233  0.0534
+(300, 600] (0.0, 0.2]  30148.3460  1626.3682   0.0539  0.0644
+           (0.2, 0.4]  21782.3785  1174.7729   0.0539  0.0465
+           (0.4, 0.6]  31733.1651  1096.1118   0.0345  0.0678
+           (0.6, 0.8]  19356.0172  -663.8554  -0.0343  0.0413
+           (0.8, 1.0]  25710.4296 -1146.8502  -0.0446  0.0549
+(600, 840] (0.0, 0.2]   9763.4980   396.2193   0.0406  0.0209
+           (0.2, 0.4]  11216.8363   374.7117   0.0334  0.0240
+           (0.4, 0.6]  16069.5804 -1419.2823  -0.0883  0.0343
+           (0.6, 0.8]  19529.6452  -261.4818  -0.0134  0.0417
+           (0.8, 1.0]   7022.2891  -544.2285  -0.0775  0.0150
+(840, 900] (0.4, 0.6]   5879.0798   -57.5910  -0.0098  0.0126
+  0xcfddfb6e:
+                               acc        pnl  pnl_acc    %acc
+T           p                                                 
+(0, 60]     (0.0, 0.2]  38640.5578 -1660.4668  -0.0430  0.0360
+            (0.8, 1.0]  20291.4936  1177.0332   0.0580  0.0189
+(60, 120]   (0.0, 0.2]  55319.0547  1505.4884   0.0272  0.0515
+            (0.2, 0.4]  26819.8302  -880.1106  -0.0328  0.0250
+            (0.4, 0.6]  32730.9286   787.9974   0.0241  0.0305
+            (0.6, 0.8]  22685.9870  1070.0455   0.0472  0.0211
+            (0.8, 1.0]  33282.4172 -2323.6025  -0.0698  0.0310
+(120, 300]  (0.0, 0.2]  95129.3068   574.7125   0.0060  0.0886
+            (0.2, 0.4]  62209.6225   -97.9095  -0.0016  0.0579
+            (0.4, 0.6]  51223.0972   -73.3311  -0.0014  0.0477
+            (0.6, 0.8]  59131.5374  -524.9776  -0.0089  0.0551
+            (0.8, 1.0]  57394.0936  -794.7804  -0.0138  0.0535
+(300, 600]  (0.0, 0.2]  67632.3324  -301.4430  -0.0045  0.0630
+            (0.2, 0.4]  59490.6398   626.8392   0.0105  0.0554
+            (0.4, 0.6]  64848.2496  -435.8717  -0.0067  0.0604
+            (0.6, 0.8]  60444.9288  -574.3505  -0.0095  0.0563
+            (0.8, 1.0]  37317.8945  -185.5226  -0.0050  0.0348
+(600, 840]  (0.0, 0.2]  15896.5515  -290.2117  -0.0183  0.0148
+            (0.2, 0.4]  38700.7081  -441.0974  -0.0114  0.0360
+            (0.4, 0.6]  44102.5276  -205.6855  -0.0047  0.0411
+            (0.6, 0.8]  42073.4181  -458.4943  -0.0109  0.0392
+(840, 900]  (0.4, 0.6]  26308.0954   514.3137   0.0195  0.0245
+(900, 2000] (0.4, 0.6]  13218.2590  -687.8295  -0.0520  0.0123
+
+(c) INVENTARIO por mercado (medianas; FWD y DESC)
+   0x2903c7dc DESC: merc 164 | acc compradas P50 339 | desbal final P50 0.0 P90 218.6 | desbal/compras 0.000 | coste/par P50 0.985 | merc con residual <0 59% | 1er relleno T P50 519 | último T P50 132 | PnL/merc +11.40 (margen +19.78, resid -8.38)
+   0x2903c7dc FWD: merc 331 | acc compradas P50 640 | desbal final P50 0.0 P90 190.0 | desbal/compras 0.000 | coste/par P50 0.983 | merc con residual <0 56% | 1er relleno T P50 605 | último T P50 126 | PnL/merc +11.92 (margen +22.65, resid -10.72)
+   0xcfddfb6e DESC: merc 215 | acc compradas P50 1679 | desbal final P50 219.4 P90 501.1 | desbal/compras 0.112 | coste/par P50 0.949 | merc con residual <0 75% | 1er relleno T P50 895 | último T P50 90 | PnL/merc +12.38 (margen +56.91, resid -44.53)
+   0xcfddfb6e FWD: merc 450 | acc compradas P50 1567 | desbal final P50 218.4 P90 513.1 | desbal/compras 0.117 | coste/par P50 0.953 | merc con residual <0 80% | 1er relleno T P50 903 | último T P50 93 | PnL/merc -7.41 (margen +50.28, resid -57.69)
+   0xb945945d DESC: merc 223 | acc compradas P50 1340 | desbal final P50 176.9 P90 490.4 | desbal/compras 0.118 | coste/par P50 0.942 | merc con residual <0 79% | 1er relleno T P50 885 | último T P50 90 | PnL/merc +2.19 (margen +50.01, resid -47.82)
+   0xb945945d FWD: merc 475 | acc compradas P50 1538 | desbal final P50 214.9 P90 539.1 | desbal/compras 0.120 | coste/par P50 0.948 | merc con residual <0 80% | 1er relleno T P50 902 | último T P50 97 | PnL/merc -5.37 (margen +50.50, resid -55.87)
+   0x758dac51 DESC: merc 223 | acc compradas P50 522 | desbal final P50 31.6 P90 96.0 | desbal/compras 0.067 | coste/par P50 0.984 | merc con residual <0 76% | 1er relleno T P50 900 | último T P50 72 | PnL/merc -0.68 (margen +6.35, resid -7.03)
+   0x758dac51 FWD: merc 480 | acc compradas P50 547 | desbal final P50 41.4 P90 89.8 | desbal/compras 0.074 | coste/par P50 0.988 | merc con residual <0 78% | 1er relleno T P50 911 | último T P50 66 | PnL/merc -1.36 (margen +7.67, resid -9.03)
+   0x86b9a88a DESC: merc 212 | acc compradas P50 267 | desbal final P50 0.0 P90 10.0 | desbal/compras 0.000 | coste/par P50 0.989 | merc con residual <0 52% | 1er relleno T P50 818 | último T P50 188 | PnL/merc +2.03 (margen +2.48, resid -0.45)
+   0x86b9a88a FWD: merc 435 | acc compradas P50 416 | desbal final P50 0.0 P90 29.8 | desbal/compras 0.000 | coste/par P50 0.986 | merc con residual <0 52% | 1er relleno T P50 846 | último T P50 182 | PnL/merc +2.89 (margen +5.53, resid -2.63)
+   0x98b84283 DESC: merc 198 | acc compradas P50 80 | desbal final P50 0.0 P90 20.0 | desbal/compras 0.000 | coste/par P50 0.981 | merc con residual <0 51% | 1er relleno T P50 664 | último T P50 129 | PnL/merc +3.35 (margen +4.35, resid -1.00)
+   0x98b84283 FWD: merc 418 | acc compradas P50 200 | desbal final P50 0.0 P90 40.9 | desbal/compras 0.000 | coste/par P50 0.984 | merc con residual <0 53% | 1er relleno T P50 649 | último T P50 131 | PnL/merc +3.64 (margen +5.17, resid -1.53)
+
+(c2) desequilibrio DURANTE el mercado: P90 de |YES−NO| acumulado tras cada relleno (FWD) y espera hasta emparejar
+   0x2903c7dc: max|inv| por mercado P50 226 P90 480; |inv| medio tras relleno 151.0; tamaño relleno P50 28.6 P90 80.9
+   0xcfddfb6e: max|inv| por mercado P50 293 P90 583; |inv| medio tras relleno 163.2; tamaño relleno P50 12.7 P90 40.0
+
+(d) PATA TOMADORA de cada wallet (todas las monedas no: solo BTC 15m)
+   0x2903c7dc DESC: tomador n 0 vol 0 (0.0% del maker) PnL +0 (PnL/$ +0.000) | comisión 0 | ventas maker 0.0%
+   0x2903c7dc FWD: tomador n 0 vol 0 (0.0% del maker) PnL +0 (PnL/$ +0.000) | comisión 0 | ventas maker 0.0%
+   0xcfddfb6e DESC: tomador n 1359 vol 21797 (9.0% del maker) PnL -107 (PnL/$ -0.005) | comisión 411 | ventas maker 0.0%
+   0xcfddfb6e FWD: tomador n 1808 vol 30872 (6.3% del maker) PnL +1741 (PnL/$ +0.056) | comisión 630 | ventas maker 0.0%
+   0xb945945d DESC: tomador n 685 vol 12261 (5.9% del maker) PnL +51 (PnL/$ +0.004) | comisión 244 | ventas maker 0.0%
+   0xb945945d FWD: tomador n 1599 vol 28200 (5.5% del maker) PnL -42 (PnL/$ -0.002) | comisión 568 | ventas maker 0.0%
+   0x758dac51 DESC: tomador n 0 vol 0 (0.0% del maker) PnL +0 (PnL/$ +0.000) | comisión 0 | ventas maker 0.0%
+   0x758dac51 FWD: tomador n 0 vol 0 (0.0% del maker) PnL +0 (PnL/$ +0.000) | comisión 0 | ventas maker 0.0%
+   0x86b9a88a DESC: tomador n 0 vol 0 (0.0% del maker) PnL +0 (PnL/$ +0.000) | comisión 0 | ventas maker 0.0%
+   0x86b9a88a FWD: tomador n 0 vol 0 (0.0% del maker) PnL +0 (PnL/$ +0.000) | comisión 0 | ventas maker 0.0%
+   0x98b84283 DESC: tomador n 0 vol 0 (0.0% del maker) PnL +0 (PnL/$ +0.000) | comisión 0 | ventas maker 0.0%
+   0x98b84283 FWD: tomador n 0 vol 0 (0.0% del maker) PnL +0 (PnL/$ +0.000) | comisión 0 | ventas maker 0.0%
+
+(e) ¿qué lado compra? precio del lado comprado vs 0,5 y resultado por lado caro/barato (maker, FWD)
+   0x2903c7dc: barato (<0,5) 52% de acciones PnL/acc +0.0541 | caro -0.0411
+   0xcfddfb6e: barato (<0,5) 54% de acciones PnL/acc -0.0032 | caro -0.0029
+
+(f) PnL por día (FWD+DESC) de cada wallet
+   0x2903c7dc: 10-05:+134 10-06:+663 10-07:+1072 10-08:+187 10-09:+1670 10-10:+725 10-11:+1175 10-12:+190
+   0xcfddfb6e: 10-05:-45 10-06:-619 10-07:+3326 10-08:-332 10-09:-1182 10-10:-863 10-11:-644 10-12:-312
+   0xb945945d: 10-05:-463 10-06:-1062 10-07:+2013 10-08:-272 10-09:-581 10-10:-956 10-11:-668 10-12:-73
+   0x758dac51: 10-05:+93 10-06:-70 10-07:-175 10-08:-315 10-09:+80 10-10:-154 10-11:-184 10-12:-81
+   0x86b9a88a: 10-05:+69 10-06:+220 10-07:+141 10-08:+146 10-09:+334 10-10:-18 10-11:+544 10-12:+254
+   0x98b84283: 10-05:+72 10-06:+418 10-07:+172 10-08:+500 10-09:+260 10-10:+369 10-11:+292 10-12:+98

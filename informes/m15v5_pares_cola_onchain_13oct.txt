@@ -1,0 +1,101 @@
+Rellenos 15m on-chain 2026-10-05..2026-10-12: 3455996 filas, 4225 mercados; cobertura desenlace por día: 10-05 100.0%, 10-06 100.0%, 10-07 100.0%, 10-08 100.0%, 10-09 100.0%, 10-10 100.0%, 10-11 100.0%, 10-12 100.0%
+
+1) RECONCILIACIÓN por día (USDC): PnL maker + PnL tomador debe = −comisión tomadora
+              vol_tom  pnl_maker  pnl_tom  fee_tom  rebate_est  cuadre  bruto_tom
+dia                                                                              
+2026-10-05   973365.0   -39270.0  17222.0  22048.0      4410.0     0.0    39270.0
+2026-10-06  2157406.0   -50938.0   2333.0  48605.0      9721.0     0.0    50938.0
+2026-10-07  1971910.0    14128.0 -57300.0  43172.0      8634.0     0.0   -14128.0
+2026-10-08  2278819.0     4028.0 -53475.0  49448.0      9890.0     0.0    -4028.0
+2026-10-09  2698270.0   -31353.0 -32746.0  64099.0     12820.0     0.0    31353.0
+2026-10-10  2560763.0   -46656.0 -16291.0  62947.0     12589.0     0.0    46656.0
+2026-10-11  2641451.0   -55957.0  -5452.0  61410.0     12282.0     0.0    55957.0
+2026-10-12  1940972.0     7832.0 -47033.0  39201.0      7840.0     0.0    -7832.0
+   lectura: bruto_tom = lo que los tomadores ganan a los makers ANTES de comisión (= −pnl_maker).
+
+2) COSECHADORES elegidos con 05-07 (≥80 % emparejado, vol ≥2.000, ventas <5 %): 32 wallets
+
+  [DESC 05-07]
+   grupo cosechadores           merc  1333 vol   1504419 PnL    +6866 (pares   +35862, residual   -28997) reemb.est  +7349 | coste/par 0.9756 | emparejado 94% | PnL/día   +2289 (+reemb   +4738) días+ 2/3 (+reemb 3)
+   0xcfddfb6e                   merc   215 vol    241609 PnL    +2662 (pares   +12235, residual    -9573) reemb.est  +1226 | coste/par 0.9486 | emparejado 90% | PnL/día    +887 (+reemb   +1296) días+ 1/3 (+reemb 2)
+      0xcfddfb6e BTC            merc   215 vol    241609 PnL    +2662 (pares   +12235, residual    -9573) reemb.est  +1226 | coste/par 0.9486 | emparejado 90% | PnL/día    +887 (+reemb   +1296) días+ 1/3 (+reemb 2)
+   0x2903c7dc                   merc   164 vol     67773 PnL    +1869 (pares    +3244, residual    -1375) reemb.est   +337 | coste/par 0.9525 | emparejado 94% | PnL/día    +623 (+reemb    +735) días+ 3/3 (+reemb 3)
+      0x2903c7dc BTC            merc   164 vol     67773 PnL    +1869 (pares    +3244, residual    -1375) reemb.est   +337 | coste/par 0.9525 | emparejado 94% | PnL/día    +623 (+reemb    +735) días+ 3/3 (+reemb 3)
+
+  [FORWARD 08-12]
+   grupo cosechadores           merc  2865 vol   3598325 PnL    -1264 (pares   +72859, residual   -74123) reemb.est +18220 | coste/par 0.9793 | emparejado 94% | PnL/día    -253 (+reemb   +3391) días+ 1/5 (+reemb 5)
+   0xcfddfb6e                   merc   450 vol    491009 PnL    -3333 (pares   +22648, residual   -25980) reemb.est  +2580 | coste/par 0.9526 | emparejado 89% | PnL/día    -667 (+reemb    -151) días+ 0/5 (+reemb 1)
+      0xcfddfb6e BTC            merc   450 vol    491009 PnL    -3333 (pares   +22648, residual   -25980) reemb.est  +2580 | coste/par 0.9526 | emparejado 89% | PnL/día    -667 (+reemb    -151) días+ 0/5 (+reemb 1)
+   0x2903c7dc                   merc   331 vol    222943 PnL    +3947 (pares    +7496, residual    -3549) reemb.est  +1084 | coste/par 0.9667 | emparejado 96% | PnL/día    +789 (+reemb   +1006) días+ 5/5 (+reemb 5)
+      0x2903c7dc BTC            merc   331 vol    222943 PnL    +3947 (pares    +7496, residual    -3549) reemb.est  +1084 | coste/par 0.9667 | emparejado 96% | PnL/día    +789 (+reemb   +1006) días+ 5/5 (+reemb 5)
+
+  cosechadores por wallet (FORWARD 08-12): PnL, reembolso, coste/par
+   0x00053804 vol      9989 PnL    -200 reemb    +56 pares    -184 residual     -16 coste/par 1.0190
+   0x11ec0cf7 vol     32503 PnL    -325 reemb   +150 pares    -148 residual    -177 coste/par 1.0046
+   0x1404d5f2 vol     52616 PnL    +792 reemb   +250 pares    +175 residual    +617 coste/par 0.9963
+   0x1603ed4b vol     17306 PnL     -94 reemb    +68 pares    +211 residual    -305 coste/par 0.9877
+   0x2903c7dc vol    222943 PnL   +3947 reemb  +1084 pares   +7496 residual   -3549 coste/par 0.9667
+   0x3ab0939c vol    125492 PnL    -601 reemb   +581 pares    +129 residual    -730 coste/par 0.9990
+   0x48052843 vol    112158 PnL    +247 reemb   +629 pares    +749 residual    -502 coste/par 0.9932
+   0x513b28f6 vol    157323 PnL    -545 reemb   +734 pares    +357 residual    -902 coste/par 0.9977
+   0x5b843791 vol     37735 PnL    -214 reemb   +176 pares     +28 residual    -242 coste/par 0.9992
+   0x62e38f7e vol     38778 PnL    -189 reemb   +180 pares     +18 residual    -207 coste/par 0.9995
+   0x69720b2a vol    152893 PnL    -665 reemb   +719 pares    +299 residual    -963 coste/par 0.9980
+   0x73adf00f vol     11696 PnL     -13 reemb    +66 pares     +92 residual    -105 coste/par 0.9899
+   0x758dac51 vol    338684 PnL   -1804 reemb  +1557 pares   +9285 residual  -11089 coste/par 0.9719
+   0x764fd57b vol     52009 PnL    +331 reemb   +295 pares    +194 residual    +138 coste/par 0.9958
+   0x81c935ef vol    167357 PnL    -590 reemb   +778 pares    +388 residual    -978 coste/par 0.9977
+   0x86b9a88a vol    244972 PnL   +1197 reemb  +1324 pares   +2446 residual   -1249 coste/par 0.9900
+   0x89e862fe vol     40317 PnL    +288 reemb   +190 pares    +981 residual    -694 coste/par 0.9754
+   0x8ff67d21 vol     23286 PnL    -115 reemb    +92 pares    +340 residual    -455 coste/par 0.9852
+   0x98b84283 vol    178577 PnL   +1520 reemb   +997 pares   +2159 residual    -639 coste/par 0.9879
+   0x9b4d3435 vol      7414 PnL    -171 reemb    +43 pares    -136 residual     -34 coste/par 1.0202
+   0xac3f0803 vol     43859 PnL    -171 reemb   +205 pares     +53 residual    -224 coste/par 0.9988
+   0xb5e78597 vol     53979 PnL   +1702 reemb   +306 pares     -21 residual   +1723 coste/par 1.0004
+   0xb945945d vol    512320 PnL   -2549 reemb  +2708 pares  +24004 residual  -26554 coste/par 0.9518
+   0xc28eecad vol       110 PnL     -14 reemb     +1 pares      +9 residual     -23 coste/par 0.9048
+   0xc3584c39 vol     45153 PnL    -142 reemb   +213 pares     +84 residual    -225 coste/par 0.9981
+   0xc6930956 vol      2253 PnL     -61 reemb    +12 pares     -66 residual      +5 coste/par 1.0322
+   0xca54210e vol     40149 PnL    +291 reemb   +238 pares   -1214 residual   +1505 coste/par 1.0336
+   0xcd4a4057 vol     13710 PnL     -17 reemb    +80 pares    +266 residual    -283 coste/par 0.9763
+   0xcfddfb6e vol    491009 PnL   -3333 reemb  +2580 pares  +22648 residual  -25980 coste/par 0.9526
+   0xf548517c vol    159126 PnL    +937 reemb   +882 pares   +1480 residual    -544 coste/par 0.9907
+   0xf6ab262d vol     47909 PnL    +150 reemb   +258 pares    +665 residual    -514 coste/par 0.9858
+   0xf79dccd1 vol    164702 PnL    -854 reemb   +769 pares     +75 residual    -928 coste/par 0.9995
+
+4) COLA OBSERVADA (orden de relleno dentro de cada nivel de precio de una tx; rango 1 = primero en prioridad)
+  [DESC 05-07] niveles con ≥2 makers
+   todos los makers         n= 316635 P(rango1)=0.320 vs azar E[1/k]=0.320 | rango medio/k 0.660 | último del nivel 0.320 | k medio 4.9
+   cosechadores             n= 167281 P(rango1)=0.279 vs azar E[1/k]=0.291 | rango medio/k 0.650 | último del nivel 0.285 | k medio 5.5
+   resto makers             n= 149354 P(rango1)=0.367 vs azar E[1/k]=0.353 | rango medio/k 0.672 | último del nivel 0.360 | k medio 4.3
+   0xcfddfb6e               n=  13759 P(rango1)=0.338 vs azar E[1/k]=0.351 | rango medio/k 0.687 | último del nivel 0.401 | k medio 4.2
+   0x2903c7dc               n=   3274 P(rango1)=0.182 vs azar E[1/k]=0.303 | rango medio/k 0.780 | último del nivel 0.459 | k medio 5.2
+  [FORWARD 08-12] niveles con ≥2 makers
+   todos los makers         n= 779355 P(rango1)=0.309 vs azar E[1/k]=0.309 | rango medio/k 0.655 | último del nivel 0.309 | k medio 5.4
+   cosechadores             n= 372435 P(rango1)=0.264 vs azar E[1/k]=0.280 | rango medio/k 0.652 | último del nivel 0.290 | k medio 6.1
+   resto makers             n= 406920 P(rango1)=0.350 vs azar E[1/k]=0.335 | rango medio/k 0.657 | último del nivel 0.326 | k medio 4.7
+   0xcfddfb6e               n=  27864 P(rango1)=0.317 vs azar E[1/k]=0.350 | rango medio/k 0.700 | último del nivel 0.425 | k medio 4.3
+   0x2903c7dc               n=   8680 P(rango1)=0.191 vs azar E[1/k]=0.287 | rango medio/k 0.765 | último del nivel 0.422 | k medio 6.0
+
+  ¿relleno en el PRIMER nivel de la tx (= en el mejor bid en ese instante)? y PnL por acción según rango (todos los días)
+   cosechadores   nivel1 0.872 | PnL/acc: nivel1 +0.0000 más profundo +0.0026
+                  en niveles compartidos: PnL/acc rango1 +0.0032 | detrás +0.0009 | último +0.0045
+   resto          nivel1 0.872 | PnL/acc: nivel1 -0.0093 más profundo -0.0027
+                  en niveles compartidos: PnL/acc rango1 -0.0035 | detrás -0.0093 | último -0.0115
+   0xcfddfb6e     nivel1 0.876 | PnL/acc: nivel1 -0.0009 más profundo +0.0016
+                  en niveles compartidos: PnL/acc rango1 +0.0023 | detrás +0.0027 | último +0.0030
+
+  PnL por acción de los makers según rango y k (todos los makers, compras, todos los días): selección adversa por posición
+               n           acc         pnl  pnl_acc
+k pos                                              
+2 1º      202387  2.801513e+06   -776.3166  -0.0003
+  último  202387  2.809787e+06  -2854.7745  -0.0010
+3 1º       64018  1.059856e+06  -1560.3135  -0.0015
+  medio    64018  1.088958e+06   2276.0792   0.0021
+  último   64018  1.135924e+06  -2433.9896  -0.0021
+4 1º       28045  5.248956e+05  -3450.2532  -0.0066
+  medio    56090  9.845812e+05    207.9941   0.0002
+  último   28045  5.868554e+05  -5569.2064  -0.0095
+5 1º       47831  1.207767e+06   -455.6559  -0.0004
+  medio   291320  5.902493e+06 -36897.5752  -0.0063
+  último   47831  1.353217e+06 -24303.6718  -0.0180

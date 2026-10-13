@@ -1,0 +1,20 @@
+{
+ "hipotesis": "H15-BARATO-REPOSICION-V1",
+ "congelada": "2026-10-13T17:45Z",
+ "origen": "informes/m15v5_barato_maker_13oct.txt + exploracion cluster (08-12 YA VISTO: no cuenta). H15-BARATO-MAKER-V1 (unidad mercado-lado) FALLO su gate: +0,015/EUR FWD.",
+ "mecanismo": "En BTC 15m hay mas volumen maker de compra a precio barato en los mercados donde el lado barato acaba ganando (vol medio 1.483 vs 1.188 $ por mercado-lado, 08-12): una puja que se REPONE tras cada relleno cobra en proporcion al volumen y captura EV ponderado por volumen; una puja de una sola vez no.",
+ "regla": {
+  "activo": "BTC", "marco": "15min",
+  "rellenos": "maker on-chain que COMPRAN un lado (venta maker de un token = compra del contrario a 1-p)",
+  "precio_pagado": "[0.10, 0.40)", "T_restante_s": "(60, 600]",
+  "metrica": "EV/EUR ponderado por volumen = suma pnl / suma coste (todos los rellenos de la celda), desenlace oficial, sin reembolso",
+  "unidad_bootstrap": "(mercado, lado comprado)"
+ },
+ "primer_dia_forward": "2026-10-13",
+ "gates": {
+  "G1": ">= 5 dias forward", "G2": "EV ponderado >= +0,10", "G3": "IC90 bootstrap por (mercado,lado) > 0",
+  "G4": ">= 80 % de dias con EV > 0", "G5": "sin el mejor dia > 0",
+  "G6": "ventaja por unidad: P(gana) - precio medio > 0", "G7": "cola: EV ponderado de los rellenos FINAL de nivel > 0"
+ },
+ "aviso": "Aunque pase, mide el precio de los rellenos de OTROS. Para nosotros falta P(relleno)/seleccion de NUESTRA puja que se repone (simulacion con cola + prueba real con OK Javi) y el tope de inventario (un tope corto corta justo los mercados con mas volumen)."
+}
